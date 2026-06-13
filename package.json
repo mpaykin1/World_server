@@ -1,0 +1,10 @@
+{
+  "name": "webgl-survival-hub-no-npm",
+  "version": "2.1.0",
+  "description": "WebGL Survival Hub без npm-зависимостей: один сервер, аккаунты, чат, каталог и survival.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {}
+}

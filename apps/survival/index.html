@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Выживач</title>
+<link rel="stylesheet" href="/shared/style.css">
+<style>
+#stats{position:fixed;left:14px;top:14px;z-index:25;width:260px;padding:10px;border-radius:12px}
+.bar{height:14px;background:#111;border:1px solid rgba(255,255,255,.15);margin:6px 0;border-radius:6px;overflow:hidden}.bar span{display:block;height:100%;width:80%}.hp span{background:#4bd35b}.hun span{background:#e5a333}.thr span{background:#3ba7ff}
+#survivalHelp{position:fixed;left:50%;top:12px;transform:translateX(-50%);z-index:25;padding:8px 12px;border-radius:999px;background:rgba(0,0,0,.45);border:1px solid var(--line);font-size:13px}
+#backLink{position:fixed;left:14px;top:124px;z-index:30;color:#bce5ff;text-decoration:none}
+#damagePrompt{position:fixed;left:50%;top:56%;transform:translate(-50%,-50%);z-index:30;padding:8px 10px;border-radius:9px;background:rgba(0,0,0,.55);border:1px solid var(--line)}
+#buildPanel{position:fixed;right:14px;bottom:96px;z-index:35;width:420px;padding:12px;border-radius:14px}.buildMode{color:var(--gold)}.buildGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.buildBtn{height:58px;background:#1f262e;border:1px solid rgba(255,255,255,.18);border-radius:8px;color:#fff;cursor:pointer;font-size:12px}.buildBtn.active{outline:2px solid #63d7ff;background:#27394a}.craftGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px}.craftBtn{height:46px;background:#221f1c;border:1px solid rgba(255,255,255,.16);border-radius:8px;color:#fff;cursor:pointer;font-size:11px}.invTitle{font-weight:800;margin-bottom:8px;display:flex;justify-content:space-between}
+#hotbarWrap{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:45;padding:6px;background:rgba(0,0,0,.45);border:2px solid #111;box-shadow:0 4px 20px rgba(0,0,0,.5)}
+#hotbarGrid{display:grid;grid-template-columns:repeat(9,56px);gap:3px}.mcSlot{height:56px;border:3px solid #373737;background:#8b8b8b;box-shadow:inset 3px 3px #cfcfcf,inset -3px -3px #404040;position:relative;display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;text-shadow:2px 2px #222;cursor:pointer}.mcSlot.sel{outline:4px solid #fff;outline-offset:-2px}.mcSlot span{position:absolute;right:5px;bottom:2px;font:bold 14px Consolas;color:#fff;text-shadow:2px 2px #000}.slotNum{position:absolute;left:5px;top:2px;font:11px Consolas;color:#252525;text-shadow:none}
+#inventory{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:55;width:562px;padding:14px;background:#c6c6c6;border:4px solid #111;box-shadow:inset 4px 4px #fff,inset -4px -4px #555,0 14px 40px rgba(0,0,0,.65);color:#1a1a1a;font-family:Consolas,monospace}.inventoryHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-weight:bold}.inventoryHint{font-size:12px;color:#333}.mcInv{display:grid;grid-template-columns:repeat(9,56px);gap:4px}.mcInv .mcSlot{background:#7f7f7f}.invSep{height:14px}.itemName{position:fixed;left:50%;bottom:88px;transform:translateX(-50%);z-index:50;padding:8px 12px;border-radius:8px;background:rgba(0,0,0,.75);border:1px solid var(--line);font-family:Consolas,monospace}
+</style>
+</head>
+<body>
+<div id="survivalHelp">WASD · Shift бег · ЛКМ добыча/стройка · B стройка · R поворот · 1-9 слот · I/E инвентарь · Enter чат</div>
+<div id="stats" class="hud-panel"><b id="playerName">Player</b><div class="bar hp"><span id="hpBar"></span></div><div class="bar hun"><span id="hunBar"></span></div><div class="bar thr"><span id="thrBar"></span></div></div>
+<a id="backLink" href="/apps/catalog/">← 3D каталог</a>
+<div class="crosshair"></div>
+<div id="damagePrompt" class="hidden">ЛКМ / E — добыть ресурс</div>
+<div id="inventory"><div class="inventoryHead"><span>Inventory</span><span class="inventoryHint">Minecraft-style · I/E закрыть</span></div><div id="invGrid" class="mcInv"></div><div class="invSep"></div><div class="inventoryHead"><span>Hotbar</span><span class="inventoryHint">1-9 выбрать</span></div><div id="invHotGrid" class="mcInv"></div></div>
+<div id="hotbarWrap"><div id="hotbarGrid"></div></div>
+<div id="buildPanel" class="hud-panel"><div class="invTitle"><span class="buildMode">Rust-style Building Plan</span><span id="buildState">B: выкл</span></div><div class="buildGrid" id="buildGrid"></div><div class="craftGrid" id="craftGrid"></div></div>
+<div class="itemName hidden" id="itemName"></div>
+<script src="/shared/common.js"></script>
+<script type="module" src="./client.js"></script>
+</body>
+</html>
