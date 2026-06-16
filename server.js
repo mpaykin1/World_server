@@ -157,11 +157,19 @@ const server = http.createServer(async (req, res) => {
       if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, 'index.html');
       return sendFile(res, file);
     }
+    if (url.pathname === '/favicon.ico') { res.writeHead(204); return res.end(); }
     return notFound(res);
   } catch (e) {
     json(res, 500, { error: e.message || 'server error' });
   }
 });
+
+// ---------- sharabass room ----------
+const sharabassPlayers = new Map();
+const sharabassObjects = [];
+const MAX_SHARABASS_OBJECTS = 50;
+let sharabassWeather = { rain: 0, lightning: 0, clouds: 0.2, wind: 0.1, snow: 0, smoke: 0.4 };
+let lastWeatherChange = 0;
 
 // ---------- survival world ----------
 const CHUNK_SIZE = 64;
@@ -295,6 +303,13 @@ function closeClient(client) {
   client.closed = true;
   clients.delete(client.id);
   survivalPlayers.delete(client.id);
+  if (client.inSharabass) {
+    sharabassPlayers.delete(client.id);
+    const removed = [];
+    for (let i = sharabassObjects.length - 1; i >= 0; i--) { if (sharabassObjects[i].owner === client.id) { removed.push(sharabassObjects[i].id); sharabassObjects.splice(i, 1); } }
+    for (const id of removed) broadcast('sharabass:object:removed', { id }, c => c.inSharabass);
+    broadcast('sharabass:players', [...sharabassPlayers.values()].map(p => ({ id: p.id, name: p.name, cameraPos: p.cameraPos, cameraTarget: p.cameraTarget })), c => c.inSharabass);
+  }
   broadcast('survival:players:update', nearbyPlayersPayload(), c => c.inSurvival);
   try { client.socket.destroy(); } catch {}
 }
@@ -306,6 +321,43 @@ function onEvent(client, event, data) {
     const msg = { id: crypto.randomUUID(), ts: Date.now(), app: safeName(data?.app || client.app || 'global'), name: client.name, account: Boolean(client.user), text };
     chatHistory.push(msg); while (chatHistory.length > 100) chatHistory.shift();
     broadcast('chat:message', msg);
+    return;
+  }
+  if (event === 'sharabass:join') {
+    const p = { id: client.id, name: client.user?.username || `Guest_${client.id.slice(0, 4)}`, cameraPos: { x: 0, y: 3, z: 8 }, cameraTarget: { x: 0, y: 0, z: 0 }, lastUpdate: Date.now() };
+    sharabassPlayers.set(client.id, p);
+    client.inSharabass = true;
+    wsSend(client, 'sharabass:init', { selfId: client.id, objects: sharabassObjects, weather: sharabassWeather, players: [...sharabassPlayers.values()].map(p2 => ({ id: p2.id, name: p2.name, cameraPos: p2.cameraPos, cameraTarget: p2.cameraTarget })) });
+    broadcast('sharabass:players', [...sharabassPlayers.values()].map(p2 => ({ id: p2.id, name: p2.name, cameraPos: p2.cameraPos, cameraTarget: p2.cameraTarget })), c => c.inSharabass);
+    return;
+  }
+  if (event === 'sharabass:weather') {
+    if (data && typeof data.rain === 'number') { sharabassWeather = data; lastWeatherChange = Date.now(); broadcast('sharabass:weather', sharabassWeather, c => c.inSharabass); }
+    return;
+  }
+  if (event === 'sharabass:fly') {
+    const p = sharabassPlayers.get(client.id); if (!p) return;
+    const d = data || {};
+    p.cameraPos = { x: Number(d.cameraPos?.x) || p.cameraPos.x || 0, y: Number(d.cameraPos?.y) || p.cameraPos.y || 0, z: Number(d.cameraPos?.z) || p.cameraPos.z || 0 };
+    p.cameraTarget = { x: Number(d.cameraTarget?.x) || p.cameraTarget.x || 0, y: Number(d.cameraTarget?.y) || p.cameraTarget.y || 0, z: Number(d.cameraTarget?.z) || p.cameraTarget.z || 0 };
+    p.lastUpdate = Date.now();
+    return;
+  }
+  if (event === 'sharabass:place') {
+    const p = sharabassPlayers.get(client.id); if (!p) return;
+    if (sharabassObjects.length >= MAX_SHARABASS_OBJECTS) return wsSend(client, 'error:message', 'Мир переполнен объектами, удали что-нибудь.');
+    const d = data || {};
+    const obj = { id: crypto.randomUUID(), type: Number(d.type) || 0, position: { x: Number(d.position?.x) || 0, y: Number(d.position?.y) || 0, z: Number(d.position?.z) || 0 }, size: Math.max(0.2, Number(d.size) || 1), owner: client.id, ownerName: p.name };
+    sharabassObjects.push(obj);
+    broadcast('sharabass:object:placed', obj, c => c.inSharabass);
+    return;
+  }
+  if (event === 'sharabass:remove') {
+    const id = String(data?.id || '');
+    const idx = sharabassObjects.findIndex(o => o.id === id && o.owner === client.id);
+    if (idx === -1) return wsSend(client, 'error:message', 'Не найден объект для удаления.');
+    sharabassObjects.splice(idx, 1);
+    broadcast('sharabass:object:removed', { id }, c => c.inSharabass);
     return;
   }
   if (event === 'survival:join') {
@@ -405,5 +457,20 @@ server.on('upgrade', (req, socket) => {
   wsSend(client, 'chat:history', chatHistory.slice(-60));
 });
 setInterval(() => broadcast('survival:players:update', nearbyPlayersPayload(), c => c.inSurvival), 100);
+setInterval(() => broadcast('sharabass:players', [...sharabassPlayers.values()].map(p => ({ id: p.id, name: p.name, cameraPos: p.cameraPos, cameraTarget: p.cameraTarget })), c => c.inSharabass), 100);
+// Weather auto-change for sharabass
+setInterval(() => {
+    const now = Date.now();
+    if (now - lastWeatherChange > 8000) {
+        lastWeatherChange = now;
+        sharabassWeather = {
+            rain: Math.random() * 0.6, lightning: 0, clouds: 0.1 + Math.random() * 0.7,
+            wind: Math.random() * 0.6, snow: Math.random() < 0.2 ? Math.random() * 0.5 : 0,
+            smoke: 0.3 + Math.random() * 0.5
+        };
+        if (sharabassWeather.rain > 0.3 && Math.random() < 0.4) sharabassWeather.lightning = 0.3 + Math.random() * 0.6;
+        broadcast('sharabass:weather', sharabassWeather, c => c.inSharabass);
+    }
+}, 2000);
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`WebGL Survival Hub NO-NPM running: http://localhost:${PORT}`));

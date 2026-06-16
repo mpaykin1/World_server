@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Мир Шарабас — Музыкальная стройка</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎵</text></svg>">
+    <link rel="stylesheet" href="/shared/style.css">
+    <style>
+        body { margin: 0; overflow: hidden; background: #000; touch-action: none; }
+        canvas { display: block; width: 100vw; height: 100vh; }
+        #info {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            color: rgba(255,255,255,0.8);
+            font-family: monospace;
+            font-size: 11px;
+            pointer-events: none;
+            z-index: 10;
+            line-height: 1.6;
+            text-shadow: 0 0 4px #000;
+        }
+        #weather {
+            position: absolute;
+            top: 60px;
+            right: 15px;
+            color: rgba(255,255,255,0.9);
+            font-family: monospace;
+            font-size: 13px;
+            pointer-events: none;
+            z-index: 10;
+            text-shadow: 0 0 4px #000;
+        }
+        #ui {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+            pointer-events: none;
+        }
+        #ui button {
+            pointer-events: auto;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            font-family: monospace;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            transition: all 0.15s;
+        }
+        #ui button:hover { background: rgba(100,180,255,0.35); border-color: #4fd8ff; }
+        #ui button.active { background: rgba(79,216,255,0.3); border-color: #4fd8ff; box-shadow: 0 0 12px rgba(79,216,255,0.4); }
+        #buildBtn { min-width: 90px; }
+        #typeBtn { min-width: 70px; }
+        #delBtn { min-width: 60px; }
+        #sizeBar {
+            position: absolute;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            pointer-events: none;
+            color: rgba(255,255,255,0.7);
+            font-family: monospace;
+            font-size: 11px;
+            text-align: center;
+            text-shadow: 0 0 4px #000;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        #sizeBar.show { opacity: 1; }
+        #players {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: rgba(255,255,255,0.6);
+            font-family: monospace;
+            font-size: 10px;
+            z-index: 10;
+            text-shadow: 0 0 4px #000;
+            text-align: right;
+            line-height: 1.5;
+        }
+        #threeCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
+        #ui { position:relative; }
+    </style>
+</head>
+<body>
+    <div id="info"></div>
+<div id="players"></div>
+<div id="weather">☀️ CLEAR</div>
+<div id="sizeBar">Размер: █████░░░░░</div>
+<div id="ui">
+    <button id="buildBtn">🚧 Строить</button>
+    <button id="typeBtn">🔵 Шар</button>
+    <button id="delBtn">🗑️</button>
+</div>
+<canvas id="glcanvas"></canvas>
+<canvas id="threeCanvas"></canvas>
+<script src="/shared/common.js"></script>
+<script type="module">
+import * as THREE from 'https://unpkg.com/three@0.165.0/build/three.module.js';
+
+await window.AppCore.init('world-sharabass');
+const socket = window.AppCore.socket();
+socket.on('connect', () => socket.emit('sharabass:join'));
+if (socket.connected) socket.emit('sharabass:join');
+
+// Compact UI: 40% smaller, more transparent, closable
+function makeCompact(el,scale,origin){
+  if(!el) return;
+  el.style.transform=`scale(${scale})`; el.style.transformOrigin=origin; el.style.opacity='.7'; el.style.position='relative';
+  const btn=document.createElement('button'); btn.textContent='×'; btn.style.cssText='position:absolute;top:0;right:0;width:16px;height:16px;border:none;background:none;color:#fff;font-size:14px;line-height:16px;text-align:center;cursor:pointer;z-index:99;padding:0;';
+  btn.onmouseover=()=>btn.style.color='#ff6666'; btn.onmouseout=()=>btn.style.color='#fff';
+  btn.onclick=()=>{ el.style.display=el.style.display==='none'?'':'none'; };
+  el.appendChild(btn);
+}
+setTimeout(()=>{
+  makeCompact(document.getElementById('authBox'),.6,'top right');
+  makeCompact(document.querySelector('.mc-chat'),.6,'bottom left');
+  const uiEl=document.getElementById('ui');
+  if(uiEl){ uiEl.style.transform='scale(.6)'; uiEl.style.transformOrigin='bottom center'; uiEl.style.opacity='.7';
+    const tb=document.createElement('button'); tb.textContent='×'; tb.style.cssText='position:absolute;top:-20px;right:-10px;width:18px;height:18px;border:none;background:rgba(255,255,255,.2);color:#fff;font-size:13px;border-radius:50%;cursor:pointer;z-index:99;padding:0;line-height:18px;';
+    tb.onmouseover=()=>tb.style.background='rgba(255,80,80,.6)'; tb.onmouseout=()=>tb.style.background='rgba(255,255,255,.2)';
+    tb.onclick=()=>{ const h=uiEl.style.display; uiEl.style.display=h==='none'?'':'none'; tb.textContent=h==='none'?'□':'×'; };
+    uiEl.style.position='relative'; uiEl.parentNode.insertBefore(tb,uiEl);
+  }
+},200);
+
+// --- Three.js overlay for other players ---
+const threeCanvas = document.getElementById('threeCanvas');
+const threeRenderer = new THREE.WebGLRenderer({ canvas: threeCanvas, alpha: true, antialias: false });
+threeRenderer.setClearColor(0x000000, 0);
+threeRenderer.setPixelRatio(Math.min(devicePixelRatio, 1.4));
+const threeScene = new THREE.Scene();
+threeScene.add(new THREE.AmbientLight(0xffffff, 0.7));
+threeScene.add(new THREE.DirectionalLight(0xffffff, 1.4));
+// Grid at SDF ground level so movement is visible
+const grid = new THREE.GridHelper(60, 30, 0x4488ff, 0x335577);
+grid.position.y = -1.49;
+threeScene.add(grid);
+// Placement ghost
+const ghostMat = new THREE.MeshBasicMaterial({ color: 0x44ff88, transparent: true, opacity: 0.35, wireframe: false, depthWrite: false });
+const ghostBox = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.5), ghostMat);
+ghostBox.visible = false;
+threeScene.add(ghostBox);
+const ghostSphere = new THREE.Mesh(new THREE.SphereGeometry(0.35, 12, 8), ghostMat);
+ghostSphere.visible = false;
+threeScene.add(ghostSphere);
+const threeCamera = new THREE.PerspectiveCamera(70, innerWidth / innerHeight, 0.1, 100);
+
+function snapToGrid(v) { return Math.round(v / 2) * 2; }
+function getPlacePos() {
+    const px = charPos.x + Math.sin(charYaw) * 2;
+    const pz = charPos.z + Math.cos(charYaw) * 2;
+    return { x: snapToGrid(px), z: snapToGrid(pz) };
+}
+let placeFlash = 0;
+function placeObject() {
+    if (!buildMode) return;
+    buildBoost = 1.0;
+    if (audioCtx) playPlacementSound();
+    const pp = getPlacePos();
+    const obj = { position: { x: pp.x, y: -1.25, z: pp.z }, size: placeSize, type: objType };
+    if (socket && socket.connected) {
+        socket.emit('sharabass:place', obj);
+    } else {
+        // Local fallback: add object directly so it appears immediately in SDF
+        const localObj = { id: 'local_' + Date.now(), type: objType, position: { x: pp.x, y: -1.25, z: pp.z }, size: placeSize, owner: selfId || 'local', ownerName: 'Вы' };
+        worldObjects.push(localObj);
+    }
+    // Exit build mode so ghost disappears and only solid object is visible
+    if (buildMode) document.getElementById('buildBtn').click();
+}
+const remoteStickFigures = new Map();
+function makeFacePlane() {
+    const c = document.createElement('canvas'); c.width = 256; c.height = 256;
+    const ctx = c.getContext('2d'); ctx.clearRect(0, 0, 256, 256);
+    ctx.fillStyle = '#24140e'; ctx.beginPath(); ctx.arc(88, 100, 13, 0, Math.PI * 2); ctx.arc(168, 100, 13, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = '#5b2d1e'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(128, 116); ctx.lineTo(120, 145); ctx.lineTo(137, 145); ctx.stroke();
+    ctx.strokeStyle = '#7b231d'; ctx.lineWidth = 9; ctx.beginPath(); ctx.arc(128, 158, 35, 0.15 * Math.PI, 0.85 * Math.PI); ctx.stroke();
+    const tex = new THREE.CanvasTexture(c);
+    return new THREE.Mesh(new THREE.PlaneGeometry(0.42, 0.42), new THREE.MeshBasicMaterial({ map: tex, transparent: true, side: THREE.DoubleSide }));
+}
+function makeStickFigure(color) {
+    const g = new THREE.Group();
+    const bodyMat = new THREE.MeshStandardMaterial({ color, roughness: 0.6 });
+    const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.33, 0.85, 8, 16), bodyMat); body.position.y = 1.25; g.add(body);
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.28, 24, 16), new THREE.MeshStandardMaterial({ color: 0xf1c49c, roughness: 0.7 })); head.position.y = 1.9; g.add(head);
+    const face = makeFacePlane(); face.position.set(0, 0, -0.275); head.add(face);
+    const limbMat = new THREE.MeshStandardMaterial({ color: 0x263447, roughness: 0.8 });
+    const bodyMat2 = new THREE.MeshStandardMaterial({ color, roughness: 0.6 });
+    const armL = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.7, 0.18), bodyMat2); armL.position.set(-0.42, 1.18, 0); g.add(armL);
+    const armR = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.7, 0.18), bodyMat2); armR.position.set(0.42, 1.18, 0); g.add(armR);
+    const legL = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.8, 0.2), limbMat); legL.position.set(-0.16, 0.45, 0); g.add(legL);
+    const legR = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.8, 0.2), limbMat); legR.position.set(0.16, 0.45, 0); g.add(legR);
+    g.userData = { armL, armR, legL, legR, moveTime: 0 };
+    return g;
+}
+// Self stick figure (we see ourselves)
+const stickColors = [0x4488ff, 0xff8844, 0x44ff88, 0xff44aa, 0xffdd00, 0xaa44ff, 0x00ffdd, 0xff2244];
+function pickColor(id) { let h = 0; for (let i = 0; i < id.length; i++) h = ((h << 5) - h) + id.charCodeAt(i); return stickColors[Math.abs(h) % stickColors.length]; }
+
+// --- Main WebGL2 ---
+const canvas = document.getElementById('glcanvas');
+const gl = canvas.getContext('webgl2', { antialias: false, powerPreference: 'high-performance' });
+if (!gl) { document.body.innerHTML = '<h1 style="color:white;text-align:center;margin-top:50px;">WebGL2 not supported</h1>'; throw new Error('WebGL2 not supported'); }
+
+const MAX_STEPS = 96;
+const MAX_DIST = 25.0;
+const SURF_DIST = 0.002;
+
+// --- Building / Object state ---
+let buildMode = false;
+let objType = 0; // 0=sphere, 1=cube
+let placeSize = 1.0;
+function updateSizeBar() {
+    const bars = Math.round((placeSize / 4) * 10);
+    document.getElementById('sizeBar').textContent = 'Размер: ' + '█'.repeat(Math.min(10, Math.max(1, bars))) + '░'.repeat(Math.max(0, 10 - Math.max(1, bars)));
+}
+const worldObjects = [];   // { id, type, position:{x,y,z}, size, owner, ownerName }
+// IDEA: когда центр застроят игроки → очки силы за обнаружение/освоение центра
+const MAX_OBJECTS = 50;
+let selfId = '';
+let lastPosSend = 0;
+const remotePlayers = new Map(); // id -> { name, cameraPos, cameraTarget }
+
+// --- Network ---
+socket.on('sharabass:init', data => {
+    if (!data) return;
+    if (data.selfId) selfId = data.selfId;
+    if (data.objects) { worldObjects.length = 0; worldObjects.push(...data.objects); }
+    if (data.players) for (const p of data.players) remotePlayers.set(p.id, p);
+    if (data.weather) Object.assign(weatherState, data.weather);
+});
+socket.on('sharabass:weather', w => { if (w) Object.assign(weatherState, w); });
+socket.on('sharabass:players', players => {
+    if (!players) return;
+    const ids = new Set(players.map(p => p.id));
+    for (const p of players) remotePlayers.set(p.id, p);
+    for (const [id] of remotePlayers) if (!ids.has(id)) remotePlayers.delete(id);
+    updatePlayersUI();
+});
+socket.on('sharabass:object:placed', obj => { if (obj) { const i = worldObjects.findIndex(o => o.id === obj.id); if (i === -1) worldObjects.push(obj); else worldObjects[i] = obj; } });
+socket.on('sharabass:object:removed', d => { if (d) { const i = worldObjects.findIndex(o => o.id === d.id); if (i !== -1) worldObjects.splice(i, 1); } });
+
+function putLog(msg) { /* console only */ }
+function updatePlayersUI() {
+    const el = document.getElementById('players');
+    el.innerHTML = [...remotePlayers.values()].map(p => `👤 ${p.name || 'anon'}`).join('<br>');
+}
+
+// --- Resize ---
+function resize() {
+    const pr = Math.min(window.devicePixelRatio || 2, 2);
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const maxDim = 1080;
+    const scale = Math.min(1, maxDim / Math.max(w, h));
+    canvas.width = Math.floor(w * pr * scale);
+    canvas.height = Math.floor(h * pr * scale);
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    threeRenderer.setSize(w, h);
+    threeCamera.aspect = w / h;
+    threeCamera.updateProjectionMatrix();
+}
+resize();
+window.addEventListener('resize', resize);
+
+// --- THIRD-PERSON CHARACTER CONTROLS ---
+let charPos = { x: 0, y: 0, z: 0 };
+let charYaw = 0;
+let camHeight = 4.0;
+let camDistance = 6.0;
+let firstPerson = false;
+let isTouching = false, isPinching = false;
+let lastPinchDist = 0, lastPinchAngle = 0;
+let touchStartX = 0, touchStartY = 0, touchMoved = false;
+const MOVE_SENSITIVITY = 0.06;
+
+function handleTouchStart(e) {
+    e.preventDefault();
+    if (e.touches.length === 1) {
+        isTouching = true; isPinching = false;
+        const t = e.touches[0];
+        touchStartX = t.clientX; touchStartY = t.clientY;
+        touchMoved = false;
+        if (audioCtx && !buildMode) triggerMelodySequencer((t.clientX / window.innerWidth) * 2 - 1, (t.clientY / window.innerHeight) * 2 - 1);
+        if (!audioCtx) initAudio();
+    } else if (e.touches.length >= 2) {
+        isPinching = true; isTouching = false;
+        const t1 = e.touches[0], t2 = e.touches[1];
+        lastPinchDist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+        lastPinchAngle = Math.atan2(t2.clientY - t1.clientY, t2.clientX - t1.clientX);
+    }
+}
+
+function handleTouchMove(e) {
+    e.preventDefault();
+    if (e.touches.length === 1 && isTouching) {
+        const t = e.touches[0];
+        const dx = t.clientX - touchStartX;
+        const dy = t.clientY - touchStartY;
+        if (Math.abs(dx) > 3 || Math.abs(dy) > 3) touchMoved = true;
+        // Walk: drag moves character on ground (both in normal and build mode)
+        const forward = new THREE.Vector3(Math.sin(charYaw), 0, Math.cos(charYaw));
+        const right = new THREE.Vector3(Math.cos(charYaw), 0, -Math.sin(charYaw));
+        const fwd = -dy * MOVE_SENSITIVITY;
+        const strafe = dx * MOVE_SENSITIVITY;
+        charPos.x += forward.x * fwd + right.x * strafe;
+        charPos.z += forward.z * fwd + right.z * strafe;
+        touchStartX = t.clientX;
+        touchStartY = t.clientY;
+    } else if (e.touches.length >= 2) {
+        const t1 = e.touches[0], t2 = e.touches[1];
+        const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+        const angle = Math.atan2(t2.clientY - t1.clientY, t2.clientX - t1.clientX);
+        if (isPinching) {
+            const angleDelta = angle - lastPinchAngle;
+            charYaw += angleDelta;
+        }
+        lastPinchDist = dist;
+        lastPinchAngle = angle;
+    }
+}
+
+function handleTouchEnd(e) {
+    e.preventDefault();
+    if (e.touches.length === 0) {
+        if (isTouching && !touchMoved && buildMode) placeObject();
+        isTouching = false;
+        isPinching = false;
+        touchMoved = false;
+    } else if (e.touches.length === 1) {
+        isPinching = false;
+        isTouching = true;
+        const t = e.touches[0];
+        touchStartX = t.clientX; touchStartY = t.clientY;
+        touchMoved = false;
+    }
+}
+
+canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+canvas.addEventListener('touchcancel', handleTouchEnd, { passive: false });
+
+// --- PC: Keyboard + Mouse ---
+const keys = new Set();
+let mouseDown = false, mouseX = 0, mouseY = 0;
+function triggerAudioOnPC(x, y) {
+    if (!audioCtx) initAudio();
+    if (audioCtx) triggerMelodySequencer(x, y);
+}
+addEventListener('keydown', e => {
+    keys.add(e.code);
+    if (e.code.startsWith('Arrow') || e.code.startsWith('Key')) e.preventDefault();
+    if (e.code === 'KeyB') { document.getElementById('buildBtn').click(); return; }
+    if (e.code === 'KeyQ') {
+        if (buildMode) { placeSize = Math.max(0.25, placeSize - 0.25); document.getElementById('sizeBar').classList.add('show'); updateSizeBar(); ghostBox.scale.setScalar(placeSize); ghostSphere.scale.setScalar(placeSize); }
+        else { firstPerson = !firstPerson; }
+        return;
+    }
+    if (e.code === 'KeyE' && buildMode) { placeSize += 0.25; document.getElementById('sizeBar').classList.add('show'); updateSizeBar(); ghostBox.scale.setScalar(placeSize); ghostSphere.scale.setScalar(placeSize); return; }
+    if (e.code === 'Space' || e.code === 'Enter') {
+        e.preventDefault();
+        if (buildMode) { placeObject(); return; }
+    }
+    if (!audioCtx) initAudio();
+    if (audioCtx) triggerMelodySequencer(Math.random() * 2 - 1, Math.random() * 2 - 1);
+});
+addEventListener('keyup', e => keys.delete(e.code));
+addEventListener('mousedown', e => {
+    mouseDown = true; mouseX = e.clientX; mouseY = e.clientY;
+    if (!audioCtx) initAudio();
+    else if (!buildMode) triggerMelodySequencer((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 - 1);
+});
+addEventListener('mouseup', () => mouseDown = false);
+addEventListener('mousemove', e => {
+    if (mouseDown) {
+        const dx = e.clientX - mouseX, dy = e.clientY - mouseY;
+        mouseX = e.clientX; mouseY = e.clientY;
+        charYaw += dx * 0.01;
+    }
+});
+// Place object on click in build mode (not on UI buttons)
+addEventListener('click', e => {
+    if (buildMode && !e.target.closest('button')) { placeObject(); e.preventDefault(); }
+});
+
+// --- UI buttons ---
+document.getElementById('buildBtn').onclick = () => {
+    buildMode = !buildMode;
+    document.getElementById('buildBtn').classList.toggle('active', buildMode);
+    document.getElementById('buildBtn').textContent = buildMode ? '🚫 Лететь' : '🚧 Строить';
+    if (buildMode) {
+        document.getElementById('sizeBar').classList.add('show');
+        updateSizeBar();
+    } else {
+        document.getElementById('sizeBar').classList.remove('show');
+    }
+};
+document.getElementById('typeBtn').onclick = () => { objType = 1 - objType; document.getElementById('typeBtn').textContent = objType === 0 ? '🔵 Шар' : '🧊 Куб'; };
+document.getElementById('delBtn').onclick = () => {
+    // Remove own last placed object
+    const own = worldObjects.filter(o => o.owner === selfId);
+    if (own.length > 0) socket.emit('sharabass:remove', { id: own[own.length - 1].id });
+};
+
+// --- AUDIO: BASSLINE + MELODY SEQUENCER ---
+let audioCtx = null;
+let masterGain = null;
+let reverbNode = null;
+let chordOscillators = [];
+let chordGain = null;
+let currentChordIndex = -1;
+let lightningGain = null;
+
+// Bass specific nodes
+let bassOsc = null;
+let bassFilter = null;
+let bassGain = null;
+
+let grooveTimer = null;
+let currentMelodyTempo = 400;
+let lastTapTime = 0;
+let beatCount = 0;
+
+const CHORDS = [
+    { name: 'Cmaj', notes: [261.63, 329.63, 392.00, 523.25] },
+    { name: 'Amin', notes: [220.00, 261.63, 329.63, 440.00] },
+    { name: 'Fmaj', notes: [174.61, 220.00, 261.63, 349.23] },
+    { name: 'Gmaj', notes: [196.00, 246.94, 293.66, 392.00] },
+    { name: 'Em',   notes: [164.81, 196.00, 246.94, 329.63] },
+    { name: 'Dm',   notes: [146.83, 174.61, 220.00, 293.66] },
+    { name: 'Bdim', notes: [246.94, 293.66, 349.23, 466.16] },
+    { name: 'F#aug', notes: [185.00, 233.08, 293.66, 370.00] },
+    { name: 'Cmaj7', notes: [261.63, 329.63, 392.00, 493.88] },
+    { name: 'Amin7', notes: [220.00, 261.63, 329.63, 392.00] },
+    { name: 'G7',   notes: [196.00, 246.94, 293.66, 349.23] },
+    { name: 'Dmin7', notes: [146.83, 174.61, 220.00, 261.63] }
+];
+
+function createReverb() {
+    const sampleRate = audioCtx.sampleRate;
+    const length = sampleRate * 2.5;
+    const impulse = audioCtx.createBuffer(2, length, sampleRate);
+    for (let ch = 0; ch < 2; ch++) {
+        const data = impulse.getChannelData(ch);
+        for (let i = 0; i < length; i++) {
+            data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, 2.5);
+        }
+    }
+    const convolver = audioCtx.createConvolver();
+    convolver.buffer = impulse;
+    return convolver;
+}
+
+function initAudio() {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0.6;
+    
+    reverbNode = createReverb();
+    const reverbGain = audioCtx.createGain();
+    reverbGain.gain.value = 0.4;
+    reverbNode.connect(reverbGain);
+    reverbGain.connect(masterGain);
+    masterGain.connect(audioCtx.destination);
+    
+    chordGain = audioCtx.createGain();
+    chordGain.gain.value = 0.0;
+    const chordFilter = audioCtx.createBiquadFilter();
+    chordFilter.type = 'lowpass';
+    chordFilter.frequency.value = 2500;
+    chordFilter.Q.value = 1.5;
+    chordGain.connect(chordFilter);
+    chordFilter.connect(reverbNode);
+    chordFilter.connect(masterGain);
+    
+    for (let i = 0; i < 4; i++) {
+        const osc = audioCtx.createOscillator();
+        osc.type = i < 2 ? 'sine' : 'triangle';
+        const g = audioCtx.createGain();
+        g.gain.value = 0.15;
+        osc.connect(g);
+        g.connect(chordGain);
+        osc.start();
+        chordOscillators.push({ osc, gain: g });
+    }
+    
+    // --- BASS SETUP ---
+    bassOsc = audioCtx.createOscillator();
+    bassOsc.type = 'sawtooth';
+    bassFilter = audioCtx.createBiquadFilter();
+    bassFilter.type = 'lowpass';
+    bassFilter.frequency.value = 400;
+    bassFilter.Q.value = 2;
+    bassGain = audioCtx.createGain();
+    bassGain.gain.value = 0;
+    bassOsc.connect(bassFilter);
+    bassFilter.connect(bassGain);
+    bassGain.connect(masterGain); // Прямое подключение для чёткости баса
+    bassOsc.start();
+    
+    lightningGain = audioCtx.createGain();
+    lightningGain.gain.value = 0;
+    const lpFilter = audioCtx.createBiquadFilter();
+    lpFilter.type = 'lowpass';
+    lpFilter.frequency.value = 200;
+    lightningGain.connect(lpFilter);
+    lpFilter.connect(masterGain);
+    
+    setChord(0);
+}
+
+function setChord(idx) {
+    if (idx === currentChordIndex || !audioCtx) return;
+    currentChordIndex = idx;
+    const chord = CHORDS[idx];
+    const t = audioCtx.currentTime;
+    chordGain.gain.cancelScheduledValues(t);
+    chordGain.gain.setValueAtTime(chordGain.gain.value, t);
+    chordGain.gain.linearRampToValueAtTime(0.0, t + 0.1);
+    for (let i = 0; i < chordOscillators.length; i++) {
+        const freq = chord.notes[i] || chord.notes[0];
+        chordOscillators[i].osc.frequency.setTargetAtTime(freq, t + 0.15, 0.25);
+    }
+    chordGain.gain.setTargetAtTime(0.22, t + 0.2, 0.35);
+}
+
+function triggerMelodySequencer(x, y) {
+    if (!audioCtx) return;
+    const now = performance.now();
+    let tempo = 400;
+    if (lastTapTime > 0) {
+        const delta = now - lastTapTime;
+        tempo = Math.max(150, Math.min(800, delta * 0.8));
+    }
+    lastTapTime = now;
+    currentMelodyTempo = tempo;
+    
+    const chordIdx = Math.floor(((x + 1) / 2) * CHORDS.length);
+    const clampedIdx = Math.max(0, Math.min(CHORDS.length - 1, chordIdx));
+    
+    if (clampedIdx !== currentChordIndex) {
+        setChord(clampedIdx);
+    }
+    
+    if (grooveTimer) clearTimeout(grooveTimer);
+    beatCount = 0;
+    scheduleGroove(clampedIdx, y);
+}
+
+function scheduleGroove(chordIdx, y) {
+    if (!audioCtx) return;
+    const chord = CHORDS[chordIdx];
+    const t = audioCtx.currentTime;
+    
+    // --- BASSLINE (Root and Fifth alternation) ---
+    const isRoot = (beatCount % 2 === 0);
+    // notes[0] is root, notes[2] is fifth. Divide by 2 for bass octave.
+    const bassFreq = isRoot ? (chord.notes[0] / 2) : (chord.notes[2] / 2);
+    
+    bassOsc.frequency.setTargetAtTime(bassFreq, t, 0.02);
+    bassFilter.frequency.setTargetAtTime(300 + Math.random() * 200, t, 0.05);
+    
+    bassGain.gain.cancelScheduledValues(t);
+    bassGain.gain.setValueAtTime(0, t);
+    bassGain.gain.linearRampToValueAtTime(0.25, t + 0.015); // Punchy attack
+    bassGain.gain.exponentialRampToValueAtTime(0.01, t + (currentMelodyTempo / 1000) * 0.7);
+    
+    // --- MELODY ---
+    const noteIdx = Math.floor(Math.random() * chord.notes.length);
+    const baseFreq = chord.notes[noteIdx];
+    const octaveRoll = Math.random();
+    let octaveMult = 1.0;
+    if (octaveRoll > 0.7) octaveMult = 2.0;
+    else if (octaveRoll < 0.2) octaveMult = 0.5;
+    
+    const freq = baseFreq * octaveMult;
+    const velocity = 0.12 + Math.random() * 0.15;
+    
+    const osc = audioCtx.createOscillator();
+    osc.type = Math.random() > 0.5 ? 'triangle' : 'sine';
+    osc.frequency.value = freq;
+    
+    const g = audioCtx.createGain();
+    g.gain.value = 0;
+    g.gain.linearRampToValueAtTime(velocity, t + 0.015);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
+    
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 2000 + (1 - Math.abs(y)) * 3000;
+    
+    osc.connect(filter);
+    filter.connect(g);
+    g.connect(reverbNode);
+    g.connect(masterGain);
+    
+    osc.start(t);
+    osc.stop(t + 0.5);
+    
+    beatCount++;
+    const humanVariation = 0.95 + Math.random() * 0.1;
+    const nextDelay = currentMelodyTempo * humanVariation;
+    
+    grooveTimer = setTimeout(() => {
+        scheduleGroove(chordIdx, y);
+    }, nextDelay);
+}
+
+function triggerLightningSound(intensity, type) {
+    if (!audioCtx || !lightningGain) return;
+    const t = audioCtx.currentTime;
+    const bufferSize = audioCtx.sampleRate * 2.0;
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    let decay = 1.5, filterFreq = 150;
+    if (type === 'cloud') { decay = 0.8; filterFreq = 300; } 
+    else if (type === 'branching') { decay = 2.0; filterFreq = 100; }
+    
+    for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, decay);
+    }
+    const noise = audioCtx.createBufferSource();
+    noise.buffer = buffer;
+    const lp = audioCtx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = filterFreq;
+    const g = audioCtx.createGain();
+    g.gain.value = 0;
+    g.gain.linearRampToValueAtTime(0.5 * intensity, t + 0.05);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 1.8);
+    noise.connect(lp);
+    lp.connect(g);
+    g.connect(masterGain);
+    noise.start(t);
+    noise.stop(t + 2.0);
+}
+
+// --- Audio Metrics for Shader Deform ---
+let bassLevel = 0, harmonyComplexity = 0, melodyActivity = 0;
+let buildBoost = 0; // 0-1, decays after placement
+function updateAudioMetrics() {
+    if (audioCtx && bassGain) {
+        const now = audioCtx.currentTime;
+        const targetBass = Math.min(1, (bassGain?.gain?.value || 0) * 4);
+        bassLevel += (targetBass - bassLevel) * 0.1;
+    }
+    const hTarget = (currentChordIndex + 1) / CHORDS.length;
+    harmonyComplexity += (hTarget - harmonyComplexity) * 0.05;
+    const mTarget = Math.min(1, 800 / Math.max(150, currentMelodyTempo));
+    melodyActivity += (mTarget - melodyActivity) * 0.05;
+    // Build boost decays
+    if (buildBoost > 0.01) buildBoost *= 0.98;
+    else buildBoost = 0;
+    bassLevel += buildBoost * 0.2;
+    harmonyComplexity += buildBoost * 0.4;
+    melodyActivity += buildBoost * 0.3;
+}
+
+function playPlacementSound() {
+    if (!audioCtx) return;
+    const t = audioCtx.currentTime;
+    // Bright major chord stab
+    const freqs = [523.25, 659.25, 783.99]; // C5, E5, G5
+    for (const f of freqs) {
+        const osc = audioCtx.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.value = f;
+        const g = audioCtx.createGain();
+        g.gain.setValueAtTime(0, t);
+        g.gain.linearRampToValueAtTime(0.08, t + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+        osc.connect(g);
+        g.connect(masterGain);
+        osc.start(t);
+        osc.stop(t + 0.4);
+    }
+}
+
+// --- WEATHER STATE ---
+let weatherState = { rain: 0, lightning: 0, clouds: 0, wind: 0, snow: 0, smoke: 0 };
+let lightningFlash = 0;
+let lightningType = 0;
+let nextLightningTime = 0;
+const weatherLabel = document.getElementById('weather');
+
+function updateWeather(touchY) {
+    const y = touchY;
+    weatherState.clouds = Math.max(0, Math.min(1, (y - 0.2) * 2.5));
+    weatherState.rain = Math.max(0, Math.min(1, (y - (-0.2)) * 2.0)) * (1 - Math.max(0, (y - 0.5) * 2));
+    weatherState.lightning = Math.max(0, Math.min(1, (-0.3 - y) * 2.5));
+    weatherState.wind = Math.abs(y) * 0.8;
+    weatherState.snow = Math.max(0, Math.min(1, (-0.7 - y) * 3.0));
+    weatherState.smoke = 0.4 + Math.abs(y) * 0.6;
+    
+    if (weatherState.lightning > 0.3) {
+        const now = performance.now() / 1000;
+        if (now > nextLightningTime) {
+            lightningFlash = 1.0;
+            lightningType = Math.floor(Math.random() * 4);
+            nextLightningTime = now + 1.5 + Math.random() * 3;
+            triggerLightningSound(weatherState.lightning, lightningType);
+        }
+    }
+    lightningFlash *= 0.82;
+    
+    let label = '☀️ CLEAR';
+    if (weatherState.snow > 0.3) label = '❄️ SNOWSTORM';
+    else if (weatherState.lightning > 0.3) {
+        const types = ['⚡ STORM', '☁️ CLOUD FLASH', '🌳 BRANCHING', '↔️ HORIZONTAL'];
+        label = types[lightningType];
+    } else if (weatherState.rain > 0.3) label = '🌧️ RAIN';
+    else if (weatherState.clouds > 0.3) label = '☁️ CLOUDY';
+    else if (weatherState.smoke > 0.7) label = '🌫️ SMOKE';
+    weatherLabel.textContent = label;
+}
+
+// --- SHADERS ---
+const vsSource = `#version 300 es
+precision mediump float;
+layout(location = 0) in vec3 position;
+void main() { gl_Position = vec4(position, 1.0); }`;
+
+const fsSource = `#version 300 es
+precision mediump float;
+layout(location = 0) out vec4 fragColor;
+
+uniform float uTime;
+uniform vec2 uResolution;
+uniform vec3 uCamPos;
+uniform vec3 uCamDir;
+uniform vec3 uCamRight;
+uniform vec3 uCamUp;
+uniform vec2 uTouch;
+uniform float uTouchIntensity;
+uniform float uLightLevel;
+uniform float uWarmth;
+uniform float uRain;
+uniform float uLightning;
+uniform float uClouds;
+uniform float uWind;
+uniform float uSnow;
+uniform float uLightningFlash;
+uniform float uLightningType;
+uniform float uSmoke;
+
+// --- Player objects + Audio deform ---
+#define MAX_OBJECTS 50
+uniform vec3 uObjPos[MAX_OBJECTS];
+uniform float uObjSize[MAX_OBJECTS];
+uniform float uObjType[MAX_OBJECTS];
+uniform int uObjCount;
+uniform float uBassLevel;
+uniform float uHarmonyComplexity;
+uniform float uMelodyActivity;
+
+#define MAX_STEPS 96
+#define MAX_DIST 25.0
+#define SURF_DIST 0.002
+
+float hash(vec3 p) {
+    p = fract(p * vec3(443.897, 441.423, 437.195));
+    p += dot(p, p.yzx + 19.19);
+    return fract((p.x + p.y) * p.z);
+}
+float noise(vec3 p) {
+    vec3 i = floor(p);
+    vec3 f = fract(p);
+    f = f * f * (3.0 - 2.0 * f);
+    return mix(mix(mix(hash(i), hash(i + vec3(1,0,0)), f.x), mix(hash(i + vec3(0,1,0)), hash(i + vec3(1,1,0)), f.x), f.y),
+               mix(mix(hash(i + vec3(0,0,1)), hash(i + vec3(1,0,1)), f.x), mix(hash(i + vec3(0,1,1)), hash(i + vec3(1,1,1)), f.x), f.y), f.z);
+}
+float fbm(vec3 p) {
+    float v = 0.0, a = 0.5;
+    for (int i = 0; i < 4; i++) { v += a * noise(p); p *= 2.0; a *= 0.5; }
+    return v;
+}
+float smin(float a, float b, float k) {
+    float h = clamp(0.5 + 0.5 * (b - a) / k, 0.0, 1.0);
+    return mix(b, a, h) - k * h * (1.0 - h);
+}
+float sdSphere(vec3 p, float r) { return length(p) - r; }
+float sdBox(vec3 p, vec3 b) { vec3 q = abs(p) - b; return length(max(q, 0.0)) + min(max(q.x, max(q.y, q.z)), 0.0); }
+float sdTorus(vec3 p, vec2 t) { vec2 q = vec2(length(p.xz) - t.x, p.y); return length(q) - t.y; }
+
+// Audio-driven deform for player objects
+vec3 deformObject(vec3 p, float t, float bass, float harmony, float melody, vec3 objPos) {
+    float distFromCenter = length(objPos);
+    float audioStrength = clamp(distFromCenter / 12.0, 0.0, 1.0);
+    // Bass pulse: scale changes
+    float pulse = 1.0 + bass * 0.35 * sin(t * 4.0 + objPos.x * 2.0) * audioStrength;
+    p *= pulse;
+    // Harmony twist
+    float twistA = harmony * 2.0 * sin(t * 0.7 + objPos.z * 0.3) * audioStrength;
+    float ca = cos(twistA * p.y), sa = sin(twistA * p.y);
+    p.xz = mat2(ca, -sa, sa, ca) * p.xz;
+    // Melody surface waves
+    p.x += melody * 0.25 * sin(p.y * 3.0 + t * 2.0 + objPos.x) * audioStrength;
+    p.z += melody * 0.25 * cos(p.x * 2.5 + t * 1.7 + objPos.z) * audioStrength;
+    return p;
+}
+
+vec3 deform(vec3 p, float t, float intensity) {
+    float twistAmt = sin(t * 0.5) * 1.5 * intensity;
+    float angle = p.y * twistAmt;
+    float c = cos(angle), s = sin(angle);
+    p.xz = mat2(c, -s, s, c) * p.xz;
+    p.x += sin(p.y * 3.0 + t * 2.0) * 0.25 * intensity;
+    p.z += cos(p.x * 2.5 + t * 1.7) * 0.2 * intensity;
+    p /= (1.0 + sin(t * 1.5) * 0.15 * intensity);
+    return p;
+}
+
+vec2 map(vec3 p) {
+    float t = uTime;
+    float intensity = 0.6 + uTouchIntensity * 1.5;
+    vec3 sp = vec3(abs(p.x), p.y, p.z);
+    vec3 dp = deform(p, t, intensity);
+    vec3 dsp = vec3(abs(dp.x), dp.y, dp.z);
+    
+    float touchInfluence = uTouchIntensity * 0.8;
+    float blob = sdSphere(dp, 0.9 + 0.2 * sin(t * 1.3) + touchInfluence * 0.4 + fbm(dp * 1.8 + t * 0.4) * (0.3 + touchInfluence * 0.5));
+    
+    vec3 pillarPos = dsp - vec3(2.2 + uTouch.x * 0.8, uTouch.y * 0.5, 0.0);
+    float pAngle = pillarPos.y * sin(t * 0.7) * 1.2 * intensity;
+    pillarPos.xz = mat2(cos(pAngle), -sin(pAngle), sin(pAngle), cos(pAngle)) * pillarPos.xz;
+    float pillar = sdBox(pillarPos, vec3(0.25, 1.4 + touchInfluence * 0.6, 0.25));
+    
+    float orbAngle = t * 1.2 + uTouch.x * 3.14159;
+    vec3 orbPos = dsp - vec3(1.3 * cos(orbAngle), 1.6 + 0.3 * sin(t * 1.5) + uTouch.y * 0.7, 1.3 * sin(orbAngle));
+    float orb = sdSphere(orbPos, 0.25 + touchInfluence * 0.2 + sin(t * 3.0) * 0.08 * intensity);
+    
+    vec3 groundOrbPos = dsp - vec3(1.0, -1.2, 0.5);
+    float groundOrb = sdSphere(groundOrbPos, 0.35 + touchInfluence * 0.25 + sin(t * 2.0) * 0.1);
+    
+    vec3 torusPos = dp - vec3(0.0, 2.4 + 0.2 * sin(t * 0.7), 0.0);
+    float torusAngle = t * 0.8 + uTouch.x * 2.0;
+    torusPos.xz = mat2(cos(torusAngle), -sin(torusAngle), sin(torusAngle), cos(torusAngle)) * torusPos.xz;
+    float torus = sdTorus(torusPos, vec2(0.7 + touchInfluence * 0.3, 0.08 + touchInfluence * 0.08 + sin(t * 2.0 + torusPos.x * 4.0) * 0.15 * intensity));
+    
+    float ground = p.y + 1.5;
+    float d = smin(blob, pillar, 0.35);
+    d = smin(d, orb, 0.25); d = smin(d, groundOrb, 0.3); d = smin(d, torus, 0.2); d = min(d, ground);
+    float matOut = (abs(d - ground) < 0.01) ? 2.0 : 1.0;
+    
+    // Player built objects with audio deform (only if closer than scene)
+    for (int j = 0; j < MAX_OBJECTS; j++) {
+        if (j >= uObjCount) break;
+        vec3 op = p - uObjPos[j];
+        vec3 oPos = uObjPos[j];
+        float oSize = uObjSize[j];
+        float oType = uObjType[j];
+        vec3 dop = deformObject(op, t, uBassLevel, uHarmonyComplexity, uMelodyActivity, oPos);
+        float od = oType < 0.5 ? sdSphere(dop, oSize * 0.5) : sdBox(dop, vec3(oSize * 0.5));
+        if (od < d) { d = od; matOut = 3.0; }
+    }
+    return vec2(d, matOut);
+}
+
+vec3 getNormal(vec3 p) {
+    vec2 e = vec2(SURF_DIST, 0.0);
+    return normalize(vec3(map(p + e.xyy).x - map(p - e.xyy).x, map(p + e.yxy).x - map(p - e.yxy).x, map(p + e.yyx).x - map(p - e.yyx).x));
+}
+
+float smokeDensity(vec3 p) {
+    if (uSmoke < 0.01) return 0.0;
+    vec3 sp = p * 0.15 + vec3(uTime * 0.08 * (1.0 + uWind), uTime * 0.05, uTime * 0.03);
+    float n = fbm(sp);
+    float density = max(0.0, n - 0.45) * 3.0;
+    float heightFade = smoothstep(-2.0, 8.0, p.y) * (1.0 - smoothstep(6.0, 12.0, p.y));
+    return density * heightFade * uSmoke;
+}
+
+vec3 getSmokeColor(vec3 p) {
+    float colorShift = sin(p.x * 0.3 + uTime * 0.2) * 0.5 + 0.5;
+    return mix(vec3(0.85, 0.88, 0.92), vec3(0.05, 0.05, 0.08), sin(p.y * 0.2 + uTime * 0.1) * 0.5 + 0.5);
+}
+
+vec3 calcLighting(vec3 p, vec3 n, vec3 rd, float matId, float dist) {
+    float lightAngle = uTime * 0.8 + uTouch.x * 3.14159;
+    vec3 lightPos = vec3(sin(lightAngle) * 3.0 + uTouch.x * 2.0, 3.5 + uTouch.y * 1.5, cos(lightAngle) * 3.0);
+    vec3 lDir = normalize(lightPos - p);
+    float ll = uLightLevel;
+    vec3 baseCol = (matId < 1.5) ? mix(vec3(0.2, 0.6, 0.9), vec3(0.9, 0.3, 0.5), uTouchIntensity) : vec3(0.18, 0.18, 0.22);
+    vec3 viewDir = normalize(-rd);
+    vec3 halfDir = normalize(lDir + viewDir);
+    float diff = max(dot(n, lDir), 0.0);
+    float spec = pow(max(dot(n, halfDir), 0.0), 64.0);
+    float fresnel = pow(1.0 - max(dot(viewDir, n), 0.0), 4.0);
+    
+    // Player objects: metallic with sharp reflections
+    if (matId > 2.5) {
+        vec3 metalBase = vec3(0.18, 0.20, 0.22);
+        vec3 metalCol = metalBase * (0.3 + 0.7 * diff * ll);
+        metalCol += vec3(1.0, 0.95, 0.85) * spec * 1.5 * ll;
+        metalCol += vec3(0.6, 0.7, 0.9) * fresnel * 0.5;
+        metalCol += vec3(0.5, 0.7, 1.0) * uLightningFlash * 0.6;
+        return metalCol / (1.0 + metalCol);
+    }
+    
+    vec3 ambient = baseCol * 0.08 * ll;
+    diff *= ll;
+    spec = pow(max(dot(n, halfDir), 0.0), 32.0);
+    fresnel = pow(1.0 - max(dot(viewDir, n), 0.0), 3.0);
+    float glowFactor = max(0.0, ll - 1.0) * 2.5;
+    vec3 glow = baseCol * glowFactor * (0.6 + 0.4 * sin(uTime * 3.0 + p.y * 2.0));
+    
+    vec3 lightningCol = vec3(0.0);
+    if (uLightningFlash > 0.01) {
+        if (uLightningType < 0.5) lightningCol = vec3(0.8, 0.9, 1.0) * uLightningFlash * (diff * 0.8 + 0.4) * 3.5;
+        else if (uLightningType < 1.5) lightningCol = vec3(0.6, 0.5, 0.9) * uLightningFlash * 2.0;
+        else if (uLightningType < 2.5) lightningCol = vec3(1.0, 0.95, 0.7) * uLightningFlash * (diff + 0.5) * 4.0;
+        else lightningCol = vec3(0.5, 0.9, 1.0) * uLightningFlash * 2.5;
+    }
+    
+    vec3 coldLight = vec3(0.7, 0.85, 1.0);
+    vec3 warmLight = vec3(1.0, 0.8, 0.6);
+    vec3 lightColor = mix(coldLight, warmLight, uWarmth);
+    
+    vec3 col = ambient + baseCol * diff * lightColor + lightColor * spec * 0.6 + vec3(0.4, 0.7, 1.0) * (fresnel * 0.4);
+    col += glow + lightningCol;
+    col = col / (1.0 + col);
+    return col;
+}
+
+vec3 renderSky(vec3 rd) {
+    vec3 coldSkyTop = vec3(0.05, 0.1, 0.25);
+    vec3 warmSkyTop = vec3(0.25, 0.1, 0.05);
+    vec3 coldSkyBot = vec3(0.15, 0.2, 0.35);
+    vec3 warmSkyBot = vec3(0.35, 0.15, 0.05);
+    vec3 skyTopColor = mix(coldSkyTop, warmSkyTop, uWarmth);
+    vec3 skyBotColor = mix(coldSkyBot, warmSkyBot, uWarmth);
+    skyTopColor = mix(skyTopColor, vec3(0.05, 0.05, 0.1), uClouds);
+    skyBotColor = mix(skyBotColor, vec3(0.15, 0.15, 0.2), uClouds);
+    vec3 sky = mix(skyBotColor, skyTopColor, max(0.0, rd.y));
+    sky = mix(vec3(0.01), sky, uLightLevel);
+    sky += vec3(0.5, 0.6, 0.8) * uLightningFlash;
+    if (uRain > 0.01) {
+        float rainAccum = 0.0;
+        for (int i = 0; i < 8; i++) {
+            vec3 rp = uCamPos + rd * (float(i) * 1.8 + 1.0);
+            rp.x += uTime * 0.5 * uWind; rp.y -= uTime * 8.0;
+            vec3 cell = floor(rp * vec3(1.5, 0.3, 1.5));
+            vec3 f = fract(rp * vec3(1.5, 0.3, 1.5));
+            if (hash(cell) > 0.85) rainAccum += smoothstep(0.5, 0.0, abs(f.x - 0.5)) * smoothstep(0.5, 0.0, abs(f.z - 0.5)) * 0.15;
+        }
+        sky += vec3(0.5, 0.6, 0.8) * rainAccum * uRain;
+    }
+    if (uSnow > 0.01) {
+        float snowAccum = 0.0;
+        for (int i = 0; i < 6; i++) {
+            vec3 sp = uCamPos + rd * (float(i) * 2.0 + 1.0);
+            sp.x += sin(uTime * 0.5 + sp.y) * 0.3 * uWind; sp.y -= uTime * 1.5;
+            vec3 cell = floor(sp * 1.2);
+            if (hash(cell) > 0.92) { vec3 f = fract(sp * 1.2) - 0.5; snowAccum += smoothstep(0.2, 0.0, length(f)) * 0.2; }
+        }
+        sky += vec3(1.0) * snowAccum * uSnow;
+    }
+    return sky;
+}
+
+vec3 render(vec2 uv) {
+    vec3 ro = uCamPos;
+    vec3 rd = normalize(uCamDir + uv.x * uCamRight + uv.y * uCamUp);
+    float t = 0.0, matId = 0.0;
+    bool hit = false;
+    for(int i = 0; i < MAX_STEPS; i++) {
+        vec3 p = ro + rd * t;
+        vec2 res = map(p);
+        if(res.x < SURF_DIST) { matId = res.y; hit = true; break; }
+        if(t > MAX_DIST) break;
+        t += res.x;
+    }
+    vec3 col;
+    if(!hit) col = renderSky(rd);
+    else { vec3 p = ro + rd * t; vec3 n = getNormal(p); col = calcLighting(p, n, rd, matId, t); }
+    if (uSmoke > 0.01) {
+        float smokeAccum = 0.0; vec3 smokeColAccum = vec3(0.0);
+        for(int i = 0; i < 20; i++) {
+            float dist = float(i) * 1.5 + 1.0; if (dist > MAX_DIST) break;
+            vec3 p = ro + rd * dist; float d = smokeDensity(p);
+            if (d > 0.01) { smokeAccum += d * 0.12; smokeColAccum += getSmokeColor(p) * d * 0.12; }
+        }
+        smokeAccum = clamp(smokeAccum, 0.0, 0.85);
+        col = mix(col, smokeColAccum / max(smokeAccum, 0.001), smokeAccum);
+    }
+    col = pow(clamp(col, 0.0, 1.0), vec3(0.4545));
+    return col;
+}
+
+void main() {
+    vec2 uv = (gl_FragCoord.xy - 0.5 * uResolution) / uResolution.y;
+    fragColor = vec4(render(uv), 1.0);
+}`;
+
+// --- WebGL Setup ---
+function createShader(type, source) {
+    const shader = gl.createShader(type);
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) { console.error('Shader error:', gl.getShaderInfoLog(shader)); return null; }
+    return shader;
+}
+const vs = createShader(gl.VERTEX_SHADER, vsSource);
+const fs = createShader(gl.FRAGMENT_SHADER, fsSource);
+const program = gl.createProgram();
+gl.attachShader(program, vs); gl.attachShader(program, fs);
+gl.linkProgram(program); gl.useProgram(program);
+
+const posBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 0, 1, -1, 0, -1, 1, 0, 1, 1, 0]), gl.STATIC_DRAW);
+gl.enableVertexAttribArray(gl.getAttribLocation(program, 'position'));
+gl.vertexAttribPointer(gl.getAttribLocation(program, 'position'), 3, gl.FLOAT, false, 0, 0);
+
+const uTime = gl.getUniformLocation(program, 'uTime');
+const uRes = gl.getUniformLocation(program, 'uResolution');
+const uCamPos = gl.getUniformLocation(program, 'uCamPos');
+const uCamDir = gl.getUniformLocation(program, 'uCamDir');
+const uCamRight = gl.getUniformLocation(program, 'uCamRight');
+const uCamUp = gl.getUniformLocation(program, 'uCamUp');
+const uTouch = gl.getUniformLocation(program, 'uTouch');
+const uTouchIntensity = gl.getUniformLocation(program, 'uTouchIntensity');
+const uLightLevel = gl.getUniformLocation(program, 'uLightLevel');
+const uWarmth = gl.getUniformLocation(program, 'uWarmth');
+const uRain = gl.getUniformLocation(program, 'uRain');
+const uLightning = gl.getUniformLocation(program, 'uLightning');
+const uClouds = gl.getUniformLocation(program, 'uClouds');
+const uWind = gl.getUniformLocation(program, 'uWind');
+const uSnow = gl.getUniformLocation(program, 'uSnow');
+const uLightningFlash = gl.getUniformLocation(program, 'uLightningFlash');
+const uLightningType = gl.getUniformLocation(program, 'uLightningType');
+const uSmoke = gl.getUniformLocation(program, 'uSmoke');
+const uObjPos = gl.getUniformLocation(program, 'uObjPos');
+const uObjSize = gl.getUniformLocation(program, 'uObjSize');
+const uObjType = gl.getUniformLocation(program, 'uObjType');
+const uObjCount = gl.getUniformLocation(program, 'uObjCount');
+const uBassLevel = gl.getUniformLocation(program, 'uBassLevel');
+const uHarmonyComplexity = gl.getUniformLocation(program, 'uHarmonyComplexity');
+const uMelodyActivity = gl.getUniformLocation(program, 'uMelodyActivity');
+
+function setupCamera(time) {
+    const dist = firstPerson ? 0.15 : camDistance;
+    const height = firstPerson ? 1.6 : camHeight;
+    const camPos = [charPos.x - Math.sin(charYaw) * dist, height, charPos.z - Math.cos(charYaw) * dist];
+    const target = new THREE.Vector3(charPos.x, firstPerson ? 1.4 : 0.5, charPos.z);
+    let fx = target.x - camPos[0], fy = target.y - camPos[1], fz = target.z - camPos[2];
+    const fl = Math.sqrt(fx*fx + fy*fy + fz*fz);
+    fx /= fl; fy /= fl; fz /= fl;
+    const up = [0, 1, 0];
+    let rx = fy * up[2] - fz * up[1], ry = fz * up[0] - fx * up[2], rz = fx * up[1] - fy * up[0];
+    const rl = Math.sqrt(rx*rx + ry*ry + rz*rz);
+    rx /= rl; ry /= rl; rz /= rl;
+    let ux = fy * rz - fz * ry, uy = fz * rx - fx * rz, uz = fx * ry - fy * rx;
+    gl.uniform3fv(uCamPos, camPos);
+    gl.uniform3f(uCamDir, fx, fy, fz);
+    gl.uniform3f(uCamRight, rx, ry, rz);
+    gl.uniform3f(uCamUp, ux, uy, uz);
+    threeCamera.position.set(camPos[0], camPos[1], camPos[2]);
+    threeCamera.lookAt(target.x, target.y, target.z);
+}
+
+let startTime = Date.now();
+let selfFig = null;
+const objPosFlat = new Float32Array(MAX_OBJECTS * 3);
+const objSizeFlat = new Float32Array(MAX_OBJECTS);
+const objTypeFlat = new Float32Array(MAX_OBJECTS);
+
+function updateInfoText() {
+    const d = Math.hypot(charPos.x, charPos.z).toFixed(1);
+    const isPC = !('ontouchstart' in window);
+    if (buildMode) {
+        document.getElementById('info').innerHTML = 'СТРОЙКА: Space / клик / тап = поставить &bull; Q/E = размер' + '<br>📏 ' + d + 'м от центра';
+    } else {
+        const ctrl = isPC ? 'WASD/стрелки: ходьба • мышь drag: поворот • B: стройка • Q: вид' : '🚶 1 палец: ходьба • ✌️ 2 пальца: поворот';
+        document.getElementById('info').innerHTML = ctrl + '<br>📏 ' + d + 'м от центра' + (firstPerson ? ' [1P]' : '');
+    }
+}
+updateInfoText();
+function render() {
+    const time = (Date.now() - startTime) / 1000;
+    updateAudioMetrics();
+    
+    updateInfoText();
+    
+    // PC keyboard movement
+    const speed = 0.12;
+    if (keys.has('KeyW') || keys.has('ArrowUp')) { charPos.x += Math.sin(charYaw) * speed; charPos.z += Math.cos(charYaw) * speed; }
+    if (keys.has('KeyS') || keys.has('ArrowDown')) { charPos.x -= Math.sin(charYaw) * speed; charPos.z -= Math.cos(charYaw) * speed; }
+    if (keys.has('KeyA') || keys.has('ArrowLeft')) { charPos.x -= Math.cos(charYaw) * speed; charPos.z += Math.sin(charYaw) * speed; }
+    if (keys.has('KeyD') || keys.has('ArrowRight')) { charPos.x += Math.cos(charYaw) * speed; charPos.z -= Math.sin(charYaw) * speed; }
+    
+    const distToCenter = Math.hypot(charPos.x, charPos.z);
+    const lightLevel = Math.min(1.2, 0.4 + 0.3 * (1 - weatherState.clouds * 0.4) + 0.08 * Math.sin(time * 0.2));
+    const warmth = 0.5 + Math.sin(time * 0.1) * 0.2;
+    
+    // Weather from server, lightning flash locally
+    updateWeather(-0.3 + weatherState.rain * 0.6);
+    
+    // Chord: cycle based on audio metrics
+    if (audioCtx) {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const chordCycle = Math.floor((time * 0.15) % CHORDS.length);
+        if (chordCycle !== currentChordIndex) setChord(chordCycle);
+    }
+    
+    // Send camera position to server (throttled)
+    const now2 = performance.now();
+    if (now2 - lastPosSend > 80) {
+        lastPosSend = now2;
+        socket.emit('sharabass:fly', { cameraPos: { x: charPos.x, y: 0, z: charPos.z }, cameraTarget: { x: charPos.x + Math.sin(charYaw), y: 0.5, z: charPos.z + Math.cos(charYaw) } });
+    }
+    
+    // --- Update shader uniforms ---
+    gl.uniform1f(uTime, time);
+    gl.uniform2f(uRes, canvas.width, canvas.height);
+    gl.uniform2f(uTouch, 0.5, -0.3 + weatherState.rain * 0.6);
+    gl.uniform1f(uTouchIntensity, 0.5);
+    gl.uniform1f(uLightLevel, lightLevel);
+    gl.uniform1f(uWarmth, warmth);
+    gl.uniform1f(uRain, weatherState.rain);
+    gl.uniform1f(uLightning, weatherState.lightning);
+    gl.uniform1f(uClouds, weatherState.clouds);
+    gl.uniform1f(uWind, weatherState.wind);
+    gl.uniform1f(uSnow, weatherState.snow);
+    gl.uniform1f(uLightningFlash, lightningFlash);
+    gl.uniform1f(uLightningType, lightningType);
+    gl.uniform1f(uSmoke, weatherState.smoke);
+    
+    // Player objects uniforms
+    const count = Math.min(worldObjects.length, MAX_OBJECTS);
+    gl.uniform1i(uObjCount, count);
+    for (let i = 0; i < count; i++) {
+        const o = worldObjects[i];
+        objPosFlat[i * 3] = o.position.x;
+        objPosFlat[i * 3 + 1] = o.position.y;
+        objPosFlat[i * 3 + 2] = o.position.z;
+        objSizeFlat[i] = o.size || 1;
+        objTypeFlat[i] = o.type || 0;
+    }
+    for (let i = count; i < MAX_OBJECTS; i++) {
+        objPosFlat[i * 3] = 0; objPosFlat[i * 3 + 1] = -100; objPosFlat[i * 3 + 2] = 0;
+        objSizeFlat[i] = 0; objTypeFlat[i] = 0;
+    }
+    gl.uniform3fv(uObjPos, objPosFlat);
+    gl.uniform1fv(uObjSize, objSizeFlat);
+    gl.uniform1fv(uObjType, objTypeFlat);
+    
+    // Audio music metrics for shader deform
+    gl.uniform1f(uBassLevel, bassLevel);
+    gl.uniform1f(uHarmonyComplexity, harmonyComplexity);
+    gl.uniform1f(uMelodyActivity, melodyActivity);
+    
+    setupCamera(time);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    
+    // --- Three.js overlay: other players as stick figures ---
+    for (const [id, p] of remotePlayers) {
+        if (!remoteStickFigures.has(id)) {
+            const fig = makeStickFigure(pickColor(id));
+            threeScene.add(fig);
+            remoteStickFigures.set(id, fig);
+        }
+        const fig = remoteStickFigures.get(id);
+        const cp = p.cameraPos || { x: 0, y: 0, z: 0 };
+        fig.position.set(cp.x, cp.y, cp.z);
+        // Look toward camera target
+        const ct = p.cameraTarget || { x: 0, y: 0, z: 0 };
+        fig.lookAt(ct.x, ct.y, ct.z);
+    }
+    for (const [id] of remoteStickFigures) {
+        if (!remotePlayers.has(id)) { threeScene.remove(remoteStickFigures.get(id)); remoteStickFigures.delete(id); }
+    }
+    // Self stick figure (local player, on ground at y=-1.5)
+    if (!selfFig) {
+        selfFig = makeStickFigure(pickColor(selfId || 'self'));
+        selfFig.userData._px = charPos.x; selfFig.userData._pz = charPos.z;
+        threeScene.add(selfFig);
+        // Ground disc under character
+        const discMat = new THREE.MeshBasicMaterial({ color: 0x4488ff, transparent: true, opacity: 0.2, side: THREE.DoubleSide, depthWrite: false });
+        const disc = new THREE.Mesh(new THREE.CircleGeometry(0.4, 16), discMat);
+        disc.rotation.x = -Math.PI/2;
+        disc.position.y = -0.02;
+        selfFig.add(disc);
+    }
+    selfFig.visible = !firstPerson;
+    selfFig.position.set(charPos.x, -1.5, charPos.z);
+    selfFig.lookAt(charPos.x + Math.sin(charYaw), -1.5, charPos.z + Math.cos(charYaw));
+    // Walking animation
+    const u = selfFig.userData;
+    const dx = charPos.x - u._px, dz = charPos.z - u._pz;
+    u._px = charPos.x; u._pz = charPos.z;
+    const moving = Math.abs(dx) > 0.0001 || Math.abs(dz) > 0.0001;
+    if (moving) u.moveTime += 0.08; else u.moveTime *= 0.85;
+    const swing = Math.sin(u.moveTime) * 0.6;
+    if (u.armL) { u.armL.rotation.x = swing; u.armR.rotation.x = -swing; u.legL.rotation.x = -swing; u.legR.rotation.x = swing; }
+    // Placement ghost
+    if (buildMode) {
+        const pp = getPlacePos();
+        ghostBox.position.set(pp.x, -1.25, pp.z);
+        ghostSphere.position.set(pp.x, -1.25, pp.z);
+        ghostBox.visible = objType === 1;
+        ghostSphere.visible = objType === 0;
+        // Flash on place
+        if (placeFlash > 0.01) {
+            ghostMat.color.setHex(0xffffff);
+            placeFlash *= 0.85;
+        } else {
+            ghostMat.color.setHex(0x44ff88);
+            placeFlash = 0;
+        }
+    } else {
+        ghostBox.visible = false;
+        ghostSphere.visible = false;
+        placeFlash = 0;
+    }
+    
+    threeRenderer.render(threeScene, threeCamera);
+    
+    requestAnimationFrame(render);
+}
+render();
+</script>
+</body>
+</html>
+
