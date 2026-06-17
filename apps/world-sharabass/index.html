@@ -175,6 +175,7 @@ function placeObject() {
         // Local fallback: add object directly so it appears immediately in SDF
         const localObj = { id: 'local_' + Date.now(), type: objType, position: { x: pp.x, y: -1.25, z: pp.z }, size: placeSize, owner: selfId || 'local', ownerName: 'Вы' };
         worldObjects.push(localObj);
+        objUniformDirty = true;
     }
     // Exit build mode so ghost disappears and only solid object is visible
     if (buildMode) document.getElementById('buildBtn').click();
@@ -212,10 +213,65 @@ function pickColor(id) { let h = 0; for (let i = 0; i < id.length; i++) h = ((h 
 const canvas = document.getElementById('glcanvas');
 const gl = canvas.getContext('webgl2', { antialias: false, powerPreference: 'high-performance' });
 if (!gl) { document.body.innerHTML = '<h1 style="color:white;text-align:center;margin-top:50px;">WebGL2 not supported</h1>'; throw new Error('WebGL2 not supported'); }
+const rendererInfo = gl.getExtension('WEBGL_debug_renderer_info');
+const webglRendererName = rendererInfo ? gl.getParameter(rendererInfo.UNMASKED_RENDERER_WEBGL) : '';
+const isSoftwareWebGL = /swiftshader|software|warp|llvmpipe/i.test(webglRendererName);
+const isLegacyIntelWebGL = /Intel\(R\) HD Graphics (?:2000|2500|3000|4000|4400|4600|5000)/i.test(webglRendererName);
+const isLowPowerWebGL = isSoftwareWebGL || isLegacyIntelWebGL;
+const requestedPerfMode = new URLSearchParams(location.search).get('perf');
+const perfMode = ['max', 'balanced', 'quality'].includes(requestedPerfMode) ? requestedPerfMode : (isLowPowerWebGL ? 'max' : 'balanced');
+const maxPerfMode = perfMode === 'max';
+const qualityPerfMode = perfMode === 'quality';
+document.body.dataset.sharabassRenderer = webglRendererName || 'unknown';
+document.body.dataset.sharabassGpuTier = isLowPowerWebGL ? 'low' : 'normal';
+document.body.dataset.sharabassPerfMode = perfMode;
 
-const MAX_STEPS = 96;
+const MAX_STEPS = isLowPowerWebGL && maxPerfMode ? 32 : isLowPowerWebGL && !qualityPerfMode ? 48 : 64;
 const MAX_DIST = 25.0;
 const SURF_DIST = 0.002;
+const BASE_RENDER_MAX_DIM = isLowPowerWebGL && maxPerfMode ? 720 : qualityPerfMode ? 1080 : 900;
+const MAX_RENDER_PIXEL_RATIO = isLowPowerWebGL ? 1.0 : 1.4;
+const MIN_RENDER_QUALITY = isLowPowerWebGL && maxPerfMode ? 0.22 : isLowPowerWebGL ? 0.28 : 0.45;
+const TARGET_FRAME_MS = maxPerfMode ? 17.5 : qualityPerfMode ? 24 : 20;
+const QUALITY_RECOVER_FRAME_MS = maxPerfMode ? 15.5 : qualityPerfMode ? 20 : 17;
+const WALK_SPEED = 7.2;
+let renderQuality = isLowPowerWebGL && maxPerfMode ? 0.32 : isLowPowerWebGL ? 0.42 : 0.82;
+let perfFrameCount = 0;
+let perfFrameMsTotal = 0;
+let lastQualityTune = performance.now();
+window.__sharabassPerf = { fps: 0, avgFrameMs: 0, renderQuality, canvasWidth: 0, canvasHeight: 0 };
+
+function tuneRenderQuality(frameMs, now) {
+    perfFrameCount++;
+    perfFrameMsTotal += frameMs;
+    if (now - lastQualityTune < 1000 || perfFrameCount < 8) return;
+    const avgFrameMs = perfFrameMsTotal / perfFrameCount;
+    window.__sharabassPerf.fps = 1000 / avgFrameMs;
+    window.__sharabassPerf.avgFrameMs = avgFrameMs;
+    window.__sharabassPerf.renderQuality = renderQuality;
+    document.body.dataset.sharabassFps = window.__sharabassPerf.fps.toFixed(1);
+    document.body.dataset.sharabassFrameMs = avgFrameMs.toFixed(1);
+    document.body.dataset.sharabassRenderQuality = renderQuality.toFixed(2);
+    let nextQuality = renderQuality;
+    if (avgFrameMs > 50 && renderQuality > MIN_RENDER_QUALITY) {
+        nextQuality = Math.max(MIN_RENDER_QUALITY, renderQuality - 0.16);
+    } else if (avgFrameMs > 32 && renderQuality > MIN_RENDER_QUALITY) {
+        nextQuality = Math.max(MIN_RENDER_QUALITY, renderQuality - 0.12);
+    } else if (avgFrameMs > TARGET_FRAME_MS && renderQuality > MIN_RENDER_QUALITY) {
+        nextQuality = Math.max(MIN_RENDER_QUALITY, renderQuality - 0.06);
+    } else if (avgFrameMs < QUALITY_RECOVER_FRAME_MS && renderQuality < 1) {
+        nextQuality = Math.min(1, renderQuality + 0.02);
+    }
+    if (Math.abs(nextQuality - renderQuality) > 0.001) {
+        renderQuality = nextQuality;
+        resize();
+    }
+    window.__sharabassPerf.renderQuality = renderQuality;
+    document.body.dataset.sharabassRenderQuality = renderQuality.toFixed(2);
+    perfFrameCount = 0;
+    perfFrameMsTotal = 0;
+    lastQualityTune = now;
+}
 
 // --- Building / Object state ---
 let buildMode = false;
@@ -236,7 +292,7 @@ const remotePlayers = new Map(); // id -> { name, cameraPos, cameraTarget }
 socket.on('sharabass:init', data => {
     if (!data) return;
     if (data.selfId) selfId = data.selfId;
-    if (data.objects) { worldObjects.length = 0; worldObjects.push(...data.objects); }
+    if (data.objects) { worldObjects.length = 0; worldObjects.push(...data.objects); objUniformDirty = true; }
     if (data.players) for (const p of data.players) remotePlayers.set(p.id, p);
     if (data.weather) Object.assign(weatherState, data.weather);
 });
@@ -248,8 +304,8 @@ socket.on('sharabass:players', players => {
     for (const [id] of remotePlayers) if (!ids.has(id)) remotePlayers.delete(id);
     updatePlayersUI();
 });
-socket.on('sharabass:object:placed', obj => { if (obj) { const i = worldObjects.findIndex(o => o.id === obj.id); if (i === -1) worldObjects.push(obj); else worldObjects[i] = obj; } });
-socket.on('sharabass:object:removed', d => { if (d) { const i = worldObjects.findIndex(o => o.id === d.id); if (i !== -1) worldObjects.splice(i, 1); } });
+socket.on('sharabass:object:placed', obj => { if (obj) { const i = worldObjects.findIndex(o => o.id === obj.id); if (i === -1) worldObjects.push(obj); else worldObjects[i] = obj; objUniformDirty = true; } });
+socket.on('sharabass:object:removed', d => { if (d) { const i = worldObjects.findIndex(o => o.id === d.id); if (i !== -1) { worldObjects.splice(i, 1); objUniformDirty = true; } } });
 
 function putLog(msg) { /* console only */ }
 function updatePlayersUI() {
@@ -259,13 +315,15 @@ function updatePlayersUI() {
 
 // --- Resize ---
 function resize() {
-    const pr = Math.min(window.devicePixelRatio || 2, 2);
+    const pr = Math.min(window.devicePixelRatio || 1, MAX_RENDER_PIXEL_RATIO) * renderQuality;
     const w = window.innerWidth;
     const h = window.innerHeight;
-    const maxDim = 1080;
-    const scale = Math.min(1, maxDim / Math.max(w, h));
-    canvas.width = Math.floor(w * pr * scale);
-    canvas.height = Math.floor(h * pr * scale);
+    const scale = Math.min(1, BASE_RENDER_MAX_DIM / Math.max(w, h));
+    canvas.width = Math.max(1, Math.floor(w * pr * scale));
+    canvas.height = Math.max(1, Math.floor(h * pr * scale));
+    window.__sharabassPerf.canvasWidth = canvas.width;
+    window.__sharabassPerf.canvasHeight = canvas.height;
+    document.body.dataset.sharabassCanvas = `${canvas.width}x${canvas.height}`;
     canvas.style.width = w + 'px';
     canvas.style.height = h + 'px';
     gl.viewport(0, 0, canvas.width, canvas.height);
@@ -653,18 +711,19 @@ function triggerLightningSound(intensity, type) {
 // --- Audio Metrics for Shader Deform ---
 let bassLevel = 0, harmonyComplexity = 0, melodyActivity = 0;
 let buildBoost = 0; // 0-1, decays after placement
-function updateAudioMetrics() {
+function updateAudioMetrics(dt = 1 / 60) {
+    const frameScale = Math.max(0.1, Math.min(3, dt * 60));
     if (audioCtx && bassGain) {
         const now = audioCtx.currentTime;
         const targetBass = Math.min(1, (bassGain?.gain?.value || 0) * 4);
-        bassLevel += (targetBass - bassLevel) * 0.1;
+        bassLevel += (targetBass - bassLevel) * (1 - Math.pow(0.9, frameScale));
     }
     const hTarget = (currentChordIndex + 1) / CHORDS.length;
-    harmonyComplexity += (hTarget - harmonyComplexity) * 0.05;
+    harmonyComplexity += (hTarget - harmonyComplexity) * (1 - Math.pow(0.95, frameScale));
     const mTarget = Math.min(1, 800 / Math.max(150, currentMelodyTempo));
-    melodyActivity += (mTarget - melodyActivity) * 0.05;
+    melodyActivity += (mTarget - melodyActivity) * (1 - Math.pow(0.95, frameScale));
     // Build boost decays
-    if (buildBoost > 0.01) buildBoost *= 0.98;
+    if (buildBoost > 0.01) buildBoost *= Math.pow(0.98, frameScale);
     else buildBoost = 0;
     bassLevel += buildBoost * 0.2;
     harmonyComplexity += buildBoost * 0.4;
@@ -697,8 +756,9 @@ let lightningFlash = 0;
 let lightningType = 0;
 let nextLightningTime = 0;
 const weatherLabel = document.getElementById('weather');
+let lastWeatherLabel = weatherLabel ? weatherLabel.textContent : '';
 
-function updateWeather(touchY) {
+function updateWeather(touchY, dt = 1 / 60) {
     const y = touchY;
     weatherState.clouds = Math.max(0, Math.min(1, (y - 0.2) * 2.5));
     weatherState.rain = Math.max(0, Math.min(1, (y - (-0.2)) * 2.0)) * (1 - Math.max(0, (y - 0.5) * 2));
@@ -716,7 +776,7 @@ function updateWeather(touchY) {
             triggerLightningSound(weatherState.lightning, lightningType);
         }
     }
-    lightningFlash *= 0.82;
+    lightningFlash *= Math.pow(0.82, Math.max(0.1, Math.min(3, dt * 60)));
     
     let label = '☀️ CLEAR';
     if (weatherState.snow > 0.3) label = '❄️ SNOWSTORM';
@@ -726,7 +786,10 @@ function updateWeather(touchY) {
     } else if (weatherState.rain > 0.3) label = '🌧️ RAIN';
     else if (weatherState.clouds > 0.3) label = '☁️ CLOUDY';
     else if (weatherState.smoke > 0.7) label = '🌫️ SMOKE';
-    weatherLabel.textContent = label;
+    if (label !== lastWeatherLabel) {
+        weatherLabel.textContent = label;
+        lastWeatherLabel = label;
+    }
 }
 
 // --- SHADERS ---
@@ -768,9 +831,11 @@ uniform float uBassLevel;
 uniform float uHarmonyComplexity;
 uniform float uMelodyActivity;
 
-#define MAX_STEPS 96
-#define MAX_DIST 25.0
-#define SURF_DIST 0.002
+#define MAX_STEPS ${MAX_STEPS}
+#define MAX_DIST ${isLowPowerWebGL && maxPerfMode ? '18.0' : isLowPowerWebGL && !qualityPerfMode ? '22.0' : '25.0'}
+#define SURF_DIST ${isLowPowerWebGL && maxPerfMode ? '0.004' : isLowPowerWebGL && !qualityPerfMode ? '0.003' : '0.002'}
+#define SMOKE_STEPS ${isLowPowerWebGL && maxPerfMode ? 3 : isLowPowerWebGL && !qualityPerfMode ? 5 : 8}
+#define FBM_OCTAVES ${isLowPowerWebGL && !qualityPerfMode ? 2 : 4}
 
 float hash(vec3 p) {
     p = fract(p * vec3(443.897, 441.423, 437.195));
@@ -786,7 +851,7 @@ float noise(vec3 p) {
 }
 float fbm(vec3 p) {
     float v = 0.0, a = 0.5;
-    for (int i = 0; i < 4; i++) { v += a * noise(p); p *= 2.0; a *= 0.5; }
+    for (int i = 0; i < FBM_OCTAVES; i++) { v += a * noise(p); p *= 2.0; a *= 0.5; }
     return v;
 }
 float smin(float a, float b, float k) {
@@ -990,7 +1055,7 @@ vec3 render(vec2 uv) {
     else { vec3 p = ro + rd * t; vec3 n = getNormal(p); col = calcLighting(p, n, rd, matId, t); }
     if (uSmoke > 0.01) {
         float smokeAccum = 0.0; vec3 smokeColAccum = vec3(0.0);
-        for(int i = 0; i < 20; i++) {
+        for(int i = 0; i < SMOKE_STEPS; i++) {
             float dist = float(i) * 1.5 + 1.0; if (dist > MAX_DIST) break;
             vec3 p = ro + rd * dist; float d = smokeDensity(p);
             if (d > 0.01) { smokeAccum += d * 0.12; smokeColAccum += getSmokeColor(p) * d * 0.12; }
@@ -1074,11 +1139,17 @@ function setupCamera(time) {
     threeCamera.lookAt(target.x, target.y, target.z);
 }
 
-let startTime = Date.now();
+let startTime = performance.now();
 let selfFig = null;
 const objPosFlat = new Float32Array(MAX_OBJECTS * 3);
 const objSizeFlat = new Float32Array(MAX_OBJECTS);
 const objTypeFlat = new Float32Array(MAX_OBJECTS);
+let objUniformDirty = true;
+let lastObjUniformCount = -1;
+let lastFrameTime = startTime;
+let lastInfoUpdate = 0;
+let debugFrameCount = 0;
+let lastDebugUpdate = 0;
 
 function updateInfoText() {
     const d = Math.hypot(charPos.x, charPos.z).toFixed(1);
@@ -1091,14 +1162,28 @@ function updateInfoText() {
     }
 }
 updateInfoText();
-function render() {
-    const time = (Date.now() - startTime) / 1000;
-    updateAudioMetrics();
+function render(now = performance.now()) {
+    const rawFrameMs = Math.max(1, now - lastFrameTime);
+    const frameMs = Math.min(100, rawFrameMs);
+    const dt = Math.min(0.05, frameMs / 1000);
+    lastFrameTime = now;
+    const time = (now - startTime) / 1000;
+    tuneRenderQuality(rawFrameMs, now);
+    updateAudioMetrics(dt);
+    debugFrameCount++;
+    if (now - lastDebugUpdate > 500) {
+        document.body.dataset.sharabassFrames = String(debugFrameCount);
+        document.body.dataset.sharabassRenderQuality = renderQuality.toFixed(2);
+        lastDebugUpdate = now;
+    }
     
-    updateInfoText();
+    if (now - lastInfoUpdate > 150) {
+        updateInfoText();
+        lastInfoUpdate = now;
+    }
     
     // PC keyboard movement
-    const speed = 0.12;
+    const speed = WALK_SPEED * dt;
     if (keys.has('KeyW') || keys.has('ArrowUp')) { charPos.x += Math.sin(charYaw) * speed; charPos.z += Math.cos(charYaw) * speed; }
     if (keys.has('KeyS') || keys.has('ArrowDown')) { charPos.x -= Math.sin(charYaw) * speed; charPos.z -= Math.cos(charYaw) * speed; }
     if (keys.has('KeyA') || keys.has('ArrowLeft')) { charPos.x -= Math.cos(charYaw) * speed; charPos.z += Math.sin(charYaw) * speed; }
@@ -1109,7 +1194,7 @@ function render() {
     const warmth = 0.5 + Math.sin(time * 0.1) * 0.2;
     
     // Weather from server, lightning flash locally
-    updateWeather(-0.3 + weatherState.rain * 0.6);
+    updateWeather(-0.3 + weatherState.rain * 0.6, dt);
     
     // Chord: cycle based on audio metrics
     if (audioCtx) {
@@ -1143,22 +1228,22 @@ function render() {
     
     // Player objects uniforms
     const count = Math.min(worldObjects.length, MAX_OBJECTS);
-    gl.uniform1i(uObjCount, count);
-    for (let i = 0; i < count; i++) {
-        const o = worldObjects[i];
-        objPosFlat[i * 3] = o.position.x;
-        objPosFlat[i * 3 + 1] = o.position.y;
-        objPosFlat[i * 3 + 2] = o.position.z;
-        objSizeFlat[i] = o.size || 1;
-        objTypeFlat[i] = o.type || 0;
+    if (objUniformDirty || count !== lastObjUniformCount) {
+        gl.uniform1i(uObjCount, count);
+        for (let i = 0; i < count; i++) {
+            const o = worldObjects[i];
+            objPosFlat[i * 3] = o.position.x;
+            objPosFlat[i * 3 + 1] = o.position.y;
+            objPosFlat[i * 3 + 2] = o.position.z;
+            objSizeFlat[i] = o.size || 1;
+            objTypeFlat[i] = o.type || 0;
+        }
+        gl.uniform3fv(uObjPos, objPosFlat);
+        gl.uniform1fv(uObjSize, objSizeFlat);
+        gl.uniform1fv(uObjType, objTypeFlat);
+        objUniformDirty = false;
+        lastObjUniformCount = count;
     }
-    for (let i = count; i < MAX_OBJECTS; i++) {
-        objPosFlat[i * 3] = 0; objPosFlat[i * 3 + 1] = -100; objPosFlat[i * 3 + 2] = 0;
-        objSizeFlat[i] = 0; objTypeFlat[i] = 0;
-    }
-    gl.uniform3fv(uObjPos, objPosFlat);
-    gl.uniform1fv(uObjSize, objSizeFlat);
-    gl.uniform1fv(uObjType, objTypeFlat);
     
     // Audio music metrics for shader deform
     gl.uniform1f(uBassLevel, bassLevel);
@@ -1205,7 +1290,7 @@ function render() {
     const dx = charPos.x - u._px, dz = charPos.z - u._pz;
     u._px = charPos.x; u._pz = charPos.z;
     const moving = Math.abs(dx) > 0.0001 || Math.abs(dz) > 0.0001;
-    if (moving) u.moveTime += 0.08; else u.moveTime *= 0.85;
+    if (moving) u.moveTime += dt * 4.8; else u.moveTime *= Math.pow(0.85, dt * 60);
     const swing = Math.sin(u.moveTime) * 0.6;
     if (u.armL) { u.armL.rotation.x = swing; u.armR.rotation.x = -swing; u.legL.rotation.x = -swing; u.legR.rotation.x = swing; }
     // Placement ghost
@@ -1237,4 +1322,3 @@ render();
 </script>
 </body>
 </html>
-
