@@ -708,9 +708,31 @@ function triggerLightningSound(intensity, type) {
     noise.stop(t + 2.0);
 }
 
+function calcSymmetry(objs){
+  if(objs.length<2) return 0;
+  let pairs=0; const used=new Set();
+  for(let i=0;i<objs.length;i++){
+    if(used.has(i)) continue;
+    const a=objs[i];
+    for(let j=i+1;j<objs.length;j++){
+      if(used.has(j)) continue;
+      const b=objs[j];
+      const dx=Math.abs(a.position.x+b.position.x);
+      const dz=Math.abs(a.position.z+b.position.z);
+      if(dx<0.5 && dz<0.5){ pairs++; used.add(i); used.add(j); break; }
+    }
+  }
+  return pairs/Math.max(1,objs.length);
+}
+function calcSizeScore(objs){
+  let s=0; for(const o of objs) s+=o.size||1; return s;
+}
+
 // --- Audio Metrics for Shader Deform ---
 let bassLevel = 0, harmonyComplexity = 0, melodyActivity = 0;
 let buildBoost = 0; // 0-1, decays after placement
+let powerPoints = 0;
+let powerPointDisplay = 0;
 function updateAudioMetrics(dt = 1 / 60) {
     const frameScale = Math.max(0.1, Math.min(3, dt * 60));
     if (audioCtx && bassGain) {
@@ -728,6 +750,19 @@ function updateAudioMetrics(dt = 1 / 60) {
     bassLevel += buildBoost * 0.2;
     harmonyComplexity += buildBoost * 0.4;
     melodyActivity += buildBoost * 0.3;
+    // Center proximity bonus
+    const dist=Math.hypot(charPos.x,charPos.z);
+    const prox=1-Math.min(1,dist/30);
+    bassLevel+=prox*0.08; harmonyComplexity+=prox*0.1; melodyActivity+=prox*0.12;
+    // Symmetry + size bonus from own objects
+    const own=worldObjects.filter(o=>o.owner===selfId);
+    const sym=calcSymmetry(own); const sizeScore=calcSizeScore(own);
+    bassLevel+=sym*0.12; harmonyComplexity+=sym*0.15; melodyActivity+=sym*0.18;
+    const sizeBonus=Math.min(1,sizeScore/20);
+    bassLevel+=sizeBonus*0.06; harmonyComplexity+=sizeBonus*0.08; melodyActivity+=sizeBonus*0.1;
+    // Power points accumulate over time based on proximity + sym + size
+    const ppRate=(prox*0.5+sym*0.3+sizeBonus*0.2)*dt;
+    powerPoints+=ppRate; powerPointDisplay+=(powerPoints-powerPointDisplay)*0.02;
 }
 
 function playPlacementSound() {
@@ -1158,7 +1193,8 @@ function updateInfoText() {
         document.getElementById('info').innerHTML = 'СТРОЙКА: Space / клик / тап = поставить &bull; Q/E = размер' + '<br>📏 ' + d + 'м от центра';
     } else {
         const ctrl = isPC ? 'WASD/стрелки: ходьба • мышь drag: поворот • B: стройка • Q: вид' : '🚶 1 палец: ходьба • ✌️ 2 пальца: поворот';
-        document.getElementById('info').innerHTML = ctrl + '<br>📏 ' + d + 'м от центра' + (firstPerson ? ' [1P]' : '');
+        const pp=Math.floor(powerPointDisplay);
+        document.getElementById('info').innerHTML = ctrl + '<br>📏 ' + d + 'м от центра' + (firstPerson ? ' [1P]' : '') + ' ⚡'+pp;
     }
 }
 updateInfoText();
