@@ -1,7 +1,7 @@
 {
   "name": "webgl-survival-hub-no-npm",
   "version": "2.1.0",
-  "description": "WebGL Survival Hub на Supabase Realtime/Auth с Vercel Functions.",
+  "description": "WebGL World Hub с Voxel World на Supabase Realtime/Auth и Vercel Functions.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
