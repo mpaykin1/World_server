@@ -42,6 +42,9 @@ test('greedy mesher collapses a solid chunk prism to a handful of quads', () => 
   assert.equal(result.geometry.translucent.triangles, 0);
   assert.equal(result.geometry.water.triangles, 0);
   assert.ok(result.geometry.solid.vertices <= 20);
+  assert.equal(result.geometry.solid.uvs.length, result.geometry.solid.vertices * 2);
+  assert.equal(result.geometry.solid.tiles.length, result.geometry.solid.vertices);
+  assert.ok(Array.from(result.geometry.solid.tiles).every(tile => tile === 3));
 });
 
 test('worker ignores malformed messages without posting geometry', () => {

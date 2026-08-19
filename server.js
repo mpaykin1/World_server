@@ -16,7 +16,8 @@ const apiHandlers = new Map([
   ['/api/me', require('./api/me')],
   ['/api/logout', require('./api/logout')],
   ['/api/game', require('./api/game')],
-  ['/api/voxel', require('./api/voxel')]
+  ['/api/voxel', require('./api/voxel')],
+  ['/api/roblox-texture', require('./api/roblox-texture')]
 ]);
 
 const mime = {
@@ -62,6 +63,7 @@ function sendFile(res, file) {
 
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+  req.query = Object.fromEntries(url.searchParams);
   const handler = apiHandlers.get(url.pathname);
   if (handler) return handler(req, res);
   if (url.pathname.startsWith('/api/')) return notFound(res);

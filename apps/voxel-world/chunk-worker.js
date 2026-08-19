@@ -32,7 +32,7 @@ function isTranslucent(block) {
 }
 
 function target() {
-  return { positions: [], normals: [], colors: [], indices: [] };
+  return { positions: [], normals: [], colors: [], uvs: [], tiles: [], indices: [] };
 }
 
 function appendQuad(dst, vertices, normal, block, shade) {
@@ -41,11 +41,25 @@ function appendQuad(dst, vertices, normal, block, shade) {
   const r = Math.min(1, color[0] * shade);
   const g = Math.min(1, color[1] * shade);
   const b = Math.min(1, color[2] * shade);
+  const edgeH = Math.max(1, Math.hypot(
+    vertices[1][0] - vertices[0][0],
+    vertices[1][1] - vertices[0][1],
+    vertices[1][2] - vertices[0][2]
+  ));
+  const edgeW = Math.max(1, Math.hypot(
+    vertices[3][0] - vertices[0][0],
+    vertices[3][1] - vertices[0][1],
+    vertices[3][2] - vertices[0][2]
+  ));
+  const quadUvs = [[0,0],[0,edgeH],[edgeW,edgeH],[edgeW,0]];
 
-  for (const v of vertices) {
+  for (let i = 0; i < vertices.length; i++) {
+    const v = vertices[i];
     dst.positions.push(v[0], v[1], v[2]);
     dst.normals.push(normal[0], normal[1], normal[2]);
     dst.colors.push(r, g, b);
+    dst.uvs.push(quadUvs[i][0], quadUvs[i][1]);
+    dst.tiles.push(block);
   }
   dst.indices.push(base, base + 1, base + 2, base, base + 2, base + 3);
 }
@@ -182,6 +196,8 @@ function finalize(data) {
     positions: new Float32Array(data.positions),
     normals: new Float32Array(data.normals),
     colors: new Float32Array(data.colors),
+    uvs: new Float32Array(data.uvs),
+    tiles: new Float32Array(data.tiles),
     indices: new IndexArray(data.indices),
     vertices: vertexCount,
     triangles: data.indices.length / 3
@@ -192,7 +208,7 @@ function transferables(geometry) {
   const out = [];
   for (const part of Object.values(geometry)) {
     if (!part || typeof part !== 'object') continue;
-    for (const key of ['positions', 'normals', 'colors', 'indices']) {
+    for (const key of ['positions', 'normals', 'colors', 'uvs', 'tiles', 'indices']) {
       if (part[key]?.buffer) out.push(part[key].buffer);
     }
   }

@@ -78,7 +78,8 @@ fetch('/api/apps').then(r=>r.json()).then(json=>{
 });
 
 const keys = new Set(); let yaw=0, pitch=.38; let mouseDown=false;
-addEventListener('keydown',e=>keys.add(e.code)); addEventListener('keyup',e=>keys.delete(e.code));
+const keyDown=(...codes)=>codes.some(code=>keys.has(code));
+addEventListener('keydown',e=>{if(e.target instanceof Element&&e.target.closest('input,textarea,[contenteditable="true"]'))return;if(e.code.startsWith('Arrow'))e.preventDefault();keys.add(e.code);}); addEventListener('keyup',e=>keys.delete(e.code));
 addEventListener('mousedown',()=>mouseDown=true); addEventListener('mouseup',()=>mouseDown=false);
 addEventListener('mousemove',e=>{ if(mouseDown || document.pointerLockElement){ yaw -= e.movementX*.003; pitch = Math.max(.15, Math.min(.9, pitch - e.movementY*.002)); }});
 renderer.domElement.addEventListener('click',()=>renderer.domElement.requestPointerLock?.());
@@ -565,7 +566,7 @@ function animate(now){
   const forward = new THREE.Vector3(Math.sin(yaw),0,Math.cos(yaw));
   const right = new THREE.Vector3(Math.cos(yaw),0,-Math.sin(yaw));
   const move = new THREE.Vector3();
-  if(keys.has('KeyW')) move.add(forward); if(keys.has('KeyS')) move.sub(forward); if(keys.has('KeyD')) move.add(right); if(keys.has('KeyA')) move.sub(right);
+  if(keyDown('KeyW','ArrowUp')) move.add(forward); if(keyDown('KeyS','ArrowDown')) move.sub(forward); if(keyDown('KeyD','ArrowRight')) move.add(right); if(keyDown('KeyA','ArrowLeft')) move.sub(right);
   if(move.lengthSq()>0){ move.normalize().multiplyScalar(speed*dt); player.position.add(move); player.rotation.y=yaw; }
   const camOffset = new THREE.Vector3(Math.sin(yaw)*-12, 8 + pitch*4, Math.cos(yaw)*-12);
   camera.position.lerp(player.position.clone().add(camOffset), .12);

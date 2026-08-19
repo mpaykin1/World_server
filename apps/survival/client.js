@@ -212,8 +212,10 @@ function createGrass(cx,cz){
 }
 function mulberry(seed){let h=0; for(let i=0;i<seed.length;i++)h=Math.imul(31,h)+seed.charCodeAt(i)|0; return function(){h+=0x6D2B79F5;let t=h;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}}
 
+const keyDown=(...codes)=>codes.some(code=>keys.has(code));
 addEventListener('keydown',e=>{
-  if(document.activeElement?.id==='chatInput') return;
+  if(e.target instanceof Element&&e.target.closest('input,textarea,[contenteditable="true"]')) return;
+  if(e.code.startsWith('Arrow'))e.preventDefault();
   keys.add(e.code);
   if(e.code==='KeyB'){ buildMode=!buildMode; document.getElementById('buildState').textContent='B: '+(buildMode?'вкл':'выкл'); }
   if(e.code==='KeyR'){ buildRotation=(buildRotation+Math.PI/2)%(Math.PI*2); }
@@ -539,7 +541,7 @@ let last=performance.now();
 function frame(now){
   requestAnimationFrame(frame); const dt=Math.min(.05,(now-last)/1000); last=now;
   const forward=new THREE.Vector3(Math.sin(yaw),0,Math.cos(yaw)); const right=new THREE.Vector3(Math.cos(yaw),0,-Math.sin(yaw)); const move=new THREE.Vector3();
-  if(keys.has('KeyW')) move.add(forward); if(keys.has('KeyS')) move.sub(forward); if(keys.has('KeyA')) move.add(right); if(keys.has('KeyD')) move.sub(right);
+  if(keyDown('KeyW','ArrowUp')) move.add(forward); if(keyDown('KeyS','ArrowDown')) move.sub(forward); if(keyDown('KeyA','ArrowLeft')) move.sub(right); if(keyDown('KeyD','ArrowRight')) move.add(right);
   self.running=keys.has('ShiftLeft'); const speed=self.running?13:7;
   const old=self.position.clone(); if(move.lengthSq()>0){ move.normalize().multiplyScalar(speed*dt); self.position.add(move); self.rotationY=yaw; self.action=self.action==='mine'?'mine':(self.running?'run':'walk'); } else if(self.action!=='mine') self.action='idle';
   selfMesh.position.copy(self.position); selfMesh.rotation.y=yaw; animateHuman(selfMesh,now/1000,self.position.distanceTo(old)/dt,self.action);
