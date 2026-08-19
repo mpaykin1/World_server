@@ -1,10 +1,16 @@
 {
   "name": "webgl-survival-hub-no-npm",
   "version": "2.1.0",
-  "description": "WebGL Survival Hub без npm-зависимостей: один сервер, аккаунты, чат, каталог и survival.",
+  "description": "WebGL Survival Hub на Supabase Realtime/Auth с Vercel Functions.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "check": "node scripts/check-js.js && node --test"
   },
-  "dependencies": {}
+  "engines": {
+    "node": "24.x"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.112.3"
+  }
 }
