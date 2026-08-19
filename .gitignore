@@ -1,5 +1,8 @@
-node_modules/
 .env
-*.log
-.DS_Store
-Thumbs.db
+.env.*
+!.env.example
+.vercel
+.playwright-cli/
+supabase/.temp/
+node_modules
+npm-debug.log*

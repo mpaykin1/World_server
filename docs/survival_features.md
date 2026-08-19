@@ -16,7 +16,7 @@
 - `self.inventory` — массив 36 слотов (0–26 основной, 27–35 хотбар)
 - `self.selected` — выбранный слот хотбара (0–8)
 - Клик по предмету в инвентаре (0–26) → перемещает в первый пустой слот хотбара. Если хотбар полон → swap с выбранным
-- Реализация: `socket.emit('inventory:move', {from, to})` → сервер `server.js:408` шлёт `inventory:update`
+- Реализация: `socket.emit('inventory:move', {from, to})` → stateless API выполняет атомарную RPC-функцию Supabase → клиент получает `inventory:update`
 
 ### Иконки предметов (canvas 24×24)
 - `_itemIcon._d` — рисовалки для: wood (прожилки), stone (крапинки), metal_ore (шестиугольник + ржавчина), cloth (плетение), food (мясо), campfire (пламя), storage_box (ящик), door (дверь)
@@ -27,7 +27,7 @@
 - Wood: RepeatWrapping (2,2) на CylinderGeometry
 
 ## Ресурсы (добыча)
-- Сервер: проверка `survivalPlayers.get(client.id)`, дистанция < 8м, кулдаун 550мс, добавление в инвентарь
+- Сервер: проверка игрока в `game_player_states`, дистанция < 8м, кулдаун 550мс и атомарное добавление в инвентарь
 - Клиент: `hitResource()` → `nearestResource()` (raycast по interactables, fallback по дистанции)
 - После добычи: `inventory:update` + `resource:update`
 
@@ -85,7 +85,7 @@
 - **Размер**: Q/E без ограничений (серверный cap удалён)
 - **Типы**: шар (0) / куб (1)
 
-## Сетевые события (WebSocket)
+## Сетевые события (совместимый MiniSocket поверх Supabase)
 | Событие | Направление | Описание |
 |---------|-------------|----------|
 | `sharabass:join` | client → server | Регистрация в мире (без этого всё молча дропается!) |
@@ -131,10 +131,10 @@
 
 ---
 
-# Сервер (server.js) — фичи (не ломать!)
-- WebSocket на едином `/ws` порту, MiniSocket с очередью
-- Аутентификация: регистрация/логин/JWT token
+# Сервер и realtime — фичи (не ломать!)
+- MiniSocket сохраняет прежние события, используя stateless API, Supabase Realtime Broadcast, Presence и Postgres Changes
+- Аутентификация: Supabase Auth; секретные ключи доступны только серверным функциям
 - **Survival**: игроки, ресурсы (чанки), стройка, крафт, инвентарь, автогенерация чанков
-- **Sharabass**: игроки, объекты (с металлом), погода, `MAX_SHARABASS_OBJECTS=200`
+- **Sharabass**: игроки, объекты (с металлом), погода, серверный лимит объектов
 - **Чат**: глобальный, с историей
-- **Сохранение мира**: `saveWorldSoon()` в `data/survival_world.json`
+- **Сохранение мира**: постоянные данные в Postgres Supabase, без зависимости от локальной файловой системы
