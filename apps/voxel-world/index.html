@@ -3,30 +3,34 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Voxel World</title>
 <link rel="stylesheet" href="/shared/style.css">
 <style>
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#79b8ef;touch-action:none}canvas{display:block}
+html,body{margin:0;width:100vw;height:100vh;height:100dvh;overflow:hidden;background:#79b8ef;touch-action:none;overscroll-behavior:none;-webkit-user-select:none;user-select:none}canvas{display:block;width:100%;height:100%;touch-action:none}
 #vwHud{position:fixed;left:10px;top:10px;z-index:40;min-width:190px;padding:8px 10px;border-radius:10px;background:rgba(8,13,18,.55);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(7px);font:12px/1.4 system-ui;color:#fff}
 #vwTitle{font-weight:800;font-size:14px}.vwMuted{color:#b7c8d6}.vwGood{color:#81f7ad}.vwWarn{color:#ffd27b}
 #vwHelp{position:fixed;left:50%;top:10px;transform:translateX(-50%);z-index:40;max-width:min(760px,72vw);padding:6px 11px;border-radius:999px;background:rgba(0,0,0,.40);border:1px solid rgba(255,255,255,.12);font:11px system-ui;color:#fff;text-align:center}
-#vwBack{position:fixed;left:10px;top:112px;z-index:45;color:#d8f1ff;text-decoration:none;font:12px system-ui;text-shadow:0 1px 3px #000}
+#vwBack{position:fixed;left:10px;top:130px;z-index:45;color:#d8f1ff;text-decoration:none;font:12px system-ui;text-shadow:0 1px 3px #000}
 #crosshair{position:fixed;left:50%;top:50%;width:18px;height:18px;transform:translate(-50%,-50%);z-index:35;pointer-events:none}#crosshair:before,#crosshair:after{content:"";position:absolute;background:#fff;box-shadow:0 0 3px #000}#crosshair:before{left:8px;top:2px;width:2px;height:14px}#crosshair:after{top:8px;left:2px;height:2px;width:14px}
-#hotbar{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:50;display:flex;gap:4px;padding:5px;border-radius:8px;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(5px)}
+#hotbar{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:50;display:flex;gap:4px;padding:5px;border-radius:8px;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(5px)}
 .slot{width:48px;height:48px;border:2px solid rgba(255,255,255,.22);border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(30,30,30,.55);color:#fff;font:10px system-ui;position:relative;cursor:pointer}.slot.sel{outline:3px solid white;transform:translateY(-3px)}.swatch{width:22px;height:22px;border-radius:4px;border:1px solid rgba(255,255,255,.35);box-shadow:inset 0 0 7px rgba(0,0,0,.2)}.slotNum{position:absolute;left:3px;top:1px;font-size:9px;color:#d7e8f5}
 #targetInfo{position:fixed;left:50%;top:55%;transform:translateX(-50%);z-index:38;padding:5px 8px;border-radius:6px;background:rgba(0,0,0,.35);color:#fff;font:11px system-ui;pointer-events:none}
-#mobileControls{display:none;position:fixed;inset:0;z-index:60;pointer-events:none}.touchBtn{pointer-events:auto;position:absolute;width:58px;height:58px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.35);color:white;font:700 11px system-ui;backdrop-filter:blur(4px)}#movePad{pointer-events:auto;position:absolute;left:18px;bottom:92px;width:132px;height:132px;border-radius:50%;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.2)}#moveKnob{position:absolute;left:42px;top:42px;width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.42);border:1px solid rgba(255,255,255,.65)}#jumpBtn{right:18px;bottom:160px}#breakBtn{right:86px;bottom:92px}#placeBtn{right:18px;bottom:92px}.lookZone{pointer-events:auto;position:absolute;right:0;top:0;width:58%;height:72%}
+#mobileControls{display:none;position:fixed;inset:0;z-index:60;pointer-events:none}.touchBtn{pointer-events:auto;position:absolute;width:58px;height:58px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.35);color:white;font:700 11px system-ui;backdrop-filter:blur(4px);touch-action:none}.touchBtn:active{background:rgba(255,255,255,.25);transform:scale(.94)}#movePad{pointer-events:auto;position:absolute;left:max(18px,env(safe-area-inset-left));bottom:calc(92px + env(safe-area-inset-bottom));width:132px;height:132px;border-radius:50%;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.2);touch-action:none}#moveKnob{position:absolute;left:42px;top:42px;width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.42);border:1px solid rgba(255,255,255,.65);pointer-events:none}#jumpBtn{right:max(18px,env(safe-area-inset-right));bottom:calc(160px + env(safe-area-inset-bottom))}#breakBtn{right:calc(86px + env(safe-area-inset-right));bottom:calc(92px + env(safe-area-inset-bottom))}#placeBtn{right:max(18px,env(safe-area-inset-right));bottom:calc(92px + env(safe-area-inset-bottom))}#fullscreenBtn{right:max(8px,env(safe-area-inset-right));top:50%;width:42px;height:42px;transform:translateY(-50%);font-size:20px}#fullscreenBtn:active{transform:translateY(-50%) scale(.94)}.lookZone{display:none}
 #loading{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:linear-gradient(#79b8ef,#b9ddff);color:#102335;font:800 20px system-ui;letter-spacing:.04em}.hidden{display:none!important}
-@media (max-width:800px),(pointer:coarse){#vwHelp{display:none}#vwBack{top:124px}#hotbar{bottom:12px;max-width:94vw;overflow-x:auto}.slot{min-width:42px;width:42px;height:42px}#mobileControls{display:block}#vwHud{font-size:11px}}
+@media (max-width:800px),(pointer:coarse){#vwHelp{display:none}#vwBack{top:140px}#hotbar{bottom:calc(12px + env(safe-area-inset-bottom));max-width:94vw;overflow-x:auto}.slot{min-width:42px;width:42px;height:42px}#mobileControls{display:block}#vwHud{font-size:11px}.mc-chat{left:50%;bottom:calc(68px + env(safe-area-inset-bottom));width:min(300px,68vw);transform:translateX(-50%)}.mc-lines{display:none}.mc-input-row{height:32px}}
+@media (max-width:520px){#vwHud{min-width:0;width:calc(50vw - 15px)}#authBox{width:calc(50vw - 15px)}}
 </style>
 </head>
 <body>
 <div id="loading">Загрузка Voxel World…</div>
-<div id="vwHud"><div id="vwTitle">Voxel World</div><div id="vwStatus" class="vwMuted">инициализация…</div><div id="vwBiome" class="vwMuted">биом: —</div><div id="vwPlayers" class="vwMuted">игроков: 1</div></div>
-<div id="vwHelp">WASD · мышь — обзор · Space — прыжок · ЛКМ — сломать · ПКМ — поставить · 1–9 — блок · Shift — бег · Enter — чат</div>
+<div id="vwHud"><div id="vwTitle">Voxel World</div><div id="vwStatus" class="vwMuted">инициализация…</div><div id="vwBiome" class="vwMuted">биом: —</div><div id="vwPlayers" class="vwMuted">игроков: 1</div><div id="vwPerf" class="vwMuted">FPS — · дальность — · mesh —</div></div>
+<div id="vwHelp">WASD / стрелки · мышь/тачпад — обзор · Space — прыжок · ЛКМ — сломать · ПКМ — поставить · 1–9 — блок · Shift — бег · P — FPS · Enter — чат</div>
 <a id="vwBack" href="/apps/catalog/">← 3D каталог</a>
 <div id="crosshair"></div><div id="targetInfo">Нажми на экран, чтобы играть</div><div id="hotbar"></div>
-<div id="mobileControls"><div class="lookZone" id="lookZone"></div><div id="movePad"><div id="moveKnob"></div></div><button class="touchBtn" id="jumpBtn">ПРЫЖОК</button><button class="touchBtn" id="breakBtn">ЛОМАТЬ</button><button class="touchBtn" id="placeBtn">СТАВИТЬ</button></div>
+<div id="mobileControls"><div class="lookZone" id="lookZone"></div><div id="movePad" aria-label="Джойстик движения"><div id="moveKnob"></div></div><button class="touchBtn" id="fullscreenBtn" aria-label="Полный экран">⛶</button><button class="touchBtn" id="jumpBtn">ПРЫЖОК</button><button class="touchBtn" id="breakBtn">ЛОМАТЬ</button><button class="touchBtn" id="placeBtn">СТАВИТЬ</button></div>
 <script src="/shared/common.js"></script>
 <script type="module" src="./client.js"></script>
 </body>

@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover, user-scalable=no">
     <title>Мир Шарабас — Музыкальная стройка</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎵</text></svg>">
     <link rel="stylesheet" href="/shared/style.css">
     <style>
-        body { margin: 0; overflow: hidden; background: #000; touch-action: none; }
-        canvas { display: block; width: 100vw; height: 100vh; }
+        body { margin: 0; width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; background: #000; touch-action: none; overscroll-behavior: none; }
+        canvas { display: block; width: 100vw; height: 100vh; height: 100dvh; }
         #info {
             position: absolute;
             top: 15px;
@@ -337,7 +337,7 @@ window.addEventListener('resize', resize);
 // --- THIRD-PERSON CHARACTER CONTROLS ---
 let charPos = { x: 0, y: 0, z: 0 };
 let charYaw = 0;
-let camHeight = 4.0;
+let charPitch = -0.45;
 let camDistance = 6.0;
 let firstPerson = false;
 let isTouching = false, isPinching = false;
@@ -420,6 +420,7 @@ function triggerAudioOnPC(x, y) {
     if (audioCtx) triggerMelodySequencer(x, y);
 }
 addEventListener('keydown', e => {
+    if (e.target instanceof Element && e.target.closest('input, textarea, [contenteditable="true"]')) return;
     keys.add(e.code);
     if (e.code.startsWith('Arrow') || e.code.startsWith('Key')) e.preventDefault();
     if (e.code === 'KeyB') { document.getElementById('buildBtn').click(); return; }
@@ -448,6 +449,7 @@ addEventListener('mousemove', e => {
         const dx = e.clientX - mouseX, dy = e.clientY - mouseY;
         mouseX = e.clientX; mouseY = e.clientY;
         charYaw += dx * 0.01;
+        charPitch = Math.max(-1.35, Math.min(0.65, charPitch - dy * 0.006));
     }
 });
 // Place object on click in build mode (not on UI buttons)
@@ -1155,9 +1157,13 @@ const uMelodyActivity = gl.getUniformLocation(program, 'uMelodyActivity');
 
 function setupCamera(time) {
     const dist = firstPerson ? 0.15 : camDistance;
-    const height = firstPerson ? 1.6 : camHeight;
-    const camPos = [charPos.x - Math.sin(charYaw) * dist, height, charPos.z - Math.cos(charYaw) * dist];
-    const target = new THREE.Vector3(charPos.x, firstPerson ? 1.4 : 0.5, charPos.z);
+    const horizontal = Math.cos(charPitch) * dist;
+    const camPos = firstPerson
+        ? [charPos.x, 1.6, charPos.z]
+        : [charPos.x - Math.sin(charYaw) * horizontal, 0.8 - Math.sin(charPitch) * dist, charPos.z - Math.cos(charYaw) * horizontal];
+    const target = firstPerson
+        ? new THREE.Vector3(charPos.x + Math.sin(charYaw) * Math.cos(charPitch), 1.6 + Math.sin(charPitch), charPos.z + Math.cos(charYaw) * Math.cos(charPitch))
+        : new THREE.Vector3(charPos.x, 0.8, charPos.z);
     let fx = target.x - camPos[0], fy = target.y - camPos[1], fz = target.z - camPos[2];
     const fl = Math.sqrt(fx*fx + fy*fy + fz*fz);
     fx /= fl; fy /= fl; fz /= fl;
@@ -1192,7 +1198,7 @@ function updateInfoText() {
     if (buildMode) {
         document.getElementById('info').innerHTML = 'СТРОЙКА: Space / клик / тап = поставить &bull; Q/E = размер' + '<br>📏 ' + d + 'м от центра';
     } else {
-        const ctrl = isPC ? 'WASD/стрелки: ходьба • мышь drag: поворот • B: стройка • Q: вид' : '🚶 1 палец: ходьба • ✌️ 2 пальца: поворот';
+        const ctrl = isPC ? 'WASD/стрелки: ходьба • мышь/тачпад drag: обзор • B: стройка • Q: вид' : '🚶 1 палец: ходьба • ✌️ 2 пальца: поворот';
         const pp=Math.floor(powerPointDisplay);
         document.getElementById('info').innerHTML = ctrl + '<br>📏 ' + d + 'м от центра' + (firstPerson ? ' [1P]' : '') + ' ⚡'+pp;
     }
