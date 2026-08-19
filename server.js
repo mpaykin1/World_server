@@ -15,7 +15,8 @@ const apiHandlers = new Map([
   ['/api/login', require('./api/login')],
   ['/api/me', require('./api/me')],
   ['/api/logout', require('./api/logout')],
-  ['/api/game', require('./api/game')]
+  ['/api/game', require('./api/game')],
+  ['/api/voxel', require('./api/voxel')]
 ]);
 
 const mime = {
