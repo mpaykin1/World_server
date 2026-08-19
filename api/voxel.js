@@ -145,7 +145,7 @@ async function actionSavePlayer(admin, identity, body) {
   const position = safePosition(body.position);
   const yaw = Math.max(-100000, Math.min(100000, finite(body.yaw)));
   const pitch = Math.max(-1.55, Math.min(1.55, finite(body.pitch)));
-  const selectedBlock = Math.max(0, Math.min(255, Math.trunc(finite(body.selectedBlock, 1))));
+  const selectedBlock = safeBlockType(body.selectedBlock ?? 1);
   const now = new Date().toISOString();
   const { error } = await admin.from('voxel_player_states').update({ position, yaw, pitch, selected_block: selectedBlock, last_save_at: now, updated_at: now }).eq('id', player.id);
   dbFailure(error);
