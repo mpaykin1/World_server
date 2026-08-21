@@ -1,0 +1,242 @@
+{
+  "generatedAt": "2026-08-21T15:16:28.987Z",
+  "roots": {
+    "external3d": "C:\\Users\\user\\Desktop\\3дгенерация",
+    "externalMine": "C:\\Users\\user\\Desktop\\майн"
+  },
+  "blender": {
+    "path": "blender",
+    "found": false,
+    "requiredFor": [
+      "BuildingGeneratorThreeJS",
+      "bene-proggen-maps"
+    ]
+  },
+  "primary": [
+    {
+      "name": "TRELLIS.2",
+      "folder": "C:\\Users\\user\\Desktop\\3дгенерация",
+      "path": "C:\\Users\\user\\Desktop\\3дгенерация\\TRELLIS.2",
+      "extracted": true,
+      "hasZip": false,
+      "ready": true,
+      "evidence": [
+        "trellis2/__init__.py:ok",
+        "trellis2:ok",
+        "setup.sh:ok"
+      ],
+      "commit": "75fbf01"
+    },
+    {
+      "name": "Depth-Anything-V2",
+      "folder": "C:\\Users\\user\\Desktop\\3дгенерация",
+      "path": "C:\\Users\\user\\Desktop\\3дгенерация\\Depth-Anything-V2",
+      "extracted": true,
+      "hasZip": true,
+      "ready": true,
+      "evidence": [
+        "depth_anything_v2/dpt.py:ok",
+        "depth_anything_v2:ok"
+      ],
+      "commit": "a561b84"
+    },
+    {
+      "name": "BuildingGeneratorThreeJS",
+      "folder": "C:\\Users\\user\\Desktop\\3дгенерация",
+      "path": "C:\\Users\\user\\Desktop\\3дгенерация\\BuildingGeneratorThreeJS",
+      "extracted": true,
+      "hasZip": true,
+      "ready": true,
+      "evidence": [
+        "procedural-hong-kong-building/source/procedural_building.blend:ok",
+        "package.json:ok"
+      ],
+      "commit": "74cb71b"
+    },
+    {
+      "name": "bene-proggen-maps",
+      "folder": "C:\\Users\\user\\Desktop\\3дгенерация",
+      "path": "C:\\Users\\user\\Desktop\\3дгенерация\\bene-proggen-maps",
+      "extracted": true,
+      "hasZip": true,
+      "ready": true,
+      "evidence": [
+        "procgen_maps/__init__.py:ok",
+        "procgen_maps:ok"
+      ],
+      "commit": "ed622c5"
+    }
+  ],
+  "extended": [
+    {
+      "name": "InstantMesh",
+      "folder": "C:\\Users\\user\\Desktop\\майн",
+      "path": "C:\\Users\\user\\Desktop\\майн\\InstantMesh",
+      "extracted": true,
+      "hasZip": true,
+      "ready": true,
+      "evidence": [
+        "src:ok",
+        "configs:ok",
+        "app.py:ok"
+      ],
+      "commit": "08822c5"
+    },
+    {
+      "name": "voxelsrv",
+      "folder": "C:\\Users\\user\\Desktop\\майн",
+      "path": "C:\\Users\\user\\Desktop\\майн\\voxelsrv",
+      "extracted": true,
+      "hasZip": true,
+      "ready": true,
+      "evidence": [
+        "src:ok",
+        "package.json:ok"
+      ],
+      "commit": "6e1c07b"
+    },
+    {
+      "name": "LittleCubes",
+      "folder": "C:\\Users\\user\\Desktop\\майн",
+      "path": "C:\\Users\\user\\Desktop\\майн\\LittleCubes",
+      "extracted": true,
+      "hasZip": true,
+      "ready": true,
+      "evidence": [
+        "src:ok",
+        "index.html:ok"
+      ],
+      "commit": "7d1ff0c"
+    },
+    {
+      "name": "mcp-blender",
+      "folder": "C:\\Users\\user\\Desktop\\майн",
+      "path": "C:\\Users\\user\\Desktop\\майн\\mcp-blender",
+      "extracted": true,
+      "hasZip": true,
+      "ready": true,
+      "evidence": [
+        "src:ok",
+        "addon:ok"
+      ],
+      "commit": "c3bfcd1"
+    },
+    {
+      "name": "UPNG.js",
+      "folder": "C:\\Users\\user\\Desktop\\майн",
+      "path": "C:\\Users\\user\\Desktop\\майн\\UPNG.js",
+      "extracted": true,
+      "hasZip": true,
+      "ready": true,
+      "evidence": [
+        "UPNG.js:ok",
+        "package.json:ok"
+      ],
+      "commit": "88f504b"
+    },
+    {
+      "name": "UniRig",
+      "folder": "C:\\Users\\user\\Desktop\\майн",
+      "path": "C:\\Users\\user\\Desktop\\майн\\UniRig",
+      "extracted": true,
+      "hasZip": true,
+      "ready": true,
+      "evidence": [
+        "src:ok",
+        "blender:ok"
+      ],
+      "commit": "6793c66"
+    },
+    {
+      "name": "mpfb2",
+      "folder": "C:\\Users\\user\\Desktop\\майн",
+      "path": "C:\\Users\\user\\Desktop\\майн\\mpfb2",
+      "extracted": true,
+      "hasZip": true,
+      "ready": true,
+      "evidence": [
+        "src:ok",
+        "script_samples:ok"
+      ],
+      "commit": "437dd513"
+    },
+    {
+      "name": "graphify",
+      "folder": "C:\\Users\\user\\Desktop\\майн",
+      "path": "C:\\Users\\user\\Desktop\\майн\\graphify",
+      "extracted": true,
+      "hasZip": true,
+      "ready": true,
+      "evidence": [
+        "pyproject.toml:ok"
+      ],
+      "commit": "b14b52e"
+    },
+    {
+      "name": "graphify-godot",
+      "folder": "C:\\Users\\user\\Desktop\\майн",
+      "path": "C:\\Users\\user\\Desktop\\майн\\graphify-godot",
+      "extracted": true,
+      "hasZip": true,
+      "ready": true,
+      "evidence": [
+        "pyproject.toml:ok"
+      ],
+      "commit": "cd3d27c"
+    },
+    {
+      "name": "Gut",
+      "folder": "C:\\Users\\user\\Desktop\\майн",
+      "path": "C:\\Users\\user\\Desktop\\майн\\Gut",
+      "extracted": true,
+      "hasZip": true,
+      "ready": true,
+      "evidence": [
+        "addons/gut:ok"
+      ],
+      "commit": "cf45f66"
+    },
+    {
+      "name": "hytopia-source",
+      "folder": "C:\\Users\\user\\Desktop\\майн",
+      "path": "C:\\Users\\user\\Desktop\\майн\\hytopia-source",
+      "extracted": true,
+      "hasZip": true,
+      "ready": true,
+      "evidence": [
+        "assets:ok"
+      ],
+      "commit": "44f2a42"
+    },
+    {
+      "name": "apngasm",
+      "folder": "C:\\Users\\user\\Desktop\\майн",
+      "path": "C:\\Users\\user\\Desktop\\майн\\apngasm",
+      "extracted": true,
+      "hasZip": true,
+      "ready": false,
+      "evidence": [],
+      "commit": "f105b2d"
+    },
+    {
+      "name": "godot-gdscript-toolkit",
+      "folder": "C:\\Users\\user\\Desktop\\майн",
+      "path": "C:\\Users\\user\\Desktop\\майн\\godot-gdscript-toolkit",
+      "extracted": true,
+      "hasZip": false,
+      "ready": true,
+      "evidence": [
+        "gdtoolkit:ok"
+      ],
+      "commit": "f61a1f3"
+    }
+  ],
+  "summary": {
+    "primaryReady": 4,
+    "primaryTotal": 4,
+    "trellisReady": true,
+    "depthReady": true,
+    "buildingReady": true,
+    "procgenReady": true
+  }
+}

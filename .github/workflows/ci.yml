@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [master]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+      - run: npm ci --ignore-scripts || npm install
+      - run: npm run check
+      - name: Python syntax check (AI3D worker)
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m py_compile services/ai3d-worker/server.py services/ai3d-worker/ai3d/*.py services/ai3d-worker/ai3d/plugins/*.py services/ai3d-worker/tools/*.py
+      - name: AI3D discovery smoke
+        run: node scripts/discover-ai3d-engines.js && test -f services/ai3d-worker/third_party/local-inventory.json
+
+  agent-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check AGENTS.md exists
+        run: test -f AGENTS.md || (echo "ERROR: AGENTS.md missing in repo root" && exit 1)
+      - name: Check secrets not committed
+        run: |
+          echo "Scanning for accidental secrets..."
+          # .env files must not be tracked (except .env.example)
+          if git ls-files | grep -E '^\.env(\.|$)' | grep -v '^\.env\.example$'; then
+            echo "ERROR: .env file tracked (should be ignored)"
+            exit 1
+          fi
+          # Hardcoded secret keys outside allowlist
+          if grep -R --include="*.js" --include="*.json" --include="*.md" -n "SUPABASE_SECRET_KEY\s*=" . | grep -v ".env.example" | grep -v "AGENTS.md" | grep -v ".github"; then
+            echo "ERROR: SUPABASE_SECRET_KEY assignment found in repo"
+            exit 1
+          fi
+          if grep -R --include="*.js" --include="*.ts" -n "sk-[a-zA-Z0-9]\{20\}" .; then
+            echo "ERROR: possible API key pattern found"
+            exit 1
+          fi
+          echo "Secrets check passed"
+      - name: Validate branch and PR rules (informational)
+        run: |
+          echo "Branch: $GITHUB_REF_NAME, Event: $GITHUB_EVENT_NAME"
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            echo "PR base: ${{ github.base_ref }}, head: ${{ github.head_ref }}"
+            if [ "${{ github.base_ref }}" != "master" ]; then
+              echo "WARNING: PR target is not master (expected master)"
+            fi
+            if [ "${{ github.head_ref }}" = "master" ]; then
+              echo "ERROR: PR from master branch is forbidden"
+              exit 1
+            fi
+          fi
+          if [ "$GITHUB_REF_NAME" = "master" ] && [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            echo "NOTICE: direct push to master detected — protect master with branch protection rule (Require pull request)"
+          fi
+          echo "Branch/PR check done"
