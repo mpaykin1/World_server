@@ -69,17 +69,23 @@ def _heightfield_to_glb(depth_path: Path, image_path: Path, output_path: Path, c
     # Add variation so that flat depth not considered plane
     # Normalize to 0..1 then scale Z depth 0.3..1.0 for volume
     d_min, d_max = float(depth_arr.min()), float(depth_arr.max())
-    span = max(d_max - d_min, 1e-6)
-    # If image is flat (solid color), create artificial volume so GLB is not a plane
+    span = d_max - d_min
+    # If depth is nearly flat, do NOT invent sin/cos waves — that would be deceptive.
+    # Use honest flat slab with base thickness, and mark as procedural fallback if needed.
+    # The Image->3D Correspondence will remain UNTESTED, which is honest.
     if span < 0.05:
-        # Add radial gradient to ensure volume for validation
-        yy, xx = np.mgrid[0:size, 0:size]
-        norm = ((np.sin(xx * 0.3) * 0.5 + 0.5) * 0.3 + (np.cos(yy * 0.25) * 0.5 + 0.5) * 0.3 + 0.4)
-        norm = norm.astype(np.float32)
+        # Flat input: create uniform slab (procedural fallback) — volume is real but correspondence is UNTESTED
+        # Mark generator as PROCEDURAL_FALLBACK for transparency
+        norm = np.full_like(depth_arr, 0.5, dtype=np.float32)  # uniform, not artificial waves
+        is_procedural_fallback = True
     else:
-        norm = (depth_arr - d_min) / span
+        norm = (depth_arr - d_min) / max(span, 1e-6)
+        is_procedural_fallback = False
     z_scale = 0.8 if classification in ("single_object", "character") else 0.5 if classification == "building" else 0.4
-    z = norm * z_scale + 0.06  # base thickness 6cm ensures volume >0 even for flat
+    z = norm * z_scale + 0.06
+    # Store for generator marking
+    if is_procedural_fallback:
+        classification = f"{classification}_PROCEDURAL_FALLBACK"
     # Add base thickness so volume >0 even for flat
     # Create grid vertices
     # Grid: size x size vertices, each at (x, z, y) where y is depth

@@ -22,11 +22,21 @@ from ai3d.validation import validate_glb, quality_score
 from ai3d.evidence import enforce_evidence_report
 
 def make_test_image(path: Path, size=(512, 512)):
-    img = Image.new("RGB", size, (220, 40, 40))
-    for y in range(size[1]):
-        r = int(220 * (1 - y / size[1] * 0.3))
-        for x in range(size[0]):
-            pass
+    # Deterministic test scene: background + foreground object + depth structure
+    img = Image.new("RGB", size, (135, 206, 235))  # sky
+    from PIL import ImageDraw
+    draw = ImageDraw.Draw(img)
+    # Background hills
+    draw.ellipse([-100, 300, 300, 500], fill=(100, 180, 100))
+    draw.ellipse([200, 280, 600, 550], fill=(80, 160, 80))
+    # Foreground object: red cube-like with shading
+    draw.rectangle([176, 176, 336, 336], fill=(200, 40, 40), outline=(0, 0, 0), width=3)
+    draw.polygon([(176, 176), (206, 146), (366, 146), (336, 176)], fill=(220, 60, 60), outline=(0, 0, 0), width=2)
+    draw.polygon([(336, 176), (366, 146), (366, 306), (336, 336)], fill=(160, 30, 30), outline=(0, 0, 0), width=2)
+    # Ground line
+    draw.rectangle([0, 380, size[0], size[1]], fill=(120, 100, 80))
+    # Small depth cue: shadow
+    draw.ellipse([190, 340, 320, 360], fill=(0, 0, 0, 80))
     img.save(path, format="PNG")
     return path
 
@@ -68,8 +78,10 @@ def main():
                     if f["name"].endswith(".glb"):
                         validate_glb(p)
                         print(f"  validate_glb OK: {p.name} ({f['bytes']} bytes)")
-                        qs = quality_score(p)
-                        print(f"  quality: Geometry Integrity {qs['Geometry Integrity %']['percent']}% VERIFIED, GLB Validity {qs['GLB Validity %']['percent']}% VERIFIED, Real Artifact {qs['Real Image->3D Artifact %']['percent']}%")
+                        # Use the original input image for binding
+                        inp_for_quality = sub_dir / "input.png"
+                        qs = quality_score(p, input_path=inp_for_quality if inp_for_quality.is_file() else None)
+                        print(f"  quality: geometry_integrity {qs['geometry_integrity']['percent']}% VERIFIED, glb_validity {qs['glb_validity']['percent']}% VERIFIED, volumetric {qs['volumetric_artifact_integrity']['percent']}%")
                     elif f["name"].endswith(".png"):
                         from ai3d.validation import verify_image
                         verify_image(p)
