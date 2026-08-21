@@ -12,7 +12,17 @@ _MODEL_CONFIG = {"encoder": "vits", "features": 64, "out_channels": [48, 96, 192
 
 class DepthAnythingEngine:
     def __init__(self) -> None:
-        self.source = Path(os.environ.get("DEPTH_ANYTHING_HOME", "")).expanduser()
+        def _resolve_depth_home() -> Path:
+            v = os.environ.get("DEPTH_ANYTHING_HOME", "").strip()
+            if v:
+                p = Path(v).expanduser()
+                if p.exists():
+                    return p
+            for cand in [Path("C:/Users/user/Desktop/3дгенерация/Depth-Anything-V2"), Path(os.environ.get("AI3D_EXTERNAL_ROOT", "").strip()).expanduser() / "Depth-Anything-V2" if os.environ.get("AI3D_EXTERNAL_ROOT", "").strip() else None]:
+                if cand and cand.exists() and (cand / "depth_anything_v2" / "dpt.py").is_file():
+                    return cand
+            return Path(v).expanduser() if v else Path("C:/Users/user/Desktop/3дгенерация/Depth-Anything-V2")
+        self.source = _resolve_depth_home()
         self.model_dir = Path(os.environ.get("AI3D_MODEL_DIR", "./runtime/models")).expanduser().resolve()
         self.checkpoint = Path(os.environ.get("DEPTH_ANYTHING_CHECKPOINT", self.model_dir / "depth_anything_v2_vits.pth"))
         self._model = None

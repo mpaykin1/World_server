@@ -7,10 +7,45 @@ import subprocess
 from pathlib import Path
 
 
+def _find_blender() -> str:
+    env = os.environ.get("BLENDER_BIN", "").strip()
+    if env:
+        if any(c in env for c in "/\\"):
+            if Path(env).is_file():
+                return env
+        elif shutil.which(env):
+            return env
+    which = shutil.which("blender")
+    if which:
+        return which
+    import glob as _glob
+    for pattern in [
+        r"C:\Program Files\Blender Foundation\Blender*\blender.exe",
+        r"C:\Program Files\Blender Foundation\*\blender.exe",
+    ]:
+        matches = _glob.glob(pattern)
+        if matches:
+            matches.sort(reverse=True)
+            for m in matches:
+                if Path(m).is_file():
+                    return m
+    return "blender"
+
+
 class ProcgenMapsEngine:
     def __init__(self) -> None:
-        self.source = Path(os.environ.get("PROCGEN_MAPS_HOME", "")).expanduser()
-        self.blender = os.environ.get("BLENDER_BIN", "blender")
+        def _resolve_procgen() -> Path:
+            v = os.environ.get("PROCGEN_MAPS_HOME", "").strip()
+            if v:
+                p = Path(v).expanduser()
+                if p.exists():
+                    return p
+            for cand in [Path("C:/Users/user/Desktop/3дгенерация/bene-proggen-maps"), Path(os.environ.get("AI3D_EXTERNAL_ROOT", "").strip()).expanduser() / "bene-proggen-maps" if os.environ.get("AI3D_EXTERNAL_ROOT", "").strip() else None]:
+                if cand and cand.exists() and (cand / "procgen_maps" / "__init__.py").is_file():
+                    return cand
+            return Path(v).expanduser() if v else Path("C:/Users/user/Desktop/3дгенерация/bene-proggen-maps")
+        self.source = _resolve_procgen()
+        self.blender = _find_blender()
         self.timeout = int(os.environ.get("AI3D_BLENDER_TIMEOUT_SECONDS", "1200"))
 
     def available(self) -> bool:

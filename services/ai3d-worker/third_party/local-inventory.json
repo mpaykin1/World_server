@@ -1,12 +1,13 @@
 {
-  "generatedAt": "2026-08-21T15:16:28.987Z",
+  "generatedAt": "2026-08-21T17:19:13.439Z",
   "roots": {
     "external3d": "C:\\Users\\user\\Desktop\\3дгенерация",
     "externalMine": "C:\\Users\\user\\Desktop\\майн"
   },
   "blender": {
-    "path": "blender",
-    "found": false,
+    "path": "C:\\Program Files\\Blender Foundation\\Blender 5.1\\blender.exe",
+    "found": true,
+    "source": "ProgramFilesGlob",
     "requiredFor": [
       "BuildingGeneratorThreeJS",
       "bene-proggen-maps"
@@ -231,12 +232,67 @@
       "commit": "f61a1f3"
     }
   ],
+  "capabilities": {
+    "trellis": {
+      "available": true,
+      "note": "Linux + CUDA 24GB, else fallback",
+      "commit": "75fbf01"
+    },
+    "instantmesh": {
+      "available": true,
+      "bridge": "INSTANTMESH_GPU_WORKER_SERVER_BRIDGE",
+      "path": "C:\\Users\\user\\Desktop\\майн\\InstantMesh",
+      "commit": "08822c5"
+    },
+    "depth_anything_small": {
+      "available": true,
+      "license": "Apache-2.0 Small only",
+      "commit": "a561b84"
+    },
+    "blender": {
+      "path": "C:\\Program Files\\Blender Foundation\\Blender 5.1\\blender.exe",
+      "found": true,
+      "source": "ProgramFilesGlob",
+      "requiredFor": [
+        "BuildingGeneratorThreeJS",
+        "bene-proggen-maps"
+      ]
+    },
+    "building_generator": {
+      "available": true,
+      "path": "C:\\Users\\user\\Desktop\\3дгенерация\\BuildingGeneratorThreeJS"
+    },
+    "procgen_maps": {
+      "available": true,
+      "path": "C:\\Users\\user\\Desktop\\3дгенерация\\bene-proggen-maps",
+      "license": "GPL-3.0"
+    },
+    "godot_voxel_factory": {
+      "available": true,
+      "engine": "Godot 4.x glTF + tscn stub + voxel json",
+      "voxelsrv": true,
+      "littlecubes": true
+    },
+    "voxel_tools": {
+      "voxelsrv": true,
+      "littlecubes": true,
+      "hytopia": true
+    }
+  },
+  "auto": {
+    "choice": "trellis2_or_instantmesh",
+    "reason": "TRELLIS source ready, will try TRELLIS on Linux CUDA else InstantMesh fallback"
+  },
   "summary": {
     "primaryReady": 4,
     "primaryTotal": 4,
     "trellisReady": true,
     "depthReady": true,
     "buildingReady": true,
-    "procgenReady": true
+    "procgenReady": true,
+    "instantMeshReady": true,
+    "blenderFound": true,
+    "godotReady": true,
+    "voxelTools": true
   }
 }
