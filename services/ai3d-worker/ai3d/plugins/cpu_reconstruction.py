@@ -187,6 +187,9 @@ class CpuReconstructionEngine:
     def __init__(self):
         from .depth_anything import DepthAnythingEngine
         self.depth = DepthAnythingEngine()
+        self.lastDepthEngine: str = "grayscale_fallback"
+        self.lastDepthVerified: bool = False
+        self.lastBlenderUsed: bool = False
 
     def available(self) -> bool:
         # Always available on CPU (uses Depth or fallback PIL)
@@ -196,19 +199,32 @@ class CpuReconstructionEngine:
         classification = _classify_image(image_path)
         if progress:
             progress(5, f"CPU: classified as {classification}, running Depth Anything Small")
-        # Try real depth, fallback to PIL luma if Depth fails (no checkpoint yet)
         depth_path = output_path.parent / "cpu_depth.png"
+        # Honest tracking: real depth only if checkpoint exists and inference succeeded
+        self.lastDepthEngine = "grayscale_fallback"
+        self.lastDepthVerified = False
+        self.lastBlenderUsed = False
         try:
+            # Only attempt real depth if checkpoint would be used (avoid download in fallback)
+            # Depth engine will try to download if missing; we consider that VERIFIED only if checkpoint pre-exists
+            checkpoint_exists = self.depth.checkpoint.is_file() and self.depth.checkpoint.stat().st_size > 1_000_000
             self.depth.run(image_path, depth_path, int(params.get("depthInputSize", 518)))
+            if checkpoint_exists:
+                self.lastDepthEngine = "depth_anything_v2_small"
+                self.lastDepthVerified = True
+            else:
+                # Depth ran but needed to download -> still not pre-verified; mark as grayscale for honesty
+                # If download happened, it is real but we keep verified false until ground truth
+                self.lastDepthEngine = "depth_anything_v2_small"
+                self.lastDepthVerified = False
         except Exception as e:
-            # Fallback: convert image to grayscale depth approximation
             img = Image.open(image_path).convert("L")
             img = img.resize((512, 512))
-            # Simple invert + contrast for pseudo-depth
             arr = np.array(img, dtype=np.float32)
-            # Fake depth: use luminance variance
             depth_path.parent.mkdir(parents=True, exist_ok=True)
             Image.fromarray(arr.astype(np.uint8), mode="L").save(depth_path)
+            self.lastDepthEngine = "grayscale_fallback"
+            self.lastDepthVerified = False
 
         if progress:
             progress(40, f"CPU: building volumetric geometry for {classification} ({depth_path.stat().st_size} bytes)")

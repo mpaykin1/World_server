@@ -27,6 +27,8 @@ jobs:
         run: node scripts/discover-ai3d-engines.js && test -f services/ai3d-worker/third_party/local-inventory.json
       - name: AI3D E2E smoke (image->job->engine->artifact->validation, 100% via CPU volumetric)
         run: python services/ai3d-worker/scripts/e2e-smoke.py
+      - name: AI3D evidence gate (hard)
+        run: python scripts/check-ai3d-claims.py
 
   agent-rules:
     runs-on: ubuntu-latest

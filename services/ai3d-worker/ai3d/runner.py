@@ -7,7 +7,8 @@ import traceback
 from pathlib import Path
 from typing import Callable
 
-from .validation import file_meta, validate_glb
+from .validation import file_meta, validate_glb, quality_score, mesh_quality
+from .evidence import verified, untested, SCHEMA, enforce_evidence_report
 from .plugins.depth_anything import DepthAnythingEngine
 from .plugins.trellis2 import Trellis2Engine
 from .plugins.instantmesh import InstantMeshEngine
@@ -87,10 +88,30 @@ class PipelineRunner:
         if mode in {"auto", "image_to_3d", "depth"} and not input_path:
             raise RuntimeError("This mode requires an input image.")
 
+        # Depth tracking for evidence
+        depthEngine = None
+        depthInferenceVerified = False
+        blenderEnhancementUsed = False
+
         if mode in {"auto", "depth"} or (mode == "image_to_3d" and bool(params.get("depthPreview", True))):
             progress(8, "Depth Anything V2 Small: estimating depth")
-            depth_path = self.depth.run(input_path, job_dir / "depth.png", int(params.get("depthInputSize", 518)))
-            files.append(file_meta(depth_path, "depth"))
+            try:
+                checkpoint_exists = self.depth.checkpoint.is_file() and self.depth.checkpoint.stat().st_size > 1_000_000
+                depth_path = self.depth.run(input_path, job_dir / "depth.png", int(params.get("depthInputSize", 518)))
+                depthEngine = "depth_anything_v2_small"
+                depthInferenceVerified = bool(checkpoint_exists)
+                files.append(file_meta(depth_path, "depth"))
+            except Exception as e:
+                # Grayscale fallback — never claim Depth Anything success
+                from PIL import Image
+                import numpy as np
+                img = Image.open(input_path).convert("L").resize((512, 512))
+                depth_path = job_dir / "depth.png"
+                arr = np.array(img, dtype=np.float32)
+                Image.fromarray(arr.astype(np.uint8), mode="L").save(depth_path)
+                depthEngine = "grayscale_fallback"
+                depthInferenceVerified = False
+                files.append(file_meta(depth_path, "depth"))
             if mode == "depth":
                 progress(96, "Validating depth output")
 
@@ -109,10 +130,17 @@ class PipelineRunner:
                 glb_path = engine.run(input_path, job_dir / "model.glb", params)
                 progress(90, "Validating InstantMesh GLB")
             elif engine_name == "cpu_reconstruction":
-                progress(28, "CPU reconstruction: Depth Anything Small -> heightfield -> volumetric GLB")
+                progress(28, "CPU reconstruction: Depth -> heightfield -> volumetric GLB")
                 def _prog(p, m):
                     progress(28 + int(p*0.6), m)
                 glb_path, classification = engine.run(input_path, job_dir / "model.glb", params, progress=_prog)
+                # Honest depth/blender flags — CPU engine tracks them
+                depthEngine = getattr(engine, "lastDepthEngine", "grayscale_fallback")
+                depthInferenceVerified = bool(getattr(engine, "lastDepthVerified", False))
+                blenderEnhancementUsed = bool(getattr(engine, "lastBlenderUsed", False))
+                # Never claim Depth+Blender if Blender didn't run
+                if depthEngine == "grayscale_fallback":
+                    depthInferenceVerified = False
                 progress(90, "Validating CPU volumetric GLB")
             else:
                 progress(28, "PLACEHOLDER -- NOT REAL 3D RECONSTRUCTION (diagnostic fallback)")
@@ -171,6 +199,36 @@ class PipelineRunner:
         elif mode not in {"auto", "image_to_3d", "depth"}:
             raise RuntimeError(f"Unsupported mode: {mode}")
 
+        # Build qualityEvidence with strict gate
+        # Find the main GLB for quality scoring
+        glb_for_quality = None
+        for f in files:
+            if f.get("name", "").endswith(".glb"):
+                glb_for_quality = job_dir / f["name"]
+                break
+        if glb_for_quality and glb_for_quality.is_file():
+            qualityEvidence = quality_score(glb_for_quality)
+        else:
+            # No GLB (e.g., depth only) — minimal verified report
+            from .evidence import verified as _v, untested as _u
+            qualityEvidence = {
+                "Geometry Integrity %": _v(0, evidence=["no GLB produced"]),
+                "GLB Validity %": _v(0, evidence=["no GLB produced"]),
+                "Real Image->3D Artifact %": _v(0, evidence=["PLACEHOLDER -- NOT REAL 3D RECONSTRUCTION", "no GLB"], isPlaceholder=True),
+                "Depth Accuracy %": _u(reason="No ground-truth depth comparison available"),
+                "Silhouette Accuracy %": _u(reason="No render-back comparison available"),
+                "Structural Similarity %": _u(reason="No render-back comparison available"),
+                "Texture Quality %": _u(reason="No render-back comparison available"),
+                "Godot Runtime Compatibility %": _u(reason="Godot runtime not launched and GLB not imported in Godot"),
+                "Voxel Runtime Compatibility %": _u(reason="Voxel runtime/conversion not launched"),
+                "Overall Quality %": _u(reason="Critical visual metrics are UNTESTED"),
+            }
+
+        # Godot flags — honest
+        godotPackageReady = self.godot.godot_package_ready()
+        godotRuntimeAvailable = self.godot.godot_runtime_available()
+        godotRuntimeTested = self.godot.godot_runtime_tested()
+
         manifest_path = job_dir / "manifest.json"
         blocker = None
         status = self.plugin_status()
@@ -180,15 +238,47 @@ class PipelineRunner:
             elif chosen_engine == "instantmesh":
                 blocker = "TRELLIS unavailable, using InstantMesh (GPU)"
             elif chosen_engine == "cpu_reconstruction":
-                blocker = "TRELLIS/InstantMesh GPU unavailable — using REAL CPU volumetric reconstruction (Depth+Blender), not placeholder"
+                # Honest: Blender not used in current CPU heightfield (pass), so don't claim Depth+Blender
+                if blenderEnhancementUsed:
+                    blocker = "TRELLIS/InstantMesh GPU unavailable — using REAL CPU volumetric (Depth+Blender)"
+                else:
+                    blocker = "TRELLIS/InstantMesh GPU unavailable — using REAL CPU volumetric (Depth, Blender not used)"
             elif chosen_engine and "placeholder" in chosen_engine:
-                blocker = "PLACEHOLDER -- NOT REAL 3D RECONSTRUCTION — GPU missing (TRELLIS Linux 24GB, InstantMesh CUDA) and CPU fallback failed"
+                blocker = "PLACEHOLDER -- NOT REAL 3D RECONSTRUCTION"
+
+        # Quality report file (required by task)
+        quality_report = {
+            "evidencePolicy": SCHEMA,
+            "qualityEvidence": qualityEvidence,
+            "chosenEngine": chosen_engine,
+            "classification": classification,
+            "depthEngine": depthEngine,
+            "depthInferenceVerified": depthInferenceVerified,
+            "blenderEnhancementUsed": blenderEnhancementUsed,
+            "godotPackageReady": godotPackageReady,
+            "godotRuntimeAvailable": godotRuntimeAvailable,
+            "godotRuntimeTested": godotRuntimeTested,
+        }
+        # Enforce gate before writing (will raise if invalid, CI FAIL)
+        enforce_evidence_report(quality_report)
+        quality_report_path = job_dir / "quality-report.json"
+        quality_report_path.write_text(json.dumps(quality_report, ensure_ascii=False, indent=2), encoding="utf-8")
+        files.append(file_meta(quality_report_path, "quality-report"))
+
         manifest = {
             "jobId": job["id"], "mode": mode, "durationSeconds": round(time.time() - started, 3),
             "files": files, "engines": status,
             "chosenEngine": chosen_engine,
+            "classification": classification,
+            "depthEngine": depthEngine,
+            "depthInferenceVerified": depthInferenceVerified,
+            "blenderEnhancementUsed": blenderEnhancementUsed,
+            "godotPackageReady": godotPackageReady,
+            "godotRuntimeAvailable": godotRuntimeAvailable,
+            "godotRuntimeTested": godotRuntimeTested,
+            "evidencePolicy": SCHEMA,
+            "qualityEvidence": qualityEvidence,
             "infraBlocker": blocker,
-            "godotReady": True,
         }
         manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
         files.append(file_meta(manifest_path, "manifest"))
