@@ -15,18 +15,17 @@ jobs:
         with:
           node-version: "24"
           cache: "npm"
-      - run: npm ci --ignore-scripts || npm install
-      - run: npm run check
-      - name: Python syntax check (AI3D worker)
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: python -m py_compile services/ai3d-worker/server.py services/ai3d-worker/ai3d/*.py services/ai3d-worker/ai3d/plugins/*.py services/ai3d-worker/tools/*.py
+      - name: Install AI3D worker Python deps (needed for CPU tests)
+        run: pip install pillow numpy requests
+      - run: npm ci --ignore-scripts || npm install
+      - run: npm run check
+      - run: python -m py_compile services/ai3d-worker/server.py services/ai3d-worker/ai3d/*.py services/ai3d-worker/ai3d/plugins/*.py services/ai3d-worker/tools/*.py services/ai3d-worker/scripts/e2e-smoke.py
       - name: AI3D discovery smoke
         run: node scripts/discover-ai3d-engines.js && test -f services/ai3d-worker/third_party/local-inventory.json
-      - name: Install AI3D worker Python deps (for E2E)
-        run: pip install pillow numpy requests
-      - name: AI3D E2E smoke (image->job->engine->artifact->validation, 100% via InstantMesh fallback)
+      - name: AI3D E2E smoke (image->job->engine->artifact->validation, 100% via CPU volumetric)
         run: python services/ai3d-worker/scripts/e2e-smoke.py
 
   agent-rules:

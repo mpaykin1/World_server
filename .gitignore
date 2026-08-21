@@ -16,3 +16,6 @@ __pycache__/
 services/ai3d-worker/__pycache__/
 services/ai3d-worker/**/__pycache__/
 
+
+runtime/
+
