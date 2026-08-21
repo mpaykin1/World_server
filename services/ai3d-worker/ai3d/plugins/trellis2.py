@@ -9,7 +9,17 @@ from pathlib import Path
 
 class Trellis2Engine:
     def __init__(self) -> None:
-        self.source = Path(os.environ.get("TRELLIS2_HOME", "")).expanduser()
+        def _resolve_trellis() -> Path:
+            v = os.environ.get("TRELLIS2_HOME", "").strip()
+            if v:
+                p = Path(v).expanduser()
+                if p.exists():
+                    return p
+            for cand in [Path("C:/Users/user/Desktop/3дгенерация/TRELLIS.2"), Path(os.environ.get("AI3D_EXTERNAL_ROOT", "").strip()).expanduser() / "TRELLIS.2" if os.environ.get("AI3D_EXTERNAL_ROOT", "").strip() else None]:
+                if cand and cand.exists() and (cand / "trellis2").is_dir():
+                    return cand
+            return Path(v).expanduser() if v else Path("C:/Users/user/Desktop/3дгенерация/TRELLIS.2")
+        self.source = _resolve_trellis()
         self.model_id = os.environ.get("TRELLIS2_MODEL", "microsoft/TRELLIS.2-4B")
         self._pipeline = None
         self._torch = None

@@ -24,6 +24,10 @@ jobs:
       - run: python -m py_compile services/ai3d-worker/server.py services/ai3d-worker/ai3d/*.py services/ai3d-worker/ai3d/plugins/*.py services/ai3d-worker/tools/*.py
       - name: AI3D discovery smoke
         run: node scripts/discover-ai3d-engines.js && test -f services/ai3d-worker/third_party/local-inventory.json
+      - name: Install AI3D worker Python deps (for E2E)
+        run: pip install pillow numpy requests
+      - name: AI3D E2E smoke (image->job->engine->artifact->validation, 100% via InstantMesh fallback)
+        run: python services/ai3d-worker/scripts/e2e-smoke.py
 
   agent-rules:
     runs-on: ubuntu-latest
@@ -32,7 +36,8 @@ jobs:
         with:
           fetch-depth: 0
       - name: Check AGENTS.md exists
-        run: test -f AGENTS.md || (echo "ERROR: AGENTS.md missing in repo root" && exit 1)
+        run: |
+          test -f AGENTS.md || (echo "ERROR: AGENTS.md missing in repo root" && exit 1)
       - name: Check secrets not committed
         run: |
           echo "Scanning for accidental secrets..."
