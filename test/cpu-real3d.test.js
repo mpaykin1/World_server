@@ -18,17 +18,17 @@ for name in ['cube_object','house','city_street','terrain','voxel_building']:
     p = Path(f'test/fixtures/{name}.png')
     out = Path(tempfile.mktemp(suffix='.glb'))
     glb, cls = e.run(p, out, {})
-    qs = quality_score(out)
+    qs = quality_score(out, input_path=p)
     mq = mesh_quality(out)
     print(f"{name}: verts={mq['vertexCount']} faces={mq['faceCount']} zDepth={mq['zDepth']:.3f} placeholder={mq['isPlaceholder']} size={out.stat().st_size}")
-    # Check evidence-gated metrics
-    assert qs['Geometry Integrity %']['status'] == 'VERIFIED', name
-    assert qs['Geometry Integrity %']['percent'] == 100, name
-    assert qs['GLB Validity %']['status'] == 'VERIFIED' and qs['GLB Validity %']['percent'] == 100, name
-    assert qs['Real Image->3D Artifact %']['status'] == 'VERIFIED' and qs['Real Image->3D Artifact %']['percent'] == 100, name
-    assert qs['Real Image->3D Artifact %']['isPlaceholder'] == False, name
-    assert qs['Depth Accuracy %']['status'] == 'UNTESTED', name
-    assert qs['Silhouette Accuracy %']['status'] == 'UNTESTED', name
+    # Check canonical evidence-gated metrics (V2)
+    assert qs['geometry_integrity']['status'] == 'VERIFIED', name
+    assert qs['geometry_integrity']['percent'] == 100, name
+    assert qs['glb_validity']['status'] == 'VERIFIED' and qs['glb_validity']['percent'] == 100, name
+    assert qs['volumetric_artifact_integrity']['status'] == 'VERIFIED' and qs['volumetric_artifact_integrity']['percent'] == 100, name
+    assert qs['volumetric_artifact_integrity']['isPlaceholder'] == False, name
+    assert qs['depth_accuracy']['status'] == 'UNTESTED', name
+    assert qs['silhouette_accuracy']['status'] == 'UNTESTED', name
     assert mq['isPlaceholder'] == False, f"{name} is placeholder"
     assert mq['zDepth'] > 0.01, f"{name} zDepth too small"
     assert mq['vertexCount'] >= 100, f"{name} vertexCount too small"

@@ -139,23 +139,18 @@ def check_source_forbidden() -> None:
                 pass
 
 def main():
-    # 1. Find all quality-report.json files (from recent E2E runs)
     reports = list((ROOT).rglob("quality-report.json"))
-    # Also check the worker runtime if exists
+    # Also check deterministic CI path
+    ci_path = ROOT / "services" / "ai3d-worker" / "runtime" / "ci-evidence" / "quality-report.json"
+    if ci_path.is_file() and ci_path not in reports:
+        reports.append(ci_path)
+    # Also check services runtime
     if not reports:
-        print("No quality-report.json found — checking for generated reports via test run")
-        # Try to run a quick generation to produce one (optional)
-        # For CI, we will have at least one from e2e-smoke if it was run
-        # If none, we still check source gates
-        pass
-    else:
-        for r in reports:
-            check_report(r)
+        fail("0 reports → CI FAIL: no quality-report.json found (expected runtime/ci-evidence/quality-report.json)")
+    for r in reports:
+        check_report(r)
 
     check_source_forbidden()
-
-    # Also validate that no metric violates the 3-status rules via direct evidence module tests
-    # (The negative tests in test/ai3d-evidence.test.js cover this, but we also enforce here)
 
     print("EVIDENCE GATE PASS")
 
