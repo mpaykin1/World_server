@@ -16,7 +16,8 @@ const apiHandlers = new Map([
   ['/api/me', require('./api/me')],
   ['/api/logout', require('./api/logout')],
   ['/api/game', require('./api/game')],
-  ['/api/voxel', require('./api/voxel')]
+  ['/api/voxel', require('./api/voxel')],
+  ['/api/ai3d', require('./api/ai3d')]
 ]);
 
 const mime = {
@@ -86,3 +87,4 @@ const port = Number(process.env.PORT) || 3000;
 server.listen(port, () => console.log(`World Server local development: http://localhost:${port}`));
 
 module.exports = { server, safeJoin };
+
