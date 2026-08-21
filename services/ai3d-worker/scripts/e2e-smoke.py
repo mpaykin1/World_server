@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Real end-to-end smoke: image -> JobStore -> PipelineRunner -> artifacts -> validation -> 100%.
-If GPU is absent, the test still reaches 100% via InstantMesh placeholder and prints the
-single infra blocker. This is the user-requested smoke before any paid GPU is connected.
+Real end-to-end smoke: image -> JobStore -> PipelineRunner -> artifacts -> validation.
+Separates PIPELINE COMPLETION (VERIFIED) from VISUAL QUALITY (UNTESTED).
+If GPU is absent, uses REAL CPU volumetric (not placeholder) and reports blocker.
 """
 from __future__ import annotations
 
@@ -12,18 +12,17 @@ import tempfile
 import shutil
 from pathlib import Path
 
-# Ensure worker package is importable
 SERVICE_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(SERVICE_ROOT))
 
 from PIL import Image
 from ai3d.store import JobStore
 from ai3d.runner import PipelineRunner
-from ai3d.validation import validate_glb
+from ai3d.validation import validate_glb, quality_score
+from ai3d.evidence import enforce_evidence_report
 
 def make_test_image(path: Path, size=(512, 512)):
     img = Image.new("RGB", size, (220, 40, 40))
-    # Add a simple gradient to make depth non-trivial
     for y in range(size[1]):
         r = int(220 * (1 - y / size[1] * 0.3))
         for x in range(size[0]):
@@ -34,21 +33,13 @@ def make_test_image(path: Path, size=(512, 512)):
 def main():
     runtime = SERVICE_ROOT / "runtime"
     runtime.mkdir(parents=True, exist_ok=True)
-    # Use a temp DB so we don't pollute real jobs
     tmp_db = Path(tempfile.mktemp(suffix=".sqlite3"))
     store = JobStore(tmp_db)
     runner = PipelineRunner(runtime)
 
     print("=== AI3D E2E smoke ===")
     print("Capabilities:", runner.plugin_status())
-    # Auto-detect local engines via env (like discovery)
-    # Set env to local 3дгенерация so Depth becomes available on Windows
-    for k in ["DEPTH_ANYTHING_HOME", "TRELLIS2_HOME", "BUILDING_GENERATOR_HOME", "PROCGEN_MAPS_HOME", "INSTANTMESH_HOME"]:
-        if not os.environ.get(k):
-            # Try to auto-set from discovery roots if not set
-            pass
 
-    # Create synthetic image
     job_id = "e2e-smoke-" + os.urandom(4).hex()
     job_dir = runtime / "jobs" / job_id
     job_dir.mkdir(parents=True, exist_ok=True)
@@ -56,15 +47,11 @@ def main():
     make_test_image(img_path)
     print(f"Test image: {img_path} ({img_path.stat().st_size} bytes)")
 
-    # Test all modes that should be autonomously runnable before GPU
-    modes_to_test = ["depth", "image_to_3d", "auto"]
-    # For E2E we test image_to_3d (covers fallback chain) and depth
     overall_ok = True
     for mode in ["image_to_3d"]:
         sub_id = f"{job_id}-{mode}"
         sub_dir = runtime / "jobs" / sub_id
         sub_dir.mkdir(parents=True, exist_ok=True)
-        # Copy image
         import shutil as _sh
         inp = sub_dir / "input.png"
         _sh.copy(img_path, inp)
@@ -75,50 +62,52 @@ def main():
             print(f"  [{pct:3}%] {msg}")
         try:
             result = runner.run(job, prog)
-            job_after = store.get(sub_id)
-            # Validation
             for f in result["files"]:
                 p = sub_dir / f["name"]
                 if f["role"] in ("model", "depth", "building", "world"):
                     if f["name"].endswith(".glb"):
                         validate_glb(p)
                         print(f"  validate_glb OK: {p.name} ({f['bytes']} bytes)")
+                        qs = quality_score(p)
+                        print(f"  quality: Geometry Integrity {qs['Geometry Integrity %']['percent']}% VERIFIED, GLB Validity {qs['GLB Validity %']['percent']}% VERIFIED, Real Artifact {qs['Real Image->3D Artifact %']['percent']}%")
                     elif f["name"].endswith(".png"):
                         from ai3d.validation import verify_image
                         verify_image(p)
                         print(f"  verify_image OK: {p.name}")
-            # Check manifest
             manifest = sub_dir / "manifest.json"
             if manifest.is_file():
                 import json
                 m = json.loads(manifest.read_text(encoding="utf-8"))
                 print(f"  manifest chosenEngine: {m.get('chosenEngine')}, infraBlocker: {m.get('infraBlocker')}")
-                print(f"  godotReady: {m.get('godotReady')}")
+                print(f"  godotPackageReady: {m.get('godotPackageReady')}, godotRuntimeAvailable: {m.get('godotRuntimeAvailable')}, godotRuntimeTested: {m.get('godotRuntimeTested')}")
+                print(f"  depthEngine: {m.get('depthEngine')}, depthInferenceVerified: {m.get('depthInferenceVerified')}, blenderEnhancementUsed: {m.get('blenderEnhancementUsed')}")
+                # Check quality-report.json
+                qr = sub_dir / "quality-report.json"
+                if qr.is_file():
+                    qj = json.loads(qr.read_text(encoding="utf-8"))
+                    print(f"  quality-report evidencePolicy: {qj.get('evidencePolicy')}")
+                    enforce_evidence_report(qj)
+                    print(f"  evidence gate PASS for quality-report")
                 if m.get("infraBlocker"):
-                    print(f"  >>> INFRA BLOCKER (expected before GPU): {m['infraBlocker']}")
-            print(f"  Result: {len(result['files'])} files, {result['durationSeconds']}s — status 100% (simulated)")
-            # Ensure at least one GLB or PNG produced
+                    print(f"  >>> INFRA BLOCKER: {m['infraBlocker']}")
+            # PIPELINE COMPLETION — VERIFIED
+            print(f"  PIPELINE COMPLETION: VERIFIED 100% ({len(result['files'])} files, {result['durationSeconds']}s)")
+            # VISUAL QUALITY — must be UNTESTED without ground truth
+            print(f"  IMAGE->3D VISUAL QUALITY: UNTESTED (no ground-truth/render-back)")
             assert any(f["name"].endswith(".glb") for f in result["files"]), "No GLB produced"
         except Exception as exc:
             print(f"  FAILED: {exc}")
             import traceback; traceback.print_exc()
             overall_ok = False
-        finally:
-            # Cleanup sub job
-            pass
 
-    # Summary of what remains impossible without external GPU
     caps = runner.plugin_status()
     print("\n=== Summary ===")
     print(f"TRELLIS available: {caps['trellis2']['available']} (needs Linux+CUDA 24GB)")
     print(f"InstantMesh available: {caps['instantmesh']['available']}")
     print(f"Depth Small available: {caps['depth_anything_v2_small']['available']}")
     print(f"Blender auto-found: {caps['blender']}")
-    print(f"Godot voxel bridge: {caps['godot_voxel_factory']['available']}")
-    if not caps['trellis2']['available']:
-        print(">>> Single infra blocker before paid GPU: TRELLIS.2 requires Linux NVIDIA GPU (24GB). InstantMesh placeholder provides E2E 100% without it.")
+    print(f"Godot voxel bridge packageReady: {caps['godot_voxel_factory']['godotPackageReady']}")
 
-    # Cleanup temp db
     try:
         tmp_db.unlink(missing_ok=True)
         shutil.rmtree(job_dir, ignore_errors=True)
@@ -126,7 +115,8 @@ def main():
         pass
 
     if overall_ok:
-        print("\nE2E SMOKE PASSED — image->job->engine->artifact->validation->100%")
+        print("\nPIPELINE COMPLETION: VERIFIED 100%")
+        print("IMAGE->3D VISUAL QUALITY: UNTESTED")
         sys.exit(0)
     else:
         print("\nE2E SMOKE FAILED")

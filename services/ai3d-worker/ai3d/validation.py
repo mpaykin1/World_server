@@ -26,12 +26,11 @@ def validate_glb(path: Path) -> None:
         magic = handle.read(4)
     if magic != b"glTF":
         raise ValueError("Output is not a valid GLB container.")
-    # Quality validation (Stage 16): ensure real geometry, not plane
     quality = mesh_quality(path)
     if quality["isPlaceholder"]:
-        raise ValueError("PLACEHOLDER -- NOT REAL 3D RECONSTRUCTION (plane fallback, not volumetric)")
+        raise ValueError("PLACEHOLDER -- NOT REAL 3D RECONSTRUCTION")
     if quality["zDepth"] < 0.01:
-        raise ValueError(f"Z depth ~0 ({quality['zDepth']:.4f}) — flat plane, not volumetric")
+        raise ValueError(f"Z depth ~0 ({quality['zDepth']:.4f}) — flat plane")
     if quality["vertexCount"] < 100 or quality["faceCount"] < 50:
         raise ValueError(f"Mesh too small: {quality['vertexCount']} vertices, {quality['faceCount']} faces")
     if quality["hasNaN"]:
@@ -39,47 +38,40 @@ def validate_glb(path: Path) -> None:
 
 
 def mesh_quality(path: Path) -> dict:
-    """Stage 16-17: parse GLB and compute geometry metrics. Returns quality dict."""
     import struct, json
     data = path.read_bytes()
     if len(data) < 20 or data[:4] != b"glTF":
-        return {"isPlaceholder": True, "zDepth": 0, "vertexCount": 0, "faceCount": 0, "hasNaN": True}
-    # Parse JSON chunk
+        return {"isPlaceholder": True, "zDepth": 0, "vertexCount": 0, "faceCount": 0, "hasNaN": True, "generator": ""}
     try:
         json_len, json_type = struct.unpack("<II", data[12:20])
         json_bytes = data[20:20+json_len]
         gltf = json.loads(json_bytes)
     except Exception:
-        return {"isPlaceholder": True, "zDepth": 0, "vertexCount": 0, "faceCount": 0, "hasNaN": True}
-    # Detect placeholder by generator string
+        return {"isPlaceholder": True, "zDepth": 0, "vertexCount": 0, "faceCount": 0, "hasNaN": True, "generator": ""}
     gen = gltf.get("asset", {}).get("generator", "")
-    is_placeholder = "PLACEHOLDER" in gen or "placeholder" in gen.lower() and "CPU" not in gen
-    # If our CPU generator, not placeholder
-    if "CPU reconstruction" in gen:
+    # PLACEHOLDER marker is explicit; real CPU has "CPU reconstruction" and is NOT placeholder
+    is_placeholder = "PLACEHOLDER" in gen
+    if "CPU reconstruction" in gen and "PLACEHOLDER" not in gen:
         is_placeholder = False
-    # Count vertices/faces
+    # Fallback for old instantmesh placeholder without explicit marker
+    if not is_placeholder and "placeholder" in gen.lower() and "CPU reconstruction" not in gen:
+        is_placeholder = True
     accessors = gltf.get("accessors", [])
     vertex_count = accessors[0]["count"] if len(accessors) > 0 else 0
     face_count = (accessors[2]["count"] // 3) if len(accessors) > 2 else 0
-    # Bounding box
     try:
         acc0 = accessors[0]
         mn = acc0.get("min", [0, 0, 0])
         mx = acc0.get("max", [0, 0, 0])
         z_depth = float(mx[1] - mn[1]) if len(mn) > 1 else 0
-        has_nan = any(v != v for v in mn+mx)  # NaN check
+        has_nan = any(v != v for v in mn+mx)
         degenerate = z_depth < 0.005
     except Exception:
         z_depth = 0
         has_nan = True
         degenerate = True
-    # File size
     file_size = path.stat().st_size
-    # Material/texture count (approx)
     mat_count = len(gltf.get("materials", []))
-    # Overall quality score (Stage 17)
-    geometry_q = min(100, max(0, (vertex_count / 8000) * 40 + (face_count / 15000) * 40 + (min(z_depth, 1.0) * 20)))
-    glb_valid = 100 if not is_placeholder and z_depth >= 0.01 and vertex_count >= 100 else 0
     return {
         "isPlaceholder": is_placeholder,
         "zDepth": z_depth,
@@ -89,39 +81,81 @@ def mesh_quality(path: Path) -> dict:
         "degenerate": degenerate,
         "fileSize": file_size,
         "materialCount": mat_count,
-        "geometryQuality": round(geometry_q, 1),
-        "glbValidity": glb_valid,
-        "generator": gen
+        "generator": gen,
     }
 
 
 def quality_score(path: Path) -> dict:
-    """Stage 17: returns detailed percentages."""
+    """
+    Returns evidence-gated quality report. No visual metrics are fabricated from geometry alone.
+    Only Geometry Integrity, GLB Validity, Real Artifact are VERIFIED; the rest are UNTESTED.
+    """
+    from .evidence import verified, untested
+
     q = mesh_quality(path)
-    # Depth/silhouette/texture are approximated via geometry for CPU pipeline
-    depth_acc = 80 if not q["isPlaceholder"] and q["zDepth"] > 0.05 else 20
-    silhouette = 75 if q["vertexCount"] > 1000 else 30
-    structural = 70 if q["faceCount"] > 500 else 30
-    texture = 60 if q["fileSize"] > 10000 else 30  # placeholder 816 vs real 355k
-    detail = min(100, q["geometryQuality"] + 10)
-    godot = 100 if not q["isPlaceholder"] else 50
-    voxel = 80 if not q["isPlaceholder"] else 40
-    overall = round((q["geometryQuality"]*0.25 + depth_acc*0.15 + silhouette*0.1 + structural*0.1 + texture*0.1 + detail*0.1 + q["glbValidity"]*0.1 + godot*0.05 + voxel*0.05), 1)
-    if q["isPlaceholder"]:
-        overall = min(overall, 35)  # never 100% for placeholder
-    return {
-        "Geometry Quality %": q["geometryQuality"],
+
+    # VERIFIED: technical facts only
+    geometry_integrity = verified(
+        100 if (q["vertexCount"] >= 100 and q["faceCount"] >= 50 and not q["hasNaN"] and not q["degenerate"]) else 0,
+        evidence=[
+            f"vertexCount={q['vertexCount']} (threshold 100)",
+            f"faceCount={q['faceCount']} (threshold 50)",
+            f"hasNaN={q['hasNaN']}",
+            f"degenerate={q['degenerate']}",
+            f"generator={q['generator']}",
+        ],
+    )
+    # Add raw values for CI gate
+    geometry_integrity["vertexCount"] = q["vertexCount"]
+    geometry_integrity["faceCount"] = q["faceCount"]
+
+    glb_validity = verified(
+        100 if (not q["isPlaceholder"] and q["zDepth"] >= 0.01 and q["vertexCount"] >= 100 and not q["hasNaN"]) else 0,
+        evidence=[
+            f"glTF magic OK",
+            f"vertexCount={q['vertexCount']}",
+            f"zDepth={q['zDepth']:.4f} (threshold 0.01)",
+            f"isPlaceholder={q['isPlaceholder']}",
+        ],
+    )
+
+    # Real Image->3D Artifact % — VERIFIED 100 only if real volumetric
+    is_real = (not q["isPlaceholder"] and q["vertexCount"] >= 100 and q["faceCount"] >= 50 and q["zDepth"] > 0.01)
+    # Use mesh_quality parse valid as evidence; if is_real then 100 else 0
+    real_artifact = verified(
+        100 if is_real else 0,
+        evidence=[
+            f"not placeholder={not q['isPlaceholder']}",
+            f"vertexCount={q['vertexCount']} >=100",
+            f"faceCount={q['faceCount']} >=50",
+            f"zDepth={q['zDepth']:.4f} >0.01",
+            f"GLB parse valid",
+        ],
+        isPlaceholder=q["isPlaceholder"],
+    )
+
+    # UNTESTED visual metrics — no ground truth / render-back
+    depth_acc = untested(reason="No ground-truth depth comparison available")
+    silhouette = untested(reason="No render-back comparison available")
+    structural = untested(reason="No render-back comparison available")
+    texture = untested(reason="No render-back comparison available")
+    godot_runtime = untested(reason="Godot runtime not launched and GLB not imported in Godot")
+    voxel_runtime = untested(reason="Voxel runtime/conversion not launched")
+    overall = untested(reason="Critical visual metrics (Depth/Silhouette/Structural/Texture/Godot/Voxel) are UNTESTED")
+
+    report = {
+        "Geometry Integrity %": geometry_integrity,
+        "GLB Validity %": glb_validity,
+        "Real Image->3D Artifact %": real_artifact,
         "Depth Accuracy %": depth_acc,
         "Silhouette Accuracy %": silhouette,
         "Structural Similarity %": structural,
         "Texture Quality %": texture,
-        "Detail Level %": detail,
-        "GLB Validity %": q["glbValidity"],
-        "Godot Compatibility %": godot,
-        "Voxel Compatibility %": voxel,
-        "Overall %": overall,
-        **q
+        "Godot Runtime Compatibility %": godot_runtime,
+        "Voxel Runtime Compatibility %": voxel_runtime,
+        "Overall Quality %": overall,
     }
+    return report
 
 
 def file_meta(path: Path, role: str) -> dict[str, Any]:
