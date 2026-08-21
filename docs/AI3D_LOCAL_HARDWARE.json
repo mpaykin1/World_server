@@ -1,0 +1,132 @@
+{
+  "generatedAt": "2026-08-21T17:45:00Z",
+  "host": "Windows",
+  "windows": {
+    "caption": "Microsoft Windows 10 Home Single Language",
+    "version": "10.0.19045",
+    "buildNumber": "19045",
+    "architecture": "64-bit"
+  },
+  "cpu": {
+    "model": "Intel(R) Core(TM) i7-3612QM CPU @ 2.10GHz",
+    "cores": 4,
+    "threads": 8,
+    "architecture": "x64",
+    "baseClockGHz": 2.1,
+    "turboClockGHz": 3.1
+  },
+  "ram": {
+    "totalBytes": 17028370432,
+    "totalGB": 15.86,
+    "freeBytes": 4450000000,
+    "freeGB": 4.15,
+    "visibleGB": 15.86
+  },
+  "gpu": [
+    {
+      "name": "NVIDIA GeForce GT 740M",
+      "driverVersion": "25.21.14.2531",
+      "adapterRAMBytes": 2147483648,
+      "adapterRAMGB": 2.0,
+      "videoProcessor": "GeForce GT 740M",
+      "architecture": "Kepler",
+      "computeCapability": "3.0",
+      "vramTotalGB": 2.0,
+      "vramFreeGB": null,
+      "nvidiaSmi": "not found (driver too old, no nvidia-smi)",
+      "cudaRuntime": "not available (no torch, no nvidia-smi)",
+      "cudaToolkit": "not installed (nvcc not found)",
+      "cudnn": "not installed",
+      "fp16": false,
+      "bf16": false,
+      "directML": "not tested (GPU too old for modern DirectML)"
+    },
+    {
+      "name": "Intel(R) HD Graphics 4000",
+      "driverVersion": "10.18.10.5161",
+      "adapterRAMGB": 2.06,
+      "videoProcessor": "Intel(R) HD Graphics Family",
+      "type": "integrated"
+    }
+  ],
+  "nvidiaDriver": "25.21.14.2531 (2019, very old, no nvidia-smi, no WSL GPU passthrough support)",
+  "cuda": {
+    "runtime": null,
+    "toolkit": null,
+    "toolkitVersion": null,
+    "cudnn": null,
+    "torchVersion": null,
+    "torchCudaAvailable": false,
+    "torchCudaVersion": null,
+    "deviceCount": 0,
+    "computeCapability": null,
+    "fp16Support": false,
+    "bf16Support": false,
+    "sequentialOffloadPossible": false,
+    "reason": "No PyTorch CUDA, no nvidia-smi, GPU Kepler 3.0 unsupported for modern CUDA 12.1+ and flash-attn"
+  },
+  "storage": {
+    "cDrive": {
+      "device": "C:",
+      "totalBytes": 511987150848,
+      "totalGB": 476.8,
+      "freeBytes": 218940985344,
+      "freeGB": 203.9,
+      "filesystem": "NTFS",
+      "type": "SSD/HDD unknown (laptop 2012, likely HDD 500GB)",
+      "freePercent": 42.7
+    },
+    "pagefile": "C:\\pagefile.sys peak 8188 MB"
+  },
+  "wsl2": {
+    "installed": false,
+    "distributions": [],
+    "version": null,
+    "gpuPassthrough": false,
+    "available": "WSL executable present but no distribution installed (wsl --list shows help, not distro)",
+    "dockerGpuSupport": false
+  },
+  "docker": {
+    "installed": false,
+    "version": null,
+    "gpuSupport": false,
+    "desktop": false,
+    "info": "docker not found"
+  },
+  "python": {
+    "versions": ["3.11.9", "3.14.6"],
+    "default": "3.11.9",
+    "pip": "24.0",
+    "conda": null,
+    "mamba": null
+  },
+  "git": "2.54.0.windows.1",
+  "node": "v24.15.0",
+  "npm": "11.12.1",
+  "blender": {
+    "found": true,
+    "path": "C:\\Program Files\\Blender Foundation\\Blender 5.1\\blender.exe",
+    "version": "5.1",
+    "source": "ProgramFilesGlob",
+    "headless": true
+  },
+  "godot": {
+    "found": false,
+    "path": null,
+    "reason": "godot not in PATH, no Godot install detected"
+  },
+  "buildTools": {
+    "visualStudio": "18 (VS2022?) detected in C:\\Program Files\\Microsoft Visual Studio\\18",
+    "msvc": "cl not in PATH",
+    "cmake": null,
+    "ninja": null,
+    "cudaCompiler": null
+  },
+  "directML": "not available / old GPU",
+  "summary": {
+    "trellisLocalPossible": false,
+    "trellisWsl2Possible": false,
+    "trellisDockerPossible": false,
+    "reason": "Kepler GT 740M 2GB, driver 2019, no nvidia-smi, no CUDA, no torch CUDA, compute 3.0 below required 7.0+ for TRELLIS.2"
+  }
+}

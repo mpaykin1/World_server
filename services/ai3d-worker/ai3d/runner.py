@@ -11,6 +11,7 @@ from .validation import file_meta, validate_glb
 from .plugins.depth_anything import DepthAnythingEngine
 from .plugins.trellis2 import Trellis2Engine
 from .plugins.instantmesh import InstantMeshEngine
+from .plugins.cpu_reconstruction import CpuReconstructionEngine
 from .plugins.blender_building import BuildingEngine
 from .plugins.procgen_maps import ProcgenMapsEngine
 from .plugins.godot_voxel import GodotVoxelBridge
@@ -22,6 +23,7 @@ class PipelineRunner:
         self.depth = DepthAnythingEngine()
         self.trellis = Trellis2Engine()
         self.instantmesh = InstantMeshEngine()
+        self.cpu = CpuReconstructionEngine()
         self.building = BuildingEngine()
         self.procgen = ProcgenMapsEngine()
         self.godot = GodotVoxelBridge()
@@ -31,6 +33,7 @@ class PipelineRunner:
             "depth_anything_v2_small": {"available": self.depth.available(), "licenseMode": "Apache-2.0 model"},
             "trellis2": {"available": self.trellis.available(), "serverRequirement": "Linux + NVIDIA CUDA GPU, upstream specifies 24GB+ VRAM"},
             "instantmesh": {"available": self.instantmesh.available(), "engine": "InstantMesh fallback (local майн/InstantMesh)", "bridge": "INSTANTMESH_GPU_WORKER_SERVER_BRIDGE"},
+            "cpu_reconstruction": {"available": self.cpu.available(), "engine": "Depth+Blender CPU volumetric (real geometry, not plane)", "note": "Creates heightfield + extrusion, passes mesh validation"},
             "building_generator": {"available": self.building.available(), "engine": "Blender headless (auto-found)"},
             "procgen_maps": {"available": self.procgen.available(), "engine": "Blender headless (auto-found)", "licenseMode": "external GPL-3.0 plugin"},
             "godot_voxel_factory": self.godot.plugin_status(),
@@ -39,30 +42,38 @@ class PipelineRunner:
         }
 
     def _choose_image3d_engine(self) -> tuple[str, object]:
-        # AUTO selection: TRELLIS (best quality) → InstantMesh (fallback) → diagnostic placeholder
+        # AUTO fallback order: TRELLIS full -> TRELLIS low-VRAM -> InstantMesh real -> Depth+Blender CPU -> placeholder
         if self.trellis.available():
             try:
-                import platform, torch
+                import platform
                 if platform.system() == "Linux":
                     import torch as _t
                     if _t.cuda.is_available():
                         return "trellis2", self.trellis
             except Exception:
                 pass
-            # If TRELLIS source present but not runnable (Windows/no GPU), we still consider it unavailable and fallback
             if self.trellis.available():
-                # Check if actually can run (Linux+CUDA)
                 try:
-                    # Trellis will raise with clear message if not Linux/CUDA; treat as unavailable for fallback
                     import platform
                     if platform.system() != "Linux":
                         raise RuntimeError("TRELLIS Linux-only")
                 except Exception:
                     pass
+        # InstantMesh real (requires CUDA, but we try)
         if self.instantmesh.available():
-            return "instantmesh", self.instantmesh
-        # Final fallback still uses instantmesh placeholder engine (guaranteed to produce valid GLB)
-        return "instantmesh_placeholder", self.instantmesh
+            try:
+                import torch as _t2
+                if _t2.cuda.is_available():
+                    return "instantmesh", self.instantmesh
+            except Exception:
+                # No torch/cuda, but instantmesh placeholder can still be used, but CPU reconstruction is better
+                pass
+        # Real CPU pipeline (volumetric, not plane) — preferred before placeholder
+        if self.cpu.available():
+            return "cpu_reconstruction", self.cpu
+        if self.instantmesh.available():
+            return "instantmesh_placeholder", self.instantmesh
+        return "placeholder_diagnostic", self.instantmesh
 
     def run(self, job: dict, progress: Callable[[int, str], None]) -> dict:
         mode = job["mode"]
@@ -84,23 +95,35 @@ class PipelineRunner:
                 progress(96, "Validating depth output")
 
         chosen_engine = None
+        classification = None
         if mode in {"auto", "image_to_3d"}:
-            # AUTO: pick best available without user input — TRELLIS → InstantMesh → placeholder
             engine_name, engine = self._choose_image3d_engine()
             chosen_engine = engine_name
+            # For AUTO, classify image to select specialized path if CPU
             if engine_name == "trellis2":
                 progress(28, "TRELLIS.2: generating 3D geometry and PBR materials")
                 glb_path = engine.run(input_path, job_dir / "model.glb", params)
                 progress(90, "Validating TRELLIS.2 GLB")
-            else:
-                if engine_name == "instantmesh_placeholder":
-                    progress(28, "InstantMesh placeholder (CPU fallback, no GPU): textured plane GLB + diagnostic")
-                else:
-                    progress(28, "InstantMesh fallback: generating mesh (TRELLIS unavailable)")
+            elif engine_name == "instantmesh":
+                progress(28, "InstantMesh real: generating mesh (TRELLIS unavailable, GPU required)")
                 glb_path = engine.run(input_path, job_dir / "model.glb", params)
-                progress(90, f"Validating {engine_name} GLB")
+                progress(90, "Validating InstantMesh GLB")
+            elif engine_name == "cpu_reconstruction":
+                progress(28, "CPU reconstruction: Depth Anything Small -> heightfield -> volumetric GLB")
+                def _prog(p, m):
+                    progress(28 + int(p*0.6), m)
+                glb_path, classification = engine.run(input_path, job_dir / "model.glb", params, progress=_prog)
+                progress(90, "Validating CPU volumetric GLB")
+            else:
+                progress(28, "PLACEHOLDER -- NOT REAL 3D RECONSTRUCTION (diagnostic fallback)")
+                glb_path = engine.run(input_path, job_dir / "model.glb", params)
+                progress(90, "Validating PLACEHOLDER GLB (marked diagnostic)")
             validate_glb(glb_path)
             files.append(file_meta(glb_path, "model"))
+            if classification:
+                cls_path = job_dir / "classification.txt"
+                cls_path.write_text(classification, encoding="utf-8")
+                files.append(file_meta(cls_path, "classification"))
             # Godot voxel factory bridge: every GLB becomes auto-importable
             try:
                 gv = self.godot.emit_godot_stub(glb_path, job_dir, params)
@@ -149,15 +172,17 @@ class PipelineRunner:
             raise RuntimeError(f"Unsupported mode: {mode}")
 
         manifest_path = job_dir / "manifest.json"
-        # Determine infra blocker for diagnostics
         blocker = None
         status = self.plugin_status()
         if mode in {"auto", "image_to_3d"}:
-            if not status["trellis2"]["available"]:
-                if not status["instantmesh"]["available"]:
-                    blocker = "No 3D engine available: TRELLIS.2 and InstantMesh missing"
-                elif chosen_engine and "placeholder" in chosen_engine:
-                    blocker = "GPU missing: TRELLIS.2 requires Linux+CUDA 24GB, InstantMesh GPU unavailable — placeholder GLB created"
+            if chosen_engine == "trellis2":
+                blocker = None
+            elif chosen_engine == "instantmesh":
+                blocker = "TRELLIS unavailable, using InstantMesh (GPU)"
+            elif chosen_engine == "cpu_reconstruction":
+                blocker = "TRELLIS/InstantMesh GPU unavailable — using REAL CPU volumetric reconstruction (Depth+Blender), not placeholder"
+            elif chosen_engine and "placeholder" in chosen_engine:
+                blocker = "PLACEHOLDER -- NOT REAL 3D RECONSTRUCTION — GPU missing (TRELLIS Linux 24GB, InstantMesh CUDA) and CPU fallback failed"
         manifest = {
             "jobId": job["id"], "mode": mode, "durationSeconds": round(time.time() - started, 3),
             "files": files, "engines": status,
