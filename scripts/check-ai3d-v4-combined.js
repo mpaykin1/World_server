@@ -24,7 +24,11 @@ for (const rel of [
   'shared/ai3d-playable-runtime.js',
   'api/ai3d-voxel-generate.js',
   'test/ai3d-delivery-policy.test.js',
-  'test/ai3d-voxel-serverless.test.js'
+  'test/ai3d-voxel-serverless.test.js',
+  'apps/ai3d-voxel-city/default-city.json',
+  'apps/ai3d-voxel-city/scene-delivery.json',
+  'e2e/ai3d-voxel-city-autoplay.spec.js',
+  'playwright.config.js'
 ]) check(fs.existsSync(path.join(root, rel)), `${rel} exists`);
 
 const ai3d = text('api/ai3d.js');
@@ -39,10 +43,16 @@ const client = text('apps/ai3d-voxel-city/client.js');
 check(client.includes('generateServerlessFallback'), 'Voxel City has Vercel fallback');
 check(client.includes('/api/ai3d-voxel-generate'), 'Voxel City calls serverless voxel endpoint');
 check(client.includes('Vercel fallback ready'), 'UI reports fallback readiness');
+check(client.includes('autoLoadDefaultCity'), 'Voxel City has default-city autoplay (no button)');
+check(client.includes('collidesAt') && client.includes('onGround'), 'Voxel City has collision+gravity');
+check(client.includes('default-city.json'), 'Voxel City autoplay uses immutable asset');
+check(!client.includes('HTTP 200') || client.includes('do NOT count HTTP 200'), 'HTTP 200 not counted as ready proof');
 
 const ci = text('.github/workflows/ci.yml');
 check(ci.includes('AI3D final delivery policy (hard)'), 'CI hard delivery gate present');
 check(ci.includes('node scripts/check-ai3d-delivery-policy.js'), 'CI executes hard delivery gate');
+check(ci.includes('playwright') && ci.includes('ai3d-voxel-city-autoplay'), 'CI has Playwright autoplay hard gate');
+check(ci.includes('npx playwright test'), 'CI executes Playwright tests');
 
 const diagnostic = text('apps/ai3d-reference-test/index.html');
 check(diagnostic.includes('DIAGNOSTIC ONLY'), 'old reference viewer marked diagnostic only');

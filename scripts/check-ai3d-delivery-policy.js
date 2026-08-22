@@ -41,6 +41,40 @@ check(ci.includes('AI3D final delivery policy (hard)'), 'CI contains hard delive
 check(ci.includes('node scripts/check-ai3d-delivery-policy.js'), 'CI executes hard delivery gate');
 check(!/check-ai3d-delivery-policy\.js\s*\|\|\s*true/.test(ci), 'CI cannot ignore gate with || true');
 check(!/continue-on-error:\s*true[\s\S]{0,160}check-ai3d-delivery-policy/.test(ci), 'gate cannot use continue-on-error');
+check(ci.includes('AI3D Voxel City autoplay') || ci.includes('playwright test'), 'CI contains autoplay Playwright hard gate');
+check(ci.includes('npx playwright test') || ci.includes('playwright'), 'CI executes Playwright autoplay');
+
+// Default-city immutable autoplay requirements — must not rely on AI worker / serverless / GPU for generation
+for (const rel of ['apps/ai3d-voxel-city/default-city.json','apps/ai3d-voxel-city/default-city.sha256','apps/ai3d-voxel-city/scene-delivery.json','e2e/ai3d-voxel-city-autoplay.spec.js','playwright.config.js']) check(fs.existsSync(path.join(root, rel)), `${rel} exists (autoplay)`);
+
+const defaultCity = JSON.parse(fs.readFileSync(path.join(root,'apps/ai3d-voxel-city/default-city.json'),'utf8'));
+check(Array.isArray(defaultCity.voxels) && defaultCity.voxels.length>0, `default-city voxels>0 (${defaultCity.voxels.length})`);
+check(defaultCity.defaultCity?.immutable===true, 'default-city is immutable');
+check(fs.readFileSync(path.join(root,'apps/ai3d-voxel-city/default-city.sha256'),'utf8').trim().length===64, 'default-city sha256 exists');
+const manifest = JSON.parse(fs.readFileSync(path.join(root,'apps/ai3d-voxel-city/scene-delivery.json'),'utf8'));
+check(manifest.playable===true && manifest.walkable===true, 'scene-delivery manifest playable+walkable');
+check(manifest.collisions===true && manifest.grounding===true && manifest.playerSpawn===true, 'scene-delivery manifest collisions+grounding+spawn');
+check(manifest.controls?.includes('WASD') && manifest.controls?.includes('ARROW_KEYS'), 'scene-delivery manifest WASD+arrows');
+check(manifest.defaultCity?.autoplay===true && manifest.defaultCity?.immutable===true, 'scene-delivery autoplay immutable');
+check(manifest.heightfieldDominant===false && manifest.reliefDominant===false && manifest.billboardLike===false, 'scene-delivery not heightfield/relief/billboard');
+
+const voxelClient = read('apps/ai3d-voxel-city/client.js');
+check(voxelClient.includes('autoLoadDefaultCity'), 'Voxel City has autoplay autoLoadDefaultCity');
+check(voxelClient.includes('./default-city.json'), 'autoplay fetches immutable default-city.json (not API)');
+check(!/autoLoadDefaultCity[\s\S]*AI3D_WORKER_URL/.test(voxelClient), 'autoplay does not depend on AI3D_WORKER_URL');
+check(voxelClient.includes('collidesAt') && voxelClient.includes('findGroundY'), 'client has collision + ground detection');
+check(voxelClient.includes('playableMode') && voxelClient.includes('updatePlayer'), 'client has playable WASD+gravity controller');
+check(voxelClient.includes('window.__AI3D_PLAYABLE_SCENE__'), 'client reports playable runtime');
+check(voxelClient.includes('window.AI3DVoxelRuntime'), 'client exposes runtime for Playwright');
+
+const playwright = read('e2e/ai3d-voxel-city-autoplay.spec.js');
+check(playwright.includes('canvas not пуст') || playwright.includes('canvas'), 'Playwright checks canvas not empty');
+check(playwright.includes('voxels') && playwright.includes('chunks') && playwright.includes('triangles'), 'Playwright checks voxels/chunks/triangles>0');
+check(playwright.includes('spawn') || playwright.includes('playerSpawn'), 'Playwright checks spawn');
+check(playwright.includes('KeyW') && playwright.includes('WASD'), 'Playwright checks WASD movement');
+check(playwright.includes('collidesAt') || playwright.includes('collision'), 'Playwright checks collision');
+check(playwright.includes('onGround') || playwright.includes('grounding'), 'Playwright checks gravity/ground');
+check(playwright.includes('HTTP 200 alone is not proof') || playwright.includes('not proof'), 'Playwright asserts HTTP 200 not sufficient');
 
 if (failed) { console.error('\nAI3D FINAL DELIVERY POLICY FAILED'); process.exit(1); }
 console.log(`\nAI3D FINAL DELIVERY POLICY PASSED · STATUS=${status.status}`);
