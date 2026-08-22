@@ -113,7 +113,7 @@ async def create_job(
     _token=Depends(require_token),
 ):
     mode = mode.strip().lower()
-    if mode not in {"auto", "image_to_3d", "depth", "building", "map"}:
+    if mode not in {"auto", "image_to_3d", "depth", "building", "map", "voxel_city"}:
         raise HTTPException(status_code=400, detail="Unsupported mode.")
     try:
         options = json.loads(params or "{}")
@@ -122,7 +122,7 @@ async def create_job(
     if not isinstance(options, dict) or len(params) > 64_000:
         raise HTTPException(status_code=400, detail="params object is invalid or too large.")
 
-    needs_image = mode in {"auto", "image_to_3d", "depth"}
+    needs_image = mode in {"auto", "image_to_3d", "depth", "voxel_city"}
     if needs_image and file is None:
         raise HTTPException(status_code=400, detail="This mode requires an image.")
     if file is not None and file.content_type not in ALLOWED_IMAGE_TYPES:
