@@ -11,6 +11,7 @@ REGISTRY = {
     "geometry_integrity": {"label": "Geometry Integrity %"},
     "glb_validity": {"label": "GLB Validity %"},
     "volumetric_artifact_integrity": {"label": "Volumetric Artifact Integrity %"},
+    "walkable_scene_integrity": {"label": "Walkable Scene Integrity %"},
     "image3d_correspondence": {"label": "Image->3D Correspondence %"},
     "depth_accuracy": {"label": "Depth Accuracy %"},
     "silhouette_accuracy": {"label": "Silhouette Accuracy %"},
@@ -37,7 +38,7 @@ LABEL_TO_ID["Godot Runtime Compatibility %"] = "godot_runtime_compatibility"
 LABEL_TO_ID["Voxel Runtime Compatibility %"] = "voxel_runtime_compatibility"
 LABEL_TO_ID["Pipeline Completion %"] = "pipeline_completion"
 
-REQUIRED_IDS = set(REGISTRY.keys())
+REQUIRED_IDS = set(REGISTRY.keys()) - {"walkable_scene_integrity"}  # walkable is new, make optional for backward compat until all reports updated
 
 def verified(percent: int | float, evidence: list[dict[str, Any] | str], **extra: Any) -> dict[str, Any]:
     if not isinstance(percent, (int, float)):

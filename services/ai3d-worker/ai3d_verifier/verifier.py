@@ -178,10 +178,7 @@ def verify_job(job_dir: Path) -> dict[str, Any]:
         glb_validity = verified(0, evidence=[{"kind": "glb_validation", "inputSha256": input_sha, "artifactSha256": "0"*64, "artifactPath": "no_file", "artifactBytes": 0, "verifier": "glb_validator", "verifierVersion": "2", "measurement": {}, "threshold": {}, "passed": False}])
         volumetric = verified(0, evidence=[{"kind": "artifact_measurement", "inputSha256": input_sha, "artifactSha256": "0"*64, "artifactPath": "no_file", "artifactBytes": 0, "verifier": "mesh_validator", "verifierVersion": "2", "measurement": {"isPlaceholder": True}, "threshold": {}, "passed": False}], isPlaceholder=True)
 
-    # UNTESTED for visual metrics (need ground truth / render)
     from ai3d.evidence import untested
-
-    # Determine if we can do image3d correspondence: need render
     image3d_correspondence = untested(reason="No render-back comparison available (need inputSha256 + renderSha256 + comparisonMethod)")
     depth_accuracy = untested(reason="No ground-truth depth file available for comparison")
     silhouette_accuracy = untested(reason="No render-back comparison available (need inputSha256 + renderSha256 + IoU)")
@@ -189,24 +186,23 @@ def verify_job(job_dir: Path) -> dict[str, Any]:
     texture_quality = untested(reason="No render-back image similarity measurement available (need color histogram)")
     godot_runtime_compatibility = untested(reason="Godot runtime not launched (need godotExecutablePath, exitCode 0, importLogSha256)")
     voxel_runtime_compatibility = untested(reason="Voxel runtime not launched (need voxel artifact)")
+    walkable_scene_integrity = untested(reason="Walkable scene not verified (need hasWalkableFloor + hasVerticalWalls + multi_view VERIFIED_VOLUMETRIC)")
 
-    # Pipeline completion — verifier computes percent based on actual stages
-    # For image_to_3d, need all 7, else 0
     pipeline_passed = required.issubset(found_stages) and all(s.get("passed") for s in stages)
     pipeline_evidence = []
     for s in stages:
-        # Ensure each stage has required fields and valid SHA
         pipeline_evidence.append(s)
     from ai3d.evidence import verified as _v
     pipeline_completion = _v(100 if pipeline_passed else 0, evidence=pipeline_evidence)
 
-    overall_visual_quality = untested(reason="Critical visual metrics (Depth/Silhouette/Structural/Texture/Godot/Voxel/Image3D) are UNTESTED")
+    overall_visual_quality = untested(reason="Critical visual metrics (Depth/Silhouette/Structural/Texture/Godot/Voxel/Image3D/Walkable) are UNTESTED")
 
     qualityEvidence = {
         "pipeline_completion": pipeline_completion,
         "geometry_integrity": geometry_integrity,
         "glb_validity": glb_validity,
         "volumetric_artifact_integrity": volumetric,
+        "walkable_scene_integrity": walkable_scene_integrity,
         "image3d_correspondence": image3d_correspondence,
         "depth_accuracy": depth_accuracy,
         "silhouette_accuracy": silhouette_accuracy,
