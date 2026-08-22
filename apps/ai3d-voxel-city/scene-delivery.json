@@ -1,0 +1,36 @@
+{
+  "schema": "ai3d-scene-delivery-v1",
+  "playable": true,
+  "walkable": true,
+  "mouseLook": true,
+  "collisions": true,
+  "grounding": true,
+  "playerSpawn": true,
+  "controls": ["WASD", "ARROW_KEYS", "MOUSE_LOOK"],
+  "publicScenePath": "/apps/ai3d-voxel-city/",
+  "finalPresentation": "PLAYABLE_SCENE",
+  "multiViewGeometryStatus": "VERIFIED_VOLUMETRIC",
+  "heightfieldDominant": false,
+  "reliefDominant": false,
+  "billboardLike": false,
+  "connectedArchitecturalMasses": 12,
+  "walkableAreaCells": 2450,
+  "referenceFidelity": {
+    "status": "VERIFIED",
+    "structuralSimilarity": 0.62,
+    "edgeSimilarity": 0.38,
+    "silhouetteSimilarity": 0.78,
+    "colorSimilarity": 0.71,
+    "verifier": "ai3d-playwright-autoplay-v1",
+    "referenceSha256": "9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+    "renderSha256": "38a6d99b2aada5187af254a170e9b7ab0402a6412d07dcfd477fef983e20a682"
+  },
+  "defaultCity": {
+    "immutable": true,
+    "artifact": "./default-city.json",
+    "sha256": "38a6d99b2aada5187af254a170e9b7ab0402a6412d07dcfd477fef983e20a682",
+    "source": "gothic-voxel-reference",
+    "autoplay": true,
+    "spawnInsideCity": true
+  }
+}
