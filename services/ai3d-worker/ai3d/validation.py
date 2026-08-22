@@ -245,18 +245,16 @@ def quality_score(path: Path, input_path: Path | None = None) -> dict:
         vertexCount=q["vertexCount"],
     )
 
-    # UNTESTED visual metrics
     image_corr = untested(reason="No render-back comparison of input vs rendered output available (need inputSha256 + renderSha256 + IoU/SSIM)")
     depth_acc = untested(reason="No ground-truth depth comparison available (need groundTruthArtifactSha256 + predictedDepthSha256 + comparisonMethod)")
     silhouette = untested(reason="No render-back comparison available (need inputSha256 + renderSha256 + IoU)")
     structural = untested(reason="No render-back comparison available (need SSIM or registered method)")
     texture = untested(reason="No render-back image similarity measurement available")
-    godot_runtime = untested(reason="Godot runtime not launched and GLB not imported in Godot (need executable, exitCode, importLogSha256)")
-    voxel_runtime = untested(reason="Voxel runtime/conversion not launched (need voxel artifact and conversion log)")
-    overall = untested(reason="Critical visual metrics (Depth/Silhouette/Structural/Texture/Godot/Voxel/Image3D Correspondence) are UNTESTED")
+    godot_runtime = untested(reason="Godot runtime not launched (need godotExecutablePath, exitCode 0, importLogSha256)")
+    voxel_runtime = untested(reason="Voxel runtime not launched (need voxel artifact)")
+    walkable = untested(reason="Walkable scene not verified (need hasWalkableFloor + hasVerticalWalls + multi_view VERIFIED_VOLUMETRIC)")
+    overall = untested(reason="Critical visual metrics (Depth/Silhouette/Structural/Texture/Godot/Voxel/Image3D/Walkable) are UNTESTED")
 
-    # Also need pipeline_completion, but that's handled in runner, not here. For this file, we return the 8 above + volumetric etc.
-    # To satisfy registry, we need to include all 12 canonical IDs. We'll include pipeline_completion as UNTESTED here (runner will override with VERIFIED)
     pipeline_completion = untested(reason="Pipeline completion not evaluated in this context (handled by runner)")
 
     return {
@@ -264,6 +262,7 @@ def quality_score(path: Path, input_path: Path | None = None) -> dict:
         "geometry_integrity": geometry_integrity,
         "glb_validity": glb_validity,
         "volumetric_artifact_integrity": volumetric,
+        "walkable_scene_integrity": walkable,
         "image3d_correspondence": image_corr,
         "depth_accuracy": depth_acc,
         "silhouette_accuracy": silhouette,

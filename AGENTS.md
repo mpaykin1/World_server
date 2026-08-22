@@ -91,10 +91,17 @@
 node scripts/check-agent-rules.js
 ```
 
-## 7. Контакты и эскалация
+## 7. AI3D — walkable и 1в1 к референсу
+
+- **Результат AI3D всегда — walkable сцена, а не GLB-рельеф.** Для города/улицы/ландшафта: `WASD` + мышь, пол/стены/отдельные здания. Для персонажа: персонаж внутри мира с управлением. `apps/voxel-world` — образец.
+- **1 в 1 к референсу:** силуэт, структура, цвет, ключевые объекты (собор, мосты) — метрики только из `ai3d-verifier` (`image3d_correspondence` с `renderSha256`), не на словах.
+- **Запрет:** `HEIGHTFIELD-DOMINANT`/`BILLBOARD_LIKE` выдавать как `VERIFIED 100` Image→3D. Такие — `UNTESTED` или `0%`.
+- Подробно: `docs/AI3D_WALKABLE_REQUIREMENTS.md`, разбор провалов: `docs/AI3D_FAILURE_ANALYSIS.md`.
+
+## 8. Контакты и эскалация
 
 - Если правило мешает выполнить задачу — описать причину в PR и запросить исключение, не нарушать скрытно.
 - Сохранять историю и совместимость данных в `supabase/migrations` и `data/` (только для истории).
 
 ---
-*Версия: 1.0 — зафиксирована в ветке `opencode/agent-rules`, любые изменения правил — только через PR в `master`.*
+*Версия: 1.1 — добавлены AI3D walkable/1в1 правила (`docs/AI3D_WALKABLE_REQUIREMENTS.md`), зафиксированы в `opencode/ai3d-full-integration`.*

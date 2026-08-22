@@ -19,6 +19,7 @@ const baseEvidence = (overrides = {}) => {
       geometry_integrity: { status: "VERIFIED", percent: 100, evidence: [{ kind: "geometry_integrity", inputSha256: "a".repeat(64), artifactSha256: "b".repeat(64), verifier: "mesh_validator", verifierVersion: "2", measurement: { vertexCount: 8192 }, threshold: { minVertexCount: 100 }, passed: true }] },
       glb_validity: { status: "VERIFIED", percent: 100, evidence: [{ kind: "glb_validation", inputSha256: "a".repeat(64), artifactSha256: "b".repeat(64), verifier: "glb_validator", verifierVersion: "2", measurement: {}, threshold: {}, passed: true }] },
       volumetric_artifact_integrity: { status: "VERIFIED", percent: 100, evidence: [{ kind: "artifact_measurement", inputSha256: "a".repeat(64), artifactSha256: "b".repeat(64), verifier: "mesh_validator", verifierVersion: "2", measurement: { vertexCount: 8192 }, threshold: { minVertexCount: 100 }, passed: true }], isPlaceholder: false },
+      walkable_scene_integrity: { status: "UNTESTED", reason: "Walkable not verified" },
       image3d_correspondence: { status: "UNTESTED", reason: "No render-back" },
       depth_accuracy: { status: "UNTESTED", reason: "No ground truth" },
       silhouette_accuracy: { status: "UNTESTED", reason: "No render-back" },
