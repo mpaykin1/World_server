@@ -1,0 +1,36 @@
+{
+  "policy": "External engines stay outside World_server; the repo contains only adapters/orchestration. This avoids committing large model weights and keeps independent licenses isolated.",
+  "engines": [
+    {
+      "name": "Depth-Anything-V2",
+      "origin": "https://github.com/DepthAnything/Depth-Anything-V2",
+      "uploadedCommit": "a561b849ebae10a6f5ef49e26c83cbbcd36c71bf",
+      "uploadedZipSha256": "fce418859e704411390d7ed5879ed0e4a1048342936d5cf27fa676df1c3252a2",
+      "codeLicense": "Apache-2.0",
+      "modelPolicy": "Default adapter only uses Depth-Anything-V2-Small because upstream states Small is Apache-2.0; Base/Large/Giant are not enabled by this integration."
+    },
+    {
+      "name": "BuildingGeneratorThreeJS",
+      "origin": "https://github.com/achrefelouafi/BuildingGeneratorThreeJS",
+      "uploadedCommit": "74cb71b0db1efa894a9763fba3ae67ca8ea54547",
+      "uploadedZipSha256": "31723a995881e557e6b619f56ed023e1b6155fbb2903b329bbd024172f27bf82",
+      "license": "MIT",
+      "integration": "Server-side Blender Geometry Nodes evaluation/export to GLB."
+    },
+    {
+      "name": "bene-proggen-maps",
+      "origin": "https://github.com/Beneking102/bene-proggen-maps",
+      "uploadedCommit": "ed622c5ce10f33092c7b651628d7c0d2015dcd61",
+      "uploadedZipSha256": "f70f6ba69dc908bddeff5d5d9a4ef154304061c17bfaafe99a3e8b1217b3b25b",
+      "license": "GPL-3.0-or-later",
+      "integration": "Kept as a separate external Blender add-on and invoked headlessly; its source is not copied into World_server."
+    },
+    {
+      "name": "TRELLIS.2",
+      "origin": "https://github.com/microsoft/TRELLIS.2",
+      "license": "MIT (repository)",
+      "integration": "Lazy-loaded on a persistent Linux NVIDIA GPU worker; model weights are never committed to World_server.",
+      "pinnedCommit": "75fbf0183001ed9876c8dbb35de6b68552ee08bd"
+    }
+  ]
+}
