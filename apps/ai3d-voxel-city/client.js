@@ -18,7 +18,16 @@ let dynamicPixelRatio=1;
 async function getSession(force=false){
   if(!force&&session&&session.expiresAt>Date.now()+30000)return session;
   const r=await fetch('/api/ai3d',{cache:'no-store'}),j=await r.json();
-  if(!r.ok||!j.enabled)throw new Error(j.error||j.reason||'AI3D worker не настроен');
+  // For voxel_city, allow local fallback when worker is offline (preview without AI3D_WORKER_URL)
+  if(!r.ok||!j.enabled){
+    const msg=j.error||j.reason||'AI3D worker не настроен';
+    // Check if this is a preview without worker — allow local generation
+    if(msg.includes('AI3D_WORKER_URL')||msg.includes('not configured')){
+      console.warn('Worker offline, will use local CPU fallback for voxel_city');
+      return null;
+    }
+    throw new Error(msg);
+  }
   session=j;return session;
 }
 async function authFetch(path,options={}){
@@ -253,6 +262,32 @@ $('generate').onclick=async()=>{
   try{
     const file=$('file').files?.[0];if(!file)throw new Error('Выбери картинку.');
     $('reference').src=URL.createObjectURL(file);
+    // Try server first, fallback to local CPU if worker offline (preview without AI3D_WORKER_URL)
+    let useLocal=false;
+    let sessionCheck=null;
+    try{
+      sessionCheck=await getSession();
+    }catch(e){
+      if(String(e.message).includes('AI3D_WORKER_URL')||String(e.message).includes('not configured')){
+        useLocal=true;
+        console.warn('Worker offline — using local CPU voxel generation');
+        $('health').textContent='Worker offline — локальная генерация (CPU)';
+        setProgress(10,'Worker offline — генерирую локально в браузере…');
+      } else throw e;
+    }
+    if(useLocal||!sessionCheck){
+      // Local CPU fallback: generate voxel-city.json directly in browser
+      const localData=await generateLocalVoxelCity(file,{
+        voxelGridWidth:Number($('grid').value),maxDepth:Number($('depth').value),maxThickness:Number($('thickness').value),
+        structureCell:Number($('structureCell').value)
+      });
+      await renderWorld(localData);
+      // Create a fake sky backplate from reference
+      const skyBlob=await createSkyBackplate(file);
+      if(skyBlob) setSkyBackplate(skyBlob);
+      setProgress(100,'Готово: локальный voxel world (без сервера) — можно ходить WASD');
+      return;
+    }
     const form=new FormData();form.set('mode','voxel_city');
     form.set('params',JSON.stringify({
       voxelGridWidth:Number($('grid').value),maxDepth:Number($('depth').value),maxThickness:Number($('thickness').value),
@@ -264,6 +299,61 @@ $('generate').onclick=async()=>{
     poll(j.id).catch(e=>setProgress(0,e.message));
   }catch(e){setProgress(0,e.message);}
 };
+
+async function generateLocalVoxelCity(file, params){
+  // Simple local CPU voxel generation: image -> palette -> heightfield -> voxels
+  // This is a lightweight browser fallback when worker is offline.
+  // It creates a voxel-city.json that can be rendered by the same mesher.
+  const img=await createImageBitmap(file);
+  const canvas=document.createElement('canvas');
+  const w=params.voxelGridWidth||80, h=Math.round(w * (img.height/img.width));
+  canvas.width=w; canvas.height=h;
+  const ctx=canvas.getContext('2d');
+  ctx.drawImage(img,0,0,w,h);
+  const data=ctx.getImageData(0,0,w,h).data;
+  // Simple palette: quantize to 8 colors
+  const voxels=[];
+  const palette=[[34,139,34],[139,69,19],[128,128,128],[210,180,140],[70,70,70],[0,100,0],[255,255,255],[0,0,0]];
+  for(let y=0;y<h;y++){
+    for(let x=0;x<w;x++){
+      const idx=(y*w+x)*4;
+      const r=data[idx],g=data[idx+1],b=data[idx+2],a=data[idx+3];
+      if(a<10) continue;
+      // Simple height based on brightness (for demo)
+      const brightness=(r+g+b)/3;
+      const height=Math.floor((brightness/255)* (params.maxDepth||12));
+      const colIdx=Math.floor((r+g+b)/3 / 32) % palette.length;
+      const color=palette[colIdx];
+      // Create a column of voxels up to height
+      for(let z=0; z<Math.min(height, params.maxThickness||4); z++){
+        voxels.push({x, y: h-1-y, z, color, material: z===height-1 ? 'top' : 'side'});
+      }
+      // Foundation
+      if(params.foundation!==false){
+        voxels.push({x, y: h-1-y, z: -1, color:[100,100,100], material:'foundation'});
+      }
+    }
+  }
+  // Add a simple sky
+  return {
+    source:{gridWidth:w, gridHeight:h, gridDepth: params.maxDepth||16},
+    voxels,
+    palette,
+    camera:{target:[w/2,h/2,5]},
+    background:{top:[135,206,235], horizon:[70,55,55]},
+    voxelsCount: voxels.length
+  };
+}
+async function createSkyBackplate(file){
+  try{
+    const img=await createImageBitmap(file);
+    const canvas=document.createElement('canvas');
+    canvas.width=512; canvas.height=128;
+    const ctx=canvas.getContext('2d');
+    ctx.drawImage(img,0,0,512,128);
+    return await new Promise(res=>canvas.toBlob(b=>res(b), 'image/png'));
+  }catch{return null;}
+}
 
 $('front').onclick=switchFront;
 $('orbit').onclick=switchOrbit;
