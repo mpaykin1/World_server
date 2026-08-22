@@ -2,6 +2,7 @@
 
 const { sendJson, methodNotAllowed, withErrors } = require('../lib/http');
 const { issueAi3dToken } = require('../lib/ai3d-auth');
+const { deliveryPolicyForClient, deliveryStatusForClient } = require('../lib/ai3d-delivery-policy');
 
 function workerUrl() {
   return String(process.env.AI3D_WORKER_URL || '').trim().replace(/\/+$/, '');
@@ -31,6 +32,13 @@ module.exports = withErrors(async (req, res) => {
     return sendJson(res, 200, await workerHealth(url));
   }
 
+  if (action === 'delivery') {
+    return sendJson(res, 200, {
+      deliveryPolicy: deliveryPolicyForClient(),
+      deliveryStatus: deliveryStatusForClient()
+    });
+  }
+
   const secret = String(process.env.AI3D_SHARED_SECRET || '');
   if (!url || secret.length < 24) {
     return sendJson(res, 200, {
@@ -47,6 +55,8 @@ module.exports = withErrors(async (req, res) => {
     token,
     expiresAt: payload.exp * 1000,
     maxUploadMb: Math.max(1, Math.min(Number(process.env.AI3D_MAX_UPLOAD_MB) || 25, 100)),
-    modes: ['auto', 'image_to_3d', 'depth', 'building', 'map', 'voxel_city']
+    modes: ['auto', 'image_to_3d', 'depth', 'building', 'map', 'voxel_city'],
+    deliveryPolicy: deliveryPolicyForClient(),
+    deliveryStatus: deliveryStatusForClient()
   });
 });
