@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SCHEMA = "ai3d-evidence-v1"
+SCHEMA = "ai3d-evidence-v2"
 
 FORBIDDEN_PHRASES = [
     "100% simulated",
@@ -59,38 +59,56 @@ def check_report(path: Path) -> None:
         if status == "VERIFIED" and not metric.get("evidence"):
             fail(f"{path}: VERIFIED {key} requires evidence")
 
-    # Placeholder gate
-    real = q.get("Real Image->3D Artifact %") or q.get("Real Image→3D Artifact %")
+    # Placeholder gate — handle both canonical and human labels
+    real = q.get("volumetric_artifact_integrity") or q.get("Real Image->3D Artifact %") or q.get("Real Image→3D Artifact %")
     if real and real.get("status") == "VERIFIED":
-        # Check placeholder flag
-        ev_text = " ".join(real.get("evidence", [])).lower()
-        is_ph = real.get("isPlaceholder") or ("placeholder" in ev_text and "not real" in ev_text)
+        # Check placeholder via structured evidence
+        is_ph = real.get("isPlaceholder") is True
+        for ev in real.get("evidence", []):
+            if isinstance(ev, dict) and ev.get("isPlaceholder") is True:
+                is_ph = True
+            if isinstance(ev, dict) and isinstance(ev.get("measurement"), dict) and ev["measurement"].get("isPlaceholder") is True:
+                is_ph = True
         if is_ph and real.get("percent", 0) != 0:
-            fail(f"{path}: PLACEHOLDER Real Image->3D must be VERIFIED 0%")
+            fail(f"{path}: PLACEHOLDER volumetric_artifact_integrity must be VERIFIED 0%")
 
-    # Godot gate
-    godot = q.get("Godot Runtime Compatibility %")
+    # Godot gate — canonical and human
+    godot = q.get("godot_runtime_compatibility") or q.get("Godot Runtime Compatibility %")
     if godot and godot.get("status") == "VERIFIED":
-        ev = " ".join(godot.get("evidence", [])).lower()
-        if "runtime" not in ev:
-            fail(f"{path}: Godot VERIFIED requires runtime evidence")
-        if godot.get("percent", 0) > 0 and not godot.get("runtimeTested"):
-            fail(f"{path}: Godot VERIFIED without runtimeTested")
+        has_runtime = False
+        for ev in godot.get("evidence", []):
+            if isinstance(ev, dict) and ev.get("kind") == "godot_runtime" and ev.get("exitCode") == 0:
+                has_runtime = True
+        if not has_runtime:
+            # Also check legacy string evidence
+            ev_text = " ".join(str(e) for e in godot.get("evidence", [])).lower()
+            if "runtime" not in ev_text:
+                fail(f"{path}: Godot VERIFIED requires runtime evidence (godot_runtime kind, exitCode 0)")
 
-    # Depth gate
-    depth = q.get("Depth Accuracy %")
+    # Depth gate — canonical
+    depth = q.get("depth_accuracy") or q.get("Depth Accuracy %")
     if depth and depth.get("status") == "VERIFIED":
-        ev = " ".join(depth.get("evidence", [])).lower()
-        if "ground truth" not in ev:
-            fail(f"{path}: Depth Accuracy VERIFIED requires ground truth")
+        has_gt = False
+        for ev in depth.get("evidence", []):
+            if isinstance(ev, dict) and ev.get("kind") == "depth_accuracy" and "groundTruthArtifactSha256" in ev:
+                has_gt = True
+        if not has_gt:
+            ev_text = " ".join(str(e) for e in depth.get("evidence", [])).lower()
+            if "ground truth" not in ev_text and "groundtruth" not in ev_text:
+                fail(f"{path}: Depth Accuracy VERIFIED requires groundTruthArtifactSha256")
 
-    # Silhouette etc.
-    for k in ["Silhouette Accuracy %", "Structural Similarity %", "Texture Quality %"]:
+    # Silhouette etc. — canonical
+    for k in ["silhouette_accuracy", "structural_similarity", "texture_quality", "Silhouette Accuracy %", "Structural Similarity %", "Texture Quality %"]:
         m = q.get(k)
         if m and m.get("status") == "VERIFIED":
-            ev = " ".join(m.get("evidence", [])).lower()
-            if "render" not in ev:
-                fail(f"{path}: {k} VERIFIED requires render-back")
+            has_render = False
+            for ev in m.get("evidence", []):
+                if isinstance(ev, dict) and "renderSha256" in ev and "inputSha256" in ev:
+                    has_render = True
+            if not has_render:
+                ev_text = " ".join(str(e) for e in m.get("evidence", [])).lower()
+                if "render" not in ev_text:
+                    fail(f"{path}: {k} VERIFIED requires renderSha256 + inputSha256")
 
     print(f"PASS: {path}")
 

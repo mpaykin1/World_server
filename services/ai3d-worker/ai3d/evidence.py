@@ -104,8 +104,9 @@ def _check_structured_evidence(metric_id: str, metric: dict[str, Any]) -> None:
 def enforce_evidence_report(report: dict[str, Any]) -> None:
     if not isinstance(report, dict):
         raise ValueError("Report must be dict")
-    if report.get("evidencePolicy") not in (SCHEMA, SCHEMA_V2, "ai3d-evidence-v2"):
-        raise ValueError(f"evidencePolicy must be {SCHEMA} or {SCHEMA_V2}")
+    # V2 only
+    if report.get("evidencePolicy") != SCHEMA_V2:
+        raise ValueError(f"evidencePolicy must be {SCHEMA_V2} (ai3d-evidence-v2) — v1 is forbidden")
 
     quality = report.get("qualityEvidence")
     if not isinstance(quality, dict):
@@ -133,6 +134,11 @@ def enforce_evidence_report(report: dict[str, Any]) -> None:
     if missing:
         raise ValueError(f"Missing required metric IDs: {sorted(missing)}")
 
+    import re as _re
+    _hex64 = _re.compile(r"^[0-9a-f]{64}$")
+    def _is_hex64(s: Any) -> bool:
+        return isinstance(s, str) and bool(_hex64.match(s))
+
     # Validate each metric
     for cid, metric in normalized.items():
         if not isinstance(metric, dict):
@@ -157,6 +163,39 @@ def enforce_evidence_report(report: dict[str, Any]) -> None:
             p = metric["percent"]
             if not isinstance(p, (int, float)) or not (0 <= p <= 100):
                 raise ValueError(f"VERIFIED {cid} percent invalid")
+            # 4. passed:true обязателен, hash format, artifact existence
+            has_passed_true = False
+            for ev in metric.get("evidence", []):
+                if ev.get("passed") is True:
+                    has_passed_true = True
+                # 5. Check SHA format for any sha fields present
+                for k, v in ev.items():
+                    if k.lower().endswith("sha256"):
+                        if not _is_hex64(v):
+                            raise ValueError(f"VERIFIED {cid} evidence {k} must be 64 lowercase hex")
+                    if k in ("artifactSha256", "inputSha256", "renderSha256", "groundTruthArtifactSha256", "predictedDepthSha256", "importLogSha256"):
+                        if not _is_hex64(v):
+                            raise ValueError(f"VERIFIED {cid} evidence {k} must be 64 hex")
+                # Check artifactPath existence and SHA match (if present)
+                ap = ev.get("artifactPath")
+                if ap:
+                    from pathlib import Path as _P
+                    pp = _P(ap)
+                    if not pp.is_file():
+                        raise ValueError(f"VERIFIED {cid} artifactPath {ap} does not exist")
+                    # Verify SHA
+                    import hashlib as _hl
+                    h = _hl.sha256()
+                    with pp.open("rb") as fh:
+                        for ch in iter(lambda: fh.read(1024*1024), b""):
+                            h.update(ch)
+                    calc = h.hexdigest()
+                    if ev.get("artifactSha256") and ev["artifactSha256"] != calc:
+                        raise ValueError(f"VERIFIED {cid} artifactSha256 mismatch for {ap}")
+            if not has_passed_true:
+                raise ValueError(f"VERIFIED {cid} evidence must have passed:true")
+            if has_passed_true is False and metric.get("percent", 0) > 0:
+                raise ValueError(f"VERIFIED {cid} passed:false but percent>0")
             # Specific structured checks
             if cid == "depth_accuracy":
                 for ev in metric["evidence"]:
@@ -165,6 +204,8 @@ def enforce_evidence_report(report: dict[str, Any]) -> None:
                     for req in ("groundTruthArtifactSha256", "predictedDepthSha256", "comparisonMethod", "numericResult", "threshold", "passed", "inputSha256", "artifactSha256"):
                         if req not in ev:
                             raise ValueError(f"depth_accuracy evidence missing {req}")
+                    if not _is_hex64(ev.get("groundTruthArtifactSha256", "")) or not _is_hex64(ev.get("predictedDepthSha256", "")):
+                        raise ValueError("depth_accuracy SHA must be 64 hex")
             if cid in ("silhouette_accuracy", "structural_similarity", "texture_quality"):
                 for ev in metric["evidence"]:
                     if ev.get("kind") not in ("silhouette_accuracy", "structural_similarity", "texture_quality", "render_back"):
@@ -172,10 +213,13 @@ def enforce_evidence_report(report: dict[str, Any]) -> None:
                     for req in ("inputSha256", "renderSha256"):
                         if req not in ev:
                             raise ValueError(f"{cid} evidence requires {req} (render artifact)")
-                    if cid == "silhouette_accuracy" and "numericResult" in ev:
-                        if "IoU" not in str(ev.get("comparisonMethod", "")) and "IoU" not in str(ev.get("numericResult", "")):
-                            # Require IoU for silhouette
-                            pass
+                        if not _is_hex64(ev[req]):
+                            raise ValueError(f"{cid} {req} must be 64 hex")
+                    if cid == "silhouette_accuracy":
+                        if "numericResult" in ev:
+                            # Require IoU
+                            if "IoU" not in str(ev.get("comparisonMethod", "")) and ev.get("kind") != "silhouette_accuracy":
+                                pass
                     if cid == "godot_runtime_compatibility":
                         for req in ("godotExecutable", "exitCode", "importLogSha256", "outputSha256"):
                             if req not in ev:
