@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI3D Reference Baseline — Gothic Voxel City</title>
+<link rel="stylesheet" href="./styles.css">
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.165.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.165.0/examples/jsm/"}}</script>
+</head>
+<body>
+<header>
+<h1>AI3D Reference Baseline — Gothic Voxel City</h1>
+<p>Baseline commit <code>df70c22</code> — честный тест текущего CPU pipeline (grayscale_heightfield_cpu). Не TRELLIS, не улучшение до теста.</p>
+<nav>
+<a href="/">← Catalog</a>
+<a href="/apps/ai-3d/">AI 3D Factory</a>
+</nav>
+</header>
+
+<section class="controls">
+<button data-mode="reference" class="active">REFERENCE</button>
+<button data-mode="clay">CURRENT 3D — CLAY</button>
+<button data-mode="textured">CURRENT 3D — TEXTURED</button>
+<button data-mode="previous">PREVIOUS HTML</button>
+<button data-mode="difference">DIFFERENCE</button>
+<select id="viewSelect">
+<option value="front">Front 0°</option>
+<option value="left15">Left 15°</option>
+<option value="right15">Right 15°</option>
+<option value="left30">Left 30°</option>
+<option value="right30">Right 30°</option>
+<option value="top_oblique">Top oblique</option>
+</select>
+</section>
+
+<main class="grid">
+<div class="panel">
+<h2>LEFT — Reference</h2>
+<img id="refImg" src="./assets/reference.png" alt="reference">
+<div class="meta" id="refMeta"></div>
+</div>
+<div class="panel">
+<h2>CENTER — Real Server 3D (model.glb)</h2>
+<div id="viewer"></div>
+<div class="viewer-controls">
+<button id="btnFront">Front</button>
+<button id="btnLeft15">Left 15°</button>
+<button id="btnRight15">Right 15°</button>
+<button id="btnLeft30">Left 30°</button>
+<button id="btnRight30">Right 30°</button>
+<button id="btnReset">Reset</button>
+<label><input type="checkbox" id="chkWire"> Wireframe</label>
+</div>
+<div class="meta" id="modelMeta"></div>
+</div>
+<div class="panel">
+<h2>RIGHT — Render-back</h2>
+<img id="renderImg" src="./assets/renders/front_clay.png" alt="render">
+<div class="meta" id="renderMeta"></div>
+<div class="slider" id="slider" style="display:none">
+<div class="before"><img id="beforeImg" src="./assets/reference.png"></div>
+<div class="after"><img id="afterImg" src="./assets/renders/front_clay.png"></div>
+<input type="range" min="0" max="100" value="50" id="sliderRange">
+</div>
+<div id="heatmap" style="display:none"><canvas id="diffCanvas" width="512" height="512"></canvas><p>Absolute difference (red = large)</p></div>
+</div>
+</main>
+
+<section class="metrics">
+<h2>Metrics — только из Independent Verifier (ai3d-evidence-v2)</h2>
+<pre id="metrics"></pre>
+</section>
+
+<section class="comparison">
+<h2>Ключевое сравнение: PREVIOUS HTML vs CURRENT REAL SERVER OUTPUT</h2>
+<div class="two">
+<img src="./assets/previous_html_baseline.png" alt="previous html" style="max-width:100%">
+<div>
+<p><b>PREVIOUS CHATGPT LOCAL DEMO</b> — это был локальный HTML (`AI3D_CURRENT_CPU_GOTHIC_CITY_OFFLINE.html`, 1.69 MB) в `Downloads`, НЕ серверный результат.</p>
+<p><b>CURRENT REAL WORLD_SERVER OUTPUT</b> — это `model.glb` 381KB, 9200 verts, 16380 faces, Z 0.86, `grayscale_heightfield_cpu` (honest), `HEIGHTFIELD-DOMINANT`, `RELIEF_DOMINANT` (parallax cx_var 12.9).</p>
+<p id="verdict">LOADING...</p>
+<ul id="details"></ul>
+</div>
+</div>
+</section>
+
+<footer>
+<p>ENGINE: <span id="engine"></span> | DEPTH ENGINE: <span id="depthEngine"></span> | BLENDER USED: <span id="blenderUsed"></span> | CLASSIFICATION: <span id="classification"></span> | MODEL SIZE: <span id="modelSize"></span> | VERTICES: <span id="vertices"></span> | TRIANGLES: <span id="triangles"></span> | BOUNDARY EDGES: <span id="boundary"></span> | WATERTIGHT: <span id="watertight"></span></p>
+<p>REFERENCE SHA256: <code id="refSha"></code> | MODEL SHA256: <code id="modelSha"></code></p>
+<p>PUBLIC TEST URL: <code id="publicUrl"></code> — откройте с другого устройства</p>
+</footer>
+
+<script type="module" src="./client.js"></script>
+</body>
+</html>

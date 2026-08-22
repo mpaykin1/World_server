@@ -1,0 +1,42 @@
+{
+  "views": [
+    [
+      "front",
+      0,
+      5,
+      1.6
+    ],
+    [
+      "left15",
+      -15,
+      5,
+      1.6
+    ],
+    [
+      "right15",
+      15,
+      5,
+      1.6
+    ],
+    [
+      "left30",
+      -30,
+      5,
+      1.6
+    ],
+    [
+      "right30",
+      30,
+      5,
+      1.6
+    ],
+    [
+      "top_oblique",
+      0,
+      35,
+      6
+    ]
+  ],
+  "lens": 35.0,
+  "note": "Front camera fitted to approximate reference perspective, fixed after search"
+}

@@ -1,0 +1,51 @@
+{
+  "front_clay": {
+    "ssim": 0.18038318048732896,
+    "edge_iou": 0.025108317352084665,
+    "edge_similarity": 0.003826465379961474,
+    "silhouette_iou": 0.9134864807128906,
+    "color_similarity": 0
+  },
+  "front_textured": {
+    "ssim": 0.18038318048732896,
+    "edge_iou": 0.025108317352084665,
+    "edge_similarity": 0.003826465379961474,
+    "silhouette_iou": 0.9134864807128906,
+    "color_similarity": 0
+  },
+  "multi_view": {
+    "front_clay": {
+      "cx": 231.48361529573958,
+      "cy": 327.95533068022615,
+      "area": 179161
+    },
+    "left15_clay": {
+      "cx": 219.95587767889575,
+      "cy": 326.6093977025064,
+      "area": 176192
+    },
+    "right15_clay": {
+      "cx": 239.61039769811387,
+      "cy": 332.8284944903502,
+      "area": 173423
+    },
+    "left30_clay": {
+      "cx": 212.71406606771998,
+      "cy": 325.5824526981286,
+      "area": 174306
+    },
+    "right30_clay": {
+      "cx": 248.41000274131156,
+      "cy": 339.4918765800615,
+      "area": 164155
+    }
+  },
+  "multi_view_geometry_status": "RELIEF_DOMINANT",
+  "heightfield_dominance": "HEIGHTFIELD-DOMINANT RESULT (single heightfield, no separate towers)",
+  "heightfield_dominance_percent": 85,
+  "depth_variance": "grayscale_fallback (no real Depth Anything)",
+  "multi_view_parallax": {
+    "area_var": 0.029087132672009033,
+    "cx_var": 12.901408793953733
+  }
+}

@@ -1,0 +1,193 @@
+{
+  "jobId": "baseline-0fb00f50",
+  "mode": "image_to_3d",
+  "durationSeconds": 0.531,
+  "files": [
+    {
+      "name": "model.glb",
+      "role": "model",
+      "bytes": 381328,
+      "sha256": "71d1c26d5fa858fc30b74c56bccf9a93769f5cfec5a8522ea24ade6d4a284d33",
+      "mime": "model/gltf-binary"
+    },
+    {
+      "name": "classification.txt",
+      "role": "classification",
+      "bytes": 13,
+      "sha256": "f027f8c5a78747f527c16b379e8c1201b8e003dbbef26d8990821fbc70f73d51",
+      "mime": "text/plain"
+    },
+    {
+      "name": "godot_voxel.json",
+      "role": "godot_voxel",
+      "bytes": 537,
+      "sha256": "67e088dac1c0af44027de81f38a4d2b4552ff761c217cc2dc40ec9fdb689dcc6",
+      "mime": "application/json"
+    },
+    {
+      "name": "godot_import.tscn",
+      "role": "godot_scene",
+      "bytes": 265,
+      "sha256": "f672ae9af0508c5cc6c23534902dab8368bd2cfe739350569fb82f6575430699",
+      "mime": "application/octet-stream"
+    }
+  ],
+  "engines": {
+    "depth_anything_v2_small": {
+      "available": true,
+      "licenseMode": "Apache-2.0 model"
+    },
+    "trellis2": {
+      "available": false,
+      "serverRequirement": "Linux + NVIDIA CUDA GPU, upstream specifies 24GB+ VRAM"
+    },
+    "instantmesh": {
+      "available": true,
+      "engine": "InstantMesh fallback (local майн/InstantMesh)",
+      "bridge": "INSTANTMESH_GPU_WORKER_SERVER_BRIDGE"
+    },
+    "cpu_reconstruction": {
+      "available": true,
+      "engine": "grayscale_heightfield_cpu",
+      "note": "Real volumetric heightfield, honest depth/blender flags per job"
+    },
+    "building_generator": {
+      "available": true,
+      "engine": "Blender headless (auto-found)"
+    },
+    "procgen_maps": {
+      "available": true,
+      "engine": "Blender headless (auto-found)",
+      "licenseMode": "external GPL-3.0 plugin"
+    },
+    "godot_voxel_factory": {
+      "godotPackageReady": true,
+      "godotRuntimeAvailable": false,
+      "godotRuntimeTested": false,
+      "engine": "Godot glTF bridge + voxel manifest",
+      "voxelTools": {
+        "voxelsrv": true,
+        "littlecubes": true
+      },
+      "notes": "Package ready does not mean runtime tested; .tscn creation is not proof of Godot import"
+    },
+    "blender": {
+      "available": true,
+      "autoFound": "C:\\Program Files\\Blender Foundation\\Blender 5.1\\blender.exe"
+    },
+    "voxel_tools": {
+      "voxelsrv": true,
+      "littlecubes": true
+    }
+  },
+  "chosenEngine": "grayscale_heightfield_cpu",
+  "classification": "single_object",
+  "depthEngine": "grayscale_fallback",
+  "depthInferenceVerified": false,
+  "blenderEnhancementUsed": false,
+  "godotPackageReady": true,
+  "godotRuntimeAvailable": false,
+  "godotRuntimeTested": false,
+  "inputPath": "services\\ai3d-worker\\runtime\\jobs\\baseline-0fb00f50\\input.png",
+  "inputSha256": "9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+  "stages": [
+    {
+      "kind": "stage_completion",
+      "stage": "input_validation",
+      "status": "completed",
+      "startedAt": 1787360915.2813985,
+      "finishedAt": 1787360915.3313985,
+      "duration": 0.05,
+      "inputSha256": "9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+      "artifactPath": "services\\ai3d-worker\\runtime\\jobs\\baseline-0fb00f50\\input.png",
+      "artifactSha256": "9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+      "passed": true,
+      "verifier": "pipeline",
+      "verifierVersion": "2"
+    },
+    {
+      "kind": "stage_completion",
+      "stage": "classification",
+      "status": "completed",
+      "startedAt": 1787360915.285147,
+      "finishedAt": 1787360915.4456205,
+      "duration": 0.16,
+      "inputSha256": "9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+      "artifactPath": "services\\ai3d-worker\\runtime\\jobs\\baseline-0fb00f50\\classification.txt",
+      "artifactSha256": "f027f8c5a78747f527c16b379e8c1201b8e003dbbef26d8990821fbc70f73d51",
+      "passed": true,
+      "verifier": "pipeline",
+      "verifierVersion": "2"
+    },
+    {
+      "kind": "stage_completion",
+      "stage": "depth_or_explicit_depth_fallback",
+      "status": "completed",
+      "startedAt": 1787360915.4476213,
+      "finishedAt": 1787360915.6625655,
+      "duration": 0.215,
+      "inputSha256": "9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+      "artifactPath": "services\\ai3d-worker\\runtime\\jobs\\baseline-0fb00f50\\cpu_depth.png",
+      "artifactSha256": "7d80c1cebf12628746968c278b1a7fa72390252de5754865ca7bf5f7533652dc",
+      "passed": true,
+      "verifier": "pipeline",
+      "verifierVersion": "2"
+    },
+    {
+      "kind": "stage_completion",
+      "stage": "geometry",
+      "status": "completed",
+      "startedAt": 1787360915.285147,
+      "finishedAt": 1787360915.758246,
+      "duration": 0.473,
+      "inputSha256": "9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+      "artifactPath": "services\\ai3d-worker\\runtime\\jobs\\baseline-0fb00f50\\model.glb",
+      "artifactSha256": "71d1c26d5fa858fc30b74c56bccf9a93769f5cfec5a8522ea24ade6d4a284d33",
+      "passed": true,
+      "verifier": "pipeline",
+      "verifierVersion": "2"
+    },
+    {
+      "kind": "stage_completion",
+      "stage": "export",
+      "status": "completed",
+      "startedAt": 1787360915.758246,
+      "finishedAt": 1787360915.808246,
+      "duration": 0.05,
+      "inputSha256": "9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+      "artifactPath": "services\\ai3d-worker\\runtime\\jobs\\baseline-0fb00f50\\model.glb",
+      "artifactSha256": "71d1c26d5fa858fc30b74c56bccf9a93769f5cfec5a8522ea24ade6d4a284d33",
+      "passed": true,
+      "verifier": "pipeline",
+      "verifierVersion": "2"
+    },
+    {
+      "kind": "stage_completion",
+      "stage": "validation",
+      "status": "completed",
+      "startedAt": 1787360915.808246,
+      "finishedAt": 1787360915.8582458,
+      "duration": 0.05,
+      "inputSha256": "9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+      "artifactPath": "services\\ai3d-worker\\runtime\\jobs\\baseline-0fb00f50\\model.glb",
+      "artifactSha256": "71d1c26d5fa858fc30b74c56bccf9a93769f5cfec5a8522ea24ade6d4a284d33",
+      "passed": true,
+      "verifier": "pipeline",
+      "verifierVersion": "2"
+    },
+    {
+      "kind": "stage_completion",
+      "stage": "evidence_generation",
+      "status": "completed",
+      "startedAt": 1787360915.8095348,
+      "finishedAt": 1787360915.8595347,
+      "duration": 0.05,
+      "inputSha256": "9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+      "artifactPath": "services\\ai3d-worker\\runtime\\jobs\\baseline-0fb00f50\\model.glb",
+      "artifactSha256": "71d1c26d5fa858fc30b74c56bccf9a93769f5cfec5a8522ea24ade6d4a284d33",
+      "passed": true,
+      "verifier": "pipeline",
+      "verifierVersion": "2"
+    }
+  ]
+}
