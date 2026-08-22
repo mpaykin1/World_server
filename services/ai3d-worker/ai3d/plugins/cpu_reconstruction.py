@@ -113,32 +113,54 @@ def _heightfield_to_glb(depth_path: Path, image_path: Path, output_path: Path, c
             faces.append([i0, i2, i3])
     faces = np.array(faces, dtype=np.uint32)
 
-    # Add bottom face and sides to make closed volume (so bounding box Z >0 is valid volume, not plane)
-    # Bottom vertices (y=0)
     bottom_offset = len(vertices)
-    bottom_verts = np.array([ [x, 0.0, z] for x, _, z in vertices ], dtype=np.float32)
+    bottom_verts = np.array([[x, 0.0, z] for x, _, z in vertices], dtype=np.float32)
     vertices = np.vstack([vertices, bottom_verts])
     uvs = np.vstack([uvs, uvs])
-    # Bottom faces (reversed winding)
     bottom_faces = faces + bottom_offset
-    # Flip bottom winding
     bottom_faces = bottom_faces[:, [0, 2, 1]]
     faces = np.vstack([faces, bottom_faces])
-    # Side walls: connect perimeter
-    # This will significantly increase vertex count and make it truly volumetric
-
-    # Simple side walls for perimeter
-    side_verts = []
+    # Side walls: 4 sides, each as quads (2 triangles) to make watertight
+    # Build side walls for all 4 perimeters
+    side_vertices = []
+    side_uvs = []
     side_faces = []
-    # We will add quads for each edge: top edge -> bottom edge
-    base_idx = len(vertices)
-    # Front edge (iz=0)
+    vert_count = len(vertices)
+    def add_side_quad(top_a, top_b, bot_a, bot_b):
+        base = len(vertices) + len(side_vertices)
+        side_vertices.extend([vertices[top_a], vertices[top_b], vertices[bot_b], vertices[bot_a]])
+        side_uvs.extend([uvs[top_a % len(uvs)], uvs[top_b % len(uvs)], uvs[bot_b % len(uvs)], uvs[bot_a % len(uvs)]])
+        # Two triangles
+        side_faces.append([base, base+1, base+2])
+        side_faces.append([base, base+2, base+3])
+    # Front (iz=0)
     for ix in range(size - 1):
-        top_a = ix
-        top_b = ix + 1
-        bot_a = bottom_offset + ix
-        bot_b = bottom_offset + ix + 1
-        side_verts.extend([vertices[top_a], vertices[top_b], vertices[bot_b], vertices[bot_a]])
+        add_side_quad(ix, ix+1, bottom_offset+ix, bottom_offset+ix+1)
+    # Back (iz=size-1)
+    for ix in range(size - 1):
+        top_a = (size-1)*size + ix
+        top_b = (size-1)*size + ix + 1
+        bot_a = bottom_offset + (size-1)*size + ix
+        bot_b = bottom_offset + (size-1)*size + ix + 1
+        add_side_quad(top_b, top_a, bot_a, bot_b)  # reversed for correct winding
+    # Left (ix=0)
+    for iz in range(size - 1):
+        top_a = iz*size
+        top_b = (iz+1)*size
+        bot_a = bottom_offset + iz*size
+        bot_b = bottom_offset + (iz+1)*size
+        add_side_quad(top_b, top_a, bot_a, bot_b)
+    # Right (ix=size-1)
+    for iz in range(size - 1):
+        top_a = iz*size + (size-1)
+        top_b = (iz+1)*size + (size-1)
+        bot_a = bottom_offset + iz*size + (size-1)
+        bot_b = bottom_offset + (iz+1)*size + (size-1)
+        add_side_quad(top_a, top_b, bot_b, bot_a)
+    if side_vertices:
+        vertices = np.vstack([vertices, np.array(side_vertices, dtype=np.float32)])
+        uvs = np.vstack([uvs, np.array(side_uvs, dtype=np.float32)])
+        faces = np.vstack([faces, np.array(side_faces, dtype=np.uint32)])
     # Back edge, left, right similarly (simplified: we already have volume via top+bottom, side will add more)
     # For E2E we already have >8k vertices, sufficient for validation (not plane)
 
