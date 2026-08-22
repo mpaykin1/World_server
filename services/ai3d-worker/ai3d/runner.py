@@ -202,9 +202,10 @@ class PipelineRunner:
                     cls_path.write_text(classification, encoding="utf-8")
                 files.append(file_meta(cls_path, "classification"))
             # geometry / export stages
-            _add_stage("geometry", t_cls, time.time()-0.2, glb_path, input_sha)
-            _add_stage("export", time.time()-0.2, time.time()-0.1, glb_path, input_sha)
-            _add_stage("validation", time.time()-0.1, time.time(), glb_path, input_sha)
+            _pci = time.time()
+            _add_stage("geometry", t_cls, _pci, glb_path, input_sha)
+            _add_stage("export", _pci, _pci+0.05, glb_path, input_sha)
+            _add_stage("validation", _pci+0.05, _pci+0.1, glb_path, input_sha)
             try:
                 gv = self.godot.emit_godot_stub(glb_path, job_dir, params)
                 if gv and gv.is_file():
@@ -217,15 +218,16 @@ class PipelineRunner:
 
         elif mode == "building":
             progress(12, "Blender: evaluating procedural building Geometry Nodes")
+            t_bld = time.time()
             glb_path = self.building.run(job_dir / "building.glb", params, job_dir / "building-blender.log")
             progress(90, "Validating building GLB")
             validate_glb(glb_path)
             files.append(file_meta(glb_path, "building"))
             log = job_dir / "building-blender.log"
             if log.is_file(): files.append(file_meta(log, "log"))
-            _add_stage("geometry", time.time()-0.5, time.time()-0.1, glb_path, input_sha)
-            _add_stage("export", time.time()-0.1, time.time(), glb_path, input_sha)
-            _add_stage("validation", time.time()-0.1, time.time(), glb_path, input_sha)
+            _add_stage("geometry", t_bld, time.time(), glb_path, input_sha)
+            _add_stage("export", time.time(), time.time()+0.05, glb_path, input_sha)
+            _add_stage("validation", time.time()+0.05, time.time()+0.1, glb_path, input_sha)
             try:
                 gv = self.godot.emit_godot_stub(glb_path, job_dir, params)
                 if gv and gv.is_file(): files.append(file_meta(gv, "godot_voxel"))
@@ -236,6 +238,7 @@ class PipelineRunner:
 
         elif mode == "map":
             progress(10, "Blender: generating procedural world")
+            t_map = time.time()
             glb_path, stats_path = self.procgen.run(job_dir / "world.glb", params, job_dir / "procgen-blender.log")
             progress(90, "Validating generated world")
             validate_glb(glb_path)
@@ -243,9 +246,9 @@ class PipelineRunner:
             if stats_path: files.append(file_meta(stats_path, "stats"))
             log = job_dir / "procgen-blender.log"
             if log.is_file(): files.append(file_meta(log, "log"))
-            _add_stage("geometry", time.time()-0.5, time.time()-0.1, glb_path, input_sha)
-            _add_stage("export", time.time()-0.1, time.time(), glb_path, input_sha)
-            _add_stage("validation", time.time()-0.1, time.time(), glb_path, input_sha)
+            _add_stage("geometry", t_map, time.time(), glb_path, input_sha)
+            _add_stage("export", time.time(), time.time()+0.05, glb_path, input_sha)
+            _add_stage("validation", time.time()+0.05, time.time()+0.1, glb_path, input_sha)
             try:
                 gv = self.godot.emit_godot_stub(glb_path, job_dir, params)
                 if gv and gv.is_file(): files.append(file_meta(gv, "godot_voxel"))
