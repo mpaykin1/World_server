@@ -16,18 +16,9 @@ let frameCount=0,lastFpsTime=performance.now(),measuredFps=0,lastStreamUpdate=0;
 let dynamicPixelRatio=1;
 
 async function getSession(force=false){
-  if(!force&&session&&session.expiresAt>Date.now()+30000)return session;
+  if(!force&&session&&((session.enabled===false)||session.expiresAt>Date.now()+30000))return session;
   const r=await fetch('/api/ai3d',{cache:'no-store'}),j=await r.json();
-  // For voxel_city, allow local fallback when worker is offline (preview without AI3D_WORKER_URL)
-  if(!r.ok||!j.enabled){
-    const msg=j.error||j.reason||'AI3D worker не настроен';
-    // Check if this is a preview without worker — allow local generation
-    if(msg.includes('AI3D_WORKER_URL')||msg.includes('not configured')){
-      console.warn('Worker offline, will use local CPU fallback for voxel_city');
-      return null;
-    }
-    throw new Error(msg);
-  }
+  if(!r.ok)throw new Error(j.error||j.reason||'AI3D API недоступен');
   session=j;return session;
 }
 async function authFetch(path,options={}){
@@ -37,8 +28,15 @@ async function authFetch(path,options={}){
   return r;
 }
 async function health(){
-  try{const r=await fetch('/api/ai3d?action=health',{cache:'no-store'}),j=await r.json();const ready=j.plugins?.voxel_city?.available;$('health').textContent=j.ok?(ready?'Worker online · Voxel City ready':'Worker online · Voxel City missing'):'Worker offline';}
-  catch{$('health').textContent='Worker offline';}
+  try{
+    const [hr,s]=await Promise.all([
+      fetch('/api/ai3d?action=health',{cache:'no-store'}).then(r=>r.json()).catch(()=>({ok:false})),
+      getSession(true).catch(()=>({enabled:false}))
+    ]);
+    if(hr.ok)$('health').textContent='Worker online · Voxel City ready';
+    else if(s.enabled===false)$('health').textContent='Vercel fallback ready · external worker offline';
+    else $('health').textContent='Voxel service checking…';
+  }catch{$('health').textContent='Vercel fallback ready';}
 }
 function setProgress(p,msg){$('bar').style.width=`${Math.max(0,Math.min(100,p))}%`;if(msg)$('log').textContent=msg;}
 function profile(){return PROFILES[profileName]||PROFILES.HIGH;}
@@ -232,6 +230,45 @@ function animate(now=performance.now()){
   renderer?.render(scene,activeCamera);
 }
 
+async function preprocessForServerless(file){
+  const bitmap=await createImageBitmap(file);
+  const maxW=96;
+  const width=Math.min(maxW,bitmap.width);
+  const height=Math.max(32,Math.round(width*bitmap.height/Math.max(1,bitmap.width)));
+  const cv=document.createElement('canvas');cv.width=width;cv.height=height;
+  const cx=cv.getContext('2d',{willReadFrequently:true});
+  cx.drawImage(bitmap,0,0,width,height);bitmap.close?.();
+  const rgba=cx.getImageData(0,0,width,height).data;
+  const rgb=new Uint8Array(width*height*3);
+  for(let i=0,j=0;i<rgba.length;i+=4){rgb[j++]=rgba[i];rgb[j++]=rgba[i+1];rgb[j++]=rgba[i+2];}
+  let binary='';const step=0x8000;
+  for(let i=0;i<rgb.length;i+=step)binary+=String.fromCharCode(...rgb.subarray(i,i+step));
+  return {width,height,rgbBase64:btoa(binary)};
+}
+async function generateServerlessFallback(file){
+  setProgress(8,'External AI3D worker не настроен. Использую Vercel serverless voxel fallback…');
+  const pixels=await preprocessForServerless(file);
+  const payload={
+    ...pixels,
+    maxDepth:Number($('depth').value),
+    maxThickness:Number($('thickness').value),
+    structureCell:Number($('structureCell').value),
+    depthLayers:10
+  };
+  setProgress(28,'Отправляю reference pixels на World_server…');
+  const r=await fetch('/api/ai3d-voxel-generate',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
+  });
+  const j=await r.json();
+  if(!r.ok||!j.ok)throw new Error(j.error||'Serverless voxel generation failed');
+  setProgress(78,`World_server построил ${j.world?.voxels?.length?.toLocaleString('ru-RU')||0} кубиков. Строю render chunks…`);
+  await renderWorld(j.world);
+  $('corrMetric').textContent='UNTESTED';
+  $('frontMetric').textContent='SERVERLESS FALLBACK';
+  setProgress(100,'Готово: город построен на Vercel без AI3D_WORKER_URL.');
+}
 async function loadJsonFile(job,predicate){
   const f=(job.files||[]).find(predicate);if(!f)return null;
   const r=await authFetch(f.url);if(!r.ok)throw new Error(`Не удалось загрузить ${f.name}`);return r.json();
@@ -262,30 +299,21 @@ $('generate').onclick=async()=>{
   try{
     const file=$('file').files?.[0];if(!file)throw new Error('Выбери картинку.');
     $('reference').src=URL.createObjectURL(file);
-    // Try server first, fallback to local CPU if worker offline (preview without AI3D_WORKER_URL)
-    let useLocal=false;
-    let sessionCheck=null;
-    try{
-      sessionCheck=await getSession();
-    }catch(e){
-      if(String(e.message).includes('AI3D_WORKER_URL')||String(e.message).includes('not configured')){
-        useLocal=true;
-        console.warn('Worker offline — using local CPU voxel generation');
-        $('health').textContent='Worker offline — локальная генерация (CPU)';
-        setProgress(10,'Worker offline — генерирую локально в браузере…');
-      } else throw e;
-    }
-    if(useLocal||!sessionCheck){
-      // Local CPU fallback: generate voxel-city.json directly in browser
-      const localData=await generateLocalVoxelCity(file,{
-        voxelGridWidth:Number($('grid').value),maxDepth:Number($('depth').value),maxThickness:Number($('thickness').value),
-        structureCell:Number($('structureCell').value)
-      });
-      await renderWorld(localData);
-      // Create a fake sky backplate from reference
-      const skyBlob=await createSkyBackplate(file);
-      if(skyBlob) setSkyBackplate(skyBlob);
-      setProgress(100,'Готово: локальный voxel world (без сервера) — можно ходить WASD');
+    const s=await getSession(true).catch(()=>({enabled:false}));
+    if(!s.enabled){
+      try{
+        await generateServerlessFallback(file);
+      }catch(err){
+        console.warn('Serverless fallback failed, using local CPU:', err.message);
+        const localData=await generateLocalVoxelCity(file,{
+          voxelGridWidth:Number($('grid').value),maxDepth:Number($('depth').value),maxThickness:Number($('thickness').value),
+          structureCell:Number($('structureCell').value)
+        });
+        await renderWorld(localData);
+        const skyBlob=await createSkyBackplate(file);
+        if(skyBlob) setSkyBackplate(skyBlob);
+        setProgress(100,'Готово: локальный voxel world (без сервера) — fallback после ошибки Vercel');
+      }
       return;
     }
     const form=new FormData();form.set('mode','voxel_city');
@@ -293,7 +321,7 @@ $('generate').onclick=async()=>{
       voxelGridWidth:Number($('grid').value),maxDepth:Number($('depth').value),maxThickness:Number($('thickness').value),
       structureCell:Number($('structureCell').value),paletteColors:64,depthLayers:10,foundation:true,useDepthAnything:true,depthInputSize:518
     }));
-    form.set('file',file,file.name);setProgress(3,'Создаю server job…');
+    form.set('file',file,file.name);setProgress(3,'Создаю external worker job…');
     const r=await authFetch('/v1/jobs',{method:'POST',body:form}),j=await r.json();
     if(!r.ok)throw new Error(j.detail||j.error||'Worker rejected job');
     poll(j.id).catch(e=>setProgress(0,e.message));

@@ -1,0 +1,13 @@
+{
+  "schema": "ai3d-final-delivery-status-v1",
+  "status": "NOT_READY_FOR_FINAL_DELIVERY",
+  "finalScenePath": null,
+  "diagnosticPaths": ["/apps/ai3d-reference-test/"],
+  "reason": "No final walkable scene has passed the hard delivery gate yet.",
+  "lastVerifiedCommit": null,
+  "rules": {
+    "finalResultMustBePlayableScene": true,
+    "diagnosticViewerCannotBeFinal": true,
+    "targetReferenceMatch": "AS_CLOSE_TO_1_TO_1_AS_TECHNICALLY_POSSIBLE"
+  }
+}

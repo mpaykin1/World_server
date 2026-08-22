@@ -17,7 +17,8 @@ const apiHandlers = new Map([
   ['/api/logout', require('./api/logout')],
   ['/api/game', require('./api/game')],
   ['/api/voxel', require('./api/voxel')],
-  ['/api/ai3d', require('./api/ai3d')]
+  ['/api/ai3d', require('./api/ai3d')],
+  ['/api/ai3d-voxel-generate', require('./api/ai3d-voxel-generate')]
 ]);
 
 const mime = {

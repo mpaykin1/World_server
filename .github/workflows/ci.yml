@@ -29,6 +29,10 @@ jobs:
         run: python services/ai3d-worker/scripts/e2e-smoke.py
       - name: AI3D evidence gate (hard)
         run: python scripts/check-ai3d-claims.py
+      - name: AI3D final delivery policy (hard)
+        run: node scripts/check-ai3d-delivery-policy.js
+      - name: AI3D V4 combined integration (hard)
+        run: node scripts/check-ai3d-v4-combined.js
 
   agent-rules:
     runs-on: ubuntu-latest
