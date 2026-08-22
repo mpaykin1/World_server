@@ -15,6 +15,8 @@ from .plugins.cpu_reconstruction import CpuReconstructionEngine
 from .plugins.blender_building import BuildingEngine
 from .plugins.procgen_maps import ProcgenMapsEngine
 from .plugins.godot_voxel import GodotVoxelBridge
+from .plugins.voxel_city import VoxelCityEngine
+from ai3d_voxel_verifier.verifier import verify_voxel_city
 
 
 def _sha(p: Path) -> str:
@@ -36,6 +38,7 @@ class PipelineRunner:
         self.building = BuildingEngine()
         self.procgen = ProcgenMapsEngine()
         self.godot = GodotVoxelBridge()
+        self.voxel_city = VoxelCityEngine()
 
     def plugin_status(self) -> dict:
         # Honest engine name based on actually used stages, not claimed Depth+Blender
@@ -48,6 +51,7 @@ class PipelineRunner:
             "cpu_reconstruction": {"available": self.cpu.available(), "engine": cpu_engine_name, "note": "Real volumetric heightfield, honest depth/blender flags per job"},
             "building_generator": {"available": self.building.available(), "engine": "Blender headless (auto-found)"},
             "procgen_maps": {"available": self.procgen.available(), "engine": "Blender headless (auto-found)", "licenseMode": "external GPL-3.0 plugin"},
+            "voxel_city": {"available": self.voxel_city.available(), "engine": "skyline_dp_reference_shell_piecewise_voxel_depth_cpu", "output": "voxel-city.json"},
             "godot_voxel_factory": self.godot.plugin_status(),
             "blender": {"available": self.building.available() or self.procgen.available(), "autoFound": self.building.blender if hasattr(self.building, 'blender') else "blender"},
             "voxel_tools": {"voxelsrv": (Path("C:/Users/user/Desktop/майн/voxelsrv/src").is_dir()), "littlecubes": (Path("C:/Users/user/Desktop/майн/LittleCubes/src").is_dir())},
@@ -92,7 +96,7 @@ class PipelineRunner:
         started = time.time()
         input_path = Path(job["input_path"]) if job.get("input_path") else None
 
-        if mode in {"auto", "image_to_3d", "depth"} and not input_path:
+        if mode in {"auto", "image_to_3d", "depth", "voxel_city"} and not input_path:
             raise RuntimeError("This mode requires an input image.")
 
         depthEngine = None
@@ -121,6 +125,67 @@ class PipelineRunner:
         t0 = started
         # input_validation
         _add_stage("input_validation", t0, t0+0.05, input_path if input_path and input_path.is_file() else job_dir / "input.png", input_sha)
+
+        # Separate CPU voxel method: image -> logical cube world (NO GLB heightfield).
+        if mode == "voxel_city":
+            progress(8, "Voxel City: preparing image-derived voxel reconstruction")
+            voxel_params = dict(params)
+            voxel_monocular_depth = None
+            voxel_depth_engine = "heuristic_perspective"
+            if bool(params.get("useDepthAnything", True)) and self.depth.available():
+                try:
+                    progress(10, "Voxel City: Depth Anything V2 Small")
+                    voxel_monocular_depth = self.depth.run(
+                        input_path,
+                        job_dir / "voxel-depth-anything.png",
+                        int(params.get("depthInputSize", 518)),
+                    )
+                    voxel_params["_depthPath"] = str(voxel_monocular_depth)
+                    voxel_depth_engine = "depth_anything_v2_small"
+                    files.append(file_meta(voxel_monocular_depth, "voxel_monocular_depth"))
+                except Exception:
+                    # Honest fallback: do NOT substitute grayscale as depth for the voxel method.
+                    voxel_monocular_depth = None
+                    voxel_depth_engine = "heuristic_perspective"
+
+            progress(12, "Voxel City: solving skyline and cubical structure")
+            world_path, stats_path, preview_path, sky_path, silhouette_path, voxel_depth_path = self.voxel_city.run(
+                input_path,
+                job_dir / "voxel-city.json",
+                voxel_params,
+                progress=lambda p, m: progress(12 + int(p * 0.72), m),
+            )
+            files.append(file_meta(world_path, "voxel_world"))
+            files.append(file_meta(stats_path, "voxel_stats"))
+            files.append(file_meta(preview_path, "voxel_preview"))
+            files.append(file_meta(sky_path, "voxel_sky_backplate"))
+            files.append(file_meta(silhouette_path, "voxel_silhouette"))
+            files.append(file_meta(voxel_depth_path, "voxel_depth_preview"))
+
+            # Independent artifact verifier: does not trust generator claims.
+            verification_path, verifier_projection_path = verify_voxel_city(input_path, world_path, job_dir)
+            files.append(file_meta(verification_path, "voxel_verification"))
+            files.append(file_meta(verifier_projection_path, "voxel_verifier_projection"))
+
+            manifest_path = job_dir / "voxel-generation-manifest.json"
+            manifest = {
+                "jobId": job["id"],
+                "mode": "voxel_city",
+                "chosenEngine": "skyline_dp_reference_shell_piecewise_voxel_depth_cpu",
+                "inputSha256": input_sha,
+                "worldSha256": _sha(world_path),
+                "verificationSha256": _sha(verification_path),
+                "frontProjectionMethod": "orthographic_reference_facade",
+                "voxelDepthEngine": voxel_depth_engine,
+                "visual3DQuality": "UNTESTED",
+                "depthClaim": "MONOCULAR_INFERRED" if voxel_depth_engine == "depth_anything_v2_small" else "HEURISTIC",
+                "note": "Reference-facing x/y/color shell is image-derived; unseen depth remains inferred.",
+                "durationSeconds": round(time.time() - started, 3),
+            }
+            manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+            files.append(file_meta(manifest_path, "manifest"))
+            progress(99, "Voxel City ready and independently checked")
+            return {"files": files, "durationSeconds": manifest["durationSeconds"]}
 
         if mode in {"auto", "depth"} or (mode == "image_to_3d" and bool(params.get("depthPreview", True))):
             progress(8, "Depth Anything V2 Small: estimating depth")

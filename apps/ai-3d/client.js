@@ -44,7 +44,7 @@ async function checkHealth() {
 
 function modeChanged() {
   const m = ui.mode.value;
-  ui.fileWrap.classList.toggle('hidden', !['auto', 'image_to_3d', 'depth'].includes(m));
+  ui.fileWrap.classList.toggle('hidden', !['auto', 'image_to_3d', 'depth', 'voxel_city'].includes(m));
   ui.buildingParams.classList.toggle('hidden', m !== 'building');
   ui.mapParams.classList.toggle('hidden', m !== 'map');
 }
@@ -154,7 +154,7 @@ async function generate() {
     const form = new FormData();
     form.set('mode', mode);
     form.set('params', JSON.stringify(paramsForMode()));
-    if (['auto', 'image_to_3d', 'depth'].includes(mode)) {
+    if (['auto', 'image_to_3d', 'depth', 'voxel_city'].includes(mode)) {
       const file = ui.file.files?.[0];
       if (!file) throw new Error('Выбери картинку.');
       if (file.size > s.maxUploadMb * 1024 * 1024) throw new Error(`Файл больше ${s.maxUploadMb} MB.`);
