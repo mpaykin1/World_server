@@ -22,27 +22,27 @@ const { chromium } = require('@playwright/test');
   const start = await page.evaluate(() => ({ ...window.__hunyuanDebug }));
   if (Math.abs(start.roll) > 1e-5) throw new Error(`spawn roll != 0: ${start.roll}`);
 
-  // Robust Space: Godot Web needs focused canvas; wait for y increase immediately
+  // Robust Space: wait for y increase — y stays high longer than vy
   let airborne = null;
   for (let attempt = 0; attempt < 4 && !airborne; attempt++) {
-    try { await page.mouse.click(640, 360); await page.waitForTimeout(200); } catch {}
+    try { await page.mouse.click(640, 360); await page.waitForTimeout(300); } catch {}
     const pressPromise = page.waitForFunction(y0 => {
       const d = window.__hunyuanDebug;
-      return d && (d.y > y0 + 0.02 || d.grounded === false);
-    }, start.y, { timeout: 5000 }).catch(()=>null);
+      return d && d.y > y0 + 0.02;
+    }, start.y, { timeout: 10000 }).catch(()=>null);
     await page.keyboard.press('Space').catch(()=>{});
     await page.evaluate(() => {
       const c = document.querySelector('canvas');
-      const t = c || window;
+      const t = c || document;
       const ev = new KeyboardEvent('keydown', { key: ' ', code: 'Space', keyCode: 32, bubbles: true });
-      t.dispatchEvent(ev);
-      setTimeout(()=>t.dispatchEvent(new KeyboardEvent('keyup', { key: ' ', code: 'Space', keyCode: 32, bubbles: true })), 80);
+      (c || window).dispatchEvent(ev);
+      setTimeout(()=>(c || window).dispatchEvent(new KeyboardEvent('keyup', { key: ' ', code: 'Space', keyCode: 32, bubbles: true })), 80);
+      document.dispatchEvent(ev);
     }).catch(()=>{});
     const jumped = await pressPromise;
     if (jumped) {
-      await page.waitForTimeout(100);
+      await page.waitForTimeout(120);
       const cur = await page.evaluate(() => ({ ...window.__hunyuanDebug }));
-      // ensure we captured upward phase, not falling (vy should be >0 or y higher)
       if (cur.y > start.y + 0.02) {
         airborne = cur;
         break;
@@ -50,7 +50,7 @@ const { chromium } = require('@playwright/test');
     }
     const cur = await page.evaluate(() => window.__hunyuanDebug);
     console.log(`[HUNYUAN_BROWSER_GATE] attempt ${attempt} y=${cur?.y} vy=${cur?.vy} grounded=${cur?.grounded} start=${start.y}`);
-    await page.waitForTimeout(400);
+    await page.waitForTimeout(500);
   }
   if (!airborne) {
     const cur = await page.evaluate(() => ({ ...window.__hunyuanDebug }));
