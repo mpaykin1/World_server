@@ -139,7 +139,7 @@ func _find_walkable_spawn() -> Vector3:
         if normal.dot(Vector3.UP) < 0.72:
             continue
         var p: Vector3 = hit["position"]
-        var score := abs(p.y - TARGET_STREET_Y) * 4.0
+        var score: float = abs(p.y - TARGET_STREET_Y) * 4.0
         score += (1.0 - normal.dot(Vector3.UP)) * 10.0
         score += Vector2(p.x - PREFERRED_SPAWN_XZ.x, p.z - PREFERRED_SPAWN_XZ.y).length() * 0.02
         if score < best_score:
