@@ -22,35 +22,38 @@ const { chromium } = require('@playwright/test');
   const start = await page.evaluate(() => ({ ...window.__hunyuanDebug }));
   if (Math.abs(start.roll) > 1e-5) throw new Error(`spawn roll != 0: ${start.roll}`);
 
-  // Robust Space: wait for y increase — y stays high longer than vy
+  // Robust Space: manual poll for y increase (waitForFunction flaky in Web export)
   let airborne = null;
   for (let attempt = 0; attempt < 4 && !airborne; attempt++) {
-    try { await page.mouse.click(640, 360); await page.waitForTimeout(300); } catch {}
-    const pressPromise = page.waitForFunction(y0 => {
-      const d = window.__hunyuanDebug;
-      return d && d.y > y0 + 0.02;
-    }, start.y, { timeout: 10000 }).catch(()=>null);
+    try { await page.mouse.click(640, 360); await page.waitForTimeout(400); } catch {}
     await page.keyboard.press('Space').catch(()=>{});
     await page.evaluate(() => {
       const c = document.querySelector('canvas');
-      const t = c || document;
-      const ev = new KeyboardEvent('keydown', { key: ' ', code: 'Space', keyCode: 32, bubbles: true });
-      (c || window).dispatchEvent(ev);
-      setTimeout(()=>(c || window).dispatchEvent(new KeyboardEvent('keyup', { key: ' ', code: 'Space', keyCode: 32, bubbles: true })), 80);
-      document.dispatchEvent(ev);
+      const targets = [window, document, c].filter(Boolean);
+      for (const t of targets) {
+        t.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', code: 'Space', keyCode: 32, bubbles: true }));
+        setTimeout(()=>t.dispatchEvent(new KeyboardEvent('keyup', { key: ' ', code: 'Space', keyCode: 32, bubbles: true })), 80);
+      }
     }).catch(()=>{});
-    const jumped = await pressPromise;
-    if (jumped) {
-      await page.waitForTimeout(120);
+    // manual poll 8s
+    let jumpedAt = null;
+    for (let i=0;i<80;i++) {
+      await page.waitForTimeout(100);
+      const d = await page.evaluate(() => window.__hunyuanDebug);
+      if (d && d.y > start.y + 0.02) { jumpedAt = d; break; }
+    }
+    if (jumpedAt) {
+      await page.waitForTimeout(80);
       const cur = await page.evaluate(() => ({ ...window.__hunyuanDebug }));
       if (cur.y > start.y + 0.02) {
         airborne = cur;
+        console.log(`[HUNYUAN_BROWSER_GATE] attempt ${attempt} jumped y=${cur.y} vy=${cur.vy}`);
         break;
       }
     }
     const cur = await page.evaluate(() => window.__hunyuanDebug);
     console.log(`[HUNYUAN_BROWSER_GATE] attempt ${attempt} y=${cur?.y} vy=${cur?.vy} grounded=${cur?.grounded} start=${start.y}`);
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(600);
   }
   if (!airborne) {
     const cur = await page.evaluate(() => ({ ...window.__hunyuanDebug }));
