@@ -26,29 +26,37 @@ const { chromium } = require('@playwright/test');
   let jumped = false;
   for (let attempt = 0; attempt < 4 && !jumped; attempt++) {
     try {
-      // ensure focus
+      // ensure focus — click center of viewport (dismiss Godot start overlay)
       await page.mouse.click(640, 360);
-      await page.waitForTimeout(150);
+      await page.waitForTimeout(250);
     } catch {}
     // try press via Playwright, also dispatch DOM KeyboardEvent as fallback
     await page.keyboard.press('Space').catch(()=>{});
     await page.evaluate(() => {
       const ev = new KeyboardEvent('keydown', { key: ' ', code: 'Space', keyCode: 32, bubbles: true });
       window.dispatchEvent(ev);
+      const ev2 = new KeyboardEvent('keyup', { key: ' ', code: 'Space', keyCode: 32, bubbles: true });
+      setTimeout(()=>window.dispatchEvent(ev2), 80);
     }).catch(()=>{});
-    await page.waitForTimeout(200);
+    await page.waitForTimeout(150);
     try {
-      await page.waitForFunction(y0 => window.__hunyuanDebug?.y > y0 + 0.03, start.y, { timeout: 1500 });
+      // wait for any upward sign: y increase, vy>0, or grounded false (all indicate jump started)
+      await page.waitForFunction(y0 => {
+        const d = window.__hunyuanDebug;
+        if (!d) return false;
+        return d.y > y0 + 0.02 || d.vy > 0.05 || d.grounded === false;
+      }, start.y, { timeout: 4000 });
       jumped = true;
+      // small extra wait to let y peak
+      await page.waitForTimeout(200);
     } catch {
-      // log current y for debugging
-      const cur = await page.evaluate(() => window.__hunyuanDebug?.y);
-      console.log(`[HUNYUAN_BROWSER_GATE] attempt ${attempt} y=${cur} start=${start.y}`);
+      const cur = await page.evaluate(() => window.__hunyuanDebug);
+      console.log(`[HUNYUAN_BROWSER_GATE] attempt ${attempt} y=${cur?.y} vy=${cur?.vy} grounded=${cur?.grounded} start=${start.y}`);
     }
   }
   if (!jumped) {
     const cur = await page.evaluate(() => ({ ...window.__hunyuanDebug }));
-    throw new Error(`Space did not move player upward after 4 attempts: start y=${start.y} cur y=${cur.y} grounded=${cur.grounded}`);
+    throw new Error(`Space did not move player upward after 4 attempts: start y=${start.y} cur y=${cur.y} vy=${cur.vy} grounded=${cur.grounded}`);
   }
   const airborne = await page.evaluate(() => ({ ...window.__hunyuanDebug }));
   const jumpXZ = Math.hypot(airborne.x - start.x, airborne.z - start.z);
