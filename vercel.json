@@ -33,5 +33,5 @@
       ]
     }
   ],
-  "buildCommand": "npm run build:sentry && node scripts/inject-sentry-runtime.js"
+  "buildCommand": "node scripts/inject-sentry-runtime.js"
 }
