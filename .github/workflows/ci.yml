@@ -70,6 +70,7 @@ jobs:
         with:
           name: lighthouse-reports
           path: .lighthouseci
+          include-hidden-files: true
           if-no-files-found: warn
 
   agent-rules:
