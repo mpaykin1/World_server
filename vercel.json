@@ -33,5 +33,6 @@
       ]
     }
   ],
+  "outputDirectory": ".",
   "buildCommand": "node scripts/inject-sentry-runtime.js"
 }
