@@ -182,10 +182,28 @@ function collides(px,py,pz){
   for(let x=minX;x<=maxX;x++)for(let y=minY;y<=maxY;y++)for(let z=minZ;z<=maxZ;z++){const b=blockAt(x,y,z);if(BLOCKS[b]?.solid)return true;} return false;
 }
 function moveAxis(axis,amount){ if(!amount)return; const step=Math.sign(amount)*.05; let remain=Math.abs(amount); while(remain>0){const d=Math.sign(amount)*Math.min(.05,remain); const p=player.pos.clone();p[axis]+=d;if(collides(p.x,p.y,p.z)){player.vel[axis]=0;if(axis==='y'&&d<0)player.onGround=true;return;}player.pos[axis]+=d;remain-=Math.abs(d);} }
+const GOLDEN_STEP_HEIGHTS=[.25,.5,.75,1.0,1.05];
+function goldenHorizontal(axis,amount,allowStep){
+  if(!amount)return true;
+  const start=player.pos.clone();
+  const target=start.clone();target[axis]+=amount;
+  if(!collides(target.x,target.y,target.z)){player.pos[axis]=target[axis];return true;}
+  if(allowStep){
+    for(const h of GOLDEN_STEP_HEIGHTS){
+      const raised=start.clone();raised.y+=h;
+      if(collides(raised.x,raised.y,raised.z))continue;
+      raised[axis]+=amount;
+      if(collides(raised.x,raised.y,raised.z))continue;
+      player.pos.copy(raised);player.vel.y=Math.max(0,player.vel.y);return true;
+    }
+  }
+  player.vel[axis]=0;return false;
+}
 function physics(dt){
+  const wasGrounded=player.onGround;
   const f=(keys.has('KeyW')?1:0)-(keys.has('KeyS')?1:0)-mobileMove.y; const s=(keys.has('KeyD')?1:0)-(keys.has('KeyA')?1:0)+mobileMove.x; const len=Math.hypot(f,s)||1, speed=(keys.has('ShiftLeft')||keys.has('ShiftRight'))?RUN:WALK;
-  const sy=Math.sin(player.yaw),cy=Math.cos(player.yaw); const vx=((s/len)*cy+(f/len)*sy)*speed, vz=((s/len)*sy-(f/len)*cy)*speed; player.vel.x+=(vx-player.vel.x)*Math.min(1,dt*12); player.vel.z+=(vz-player.vel.z)*Math.min(1,dt*12); player.vel.y-=GRAVITY*dt; player.onGround=false;
-  moveAxis('x',player.vel.x*dt); moveAxis('z',player.vel.z*dt); moveAxis('y',player.vel.y*dt); if(player.pos.y<-8){player.pos.set(0,heightAt(0,0)+4,0);player.vel.set(0,0,0);} camera.position.set(player.pos.x,player.pos.y+1.62,player.pos.z); camera.rotation.order='YXZ'; camera.rotation.y=player.yaw; camera.rotation.x=player.pitch;
+  const move=window.GameGoldenPhysics.canonicalXZ(player.yaw,f/len,s/len,speed); const vx=move.x, vz=move.z; player.vel.x+=(vx-player.vel.x)*Math.min(1,dt*12); player.vel.z+=(vz-player.vel.z)*Math.min(1,dt*12); player.vel.y-=GRAVITY*dt; player.onGround=false;
+  goldenHorizontal('x',player.vel.x*dt,wasGrounded); goldenHorizontal('z',player.vel.z*dt,wasGrounded); moveAxis('y',player.vel.y*dt); if(player.pos.y<-8){player.pos.set(0,heightAt(0,0)+4,0);player.vel.set(0,0,0);} camera.position.set(player.pos.x,player.pos.y+1.62,player.pos.z); camera.rotation.order='YXZ'; camera.rotation.y=player.yaw; camera.rotation.x=player.pitch;
 }
 function jump(){ if(player.onGround){player.vel.y=JUMP;player.onGround=false;} }
 
@@ -255,3 +273,10 @@ try{
   const appState=await window.AppCore.init('voxel-world');
   const init=await api('init',{worldId:'main'}); worldSeed=Number(init.world?.seed)||worldSeed; player.id=init.selfId;player.name=init.player?.name||appState.user?.username||'Player'; const p=init.player?.position||{x:0,y:heightAt(0,0)+4,z:0};player.pos.set(Number(p.x)||0,Number(p.y)||heightAt(0,0)+4,Number(p.z)||0);player.yaw=Number(init.player?.yaw)||0;player.pitch=Number(init.player?.pitch)||0;const sel=HOTBAR.indexOf(Number(init.player?.selectedBlock));if(sel>=0)player.selected=sel;buildHotbar(); await connectRealtime(appState); started=true; statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';loading.classList.add('hidden');
 }catch(e){console.error(e);statusEl.textContent=e.message;statusEl.className='vwWarn';loading.textContent=`Voxel World: ${e.message}`;setTimeout(()=>loading.classList.add('hidden'),3500);started=true;player.pos.set(0,heightAt(0,0)+4,0);}
+
+window.VoxelWorldRuntime={
+    stats(){return {player:{x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw,onGround:player.onGround},renderer:renderer?.info?.render,pixelRatio:renderer?.getPixelRatio?.()||1};},
+    setView(nextYaw,nextPitch=0){player.yaw=Number(nextYaw)||0;player.pitch=Number(nextPitch)||0;}
+  };
+
+try{if(typeof renderer!=='undefined')window.GoldenPerformanceAutoTune?.registerRenderer(renderer,{targetFps:matchMedia('(pointer:coarse)').matches?45:55,minDpr:.75,maxDpr:Math.min(devicePixelRatio||1,2)});}catch{}

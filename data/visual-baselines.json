@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "VISUAL_BASELINES",
+  "approvedBaselines": [],
+  "policy": "Aesthetic score cannot reach 100 until user-approved screenshots are registered. Structural rendering tests still run.",
+  "thresholds": {
+    "pixelDiffPercentMax": 2.0,
+    "layoutShiftPxMax": 4
+  }
+}

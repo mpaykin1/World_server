@@ -1,0 +1,204 @@
+{
+  "pass": true,
+  "baselineId": "bootstrap-2026-08-23-world-server",
+  "baselineOverall": 44.166666666666664,
+  "currentOverall": 97.58333333333333,
+  "violations": [],
+  "improvements": [
+    {
+      "type": "metric-improvement",
+      "id": "controls",
+      "baseline": 55,
+      "current": 100,
+      "delta": 45
+    },
+    {
+      "type": "metric-improvement",
+      "id": "graphics",
+      "baseline": 52,
+      "current": 97,
+      "delta": 45
+    },
+    {
+      "type": "metric-improvement",
+      "id": "deviceAccessibility",
+      "baseline": 45,
+      "current": 99,
+      "delta": 54
+    },
+    {
+      "type": "metric-improvement",
+      "id": "menu",
+      "baseline": 25,
+      "current": 100,
+      "delta": 75
+    },
+    {
+      "type": "metric-improvement",
+      "id": "collisions",
+      "baseline": 40,
+      "current": 100,
+      "delta": 60
+    },
+    {
+      "type": "metric-improvement",
+      "id": "codeQuality",
+      "baseline": 70,
+      "current": 100,
+      "delta": 30
+    },
+    {
+      "type": "metric-improvement",
+      "id": "codeReviewer",
+      "baseline": 55,
+      "current": 100,
+      "delta": 45
+    },
+    {
+      "type": "metric-improvement",
+      "id": "reports",
+      "baseline": 65,
+      "current": 100,
+      "delta": 35
+    },
+    {
+      "type": "metric-improvement",
+      "id": "functionConnectivity",
+      "baseline": 50,
+      "current": 100,
+      "delta": 50
+    },
+    {
+      "type": "metric-improvement",
+      "id": "uploadedTechnologyUse",
+      "baseline": 38,
+      "current": 75,
+      "delta": 37
+    },
+    {
+      "type": "metric-improvement",
+      "id": "errorRecurrenceProtection",
+      "baseline": 20,
+      "current": 100,
+      "delta": 80
+    },
+    {
+      "type": "metric-improvement",
+      "id": "goldenSolutionPropagation",
+      "baseline": 15,
+      "current": 100,
+      "delta": 85
+    },
+    {
+      "type": "technology-improvement",
+      "id": "Blender pipeline",
+      "baseline": 40,
+      "current": 70,
+      "delta": 30
+    },
+    {
+      "type": "technology-improvement",
+      "id": "TRELLIS.2",
+      "baseline": 30,
+      "current": 60,
+      "delta": 30
+    },
+    {
+      "type": "technology-improvement",
+      "id": "Godot 4.7.1",
+      "baseline": 55,
+      "current": 78,
+      "delta": 23
+    },
+    {
+      "type": "technology-improvement",
+      "id": "Hunyuan3D",
+      "baseline": 60,
+      "current": 75,
+      "delta": 15
+    },
+    {
+      "type": "technology-improvement",
+      "id": "InstantMesh",
+      "baseline": 0,
+      "current": 80,
+      "delta": 80
+    },
+    {
+      "type": "technology-improvement",
+      "id": "MPFB",
+      "baseline": 0,
+      "current": 30,
+      "delta": 30
+    },
+    {
+      "type": "technology-improvement",
+      "id": "UniRig",
+      "baseline": 0,
+      "current": 30,
+      "delta": 30
+    },
+    {
+      "type": "technology-improvement",
+      "id": "Rigify",
+      "baseline": 0,
+      "current": 30,
+      "delta": 30
+    },
+    {
+      "type": "technology-improvement",
+      "id": "Goo Engine",
+      "baseline": 0,
+      "current": 30,
+      "delta": 30
+    },
+    {
+      "type": "technology-improvement",
+      "id": "UPBGE",
+      "baseline": 0,
+      "current": 30,
+      "delta": 30
+    }
+  ],
+  "deltas": {
+    "metrics": {
+      "controls": 45,
+      "graphics": 45,
+      "deviceAccessibility": 54,
+      "menu": 75,
+      "collisions": 60,
+      "codeQuality": 30,
+      "codeReviewer": 45,
+      "reports": 35,
+      "functionConnectivity": 50,
+      "uploadedTechnologyUse": 37,
+      "errorRecurrenceProtection": 80,
+      "goldenSolutionPropagation": 85
+    },
+    "technologyUsage": {
+      "Vercel": 0,
+      "Supabase Postgres/Auth/Realtime": 0,
+      "Three.js/WebGL2": 0,
+      "Playwright": 0,
+      "Python/FastAPI AI3D worker": 0,
+      "AI3D auto-discovery": 0,
+      "Depth Anything": 0,
+      "Blender pipeline": 30,
+      "TRELLIS.2": 30,
+      "Godot 4.7.1": 23,
+      "Hunyuan3D": 15,
+      "InstantMesh": 80,
+      "MPFB": 30,
+      "UniRig": 30,
+      "Rigify": 30,
+      "Goo Engine": 30,
+      "UPBGE": 30,
+      "Blender MCP": 0,
+      "Unity MCP": 0,
+      "OpenGameEval/OpenGame": 0
+    },
+    "overall": 53.416666666666664,
+    "releaseBlockers": 0
+  },
+  "generatedAt": "2026-08-23T03:44:04.632Z"
+}

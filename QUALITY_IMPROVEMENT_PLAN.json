@@ -1,0 +1,170 @@
+{
+  "generatedAt": "2026-08-23T03:43:24.284Z",
+  "tasks": [
+    {
+      "rank": 1,
+      "id": "QG-001",
+      "title": "Improve goldenSolutionPropagation: adoption-lock",
+      "reason": {
+        "type": "quality-control-gap",
+        "metric": "goldenSolutionPropagation",
+        "controlId": "adoption-lock",
+        "impactPoints": 15,
+        "effort": 2,
+        "confidence": 0.95,
+        "reuse": 1.5,
+        "priority": 10.69,
+        "recommendedAction": "Add required canonical file data/golden-adoptions.json"
+      },
+      "acceptanceCriteria": [
+        "No existing metric decreases",
+        "Relevant behavioral/static test passes",
+        "QUALITY_REGRESSION_REPORT passes",
+        "PROJECT_QUALITY_REVIEW has zero blockers",
+        "Evidence record is added before score increases"
+      ],
+      "status": "planned"
+    },
+    {
+      "rank": 2,
+      "id": "QG-002",
+      "title": "Integrate OpenGameEval/OpenGame",
+      "reason": {
+        "type": "technology-growth",
+        "technology": "OpenGameEval/OpenGame",
+        "impactPoints": 90,
+        "effort": 9,
+        "confidence": 0.55,
+        "reuse": 1.1,
+        "priority": 6.05,
+        "recommendedAction": "Move OpenGameEval/OpenGame from concept-partial to verified runnable integration with health check + smoke test"
+      },
+      "acceptanceCriteria": [
+        "No existing metric decreases",
+        "Relevant behavioral/static test passes",
+        "QUALITY_REGRESSION_REPORT passes",
+        "PROJECT_QUALITY_REVIEW has zero blockers",
+        "Evidence record is added before score increases"
+      ],
+      "status": "planned"
+    },
+    {
+      "rank": 3,
+      "id": "QG-003",
+      "title": "Integrate Depth Anything",
+      "reason": {
+        "type": "technology-growth",
+        "technology": "Depth Anything",
+        "impactPoints": 50,
+        "effort": 7,
+        "confidence": 0.55,
+        "reuse": 1.1,
+        "priority": 4.32,
+        "recommendedAction": "Move Depth Anything from adapter to verified runnable integration with health check + smoke test"
+      },
+      "acceptanceCriteria": [
+        "No existing metric decreases",
+        "Relevant behavioral/static test passes",
+        "QUALITY_REGRESSION_REPORT passes",
+        "PROJECT_QUALITY_REVIEW has zero blockers",
+        "Evidence record is added before score increases"
+      ],
+      "status": "planned"
+    },
+    {
+      "rank": 4,
+      "id": "QG-004",
+      "title": "Improve qualityGrowthAutomation: rollback",
+      "reason": {
+        "type": "quality-control-gap",
+        "metric": "qualityGrowthAutomation",
+        "controlId": "rollback",
+        "impactPoints": 10,
+        "effort": 3,
+        "confidence": 0.95,
+        "reuse": 1,
+        "priority": 3.17,
+        "recommendedAction": "Implement canonical source behavior containing vercel rollback"
+      },
+      "acceptanceCriteria": [
+        "No existing metric decreases",
+        "Relevant behavioral/static test passes",
+        "QUALITY_REGRESSION_REPORT passes",
+        "PROJECT_QUALITY_REVIEW has zero blockers",
+        "Evidence record is added before score increases"
+      ],
+      "status": "planned"
+    },
+    {
+      "rank": 5,
+      "id": "QG-005",
+      "title": "Improve uploadedTechnologyUse: production-adapters",
+      "reason": {
+        "type": "quality-control-gap",
+        "metric": "uploadedTechnologyUse",
+        "controlId": "production-adapters",
+        "impactPoints": 45,
+        "effort": 8,
+        "confidence": 0.55,
+        "reuse": 1,
+        "priority": 3.09,
+        "recommendedAction": "Obtain verified external/runtime evidence for production-adapters"
+      },
+      "acceptanceCriteria": [
+        "No existing metric decreases",
+        "Relevant behavioral/static test passes",
+        "QUALITY_REGRESSION_REPORT passes",
+        "PROJECT_QUALITY_REVIEW has zero blockers",
+        "Evidence record is added before score increases"
+      ],
+      "status": "planned"
+    },
+    {
+      "rank": 6,
+      "id": "QG-006",
+      "title": "Promote Golden stained-glass",
+      "reason": {
+        "type": "golden-promotion-gap",
+        "component": "stained-glass",
+        "impactPoints": 10,
+        "effort": 4,
+        "confidence": 0.7,
+        "reuse": 1.6,
+        "priority": 2.8,
+        "recommendedAction": "Obtain exact approved source/asset for stained-glass, freeze it, then propagate to all compatible apps"
+      },
+      "acceptanceCriteria": [
+        "No existing metric decreases",
+        "Relevant behavioral/static test passes",
+        "QUALITY_REGRESSION_REPORT passes",
+        "PROJECT_QUALITY_REVIEW has zero blockers",
+        "Evidence record is added before score increases"
+      ],
+      "status": "planned"
+    },
+    {
+      "rank": 7,
+      "id": "QG-007",
+      "title": "Improve graphics: approved-screenshot-baselines",
+      "reason": {
+        "type": "quality-control-gap",
+        "metric": "graphics",
+        "controlId": "approved-screenshot-baselines",
+        "impactPoints": 15,
+        "effort": 8,
+        "confidence": 0.55,
+        "reuse": 1,
+        "priority": 1.03,
+        "recommendedAction": "Obtain verified external/runtime evidence for approved-screenshot-baselines"
+      },
+      "acceptanceCriteria": [
+        "No existing metric decreases",
+        "Relevant behavioral/static test passes",
+        "QUALITY_REGRESSION_REPORT passes",
+        "PROJECT_QUALITY_REVIEW has zero blockers",
+        "Evidence record is added before score increases"
+      ],
+      "status": "planned"
+    }
+  ]
+}

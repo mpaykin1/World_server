@@ -223,6 +223,7 @@ addEventListener('keydown',e=>{
 addEventListener('keyup',e=>keys.delete(e.code));
 let mouseDown=false; addEventListener('mousedown',e=>{ if(e.button===0){ if(buildMode) placeBuild(); else hitResource(); } mouseDown=true; }); addEventListener('mouseup',()=>mouseDown=false);
 addEventListener('mousemove',e=>{ if(document.pointerLockElement || mouseDown){ yaw -= e.movementX*.003; pitch = Math.max(.12, Math.min(.82, pitch - e.movementY*.002)); }});
+addEventListener('goldenlook',e=>{const d=e.detail||{};yaw-=(Number(d.dx)||0)*.005;pitch=Math.max(.08,Math.min(.95,pitch-(Number(d.dy)||0)*.003));});
 renderer.domElement.addEventListener('click',()=>renderer.domElement.requestPointerLock?.());
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
 
@@ -538,7 +539,7 @@ function spawnBolt() {
 let last=performance.now();
 function frame(now){
   requestAnimationFrame(frame); const dt=Math.min(.05,(now-last)/1000); last=now;
-  const forward=new THREE.Vector3(Math.sin(yaw),0,Math.cos(yaw)); const right=new THREE.Vector3(Math.cos(yaw),0,-Math.sin(yaw)); const move=new THREE.Vector3();
+  const forward=new THREE.Vector3(Math.sin(yaw),0,Math.cos(yaw)); const basis=window.GameGoldenStandard?.basisFromForward(forward.x,forward.z); const right=basis?new THREE.Vector3(basis.right.x,0,basis.right.z):new THREE.Vector3(-Math.cos(yaw),0,Math.sin(yaw)); const move=new THREE.Vector3();
   if(keys.has('KeyW')) move.add(forward); if(keys.has('KeyS')) move.sub(forward); if(keys.has('KeyA')) move.add(right); if(keys.has('KeyD')) move.sub(right);
   self.running=keys.has('ShiftLeft'); const speed=self.running?13:7;
   const old=self.position.clone(); if(move.lengthSq()>0){ move.normalize().multiplyScalar(speed*dt); self.position.add(move); self.rotationY=yaw; self.action=self.action==='mine'?'mine':(self.running?'run':'walk'); } else if(self.action!=='mine') self.action='idle';
