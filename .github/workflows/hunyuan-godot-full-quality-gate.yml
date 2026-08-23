@@ -26,6 +26,11 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install AI3D worker Python deps (for npm check)
+        run: pip install pillow numpy requests
 
       - name: FULL QUALITY GATE - exact visual geometry
         run: python scripts/verify-hunyuan-full-quality.py
