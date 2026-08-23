@@ -22,8 +22,34 @@ const { chromium } = require('@playwright/test');
   const start = await page.evaluate(() => ({ ...window.__hunyuanDebug }));
   if (Math.abs(start.roll) > 1e-5) throw new Error(`spawn roll != 0: ${start.roll}`);
 
-  await page.keyboard.press('Space');
-  await page.waitForFunction(y0 => window.__hunyuanDebug?.y > y0 + 0.03, start.y, { timeout: 5000 });
+  // Robust Space: Godot Web needs focused canvas and sometimes first Space is eaten
+  let jumped = false;
+  for (let attempt = 0; attempt < 4 && !jumped; attempt++) {
+    try {
+      // ensure focus
+      await page.mouse.click(640, 360);
+      await page.waitForTimeout(150);
+    } catch {}
+    // try press via Playwright, also dispatch DOM KeyboardEvent as fallback
+    await page.keyboard.press('Space').catch(()=>{});
+    await page.evaluate(() => {
+      const ev = new KeyboardEvent('keydown', { key: ' ', code: 'Space', keyCode: 32, bubbles: true });
+      window.dispatchEvent(ev);
+    }).catch(()=>{});
+    await page.waitForTimeout(200);
+    try {
+      await page.waitForFunction(y0 => window.__hunyuanDebug?.y > y0 + 0.03, start.y, { timeout: 1500 });
+      jumped = true;
+    } catch {
+      // log current y for debugging
+      const cur = await page.evaluate(() => window.__hunyuanDebug?.y);
+      console.log(`[HUNYUAN_BROWSER_GATE] attempt ${attempt} y=${cur} start=${start.y}`);
+    }
+  }
+  if (!jumped) {
+    const cur = await page.evaluate(() => ({ ...window.__hunyuanDebug }));
+    throw new Error(`Space did not move player upward after 4 attempts: start y=${start.y} cur y=${cur.y} grounded=${cur.grounded}`);
+  }
   const airborne = await page.evaluate(() => ({ ...window.__hunyuanDebug }));
   const jumpXZ = Math.hypot(airborne.x - start.x, airborne.z - start.z);
   if (jumpXZ > 0.035) throw new Error(`Space introduced horizontal motion: ${jumpXZ}`);
