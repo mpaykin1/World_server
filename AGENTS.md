@@ -119,3 +119,30 @@ node scripts/check-agent-rules.js
 - `node scripts/check-ai3d-delivery-policy.js` — hard CI gate. Его нельзя обходить `|| true` или `continue-on-error`.
 - Если сцена не прошла gate, ответ агентом: `NOT READY FOR FINAL DELIVERY`, а не выдача diagnostic viewer.
 
+
+
+## 10. WORLD SERVER GOLDEN STANDARD — запрет сломанных релизов
+
+- Публичная выдача игр работает по **deny-by-default**: приложение не появляется в `/api/apps` и каталоге, пока оно не имеет `status: certified` в `data/app-release-registry.json`.
+- Финальную ссылку пользователю запрещено давать, пока не прошли `npm run golden:check` и Playwright на desktop + mobile.
+- Минимальный контракт playable-мира: правильные camera-relative W/S/A/D и стрелки, mouse-look, touch movement/look, spawn на поверхности, grounding, wall collision, step-up по лестнице/ступени, отсутствие проваливания, непустой render.
+- Запрещены self-reported ready-флаги как единственное доказательство. Нужен поведенческий тест.
+- Любая найденная хорошая общая функция сначала переносится в Golden Component Registry, затем переиспользуется всеми совместимыми играми. Копии логики с разными знаками/формулами запрещены.
+- Рабочая графика не удаляется и не упрощается ради прохождения тестов. Исправляется runtime/physics/input, а визуальный слой сохраняется.
+- Diagnostic/tool/quarantine приложения не должны показываться в публичном игровом каталоге.
+- Любая конструкция вида `.toBeTruthy;` / `.toBeFalsy;` без вызова считается ложным зелёным тестом и блокирует CI.
+
+
+## 11. DESKTOP AI — mandatory work instruction
+
+For every task, patch, repair, upgrade, deployment or quality-improvement run:
+
+- Read `DESKTOP_AI_INSTALL_AND_VERIFY.md` first.
+- Create/update `WORK_IN_PROGRESS.md` before editing project files.
+- The work MD must state: what we are doing, why, current state, target state, where the project is going, affected systems, risks, exact patch plan, required tests, what to do with the patch, current progress, next action, completion criteria and final evidence.
+- A patch without an updated `WORK_IN_PROGRESS.md` is invalid.
+- Do not declare completion while `Final evidence` is incomplete.
+- Do not work directly on `master`.
+- Do not merge/deploy if any accepted quality metric regresses.
+- Confirmed fixes must become regression protection.
+- Approved reusable successes must become exact Golden Components and be propagated to compatible projects.

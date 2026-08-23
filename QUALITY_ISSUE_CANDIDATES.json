@@ -1,0 +1,14 @@
+{
+  "generatedAt": "2026-08-23T03:44:15.151Z",
+  "issues": [
+    {
+      "source": "PROJECT_QUALITY_REVIEW.json",
+      "details": {
+        "severity": "major",
+        "category": "mobile",
+        "file": "apps/ai3d-voxel-city/index.html",
+        "message": "viewport-fit=cover missing"
+      }
+    }
+  ]
+}

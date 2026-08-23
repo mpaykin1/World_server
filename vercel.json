@@ -1,7 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
-  "regions": ["sin1"],
+  "regions": [
+    "sin1"
+  ],
   "functions": {
     "api/apps.js": {
       "includeFiles": "apps/**"
@@ -30,5 +32,6 @@
         }
       ]
     }
-  ]
+  ],
+  "buildCommand": "npm run build:sentry && node scripts/inject-sentry-runtime.js && npm run release:gate"
 }

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "DESKTOP_AI_WORK_PROTOCOL",
+  "requiredFiles": [
+    "DESKTOP_AI_INSTALL_AND_VERIFY.md",
+    "WORK_IN_PROGRESS.md"
+  ],
+  "mandatoryForEveryTask": true,
+  "workFile": "WORK_IN_PROGRESS.md",
+  "requiredSections": [
+    "Task",
+    "Why",
+    "Current state",
+    "Target state",
+    "Files / systems involved",
+    "Known risks",
+    "Golden systems that must be preserved",
+    "Errors that must not return",
+    "Exact patch / change plan",
+    "Tests to run",
+    "Deployment / PR plan",
+    "Current progress",
+    "Next action",
+    "Completion criteria",
+    "Final evidence"
+  ],
+  "invalidMarkers": [
+    "UNSET"
+  ],
+  "patchRule": "No patch is valid without an updated WORK_IN_PROGRESS.md.",
+  "completionRule": "Desktop AI may not declare completion until work instruction and final evidence are current.",
+  "directionRule": "Every task instruction must state what we are working on, why, where the project is going, what the patch changes, how to verify it, and what to do with the patch."
+}

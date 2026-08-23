@@ -19,6 +19,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#79b8ef;tou
 #loading{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:linear-gradient(#79b8ef,#b9ddff);color:#102335;font:800 20px system-ui;letter-spacing:.04em}.hidden{display:none!important}
 @media (max-width:800px),(pointer:coarse){#vwHelp{display:none}#vwBack{top:124px}#hotbar{bottom:12px;max-width:94vw;overflow-x:auto}.slot{min-width:42px;width:42px;height:42px}#mobileControls{display:block}#vwHud{font-size:11px}}
 </style>
+  <script src="/shared/sentry-runtime.js"></script>
 </head>
 <body>
 <div id="loading">Загрузка Voxel World…</div>
@@ -29,5 +30,8 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#79b8ef;tou
 <div id="mobileControls"><div class="lookZone" id="lookZone"></div><div id="movePad"><div id="moveKnob"></div></div><button class="touchBtn" id="jumpBtn">ПРЫЖОК</button><button class="touchBtn" id="breakBtn">ЛОМАТЬ</button><button class="touchBtn" id="placeBtn">СТАВИТЬ</button></div>
 <script src="/shared/common.js"></script>
 <script type="module" src="./client.js"></script>
+<link rel="stylesheet" href="/shared/golden-ui-shell.css"><script src="/shared/golden-physics.js"></script><script src="/shared/golden-ui-shell.js"></script>
+<script src="/shared/quality-telemetry.js"></script>
+<script src="/shared/golden-performance-autotuner.js"></script>
 </body>
 </html>

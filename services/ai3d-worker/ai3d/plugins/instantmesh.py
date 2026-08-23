@@ -1,183 +1,124 @@
 from __future__ import annotations
 
 import os
+import shutil
+import subprocess
 import sys
 import threading
 from pathlib import Path
 
 
 class InstantMeshEngine:
-    """
-    InstantMesh fallback for TRELLIS.2.
-    Uses already-downloaded local repo at INSTANTMESH_HOME or майн/InstantMesh.
-    If GPU/models unavailable, produces a valid GLB placeholder (textured plane) so that
-    E2E smoke can still reach 100% with a clear diagnostic — enabling autonomous work
-    before a paid GPU is connected. This is the INSTANTMESH_GPU_WORKER_SERVER_BRIDGE.
-    """
+    """Real InstantMesh CLI bridge. Never reports a flat placeholder as successful 3D."""
 
     def __init__(self) -> None:
-        # Try explicit env, then common local locations (avoid Path('') -> '.' bug)
-        def _env_path(key: str) -> Path | None:
-            v = os.environ.get(key, "").strip()
-            if not v:
+        def env_path(key: str) -> Path | None:
+            value = os.environ.get(key, "").strip()
+            if not value:
                 return None
-            p = Path(v).expanduser()
-            return p if str(p) and p.exists() else None
+            p = Path(value).expanduser()
+            return p if p.exists() else None
+
         candidates = [
-            _env_path("INSTANTMESH_HOME"),
-            Path(os.environ.get("AI3D_EXTERNAL_ROOT", "").strip()).expanduser() / "InstantMesh" if os.environ.get("AI3D_EXTERNAL_ROOT", "").strip() else None,
+            env_path("INSTANTMESH_HOME"),
+            Path(os.environ["AI3D_EXTERNAL_ROOT"]).expanduser() / "InstantMesh"
+            if os.environ.get("AI3D_EXTERNAL_ROOT", "").strip() else None,
             Path("C:/Users/user/Desktop/майн/InstantMesh"),
             Path("C:/Users/user/Desktop/3дгенерация/InstantMesh"),
         ]
-        # Filter to real existing dirs, avoid '.' fallback
-        filtered = [p for p in candidates if p is not None and p.exists() and p.is_dir()]
-        self.source = filtered[0] if filtered else Path("C:/Users/user/Desktop/майн/InstantMesh") if Path("C:/Users/user/Desktop/майн/InstantMesh").exists() else Path("")
+        self.source = next((p for p in candidates if p and p.is_dir()), None)
         self._lock = threading.Lock()
-        self._torch = None
 
     def available(self) -> bool:
-        # Consider available if source has at least run.py + configs
-        if not self.source or not self.source.is_dir():
+        return bool(
+            self.source
+            and (self.source / "run.py").is_file()
+            and (self.source / "configs" / "instant-mesh-large.yaml").is_file()
+        )
+
+    def runtime_available(self) -> bool:
+        if not self.available():
             return False
-        return (self.source / "run.py").is_file() and (self.source / "configs").is_dir()
+        try:
+            import torch
+            return bool(torch.cuda.is_available())
+        except Exception:
+            return False
 
-    def _load_torch(self):
-        if self._torch is not None:
-            return self._torch
-        import torch
-        self._torch = torch
-        return torch
-
-    def _create_placeholder_glb(self, image_path: Path, output_path: Path) -> Path:
-        """
-        CPU-only fallback: create a textured plane GLB from the input image.
-        Guarantees a valid GLB container for validation and E2E, with a diagnostic
-        that a GPU worker is the only blocker for true 3D.
-        """
-        from PIL import Image
-        import numpy as np
-        import base64
-
-        # Load and prepare image as texture
-        img = Image.open(image_path).convert("RGBA")
-        # Resize to power-of-two for GPU efficiency, keep aspect
-        w, h = img.size
-        # Simple plane geometry (2 triangles)
-        # Vertices: 4 corners at y=0, size 1
-        vertices = np.array([
-            [-0.5, 0, -0.5],
-            [ 0.5, 0, -0.5],
-            [ 0.5, 0,  0.5],
-            [-0.5, 0,  0.5],
-        ], dtype=np.float32)
-        uvs = np.array([[0, 1], [1, 1], [1, 0], [0, 0]], dtype=np.float32)
-        faces = np.array([[0, 1, 2], [0, 2, 3]], dtype=np.uint32)
-
-        # Try to use trimesh/o3d if available, otherwise build minimal GLB via pygltflib or manual
+    def _convert_obj_to_glb(self, obj_path: Path, output_path: Path) -> Path:
+        output_path.parent.mkdir(parents=True, exist_ok=True)
         try:
             import trimesh
-            mesh = trimesh.Trimesh(vertices=vertices, faces=faces, process=False)
-            mesh.visual.uv = uvs
-            # Create material with texture
-            tex_path = output_path.with_suffix(".png")
-            img.save(tex_path)
-            # trimesh will embed via material; simpler: export GLB with trimesh
-            # Use trimesh exchange
-            output_path.parent.mkdir(parents=True, exist_ok=True)
-            # Save image for reference, then export
-            from trimesh.exchange.gltf import export_gltf
-            # Create scene
-            scene = trimesh.Scene(mesh)
-            # Export GLB
-            glb_bytes = scene.export(file_type='glb')
-            output_path.write_bytes(glb_bytes if isinstance(glb_bytes, bytes) else b"".join(glb_bytes) if isinstance(glb_bytes, (list, tuple)) else glb_bytes)
-            if output_path.stat().st_size < 256:
-                raise RuntimeError("Fallback GLB too small")
+            scene = trimesh.load(str(obj_path), force="scene", process=False)
+            data = scene.export(file_type="glb")
+            output_path.write_bytes(data)
+            if output_path.stat().st_size < 1024:
+                raise RuntimeError("Converted GLB is unexpectedly small")
             return output_path
-        except Exception:
-            pass
-
-        # Fallback: manual minimal GLB using pygltflib if available, else raw glTF JSON + bin
-        try:
-            # Try to build a minimal valid GLB via struct
-            import struct
-            import json
-
-            # Create binary buffers
-            # Vertex buffer (float32)
-            vert_bytes = vertices.tobytes()
-            uv_bytes = uvs.tobytes()
-            idx_bytes = faces.tobytes()
-            # For simplicity, use base64 embedded images? Instead create minimal GLB without texture first
-            # Build glTF JSON
-            # We'll create a simple GLB with positions + indices, no texture (valid per GLB spec)
-            # Use pygltflib if available
-            try:
-                from pygltflib import GLTF2, Scene, Node, Mesh, Primitive, Attributes, Accessor, BufferView, Buffer, Asset
-                # This path is rarely available, fallback to manual
-                raise ImportError
-            except ImportError:
-                # Manual GLB: JSON chunk + BIN chunk
-                # Create buffers: 0 = vertices, 1 = uvs, 2 = indices
-                # For minimal, interleave?
-                # Simpler: create one buffer with all data concatenated
-                bin_data = vert_bytes + uv_bytes + idx_bytes
-                # glTF JSON
-                gltf = {
-                    "asset": {"version": "2.0", "generator": "AI3D InstantMesh fallback (CPU placeholder)"},
-                    "scene": 0,
-                    "scenes": [{"nodes": [0]}],
-                    "nodes": [{"mesh": 0, "name": "InstantMesh_fallback_plane"}],
-                    "meshes": [{"primitives": [{"attributes": {"POSITION": 0, "TEXCOORD_0": 1}, "indices": 2}]}],
-                    "accessors": [
-                        {"bufferView": 0, "componentType": 5126, "count": 4, "type": "VEC3", "min": [-0.5, 0, -0.5], "max": [0.5, 0, 0.5]},
-                        {"bufferView": 1, "componentType": 5126, "count": 4, "type": "VEC2"},
-                        {"bufferView": 2, "componentType": 5125, "count": 6, "type": "SCALAR"}
-                    ],
-                    "bufferViews": [
-                        {"buffer": 0, "byteOffset": 0, "byteLength": len(vert_bytes)},
-                        {"buffer": 0, "byteOffset": len(vert_bytes), "byteLength": len(uv_bytes)},
-                        {"buffer": 0, "byteOffset": len(vert_bytes)+len(uv_bytes), "byteLength": len(idx_bytes)},
-                    ],
-                    "buffers": [{"byteLength": len(bin_data)}]
-                }
-                json_bytes = json.dumps(gltf, separators=(",", ":")).encode("utf-8")
-                # Pad JSON to 4-byte
-                json_pad = (4 - len(json_bytes) % 4) % 4
-                json_bytes += b" " * json_pad
-                bin_pad = (4 - len(bin_data) % 4) % 4
-                bin_data += b"\x00" * bin_pad
-                # GLB header
-                glb_len = 12 + 8 + len(json_bytes) + 8 + len(bin_data)
-                header = struct.pack("<4sII", b"glTF", 2, glb_len)
-                json_chunk = struct.pack("<II", len(json_bytes), 0x4E4F534A) + json_bytes
-                bin_chunk = struct.pack("<II", len(bin_data), 0x004E4942) + bin_data
-                output_path.parent.mkdir(parents=True, exist_ok=True)
-                output_path.write_bytes(header + json_chunk + bin_chunk)
-                return output_path
-        except Exception as exc:
-            raise RuntimeError(f"InstantMesh placeholder GLB creation failed: {exc}") from exc
+        except Exception as trimesh_error:
+            blender = os.environ.get("BLENDER_BIN", "").strip() or shutil.which("blender")
+            if not blender:
+                raise RuntimeError(
+                    f"InstantMesh generated OBJ but GLB conversion failed and Blender is unavailable: {trimesh_error}"
+                ) from trimesh_error
+            script = (
+                "import bpy,sys;"
+                "bpy.ops.wm.read_factory_settings(use_empty=True);"
+                f"bpy.ops.wm.obj_import(filepath={str(obj_path)!r});"
+                f"bpy.ops.export_scene.gltf(filepath={str(output_path)!r},export_format='GLB')"
+            )
+            subprocess.run([blender, "--background", "--python-expr", script], check=True, timeout=300)
+            if not output_path.is_file() or output_path.stat().st_size < 1024:
+                raise RuntimeError("Blender did not produce a valid GLB")
+            return output_path
 
     def run(self, image_path: Path, output_path: Path, params: dict) -> Path:
         with self._lock:
-            # Try real GPU inference if torch+CUDA available and models present
-            try:
-                torch = self._load_torch()
-                if torch.cuda.is_available() and self.available():
-                    # Attempt to invoke InstantMesh pipeline — keep lazy, import only if needed
-                    # For now, we delegate to the official run.py via subprocess if needed
-                    # To avoid heavy deps on this Windows host, we treat GPU path as logical
-                    # and let the Linux worker perform it. Here we just indicate intent.
-                    # If we are on Linux+CUDA, try to load
-                    source = str(self.source.resolve())
-                    if source not in sys.path:
-                        sys.path.insert(0, source)
-                    # Check for required entrypoint
-                    # We attempt a lightweight import check; if it fails, fallback to placeholder
-                    # Real inference would be: python run.py configs/instant-mesh-large.yaml image --output ...
-                    # For worker integration, we produce placeholder but mark engine as InstantMesh
-                    pass
-            except Exception:
-                pass
-            # Always succeed with placeholder on CPU / without GPU — guarantees E2E 100% with diagnostic
-            return self._create_placeholder_glb(image_path, output_path)
+            if not self.available():
+                raise RuntimeError("InstantMesh source is not configured. Set INSTANTMESH_HOME.")
+            if not self.runtime_available():
+                raise RuntimeError("InstantMesh requires a CUDA runtime for real inference; placeholder output is forbidden.")
+
+            config_name = str(params.get("instantMeshConfig", "instant-mesh-large")).strip()
+            if config_name not in {"instant-mesh-large", "instant-mesh-base", "instant-nerf-large", "instant-nerf-base"}:
+                config_name = "instant-mesh-large"
+            config = self.source / "configs" / f"{config_name}.yaml"
+            if not config.is_file():
+                raise RuntimeError(f"InstantMesh config missing: {config}")
+
+            out_root = output_path.parent / "instantmesh-output"
+            out_root.mkdir(parents=True, exist_ok=True)
+            steps = max(10, min(int(params.get("diffusionSteps", 75)), 100))
+            seed = int(params.get("seed", 42))
+            cmd = [
+                sys.executable,
+                str(self.source / "run.py"),
+                str(config),
+                str(image_path),
+                "--output_path", str(out_root),
+                "--diffusion_steps", str(steps),
+                "--seed", str(seed),
+                "--export_texmap",
+            ]
+            if bool(params.get("noRembg", False)):
+                cmd.append("--no_rembg")
+
+            log_path = output_path.parent / "instantmesh.log"
+            with log_path.open("w", encoding="utf-8", errors="replace") as log:
+                subprocess.run(
+                    cmd,
+                    cwd=str(self.source),
+                    stdout=log,
+                    stderr=subprocess.STDOUT,
+                    check=True,
+                    timeout=int(params.get("instantMeshTimeoutSeconds", 1800)),
+                )
+
+            expected = out_root / config_name / "meshes" / f"{image_path.stem}.obj"
+            if not expected.is_file():
+                candidates = sorted(out_root.rglob("*.obj"), key=lambda q: q.stat().st_mtime, reverse=True)
+                if not candidates:
+                    raise RuntimeError(f"InstantMesh finished without OBJ output. See {log_path}")
+                expected = candidates[0]
+
+            return self._convert_obj_to_glb(expected, output_path)

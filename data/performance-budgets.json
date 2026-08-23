@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "PERFORMANCE_BUDGETS",
+  "budgets": {
+    "catalog": {
+      "canvasVisibleMs": 8000,
+      "domContentLoadedMs": 5000,
+      "minimumFps": 30,
+      "maxPersistentUiViewportRatio": 0.12
+    },
+    "voxel-world": {
+      "canvasVisibleMs": 12000,
+      "domContentLoadedMs": 6000,
+      "minimumFps": 30,
+      "maxPersistentUiViewportRatio": 0.12
+    },
+    "ai3d-voxel-city": {
+      "canvasVisibleMs": 15000,
+      "domContentLoadedMs": 7000,
+      "minimumFps": 28,
+      "maxPersistentUiViewportRatio": 0.12
+    }
+  },
+  "memory": {
+    "chromiumHeapMbSoft": 512,
+    "policy": "report if API unavailable; fail only when measurable and above budget"
+  }
+}
