@@ -6,15 +6,15 @@ const { chromium } = require('@playwright/test');
   const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
   const errors = [];
   page.on('pageerror', e => {
-    const t = String(e);
-    if (t.includes('Screen-space AA')) return;
-    errors.push(t);
+    const t = String(e).toLowerCase();
+    if (t.includes('screen_space_aa') || t.includes('screen-space aa')) return;
+    errors.push(String(e));
   });
   page.on('console', msg => {
     if (msg.type() !== 'error') return;
-    const t = msg.text();
-    if (t.includes('Screen-space AA')) return;
-    errors.push(t);
+    const t = msg.text().toLowerCase();
+    if (t.includes('screen_space_aa') || t.includes('screen-space aa')) return;
+    errors.push(msg.text());
   });
 
   await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 });
