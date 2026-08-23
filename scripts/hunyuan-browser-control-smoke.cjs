@@ -58,7 +58,7 @@ const { chromium } = require('@playwright/test');
   }
   const jumpXZ = Math.hypot(airborne.x - start.x, airborne.z - start.z);
   if (jumpXZ > 0.035) throw new Error(`Space introduced horizontal motion: ${jumpXZ}`);
-  if (!(airborne.vy > 0)) throw new Error(`Space did not create upward velocity: vy=${airborne.vy}`);
+  if (!(airborne.y > start.y + 0.01)) throw new Error(`Space did not increase height: y=${airborne.y} start=${start.y}`);
 
   await page.waitForFunction(y0 => window.__hunyuanDebug?.grounded === true && Math.abs(window.__hunyuanDebug.y - y0) < 0.12, start.y, { timeout: 5000 });
   const landed = await page.evaluate(() => ({ ...window.__hunyuanDebug }));
