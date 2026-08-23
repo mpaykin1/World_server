@@ -74,9 +74,11 @@
   "dependencies": {
     "@sentry/browser": "^10.70.0",
     "@supabase/supabase-js": "2.112.3",
-    "@vercel/sandbox": "^3.1.0"
+    "@vercel/sandbox": "^3.1.0",
+    "esbuild": "^0.28.2"
   },
   "devDependencies": {
+    "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.62.1",
     "esbuild": "^0.28.2"
   }
