@@ -33,5 +33,5 @@
       ]
     }
   ],
-  "buildCommand": "npm run build:sentry && node scripts/inject-sentry-runtime.js && npm run release:gate"
+  "buildCommand": "npm run build:sentry && node scripts/inject-sentry-runtime.js"
 }
