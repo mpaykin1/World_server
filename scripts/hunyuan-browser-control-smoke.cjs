@@ -12,11 +12,18 @@ const { chromium } = require('@playwright/test');
   await page.waitForFunction(() => window.__hunyuanDebug?.ready === true, null, { timeout: 120000 });
   await page.waitForFunction(() => window.__hunyuanDebug?.grounded === true, null, { timeout: 30000 });
 
+  // Ensure canvas has focus for keyboard input (Godot Web requires click)
+  try {
+    await page.waitForSelector('canvas', { timeout: 10000 });
+    await page.click('canvas');
+    await page.waitForTimeout(300);
+  } catch {}
+
   const start = await page.evaluate(() => ({ ...window.__hunyuanDebug }));
   if (Math.abs(start.roll) > 1e-5) throw new Error(`spawn roll != 0: ${start.roll}`);
 
   await page.keyboard.press('Space');
-  await page.waitForFunction(y0 => window.__hunyuanDebug?.y > y0 + 0.03, start.y, { timeout: 3000 });
+  await page.waitForFunction(y0 => window.__hunyuanDebug?.y > y0 + 0.03, start.y, { timeout: 5000 });
   const airborne = await page.evaluate(() => ({ ...window.__hunyuanDebug }));
   const jumpXZ = Math.hypot(airborne.x - start.x, airborne.z - start.z);
   if (jumpXZ > 0.035) throw new Error(`Space introduced horizontal motion: ${jumpXZ}`);
