@@ -47,8 +47,7 @@ const { chromium } = require('@playwright/test');
         return d.y > y0 + 0.02 || d.vy > 0.05 || d.grounded === false;
       }, start.y, { timeout: 8000 });
       jumped = true;
-      // small extra wait to let y peak
-      await page.waitForTimeout(250);
+      await page.waitForTimeout(80);
     } catch {
       const cur = await page.evaluate(() => window.__hunyuanDebug);
       console.log(`[HUNYUAN_BROWSER_GATE] attempt ${attempt} y=${cur?.y} vy=${cur?.vy} grounded=${cur?.grounded} start=${start.y}`);
