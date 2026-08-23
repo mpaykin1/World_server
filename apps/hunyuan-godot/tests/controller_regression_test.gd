@@ -68,12 +68,12 @@ func _run() -> void:
     player.debug_set_look(0.0, 0.0)
     for _i in range(30):
         await physics_frame
-    var start := player.global_position
+    var start: Vector3 = player.global_position
     check(player.is_on_floor(), "grounded before jump")
     player.debug_trigger_jump()
     for _i in range(8):
         await physics_frame
-    var airborne := player.global_position
+    var airborne: Vector3 = player.global_position
     var horizontal_delta := Vector2(airborne.x - start.x, airborne.z - start.z).length()
     check(airborne.y > start.y + 0.03, "Space moves player upward")
     check(horizontal_delta < 0.015, "Space alone adds no forward/back movement")
