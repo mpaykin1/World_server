@@ -20,4 +20,7 @@ services/ai3d-worker/**/__pycache__/
 runtime/
 test-results/
 playwright-report/
+.golden-backup/
+WORLD_SERVER_GOLDEN_STANDARD*.zip
+GOLDEN_STANDARD_WORLD_SERVER_V10/
 

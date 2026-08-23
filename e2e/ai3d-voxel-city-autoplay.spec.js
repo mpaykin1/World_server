@@ -59,7 +59,7 @@ test.describe('AI3D Voxel City - default-city autoplay (no user actions)', () =>
     // must not be at origin fallback (0,0,0) without city context
     expect(spawnState.player.x).not.toBe(0);
     // check playable spawn reported
-    expect(spawnState.autoplayState?.spawned).toBeTruthy;
+    expect(spawnState.autoplayState?.spawned).toBeTruthy();
     // also check __AI3D_PLAYABLE_SCENE__ reports playerSpawn
     const playableReady = await page.evaluate(() => {
       const s = window.__AI3D_PLAYABLE_SCENE__?.state;

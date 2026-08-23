@@ -21,6 +21,11 @@ jobs:
       - name: Install AI3D worker Python deps (needed for CPU tests)
         run: pip install pillow numpy requests
       - run: npm ci --ignore-scripts || npm install
+      - name: Sentry build + static invariants (hard)
+        run: |
+          npm run build:sentry
+          node scripts/inject-sentry-runtime.js
+          node scripts/check-sentry-runtime.js
       - run: npm run check
       - run: python -m py_compile services/ai3d-worker/server.py services/ai3d-worker/ai3d/*.py services/ai3d-worker/ai3d/plugins/*.py services/ai3d-worker/tools/*.py services/ai3d-worker/scripts/e2e-smoke.py
       - name: AI3D discovery smoke
@@ -33,8 +38,12 @@ jobs:
         run: node scripts/check-ai3d-delivery-policy.js
       - name: AI3D V4 combined integration (hard)
         run: node scripts/check-ai3d-v4-combined.js
+      - name: WORLD SERVER Golden Standard source/release gate (hard)
+        run: npm run release:gate
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
+      - name: Sentry runtime smoke (Playwright) - window.WorldServerSentry + ingest (hard)
+        run: npx playwright test e2e/sentry-smoke.spec.js --project=desktop-chromium
       - name: AI3D Voxel City autoplay (Playwright) ai3d-voxel-city-autoplay (hard)
         run: npx playwright test
 

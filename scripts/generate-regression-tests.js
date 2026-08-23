@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+'use strict';const fs=require('fs'),path=require('path');const ROOT=process.cwd(),errs=JSON.parse(fs.readFileSync(path.join(ROOT,'data/error-prevention-registry.json'),'utf8')),tpl=JSON.parse(fs.readFileSync(path.join(ROOT,'data/regression-test-templates.json'),'utf8'));const generated=[],missing=[];
+for(const e of errs.knownErrors||[]){if(e.status!=='protected')continue;const t=tpl[e.id];if(!t){missing.push({id:e.id});continue}const d=path.join(ROOT,t.target);fs.mkdirSync(path.dirname(d),{recursive:true});if(!fs.existsSync(d)||fs.readFileSync(d,'utf8')!==t.body)fs.writeFileSync(d,t.body);generated.push({errorId:e.id,target:t.target})}
+fs.writeFileSync(path.join(ROOT,'REGRESSION_TEST_GENERATION_REPORT.json'),JSON.stringify({generatedAt:new Date().toISOString(),generated,missing},null,2)+'\n');console.log(`[REGRESSION_TEST_GEN] generated=${generated.length} missing=${missing.length}`);

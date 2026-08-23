@@ -16,6 +16,8 @@ from .plugins.blender_building import BuildingEngine
 from .plugins.procgen_maps import ProcgenMapsEngine
 from .plugins.godot_voxel import GodotVoxelBridge
 from .plugins.voxel_city import VoxelCityEngine
+from .plugins.gpu_router import RemoteGPU3DRouter
+from .plugins.mesh_quality_optimizer import MeshQualityOptimizer
 from ai3d_voxel_verifier.verifier import verify_voxel_city
 
 
@@ -39,6 +41,8 @@ class PipelineRunner:
         self.procgen = ProcgenMapsEngine()
         self.godot = GodotVoxelBridge()
         self.voxel_city = VoxelCityEngine()
+        self.gpu_router = RemoteGPU3DRouter()
+        self.mesh_optimizer = MeshQualityOptimizer()
 
     def plugin_status(self) -> dict:
         # Honest engine name based on actually used stages, not claimed Depth+Blender
@@ -53,11 +57,15 @@ class PipelineRunner:
             "procgen_maps": {"available": self.procgen.available(), "engine": "Blender headless (auto-found)", "licenseMode": "external GPL-3.0 plugin"},
             "voxel_city": {"available": self.voxel_city.available(), "engine": "skyline_dp_reference_shell_piecewise_voxel_depth_cpu", "output": "voxel-city.json"},
             "godot_voxel_factory": self.godot.plugin_status(),
+            "remote_gpu_router": self.gpu_router.status(),
             "blender": {"available": self.building.available() or self.procgen.available(), "autoFound": self.building.blender if hasattr(self.building, 'blender') else "blender"},
             "voxel_tools": {"voxelsrv": (Path("C:/Users/user/Desktop/майн/voxelsrv/src").is_dir()), "littlecubes": (Path("C:/Users/user/Desktop/майн/LittleCubes/src").is_dir())},
         }
 
     def _choose_image3d_engine(self) -> tuple[str, object]:
+        for _engine in ("trellis2", "instantmesh", "hunyuan3d"):
+            if self.gpu_router.available(_engine):
+                return "remote_" + _engine, self.gpu_router
         if self.trellis.available():
             try:
                 import platform
@@ -83,9 +91,7 @@ class PipelineRunner:
                 pass
         if self.cpu.available():
             return "cpu_reconstruction", self.cpu
-        if self.instantmesh.available():
-            return "instantmesh_placeholder", self.instantmesh
-        return "placeholder_diagnostic", self.instantmesh
+        raise RuntimeError("No verified real Image-to-3D engine is runnable; placeholder success is forbidden.")
 
     def run(self, job: dict, progress: Callable[[int, str], None]) -> dict:
         mode = job["mode"]
@@ -227,7 +233,12 @@ class PipelineRunner:
             (job_dir / "classification.txt").write_text(classification or "single_object", encoding="utf-8")
             _add_stage("classification", t_cls, time.time(), job_dir / "classification.txt", input_sha)
 
-            if engine_name == "trellis2":
+            if engine_name.startswith("remote_"):
+                _remote_engine = engine_name.removeprefix("remote_")
+                progress(28, f"Remote GPU {_remote_engine}: generating verified 3D artifact")
+                glb_path = engine.run(_remote_engine, input_path, job_dir / "model.glb", params)
+                progress(90, f"Validating remote {_remote_engine} GLB")
+            elif engine_name == "trellis2":
                 progress(28, "TRELLIS.2: generating 3D geometry and PBR materials")
                 glb_path = engine.run(input_path, job_dir / "model.glb", params)
                 progress(90, "Validating TRELLIS.2 GLB")
@@ -260,6 +271,9 @@ class PipelineRunner:
                 glb_path = engine.run(input_path, job_dir / "model.glb", params)
                 progress(90, "Validating PLACEHOLDER GLB (marked diagnostic)")
             validate_glb(glb_path)
+            _mesh_report, _lods = self.mesh_optimizer.prepare(glb_path, job_dir, params)
+            files.append(file_meta(_mesh_report, "mesh_quality_report"))
+            for _lod in _lods: files.append(file_meta(_lod, "mesh_lod"))
             files.append(file_meta(glb_path, "model"))
             if classification:
                 cls_path = job_dir / "classification.txt"

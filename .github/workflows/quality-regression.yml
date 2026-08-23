@@ -1,0 +1,39 @@
+name: Quality Regression Lock
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+jobs:
+  quality-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Hard source + no-regression gate
+        run: npm run release:gate
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Desktop + mobile behavioral gate
+        run: npm run golden:e2e
+      - name: Quality delta
+        if: always()
+        run: npm run quality:diff
+      - name: Upload quality reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-regression-reports
+          path: |
+            QUALITY_REPORT.json
+            QUALITY_REGRESSION_REPORT.json
+            QUALITY_DIFF.md
+            QUALITY_DIFF.json

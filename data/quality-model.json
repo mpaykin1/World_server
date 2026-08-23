@@ -1,0 +1,821 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "EVIDENCE_DRIVEN_QUALITY_MODEL",
+  "rule": "Scores are calculated from weighted controls. A control only contributes when its evidence is present and passes.",
+  "metrics": {
+    "controls": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "canonical-basis",
+          "weight": 15,
+          "kind": "file",
+          "path": "shared/golden-physics.js"
+        },
+        {
+          "id": "desktop-cardinal-directions",
+          "weight": 20,
+          "kind": "test",
+          "tag": "controls-cardinal"
+        },
+        {
+          "id": "desktop-diagonal-directions",
+          "weight": 10,
+          "kind": "test",
+          "tag": "controls-diagonal"
+        },
+        {
+          "id": "mouse-look",
+          "weight": 15,
+          "kind": "test",
+          "tag": "mouse-look"
+        },
+        {
+          "id": "jump-y-only",
+          "weight": 15,
+          "kind": "test",
+          "tag": "jump-y-only"
+        },
+        {
+          "id": "camera-roll-zero",
+          "weight": 10,
+          "kind": "test",
+          "tag": "camera-roll-zero"
+        },
+        {
+          "id": "touch-move",
+          "weight": 10,
+          "kind": "test",
+          "tag": "touch-move"
+        },
+        {
+          "id": "touch-look",
+          "weight": 5,
+          "kind": "test",
+          "tag": "touch-look"
+        },
+        {
+          "id": "fuzz-controls",
+          "weight": 5,
+          "kind": "file",
+          "path": "test/quality-fuzz.test.js"
+        }
+      ]
+    },
+    "graphics": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "render-surface-visible",
+          "weight": 15,
+          "kind": "test",
+          "tag": "render-visible"
+        },
+        {
+          "id": "no-primary-blur",
+          "weight": 10,
+          "kind": "test",
+          "tag": "no-primary-blur"
+        },
+        {
+          "id": "nonzero-render-stats",
+          "weight": 10,
+          "kind": "test",
+          "tag": "render-stats"
+        },
+        {
+          "id": "adaptive-resolution",
+          "weight": 10,
+          "kind": "source",
+          "pattern": "adaptResolution"
+        },
+        {
+          "id": "local-three-vendor-or-controlled-import",
+          "weight": 10,
+          "kind": "review",
+          "tag": "graphics-dependency"
+        },
+        {
+          "id": "golden-visual-registry",
+          "weight": 15,
+          "kind": "file",
+          "path": "data/golden-components.json"
+        },
+        {
+          "id": "visual-regression-harness",
+          "weight": 15,
+          "kind": "file",
+          "path": "scripts/visual-regression.js"
+        },
+        {
+          "id": "approved-screenshot-baselines",
+          "weight": 15,
+          "kind": "external",
+          "status": "missing"
+        },
+        {
+          "id": "performance-budgets",
+          "weight": 5,
+          "kind": "file",
+          "path": "data/performance-budgets.json"
+        },
+        {
+          "id": "hud-visual-audit",
+          "weight": 5,
+          "kind": "file",
+          "path": "e2e/hud-visual-audit.spec.js"
+        },
+        {
+          "id": "perceptual-regression",
+          "weight": 8,
+          "kind": "file",
+          "path": "e2e/perceptual-visual.spec.js"
+        }
+      ]
+    },
+    "deviceAccessibility": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "desktop-chrome",
+          "weight": 20,
+          "kind": "project",
+          "project": "desktop-chromium"
+        },
+        {
+          "id": "android-phone",
+          "weight": 25,
+          "kind": "project",
+          "project": "mobile-chromium"
+        },
+        {
+          "id": "iphone-emulation",
+          "weight": 20,
+          "kind": "project",
+          "project": "mobile-webkit"
+        },
+        {
+          "id": "tablet-emulation",
+          "weight": 10,
+          "kind": "project",
+          "project": "tablet-chromium"
+        },
+        {
+          "id": "touch-target-44",
+          "weight": 10,
+          "kind": "test",
+          "tag": "touch-target"
+        },
+        {
+          "id": "safe-area",
+          "weight": 5,
+          "kind": "source",
+          "pattern": "safe-area-inset"
+        },
+        {
+          "id": "touch-movement-real",
+          "weight": 10,
+          "kind": "test",
+          "tag": "touch-move"
+        },
+        {
+          "id": "real-device-hook",
+          "weight": 10,
+          "kind": "file",
+          "path": "scripts/real-device-gate.js"
+        }
+      ]
+    },
+    "menu": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "shared-ui-shell",
+          "weight": 20,
+          "kind": "file",
+          "path": "shared/golden-ui-shell.js"
+        },
+        {
+          "id": "system-panels-packed",
+          "weight": 20,
+          "kind": "test",
+          "tag": "system-panels-packed"
+        },
+        {
+          "id": "direct-world-selection",
+          "weight": 15,
+          "kind": "test",
+          "tag": "direct-world-selection"
+        },
+        {
+          "id": "touch-target",
+          "weight": 10,
+          "kind": "test",
+          "tag": "touch-target"
+        },
+        {
+          "id": "safe-area",
+          "weight": 10,
+          "kind": "source",
+          "pattern": "safe-area-inset"
+        },
+        {
+          "id": "obstruction-budget",
+          "weight": 15,
+          "kind": "test",
+          "tag": "obstruction-budget"
+        },
+        {
+          "id": "escape-close",
+          "weight": 5,
+          "kind": "test",
+          "tag": "escape-close"
+        },
+        {
+          "id": "focus-visible",
+          "weight": 5,
+          "kind": "source",
+          "pattern": "focus-visible"
+        }
+      ]
+    },
+    "collisions": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "canonical-physics",
+          "weight": 15,
+          "kind": "file",
+          "path": "shared/golden-physics.js"
+        },
+        {
+          "id": "wall-block",
+          "weight": 15,
+          "kind": "test",
+          "tag": "wall-block"
+        },
+        {
+          "id": "step-up",
+          "weight": 15,
+          "kind": "test",
+          "tag": "step-up"
+        },
+        {
+          "id": "too-high-block",
+          "weight": 10,
+          "kind": "test",
+          "tag": "too-high-block"
+        },
+        {
+          "id": "spawn-grounded",
+          "weight": 15,
+          "kind": "test",
+          "tag": "spawn-grounded"
+        },
+        {
+          "id": "fall-respawn",
+          "weight": 10,
+          "kind": "test",
+          "tag": "fall-respawn"
+        },
+        {
+          "id": "no-basic-tunneling",
+          "weight": 10,
+          "kind": "test",
+          "tag": "no-tunneling"
+        },
+        {
+          "id": "swept-substeps",
+          "weight": 10,
+          "kind": "source",
+          "pattern": "moveSwept"
+        },
+        {
+          "id": "fuzz-collision",
+          "weight": 5,
+          "kind": "file",
+          "path": "test/quality-fuzz.test.js"
+        }
+      ]
+    },
+    "codeQuality": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "syntax-check",
+          "weight": 15,
+          "kind": "command",
+          "command": "npm run check"
+        },
+        {
+          "id": "no-false-green",
+          "weight": 15,
+          "kind": "review",
+          "tag": "false-green"
+        },
+        {
+          "id": "canonical-input",
+          "weight": 15,
+          "kind": "review",
+          "tag": "canonical-input"
+        },
+        {
+          "id": "canonical-physics",
+          "weight": 15,
+          "kind": "review",
+          "tag": "canonical-physics"
+        },
+        {
+          "id": "duplicate-detector",
+          "weight": 15,
+          "kind": "file",
+          "path": "scripts/duplicate-system-review.js"
+        },
+        {
+          "id": "dependency-graph",
+          "weight": 10,
+          "kind": "file",
+          "path": "scripts/system-contract-review.js"
+        },
+        {
+          "id": "tests-present",
+          "weight": 15,
+          "kind": "review",
+          "tag": "tests-present"
+        }
+      ]
+    },
+    "codeReviewer": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "project-reviewer",
+          "weight": 25,
+          "kind": "file",
+          "path": "scripts/project-quality-reviewer.js"
+        },
+        {
+          "id": "duplicate-reviewer",
+          "weight": 20,
+          "kind": "file",
+          "path": "scripts/duplicate-system-review.js"
+        },
+        {
+          "id": "contract-reviewer",
+          "weight": 20,
+          "kind": "file",
+          "path": "scripts/system-contract-review.js"
+        },
+        {
+          "id": "technology-audit",
+          "weight": 15,
+          "kind": "file",
+          "path": "scripts/technology-audit.js"
+        },
+        {
+          "id": "regression-gate",
+          "weight": 20,
+          "kind": "file",
+          "path": "scripts/quality-regression-gate.js"
+        }
+      ]
+    },
+    "reports": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "master-report",
+          "weight": 30,
+          "kind": "file",
+          "path": "scripts/quality-master-report.js"
+        },
+        {
+          "id": "regression-report",
+          "weight": 20,
+          "kind": "file",
+          "path": "scripts/quality-regression-gate.js"
+        },
+        {
+          "id": "project-review-report",
+          "weight": 15,
+          "kind": "file",
+          "path": "scripts/project-quality-reviewer.js"
+        },
+        {
+          "id": "tech-report",
+          "weight": 15,
+          "kind": "file",
+          "path": "scripts/technology-audit.js"
+        },
+        {
+          "id": "duplicate-report",
+          "weight": 10,
+          "kind": "file",
+          "path": "scripts/duplicate-system-review.js"
+        },
+        {
+          "id": "contract-report",
+          "weight": 10,
+          "kind": "file",
+          "path": "scripts/system-contract-review.js"
+        }
+      ]
+    },
+    "functionConnectivity": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "golden-registry",
+          "weight": 20,
+          "kind": "file",
+          "path": "data/golden-components.json"
+        },
+        {
+          "id": "capability-map",
+          "weight": 15,
+          "kind": "file",
+          "path": "data/app-capabilities.json"
+        },
+        {
+          "id": "propagation-gate",
+          "weight": 20,
+          "kind": "file",
+          "path": "scripts/propagate-golden-components.js"
+        },
+        {
+          "id": "system-contract-map",
+          "weight": 20,
+          "kind": "file",
+          "path": "data/system-contracts.json"
+        },
+        {
+          "id": "duplicate-system-ban",
+          "weight": 15,
+          "kind": "file",
+          "path": "scripts/duplicate-system-review.js"
+        },
+        {
+          "id": "cross-app-adoption-report",
+          "weight": 10,
+          "kind": "file",
+          "path": "scripts/system-contract-review.js"
+        }
+      ]
+    },
+    "uploadedTechnologyUse": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "evidence-registry",
+          "weight": 20,
+          "kind": "file",
+          "path": "data/technology-registry.json"
+        },
+        {
+          "id": "auto-discovery",
+          "weight": 20,
+          "kind": "file",
+          "path": "scripts/discover-ai3d-engines.js"
+        },
+        {
+          "id": "runtime-health",
+          "weight": 15,
+          "kind": "file",
+          "path": "scripts/technology-runtime-health.js"
+        },
+        {
+          "id": "production-adapters",
+          "weight": 45,
+          "kind": "external",
+          "status": "partial"
+        },
+        {
+          "id": "technology-orchestrator",
+          "weight": 15,
+          "kind": "file",
+          "path": "scripts/technology-orchestrator.js"
+        },
+        {
+          "id": "instantmesh-real-cli",
+          "weight": 15,
+          "kind": "file",
+          "path": "services/ai3d-worker/ai3d/plugins/instantmesh.py"
+        },
+        {
+          "id": "gpu-worker-router",
+          "weight": 10,
+          "kind": "file",
+          "path": "services/ai3d-worker/ai3d/plugins/gpu_router.py"
+        }
+      ]
+    },
+    "errorRecurrenceProtection": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "error-registry",
+          "weight": 20,
+          "kind": "file",
+          "path": "data/error-prevention-registry.json"
+        },
+        {
+          "id": "fix-confirmed-workflow",
+          "weight": 20,
+          "kind": "file",
+          "path": "scripts/quality-event.js"
+        },
+        {
+          "id": "protected-error-lock",
+          "weight": 20,
+          "kind": "file",
+          "path": "scripts/quality-regression-gate.js"
+        },
+        {
+          "id": "auto-capture-new-failures",
+          "weight": 20,
+          "kind": "file",
+          "path": "scripts/capture-regressions.js"
+        },
+        {
+          "id": "history",
+          "weight": 10,
+          "kind": "file",
+          "path": "data/quality-history.json"
+        },
+        {
+          "id": "ci-enforcement",
+          "weight": 10,
+          "kind": "file",
+          "path": ".github/workflows/quality-regression.yml"
+        }
+      ]
+    },
+    "goldenSolutionPropagation": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "golden-registry",
+          "weight": 20,
+          "kind": "file",
+          "path": "data/golden-components.json"
+        },
+        {
+          "id": "promotion-workflow",
+          "weight": 20,
+          "kind": "file",
+          "path": "scripts/quality-event.js"
+        },
+        {
+          "id": "capability-map",
+          "weight": 15,
+          "kind": "file",
+          "path": "data/app-capabilities.json"
+        },
+        {
+          "id": "propagation-gate",
+          "weight": 20,
+          "kind": "file",
+          "path": "scripts/propagate-golden-components.js"
+        },
+        {
+          "id": "adoption-lock",
+          "weight": 15,
+          "kind": "file",
+          "path": "data/golden-adoptions.json"
+        },
+        {
+          "id": "verified-migration",
+          "weight": 10,
+          "kind": "file",
+          "path": "data/quality-migrations.json"
+        }
+      ]
+    },
+    "qualityGrowthAutomation": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "growth-engine",
+          "weight": 10,
+          "kind": "file",
+          "path": "scripts/quality-growth-engine.js"
+        },
+        {
+          "id": "autofix",
+          "weight": 15,
+          "kind": "file",
+          "path": "scripts/quality-autofix.js"
+        },
+        {
+          "id": "auto-pr",
+          "weight": 15,
+          "kind": "file",
+          "path": ".github/workflows/quality-autofix-pr.yml"
+        },
+        {
+          "id": "canary",
+          "weight": 15,
+          "kind": "file",
+          "path": ".github/workflows/quality-canary.yml"
+        },
+        {
+          "id": "rollback",
+          "weight": 10,
+          "kind": "source",
+          "pattern": "vercel rollback"
+        },
+        {
+          "id": "telemetry",
+          "weight": 10,
+          "kind": "file",
+          "path": "shared/quality-telemetry.js"
+        },
+        {
+          "id": "autobisect",
+          "weight": 10,
+          "kind": "file",
+          "path": ".github/workflows/quality-bisect.yml"
+        },
+        {
+          "id": "mutation-safety",
+          "weight": 5,
+          "kind": "file",
+          "path": "test/quality-mutation.test.js"
+        },
+        {
+          "id": "stability-runs",
+          "weight": 5,
+          "kind": "file",
+          "path": "scripts/test-stability-runner.js"
+        },
+        {
+          "id": "issue-sync",
+          "weight": 5,
+          "kind": "file",
+          "path": "scripts/quality-issue-sync.js"
+        },
+        {
+          "id": "fuzz-property-tests",
+          "weight": 8,
+          "kind": "file",
+          "path": "test/quality-fuzz.test.js"
+        },
+        {
+          "id": "impact-graph",
+          "weight": 8,
+          "kind": "file",
+          "path": "scripts/quality-impact-graph.js"
+        },
+        {
+          "id": "change-impact-analysis",
+          "weight": 6,
+          "kind": "file",
+          "path": "scripts/quality-changed-impact.js"
+        },
+        {
+          "id": "learn-confirmed-fixes",
+          "weight": 8,
+          "kind": "file",
+          "path": "scripts/quality-learn-fix.js"
+        },
+        {
+          "id": "sandbox-patch-synthesis",
+          "weight": 12,
+          "kind": "file",
+          "path": "scripts/quality-patch-synthesizer.js"
+        },
+        {
+          "id": "perceptual-gate",
+          "weight": 8,
+          "kind": "file",
+          "path": "e2e/perceptual-visual.spec.js"
+        },
+        {
+          "id": "gpu-routing",
+          "weight": 8,
+          "kind": "file",
+          "path": "services/ai3d-worker/ai3d/plugins/gpu_router.py"
+        },
+        {
+          "id": "progressive-rollout",
+          "weight": 10,
+          "kind": "file",
+          "path": ".github/workflows/quality-progressive-rollout.yml"
+        },
+        {
+          "id": "deployment-bisect",
+          "weight": 5,
+          "kind": "file",
+          "path": "scripts/vercel-deployment-bisect.sh"
+        },
+        {
+          "id": "self-evolution-cycle",
+          "weight": 12,
+          "kind": "file",
+          "path": "scripts/quality-self-evolve.js"
+        },
+        {
+          "id": "patch-tournament",
+          "weight": 10,
+          "kind": "file",
+          "path": "scripts/quality-patch-tournament.js"
+        },
+        {
+          "id": "root-cause",
+          "weight": 8,
+          "kind": "file",
+          "path": "scripts/quality-root-cause.js"
+        },
+        {
+          "id": "auto-regression-tests",
+          "weight": 12,
+          "kind": "file",
+          "path": "scripts/generate-regression-tests.js"
+        },
+        {
+          "id": "golden-versioning",
+          "weight": 8,
+          "kind": "file",
+          "path": "data/golden-component-evolution.json"
+        },
+        {
+          "id": "perf-autotuner",
+          "weight": 8,
+          "kind": "file",
+          "path": "shared/golden-performance-autotuner.js"
+        },
+        {
+          "id": "mesh-optimizer",
+          "weight": 8,
+          "kind": "file",
+          "path": "services/ai3d-worker/ai3d/plugins/mesh_quality_optimizer.py"
+        },
+        {
+          "id": "asset-dedup",
+          "weight": 6,
+          "kind": "file",
+          "path": "scripts/asset-dedup-cache.js"
+        },
+        {
+          "id": "risk-predictor",
+          "weight": 6,
+          "kind": "file",
+          "path": "scripts/quality-risk-predictor.js"
+        },
+        {
+          "id": "cost-optimizer",
+          "weight": 6,
+          "kind": "file",
+          "path": "scripts/quality-cost-optimizer.js"
+        },
+        {
+          "id": "knowledge-graph",
+          "weight": 8,
+          "kind": "file",
+          "path": "scripts/quality-knowledge-graph.js"
+        },
+        {
+          "id": "durable-cycle",
+          "weight": 6,
+          "kind": "file",
+          "path": "scripts/durable-quality-cycle.js"
+        }
+      ]
+    },
+    "desktopAIContinuity": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "canonical-desktop-instruction",
+          "weight": 25,
+          "kind": "file",
+          "path": "DESKTOP_AI_INSTALL_AND_VERIFY.md"
+        },
+        {
+          "id": "mandatory-work-md",
+          "weight": 25,
+          "kind": "file",
+          "path": "WORK_IN_PROGRESS.md"
+        },
+        {
+          "id": "machine-policy",
+          "weight": 15,
+          "kind": "file",
+          "path": "data/desktop-ai-policy.json"
+        },
+        {
+          "id": "release-gate-enforcement",
+          "weight": 20,
+          "kind": "file",
+          "path": "scripts/check-desktop-ai-protocol.js"
+        },
+        {
+          "id": "task-initializer",
+          "weight": 15,
+          "kind": "file",
+          "path": "scripts/desktop-ai-new-task.js"
+        }
+      ]
+    }
+  }
+}
