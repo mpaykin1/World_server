@@ -47,6 +47,30 @@ jobs:
       - name: AI3D Voxel City autoplay (Playwright) ai3d-voxel-city-autoplay (hard)
         run: npx playwright test
 
+  lighthouse:
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+      - run: npm ci --ignore-scripts || npm install
+      - name: Build Sentry runtime for LHCI pages
+        run: |
+          npm run build:sentry
+          node scripts/inject-sentry-runtime.js
+      - name: Run Lighthouse CI (ubuntu-latest, port 3100, cross-platform no shell quotes)
+        run: npx lhci autorun
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: .lighthouseci
+          if-no-files-found: warn
+
   agent-rules:
     runs-on: ubuntu-latest
     steps:
