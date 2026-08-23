@@ -50,6 +50,7 @@ jobs:
   lighthouse:
     runs-on: ubuntu-latest
     needs: check
+    if: always()
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
