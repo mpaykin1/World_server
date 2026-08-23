@@ -74,7 +74,7 @@ func _apply_look_delta(delta: Vector2) -> void:
     rotation.z = 0.0
 
     # HARD INVARIANT: up/down changes head pitch around local X only.
-    var next_pitch := clamp(head.rotation.x - delta.y * mouse_sensitivity, -MAX_PITCH, MAX_PITCH)
+    var next_pitch: float = clamp(head.rotation.x - delta.y * mouse_sensitivity, -MAX_PITCH, MAX_PITCH)
     head.rotation = Vector3(next_pitch, 0.0, 0.0)
 
 func _physics_process(delta: float) -> void:
