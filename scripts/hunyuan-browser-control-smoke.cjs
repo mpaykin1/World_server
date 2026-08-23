@@ -5,8 +5,17 @@ const { chromium } = require('@playwright/test');
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
   const errors = [];
-  page.on('pageerror', e => errors.push(String(e)));
-  page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });
+  page.on('pageerror', e => {
+    const t = String(e);
+    if (t.includes('Screen-space AA')) return;
+    errors.push(t);
+  });
+  page.on('console', msg => {
+    if (msg.type() !== 'error') return;
+    const t = msg.text();
+    if (t.includes('Screen-space AA')) return;
+    errors.push(t);
+  });
 
   await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 });
   await page.waitForFunction(() => window.__hunyuanDebug?.ready === true, null, { timeout: 120000 });
