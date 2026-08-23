@@ -33,6 +33,8 @@ jobs:
         run: node scripts/check-ai3d-delivery-policy.js
       - name: AI3D V4 combined integration (hard)
         run: node scripts/check-ai3d-v4-combined.js
+      - name: WORLD SERVER Golden Standard source/release gate (hard)
+        run: npm run release:gate
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
       - name: AI3D Voxel City autoplay (Playwright) ai3d-voxel-city-autoplay (hard)

@@ -100,6 +100,7 @@ function init3D(){
   addEventListener('keyup',e=>{
     keysHeld.delete(e.code);
   });
+  addEventListener('goldenlook',e=>{if(!playableMode)return;const d=e.detail||{};yaw-=(Number(d.dx)||0)*.005;pitch=Math.max(-1.45,Math.min(1.45,pitch-(Number(d.dy)||0)*.005));player.yaw=yaw;player.pitch=pitch;});
   addEventListener('resize',fitCameras);
   animate();
 }
@@ -343,8 +344,26 @@ function adaptResolution(){
     dynamicPixelRatio=next;renderer.setPixelRatio(dynamicPixelRatio);fitCameras();
   }
 }
+const GOLDEN_STEP_HEIGHTS=[.25,.5,.75,1.0,1.05];
+function goldenPlayableHorizontal(axis,delta,allowStep){
+  if(!delta)return true;
+  const start={x:player.x,y:player.y,z:player.z};
+  const tx=axis==='x'?start.x+delta:start.x;
+  const tz=axis==='z'?start.z+delta:start.z;
+  if(!collidesAt(tx,start.y,tz)){player[axis]+=delta;return true;}
+  if(allowStep){
+    for(const h of GOLDEN_STEP_HEIGHTS){
+      const ry=start.y+h;
+      if(collidesAt(start.x,ry,start.z))continue;
+      if(collidesAt(tx,ry,tz))continue;
+      player.y=ry;player[axis]+=delta;player.vy=Math.max(0,player.vy);return true;
+    }
+  }
+  return false;
+}
 function updatePlayer(dt){
   if(!playableMode || !world) return;
+  const wasGrounded=player.onGround;
   // gather input from both custom keysHeld and __AI3D_PLAYABLE_SCENE__ input (WASD/arrows)
   let f=0,s=0;
   const sceneInput = window.__AI3D_PLAYABLE_SCENE__ ? window.__AI3D_PLAYABLE_SCENE__.input() : null;
@@ -360,23 +379,14 @@ function updatePlayer(dt){
   const len=Math.hypot(f,s);
   if(len>0){ f/=len; s/=len; }
   const speed=player.speed * ((sceneInput && sceneInput.run)|| keysHeld.has('ShiftLeft') ? 1.8 : 1);
-  const sin=Math.sin(yaw), cos=Math.cos(yaw);
-  const wishX = (s*cos + f*sin) * speed;
-  const wishZ = (s*sin - f*cos) * speed;
+  const move=window.GameGoldenPhysics.canonicalXZ(yaw,f,s,speed);
+  const wishX=move.x;
+  const wishZ=move.z;
   // gravity
   player.vy -= 9.8 * dt;
-  // horizontal move with collision
-  let nx = player.x + wishX * dt;
-  if(!collidesAt(nx, player.y, player.z)) player.x = nx;
-  else {
-    // slide along x separately? try small steps
-    if(!collidesAt(player.x + wishX*dt*0.5, player.y, player.z)) player.x += wishX*dt*0.5;
-  }
-  let nz = player.z + wishZ * dt;
-  if(!collidesAt(player.x, player.y, nz)) player.z = nz;
-  else {
-    if(!collidesAt(player.x, player.y, player.z + wishZ*dt*0.5)) player.z += wishZ*dt*0.5;
-  }
+  // Golden Standard: collision is axis-separated and can climb <= 1 voxel stairs.
+  goldenPlayableHorizontal('x',wishX*dt,wasGrounded);
+  goldenPlayableHorizontal('z',wishZ*dt,wasGrounded);
   // vertical
   let ny = player.y + player.vy * dt;
   const groundProbeY = findGroundY(player.x, player.z);
@@ -623,7 +633,8 @@ window.AI3DVoxelRuntime={
   setStreamingCenter(x,y,z){streamingCenter=new THREE.Vector3(Number(x)||0,Number(y)||0,Number(z)||0);updateStreaming(true);},
   clearStreamingCenter(){streamingCenter=null;updateStreaming(true);},
   setQuality(name){const n=String(name||'').toUpperCase();if(n==='AUTO'||PROFILES[n]){$('quality').value=n;$('quality').dispatchEvent(new Event('change'));}},
-  stats(){return {fps:measuredFps,pixelRatio:dynamicPixelRatio,renderer:renderer?.info?.render,mesher:mesherStats,chunks:chunkObjects.size, voxels:world?world.voxels.length:0, player:{x:player.x,y:player.y,z:player.z,onGround:player.onGround, playable:playableMode}, defaultCityLoaded};},
+  setPlayerView(nextYaw,nextPitch=0){yaw=Number(nextYaw)||0;pitch=Math.max(-1.45,Math.min(1.45,Number(nextPitch)||0));player.yaw=yaw;player.pitch=pitch;},
+  stats(){return {fps:measuredFps,pixelRatio:dynamicPixelRatio,renderer:renderer?.info?.render,mesher:mesherStats,chunks:chunkObjects.size, voxels:world?world.voxels.length:0, player:{x:player.x,y:player.y,z:player.z,yaw,onGround:player.onGround, playable:playableMode}, defaultCityLoaded};},
   collidesAt(x,y,z){ return collidesAt(x,y,z); },
   getOccupancySize(){ return occupancySet.size; }
 };
@@ -632,3 +643,5 @@ window.__AI3D_DEFAULT_CITY_AUTOPLAY__ = { autoLoad: autoLoadDefaultCity, get sta
 
 init3D();health();
 autoLoadDefaultCity();
+
+try{if(typeof renderer!=='undefined')window.GoldenPerformanceAutoTune?.registerRenderer(renderer,{targetFps:matchMedia('(pointer:coarse)').matches?45:55,minDpr:.75,maxDpr:Math.min(devicePixelRatio||1,2)});}catch{}

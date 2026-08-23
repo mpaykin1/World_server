@@ -81,6 +81,7 @@ const keys = new Set(); let yaw=0, pitch=.38; let mouseDown=false;
 addEventListener('keydown',e=>keys.add(e.code)); addEventListener('keyup',e=>keys.delete(e.code));
 addEventListener('mousedown',()=>mouseDown=true); addEventListener('mouseup',()=>mouseDown=false);
 addEventListener('mousemove',e=>{ if(mouseDown || document.pointerLockElement){ yaw -= e.movementX*.003; pitch = Math.max(.15, Math.min(.9, pitch - e.movementY*.002)); }});
+addEventListener('goldenlook',e=>{const d=e.detail||{};yaw-=(Number(d.dx)||0)*.005;pitch=Math.max(.15,Math.min(.9,pitch-(Number(d.dy)||0)*.003));});
 renderer.domElement.addEventListener('click',()=>renderer.domElement.requestPointerLock?.());
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
 
@@ -563,7 +564,8 @@ function animate(now){
   requestAnimationFrame(animate); const dt=Math.min(.05,(now-last)/1000); last=now;
   const speed = keys.has('ShiftLeft') ? 20 : 10;
   const forward = new THREE.Vector3(Math.sin(yaw),0,Math.cos(yaw));
-  const right = new THREE.Vector3(Math.cos(yaw),0,-Math.sin(yaw));
+  const basis=window.GameGoldenStandard?.basisFromForward(forward.x,forward.z);
+  const right = basis ? new THREE.Vector3(basis.right.x,0,basis.right.z) : new THREE.Vector3(-Math.cos(yaw),0,Math.sin(yaw));
   const move = new THREE.Vector3();
   if(keys.has('KeyW')) move.add(forward); if(keys.has('KeyS')) move.sub(forward); if(keys.has('KeyD')) move.add(right); if(keys.has('KeyA')) move.sub(right);
   if(move.lengthSq()>0){ move.normalize().multiplyScalar(speed*dt); player.position.add(move); player.rotation.y=yaw; }

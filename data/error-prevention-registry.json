@@ -1,0 +1,182 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "ERROR_RECURRENCE_PROTECTION",
+  "policy": "confirmed-fix-becomes-permanent-regression-rule",
+  "events": [],
+  "knownErrors": [
+    {
+      "id": "controls-inverted-camera-relative",
+      "category": "controls",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "W/S or A/D reverse after camera yaw or feel inverted",
+      "rootCause": "inconsistent camera-forward/screen-right basis math",
+      "protection": [
+        "canonical movement basis",
+        "behavioral yaw regression test"
+      ]
+    },
+    {
+      "id": "mobile-entry-not-clickable",
+      "category": "mobile",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "primary enter/play control cannot be activated on phone",
+      "rootCause": "desktop-only pointer/input path or overlay interception",
+      "protection": [
+        "real mobile emulation",
+        "tap target test",
+        "pointer/touch event coverage"
+      ]
+    },
+    {
+      "id": "mobile-controls-missing",
+      "category": "mobile",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "world loads on phone but cannot be played",
+      "rootCause": "no shared touch movement/look contract",
+      "protection": [
+        "mobile Playwright project",
+        "touch joystick/look/jump gate"
+      ]
+    },
+    {
+      "id": "stairs-collision-broken",
+      "category": "collision",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "player is blocked by stairs or cannot step onto valid steps",
+      "rootCause": "collision without standardized step-up behavior",
+      "protection": [
+        "step-up<=1.05 behavioral test",
+        "canonical collision helper"
+      ]
+    },
+    {
+      "id": "wall-collision-broken",
+      "category": "collision",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "player passes through walls",
+      "rootCause": "missing/incorrect horizontal collision behavior",
+      "protection": [
+        "wall traversal negative test",
+        "spawn/ground/wall collision contract"
+      ]
+    },
+    {
+      "id": "spawn-not-grounded",
+      "category": "collision",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "player appears in air/inside geometry/wrong orientation",
+      "rootCause": "spawn not derived from valid walkable surface",
+      "protection": [
+        "grounded spawn behavioral test",
+        "orientation invariant"
+      ]
+    },
+    {
+      "id": "jump-moves-forward",
+      "category": "controls",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "Space moves forward/depth instead of jumping vertically",
+      "rootCause": "jump coupled to camera/world transform",
+      "protection": [
+        "Space-only-Y invariant",
+        "world transform lock"
+      ]
+    },
+    {
+      "id": "camera-roll-on-look",
+      "category": "camera",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "horizontal look rolls/flips image",
+      "rootCause": "yaw/pitch/roll axes mixed",
+      "protection": [
+        "yaw body Y only",
+        "pitch camera X only",
+        "roll==0 invariant"
+      ]
+    },
+    {
+      "id": "catalog-auto-publishes-index-html",
+      "category": "release",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "diagnostic/incomplete apps become public automatically",
+      "rootCause": "allow-by-existence catalog discovery",
+      "protection": [
+        "deny-by-default certified registry"
+      ]
+    },
+    {
+      "id": "false-green-assertion",
+      "category": "tests",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "test passes without evaluating matcher",
+      "rootCause": "matcher referenced without invocation",
+      "protection": [
+        "static matcher invocation scan",
+        "CI hard failure"
+      ]
+    },
+    {
+      "id": "menu-obstructs-game",
+      "category": "ui",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "technical/status text or large panels obstruct gameplay",
+      "rootCause": "system information rendered persistently",
+      "protection": [
+        "compact icon menu contract",
+        "HUD obstruction audit",
+        "mobile safe-area test"
+      ]
+    },
+    {
+      "id": "world-selection-walk-only",
+      "category": "ui",
+      "severity": "major",
+      "status": "known",
+      "symptom": "user must walk to portal to choose a world",
+      "rootCause": "no direct tappable/clickable world picker",
+      "protection": [
+        "direct world-selection menu gate"
+      ]
+    }
+  ],
+  "confirmationProtocol": {
+    "triggerExamples": [
+      "ошибка исправлена",
+      "теперь работает",
+      "коллизии исправлены",
+      "управление правильное"
+    ],
+    "requiredAction": [
+      "status=protected",
+      "append FIX_CONFIRMED event",
+      "attach regression rule/test",
+      "run quality:sync"
+    ]
+  },
+  "candidates": [
+    {
+      "id": "auto-505f975e75a0",
+      "status": "candidate",
+      "severity": "release-blocker",
+      "sourceReport": "PROJECT_QUALITY_REVIEW.json",
+      "detectedAt": "2026-08-23T03:43:23.807Z",
+      "details": {
+        "severity": "major",
+        "category": "mobile",
+        "file": "apps/ai3d-voxel-city/index.html",
+        "message": "viewport-fit=cover missing"
+      }
+    }
+  ]
+}

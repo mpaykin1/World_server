@@ -1,0 +1,795 @@
+{
+  "generatedAt": "2026-08-23T03:44:13.944Z",
+  "candidateStatus": "PREPARED_NOT_DEPLOYED",
+  "scores": {
+    "controls": 100,
+    "graphics": 87.3,
+    "deviceAccessibility": 100,
+    "menu": 100,
+    "collisions": 100,
+    "codeQuality": 100,
+    "codeReviewer": 100,
+    "reports": 100,
+    "functionConnectivity": 100,
+    "uploadedTechnologyUse": 67.9,
+    "errorRecurrenceProtection": 100,
+    "goldenSolutionPropagation": 85,
+    "qualityGrowthAutomation": 96.3,
+    "desktopAIContinuity": 100
+  },
+  "overall": 95.5,
+  "detail": {
+    "controls": [
+      {
+        "id": "canonical-basis",
+        "weight": 15,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "desktop-cardinal-directions",
+        "weight": 20,
+        "pass": true,
+        "status": "prepared-test"
+      },
+      {
+        "id": "desktop-diagonal-directions",
+        "weight": 10,
+        "pass": true,
+        "status": "prepared-test"
+      },
+      {
+        "id": "mouse-look",
+        "weight": 15,
+        "pass": true,
+        "status": "prepared-test"
+      },
+      {
+        "id": "jump-y-only",
+        "weight": 15,
+        "pass": true,
+        "status": "prepared-test"
+      },
+      {
+        "id": "camera-roll-zero",
+        "weight": 10,
+        "pass": true,
+        "status": "prepared-test"
+      },
+      {
+        "id": "touch-move",
+        "weight": 10,
+        "pass": true,
+        "status": "prepared-test"
+      },
+      {
+        "id": "touch-look",
+        "weight": 5,
+        "pass": true,
+        "status": "prepared-test"
+      },
+      {
+        "id": "fuzz-controls",
+        "weight": 5,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "graphics": [
+      {
+        "id": "render-surface-visible",
+        "weight": 15,
+        "pass": true,
+        "status": "prepared-test"
+      },
+      {
+        "id": "no-primary-blur",
+        "weight": 10,
+        "pass": true,
+        "status": "prepared-test"
+      },
+      {
+        "id": "nonzero-render-stats",
+        "weight": 10,
+        "pass": true,
+        "status": "prepared-test"
+      },
+      {
+        "id": "adaptive-resolution",
+        "weight": 10,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "local-three-vendor-or-controlled-import",
+        "weight": 10,
+        "pass": true,
+        "status": "review-prepared"
+      },
+      {
+        "id": "golden-visual-registry",
+        "weight": 15,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "visual-regression-harness",
+        "weight": 15,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "approved-screenshot-baselines",
+        "weight": 15,
+        "pass": false,
+        "status": "missing"
+      },
+      {
+        "id": "performance-budgets",
+        "weight": 5,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "hud-visual-audit",
+        "weight": 5,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "perceptual-regression",
+        "weight": 8,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "deviceAccessibility": [
+      {
+        "id": "desktop-chrome",
+        "weight": 20,
+        "pass": true,
+        "status": "configured"
+      },
+      {
+        "id": "android-phone",
+        "weight": 25,
+        "pass": true,
+        "status": "configured"
+      },
+      {
+        "id": "iphone-emulation",
+        "weight": 20,
+        "pass": true,
+        "status": "configured"
+      },
+      {
+        "id": "tablet-emulation",
+        "weight": 10,
+        "pass": true,
+        "status": "configured"
+      },
+      {
+        "id": "touch-target-44",
+        "weight": 10,
+        "pass": true,
+        "status": "prepared-test"
+      },
+      {
+        "id": "safe-area",
+        "weight": 5,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "touch-movement-real",
+        "weight": 10,
+        "pass": true,
+        "status": "prepared-test"
+      },
+      {
+        "id": "real-device-hook",
+        "weight": 10,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "menu": [
+      {
+        "id": "shared-ui-shell",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "system-panels-packed",
+        "weight": 20,
+        "pass": true,
+        "status": "prepared-test"
+      },
+      {
+        "id": "direct-world-selection",
+        "weight": 15,
+        "pass": true,
+        "status": "prepared-test"
+      },
+      {
+        "id": "touch-target",
+        "weight": 10,
+        "pass": true,
+        "status": "prepared-test"
+      },
+      {
+        "id": "safe-area",
+        "weight": 10,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "obstruction-budget",
+        "weight": 15,
+        "pass": true,
+        "status": "prepared-test"
+      },
+      {
+        "id": "escape-close",
+        "weight": 5,
+        "pass": true,
+        "status": "prepared-test"
+      },
+      {
+        "id": "focus-visible",
+        "weight": 5,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "collisions": [
+      {
+        "id": "canonical-physics",
+        "weight": 15,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "wall-block",
+        "weight": 15,
+        "pass": true,
+        "status": "unit-pass"
+      },
+      {
+        "id": "step-up",
+        "weight": 15,
+        "pass": true,
+        "status": "unit-pass"
+      },
+      {
+        "id": "too-high-block",
+        "weight": 10,
+        "pass": true,
+        "status": "unit-pass"
+      },
+      {
+        "id": "spawn-grounded",
+        "weight": 15,
+        "pass": true,
+        "status": "prepared-test"
+      },
+      {
+        "id": "fall-respawn",
+        "weight": 10,
+        "pass": true,
+        "status": "prepared-test"
+      },
+      {
+        "id": "no-basic-tunneling",
+        "weight": 10,
+        "pass": true,
+        "status": "unit-pass"
+      },
+      {
+        "id": "swept-substeps",
+        "weight": 10,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "fuzz-collision",
+        "weight": 5,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "codeQuality": [
+      {
+        "id": "syntax-check",
+        "weight": 15,
+        "pass": true,
+        "status": "validated by release gate"
+      },
+      {
+        "id": "no-false-green",
+        "weight": 15,
+        "pass": true,
+        "status": "static-pass"
+      },
+      {
+        "id": "canonical-input",
+        "weight": 15,
+        "pass": true,
+        "status": "static-pass"
+      },
+      {
+        "id": "canonical-physics",
+        "weight": 15,
+        "pass": true,
+        "status": "static-pass"
+      },
+      {
+        "id": "duplicate-detector",
+        "weight": 15,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "dependency-graph",
+        "weight": 10,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "tests-present",
+        "weight": 15,
+        "pass": true,
+        "status": "static-pass"
+      }
+    ],
+    "codeReviewer": [
+      {
+        "id": "project-reviewer",
+        "weight": 25,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "duplicate-reviewer",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "contract-reviewer",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "technology-audit",
+        "weight": 15,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "regression-gate",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "reports": [
+      {
+        "id": "master-report",
+        "weight": 30,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "regression-report",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "project-review-report",
+        "weight": 15,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "tech-report",
+        "weight": 15,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "duplicate-report",
+        "weight": 10,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "contract-report",
+        "weight": 10,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "functionConnectivity": [
+      {
+        "id": "golden-registry",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "capability-map",
+        "weight": 15,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "propagation-gate",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "system-contract-map",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "duplicate-system-ban",
+        "weight": 15,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "cross-app-adoption-report",
+        "weight": 10,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "uploadedTechnologyUse": [
+      {
+        "id": "evidence-registry",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "auto-discovery",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "runtime-health",
+        "weight": 15,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "production-adapters",
+        "weight": 45,
+        "pass": false,
+        "status": "partial"
+      },
+      {
+        "id": "technology-orchestrator",
+        "weight": 15,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "instantmesh-real-cli",
+        "weight": 15,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "gpu-worker-router",
+        "weight": 10,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "errorRecurrenceProtection": [
+      {
+        "id": "error-registry",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "fix-confirmed-workflow",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "protected-error-lock",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "auto-capture-new-failures",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "history",
+        "weight": 10,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "ci-enforcement",
+        "weight": 10,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "goldenSolutionPropagation": [
+      {
+        "id": "golden-registry",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "promotion-workflow",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "capability-map",
+        "weight": 15,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "propagation-gate",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "adoption-lock",
+        "weight": 15,
+        "pass": false,
+        "status": "missing"
+      },
+      {
+        "id": "verified-migration",
+        "weight": 10,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "qualityGrowthAutomation": [
+      {
+        "id": "growth-engine",
+        "weight": 10,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "autofix",
+        "weight": 15,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "auto-pr",
+        "weight": 15,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "canary",
+        "weight": 15,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "rollback",
+        "weight": 10,
+        "pass": false,
+        "status": "missing"
+      },
+      {
+        "id": "telemetry",
+        "weight": 10,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "autobisect",
+        "weight": 10,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "mutation-safety",
+        "weight": 5,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "stability-runs",
+        "weight": 5,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "issue-sync",
+        "weight": 5,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "fuzz-property-tests",
+        "weight": 8,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "impact-graph",
+        "weight": 8,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "change-impact-analysis",
+        "weight": 6,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "learn-confirmed-fixes",
+        "weight": 8,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "sandbox-patch-synthesis",
+        "weight": 12,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "perceptual-gate",
+        "weight": 8,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "gpu-routing",
+        "weight": 8,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "progressive-rollout",
+        "weight": 10,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "deployment-bisect",
+        "weight": 5,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "self-evolution-cycle",
+        "weight": 12,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "patch-tournament",
+        "weight": 10,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "root-cause",
+        "weight": 8,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "auto-regression-tests",
+        "weight": 12,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "golden-versioning",
+        "weight": 8,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "perf-autotuner",
+        "weight": 8,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "mesh-optimizer",
+        "weight": 8,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "asset-dedup",
+        "weight": 6,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "risk-predictor",
+        "weight": 6,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "cost-optimizer",
+        "weight": 6,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "knowledge-graph",
+        "weight": 8,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "durable-cycle",
+        "weight": 6,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "desktopAIContinuity": [
+      {
+        "id": "canonical-desktop-instruction",
+        "weight": 25,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "mandatory-work-md",
+        "weight": 25,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "machine-policy",
+        "weight": 15,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "release-gate-enforcement",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "task-initializer",
+        "weight": 15,
+        "pass": true,
+        "status": "present"
+      }
+    ]
+  }
+}
