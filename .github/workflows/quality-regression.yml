@@ -25,8 +25,8 @@ jobs:
       - run: npm ci
       - name: Hard source + no-regression gate
         run: npm run release:gate
-      - name: Install Chromium
-        run: npx playwright install --with-deps chromium
+      - name: Install Playwright browsers (chromium + webkit for iPhone emulation)
+        run: npx playwright install --with-deps chromium webkit
       - name: Desktop + mobile behavioral gate
         run: npm run golden:e2e
       - name: Quality delta
