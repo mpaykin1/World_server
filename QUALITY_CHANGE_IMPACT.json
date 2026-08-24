@@ -1,11 +1,13 @@
 {
-  "generatedAt": "2026-08-24T06:26:11.158Z",
+  "generatedAt": "2026-08-24T06:55:15.983Z",
   "changed": [
+    ".github/workflows/ci.yml",
     ".github/workflows/supabase-schema-autosync.yml",
     ".github/workflows/supabase-schema-drift.yml",
     "AGENTS.md",
     "DESKTOP_AI_INSTALL_AND_VERIFY.md",
     "DESKTOP_AI_PROTOCOL_REPORT.json",
+    "DISCOVERED_TECHNOLOGIES.json",
     "DUPLICATE_SYSTEM_REPORT.json",
     "EVIDENCE_QUALITY_REPORT.json",
     "PROJECT_QUALITY_REVIEW.json",
@@ -14,6 +16,7 @@
     "QUALITY_ISSUE_CANDIDATES.json",
     "QUALITY_REGRESSION_REPORT.json",
     "QUALITY_REPORT.json",
+    "SYSTEM_COHESION_REPORT.json",
     "SYSTEM_CONTRACT_REPORT.json",
     "TECHNOLOGY_AUDIT.json",
     "TECHNOLOGY_ORCHESTRATOR_REPORT.json",
@@ -37,12 +40,35 @@
     "WORLD_SEMANTIC_DETAIL_REPORT.json",
     "WORLD_VISIBILITY_OPTIMIZER_REPORT.json",
     "WORLD_VISUAL_BASELINE_CANDIDATES.json",
+    "apps/ai3d-voxel-city/client.js",
     "data/supabase-migration-manifest.json",
+    "data/system-cohesion-registry.json",
+    "e2e/golden-controls.spec.js",
+    "e2e/hud-visual-audit.spec.js",
+    "e2e/perceptual-visual.spec.js",
+    "e2e/perceptual-visual.spec.js-snapshots/cube-object-desktop-chromium-win32.png",
+    "e2e/perceptual-visual.spec.js-snapshots/cube-object-mobile-chromium-win32.png",
+    "e2e/perceptual-visual.spec.js-snapshots/cube-object-mobile-webkit-win32.png",
+    "e2e/perceptual-visual.spec.js-snapshots/cube-object-tablet-chromium-win32.png",
+    "package.json",
     "scripts/ensure-master-protection.ps1",
     "scripts/fetch-quality-work-packet.cjs",
     "scripts/record-supabase-repo-manifest.cjs",
-    "scripts/sync-supabase-migrations.cjs"
+    "scripts/sync-supabase-migrations.cjs",
+    "scripts/system-cohesion-engine.js",
+    "shared/webgpu-enhancement-stub.js",
+    "test/system-cohesion.test.js",
+    "visual-candidates/desktop-chromium/ai3d-voxel-city.png",
+    "visual-candidates/desktop-chromium/catalog.png",
+    "visual-candidates/desktop-chromium/voxel-world.png"
   ],
-  "affectedApps": [],
-  "why": []
+  "affectedApps": [
+    "ai3d-voxel-city"
+  ],
+  "why": [
+    {
+      "from": "apps/ai3d-voxel-city/client.js",
+      "to": "app:ai3d-voxel-city"
+    }
+  ]
 }

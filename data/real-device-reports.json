@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "REAL_DEVICE_EVIDENCE",
+  "note": "Placeholder reports — verified=false until provider verification. Emulation is not accepted.",
+  "reports": [
+    {
+      "id": "ios-placeholder-001",
+      "device": "physical-ios-phone",
+      "provider": "not-configured",
+      "runId": "pending",
+      "artifactUrl": "https://example.com/ios-report",
+      "verified": false,
+      "createdAt": "2026-08-24T06:55:00Z"
+    },
+    {
+      "id": "android-placeholder-001",
+      "device": "physical-android-phone",
+      "provider": "not-configured",
+      "runId": "pending",
+      "artifactUrl": "https://example.com/android-report",
+      "verified": false,
+      "createdAt": "2026-08-24T06:55:00Z"
+    }
+  ]
+}
