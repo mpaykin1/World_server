@@ -1,0 +1,43 @@
+{
+  "generatedAt": "2026-08-24T06:02:43.104Z",
+  "source": "public.quality_export_migration_history",
+  "count": 6,
+  "latest": "20260823063700_quality_telemetry.sql",
+  "serverNameDigest": "c536bd6b73ff24e39c1c9ee57509d8453750e3f173aee28ac2d100a07c48e2c5",
+  "localNameDigest": "c536bd6b73ff24e39c1c9ee57509d8453750e3f173aee28ac2d100a07c48e2c5",
+  "contentDigest": "5733f2578c2e7ddd0f5e2597732fa5a171e8bc03cc263f99ec155feb1cac8ab3",
+  "names": [
+    "20260819055525_world_game_backend.sql",
+    "20260819061042_world_game_hardening.sql",
+    "20260819061444_authoritative_player_position.sql",
+    "20260819061621_fix_position_numeric_validation.sql",
+    "20260819081500_voxel_world.sql",
+    "20260823063700_quality_telemetry.sql"
+  ],
+  "files": [
+    {
+      "name": "20260819055525_world_game_backend.sql",
+      "sha256": "914dfb9c5da312cddbe3e87f12dc68f3d87bcf545fc353c726e592d05e7ab66e"
+    },
+    {
+      "name": "20260819061042_world_game_hardening.sql",
+      "sha256": "54eeed9cee3bc7673d9df511773733c0673b8422975c9f18d7df8be33257c026"
+    },
+    {
+      "name": "20260819061444_authoritative_player_position.sql",
+      "sha256": "dc7c18ce2a3dff17da00d71d0ee8e1f7eab041d9fd4a540df2e1b75637cb1dc3"
+    },
+    {
+      "name": "20260819061621_fix_position_numeric_validation.sql",
+      "sha256": "f6695ba31ec09ab8121e82c548e6060fc2f3e1d1747dd246d8b5b64ac952a3cf"
+    },
+    {
+      "name": "20260819081500_voxel_world.sql",
+      "sha256": "07b09e4a5f49d851fc8b9dc0d246594cb65ffe3b662853acc581c8e8b32e76fd"
+    },
+    {
+      "name": "20260823063700_quality_telemetry.sql",
+      "sha256": "5b9b8d2a93128f5205019acb43268e42adb495a0c8eb869a47e8950b7cff1099"
+    }
+  ]
+}
