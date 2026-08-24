@@ -1,7 +1,7 @@
 {
   "schemaVersion": "4.0.0",
   "system": "WORLD_RETARGET_CONTRACT",
-  "generatedAt": "2026-08-24T05:06:35.395Z",
+  "generatedAt": "2026-08-24T05:13:04.975Z",
   "boneAliases": {
     "hips": [
       "Hips",
@@ -49,9 +49,9 @@
     "maxFootSlideMetersPerSecond": 0.18,
     "maxJitterDegreesPerFrame": 12
   },
-  "runtimeSamples": 0,
-  "mappedRuntimeSamples": 0,
+  "runtimeSamples": 2,
+  "mappedRuntimeSamples": 2,
   "contractReady": true,
-  "runtimeEvidenceReady": false,
-  "note": "Universal semantic contract is installed; real rig evidence is still required for 100% animation."
+  "runtimeEvidenceReady": true,
+  "note": "Runtime skeleton evidence evaluated."
 }

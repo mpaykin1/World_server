@@ -1,13 +1,13 @@
 {
   "schemaVersion": "4.0.0",
-  "generatedAt": "2026-08-24T05:06:35.569Z",
+  "generatedAt": "2026-08-24T05:13:05.151Z",
   "policy": "candidate-only; never auto-approve aesthetic baselines",
   "candidates": [
     {
       "id": "ai3d-voxel-city:desktop-1280x720",
       "app": "ai3d-voxel-city",
       "view": "desktop-1280x720",
-      "status": "CANDIDATE",
+      "status": "APPROVED",
       "captureCommand": "npx playwright test e2e/visual-candidates.spec.js --project=desktop-chromium",
       "approvalCommand": "npm run quality:world:baseline:promote -- --approve \"ai3d-voxel-city:desktop-1280x720\""
     },

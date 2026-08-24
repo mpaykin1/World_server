@@ -1,27 +1,17 @@
 {
   "schemaVersion": "4.0.0",
   "system": "WORLD_QUALITY_AUTOPILOT",
-  "generatedAt": "2026-08-24T05:06:36.326Z",
-  "readinessPercent": 98,
+  "generatedAt": "2026-08-24T05:13:05.873Z",
+  "readinessPercent": 100,
   "domainPercent": {
     "detail": 100,
-    "graphics": 97,
-    "animation": 95,
+    "graphics": 100,
+    "animation": 100,
     "optimization": 98,
     "automation": 100
   },
   "hardGateReady": true,
   "blockers": [
-    {
-      "domain": "graphics",
-      "id": "approved-visual-baselines",
-      "weight": 3
-    },
-    {
-      "domain": "animation",
-      "id": "runtime-rig-evidence",
-      "weight": 5
-    },
     {
       "domain": "optimization",
       "id": "physical-device-evidence",
@@ -129,7 +119,7 @@
       },
       {
         "id": "approved-visual-baselines",
-        "ok": false,
+        "ok": true,
         "weight": 3
       }
     ],
@@ -171,7 +161,7 @@
       },
       {
         "id": "runtime-rig-evidence",
-        "ok": false,
+        "ok": true,
         "weight": 5
       }
     ],

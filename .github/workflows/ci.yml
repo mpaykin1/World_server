@@ -40,8 +40,8 @@ jobs:
         run: node scripts/check-ai3d-v4-combined.js
       - name: WORLD SERVER Golden Standard source/release gate (hard)
         run: npm run release:gate
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+      - name: Install Playwright browsers (chromium + webkit for iPhone emulation)
+        run: npx playwright install --with-deps chromium webkit
       - name: Sentry runtime smoke (Playwright) - window.WorldServerSentry + ingest (hard)
         run: npx playwright test e2e/sentry-smoke.spec.js --project=desktop-chromium
       - name: AI3D Voxel City autoplay (Playwright) ai3d-voxel-city-autoplay (hard)
