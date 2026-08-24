@@ -1,7 +1,7 @@
 {
   "schemaVersion": "4.0.0",
   "system": "WORLD_VISIBILITY_OPTIMIZER",
-  "generatedAt": "2026-08-24T05:13:05.632Z",
+  "generatedAt": "2026-08-24T05:16:11.556Z",
   "strategy": "frustum_sector_hlod_conservative_occlusion",
   "hardwareOcclusionQueryRequiredFor100": false,
   "profiles": {
