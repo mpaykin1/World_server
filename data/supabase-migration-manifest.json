@@ -1,18 +1,19 @@
 {
-  "generatedAt": "2026-08-24T06:02:43.104Z",
+  "generatedAt": "2026-08-24T06:54:08.426Z",
   "source": "public.quality_export_migration_history",
-  "count": 6,
-  "latest": "20260823063700_quality_telemetry.sql",
-  "serverNameDigest": "c536bd6b73ff24e39c1c9ee57509d8453750e3f173aee28ac2d100a07c48e2c5",
-  "localNameDigest": "c536bd6b73ff24e39c1c9ee57509d8453750e3f173aee28ac2d100a07c48e2c5",
-  "contentDigest": "5733f2578c2e7ddd0f5e2597732fa5a171e8bc03cc263f99ec155feb1cac8ab3",
+  "count": 7,
+  "latest": "20260824010000_silent_cpu_autopilot.sql",
+  "serverNameDigest": "4f1c7fb913a11f734062d47bee23b83ac58c009a4a4468209d26f7ee97be1260",
+  "localNameDigest": "4f1c7fb913a11f734062d47bee23b83ac58c009a4a4468209d26f7ee97be1260",
+  "contentDigest": "d7e6a8b26d8c27d2217ce197bd8ab09458b42bc1779061f2a0af301bc67ae437",
   "names": [
     "20260819055525_world_game_backend.sql",
     "20260819061042_world_game_hardening.sql",
     "20260819061444_authoritative_player_position.sql",
     "20260819061621_fix_position_numeric_validation.sql",
     "20260819081500_voxel_world.sql",
-    "20260823063700_quality_telemetry.sql"
+    "20260823063700_quality_telemetry.sql",
+    "20260824010000_silent_cpu_autopilot.sql"
   ],
   "files": [
     {
@@ -38,6 +39,10 @@
     {
       "name": "20260823063700_quality_telemetry.sql",
       "sha256": "5b9b8d2a93128f5205019acb43268e42adb495a0c8eb869a47e8950b7cff1099"
+    },
+    {
+      "name": "20260824010000_silent_cpu_autopilot.sql",
+      "sha256": "baf1f98336b7f2bfecaeec28559a98b8d605d84c8ab4dbdeaf7a5895ba98b0f3"
     }
   ]
 }

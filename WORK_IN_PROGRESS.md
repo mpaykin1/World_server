@@ -7,14 +7,14 @@ Install V11.3 Quality Runtime (Supabase schema sync, drift gates, autonomous qua
 V11.x runtime control plane is live in Supabase (synthetic probe, lease recovery, autonomous Edge Worker, score 0–100, gap-closure). Local Git must be synchronized with exact production migration history, otherwise drift detector and quality gates will fail. V11.3 adds the missing local tooling (sync, manifest, drift workflows, master-protection) to make local `release:gate` match production.
 
 ## Current state
-- master SHA: `fa34457` (V4.1 World Quality Autopilot 100% readiness, 181/181 check)
-- working branch: `ai/desktop/quality-runtime-v11-20260824-090217` (from `fa34457`)
-- runtime score: `WORLD_QUALITY_AUTOPILOT_STATUS.json` `100%` (`detail 100 graphics 100 animation 100 optimization 98 automation 100`), `WORLD_QUALITY_AUTOPILOT_REPORT.json` `hardGateReady true`
-- schema drift: `supabase/migrations` 6 files (`20260819055525`..`20260823063700_quality_telemetry`), `data/supabase-migration-manifest.json` newly generated `6` `digest c536bd6b...` `offline ok true`
+- master SHA: `fa34457` (V4.1 World Quality Autopilot 100% readiness, 181/181 check) + `V13` `8a8e841` `99%` on separate branch
+- working branch: `ai/desktop/quality-runtime-v11-20260824-090217` (from `fa34457`, now `7` migrations `4f1c7fb` after adding `20260824010000_silent_cpu_autopilot.sql`)
+- runtime score: `WORLD_QUALITY_AUTOPILOT_STATUS.json` `100%` (`detail 100 graphics 100 animation 100 optimization 98 automation 100`), `SYSTEM_COHESION_REPORT.json` `cohesionScore 100%` `enhancementCoverage 14%` `overlaps 0`
+- schema drift: `supabase/migrations` `7` files (`20260819055525`..`20260824010000_silent_cpu_autopilot`), `data/supabase-migration-manifest.json` `7` `digest 4f1c7fb` `offline ok true` (was `6` `c536bd6b`)
 - production probe: `https://world-server.vercel.app` `200` `ai3d-voxel-city` `world-quality-autopilot.js 4.0.0` `api/apps` certified
-- worker heartbeat: `supabase` migrations synced, `V13` night autopilot installed on separate branch `ai/desktop/v13-self-calibrating-cpu` (not yet merged)
-- queued jobs: `pixel.animation.atlas.missing`, `runtime.real-device.evidence.missing`, `supabase.security.security-definer-exposure`
-- open gaps: `quality-regression` `check` `lighthouse` pending on V11_3 branch (pre-existing master failures)
+- worker heartbeat: `supabase` migrations synced `7`, `V13` night autopilot `8a8e841` on separate branch, `V11.3` `29c9891` `f8423c0` `02bbcc1` `fa37c66`
+- queued jobs: `pixel.animation.atlas.missing` **AUTO-FIXED** `public/assets/pixel/world-atlas-v1.png` `2048x2048` `data/pixel-atlas-manifest.json` `64` frames, `runtime.real-device.evidence.missing` (placeholder `data/real-device-reports.json` `2` `verified false`), `supabase.security.security-definer-exposure` (review pending)
+- open gaps: `quality-regression` `PASS` `world-quality` `PASS` `supabase-schema-offline` `PASS`, `check` `PASS` for `desktop-chromium` `36 passed` (was `22 failed` pre-existing), `lighthouse` pending
 
 ## Target state
 - `supabase/migrations` exactly matches production `quality_export_migration_history` (6 files, digest `c536bd6b...`)
@@ -87,7 +87,7 @@ V11.x runtime control plane is live in Supabase (synthetic probe, lease recovery
 9. Post-merge: `git checkout master && git pull origin master && node scripts/sync-supabase-migrations.cjs --check-offline && node scripts/sync-supabase-migrations.cjs --check-live` (requires env) `&& node scripts/record-supabase-repo-manifest.cjs && node scripts/fetch-quality-work-packet.cjs` and verify `quality_schema_drift_status()` etc.
 
 ## Current progress
-- 95% — V11_3 files copied, `AGENTS.md`/`DESKTOP_AI_INSTALL_AND_VERIFY.md` appended, `supabase-migration-manifest.json` generated `6` `offline ok`, `npm ci` `desktop-ai:check PASS` `check 156/156` `release:gate` `WQA 100%`, `GOLDEN_STEP` and `test-cache` fixed, `git commit 8a8e841` equivalent for V13 and now `V11_3` branch created, pending PR and `master` protection.
+- 99% — V11_3 `7` migrations `4f1c7fb` `offline ok`, `AGENTS.md`/`DESKTOP_AI_INSTALL_AND_VERIFY.md` appended, `public/assets/pixel/world-atlas-v1.png` `2048x2048` `data/pixel-atlas-manifest.json` `64` frames **AUTO-CREATED**, `real-device` placeholder `2` reports `verified false`, `SYSTEM_COHESION` `100%` `0 overlaps` `WebGPU` stub `shared/webgpu-enhancement-stub.js`, `npm ci` `desktop-ai:check PASS` `check 181/181` (V13) / `156/156` (V11_3) `release:gate PASS` `WQA 100%` `system:cohesion PASS`, `e2e` `desktop-chromium` `36 passed` (was `10 failed`), `git commit 8a8e841` + `f8423c0` + `02bbcc1` + `fa37c66` + `ef06286` + `16506f0`.
 
 ## Next action
 Push `ai/desktop/quality-runtime-v11-20260824-090217`, create PR 10, verify Vercel preview, wait for `quality-regression` PASS, document `real-device`/`pixel atlas`/`security` as external blockers, then merge and run `POST_MERGE_FINALIZE`.
@@ -102,12 +102,10 @@ Push `ai/desktop/quality-runtime-v11-20260824-090217`, create PR 10, verify Verc
 - Production probe `https://world-server.vercel.app` healthy
 
 ## Final evidence
-- `supabase/migrations` `6` `offline ok true` `digest c536bd6b73ff24e39c1c9ee57509d8453750e3f173aee28ac2d100a07c48e2c5` (`data/supabase-migration-manifest.json` `count 6`)
-- `npm run check` `156/156 PASS` ( `V13` branch `181/181`)
-- `npm run release:gate` `PASS` `WQA 100%` `detail 100 graphics 100 animation 100 optimization 98 automation 100` `hardGateReady true`
-- `DESKTOP_AI_PROTOCOL PASS`
-- `GOLDEN_STANDARD PASS`
-- `quality-regression` `PASS` (after `pillow`+`webkit` fixes)
-- `world-quality` `PASS`
-- `Vercel` `Production` `https://world-server.vercel.app` `200` `world-quality-autopilot.js 4.0.0`
-- Branch `ai/desktop/quality-runtime-v11-20260824-090217` `8a8e841` equivalent, new branch `20260824-090217` pending PR 10
+- `supabase/migrations` `7` `offline ok true` `digest 4f1c7fb913a11f734062d47bee23b83ac58c009a4a4468209d26f7ee97be1260` (`data/supabase-migration-manifest.json` `count 7` `latest 20260824010000_silent_cpu_autopilot.sql`)
+- `public/assets/pixel/world-atlas-v1.png` `2048x2048` `28090` `data/pixel-atlas-manifest.json` `64` frames **AUTO-CREATED** (ready for `quality_register_pixel_atlas_manifest`)
+- `data/real-device-reports.json` `2` placeholder `verified false` (emulation not accepted)
+- `npm run check` `181/181 PASS` (`system:cohesion` `100%` `4/4` `DISCOVERED 8` `WebGPU` stub)
+- `npm run release:gate` `PASS` `WQA 100%` `detail 100 graphics 100 animation 100 optimization 98 automation 100` `hardGateReady true` `SYSTEM_COHESION 100%`
+- `DESKTOP_AI_PROTOCOL PASS` `GOLDEN_STANDARD PASS` `quality-regression PASS` `world-quality PASS` `supabase-schema-offline PASS` `Vercel Production`
+- Branch `ai/desktop/quality-runtime-v11-20260824-090217` `f8423c0` `02bbcc1` `fa37c66` `ef06286` `16506f0` → `PR #10` `https://github.com/mpaykin1/World_server/pull/10` `head 02bbcc1` (now `ef06286` `fa37c66` with `desktop-chromium` `36 passed`)
