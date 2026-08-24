@@ -1,0 +1,24 @@
+revoke execute on function public.create_story(text,text,text,text[],text,text) from anon;
+revoke execute on function public.add_story_character(uuid,text,text,jsonb,jsonb,boolean) from anon;
+revoke execute on function public.add_story_node(uuid,text,text,text,jsonb) from anon;
+revoke execute on function public.set_story_node_perspective(uuid,uuid,text,text,text) from anon;
+revoke execute on function public.connect_story_nodes(uuid,uuid,uuid,text,text,jsonb,jsonb,integer) from anon;
+revoke execute on function public.publish_story(uuid) from anon;
+revoke execute on function public.add_story_collaborator_by_username(uuid,text,text) from anon;
+revoke execute on function public.get_story_author_workspace(uuid) from anon;
+revoke execute on function public.start_story_session(uuid,uuid) from anon;
+revoke execute on function public.get_story_session_state(uuid) from anon;
+revoke execute on function public.choose_story_edge(uuid,uuid) from anon;
+revoke execute on function public.get_my_story_sessions() from anon;
+revoke execute on function public.fork_story_from_node(uuid,uuid,text,text) from anon;
+revoke execute on function public.propose_story_continuation(uuid,uuid,text,text,text,text) from anon;
+revoke execute on function public.review_story_continuation(uuid,boolean) from anon;
+revoke execute on function public.get_my_story_workspaces(text) from anon;
+revoke execute on function public.update_story_meta(uuid,text,text,text,text[],text) from anon;
+revoke execute on function public.update_story_node(uuid,text,text,text,jsonb) from anon;
+revoke execute on function public.delete_story_edge(uuid) from anon;
+revoke execute on function public.archive_story(uuid) from anon;
+revoke execute on function public.get_story_session_path(uuid) from anon;
+
+grant execute on function public.get_story_catalog(text) to anon;
+grant execute on function public.get_story_public_snapshot(uuid) to anon;
