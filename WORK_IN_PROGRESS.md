@@ -47,6 +47,7 @@ Generic Golden/Quality automation already exists. V4 adds the world-specific clo
 - Quality Regression Lock missing webkit (mobile-webkit iPhone 13) — resolved by installing chromium+webkit in quality-regression.yml.
 - CI missing webkit for npx playwright test (all 4 projects) — resolved by installing chromium+webkit in ci.yml.
 - Perceptual gate EISDIR on approvedBaselines without path — resolved by adding valid path+sha256 to data/visual-baselines.json (test/fixtures/cube_object.png).
+- AI3D Voxel City autoplay regression (playerSpawn false, move 0) due to V4.1 computeVertexNormals + applyWorldMaterialMode in switch handlers — resolved by removing g.computeVertexNormals and applyWorldMaterialMode calls in switchFront/Orbit/Playable, preserving PBR material creation but avoiding premature dispose.
 - Any regression in controls, collisions, mobile behavior, visuals, performance — must rollback candidate.
 
 ## Exact patch / change plan

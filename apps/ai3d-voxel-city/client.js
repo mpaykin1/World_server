@@ -140,7 +140,7 @@ function fitCameras(){
 function switchFront(){
   if(!world)return;
   playableMode=false;
-  frontMode=true;activeCamera=ortho;scene.fog=null;applyWorldMaterialMode();
+  frontMode=true;activeCamera=ortho;scene.fog=null;
   ortho.zoom=1;ortho.position.set(target.x,target.y,target.z+Math.max(world.source.gridWidth,world.source.gridHeight)*2);ortho.lookAt(target);
   fitCameras();setAllDetailVisible(true);$('viewMode').textContent='FRONT EXACT · FULL DETAIL';
   if(document.pointerLockElement) document.exitPointerLock();
@@ -148,13 +148,13 @@ function switchFront(){
 function switchOrbit(){
   if(!world)return;
   playableMode=false;
-  frontMode=false;activeCamera=persp;applyWorldMaterialMode();$('viewMode').textContent='3D ORBIT · STREAMED LOD';
+  frontMode=false;activeCamera=persp;$('viewMode').textContent='3D ORBIT · STREAMED LOD';
   applyFog();updatePerspective();updateStreaming(true);
   if(document.pointerLockElement) document.exitPointerLock();
 }
 function switchPlayable(){
   if(!world) return;
-  frontMode=false; playableMode=true; activeCamera=persp; applyWorldMaterialMode();
+  frontMode=false; playableMode=true; activeCamera=persp;
   $('viewMode').textContent='PLAYABLE · WASD + MOUSE';
   applyFog(); updateStreaming(true);
   // camera will be controlled by player
@@ -195,7 +195,7 @@ function buildGeometry(c){
   g.setAttribute('position',new THREE.BufferAttribute(new Float32Array(c.positions),3));
   g.setAttribute('color',new THREE.BufferAttribute(new Float32Array(c.colors),3));
   g.setIndex(new THREE.BufferAttribute(new Uint32Array(c.indices),1));
-  g.computeBoundingBox();g.computeBoundingSphere();g.computeVertexNormals();
+  g.computeBoundingBox();g.computeBoundingSphere();
   return g;
 }
 function buildFarChunk(c){
