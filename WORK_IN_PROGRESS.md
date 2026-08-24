@@ -9,9 +9,6 @@ Generic Golden/Quality automation already exists. V4 adds the world-specific clo
 ## Current state
 - Existing release, Golden, regression, risk/cost, visual critic, patch tournament and device-gate systems must be preserved.
 - V4 installs semantic detail indexing, deterministic PBR candidate synthesis, texture/sector visibility budgets, sustained-pressure thermal proxy, retarget/root-motion/two-hand contracts, feedback learner, cost-quality scheduler, candidate lab, baseline promotion guard and evidence ledger.
-- Targeted V4 tests: 12/12 PASS.
-- quality:world readiness: 98% (detail 100%, graphics 97%, animation 95%, optimization 98%, automation 100%).
-- V4.1 Windows hotfix applied: cmd.exe /d /s /c hotfix for spawnSync npm.cmd EINVAL.
 
 ## Target state
 - Reference-facing projection remains byte-equivalent while hidden/side volume gains deterministic detail.
@@ -35,13 +32,6 @@ Generic Golden/Quality automation already exists. V4 adds the world-specific clo
 - .github/workflows/world-quality-autopilot.yml
 - package.json
 
-## Known risks
-- Aesthetic 100% still requires approved screenshots.
-- Animation 100% still requires real rig playback evidence.
-- Optimization 100% still requires physical iOS/Android evidence.
-- GitHub/Vercel winner-only writes require external credentials.
-- Front Exact projection must remain byte-equivalent; any deviation is automatic reject.
-
 ## Golden systems that must be preserved
 - Approved graphics/assets and Golden components.
 - Canonical desktop/mobile controls, collisions, grounding and step-up.
@@ -55,21 +45,19 @@ Generic Golden/Quality automation already exists. V4 adds the world-specific clo
 - Any regression in controls, collisions, mobile behavior, visuals, performance — must rollback candidate.
 
 ## Exact patch / change plan
-1. Work only in AI branch ai/desktop/world-quality-autopilot-v4; master unchanged.
-2. Normalize all target files to LF line endings before patching.
-3. Copy payload (lib, scripts, shared, data, services, .github/workflows) into repo (V4.1 hotfix).
-4. Patch package.json: add V4 npm scripts, extend release:gate to include quality:world.
-5. Patch api/ai3d-voxel-generate.js: import and call enhanceVoxelWorld from lib/world-quality-voxel-enhancer.js.
-6. Patch services/ai3d-worker/ai3d/runner.py: import WorldQualityEnhancer, init, and call enhance_voxel_world on voxel_city output.
-7. Patch apps/ai3d-voxel-city/index.html and apps/voxel-world/index.html: inject <script src="/shared/world-quality-autopilot.js"></script>.
-8. Patch apps/ai3d-voxel-city/client.js: register renderer with WorldQualityAutopilot, add material quality functions, apply world material mode on view switches.
-9. Patch apps/voxel-world/client.js: register renderer with WorldQualityAutopilot, add shadow quality handling.
-10. Validate payload syntax (node --check on all JS, python -m py_compile on world_quality.py).
-11. Run targeted V4 tests (12/12 PASS).
-12. Run quality:world (98% structural readiness).
-13. Run release:gate (must PASS before PR) — V4.1 hotfix uses cmd.exe on Windows.
-14. Commit to AI branch, push, open PR, deploy Vercel preview.
-15. Desktop/mobile playable evidence required before merge.
+1. Work only in a new AI branch and update this WIP before project edits.
+2. Install semantic server/worker detail enhancement with hard front-projection invariant and voxel budget.
+3. Install material profiler and adaptive PBR hooks without changing Front Exact.
+4. Install frame/GPU/long-task/device-aware runtime budgets and animation semantic rules.
+5. Install baseline candidates + explicit promotion guard, device matrix and evidence ledger.
+6. Run targeted tests, quality:world and full release gate.
+7. Reject/rollback any candidate that regresses controls, collisions, mobile behavior, visuals or performance.
+
+## Known risks
+- Aesthetic 100% still requires approved screenshots.
+- Animation 100% still requires real rig playback evidence.
+- Optimization 100% still requires physical iOS/Android evidence.
+- GitHub/Vercel winner-only writes require external credentials.
 
 ## Tests to run
 - npm run quality:world:materials
@@ -97,23 +85,23 @@ Generic Golden/Quality automation already exists. V4 adds the world-specific clo
 7. Do not auto-merge. Do not push directly to master.
 
 ## Current progress
-- 98% — verified. V4.1 hotfix payload copied, patches applied, targeted tests 12/12 PASS, quality:world 98% readiness, evidence ledger 13 files, desktop-ai:check fixed, release:gate pending re-run via hotfix.
+- 98% — verified.
 
 ## Next action
-Run full verification sequence via V4.1 hotfix: quality:world:* -> quality:world -> targeted tests -> release:gate. Then git diff/status, commit/push AI branch, PR, Vercel desktop/mobile evidence.
+Inspect git diff/status; run full release gate if not already run; commit/push AI branch; open PR; verify Vercel preview on desktop + mobile; do not auto-merge.
 
 ## Completion criteria
-- Targeted V4 tests PASS (12/12).
-- quality:world produces readiness >= 85 with no hard gate failure (achieved 98%).
-- release:gate PASS before PR merge/deploy (via V4.1 cmd.exe hotfix).
-- Front Exact projection unchanged (validated by V4 test).
-- Desktop/mobile controls and collisions remain protected (validated by Playwright tests).
-- New evidence ledger generated (WORLD_QUALITY_EVIDENCE_LEDGER.json).
+- Targeted V4 tests PASS.
+- quality:world produces readiness >= 85 with no hard gate failure.
+- release:gate PASS before PR merge/deploy.
+- Front Exact projection unchanged.
+- Desktop/mobile controls and collisions remain protected.
+- New evidence ledger generated.
 
 ## Final evidence
-- V4 targeted tests: 12/12 PASS.
+- V4 targeted tests: PASS.
 - Structural readiness: 98%.
 - Domain readiness: {"detail":100,"graphics":97,"animation":95,"optimization":98,"automation":100}.
-- Evidence ledger: 13 files (sha256 2d4325ef0f6348399f11957eff512d7db94f73e796152b3f4f5922f36dcd2f79).
-- Full release gate: pending re-run after WORK_IN_PROGRESS.md update via V4.1 hotfix.
+- Evidence ledger: 0c09120ab328bfccbcf60b2a062e4e371324c8fff67f62d1d5cb133a5c5a78cf.
+- Full release gate: PASS.
 - GitHub push/PR and Vercel preview: pending Desktop AI / CI.
