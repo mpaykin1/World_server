@@ -643,6 +643,7 @@ window.AI3DVoxelRuntime={
   clearStreamingCenter(){streamingCenter=null;updateStreaming(true);},
   setQuality(name){const n=String(name||'').toUpperCase();if(n==='AUTO'||PROFILES[n]){$('quality').value=n;$('quality').dispatchEvent(new Event('change'));}},
   setPlayerView(nextYaw,nextPitch=0){yaw=Number(nextYaw)||0;pitch=Math.max(-1.45,Math.min(1.45,Number(nextPitch)||0));player.yaw=yaw;player.pitch=pitch;},
+  setView(nextYaw,nextPitch=0){return this.setPlayerView(nextYaw,nextPitch);},
   stats(){return {fps:measuredFps,pixelRatio:dynamicPixelRatio,renderer:renderer?.info?.render,mesher:mesherStats,chunks:chunkObjects.size, voxels:world?world.voxels.length:0, player:{x:player.x,y:player.y,z:player.z,yaw,onGround:player.onGround, playable:playableMode}, defaultCityLoaded};},
   collidesAt(x,y,z){ return collidesAt(x,y,z); },
   getOccupancySize(){ return occupancySet.size; }
