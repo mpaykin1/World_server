@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "4.0.0",
+  "system": "WORLD_RETARGET_CONTRACT",
+  "generatedAt": "2026-08-24T05:16:10.931Z",
+  "boneAliases": {
+    "hips": [
+      "Hips",
+      "hips",
+      "pelvis",
+      "Pelvis",
+      "mixamorigHips"
+    ],
+    "spine": [
+      "Spine",
+      "spine",
+      "Spine1",
+      "spine_01"
+    ],
+    "head": [
+      "Head",
+      "head"
+    ],
+    "leftFoot": [
+      "LeftFoot",
+      "foot_l",
+      "Left Foot"
+    ],
+    "rightFoot": [
+      "RightFoot",
+      "foot_r",
+      "Right Foot"
+    ],
+    "leftHand": [
+      "LeftHand",
+      "hand_l",
+      "Left Hand"
+    ],
+    "rightHand": [
+      "RightHand",
+      "hand_r",
+      "Right Hand"
+    ]
+  },
+  "constraints": {
+    "feetPlant": true,
+    "twoHandWeapon": true,
+    "shieldFront": true,
+    "rootMotionDirection": true,
+    "maxFootSlideMetersPerSecond": 0.18,
+    "maxJitterDegreesPerFrame": 12
+  },
+  "runtimeSamples": 2,
+  "mappedRuntimeSamples": 2,
+  "contractReady": true,
+  "runtimeEvidenceReady": true,
+  "note": "Runtime skeleton evidence evaluated."
+}

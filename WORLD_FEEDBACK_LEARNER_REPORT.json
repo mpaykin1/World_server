@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "4.0.0",
+  "system": "WORLD_FEEDBACK_LEARNER",
+  "generatedAt": "2026-08-24T05:16:11.642Z",
+  "samples": 0,
+  "healthySamples": 0,
+  "pressureSamples": 0,
+  "runtimeCapabilitiesPercent": 97,
+  "recommendations": [
+    {
+      "action": "collect-production-telemetry",
+      "reason": "no exported production samples available",
+      "confidence": 1
+    }
+  ],
+  "automaticMutation": false,
+  "guard": "recommendations must pass candidate tournament + regression gates before any code/config mutation"
+}

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-23T03:44:06.706Z",
+  "generatedAt": "2026-08-24T05:16:01.854Z",
   "nodes": [
     "app:ai-3d",
     "app:ai3d-reference-test",
@@ -43,7 +43,9 @@
     "shared/golden-ui-shell.css",
     "shared/golden-ui-shell.js",
     "shared/quality-telemetry.js",
-    "shared/style.css"
+    "shared/sentry-runtime.js",
+    "shared/style.css",
+    "shared/world-quality-autopilot.js"
   ],
   "edges": [
     {
@@ -55,6 +57,11 @@
       "from": "apps/ai-3d/index.html",
       "to": "app:ai-3d",
       "kind": "belongs-to"
+    },
+    {
+      "from": "shared/sentry-runtime.js",
+      "to": "apps/ai-3d/index.html",
+      "kind": "html-dependency"
     },
     {
       "from": "apps/ai-3d/styles.css",
@@ -77,6 +84,11 @@
       "kind": "belongs-to"
     },
     {
+      "from": "shared/sentry-runtime.js",
+      "to": "apps/ai3d-reference-test/index.html",
+      "kind": "html-dependency"
+    },
+    {
       "from": "apps/ai3d-reference-test/styles.css",
       "to": "app:ai3d-reference-test",
       "kind": "belongs-to"
@@ -93,6 +105,11 @@
     },
     {
       "from": "shared/ai3d-playable-runtime.js",
+      "to": "apps/ai3d-voxel-city/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/sentry-runtime.js",
       "to": "apps/ai3d-voxel-city/index.html",
       "kind": "html-dependency"
     },
@@ -122,6 +139,11 @@
       "kind": "html-dependency"
     },
     {
+      "from": "shared/world-quality-autopilot.js",
+      "to": "apps/ai3d-voxel-city/index.html",
+      "kind": "html-dependency"
+    },
+    {
       "from": "apps/ai3d-voxel-city/mesher-worker.js",
       "to": "app:ai3d-voxel-city",
       "kind": "belongs-to"
@@ -143,6 +165,11 @@
     },
     {
       "from": "shared/style.css",
+      "to": "apps/catalog/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/sentry-runtime.js",
       "to": "apps/catalog/index.html",
       "kind": "html-dependency"
     },
@@ -192,6 +219,11 @@
       "kind": "html-dependency"
     },
     {
+      "from": "shared/sentry-runtime.js",
+      "to": "apps/chat/index.html",
+      "kind": "html-dependency"
+    },
+    {
       "from": "shared/common.js",
       "to": "apps/chat/index.html",
       "kind": "html-dependency"
@@ -208,6 +240,11 @@
     },
     {
       "from": "shared/style.css",
+      "to": "apps/survival/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/sentry-runtime.js",
       "to": "apps/survival/index.html",
       "kind": "html-dependency"
     },
@@ -257,6 +294,11 @@
       "kind": "html-dependency"
     },
     {
+      "from": "shared/sentry-runtime.js",
+      "to": "apps/voxel-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
       "from": "shared/common.js",
       "to": "apps/voxel-world/index.html",
       "kind": "html-dependency"
@@ -287,12 +329,22 @@
       "kind": "html-dependency"
     },
     {
+      "from": "shared/world-quality-autopilot.js",
+      "to": "apps/voxel-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
       "from": "apps/world-sharabass/index.html",
       "to": "app:world-sharabass",
       "kind": "belongs-to"
     },
     {
       "from": "shared/style.css",
+      "to": "apps/world-sharabass/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/sentry-runtime.js",
       "to": "apps/world-sharabass/index.html",
       "kind": "html-dependency"
     },
@@ -464,6 +516,16 @@
     "apps/ai-3d/index.html": [
       "app:ai-3d"
     ],
+    "shared/sentry-runtime.js": [
+      "apps/ai-3d/index.html",
+      "apps/ai3d-reference-test/index.html",
+      "apps/ai3d-voxel-city/index.html",
+      "apps/catalog/index.html",
+      "apps/chat/index.html",
+      "apps/survival/index.html",
+      "apps/voxel-world/index.html",
+      "apps/world-sharabass/index.html"
+    ],
     "apps/ai-3d/styles.css": [
       "app:ai-3d"
     ],
@@ -533,6 +595,10 @@
       "apps/world-sharabass/index.html"
     ],
     "shared/golden-performance-autotuner.js": [
+      "apps/ai3d-voxel-city/index.html",
+      "apps/voxel-world/index.html"
+    ],
+    "shared/world-quality-autopilot.js": [
       "apps/ai3d-voxel-city/index.html",
       "apps/voxel-world/index.html"
     ],

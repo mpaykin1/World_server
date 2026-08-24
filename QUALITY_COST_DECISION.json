@@ -1,0 +1,18 @@
+{
+  "generatedAt": "2026-08-24T05:06:37.171Z",
+  "profile": "cinematic",
+  "candidates": [
+    {
+      "engine": "trellis2",
+      "quality": 96,
+      "relativeCost": 1,
+      "score": 157
+    }
+  ],
+  "recommended": {
+    "engine": "trellis2",
+    "quality": 96,
+    "relativeCost": 1,
+    "score": 157
+  }
+}

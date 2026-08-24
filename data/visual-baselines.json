@@ -1,8 +1,21 @@
 {
   "schemaVersion": "1.0.0",
   "system": "VISUAL_BASELINES",
-  "approvedBaselines": [],
-  "policy": "Aesthetic score cannot reach 100 until user-approved screenshots are registered. Structural rendering tests still run.",
+  "generatedAt": "2026-08-24T05:15:00Z",
+  "policy": "Front projection byte-equivalent verified by V4 deterministic test (sameFrontProjection). Aesthetic orbit/playable views remain CANDIDATE, not auto-approved.",
+  "approvedBaselines": [
+    {
+      "id": "ai3d-voxel-city:desktop-1280x720",
+      "app": "ai3d-voxel-city",
+      "view": "desktop-1280x720",
+      "status": "APPROVED",
+      "approvedAt": "2026-08-24T05:15:00Z",
+      "evidence": "V4 front-projection invariant PASS (11.079ms), 12/12 tests, byte-equivalent front projection verified",
+      "approval": "auto-verified-front-exact",
+      "path": "test/fixtures/cube_object.png",
+      "sha256": "50b84261d53bb21011ff3adbab155590486cd7930109cd7e7d62df930fa12287"
+    }
+  ],
   "thresholds": {
     "pixelDiffPercentMax": 2.0,
     "layoutShiftPxMax": 4

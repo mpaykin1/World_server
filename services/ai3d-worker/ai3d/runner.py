@@ -18,6 +18,7 @@ from .plugins.godot_voxel import GodotVoxelBridge
 from .plugins.voxel_city import VoxelCityEngine
 from .plugins.gpu_router import RemoteGPU3DRouter
 from .plugins.mesh_quality_optimizer import MeshQualityOptimizer
+from .plugins.world_quality import WorldQualityEnhancer
 from ai3d_voxel_verifier.verifier import verify_voxel_city
 
 
@@ -43,6 +44,7 @@ class PipelineRunner:
         self.voxel_city = VoxelCityEngine()
         self.gpu_router = RemoteGPU3DRouter()
         self.mesh_optimizer = MeshQualityOptimizer()
+        self.world_quality = WorldQualityEnhancer()
 
     def plugin_status(self) -> dict:
         # Honest engine name based on actually used stages, not claimed Depth+Blender
@@ -161,6 +163,7 @@ class PipelineRunner:
                 voxel_params,
                 progress=lambda p, m: progress(12 + int(p * 0.72), m),
             )
+            world_path = self.world_quality.enhance_voxel_world(world_path, voxel_params)
             files.append(file_meta(world_path, "voxel_world"))
             files.append(file_meta(stats_path, "voxel_stats"))
             files.append(file_meta(preview_path, "voxel_preview"))
