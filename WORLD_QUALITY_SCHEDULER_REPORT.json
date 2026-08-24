@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "4.0.0",
+  "system": "WORLD_QUALITY_COST_SCHEDULER",
+  "generatedAt": "2026-08-24T00:01:28.931Z",
+  "readiness": 98,
+  "runtimePercent": 97,
+  "materialProfiles": 64,
+  "routes": [
+    {
+      "id": "pbr-profile-synthesis",
+      "gain": 7,
+      "cpu": 2,
+      "gpu": 0,
+      "cacheable": true,
+      "efficiency": 3.5,
+      "route": "local-ci",
+      "priority": "high"
+    },
+    {
+      "id": "semantic-detail",
+      "gain": 9,
+      "cpu": 3,
+      "gpu": 0,
+      "cacheable": true,
+      "efficiency": 3,
+      "route": "local-ci",
+      "priority": "high"
+    },
+    {
+      "id": "visual-render-compare",
+      "gain": 10,
+      "cpu": 4,
+      "gpu": 4,
+      "cacheable": false,
+      "efficiency": 1.471,
+      "route": "local-ci",
+      "priority": "medium"
+    },
+    {
+      "id": "mesh-lod",
+      "gain": 7,
+      "cpu": 5,
+      "gpu": 0,
+      "cacheable": true,
+      "efficiency": 1.4,
+      "route": "cpu-worker",
+      "priority": "medium"
+    },
+    {
+      "id": "external-pbr-bake",
+      "gain": 9,
+      "cpu": 2,
+      "gpu": 9,
+      "cacheable": true,
+      "efficiency": 1.084,
+      "route": "remote-gpu-if-configured",
+      "priority": "medium"
+    }
+  ],
+  "policy": "maximize perceptual gain per compute while never bypassing quality gates"
+}

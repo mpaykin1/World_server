@@ -53,7 +53,7 @@ function profile(){return PROFILES[profileName]||PROFILES.HIGH;}
 function cssRgb(a){return `rgb(${a[0]},${a[1]},${a[2]})`;}
 
 function init3D(){
-  const host=$('viewer');scene=new THREE.Scene();
+  const host=$('viewer');scene=new THREE.Scene();const worldQualityHemi=new THREE.HemisphereLight(0xc9b2d6,0x241d22,.95);scene.add(worldQualityHemi);const worldQualitySun=new THREE.DirectionalLight(0xffc28a,1.15);worldQualitySun.position.set(-80,90,120);scene.add(worldQualitySun);
   persp=new THREE.PerspectiveCamera(70,host.clientWidth/host.clientHeight,.05,4000);
   ortho=new THREE.OrthographicCamera(-50,50,50,-50,.05,4000);
   activeCamera=ortho;
@@ -67,6 +67,11 @@ function init3D(){
   renderer.setPixelRatio(dynamicPixelRatio);
   renderer.setSize(host.clientWidth,host.clientHeight);
   host.replaceChildren(renderer.domElement);
+  window.WorldQualityAutopilot?.registerRenderer('ai3d-voxel-city',renderer,{
+    initialTier:matchMedia('(pointer:coarse)').matches?'BALANCED':'HIGH',targetFps:matchMedia('(pointer:coarse)').matches?43:55,
+    onQualityChange(q){if(!adaptive)return;profileName=q.tier==='SAFE'?'SAFE':q.tier==='ULTRA'?'ULTRA':'HIGH';dynamicPixelRatio=Math.min(devicePixelRatio||1,Number(q.dpr)||profile().pixelRatio);renderer.setPixelRatio(dynamicPixelRatio);renderer.setSize(host.clientWidth,host.clientHeight,false);if(typeof setWorldMaterialQuality==='function')setWorldMaterialQuality(q.pbrQuality||0);if(world){applyFog();updateStreaming(true)}},
+    getStats(){return{fps:measuredFps,calls:renderer.info.render.calls,triangles:renderer.info.render.triangles}}
+  });
 
   renderer.domElement.addEventListener('pointerdown',pointerDown);
   renderer.domElement.addEventListener('click',()=>{
@@ -135,7 +140,7 @@ function fitCameras(){
 function switchFront(){
   if(!world)return;
   playableMode=false;
-  frontMode=true;activeCamera=ortho;scene.fog=null;
+  frontMode=true;activeCamera=ortho;scene.fog=null;applyWorldMaterialMode();
   ortho.zoom=1;ortho.position.set(target.x,target.y,target.z+Math.max(world.source.gridWidth,world.source.gridHeight)*2);ortho.lookAt(target);
   fitCameras();setAllDetailVisible(true);$('viewMode').textContent='FRONT EXACT · FULL DETAIL';
   if(document.pointerLockElement) document.exitPointerLock();
@@ -143,13 +148,13 @@ function switchFront(){
 function switchOrbit(){
   if(!world)return;
   playableMode=false;
-  frontMode=false;activeCamera=persp;$('viewMode').textContent='3D ORBIT · STREAMED LOD';
+  frontMode=false;activeCamera=persp;applyWorldMaterialMode();$('viewMode').textContent='3D ORBIT · STREAMED LOD';
   applyFog();updatePerspective();updateStreaming(true);
   if(document.pointerLockElement) document.exitPointerLock();
 }
 function switchPlayable(){
   if(!world) return;
-  frontMode=false; playableMode=true; activeCamera=persp;
+  frontMode=false; playableMode=true; activeCamera=persp; applyWorldMaterialMode();
   $('viewMode').textContent='PLAYABLE · WASD + MOUSE';
   applyFog(); updateStreaming(true);
   // camera will be controlled by player
@@ -190,7 +195,7 @@ function buildGeometry(c){
   g.setAttribute('position',new THREE.BufferAttribute(new Float32Array(c.positions),3));
   g.setAttribute('color',new THREE.BufferAttribute(new Float32Array(c.colors),3));
   g.setIndex(new THREE.BufferAttribute(new Uint32Array(c.indices),1));
-  g.computeBoundingBox();g.computeBoundingSphere();
+  g.computeBoundingBox();g.computeBoundingSphere();g.computeVertexNormals();
   return g;
 }
 function buildFarChunk(c){
@@ -216,8 +221,12 @@ async function buildOptimizedChunks(data){
   });
   mesherStats=result.stats;
   const detailMatTemplate={vertexColors:true,side:THREE.FrontSide};
+  let requestedWorldMaterialQuality=0;
+  function makeWorldDetailMaterial(){return(!frontMode&&requestedWorldMaterialQuality>0)?new THREE.MeshStandardMaterial({vertexColors:true,side:THREE.FrontSide,roughness:requestedWorldMaterialQuality>1?.72:.82,metalness:.05}):new THREE.MeshBasicMaterial(detailMatTemplate)}
+  function applyWorldMaterialMode(){for(const o of chunkObjects.values()){const old=o.detail.material;o.detail.material=makeWorldDetailMaterial();old?.dispose?.()}}
+  function setWorldMaterialQuality(q){requestedWorldMaterialQuality=Math.max(0,Math.min(2,Number(q)||0));applyWorldMaterialMode()}
   for(const c of result.chunks){
-    const detail=new THREE.Mesh(buildGeometry(c),new THREE.MeshBasicMaterial(detailMatTemplate));
+    const detail=new THREE.Mesh(buildGeometry(c),makeWorldDetailMaterial());
     detail.frustumCulled=true;
     const far=buildFarChunk(c);far.visible=false;
     const b=c.bounds,center=new THREE.Vector3((b[0]+b[3])/2,(b[1]+b[4])/2,(b[2]+b[5])/2);

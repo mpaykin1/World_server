@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "4.0.0",
+  "system": "WORLD_RUNTIME_QUALITY_PROFILER",
+  "generatedAt": "2026-08-24T00:01:27.930Z",
+  "capabilities": {
+    "gpuTimerQuery": true,
+    "frameP95": true,
+    "memoryPressure": true,
+    "longTaskObserver": true,
+    "deviceMemoryAware": true,
+    "hardwareConcurrencyAware": true,
+    "adaptiveDpr": true,
+    "visibilityBudget": true,
+    "sceneBudget": true,
+    "materialBudget": true,
+    "semanticCharacterRepair": true,
+    "hlod": true
+  },
+  "physicalDeviceProviderConfigured": false,
+  "physicalDeviceProviderStatus": "NOT_CONFIGURED",
+  "percent": 97
+}

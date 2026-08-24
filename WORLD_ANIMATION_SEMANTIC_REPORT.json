@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "4.0.0",
+  "system": "WORLD_ANIMATION_SEMANTIC_VALIDATOR",
+  "generatedAt": "2026-08-24T00:01:27.764Z",
+  "configuredRules": [
+    "feetFaceMovementDirection",
+    "attackDirectionFollowsFeet",
+    "shieldStaysFrontVerticalAndCoversTorso",
+    "handgunStaysInHand",
+    "rifleAndMachineGunUseTwoHands",
+    "footSlideWithinTolerance",
+    "animationJitterWithinTolerance"
+  ],
+  "semanticRepairRuntimeInstalled": true,
+  "runtimeEvidence": false,
+  "samples": 0,
+  "violations": [],
+  "pass": false,
+  "note": "Semantic repair engine is installed, but no real rig runtime evidence exists yet; animation cannot honestly be 100%."
+}

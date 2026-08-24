@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "4.0.0",
+  "generatedAt": "2026-08-24T00:01:28.018Z",
+  "policy": "candidate-only; never auto-approve aesthetic baselines",
+  "candidates": [
+    {
+      "id": "ai3d-voxel-city:desktop-1280x720",
+      "app": "ai3d-voxel-city",
+      "view": "desktop-1280x720",
+      "status": "CANDIDATE",
+      "captureCommand": "npx playwright test e2e/visual-candidates.spec.js --project=desktop-chromium",
+      "approvalCommand": "npm run quality:world:baseline:promote -- --approve \"ai3d-voxel-city:desktop-1280x720\""
+    },
+    {
+      "id": "ai3d-voxel-city:mobile-390x844",
+      "app": "ai3d-voxel-city",
+      "view": "mobile-390x844",
+      "status": "CANDIDATE",
+      "captureCommand": "npx playwright test e2e/visual-candidates.spec.js --project=mobile-chromium",
+      "approvalCommand": "npm run quality:world:baseline:promote -- --approve \"ai3d-voxel-city:mobile-390x844\""
+    },
+    {
+      "id": "ai3d-voxel-city:desktop-1920x1080",
+      "app": "ai3d-voxel-city",
+      "view": "desktop-1920x1080",
+      "status": "CANDIDATE",
+      "captureCommand": "npx playwright test e2e/visual-candidates.spec.js --project=desktop-chromium",
+      "approvalCommand": "npm run quality:world:baseline:promote -- --approve \"ai3d-voxel-city:desktop-1920x1080\""
+    },
+    {
+      "id": "voxel-world:desktop-1280x720",
+      "app": "voxel-world",
+      "view": "desktop-1280x720",
+      "status": "CANDIDATE",
+      "captureCommand": "npx playwright test e2e/visual-candidates.spec.js --project=desktop-chromium",
+      "approvalCommand": "npm run quality:world:baseline:promote -- --approve \"voxel-world:desktop-1280x720\""
+    },
+    {
+      "id": "voxel-world:mobile-390x844",
+      "app": "voxel-world",
+      "view": "mobile-390x844",
+      "status": "CANDIDATE",
+      "captureCommand": "npx playwright test e2e/visual-candidates.spec.js --project=mobile-chromium",
+      "approvalCommand": "npm run quality:world:baseline:promote -- --approve \"voxel-world:mobile-390x844\""
+    },
+    {
+      "id": "voxel-world:desktop-1920x1080",
+      "app": "voxel-world",
+      "view": "desktop-1920x1080",
+      "status": "CANDIDATE",
+      "captureCommand": "npx playwright test e2e/visual-candidates.spec.js --project=desktop-chromium",
+      "approvalCommand": "npm run quality:world:baseline:promote -- --approve \"voxel-world:desktop-1920x1080\""
+    }
+  ]
+}

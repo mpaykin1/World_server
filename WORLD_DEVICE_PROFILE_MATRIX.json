@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "4.0.0",
+  "system": "WORLD_DEVICE_PROFILE_MATRIX",
+  "generatedAt": "2026-08-24T00:01:28.392Z",
+  "percent": 87,
+  "evidence": {
+    "adaptiveRuntime": true,
+    "mobileTouch": true,
+    "physicalProvider": false
+  },
+  "profiles": [
+    {
+      "id": "ios-low",
+      "coarse": true,
+      "targetFps": 30,
+      "maxDpr": 0.88,
+      "memoryMb": 320,
+      "physical": false
+    },
+    {
+      "id": "android-low",
+      "coarse": true,
+      "targetFps": 30,
+      "maxDpr": 0.82,
+      "memoryMb": 320,
+      "physical": false
+    },
+    {
+      "id": "mobile-balanced",
+      "coarse": true,
+      "targetFps": 40,
+      "maxDpr": 1.08,
+      "memoryMb": 420,
+      "physical": false
+    },
+    {
+      "id": "desktop-integrated",
+      "coarse": false,
+      "targetFps": 50,
+      "maxDpr": 1.15,
+      "memoryMb": 512,
+      "physical": false
+    },
+    {
+      "id": "desktop-high",
+      "coarse": false,
+      "targetFps": 58,
+      "maxDpr": 1.7,
+      "memoryMb": 768,
+      "physical": false
+    }
+  ]
+}
