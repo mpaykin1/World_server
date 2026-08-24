@@ -1,5 +1,7 @@
 {
-  "generatedAt": "2026-08-24T05:06:21.588Z",
+  "generatedAt": "2026-08-24T05:06:36.960Z",
+  "score": 100,
+  "level": "high",
   "changed": [
     ".github/workflows/world-quality-autopilot.yml",
     "DESKTOP_AI_PROTOCOL_REPORT.json",
@@ -68,42 +70,54 @@
     "shared/world-quality-autopilot.js",
     "test/world-quality-autopilot.test.js"
   ],
-  "affectedApps": [
-    "ai3d-voxel-city",
-    "voxel-world"
-  ],
-  "why": [
+  "reasons": [
     {
-      "from": "apps/ai3d-voxel-city/client.js",
-      "to": "app:ai3d-voxel-city"
+      "points": 15,
+      "reason": ".github/workflows/world-quality-autopilot.yml"
     },
     {
-      "from": "apps/ai3d-voxel-city/index.html",
-      "to": "app:ai3d-voxel-city"
+      "points": 10,
+      "reason": "api/ai3d-voxel-generate.js"
     },
     {
-      "from": "apps/voxel-world/client.js",
-      "to": "app:voxel-world"
+      "points": 12,
+      "reason": "apps/ai3d-voxel-city/client.js"
     },
     {
-      "from": "apps/voxel-world/index.html",
-      "to": "app:voxel-world"
+      "points": 12,
+      "reason": "apps/ai3d-voxel-city/index.html"
     },
     {
-      "from": "shared/world-quality-autopilot.js",
-      "to": "apps/ai3d-voxel-city/index.html"
+      "points": 12,
+      "reason": "apps/voxel-world/client.js"
     },
     {
-      "from": "apps/ai3d-voxel-city/index.html",
-      "to": "app:ai3d-voxel-city"
+      "points": 12,
+      "reason": "apps/voxel-world/index.html"
     },
     {
-      "from": "shared/world-quality-autopilot.js",
-      "to": "apps/voxel-world/index.html"
+      "points": 14,
+      "reason": "services/ai3d-worker/ai3d/plugins/world_quality.py"
     },
     {
-      "from": "apps/voxel-world/index.html",
-      "to": "app:voxel-world"
+      "points": 14,
+      "reason": "services/ai3d-worker/ai3d/runner.py"
+    },
+    {
+      "points": 20,
+      "reason": "shared/world-quality-autopilot.js"
+    },
+    {
+      "points": 15,
+      "reason": "files:66"
     }
+  ],
+  "testPlan": [
+    "release:gate",
+    "all-playwright",
+    "fuzz",
+    "stability-5x",
+    "visual",
+    "real-device-if-configured"
   ]
 }

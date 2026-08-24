@@ -1,6 +1,6 @@
 {
   "schemaVersion": "4.0.0",
-  "generatedAt": "2026-08-24T05:00:19.644Z",
+  "generatedAt": "2026-08-24T05:06:38.081Z",
   "readinessPercent": 98,
   "domainPercent": {
     "detail": 100,
@@ -12,7 +12,7 @@
   "hardGateReady": true,
   "runtimeQualityPercent": 97,
   "deviceEvidencePercent": 87,
-  "evidenceLedgerSha256": "29dbee226fb2174a6aae51042257f1fb978ffcf5bd090580d6d4d6c01f79f4f5",
+  "evidenceLedgerSha256": "19f6f8c1e03446f6406b6c385eeebe7ecb354fa50126e453bae04a612114a444",
   "materialProfiles": 64,
   "visibilityPercent": 100,
   "retargetContractReady": true,
@@ -63,5 +63,5 @@
       "automation": "Keep WebGL as fallback and promote WebGPU only after browser/device evidence wins the candidate tournament."
     }
   ],
-  "mode": "safe-analysis"
+  "mode": "full-diagnostics"
 }
