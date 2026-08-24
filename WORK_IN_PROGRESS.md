@@ -46,6 +46,7 @@ Generic Golden/Quality automation already exists. V4 adds the world-specific clo
 - Quality Regression Lock missing Python PIL (ModuleNotFoundError) — resolved by adding setup-python + pip install pillow numpy requests to quality-regression.yml (parity with ci.yml).
 - Quality Regression Lock missing webkit (mobile-webkit iPhone 13) — resolved by installing chromium+webkit in quality-regression.yml.
 - CI missing webkit for npx playwright test (all 4 projects) — resolved by installing chromium+webkit in ci.yml.
+- Perceptual gate EISDIR on approvedBaselines without path — resolved by adding valid path+sha256 to data/visual-baselines.json (test/fixtures/cube_object.png).
 - Any regression in controls, collisions, mobile behavior, visuals, performance — must rollback candidate.
 
 ## Exact patch / change plan
