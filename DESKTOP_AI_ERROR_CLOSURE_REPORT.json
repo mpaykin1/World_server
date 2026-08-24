@@ -1,0 +1,19 @@
+{
+  "generatedAt": "2026-08-24T05:55:03.467Z",
+  "pass": true,
+  "unresolved": [],
+  "documentedExternalBlockers": [
+    {
+      "name": "GitHub write access",
+      "source": "external",
+      "evidence": "GitHub connector create_branch returned 403 Resource not accessible by integration",
+      "nextAction": "Restore GitHub integration write permission, then create task branch and PR."
+    },
+    {
+      "name": "Vercel project visibility",
+      "source": "external",
+      "evidence": "Connected Vercel team currently lists zero projects",
+      "nextAction": "Connect/link the real World_server Vercel project before live canary/cron verification."
+    }
+  ]
+}

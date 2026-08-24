@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-24T05:16:08.930Z",
+  "generatedAt": "2026-08-24T05:55:01.542Z",
   "candidateStatus": "PREPARED_NOT_DEPLOYED",
   "scores": {
     "controls": 100,
@@ -15,9 +15,27 @@
     "errorRecurrenceProtection": 100,
     "goldenSolutionPropagation": 85,
     "qualityGrowthAutomation": 96.3,
-    "desktopAIContinuity": 100
+    "desktopAIContinuity": 100,
+    "silentAutopilot": 90,
+    "zeroCostComputeCompliance": 80,
+    "cpuEvolutionEngine": 100,
+    "automaticTestSynthesis": 100,
+    "cpuAssetOptimization": 100,
+    "errorClosureAutomation": 100,
+    "learningKnowledgeBase": 100,
+    "adaptiveNightBudget": 100,
+    "visualEnsemble": 100,
+    "invariantMining": 100,
+    "testResultCache": 100,
+    "nightCheckpointing": 100,
+    "bayesianQualityPrediction": 100,
+    "goldenPatternExtraction": 100,
+    "assetSimilarity": 100,
+    "collisionSimplification": 100,
+    "hardwareProfiling": 100,
+    "selfCalibration": 100
   },
-  "overall": 95.5,
+  "overall": 97.1,
   "detail": {
     "controls": [
       {
@@ -787,6 +805,438 @@
       {
         "id": "task-initializer",
         "weight": 15,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "silentAutopilot": [
+      {
+        "id": "cpu-only-policy",
+        "weight": 12,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "night-cron-api",
+        "weight": 12,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "supabase-queue",
+        "weight": 12,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "desktop-night-worker",
+        "weight": 12,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "idle-cpu-check",
+        "weight": 10,
+        "pass": false,
+        "status": "missing"
+      },
+      {
+        "id": "quality-learning",
+        "weight": 12,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "never-retry",
+        "weight": 8,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "cross-project-learning",
+        "weight": 8,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "priority-goals",
+        "weight": 7,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "cpu-budget",
+        "weight": 7,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "zeroCostComputeCompliance": [
+      {
+        "id": "gpu-disabled",
+        "weight": 30,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "paid-disabled",
+        "weight": 30,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "queue-filter",
+        "weight": 20,
+        "pass": false,
+        "status": "missing"
+      },
+      {
+        "id": "policy-test",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "cpuEvolutionEngine": [
+      {
+        "id": "genetic-optimizer",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "incremental-tests",
+        "weight": 15,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "local-cpu-model",
+        "weight": 10,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "cpu-tournament",
+        "weight": 10,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "curriculum",
+        "weight": 15,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "adaptive-budget",
+        "weight": 15,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "cpu-only",
+        "weight": 15,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "automaticTestSynthesis": [
+      {
+        "id": "deterministic-generator",
+        "weight": 40,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "unknown-test-synth",
+        "weight": 35,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "incremental-map",
+        "weight": 25,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "cpuAssetOptimization": [
+      {
+        "id": "texture-factory",
+        "weight": 35,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "mesh-factory",
+        "weight": 35,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "ssim",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "asset-dedup",
+        "weight": 10,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "errorClosureAutomation": [
+      {
+        "id": "closure-policy",
+        "weight": 25,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "closure-gate",
+        "weight": 45,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "desktop-protocol",
+        "weight": 30,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "learningKnowledgeBase": [
+      {
+        "id": "failure-kb",
+        "weight": 30,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "success-kb",
+        "weight": 30,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "knowledge-learning",
+        "weight": 40,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "adaptiveNightBudget": [
+      {
+        "id": "budget-policy",
+        "weight": 35,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "budget-engine",
+        "weight": 45,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "planner-integration",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "visualEnsemble": [
+      {
+        "id": "visual-ensemble-policy",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "visual-ensemble-engine",
+        "weight": 60,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "approved-baseline-boundary",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "invariantMining": [
+      {
+        "id": "invariant-policy",
+        "weight": 25,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "invariant-engine",
+        "weight": 55,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "protected-errors",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "testResultCache": [
+      {
+        "id": "cache-policy",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "cache-runner",
+        "weight": 55,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "cache-smoke",
+        "weight": 25,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "nightCheckpointing": [
+      {
+        "id": "checkpoint-policy",
+        "weight": 25,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "checkpoint-tool",
+        "weight": 35,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "genetic-resume",
+        "weight": 40,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "bayesianQualityPrediction": [
+      {
+        "id": "bayes-policy",
+        "weight": 25,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "bayes-engine",
+        "weight": 55,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "planner-adoption",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "goldenPatternExtraction": [
+      {
+        "id": "pattern-policy",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "pattern-registry",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "pattern-promoter",
+        "weight": 60,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "assetSimilarity": [
+      {
+        "id": "similarity-policy",
+        "weight": 25,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "similarity-engine",
+        "weight": 75,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "collisionSimplification": [
+      {
+        "id": "collision-engine",
+        "weight": 70,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "mesh-scan-integration",
+        "weight": 30,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "hardwareProfiling": [
+      {
+        "id": "hardware-policy",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "host-profile",
+        "weight": 30,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "browser-profile",
+        "weight": 30,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "perf-adoption",
+        "weight": 20,
+        "pass": true,
+        "status": "present"
+      }
+    ],
+    "selfCalibration": [
+      {
+        "id": "calibration-policy",
+        "weight": 25,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "calibration-engine",
+        "weight": 50,
+        "pass": true,
+        "status": "present"
+      },
+      {
+        "id": "adaptive-budget-adoption",
+        "weight": 25,
         "pass": true,
         "status": "present"
       }

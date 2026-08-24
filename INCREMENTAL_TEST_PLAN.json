@@ -1,0 +1,13 @@
+{
+  "generatedAt": "2026-08-24T05:54:41.878Z",
+  "changed": [
+    "shared/golden-physics.js"
+  ],
+  "tests": [
+    "test/quality-regression.test.js",
+    "test/golden-physics.test.js",
+    "test/quality-fuzz.test.js",
+    "e2e/golden-controls.spec.js"
+  ],
+  "fullSuiteRequired": false
+}

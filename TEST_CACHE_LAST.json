@@ -1,0 +1,11 @@
+{
+  "createdAt": "2026-08-24T05:54:39.212Z",
+  "key": "51a1e7fbd479d5a830f4f284d7c0331ca01bd740294902f0434ba8160bb1224f",
+  "command": "node --test \"test/quality-regression.test.js\"",
+  "inputs": [
+    "test/quality-regression.test.js"
+  ],
+  "pass": true,
+  "status": 0,
+  "cacheHit": false
+}

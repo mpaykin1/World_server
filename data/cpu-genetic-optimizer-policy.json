@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "CPU_GENETIC_OPTIMIZER",
+  "gpuAllowed": false,
+  "paidComputeAllowed": false,
+  "population": 24,
+  "generations": 10,
+  "elite": 6,
+  "mutationRate": 0.22,
+  "objective": {
+    "fpsWeight": 0.35,
+    "visualQualityWeight": 0.35,
+    "loadWeight": 0.15,
+    "memoryWeight": 0.15
+  },
+  "parameterBounds": {
+    "renderScale": [
+      0.75,
+      1.0
+    ],
+    "lodBias": [
+      0.75,
+      2.0
+    ],
+    "shadowDistance": [
+      12,
+      70
+    ],
+    "farDistance": [
+      60,
+      300
+    ],
+    "textureScale": [
+      0.5,
+      1.0
+    ]
+  },
+  "rule": "Optimization creates a candidate profile only. Production adoption still requires release/evidence gates."
+}

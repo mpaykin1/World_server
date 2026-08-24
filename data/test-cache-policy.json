@@ -1,0 +1,7 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "QUALITY_TEST_CACHE",
+  "cacheDir": ".quality-cache/tests",
+  "maxAgeHours": 168,
+  "rule": "Cache key includes command, selected inputs, package lock and Node version. Full release gate may use cache for deterministic subtests but never for post-deploy/live checks."
+}

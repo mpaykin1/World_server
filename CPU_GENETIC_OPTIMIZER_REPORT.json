@@ -1,0 +1,226 @@
+{
+  "generatedAt": "2026-08-24T05:54:41.651Z",
+  "cpuOnly": true,
+  "gpu": false,
+  "paidCost": 0,
+  "evidenceMode": "analytic-proxy",
+  "best": {
+    "gene": {
+      "renderScale": 0.7946579299494625,
+      "lodBias": 0.75,
+      "shadowDistance": 50.83023264305666,
+      "farDistance": 224.8339836202562,
+      "textureScale": 0.9965244570653885
+    },
+    "metrics": {
+      "fps": 37.156654814567474,
+      "visualQuality": 99.48644016974917,
+      "loadMs": 5332.045550640369,
+      "memoryMb": 617.3008776983313,
+      "mode": "analytic-proxy"
+    },
+    "score": 59.6762807915326
+  },
+  "history": [
+    {
+      "generation": 0,
+      "best": {
+        "gene": {
+          "renderScale": 0.8770383154042065,
+          "lodBias": 0.8048259002971463,
+          "shadowDistance": 41.08245620969683,
+          "farDistance": 89.43884706124663,
+          "textureScale": 0.9865852813236415
+        },
+        "metrics": {
+          "fps": 39.2552588613721,
+          "visualQuality": 89.25618736154163,
+          "loadMs": 5136.175839605271,
+          "memoryMb": 593.050342046367,
+          "mode": "analytic-proxy"
+        },
+        "score": 54.581592871269635
+      }
+    },
+    {
+      "generation": 1,
+      "best": {
+        "gene": {
+          "renderScale": 0.8446396623621695,
+          "lodBias": 0.8048259002971463,
+          "shadowDistance": 50.83023264305666,
+          "farDistance": 228.33983302116394,
+          "textureScale": 0.8275330549804494
+        },
+        "metrics": {
+          "fps": 37.937089911258894,
+          "visualQuality": 94.70091200523349,
+          "loadMs": 5259.204941615837,
+          "memoryMb": 608.2825165810084,
+          "mode": "analytic-proxy"
+        },
+        "score": 57.09490315112882
+      }
+    },
+    {
+      "generation": 2,
+      "best": {
+        "gene": {
+          "renderScale": 0.8446396623621695,
+          "lodBias": 0.8048259002971463,
+          "shadowDistance": 50.83023264305666,
+          "farDistance": 239.00848979875445,
+          "textureScale": 0.9662737260805443
+        },
+        "metrics": {
+          "fps": 36.49638804936141,
+          "visualQuality": 98.58565079603613,
+          "loadMs": 5393.670448726269,
+          "memoryMb": 624.930626985157,
+          "mode": "analytic-proxy"
+        },
+        "score": 58.39556554704344
+      }
+    },
+    {
+      "generation": 3,
+      "best": {
+        "gene": {
+          "renderScale": 0.836365637909621,
+          "lodBias": 0.8048259002971463,
+          "shadowDistance": 50.83023264305666,
+          "farDistance": 224.8339836202562,
+          "textureScale": 0.9662737260805443
+        },
+        "metrics": {
+          "fps": 36.97059085418355,
+          "visualQuality": 98.35397811136478,
+          "loadMs": 5349.411520276202,
+          "memoryMb": 619.4509501294345,
+          "mode": "analytic-proxy"
+        },
+        "score": 58.70034073270366
+      }
+    },
+    {
+      "generation": 4,
+      "best": {
+        "gene": {
+          "renderScale": 0.8446396623621695,
+          "lodBias": 0.8048259002971463,
+          "shadowDistance": 50.83023264305666,
+          "farDistance": 229.14572782516478,
+          "textureScale": 1
+        },
+        "metrics": {
+          "fps": 36.370381299610926,
+          "visualQuality": 99.52998646578091,
+          "loadMs": 5405.431078702981,
+          "memoryMb": 626.3867049822738,
+          "mode": "analytic-proxy"
+        },
+        "score": 58.93252205122411
+      }
+    },
+    {
+      "generation": 5,
+      "best": {
+        "gene": {
+          "renderScale": 0.8362311387690716,
+          "lodBias": 0.75,
+          "shadowDistance": 50.83023264305666,
+          "farDistance": 224.8339836202562,
+          "textureScale": 0.9662737260805443
+        },
+        "metrics": {
+          "fps": 36.361041047337686,
+          "visualQuality": 99.80346954912258,
+          "loadMs": 5406.302835581816,
+          "memoryMb": 626.4946367863201,
+          "mode": "analytic-proxy"
+        },
+        "score": 59.11476289145362
+      }
+    },
+    {
+      "generation": 6,
+      "best": {
+        "gene": {
+          "renderScale": 0.8362311387690716,
+          "lodBias": 0.75,
+          "shadowDistance": 50.83023264305666,
+          "farDistance": 224.8339836202562,
+          "textureScale": 0.9662737260805443
+        },
+        "metrics": {
+          "fps": 36.361041047337686,
+          "visualQuality": 99.80346954912258,
+          "loadMs": 5406.302835581816,
+          "memoryMb": 626.4946367863201,
+          "mode": "analytic-proxy"
+        },
+        "score": 59.11476289145362
+      }
+    },
+    {
+      "generation": 7,
+      "best": {
+        "gene": {
+          "renderScale": 0.8056963299564087,
+          "lodBias": 0.75,
+          "shadowDistance": 50.83023264305666,
+          "farDistance": 224.8339836202562,
+          "textureScale": 0.9884221129119396
+        },
+        "metrics": {
+          "fps": 36.951346641988344,
+          "visualQuality": 99.56864973364709,
+          "loadMs": 5351.207646747755,
+          "memoryMb": 619.673327692579,
+          "mode": "analytic-proxy"
+        },
+        "score": 59.53166115086845
+      }
+    },
+    {
+      "generation": 8,
+      "best": {
+        "gene": {
+          "renderScale": 0.8056963299564087,
+          "lodBias": 0.75,
+          "shadowDistance": 50.83023264305666,
+          "farDistance": 224.8339836202562,
+          "textureScale": 0.9884221129119396
+        },
+        "metrics": {
+          "fps": 36.951346641988344,
+          "visualQuality": 99.56864973364709,
+          "loadMs": 5351.207646747755,
+          "memoryMb": 619.673327692579,
+          "mode": "analytic-proxy"
+        },
+        "score": 59.53166115086845
+      }
+    },
+    {
+      "generation": 9,
+      "best": {
+        "gene": {
+          "renderScale": 0.7946579299494625,
+          "lodBias": 0.75,
+          "shadowDistance": 50.83023264305666,
+          "farDistance": 224.8339836202562,
+          "textureScale": 0.9965244570653885
+        },
+        "metrics": {
+          "fps": 37.156654814567474,
+          "visualQuality": 99.48644016974917,
+          "loadMs": 5332.045550640369,
+          "memoryMb": 617.3008776983313,
+          "mode": "analytic-proxy"
+        },
+        "score": 59.6762807915326
+      }
+    }
+  ]
+}

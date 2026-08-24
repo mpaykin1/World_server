@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-24T05:16:03.898Z",
+  "generatedAt": "2026-08-24T05:54:56.148Z",
   "technologies": {
     "Vercel": {
       "declaredPercent": 90,
@@ -253,6 +253,118 @@
       "status": "concept-partial",
       "runnableByRepoEvidence": false,
       "evidence": []
+    },
+    "llama.cpp CPU": {
+      "declaredPercent": 35,
+      "status": "adapter-prepared-local-model-not-configured",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "data/local-cpu-code-model.json",
+          "exists": true
+        },
+        {
+          "path": "scripts/local-cpu-code-model.js",
+          "exists": true
+        },
+        {
+          "path": "scripts/cpu-patch-tournament.js",
+          "exists": true
+        }
+      ]
+    },
+    "CPU Texture Factory": {
+      "declaredPercent": 90,
+      "status": "implemented-local-cpu-pipeline",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "scripts/cpu_texture_factory.py",
+          "exists": true
+        },
+        {
+          "path": "data/cpu-texture-policy.json",
+          "exists": true
+        }
+      ]
+    },
+    "CPU Mesh Factory": {
+      "declaredPercent": 85,
+      "status": "implemented-cpu-pipeline-runtime-depends-on-trimesh",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "scripts/cpu_mesh_factory.py",
+          "exists": true
+        },
+        {
+          "path": "scripts/cpu-mesh-scan.js",
+          "exists": true
+        }
+      ]
+    },
+    "CPU SSIM": {
+      "declaredPercent": 95,
+      "status": "implemented-cpu-visual-comparator",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "scripts/cpu_ssim_compare.py",
+          "exists": true
+        }
+      ]
+    },
+    "CPU Visual Ensemble": {
+      "declaredPercent": 95,
+      "status": "implemented-cpu-visual-regression-engine",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "scripts/cpu_visual_ensemble.py",
+          "exists": true
+        },
+        {
+          "path": "data/cpu-visual-ensemble-policy.json",
+          "exists": true
+        }
+      ]
+    },
+    "Bayesian Quality Predictor": {
+      "declaredPercent": 95,
+      "status": "implemented-history-driven-ranker",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "scripts/bayesian-quality-predictor.js",
+          "exists": true
+        }
+      ]
+    },
+    "Content-addressed Test Cache": {
+      "declaredPercent": 100,
+      "status": "implemented-exact-hash-cache",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "scripts/test-cache-runner.js",
+          "exists": true
+        }
+      ]
+    },
+    "Hardware Quality Profiles": {
+      "declaredPercent": 95,
+      "status": "implemented-host+browser-profiling",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "scripts/hardware-fingerprint.js",
+          "exists": true
+        },
+        {
+          "path": "shared/golden-device-profile.js",
+          "exists": true
+        }
+      ]
     }
   }
 }

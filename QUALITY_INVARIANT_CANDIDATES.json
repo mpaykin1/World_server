@@ -1,0 +1,55 @@
+{
+  "generatedAt": "2026-08-24T05:54:33.435Z",
+  "candidates": [
+    {
+      "id": "inv-contract-input-e7b1afb5",
+      "kind": "architecture",
+      "statement": "input must use canonical source shared/ai3d-playable-runtime.js",
+      "confidence": 1,
+      "status": "existing-contract"
+    },
+    {
+      "id": "inv-contract-input-28cce186",
+      "kind": "architecture",
+      "statement": "input must use canonical source shared/golden-physics.js",
+      "confidence": 1,
+      "status": "existing-contract"
+    },
+    {
+      "id": "inv-contract-ui-d49f9071",
+      "kind": "architecture",
+      "statement": "ui must use canonical source shared/golden-ui-shell.js",
+      "confidence": 1,
+      "status": "existing-contract"
+    },
+    {
+      "id": "inv-contract-ui-72bf6db7",
+      "kind": "architecture",
+      "statement": "ui must use canonical source shared/golden-ui-shell.css",
+      "confidence": 1,
+      "status": "existing-contract"
+    },
+    {
+      "id": "inv-contract-collision-28cce186",
+      "kind": "architecture",
+      "statement": "collision must use canonical source shared/golden-physics.js",
+      "confidence": 1,
+      "status": "existing-contract"
+    },
+    {
+      "id": "inv-contract-release-82c650df",
+      "kind": "architecture",
+      "statement": "release must use canonical source data/app-release-registry.json",
+      "confidence": 1,
+      "status": "existing-contract"
+    },
+    {
+      "id": "inv-contract-release-bd187898",
+      "kind": "architecture",
+      "statement": "release must use canonical source scripts/quality-regression-gate.js",
+      "confidence": 1,
+      "status": "existing-contract"
+    }
+  ],
+  "novel": []
+}

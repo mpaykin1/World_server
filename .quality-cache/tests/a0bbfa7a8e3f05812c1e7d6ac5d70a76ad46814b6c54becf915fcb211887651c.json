@@ -1,0 +1,14 @@
+{
+  "createdAt": "2026-08-24T05:52:40.230Z",
+  "key": "a0bbfa7a8e3f05812c1e7d6ac5d70a76ad46814b6c54becf915fcb211887651c",
+  "command": "node --test \"test/quality-regression.test.js\" \"test/golden-physics.test.js\" \"test/quality-fuzz.test.js\"",
+  "inputs": [
+    "shared/golden-physics.js",
+    "test/quality-regression.test.js",
+    "test/golden-physics.test.js",
+    "test/quality-fuzz.test.js"
+  ],
+  "pass": true,
+  "status": 0,
+  "cacheHit": false
+}

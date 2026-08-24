@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "1.0.0",
+  "minimumNights": 10,
+  "targetNights": 30,
+  "maxWeightChangePerRun": 0.1,
+  "maxBudgetChangePerRun": 0.15,
+  "candidateOnly": true,
+  "rule": "Calibration writes candidates; baseline/policy promotion still requires verification."
+}

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-23T03:43:23.895Z",
-  "candidateStatus": "V10_1_PREPARED_NOT_DEPLOYED",
-  "overallPercent": 98,
+  "generatedAt": "2026-08-24T05:51:07.320Z",
+  "candidateStatus": "V13_PREPARED_NOT_DEPLOYED",
+  "overallPercent": 99,
   "metrics": {
     "controls": {
       "label": "Стандарты управления",
@@ -14,7 +14,7 @@
     },
     "graphics": {
       "label": "Стандарты графики",
-      "percent": 97,
+      "percent": 99,
       "target": 100,
       "blockers": [
         "нет единого visual-quality gate",
@@ -85,7 +85,7 @@
     },
     "uploadedTechnologyUse": {
       "label": "Использование загруженных технологий",
-      "percent": 75,
+      "percent": 84,
       "target": 100,
       "blockers": [
         "InstantMesh/MPFB/UniRig/Rigify/Goo Engine/UPBGE не production-integrated",
@@ -128,6 +128,165 @@
       "percent": 100,
       "target": 100,
       "blockers": []
+    },
+    "silentAutopilot": {
+      "label": "Тихий автоматический рост качества",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "live GitHub write 403",
+        "connected Vercel team exposes 0 projects"
+      ]
+    },
+    "cpuNightLearning": {
+      "label": "Ночное CPU-обучение на истории качества",
+      "percent": 100,
+      "target": 100,
+      "blockers": [
+        "needs real accumulated production/nightly history for calibration"
+      ]
+    },
+    "zeroCostComputeCompliance": {
+      "label": "Соблюдение CPU-only / 0 платных вычислений",
+      "percent": 100,
+      "target": 100,
+      "blockers": []
+    },
+    "projectQueueAutomation": {
+      "label": "Автоматическая очередь улучшения проектов",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "Supabase migration not yet applied live"
+      ]
+    },
+    "idleCpuOptimization": {
+      "label": "Тихая работа только при свободном CPU",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "needs real desktop overnight telemetry to calibrate thresholds"
+      ]
+    },
+    "cpuEvolutionEngine": {
+      "label": "CPU Evolution Engine",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "needs real multi-night calibration on target hardware"
+      ]
+    },
+    "automaticTestSynthesis": {
+      "label": "Автоматический синтез regression tests",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "unknown error classes need local CPU model or new deterministic templates"
+      ]
+    },
+    "cpuAssetOptimization": {
+      "label": "CPU оптимизация текстур/мешей",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "real project asset benchmarks not executed live"
+      ]
+    },
+    "errorClosureAutomation": {
+      "label": "Автоматическое закрытие всех исправимых ошибок",
+      "percent": 100,
+      "target": 100,
+      "blockers": []
+    },
+    "learningKnowledgeBase": {
+      "label": "Failure/Success Knowledge Base",
+      "percent": 100,
+      "target": 100,
+      "blockers": [
+        "needs accumulated real nightly history"
+      ]
+    },
+    "adaptiveNightBudget": {
+      "label": "Адаптивный ночной CPU-бюджет",
+      "percent": 100,
+      "target": 100,
+      "blockers": []
+    },
+    "visualEnsemble": {
+      "label": "CPU Visual Ensemble",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "100% requires user-approved visual baselines for all key apps/devices"
+      ]
+    },
+    "invariantMining": {
+      "label": "Автоматический поиск инвариантов",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "novel invariants remain candidates until independently verified"
+      ]
+    },
+    "testResultCache": {
+      "label": "Кэш результатов тестов",
+      "percent": 100,
+      "target": 100,
+      "blockers": []
+    },
+    "nightCheckpointing": {
+      "label": "Checkpoint ночных задач",
+      "percent": 100,
+      "target": 100,
+      "blockers": []
+    },
+    "bayesianQualityPrediction": {
+      "label": "Bayesian Quality Predictor",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "needs more real nightly outcomes for tighter posterior estimates"
+      ]
+    },
+    "goldenPatternExtraction": {
+      "label": "Многофайловые Golden Patterns",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "explicit approval required for each promoted multi-file success"
+      ]
+    },
+    "assetSimilarity": {
+      "label": "Поиск похожих ассетов",
+      "percent": 98,
+      "target": 100,
+      "blockers": [
+        "similarity remains advisory; human/Golden confirmation required before replacement"
+      ]
+    },
+    "collisionSimplification": {
+      "label": "CPU Collision Simplifier",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "real gameplay collision validation required per promoted collision proxy"
+      ]
+    },
+    "hardwareProfiling": {
+      "label": "Профили качества под устройство",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "physical device farm is still unavailable"
+      ]
+    },
+    "selfCalibration": {
+      "label": "30-night self-calibration",
+      "percent": 98,
+      "target": 100,
+      "blockers": [
+        "needs 30 real nightly runs for full calibration"
+      ]
     }
   },
   "technologyUsage": {
@@ -150,13 +309,19 @@
     "UPBGE": 30,
     "Blender MCP": 0,
     "Unity MCP": 0,
-    "OpenGameEval/OpenGame": 10
+    "OpenGameEval/OpenGame": 10,
+    "CPU Visual Ensemble": 95,
+    "Bayesian Quality Predictor": 95,
+    "Content-addressed Test Cache": 100,
+    "Hardware Quality Profiles": 95,
+    "CPU Collision Simplifier": 95,
+    "Asset Similarity Scanner": 90
   },
   "regression": {
     "pass": true,
     "baselineId": "bootstrap-2026-08-23-world-server",
     "baselineOverall": 44.166666666666664,
-    "currentOverall": 97.58333333333333,
+    "currentOverall": 98.5,
     "violations": [],
     "improvements": [
       {
@@ -170,8 +335,8 @@
         "type": "metric-improvement",
         "id": "graphics",
         "baseline": 52,
-        "current": 97,
-        "delta": 45
+        "current": 99,
+        "delta": 47
       },
       {
         "type": "metric-improvement",
@@ -226,8 +391,8 @@
         "type": "metric-improvement",
         "id": "uploadedTechnologyUse",
         "baseline": 38,
-        "current": 75,
-        "delta": 37
+        "current": 84,
+        "delta": 46
       },
       {
         "type": "metric-improvement",
@@ -317,7 +482,7 @@
     "deltas": {
       "metrics": {
         "controls": 45,
-        "graphics": 45,
+        "graphics": 47,
         "deviceAccessibility": 54,
         "menu": 75,
         "collisions": 60,
@@ -325,7 +490,7 @@
         "codeReviewer": 45,
         "reports": 35,
         "functionConnectivity": 50,
-        "uploadedTechnologyUse": 37,
+        "uploadedTechnologyUse": 46,
         "errorRecurrenceProtection": 80,
         "goldenSolutionPropagation": 85
       },
@@ -351,13 +516,13 @@
         "Unity MCP": 0,
         "OpenGameEval/OpenGame": 0
       },
-      "overall": 53.416666666666664,
+      "overall": 54.333333333333336,
       "releaseBlockers": 0
     },
-    "generatedAt": "2026-08-23T03:43:22.837Z"
+    "generatedAt": "2026-08-24T05:51:06.356Z"
   },
   "projectReview": {
-    "generatedAt": "2026-08-23T03:43:23.105Z",
+    "generatedAt": "2026-08-24T05:51:06.685Z",
     "pass": true,
     "counts": {
       "blocker": 0,
@@ -374,7 +539,7 @@
     ]
   },
   "evidenceScore": {
-    "generatedAt": "2026-08-23T03:43:23.707Z",
+    "generatedAt": "2026-08-24T05:51:07.137Z",
     "candidateStatus": "PREPARED_NOT_DEPLOYED",
     "scores": {
       "controls": 100,
@@ -390,9 +555,27 @@
       "errorRecurrenceProtection": 100,
       "goldenSolutionPropagation": 85,
       "qualityGrowthAutomation": 96.3,
-      "desktopAIContinuity": 100
+      "desktopAIContinuity": 100,
+      "silentAutopilot": 90,
+      "zeroCostComputeCompliance": 80,
+      "cpuEvolutionEngine": 100,
+      "automaticTestSynthesis": 100,
+      "cpuAssetOptimization": 100,
+      "errorClosureAutomation": 100,
+      "learningKnowledgeBase": 100,
+      "adaptiveNightBudget": 100,
+      "visualEnsemble": 100,
+      "invariantMining": 100,
+      "testResultCache": 100,
+      "nightCheckpointing": 100,
+      "bayesianQualityPrediction": 100,
+      "goldenPatternExtraction": 100,
+      "assetSimilarity": 100,
+      "collisionSimplification": 100,
+      "hardwareProfiling": 100,
+      "selfCalibration": 100
     },
-    "overall": 95.5,
+    "overall": 97.1,
     "detail": {
       "controls": [
         {
@@ -1165,13 +1348,460 @@
           "pass": true,
           "status": "present"
         }
+      ],
+      "silentAutopilot": [
+        {
+          "id": "cpu-only-policy",
+          "weight": 12,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "night-cron-api",
+          "weight": 12,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "supabase-queue",
+          "weight": 12,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "desktop-night-worker",
+          "weight": 12,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "idle-cpu-check",
+          "weight": 10,
+          "pass": false,
+          "status": "missing"
+        },
+        {
+          "id": "quality-learning",
+          "weight": 12,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "never-retry",
+          "weight": 8,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "cross-project-learning",
+          "weight": 8,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "priority-goals",
+          "weight": 7,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "cpu-budget",
+          "weight": 7,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "zeroCostComputeCompliance": [
+        {
+          "id": "gpu-disabled",
+          "weight": 30,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "paid-disabled",
+          "weight": 30,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "queue-filter",
+          "weight": 20,
+          "pass": false,
+          "status": "missing"
+        },
+        {
+          "id": "policy-test",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "cpuEvolutionEngine": [
+        {
+          "id": "genetic-optimizer",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "incremental-tests",
+          "weight": 15,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "local-cpu-model",
+          "weight": 10,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "cpu-tournament",
+          "weight": 10,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "curriculum",
+          "weight": 15,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "adaptive-budget",
+          "weight": 15,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "cpu-only",
+          "weight": 15,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "automaticTestSynthesis": [
+        {
+          "id": "deterministic-generator",
+          "weight": 40,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "unknown-test-synth",
+          "weight": 35,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "incremental-map",
+          "weight": 25,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "cpuAssetOptimization": [
+        {
+          "id": "texture-factory",
+          "weight": 35,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "mesh-factory",
+          "weight": 35,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "ssim",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "asset-dedup",
+          "weight": 10,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "errorClosureAutomation": [
+        {
+          "id": "closure-policy",
+          "weight": 25,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "closure-gate",
+          "weight": 45,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "desktop-protocol",
+          "weight": 30,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "learningKnowledgeBase": [
+        {
+          "id": "failure-kb",
+          "weight": 30,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "success-kb",
+          "weight": 30,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "knowledge-learning",
+          "weight": 40,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "adaptiveNightBudget": [
+        {
+          "id": "budget-policy",
+          "weight": 35,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "budget-engine",
+          "weight": 45,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "planner-integration",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "visualEnsemble": [
+        {
+          "id": "visual-ensemble-policy",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "visual-ensemble-engine",
+          "weight": 60,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "approved-baseline-boundary",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "invariantMining": [
+        {
+          "id": "invariant-policy",
+          "weight": 25,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "invariant-engine",
+          "weight": 55,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "protected-errors",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "testResultCache": [
+        {
+          "id": "cache-policy",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "cache-runner",
+          "weight": 55,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "cache-smoke",
+          "weight": 25,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "nightCheckpointing": [
+        {
+          "id": "checkpoint-policy",
+          "weight": 25,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "checkpoint-tool",
+          "weight": 35,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "genetic-resume",
+          "weight": 40,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "bayesianQualityPrediction": [
+        {
+          "id": "bayes-policy",
+          "weight": 25,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "bayes-engine",
+          "weight": 55,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "planner-adoption",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "goldenPatternExtraction": [
+        {
+          "id": "pattern-policy",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "pattern-registry",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "pattern-promoter",
+          "weight": 60,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "assetSimilarity": [
+        {
+          "id": "similarity-policy",
+          "weight": 25,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "similarity-engine",
+          "weight": 75,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "collisionSimplification": [
+        {
+          "id": "collision-engine",
+          "weight": 70,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "mesh-scan-integration",
+          "weight": 30,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "hardwareProfiling": [
+        {
+          "id": "hardware-policy",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "host-profile",
+          "weight": 30,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "browser-profile",
+          "weight": 30,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "perf-adoption",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "selfCalibration": [
+        {
+          "id": "calibration-policy",
+          "weight": 25,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "calibration-engine",
+          "weight": 50,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "adaptive-budget-adoption",
+          "weight": 25,
+          "pass": true,
+          "status": "present"
+        }
       ]
     }
   },
   "duplicateReview": {
-    "generatedAt": "2026-08-23T03:43:23.228Z",
+    "generatedAt": "2026-08-24T05:51:06.811Z",
     "blockers": 0,
     "findings": [
+      {
+        "severity": "warning",
+        "system": "duplicate-code",
+        "hash": "ff471a5ff3a54ee19a711ab83333391ce0d4f497",
+        "occurrences": [
+          {
+            "file": "apps/ai3d-voxel-city/client.js",
+            "name": "goldenPlayableHorizontal"
+          },
+          {
+            "file": "apps/ai3d-voxel-city/client.js",
+            "name": "goldenPlayableHorizontal"
+          }
+        ]
+      },
       {
         "severity": "warning",
         "system": "duplicate-code",
@@ -1205,7 +1835,7 @@
     ]
   },
   "systemContracts": {
-    "generatedAt": "2026-08-23T03:43:23.379Z",
+    "generatedAt": "2026-08-24T05:51:06.896Z",
     "blockers": 0,
     "adoption": {
       "input": {
@@ -1250,7 +1880,7 @@
     "findings": []
   },
   "technologyRuntime": {
-    "generatedAt": "2026-08-23T03:43:23.535Z",
+    "generatedAt": "2026-08-24T05:51:06.981Z",
     "technologies": {
       "Vercel": {
         "declaredPercent": 90,
@@ -1504,31 +2134,1367 @@
         "status": "concept-partial",
         "runnableByRepoEvidence": false,
         "evidence": []
+      },
+      "llama.cpp CPU": {
+        "declaredPercent": 35,
+        "status": "adapter-prepared-local-model-not-configured",
+        "runnableByRepoEvidence": false,
+        "evidence": [
+          {
+            "path": "data/local-cpu-code-model.json",
+            "exists": true
+          },
+          {
+            "path": "scripts/local-cpu-code-model.js",
+            "exists": true
+          },
+          {
+            "path": "scripts/cpu-patch-tournament.js",
+            "exists": true
+          }
+        ]
+      },
+      "CPU Texture Factory": {
+        "declaredPercent": 90,
+        "status": "implemented-local-cpu-pipeline",
+        "runnableByRepoEvidence": false,
+        "evidence": [
+          {
+            "path": "scripts/cpu_texture_factory.py",
+            "exists": true
+          },
+          {
+            "path": "data/cpu-texture-policy.json",
+            "exists": true
+          }
+        ]
+      },
+      "CPU Mesh Factory": {
+        "declaredPercent": 85,
+        "status": "implemented-cpu-pipeline-runtime-depends-on-trimesh",
+        "runnableByRepoEvidence": false,
+        "evidence": [
+          {
+            "path": "scripts/cpu_mesh_factory.py",
+            "exists": true
+          },
+          {
+            "path": "scripts/cpu-mesh-scan.js",
+            "exists": true
+          }
+        ]
+      },
+      "CPU SSIM": {
+        "declaredPercent": 95,
+        "status": "implemented-cpu-visual-comparator",
+        "runnableByRepoEvidence": false,
+        "evidence": [
+          {
+            "path": "scripts/cpu_ssim_compare.py",
+            "exists": true
+          }
+        ]
+      },
+      "CPU Visual Ensemble": {
+        "declaredPercent": 95,
+        "status": "implemented-cpu-visual-regression-engine",
+        "runnableByRepoEvidence": false,
+        "evidence": [
+          {
+            "path": "scripts/cpu_visual_ensemble.py",
+            "exists": true
+          },
+          {
+            "path": "data/cpu-visual-ensemble-policy.json",
+            "exists": true
+          }
+        ]
+      },
+      "Bayesian Quality Predictor": {
+        "declaredPercent": 95,
+        "status": "implemented-history-driven-ranker",
+        "runnableByRepoEvidence": false,
+        "evidence": [
+          {
+            "path": "scripts/bayesian-quality-predictor.js",
+            "exists": true
+          }
+        ]
+      },
+      "Content-addressed Test Cache": {
+        "declaredPercent": 100,
+        "status": "implemented-exact-hash-cache",
+        "runnableByRepoEvidence": false,
+        "evidence": [
+          {
+            "path": "scripts/test-cache-runner.js",
+            "exists": true
+          }
+        ]
+      },
+      "Hardware Quality Profiles": {
+        "declaredPercent": 95,
+        "status": "implemented-host+browser-profiling",
+        "runnableByRepoEvidence": false,
+        "evidence": [
+          {
+            "path": "scripts/hardware-fingerprint.js",
+            "exists": true
+          },
+          {
+            "path": "shared/golden-device-profile.js",
+            "exists": true
+          }
+        ]
       }
     }
   },
   "visualBaselines": null,
-  "growthBacklog": null,
-  "improvementPlan": null,
+  "growthBacklog": {
+    "generatedAt": "2026-08-23T03:43:24.199Z",
+    "backlogCount": 7,
+    "top10": [
+      {
+        "type": "quality-control-gap",
+        "metric": "goldenSolutionPropagation",
+        "controlId": "adoption-lock",
+        "impactPoints": 15,
+        "effort": 2,
+        "confidence": 0.95,
+        "reuse": 1.5,
+        "priority": 10.69,
+        "recommendedAction": "Add required canonical file data/golden-adoptions.json"
+      },
+      {
+        "type": "technology-growth",
+        "technology": "OpenGameEval/OpenGame",
+        "impactPoints": 90,
+        "effort": 9,
+        "confidence": 0.55,
+        "reuse": 1.1,
+        "priority": 6.05,
+        "recommendedAction": "Move OpenGameEval/OpenGame from concept-partial to verified runnable integration with health check + smoke test"
+      },
+      {
+        "type": "technology-growth",
+        "technology": "Depth Anything",
+        "impactPoints": 50,
+        "effort": 7,
+        "confidence": 0.55,
+        "reuse": 1.1,
+        "priority": 4.32,
+        "recommendedAction": "Move Depth Anything from adapter to verified runnable integration with health check + smoke test"
+      },
+      {
+        "type": "quality-control-gap",
+        "metric": "qualityGrowthAutomation",
+        "controlId": "rollback",
+        "impactPoints": 10,
+        "effort": 3,
+        "confidence": 0.95,
+        "reuse": 1,
+        "priority": 3.17,
+        "recommendedAction": "Implement canonical source behavior containing vercel rollback"
+      },
+      {
+        "type": "quality-control-gap",
+        "metric": "uploadedTechnologyUse",
+        "controlId": "production-adapters",
+        "impactPoints": 45,
+        "effort": 8,
+        "confidence": 0.55,
+        "reuse": 1,
+        "priority": 3.09,
+        "recommendedAction": "Obtain verified external/runtime evidence for production-adapters"
+      },
+      {
+        "type": "golden-promotion-gap",
+        "component": "stained-glass",
+        "impactPoints": 10,
+        "effort": 4,
+        "confidence": 0.7,
+        "reuse": 1.6,
+        "priority": 2.8,
+        "recommendedAction": "Obtain exact approved source/asset for stained-glass, freeze it, then propagate to all compatible apps"
+      },
+      {
+        "type": "quality-control-gap",
+        "metric": "graphics",
+        "controlId": "approved-screenshot-baselines",
+        "impactPoints": 15,
+        "effort": 8,
+        "confidence": 0.55,
+        "reuse": 1,
+        "priority": 1.03,
+        "recommendedAction": "Obtain verified external/runtime evidence for approved-screenshot-baselines"
+      }
+    ],
+    "backlog": [
+      {
+        "type": "quality-control-gap",
+        "metric": "goldenSolutionPropagation",
+        "controlId": "adoption-lock",
+        "impactPoints": 15,
+        "effort": 2,
+        "confidence": 0.95,
+        "reuse": 1.5,
+        "priority": 10.69,
+        "recommendedAction": "Add required canonical file data/golden-adoptions.json"
+      },
+      {
+        "type": "technology-growth",
+        "technology": "OpenGameEval/OpenGame",
+        "impactPoints": 90,
+        "effort": 9,
+        "confidence": 0.55,
+        "reuse": 1.1,
+        "priority": 6.05,
+        "recommendedAction": "Move OpenGameEval/OpenGame from concept-partial to verified runnable integration with health check + smoke test"
+      },
+      {
+        "type": "technology-growth",
+        "technology": "Depth Anything",
+        "impactPoints": 50,
+        "effort": 7,
+        "confidence": 0.55,
+        "reuse": 1.1,
+        "priority": 4.32,
+        "recommendedAction": "Move Depth Anything from adapter to verified runnable integration with health check + smoke test"
+      },
+      {
+        "type": "quality-control-gap",
+        "metric": "qualityGrowthAutomation",
+        "controlId": "rollback",
+        "impactPoints": 10,
+        "effort": 3,
+        "confidence": 0.95,
+        "reuse": 1,
+        "priority": 3.17,
+        "recommendedAction": "Implement canonical source behavior containing vercel rollback"
+      },
+      {
+        "type": "quality-control-gap",
+        "metric": "uploadedTechnologyUse",
+        "controlId": "production-adapters",
+        "impactPoints": 45,
+        "effort": 8,
+        "confidence": 0.55,
+        "reuse": 1,
+        "priority": 3.09,
+        "recommendedAction": "Obtain verified external/runtime evidence for production-adapters"
+      },
+      {
+        "type": "golden-promotion-gap",
+        "component": "stained-glass",
+        "impactPoints": 10,
+        "effort": 4,
+        "confidence": 0.7,
+        "reuse": 1.6,
+        "priority": 2.8,
+        "recommendedAction": "Obtain exact approved source/asset for stained-glass, freeze it, then propagate to all compatible apps"
+      },
+      {
+        "type": "quality-control-gap",
+        "metric": "graphics",
+        "controlId": "approved-screenshot-baselines",
+        "impactPoints": 15,
+        "effort": 8,
+        "confidence": 0.55,
+        "reuse": 1,
+        "priority": 1.03,
+        "recommendedAction": "Obtain verified external/runtime evidence for approved-screenshot-baselines"
+      }
+    ],
+    "nextBestAction": {
+      "type": "quality-control-gap",
+      "metric": "goldenSolutionPropagation",
+      "controlId": "adoption-lock",
+      "impactPoints": 15,
+      "effort": 2,
+      "confidence": 0.95,
+      "reuse": 1.5,
+      "priority": 10.69,
+      "recommendedAction": "Add required canonical file data/golden-adoptions.json"
+    }
+  },
+  "improvementPlan": {
+    "generatedAt": "2026-08-23T03:43:24.284Z",
+    "tasks": [
+      {
+        "rank": 1,
+        "id": "QG-001",
+        "title": "Improve goldenSolutionPropagation: adoption-lock",
+        "reason": {
+          "type": "quality-control-gap",
+          "metric": "goldenSolutionPropagation",
+          "controlId": "adoption-lock",
+          "impactPoints": 15,
+          "effort": 2,
+          "confidence": 0.95,
+          "reuse": 1.5,
+          "priority": 10.69,
+          "recommendedAction": "Add required canonical file data/golden-adoptions.json"
+        },
+        "acceptanceCriteria": [
+          "No existing metric decreases",
+          "Relevant behavioral/static test passes",
+          "QUALITY_REGRESSION_REPORT passes",
+          "PROJECT_QUALITY_REVIEW has zero blockers",
+          "Evidence record is added before score increases"
+        ],
+        "status": "planned"
+      },
+      {
+        "rank": 2,
+        "id": "QG-002",
+        "title": "Integrate OpenGameEval/OpenGame",
+        "reason": {
+          "type": "technology-growth",
+          "technology": "OpenGameEval/OpenGame",
+          "impactPoints": 90,
+          "effort": 9,
+          "confidence": 0.55,
+          "reuse": 1.1,
+          "priority": 6.05,
+          "recommendedAction": "Move OpenGameEval/OpenGame from concept-partial to verified runnable integration with health check + smoke test"
+        },
+        "acceptanceCriteria": [
+          "No existing metric decreases",
+          "Relevant behavioral/static test passes",
+          "QUALITY_REGRESSION_REPORT passes",
+          "PROJECT_QUALITY_REVIEW has zero blockers",
+          "Evidence record is added before score increases"
+        ],
+        "status": "planned"
+      },
+      {
+        "rank": 3,
+        "id": "QG-003",
+        "title": "Integrate Depth Anything",
+        "reason": {
+          "type": "technology-growth",
+          "technology": "Depth Anything",
+          "impactPoints": 50,
+          "effort": 7,
+          "confidence": 0.55,
+          "reuse": 1.1,
+          "priority": 4.32,
+          "recommendedAction": "Move Depth Anything from adapter to verified runnable integration with health check + smoke test"
+        },
+        "acceptanceCriteria": [
+          "No existing metric decreases",
+          "Relevant behavioral/static test passes",
+          "QUALITY_REGRESSION_REPORT passes",
+          "PROJECT_QUALITY_REVIEW has zero blockers",
+          "Evidence record is added before score increases"
+        ],
+        "status": "planned"
+      },
+      {
+        "rank": 4,
+        "id": "QG-004",
+        "title": "Improve qualityGrowthAutomation: rollback",
+        "reason": {
+          "type": "quality-control-gap",
+          "metric": "qualityGrowthAutomation",
+          "controlId": "rollback",
+          "impactPoints": 10,
+          "effort": 3,
+          "confidence": 0.95,
+          "reuse": 1,
+          "priority": 3.17,
+          "recommendedAction": "Implement canonical source behavior containing vercel rollback"
+        },
+        "acceptanceCriteria": [
+          "No existing metric decreases",
+          "Relevant behavioral/static test passes",
+          "QUALITY_REGRESSION_REPORT passes",
+          "PROJECT_QUALITY_REVIEW has zero blockers",
+          "Evidence record is added before score increases"
+        ],
+        "status": "planned"
+      },
+      {
+        "rank": 5,
+        "id": "QG-005",
+        "title": "Improve uploadedTechnologyUse: production-adapters",
+        "reason": {
+          "type": "quality-control-gap",
+          "metric": "uploadedTechnologyUse",
+          "controlId": "production-adapters",
+          "impactPoints": 45,
+          "effort": 8,
+          "confidence": 0.55,
+          "reuse": 1,
+          "priority": 3.09,
+          "recommendedAction": "Obtain verified external/runtime evidence for production-adapters"
+        },
+        "acceptanceCriteria": [
+          "No existing metric decreases",
+          "Relevant behavioral/static test passes",
+          "QUALITY_REGRESSION_REPORT passes",
+          "PROJECT_QUALITY_REVIEW has zero blockers",
+          "Evidence record is added before score increases"
+        ],
+        "status": "planned"
+      },
+      {
+        "rank": 6,
+        "id": "QG-006",
+        "title": "Promote Golden stained-glass",
+        "reason": {
+          "type": "golden-promotion-gap",
+          "component": "stained-glass",
+          "impactPoints": 10,
+          "effort": 4,
+          "confidence": 0.7,
+          "reuse": 1.6,
+          "priority": 2.8,
+          "recommendedAction": "Obtain exact approved source/asset for stained-glass, freeze it, then propagate to all compatible apps"
+        },
+        "acceptanceCriteria": [
+          "No existing metric decreases",
+          "Relevant behavioral/static test passes",
+          "QUALITY_REGRESSION_REPORT passes",
+          "PROJECT_QUALITY_REVIEW has zero blockers",
+          "Evidence record is added before score increases"
+        ],
+        "status": "planned"
+      },
+      {
+        "rank": 7,
+        "id": "QG-007",
+        "title": "Improve graphics: approved-screenshot-baselines",
+        "reason": {
+          "type": "quality-control-gap",
+          "metric": "graphics",
+          "controlId": "approved-screenshot-baselines",
+          "impactPoints": 15,
+          "effort": 8,
+          "confidence": 0.55,
+          "reuse": 1,
+          "priority": 1.03,
+          "recommendedAction": "Obtain verified external/runtime evidence for approved-screenshot-baselines"
+        },
+        "acceptanceCriteria": [
+          "No existing metric decreases",
+          "Relevant behavioral/static test passes",
+          "QUALITY_REGRESSION_REPORT passes",
+          "PROJECT_QUALITY_REVIEW has zero blockers",
+          "Evidence record is added before score increases"
+        ],
+        "status": "planned"
+      }
+    ]
+  },
   "trend": null,
   "appMatrix": null,
-  "testGaps": null,
+  "testGaps": {
+    "generatedAt": "2026-08-24T05:15:53.126Z",
+    "gaps": []
+  },
   "promotionCandidate": null,
   "autoFix": null,
-  "technologyOrchestrator": null,
+  "technologyOrchestrator": {
+    "generatedAt": "2026-08-24T05:16:04.919Z",
+    "runnable": 0,
+    "total": 11,
+    "coveragePercent": 0,
+    "engines": {
+      "instantmesh": {
+        "available": false,
+        "location": null,
+        "reason": "repo env not configured",
+        "adapter": "services/ai3d-worker/ai3d/plugins/instantmesh.py"
+      },
+      "trellis2": {
+        "available": false,
+        "location": null,
+        "reason": "repo env not configured",
+        "adapter": "services/ai3d-worker/ai3d/plugins/trellis2.py"
+      },
+      "blender": {
+        "available": false,
+        "location": null,
+        "reason": "binary not detected",
+        "adapter": null
+      },
+      "godot": {
+        "available": false,
+        "location": null,
+        "reason": "binary not detected",
+        "adapter": null
+      },
+      "hunyuan3d": {
+        "available": false,
+        "location": null,
+        "reason": "branch may exist but no runtime endpoint",
+        "adapter": null
+      },
+      "mpfb": {
+        "available": false,
+        "location": null,
+        "reason": "addon not configured",
+        "adapter": null
+      },
+      "unirig": {
+        "available": false,
+        "location": null,
+        "reason": "repo env not configured",
+        "adapter": null
+      },
+      "rigify": {
+        "available": false,
+        "location": null,
+        "reason": "addon not configured",
+        "adapter": null
+      },
+      "goo-engine": {
+        "available": false,
+        "location": null,
+        "reason": "binary not detected",
+        "adapter": null
+      },
+      "upbge": {
+        "available": false,
+        "location": null,
+        "reason": "binary not detected",
+        "adapter": null
+      },
+      "gpu-router": {
+        "available": false,
+        "location": "AI3D_GPU_WORKERS_JSON",
+        "reason": "remote workers not configured",
+        "adapter": "services/ai3d-worker/ai3d/plugins/gpu_router.py"
+      }
+    }
+  },
   "realDevices": null,
   "goldenAssets": null,
-  "issueCandidates": null,
+  "issueCandidates": {
+    "generatedAt": "2026-08-24T05:16:10.171Z",
+    "issues": [
+      {
+        "source": "PROJECT_QUALITY_REVIEW.json",
+        "details": {
+          "severity": "major",
+          "category": "mobile",
+          "file": "apps/ai3d-voxel-city/index.html",
+          "message": "viewport-fit=cover missing"
+        }
+      }
+    ]
+  },
   "productionQuality": null,
-  "impactGraph": null,
-  "changeImpact": null,
+  "impactGraph": {
+    "generatedAt": "2026-08-24T05:16:01.854Z",
+    "nodes": [
+      "app:ai-3d",
+      "app:ai3d-reference-test",
+      "app:ai3d-voxel-city",
+      "app:catalog",
+      "app:chat",
+      "app:survival",
+      "app:voxel-world",
+      "app:world-sharabass",
+      "apps/ai-3d/client.js",
+      "apps/ai-3d/index.html",
+      "apps/ai-3d/styles.css",
+      "apps/ai3d-reference-test/assets/previous_html_baseline.html",
+      "apps/ai3d-reference-test/client.js",
+      "apps/ai3d-reference-test/index.html",
+      "apps/ai3d-reference-test/styles.css",
+      "apps/ai3d-voxel-city/client.js",
+      "apps/ai3d-voxel-city/index.html",
+      "apps/ai3d-voxel-city/mesher-worker.js",
+      "apps/ai3d-voxel-city/styles.css",
+      "apps/catalog/client.js",
+      "apps/catalog/index.html",
+      "apps/chat/index.html",
+      "apps/survival/client.js",
+      "apps/survival/index.html",
+      "apps/voxel-world/client.js",
+      "apps/voxel-world/index.html",
+      "apps/world-sharabass/index.html",
+      "capability:playable",
+      "capability:windows",
+      "release:certified",
+      "release:diagnostic",
+      "release:quarantine",
+      "release:system",
+      "release:tool",
+      "shared/ai3d-playable-runtime.js",
+      "shared/common.js",
+      "shared/golden-catalog-menu.js",
+      "shared/golden-performance-autotuner.js",
+      "shared/golden-physics.js",
+      "shared/golden-ui-shell.css",
+      "shared/golden-ui-shell.js",
+      "shared/quality-telemetry.js",
+      "shared/sentry-runtime.js",
+      "shared/style.css",
+      "shared/world-quality-autopilot.js"
+    ],
+    "edges": [
+      {
+        "from": "apps/ai-3d/client.js",
+        "to": "app:ai-3d",
+        "kind": "belongs-to"
+      },
+      {
+        "from": "apps/ai-3d/index.html",
+        "to": "app:ai-3d",
+        "kind": "belongs-to"
+      },
+      {
+        "from": "shared/sentry-runtime.js",
+        "to": "apps/ai-3d/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "apps/ai-3d/styles.css",
+        "to": "app:ai-3d",
+        "kind": "belongs-to"
+      },
+      {
+        "from": "apps/ai3d-reference-test/assets/previous_html_baseline.html",
+        "to": "app:ai3d-reference-test",
+        "kind": "belongs-to"
+      },
+      {
+        "from": "apps/ai3d-reference-test/client.js",
+        "to": "app:ai3d-reference-test",
+        "kind": "belongs-to"
+      },
+      {
+        "from": "apps/ai3d-reference-test/index.html",
+        "to": "app:ai3d-reference-test",
+        "kind": "belongs-to"
+      },
+      {
+        "from": "shared/sentry-runtime.js",
+        "to": "apps/ai3d-reference-test/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "apps/ai3d-reference-test/styles.css",
+        "to": "app:ai3d-reference-test",
+        "kind": "belongs-to"
+      },
+      {
+        "from": "apps/ai3d-voxel-city/client.js",
+        "to": "app:ai3d-voxel-city",
+        "kind": "belongs-to"
+      },
+      {
+        "from": "apps/ai3d-voxel-city/index.html",
+        "to": "app:ai3d-voxel-city",
+        "kind": "belongs-to"
+      },
+      {
+        "from": "shared/ai3d-playable-runtime.js",
+        "to": "apps/ai3d-voxel-city/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/sentry-runtime.js",
+        "to": "apps/ai3d-voxel-city/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/golden-ui-shell.css",
+        "to": "apps/ai3d-voxel-city/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/golden-physics.js",
+        "to": "apps/ai3d-voxel-city/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/golden-ui-shell.js",
+        "to": "apps/ai3d-voxel-city/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/quality-telemetry.js",
+        "to": "apps/ai3d-voxel-city/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/golden-performance-autotuner.js",
+        "to": "apps/ai3d-voxel-city/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/world-quality-autopilot.js",
+        "to": "apps/ai3d-voxel-city/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "apps/ai3d-voxel-city/mesher-worker.js",
+        "to": "app:ai3d-voxel-city",
+        "kind": "belongs-to"
+      },
+      {
+        "from": "apps/ai3d-voxel-city/styles.css",
+        "to": "app:ai3d-voxel-city",
+        "kind": "belongs-to"
+      },
+      {
+        "from": "apps/catalog/client.js",
+        "to": "app:catalog",
+        "kind": "belongs-to"
+      },
+      {
+        "from": "apps/catalog/index.html",
+        "to": "app:catalog",
+        "kind": "belongs-to"
+      },
+      {
+        "from": "shared/style.css",
+        "to": "apps/catalog/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/sentry-runtime.js",
+        "to": "apps/catalog/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/common.js",
+        "to": "apps/catalog/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/ai3d-playable-runtime.js",
+        "to": "apps/catalog/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/golden-catalog-menu.js",
+        "to": "apps/catalog/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/golden-ui-shell.css",
+        "to": "apps/catalog/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/golden-physics.js",
+        "to": "apps/catalog/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/golden-ui-shell.js",
+        "to": "apps/catalog/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/quality-telemetry.js",
+        "to": "apps/catalog/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "apps/chat/index.html",
+        "to": "app:chat",
+        "kind": "belongs-to"
+      },
+      {
+        "from": "shared/style.css",
+        "to": "apps/chat/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/sentry-runtime.js",
+        "to": "apps/chat/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/common.js",
+        "to": "apps/chat/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "apps/survival/client.js",
+        "to": "app:survival",
+        "kind": "belongs-to"
+      },
+      {
+        "from": "apps/survival/index.html",
+        "to": "app:survival",
+        "kind": "belongs-to"
+      },
+      {
+        "from": "shared/style.css",
+        "to": "apps/survival/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/sentry-runtime.js",
+        "to": "apps/survival/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/common.js",
+        "to": "apps/survival/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/ai3d-playable-runtime.js",
+        "to": "apps/survival/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/golden-ui-shell.css",
+        "to": "apps/survival/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/golden-physics.js",
+        "to": "apps/survival/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/golden-ui-shell.js",
+        "to": "apps/survival/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/quality-telemetry.js",
+        "to": "apps/survival/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "apps/voxel-world/client.js",
+        "to": "app:voxel-world",
+        "kind": "belongs-to"
+      },
+      {
+        "from": "apps/voxel-world/index.html",
+        "to": "app:voxel-world",
+        "kind": "belongs-to"
+      },
+      {
+        "from": "shared/style.css",
+        "to": "apps/voxel-world/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/sentry-runtime.js",
+        "to": "apps/voxel-world/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/common.js",
+        "to": "apps/voxel-world/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/golden-ui-shell.css",
+        "to": "apps/voxel-world/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/golden-physics.js",
+        "to": "apps/voxel-world/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/golden-ui-shell.js",
+        "to": "apps/voxel-world/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/quality-telemetry.js",
+        "to": "apps/voxel-world/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/golden-performance-autotuner.js",
+        "to": "apps/voxel-world/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/world-quality-autopilot.js",
+        "to": "apps/voxel-world/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "apps/world-sharabass/index.html",
+        "to": "app:world-sharabass",
+        "kind": "belongs-to"
+      },
+      {
+        "from": "shared/style.css",
+        "to": "apps/world-sharabass/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/sentry-runtime.js",
+        "to": "apps/world-sharabass/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/common.js",
+        "to": "apps/world-sharabass/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/golden-ui-shell.css",
+        "to": "apps/world-sharabass/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/golden-physics.js",
+        "to": "apps/world-sharabass/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/golden-ui-shell.js",
+        "to": "apps/world-sharabass/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/quality-telemetry.js",
+        "to": "apps/world-sharabass/index.html",
+        "kind": "html-dependency"
+      },
+      {
+        "from": "shared/ai3d-playable-runtime.js",
+        "to": "app:voxel-world",
+        "kind": "contract:input"
+      },
+      {
+        "from": "shared/ai3d-playable-runtime.js",
+        "to": "app:ai3d-voxel-city",
+        "kind": "contract:input"
+      },
+      {
+        "from": "shared/ai3d-playable-runtime.js",
+        "to": "app:catalog",
+        "kind": "contract:input"
+      },
+      {
+        "from": "shared/golden-physics.js",
+        "to": "app:voxel-world",
+        "kind": "contract:input"
+      },
+      {
+        "from": "shared/golden-physics.js",
+        "to": "app:ai3d-voxel-city",
+        "kind": "contract:input"
+      },
+      {
+        "from": "shared/golden-physics.js",
+        "to": "app:catalog",
+        "kind": "contract:input"
+      },
+      {
+        "from": "shared/golden-ui-shell.js",
+        "to": "app:voxel-world",
+        "kind": "contract:ui"
+      },
+      {
+        "from": "shared/golden-ui-shell.js",
+        "to": "app:ai3d-voxel-city",
+        "kind": "contract:ui"
+      },
+      {
+        "from": "shared/golden-ui-shell.js",
+        "to": "app:catalog",
+        "kind": "contract:ui"
+      },
+      {
+        "from": "shared/golden-ui-shell.css",
+        "to": "app:voxel-world",
+        "kind": "contract:ui"
+      },
+      {
+        "from": "shared/golden-ui-shell.css",
+        "to": "app:ai3d-voxel-city",
+        "kind": "contract:ui"
+      },
+      {
+        "from": "shared/golden-ui-shell.css",
+        "to": "app:catalog",
+        "kind": "contract:ui"
+      },
+      {
+        "from": "shared/golden-physics.js",
+        "to": "app:voxel-world",
+        "kind": "contract:collision"
+      },
+      {
+        "from": "shared/golden-physics.js",
+        "to": "app:ai3d-voxel-city",
+        "kind": "contract:collision"
+      },
+      {
+        "from": "capability:playable",
+        "to": "app:voxel-world",
+        "kind": "capability"
+      },
+      {
+        "from": "capability:playable",
+        "to": "app:ai3d-voxel-city",
+        "kind": "capability"
+      },
+      {
+        "from": "capability:windows",
+        "to": "app:ai3d-voxel-city",
+        "kind": "capability"
+      },
+      {
+        "from": "capability:playable",
+        "to": "app:survival",
+        "kind": "capability"
+      },
+      {
+        "from": "capability:playable",
+        "to": "app:world-sharabass",
+        "kind": "capability"
+      },
+      {
+        "from": "release:certified",
+        "to": "app:voxel-world",
+        "kind": "release-status"
+      },
+      {
+        "from": "release:certified",
+        "to": "app:ai3d-voxel-city",
+        "kind": "release-status"
+      },
+      {
+        "from": "release:quarantine",
+        "to": "app:survival",
+        "kind": "release-status"
+      },
+      {
+        "from": "release:quarantine",
+        "to": "app:world-sharabass",
+        "kind": "release-status"
+      },
+      {
+        "from": "release:diagnostic",
+        "to": "app:ai3d-reference-test",
+        "kind": "release-status"
+      },
+      {
+        "from": "release:tool",
+        "to": "app:ai-3d",
+        "kind": "release-status"
+      },
+      {
+        "from": "release:tool",
+        "to": "app:chat",
+        "kind": "release-status"
+      },
+      {
+        "from": "release:system",
+        "to": "app:catalog",
+        "kind": "release-status"
+      }
+    ],
+    "reverse": {
+      "apps/ai-3d/client.js": [
+        "app:ai-3d"
+      ],
+      "apps/ai-3d/index.html": [
+        "app:ai-3d"
+      ],
+      "shared/sentry-runtime.js": [
+        "apps/ai-3d/index.html",
+        "apps/ai3d-reference-test/index.html",
+        "apps/ai3d-voxel-city/index.html",
+        "apps/catalog/index.html",
+        "apps/chat/index.html",
+        "apps/survival/index.html",
+        "apps/voxel-world/index.html",
+        "apps/world-sharabass/index.html"
+      ],
+      "apps/ai-3d/styles.css": [
+        "app:ai-3d"
+      ],
+      "apps/ai3d-reference-test/assets/previous_html_baseline.html": [
+        "app:ai3d-reference-test"
+      ],
+      "apps/ai3d-reference-test/client.js": [
+        "app:ai3d-reference-test"
+      ],
+      "apps/ai3d-reference-test/index.html": [
+        "app:ai3d-reference-test"
+      ],
+      "apps/ai3d-reference-test/styles.css": [
+        "app:ai3d-reference-test"
+      ],
+      "apps/ai3d-voxel-city/client.js": [
+        "app:ai3d-voxel-city"
+      ],
+      "apps/ai3d-voxel-city/index.html": [
+        "app:ai3d-voxel-city"
+      ],
+      "shared/ai3d-playable-runtime.js": [
+        "apps/ai3d-voxel-city/index.html",
+        "apps/catalog/index.html",
+        "apps/survival/index.html",
+        "app:voxel-world",
+        "app:ai3d-voxel-city",
+        "app:catalog"
+      ],
+      "shared/golden-ui-shell.css": [
+        "apps/ai3d-voxel-city/index.html",
+        "apps/catalog/index.html",
+        "apps/survival/index.html",
+        "apps/voxel-world/index.html",
+        "apps/world-sharabass/index.html",
+        "app:voxel-world",
+        "app:ai3d-voxel-city",
+        "app:catalog"
+      ],
+      "shared/golden-physics.js": [
+        "apps/ai3d-voxel-city/index.html",
+        "apps/catalog/index.html",
+        "apps/survival/index.html",
+        "apps/voxel-world/index.html",
+        "apps/world-sharabass/index.html",
+        "app:voxel-world",
+        "app:ai3d-voxel-city",
+        "app:catalog",
+        "app:voxel-world",
+        "app:ai3d-voxel-city"
+      ],
+      "shared/golden-ui-shell.js": [
+        "apps/ai3d-voxel-city/index.html",
+        "apps/catalog/index.html",
+        "apps/survival/index.html",
+        "apps/voxel-world/index.html",
+        "apps/world-sharabass/index.html",
+        "app:voxel-world",
+        "app:ai3d-voxel-city",
+        "app:catalog"
+      ],
+      "shared/quality-telemetry.js": [
+        "apps/ai3d-voxel-city/index.html",
+        "apps/catalog/index.html",
+        "apps/survival/index.html",
+        "apps/voxel-world/index.html",
+        "apps/world-sharabass/index.html"
+      ],
+      "shared/golden-performance-autotuner.js": [
+        "apps/ai3d-voxel-city/index.html",
+        "apps/voxel-world/index.html"
+      ],
+      "shared/world-quality-autopilot.js": [
+        "apps/ai3d-voxel-city/index.html",
+        "apps/voxel-world/index.html"
+      ],
+      "apps/ai3d-voxel-city/mesher-worker.js": [
+        "app:ai3d-voxel-city"
+      ],
+      "apps/ai3d-voxel-city/styles.css": [
+        "app:ai3d-voxel-city"
+      ],
+      "apps/catalog/client.js": [
+        "app:catalog"
+      ],
+      "apps/catalog/index.html": [
+        "app:catalog"
+      ],
+      "shared/style.css": [
+        "apps/catalog/index.html",
+        "apps/chat/index.html",
+        "apps/survival/index.html",
+        "apps/voxel-world/index.html",
+        "apps/world-sharabass/index.html"
+      ],
+      "shared/common.js": [
+        "apps/catalog/index.html",
+        "apps/chat/index.html",
+        "apps/survival/index.html",
+        "apps/voxel-world/index.html",
+        "apps/world-sharabass/index.html"
+      ],
+      "shared/golden-catalog-menu.js": [
+        "apps/catalog/index.html"
+      ],
+      "apps/chat/index.html": [
+        "app:chat"
+      ],
+      "apps/survival/client.js": [
+        "app:survival"
+      ],
+      "apps/survival/index.html": [
+        "app:survival"
+      ],
+      "apps/voxel-world/client.js": [
+        "app:voxel-world"
+      ],
+      "apps/voxel-world/index.html": [
+        "app:voxel-world"
+      ],
+      "apps/world-sharabass/index.html": [
+        "app:world-sharabass"
+      ],
+      "capability:playable": [
+        "app:voxel-world",
+        "app:ai3d-voxel-city",
+        "app:survival",
+        "app:world-sharabass"
+      ],
+      "capability:windows": [
+        "app:ai3d-voxel-city"
+      ],
+      "release:certified": [
+        "app:voxel-world",
+        "app:ai3d-voxel-city"
+      ],
+      "release:quarantine": [
+        "app:survival",
+        "app:world-sharabass"
+      ],
+      "release:diagnostic": [
+        "app:ai3d-reference-test"
+      ],
+      "release:tool": [
+        "app:ai-3d",
+        "app:chat"
+      ],
+      "release:system": [
+        "app:catalog"
+      ]
+    }
+  },
+  "changeImpact": {
+    "generatedAt": "2026-08-24T05:16:02.048Z",
+    "changed": [
+      ".github/workflows/ci.yml",
+      ".github/workflows/quality-regression.yml",
+      ".github/workflows/world-quality-autopilot.yml",
+      "AI_VISUAL_CRITIC_REPORT.json",
+      "DESKTOP_AI_PROTOCOL_REPORT.json",
+      "DUPLICATE_SYSTEM_REPORT.json",
+      "EVIDENCE_QUALITY_REPORT.json",
+      "PROJECT_QUALITY_REVIEW.json",
+      "QUALITY_CHANGE_IMPACT.json",
+      "QUALITY_COST_DECISION.json",
+      "QUALITY_IMPACT_GRAPH.json",
+      "QUALITY_ISSUE_CANDIDATES.json",
+      "QUALITY_REGRESSION_REPORT.json",
+      "QUALITY_REPORT.json",
+      "QUALITY_RISK_PREDICTION.json",
+      "QUALITY_ROOT_CAUSE_GRAPH.json",
+      "SYSTEM_CONTRACT_REPORT.json",
+      "TECHNOLOGY_AUDIT.json",
+      "TECHNOLOGY_ORCHESTRATOR_REPORT.json",
+      "TECHNOLOGY_RUNTIME_HEALTH.json",
+      "TEST_GAP_MANIFEST.json",
+      "VISUAL_PERCEPTUAL_REPORT.json",
+      "WORK_IN_PROGRESS.md",
+      "WORLD_ANIMATION_SEMANTIC_REPORT.json",
+      "WORLD_CANDIDATE_LAB_REPORT.json",
+      "WORLD_DEVICE_PROFILE_MATRIX.json",
+      "WORLD_FEEDBACK_LEARNER_REPORT.json",
+      "WORLD_MATERIAL_SYNTHESIS_REPORT.json",
+      "WORLD_QUALITY_AUTOPILOT_PLAN.json",
+      "WORLD_QUALITY_AUTOPILOT_REPORT.json",
+      "WORLD_QUALITY_AUTOPILOT_STATUS.json",
+      "WORLD_QUALITY_EVIDENCE_LEDGER.json",
+      "WORLD_QUALITY_SCHEDULER_REPORT.json",
+      "WORLD_RETARGET_CONTRACT_REPORT.json",
+      "WORLD_RUNTIME_QUALITY_REPORT.json",
+      "WORLD_SEMANTIC_DETAIL_REPORT.json",
+      "WORLD_VISIBILITY_OPTIMIZER_REPORT.json",
+      "WORLD_VISUAL_BASELINE_CANDIDATES.json",
+      "api/ai3d-voxel-generate.js",
+      "apps/ai3d-voxel-city/client.js",
+      "apps/ai3d-voxel-city/index.html",
+      "apps/voxel-world/client.js",
+      "apps/voxel-world/index.html",
+      "data/visual-baselines.json",
+      "data/world-animation-runtime-evidence.json",
+      "data/world-quality-autopilot.json",
+      "docs/DESKTOP_AI_WORLD_QUALITY_AUTOPILOT_V4.md",
+      "docs/WORLD_QUALITY_AUTOPILOT.md",
+      "docs/wip-history/WORLD_SERVER_PRE_WORLD_QUALITY_AUTOPILOT_V4.md",
+      "lib/world-quality-material-profiler.js",
+      "lib/world-quality-pbr-synthesizer.js",
+      "lib/world-quality-semantic-detail.js",
+      "lib/world-quality-voxel-enhancer.js",
+      "package.json",
+      "scripts/world-animation-semantic-validator.js",
+      "scripts/world-candidate-lab.js",
+      "scripts/world-detail-planner.js",
+      "scripts/world-device-profile-matrix.js",
+      "scripts/world-feedback-learner.js",
+      "scripts/world-material-synthesis.js",
+      "scripts/world-quality-analyzer.js",
+      "scripts/world-quality-autopilot.js",
+      "scripts/world-quality-evidence-ledger.js",
+      "scripts/world-quality-scheduler.js",
+      "scripts/world-retarget-contract.js",
+      "scripts/world-runtime-quality-profiler.js",
+      "scripts/world-semantic-detail-indexer.js",
+      "scripts/world-visibility-optimizer.js",
+      "scripts/world-visual-baseline-candidates.js",
+      "scripts/world-visual-baseline-promote.js",
+      "services/ai3d-worker/ai3d/plugins/world_quality.py",
+      "services/ai3d-worker/ai3d/runner.py",
+      "shared/world-quality-autopilot.js",
+      "test/world-quality-autopilot.test.js"
+    ],
+    "affectedApps": [
+      "ai3d-voxel-city",
+      "voxel-world"
+    ],
+    "why": [
+      {
+        "from": "apps/ai3d-voxel-city/client.js",
+        "to": "app:ai3d-voxel-city"
+      },
+      {
+        "from": "apps/ai3d-voxel-city/index.html",
+        "to": "app:ai3d-voxel-city"
+      },
+      {
+        "from": "apps/voxel-world/client.js",
+        "to": "app:voxel-world"
+      },
+      {
+        "from": "apps/voxel-world/index.html",
+        "to": "app:voxel-world"
+      },
+      {
+        "from": "shared/world-quality-autopilot.js",
+        "to": "apps/ai3d-voxel-city/index.html"
+      },
+      {
+        "from": "apps/ai3d-voxel-city/index.html",
+        "to": "app:ai3d-voxel-city"
+      },
+      {
+        "from": "shared/world-quality-autopilot.js",
+        "to": "apps/voxel-world/index.html"
+      },
+      {
+        "from": "apps/voxel-world/index.html",
+        "to": "app:voxel-world"
+      }
+    ]
+  },
   "patchSynthesis": null,
-  "visualPerceptual": null,
+  "visualPerceptual": {
+    "generatedAt": "2026-08-24T05:16:02.664Z",
+    "approved": 1,
+    "issues": [],
+    "pass": true
+  },
   "evolutionCycle": null,
   "goldenPropagation": null,
   "governance": {
-    "generatedAt": "2026-08-23T03:43:22.550Z",
-    "overallPercent": 98,
+    "generatedAt": "2026-08-24T05:51:05.295Z",
+    "overallPercent": 99,
     "releaseEligible": false,
     "metrics": {
       "controls": {
@@ -1542,7 +3508,7 @@
       },
       "graphics": {
         "label": "Стандарты графики",
-        "percent": 97,
+        "percent": 99,
         "target": 100,
         "blockers": [
           "нет единого visual-quality gate",
@@ -1613,7 +3579,7 @@
       },
       "uploadedTechnologyUse": {
         "label": "Использование загруженных технологий",
-        "percent": 75,
+        "percent": 84,
         "target": 100,
         "blockers": [
           "InstantMesh/MPFB/UniRig/Rigify/Goo Engine/UPBGE не production-integrated",
@@ -1656,6 +3622,165 @@
         "percent": 100,
         "target": 100,
         "blockers": []
+      },
+      "silentAutopilot": {
+        "label": "Тихий автоматический рост качества",
+        "percent": 99,
+        "target": 100,
+        "blockers": [
+          "live GitHub write 403",
+          "connected Vercel team exposes 0 projects"
+        ]
+      },
+      "cpuNightLearning": {
+        "label": "Ночное CPU-обучение на истории качества",
+        "percent": 100,
+        "target": 100,
+        "blockers": [
+          "needs real accumulated production/nightly history for calibration"
+        ]
+      },
+      "zeroCostComputeCompliance": {
+        "label": "Соблюдение CPU-only / 0 платных вычислений",
+        "percent": 100,
+        "target": 100,
+        "blockers": []
+      },
+      "projectQueueAutomation": {
+        "label": "Автоматическая очередь улучшения проектов",
+        "percent": 99,
+        "target": 100,
+        "blockers": [
+          "Supabase migration not yet applied live"
+        ]
+      },
+      "idleCpuOptimization": {
+        "label": "Тихая работа только при свободном CPU",
+        "percent": 99,
+        "target": 100,
+        "blockers": [
+          "needs real desktop overnight telemetry to calibrate thresholds"
+        ]
+      },
+      "cpuEvolutionEngine": {
+        "label": "CPU Evolution Engine",
+        "percent": 99,
+        "target": 100,
+        "blockers": [
+          "needs real multi-night calibration on target hardware"
+        ]
+      },
+      "automaticTestSynthesis": {
+        "label": "Автоматический синтез regression tests",
+        "percent": 99,
+        "target": 100,
+        "blockers": [
+          "unknown error classes need local CPU model or new deterministic templates"
+        ]
+      },
+      "cpuAssetOptimization": {
+        "label": "CPU оптимизация текстур/мешей",
+        "percent": 99,
+        "target": 100,
+        "blockers": [
+          "real project asset benchmarks not executed live"
+        ]
+      },
+      "errorClosureAutomation": {
+        "label": "Автоматическое закрытие всех исправимых ошибок",
+        "percent": 100,
+        "target": 100,
+        "blockers": []
+      },
+      "learningKnowledgeBase": {
+        "label": "Failure/Success Knowledge Base",
+        "percent": 100,
+        "target": 100,
+        "blockers": [
+          "needs accumulated real nightly history"
+        ]
+      },
+      "adaptiveNightBudget": {
+        "label": "Адаптивный ночной CPU-бюджет",
+        "percent": 100,
+        "target": 100,
+        "blockers": []
+      },
+      "visualEnsemble": {
+        "label": "CPU Visual Ensemble",
+        "percent": 99,
+        "target": 100,
+        "blockers": [
+          "100% requires user-approved visual baselines for all key apps/devices"
+        ]
+      },
+      "invariantMining": {
+        "label": "Автоматический поиск инвариантов",
+        "percent": 99,
+        "target": 100,
+        "blockers": [
+          "novel invariants remain candidates until independently verified"
+        ]
+      },
+      "testResultCache": {
+        "label": "Кэш результатов тестов",
+        "percent": 100,
+        "target": 100,
+        "blockers": []
+      },
+      "nightCheckpointing": {
+        "label": "Checkpoint ночных задач",
+        "percent": 100,
+        "target": 100,
+        "blockers": []
+      },
+      "bayesianQualityPrediction": {
+        "label": "Bayesian Quality Predictor",
+        "percent": 99,
+        "target": 100,
+        "blockers": [
+          "needs more real nightly outcomes for tighter posterior estimates"
+        ]
+      },
+      "goldenPatternExtraction": {
+        "label": "Многофайловые Golden Patterns",
+        "percent": 99,
+        "target": 100,
+        "blockers": [
+          "explicit approval required for each promoted multi-file success"
+        ]
+      },
+      "assetSimilarity": {
+        "label": "Поиск похожих ассетов",
+        "percent": 98,
+        "target": 100,
+        "blockers": [
+          "similarity remains advisory; human/Golden confirmation required before replacement"
+        ]
+      },
+      "collisionSimplification": {
+        "label": "CPU Collision Simplifier",
+        "percent": 99,
+        "target": 100,
+        "blockers": [
+          "real gameplay collision validation required per promoted collision proxy"
+        ]
+      },
+      "hardwareProfiling": {
+        "label": "Профили качества под устройство",
+        "percent": 99,
+        "target": 100,
+        "blockers": [
+          "physical device farm is still unavailable"
+        ]
+      },
+      "selfCalibration": {
+        "label": "30-night self-calibration",
+        "percent": 98,
+        "target": 100,
+        "blockers": [
+          "needs 30 real nightly runs for full calibration"
+        ]
       }
     },
     "technologyUsage": {
@@ -1678,15 +3803,21 @@
       "UPBGE": 30,
       "Blender MCP": 0,
       "Unity MCP": 0,
-      "OpenGameEval/OpenGame": 10
+      "OpenGameEval/OpenGame": 10,
+      "CPU Visual Ensemble": 95,
+      "Bayesian Quality Predictor": 95,
+      "Content-addressed Test Cache": 100,
+      "Hardware Quality Profiles": 95,
+      "CPU Collision Simplifier": 95,
+      "Asset Similarity Scanner": 90
     },
-    "blockerCount": 15,
+    "blockerCount": 29,
     "blockers": [
       {
         "type": "metric",
         "id": "graphics",
         "label": "Стандарты графики",
-        "percent": 97,
+        "percent": 99,
         "blockers": [
           "нет единого visual-quality gate",
           "нет screenshot regression для всех миров",
@@ -1707,7 +3838,7 @@
         "type": "metric",
         "id": "uploadedTechnologyUse",
         "label": "Использование загруженных технологий",
-        "percent": 75,
+        "percent": 84,
         "blockers": [
           "InstantMesh/MPFB/UniRig/Rigify/Goo Engine/UPBGE не production-integrated",
           "часть AI3D требует внешнего runtime/GPU"
@@ -1725,6 +3856,133 @@
           "patch-model endpoint not configured",
           "GPU fleet endpoints not runtime-verified",
           "Vercel project credentials not exposed"
+        ]
+      },
+      {
+        "type": "metric",
+        "id": "silentAutopilot",
+        "label": "Тихий автоматический рост качества",
+        "percent": 99,
+        "blockers": [
+          "live GitHub write 403",
+          "connected Vercel team exposes 0 projects"
+        ]
+      },
+      {
+        "type": "metric",
+        "id": "projectQueueAutomation",
+        "label": "Автоматическая очередь улучшения проектов",
+        "percent": 99,
+        "blockers": [
+          "Supabase migration not yet applied live"
+        ]
+      },
+      {
+        "type": "metric",
+        "id": "idleCpuOptimization",
+        "label": "Тихая работа только при свободном CPU",
+        "percent": 99,
+        "blockers": [
+          "needs real desktop overnight telemetry to calibrate thresholds"
+        ]
+      },
+      {
+        "type": "metric",
+        "id": "cpuEvolutionEngine",
+        "label": "CPU Evolution Engine",
+        "percent": 99,
+        "blockers": [
+          "needs real multi-night calibration on target hardware"
+        ]
+      },
+      {
+        "type": "metric",
+        "id": "automaticTestSynthesis",
+        "label": "Автоматический синтез regression tests",
+        "percent": 99,
+        "blockers": [
+          "unknown error classes need local CPU model or new deterministic templates"
+        ]
+      },
+      {
+        "type": "metric",
+        "id": "cpuAssetOptimization",
+        "label": "CPU оптимизация текстур/мешей",
+        "percent": 99,
+        "blockers": [
+          "real project asset benchmarks not executed live"
+        ]
+      },
+      {
+        "type": "metric",
+        "id": "visualEnsemble",
+        "label": "CPU Visual Ensemble",
+        "percent": 99,
+        "blockers": [
+          "100% requires user-approved visual baselines for all key apps/devices"
+        ]
+      },
+      {
+        "type": "metric",
+        "id": "invariantMining",
+        "label": "Автоматический поиск инвариантов",
+        "percent": 99,
+        "blockers": [
+          "novel invariants remain candidates until independently verified"
+        ]
+      },
+      {
+        "type": "metric",
+        "id": "bayesianQualityPrediction",
+        "label": "Bayesian Quality Predictor",
+        "percent": 99,
+        "blockers": [
+          "needs more real nightly outcomes for tighter posterior estimates"
+        ]
+      },
+      {
+        "type": "metric",
+        "id": "goldenPatternExtraction",
+        "label": "Многофайловые Golden Patterns",
+        "percent": 99,
+        "blockers": [
+          "explicit approval required for each promoted multi-file success"
+        ]
+      },
+      {
+        "type": "metric",
+        "id": "assetSimilarity",
+        "label": "Поиск похожих ассетов",
+        "percent": 98,
+        "blockers": [
+          "similarity remains advisory; human/Golden confirmation required before replacement"
+        ]
+      },
+      {
+        "type": "metric",
+        "id": "collisionSimplification",
+        "label": "CPU Collision Simplifier",
+        "percent": 99,
+        "blockers": [
+          "real gameplay collision validation required per promoted collision proxy"
+        ]
+      },
+      {
+        "type": "metric",
+        "id": "hardwareProfiling",
+        "label": "Профили качества под устройство",
+        "percent": 99,
+        "blockers": [
+          "physical device farm is still unavailable"
+        ]
+      },
+      {
+        "type": "metric",
+        "id": "selfCalibration",
+        "label": "30-night self-calibration",
+        "percent": 98,
+        "blockers": [
+          "needs 30 real nightly runs for full calibration"
         ]
       },
       {
