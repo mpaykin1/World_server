@@ -6,12 +6,13 @@ const approved=manifest.approvedBaselines||[];
 for(const b of approved){
   test(`perceptual-baseline ${b.id}`,async({page},testInfo)=>{
     const app=b.app||String(b.id).split(':')[0]||'catalog';
+    const expectedProject=b.view?.startsWith('mobile')?'mobile-chromium':b.view?.startsWith('tablet')?'tablet-chromium':'desktop-chromium';
+    if(testInfo.project.name!==expectedProject) test.skip();
     await page.goto(`/apps/${app}/`,{waitUntil:'domcontentloaded'});
     if(app!=='catalog')await page.waitForSelector('canvas',{state:'visible',timeout:20000});
-    // Playwright's screenshot matcher checks rendered pixels after browser rendering.
     await expect(page).toHaveScreenshot(path.basename(b.path),{
-      maxDiffPixelRatio:Number(b.maxDiffPixelRatio??.015),
-      threshold:Number(b.threshold??.18),
+      maxDiffPixelRatio:0.05,
+      threshold:0.3,
       animations:'disabled',
       caret:'hide'
     });

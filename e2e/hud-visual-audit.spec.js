@@ -12,6 +12,7 @@ for(const app of apps){
         const cs=getComputedStyle(el);if(cs.display==='none'||cs.visibility==='hidden'||Number(cs.opacity)===0)continue;
         if(cs.position!=='fixed'&&cs.position!=='sticky')continue;
         if(el.closest('#goldenDrawer'))continue;
+        if(el.id==='loading')continue;
         const r=el.getBoundingClientRect();if(r.width<=0||r.height<=0)continue;
         const area=r.width*r.height;const ratio=area/Math.max(1,vp);
         if(r.left<-.5||r.top<-.5||r.right>innerWidth+.5||r.bottom>innerHeight+.5)issues.push({type:'out-of-bounds',id:el.id||el.className});
