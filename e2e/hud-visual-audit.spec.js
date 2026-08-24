@@ -3,6 +3,9 @@ const apps=['catalog','voxel-world','ai3d-voxel-city'];
 for(const app of apps){
   test(`hud-audit ${app}`,async({page})=>{
     await page.goto(`/apps/${app}/`,{waitUntil:'domcontentloaded'});
+    // Wait for world to load and loading overlay to disappear (cohesive: world-quality + golden UI)
+    await page.waitForFunction(()=>{const ld=document.querySelector('#loading');return !ld || getComputedStyle(ld).display==='none' || ld.getBoundingClientRect().width===0;},{timeout:8000}).catch(()=>{});
+    await page.waitForTimeout(500);
     const report=await page.evaluate(()=>{
       const vp=innerWidth*innerHeight,issues=[],persistent=[];
       for(const el of document.querySelectorAll('body *')){

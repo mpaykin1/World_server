@@ -1,7 +1,7 @@
 {
   "schemaVersion": "4.0.0",
   "system": "WORLD_SEMANTIC_DETAIL_INDEX",
-  "generatedAt": "2026-08-24T06:04:31.639Z",
+  "generatedAt": "2026-08-24T06:26:20.396Z",
   "source": "apps/ai3d-voxel-city/default-city.json",
   "available": true,
   "stats": {
