@@ -62,6 +62,11 @@ Task branch -> CI -> PR -> preview/canary -> verified production promotion.
 ## Next action
 Inspect baseline and fill the task-specific sections above before editing.
 
+## Error closure loop
+Repeat scan -> reproduce -> root cause -> fix -> incremental tests -> full gate -> rescan.
+Do not stop while any fixable error, blocker, failed mandatory gate, or regression remains.
+External blockers require evidence and an exact next action.
+
 ## Completion criteria
 - No accepted metric decreases.
 - Required gates PASS.

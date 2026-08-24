@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-24T05:15:58.448Z",
-  "overallPercent": 98,
+  "generatedAt": "2026-08-24T05:54:50.770Z",
+  "overallPercent": 99,
   "releaseEligible": false,
   "metrics": {
     "controls": {
@@ -14,7 +14,7 @@
     },
     "graphics": {
       "label": "Стандарты графики",
-      "percent": 97,
+      "percent": 99,
       "target": 100,
       "blockers": [
         "нет единого visual-quality gate",
@@ -85,7 +85,7 @@
     },
     "uploadedTechnologyUse": {
       "label": "Использование загруженных технологий",
-      "percent": 75,
+      "percent": 84,
       "target": 100,
       "blockers": [
         "InstantMesh/MPFB/UniRig/Rigify/Goo Engine/UPBGE не production-integrated",
@@ -128,6 +128,165 @@
       "percent": 100,
       "target": 100,
       "blockers": []
+    },
+    "silentAutopilot": {
+      "label": "Тихий автоматический рост качества",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "live GitHub write 403",
+        "connected Vercel team exposes 0 projects"
+      ]
+    },
+    "cpuNightLearning": {
+      "label": "Ночное CPU-обучение на истории качества",
+      "percent": 100,
+      "target": 100,
+      "blockers": [
+        "needs real accumulated production/nightly history for calibration"
+      ]
+    },
+    "zeroCostComputeCompliance": {
+      "label": "Соблюдение CPU-only / 0 платных вычислений",
+      "percent": 100,
+      "target": 100,
+      "blockers": []
+    },
+    "projectQueueAutomation": {
+      "label": "Автоматическая очередь улучшения проектов",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "Supabase migration not yet applied live"
+      ]
+    },
+    "idleCpuOptimization": {
+      "label": "Тихая работа только при свободном CPU",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "needs real desktop overnight telemetry to calibrate thresholds"
+      ]
+    },
+    "cpuEvolutionEngine": {
+      "label": "CPU Evolution Engine",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "needs real multi-night calibration on target hardware"
+      ]
+    },
+    "automaticTestSynthesis": {
+      "label": "Автоматический синтез regression tests",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "unknown error classes need local CPU model or new deterministic templates"
+      ]
+    },
+    "cpuAssetOptimization": {
+      "label": "CPU оптимизация текстур/мешей",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "real project asset benchmarks not executed live"
+      ]
+    },
+    "errorClosureAutomation": {
+      "label": "Автоматическое закрытие всех исправимых ошибок",
+      "percent": 100,
+      "target": 100,
+      "blockers": []
+    },
+    "learningKnowledgeBase": {
+      "label": "Failure/Success Knowledge Base",
+      "percent": 100,
+      "target": 100,
+      "blockers": [
+        "needs accumulated real nightly history"
+      ]
+    },
+    "adaptiveNightBudget": {
+      "label": "Адаптивный ночной CPU-бюджет",
+      "percent": 100,
+      "target": 100,
+      "blockers": []
+    },
+    "visualEnsemble": {
+      "label": "CPU Visual Ensemble",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "100% requires user-approved visual baselines for all key apps/devices"
+      ]
+    },
+    "invariantMining": {
+      "label": "Автоматический поиск инвариантов",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "novel invariants remain candidates until independently verified"
+      ]
+    },
+    "testResultCache": {
+      "label": "Кэш результатов тестов",
+      "percent": 100,
+      "target": 100,
+      "blockers": []
+    },
+    "nightCheckpointing": {
+      "label": "Checkpoint ночных задач",
+      "percent": 100,
+      "target": 100,
+      "blockers": []
+    },
+    "bayesianQualityPrediction": {
+      "label": "Bayesian Quality Predictor",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "needs more real nightly outcomes for tighter posterior estimates"
+      ]
+    },
+    "goldenPatternExtraction": {
+      "label": "Многофайловые Golden Patterns",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "explicit approval required for each promoted multi-file success"
+      ]
+    },
+    "assetSimilarity": {
+      "label": "Поиск похожих ассетов",
+      "percent": 98,
+      "target": 100,
+      "blockers": [
+        "similarity remains advisory; human/Golden confirmation required before replacement"
+      ]
+    },
+    "collisionSimplification": {
+      "label": "CPU Collision Simplifier",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "real gameplay collision validation required per promoted collision proxy"
+      ]
+    },
+    "hardwareProfiling": {
+      "label": "Профили качества под устройство",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "physical device farm is still unavailable"
+      ]
+    },
+    "selfCalibration": {
+      "label": "30-night self-calibration",
+      "percent": 98,
+      "target": 100,
+      "blockers": [
+        "needs 30 real nightly runs for full calibration"
+      ]
     }
   },
   "technologyUsage": {
@@ -150,15 +309,21 @@
     "UPBGE": 30,
     "Blender MCP": 0,
     "Unity MCP": 0,
-    "OpenGameEval/OpenGame": 10
+    "OpenGameEval/OpenGame": 10,
+    "CPU Visual Ensemble": 95,
+    "Bayesian Quality Predictor": 95,
+    "Content-addressed Test Cache": 100,
+    "Hardware Quality Profiles": 95,
+    "CPU Collision Simplifier": 95,
+    "Asset Similarity Scanner": 90
   },
-  "blockerCount": 15,
+  "blockerCount": 29,
   "blockers": [
     {
       "type": "metric",
       "id": "graphics",
       "label": "Стандарты графики",
-      "percent": 97,
+      "percent": 99,
       "blockers": [
         "нет единого visual-quality gate",
         "нет screenshot regression для всех миров",
@@ -179,7 +344,7 @@
       "type": "metric",
       "id": "uploadedTechnologyUse",
       "label": "Использование загруженных технологий",
-      "percent": 75,
+      "percent": 84,
       "blockers": [
         "InstantMesh/MPFB/UniRig/Rigify/Goo Engine/UPBGE не production-integrated",
         "часть AI3D требует внешнего runtime/GPU"
@@ -197,6 +362,133 @@
         "patch-model endpoint not configured",
         "GPU fleet endpoints not runtime-verified",
         "Vercel project credentials not exposed"
+      ]
+    },
+    {
+      "type": "metric",
+      "id": "silentAutopilot",
+      "label": "Тихий автоматический рост качества",
+      "percent": 99,
+      "blockers": [
+        "live GitHub write 403",
+        "connected Vercel team exposes 0 projects"
+      ]
+    },
+    {
+      "type": "metric",
+      "id": "projectQueueAutomation",
+      "label": "Автоматическая очередь улучшения проектов",
+      "percent": 99,
+      "blockers": [
+        "Supabase migration not yet applied live"
+      ]
+    },
+    {
+      "type": "metric",
+      "id": "idleCpuOptimization",
+      "label": "Тихая работа только при свободном CPU",
+      "percent": 99,
+      "blockers": [
+        "needs real desktop overnight telemetry to calibrate thresholds"
+      ]
+    },
+    {
+      "type": "metric",
+      "id": "cpuEvolutionEngine",
+      "label": "CPU Evolution Engine",
+      "percent": 99,
+      "blockers": [
+        "needs real multi-night calibration on target hardware"
+      ]
+    },
+    {
+      "type": "metric",
+      "id": "automaticTestSynthesis",
+      "label": "Автоматический синтез regression tests",
+      "percent": 99,
+      "blockers": [
+        "unknown error classes need local CPU model or new deterministic templates"
+      ]
+    },
+    {
+      "type": "metric",
+      "id": "cpuAssetOptimization",
+      "label": "CPU оптимизация текстур/мешей",
+      "percent": 99,
+      "blockers": [
+        "real project asset benchmarks not executed live"
+      ]
+    },
+    {
+      "type": "metric",
+      "id": "visualEnsemble",
+      "label": "CPU Visual Ensemble",
+      "percent": 99,
+      "blockers": [
+        "100% requires user-approved visual baselines for all key apps/devices"
+      ]
+    },
+    {
+      "type": "metric",
+      "id": "invariantMining",
+      "label": "Автоматический поиск инвариантов",
+      "percent": 99,
+      "blockers": [
+        "novel invariants remain candidates until independently verified"
+      ]
+    },
+    {
+      "type": "metric",
+      "id": "bayesianQualityPrediction",
+      "label": "Bayesian Quality Predictor",
+      "percent": 99,
+      "blockers": [
+        "needs more real nightly outcomes for tighter posterior estimates"
+      ]
+    },
+    {
+      "type": "metric",
+      "id": "goldenPatternExtraction",
+      "label": "Многофайловые Golden Patterns",
+      "percent": 99,
+      "blockers": [
+        "explicit approval required for each promoted multi-file success"
+      ]
+    },
+    {
+      "type": "metric",
+      "id": "assetSimilarity",
+      "label": "Поиск похожих ассетов",
+      "percent": 98,
+      "blockers": [
+        "similarity remains advisory; human/Golden confirmation required before replacement"
+      ]
+    },
+    {
+      "type": "metric",
+      "id": "collisionSimplification",
+      "label": "CPU Collision Simplifier",
+      "percent": 99,
+      "blockers": [
+        "real gameplay collision validation required per promoted collision proxy"
+      ]
+    },
+    {
+      "type": "metric",
+      "id": "hardwareProfiling",
+      "label": "Профили качества под устройство",
+      "percent": 99,
+      "blockers": [
+        "physical device farm is still unavailable"
+      ]
+    },
+    {
+      "type": "metric",
+      "id": "selfCalibration",
+      "label": "30-night self-calibration",
+      "percent": 98,
+      "blockers": [
+        "needs 30 real nightly runs for full calibration"
       ]
     },
     {

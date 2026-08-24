@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "NIGHT_JOB_CHECKPOINTING",
+  "dir": ".quality-checkpoints",
+  "maxAgeDays": 30,
+  "resumeAcrossNights": true,
+  "gpu": false,
+  "paidCost": 0
+}

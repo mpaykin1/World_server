@@ -200,6 +200,7 @@ function goldenHorizontal(axis,amount,allowStep){
   }
   player.vel[axis]=0;return false;
 }
+
 function physics(dt){
   const wasGrounded=player.onGround;
   const f=(keys.has('KeyW')?1:0)-(keys.has('KeyS')?1:0)-mobileMove.y; const s=(keys.has('KeyD')?1:0)-(keys.has('KeyA')?1:0)+mobileMove.x; const len=Math.hypot(f,s)||1, speed=(keys.has('ShiftLeft')||keys.has('ShiftRight'))?RUN:WALK;

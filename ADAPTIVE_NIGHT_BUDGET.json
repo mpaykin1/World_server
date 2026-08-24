@@ -1,0 +1,11 @@
+{
+  "generatedAt": "2026-08-24T05:54:42.111Z",
+  "mode": "idle",
+  "loadRatio": 0,
+  "cpuMinutes": 324,
+  "maxCpuSeconds": 19440,
+  "maxParallelHeavy": 1,
+  "maxParallelLight": 2,
+  "gpu": false,
+  "paidCost": 0
+}

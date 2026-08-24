@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-23T03:43:24.199Z",
-  "backlogCount": 7,
+  "generatedAt": "2026-08-24T05:51:08.145Z",
+  "backlogCount": 9,
   "top10": [
     {
       "type": "quality-control-gap",
@@ -12,6 +12,17 @@
       "reuse": 1.5,
       "priority": 10.69,
       "recommendedAction": "Add required canonical file data/golden-adoptions.json"
+    },
+    {
+      "type": "quality-control-gap",
+      "metric": "zeroCostComputeCompliance",
+      "controlId": "queue-filter",
+      "impactPoints": 20,
+      "effort": 3,
+      "confidence": 0.95,
+      "reuse": 1,
+      "priority": 6.33,
+      "recommendedAction": "Implement canonical source behavior containing requires_gpu=false"
     },
     {
       "type": "technology-growth",
@@ -43,6 +54,17 @@
       "reuse": 1,
       "priority": 3.17,
       "recommendedAction": "Implement canonical source behavior containing vercel rollback"
+    },
+    {
+      "type": "quality-control-gap",
+      "metric": "silentAutopilot",
+      "controlId": "idle-cpu-check",
+      "impactPoints": 10,
+      "effort": 3,
+      "confidence": 0.95,
+      "reuse": 1,
+      "priority": 3.17,
+      "recommendedAction": "Implement canonical source behavior containing usage>72"
     },
     {
       "type": "quality-control-gap",
@@ -90,6 +112,17 @@
       "recommendedAction": "Add required canonical file data/golden-adoptions.json"
     },
     {
+      "type": "quality-control-gap",
+      "metric": "zeroCostComputeCompliance",
+      "controlId": "queue-filter",
+      "impactPoints": 20,
+      "effort": 3,
+      "confidence": 0.95,
+      "reuse": 1,
+      "priority": 6.33,
+      "recommendedAction": "Implement canonical source behavior containing requires_gpu=false"
+    },
+    {
       "type": "technology-growth",
       "technology": "OpenGameEval/OpenGame",
       "impactPoints": 90,
@@ -119,6 +152,17 @@
       "reuse": 1,
       "priority": 3.17,
       "recommendedAction": "Implement canonical source behavior containing vercel rollback"
+    },
+    {
+      "type": "quality-control-gap",
+      "metric": "silentAutopilot",
+      "controlId": "idle-cpu-check",
+      "impactPoints": 10,
+      "effort": 3,
+      "confidence": 0.95,
+      "reuse": 1,
+      "priority": 3.17,
+      "recommendedAction": "Implement canonical source behavior containing usage>72"
     },
     {
       "type": "quality-control-gap",

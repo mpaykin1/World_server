@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-24T05:16:01.854Z",
+  "generatedAt": "2026-08-24T05:54:54.166Z",
   "nodes": [
     "app:ai-3d",
     "app:ai3d-reference-test",
@@ -38,6 +38,7 @@
     "shared/ai3d-playable-runtime.js",
     "shared/common.js",
     "shared/golden-catalog-menu.js",
+    "shared/golden-device-profile.js",
     "shared/golden-performance-autotuner.js",
     "shared/golden-physics.js",
     "shared/golden-ui-shell.css",
@@ -140,6 +141,11 @@
     },
     {
       "from": "shared/world-quality-autopilot.js",
+      "to": "apps/ai3d-voxel-city/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-device-profile.js",
       "to": "apps/ai3d-voxel-city/index.html",
       "kind": "html-dependency"
     },
@@ -330,6 +336,11 @@
     },
     {
       "from": "shared/world-quality-autopilot.js",
+      "to": "apps/voxel-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-device-profile.js",
       "to": "apps/voxel-world/index.html",
       "kind": "html-dependency"
     },
@@ -599,6 +610,10 @@
       "apps/voxel-world/index.html"
     ],
     "shared/world-quality-autopilot.js": [
+      "apps/ai3d-voxel-city/index.html",
+      "apps/voxel-world/index.html"
+    ],
+    "shared/golden-device-profile.js": [
       "apps/ai3d-voxel-city/index.html",
       "apps/voxel-world/index.html"
     ],

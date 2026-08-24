@@ -816,6 +816,492 @@
           "path": "scripts/desktop-ai-new-task.js"
         }
       ]
+    },
+    "silentAutopilot": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "cpu-only-policy",
+          "weight": 12,
+          "kind": "file",
+          "path": "data/silent-cpu-autopilot-policy.json"
+        },
+        {
+          "id": "night-cron-api",
+          "weight": 12,
+          "kind": "file",
+          "path": "api/quality-autopilot-nightly.js"
+        },
+        {
+          "id": "supabase-queue",
+          "weight": 12,
+          "kind": "file",
+          "path": "supabase/migrations/20260824010000_silent_cpu_autopilot.sql"
+        },
+        {
+          "id": "desktop-night-worker",
+          "weight": 12,
+          "kind": "file",
+          "path": "desktop/cpu-night-autopilot.cjs"
+        },
+        {
+          "id": "idle-cpu-check",
+          "weight": 10,
+          "kind": "source",
+          "pattern": "usage>72"
+        },
+        {
+          "id": "quality-learning",
+          "weight": 12,
+          "kind": "file",
+          "path": "scripts/cpu-quality-learner.js"
+        },
+        {
+          "id": "never-retry",
+          "weight": 8,
+          "kind": "source",
+          "pattern": "neverRetry"
+        },
+        {
+          "id": "cross-project-learning",
+          "weight": 8,
+          "kind": "file",
+          "path": "scripts/cross-project-learning.js"
+        },
+        {
+          "id": "priority-goals",
+          "weight": 7,
+          "kind": "file",
+          "path": "scripts/autopilot-project-priority.js"
+        },
+        {
+          "id": "cpu-budget",
+          "weight": 7,
+          "kind": "file",
+          "path": "scripts/cpu-budget-gate.js"
+        }
+      ]
+    },
+    "zeroCostComputeCompliance": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "gpu-disabled",
+          "weight": 30,
+          "kind": "source",
+          "pattern": "gpuAllowed"
+        },
+        {
+          "id": "paid-disabled",
+          "weight": 30,
+          "kind": "source",
+          "pattern": "paidComputeAllowed"
+        },
+        {
+          "id": "queue-filter",
+          "weight": 20,
+          "kind": "source",
+          "pattern": "requires_gpu=false"
+        },
+        {
+          "id": "policy-test",
+          "weight": 20,
+          "kind": "file",
+          "path": "test/cpu-night-autopilot.test.js"
+        }
+      ]
+    },
+    "cpuEvolutionEngine": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "genetic-optimizer",
+          "weight": 20,
+          "kind": "file",
+          "path": "scripts/cpu-genetic-optimizer.js"
+        },
+        {
+          "id": "incremental-tests",
+          "weight": 15,
+          "kind": "file",
+          "path": "scripts/incremental-test-selector.js"
+        },
+        {
+          "id": "local-cpu-model",
+          "weight": 10,
+          "kind": "file",
+          "path": "scripts/local-cpu-code-model.js"
+        },
+        {
+          "id": "cpu-tournament",
+          "weight": 10,
+          "kind": "file",
+          "path": "scripts/cpu-patch-tournament.js"
+        },
+        {
+          "id": "curriculum",
+          "weight": 15,
+          "kind": "file",
+          "path": "scripts/project-quality-curriculum.js"
+        },
+        {
+          "id": "adaptive-budget",
+          "weight": 15,
+          "kind": "file",
+          "path": "scripts/adaptive-night-budget.js"
+        },
+        {
+          "id": "cpu-only",
+          "weight": 15,
+          "kind": "file",
+          "path": "scripts/check-cpu-only-autopilot.js"
+        }
+      ]
+    },
+    "automaticTestSynthesis": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "deterministic-generator",
+          "weight": 40,
+          "kind": "file",
+          "path": "scripts/generate-regression-tests.js"
+        },
+        {
+          "id": "unknown-test-synth",
+          "weight": 35,
+          "kind": "file",
+          "path": "scripts/automatic-test-synthesizer.js"
+        },
+        {
+          "id": "incremental-map",
+          "weight": 25,
+          "kind": "file",
+          "path": "data/incremental-test-map.json"
+        }
+      ]
+    },
+    "cpuAssetOptimization": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "texture-factory",
+          "weight": 35,
+          "kind": "file",
+          "path": "scripts/cpu_texture_factory.py"
+        },
+        {
+          "id": "mesh-factory",
+          "weight": 35,
+          "kind": "file",
+          "path": "scripts/cpu_mesh_factory.py"
+        },
+        {
+          "id": "ssim",
+          "weight": 20,
+          "kind": "file",
+          "path": "scripts/cpu_ssim_compare.py"
+        },
+        {
+          "id": "asset-dedup",
+          "weight": 10,
+          "kind": "file",
+          "path": "scripts/asset-dedup-cache.js"
+        }
+      ]
+    },
+    "errorClosureAutomation": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "closure-policy",
+          "weight": 25,
+          "kind": "file",
+          "path": "data/desktop-ai-error-closure-policy.json"
+        },
+        {
+          "id": "closure-gate",
+          "weight": 45,
+          "kind": "file",
+          "path": "scripts/desktop-ai-error-closure.js"
+        },
+        {
+          "id": "desktop-protocol",
+          "weight": 30,
+          "kind": "file",
+          "path": "DESKTOP_AI_INSTALL_AND_VERIFY.md"
+        }
+      ]
+    },
+    "learningKnowledgeBase": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "failure-kb",
+          "weight": 30,
+          "kind": "file",
+          "path": "data/failure-knowledge-base.json"
+        },
+        {
+          "id": "success-kb",
+          "weight": 30,
+          "kind": "file",
+          "path": "data/success-knowledge-base.json"
+        },
+        {
+          "id": "knowledge-learning",
+          "weight": 40,
+          "kind": "file",
+          "path": "scripts/quality-knowledge-learning.js"
+        }
+      ]
+    },
+    "adaptiveNightBudget": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "budget-policy",
+          "weight": 35,
+          "kind": "file",
+          "path": "data/adaptive-night-budget-policy.json"
+        },
+        {
+          "id": "budget-engine",
+          "weight": 45,
+          "kind": "file",
+          "path": "scripts/adaptive-night-budget.js"
+        },
+        {
+          "id": "planner-integration",
+          "weight": 20,
+          "kind": "source",
+          "pattern": "ADAPTIVE_NIGHT_BUDGET.json"
+        }
+      ]
+    },
+    "visualEnsemble": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "visual-ensemble-policy",
+          "weight": 20,
+          "kind": "file",
+          "path": "data/cpu-visual-ensemble-policy.json"
+        },
+        {
+          "id": "visual-ensemble-engine",
+          "weight": 60,
+          "kind": "file",
+          "path": "scripts/cpu_visual_ensemble.py"
+        },
+        {
+          "id": "approved-baseline-boundary",
+          "weight": 20,
+          "kind": "file",
+          "path": "data/visual-baselines.json"
+        }
+      ]
+    },
+    "invariantMining": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "invariant-policy",
+          "weight": 25,
+          "kind": "file",
+          "path": "data/invariant-miner-policy.json"
+        },
+        {
+          "id": "invariant-engine",
+          "weight": 55,
+          "kind": "file",
+          "path": "scripts/quality-invariant-miner.js"
+        },
+        {
+          "id": "protected-errors",
+          "weight": 20,
+          "kind": "file",
+          "path": "data/error-prevention-registry.json"
+        }
+      ]
+    },
+    "testResultCache": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "cache-policy",
+          "weight": 20,
+          "kind": "file",
+          "path": "data/test-cache-policy.json"
+        },
+        {
+          "id": "cache-runner",
+          "weight": 55,
+          "kind": "file",
+          "path": "scripts/test-cache-runner.js"
+        },
+        {
+          "id": "cache-smoke",
+          "weight": 25,
+          "kind": "file",
+          "path": "scripts/test-cache-smoke.js"
+        }
+      ]
+    },
+    "nightCheckpointing": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "checkpoint-policy",
+          "weight": 25,
+          "kind": "file",
+          "path": "data/night-checkpoint-policy.json"
+        },
+        {
+          "id": "checkpoint-tool",
+          "weight": 35,
+          "kind": "file",
+          "path": "scripts/night-checkpoint.js"
+        },
+        {
+          "id": "genetic-resume",
+          "weight": 40,
+          "kind": "source",
+          "pattern": "quality-checkpoints"
+        }
+      ]
+    },
+    "bayesianQualityPrediction": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "bayes-policy",
+          "weight": 25,
+          "kind": "file",
+          "path": "data/bayesian-quality-policy.json"
+        },
+        {
+          "id": "bayes-engine",
+          "weight": 55,
+          "kind": "file",
+          "path": "scripts/bayesian-quality-predictor.js"
+        },
+        {
+          "id": "planner-adoption",
+          "weight": 20,
+          "kind": "source",
+          "pattern": "BAYESIAN_QUALITY_PREDICTION.json"
+        }
+      ]
+    },
+    "goldenPatternExtraction": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "pattern-policy",
+          "weight": 20,
+          "kind": "file",
+          "path": "data/golden-pattern-policy.json"
+        },
+        {
+          "id": "pattern-registry",
+          "weight": 20,
+          "kind": "file",
+          "path": "data/golden-patterns.json"
+        },
+        {
+          "id": "pattern-promoter",
+          "weight": 60,
+          "kind": "file",
+          "path": "scripts/promote-golden-pattern.js"
+        }
+      ]
+    },
+    "assetSimilarity": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "similarity-policy",
+          "weight": 25,
+          "kind": "file",
+          "path": "data/asset-similarity-policy.json"
+        },
+        {
+          "id": "similarity-engine",
+          "weight": 75,
+          "kind": "file",
+          "path": "scripts/asset_similarity_scan.py"
+        }
+      ]
+    },
+    "collisionSimplification": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "collision-engine",
+          "weight": 70,
+          "kind": "file",
+          "path": "scripts/cpu_collision_simplifier.py"
+        },
+        {
+          "id": "mesh-scan-integration",
+          "weight": 30,
+          "kind": "source",
+          "pattern": "cpu_collision_simplifier.py"
+        }
+      ]
+    },
+    "hardwareProfiling": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "hardware-policy",
+          "weight": 20,
+          "kind": "file",
+          "path": "data/hardware-profile-policy.json"
+        },
+        {
+          "id": "host-profile",
+          "weight": 30,
+          "kind": "file",
+          "path": "scripts/hardware-fingerprint.js"
+        },
+        {
+          "id": "browser-profile",
+          "weight": 30,
+          "kind": "file",
+          "path": "shared/golden-device-profile.js"
+        },
+        {
+          "id": "perf-adoption",
+          "weight": 20,
+          "kind": "source",
+          "pattern": "GoldenDeviceProfile"
+        }
+      ]
+    },
+    "selfCalibration": {
+      "weight": 1,
+      "controls": [
+        {
+          "id": "calibration-policy",
+          "weight": 25,
+          "kind": "file",
+          "path": "data/self-calibration-policy.json"
+        },
+        {
+          "id": "calibration-engine",
+          "weight": 50,
+          "kind": "file",
+          "path": "scripts/quality-self-calibration.js"
+        },
+        {
+          "id": "adaptive-budget-adoption",
+          "weight": 25,
+          "kind": "source",
+          "pattern": "SELF_CALIBRATION_REPORT.json"
+        }
+      ]
     }
   }
 }

@@ -170,7 +170,7 @@
       "status": "candidate",
       "severity": "release-blocker",
       "sourceReport": "PROJECT_QUALITY_REVIEW.json",
-      "detectedAt": "2026-08-23T03:43:23.807Z",
+      "detectedAt": "2026-08-24T05:51:07.231Z",
       "details": {
         "severity": "major",
         "category": "mobile",

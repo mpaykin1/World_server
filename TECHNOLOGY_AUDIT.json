@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-24T05:16:03.288Z",
+  "generatedAt": "2026-08-24T05:54:55.554Z",
   "issues": [],
   "technologies": {
     "Vercel": {
@@ -8,21 +8,24 @@
       "evidence": [
         "vercel.json",
         "api/apps.js"
-      ]
+      ],
+      "nightAutopilotEligible": true
     },
     "Supabase Postgres/Auth/Realtime": {
       "percent": 90,
       "status": "production",
       "evidence": [
         "package.json"
-      ]
+      ],
+      "nightAutopilotEligible": true
     },
     "Three.js/WebGL2": {
       "percent": 90,
       "status": "production",
       "evidence": [
         "apps/voxel-world/index.html"
-      ]
+      ],
+      "nightAutopilotEligible": true
     },
     "Playwright": {
       "percent": 65,
@@ -30,28 +33,32 @@
       "evidence": [
         "playwright.config.js",
         "e2e/golden-release.spec.js"
-      ]
+      ],
+      "nightAutopilotEligible": true
     },
     "Python/FastAPI AI3D worker": {
       "percent": 65,
       "status": "integrated",
       "evidence": [
         "services/ai3d-worker"
-      ]
+      ],
+      "nightAutopilotEligible": true
     },
     "AI3D auto-discovery": {
       "percent": 70,
       "status": "integrated",
       "evidence": [
         "scripts/discover-ai3d-engines.js"
-      ]
+      ],
+      "nightAutopilotEligible": true
     },
     "Depth Anything": {
       "percent": 50,
       "status": "adapter",
       "evidence": [
         "services/ai3d-worker"
-      ]
+      ],
+      "nightAutopilotEligible": true
     },
     "Blender pipeline": {
       "percent": 70,
@@ -59,7 +66,8 @@
       "evidence": [
         "services/ai3d-worker/tools/run_building_blender.py",
         "scripts/technology-orchestrator.js"
-      ]
+      ],
+      "nightAutopilotEligible": true
     },
     "TRELLIS.2": {
       "percent": 60,
@@ -68,7 +76,10 @@
         "services/ai3d-worker/ai3d/plugins/trellis2.py",
         "scripts/technology-orchestrator.js",
         "services/ai3d-worker/ai3d/plugins/gpu_router.py"
-      ]
+      ],
+      "userRuntimeConstraint": "DISABLED_NO_GPU",
+      "effectiveRuntimeOnCurrentHardwarePercent": 0,
+      "nightAutopilotEligible": false
     },
     "Godot 4.7.1": {
       "percent": 78,
@@ -77,7 +88,8 @@
         "services/ai3d-worker/ai3d/plugins/godot_voxel.py",
         "scripts/godot-runtime-smoke.js"
       ],
-      "externalEvidence": "PR #6"
+      "externalEvidence": "PR #6",
+      "nightAutopilotEligible": true
     },
     "Hunyuan3D": {
       "percent": 75,
@@ -85,7 +97,10 @@
       "externalEvidence": "PR #6",
       "evidence": [
         "services/ai3d-worker/ai3d/plugins/gpu_router.py"
-      ]
+      ],
+      "userRuntimeConstraint": "DISABLED_NO_GPU",
+      "effectiveRuntimeOnCurrentHardwarePercent": 0,
+      "nightAutopilotEligible": false
     },
     "InstantMesh": {
       "percent": 80,
@@ -94,7 +109,10 @@
         "services/ai3d-worker/ai3d/plugins/instantmesh.py",
         "services/ai3d-worker/ai3d/plugins/gpu_router.py"
       ],
-      "note": "V8 invokes official run.py when CUDA/source are available; placeholder-success path is forbidden."
+      "note": "V8 invokes official run.py when CUDA/source are available; placeholder-success path is forbidden.",
+      "userRuntimeConstraint": "DISABLED_NO_GPU",
+      "effectiveRuntimeOnCurrentHardwarePercent": 0,
+      "nightAutopilotEligible": false
     },
     "MPFB": {
       "percent": 30,
@@ -102,7 +120,8 @@
       "evidence": [
         "data/technology-orchestrator.json",
         "scripts/technology-orchestrator.js"
-      ]
+      ],
+      "nightAutopilotEligible": true
     },
     "UniRig": {
       "percent": 30,
@@ -110,7 +129,8 @@
       "evidence": [
         "data/technology-orchestrator.json",
         "scripts/technology-orchestrator.js"
-      ]
+      ],
+      "nightAutopilotEligible": true
     },
     "Rigify": {
       "percent": 30,
@@ -118,7 +138,8 @@
       "evidence": [
         "data/technology-orchestrator.json",
         "scripts/technology-orchestrator.js"
-      ]
+      ],
+      "nightAutopilotEligible": true
     },
     "Goo Engine": {
       "percent": 30,
@@ -126,7 +147,8 @@
       "evidence": [
         "data/technology-orchestrator.json",
         "scripts/technology-orchestrator.js"
-      ]
+      ],
+      "nightAutopilotEligible": true
     },
     "UPBGE": {
       "percent": 30,
@@ -134,19 +156,102 @@
       "evidence": [
         "data/technology-orchestrator.json",
         "scripts/technology-orchestrator.js"
-      ]
+      ],
+      "nightAutopilotEligible": true
     },
     "Blender MCP": {
       "percent": 0,
-      "status": "not-server-runtime"
+      "status": "not-server-runtime",
+      "nightAutopilotEligible": true
     },
     "Unity MCP": {
       "percent": 0,
-      "status": "not-server-runtime"
+      "status": "not-server-runtime",
+      "nightAutopilotEligible": true
     },
     "OpenGameEval/OpenGame": {
       "percent": 10,
-      "status": "concept-partial"
+      "status": "concept-partial",
+      "nightAutopilotEligible": true
+    },
+    "llama.cpp CPU": {
+      "percent": 35,
+      "status": "adapter-prepared-local-model-not-configured",
+      "nightAutopilotEligible": true,
+      "effectiveRuntimeOnCurrentHardwarePercent": 35,
+      "evidence": [
+        "data/local-cpu-code-model.json",
+        "scripts/local-cpu-code-model.js",
+        "scripts/cpu-patch-tournament.js"
+      ],
+      "note": "Runs with -ngl 0 only when user supplies a local GGUF model."
+    },
+    "CPU Texture Factory": {
+      "percent": 90,
+      "status": "implemented-local-cpu-pipeline",
+      "nightAutopilotEligible": true,
+      "effectiveRuntimeOnCurrentHardwarePercent": 90,
+      "evidence": [
+        "scripts/cpu_texture_factory.py",
+        "data/cpu-texture-policy.json"
+      ]
+    },
+    "CPU Mesh Factory": {
+      "percent": 85,
+      "status": "implemented-cpu-pipeline-runtime-depends-on-trimesh",
+      "nightAutopilotEligible": true,
+      "effectiveRuntimeOnCurrentHardwarePercent": 85,
+      "evidence": [
+        "scripts/cpu_mesh_factory.py",
+        "scripts/cpu-mesh-scan.js"
+      ]
+    },
+    "CPU SSIM": {
+      "percent": 95,
+      "status": "implemented-cpu-visual-comparator",
+      "nightAutopilotEligible": true,
+      "effectiveRuntimeOnCurrentHardwarePercent": 95,
+      "evidence": [
+        "scripts/cpu_ssim_compare.py"
+      ]
+    },
+    "CPU Visual Ensemble": {
+      "percent": 95,
+      "status": "implemented-cpu-visual-regression-engine",
+      "nightAutopilotEligible": true,
+      "effectiveRuntimeOnCurrentHardwarePercent": 95,
+      "evidence": [
+        "scripts/cpu_visual_ensemble.py",
+        "data/cpu-visual-ensemble-policy.json"
+      ]
+    },
+    "Bayesian Quality Predictor": {
+      "percent": 95,
+      "status": "implemented-history-driven-ranker",
+      "nightAutopilotEligible": true,
+      "effectiveRuntimeOnCurrentHardwarePercent": 95,
+      "evidence": [
+        "scripts/bayesian-quality-predictor.js"
+      ]
+    },
+    "Content-addressed Test Cache": {
+      "percent": 100,
+      "status": "implemented-exact-hash-cache",
+      "nightAutopilotEligible": true,
+      "effectiveRuntimeOnCurrentHardwarePercent": 100,
+      "evidence": [
+        "scripts/test-cache-runner.js"
+      ]
+    },
+    "Hardware Quality Profiles": {
+      "percent": 95,
+      "status": "implemented-host+browser-profiling",
+      "nightAutopilotEligible": true,
+      "effectiveRuntimeOnCurrentHardwarePercent": 95,
+      "evidence": [
+        "scripts/hardware-fingerprint.js",
+        "shared/golden-device-profile.js"
+      ]
     }
   }
 }

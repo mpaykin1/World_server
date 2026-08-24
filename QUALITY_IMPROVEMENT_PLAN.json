@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-23T03:43:24.284Z",
+  "generatedAt": "2026-08-24T05:51:08.235Z",
   "tasks": [
     {
       "rank": 1,
@@ -28,6 +28,30 @@
     {
       "rank": 2,
       "id": "QG-002",
+      "title": "Improve zeroCostComputeCompliance: queue-filter",
+      "reason": {
+        "type": "quality-control-gap",
+        "metric": "zeroCostComputeCompliance",
+        "controlId": "queue-filter",
+        "impactPoints": 20,
+        "effort": 3,
+        "confidence": 0.95,
+        "reuse": 1,
+        "priority": 6.33,
+        "recommendedAction": "Implement canonical source behavior containing requires_gpu=false"
+      },
+      "acceptanceCriteria": [
+        "No existing metric decreases",
+        "Relevant behavioral/static test passes",
+        "QUALITY_REGRESSION_REPORT passes",
+        "PROJECT_QUALITY_REVIEW has zero blockers",
+        "Evidence record is added before score increases"
+      ],
+      "status": "planned"
+    },
+    {
+      "rank": 3,
+      "id": "QG-003",
       "title": "Integrate OpenGameEval/OpenGame",
       "reason": {
         "type": "technology-growth",
@@ -49,8 +73,8 @@
       "status": "planned"
     },
     {
-      "rank": 3,
-      "id": "QG-003",
+      "rank": 4,
+      "id": "QG-004",
       "title": "Integrate Depth Anything",
       "reason": {
         "type": "technology-growth",
@@ -72,8 +96,8 @@
       "status": "planned"
     },
     {
-      "rank": 4,
-      "id": "QG-004",
+      "rank": 5,
+      "id": "QG-005",
       "title": "Improve qualityGrowthAutomation: rollback",
       "reason": {
         "type": "quality-control-gap",
@@ -96,8 +120,32 @@
       "status": "planned"
     },
     {
-      "rank": 5,
-      "id": "QG-005",
+      "rank": 6,
+      "id": "QG-006",
+      "title": "Improve silentAutopilot: idle-cpu-check",
+      "reason": {
+        "type": "quality-control-gap",
+        "metric": "silentAutopilot",
+        "controlId": "idle-cpu-check",
+        "impactPoints": 10,
+        "effort": 3,
+        "confidence": 0.95,
+        "reuse": 1,
+        "priority": 3.17,
+        "recommendedAction": "Implement canonical source behavior containing usage>72"
+      },
+      "acceptanceCriteria": [
+        "No existing metric decreases",
+        "Relevant behavioral/static test passes",
+        "QUALITY_REGRESSION_REPORT passes",
+        "PROJECT_QUALITY_REVIEW has zero blockers",
+        "Evidence record is added before score increases"
+      ],
+      "status": "planned"
+    },
+    {
+      "rank": 7,
+      "id": "QG-007",
       "title": "Improve uploadedTechnologyUse: production-adapters",
       "reason": {
         "type": "quality-control-gap",
@@ -120,8 +168,8 @@
       "status": "planned"
     },
     {
-      "rank": 6,
-      "id": "QG-006",
+      "rank": 8,
+      "id": "QG-008",
       "title": "Promote Golden stained-glass",
       "reason": {
         "type": "golden-promotion-gap",
@@ -143,8 +191,8 @@
       "status": "planned"
     },
     {
-      "rank": 7,
-      "id": "QG-007",
+      "rank": 9,
+      "id": "QG-009",
       "title": "Improve graphics: approved-screenshot-baselines",
       "reason": {
         "type": "quality-control-gap",

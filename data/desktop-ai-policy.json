@@ -21,6 +21,7 @@
     "Deployment / PR plan",
     "Current progress",
     "Next action",
+    "Error closure loop",
     "Completion criteria",
     "Final evidence"
   ],
@@ -28,6 +29,6 @@
     "UNSET"
   ],
   "patchRule": "No patch is valid without an updated WORK_IN_PROGRESS.md.",
-  "completionRule": "Desktop AI may not declare completion until work instruction and final evidence are current.",
+  "completionRule": "Desktop AI may not declare completion until work instruction/final evidence are current AND every fixable error/failed mandatory gate is closed. External blockers require evidence + exact next action.",
   "directionRule": "Every task instruction must state what we are working on, why, where the project is going, what the patch changes, how to verify it, and what to do with the patch."
 }

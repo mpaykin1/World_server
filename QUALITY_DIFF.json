@@ -12,8 +12,8 @@
       "id": "graphics",
       "label": "Стандарты графики",
       "before": 52,
-      "now": 97,
-      "delta": 45
+      "now": 99,
+      "delta": 47
     },
     {
       "id": "deviceAccessibility",
@@ -68,8 +68,8 @@
       "id": "uploadedTechnologyUse",
       "label": "Использование загруженных технологий",
       "before": 38,
-      "now": 75,
-      "delta": 37
+      "now": 84,
+      "delta": 46
     },
     {
       "id": "errorRecurrenceProtection",

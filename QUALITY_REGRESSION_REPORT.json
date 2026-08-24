@@ -2,7 +2,7 @@
   "pass": true,
   "baselineId": "bootstrap-2026-08-23-world-server",
   "baselineOverall": 44.166666666666664,
-  "currentOverall": 97.58333333333333,
+  "currentOverall": 98.5,
   "violations": [],
   "improvements": [
     {
@@ -16,8 +16,8 @@
       "type": "metric-improvement",
       "id": "graphics",
       "baseline": 52,
-      "current": 97,
-      "delta": 45
+      "current": 99,
+      "delta": 47
     },
     {
       "type": "metric-improvement",
@@ -72,8 +72,8 @@
       "type": "metric-improvement",
       "id": "uploadedTechnologyUse",
       "baseline": 38,
-      "current": 75,
-      "delta": 37
+      "current": 84,
+      "delta": 46
     },
     {
       "type": "metric-improvement",
@@ -163,7 +163,7 @@
   "deltas": {
     "metrics": {
       "controls": 45,
-      "graphics": 45,
+      "graphics": 47,
       "deviceAccessibility": 54,
       "menu": 75,
       "collisions": 60,
@@ -171,7 +171,7 @@
       "codeReviewer": 45,
       "reports": 35,
       "functionConnectivity": 50,
-      "uploadedTechnologyUse": 37,
+      "uploadedTechnologyUse": 46,
       "errorRecurrenceProtection": 80,
       "goldenSolutionPropagation": 85
     },
@@ -197,8 +197,8 @@
       "Unity MCP": 0,
       "OpenGameEval/OpenGame": 0
     },
-    "overall": 53.416666666666664,
+    "overall": 54.333333333333336,
     "releaseBlockers": 0
   },
-  "generatedAt": "2026-08-24T05:15:59.758Z"
+  "generatedAt": "2026-08-24T05:54:52.118Z"
 }

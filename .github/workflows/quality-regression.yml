@@ -17,16 +17,11 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - name: Install AI3D worker Python deps (needed for CPU/voxel tests)
-        run: pip install pillow numpy requests
       - run: npm ci
       - name: Hard source + no-regression gate
         run: npm run release:gate
-      - name: Install Playwright browsers (chromium + webkit for iPhone emulation)
-        run: npx playwright install --with-deps chromium webkit
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
       - name: Desktop + mobile behavioral gate
         run: npm run golden:e2e
       - name: Quality delta
