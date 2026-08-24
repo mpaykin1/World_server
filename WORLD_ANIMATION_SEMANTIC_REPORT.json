@@ -1,7 +1,7 @@
 {
   "schemaVersion": "4.0.0",
   "system": "WORLD_ANIMATION_SEMANTIC_VALIDATOR",
-  "generatedAt": "2026-08-24T00:01:27.764Z",
+  "generatedAt": "2026-08-24T05:00:18.392Z",
   "configuredRules": [
     "feetFaceMovementDirection",
     "attackDirectionFollowsFeet",
