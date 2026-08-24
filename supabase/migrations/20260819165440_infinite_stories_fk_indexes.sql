@@ -1,0 +1,13 @@
+create index if not exists stories_origin_node_idx on private.stories(origin_node_id) where origin_node_id is not null;
+create index if not exists stories_origin_story_idx on private.stories(origin_story_id) where origin_story_id is not null;
+create index if not exists story_characters_created_by_idx on private.story_characters(created_by);
+create index if not exists story_characters_world_entity_idx on private.story_characters(world_entity_id) where world_entity_id is not null;
+create index if not exists story_continuations_base_node_idx on private.story_continuations(base_node_id);
+create index if not exists story_continuations_resulting_node_idx on private.story_continuations(resulting_node_id) where resulting_node_id is not null;
+create index if not exists story_edges_created_by_idx on private.story_edges(created_by);
+create index if not exists story_perspectives_created_by_idx on private.story_node_perspectives(created_by);
+create index if not exists story_nodes_created_by_idx on private.story_nodes(created_by);
+create index if not exists story_steps_edge_idx on private.story_session_steps(edge_id) where edge_id is not null;
+create index if not exists story_steps_node_idx on private.story_session_steps(node_id);
+create index if not exists story_sessions_character_idx on private.story_sessions(character_id);
+create index if not exists story_sessions_current_node_idx on private.story_sessions(current_node_id);
