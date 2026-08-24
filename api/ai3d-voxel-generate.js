@@ -2,6 +2,8 @@
 
 const { sendJson, methodNotAllowed, withErrors, httpError } = require('../lib/http');
 
+const { enhanceVoxelWorld } = require('../lib/world-quality-voxel-enhancer');
+
 const MAX_INPUT_BYTES = 58 * 1024;
 
 async function readBody(req) {
@@ -256,7 +258,7 @@ function generateWorld(body) {
 module.exports = withErrors(async (req,res)=>{
   if(req.method!=='POST')return methodNotAllowed(res,['POST']);
   const body=await readBody(req);
-  const world=generateWorld(body);
+  const world=enhanceVoxelWorld(generateWorld(body),{rootDir:process.cwd(),enabled:body.qualityAutopilot!==false,seed:Number(body.qualitySeed)||undefined});
   sendJson(res,200,{ok:true,engine:'vercel_serverless_voxel_fallback',world});
 });
 

@@ -1,0 +1,41 @@
+name: World Quality Autopilot V4
+on:
+  pull_request:
+    paths: ['apps/**','api/**','lib/**','shared/**','services/ai3d-worker/**','data/**','scripts/**','test/**']
+  workflow_dispatch:
+  schedule:
+    - cron: '23 3 * * *'
+permissions:
+  contents: read
+jobs:
+  world-quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - run: npm ci
+      - run: npm run quality:world:full
+      - run: node --test test/world-quality-autopilot.test.js
+      - run: npm run quality:regression
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: world-quality-autopilot-v4-reports
+          path: |
+            WORLD_QUALITY_AUTOPILOT_REPORT.json
+            WORLD_QUALITY_AUTOPILOT_PLAN.json
+            WORLD_QUALITY_AUTOPILOT_STATUS.json
+            WORLD_RUNTIME_QUALITY_REPORT.json
+            WORLD_VISUAL_BASELINE_CANDIDATES.json
+            WORLD_ANIMATION_SEMANTIC_REPORT.json
+            WORLD_SEMANTIC_DETAIL_REPORT.json
+            WORLD_DEVICE_PROFILE_MATRIX.json
+            WORLD_QUALITY_EVIDENCE_LEDGER.json
+            WORLD_MATERIAL_SYNTHESIS_REPORT.json
+            WORLD_VISIBILITY_OPTIMIZER_REPORT.json
+            WORLD_RETARGET_CONTRACT_REPORT.json
+            WORLD_QUALITY_SCHEDULER_REPORT.json
+            WORLD_FEEDBACK_LEARNER_REPORT.json
+            WORLD_CANDIDATE_LAB_REPORT.json
