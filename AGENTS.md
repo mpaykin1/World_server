@@ -146,3 +146,22 @@ For every task, patch, repair, upgrade, deployment or quality-improvement run:
 - Do not merge/deploy if any accepted quality metric regresses.
 - Confirmed fixes must become regression protection.
 - Approved reusable successes must become exact Golden Components and be propagated to compatible projects.
+
+
+## WORLD SERVER QUALITY RUNTIME V11.3 — mandatory autonomous repair rules
+
+Add this section to `AGENTS.md` once (do not duplicate it).
+
+- Before any quality/runtime task, query `public.quality_desktop_ai_work_packet()` and copy relevant jobs/gaps into `WORK_IN_PROGRESS.md`.
+- Do not stop while a reproducible in-scope error remains unfixed or a changed behavior remains unverified.
+- After 2–3 failed attempts, change strategy; do not loop the same failing action.
+- Never convert external blockers into a PASS.
+- Never push directly to `master`.
+- Every confirmed fix must gain regression protection where technically possible.
+- Do not simplify working graphics, physics, controls, or content merely to make a test pass.
+- Supabase migration drift is a release blocker: sync from `quality_export_migration_history()`, verify, commit through PR, and record the merged SHA via `quality_record_schema_manifest()`.
+- A pixel atlas is valid only after `quality_register_pixel_atlas_manifest()` accepts a real texture URL, dimensions, and non-empty frame manifest.
+- Real-device readiness requires verified physical iOS + Android evidence; emulators do not qualify.
+- SECURITY DEFINER warnings require deliberate authorization review; mass-revocation without contract analysis is forbidden.
+- Before final completion run `npm run release:gate`, relevant Playwright/runtime tests, production synthetic verification, and re-read the live work packet.
+

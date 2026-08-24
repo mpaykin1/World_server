@@ -206,3 +206,285 @@ Desktop AI must report:
 11. Preview / production link only if verified working.
 
 Never invent a successful deployment, URL, test pass, or integration.
+
+
+---
+
+# DESKTOP AI — WORLD SERVER V11.3 MANDATORY INSTRUCTION
+
+This file is mandatory for every V11.3 installation, repair, upgrade, deployment, and quality-improvement run.
+
+## Absolute rule
+
+**Do not stop while a reproducible in-scope error remains unfixed or a changed behavior remains unverified.**
+
+This does NOT mean repeating the same failing command forever:
+- after 2–3 failed attempts, change strategy;
+- inspect logs/evidence/contracts;
+- isolate the failing subsystem;
+- repair the root cause;
+- add regression protection;
+- rerun the failing test and the broader gate.
+
+If an external permission or unavailable physical service blocks one item, record it explicitly, try another safe route, and continue all other actionable work. Never convert an external blocker into a fake PASS.
+
+## 1. Before touching files
+
+Read:
+1. `AGENTS.md`
+2. `DESKTOP_AI_INSTALL_AND_VERIFY.md`
+3. this file
+4. `WORK_IN_PROGRESS.md` if present
+
+Then query the live Supabase work packet:
+
+```sql
+select public.quality_desktop_ai_work_packet();
+```
+
+Use the connected Supabase app/MCP when available. Never paste service-role secrets into chat or commit them.
+
+Create/update `WORK_IN_PROGRESS.md` before editing. It must contain:
+- exact goal;
+- current Git SHA/branch;
+- current runtime score;
+- queued jobs and open gaps;
+- systems affected;
+- risks;
+- exact patch plan;
+- tests to run;
+- errors that must not return;
+- deployment / PR plan;
+- completion criteria;
+- final evidence.
+
+## 2. Git safety
+
+Never edit directly on `master`.
+
+```powershell
+git checkout master
+git pull origin master
+git status --short
+git checkout -b ai/desktop/quality-runtime-v11-<timestamp>
+```
+
+If the working tree is not clean, preserve the user’s work first. Never discard unknown changes.
+
+## 3. Close Git ↔ Supabase migration drift
+
+Preferred automated path when `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` or `SUPABASE_SECRET_KEY` are already available to the local process:
+
+```powershell
+node scripts/sync-supabase-migrations.cjs --apply
+node scripts/sync-supabase-migrations.cjs --check-offline
+node scripts/sync-supabase-migrations.cjs --check-live
+```
+
+The sync script:
+- calls `quality_export_migration_history()`;
+- backs up the old local migration folder before replacing SQL files;
+- writes the exact production migration names and SQL statements;
+- stores rollback statements separately;
+- writes `data/supabase-migration-manifest.json`;
+- verifies the server name digest.
+
+If the environment variables are not available, do NOT request or expose the service key. Use the connected Supabase tool to call:
+
+```sql
+select public.quality_export_migration_history();
+```
+
+Then materialize the returned `version_name.sql` files exactly and build the same manifest.
+
+Never “fix drift” by deleting production migration history.
+
+## 4. Run quality gates
+
+At minimum:
+
+```powershell
+npm ci
+node --check scripts/sync-supabase-migrations.cjs
+node --check scripts/record-supabase-repo-manifest.cjs
+node scripts/sync-supabase-migrations.cjs --check-offline
+npm run desktop-ai:check
+npm run check
+npm run release:gate
+```
+
+Run all relevant browser/runtime tests for any touched system. For gameplay or UI changes, include desktop + mobile Playwright evidence. Do not simplify graphics to make tests pass.
+
+When a test fails:
+1. capture exact error;
+2. locate root cause;
+3. fix the root cause;
+4. add/update regression protection;
+5. rerun the failed test;
+6. rerun `release:gate`.
+
+## 5. Pixel atlas gap
+
+Live gap key:
+
+`pixel.animation.atlas.missing`
+
+Do NOT insert a fake atlas manifest.
+
+Build a real texture atlas from real project pixel assets. After a real atlas exists, register it through:
+
+```sql
+select public.quality_register_pixel_atlas_manifest(
+  '{
+    "atlasKey":"world-pixel-atlas-v1",
+    "version":1,
+    "textureUrl":"/assets/pixel/world-atlas-v1.png",
+    "width":2048,
+    "height":2048,
+    "manifest":{"frames":{"example":{"x":0,"y":0,"w":32,"h":32}}}
+  }'::jsonb
+);
+```
+
+Replace the example with the real URL, dimensions, and all real frame entries.
+
+The server will reject:
+- missing URL;
+- invalid dimensions;
+- empty `manifest.frames`.
+
+The gap closes only after a valid manifest is recorded and the gap cycle verifies it.
+
+## 6. Real-device gap
+
+Live gap key:
+
+`runtime.real-device.evidence.missing`
+
+Do NOT mark emulator results as physical-device evidence.
+
+Required for full device readiness:
+- verified physical iOS report from the last 30 days;
+- verified physical Android report from the last 30 days.
+
+Ingestion contract:
+
+```sql
+select public.quality_record_real_device_report(<report-json>);
+```
+
+New reports are intentionally `verified=false`.
+
+Verification requires provider/run/artifact evidence:
+
+```sql
+select public.quality_verify_real_device_report(
+  '<report-uuid>',
+  '{"provider":"<provider>","runId":"<run>","artifactUrl":"https://..."}'::jsonb
+);
+```
+
+Check:
+
+```sql
+select public.quality_real_device_status();
+```
+
+Never claim real-device 100% until `ready=true`.
+
+## 7. Security gap
+
+Live gap key:
+
+`supabase.security.security-definer-exposure`
+
+Do not mass-revoke functions blindly. For each flagged SECURITY DEFINER function:
+1. inspect its body;
+2. inspect ownership/RLS contract;
+3. determine intended caller;
+4. prefer SECURITY INVOKER where possible;
+5. otherwise keep SECURITY DEFINER only with explicit authorization checks and least-privilege EXECUTE grants;
+6. rerun Supabase Security Advisor;
+7. run auth/story/game regression tests.
+
+## 8. Commit + PR
+
+Before commit:
+
+```powershell
+git diff --check
+git status --short
+node scripts/sync-supabase-migrations.cjs --check-offline
+npm run release:gate
+```
+
+Then:
+
+```powershell
+git add .
+git commit -m "feat(quality): runtime V11.3 schema sync and autonomous quality loop"
+git push -u origin HEAD
+gh pr create --base master --fill
+```
+
+Do not bypass failing checks.
+
+## 9. Protect master
+
+After the new workflow has existed and produced its status checks, run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\ensure-master-protection.ps1
+```
+
+Verify through GitHub API that `master` is actually protected. A local script existing is not evidence that protection is active.
+
+## 10. Post-merge finalization
+
+After the PR is merged:
+
+```powershell
+git checkout master
+git pull origin master
+node scripts/sync-supabase-migrations.cjs --check-offline
+node scripts/sync-supabase-migrations.cjs --check-live
+node scripts/record-supabase-repo-manifest.cjs
+node scripts/fetch-quality-work-packet.cjs
+```
+
+The manifest recorder sends:
+- the actual merged master SHA;
+- the actual local migration filename list.
+
+Then check live:
+
+```sql
+select public.quality_schema_drift_status();
+select public.quality_runtime_score();
+select public.quality_desktop_ai_work_packet();
+```
+
+## 11. Completion rules
+
+Do not say “done” unless:
+- no reproducible in-scope error remains;
+- every modified behavior is re-tested;
+- regression protection exists for confirmed fixes;
+- `release:gate` passes;
+- Git migration manifest matches the live database;
+- the current master SHA is recorded in Supabase;
+- production synthetic probe is healthy;
+- runtime worker heartbeat is fresh;
+- no compatible actionable runtime job remains;
+- PR/deployment evidence is recorded.
+
+Do not claim **overall 100%** while open non-runtime gaps such as real-device evidence, pixel atlas, or unresolved security review remain.
+
+At the end always report:
+- system readiness %;
+- runtime score;
+- connectivity %;
+- remaining gaps;
+- exact evidence for every PASS;
+- exact blockers for every non-PASS.
+

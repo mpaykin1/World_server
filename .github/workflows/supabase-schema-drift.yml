@@ -1,0 +1,45 @@
+name: Supabase Schema Drift
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+  schedule:
+    - cron: '17 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  supabase-schema-offline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Check sync script syntax
+        run: node --check scripts/sync-supabase-migrations.cjs
+      - name: Verify committed migration manifest
+        run: node scripts/sync-supabase-migrations.cjs --check-offline
+
+  supabase-schema-live:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/master')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Require live Supabase credentials
+        run: |
+          test -n "$SUPABASE_URL"
+          test -n "$SUPABASE_SERVICE_ROLE_KEY"
+      - name: Compare repository with production migration history
+        run: node scripts/sync-supabase-migrations.cjs --check-live
