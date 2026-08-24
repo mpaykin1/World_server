@@ -2,7 +2,23 @@
   "schemaVersion": "1.0.0",
   "system": "ERROR_RECURRENCE_PROTECTION",
   "policy": "confirmed-fix-becomes-permanent-regression-rule",
-  "events": [],
+  "events": [
+    {
+      "type": "FIX_CONFIRMED",
+      "errorId": "supabase-schema-drift-missing-migrations",
+      "at": "2026-08-24T10:34:00Z",
+      "commit": "9a8affd",
+      "branch": "ai/desktop/quality-runtime-v11-20260824-090217",
+      "digest": "6775a559063525b6dfb9ef61181c7eb83c1a05fe5eea6e2180c83ea6185a5363",
+      "protectionAdded": [
+        "scripts/check-supabase-migrations.js digest guard (108/6775a559...)",
+        "data/error-prevention-registry.json recurrence rule",
+        "QUALITY_AUTOLOOP every 15m auto-restore + push",
+        "pre-commit migration guard (npm run check includes migration guard)",
+        "gap_closure supabase.schema.drift auto-heal"
+      ]
+    }
+  ],
   "knownErrors": [
     {
       "id": "controls-inverted-camera-relative",
@@ -148,6 +164,29 @@
       "protection": [
         "direct world-selection menu gate"
       ]
+    },
+    {
+      "id": "supabase-schema-drift-missing-migrations",
+      "category": "supabase",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "production has 108 migrations but repo has 7 mismatched versions -> quality_schema_drift_status drift=true, blocks factory/quality promotion",
+      "rootCause": "local supabase/migrations not synced from production export quality_export_migration_history(); version timestamps diverged (20260819055525 vs 20260819060509 etc) and 101 migrations missing",
+      "protection": [
+        "scripts/check-supabase-migrations.js digest guard (108/6775a559...)",
+        "data/error-prevention-registry.json recurrence rule",
+        "QUALITY_AUTOLOOP every 15m auto-restore + push",
+        "pre-commit migration guard (npm run check includes migration guard)",
+        "gap_closure supabase.schema.drift auto-heal"
+      ],
+      "fixedAt": "2026-08-24T10:34:00Z",
+      "fixedCommit": "9a8affd",
+      "expected": {
+        "count": 108,
+        "digest": "6775a559063525b6dfb9ef61181c7eb83c1a05fe5eea6e2180c83ea6185a5363",
+        "latest": "20260824060624_unified_autonomous_game_factory_v1_hardening.sql"
+      },
+      "recovery": "restore.py from Supabase Snippet Untitled query.csv -> supabase/migrations (108 files) -> git commit+push"
     }
   ],
   "confirmationProtocol": {
