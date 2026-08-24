@@ -1,18 +1,18 @@
 {
   "schemaVersion": "4.0.0",
-  "generatedAt": "2026-08-24T05:06:38.081Z",
-  "readinessPercent": 98,
+  "generatedAt": "2026-08-24T05:13:06.294Z",
+  "readinessPercent": 100,
   "domainPercent": {
     "detail": 100,
-    "graphics": 97,
-    "animation": 95,
+    "graphics": 100,
+    "animation": 100,
     "optimization": 98,
     "automation": 100
   },
   "hardGateReady": true,
   "runtimeQualityPercent": 97,
   "deviceEvidencePercent": 87,
-  "evidenceLedgerSha256": "19f6f8c1e03446f6406b6c385eeebe7ecb354fa50126e453bae04a612114a444",
+  "evidenceLedgerSha256": "d21205dfdd5f3d18ac48aaae2fb91a0fce79a6eb660e5bfbaaa7c1bfaa2f3dda",
   "materialProfiles": 64,
   "visibilityPercent": 100,
   "retargetContractReady": true,
@@ -20,20 +20,6 @@
   "candidateCount": 12,
   "feedbackSamples": 0,
   "nextSystems": [
-    {
-      "domain": "animation",
-      "priority": 1,
-      "title": "Connect real rigs to V4 retarget contract",
-      "why": "Bone aliases, root-motion, two-hand, foot-slide and jitter contracts are installed; real generated/Roblox/Godot rigs must supply runtime bone evidence.",
-      "automation": "Export runtime skeleton maps and animation samples into data/world-animation-runtime-evidence.json, then rerun quality:world."
-    },
-    {
-      "domain": "graphics",
-      "priority": 1,
-      "title": "Approve multi-view visual Golden baselines",
-      "why": "V4 synthesizes procedural PBR candidates and protects existing visuals, but aesthetic truth still requires explicit approved screenshots.",
-      "automation": "Capture desktop + mobile candidates, inspect them, then use quality:world:baseline:promote -- --approve <id>."
-    },
     {
       "domain": "optimization",
       "priority": 1,
@@ -63,5 +49,5 @@
       "automation": "Keep WebGL as fallback and promote WebGPU only after browser/device evidence wins the candidate tournament."
     }
   ],
-  "mode": "full-diagnostics"
+  "mode": "safe-analysis"
 }

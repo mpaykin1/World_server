@@ -45,6 +45,7 @@ Generic Golden/Quality automation already exists. V4 adds the world-specific clo
 - spawnSync npm.cmd EINVAL on release:gate — resolved by V4.1 hotfix (cmd.exe /d /s /c npm ...).
 - Quality Regression Lock missing Python PIL (ModuleNotFoundError) — resolved by adding setup-python + pip install pillow numpy requests to quality-regression.yml (parity with ci.yml).
 - Quality Regression Lock missing webkit (mobile-webkit iPhone 13) — resolved by installing chromium+webkit in quality-regression.yml.
+- CI missing webkit for npx playwright test (all 4 projects) — resolved by installing chromium+webkit in ci.yml.
 - Any regression in controls, collisions, mobile behavior, visuals, performance — must rollback candidate.
 
 ## Exact patch / change plan

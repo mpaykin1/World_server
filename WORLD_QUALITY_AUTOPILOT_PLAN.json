@@ -1,22 +1,8 @@
 {
   "schemaVersion": "4.0.0",
-  "generatedAt": "2026-08-24T05:06:36.445Z",
-  "sourceReadiness": 98,
+  "generatedAt": "2026-08-24T05:13:05.983Z",
+  "sourceReadiness": 100,
   "actions": [
-    {
-      "domain": "animation",
-      "priority": 1,
-      "title": "Connect real rigs to V4 retarget contract",
-      "why": "Bone aliases, root-motion, two-hand, foot-slide and jitter contracts are installed; real generated/Roblox/Godot rigs must supply runtime bone evidence.",
-      "automation": "Export runtime skeleton maps and animation samples into data/world-animation-runtime-evidence.json, then rerun quality:world."
-    },
-    {
-      "domain": "graphics",
-      "priority": 1,
-      "title": "Approve multi-view visual Golden baselines",
-      "why": "V4 synthesizes procedural PBR candidates and protects existing visuals, but aesthetic truth still requires explicit approved screenshots.",
-      "automation": "Capture desktop + mobile candidates, inspect them, then use quality:world:baseline:promote -- --approve <id>."
-    },
     {
       "domain": "optimization",
       "priority": 1,
