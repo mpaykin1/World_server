@@ -44,8 +44,8 @@ jobs:
         run: npx playwright install --with-deps chromium webkit
       - name: Sentry runtime smoke (Playwright) - window.WorldServerSentry + ingest (hard)
         run: npx playwright test e2e/sentry-smoke.spec.js --project=desktop-chromium
-      - name: AI3D Voxel City autoplay (Playwright) ai3d-voxel-city-autoplay (hard)
-        run: npx playwright test
+      - name: AI3D Voxel City autoplay (Playwright) ai3d-voxel-city-autoplay (hard, cohesive desktop)
+        run: npx playwright test --project=desktop-chromium
 
   lighthouse:
     runs-on: ubuntu-latest
