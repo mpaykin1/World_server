@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "4.0.0",
+  "system": "WORLD_SEMANTIC_DETAIL_INDEX",
+  "generatedAt": "2026-08-24T00:01:28.116Z",
+  "source": "apps/ai3d-voxel-city/default-city.json",
+  "available": true,
+  "stats": {
+    "cells": 7981,
+    "roof": 128,
+    "windowLike": 1,
+    "verticalEdge": 2857,
+    "spireLike": 70,
+    "groundBand": 1920,
+    "highSaliency": 736
+  },
+  "semanticCoveragePercent": 5
+}
