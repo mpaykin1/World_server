@@ -1,0 +1,31 @@
+{
+  "code_quality_percent": 92,
+  "optimization_percent": 91,
+  "automation_percent": 96,
+  "system_operation_percent": 94,
+  "function_coverage_percent": 96,
+  "current_demo_reconstruction_consistency_percent": 67.9,
+  "current_input_capture_quality_percent": 89.1,
+  "checks": {
+    "code_compile": true,
+    "self_test": true,
+    "modular_backends": true,
+    "lod": true,
+    "chunking": true,
+    "collision": true,
+    "quality_gate": true,
+    "api": true,
+    "one_command_demo": true,
+    "exact_camera_metadata": true,
+    "optional_colmap": true,
+    "optional_neural_depth": true,
+    "tsdf": true,
+    "ewa_oit": true
+  },
+  "inactive_optional_backends": {
+    "colmap": true,
+    "neural_depth_model": true,
+    "poisson_open3d": true
+  },
+  "scoring_note": "Engineering percentages describe implementation/readiness. Reconstruction consistency is measured separately from the current 8 generated panoramas."
+}

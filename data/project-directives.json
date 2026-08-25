@@ -1,0 +1,132 @@
+{
+  "schemaVersion": "7.4.0",
+  "system": "PROJECT_DIRECTIVE_CONSTITUTION",
+  "enforcement": "fail-closed-on-applicable-task",
+  "solutionStrategy": {
+    "scalableFirst": true,
+    "preferMinimumManualActions": true,
+    "combineStepsWhenSafe": true,
+    "batchAssetsWhenFeasible": true,
+    "singleAtlasOverManyLooseFiles": true,
+    "productionGameQualityOverTemplateAssets": true,
+    "proactiveImprovement": true
+  },
+  "delivery": {
+    "noInlineHtml": true,
+    "htmlMustBeDownloadableArtifact": true,
+    "fullFileCodeDelivery": true,
+    "rootCauseRequiredForBugfix": true,
+    "permanentRegressionPreventionRequired": true,
+    "conciseTruthfulFinalReport": true,
+    "noUnsupported100Claims": true
+  },
+  "technology": {
+    "respectUserMandatedTechnology": true,
+    "allowAlternativeSuggestionWithoutSubstitution": true,
+    "apngIsStrictWhenRequested": true,
+    "cpuFirst": true,
+    "paidInfrastructureRequiresApproval": true
+  },
+  "graphics": {
+    "preserveExistingGraphics": true,
+    "noDestructiveSimplification": true,
+    "qualityRatchet": true,
+    "improveDetailEffectsNuanceOptimization": true,
+    "improveGraphicsPhysicsMotion": true,
+    "improveShadowsTexturesLightingVolume": true,
+    "visualRegressionEvidenceRequiredOnProtectedChanges": true
+  },
+  "audio": {
+    "variationRequired": true,
+    "minimumVariantsPerEvent": 4,
+    "selectionModes": [
+      "shuffle-bag",
+      "weighted-random",
+      "contextual-random"
+    ],
+    "requirePitchVariation": true,
+    "requireGainVariation": true,
+    "avoidImmediateRepeat": true
+  },
+  "gameplay": {
+    "feetFollowTravelDirection": true,
+    "attacksFollowFeetForward": true,
+    "shieldBetweenEnemyAndTorso": true,
+    "shieldVertical": true,
+    "shieldMinimumTorsoCoverage": 0.8,
+    "pistolHands": 1,
+    "pistolAttachedToHand": true,
+    "rifleHands": 2,
+    "machineGunHands": 2
+  },
+  "technologyAdmission": {
+    "collectiveConsensus": true,
+    "sandboxBeforePromotion": true,
+    "dependencyImpactRequired": true,
+    "regressionGateRequired": true,
+    "canaryBeforeProduction": true
+  },
+  "supplyChain": {
+    "signReleaseEvidence": true,
+    "tamperEvidentTransparencyLog": true,
+    "monitorTransparencyContinuously": true
+  },
+  "verification": {
+    "modelCheckDurableStateMachines": true,
+    "semanticDependencyGraph": true,
+    "nativeAstWhenAvailable": true,
+    "mandatoryTlcInCI": true,
+    "rejectVulnerableCosign": true
+  },
+  "storage": {
+    "contentAddressed": true,
+    "distributedCasReady": true,
+    "zeroConfigCasDiscovery": true
+  },
+  "deviceTesting": {
+    "ownedRealDevicesFirst": true,
+    "neverCountEmulatorAsRealDevice": true,
+    "automatedExecutor": true
+  },
+  "adapters": {
+    "typedWitContracts": true,
+    "wasiComponentModelPreferred": true,
+    "generateWitBindings": true
+  },
+  "tooling": {
+    "autoInstallFreePinnedToolsLocally": true,
+    "neverRequireGlobalInstall": true
+  },
+  "orchestrator": {
+    "boundedRestartOnly": true,
+    "noInfiniteCrashLoop": true,
+    "stableMustSurviveRecovery": true,
+    "staleMonitorGenerationRejected": true,
+    "identityPredicateRequired": true,
+    "stabilizationBarrierRequired": true,
+    "minimalReproOnPersistentFailure": true,
+    "workingCandidateStablePromotion": true
+  },
+  "systems": {
+    "legacyEvidence": {
+      "explicitRecipesOnly": true,
+      "autoCertifyByName": false
+    },
+    "sloErrorBudget": {
+      "productionEvidenceRequiredForRollbackClaim": true
+    },
+    "databaseMigration": {
+      "expandMigrateContract": true,
+      "fencedLeaderRequired": true,
+      "snapshotRequired": true
+    },
+    "assetDelta": {
+      "contentDefinedChunks": true,
+      "verifyEveryChunk": true
+    },
+    "causalDebugging": {
+      "secretRedaction": true,
+      "correlateTraceQueueDeployCrash": true
+    }
+  }
+}

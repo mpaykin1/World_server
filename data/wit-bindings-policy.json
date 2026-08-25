@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "7.2.0",
+  "source": "wit/world-server-adapter.wit",
+  "outputDir": "generated/wit",
+  "languages": [
+    "typescript"
+  ],
+  "deterministic": true,
+  "nativeGeneratorOptional": true,
+  "embeddedGeneratorRequired": true
+}

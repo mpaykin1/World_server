@@ -1,0 +1,14 @@
+{
+  "version": "8.0",
+  "tests": "37/37 PASS",
+  "packageGate": "PASS",
+  "isolatedInstaller": "PASS",
+  "threeNativePatch": "PASS",
+  "voxelDDGIPatch": "PASS",
+  "architecturalReadinessPct": 99,
+  "verifiedReadinessPct": 98,
+  "physicalDeviceCertification": "PENDING_REAL_DEVICES",
+  "productionGoldenBaselines": "PENDING_PREVIEW_CAPTURE",
+  "githubDirectBranchCreation": "BLOCKED_403",
+  "supabaseMigration": "APPLIED"
+}

@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-25T01:15:45.869Z",
+  "pass": true,
+  "orchestratorReady": true,
+  "appiumCompatible": true,
+  "localDevices": [],
+  "remoteWorkers": [],
+  "appium": {
+    "configured": false,
+    "reachable": false
+  },
+  "realDeviceCount": 0,
+  "platforms": [],
+  "realDeviceCoveragePercent": 0,
+  "claimRule": "Only detected physical hardware or remote-worker hardware counts as real-device evidence. Emulators/simulators never count.",
+  "externalBlockers": [
+    "no-owned-real-device-connected-or-worker-configured"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "7.3.0",
+  "leaseKey": "world-server-control-plane",
+  "ttlSeconds": 30,
+  "renewEverySeconds": 10,
+  "requireFencingOnMutation": true,
+  "failClosedOnLeaseLoss": true,
+  "productionBackend": "supabase-rpc",
+  "requiredRpc": [
+    "world_server_acquire_lease",
+    "world_server_renew_lease",
+    "world_server_release_lease"
+  ],
+  "splitBrainRule": "Only the holder of the newest fencing token may mutate shared orchestration state."
+}

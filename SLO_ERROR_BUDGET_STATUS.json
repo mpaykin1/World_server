@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "7.4.0",
+  "generatedAt": "2026-08-25T01:15:53.317Z",
+  "pass": true,
+  "syntheticControllerValidation": true,
+  "productionEvidence": false,
+  "healthyCase": {
+    "schemaVersion": "7.4.0",
+    "generatedAt": "2026-08-25T01:15:53.316Z",
+    "pass": true,
+    "source": "synthetic",
+    "sampleCount": 100,
+    "successRate": 1,
+    "p95Ms": 118,
+    "errorBudgetAllowedRate": 0.0050000000000000044,
+    "errorBudgetBurnRate": 0,
+    "latencyBad": false,
+    "productionEvidence": false,
+    "action": "ALLOW_CANARY",
+    "truthRule": "No production rollback decision is claimed from synthetic samples. Synthetic mode validates controller math only."
+  },
+  "burnCase": {
+    "schemaVersion": "7.4.0",
+    "generatedAt": "2026-08-25T01:15:53.317Z",
+    "pass": true,
+    "source": "synthetic",
+    "sampleCount": 100,
+    "successRate": 0.8,
+    "p95Ms": 2500,
+    "errorBudgetAllowedRate": 0.0050000000000000044,
+    "errorBudgetBurnRate": 40,
+    "latencyBad": true,
+    "productionEvidence": false,
+    "action": "STOP_CANARY_AND_ROLLBACK",
+    "truthRule": "No production rollback decision is claimed from synthetic samples. Synthetic mode validates controller math only."
+  },
+  "action": "NO_PRODUCTION_DECISION"
+}

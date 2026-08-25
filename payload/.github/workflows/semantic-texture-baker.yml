@@ -1,0 +1,20 @@
+name: CPU Semantic Texture Baker Smoke
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "services/semantic-texture-baker/**"
+      - "scripts/semantic-texture-baker-smoke.js"
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install pillow numpy
+      - run: node scripts/semantic-texture-baker-smoke.js

@@ -1,0 +1,387 @@
+{
+  "schemaVersion": 2,
+  "id": "sample-city",
+  "title": "Sample City — Source Locked V9",
+  "visual": {
+    "type": "ply-mesh",
+    "url": "./assets/world.ply",
+    "fidelity": "source-locked",
+    "sha256": "af8b08927d911b259f04975e146f26a1110c574ba3bc465ae319685826ca9473",
+    "sourceStats": {
+      "type": "ply-mesh",
+      "vertices": 361039,
+      "faces": 683077,
+      "format": "binary_little_endian",
+      "bounds": {
+        "min": [
+          -10.725000381469727,
+          -13.475000381469727,
+          -3.7249999046325684
+        ],
+        "max": [
+          13.121246337890625,
+          11.975000381469727,
+          3.9749999046325684
+        ],
+        "extents": [
+          23.84624671936035,
+          25.450000762939453,
+          7.699999809265137
+        ]
+      },
+      "properties": [
+        "blue",
+        "green",
+        "red",
+        "x",
+        "y",
+        "z"
+      ]
+    }
+  },
+  "transform": {
+    "sourceUpAxis": "Z",
+    "rotationDeg": [
+      -90,
+      0,
+      0
+    ],
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "scale": 1.0,
+    "autoInference": {
+      "axisConfidence": 1.0,
+      "axis": {
+        "method": "approved-existing-orientation"
+      },
+      "scaleConfidence": 1.0,
+      "scale": {
+        "method": "approved-existing-scale"
+      }
+    }
+  },
+  "collision": {
+    "enabled": true,
+    "mode": "visual-exact",
+    "generated": false
+  },
+  "semantic": {
+    "url": "./generated/semantic.json",
+    "required": true
+  },
+  "spawn": {
+    "mode": "auto-safe-ground",
+    "maxSnapDistance": 16,
+    "maxSlopeDeg": 50,
+    "gridSize": 15,
+    "requireCapsuleClearance": true,
+    "preferDominantFloorBand": true,
+    "preferredPosition": [
+      0,
+      2.5,
+      0
+    ]
+  },
+  "navigation": {
+    "enabled": true,
+    "source": "semantic-walkable-surfaces",
+    "agentRadius": 0.32,
+    "agentHeight": 1.72,
+    "maxSlopeDeg": 50,
+    "stepHeight": 0.38,
+    "dropLimit": 0.75,
+    "url": "./generated/navgraph.json",
+    "runtime": "astar-v2"
+  },
+  "player": {
+    "profile": "human-v2",
+    "height": 1.72,
+    "radius": 0.32,
+    "eyeHeight": 1.58,
+    "moveSpeed": 4.6,
+    "airControl": 0.3,
+    "jumpSpeed": 5.6,
+    "gravity": 16.5,
+    "maxFallSpeed": 28,
+    "groundSnap": 0.24,
+    "stepHeight": 0.38,
+    "maxSlopeDeg": 50,
+    "fallResetMargin": 12
+  },
+  "controls": {
+    "profile": "standard-v2",
+    "desktop": true,
+    "mobile": true,
+    "gamepad": true,
+    "cameraRoll": false,
+    "maxPitchDeg": 89,
+    "jumpImpulse": "vertical-only",
+    "feetFollowTravel": true,
+    "attackFollowsFeet": true
+  },
+  "graphics": {
+    "profile": "cinematic-preserve-v9",
+    "sourceColor": "srgb",
+    "toneMapping": "aces",
+    "castShadows": false,
+    "receiveShadows": true,
+    "allowVisualGeometryLod": false,
+    "allowTextureDownscale": false,
+    "allowVisualRecompression": false,
+    "performanceGovernor": "cpu-first-non-destructive-v9",
+    "proximityQuality": {
+      "enabled": true,
+      "maxQualityRadius": 32,
+      "mediumRadius": 72,
+      "shadowRadius": 34,
+      "preserveFullSourceGeometry": true,
+      "fogCullMargin": 6,
+      "fogOccludedCulling": true
+    },
+    "atmosphere": {
+      "enabled": true,
+      "mode": "linear-depth-fog-plus-horizon-shimmer",
+      "horizonShimmer": true,
+      "shimmerStrength": 0.00055,
+      "backgroundBlend": true,
+      "postDepthFog": true
+    },
+    "fpsOptimization": {
+      "enabled": true,
+      "mode": "cpu-first-near-lossless-v9",
+      "nearMaxRadius": 36,
+      "midRadius": 90,
+      "nearTickHz": 60,
+      "midTickHz": 12,
+      "farTickHz": 2,
+      "staticTransformFreeze": true,
+      "shaderWarmup": true,
+      "texturePrewarm": true,
+      "maximumNearAnisotropy": true,
+      "exactDecorativeInstancing": true,
+      "predictiveStreaming": true,
+      "nearestFirstStreaming": true,
+      "adaptiveDecodeConcurrency": true,
+      "forbidDynamicResolution": true,
+      "forbidNearFieldFidelityReduction": true,
+      "staticShadowCache": true,
+      "workerPlyDecode": true,
+      "indexedDbShaCache": true,
+      "serializedBvhCache": true,
+      "materialDeduplicationExactOnly": true,
+      "networkInterestManagement": true,
+      "distantPoseSharing": true,
+      "wasmSimd": true,
+      "webgpuHzbPreferred": true,
+      "webgpuIndirectMeshletsPreferred": true,
+      "byteIdenticalAnimatedGlbRangeStreaming": true,
+      "sweptDynamicMeshCollision": true,
+      "wasmSimdThreadPool": true,
+      "parallelBvhExactPrepass": true,
+      "webgpuSourceEquivalentPbr": true,
+      "sharedArrayBufferDecode": true,
+      "webgpuExactMaterialTable": true,
+      "webgpuClusteredLighting": true,
+      "virtualTextureResidencyFullResolution": true,
+      "portalRoomVisibility": true,
+      "screenSpaceAnimationBudget": true,
+      "physicsSpatialHashBroadphase": true,
+      "losslessNetworkDeltaCompression": true,
+      "ratchetApprovedDeviceSchedules": true,
+      "frameBudgetOrchestrator": true,
+      "persistentDerivedArtifactCas": true,
+      "stutterRegressionGate": true,
+      "serverGpuRequired": false,
+      "hierarchicalSpatialGrid": true,
+      "cpuPvs": true,
+      "cpuOcclusionCache": true,
+      "predictiveStreamingV2": true,
+      "incrementalWorldCompiler": true,
+      "incrementalCpuLightBake": true,
+      "navCollisionHashCache": true,
+      "simulationLod": true,
+      "cpuCausalityProfiler": true,
+      "qualitySafeCpuAutotuner": true,
+      "deterministicProductionReplay": true,
+      "clientRenderingOffload": true
+    },
+    "gpuVisibility": {
+      "enabled": true,
+      "mode": "webgl2-conservative-occlusion-v1",
+      "nearBypassRadius": 42,
+      "maxQueriesPerFrame": 6,
+      "occludedConfirmFrames": 3
+    },
+    "reflectionProbes": {
+      "enabled": true,
+      "mode": "offline-preferred-runtime-fallback-v1",
+      "resolution": 256,
+      "far": 900
+    },
+    "meshlets": {
+      "enabled": true,
+      "url": "./generated/meshlets.json",
+      "mode": "lossless-source-triangle-meshlets-v1",
+      "sourceSha256": "af8b08927d911b259f04975e146f26a1110c574ba3bc465ae319685826ca9473",
+      "sourceTriangles": 683077,
+      "meshletTriangles": 683077,
+      "faceConservation": true,
+      "gpuIndirectDrawPath": "webgpu-compute-generated-drawIndexedIndirect-v1"
+    },
+    "webgpuVisibility": {
+      "enabled": true,
+      "mode": "private-depth-hzb-v1",
+      "nearBypassRadius": 42,
+      "failVisible": true,
+      "confirmFrames": 2,
+      "width": 256,
+      "height": 144,
+      "fallback": "webgl2-conservative-occlusion-v1"
+    },
+    "webgpuPbr": {
+      "enabled": true,
+      "mode": "webgpu-source-equivalent-pbr-v1",
+      "sourceGeometryExact": true,
+      "sourceTextureDimensionsPreserved": true,
+      "lossyFallbackAllowed": false,
+      "authority": "proven-renderer-until-device+golden-parity"
+    },
+    "webgpuMaterialTable": {
+      "enabled": true,
+      "mode": "webgpu-exact-material-table-v1",
+      "bindless": "capability-gated",
+      "sourceTextureDimensionsPreserved": true,
+      "lossyFallbackAllowed": false
+    },
+    "clusteredLighting": {
+      "enabled": true,
+      "mode": "webgpu-conservative-clustered-lighting-v1",
+      "overflowFallback": "full-light-list",
+      "nearCriticalRadius": 42
+    },
+    "virtualTextureResidency": {
+      "enabled": true,
+      "mode": "full-resolution-virtual-texture-residency-v1",
+      "nearRadius": 42,
+      "maxResidentPages": 2048,
+      "pageScale": 1,
+      "missingPageFallback": "whole-source-texture"
+    },
+    "portalVisibility": {
+      "enabled": true,
+      "mode": "conservative-portal-room-visibility-v1",
+      "nearBypassRadius": 42,
+      "unknownRoomFailVisible": true
+    }
+  },
+  "materials": {
+    "profile": "pbr-preserve-wet-v8",
+    "validateMaps": true,
+    "validateColorSpace": true,
+    "allowMissingSourceMaps": false,
+    "wetSurface": {
+      "enabled": true,
+      "intensity": 0.14,
+      "roughnessMultiplier": 0.84,
+      "envMapIntensityBoost": 0.18,
+      "clearcoat": 0.12,
+      "clearcoatRoughness": 0.32,
+      "runtimeOnly": true,
+      "postFallbackForUnsupported": true
+    }
+  },
+  "audio": {
+    "profile": "variation-v2",
+    "minimumVariationsPerRepeatedEvent": 3,
+    "randomPitch": true,
+    "randomGain": true,
+    "spatial": true,
+    "materialFootsteps": true
+  },
+  "gameplay": {
+    "componentStandard": "gameplay-components-v2",
+    "modules": [
+      "health",
+      "damage",
+      "interaction",
+      "inventory",
+      "checkpoint",
+      "weapon-contract",
+      "shield-contract"
+    ]
+  },
+  "quality": {
+    "profile": "WORLD_FACTORY_QUALITY_CORE_V10",
+    "preserveSourceAsset": true,
+    "visualDecimationAllowed": false,
+    "textureDownscaleAllowed": false,
+    "visualRecompressionAllowed": false,
+    "regressionGate": true,
+    "visualRegressionGate": true,
+    "geometryRegressionGate": true,
+    "automatedPlaytestGate": true,
+    "performanceGate": true,
+    "knowledgeGate": true,
+    "failClosed": true
+  },
+  "qualityLock": {
+    "visualSha256": "af8b08927d911b259f04975e146f26a1110c574ba3bc465ae319685826ca9473",
+    "immutableWorldId": true,
+    "runtimeStandard": "WORLD_FACTORY_QUALITY_CORE_V10",
+    "ruleset": "quality/rules.json"
+  },
+  "streaming": {
+    "mode": "whole-asset-frustum-v2",
+    "lossless": true,
+    "predictivePrefetch": true,
+    "nearestFirst": true,
+    "adaptiveDecodeConcurrency": true
+  },
+  "lightingBake": {
+    "enabled": true,
+    "requiredForStaticMesh": true,
+    "mode": "vertex-scalar-ply-v1",
+    "sourceAssetModified": false,
+    "descriptorUrl": "./generated/lighting/lighting-bake.json",
+    "sourceSha256": "af8b08927d911b259f04975e146f26a1110c574ba3bc465ae319685826ca9473",
+    "verified": true,
+    "vertices": 361039
+  },
+  "environment": {
+    "dynamicPlatforms": [],
+    "waterVolumes": [],
+    "runtime": "dynamic-environment-v2",
+    "sourceAssetsImmutable": true
+  },
+  "animationBudget": {
+    "nearRadius": 42,
+    "midPixels": 80,
+    "farPixels": 20,
+    "midHz": 30,
+    "farHz": 10,
+    "interactionBoundaryExact": true
+  },
+  "physicsBroadphase": {
+    "cellSize": 12,
+    "nearRadius": 50,
+    "sleepDelaySec": 2,
+    "nearBodiesNeverSleep": true,
+    "playerContactBodiesNeverSleep": true
+  },
+  "networkCompression": {
+    "mode": "lossless-delta-v1",
+    "quantization": false,
+    "localPlayerAuthoritative": true
+  },
+  "performanceSchedule": {
+    "profile": "default",
+    "knobs": {}
+  },
+  "frameBudget": {
+    "backgroundBudgetMs": 2.5,
+    "nearCriticalNeverDeferred": true
+  }
+}

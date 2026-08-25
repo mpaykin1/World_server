@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "AUTONOMOUS_QUALITY_GROWTH",
+  "mode": "safe-autonomous-planning + fail-closed-verification",
+  "loop": [
+    "OBSERVE: collect all quality reports and runtime evidence",
+    "SCORE: calculate evidence-based metric scores",
+    "DIAGNOSE: map every lost point to a concrete missing control/evidence",
+    "PRIORITIZE: rank improvements by impact × confidence × reuse ÷ effort × risk",
+    "PLAN: generate concrete tasks with files/tests/acceptance criteria",
+    "PROPAGATE: prefer one canonical fix shared across compatible projects",
+    "VERIFY: run regression, project, technology, contract, device and visual gates",
+    "LEARN: confirmed fixes become protected errors; approved successes become Golden",
+    "PROMOTE: baseline may move upward only after all gates pass"
+  ],
+  "automaticActionsAllowed": [
+    "generate improvement backlog",
+    "generate ranked remediation plans",
+    "generate missing-test manifest",
+    "generate Golden adoption tasks",
+    "generate technology integration tasks",
+    "generate per-app quality debt",
+    "generate stagnation alerts",
+    "generate trend reports",
+    "generate release-blocking status"
+  ],
+  "automaticActionsForbiddenWithoutVerifiedPatch": [
+    "claiming a runtime technology is integrated",
+    "raising a metric without evidence",
+    "changing Golden canonical source",
+    "lowering any quality baseline",
+    "publishing a quarantined app",
+    "silently deleting a protected regression rule"
+  ]
+}

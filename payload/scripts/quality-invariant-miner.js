@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+'use strict';
+const fs=require('fs'),path=require('path'),crypto=require('crypto');const ROOT=process.cwd(),load=f=>{const p=path.join(ROOT,f);return fs.existsSync(p)?JSON.parse(fs.readFileSync(p,'utf8')):{}};
+const policy=load('data/invariant-miner-policy.json'),succ=load('data/success-knowledge-base.json'),contracts=load('data/system-contracts.json'),errors=load('data/error-prevention-registry.json'),candidates=[];
+for(const s of succ.patterns||[]){const attempts=Number(s.attempts||0),prob=Number(s.successProbability||0),delta=Number(s.averageDelta||0);if(attempts>=policy.minimumIndependentSuccesses&&prob>=policy.minimumConfidence&&delta>=0){candidates.push({id:'inv-success-'+s.id,kind:'behavioral-pattern',statement:`Action ${s.actionKind} in ${s.systemArea} should preserve non-negative quality delta`,confidence:prob,evidence:{attempts,delta},status:'candidate'})}}
+for(const [id,c] of Object.entries(contracts.contracts||{})){for(const canonical of c.canonical||[])candidates.push({id:`inv-contract-${id}-${crypto.createHash('sha1').update(canonical).digest('hex').slice(0,8)}`,kind:'architecture',statement:`${id} must use canonical source ${canonical}`,confidence:1,status:'existing-contract'})}
+for(const e of errors.knownErrors||[])if(e.status==='protected')candidates.push({id:`inv-error-${e.id}`,kind:'negative-invariant',statement:`Protected error ${e.id} must never recur`,confidence:1,status:'existing-protection'});
+const out={generatedAt:new Date().toISOString(),candidates,novel:candidates.filter(x=>x.status==='candidate')};fs.writeFileSync(path.join(ROOT,'QUALITY_INVARIANT_CANDIDATES.json'),JSON.stringify(out,null,2)+'\n');console.log(`[INVARIANT_MINER] candidates=${candidates.length} novel=${out.novel.length}`);

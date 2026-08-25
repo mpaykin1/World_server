@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "runtime": "WORLD_FACTORY_QUALITY_CORE_V10",
+  "pass": true,
+  "problems": [],
+  "requiredModules": 14,
+  "requiredCpuFlags": 12,
+  "selfTests": [
+    {
+      "cmd": "/opt/pyvenv/bin/python tools/streamed_asset_reader.py --self-test",
+      "pass": true,
+      "stdout": "{\n  \"schemaVersion\": 1,\n  \"pass\": true,\n  \"mode\": \"mmap-windowed-bounded-memory-v1\",\n  \"windows\": 16,\n  \"bytes\": 2000003,\n  \"maxWindowBytes\": 131071,\n  \"wholeFileLoaded\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "cmd": "/opt/pyvenv/bin/python tools/content_defined_chunking.py --self-test",
+      "pass": true,
+      "stdout": "{\n  \"schemaVersion\": 1,\n  \"mode\": \"content-defined-lossless-chunking-v1\",\n  \"source\": \"/tmp/tmpqcmwtnbw/x.bin\",\n  \"sourceSha256\": \"c119f3bda25c9ea967dfb367bdeefcef60b0540e2771bdf63699456ea48a1ac1\",\n  \"sourceBytes\": 2600003,\n  \"chunks\": [\n    {\n      \"index\": 0,\n      \"start\": 0,\n      \"end\": 1048576,\n      \"size\": 1048576,\n      \"sha256\": \"e91db7585175e26eed3527e57a3cbd55a8832e64f7021ab1c64c067dcc990ab2\"\n    },\n    {\n      \"index\": 1,\n      \"start\": 1048576,\n      \"end\": 2097152,\n      \"size\": 1048576,\n      \"sha256\": \"e91db7585175e26eed3527e57a3cbd55a8832e64f7021ab1c64c067dcc990ab2\"\n    },\n    {\n      \"index\": 2,\n      \"start\": 2097152,\n      \"end\": 2600003,\n      \"size\": 502851,\n      \"sha256\": \"32e38105e9f0672dfdd3b004dc64b61a4711b7b20bcaa8437fc5e73e18f673fb\"\n    }\n  ],\n  \"chunkCount\": 3,\n  \"reconstructionSha256\": \"c119f3bda25c9ea967dfb367bdeefcef60b0540e2771bdf63699456ea48a1ac1\",\n  \"byteExact\": true,\n  \"sourceAssetModified\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "cmd": "/opt/pyvenv/bin/python tools/derived_cache_codec.py --self-test",
+      "pass": true,
+      "stdout": "{\n  \"schemaVersion\": 1,\n  \"pass\": true,\n  \"mode\": \"lossless-derived-cache-transport-v1\",\n  \"codec\": \"brotli\",\n  \"sourceSha256\": \"c7c5a324afd2812a1465c807d78f905f19e454d9b946d636c3ac859d3792e3ae\",\n  \"decodedSha256\": \"c7c5a324afd2812a1465c807d78f905f19e454d9b946d636c3ac859d3792e3ae\",\n  \"sourceBytes\": 256384,\n  \"encodedBytes\": 278,\n  \"sourceAssetModified\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "cmd": "/opt/pyvenv/bin/python tools/binary_delta.py --self-test",
+      "pass": true,
+      "stdout": "{\n  \"schemaVersion\": 1,\n  \"pass\": true,\n  \"mode\": \"exact-derived-binary-delta-v1\",\n  \"spans\": 4,\n  \"baseBytes\": 19005,\n  \"targetBytes\": 19015,\n  \"exactReconstruction\": true\n}\n",
+      "stderr": ""
+    },
+    {
+      "cmd": "/opt/pyvenv/bin/python tools/semantic_pvs_builder.py --self-test",
+      "pass": true,
+      "stdout": "{\n  \"schemaVersion\": 1,\n  \"mode\": \"semantic-conservative-pvs-v1\",\n  \"semanticSha256\": \"e3188b96e92c5c3dee3811ec0b8f3758dce65bfba3db95c6faecbaae48bd849f\",\n  \"pvs\": {\n    \"a\": [\n      \"a\",\n      \"b\"\n    ],\n    \"b\": [\n      \"a\",\n      \"b\"\n    ],\n    \"c\": [\n      \"c\"\n    ]\n  },\n  \"unknownSpacePolicy\": \"fail-visible\",\n  \"nearFieldBypass\": true,\n  \"onlyCullSemanticallyAssignedRooms\": true,\n  \"pass\": true\n}\n",
+      "stderr": ""
+    },
+    {
+      "cmd": "/opt/pyvenv/bin/python tools/incremental_gi_reuse.py --self-test",
+      "pass": true,
+      "stdout": "{\n  \"schemaVersion\": 1,\n  \"mode\": \"incremental-gi-cell-reuse-v1\",\n  \"pass\": true,\n  \"reused\": [\n    {\n      \"id\": \"0,0,0\",\n      \"outputSha256\": \"11\",\n      \"reason\": \"cell-input-hash-identical\"\n    }\n  ],\n  \"rebuild\": [\n    {\n      \"id\": \"1,0,0\",\n      \"reason\": \"new-or-dirty-cell\"\n    },\n    {\n      \"id\": \"2,0,0\",\n      \"reason\": \"new-or-dirty-cell\"\n    }\n  ],\n  \"reuseCount\": 1,\n  \"rebuildCount\": 2,\n  \"sourceAssetsModified\": false,\n  \"reuseRequiresExactInputHash\": true\n}\n",
+      "stderr": ""
+    },
+    {
+      "cmd": "/opt/pyvenv/bin/python tools/cpu_flamegraph.py --self-test",
+      "pass": true,
+      "stdout": "{\n  \"schemaVersion\": 1,\n  \"mode\": \"automatic-cpu-causality-flame-profile-v1\",\n  \"pass\": true,\n  \"checksum\": 4239296248,\n  \"top\": [\n    {\n      \"function\": \"workload\",\n      \"file\": \"cpu_flamegraph.py\",\n      \"line\": 6,\n      \"calls\": 1,\n      \"selfSec\": 0.005136113,\n      \"cumulativeSec\": 0.005136113\n    },\n    {\n      \"function\": \"<method 'disable' of '_lsprof.Profiler' objects>\",\n      \"file\": \"~\",\n      \"line\": 0,\n      \"calls\": 1,\n      \"selfSec\": 9.714e-06,\n      \"cumulativeSec\": 9.714e-06\n    }\n  ],\n  \"capturesSourceAssets\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "cmd": "/opt/pyvenv/bin/python tools/replay_farm.py --self-test",
+      "pass": true,
+      "stdout": "{\n  \"schemaVersion\": 1,\n  \"mode\": \"deterministic-network-physics-replay-farm-v1\",\n  \"pass\": true,\n  \"runs\": [\n    {\n      \"seed\": 7,\n      \"hash\": \"e81526ad7d93afb41b9a269d538d983f9d68a47a2e6ecf7a6c80ed386dedb0cc\",\n      \"repeatHash\": \"e81526ad7d93afb41b9a269d538d983f9d68a47a2e6ecf7a6c80ed386dedb0cc\",\n      \"deterministic\": true\n    },\n    {\n      \"seed\": 11,\n      \"hash\": \"ffdb5bc1a4b71678a921578c52a38908841d100448fb6e34a540667641bc2529\",\n      \"repeatHash\": \"ffdb5bc1a4b71678a921578c52a38908841d100448fb6e34a540667641bc2529\",\n      \"deterministic\": true\n    },\n    {\n      \"seed\": 23,\n      \"hash\": \"0078013e63f127e8089e17d7dc1d6499f68ce5c2a5f5aeb0a358d89ac83c2bc1\",\n      \"repeatHash\": \"0078013e63f127e8089e17d7dc1d6499f68ce5c2a5f5aeb0a358d89ac83c2bc1\",\n      \"deterministic\": true\n    },\n    {\n      \"seed\": 47,\n      \"hash\": \"9f383b8967291c8217dc4cc4d2ac25b437129ba4c7883f0da2e7d5a253650019\",\n      \"repeatHash\": \"9f383b8967291c8217dc4cc4d2ac25b437129ba4c7883f0da2e7d5a253650019\",\n      \"deterministic\": true\n    },\n    {\n      \"seed\": 97,\n      \"hash\": \"2a0917dca771eb0719afc24676416ebe3893a6acf01d62ea487449dbf3d49bcf\",\n      \"repeatHash\": \"2a0917dca771eb0719afc24676416ebe3893a6acf01d62ea487449dbf3d49bcf\",\n      \"deterministic\": true\n    }\n  ],\n  \"seedCount\": 5,\n  \"serverGpuRequired\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "cmd": "/opt/pyvenv/bin/python tools/dependency_graph_v10.py --self-test",
+      "pass": true,
+      "stdout": "{\n  \"schemaVersion\": 1,\n  \"mode\": \"code-asset-bake-game-dependency-graph-v1\",\n  \"pass\": true,\n  \"nodeCount\": 67,\n  \"edgeCount\": 75,\n  \"graphSha256\": \"ab5547a62f1c2b5dcaeb086013fa98fbfc87714d024fa5b0e06568d75d0decf4\",\n  \"failClosedOnMissingDependency\": true,\n  \"sampleImpact\": [\n    \"worlds/sample-city/generated/lighting/lighting-bake.json\",\n    \"worlds/sample-city/generated/lighting/lighting-vertex.bin\",\n    \"worlds/sample-city/generated/meshlets.json\",\n    \"worlds/sample-city/generated/navgraph.json\",\n    \"worlds/sample-city/generated/semantic.json\",\n    \"worlds/sample-city/generated/v6-preparation.json\",\n    \"worlds/sample-city/generated/v7-preparation.json\",\n    \"worlds/sample-city/generated/v8-preparation.json\",\n    \"worlds/sample-city/generated/v9-preparation.json\",\n    \"worlds/sample-city/world.json\"\n  ]\n}\n",
+      "stderr": ""
+    }
+  ],
+  "serverGpuRequired": false,
+  "nearFieldFidelityFloor": 100,
+  "sourceFidelityFloor": 100
+}

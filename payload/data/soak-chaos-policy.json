@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "7.3.0",
+  "defaultCycles": 200,
+  "maxCyclesInGate": 500,
+  "seed": 7331,
+  "faults": [
+    "process-kill",
+    "network-partition",
+    "disk-full",
+    "corrupt-checkpoint",
+    "duplicate-delivery",
+    "lease-expiry"
+  ],
+  "invariants": [
+    "no-two-leaders",
+    "certified-functions-preserved",
+    "queue-idempotent",
+    "stable-not-mutated-on-failure",
+    "rollback-available"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "schemaVersion": "1.0.0",
+  "maxAutomaticIterations": 8,
+  "automaticFixes": "deterministic AutoFix recipes only",
+  "rule": "If unresolved errors remain after automatic recipes, exit non-zero with evidence; Desktop AI must continue manual root-cause/fix and rerun. Never claim completion."
+}

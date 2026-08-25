@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "7.2.0",
+  "policy": "semantic-merge-never-last-writer-wins",
+  "critical": [
+    {
+      "path": "scripts/world-quality-analyzer.js",
+      "canonical": "V6 technology checks + production truth certification"
+    },
+    {
+      "path": "scripts/world-quality-autopilot.js",
+      "canonical": "V6 orchestration + production certification status"
+    },
+    {
+      "path": ".github/workflows/world-quality-autopilot.yml",
+      "canonical": "V6 technology pipeline + truth-gate CI recompute"
+    },
+    {
+      "path": "scripts/world-device-profile-matrix.js",
+      "canonical": "Dream V5 fresh physical runtime evidence with 24h freshness"
+    },
+    {
+      "path": "scripts/world-runtime-quality-profiler.js",
+      "canonical": "Dream V5 fresh physical runtime evidence with 24h freshness"
+    },
+    {
+      "path": "services/ai3d-worker/ai3d/plugins/mesh_quality_optimizer.py",
+      "canonical": "Mesh V12 canonical MeshOptimizationPipeline bridge"
+    },
+    {
+      "path": "data/performance-budgets.json",
+      "canonical": "PWA V4 structured budgets + Dream hard ceilings"
+    },
+    {
+      "path": ".github/workflows/quality-canary.yml",
+      "canonical": "PWA V4 superset of V13 canary plus real-iOS and rollback"
+    },
+    {
+      "path": "api/quality-summary.js",
+      "canonical": "PWA V4 superset"
+    },
+    {
+      "path": "api/quality-telemetry.js",
+      "canonical": "PWA V4 superset"
+    },
+    {
+      "path": "playwright.config.js",
+      "canonical": "PWA V4 browser/device matrix"
+    },
+    {
+      "path": "scripts/ai-visual-critic.js",
+      "canonical": "PWA V4 richer critic"
+    },
+    {
+      "path": "scripts/production-quality-pull.js",
+      "canonical": "PWA V4 richer production telemetry"
+    },
+    {
+      "path": "DESKTOP_AI_INSTALL_AND_VERIFY.md",
+      "canonical": "append sections; never replace"
+    },
+    {
+      "path": "WORK_IN_PROGRESS.md",
+      "canonical": "preserve current task state; never replace"
+    }
+  ],
+  "integrationVersion": "7.2.0",
+  "rules": [
+    "No last-writer-wins on critical paths.",
+    "A newer integration layer must never be overwritten by an older installer.",
+    "Before semantic merge, compute dependency impact and create a CAS snapshot.",
+    "CPU path remains mandatory; GPU can only be an optional accelerator.",
+    "100% claims require evidence from the relevant gate, not static constants.",
+    "New technology requires consensus: compatibility + CPU/cost + policy/security + sandbox + regression + canary.",
+    "A CERTIFIED_100 function is protected by a monotonic baseline; any regression blocks release.",
+    "New functions are SHADOW-first and may add capabilities but may not remove certified capabilities.",
+    "Replacing a certified function requires dual-run equivalence evidence, retained fallback and canary promotion.",
+    "100% certification expires whenever required evidence fails, becomes stale, or the function dependency/source changes without fresh recertification."
+  ],
+  "owners": {
+    "scripts/cas-merkle-store.cjs": "SYSTEM_INTEGRATION_LAYER_V2",
+    "scripts/durable-job-queue.cjs": "SYSTEM_INTEGRATION_LAYER_V2",
+    "scripts/integration-telemetry-lib.cjs": "SYSTEM_INTEGRATION_LAYER_V2",
+    "scripts/integration-telemetry.cjs": "SYSTEM_INTEGRATION_LAYER_V2",
+    "scripts/policy-engine.cjs": "SYSTEM_INTEGRATION_LAYER_V2",
+    "scripts/provenance.cjs": "SYSTEM_INTEGRATION_LAYER_V2",
+    "scripts/system-control-plane.cjs": "SYSTEM_INTEGRATION_LAYER_V2",
+    "scripts/system-integration-gate.cjs": "SYSTEM_INTEGRATION_LAYER_V2",
+    "scripts/system-readiness.cjs": "SYSTEM_INTEGRATION_LAYER_V2",
+    "policy/opa-bundle": "SYSTEM_INTEGRATION_LAYER_V2"
+  }
+}

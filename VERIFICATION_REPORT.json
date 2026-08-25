@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "6.0.0",
+  "system": "WORLD_QUALITY_AUTOPILOT_V6_PACKAGE_VERIFICATION",
+  "generatedAt": "2026-08-24T05:58:00Z",
+  "package": "WORLD_QUALITY_AUTOPILOT_V6",
+  "currentServerEvidence": {
+    "repository": "mpaykin1/World_server",
+    "masterHead": "fa3445713f8f9f84130c2795421b9cb1ca2d6640",
+    "masterHeadDescription": "merge PR #8 World Quality Autopilot V4.1 Windows hotfix",
+    "githubWriteAttempt": "403 Resource not accessible by integration",
+    "masterModifiedByThisSession": false,
+    "observedGaps": [
+      "human-approved aesthetic multiview baselines missing",
+      "real generated/Roblox/Godot rig playback evidence missing",
+      "physical iOS/Android provider NOT_CONFIGURED",
+      "voxel-world Three.js runtime still uses unpkg CDN in current master"
+    ]
+  },
+  "verificationEnvironment": "server-compatible World_server mock mirroring current graphics technology families and HLOD evidence",
+  "checks": {
+    "nodeTests": {
+      "passed": 32,
+      "failed": 0
+    },
+    "javascriptSyntax": {
+      "passedFiles": 40,
+      "failedFiles": 0,
+      "installerSyntax": true
+    },
+    "pythonCompile": {
+      "worldQualityPlugin": true
+    },
+    "installer": {
+      "firstInstall": "PASS",
+      "idempotentSecondInstall": "PASS",
+      "verifyFull": "PASS",
+      "transactionalRollbackCapability": true
+    },
+    "technologyScout": {
+      "total": 15,
+      "runtime": 9,
+      "declaredOnly": 6
+    },
+    "technologyConnectivityPercent": 100,
+    "technologyIntegrationBlockers": 0,
+    "cpuGraphicsReadinessPercent": 100,
+    "technologyDriftPass": true,
+    "graphicsRoutes": 9,
+    "productionExternalProofPercent": 0
+  },
+  "structuralReadiness": {
+    "overallPercent": 99,
+    "domains": {
+      "detail": 100,
+      "graphics": 99,
+      "animation": 98,
+      "optimization": 99,
+      "automation": 100
+    },
+    "technologyConnectivityPercent": 100,
+    "hardGateReady": true
+  },
+  "interpretation": {
+    "structural99Means": "V6 code/gates/adapters are present and pass the server-compatible verification suite; it is not a claim that external production proof is complete.",
+    "production100Requires": [
+      "human-approved multiview screenshots",
+      "real rig playback",
+      "physical iOS/Android evidence",
+      "production canary/rollback evidence"
+    ]
+  }
+}

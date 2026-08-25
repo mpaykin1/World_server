@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "7.2.0",
+  "provider": "owned/free-device-workers-first",
+  "paidProviderRequired": false,
+  "appiumCompatible": true,
+  "androidDiscovery": [
+    "adb"
+  ],
+  "iosDiscovery": [
+    "idevice_id",
+    "xcrun"
+  ],
+  "workerRegistryEnv": "WORLD_SERVER_DEVICE_WORKERS_JSON",
+  "appiumUrlEnv": "APPIUM_URL",
+  "maxEvidenceAgeHours": 24,
+  "realHardwareRequiredForRealDeviceClaim": true,
+  "absenceIsExternalBlockerNotFalsePass": true
+}

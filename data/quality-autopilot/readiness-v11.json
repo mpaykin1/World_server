@@ -1,0 +1,327 @@
+{
+  "generatedAt": "2026-08-24T05:46:06.313Z",
+  "version": 11,
+  "mode": "CPU_FIRST_NO_SERVER_GPU",
+  "softwareReadiness": 100,
+  "architecturalReadiness": 100,
+  "operationalReadiness": 85,
+  "internalConnectivityReadiness": 100,
+  "systemConnectivityReadiness": 96,
+  "endToEndAutonomyReadiness": 96,
+  "wholeSystemReadiness": 96,
+  "currentMasterQuality": 98,
+  "currentEvidenceQuality": 95.5,
+  "core": [
+    {
+      "name": "CPU-first no-server-GPU execution policy",
+      "score": 100,
+      "implemented": true
+    },
+    {
+      "name": "Adaptive CPU scheduler/backpressure",
+      "score": 100,
+      "implemented": true
+    },
+    {
+      "name": "Worker-thread CPU pool",
+      "score": 99,
+      "implemented": true
+    },
+    {
+      "name": "Content-addressed CPU result cache",
+      "score": 100,
+      "implemented": true
+    },
+    {
+      "name": "Checkpoint/resume for long CPU jobs",
+      "score": 100,
+      "implemented": true
+    },
+    {
+      "name": "Memory pressure/leak gate",
+      "score": 99,
+      "implemented": true
+    },
+    {
+      "name": "CPU benchmark/profile",
+      "score": 99,
+      "implemented": true
+    },
+    {
+      "name": "WASM SIMD detection + scalar fallback",
+      "score": 99,
+      "implemented": true
+    },
+    {
+      "name": "Incremental CPU impact planner",
+      "score": 100,
+      "implemented": true
+    },
+    {
+      "name": "CPU scene budget preserving near field",
+      "score": 100,
+      "implemented": true
+    },
+    {
+      "name": "CPU external toolchain verifier",
+      "score": 98,
+      "implemented": true
+    },
+    {
+      "name": "Supabase CPU runtime persistence adapter",
+      "score": 99,
+      "implemented": true
+    },
+    {
+      "name": "Existing Supabase runtime-worker CPU bridge",
+      "score": 100,
+      "implemented": true
+    },
+    {
+      "name": "Golden/near-field/SLO v9 protections",
+      "score": 100,
+      "implemented": true
+    },
+    {
+      "name": "Supply-chain/migration/restore v10 protections",
+      "score": 100,
+      "implemented": true
+    },
+    {
+      "name": "Promotion evidence chain",
+      "score": 100,
+      "implemented": true
+    }
+  ],
+  "runtime": [
+    {
+      "name": "Supabase telemetry storage live",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "Supabase worker queue live",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "Supabase canary runtime state live",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "Supabase deterministic replay store live",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "Supabase visual oracle store live",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "Supabase v8 control plane live",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "Supabase v6 provider health/jobs live",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "Supabase v7 visual quorum live",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "Supabase procedural-quality runtime live",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "Supabase distributed run lease live",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "Supabase global CPU compute budget live",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "Supabase v10 promotion attestation store live",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "Supabase v10 restore drill store live",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "Supabase v10 privilege isolation verified",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "Supabase logical restore drill verified",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "Repository backup/restore drill verified",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "Supply-chain gate verified",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "Migration safety gate verified",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "Promotion chain verified",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "Supabase v11 CPU profile store live",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "Supabase v11 CPU cache event store live",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "Supabase v11 CPU privilege isolation verified",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "Supabase existing runtime-worker CPU bridge verified",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "CPU benchmark executed",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "CPU worker pool verified",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "CPU content cache verified",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "Server GPU independence verified",
+      "score": 100,
+      "verified": true,
+      "optional": false
+    },
+    {
+      "name": "Production telemetry endpoint verified",
+      "score": 55,
+      "verified": false,
+      "optional": false
+    },
+    {
+      "name": "GitHub autonomous branch/PR write",
+      "score": 35,
+      "verified": false,
+      "optional": false
+    },
+    {
+      "name": "Vercel project/deployment connected",
+      "score": 35,
+      "verified": false,
+      "optional": false
+    },
+    {
+      "name": "Physical mobile device provider",
+      "score": 45,
+      "verified": false,
+      "optional": false
+    },
+    {
+      "name": "Real Godot headless verifier",
+      "score": 50,
+      "verified": false,
+      "optional": false
+    },
+    {
+      "name": "Real Roblox verification runner",
+      "score": 45,
+      "verified": false,
+      "optional": false
+    },
+    {
+      "name": "Depth Anything CPU runtime smoke verified",
+      "score": 50,
+      "verified": false,
+      "optional": false
+    },
+    {
+      "name": "OpenGameEval/OpenGame CPU runtime smoke verified",
+      "score": 35,
+      "verified": false,
+      "optional": false
+    },
+    {
+      "name": "Cross-region probe provider connected",
+      "score": 45,
+      "verified": false,
+      "optional": false
+    },
+    {
+      "name": "Database backup provider connected",
+      "score": 50,
+      "verified": false,
+      "optional": false
+    },
+    {
+      "name": "Server GPU worker provider (optional)",
+      "score": 100,
+      "verified": false,
+      "optional": true
+    }
+  ],
+  "rule": "Server GPU is optional and must never block promotion when a verified CPU path exists. Never claim CPU equivalence for 3DGS training; use a labeled photogrammetry/mesh alternative. Near-player graphics and gameplay quality cannot be reduced to save CPU."
+}

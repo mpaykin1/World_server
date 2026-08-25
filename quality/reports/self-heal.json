@@ -1,0 +1,8 @@
+{
+  "pass": true,
+  "apply": false,
+  "changes": [],
+  "transactional": true,
+  "tests": [],
+  "rollbackOnFailure": true
+}

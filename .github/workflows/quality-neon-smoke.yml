@@ -1,0 +1,18 @@
+name: Quality Neon Evidence V8
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  neon-smoke:
+    if: ${{ secrets.DATABASE_URL != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: npm install --no-audit --no-fund
+      - name: Durable evidence roundtrip
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: node tools/neon_telemetry_smoke.mjs

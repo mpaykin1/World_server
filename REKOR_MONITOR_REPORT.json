@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-25T01:15:46.150Z",
+  "pass": true,
+  "localHashChain": {
+    "pass": true,
+    "entries": 7,
+    "head": "10033e10d32f9d7973279e59cd0456efcc296faf7b0e6f440a12c485320e9760"
+  },
+  "nativeCosignVersion": null,
+  "bundles": [],
+  "rule": "Bundle-first transparency evidence; legacy keyless bundles are not accepted as proof."
+}

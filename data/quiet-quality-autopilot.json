@@ -1,0 +1,380 @@
+{
+  "schemaVersion": "6.0.0",
+  "system": "WORLD_SERVER_QUIET_QUALITY_AUTOPILOT",
+  "productionBaseUrl": "https://world-server.vercel.app",
+  "policy": {
+    "mode": "silent",
+    "maxAutoChangedFiles": 12,
+    "maxAutoChangedLines": 400,
+    "requireReleaseGate": true,
+    "rollbackOnVerificationFailure": true,
+    "requireCleanCandidateRoots": true,
+    "allowedAutoChangeRoots": [
+      "apps/",
+      "e2e/",
+      "test/"
+    ],
+    "requireCanaryBeforeMerge": true,
+    "neverLowerQualityBaseline": true,
+    "neverTradeVisualQualityForSpeed": true,
+    "requireGeographicDeviceEvidence": true,
+    "requireOtelTraceContinuity": true,
+    "preferFreeProgressiveRollout": true,
+    "neverCollectRawGpuRenderer": true,
+    "requireRealDeviceVisualOracle": true,
+    "requireTraceCriticalPathHealth": true,
+    "requireChaosFailoverProof": true,
+    "rendererTuningMayNotRemoveVisualFeatures": true,
+    "neverUploadRawVisualPixels": true
+  },
+  "lock": {
+    "enabled": true,
+    "staleMinutes": 90
+  },
+  "adaptive": {
+    "healthyCyclesForLightMode": 4,
+    "deepModeAfterDegradedCycles": 1,
+    "forceDeepOnImprove": true,
+    "cadenceHours": {
+      "healthy": 6,
+      "standard": 3,
+      "degraded": 1,
+      "breakerOpen": 1
+    }
+  },
+  "circuitBreaker": {
+    "openAfterConsecutiveDegradedCycles": 3,
+    "cooldownHealthyCycles": 2,
+    "blockAutoChangesWhileOpen": true
+  },
+  "mutationBreaker": {
+    "openAfterFailedImproveCycles": 2,
+    "cooldownHours": 24,
+    "blockAutoChangesWhileOpen": true
+  },
+  "resources": {
+    "monitorMaxMinutes": 25,
+    "improveMaxMinutes": 70,
+    "defaultStepTimeoutMinutes": 12,
+    "maxCapturedOutputChars": 6000,
+    "historyLimit": 360,
+    "maxCanaryMinutes": 25,
+    "rolloutTickMaxMinutes": 25
+  },
+  "proof": {
+    "requireAutofixEvidence": true,
+    "requireFocusedRegressionTests": true,
+    "minimumVerificationScore": 5,
+    "requireCanaryPass": true,
+    "requireMultiRegionPass": true,
+    "maxCandidateRegressionPercent": 3,
+    "maxCandidateErrorRateDeltaPercent": 0,
+    "minimumMeaningfulPerfWinPercent": 1,
+    "requireChaosFailoverPass": true
+  },
+  "canary": {
+    "paths": [
+      "/api/apps",
+      "/apps/catalog/",
+      "/apps/voxel-world/",
+      "/apps/ai3d-voxel-city/"
+    ],
+    "warmupRequests": 2,
+    "sampleRequests": 7,
+    "requestTimeoutMs": 15000,
+    "maxP95RegressionPercent": 3,
+    "maxMedianRegressionPercent": 3,
+    "maxErrorRateDeltaPercent": 0,
+    "minHtmlBodyRatio": 0.7
+  },
+  "rum": {
+    "enabled": true,
+    "windowHours": 24,
+    "minSessionsForHardGate": 20,
+    "minMobileSessionsForHardGate": 8,
+    "thresholds": {
+      "p75LcpMs": 2500,
+      "p75InpMs": 200,
+      "p75Cls": 0.1,
+      "p75TtfbMs": 800,
+      "p10Fps": 30,
+      "maxErrorRatePercent": 5,
+      "maxThermalPressureProxy": 0.35,
+      "maxLongTaskRatio": 0.2,
+      "minSustainedFps": 24
+    },
+    "activeDeviceProbeSamplePercent": 8,
+    "geoMinimumCountriesForEvidence": 1,
+    "geoMinimumSessionsPerCountry": 3,
+    "minGpuProfileSessionsForHardGate": 5,
+    "maxThermalPressureProxy": 0.35,
+    "maxLongTaskRatio": 0.2,
+    "minSustainedFps": 24,
+    "deviceProbeDurationMs": 3500
+  },
+  "multiRegion": {
+    "enabled": true,
+    "probeEndpoints": [
+      {
+        "id": "us",
+        "path": "/api/quality-probe-us",
+        "region": "iad1"
+      },
+      {
+        "id": "eu",
+        "path": "/api/quality-probe-eu",
+        "region": "fra1"
+      },
+      {
+        "id": "ap",
+        "path": "/api/quality-probe-ap",
+        "region": "sin1"
+      }
+    ],
+    "paths": [
+      "/api/apps",
+      "/apps/catalog/",
+      "/apps/ai3d-voxel-city/"
+    ],
+    "samplesPerPath": 3,
+    "requestTimeoutMs": 15000,
+    "maxMedianRegressionPercent": 5,
+    "maxErrorRateDeltaPercent": 0,
+    "maxAbsoluteP95Ms": 5000
+  },
+  "learning": {
+    "enabled": true,
+    "minimumOutcomes": 5,
+    "lookbackOutcomes": 40,
+    "failureRateForConservativeMode": 0.25,
+    "successRateForRecovery": 0.85,
+    "conservative": {
+      "maxAutoChangedFiles": 6,
+      "maxAutoChangedLines": 200,
+      "sampleRequests": 11,
+      "maxMedianRegressionPercent": 1,
+      "maxP95RegressionPercent": 1,
+      "minimumMeaningfulPerfWinPercent": 1.5,
+      "mutationCooldownHours": 48
+    }
+  },
+  "distributed": {
+    "enabledWhenSupabaseSecretsPresent": true,
+    "leaseKey": "world-server:quiet-quality-autopilot:improve",
+    "leaseTtlSeconds": 7200,
+    "queueKind": "quality",
+    "queueLeaseSeconds": 3600,
+    "rolloutLeaseKey": "world-server:quiet-quality-autopilot:rollout"
+  },
+  "telemetry": {
+    "localRecord": true,
+    "githubTelemetryBranch": "quality-telemetry",
+    "dailyFlush": true,
+    "supabase": {
+      "enabledWhenSecretsPresent": true,
+      "table": "world_server_quality_telemetry",
+      "patchOutcomeTable": "quality_autopilot_patch_outcomes",
+      "traceSpanTable": "quality_trace_spans",
+      "rolloutStateTable": "quality_rollout_state"
+    }
+  },
+  "monitor": {
+    "production": true,
+    "realDeviceRum": true,
+    "multiRegion": true,
+    "runtimeTechnologyHealth": true,
+    "qualityTrend": true,
+    "riskPrediction": true,
+    "rootCause": true,
+    "costOptimization": true,
+    "technologyOrchestration": true,
+    "selfEvolution": true,
+    "testGapSynthesis": true,
+    "masterReport": true,
+    "geographicDeviceGate": true,
+    "mobileGpuProfiler": true,
+    "traceContinuity": true,
+    "progressiveRolloutTick": true,
+    "realDeviceVisualOracle": true,
+    "traceCriticalPathOptimizer": true,
+    "chaosFailover": true,
+    "rendererTuner": true
+  },
+  "progressiveRollout": {
+    "enabled": true,
+    "strategy": "free-rum-session-routing",
+    "nativeVercelRollingRelease": "optional-pro-enterprise-only",
+    "stages": [
+      1,
+      10,
+      50,
+      100
+    ],
+    "minimumCandidateSessionsByStage": {
+      "1": 4,
+      "10": 10,
+      "50": 20
+    },
+    "minimumCandidateMobileSessionsByStage": {
+      "1": 1,
+      "10": 3,
+      "50": 6
+    },
+    "minimumStageMinutes": {
+      "1": 10,
+      "10": 15,
+      "50": 20
+    },
+    "maxStageHours": 24,
+    "maxErrorRateDeltaPercent": 0,
+    "maxP75LcpRegressionPercent": 3,
+    "maxP75InpRegressionPercent": 3,
+    "maxP10FpsRegressionPercent": 5,
+    "maxThermalProxyDelta": 0.05,
+    "requireGeographicEvidence": true,
+    "requireMobileGpuEvidenceAt50": true,
+    "abortOnHardRegression": true,
+    "routerConfigCacheSeconds": 20,
+    "cookieTtlDays": 7,
+    "requireVisualOracleAt50": true,
+    "maxVisualBlankRateDeltaPercent": 5,
+    "maxVisualNonBlankRegressionPercent": 20,
+    "maxVisualLumaStddevRegressionPercent": 35,
+    "maxVisualEdgeDensityRegressionPercent": 35
+  },
+  "opentelemetry": {
+    "enabled": true,
+    "w3cTraceContext": true,
+    "supabaseSpanTable": "quality_trace_spans",
+    "ingestEndpoint": "/api/quality-trace",
+    "browserSamplePercent": 5,
+    "maxSpanAttributes": 32,
+    "maxAttributeValueChars": 300,
+    "services": [
+      "world-web",
+      "vercel-api",
+      "supabase",
+      "ai3d-worker",
+      "godot-runtime"
+    ],
+    "requireTraceTokenForExternalServices": true,
+    "optionalOtlpExporterEnv": "OTEL_EXPORTER_OTLP_ENDPOINT",
+    "coreRequiredServices": [
+      "vercel-api"
+    ],
+    "fullReadinessServices": [
+      "vercel-api",
+      "ai3d-worker",
+      "godot-runtime"
+    ],
+    "healthWindowHours": 24
+  },
+  "deviceProfiler": {
+    "enabled": true,
+    "realDeviceRum": true,
+    "webglMicroProbe": true,
+    "collectRawRenderer": false,
+    "collectCapabilities": [
+      "webglVersion",
+      "maxTextureSize",
+      "maxRenderbufferSize",
+      "maxViewportDimension",
+      "extensionsCount"
+    ],
+    "thermalPressureIsProxy": true,
+    "thermalProxySignals": [
+      "sustainedFpsDecay",
+      "webglMicrobenchDecay",
+      "longTaskRatio"
+    ],
+    "minimumProbeIntervalHoursPerDevice": 12,
+    "samplePercent": 8
+  },
+  "geographicEvidence": {
+    "enabled": true,
+    "source": "real-user-rum-plus-regional-synthetic",
+    "requestHeaderCountry": "x-vercel-ip-country",
+    "requestHeaderRegion": "x-vercel-ip-country-region",
+    "privacy": "country-and-region-only-no-city-no-ip",
+    "fallbackRegions": [
+      "iad1",
+      "fra1",
+      "sin1"
+    ]
+  },
+  "visualOracle": {
+    "enabled": true,
+    "privacy": "derived-low-dimensional-metrics-only-no-screenshot-no-raw-pixels",
+    "samplePercent": 12,
+    "candidateSamplePercent": 35,
+    "minSamplesForHardGate": 6,
+    "minCandidateSamplesAt50Percent": 5,
+    "maxBlankRatePercent": 12,
+    "maxBlankRateDeltaPercent": 5,
+    "maxNonBlankRegressionPercent": 20,
+    "maxLumaStddevRegressionPercent": 35,
+    "maxEdgeDensityRegressionPercent": 35,
+    "allowTaintedCanvasFallback": true,
+    "signatureBits": 64
+  },
+  "traceOptimizer": {
+    "enabled": true,
+    "windowHours": 24,
+    "maxRows": 8000,
+    "minimumSamplesPerOperation": 3,
+    "slowP95Ms": 1200,
+    "criticalContributionPercent": 25,
+    "maxErrorRatePercent": 5,
+    "topActions": 12,
+    "queueCriticalActions": true,
+    "neverAutoPatchFromTraceAlone": true
+  },
+  "chaosFailover": {
+    "enabled": true,
+    "mode": "non-destructive-isolated-fault-injection",
+    "liveCoreDependencies": [
+      "vercel",
+      "supabase"
+    ],
+    "optionalDependencies": [
+      "ai3d-worker"
+    ],
+    "scenarios": [
+      "transient-503",
+      "timeout",
+      "hard-503",
+      "malformed-json"
+    ],
+    "retries": 2,
+    "timeoutMs": 900,
+    "hardFailCoreDependency": true,
+    "neverInjectFaultsIntoProductionTraffic": true
+  },
+  "rendererTuner": {
+    "enabled": true,
+    "mode": "safe-runtime-hints",
+    "preferWebGPUWhenAvailable": true,
+    "fallbackOrder": [
+      "webgpu",
+      "webgl2",
+      "webgl1"
+    ],
+    "advisoryByDefault": true,
+    "autoApplyOnlyThroughRegisteredAdapter": true,
+    "forbidGeometryReduction": true,
+    "forbidMaterialRemoval": true,
+    "forbidShadowRemoval": true,
+    "forbidEffectRemoval": true,
+    "stress": {
+      "minSustainedFps": 24,
+      "maxThermalPressureProxy": 0.45,
+      "maxLongTaskRatio": 0.25
+    },
+    "stable": {
+      "minSustainedFps": 50,
+      "maxThermalPressureProxy": 0.18,
+      "maxLongTaskRatio": 0.1
+    },
+    "storageKey": "world-server-render-profile-v2"
+  }
+}

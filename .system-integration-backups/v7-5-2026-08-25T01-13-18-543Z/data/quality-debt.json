@@ -1,0 +1,6 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "QUALITY_DEBT_LEDGER",
+  "rule": "Every missing quality control becomes explicit debt until evidence closes it.",
+  "items": []
+}

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "7.5.0",
+  "rollbackActions": [
+    "STOP_CANARY_AND_ROLLBACK"
+  ],
+  "freezeActions": [
+    "FREEZE_PROMOTION",
+    "INSUFFICIENT_PRODUCTION_EVIDENCE"
+  ],
+  "requireProductionEvidenceForAutomaticRollback": true,
+  "requireRollbackAuthorizationEnv": "WORLD_SERVER_ALLOW_AUTO_ROLLBACK",
+  "truthRule": "Synthetic samples may validate decision logic but can never authorize a production rollback."
+}

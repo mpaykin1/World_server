@@ -1,0 +1,413 @@
+[WORLD_QUALITY_AUTOPILOT_V6] repo: /mnt/data/wqa_v6_server_mock
+TAP version 13
+# Subtest: V5 semantic detail index detects architectural motifs
+ok 1 - V5 semantic detail index detects architectural motifs
+  ---
+  duration_ms: 4.230287
+  type: 'test'
+  ...
+# Subtest: V5 deterministic enhancement preserves exact front projection
+ok 2 - V5 deterministic enhancement preserves exact front projection
+  ---
+  duration_ms: 13.05886
+  type: 'test'
+  ...
+# Subtest: V5 geometry budget remains strict
+ok 3 - V5 geometry budget remains strict
+  ---
+  duration_ms: 3.02229
+  type: 'test'
+  ...
+# Subtest: material profiler classifies emissive and metal-like colors
+ok 4 - material profiler classifies emissive and metal-like colors
+  ---
+  duration_ms: 0.151861
+  type: 'test'
+  ...
+# Subtest: V5 procedural PBR synthesis is deterministic and budgeted
+ok 5 - V5 procedural PBR synthesis is deterministic and budgeted
+  ---
+  duration_ms: 0.451318
+  type: 'test'
+  ...
+# Subtest: runtime V5 exposes pressure, texture and occlusion hooks
+ok 6 - runtime V5 exposes pressure, texture and occlusion hooks
+  ---
+  duration_ms: 0.173689
+  type: 'test'
+  ...
+# Subtest: V5 retarget contract contains root motion and two-hand constraints
+ok 7 - V5 retarget contract contains root motion and two-hand constraints
+  ---
+  duration_ms: 0.167383
+  type: 'test'
+  ...
+# Subtest: V5 visibility optimizer is conservative
+ok 8 - V5 visibility optimizer is conservative
+  ---
+  duration_ms: 0.098132
+  type: 'test'
+  ...
+# Subtest: V5 candidate lab is prediction only before promotion
+ok 9 - V5 candidate lab is prediction only before promotion
+  ---
+  duration_ms: 0.242261
+  type: 'test'
+  ...
+# Subtest: V5 feedback learner cannot mutate directly
+ok 10 - V5 feedback learner cannot mutate directly
+  ---
+  duration_ms: 0.404394
+  type: 'test'
+  ...
+# Subtest: baseline promotion remains explicit and cannot self-approve
+ok 11 - baseline promotion remains explicit and cannot self-approve
+  ---
+  duration_ms: 0.135367
+  type: 'test'
+  ...
+# Subtest: weighted readiness remains evidence based
+ok 12 - weighted readiness remains evidence based
+  ---
+  duration_ms: 0.167754
+  type: 'test'
+  ...
+# Subtest: V5 importance budget protects hero landmarks and reacts to pressure
+ok 13 - V5 importance budget protects hero landmarks and reacts to pressure
+  ---
+  duration_ms: 0.294696
+  type: 'test'
+  ...
+# Subtest: V5 texture baker contract is deterministic and non-destructive
+ok 14 - V5 texture baker contract is deterministic and non-destructive
+  ---
+  duration_ms: 0.23062
+  type: 'test'
+  ...
+# Subtest: V5 streaming topology prioritizes hero and neighbors
+ok 15 - V5 streaming topology prioritizes hero and neighbors
+  ---
+  duration_ms: 0.294499
+  type: 'test'
+  ...
+# Subtest: V5 shader auditor penalizes expensive paths
+ok 16 - V5 shader auditor penalizes expensive paths
+  ---
+  duration_ms: 0.259613
+  type: 'test'
+  ...
+# Subtest: V5 animation LOD keeps hero animation floor
+ok 17 - V5 animation LOD keeps hero animation floor
+  ---
+  duration_ms: 0.117403
+  type: 'test'
+  ...
+# Subtest: V5 deterministic replay contract is stable
+ok 18 - V5 deterministic replay contract is stable
+  ---
+  duration_ms: 0.110189
+  type: 'test'
+  ...
+# Subtest: V5 multiview visual gate never treats partial baselines as complete
+ok 19 - V5 multiview visual gate never treats partial baselines as complete
+  ---
+  duration_ms: 0.176951
+  type: 'test'
+  ...
+# Subtest: V5 quality SLO catches p95 regression
+ok 20 - V5 quality SLO catches p95 regression
+  ---
+  duration_ms: 0.106831
+  type: 'test'
+  ...
+# Subtest: V5 causality guard rejects any regression
+ok 21 - V5 causality guard rejects any regression
+  ---
+  duration_ms: 0.116837
+  type: 'test'
+  ...
+# Subtest: V5 canary release never auto-merges or writes master
+ok 22 - V5 canary release never auto-merges or writes master
+  ---
+  duration_ms: 0.07555
+  type: 'test'
+  ...
+# Subtest: runtime V5 exposes replay and SLO adapters
+ok 23 - runtime V5 exposes replay and SLO adapters
+  ---
+  duration_ms: 0.096893
+  type: 'test'
+  ...
+# Subtest: V6 graphics technology aliases normalize server audit names
+ok 24 - V6 graphics technology aliases normalize server audit names
+  ---
+  duration_ms: 0.067598
+  type: 'test'
+  ...
+# Subtest: V6 technology integrator requires both detail and optimization adapters
+ok 25 - V6 technology integrator requires both detail and optimization adapters
+  ---
+  duration_ms: 1.247502
+  type: 'test'
+  ...
+# Subtest: V6 adapter registry covers major current and planned graphics technologies
+ok 26 - V6 adapter registry covers major current and planned graphics technologies
+  ---
+  duration_ms: 0.216126
+  type: 'test'
+  ...
+# Subtest: V6 evidence provenance never promotes synthetic proof to production proof
+ok 27 - V6 evidence provenance never promotes synthetic proof to production proof
+  ---
+  duration_ms: 0.382157
+  type: 'test'
+  ...
+# Subtest: V6 graphics router prefers CPU-safe routes and keeps GPU routes optional
+ok 28 - V6 graphics router prefers CPU-safe routes and keeps GPU routes optional
+  ---
+  duration_ms: 0.60212
+  type: 'test'
+  ...
+# Subtest: V6 orchestrator scans graphics technology before quality mutation stages
+ok 29 - V6 orchestrator scans graphics technology before quality mutation stages
+  ---
+  duration_ms: 0.128141
+  type: 'test'
+  ...
+# Subtest: V6 policy makes technology scan and dual adapters hard gates
+ok 30 - V6 policy makes technology scan and dual adapters hard gates
+  ---
+  duration_ms: 0.166539
+  type: 'test'
+  ...
+# Subtest: V6 candidate branch intake never promotes branch names to runtime evidence
+ok 31 - V6 candidate branch intake never promotes branch names to runtime evidence
+  ---
+  duration_ms: 0.651513
+  type: 'test'
+  ...
+# Subtest: V6 runtime resilience audit detects CDN paths without silently changing versions
+ok 32 - V6 runtime resilience audit detects CDN paths without silently changing versions
+  ---
+  duration_ms: 0.135912
+  type: 'test'
+  ...
+1..32
+# tests 32
+# suites 0
+# pass 32
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 97.939184
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-graphics-technology-scout.js
+[GRAPHICS_TECH_SCOUT] 9 runtime / 15 known
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-technology-candidate-intake.js
+[TECH_CANDIDATE_INTAKE] refs=0 candidates=0
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-runtime-dependency-resilience.js
+[RUNTIME_RESILIENCE] networkDeps=0 recommendations=0
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-cpu-first-graphics-optimizer.js
+[CPU_GRAPHICS] 100% cores=5 workers=4
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-graphics-technology-integrator.js
+[GRAPHICS_TECH_INTEGRATOR] connectivity 100% blockers=0
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-graphics-quality-router.js
+[GRAPHICS_ROUTER] routes=9 cpu=7
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-technology-drift-gate.js
+[TECH_DRIFT_GATE] PASS new=9
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-evidence-provenance-guard.js
+[EVIDENCE_PROVENANCE] production proof 0%
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-animation-semantic-validator.js
+[WORLD_ANIMATION_SEMANTIC_VALIDATOR] rules=7 real=0 synthetic=1 violations=0
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-animation-lod-controller.js
+[WQA_V5] animation LOD ready
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-retarget-contract.js
+[WORLD_RETARGET_CONTRACT_V5] contract ready · runtime samples=1
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-runtime-quality-profiler.js
+[WORLD_RUNTIME_QUALITY_PROFILER_V5] 97%
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-visual-baseline-candidates.js
+[WORLD_VISUAL_BASELINE_CANDIDATES_V5] 6 candidates; approved=1
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-multiview-visual-gate.js
+[WQA_V6] human multiview baselines 0/4
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-semantic-detail-indexer.js
+[WORLD_SEMANTIC_DETAIL_V5] no world artifact
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-material-synthesis.js
+[WORLD_MATERIAL_SYNTHESIS_V5] 6 PBR profiles · source=fallback-palette-for-capability-check
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-shader-cost-auditor.js
+[WQA_V5] shader cost worst=0
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-device-profile-matrix.js
+[WORLD_DEVICE_MATRIX_V5] 45%
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-visibility-optimizer.js
+[WORLD_VISIBILITY_OPTIMIZER_V5] conservative visibility plan ready
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-streaming-topology.js
+[WQA_V5] streaming topology 5 nodes
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-deterministic-replay.js
+[WQA_V5] deterministic replay 8 contracts
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-quality-slo.js
+[WQA_V5] SLO 100%
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-feedback-learner.js
+[WORLD_FEEDBACK_LEARNER_V5] samples=0 recommendations=1
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-quality-causality.js
+[WQA_V5] causality guard ready
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-candidate-lab.js
+[WORLD_CANDIDATE_LAB_V5] candidates=12 winner=ultra--0p08
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-quality-analyzer.js
+[WORLD_QUALITY_AUTOPILOT_V6] readiness 99%
+  detail: 100%
+  graphics: 99%
+  animation: 98%
+  optimization: 99%
+  automation: 100%
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-detail-planner.js
+[WORLD_DETAIL_PLANNER_V5] 6 actions
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-quality-scheduler.js
+[WORLD_QUALITY_SCHEDULER_V5] 5 task routes
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-canary-release.js
+[WQA_V5] canary release plan ready
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-quality-evidence-ledger.js
+[WORLD_EVIDENCE_LEDGER_V6] 29 evidence files
+[WQA_V6] complete 99%
+[TECH_DRIFT_GATE] PASS new=9
+[GRAPHICS_TECH_SCOUT] 9 runtime / 15 known
+[TECH_CANDIDATE_INTAKE] refs=0 candidates=0
+[RUNTIME_RESILIENCE] networkDeps=0 recommendations=0
+[GRAPHICS_TECH_INTEGRATOR] connectivity 100% blockers=0
+[TECH_DRIFT_GATE] PASS new=0
+
+> world-server-v6-mock@1.0.0 release:gate
+> node -e "console.log('mock base gate pass')" && npm run quality:world
+
+mock base gate pass
+
+> world-server-v6-mock@1.0.0 quality:world
+> node scripts/world-quality-autopilot.js
+
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-graphics-technology-scout.js
+[GRAPHICS_TECH_SCOUT] 9 runtime / 15 known
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-technology-candidate-intake.js
+[TECH_CANDIDATE_INTAKE] refs=0 candidates=0
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-runtime-dependency-resilience.js
+[RUNTIME_RESILIENCE] networkDeps=0 recommendations=0
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-cpu-first-graphics-optimizer.js
+[CPU_GRAPHICS] 100% cores=5 workers=4
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-graphics-technology-integrator.js
+[GRAPHICS_TECH_INTEGRATOR] connectivity 100% blockers=0
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-graphics-quality-router.js
+[GRAPHICS_ROUTER] routes=9 cpu=7
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-technology-drift-gate.js
+[TECH_DRIFT_GATE] PASS new=0
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-evidence-provenance-guard.js
+[EVIDENCE_PROVENANCE] production proof 0%
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-animation-semantic-validator.js
+[WORLD_ANIMATION_SEMANTIC_VALIDATOR] rules=7 real=0 synthetic=1 violations=0
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-animation-lod-controller.js
+[WQA_V5] animation LOD ready
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-retarget-contract.js
+[WORLD_RETARGET_CONTRACT_V5] contract ready · runtime samples=1
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-runtime-quality-profiler.js
+[WORLD_RUNTIME_QUALITY_PROFILER_V5] 97%
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-visual-baseline-candidates.js
+[WORLD_VISUAL_BASELINE_CANDIDATES_V5] 6 candidates; approved=1
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-multiview-visual-gate.js
+[WQA_V6] human multiview baselines 0/4
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-semantic-detail-indexer.js
+[WORLD_SEMANTIC_DETAIL_V5] no world artifact
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-material-synthesis.js
+[WORLD_MATERIAL_SYNTHESIS_V5] 6 PBR profiles · source=fallback-palette-for-capability-check
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-shader-cost-auditor.js
+[WQA_V5] shader cost worst=0
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-device-profile-matrix.js
+[WORLD_DEVICE_MATRIX_V5] 45%
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-visibility-optimizer.js
+[WORLD_VISIBILITY_OPTIMIZER_V5] conservative visibility plan ready
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-streaming-topology.js
+[WQA_V5] streaming topology 5 nodes
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-deterministic-replay.js
+[WQA_V5] deterministic replay 8 contracts
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-quality-slo.js
+[WQA_V5] SLO 100%
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-feedback-learner.js
+[WORLD_FEEDBACK_LEARNER_V5] samples=0 recommendations=1
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-quality-causality.js
+[WQA_V5] causality guard ready
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-candidate-lab.js
+[WORLD_CANDIDATE_LAB_V5] candidates=12 winner=ultra--0p08
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-quality-analyzer.js
+[WORLD_QUALITY_AUTOPILOT_V6] readiness 99%
+  detail: 100%
+  graphics: 99%
+  animation: 98%
+  optimization: 99%
+  automation: 100%
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-detail-planner.js
+[WORLD_DETAIL_PLANNER_V5] 6 actions
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-quality-scheduler.js
+[WORLD_QUALITY_SCHEDULER_V5] 5 task routes
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-canary-release.js
+[WQA_V5] canary release plan ready
+
+[WORLD_QUALITY_AUTOPILOT_V6] world-quality-evidence-ledger.js
+[WORLD_EVIDENCE_LEDGER_V6] 29 evidence files
+[WQA_V6] complete 99%
+
+[WORLD_QUALITY_AUTOPILOT_V6] INSTALLED. Structural readiness: 99%
+[WORLD_QUALITY_AUTOPILOT_V6] Next: git diff/status -> full release gate -> commit/push AI branch -> PR -> Vercel desktop/mobile evidence.

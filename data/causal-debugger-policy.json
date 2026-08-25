@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "7.4.0",
+  "system": "CAUSAL_DEBUGGER",
+  "sources": [
+    "integration-telemetry",
+    "durable-queue",
+    "record-replay",
+    "orchestrator-crashes",
+    "transactional-deploy",
+    "production-safety",
+    "slo-error-budget"
+  ],
+  "correlationKeys": ["traceId", "traceparent", "jobId", "deploymentId", "crashFingerprint", "commit"],
+  "nativeCollectors": {
+    "windows": ["wpr", "wpaexporter"],
+    "linux": ["bpftrace", "perf"],
+    "fallback": "node-process-report"
+  },
+  "secretRedaction": true,
+  "nativeCollectorAbsenceIsExternalBlockerOnly": true
+}

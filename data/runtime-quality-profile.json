@@ -1,0 +1,7 @@
+{
+  "renderScale": 1.0,
+  "lodBias": 1.0,
+  "shadowDistance": 50,
+  "farDistance": 220,
+  "textureScale": 1.0
+}

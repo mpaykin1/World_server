@@ -1,0 +1,8 @@
+{
+  "platform": "godot_desktop",
+  "fps": 60.0,
+  "p95FrameMs": 16.7,
+  "textureVramMB": 420.0,
+  "visualDelta": 0.012,
+  "notes": "Replace with measurements from the candidate build and an identical-camera before/after render comparison."
+}

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "7.3.0",
+  "generatedAt": "2026-08-25T01:15:59.974Z",
+  "pass": true,
+  "cycles": 200,
+  "faultCounts": {
+    "process-kill": 40,
+    "disk-full": 33,
+    "network-partition": 31,
+    "lease-expiry": 34,
+    "corrupt-checkpoint": 29,
+    "duplicate-delivery": 33
+  },
+  "uniqueProcessed": 39,
+  "violations": [],
+  "invariantsChecked": [
+    "no-two-leaders",
+    "certified-functions-preserved",
+    "queue-idempotent",
+    "stable-not-mutated-on-failure",
+    "rollback-available"
+  ]
+}

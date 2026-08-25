@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "runtime": "WORLD_FACTORY_QUALITY_CORE_V10",
+  "pass": true,
+  "problems": [],
+  "requiredModules": 10,
+  "requiredV8Gates": 13,
+  "protectedV8OptimizationIncidents": 13,
+  "sourceQualityReduced": false
+}

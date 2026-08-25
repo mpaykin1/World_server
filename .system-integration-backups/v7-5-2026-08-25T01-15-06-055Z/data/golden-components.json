@@ -1,0 +1,66 @@
+{
+  "version": "1.0.0",
+  "policy": "promote-once-reuse-everywhere-compatible",
+  "components": {
+    "controls": {
+      "canonical": "shared/ai3d-playable-runtime.js",
+      "status": "golden",
+      "rules": [
+        "camera-forward",
+        "screen-right",
+        "desktop",
+        "touch",
+        "mouse-look",
+        "touch-look"
+      ]
+    },
+    "collision": {
+      "canonical": "step-up-v1",
+      "status": "golden",
+      "rules": [
+        "walls-block",
+        "grounding",
+        "step-up<=1.05",
+        "no-fallthrough"
+      ]
+    },
+    "stained-glass": {
+      "canonical": null,
+      "status": "awaiting-source-promotion",
+      "scope": {
+        "requiresCapability": "windows"
+      },
+      "rule": "After user approval, freeze exact source/asset ref and require it in every compatible project with windows. Never approximate it."
+    },
+    "compact-menu": {
+      "canonical": "shared/golden-ui-menu.js",
+      "status": "planned",
+      "scope": {
+        "allPlayableApps": true
+      },
+      "rules": [
+        "compact icon buttons",
+        "system info inside menu",
+        "settings inside menu",
+        "mobile safe area",
+        "non-obstructive HUD"
+      ]
+    }
+  },
+  "schemaVersion": "2.0.0",
+  "promotionProtocol": {
+    "triggerExamples": [
+      "получились отличные витражи",
+      "это управление хорошее",
+      "это меню удобное",
+      "эти коллизии работают правильно"
+    ],
+    "requiredAction": [
+      "freeze exact source/asset reference",
+      "declare compatibility scope",
+      "propagate to all compatible apps",
+      "verify no regression",
+      "block obsolete duplicates"
+    ]
+  }
+}

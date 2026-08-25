@@ -1,0 +1,77 @@
+{
+  "version": "6.0-phone-4d-max",
+  "system_readiness_percent": 97,
+  "system_cohesion_percent": 98,
+  "code_quality_percent": 98,
+  "optimization_percent": 96,
+  "automation_percent": 99,
+  "system_operation_percent": 98,
+  "function_coverage_percent": 98,
+  "panorama_demo_reconstruction_consistency_percent": 67.9,
+  "panorama_capture_quality_percent": 89.1,
+  "video_space_smoke_quality_percent": 72.2,
+  "video_character_smoke_quality_percent": 64.5,
+  "regression_green": true,
+  "v6_new_checks": {
+    "phone_pose_fusion": true,
+    "dynamic4d_tracks": true,
+    "model_manager": true,
+    "phone_capture_api": true,
+    "phone_capture_static": true,
+    "phone_capture_files": true
+  },
+  "optional_models": {
+    "depth": {
+      "active": false,
+      "path": null,
+      "source": null
+    },
+    "matcher": {
+      "active": false,
+      "path": null,
+      "source": null
+    },
+    "flow": {
+      "active": false,
+      "path": null,
+      "source": null
+    },
+    "segmentation": {
+      "active": false,
+      "path": null,
+      "source": null
+    }
+  },
+  "new_systems": {
+    "phone_capture_pwa": true,
+    "video_pose_bundle_upload": true,
+    "phone_orientation_imu_fusion": true,
+    "gps_drift_anchor": true,
+    "native_metric_pose_ingest": true,
+    "dynamic_character_temporal_tracks": true,
+    "automatic_optional_model_activation": true,
+    "onnx_matcher_runtime_adapter": true,
+    "onnx_raft_like_flow_runtime_adapter": true,
+    "semantic_transient_mask_adapter": true,
+    "full_regression_deployment_gate": true
+  },
+  "limitations": [
+    "No CUDA-trained 3DGS because the target environment has no GPU.",
+    "True learned 4D Gaussian deformation is not active; V6 implements CPU temporal deformation tracks as the bridge.",
+    "Optional ONNX quality backends are currently inactive because model files are not present.",
+    "Browser phone sensors improve orientation/drift, but native ARKit/ARCore metric camera poses would be substantially better."
+  ],
+  "next_major_quality_systems": [
+    "Native iOS/Android ARKit/ARCore pose exporter feeding metric position + quaternion into capture_pose.json.",
+    "Install and validate Depth Anything V2 ONNX CPU model.",
+    "Install and validate LightGlue or LoFTR ONNX matcher.",
+    "Install and validate RAFT ONNX dense flow.",
+    "Install high-quality human/semantic segmentation ONNX model.",
+    "CPU-capable learned dynamic 4D deformation backend for moving characters.",
+    "Photometric calibration and rolling-shutter correction for phone video.",
+    "Exposure/white-balance normalization across frames.",
+    "Geometry confidence learning / uncertainty propagation into splat pruning.",
+    "Hybrid mesh retopology + texture baking for rigid architecture and character collision shells."
+  ],
+  "scoring_note": "Engineering readiness scores are based on implemented code paths plus green regression tests. Visual reconstruction scores are separate and remain constrained by source capture consistency and missing optional model weights."
+}

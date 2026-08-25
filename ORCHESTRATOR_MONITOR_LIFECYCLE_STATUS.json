@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-25T01:15:57.602Z",
+  "pass": true,
+  "generationTokens": true,
+  "cancelPreviousGeneration": true,
+  "identityPredicate": true,
+  "stabilizationBarrier": true,
+  "recursiveEventPolicy": true,
+  "defaultSettleMs": 1250
+}

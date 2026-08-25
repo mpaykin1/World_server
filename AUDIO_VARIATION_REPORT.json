@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "3.0.0",
+  "generatedAt": "2026-08-25T01:15:38.379Z",
+  "applicable": false,
+  "pass": true,
+  "minimumVariants": 4,
+  "checkedEvents": 0,
+  "failed": [],
+  "checks": [],
+  "rule": "Repeated sounds must use multiple samples plus non-monotone selection and bounded pitch/gain variation."
+}

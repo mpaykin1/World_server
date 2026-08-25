@@ -1,0 +1,7 @@
+#!/usr/bin/env node
+'use strict';
+const fs=require('fs'),path=require('path');const ROOT=process.cwd();
+const targets=['apps/ai3d-voxel-city/client.js','apps/voxel-world/client.js','shared/world-quality-autopilot.js'];
+function auditText(src=''){const expensive={dynamicShadows:(src.match(/shadowMap\.enabled\s*=\s*true/g)||[]).length,transparency:(src.match(/transparent\s*:\s*true/g)||[]).length,doubleSide:(src.match(/DoubleSide/g)||[]).length,pbr:(src.match(/MeshStandardMaterial/g)||[]).length,postFx:(src.match(/EffectComposer|ShaderPass|UnrealBloomPass/g)||[]).length};const cost=expensive.dynamicShadows*12+expensive.transparency*7+expensive.doubleSide*5+expensive.pbr*3+expensive.postFx*10;return{expensive,cost,grade:cost<=20?'A':cost<=45?'B':cost<=75?'C':'D'}}
+function main(){const files=[];for(const rel of targets){let src='';try{src=fs.readFileSync(path.join(ROOT,rel),'utf8')}catch{}files.push({path:rel,...auditText(src)})}const worst=Math.max(0,...files.map(x=>x.cost));const report={schemaVersion:'5.0.0',system:'WORLD_SHADER_COST_AUDITOR',files,worstCost:worst,gate:worst<90,policy:{mobileFeatureDowngrade:true,frontExactNoPbr:true,shaderMutation:false}};fs.writeFileSync(path.join(ROOT,'WORLD_SHADER_COST_REPORT.json'),JSON.stringify(report,null,2)+'\n');if(!report.gate)process.exitCode=1;console.log(`[WQA_V5] shader cost worst=${worst}`)}
+if(require.main===module)main();module.exports={auditText};

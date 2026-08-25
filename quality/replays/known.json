@@ -1,0 +1,5 @@
+{
+  "schemaVersion":2,
+  "seeds":[],
+  "policy":"Any fuzz seed that reproduces a real regression is retained permanently and rerun before release."
+}

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "CPU_TEXTURE_FACTORY",
+  "gpuAllowed": false,
+  "paidComputeAllowed": false,
+  "formats": [
+    "webp",
+    "png"
+  ],
+  "webpQualities": [
+    92,
+    82,
+    72
+  ],
+  "scales": [
+    1.0,
+    0.5,
+    0.25
+  ],
+  "optionalExternalBinary": "toktx",
+  "rule": "Original assets are never overwritten. KTX2 is optional only when a local free toktx binary exists."
+}

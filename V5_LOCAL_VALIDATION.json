@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.0.0",
+  "patch": "SYSTEM_INTEGRATION_LAYER_V5",
+  "validatedAt": "2026-08-24T07:44:39.026977+00:00",
+  "validationScope": "Synthetic V4->V5 upgrade fixture with repeated full control plane and release gate; external/native runtimes are reported separately and are not fabricated.",
+  "installUpgradePass": true,
+  "repeatedIntegrationFullPass": true,
+  "releaseGatePass": true,
+  "integrationGate": {
+    "pass": true,
+    "percent": 100,
+    "passed": 68,
+    "total": 68,
+    "failed": []
+  },
+  "controlPlane": {
+    "pass": true,
+    "passed": 34,
+    "total": 34
+  },
+  "selftest": {
+    "pass": true,
+    "passed": 45,
+    "total": 45
+  },
+  "modelCheck": {
+    "pass": true,
+    "nativeTlcAvailable": false,
+    "embeddedExhaustive": true
+  },
+  "readiness": {
+    "pass": true,
+    "structuralReadinessPercent": 100,
+    "mandatoryRuntimeConnectivityPercent": 100,
+    "overallOperationalReadinessPercent": 90,
+    "evidenceConfidencePercent": 100,
+    "nativeExtensionCoveragePercent": 0,
+    "externalBlockers": [
+      "native-cosign-unavailable",
+      "remote-cas-peer-unavailable",
+      "physical-device-worker-unavailable",
+      "wasmtime-component-runtime-unavailable",
+      "native-tlc-unavailable"
+    ]
+  },
+  "negativeTests": {
+    "sameVersionDriftRefused": true,
+    "downgradeV5ToV4Refused": true,
+    "tamperedPatchRefused": true,
+    "modelMutantsRejected": true,
+    "casDigestMismatchRejected": true,
+    "emulatorNotCountedAsRealDevice": true,
+    "invalidWitRejected": true,
+    "signatureMutantRejected": true
+  },
+  "truth": "100% applies to V5 structural/evidence readiness of the validated fixture. Overall operational readiness is lower when optional native/external extensions are absent. Target World_server must recalculate after installation."
+}

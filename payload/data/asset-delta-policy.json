@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "7.4.0",
+  "system": "ASSET_DELTA_DISTRIBUTION",
+  "algorithm": "gear-content-defined-chunking",
+  "hash": "sha256",
+  "minChunkBytes": 16384,
+  "avgChunkBytes": 65536,
+  "maxChunkBytes": 262144,
+  "verifyEveryChunk": true,
+  "verifyReconstruction": true,
+  "deduplicateAcrossAssets": true,
+  "networkUploadExplicitOnly": true
+}

@@ -1,0 +1,1 @@
+'use strict';const cp=require('child_process'),path=require('path'),fs=require('fs');const root=path.resolve(__dirname,'..');const files=fs.readdirSync(path.join(root,'test')).filter(x=>/^procedural-quality(?:-v\d+)?\.test\.js$/.test(x)).sort().map(x=>path.join('test',x));cp.execFileSync(process.execPath,['--test',...files],{cwd:root,stdio:'inherit'});

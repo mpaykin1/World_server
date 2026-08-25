@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "VISUAL_QUALITY_POLICY",
+  "rules": {
+    "visibleRenderSurface": true,
+    "minimumCanvasWidth": 320,
+    "minimumCanvasHeight": 180,
+    "nonZeroTrianglesWhenRuntimeExposesStats": true,
+    "cssBlurOnPrimaryCanvasForbidden": true,
+    "approvedGoldenGraphicsMustNotBeReplaced": true,
+    "screenshotRegressionRequiredFor100Percent": true
+  },
+  "note": "Structural/runtime visual gates are automated. Aesthetic quality cannot reach 100% until approved screenshot baselines or exact Golden visual assets exist."
+}

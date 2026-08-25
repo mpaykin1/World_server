@@ -1,0 +1,1105 @@
+{
+  "schemaVersion": "2.0.0",
+  "generatedAt": "2026-08-25T01:15:37.541Z",
+  "contentAddressed": true,
+  "total": 48,
+  "unique": 43,
+  "duplicateGroups": 5,
+  "missingDependencies": [],
+  "metadataCoverage": {
+    "licensePercent": 0,
+    "versionPercent": 0,
+    "qualityPercent": 0
+  },
+  "items": [
+    {
+      "id": "sha256:71d1c26d5fa858fc30b74c56bccf9a93769f5cfec5a8522ea24ade6d4a284d33",
+      "path": "apps/ai3d-reference-test/assets/model.glb",
+      "type": "model",
+      "ext": ".glb",
+      "bytes": 381328,
+      "sha256": "71d1c26d5fa858fc30b74c56bccf9a93769f5cfec5a8522ea24ade6d4a284d33",
+      "cas": "cas+sha256:71d1c26d5fa858fc30b74c56bccf9a93769f5cfec5a8522ea24ade6d4a284d33",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": null,
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:0f51d6f7733a845de863b68f3361b0736105f33acedc71f636d2fdc4c2b6eb22",
+      "path": "apps/ai3d-reference-test/assets/previous_html_baseline.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 587833,
+      "sha256": "0f51d6f7733a845de863b68f3361b0736105f33acedc71f636d2fdc4c2b6eb22",
+      "cas": "cas+sha256:0f51d6f7733a845de863b68f3361b0736105f33acedc71f636d2fdc4c2b6eb22",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 1280,
+        "height": 800
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+      "path": "apps/ai3d-reference-test/assets/reference.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 186804,
+      "sha256": "9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+      "cas": "cas+sha256:9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": null,
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:04cc01f41064f97e511a69e4536d38cac9232837c556fe7a95db94412f22b5b5",
+      "path": "apps/ai3d-reference-test/assets/renders/front_clay.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 182098,
+      "sha256": "04cc01f41064f97e511a69e4536d38cac9232837c556fe7a95db94412f22b5b5",
+      "cas": "cas+sha256:04cc01f41064f97e511a69e4536d38cac9232837c556fe7a95db94412f22b5b5",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 512,
+        "height": 512
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:422382ba957be4bc425f920b92aadb0d940aa5ca72e65570efe23e5e1e8dbae0",
+      "path": "apps/ai3d-reference-test/assets/renders/front_textured.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 182098,
+      "sha256": "422382ba957be4bc425f920b92aadb0d940aa5ca72e65570efe23e5e1e8dbae0",
+      "cas": "cas+sha256:422382ba957be4bc425f920b92aadb0d940aa5ca72e65570efe23e5e1e8dbae0",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 512,
+        "height": 512
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:95d3075235c79a74c192a5f3f41a3a5106b964e39f01cfb1c56f77e8a3d2b8ea",
+      "path": "apps/ai3d-reference-test/assets/renders/left15_clay.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 181139,
+      "sha256": "95d3075235c79a74c192a5f3f41a3a5106b964e39f01cfb1c56f77e8a3d2b8ea",
+      "cas": "cas+sha256:95d3075235c79a74c192a5f3f41a3a5106b964e39f01cfb1c56f77e8a3d2b8ea",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 512,
+        "height": 512
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:a17b15dbae8caefd98e3999759cd1b9e450ab0016a91ea4fe5c3c9d3226eeb11",
+      "path": "apps/ai3d-reference-test/assets/renders/left15_textured.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 181139,
+      "sha256": "a17b15dbae8caefd98e3999759cd1b9e450ab0016a91ea4fe5c3c9d3226eeb11",
+      "cas": "cas+sha256:a17b15dbae8caefd98e3999759cd1b9e450ab0016a91ea4fe5c3c9d3226eeb11",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 512,
+        "height": 512
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:ce9ee3313f8459388e23fa9a5025b3000216d28f0aaf3a9c1e88e1111f196239",
+      "path": "apps/ai3d-reference-test/assets/renders/left30_clay.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 177791,
+      "sha256": "ce9ee3313f8459388e23fa9a5025b3000216d28f0aaf3a9c1e88e1111f196239",
+      "cas": "cas+sha256:ce9ee3313f8459388e23fa9a5025b3000216d28f0aaf3a9c1e88e1111f196239",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 512,
+        "height": 512
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:c57f5e6b7110be56e8227827aff049ad904a3c27e7f3013e22b9bea4b415ad27",
+      "path": "apps/ai3d-reference-test/assets/renders/left30_textured.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 177791,
+      "sha256": "c57f5e6b7110be56e8227827aff049ad904a3c27e7f3013e22b9bea4b415ad27",
+      "cas": "cas+sha256:c57f5e6b7110be56e8227827aff049ad904a3c27e7f3013e22b9bea4b415ad27",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 512,
+        "height": 512
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:a7cfc24cc99066506f9a524d2562bc7c334bdae651ed24eabbb87a3bece6f783",
+      "path": "apps/ai3d-reference-test/assets/renders/right15_clay.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 178046,
+      "sha256": "a7cfc24cc99066506f9a524d2562bc7c334bdae651ed24eabbb87a3bece6f783",
+      "cas": "cas+sha256:a7cfc24cc99066506f9a524d2562bc7c334bdae651ed24eabbb87a3bece6f783",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 512,
+        "height": 512
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:6f2317d5b031197d5b15e5c8eb1e747f05920c82a2335e52e5c852acd2001a48",
+      "path": "apps/ai3d-reference-test/assets/renders/right15_textured.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 178046,
+      "sha256": "6f2317d5b031197d5b15e5c8eb1e747f05920c82a2335e52e5c852acd2001a48",
+      "cas": "cas+sha256:6f2317d5b031197d5b15e5c8eb1e747f05920c82a2335e52e5c852acd2001a48",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 512,
+        "height": 512
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:17a138577d27ccd649c596283850430a3def0675e10c903546bb6b573f095b69",
+      "path": "apps/ai3d-reference-test/assets/renders/right30_clay.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 172205,
+      "sha256": "17a138577d27ccd649c596283850430a3def0675e10c903546bb6b573f095b69",
+      "cas": "cas+sha256:17a138577d27ccd649c596283850430a3def0675e10c903546bb6b573f095b69",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 512,
+        "height": 512
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:baab940757b82aff9b7689069dd92ad0616dc06fc027982f0e4380230a4058a2",
+      "path": "apps/ai3d-reference-test/assets/renders/right30_textured.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 172205,
+      "sha256": "baab940757b82aff9b7689069dd92ad0616dc06fc027982f0e4380230a4058a2",
+      "cas": "cas+sha256:baab940757b82aff9b7689069dd92ad0616dc06fc027982f0e4380230a4058a2",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 512,
+        "height": 512
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:04ec9bdd5fda2516f279a6d0230e65b7bb3a9da1bf2d4d8af9b529873a891526",
+      "path": "apps/ai3d-reference-test/assets/renders/top_oblique_clay.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 88575,
+      "sha256": "04ec9bdd5fda2516f279a6d0230e65b7bb3a9da1bf2d4d8af9b529873a891526",
+      "cas": "cas+sha256:04ec9bdd5fda2516f279a6d0230e65b7bb3a9da1bf2d4d8af9b529873a891526",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 512,
+        "height": 512
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:c1dd6a6f93a90702fb9a0bb0cbb434ee90120ff5860515d10410a887c127696b",
+      "path": "apps/ai3d-reference-test/assets/renders/top_oblique_textured.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 88575,
+      "sha256": "c1dd6a6f93a90702fb9a0bb0cbb434ee90120ff5860515d10410a887c127696b",
+      "cas": "cas+sha256:c1dd6a6f93a90702fb9a0bb0cbb434ee90120ff5860515d10410a887c127696b",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 512,
+        "height": 512
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:625211b3b3c6baff25ca2408d731477382b93e552a9d8c03a755aa039d1353cf",
+      "path": "apps/catalog/ico.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 1862,
+      "sha256": "625211b3b3c6baff25ca2408d731477382b93e552a9d8c03a755aa039d1353cf",
+      "cas": "cas+sha256:625211b3b3c6baff25ca2408d731477382b93e552a9d8c03a755aa039d1353cf",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 128,
+        "height": 128
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:e818d80fa57a4c0b45e890dbcf1184f3b11a39f6b9bef87fb727dbfb90a54f18",
+      "path": "apps/chat/ico.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 1690,
+      "sha256": "e818d80fa57a4c0b45e890dbcf1184f3b11a39f6b9bef87fb727dbfb90a54f18",
+      "cas": "cas+sha256:e818d80fa57a4c0b45e890dbcf1184f3b11a39f6b9bef87fb727dbfb90a54f18",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 128,
+        "height": 128
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:7788e84319aa85b3cfd354915050d4f536a760ba9967043a00d9034ce864d3f2",
+      "path": "apps/survival/ico.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 2181,
+      "sha256": "7788e84319aa85b3cfd354915050d4f536a760ba9967043a00d9034ce864d3f2",
+      "cas": "cas+sha256:7788e84319aa85b3cfd354915050d4f536a760ba9967043a00d9034ce864d3f2",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 128,
+        "height": 128
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:d443c81bf0359144d6bb14d6897d2272d37e86b8e0b746175fd85a1ddf94f95d",
+      "path": "assets/pixel/world-atlas-v1.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 28090,
+      "sha256": "d443c81bf0359144d6bb14d6897d2272d37e86b8e0b746175fd85a1ddf94f95d",
+      "cas": "cas+sha256:d443c81bf0359144d6bb14d6897d2272d37e86b8e0b746175fd85a1ddf94f95d",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 2048,
+        "height": 2048
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:8a7f3698dc46927aa01d1fb7a58f78488dd7a1a6a10c7c1091782b402ce2ed75",
+      "path": "e2e/perceptual-visual.spec.js-snapshots/cube-object-desktop-chromium-win32.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 35990,
+      "sha256": "8a7f3698dc46927aa01d1fb7a58f78488dd7a1a6a10c7c1091782b402ce2ed75",
+      "cas": "cas+sha256:8a7f3698dc46927aa01d1fb7a58f78488dd7a1a6a10c7c1091782b402ce2ed75",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:453e32965facba213a67cd473f12a06231c0130cc974cca06a82fc9a45879b75",
+      "path": "e2e/perceptual-visual.spec.js-snapshots/cube-object-mobile-chromium-win32.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 31234,
+      "sha256": "453e32965facba213a67cd473f12a06231c0130cc974cca06a82fc9a45879b75",
+      "cas": "cas+sha256:453e32965facba213a67cd473f12a06231c0130cc974cca06a82fc9a45879b75",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 412,
+        "height": 839
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:3aa744d9bfb32bf7f11e3be2700120ac69eac4a7daa79f1c3b496984045e7623",
+      "path": "e2e/perceptual-visual.spec.js-snapshots/cube-object-mobile-webkit-win32.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 27341,
+      "sha256": "3aa744d9bfb32bf7f11e3be2700120ac69eac4a7daa79f1c3b496984045e7623",
+      "cas": "cas+sha256:3aa744d9bfb32bf7f11e3be2700120ac69eac4a7daa79f1c3b496984045e7623",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 390,
+        "height": 664
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:2ad9836c1fde4ec4309943a59030cfaa7fd07d08af7ed02b997d9b85fbe31118",
+      "path": "e2e/perceptual-visual.spec.js-snapshots/cube-object-tablet-chromium-win32.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 38954,
+      "sha256": "2ad9836c1fde4ec4309943a59030cfaa7fd07d08af7ed02b997d9b85fbe31118",
+      "cas": "cas+sha256:2ad9836c1fde4ec4309943a59030cfaa7fd07d08af7ed02b997d9b85fbe31118",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 810,
+        "height": 1080
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:29816b6bbe9f9c08c491f693175931fbf3b1dc688d9a833db8e97a0950204e81",
+      "path": "examples/neon_city/РЅРµРѕРЅРѕРІР°СЏ_РїР°РіРѕРґР°_РІ_РґРѕР¶РґР»РёРІРѕРј_РєРёР±РµСЂРїР°РЅРє_РіРѕСЂРѕРґРµ.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 2704069,
+      "sha256": "29816b6bbe9f9c08c491f693175931fbf3b1dc688d9a833db8e97a0950204e81",
+      "cas": "cas+sha256:29816b6bbe9f9c08c491f693175931fbf3b1dc688d9a833db8e97a0950204e81",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 1774,
+        "height": 887
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:c9a5bdbcf564ce0c6020510bbfd58498ccc6559708a1612bead15c11cb2188a1",
+      "path": "examples/neon_city/РЅРµРѕРЅРѕРІР°СЏ_РїР°РіРѕРґР°_РІ_РґРѕР¶РґР»РёРІРѕРј_РєРёР±РµСЂРїР°РЅРєРµ.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 2738919,
+      "sha256": "c9a5bdbcf564ce0c6020510bbfd58498ccc6559708a1612bead15c11cb2188a1",
+      "cas": "cas+sha256:c9a5bdbcf564ce0c6020510bbfd58498ccc6559708a1612bead15c11cb2188a1",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 1774,
+        "height": 887
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:9a06069fa8645aa69357745214e15c337b8aaaaeb433da4d9a586287982253a9",
+      "path": "examples/neon_city/РЅРµРѕРЅРѕРІР°СЏ_РїР°РіРѕРґР°_РїРѕРґ_РґРѕР¶РґС‘Рј.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 2730021,
+      "sha256": "9a06069fa8645aa69357745214e15c337b8aaaaeb433da4d9a586287982253a9",
+      "cas": "cas+sha256:9a06069fa8645aa69357745214e15c337b8aaaaeb433da4d9a586287982253a9",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 1774,
+        "height": 887
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:a46623e6323cabd1b9350ae60a11dd540e3c5814cee62fbb80880e236b1f1ed6",
+      "path": "examples/neon_city/РЅРµРѕРЅРѕРІС‹Р№_РєРёР±РµСЂРїР°РЅРє_СЂС‹РЅРѕРє_РїРѕРґ_РґРѕР¶РґС‘Рј.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 2620635,
+      "sha256": "a46623e6323cabd1b9350ae60a11dd540e3c5814cee62fbb80880e236b1f1ed6",
+      "cas": "cas+sha256:a46623e6323cabd1b9350ae60a11dd540e3c5814cee62fbb80880e236b1f1ed6",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 1774,
+        "height": 887
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:73d6efdb586255ccaf00d978151e899f12ebcb8c5008fc518ff724a363555620",
+      "path": "examples/neon_city/РЅРµРѕРЅРѕРІС‹Р№_РґРѕР¶РґСЊ_РЅР°Рґ_РєРёР±РµСЂРїР°РЅРє_РїР°РіРѕРґРѕР№.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 2630341,
+      "sha256": "73d6efdb586255ccaf00d978151e899f12ebcb8c5008fc518ff724a363555620",
+      "cas": "cas+sha256:73d6efdb586255ccaf00d978151e899f12ebcb8c5008fc518ff724a363555620",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 1774,
+        "height": 887
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:caf47d3bd7d1ebfac90d1289304d838f3f4d9804f63ab69dacf74706e8c18e2e",
+      "path": "examples/neon_city/РґРѕР¶РґР»РёРІС‹Р№_РЅРµРѕРЅРѕРІС‹Р№_РєРІР°СЂС‚Р°Р»_РїР°РіРѕРґ.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 2679384,
+      "sha256": "caf47d3bd7d1ebfac90d1289304d838f3f4d9804f63ab69dacf74706e8c18e2e",
+      "cas": "cas+sha256:caf47d3bd7d1ebfac90d1289304d838f3f4d9804f63ab69dacf74706e8c18e2e",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 1774,
+        "height": 887
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:f3cd2802884ddcf7f18633935869384b07a49e6c1dc92262a94e8b7e9d8da8a7",
+      "path": "examples/neon_city/РґРѕР¶РґР»РёРІС‹Р№_РЅРµРѕРЅРѕРІС‹Р№_РіРѕСЂРѕРґ_РїР°РіРѕРґ.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 2663755,
+      "sha256": "f3cd2802884ddcf7f18633935869384b07a49e6c1dc92262a94e8b7e9d8da8a7",
+      "cas": "cas+sha256:f3cd2802884ddcf7f18633935869384b07a49e6c1dc92262a94e8b7e9d8da8a7",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 1774,
+        "height": 887
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:2496c4469bb614d425f81d2de0011e9c9b00fc634a74e2724944d24464e877e0",
+      "path": "examples/neon_city/РґРѕР¶РґР»РёРІС‹Р№_РЅРµРѕРЅРѕРІС‹Р№_РіРѕСЂРѕРґ_РїР°РіРѕРґ_Рё_С„РѕРЅР°СЂРµР№.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 2604074,
+      "sha256": "2496c4469bb614d425f81d2de0011e9c9b00fc634a74e2724944d24464e877e0",
+      "cas": "cas+sha256:2496c4469bb614d425f81d2de0011e9c9b00fc634a74e2724944d24464e877e0",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 1774,
+        "height": 887
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:853d8f8e9f01f60c40665a78c362005331a159ddc8c093a14d18781116cbb4dd",
+      "path": "output/demo_build/collision_proxy.glb",
+      "type": "model",
+      "ext": ".glb",
+      "bytes": 4316,
+      "sha256": "853d8f8e9f01f60c40665a78c362005331a159ddc8c093a14d18781116cbb4dd",
+      "cas": "cas+sha256:853d8f8e9f01f60c40665a78c362005331a159ddc8c093a14d18781116cbb4dd",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": null,
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:9157ff65335988cb789abca9196a9e006599f80637ba743af7e107edcf3cfeb1",
+      "path": "output/demo_build/collision_proxy.obj",
+      "type": "model",
+      "ext": ".obj",
+      "bytes": 5909,
+      "sha256": "9157ff65335988cb789abca9196a9e006599f80637ba743af7e107edcf3cfeb1",
+      "cas": "cas+sha256:9157ff65335988cb789abca9196a9e006599f80637ba743af7e107edcf3cfeb1",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": null,
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:653f6a9e0810e129812659776f3bab2476f554e0a84970c398bd22b8ba4f1927",
+      "path": "payload/shared/pwa-icon-180.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 25158,
+      "sha256": "653f6a9e0810e129812659776f3bab2476f554e0a84970c398bd22b8ba4f1927",
+      "cas": "cas+sha256:653f6a9e0810e129812659776f3bab2476f554e0a84970c398bd22b8ba4f1927",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 180,
+        "height": 180
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:4eefefc230e5e3d305ca0d515a43fc28ae87eaa47daf65ebdf9bbfd29fb92e85",
+      "path": "payload/shared/pwa-icon-192.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 28191,
+      "sha256": "4eefefc230e5e3d305ca0d515a43fc28ae87eaa47daf65ebdf9bbfd29fb92e85",
+      "cas": "cas+sha256:4eefefc230e5e3d305ca0d515a43fc28ae87eaa47daf65ebdf9bbfd29fb92e85",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 192,
+        "height": 192
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:a890cc505fc23c820033e84a27ccaf5f28c949b875ba2ff9f650bc45ffeca4b7",
+      "path": "payload/shared/pwa-icon-512.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 7037,
+      "sha256": "a890cc505fc23c820033e84a27ccaf5f28c949b875ba2ff9f650bc45ffeca4b7",
+      "cas": "cas+sha256:a890cc505fc23c820033e84a27ccaf5f28c949b875ba2ff9f650bc45ffeca4b7",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 512,
+        "height": 512
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:d443c81bf0359144d6bb14d6897d2272d37e86b8e0b746175fd85a1ddf94f95d",
+      "path": "public/assets/pixel/world-atlas-v1.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 28090,
+      "sha256": "d443c81bf0359144d6bb14d6897d2272d37e86b8e0b746175fd85a1ddf94f95d",
+      "cas": "cas+sha256:d443c81bf0359144d6bb14d6897d2272d37e86b8e0b746175fd85a1ddf94f95d",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 2048,
+        "height": 2048
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:653f6a9e0810e129812659776f3bab2476f554e0a84970c398bd22b8ba4f1927",
+      "path": "shared/pwa-icon-180.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 25158,
+      "sha256": "653f6a9e0810e129812659776f3bab2476f554e0a84970c398bd22b8ba4f1927",
+      "cas": "cas+sha256:653f6a9e0810e129812659776f3bab2476f554e0a84970c398bd22b8ba4f1927",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 180,
+        "height": 180
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:4eefefc230e5e3d305ca0d515a43fc28ae87eaa47daf65ebdf9bbfd29fb92e85",
+      "path": "shared/pwa-icon-192.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 28191,
+      "sha256": "4eefefc230e5e3d305ca0d515a43fc28ae87eaa47daf65ebdf9bbfd29fb92e85",
+      "cas": "cas+sha256:4eefefc230e5e3d305ca0d515a43fc28ae87eaa47daf65ebdf9bbfd29fb92e85",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 192,
+        "height": 192
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:a890cc505fc23c820033e84a27ccaf5f28c949b875ba2ff9f650bc45ffeca4b7",
+      "path": "shared/pwa-icon-512.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 7037,
+      "sha256": "a890cc505fc23c820033e84a27ccaf5f28c949b875ba2ff9f650bc45ffeca4b7",
+      "cas": "cas+sha256:a890cc505fc23c820033e84a27ccaf5f28c949b875ba2ff9f650bc45ffeca4b7",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 512,
+        "height": 512
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:282569e150ea14b956cff4f7e499cec087f9e23c57a6c13f1375ef4dc9c40dda",
+      "path": "test/fixtures/city_street.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 1093,
+      "sha256": "282569e150ea14b956cff4f7e499cec087f9e23c57a6c13f1375ef4dc9c40dda",
+      "cas": "cas+sha256:282569e150ea14b956cff4f7e499cec087f9e23c57a6c13f1375ef4dc9c40dda",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 256,
+        "height": 256
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:50b84261d53bb21011ff3adbab155590486cd7930109cd7e7d62df930fa12287",
+      "path": "test/fixtures/cube_object.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 810,
+      "sha256": "50b84261d53bb21011ff3adbab155590486cd7930109cd7e7d62df930fa12287",
+      "cas": "cas+sha256:50b84261d53bb21011ff3adbab155590486cd7930109cd7e7d62df930fa12287",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 256,
+        "height": 256
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:f336d6ebe1b0de63370dcc823912f89eb78f5c2e3d3a6c76e6d2970e99a3e706",
+      "path": "test/fixtures/house.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 1232,
+      "sha256": "f336d6ebe1b0de63370dcc823912f89eb78f5c2e3d3a6c76e6d2970e99a3e706",
+      "cas": "cas+sha256:f336d6ebe1b0de63370dcc823912f89eb78f5c2e3d3a6c76e6d2970e99a3e706",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 256,
+        "height": 256
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:26f96aba2ca01f081da5e304bd6b0bb57b0df164a59e7b358d703cd1fb6b3f73",
+      "path": "test/fixtures/terrain.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 1592,
+      "sha256": "26f96aba2ca01f081da5e304bd6b0bb57b0df164a59e7b358d703cd1fb6b3f73",
+      "cas": "cas+sha256:26f96aba2ca01f081da5e304bd6b0bb57b0df164a59e7b358d703cd1fb6b3f73",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 256,
+        "height": 256
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:505bce2939de0a18110e13744f8cd303b939537e7a0e997c899bfb8e940cd8fa",
+      "path": "test/fixtures/voxel_building.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 915,
+      "sha256": "505bce2939de0a18110e13744f8cd303b939537e7a0e997c899bfb8e940cd8fa",
+      "cas": "cas+sha256:505bce2939de0a18110e13744f8cd303b939537e7a0e997c899bfb8e940cd8fa",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 256,
+        "height": 256
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:8a7f3698dc46927aa01d1fb7a58f78488dd7a1a6a10c7c1091782b402ce2ed75",
+      "path": "visual-candidates/desktop-chromium/ai3d-voxel-city.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 35990,
+      "sha256": "8a7f3698dc46927aa01d1fb7a58f78488dd7a1a6a10c7c1091782b402ce2ed75",
+      "cas": "cas+sha256:8a7f3698dc46927aa01d1fb7a58f78488dd7a1a6a10c7c1091782b402ce2ed75",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:cf4588b334cdc4d7f40a7f26457e9495b54398ad0fc4966322e51b036b097e35",
+      "path": "visual-candidates/desktop-chromium/catalog.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 12804,
+      "sha256": "cf4588b334cdc4d7f40a7f26457e9495b54398ad0fc4966322e51b036b097e35",
+      "cas": "cas+sha256:cf4588b334cdc4d7f40a7f26457e9495b54398ad0fc4966322e51b036b097e35",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:e81184d515271a181a444a744c017525ce5401868b0ecaa5c7f37bb91b9514db",
+      "path": "visual-candidates/desktop-chromium/voxel-world.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 35678,
+      "sha256": "e81184d515271a181a444a744c017525ce5401868b0ecaa5c7f37bb91b9514db",
+      "cas": "cas+sha256:e81184d515271a181a444a744c017525ce5401868b0ecaa5c7f37bb91b9514db",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "animation": null,
+      "dependencies": []
+    }
+  ],
+  "duplicates": [
+    {
+      "sha256": "d443c81bf0359144d6bb14d6897d2272d37e86b8e0b746175fd85a1ddf94f95d",
+      "paths": [
+        "assets/pixel/world-atlas-v1.png",
+        "public/assets/pixel/world-atlas-v1.png"
+      ]
+    },
+    {
+      "sha256": "8a7f3698dc46927aa01d1fb7a58f78488dd7a1a6a10c7c1091782b402ce2ed75",
+      "paths": [
+        "e2e/perceptual-visual.spec.js-snapshots/cube-object-desktop-chromium-win32.png",
+        "visual-candidates/desktop-chromium/ai3d-voxel-city.png"
+      ]
+    },
+    {
+      "sha256": "653f6a9e0810e129812659776f3bab2476f554e0a84970c398bd22b8ba4f1927",
+      "paths": [
+        "payload/shared/pwa-icon-180.png",
+        "shared/pwa-icon-180.png"
+      ]
+    },
+    {
+      "sha256": "4eefefc230e5e3d305ca0d515a43fc28ae87eaa47daf65ebdf9bbfd29fb92e85",
+      "paths": [
+        "payload/shared/pwa-icon-192.png",
+        "shared/pwa-icon-192.png"
+      ]
+    },
+    {
+      "sha256": "a890cc505fc23c820033e84a27ccaf5f28c949b875ba2ff9f650bc45ffeca4b7",
+      "paths": [
+        "payload/shared/pwa-icon-512.png",
+        "shared/pwa-icon-512.png"
+      ]
+    }
+  ],
+  "missingMetadata": {
+    "license": [
+      "apps/ai3d-reference-test/assets/model.glb",
+      "apps/ai3d-reference-test/assets/previous_html_baseline.png",
+      "apps/ai3d-reference-test/assets/reference.png",
+      "apps/ai3d-reference-test/assets/renders/front_clay.png",
+      "apps/ai3d-reference-test/assets/renders/front_textured.png",
+      "apps/ai3d-reference-test/assets/renders/left15_clay.png",
+      "apps/ai3d-reference-test/assets/renders/left15_textured.png",
+      "apps/ai3d-reference-test/assets/renders/left30_clay.png",
+      "apps/ai3d-reference-test/assets/renders/left30_textured.png",
+      "apps/ai3d-reference-test/assets/renders/right15_clay.png",
+      "apps/ai3d-reference-test/assets/renders/right15_textured.png",
+      "apps/ai3d-reference-test/assets/renders/right30_clay.png",
+      "apps/ai3d-reference-test/assets/renders/right30_textured.png",
+      "apps/ai3d-reference-test/assets/renders/top_oblique_clay.png",
+      "apps/ai3d-reference-test/assets/renders/top_oblique_textured.png",
+      "apps/catalog/ico.png",
+      "apps/chat/ico.png",
+      "apps/survival/ico.png",
+      "assets/pixel/world-atlas-v1.png",
+      "e2e/perceptual-visual.spec.js-snapshots/cube-object-desktop-chromium-win32.png",
+      "e2e/perceptual-visual.spec.js-snapshots/cube-object-mobile-chromium-win32.png",
+      "e2e/perceptual-visual.spec.js-snapshots/cube-object-mobile-webkit-win32.png",
+      "e2e/perceptual-visual.spec.js-snapshots/cube-object-tablet-chromium-win32.png",
+      "examples/neon_city/РЅРµРѕРЅРѕРІР°СЏ_РїР°РіРѕРґР°_РІ_РґРѕР¶РґР»РёРІРѕРј_РєРёР±РµСЂРїР°РЅРє_РіРѕСЂРѕРґРµ.png",
+      "examples/neon_city/РЅРµРѕРЅРѕРІР°СЏ_РїР°РіРѕРґР°_РІ_РґРѕР¶РґР»РёРІРѕРј_РєРёР±РµСЂРїР°РЅРєРµ.png",
+      "examples/neon_city/РЅРµРѕРЅРѕРІР°СЏ_РїР°РіРѕРґР°_РїРѕРґ_РґРѕР¶РґС‘Рј.png",
+      "examples/neon_city/РЅРµРѕРЅРѕРІС‹Р№_РєРёР±РµСЂРїР°РЅРє_СЂС‹РЅРѕРє_РїРѕРґ_РґРѕР¶РґС‘Рј.png",
+      "examples/neon_city/РЅРµРѕРЅРѕРІС‹Р№_РґРѕР¶РґСЊ_РЅР°Рґ_РєРёР±РµСЂРїР°РЅРє_РїР°РіРѕРґРѕР№.png",
+      "examples/neon_city/РґРѕР¶РґР»РёРІС‹Р№_РЅРµРѕРЅРѕРІС‹Р№_РєРІР°СЂС‚Р°Р»_РїР°РіРѕРґ.png",
+      "examples/neon_city/РґРѕР¶РґР»РёРІС‹Р№_РЅРµРѕРЅРѕРІС‹Р№_РіРѕСЂРѕРґ_РїР°РіРѕРґ.png",
+      "examples/neon_city/РґРѕР¶РґР»РёРІС‹Р№_РЅРµРѕРЅРѕРІС‹Р№_РіРѕСЂРѕРґ_РїР°РіРѕРґ_Рё_С„РѕРЅР°СЂРµР№.png",
+      "output/demo_build/collision_proxy.glb",
+      "output/demo_build/collision_proxy.obj",
+      "payload/shared/pwa-icon-180.png",
+      "payload/shared/pwa-icon-192.png",
+      "payload/shared/pwa-icon-512.png",
+      "public/assets/pixel/world-atlas-v1.png",
+      "shared/pwa-icon-180.png",
+      "shared/pwa-icon-192.png",
+      "shared/pwa-icon-512.png",
+      "test/fixtures/city_street.png",
+      "test/fixtures/cube_object.png",
+      "test/fixtures/house.png",
+      "test/fixtures/terrain.png",
+      "test/fixtures/voxel_building.png",
+      "visual-candidates/desktop-chromium/ai3d-voxel-city.png",
+      "visual-candidates/desktop-chromium/catalog.png",
+      "visual-candidates/desktop-chromium/voxel-world.png"
+    ],
+    "version": [
+      "apps/ai3d-reference-test/assets/model.glb",
+      "apps/ai3d-reference-test/assets/previous_html_baseline.png",
+      "apps/ai3d-reference-test/assets/reference.png",
+      "apps/ai3d-reference-test/assets/renders/front_clay.png",
+      "apps/ai3d-reference-test/assets/renders/front_textured.png",
+      "apps/ai3d-reference-test/assets/renders/left15_clay.png",
+      "apps/ai3d-reference-test/assets/renders/left15_textured.png",
+      "apps/ai3d-reference-test/assets/renders/left30_clay.png",
+      "apps/ai3d-reference-test/assets/renders/left30_textured.png",
+      "apps/ai3d-reference-test/assets/renders/right15_clay.png",
+      "apps/ai3d-reference-test/assets/renders/right15_textured.png",
+      "apps/ai3d-reference-test/assets/renders/right30_clay.png",
+      "apps/ai3d-reference-test/assets/renders/right30_textured.png",
+      "apps/ai3d-reference-test/assets/renders/top_oblique_clay.png",
+      "apps/ai3d-reference-test/assets/renders/top_oblique_textured.png",
+      "apps/catalog/ico.png",
+      "apps/chat/ico.png",
+      "apps/survival/ico.png",
+      "assets/pixel/world-atlas-v1.png",
+      "e2e/perceptual-visual.spec.js-snapshots/cube-object-desktop-chromium-win32.png",
+      "e2e/perceptual-visual.spec.js-snapshots/cube-object-mobile-chromium-win32.png",
+      "e2e/perceptual-visual.spec.js-snapshots/cube-object-mobile-webkit-win32.png",
+      "e2e/perceptual-visual.spec.js-snapshots/cube-object-tablet-chromium-win32.png",
+      "examples/neon_city/РЅРµРѕРЅРѕРІР°СЏ_РїР°РіРѕРґР°_РІ_РґРѕР¶РґР»РёРІРѕРј_РєРёР±РµСЂРїР°РЅРє_РіРѕСЂРѕРґРµ.png",
+      "examples/neon_city/РЅРµРѕРЅРѕРІР°СЏ_РїР°РіРѕРґР°_РІ_РґРѕР¶РґР»РёРІРѕРј_РєРёР±РµСЂРїР°РЅРєРµ.png",
+      "examples/neon_city/РЅРµРѕРЅРѕРІР°СЏ_РїР°РіРѕРґР°_РїРѕРґ_РґРѕР¶РґС‘Рј.png",
+      "examples/neon_city/РЅРµРѕРЅРѕРІС‹Р№_РєРёР±РµСЂРїР°РЅРє_СЂС‹РЅРѕРє_РїРѕРґ_РґРѕР¶РґС‘Рј.png",
+      "examples/neon_city/РЅРµРѕРЅРѕРІС‹Р№_РґРѕР¶РґСЊ_РЅР°Рґ_РєРёР±РµСЂРїР°РЅРє_РїР°РіРѕРґРѕР№.png",
+      "examples/neon_city/РґРѕР¶РґР»РёРІС‹Р№_РЅРµРѕРЅРѕРІС‹Р№_РєРІР°СЂС‚Р°Р»_РїР°РіРѕРґ.png",
+      "examples/neon_city/РґРѕР¶РґР»РёРІС‹Р№_РЅРµРѕРЅРѕРІС‹Р№_РіРѕСЂРѕРґ_РїР°РіРѕРґ.png",
+      "examples/neon_city/РґРѕР¶РґР»РёРІС‹Р№_РЅРµРѕРЅРѕРІС‹Р№_РіРѕСЂРѕРґ_РїР°РіРѕРґ_Рё_С„РѕРЅР°СЂРµР№.png",
+      "output/demo_build/collision_proxy.glb",
+      "output/demo_build/collision_proxy.obj",
+      "payload/shared/pwa-icon-180.png",
+      "payload/shared/pwa-icon-192.png",
+      "payload/shared/pwa-icon-512.png",
+      "public/assets/pixel/world-atlas-v1.png",
+      "shared/pwa-icon-180.png",
+      "shared/pwa-icon-192.png",
+      "shared/pwa-icon-512.png",
+      "test/fixtures/city_street.png",
+      "test/fixtures/cube_object.png",
+      "test/fixtures/house.png",
+      "test/fixtures/terrain.png",
+      "test/fixtures/voxel_building.png",
+      "visual-candidates/desktop-chromium/ai3d-voxel-city.png",
+      "visual-candidates/desktop-chromium/catalog.png",
+      "visual-candidates/desktop-chromium/voxel-world.png"
+    ],
+    "quality": [
+      "apps/ai3d-reference-test/assets/model.glb",
+      "apps/ai3d-reference-test/assets/previous_html_baseline.png",
+      "apps/ai3d-reference-test/assets/reference.png",
+      "apps/ai3d-reference-test/assets/renders/front_clay.png",
+      "apps/ai3d-reference-test/assets/renders/front_textured.png",
+      "apps/ai3d-reference-test/assets/renders/left15_clay.png",
+      "apps/ai3d-reference-test/assets/renders/left15_textured.png",
+      "apps/ai3d-reference-test/assets/renders/left30_clay.png",
+      "apps/ai3d-reference-test/assets/renders/left30_textured.png",
+      "apps/ai3d-reference-test/assets/renders/right15_clay.png",
+      "apps/ai3d-reference-test/assets/renders/right15_textured.png",
+      "apps/ai3d-reference-test/assets/renders/right30_clay.png",
+      "apps/ai3d-reference-test/assets/renders/right30_textured.png",
+      "apps/ai3d-reference-test/assets/renders/top_oblique_clay.png",
+      "apps/ai3d-reference-test/assets/renders/top_oblique_textured.png",
+      "apps/catalog/ico.png",
+      "apps/chat/ico.png",
+      "apps/survival/ico.png",
+      "assets/pixel/world-atlas-v1.png",
+      "e2e/perceptual-visual.spec.js-snapshots/cube-object-desktop-chromium-win32.png",
+      "e2e/perceptual-visual.spec.js-snapshots/cube-object-mobile-chromium-win32.png",
+      "e2e/perceptual-visual.spec.js-snapshots/cube-object-mobile-webkit-win32.png",
+      "e2e/perceptual-visual.spec.js-snapshots/cube-object-tablet-chromium-win32.png",
+      "examples/neon_city/РЅРµРѕРЅРѕРІР°СЏ_РїР°РіРѕРґР°_РІ_РґРѕР¶РґР»РёРІРѕРј_РєРёР±РµСЂРїР°РЅРє_РіРѕСЂРѕРґРµ.png",
+      "examples/neon_city/РЅРµРѕРЅРѕРІР°СЏ_РїР°РіРѕРґР°_РІ_РґРѕР¶РґР»РёРІРѕРј_РєРёР±РµСЂРїР°РЅРєРµ.png",
+      "examples/neon_city/РЅРµРѕРЅРѕРІР°СЏ_РїР°РіРѕРґР°_РїРѕРґ_РґРѕР¶РґС‘Рј.png",
+      "examples/neon_city/РЅРµРѕРЅРѕРІС‹Р№_РєРёР±РµСЂРїР°РЅРє_СЂС‹РЅРѕРє_РїРѕРґ_РґРѕР¶РґС‘Рј.png",
+      "examples/neon_city/РЅРµРѕРЅРѕРІС‹Р№_РґРѕР¶РґСЊ_РЅР°Рґ_РєРёР±РµСЂРїР°РЅРє_РїР°РіРѕРґРѕР№.png",
+      "examples/neon_city/РґРѕР¶РґР»РёРІС‹Р№_РЅРµРѕРЅРѕРІС‹Р№_РєРІР°СЂС‚Р°Р»_РїР°РіРѕРґ.png",
+      "examples/neon_city/РґРѕР¶РґР»РёРІС‹Р№_РЅРµРѕРЅРѕРІС‹Р№_РіРѕСЂРѕРґ_РїР°РіРѕРґ.png",
+      "examples/neon_city/РґРѕР¶РґР»РёРІС‹Р№_РЅРµРѕРЅРѕРІС‹Р№_РіРѕСЂРѕРґ_РїР°РіРѕРґ_Рё_С„РѕРЅР°СЂРµР№.png",
+      "output/demo_build/collision_proxy.glb",
+      "output/demo_build/collision_proxy.obj",
+      "payload/shared/pwa-icon-180.png",
+      "payload/shared/pwa-icon-192.png",
+      "payload/shared/pwa-icon-512.png",
+      "public/assets/pixel/world-atlas-v1.png",
+      "shared/pwa-icon-180.png",
+      "shared/pwa-icon-192.png",
+      "shared/pwa-icon-512.png",
+      "test/fixtures/city_street.png",
+      "test/fixtures/cube_object.png",
+      "test/fixtures/house.png",
+      "test/fixtures/terrain.png",
+      "test/fixtures/voxel_building.png",
+      "visual-candidates/desktop-chromium/ai3d-voxel-city.png",
+      "visual-candidates/desktop-chromium/catalog.png",
+      "visual-candidates/desktop-chromium/voxel-world.png"
+    ]
+  }
+}

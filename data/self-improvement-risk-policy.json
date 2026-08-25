@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "SELF_IMPROVEMENT_RISK_GATE",
+  "autoMerge": {
+    "enabled": true,
+    "maxFiles": 8,
+    "maxChangedLines": 450,
+    "allowedPrefixes": [
+      "apps/",
+      "shared/",
+      "test/",
+      "e2e/",
+      "data/"
+    ],
+    "forbiddenPrefixes": [
+      "api/",
+      "lib/",
+      "supabase/",
+      ".github/",
+      "services/"
+    ],
+    "forbiddenExact": [
+      "package-lock.json",
+      "package.json",
+      "vercel.json",
+      "AGENTS.md",
+      "data/quality-baseline.json"
+    ],
+    "candidatePrefixes": [
+      "apps/",
+      "shared/",
+      "scripts/",
+      "test/",
+      "e2e/",
+      "data/",
+      "api/"
+    ]
+  },
+  "policy": "Only low-risk candidates that already passed sandbox/release/deployed-preview/post-deploy gates may auto-merge. Everything else remains a verified PR for review."
+}

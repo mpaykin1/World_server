@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "7.5.0",
+  "minimumCertifiedHours": 8,
+  "recommendedHours": 24,
+  "checkpointEverySeconds": 60,
+  "maxConsecutiveFailures": 3,
+  "faults": [
+    "child-crash",
+    "checkpoint-corruption",
+    "disk-pressure-simulated",
+    "network-partition-simulated",
+    "stale-lease"
+  ],
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation.",
+  "faultEverySeconds": 30
+}

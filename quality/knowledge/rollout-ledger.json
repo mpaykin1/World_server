@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 2,
+  "rollouts": [
+    {
+      "at": "2026-08-23T04:18:36.703709+00:00",
+      "pack": "WORLD_FACTORY_QUALITY_CORE_V6",
+      "mode": "promote",
+      "status": "committed",
+      "consumers": [],
+      "canary": [],
+      "packHash": "e4c672fe66c30604be44fab48d955bb21c64f43a454cffee359658c83b8b56aa",
+      "runtimeHash": "3a463010b8d0d243156af2818de18e64fb261b479813d50b8dc5636961765478"
+    },
+    {
+      "at": "2026-08-23T04:22:21.088621+00:00",
+      "pack": "WORLD_FACTORY_QUALITY_CORE_V6",
+      "mode": "promote",
+      "status": "committed",
+      "consumers": [],
+      "canary": [],
+      "packHash": "e4c672fe66c30604be44fab48d955bb21c64f43a454cffee359658c83b8b56aa",
+      "runtimeHash": "3a463010b8d0d243156af2818de18e64fb261b479813d50b8dc5636961765478"
+    },
+    {
+      "at": "2026-08-23T04:45:46.469162+00:00",
+      "pack": "WORLD_FACTORY_QUALITY_CORE_V6",
+      "mode": "promote",
+      "status": "committed",
+      "consumers": [],
+      "canary": [],
+      "packHash": "325388e39c285fd2646712c5665e07812c55d6cc783348808830d7b1e00cce1e",
+      "runtimeHash": "c5beb5e679ea9ae5a595e57e81ade034d612a96f83c9519f16cba8cba0418ab5"
+    },
+    {
+      "at": "2026-08-23T15:41:56.279397+00:00",
+      "pack": "WORLD_FACTORY_QUALITY_CORE_V10",
+      "mode": "promote",
+      "status": "committed",
+      "consumers": [],
+      "canary": [],
+      "packHash": "694c3c0002b93297be00916fd6267f916c94a40aec1a8778318d471585785c3c",
+      "runtimeHash": "50fa13c535ee50ee575ff849c0c0545cdeed23382d7828bc7088be0c68be8770"
+    },
+    {
+      "at": "2026-08-24T05:14:38.594826+00:00",
+      "pack": "WORLD_FACTORY_QUALITY_CORE_V10",
+      "mode": "promote",
+      "status": "committed",
+      "consumers": [],
+      "canary": [],
+      "packHash": "b325a2710e971f861ddcad14780ac92456ed763f46001371ec58ec96bb80febe",
+      "runtimeHash": "50669f49fd8de06462b5088aa1ad689b042901bc1229baf5ed94cedaa3b1f93f"
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+video:
+  sample_fps: 6.0
+  max_frames: 280
+  resize_max: 960
+
+person:
+  prefer_mediapipe: true
+  mask_dilate_px: 10
+  temporal_alpha: 0.70
+  external_segmentation_command: ""
+
+scene:
+  autopilot: true
+  backend: cpu_sfm
+  presets:
+    - {max_features: 2400, ratio_test: 0.74, min_matches: 50}
+    - {max_features: 3600, ratio_test: 0.72, min_matches: 60}
+    - {max_features: 4800, ratio_test: 0.70, min_matches: 72}
+  max_scene_points: 280000
+  world_extent_m: 34.0
+  external_gpu_command: ""
+
+depth:
+  enabled: true
+  mode: cpu_sparse_fusion
+  external_depth_command: ""
+  fill_radius_voxels: 2
+  max_generated_points: 70000
+
+voxel:
+  voxel_size_candidates: [0.16, 0.20, 0.24, 0.30]
+  max_voxels: 100000
+  color_mode: palette16
+  chunk_size: 16
+  lod_size_far: 0.48
+  floor_band_percentile: 10
+  max_vertical_fill_gap: 3
+  enable_hidden_voxel_cull: true
+  enable_floor_hole_fill: true
+  floor_fill_neighbors_min: 3
+  enable_interior_completion: true
+  interior_fill_max_gap: 2
+  enable_procedural_cleanup: true
+  stream_radius_chunks: 5
+  max_visible_chunks: 150
+
+avatar:
+  pixel_stride: 4
+  max_points_per_bone: 20000
+  depth_layers: 3
+  voxel_size: 0.07
+  root_motion_gain: 2.2
+  temporal_angle_alpha: 0.60
+  external_smplx_command: ""
+  enable_motion_retarget: true
+  enable_animation_synthesis: true
+  lod_distances: [8.0, 18.0, 32.0]
+
+game:
+  walk_speed: 3.4
+  run_speed: 5.8
+  jump_speed: 6.0
+  gravity: 16.0
+  player_height: 1.75
+  foot_ik: true
+  ground_lock: true
+
+performance:
+  target_runtime_fps: 60
+  mobile_target_fps: 30
+  max_scene_voxels_desktop: 100000
+  max_scene_voxels_mobile: 50000
+  max_avatar_voxels: 28000
+  chunk_budget_desktop: 180
+  chunk_budget_mobile: 100
+  enable_auto_tune: true
+  enable_frustum_culling: true
+  enable_runtime_profiler: true
+
+validation:
+  require_manifest: true
+  require_scene_manifest: true
+  require_avatar_meta: true
+  require_collision: true
+  require_navgrid: true
+  require_pipeline_report: true
+  require_quality_gate: true
+
+regression:
+  enabled: true
+  require_green_gate: true
+  min_desktop_readiness: 75
+  min_mobile_readiness: 65

@@ -1,0 +1,30 @@
+{
+  "algorithm": "sha256",
+  "version": 1,
+  "files": {
+    ".github/workflows/apng-autofix.yml": "19344e5262acb0bf0d81708dee9f74fcc9f668febd177fd6df63ba4d85ed13b6",
+    "APNG_PATCH_MANIFEST.json": "422eaedb9f2ff28111440814aeb5002109f3b29b87e1fe62d455471aa907eec5",
+    "APNG_QUALITY_REPORT.json": "7fb3b21949ebb7058cdd226bb1866c6417be6e753b9caf5dee78c79675ae1293",
+    "APNG_V3_LOCAL_VERIFICATION.json": "b6750931f83e16a53a68ebc9f8f581cf9d4a202163228704d59f59367629db01",
+    "APPLY_APNG_SYSTEM.ps1": "a6d299bab2034900112cb107447ed8671a879724e1dfac45581f0d942398f38d",
+    "DESKTOP_AI_READ_THIS_FIRST.txt": "a8d0095f2917f31e07c01e39bc0cd0989210cd7865bd13834b49c676b97ca528",
+    "INSTALL_APNG_SYSTEM.bat": "bb7ad0fa8fe47ea32414c2737f90c75786e9381618f14bde16d1097fcc85dcc1",
+    "api/apng.js": "63da014947ef60c5fdea27b8b4f1022ceae942e378d7bfe884ef1db9b673b711",
+    "apng-quality.config.json": "5745cc94dcee0166d8481776e52bcd054732398e301e06d580c186b91c6a4888",
+    "apps/apng-lab/client.js": "4f2620325df164f34edaa829e74dbeee7c7f38afa873c53de23052261a767cab",
+    "apps/apng-lab/index.html": "42f01479c50469dabf88d0732ea0e9fe58835335e5ee006e82ad06c11bb0e50d",
+    "apps/apng-lab/styles.css": "5f88f37b34d540fc86871071381a426ab1c70e07838c303310e65687bca358ba",
+    "docs/APNG_SYSTEM.md": "03397559f2b6b61afb1481e2e37a068c735576233c1a976500c0ad4f81b4189e",
+    "docs/DESKTOP_AI_APNG_INSTALL_AND_VERIFY.md": "e9a5d436f0d0e9380adf955f1234139d61554f49de516d780d99903e35c0cff7",
+    "e2e/apng-browser-compat.spec.js": "0a7f0d8516ee6140ebe5c64dec915d99011ff647367cd4fb6565d70738fccc06",
+    "lib/apng-engine.js": "7772fd50ec45aec30d4519a29e6a798f44c0717035062f20d768e9672929dbb1",
+    "playwright.apng.config.js": "44e2e19a146f11f27a190148175ec06598485b2b60086b25b24a9f8e358f09fb",
+    "scripts/apng-quality-gate.js": "de7915ebde67a7cf4b3cb28bc6d3e024ac4e6d235e460a50491601ca067a81cf",
+    "scripts/integrate-apng-system.js": "b1eea625f7f4ad14b8b1e04bc7900e2c5b61345a7f533f04299f84dc91fd0527",
+    "scripts/verify-apng-bundle.js": "a2d794acedc87f080268b3162376f8c0dde8295fefe90573b1b9162017e7d718",
+    "test/apng-api.test.js": "8a68e0b6b4d9d62e029ab2aae40811bf2c1c9e95f6006358ed0733de76268ac8",
+    "test/apng-engine.test.js": "fd41efa42fcd203297b27b77f8d03490123e9e802dae4d88210b4398986d6922",
+    "test/apng-gate.test.js": "177e3c717ed7bf0316ba63d3027d26bf0856f8212054b5c296d352831a4e47d0",
+    "test/apng-integration.test.js": "400ee40ae0f08897d8dfa7be361b9209c7899027caa22997cb09bb8a3331f560"
+  }
+}

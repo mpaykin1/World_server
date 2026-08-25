@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "CPU_DERIVED_ASSET_TRANSCODE",
+  "sourceRoots": ["apps", "shared", "assets"],
+  "textureMinBytes": 262144,
+  "modelMinBytes": 524288,
+  "maxSourceBytes": 134217728,
+  "textureExtensions": [".png", ".jpg", ".jpeg"],
+  "modelExtensions": [".glb", ".gltf"],
+  "skipNamePatterns": ["pwa-icon", "favicon", "sprite", "hud", "ui-", "icon-"],
+  "derivedSuffix": ".optimized",
+  "preserveSources": true,
+  "texture": {
+    "uastcNamePatterns": ["normal", "rough", "metal", "occlusion", "mask"],
+    "generateMipmaps": true,
+    "qualityMode": "maximum-safe"
+  },
+  "model": {
+    "meshoptLevel": "medium",
+    "uastcLevel": 4,
+    "etc1sQuality": 255
+  },
+  "rule": "Never delete or overwrite source assets. Derived assets must be accepted only when decode/load verification passes; visual or semantic regressions block rollout."
+}

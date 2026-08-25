@@ -1,0 +1,190 @@
+name: Quiet PWA Self-Improve
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '47 */6 * * *'
+
+concurrency:
+  group: quiet-pwa-self-improve
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+env:
+  QUALITY_BASE_URL: https://world-server.vercel.app
+
+jobs:
+  improve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    env:
+      QUALITY_PATCH_MODEL_URL: ${{ secrets.QUALITY_PATCH_MODEL_URL }}
+      QUALITY_PATCH_MODEL_TOKEN: ${{ secrets.QUALITY_PATCH_MODEL_TOKEN }}
+      QUALITY_VISUAL_CRITIC_URL: ${{ secrets.QUALITY_VISUAL_CRITIC_URL }}
+      QUALITY_VISUAL_CRITIC_TOKEN: ${{ secrets.QUALITY_VISUAL_CRITIC_TOKEN }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Learn from production and prepare safe candidate
+        run: node scripts/quiet-self-improve.js
+
+      - name: Converge until all reproducible gates are clean
+        run: npm run quality:converge:full
+
+      - name: Upload convergence evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-convergence-${{ github.run_id }}
+          path: |
+            QUALITY_CONVERGENCE_REPORT.json
+            PWA_RUNTIME_ADAPTER_REPORT.json
+            PWA_RUNTIME_INTEGRATION_REPORT.json
+            ASSET_QUALITY_REPORT.json
+            ANIMATION_QUALITY_SYSTEM_REPORT.json
+            CPU_ASSET_TRANSCODE_REPORT.json
+            REAL_IOS_QUALITY_REPORT.json
+            PWA_RUNTIME_DISCOVERY.json
+          if-no-files-found: ignore
+
+      - name: Track unresolved convergence blocker
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          TITLE="Quiet self-improvement unresolved errors"
+          EXISTING="$(gh issue list --state open --search "$TITLE in:title" --json number --jq '.[0].number // empty')"
+          BODY="Run ${GITHUB_RUN_ID} did not converge to CLEAN. BLOCKED_UNRESOLVED is not completion. Inspect QUALITY_CONVERGENCE_REPORT artifact, fix root causes, add regression tests, and rerun until all gates pass."
+          if [ -n "$EXISTING" ]; then gh issue comment "$EXISTING" --body "$BODY"; else gh issue create --title "$TITLE" --body "$BODY"; fi
+
+      - name: Full regression and quality gate
+        run: npm run release:gate
+
+      - name: Recalculate risk after full release gate
+        run: node scripts/self-improvement-risk.js
+
+      - name: Detect meaningful source changes
+        id: diff
+        shell: bash
+        run: |
+          PATHS=(apps shared scripts test e2e data api supabase/migrations)
+          if git diff --quiet -- "${PATHS[@]}"; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Read autonomous risk classification
+        if: steps.diff.outputs.changed == 'true'
+        id: risk
+        shell: bash
+        run: |
+          node -e "const r=require('./SELF_IMPROVEMENT_RISK.json'); console.log('risk='+r.risk); console.log('auto='+r.autoMergeEligible)" | tee /tmp/risk.txt
+          echo "risk=$(sed -n 's/^risk=//p' /tmp/risk.txt)" >> "$GITHUB_OUTPUT"
+          echo "auto=$(sed -n 's/^auto=//p' /tmp/risk.txt)" >> "$GITHUB_OUTPUT"
+
+      - name: Commit candidate branch
+        if: steps.diff.outputs.changed == 'true'
+        id: branch
+        shell: bash
+        run: |
+          BRANCH="ai/quiet-self-improve/${GITHUB_RUN_ID}"
+          git config user.name "world-server-quality-bot"
+          git config user.email "quality-bot@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add apps shared scripts test e2e data api supabase/migrations
+          git commit -m "fix(quality): quiet self-improvement candidate [quiet-self-improve]"
+          git push origin "$BRANCH"
+          echo "name=$BRANCH" >> "$GITHUB_OUTPUT"
+
+      - name: Restore exact committed candidate
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git reset --hard HEAD
+          git clean -fd
+
+      - name: Require pinned Vercel preview configuration
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          test -n "$VERCEL_TOKEN"
+          test -n "$VERCEL_ORG_ID"
+          test -n "$VERCEL_PROJECT_ID"
+          test -n "${{ vars.VERCEL_CLI_VERSION }}"
+
+      - name: Install pinned Vercel CLI
+        if: steps.diff.outputs.changed == 'true'
+        run: npm install -g "vercel@${{ vars.VERCEL_CLI_VERSION }}"
+
+      - name: Build exact candidate
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          vercel pull --yes --environment=preview --token="$VERCEL_TOKEN"
+          vercel build --token="$VERCEL_TOKEN"
+
+      - name: Deploy immutable preview
+        if: steps.diff.outputs.changed == 'true'
+        id: deploy
+        shell: bash
+        run: |
+          URL="$(vercel deploy --prebuilt --token="$VERCEL_TOKEN")"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+
+      - name: Browser verification on deployed preview
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          npx playwright install --with-deps chromium webkit
+          npx playwright test
+
+      - name: Post-deploy quality smoke
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          QUALITY_BASE_URL: ${{ steps.deploy.outputs.url }}
+        run: node scripts/post-deploy-smoke.js
+
+      - name: Create verified PR
+        if: steps.diff.outputs.changed == 'true'
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          PR_URL="$(gh pr create \
+            --base master \
+            --head "${{ steps.branch.outputs.name }}" \
+            --title "fix(quality): verified quiet self-improvement [quiet-self-improve]" \
+            --body "Generated from production telemetry. Risk=${{ steps.risk.outputs.risk }}. Candidate passed release:gate, sandbox verification when AI was used, deployed-preview Chromium/WebKit tests, and post-deploy smoke. Low-risk candidates may auto-merge under the quiet self-improvement policy.")"
+          echo "url=$PR_URL" >> "$GITHUB_OUTPUT"
+
+      - name: Auto-merge verified low-risk candidate
+        if: steps.diff.outputs.changed == 'true' && steps.risk.outputs.auto == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr merge "${{ steps.pr.outputs.url }}" --squash --delete-branch
+
+      - name: Keep medium/high-risk candidate for review
+        if: steps.diff.outputs.changed == 'true' && steps.risk.outputs.auto != 'true'
+        run: echo "Verified PR kept for review because risk=${{ steps.risk.outputs.risk }}."
+
+      - name: No safe improvement found
+        if: steps.diff.outputs.changed != 'true'
+        run: echo "No source change passed the autonomous improvement policy in this cycle."

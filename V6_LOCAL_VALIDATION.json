@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0.0",
+  "validatedAt": "2026-08-24T07:58:00Z",
+  "patch": "SYSTEM_INTEGRATION_LAYER_V6",
+  "status": "PASS",
+  "upgradePath": "V5->V6",
+  "compatibilityGate": {
+    "pass": true,
+    "checksPassed": 85,
+    "checksTotal": 85
+  },
+  "controlPlane": {
+    "pass": true,
+    "stepsPassed": 41,
+    "stepsTotal": 41
+  },
+  "selfTests": {
+    "pass": true,
+    "checksPassed": 55,
+    "checksTotal": 55
+  },
+  "releaseGate": {
+    "pass": true
+  },
+  "securityNegativeTests": {
+    "cosign_3_1_2_rejected": true,
+    "cosign_3_1_3_accepted": true,
+    "downgrade_v6_to_v5_rejected": true,
+    "same_version_drift_rejected": true
+  },
+  "readinessOnValidationHost": {
+    "structuralReadinessPercent": 100,
+    "evidenceConfidencePercent": 100,
+    "overallOperationalReadinessPercent": 92,
+    "nativeExtensionCoveragePercent": 17
+  },
+  "externalRuntimeBlockersOnValidationHost": [
+    "native-cosign-unavailable",
+    "remote-cas-peer-unavailable",
+    "physical-device-worker-unavailable",
+    "wasmtime-component-runtime-unavailable",
+    "native-tlc-unavailable"
+  ],
+  "toolchainApplyNote": "Network-dependent local bootstrap was attempted on the validation host but exceeded the execution window; offline fallbacks remained active. This is not counted as native runtime evidence.",
+  "truthRule": "100% structural/evidence readiness is not a claim of 100% native/network/physical-device runtime coverage."
+}

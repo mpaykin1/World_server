@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1.0.0",
+  "algorithm": "sha256",
+  "excludePatterns": [
+    ".world-server-state/**",
+    "*_REPORT.json",
+    "*_STATUS.json",
+    "node_modules/**",
+    ".git/**"
+  ],
+  "normalizeLineEndings": true,
+  "sortPaths": true,
+  "requireStableDoubleHash": true
+}

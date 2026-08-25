@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "7.2.0",
+  "embeddedExhaustiveModelChecker": true,
+  "tlaPlusSpecs": [
+    "specs/DurableJobQueue.tla",
+    "specs/ControlPlane.tla"
+  ],
+  "nativeTlcOptional": true,
+  "tlaToolsJarEnv": "TLA2TOOLS_JAR",
+  "requiredInvariants": [
+    "no-double-lease",
+    "terminal-job-has-no-owner",
+    "attempts-bounded",
+    "dependency-order",
+    "no-promotion-with-failure"
+  ],
+  "mutantMustBeRejected": true
+}
