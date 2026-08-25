@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "1.0.0",
+  "package": "WORLD_SERVER_GOLDEN_STANDARD_V13_SELF_CALIBRATING_CPU_QUALITY",
+  "status": "LOCAL_PACKAGE_VALIDATION_PASS",
+  "liveDeploymentClaimed": false,
+  "checks": {
+    "jsCjsSyntax": {
+      "pass": true,
+      "files": 130
+    },
+    "pythonSyntax": {
+      "pass": true,
+      "files": 10
+    },
+    "nodeTests": {
+      "pass": true,
+      "testFiles": 21,
+      "assertions": 62,
+      "mode": "--test-concurrency=1"
+    },
+    "cpuOnly": {
+      "pass": true,
+      "gpuTasks": 0,
+      "paidComputeTasks": 0
+    },
+    "nightPlan": {
+      "pass": true,
+      "tasks": 9
+    },
+    "selfCalibrationSynthetic30Nights": {
+      "pass": true,
+      "status": "CALIBRATED_30_NIGHTS",
+      "confidence": 1.0
+    },
+    "geneticOptimizer": {
+      "pass": true,
+      "score": 59.68,
+      "evidenceMode": "analytic-proxy"
+    },
+    "strictDesktopAIClosure": {
+      "pass": true,
+      "note": "clean evidence accepted; blocking behavior tested"
+    },
+    "evidenceModelPercent": 96.7,
+    "scorecardPercent": 99.0
+  },
+  "important": "Synthetic 30-night history validates calibration logic only; real calibration remains pending until 30 real overnight runs exist.",
+  "liveConnectivityCheck": {
+    "checkedAt": "2026-08-24T09:34:00+04:00",
+    "githubWrite": {
+      "pass": false,
+      "evidence": "create_branch on mpaykin1/World_server returned 403 Resource not accessible by integration"
+    },
+    "vercelProjectVisibility": {
+      "pass": false,
+      "team": "IMPROVE WORLD",
+      "visibleProjects": 0
+    },
+    "effect": "V13 package is prepared/tested but not installed into live master/production."
+  }
+}

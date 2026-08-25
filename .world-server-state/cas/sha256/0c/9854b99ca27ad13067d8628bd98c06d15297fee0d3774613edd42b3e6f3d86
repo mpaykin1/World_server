@@ -1,0 +1,3 @@
+'use strict';
+async function probeAdapter(name,{healthUrl,smokeUrl,timeoutMs=8000}={}){if(!healthUrl||!smokeUrl)return {name,ok:false,status:'HOLD',reason:'endpoint-not-configured'};const ac=new AbortController();const t=setTimeout(()=>ac.abort(),timeoutMs);try{const h=await fetch(healthUrl,{signal:ac.signal});if(!h.ok)return {name,ok:false,status:'HOLD',reason:`health-${h.status}`};const s=await fetch(smokeUrl,{signal:ac.signal});if(!s.ok)return {name,ok:false,status:'HOLD',reason:`smoke-${s.status}`};return {name,ok:true,status:'PASS',verifiedRuntime:true};}catch(e){return {name,ok:false,status:'HOLD',reason:e.name==='AbortError'?'timeout':'network-error'};}finally{clearTimeout(t);}}
+module.exports={probeAdapter};

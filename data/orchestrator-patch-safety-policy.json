@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "7.2.0",
+  "flow": ["Working", "Candidate", "Stable"],
+  "verifyBeforeStaging": ["manifest", "project_id", "base_sha256", "payload_sha256"],
+  "stagingRequired": true,
+  "selectiveRegressionBeforeFull": true,
+  "fullRegressionRequired": true,
+  "backupBeforeCommit": true,
+  "postCommitShaComparison": true,
+  "failureBehavior": "reject-and-preserve-stable",
+  "neverApplyUnknownPath": true
+}

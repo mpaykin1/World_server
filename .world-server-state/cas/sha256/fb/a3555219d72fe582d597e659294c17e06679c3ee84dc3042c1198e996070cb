@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "7.2.0",
+  "engine": "typescript-compiler-api",
+  "typescriptVersion": "6.0.3",
+  "failClosedOnParseError": true,
+  "fallback": "semantic-lexical-v5",
+  "fallbackMayNotClaimNative": true,
+  "extensions": [
+    ".js",
+    ".cjs",
+    ".mjs",
+    ".jsx",
+    ".ts",
+    ".tsx"
+  ],
+  "maxFileBytes": 4194304,
+  "emitCallGraph": true,
+  "emitImportGraph": true,
+  "emitAssignmentDataflow": true
+}

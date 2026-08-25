@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "4.0.0",
+  "system": "WORLD_ANIMATION_SEMANTIC_VALIDATOR",
+  "generatedAt": "2026-08-24T06:55:24.931Z",
+  "configuredRules": [
+    "feetFaceMovementDirection",
+    "attackDirectionFollowsFeet",
+    "shieldStaysFrontVerticalAndCoversTorso",
+    "handgunStaysInHand",
+    "rifleAndMachineGunUseTwoHands",
+    "footSlideWithinTolerance",
+    "animationJitterWithinTolerance"
+  ],
+  "semanticRepairRuntimeInstalled": true,
+  "runtimeEvidence": true,
+  "samples": 2,
+  "violations": [],
+  "pass": true,
+  "note": "Runtime rig evidence evaluated."
+}

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-25T01:14:46.901Z",
+  "pass": true,
+  "witPath": "wit/world-server-adapter.wit",
+  "world": "worldserver:adapter/world-server-adapter",
+  "embeddedContractValidation": true,
+  "nativeWasmtimeAvailable": false,
+  "nativeWasmtimeVersion": null,
+  "componentModelContract": true,
+  "failClosed": true,
+  "untrustedExecutionAllowed": false,
+  "errors": [],
+  "note": "Typed WIT contract is valid; Wasmtime is absent, so untrusted component execution remains denied by policy."
+}

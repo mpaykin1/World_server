@@ -1,0 +1,7 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "AUTOFIX_LEARNING",
+  "candidates": [],
+  "promoted": [],
+  "policy": "Confirmed fixes are always protected against recurrence. A reusable AutoFix recipe is only promoted when the transformation is deterministic, small and independently tested."
+}

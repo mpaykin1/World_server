@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "WORLD_SERVER_NO_REGRESSION_POLICY",
+  "mode": "fail-closed",
+  "rule": "No quality metric, technology integration, protected fix, Golden component, certified app contract or critical test may regress.",
+  "criticalMetrics": [
+    "controls",
+    "graphics",
+    "deviceAccessibility",
+    "menu",
+    "collisions",
+    "codeQuality",
+    "codeReviewer",
+    "reports",
+    "functionConnectivity",
+    "uploadedTechnologyUse",
+    "errorRecurrenceProtection",
+    "goldenSolutionPropagation"
+  ],
+  "comparison": {
+    "metricPercent": "current >= accepted baseline",
+    "technologyUsage": "current >= accepted baseline",
+    "overall": "current >= accepted baseline",
+    "releaseBlockers": "current <= accepted baseline",
+    "protectedErrors": "accepted protected ids must remain protected",
+    "goldenComponents": "accepted canonical solution must remain, unless verified migration exists",
+    "certifiedApps": "accepted certified app must remain certified and keep all required capabilities",
+    "criticalTests": "accepted critical test files must remain present",
+    "sourceGate": "Golden Standard static/source checks must pass"
+  },
+  "improvementRules": [
+    "A percentage increase must have an evidence record.",
+    "A confirmed fix must become a protected regression rule.",
+    "A user-approved reusable success must become a Golden Component.",
+    "A Golden replacement requires an explicit verified migration record.",
+    "A new release-blocking error stops release until protected/fixed.",
+    "One metric may not be traded down to improve another."
+  ],
+  "externalEnforcementRequired": {
+    "githubBranchProtection": true,
+    "requiredStatusCheck": "quality-regression",
+    "note": "Without GitHub branch protection a human/integration can still push directly to master; CI will detect it after push but cannot prevent the Git ref from moving."
+  }
+}

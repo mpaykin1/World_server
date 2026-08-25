@@ -1,0 +1,7 @@
+#!/usr/bin/env node
+'use strict';
+const fs=require('fs'),path=require('path'),cp=require('child_process');const ROOT=process.cwd();
+function walk(d,o=[]){if(!fs.existsSync(d))return o;for(const e of fs.readdirSync(d,{withFileTypes:true})){const a=path.join(d,e.name);e.isDirectory()?walk(a,o):o.push(a)}return o}
+const files=walk(path.join(ROOT,'apps')).filter(f=>f.toLowerCase().endsWith('.glb')).slice(0,12),results=[];
+for(const f of files){const out=path.join(ROOT,'.quality-generated','meshes',path.basename(f,'.glb'));const r=cp.spawnSync(process.env.PYTHON_BIN||'python',[path.join(ROOT,'scripts/cpu_mesh_factory.py'),f,out],{cwd:ROOT,encoding:'utf8',timeout:600000});let collisionStatus=null;if(r.status===0){const c=cp.spawnSync(process.env.PYTHON_BIN||'python',[path.join(ROOT,'scripts/cpu_collision_simplifier.py'),f,path.join(ROOT,'.quality-generated','collisions',path.basename(f,'.glb'))],{cwd:ROOT,encoding:'utf8',timeout:600000});collisionStatus=c.status}results.push({file:path.relative(ROOT,f).replaceAll('\\','/'),status:r.status,collisionStatus,stdout:(r.stdout||'').slice(-3000),stderr:(r.stderr||'').slice(-3000)})}
+const report={generatedAt:new Date().toISOString(),cpuOnly:true,gpu:false,paidCost:0,files:files.length,results,pass:results.every(x=>x.status===0)};fs.writeFileSync(path.join(ROOT,'CPU_MESH_SCAN_REPORT.json'),JSON.stringify(report,null,2)+'\n');console.log(`[CPU_MESH_SCAN] files=${files.length} pass=${report.pass}`);if(!report.pass)process.exit(73);

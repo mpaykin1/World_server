@@ -1,0 +1,8 @@
+export class HierarchicalSpatialGrid {
+  constructor({baseCell=8, levels=5, nearRadius=42}={}){this.baseCell=baseCell;this.levels=levels;this.nearRadius=nearRadius;this.cells=Array.from({length:levels},()=>new Map());this.objects=new Map();}
+  _key(p,level){const s=this.baseCell*(1<<level);return `${Math.floor(p.x/s)},${Math.floor(p.y/s)},${Math.floor(p.z/s)}`;}
+  insert(id,bounds,meta={}){this.remove(id);const c={x:(bounds.min.x+bounds.max.x)/2,y:(bounds.min.y+bounds.max.y)/2,z:(bounds.min.z+bounds.max.z)/2};const rec={id,bounds,center:c,meta,keys:[]};for(let l=0;l<this.levels;l++){const k=this._key(c,l);const set=this.cells[l].get(k)||new Set();set.add(id);this.cells[l].set(k,set);rec.keys.push(k);}this.objects.set(id,rec);return rec;}
+  remove(id){const r=this.objects.get(id);if(!r)return;for(let l=0;l<r.keys.length;l++){const set=this.cells[l].get(r.keys[l]);if(set){set.delete(id);if(!set.size)this.cells[l].delete(r.keys[l]);}}this.objects.delete(id);}
+  querySphere(p,r){const out=new Set();const level=Math.max(0,Math.min(this.levels-1,Math.ceil(Math.log2(Math.max(1,r/this.baseCell)))));const s=this.baseCell*(1<<level);const n=Math.ceil(r/s);const cx=Math.floor(p.x/s),cy=Math.floor(p.y/s),cz=Math.floor(p.z/s);for(let x=-n;x<=n;x++)for(let y=-n;y<=n;y++)for(let z=-n;z<=n;z++){const set=this.cells[level].get(`${cx+x},${cy+y},${cz+z}`);if(set)for(const id of set){const o=this.objects.get(id);const dx=o.center.x-p.x,dy=o.center.y-p.y,dz=o.center.z-p.z;if(dx*dx+dy*dy+dz*dz<=r*r)out.add(id);}}return [...out];}
+  qualityContract(){return {sourceGeometryModified:false,nearObjectsNeverDropped:true,hierarchicalCullOnly:true};}
+}

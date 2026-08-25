@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "2.0.0",
+  "system": "ASSET_QUALITY_PIPELINE",
+  "roots": [
+    "apps",
+    "shared"
+  ],
+  "heavyAssetBytes": 8388608,
+  "veryHeavyAssetBytes": 33554432,
+  "textureHeavyBytes": 4194304,
+  "supported3d": [
+    ".glb",
+    ".gltf",
+    ".bin",
+    ".obj",
+    ".fbx",
+    ".ply",
+    ".spz"
+  ],
+  "textures": [
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".webp",
+    ".avif",
+    ".ktx2"
+  ],
+  "audio": [
+    ".wav",
+    ".mp3",
+    ".ogg",
+    ".m4a"
+  ],
+  "runtimeCompressedPreferred": [
+    ".ktx2",
+    ".webp",
+    ".avif"
+  ],
+  "principles": [
+    "Never simplify certified graphics just to lower file size.",
+    "Prefer compression, mesh/texture streaming, LOD, instancing, batching and deduplication before deleting detail.",
+    "Keep source-quality masters outside hot runtime paths when possible.",
+    "Any destructive asset rewrite requires visual regression evidence before acceptance.",
+    "Idle warm only small/medium per-app assets when Save-Data is off and the network is not constrained."
+  ],
+  "idleWarmMaxAssetBytes": 8388608,
+  "deliveryManifest": "data/runtime-asset-manifest.json"
+}

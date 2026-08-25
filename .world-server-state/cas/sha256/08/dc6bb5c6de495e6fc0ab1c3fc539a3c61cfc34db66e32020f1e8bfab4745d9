@@ -1,0 +1,2962 @@
+{
+  "2.0.0": {
+    ".github/workflows/system-integration-v2.yml": [
+      "8ee238511b1379f2280df56b4aeb27b08cb6468beb8fbbd17201c80f8f3cb07b"
+    ],
+    "DESKTOP_AI_SYSTEM_INTEGRATION_V2.md": [
+      "854121d9029c4bbab239c2beab4644a802dc202fde84b2c63376d81cd98e1195"
+    ],
+    "data/asset-metadata-template.json": [
+      "f27a5247fb7cfe1a3cdc0bc74370f9d433170efa4a3b8097be9d1aa2be936084"
+    ],
+    "data/system-capability-registry.json": [
+      "980d79f20f2623af5033cd4a425bb7ef15d15e5054e66b17075304e1240f1dec"
+    ],
+    "data/system-conflict-policy.json": [
+      "15ef493b099c07cde0f276acdfe3c63fa9edd3ad292d7deb3e98b0497ec5c36b"
+    ],
+    "data/system-integration-version.json": [
+      "e854131c470ddf83dc65d19a4bd251bb4d15b7423085647532831d8978d0336f"
+    ],
+    "data/technology-candidate-catalog.json": [
+      "70910a61cd89486daebc9fba87376ef723b668b8af142d524bb34c089ec8b137"
+    ],
+    "docs/TECHNOLOGY_REFERENCES.md": [
+      "f978a277c0cb91997e49f271b2a1050cb32de5a15dfc3342d245492f732d7aa8"
+    ],
+    "docs/buildtypes/system-integration-v2.md": [
+      "be52715f8e58c6b1970e4ee0581ad5dac078652ca20364052ecef412df45a3f3"
+    ],
+    "policy/opa-bundle/.manifest": [
+      "c10a0b0ac0218a3d94a8648faec939288d66d4a4df02b7c2008bca621a4f6e14"
+    ],
+    "policy/opa-bundle/data.json": [
+      "69dee165420807eed2538b02ceb84591e3162e9fd6744481b878a4e9cb4d6ec2"
+    ],
+    "policy/opa-bundle/worldserver.rego": [
+      "5247c671f468607ad4692477046a5a940ef0233f8f8b42f9228739b75adbf81b"
+    ],
+    "scripts/asset-registry.cjs": [
+      "9596dd4c1a1537e1c7143374b50c4f477f0c89eac5e841742c20cb0871d962b8"
+    ],
+    "scripts/cas-merkle-store.cjs": [
+      "d2b7c5da39060266279acf071b66aa455a634ea78c62af8a2c20e6900db4d4d9"
+    ],
+    "scripts/change-impact-orchestrator.cjs": [
+      "6e15bb94e356b8944da377345a962bd08ece1ad6f936683c2952b89ca8b7240b"
+    ],
+    "scripts/durable-job-queue.cjs": [
+      "6153c70572311bb6afc07cbaab45369a21c6e8df4ba6c9cfc5862a4faa86a016"
+    ],
+    "scripts/integration-selftest.cjs": [
+      "d31e32ca57f7ba265ffff6382421f10ebcf485a3c8f81797757168b4e40944c9"
+    ],
+    "scripts/integration-telemetry-lib.cjs": [
+      "d1340539a6062977d105c537d886d5f57e0860ba468e0c1cc2da3d2a286aadc9"
+    ],
+    "scripts/integration-telemetry.cjs": [
+      "15d446900874ffe5e110668c51ae6d670150f08db7393e58a9f6837ce962666c"
+    ],
+    "scripts/integration-utils.cjs": [
+      "636af5be6fdc8b332aafe30643a9fc5c74945bb5a94496068d4cd5c8b854aa94"
+    ],
+    "scripts/policy-engine.cjs": [
+      "d09d80b53598f94047b657611672923c8487ad99adc2ebe675e172f9eef1dcd3"
+    ],
+    "scripts/provenance.cjs": [
+      "7433e9675374b2e831eb7eddcf3a892f5f05cb280429ce8a4d43840102afcc33"
+    ],
+    "scripts/system-control-plane.cjs": [
+      "43704d3f08e9e97045ba9619b921ec50dcd1b52daa9ef0c87000273fd585b0cf"
+    ],
+    "scripts/system-integration-gate.cjs": [
+      "df2c532a0fb62d61cc7704849996bad8e8efb037e0e06ee5e189ac2384a563f2"
+    ],
+    "scripts/system-readiness.cjs": [
+      "4f7d2a5fbd39374427f7047bf3fdf7a742de0a80203918fe1a884d63daea9ad2"
+    ],
+    "scripts/technology-consensus.cjs": [
+      "7432c2c726ee5af065b2c046ee24e6d0c8b49627d625cfc759c11a79c0bb5465"
+    ]
+  },
+  "3.0.0": {
+    "playwright.config.js": [
+      "29e4563ba7154632a8992502f345d39f9c1cca02aadee1a0d3e56b277fd19859"
+    ],
+    "DESKTOP_AI_SYSTEM_INTEGRATION_V3.md": [
+      "6c58de768ec7059b72df559647b26dbbea91354bb2a072ad820b863c7d25e86b"
+    ],
+    "docs/TECHNOLOGY_REFERENCES.md": [
+      "f6b75c5c94d89e0feb54e2277065cd2da40ec1932d2cae02d08c8358915f92a7"
+    ],
+    "scripts/desktop-ai-report-validator.cjs": [
+      "f1d3f42899c3fc714a3e2cf5a286735d7722af7dc7bc8773f8cc10981922ce3e"
+    ],
+    "scripts/integration-utils.cjs": [
+      "636af5be6fdc8b332aafe30643a9fc5c74945bb5a94496068d4cd5c8b854aa94"
+    ],
+    "scripts/ai-visual-critic.js": [
+      "fae8b06bd8464d74b77f1e961dab0bf7fe7e2d3e020780c7e1467210bda80ce5"
+    ],
+    "scripts/world-device-profile-matrix.js": [
+      "5d8f6ed25e05439858c717281560de179cbee098ade7f57126fb200fc2f3bd83"
+    ],
+    "scripts/cas-merkle-store.cjs": [
+      "d2b7c5da39060266279acf071b66aa455a634ea78c62af8a2c20e6900db4d4d9"
+    ],
+    "scripts/system-readiness.cjs": [
+      "b62c08f984b998651ecf5acaf8f17ab8ae4150c5d1401f61c21ec715f3a008e4"
+    ],
+    "scripts/durable-job-queue.cjs": [
+      "6153c70572311bb6afc07cbaab45369a21c6e8df4ba6c9cfc5862a4faa86a016"
+    ],
+    "scripts/integration-telemetry-lib.cjs": [
+      "d1340539a6062977d105c537d886d5f57e0860ba468e0c1cc2da3d2a286aadc9"
+    ],
+    "scripts/world-quality-analyzer.js": [
+      "44b32b12f4e6a9dbe2c62c12f842eee551f4319279aac62a04d6b1449915753b"
+    ],
+    "scripts/technology-lock-validator.cjs": [
+      "f471e26bdb4030826d50c7169712b8a351ef6ee4c2e7ce23184776dc87ff321a"
+    ],
+    "scripts/project-directive-gate.cjs": [
+      "1b6483279e27a571a9c546f9ff51c205ab74441888c65465cf4f9c416a1a8136"
+    ],
+    "scripts/integration-selftest.cjs": [
+      "d53ca7a64fe026d4f4485a89a4712988dced528738e6d0210c9430148c0a4df0"
+    ],
+    "scripts/character-spatial-contract-lib.cjs": [
+      "52f56bbae04bb09cc0811a28935820eede714d490c39e4ca1b99b760d7f0b9c0"
+    ],
+    "scripts/graphics-regression-guard.cjs": [
+      "16b3eb3e788739f6c15888e924c102b4dde2276dc87d14fd292c3650dc0da5f9"
+    ],
+    "scripts/system-integration-gate.cjs": [
+      "7bf54d76acb876d6d20b955a35c3bcaa2098caac40b14786c3daca831ecd9ed4"
+    ],
+    "scripts/system-enhancement-orchestrator.cjs": [
+      "22c2873349d1f3d7923db85564c3e63282687515b8ce255b464537ffe18d604f"
+    ],
+    "scripts/change-impact-orchestrator.cjs": [
+      "6e15bb94e356b8944da377345a962bd08ece1ad6f936683c2952b89ca8b7240b"
+    ],
+    "scripts/audio-variation-validator.cjs": [
+      "eb3fbfedb425cd64cfc68e1edfd98ce3418b293c5739bfbc86c87ce0ad96f471"
+    ],
+    "scripts/system-control-plane.cjs": [
+      "10a0cc5b90299fbd5692dc0c8f7b6ed5bf480569296c2a1d1c342736fe5ff1d6"
+    ],
+    "scripts/integration-telemetry.cjs": [
+      "15d446900874ffe5e110668c51ae6d670150f08db7393e58a9f6837ce962666c"
+    ],
+    "scripts/world-runtime-quality-profiler.js": [
+      "04f134381881c7c27d06b7f8d65f8342ef7ca2411a7f9ca03b1f098e612acbf6"
+    ],
+    "scripts/provenance.cjs": [
+      "7433e9675374b2e831eb7eddcf3a892f5f05cb280429ce8a4d43840102afcc33"
+    ],
+    "scripts/production-quality-pull.js": [
+      "c1582e5f7a31f2e410ed0a01f899cb9ee4b49f159f29a4cab84f485531fbfe87"
+    ],
+    "scripts/world-quality-autopilot.js": [
+      "3b4dc70287b57e56a7b394b33a4023f785be8f2b30d57ac76dde2fba674f3984"
+    ],
+    "scripts/asset-registry.cjs": [
+      "9596dd4c1a1537e1c7143374b50c4f477f0c89eac5e841742c20cb0871d962b8"
+    ],
+    "scripts/asset-ingestion-planner.cjs": [
+      "e5f29da66b0249d3309d8180f74e5e645e5ed0f325893a95ddd17b552a4238ea"
+    ],
+    "scripts/gameplay-physical-contract-validator.cjs": [
+      "24f6f6a7ee40e0b237ad8deee5039f080406f25416b22e35cde5ded69e253f3b"
+    ],
+    "scripts/cyclonedx-sbom.cjs": [
+      "c1643511768779845db7bdfaf33cf43fffcdf40fec1832699d926ff80894c319"
+    ],
+    "scripts/policy-engine.cjs": [
+      "10979c1cdd71b0ec1c689be89e57047d4b40f94dde9cb26dd5a36c67c416e25e"
+    ],
+    "scripts/technology-consensus.cjs": [
+      "4e5d62465056394a4ecf41b5ca5252d708bcdfde23dbe0e08b73e66cec09776f"
+    ],
+    "data/performance-budgets.json": [
+      "94151b44aa771e7081ac3e1e2060f2ddfbb4e8f72b44fb767280765bcb00eb3a"
+    ],
+    "data/desktop-ai-final-report.template.json": [
+      "e08f0c4c5f1696344058d35a9cca5cb61c22b9b7ceca52f4d8cf86b352c07dc4"
+    ],
+    "data/audio-events.template.json": [
+      "7edf235baf298240981d90848ab1197f9c72663cc88bdd0b12115c5863f097ef"
+    ],
+    "data/system-conflict-policy.json": [
+      "15ef493b099c07cde0f276acdfe3c63fa9edd3ad292d7deb3e98b0497ec5c36b"
+    ],
+    "data/system-capability-registry.json": [
+      "3c5eb93b4569b41dce575e9d8fdd2138dfb02e4990db81e7642f2b188b1cd92a"
+    ],
+    "data/technology-candidate-catalog.json": [
+      "5d1e30e7eb47563879d50db0f85979b50ecd39d135703f9842d65f93efb344d6"
+    ],
+    "data/current-task-contract.template.json": [
+      "45bdc5c9e6dfc5cd96c3c00282f413c4e926fb3666c96c44a07aed721debe8d5"
+    ],
+    "data/asset-metadata-template.json": [
+      "f27a5247fb7cfe1a3cdc0bc74370f9d433170efa4a3b8097be9d1aa2be936084"
+    ],
+    "data/gameplay-physical-contract.json": [
+      "e024954a837e005ceffe8436ede1b1158e87c0072d50a4cd1233a9183f428eca"
+    ],
+    "data/system-integration-version.json": [
+      "cee3cad97ee8aee6583558ff1ddf54b818559ad879d61034789188633255e77f"
+    ],
+    "data/project-directives.json": [
+      "c14bc34973b0497f60c7d2784c01494da8c289b8a4fcc48d13e011e544d70961"
+    ],
+    "data/asset-quality-ratchet-policy.json": [
+      "6661c375213038599b7d89a2eb2623d7f6f62b55da2e2a78cf6a890caa658d27"
+    ],
+    "api/quality-summary.js": [
+      "5b90b0abd2adc1565904ac3f68ee82e5c46e86875100730af8a157311fb2cec5"
+    ],
+    "api/quality-telemetry.js": [
+      "d16374c5659b6279dbce0509ab957cce29232de6ff39dfe8882e226feffc3367"
+    ],
+    "policy/opa-bundle/data.json": [
+      "69dee165420807eed2538b02ceb84591e3162e9fd6744481b878a4e9cb4d6ec2"
+    ],
+    "policy/opa-bundle/worldserver.rego": [
+      "0dbc406581ae14950d15f2e74bfddaf786b87ca34222bea9205b9506e77ce5f5"
+    ],
+    "policy/opa-bundle/.manifest": [
+      "c10a0b0ac0218a3d94a8648faec939288d66d4a4df02b7c2008bca621a4f6e14"
+    ],
+    ".github/workflows/system-integration-v3.yml": [
+      "e028ff5220dcdde06498f1c310f0288dc141733a166cdc62314f8a1c0317d5b4"
+    ],
+    ".github/workflows/quality-canary.yml": [
+      "964102707e4f37c5588060e900a9bdffec0a3cefc1a8c5cf95de0e2c4eb0d793"
+    ],
+    ".github/workflows/world-quality-autopilot.yml": [
+      "da39f0778d86b5145dac648de462652ebff4a5227fec77d0bb0a1d9ca79c3552"
+    ],
+    "services/ai3d-worker/ai3d/plugins/mesh_quality_optimizer.py": [
+      "321354103d29948e869e38b9028e01263ea0b546c3ad46537a504fbb6825afd1"
+    ],
+    "docs/buildtypes/system-integration-v3.md": [
+      "e025b3cb35aa16cdc92c6659309f780eeef9fffadd7b0274f5beb60b278fc917"
+    ]
+  },
+  "4.0.0": {
+    "playwright.config.js": [
+      "29e4563ba7154632a8992502f345d39f9c1cca02aadee1a0d3e56b277fd19859"
+    ],
+    "DESKTOP_AI_SYSTEM_INTEGRATION_V4.md": [
+      "f7a42af3544e68474cb28ae8fee34559b6e508ad641f718818d28e5a2567393e"
+    ],
+    "docs/TECHNOLOGY_REFERENCES.md": [
+      "b00720b11d6e64c85b474c5c50d19281c388cac6259a98a519ea0c9d12d6f792"
+    ],
+    "config/integration-v4.cue": [
+      "62bc33f871d5eceb58cfbfab54d1db65c5187df0e8fa51da8f2182c1dea323ed"
+    ],
+    "scripts/desktop-ai-report-validator.cjs": [
+      "f1d3f42899c3fc714a3e2cf5a286735d7722af7dc7bc8773f8cc10981922ce3e"
+    ],
+    "scripts/integration-utils.cjs": [
+      "636af5be6fdc8b332aafe30643a9fc5c74945bb5a94496068d4cd5c8b854aa94"
+    ],
+    "scripts/release-promotion-controller.cjs": [
+      "32179096ba926bdbbfd0ffb7e97456037716ef8783b255d4dfaf0650e81deac0"
+    ],
+    "scripts/feature-flag-engine.cjs": [
+      "82979f7a15f16f81a15d75d9218197ab0d8afbb9d90bdcabd55d7fc8fbc14471"
+    ],
+    "scripts/ai-visual-critic.js": [
+      "fae8b06bd8464d74b77f1e961dab0bf7fe7e2d3e020780c7e1467210bda80ce5"
+    ],
+    "scripts/integration-chaos-test.cjs": [
+      "9148ee3531e08d993cfddc9b9deaf7376a392da44c227c5ed14f1a92902b7782"
+    ],
+    "scripts/config-contract-validator.cjs": [
+      "b8e186fb2b524a0f260606d4f7e944df6c7cd181eae63a3b62cd689f23b27162"
+    ],
+    "scripts/world-device-profile-matrix.js": [
+      "5d8f6ed25e05439858c717281560de179cbee098ade7f57126fb200fc2f3bd83"
+    ],
+    "scripts/cas-merkle-store.cjs": [
+      "d2b7c5da39060266279acf071b66aa455a634ea78c62af8a2c20e6900db4d4d9"
+    ],
+    "scripts/system-readiness.cjs": [
+      "373777e896cf48d01266dd59e4ce087c4a8e929a01ef42d526bb418451785635"
+    ],
+    "scripts/durable-job-queue.cjs": [
+      "6153c70572311bb6afc07cbaab45369a21c6e8df4ba6c9cfc5862a4faa86a016"
+    ],
+    "scripts/integration-telemetry-lib.cjs": [
+      "d1340539a6062977d105c537d886d5f57e0860ba468e0c1cc2da3d2a286aadc9"
+    ],
+    "scripts/world-quality-analyzer.js": [
+      "44b32b12f4e6a9dbe2c62c12f842eee551f4319279aac62a04d6b1449915753b"
+    ],
+    "scripts/technology-lock-validator.cjs": [
+      "f471e26bdb4030826d50c7169712b8a351ef6ee4c2e7ce23184776dc87ff321a"
+    ],
+    "scripts/project-directive-gate.cjs": [
+      "d386f5a46d6d3312860182f42b8c7f7d4bd4ea6591447ce4084391bcb8c23238"
+    ],
+    "scripts/integration-selftest.cjs": [
+      "b9ccecf0602725edbd569d4c0cde5e458ac14e10da5e5084a4f979352fa09928"
+    ],
+    "scripts/character-spatial-contract-lib.cjs": [
+      "52f56bbae04bb09cc0811a28935820eede714d490c39e4ca1b99b760d7f0b9c0"
+    ],
+    "scripts/secure-update-metadata.cjs": [
+      "b602a1629a641110025b2769d7ef6ad5a6402e5f4af2b7a1b1783ce0b801916b"
+    ],
+    "scripts/graphics-regression-guard.cjs": [
+      "16b3eb3e788739f6c15888e924c102b4dde2276dc87d14fd292c3650dc0da5f9"
+    ],
+    "scripts/system-integration-gate.cjs": [
+      "91712bb631b0b23044b211b7de91328ac2f6710ced2187d03ef211d89139a3a1"
+    ],
+    "scripts/system-enhancement-orchestrator.cjs": [
+      "74add621d40ae079cc868ac3e373f21a42962f3ac6bfed9925eb8fcf19bbf124"
+    ],
+    "scripts/change-impact-orchestrator.cjs": [
+      "6e15bb94e356b8944da377345a962bd08ece1ad6f936683c2952b89ca8b7240b"
+    ],
+    "scripts/audio-variation-validator.cjs": [
+      "eb3fbfedb425cd64cfc68e1edfd98ce3418b293c5739bfbc86c87ce0ad96f471"
+    ],
+    "scripts/system-control-plane.cjs": [
+      "d8cae2f87484d2b8bed6a34d87d5466752377eec9e41ede655c8cc422877f207"
+    ],
+    "scripts/integration-telemetry.cjs": [
+      "15d446900874ffe5e110668c51ae6d670150f08db7393e58a9f6837ce962666c"
+    ],
+    "scripts/reproducible-build-gate.cjs": [
+      "d45d1e35c77c7fcc9ac5142bed21294315655e1ba9a77031293e8d3deb6b9a3e"
+    ],
+    "scripts/world-runtime-quality-profiler.js": [
+      "04f134381881c7c27d06b7f8d65f8342ef7ca2411a7f9ca03b1f098e612acbf6"
+    ],
+    "scripts/provenance.cjs": [
+      "7433e9675374b2e831eb7eddcf3a892f5f05cb280429ce8a4d43840102afcc33"
+    ],
+    "scripts/production-quality-pull.js": [
+      "c1582e5f7a31f2e410ed0a01f899cb9ee4b49f159f29a4cab84f485531fbfe87"
+    ],
+    "scripts/world-quality-autopilot.js": [
+      "3b4dc70287b57e56a7b394b33a4023f785be8f2b30d57ac76dde2fba674f3984"
+    ],
+    "scripts/asset-registry.cjs": [
+      "9596dd4c1a1537e1c7143374b50c4f477f0c89eac5e841742c20cb0871d962b8"
+    ],
+    "scripts/asset-ingestion-planner.cjs": [
+      "e5f29da66b0249d3309d8180f74e5e645e5ed0f325893a95ddd17b552a4238ea"
+    ],
+    "scripts/gameplay-physical-contract-validator.cjs": [
+      "24f6f6a7ee40e0b237ad8deee5039f080406f25416b22e35cde5ded69e253f3b"
+    ],
+    "scripts/cyclonedx-sbom.cjs": [
+      "c1643511768779845db7bdfaf33cf43fffcdf40fec1832699d926ff80894c319"
+    ],
+    "scripts/policy-engine.cjs": [
+      "7f9ef43793ada2f77d668e5f67a2b6f6cbc32440dcee7b8a9e0a7e1b77c2d6e4"
+    ],
+    "scripts/adapter-sandbox.cjs": [
+      "9471ab9515d6b057a1d78dc0da29cf0210383fedb0e879e9bef5d722dd23f48b"
+    ],
+    "scripts/technology-consensus.cjs": [
+      "76c1213274856216cce11405518d1ec92c6e4b3fa35dd255e3921fec9072e757"
+    ],
+    "data/performance-budgets.json": [
+      "94151b44aa771e7081ac3e1e2060f2ddfbb4e8f72b44fb767280765bcb00eb3a"
+    ],
+    "data/desktop-ai-final-report.template.json": [
+      "e08f0c4c5f1696344058d35a9cca5cb61c22b9b7ceca52f4d8cf86b352c07dc4"
+    ],
+    "data/feature-flag-policy.json": [
+      "1fa38304e1f58ec47c59fd40447a2c9bb4e4d4c052e8ee6ece0d492086b07331"
+    ],
+    "data/update-trust-policy.json": [
+      "fce326a395749e98ede758982481f4e84c6f34a832bc908d8992c669fc1716d8"
+    ],
+    "data/audio-events.template.json": [
+      "7edf235baf298240981d90848ab1197f9c72663cc88bdd0b12115c5863f097ef"
+    ],
+    "data/adapter-sandbox-policy.json": [
+      "e20f937a8b46fd4c65713609c2a353faf87aab3c18f72d434053ed86a42c9086"
+    ],
+    "data/system-conflict-policy.json": [
+      "15ef493b099c07cde0f276acdfe3c63fa9edd3ad292d7deb3e98b0497ec5c36b"
+    ],
+    "data/system-capability-registry.json": [
+      "3c5eb93b4569b41dce575e9d8fdd2138dfb02e4990db81e7642f2b188b1cd92a"
+    ],
+    "data/technology-candidate-catalog.json": [
+      "d1b46f0d29c47bf8378b667d4d779556512133a2e1fd4261b926bd8b58281963"
+    ],
+    "data/reproducible-build-policy.json": [
+      "ac99fbed7663e5b2fdef91897700f7a2815d22163b716f7296256152edc843a9"
+    ],
+    "data/current-task-contract.template.json": [
+      "45bdc5c9e6dfc5cd96c3c00282f413c4e926fb3666c96c44a07aed721debe8d5"
+    ],
+    "data/asset-metadata-template.json": [
+      "f27a5247fb7cfe1a3cdc0bc74370f9d433170efa4a3b8097be9d1aa2be936084"
+    ],
+    "data/gameplay-physical-contract.json": [
+      "e024954a837e005ceffe8436ede1b1158e87c0072d50a4cd1233a9183f428eca"
+    ],
+    "data/system-integration-version.json": [
+      "2fd2603dacc888f84003ae45cd335ba814f7a828ccb079ab45469b3d801848da"
+    ],
+    "data/project-directives.json": [
+      "57d280a2b8eb22c1bf57217ec7e2adb71d2b1e6c3e225bd7aa730dcef7a50456"
+    ],
+    "data/asset-quality-ratchet-policy.json": [
+      "6661c375213038599b7d89a2eb2623d7f6f62b55da2e2a78cf6a890caa658d27"
+    ],
+    "data/flags.json": [
+      "5b629e95e307725865389626726beb70748ff57c9ec90e17c3fbb610788390d0"
+    ],
+    "api/quality-summary.js": [
+      "5b90b0abd2adc1565904ac3f68ee82e5c46e86875100730af8a157311fb2cec5"
+    ],
+    "api/quality-telemetry.js": [
+      "d16374c5659b6279dbce0509ab957cce29232de6ff39dfe8882e226feffc3367"
+    ],
+    "policy/opa-bundle/data.json": [
+      "69dee165420807eed2538b02ceb84591e3162e9fd6744481b878a4e9cb4d6ec2"
+    ],
+    "policy/opa-bundle/worldserver.rego": [
+      "849f76a7ad1cc8e720134100183574e2cb3c7d8049c4a0d3372e44ae3cb06cba"
+    ],
+    "policy/opa-bundle/.manifest": [
+      "a23ea6f29afd8fe235463677ded2bfee8c130a8dc9e7e46e00ad95e1156c33b3"
+    ],
+    ".github/workflows/quality-canary.yml": [
+      "964102707e4f37c5588060e900a9bdffec0a3cefc1a8c5cf95de0e2c4eb0d793"
+    ],
+    ".github/workflows/world-quality-autopilot.yml": [
+      "da39f0778d86b5145dac648de462652ebff4a5227fec77d0bb0a1d9ca79c3552"
+    ],
+    ".github/workflows/system-integration-v4.yml": [
+      "8847e77840e0992a338ff71551dbbfbe36092ec5a1c946c9012524268a8c8a93"
+    ],
+    "services/ai3d-worker/ai3d/plugins/mesh_quality_optimizer.py": [
+      "321354103d29948e869e38b9028e01263ea0b546c3ad46537a504fbb6825afd1"
+    ],
+    "docs/buildtypes/system-integration-v4.md": [
+      "074f60a662ab421a8503339ca1a01b3f01106719740d0c8aaf2126d449c6f87d"
+    ]
+  },
+  "5.0.0": {
+    "playwright.config.js": [
+      "29e4563ba7154632a8992502f345d39f9c1cca02aadee1a0d3e56b277fd19859"
+    ],
+    "DESKTOP_AI_SYSTEM_INTEGRATION_V5.md": [
+      "0d4f30495bc063463a2e8029e00deef2054d40a41f1af0f57fcc4a3d97ddda83"
+    ],
+    "docs/TECHNOLOGY_REFERENCES.md": [
+      "6172f2cb5374e3f8a54ea03ba87c9ebfc466cde5709eb4cb7a20cab5cfa2d0aa"
+    ],
+    "specs/DurableJobQueue.tla": [
+      "bd2bfe6a6f1c36d932574fbb58ce205efa42a361cc666a74add3bf1cb95894ab"
+    ],
+    "specs/DurableJobQueue.cfg": [
+      "a8f1ef472fa6a3a547634118f5027d8089ddaca91a8afb920773629583097f5e"
+    ],
+    "specs/ControlPlane.tla": [
+      "14a06f79b5631fa9d5f22359374faf324caa2983ef7961975cffdea2dc44d61f"
+    ],
+    "specs/ControlPlane.cfg": [
+      "cf9bfe1ca26ebf728685e4db44c2ce6fdf11aa1361216445f81f3c55878455ae"
+    ],
+    "config/integration-v5.cue": [
+      "206a915aa610ec726529aace45840153c900f949fd5cfb31f2859051b9dc5fb0"
+    ],
+    "scripts/desktop-ai-report-validator.cjs": [
+      "f1d3f42899c3fc714a3e2cf5a286735d7722af7dc7bc8773f8cc10981922ce3e"
+    ],
+    "scripts/integration-utils.cjs": [
+      "636af5be6fdc8b332aafe30643a9fc5c74945bb5a94496068d4cd5c8b854aa94"
+    ],
+    "scripts/release-promotion-controller.cjs": [
+      "3c914ca2fb4d2fc4cb60f3da8387e7335286851b3d85ce8430a234cc5e53e5bc"
+    ],
+    "scripts/feature-flag-engine.cjs": [
+      "f588e628344fbc0e512adf25e2235025cd9e51a006de45ba0a1bc757bf173e20"
+    ],
+    "scripts/ai-visual-critic.js": [
+      "fae8b06bd8464d74b77f1e961dab0bf7fe7e2d3e020780c7e1467210bda80ce5"
+    ],
+    "scripts/wit-component-validator.cjs": [
+      "e8903681eb9f7d659df3feb5be2220ff990ce7d7f4560fc3db3c07dda87bd429"
+    ],
+    "scripts/integration-chaos-test.cjs": [
+      "3383e052ef07ea8bbea64067d5ac2d12e2c071ef73a08a8650d3477ea2e01f94"
+    ],
+    "scripts/config-contract-validator.cjs": [
+      "e39e80a50323e769ab01711cceb28a57877d9d93504feda2639cd4d66c83ebe7"
+    ],
+    "scripts/device-lab-orchestrator.cjs": [
+      "a703317f86884d72a67142279c8eae3019939957813024bcbbae3e9b4eb41b97"
+    ],
+    "scripts/world-device-profile-matrix.js": [
+      "5d8f6ed25e05439858c717281560de179cbee098ade7f57126fb200fc2f3bd83"
+    ],
+    "scripts/cas-merkle-store.cjs": [
+      "d2b7c5da39060266279acf071b66aa455a634ea78c62af8a2c20e6900db4d4d9"
+    ],
+    "scripts/system-readiness.cjs": [
+      "d54e9aa1bbf6177c0f045e8398fb83953471fd626cb6ae5bc73c06f53da4a36f"
+    ],
+    "scripts/durable-job-queue.cjs": [
+      "6153c70572311bb6afc07cbaab45369a21c6e8df4ba6c9cfc5862a4faa86a016"
+    ],
+    "scripts/integration-telemetry-lib.cjs": [
+      "d1340539a6062977d105c537d886d5f57e0860ba468e0c1cc2da3d2a286aadc9"
+    ],
+    "scripts/world-quality-analyzer.js": [
+      "44b32b12f4e6a9dbe2c62c12f842eee551f4319279aac62a04d6b1449915753b"
+    ],
+    "scripts/distributed-cas.cjs": [
+      "c88b9444c453f408b0c45bf230c64ccb3f122f587c4ab557050db3dcb816fbc3"
+    ],
+    "scripts/technology-lock-validator.cjs": [
+      "f471e26bdb4030826d50c7169712b8a351ef6ee4c2e7ce23184776dc87ff321a"
+    ],
+    "scripts/project-directive-gate.cjs": [
+      "a3ae11c773505dfc76b6f8ec863ee1021b5084befa11fb161516440fc1954e44"
+    ],
+    "scripts/integration-selftest.cjs": [
+      "ae4a801adb5a1a4a1fa667c402ce8fe087fe54a323c191cfc52575a11fb3741c"
+    ],
+    "scripts/character-spatial-contract-lib.cjs": [
+      "52f56bbae04bb09cc0811a28935820eede714d490c39e4ca1b99b760d7f0b9c0"
+    ],
+    "scripts/secure-update-metadata.cjs": [
+      "487d77bef62f8470163aed030e1a02bfcbac647edc1657c885edc38ac8fbb91b"
+    ],
+    "scripts/graphics-regression-guard.cjs": [
+      "16b3eb3e788739f6c15888e924c102b4dde2276dc87d14fd292c3650dc0da5f9"
+    ],
+    "scripts/system-integration-gate.cjs": [
+      "adb3dd332de2b40e2230790471a69c8d0362d590ce0f3eaa3474907fc93547e1"
+    ],
+    "scripts/model-state-checker.cjs": [
+      "cc1ab9ab001f9be4dadeea32267acf608692ee897ef0a5b2015cd7a62e1cf330"
+    ],
+    "scripts/system-enhancement-orchestrator.cjs": [
+      "c79d46f4df5d2acb60bb79a455c7df74ffc9821ef74978cbfe529bd1f303ed2e"
+    ],
+    "scripts/change-impact-orchestrator.cjs": [
+      "6e15bb94e356b8944da377345a962bd08ece1ad6f936683c2952b89ca8b7240b"
+    ],
+    "scripts/audio-variation-validator.cjs": [
+      "eb3fbfedb425cd64cfc68e1edfd98ce3418b293c5739bfbc86c87ce0ad96f471"
+    ],
+    "scripts/system-control-plane.cjs": [
+      "f6f37a41883cb39bccd89e9dd07bf11af726c464718b04660f2a2c90c6f74b20"
+    ],
+    "scripts/semantic-dependency-graph.cjs": [
+      "0100c862a8c6fde7777f8cd7eb68f850cd758851ced7c7b6b2797fabac155c94"
+    ],
+    "scripts/integration-telemetry.cjs": [
+      "15d446900874ffe5e110668c51ae6d670150f08db7393e58a9f6837ce962666c"
+    ],
+    "scripts/reproducible-build-gate.cjs": [
+      "67928c7552f3730ea20a2d0622aa9eb312bacca45bc19c9ac30ffbfc317a849e"
+    ],
+    "scripts/world-runtime-quality-profiler.js": [
+      "04f134381881c7c27d06b7f8d65f8342ef7ca2411a7f9ca03b1f098e612acbf6"
+    ],
+    "scripts/provenance.cjs": [
+      "7433e9675374b2e831eb7eddcf3a892f5f05cb280429ce8a4d43840102afcc33"
+    ],
+    "scripts/production-quality-pull.js": [
+      "c1582e5f7a31f2e410ed0a01f899cb9ee4b49f159f29a4cab84f485531fbfe87"
+    ],
+    "scripts/world-quality-autopilot.js": [
+      "3b4dc70287b57e56a7b394b33a4023f785be8f2b30d57ac76dde2fba674f3984"
+    ],
+    "scripts/artifact-signing-transparency.cjs": [
+      "7058181addf3940750baacfb2ff247645e63c19260bbf255bce2d230623fffcc"
+    ],
+    "scripts/asset-registry.cjs": [
+      "9596dd4c1a1537e1c7143374b50c4f477f0c89eac5e841742c20cb0871d962b8"
+    ],
+    "scripts/asset-ingestion-planner.cjs": [
+      "e5f29da66b0249d3309d8180f74e5e645e5ed0f325893a95ddd17b552a4238ea"
+    ],
+    "scripts/gameplay-physical-contract-validator.cjs": [
+      "24f6f6a7ee40e0b237ad8deee5039f080406f25416b22e35cde5ded69e253f3b"
+    ],
+    "scripts/cyclonedx-sbom.cjs": [
+      "c1643511768779845db7bdfaf33cf43fffcdf40fec1832699d926ff80894c319"
+    ],
+    "scripts/policy-engine.cjs": [
+      "bac183ec74dbaef1755bbbe6a9fc0d06438006f4dbf4f6915f3db28a66c510f3"
+    ],
+    "scripts/adapter-sandbox.cjs": [
+      "4017a9a0891c83e739a6e2d3353a573f5adb622432202cd1786308a8f2fade65"
+    ],
+    "scripts/technology-consensus.cjs": [
+      "9e235123f0874b8d0f8e86b239af34235ade2d9d880c8baa3b14ceebb3372f0e"
+    ],
+    "data/performance-budgets.json": [
+      "94151b44aa771e7081ac3e1e2060f2ddfbb4e8f72b44fb767280765bcb00eb3a"
+    ],
+    "data/device-lab-policy.json": [
+      "4af0077bdaeb180bcb41c839d3c833b35cb04c890c93e0e0731886dce1698c05"
+    ],
+    "data/desktop-ai-final-report.template.json": [
+      "e08f0c4c5f1696344058d35a9cca5cb61c22b9b7ceca52f4d8cf86b352c07dc4"
+    ],
+    "data/model-check-policy.json": [
+      "1e71d7adabd0c8cd44a8c96838d44a2192487321380c42baf5c1d97ca41bf236"
+    ],
+    "data/feature-flag-policy.json": [
+      "1fa38304e1f58ec47c59fd40447a2c9bb4e4d4c052e8ee6ece0d492086b07331"
+    ],
+    "data/update-trust-policy.json": [
+      "fce326a395749e98ede758982481f4e84c6f34a832bc908d8992c669fc1716d8"
+    ],
+    "data/audio-events.template.json": [
+      "7edf235baf298240981d90848ab1197f9c72663cc88bdd0b12115c5863f097ef"
+    ],
+    "data/adapter-sandbox-policy.json": [
+      "e20f937a8b46fd4c65713609c2a353faf87aab3c18f72d434053ed86a42c9086"
+    ],
+    "data/distributed-cas-policy.json": [
+      "d1a3cc6f6c922cd70a88f5e85f11d837d13c5f9c3366c4991ada15be63616e2e"
+    ],
+    "data/component-model-policy.json": [
+      "264de821c44b3b1c59426ff58bcbf282cc9fe80656962e12ae4d1ac78e7cdb40"
+    ],
+    "data/system-conflict-policy.json": [
+      "15ef493b099c07cde0f276acdfe3c63fa9edd3ad292d7deb3e98b0497ec5c36b"
+    ],
+    "data/supply-chain-signing-policy.json": [
+      "dd397620c7bb7f7b143319575bd10bdb67b791f6361687c1caddb3c1faf72a2f"
+    ],
+    "data/system-capability-registry.json": [
+      "a1e5b55003d9feb9d00591abbfdce0c9865fd633d6d6174eb9011ef16af87dae"
+    ],
+    "data/technology-candidate-catalog.json": [
+      "856afb09a4a643f0f49a782030d652b23f7928e167abb8cabe61cff6af61159a"
+    ],
+    "data/reproducible-build-policy.json": [
+      "ac99fbed7663e5b2fdef91897700f7a2815d22163b716f7296256152edc843a9"
+    ],
+    "data/current-task-contract.template.json": [
+      "45bdc5c9e6dfc5cd96c3c00282f413c4e926fb3666c96c44a07aed721debe8d5"
+    ],
+    "data/asset-metadata-template.json": [
+      "f27a5247fb7cfe1a3cdc0bc74370f9d433170efa4a3b8097be9d1aa2be936084"
+    ],
+    "data/gameplay-physical-contract.json": [
+      "e024954a837e005ceffe8436ede1b1158e87c0072d50a4cd1233a9183f428eca"
+    ],
+    "data/semantic-graph-policy.json": [
+      "54a22b2d31ba856079aa19e3d13b47dcd34ed68df0d9de1af84d1ad9d1d152b1"
+    ],
+    "data/system-integration-version.json": [
+      "fcdfaeab4d4b77a8914b7291eca489828c86528579d61c99a9c913363fbce71b"
+    ],
+    "data/project-directives.json": [
+      "27d3a0fea44c5d079623a59e14054b22c7cad74e47776cd4de7df3460838ca63"
+    ],
+    "data/asset-quality-ratchet-policy.json": [
+      "6661c375213038599b7d89a2eb2623d7f6f62b55da2e2a78cf6a890caa658d27"
+    ],
+    "data/flags.json": [
+      "5b629e95e307725865389626726beb70748ff57c9ec90e17c3fbb610788390d0"
+    ],
+    "wit/world-server-adapter.wit": [
+      "aa3475d2b717e427004a3b3adc27695c3e00d4a2220faae6ef8fc0fbb7e83223"
+    ],
+    "api/quality-summary.js": [
+      "5b90b0abd2adc1565904ac3f68ee82e5c46e86875100730af8a157311fb2cec5"
+    ],
+    "api/quality-telemetry.js": [
+      "d16374c5659b6279dbce0509ab957cce29232de6ff39dfe8882e226feffc3367"
+    ],
+    "policy/opa-bundle/data.json": [
+      "69dee165420807eed2538b02ceb84591e3162e9fd6744481b878a4e9cb4d6ec2"
+    ],
+    "policy/opa-bundle/worldserver.rego": [
+      "849f76a7ad1cc8e720134100183574e2cb3c7d8049c4a0d3372e44ae3cb06cba"
+    ],
+    "policy/opa-bundle/.manifest": [
+      "a23ea6f29afd8fe235463677ded2bfee8c130a8dc9e7e46e00ad95e1156c33b3"
+    ],
+    ".github/workflows/quality-canary.yml": [
+      "964102707e4f37c5588060e900a9bdffec0a3cefc1a8c5cf95de0e2c4eb0d793"
+    ],
+    ".github/workflows/system-integration-v5.yml": [
+      "2fb9864ac794878b320870c08e11fa4bd29a6f11413b309399c45012051217fa"
+    ],
+    ".github/workflows/world-quality-autopilot.yml": [
+      "da39f0778d86b5145dac648de462652ebff4a5227fec77d0bb0a1d9ca79c3552"
+    ],
+    "services/ai3d-worker/ai3d/plugins/mesh_quality_optimizer.py": [
+      "321354103d29948e869e38b9028e01263ea0b546c3ad46537a504fbb6825afd1"
+    ],
+    "docs/buildtypes/system-integration-v5.md": [
+      "908d19833eec5a3efdf7ee2c59d507c8272544baffebadde0abc3b10a4d0a648"
+    ]
+  },
+  "6.0.0": {
+    "playwright.config.js": [
+      "29e4563ba7154632a8992502f345d39f9c1cca02aadee1a0d3e56b277fd19859"
+    ],
+    "DESKTOP_AI_SYSTEM_INTEGRATION_V6.md": [
+      "3a80a885b34ffcb397755dbaf70781e1491dce5f230ef3fe01759162b2220e6b"
+    ],
+    "docs/TECHNOLOGY_REFERENCES.md": [
+      "17cff2e5e641dde1a4f429b556fdc2c3d91233cfe9cccde4670eaf87a13b117e"
+    ],
+    "specs/DurableJobQueue.tla": [
+      "bd2bfe6a6f1c36d932574fbb58ce205efa42a361cc666a74add3bf1cb95894ab"
+    ],
+    "specs/DurableJobQueue.cfg": [
+      "a8f1ef472fa6a3a547634118f5027d8089ddaca91a8afb920773629583097f5e"
+    ],
+    "specs/ControlPlane.tla": [
+      "14a06f79b5631fa9d5f22359374faf324caa2983ef7961975cffdea2dc44d61f"
+    ],
+    "specs/ControlPlane.cfg": [
+      "cf9bfe1ca26ebf728685e4db44c2ce6fdf11aa1361216445f81f3c55878455ae"
+    ],
+    "config/integration-v6.cue": [
+      "9e98b6e89b3039b7e9c6bdcfd206fb01e5390fe482d24bc69f022eb832562d49"
+    ],
+    "scripts/desktop-ai-report-validator.cjs": [
+      "f1d3f42899c3fc714a3e2cf5a286735d7722af7dc7bc8773f8cc10981922ce3e"
+    ],
+    "scripts/device-test-executor.cjs": [
+      "eceb65f04d365c243df35fef1f8d7233772115bb473e22a67fa87d607447872d"
+    ],
+    "scripts/integration-utils.cjs": [
+      "636af5be6fdc8b332aafe30643a9fc5c74945bb5a94496068d4cd5c8b854aa94"
+    ],
+    "scripts/release-promotion-controller.cjs": [
+      "f6c02fc158836ce2a280c29d7c9da4f034dedc86b51c06295e33838242e173c4"
+    ],
+    "scripts/feature-flag-engine.cjs": [
+      "01e812736e18a9a36954aaa5f7cf1ea0110f17a4ef17e95db55eb1abfd0f1b27"
+    ],
+    "scripts/native-ast-dataflow.cjs": [
+      "ad3c2a4bf609c5cd284fe6513ba2004868a7cfca6b812e291a2f6bdeaec8bb6a"
+    ],
+    "scripts/ai-visual-critic.js": [
+      "fae8b06bd8464d74b77f1e961dab0bf7fe7e2d3e020780c7e1467210bda80ce5"
+    ],
+    "scripts/wit-component-validator.cjs": [
+      "4fd059656c9bae420e0a00337845a2d770c269f700dfd97a004a04281b41144c"
+    ],
+    "scripts/integration-chaos-test.cjs": [
+      "47399e6e235da7b66c7fe0d315846dd5e4ecf62e6bd784a201cfda859530b0d6"
+    ],
+    "scripts/config-contract-validator.cjs": [
+      "f4c1d4e9ed7a94b0ad0ed67d2a03f6582c3602a40204dde9e1e4ac535b48fbbf"
+    ],
+    "scripts/device-lab-orchestrator.cjs": [
+      "c9b2909efe5cd8c9f27b4a4fd216d55f29118134ce11cf4cdf1b74c411518736"
+    ],
+    "scripts/world-device-profile-matrix.js": [
+      "5d8f6ed25e05439858c717281560de179cbee098ade7f57126fb200fc2f3bd83"
+    ],
+    "scripts/cas-peer-discovery.cjs": [
+      "d28748b0f15939d54b58c8912816d2e062db06cbb17fd86067d01c6ebdfba9f8"
+    ],
+    "scripts/cas-merkle-store.cjs": [
+      "d2b7c5da39060266279acf071b66aa455a634ea78c62af8a2c20e6900db4d4d9"
+    ],
+    "scripts/system-readiness.cjs": [
+      "433e07f9a43f207b98397bf945fd83382fe1a9f833666893d2f288987a89ff77"
+    ],
+    "scripts/durable-job-queue.cjs": [
+      "6153c70572311bb6afc07cbaab45369a21c6e8df4ba6c9cfc5862a4faa86a016"
+    ],
+    "scripts/integration-telemetry-lib.cjs": [
+      "d1340539a6062977d105c537d886d5f57e0860ba468e0c1cc2da3d2a286aadc9"
+    ],
+    "scripts/world-quality-analyzer.js": [
+      "44b32b12f4e6a9dbe2c62c12f842eee551f4319279aac62a04d6b1449915753b"
+    ],
+    "scripts/distributed-cas.cjs": [
+      "279603207f14d1b3d79460274edf3a4b24b039a9e5eefc1ea71e6cd454ecd596"
+    ],
+    "scripts/rekor-monitor.cjs": [
+      "6a89552eb6f7421dbaf89c2960c1cb2e198998d3ac9e5860e3896325b5e2cdea"
+    ],
+    "scripts/technology-lock-validator.cjs": [
+      "f471e26bdb4030826d50c7169712b8a351ef6ee4c2e7ce23184776dc87ff321a"
+    ],
+    "scripts/project-directive-gate.cjs": [
+      "0d725c0dd4456750580cc41dff49169b1fb726bc8a5903cc0618dd24b0469c8a"
+    ],
+    "scripts/integration-selftest.cjs": [
+      "122f57ba53a3904a7787af7d13536ee7190d87cf19d8977701b37ee2d87d1039"
+    ],
+    "scripts/wit-bindings-generator.cjs": [
+      "5f503d3f1ac7e6813975c47c8aa77458b4b9888c1d8171d5cafa6b887ada15ac"
+    ],
+    "scripts/character-spatial-contract-lib.cjs": [
+      "52f56bbae04bb09cc0811a28935820eede714d490c39e4ca1b99b760d7f0b9c0"
+    ],
+    "scripts/secure-update-metadata.cjs": [
+      "cf2b5e20e75f51ed582dbfacea12921554d315611771b3660c06ca347fc15abc"
+    ],
+    "scripts/graphics-regression-guard.cjs": [
+      "16b3eb3e788739f6c15888e924c102b4dde2276dc87d14fd292c3650dc0da5f9"
+    ],
+    "scripts/system-integration-gate.cjs": [
+      "c21eff21167add266c2323ef9b6ad0f14956c2feaace4d824f84bda51048fb24"
+    ],
+    "scripts/model-state-checker.cjs": [
+      "e43ef7ac705cc628ded941682c4b7e01275586ef47997e8474e38db3298edec5"
+    ],
+    "scripts/system-enhancement-orchestrator.cjs": [
+      "b60b63b555bf03f003761e39f0fc6ba63c6c57d38ac23efdf28b0797e968709d"
+    ],
+    "scripts/toolchain-bootstrap.cjs": [
+      "7e2c57ed5c907a2775896e001499d896fb6a1cfcdc6b04ff5c2c720f06798ced"
+    ],
+    "scripts/change-impact-orchestrator.cjs": [
+      "6e15bb94e356b8944da377345a962bd08ece1ad6f936683c2952b89ca8b7240b"
+    ],
+    "scripts/audio-variation-validator.cjs": [
+      "eb3fbfedb425cd64cfc68e1edfd98ce3418b293c5739bfbc86c87ce0ad96f471"
+    ],
+    "scripts/toolchain-security-gate.cjs": [
+      "295dfae961a36ff84fe69642b1369a4c3d1706f60a78227649ac157104118a04"
+    ],
+    "scripts/system-control-plane.cjs": [
+      "73a9d6cddf43c3cc4717bd53e29193c2fc466cd651ea74d63cd34e1d6479b13e"
+    ],
+    "scripts/semantic-dependency-graph.cjs": [
+      "d0d122ba4dde0656545510e7c29399aef127ff6bd01f56f13baf37279179d902"
+    ],
+    "scripts/integration-telemetry.cjs": [
+      "15d446900874ffe5e110668c51ae6d670150f08db7393e58a9f6837ce962666c"
+    ],
+    "scripts/reproducible-build-gate.cjs": [
+      "cbdfd11dedf40b223c0afcf72526cf8bc74fd5d7a0c2625088bb8feaa680b23a"
+    ],
+    "scripts/world-runtime-quality-profiler.js": [
+      "04f134381881c7c27d06b7f8d65f8342ef7ca2411a7f9ca03b1f098e612acbf6"
+    ],
+    "scripts/tlc-native-runner.cjs": [
+      "6aae26fecdda5e05e48d7f15d01cd9015fd93dec5af7231183b0acf72a76d671"
+    ],
+    "scripts/provenance.cjs": [
+      "7433e9675374b2e831eb7eddcf3a892f5f05cb280429ce8a4d43840102afcc33"
+    ],
+    "scripts/production-quality-pull.js": [
+      "c1582e5f7a31f2e410ed0a01f899cb9ee4b49f159f29a4cab84f485531fbfe87"
+    ],
+    "scripts/world-quality-autopilot.js": [
+      "3b4dc70287b57e56a7b394b33a4023f785be8f2b30d57ac76dde2fba674f3984"
+    ],
+    "scripts/artifact-signing-transparency.cjs": [
+      "6e5907042a120bb6c3191c3410edebcc739a62e21af7a58c0b7fb3eda43743fc"
+    ],
+    "scripts/asset-registry.cjs": [
+      "9596dd4c1a1537e1c7143374b50c4f477f0c89eac5e841742c20cb0871d962b8"
+    ],
+    "scripts/asset-ingestion-planner.cjs": [
+      "e5f29da66b0249d3309d8180f74e5e645e5ed0f325893a95ddd17b552a4238ea"
+    ],
+    "scripts/gameplay-physical-contract-validator.cjs": [
+      "24f6f6a7ee40e0b237ad8deee5039f080406f25416b22e35cde5ded69e253f3b"
+    ],
+    "scripts/cyclonedx-sbom.cjs": [
+      "c1643511768779845db7bdfaf33cf43fffcdf40fec1832699d926ff80894c319"
+    ],
+    "scripts/policy-engine.cjs": [
+      "4a07bbb1c870d3ef07178fb3fcff889b4e6b2ce100443153adbe9024f53448ae"
+    ],
+    "scripts/adapter-sandbox.cjs": [
+      "64c9596d24f661c9c4f8f87015fd63fc1470240845b93e8ba273c18b571c4065"
+    ],
+    "scripts/technology-consensus.cjs": [
+      "4cd87f8e45a00f6dcebe85ab456ab0c4364c2c6e3b11f8e6c00cfcb3170317c7"
+    ],
+    "data/performance-budgets.json": [
+      "94151b44aa771e7081ac3e1e2060f2ddfbb4e8f72b44fb767280765bcb00eb3a"
+    ],
+    "data/device-lab-policy.json": [
+      "d1368530dbeb7f4e392344d373c1e8cfe49d4b72a7ff5d86e82953fa53a4dabc"
+    ],
+    "data/desktop-ai-final-report.template.json": [
+      "e08f0c4c5f1696344058d35a9cca5cb61c22b9b7ceca52f4d8cf86b352c07dc4"
+    ],
+    "data/model-check-policy.json": [
+      "752a2be0ec21d05243e660609d5cdfced09f6afe4cad03493998ef84d86a6d6a"
+    ],
+    "data/feature-flag-policy.json": [
+      "1fa38304e1f58ec47c59fd40447a2c9bb4e4d4c052e8ee6ece0d492086b07331"
+    ],
+    "data/update-trust-policy.json": [
+      "fce326a395749e98ede758982481f4e84c6f34a832bc908d8992c669fc1716d8"
+    ],
+    "data/audio-events.template.json": [
+      "7edf235baf298240981d90848ab1197f9c72663cc88bdd0b12115c5863f097ef"
+    ],
+    "data/adapter-sandbox-policy.json": [
+      "e20f937a8b46fd4c65713609c2a353faf87aab3c18f72d434053ed86a42c9086"
+    ],
+    "data/distributed-cas-policy.json": [
+      "d1f8f729f2d5958d94a363e70c878d25dadb534f37c71b45971bde58d15e733f"
+    ],
+    "data/component-model-policy.json": [
+      "f74a4dc8315423123d6922c969aee09b865f68a4a79ece305dba1010b052afbc"
+    ],
+    "data/system-conflict-policy.json": [
+      "15ef493b099c07cde0f276acdfe3c63fa9edd3ad292d7deb3e98b0497ec5c36b"
+    ],
+    "data/supply-chain-signing-policy.json": [
+      "6d46e9738ac1c90595c000ed6185ab1bcc203461ff1d6a846a021993f1955e3f"
+    ],
+    "data/system-capability-registry.json": [
+      "8cfd65e08a649d982ed898d5f9b4f5d49263b5ba74923594f11ce5e67bfffbdb"
+    ],
+    "data/rekor-monitor-policy.json": [
+      "dc08b13cc40fcaf5172192899107f371cc796a2de37f99a335acc51a0e33af71"
+    ],
+    "data/technology-candidate-catalog.json": [
+      "2fe895156269c8ef516a615372a1d2ff957da341146c00e41a066d8ef18baa2e"
+    ],
+    "data/wit-bindings-policy.json": [
+      "8cd2bd9510acbb8b663b3f7f8b4afa16578a6bd6dcff8cb3a565da2e5b5030ef"
+    ],
+    "data/reproducible-build-policy.json": [
+      "ac99fbed7663e5b2fdef91897700f7a2815d22163b716f7296256152edc843a9"
+    ],
+    "data/real-device-executor-policy.json": [
+      "6676749cef5ed5474f14be53248446a00c3cdb3e35db033bff67e46d39116ff1"
+    ],
+    "data/native-analysis-policy.json": [
+      "a99c83d894db54fce6547fdd7adb7bd00ce8a93ac90e03ea0a4647d0c64ef0c5"
+    ],
+    "data/toolchain-bootstrap-policy.json": [
+      "214b050a97eb715684fa802b6073d2ed9d0598f4d55a19a4ee6e90222af27590"
+    ],
+    "data/current-task-contract.template.json": [
+      "45bdc5c9e6dfc5cd96c3c00282f413c4e926fb3666c96c44a07aed721debe8d5"
+    ],
+    "data/asset-metadata-template.json": [
+      "f27a5247fb7cfe1a3cdc0bc74370f9d433170efa4a3b8097be9d1aa2be936084"
+    ],
+    "data/gameplay-physical-contract.json": [
+      "e024954a837e005ceffe8436ede1b1158e87c0072d50a4cd1233a9183f428eca"
+    ],
+    "data/semantic-graph-policy.json": [
+      "4c0daacc19177485f06363a91d5f0a88677558b6a45884fc7e35d195229b2f38"
+    ],
+    "data/system-integration-version.json": [
+      "a89031d2d231cd530e86b3712384d27d0dc53d02533f7e5afada25f90cf9b0ed"
+    ],
+    "data/cas-discovery-policy.json": [
+      "e6b4b45acb8e5312c81ab888b7df0fe06fb48aa213411638215aff3c0c20aa1d"
+    ],
+    "data/project-directives.json": [
+      "3f6dd608d9d891cedfde40de3a5dcfd7c7b831cdf78bd3117a745defa73dc52d"
+    ],
+    "data/asset-quality-ratchet-policy.json": [
+      "6661c375213038599b7d89a2eb2623d7f6f62b55da2e2a78cf6a890caa658d27"
+    ],
+    "data/flags.json": [
+      "5b629e95e307725865389626726beb70748ff57c9ec90e17c3fbb610788390d0"
+    ],
+    "wit/world-server-adapter.wit": [
+      "aa3475d2b717e427004a3b3adc27695c3e00d4a2220faae6ef8fc0fbb7e83223"
+    ],
+    "api/quality-summary.js": [
+      "5b90b0abd2adc1565904ac3f68ee82e5c46e86875100730af8a157311fb2cec5"
+    ],
+    "api/quality-telemetry.js": [
+      "d16374c5659b6279dbce0509ab957cce29232de6ff39dfe8882e226feffc3367"
+    ],
+    "policy/opa-bundle/data.json": [
+      "69dee165420807eed2538b02ceb84591e3162e9fd6744481b878a4e9cb4d6ec2"
+    ],
+    "policy/opa-bundle/worldserver.rego": [
+      "849f76a7ad1cc8e720134100183574e2cb3c7d8049c4a0d3372e44ae3cb06cba"
+    ],
+    "policy/opa-bundle/.manifest": [
+      "a23ea6f29afd8fe235463677ded2bfee8c130a8dc9e7e46e00ad95e1156c33b3"
+    ],
+    ".github/workflows/system-integration-v6.yml": [
+      "852a65a8fb35653fa5b9cd35d3b8566a7134c56e9dfb23e75129668fba4d6e11"
+    ],
+    ".github/workflows/quality-canary.yml": [
+      "964102707e4f37c5588060e900a9bdffec0a3cefc1a8c5cf95de0e2c4eb0d793"
+    ],
+    ".github/workflows/world-quality-autopilot.yml": [
+      "da39f0778d86b5145dac648de462652ebff4a5227fec77d0bb0a1d9ca79c3552"
+    ],
+    "services/ai3d-worker/ai3d/plugins/mesh_quality_optimizer.py": [
+      "321354103d29948e869e38b9028e01263ea0b546c3ad46537a504fbb6825afd1"
+    ],
+    "docs/buildtypes/system-integration-v6.md": [
+      "be132383031c0594eba5482bfec62cbbec08095c96e3b00308d5033ed43131ee"
+    ]
+  },
+  "7.0.0": {
+    "playwright.config.js": [
+      "29e4563ba7154632a8992502f345d39f9c1cca02aadee1a0d3e56b277fd19859"
+    ],
+    "DESKTOP_AI_SYSTEM_INTEGRATION_V7.md": [
+      "f06c9d9182e40ad0c0e125cef810c5dd03d39270ee7803c88e5300e5dc1cec97"
+    ],
+    "docs/TECHNOLOGY_REFERENCES.md": [
+      "17cff2e5e641dde1a4f429b556fdc2c3d91233cfe9cccde4670eaf87a13b117e"
+    ],
+    "specs/DurableJobQueue.tla": [
+      "bd2bfe6a6f1c36d932574fbb58ce205efa42a361cc666a74add3bf1cb95894ab"
+    ],
+    "specs/DurableJobQueue.cfg": [
+      "a8f1ef472fa6a3a547634118f5027d8089ddaca91a8afb920773629583097f5e"
+    ],
+    "specs/ControlPlane.tla": [
+      "14a06f79b5631fa9d5f22359374faf324caa2983ef7961975cffdea2dc44d61f"
+    ],
+    "specs/ControlPlane.cfg": [
+      "cf9bfe1ca26ebf728685e4db44c2ce6fdf11aa1361216445f81f3c55878455ae"
+    ],
+    "config/integration-v7.cue": [
+      "9e98b6e89b3039b7e9c6bdcfd206fb01e5390fe482d24bc69f022eb832562d49"
+    ],
+    "scripts/desktop-ai-report-validator.cjs": [
+      "f1d3f42899c3fc714a3e2cf5a286735d7722af7dc7bc8773f8cc10981922ce3e"
+    ],
+    "scripts/device-test-executor.cjs": [
+      "c38706afd2c2744ab1de5ec5083511a44986bb620d6eaecca8b187bf5dc57af9"
+    ],
+    "scripts/integration-utils.cjs": [
+      "636af5be6fdc8b332aafe30643a9fc5c74945bb5a94496068d4cd5c8b854aa94"
+    ],
+    "scripts/release-promotion-controller.cjs": [
+      "81e051d92a7e4bb7916457fa8cd507ad62c87af6599eb0ef78bbec126ecbbfca"
+    ],
+    "scripts/feature-flag-engine.cjs": [
+      "e858296289d8872cfa864376d7e2cd7d85aaa996b7a9382139b6cd485565fb85"
+    ],
+    "scripts/native-ast-dataflow.cjs": [
+      "7344e092ef552da7b8cc2891b528d57078897de2f86db1c8094c85f81a80cf2e"
+    ],
+    "scripts/ai-visual-critic.js": [
+      "fae8b06bd8464d74b77f1e961dab0bf7fe7e2d3e020780c7e1467210bda80ce5"
+    ],
+    "scripts/wit-component-validator.cjs": [
+      "753b798978797eda7ecde2843ff37c8268cd16ed00d98fb6af903a10f49190f1"
+    ],
+    "scripts/integration-chaos-test.cjs": [
+      "b54fc0fa6da44ed3660b56ceb53664b991d456cfb3556e31eb2803976f332793"
+    ],
+    "scripts/config-contract-validator.cjs": [
+      "e1b8db70b59dbac325f00d2ead23118db06f52f18f3bcb5d7c102da9ed0444e7"
+    ],
+    "scripts/device-lab-orchestrator.cjs": [
+      "dffdeaf2d5f5629b9f8ae9386503fc327762c1f72082e42217009de911a1faff"
+    ],
+    "scripts/world-device-profile-matrix.js": [
+      "5d8f6ed25e05439858c717281560de179cbee098ade7f57126fb200fc2f3bd83"
+    ],
+    "scripts/cas-peer-discovery.cjs": [
+      "2414961f42f4dea7a50eb7574abdd56180b3338077dd8fb368ed7a7a2138c2c5"
+    ],
+    "scripts/cas-merkle-store.cjs": [
+      "d2b7c5da39060266279acf071b66aa455a634ea78c62af8a2c20e6900db4d4d9"
+    ],
+    "scripts/system-readiness.cjs": [
+      "3dca87f0242277f9ae034eef8ee86ff23f458a317a462851b30745d9738b83e3"
+    ],
+    "scripts/durable-job-queue.cjs": [
+      "6153c70572311bb6afc07cbaab45369a21c6e8df4ba6c9cfc5862a4faa86a016"
+    ],
+    "scripts/integration-telemetry-lib.cjs": [
+      "d1340539a6062977d105c537d886d5f57e0860ba468e0c1cc2da3d2a286aadc9"
+    ],
+    "scripts/world-quality-analyzer.js": [
+      "44b32b12f4e6a9dbe2c62c12f842eee551f4319279aac62a04d6b1449915753b"
+    ],
+    "scripts/distributed-cas.cjs": [
+      "d4584046d37407464b0c5e766b2ec9b0def60c447d39ac6d0c48e1398a66d51e"
+    ],
+    "scripts/device-worker-server.cjs": [
+      "66faa95961f7e00f520be3834ac4391ae3af47f567de4902e1ba566c13b4d977"
+    ],
+    "scripts/rekor-monitor.cjs": [
+      "39afdd722e68b7f68056121cf0578636ebfe25fd08ccb1121f13af452accc3d0"
+    ],
+    "scripts/cas-redundancy-verifier.cjs": [
+      "0ee608c4676b1d0a100e07f7642fd28398cee6f70af5e6696a468d624de60574"
+    ],
+    "scripts/technology-lock-validator.cjs": [
+      "f471e26bdb4030826d50c7169712b8a351ef6ee4c2e7ce23184776dc87ff321a"
+    ],
+    "scripts/project-directive-gate.cjs": [
+      "9ba6a5bb515d5111b36a8cbea3c0135fbcfe036981cf84fff98e2a91e0fcb578"
+    ],
+    "scripts/integration-selftest.cjs": [
+      "3923a599026bc197ff57d4f4c373e09f6b7d6f1e4f8f0a0fda19ab56d619f507"
+    ],
+    "scripts/wit-bindings-generator.cjs": [
+      "ca03aabdbeb643ebcca4f6ade1282cd015104fa60180d105e952defcec453cc1"
+    ],
+    "scripts/character-spatial-contract-lib.cjs": [
+      "52f56bbae04bb09cc0811a28935820eede714d490c39e4ca1b99b760d7f0b9c0"
+    ],
+    "scripts/secure-update-metadata.cjs": [
+      "1599913314de33ec1d485cd16ca11531169628ac1de5f80d7936db171738024f"
+    ],
+    "scripts/graphics-regression-guard.cjs": [
+      "16b3eb3e788739f6c15888e924c102b4dde2276dc87d14fd292c3650dc0da5f9"
+    ],
+    "scripts/system-integration-gate.cjs": [
+      "a201d9bb9a9de463c1c3801d23bcd45b02c7fdfa682c30bd68d984693d1d98e0"
+    ],
+    "scripts/model-state-checker.cjs": [
+      "81c256135aa12c6885d8bf63256aa683a9e65631a32221c6f442ccefcdf09885"
+    ],
+    "scripts/deterministic-record-replay.cjs": [
+      "aeb58f7b5f79718fcc743e2aa2faf33da19b205895890140660c33e1911f814a"
+    ],
+    "scripts/system-enhancement-orchestrator.cjs": [
+      "b52418bf05966f1de417dc521d21610fc34612c0523087ae92413f7dea84070b"
+    ],
+    "scripts/toolchain-bootstrap.cjs": [
+      "6e4022d42d159c5423864dd90ded82afc539b8b578954e717bd461a04f996648"
+    ],
+    "scripts/change-impact-orchestrator.cjs": [
+      "6e15bb94e356b8944da377345a962bd08ece1ad6f936683c2952b89ca8b7240b"
+    ],
+    "scripts/audio-variation-validator.cjs": [
+      "eb3fbfedb425cd64cfc68e1edfd98ce3418b293c5739bfbc86c87ce0ad96f471"
+    ],
+    "scripts/toolchain-security-gate.cjs": [
+      "df87b986234c36f34edb2c573d06f6c8677ac906e1f851271f26ef4576fe6d52"
+    ],
+    "scripts/system-control-plane.cjs": [
+      "081ffb6ea59978b7d22e9a38e1cbca1ba519ce83e2c6884dde939c16001fe2f6"
+    ],
+    "scripts/semantic-dependency-graph.cjs": [
+      "9bde74f28b8eb8a4f222b443516f4f224c6b8f3870b38247d7ba5fd28e5936b5"
+    ],
+    "scripts/integration-telemetry.cjs": [
+      "15d446900874ffe5e110668c51ae6d670150f08db7393e58a9f6837ce962666c"
+    ],
+    "scripts/reproducible-build-gate.cjs": [
+      "122e73aef8d4451dbc5e104775962ef627d70f8cc7a1b1b6e7750d4fe680942e"
+    ],
+    "scripts/capability-aware-scheduler.cjs": [
+      "03f0525a4e19836213a55cb09dfd44ec87f2480fcec50042f3f998add10ad166"
+    ],
+    "scripts/world-runtime-quality-profiler.js": [
+      "04f134381881c7c27d06b7f8d65f8342ef7ca2411a7f9ca03b1f098e612acbf6"
+    ],
+    "scripts/orchestrator-supervisor.cjs": [
+      "73b79e3833a38bfd812b44465242af0bb95acf25013ea498f7fa45ef0cec5f5f"
+    ],
+    "scripts/tlc-native-runner.cjs": [
+      "a00bfd24677f3e96bdf57dc804d9222dedf447332e49c609604f8f828a02306d"
+    ],
+    "scripts/provenance.cjs": [
+      "7433e9675374b2e831eb7eddcf3a892f5f05cb280429ce8a4d43840102afcc33"
+    ],
+    "scripts/production-quality-pull.js": [
+      "c1582e5f7a31f2e410ed0a01f899cb9ee4b49f159f29a4cab84f485531fbfe87"
+    ],
+    "scripts/world-quality-autopilot.js": [
+      "3b4dc70287b57e56a7b394b33a4023f785be8f2b30d57ac76dde2fba674f3984"
+    ],
+    "scripts/artifact-signing-transparency.cjs": [
+      "9d047c83e0b0638d058c7f140cec3761d54a41a86e36b9a0a8d7bac69f6d213f"
+    ],
+    "scripts/asset-registry.cjs": [
+      "9596dd4c1a1537e1c7143374b50c4f477f0c89eac5e841742c20cb0871d962b8"
+    ],
+    "scripts/dependency-security-orchestrator.cjs": [
+      "9987aec16b8b55f98631844ad5c0abd9ed6237aa9b582ddd07c988e5aeb2955b"
+    ],
+    "scripts/asset-ingestion-planner.cjs": [
+      "e5f29da66b0249d3309d8180f74e5e645e5ed0f325893a95ddd17b552a4238ea"
+    ],
+    "scripts/gameplay-physical-contract-validator.cjs": [
+      "24f6f6a7ee40e0b237ad8deee5039f080406f25416b22e35cde5ded69e253f3b"
+    ],
+    "scripts/cyclonedx-sbom.cjs": [
+      "c1643511768779845db7bdfaf33cf43fffcdf40fec1832699d926ff80894c319"
+    ],
+    "scripts/policy-engine.cjs": [
+      "9535db19def5dab53922ea5bb7d7255d02985c805b5ed6543c47c02f12fd2746"
+    ],
+    "scripts/adapter-sandbox.cjs": [
+      "6c6263265e281da03fb7b4d0db824c3c977f9814563739ee51946c617d9bc1f1"
+    ],
+    "scripts/technology-consensus.cjs": [
+      "f3aba9b3a5143282d41381497ed4b2723f422b3df28aa25d49913c333fce1bff"
+    ],
+    "scripts/transactional-deploy.cjs": [
+      "0c942a95c71714154b8dfbd695f102cb9b927f8d1235d8f470311c3f8c940f8b"
+    ],
+    "data/performance-budgets.json": [
+      "94151b44aa771e7081ac3e1e2060f2ddfbb4e8f72b44fb767280765bcb00eb3a"
+    ],
+    "data/transactional-deploy-policy.json": [
+      "44aca9c7ef1be68d7d89f235cc6d25244e209462240b37b73fbe7cb2d030aa48"
+    ],
+    "data/device-lab-policy.json": [
+      "bccbac937286a8e6b6821f4ff0cccfbe215b86f618052ee9c7fb294847b5f1a0"
+    ],
+    "data/desktop-ai-final-report.template.json": [
+      "e08f0c4c5f1696344058d35a9cca5cb61c22b9b7ceca52f4d8cf86b352c07dc4"
+    ],
+    "data/model-check-policy.json": [
+      "f080338c31d2497de5c9f92562e0fbceb00ee146b419945286142e5bd778d438"
+    ],
+    "data/feature-flag-policy.json": [
+      "1fa38304e1f58ec47c59fd40447a2c9bb4e4d4c052e8ee6ece0d492086b07331"
+    ],
+    "data/update-trust-policy.json": [
+      "fce326a395749e98ede758982481f4e84c6f34a832bc908d8992c669fc1716d8"
+    ],
+    "data/audio-events.template.json": [
+      "7edf235baf298240981d90848ab1197f9c72663cc88bdd0b12115c5863f097ef"
+    ],
+    "data/device-worker-policy.json": [
+      "41c9156b6feed2d530228269ea4186004199c60f76433a69e5d50f0fb807aad4"
+    ],
+    "data/capability-scheduler-policy.json": [
+      "1ffd72921a077b93fd0525bb818ad465130542d578ee9dee9c2489f2e713b27a"
+    ],
+    "data/adapter-sandbox-policy.json": [
+      "e20f937a8b46fd4c65713609c2a353faf87aab3c18f72d434053ed86a42c9086"
+    ],
+    "data/record-replay-policy.json": [
+      "aa7964c56c37a6d846d3bf672ba514308058e29ffe80f3ff1c8decead4d55ef6"
+    ],
+    "data/cas-redundancy-policy.json": [
+      "e926532ad128d7ced21c3f97ba6e2d2f2110b7062cd1611b4d58db0ba3442677"
+    ],
+    "data/distributed-cas-policy.json": [
+      "e76febd25dda21d575cdea4faf6e96106ecac3c4070e041641fb915ab78297e0"
+    ],
+    "data/component-model-policy.json": [
+      "e5320b1c86c1e6db531b7c9b6c3454a7aa2050d6624cb346244ae3a588517f30"
+    ],
+    "data/system-conflict-policy.json": [
+      "15ef493b099c07cde0f276acdfe3c63fa9edd3ad292d7deb3e98b0497ec5c36b"
+    ],
+    "data/orchestrator-supervisor-policy.json": [
+      "7f820043e9d47009e840d93106dde046f77034a15238d12476a519ab6e68894b"
+    ],
+    "data/supply-chain-signing-policy.json": [
+      "188b93b1f1763b0edd12d1f7981c754550a08201317587dfcaa43d91997c3ef8"
+    ],
+    "data/system-capability-registry.json": [
+      "278a29d66830b29b3caeb2869fdce60df281212b82952800fc224ba77462cbb5"
+    ],
+    "data/rekor-monitor-policy.json": [
+      "19a8dc26debc365d18570f496cf5d59026ce0e9a9876c3626527cd390e488213"
+    ],
+    "data/technology-candidate-catalog.json": [
+      "6be73259cc8e5ff400a7b249a6d3b1dc3d44d4fc532e017484be8a5132378979"
+    ],
+    "data/wit-bindings-policy.json": [
+      "3ea48febf541d3ebd95627e77b7ef8705d46c06f90fc620e2afc6ac103287f4a"
+    ],
+    "data/reproducible-build-policy.json": [
+      "ac99fbed7663e5b2fdef91897700f7a2815d22163b716f7296256152edc843a9"
+    ],
+    "data/real-device-executor-policy.json": [
+      "da04d3dd9b10b37205ca174b80aa6233afd292d595ef2d8bcc5abe5acc669518"
+    ],
+    "data/native-analysis-policy.json": [
+      "579b91e6c9a4ed217b870c4db6129a5d71dd88cd482ab4d887fe3e68f0d397c7"
+    ],
+    "data/toolchain-bootstrap-policy.json": [
+      "97ae61efbcb4f629fec3b1a1c54d0f99ea44eecb44a0936205bc6ce19d3414ac"
+    ],
+    "data/current-task-contract.template.json": [
+      "45bdc5c9e6dfc5cd96c3c00282f413c4e926fb3666c96c44a07aed721debe8d5"
+    ],
+    "data/asset-metadata-template.json": [
+      "f27a5247fb7cfe1a3cdc0bc74370f9d433170efa4a3b8097be9d1aa2be936084"
+    ],
+    "data/gameplay-physical-contract.json": [
+      "e024954a837e005ceffe8436ede1b1158e87c0072d50a4cd1233a9183f428eca"
+    ],
+    "data/semantic-graph-policy.json": [
+      "7b33b578af3244a773f536c7c85fd6858bf496ac73b42463839487d587ddec26"
+    ],
+    "data/device-scenarios.json": [
+      "aa328e660f5ff14b9f775936a8481006c823d9b081984ca657d8d68d6cd0546d"
+    ],
+    "data/dependency-security-policy.json": [
+      "b85819f3415e66404c7bc4f5f54f2c6ae90f9574d2c41bbf98cebbaaef663140"
+    ],
+    "data/system-integration-version.json": [
+      "2f779f8f62eda4010d50ca432ac11374786aa5847ec7a86a2344a98fa687ee1e"
+    ],
+    "data/cas-discovery-policy.json": [
+      "686021e72c0a4ecbb39a482d58ee76dfe6f2b9067de51b08616ccc1210493320"
+    ],
+    "data/project-directives.json": [
+      "0d87234b8bb4f080836a029f4345dd4ec91c354ee5b3a83be34cf7c4d3ae7be1"
+    ],
+    "data/asset-quality-ratchet-policy.json": [
+      "6661c375213038599b7d89a2eb2623d7f6f62b55da2e2a78cf6a890caa658d27"
+    ],
+    "data/flags.json": [
+      "5b629e95e307725865389626726beb70748ff57c9ec90e17c3fbb610788390d0"
+    ],
+    "wit/world-server-adapter.wit": [
+      "aa3475d2b717e427004a3b3adc27695c3e00d4a2220faae6ef8fc0fbb7e83223"
+    ],
+    "api/quality-summary.js": [
+      "5b90b0abd2adc1565904ac3f68ee82e5c46e86875100730af8a157311fb2cec5"
+    ],
+    "api/quality-telemetry.js": [
+      "d16374c5659b6279dbce0509ab957cce29232de6ff39dfe8882e226feffc3367"
+    ],
+    "policy/opa-bundle/data.json": [
+      "69dee165420807eed2538b02ceb84591e3162e9fd6744481b878a4e9cb4d6ec2"
+    ],
+    "policy/opa-bundle/worldserver.rego": [
+      "849f76a7ad1cc8e720134100183574e2cb3c7d8049c4a0d3372e44ae3cb06cba"
+    ],
+    "policy/opa-bundle/.manifest": [
+      "a23ea6f29afd8fe235463677ded2bfee8c130a8dc9e7e46e00ad95e1156c33b3"
+    ],
+    ".github/workflows/system-integration-v7.yml": [
+      "ad03cc8113fb74a2d36a789b4ae9aec2eb698af058608b33edf0761f0f7359e8"
+    ],
+    ".github/workflows/quality-canary.yml": [
+      "964102707e4f37c5588060e900a9bdffec0a3cefc1a8c5cf95de0e2c4eb0d793"
+    ],
+    ".github/workflows/world-quality-autopilot.yml": [
+      "da39f0778d86b5145dac648de462652ebff4a5227fec77d0bb0a1d9ca79c3552"
+    ],
+    "services/ai3d-worker/ai3d/plugins/mesh_quality_optimizer.py": [
+      "321354103d29948e869e38b9028e01263ea0b546c3ad46537a504fbb6825afd1"
+    ]
+  },
+  "7.1.0": {
+    "DESKTOP_AI_SYSTEM_INTEGRATION_V7.md": [
+      "bc7fe3de8912992e59f735e1f44645443be7252871029b0735560d9d20d3c92f"
+    ],
+    "docs/TECHNOLOGY_REFERENCES.md": [
+      "17cff2e5e641dde1a4f429b556fdc2c3d91233cfe9cccde4670eaf87a13b117e"
+    ],
+    "specs/DurableJobQueue.tla": [
+      "bd2bfe6a6f1c36d932574fbb58ce205efa42a361cc666a74add3bf1cb95894ab"
+    ],
+    "specs/DurableJobQueue.cfg": [
+      "a8f1ef472fa6a3a547634118f5027d8089ddaca91a8afb920773629583097f5e"
+    ],
+    "specs/ControlPlane.tla": [
+      "14a06f79b5631fa9d5f22359374faf324caa2983ef7961975cffdea2dc44d61f"
+    ],
+    "specs/ControlPlane.cfg": [
+      "cf9bfe1ca26ebf728685e4db44c2ce6fdf11aa1361216445f81f3c55878455ae"
+    ],
+    "config/integration-v7.cue": [
+      "9e98b6e89b3039b7e9c6bdcfd206fb01e5390fe482d24bc69f022eb832562d49"
+    ],
+    "scripts/desktop-ai-report-validator.cjs": [
+      "f1d3f42899c3fc714a3e2cf5a286735d7722af7dc7bc8773f8cc10981922ce3e"
+    ],
+    "scripts/device-test-executor.cjs": [
+      "a996fa7be314740e4df22ac872416e1d2a0b1f95ba4b0620b1faac668da6a682"
+    ],
+    "scripts/integration-utils.cjs": [
+      "636af5be6fdc8b332aafe30643a9fc5c74945bb5a94496068d4cd5c8b854aa94"
+    ],
+    "scripts/release-promotion-controller.cjs": [
+      "e09c48266e0fc9fcbda2f8adc69c3832dd25a61382f343a2b9453fc041c6894f"
+    ],
+    "scripts/feature-flag-engine.cjs": [
+      "91fbb5010e8a22ed8a22fdcd154903d728e5d5caf66c22cb00e11812a1b56eec"
+    ],
+    "scripts/native-ast-dataflow.cjs": [
+      "9995871e735e78d92dcb0c63a2450412b34d909280a9619259bf10992b9093b0"
+    ],
+    "scripts/wit-component-validator.cjs": [
+      "5c01e89c426468c92e70fc3999320b81227a72bcef5b6ab3c9e17d4040e2b450"
+    ],
+    "scripts/function-honest-100-auditor.cjs": [
+      "d7289a784c06d771ad392961990d5a8f62b4782c167bae559bd74452c54cfee3"
+    ],
+    "scripts/integration-chaos-test.cjs": [
+      "f5f0f3565a9d781a56b2159faaa7b39d7c640b631fb0737f15d3980d63475822"
+    ],
+    "scripts/config-contract-validator.cjs": [
+      "363f383f2d1bf42d46c2057dc32c2cd4e3fa3d40175690333336052ab76d0d29"
+    ],
+    "scripts/device-lab-orchestrator.cjs": [
+      "6c4d1dca75d28a22c66d39df9222c2dcc044495807ddd89fa720ca238a2c5421"
+    ],
+    "scripts/cas-peer-discovery.cjs": [
+      "6582a14df874e62fdd552cf7d350aa99f0b106058c42c7c36818371ed9733b88"
+    ],
+    "scripts/cas-merkle-store.cjs": [
+      "d2b7c5da39060266279acf071b66aa455a634ea78c62af8a2c20e6900db4d4d9"
+    ],
+    "scripts/system-readiness.cjs": [
+      "b91dbe66a2dc157cfa45853133a87c304dc066f3419f30ae4baa457fe71e8c6b"
+    ],
+    "scripts/durable-job-queue.cjs": [
+      "6153c70572311bb6afc07cbaab45369a21c6e8df4ba6c9cfc5862a4faa86a016"
+    ],
+    "scripts/integration-telemetry-lib.cjs": [
+      "d1340539a6062977d105c537d886d5f57e0860ba468e0c1cc2da3d2a286aadc9"
+    ],
+    "scripts/function-monotonic-enhancement-gate.cjs": [
+      "c60a31ec359e30711b2bf473573cb5d2eec630125fb5b9a891ec08f80535df7d"
+    ],
+    "scripts/distributed-cas.cjs": [
+      "31ba3671643ab3597c48e3b9dc59f8f34a15aeb6f93dc3b3dd47d46e4bb80636"
+    ],
+    "scripts/device-worker-server.cjs": [
+      "53836d7a4476b59c0ab690181799cd85d44c704ff19bbf3859aaf96b8074c87e"
+    ],
+    "scripts/rekor-monitor.cjs": [
+      "9e22f7197cd2a775a0129c6e6e2d34f6f6ed96f30c128c0738383ce27b821573"
+    ],
+    "scripts/cas-redundancy-verifier.cjs": [
+      "3c6ff24f9d8aca9f493ddaf7590cb27c14958a5dfbde867155e5fe568f1f8e76"
+    ],
+    "scripts/technology-lock-validator.cjs": [
+      "f471e26bdb4030826d50c7169712b8a351ef6ee4c2e7ce23184776dc87ff321a"
+    ],
+    "scripts/project-directive-gate.cjs": [
+      "129302cb0e9448def373e17bab56a0929201bc5ad698e298aa8a5ac2e032c510"
+    ],
+    "scripts/integration-selftest.cjs": [
+      "17a66706ced59fda918530a65baa071d98ae13b2db2d81086544a2866d3da17a"
+    ],
+    "scripts/wit-bindings-generator.cjs": [
+      "766bab76a370bd52da2dd2803279a31667fa22851f2e902c31965994890e0ad0"
+    ],
+    "scripts/character-spatial-contract-lib.cjs": [
+      "52f56bbae04bb09cc0811a28935820eede714d490c39e4ca1b99b760d7f0b9c0"
+    ],
+    "scripts/secure-update-metadata.cjs": [
+      "90634ac212c662dbc00439a0dcefa685c066fa1faea7846d933ed6fadbbcce82"
+    ],
+    "scripts/graphics-regression-guard.cjs": [
+      "16b3eb3e788739f6c15888e924c102b4dde2276dc87d14fd292c3650dc0da5f9"
+    ],
+    "scripts/system-integration-gate.cjs": [
+      "7e1b9dca971c9fea8a1f3d3cf96d544992a7f4e32d362c4527def3e057bee401"
+    ],
+    "scripts/model-state-checker.cjs": [
+      "b6a06351a396e7a5820e7f1c73bed8eb9f201236316c3e77b71d6d85cb603e9c"
+    ],
+    "scripts/deterministic-record-replay.cjs": [
+      "b6755aa7a2d4ad42793d2c0357a5e81f7f988f22be003fa84eb0c7ee2cf474b6"
+    ],
+    "scripts/function-contract-coverage.cjs": [
+      "cf1c8ab589b5d08a43e03555782c21447db57f867c9d4ab4b7ced0b08e436003"
+    ],
+    "scripts/system-enhancement-orchestrator.cjs": [
+      "6f58281f0f6f703027551b399d7020925ef9d44fd728a4b4adbef8bd0ef05e4a"
+    ],
+    "scripts/toolchain-bootstrap.cjs": [
+      "6b0250c725a9030e294b18194f4a038778e6fa2f5cd3b14db2a032a163048fdd"
+    ],
+    "scripts/change-impact-orchestrator.cjs": [
+      "6e15bb94e356b8944da377345a962bd08ece1ad6f936683c2952b89ca8b7240b"
+    ],
+    "scripts/audio-variation-validator.cjs": [
+      "eb3fbfedb425cd64cfc68e1edfd98ce3418b293c5739bfbc86c87ce0ad96f471"
+    ],
+    "scripts/toolchain-security-gate.cjs": [
+      "b44307810ebc5e0ae3b2f6512d1e707f33e85cd945146e41f858f45cd3e48eda"
+    ],
+    "scripts/system-control-plane.cjs": [
+      "134663b247a171bc5c64d55c137cfa00db81c33fa7de7e8a2f15347db7c358a9"
+    ],
+    "scripts/semantic-dependency-graph.cjs": [
+      "c893d354629455ec232ec575eb4c412b054ecec124a32fad5870cceec29922e7"
+    ],
+    "scripts/integration-telemetry.cjs": [
+      "15d446900874ffe5e110668c51ae6d670150f08db7393e58a9f6837ce962666c"
+    ],
+    "scripts/reproducible-build-gate.cjs": [
+      "b266b0504b7709521e17996bc666e05daf2e144798044cd6355cb4727ae3cab9"
+    ],
+    "scripts/capability-aware-scheduler.cjs": [
+      "b78df79e521839ad17432bdd7070229e922643426b8b119bac9c33653aa98840"
+    ],
+    "scripts/orchestrator-supervisor.cjs": [
+      "5cae567ea3820db33c93a10fab8c24152c6db717b93c596b8c3d98561e1b1e03"
+    ],
+    "scripts/tlc-native-runner.cjs": [
+      "f50f643474314b232db83ec6e9a92ad9a5e27584f900fcad1c3d549ca3b7c3fc"
+    ],
+    "scripts/provenance.cjs": [
+      "7433e9675374b2e831eb7eddcf3a892f5f05cb280429ce8a4d43840102afcc33"
+    ],
+    "scripts/artifact-signing-transparency.cjs": [
+      "5b436e1797572c717a0ba5126ffb23fdd3f2da8c24961d5823f8aa97e37ecb07"
+    ],
+    "scripts/asset-registry.cjs": [
+      "9596dd4c1a1537e1c7143374b50c4f477f0c89eac5e841742c20cb0871d962b8"
+    ],
+    "scripts/dependency-security-orchestrator.cjs": [
+      "fcc4822321ad1d1460ccaa32236bc2d64a20934e13506f169ccce09dfb774c46"
+    ],
+    "scripts/asset-ingestion-planner.cjs": [
+      "e5f29da66b0249d3309d8180f74e5e645e5ed0f325893a95ddd17b552a4238ea"
+    ],
+    "scripts/gameplay-physical-contract-validator.cjs": [
+      "24f6f6a7ee40e0b237ad8deee5039f080406f25416b22e35cde5ded69e253f3b"
+    ],
+    "scripts/cyclonedx-sbom.cjs": [
+      "c1643511768779845db7bdfaf33cf43fffcdf40fec1832699d926ff80894c319"
+    ],
+    "scripts/policy-engine.cjs": [
+      "a86e0b9747f1d83026fc4b4d0c7ed128cf8e9c8e6999c1d29020faead4f60237"
+    ],
+    "scripts/adapter-sandbox.cjs": [
+      "13ca8013798f0b34178ee6563180058f209ac697319a7a9b78afa787e09b314b"
+    ],
+    "scripts/technology-consensus.cjs": [
+      "3e929480a597e0e801ffe8904bcee346635e76072a9809c536bf9126d20437ac"
+    ],
+    "scripts/transactional-deploy.cjs": [
+      "02c1cabef07d25a193620b009b3c1455a22729dd7fec4888bf4f6427d4545c34"
+    ],
+    "data/transactional-deploy-policy.json": [
+      "a4cc008440a4949bc5ae7cddde62e762850447d58480955444170f15842ba881"
+    ],
+    "data/device-lab-policy.json": [
+      "28606d67b610d6e9b417e193e1217723c1b5f3c2f2154e1fc2cfddc5a89fbef8"
+    ],
+    "data/desktop-ai-final-report.template.json": [
+      "e08f0c4c5f1696344058d35a9cca5cb61c22b9b7ceca52f4d8cf86b352c07dc4"
+    ],
+    "data/model-check-policy.json": [
+      "c7e17e55517055164a5cb5d30b294f033d2d143072b370d825dce5644e83768b"
+    ],
+    "data/function-change-proposal.template.json": [
+      "1890908ae9d963e016db7065edf9973a767db340cf612de3aacd50611c11e7f1"
+    ],
+    "data/feature-flag-policy.json": [
+      "1fa38304e1f58ec47c59fd40447a2c9bb4e4d4c052e8ee6ece0d492086b07331"
+    ],
+    "data/update-trust-policy.json": [
+      "fce326a395749e98ede758982481f4e84c6f34a832bc908d8992c669fc1716d8"
+    ],
+    "data/audio-events.template.json": [
+      "7edf235baf298240981d90848ab1197f9c72663cc88bdd0b12115c5863f097ef"
+    ],
+    "data/device-worker-policy.json": [
+      "5c8be48924427d023c34310e4af7d0d29757c751c29d995d4a50a08ab516137d"
+    ],
+    "data/capability-scheduler-policy.json": [
+      "3e7277183b821d4db6f079a05344c01754510625dced18232aad670876e01107"
+    ],
+    "data/adapter-sandbox-policy.json": [
+      "e20f937a8b46fd4c65713609c2a353faf87aab3c18f72d434053ed86a42c9086"
+    ],
+    "data/record-replay-policy.json": [
+      "9357ed1ca1e6c82c9d816bf8b0b5bfc18ec798f28852f9408025d235516a0b50"
+    ],
+    "data/cas-redundancy-policy.json": [
+      "5e69a5fc58c695aed93cb6c718c4c67a093fa7c3fcd5d575dc5d532eb25a0867"
+    ],
+    "data/distributed-cas-policy.json": [
+      "a9b9776a389c92b465758f8c1a8839b3ca55a7d518a901e3818480578d634ea3"
+    ],
+    "data/component-model-policy.json": [
+      "73e60b92c760ff0489fdb3557d43fa021a039ff4e8d8dfe9b218411a5aefc910"
+    ],
+    "data/system-conflict-policy.json": [
+      "0fbc4cf60e9b48585e0d7c0025e8ab66305fac5eca799f20a17a3dfbd7b9ed20"
+    ],
+    "data/orchestrator-supervisor-policy.json": [
+      "4b4b4d86b1863b729228824f80ff60f2a8f36fdecca2bbf62eda458f88a71982"
+    ],
+    "data/function-honest-100-policy.json": [
+      "34e6b9fbbf3d9df4b37dc8ad86e75bed9de98b052dc950e14d047ddaabfda76c"
+    ],
+    "data/supply-chain-signing-policy.json": [
+      "87244cbba015d481bd3fcf2df5e15a7e74c37d6885887976773670d9d1068a56"
+    ],
+    "data/system-capability-registry.json": [
+      "751704b7d81afce90d8f98a8042929ff7652110c2cc20c491ba4befd4e201375"
+    ],
+    "data/rekor-monitor-policy.json": [
+      "e48628a9c95463ba4a6ae082abfdd4e14ff8338eb33a9ff78d1c42e24e8ffdfa"
+    ],
+    "data/technology-candidate-catalog.json": [
+      "07d9f3714248f6ef51497df7b1ee465e19c967f076bd54822d26c98cfae181eb"
+    ],
+    "data/wit-bindings-policy.json": [
+      "615604232e312bf7e183db73bc232a6b0913744fa3892ade9dbe394ae7f0345c"
+    ],
+    "data/reproducible-build-policy.json": [
+      "ac99fbed7663e5b2fdef91897700f7a2815d22163b716f7296256152edc843a9"
+    ],
+    "data/real-device-executor-policy.json": [
+      "c6eb13a4f97a7a593ff4c827b781f53f478332aafe9827738ac5792435a4dc0e"
+    ],
+    "data/native-analysis-policy.json": [
+      "622a2460cba6e6393ee51f29c3f9dd741745971d729919185f7a701337343401"
+    ],
+    "data/function-contracts.json": [
+      "f4a3147172ad08ddb42d8d56464efd0d75aab5f2adc7ec224b7854516e68df64"
+    ],
+    "data/toolchain-bootstrap-policy.json": [
+      "d942ecd4fd7986b9a6b24a932923e52fee6535108bfe8dd02d06d8562ab6903a"
+    ],
+    "data/current-task-contract.template.json": [
+      "45bdc5c9e6dfc5cd96c3c00282f413c4e926fb3666c96c44a07aed721debe8d5"
+    ],
+    "data/asset-metadata-template.json": [
+      "f27a5247fb7cfe1a3cdc0bc74370f9d433170efa4a3b8097be9d1aa2be936084"
+    ],
+    "data/gameplay-physical-contract.json": [
+      "e024954a837e005ceffe8436ede1b1158e87c0072d50a4cd1233a9183f428eca"
+    ],
+    "data/semantic-graph-policy.json": [
+      "7052f7937428891e3e1982a57a4c2014b28d50ded0be92766cee1daa972f4fc6"
+    ],
+    "data/device-scenarios.json": [
+      "aa328e660f5ff14b9f775936a8481006c823d9b081984ca657d8d68d6cd0546d"
+    ],
+    "data/dependency-security-policy.json": [
+      "64ecea1c2b3094570970d731abd4b0d9978d539b6fe246ba6eaf58b6546ac0b4"
+    ],
+    "data/system-integration-version.json": [
+      "1ccb7a0f4e415218112d2dbc3f61467cc53e4f7eb5143e58223169e755969f7c"
+    ],
+    "data/cas-discovery-policy.json": [
+      "03d1f745387297b9bef13fe93a9dbd2379e0d0cd89aa8e97c038d59437e01fb4"
+    ],
+    "data/project-directives.json": [
+      "f32cc1f324f6d34a1cb99fd25cc8affe3ab5367ae9b845f4c777f0cf15082125"
+    ],
+    "data/asset-quality-ratchet-policy.json": [
+      "6661c375213038599b7d89a2eb2623d7f6f62b55da2e2a78cf6a890caa658d27"
+    ],
+    "data/flags.json": [
+      "5b629e95e307725865389626726beb70748ff57c9ec90e17c3fbb610788390d0"
+    ],
+    "wit/world-server-adapter.wit": [
+      "aa3475d2b717e427004a3b3adc27695c3e00d4a2220faae6ef8fc0fbb7e83223"
+    ],
+    "policy/opa-bundle/data.json": [
+      "69dee165420807eed2538b02ceb84591e3162e9fd6744481b878a4e9cb4d6ec2"
+    ],
+    "policy/opa-bundle/worldserver.rego": [
+      "849f76a7ad1cc8e720134100183574e2cb3c7d8049c4a0d3372e44ae3cb06cba"
+    ],
+    "policy/opa-bundle/.manifest": [
+      "a23ea6f29afd8fe235463677ded2bfee8c130a8dc9e7e46e00ad95e1156c33b3"
+    ],
+    ".github/workflows/system-integration-v7.yml": [
+      "fe9c4e4cdd20dda7290d95592a51c7976139603e4544ac57f872e8218b52d34e"
+    ]
+  },
+  "7.2.0": {
+    "DESKTOP_AI_SYSTEM_INTEGRATION_V7.md": [
+      "58a723107437b7741695e024035abf6c68249c74508dfb40d6c99bdb8697fc3f",
+      "bc7fe3de8912992e59f735e1f44645443be7252871029b0735560d9d20d3c92f",
+      "bd65905c1ca90e88d524c498b471c1c67b917e66961ff43503b32dfe5534941c"
+    ],
+    "README_V7_2.md": [
+      "f5726347db0ef81330f4375cdd3dbc19e0685b25965d48a38ea32163d8a3b5e8"
+    ],
+    "docs/TECHNOLOGY_REFERENCES.md": [
+      "17cff2e5e641dde1a4f429b556fdc2c3d91233cfe9cccde4670eaf87a13b117e"
+    ],
+    "specs/DurableJobQueue.tla": [
+      "bd2bfe6a6f1c36d932574fbb58ce205efa42a361cc666a74add3bf1cb95894ab"
+    ],
+    "specs/DurableJobQueue.cfg": [
+      "a8f1ef472fa6a3a547634118f5027d8089ddaca91a8afb920773629583097f5e"
+    ],
+    "specs/ControlPlane.tla": [
+      "14a06f79b5631fa9d5f22359374faf324caa2983ef7961975cffdea2dc44d61f"
+    ],
+    "specs/ControlPlane.cfg": [
+      "cf9bfe1ca26ebf728685e4db44c2ce6fdf11aa1361216445f81f3c55878455ae"
+    ],
+    ".github/workflows/system-integration-v7.yml": [
+      "fe9c4e4cdd20dda7290d95592a51c7976139603e4544ac57f872e8218b52d34e"
+    ],
+    "config/integration-v7.cue": [
+      "b37b999559530de7d933face65f9fb4a91586a89d3000614a6c62e15be302879",
+      "9e98b6e89b3039b7e9c6bdcfd206fb01e5390fe482d24bc69f022eb832562d49"
+    ],
+    "scripts/desktop-ai-report-validator.cjs": [
+      "f1d3f42899c3fc714a3e2cf5a286735d7722af7dc7bc8773f8cc10981922ce3e"
+    ],
+    "scripts/device-test-executor.cjs": [
+      "f27873430294355b70cce2d01cca5d4d4a331784377c744e93690b148c0ad08f",
+      "a996fa7be314740e4df22ac872416e1d2a0b1f95ba4b0620b1faac668da6a682"
+    ],
+    "scripts/integration-utils.cjs": [
+      "636af5be6fdc8b332aafe30643a9fc5c74945bb5a94496068d4cd5c8b854aa94"
+    ],
+    "scripts/release-promotion-controller.cjs": [
+      "f81120253e0cebdb61f64a300ea5ad8653490918179ea3c4d099616c3c833cfc",
+      "e09c48266e0fc9fcbda2f8adc69c3832dd25a61382f343a2b9453fc041c6894f"
+    ],
+    "scripts/feature-flag-engine.cjs": [
+      "f6d08c5fe5c17f2401707f9627fd59e097e979a3d888cbdd0653da10698c25af",
+      "91fbb5010e8a22ed8a22fdcd154903d728e5d5caf66c22cb00e11812a1b56eec"
+    ],
+    "scripts/native-ast-dataflow.cjs": [
+      "f1dee4d05baaba629d5fb609678a6f26314dd4d1ab18047591ceecf2ef8ec978",
+      "9995871e735e78d92dcb0c63a2450412b34d909280a9619259bf10992b9093b0"
+    ],
+    "scripts/wit-component-validator.cjs": [
+      "51b1d71ec5ac7294265fea4c3d79df54a2e3b3bdaffd084e014008ded5705e18",
+      "5c01e89c426468c92e70fc3999320b81227a72bcef5b6ab3c9e17d4040e2b450"
+    ],
+    "scripts/function-honest-100-auditor.cjs": [
+      "a8c6d63593ffe3aabf69320c1b67c886a07303d65d9f07fb39c9057a326cef9f",
+      "d7289a784c06d771ad392961990d5a8f62b4782c167bae559bd74452c54cfee3"
+    ],
+    "scripts/integration-chaos-test.cjs": [
+      "6f58d7fc674ca9c31396ae8e00b3fb110c3acedff7c38752f2afb3e1deb4ffba",
+      "f5f0f3565a9d781a56b2159faaa7b39d7c640b631fb0737f15d3980d63475822"
+    ],
+    "scripts/config-contract-validator.cjs": [
+      "7257afcf56d411c80be3e835ccf13df799da3ee91e6533c2fb83655cb104328b",
+      "363f383f2d1bf42d46c2057dc32c2cd4e3fa3d40175690333336052ab76d0d29"
+    ],
+    "scripts/device-lab-orchestrator.cjs": [
+      "d16e4c9a696b1b56f017ea20d0382f407a83605a8355913db0e66feb63d24153",
+      "6c4d1dca75d28a22c66d39df9222c2dcc044495807ddd89fa720ca238a2c5421"
+    ],
+    "scripts/cas-peer-discovery.cjs": [
+      "db8d2080cce8718ed28e362d140ca959ff9d3fe29452b86ad10242b0709b905b",
+      "6582a14df874e62fdd552cf7d350aa99f0b106058c42c7c36818371ed9733b88"
+    ],
+    "scripts/cas-merkle-store.cjs": [
+      "d2b7c5da39060266279acf071b66aa455a634ea78c62af8a2c20e6900db4d4d9"
+    ],
+    "scripts/system-readiness.cjs": [
+      "27f891433de012af5655a6602047e48ded51779d73271e7917e10d8c4e873167",
+      "b91dbe66a2dc157cfa45853133a87c304dc066f3419f30ae4baa457fe71e8c6b"
+    ],
+    "scripts/durable-job-queue.cjs": [
+      "6153c70572311bb6afc07cbaab45369a21c6e8df4ba6c9cfc5862a4faa86a016"
+    ],
+    "scripts/integration-telemetry-lib.cjs": [
+      "d1340539a6062977d105c537d886d5f57e0860ba468e0c1cc2da3d2a286aadc9"
+    ],
+    "scripts/function-monotonic-enhancement-gate.cjs": [
+      "98d57b0b7d91dd0d6cc6a2be043af669087e9e9599a75fa77bcbc0b6e63dcab9",
+      "c60a31ec359e30711b2bf473573cb5d2eec630125fb5b9a891ec08f80535df7d"
+    ],
+    "scripts/distributed-cas.cjs": [
+      "08f6f86512bdbf7565381a6bae733e4a17d16723e160f2ad53e8c9dcf4264d62",
+      "31ba3671643ab3597c48e3b9dc59f8f34a15aeb6f93dc3b3dd47d46e4bb80636"
+    ],
+    "scripts/device-worker-server.cjs": [
+      "09e4dbbe36b67aeec08fce5a3c8c784b698a4ae362400cbd1acaffd250971751",
+      "53836d7a4476b59c0ab690181799cd85d44c704ff19bbf3859aaf96b8074c87e"
+    ],
+    "scripts/rekor-monitor.cjs": [
+      "dcf7099d968a8f6ef8e905651b4280546ccb0f6a5817cc3a85abe6a0d1253509",
+      "9e22f7197cd2a775a0129c6e6e2d34f6f6ed96f30c128c0738383ce27b821573"
+    ],
+    "scripts/cas-redundancy-verifier.cjs": [
+      "c3f6b319ac6d9d857a06259fec9f81b117d5b4477a75d6b668cd32a5da088597",
+      "3c6ff24f9d8aca9f493ddaf7590cb27c14958a5dfbde867155e5fe568f1f8e76"
+    ],
+    "scripts/technology-lock-validator.cjs": [
+      "f471e26bdb4030826d50c7169712b8a351ef6ee4c2e7ce23184776dc87ff321a"
+    ],
+    "scripts/project-directive-gate.cjs": [
+      "1951575e36ca954f55d60f6e9dba786794478b2db59c7857db79bef548003218",
+      "129302cb0e9448def373e17bab56a0929201bc5ad698e298aa8a5ac2e032c510"
+    ],
+    "scripts/integration-selftest.cjs": [
+      "60de0dcf95c9bda21f61e593cdc75f0dd251ecdd83f943aa49315d7c2c46d886",
+      "17a66706ced59fda918530a65baa071d98ae13b2db2d81086544a2866d3da17a"
+    ],
+    "scripts/wit-bindings-generator.cjs": [
+      "43a80b584a07975ac93967a5ae53110ecbdca88950b2dfcfac530d146cab5717",
+      "766bab76a370bd52da2dd2803279a31667fa22851f2e902c31965994890e0ad0"
+    ],
+    "scripts/character-spatial-contract-lib.cjs": [
+      "52f56bbae04bb09cc0811a28935820eede714d490c39e4ca1b99b760d7f0b9c0"
+    ],
+    "scripts/secure-update-metadata.cjs": [
+      "1ff6b6e5101b17191edd720d6cce79d42ea683060168eb533f0b8472196f4e44",
+      "90634ac212c662dbc00439a0dcefa685c066fa1faea7846d933ed6fadbbcce82"
+    ],
+    "scripts/graphics-regression-guard.cjs": [
+      "16b3eb3e788739f6c15888e924c102b4dde2276dc87d14fd292c3650dc0da5f9"
+    ],
+    "scripts/system-integration-gate.cjs": [
+      "1bbdaa59ffaa755b9d2d48d47a524eed7422a617888caa4560c51ad079a256c9",
+      "7e1b9dca971c9fea8a1f3d3cf96d544992a7f4e32d362c4527def3e057bee401"
+    ],
+    "scripts/orchestrator-invariant-model.cjs": [
+      "3bafad2bc1b3a0789902132f0509a903405d7bf7270371afd5c64bcb4d49c896"
+    ],
+    "scripts/model-state-checker.cjs": [
+      "33d5af939cd16098545f070a8ffba2005cdbee3ed11eb576122f47834cfcb6ae",
+      "b6a06351a396e7a5820e7f1c73bed8eb9f201236316c3e77b71d6d85cb603e9c"
+    ],
+    "scripts/deterministic-record-replay.cjs": [
+      "1e92a044a982fc43ef7cf20b5c32ac265aced334f4ad6d880d150029d93fcf1a",
+      "b6755aa7a2d4ad42793d2c0357a5e81f7f988f22be003fa84eb0c7ee2cf474b6"
+    ],
+    "scripts/function-contract-coverage.cjs": [
+      "d77476bee93b5e9282a7ff9c507e70aaaec1387718b7c9156d018426dea947fb",
+      "cf1c8ab589b5d08a43e03555782c21447db57f867c9d4ab4b7ced0b08e436003"
+    ],
+    "scripts/system-enhancement-orchestrator.cjs": [
+      "1591cc84324259b20ae2c0732e15fbaed0c0ce28e3ea8b32962653ef645dc760",
+      "6f58281f0f6f703027551b399d7020925ef9d44fd728a4b4adbef8bd0ef05e4a"
+    ],
+    "scripts/toolchain-bootstrap.cjs": [
+      "e26dae5b0ccec4332562c5bee06f1707f0bc1d00360c38d917f34374552aed02",
+      "6b0250c725a9030e294b18194f4a038778e6fa2f5cd3b14db2a032a163048fdd"
+    ],
+    "scripts/orchestrator-patch-safety-gate.cjs": [
+      "61180addd942de893ff8a0e7917d45e185ea146493f506faca730e8bbfb2746d"
+    ],
+    "scripts/change-impact-orchestrator.cjs": [
+      "6e15bb94e356b8944da377345a962bd08ece1ad6f936683c2952b89ca8b7240b"
+    ],
+    "scripts/orchestrator-monitor-lifecycle.cjs": [
+      "29e7978a35fb3ba58dc934a9829f93fc2d7ba1485bc40f6ad46d0c66c4a50b54"
+    ],
+    "scripts/orchestrator-minimal-repro.cjs": [
+      "0188d58970e8e52cd33be8b2a4c9e847709afc87f28e1f32b11d0630d800b1f6"
+    ],
+    "scripts/audio-variation-validator.cjs": [
+      "eb3fbfedb425cd64cfc68e1edfd98ce3418b293c5739bfbc86c87ce0ad96f471"
+    ],
+    "scripts/toolchain-security-gate.cjs": [
+      "b575c32629713c3e3eb1d44dcf80b712ee23fca4ab60dd1a609db9c473311190",
+      "b44307810ebc5e0ae3b2f6512d1e707f33e85cd945146e41f858f45cd3e48eda"
+    ],
+    "scripts/system-control-plane.cjs": [
+      "47dab3ff0ec81930b079604e7d29ef2fca1f3a094822f512a3057e1357f0d762",
+      "134663b247a171bc5c64d55c137cfa00db81c33fa7de7e8a2f15347db7c358a9"
+    ],
+    "scripts/semantic-dependency-graph.cjs": [
+      "79694f443c8eddc85f2928da442ba9172f9de806b4cb52e9ece79e4339f048c1",
+      "c893d354629455ec232ec575eb4c412b054ecec124a32fad5870cceec29922e7"
+    ],
+    "scripts/integration-telemetry.cjs": [
+      "15d446900874ffe5e110668c51ae6d670150f08db7393e58a9f6837ce962666c"
+    ],
+    "scripts/reproducible-build-gate.cjs": [
+      "9852ad49f03455d8f6c38c17ebfdd394eaed66c75f2d757784bb335e9baea8f7",
+      "b266b0504b7709521e17996bc666e05daf2e144798044cd6355cb4727ae3cab9"
+    ],
+    "scripts/capability-aware-scheduler.cjs": [
+      "afa786a48a04603f12d926f28d92490a8d2ca7734b5e82fdcf5bbab330a17d35",
+      "b78df79e521839ad17432bdd7070229e922643426b8b119bac9c33653aa98840"
+    ],
+    "scripts/orchestrator-supervisor.cjs": [
+      "a105490da954e693637a3a95607ee8b7b59d10c205cb23eaf5360609f242bdfd",
+      "5cae567ea3820db33c93a10fab8c24152c6db717b93c596b8c3d98561e1b1e03"
+    ],
+    "scripts/tlc-native-runner.cjs": [
+      "2caf255c74c9afce97fddb724cfc1dd951cd477ccc4d90ba4c480864ff06c8bd",
+      "f50f643474314b232db83ec6e9a92ad9a5e27584f900fcad1c3d549ca3b7c3fc"
+    ],
+    "scripts/provenance.cjs": [
+      "7433e9675374b2e831eb7eddcf3a892f5f05cb280429ce8a4d43840102afcc33"
+    ],
+    "scripts/artifact-signing-transparency.cjs": [
+      "86f7c830174795c535fb08902db5f46160f849e74f51247816ed8d461184a1da",
+      "5b436e1797572c717a0ba5126ffb23fdd3f2da8c24961d5823f8aa97e37ecb07"
+    ],
+    "scripts/asset-registry.cjs": [
+      "9596dd4c1a1537e1c7143374b50c4f477f0c89eac5e841742c20cb0871d962b8"
+    ],
+    "scripts/dependency-security-orchestrator.cjs": [
+      "1b431a9e5174049fc3c77c9333218c6f02f26c26298e4100c3207ec23b3e18a6",
+      "fcc4822321ad1d1460ccaa32236bc2d64a20934e13506f169ccce09dfb774c46"
+    ],
+    "scripts/asset-ingestion-planner.cjs": [
+      "e5f29da66b0249d3309d8180f74e5e645e5ed0f325893a95ddd17b552a4238ea"
+    ],
+    "scripts/gameplay-physical-contract-validator.cjs": [
+      "24f6f6a7ee40e0b237ad8deee5039f080406f25416b22e35cde5ded69e253f3b"
+    ],
+    "scripts/orchestrator-continuity-gate.cjs": [
+      "2040ee038eef21a47aed3033aa2797bc4b043a9c1a92d90101818fcf2eb773ed"
+    ],
+    "scripts/cyclonedx-sbom.cjs": [
+      "c1643511768779845db7bdfaf33cf43fffcdf40fec1832699d926ff80894c319"
+    ],
+    "scripts/policy-engine.cjs": [
+      "1799a38995ecc07712e25643e84b82b9a213a6550ef59512836fda49fc056099",
+      "a86e0b9747f1d83026fc4b4d0c7ed128cf8e9c8e6999c1d29020faead4f60237"
+    ],
+    "scripts/adapter-sandbox.cjs": [
+      "b119443056285ffdd345e89b6f6ddc2c32f30fc803e93810f51dc15e27f197cd",
+      "13ca8013798f0b34178ee6563180058f209ac697319a7a9b78afa787e09b314b"
+    ],
+    "scripts/technology-consensus.cjs": [
+      "575f20288d61288ac684fa79d74e05c08138ffe885f6c604915cba44b6b5d0f3",
+      "3e929480a597e0e801ffe8904bcee346635e76072a9809c536bf9126d20437ac"
+    ],
+    "scripts/transactional-deploy.cjs": [
+      "c001300a1198cde6b33020a7afa08de2606c8bb6da676a5264bff78e112a58f0",
+      "02c1cabef07d25a193620b009b3c1455a22729dd7fec4888bf4f6427d4545c34"
+    ],
+    "data/transactional-deploy-policy.json": [
+      "6c83323bfc7afb99deff2c70391de84870fa496deef6b287631633f67a78e810",
+      "a4cc008440a4949bc5ae7cddde62e762850447d58480955444170f15842ba881"
+    ],
+    "data/device-lab-policy.json": [
+      "8c3e7f3529a83da99918f4908818c653bec6dd073e23f0b79710488a783d2d58",
+      "28606d67b610d6e9b417e193e1217723c1b5f3c2f2154e1fc2cfddc5a89fbef8"
+    ],
+    "data/desktop-ai-final-report.template.json": [
+      "e08f0c4c5f1696344058d35a9cca5cb61c22b9b7ceca52f4d8cf86b352c07dc4"
+    ],
+    "data/model-check-policy.json": [
+      "30eb22a1c69c69e9747937c0154068284ae1c7cbe9cf237b348eb1e9000a851c",
+      "c7e17e55517055164a5cb5d30b294f033d2d143072b370d825dce5644e83768b"
+    ],
+    "data/function-change-proposal.template.json": [
+      "1890908ae9d963e016db7065edf9973a767db340cf612de3aacd50611c11e7f1"
+    ],
+    "data/feature-flag-policy.json": [
+      "1fa38304e1f58ec47c59fd40447a2c9bb4e4d4c052e8ee6ece0d492086b07331"
+    ],
+    "data/update-trust-policy.json": [
+      "fce326a395749e98ede758982481f4e84c6f34a832bc908d8992c669fc1716d8"
+    ],
+    "data/audio-events.template.json": [
+      "7edf235baf298240981d90848ab1197f9c72663cc88bdd0b12115c5863f097ef"
+    ],
+    "data/orchestrator-monitor-policy.json": [
+      "20e1e0cbceea15e2faa6fb16b36ab09025177f2fc523bca9d14582515997b281"
+    ],
+    "data/device-worker-policy.json": [
+      "08d07fa2780d7d40582fd8d99f2489f67455c3993c846f312bf287f4fee87886",
+      "5c8be48924427d023c34310e4af7d0d29757c751c29d995d4a50a08ab516137d"
+    ],
+    "data/capability-scheduler-policy.json": [
+      "a456c992b97fa03a159caebe561941dec80aac36a6339ec0fda6bdffe28439ac",
+      "3e7277183b821d4db6f079a05344c01754510625dced18232aad670876e01107"
+    ],
+    "data/adapter-sandbox-policy.json": [
+      "e20f937a8b46fd4c65713609c2a353faf87aab3c18f72d434053ed86a42c9086"
+    ],
+    "data/record-replay-policy.json": [
+      "a7e401caa7f87eb4d663bdd2597a4246cc826f58f4271e8bec69dfdeec265bb9",
+      "9357ed1ca1e6c82c9d816bf8b0b5bfc18ec798f28852f9408025d235516a0b50"
+    ],
+    "data/cas-redundancy-policy.json": [
+      "fe5f2dd4e4973db3cf279a28a09dfd5eec8912b7938626475e0a1b77f1c33c4c",
+      "5e69a5fc58c695aed93cb6c718c4c67a093fa7c3fcd5d575dc5d532eb25a0867"
+    ],
+    "data/distributed-cas-policy.json": [
+      "0b542fc19f06ce41d4600b81bfd213f5404b5962cc3de72fc6db78c7c3f20947",
+      "a9b9776a389c92b465758f8c1a8839b3ca55a7d518a901e3818480578d634ea3"
+    ],
+    "data/component-model-policy.json": [
+      "effba50211088e87c21842d3967accc9039d8104cfdf8379f3f3281b1427d862",
+      "73e60b92c760ff0489fdb3557d43fa021a039ff4e8d8dfe9b218411a5aefc910"
+    ],
+    "data/system-conflict-policy.json": [
+      "3e0b37a78d0dccaf11cd84d95b413144beb8306997ffb1fae2ddee1d473112b2",
+      "0fbc4cf60e9b48585e0d7c0025e8ab66305fac5eca799f20a17a3dfbd7b9ed20"
+    ],
+    "data/orchestrator-supervisor-policy.json": [
+      "2a17c7fbd226b43558f7a146cc895e598bb15860cc8a54eb26538d71aac21534",
+      "4b4b4d86b1863b729228824f80ff60f2a8f36fdecca2bbf62eda458f88a71982"
+    ],
+    "data/function-honest-100-policy.json": [
+      "c15f2277ba9ea11a202fc64d79267f03202e7cde7999588be29488df7e0a52a8",
+      "34e6b9fbbf3d9df4b37dc8ad86e75bed9de98b052dc950e14d047ddaabfda76c"
+    ],
+    "data/supply-chain-signing-policy.json": [
+      "289f8e93b1a761409252fec39fe874c55e62fdc35c1a8e7573f3416c0bebd14d",
+      "87244cbba015d481bd3fcf2df5e15a7e74c37d6885887976773670d9d1068a56"
+    ],
+    "data/orchestrator-patch-safety-policy.json": [
+      "288c4ca30d70fd14e39dc5211a9202c254ae60387cc738460865e986abebaae4"
+    ],
+    "data/system-capability-registry.json": [
+      "736bc66d9c36111fb40081d2bea1acade6893af2b18efc4cff5d68a74c024693",
+      "751704b7d81afce90d8f98a8042929ff7652110c2cc20c491ba4befd4e201375"
+    ],
+    "data/rekor-monitor-policy.json": [
+      "dc905c3d540db9b72d6c84cd144ba836916aba1a1e4c7b02b2861e1b8a90f519",
+      "e48628a9c95463ba4a6ae082abfdd4e14ff8338eb33a9ff78d1c42e24e8ffdfa"
+    ],
+    "data/technology-candidate-catalog.json": [
+      "4d7e75477fc6879f3fbaa48297af40ad7d38d8252796d586680f5d42dd68795f",
+      "07d9f3714248f6ef51497df7b1ee465e19c967f076bd54822d26c98cfae181eb"
+    ],
+    "data/wit-bindings-policy.json": [
+      "c82f3f2f1542ef936177918a592b5f9b251ff91967ae29d04aee9349983119f3",
+      "615604232e312bf7e183db73bc232a6b0913744fa3892ade9dbe394ae7f0345c"
+    ],
+    "data/reproducible-build-policy.json": [
+      "ac99fbed7663e5b2fdef91897700f7a2815d22163b716f7296256152edc843a9"
+    ],
+    "data/real-device-executor-policy.json": [
+      "dc06fad039a0ea14d774d8886bc7dffdf2fc1de023852b9487d65c2235265996",
+      "c6eb13a4f97a7a593ff4c827b781f53f478332aafe9827738ac5792435a4dc0e"
+    ],
+    "data/native-analysis-policy.json": [
+      "fba3555219d72fe582d597e659294c17e06679c3ee84dc3042c1198e996070cb",
+      "622a2460cba6e6393ee51f29c3f9dd741745971d729919185f7a701337343401"
+    ],
+    "data/function-contracts.json": [
+      "50e8ceacb5995ed1911291de37d8e02e14404ebbf4639a15444860402c12aa58",
+      "f4a3147172ad08ddb42d8d56464efd0d75aab5f2adc7ec224b7854516e68df64"
+    ],
+    "data/toolchain-bootstrap-policy.json": [
+      "bbd7cbcbef3f208fd21ecb98888ecfc04f709620d20c9698203fd96019d9c486",
+      "d942ecd4fd7986b9a6b24a932923e52fee6535108bfe8dd02d06d8562ab6903a"
+    ],
+    "data/current-task-contract.template.json": [
+      "45bdc5c9e6dfc5cd96c3c00282f413c4e926fb3666c96c44a07aed721debe8d5"
+    ],
+    "data/asset-metadata-template.json": [
+      "f27a5247fb7cfe1a3cdc0bc74370f9d433170efa4a3b8097be9d1aa2be936084"
+    ],
+    "data/gameplay-physical-contract.json": [
+      "e024954a837e005ceffe8436ede1b1158e87c0072d50a4cd1233a9183f428eca"
+    ],
+    "data/semantic-graph-policy.json": [
+      "40642b343e34c092101be76253c167f0f4c1a4b2ead326f22d5a8f69bf86a5d7",
+      "7052f7937428891e3e1982a57a4c2014b28d50ded0be92766cee1daa972f4fc6"
+    ],
+    "data/device-scenarios.json": [
+      "aa328e660f5ff14b9f775936a8481006c823d9b081984ca657d8d68d6cd0546d"
+    ],
+    "data/dependency-security-policy.json": [
+      "1d03b7cd326db34d7440a875dcdc0c792b1718073663677b148e58fde2021377",
+      "64ecea1c2b3094570970d731abd4b0d9978d539b6fe246ba6eaf58b6546ac0b4"
+    ],
+    "data/system-integration-version.json": [
+      "09aef9dfd5ee8e58caa12a84220ece413c47655ee694c0dcdab97af01fbb2397",
+      "1ccb7a0f4e415218112d2dbc3f61467cc53e4f7eb5143e58223169e755969f7c"
+    ],
+    "data/cas-discovery-policy.json": [
+      "d7623ec40fbfcd5e0619bbb9894a528c6c252ee2b27ee74b827b14c8135bfe29",
+      "03d1f745387297b9bef13fe93a9dbd2379e0d0cd89aa8e97c038d59437e01fb4"
+    ],
+    "data/project-directives.json": [
+      "56793d1ef24af62f4501ebca3e594d6ea5446087e83f776d4275ec8e04b872f5",
+      "f32cc1f324f6d34a1cb99fd25cc8affe3ab5367ae9b845f4c777f0cf15082125"
+    ],
+    "data/asset-quality-ratchet-policy.json": [
+      "6661c375213038599b7d89a2eb2623d7f6f62b55da2e2a78cf6a890caa658d27"
+    ],
+    "data/flags.json": [
+      "d026753140aefff3f816c661615ee0cb808d0bd616c67a68c585c03023c2104c",
+      "5b629e95e307725865389626726beb70748ff57c9ec90e17c3fbb610788390d0"
+    ],
+    "wit/world-server-adapter.wit": [
+      "aa3475d2b717e427004a3b3adc27695c3e00d4a2220faae6ef8fc0fbb7e83223"
+    ],
+    "policy/opa-bundle/data.json": [
+      "69dee165420807eed2538b02ceb84591e3162e9fd6744481b878a4e9cb4d6ec2"
+    ],
+    "policy/opa-bundle/worldserver.rego": [
+      "849f76a7ad1cc8e720134100183574e2cb3c7d8049c4a0d3372e44ae3cb06cba"
+    ],
+    "policy/opa-bundle/.manifest": [
+      "a23ea6f29afd8fe235463677ded2bfee8c130a8dc9e7e46e00ad95e1156c33b3"
+    ]
+  },
+  "7.3.0": {
+    "README_V7_3.md": [
+      "db73ff4089135d25c7674fd4b54e1eb2f87291b4e9c209b2aeded3a7eb4de454"
+    ],
+    "playwright.config.js": [
+      "29e4563ba7154632a8992502f345d39f9c1cca02aadee1a0d3e56b277fd19859"
+    ],
+    "DESKTOP_AI_SYSTEM_INTEGRATION_V7.md": [
+      "cf07b73b57886854774884a8dd0427634d0d3cfb13c5ea9b1599ffe92c82c774"
+    ],
+    "README_V7_2.md": [
+      "f5726347db0ef81330f4375cdd3dbc19e0685b25965d48a38ea32163d8a3b5e8"
+    ],
+    "docs/TECHNOLOGY_REFERENCES.md": [
+      "17cff2e5e641dde1a4f429b556fdc2c3d91233cfe9cccde4670eaf87a13b117e"
+    ],
+    "specs/DurableJobQueue.tla": [
+      "bd2bfe6a6f1c36d932574fbb58ce205efa42a361cc666a74add3bf1cb95894ab"
+    ],
+    "specs/DurableJobQueue.cfg": [
+      "a8f1ef472fa6a3a547634118f5027d8089ddaca91a8afb920773629583097f5e"
+    ],
+    "specs/ControlPlane.tla": [
+      "14a06f79b5631fa9d5f22359374faf324caa2983ef7961975cffdea2dc44d61f"
+    ],
+    "specs/ControlPlane.cfg": [
+      "cf9bfe1ca26ebf728685e4db44c2ce6fdf11aa1361216445f81f3c55878455ae"
+    ],
+    "config/integration-v7.cue": [
+      "b37b999559530de7d933face65f9fb4a91586a89d3000614a6c62e15be302879"
+    ],
+    "scripts/desktop-ai-report-validator.cjs": [
+      "f1d3f42899c3fc714a3e2cf5a286735d7722af7dc7bc8773f8cc10981922ce3e"
+    ],
+    "scripts/device-test-executor.cjs": [
+      "f27873430294355b70cce2d01cca5d4d4a331784377c744e93690b148c0ad08f"
+    ],
+    "scripts/integration-utils.cjs": [
+      "636af5be6fdc8b332aafe30643a9fc5c74945bb5a94496068d4cd5c8b854aa94"
+    ],
+    "scripts/release-promotion-controller.cjs": [
+      "f81120253e0cebdb61f64a300ea5ad8653490918179ea3c4d099616c3c833cfc"
+    ],
+    "scripts/feature-flag-engine.cjs": [
+      "f6d08c5fe5c17f2401707f9627fd59e097e979a3d888cbdd0653da10698c25af"
+    ],
+    "scripts/native-ast-dataflow.cjs": [
+      "f1dee4d05baaba629d5fb609678a6f26314dd4d1ab18047591ceecf2ef8ec978"
+    ],
+    "scripts/ai-visual-critic.js": [
+      "fae8b06bd8464d74b77f1e961dab0bf7fe7e2d3e020780c7e1467210bda80ce5"
+    ],
+    "scripts/wit-component-validator.cjs": [
+      "51b1d71ec5ac7294265fea4c3d79df54a2e3b3bdaffd084e014008ded5705e18"
+    ],
+    "scripts/function-honest-100-auditor.cjs": [
+      "77fd322bdea7cdd44695fc44e512005115efeb5324dd657e2faffe623591b5ac"
+    ],
+    "scripts/integration-chaos-test.cjs": [
+      "6f58d7fc674ca9c31396ae8e00b3fb110c3acedff7c38752f2afb3e1deb4ffba"
+    ],
+    "scripts/config-contract-validator.cjs": [
+      "7257afcf56d411c80be3e835ccf13df799da3ee91e6533c2fb83655cb104328b"
+    ],
+    "scripts/device-lab-orchestrator.cjs": [
+      "d16e4c9a696b1b56f017ea20d0382f407a83605a8355913db0e66feb63d24153"
+    ],
+    "scripts/world-device-profile-matrix.js": [
+      "5d8f6ed25e05439858c717281560de179cbee098ade7f57126fb200fc2f3bd83"
+    ],
+    "scripts/cas-peer-discovery.cjs": [
+      "db8d2080cce8718ed28e362d140ca959ff9d3fe29452b86ad10242b0709b905b"
+    ],
+    "scripts/cas-merkle-store.cjs": [
+      "d2b7c5da39060266279acf071b66aa455a634ea78c62af8a2c20e6900db4d4d9"
+    ],
+    "scripts/crash-diagnostics-cluster.cjs": [
+      "641a8427ad69e360724990b8bed11f28425f18681ce645de9bcd49f0719aaee4"
+    ],
+    "scripts/system-readiness.cjs": [
+      "6e2865fa0638e6a1a97a9237f53a1943820216cead9d71b9eba0295d2655cfcf"
+    ],
+    "scripts/production-safety-controller.cjs": [
+      "37d51f05cb63ee264c3e2b1953f4ba45c47dd8e4ad9bd5c06e095103628fa344"
+    ],
+    "scripts/durable-job-queue.cjs": [
+      "6153c70572311bb6afc07cbaab45369a21c6e8df4ba6c9cfc5862a4faa86a016"
+    ],
+    "scripts/integration-telemetry-lib.cjs": [
+      "d1340539a6062977d105c537d886d5f57e0860ba468e0c1cc2da3d2a286aadc9"
+    ],
+    "scripts/function-monotonic-enhancement-gate.cjs": [
+      "98d57b0b7d91dd0d6cc6a2be043af669087e9e9599a75fa77bcbc0b6e63dcab9"
+    ],
+    "scripts/soak-chaos-verifier.cjs": [
+      "893cdb8e6c11867add750cc685e102ba662e9ee2fa14001e346513d0dcf1f0fa"
+    ],
+    "scripts/world-quality-analyzer.js": [
+      "44b32b12f4e6a9dbe2c62c12f842eee551f4319279aac62a04d6b1449915753b"
+    ],
+    "scripts/distributed-cas.cjs": [
+      "08f6f86512bdbf7565381a6bae733e4a17d16723e160f2ad53e8c9dcf4264d62"
+    ],
+    "scripts/device-worker-server.cjs": [
+      "09e4dbbe36b67aeec08fce5a3c8c784b698a4ae362400cbd1acaffd250971751"
+    ],
+    "scripts/rekor-monitor.cjs": [
+      "dcf7099d968a8f6ef8e905651b4280546ccb0f6a5817cc3a85abe6a0d1253509"
+    ],
+    "scripts/cas-redundancy-verifier.cjs": [
+      "c3f6b319ac6d9d857a06259fec9f81b117d5b4477a75d6b668cd32a5da088597"
+    ],
+    "scripts/technology-lock-validator.cjs": [
+      "f471e26bdb4030826d50c7169712b8a351ef6ee4c2e7ce23184776dc87ff321a"
+    ],
+    "scripts/project-directive-gate.cjs": [
+      "1951575e36ca954f55d60f6e9dba786794478b2db59c7857db79bef548003218"
+    ],
+    "scripts/integration-selftest.cjs": [
+      "7accf992c6e57a5b8dc6bbe41dd1f92ff21b604e4f739d430e4d13c34a7c3458"
+    ],
+    "scripts/wit-bindings-generator.cjs": [
+      "43a80b584a07975ac93967a5ae53110ecbdca88950b2dfcfac530d146cab5717"
+    ],
+    "scripts/character-spatial-contract-lib.cjs": [
+      "52f56bbae04bb09cc0811a28935820eede714d490c39e4ca1b99b760d7f0b9c0"
+    ],
+    "scripts/secure-update-metadata.cjs": [
+      "1ff6b6e5101b17191edd720d6cce79d42ea683060168eb533f0b8472196f4e44"
+    ],
+    "scripts/graphics-regression-guard.cjs": [
+      "16b3eb3e788739f6c15888e924c102b4dde2276dc87d14fd292c3650dc0da5f9"
+    ],
+    "scripts/system-integration-gate.cjs": [
+      "bf7ee1ec959c2ecd63fed8e1a4792ab0830eb4aedf023e6af5d10809fe5ef8f5"
+    ],
+    "scripts/orchestrator-invariant-model.cjs": [
+      "3bafad2bc1b3a0789902132f0509a903405d7bf7270371afd5c64bcb4d49c896"
+    ],
+    "scripts/model-state-checker.cjs": [
+      "33d5af939cd16098545f070a8ffba2005cdbee3ed11eb576122f47834cfcb6ae"
+    ],
+    "scripts/deterministic-record-replay.cjs": [
+      "1e92a044a982fc43ef7cf20b5c32ac265aced334f4ad6d880d150029d93fcf1a"
+    ],
+    "scripts/function-contract-coverage.cjs": [
+      "09ad0eb971428665e3068f2252a2b74b43f2fcdc7b81b9c27e90342d4bd86f98"
+    ],
+    "scripts/system-enhancement-orchestrator.cjs": [
+      "1591cc84324259b20ae2c0732e15fbaed0c0ce28e3ea8b32962653ef645dc760"
+    ],
+    "scripts/toolchain-bootstrap.cjs": [
+      "e26dae5b0ccec4332562c5bee06f1707f0bc1d00360c38d917f34374552aed02"
+    ],
+    "scripts/orchestrator-patch-safety-gate.cjs": [
+      "61180addd942de893ff8a0e7917d45e185ea146493f506faca730e8bbfb2746d"
+    ],
+    "scripts/change-impact-orchestrator.cjs": [
+      "6e15bb94e356b8944da377345a962bd08ece1ad6f936683c2952b89ca8b7240b"
+    ],
+    "scripts/orchestrator-monitor-lifecycle.cjs": [
+      "29e7978a35fb3ba58dc934a9829f93fc2d7ba1485bc40f6ad46d0c66c4a50b54"
+    ],
+    "scripts/orchestrator-minimal-repro.cjs": [
+      "0188d58970e8e52cd33be8b2a4c9e847709afc87f28e1f32b11d0630d800b1f6"
+    ],
+    "scripts/audio-variation-validator.cjs": [
+      "eb3fbfedb425cd64cfc68e1edfd98ce3418b293c5739bfbc86c87ce0ad96f471"
+    ],
+    "scripts/toolchain-security-gate.cjs": [
+      "b575c32629713c3e3eb1d44dcf80b712ee23fca4ab60dd1a609db9c473311190"
+    ],
+    "scripts/leader-lease-fencing.cjs": [
+      "42fceca5f578b5c213fef13fa218126c0aafb181c23f31a61d4b6e92e2ed8b03"
+    ],
+    "scripts/system-control-plane.cjs": [
+      "11847358cc5e89a9445c2416eb69e5951f46833b4ac521fdc8f9b0874ee83a3f"
+    ],
+    "scripts/semantic-dependency-graph.cjs": [
+      "79694f443c8eddc85f2928da442ba9172f9de806b4cb52e9ece79e4339f048c1"
+    ],
+    "scripts/integration-telemetry.cjs": [
+      "15d446900874ffe5e110668c51ae6d670150f08db7393e58a9f6837ce962666c"
+    ],
+    "scripts/reproducible-build-gate.cjs": [
+      "9852ad49f03455d8f6c38c17ebfdd394eaed66c75f2d757784bb335e9baea8f7"
+    ],
+    "scripts/capability-aware-scheduler.cjs": [
+      "afa786a48a04603f12d926f28d92490a8d2ca7734b5e82fdcf5bbab330a17d35"
+    ],
+    "scripts/world-runtime-quality-profiler.js": [
+      "04f134381881c7c27d06b7f8d65f8342ef7ca2411a7f9ca03b1f098e612acbf6"
+    ],
+    "scripts/orchestrator-supervisor.cjs": [
+      "a105490da954e693637a3a95607ee8b7b59d10c205cb23eaf5360609f242bdfd"
+    ],
+    "scripts/tlc-native-runner.cjs": [
+      "2caf255c74c9afce97fddb724cfc1dd951cd477ccc4d90ba4c480864ff06c8bd"
+    ],
+    "scripts/provenance.cjs": [
+      "7433e9675374b2e831eb7eddcf3a892f5f05cb280429ce8a4d43840102afcc33"
+    ],
+    "scripts/production-quality-pull.js": [
+      "c1582e5f7a31f2e410ed0a01f899cb9ee4b49f159f29a4cab84f485531fbfe87"
+    ],
+    "scripts/world-quality-autopilot.js": [
+      "3b4dc70287b57e56a7b394b33a4023f785be8f2b30d57ac76dde2fba674f3984"
+    ],
+    "scripts/artifact-signing-transparency.cjs": [
+      "86f7c830174795c535fb08902db5f46160f849e74f51247816ed8d461184a1da"
+    ],
+    "scripts/asset-registry.cjs": [
+      "9596dd4c1a1537e1c7143374b50c4f477f0c89eac5e841742c20cb0871d962b8"
+    ],
+    "scripts/dependency-security-orchestrator.cjs": [
+      "1b431a9e5174049fc3c77c9333218c6f02f26c26298e4100c3207ec23b3e18a6"
+    ],
+    "scripts/asset-ingestion-planner.cjs": [
+      "e5f29da66b0249d3309d8180f74e5e645e5ed0f325893a95ddd17b552a4238ea"
+    ],
+    "scripts/gameplay-physical-contract-validator.cjs": [
+      "24f6f6a7ee40e0b237ad8deee5039f080406f25416b22e35cde5ded69e253f3b"
+    ],
+    "scripts/orchestrator-continuity-gate.cjs": [
+      "2040ee038eef21a47aed3033aa2797bc4b043a9c1a92d90101818fcf2eb773ed"
+    ],
+    "scripts/cyclonedx-sbom.cjs": [
+      "c1643511768779845db7bdfaf33cf43fffcdf40fec1832699d926ff80894c319"
+    ],
+    "scripts/policy-engine.cjs": [
+      "1799a38995ecc07712e25643e84b82b9a213a6550ef59512836fda49fc056099"
+    ],
+    "scripts/adapter-sandbox.cjs": [
+      "b119443056285ffdd345e89b6f6ddc2c32f30fc803e93810f51dc15e27f197cd"
+    ],
+    "scripts/technology-consensus.cjs": [
+      "575f20288d61288ac684fa79d74e05c08138ffe885f6c604915cba44b6b5d0f3"
+    ],
+    "scripts/transactional-deploy.cjs": [
+      "c001300a1198cde6b33020a7afa08de2606c8bb6da676a5264bff78e112a58f0"
+    ],
+    "data/performance-budgets.json": [
+      "94151b44aa771e7081ac3e1e2060f2ddfbb4e8f72b44fb767280765bcb00eb3a"
+    ],
+    "data/transactional-deploy-policy.json": [
+      "6c83323bfc7afb99deff2c70391de84870fa496deef6b287631633f67a78e810"
+    ],
+    "data/device-lab-policy.json": [
+      "8c3e7f3529a83da99918f4908818c653bec6dd073e23f0b79710488a783d2d58"
+    ],
+    "data/desktop-ai-final-report.template.json": [
+      "e08f0c4c5f1696344058d35a9cca5cb61c22b9b7ceca52f4d8cf86b352c07dc4"
+    ],
+    "data/model-check-policy.json": [
+      "30eb22a1c69c69e9747937c0154068284ae1c7cbe9cf237b348eb1e9000a851c"
+    ],
+    "data/function-change-proposal.template.json": [
+      "1890908ae9d963e016db7065edf9973a767db340cf612de3aacd50611c11e7f1"
+    ],
+    "data/feature-flag-policy.json": [
+      "1fa38304e1f58ec47c59fd40447a2c9bb4e4d4c052e8ee6ece0d492086b07331"
+    ],
+    "data/update-trust-policy.json": [
+      "fce326a395749e98ede758982481f4e84c6f34a832bc908d8992c669fc1716d8"
+    ],
+    "data/audio-events.template.json": [
+      "7edf235baf298240981d90848ab1197f9c72663cc88bdd0b12115c5863f097ef"
+    ],
+    "data/orchestrator-monitor-policy.json": [
+      "20e1e0cbceea15e2faa6fb16b36ab09025177f2fc523bca9d14582515997b281"
+    ],
+    "data/device-worker-policy.json": [
+      "08d07fa2780d7d40582fd8d99f2489f67455c3993c846f312bf287f4fee87886"
+    ],
+    "data/capability-scheduler-policy.json": [
+      "a456c992b97fa03a159caebe561941dec80aac36a6339ec0fda6bdffe28439ac"
+    ],
+    "data/adapter-sandbox-policy.json": [
+      "e20f937a8b46fd4c65713609c2a353faf87aab3c18f72d434053ed86a42c9086"
+    ],
+    "data/record-replay-policy.json": [
+      "a7e401caa7f87eb4d663bdd2597a4246cc826f58f4271e8bec69dfdeec265bb9"
+    ],
+    "data/cas-redundancy-policy.json": [
+      "fe5f2dd4e4973db3cf279a28a09dfd5eec8912b7938626475e0a1b77f1c33c4c"
+    ],
+    "data/leader-lease-policy.json": [
+      "f18408dd71404c5882e24d8b68a467959d7f5c15418c51832c3e7eb21ae2fcc9"
+    ],
+    "data/distributed-cas-policy.json": [
+      "0b542fc19f06ce41d4600b81bfd213f5404b5962cc3de72fc6db78c7c3f20947"
+    ],
+    "data/component-model-policy.json": [
+      "effba50211088e87c21842d3967accc9039d8104cfdf8379f3f3281b1427d862"
+    ],
+    "data/system-conflict-policy.json": [
+      "3e0b37a78d0dccaf11cd84d95b413144beb8306997ffb1fae2ddee1d473112b2"
+    ],
+    "data/orchestrator-supervisor-policy.json": [
+      "2a17c7fbd226b43558f7a146cc895e598bb15860cc8a54eb26538d71aac21534"
+    ],
+    "data/function-honest-100-policy.json": [
+      "c15f2277ba9ea11a202fc64d79267f03202e7cde7999588be29488df7e0a52a8"
+    ],
+    "data/supply-chain-signing-policy.json": [
+      "289f8e93b1a761409252fec39fe874c55e62fdc35c1a8e7573f3416c0bebd14d"
+    ],
+    "data/orchestrator-patch-safety-policy.json": [
+      "288c4ca30d70fd14e39dc5211a9202c254ae60387cc738460865e986abebaae4"
+    ],
+    "data/system-capability-registry.json": [
+      "4faf78cdd6ee2d1e22a3ac66857accdf97ffdd62245a82b0ee5d57ff9d5301dc"
+    ],
+    "data/rekor-monitor-policy.json": [
+      "dc905c3d540db9b72d6c84cd144ba836916aba1a1e4c7b02b2861e1b8a90f519"
+    ],
+    "data/technology-candidate-catalog.json": [
+      "4d7e75477fc6879f3fbaa48297af40ad7d38d8252796d586680f5d42dd68795f"
+    ],
+    "data/wit-bindings-policy.json": [
+      "c82f3f2f1542ef936177918a592b5f9b251ff91967ae29d04aee9349983119f3"
+    ],
+    "data/reproducible-build-policy.json": [
+      "ac99fbed7663e5b2fdef91897700f7a2815d22163b716f7296256152edc843a9"
+    ],
+    "data/soak-chaos-policy.json": [
+      "7b6b1317434c8b5cbd14b64ecf6b81f105fe504769abd3e6bc1064e30e871d45"
+    ],
+    "data/real-device-executor-policy.json": [
+      "dc06fad039a0ea14d774d8886bc7dffdf2fc1de023852b9487d65c2235265996"
+    ],
+    "data/native-analysis-policy.json": [
+      "fba3555219d72fe582d597e659294c17e06679c3ee84dc3042c1198e996070cb"
+    ],
+    "data/function-contracts.json": [
+      "ac0e74e86e29125896a9e8e1214a58fa53ee88328ecfa58613b398ca0e1caea1"
+    ],
+    "data/toolchain-bootstrap-policy.json": [
+      "bbd7cbcbef3f208fd21ecb98888ecfc04f709620d20c9698203fd96019d9c486"
+    ],
+    "data/current-task-contract.template.json": [
+      "45bdc5c9e6dfc5cd96c3c00282f413c4e926fb3666c96c44a07aed721debe8d5"
+    ],
+    "data/asset-metadata-template.json": [
+      "f27a5247fb7cfe1a3cdc0bc74370f9d433170efa4a3b8097be9d1aa2be936084"
+    ],
+    "data/production-safety-policy.json": [
+      "71ea6c706b7cea085399e50870879cc0ec4832e6747e1403a58de183df05bced"
+    ],
+    "data/gameplay-physical-contract.json": [
+      "e024954a837e005ceffe8436ede1b1158e87c0072d50a4cd1233a9183f428eca"
+    ],
+    "data/semantic-graph-policy.json": [
+      "40642b343e34c092101be76253c167f0f4c1a4b2ead326f22d5a8f69bf86a5d7"
+    ],
+    "data/device-scenarios.json": [
+      "aa328e660f5ff14b9f775936a8481006c823d9b081984ca657d8d68d6cd0546d"
+    ],
+    "data/dependency-security-policy.json": [
+      "1d03b7cd326db34d7440a875dcdc0c792b1718073663677b148e58fde2021377"
+    ],
+    "data/system-integration-version.json": [
+      "7b13dbedf0a5aa2bdb5e15ad495e3afa4f646f9280578b13ea7292a4ad20926a"
+    ],
+    "data/crash-diagnostics-policy.json": [
+      "62060b241cc557b553bd29872838a894365c929ba6cdd562c8bf90d965cf2b5f"
+    ],
+    "data/cas-discovery-policy.json": [
+      "d7623ec40fbfcd5e0619bbb9894a528c6c252ee2b27ee74b827b14c8135bfe29"
+    ],
+    "data/project-directives.json": [
+      "56793d1ef24af62f4501ebca3e594d6ea5446087e83f776d4275ec8e04b872f5"
+    ],
+    "data/asset-quality-ratchet-policy.json": [
+      "6661c375213038599b7d89a2eb2623d7f6f62b55da2e2a78cf6a890caa658d27"
+    ],
+    "data/flags.json": [
+      "d026753140aefff3f816c661615ee0cb808d0bd616c67a68c585c03023c2104c"
+    ],
+    "wit/world-server-adapter.wit": [
+      "aa3475d2b717e427004a3b3adc27695c3e00d4a2220faae6ef8fc0fbb7e83223"
+    ],
+    "api/quality-summary.js": [
+      "5b90b0abd2adc1565904ac3f68ee82e5c46e86875100730af8a157311fb2cec5"
+    ],
+    "api/quality-telemetry.js": [
+      "d16374c5659b6279dbce0509ab957cce29232de6ff39dfe8882e226feffc3367"
+    ],
+    "policy/opa-bundle/data.json": [
+      "69dee165420807eed2538b02ceb84591e3162e9fd6744481b878a4e9cb4d6ec2"
+    ],
+    "policy/opa-bundle/worldserver.rego": [
+      "849f76a7ad1cc8e720134100183574e2cb3c7d8049c4a0d3372e44ae3cb06cba"
+    ],
+    "policy/opa-bundle/.manifest": [
+      "a23ea6f29afd8fe235463677ded2bfee8c130a8dc9e7e46e00ad95e1156c33b3"
+    ],
+    "supabase/migrations/20260824_orchestrator_leader_lease.sql": [
+      "0b34c186579660287a5914165614bce1977d9db6b99cb06c796010fffdcc997b"
+    ],
+    ".github/workflows/system-integration-v7.yml": [
+      "fe9c4e4cdd20dda7290d95592a51c7976139603e4544ac57f872e8218b52d34e"
+    ],
+    ".github/workflows/quality-canary.yml": [
+      "964102707e4f37c5588060e900a9bdffec0a3cefc1a8c5cf95de0e2c4eb0d793"
+    ],
+    ".github/workflows/world-quality-autopilot.yml": [
+      "da39f0778d86b5145dac648de462652ebff4a5227fec77d0bb0a1d9ca79c3552"
+    ],
+    "services/ai3d-worker/ai3d/plugins/mesh_quality_optimizer.py": [
+      "321354103d29948e869e38b9028e01263ea0b546c3ad46537a504fbb6825afd1"
+    ]
+  },
+  "7.4.0": {
+    ".github/workflows/quality-canary.yml": [
+      "964102707e4f37c5588060e900a9bdffec0a3cefc1a8c5cf95de0e2c4eb0d793"
+    ],
+    ".github/workflows/system-integration-v7.yml": [
+      "9f0483773cb0370a12d0b49ae7fd458f473f0b12fcc496c6dc01e6129f0c4808"
+    ],
+    ".github/workflows/world-quality-autopilot.yml": [
+      "da39f0778d86b5145dac648de462652ebff4a5227fec77d0bb0a1d9ca79c3552"
+    ],
+    "ASSET_DELTA_STATUS.json": [
+      "256b3c88be20f0c4dd483baa0f8bd1869a755ba3e85d1ceb06bcf8008b81c366"
+    ],
+    "CAUSAL_DEBUGGER_STATUS.json": [
+      "afb08b04b489b3ad800ac1afaa87f9b960e8527a3e339764e1a31431df52b4c5"
+    ],
+    "DB_MIGRATION_COORDINATOR_STATUS.json": [
+      "728f50069e6b0823805d7ddff8850a926ca7eda28887e1a68b4a1bf6ba23d366"
+    ],
+    "DESKTOP_AI_SYSTEM_INTEGRATION_V7.md": [
+      "bdcbe5ae3fa909d42db26a569edc891ddf130fbcad743749224cc78e2b888967"
+    ],
+    "README_V7_2.md": [
+      "f5726347db0ef81330f4375cdd3dbc19e0685b25965d48a38ea32163d8a3b5e8"
+    ],
+    "README_V7_3.md": [
+      "db73ff4089135d25c7674fd4b54e1eb2f87291b4e9c209b2aeded3a7eb4de454"
+    ],
+    "README_V7_4.md": [
+      "ef9a7f74485d4d3a95bf0613a579acf87fd1d7c0155ce239cb10b1dd0224f278"
+    ],
+    "SLO_ERROR_BUDGET_STATUS.json": [
+      "d839333d82ae29529c41e6470363e657ae8180e2ac15d7d333d932bb0deb9b6f"
+    ],
+    "api/quality-summary.js": [
+      "5b90b0abd2adc1565904ac3f68ee82e5c46e86875100730af8a157311fb2cec5"
+    ],
+    "api/quality-telemetry.js": [
+      "d16374c5659b6279dbce0509ab957cce29232de6ff39dfe8882e226feffc3367"
+    ],
+    "config/integration-v7.cue": [
+      "6c887860cd56c1b3325003377931a2ade224cd9d920a64e7543ad78090fccdc5"
+    ],
+    "data/adapter-sandbox-policy.json": [
+      "e20f937a8b46fd4c65713609c2a353faf87aab3c18f72d434053ed86a42c9086"
+    ],
+    "data/asset-delta-policy.json": [
+      "08efbca36481bc75d87b1c6643b6ab1aabccbd59a0c2bd778c2768ff5ac70b36"
+    ],
+    "data/asset-metadata-template.json": [
+      "f27a5247fb7cfe1a3cdc0bc74370f9d433170efa4a3b8097be9d1aa2be936084"
+    ],
+    "data/asset-quality-ratchet-policy.json": [
+      "6661c375213038599b7d89a2eb2623d7f6f62b55da2e2a78cf6a890caa658d27"
+    ],
+    "data/audio-events.template.json": [
+      "7edf235baf298240981d90848ab1197f9c72663cc88bdd0b12115c5863f097ef"
+    ],
+    "data/capability-scheduler-policy.json": [
+      "a456c992b97fa03a159caebe561941dec80aac36a6339ec0fda6bdffe28439ac"
+    ],
+    "data/cas-discovery-policy.json": [
+      "d7623ec40fbfcd5e0619bbb9894a528c6c252ee2b27ee74b827b14c8135bfe29"
+    ],
+    "data/cas-redundancy-policy.json": [
+      "fe5f2dd4e4973db3cf279a28a09dfd5eec8912b7938626475e0a1b77f1c33c4c"
+    ],
+    "data/causal-debugger-policy.json": [
+      "7c351adf4d3c62a5743c399ba7da26b283370a57941d30c72f333ff44392e8e7"
+    ],
+    "data/component-model-policy.json": [
+      "effba50211088e87c21842d3967accc9039d8104cfdf8379f3f3281b1427d862"
+    ],
+    "data/crash-diagnostics-policy.json": [
+      "62060b241cc557b553bd29872838a894365c929ba6cdd562c8bf90d965cf2b5f"
+    ],
+    "data/current-task-contract.template.json": [
+      "45bdc5c9e6dfc5cd96c3c00282f413c4e926fb3666c96c44a07aed721debe8d5"
+    ],
+    "data/dependency-security-policy.json": [
+      "1d03b7cd326db34d7440a875dcdc0c792b1718073663677b148e58fde2021377"
+    ],
+    "data/desktop-ai-final-report.template.json": [
+      "e08f0c4c5f1696344058d35a9cca5cb61c22b9b7ceca52f4d8cf86b352c07dc4"
+    ],
+    "data/device-lab-policy.json": [
+      "8c3e7f3529a83da99918f4908818c653bec6dd073e23f0b79710488a783d2d58"
+    ],
+    "data/device-scenarios.json": [
+      "aa328e660f5ff14b9f775936a8481006c823d9b081984ca657d8d68d6cd0546d"
+    ],
+    "data/device-worker-policy.json": [
+      "08d07fa2780d7d40582fd8d99f2489f67455c3993c846f312bf287f4fee87886"
+    ],
+    "data/distributed-cas-policy.json": [
+      "0b542fc19f06ce41d4600b81bfd213f5404b5962cc3de72fc6db78c7c3f20947"
+    ],
+    "data/feature-flag-policy.json": [
+      "1fa38304e1f58ec47c59fd40447a2c9bb4e4d4c052e8ee6ece0d492086b07331"
+    ],
+    "data/flags.json": [
+      "d026753140aefff3f816c661615ee0cb808d0bd616c67a68c585c03023c2104c"
+    ],
+    "data/function-change-proposal.template.json": [
+      "1890908ae9d963e016db7065edf9973a767db340cf612de3aacd50611c11e7f1"
+    ],
+    "data/function-contracts.json": [
+      "4eadc743819c3eea1d5ae7d08942cb9053eb2d50d8f4668dba3712997db08e02"
+    ],
+    "data/function-honest-100-policy.json": [
+      "19a118a30c17259e8c0462b4dad90527bfd8576cf5c5652acabaf13ba3e9a752"
+    ],
+    "data/gameplay-physical-contract.json": [
+      "e024954a837e005ceffe8436ede1b1158e87c0072d50a4cd1233a9183f428eca"
+    ],
+    "data/leader-lease-policy.json": [
+      "f18408dd71404c5882e24d8b68a467959d7f5c15418c51832c3e7eb21ae2fcc9"
+    ],
+    "data/legacy-evidence-factory-policy.json": [
+      "c3370320df352bc00ff4e76b2683b2b7e96fff3e04628849c24c236c58066b20"
+    ],
+    "data/legacy-evidence-recipes.json": [
+      "06139aef66e4372e0c9206a2d1607505247cab5dbd0d943c9d1585704d1a5d9c"
+    ],
+    "data/migration-coordinator-policy.json": [
+      "9a1f61d53b58dbd08d8933d3d8f707446651e3c4bd68f4a09920e3a5d97d1534"
+    ],
+    "data/migration-plan.template.json": [
+      "b3a69e6b9d9ae686c92660ee3d26a75ad578ae877ca667fe42b140ea99ef6ed0"
+    ],
+    "data/model-check-policy.json": [
+      "30eb22a1c69c69e9747937c0154068284ae1c7cbe9cf237b348eb1e9000a851c"
+    ],
+    "data/native-analysis-policy.json": [
+      "fba3555219d72fe582d597e659294c17e06679c3ee84dc3042c1198e996070cb"
+    ],
+    "data/orchestrator-monitor-policy.json": [
+      "20e1e0cbceea15e2faa6fb16b36ab09025177f2fc523bca9d14582515997b281"
+    ],
+    "data/orchestrator-patch-safety-policy.json": [
+      "288c4ca30d70fd14e39dc5211a9202c254ae60387cc738460865e986abebaae4"
+    ],
+    "data/orchestrator-supervisor-policy.json": [
+      "2a17c7fbd226b43558f7a146cc895e598bb15860cc8a54eb26538d71aac21534"
+    ],
+    "data/performance-budgets.json": [
+      "94151b44aa771e7081ac3e1e2060f2ddfbb4e8f72b44fb767280765bcb00eb3a"
+    ],
+    "data/production-safety-policy.json": [
+      "71ea6c706b7cea085399e50870879cc0ec4832e6747e1403a58de183df05bced"
+    ],
+    "data/project-directives.json": [
+      "53fe2cbd10271db9841d3410b6246e91bad62bb3f29b719e15bce1d85085f4af"
+    ],
+    "data/real-device-executor-policy.json": [
+      "dc06fad039a0ea14d774d8886bc7dffdf2fc1de023852b9487d65c2235265996"
+    ],
+    "data/record-replay-policy.json": [
+      "a7e401caa7f87eb4d663bdd2597a4246cc826f58f4271e8bec69dfdeec265bb9"
+    ],
+    "data/rekor-monitor-policy.json": [
+      "dc905c3d540db9b72d6c84cd144ba836916aba1a1e4c7b02b2861e1b8a90f519"
+    ],
+    "data/reproducible-build-policy.json": [
+      "ac99fbed7663e5b2fdef91897700f7a2815d22163b716f7296256152edc843a9"
+    ],
+    "data/semantic-graph-policy.json": [
+      "40642b343e34c092101be76253c167f0f4c1a4b2ead326f22d5a8f69bf86a5d7"
+    ],
+    "data/slo-error-budget-policy.json": [
+      "338127c28845c4fd58b5be448e47cc620cdbd494b578db02056530f985e5b6a7"
+    ],
+    "data/soak-chaos-policy.json": [
+      "7b6b1317434c8b5cbd14b64ecf6b81f105fe504769abd3e6bc1064e30e871d45"
+    ],
+    "data/supply-chain-signing-policy.json": [
+      "289f8e93b1a761409252fec39fe874c55e62fdc35c1a8e7573f3416c0bebd14d"
+    ],
+    "data/system-capability-registry.json": [
+      "ac1590ea85bb5362628ea48595f426cc2366f3f43e39c1a7c3123dca30780ac2"
+    ],
+    "data/system-conflict-policy.json": [
+      "3e0b37a78d0dccaf11cd84d95b413144beb8306997ffb1fae2ddee1d473112b2"
+    ],
+    "data/system-integration-version.json": [
+      "90295a1d6f83c83bf25a9b954ebf69889185e1eb1798fbac9224370fbf2ae674"
+    ],
+    "data/technology-candidate-catalog.json": [
+      "4d7e75477fc6879f3fbaa48297af40ad7d38d8252796d586680f5d42dd68795f"
+    ],
+    "data/toolchain-bootstrap-policy.json": [
+      "bbd7cbcbef3f208fd21ecb98888ecfc04f709620d20c9698203fd96019d9c486"
+    ],
+    "data/transactional-deploy-policy.json": [
+      "6c83323bfc7afb99deff2c70391de84870fa496deef6b287631633f67a78e810"
+    ],
+    "data/update-trust-policy.json": [
+      "fce326a395749e98ede758982481f4e84c6f34a832bc908d8992c669fc1716d8"
+    ],
+    "data/wit-bindings-policy.json": [
+      "c82f3f2f1542ef936177918a592b5f9b251ff91967ae29d04aee9349983119f3"
+    ],
+    "docs/TECHNOLOGY_REFERENCES.md": [
+      "17cff2e5e641dde1a4f429b556fdc2c3d91233cfe9cccde4670eaf87a13b117e"
+    ],
+    "playwright.config.js": [
+      "29e4563ba7154632a8992502f345d39f9c1cca02aadee1a0d3e56b277fd19859"
+    ],
+    "policy/opa-bundle/.manifest": [
+      "a23ea6f29afd8fe235463677ded2bfee8c130a8dc9e7e46e00ad95e1156c33b3"
+    ],
+    "policy/opa-bundle/data.json": [
+      "69dee165420807eed2538b02ceb84591e3162e9fd6744481b878a4e9cb4d6ec2"
+    ],
+    "policy/opa-bundle/worldserver.rego": [
+      "849f76a7ad1cc8e720134100183574e2cb3c7d8049c4a0d3372e44ae3cb06cba"
+    ],
+    "scripts/adapter-sandbox.cjs": [
+      "b119443056285ffdd345e89b6f6ddc2c32f30fc803e93810f51dc15e27f197cd"
+    ],
+    "scripts/ai-visual-critic.js": [
+      "fae8b06bd8464d74b77f1e961dab0bf7fe7e2d3e020780c7e1467210bda80ce5"
+    ],
+    "scripts/artifact-signing-transparency.cjs": [
+      "86f7c830174795c535fb08902db5f46160f849e74f51247816ed8d461184a1da"
+    ],
+    "scripts/asset-delta-distributor.cjs": [
+      "04c9346dc2972f7b23d29ec3f292c563f61213dfa5d2599a6e101f3cd06f8013"
+    ],
+    "scripts/asset-ingestion-planner.cjs": [
+      "e5f29da66b0249d3309d8180f74e5e645e5ed0f325893a95ddd17b552a4238ea"
+    ],
+    "scripts/asset-registry.cjs": [
+      "9596dd4c1a1537e1c7143374b50c4f477f0c89eac5e841742c20cb0871d962b8"
+    ],
+    "scripts/audio-variation-validator.cjs": [
+      "eb3fbfedb425cd64cfc68e1edfd98ce3418b293c5739bfbc86c87ce0ad96f471"
+    ],
+    "scripts/capability-aware-scheduler.cjs": [
+      "afa786a48a04603f12d926f28d92490a8d2ca7734b5e82fdcf5bbab330a17d35"
+    ],
+    "scripts/cas-merkle-store.cjs": [
+      "d2b7c5da39060266279acf071b66aa455a634ea78c62af8a2c20e6900db4d4d9"
+    ],
+    "scripts/cas-peer-discovery.cjs": [
+      "db8d2080cce8718ed28e362d140ca959ff9d3fe29452b86ad10242b0709b905b"
+    ],
+    "scripts/cas-redundancy-verifier.cjs": [
+      "c3f6b319ac6d9d857a06259fec9f81b117d5b4477a75d6b668cd32a5da088597"
+    ],
+    "scripts/causal-debugger.cjs": [
+      "1075c9646461af31a81d3b59015d788fc5cec43e06bac3c36db365d6b5641f32"
+    ],
+    "scripts/change-impact-orchestrator.cjs": [
+      "6e15bb94e356b8944da377345a962bd08ece1ad6f936683c2952b89ca8b7240b"
+    ],
+    "scripts/character-spatial-contract-lib.cjs": [
+      "52f56bbae04bb09cc0811a28935820eede714d490c39e4ca1b99b760d7f0b9c0"
+    ],
+    "scripts/config-contract-validator.cjs": [
+      "849f58808f249f80c9e110dc3785e5a197e791690136960d4664f853138d31e2"
+    ],
+    "scripts/crash-diagnostics-cluster.cjs": [
+      "641a8427ad69e360724990b8bed11f28425f18681ce645de9bcd49f0719aaee4"
+    ],
+    "scripts/cyclonedx-sbom.cjs": [
+      "c1643511768779845db7bdfaf33cf43fffcdf40fec1832699d926ff80894c319"
+    ],
+    "scripts/database-migration-coordinator.cjs": [
+      "cbc47f25e88352452f140251e12513e722aacd5592e34ceaf23cd0220542109a"
+    ],
+    "scripts/dependency-security-orchestrator.cjs": [
+      "1b431a9e5174049fc3c77c9333218c6f02f26c26298e4100c3207ec23b3e18a6"
+    ],
+    "scripts/desktop-ai-report-validator.cjs": [
+      "f1d3f42899c3fc714a3e2cf5a286735d7722af7dc7bc8773f8cc10981922ce3e"
+    ],
+    "scripts/deterministic-record-replay.cjs": [
+      "1e92a044a982fc43ef7cf20b5c32ac265aced334f4ad6d880d150029d93fcf1a"
+    ],
+    "scripts/device-lab-orchestrator.cjs": [
+      "d16e4c9a696b1b56f017ea20d0382f407a83605a8355913db0e66feb63d24153"
+    ],
+    "scripts/device-test-executor.cjs": [
+      "f27873430294355b70cce2d01cca5d4d4a331784377c744e93690b148c0ad08f"
+    ],
+    "scripts/device-worker-server.cjs": [
+      "09e4dbbe36b67aeec08fce5a3c8c784b698a4ae362400cbd1acaffd250971751"
+    ],
+    "scripts/distributed-cas.cjs": [
+      "08f6f86512bdbf7565381a6bae733e4a17d16723e160f2ad53e8c9dcf4264d62"
+    ],
+    "scripts/durable-job-queue.cjs": [
+      "6153c70572311bb6afc07cbaab45369a21c6e8df4ba6c9cfc5862a4faa86a016"
+    ],
+    "scripts/feature-flag-engine.cjs": [
+      "f6d08c5fe5c17f2401707f9627fd59e097e979a3d888cbdd0653da10698c25af"
+    ],
+    "scripts/function-contract-coverage.cjs": [
+      "5291fa34d6f9b08125a7dfbc11559d2fd3878c46aa2747282702ce4bb81fa536"
+    ],
+    "scripts/function-honest-100-auditor.cjs": [
+      "c7523ce73b3a96b797f24dbe2eb5ece7418beb1dbcabef931c64bd26bb733762"
+    ],
+    "scripts/function-monotonic-enhancement-gate.cjs": [
+      "98d57b0b7d91dd0d6cc6a2be043af669087e9e9599a75fa77bcbc0b6e63dcab9"
+    ],
+    "scripts/gameplay-physical-contract-validator.cjs": [
+      "24f6f6a7ee40e0b237ad8deee5039f080406f25416b22e35cde5ded69e253f3b"
+    ],
+    "scripts/graphics-regression-guard.cjs": [
+      "16b3eb3e788739f6c15888e924c102b4dde2276dc87d14fd292c3650dc0da5f9"
+    ],
+    "scripts/integration-chaos-test.cjs": [
+      "6f58d7fc674ca9c31396ae8e00b3fb110c3acedff7c38752f2afb3e1deb4ffba"
+    ],
+    "scripts/integration-selftest.cjs": [
+      "db55fe4b8f8ca3eabfad49c25de1c556cf6e9641e31f0c8599269091a6cf1ebf"
+    ],
+    "scripts/integration-telemetry-lib.cjs": [
+      "d1340539a6062977d105c537d886d5f57e0860ba468e0c1cc2da3d2a286aadc9"
+    ],
+    "scripts/integration-telemetry.cjs": [
+      "15d446900874ffe5e110668c51ae6d670150f08db7393e58a9f6837ce962666c"
+    ],
+    "scripts/integration-utils.cjs": [
+      "636af5be6fdc8b332aafe30643a9fc5c74945bb5a94496068d4cd5c8b854aa94"
+    ],
+    "scripts/leader-lease-fencing.cjs": [
+      "42fceca5f578b5c213fef13fa218126c0aafb181c23f31a61d4b6e92e2ed8b03"
+    ],
+    "scripts/legacy-evidence-factory.cjs": [
+      "7510f75ba18c1fc9a92839bca9d009fb73983e43fa83363d5ffafb3d77329993"
+    ],
+    "scripts/model-state-checker.cjs": [
+      "33d5af939cd16098545f070a8ffba2005cdbee3ed11eb576122f47834cfcb6ae"
+    ],
+    "scripts/native-ast-dataflow.cjs": [
+      "f1dee4d05baaba629d5fb609678a6f26314dd4d1ab18047591ceecf2ef8ec978"
+    ],
+    "scripts/orchestrator-continuity-gate.cjs": [
+      "2040ee038eef21a47aed3033aa2797bc4b043a9c1a92d90101818fcf2eb773ed"
+    ],
+    "scripts/orchestrator-invariant-model.cjs": [
+      "3bafad2bc1b3a0789902132f0509a903405d7bf7270371afd5c64bcb4d49c896"
+    ],
+    "scripts/orchestrator-minimal-repro.cjs": [
+      "0188d58970e8e52cd33be8b2a4c9e847709afc87f28e1f32b11d0630d800b1f6"
+    ],
+    "scripts/orchestrator-monitor-lifecycle.cjs": [
+      "29e7978a35fb3ba58dc934a9829f93fc2d7ba1485bc40f6ad46d0c66c4a50b54"
+    ],
+    "scripts/orchestrator-patch-safety-gate.cjs": [
+      "61180addd942de893ff8a0e7917d45e185ea146493f506faca730e8bbfb2746d"
+    ],
+    "scripts/orchestrator-supervisor.cjs": [
+      "a105490da954e693637a3a95607ee8b7b59d10c205cb23eaf5360609f242bdfd"
+    ],
+    "scripts/policy-engine.cjs": [
+      "1799a38995ecc07712e25643e84b82b9a213a6550ef59512836fda49fc056099"
+    ],
+    "scripts/production-quality-pull.js": [
+      "c1582e5f7a31f2e410ed0a01f899cb9ee4b49f159f29a4cab84f485531fbfe87"
+    ],
+    "scripts/production-safety-controller.cjs": [
+      "13caf1dfecd6aefb01fe40ae116dcf0873d59d3d9d68dd31877ea7d38406bf6f"
+    ],
+    "scripts/project-directive-gate.cjs": [
+      "ffd1b65125a7a5928fe910a043b1cf00c82cda46ff6fe1392a85dbb5ec29f46c"
+    ],
+    "scripts/provenance.cjs": [
+      "7433e9675374b2e831eb7eddcf3a892f5f05cb280429ce8a4d43840102afcc33"
+    ],
+    "scripts/rekor-monitor.cjs": [
+      "dcf7099d968a8f6ef8e905651b4280546ccb0f6a5817cc3a85abe6a0d1253509"
+    ],
+    "scripts/release-promotion-controller.cjs": [
+      "f81120253e0cebdb61f64a300ea5ad8653490918179ea3c4d099616c3c833cfc"
+    ],
+    "scripts/reproducible-build-gate.cjs": [
+      "9852ad49f03455d8f6c38c17ebfdd394eaed66c75f2d757784bb335e9baea8f7"
+    ],
+    "scripts/secure-update-metadata.cjs": [
+      "1ff6b6e5101b17191edd720d6cce79d42ea683060168eb533f0b8472196f4e44"
+    ],
+    "scripts/semantic-dependency-graph.cjs": [
+      "79694f443c8eddc85f2928da442ba9172f9de806b4cb52e9ece79e4339f048c1"
+    ],
+    "scripts/slo-error-budget-controller.cjs": [
+      "5be79af497982a04bce938a6f021ef53959e03550b2a1022ed580e6174ef92c0"
+    ],
+    "scripts/soak-chaos-verifier.cjs": [
+      "893cdb8e6c11867add750cc685e102ba662e9ee2fa14001e346513d0dcf1f0fa"
+    ],
+    "scripts/system-control-plane.cjs": [
+      "77b1f968003e67c937167506b97b74b88a21c29c8413d94f2bf9edf7a1722fa1"
+    ],
+    "scripts/system-enhancement-orchestrator.cjs": [
+      "59bdb1a737747143181070d8c9e8080e01b2c143ac10cd7c1b0fa221893b887a"
+    ],
+    "scripts/system-integration-gate.cjs": [
+      "8e6e6e3ac6b43aaee11a07c39b045f62141d2a346e2d39165e13e0523e842919"
+    ],
+    "scripts/system-readiness.cjs": [
+      "cb0f892640e00af72187cc1161fdc951a10f99588bbec60f05ef1c56bb8ddcdb"
+    ],
+    "scripts/technology-consensus.cjs": [
+      "575f20288d61288ac684fa79d74e05c08138ffe885f6c604915cba44b6b5d0f3"
+    ],
+    "scripts/technology-lock-validator.cjs": [
+      "f471e26bdb4030826d50c7169712b8a351ef6ee4c2e7ce23184776dc87ff321a"
+    ],
+    "scripts/tlc-native-runner.cjs": [
+      "2caf255c74c9afce97fddb724cfc1dd951cd477ccc4d90ba4c480864ff06c8bd"
+    ],
+    "scripts/toolchain-bootstrap.cjs": [
+      "e26dae5b0ccec4332562c5bee06f1707f0bc1d00360c38d917f34374552aed02"
+    ],
+    "scripts/toolchain-security-gate.cjs": [
+      "b575c32629713c3e3eb1d44dcf80b712ee23fca4ab60dd1a609db9c473311190"
+    ],
+    "scripts/transactional-deploy.cjs": [
+      "c001300a1198cde6b33020a7afa08de2606c8bb6da676a5264bff78e112a58f0"
+    ],
+    "scripts/wit-bindings-generator.cjs": [
+      "43a80b584a07975ac93967a5ae53110ecbdca88950b2dfcfac530d146cab5717"
+    ],
+    "scripts/wit-component-validator.cjs": [
+      "51b1d71ec5ac7294265fea4c3d79df54a2e3b3bdaffd084e014008ded5705e18"
+    ],
+    "scripts/world-device-profile-matrix.js": [
+      "5d8f6ed25e05439858c717281560de179cbee098ade7f57126fb200fc2f3bd83"
+    ],
+    "scripts/world-quality-analyzer.js": [
+      "44b32b12f4e6a9dbe2c62c12f842eee551f4319279aac62a04d6b1449915753b"
+    ],
+    "scripts/world-quality-autopilot.js": [
+      "3b4dc70287b57e56a7b394b33a4023f785be8f2b30d57ac76dde2fba674f3984"
+    ],
+    "scripts/world-runtime-quality-profiler.js": [
+      "04f134381881c7c27d06b7f8d65f8342ef7ca2411a7f9ca03b1f098e612acbf6"
+    ],
+    "services/ai3d-worker/ai3d/plugins/mesh_quality_optimizer.py": [
+      "321354103d29948e869e38b9028e01263ea0b546c3ad46537a504fbb6825afd1"
+    ],
+    "specs/ControlPlane.cfg": [
+      "cf9bfe1ca26ebf728685e4db44c2ce6fdf11aa1361216445f81f3c55878455ae"
+    ],
+    "specs/ControlPlane.tla": [
+      "14a06f79b5631fa9d5f22359374faf324caa2983ef7961975cffdea2dc44d61f"
+    ],
+    "specs/DurableJobQueue.cfg": [
+      "a8f1ef472fa6a3a547634118f5027d8089ddaca91a8afb920773629583097f5e"
+    ],
+    "specs/DurableJobQueue.tla": [
+      "bd2bfe6a6f1c36d932574fbb58ce205efa42a361cc666a74add3bf1cb95894ab"
+    ],
+    "supabase/migrations/20260824_orchestrator_leader_lease.sql": [
+      "0b34c186579660287a5914165614bce1977d9db6b99cb06c796010fffdcc997b"
+    ],
+    "wit/world-server-adapter.wit": [
+      "aa3475d2b717e427004a3b3adc27695c3e00d4a2220faae6ef8fc0fbb7e83223"
+    ]
+  }
+}

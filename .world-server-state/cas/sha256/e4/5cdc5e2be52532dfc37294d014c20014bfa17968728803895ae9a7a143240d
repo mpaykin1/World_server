@@ -1,0 +1,21 @@
+{
+  "version": "4.0",
+  "runtimeSyntax": true,
+  "serverProfile": true,
+  "serverOrchestrator": true,
+  "nativeGBuffer": true,
+  "inferredGBuffer": true,
+  "tsr": true,
+  "radiance": true,
+  "pbrCompute": true,
+  "sdf3dBVH": true,
+  "locomotion": true,
+  "simdPool": true,
+  "culling": true,
+  "eligibleApps": 1,
+  "injectedApps": 1,
+  "injectionCoveragePct": 100,
+  "webgpu": true,
+  "webgl2Fallback": true,
+  "hardGate": true
+}

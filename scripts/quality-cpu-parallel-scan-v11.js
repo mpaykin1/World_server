@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+'use strict';
+const fs=require('node:fs');const path=require('node:path');const {runCpuTasks}=require('../lib/quality/cpu-worker-pool-v11');
+function walk(d,out=[]){if(!fs.existsSync(d))return out;for(const n of fs.readdirSync(d)){if(n==='node_modules'||n==='.git')continue;const p=path.join(d,n),s=fs.statSync(p);if(s.isDirectory())walk(p,out);else if(/\.(js|cjs|mjs|json)$/.test(n))out.push(p);}return out;}
+(async()=>{const files=walk(process.argv[2]||'.').slice(0,Number(process.env.QUALITY_CPU_SCAN_MAX_FILES||2000));const started=Date.now();const r=await runCpuTasks(files.map(p=>({op:p.endsWith('.json')?'json-hash':'sha256-file',path:p})),{reserveCores:1,maxWorkers:Number(process.env.QUALITY_CPU_MAX_WORKERS||8)});const out={ok:r.ok,status:r.ok?'PASS':'HOLD',files:files.length,concurrency:r.concurrency,durationMs:Date.now()-started,failures:r.results.filter(x=>!x.ok).slice(0,20)};fs.mkdirSync('data/quality-autopilot',{recursive:true});fs.writeFileSync('data/quality-autopilot/cpu-parallel-scan-v11.json',JSON.stringify(out,null,2)+'\n');console.log(JSON.stringify(out,null,2));if(!out.ok)process.exitCode=2;})();

@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "4.0.0",
+  "generatedAt": "2026-08-24T06:55:26.211Z",
+  "readinessPercent": 100,
+  "domainPercent": {
+    "detail": 100,
+    "graphics": 100,
+    "animation": 100,
+    "optimization": 98,
+    "automation": 100
+  },
+  "hardGateReady": true,
+  "runtimeQualityPercent": 97,
+  "deviceEvidencePercent": 87,
+  "evidenceLedgerSha256": "cfa45f8e19c81c0f3b6d961178874fb63600af1f45872b321f2f2d6d2a0de9a3",
+  "materialProfiles": 64,
+  "visibilityPercent": 100,
+  "retargetContractReady": true,
+  "schedulerRoutes": 5,
+  "candidateCount": 12,
+  "feedbackSamples": 0,
+  "nextSystems": [
+    {
+      "domain": "optimization",
+      "priority": 1,
+      "title": "Configure physical iOS + Android device provider",
+      "why": "V4 adds sustained-pressure/thermal proxy, sector visibility and texture budgets, but emulation is not physical-device evidence.",
+      "automation": "Configure REAL_DEVICE_PROVIDER_URL/TOKEN and run sustained tests on real iPhone + Android."
+    },
+    {
+      "domain": "automation",
+      "priority": 2,
+      "title": "Enable write-capable winner-only PR bot",
+      "why": "V4 candidate lab, learner, scheduler, patch tournament and gates are ready for branch-only automation.",
+      "automation": "Grant branch/PR credentials; never push master and never auto-merge."
+    },
+    {
+      "domain": "graphics",
+      "priority": 2,
+      "title": "Connect verified semantic texture baker",
+      "why": "Procedural PBR parameters are ready, but high-frequency authored normal/roughness/AO textures should come from a verified backend.",
+      "automation": "Route generated maps through candidate hashes, memory budgets and visual baseline gate; never auto-approve."
+    },
+    {
+      "domain": "optimization",
+      "priority": 2,
+      "title": "Add WebGPU meshlet path as optional experiment",
+      "why": "Current WebGL greedy/HLOD/sector visibility is mature; meshlets may improve huge scenes on supported devices.",
+      "automation": "Keep WebGL as fallback and promote WebGPU only after browser/device evidence wins the candidate tournament."
+    }
+  ],
+  "mode": "safe-analysis"
+}

@@ -1,0 +1,20 @@
+Эта версия НЕ требует npm install.
+
+Запуск:
+1) Открой PowerShell в папке проекта.
+2) Выполни:
+
+node server.js
+
+или:
+
+npm start
+
+3) Открой в браузере:
+
+http://localhost:3000
+
+Важно:
+- node_modules больше не нужен.
+- express и socket.io больше не нужны.
+- server.js использует только встроенные модули Node.js: http, fs, path, crypto.

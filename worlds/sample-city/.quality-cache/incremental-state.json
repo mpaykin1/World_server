@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "mode": "content-hash-incremental-world-compiler-v1",
+  "files": {
+    "assets/world.ply": "af8b08927d911b259f04975e146f26a1110c574ba3bc465ae319685826ca9473",
+    "world.json": "fed1f1372f9b4eddba4b156e44836dddfe5b06723e503883daa959abf60c8dbe"
+  },
+  "changed": [
+    "assets/world.ply",
+    "world.json"
+  ],
+  "removed": [],
+  "affectedSystems": [
+    "collision",
+    "lighting",
+    "meshlets",
+    "metadata",
+    "nav",
+    "pvs",
+    "semantic",
+    "streaming"
+  ],
+  "fullRebuild": false,
+  "sourceAssetsModified": false,
+  "generatedAt": 1787549880.9522274
+}

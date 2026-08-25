@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-25T01:14:44.557Z",
+  "pass": true,
+  "collectorDiscovery": {
+    "platform": "win32",
+    "windowsCollectors": [
+      "wpr",
+      "logman"
+    ],
+    "linuxCollectors": [],
+    "otelCollectors": [],
+    "nativeAvailable": true,
+    "otelAvailable": false
+  },
+  "selftest": {
+    "pass": true,
+    "traceCorrelation": true
+  },
+  "nativeCollectorAvailable": true,
+  "otelCollectorAvailable": false,
+  "externalBlockers": [
+    "otel-collector-unavailable"
+  ],
+  "truthRule": "Collector availability is reported separately from causal graph logic. Missing privileged/native collectors never becomes a false 100% native-runtime claim."
+}

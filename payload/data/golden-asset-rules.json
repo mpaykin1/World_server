@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "GOLDEN_ASSET_BOT",
+  "rules": [
+    {
+      "componentId": "stained-glass",
+      "status": "awaiting-source-promotion",
+      "source": null,
+      "sha256": null,
+      "capability": "windows",
+      "strategy": "copy-exact",
+      "note": "Will activate only after exact user-approved asset/source is registered."
+    }
+  ]
+}

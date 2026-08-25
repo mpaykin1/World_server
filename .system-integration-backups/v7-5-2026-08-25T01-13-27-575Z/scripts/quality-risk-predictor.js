@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+'use strict';
+const fs=require('fs'),path=require('path'),cp=require('child_process');const ROOT=process.cwd(),m=JSON.parse(fs.readFileSync(path.join(ROOT,'data/quality-risk-model.json'),'utf8'));
+let changed=process.env.QUALITY_CHANGED_FILES?process.env.QUALITY_CHANGED_FILES.split(/[,\n]/).map(x=>x.trim()).filter(Boolean):[];if(!changed.length){const r=cp.spawnSync('git',['diff','--name-only',process.env.QUALITY_BASE_SHA||'master','HEAD'],{cwd:ROOT,encoding:'utf8'});if(r.status===0)changed=r.stdout.trim().split(/\r?\n/).filter(Boolean)}
+let score=0;const reasons=[];const add=(n,r)=>{score+=n;reasons.push({points:n,reason:r})};
+for(const f of changed){if(f.startsWith('shared/'))add(m.weights.shared,f);if(/^apps\/(voxel-world|ai3d-voxel-city)\//.test(f))add(m.weights.certified,f);if(f.startsWith('.github/workflows/'))add(m.weights.workflow,f);if(f.startsWith('api/'))add(m.weights.api,f);if(f.startsWith('services/ai3d-worker/'))add(m.weights.worker,f)}if(changed.length>12)add(m.weights.manyFiles,`files:${changed.length}`);
+const impact=fs.existsSync(path.join(ROOT,'QUALITY_CHANGE_IMPACT.json'))?JSON.parse(fs.readFileSync(path.join(ROOT,'QUALITY_CHANGE_IMPACT.json'),'utf8')):{affectedApps:[]};if((impact.affectedApps||[]).length>=4)add(m.weights.manyApps,`apps:${impact.affectedApps.length}`);score=Math.min(100,score);
+const level=score>=m.thresholds.high?'high':score>=m.thresholds.medium?'medium':score>=m.thresholds.low?'low':'minimal',testPlan=level==='high'?['release:gate','all-playwright','fuzz','stability-5x','visual','real-device-if-configured']:level==='medium'?['release:gate','affected-playwright','fuzz','stability-3x']:['release:gate','affected-smoke'];
+const out={generatedAt:new Date().toISOString(),score,level,changed,reasons,testPlan};fs.writeFileSync(path.join(ROOT,'QUALITY_RISK_PREDICTION.json'),JSON.stringify(out,null,2)+'\n');console.log(`[QUALITY_RISK] ${level} ${score}/100`);

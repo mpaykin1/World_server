@@ -1,0 +1,54 @@
+{
+  "ok": true,
+  "checks": {
+    "phone_pose_fusion": true,
+    "dynamic4d_tracks": true,
+    "model_manager": true,
+    "phone_capture_api": true,
+    "phone_capture_static": true,
+    "phone_capture_files": true
+  },
+  "pose_report": {
+    "used": true,
+    "orientation_used": true,
+    "native_position_used": true,
+    "gps_position_used": false,
+    "sample_count": 40,
+    "frame_count": 10,
+    "coverage_ratio": 1.0,
+    "source": "/mnt/data/PIXEL_3DGS_CPU_V6_PHONE_4D_MAX/output/demo_build/synthetic_capture_pose.json"
+  },
+  "dynamic4d_report": {
+    "ok": true,
+    "backend": "cpu_dense_flow_temporal_tracks",
+    "track_count": 39,
+    "frame_count": 12,
+    "median_motion_px": 0.9063,
+    "dynamic_score": 0.1813,
+    "recommended_mode": "rigid_character",
+    "tracks_file": "/mnt/data/PIXEL_3DGS_CPU_V6_PHONE_4D_MAX/output/demo_build/v6_dynamic4d_test/dynamic4d_tracks.npz",
+    "note": "Temporal deformation tracks are operational; true learned 4D Gaussian deformation remains an optional future backend."
+  },
+  "model_status": {
+    "depth": {
+      "active": false,
+      "path": null,
+      "source": null
+    },
+    "matcher": {
+      "active": false,
+      "path": null,
+      "source": null
+    },
+    "flow": {
+      "active": false,
+      "path": null,
+      "source": null
+    },
+    "segmentation": {
+      "active": false,
+      "path": null,
+      "source": null
+    }
+  }
+}

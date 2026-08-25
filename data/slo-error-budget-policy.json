@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "7.4.0",
+  "system": "SLO_ERROR_BUDGET_CONTROLLER",
+  "windowMinutes": 60,
+  "targetSuccessRate": 0.995,
+  "targetP95Ms": 1500,
+  "minimumSamplesForProductionDecision": 20,
+  "fastBurnThreshold": 14.4,
+  "slowBurnThreshold": 6,
+  "actions": {
+    "fastBurn": "STOP_CANARY_AND_ROLLBACK",
+    "slowBurn": "FREEZE_PROMOTION",
+    "healthy": "ALLOW_CANARY"
+  },
+  "truthRule": "No production rollback decision is claimed from synthetic samples. Synthetic mode validates controller math only."
+}

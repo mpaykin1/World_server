@@ -1,0 +1,626 @@
+{
+  "schemaVersion": 6,
+  "tests": [
+    {
+      "id": "spawn-grounded",
+      "type": "browser",
+      "rule": "PHY-002"
+    },
+    {
+      "id": "spawn-capsule-clearance",
+      "type": "browser",
+      "rule": "PHY-002"
+    },
+    {
+      "id": "jump-world-y-only",
+      "type": "browser",
+      "rule": "PHY-003"
+    },
+    {
+      "id": "pitch-plus-minus-89",
+      "type": "browser",
+      "rule": "CAM-002"
+    },
+    {
+      "id": "camera-roll-zero",
+      "type": "browser",
+      "rule": "CAM-001"
+    },
+    {
+      "id": "horizontal-look-yaw-only",
+      "type": "browser",
+      "rule": "INP-001"
+    },
+    {
+      "id": "source-hash-lock",
+      "type": "static",
+      "rule": "SRC-001"
+    },
+    {
+      "id": "geometry-stats-regression",
+      "type": "static",
+      "rule": "GFX-001"
+    },
+    {
+      "id": "visual-golden-regression",
+      "type": "browser",
+      "rule": "GFX-002"
+    },
+    {
+      "id": "splat-proxy-required",
+      "type": "static",
+      "rule": "PHY-001"
+    },
+    {
+      "id": "collider-raycast-floor",
+      "type": "browser",
+      "rule": "PHY-001"
+    },
+    {
+      "id": "forward-planar-camera",
+      "type": "browser",
+      "rule": "INP-001"
+    },
+    {
+      "id": "left-right-basis",
+      "type": "browser",
+      "rule": "INP-001"
+    },
+    {
+      "id": "performance-floor",
+      "type": "browser",
+      "rule": "PERF-001"
+    },
+    {
+      "id": "shared-runtime-drift",
+      "type": "static",
+      "rule": "QA-002"
+    },
+    {
+      "id": "known-error-immunity",
+      "type": "static",
+      "rule": "QA-001"
+    },
+    {
+      "id": "promoted-pattern-propagation",
+      "type": "static",
+      "rule": "QA-004"
+    },
+    {
+      "id": "deterministic-fuzz-replay",
+      "type": "browser",
+      "rule": "QA-005"
+    },
+    {
+      "id": "static-light-bake-lock",
+      "type": "static",
+      "rule": "LGT-001"
+    },
+    {
+      "id": "near-field-max-quality",
+      "type": "static",
+      "rule": "GFX-004"
+    },
+    {
+      "id": "distance-atmosphere-enabled",
+      "type": "static",
+      "rule": "GFX-005"
+    },
+    {
+      "id": "global-subtle-wetness",
+      "type": "static",
+      "rule": "MAT-002"
+    },
+    {
+      "id": "protected-error-never-recur",
+      "type": "static",
+      "rule": "QA-006"
+    },
+    {
+      "id": "canary-global-rollout",
+      "type": "static",
+      "rule": "QA-007"
+    },
+    {
+      "id": "quality-genome-inheritance",
+      "type": "static",
+      "rule": "QA-008"
+    },
+    {
+      "id": "fog-cull-only-behind-opaque-fog",
+      "type": "static",
+      "rule": "GFX-006"
+    },
+    {
+      "id": "wet-fallback-all-renderers",
+      "type": "static",
+      "rule": "MAT-003"
+    },
+    {
+      "id": "all-static-mesh-bake-policy",
+      "type": "static",
+      "rule": "LGT-002"
+    },
+    {
+      "id": "failed-build-no-propagation",
+      "type": "static",
+      "rule": "QA-009"
+    },
+    {
+      "id": "transactional-rollout-rollback",
+      "type": "static",
+      "rule": "QA-010"
+    },
+    {
+      "id": "last-known-good-release-state",
+      "type": "static",
+      "rule": "QA-011"
+    },
+    {
+      "id": "unknown-error-quarantine",
+      "type": "static",
+      "rule": "QA-012"
+    },
+    {
+      "id": "cross-project-pattern-promotion",
+      "type": "static",
+      "rule": "QA-013"
+    },
+    {
+      "id": "near-fps-optimization-no-quality-loss",
+      "type": "static",
+      "rule": "PERF-003"
+    },
+    {
+      "id": "adaptive-tick-near-full-rate",
+      "type": "static",
+      "rule": "PERF-004"
+    },
+    {
+      "id": "predictive-streaming-nearest-first",
+      "type": "static",
+      "rule": "PERF-005"
+    },
+    {
+      "id": "native-spz-decode-v1-v4",
+      "type": "unit",
+      "rule": "SRC-003"
+    },
+    {
+      "id": "glb-chunk-face-conservation",
+      "type": "unit",
+      "rule": "GFX-007"
+    },
+    {
+      "id": "glb-uv-lightmap-companion",
+      "type": "unit",
+      "rule": "LGT-003"
+    },
+    {
+      "id": "dynamic-moving-side-collision",
+      "type": "static",
+      "rule": "PHY-007"
+    },
+    {
+      "id": "compiled-global-protection-pack",
+      "type": "static",
+      "rule": "QA-014"
+    },
+    {
+      "id": "gpu-occlusion-near-bypass",
+      "type": "static",
+      "rule": "PERF-006"
+    },
+    {
+      "id": "immutable-sha-cache",
+      "type": "static",
+      "rule": "PERF-007"
+    },
+    {
+      "id": "serialized-bvh-cache-keyed",
+      "type": "static",
+      "rule": "PERF-008"
+    },
+    {
+      "id": "worker-ply-fidelity-fallback",
+      "type": "unit",
+      "rule": "PERF-009"
+    },
+    {
+      "id": "exact-material-dedup",
+      "type": "static",
+      "rule": "PERF-010"
+    },
+    {
+      "id": "meshlet-face-conservation",
+      "type": "unit",
+      "rule": "PERF-011"
+    },
+    {
+      "id": "static-reflection-probe-once",
+      "type": "static",
+      "rule": "PERF-012"
+    },
+    {
+      "id": "network-near-full-precision",
+      "type": "static",
+      "rule": "NET-001"
+    },
+    {
+      "id": "distant-pose-near-untouched",
+      "type": "static",
+      "rule": "ANM-001"
+    },
+    {
+      "id": "static-shadow-cache-safe-only",
+      "type": "static",
+      "rule": "PERF-013"
+    },
+    {
+      "id": "optimization-promotion-quality-nonregression",
+      "type": "static",
+      "rule": "QA-015"
+    },
+    {
+      "id": "webgpu-hzb-conservative-fail-visible",
+      "type": "unit",
+      "protects": [
+        "PERF-014"
+      ]
+    },
+    {
+      "id": "wasm-simd-numerical-parity",
+      "type": "unit",
+      "protects": [
+        "PERF-015"
+      ]
+    },
+    {
+      "id": "meshlet-indirect-source-ranges",
+      "type": "unit",
+      "protects": [
+        "PERF-016"
+      ]
+    },
+    {
+      "id": "offline-gi-source-lock",
+      "type": "unit",
+      "protects": [
+        "LGT-004"
+      ]
+    },
+    {
+      "id": "offline-reflection-source-lock",
+      "type": "unit",
+      "protects": [
+        "LGT-005"
+      ]
+    },
+    {
+      "id": "animated-glb-range-byte-conservation",
+      "type": "unit",
+      "protects": [
+        "STR-001"
+      ]
+    },
+    {
+      "id": "dynamic-mesh-sweep-contract",
+      "type": "unit",
+      "protects": [
+        "PHY-008"
+      ]
+    },
+    {
+      "id": "global-production-fingerprint",
+      "type": "unit",
+      "protects": [
+        "QA-016"
+      ]
+    },
+    {
+      "id": "production-telemetry-quarantine",
+      "type": "unit",
+      "protects": [
+        "QA-017"
+      ]
+    },
+    {
+      "id": "transactional-protected-self-heal",
+      "type": "unit",
+      "protects": [
+        "QA-018"
+      ]
+    },
+    {
+      "id": "webgpu-pbr-source-equivalence",
+      "type": "unit",
+      "protects": [
+        "PERF-017"
+      ]
+    },
+    {
+      "id": "wasm-simd-threaded-parity",
+      "type": "unit",
+      "protects": [
+        "PERF-018"
+      ]
+    },
+    {
+      "id": "parallel-bvh-prepass-exact",
+      "type": "unit",
+      "protects": [
+        "PERF-019"
+      ]
+    },
+    {
+      "id": "monotonic-quality-ratchet",
+      "type": "unit",
+      "protects": [
+        "QA-019"
+      ]
+    },
+    {
+      "id": "quality-knowledge-graph-complete",
+      "type": "unit",
+      "protects": [
+        "QA-019"
+      ]
+    },
+    {
+      "id": "sandboxed-fix-proof",
+      "type": "static",
+      "protects": [
+        "QA-020"
+      ]
+    },
+    {
+      "id": "content-addressed-bake-cache",
+      "type": "unit",
+      "protects": [
+        "QA-021"
+      ]
+    },
+    {
+      "id": "representative-device-farm-contract",
+      "type": "static",
+      "protects": [
+        "QA-022"
+      ]
+    },
+    {
+      "id": "consumer-drift-audit",
+      "type": "unit",
+      "protects": [
+        "QA-023"
+      ]
+    },
+    {
+      "id": "durable-pattern-evidence-contract",
+      "type": "static",
+      "protects": [
+        "QA-024"
+      ]
+    },
+    {
+      "id": "shared-memory-zero-copy-fallback",
+      "type": "unit",
+      "protects": [
+        "PERF-020"
+      ]
+    },
+    {
+      "id": "webgpu-exact-material-table",
+      "type": "unit",
+      "protects": [
+        "PERF-021"
+      ]
+    },
+    {
+      "id": "clustered-lighting-fail-bright",
+      "type": "unit",
+      "protects": [
+        "LGT-006"
+      ]
+    },
+    {
+      "id": "virtual-texture-near-full-resolution",
+      "type": "unit",
+      "protects": [
+        "PERF-022"
+      ]
+    },
+    {
+      "id": "portal-visibility-conservative",
+      "type": "unit",
+      "protects": [
+        "PERF-023"
+      ]
+    },
+    {
+      "id": "animation-budget-near-interaction-full-rate",
+      "type": "unit",
+      "protects": [
+        "ANM-002"
+      ]
+    },
+    {
+      "id": "physics-broadphase-near-contact-awake",
+      "type": "unit",
+      "protects": [
+        "PHY-009"
+      ]
+    },
+    {
+      "id": "network-delta-lossless",
+      "type": "unit",
+      "protects": [
+        "NET-002"
+      ]
+    },
+    {
+      "id": "device-schedule-safe-knobs-only",
+      "type": "unit",
+      "protects": [
+        "PERF-024"
+      ]
+    },
+    {
+      "id": "derived-artifact-cas-source-lock",
+      "type": "unit",
+      "protects": [
+        "QA-025"
+      ]
+    },
+    {
+      "id": "pattern-applicability-firewall",
+      "type": "unit",
+      "protects": [
+        "QA-026"
+      ]
+    },
+    {
+      "id": "frame-budget-near-critical",
+      "type": "unit",
+      "protects": [
+        "PERF-025"
+      ]
+    },
+    {
+      "id": "stutter-p99-regression",
+      "type": "unit",
+      "protects": [
+        "PERF-026"
+      ]
+    },
+    {
+      "id": "incremental-world-compiler-affected-only",
+      "type": "unit",
+      "protects": [
+        "PERF-028"
+      ]
+    },
+    {
+      "id": "cpu-first-no-paid-gpu",
+      "type": "unit",
+      "protects": [
+        "PERF-027"
+      ]
+    },
+    {
+      "id": "cpu-pvs-near-fail-visible",
+      "type": "unit",
+      "protects": [
+        "PERF-029"
+      ]
+    },
+    {
+      "id": "predictive-streaming-v2",
+      "type": "unit",
+      "protects": [
+        "PERF-030"
+      ]
+    },
+    {
+      "id": "simulation-lod-near-exact",
+      "type": "unit",
+      "protects": [
+        "PERF-031"
+      ]
+    },
+    {
+      "id": "cpu-autotuner-safe-knobs",
+      "type": "unit",
+      "protects": [
+        "PERF-032"
+      ]
+    },
+    {
+      "id": "incremental-cpu-light-bake",
+      "type": "unit",
+      "protects": [
+        "LGT-007"
+      ]
+    },
+    {
+      "id": "production-replay-permanent",
+      "type": "unit",
+      "protects": [
+        "QA-027"
+      ]
+    },
+    {
+      "id": "nav-collision-cache-source-lock",
+      "type": "unit",
+      "protects": [
+        "QA-028"
+      ]
+    },
+    {
+      "id": "desktop-ai-no-stop-protocol",
+      "type": "unit",
+      "protects": [
+        "QA-029"
+      ]
+    },
+    {
+      "id": "threaded-importer-exact-parity",
+      "type": "unit",
+      "rule": "PERF-033"
+    },
+    {
+      "id": "mmap-stream-bounded-memory",
+      "type": "unit",
+      "rule": "PERF-034"
+    },
+    {
+      "id": "semantic-pvs-fail-visible",
+      "type": "unit",
+      "rule": "PERF-035"
+    },
+    {
+      "id": "incremental-gi-cell-hash-reuse",
+      "type": "unit",
+      "rule": "LGT-008"
+    },
+    {
+      "id": "content-defined-chunk-byte-reconstruction",
+      "type": "unit",
+      "rule": "STR-002"
+    },
+    {
+      "id": "offline-sha-cache-version-isolation",
+      "type": "static",
+      "rule": "PERF-036"
+    },
+    {
+      "id": "shared-worker-cache-sha-isolation",
+      "type": "static",
+      "rule": "PERF-036"
+    },
+    {
+      "id": "cpu-flamegraph-evidence",
+      "type": "unit",
+      "rule": "PERF-037"
+    },
+    {
+      "id": "network-physics-replay-farm-determinism",
+      "type": "unit",
+      "rule": "QA-030"
+    },
+    {
+      "id": "dependency-impact-graph-complete",
+      "type": "unit",
+      "rule": "QA-031"
+    },
+    {
+      "id": "derived-cache-codec-lossless",
+      "type": "unit",
+      "rule": "QA-032"
+    },
+    {
+      "id": "binary-delta-exact-reconstruction",
+      "type": "unit",
+      "rule": "QA-033"
+    }
+  ]
+}

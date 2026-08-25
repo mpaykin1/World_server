@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "6.0.0",
+  "system": "WORLD_TECHNOLOGY_CANDIDATE_INTAKE",
+  "generatedAt": "2026-08-25T01:15:50.635Z",
+  "refsScanned": 3,
+  "candidates": [
+    {
+      "ref": "origin/ai/desktop/hunyuan-full-quality-v3",
+      "status": "candidate-ref-only",
+      "runtimeReady": false,
+      "requiresCheckoutAndTechnologyScout": true
+    }
+  ],
+  "policy": "candidate refs never count as runtime until checked out and verified by technology scout",
+  "hardGateReady": true
+}

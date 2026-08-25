@@ -1,0 +1,15 @@
+{
+  "checks": {
+    "code_compile": true,
+    "video_space_e2e": true,
+    "video_character_e2e": true,
+    "api_upload_jobs": true,
+    "cli": true,
+    "lod_chunking": true,
+    "ewa_oit": true,
+    "desktop_ai_instruction_updated": true,
+    "optional_backend_hooks_present": true,
+    "capture_pose_schema_present": true
+  },
+  "rule": "Do not stop until every failed check is fixed and re-run."
+}

@@ -1,0 +1,152 @@
+{
+  "generatedAt": "2026-08-24T06:55:17.184Z",
+  "issues": [],
+  "technologies": {
+    "Vercel": {
+      "percent": 90,
+      "status": "production",
+      "evidence": [
+        "vercel.json",
+        "api/apps.js"
+      ]
+    },
+    "Supabase Postgres/Auth/Realtime": {
+      "percent": 90,
+      "status": "production",
+      "evidence": [
+        "package.json"
+      ]
+    },
+    "Three.js/WebGL2": {
+      "percent": 90,
+      "status": "production",
+      "evidence": [
+        "apps/voxel-world/index.html"
+      ]
+    },
+    "Playwright": {
+      "percent": 65,
+      "status": "integrated",
+      "evidence": [
+        "playwright.config.js",
+        "e2e/golden-release.spec.js"
+      ]
+    },
+    "Python/FastAPI AI3D worker": {
+      "percent": 65,
+      "status": "integrated",
+      "evidence": [
+        "services/ai3d-worker"
+      ]
+    },
+    "AI3D auto-discovery": {
+      "percent": 70,
+      "status": "integrated",
+      "evidence": [
+        "scripts/discover-ai3d-engines.js"
+      ]
+    },
+    "Depth Anything": {
+      "percent": 50,
+      "status": "adapter",
+      "evidence": [
+        "services/ai3d-worker"
+      ]
+    },
+    "Blender pipeline": {
+      "percent": 70,
+      "status": "adapter + LOD/mesh optimizer prepared",
+      "evidence": [
+        "services/ai3d-worker/tools/run_building_blender.py",
+        "scripts/technology-orchestrator.js"
+      ]
+    },
+    "TRELLIS.2": {
+      "percent": 60,
+      "status": "real adapter + GPU router + mesh postprocess prepared; runtime not verified",
+      "evidence": [
+        "services/ai3d-worker/ai3d/plugins/trellis2.py",
+        "scripts/technology-orchestrator.js",
+        "services/ai3d-worker/ai3d/plugins/gpu_router.py"
+      ]
+    },
+    "Godot 4.7.1": {
+      "percent": 78,
+      "status": "bridge + runtime smoke + quality orchestration prepared",
+      "evidence": [
+        "services/ai3d-worker/ai3d/plugins/godot_voxel.py",
+        "scripts/godot-runtime-smoke.js"
+      ],
+      "externalEvidence": "PR #6"
+    },
+    "Hunyuan3D": {
+      "percent": 75,
+      "status": "remote routing + quality postprocess prepared",
+      "externalEvidence": "PR #6",
+      "evidence": [
+        "services/ai3d-worker/ai3d/plugins/gpu_router.py"
+      ]
+    },
+    "InstantMesh": {
+      "percent": 80,
+      "status": "real adapter + GPU router + mesh postprocess prepared; runtime not verified",
+      "evidence": [
+        "services/ai3d-worker/ai3d/plugins/instantmesh.py",
+        "services/ai3d-worker/ai3d/plugins/gpu_router.py"
+      ],
+      "note": "V8 invokes official run.py when CUDA/source are available; placeholder-success path is forbidden."
+    },
+    "MPFB": {
+      "percent": 30,
+      "status": "orchestrator-visible; runtime not verified",
+      "evidence": [
+        "data/technology-orchestrator.json",
+        "scripts/technology-orchestrator.js"
+      ]
+    },
+    "UniRig": {
+      "percent": 30,
+      "status": "orchestrator-visible; runtime not verified",
+      "evidence": [
+        "data/technology-orchestrator.json",
+        "scripts/technology-orchestrator.js"
+      ]
+    },
+    "Rigify": {
+      "percent": 30,
+      "status": "orchestrator-visible; runtime not verified",
+      "evidence": [
+        "data/technology-orchestrator.json",
+        "scripts/technology-orchestrator.js"
+      ]
+    },
+    "Goo Engine": {
+      "percent": 30,
+      "status": "orchestrator-visible; runtime not verified",
+      "evidence": [
+        "data/technology-orchestrator.json",
+        "scripts/technology-orchestrator.js"
+      ]
+    },
+    "UPBGE": {
+      "percent": 30,
+      "status": "orchestrator-visible; runtime not verified",
+      "evidence": [
+        "data/technology-orchestrator.json",
+        "scripts/technology-orchestrator.js"
+      ]
+    },
+    "Blender MCP": {
+      "percent": 0,
+      "status": "not-server-runtime"
+    },
+    "Unity MCP": {
+      "percent": 0,
+      "status": "not-server-runtime"
+    },
+    "OpenGameEval/OpenGame": {
+      "percent": 10,
+      "status": "concept-partial"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "license": "REQUIRED: SPDX expression or project license reference",
+  "quality": {
+    "tier": "production",
+    "notes": "Optional perceptual/technical quality notes"
+  },
+  "lod": {
+    "level": 0,
+    "group": "optional-group-id"
+  },
+  "dependencies": []
+}

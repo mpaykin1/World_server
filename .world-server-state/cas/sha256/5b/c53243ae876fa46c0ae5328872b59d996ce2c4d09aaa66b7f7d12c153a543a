@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+'use strict';
+const os=require('os'),fs=require('fs'),path=require('path');const ROOT=process.cwd(),cores=os.cpus().length,memGb=os.totalmem()/1073741824,model=os.cpus()[0]?.model||'unknown',score=Math.min(100,cores*5+memGb*2),klass=score>=70?'high':score>=40?'balanced':'low';
+const profiles={low:{targetFps:30,renderScale:.75,lodBias:1.8,textureScale:.6},balanced:{targetFps:45,renderScale:.9,lodBias:1.25,textureScale:.8},high:{targetFps:55,renderScale:1,lodBias:1,textureScale:1}},out={generatedAt:new Date().toISOString(),cpuOnly:true,cores,totalMemoryGb:Math.round(memGb*10)/10,cpuModel:model,score,hardwareClass:klass,recommended:profiles[klass],profiles};fs.writeFileSync(path.join(ROOT,'HARDWARE_QUALITY_PROFILE.json'),JSON.stringify(out,null,2)+'\n');console.log(`[HARDWARE_PROFILE] ${klass} cores=${cores} mem=${memGb.toFixed(1)}GB`);

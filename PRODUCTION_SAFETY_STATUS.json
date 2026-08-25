@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "7.4.0",
+  "generatedAt": "2026-08-25T01:15:59.771Z",
+  "pass": true,
+  "armed": true,
+  "dryRun": true,
+  "badSignals": [],
+  "action": "NO_ACTION",
+  "rollbackAuthorized": false
+}

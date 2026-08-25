@@ -1,0 +1,37 @@
+{
+  "patchReadinessPercent": 100,
+  "generatedAt": "2026-08-24T05:45:00Z",
+  "validation": {
+    "nodeSyntax": {
+      "pass": 29,
+      "total": 29
+    },
+    "pythonCompile": {
+      "pass": 1,
+      "total": 1
+    },
+    "jsonParse": {
+      "pass": 9,
+      "total": 9
+    },
+    "installerIdempotency": "PASS",
+    "syntheticRuntimeProof": {
+      "status": "PASS",
+      "percent": 100
+    },
+    "semanticTextureBakerSmoke": "PASS",
+    "webgpuMeshletPartition": "PASS"
+  },
+  "compatibilityNotes": [
+    "Current master already has World Quality Autopilot V4 adaptive runtime; V5 does not add a competing LOD controller.",
+    "V5 upgrades device evidence so physical iOS/Android only count after live runtime proof.",
+    "Existing graphics and Golden assets are not replaced automatically."
+  ],
+  "externalBlockers": [
+    "GitHub connector write access returned HTTP 403, so patch could not be committed directly.",
+    "Physical iOS/Android provider is currently NOT_CONFIGURED on master.",
+    "Roblox, CV provider and true multiplayer adapter require their actual external runtimes for PASS.",
+    "The public repository could not be cloned in the artifact sandbox because outbound DNS/network is unavailable; installer compatibility was tested against a current-master-shaped synthetic repository."
+  ],
+  "truthPolicy": "NOT_CONFIGURED/NOT_VERIFIED/BLOCKED never count as PASS."
+}

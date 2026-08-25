@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "1.0.0",
+  "imageHashDistance": 8,
+  "minimumImageSimilarity": 0.94,
+  "meshRelativeVertexTolerance": 0.05,
+  "meshRelativeFaceTolerance": 0.05,
+  "rule": "Similarity is advisory only; never delete or replace assets automatically."
+}

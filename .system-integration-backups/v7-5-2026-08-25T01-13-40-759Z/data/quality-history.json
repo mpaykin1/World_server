@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "1.0.0",
+  "events": [
+    {
+      "type": "BASELINE_BOOTSTRAP",
+      "at": "2026-08-23T06:14:00+04:00",
+      "baselineId": "bootstrap-2026-08-23-world-server",
+      "commit": "4e20c3d864f6d37cab904357dac455be9d2a9826",
+      "metrics": {
+        "controls": 55,
+        "graphics": 52,
+        "deviceAccessibility": 45,
+        "menu": 25,
+        "collisions": 40,
+        "codeQuality": 70,
+        "codeReviewer": 55,
+        "reports": 65,
+        "functionConnectivity": 50,
+        "uploadedTechnologyUse": 38,
+        "errorRecurrenceProtection": 20,
+        "goldenSolutionPropagation": 15
+      }
+    }
+  ]
+}

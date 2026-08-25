@@ -1,0 +1,28 @@
+{
+  "version": 10,
+  "candidates": 2,
+  "native": 0,
+  "coveragePct": 0,
+  "three": 0,
+  "canvas2d": 1,
+  "webgl": 0,
+  "webgpu": 1,
+  "genericBridge": 0,
+  "exactMotion": 0,
+  "detail": [
+    {
+      "file": "apps/procedural-quality-certification/index.html",
+      "type": "webgpu",
+      "native": false,
+      "genericBridge": false,
+      "exactMotion": false
+    },
+    {
+      "file": "apps/procedural-quality-lab/index.html",
+      "type": "canvas2d",
+      "native": false,
+      "genericBridge": false,
+      "exactMotion": false
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "7.4.0",
+  "generatedAt": "2026-08-25T01:15:57.486Z",
+  "pass": true,
+  "embeddedConstraintMirror": true,
+  "cue": {
+    "available": false,
+    "pass": null,
+    "stdout": "",
+    "stderr": ""
+  },
+  "errors": [],
+  "note": "CUE binary not present; strict embedded mirror enforced and release remains fail-closed for invalid config."
+}

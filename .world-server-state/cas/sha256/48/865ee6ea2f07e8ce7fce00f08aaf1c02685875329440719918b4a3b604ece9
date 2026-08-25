@@ -1,0 +1,1 @@
+import {FilesetResolver,PoseLandmarker} from '@mediapipe/tasks-vision';globalThis.__PQMediaPipe={FilesetResolver,PoseLandmarker,version:'1.0.1'};

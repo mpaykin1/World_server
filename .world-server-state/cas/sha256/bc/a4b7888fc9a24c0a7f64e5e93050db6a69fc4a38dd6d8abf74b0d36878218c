@@ -1,0 +1,680 @@
+{
+  "generatedAt": "2026-08-24T06:55:15.787Z",
+  "nodes": [
+    "app:ai-3d",
+    "app:ai3d-reference-test",
+    "app:ai3d-voxel-city",
+    "app:catalog",
+    "app:chat",
+    "app:survival",
+    "app:voxel-world",
+    "app:world-sharabass",
+    "apps/ai-3d/client.js",
+    "apps/ai-3d/index.html",
+    "apps/ai-3d/styles.css",
+    "apps/ai3d-reference-test/assets/previous_html_baseline.html",
+    "apps/ai3d-reference-test/client.js",
+    "apps/ai3d-reference-test/index.html",
+    "apps/ai3d-reference-test/styles.css",
+    "apps/ai3d-voxel-city/client.js",
+    "apps/ai3d-voxel-city/index.html",
+    "apps/ai3d-voxel-city/mesher-worker.js",
+    "apps/ai3d-voxel-city/styles.css",
+    "apps/catalog/client.js",
+    "apps/catalog/index.html",
+    "apps/chat/index.html",
+    "apps/survival/client.js",
+    "apps/survival/index.html",
+    "apps/voxel-world/client.js",
+    "apps/voxel-world/index.html",
+    "apps/world-sharabass/index.html",
+    "capability:playable",
+    "capability:windows",
+    "release:certified",
+    "release:diagnostic",
+    "release:quarantine",
+    "release:system",
+    "release:tool",
+    "shared/ai3d-playable-runtime.js",
+    "shared/common.js",
+    "shared/golden-catalog-menu.js",
+    "shared/golden-performance-autotuner.js",
+    "shared/golden-physics.js",
+    "shared/golden-ui-shell.css",
+    "shared/golden-ui-shell.js",
+    "shared/quality-telemetry.js",
+    "shared/sentry-runtime.js",
+    "shared/style.css",
+    "shared/world-quality-autopilot.js"
+  ],
+  "edges": [
+    {
+      "from": "apps/ai-3d/client.js",
+      "to": "app:ai-3d",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/ai-3d/index.html",
+      "to": "app:ai-3d",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "shared/sentry-runtime.js",
+      "to": "apps/ai-3d/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "apps/ai-3d/styles.css",
+      "to": "app:ai-3d",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/ai3d-reference-test/assets/previous_html_baseline.html",
+      "to": "app:ai3d-reference-test",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/ai3d-reference-test/client.js",
+      "to": "app:ai3d-reference-test",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/ai3d-reference-test/index.html",
+      "to": "app:ai3d-reference-test",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "shared/sentry-runtime.js",
+      "to": "apps/ai3d-reference-test/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "apps/ai3d-reference-test/styles.css",
+      "to": "app:ai3d-reference-test",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/ai3d-voxel-city/client.js",
+      "to": "app:ai3d-voxel-city",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/ai3d-voxel-city/index.html",
+      "to": "app:ai3d-voxel-city",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "shared/ai3d-playable-runtime.js",
+      "to": "apps/ai3d-voxel-city/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/sentry-runtime.js",
+      "to": "apps/ai3d-voxel-city/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-ui-shell.css",
+      "to": "apps/ai3d-voxel-city/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-physics.js",
+      "to": "apps/ai3d-voxel-city/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-ui-shell.js",
+      "to": "apps/ai3d-voxel-city/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/quality-telemetry.js",
+      "to": "apps/ai3d-voxel-city/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-performance-autotuner.js",
+      "to": "apps/ai3d-voxel-city/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/world-quality-autopilot.js",
+      "to": "apps/ai3d-voxel-city/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "apps/ai3d-voxel-city/mesher-worker.js",
+      "to": "app:ai3d-voxel-city",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/ai3d-voxel-city/styles.css",
+      "to": "app:ai3d-voxel-city",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/catalog/client.js",
+      "to": "app:catalog",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/catalog/index.html",
+      "to": "app:catalog",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "shared/style.css",
+      "to": "apps/catalog/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/sentry-runtime.js",
+      "to": "apps/catalog/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/common.js",
+      "to": "apps/catalog/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/ai3d-playable-runtime.js",
+      "to": "apps/catalog/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-catalog-menu.js",
+      "to": "apps/catalog/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-ui-shell.css",
+      "to": "apps/catalog/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-physics.js",
+      "to": "apps/catalog/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-ui-shell.js",
+      "to": "apps/catalog/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/quality-telemetry.js",
+      "to": "apps/catalog/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "apps/chat/index.html",
+      "to": "app:chat",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "shared/style.css",
+      "to": "apps/chat/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/sentry-runtime.js",
+      "to": "apps/chat/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/common.js",
+      "to": "apps/chat/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "apps/survival/client.js",
+      "to": "app:survival",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/survival/index.html",
+      "to": "app:survival",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "shared/style.css",
+      "to": "apps/survival/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/sentry-runtime.js",
+      "to": "apps/survival/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/common.js",
+      "to": "apps/survival/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/ai3d-playable-runtime.js",
+      "to": "apps/survival/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-ui-shell.css",
+      "to": "apps/survival/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-physics.js",
+      "to": "apps/survival/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-ui-shell.js",
+      "to": "apps/survival/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/quality-telemetry.js",
+      "to": "apps/survival/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "apps/voxel-world/client.js",
+      "to": "app:voxel-world",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/voxel-world/index.html",
+      "to": "app:voxel-world",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "shared/style.css",
+      "to": "apps/voxel-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/sentry-runtime.js",
+      "to": "apps/voxel-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/common.js",
+      "to": "apps/voxel-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-ui-shell.css",
+      "to": "apps/voxel-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-physics.js",
+      "to": "apps/voxel-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-ui-shell.js",
+      "to": "apps/voxel-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/quality-telemetry.js",
+      "to": "apps/voxel-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-performance-autotuner.js",
+      "to": "apps/voxel-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/world-quality-autopilot.js",
+      "to": "apps/voxel-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "apps/world-sharabass/index.html",
+      "to": "app:world-sharabass",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "shared/style.css",
+      "to": "apps/world-sharabass/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/sentry-runtime.js",
+      "to": "apps/world-sharabass/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/common.js",
+      "to": "apps/world-sharabass/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-ui-shell.css",
+      "to": "apps/world-sharabass/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-physics.js",
+      "to": "apps/world-sharabass/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-ui-shell.js",
+      "to": "apps/world-sharabass/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/quality-telemetry.js",
+      "to": "apps/world-sharabass/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/ai3d-playable-runtime.js",
+      "to": "app:voxel-world",
+      "kind": "contract:input"
+    },
+    {
+      "from": "shared/ai3d-playable-runtime.js",
+      "to": "app:ai3d-voxel-city",
+      "kind": "contract:input"
+    },
+    {
+      "from": "shared/ai3d-playable-runtime.js",
+      "to": "app:catalog",
+      "kind": "contract:input"
+    },
+    {
+      "from": "shared/golden-physics.js",
+      "to": "app:voxel-world",
+      "kind": "contract:input"
+    },
+    {
+      "from": "shared/golden-physics.js",
+      "to": "app:ai3d-voxel-city",
+      "kind": "contract:input"
+    },
+    {
+      "from": "shared/golden-physics.js",
+      "to": "app:catalog",
+      "kind": "contract:input"
+    },
+    {
+      "from": "shared/golden-ui-shell.js",
+      "to": "app:voxel-world",
+      "kind": "contract:ui"
+    },
+    {
+      "from": "shared/golden-ui-shell.js",
+      "to": "app:ai3d-voxel-city",
+      "kind": "contract:ui"
+    },
+    {
+      "from": "shared/golden-ui-shell.js",
+      "to": "app:catalog",
+      "kind": "contract:ui"
+    },
+    {
+      "from": "shared/golden-ui-shell.css",
+      "to": "app:voxel-world",
+      "kind": "contract:ui"
+    },
+    {
+      "from": "shared/golden-ui-shell.css",
+      "to": "app:ai3d-voxel-city",
+      "kind": "contract:ui"
+    },
+    {
+      "from": "shared/golden-ui-shell.css",
+      "to": "app:catalog",
+      "kind": "contract:ui"
+    },
+    {
+      "from": "shared/golden-physics.js",
+      "to": "app:voxel-world",
+      "kind": "contract:collision"
+    },
+    {
+      "from": "shared/golden-physics.js",
+      "to": "app:ai3d-voxel-city",
+      "kind": "contract:collision"
+    },
+    {
+      "from": "capability:playable",
+      "to": "app:voxel-world",
+      "kind": "capability"
+    },
+    {
+      "from": "capability:playable",
+      "to": "app:ai3d-voxel-city",
+      "kind": "capability"
+    },
+    {
+      "from": "capability:windows",
+      "to": "app:ai3d-voxel-city",
+      "kind": "capability"
+    },
+    {
+      "from": "capability:playable",
+      "to": "app:survival",
+      "kind": "capability"
+    },
+    {
+      "from": "capability:playable",
+      "to": "app:world-sharabass",
+      "kind": "capability"
+    },
+    {
+      "from": "release:certified",
+      "to": "app:voxel-world",
+      "kind": "release-status"
+    },
+    {
+      "from": "release:certified",
+      "to": "app:ai3d-voxel-city",
+      "kind": "release-status"
+    },
+    {
+      "from": "release:quarantine",
+      "to": "app:survival",
+      "kind": "release-status"
+    },
+    {
+      "from": "release:quarantine",
+      "to": "app:world-sharabass",
+      "kind": "release-status"
+    },
+    {
+      "from": "release:diagnostic",
+      "to": "app:ai3d-reference-test",
+      "kind": "release-status"
+    },
+    {
+      "from": "release:tool",
+      "to": "app:ai-3d",
+      "kind": "release-status"
+    },
+    {
+      "from": "release:tool",
+      "to": "app:chat",
+      "kind": "release-status"
+    },
+    {
+      "from": "release:system",
+      "to": "app:catalog",
+      "kind": "release-status"
+    }
+  ],
+  "reverse": {
+    "apps/ai-3d/client.js": [
+      "app:ai-3d"
+    ],
+    "apps/ai-3d/index.html": [
+      "app:ai-3d"
+    ],
+    "shared/sentry-runtime.js": [
+      "apps/ai-3d/index.html",
+      "apps/ai3d-reference-test/index.html",
+      "apps/ai3d-voxel-city/index.html",
+      "apps/catalog/index.html",
+      "apps/chat/index.html",
+      "apps/survival/index.html",
+      "apps/voxel-world/index.html",
+      "apps/world-sharabass/index.html"
+    ],
+    "apps/ai-3d/styles.css": [
+      "app:ai-3d"
+    ],
+    "apps/ai3d-reference-test/assets/previous_html_baseline.html": [
+      "app:ai3d-reference-test"
+    ],
+    "apps/ai3d-reference-test/client.js": [
+      "app:ai3d-reference-test"
+    ],
+    "apps/ai3d-reference-test/index.html": [
+      "app:ai3d-reference-test"
+    ],
+    "apps/ai3d-reference-test/styles.css": [
+      "app:ai3d-reference-test"
+    ],
+    "apps/ai3d-voxel-city/client.js": [
+      "app:ai3d-voxel-city"
+    ],
+    "apps/ai3d-voxel-city/index.html": [
+      "app:ai3d-voxel-city"
+    ],
+    "shared/ai3d-playable-runtime.js": [
+      "apps/ai3d-voxel-city/index.html",
+      "apps/catalog/index.html",
+      "apps/survival/index.html",
+      "app:voxel-world",
+      "app:ai3d-voxel-city",
+      "app:catalog"
+    ],
+    "shared/golden-ui-shell.css": [
+      "apps/ai3d-voxel-city/index.html",
+      "apps/catalog/index.html",
+      "apps/survival/index.html",
+      "apps/voxel-world/index.html",
+      "apps/world-sharabass/index.html",
+      "app:voxel-world",
+      "app:ai3d-voxel-city",
+      "app:catalog"
+    ],
+    "shared/golden-physics.js": [
+      "apps/ai3d-voxel-city/index.html",
+      "apps/catalog/index.html",
+      "apps/survival/index.html",
+      "apps/voxel-world/index.html",
+      "apps/world-sharabass/index.html",
+      "app:voxel-world",
+      "app:ai3d-voxel-city",
+      "app:catalog",
+      "app:voxel-world",
+      "app:ai3d-voxel-city"
+    ],
+    "shared/golden-ui-shell.js": [
+      "apps/ai3d-voxel-city/index.html",
+      "apps/catalog/index.html",
+      "apps/survival/index.html",
+      "apps/voxel-world/index.html",
+      "apps/world-sharabass/index.html",
+      "app:voxel-world",
+      "app:ai3d-voxel-city",
+      "app:catalog"
+    ],
+    "shared/quality-telemetry.js": [
+      "apps/ai3d-voxel-city/index.html",
+      "apps/catalog/index.html",
+      "apps/survival/index.html",
+      "apps/voxel-world/index.html",
+      "apps/world-sharabass/index.html"
+    ],
+    "shared/golden-performance-autotuner.js": [
+      "apps/ai3d-voxel-city/index.html",
+      "apps/voxel-world/index.html"
+    ],
+    "shared/world-quality-autopilot.js": [
+      "apps/ai3d-voxel-city/index.html",
+      "apps/voxel-world/index.html"
+    ],
+    "apps/ai3d-voxel-city/mesher-worker.js": [
+      "app:ai3d-voxel-city"
+    ],
+    "apps/ai3d-voxel-city/styles.css": [
+      "app:ai3d-voxel-city"
+    ],
+    "apps/catalog/client.js": [
+      "app:catalog"
+    ],
+    "apps/catalog/index.html": [
+      "app:catalog"
+    ],
+    "shared/style.css": [
+      "apps/catalog/index.html",
+      "apps/chat/index.html",
+      "apps/survival/index.html",
+      "apps/voxel-world/index.html",
+      "apps/world-sharabass/index.html"
+    ],
+    "shared/common.js": [
+      "apps/catalog/index.html",
+      "apps/chat/index.html",
+      "apps/survival/index.html",
+      "apps/voxel-world/index.html",
+      "apps/world-sharabass/index.html"
+    ],
+    "shared/golden-catalog-menu.js": [
+      "apps/catalog/index.html"
+    ],
+    "apps/chat/index.html": [
+      "app:chat"
+    ],
+    "apps/survival/client.js": [
+      "app:survival"
+    ],
+    "apps/survival/index.html": [
+      "app:survival"
+    ],
+    "apps/voxel-world/client.js": [
+      "app:voxel-world"
+    ],
+    "apps/voxel-world/index.html": [
+      "app:voxel-world"
+    ],
+    "apps/world-sharabass/index.html": [
+      "app:world-sharabass"
+    ],
+    "capability:playable": [
+      "app:voxel-world",
+      "app:ai3d-voxel-city",
+      "app:survival",
+      "app:world-sharabass"
+    ],
+    "capability:windows": [
+      "app:ai3d-voxel-city"
+    ],
+    "release:certified": [
+      "app:voxel-world",
+      "app:ai3d-voxel-city"
+    ],
+    "release:quarantine": [
+      "app:survival",
+      "app:world-sharabass"
+    ],
+    "release:diagnostic": [
+      "app:ai3d-reference-test"
+    ],
+    "release:tool": [
+      "app:ai-3d",
+      "app:chat"
+    ],
+    "release:system": [
+      "app:catalog"
+    ]
+  }
+}

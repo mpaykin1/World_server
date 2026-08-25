@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-25T01:16:23.796Z",
+  "pass": false,
+  "status": "BASELINE_REQUIRED",
+  "blockers": [
+    "Run integration:functions:baseline on a known-good state before changing certified functionality."
+  ]
+}

@@ -1,0 +1,4 @@
+(() => {
+'use strict';const G=globalThis;if(G.WorldProceduralScheduler)return;const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function create({budgetMs=16.67}={}){const pass=new Map();let scale=1;function sample(name,ms,gain=1){const p=pass.get(name)||{ms,gain,ema:ms};p.ema=p.ema*.86+ms*.14;p.gain=gain;pass.set(name,p)}function plan(){const all=[...pass].map(([name,p])=>({name,...p,utility:p.gain/Math.max(.05,p.ema)})).sort((a,b)=>b.utility-a.utility),chosen=[];let spent=0;for(const p of all){if(spent+p.ema<=budgetMs*scale*.72||p.gain>=.88){chosen.push(p.name);spent+=p.ema}}return{passes:chosen,estimatedMs:spent,scale}}return{sample,plan,pressure(ms){scale=clamp(scale+(ms>budgetMs?-.045:.012),.45,1);return scale},snapshot(){return{budgetMs,scale,passes:Object.fromEntries(pass),plan:plan()}}}}
+G.WorldProceduralScheduler={version:'5.0.0',create};})();

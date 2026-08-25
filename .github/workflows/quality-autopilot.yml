@@ -1,0 +1,149 @@
+name: Quality Autopilot Candidate v3
+
+on:
+  schedule:
+    - cron: "30 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: quality-autopilot
+  cancel-in-progress: false
+
+env:
+  QUALITY_PROJECT_ROUTES: /apps/ai3d-voxel-city/
+
+jobs:
+  candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install verification dependencies
+        run: |
+          pip install pillow numpy requests
+          npm ci --ignore-scripts || npm install
+          npx playwright install --with-deps chromium
+
+      - name: Reserve daily compute budget before expensive verification
+        run: node scripts/quality-budget-reserve.js --cpu 1800 --gpu 0 --cost 0
+
+      - name: Run isolated candidate tournament + complete repository hard gates
+        id: autopilot
+        shell: bash
+        run: |
+          REPORT="$RUNNER_TEMP/quality-autopilot-report.json"
+          node scripts/quality-autopilot.js --mode candidate --verify --compile-regressions --report "$REPORT"
+          ACCEPTED="$(node -e "const r=require(process.argv[1]);process.stdout.write(String(r.summary.acceptedFixes))" "$REPORT")"
+          echo "accepted=$ACCEPTED" >> "$GITHUB_OUTPUT"
+
+      - name: Build immutable baseline worktree
+        if: steps.autopilot.outputs.accepted != '0'
+        shell: bash
+        run: |
+          git worktree add --detach "$RUNNER_TEMP/quality-baseline" HEAD
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/quality-baseline/node_modules" || true
+
+      - name: Start baseline and candidate servers
+        if: steps.autopilot.outputs.accepted != '0'
+        shell: bash
+        run: |
+          (cd "$RUNNER_TEMP/quality-baseline" && PORT=3101 node server.js > "$RUNNER_TEMP/baseline-server.log" 2>&1 & echo $! > "$RUNNER_TEMP/baseline.pid")
+          (PORT=3102 node server.js > "$RUNNER_TEMP/candidate-server.log" 2>&1 & echo $! > "$RUNNER_TEMP/candidate.pid")
+          for i in {1..30}; do curl -fsS "http://localhost:3101/apps/ai3d-voxel-city/" >/dev/null && break; sleep 1; done
+          for i in {1..30}; do curl -fsS "http://localhost:3102/apps/ai3d-voxel-city/" >/dev/null && break; sleep 1; done
+          curl -fsS "http://localhost:3101/apps/ai3d-voxel-city/" >/dev/null
+          curl -fsS "http://localhost:3102/apps/ai3d-voxel-city/" >/dev/null
+
+      - name: Capture exact before/after visual baselines
+        if: steps.autopilot.outputs.accepted != '0'
+        run: |
+          node scripts/quality-visual-snapshot.js --base-url http://localhost:3101 --routes "$QUALITY_PROJECT_ROUTES" --out "$RUNNER_TEMP/visual-baseline"
+          node scripts/quality-visual-snapshot.js --base-url http://localhost:3102 --routes "$QUALITY_PROJECT_ROUTES" --out "$RUNNER_TEMP/visual-candidate"
+          node scripts/quality-visual-diff.js --baseline "$RUNNER_TEMP/visual-baseline" --candidate "$RUNNER_TEMP/visual-candidate" --out "$RUNNER_TEMP/visual-diff.json"
+
+      - name: Gameplay + GPU/WebGL + mobile/desktop regression probes
+        if: steps.autopilot.outputs.accepted != '0'
+        run: |
+          node scripts/quality-browser-probe.js --base-url http://localhost:3101 --routes "$QUALITY_PROJECT_ROUTES" --out "$RUNNER_TEMP/browser-baseline.json" --no-telemetry
+          node scripts/quality-browser-probe.js --base-url http://localhost:3102 --routes "$QUALITY_PROJECT_ROUTES" --out "$RUNNER_TEMP/browser-candidate.json" --no-telemetry
+          node scripts/quality-telemetry-compare.js --baseline "$RUNNER_TEMP/browser-baseline.json" --candidate "$RUNNER_TEMP/browser-candidate.json" --out "$RUNNER_TEMP/telemetry-compare.json"
+
+      - name: Synthetic player army (desktop + mobile)
+        if: steps.autopilot.outputs.accepted != '0'
+        run: |
+          node scripts/quality-synthetic-player-army.js --base-url http://localhost:3102 --route /apps/ai3d-voxel-city/ --players 12 --concurrency 4 --out "$RUNNER_TEMP/synthetic-player-army.json"
+
+      - name: Migration safety + audit-chain integrity
+        if: steps.autopilot.outputs.accepted != '0'
+        run: |
+          node scripts/quality-migration-gate.js --base-ref HEAD
+          node scripts/quality-audit-verify.js
+
+      - name: Stop test servers
+        if: always()
+        shell: bash
+        run: |
+          test -f "$RUNNER_TEMP/baseline.pid" && kill "$(cat "$RUNNER_TEMP/baseline.pid")" 2>/dev/null || true
+          test -f "$RUNNER_TEMP/candidate.pid" && kill "$(cat "$RUNNER_TEMP/candidate.pid")" 2>/dev/null || true
+
+      - name: Calculate readiness
+        if: always()
+        run: node scripts/quality-readiness.js > "$RUNNER_TEMP/readiness.json" || true
+
+      - name: Upload complete quality evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-autopilot-evidence-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/quality-autopilot-report.json
+            ${{ runner.temp }}/visual-diff.json
+            ${{ runner.temp }}/telemetry-compare.json
+            ${{ runner.temp }}/browser-baseline.json
+            ${{ runner.temp }}/browser-candidate.json
+            ${{ runner.temp }}/synthetic-player-army.json
+            ${{ runner.temp }}/readiness.json
+            ${{ runner.temp }}/baseline-server.log
+            ${{ runner.temp }}/candidate-server.log
+          if-no-files-found: ignore
+          retention-days: 30
+
+      - name: Create isolated candidate PR only when repository improved
+        if: steps.autopilot.outputs.accepted != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          BRANCH="autopilot/candidate-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          git config user.name "quality-autopilot[bot]"
+          git config user.email "quality-autopilot[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add apps WORK_IN_PROGRESS.md test/generated 2>/dev/null || true
+          git add data/quality-autopilot/memory.json data/quality-autopilot/golden.json data/quality-autopilot/regressions.json data/quality-autopilot/quality-debt.json data/quality-autopilot/failure-events.json data/quality-autopilot/global-regression-kb.json data/quality-autopilot/audit-chain.jsonl 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "No candidate source/state changes to commit."
+            exit 0
+          fi
+          git commit -m "chore(quality): verified automatic candidate improvements"
+          git push origin "$BRANCH"
+          gh pr create \
+            --base master \
+            --head "$BRANCH" \
+            --title "Quality Autopilot candidate: ${GITHUB_RUN_ID}" \
+            --body "Automated candidate only. Production was not modified. Candidate passed protected static metrics, full repository hard gates, exact baseline→candidate visual comparison, desktop/mobile gameplay probes, GPU/WebGL telemetry comparison, migration safety and audit integrity. Full automatic promotion remains disabled until progressive 1→5→20→50→100% canary traffic and production telemetry are connected; engine-specific proposals, synthetic players and global regression KB are already gated in candidate mode."

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "7.2.0",
+  "cpuFirst": true,
+  "defaultLeaseMs": 300000,
+  "heartbeatMs": 30000,
+  "staleWorkerMs": 90000,
+  "maxJobsPerWorker": 1,
+  "requireExactTechnologyLocks": true,
+  "resourceDimensions": [
+    "cpuCores",
+    "memoryMb",
+    "diskMb"
+  ],
+  "capabilityDimensions": [
+    "node",
+    "python",
+    "blender",
+    "godot",
+    "appium",
+    "wasmtime",
+    "gpu"
+  ],
+  "preferLocality": true,
+  "preferWarmCache": true
+}

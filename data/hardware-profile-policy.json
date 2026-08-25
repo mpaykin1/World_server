@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "HARDWARE_QUALITY_PROFILES",
+  "classes": [
+    "low",
+    "balanced",
+    "high"
+  ],
+  "gpuRequired": false,
+  "rule": "Profiles tune candidate quality budgets only; behavior contracts remain identical."
+}

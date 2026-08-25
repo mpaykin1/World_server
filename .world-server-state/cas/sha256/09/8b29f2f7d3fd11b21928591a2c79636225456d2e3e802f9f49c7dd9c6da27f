@@ -1,0 +1,42 @@
+# One-command deployment for any Linux NVIDIA server — no World_server changes required
+# Usage:
+#   cp .env.example .env   # set AI3D_SHARED_SECRET (same as Vercel), optional paths
+#   docker compose up --build -d
+#   curl http://localhost:8787/health
+services:
+  ai3d-worker:
+    build: .
+    image: world-server-ai3d-worker:latest
+    container_name: ai3d-worker
+    ports:
+      - "8787:8787"
+    env_file:
+      - .env
+    environment:
+      AI3D_RUNTIME_DIR: /app/runtime
+      AI3D_MODEL_DIR: /app/runtime/models
+      # External engines can be mounted or bootstrapped on first run
+      # Override freely without rebuilding World_server:
+      TRELLIS2_HOME: /opt/ai3d/external/TRELLIS.2
+      DEPTH_ANYTHING_HOME: /opt/ai3d/external/Depth-Anything-V2
+      BUILDING_GENERATOR_HOME: /opt/ai3d/external/BuildingGeneratorThreeJS
+      PROCGEN_MAPS_HOME: /opt/ai3d/external/bene-proggen-maps
+      INSTANTMESH_HOME: /opt/ai3d/external/InstantMesh
+      BLENDER_BIN: blender
+    volumes:
+      - ai3d-runtime:/app/runtime
+      - ai3d-external:/opt/ai3d/external
+      # Optional: mount host Blender if not in image
+      # - /usr/bin/blender:/usr/bin/blender:ro
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+
+volumes:
+  ai3d-runtime:
+  ai3d-external:

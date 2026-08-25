@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0.0",
+  "package": "SYSTEM_INTEGRATION_LAYER_V7",
+  "version": "7.1.0",
+  "validatedAt": "2026-08-24T08:50:00Z",
+  "results": {
+    "compatibility": {
+      "pass": true,
+      "passed": 87,
+      "total": 87,
+      "percent": 100
+    },
+    "controlPlane": {
+      "pass": true,
+      "passed": 51,
+      "total": 51
+    },
+    "selftests": {
+      "pass": true,
+      "passed": 61,
+      "total": 61
+    },
+    "honest100": {
+      "pass": true,
+      "certified": 38,
+      "contracted": 38
+    },
+    "monotonicGuard": {
+      "pass": true
+    },
+    "capabilityCertification": {
+      "integrationOwnedPercent": 92,
+      "globalDiscoveredPercent": 58
+    },
+    "readiness": {
+      "structuralPercent": 100,
+      "evidencePercent": 100,
+      "testEnvironmentOperationalPercent": 91
+    }
+  },
+  "negativeTests": {
+    "sourceChangedAfterEvidenceBlocksCertification": true,
+    "certifiedCapabilityRemovalBlocksPromotion": true,
+    "downgradeProtectionInherited": true,
+    "sameVersionDriftProtectionInherited": true
+  },
+  "truth": "Operational percentage is environment-specific and must be recomputed on the actual World_server. Uncontracted capabilities are never called 100%."
+}

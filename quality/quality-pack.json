@@ -1,0 +1,25 @@
+{
+  "id": "WORLD_FACTORY_QUALITY_CORE_V10",
+  "version": "9.0.0",
+  "sharedFiles": [
+    "quality/standards.json",
+    "quality/rules.json",
+    "quality/knowledge/incidents.json",
+    "quality/knowledge/patterns.json",
+    "quality/knowledge/quality-genome.json",
+    "src/player-controller.js",
+    "src/quality-gate.js",
+    "src/performance-governor.js",
+    "src/proximity-quality.js",
+    "src/atmosphere-quality.js",
+    "src/wet-surface-system.js",
+    "src/baked-lighting.js",
+    "src/gameplay-core.js",
+    "src/sound-bank.js",
+    "src/dynamic-environment.js",
+    "quality/knowledge/protection-pack.json",
+    "src/fps-quality-optimizer.js",
+    "src/adaptive-tick-scheduler.js"
+  ],
+  "consumerRule": "All projects consume one shared runtime and one versioned quality genome. Fixed errors and promoted patterns propagate globally; project-specific forks of core quality logic are forbidden."
+}

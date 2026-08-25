@@ -1,0 +1,52 @@
+{
+  "signed": {
+    "_type": "targets",
+    "spec_version": "1.0.33",
+    "version": 4,
+    "expires": "2026-09-01T01:15:57.496Z",
+    "targets": {
+      "data/system-capability-registry.json": {
+        "length": 6778,
+        "hashes": {
+          "sha256": "4acc698baaf4c1d35412c96efe6640d832bb81e1892bae4671cf2749fa0801a2"
+        }
+      },
+      "data/project-directives.json": {
+        "length": 3810,
+        "hashes": {
+          "sha256": "53fe2cbd10271db9841d3410b6246e91bad62bb3f29b719e15bce1d85085f4af"
+        }
+      },
+      "scripts/system-control-plane.cjs": {
+        "length": 9181,
+        "hashes": {
+          "sha256": "4369e033f91fc384a6004583ecdb99b7b7a4d429fec0afd5d8bb5dfb4369c0e9"
+        }
+      },
+      "scripts/system-integration-gate.cjs": {
+        "length": 17031,
+        "hashes": {
+          "sha256": "8fc3646b1af00cbbdc297263f6bc50fac6a26cf66e7e9bdba67adf0400fa717c"
+        }
+      },
+      "scripts/policy-engine.cjs": {
+        "length": 5878,
+        "hashes": {
+          "sha256": "1799a38995ecc07712e25643e84b82b9a213a6550ef59512836fda49fc056099"
+        }
+      },
+      "scripts/technology-lock-validator.cjs": {
+        "length": 2005,
+        "hashes": {
+          "sha256": "f471e26bdb4030826d50c7169712b8a351ef6ee4c2e7ce23184776dc87ff321a"
+        }
+      }
+    }
+  },
+  "signatures": [
+    {
+      "keyid": "local-root",
+      "sig": "MSV0/O3Igm4SbPXsBZ7irjw6heZoPG7Gw1G38cRxadk/ij1XQnS6nYz/jgt8EtPZ/LWDF+OZP4qiXprUEzdGDg=="
+    }
+  ]
+}

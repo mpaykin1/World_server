@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "WORLD_SERVER_SYSTEM_CONTRACTS",
+  "contracts": {
+    "input": {
+      "canonical": [
+        "shared/ai3d-playable-runtime.js",
+        "shared/golden-physics.js"
+      ],
+      "forbiddenPatterns": [
+        "const wishX = (s*cos + f*sin)",
+        "new THREE.Vector3(Math.cos(yaw),0,-Math.sin(yaw))"
+      ],
+      "requiredBy": [
+        "voxel-world",
+        "ai3d-voxel-city",
+        "catalog"
+      ]
+    },
+    "ui": {
+      "canonical": [
+        "shared/golden-ui-shell.js",
+        "shared/golden-ui-shell.css"
+      ],
+      "requiredBy": [
+        "voxel-world",
+        "ai3d-voxel-city",
+        "catalog"
+      ],
+      "forbiddenBehavior": "persistent system/debug panels outside Golden drawer"
+    },
+    "collision": {
+      "canonical": [
+        "shared/golden-physics.js"
+      ],
+      "requiredBy": [
+        "voxel-world",
+        "ai3d-voxel-city"
+      ]
+    },
+    "release": {
+      "canonical": [
+        "data/app-release-registry.json",
+        "scripts/quality-regression-gate.js"
+      ],
+      "requiredBy": [
+        "all-public-apps"
+      ]
+    }
+  }
+}

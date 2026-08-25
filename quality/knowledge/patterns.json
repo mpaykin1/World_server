@@ -1,0 +1,277 @@
+{
+  "schemaVersion": 5,
+  "promotionPolicy": {
+    "minimumWorlds": 2,
+    "minimumConsecutivePasses": 3,
+    "minimumScore": 95,
+    "autoPromote": true,
+    "mandatoryScopeAfterPromotion": "all",
+    "requireZeroVisualRegression": true,
+    "requireZeroSourceRegression": true,
+    "requirePerformanceImprovementForOptimizationPatterns": true,
+    "requireRollbackDrill": true,
+    "requireApplicabilityProof": true,
+    "blindGlobalPropagationForbidden": true
+  },
+  "patterns": [
+    {
+      "id": "PAT-001",
+      "name": "Shared player runtime",
+      "state": "mandatory",
+      "evidence": "prevents per-project controller drift",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-002",
+      "name": "Source SHA lock",
+      "state": "mandatory",
+      "evidence": "prevents silent visual degradation",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-003",
+      "name": "BVH capsule collision",
+      "state": "mandatory",
+      "evidence": "stable high-poly world collision",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-004",
+      "name": "Safe-spawn raycast plus capsule clearance",
+      "state": "mandatory",
+      "evidence": "prevents invalid spawn recurrence",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-005",
+      "name": "Fixed-step physics",
+      "state": "mandatory",
+      "evidence": "prevents FPS-dependent movement",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-006",
+      "name": "Fail-closed predeploy gate",
+      "state": "mandatory",
+      "evidence": "broken builds cannot publish",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-007",
+      "name": "Baked static lighting without source rewrite",
+      "state": "mandatory",
+      "evidence": "reduces dynamic lighting cost while preserving source asset",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-008",
+      "name": "Near-max quality plus fog-concealed far field",
+      "state": "mandatory",
+      "evidence": "keeps nearby objects strongest while hiding distant rendering cost",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-009",
+      "name": "Global subtle wet-surface response",
+      "state": "mandatory",
+      "evidence": "shared art-quality trait with runtime-only source-safe implementation",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-010",
+      "name": "Transactional canary propagation with rollback",
+      "state": "mandatory",
+      "evidence": "prevents one bad global improvement from damaging all projects",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-011",
+      "name": "Unknown-error quarantine",
+      "state": "mandatory",
+      "evidence": "prevents new regressions from becoming accepted behavior",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-012",
+      "name": "Last-known-good quality hash",
+      "state": "mandatory",
+      "evidence": "provides deterministic recovery target and drift detection",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-013",
+      "name": "SHA-verified immutable asset caching",
+      "state": "mandatory",
+      "evidence": "reuses identical source bytes without network/decode churn",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-014",
+      "name": "Serialized geometry-bound BVH cache",
+      "state": "mandatory",
+      "evidence": "avoids repeat BVH construction while source hash/transform lock prevents stale collision",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-015",
+      "name": "Safe GPU occlusion with near-field bypass",
+      "state": "mandatory",
+      "evidence": "removes fully occluded distant work without touching near fidelity",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-016",
+      "name": "Exact material deduplication",
+      "state": "mandatory",
+      "evidence": "reduces shader/material state churn only for render-identical materials",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-017",
+      "name": "One-shot static reflection probes",
+      "state": "mandatory",
+      "evidence": "improves wet/PBR response without per-frame reflection capture",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-018",
+      "name": "Worker mesh decode with fail-safe fallback",
+      "state": "mandatory",
+      "evidence": "moves supported parsing off main thread while preserving source geometry",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-019",
+      "name": "Cross-project optimization promotion only with zero quality regression",
+      "state": "mandatory",
+      "evidence": "spreads performance wins only after canary evidence proves visual/source quality is unchanged",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-020",
+      "name": "Conservative WebGPU HZB with fail-visible fallback",
+      "state": "mandatory",
+      "evidence": "reduces hidden distant draw work without near-field or source fidelity changes",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-021",
+      "name": "WASM SIMD decode with numerical parity guard",
+      "state": "mandatory",
+      "evidence": "accelerates supported decode/copy work while scalar fallback preserves correctness",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-022",
+      "name": "Source-locked offline GI and reflection companions",
+      "state": "mandatory-scoped",
+      "evidence": "moves static lighting/reflection cost offline without modifying source assets",
+      "appliesTo": "supported-static-worlds"
+    },
+    {
+      "id": "PAT-023",
+      "name": "Byte-identical animated GLB range transport",
+      "state": "mandatory-scoped",
+      "evidence": "preserves skins/animations/morphs while parallelizing/cache-optimizing transport",
+      "appliesTo": "large-animated-glb"
+    },
+    {
+      "id": "PAT-024",
+      "name": "Global production fingerprint and quarantine loop",
+      "state": "mandatory",
+      "evidence": "a runtime bug found in one game becomes protection work for every game",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-025",
+      "name": "Strict transactional protected self-heal",
+      "state": "mandatory",
+      "evidence": "known anti-patterns may be repaired automatically only with rollback-backed historical proof",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-026",
+      "name": "Source-equivalent WebGPU PBR with proven-renderer fallback",
+      "state": "mandatory-when-webgpu-parity-proven",
+      "evidence": "preserves source PBR semantics and near detail while enabling future indirect GPU-driven rendering",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-027",
+      "name": "Threaded deterministic WASM SIMD decode",
+      "state": "mandatory-when-workers-available",
+      "evidence": "parallelizes CPU decode/copy without changing values or source bytes",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-028",
+      "name": "Monotonic global quality ratchet",
+      "state": "mandatory",
+      "evidence": "prevents successful quality levels from silently regressing in later projects",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-029",
+      "name": "Content-addressed distributed bake artifacts",
+      "state": "mandatory",
+      "evidence": "reuses expensive bakes safely across machines only when source/tool/params are identical",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-030",
+      "name": "Representative canary + device matrix before propagation",
+      "state": "mandatory",
+      "evidence": "prevents a win on one project/device from becoming a regression elsewhere",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-031",
+      "name": "Sandboxed unknown-fix proof loop",
+      "state": "mandatory",
+      "evidence": "allows aggressive automation while preventing unproven code edits from reaching consumers",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-032",
+      "name": "Shared-memory zero-copy decode with safe fallback",
+      "state": "mandatory-when-isolated",
+      "evidence": "reduces worker/main memory churn without changing decoded data",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-033",
+      "name": "Full-resolution virtual texture residency",
+      "state": "mandatory-scoped",
+      "evidence": "keeps near texture pages at source resolution while evicting only far invisible pages",
+      "appliesTo": "tiled-texture-worlds"
+    },
+    {
+      "id": "PAT-034",
+      "name": "Conservative portal/room visibility",
+      "state": "mandatory-scoped",
+      "evidence": "avoids rendering closed interior rooms while fail-visible semantics prevent over-culling",
+      "appliesTo": "semantic-interiors"
+    },
+    {
+      "id": "PAT-035",
+      "name": "Lossless network delta state",
+      "state": "mandatory",
+      "evidence": "reduces network bytes by omitting unchanged fields without quantization",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-036",
+      "name": "Ratchet-approved device schedules",
+      "state": "mandatory",
+      "evidence": "learns scheduling-only performance knobs per device while fidelity knobs remain forbidden",
+      "appliesTo": "all"
+    },
+    {
+      "id": "PAT-037",
+      "name": "Pattern applicability firewall",
+      "state": "mandatory",
+      "evidence": "prevents a good project-specific solution from being blindly forced into incompatible games",
+      "appliesTo": "all"
+    }
+  ]
+}

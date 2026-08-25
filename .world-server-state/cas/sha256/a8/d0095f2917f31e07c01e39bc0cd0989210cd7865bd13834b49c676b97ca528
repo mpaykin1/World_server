@@ -1,0 +1,13 @@
+APNG QUALITY SYSTEM V3
+
+1) Запусти INSTALL_APNG_SYSTEM.bat.
+2) Никогда не работай напрямую в master.
+3) Не удаляй и не упрощай существующую графику/функции.
+4) После установки обязаны пройти: APNG 26/26+ tests, APNG repository gate, полный npm run check, diff check.
+5) Затем PR CI обязан пройти Chromium + Firefox + WebKit APNG playback gate.
+6) Проверь Vercel Preview /api/apng?action=health и /apps/apng-lab/ на desktop/mobile.
+7) НЕ ОСТАНАВЛИВАЙСЯ, пока не найдёшь корневую причину каждого воспроизводимого blocking error, не исправишь её и не повторишь весь verification cycle.
+8) Не скрывай ошибки удалением тестов, ослаблением assertions/policy или удалением assets.
+9) 100% разрешено писать только после полного local + repository + CI + cross-browser + Vercel evidence.
+
+Полный протокол: docs/DESKTOP_AI_APNG_INSTALL_AND_VERIFY.md

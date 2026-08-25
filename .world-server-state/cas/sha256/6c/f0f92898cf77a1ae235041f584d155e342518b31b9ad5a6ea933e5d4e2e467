@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "1.0.0",
+  "minCpuMinutes": 30,
+  "maxCpuMinutes": 360,
+  "baseCpuMinutes": 240,
+  "busyLoadRatio": 0.65,
+  "idleLoadRatio": 0.25,
+  "maxParallelHeavy": 1,
+  "maxParallelLight": 2,
+  "paidCost": 0,
+  "gpu": false
+}

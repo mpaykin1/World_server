@@ -1,0 +1,8 @@
+{
+  "name": "Pixel 3DGS Capture",
+  "short_name": "3DGS Capture",
+  "start_url": "/capture-app/",
+  "display": "standalone",
+  "background_color": "#05080d",
+  "theme_color": "#07101d"
+}

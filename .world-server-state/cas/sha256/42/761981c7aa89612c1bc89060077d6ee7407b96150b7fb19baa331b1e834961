@@ -1,0 +1,39 @@
+{
+  "depth": {
+    "enabled": true,
+    "filename": "depth_anything_v2.onnx",
+    "url": null,
+    "sha256": null,
+    "purpose": "Depth Anything / MiDaS style relative depth on CPU"
+  },
+  "matcher": {
+    "enabled": true,
+    "filename": "lightglue.onnx",
+    "url": null,
+    "sha256": null,
+    "purpose": "LightGlue / LoFTR style pair correspondences on CPU"
+  },
+  "flow": {
+    "enabled": true,
+    "filename": "raft.onnx",
+    "url": null,
+    "sha256": null,
+    "purpose": "RAFT-like dense optical flow on CPU"
+  },
+  "segmentation": {
+    "enabled": true,
+    "filename": "birefnet.onnx",
+    "url": null,
+    "sha256": null,
+    "purpose": "Character/semantic foreground or transient masking on CPU"
+  },
+  "imu_pose_ingest": {
+    "enabled": true,
+    "capture_schema": "schemas/capture_pose.schema.json"
+  },
+  "dynamic_4d_character_pipeline": {
+    "enabled": true,
+    "backend": "cpu_dense_flow_temporal_tracks",
+    "learned_temporal_backend": false
+  }
+}

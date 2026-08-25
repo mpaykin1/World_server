@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 2,
+  "runtime": "WORLD_FACTORY_QUALITY_CORE_V10",
+  "worlds": [
+    {
+      "id": "sample-city",
+      "manifest": "./worlds/sample-city/world.json",
+      "enabled": true
+    }
+  ]
+}

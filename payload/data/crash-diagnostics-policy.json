@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "7.3.0",
+  "captureNodeReport": true,
+  "maxClusters": 50,
+  "fingerprintFields": [
+    "name",
+    "message",
+    "topFrame",
+    "exitCode"
+  ],
+  "stripSecrets": true,
+  "minimalReproIntegration": true
+}

@@ -1,0 +1,112 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "INTEGRATION_BUILD_SUBJECT.json",
+      "digest": {
+        "sha256": "2d58dd5344754caad3e255346bfe2a42b4833585004bd390447548a43794896a"
+      }
+    }
+  ],
+  "predicateType": "https://slsa.dev/provenance/v1",
+  "predicate": {
+    "buildDefinition": {
+      "buildType": "https://github.com/mpaykin1/World_server/blob/master/docs/buildtypes/system-integration-v2.md",
+      "externalParameters": {
+        "branch": "ai/desktop/quality-runtime-v11-20260824-090217",
+        "cpuFirst": true,
+        "gpuRequired": false,
+        "integrationLayer": "2.0.0"
+      },
+      "internalParameters": {
+        "node": "v24.15.0",
+        "platform": "win32",
+        "arch": "x64"
+      },
+      "resolvedDependencies": [
+        {
+          "name": "git-commit",
+          "uri": "git+https://github.com/mpaykin1/World_server@a525b7df9aa7e0e34272c3272a87ac6ed1831625",
+          "digest": {
+            "sha1": "a525b7df9aa7e0e34272c3272a87ac6ed1831625"
+          }
+        },
+        {
+          "name": "package-lock.json",
+          "digest": {
+            "sha256": "04466c8c00413bc129872f4ceef623496ad523956eec3f8c57c63d53d04fe54f"
+          }
+        },
+        {
+          "name": "data/system-capability-registry.json",
+          "digest": {
+            "sha256": "4acc698baaf4c1d35412c96efe6640d832bb81e1892bae4671cf2749fa0801a2"
+          }
+        },
+        {
+          "name": "policy/opa-bundle/worldserver.rego",
+          "digest": {
+            "sha256": "849f76a7ad1cc8e720134100183574e2cb3c7d8049c4a0d3372e44ae3cb06cba"
+          }
+        },
+        {
+          "name": "project-merkle-root",
+          "digest": {
+            "sha256": "13722823fccdf15566643561bcd6a452c58c5a5b2e3e76e170532bff4ec24f48"
+          }
+        }
+      ]
+    },
+    "runDetails": {
+      "builder": {
+        "id": "https://github.com/mpaykin1/World_server/.github/workflows/system-integration-v2.yml@master",
+        "version": {
+          "integrationLayer": "2.0.0"
+        }
+      },
+      "metadata": {
+        "invocationId": "local-1787620555786-12080",
+        "startedOn": "2026-08-25T01:15:55.506Z",
+        "finishedOn": "2026-08-25T01:15:55.786Z"
+      },
+      "byproducts": [
+        {
+          "name": "SYSTEM_INTEGRATION_REPORT.json",
+          "digest": {
+            "sha256": "1d976cc5e157d068167a59f1bc52a999035e2eb11f8754bd94b554172dde05fe"
+          }
+        },
+        {
+          "name": "POLICY_DECISION_REPORT.json",
+          "digest": {
+            "sha256": "20563019604844a7af7ff42c5f26d23e49719458fa5676bc4e90a6dde0976c61"
+          }
+        },
+        {
+          "name": "DISASTER_RECOVERY_VERIFY_REPORT.json",
+          "digest": {
+            "sha256": "bcf090baa8469efa645b7f7e299cac290c0aa4af32edf8a9f3490d5542f66373"
+          }
+        },
+        {
+          "name": "TECHNOLOGY_CONSENSUS_REPORT.json",
+          "digest": {
+            "sha256": "3d1897a7cf61834aeac13506715a5bff496004dbe73c06686d6bea9686c097e6"
+          }
+        },
+        {
+          "name": "DURABLE_QUEUE_STATUS.json",
+          "digest": {
+            "sha256": "b533428845c7f9cc778ba56568ce1ac0c554b3f20fb96c80a6df4e82463ae9a4"
+          }
+        },
+        {
+          "name": "INTEGRATION_TELEMETRY_STATUS.json",
+          "digest": {
+            "sha256": "f2869cba4b6b7e76026fc0fee77dc8b83540dfc6da81d707047cfaab350e861f"
+          }
+        }
+      ]
+    }
+  }
+}

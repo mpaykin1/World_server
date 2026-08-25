@@ -1,0 +1,318 @@
+{
+  "schemaVersion": "4.0.0",
+  "system": "WORLD_QUALITY_AUTOPILOT",
+  "generatedAt": "2026-08-24T06:55:25.924Z",
+  "readinessPercent": 100,
+  "domainPercent": {
+    "detail": 100,
+    "graphics": 100,
+    "animation": 100,
+    "optimization": 98,
+    "automation": 100
+  },
+  "hardGateReady": true,
+  "blockers": [
+    {
+      "domain": "optimization",
+      "id": "physical-device-evidence",
+      "weight": 2
+    }
+  ],
+  "evidence": {
+    "detail": [
+      {
+        "id": "server-semantic-enhancer-v4",
+        "ok": true,
+        "weight": 18
+      },
+      {
+        "id": "worker-semantic-enhancer-v4",
+        "ok": true,
+        "weight": 14
+      },
+      {
+        "id": "semantic-detail-index",
+        "ok": true,
+        "weight": 14
+      },
+      {
+        "id": "material-aware-detail",
+        "ok": true,
+        "weight": 10
+      },
+      {
+        "id": "pbr-aware-detail-metadata",
+        "ok": true,
+        "weight": 10
+      },
+      {
+        "id": "mesh-quality-optimizer",
+        "ok": true,
+        "weight": 10
+      },
+      {
+        "id": "reference-verifier",
+        "ok": true,
+        "weight": 12
+      },
+      {
+        "id": "front-projection-invariant",
+        "ok": true,
+        "weight": 12
+      }
+    ],
+    "graphics": [
+      {
+        "id": "visual-policy",
+        "ok": true,
+        "weight": 8
+      },
+      {
+        "id": "perceptual-gate",
+        "ok": true,
+        "weight": 8
+      },
+      {
+        "id": "visual-critic",
+        "ok": true,
+        "weight": 8
+      },
+      {
+        "id": "golden-assets",
+        "ok": true,
+        "weight": 6
+      },
+      {
+        "id": "runtime-controller-v4",
+        "ok": true,
+        "weight": 12
+      },
+      {
+        "id": "semantic-material-profiler",
+        "ok": true,
+        "weight": 10
+      },
+      {
+        "id": "procedural-pbr-synthesizer",
+        "ok": true,
+        "weight": 14
+      },
+      {
+        "id": "texture-budgeting",
+        "ok": true,
+        "weight": 10
+      },
+      {
+        "id": "virtual-atlas-planning",
+        "ok": true,
+        "weight": 7
+      },
+      {
+        "id": "baseline-candidate-automation",
+        "ok": true,
+        "weight": 7
+      },
+      {
+        "id": "explicit-baseline-promotion",
+        "ok": true,
+        "weight": 7
+      },
+      {
+        "id": "approved-visual-baselines",
+        "ok": true,
+        "weight": 3
+      }
+    ],
+    "animation": [
+      {
+        "id": "adaptive-animation-budget",
+        "ok": true,
+        "weight": 15
+      },
+      {
+        "id": "semantic-repair-runtime",
+        "ok": true,
+        "weight": 18
+      },
+      {
+        "id": "semantic-rules",
+        "ok": true,
+        "weight": 12
+      },
+      {
+        "id": "ik-budget",
+        "ok": true,
+        "weight": 10
+      },
+      {
+        "id": "foot-slide-jitter-validation",
+        "ok": true,
+        "weight": 13
+      },
+      {
+        "id": "universal-retarget-contract",
+        "ok": true,
+        "weight": 15
+      },
+      {
+        "id": "root-motion-two-hand-contract",
+        "ok": true,
+        "weight": 12
+      },
+      {
+        "id": "runtime-rig-evidence",
+        "ok": true,
+        "weight": 5
+      }
+    ],
+    "optimization": [
+      {
+        "id": "performance-budgets",
+        "ok": true,
+        "weight": 7
+      },
+      {
+        "id": "adaptive-runtime",
+        "ok": true,
+        "weight": 10
+      },
+      {
+        "id": "gpu-timing-query",
+        "ok": true,
+        "weight": 9
+      },
+      {
+        "id": "longtask-memory-device-pressure",
+        "ok": true,
+        "weight": 10
+      },
+      {
+        "id": "sustained-pressure-thermal-proxy",
+        "ok": true,
+        "weight": 8
+      },
+      {
+        "id": "visibility-scene-budget",
+        "ok": true,
+        "weight": 10
+      },
+      {
+        "id": "sector-visibility-optimizer",
+        "ok": true,
+        "weight": 10
+      },
+      {
+        "id": "texture-memory-budget",
+        "ok": true,
+        "weight": 8
+      },
+      {
+        "id": "greedy-meshing",
+        "ok": true,
+        "weight": 8
+      },
+      {
+        "id": "hlod-streaming",
+        "ok": true,
+        "weight": 7
+      },
+      {
+        "id": "asset-dedup",
+        "ok": true,
+        "weight": 5
+      },
+      {
+        "id": "gpu-autoscaler",
+        "ok": true,
+        "weight": 6
+      },
+      {
+        "id": "physical-device-evidence",
+        "ok": false,
+        "weight": 2
+      }
+    ],
+    "automation": [
+      {
+        "id": "world-orchestrator-v4",
+        "ok": true,
+        "weight": 12
+      },
+      {
+        "id": "semantic-index-automation",
+        "ok": true,
+        "weight": 6
+      },
+      {
+        "id": "material-synthesis-automation",
+        "ok": true,
+        "weight": 8
+      },
+      {
+        "id": "visibility-automation",
+        "ok": true,
+        "weight": 7
+      },
+      {
+        "id": "retarget-contract-automation",
+        "ok": true,
+        "weight": 7
+      },
+      {
+        "id": "cost-quality-scheduler",
+        "ok": true,
+        "weight": 8
+      },
+      {
+        "id": "feedback-learner",
+        "ok": true,
+        "weight": 8
+      },
+      {
+        "id": "candidate-lab",
+        "ok": true,
+        "weight": 8
+      },
+      {
+        "id": "evidence-ledger",
+        "ok": true,
+        "weight": 7
+      },
+      {
+        "id": "baseline-promotion-guard",
+        "ok": true,
+        "weight": 5
+      },
+      {
+        "id": "durable-cycle",
+        "ok": true,
+        "weight": 6
+      },
+      {
+        "id": "regression-gate",
+        "ok": true,
+        "weight": 6
+      },
+      {
+        "id": "patch-tournament",
+        "ok": true,
+        "weight": 5
+      },
+      {
+        "id": "risk-root-cause",
+        "ok": true,
+        "weight": 4
+      },
+      {
+        "id": "quality-workflow",
+        "ok": true,
+        "weight": 3
+      },
+      {
+        "id": "desktop-ai-continuity",
+        "ok": true,
+        "weight": 2
+      }
+    ]
+  }
+}

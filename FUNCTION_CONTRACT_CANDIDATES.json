@@ -1,0 +1,223 @@
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-25T01:16:23.086Z",
+  "candidates": [
+    {
+      "capability": "dependency-graph",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10",
+      "systemId": "quality-core",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "replay",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10",
+      "systemId": "quality-core",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "ratchet",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10",
+      "systemId": "quality-core",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "quality-knowledge",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10",
+      "systemId": "quality-core",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "texture-pipeline",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10",
+      "systemId": "texture-quality",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "pbr",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10",
+      "systemId": "texture-quality",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "atlas",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10",
+      "systemId": "texture-quality",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "texture-runtime-evidence",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10",
+      "systemId": "texture-quality",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "canonical-mesh-optimizer",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12",
+      "systemId": "mesh-quality",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "lod",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12",
+      "systemId": "mesh-quality",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "hlod",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12",
+      "systemId": "mesh-quality",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "mesh-regression",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12",
+      "systemId": "mesh-quality",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "video-to-voxel",
+      "owner": "VIDEO2GAME_VOXEL_V5",
+      "systemId": "video2game",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "cpu-fallback",
+      "owner": "VIDEO2GAME_VOXEL_V5",
+      "systemId": "video2game",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "cpu-3dgs",
+      "owner": "PIXEL_3DGS_CPU_V6_PHONE_4D_MAX",
+      "systemId": "3dgs",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "phone-capture",
+      "owner": "PIXEL_3DGS_CPU_V6_PHONE_4D_MAX",
+      "systemId": "3dgs",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "dynamic-4d",
+      "owner": "PIXEL_3DGS_CPU_V6_PHONE_4D_MAX",
+      "systemId": "3dgs",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "github-supabase-bridge",
+      "owner": "WORLD_SERVER_QUALITY_RUNTIME_V12_3",
+      "systemId": "runtime-v12-3",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "master-protection",
+      "owner": "WORLD_SERVER_QUALITY_RUNTIME_V12_3",
+      "systemId": "runtime-v12-3",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "pixel-atlas-v12",
+      "owner": "WORLD_SERVER_QUALITY_RUNTIME_V12_3",
+      "systemId": "runtime-v12-3",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "affected-test-selection",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "change-impact-routing",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "dependency-impact-graph",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "explicit-legacy-contract-synthesis",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "graphics-quality-ratchet",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "legacy-evidence-factory",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "lexical-dataflow-impact",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "offline-policy-mirror",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "opa-rego-policy",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "semantic-symbol-graph",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "typescript-native-ast-dataflow",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "id": "WORLD_DEVICE_QUALITY_MATRIX_V8",
+  "profiles": [
+    {"id":"desktop-high","viewport":{"width":1920,"height":1080},"deviceScaleFactor":1,"minFps":55,"nearFieldGolden":true,"webgpuRequired":true,"weight":3},
+    {"id":"desktop-integrated","viewport":{"width":1366,"height":768},"deviceScaleFactor":1,"minFps":45,"nearFieldGolden":true,"webgpuRequired":false,"weight":3},
+    {"id":"mobile-modern","viewport":{"width":390,"height":844},"deviceScaleFactor":3,"isMobile":true,"hasTouch":true,"minFps":30,"nearFieldGolden":true,"webgpuRequired":false,"weight":2},
+    {"id":"mobile-low-memory","viewport":{"width":360,"height":800},"deviceScaleFactor":2,"isMobile":true,"hasTouch":true,"minFps":28,"nearFieldGolden":true,"webgpuRequired":false,"weight":2}
+  ],
+  "hardRules": {
+    "nearFieldSourceQualityLossAllowed": false,
+    "dynamicResolutionAllowed": false,
+    "sourceAssetMutationAllowed": false,
+    "protectedErrorRecurrenceAllowed": false
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "MULTIFILE_GOLDEN_PATTERN",
+  "approvalEnv": "GOLDEN_PATTERN_APPROVED",
+  "maxFiles": 24,
+  "allowedPrefixes": [
+    "apps/",
+    "shared/",
+    "scripts/",
+    "data/"
+  ],
+  "immutableSnapshot": true,
+  "rule": "Only exact approved files are snapshotted; no AI-rewritten approximation is promoted."
+}

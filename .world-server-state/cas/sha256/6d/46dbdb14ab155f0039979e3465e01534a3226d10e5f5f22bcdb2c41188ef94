@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "3.0.0",
+  "generatedAt": "2026-08-25T01:14:19.747Z",
+  "taskContractPresent": false,
+  "requested": [],
+  "used": [],
+  "missing": [],
+  "apng": {
+    "applicable": false,
+    "pass": true,
+    "checked": []
+  },
+  "pass": true,
+  "rule": "User-mandated technologies are hard requirements. Alternatives may be suggested but never silently substituted."
+}

@@ -1,0 +1,95 @@
+{
+  "schemaVersion": "1.0.0",
+  "baselineId": "bootstrap-2026-08-23-world-server",
+  "baselineType": "audit-bootstrap",
+  "acceptedAt": "2026-08-23T06:14:00+04:00",
+  "acceptedCommit": "4e20c3d864f6d37cab904357dac455be9d2a9826",
+  "note": "Bootstrap baseline from the agreed quality audit. After first verified V4 release, replace via quality:accept.",
+  "metrics": {
+    "controls": 55,
+    "graphics": 52,
+    "deviceAccessibility": 45,
+    "menu": 25,
+    "collisions": 40,
+    "codeQuality": 70,
+    "codeReviewer": 55,
+    "reports": 65,
+    "functionConnectivity": 50,
+    "uploadedTechnologyUse": 38,
+    "errorRecurrenceProtection": 20,
+    "goldenSolutionPropagation": 15
+  },
+  "technologyUsage": {
+    "Vercel": 90,
+    "Supabase Postgres/Auth/Realtime": 90,
+    "Three.js/WebGL2": 90,
+    "Playwright": 65,
+    "Python/FastAPI AI3D worker": 65,
+    "AI3D auto-discovery": 70,
+    "Depth Anything": 50,
+    "Blender pipeline": 40,
+    "TRELLIS.2": 30,
+    "Godot 4.7.1": 55,
+    "Hunyuan3D": 60,
+    "InstantMesh": 0,
+    "MPFB": 0,
+    "UniRig": 0,
+    "Rigify": 0,
+    "Goo Engine": 0,
+    "UPBGE": 0,
+    "Blender MCP": 0,
+    "Unity MCP": 0,
+    "OpenGameEval/OpenGame": 10
+  },
+  "releaseBlockerCount": 11,
+  "protectedErrorIds": [],
+  "goldenLocks": {
+    "controls": {
+      "canonical": "shared/ai3d-playable-runtime.js",
+      "status": "golden"
+    },
+    "collision": {
+      "canonical": "step-up-v1",
+      "status": "golden"
+    }
+  },
+  "certifiedApps": {
+    "voxel-world": {
+      "required": [
+        "camera-relative-directions",
+        "desktop-controls",
+        "grounding",
+        "mobile-controls",
+        "mouse-look",
+        "render",
+        "spawn",
+        "step-up",
+        "touch-look",
+        "wall-collision"
+      ],
+      "visible": true,
+      "status": "certified"
+    },
+    "ai3d-voxel-city": {
+      "required": [
+        "camera-relative-directions",
+        "desktop-controls",
+        "grounding",
+        "mobile-controls",
+        "mouse-look",
+        "render",
+        "spawn",
+        "step-up",
+        "touch-look",
+        "wall-collision"
+      ],
+      "visible": true,
+      "status": "certified"
+    }
+  },
+  "criticalTests": [
+    "e2e/ai3d-voxel-city-autoplay.spec.js",
+    "e2e/golden-release.spec.js",
+    "test/quality-regression.test.js"
+  ]
+}

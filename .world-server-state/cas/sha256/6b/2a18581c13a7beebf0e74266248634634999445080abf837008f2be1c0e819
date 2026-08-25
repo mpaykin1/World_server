@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "7.5.0",
+  "windows": [
+    "wpr",
+    "logman"
+  ],
+  "linux": [
+    "obi",
+    "bpftool",
+    "perf"
+  ],
+  "otel": [
+    "otelcol",
+    "otelcol-contrib"
+  ],
+  "requireTraceCorrelation": true,
+  "secretRedaction": true,
+  "truthRule": "Collector availability is reported separately from causal graph logic. Missing privileged/native collectors never becomes a false 100% native-runtime claim.",
+  "obiMaturityRule": "Treat OBI availability as native eBPF instrumentation capability, but do not call it production-certified solely from binary presence; require runtime evidence."
+}

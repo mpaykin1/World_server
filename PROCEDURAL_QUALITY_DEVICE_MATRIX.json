@@ -1,0 +1,85 @@
+{
+  "version": 10,
+  "pass": true,
+  "physical": false,
+  "note": "synthetic policy matrix; V10 still requires physical-device verification before 100%",
+  "results": [
+    {
+      "name": "iphone-fallback",
+      "q": {
+        "webgpu": "0",
+        "webgl2": "1",
+        "memory": 4,
+        "cores": 6,
+        "dpr": 3
+      },
+      "expected": [
+        "balanced"
+      ],
+      "actual": "balanced",
+      "pass": true
+    },
+    {
+      "name": "mobile-webgpu",
+      "q": {
+        "webgpu": "1",
+        "webgl2": "1",
+        "memory": 6,
+        "cores": 8,
+        "dpr": 3
+      },
+      "expected": [
+        "high",
+        "cinematic"
+      ],
+      "actual": "high",
+      "pass": true
+    },
+    {
+      "name": "desktop-igpu",
+      "q": {
+        "webgpu": "1",
+        "webgl2": "1",
+        "memory": 8,
+        "cores": 8,
+        "dpr": 1.5
+      },
+      "expected": [
+        "cinematic"
+      ],
+      "actual": "cinematic",
+      "pass": true
+    },
+    {
+      "name": "desktop-dgpu",
+      "q": {
+        "webgpu": "1",
+        "webgl2": "1",
+        "memory": 16,
+        "cores": 16,
+        "dpr": 1
+      },
+      "expected": [
+        "cinematic"
+      ],
+      "actual": "cinematic",
+      "pass": true
+    },
+    {
+      "name": "reduced-motion",
+      "q": {
+        "webgpu": "1",
+        "webgl2": "1",
+        "memory": 16,
+        "cores": 16,
+        "dpr": 2,
+        "reducedMotion": "1"
+      },
+      "expected": [
+        "safe"
+      ],
+      "actual": "safe",
+      "pass": true
+    }
+  ]
+}

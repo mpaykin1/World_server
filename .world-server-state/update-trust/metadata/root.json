@@ -1,0 +1,50 @@
+{
+  "signed": {
+    "_type": "root",
+    "spec_version": "1.0.33",
+    "version": 4,
+    "expires": "2026-09-24T01:15:57.492Z",
+    "consistent_snapshot": true,
+    "keys": {
+      "local-root": {
+        "keytype": "ed25519",
+        "scheme": "ed25519",
+        "keyval": {
+          "public": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEA9rd94aEm89jTrP7dW1HE5EM6yTk/q5EUU1ICqh83PRI=\n-----END PUBLIC KEY-----\n"
+        }
+      }
+    },
+    "roles": {
+      "root": {
+        "keyids": [
+          "local-root"
+        ],
+        "threshold": 1
+      },
+      "targets": {
+        "keyids": [
+          "local-root"
+        ],
+        "threshold": 1
+      },
+      "snapshot": {
+        "keyids": [
+          "local-root"
+        ],
+        "threshold": 1
+      },
+      "timestamp": {
+        "keyids": [
+          "local-root"
+        ],
+        "threshold": 1
+      }
+    }
+  },
+  "signatures": [
+    {
+      "keyid": "local-root",
+      "sig": "ZS7+3+hfUlpd3d4Th2Aszemcc77KvdBpA0J5vTpJyMoh3fNU37zJ2NrjudoShPCFl5OkFFHHO5fpjzBx9wU6Cw=="
+    }
+  ]
+}

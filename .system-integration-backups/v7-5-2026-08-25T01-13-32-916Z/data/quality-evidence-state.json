@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedFor": "V6_PREPARED_PACKAGE",
+  "testTags": {
+    "controls-cardinal": "prepared-test",
+    "controls-diagonal": "prepared-test",
+    "mouse-look": "prepared-test",
+    "jump-y-only": "prepared-test",
+    "camera-roll-zero": "prepared-test",
+    "touch-move": "prepared-test",
+    "touch-look": "prepared-test",
+    "render-visible": "prepared-test",
+    "no-primary-blur": "prepared-test",
+    "render-stats": "prepared-test",
+    "touch-target": "prepared-test",
+    "system-panels-packed": "prepared-test",
+    "direct-world-selection": "prepared-test",
+    "obstruction-budget": "prepared-test",
+    "escape-close": "prepared-test",
+    "wall-block": "unit-pass",
+    "step-up": "unit-pass",
+    "too-high-block": "unit-pass",
+    "spawn-grounded": "prepared-test",
+    "fall-respawn": "prepared-test",
+    "no-tunneling": "unit-pass",
+    "false-green": "static-pass",
+    "canonical-input": "static-pass",
+    "canonical-physics": "static-pass",
+    "tests-present": "static-pass",
+    "graphics-dependency": "review-prepared"
+  },
+  "projectTags": {
+    "desktop-chromium": true,
+    "mobile-chromium": true,
+    "mobile-webkit": true,
+    "tablet-chromium": true
+  },
+  "note": "prepared-test counts as implementation evidence but not as live production pass; final live score is only promoted after CI execution."
+}

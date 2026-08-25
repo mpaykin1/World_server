@@ -1,0 +1,26 @@
+{
+  "worldId": "sample-city",
+  "runtime": "WORLD_FACTORY_QUALITY_CORE_V10",
+  "visualSha256": "af8b08927d911b259f04975e146f26a1110c574ba3bc465ae319685826ca9473",
+  "sourceStats": {
+    "type": "ply-mesh",
+    "vertices": 361039,
+    "faces": 683077,
+    "triangles": null,
+    "materials": null,
+    "textures": null
+  },
+  "semantic": {
+    "walkableArea": 313.76908581179123,
+    "walkableRatio": 0.5406605062851305,
+    "wallArea": 157.84051542374726,
+    "wallRatio": 0.271977504605083
+  },
+  "contracts": {
+    "cameraRoll": false,
+    "maxPitchDeg": 89,
+    "jumpImpulse": "vertical-only",
+    "feetFollowTravel": true,
+    "attackFollowsFeet": true
+  }
+}

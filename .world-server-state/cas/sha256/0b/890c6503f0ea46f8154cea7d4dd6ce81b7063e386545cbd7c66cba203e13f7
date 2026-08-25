@@ -1,0 +1,7 @@
+'use strict';
+function env(){return {url:(process.env.SUPABASE_URL||process.env.NEXT_PUBLIC_SUPABASE_URL||'').replace(/\/$/,''),key:process.env.SUPABASE_SECRET_KEY||process.env.SUPABASE_SERVICE_ROLE_KEY||''};}
+async function rpc(name,args){const {url,key}=env();if(!url||!key)return {ok:false,status:'HOLD',reason:'supabase-service-credentials-missing'};const r=await fetch(`${url}/rest/v1/rpc/${name}`,{method:'POST',headers:{apikey:key,Authorization:`Bearer ${key}`,'Content-Type':'application/json'},body:JSON.stringify(args)});const text=await r.text();if(!r.ok)return {ok:false,status:'HOLD',reason:`rpc-${r.status}`,detail:text.slice(0,500)};let data;try{data=JSON.parse(text)}catch{data=text}return {ok:true,status:'PASS',data};}
+const claimAutopilotLease=(project,owner,seconds=900)=>rpc('claim_quality_autopilot_lease',{p_project:project,p_owner:owner,p_seconds:seconds});
+const releaseAutopilotLease=(project,owner)=>rpc('release_quality_autopilot_lease',{p_project:project,p_owner:owner});
+const reserveGlobalCompute=(project,usage,limits)=>rpc('reserve_quality_compute',{p_project:project,p_cpu_seconds:usage.cpuSeconds||0,p_gpu_seconds:usage.gpuSeconds||0,p_cost_usd:usage.costUsd||0,p_jobs:usage.jobs||1,p_max_cpu_seconds:limits.maxCpuSecondsPerDay,p_max_gpu_seconds:limits.maxGpuSecondsPerDay,p_max_cost_usd:limits.maxCostUsdPerDay,p_max_jobs:limits.maxJobsPerDay});
+module.exports={rpc,claimAutopilotLease,releaseAutopilotLease,reserveGlobalCompute};

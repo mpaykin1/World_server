@@ -1,0 +1,21 @@
+{
+  "package": "WORLD_SERVER_QUALITY_RUNTIME_V12_3",
+  "generatedAt": "2026-08-24T06:03:49.119984+00:00",
+  "liveControlPlaneVersion": "2026-08-24.v12.3",
+  "bridgeEdgeFunction": "quality-github-bridge",
+  "bridgeAudience": "world-server-quality-bridge",
+  "files": [
+    ".github/workflows/quality-runtime-bridge.yml",
+    "AGENTS_APPEND_V12.md",
+    "DESKTOP_AI_V12_INSTRUCTION.md",
+    "INSTALL_V12_3.ps1",
+    "README_FIRST.md",
+    "STATUS_V12_3.md",
+    "WORK_IN_PROGRESS_V12_TEMPLATE.md",
+    "scripts/build-pixel-atlas-v12.cjs",
+    "scripts/check-supabase-migration-manifest-v12.cjs",
+    "scripts/ensure-master-protection-v12.ps1",
+    "scripts/github-quality-bridge-v12.cjs",
+    "scripts/materialize-supabase-bridge-export-v12.cjs"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-25T01:15:30.171Z",
+  "pass": true,
+  "apply": false,
+  "localInstallRoot": ".world-server\\tools",
+  "results": [
+    {
+      "tool": "typescript",
+      "installed": false,
+      "version": null
+    },
+    {
+      "tool": "appium",
+      "installed": false,
+      "version": null
+    },
+    {
+      "tool": "tlc",
+      "installed": false,
+      "version": "1.7.4"
+    },
+    {
+      "tool": "wasmtime",
+      "installed": false,
+      "version": null
+    },
+    {
+      "tool": "cosign",
+      "installed": false,
+      "version": null,
+      "safe": false,
+      "minimumSafeVersion": "3.1.3",
+      "securityFloorReason": "GHSA-fx35-mq7g-6g98"
+    }
+  ],
+  "securityPass": true,
+  "externalBlockers": [
+    "typescript-unavailable",
+    "appium-unavailable",
+    "tlc-unavailable",
+    "wasmtime-unavailable",
+    "cosign-unavailable"
+  ]
+}

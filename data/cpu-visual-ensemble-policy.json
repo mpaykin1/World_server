@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "CPU_VISUAL_ENSEMBLE",
+  "gpuAllowed": false,
+  "paidComputeAllowed": false,
+  "metrics": {
+    "ssim": 0.35,
+    "histogram": 0.15,
+    "edges": 0.2,
+    "layoutBlocks": 0.2,
+    "averageHash": 0.1
+  },
+  "defaultMinimum": 0.92,
+  "rule": "Visual ensemble can reject regressions against approved baselines; it cannot self-approve aesthetics."
+}

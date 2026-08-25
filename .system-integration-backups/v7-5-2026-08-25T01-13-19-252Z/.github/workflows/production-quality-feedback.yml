@@ -1,0 +1,41 @@
+name: Production Quality Feedback
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 */6 * * *'
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  feedback:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Pull real production quality evidence
+        id: prod
+        continue-on-error: true
+        env:
+          QUALITY_BASE_URL: https://world-server.vercel.app
+        run: node scripts/production-quality-pull.js
+      - name: Open/update production quality blocker
+        if: steps.prod.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TITLE="Production quality regression detected"
+          EXISTING="$(gh issue list --state open --search "$TITLE in:title" --json number --jq '.[0].number // empty')"
+          BODY="The scheduled production-feedback gate found a runtime quality violation. Inspect the workflow artifact/log and PRODUCTION_QUALITY_REPORT.json. Do not raise the quality baseline until this is resolved."
+          if [ -n "$EXISTING" ]; then
+            gh issue comment "$EXISTING" --body "$BODY"
+          else
+            gh issue create --title "$TITLE" --body "$BODY"
+          fi
+          exit 1

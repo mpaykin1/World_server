@@ -1,0 +1,32 @@
+{
+  "version": 10,
+  "architectureReadinessPct": 99,
+  "verifiedReadinessPct": 98,
+  "architectureConnectednessPct": 100,
+  "verifiedConnectednessPct": 88,
+  "links": {
+    "runtimeToRenderer": true,
+    "rendererToMotion": true,
+    "rendererToGI": true,
+    "runtimeToBudget": true,
+    "runtimeToTemporalQA": true,
+    "runtimeToFramePacing": true,
+    "runtimeToLeakWatchdog": true,
+    "runtimeToThermal": true,
+    "runtimeToShaderPrewarm": true,
+    "replayToRegression": true,
+    "evidenceToLearning": true,
+    "learningToPromotion": true,
+    "promotionToCanary": true,
+    "promotionToRollback": true,
+    "doctorToGate": true,
+    "previewToGolden": false,
+    "physicalToCertification": false
+  },
+  "nativeCoveragePct": 0,
+  "physicalCertified": false,
+  "goldenRecorded": false,
+  "criticPass": true,
+  "tournamentPass": true,
+  "doctorPass": true
+}

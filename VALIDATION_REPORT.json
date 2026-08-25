@@ -1,0 +1,33 @@
+{
+  "system": "PIXEL_ANIMATION_SYSTEM_V3",
+  "version": "3.0.0",
+  "validatedAt": "2026-08-24T05:46:00Z",
+  "local": {
+    "structuralGate": "PASS",
+    "nodeTests": {"passed":20,"failed":0},
+    "animatedVisualRegression": {"passedFrames":8,"failedFrames":0,"maxError":0},
+    "spatialBenchmark": {"objects":50000,"queries":300,"latestDirectAvgQueryMs":0.0649,"fullInstallerAvgQueryMs":0.1124},
+    "installerMock": {"pass":true,"createdBranch":"ai/desktop/pixel-animation-system-v3","autoIntegrationFirstChanged":1,"autoIntegrationSecondChanged":0,"preservedExistingGoldenComponent":true}
+  },
+  "server": {
+    "projectStatus": "ACTIVE_HEALTHY",
+    "runtimePolicyVersion": 3,
+    "enabledProfiles": 17,
+    "configEdge": {"version":3,"status":"ACTIVE"},
+    "telemetryEdge": {"version":2,"status":"ACTIVE","verifyJwt":true},
+    "migrationsApplied": ["pixel_animation_runtime_v3","pixel_animation_runtime_v3_deny_policy","pixel_animation_runtime_v3_remove_unused_indexes"],
+    "desktopAiInstructionVersion": 3,
+    "featureSpecStatus": "ready",
+    "baselineDenyPolicy": true,
+    "removedUnusedV3IndexesRemaining": 0
+  },
+  "externalEvidencePending": [
+    "actual World_server repository integration",
+    "Git task branch / PR / CI / preview",
+    "real desktop WebGPU compute validation",
+    "forced WebGL2 validation",
+    "forced Canvas2D validation",
+    "real mobile/Safari-compatible device evidence",
+    "project quality:impact and release:gate"
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "7.4.0",
+  "generatedAt": "2026-08-25T01:16:00.259Z",
+  "pass": true,
+  "nodes": [
+    {
+      "id": "n0",
+      "type": "control-plane",
+      "file": "CONTROL_PLANE_REPORT.json",
+      "keys": {
+        "traceId": "70ef4061db14cbbfe4291a5cc869af25",
+        "traceparent": "00-70ef4061db14cbbfe4291a5cc869af25-a77cc23e2983a03f-01"
+      }
+    },
+    {
+      "id": "n1",
+      "type": "telemetry",
+      "file": "INTEGRATION_TELEMETRY_STATUS.json",
+      "keys": {}
+    },
+    {
+      "id": "n2",
+      "type": "record-replay",
+      "file": "RECORD_REPLAY_STATUS.json",
+      "keys": {}
+    },
+    {
+      "id": "n3",
+      "type": "orchestrator",
+      "file": "ORCHESTRATOR_SUPERVISOR_STATUS.json",
+      "keys": {}
+    },
+    {
+      "id": "n4",
+      "type": "crash",
+      "file": "CRASH_DIAGNOSTICS_REPORT.json",
+      "keys": {}
+    },
+    {
+      "id": "n5",
+      "type": "deploy",
+      "file": "TRANSACTIONAL_DEPLOY_STATUS.json",
+      "keys": {}
+    },
+    {
+      "id": "n6",
+      "type": "production-safety",
+      "file": "PRODUCTION_SAFETY_STATUS.json",
+      "keys": {}
+    },
+    {
+      "id": "n7",
+      "type": "slo",
+      "file": "SLO_ERROR_BUDGET_STATUS.json",
+      "keys": {}
+    }
+  ],
+  "edges": [],
+  "sourceCount": 8,
+  "truthRule": "Edges are evidence correlations, not proof of physical causality; native ETW/eBPF availability is reported separately."
+}

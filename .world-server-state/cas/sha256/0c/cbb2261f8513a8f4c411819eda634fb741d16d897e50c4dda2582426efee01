@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "runtime": "WORLD_FACTORY_QUALITY_CORE_V6",
+  "runtimeHash": "c90b3ca5854503f24ee8500f07fa38148daa559f905f342fdccf29bac3f569cb",
+  "qualityPackFiles": {
+    "quality/standards.json": "6066fca607698f87389d0b60c06f4f954ee37a417bdfd7739c51fcad2de7248b",
+    "quality/rules.json": "6c6221654ea0a49d2792257382b18b72dff8a72915ce6702d0f1d82ebea9b32b",
+    "quality/knowledge/incidents.json": "ff9b3dcc3831a5842a21f2e49a94e20213f67d437f06a947e57187fd34e2f4f4",
+    "quality/knowledge/patterns.json": "c7e81658e7e7f5f2155b090d5ae12d49d9c63a9c7ae0b8edbd9886609e6649c8",
+    "quality/knowledge/quality-genome.json": "bc8b76a354fea49ca71f0122a2f36f0016d0aadb70d7201171770deab836fec3"
+  },
+  "pipelineScore": 100.0,
+  "source": "quality-pipeline-pass",
+  "status": "historical-last-known-good-do-not-promote-current-candidate-without-full-ci",
+  "note": "Current V3.1 static candidate is stored in quality/knowledge/static-candidate.json; full browser/fuzz/visual CI must pass before release approval."
+}

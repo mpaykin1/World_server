@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "3.0.0",
+  "protectedExtensions": [
+    ".png",
+    ".apng",
+    ".webp",
+    ".jpg",
+    ".jpeg",
+    ".ktx2",
+    ".basis",
+    ".glb",
+    ".gltf",
+    ".fbx",
+    ".obj",
+    ".blend",
+    ".svg"
+  ],
+  "protectedPathTokens": [
+    "/textures/",
+    "/materials/",
+    "/shaders/",
+    "/graphics/",
+    "/models/",
+    "/sprites/",
+    "/assets/"
+  ],
+  "evidenceFile": "QUALITY_CHANGE_EVIDENCE.json",
+  "rules": {
+    "deletionForbiddenWithoutExplicitReplacement": true,
+    "modifiedProtectedAssetRequiresVisualRegressionPass": true,
+    "qualityDeltaMustBeNonNegative": true,
+    "preservesExistingFeatures": true
+  },
+  "atlas": {
+    "threshold": 8,
+    "preferAtlas": true,
+    "preferSingleArchive": true,
+    "neverReplaceRequestedAPNG": true
+  }
+}

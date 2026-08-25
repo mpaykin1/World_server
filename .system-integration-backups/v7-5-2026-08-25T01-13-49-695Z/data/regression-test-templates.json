@@ -1,0 +1,18 @@
+{
+  "controls-inverted-camera-relative": {
+    "target": "test/generated/controls-inverted-camera-relative.test.js",
+    "body": "'use strict';const test=require('node:test'),assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('fs'),path=require('path');const s=fs.readFileSync(path.join(__dirname,'../../shared/golden-physics.js'),'utf8'),c={window:{GameGoldenStandard:{basisFromForward(fx,fz){const l=Math.hypot(fx,fz)||1;fx/=l;fz/=l;return {forward:{x:fx,z:fz},right:{x:-fz,z:fx}}}}},Math};vm.createContext(c);vm.runInContext(s,c);test('protected controls cardinal basis',()=>{for(const y of [0,Math.PI/2,Math.PI,-Math.PI/2]){const w=c.window.GameGoldenPhysics.canonicalXZ(y,1,0,1),d=c.window.GameGoldenPhysics.canonicalXZ(y,0,1,1);assert.ok(Math.abs(w.x*d.x+w.z*d.z)<1e-9)}});"
+  },
+  "stairs-collision-broken": {
+    "target": "test/generated/stairs-collision-broken.test.js",
+    "body": "'use strict';const test=require('node:test'),assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('fs'),path=require('path');const s=fs.readFileSync(path.join(__dirname,'../../shared/golden-physics.js'),'utf8'),c={window:{},Math};vm.createContext(c);vm.runInContext(s,c);test('protected stair contract',()=>{for(const h of [.25,.5,.75,1,1.05]){const can=p=>!(p.x>.2&&p.y<h-.01);assert.equal(c.window.GameGoldenPhysics.stepAxis({x:0,y:0,z:0},'x',.5,can,true).moved,true)}const can=p=>!(p.x>.2&&p.y<1.2);assert.equal(c.window.GameGoldenPhysics.stepAxis({x:0,y:0,z:0},'x',.5,can,true).blocked,true)});"
+  },
+  "wall-collision-broken": {
+    "target": "test/generated/wall-collision-broken.test.js",
+    "body": "'use strict';const test=require('node:test'),assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('fs'),path=require('path');const s=fs.readFileSync(path.join(__dirname,'../../shared/golden-physics.js'),'utf8'),c={window:{},Math};vm.createContext(c);vm.runInContext(s,c);test('protected wall no tunneling',()=>{const can=p=>!(p.x>=1&&p.x<=1.2),r=c.window.GameGoldenPhysics.moveSwept({x:0,y:0,z:0},{x:8,y:0,z:0},can,{allowStep:false,maxSubstep:.02});assert.ok(r.position.x<1);assert.equal(r.blocked,true)});"
+  },
+  "false-green-assertion": {
+    "target": "test/generated/false-green-assertion.test.js",
+    "body": "'use strict';const test=require('node:test'),assert=require('node:assert/strict'),fs=require('fs'),path=require('path');function walk(d,o=[]){if(!fs.existsSync(d))return o;for(const e of fs.readdirSync(d,{withFileTypes:true})){const a=path.join(d,e.name);e.isDirectory()?walk(a,o):o.push(a)}return o}test('protected matcher invocation',()=>{const bad=[];for(const f of [...walk('e2e'),...walk('test')].filter(f=>f.endsWith('.js'))){const s=fs.readFileSync(f,'utf8');if(/\\.toBeTruthy\\s*;|\\.toBeFalsy\\s*;/.test(s))bad.push(f)}assert.deepEqual(bad,[])});"
+  }
+}

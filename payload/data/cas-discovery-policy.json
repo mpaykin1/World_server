@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "7.2.0",
+  "protocol": "world-server-cas-discovery-v1",
+  "transport": "udp-multicast",
+  "multicastAddress": "239.255.42.99",
+  "port": 42499,
+  "ttl": 1,
+  "discoveryWindowMs": 650,
+  "requireAuthTokenForRemoteTransfer": true,
+  "loopbackAllowedWithoutToken": true,
+  "autoReplicate": true,
+  "replicationFactorTarget": 2,
+  "verifySha256": true
+}

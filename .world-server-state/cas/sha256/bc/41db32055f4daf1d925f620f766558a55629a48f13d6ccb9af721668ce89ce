@@ -1,0 +1,74 @@
+{
+  "generatedAt": "2026-08-24T06:55:18.928Z",
+  "runnable": 0,
+  "total": 11,
+  "coveragePercent": 0,
+  "engines": {
+    "instantmesh": {
+      "available": false,
+      "location": null,
+      "reason": "repo env not configured",
+      "adapter": "services/ai3d-worker/ai3d/plugins/instantmesh.py"
+    },
+    "trellis2": {
+      "available": false,
+      "location": null,
+      "reason": "repo env not configured",
+      "adapter": "services/ai3d-worker/ai3d/plugins/trellis2.py"
+    },
+    "blender": {
+      "available": false,
+      "location": null,
+      "reason": "binary not detected",
+      "adapter": null
+    },
+    "godot": {
+      "available": false,
+      "location": null,
+      "reason": "binary not detected",
+      "adapter": null
+    },
+    "hunyuan3d": {
+      "available": false,
+      "location": null,
+      "reason": "branch may exist but no runtime endpoint",
+      "adapter": null
+    },
+    "mpfb": {
+      "available": false,
+      "location": null,
+      "reason": "addon not configured",
+      "adapter": null
+    },
+    "unirig": {
+      "available": false,
+      "location": null,
+      "reason": "repo env not configured",
+      "adapter": null
+    },
+    "rigify": {
+      "available": false,
+      "location": null,
+      "reason": "addon not configured",
+      "adapter": null
+    },
+    "goo-engine": {
+      "available": false,
+      "location": null,
+      "reason": "binary not detected",
+      "adapter": null
+    },
+    "upbge": {
+      "available": false,
+      "location": null,
+      "reason": "binary not detected",
+      "adapter": null
+    },
+    "gpu-router": {
+      "available": false,
+      "location": "AI3D_GPU_WORKERS_JSON",
+      "reason": "remote workers not configured",
+      "adapter": "services/ai3d-worker/ai3d/plugins/gpu_router.py"
+    }
+  }
+}

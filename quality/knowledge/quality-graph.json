@@ -1,0 +1,2863 @@
+{
+  "schemaVersion": 1,
+  "id": "WORLD_QUALITY_KNOWLEDGE_GRAPH_V8",
+  "nodes": [
+    {
+      "id": "rule:SRC-001",
+      "kind": "rule",
+      "title": "Immutable visual source"
+    },
+    {
+      "id": "rule:SRC-002",
+      "kind": "rule",
+      "title": "No automatic visual quality loss"
+    },
+    {
+      "id": "rule:PHY-001",
+      "kind": "rule",
+      "title": "Real collision topology"
+    },
+    {
+      "id": "rule:PHY-002",
+      "kind": "rule",
+      "title": "Safe spawn clearance"
+    },
+    {
+      "id": "rule:PHY-003",
+      "kind": "rule",
+      "title": "Vertical-only jump"
+    },
+    {
+      "id": "rule:PHY-004",
+      "kind": "rule",
+      "title": "Deterministic physics"
+    },
+    {
+      "id": "rule:PHY-005",
+      "kind": "rule",
+      "title": "Step and slope contract"
+    },
+    {
+      "id": "rule:CAM-001",
+      "kind": "rule",
+      "title": "No camera roll"
+    },
+    {
+      "id": "rule:CAM-002",
+      "kind": "rule",
+      "title": "Full vertical look"
+    },
+    {
+      "id": "rule:INP-001",
+      "kind": "rule",
+      "title": "Non-inverted planar movement"
+    },
+    {
+      "id": "rule:ACT-001",
+      "kind": "rule",
+      "title": "Feet define attack direction"
+    },
+    {
+      "id": "rule:ACT-002",
+      "kind": "rule",
+      "title": "Shield coverage contract"
+    },
+    {
+      "id": "rule:ACT-003",
+      "kind": "rule",
+      "title": "Weapon hand ownership"
+    },
+    {
+      "id": "rule:GFX-001",
+      "kind": "rule",
+      "title": "Geometry regression protection"
+    },
+    {
+      "id": "rule:GFX-002",
+      "kind": "rule",
+      "title": "Visual regression protection"
+    },
+    {
+      "id": "rule:GFX-003",
+      "kind": "rule",
+      "title": "PBR preservation"
+    },
+    {
+      "id": "rule:PERF-001",
+      "kind": "rule",
+      "title": "Performance floor"
+    },
+    {
+      "id": "rule:PERF-002",
+      "kind": "rule",
+      "title": "Non-destructive performance tuning"
+    },
+    {
+      "id": "rule:AUD-001",
+      "kind": "rule",
+      "title": "Repeated sound variation"
+    },
+    {
+      "id": "rule:QA-001",
+      "kind": "rule",
+      "title": "Known-error immunity"
+    },
+    {
+      "id": "rule:QA-002",
+      "kind": "rule",
+      "title": "Shared runtime only"
+    },
+    {
+      "id": "rule:QA-003",
+      "kind": "rule",
+      "title": "No quality-score regression"
+    },
+    {
+      "id": "rule:QA-004",
+      "kind": "rule",
+      "title": "Proven pattern propagation"
+    },
+    {
+      "id": "rule:QA-005",
+      "kind": "rule",
+      "title": "Deterministic fuzz replay"
+    },
+    {
+      "id": "rule:LGT-001",
+      "kind": "rule",
+      "title": "Non-destructive static lighting bake"
+    },
+    {
+      "id": "rule:GFX-004",
+      "kind": "rule",
+      "title": "Near-field maximum quality"
+    },
+    {
+      "id": "rule:GFX-005",
+      "kind": "rule",
+      "title": "Distance haze/fog optimization"
+    },
+    {
+      "id": "rule:MAT-002",
+      "kind": "rule",
+      "title": "Global subtle wet-surface art standard"
+    },
+    {
+      "id": "rule:QA-006",
+      "kind": "rule",
+      "title": "Protected errors may never recur"
+    },
+    {
+      "id": "rule:QA-007",
+      "kind": "rule",
+      "title": "Canary-first propagation"
+    },
+    {
+      "id": "rule:QA-008",
+      "kind": "rule",
+      "title": "Quality genome inheritance"
+    },
+    {
+      "id": "rule:GFX-006",
+      "kind": "rule",
+      "title": "Fog-occluded culling may not cause visible pop-in"
+    },
+    {
+      "id": "rule:MAT-003",
+      "kind": "rule",
+      "title": "Wet look covers all visible render paths"
+    },
+    {
+      "id": "rule:LGT-002",
+      "kind": "rule",
+      "title": "Every static mesh receives deterministic non-destructive baked response"
+    },
+    {
+      "id": "rule:QA-009",
+      "kind": "rule",
+      "title": "Failed builds never propagate"
+    },
+    {
+      "id": "rule:QA-010",
+      "kind": "rule",
+      "title": "Transactional canary rollout with automatic rollback"
+    },
+    {
+      "id": "rule:QA-011",
+      "kind": "rule",
+      "title": "Last-known-good quality state"
+    },
+    {
+      "id": "rule:QA-012",
+      "kind": "rule",
+      "title": "Unknown errors are quarantined"
+    },
+    {
+      "id": "rule:QA-013",
+      "kind": "rule",
+      "title": "Successful patterns require cross-project evidence"
+    },
+    {
+      "id": "rule:PHY-006",
+      "kind": "rule",
+      "title": "Dynamic environment remains source-safe"
+    },
+    {
+      "id": "rule:PERF-003",
+      "kind": "rule",
+      "title": "Near-field fidelity may never be traded for FPS"
+    },
+    {
+      "id": "rule:PERF-004",
+      "kind": "rule",
+      "title": "CPU work scales with distance, not visual source quality"
+    },
+    {
+      "id": "rule:PERF-005",
+      "kind": "rule",
+      "title": "Predictive nearest-first streaming"
+    },
+    {
+      "id": "rule:SRC-003",
+      "kind": "rule",
+      "title": "Native SPZ collision decode"
+    },
+    {
+      "id": "rule:GFX-007",
+      "kind": "rule",
+      "title": "Lossless GLB chunk face conservation"
+    },
+    {
+      "id": "rule:LGT-003",
+      "kind": "rule",
+      "title": "Non-destructive GLB UV lightmap bake"
+    },
+    {
+      "id": "rule:PHY-007",
+      "kind": "rule",
+      "title": "Moving-body side collision"
+    },
+    {
+      "id": "rule:QA-014",
+      "kind": "rule",
+      "title": "Compiled global protection pack"
+    },
+    {
+      "id": "rule:PERF-006",
+      "kind": "rule",
+      "title": "Near field bypasses GPU occlusion"
+    },
+    {
+      "id": "rule:PERF-007",
+      "kind": "rule",
+      "title": "Immutable SHA asset cache"
+    },
+    {
+      "id": "rule:PERF-008",
+      "kind": "rule",
+      "title": "Serialized BVH cache is geometry-bound"
+    },
+    {
+      "id": "rule:PERF-009",
+      "kind": "rule",
+      "title": "Worker decode must be fidelity-equivalent"
+    },
+    {
+      "id": "rule:PERF-010",
+      "kind": "rule",
+      "title": "Exact-only material deduplication"
+    },
+    {
+      "id": "rule:PERF-011",
+      "kind": "rule",
+      "title": "Lossless meshlet triangle conservation"
+    },
+    {
+      "id": "rule:PERF-012",
+      "kind": "rule",
+      "title": "Static reflection probes are one-shot and source-safe"
+    },
+    {
+      "id": "rule:NET-001",
+      "kind": "rule",
+      "title": "Distance interest never reduces near simulation fidelity"
+    },
+    {
+      "id": "rule:ANM-001",
+      "kind": "rule",
+      "title": "Distant pose sharing never touches near characters"
+    },
+    {
+      "id": "rule:PERF-013",
+      "kind": "rule",
+      "title": "Static shadow cache only when safe"
+    },
+    {
+      "id": "rule:QA-015",
+      "kind": "rule",
+      "title": "Optimization promotion requires quality non-regression"
+    },
+    {
+      "id": "rule:PERF-014",
+      "kind": "rule",
+      "title": "WebGPU HZB visibility is conservative and fail-visible"
+    },
+    {
+      "id": "rule:PERF-015",
+      "kind": "rule",
+      "title": "WASM SIMD fast path has bit/number-equivalent safe fallback"
+    },
+    {
+      "id": "rule:PERF-016",
+      "kind": "rule",
+      "title": "WebGPU indirect meshlets preserve source index ranges"
+    },
+    {
+      "id": "rule:LGT-004",
+      "kind": "rule",
+      "title": "Offline ray-traced GI companion is source locked"
+    },
+    {
+      "id": "rule:LGT-005",
+      "kind": "rule",
+      "title": "Offline reflection probes are source locked with runtime fallback"
+    },
+    {
+      "id": "rule:STR-001",
+      "kind": "rule",
+      "title": "Animated/skinned/morph GLB transport is byte-identical"
+    },
+    {
+      "id": "rule:PHY-008",
+      "kind": "rule",
+      "title": "Dynamic mesh collision uses continuous sweep when exact mesh is available"
+    },
+    {
+      "id": "rule:QA-016",
+      "kind": "rule",
+      "title": "Production error fingerprints are global across projects"
+    },
+    {
+      "id": "rule:QA-017",
+      "kind": "rule",
+      "title": "Production telemetry feeds quarantine automatically"
+    },
+    {
+      "id": "rule:QA-018",
+      "kind": "rule",
+      "title": "Known protected self-heal is strict and transactional"
+    },
+    {
+      "id": "rule:PERF-017",
+      "kind": "rule",
+      "title": "Source-equivalent WebGPU PBR renderer"
+    },
+    {
+      "id": "rule:PERF-018",
+      "kind": "rule",
+      "title": "Threaded WASM SIMD remains numerically equivalent"
+    },
+    {
+      "id": "rule:PERF-019",
+      "kind": "rule",
+      "title": "Parallel BVH prepass is exact"
+    },
+    {
+      "id": "rule:QA-019",
+      "kind": "rule",
+      "title": "Monotonic quality ratchet"
+    },
+    {
+      "id": "rule:QA-020",
+      "kind": "rule",
+      "title": "Unknown-code fixes execute in sandbox with proof"
+    },
+    {
+      "id": "rule:QA-021",
+      "kind": "rule",
+      "title": "Bake artifacts are content-addressed and source locked"
+    },
+    {
+      "id": "rule:QA-022",
+      "kind": "rule",
+      "title": "Representative real-device gate before global promotion"
+    },
+    {
+      "id": "rule:QA-023",
+      "kind": "rule",
+      "title": "Consumer drift is forbidden"
+    },
+    {
+      "id": "rule:QA-024",
+      "kind": "rule",
+      "title": "Durable cross-project evidence gates promotion"
+    },
+    {
+      "id": "rule:PERF-020",
+      "kind": "rule",
+      "title": "Shared-memory decode is zero-copy only when isolated and always has fidelity-safe fallback"
+    },
+    {
+      "id": "rule:PERF-021",
+      "kind": "rule",
+      "title": "WebGPU material table preserves exact source material semantics"
+    },
+    {
+      "id": "rule:LGT-006",
+      "kind": "rule",
+      "title": "Clustered lighting fails bright instead of dropping lights"
+    },
+    {
+      "id": "rule:PERF-022",
+      "kind": "rule",
+      "title": "Virtual texture residency pins full-resolution near pages"
+    },
+    {
+      "id": "rule:PERF-023",
+      "kind": "rule",
+      "title": "Portal visibility is conservative and fail-visible"
+    },
+    {
+      "id": "rule:ANM-002",
+      "kind": "rule",
+      "title": "Screen-space animation budgeting preserves near and interaction motion"
+    },
+    {
+      "id": "rule:PHY-009",
+      "kind": "rule",
+      "title": "Physics broadphase never sleeps near or player-contact bodies"
+    },
+    {
+      "id": "rule:NET-002",
+      "kind": "rule",
+      "title": "Network delta compression is lossless and local player authoritative"
+    },
+    {
+      "id": "rule:PERF-024",
+      "kind": "rule",
+      "title": "Per-device schedules may change only safe cost knobs"
+    },
+    {
+      "id": "rule:QA-025",
+      "kind": "rule",
+      "title": "Persistent derived artifact CAS is content-addressed and source locked"
+    },
+    {
+      "id": "rule:QA-026",
+      "kind": "rule",
+      "title": "Successful pattern propagation has an applicability firewall"
+    },
+    {
+      "id": "rule:PERF-025",
+      "kind": "rule",
+      "title": "Frame budget defers background work before visible quality"
+    },
+    {
+      "id": "rule:PERF-026",
+      "kind": "rule",
+      "title": "Stutter p99 and hitch counts are regression gates"
+    },
+    {
+      "id": "rule:PERF-027",
+      "kind": "rule",
+      "title": "CPU-first server contract"
+    },
+    {
+      "id": "rule:PERF-028",
+      "kind": "rule",
+      "title": "Incremental world compilation"
+    },
+    {
+      "id": "rule:PERF-029",
+      "kind": "rule",
+      "title": "Hierarchical CPU visibility"
+    },
+    {
+      "id": "rule:PERF-030",
+      "kind": "rule",
+      "title": "Predictive streaming V2"
+    },
+    {
+      "id": "rule:PERF-031",
+      "kind": "rule",
+      "title": "Simulation LOD preserves near behavior"
+    },
+    {
+      "id": "rule:PERF-032",
+      "kind": "rule",
+      "title": "CPU autotuner cannot select fidelity knobs"
+    },
+    {
+      "id": "rule:LGT-007",
+      "kind": "rule",
+      "title": "Incremental CPU light bake"
+    },
+    {
+      "id": "rule:QA-027",
+      "kind": "rule",
+      "title": "Production replay becomes permanent regression"
+    },
+    {
+      "id": "rule:QA-028",
+      "kind": "rule",
+      "title": "Nav/collision cache is source locked"
+    },
+    {
+      "id": "rule:QA-029",
+      "kind": "rule",
+      "title": "No-stop-until-green desktop protocol"
+    },
+    {
+      "id": "rule:PERF-033",
+      "kind": "rule",
+      "title": "All importer/BVH CPU fastpaths are threaded and exact"
+    },
+    {
+      "id": "rule:PERF-034",
+      "kind": "rule",
+      "title": "Huge assets use bounded-memory streamed parsing"
+    },
+    {
+      "id": "rule:PERF-035",
+      "kind": "rule",
+      "title": "Semantic PVS is conservative and fail-visible"
+    },
+    {
+      "id": "rule:LGT-008",
+      "kind": "rule",
+      "title": "Incremental GI reuses only hash-identical cells"
+    },
+    {
+      "id": "rule:STR-002",
+      "kind": "rule",
+      "title": "Content-defined chunks reconstruct source bytes exactly"
+    },
+    {
+      "id": "rule:PERF-036",
+      "kind": "rule",
+      "title": "Offline and multi-tab caches are SHA/version isolated"
+    },
+    {
+      "id": "rule:PERF-037",
+      "kind": "rule",
+      "title": "CPU flamegraph evidence precedes performance tuning"
+    },
+    {
+      "id": "rule:QA-030",
+      "kind": "rule",
+      "title": "Network and physics replay farm is deterministic"
+    },
+    {
+      "id": "rule:QA-031",
+      "kind": "rule",
+      "title": "Dependency impact graph is complete and fail-closed"
+    },
+    {
+      "id": "rule:QA-032",
+      "kind": "rule",
+      "title": "Derived-cache compression is lossless"
+    },
+    {
+      "id": "rule:QA-033",
+      "kind": "rule",
+      "title": "Binary delta reconstruction is exact"
+    },
+    {
+      "id": "incident:spawn-not-on-floor",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "hard-coded or unvalidated spawn transform"
+    },
+    {
+      "id": "test:spawn-grounded",
+      "kind": "test"
+    },
+    {
+      "id": "test:spawn-capsule-clearance",
+      "kind": "test"
+    },
+    {
+      "id": "incident:jump-moves-forward-instead-of-up",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "jump impulse applied in camera/local axis or camera rig moved instead of player body"
+    },
+    {
+      "id": "test:jump-world-y-only",
+      "kind": "test"
+    },
+    {
+      "id": "incident:camera-cannot-look-straight-up",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "pitch clamp too narrow or wrong Euler order"
+    },
+    {
+      "id": "test:pitch-plus-minus-89",
+      "kind": "test"
+    },
+    {
+      "id": "incident:camera-rolls-when-looking-left-right",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "yaw applied to wrong local axis / roll left unconstrained"
+    },
+    {
+      "id": "test:camera-roll-zero",
+      "kind": "test"
+    },
+    {
+      "id": "test:horizontal-look-yaw-only",
+      "kind": "test"
+    },
+    {
+      "id": "incident:world-became-blurry",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "asset decimation, texture downscale/recompression, low render resolution or wrong splat pipeline"
+    },
+    {
+      "id": "test:source-hash-lock",
+      "kind": "test"
+    },
+    {
+      "id": "test:geometry-stats-regression",
+      "kind": "test"
+    },
+    {
+      "id": "test:visual-golden-regression",
+      "kind": "test"
+    },
+    {
+      "id": "incident:splat-has-no-collision",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "Gaussian splats are visual primitives without triangle collision topology"
+    },
+    {
+      "id": "test:splat-proxy-required",
+      "kind": "test"
+    },
+    {
+      "id": "test:collider-raycast-floor",
+      "kind": "test"
+    },
+    {
+      "id": "incident:controls-inverted-or-world-rotates",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "movement vectors include pitch/roll or wrong sign/basis"
+    },
+    {
+      "id": "test:forward-planar-camera",
+      "kind": "test"
+    },
+    {
+      "id": "test:left-right-basis",
+      "kind": "test"
+    },
+    {
+      "id": "incident:fps-optimization-degraded-near-graphics",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "performance control changed visible source fidelity instead of reducing invisible/distant work"
+    },
+    {
+      "id": "test:near-fps-optimization-no-quality-loss",
+      "kind": "test"
+    },
+    {
+      "id": "test:near-field-max-quality",
+      "kind": "test"
+    },
+    {
+      "id": "incident:fixed-error-returned-in-another-project",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "fix was local or consumer did not inherit compiled protection pack"
+    },
+    {
+      "id": "test:protected-error-never-recur",
+      "kind": "test"
+    },
+    {
+      "id": "test:quality-genome-inheritance",
+      "kind": "test"
+    },
+    {
+      "id": "test:compiled-global-protection-pack",
+      "kind": "test"
+    },
+    {
+      "id": "incident:good-pattern-not-spread-to-all-projects",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "successful pattern was not promoted through quality genome and transactional rollout"
+    },
+    {
+      "id": "test:promoted-pattern-propagation",
+      "kind": "test"
+    },
+    {
+      "id": "test:canary-global-rollout",
+      "kind": "test"
+    },
+    {
+      "id": "test:cross-project-pattern-promotion",
+      "kind": "test"
+    },
+    {
+      "id": "incident:webgpu-occlusion-caused-popin-or-overcull",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "non-conservative HZB or missing near bypass/fail-visible behavior"
+    },
+    {
+      "id": "test:webgpu-hzb-conservative-fail-visible",
+      "kind": "test"
+    },
+    {
+      "id": "test:gpu-occlusion-near-bypass",
+      "kind": "test"
+    },
+    {
+      "id": "incident:simd-fast-path-changed-geometry",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "fast path numerical/byte mismatch"
+    },
+    {
+      "id": "test:wasm-simd-numerical-parity",
+      "kind": "test"
+    },
+    {
+      "id": "incident:animated-glb-streaming-broke-animation",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "animated GLB was structurally split or bytes were not conserved"
+    },
+    {
+      "id": "test:animated-glb-range-byte-conservation",
+      "kind": "test"
+    },
+    {
+      "id": "incident:dynamic-body-tunneling",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "discrete AABB-only dynamic collision missed relative motion"
+    },
+    {
+      "id": "test:dynamic-mesh-sweep-contract",
+      "kind": "test"
+    },
+    {
+      "id": "test:dynamic-moving-side-collision",
+      "kind": "test"
+    },
+    {
+      "id": "incident:production-error-fingerprint-project-local",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "fingerprint included project/world identity"
+    },
+    {
+      "id": "test:global-production-fingerprint",
+      "kind": "test"
+    },
+    {
+      "id": "incident:offline-bake-mismatched-source",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "derived bake was applied without source SHA lock"
+    },
+    {
+      "id": "test:offline-gi-source-lock",
+      "kind": "test"
+    },
+    {
+      "id": "test:offline-reflection-source-lock",
+      "kind": "test"
+    },
+    {
+      "id": "incident:protected-self-heal-broke-other-invariant",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "unbounded auto code patch without transactional proof"
+    },
+    {
+      "id": "test:transactional-protected-self-heal",
+      "kind": "test"
+    },
+    {
+      "id": "test:known-error-immunity",
+      "kind": "test"
+    },
+    {
+      "id": "incident:webgpu-pbr-fastpath-lost-source-material-semantics",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "fast renderer became authoritative before source-equivalent material and golden parity proof"
+    },
+    {
+      "id": "test:webgpu-pbr-source-equivalence",
+      "kind": "test"
+    },
+    {
+      "id": "incident:threaded-simd-decode-race-or-corruption",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "threaded fast path lacked deterministic chunk ordering/numerical parity"
+    },
+    {
+      "id": "test:wasm-simd-threaded-parity",
+      "kind": "test"
+    },
+    {
+      "id": "incident:quality-floor-regressed-after-optimization",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "quality history was advisory instead of a monotonic release floor"
+    },
+    {
+      "id": "test:monotonic-quality-ratchet",
+      "kind": "test"
+    },
+    {
+      "id": "test:optimization-promotion-quality-nonregression",
+      "kind": "test"
+    },
+    {
+      "id": "incident:stale-bake-cache-applied-to-new-source",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "derived artifact cache was not keyed by source SHA/tool SHA/parameters"
+    },
+    {
+      "id": "test:content-addressed-bake-cache",
+      "kind": "test"
+    },
+    {
+      "id": "incident:consumer-drift-missed-global-fix",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "consumer runtime/protection hash drift was not release-blocking"
+    },
+    {
+      "id": "test:consumer-drift-audit",
+      "kind": "test"
+    },
+    {
+      "id": "incident:shared-memory-fastpath-broke-on-nonisolated-deploy",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "Shared memory fast path lacked cross-origin isolation capability gate/fallback"
+    },
+    {
+      "id": "test:shared-memory-zero-copy-fallback",
+      "kind": "test"
+    },
+    {
+      "id": "incident:material-table-fastpath-changed-material",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "material table repacked or omitted exact source semantics/textures"
+    },
+    {
+      "id": "test:webgpu-exact-material-table",
+      "kind": "test"
+    },
+    {
+      "id": "incident:clustered-lighting-dropped-visible-light",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "cluster overflow discarded relevant light instead of falling back"
+    },
+    {
+      "id": "test:clustered-lighting-fail-bright",
+      "kind": "test"
+    },
+    {
+      "id": "incident:virtual-texture-evicted-near-detail",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "near full-resolution texture page was evicted or replaced with lower-resolution data"
+    },
+    {
+      "id": "test:virtual-texture-near-full-resolution",
+      "kind": "test"
+    },
+    {
+      "id": "incident:portal-overcull-visible-room",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "portal system hid unknown/near room without conservative semantic proof"
+    },
+    {
+      "id": "test:portal-visibility-conservative",
+      "kind": "test"
+    },
+    {
+      "id": "incident:animation-budget-stuttered-near-character",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "screen-space animation budget throttled near/interaction rig or discarded accumulated time"
+    },
+    {
+      "id": "test:animation-budget-near-interaction-full-rate",
+      "kind": "test"
+    },
+    {
+      "id": "incident:physics-sleep-disabled-player-contact",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "broadphase sleeping applied to near or player-contact body"
+    },
+    {
+      "id": "test:physics-broadphase-near-contact-awake",
+      "kind": "test"
+    },
+    {
+      "id": "incident:network-compression-changed-local-state",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "network optimizer quantized or approximated local/near authoritative state"
+    },
+    {
+      "id": "test:network-delta-lossless",
+      "kind": "test"
+    },
+    {
+      "id": "incident:device-learning-lowered-graphics",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "learned schedule changed fidelity knob instead of scheduling cost"
+    },
+    {
+      "id": "test:device-schedule-safe-knobs-only",
+      "kind": "test"
+    },
+    {
+      "id": "incident:derived-cache-hash-mismatch",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "persistent cache object was not verified by content hash/source lock"
+    },
+    {
+      "id": "test:derived-artifact-cas-source-lock",
+      "kind": "test"
+    },
+    {
+      "id": "incident:good-pattern-propagated-to-incompatible-project",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "successful pattern was spread without applicability/capability evidence"
+    },
+    {
+      "id": "test:pattern-applicability-firewall",
+      "kind": "test"
+    },
+    {
+      "id": "incident:frame-budget-sacrificed-near-quality",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "scheduler deferred near-critical work or touched fidelity knobs"
+    },
+    {
+      "id": "test:frame-budget-near-critical",
+      "kind": "test"
+    },
+    {
+      "id": "incident:p99-stutter-regressed-after-fps-optimization",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "optimization considered mean FPS only and ignored p99/hitch regression"
+    },
+    {
+      "id": "test:stutter-p99-regression",
+      "kind": "test"
+    },
+    {
+      "id": "incident:full-world-rebuild-after-single-object-change",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "compiler had no content dependency graph"
+    },
+    {
+      "id": "test:incremental-world-compiler-affected-only",
+      "kind": "test"
+    },
+    {
+      "id": "incident:cpu-optimization-reduced-near-graphics",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "optimizer touched fidelity instead of computation cadence/cache"
+    },
+    {
+      "id": "test:cpu-first-no-paid-gpu",
+      "kind": "test"
+    },
+    {
+      "id": "test:cpu-autotuner-safe-knobs",
+      "kind": "test"
+    },
+    {
+      "id": "incident:pvs-overculled-near-visible-object",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "visibility fastpath was not conservative/fail-visible"
+    },
+    {
+      "id": "test:cpu-pvs-near-fail-visible",
+      "kind": "test"
+    },
+    {
+      "id": "incident:autotuner-selected-lossy-knob",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "optimizer search space included fidelity knobs"
+    },
+    {
+      "id": "incident:replay-bug-was-not-promoted-to-regression",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "production repro was not persisted as mandatory replay"
+    },
+    {
+      "id": "test:production-replay-permanent",
+      "kind": "test"
+    },
+    {
+      "id": "incident:cached-nav-collision-used-for-wrong-source",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "cache key omitted source SHA/parameters"
+    },
+    {
+      "id": "test:nav-collision-cache-source-lock",
+      "kind": "test"
+    },
+    {
+      "id": "incident:background-bake-starved-game-loop",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "background CPU work was not budgeted/incremental"
+    },
+    {
+      "id": "test:incremental-cpu-light-bake",
+      "kind": "test"
+    },
+    {
+      "id": "incident:server-required-paid-gpu",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "server path depended on GPU-only work instead of CPU/cache/client split"
+    },
+    {
+      "id": "incident:threaded-importer-race-corrupted-asset",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "concurrent decode/write lacked deterministic exact parity"
+    },
+    {
+      "id": "test:threaded-importer-exact-parity",
+      "kind": "test"
+    },
+    {
+      "id": "incident:huge-world-parser-loaded-whole-file-oom",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "parser materialized whole source instead of bounded windows"
+    },
+    {
+      "id": "test:mmap-stream-bounded-memory",
+      "kind": "test"
+    },
+    {
+      "id": "incident:semantic-pvs-overculled-unknown-space",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "PVS treated uncertain semantic membership as invisible"
+    },
+    {
+      "id": "test:semantic-pvs-fail-visible",
+      "kind": "test"
+    },
+    {
+      "id": "incident:incremental-gi-reused-dirty-cell",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "GI cache reused cell without exact input hash parity"
+    },
+    {
+      "id": "test:incremental-gi-cell-hash-reuse",
+      "kind": "test"
+    },
+    {
+      "id": "incident:content-defined-chunking-changed-bytes",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "CDC implementation was not byte-conservative"
+    },
+    {
+      "id": "test:content-defined-chunk-byte-reconstruction",
+      "kind": "test"
+    },
+    {
+      "id": "incident:offline-cache-served-wrong-sha",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "service worker cache was not version/SHA isolated"
+    },
+    {
+      "id": "test:offline-sha-cache-version-isolation",
+      "kind": "test"
+    },
+    {
+      "id": "incident:shared-worker-cache-cross-version-stale",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "multi-tab cache key omitted runtime version or SHA"
+    },
+    {
+      "id": "test:shared-worker-cache-sha-isolation",
+      "kind": "test"
+    },
+    {
+      "id": "incident:cpu-tuning-without-causality-evidence",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "tuning occurred without profiler/flamegraph evidence"
+    },
+    {
+      "id": "test:cpu-flamegraph-evidence",
+      "kind": "test"
+    },
+    {
+      "id": "incident:replay-farm-nondeterministic-network-physics",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "network/physics scheduling used nondeterministic state"
+    },
+    {
+      "id": "test:network-physics-replay-farm-determinism",
+      "kind": "test"
+    },
+    {
+      "id": "incident:dependency-impact-missed-required-rebuild",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "dependency graph failed to propagate change impact"
+    },
+    {
+      "id": "test:dependency-impact-graph-complete",
+      "kind": "test"
+    },
+    {
+      "id": "incident:derived-cache-compression-changed-bytes",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "transport codec parity was not SHA-verified"
+    },
+    {
+      "id": "test:derived-cache-codec-lossless",
+      "kind": "test"
+    },
+    {
+      "id": "incident:binary-delta-reconstruction-mismatch",
+      "kind": "incident",
+      "status": "protected",
+      "rootCause": "delta patch lacked exact reconstruction verification"
+    },
+    {
+      "id": "test:binary-delta-exact-reconstruction",
+      "kind": "test"
+    },
+    {
+      "id": "pattern:PAT-001",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Shared player runtime"
+    },
+    {
+      "id": "pattern:PAT-002",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Source SHA lock"
+    },
+    {
+      "id": "pattern:PAT-003",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "BVH capsule collision"
+    },
+    {
+      "id": "pattern:PAT-004",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Safe-spawn raycast plus capsule clearance"
+    },
+    {
+      "id": "pattern:PAT-005",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Fixed-step physics"
+    },
+    {
+      "id": "pattern:PAT-006",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Fail-closed predeploy gate"
+    },
+    {
+      "id": "pattern:PAT-007",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Baked static lighting without source rewrite"
+    },
+    {
+      "id": "pattern:PAT-008",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Near-max quality plus fog-concealed far field"
+    },
+    {
+      "id": "pattern:PAT-009",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Global subtle wet-surface response"
+    },
+    {
+      "id": "pattern:PAT-010",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Transactional canary propagation with rollback"
+    },
+    {
+      "id": "pattern:PAT-011",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Unknown-error quarantine"
+    },
+    {
+      "id": "pattern:PAT-012",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Last-known-good quality hash"
+    },
+    {
+      "id": "pattern:PAT-013",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "SHA-verified immutable asset caching"
+    },
+    {
+      "id": "pattern:PAT-014",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Serialized geometry-bound BVH cache"
+    },
+    {
+      "id": "pattern:PAT-015",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Safe GPU occlusion with near-field bypass"
+    },
+    {
+      "id": "pattern:PAT-016",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Exact material deduplication"
+    },
+    {
+      "id": "pattern:PAT-017",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "One-shot static reflection probes"
+    },
+    {
+      "id": "pattern:PAT-018",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Worker mesh decode with fail-safe fallback"
+    },
+    {
+      "id": "pattern:PAT-019",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Cross-project optimization promotion only with zero quality regression"
+    },
+    {
+      "id": "pattern:PAT-020",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Conservative WebGPU HZB with fail-visible fallback"
+    },
+    {
+      "id": "pattern:PAT-021",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "WASM SIMD decode with numerical parity guard"
+    },
+    {
+      "id": "pattern:PAT-022",
+      "kind": "pattern",
+      "state": "mandatory-scoped",
+      "name": "Source-locked offline GI and reflection companions"
+    },
+    {
+      "id": "pattern:PAT-023",
+      "kind": "pattern",
+      "state": "mandatory-scoped",
+      "name": "Byte-identical animated GLB range transport"
+    },
+    {
+      "id": "pattern:PAT-024",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Global production fingerprint and quarantine loop"
+    },
+    {
+      "id": "pattern:PAT-025",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Strict transactional protected self-heal"
+    },
+    {
+      "id": "pattern:PAT-026",
+      "kind": "pattern",
+      "state": "mandatory-when-webgpu-parity-proven",
+      "name": "Source-equivalent WebGPU PBR with proven-renderer fallback"
+    },
+    {
+      "id": "pattern:PAT-027",
+      "kind": "pattern",
+      "state": "mandatory-when-workers-available",
+      "name": "Threaded deterministic WASM SIMD decode"
+    },
+    {
+      "id": "pattern:PAT-028",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Monotonic global quality ratchet"
+    },
+    {
+      "id": "pattern:PAT-029",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Content-addressed distributed bake artifacts"
+    },
+    {
+      "id": "pattern:PAT-030",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Representative canary + device matrix before propagation"
+    },
+    {
+      "id": "pattern:PAT-031",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Sandboxed unknown-fix proof loop"
+    },
+    {
+      "id": "pattern:PAT-032",
+      "kind": "pattern",
+      "state": "mandatory-when-isolated",
+      "name": "Shared-memory zero-copy decode with safe fallback"
+    },
+    {
+      "id": "pattern:PAT-033",
+      "kind": "pattern",
+      "state": "mandatory-scoped",
+      "name": "Full-resolution virtual texture residency"
+    },
+    {
+      "id": "pattern:PAT-034",
+      "kind": "pattern",
+      "state": "mandatory-scoped",
+      "name": "Conservative portal/room visibility"
+    },
+    {
+      "id": "pattern:PAT-035",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Lossless network delta state"
+    },
+    {
+      "id": "pattern:PAT-036",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Ratchet-approved device schedules"
+    },
+    {
+      "id": "pattern:PAT-037",
+      "kind": "pattern",
+      "state": "mandatory",
+      "name": "Pattern applicability firewall"
+    },
+    {
+      "id": "trait:safe-spawn",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "proven-regression-protection"
+    },
+    {
+      "id": "trait:vertical-jump",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "proven-regression-protection"
+    },
+    {
+      "id": "trait:zero-camera-roll",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "proven-regression-protection"
+    },
+    {
+      "id": "trait:source-locked-visuals",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "proven-regression-protection"
+    },
+    {
+      "id": "trait:auto-collision",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "proven-ingest-pattern"
+    },
+    {
+      "id": "trait:near-field-max-quality",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v3-performance-standard"
+    },
+    {
+      "id": "trait:distance-atmosphere",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v3-performance-standard"
+    },
+    {
+      "id": "trait:subtle-wet-surface-look",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "global-art-standard"
+    },
+    {
+      "id": "trait:static-light-bake-companion",
+      "kind": "quality-trait",
+      "state": "mandatory-for-supported-static-meshes",
+      "source": "v3-lighting-standard"
+    },
+    {
+      "id": "trait:protected-error-never-recur",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v3-error-immunity"
+    },
+    {
+      "id": "trait:canary-first-cross-project-rollout",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v3-propagation-standard"
+    },
+    {
+      "id": "trait:fog-occluded-lossless-culling",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v3.1-performance-standard"
+    },
+    {
+      "id": "trait:wet-post-fallback-all-renderers",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v3.1-art-standard"
+    },
+    {
+      "id": "trait:failed-build-never-propagates",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v3.1-release-safety"
+    },
+    {
+      "id": "trait:automatic-rollback-on-rollout-failure",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v3.1-propagation-safety"
+    },
+    {
+      "id": "trait:last-known-good-pack-runtime-hash",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v3.1-recovery-standard"
+    },
+    {
+      "id": "trait:unknown-error-quarantine",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v3.1-error-immunity"
+    },
+    {
+      "id": "trait:cross-project-evidence-before-promotion",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v3.1-quality-learning"
+    },
+    {
+      "id": "trait:shared-dynamic-environment-runtime",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v3.1-physics-standard"
+    },
+    {
+      "id": "trait:near-field-lossless-fps-optimization",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v4-performance-standard"
+    },
+    {
+      "id": "trait:predictive-nearest-first-streaming",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v4-performance-standard"
+    },
+    {
+      "id": "trait:adaptive-distant-nonphysics-ticks",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v4-performance-standard"
+    },
+    {
+      "id": "trait:native-spz-collision-decoder",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v4-ingest-standard"
+    },
+    {
+      "id": "trait:lossless-glb-spatial-chunking-when-compatible",
+      "kind": "quality-trait",
+      "state": "mandatory-for-compatible-static-glb",
+      "source": "v4-streaming-standard"
+    },
+    {
+      "id": "trait:uv-lightmap-companion-with-safe-fallback",
+      "kind": "quality-trait",
+      "state": "mandatory-for-compatible-static-glb",
+      "source": "v4-lighting-standard"
+    },
+    {
+      "id": "trait:moving-body-side-collision",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v4-physics-standard"
+    },
+    {
+      "id": "trait:compiled-protection-pack-same-hash-all-projects",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v4-error-immunity"
+    },
+    {
+      "id": "trait:immutable-sha-asset-cache",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v6-loading-performance-standard"
+    },
+    {
+      "id": "trait:serialized-bvh-cache",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v6-physics-startup-standard"
+    },
+    {
+      "id": "trait:worker-ply-decode-safe-fallback",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v6-loading-performance-standard"
+    },
+    {
+      "id": "trait:exact-material-deduplication",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v6-draw-memory-standard"
+    },
+    {
+      "id": "trait:static-world-reflection-probe",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v6-lighting-quality-standard"
+    },
+    {
+      "id": "trait:gpu-occlusion-near-bypass",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v6-gpu-visibility-standard"
+    },
+    {
+      "id": "trait:lossless-meshlet-metadata",
+      "kind": "quality-trait",
+      "state": "mandatory-for-compatible-meshes",
+      "source": "v6-gpu-driven-preparation"
+    },
+    {
+      "id": "trait:network-interest-management",
+      "kind": "quality-trait",
+      "state": "mandatory-for-multiplayer",
+      "source": "v6-network-performance-standard"
+    },
+    {
+      "id": "trait:distant-pose-sharing-safe-radius",
+      "kind": "quality-trait",
+      "state": "mandatory-for-crowd-projects",
+      "source": "v6-animation-performance-standard"
+    },
+    {
+      "id": "trait:static-shadow-cache-only-when-no-dynamic-casters",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v6-shadow-performance-standard"
+    },
+    {
+      "id": "trait:optimization-promotion-zero-quality-regression",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v6-learning-standard"
+    },
+    {
+      "id": "trait:webgpu-hzb-conservative-visibility",
+      "kind": "quality-trait",
+      "state": "mandatory-when-webgpu-available",
+      "source": "v6-gpu-visibility-standard"
+    },
+    {
+      "id": "trait:wasm-simd-safe-fastpath",
+      "kind": "quality-trait",
+      "state": "mandatory-when-simd-available",
+      "source": "v6-decode-performance-standard"
+    },
+    {
+      "id": "trait:webgpu-lossless-meshlet-indirect",
+      "kind": "quality-trait",
+      "state": "mandatory-for-compatible-webgpu-meshes",
+      "source": "v6-draw-performance-standard"
+    },
+    {
+      "id": "trait:offline-raytraced-gi-companion",
+      "kind": "quality-trait",
+      "state": "mandatory-for-supported-static-meshes",
+      "source": "v6-lighting-quality-standard"
+    },
+    {
+      "id": "trait:offline-source-locked-reflection-probes",
+      "kind": "quality-trait",
+      "state": "mandatory-for-supported-static-worlds",
+      "source": "v6-reflection-quality-standard"
+    },
+    {
+      "id": "trait:animated-glb-byte-identical-range-streaming",
+      "kind": "quality-trait",
+      "state": "mandatory-for-large-animated-glb",
+      "source": "v6-streaming-standard"
+    },
+    {
+      "id": "trait:swept-dynamic-mesh-collision",
+      "kind": "quality-trait",
+      "state": "mandatory-for-moving-meshes",
+      "source": "v6-physics-standard"
+    },
+    {
+      "id": "trait:global-cross-project-production-fingerprints",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v6-error-immunity-standard"
+    },
+    {
+      "id": "trait:production-telemetry-to-quarantine",
+      "kind": "quality-trait",
+      "state": "mandatory-when-telemetry-connected",
+      "source": "v6-learning-standard"
+    },
+    {
+      "id": "trait:transactional-known-antipattern-self-heal",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v6-learning-standard"
+    },
+    {
+      "id": "trait:source-equivalent-webgpu-pbr",
+      "kind": "quality-trait",
+      "state": "mandatory-when-parity-proven",
+      "source": "v7-render-standard"
+    },
+    {
+      "id": "trait:threaded-wasm-simd-deterministic",
+      "kind": "quality-trait",
+      "state": "mandatory-when-workers-available",
+      "source": "v7-cpu-performance"
+    },
+    {
+      "id": "trait:parallel-exact-bvh-prepass",
+      "kind": "quality-trait",
+      "state": "mandatory-for-large-meshes",
+      "source": "v7-cpu-performance"
+    },
+    {
+      "id": "trait:monotonic-quality-ratchet",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v7-learning"
+    },
+    {
+      "id": "trait:content-addressed-bake-farm",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v7-build-automation"
+    },
+    {
+      "id": "trait:representative-device-canary",
+      "kind": "quality-trait",
+      "state": "mandatory-before-global-renderer-promotion",
+      "source": "v7-rollout"
+    },
+    {
+      "id": "trait:sandboxed-unknown-fix-proof",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v7-error-immunity"
+    },
+    {
+      "id": "trait:consumer-drift-release-block",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v7-cross-project-propagation"
+    },
+    {
+      "id": "trait:shared-memory-zero-copy-with-fidelity-fallback",
+      "kind": "quality-trait",
+      "state": "mandatory-when-isolated",
+      "source": "v8-cpu-performance"
+    },
+    {
+      "id": "trait:exact-webgpu-material-table",
+      "kind": "quality-trait",
+      "state": "mandatory-when-webgpu",
+      "source": "v8-gpu-performance"
+    },
+    {
+      "id": "trait:clustered-lighting-fail-bright",
+      "kind": "quality-trait",
+      "state": "mandatory-for-dense-lights",
+      "source": "v8-lighting-performance"
+    },
+    {
+      "id": "trait:full-resolution-virtual-texture-residency",
+      "kind": "quality-trait",
+      "state": "mandatory-for-tiled-textures",
+      "source": "v8-texture-performance"
+    },
+    {
+      "id": "trait:conservative-portal-visibility",
+      "kind": "quality-trait",
+      "state": "mandatory-for-tagged-interiors",
+      "source": "v8-visibility"
+    },
+    {
+      "id": "trait:near-interaction-animation-full-rate",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v8-animation"
+    },
+    {
+      "id": "trait:safe-spatial-physics-sleep",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v8-physics"
+    },
+    {
+      "id": "trait:lossless-network-delta",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v8-network"
+    },
+    {
+      "id": "trait:ratchet-approved-device-schedules",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v8-autotuning"
+    },
+    {
+      "id": "trait:content-addressed-derived-artifact-cas",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v8-build-cache"
+    },
+    {
+      "id": "trait:pattern-applicability-firewall",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v8-learning"
+    },
+    {
+      "id": "trait:stutter-p99-ratchet",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v8-performance-quality"
+    },
+    {
+      "id": "trait:cpu-first-no-paid-server-gpu",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v9-cpu-architecture"
+    },
+    {
+      "id": "trait:incremental-world-compiler",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v9-build"
+    },
+    {
+      "id": "trait:cpu-pvs-hierarchical-visibility",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v9-visibility"
+    },
+    {
+      "id": "trait:predictive-streaming-v2",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v9-streaming"
+    },
+    {
+      "id": "trait:incremental-cpu-light-bake",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v9-lighting"
+    },
+    {
+      "id": "trait:nav-collision-source-hash-cache",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v9-cache"
+    },
+    {
+      "id": "trait:near-exact-simulation-lod",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v9-runtime"
+    },
+    {
+      "id": "trait:production-deterministic-replay",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v9-error-immunity"
+    },
+    {
+      "id": "trait:quality-safe-cpu-autotuner",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v9-autotune"
+    },
+    {
+      "id": "trait:no-stop-until-required-gates-green",
+      "kind": "quality-trait",
+      "state": "mandatory-desktop-ai",
+      "source": "v9-desktop-protocol"
+    },
+    {
+      "id": "trait:threaded-exact-import-pool",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v10-cpu-import-standard"
+    },
+    {
+      "id": "trait:bounded-memory-huge-world-parser",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v10-memory-standard"
+    },
+    {
+      "id": "trait:semantic-conservative-pvs",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v10-visibility-standard"
+    },
+    {
+      "id": "trait:incremental-gi-cell-reuse",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v10-lighting-standard"
+    },
+    {
+      "id": "trait:content-defined-lossless-chunks",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v10-cache-standard"
+    },
+    {
+      "id": "trait:versioned-offline-sha-cache",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v10-offline-standard"
+    },
+    {
+      "id": "trait:multi-tab-sha-cache",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v10-cache-standard"
+    },
+    {
+      "id": "trait:automatic-cpu-flamegraph-evidence",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v10-performance-learning"
+    },
+    {
+      "id": "trait:deterministic-network-physics-replay-farm",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v10-regression-standard"
+    },
+    {
+      "id": "trait:dependency-impact-graph",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v10-incremental-build-standard"
+    },
+    {
+      "id": "trait:lossless-derived-cache-codec",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v10-cache-standard"
+    },
+    {
+      "id": "trait:exact-derived-binary-delta",
+      "kind": "quality-trait",
+      "state": "mandatory",
+      "source": "v10-cache-standard"
+    },
+    {
+      "id": "genome:global",
+      "kind": "quality-genome",
+      "idValue": "WORLD_QUALITY_GENOME_V10"
+    }
+  ],
+  "edges": [
+    {
+      "from": "incident:spawn-not-on-floor",
+      "to": "rule:PHY-002",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:spawn-not-on-floor",
+      "to": "test:spawn-grounded",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:spawn-not-on-floor",
+      "to": "test:spawn-capsule-clearance",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:jump-moves-forward-instead-of-up",
+      "to": "rule:PHY-003",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:jump-moves-forward-instead-of-up",
+      "to": "test:jump-world-y-only",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:camera-cannot-look-straight-up",
+      "to": "rule:CAM-002",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:camera-cannot-look-straight-up",
+      "to": "test:pitch-plus-minus-89",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:camera-rolls-when-looking-left-right",
+      "to": "rule:CAM-001",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:camera-rolls-when-looking-left-right",
+      "to": "rule:INP-001",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:camera-rolls-when-looking-left-right",
+      "to": "test:camera-roll-zero",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:camera-rolls-when-looking-left-right",
+      "to": "test:horizontal-look-yaw-only",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:world-became-blurry",
+      "to": "rule:SRC-001",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:world-became-blurry",
+      "to": "rule:SRC-002",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:world-became-blurry",
+      "to": "rule:GFX-001",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:world-became-blurry",
+      "to": "rule:GFX-002",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:world-became-blurry",
+      "to": "rule:PERF-002",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:world-became-blurry",
+      "to": "test:source-hash-lock",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:world-became-blurry",
+      "to": "test:geometry-stats-regression",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:world-became-blurry",
+      "to": "test:visual-golden-regression",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:splat-has-no-collision",
+      "to": "rule:PHY-001",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:splat-has-no-collision",
+      "to": "test:splat-proxy-required",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:splat-has-no-collision",
+      "to": "test:collider-raycast-floor",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:controls-inverted-or-world-rotates",
+      "to": "rule:INP-001",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:controls-inverted-or-world-rotates",
+      "to": "rule:CAM-001",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:controls-inverted-or-world-rotates",
+      "to": "test:forward-planar-camera",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:controls-inverted-or-world-rotates",
+      "to": "test:left-right-basis",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:fps-optimization-degraded-near-graphics",
+      "to": "rule:SRC-002",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:fps-optimization-degraded-near-graphics",
+      "to": "rule:PERF-002",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:fps-optimization-degraded-near-graphics",
+      "to": "rule:PERF-003",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:fps-optimization-degraded-near-graphics",
+      "to": "rule:PERF-004",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:fps-optimization-degraded-near-graphics",
+      "to": "test:source-hash-lock",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:fps-optimization-degraded-near-graphics",
+      "to": "test:near-fps-optimization-no-quality-loss",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:fps-optimization-degraded-near-graphics",
+      "to": "test:near-field-max-quality",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:fixed-error-returned-in-another-project",
+      "to": "rule:QA-006",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:fixed-error-returned-in-another-project",
+      "to": "rule:QA-008",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:fixed-error-returned-in-another-project",
+      "to": "rule:QA-014",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:fixed-error-returned-in-another-project",
+      "to": "test:protected-error-never-recur",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:fixed-error-returned-in-another-project",
+      "to": "test:quality-genome-inheritance",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:fixed-error-returned-in-another-project",
+      "to": "test:compiled-global-protection-pack",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:good-pattern-not-spread-to-all-projects",
+      "to": "rule:QA-004",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:good-pattern-not-spread-to-all-projects",
+      "to": "rule:QA-007",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:good-pattern-not-spread-to-all-projects",
+      "to": "rule:QA-013",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:good-pattern-not-spread-to-all-projects",
+      "to": "rule:QA-014",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:good-pattern-not-spread-to-all-projects",
+      "to": "test:promoted-pattern-propagation",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:good-pattern-not-spread-to-all-projects",
+      "to": "test:canary-global-rollout",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:good-pattern-not-spread-to-all-projects",
+      "to": "test:cross-project-pattern-promotion",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:good-pattern-not-spread-to-all-projects",
+      "to": "test:compiled-global-protection-pack",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:webgpu-occlusion-caused-popin-or-overcull",
+      "to": "rule:PERF-014",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:webgpu-occlusion-caused-popin-or-overcull",
+      "to": "rule:PERF-006",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:webgpu-occlusion-caused-popin-or-overcull",
+      "to": "test:webgpu-hzb-conservative-fail-visible",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:webgpu-occlusion-caused-popin-or-overcull",
+      "to": "test:gpu-occlusion-near-bypass",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:simd-fast-path-changed-geometry",
+      "to": "rule:PERF-015",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:simd-fast-path-changed-geometry",
+      "to": "rule:SRC-001",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:simd-fast-path-changed-geometry",
+      "to": "test:wasm-simd-numerical-parity",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:simd-fast-path-changed-geometry",
+      "to": "test:source-hash-lock",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:animated-glb-streaming-broke-animation",
+      "to": "rule:STR-001",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:animated-glb-streaming-broke-animation",
+      "to": "rule:SRC-001",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:animated-glb-streaming-broke-animation",
+      "to": "test:animated-glb-range-byte-conservation",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:animated-glb-streaming-broke-animation",
+      "to": "test:source-hash-lock",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:dynamic-body-tunneling",
+      "to": "rule:PHY-008",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:dynamic-body-tunneling",
+      "to": "rule:PHY-006",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:dynamic-body-tunneling",
+      "to": "test:dynamic-mesh-sweep-contract",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:dynamic-body-tunneling",
+      "to": "test:dynamic-moving-side-collision",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:production-error-fingerprint-project-local",
+      "to": "rule:QA-016",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:production-error-fingerprint-project-local",
+      "to": "rule:QA-006",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:production-error-fingerprint-project-local",
+      "to": "test:global-production-fingerprint",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:production-error-fingerprint-project-local",
+      "to": "test:protected-error-never-recur",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:offline-bake-mismatched-source",
+      "to": "rule:LGT-004",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:offline-bake-mismatched-source",
+      "to": "rule:LGT-005",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:offline-bake-mismatched-source",
+      "to": "test:offline-gi-source-lock",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:offline-bake-mismatched-source",
+      "to": "test:offline-reflection-source-lock",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:protected-self-heal-broke-other-invariant",
+      "to": "rule:QA-018",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:protected-self-heal-broke-other-invariant",
+      "to": "rule:QA-001",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:protected-self-heal-broke-other-invariant",
+      "to": "test:transactional-protected-self-heal",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:protected-self-heal-broke-other-invariant",
+      "to": "test:known-error-immunity",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:webgpu-pbr-fastpath-lost-source-material-semantics",
+      "to": "rule:PERF-017",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:webgpu-pbr-fastpath-lost-source-material-semantics",
+      "to": "rule:GFX-002",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:webgpu-pbr-fastpath-lost-source-material-semantics",
+      "to": "test:webgpu-pbr-source-equivalence",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:webgpu-pbr-fastpath-lost-source-material-semantics",
+      "to": "test:visual-golden-regression",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:threaded-simd-decode-race-or-corruption",
+      "to": "rule:PERF-018",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:threaded-simd-decode-race-or-corruption",
+      "to": "rule:PERF-015",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:threaded-simd-decode-race-or-corruption",
+      "to": "test:wasm-simd-threaded-parity",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:threaded-simd-decode-race-or-corruption",
+      "to": "test:wasm-simd-numerical-parity",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:quality-floor-regressed-after-optimization",
+      "to": "rule:QA-019",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:quality-floor-regressed-after-optimization",
+      "to": "rule:QA-003",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:quality-floor-regressed-after-optimization",
+      "to": "test:monotonic-quality-ratchet",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:quality-floor-regressed-after-optimization",
+      "to": "test:optimization-promotion-quality-nonregression",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:stale-bake-cache-applied-to-new-source",
+      "to": "rule:QA-021",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:stale-bake-cache-applied-to-new-source",
+      "to": "rule:LGT-004",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:stale-bake-cache-applied-to-new-source",
+      "to": "rule:LGT-005",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:stale-bake-cache-applied-to-new-source",
+      "to": "test:content-addressed-bake-cache",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:stale-bake-cache-applied-to-new-source",
+      "to": "test:offline-gi-source-lock",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:stale-bake-cache-applied-to-new-source",
+      "to": "test:offline-reflection-source-lock",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:consumer-drift-missed-global-fix",
+      "to": "rule:QA-023",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:consumer-drift-missed-global-fix",
+      "to": "rule:QA-008",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:consumer-drift-missed-global-fix",
+      "to": "rule:QA-014",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:consumer-drift-missed-global-fix",
+      "to": "test:consumer-drift-audit",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:consumer-drift-missed-global-fix",
+      "to": "test:quality-genome-inheritance",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:consumer-drift-missed-global-fix",
+      "to": "test:compiled-global-protection-pack",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:shared-memory-fastpath-broke-on-nonisolated-deploy",
+      "to": "rule:PERF-020",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:shared-memory-fastpath-broke-on-nonisolated-deploy",
+      "to": "test:shared-memory-zero-copy-fallback",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:material-table-fastpath-changed-material",
+      "to": "rule:PERF-021",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:material-table-fastpath-changed-material",
+      "to": "rule:PERF-017",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:material-table-fastpath-changed-material",
+      "to": "test:webgpu-exact-material-table",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:material-table-fastpath-changed-material",
+      "to": "test:webgpu-pbr-source-equivalence",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:clustered-lighting-dropped-visible-light",
+      "to": "rule:LGT-006",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:clustered-lighting-dropped-visible-light",
+      "to": "test:clustered-lighting-fail-bright",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:virtual-texture-evicted-near-detail",
+      "to": "rule:PERF-022",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:virtual-texture-evicted-near-detail",
+      "to": "rule:SRC-002",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:virtual-texture-evicted-near-detail",
+      "to": "test:virtual-texture-near-full-resolution",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:virtual-texture-evicted-near-detail",
+      "to": "test:near-field-max-quality",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:portal-overcull-visible-room",
+      "to": "rule:PERF-023",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:portal-overcull-visible-room",
+      "to": "test:portal-visibility-conservative",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:animation-budget-stuttered-near-character",
+      "to": "rule:ANM-002",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:animation-budget-stuttered-near-character",
+      "to": "test:animation-budget-near-interaction-full-rate",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:physics-sleep-disabled-player-contact",
+      "to": "rule:PHY-009",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:physics-sleep-disabled-player-contact",
+      "to": "test:physics-broadphase-near-contact-awake",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:network-compression-changed-local-state",
+      "to": "rule:NET-002",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:network-compression-changed-local-state",
+      "to": "test:network-delta-lossless",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:device-learning-lowered-graphics",
+      "to": "rule:PERF-024",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:device-learning-lowered-graphics",
+      "to": "rule:PERF-003",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:device-learning-lowered-graphics",
+      "to": "test:device-schedule-safe-knobs-only",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:device-learning-lowered-graphics",
+      "to": "test:near-fps-optimization-no-quality-loss",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:derived-cache-hash-mismatch",
+      "to": "rule:QA-025",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:derived-cache-hash-mismatch",
+      "to": "rule:QA-021",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:derived-cache-hash-mismatch",
+      "to": "test:derived-artifact-cas-source-lock",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:derived-cache-hash-mismatch",
+      "to": "test:content-addressed-bake-cache",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:good-pattern-propagated-to-incompatible-project",
+      "to": "rule:QA-026",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:good-pattern-propagated-to-incompatible-project",
+      "to": "rule:QA-013",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:good-pattern-propagated-to-incompatible-project",
+      "to": "test:pattern-applicability-firewall",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:good-pattern-propagated-to-incompatible-project",
+      "to": "test:cross-project-pattern-promotion",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:frame-budget-sacrificed-near-quality",
+      "to": "rule:PERF-025",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:frame-budget-sacrificed-near-quality",
+      "to": "rule:PERF-003",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:frame-budget-sacrificed-near-quality",
+      "to": "test:frame-budget-near-critical",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:frame-budget-sacrificed-near-quality",
+      "to": "test:near-fps-optimization-no-quality-loss",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:p99-stutter-regressed-after-fps-optimization",
+      "to": "rule:PERF-026",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:p99-stutter-regressed-after-fps-optimization",
+      "to": "test:stutter-p99-regression",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:full-world-rebuild-after-single-object-change",
+      "to": "rule:PERF-028",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:full-world-rebuild-after-single-object-change",
+      "to": "test:incremental-world-compiler-affected-only",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:cpu-optimization-reduced-near-graphics",
+      "to": "rule:PERF-027",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:cpu-optimization-reduced-near-graphics",
+      "to": "rule:PERF-032",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:cpu-optimization-reduced-near-graphics",
+      "to": "test:cpu-first-no-paid-gpu",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:cpu-optimization-reduced-near-graphics",
+      "to": "test:cpu-autotuner-safe-knobs",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:pvs-overculled-near-visible-object",
+      "to": "rule:PERF-029",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:pvs-overculled-near-visible-object",
+      "to": "test:cpu-pvs-near-fail-visible",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:autotuner-selected-lossy-knob",
+      "to": "rule:PERF-032",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:autotuner-selected-lossy-knob",
+      "to": "test:cpu-autotuner-safe-knobs",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:replay-bug-was-not-promoted-to-regression",
+      "to": "rule:QA-027",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:replay-bug-was-not-promoted-to-regression",
+      "to": "test:production-replay-permanent",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:cached-nav-collision-used-for-wrong-source",
+      "to": "rule:QA-028",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:cached-nav-collision-used-for-wrong-source",
+      "to": "test:nav-collision-cache-source-lock",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:background-bake-starved-game-loop",
+      "to": "rule:PERF-025",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:background-bake-starved-game-loop",
+      "to": "rule:LGT-007",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:background-bake-starved-game-loop",
+      "to": "test:incremental-cpu-light-bake",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:background-bake-starved-game-loop",
+      "to": "test:frame-budget-near-critical",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:server-required-paid-gpu",
+      "to": "rule:PERF-027",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:server-required-paid-gpu",
+      "to": "test:cpu-first-no-paid-gpu",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:threaded-importer-race-corrupted-asset",
+      "to": "rule:PERF-033",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:threaded-importer-race-corrupted-asset",
+      "to": "test:threaded-importer-exact-parity",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:huge-world-parser-loaded-whole-file-oom",
+      "to": "rule:PERF-034",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:huge-world-parser-loaded-whole-file-oom",
+      "to": "test:mmap-stream-bounded-memory",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:semantic-pvs-overculled-unknown-space",
+      "to": "rule:PERF-035",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:semantic-pvs-overculled-unknown-space",
+      "to": "test:semantic-pvs-fail-visible",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:incremental-gi-reused-dirty-cell",
+      "to": "rule:LGT-008",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:incremental-gi-reused-dirty-cell",
+      "to": "test:incremental-gi-cell-hash-reuse",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:content-defined-chunking-changed-bytes",
+      "to": "rule:STR-002",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:content-defined-chunking-changed-bytes",
+      "to": "test:content-defined-chunk-byte-reconstruction",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:offline-cache-served-wrong-sha",
+      "to": "rule:PERF-036",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:offline-cache-served-wrong-sha",
+      "to": "test:offline-sha-cache-version-isolation",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:shared-worker-cache-cross-version-stale",
+      "to": "rule:PERF-036",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:shared-worker-cache-cross-version-stale",
+      "to": "test:shared-worker-cache-sha-isolation",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:cpu-tuning-without-causality-evidence",
+      "to": "rule:PERF-037",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:cpu-tuning-without-causality-evidence",
+      "to": "test:cpu-flamegraph-evidence",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:replay-farm-nondeterministic-network-physics",
+      "to": "rule:QA-030",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:replay-farm-nondeterministic-network-physics",
+      "to": "test:network-physics-replay-farm-determinism",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:dependency-impact-missed-required-rebuild",
+      "to": "rule:QA-031",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:dependency-impact-missed-required-rebuild",
+      "to": "test:dependency-impact-graph-complete",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:derived-cache-compression-changed-bytes",
+      "to": "rule:QA-032",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:derived-cache-compression-changed-bytes",
+      "to": "test:derived-cache-codec-lossless",
+      "kind": "guarded-by"
+    },
+    {
+      "from": "incident:binary-delta-reconstruction-mismatch",
+      "to": "rule:QA-033",
+      "kind": "prevented-by"
+    },
+    {
+      "from": "incident:binary-delta-reconstruction-mismatch",
+      "to": "test:binary-delta-exact-reconstruction",
+      "kind": "guarded-by"
+    }
+  ],
+  "protectedIncidents": 55,
+  "consumerCount": 0,
+  "stats": {
+    "protectedIncidents": 55,
+    "unprotectedIncidents": 0,
+    "rules": 112,
+    "tests": 70,
+    "patterns": 37,
+    "traits": 90,
+    "consumers": 0
+  },
+  "problems": [],
+  "pass": true
+}

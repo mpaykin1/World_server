@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "4.0.0",
+  "system": "QUALITY_CONVERGENCE_LOOP",
+  "maxRounds": 8,
+  "maxPlateauRounds": 1,
+  "completionRule": "Completion is forbidden while any reproducible verification failure remains. BLOCKED_UNRESOLVED is a handoff to immediate root-cause repair, never task completion.",
+  "remediationOrder": [
+    "deterministic safe autofix",
+    "runtime renderer, shader-stutter and predictive-streaming integration",
+    "CPU asset pipeline plan and source-preserving derivative validation",
+    "telemetry-driven quality profile analysis",
+    "semantic rig adapter discovery and validation",
+    "root-cause analysis",
+    "sandbox-verified AI patch tournament when configured",
+    "regression test creation",
+    "Chromium + mobile WebKit deployed verification",
+    "full re-verification until CLEAN"
+  ],
+  "safety": {
+    "neverLowerBaseline": true,
+    "neverDeleteWorkingGraphics": true,
+    "neverBypassFailedGate": true,
+    "neverAutoMergeMediumOrHighRisk": true,
+    "blockedIsNotComplete": true,
+    "neverTreatEmulationAsRealIphoneEvidence": true,
+    "neverDestructivelyReplaceSourceAssets": true,
+    "requireStableDerivedAssetManifest": true,
+    "desktopAiMustContinueAfterBlocked": true
+  }
+}

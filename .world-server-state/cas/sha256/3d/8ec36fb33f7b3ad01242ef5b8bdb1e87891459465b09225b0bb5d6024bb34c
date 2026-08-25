@@ -1,0 +1,128 @@
+{
+  "schemaVersion": "4.0.0",
+  "system": "WORLD_CANDIDATE_LAB",
+  "generatedAt": "2026-08-24T06:55:25.833Z",
+  "candidateCount": 12,
+  "winner": {
+    "id": "ultra--0p08",
+    "tier": "ULTRA",
+    "detailRadius": 1.2,
+    "maxDpr": 1.62,
+    "predictedQuality": 122.9,
+    "predictedCost": 135.58,
+    "winnerScore": 86.83
+  },
+  "winnerOnly": true,
+  "mutationAllowed": false,
+  "note": "Prediction-only lab. Winner must still pass candidate tournament, real regression, visual, controls, collisions and device gates before promotion.",
+  "candidates": [
+    {
+      "id": "ultra--0p08",
+      "tier": "ULTRA",
+      "detailRadius": 1.2,
+      "maxDpr": 1.62,
+      "predictedQuality": 122.9,
+      "predictedCost": 135.58,
+      "winnerScore": 86.83
+    },
+    {
+      "id": "ultra-0",
+      "tier": "ULTRA",
+      "detailRadius": 1.28,
+      "maxDpr": 1.7,
+      "predictedQuality": 128.26,
+      "predictedCost": 145.52,
+      "winnerScore": 86.72
+    },
+    {
+      "id": "ultra-0p08",
+      "tier": "ULTRA",
+      "detailRadius": 1.36,
+      "maxDpr": 1.78,
+      "predictedQuality": 133.62,
+      "predictedCost": 155.87,
+      "winnerScore": 86.39
+    },
+    {
+      "id": "high-0p08",
+      "tier": "HIGH",
+      "detailRadius": 1.08,
+      "maxDpr": 1.4,
+      "predictedQuality": 96.36,
+      "predictedCost": 97.16,
+      "winnerScore": 81.42
+    },
+    {
+      "id": "high-0",
+      "tier": "HIGH",
+      "detailRadius": 1,
+      "maxDpr": 1.32,
+      "predictedQuality": 91,
+      "predictedCost": 88.76,
+      "winnerScore": 80.68
+    },
+    {
+      "id": "high--0p08",
+      "tier": "HIGH",
+      "detailRadius": 0.92,
+      "maxDpr": 1.24,
+      "predictedQuality": 85.64,
+      "predictedCost": 80.76,
+      "winnerScore": 79.72
+    },
+    {
+      "id": "balanced-0p08",
+      "tier": "BALANCED",
+      "detailRadius": 0.84,
+      "maxDpr": 1.1,
+      "predictedQuality": 68.78,
+      "predictedCost": 60.84,
+      "winnerScore": 68.78
+    },
+    {
+      "id": "balanced-0",
+      "tier": "BALANCED",
+      "detailRadius": 0.76,
+      "maxDpr": 1.02,
+      "predictedQuality": 63.42,
+      "predictedCost": 53.97,
+      "winnerScore": 63.42
+    },
+    {
+      "id": "balanced--0p08",
+      "tier": "BALANCED",
+      "detailRadius": 0.68,
+      "maxDpr": 0.94,
+      "predictedQuality": 58.06,
+      "predictedCost": 47.52,
+      "winnerScore": 58.06
+    },
+    {
+      "id": "safe-0p08",
+      "tier": "SAFE",
+      "detailRadius": 0.6,
+      "maxDpr": 0.9,
+      "predictedQuality": 47.7,
+      "predictedCost": 36.72,
+      "winnerScore": 47.7
+    },
+    {
+      "id": "safe-0",
+      "tier": "SAFE",
+      "detailRadius": 0.52,
+      "maxDpr": 0.82,
+      "predictedQuality": 42.34,
+      "predictedCost": 30.88,
+      "winnerScore": 42.34
+    },
+    {
+      "id": "safe--0p08",
+      "tier": "SAFE",
+      "detailRadius": 0.44,
+      "maxDpr": 0.74,
+      "predictedQuality": 36.98,
+      "predictedCost": 25.44,
+      "winnerScore": 36.98
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+package worldserver:adapter@1.0.0;
+
+interface types {
+  record artifact-ref {
+    uri: string,
+    sha256: string,
+    media-type: string,
+  }
+
+  record quality-result {
+    score: u8,
+    status: string,
+    evidence-json: string,
+  }
+
+  record transform-request {
+    input: artifact-ref,
+    operation: string,
+    options-json: string,
+  }
+}
+
+interface quality-adapter {
+  use types.{artifact-ref, quality-result};
+  analyze: func(input: artifact-ref) -> result<quality-result, string>;
+}
+
+interface asset-transform {
+  use types.{transform-request, artifact-ref};
+  transform: func(request: transform-request) -> result<artifact-ref, string>;
+}
+
+world world-server-adapter {
+  export quality-adapter;
+  export asset-transform;
+}

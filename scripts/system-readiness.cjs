@@ -1,0 +1,83 @@
+#!/usr/bin/env node
+'use strict';
+const path=require('path');const {ROOT,readJSON,writeJSON,nowIso}=require('./integration-utils.cjs');
+const metrics=[
+ ['structuralIntegration','SYSTEM_INTEGRATION_REPORT.json','percent',12],
+ ['projectDirectives','PROJECT_DIRECTIVE_REPORT.json','pass',10],
+ ['graphicsRatchet','GRAPHICS_REGRESSION_GUARD_REPORT.json','pass',10],
+ ['technologyLock','TECHNOLOGY_LOCK_REPORT.json','pass',6],
+ ['gameplayContract','GAMEPLAY_PHYSICAL_CONTRACT_REPORT.json','pass',6],
+ ['desktopAIReport','DESKTOP_AI_REPORT_VALIDATION.json','pass',3],
+ ['audioVariation','AUDIO_VARIATION_REPORT.json','pass',5],
+ ['assetBatching','ASSET_INGESTION_PLAN.json','pass',5],
+ ['disasterRecovery','DISASTER_RECOVERY_VERIFY_REPORT.json','pass',10],
+ ['policySafety','POLICY_DECISION_REPORT.json','pass',10],
+ ['provenance','PROVENANCE_STATUS.json','pass',6],
+ ['durableQueue','DURABLE_QUEUE_STATUS.json','ok',5],
+ ['telemetry','INTEGRATION_TELEMETRY_STATUS.json','pass',5],
+ ['sbom','SBOM_STATUS.json','pass',3],
+ ['assetRegistry','ASSET_REGISTRY.json','contentAddressed',2],
+ ['dependencyGraph','DEPENDENCY_GRAPH.json','merkleRoot',2],
+ ['changeImpact','CHANGE_IMPACT_MATRIX.json','executionPolicy',2],
+ ['technologyConsensus','TECHNOLOGY_CONSENSUS_REPORT.json','embeddedAdopted',1],
+ ['secureUpdates','UPDATE_TRUST_STATUS.json','pass',6],
+ ['featureFlags','FEATURE_FLAG_STATUS.json','pass',4],
+ ['configContracts','CONFIG_CONTRACT_STATUS.json','pass',4],
+ ['adapterSandbox','ADAPTER_SANDBOX_STATUS.json','pass',5],
+ ['reproducibleBuild','REPRODUCIBLE_BUILD_STATUS.json','pass',4],
+ ['releasePromotion','RELEASE_PROMOTION_DECISION.json','pass',4],
+ ['chaosSafety','INTEGRATION_CHAOS_REPORT.json','pass',4],
+ ['selftest','INTEGRATION_SELFTEST_REPORT.json','pass',4],
+ ['supplyChainSigning','SUPPLY_CHAIN_SIGNATURE_STATUS.json','pass',5],
+ ['modelChecking','MODEL_CHECK_REPORT.json','pass',5],
+ ['distributedCas','DISTRIBUTED_CAS_STATUS.json','pass',4],
+ ['semanticGraph','SEMANTIC_DEPENDENCY_GRAPH.json','pass',5],
+ ['deviceLabOrchestrator','DEVICE_LAB_STATUS.json','pass',3],
+ ['witComponentModel','WIT_COMPONENT_STATUS.json','pass',4],
+ ['toolchainSecurity','TOOLCHAIN_SECURITY_REPORT.json','pass',5],
+ ['toolchainBootstrap','TOOLCHAIN_BOOTSTRAP_STATUS.json','pass',2],
+ ['nativeAstDataflow','NATIVE_AST_DATAFLOW_REPORT.json','pass',5],
+ ['rekorMonitoring','REKOR_MONITOR_REPORT.json','pass',4],
+ ['casDiscovery','CAS_DISCOVERY_STATUS.json','pass',3],
+ ['deviceExecutor','DEVICE_EXECUTOR_STATUS.json','pass',3],
+ ['witBindings','WIT_BINDINGS_STATUS.json','pass',3],
+ ['orchestratorSupervisor','ORCHESTRATOR_SUPERVISOR_STATUS.json','pass',5],
+ ['orchestratorMonitorLifecycle','ORCHESTRATOR_MONITOR_LIFECYCLE_STATUS.json','pass',4],
+ ['orchestratorPatchSafety','ORCHESTRATOR_PATCH_SAFETY_STATUS.json','pass',5],
+ ['orchestratorMinimalRepro','ORCHESTRATOR_MINIMAL_REPRO_STATUS.json','pass',3],
+ ['orchestratorInvariantModel','ORCHESTRATOR_INVARIANT_MODEL_REPORT.json','pass',4],
+ ['orchestratorContinuity','ORCHESTRATOR_CONTINUITY_REPORT.json','pass',8],
+ ['capabilityScheduler','CAPABILITY_SCHEDULER_STATUS.json','pass',5],
+ ['casRedundancy','CAS_REDUNDANCY_STATUS.json','pass',4],
+ ['deviceWorker','DEVICE_WORKER_STATUS.json','pass',3],
+ ['recordReplay','RECORD_REPLAY_STATUS.json','pass',4],
+ ['dependencySecurity','DEPENDENCY_SECURITY_STATUS.json','pass',4],
+ ['transactionalDeploy','TRANSACTIONAL_DEPLOY_STATUS.json','pass',4],
+ ['honest100Functions','HONEST_100_FUNCTION_REPORT.json','pass',10],
+ ['functionCoverage','FUNCTION_CERTIFICATION_COVERAGE.json','pass',4],
+ ['monotonicEnhancement','FUNCTION_MONOTONIC_ENHANCEMENT_REPORT.json','pass',10],
+ ['leaderLease','LEADER_LEASE_STATUS.json','pass',8],
+ ['productionSafety','PRODUCTION_SAFETY_STATUS.json','pass',8],
+ ['soakChaos','SOAK_CHAOS_REPORT.json','pass',6],
+ ['crashDiagnostics','CRASH_DIAGNOSTICS_REPORT.json','pass',5],
+ ['legacyEvidenceFactory','LEGACY_EVIDENCE_FACTORY_REPORT.json','pass',4],
+ ['sloErrorBudget','SLO_ERROR_BUDGET_STATUS.json','pass',5],
+ ['dbMigrationCoordinator','DB_MIGRATION_COORDINATOR_STATUS.json','pass',6],
+ ['assetDelta','ASSET_DELTA_STATUS.json','pass',5],
+ ['causalDebugger','CAUSAL_DEBUGGER_STATUS.json','pass',5],
+ ['casReplicationController','CAS_REPLICATION_STATUS.json','pass',5],
+ ['physicalDeviceFleet','PHYSICAL_DEVICE_FLEET_STATUS.json','pass',4],
+ ['productionSloAutopilot','PRODUCTION_SLO_AUTOPILOT_STATUS.json','pass',5],
+ ['migrationFencingRuntime','MIGRATION_FENCING_STATUS.json','pass',5],
+ ['longSoakHarness','LONG_SOAK_HARNESS_STATUS.json','pass',4],
+ ['nativeCausalCollector','NATIVE_CAUSAL_COLLECTOR_STATUS.json','pass',4]
+];
+const details={};let weighted=0,totalWeight=0;
+for(const [id,file,key,w] of metrics){const j=readJSON(path.join(ROOT,file),{});let pct=0;if(key==='percent')pct=Number(j[key]||0);else if(key==='embeddedAdopted'){const embedded=(j.decisions||[]).filter(x=>x.embeddedAdapter);const n=embedded.length;pct=n?Math.round(embedded.filter(x=>x.status==='ADOPTED_EMBEDDED').length/n*100):100}else pct=j[key]?100:0;details[id]={percent:pct,weight:w,file,applicable:j.applicable!==false};weighted+=pct*w;totalWeight+=w}
+const structural=Math.round(weighted/totalWeight),tech=readJSON(path.join(ROOT,'TECHNOLOGY_CONSENSUS_REPORT.json'),{}).externalRuntimeCoverage||{},externalPercent=tech.percent==null?null:Number(tech.percent),runtimeConnectivity=externalPercent==null?structural:Math.round(structural*0.90+externalPercent*0.10);
+const supply=readJSON(path.join(ROOT,'SUPPLY_CHAIN_SIGNATURE_STATUS.json'),{}),dcas=readJSON(path.join(ROOT,'DISTRIBUTED_CAS_STATUS.json'),{}),devices=readJSON(path.join(ROOT,'DEVICE_LAB_STATUS.json'),{}),wit=readJSON(path.join(ROOT,'WIT_COMPONENT_STATUS.json'),{}),model=readJSON(path.join(ROOT,'MODEL_CHECK_REPORT.json'),{});
+const toolchain=readJSON(path.join(ROOT,'TOOLCHAIN_BOOTSTRAP_STATUS.json'),{}),nast=readJSON(path.join(ROOT,'NATIVE_AST_DATAFLOW_REPORT.json'),{}),devexec=readJSON(path.join(ROOT,'DEVICE_EXECUTOR_STATUS.json'),{}),casdisc=readJSON(path.join(ROOT,'CAS_DISCOVERY_STATUS.json'),{}),tlcNative=readJSON(path.join(ROOT,'TLC_NATIVE_REPORT.json'),{});const lease=readJSON(path.join(ROOT,'LEADER_LEASE_STATUS.json'),{}),prodSafety=readJSON(path.join(ROOT,'PRODUCTION_SAFETY_STATUS.json'),{});const causal=readJSON(path.join(ROOT,'CAUSAL_DEBUGGER_STATUS.json'),{});const casrepl=readJSON(path.join(ROOT,'CAS_REPLICATION_STATUS.json'),{}),devfleet=readJSON(path.join(ROOT,'PHYSICAL_DEVICE_FLEET_STATUS.json'),{}),longsoak=readJSON(path.join(ROOT,'LONG_SOAK_STATUS.json'),{}),nativecausal=readJSON(path.join(ROOT,'NATIVE_CAUSAL_COLLECTOR_STATUS.json'),{}),migfence=readJSON(path.join(ROOT,'MIGRATION_FENCING_STATUS.json'),{});const security=readJSON(path.join(ROOT,'DEPENDENCY_SECURITY_STATUS.json'),{}),txd=readJSON(path.join(ROOT,'TRANSACTIONAL_DEPLOY_STATUS.json'),{});const nativeCoverageChecks=[Boolean(supply.nativeCosignAvailable),Boolean(casrepl.hostDisasterToleranceCertified),Boolean(devfleet.productionCertified),Boolean(wit.nativeWasmtimeAvailable),Boolean(tlcNative.available||model.nativeTlc?.available),Boolean(nast.nativeAstAvailable),Boolean(security.scanCompleted),Boolean(txd.lastProductionEvidence||false),Boolean(lease.productionConfigured&&lease.fencingVerified),Boolean(nativecausal.nativeCollectorAvailable),Boolean(longsoak.longSoakCertified),Boolean(migfence.liveVerified)];const nativeExtensionPercent=Math.round(nativeCoverageChecks.filter(Boolean).length/nativeCoverageChecks.length*100);
+const requiredEvidence=['SYSTEM_INTEGRATION_REPORT.json','DISASTER_RECOVERY_VERIFY_REPORT.json','POLICY_DECISION_REPORT.json','PROVENANCE_STATUS.json','PROJECT_DIRECTIVE_REPORT.json','GRAPHICS_REGRESSION_GUARD_REPORT.json','UPDATE_TRUST_STATUS.json','CONFIG_CONTRACT_STATUS.json','ADAPTER_SANDBOX_STATUS.json','REPRODUCIBLE_BUILD_STATUS.json','INTEGRATION_CHAOS_REPORT.json','INTEGRATION_SELFTEST_REPORT.json','SUPPLY_CHAIN_SIGNATURE_STATUS.json','MODEL_CHECK_REPORT.json','DISTRIBUTED_CAS_STATUS.json','SEMANTIC_DEPENDENCY_GRAPH.json','DEVICE_LAB_STATUS.json','WIT_COMPONENT_STATUS.json','TOOLCHAIN_SECURITY_REPORT.json','TOOLCHAIN_BOOTSTRAP_STATUS.json','NATIVE_AST_DATAFLOW_REPORT.json','REKOR_MONITOR_REPORT.json','CAS_DISCOVERY_STATUS.json','DEVICE_EXECUTOR_STATUS.json','WIT_BINDINGS_STATUS.json','ORCHESTRATOR_SUPERVISOR_STATUS.json','ORCHESTRATOR_MONITOR_LIFECYCLE_STATUS.json','ORCHESTRATOR_PATCH_SAFETY_STATUS.json','ORCHESTRATOR_MINIMAL_REPRO_STATUS.json','ORCHESTRATOR_INVARIANT_MODEL_REPORT.json','ORCHESTRATOR_CONTINUITY_REPORT.json','CAPABILITY_SCHEDULER_STATUS.json','CAS_REDUNDANCY_STATUS.json','DEVICE_WORKER_STATUS.json','RECORD_REPLAY_STATUS.json','DEPENDENCY_SECURITY_STATUS.json','TRANSACTIONAL_DEPLOY_STATUS.json','HONEST_100_FUNCTION_REPORT.json','FUNCTION_MONOTONIC_ENHANCEMENT_REPORT.json','LEADER_LEASE_STATUS.json','PRODUCTION_SAFETY_STATUS.json','SOAK_CHAOS_REPORT.json','CRASH_DIAGNOSTICS_REPORT.json','LEGACY_EVIDENCE_FACTORY_REPORT.json','SLO_ERROR_BUDGET_STATUS.json','DB_MIGRATION_COORDINATOR_STATUS.json','ASSET_DELTA_STATUS.json','CAUSAL_DEBUGGER_STATUS.json','CAS_REPLICATION_STATUS.json','PHYSICAL_DEVICE_FLEET_STATUS.json','PRODUCTION_SLO_AUTOPILOT_STATUS.json','MIGRATION_FENCING_STATUS.json','LONG_SOAK_HARNESS_STATUS.json','NATIVE_CAUSAL_COLLECTOR_STATUS.json'];const evidencePass=requiredEvidence.map(f=>readJSON(path.join(ROOT,f),{}).pass===true),evidenceConfidence=Math.round(evidencePass.filter(Boolean).length/evidencePass.length*100);
+const blockers=[];for(const [id,d] of Object.entries(details))if(d.percent<100)blockers.push(`${id}-${d.percent}%`);if(externalPercent!==null&&externalPercent<100)blockers.push(`external-runtime-coverage-${externalPercent}%`);
+const mandatoryRuntimeConnectivityPercent=runtimeConnectivity,overallOperationalReadinessPercent=Math.round(structural*0.80+evidenceConfidence*0.10+nativeExtensionPercent*0.10);const externalBlockers=[...(supply.nativeCosignAvailable?[]:['native-cosign-unavailable']),...(casrepl.hostDisasterToleranceCertified?[]:['independent-remote-cas-peer-unavailable']),...(devfleet.productionCertified?[]:['fresh-android-and-ios-device-evidence-unavailable']),...(wit.nativeWasmtimeAvailable?[]:['wasmtime-component-runtime-unavailable']),...(model.nativeTlc?.available?[]:['native-tlc-unavailable']),...(nast.nativeAstAvailable?[]:['native-ast-unavailable']),...(nativecausal.nativeCollectorAvailable?[]:['native-etw-ebpf-perf-collector-unavailable']),...(longsoak.longSoakCertified?[]:['8h-long-soak-evidence-unavailable']),...(migfence.liveVerified?[]:['live-fenced-migration-evidence-unavailable'])];const report={schemaVersion:'7.5.0',generatedAt:nowIso(),pass:structural===100&&evidenceConfidence===100,structuralReadinessPercent:structural,mandatoryRuntimeConnectivityPercent,runtimeConnectivityPercent:overallOperationalReadinessPercent,overallOperationalReadinessPercent,evidenceConfidencePercent:evidenceConfidence,externalRuntimePercent:externalPercent,nativeExtensionCoveragePercent:nativeExtensionPercent,externalBlockers,nativeExtensions:{cosign:Boolean(supply.nativeCosignAvailable),remoteCasPeers:Number(dcas.reachablePeers||casdisc.reachablePeers||0),realDeviceEvidence:Number(devexec.realDeviceEvidenceCount||0),wasmtime:Boolean(wit.nativeWasmtimeAvailable),tlc:Boolean(tlcNative.available||model.nativeTlc?.available),nativeAst:Boolean(nast.nativeAstAvailable),osvScanCompleted:Boolean(security.scanCompleted),productionTransactionEvidence:Boolean(txd.lastProductionEvidence),productionFencedLease:Boolean(lease.productionConfigured&&lease.fencingVerified),nativeCausalCollector:Boolean(nativecausal.nativeCollectorAvailable),remoteCasHostDisasterTolerance:Boolean(casrepl.hostDisasterToleranceCertified),physicalDeviceFleetProduction:Boolean(devfleet.productionCertified),longSoakCertified:Boolean(longsoak.longSoakCertified),liveFencedMigration:Boolean(migfence.liveVerified)},details,blockers:[...new Set(blockers)],truthRule:'Structural 100% requires all mandatory machine-readable gates. Overall operational 100% additionally requires safe native Cosign >=3.1.3, remote CAS peer, physical-device execution evidence, Wasmtime Component runtime, native TLC and native AST evidence, completed OSV scan and actual transactional production evidence and an externally configured fenced leader lease and a native ETW/eBPF/perf collector, >=8h long-soak evidence, independent remote CAS failure domain, real Android+iOS worker evidence, and live fenced-migration verification where applicable; optional absence never causes a false internal PASS claim.'};
+writeJSON(path.join(ROOT,'SYSTEM_READINESS_REPORT.json'),report);console.log(`[READINESS_V75] structural=${structural}% operational=${overallOperationalReadinessPercent}% evidence=${evidenceConfidence}% native=${nativeExtensionPercent}%`);if(structural<100||evidenceConfidence<100)process.exitCode=2;

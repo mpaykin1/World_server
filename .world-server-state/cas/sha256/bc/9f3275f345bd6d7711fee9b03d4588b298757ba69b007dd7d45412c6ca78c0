@@ -1,0 +1,28 @@
+{
+  "generatedAt": "2026-08-24T05:46:04.861Z",
+  "snapshot": {
+    "logicalCores": 4,
+    "totalMemory": 6368813056,
+    "freeMemory": 5660721152,
+    "load1": 0.12
+  },
+  "capacity": {
+    "concurrency": 3,
+    "normalizedLoad": 0.03,
+    "byCore": 3,
+    "byMemory": 10,
+    "reason": "normal"
+  },
+  "benchmark": {
+    "hashMBps": 1533.9532645665279,
+    "jsonOpsPerSec": 18118.483273455047,
+    "score": 5271.9,
+    "rounds": 256
+  },
+  "wasm": {
+    "wasm": true,
+    "simd": true,
+    "fallback": "scalar-cpu"
+  },
+  "verified": true
+}

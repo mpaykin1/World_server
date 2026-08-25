@@ -1,0 +1,24 @@
+{
+  "shared/golden-physics.js": [
+    "test/golden-physics.test.js",
+    "test/quality-fuzz.test.js",
+    "e2e/golden-controls.spec.js"
+  ],
+  "shared/golden-ui-shell.js": [
+    "e2e/golden-ui-quality.spec.js",
+    "e2e/hud-visual-audit.spec.js"
+  ],
+  "shared/golden-performance-autotuner.js": [
+    "test/performance-autotuner.test.js",
+    "e2e/performance-budgets.spec.js"
+  ],
+  "services/ai3d-worker": [
+    "test/quality-regression.test.js"
+  ],
+  "api/": [
+    "test/cpu-night-api-contract.test.js"
+  ],
+  "desktop/": [
+    "test/cpu-night-autopilot.test.js"
+  ]
+}

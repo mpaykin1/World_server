@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "6.0.0",
+  "system": "WORLD_GRAPHICS_TECHNOLOGY_INTEGRATION",
+  "generatedAt": "2026-08-25T01:15:50.632Z",
+  "policy": "every-runtime-tech-gets-detail-plus-optimization",
+  "routes": [
+    {
+      "technology": "package:mystery-renderer",
+      "status": "runtime-package",
+      "runtimeReady": true,
+      "detailAdapter": [
+        "capability-review-required"
+      ],
+      "optimizationAdapter": [
+        "budget-profile-first"
+      ],
+      "cpuSafe": true,
+      "experimental": false,
+      "generic": true,
+      "productionReady": false
+    }
+  ],
+  "blockers": [
+    {
+      "technology": "package:mystery-renderer",
+      "reason": "generic-adapter-needs-review"
+    }
+  ],
+  "connectivityPercent": 0,
+  "hardGateReady": false
+}

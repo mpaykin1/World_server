@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-25T01:14:40.114Z",
+  "pass": true,
+  "statesExplored": 20,
+  "violations": [],
+  "mutantRejected": true,
+  "properties": [
+    "crash-budget-opens-circuit",
+    "open-circuit-does-not-restart",
+    "clean-run-resets-budget",
+    "stable-is-immutable",
+    "generation-is-monotonic"
+  ]
+}

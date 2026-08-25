@@ -1,0 +1,38 @@
+name: Dream Quality Autopilot
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * *"
+
+jobs:
+  dream-quality-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+      - run: npm ci --ignore-scripts || npm install
+      - run: npx playwright install --with-deps chromium
+      - name: Runtime + gameplay + performance evidence
+        run: |
+          npm run runtime:proof
+          npm run quality:dream-agent
+          npm run quality:physics-guardian
+          npm run quality:performance:capture
+          npm run quality:performance-budget -- --require
+          npm run quality:lod
+          npm run quality:telemetry
+      - name: Full dream readiness report
+        run: npm run quality:dream
+      - name: Upload machine-readable evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dream-quality-evidence
+          path: |
+            *_REPORT.json
+            *_TELEMETRY.json
+          if-no-files-found: warn

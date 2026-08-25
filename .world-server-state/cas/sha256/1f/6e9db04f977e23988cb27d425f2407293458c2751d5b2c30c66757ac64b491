@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "7.4.0",
+  "generatedAt": "2026-08-24T10:16:26.391982Z",
+  "validation": "LOCAL_SYNTHETIC_UPGRADE_V7_3_TO_V7_4_FINAL",
+  "pass": true,
+  "integration": {
+    "passed": 114,
+    "total": 114
+  },
+  "controlPlane": {
+    "passed": 69,
+    "total": 69
+  },
+  "selftests": {
+    "passed": 85,
+    "total": 85
+  },
+  "honest100": {
+    "certified": 58,
+    "contracted": 58,
+    "discoveredCapabilities": 137
+  },
+  "capabilityCertification": {
+    "globalPercent": 67,
+    "integrationOwnedPercent": 100,
+    "certifiedCapabilities": 92,
+    "totalCapabilities": 137
+  },
+  "readiness": {
+    "structuralPercent": 100,
+    "mandatoryRuntimeConnectivityPercent": 100,
+    "overallOperationalPercent": 91,
+    "evidenceConfidencePercent": 100
+  },
+  "releaseGatePass": true,
+  "newSystems": [
+    "legacy-evidence-factory",
+    "slo-error-budget-controller",
+    "database-migration-coordinator",
+    "asset-delta-distribution",
+    "causal-debugger"
+  ],
+  "newSystemNegativeEvidence": {
+    "legacyEvidenceNameOnlyBlocked": true,
+    "sloBadBurnTriggersRollbackDecision": true,
+    "dbDestructiveExpandRejected": true,
+    "dbDeprecatedExtensionVersionPinRejected": true,
+    "assetCorruptChunkRejected": true,
+    "causalSecretRedactionVerified": true
+  },
+  "legacyEvidenceOnSyntheticBase": {
+    "eligibleContracts": 0,
+    "recipes": 14,
+    "reason": "Synthetic V7.3 test repo did not contain all 01-18 legacy patch payloads. Factory logic is verified; real legacy certification must be recalculated only after 01-18 are installed and their regression commands pass."
+  },
+  "externalBlockers": [
+    "native-cosign-unavailable",
+    "remote-cas-peer-unavailable",
+    "physical-device-worker-unavailable",
+    "wasmtime-component-runtime-unavailable",
+    "native-tlc-unavailable",
+    "native-etw-ebpf-perf-collector-unavailable",
+    "production-slo-evidence-unavailable",
+    "production-db-migration-evidence-unavailable"
+  ],
+  "rootCauseFixed": "V7.4 documentation/instructions were stale at V7.3 while code/manifest were V7.4. Updated README/Desktop AI master instructions and re-ran clean upgrade, full control plane, Honest-100 and release gate.",
+  "truthRule": "Local structural/evidence PASS does not certify absent external/native/physical production runtimes. Real server metrics must be recalculated after installation."
+}

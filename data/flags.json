@@ -1,0 +1,51 @@
+{
+  "$schema": "https://raw.githubusercontent.com/open-feature/cli/refs/heads/main/schema/v0/flag-manifest.json",
+  "schemaVersion": "7.2.0",
+  "flags": {
+    "integration.shadowMode": {
+      "description": "Run new integrations in shadow mode before promotion",
+      "type": "boolean",
+      "defaultValue": true,
+      "enabled": true,
+      "rollout": 100
+    },
+    "technology.autoAdoptSafe": {
+      "description": "Auto-adopt only policy-approved embedded technologies",
+      "type": "boolean",
+      "defaultValue": true,
+      "enabled": true,
+      "rollout": 100
+    },
+    "graphics.qualityRatchet": {
+      "description": "Never allow graphics quality regression",
+      "type": "boolean",
+      "defaultValue": true,
+      "enabled": true,
+      "rollout": 100,
+      "safetyLocked": true
+    },
+    "release.progressiveRollout": {
+      "description": "Require progressive promotion before broad rollout",
+      "type": "boolean",
+      "defaultValue": true,
+      "enabled": true,
+      "rollout": 100,
+      "safetyLocked": true
+    },
+    "release.emergencyKillSwitch": {
+      "description": "Emergency kill switch for newly promoted optional capabilities",
+      "type": "boolean",
+      "defaultValue": false,
+      "enabled": true,
+      "rollout": 100
+    },
+    "adapter.untrustedExecution": {
+      "description": "Permit untrusted adapters only through approved sandbox",
+      "type": "boolean",
+      "defaultValue": false,
+      "enabled": true,
+      "rollout": 0,
+      "safetyLocked": true
+    }
+  }
+}

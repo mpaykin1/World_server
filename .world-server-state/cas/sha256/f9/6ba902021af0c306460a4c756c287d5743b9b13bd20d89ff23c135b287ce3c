@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0.0",
+  "rule": "Do not stop while any fixable blocker/error remains or a mandatory gate fails. Run deterministic fix-loop, then manual root-cause/fix as necessary, then rerun until clean.",
+  "externalBlockersAllowedOnlyWithEvidence": true,
+  "reports": [
+    "QUALITY_REGRESSION_REPORT.json",
+    "PROJECT_QUALITY_REVIEW.json",
+    "DUPLICATE_SYSTEM_REPORT.json",
+    "SYSTEM_CONTRACT_REPORT.json",
+    "CPU_ONLY_AUTOPILOT_POLICY_REPORT.json",
+    "DESKTOP_AI_FIX_LOOP_REPORT.json"
+  ],
+  "fixableSeverities": [
+    "blocker",
+    "error",
+    "release-blocker"
+  ],
+  "completionEnv": "DESKTOP_AI_REQUIRE_COMPLETE"
+}

@@ -1,0 +1,7 @@
+{
+  "worldserver": {
+    "integration": {
+      "policyVersion": "2.0.0"
+    }
+  }
+}

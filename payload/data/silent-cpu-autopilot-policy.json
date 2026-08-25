@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "SILENT_CPU_QUALITY_AUTOPILOT",
+  "hardConstraints": {
+    "gpuAllowed": false,
+    "paidGpuAllowed": false,
+    "paidComputeAllowed": false,
+    "gpuTaskScheduling": "FORBIDDEN",
+    "qualityMustNeverRegress": true
+  },
+  "defaultMode": "candidate_autoimprove",
+  "nightWindowLocal": {
+    "timezone": "Asia/Tbilisi",
+    "start": "00:30",
+    "end": "07:30"
+  },
+  "nightly": {
+    "vercelCronUtc": "17 23 * * *",
+    "maxProjectsPerNight": 12,
+    "maxImprovementsPerProject": 3,
+    "maxCandidatesPerNight": 20
+  },
+  "cpuBudget": {
+    "maxCpuMinutesPerNight": 240,
+    "maxAverageCpuPercent": 72,
+    "maxParallelHeavyJobs": 1,
+    "maxParallelLightJobs": 2
+  },
+  "costBudget": {
+    "paidComputeUnits": 0,
+    "paidGpuUnits": 0,
+    "externalPaidServices": "FORBIDDEN"
+  },
+  "learning": {
+    "kind": "CPU quality-learning from project history; not foundation-model training",
+    "inputs": [
+      "quality history",
+      "patch outcomes",
+      "regressions",
+      "performance reports",
+      "Golden adoptions",
+      "cross-project outcomes"
+    ],
+    "outputs": [
+      "success priors",
+      "expected quality delta",
+      "never-retry fingerprints",
+      "transfer recommendations",
+      "next-best-action ranking"
+    ]
+  },
+  "releaseRule": "Production is unchanged unless all accepted gates pass; rollback on real telemetry regression."
+}

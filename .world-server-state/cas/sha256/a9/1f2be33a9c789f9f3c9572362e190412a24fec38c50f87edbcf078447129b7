@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "WORLD_QUALITY_RATCHET_V8",
+  "floors": {
+    "sourceFidelity": 100.0,
+    "geometryConservation": 100.0,
+    "nearFieldFidelity": 100.0,
+    "protectedErrorImmunity": 100.0,
+    "controllerInvariantPass": 100.0,
+    "staticGate": 100.0,
+    "unitGate": 100.0,
+    "visualSimilarity": 99.0,
+    "desktopFps": 55.0,
+    "mobileFps": 30.0,
+    "integrationConnectivity": 99.0
+  },
+  "history": [
+    {
+      "at": "2026-08-23T12:39:13.957735+00:00",
+      "project": "v7-core-bootstrap",
+      "candidate": {
+        "sourceFidelity": 100.0,
+        "geometryConservation": 100.0,
+        "nearFieldFidelity": 100.0,
+        "protectedErrorImmunity": 100.0,
+        "controllerInvariantPass": 100.0,
+        "staticGate": 100.0,
+        "unitGate": 100.0,
+        "visualSimilarity": 99.0,
+        "desktopFps": 55.0,
+        "mobileFps": 30.0,
+        "integrationConnectivity": 99.6
+      },
+      "promoted": {}
+    }
+  ],
+  "promotionPolicy": {
+    "minimumDistinctProjects": 3,
+    "minimumConsecutivePasses": 3,
+    "requireSourceRegressionZero": true,
+    "requireVisualRegressionZero": true,
+    "rollbackOnAnyFloorViolation": true,
+    "neverLower": true
+  }
+}

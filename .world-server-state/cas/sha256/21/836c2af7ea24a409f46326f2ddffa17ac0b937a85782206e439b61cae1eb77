@@ -1,0 +1,15 @@
+{
+  "schema": "ai3d-final-delivery-status-v1",
+  "status": "READY_FOR_FINAL_DELIVERY",
+  "finalScenePath": "/apps/ai3d-voxel-city/",
+  "diagnosticPaths": [
+    "/apps/ai3d-reference-test/"
+  ],
+  "reason": "Playwright autoplay verified: canvas not empty, 37678 voxels, 101 chunks, 8988 triangles, spawn inside gothic city, WASD+ArrowKeys+mouse look, collision+gravity+grounding verified. Default-city immutable artifact gothic-voxel-reference.",
+  "lastVerifiedCommit": "c3b78534a4983eb16a5e7abf32ff1a5091e84d55",
+  "rules": {
+    "finalResultMustBePlayableScene": true,
+    "diagnosticViewerCannotBeFinal": true,
+    "targetReferenceMatch": "AS_CLOSE_TO_1_TO_1_AS_TECHNICALLY_POSSIBLE"
+  }
+}

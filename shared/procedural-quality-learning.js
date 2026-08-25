@@ -1,0 +1,10 @@
+(() => {
+'use strict';const G=globalThis;if(G.WorldProceduralLearning?.version==='7.0.0')return;
+const DB='world-procedural-quality-v7',STORE='samples';
+function open(){return new Promise((resolve,reject)=>{if(!('indexedDB'in G))return resolve(null);const r=indexedDB.open(DB,1);r.onupgradeneeded=()=>{const db=r.result;if(!db.objectStoreNames.contains(STORE)){const s=db.createObjectStore(STORE,{keyPath:'id'});s.createIndex('sceneDevice','sceneDevice');s.createIndex('score','score')}};r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)})}
+async function record(sample){const row={...sample,id:sample.id||crypto.randomUUID(),createdAt:Date.now(),sceneDevice:[sample.scene||'generic',sample.device||'unknown'].join('|')},db=await open();if(!db)return row;await new Promise((resolve,reject)=>{const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).put(row);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)});return row}
+async function best({scene='generic',device='unknown'}={}){const db=await open();if(!db)return null;return new Promise((resolve,reject)=>{const tx=db.transaction(STORE,'readonly'),idx=tx.objectStore(STORE).index('sceneDevice'),r=idx.getAll([scene,device].join('|'));r.onsuccess=()=>resolve((r.result||[]).sort((a,b)=>(Number(b.verified)-Number(a.verified))||Number(b.score)-Number(a.score))[0]||null);r.onerror=()=>reject(r.error)})}
+async function sync(sample){try{const r=await fetch('/api/procedural-quality-learn',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(sample)});return r.ok?await r.json():null}catch(_){return null}}
+async function serverRecommend(q={}){try{const p=new URLSearchParams();for(const[k,v]of Object.entries(q))if(v!==undefined&&v!==null&&v!=='')p.set(k,String(v));const r=await fetch('/api/procedural-quality-learn?'+p,{cache:'no-store'});if(!r.ok)return null;const j=await r.json();return j.recommendation||null}catch(_){return null}}
+G.WorldProceduralLearning={version:'7.0.0',record,best,sync,serverRecommend};
+})();

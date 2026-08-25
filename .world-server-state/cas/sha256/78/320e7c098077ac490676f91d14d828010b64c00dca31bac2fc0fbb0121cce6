@@ -1,0 +1,6 @@
+'use strict';const fs=require('fs'),path=require('path');const root=path.resolve(__dirname,'..'),required=[
+'shared/procedural-quality-runtime.js','shared/procedural-quality-temporal-artifacts.js','shared/procedural-quality-frame-pacing.js','shared/procedural-quality-resource-watchdog.js','shared/procedural-quality-thermal-governor.js','shared/procedural-quality-shader-prewarm.js','shared/procedural-quality-replay-benchmark.js','shared/procedural-quality-canary.js',
+'api/procedural-quality-profile.js','api/procedural-quality-runtime-health.js','api/procedural-quality-canary.js','scripts/procedural-quality-doctor.js','scripts/procedural-quality-canary-gate.js','scripts/procedural-quality-evidence-orchestrator.js','supabase/procedural_quality_v10.sql'];
+let ok=true;for(const f of required)if(!fs.existsSync(path.join(root,f))){console.error('MISSING',f);ok=false}
+const rt=fs.readFileSync(path.join(root,'shared/procedural-quality-runtime.js'),'utf8');for(const m of ['10.0.0','temporalArtifacts','framePacing','resourceWatchdog','thermalGovernor','shaderPrewarm','replayBenchmark','canary'])if(!rt.includes(m)){console.error('RUNTIME MARKER',m);ok=false}
+console.log(JSON.stringify({version:10,ok,required:required.length}));if(!ok)process.exit(1);

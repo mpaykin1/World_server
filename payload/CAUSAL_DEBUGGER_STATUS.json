@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "7.4.0",
+  "generatedAt": "2026-08-24T09:59:50.011Z",
+  "pass": true,
+  "correlationValidated": true,
+  "nativeCollectorAvailable": false,
+  "nativeCollectorRequiredForInternalPass": false,
+  "secretRedaction": true
+}

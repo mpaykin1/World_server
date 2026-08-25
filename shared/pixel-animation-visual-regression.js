@@ -1,0 +1,8 @@
+(function(root,factory){'use strict';const api=factory(root);if(typeof module==='object'&&module.exports)module.exports=api;else root.PixelAnimationVisualRegression=api;})(typeof globalThis!=='undefined'?globalThis:this,function(root){
+'use strict';const VERSION='3.0.0';
+function signature(bytes){let sum=0,sum2=0,edge=0,prev=0;for(let i=0;i<bytes.length;i++){const v=bytes[i];sum=(sum+v)>>>0;sum2=(sum2+v*v)>>>0;edge=(edge+Math.abs(v-prev))>>>0;prev=v;}return{length:bytes.length,sum,sum2,edge};}
+function compare(a,b,tolerance){const t=Number(tolerance)||0.015;if(!a||!b||a.length!==b.length)return{pass:false,error:1};const denom=Math.max(1,a.length*255),err=(Math.abs(a.sum-b.sum)+Math.abs(a.edge-b.edge)*0.5)/denom;return{pass:err<=t,error:err};}
+async function captureSequence(canvas,options){const o=options||{},frames=Math.max(1,Number(o.frames)||8),stepMs=Math.max(1,Number(o.stepMs)||83),ctx=canvas.getContext&&canvas.getContext('2d',{willReadFrequently:true});if(!ctx)throw new Error('2D readback unavailable for visual regression');const out=[];for(let i=0;i<frames;i++){if(typeof o.render==='function')await o.render(i*stepMs,i);const img=ctx.getImageData(0,0,canvas.width,canvas.height);out.push(signature(img.data));if(i<frames-1)await new Promise(r=>setTimeout(r,0));}return out;}
+function compareSequence(current,baseline,tolerance){if(!Array.isArray(current)||!Array.isArray(baseline)||current.length!==baseline.length)return{pass:false,maxError:1,frames:[]};const frames=current.map((s,i)=>compare(s,baseline[i],tolerance)),maxError=Math.max(0,...frames.map(x=>x.error));return{pass:frames.every(x=>x.pass),maxError,frames};}
+return Object.freeze({VERSION,signature,compare,captureSequence,compareSequence});
+});

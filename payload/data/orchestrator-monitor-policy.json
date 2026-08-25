@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "7.2.0",
+  "eventScope": "recursive-descendants",
+  "requireIdentity": true,
+  "defaultSettleMs": 1250,
+  "cancelPreviousGeneration": true,
+  "rejectStaleGeneration": true,
+  "restartMonitorAfterReconfiguration": true,
+  "reason": "Prevents stale watchers, early checks and false trigger activation after orchestrator/service reconfiguration."
+}

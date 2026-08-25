@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0.0",
+  "framework": "TUF-aligned-subset",
+  "tufSpec": "1.0.33",
+  "threshold": 1,
+  "consistentSnapshot": true,
+  "minimumExpiryHours": 24,
+  "maximumExpiryDays": 30,
+  "rollbackProtection": true,
+  "freezeProtection": true,
+  "targets": [
+    "data/system-capability-registry.json",
+    "data/project-directives.json",
+    "scripts/system-control-plane.cjs",
+    "scripts/system-integration-gate.cjs",
+    "scripts/policy-engine.cjs",
+    "scripts/technology-lock-validator.cjs"
+  ]
+}

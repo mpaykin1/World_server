@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-25T01:16:01.263Z",
+  "pass": true,
+  "selftest": {
+    "pass": true,
+    "ok": {
+      "pass": true,
+      "errors": [],
+      "currentFencingToken": 8,
+      "callerFencingToken": 8
+    },
+    "stale": {
+      "pass": false,
+      "errors": [
+        "stale-or-missing-fencing-token"
+      ],
+      "currentFencingToken": 8,
+      "callerFencingToken": 7
+    },
+    "early": {
+      "pass": false,
+      "errors": [
+        "contract-before-backfill-verification"
+      ],
+      "currentFencingToken": 8,
+      "callerFencingToken": 8
+    }
+  },
+  "liveConfigured": false,
+  "liveVerified": false,
+  "live": {
+    "pass": false,
+    "errors": [
+      "no-live-migration-plan"
+    ]
+  },
+  "truthRule": "A migration may execute only while the caller holds the current lease and exact fencing token. Stale leaders are rejected."
+}

@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+'use strict';
+const fs=require('node:fs');const {spawnSync}=require('node:child_process');const {inspectUnifiedDiff}=require('../lib/quality/candidate-sandbox');
+const diffFile=process.argv[2];if(!diffFile||!fs.existsSync(diffFile))throw new Error('Usage: node scripts/quality-candidate-sandbox.js candidate.diff');const config=JSON.parse(fs.readFileSync('config/quality-autopilot.json','utf8'));const text=fs.readFileSync(diffFile,'utf8');const r=inspectUnifiedDiff(text,{maxFiles:config.aiCandidates?.maxFiles,maxChangedLines:config.aiCandidates?.maxChangedLines,neverMutate:config.neverMutate});if(r.ok&&process.argv.includes('--apply')){const c=spawnSync(`git apply --check "${diffFile}" && git apply "${diffFile}"`,{shell:true,stdio:'inherit'});r.applied=c.status===0;if(!r.applied)r.ok=false;}console.log(JSON.stringify(r,null,2));if(!r.ok)process.exitCode=2;

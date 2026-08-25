@@ -1,0 +1,15 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+const here=path.dirname(fileURLToPath(import.meta.url));
+const wasm=path.resolve(here,'../src/wasm/quality-simd.wasm');
+const bytes=fs.readFileSync(wasm);
+const {instance}=await WebAssembly.instantiate(bytes,{});
+const e=instance.exports;
+if(!e.memory||!e.dequant_u16_to_f32||!e.scale_bias_f32||!e.copy_u8)throw new Error('missing exports');
+const src=new Uint16Array(e.memory.buffer,0,8);src.set([0,1,2,3,4,5,6,7]);
+e.dequant_u16_to_f32(0,64,8,0.5,1.0);
+const got=[...new Float32Array(e.memory.buffer,64,8)];
+const exp=[1,1.5,2,2.5,3,3.5,4,4.5];
+if(got.some((v,i)=>Math.abs(v-exp[i])>1e-6))throw new Error(`SIMD dequant mismatch ${got}`);
+console.log(JSON.stringify({pass:true,mode:'wasm-simd128-v1',bytes:bytes.length,exports:Object.keys(e),sample:got}));

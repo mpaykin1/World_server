@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "SYSTEM_COHESION_REGISTRY",
+  "purpose": "Ensure all quality/runtime/visual/physics systems enhance each other without overlap",
+  "systems": [
+    {
+      "id": "golden-standard",
+      "version": "V10",
+      "responsibility": "Canonical controls, collisions, mobile, deny-by-default release",
+      "inputs": ["player input", "physics config"],
+      "outputs": ["canonicalXZ", "goldenHorizontal", "certified apps"],
+      "enhances": ["world-quality-autopilot", "cpu-visual-ensemble"],
+      "overlaps": []
+    },
+    {
+      "id": "world-quality-autopilot",
+      "version": "V4.1",
+      "responsibility": "Deterministic voxel detail, PBR synthesis, visibility budgets, adaptive runtime",
+      "inputs": ["voxel world", "semantic intent", "device pressure"],
+      "outputs": ["enhanced voxels", "pbrProfiles", "visibility plan"],
+      "enhances": ["golden-standard", "cpu-visual-ensemble"],
+      "overlaps": []
+    },
+    {
+      "id": "cpu-visual-ensemble",
+      "version": "V13",
+      "responsibility": "SSIM + histogram + edges + hash visual validation (CPU-only)",
+      "inputs": ["rendered canvas", "baseline screenshots"],
+      "outputs": ["visual score", "regression signal"],
+      "enhances": ["world-quality-autopilot", "perceptual-visual-gate"],
+      "overlaps": []
+    },
+    {
+      "id": "perceptual-visual-gate",
+      "version": "V9",
+      "responsibility": "Approved baseline hash validation",
+      "inputs": ["baseline manifest"],
+      "outputs": ["perceptual PASS/FAIL"],
+      "enhances": ["cpu-visual-ensemble"],
+      "overlaps": []
+    },
+    {
+      "id": "cpu-night-autopilot",
+      "version": "V11",
+      "responsibility": "CPU-only night loop (no GPU, no paid compute)",
+      "inputs": ["quality history", "supabase queue"],
+      "outputs": ["candidate patches", "night report"],
+      "enhances": ["world-quality-autopilot", "quality-governance"],
+      "overlaps": []
+    },
+    {
+      "id": "quality-runtime-v11.3",
+      "version": "V11.3",
+      "responsibility": "Supabase migration sync, drift gates, autonomous worker",
+      "inputs": ["supabase migration history", "production probe"],
+      "outputs": ["manifest", "drift status", "work packet"],
+      "enhances": ["golden-standard", "cpu-night-autopilot"],
+      "overlaps": []
+    },
+    {
+      "id": "system-cohesion-engine",
+      "version": "V1.0",
+      "responsibility": "Audit overlaps, ensure enhancement, auto-discover new tech",
+      "inputs": ["registry", "codebase", "technology-registry"],
+      "outputs": ["SYSTEM_COHESION_REPORT.json", "DISCOVERED_TECHNOLOGIES.json"],
+      "enhances": ["all"],
+      "overlaps": []
+    }
+  ],
+  "enhancementMatrix": [
+    {"from": "golden-standard", "to": "world-quality-autopilot", "via": "canonicalXZ ensures detail never breaks controls"},
+    {"from": "world-quality-autopilot", "to": "cpu-visual-ensemble", "via": "PBR synthesis provides material for ensemble to validate"},
+    {"from": "cpu-visual-ensemble", "to": "world-quality-autopilot", "via": "visual score feeds back to PBR budget (closed loop)"},
+    {"from": "cpu-visual-ensemble", "to": "perceptual-visual-gate", "via": "ensemble full score complements gate hash (no overlap)"},
+    {"from": "perceptual-visual-gate", "to": "cpu-visual-ensemble", "via": "gate hash validates ensemble baseline (complementary)"},
+    {"from": "quality-runtime-v11.3", "to": "cpu-night-autopilot", "via": "supabase queue provides night jobs for CPU worker"}
+  ],
+  "discoveryPolicy": {
+    "scanWebAPIs": ["WebGPU", "WebCodecs", "AVIF", "OffscreenCanvas", "Web Workers", "View Transitions"],
+    "scanAIModels": ["TRELLIS.2", "Hunyuan3D", "InstantMesh", "Goo Engine", "UPBGE", "Rigify"],
+    "scanSupabase": ["quality_export_migration_history", "quality_desktop_ai_work_packet"]
+  }
+}

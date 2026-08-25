@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "defaultSize": 20,
+  "durationMs": 2500,
+  "thinkTimeMs": 80,
+  "minimumAvailability": 0.995
+}

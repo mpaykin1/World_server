@@ -1,0 +1,617 @@
+{
+  "schemaVersion": "7.5.0",
+  "recipes": [
+    {
+      "id": "legacy-quality-core",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10",
+      "capabilities": [
+        "dependency-graph",
+        "replay",
+        "ratchet",
+        "quality-knowledge"
+      ],
+      "sourcePaths": [
+        "shared/world-quality-core/tools/dependency_graph_v10.py",
+        "shared/world-quality-core/tools/deterministic_replay.py",
+        "shared/world-quality-core/tools/quality_ratchet.py",
+        "shared/world-quality-core/tools/knowledge_engine.py"
+      ],
+      "staticMarkers": [
+        {
+          "file": "shared/world-quality-core/tools/quality_ratchet.py",
+          "contains": "ratchet"
+        }
+      ],
+      "integrationMarkers": [
+        {
+          "file": "shared/world-quality-core/tools/readiness.py",
+          "contains": "readiness"
+        }
+      ],
+      "regressionCommands": [
+        [
+          "python",
+          "shared/world-quality-core/tests/test_quality_core.py"
+        ]
+      ]
+    },
+    {
+      "id": "legacy-texture-quality",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10",
+      "capabilities": [
+        "texture-pipeline",
+        "pbr",
+        "atlas",
+        "texture-runtime-evidence"
+      ],
+      "sourcePaths": [
+        "services/ai3d-worker/tools/optimize_scene_quality.py",
+        "services/ai3d-worker/tools/verify_texture_runtime.py",
+        "services/ai3d-worker/tools/texture_runtime_adapters/blender/autofix_uv_and_atlas.py"
+      ],
+      "staticMarkers": [
+        {
+          "file": "services/ai3d-worker/tools/verify_texture_runtime.py",
+          "contains": "texture"
+        }
+      ],
+      "integrationMarkers": [
+        {
+          "file": "services/ai3d-worker/tests/test_texture_v10.py",
+          "contains": "texture"
+        }
+      ],
+      "regressionCommands": [
+        [
+          "python",
+          "services/ai3d-worker/tests/test_texture_v10.py"
+        ]
+      ]
+    },
+    {
+      "id": "legacy-mesh-quality",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12",
+      "capabilities": [
+        "canonical-mesh-optimizer",
+        "lod",
+        "hlod",
+        "mesh-regression"
+      ],
+      "sourcePaths": [
+        "services/ai3d-worker/ai3d/plugins/mesh_quality_optimizer.py",
+        "services/ai3d-worker/ai3d/mesh_optimizer.py",
+        "services/ai3d-worker/ai3d/production_v12.py"
+      ],
+      "staticMarkers": [
+        {
+          "file": "services/ai3d-worker/ai3d/plugins/mesh_quality_optimizer.py",
+          "contains": "MeshOptimizationPipeline"
+        }
+      ],
+      "integrationMarkers": [
+        {
+          "file": "services/ai3d-worker/scripts/verify_mesh_pipeline_v12.py",
+          "contains": "mesh"
+        }
+      ],
+      "regressionCommands": [
+        [
+          "python",
+          "services/ai3d-worker/tests/test_production_v12.py"
+        ]
+      ]
+    },
+    {
+      "id": "legacy-procedural-quality",
+      "owner": "PROCEDURAL_QUALITY_ENGINE_V10",
+      "capabilities": [
+        "procedural-generation",
+        "temporal-qa",
+        "frame-pacing"
+      ],
+      "sourcePaths": [
+        "scripts/procedural-quality-v10-gate.js",
+        "scripts/run-procedural-tests.js"
+      ],
+      "staticMarkers": [
+        {
+          "file": "scripts/procedural-quality-v10-gate.js",
+          "contains": "procedural"
+        }
+      ],
+      "integrationMarkers": [
+        {
+          "file": "PROCEDURAL_QUALITY_V10_VERIFICATION.json"
+        }
+      ],
+      "regressionCommands": [
+        [
+          "node",
+          "--test",
+          "test/procedural-quality-v10.test.js"
+        ]
+      ]
+    },
+    {
+      "id": "legacy-apng-quality",
+      "owner": "WORLD_SERVER_APNG_QUALITY_SYSTEM_V3_MAX",
+      "capabilities": [
+        "apng-validate",
+        "apng-repair",
+        "apng-release-gate"
+      ],
+      "sourcePaths": [
+        "scripts/apng-quality-gate.js",
+        "scripts/verify-apng-bundle.js",
+        "scripts/integrate-apng-system.js"
+      ],
+      "staticMarkers": [
+        {
+          "file": "scripts/apng-quality-gate.js",
+          "contains": "APNG"
+        }
+      ],
+      "integrationMarkers": [
+        {
+          "file": "test/apng-integration.test.js",
+          "contains": "APNG"
+        }
+      ],
+      "regressionCommands": [
+        [
+          "node",
+          "--test",
+          "test/apng-engine.test.js",
+          "test/apng-gate.test.js",
+          "test/apng-integration.test.js"
+        ]
+      ]
+    },
+    {
+      "id": "legacy-pixel-animation",
+      "owner": "PIXEL_ANIMATION_SYSTEM_V3",
+      "capabilities": [
+        "pixel-atlas",
+        "animation-culling",
+        "mobile-fallback"
+      ],
+      "sourcePaths": [
+        "scripts/pixel-animation-verify.js",
+        "scripts/pixel-animation-auto-integrate.js"
+      ],
+      "staticMarkers": [
+        {
+          "file": "scripts/pixel-animation-verify.js",
+          "contains": "pixel"
+        }
+      ],
+      "integrationMarkers": [
+        {
+          "file": "test/pixel-animation-v3.test.js",
+          "contains": "pixel"
+        }
+      ],
+      "regressionCommands": [
+        [
+          "node",
+          "--test",
+          "test/pixel-animation-v3.test.js",
+          "test/pixel-animation-engine.test.js"
+        ]
+      ]
+    },
+    {
+      "id": "legacy-golden-governance",
+      "owner": "WORLD_SERVER_GOLDEN_STANDARD_V13",
+      "capabilities": [
+        "no-regression",
+        "self-calibration",
+        "desktop-ai-protocol"
+      ],
+      "sourcePaths": [
+        "scripts/quality-regression-gate.js",
+        "scripts/check-desktop-ai-protocol.js",
+        "scripts/quality-self-evolve.js"
+      ],
+      "staticMarkers": [
+        {
+          "file": "scripts/quality-regression-gate.js",
+          "contains": "regression"
+        }
+      ],
+      "integrationMarkers": [
+        {
+          "file": "test/v13-invariant-golden.test.js",
+          "contains": "test"
+        }
+      ],
+      "regressionCommands": [
+        [
+          "node",
+          "--test",
+          "test/v13-invariant-golden.test.js",
+          "test/desktop-ai-error-closure.test.js"
+        ]
+      ]
+    },
+    {
+      "id": "legacy-world-quality-v6",
+      "owner": "WORLD_QUALITY_AUTOPILOT_V6",
+      "capabilities": [
+        "technology-scout",
+        "cpu-routing",
+        "technology-drift",
+        "quality-slo"
+      ],
+      "sourcePaths": [
+        "scripts/world-graphics-technology-scout.js",
+        "scripts/world-cpu-first-graphics-optimizer.js",
+        "scripts/world-technology-drift-gate.js",
+        "scripts/world-quality-slo.js"
+      ],
+      "staticMarkers": [
+        {
+          "file": "scripts/world-graphics-technology-scout.js",
+          "contains": "technology"
+        }
+      ],
+      "integrationMarkers": [
+        {
+          "file": "scripts/world-quality-autopilot.js",
+          "contains": "world-quality"
+        }
+      ],
+      "regressionCommands": [
+        [
+          "node",
+          "--test",
+          "test/world-quality-autopilot.test.js"
+        ]
+      ]
+    },
+    {
+      "id": "legacy-dream-v5",
+      "owner": "WORLD_SERVER_DREAM_AUTOPILOT_V5_CPU",
+      "capabilities": [
+        "fresh-real-device-evidence",
+        "physics-guardian",
+        "gameplay-agent"
+      ],
+      "sourcePaths": [
+        "scripts/world-device-profile-matrix.js",
+        "scripts/cv-gameplay-agent.js",
+        "scripts/character-motion-validator.js"
+      ],
+      "staticMarkers": [
+        {
+          "file": "scripts/cv-gameplay-agent.js",
+          "contains": "gameplay"
+        }
+      ],
+      "integrationMarkers": [
+        {
+          "file": "data/cv-action-policy.json"
+        }
+      ],
+      "regressionCommands": [
+        [
+          "node",
+          "scripts/dream-readiness.js"
+        ]
+      ]
+    },
+    {
+      "id": "legacy-pwa-v4",
+      "owner": "WORLD_SERVER_PWA_SELF_IMPROVING_V4_MAX",
+      "capabilities": [
+        "pwa",
+        "real-ios-evidence",
+        "adaptive-runtime",
+        "production-rollback"
+      ],
+      "sourcePaths": [
+        "shared/pwa-runtime.js",
+        "scripts/real-ios-telemetry-gate.js",
+        "scripts/runtime-integration-discovery.js",
+        ".github/workflows/quality-canary.yml"
+      ],
+      "staticMarkers": [
+        {
+          "file": "shared/pwa-runtime.js",
+          "contains": "serviceWorker"
+        }
+      ],
+      "integrationMarkers": [
+        {
+          "file": "scripts/check-pwa-system.js",
+          "contains": "pwa"
+        }
+      ],
+      "regressionCommands": [
+        [
+          "node",
+          "--test",
+          "test/pwa-system.test.js",
+          "test/runtime-integration-adapters.test.js"
+        ]
+      ]
+    },
+    {
+      "id": "legacy-truth-gate",
+      "owner": "production-100-truth-gate-v1",
+      "capabilities": [
+        "production-certification",
+        "anti-false-100"
+      ],
+      "sourcePaths": [
+        "scripts/world-quality-analyzer.js",
+        "scripts/world-quality-autopilot.js"
+      ],
+      "staticMarkers": [
+        {
+          "file": "scripts/world-quality-analyzer.js",
+          "contains": "production100Certified"
+        }
+      ],
+      "integrationMarkers": [
+        {
+          "file": "test/world-quality-truth-gate.test.js",
+          "contains": "production"
+        }
+      ],
+      "regressionCommands": [
+        [
+          "node",
+          "--test",
+          "test/world-quality-truth-gate.test.js"
+        ]
+      ]
+    },
+    {
+      "id": "legacy-runtime-v12-3",
+      "owner": "WORLD_SERVER_QUALITY_RUNTIME_V12_3",
+      "capabilities": [
+        "github-supabase-bridge",
+        "master-protection",
+        "pixel-atlas-v12"
+      ],
+      "sourcePaths": [
+        "scripts/github-quality-bridge-v12.cjs",
+        "scripts/build-pixel-atlas-v12.cjs",
+        "scripts/check-supabase-migration-manifest-v12.cjs"
+      ],
+      "staticMarkers": [
+        {
+          "file": "scripts/github-quality-bridge-v12.cjs",
+          "contains": "github"
+        }
+      ],
+      "integrationMarkers": [
+        {
+          "file": "scripts/check-supabase-migration-manifest-v12.cjs",
+          "contains": "supabase"
+        }
+      ],
+      "regressionCommands": [
+        [
+          "node",
+          "scripts/check-supabase-migration-manifest-v12.cjs"
+        ]
+      ]
+    },
+    {
+      "id": "legacy-video2game-v5",
+      "owner": "VIDEO2GAME_VOXEL_V5",
+      "capabilities": [
+        "video-to-voxel",
+        "cpu-fallback"
+      ],
+      "workdirCandidates": [
+        "services/video2game-voxel",
+        "services/video2game_voxel",
+        "VIDEO2GAME_VOXEL_V5"
+      ],
+      "sourcePaths": [
+        "video2game_voxel/pipeline.py",
+        "video2game_voxel/voxelize.py",
+        "video2game_voxel/quality_gate.py"
+      ],
+      "staticMarkers": [
+        {
+          "file": "video2game_voxel/pipeline.py",
+          "contains": "pipeline"
+        }
+      ],
+      "integrationMarkers": [
+        {
+          "file": "PIPELINE_REPORT.json"
+        },
+        {
+          "file": "VALIDATION_REPORT.json"
+        },
+        {
+          "file": "QUALITY_GATE.json"
+        },
+        {
+          "file": "REGRESSION_REPORT.json"
+        },
+        {
+          "file": "tests/test_regression.py",
+          "contains": "regression"
+        }
+      ],
+      "regressionCommands": [
+        [
+          "python",
+          "REGRESSION_CHECK.py"
+        ]
+      ]
+    },
+    {
+      "id": "legacy-pixel3dgs-v6",
+      "owner": "PIXEL_3DGS_CPU_V6_PHONE_4D_MAX",
+      "capabilities": [
+        "cpu-3dgs",
+        "phone-capture",
+        "dynamic-4d"
+      ],
+      "workdirCandidates": [
+        "services/pixel3dgs",
+        "services/pixel-3dgs",
+        "PIXEL_3DGS_CPU_V6_PHONE_4D_MAX"
+      ],
+      "sourcePaths": [
+        "pixel3dgs/pipeline.py",
+        "pixel3dgs/dynamic4d_cpu.py",
+        "phone_capture/manifest.webmanifest"
+      ],
+      "staticMarkers": [
+        {
+          "file": "pixel3dgs/pipeline.py",
+          "contains": "pipeline"
+        }
+      ],
+      "integrationMarkers": [
+        {
+          "file": "v6_self_test.py",
+          "contains": "self"
+        }
+      ],
+      "regressionCommands": [
+        [
+          "python",
+          "v6_self_test.py"
+        ],
+        [
+          "python",
+          "tools/regression_runner.py"
+        ]
+      ]
+    },
+    {
+      "id": "legacy-lowfi-25d",
+      "owner": "LOWFI_25D_SERVER_PATCH",
+      "capabilities": [
+        "lowfi-25d-runtime"
+      ],
+      "sourcePaths": [
+        "api/lowfi-25d-scene.js",
+        "apps/lowfi-25d/index.html"
+      ],
+      "staticMarkers": [
+        {
+          "file": "api/lowfi-25d-scene.js",
+          "contains": "lowfi"
+        }
+      ],
+      "integrationMarkers": [
+        {
+          "file": "apps/lowfi-25d/index.html",
+          "contains": "lowfi"
+        }
+      ],
+      "regressionCommands": [
+        [
+          "node",
+          "--check",
+          "api/lowfi-25d-scene.js"
+        ]
+      ]
+    },
+    {
+      "id": "legacy-quality-autopilot-v11",
+      "owner": "QUALITY_AUTOPILOT_PATCH_v11_CPU_MAX",
+      "capabilities": [
+        "quality-autopilot-v11",
+        "quality-security-gate",
+        "quality-readiness-v11"
+      ],
+      "sourcePaths": [
+        "scripts/quality-readiness-v11.js",
+        "scripts/quality-security-gate.js"
+      ],
+      "staticMarkers": [
+        {
+          "file": "scripts/quality-readiness-v11.js",
+          "contains": "quality"
+        }
+      ],
+      "integrationMarkers": [
+        {
+          "file": "test/quality-autopilot-v11.test.js",
+          "contains": "test"
+        }
+      ],
+      "regressionCommands": [
+        [
+          "node",
+          "--test",
+          "test/quality-autopilot-v11.test.js"
+        ]
+      ]
+    },
+    {
+      "id": "legacy-quiet-autopilot-v6",
+      "owner": "WORLD_SERVER_QUIET_QUALITY_AUTOPILOT_V6",
+      "capabilities": [
+        "quiet-quality-autopilot",
+        "quality-proof-gate",
+        "quality-otel-bridge"
+      ],
+      "sourcePaths": [
+        "scripts/verify-v6-runtime.js",
+        "scripts/quality-proof-gate.js",
+        "scripts/quality-otel-bridge-check.js"
+      ],
+      "staticMarkers": [
+        {
+          "file": "scripts/verify-v6-runtime.js",
+          "contains": "runtime"
+        }
+      ],
+      "integrationMarkers": [
+        {
+          "file": "scripts/quality-proof-gate.js",
+          "contains": "quality"
+        }
+      ],
+      "regressionCommands": [
+        [
+          "node",
+          "scripts/verify-v6-runtime.js"
+        ]
+      ]
+    },
+    {
+      "id": "legacy-gap-closure-v1",
+      "owner": "GAP_CLOSURE_SYSTEM_V1",
+      "capabilities": [
+        "gap-closure",
+        "gap-regression-test"
+      ],
+      "sourcePaths": [
+        "test/gap-closure.test.js"
+      ],
+      "staticMarkers": [
+        {
+          "file": "test/gap-closure.test.js",
+          "contains": "gap"
+        }
+      ],
+      "integrationMarkers": [
+        {
+          "file": "test/gap-closure.test.js",
+          "contains": "test"
+        }
+      ],
+      "regressionCommands": [
+        [
+          "node",
+          "--test",
+          "test/gap-closure.test.js"
+        ]
+      ]
+    }
+  ],
+  "generatedFromBundleAudit": "WORLD_SERVER_ONE_FOLDER_V7_4"
+}

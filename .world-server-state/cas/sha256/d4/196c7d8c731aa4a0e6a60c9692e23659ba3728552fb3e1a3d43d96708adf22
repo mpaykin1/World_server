@@ -1,0 +1,17 @@
+{
+  "generatedAt": "2026-08-24T06:55:20.810Z",
+  "pass": true,
+  "counts": {
+    "blocker": 0,
+    "major": 1,
+    "warning": 0
+  },
+  "findings": [
+    {
+      "severity": "major",
+      "category": "mobile",
+      "file": "apps/ai3d-voxel-city/index.html",
+      "message": "viewport-fit=cover missing"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1.0.0",
+  "endpointEnv": "QUALITY_VISUAL_CRITIC_URL",
+  "dimensions": [
+    "legibility",
+    "occlusion",
+    "composition",
+    "material-readability",
+    "lighting",
+    "detail-consistency",
+    "mobile-clarity"
+  ],
+  "rule": "Critic creates findings only; cannot approve Golden baseline."
+}

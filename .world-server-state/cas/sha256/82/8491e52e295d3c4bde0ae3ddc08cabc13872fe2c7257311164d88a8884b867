@@ -1,0 +1,10 @@
+{
+  "pass": true,
+  "nodeSyntaxChecks": [
+    "payload/scripts/world-quality-analyzer.js",
+    "payload/scripts/world-quality-autopilot.js",
+    "apply-production-100-truth-gate.cjs"
+  ],
+  "truthGateUnitTests": "4/4 PASS",
+  "note": "Full repository release:gate must run on the user's World_server checkout because the execution container has no GitHub/network checkout access."
+}

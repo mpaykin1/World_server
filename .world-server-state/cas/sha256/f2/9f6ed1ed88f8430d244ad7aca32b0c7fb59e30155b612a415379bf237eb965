@@ -1,0 +1,8 @@
+{
+  "version": 10,
+  "migration": "procedural_quality_v10",
+  "supabaseMigrationApplied": true,
+  "githubMasterContainsV10": false,
+  "physicalDeviceCertification": "PENDING_REAL_DEVICES",
+  "goldenProductionBaselines": "PENDING_PREVIEW_CAPTURE"
+}

@@ -1,0 +1,41 @@
+name: Dream Quality V5 Audit
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 3 * * *"
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install pillow numpy
+      - run: npm ci --ignore-scripts || npm install
+      - run: npx playwright install --with-deps chromium
+      - name: Collect real local runtime evidence
+        run: |
+          npm run runtime:proof
+          npm run quality:dream-agent
+          npm run quality:physics-guardian
+          npm run quality:performance:capture
+          npm run quality:performance-budget -- --require
+          npm run quality:texture-baker:smoke
+          npm run quality:meshlets
+          npm run quality:world:v5
+          npm run quality:system:v5
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v5-quality-evidence
+          path: |
+            *_REPORT.json
+            *_TELEMETRY.json
+            data/world-quality-telemetry-export.json
+          if-no-files-found: warn

@@ -1,0 +1,14 @@
+{
+  "version": "6.0",
+  "packageGate": "PASS",
+  "nodeTests": {"passed": 23, "failed": 0},
+  "readinessPct": 96,
+  "deviceMatrix": "PASS",
+  "visualCritic": {"score": 90, "pass": true},
+  "tournament": {"pass": true, "winner": "high"},
+  "rollback": false,
+  "installerMock": "PASS",
+  "supabaseMigration": "procedural_quality_v6_learning_fields applied",
+  "productionVercelVerification": "pending until V6 branch is deployed",
+  "physicalDeviceFarm": "not executed"
+}

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 2,
+  "qualityScoreFloor": 95,
+  "targetScore": 100,
+  "performance": {
+    "desktopFps": 55,
+    "mobileFps": 30
+  },
+  "visualRegression": {
+    "maxChangedPixelRatio": 0.025,
+    "maxMeanChannelDelta": 7.0
+  },
+  "geometry": {
+    "allowSourceHashChange": false,
+    "allowTriangleLoss": false,
+    "allowTextureCountLoss": false
+  },
+  "automation": {
+    "requiredGates": 17,
+    "requireZeroManualRuntimeEditsPerWorld": true,
+    "protectedErrorsNeverRecur": true,
+    "canaryBeforeGlobalPropagation": true,
+    "sharedRuntimeHashRequired": true
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0.0",
+  "scaleOut": {
+    "queueDepthPerWorker": 2,
+    "p95WaitSeconds": 45,
+    "minHealthyWorkers": 1
+  },
+  "hardLimits": {
+    "maxWorkers": 8
+  },
+  "provider": {
+    "urlEnv": "GPU_FLEET_CONTROL_URL",
+    "tokenEnv": "GPU_FLEET_CONTROL_TOKEN"
+  },
+  "status": "ADAPTER_PREPARED"
+}

@@ -1,0 +1,13 @@
+{
+  "pass": true,
+  "changes": 0,
+  "applied": false,
+  "worlds": [
+    {
+      "world": "sample-city",
+      "changes": [],
+      "applied": false
+    }
+  ],
+  "sourceAssetsTouched": false
+}

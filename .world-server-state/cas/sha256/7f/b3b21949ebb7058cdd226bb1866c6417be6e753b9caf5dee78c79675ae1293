@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "engineVersion": "3.0.0",
+  "apply": false,
+  "normalizeAll": false,
+  "policyVersion": 1,
+  "scanned": 0,
+  "png": 0,
+  "apng": 0,
+  "repaired": 0,
+  "normalized": 0,
+  "errors": 0,
+  "warnings": 0,
+  "remainingErrors": 0,
+  "remainingWarnings": 0,
+  "acceptedIntentionalIssues": 0,
+  "qualityScoreAverage": 100,
+  "failures": [],
+  "files": []
+}

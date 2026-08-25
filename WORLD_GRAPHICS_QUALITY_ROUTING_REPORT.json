@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "6.0.0",
+  "system": "WORLD_GRAPHICS_QUALITY_ROUTER",
+  "generatedAt": "2026-08-25T01:15:50.634Z",
+  "defaultPolicy": "CPU_FIRST_FREE_LOCAL",
+  "cpuReadiness": 100,
+  "routes": [
+    {
+      "technology": "three-webgl2",
+      "priority": "CPU_FIRST",
+      "detail": [
+        "d"
+      ],
+      "optimization": [
+        "o"
+      ]
+    },
+    {
+      "technology": "trellis2",
+      "priority": "OPTIONAL_GPU",
+      "detail": [
+        "d"
+      ],
+      "optimization": [
+        "o"
+      ]
+    }
+  ],
+  "gpuRoutesOptional": [
+    "trellis2"
+  ],
+  "hardGateReady": true
+}

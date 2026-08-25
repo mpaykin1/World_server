@@ -1,0 +1,30 @@
+{
+  "pass": true,
+  "run": {
+    "recordedAt": "2026-08-24T05:14:34.098613+00:00",
+    "project": "world-factory-core",
+    "pass": true,
+    "score": 100.0,
+    "zeroQualityRegression": true,
+    "reports": [
+      "auto-repair.json",
+      "bake-farm.json",
+      "consumer-drift.json",
+      "error-immunity.json",
+      "global-autopilot.json",
+      "learning-actions.json",
+      "quality-graph.json",
+      "quality-pipeline.json",
+      "quality-ratchet.json",
+      "regression.json",
+      "self-heal.json",
+      "static-validation.json",
+      "v8-optimization-gate.json",
+      "v9-cpu-first-gate.json",
+      "v9-preparation.json"
+    ]
+  },
+  "actions": [],
+  "failures": [],
+  "quarantineCount": 0
+}

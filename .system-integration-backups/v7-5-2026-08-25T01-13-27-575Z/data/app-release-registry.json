@@ -1,0 +1,83 @@
+{
+  "version": "2.0.0",
+  "policy": "deny-by-default",
+  "rule": "Only certified apps may be returned by /api/apps and shown in the public catalog.",
+  "apps": {
+    "voxel-world": {
+      "title": "Voxel World",
+      "visible": true,
+      "status": "certified",
+      "kind": "game",
+      "goldenStandard": "v2",
+      "required": [
+        "desktop-controls",
+        "camera-relative-directions",
+        "mobile-controls",
+        "mouse-look",
+        "touch-look",
+        "grounding",
+        "wall-collision",
+        "step-up",
+        "spawn",
+        "render"
+      ]
+    },
+    "ai3d-voxel-city": {
+      "title": "AI3D Voxel City",
+      "visible": true,
+      "status": "certified",
+      "kind": "game",
+      "goldenStandard": "v2",
+      "required": [
+        "desktop-controls",
+        "camera-relative-directions",
+        "mobile-controls",
+        "mouse-look",
+        "touch-look",
+        "grounding",
+        "wall-collision",
+        "step-up",
+        "spawn",
+        "render"
+      ]
+    },
+    "survival": {
+      "title": "Survival",
+      "visible": false,
+      "status": "quarantine",
+      "kind": "game",
+      "reason": "No certified collision/mobile behavioral gate yet."
+    },
+    "world-sharabass": {
+      "title": "Мир Шарабас",
+      "visible": false,
+      "status": "quarantine",
+      "kind": "game",
+      "reason": "Touch exists, but world collision is not certified."
+    },
+    "ai3d-reference-test": {
+      "title": "AI3D Reference Test",
+      "visible": false,
+      "status": "diagnostic",
+      "kind": "diagnostic"
+    },
+    "ai-3d": {
+      "title": "AI 3D",
+      "visible": false,
+      "status": "tool",
+      "kind": "tool"
+    },
+    "chat": {
+      "title": "Chat",
+      "visible": false,
+      "status": "tool",
+      "kind": "tool"
+    },
+    "catalog": {
+      "title": "3D Каталог",
+      "visible": false,
+      "status": "system",
+      "kind": "hub"
+    }
+  }
+}

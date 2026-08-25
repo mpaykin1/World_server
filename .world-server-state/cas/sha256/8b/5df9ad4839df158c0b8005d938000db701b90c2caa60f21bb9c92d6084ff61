@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "4.0.0",
+  "system": "WORLD_VISIBILITY_OPTIMIZER",
+  "generatedAt": "2026-08-24T06:55:25.663Z",
+  "strategy": "frustum_sector_hlod_conservative_occlusion",
+  "hardwareOcclusionQueryRequiredFor100": false,
+  "profiles": {
+    "SAFE": {
+      "sectorSize": 24,
+      "farSectors": 3,
+      "occlusionHz": 8,
+      "detailKeepFrames": 6
+    },
+    "BALANCED": {
+      "sectorSize": 20,
+      "farSectors": 5,
+      "occlusionHz": 14,
+      "detailKeepFrames": 8
+    },
+    "HIGH": {
+      "sectorSize": 16,
+      "farSectors": 8,
+      "occlusionHz": 24,
+      "detailKeepFrames": 12
+    },
+    "ULTRA": {
+      "sectorSize": 16,
+      "farSectors": 12,
+      "occlusionHz": 40,
+      "detailKeepFrames": 16
+    }
+  },
+  "guards": {
+    "neverCullNearPlayer": true,
+    "neverCullHeroLandmarkByHeuristic": true,
+    "temporalHysteresis": true,
+    "frustumFallback": true
+  },
+  "runtimeProfilerDetected": true,
+  "deviceMatrixDetected": true,
+  "percent": 100
+}

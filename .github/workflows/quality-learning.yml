@@ -1,0 +1,87 @@
+name: quality-learning-v8
+on:
+  workflow_run:
+    workflows: ["check", "World Quality Pipeline V8"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  protect-learn-propagate:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: pip install -r requirements.txt
+      - run: npm install --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium
+      - name: Import production quality telemetry when configured
+        if: ${{ secrets.QUALITY_TELEMETRY_EXPORT_URL != '' && secrets.QUALITY_EXPORT_TOKEN != '' }}
+        env:
+          QUALITY_TELEMETRY_EXPORT_URL: ${{ secrets.QUALITY_TELEMETRY_EXPORT_URL }}
+          QUALITY_EXPORT_TOKEN: ${{ secrets.QUALITY_EXPORT_TOKEN }}
+        run: |
+          mkdir -p quality/reports
+          curl --fail --retry 3 --retry-all-errors -H "Authorization: Bearer $QUALITY_EXPORT_TOKEN" "$QUALITY_TELEMETRY_EXPORT_URL" -o quality/reports/production-telemetry-export.json
+          python tools/import_production_telemetry.py quality/reports/production-telemetry-export.json
+      - name: V8 transactional known-error self heal
+        run: python tools/self_heal_protected_errors.py --apply
+      - name: Deterministic local quality wall
+        run: python tools/quality_pipeline.py
+      - name: Native + threaded WASM SIMD parity
+        run: |
+          node tools/verify_wasm_simd.mjs
+          node tools/verify_wasm_threads.mjs
+      - name: Start proven runtime
+        run: |
+          python -m http.server 8000 > /tmp/world-server.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:8000/worlds/registry.json && break; sleep 1; done
+      - name: Browser, fuzz and visual regression
+        run: |
+          npm run qa:browser
+          npm run qa:fuzz
+          npm run qa:visual
+      - name: Representative device farm
+        run: node tools/device_farm_runner.mjs
+      - name: Durable Neon telemetry smoke when configured
+        if: ${{ secrets.DATABASE_URL != '' }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: node tools/neon_telemetry_smoke.mjs
+      - name: Compile graph, learn, ratchet, protect
+        run: |
+          python tools/quality_graph.py --repo .
+          python tools/learn_from_reports.py
+          python tools/quality_ratchet.py --promote --project "github-${GITHUB_REPOSITORY}"
+          python tools/fix_rule_agent.py
+          python tools/compile_protection_pack.py
+          python tools/error_immunity.py check
+      - name: Transactional representative canary then all-consumer propagation
+        run: python tools/quality_rollout.py --repo . --mode promote
+      - name: Final consumer drift verification
+        run: |
+          python tools/verify_consumers.py --repo . --scope all
+          python tools/consumer_drift_audit.py --repo .
+      - name: Readiness report
+        run: python tools/readiness.py
+      - name: Commit learned protections only after every gate passes
+        run: |
+          if ! git diff --quiet -- quality/knowledge quality/reports; then
+            git config user.name "world-quality-bot"
+            git config user.email "world-quality-bot@users.noreply.github.com"
+            git checkout -B quality/auto-learning-${GITHUB_RUN_ID}
+            git add quality/knowledge quality/reports
+            git commit -m "quality: V8 learn protections and proven patterns [run ${GITHUB_RUN_ID}]"
+            git push -f origin HEAD
+            gh pr create --base master --head "quality/auto-learning-${GITHUB_RUN_ID}" --title "Quality learning V8 ${GITHUB_RUN_ID}" --body "Automated V8 protection/pattern update. Ratchet, browser, visual, device, immunity and rollout gates passed."
+          fi
+        env: { GH_TOKEN: "${{ github.token }}" }
