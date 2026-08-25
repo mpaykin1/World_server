@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0.0",
+  "policy": "auto-discover-free-opensource-if-plus-50pct-quality",
+  "thresholdPercent": 50,
+  "allowedLicenses": ["MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "CC0-1.0", "ISC", "Unlicense"],
+  "deniedLicenses": ["UNKNOWN", "GPL-2.0", "GPL-3.0", "AGPL-3.0"],
+  "evaluation": {
+    "metrics": ["quality_runtime_score", "gap_closure", "performance", "stability", "coverage", "atlas_ready", "real_device"],
+    "requires": "before/after measurement on same workload, no regression in existing 160 tests",
+    "gate": "npm run check + npm run quality:regression must stay PASS"
+  },
+  "automation": {
+    "discoverInterval": "every autoloop tick (15m)",
+    "dryRunFirst": false,
+    "autoInstall": "enabled if >=50% gain and allowed license and mutualSupportScore>=50 and no blocker",
+    "mutualSupport": true,
+    "mutualSupportThreshold": 50,
+    "sandbox": "install in branch ai/plugins/*, test, PR to master only after human review if production channel"
+  },
+  "mutualSupport": {
+    "enabled": true,
+    "graph": "lib/plugin-orchestrator.js builds synergy graph, each plugin boosts 2+ existing systems",
+    "scoring": "synergy = sum(crossSystemGains)/maxSingleGain *100, require >=50"
+  },
+  "sources": ["npm registry", "github topics", "supabase extensions", "vercel marketplace"],
+  "log": "QUALITY_PLUGIN_DISCOVERY.log"
+}
