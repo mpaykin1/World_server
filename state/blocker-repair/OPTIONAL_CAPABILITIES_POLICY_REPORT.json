@@ -1,0 +1,51 @@
+{
+  "patch": "WORLD_SERVER_V7_5_OPTIONAL_EXTERNAL_CAPABILITIES_V1",
+  "version": "1.0.0",
+  "pass": true,
+  "installedAt": "2026-08-25T02:39:45.446Z",
+  "root": "C:\\Users\\user\\Desktop\\World_server",
+  "policyPath": "data\\blocker-repair-policy.json",
+  "backupPath": ".blocker-repair-backups\\optional-capabilities-v1-2026-08-25T02-39-45-442Z\\data\\blocker-repair-policy.json",
+  "sha256Before": "79b95e960e84bd4bf74819ce535bd27b3f23ef653b3700e1bd1d780ba3d9b912",
+  "sha256After": "b243987169d3784333e82ae462feafa9739e8f1da73a5f7b7f03102b42bf0976",
+  "beforeRequiredBlockers": [
+    "toolchain-bootstrap",
+    "tlc",
+    "wasmtime",
+    "native-cosign",
+    "etw-ebpf-perf",
+    "fresh-android-device",
+    "fresh-ios-device",
+    "remote-cas-peer",
+    "fenced-migration",
+    "8h-long-soak",
+    "vercel-deployment",
+    "local-gates",
+    "durable-scheduler"
+  ],
+  "afterRequiredBlockers": [
+    "toolchain-bootstrap",
+    "tlc",
+    "wasmtime",
+    "native-cosign",
+    "etw-ebpf-perf",
+    "fenced-migration",
+    "8h-long-soak",
+    "vercel-deployment",
+    "local-gates",
+    "durable-scheduler"
+  ],
+  "optionalCapabilities": [
+    "fresh-android-device",
+    "fresh-ios-device",
+    "remote-cas-peer"
+  ],
+  "optionalCapabilitiesBlockMerge": false,
+  "removedFromRequired": [
+    "fresh-android-device",
+    "fresh-ios-device",
+    "remote-cas-peer"
+  ],
+  "preservedUnknownRequired": [],
+  "nextAction": "Run npm run blockers:tick, then npm run blockers:status. Optional capability waiting states remain honest but no longer block mergeSafe."
+}

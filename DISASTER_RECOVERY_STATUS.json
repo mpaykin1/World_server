@@ -1,9 +1,9 @@
 {
   "schemaVersion": "2.0.0",
-  "generatedAt": "2026-08-25T01:51:12.906Z",
+  "generatedAt": "2026-08-25T03:09:49.850Z",
   "status": "SNAPSHOT_CREATED",
-  "latestSnapshot": "2026-08-25T01-51-12-896Z-pre-control-plane-59f74cd02be8",
-  "merkleRoot": "59f74cd02be8341ec6d8e19ce7163952ca67f6cc091227b4bbbf69794b6b2600",
-  "files": 2693,
+  "latestSnapshot": "2026-08-25T03-09-49-841Z-pre-control-plane-19a02345b57d",
+  "merkleRoot": "19a02345b57d36262081addf5d99560c3ed66c44ccb783730b6c683538f8bb6d",
+  "files": 2706,
   "casDeduplicated": true
 }

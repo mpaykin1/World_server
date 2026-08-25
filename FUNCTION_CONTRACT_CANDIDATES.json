@@ -1,6 +1,6 @@
 {
   "schemaVersion": "7.5.0",
-  "generatedAt": "2026-08-25T02:04:19.561Z",
+  "generatedAt": "2026-08-25T03:10:33.400Z",
   "candidates": [
     {
       "capability": "dependency-graph",
@@ -277,6 +277,13 @@
     },
     {
       "capability": "typescript-native-ast-dataflow",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "wasi-component-model",
       "owner": "SYSTEM_INTEGRATION_LAYER_V7",
       "systemId": "system-integration-v7",
       "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",

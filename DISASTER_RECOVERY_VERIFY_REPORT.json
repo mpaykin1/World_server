@@ -1,10 +1,10 @@
 {
   "schemaVersion": "2.0.0",
-  "generatedAt": "2026-08-25T02:04:07.477Z",
-  "snapshot": "2026-08-25T01-51-12-896Z-pre-control-plane-59f74cd02be8",
-  "merkleRoot": "59f74cd02be8341ec6d8e19ce7163952ca67f6cc091227b4bbbf69794b6b2600",
-  "verifiedObjects": 2693,
-  "totalObjects": 2693,
+  "generatedAt": "2026-08-25T03:10:19.813Z",
+  "snapshot": "2026-08-25T03-09-49-841Z-pre-control-plane-19a02345b57d",
+  "merkleRoot": "19a02345b57d36262081addf5d99560c3ed66c44ccb783730b6c683538f8bb6d",
+  "verifiedObjects": 2706,
+  "totalObjects": 2706,
   "pass": true,
   "failures": []
 }

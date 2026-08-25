@@ -1,13 +1,11 @@
 {
   "schemaVersion": "7.5.0",
-  "generatedAt": "2026-08-25T02:04:22.636Z",
-  "traceId": "520077b29d0de55caaca23e9ca955d8d",
-  "traceparent": "00-520077b29d0de55caaca23e9ca955d8d-15ab427e9ed91feb-01",
+  "generatedAt": "2026-08-25T03:10:36.698Z",
+  "traceId": "ba9262bd2a1862a4d92185f5e79b2c8b",
+  "traceparent": "00-ba9262bd2a1862a4d92185f5e79b2c8b-628c974de85bdb10-01",
   "pass": false,
   "requiredFailures": [
-    "snapshot",
     "graphics-ratchet",
-    "reproducible-build",
     "integration-gate",
     "policy",
     "selftest",
@@ -22,85 +20,84 @@
       "id": "toolchain-security",
       "required": true,
       "pass": true,
-      "durationMs": 110,
+      "durationMs": 185,
       "stdout": "[TOOLCHAIN_SECURITY] PASS cosign=absent min=3.1.3"
     },
     {
       "id": "toolchain-health",
       "required": true,
       "pass": true,
-      "durationMs": 125,
-      "stdout": "[TOOLCHAIN_V6] PASS apply=false installed=1/5"
+      "durationMs": 225,
+      "stdout": "[TOOLCHAIN_V6] PASS apply=false installed=2/5"
     },
     {
       "id": "telemetry",
       "required": true,
       "pass": true,
       "durationMs": 100,
-      "stdout": "{\n  \"schemaVersion\": \"2.0.0\",\n  \"generatedAt\": \"2026-08-25T02:03:38.696Z\",\n  \"w3cTraceContext\": true,\n  \"otlpHttpJson\": true,\n  \"localJsonl\": true,\n  \"logPath\": \".world-server-state/telemetry/integration-spans.jsonl\",\n  \"endpointConfigured\": false,\n  \"pass\": true\n}"
+      "stdout": "{\n  \"schemaVersion\": \"2.0.0\",\n  \"generatedAt\": \"2026-08-25T03:09:44.669Z\",\n  \"w3cTraceContext\": true,\n  \"otlpHttpJson\": true,\n  \"localJsonl\": true,\n  \"logPath\": \".world-server-state/telemetry/integration-spans.jsonl\",\n  \"endpointConfigured\": false,\n  \"pass\": true\n}"
     },
     {
       "id": "snapshot",
       "required": true,
-      "pass": false,
-      "durationMs": 4483,
-      "error": "[CAS_MERKLE] FAIL Error: EBUSY: resource busy or locked, open 'C:\\Users\\user\\Desktop\\World_server\\state\\blocker-repair\\unified.lock'\n    at Object.openSync (node:fs:561:18)\n    at Object.readFileSync (node:fs:445:35)\n    at shaFile (C:\\Users\\user\\Desktop\\World_server\\scripts\\integration-utils.cjs:14:43)\n    at buildIndex (C:\\Users\\user\\Desktop\\World_server\\scripts\\cas-merkle-store.cjs:69:18)\n    at snapshot (C:\\Users\\user\\Desktop\\World_server\\scripts\\cas-merkle-store.cjs:90:19)\n    at Object.<anonymous> (C:\\Users\\user\\Desktop\\World_server\\scripts\\cas-merkle-store.cjs:157:32)\n    at Module._compile (node:internal/modules/cjs/loader:1830:14)\n    at Object..js (node:internal/modules/cjs/loader:1961:10)\n    at Module.load (node:internal/modules/cjs/loader:1553:32)\n    at Module._load (node:internal/modules/cjs/loader:1355:12)",
-      "exitCode": 2
+      "pass": true,
+      "durationMs": 5190,
+      "stdout": "[CAS_SNAPSHOT] 2026-08-25T03-09-49-841Z-pre-control-plane-19a02345b57d files=2706 root=19a02345b57d36262081addf5d99560c3ed66c44ccb783730b6c683538f8bb6d"
     },
     {
       "id": "native-ast-dataflow",
       "required": true,
       "pass": true,
-      "durationMs": 91,
+      "durationMs": 99,
       "stdout": "[NATIVE_AST] PASS fallback-v5"
     },
     {
       "id": "semantic-graph",
       "required": true,
       "pass": true,
-      "durationMs": 2138,
-      "stdout": "[SEMANTIC_GRAPH] PASS files=1077 symbols=4614 calls=182737"
+      "durationMs": 2256,
+      "stdout": "[SEMANTIC_GRAPH] PASS files=1077 symbols=4614 calls=182757"
     },
     {
       "id": "change-impact",
       "required": true,
       "pass": true,
-      "durationMs": 628,
-      "stdout": "[CHANGE_IMPACT] changed=114 affected=114 systems=4 risk=50 tests=check,quality:regression,quality:world,golden:e2e,integration:verify,release:gate"
+      "durationMs": 1116,
+      "stdout": "[CHANGE_IMPACT] changed=101 affected=101 systems=3 risk=35 tests=check,quality:regression,quality:world,integration:verify"
     },
     {
       "id": "assets",
       "required": true,
       "pass": true,
-      "durationMs": 1057,
+      "durationMs": 1249,
       "stdout": "[ASSET_REGISTRY_V2] assets=48 unique=43 duplicates=5 missingDeps=0"
     },
     {
       "id": "project-directives",
       "required": true,
       "pass": true,
-      "durationMs": 87,
+      "durationMs": 91,
       "stdout": "[DIRECTIVES] PASS 100%"
     },
     {
       "id": "asset-ingestion-plan",
       "required": true,
       "pass": true,
-      "durationMs": 88,
+      "durationMs": 109,
       "stdout": "[ASSET_PLAN] PASS NO_TASK"
     },
     {
       "id": "technology-lock",
       "required": true,
       "pass": true,
-      "durationMs": 115,
+      "durationMs": 97,
       "stdout": "[TECH_LOCK] PASS requested=0 missing=0"
     },
     {
       "id": "graphics-ratchet",
       "required": true,
       "pass": false,
-      "durationMs": 1445,
+      "durationMs": 1539,
       "error": "[GRAPHICS_GUARD] FAIL protectedChanges=20 failed=20",
       "exitCode": 2
     },
@@ -108,169 +105,168 @@
       "id": "audio-variation",
       "required": true,
       "pass": true,
-      "durationMs": 161,
+      "durationMs": 93,
       "stdout": "[AUDIO_VARIATION] PASS N/A"
     },
     {
       "id": "gameplay-spatial-contract",
       "required": true,
       "pass": true,
-      "durationMs": 107,
+      "durationMs": 97,
       "stdout": "[GAMEPLAY_CONTRACT] PASS N/A"
     },
     {
       "id": "desktop-ai-report-contract",
       "required": true,
       "pass": true,
-      "durationMs": 89,
+      "durationMs": 91,
       "stdout": "[DESKTOP_AI_REPORT] PASS N/A"
     },
     {
       "id": "queue",
       "required": true,
       "pass": true,
-      "durationMs": 91,
-      "stdout": "{\n  \"schemaVersion\": \"2.0.0\",\n  \"generatedAt\": \"2026-08-25T02:03:49.297Z\",\n  \"ok\": true,\n  \"backend\": \"node:sqlite\",\n  \"journal\": \"WAL\",\n  \"synchronous\": \"FULL\",\n  \"idempotency\": true,\n  \"priorityQueue\": true,\n  \"checkpointResume\": true,\n  \"leaseRecovery\": true,\n  \"deadLetterQueue\": true,\n  \"retry\": true,\n  \"counts\": {},\n  \"oldestActiveAt\": null\n}"
+      "durationMs": 97,
+      "stdout": "{\n  \"schemaVersion\": \"2.0.0\",\n  \"generatedAt\": \"2026-08-25T03:09:56.811Z\",\n  \"ok\": true,\n  \"backend\": \"node:sqlite\",\n  \"journal\": \"WAL\",\n  \"synchronous\": \"FULL\",\n  \"idempotency\": true,\n  \"priorityQueue\": true,\n  \"checkpointResume\": true,\n  \"leaseRecovery\": true,\n  \"deadLetterQueue\": true,\n  \"retry\": true,\n  \"counts\": {},\n  \"oldestActiveAt\": null\n}"
     },
     {
       "id": "config-contract",
       "required": true,
       "pass": true,
-      "durationMs": 250,
+      "durationMs": 413,
       "stdout": "[CONFIG_CONTRACT] PASS cue=embedded"
     },
     {
       "id": "feature-flags",
       "required": true,
       "pass": true,
-      "durationMs": 164,
+      "durationMs": 97,
       "stdout": "[FEATURE_FLAGS] PASS 6/6"
     },
     {
       "id": "wit-component-contract",
       "required": true,
       "pass": true,
-      "durationMs": 247,
-      "stdout": "[WIT_COMPONENT] PASS wasmtime=false"
+      "durationMs": 274,
+      "stdout": "[WIT_COMPONENT] PASS wasmtime=true"
     },
     {
       "id": "adapter-sandbox",
       "required": true,
       "pass": true,
-      "durationMs": 226,
-      "stdout": "[ADAPTER_SANDBOX] PASS runtime=deny-untrusted"
+      "durationMs": 388,
+      "stdout": "[ADAPTER_SANDBOX] PASS runtime=wasmtime"
     },
     {
       "id": "secure-update",
       "required": true,
       "pass": true,
-      "durationMs": 196,
+      "durationMs": 109,
       "stdout": "[UPDATE_TRUST] PASS targets=6"
     },
     {
       "id": "reproducible-build",
       "required": true,
-      "pass": false,
-      "durationMs": 4005,
-      "error": "node:fs:561\r\n  return binding.open(\r\n                 ^\r\n\r\nError: EBUSY: resource busy or locked, open 'C:\\Users\\user\\Desktop\\World_server\\state\\blocker-repair\\unified.lock'\r\n    at Object.openSync (node:fs:561:18)\r\n    at Object.readFileSync (node:fs:445:35)\r\n    at fingerprint (C:\\Users\\user\\Desktop\\World_server\\scripts\\reproducible-build-gate.cjs:4:391)\r\n    at Object.<anonymous> (C:\\Users\\user\\Desktop\\World_server\\scripts\\reproducible-build-gate.cjs:5:9)\r\n    at Module._compile (node:internal/modules/cjs/loader:1830:14)\r\n    at Object..js (node:internal/modules/cjs/loader:1961:10)\r\n    at Module.load (node:internal/modules/cjs/loader:1553:32)\r\n    at Module._load (node:internal/modules/cjs/loader:1355:12)\r\n    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)\r\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5) {\r\n  errno: -4082,\r\n  code: 'EBUSY',\r\n  syscall: 'open',\r\n  path: 'C:\\\\Users\\\\user\\\\Desktop\\\\World_server\\\\state\\\\blocker-repair\\\\unified.lock'\r\n}\r\n\r\nNode.js v24.15.0",
-      "exitCode": 1
+      "pass": true,
+      "durationMs": 7829,
+      "stdout": "[REPRO_BUILD] PASS files=2599"
     },
     {
       "id": "model-check",
       "required": true,
       "pass": true,
-      "durationMs": 88,
+      "durationMs": 97,
       "stdout": "[MODEL_CHECK] PASS embeddedStates=15 tlc=optional-unavailable"
     },
     {
       "id": "cas-peer-discovery",
       "required": true,
       "pass": true,
-      "durationMs": 1002,
+      "durationMs": 1012,
       "stdout": "[CAS_DISCOVERY] PASS peers=0"
     },
     {
       "id": "distributed-cas",
       "required": true,
       "pass": true,
-      "durationMs": 347,
+      "durationMs": 350,
       "stdout": "[DISTRIBUTED_CAS] PASS peers=0/0"
     },
     {
       "id": "device-lab",
       "required": true,
       "pass": true,
-      "durationMs": 388,
+      "durationMs": 468,
       "stdout": "[DEVICE_LAB] PASS real=0 platforms=none"
     },
     {
       "id": "device-executor",
       "required": true,
       "pass": true,
-      "durationMs": 162,
+      "durationMs": 103,
       "stdout": "[DEVICE_EXECUTOR] PASS evidence=0"
     },
     {
       "id": "wit-bindings",
       "required": true,
       "pass": true,
-      "durationMs": 115,
+      "durationMs": 102,
       "stdout": "[WIT_BINDINGS] PASS generated/wit/world-server-adapter.d.ts"
     },
     {
       "id": "rekor-monitor",
       "required": true,
       "pass": true,
-      "durationMs": 103,
-      "stdout": "[REKOR_MONITOR] PASS localEntries=91 bundles=0"
+      "durationMs": 182,
+      "stdout": "[REKOR_MONITOR] PASS localEntries=119 bundles=0"
     },
     {
       "id": "technology-consensus",
       "required": true,
       "pass": true,
-      "durationMs": 1037,
+      "durationMs": 984,
       "stdout": "[TECH_CONSENSUS_V4] embedded=16/17 external=0/11"
     },
     {
       "id": "sbom",
       "required": true,
       "pass": true,
-      "durationMs": 122,
+      "durationMs": 117,
       "stdout": "[SBOM] PASS CycloneDX-1.7 components=477"
     },
     {
       "id": "legacy-evidence-factory",
       "required": true,
       "pass": true,
-      "durationMs": 6015,
-      "stdout": "utopilot-v11.test.js\"\n          }\n        ]\n      },\n      \"regression\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"cmd\": \"node --test test/quality-autopilot-v11.test.js\",\n            \"stdout\": \"✔ CPU-first policy uses CPU when GPU is absent (2.1807ms)\\n✔ 3DGS does not fake CPU equivalence (0.4028ms)\\n✔ GPU is not a promotion blocker in CPU-first config (0.272ms)\\n✔ adaptive scheduler reserves a core and obeys memory budget (0.392ms)\\n✔ adaptive scheduler runs protected tasks first (0.462ms)\\n✔ worker thread pool hashes files in parallel (79.1825ms)\\n✔ content-addressed CPU cache is stable and hits (7.1129ms)\\n✔ checkpoint resume refuses changed input (2.2446ms)\\n✔ memory pressure gate detects growth (0.5759ms)\\n✔ CPU benchmark score is deterministic from metrics (0.4663ms)\\n✔ WASM SIMD detector always exposes scalar fallback (0.3526ms)\\n✔ impact planner forces full suite for collision changes (0.6651ms)\\n✔ scene CPU pressure never reduces near-field gameplay/collision below floor (0.3669ms)\\n✔ CPU toolchain gate can be verified without invoking external tool in test (0.4226ms)\\n✔ v11 runtime store refuses fake persistence without server credentials (1.6953ms)\\n✔ runtime worker bridge advertises CPU and explicitly no server GPU (1.7721ms)\\nℹ tests 16\\nℹ suites 0\\nℹ pass 16\\nℹ fail 0\\nℹ cancelled 0\\nℹ skipped 0\\nℹ todo 0\\nℹ duration_ms 249.706\\n\"\n          }\n        ]\n      },\n      \"eligible\": true\n    },\n    {\n      \"recipeId\": \"legacy-quiet-autopilot-v6\",\n      \"owner\": \"WORLD_SERVER_QUIET_QUALITY_AUTOPILOT_V6\",\n      \"capabilities\": [\n        \"quiet-quality-autopilot\",\n        \"quality-proof-gate\",\n        \"quality-otel-bridge\"\n      ],\n      \"workdir\": \".\",\n      \"sourcePaths\": [\n        \"scripts/verify-v6-runtime.js\",\n        \"scripts/quality-proof-gate.js\",\n        \"scripts/quality-otel-bridge-check.js\"\n      ],\n      \"static\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"file\": \"scripts/verify-v6-runtime.js\"\n          }\n        ]\n      },\n      \"integration\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"file\": \"scripts/quality-proof-gate.js\"\n          }\n        ]\n      },\n      \"regression\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"cmd\": \"node scripts/verify-v6-runtime.js\",\n            \"stdout\": \"[V6_RUNTIME_VERIFY] PASS\\n\"\n          }\n        ]\n      },\n      \"eligible\": true\n    },\n    {\n      \"recipeId\": \"legacy-gap-closure-v1\",\n      \"owner\": \"GAP_CLOSURE_SYSTEM_V1\",\n      \"capabilities\": [\n        \"gap-closure\",\n        \"gap-regression-test\"\n      ],\n      \"workdir\": \".\",\n      \"sourcePaths\": [\n        \"test/gap-closure.test.js\"\n      ],\n      \"static\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"file\": \"test/gap-closure.test.js\"\n          }\n        ]\n      },\n      \"integration\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"file\": \"test/gap-closure.test.js\"\n          }\n        ]\n      },\n      \"regression\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"cmd\": \"node --test test/gap-closure.test.js\",\n            \"stdout\": \"✔ adds viewport-fit=cover to existing viewport meta exactly once (2.262ms)\\n✔ adds viewport meta when absent (0.4063ms)\\n✔ deduplicates gaps and keeps higher severity (0.4831ms)\\n✔ release gate blocks releaseBlocking gaps and blockers only (1.3549ms)\\n✔ perfect gate requires zero warning-or-higher gaps (0.3999ms)\\nℹ tests 5\\nℹ suites 0\\nℹ pass 5\\nℹ fail 0\\nℹ cancelled 0\\nℹ skipped 0\\nℹ todo 0\\nℹ duration_ms 137.3889\\n\"\n          }\n        ]\n      },\n      \"eligible\": true\n    }\n  ],\n  \"truthRule\": \"Only explicit recipes with static + integration + executed regression evidence produce generated contracts. Missing legacy runtime remains UNVERIFIED.\"\n}"
+      "durationMs": 6323,
+      "stdout": "ilot-v11.test.js\"\n          }\n        ]\n      },\n      \"regression\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"cmd\": \"node --test test/quality-autopilot-v11.test.js\",\n            \"stdout\": \"✔ CPU-first policy uses CPU when GPU is absent (2.182ms)\\n✔ 3DGS does not fake CPU equivalence (0.4022ms)\\n✔ GPU is not a promotion blocker in CPU-first config (0.2427ms)\\n✔ adaptive scheduler reserves a core and obeys memory budget (0.3893ms)\\n✔ adaptive scheduler runs protected tasks first (0.4368ms)\\n✔ worker thread pool hashes files in parallel (80.3755ms)\\n✔ content-addressed CPU cache is stable and hits (7.5835ms)\\n✔ checkpoint resume refuses changed input (2.5298ms)\\n✔ memory pressure gate detects growth (0.6128ms)\\n✔ CPU benchmark score is deterministic from metrics (0.4661ms)\\n✔ WASM SIMD detector always exposes scalar fallback (0.4185ms)\\n✔ impact planner forces full suite for collision changes (0.7642ms)\\n✔ scene CPU pressure never reduces near-field gameplay/collision below floor (0.3748ms)\\n✔ CPU toolchain gate can be verified without invoking external tool in test (0.3629ms)\\n✔ v11 runtime store refuses fake persistence without server credentials (1.4919ms)\\n✔ runtime worker bridge advertises CPU and explicitly no server GPU (1.5643ms)\\nℹ tests 16\\nℹ suites 0\\nℹ pass 16\\nℹ fail 0\\nℹ cancelled 0\\nℹ skipped 0\\nℹ todo 0\\nℹ duration_ms 252.6509\\n\"\n          }\n        ]\n      },\n      \"eligible\": true\n    },\n    {\n      \"recipeId\": \"legacy-quiet-autopilot-v6\",\n      \"owner\": \"WORLD_SERVER_QUIET_QUALITY_AUTOPILOT_V6\",\n      \"capabilities\": [\n        \"quiet-quality-autopilot\",\n        \"quality-proof-gate\",\n        \"quality-otel-bridge\"\n      ],\n      \"workdir\": \".\",\n      \"sourcePaths\": [\n        \"scripts/verify-v6-runtime.js\",\n        \"scripts/quality-proof-gate.js\",\n        \"scripts/quality-otel-bridge-check.js\"\n      ],\n      \"static\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"file\": \"scripts/verify-v6-runtime.js\"\n          }\n        ]\n      },\n      \"integration\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"file\": \"scripts/quality-proof-gate.js\"\n          }\n        ]\n      },\n      \"regression\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"cmd\": \"node scripts/verify-v6-runtime.js\",\n            \"stdout\": \"[V6_RUNTIME_VERIFY] PASS\\n\"\n          }\n        ]\n      },\n      \"eligible\": true\n    },\n    {\n      \"recipeId\": \"legacy-gap-closure-v1\",\n      \"owner\": \"GAP_CLOSURE_SYSTEM_V1\",\n      \"capabilities\": [\n        \"gap-closure\",\n        \"gap-regression-test\"\n      ],\n      \"workdir\": \".\",\n      \"sourcePaths\": [\n        \"test/gap-closure.test.js\"\n      ],\n      \"static\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"file\": \"test/gap-closure.test.js\"\n          }\n        ]\n      },\n      \"integration\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"file\": \"test/gap-closure.test.js\"\n          }\n        ]\n      },\n      \"regression\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"cmd\": \"node --test test/gap-closure.test.js\",\n            \"stdout\": \"✔ adds viewport-fit=cover to existing viewport meta exactly once (2.3208ms)\\n✔ adds viewport meta when absent (0.4191ms)\\n✔ deduplicates gaps and keeps higher severity (1.0252ms)\\n✔ release gate blocks releaseBlocking gaps and blockers only (2.5193ms)\\n✔ perfect gate requires zero warning-or-higher gaps (0.5735ms)\\nℹ tests 5\\nℹ suites 0\\nℹ pass 5\\nℹ fail 0\\nℹ cancelled 0\\nℹ skipped 0\\nℹ todo 0\\nℹ duration_ms 156.7341\\n\"\n          }\n        ]\n      },\n      \"eligible\": true\n    }\n  ],\n  \"truthRule\": \"Only explicit recipes with static + integration + executed regression evidence produce generated contracts. Missing legacy runtime remains UNVERIFIED.\"\n}"
     },
     {
       "id": "slo-error-budget",
       "required": true,
       "pass": true,
-      "durationMs": 92,
-      "stdout": "{\n  \"schemaVersion\": \"7.4.0\",\n  \"generatedAt\": \"2026-08-25T02:04:03.885Z\",\n  \"pass\": true,\n  \"syntheticControllerValidation\": true,\n  \"productionEvidence\": false,\n  \"healthyCase\": {\n    \"schemaVersion\": \"7.4.0\",\n    \"generatedAt\": \"2026-08-25T02:04:03.884Z\",\n    \"pass\": true,\n    \"source\": \"synthetic\",\n    \"sampleCount\": 100,\n    \"successRate\": 1,\n    \"p95Ms\": 118,\n    \"errorBudgetAllowedRate\": 0.0050000000000000044,\n    \"errorBudgetBurnRate\": 0,\n    \"latencyBad\": false,\n    \"productionEvidence\": false,\n    \"action\": \"ALLOW_CANARY\",\n    \"truthRule\": \"No production rollback decision is claimed from synthetic samples. Synthetic mode validates controller math only.\"\n  },\n  \"burnCase\": {\n    \"schemaVersion\": \"7.4.0\",\n    \"generatedAt\": \"2026-08-25T02:04:03.885Z\",\n    \"pass\": true,\n    \"source\": \"synthetic\",\n    \"sampleCount\": 100,\n    \"successRate\": 0.8,\n    \"p95Ms\": 2500,\n    \"errorBudgetAllowedRate\": 0.0050000000000000044,\n    \"errorBudgetBurnRate\": 40,\n    \"latencyBad\": true,\n    \"productionEvidence\": false,\n    \"action\": \"STOP_CANARY_AND_ROLLBACK\",\n    \"truthRule\": \"No production rollback decision is claimed from synthetic samples. Synthetic mode validates controller math only.\"\n  },\n  \"action\": \"NO_PRODUCTION_DECISION\"\n}"
+      "durationMs": 86,
+      "stdout": "{\n  \"schemaVersion\": \"7.4.0\",\n  \"generatedAt\": \"2026-08-25T03:10:15.769Z\",\n  \"pass\": true,\n  \"syntheticControllerValidation\": true,\n  \"productionEvidence\": false,\n  \"healthyCase\": {\n    \"schemaVersion\": \"7.4.0\",\n    \"generatedAt\": \"2026-08-25T03:10:15.768Z\",\n    \"pass\": true,\n    \"source\": \"synthetic\",\n    \"sampleCount\": 100,\n    \"successRate\": 1,\n    \"p95Ms\": 118,\n    \"errorBudgetAllowedRate\": 0.0050000000000000044,\n    \"errorBudgetBurnRate\": 0,\n    \"latencyBad\": false,\n    \"productionEvidence\": false,\n    \"action\": \"ALLOW_CANARY\",\n    \"truthRule\": \"No production rollback decision is claimed from synthetic samples. Synthetic mode validates controller math only.\"\n  },\n  \"burnCase\": {\n    \"schemaVersion\": \"7.4.0\",\n    \"generatedAt\": \"2026-08-25T03:10:15.769Z\",\n    \"pass\": true,\n    \"source\": \"synthetic\",\n    \"sampleCount\": 100,\n    \"successRate\": 0.8,\n    \"p95Ms\": 2500,\n    \"errorBudgetAllowedRate\": 0.0050000000000000044,\n    \"errorBudgetBurnRate\": 40,\n    \"latencyBad\": true,\n    \"productionEvidence\": false,\n    \"action\": \"STOP_CANARY_AND_ROLLBACK\",\n    \"truthRule\": \"No production rollback decision is claimed from synthetic samples. Synthetic mode validates controller math only.\"\n  },\n  \"action\": \"NO_PRODUCTION_DECISION\"\n}"
     },
     {
       "id": "db-migration-coordinator",
       "required": true,
       "pass": true,
-      "durationMs": 95,
-      "stdout": "{\n  \"schemaVersion\": \"7.4.0\",\n  \"generatedAt\": \"2026-08-25T02:04:03.976Z\",\n  \"pass\": true,\n  \"strategy\": \"expand-migrate-contract\",\n  \"expandContractGuard\": true,\n  \"fencedLeaderRequired\": true,\n  \"supabase2026ExtensionPinningRejected\": true,\n  \"syntheticPlanValidation\": true\n}"
+      "durationMs": 93,
+      "stdout": "{\n  \"schemaVersion\": \"7.4.0\",\n  \"generatedAt\": \"2026-08-25T03:10:15.865Z\",\n  \"pass\": true,\n  \"strategy\": \"expand-migrate-contract\",\n  \"expandContractGuard\": true,\n  \"fencedLeaderRequired\": true,\n  \"supabase2026ExtensionPinningRejected\": true,\n  \"syntheticPlanValidation\": true\n}"
     },
     {
       "id": "asset-delta",
       "required": true,
       "pass": true,
-      "durationMs": 163,
-      "stdout": "{\n  \"schemaVersion\": \"7.4.0\",\n  \"generatedAt\": \"2026-08-25T02:04:04.141Z\",\n  \"pass\": true,\n  \"contentDefinedChunking\": true,\n  \"reusePercent\": 75,\n  \"corruptChunkRejected\": true,\n  \"reconstructionVerified\": true\n}"
+      "durationMs": 168,
+      "stdout": "{\n  \"schemaVersion\": \"7.4.0\",\n  \"generatedAt\": \"2026-08-25T03:10:16.032Z\",\n  \"pass\": true,\n  \"contentDefinedChunking\": true,\n  \"reusePercent\": 75,\n  \"corruptChunkRejected\": true,\n  \"reconstructionVerified\": true\n}"
     },
     {
       "id": "integration-gate",
       "required": true,
       "pass": false,
-      "durationMs": 107,
+      "durationMs": 108,
       "error": "[SYSTEM_INTEGRATION_V7] 99% FAIL 126/127 leader-lease-migration",
       "exitCode": 2
     },
@@ -278,255 +274,255 @@
       "id": "disaster-recovery-verify",
       "required": true,
       "pass": true,
-      "durationMs": 3232,
-      "stdout": "[DR_VERIFY] PASS 2693/2693 snapshot=2026-08-25T01-51-12-896Z-pre-control-plane-59f74cd02be8"
+      "durationMs": 3667,
+      "stdout": "[DR_VERIFY] PASS 2706/2706 snapshot=2026-08-25T03-09-49-841Z-pre-control-plane-19a02345b57d"
     },
     {
       "id": "provenance",
       "required": true,
       "pass": true,
-      "durationMs": 365,
+      "durationMs": 404,
       "stdout": "[PROVENANCE] PASS subjects=1 dependencies=5"
     },
     {
       "id": "supply-chain-signing",
       "required": true,
       "pass": true,
-      "durationMs": 455,
-      "stdout": "[SUPPLY_CHAIN_SIGN] PASS signed=7 cosign=false"
+      "durationMs": 566,
+      "stdout": "[SUPPLY_CHAIN_SIGN] PASS signed=7 cosign=true"
     },
     {
       "id": "policy",
       "required": true,
       "pass": false,
-      "durationMs": 1044,
-      "error": "PRODUCTION_SAFETY_STATUS.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'PRODUCTION_SLO_AUTOPILOT_STATUS.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'PROJECT_DIRECTIVE_REPORT.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'PROVENANCE_STATUS.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'QUALITY_V6_RUNTIME_VERIFY.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'RECORD_REPLAY_STATUS.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'REKOR_MONITOR_REPORT.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'RELEASE_PROMOTION_DECISION.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'REPRODUCIBLE_BUILD_STATUS.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'SBOM_STATUS.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'SEMANTIC_DEPENDENCY_GRAPH.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'SLO_ERROR_BUDGET_STATUS.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'SLSA_PROVENANCE.intoto.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'SOAK_CHAOS_REPORT.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'SUPPLY_CHAIN_SIGNATURE_STATUS.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'SYSTEM_ENHANCEMENT_BACKLOG.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'SYSTEM_INTEGRATION_REPORT.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'SYSTEM_READINESS_REPORT.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'TECHNOLOGY_CONSENSUS_REPORT.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'TECHNOLOGY_LOCK_REPORT.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'TOOLCHAIN_BOOTSTRAP_STATUS.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'TOOLCHAIN_SECURITY_REPORT.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'TRANSACTIONAL_DEPLOY_STATUS.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'UPDATE_TRUST_STATUS.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'WIT_BINDINGS_STATUS.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'WIT_COMPONENT_STATUS.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'WORLD_GRAPHICS_QUALITY_ROUTING_REPORT.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'WORLD_GRAPHICS_TECHNOLOGY_INTEGRATION_REPORT.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'WORLD_TECHNOLOGY_CANDIDATE_REPORT.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'bom.cdx.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'data/generated-legacy-function-contracts.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'generated/wit/world-server-adapter.d.ts', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it",
+      "durationMs": 1589,
+      "error": "t\nwarning: in the working copy of 'REPRODUCIBLE_BUILD_STATUS.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'SBOM_STATUS.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'SEMANTIC_DEPENDENCY_GRAPH.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'SLO_ERROR_BUDGET_STATUS.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'SLSA_PROVENANCE.intoto.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'SOAK_CHAOS_REPORT.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'SUPPLY_CHAIN_SIGNATURE_STATUS.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'SYSTEM_ENHANCEMENT_BACKLOG.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'SYSTEM_INTEGRATION_REPORT.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'SYSTEM_READINESS_REPORT.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'TECHNOLOGY_CONSENSUS_REPORT.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'TECHNOLOGY_LOCK_REPORT.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'TOOLCHAIN_BOOTSTRAP_STATUS.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'TOOLCHAIN_SECURITY_REPORT.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'TRANSACTIONAL_DEPLOY_STATUS.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'UPDATE_TRUST_STATUS.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'WIT_BINDINGS_STATUS.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'WIT_COMPONENT_STATUS.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'WORLD_GRAPHICS_QUALITY_ROUTING_REPORT.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'WORLD_GRAPHICS_TECHNOLOGY_INTEGRATION_REPORT.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'WORLD_TECHNOLOGY_CANDIDATE_REPORT.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'bom.cdx.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'data/blocker-repair-policy.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'data/generated-legacy-function-contracts.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'generated/wit/world-server-adapter.d.ts', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'state/blocker-repair/DESKTOP_AI_NEXT_ACTION.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'state/blocker-repair/device-evidence.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'state/blocker-repair/events.jsonl', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'state/blocker-repair/latest-gates.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'state/blocker-repair/platform-evidence.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'state/blocker-repair/scheduler.log', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'state/blocker-repair/state.json', LF will be replaced by CRLF the next time Git touches it",
       "exitCode": 2
     },
     {
       "id": "chaos-safety",
       "required": true,
       "pass": true,
-      "durationMs": 438,
-      "stdout": "[FEATURE_FLAGS] PASS 6/6\n[ADAPTER_SANDBOX] PASS runtime=deny-untrusted\n[CONFIG_CONTRACT] PASS cue=embedded\n[UPDATE_TRUST] PASS targets=6\n[INTEGRATION_CHAOS] PASS 4/4"
+      "durationMs": 463,
+      "stdout": "[FEATURE_FLAGS] PASS 6/6\n[ADAPTER_SANDBOX] PASS runtime=wasmtime\n[CONFIG_CONTRACT] PASS cue=embedded\n[UPDATE_TRUST] PASS targets=6\n[INTEGRATION_CHAOS] PASS 4/4"
     },
     {
       "id": "orchestrator-monitor-lifecycle",
       "required": true,
       "pass": true,
-      "durationMs": 94,
-      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-25T02:04:09.887Z\",\n  \"pass\": true,\n  \"generationTokens\": true,\n  \"cancelPreviousGeneration\": true,\n  \"identityPredicate\": true,\n  \"stabilizationBarrier\": true,\n  \"recursiveEventPolicy\": true,\n  \"defaultSettleMs\": 1250\n}"
+      "durationMs": 90,
+      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-25T03:10:22.932Z\",\n  \"pass\": true,\n  \"generationTokens\": true,\n  \"cancelPreviousGeneration\": true,\n  \"identityPredicate\": true,\n  \"stabilizationBarrier\": true,\n  \"recursiveEventPolicy\": true,\n  \"defaultSettleMs\": 1250\n}"
     },
     {
       "id": "orchestrator-patch-safety",
       "required": true,
       "pass": true,
-      "durationMs": 194,
-      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-25T02:04:10.065Z\",\n  \"pass\": true,\n  \"manifestFirst\": true,\n  \"projectIdentityGate\": true,\n  \"baseHashGate\": true,\n  \"payloadHashGate\": true,\n  \"pathTraversalProtection\": true,\n  \"stagingCopyRequired\": true,\n  \"selectiveThenFullRegression\": true,\n  \"backupBeforeCommit\": true,\n  \"postCommitHashComparison\": true,\n  \"badPatchMustLeaveStableUnchanged\": true,\n  \"workingCandidateStable\": true\n}"
+      "durationMs": 121,
+      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-25T03:10:23.048Z\",\n  \"pass\": true,\n  \"manifestFirst\": true,\n  \"projectIdentityGate\": true,\n  \"baseHashGate\": true,\n  \"payloadHashGate\": true,\n  \"pathTraversalProtection\": true,\n  \"stagingCopyRequired\": true,\n  \"selectiveThenFullRegression\": true,\n  \"backupBeforeCommit\": true,\n  \"postCommitHashComparison\": true,\n  \"badPatchMustLeaveStableUnchanged\": true,\n  \"workingCandidateStable\": true\n}"
     },
     {
       "id": "orchestrator-minimal-repro",
       "required": true,
       "pass": true,
-      "durationMs": 103,
-      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-25T02:04:10.187Z\",\n  \"pass\": true,\n  \"zip\": true,\n  \"redaction\": true,\n  \"allowlistedEvidence\": true,\n  \"stablePreservationEvidence\": true\n}"
+      "durationMs": 95,
+      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-25T03:10:23.148Z\",\n  \"pass\": true,\n  \"zip\": true,\n  \"redaction\": true,\n  \"allowlistedEvidence\": true,\n  \"stablePreservationEvidence\": true\n}"
     },
     {
       "id": "orchestrator-invariant-model",
       "required": true,
       "pass": true,
-      "durationMs": 94,
+      "durationMs": 91,
       "stdout": "[ORCHESTRATOR_MODEL] PASS states=20"
     },
     {
       "id": "orchestrator-supervisor-negative",
       "required": true,
       "pass": true,
-      "durationMs": 342,
+      "durationMs": 355,
       "stdout": "{\n  \"pass\": true,\n  \"crashLoopBlocked\": true,\n  \"normalizedFingerprintStable\": true,\n  \"minimalReproCreated\": true\n}"
     },
     {
       "id": "orchestrator-supervisor",
       "required": true,
       "pass": true,
-      "durationMs": 101,
-      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-25T02:04:10.724Z\",\n  \"pass\": true,\n  \"watchdog\": true,\n  \"crashLoopProtection\": true,\n  \"restartBudget\": true,\n  \"circuitBreaker\": true,\n  \"exponentialBackoff\": true,\n  \"jitter\": true,\n  \"persistentIncidents\": true,\n  \"crashFingerprinting\": true,\n  \"generationLease\": true,\n  \"staleMonitorCancellation\": true,\n  \"startupStabilization\": true,\n  \"heartbeatTimeoutSupport\": true,\n  \"minimalReproOnCircuitOpen\": true,\n  \"stablePreserved\": true,\n  \"managedServiceCount\": 0\n}"
+      "durationMs": 100,
+      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-25T03:10:23.699Z\",\n  \"pass\": true,\n  \"watchdog\": true,\n  \"crashLoopProtection\": true,\n  \"restartBudget\": true,\n  \"circuitBreaker\": true,\n  \"exponentialBackoff\": true,\n  \"jitter\": true,\n  \"persistentIncidents\": true,\n  \"crashFingerprinting\": true,\n  \"generationLease\": true,\n  \"staleMonitorCancellation\": true,\n  \"startupStabilization\": true,\n  \"heartbeatTimeoutSupport\": true,\n  \"minimalReproOnCircuitOpen\": true,\n  \"stablePreserved\": true,\n  \"managedServiceCount\": 0\n}"
     },
     {
       "id": "capability-scheduler",
       "required": true,
       "pass": true,
-      "durationMs": 104,
-      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-25T02:04:10.828Z\",\n  \"pass\": true,\n  \"cpuFirst\": true,\n  \"capabilityAware\": true,\n  \"resourceAware\": true,\n  \"cacheLocalityAware\": true,\n  \"localWorker\": \"local-WIN-GJVRHRQPB5A\"\n}"
+      "durationMs": 110,
+      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-25T03:10:23.810Z\",\n  \"pass\": true,\n  \"cpuFirst\": true,\n  \"capabilityAware\": true,\n  \"resourceAware\": true,\n  \"cacheLocalityAware\": true,\n  \"localWorker\": \"local-WIN-GJVRHRQPB5A\"\n}"
     },
     {
       "id": "cas-redundancy",
       "required": true,
       "pass": true,
-      "durationMs": 91,
-      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-25T02:04:10.925Z\",\n  \"pass\": true,\n  \"minimumCopies\": 2,\n  \"independentRoots\": true,\n  \"repairOnReadReady\": true,\n  \"remoteDisasterToleranceClaim\": false,\n  \"claim\": \"Two independent local roots verified. A remote peer is still required before claiming host-disaster tolerance.\"\n}"
+      "durationMs": 249,
+      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-25T03:10:24.049Z\",\n  \"pass\": true,\n  \"minimumCopies\": 2,\n  \"independentRoots\": true,\n  \"repairOnReadReady\": true,\n  \"remoteDisasterToleranceClaim\": false,\n  \"claim\": \"Two independent local roots verified. A remote peer is still required before claiming host-disaster tolerance.\"\n}"
     },
     {
       "id": "device-worker",
       "required": true,
       "pass": true,
-      "durationMs": 95,
-      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-08-25T02:04:11.020Z\",\n  \"pass\": true,\n  \"allowArbitraryCommands\": false,\n  \"scenarioCount\": 1,\n  \"bindHost\": \"127.0.0.1\",\n  \"tokenConfigured\": false,\n  \"evidenceEndpoint\": true,\n  \"evidenceConfigured\": false\n}"
+      "durationMs": 112,
+      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-08-25T03:10:24.179Z\",\n  \"pass\": true,\n  \"allowArbitraryCommands\": false,\n  \"scenarioCount\": 1,\n  \"bindHost\": \"127.0.0.1\",\n  \"tokenConfigured\": false,\n  \"evidenceEndpoint\": true,\n  \"evidenceConfigured\": false\n}"
     },
     {
       "id": "record-replay",
       "required": true,
       "pass": true,
-      "durationMs": 370,
-      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-25T02:04:11.388Z\",\n  \"pass\": true,\n  \"name\": \"selftest-10088\",\n  \"mismatches\": [],\n  \"expected\": {\n    \"exitCode\": 0,\n    \"stdoutHash\": \"9fa528fa3271e27a3d6f4089b7c25ffdb115c3732e07229ca9d2ad4c7e73bde2\",\n    \"stderrHash\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\"\n  },\n  \"actual\": {\n    \"exitCode\": 0,\n    \"stdoutHash\": \"9fa528fa3271e27a3d6f4089b7c25ffdb115c3732e07229ca9d2ad4c7e73bde2\",\n    \"stderrHash\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\"\n  }\n}"
+      "durationMs": 269,
+      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-25T03:10:24.446Z\",\n  \"pass\": true,\n  \"name\": \"selftest-13780\",\n  \"mismatches\": [],\n  \"expected\": {\n    \"exitCode\": 0,\n    \"stdoutHash\": \"9fa528fa3271e27a3d6f4089b7c25ffdb115c3732e07229ca9d2ad4c7e73bde2\",\n    \"stderrHash\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\"\n  },\n  \"actual\": {\n    \"exitCode\": 0,\n    \"stdoutHash\": \"9fa528fa3271e27a3d6f4089b7c25ffdb115c3732e07229ca9d2ad4c7e73bde2\",\n    \"stderrHash\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\"\n  }\n}"
     },
     {
       "id": "dependency-security",
       "required": true,
       "pass": true,
-      "durationMs": 108,
-      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-25T02:04:11.496Z\",\n  \"pass\": true,\n  \"engineReady\": true,\n  \"provider\": \"OSV\",\n  \"lockedPackageCount\": 472,\n  \"networkScanClaim\": false,\n  \"transactionalRemediationReady\": true\n}"
+      "durationMs": 111,
+      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-25T03:10:24.557Z\",\n  \"pass\": true,\n  \"engineReady\": true,\n  \"provider\": \"OSV\",\n  \"lockedPackageCount\": 472,\n  \"networkScanClaim\": false,\n  \"transactionalRemediationReady\": true\n}"
     },
     {
       "id": "transactional-deploy",
       "required": true,
       "pass": true,
-      "durationMs": 225,
-      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-25T02:04:11.585Z\",\n  \"pass\": true,\n  \"provider\": \"vercel-cli\",\n  \"vercelAvailable\": false,\n  \"transactionalStateMachine\": true,\n  \"previewBeforePromote\": true,\n  \"rollbackOnFailure\": true,\n  \"explicitDeployRequired\": true\n}"
+      "durationMs": 405,
+      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-25T03:10:24.758Z\",\n  \"pass\": true,\n  \"provider\": \"vercel-cli\",\n  \"vercelAvailable\": false,\n  \"transactionalStateMachine\": true,\n  \"previewBeforePromote\": true,\n  \"rollbackOnFailure\": true,\n  \"explicitDeployRequired\": true\n}"
     },
     {
       "id": "enhancement-orchestrator",
       "required": true,
       "pass": true,
-      "durationMs": 88,
+      "durationMs": 94,
       "stdout": "[ENHANCEMENT_V7] PASS next=9"
     },
     {
       "id": "leader-lease-health",
       "required": true,
       "pass": true,
-      "durationMs": 176,
-      "stdout": "{\n  \"schemaVersion\": \"7.3.0\",\n  \"generatedAt\": \"2026-08-25T02:04:11.983Z\",\n  \"pass\": true,\n  \"productionConfigured\": false,\n  \"backend\": \"local-model-only\",\n  \"fencingVerified\": true,\n  \"splitBrainMutationsBlocked\": true,\n  \"holderId\": \"local-18448\",\n  \"migration\": \"supabase/migrations/20260824_orchestrator_leader_lease.sql\"\n}"
+      "durationMs": 106,
+      "stdout": "{\n  \"schemaVersion\": \"7.3.0\",\n  \"generatedAt\": \"2026-08-25T03:10:25.168Z\",\n  \"pass\": true,\n  \"productionConfigured\": false,\n  \"backend\": \"local-model-only\",\n  \"fencingVerified\": true,\n  \"splitBrainMutationsBlocked\": true,\n  \"holderId\": \"local-17224\",\n  \"migration\": \"supabase/migrations/20260824_orchestrator_leader_lease.sql\"\n}"
     },
     {
       "id": "leader-lease-selftest",
       "required": true,
       "pass": true,
-      "durationMs": 119,
-      "stdout": "{\n  \"schemaVersion\": \"7.3.0\",\n  \"generatedAt\": \"2026-08-25T02:04:12.115Z\",\n  \"pass\": true,\n  \"checks\": {\n    \"singleLeader\": true,\n    \"fencingIncrements\": true,\n    \"staleLeaderRejected\": true\n  }\n}"
+      "durationMs": 93,
+      "stdout": "{\n  \"schemaVersion\": \"7.3.0\",\n  \"generatedAt\": \"2026-08-25T03:10:25.264Z\",\n  \"pass\": true,\n  \"checks\": {\n    \"singleLeader\": true,\n    \"fencingIncrements\": true,\n    \"staleLeaderRejected\": true\n  }\n}"
     },
     {
       "id": "production-safety-health",
       "required": true,
       "pass": true,
-      "durationMs": 86,
-      "stdout": "{\n  \"schemaVersion\": \"7.4.0\",\n  \"generatedAt\": \"2026-08-25T02:04:12.199Z\",\n  \"pass\": true,\n  \"armed\": true,\n  \"dryRun\": true,\n  \"badSignals\": [\n    \"certified-function-regression\"\n  ],\n  \"action\": \"STOP_CANARY_AND_ROLLBACK_IF_AUTHORIZED\",\n  \"rollbackAuthorized\": false\n}"
+      "durationMs": 99,
+      "stdout": "{\n  \"schemaVersion\": \"7.4.0\",\n  \"generatedAt\": \"2026-08-25T03:10:25.363Z\",\n  \"pass\": true,\n  \"armed\": true,\n  \"dryRun\": true,\n  \"badSignals\": [\n    \"certified-function-regression\"\n  ],\n  \"action\": \"STOP_CANARY_AND_ROLLBACK_IF_AUTHORIZED\",\n  \"rollbackAuthorized\": false\n}"
     },
     {
       "id": "production-safety-selftest",
       "required": true,
       "pass": true,
-      "durationMs": 86,
-      "stdout": "{\n  \"schemaVersion\": \"7.4.0\",\n  \"generatedAt\": \"2026-08-25T02:04:12.286Z\",\n  \"pass\": true,\n  \"cases\": [\n    {\n      \"name\": \"healthy\",\n      \"bad\": [],\n      \"expect\": \"NO_ACTION\"\n    },\n    {\n      \"name\": \"certified-regression\",\n      \"bad\": [\n        \"certified-function-regression\"\n      ],\n      \"expect\": \"STOP_CANARY\"\n    },\n    {\n      \"name\": \"crash-loop\",\n      \"bad\": [\n        \"crash-loop\"\n      ],\n      \"expect\": \"STOP_CANARY\"\n    }\n  ]\n}"
+      "durationMs": 92,
+      "stdout": "{\n  \"schemaVersion\": \"7.4.0\",\n  \"generatedAt\": \"2026-08-25T03:10:25.462Z\",\n  \"pass\": true,\n  \"cases\": [\n    {\n      \"name\": \"healthy\",\n      \"bad\": [],\n      \"expect\": \"NO_ACTION\"\n    },\n    {\n      \"name\": \"certified-regression\",\n      \"bad\": [\n        \"certified-function-regression\"\n      ],\n      \"expect\": \"STOP_CANARY\"\n    },\n    {\n      \"name\": \"crash-loop\",\n      \"bad\": [\n        \"crash-loop\"\n      ],\n      \"expect\": \"STOP_CANARY\"\n    }\n  ]\n}"
     },
     {
       "id": "soak-chaos",
       "required": true,
       "pass": true,
-      "durationMs": 91,
-      "stdout": "{\n  \"schemaVersion\": \"7.3.0\",\n  \"generatedAt\": \"2026-08-25T02:04:12.381Z\",\n  \"pass\": true,\n  \"cycles\": 200,\n  \"faultCounts\": {\n    \"process-kill\": 40,\n    \"disk-full\": 33,\n    \"network-partition\": 31,\n    \"lease-expiry\": 34,\n    \"corrupt-checkpoint\": 29,\n    \"duplicate-delivery\": 33\n  },\n  \"uniqueProcessed\": 39,\n  \"violations\": [],\n  \"invariantsChecked\": [\n    \"no-two-leaders\",\n    \"certified-functions-preserved\",\n    \"queue-idempotent\",\n    \"stable-not-mutated-on-failure\",\n    \"rollback-available\"\n  ]\n}"
+      "durationMs": 92,
+      "stdout": "{\n  \"schemaVersion\": \"7.3.0\",\n  \"generatedAt\": \"2026-08-25T03:10:25.551Z\",\n  \"pass\": true,\n  \"cycles\": 200,\n  \"faultCounts\": {\n    \"process-kill\": 40,\n    \"disk-full\": 33,\n    \"network-partition\": 31,\n    \"lease-expiry\": 34,\n    \"corrupt-checkpoint\": 29,\n    \"duplicate-delivery\": 33\n  },\n  \"uniqueProcessed\": 39,\n  \"violations\": [],\n  \"invariantsChecked\": [\n    \"no-two-leaders\",\n    \"certified-functions-preserved\",\n    \"queue-idempotent\",\n    \"stable-not-mutated-on-failure\",\n    \"rollback-available\"\n  ]\n}"
     },
     {
       "id": "crash-diagnostics",
       "required": true,
       "pass": true,
-      "durationMs": 89,
-      "stdout": "{\n  \"schemaVersion\": \"7.3.0\",\n  \"generatedAt\": \"2026-08-25T02:04:12.473Z\",\n  \"pass\": true,\n  \"eventCount\": 0,\n  \"clusterCount\": 0,\n  \"clusters\": [],\n  \"nodeDiagnosticReportAvailable\": true\n}"
+      "durationMs": 96,
+      "stdout": "{\n  \"schemaVersion\": \"7.3.0\",\n  \"generatedAt\": \"2026-08-25T03:10:25.648Z\",\n  \"pass\": true,\n  \"eventCount\": 0,\n  \"clusterCount\": 0,\n  \"clusters\": [],\n  \"nodeDiagnosticReportAvailable\": true\n}"
     },
     {
       "id": "crash-diagnostics-selftest",
       "required": true,
       "pass": true,
-      "durationMs": 88,
-      "stdout": "{\n  \"schemaVersion\": \"7.3.0\",\n  \"generatedAt\": \"2026-08-25T02:04:12.560Z\",\n  \"pass\": true,\n  \"secretRedaction\": true,\n  \"deterministicFingerprint\": true\n}"
+      "durationMs": 100,
+      "stdout": "{\n  \"schemaVersion\": \"7.3.0\",\n  \"generatedAt\": \"2026-08-25T03:10:25.750Z\",\n  \"pass\": true,\n  \"secretRedaction\": true,\n  \"deterministicFingerprint\": true\n}"
     },
     {
       "id": "causal-debugger",
       "required": true,
       "pass": true,
-      "durationMs": 331,
-      "stdout": "{\n  \"schemaVersion\": \"7.4.0\",\n  \"generatedAt\": \"2026-08-25T02:04:12.891Z\",\n  \"pass\": true,\n  \"correlationValidated\": true,\n  \"nativeCollectorAvailable\": true,\n  \"nativeCollectorRequiredForInternalPass\": false,\n  \"secretRedaction\": true,\n  \"graphNodes\": 8,\n  \"graphEdges\": 0\n}"
+      "durationMs": 256,
+      "stdout": "{\n  \"schemaVersion\": \"7.4.0\",\n  \"generatedAt\": \"2026-08-25T03:10:26.006Z\",\n  \"pass\": true,\n  \"correlationValidated\": true,\n  \"nativeCollectorAvailable\": true,\n  \"nativeCollectorRequiredForInternalPass\": false,\n  \"secretRedaction\": true,\n  \"graphNodes\": 8,\n  \"graphEdges\": 0\n}"
     },
     {
       "id": "cas-replication-controller",
       "required": true,
       "pass": true,
-      "durationMs": 297,
-      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-08-25T02:04:13.116Z\",\n  \"pass\": true,\n  \"protocolSelftest\": {\n    \"pass\": true,\n    \"replicationAcks\": 3,\n    \"readRepair\": true,\n    \"digestVerified\": true\n  },\n  \"configuredPeers\": 0,\n  \"reachablePeers\": 0,\n  \"independentRemotePeers\": 0,\n  \"hostDisasterToleranceCertified\": false,\n  \"externalBlockers\": [\n    \"independent-remote-cas-peer-required\"\n  ],\n  \"probes\": [],\n  \"truthRule\": \"Protocol self-tests prove replication/read-repair semantics only. Host-disaster tolerance is certified only with a reachable remote peer explicitly marked independentFailureDomain=true.\"\n}"
+      "durationMs": 310,
+      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-08-25T03:10:26.249Z\",\n  \"pass\": true,\n  \"protocolSelftest\": {\n    \"pass\": true,\n    \"replicationAcks\": 3,\n    \"readRepair\": true,\n    \"digestVerified\": true\n  },\n  \"configuredPeers\": 0,\n  \"reachablePeers\": 0,\n  \"independentRemotePeers\": 0,\n  \"hostDisasterToleranceCertified\": false,\n  \"externalBlockers\": [\n    \"independent-remote-cas-peer-required\"\n  ],\n  \"probes\": [],\n  \"truthRule\": \"Protocol self-tests prove replication/read-repair semantics only. Host-disaster tolerance is certified only with a reachable remote peer explicitly marked independentFailureDomain=true.\"\n}"
     },
     {
       "id": "physical-device-fleet",
       "required": true,
       "pass": true,
-      "durationMs": 336,
-      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-08-25T02:04:13.522Z\",\n  \"pass\": true,\n  \"protocolSelftest\": {\n    \"pass\": true,\n    \"mockProtocolOnly\": true,\n    \"evidenceVerified\": true,\n    \"staleEvidenceRejected\": true\n  },\n  \"configuredWorkers\": 0,\n  \"freshAuthenticatedRealEvidenceCount\": 0,\n  \"platforms\": [],\n  \"productionCertified\": false,\n  \"externalBlockers\": [\n    \"fresh-authenticated-real-android-worker-evidence-required\",\n    \"fresh-authenticated-real-ios-worker-evidence-required\"\n  ],\n  \"truthRule\": \"Mock workers validate protocol only. Physical-device 100% requires fresh evidence from real Android and iOS hardware.\"\n}"
+      "durationMs": 228,
+      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-08-25T03:10:26.538Z\",\n  \"pass\": true,\n  \"protocolSelftest\": {\n    \"pass\": true,\n    \"mockProtocolOnly\": true,\n    \"evidenceVerified\": true,\n    \"staleEvidenceRejected\": true\n  },\n  \"configuredWorkers\": 0,\n  \"freshAuthenticatedRealEvidenceCount\": 0,\n  \"platforms\": [],\n  \"productionCertified\": false,\n  \"externalBlockers\": [\n    \"fresh-authenticated-real-android-worker-evidence-required\",\n    \"fresh-authenticated-real-ios-worker-evidence-required\"\n  ],\n  \"truthRule\": \"Mock workers validate protocol only. Physical-device 100% requires fresh evidence from real Android and iOS hardware.\"\n}"
     },
     {
       "id": "production-slo-autopilot",
       "required": true,
       "pass": true,
-      "durationMs": 88,
-      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-08-25T02:04:13.616Z\",\n  \"pass\": true,\n  \"controllerSelftest\": {\n    \"healthy\": {\n      \"decision\": \"ALLOW_CANARY\",\n      \"authorized\": false\n    },\n    \"synthetic\": {\n      \"decision\": \"DRY_RUN_ROLLBACK_ONLY\",\n      \"authorized\": false,\n      \"reason\": \"no-production-evidence\"\n    },\n    \"prodNoAuth\": {\n      \"decision\": \"STOP_CANARY_AND_REQUIRE_ROLLBACK_AUTH\",\n      \"authorized\": false,\n      \"reason\": \"authorization-required\"\n    },\n    \"prodAuth\": {\n      \"decision\": \"EXECUTE_AUTHORIZED_ROLLBACK\",\n      \"authorized\": true\n    }\n  },\n  \"current\": {\n    \"decision\": \"ALLOW_CANARY\",\n    \"authorized\": false\n  },\n  \"productionEvidence\": false,\n  \"rollbackActuallyExecuted\": false,\n  \"truthRule\": \"Synthetic samples may validate decision logic but can never authorize a production rollback.\"\n}"
+      "durationMs": 106,
+      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-08-25T03:10:26.654Z\",\n  \"pass\": true,\n  \"controllerSelftest\": {\n    \"healthy\": {\n      \"decision\": \"ALLOW_CANARY\",\n      \"authorized\": false\n    },\n    \"synthetic\": {\n      \"decision\": \"DRY_RUN_ROLLBACK_ONLY\",\n      \"authorized\": false,\n      \"reason\": \"no-production-evidence\"\n    },\n    \"prodNoAuth\": {\n      \"decision\": \"STOP_CANARY_AND_REQUIRE_ROLLBACK_AUTH\",\n      \"authorized\": false,\n      \"reason\": \"authorization-required\"\n    },\n    \"prodAuth\": {\n      \"decision\": \"EXECUTE_AUTHORIZED_ROLLBACK\",\n      \"authorized\": true\n    }\n  },\n  \"current\": {\n    \"decision\": \"ALLOW_CANARY\",\n    \"authorized\": false\n  },\n  \"productionEvidence\": false,\n  \"rollbackActuallyExecuted\": false,\n  \"truthRule\": \"Synthetic samples may validate decision logic but can never authorize a production rollback.\"\n}"
     },
     {
       "id": "migration-fencing-runtime",
       "required": true,
       "pass": true,
-      "durationMs": 87,
-      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-08-25T02:04:13.705Z\",\n  \"pass\": true,\n  \"selftest\": {\n    \"pass\": true,\n    \"ok\": {\n      \"pass\": true,\n      \"errors\": [],\n      \"currentFencingToken\": 8,\n      \"callerFencingToken\": 8\n    },\n    \"stale\": {\n      \"pass\": false,\n      \"errors\": [\n        \"stale-or-missing-fencing-token\"\n      ],\n      \"currentFencingToken\": 8,\n      \"callerFencingToken\": 7\n    },\n    \"early\": {\n      \"pass\": false,\n      \"errors\": [\n        \"contract-before-backfill-verification\"\n      ],\n      \"currentFencingToken\": 8,\n      \"callerFencingToken\": 8\n    }\n  },\n  \"liveConfigured\": false,\n  \"liveVerified\": false,\n  \"live\": {\n    \"pass\": false,\n    \"errors\": [\n      \"no-live-migration-plan\"\n    ]\n  },\n  \"truthRule\": \"A migration may execute only while the caller holds the current lease and exact fencing token. Stale leaders are rejected.\"\n}"
+      "durationMs": 97,
+      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-08-25T03:10:26.752Z\",\n  \"pass\": true,\n  \"selftest\": {\n    \"pass\": true,\n    \"ok\": {\n      \"pass\": true,\n      \"errors\": [],\n      \"currentFencingToken\": 8,\n      \"callerFencingToken\": 8\n    },\n    \"stale\": {\n      \"pass\": false,\n      \"errors\": [\n        \"stale-or-missing-fencing-token\"\n      ],\n      \"currentFencingToken\": 8,\n      \"callerFencingToken\": 7\n    },\n    \"early\": {\n      \"pass\": false,\n      \"errors\": [\n        \"contract-before-backfill-verification\"\n      ],\n      \"currentFencingToken\": 8,\n      \"callerFencingToken\": 8\n    }\n  },\n  \"liveConfigured\": false,\n  \"liveVerified\": false,\n  \"live\": {\n    \"pass\": false,\n    \"errors\": [\n      \"no-live-migration-plan\"\n    ]\n  },\n  \"truthRule\": \"A migration may execute only while the caller holds the current lease and exact fencing token. Stale leaders are rejected.\"\n}"
     },
     {
       "id": "long-soak-smoke",
       "required": true,
       "pass": true,
-      "durationMs": 167,
-      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-08-25T02:04:13.868Z\",\n  \"pass\": true,\n  \"smokeHarnessVerified\": true,\n  \"durationHours\": 0.00002,\n  \"eventCount\": 5,\n  \"allRecovered\": true,\n  \"longSoakCertified\": false,\n  \"minimumCertifiedHours\": 8,\n  \"stateFile\": \".world-server-state/long-soak/selftest-21908.json\",\n  \"truthRule\": \"Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation.\"\n}"
+      "durationMs": 177,
+      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-08-25T03:10:26.930Z\",\n  \"pass\": true,\n  \"smokeHarnessVerified\": true,\n  \"durationHours\": 0.000023,\n  \"eventCount\": 5,\n  \"allRecovered\": true,\n  \"longSoakCertified\": false,\n  \"minimumCertifiedHours\": 8,\n  \"stateFile\": \".world-server-state/long-soak/selftest-22636.json\",\n  \"truthRule\": \"Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation.\"\n}"
     },
     {
       "id": "native-causal-collector",
       "required": true,
       "pass": true,
-      "durationMs": 1161,
-      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-08-25T02:04:15.036Z\",\n  \"pass\": true,\n  \"collectorDiscovery\": {\n    \"platform\": \"win32\",\n    \"windowsCollectors\": [\n      \"wpr\",\n      \"logman\"\n    ],\n    \"linuxCollectors\": [],\n    \"otelCollectors\": [],\n    \"nativeAvailable\": true,\n    \"otelAvailable\": false\n  },\n  \"selftest\": {\n    \"pass\": true,\n    \"traceCorrelation\": true\n  },\n  \"nativeCollectorAvailable\": true,\n  \"otelCollectorAvailable\": false,\n  \"externalBlockers\": [\n    \"otel-collector-unavailable\"\n  ],\n  \"truthRule\": \"Collector availability is reported separately from causal graph logic. Missing privileged/native collectors never becomes a false 100% native-runtime claim.\"\n}"
+      "durationMs": 1401,
+      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-08-25T03:10:28.332Z\",\n  \"pass\": true,\n  \"collectorDiscovery\": {\n    \"platform\": \"win32\",\n    \"windowsCollectors\": [\n      \"wpr\",\n      \"logman\"\n    ],\n    \"linuxCollectors\": [],\n    \"otelCollectors\": [],\n    \"nativeAvailable\": true,\n    \"otelAvailable\": false\n  },\n  \"selftest\": {\n    \"pass\": true,\n    \"traceCorrelation\": true\n  },\n  \"nativeCollectorAvailable\": true,\n  \"otelCollectorAvailable\": false,\n  \"externalBlockers\": [\n    \"otel-collector-unavailable\"\n  ],\n  \"truthRule\": \"Collector availability is reported separately from causal graph logic. Missing privileged/native collectors never becomes a false 100% native-runtime claim.\"\n}"
     },
     {
       "id": "selftest",
       "required": true,
       "pass": false,
-      "durationMs": 2913,
-      "error": "node:fs:441\r\n    return binding.readFileUtf8(path, stringToFlags(options.flag));\r\n                   ^\r\n\r\nError: ENOENT: no such file or directory, open 'C:\\Users\\user\\Desktop\\World_server\\supabase\\migrations\\20260824_orchestrator_leader_lease.sql'\r\n    at Object.readFileSync (node:fs:441:20)\r\n    at Object.<anonymous> (C:\\Users\\user\\Desktop\\World_server\\scripts\\integration-selftest.cjs:62:20)\r\n    at Module._compile (node:internal/modules/cjs/loader:1830:14)\r\n    at Object..js (node:internal/modules/cjs/loader:1961:10)\r\n    at Module.load (node:internal/modules/cjs/loader:1553:32)\r\n    at Module._load (node:internal/modules/cjs/loader:1355:12)\r\n    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)\r\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\r\n    at node:internal/main/run_main_module:33:47 {\r\n  errno: -4058,\r\n  code: 'ENOENT',\r\n  syscall: 'open',\r\n  path: 'C:\\\\Users\\\\user\\\\Desktop\\\\World_server\\\\supabase\\\\migrations\\\\20260824_orchestrator_leader_lease.sql'\r\n}\r\n\r\nNode.js v24.15.0",
+      "durationMs": 3400,
+      "error": "Error: unknown flag: --version\nerror during command execution: unknown flag: --version\nnode:fs:441\r\n    return binding.readFileUtf8(path, stringToFlags(options.flag));\r\n                   ^\r\n\r\nError: ENOENT: no such file or directory, open 'C:\\Users\\user\\Desktop\\World_server\\supabase\\migrations\\20260824_orchestrator_leader_lease.sql'\r\n    at Object.readFileSync (node:fs:441:20)\r\n    at Object.<anonymous> (C:\\Users\\user\\Desktop\\World_server\\scripts\\integration-selftest.cjs:62:20)\r\n    at Module._compile (node:internal/modules/cjs/loader:1830:14)\r\n    at Object..js (node:internal/modules/cjs/loader:1961:10)\r\n    at Module.load (node:internal/modules/cjs/loader:1553:32)\r\n    at Module._load (node:internal/modules/cjs/loader:1355:12)\r\n    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)\r\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\r\n    at node:internal/main/run_main_module:33:47 {\r\n  errno: -4058,\r\n  code: 'ENOENT',\r\n  syscall: 'open',\r\n  path: 'C:\\\\Users\\\\user\\\\Desktop\\\\World_server\\\\supabase\\\\migrations\\\\20260824_orchestrator_leader_lease.sql'\r\n}\r\n\r\nNode.js v24.15.0",
       "exitCode": 1
     },
     {
       "id": "honest-100-functions",
       "required": true,
       "pass": false,
-      "durationMs": 1512,
-      "error": "[HONEST_100] FAIL certified=70/76 discovered=146",
+      "durationMs": 1556,
+      "error": "[HONEST_100] FAIL certified=69/76 discovered=146",
       "exitCode": 2
     },
     {
       "id": "function-contract-coverage",
       "required": true,
       "pass": true,
-      "durationMs": 92,
-      "stdout": "[FUNCTION_COVERAGE] integration=80% global=73% candidates=40"
+      "durationMs": 103,
+      "stdout": "[FUNCTION_COVERAGE] integration=79% global=72% candidates=41"
     },
     {
       "id": "monotonic-100-guard",
       "required": true,
       "pass": false,
-      "durationMs": 1469,
+      "durationMs": 1607,
       "error": "[MONOTONIC_100] FAIL Error: cannot baseline while critical contracted functions are not CERTIFIED_100\n    at makeBaseline (C:\\Users\\user\\Desktop\\World_server\\scripts\\function-monotonic-enhancement-gate.cjs:10:66)\n    at verify (C:\\Users\\user\\Desktop\\World_server\\scripts\\function-monotonic-enhancement-gate.cjs:12:139)\n    at Object.<anonymous> (C:\\Users\\user\\Desktop\\World_server\\scripts\\function-monotonic-enhancement-gate.cjs:18:156)\n    at Module._compile (node:internal/modules/cjs/loader:1830:14)\n    at Object..js (node:internal/modules/cjs/loader:1961:10)\n    at Module.load (node:internal/modules/cjs/loader:1553:32)\n    at Module._load (node:internal/modules/cjs/loader:1355:12)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\n    at node:internal/main/run_main_module:33:47",
       "exitCode": 2
     },
@@ -534,7 +530,7 @@
       "id": "orchestrator-continuity",
       "required": true,
       "pass": false,
-      "durationMs": 94,
+      "durationMs": 106,
       "error": "[ORCHESTRATOR_CONTINUITY] FAIL 5/8",
       "exitCode": 2
     },
@@ -542,7 +538,7 @@
       "id": "release-promotion",
       "required": true,
       "pass": false,
-      "durationMs": 585,
+      "durationMs": 655,
       "error": "[FEATURE_FLAGS] PASS 6/6\n[RELEASE_PROMOTION] BLOCK decision=BLOCK",
       "exitCode": 2
     },
@@ -550,8 +546,8 @@
       "id": "readiness",
       "required": true,
       "pass": false,
-      "durationMs": 906,
-      "error": "[READINESS_V75] structural=84% operational=77% evidence=87% native=8%",
+      "durationMs": 908,
+      "error": "[READINESS_V75] structural=84% operational=78% evidence=87% native=25%",
       "exitCode": 2
     }
   ]

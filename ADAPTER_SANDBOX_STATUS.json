@@ -1,6 +1,6 @@
 {
   "schemaVersion": "7.2.0",
-  "generatedAt": "2026-08-25T02:12:01.767Z",
+  "generatedAt": "2026-08-25T03:10:30.742Z",
   "pass": true,
   "wasmtimeAvailable": true,
   "wasmtimeVersion": "wasmtime 27.0.0 (8eefa236f 2024-11-20)",

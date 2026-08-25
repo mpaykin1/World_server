@@ -1,21 +1,15 @@
 # Desktop AI — autonomous blocker repair action
 
-Generated: 2026-08-25T01:59:54.651Z
+Generated: 2026-08-25T03:10:37.315Z
 Repair engine: 1.0.0
 
-## 2 blocker(s) require Desktop AI root-cause repair
+## 1 blocker(s) require Desktop AI root-cause repair
 
 ### local-gates
 
 Status: **requires_ai**
 
-Reason: 0/6 gates PASS
-
-### vercel-deployment
-
-Status: **requires_ai**
-
-Reason: Vercel state=failure: Deployment has failed — run this Vercel CLI command: npx vercel inspect dpl_8wpx3qKRsFqMPoAXzibk3SFKeXwF --logs
+Reason: 2/6 gates PASS
 
 
 ## Mandatory repair loop

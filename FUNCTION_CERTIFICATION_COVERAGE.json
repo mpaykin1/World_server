@@ -1,12 +1,12 @@
 {
   "schemaVersion": "7.5.0",
-  "generatedAt": "2026-08-25T02:04:19.558Z",
+  "generatedAt": "2026-08-25T03:10:33.397Z",
   "pass": true,
-  "globalCapabilityCertificationPercent": 73,
-  "integrationOwnedCapabilityCertificationPercent": 80,
-  "certifiedCapabilities": 106,
+  "globalCapabilityCertificationPercent": 72,
+  "integrationOwnedCapabilityCertificationPercent": 79,
+  "certifiedCapabilities": 105,
   "totalCapabilities": 146,
-  "integrationOwnedCertified": 81,
+  "integrationOwnedCertified": 80,
   "integrationOwnedTotal": 101,
   "rows": [
     {
@@ -1008,7 +1008,7 @@
       "systemId": "system-integration-v7",
       "owner": "SYSTEM_INTEGRATION_LAYER_V7",
       "contractId": "adapter-sandbox-fail-closed",
-      "status": "CERTIFIED_100"
+      "status": "UNVERIFIED"
     },
     {
       "capability": "weapon-grip-contract",
@@ -1308,6 +1308,13 @@
     },
     {
       "capability": "typescript-native-ast-dataflow",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "wasi-component-model",
       "owner": "SYSTEM_INTEGRATION_LAYER_V7",
       "systemId": "system-integration-v7",
       "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",

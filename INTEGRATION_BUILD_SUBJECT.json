@@ -1,9 +1,9 @@
 {
   "schemaVersion": "2.0.0",
-  "commit": "d55410b1d8e10cd7b07b7a7ed11298f620acec2b",
+  "commit": "a1b89977cf697b8f78d76562e5d1344df7c9304e",
   "branch": "ai/desktop/quality-runtime-v11-20260824-090217",
-  "merkleRoot": "59f74cd02be8341ec6d8e19ce7163952ca67f6cc091227b4bbbf69794b6b2600",
-  "latestSnapshot": "2026-08-25T01-51-12-896Z-pre-control-plane-59f74cd02be8",
+  "merkleRoot": "19a02345b57d36262081addf5d99560c3ed66c44ccb783730b6c683538f8bb6d",
+  "latestSnapshot": "2026-08-25T03-09-49-841Z-pre-control-plane-19a02345b57d",
   "capabilityRegistry": "4acc698baaf4c1d35412c96efe6640d832bb81e1892bae4671cf2749fa0801a2",
   "policy": "849f76a7ad1cc8e720134100183574e2cb3c7d8049c4a0d3372e44ae3cb06cba"
 }

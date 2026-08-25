@@ -1,6 +1,6 @@
 {
   "schemaVersion": "7.2.0",
-  "generatedAt": "2026-08-25T02:04:17.354Z",
+  "generatedAt": "2026-08-25T03:10:31.140Z",
   "pass": true,
   "source": "wit/world-server-adapter.wit",
   "output": "generated/wit/world-server-adapter.d.ts",

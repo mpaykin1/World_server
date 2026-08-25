@@ -1128,3 +1128,2073 @@ C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:
     + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
  
 [2026-08-25 05:21:00][UNIFIED] SKIP parallel run - lock busy C:\Users\user\Desktop\World_server\state\blocker-repair\unified.lock : Исключение при вызове "Open" с "4" аргументами: "Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\unified.lock", так как этот файл используется другим процессом."
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 05:36:00][UNIFIED] LOCK acquired C:\Users\user\Desktop\World_server\state\blocker-repair\unified.lock
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 05:36:00][UNIFIED] === UNIFIED TICK START quality_autoloop -> blocker-repair -> verification ===
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 05:36:00][UNIFIED] Step 1: quality_autoloop
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 05:36:00][UNIFIED]   autoloop: [2026-08-25 05:36:00] === AUTOLOOP TICK START ===
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 05:36:01][UNIFIED]   autoloop: [2026-08-25 05:36:01] localCount=108 localDigest=6775a559063525b6dfb9ef61181c7eb83c1a05fe5eea6e2180c83ea6185a5363 expected=6775a559063525b6dfb9ef61181c7eb83c1a05fe5eea6e2180c83ea6185a5363
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 05:36:01][UNIFIED]   autoloop: [2026-08-25 05:36:01] LOCAL 100% OK (108/108)
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 05:36:01][UNIFIED]   autoloop: [2026-08-25 05:36:01] commits ahead of master: 15 (need PR if >0)
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 05:36:01][UNIFIED]   autoloop: [2026-08-25 05:36:01] PLUGIN DISCOVER: [2026-08-25T02:36:01.350Z] OK cannon-es already installed (MIT) impact 80%
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 05:36:01][UNIFIED]   autoloop: [2026-08-25T02:36:01.354Z] OK comlink already installed (Apache-2.0) impact 65%
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 05:36:01][UNIFIED]   autoloop: [2026-08-25T02:36:01.355Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 05:36:01][UNIFIED]   autoloop: [2026-08-25T02:36:01.356Z] OK sharp already installed (Apache-2.0) impact 70%
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 05:36:01][UNIFIED]   autoloop: [2026-08-25T02:36:01.356Z] OK msw already installed (MIT) impact 60%
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 05:36:01][UNIFIED]   autoloop: [2026-08-25T02:36:01.357Z] OK zod already installed (MIT) impact 55%
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 05:36:01][UNIFIED]   autoloop: [2026-08-25T02:36:01.358Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 05:36:01][UNIFIED]   autoloop: 
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 05:36:01][UNIFIED]   autoloop: [2026-08-25 05:36:01] PLUGIN AUTO-WIRE tick done
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 05:36:01][UNIFIED]   autoloop: [2026-08-25 05:36:01] LOCAL honest 100% reached. Cloud checks need time - waiting.
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 05:36:02][UNIFIED]   autoloop: [2026-08-25 05:36:02] No autoloop task found
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 05:36:02][UNIFIED]   autoloop: [2026-08-25 05:36:02] === AUTOLOOP TICK END - next tick in 15 min (keep running until honest 100%) ===
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 05:36:02][UNIFIED] Step 2: blocker-repair tick
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker: {
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:   "pass": false,
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:   "version": "1.0.0",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:   "cycle": 8,
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:   "counts": {
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:     "pass": 7,
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:     "waiting": 5,
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:     "requires_ai": 1
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:   },
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:   "gatesPass": false,
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:   "mergeSafe": false,
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:   "nextRunAt": "2026-08-25T02:51:09.241Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:   "aiAction": "state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:   "blockers": {
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:     "durable-scheduler": {
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:       "id": "durable-scheduler",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:       "status": "pass",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:       "updatedAt": "2026-08-25T01:36:13.140Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T01:36:13.140Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:       "attempts": 0,
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:       "reason": "Task Scheduler every 15 minutes"
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:     },
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:     "toolchain-bootstrap": {
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:       "id": "toolchain-bootstrap",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:       "status": "pass",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:       "updatedAt": "2026-08-25T02:36:02.808Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T01:38:31.809Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:       "attempts": 0,
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:       "reason": "Existing bootstrap PASS"
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:     },
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:     "wasmtime": {
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:       "id": "wasmtime",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:       "status": "pass",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:       "updatedAt": "2026-08-25T02:36:02.841Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T01:38:31.814Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:       "attempts": 0,
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:       "reason": "wasmtime 27.0.0 (8eefa236f 2024-11-20)"
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:     },
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:     "tlc": {
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:07][UNIFIED]   blocker:       "id": "tlc",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "status": "pass",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "updatedAt": "2026-08-25T02:36:03.230Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T01:38:31.814Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "attempts": 0,
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "reason": "TLC native Java invocation verified"
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:     },
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:     "native-cosign": {
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "id": "native-cosign",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "status": "pass",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "updatedAt": "2026-08-25T02:36:03.347Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T01:40:32.228Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "attempts": 1,
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "attempted": true,
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "reason": "Compiler:      gc\nPlatform:      windows/amd64"
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:     },
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:     "etw-ebpf-perf": {
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "id": "etw-ebpf-perf",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "status": "pass",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "updatedAt": "2026-08-25T02:36:09.065Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T01:40:43.724Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "attempts": 0,
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "reason": "Real Windows ETW/WPR capability evidence collected; eBPF/perf not falsely required on Windows"
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:     },
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:     "fresh-android-device": {
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "id": "fresh-android-device",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "status": "waiting",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "updatedAt": "2026-08-25T02:36:09.241Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T01:40:43.875Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "attempts": 0,
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "reason": "adb is not available or no physical Android evidence can be collected",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "nextRunAt": "2026-08-25T02:51:09.241Z"
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:     },
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:     "fresh-ios-device": {
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "id": "fresh-ios-device",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "status": "waiting",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "updatedAt": "2026-08-25T02:36:09.393Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T01:40:44.022Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "attempts": 0,
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "reason": "No physical iOS probe available on win32; simulator/fake evidence is forbidden",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "nextRunAt": "2026-08-25T02:51:09.393Z"
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:     },
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:     "remote-cas-peer": {
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "id": "remote-cas-peer",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "status": "waiting",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "updatedAt": "2026-08-25T02:36:09.395Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T01:40:44.023Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "attempts": 0,
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "reason": "WORLD_SERVER_REMOTE_CAS_URL/REMOTE_CAS_URL not configured; localhost is not accepted as remote evidence",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "nextRunAt": "2026-08-25T02:51:09.395Z"
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:     },
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:     "fenced-migration": {
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "id": "fenced-migration",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "status": "pass",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "updatedAt": "2026-08-25T02:36:09.503Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T01:40:44.144Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "attempts": 0,
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "reason": "C:\\Program Files\\nodejs\\node.exe C:\\Users\\user\\Desktop\\World_server\\scripts\\migration-fencing-verifier.cjs PASS"
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:     },
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:     "local-gates": {
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "id": "local-gates",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "status": "requires_ai",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "updatedAt": "2026-08-25T03:07:07.071Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T01:41:31.266Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "attempts": 0,
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "reason": "2/6 gates PASS"
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:     },
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:     "vercel-deployment": {
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "id": "vercel-deployment",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "status": "waiting",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "updatedAt": "2026-08-25T03:07:07.651Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T01:41:32.802Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "attempts": 7,
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "attempted": true,
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "reason": "No Vercel commit status yet for a1b89977",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "deploymentId": "dpl_8wpx3qKRsFqMPoAXzibk3SFKeXwF",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "targetUrl": "https://vercel.com/improve-world/world-server/8wpx3qKRsFqMPoAXzibk3SFKeXwF",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "outputTail": "",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "nextRunAt": "2026-08-25T03:17:07.651Z"
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:     },
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:     "8h-long-soak": {
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "id": "8h-long-soak",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "status": "waiting",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "updatedAt": "2026-08-25T03:07:07.656Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T01:41:32.806Z",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "attempts": 0,
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "reason": "Long-soak will start only after deterministic local prerequisites are green",
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:       "nextRunAt": "2026-08-25T03:22:07.656Z"
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:     }
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker:   }
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   blocker: }
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED] Step 3: verification
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:08][UNIFIED]   verify: [CONTROL_PLANE] PASS toolchain-security
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:09][UNIFIED]   verify: [CONTROL_PLANE] PASS toolchain-health
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:09][UNIFIED]   verify: [CONTROL_PLANE] PASS telemetry
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:13][UNIFIED]   verify: [CONTROL_PLANE] FAIL snapshot:     at Module._load (node:internal/modules/cjs/loader:1355:12)
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:13][UNIFIED]   verify: [CONTROL_PLANE] PASS native-ast-dataflow
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:15][UNIFIED]   verify: [CONTROL_PLANE] PASS semantic-graph
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:17][UNIFIED]   verify: [CONTROL_PLANE] PASS change-impact
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:17][UNIFIED]   verify: [CONTROL_PLANE] PASS assets
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:18][UNIFIED]   verify: [CONTROL_PLANE] PASS project-directives
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:18][UNIFIED]   verify: [CONTROL_PLANE] PASS asset-ingestion-plan
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:18][UNIFIED]   verify: [CONTROL_PLANE] PASS technology-lock
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:19][UNIFIED]   verify: [CONTROL_PLANE] FAIL graphics-ratchet: [GRAPHICS_GUARD] FAIL protectedChanges=20 failed=20
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:19][UNIFIED]   verify: [CONTROL_PLANE] PASS audio-variation
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:19][UNIFIED]   verify: [CONTROL_PLANE] PASS gameplay-spatial-contract
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:20][UNIFIED]   verify: [CONTROL_PLANE] PASS desktop-ai-report-contract
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:20][UNIFIED]   verify: [CONTROL_PLANE] PASS queue
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:20][UNIFIED]   verify: [CONTROL_PLANE] PASS config-contract
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:20][UNIFIED]   verify: [CONTROL_PLANE] PASS feature-flags
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:20][UNIFIED]   verify: [CONTROL_PLANE] PASS wit-component-contract
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:20][UNIFIED]   verify: [CONTROL_PLANE] PASS adapter-sandbox
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:21][UNIFIED]   verify: [CONTROL_PLANE] PASS secure-update
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:24][UNIFIED]   verify: [CONTROL_PLANE] FAIL reproducible-build: Node.js v24.15.0
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:24][UNIFIED]   verify: [CONTROL_PLANE] PASS model-check
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:25][UNIFIED]   verify: [CONTROL_PLANE] PASS cas-peer-discovery
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:26][UNIFIED]   verify: [CONTROL_PLANE] PASS distributed-cas
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:26][UNIFIED]   verify: [CONTROL_PLANE] PASS device-lab
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:26][UNIFIED]   verify: [CONTROL_PLANE] PASS device-executor
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:26][UNIFIED]   verify: [CONTROL_PLANE] PASS wit-bindings
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:27][UNIFIED]   verify: [CONTROL_PLANE] PASS rekor-monitor
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:28][UNIFIED]   verify: [CONTROL_PLANE] PASS technology-consensus
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:28][UNIFIED]   verify: [CONTROL_PLANE] PASS sbom
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:34][UNIFIED]   verify: [CONTROL_PLANE] PASS legacy-evidence-factory
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:34][UNIFIED]   verify: [CONTROL_PLANE] PASS slo-error-budget
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:34][UNIFIED]   verify: [CONTROL_PLANE] PASS db-migration-coordinator
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:34][UNIFIED]   verify: [CONTROL_PLANE] PASS asset-delta
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:34][UNIFIED]   verify: [CONTROL_PLANE] FAIL integration-gate: [SYSTEM_INTEGRATION_V7] 99% FAIL 126/127 leader-lease-migration
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:37][UNIFIED]   verify: [CONTROL_PLANE] PASS disaster-recovery-verify
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:38][UNIFIED]   verify: [CONTROL_PLANE] PASS provenance
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:38][UNIFIED]   verify: [CONTROL_PLANE] PASS supply-chain-signing
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:40][UNIFIED]   verify: [CONTROL_PLANE] FAIL policy: warning: in the working copy of 'state/blocker-repair/state.json', LF will be replaced by CRLF the next time Git touches it
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:40][UNIFIED]   verify: [CONTROL_PLANE] PASS chaos-safety
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:40][UNIFIED]   verify: [CONTROL_PLANE] PASS orchestrator-monitor-lifecycle
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:40][UNIFIED]   verify: [CONTROL_PLANE] PASS orchestrator-patch-safety
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:40][UNIFIED]   verify: [CONTROL_PLANE] PASS orchestrator-minimal-repro
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:40][UNIFIED]   verify: [CONTROL_PLANE] PASS orchestrator-invariant-model
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:41][UNIFIED]   verify: [CONTROL_PLANE] PASS orchestrator-supervisor-negative
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:41][UNIFIED]   verify: [CONTROL_PLANE] PASS orchestrator-supervisor
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:41][UNIFIED]   verify: [CONTROL_PLANE] PASS capability-scheduler
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:41][UNIFIED]   verify: [CONTROL_PLANE] PASS cas-redundancy
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:41][UNIFIED]   verify: [CONTROL_PLANE] PASS device-worker
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:41][UNIFIED]   verify: [CONTROL_PLANE] PASS record-replay
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:42][UNIFIED]   verify: [CONTROL_PLANE] PASS dependency-security
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:42][UNIFIED]   verify: [CONTROL_PLANE] PASS transactional-deploy
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:42][UNIFIED]   verify: [CONTROL_PLANE] PASS enhancement-orchestrator
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:42][UNIFIED]   verify: [CONTROL_PLANE] PASS leader-lease-health
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:42][UNIFIED]   verify: [CONTROL_PLANE] PASS leader-lease-selftest
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:42][UNIFIED]   verify: [CONTROL_PLANE] PASS production-safety-health
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:43][UNIFIED]   verify: [CONTROL_PLANE] PASS production-safety-selftest
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:43][UNIFIED]   verify: [CONTROL_PLANE] PASS soak-chaos
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:43][UNIFIED]   verify: [CONTROL_PLANE] PASS crash-diagnostics
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:43][UNIFIED]   verify: [CONTROL_PLANE] PASS crash-diagnostics-selftest
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:43][UNIFIED]   verify: [CONTROL_PLANE] PASS causal-debugger
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:43][UNIFIED]   verify: [CONTROL_PLANE] PASS cas-replication-controller
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:44][UNIFIED]   verify: [CONTROL_PLANE] PASS physical-device-fleet
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:44][UNIFIED]   verify: [CONTROL_PLANE] PASS production-slo-autopilot
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:44][UNIFIED]   verify: [CONTROL_PLANE] PASS migration-fencing-runtime
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:44][UNIFIED]   verify: [CONTROL_PLANE] PASS long-soak-smoke
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:45][UNIFIED]   verify: [CONTROL_PLANE] PASS native-causal-collector
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:48][UNIFIED]   verify: [CONTROL_PLANE] FAIL selftest: Node.js v24.15.0
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:49][UNIFIED]   verify: [CONTROL_PLANE] FAIL honest-100-functions: [HONEST_100] FAIL certified=70/76 discovered=146
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:49][UNIFIED]   verify: [CONTROL_PLANE] PASS function-contract-coverage
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:51][UNIFIED]   verify: [CONTROL_PLANE] FAIL monotonic-100-guard:     at node:internal/main/run_main_module:33:47
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:51][UNIFIED]   verify: [CONTROL_PLANE] FAIL orchestrator-continuity: [ORCHESTRATOR_CONTINUITY] FAIL 5/8
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:52][UNIFIED]   verify: [CONTROL_PLANE] FAIL release-promotion: [RELEASE_PROMOTION] BLOCK decision=BLOCK
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:53][UNIFIED]   verify: [CONTROL_PLANE] FAIL readiness: [READINESS_V75] structural=84% operational=77% evidence=87% native=8%
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:53][UNIFIED]   verify: [CONTROL_PLANE] FAIL 64/75 trace=4b7231024ebb791bf1723b0f24995c30
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:53][UNIFIED] === UNIFIED TICK END ===
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:53][UNIFIED] state nextRunAt=2026-08-25T02:51:09.241Z blockers pass= requires_ai= waiting= mergeSafe=False
+Add-Content : Процесс не может получить доступ к файлу "C:\Users\user\Desktop\World_server\state\blocker-repair\schedul
+er.log", так как этот файл используется другим процессом.
+C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:90
++ ... line="[$ts][UNIFIED] $m"; Add-Content -Path $log -Value $line; Write- ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\user\D...r\scheduler.log:String) [Add-Content], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.AddContentCommand
+ 
+[2026-08-25 06:07:53][UNIFIED] LOCK released

@@ -1,9 +1,9 @@
 {
   "schemaVersion": "7.5.0",
-  "generatedAt": "2026-08-25T02:04:20.973Z",
+  "generatedAt": "2026-08-25T03:10:34.937Z",
   "pass": false,
   "claim": "Only functions with explicit scoped contracts and passing machine-readable evidence are called CERTIFIED_100. Uncontracted capabilities remain discovered but unverified.",
-  "certified100Count": 70,
+  "certified100Count": 69,
   "contractedCount": 76,
   "discoveredCapabilityCount": 146,
   "certified100": [
@@ -35,12 +35,6 @@
       "id": "feature-flag-safety",
       "owner": "SYSTEM_INTEGRATION_LAYER_V7",
       "scope": "deterministic rollout and safety lock",
-      "percent": 100
-    },
-    {
-      "id": "adapter-sandbox-fail-closed",
-      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
-      "scope": "untrusted adapters denied when Wasmtime unavailable",
       "percent": 100
     },
     {
@@ -450,6 +444,13 @@
       "percent": 67,
       "missingClasses": [
         "integration"
+      ]
+    },
+    {
+      "id": "adapter-sandbox-fail-closed",
+      "percent": 67,
+      "missingClasses": [
+        "regression"
       ]
     },
     {
@@ -1679,14 +1680,16 @@
       "scope": "untrusted adapters denied when Wasmtime unavailable",
       "critical": true,
       "applicable": true,
-      "status": "CERTIFIED_100",
-      "percent": 100,
+      "status": "DEGRADED",
+      "percent": 67,
       "requiredEvidenceClasses": [
         "static",
         "integration",
         "regression"
       ],
-      "missingClasses": [],
+      "missingClasses": [
+        "regression"
+      ],
       "evidence": [
         {
           "class": "integration",
@@ -1703,8 +1706,8 @@
           "file": "ADAPTER_SANDBOX_STATUS.json",
           "path": "untrustedBehavior",
           "equals": "DENY_UNTRUSTED",
-          "pass": true,
-          "actual": "DENY_UNTRUSTED"
+          "pass": false,
+          "actual": "EXECUTE_ONLY_WITH_EXPLICIT_PREOPENS"
         },
         {
           "class": "static",
@@ -1721,7 +1724,7 @@
       },
       "contractHash": "51baf5bf60c33812269fda35913c77fe838ac299fc55df3f7d73a1400e058dee",
       "sourceFingerprint": "227d634d4f1776763cefef3168dc0b23a1a211735639dbc5f77f01806cc220c2",
-      "evidenceFingerprint": "5900a4fd9500146de358d19a7a9a639c90c40afe6c6608cfcb7fa96d41aa4fa3"
+      "evidenceFingerprint": "0d2802aef017ffde430488e3df23bd7079cb3f64335262167f5339fa3175fdbb"
     },
     {
       "id": "model-checker",
