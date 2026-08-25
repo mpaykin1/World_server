@@ -1,47 +1,71 @@
-# WORK IN PROGRESS — PWA SELF-IMPROVING V4 MAX
+# WORK IN PROGRESS — V7.5 RUNTIME CLOSURE + AUTONOMOUS BLOCKER REPAIR V1
 
 ## Task
-Install/upgrade V4 and fully connect PWA, adaptive graphics, shader/stutter profiling, predictive streaming, CPU asset derivatives, learned quality profiles, semantic rigs, WebKit/real-iOS evidence, quiet self-improvement and rollback.
+Install WORLD_SERVER_ONE_FOLDER_V7_5_RUNTIME_CLOSURE (01-19) + V7_5_AUTONOMOUS_BLOCKER_REPAIR_V1, then autonomous repair of 4 requires_ai blockers (wasmtime, tlc, local-gates, vercel) until honest 100% with timers.
+
+## What we are doing
+Install WORLD_SERVER_ONE_FOLDER_V7_5_RUNTIME_CLOSURE (01-19) + V7_5_AUTONOMOUS_BLOCKER_REPAIR_V1, then autonomous repair of 4 requires_ai blockers (wasmtime, tlc, local-gates, vercel) until honest 100% with timers.
 
 ## Why
-V3 had strong PWA/convergence foundations but lacked fully connected CPU transcode tooling, production-learned profiles, explicit shader-stutter control, real-iOS evidence separation, and had a rig-adapter signature mismatch plus local `/data`/quality-profile routing gaps.
+Previous drift 7 vs 108 migrations blocked promotion. V7.5 adds 127 integration gates + control-plane 75, honest-100 now 72/76. Need to close gaps without faking evidence.
 
 ## Current state
-Patch package prepared. Production remains unchanged until task-branch gates and deployed verification pass.
+- branch: ai/desktop/quality-runtime-v11-20260824-090217
+- supabase drift fixed 108/6775a5, synergy 188 via 6 plugins
+- V7.5 payload 19 installed via install-system-integration-v7_5.cjs (SKIP verify)
+- control-plane 67/75, honest-100 72/76, readiness 84/77/87
+- blockers: 5 pass, 4 requires_ai, 4 waiting, mergeSafe false
 
 ## Target state
-- local + deployed PWA gates PASS;
-- renderer/shader/predictive integration complete for certified compatible renderers;
-- relevant rigs registered/tested;
-- CPU derivative pipeline available without GPU and preserves originals;
-- telemetry migration applied through normal migration path;
-- learned quality API functioning;
-- Chromium + mobile WebKit preview PASS;
-- production smoke PASS;
-- real-iOS evidence reported truthfully;
-- convergence `CLEAN`, unresolved errors 0, regressions 0.
+- local-gates 6/6 PASS, control-plane 75/75, honest-100 76/76 (or 65/65 per V7.5 contract)
+- vercel PASS, wasmtime/tlc available or honestly external, long-soak 8h started
+
+## Files / systems involved
+- supabase/migrations (108), lib/plugin-orchestrator.js, scripts/world-*, data/system-integration-version.json, .github/workflows, payload/, state/blocker-repair/
+
+## Known risks
+- Overwriting unknown shared variants without semantic merge breaks honest-100
+- Faking device/remote/soak evidence violates V7.5 truth gate
+- Pushing directly to master breaks protection
+
+## Golden systems that must be preserved
+- Supabase 108 migrations digest, Voxel World, APNG, WebGL survival hub, Realtime, Vercel stateless, 65 CERTIFIED_100 functions
+
+## Current progress
+- V7.5 01-19 installed, backup .system-integration-backups/v7-5-*
+- Plugin orchestrator synergy 188 installed
+- Blocker repair V1 scheduler Task Scheduler every 15m active
+- Tick 1: 5 pass, 4 requires_ai (wasmtime, tlc, local-gates, vercel), 4 waiting
+
+## Next action
+1. Fix WORK_IN_PROGRESS sections (this commit)
+2. Diagnose vercel dpl_6Ho8Tx5wpLErdrfJnJJTj7d6yJYT logs -> root cause -> push fix -> blockers:tick
+3. Fix wasmtime/tlc via toolchain-bootstrap apply or honestly mark external
+4. Re-run local-gates until 6/6
+5. Let 8h soak and device waiting timers run (do not fake)
+
+## Error closure loop
+For each reproducible failure: root cause → complete file fix → regression test → blockers:tick → verify. Never stop at false green. Preserve Stable.
 
 ## Errors that must not return
-False-green localhost preview; V3 `registerRig(id, fn)` signature mismatch; local server missing `/data` or `/api/quality-profile`; profile oscillation; server recommendation bypassing device ceiling; destructive source-asset replacement; prediction abandoning player chunks; shader compilation stutter ignored; WebKit emulation claimed as real iPhone; unresolved blocker reported as done.
+- supabase drift 7 vs 108, false 100% via file existence, synthetic device as real, SKIP_FULL_VERIFY, localhost as remote CAS, shortened soak
 
 ## Exact patch / change plan
-1. Safe V2/V3/base upgrade on task branch.
-2. Integrate renderer + shader/stutter + predictive streaming + rig scan.
-3. Generate asset manifests; bootstrap/apply free CPU derivatives when candidates exist.
-4. Apply additive V4 telemetry migration.
-5. Run local convergence/release gates until CLEAN.
-6. Deploy exact preview; Chromium + WebKit + smoke.
-7. PR/canary; production smoke; collect real-iOS evidence.
-8. On any failure: root-cause fix + regression test + repeat; never declare completion while unresolved.
+1. V7.5 01-19 payload copy + install-system-integration-v7_5.cjs with SKIP then honest gates
+2. Blocker repair V1 install-autonomous-blocker-repair.cjs -> scheduler every 15m
+3. Fix wasmtime/tlc via toolchain-bootstrap or mark external honestly
+4. Fix local-gates 0/6 via WORK_IN_PROGRESS + control-plane 67/75 -> 75/75
+5. Capture vercel inspect logs -> push fix
+6. Let waiting timers (android/ios/remote/soak) run honestly
 
 ## Tests to run
-`npm ci`; `npm run pwa:integrate-runtime`; `npm run assets:quality`; `npm run assets:transcode`; `npm run pwa:check`; `npm run animation:check`; `npm run check`; `npm run quality:converge:full`; `npm run release:gate`; deployed Playwright Chromium/WebKit; post-deploy smoke; `npm run quality:ios-evidence` after production.
+npm run blockers:tick; npm run blockers:status; npm run integration:full; npm run release:gate; npm run blockers:self-test
 
 ## Deployment / PR plan
-No direct master push. Task branch -> exact Vercel preview -> browser/smoke gates -> PR -> canary/promotion. Quiet auto-merge remains low-risk-only. Production failure -> Vercel rollback; quiet patch -> code revert lane.
+Branch ai/desktop/... -> Vercel preview -> blockers:tick until mergeSafe true -> PR to master -> canary -> production. No direct master push.
 
 ## Completion criteria
-All mandatory gates PASS, `QUALITY_CONVERGENCE_REPORT.status=CLEAN`, unresolved errors 0, regressions 0, evidence recorded, physical-iPhone status stated without guessing.
+blockers:status mergeSafe true, local gates PASS, control-plane 75/75, honest-100 PASS, vercel PASS, longSoakCertified true, no requires_ai
 
 ## Final evidence
-Fill only after real installation/deployment verification. Do not fabricate.
+Fill after real verification. Do not fabricate.
