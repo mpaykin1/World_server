@@ -1,0 +1,18 @@
+{
+  "at": "2026-08-25T02:11:41.335Z",
+  "platform": "win32",
+  "arch": "x64",
+  "hostname": "WIN-GJVRHRQPB5A",
+  "cpus": 8,
+  "totalMemoryBytes": 17028370432,
+  "tools": {
+    "etwLogman": {
+      "ok": true,
+      "sample": "WPD FSDriver Trace                       {1311095B-B9FF-497A-8560-2F43CA5438E4}\nWPD MTPDriver Trace                      {97496DDA-C211-4FFE-B1B1-68E6E98EBC38}\nWPD ShellExtension Trace                 {A42C7BD1-5AF3-4B32-9BC6-B85EB31D3F4A}\nWPD ShellServiceObject Trace             {1AB5AC29-037F-43A1-9484-78C9DB61F869}\nWPD Types Trace                          {58E8F67D-29E9-456C-B23D-C6489E341BB0}\nWPD WiaCompat Trace                      {B809F4FF-3023-473C-971B-AB594429EA57}\nWPD WMDMCompat Trace                     {17ABF473-982C-4D0E-B502-3A59D89E71DE}\nWSAT_TraceProvider                       {7F3FE630-462B-47C5-AB07-67CA84934ABD}\nWudfx02000_KmdfTraceGuid                 {485E7DE9-0A80-11D8-AD15-505054503030}\nXWizard Framework                        {777BA8FF-2498-4875-933A-3067DE883070}\n������ ����� ��饣� ����㯠 � WMP �� �� {D804A67F-4C25-43C1-896F-89FF78B3A911}\n���⠢騪 ����஢�� VSS                {9138500E-3648-4EDB-AA4C-859E9F7B7C38}\n��㦡� ��饣� ����㯠 � WMP �� ��      {A7EB57F6-145E-4F18-BD75-DBBF6F7E23A7}\n����஢�� �� 䠩��; ����� ����権 1 {D75D8303-6C21-4BDE-9C98-ECC6320F9291}\n����஢�� �� 䠩��; ����� ����権 2 {058DD951-7604-414D-A5D6-A56D35367A46}\n����஢�� �� 䠩��; ����易⥫�� ����� {7DA1385C-F8F5-414D-B9D0-02FCA090F1EC}\n����஢�� �� 䠩��; ⮬ ��� ����� � ��ୠ� {127D46AF-4AD3-489F-9165-F00BA64D5467}\n\n������� �믮����� �ᯥ譮."
+    },
+    "wpr": {
+      "ok": true,
+      "sample": "Microsoft Windows Performance Recorder Version 10.0.19041 (CoreSystem)\nCopyright (c) 2019 Microsoft Corporation. All rights reserved.\n\nWPR is not recording"
+    }
+  }
+}

@@ -1,18 +1,12 @@
 {
   "schemaVersion": "7.5.0",
-  "generatedAt": "2026-08-25T01:16:22.405Z",
+  "generatedAt": "2026-08-25T02:04:20.973Z",
   "pass": false,
   "claim": "Only functions with explicit scoped contracts and passing machine-readable evidence are called CERTIFIED_100. Uncontracted capabilities remain discovered but unverified.",
-  "certified100Count": 72,
+  "certified100Count": 70,
   "contractedCount": 76,
   "discoveredCapabilityCount": 146,
   "certified100": [
-    {
-      "id": "system-integration-gate",
-      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
-      "scope": "structural integration compatibility",
-      "percent": 100
-    },
     {
       "id": "durable-job-queue",
       "owner": "SYSTEM_INTEGRATION_LAYER_V7",
@@ -248,12 +242,6 @@
       "percent": 100
     },
     {
-      "id": "leader-lease-fencing",
-      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
-      "scope": "atomic leader lease with monotonic fencing against split brain",
-      "percent": 100
-    },
-    {
       "id": "production-safety-controller",
       "owner": "SYSTEM_INTEGRATION_LAYER_V7",
       "scope": "certified regression/crash-loop stops canary and prepares authorized rollback",
@@ -442,6 +430,14 @@
   ],
   "degraded": [
     {
+      "id": "system-integration-gate",
+      "percent": 33,
+      "missingClasses": [
+        "integration",
+        "regression"
+      ]
+    },
+    {
       "id": "graphics-quality-ratchet",
       "percent": 33,
       "missingClasses": [
@@ -461,6 +457,13 @@
       "percent": 67,
       "missingClasses": [
         "regression"
+      ]
+    },
+    {
+      "id": "leader-lease-fencing",
+      "percent": 67,
+      "missingClasses": [
+        "static"
       ]
     },
     {
@@ -1135,14 +1138,17 @@
       "scope": "structural integration compatibility",
       "critical": true,
       "applicable": true,
-      "status": "CERTIFIED_100",
-      "percent": 100,
+      "status": "DEGRADED",
+      "percent": 33,
       "requiredEvidenceClasses": [
         "static",
         "integration",
         "regression"
       ],
-      "missingClasses": [],
+      "missingClasses": [
+        "integration",
+        "regression"
+      ],
       "evidence": [
         {
           "class": "integration",
@@ -1150,8 +1156,8 @@
           "file": "SYSTEM_INTEGRATION_REPORT.json",
           "path": "pass",
           "equals": true,
-          "pass": true,
-          "actual": true
+          "pass": false,
+          "actual": false
         },
         {
           "class": "regression",
@@ -1159,8 +1165,8 @@
           "file": "SYSTEM_INTEGRATION_REPORT.json",
           "path": "percent",
           "equals": 100,
-          "pass": true,
-          "actual": 100
+          "pass": false,
+          "actual": 99
         },
         {
           "class": "static",
@@ -1176,7 +1182,7 @@
       },
       "contractHash": "bccdf099d4d113274dfdc64e68ad7d4be133efd2838be4ed93b6b336e772f94f",
       "sourceFingerprint": "a09f926c98f049e5ed35f24af2ac5835e0f32a73c4d4663c56083f125703c0c6",
-      "evidenceFingerprint": "9313e2bf1af5ea3ca221b49d9712642ef266a654000bb8d16113a5a1bdc009c7"
+      "evidenceFingerprint": "0d3af9619270b1256fb206a7d7f6f9fcbba9267975dab8122c5108bf32f0b7fd"
     },
     {
       "id": "durable-job-queue",
@@ -1459,7 +1465,67 @@
               "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
             },
             {
+              "path": "models/README.md",
+              "status": "A",
+              "pass": false,
+              "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+            },
+            {
+              "path": "models/optional/README.md",
+              "status": "A",
+              "pass": false,
+              "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+            },
+            {
+              "path": "output/demo_build/collision_proxy.glb",
+              "status": "A",
+              "pass": false,
+              "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+            },
+            {
+              "path": "output/demo_build/collision_proxy.obj",
+              "status": "A",
+              "pass": false,
+              "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+            },
+            {
+              "path": "payload/shared/pwa-icon-180.png",
+              "status": "A",
+              "pass": false,
+              "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+            },
+            {
+              "path": "payload/shared/pwa-icon-192.png",
+              "status": "A",
+              "pass": false,
+              "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+            },
+            {
+              "path": "payload/shared/pwa-icon-512.png",
+              "status": "A",
+              "pass": false,
+              "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+            },
+            {
               "path": "public/assets/pixel/world-atlas-v1.png",
+              "status": "A",
+              "pass": false,
+              "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+            },
+            {
+              "path": "shared/pwa-icon-180.png",
+              "status": "A",
+              "pass": false,
+              "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+            },
+            {
+              "path": "shared/pwa-icon-192.png",
+              "status": "A",
+              "pass": false,
+              "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+            },
+            {
+              "path": "shared/pwa-icon-512.png",
               "status": "A",
               "pass": false,
               "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
@@ -1481,6 +1547,12 @@
               "status": "A",
               "pass": false,
               "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+            },
+            {
+              "path": "worlds/sample-city/assets/world.ply",
+              "status": "A",
+              "pass": false,
+              "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
             }
           ]
         },
@@ -1498,7 +1570,7 @@
       },
       "contractHash": "c74e7b72908ec46519fb8ced5cb3661d574aad9d3b0b6216c4f665cda1b53c62",
       "sourceFingerprint": "25eba40edfa2641a14c11c2499924b11090be674b71a51eae9ba8e9d6778e79f",
-      "evidenceFingerprint": "4e9635e149d8b4e52a6b9d58b64bc89e45a73af5ed17467f33bf3b044ce0d794"
+      "evidenceFingerprint": "50c9f93082c0a613f5376fdc0762da4f869a828e042b7f4d7fa76a87650218d9"
     },
     {
       "id": "offline-policy-enforcement",
@@ -3427,14 +3499,16 @@
       "scope": "atomic leader lease with monotonic fencing against split brain",
       "critical": true,
       "applicable": true,
-      "status": "CERTIFIED_100",
-      "percent": 100,
+      "status": "DEGRADED",
+      "percent": 67,
       "requiredEvidenceClasses": [
         "static",
         "integration",
         "regression"
       ],
-      "missingClasses": [],
+      "missingClasses": [
+        "static"
+      ],
       "evidence": [
         {
           "class": "integration",
@@ -3459,17 +3533,17 @@
           "type": "contains",
           "file": "supabase/migrations/20260824_orchestrator_leader_lease.sql",
           "text": "fencing_token",
-          "pass": true,
-          "actual": true
+          "pass": false,
+          "actual": false
         }
       ],
       "sourceHashes": {
         "scripts/leader-lease-fencing.cjs": "42fceca5f578b5c213fef13fa218126c0aafb181c23f31a61d4b6e92e2ed8b03",
-        "supabase/migrations/20260824_orchestrator_leader_lease.sql": "0b34c186579660287a5914165614bce1977d9db6b99cb06c796010fffdcc997b"
+        "supabase/migrations/20260824_orchestrator_leader_lease.sql": null
       },
       "contractHash": "ce4c0daafbf8dd8fbbc041fc94a1fe16169cbb2b8c954173bdf12e58da2ec8ee",
-      "sourceFingerprint": "9cfe445df4a80c0308b1b995345ea9ab48a892610730aa04d1177906fa204a4a",
-      "evidenceFingerprint": "a9256a39f1f1208cb916de886fbd01271497ece67c42ae3d6dbaecc14c289d7b"
+      "sourceFingerprint": "b5fe04118fd643dee7989cc1a53ea1ac540678e640994367e7268d7df29f07a6",
+      "evidenceFingerprint": "0b335a902fc65bf3c6ddbafc745fc5ff824e0daeb04b5a5fc79d0acf51521fc3"
     },
     {
       "id": "production-safety-controller",

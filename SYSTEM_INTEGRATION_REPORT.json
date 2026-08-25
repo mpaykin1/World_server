@@ -1,12 +1,14 @@
 {
   "schemaVersion": "7.5.0",
   "system": "SYSTEM_INTEGRATION_GATE",
-  "generatedAt": "2026-08-25T01:15:53.693Z",
-  "percent": 100,
-  "pass": true,
-  "passed": 127,
+  "generatedAt": "2026-08-25T02:04:04.250Z",
+  "percent": 99,
+  "pass": false,
+  "passed": 126,
   "total": 127,
-  "failed": [],
+  "failed": [
+    "leader-lease-migration"
+  ],
   "checks": {
     "analyzer-v6-tech": true,
     "analyzer-truth-cert": true,
@@ -123,7 +125,7 @@
     "production-safety-wired": true,
     "soak-chaos-wired": true,
     "crash-diagnostics-wired": true,
-    "leader-lease-migration": true,
+    "leader-lease-migration": false,
     "legacy-evidence-wired": true,
     "slo-error-budget-wired": true,
     "db-migration-wired": true,

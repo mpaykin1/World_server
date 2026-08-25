@@ -1,13 +1,13 @@
 {
   "schemaVersion": "7.2.0",
-  "generatedAt": "2026-08-25T01:16:10.274Z",
+  "generatedAt": "2026-08-25T02:04:21.702Z",
   "pass": false,
   "decision": "BLOCK",
   "nextStep": "FIX_BLOCKERS",
   "checks": [
     {
       "file": "SYSTEM_INTEGRATION_REPORT.json",
-      "pass": true
+      "pass": false
     },
     {
       "file": "UPDATE_TRUST_STATUS.json",
@@ -67,6 +67,7 @@
     }
   ],
   "blockers": [
+    "SYSTEM_INTEGRATION_REPORT.json",
     "POLICY_DECISION_REPORT.json",
     "GRAPHICS_REGRESSION_GUARD_REPORT.json",
     "HONEST_100_FUNCTION_REPORT.json",

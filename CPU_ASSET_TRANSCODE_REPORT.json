@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "4.0.0",
+  "mode": "plan",
+  "tools": {
+    "gltfTransform": false,
+    "ktx2Encoder": false
+  },
+  "candidates": [
+    {
+      "source": "apps/ai3d-reference-test/assets/previous_html_baseline.png",
+      "bytes": 587833,
+      "sha256": "0f51d6f7733a845de863b68f3361b0736105f33acedc71f636d2fdc4c2b6eb22",
+      "type": "texture"
+    }
+  ],
+  "derived": [],
+  "failures": []
+}

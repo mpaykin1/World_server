@@ -1,0 +1,220 @@
+{
+  "generatedAt": "2026-08-25T02:02:37.780Z",
+  "system": "ASSET_QUALITY_PIPELINE",
+  "assetCount": 24,
+  "totalBytes": 3184701,
+  "duplicateGroups": 0,
+  "duplicateRedundantBytes": 0,
+  "heavyCandidates": 0,
+  "entries": [
+    {
+      "file": "apps/ai3d-reference-test/assets/model.glb",
+      "kind": "3d",
+      "ext": ".glb",
+      "bytes": 381328,
+      "sha256": "71d1c26d5fa858fc30b74c56bccf9a93769f5cfec5a8522ea24ade6d4a284d33",
+      "opportunities": []
+    },
+    {
+      "file": "apps/ai3d-reference-test/assets/previous_html_baseline.png",
+      "kind": "texture",
+      "ext": ".png",
+      "bytes": 587833,
+      "sha256": "0f51d6f7733a845de863b68f3361b0736105f33acedc71f636d2fdc4c2b6eb22",
+      "opportunities": []
+    },
+    {
+      "file": "apps/ai3d-reference-test/assets/reference.png",
+      "kind": "texture",
+      "ext": ".png",
+      "bytes": 186804,
+      "sha256": "9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+      "opportunities": []
+    },
+    {
+      "file": "apps/ai3d-reference-test/assets/renders/front_clay.png",
+      "kind": "texture",
+      "ext": ".png",
+      "bytes": 182098,
+      "sha256": "04cc01f41064f97e511a69e4536d38cac9232837c556fe7a95db94412f22b5b5",
+      "opportunities": []
+    },
+    {
+      "file": "apps/ai3d-reference-test/assets/renders/front_textured.png",
+      "kind": "texture",
+      "ext": ".png",
+      "bytes": 182098,
+      "sha256": "422382ba957be4bc425f920b92aadb0d940aa5ca72e65570efe23e5e1e8dbae0",
+      "opportunities": []
+    },
+    {
+      "file": "apps/ai3d-reference-test/assets/renders/left15_clay.png",
+      "kind": "texture",
+      "ext": ".png",
+      "bytes": 181139,
+      "sha256": "95d3075235c79a74c192a5f3f41a3a5106b964e39f01cfb1c56f77e8a3d2b8ea",
+      "opportunities": []
+    },
+    {
+      "file": "apps/ai3d-reference-test/assets/renders/left15_textured.png",
+      "kind": "texture",
+      "ext": ".png",
+      "bytes": 181139,
+      "sha256": "a17b15dbae8caefd98e3999759cd1b9e450ab0016a91ea4fe5c3c9d3226eeb11",
+      "opportunities": []
+    },
+    {
+      "file": "apps/ai3d-reference-test/assets/renders/left30_clay.png",
+      "kind": "texture",
+      "ext": ".png",
+      "bytes": 177791,
+      "sha256": "ce9ee3313f8459388e23fa9a5025b3000216d28f0aaf3a9c1e88e1111f196239",
+      "opportunities": []
+    },
+    {
+      "file": "apps/ai3d-reference-test/assets/renders/left30_textured.png",
+      "kind": "texture",
+      "ext": ".png",
+      "bytes": 177791,
+      "sha256": "c57f5e6b7110be56e8227827aff049ad904a3c27e7f3013e22b9bea4b415ad27",
+      "opportunities": []
+    },
+    {
+      "file": "apps/ai3d-reference-test/assets/renders/right15_clay.png",
+      "kind": "texture",
+      "ext": ".png",
+      "bytes": 178046,
+      "sha256": "a7cfc24cc99066506f9a524d2562bc7c334bdae651ed24eabbb87a3bece6f783",
+      "opportunities": []
+    },
+    {
+      "file": "apps/ai3d-reference-test/assets/renders/right15_textured.png",
+      "kind": "texture",
+      "ext": ".png",
+      "bytes": 178046,
+      "sha256": "6f2317d5b031197d5b15e5c8eb1e747f05920c82a2335e52e5c852acd2001a48",
+      "opportunities": []
+    },
+    {
+      "file": "apps/ai3d-reference-test/assets/renders/right30_clay.png",
+      "kind": "texture",
+      "ext": ".png",
+      "bytes": 172205,
+      "sha256": "17a138577d27ccd649c596283850430a3def0675e10c903546bb6b573f095b69",
+      "opportunities": []
+    },
+    {
+      "file": "apps/ai3d-reference-test/assets/renders/right30_textured.png",
+      "kind": "texture",
+      "ext": ".png",
+      "bytes": 172205,
+      "sha256": "baab940757b82aff9b7689069dd92ad0616dc06fc027982f0e4380230a4058a2",
+      "opportunities": []
+    },
+    {
+      "file": "apps/ai3d-reference-test/assets/renders/top_oblique_clay.png",
+      "kind": "texture",
+      "ext": ".png",
+      "bytes": 88575,
+      "sha256": "04ec9bdd5fda2516f279a6d0230e65b7bb3a9da1bf2d4d8af9b529873a891526",
+      "opportunities": []
+    },
+    {
+      "file": "apps/ai3d-reference-test/assets/renders/top_oblique_textured.png",
+      "kind": "texture",
+      "ext": ".png",
+      "bytes": 88575,
+      "sha256": "c1dd6a6f93a90702fb9a0bb0cbb434ee90120ff5860515d10410a887c127696b",
+      "opportunities": []
+    },
+    {
+      "file": "apps/catalog/ico.png",
+      "kind": "texture",
+      "ext": ".png",
+      "bytes": 1862,
+      "sha256": "625211b3b3c6baff25ca2408d731477382b93e552a9d8c03a755aa039d1353cf",
+      "opportunities": []
+    },
+    {
+      "file": "apps/chat/ico.png",
+      "kind": "texture",
+      "ext": ".png",
+      "bytes": 1690,
+      "sha256": "e818d80fa57a4c0b45e890dbcf1184f3b11a39f6b9bef87fb727dbfb90a54f18",
+      "opportunities": []
+    },
+    {
+      "file": "apps/survival/ico.png",
+      "kind": "texture",
+      "ext": ".png",
+      "bytes": 2181,
+      "sha256": "7788e84319aa85b3cfd354915050d4f536a760ba9967043a00d9034ce864d3f2",
+      "opportunities": []
+    },
+    {
+      "file": "shared/pq-kernel-v5-simd.wasm",
+      "kind": "runtime",
+      "ext": ".wasm",
+      "bytes": 662,
+      "sha256": "8286a616f577341107d6f3c04f83b03a0784f55ac66841cfa1e1e92184ef16c7",
+      "opportunities": []
+    },
+    {
+      "file": "shared/pq-kernel-v5-threads.wasm",
+      "kind": "runtime",
+      "ext": ".wasm",
+      "bytes": 759,
+      "sha256": "bd6a6391e71e96f45a12e2feeb6233f09b38ad61ff6f0f213970276be55fd811",
+      "opportunities": []
+    },
+    {
+      "file": "shared/pq-kernel.wasm",
+      "kind": "runtime",
+      "ext": ".wasm",
+      "bytes": 1488,
+      "sha256": "b6194fddd090cb583f95d42a725e98c8e635b920d48cdeec76d0156bf5da2777",
+      "opportunities": []
+    },
+    {
+      "file": "shared/pwa-icon-180.png",
+      "kind": "texture",
+      "ext": ".png",
+      "bytes": 25158,
+      "sha256": "653f6a9e0810e129812659776f3bab2476f554e0a84970c398bd22b8ba4f1927",
+      "opportunities": []
+    },
+    {
+      "file": "shared/pwa-icon-192.png",
+      "kind": "texture",
+      "ext": ".png",
+      "bytes": 28191,
+      "sha256": "4eefefc230e5e3d305ca0d515a43fc28ae87eaa47daf65ebdf9bbfd29fb92e85",
+      "opportunities": []
+    },
+    {
+      "file": "shared/pwa-icon-512.png",
+      "kind": "texture",
+      "ext": ".png",
+      "bytes": 7037,
+      "sha256": "a890cc505fc23c820033e84a27ccaf5f28c949b875ba2ff9f650bc45ffeca4b7",
+      "opportunities": []
+    }
+  ],
+  "duplicates": [],
+  "opportunities": [],
+  "actions": {
+    "automaticSafe": [
+      "Service worker runtime caching for 3D/audio/texture assets",
+      "Exact duplicate detection and report",
+      "Heavy asset detection",
+      "Compression/streaming candidate classification",
+      "Per-app idle warm manifest generation for safe small/medium runtime assets"
+    ],
+    "gatedDestructive": [
+      "Mesh simplification",
+      "Texture downscaling",
+      "Geometry decimation",
+      "Source asset deletion"
+    ]
+  }
+}

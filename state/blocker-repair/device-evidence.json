@@ -1,0 +1,11 @@
+{
+  "at": "2026-08-25T02:11:47.578Z",
+  "android": {
+    "adb": false,
+    "physicalDeviceIds": []
+  },
+  "ios": {
+    "ideviceId": false,
+    "physicalDeviceIds": []
+  }
+}

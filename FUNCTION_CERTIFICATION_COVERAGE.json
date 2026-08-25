@@ -1,12 +1,12 @@
 {
   "schemaVersion": "7.5.0",
-  "generatedAt": "2026-08-25T01:16:23.083Z",
+  "generatedAt": "2026-08-25T02:04:19.558Z",
   "pass": true,
-  "globalCapabilityCertificationPercent": 79,
-  "integrationOwnedCapabilityCertificationPercent": 89,
-  "certifiedCapabilities": 115,
+  "globalCapabilityCertificationPercent": 73,
+  "integrationOwnedCapabilityCertificationPercent": 80,
+  "certifiedCapabilities": 106,
   "totalCapabilities": 146,
-  "integrationOwnedCertified": 90,
+  "integrationOwnedCertified": 81,
   "integrationOwnedTotal": 101,
   "rows": [
     {
@@ -392,7 +392,7 @@
       "systemId": "system-integration-v7",
       "owner": "SYSTEM_INTEGRATION_LAYER_V7",
       "contractId": "system-integration-gate",
-      "status": "CERTIFIED_100"
+      "status": "UNVERIFIED"
     },
     {
       "capability": "cas-local-redundancy",
@@ -427,14 +427,14 @@
       "systemId": "system-integration-v7",
       "owner": "SYSTEM_INTEGRATION_LAYER_V7",
       "contractId": "system-integration-gate",
-      "status": "CERTIFIED_100"
+      "status": "UNVERIFIED"
     },
     {
       "capability": "certified-function-baselines",
       "systemId": "system-integration-v7",
       "owner": "SYSTEM_INTEGRATION_LAYER_V7",
       "contractId": "system-integration-gate",
-      "status": "CERTIFIED_100"
+      "status": "UNVERIFIED"
     },
     {
       "capability": "change-impact-routing",
@@ -560,7 +560,7 @@
       "systemId": "system-integration-v7",
       "owner": "SYSTEM_INTEGRATION_LAYER_V7",
       "contractId": "system-integration-gate",
-      "status": "CERTIFIED_100"
+      "status": "UNVERIFIED"
     },
     {
       "capability": "durable-priority-queue",
@@ -616,7 +616,7 @@
       "systemId": "system-integration-v7",
       "owner": "SYSTEM_INTEGRATION_LAYER_V7",
       "contractId": "leader-lease-fencing",
-      "status": "CERTIFIED_100"
+      "status": "UNVERIFIED"
     },
     {
       "capability": "full-file-delivery-contract",
@@ -651,7 +651,7 @@
       "systemId": "system-integration-v7",
       "owner": "SYSTEM_INTEGRATION_LAYER_V7",
       "contractId": "system-integration-gate",
-      "status": "CERTIFIED_100"
+      "status": "UNVERIFIED"
     },
     {
       "capability": "idempotency",
@@ -735,7 +735,7 @@
       "systemId": "system-integration-v7",
       "owner": "SYSTEM_INTEGRATION_LAYER_V7",
       "contractId": "system-integration-gate",
-      "status": "CERTIFIED_100"
+      "status": "UNVERIFIED"
     },
     {
       "capability": "multi-window-burn-rate",
@@ -882,7 +882,7 @@
       "systemId": "system-integration-v7",
       "owner": "SYSTEM_INTEGRATION_LAYER_V7",
       "contractId": "system-integration-gate",
-      "status": "CERTIFIED_100"
+      "status": "UNVERIFIED"
     },
     {
       "capability": "semantic-symbol-graph",
@@ -938,7 +938,7 @@
       "systemId": "system-integration-v7",
       "owner": "SYSTEM_INTEGRATION_LAYER_V7",
       "contractId": "leader-lease-fencing",
-      "status": "CERTIFIED_100"
+      "status": "UNVERIFIED"
     },
     {
       "capability": "system-enhancement-orchestrator",
@@ -1181,6 +1181,27 @@
       "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
     },
     {
+      "capability": "capability-preservation-gate",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "central-control-plane",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "certified-function-baselines",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
       "capability": "change-impact-routing",
       "owner": "SYSTEM_INTEGRATION_LAYER_V7",
       "systemId": "system-integration-v7",
@@ -1195,6 +1216,13 @@
       "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
     },
     {
+      "capability": "dual-run-replacement-contract",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
       "capability": "explicit-legacy-contract-synthesis",
       "owner": "SYSTEM_INTEGRATION_LAYER_V7",
       "systemId": "system-integration-v7",
@@ -1202,7 +1230,21 @@
       "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
     },
     {
+      "capability": "fenced-leader-lease",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
       "capability": "graphics-quality-ratchet",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "honest-100-function-certification",
       "owner": "SYSTEM_INTEGRATION_LAYER_V7",
       "systemId": "system-integration-v7",
       "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
@@ -1223,6 +1265,13 @@
       "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
     },
     {
+      "capability": "monotonic-function-enhancement",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
       "capability": "offline-policy-mirror",
       "owner": "SYSTEM_INTEGRATION_LAYER_V7",
       "systemId": "system-integration-v7",
@@ -1237,7 +1286,21 @@
       "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
     },
     {
+      "capability": "semantic-merge-ownership",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
       "capability": "semantic-symbol-graph",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "split-brain-prevention",
       "owner": "SYSTEM_INTEGRATION_LAYER_V7",
       "systemId": "system-integration-v7",
       "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",

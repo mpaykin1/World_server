@@ -1,12 +1,12 @@
 {
   "schemaVersion": "7.5.0",
-  "generatedAt": "2026-08-25T01:16:11.248Z",
+  "generatedAt": "2026-08-25T02:04:22.591Z",
   "pass": false,
   "structuralReadinessPercent": 84,
   "mandatoryRuntimeConnectivityPercent": 76,
   "runtimeConnectivityPercent": 77,
   "overallOperationalReadinessPercent": 77,
-  "evidenceConfidencePercent": 89,
+  "evidenceConfidencePercent": 87,
   "externalRuntimePercent": 0,
   "nativeExtensionCoveragePercent": 8,
   "externalBlockers": [
@@ -37,7 +37,7 @@
   },
   "details": {
     "structuralIntegration": {
-      "percent": 100,
+      "percent": 99,
       "weight": 12,
       "file": "SYSTEM_INTEGRATION_REPORT.json",
       "applicable": true
@@ -452,6 +452,7 @@
     }
   },
   "blockers": [
+    "structuralIntegration-99%",
     "graphicsRatchet-0%",
     "policySafety-0%",
     "releasePromotion-0%",

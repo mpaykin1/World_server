@@ -1,6 +1,6 @@
 {
   "schemaVersion": "7.2.0",
-  "generatedAt": "2026-08-25T01:15:30.171Z",
+  "generatedAt": "2026-08-25T02:11:49.092Z",
   "pass": true,
   "apply": false,
   "localInstallRoot": ".world-server\\tools",
@@ -17,13 +17,13 @@
     },
     {
       "tool": "tlc",
-      "installed": false,
+      "installed": true,
       "version": "1.7.4"
     },
     {
       "tool": "wasmtime",
-      "installed": false,
-      "version": null
+      "installed": true,
+      "version": "wasmtime 27.0.0 (8eefa236f 2024-11-20)"
     },
     {
       "tool": "cosign",
@@ -38,8 +38,6 @@
   "externalBlockers": [
     "typescript-unavailable",
     "appium-unavailable",
-    "tlc-unavailable",
-    "wasmtime-unavailable",
     "cosign-unavailable"
   ]
 }

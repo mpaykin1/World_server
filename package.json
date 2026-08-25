@@ -197,7 +197,13 @@
     "integration:readiness": "node scripts/system-readiness.cjs",
     "integration:selftest": "node scripts/integration-selftest.cjs",
     "integration:verify": "node scripts/system-control-plane.cjs --verify",
-    "integration:full": "node scripts/system-control-plane.cjs"
+    "integration:full": "node scripts/system-control-plane.cjs",
+    "blockers:tick": "node scripts/autonomous-blocker-repair.cjs tick",
+    "blockers:loop": "node scripts/autonomous-blocker-repair.cjs loop",
+    "blockers:status": "node scripts/autonomous-blocker-repair.cjs status",
+    "blockers:self-test": "node scripts/autonomous-blocker-repair.cjs self-test",
+    "blockers:scheduler:install": "node scripts/autonomous-blocker-repair.cjs scheduler-install",
+    "blockers:scheduler:remove": "node scripts/autonomous-blocker-repair.cjs scheduler-remove"
   },
   "engines": {
     "node": "24.x"

@@ -1,0 +1,188 @@
+{
+  "version": "1.0.0",
+  "createdAt": "2026-08-25T01:36:12.888Z",
+  "updatedAt": "2026-08-25T01:59:54.652Z",
+  "cycle": 7,
+  "nextRunAt": "2026-08-25T02:14:08.659Z",
+  "lastRunAt": "2026-08-25T01:59:02.011Z",
+  "scheduler": {
+    "mode": "windows-task-scheduler",
+    "taskName": "WorldServer-BlockerRepair-ce4c149910",
+    "launcher": "C:\\Users\\user\\Desktop\\World_server\\state\\blocker-repair\\blocker-repair-tick.cmd",
+    "ok": true,
+    "outputTail": "�����. �������஢����� ����� \"WorldServer-BlockerRepair-ce4c149910\" �뫠 �ᯥ譮 ᮧ����.",
+    "at": "2026-08-25T01:36:13.140Z"
+  },
+  "longSoak": {},
+  "blockers": {
+    "durable-scheduler": {
+      "id": "durable-scheduler",
+      "status": "pass",
+      "updatedAt": "2026-08-25T01:36:13.140Z",
+      "firstSeenAt": "2026-08-25T01:36:13.140Z",
+      "attempts": 0,
+      "reason": "Task Scheduler every 15 minutes"
+    },
+    "toolchain-bootstrap": {
+      "id": "toolchain-bootstrap",
+      "status": "pass",
+      "updatedAt": "2026-08-25T01:59:02.257Z",
+      "firstSeenAt": "2026-08-25T01:38:31.809Z",
+      "attempts": 0,
+      "reason": "Existing bootstrap PASS"
+    },
+    "wasmtime": {
+      "id": "wasmtime",
+      "status": "pass",
+      "updatedAt": "2026-08-25T01:59:02.291Z",
+      "firstSeenAt": "2026-08-25T01:38:31.814Z",
+      "attempts": 0,
+      "reason": "wasmtime 27.0.0 (8eefa236f 2024-11-20)"
+    },
+    "tlc": {
+      "id": "tlc",
+      "status": "pass",
+      "updatedAt": "2026-08-25T01:59:02.703Z",
+      "firstSeenAt": "2026-08-25T01:38:31.814Z",
+      "attempts": 0,
+      "reason": "TLC native Java invocation verified"
+    },
+    "native-cosign": {
+      "id": "native-cosign",
+      "status": "pass",
+      "updatedAt": "2026-08-25T01:59:02.793Z",
+      "firstSeenAt": "2026-08-25T01:40:32.228Z",
+      "attempts": 1,
+      "attempted": true,
+      "reason": "Compiler:      gc\nPlatform:      windows/amd64"
+    },
+    "etw-ebpf-perf": {
+      "id": "etw-ebpf-perf",
+      "status": "pass",
+      "updatedAt": "2026-08-25T01:59:08.481Z",
+      "firstSeenAt": "2026-08-25T01:40:43.724Z",
+      "attempts": 0,
+      "reason": "Real Windows ETW/WPR capability evidence collected; eBPF/perf not falsely required on Windows"
+    },
+    "fresh-android-device": {
+      "id": "fresh-android-device",
+      "status": "waiting",
+      "updatedAt": "2026-08-25T01:59:08.659Z",
+      "firstSeenAt": "2026-08-25T01:40:43.875Z",
+      "attempts": 0,
+      "reason": "adb is not available or no physical Android evidence can be collected",
+      "nextRunAt": "2026-08-25T02:14:08.659Z"
+    },
+    "fresh-ios-device": {
+      "id": "fresh-ios-device",
+      "status": "waiting",
+      "updatedAt": "2026-08-25T01:59:08.821Z",
+      "firstSeenAt": "2026-08-25T01:40:44.022Z",
+      "attempts": 0,
+      "reason": "No physical iOS probe available on win32; simulator/fake evidence is forbidden",
+      "nextRunAt": "2026-08-25T02:14:08.821Z"
+    },
+    "remote-cas-peer": {
+      "id": "remote-cas-peer",
+      "status": "waiting",
+      "updatedAt": "2026-08-25T01:59:08.822Z",
+      "firstSeenAt": "2026-08-25T01:40:44.023Z",
+      "attempts": 0,
+      "reason": "WORLD_SERVER_REMOTE_CAS_URL/REMOTE_CAS_URL not configured; localhost is not accepted as remote evidence",
+      "nextRunAt": "2026-08-25T02:14:08.822Z"
+    },
+    "fenced-migration": {
+      "id": "fenced-migration",
+      "status": "pass",
+      "updatedAt": "2026-08-25T01:59:08.931Z",
+      "firstSeenAt": "2026-08-25T01:40:44.144Z",
+      "attempts": 0,
+      "reason": "C:\\Program Files\\nodejs\\node.exe C:\\Users\\user\\Desktop\\World_server\\scripts\\migration-fencing-verifier.cjs PASS"
+    },
+    "local-gates": {
+      "id": "local-gates",
+      "status": "requires_ai",
+      "updatedAt": "2026-08-25T01:59:54.048Z",
+      "firstSeenAt": "2026-08-25T01:41:31.266Z",
+      "attempts": 0,
+      "reason": "0/6 gates PASS"
+    },
+    "vercel-deployment": {
+      "id": "vercel-deployment",
+      "status": "requires_ai",
+      "updatedAt": "2026-08-25T01:59:54.644Z",
+      "firstSeenAt": "2026-08-25T01:41:32.802Z",
+      "attempts": 7,
+      "attempted": true,
+      "reason": "Vercel state=failure: Deployment has failed — run this Vercel CLI command: npx vercel inspect dpl_8wpx3qKRsFqMPoAXzibk3SFKeXwF --logs",
+      "deploymentId": "dpl_8wpx3qKRsFqMPoAXzibk3SFKeXwF",
+      "targetUrl": "https://vercel.com/improve-world/world-server/8wpx3qKRsFqMPoAXzibk3SFKeXwF",
+      "outputTail": "",
+      "nextRunAt": null
+    },
+    "8h-long-soak": {
+      "id": "8h-long-soak",
+      "status": "waiting",
+      "updatedAt": "2026-08-25T01:59:54.650Z",
+      "firstSeenAt": "2026-08-25T01:41:32.806Z",
+      "attempts": 0,
+      "reason": "Long-soak will start only after deterministic local prerequisites are green",
+      "nextRunAt": "2026-08-25T02:14:54.650Z"
+    }
+  },
+  "gates": {
+    "at": "2026-08-25T01:59:54.047Z",
+    "allPass": false,
+    "results": [
+      {
+        "id": "npm:integration:full",
+        "ok": false,
+        "code": -1,
+        "startedAt": "2026-08-25T01:59:08.932Z",
+        "finishedAt": "2026-08-25T01:59:08.933Z",
+        "outputTail": ""
+      },
+      {
+        "id": "npm:integration:functions:audit",
+        "ok": false,
+        "code": -1,
+        "startedAt": "2026-08-25T01:59:08.933Z",
+        "finishedAt": "2026-08-25T01:59:08.933Z",
+        "outputTail": ""
+      },
+      {
+        "id": "npm:integration:functions:coverage",
+        "ok": false,
+        "code": -1,
+        "startedAt": "2026-08-25T01:59:08.933Z",
+        "finishedAt": "2026-08-25T01:59:08.934Z",
+        "outputTail": ""
+      },
+      {
+        "id": "npm:desktop-ai:check",
+        "ok": false,
+        "code": -1,
+        "startedAt": "2026-08-25T01:59:08.934Z",
+        "finishedAt": "2026-08-25T01:59:08.934Z",
+        "outputTail": ""
+      },
+      {
+        "id": "npm:release:gate",
+        "ok": false,
+        "code": -1,
+        "startedAt": "2026-08-25T01:59:08.934Z",
+        "finishedAt": "2026-08-25T01:59:08.935Z",
+        "outputTail": ""
+      },
+      {
+        "id": "control-plane-verify",
+        "ok": false,
+        "code": 2,
+        "startedAt": "2026-08-25T01:59:08.935Z",
+        "finishedAt": "2026-08-25T01:59:54.047Z",
+        "outputTail": "[CONTROL_PLANE] PASS toolchain-security\n[CONTROL_PLANE] PASS toolchain-health\n[CONTROL_PLANE] PASS telemetry\n[CONTROL_PLANE] PASS native-ast-dataflow\n[CONTROL_PLANE] PASS semantic-graph\n[CONTROL_PLANE] PASS change-impact\n[CONTROL_PLANE] PASS assets\n[CONTROL_PLANE] PASS project-directives\n[CONTROL_PLANE] PASS asset-ingestion-plan\n[CONTROL_PLANE] PASS technology-lock\n[CONTROL_PLANE] PASS audio-variation\n[CONTROL_PLANE] PASS gameplay-spatial-contract\n[CONTROL_PLANE] PASS desktop-ai-report-contract\n[CONTROL_PLANE] PASS queue\n[CONTROL_PLANE] PASS config-contract\n[CONTROL_PLANE] PASS feature-flags\n[CONTROL_PLANE] PASS wit-component-contract\n[CONTROL_PLANE] PASS adapter-sandbox\n[CONTROL_PLANE] PASS secure-update\n[CONTROL_PLANE] PASS model-check\n[CONTROL_PLANE] PASS cas-peer-discovery\n[CONTROL_PLANE] PASS distributed-cas\n[CONTROL_PLANE] PASS device-lab\n[CONTROL_PLANE] PASS device-executor\n[CONTROL_PLANE] PASS wit-bindings\n[CONTROL_PLANE] PASS rekor-monitor\n[CONTROL_PLANE] PASS technology-consensus\n[CONTROL_PLANE] PASS sbom\n[CONTROL_PLANE] PASS legacy-evidence-factory\n[CONTROL_PLANE] PASS slo-error-budget\n[CONTROL_PLANE] PASS db-migration-coordinator\n[CONTROL_PLANE] PASS asset-delta\n[CONTROL_PLANE] PASS disaster-recovery-verify\n[CONTROL_PLANE] PASS provenance\n[CONTROL_PLANE] PASS supply-chain-signing\n[CONTROL_PLANE] PASS chaos-safety\n[CONTROL_PLANE] PASS orchestrator-monitor-lifecycle\n[CONTROL_PLANE] PASS orchestrator-patch-safety\n[CONTROL_PLANE] PASS orchestrator-minimal-repro\n[CONTROL_PLANE] PASS orchestrator-invariant-model\n[CONTROL_PLANE] PASS orchestrator-supervisor-negative\n[CONTROL_PLANE] PASS orchestrator-supervisor\n[CONTROL_PLANE] PASS capability-scheduler\n[CONTROL_PLANE] PASS cas-redundancy\n[CONTROL_PLANE] PASS device-worker\n[CONTROL_PLANE] PASS record-replay\n[CONTROL_PLANE] PASS dependency-security\n[CONTROL_PLANE] PASS transactional-deploy\n[CONTROL_PLANE] PASS enhancement-orchestrator\n[CONTROL_PLANE] PASS leader-lease-health\n[CONTROL_PLANE] PASS leader-lease-selftest\n[CONTROL_PLANE] PASS production-safety-health\n[CONTROL_PLANE] PASS production-safety-selftest\n[CONTROL_PLANE] PASS soak-chaos\n[CONTROL_PLANE] PASS crash-diagnostics\n[CONTROL_PLANE] PASS crash-diagnostics-selftest\n[CONTROL_PLANE] PASS causal-debugger\n[CONTROL_PLANE] PASS cas-replication-controller\n[CONTROL_PLANE] PASS physical-device-fleet\n[CONTROL_PLANE] PASS production-slo-autopilot\n[CONTROL_PLANE] PASS migration-fencing-runtime\n[CONTROL_PLANE] PASS long-soak-smoke\n[CONTROL_PLANE] PASS native-causal-collector\n[CONTROL_PLANE] PASS function-contract-coverage\n[CONTROL_PLANE] FAIL 64/75 trace=f65a48ed13782e682846928ec49d3067\n\n[CONTROL_PLANE] FAIL snapshot:     at Module._load (node:internal/modules/cjs/loader:1355:12)\n[CONTROL_PLANE] FAIL graphics-ratchet: [GRAPHICS_GUARD] FAIL protectedChanges=20 failed=20\n[CONTROL_PLANE] FAIL reproducible-build: Node.js v24.15.0\n[CONTROL_PLANE] FAIL integration-gate: [SYSTEM_INTEGRATION_V7] 99% FAIL 126/127 leader-lease-migration\n[CONTROL_PLANE] FAIL policy: warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it\n[CONTROL_PLANE] FAIL selftest: Node.js v24.15.0\n[CONTROL_PLANE] FAIL honest-100-functions: [HONEST_100] FAIL certified=69/76 discovered=146\n[CONTROL_PLANE] FAIL monotonic-100-guard:     at node:internal/main/run_main_module:33:47\n[CONTROL_PLANE] FAIL orchestrator-continuity: [ORCHESTRATOR_CONTINUITY] FAIL 5/8\n[CONTROL_PLANE] FAIL release-promotion: [RELEASE_PROMOTION] BLOCK decision=BLOCK\n[CONTROL_PLANE] FAIL readiness: [READINESS_V75] structural=84% operational=78% evidence=87% native=25%"
+      }
+    ]
+  },
+  "mergeSafe": false
+}

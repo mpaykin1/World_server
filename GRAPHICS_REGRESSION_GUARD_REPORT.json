@@ -1,8 +1,8 @@
 {
   "schemaVersion": "3.0.0",
-  "generatedAt": "2026-08-25T01:15:38.281Z",
+  "generatedAt": "2026-08-25T02:12:00.154Z",
   "base": "master",
-  "protectedChanges": 9,
+  "protectedChanges": 20,
   "pass": false,
   "failed": [
     {
@@ -36,7 +36,67 @@
       "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
     },
     {
+      "path": "models/README.md",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "models/optional/README.md",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "output/demo_build/collision_proxy.glb",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "output/demo_build/collision_proxy.obj",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "payload/shared/pwa-icon-180.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "payload/shared/pwa-icon-192.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "payload/shared/pwa-icon-512.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
       "path": "public/assets/pixel/world-atlas-v1.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "shared/pwa-icon-180.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "shared/pwa-icon-192.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "shared/pwa-icon-512.png",
       "status": "A",
       "pass": false,
       "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
@@ -55,6 +115,12 @@
     },
     {
       "path": "visual-candidates/desktop-chromium/voxel-world.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "worlds/sample-city/assets/world.ply",
       "status": "A",
       "pass": false,
       "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
@@ -92,7 +158,67 @@
       "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
     },
     {
+      "path": "models/README.md",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "models/optional/README.md",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "output/demo_build/collision_proxy.glb",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "output/demo_build/collision_proxy.obj",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "payload/shared/pwa-icon-180.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "payload/shared/pwa-icon-192.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "payload/shared/pwa-icon-512.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
       "path": "public/assets/pixel/world-atlas-v1.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "shared/pwa-icon-180.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "shared/pwa-icon-192.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "shared/pwa-icon-512.png",
       "status": "A",
       "pass": false,
       "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
@@ -111,6 +237,12 @@
     },
     {
       "path": "visual-candidates/desktop-chromium/voxel-world.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "worlds/sample-city/assets/world.ply",
       "status": "A",
       "pass": false,
       "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"

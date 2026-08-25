@@ -1,11 +1,11 @@
 {
   "schemaVersion": "7.3.0",
-  "generatedAt": "2026-08-25T01:15:59.581Z",
+  "generatedAt": "2026-08-25T02:04:11.983Z",
   "pass": true,
   "productionConfigured": false,
   "backend": "local-model-only",
   "fencingVerified": true,
   "splitBrainMutationsBlocked": true,
-  "holderId": "local-19388",
+  "holderId": "local-18448",
   "migration": "supabase/migrations/20260824_orchestrator_leader_lease.sql"
 }
