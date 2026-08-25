@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 const fs=require('fs'),path=require('path'),cp=require('child_process');
-const ROOT=process.cwd();
+const ROOT=path.resolve(__dirname,'..');
 const POLICY=JSON.parse(fs.readFileSync(path.join(ROOT,'data/plugin-discovery-policy.json'),'utf8'));
 const LOG=path.join(ROOT,'QUALITY_PLUGIN_DISCOVERY.log');
 function log(m){ const ts=new Date().toISOString(); const l=`[${ts}] ${m}`; console.log(l); fs.appendFileSync(LOG,l+'\n'); }
