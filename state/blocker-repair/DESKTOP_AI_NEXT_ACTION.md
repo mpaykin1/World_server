@@ -1,6 +1,6 @@
 # Desktop AI — autonomous blocker repair action
 
-Generated: 2026-08-25T03:10:37.315Z
+Generated: 2026-08-25T04:35:33.749Z
 Repair engine: 1.0.0
 
 ## 1 blocker(s) require Desktop AI root-cause repair

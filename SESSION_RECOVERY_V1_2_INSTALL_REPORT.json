@@ -1,0 +1,101 @@
+{
+  "patch": "WORLD_SERVER_DESKTOP_AI_SESSION_RECOVERY_V1_2",
+  "version": "1.2.0",
+  "installedAt": "2026-08-25T04:37:05.421Z",
+  "manifestSchemaVersion": 1,
+  "backup": ".session-recovery-backups\\v1-2-2026-08-25T04-36-59-651Z",
+  "payload": [
+    "scripts/desktop-ai-session-recovery.cjs",
+    "data/desktop-ai-session-recovery-policy.json"
+  ],
+  "scripts": [
+    "desktop-ai:resume",
+    "desktop-ai:session:start",
+    "desktop-ai:checkpoint",
+    "desktop-ai:step:add",
+    "desktop-ai:step:done",
+    "desktop-ai:step:fail",
+    "desktop-ai:run",
+    "desktop-ai:heartbeat",
+    "desktop-ai:health",
+    "desktop-ai:watchdog",
+    "desktop-ai:watchdog:install",
+    "desktop-ai:watchdog:remove",
+    "desktop-ai:session:status",
+    "desktop-ai:session:finish",
+    "desktop-ai:unfinished",
+    "desktop-ai:session:self-test"
+  ],
+  "selfTest": {
+    "pass": true,
+    "version": "1.2.0",
+    "tests": [
+      {
+        "name": "managed block is idempotent",
+        "pass": true
+      },
+      {
+        "name": "argument parser preserves command tail",
+        "pass": true
+      },
+      {
+        "name": "WIP headings parser contract",
+        "pass": true
+      },
+      {
+        "name": "live pid detection",
+        "pass": true
+      },
+      {
+        "name": "sha256 deterministic",
+        "pass": true
+      },
+      {
+        "name": "unfinished status classifier",
+        "pass": true
+      },
+      {
+        "name": "optional external capability classifier",
+        "pass": true
+      },
+      {
+        "name": "command marker extraction",
+        "pass": true
+      },
+      {
+        "name": "watchdog waiting marker classifier",
+        "pass": true
+      },
+      {
+        "name": "progress fingerprint deterministic on stable state",
+        "pass": true
+      },
+      {
+        "name": "primary lock reality shape",
+        "pass": true
+      },
+      {
+        "name": "watchdog task name stable",
+        "pass": true
+      }
+    ],
+    "score": "12/12"
+  },
+  "initOutput": "{\n  \"pass\": true,\n  \"sessionId\": \"session-1787632622221-75896e\",\n  \"status\": \"in_progress\",\n  \"task\": \"Install WORLD_SERVER_ONE_FOLDER_V7_5_RUNTIME_CLOSURE (01-19) + V7_5_AUTONOMOUS_BLOCKER_REPAIR_V1, then autonomous repair of 4 requires_ai blockers (wasmtime, tlc, local-gates, vercel) until honest 100% with timers.\"\n}",
+  "healthOutput": "SESSION_STATUS = LIVE\n{\n  \"schemaVersion\": 1,\n  \"engineVersion\": \"1.2.0\",\n  \"checkedAt\": \"2026-08-25T04:37:05.248Z\",\n  \"status\": \"LIVE\",\n  \"reason\": \"observable durable progress changed since previous watchdog tick\",\n  \"progressChanged\": true,\n  \"activityMinutes\": 0.04,\n  \"nextTimerAt\": \"2026-08-25T04:45:33.742Z\",\n  \"primaryLock\": {\n    \"exists\": false,\n    \"alive\": false,\n    \"pid\": null,\n    \"op\": null,\n    \"ageMinutes\": null,\n    \"raw\": null\n  },\n  \"activeCommand\": null,\n  \"commandProcessAlive\": false,\n  \"unfinishedCounts\": {\n    \"total\": 8,\n    \"blocking\": 1,\n    \"running\": 0,\n    \"waiting\": 5\n  },\n  \"sessionId\": \"session-1787632622221-75896e\",\n  \"task\": \"Install WORLD_SERVER_ONE_FOLDER_V7_5_RUNTIME_CLOSURE (01-19) + V7_5_AUTONOMOUS_BLOCKER_REPAIR_V1, then autonomous repair of 4 requires_ai blockers (wasmtime, tlc, local-gates, vercel) until honest 100% with timers.\",\n  \"nextAction\": \"Continue repair of blocker local-gates; diagnose root cause, apply smallest safe fix, regression-test, then run blockers:tick.\",\n  \"recoveryCheckpointCreated\": false,\n  \"safeToStartNewChat\": false\n}",
+  "watchdogInstall": {
+    "exitCode": 0,
+    "stdout": "{\n  \"pass\": true,\n  \"installed\": true,\n  \"platform\": \"win32\",\n  \"taskName\": \"WorldServer-SessionWatchdog-558605bcd9\",\n  \"intervalMinutes\": 5,\n  \"launcher\": \"state\\\\session-recovery\\\\session-watchdog.cmd\",\n  \"stdout\": \"�����. �������஢����� ����� \\\"WorldServer-SessionWatchdog-558605bcd9\\\" �뫠 �ᯥ譮 ᮧ����.\\r\\n\",\n  \"stderr\": \"\"\n}",
+    "stderr": "",
+    "requiredOnWindows": true
+  },
+  "pass": true,
+  "watchdogCorePass": true,
+  "watchdogSchedulerInstalled": true,
+  "next": [
+    "npm run desktop-ai:health",
+    "npm run desktop-ai:resume",
+    "npm run desktop-ai:unfinished",
+    "npm run desktop-ai:session:status"
+  ]
+}

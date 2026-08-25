@@ -1,10 +1,10 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.7",
-  "serialNumber": "urn:uuid:646393b6-db03-4867-a51d-8e180871d3d8",
+  "serialNumber": "urn:uuid:dfcda9e3-f213-4b2f-be0e-627c695351fa",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-08-25T03:10:09.353Z",
+    "timestamp": "2026-08-25T04:35:07.543Z",
     "component": {
       "type": "application",
       "name": "webgl-survival-hub-no-npm",

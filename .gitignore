@@ -28,4 +28,7 @@ QUALITY_PLUGIN_DISCOVERY.log
 QUALITY_PLUGIN_CANDIDATES.json
 QUALITY_TIMER_CHECK.log
 supabase/migrations_backup_*/
-
+state/session-recovery/
+.session-recovery-backups/
+.cache/
+.world-server-state/

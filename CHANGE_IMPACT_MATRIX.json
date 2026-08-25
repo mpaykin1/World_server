@@ -1,8 +1,7 @@
 {
   "schemaVersion": "2.0.0",
-  "generatedAt": "2026-08-25T03:09:53.341Z",
+  "generatedAt": "2026-08-25T04:34:52.424Z",
   "changed": [
-    ".blocker-repair-backups/optional-capabilities-v1-2026-08-25T02-39-45-442Z/data/blocker-repair-policy.json",
     "ADAPTER_SANDBOX_STATUS.json",
     "ASSET_DELTA_STATUS.json",
     "ASSET_INGESTION_PLAN.json",
@@ -88,24 +87,15 @@
     "WIT_COMPONENT_STATUS.json",
     "WORLD_GRAPHICS_QUALITY_ROUTING_REPORT.json",
     "WORLD_GRAPHICS_TECHNOLOGY_INTEGRATION_REPORT.json",
-    "WORLD_SERVER_DESKTOP_AI_SESSION_RECOVERY_V1_1_ONE_FOLDER.zip",
     "WORLD_TECHNOLOGY_CANDIDATE_REPORT.json",
     "bom.cdx.json",
-    "data/blocker-repair-policy.json",
     "data/generated-legacy-function-contracts.json",
-    "state/blocker-repair/DESKTOP_AI_NEXT_ACTION.md",
-    "state/blocker-repair/OPTIONAL_CAPABILITIES_POLICY_REPORT.json",
     "state/blocker-repair/device-evidence.json",
     "state/blocker-repair/events.jsonl",
-    "state/blocker-repair/latest-gates.json",
     "state/blocker-repair/platform-evidence.json",
-    "state/blocker-repair/repair.lock",
-    "state/blocker-repair/scheduler.log",
-    "state/blocker-repair/state.json",
-    "state/blocker-repair/unified.lock"
+    "state/blocker-repair/repair.lock"
   ],
   "affectedFiles": [
-    ".blocker-repair-backups/optional-capabilities-v1-2026-08-25T02-39-45-442Z/data/blocker-repair-policy.json",
     "ADAPTER_SANDBOX_STATUS.json",
     "ASSET_DELTA_STATUS.json",
     "ASSET_INGESTION_PLAN.json",
@@ -191,29 +181,16 @@
     "WIT_COMPONENT_STATUS.json",
     "WORLD_GRAPHICS_QUALITY_ROUTING_REPORT.json",
     "WORLD_GRAPHICS_TECHNOLOGY_INTEGRATION_REPORT.json",
-    "WORLD_SERVER_DESKTOP_AI_SESSION_RECOVERY_V1_1_ONE_FOLDER.zip",
     "WORLD_TECHNOLOGY_CANDIDATE_REPORT.json",
     "bom.cdx.json",
-    "data/blocker-repair-policy.json",
     "data/generated-legacy-function-contracts.json",
-    "state/blocker-repair/DESKTOP_AI_NEXT_ACTION.md",
-    "state/blocker-repair/OPTIONAL_CAPABILITIES_POLICY_REPORT.json",
     "state/blocker-repair/device-evidence.json",
     "state/blocker-repair/events.jsonl",
-    "state/blocker-repair/latest-gates.json",
     "state/blocker-repair/platform-evidence.json",
-    "state/blocker-repair/repair.lock",
-    "state/blocker-repair/scheduler.log",
-    "state/blocker-repair/state.json",
-    "state/blocker-repair/unified.lock"
+    "state/blocker-repair/repair.lock"
   ],
-  "affectedCount": 101,
+  "affectedCount": 92,
   "systems": [
-    {
-      "id": "system-integration-v2",
-      "owner": null,
-      "provides": []
-    },
     {
       "id": "quality-core",
       "owner": "WORLD_FACTORY_QUALITY_CORE_V10",
@@ -223,6 +200,11 @@
         "ratchet",
         "quality-knowledge"
       ]
+    },
+    {
+      "id": "system-integration-v2",
+      "owner": null,
+      "provides": []
     },
     {
       "id": "world-quality-v6",

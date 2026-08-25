@@ -1,12 +1,12 @@
 {
   "schemaVersion": "7.2.0",
-  "generatedAt": "2026-08-25T03:10:07.378Z",
+  "generatedAt": "2026-08-25T04:35:05.676Z",
   "pass": true,
   "protocol": "world-server-cas-http-v1",
   "localCasReady": true,
   "loopbackProtocolSelftest": {
     "pass": true,
-    "digest": "c60269f6f7a4b9cad00499a33c9a02421a0d1e85934511d70d096b2db71eec2e",
+    "digest": "910ae0517953939a9a46aa33bf2e659bc350ff91916dc291ebcbb6f623da8412",
     "protocol": "http-put-get-sha256"
   },
   "configuredPeers": 0,

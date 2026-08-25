@@ -1,6 +1,6 @@
 {
   "schemaVersion": "7.4.0",
-  "generatedAt": "2026-08-25T03:10:15.865Z",
+  "generatedAt": "2026-08-25T04:35:13.840Z",
   "pass": true,
   "strategy": "expand-migrate-contract",
   "expandContractGuard": true,

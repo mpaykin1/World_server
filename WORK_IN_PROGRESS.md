@@ -69,3 +69,20 @@ blockers:status mergeSafe true, local gates PASS, control-plane 75/75, honest-10
 
 ## Final evidence
 Fill after real verification. Do not fabricate.
+
+<!-- WORLD_SERVER_SESSION_RECOVERY_V1_START -->
+## Desktop AI Session Recovery V1 — managed checkpoint
+
+- sessionId: `session-1787632622221-75896e`
+- status: `in_progress`
+- checkpoint: `2026-08-25T04:37:02.222Z`
+- checkpoint message: Session recovery initialized
+- last successful command: none
+- last error: none
+- next action: 1. Fix WORK_IN_PROGRESS sections (this commit) 2. Diagnose vercel dpl_6Ho8Tx5wpLErdrfJnJJTj7d6yJYT logs -> root cause -> push fix -> blockers:tick 3. Fix wasmtime/tlc via toolchain-bootstrap apply or honestly mark external 4. Re-run local-gates until 6/6 5. Let 8h soak and device waiting timers run (do not fake)
+
+### Recovery queue
+- no explicit recovery steps registered yet
+
+> New Desktop AI session: run `npm run desktop-ai:resume` before editing. Git reality overrides stale recovery metadata.
+<!-- WORLD_SERVER_SESSION_RECOVERY_V1_END -->

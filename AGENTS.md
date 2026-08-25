@@ -165,3 +165,23 @@ Add this section to `AGENTS.md` once (do not duplicate it).
 - SECURITY DEFINER warnings require deliberate authorization review; mass-revocation without contract analysis is forbidden.
 - Before final completion run `npm run release:gate`, relevant Playwright/runtime tests, production synthetic verification, and re-read the live work packet.
 
+<!-- WORLD_SERVER_DESKTOP_AI_SESSION_RECOVERY_V1_START -->
+## DESKTOP AI SESSION RECOVERY V1.2 — mandatory crash/resume + watchdog protocol
+
+- A Desktop AI chat/session is disposable. Critical task context must live in the repository recovery state, not only in chat memory.
+- **At the beginning of every new Desktop AI session, before editing files, run `npm run desktop-ai:resume`.** This command must scan unfinished durable work and live background processes before choosing the next action.
+- Read `WORK_IN_PROGRESS.md` and `state/session-recovery/DESKTOP_AI_RESUME.md`; then verify `git status`, current branch, and HEAD. Git reality overrides stale recovery metadata.
+- Do not restart the task from scratch when a valid unfinished recovery session exists. Continue from the first unresolved verified checkpoint. Read `state/session-recovery/UNFINISHED_WORK.json` and reconcile every discovered unfinished process.
+- Before risky edits, migrations, deployment, large installs, or long-running verification, run `npm run desktop-ai:checkpoint -- --message "<verified state>" --next "<exact next action>"`.
+- Register multi-step work with `desktop-ai:step:add`, then mark real completion with `desktop-ai:step:done`; record reproducible failures with `desktop-ai:step:fail`.
+- Prefer `npm run desktop-ai:run -- <command>` for important tests/build/deploy commands so command, exit code and log tail survive a dead session. If a session dies after command start and before completion is recorded, the next session must treat it as interrupted and verify side effects before rerunning.
+- If a discovered background process is still alive (for example long-soak or blocker repair), **do not start a duplicate**; observe its durable state and continue when it completes/fails/timer fires.
+- Timer-managed waiting work remains visible after a new chat/session and must be picked up automatically by `desktop-ai:resume`.
+- Independent Session Watchdog writes `state/session-recovery/SESSION_HEALTH.json` and classifies `LIVE`, `WAITING_VALID`, `STALLED`, `DEAD`, or `IDLE`.
+- `WAITING_VALID` is legitimate waiting and must not be killed. `STALLED` requires diagnosis before killing. `DEAD` permits a recovery checkpoint only after the responsible PID/process is proven absent.
+- Watchdog is intentionally separate from the unified repair scheduler and may observe it, but it must never launch blocker repair, deploy, push, or a duplicate main cycle.
+- Never clear a live recovery lock. Only the recovery engine may quarantine a safely stale/dead lock.
+- Never fake PASS/evidence after a restart. Never auto-push or auto-merge from recovery. `master` remains protected.
+- After 2–3 failed attempts at the same error, change strategy and record the new root-cause hypothesis.
+- Finish/archive a session only after the real completion criteria and final evidence are satisfied: `npm run desktop-ai:session:finish`.
+<!-- WORLD_SERVER_DESKTOP_AI_SESSION_RECOVERY_V1_END -->

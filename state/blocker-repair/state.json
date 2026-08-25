@@ -1,10 +1,10 @@
 {
   "version": "1.0.0",
   "createdAt": "2026-08-25T01:36:12.888Z",
-  "updatedAt": "2026-08-25T03:10:37.315Z",
-  "cycle": 9,
-  "nextRunAt": "2026-08-25T03:20:37.309Z",
-  "lastRunAt": "2026-08-25T03:08:34.128Z",
+  "updatedAt": "2026-08-25T04:35:33.750Z",
+  "cycle": 10,
+  "nextRunAt": "2026-08-25T04:45:33.742Z",
+  "lastRunAt": "2026-08-25T04:33:23.801Z",
   "scheduler": {
     "mode": "windows-task-scheduler",
     "taskName": "WorldServer-BlockerRepair-ce4c149910",
@@ -26,7 +26,7 @@
     "toolchain-bootstrap": {
       "id": "toolchain-bootstrap",
       "status": "pass",
-      "updatedAt": "2026-08-25T03:08:34.376Z",
+      "updatedAt": "2026-08-25T04:33:24.071Z",
       "firstSeenAt": "2026-08-25T01:38:31.809Z",
       "attempts": 0,
       "reason": "Existing bootstrap PASS"
@@ -34,7 +34,7 @@
     "wasmtime": {
       "id": "wasmtime",
       "status": "pass",
-      "updatedAt": "2026-08-25T03:08:34.413Z",
+      "updatedAt": "2026-08-25T04:33:24.107Z",
       "firstSeenAt": "2026-08-25T01:38:31.814Z",
       "attempts": 0,
       "reason": "wasmtime 27.0.0 (8eefa236f 2024-11-20)"
@@ -42,7 +42,7 @@
     "tlc": {
       "id": "tlc",
       "status": "pass",
-      "updatedAt": "2026-08-25T03:08:34.797Z",
+      "updatedAt": "2026-08-25T04:33:24.481Z",
       "firstSeenAt": "2026-08-25T01:38:31.814Z",
       "attempts": 0,
       "reason": "TLC native Java invocation verified"
@@ -50,7 +50,7 @@
     "native-cosign": {
       "id": "native-cosign",
       "status": "pass",
-      "updatedAt": "2026-08-25T03:08:34.893Z",
+      "updatedAt": "2026-08-25T04:33:24.586Z",
       "firstSeenAt": "2026-08-25T01:40:32.228Z",
       "attempts": 1,
       "attempted": true,
@@ -59,7 +59,7 @@
     "etw-ebpf-perf": {
       "id": "etw-ebpf-perf",
       "status": "pass",
-      "updatedAt": "2026-08-25T03:08:40.656Z",
+      "updatedAt": "2026-08-25T04:33:31.021Z",
       "firstSeenAt": "2026-08-25T01:40:43.724Z",
       "attempts": 0,
       "reason": "Real Windows ETW/WPR capability evidence collected; eBPF/perf not falsely required on Windows"
@@ -67,34 +67,34 @@
     "fresh-android-device": {
       "id": "fresh-android-device",
       "status": "waiting",
-      "updatedAt": "2026-08-25T03:08:40.817Z",
+      "updatedAt": "2026-08-25T04:33:31.225Z",
       "firstSeenAt": "2026-08-25T01:40:43.875Z",
       "attempts": 0,
       "reason": "adb is not available or no physical Android evidence can be collected",
-      "nextRunAt": "2026-08-25T03:23:40.817Z"
+      "nextRunAt": "2026-08-25T04:48:31.225Z"
     },
     "fresh-ios-device": {
       "id": "fresh-ios-device",
       "status": "waiting",
-      "updatedAt": "2026-08-25T03:08:40.980Z",
+      "updatedAt": "2026-08-25T04:33:31.402Z",
       "firstSeenAt": "2026-08-25T01:40:44.022Z",
       "attempts": 0,
       "reason": "No physical iOS probe available on win32; simulator/fake evidence is forbidden",
-      "nextRunAt": "2026-08-25T03:23:40.980Z"
+      "nextRunAt": "2026-08-25T04:48:31.402Z"
     },
     "remote-cas-peer": {
       "id": "remote-cas-peer",
       "status": "waiting",
-      "updatedAt": "2026-08-25T03:08:40.982Z",
+      "updatedAt": "2026-08-25T04:33:31.403Z",
       "firstSeenAt": "2026-08-25T01:40:44.023Z",
       "attempts": 0,
       "reason": "WORLD_SERVER_REMOTE_CAS_URL/REMOTE_CAS_URL not configured; localhost is not accepted as remote evidence",
-      "nextRunAt": "2026-08-25T03:23:40.982Z"
+      "nextRunAt": "2026-08-25T04:48:31.403Z"
     },
     "fenced-migration": {
       "id": "fenced-migration",
       "status": "pass",
-      "updatedAt": "2026-08-25T03:08:41.106Z",
+      "updatedAt": "2026-08-25T04:33:31.536Z",
       "firstSeenAt": "2026-08-25T01:40:44.144Z",
       "attempts": 0,
       "reason": "C:\\Program Files\\nodejs\\node.exe C:\\Users\\user\\Desktop\\World_server\\scripts\\migration-fencing-verifier.cjs PASS"
@@ -102,7 +102,7 @@
     "local-gates": {
       "id": "local-gates",
       "status": "requires_ai",
-      "updatedAt": "2026-08-25T03:10:36.719Z",
+      "updatedAt": "2026-08-25T04:35:32.995Z",
       "firstSeenAt": "2026-08-25T01:41:31.266Z",
       "attempts": 0,
       "reason": "2/6 gates PASS"
@@ -110,77 +110,77 @@
     "vercel-deployment": {
       "id": "vercel-deployment",
       "status": "waiting",
-      "updatedAt": "2026-08-25T03:10:37.309Z",
+      "updatedAt": "2026-08-25T04:35:33.742Z",
       "firstSeenAt": "2026-08-25T01:41:32.802Z",
       "attempts": 7,
       "attempted": true,
-      "reason": "No Vercel commit status yet for a1b89977",
+      "reason": "No Vercel commit status yet for 3a702805",
       "deploymentId": "dpl_8wpx3qKRsFqMPoAXzibk3SFKeXwF",
       "targetUrl": "https://vercel.com/improve-world/world-server/8wpx3qKRsFqMPoAXzibk3SFKeXwF",
       "outputTail": "",
-      "nextRunAt": "2026-08-25T03:20:37.309Z"
+      "nextRunAt": "2026-08-25T04:45:33.742Z"
     },
     "8h-long-soak": {
       "id": "8h-long-soak",
       "status": "waiting",
-      "updatedAt": "2026-08-25T03:10:37.314Z",
+      "updatedAt": "2026-08-25T04:35:33.748Z",
       "firstSeenAt": "2026-08-25T01:41:32.806Z",
       "attempts": 0,
       "reason": "Long-soak will start only after deterministic local prerequisites are green",
-      "nextRunAt": "2026-08-25T03:25:37.314Z"
+      "nextRunAt": "2026-08-25T04:50:33.748Z"
     }
   },
   "gates": {
-    "at": "2026-08-25T03:10:36.717Z",
+    "at": "2026-08-25T04:35:32.993Z",
     "allPass": false,
     "results": [
       {
         "id": "npm:integration:full",
         "ok": false,
         "code": 2,
-        "startedAt": "2026-08-25T03:08:41.107Z",
-        "finishedAt": "2026-08-25T03:09:31.532Z",
-        "outputTail": "> webgl-survival-hub-no-npm@2.1.0 integration:full\n> node scripts/system-control-plane.cjs\n\n[CONTROL_PLANE] PASS toolchain-security\n[CONTROL_PLANE] PASS toolchain-health\n[CONTROL_PLANE] PASS telemetry\n[CONTROL_PLANE] PASS snapshot\n[CONTROL_PLANE] PASS native-ast-dataflow\n[CONTROL_PLANE] PASS semantic-graph\n[CONTROL_PLANE] PASS change-impact\n[CONTROL_PLANE] PASS assets\n[CONTROL_PLANE] PASS project-directives\n[CONTROL_PLANE] PASS asset-ingestion-plan\n[CONTROL_PLANE] PASS technology-lock\n[CONTROL_PLANE] PASS audio-variation\n[CONTROL_PLANE] PASS gameplay-spatial-contract\n[CONTROL_PLANE] PASS desktop-ai-report-contract\n[CONTROL_PLANE] PASS queue\n[CONTROL_PLANE] PASS config-contract\n[CONTROL_PLANE] PASS feature-flags\n[CONTROL_PLANE] PASS wit-component-contract\n[CONTROL_PLANE] PASS adapter-sandbox\n[CONTROL_PLANE] PASS secure-update\n[CONTROL_PLANE] PASS reproducible-build\n[CONTROL_PLANE] PASS model-check\n[CONTROL_PLANE] PASS cas-peer-discovery\n[CONTROL_PLANE] PASS distributed-cas\n[CONTROL_PLANE] PASS device-lab\n[CONTROL_PLANE] PASS device-executor\n[CONTROL_PLANE] PASS wit-bindings\n[CONTROL_PLANE] PASS rekor-monitor\n[CONTROL_PLANE] PASS technology-consensus\n[CONTROL_PLANE] PASS sbom\n[CONTROL_PLANE] PASS legacy-evidence-factory\n[CONTROL_PLANE] PASS slo-error-budget\n[CONTROL_PLANE] PASS db-migration-coordinator\n[CONTROL_PLANE] PASS asset-delta\n[CONTROL_PLANE] PASS disaster-recovery-verify\n[CONTROL_PLANE] PASS provenance\n[CONTROL_PLANE] PASS supply-chain-signing\n[CONTROL_PLANE] PASS chaos-safety\n[CONTROL_PLANE] PASS orchestrator-monitor-lifecycle\n[CONTROL_PLANE] PASS orchestrator-patch-safety\n[CONTROL_PLANE] PASS orchestrator-minimal-repro\n[CONTROL_PLANE] PASS orchestrator-invariant-model\n[CONTROL_PLANE] PASS orchestrator-supervisor-negative\n[CONTROL_PLANE] PASS orchestrator-supervisor\n[CONTROL_PLANE] PASS capability-scheduler\n[CONTROL_PLANE] PASS cas-redundancy\n[CONTROL_PLANE] PASS device-worker\n[CONTROL_PLANE] PASS record-replay\n[CONTROL_PLANE] PASS dependency-security\n[CONTROL_PLANE] PASS transactional-deploy\n[CONTROL_PLANE] PASS enhancement-orchestrator\n[CONTROL_PLANE] PASS leader-lease-health\n[CONTROL_PLANE] PASS leader-lease-selftest\n[CONTROL_PLANE] PASS production-safety-health\n[CONTROL_PLANE] PASS production-safety-selftest\n[CONTROL_PLANE] PASS soak-chaos\n[CONTROL_PLANE] PASS crash-diagnostics\n[CONTROL_PLANE] PASS crash-diagnostics-selftest\n[CONTROL_PLANE] PASS causal-debugger\n[CONTROL_PLANE] PASS cas-replication-controller\n[CONTROL_PLANE] PASS physical-device-fleet\n[CONTROL_PLANE] PASS production-slo-autopilot\n[CONTROL_PLANE] PASS migration-fencing-runtime\n[CONTROL_PLANE] PASS long-soak-smoke\n[CONTROL_PLANE] PASS native-causal-collector\n[CONTROL_PLANE] PASS function-contract-coverage\n[CONTROL_PLANE] FAIL 66/75 trace=277660670f816b8de747c3b330b9d3d7\n\n[CONTROL_PLANE] FAIL graphics-ratchet: [GRAPHICS_GUARD] FAIL protectedChanges=20 failed=20\n[CONTROL_PLANE] FAIL integration-gate: [SYSTEM_INTEGRATION_V7] 99% FAIL 126/127 leader-lease-migration\n[CONTROL_PLANE] FAIL policy: warning: in the working copy of 'state/blocker-repair/state.json', LF will be replaced by CRLF the next time Git touches it\n[CONTROL_PLANE] FAIL selftest: Node.js v24.15.0\n[CONTROL_PLANE] FAIL honest-100-functions: [HONEST_100] FAIL certified=69/76 discovered=146\n[CONTROL_PLANE] FAIL monotonic-100-guard:     at node:internal/main/run_main_module:33:47\n[CONTROL_PLANE] FAIL orchestrator-continuity: [ORCHESTRATOR_CONTINUITY] FAIL 5/8\n[CONTROL_PLANE] FAIL release-promotion: [RELEASE_PROMOTION] BLOCK decision=BLOCK\n[CONTROL_PLANE] FAIL readiness: [READINESS_V75] structural=84% operational=78% evidence=87% native=25%"
+        "startedAt": "2026-08-25T04:33:31.538Z",
+        "finishedAt": "2026-08-25T04:34:30.920Z",
+        "outputTail": "> webgl-survival-hub-no-npm@2.1.0 integration:full\n> node scripts/system-control-plane.cjs\n\n[CONTROL_PLANE] PASS toolchain-security\n[CONTROL_PLANE] PASS toolchain-health\n[CONTROL_PLANE] PASS telemetry\n[CONTROL_PLANE] PASS snapshot\n[CONTROL_PLANE] PASS native-ast-dataflow\n[CONTROL_PLANE] PASS semantic-graph\n[CONTROL_PLANE] PASS change-impact\n[CONTROL_PLANE] PASS assets\n[CONTROL_PLANE] PASS project-directives\n[CONTROL_PLANE] PASS asset-ingestion-plan\n[CONTROL_PLANE] PASS technology-lock\n[CONTROL_PLANE] PASS audio-variation\n[CONTROL_PLANE] PASS gameplay-spatial-contract\n[CONTROL_PLANE] PASS desktop-ai-report-contract\n[CONTROL_PLANE] PASS queue\n[CONTROL_PLANE] PASS config-contract\n[CONTROL_PLANE] PASS feature-flags\n[CONTROL_PLANE] PASS wit-component-contract\n[CONTROL_PLANE] PASS adapter-sandbox\n[CONTROL_PLANE] PASS secure-update\n[CONTROL_PLANE] PASS reproducible-build\n[CONTROL_PLANE] PASS model-check\n[CONTROL_PLANE] PASS cas-peer-discovery\n[CONTROL_PLANE] PASS distributed-cas\n[CONTROL_PLANE] PASS device-lab\n[CONTROL_PLANE] PASS device-executor\n[CONTROL_PLANE] PASS wit-bindings\n[CONTROL_PLANE] PASS rekor-monitor\n[CONTROL_PLANE] PASS technology-consensus\n[CONTROL_PLANE] PASS sbom\n[CONTROL_PLANE] PASS legacy-evidence-factory\n[CONTROL_PLANE] PASS slo-error-budget\n[CONTROL_PLANE] PASS db-migration-coordinator\n[CONTROL_PLANE] PASS asset-delta\n[CONTROL_PLANE] PASS disaster-recovery-verify\n[CONTROL_PLANE] PASS provenance\n[CONTROL_PLANE] PASS supply-chain-signing\n[CONTROL_PLANE] PASS chaos-safety\n[CONTROL_PLANE] PASS orchestrator-monitor-lifecycle\n[CONTROL_PLANE] PASS orchestrator-patch-safety\n[CONTROL_PLANE] PASS orchestrator-minimal-repro\n[CONTROL_PLANE] PASS orchestrator-invariant-model\n[CONTROL_PLANE] PASS orchestrator-supervisor-negative\n[CONTROL_PLANE] PASS orchestrator-supervisor\n[CONTROL_PLANE] PASS capability-scheduler\n[CONTROL_PLANE] PASS cas-redundancy\n[CONTROL_PLANE] PASS device-worker\n[CONTROL_PLANE] PASS record-replay\n[CONTROL_PLANE] PASS dependency-security\n[CONTROL_PLANE] PASS transactional-deploy\n[CONTROL_PLANE] PASS enhancement-orchestrator\n[CONTROL_PLANE] PASS leader-lease-health\n[CONTROL_PLANE] PASS leader-lease-selftest\n[CONTROL_PLANE] PASS production-safety-health\n[CONTROL_PLANE] PASS production-safety-selftest\n[CONTROL_PLANE] PASS soak-chaos\n[CONTROL_PLANE] PASS crash-diagnostics\n[CONTROL_PLANE] PASS crash-diagnostics-selftest\n[CONTROL_PLANE] PASS causal-debugger\n[CONTROL_PLANE] PASS cas-replication-controller\n[CONTROL_PLANE] PASS physical-device-fleet\n[CONTROL_PLANE] PASS production-slo-autopilot\n[CONTROL_PLANE] PASS migration-fencing-runtime\n[CONTROL_PLANE] PASS long-soak-smoke\n[CONTROL_PLANE] PASS native-causal-collector\n[CONTROL_PLANE] PASS function-contract-coverage\n[CONTROL_PLANE] FAIL 66/75 trace=9b92e7cdaa26fdb1b3cc15ba32852fab\n\n[CONTROL_PLANE] FAIL graphics-ratchet: [GRAPHICS_GUARD] FAIL protectedChanges=20 failed=20\n[CONTROL_PLANE] FAIL integration-gate: [SYSTEM_INTEGRATION_V7] 99% FAIL 126/127 leader-lease-migration\n[CONTROL_PLANE] FAIL policy: warning: in the working copy of 'state/blocker-repair/platform-evidence.json', LF will be replaced by CRLF the next time Git touches it\n[CONTROL_PLANE] FAIL selftest: Node.js v24.15.0\n[CONTROL_PLANE] FAIL honest-100-functions: [HONEST_100] FAIL certified=69/76 discovered=146\n[CONTROL_PLANE] FAIL monotonic-100-guard:     at node:internal/main/run_main_module:33:47\n[CONTROL_PLANE] FAIL orchestrator-continuity: [ORCHESTRATOR_CONTINUITY] FAIL 5/8\n[CONTROL_PLANE] FAIL release-promotion: [RELEASE_PROMOTION] BLOCK decision=BLOCK\n[CONTROL_PLANE] FAIL readiness: [READINESS_V75] structural=84% operational=78% evidence=87% native=25%"
       },
       {
         "id": "npm:integration:functions:audit",
         "ok": false,
         "code": 2,
-        "startedAt": "2026-08-25T03:09:31.533Z",
-        "finishedAt": "2026-08-25T03:09:33.552Z",
+        "startedAt": "2026-08-25T04:34:30.920Z",
+        "finishedAt": "2026-08-25T04:34:32.681Z",
         "outputTail": "> webgl-survival-hub-no-npm@2.1.0 integration:functions:audit\n> node scripts/function-honest-100-auditor.cjs\n\n[HONEST_100] FAIL certified=69/76 discovered=146"
       },
       {
         "id": "npm:integration:functions:coverage",
         "ok": true,
         "code": 0,
-        "startedAt": "2026-08-25T03:09:33.552Z",
-        "finishedAt": "2026-08-25T03:09:34.074Z",
+        "startedAt": "2026-08-25T04:34:32.681Z",
+        "finishedAt": "2026-08-25T04:34:33.167Z",
         "outputTail": "> webgl-survival-hub-no-npm@2.1.0 integration:functions:coverage\n> node scripts/function-contract-coverage.cjs\n\n[FUNCTION_COVERAGE] integration=79% global=72% candidates=41"
       },
       {
         "id": "npm:desktop-ai:check",
         "ok": true,
         "code": 0,
-        "startedAt": "2026-08-25T03:09:34.074Z",
-        "finishedAt": "2026-08-25T03:09:35.496Z",
+        "startedAt": "2026-08-25T04:34:33.167Z",
+        "finishedAt": "2026-08-25T04:34:34.623Z",
         "outputTail": "> webgl-survival-hub-no-npm@2.1.0 desktop-ai:check\n> node scripts/check-desktop-ai-protocol.js\n\n[DESKTOP_AI_PROTOCOL] PASS"
       },
       {
         "id": "npm:release:gate",
         "ok": false,
         "code": 42,
-        "startedAt": "2026-08-25T03:09:35.496Z",
-        "finishedAt": "2026-08-25T03:09:44.078Z",
+        "startedAt": "2026-08-25T04:34:34.623Z",
+        "finishedAt": "2026-08-25T04:34:43.237Z",
         "outputTail": "> webgl-survival-hub-no-npm@2.1.0 release:gate\n> npm run desktop-ai:check && npm run check && npm run golden:check && npm run quality:check && npm run quality:regression && npm run quality:fuzz && npm run quality:impact && npm run quality:perceptual && npm run tech:audit && npm run tech:health && npm run quality:tech-orchestrator && npm run duplicates:check && npm run contracts:check && npm run project:review && npm run quality:stability && npm run evidence:score && npm run regressions:capture && npm run quality:issue-candidates && npm run quality:world && npm run integration:verify\n\n\n> webgl-survival-hub-no-npm@2.1.0 desktop-ai:check\n> node scripts/check-desktop-ai-protocol.js\n\n[DESKTOP_AI_PROTOCOL] PASS\n\n> webgl-survival-hub-no-npm@2.1.0 check\n> node scripts/check-js.js && node scripts/asset-quality-pipeline.js && node scripts/cpu-asset-transcode.js && node scripts/check-pwa-system.js && node scripts/check-animation-quality-system.js && node --test\n\nSyntax OK: 67 JavaScript files\n[ASSET_QUALITY] assets=24 heavy=0 duplicateGroups=0 totalMB=3.0\n[CPU_ASSET_TRANSCODE] mode=plan candidates=1 derived=0 failures=0 gltf=false ktx2=false\n[PWA_CHECK] readiness=85.1% passed=57/67 apps=12\n\n[PWA_CHECK] FAIL quality telemetry v4 migration\n[PWA_CHECK] FAIL certified-renderer-integrated:voxel-world\n[PWA_CHECK] FAIL certified-stutter-integrated:voxel-world\n[PWA_CHECK] FAIL certified-predictive-integrated:voxel-world\n[PWA_CHECK] FAIL certified-rig-scan-integrated:voxel-world\n[PWA_CHECK] FAIL voxel-predictive-center-integrated\n[PWA_CHECK] FAIL certified-renderer-integrated:ai3d-voxel-city\n[PWA_CHECK] FAIL certified-stutter-integrated:ai3d-voxel-city\n[PWA_CHECK] FAIL certified-predictive-integrated:ai3d-voxel-city\n[PWA_CHECK] FAIL certified-rig-scan-integrated:ai3d-voxel-city"
       },
       {
         "id": "control-plane-verify",
         "ok": false,
         "code": 2,
-        "startedAt": "2026-08-25T03:09:44.078Z",
-        "finishedAt": "2026-08-25T03:10:36.717Z",
-        "outputTail": "[CONTROL_PLANE] PASS toolchain-security\n[CONTROL_PLANE] PASS toolchain-health\n[CONTROL_PLANE] PASS telemetry\n[CONTROL_PLANE] PASS snapshot\n[CONTROL_PLANE] PASS native-ast-dataflow\n[CONTROL_PLANE] PASS semantic-graph\n[CONTROL_PLANE] PASS change-impact\n[CONTROL_PLANE] PASS assets\n[CONTROL_PLANE] PASS project-directives\n[CONTROL_PLANE] PASS asset-ingestion-plan\n[CONTROL_PLANE] PASS technology-lock\n[CONTROL_PLANE] PASS audio-variation\n[CONTROL_PLANE] PASS gameplay-spatial-contract\n[CONTROL_PLANE] PASS desktop-ai-report-contract\n[CONTROL_PLANE] PASS queue\n[CONTROL_PLANE] PASS config-contract\n[CONTROL_PLANE] PASS feature-flags\n[CONTROL_PLANE] PASS wit-component-contract\n[CONTROL_PLANE] PASS adapter-sandbox\n[CONTROL_PLANE] PASS secure-update\n[CONTROL_PLANE] PASS reproducible-build\n[CONTROL_PLANE] PASS model-check\n[CONTROL_PLANE] PASS cas-peer-discovery\n[CONTROL_PLANE] PASS distributed-cas\n[CONTROL_PLANE] PASS device-lab\n[CONTROL_PLANE] PASS device-executor\n[CONTROL_PLANE] PASS wit-bindings\n[CONTROL_PLANE] PASS rekor-monitor\n[CONTROL_PLANE] PASS technology-consensus\n[CONTROL_PLANE] PASS sbom\n[CONTROL_PLANE] PASS legacy-evidence-factory\n[CONTROL_PLANE] PASS slo-error-budget\n[CONTROL_PLANE] PASS db-migration-coordinator\n[CONTROL_PLANE] PASS asset-delta\n[CONTROL_PLANE] PASS disaster-recovery-verify\n[CONTROL_PLANE] PASS provenance\n[CONTROL_PLANE] PASS supply-chain-signing\n[CONTROL_PLANE] PASS chaos-safety\n[CONTROL_PLANE] PASS orchestrator-monitor-lifecycle\n[CONTROL_PLANE] PASS orchestrator-patch-safety\n[CONTROL_PLANE] PASS orchestrator-minimal-repro\n[CONTROL_PLANE] PASS orchestrator-invariant-model\n[CONTROL_PLANE] PASS orchestrator-supervisor-negative\n[CONTROL_PLANE] PASS orchestrator-supervisor\n[CONTROL_PLANE] PASS capability-scheduler\n[CONTROL_PLANE] PASS cas-redundancy\n[CONTROL_PLANE] PASS device-worker\n[CONTROL_PLANE] PASS record-replay\n[CONTROL_PLANE] PASS dependency-security\n[CONTROL_PLANE] PASS transactional-deploy\n[CONTROL_PLANE] PASS enhancement-orchestrator\n[CONTROL_PLANE] PASS leader-lease-health\n[CONTROL_PLANE] PASS leader-lease-selftest\n[CONTROL_PLANE] PASS production-safety-health\n[CONTROL_PLANE] PASS production-safety-selftest\n[CONTROL_PLANE] PASS soak-chaos\n[CONTROL_PLANE] PASS crash-diagnostics\n[CONTROL_PLANE] PASS crash-diagnostics-selftest\n[CONTROL_PLANE] PASS causal-debugger\n[CONTROL_PLANE] PASS cas-replication-controller\n[CONTROL_PLANE] PASS physical-device-fleet\n[CONTROL_PLANE] PASS production-slo-autopilot\n[CONTROL_PLANE] PASS migration-fencing-runtime\n[CONTROL_PLANE] PASS long-soak-smoke\n[CONTROL_PLANE] PASS native-causal-collector\n[CONTROL_PLANE] PASS function-contract-coverage\n[CONTROL_PLANE] FAIL 66/75 trace=ba9262bd2a1862a4d92185f5e79b2c8b\n\n[CONTROL_PLANE] FAIL graphics-ratchet: [GRAPHICS_GUARD] FAIL protectedChanges=20 failed=20\n[CONTROL_PLANE] FAIL integration-gate: [SYSTEM_INTEGRATION_V7] 99% FAIL 126/127 leader-lease-migration\n[CONTROL_PLANE] FAIL policy: warning: in the working copy of 'state/blocker-repair/state.json', LF will be replaced by CRLF the next time Git touches it\n[CONTROL_PLANE] FAIL selftest: Node.js v24.15.0\n[CONTROL_PLANE] FAIL honest-100-functions: [HONEST_100] FAIL certified=69/76 discovered=146\n[CONTROL_PLANE] FAIL monotonic-100-guard:     at node:internal/main/run_main_module:33:47\n[CONTROL_PLANE] FAIL orchestrator-continuity: [ORCHESTRATOR_CONTINUITY] FAIL 5/8\n[CONTROL_PLANE] FAIL release-promotion: [RELEASE_PROMOTION] BLOCK decision=BLOCK\n[CONTROL_PLANE] FAIL readiness: [READINESS_V75] structural=84% operational=78% evidence=87% native=25%"
+        "startedAt": "2026-08-25T04:34:43.237Z",
+        "finishedAt": "2026-08-25T04:35:32.992Z",
+        "outputTail": "[CONTROL_PLANE] PASS toolchain-security\n[CONTROL_PLANE] PASS toolchain-health\n[CONTROL_PLANE] PASS telemetry\n[CONTROL_PLANE] PASS snapshot\n[CONTROL_PLANE] PASS native-ast-dataflow\n[CONTROL_PLANE] PASS semantic-graph\n[CONTROL_PLANE] PASS change-impact\n[CONTROL_PLANE] PASS assets\n[CONTROL_PLANE] PASS project-directives\n[CONTROL_PLANE] PASS asset-ingestion-plan\n[CONTROL_PLANE] PASS technology-lock\n[CONTROL_PLANE] PASS audio-variation\n[CONTROL_PLANE] PASS gameplay-spatial-contract\n[CONTROL_PLANE] PASS desktop-ai-report-contract\n[CONTROL_PLANE] PASS queue\n[CONTROL_PLANE] PASS config-contract\n[CONTROL_PLANE] PASS feature-flags\n[CONTROL_PLANE] PASS wit-component-contract\n[CONTROL_PLANE] PASS adapter-sandbox\n[CONTROL_PLANE] PASS secure-update\n[CONTROL_PLANE] PASS reproducible-build\n[CONTROL_PLANE] PASS model-check\n[CONTROL_PLANE] PASS cas-peer-discovery\n[CONTROL_PLANE] PASS distributed-cas\n[CONTROL_PLANE] PASS device-lab\n[CONTROL_PLANE] PASS device-executor\n[CONTROL_PLANE] PASS wit-bindings\n[CONTROL_PLANE] PASS rekor-monitor\n[CONTROL_PLANE] PASS technology-consensus\n[CONTROL_PLANE] PASS sbom\n[CONTROL_PLANE] PASS legacy-evidence-factory\n[CONTROL_PLANE] PASS slo-error-budget\n[CONTROL_PLANE] PASS db-migration-coordinator\n[CONTROL_PLANE] PASS asset-delta\n[CONTROL_PLANE] PASS disaster-recovery-verify\n[CONTROL_PLANE] PASS provenance\n[CONTROL_PLANE] PASS supply-chain-signing\n[CONTROL_PLANE] PASS chaos-safety\n[CONTROL_PLANE] PASS orchestrator-monitor-lifecycle\n[CONTROL_PLANE] PASS orchestrator-patch-safety\n[CONTROL_PLANE] PASS orchestrator-minimal-repro\n[CONTROL_PLANE] PASS orchestrator-invariant-model\n[CONTROL_PLANE] PASS orchestrator-supervisor-negative\n[CONTROL_PLANE] PASS orchestrator-supervisor\n[CONTROL_PLANE] PASS capability-scheduler\n[CONTROL_PLANE] PASS cas-redundancy\n[CONTROL_PLANE] PASS device-worker\n[CONTROL_PLANE] PASS record-replay\n[CONTROL_PLANE] PASS dependency-security\n[CONTROL_PLANE] PASS transactional-deploy\n[CONTROL_PLANE] PASS enhancement-orchestrator\n[CONTROL_PLANE] PASS leader-lease-health\n[CONTROL_PLANE] PASS leader-lease-selftest\n[CONTROL_PLANE] PASS production-safety-health\n[CONTROL_PLANE] PASS production-safety-selftest\n[CONTROL_PLANE] PASS soak-chaos\n[CONTROL_PLANE] PASS crash-diagnostics\n[CONTROL_PLANE] PASS crash-diagnostics-selftest\n[CONTROL_PLANE] PASS causal-debugger\n[CONTROL_PLANE] PASS cas-replication-controller\n[CONTROL_PLANE] PASS physical-device-fleet\n[CONTROL_PLANE] PASS production-slo-autopilot\n[CONTROL_PLANE] PASS migration-fencing-runtime\n[CONTROL_PLANE] PASS long-soak-smoke\n[CONTROL_PLANE] PASS native-causal-collector\n[CONTROL_PLANE] PASS function-contract-coverage\n[CONTROL_PLANE] FAIL 66/75 trace=ed45997ed9f627884e89243f02de187e\n\n[CONTROL_PLANE] FAIL graphics-ratchet: [GRAPHICS_GUARD] FAIL protectedChanges=20 failed=20\n[CONTROL_PLANE] FAIL integration-gate: [SYSTEM_INTEGRATION_V7] 99% FAIL 126/127 leader-lease-migration\n[CONTROL_PLANE] FAIL policy: warning: in the working copy of 'state/blocker-repair/platform-evidence.json', LF will be replaced by CRLF the next time Git touches it\n[CONTROL_PLANE] FAIL selftest: Node.js v24.15.0\n[CONTROL_PLANE] FAIL honest-100-functions: [HONEST_100] FAIL certified=69/76 discovered=146\n[CONTROL_PLANE] FAIL monotonic-100-guard:     at node:internal/main/run_main_module:33:47\n[CONTROL_PLANE] FAIL orchestrator-continuity: [ORCHESTRATOR_CONTINUITY] FAIL 5/8\n[CONTROL_PLANE] FAIL release-promotion: [RELEASE_PROMOTION] BLOCK decision=BLOCK\n[CONTROL_PLANE] FAIL readiness: [READINESS_V75] structural=84% operational=78% evidence=87% native=25%"
       }
     ]
   },
