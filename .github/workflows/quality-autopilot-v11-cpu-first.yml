@@ -1,0 +1,23 @@
+name: Quality Autopilot v11 CPU First
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 2 * * *'
+jobs:
+  cpu-quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '24', cache: 'npm'}
+      - run: npm ci --ignore-scripts
+      - run: npm run quality:v11:test
+      - run: npm run quality:v11:cpu:benchmark
+      - run: npm run quality:v11:cpu:parallel-scan
+      - run: npm run quality:v11:cpu:policy
+      - run: npm run quality:v10:migrations
+      - run: npm run quality:v10:sbom
+      - run: npm run release:gate
+        if: ${{ hashFiles('scripts/quality-regression-gate.js') != '' }}
+      - run: npm run quality:v11:readiness

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>APNG Auto Repair</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <p class="eyebrow">WORLD SERVER · APNG QUALITY PIPELINE V3</p>
+      <h1>APNG Auto Repair</h1>
+      <p class="lede">Перетащите один или несколько APNG. Анализ 8/16-bit и Adam7, мигания, alpha-ореолов, движения и codec-рисков; затем безопасный repair и независимая повторная проверка запускаются автоматически.</p>
+    </header>
+
+    <section class="panel">
+      <label id="drop" class="drop" for="files">
+        <input id="files" type="file" accept="image/png,.apng" multiple>
+        <span class="drop-title">Выбрать APNG</span>
+        <span class="drop-sub">или перетащить файлы сюда</span>
+      </label>
+      <div class="controls">
+        <label class="toggle"><input id="temporal" type="checkbox" checked><span>Исправлять одиночные вспышки/alpha/смещение</span></label>
+        <button id="clear" type="button">Очистить</button>
+      </div>
+    </section>
+
+    <section id="queue" class="queue" aria-live="polite"></section>
+  </main>
+  <script src="./client.js" defer></script>
+</body>
+</html>

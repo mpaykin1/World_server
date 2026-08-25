@@ -1,0 +1,16 @@
+{
+  "project": "CHANGE_ME",
+  "mode": "shared-runtime",
+  "runtime": "WORLD_FACTORY_QUALITY_CORE_V10",
+  "inheritQualityGenome": true,
+  "rule": "Never fork player/camera/physics/graphics-quality code. Consume the shared runtime so every fixed error and every proven improvement propagates automatically.",
+  "requiredProtection": "same-hash-as-core",
+  "qualityRatchet": true,
+  "qualityCanary": {
+    "family": "CHANGE_ME",
+    "criticality": 1,
+    "worldComplexity": 1,
+    "mobileTraffic": 1,
+    "webgpuTraffic": 0
+  }
+}

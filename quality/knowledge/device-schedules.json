@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "mode": "ratchet-approved-per-device-schedule-v1",
+  "schedules": {
+    "default": {
+      "profile": "default",
+      "knobs": {},
+      "qualityEvidence": {
+        "sourceFidelityFloor": 100,
+        "visualScoreFloor": 100
+      }
+    }
+  }
+}

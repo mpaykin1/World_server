@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "7.4.0",
+  "system": "HONEST_100_FUNCTION_CERTIFICATION",
+  "claimRule": "100% is a certification result, never a constant or self-declared score.",
+  "statuses": [
+    "UNVERIFIED",
+    "PARTIAL",
+    "CERTIFIED_100",
+    "DEGRADED",
+    "SHADOW",
+    "BLOCKED"
+  ],
+  "requiredEvidenceClasses": [
+    "static",
+    "integration",
+    "regression"
+  ],
+  "productionEvidenceClass": "production",
+  "runtimeFreshnessHours": 24,
+  "securityFreshnessHours": 168,
+  "minimumEvidenceItems": 2,
+  "certifyOnlyApplicable": true,
+  "staleEvidenceInvalidatesCertification": true,
+  "dependencyChangeInvalidatesUntilRetested": true,
+  "newFunctionsDefault": "SHADOW",
+  "promotionSequence": [
+    "SHADOW",
+    "CERTIFIED_100",
+    "CANARY",
+    "PROMOTED"
+  ],
+  "monotonicRules": {
+    "previousCertifiedSetMustBeSubsetOfCurrentCertifiedSet": true,
+    "previousCapabilitiesMustRemain": true,
+    "ownerChangeRequiresExplicitMigration": true,
+    "replacementRequiresDualRun": true,
+    "replacementKeepsFallbackUntilCanaryPass": true,
+    "changedCertifiedSourceRequiresFreshRecertification": true,
+    "qualityMetricsMayNotRegress": true,
+    "productionPromotionBlockedOnAnyCertifiedRegression": true
+  },
+  "sourceFreshnessRule": "Runtime/integration/regression evidence must be generated after the newest source dependency timestamp.",
+  "generatedLegacyContracts": {
+    "allowedOnlyFrom": "LEGACY_EVIDENCE_FACTORY_V7_4",
+    "requireFactoryHash": true,
+    "autoCertifyByName": false
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "mode": "vertex-scalar-ply-v1",
+  "sourceSha256": "af8b08927d911b259f04975e146f26a1110c574ba3bc465ae319685826ca9473",
+  "sourceVertices": 361039,
+  "binaryUrl": "./lighting-vertex.bin",
+  "binarySha256": "d85c69235a353778744dc46ed6e5b43381b05d56ebeec0916734d0dae1fac2d2",
+  "dtype": "float32-le",
+  "channels": 1,
+  "range": [
+    0.7599999904632568,
+    1.0620968341827393
+  ],
+  "method": "static-sky-plus-key-directional-response-v1",
+  "sourceAssetModified": false
+}

@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "7.3.0",
+  "generatedAt": "2026-08-25T01:15:59.682Z",
+  "pass": true,
+  "checks": {
+    "singleLeader": true,
+    "fencingIncrements": true,
+    "staleLeaderRejected": true
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0.0",
+  "defaultProfile": "cinematic",
+  "profiles": {
+    "preview": {
+      "minimumQuality": 60,
+      "maxRelativeCost": 0.3
+    },
+    "balanced": {
+      "minimumQuality": 80,
+      "maxRelativeCost": 0.7
+    },
+    "cinematic": {
+      "minimumQuality": 95,
+      "maxRelativeCost": 1
+    }
+  },
+  "engines": {
+    "cpu_reconstruction": {
+      "quality": 55,
+      "relativeCost": 0.05
+    },
+    "instantmesh": {
+      "quality": 82,
+      "relativeCost": 0.45
+    },
+    "hunyuan3d": {
+      "quality": 90,
+      "relativeCost": 0.65
+    },
+    "trellis2": {
+      "quality": 96,
+      "relativeCost": 1
+    }
+  }
+}

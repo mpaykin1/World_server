@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-25T01:16:09.891Z",
+  "pass": true,
+  "openFeatureAligned": true,
+  "specificationTarget": "0.9.0",
+  "providerModel": "vendor-neutral local provider subset",
+  "deterministicRollout": true,
+  "safetyLockVerified": true,
+  "checks": [
+    {
+      "key": "integration.shadowMode",
+      "pass": true,
+      "reason": "PERCENTAGE"
+    },
+    {
+      "key": "technology.autoAdoptSafe",
+      "pass": true,
+      "reason": "PERCENTAGE"
+    },
+    {
+      "key": "graphics.qualityRatchet",
+      "pass": true,
+      "reason": "PERCENTAGE"
+    },
+    {
+      "key": "release.progressiveRollout",
+      "pass": true,
+      "reason": "PERCENTAGE"
+    },
+    {
+      "key": "release.emergencyKillSwitch",
+      "pass": true,
+      "reason": "PERCENTAGE"
+    },
+    {
+      "key": "adapter.untrustedExecution",
+      "pass": true,
+      "reason": "SAFETY_LOCK"
+    }
+  ]
+}

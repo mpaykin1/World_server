@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-25T01:15:33.569Z",
+  "pass": true,
+  "nativeAstAvailable": false,
+  "mode": "fallback-v5",
+  "externalBlockers": [
+    "typescript-compiler-api-not-installed"
+  ],
+  "claim": "No native AST claim. Run npm run integration:toolchain:apply to install pinned TypeScript 6.0.3 locally."
+}

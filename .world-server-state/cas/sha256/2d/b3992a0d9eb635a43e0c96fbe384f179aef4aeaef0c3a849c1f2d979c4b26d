@@ -1,0 +1,231 @@
+{
+  "schemaVersion": "ai3d-evidence-v2",
+  "evidencePolicy": "ai3d-evidence-v2",
+  "generatorCommitSha": "df70c22a91ac67c958557b19871231c85f0a9688",
+  "verifierCommitSha": "df70c22a91ac67c958557b19871231c85f0a9688",
+  "verifierVersion": "2",
+  "createdAt": 1787360916.060861,
+  "jobId": "baseline-0fb00f50",
+  "inputSha256": "9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+  "artifactSha256": "71d1c26d5fa858fc30b74c56bccf9a93769f5cfec5a8522ea24ade6d4a284d33",
+  "artifactPath": "services\\ai3d-worker\\runtime\\jobs\\baseline-0fb00f50\\model.glb",
+  "qualityEvidence": {
+    "pipeline_completion": {
+      "status": "VERIFIED",
+      "percent": 100,
+      "evidence": [
+        {
+          "kind": "stage_completion",
+          "stage": "input_validation",
+          "status": "completed",
+          "startedAt": 1787360915.2813985,
+          "finishedAt": 1787360915.3313985,
+          "duration": 0.05,
+          "inputSha256": "9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+          "artifactPath": "services\\ai3d-worker\\runtime\\jobs\\baseline-0fb00f50\\input.png",
+          "artifactSha256": "9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+          "passed": true,
+          "verifier": "pipeline",
+          "verifierVersion": "2"
+        },
+        {
+          "kind": "stage_completion",
+          "stage": "classification",
+          "status": "completed",
+          "startedAt": 1787360915.285147,
+          "finishedAt": 1787360915.4456205,
+          "duration": 0.16,
+          "inputSha256": "9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+          "artifactPath": "services\\ai3d-worker\\runtime\\jobs\\baseline-0fb00f50\\classification.txt",
+          "artifactSha256": "f027f8c5a78747f527c16b379e8c1201b8e003dbbef26d8990821fbc70f73d51",
+          "passed": true,
+          "verifier": "pipeline",
+          "verifierVersion": "2"
+        },
+        {
+          "kind": "stage_completion",
+          "stage": "depth_or_explicit_depth_fallback",
+          "status": "completed",
+          "startedAt": 1787360915.4476213,
+          "finishedAt": 1787360915.6625655,
+          "duration": 0.215,
+          "inputSha256": "9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+          "artifactPath": "services\\ai3d-worker\\runtime\\jobs\\baseline-0fb00f50\\cpu_depth.png",
+          "artifactSha256": "7d80c1cebf12628746968c278b1a7fa72390252de5754865ca7bf5f7533652dc",
+          "passed": true,
+          "verifier": "pipeline",
+          "verifierVersion": "2"
+        },
+        {
+          "kind": "stage_completion",
+          "stage": "geometry",
+          "status": "completed",
+          "startedAt": 1787360915.285147,
+          "finishedAt": 1787360915.758246,
+          "duration": 0.473,
+          "inputSha256": "9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+          "artifactPath": "services\\ai3d-worker\\runtime\\jobs\\baseline-0fb00f50\\model.glb",
+          "artifactSha256": "71d1c26d5fa858fc30b74c56bccf9a93769f5cfec5a8522ea24ade6d4a284d33",
+          "passed": true,
+          "verifier": "pipeline",
+          "verifierVersion": "2"
+        },
+        {
+          "kind": "stage_completion",
+          "stage": "export",
+          "status": "completed",
+          "startedAt": 1787360915.758246,
+          "finishedAt": 1787360915.808246,
+          "duration": 0.05,
+          "inputSha256": "9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+          "artifactPath": "services\\ai3d-worker\\runtime\\jobs\\baseline-0fb00f50\\model.glb",
+          "artifactSha256": "71d1c26d5fa858fc30b74c56bccf9a93769f5cfec5a8522ea24ade6d4a284d33",
+          "passed": true,
+          "verifier": "pipeline",
+          "verifierVersion": "2"
+        },
+        {
+          "kind": "stage_completion",
+          "stage": "validation",
+          "status": "completed",
+          "startedAt": 1787360915.808246,
+          "finishedAt": 1787360915.8582458,
+          "duration": 0.05,
+          "inputSha256": "9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+          "artifactPath": "services\\ai3d-worker\\runtime\\jobs\\baseline-0fb00f50\\model.glb",
+          "artifactSha256": "71d1c26d5fa858fc30b74c56bccf9a93769f5cfec5a8522ea24ade6d4a284d33",
+          "passed": true,
+          "verifier": "pipeline",
+          "verifierVersion": "2"
+        },
+        {
+          "kind": "stage_completion",
+          "stage": "evidence_generation",
+          "status": "completed",
+          "startedAt": 1787360915.8095348,
+          "finishedAt": 1787360915.8595347,
+          "duration": 0.05,
+          "inputSha256": "9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+          "artifactPath": "services\\ai3d-worker\\runtime\\jobs\\baseline-0fb00f50\\model.glb",
+          "artifactSha256": "71d1c26d5fa858fc30b74c56bccf9a93769f5cfec5a8522ea24ade6d4a284d33",
+          "passed": true,
+          "verifier": "pipeline",
+          "verifierVersion": "2"
+        }
+      ]
+    },
+    "geometry_integrity": {
+      "status": "VERIFIED",
+      "percent": 100,
+      "evidence": [
+        {
+          "kind": "geometry_integrity",
+          "inputSha256": "9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+          "artifactSha256": "71d1c26d5fa858fc30b74c56bccf9a93769f5cfec5a8522ea24ade6d4a284d33",
+          "artifactPath": "services\\ai3d-worker\\runtime\\jobs\\baseline-0fb00f50\\model.glb",
+          "artifactBytes": 381328,
+          "verifier": "mesh_validator",
+          "verifierVersion": "2",
+          "testId": "geometry_integrity_check",
+          "measurement": {
+            "vertexCount": 9200,
+            "faceCount": 16380,
+            "hasNaN": false,
+            "degenerateTriangles": 0
+          },
+          "threshold": {
+            "minVertexCount": 100,
+            "minFaceCount": 50
+          },
+          "passed": true
+        }
+      ]
+    },
+    "glb_validity": {
+      "status": "VERIFIED",
+      "percent": 100,
+      "evidence": [
+        {
+          "kind": "glb_validation",
+          "inputSha256": "9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+          "artifactSha256": "71d1c26d5fa858fc30b74c56bccf9a93769f5cfec5a8522ea24ade6d4a284d33",
+          "artifactPath": "services\\ai3d-worker\\runtime\\jobs\\baseline-0fb00f50\\model.glb",
+          "artifactBytes": 381328,
+          "verifier": "glb_validator",
+          "verifierVersion": "2",
+          "testId": "glb_header_and_buffers",
+          "measurement": {
+            "zDepth": 0.8600000143051147,
+            "validHeader": true,
+            "fileSize": 381328
+          },
+          "threshold": {
+            "minZDepth": 0.01
+          },
+          "passed": true
+        }
+      ]
+    },
+    "volumetric_artifact_integrity": {
+      "status": "VERIFIED",
+      "percent": 100,
+      "evidence": [
+        {
+          "kind": "artifact_measurement",
+          "inputSha256": "9b4999cbab9cb7b2e0cc6532a92e1b8a5d743cac93a89911fccdd15bc508db63",
+          "artifactSha256": "71d1c26d5fa858fc30b74c56bccf9a93769f5cfec5a8522ea24ade6d4a284d33",
+          "artifactPath": "services\\ai3d-worker\\runtime\\jobs\\baseline-0fb00f50\\model.glb",
+          "artifactBytes": 381328,
+          "verifier": "mesh_validator",
+          "verifierVersion": "2",
+          "testId": "volumetric_artifact_check",
+          "measurement": {
+            "vertexCount": 9200,
+            "faceCount": 16380,
+            "zDepth": 0.8600000143051147,
+            "isPlaceholder": false
+          },
+          "threshold": {
+            "minVertexCount": 100,
+            "minFaceCount": 50,
+            "minZDepth": 0.01
+          },
+          "passed": true
+        }
+      ],
+      "isPlaceholder": false
+    },
+    "image3d_correspondence": {
+      "status": "UNTESTED",
+      "reason": "No render-back comparison available (need inputSha256 + renderSha256 + comparisonMethod)"
+    },
+    "depth_accuracy": {
+      "status": "UNTESTED",
+      "reason": "No ground-truth depth file available for comparison"
+    },
+    "silhouette_accuracy": {
+      "status": "UNTESTED",
+      "reason": "No render-back comparison available (need inputSha256 + renderSha256 + IoU)"
+    },
+    "structural_similarity": {
+      "status": "UNTESTED",
+      "reason": "No render-back comparison available (need SSIM)"
+    },
+    "texture_quality": {
+      "status": "UNTESTED",
+      "reason": "No render-back image similarity measurement available (need color histogram)"
+    },
+    "godot_runtime_compatibility": {
+      "status": "UNTESTED",
+      "reason": "Godot runtime not launched (need godotExecutablePath, exitCode 0, importLogSha256)"
+    },
+    "voxel_runtime_compatibility": {
+      "status": "UNTESTED",
+      "reason": "Voxel runtime not launched (need voxel artifact)"
+    },
+    "overall_visual_quality": {
+      "status": "UNTESTED",
+      "reason": "Critical visual metrics (Depth/Silhouette/Structural/Texture/Godot/Voxel/Image3D) are UNTESTED"
+    }
+  }
+}

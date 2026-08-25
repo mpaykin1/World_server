@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "mode": "deterministic-network-physics-replay-farm-v1",
+  "pass": true,
+  "runs": [
+    {
+      "seed": 7,
+      "hash": "e81526ad7d93afb41b9a269d538d983f9d68a47a2e6ecf7a6c80ed386dedb0cc",
+      "repeatHash": "e81526ad7d93afb41b9a269d538d983f9d68a47a2e6ecf7a6c80ed386dedb0cc",
+      "deterministic": true
+    },
+    {
+      "seed": 11,
+      "hash": "ffdb5bc1a4b71678a921578c52a38908841d100448fb6e34a540667641bc2529",
+      "repeatHash": "ffdb5bc1a4b71678a921578c52a38908841d100448fb6e34a540667641bc2529",
+      "deterministic": true
+    },
+    {
+      "seed": 23,
+      "hash": "0078013e63f127e8089e17d7dc1d6499f68ce5c2a5f5aeb0a358d89ac83c2bc1",
+      "repeatHash": "0078013e63f127e8089e17d7dc1d6499f68ce5c2a5f5aeb0a358d89ac83c2bc1",
+      "deterministic": true
+    },
+    {
+      "seed": 47,
+      "hash": "9f383b8967291c8217dc4cc4d2ac25b437129ba4c7883f0da2e7d5a253650019",
+      "repeatHash": "9f383b8967291c8217dc4cc4d2ac25b437129ba4c7883f0da2e7d5a253650019",
+      "deterministic": true
+    },
+    {
+      "seed": 97,
+      "hash": "2a0917dca771eb0719afc24676416ebe3893a6acf01d62ea487449dbf3d49bcf",
+      "repeatHash": "2a0917dca771eb0719afc24676416ebe3893a6acf01d62ea487449dbf3d49bcf",
+      "deterministic": true
+    }
+  ],
+  "seedCount": 5,
+  "serverGpuRequired": false
+}

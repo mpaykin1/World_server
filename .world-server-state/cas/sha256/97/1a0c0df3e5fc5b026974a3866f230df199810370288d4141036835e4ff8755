@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-25T01:14:48.656Z",
+  "pass": true,
+  "protocol": "world-server-cas-http-v1",
+  "localCasReady": true,
+  "loopbackProtocolSelftest": {
+    "pass": true,
+    "digest": "f6200f06729db688ea4b3ef050c749ee8756e313ed30a045392a5942891d3c8b",
+    "protocol": "http-put-get-sha256"
+  },
+  "configuredPeers": 0,
+  "reachablePeers": 0,
+  "peerCoveragePercent": 0,
+  "remotePeerRequiredForRelease": false,
+  "externalBlockers": [
+    "no-remote-cas-peer-configured"
+  ],
+  "probes": []
+}

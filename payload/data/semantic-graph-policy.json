@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "7.2.0",
+  "mode": "module-symbol-lexical-dataflow",
+  "maxFileBytes": 4194304,
+  "extensions": [
+    ".js",
+    ".cjs",
+    ".mjs",
+    ".jsx",
+    ".ts",
+    ".tsx"
+  ],
+  "confidenceFloor": 0.55,
+  "moduleGraphSource": "CAS dependency graph",
+  "nativeAstAdapterOptional": true,
+  "nativeAstBinaryCandidates": [
+    "sg",
+    "ast-grep",
+    "tree-sitter"
+  ]
+}

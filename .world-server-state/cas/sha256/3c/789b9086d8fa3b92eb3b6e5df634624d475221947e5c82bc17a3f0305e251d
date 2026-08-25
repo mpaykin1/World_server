@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+'use strict';
+const fs=require('fs'),path=require('path');const ROOT=process.cwd();
+const REQUIRED=['desktop-front','desktop-playable','mobile-portrait','mobile-landscape'];
+function humanApproved(x){const t=JSON.stringify(x||{}).toLowerCase();return /(user-approved|human-approved|manual-approved)/.test(t)&&!/(synthetic|fixture|auto-verified)/.test(t)}
+function normalizedView(x){const raw=String(x?.view||x?.id||x?.name||'').toLowerCase();if(raw.includes('desktop-front'))return'desktop-front';if(raw.includes('desktop-playable'))return'desktop-playable';if(raw.includes('mobile-portrait'))return'mobile-portrait';if(raw.includes('mobile-landscape'))return'mobile-landscape';return raw}
+function assess(b={}){const all=Array.isArray(b.approvedBaselines)?b.approvedBaselines:[],approved=all.filter(humanApproved),names=new Set(approved.map(normalizedView)),missing=REQUIRED.filter(x=>!names.has(x));return{approved:approved.length,structuralOrSyntheticApproved:all.length-approved.length,required:REQUIRED,missing,complete:missing.length===0,selfApprovalForbidden:true}}
+function main(){let b={approvedBaselines:[]};try{b=JSON.parse(fs.readFileSync(path.join(ROOT,'data/visual-baselines.json'),'utf8'))}catch{}const a=assess(b),report={schemaVersion:'6.0.0',system:'WORLD_MULTIVIEW_VISUAL_GATE',...a,hardReleaseBlock:false,note:'Only explicit human/user-approved non-synthetic baselines count toward aesthetic production proof. Auto-verified front invariants remain structural evidence only.'};fs.writeFileSync(path.join(ROOT,'WORLD_MULTIVIEW_VISUAL_GATE_REPORT.json'),JSON.stringify(report,null,2)+'\n');console.log(`[WQA_V6] human multiview baselines ${a.approved}/${REQUIRED.length}`)}
+if(require.main===module)main();module.exports={REQUIRED,assess,humanApproved,normalizedView};

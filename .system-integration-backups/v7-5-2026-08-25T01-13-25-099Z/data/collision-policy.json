@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "COLLISION_STANDARD",
+  "releaseBlocking": true,
+  "required": [
+    "grounded-spawn",
+    "floor",
+    "wall",
+    "no-tunneling-basic",
+    "step-up<=1.05",
+    "fall-respawn"
+  ],
+  "canonical": "shared/golden-physics.js"
+}

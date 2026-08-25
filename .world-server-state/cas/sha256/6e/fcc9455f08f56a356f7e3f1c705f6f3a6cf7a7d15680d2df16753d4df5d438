@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-25T01:14:46.932Z",
+  "pass": true,
+  "file": ".world-server-state/repro/AI_MIN_REPRO_2026-08-25T01-14-46-923Z.zip",
+  "sha256": "1251a06aa61e4b7b4e4ac683c30017dbfbdb886f10c555c239c864cfb608b1b2",
+  "entries": [
+    "REPRO_MANIFEST.json",
+    "files/package.json",
+    "files/data/system-integration-version.json",
+    "files/data/orchestrator-supervisor-policy.json",
+    "files/data/orchestrator-monitor-policy.json",
+    "files/ORCHESTRATOR_SUPERVISOR_STATUS.json",
+    "logs/stderr.tail.txt"
+  ],
+  "redacted": true,
+  "redaction": true
+}

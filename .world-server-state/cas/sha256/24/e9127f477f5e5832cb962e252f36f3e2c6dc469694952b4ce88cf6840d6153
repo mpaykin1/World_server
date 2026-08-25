@@ -1,0 +1,397 @@
+{
+  "version": 11,
+  "mode": "candidate",
+  "projectRoots": [
+    "apps"
+  ],
+  "entryFiles": [
+    "index.html"
+  ],
+  "qualityGoals": [
+    80,
+    90,
+    95,
+    98,
+    99,
+    99.5
+  ],
+  "budget": {
+    "maxProjectsPerRun": 20,
+    "maxFixesPerProject": 4,
+    "maxRuntimeSeconds": 1200,
+    "maxFileBytesToInspect": 2097152,
+    "maxInspectedBytesPerRun": 536870912
+  },
+  "projectPriority": {
+    "apps/ai3d-voxel-city": 100
+  },
+  "priorityRules": [
+    {
+      "pattern": "ai3d|voxel|game|world",
+      "priority": 50
+    }
+  ],
+  "performance": {
+    "warnProjectBytes": 8388608,
+    "warnSingleFileBytes": 2097152
+  },
+  "deviceBudgets": {
+    "desktop": {
+      "totalBytes": 67108864,
+      "scriptBytes": 16777216,
+      "largestFileBytes": 33554432
+    },
+    "midMobile": {
+      "totalBytes": 33554432,
+      "scriptBytes": 8388608,
+      "largestFileBytes": 16777216
+    },
+    "weakMobile": {
+      "totalBytes": 16777216,
+      "scriptBytes": 4194304,
+      "largestFileBytes": 8388608
+    }
+  },
+  "assetQuality": {
+    "maxTextureBytes": 16777216,
+    "minUsefulTextureBytes": 1024,
+    "warnModelBytes": 67108864
+  },
+  "golden": {
+    "minimumSuccessfulProjects": 3,
+    "revalidateDays": 30
+  },
+  "protectedMetrics": {
+    "allowScoreDrop": 0,
+    "allowNewSyntaxErrors": 0,
+    "allowNewMissingEntries": 0,
+    "allowNewAssetIssues": 0,
+    "allowNewDuplicateGroups": 0,
+    "allowNewSemanticCritical": 0
+  },
+  "neverMutate": [
+    ".git/",
+    ".github/CODEOWNERS",
+    ".env",
+    ".env.production",
+    "data/quality-autopilot/baselines/"
+  ],
+  "safeFixes": [
+    "html-meta-charset",
+    "html-meta-viewport",
+    "text-final-newline"
+  ],
+  "tournament": {
+    "maxCandidates": 8,
+    "weights": {
+      "integrity": 0.02,
+      "performance": 0.01,
+      "assets": 0.01
+    }
+  },
+  "telemetry": {
+    "directory": "data/quality-autopilot/telemetry"
+  },
+  "verification": {
+    "retries": 1
+  },
+  "verificationCommands": [
+    "node scripts/quality-security-gate.js",
+    "npm run check",
+    "python -m py_compile services/ai3d-worker/server.py services/ai3d-worker/ai3d/*.py services/ai3d-worker/ai3d/plugins/*.py services/ai3d-worker/tools/*.py services/ai3d-worker/scripts/e2e-smoke.py",
+    "node scripts/discover-ai3d-engines.js",
+    "python services/ai3d-worker/scripts/e2e-smoke.py",
+    "python scripts/check-ai3d-claims.py",
+    "node scripts/check-ai3d-delivery-policy.js",
+    "node scripts/check-ai3d-v4-combined.js",
+    "npx playwright test"
+  ],
+  "aiCandidates": {
+    "maxFiles": 8,
+    "maxChangedLines": 600
+  },
+  "fullAutopilot": {
+    "enabled": false,
+    "requireVisualGate": true,
+    "requireGameplayGate": true,
+    "requireTelemetryGate": true,
+    "requireCanary": true,
+    "minimumCanarySessions": 20,
+    "minimumCanaryMinutes": 10,
+    "progressiveCanary": true,
+    "minimumCausalConfidence": 0.9,
+    "requireGlobalRegressionKb": true,
+    "requireSyntheticPlayers": true
+  },
+  "globalRegressionKb": {
+    "minimumConfidence": 0.6,
+    "promoteConfidence": 0.9,
+    "maxRules": 5000,
+    "crossProject": true
+  },
+  "engineOptimizer": {
+    "enabled": true,
+    "autoApplyRisk": "low",
+    "preserveNearPlayerQuality": true,
+    "nearQualityDistanceMeters": 35,
+    "midQualityDistanceMeters": 120,
+    "farQualityMode": "lod-fog-occlusion",
+    "disabled": []
+  },
+  "progressiveCanary": {
+    "stages": [
+      {
+        "traffic": 1,
+        "minSessions": 20,
+        "minMinutes": 10
+      },
+      {
+        "traffic": 5,
+        "minSessions": 60,
+        "minMinutes": 20
+      },
+      {
+        "traffic": 20,
+        "minSessions": 150,
+        "minMinutes": 30
+      },
+      {
+        "traffic": 50,
+        "minSessions": 300,
+        "minMinutes": 45
+      },
+      {
+        "traffic": 100,
+        "minSessions": 500,
+        "minMinutes": 60
+      }
+    ],
+    "requiredConsecutivePasses": 2,
+    "rollbackOnAnyProtectedRegression": true
+  },
+  "syntheticPlayers": {
+    "enabled": true,
+    "playersPerCandidate": 12,
+    "concurrency": 4,
+    "minimumPassRate": 1.0,
+    "desktopShare": 0.67,
+    "mobileShare": 0.33
+  },
+  "causalLearning": {
+    "enabled": true,
+    "minimumConfidenceForGolden": 0.9,
+    "minimumSamplesPerArm": 20
+  },
+  "computeBudget": {
+    "maxCpuSecondsPerDay": 43200,
+    "maxGpuSecondsPerDay": 0,
+    "maxCostUsdPerDay": 5,
+    "maxJobsPerDay": 200
+  },
+  "dependencyTournament": {
+    "enabled": true,
+    "requireZeroFailedTests": true,
+    "requireZeroNewVulnerabilities": true,
+    "maxBundleGrowthBytes": 0
+  },
+  "semanticWorldValidator": {
+    "enabled": true,
+    "criticalChecks": [
+      "spawn",
+      "collision",
+      "camera",
+      "movement"
+    ],
+    "requiredForPromotion": true
+  },
+  "goldenAdoptionLock": {
+    "enabled": true,
+    "freezeOnDrift": true,
+    "hash": "sha256",
+    "requireObservedAdoption": true
+  },
+  "visualBaselineQuorum": {
+    "enabled": true,
+    "minCaptures": 3,
+    "maxMetricDrift": 0.035,
+    "automatedBaselineIsUserApproved": false
+  },
+  "nearFieldQualityInvariant": {
+    "enabled": true,
+    "allowedRelativeDrop": 0,
+    "protected": [
+      "nearDetail",
+      "nearTextureResolution",
+      "nearMeshDensity",
+      "nearShadowQuality",
+      "nearAnisotropy",
+      "nearPixelRatio"
+    ],
+    "farOptimizationAllowed": [
+      "lod",
+      "fog",
+      "occlusion",
+      "distant-simplification"
+    ]
+  },
+  "sloAnomaly": {
+    "enabled": true,
+    "robustZLimit": 6,
+    "relativeLimit": 0.15,
+    "rollbackOnProtectedAnomaly": true
+  },
+  "providerCapabilityGate": {
+    "enabled": true,
+    "acceptSimulated": false,
+    "requireVerifiedRuntime": true
+  },
+  "promotionAttestation": {
+    "enabled": true,
+    "hash": "sha256",
+    "optionalHmacSecret": "QUALITY_ATTESTATION_SECRET"
+  },
+  "distributedCoordination": {
+    "enabled": true,
+    "supabaseRunLeaseRpc": "claim_quality_autopilot_lease",
+    "supabaseReleaseLeaseRpc": "release_quality_autopilot_lease",
+    "supabaseComputeBudgetRpc": "reserve_quality_compute",
+    "requireServerSideSecret": true
+  },
+  "externalAdapters": {
+    "depthAnything": {
+      "requiredForTasksThatUseIt": true
+    },
+    "openGameEval": {
+      "requiredForClaimsThatUseIt": true
+    }
+  },
+  "supplyChainProvenance": {
+    "enabled": true,
+    "sbom": "quality-sbom-v10",
+    "requireLockfile": true,
+    "strictPinningForNewDependencies": true,
+    "hash": "sha256"
+  },
+  "migrationSafety": {
+    "enabled": true,
+    "blockDropTable": true,
+    "blockTruncate": true,
+    "blockDisableRls": true,
+    "requireBackupForDestructive": true,
+    "requireExplicitApprovalForDestructive": true,
+    "securityDefinerRequiresExecuteRevoke": true
+  },
+  "backupRestoreDrill": {
+    "enabled": true,
+    "repositoryMetadataDrill": true,
+    "databaseBackupProviderRequiredForDatabaseClaim": true,
+    "persistResultsToSupabase": true
+  },
+  "crossRegionSyntheticProbe": {
+    "enabled": true,
+    "minimumDistinctVerifiedRegions": 3,
+    "acceptSimulated": false
+  },
+  "qualityContractInstrumentation": {
+    "enabled": true,
+    "automaticApplyDuringInstall": false,
+    "fallbackSources": [
+      "GameGoldenStandard.state",
+      "__AI3D_PLAYABLE_SCENE__.state"
+    ]
+  },
+  "webglGpuTimer": {
+    "enabled": true,
+    "extension": "EXT_disjoint_timer_query_webgl2",
+    "fallback": "HOLD_WITH_CPU_FRAME_TIME"
+  },
+  "promotionEvidenceChain": {
+    "enabled": true,
+    "hash": "sha256",
+    "optionalHmacSecret": "QUALITY_ATTESTATION_SECRET",
+    "persistToSupabase": true
+  },
+  "releaseIntegrityStore": {
+    "promotionTable": "quality_promotion_attestations_v10",
+    "restoreDrillTable": "quality_restore_drills_v10",
+    "requireServerSideSecret": true
+  },
+  "serverAcceleration": {
+    "mode": "cpu-first",
+    "gpuRequired": false,
+    "gpuOptional": true,
+    "neverBlockOnMissingGpuWhenCpuPathVerified": true
+  },
+  "cpuFirst": {
+    "enabled": true,
+    "reserveCores": 1,
+    "maxWorkers": 8,
+    "memoryPerWorkerBytes": 536870912,
+    "loadTarget": 0.85,
+    "priorities": [
+      "protected",
+      "verification",
+      "build",
+      "optimization",
+      "background"
+    ],
+    "workerThreads": true,
+    "backpressure": true
+  },
+  "cpuCache": {
+    "enabled": true,
+    "contentAddressed": true,
+    "hash": "sha256",
+    "maxBytes": 1073741824,
+    "ttlHours": 168,
+    "atomicWrites": true,
+    "deduplicate": true
+  },
+  "cpuCheckpoint": {
+    "enabled": true,
+    "resumeOnlyWhenInputHashMatches": true,
+    "atomicWrites": true
+  },
+  "cpuMemoryPressure": {
+    "enabled": true,
+    "maxRssRatio": 0.82,
+    "maxHeapRatio": 0.9,
+    "maxGrowthBytes": 268435456
+  },
+  "wasmSimd": {
+    "enabled": true,
+    "preferSimdWhenAvailable": true,
+    "scalarFallbackRequired": true
+  },
+  "cpuImpactPlanner": {
+    "enabled": true,
+    "fullSuiteOn": [
+      "movement",
+      "collision",
+      "camera",
+      "spawn",
+      "physics",
+      "release",
+      "workflow"
+    ],
+    "incrementalOtherwise": true
+  },
+  "cpuSceneBudget": {
+    "enabled": true,
+    "preserveNearField": true,
+    "nearGameplayHzFloor": 30,
+    "nearCollisionHzFloor": 30,
+    "degradeOnly": [
+      "far-ai-hz",
+      "far-physics-hz",
+      "streaming-batch",
+      "background-work"
+    ]
+  },
+  "cpu3dFallback": {
+    "enabled": true,
+    "threeDgsTrainingCpuEquivalent": false,
+    "fallbackForNoGpu": "photogrammetry-mesh-or-point-cloud",
+    "neverLabelFallbackAs3DGS": true
+  }
+}

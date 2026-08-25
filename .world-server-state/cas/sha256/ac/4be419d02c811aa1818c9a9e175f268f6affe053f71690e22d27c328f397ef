@@ -1,0 +1,28 @@
+name: Quality Rollback Decision
+
+on:
+  workflow_dispatch:
+    inputs:
+      enforce:
+        description: "Fail workflow unless canary is promotable"
+        required: false
+        default: "true"
+
+jobs:
+  rollback-decision:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - run: npm ci --ignore-scripts || npm install
+      - name: Evaluate canary metrics
+        run: node scripts/canary-rollback-gate.js --enforce
+      - name: Upload decision
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: canary-rollback-decision
+          path: CANARY_ROLLBACK_REPORT.json
+          if-no-files-found: error

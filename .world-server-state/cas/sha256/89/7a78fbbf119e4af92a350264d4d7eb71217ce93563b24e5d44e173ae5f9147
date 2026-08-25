@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-25T01:14:26.848Z",
+  "pass": true,
+  "nodeId": "d09188b2aafd5940",
+  "transport": "udp-multicast",
+  "peers": [],
+  "reachablePeers": 0,
+  "autoReplicate": true,
+  "replicationFactorTarget": 2,
+  "externalBlockers": [
+    "no-zero-config-cas-peer-discovered"
+  ]
+}

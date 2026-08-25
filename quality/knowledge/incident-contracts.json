@@ -1,0 +1,846 @@
+{
+  "schemaVersion": 1,
+  "contracts": [
+    {
+      "fingerprint": "spawn-not-on-floor",
+      "status": "protected",
+      "rootCause": "hard-coded or unvalidated spawn transform",
+      "mustNeverRecur": true,
+      "rules": [
+        "PHY-002"
+      ],
+      "tests": [
+        "spawn-grounded",
+        "spawn-capsule-clearance"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591887+00:00"
+    },
+    {
+      "fingerprint": "jump-moves-forward-instead-of-up",
+      "status": "protected",
+      "rootCause": "jump impulse applied in camera/local axis or camera rig moved instead of player body",
+      "mustNeverRecur": true,
+      "rules": [
+        "PHY-003"
+      ],
+      "tests": [
+        "jump-world-y-only"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591908+00:00"
+    },
+    {
+      "fingerprint": "camera-cannot-look-straight-up",
+      "status": "protected",
+      "rootCause": "pitch clamp too narrow or wrong Euler order",
+      "mustNeverRecur": true,
+      "rules": [
+        "CAM-002"
+      ],
+      "tests": [
+        "pitch-plus-minus-89"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591912+00:00"
+    },
+    {
+      "fingerprint": "camera-rolls-when-looking-left-right",
+      "status": "protected",
+      "rootCause": "yaw applied to wrong local axis / roll left unconstrained",
+      "mustNeverRecur": true,
+      "rules": [
+        "CAM-001",
+        "INP-001"
+      ],
+      "tests": [
+        "camera-roll-zero",
+        "horizontal-look-yaw-only"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591914+00:00"
+    },
+    {
+      "fingerprint": "world-became-blurry",
+      "status": "protected",
+      "rootCause": "asset decimation, texture downscale/recompression, low render resolution or wrong splat pipeline",
+      "mustNeverRecur": true,
+      "rules": [
+        "SRC-001",
+        "SRC-002",
+        "GFX-001",
+        "GFX-002",
+        "PERF-002"
+      ],
+      "tests": [
+        "source-hash-lock",
+        "geometry-stats-regression",
+        "visual-golden-regression"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591916+00:00"
+    },
+    {
+      "fingerprint": "splat-has-no-collision",
+      "status": "protected",
+      "rootCause": "Gaussian splats are visual primitives without triangle collision topology",
+      "mustNeverRecur": true,
+      "rules": [
+        "PHY-001"
+      ],
+      "tests": [
+        "splat-proxy-required",
+        "collider-raycast-floor"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591919+00:00"
+    },
+    {
+      "fingerprint": "controls-inverted-or-world-rotates",
+      "status": "protected",
+      "rootCause": "movement vectors include pitch/roll or wrong sign/basis",
+      "mustNeverRecur": true,
+      "rules": [
+        "INP-001",
+        "CAM-001"
+      ],
+      "tests": [
+        "forward-planar-camera",
+        "left-right-basis"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591921+00:00"
+    },
+    {
+      "fingerprint": "fps-optimization-degraded-near-graphics",
+      "status": "protected",
+      "rootCause": "performance control changed visible source fidelity instead of reducing invisible/distant work",
+      "mustNeverRecur": true,
+      "rules": [
+        "SRC-002",
+        "PERF-002",
+        "PERF-003",
+        "PERF-004"
+      ],
+      "tests": [
+        "source-hash-lock",
+        "near-fps-optimization-no-quality-loss",
+        "near-field-max-quality"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591923+00:00"
+    },
+    {
+      "fingerprint": "fixed-error-returned-in-another-project",
+      "status": "protected",
+      "rootCause": "fix was local or consumer did not inherit compiled protection pack",
+      "mustNeverRecur": true,
+      "rules": [
+        "QA-006",
+        "QA-008",
+        "QA-014"
+      ],
+      "tests": [
+        "protected-error-never-recur",
+        "quality-genome-inheritance",
+        "compiled-global-protection-pack"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591926+00:00"
+    },
+    {
+      "fingerprint": "good-pattern-not-spread-to-all-projects",
+      "status": "protected",
+      "rootCause": "successful pattern was not promoted through quality genome and transactional rollout",
+      "mustNeverRecur": true,
+      "rules": [
+        "QA-004",
+        "QA-007",
+        "QA-013",
+        "QA-014"
+      ],
+      "tests": [
+        "promoted-pattern-propagation",
+        "canary-global-rollout",
+        "cross-project-pattern-promotion",
+        "compiled-global-protection-pack"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591928+00:00"
+    },
+    {
+      "fingerprint": "webgpu-occlusion-caused-popin-or-overcull",
+      "status": "protected",
+      "rootCause": "non-conservative HZB or missing near bypass/fail-visible behavior",
+      "mustNeverRecur": true,
+      "rules": [
+        "PERF-014",
+        "PERF-006"
+      ],
+      "tests": [
+        "webgpu-hzb-conservative-fail-visible",
+        "gpu-occlusion-near-bypass"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591930+00:00"
+    },
+    {
+      "fingerprint": "simd-fast-path-changed-geometry",
+      "status": "protected",
+      "rootCause": "fast path numerical/byte mismatch",
+      "mustNeverRecur": true,
+      "rules": [
+        "PERF-015",
+        "SRC-001"
+      ],
+      "tests": [
+        "wasm-simd-numerical-parity",
+        "source-hash-lock"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591932+00:00"
+    },
+    {
+      "fingerprint": "animated-glb-streaming-broke-animation",
+      "status": "protected",
+      "rootCause": "animated GLB was structurally split or bytes were not conserved",
+      "mustNeverRecur": true,
+      "rules": [
+        "STR-001",
+        "SRC-001"
+      ],
+      "tests": [
+        "animated-glb-range-byte-conservation",
+        "source-hash-lock"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591934+00:00"
+    },
+    {
+      "fingerprint": "dynamic-body-tunneling",
+      "status": "protected",
+      "rootCause": "discrete AABB-only dynamic collision missed relative motion",
+      "mustNeverRecur": true,
+      "rules": [
+        "PHY-008",
+        "PHY-006"
+      ],
+      "tests": [
+        "dynamic-mesh-sweep-contract",
+        "dynamic-moving-side-collision"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591937+00:00"
+    },
+    {
+      "fingerprint": "production-error-fingerprint-project-local",
+      "status": "protected",
+      "rootCause": "fingerprint included project/world identity",
+      "mustNeverRecur": true,
+      "rules": [
+        "QA-016",
+        "QA-006"
+      ],
+      "tests": [
+        "global-production-fingerprint",
+        "protected-error-never-recur"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591939+00:00"
+    },
+    {
+      "fingerprint": "offline-bake-mismatched-source",
+      "status": "protected",
+      "rootCause": "derived bake was applied without source SHA lock",
+      "mustNeverRecur": true,
+      "rules": [
+        "LGT-004",
+        "LGT-005"
+      ],
+      "tests": [
+        "offline-gi-source-lock",
+        "offline-reflection-source-lock"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591941+00:00"
+    },
+    {
+      "fingerprint": "protected-self-heal-broke-other-invariant",
+      "status": "protected",
+      "rootCause": "unbounded auto code patch without transactional proof",
+      "mustNeverRecur": true,
+      "rules": [
+        "QA-018",
+        "QA-001"
+      ],
+      "tests": [
+        "transactional-protected-self-heal",
+        "known-error-immunity"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591943+00:00"
+    },
+    {
+      "fingerprint": "webgpu-pbr-fastpath-lost-source-material-semantics",
+      "status": "protected",
+      "rootCause": "fast renderer became authoritative before source-equivalent material and golden parity proof",
+      "mustNeverRecur": true,
+      "rules": [
+        "PERF-017",
+        "GFX-002"
+      ],
+      "tests": [
+        "webgpu-pbr-source-equivalence",
+        "visual-golden-regression"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591945+00:00"
+    },
+    {
+      "fingerprint": "threaded-simd-decode-race-or-corruption",
+      "status": "protected",
+      "rootCause": "threaded fast path lacked deterministic chunk ordering/numerical parity",
+      "mustNeverRecur": true,
+      "rules": [
+        "PERF-018",
+        "PERF-015"
+      ],
+      "tests": [
+        "wasm-simd-threaded-parity",
+        "wasm-simd-numerical-parity"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591947+00:00"
+    },
+    {
+      "fingerprint": "quality-floor-regressed-after-optimization",
+      "status": "protected",
+      "rootCause": "quality history was advisory instead of a monotonic release floor",
+      "mustNeverRecur": true,
+      "rules": [
+        "QA-019",
+        "QA-003"
+      ],
+      "tests": [
+        "monotonic-quality-ratchet",
+        "optimization-promotion-quality-nonregression"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591949+00:00"
+    },
+    {
+      "fingerprint": "stale-bake-cache-applied-to-new-source",
+      "status": "protected",
+      "rootCause": "derived artifact cache was not keyed by source SHA/tool SHA/parameters",
+      "mustNeverRecur": true,
+      "rules": [
+        "QA-021",
+        "LGT-004",
+        "LGT-005"
+      ],
+      "tests": [
+        "content-addressed-bake-cache",
+        "offline-gi-source-lock",
+        "offline-reflection-source-lock"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591952+00:00"
+    },
+    {
+      "fingerprint": "consumer-drift-missed-global-fix",
+      "status": "protected",
+      "rootCause": "consumer runtime/protection hash drift was not release-blocking",
+      "mustNeverRecur": true,
+      "rules": [
+        "QA-023",
+        "QA-008",
+        "QA-014"
+      ],
+      "tests": [
+        "consumer-drift-audit",
+        "quality-genome-inheritance",
+        "compiled-global-protection-pack"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591954+00:00"
+    },
+    {
+      "fingerprint": "shared-memory-fastpath-broke-on-nonisolated-deploy",
+      "status": "protected",
+      "rootCause": "Shared memory fast path lacked cross-origin isolation capability gate/fallback",
+      "mustNeverRecur": true,
+      "rules": [
+        "PERF-020"
+      ],
+      "tests": [
+        "shared-memory-zero-copy-fallback"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591956+00:00"
+    },
+    {
+      "fingerprint": "material-table-fastpath-changed-material",
+      "status": "protected",
+      "rootCause": "material table repacked or omitted exact source semantics/textures",
+      "mustNeverRecur": true,
+      "rules": [
+        "PERF-021",
+        "PERF-017"
+      ],
+      "tests": [
+        "webgpu-exact-material-table",
+        "webgpu-pbr-source-equivalence"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591958+00:00"
+    },
+    {
+      "fingerprint": "clustered-lighting-dropped-visible-light",
+      "status": "protected",
+      "rootCause": "cluster overflow discarded relevant light instead of falling back",
+      "mustNeverRecur": true,
+      "rules": [
+        "LGT-006"
+      ],
+      "tests": [
+        "clustered-lighting-fail-bright"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591961+00:00"
+    },
+    {
+      "fingerprint": "virtual-texture-evicted-near-detail",
+      "status": "protected",
+      "rootCause": "near full-resolution texture page was evicted or replaced with lower-resolution data",
+      "mustNeverRecur": true,
+      "rules": [
+        "PERF-022",
+        "SRC-002"
+      ],
+      "tests": [
+        "virtual-texture-near-full-resolution",
+        "near-field-max-quality"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591963+00:00"
+    },
+    {
+      "fingerprint": "portal-overcull-visible-room",
+      "status": "protected",
+      "rootCause": "portal system hid unknown/near room without conservative semantic proof",
+      "mustNeverRecur": true,
+      "rules": [
+        "PERF-023"
+      ],
+      "tests": [
+        "portal-visibility-conservative"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591965+00:00"
+    },
+    {
+      "fingerprint": "animation-budget-stuttered-near-character",
+      "status": "protected",
+      "rootCause": "screen-space animation budget throttled near/interaction rig or discarded accumulated time",
+      "mustNeverRecur": true,
+      "rules": [
+        "ANM-002"
+      ],
+      "tests": [
+        "animation-budget-near-interaction-full-rate"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591967+00:00"
+    },
+    {
+      "fingerprint": "physics-sleep-disabled-player-contact",
+      "status": "protected",
+      "rootCause": "broadphase sleeping applied to near or player-contact body",
+      "mustNeverRecur": true,
+      "rules": [
+        "PHY-009"
+      ],
+      "tests": [
+        "physics-broadphase-near-contact-awake"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591969+00:00"
+    },
+    {
+      "fingerprint": "network-compression-changed-local-state",
+      "status": "protected",
+      "rootCause": "network optimizer quantized or approximated local/near authoritative state",
+      "mustNeverRecur": true,
+      "rules": [
+        "NET-002"
+      ],
+      "tests": [
+        "network-delta-lossless"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591971+00:00"
+    },
+    {
+      "fingerprint": "device-learning-lowered-graphics",
+      "status": "protected",
+      "rootCause": "learned schedule changed fidelity knob instead of scheduling cost",
+      "mustNeverRecur": true,
+      "rules": [
+        "PERF-024",
+        "PERF-003"
+      ],
+      "tests": [
+        "device-schedule-safe-knobs-only",
+        "near-fps-optimization-no-quality-loss"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591973+00:00"
+    },
+    {
+      "fingerprint": "derived-cache-hash-mismatch",
+      "status": "protected",
+      "rootCause": "persistent cache object was not verified by content hash/source lock",
+      "mustNeverRecur": true,
+      "rules": [
+        "QA-025",
+        "QA-021"
+      ],
+      "tests": [
+        "derived-artifact-cas-source-lock",
+        "content-addressed-bake-cache"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591974+00:00"
+    },
+    {
+      "fingerprint": "good-pattern-propagated-to-incompatible-project",
+      "status": "protected",
+      "rootCause": "successful pattern was spread without applicability/capability evidence",
+      "mustNeverRecur": true,
+      "rules": [
+        "QA-026",
+        "QA-013"
+      ],
+      "tests": [
+        "pattern-applicability-firewall",
+        "cross-project-pattern-promotion"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591976+00:00"
+    },
+    {
+      "fingerprint": "frame-budget-sacrificed-near-quality",
+      "status": "protected",
+      "rootCause": "scheduler deferred near-critical work or touched fidelity knobs",
+      "mustNeverRecur": true,
+      "rules": [
+        "PERF-025",
+        "PERF-003"
+      ],
+      "tests": [
+        "frame-budget-near-critical",
+        "near-fps-optimization-no-quality-loss"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591978+00:00"
+    },
+    {
+      "fingerprint": "p99-stutter-regressed-after-fps-optimization",
+      "status": "protected",
+      "rootCause": "optimization considered mean FPS only and ignored p99/hitch regression",
+      "mustNeverRecur": true,
+      "rules": [
+        "PERF-026"
+      ],
+      "tests": [
+        "stutter-p99-regression"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591980+00:00"
+    },
+    {
+      "fingerprint": "full-world-rebuild-after-single-object-change",
+      "status": "protected",
+      "rootCause": "compiler had no content dependency graph",
+      "mustNeverRecur": true,
+      "rules": [
+        "PERF-028"
+      ],
+      "tests": [
+        "incremental-world-compiler-affected-only"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591982+00:00"
+    },
+    {
+      "fingerprint": "cpu-optimization-reduced-near-graphics",
+      "status": "protected",
+      "rootCause": "optimizer touched fidelity instead of computation cadence/cache",
+      "mustNeverRecur": true,
+      "rules": [
+        "PERF-027",
+        "PERF-032"
+      ],
+      "tests": [
+        "cpu-first-no-paid-gpu",
+        "cpu-autotuner-safe-knobs"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591984+00:00"
+    },
+    {
+      "fingerprint": "pvs-overculled-near-visible-object",
+      "status": "protected",
+      "rootCause": "visibility fastpath was not conservative/fail-visible",
+      "mustNeverRecur": true,
+      "rules": [
+        "PERF-029"
+      ],
+      "tests": [
+        "cpu-pvs-near-fail-visible"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591986+00:00"
+    },
+    {
+      "fingerprint": "autotuner-selected-lossy-knob",
+      "status": "protected",
+      "rootCause": "optimizer search space included fidelity knobs",
+      "mustNeverRecur": true,
+      "rules": [
+        "PERF-032"
+      ],
+      "tests": [
+        "cpu-autotuner-safe-knobs"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591988+00:00"
+    },
+    {
+      "fingerprint": "replay-bug-was-not-promoted-to-regression",
+      "status": "protected",
+      "rootCause": "production repro was not persisted as mandatory replay",
+      "mustNeverRecur": true,
+      "rules": [
+        "QA-027"
+      ],
+      "tests": [
+        "production-replay-permanent"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591990+00:00"
+    },
+    {
+      "fingerprint": "cached-nav-collision-used-for-wrong-source",
+      "status": "protected",
+      "rootCause": "cache key omitted source SHA/parameters",
+      "mustNeverRecur": true,
+      "rules": [
+        "QA-028"
+      ],
+      "tests": [
+        "nav-collision-cache-source-lock"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591992+00:00"
+    },
+    {
+      "fingerprint": "background-bake-starved-game-loop",
+      "status": "protected",
+      "rootCause": "background CPU work was not budgeted/incremental",
+      "mustNeverRecur": true,
+      "rules": [
+        "PERF-025",
+        "LGT-007"
+      ],
+      "tests": [
+        "incremental-cpu-light-bake",
+        "frame-budget-near-critical"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591994+00:00"
+    },
+    {
+      "fingerprint": "server-required-paid-gpu",
+      "status": "protected",
+      "rootCause": "server path depended on GPU-only work instead of CPU/cache/client split",
+      "mustNeverRecur": true,
+      "rules": [
+        "PERF-027"
+      ],
+      "tests": [
+        "cpu-first-no-paid-gpu"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591996+00:00"
+    },
+    {
+      "fingerprint": "threaded-importer-race-corrupted-asset",
+      "status": "protected",
+      "rootCause": "concurrent decode/write lacked deterministic exact parity",
+      "mustNeverRecur": true,
+      "rules": [
+        "PERF-033"
+      ],
+      "tests": [
+        "threaded-importer-exact-parity"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.591999+00:00"
+    },
+    {
+      "fingerprint": "huge-world-parser-loaded-whole-file-oom",
+      "status": "protected",
+      "rootCause": "parser materialized whole source instead of bounded windows",
+      "mustNeverRecur": true,
+      "rules": [
+        "PERF-034"
+      ],
+      "tests": [
+        "mmap-stream-bounded-memory"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.592001+00:00"
+    },
+    {
+      "fingerprint": "semantic-pvs-overculled-unknown-space",
+      "status": "protected",
+      "rootCause": "PVS treated uncertain semantic membership as invisible",
+      "mustNeverRecur": true,
+      "rules": [
+        "PERF-035"
+      ],
+      "tests": [
+        "semantic-pvs-fail-visible"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.592004+00:00"
+    },
+    {
+      "fingerprint": "incremental-gi-reused-dirty-cell",
+      "status": "protected",
+      "rootCause": "GI cache reused cell without exact input hash parity",
+      "mustNeverRecur": true,
+      "rules": [
+        "LGT-008"
+      ],
+      "tests": [
+        "incremental-gi-cell-hash-reuse"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.592007+00:00"
+    },
+    {
+      "fingerprint": "content-defined-chunking-changed-bytes",
+      "status": "protected",
+      "rootCause": "CDC implementation was not byte-conservative",
+      "mustNeverRecur": true,
+      "rules": [
+        "STR-002"
+      ],
+      "tests": [
+        "content-defined-chunk-byte-reconstruction"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.592010+00:00"
+    },
+    {
+      "fingerprint": "offline-cache-served-wrong-sha",
+      "status": "protected",
+      "rootCause": "service worker cache was not version/SHA isolated",
+      "mustNeverRecur": true,
+      "rules": [
+        "PERF-036"
+      ],
+      "tests": [
+        "offline-sha-cache-version-isolation"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.592012+00:00"
+    },
+    {
+      "fingerprint": "shared-worker-cache-cross-version-stale",
+      "status": "protected",
+      "rootCause": "multi-tab cache key omitted runtime version or SHA",
+      "mustNeverRecur": true,
+      "rules": [
+        "PERF-036"
+      ],
+      "tests": [
+        "shared-worker-cache-sha-isolation"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.592014+00:00"
+    },
+    {
+      "fingerprint": "cpu-tuning-without-causality-evidence",
+      "status": "protected",
+      "rootCause": "tuning occurred without profiler/flamegraph evidence",
+      "mustNeverRecur": true,
+      "rules": [
+        "PERF-037"
+      ],
+      "tests": [
+        "cpu-flamegraph-evidence"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.592016+00:00"
+    },
+    {
+      "fingerprint": "replay-farm-nondeterministic-network-physics",
+      "status": "protected",
+      "rootCause": "network/physics scheduling used nondeterministic state",
+      "mustNeverRecur": true,
+      "rules": [
+        "QA-030"
+      ],
+      "tests": [
+        "network-physics-replay-farm-determinism"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.592018+00:00"
+    },
+    {
+      "fingerprint": "dependency-impact-missed-required-rebuild",
+      "status": "protected",
+      "rootCause": "dependency graph failed to propagate change impact",
+      "mustNeverRecur": true,
+      "rules": [
+        "QA-031"
+      ],
+      "tests": [
+        "dependency-impact-graph-complete"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.592021+00:00"
+    },
+    {
+      "fingerprint": "derived-cache-compression-changed-bytes",
+      "status": "protected",
+      "rootCause": "transport codec parity was not SHA-verified",
+      "mustNeverRecur": true,
+      "rules": [
+        "QA-032"
+      ],
+      "tests": [
+        "derived-cache-codec-lossless"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.592023+00:00"
+    },
+    {
+      "fingerprint": "binary-delta-reconstruction-mismatch",
+      "status": "protected",
+      "rootCause": "delta patch lacked exact reconstruction verification",
+      "mustNeverRecur": true,
+      "rules": [
+        "QA-033"
+      ],
+      "tests": [
+        "binary-delta-exact-reconstruction"
+      ],
+      "projects": [],
+      "compiledAt": "2026-08-24T05:45:49.592025+00:00"
+    }
+  ]
+}

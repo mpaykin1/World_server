@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-25T01:16:05.329Z",
+  "pass": true,
+  "provider": "vercel-cli",
+  "vercelAvailable": false,
+  "transactionalStateMachine": true,
+  "previewBeforePromote": true,
+  "rollbackOnFailure": true,
+  "explicitDeployRequired": true
+}

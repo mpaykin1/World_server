@@ -1,0 +1,179 @@
+{
+  "schemaVersion": "7.4.0",
+  "generatedAt": "2026-08-25T01:15:37.680Z",
+  "system": "PROJECT_DIRECTIVE_GATE",
+  "taskContractPresent": false,
+  "pass": true,
+  "percent": 100,
+  "failed": [],
+  "checks": [
+    {
+      "id": "constitution-present",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "scalable-first",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "minimum-manual-actions",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "batch-assets",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "production-assets",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "full-file-code",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "no-inline-html",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "root-cause-permanent-fix",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "technology-lock",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "graphics-ratchet",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "audio-variation-policy",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "supply-chain-signing",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "model-check-state-machines",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "semantic-dependency-graph",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "distributed-cas-ready",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "real-device-truth",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "typed-wit-adapters",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "native-ast-policy",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "mandatory-tlc-ci",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "cosign-security-floor",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "auto-free-local-toolchain",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "zero-config-cas",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "continuous-transparency-monitor",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "device-executor",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "wit-bindings-generation",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "v74-evidence-slo-migration-delta-causal",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "combat-spatial-policy",
+      "applicable": true,
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "task-contract-evidence",
+      "applicable": false,
+      "pass": true,
+      "details": "CURRENT_TASK_CONTRACT.json absent: baseline constitution enforced; task-specific checks are N/A"
+    }
+  ]
+}

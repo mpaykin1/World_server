@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "purpose": "Mandatory character motion and weapon/shield orientation contract.",
+  "thresholds": {
+    "movementSpeedMin": 0.05,
+    "feetMovementAlignmentMin": 0.85,
+    "swordFeetAlignmentMin": 0.8,
+    "shieldEnemyAlignmentMin": 0.75,
+    "shieldTorsoCoverageMin": 0.72,
+    "footSlideMetersMax": 0.06
+  },
+  "rules": [
+    "feet face movement direction",
+    "sword attack follows feet direction",
+    "shield stays vertical between enemy and torso",
+    "shield covers chest and abdomen as much as possible",
+    "pistol stays in primary hand",
+    "automatic/rifle/machinegun uses two hands"
+  ]
+}

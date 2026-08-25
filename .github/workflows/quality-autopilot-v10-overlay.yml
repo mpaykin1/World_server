@@ -1,0 +1,33 @@
+name: Quality Autopilot v10 Overlay
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 3 * * *'
+permissions:
+  contents: read
+jobs:
+  verify-v10:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Existing release gate
+        run: npm run release:gate
+      - name: v10 tests
+        run: npm run quality:v10:test
+      - name: Supply-chain provenance
+        run: npm run quality:v10:sbom
+      - name: Migration safety
+        run: npm run quality:v10:migrations
+      - name: Restore drill
+        run: npm run quality:v10:backup-drill
+      - name: Contract instrumentation plan
+        run: npm run quality:v10:contract:plan
+      - name: Promotion chain verify
+        run: npm run quality:v10:chain:verify || true
+      - name: Readiness
+        run: npm run quality:v10:readiness

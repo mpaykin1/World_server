@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-25T01:14:27.939Z",
+  "pass": true,
+  "executorReady": true,
+  "mode": "health",
+  "appiumReachable": false,
+  "detectedPhysicalDevices": 0,
+  "realDeviceEvidenceCount": 0,
+  "results": [],
+  "claim": "Executor is ready but no physical-device run is claimed.",
+  "externalBlockers": [
+    "no-physical-device-execution-evidence"
+  ]
+}

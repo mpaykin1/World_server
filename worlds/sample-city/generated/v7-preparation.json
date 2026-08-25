@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 2,
+  "runtime": "WORLD_FACTORY_QUALITY_CORE_V10",
+  "world": "sample-city",
+  "qualityTier": "production",
+  "heavyBakes": "distributed",
+  "pass": true,
+  "sourceSha256": "af8b08927d911b259f04975e146f26a1110c574ba3bc465ae319685826ca9473",
+  "sourceAssetModified": false,
+  "steps": [
+    {
+      "system": "meshlets",
+      "pass": true,
+      "triangles": 683077,
+      "loss": 0
+    },
+    {
+      "system": "offline-gi",
+      "pass": true,
+      "state": "queued-content-addressed-bake-farm",
+      "sourceSha256": "af8b08927d911b259f04975e146f26a1110c574ba3bc465ae319685826ca9473",
+      "safeRuntimeFallback": "vertex-scalar-ply-v1"
+    },
+    {
+      "system": "offline-reflection-probes",
+      "pass": true,
+      "state": "queued-content-addressed-bake-farm",
+      "sourceSha256": "af8b08927d911b259f04975e146f26a1110c574ba3bc465ae319685826ca9473",
+      "safeRuntimeFallback": "static-world-cubemap-once-v1"
+    }
+  ]
+}

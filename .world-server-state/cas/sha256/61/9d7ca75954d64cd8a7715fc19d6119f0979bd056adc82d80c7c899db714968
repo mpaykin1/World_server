@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "runtime": "WORLD_FACTORY_QUALITY_CORE_V10",
+  "world": "sample-city",
+  "serverGpuRequired": false,
+  "cpuFirst": true,
+  "sourceSha256": "af8b08927d911b259f04975e146f26a1110c574ba3bc465ae319685826ca9473",
+  "sourceAssetModified": false
+}

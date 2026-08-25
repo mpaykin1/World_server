@@ -1,0 +1,15 @@
+{
+  "version": 10,
+  "status": "PASS",
+  "rounds": 1,
+  "history": [
+    {
+      "round": 1,
+      "issues": [],
+      "repairs": [],
+      "gate": {
+        "pass": true
+      }
+    }
+  ]
+}

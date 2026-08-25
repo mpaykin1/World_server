@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "2.0.0",
+  "commit": "a525b7df9aa7e0e34272c3272a87ac6ed1831625",
+  "branch": "ai/desktop/quality-runtime-v11-20260824-090217",
+  "merkleRoot": "13722823fccdf15566643561bcd6a452c58c5a5b2e3e76e170532bff4ec24f48",
+  "latestSnapshot": "2026-08-25T01-15-33-460Z-pre-control-plane-13722823fccd",
+  "capabilityRegistry": "4acc698baaf4c1d35412c96efe6640d832bb81e1892bae4671cf2749fa0801a2",
+  "policy": "849f76a7ad1cc8e720134100183574e2cb3c7d8049c4a0d3372e44ae3cb06cba"
+}

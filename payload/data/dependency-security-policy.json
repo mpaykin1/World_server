@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "7.2.0",
+  "provider": "OSV",
+  "api": "https://api.osv.dev/v1/querybatch",
+  "networkOptionalForStructuralGate": true,
+  "productionMaxCacheAgeHours": 168,
+  "ecosystems": [
+    "npm"
+  ],
+  "blockSeverities": [
+    "CRITICAL",
+    "HIGH"
+  ],
+  "autoRemediation": {
+    "enabled": true,
+    "protectedBranches": [
+      "master",
+      "main"
+    ],
+    "requireFixedVersion": true,
+    "transactionalPackageFiles": true,
+    "verification": [
+      "npm run integration:full",
+      "npm run release:gate"
+    ],
+    "rollbackOnAnyFailure": true
+  },
+  "denyPackages": []
+}

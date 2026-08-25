@@ -1,0 +1,59 @@
+{
+  "scripts/world-quality-analyzer.js": [
+    "260bf93532f981ea19857a83171795c7e0f6f1feff12e9f0f4d969d981537408",
+    "44b32b12f4e6a9dbe2c62c12f842eee551f4319279aac62a04d6b1449915753b",
+    "f5ed422b1e113f3f6a98c5b782f25b715f12726b730c2bb145db741a688c7a62"
+  ],
+  "scripts/world-quality-autopilot.js": [
+    "3b4dc70287b57e56a7b394b33a4023f785be8f2b30d57ac76dde2fba674f3984",
+    "3bcde330156ecbf13460761ebaa6931fb5efc784904a539bcd6790f1514cf475",
+    "5cc739d59f893feb75aa6d811aaf77ad93839fc8c60d4a4d2a07d307df167c74"
+  ],
+  ".github/workflows/world-quality-autopilot.yml": [
+    "3fdae3617252313ca77c343f9f79cf757405b09424bc781219b8660735fcca19",
+    "55ebbf74136fdeb1198947947f3ab1baf0839bc9ce80fb77eaa2cb2c08294796",
+    "da39f0778d86b5145dac648de462652ebff4a5227fec77d0bb0a1d9ca79c3552"
+  ],
+  "scripts/world-device-profile-matrix.js": [
+    "5d8f6ed25e05439858c717281560de179cbee098ade7f57126fb200fc2f3bd83",
+    "ca55c34e0f5f512a3bcc019475b48dbd9e16d53a09ba476fb0785944d7f9c1a4"
+  ],
+  "scripts/world-runtime-quality-profiler.js": [
+    "04f134381881c7c27d06b7f8d65f8342ef7ca2411a7f9ca03b1f098e612acbf6",
+    "2dd1cf8acc1b5a70ad125e39a0481b840723a872f484e362a9c84ccb1c0198e3"
+  ],
+  "services/ai3d-worker/ai3d/plugins/mesh_quality_optimizer.py": [
+    "321354103d29948e869e38b9028e01263ea0b546c3ad46537a504fbb6825afd1",
+    "a4b5f10ac20ac7cd0921223691b4fd4e2d379778222f98d71fa03919a55f0908"
+  ],
+  "data/performance-budgets.json": [
+    "34622b1a29926bc85b5db20367276a3620d3fa62c29529e01082a3850143375e",
+    "3d83f687d6b246b5132c481f18f66b9f5ebc843b60c32193bcb751e2d6b4ac43",
+    "94151b44aa771e7081ac3e1e2060f2ddfbb4e8f72b44fb767280765bcb00eb3a",
+    "b8a3707e42f82a939ff958c31270e41ed94998b21ac7f5c2fd50a8e95881973a"
+  ],
+  ".github/workflows/quality-canary.yml": [
+    "964102707e4f37c5588060e900a9bdffec0a3cefc1a8c5cf95de0e2c4eb0d793",
+    "e01ef8b5c85f9f2324588e34a05dc1622e8e0f914c49db59c12e13622ae74792"
+  ],
+  "api/quality-summary.js": [
+    "5b90b0abd2adc1565904ac3f68ee82e5c46e86875100730af8a157311fb2cec5",
+    "7e0592c598b868aa19514e712d274e1b08602f4868e169aff26c3e7d2c251466"
+  ],
+  "api/quality-telemetry.js": [
+    "ce9dc0b5852a1e6ee6c6b831b3fb4ced2badb5f97994b3c2ed700f383802a15a",
+    "d16374c5659b6279dbce0509ab957cce29232de6ff39dfe8882e226feffc3367"
+  ],
+  "playwright.config.js": [
+    "04bbfe673cb35e66b36af01f3dc93e54b31844dceb72a0c8b66e5916a900b9a4",
+    "29e4563ba7154632a8992502f345d39f9c1cca02aadee1a0d3e56b277fd19859"
+  ],
+  "scripts/ai-visual-critic.js": [
+    "092819433eb4b549f9111b6f0807b49369f28c7140bc63a9b689ca77972ae3d4",
+    "fae8b06bd8464d74b77f1e961dab0bf7fe7e2d3e020780c7e1467210bda80ce5"
+  ],
+  "scripts/production-quality-pull.js": [
+    "56f98e23f5811af7895f796fa92e40b2581fff09fd9e3e62e944097df7b249cc",
+    "c1582e5f7a31f2e410ed0a01f899cb9ee4b49f159f29a4cab84f485531fbfe87"
+  ]
+}

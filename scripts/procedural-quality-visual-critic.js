@@ -1,0 +1,11 @@
+'use strict';
+const fs=require('fs'),path=require('path'),root=path.resolve(__dirname,'..');
+const rd=JSON.parse(fs.readFileSync(path.join(root,'PROCEDURAL_QUALITY_READINESS.json'),'utf8'));
+const a=fs.existsSync(path.join(root,'PROCEDURAL_NATIVE_RENDERER_AUDIT.json'))?JSON.parse(fs.readFileSync(path.join(root,'PROCEDURAL_NATIVE_RENDERER_AUDIT.json'),'utf8')):{coveragePct:0,candidates:0};
+const architectural=Math.min(100,Number(rd.architecturalReadinessPct??rd.readinessPct??0));
+const verified=Math.min(100,Number(rd.verifiedReadinessPct??architectural));
+const native=a.candidates?Number(a.coveragePct||0):100;
+const score=Math.round(architectural*.72+verified*.18+Math.min(100,40+native*.6)*.10);
+const report={version:10,score,pass:score>=90,architecturalReadiness:architectural,verifiedReadiness:verified,nativeRendererCoverage:native,physicalCertified:!!rd.physicalCertified,note:'Critic scores implementation/evidence coverage; it does not claim arbitrary photorealism.'};
+fs.writeFileSync(path.join(root,'PROCEDURAL_QUALITY_CRITIC.json'),JSON.stringify(report,null,2)+'\n');
+console.log(JSON.stringify(report,null,2));if(!report.pass)process.exit(1);

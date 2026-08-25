@@ -1,0 +1,267 @@
+{
+  "pipeline_health_percent": 67.9,
+  "capture_quality_percent": 89.1,
+  "input_panorama_count": 8,
+  "feature_matches_mean": 57.3,
+  "neighbor_overlap_mean": 0.797,
+  "multiview_confidence_mean": 0.671,
+  "multi_camera_support_mean": 1.134,
+  "raw_points": 126375,
+  "final_splats": 67709,
+  "voxel_size_m": 0.4538,
+  "single_gap_filled": 4726,
+  "tangent_surface_filled": 1980,
+  "camera_metadata": {
+    "present": false,
+    "used": false
+  },
+  "pose_graph": {
+    "used": true,
+    "edge_count": 19,
+    "loop_closure": true,
+    "cost": 0.001588668549375895,
+    "success": true,
+    "max_yaw_change_deg": 8.690620855576565,
+    "edges": [
+      {
+        "i": 0,
+        "j": 1,
+        "overlap": 0.75,
+        "matches": 44
+      },
+      {
+        "i": 0,
+        "j": 2,
+        "overlap": 0.75,
+        "matches": 57
+      },
+      {
+        "i": 0,
+        "j": 3,
+        "overlap": 0.9176,
+        "matches": 78
+      },
+      {
+        "i": 1,
+        "j": 2,
+        "overlap": 0.75,
+        "matches": 25
+      },
+      {
+        "i": 1,
+        "j": 3,
+        "overlap": 0.7647,
+        "matches": 65
+      },
+      {
+        "i": 1,
+        "j": 4,
+        "overlap": 0.6855,
+        "matches": 39
+      },
+      {
+        "i": 2,
+        "j": 3,
+        "overlap": 1.0,
+        "matches": 108
+      },
+      {
+        "i": 2,
+        "j": 4,
+        "overlap": 0.6649,
+        "matches": 40
+      },
+      {
+        "i": 2,
+        "j": 5,
+        "overlap": 0.7033,
+        "matches": 44
+      },
+      {
+        "i": 3,
+        "j": 4,
+        "overlap": 0.8235,
+        "matches": 70
+      },
+      {
+        "i": 3,
+        "j": 5,
+        "overlap": 1.0,
+        "matches": 121
+      },
+      {
+        "i": 3,
+        "j": 6,
+        "overlap": 0.75,
+        "matches": 54
+      },
+      {
+        "i": 4,
+        "j": 5,
+        "overlap": 0.7529,
+        "matches": 64
+      },
+      {
+        "i": 4,
+        "j": 6,
+        "overlap": 0.75,
+        "matches": 42
+      },
+      {
+        "i": 4,
+        "j": 7,
+        "overlap": 0.6569,
+        "matches": 36
+      },
+      {
+        "i": 5,
+        "j": 6,
+        "overlap": 0.75,
+        "matches": 58
+      },
+      {
+        "i": 5,
+        "j": 7,
+        "overlap": 0.8235,
+        "matches": 70
+      },
+      {
+        "i": 6,
+        "j": 7,
+        "overlap": 0.75,
+        "matches": 32
+      },
+      {
+        "i": 0,
+        "j": 7,
+        "overlap": 0.7423,
+        "matches": 55
+      }
+    ]
+  },
+  "colmap": {
+    "available": false,
+    "ran": false
+  },
+  "neural_depth_available": false,
+  "manhattan": {
+    "normal_snaps": 11453,
+    "point_plane_snaps": 1341,
+    "planes": [
+      {
+        "axis": "x",
+        "value": 9.983381458893735,
+        "support": 83
+      },
+      {
+        "axis": "x",
+        "value": -18.151602652534063,
+        "support": 74
+      },
+      {
+        "axis": "x",
+        "value": -19.059182785160765,
+        "support": 69
+      },
+      {
+        "axis": "x",
+        "value": -11.79854172414714,
+        "support": 64
+      },
+      {
+        "axis": "x",
+        "value": -10.890961591520437,
+        "support": 64
+      },
+      {
+        "axis": "x",
+        "value": -19.96676291778747,
+        "support": 63
+      },
+      {
+        "axis": "x",
+        "value": -17.24402251990736,
+        "support": 63
+      },
+      {
+        "axis": "x",
+        "value": -13.613701989400546,
+        "support": 63
+      },
+      {
+        "axis": "z",
+        "value": -19.059182785160765,
+        "support": 133
+      },
+      {
+        "axis": "z",
+        "value": -19.96676291778747,
+        "support": 125
+      },
+      {
+        "axis": "z",
+        "value": -26.31982384617439,
+        "support": 121
+      },
+      {
+        "axis": "z",
+        "value": -20.874343050414172,
+        "support": 110
+      },
+      {
+        "axis": "z",
+        "value": 13.613701989400546,
+        "support": 103
+      },
+      {
+        "axis": "z",
+        "value": 19.96676291778747,
+        "support": 96
+      },
+      {
+        "axis": "z",
+        "value": -16.336442387280655,
+        "support": 93
+      },
+      {
+        "axis": "z",
+        "value": -17.24402251990736,
+        "support": 91
+      }
+    ]
+  },
+  "surfel_fusion": {
+    "iterations": 2,
+    "point_updates": 25063,
+    "residual_rms_m": [
+      0.12198309247194074,
+      0.11872167136273451
+    ]
+  },
+  "sparse_tsdf": {
+    "sampled_observations": 126375,
+    "candidate_cells": 1973,
+    "added": 1917,
+    "truncation_m": 0.8168221193640328
+  },
+  "poisson": {
+    "available": false,
+    "ran": false
+  },
+  "capture_gate": {
+    "accepted": true,
+    "strict": false,
+    "score_percent": 89.1,
+    "issues": [],
+    "metrics": {
+      "neighbor_overlap_mean": 0.7966,
+      "feature_matches_mean": 57.29,
+      "blur_score_mean": 722.08,
+      "seam_error_mean": 0.0332
+    }
+  },
+  "notes": [
+    "Health is reconstruction consistency, not photorealism.",
+    "AI-generated panoramas remain the dominant accuracy limit when geometry changes between views."
+  ]
+}

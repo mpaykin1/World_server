@@ -1,0 +1,3355 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.7",
+  "serialNumber": "urn:uuid:16192092-7599-47a2-a926-6c2201200ebf",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-08-25T01:14:29.129Z",
+    "component": {
+      "type": "application",
+      "name": "webgl-survival-hub-no-npm",
+      "version": "2.1.0"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "@emnapi/runtime",
+      "version": "1.11.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40emnapi%2Fruntime@1.11.3"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/aix-ppc64",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Faix-ppc64@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/android-arm",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Fandroid-arm@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/android-arm64",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Fandroid-arm64@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/android-x64",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Fandroid-x64@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/darwin-arm64",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Fdarwin-arm64@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/darwin-x64",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Fdarwin-x64@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/freebsd-arm64",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Ffreebsd-arm64@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/freebsd-x64",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Ffreebsd-x64@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/linux-arm",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Flinux-arm@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/linux-arm64",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Flinux-arm64@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/linux-ia32",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Flinux-ia32@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/linux-loong64",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Flinux-loong64@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/linux-mips64el",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Flinux-mips64el@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/linux-ppc64",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Flinux-ppc64@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/linux-riscv64",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Flinux-riscv64@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/linux-s390x",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Flinux-s390x@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/linux-x64",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Flinux-x64@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/netbsd-arm64",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Fnetbsd-arm64@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/netbsd-x64",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Fnetbsd-x64@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/openbsd-arm64",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Fopenbsd-arm64@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/openbsd-x64",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Fopenbsd-x64@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/openharmony-arm64",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Fopenharmony-arm64@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/sunos-x64",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Fsunos-x64@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/win32-arm64",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Fwin32-arm64@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/win32-ia32",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Fwin32-ia32@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/win32-x64",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40esbuild%2Fwin32-x64@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "@formatjs/ecma402-abstract",
+      "version": "2.3.6",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40formatjs%2Fecma402-abstract@2.3.6"
+    },
+    {
+      "type": "library",
+      "name": "@formatjs/fast-memoize",
+      "version": "2.2.7",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40formatjs%2Ffast-memoize@2.2.7"
+    },
+    {
+      "type": "library",
+      "name": "@formatjs/icu-messageformat-parser",
+      "version": "2.11.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40formatjs%2Ficu-messageformat-parser@2.11.4"
+    },
+    {
+      "type": "library",
+      "name": "@formatjs/icu-skeleton-parser",
+      "version": "1.8.16",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40formatjs%2Ficu-skeleton-parser@1.8.16"
+    },
+    {
+      "type": "library",
+      "name": "@formatjs/intl-localematcher",
+      "version": "0.6.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40formatjs%2Fintl-localematcher@0.6.2"
+    },
+    {
+      "type": "library",
+      "name": "@img/colour",
+      "version": "1.1.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fcolour@1.1.0"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-darwin-arm64",
+      "version": "0.35.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-darwin-arm64@0.35.3"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-darwin-x64",
+      "version": "0.35.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-darwin-x64@0.35.3"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-freebsd-wasm32",
+      "version": "0.35.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-freebsd-wasm32@0.35.3"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-libvips-darwin-arm64",
+      "version": "1.3.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-libvips-darwin-arm64@1.3.2"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-libvips-darwin-x64",
+      "version": "1.3.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-libvips-darwin-x64@1.3.2"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-libvips-linux-arm",
+      "version": "1.3.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-libvips-linux-arm@1.3.2"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-libvips-linux-arm64",
+      "version": "1.3.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-libvips-linux-arm64@1.3.2"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-libvips-linux-ppc64",
+      "version": "1.3.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-libvips-linux-ppc64@1.3.2"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-libvips-linux-riscv64",
+      "version": "1.3.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-libvips-linux-riscv64@1.3.2"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-libvips-linux-s390x",
+      "version": "1.3.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-libvips-linux-s390x@1.3.2"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-libvips-linux-x64",
+      "version": "1.3.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-libvips-linux-x64@1.3.2"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-libvips-linuxmusl-arm64",
+      "version": "1.3.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-libvips-linuxmusl-arm64@1.3.2"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-libvips-linuxmusl-x64",
+      "version": "1.3.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-libvips-linuxmusl-x64@1.3.2"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-linux-arm",
+      "version": "0.35.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-linux-arm@0.35.3"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-linux-arm64",
+      "version": "0.35.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-linux-arm64@0.35.3"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-linux-ppc64",
+      "version": "0.35.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-linux-ppc64@0.35.3"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-linux-riscv64",
+      "version": "0.35.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-linux-riscv64@0.35.3"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-linux-s390x",
+      "version": "0.35.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-linux-s390x@0.35.3"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-linux-x64",
+      "version": "0.35.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-linux-x64@0.35.3"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-linuxmusl-arm64",
+      "version": "0.35.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-linuxmusl-arm64@0.35.3"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-linuxmusl-x64",
+      "version": "0.35.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-linuxmusl-x64@0.35.3"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-wasm32",
+      "version": "0.35.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-wasm32@0.35.3"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-webcontainers-wasm32",
+      "version": "0.35.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-webcontainers-wasm32@0.35.3"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-win32-arm64",
+      "version": "0.35.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-win32-arm64@0.35.3"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-win32-ia32",
+      "version": "0.35.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-win32-ia32@0.35.3"
+    },
+    {
+      "type": "library",
+      "name": "@img/sharp-win32-x64",
+      "version": "0.35.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40img%2Fsharp-win32-x64@0.35.3"
+    },
+    {
+      "type": "library",
+      "name": "@inquirer/ansi",
+      "version": "2.0.7",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40inquirer%2Fansi@2.0.7"
+    },
+    {
+      "type": "library",
+      "name": "@inquirer/confirm",
+      "version": "6.2.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40inquirer%2Fconfirm@6.2.0"
+    },
+    {
+      "type": "library",
+      "name": "@inquirer/core",
+      "version": "12.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40inquirer%2Fcore@12.0.0"
+    },
+    {
+      "type": "library",
+      "name": "@inquirer/core/node_modules/cli-width",
+      "version": "4.1.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40inquirer%2Fcore%2Fnode_modules%2Fcli-width@4.1.0"
+    },
+    {
+      "type": "library",
+      "name": "@inquirer/core/node_modules/mute-stream",
+      "version": "3.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40inquirer%2Fcore%2Fnode_modules%2Fmute-stream@3.0.0"
+    },
+    {
+      "type": "library",
+      "name": "@inquirer/core/node_modules/signal-exit",
+      "version": "4.1.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40inquirer%2Fcore%2Fnode_modules%2Fsignal-exit@4.1.0"
+    },
+    {
+      "type": "library",
+      "name": "@inquirer/figures",
+      "version": "2.0.8",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40inquirer%2Ffigures@2.0.8"
+    },
+    {
+      "type": "library",
+      "name": "@inquirer/type",
+      "version": "4.0.7",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40inquirer%2Ftype@4.0.7"
+    },
+    {
+      "type": "library",
+      "name": "@lhci/cli",
+      "version": "^0.15.1",
+      "scope": "optional",
+      "bom-ref": "pkg:npm/%40lhci%2Fcli@%5E0.15.1"
+    },
+    {
+      "type": "library",
+      "name": "@lhci/cli",
+      "version": "0.15.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40lhci%2Fcli@0.15.1"
+    },
+    {
+      "type": "library",
+      "name": "@lhci/utils",
+      "version": "0.15.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40lhci%2Futils@0.15.1"
+    },
+    {
+      "type": "library",
+      "name": "@mswjs/interceptors",
+      "version": "0.41.9",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40mswjs%2Finterceptors@0.41.9"
+    },
+    {
+      "type": "library",
+      "name": "@mswjs/interceptors/node_modules/@open-draft/deferred-promise",
+      "version": "2.2.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40mswjs%2Finterceptors%2Fnode_modules%2F%40open-draft%2Fdeferred-promise@2.2.0"
+    },
+    {
+      "type": "library",
+      "name": "@open-draft/deferred-promise",
+      "version": "3.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40open-draft%2Fdeferred-promise@3.0.0"
+    },
+    {
+      "type": "library",
+      "name": "@open-draft/logger",
+      "version": "0.3.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40open-draft%2Flogger@0.3.0"
+    },
+    {
+      "type": "library",
+      "name": "@open-draft/until",
+      "version": "2.1.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40open-draft%2Funtil@2.1.0"
+    },
+    {
+      "type": "library",
+      "name": "@paulirish/trace_engine",
+      "version": "0.0.53",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40paulirish%2Ftrace_engine@0.0.53"
+    },
+    {
+      "type": "library",
+      "name": "@playwright/test",
+      "version": "^1.62.1",
+      "scope": "optional",
+      "bom-ref": "pkg:npm/%40playwright%2Ftest@%5E1.62.1"
+    },
+    {
+      "type": "library",
+      "name": "@playwright/test",
+      "version": "1.62.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40playwright%2Ftest@1.62.1"
+    },
+    {
+      "type": "library",
+      "name": "@puppeteer/browsers",
+      "version": "2.13.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40puppeteer%2Fbrowsers@2.13.2"
+    },
+    {
+      "type": "library",
+      "name": "@puppeteer/browsers/node_modules/ansi-regex",
+      "version": "5.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40puppeteer%2Fbrowsers%2Fnode_modules%2Fansi-regex@5.0.1"
+    },
+    {
+      "type": "library",
+      "name": "@puppeteer/browsers/node_modules/ansi-styles",
+      "version": "4.3.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40puppeteer%2Fbrowsers%2Fnode_modules%2Fansi-styles@4.3.0"
+    },
+    {
+      "type": "library",
+      "name": "@puppeteer/browsers/node_modules/cliui",
+      "version": "8.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40puppeteer%2Fbrowsers%2Fnode_modules%2Fcliui@8.0.1"
+    },
+    {
+      "type": "library",
+      "name": "@puppeteer/browsers/node_modules/color-convert",
+      "version": "2.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40puppeteer%2Fbrowsers%2Fnode_modules%2Fcolor-convert@2.0.1"
+    },
+    {
+      "type": "library",
+      "name": "@puppeteer/browsers/node_modules/color-name",
+      "version": "1.1.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40puppeteer%2Fbrowsers%2Fnode_modules%2Fcolor-name@1.1.4"
+    },
+    {
+      "type": "library",
+      "name": "@puppeteer/browsers/node_modules/is-fullwidth-code-point",
+      "version": "3.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40puppeteer%2Fbrowsers%2Fnode_modules%2Fis-fullwidth-code-point@3.0.0"
+    },
+    {
+      "type": "library",
+      "name": "@puppeteer/browsers/node_modules/semver",
+      "version": "7.8.5",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40puppeteer%2Fbrowsers%2Fnode_modules%2Fsemver@7.8.5"
+    },
+    {
+      "type": "library",
+      "name": "@puppeteer/browsers/node_modules/string-width",
+      "version": "4.2.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40puppeteer%2Fbrowsers%2Fnode_modules%2Fstring-width@4.2.3"
+    },
+    {
+      "type": "library",
+      "name": "@puppeteer/browsers/node_modules/strip-ansi",
+      "version": "6.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40puppeteer%2Fbrowsers%2Fnode_modules%2Fstrip-ansi@6.0.1"
+    },
+    {
+      "type": "library",
+      "name": "@puppeteer/browsers/node_modules/wrap-ansi",
+      "version": "7.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40puppeteer%2Fbrowsers%2Fnode_modules%2Fwrap-ansi@7.0.0"
+    },
+    {
+      "type": "library",
+      "name": "@puppeteer/browsers/node_modules/y18n",
+      "version": "5.0.8",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40puppeteer%2Fbrowsers%2Fnode_modules%2Fy18n@5.0.8"
+    },
+    {
+      "type": "library",
+      "name": "@puppeteer/browsers/node_modules/yargs-parser",
+      "version": "21.1.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40puppeteer%2Fbrowsers%2Fnode_modules%2Fyargs-parser@21.1.1"
+    },
+    {
+      "type": "library",
+      "name": "@puppeteer/browsers/node_modules/yargs",
+      "version": "17.7.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40puppeteer%2Fbrowsers%2Fnode_modules%2Fyargs@17.7.3"
+    },
+    {
+      "type": "library",
+      "name": "@sentry-internal/tracing",
+      "version": "7.120.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40sentry-internal%2Ftracing@7.120.4"
+    },
+    {
+      "type": "library",
+      "name": "@sentry-internal/tracing/node_modules/@sentry/core",
+      "version": "7.120.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40sentry-internal%2Ftracing%2Fnode_modules%2F%40sentry%2Fcore@7.120.4"
+    },
+    {
+      "type": "library",
+      "name": "@sentry/browser-utils",
+      "version": "10.70.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40sentry%2Fbrowser-utils@10.70.0"
+    },
+    {
+      "type": "library",
+      "name": "@sentry/browser",
+      "version": "^10.70.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40sentry%2Fbrowser@%5E10.70.0"
+    },
+    {
+      "type": "library",
+      "name": "@sentry/browser",
+      "version": "10.70.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40sentry%2Fbrowser@10.70.0"
+    },
+    {
+      "type": "library",
+      "name": "@sentry/conventions",
+      "version": "0.16.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40sentry%2Fconventions@0.16.0"
+    },
+    {
+      "type": "library",
+      "name": "@sentry/core",
+      "version": "10.70.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40sentry%2Fcore@10.70.0"
+    },
+    {
+      "type": "library",
+      "name": "@sentry/feedback",
+      "version": "10.70.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40sentry%2Ffeedback@10.70.0"
+    },
+    {
+      "type": "library",
+      "name": "@sentry/integrations",
+      "version": "7.120.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40sentry%2Fintegrations@7.120.4"
+    },
+    {
+      "type": "library",
+      "name": "@sentry/integrations/node_modules/@sentry/core",
+      "version": "7.120.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40sentry%2Fintegrations%2Fnode_modules%2F%40sentry%2Fcore@7.120.4"
+    },
+    {
+      "type": "library",
+      "name": "@sentry/node",
+      "version": "7.120.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40sentry%2Fnode@7.120.4"
+    },
+    {
+      "type": "library",
+      "name": "@sentry/node/node_modules/@sentry/core",
+      "version": "7.120.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40sentry%2Fnode%2Fnode_modules%2F%40sentry%2Fcore@7.120.4"
+    },
+    {
+      "type": "library",
+      "name": "@sentry/replay-canvas",
+      "version": "10.70.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40sentry%2Freplay-canvas@10.70.0"
+    },
+    {
+      "type": "library",
+      "name": "@sentry/replay",
+      "version": "10.70.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40sentry%2Freplay@10.70.0"
+    },
+    {
+      "type": "library",
+      "name": "@sentry/types",
+      "version": "7.120.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40sentry%2Ftypes@7.120.4"
+    },
+    {
+      "type": "library",
+      "name": "@sentry/utils",
+      "version": "7.120.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40sentry%2Futils@7.120.4"
+    },
+    {
+      "type": "library",
+      "name": "@supabase/auth-js",
+      "version": "2.112.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40supabase%2Fauth-js@2.112.3"
+    },
+    {
+      "type": "library",
+      "name": "@supabase/functions-js",
+      "version": "2.112.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40supabase%2Ffunctions-js@2.112.3"
+    },
+    {
+      "type": "library",
+      "name": "@supabase/phoenix",
+      "version": "0.4.5",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40supabase%2Fphoenix@0.4.5"
+    },
+    {
+      "type": "library",
+      "name": "@supabase/postgrest-js",
+      "version": "2.112.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40supabase%2Fpostgrest-js@2.112.3"
+    },
+    {
+      "type": "library",
+      "name": "@supabase/realtime-js",
+      "version": "2.112.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40supabase%2Frealtime-js@2.112.3"
+    },
+    {
+      "type": "library",
+      "name": "@supabase/storage-js",
+      "version": "2.112.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40supabase%2Fstorage-js@2.112.3"
+    },
+    {
+      "type": "library",
+      "name": "@supabase/supabase-js",
+      "version": "2.112.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40supabase%2Fsupabase-js@2.112.3"
+    },
+    {
+      "type": "library",
+      "name": "@tootallnate/quickjs-emscripten",
+      "version": "0.23.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40tootallnate%2Fquickjs-emscripten@0.23.0"
+    },
+    {
+      "type": "library",
+      "name": "@types/node",
+      "version": "26.2.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40types%2Fnode@26.2.0"
+    },
+    {
+      "type": "library",
+      "name": "@types/set-cookie-parser",
+      "version": "2.4.10",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40types%2Fset-cookie-parser@2.4.10"
+    },
+    {
+      "type": "library",
+      "name": "@types/statuses",
+      "version": "2.0.6",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40types%2Fstatuses@2.0.6"
+    },
+    {
+      "type": "library",
+      "name": "@types/yauzl",
+      "version": "2.10.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40types%2Fyauzl@2.10.3"
+    },
+    {
+      "type": "library",
+      "name": "@vercel/oidc",
+      "version": "3.2.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40vercel%2Foidc@3.2.0"
+    },
+    {
+      "type": "library",
+      "name": "@vercel/sandbox",
+      "version": "^3.1.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40vercel%2Fsandbox@%5E3.1.0"
+    },
+    {
+      "type": "library",
+      "name": "@vercel/sandbox",
+      "version": "3.1.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40vercel%2Fsandbox@3.1.0"
+    },
+    {
+      "type": "library",
+      "name": "@workflow/serde",
+      "version": "4.1.0-beta.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40workflow%2Fserde@4.1.0-beta.2"
+    },
+    {
+      "type": "library",
+      "name": "accepts",
+      "version": "1.3.8",
+      "scope": "required",
+      "bom-ref": "pkg:npm/accepts@1.3.8"
+    },
+    {
+      "type": "library",
+      "name": "accepts/node_modules/negotiator",
+      "version": "0.6.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/accepts%2Fnode_modules%2Fnegotiator@0.6.3"
+    },
+    {
+      "type": "library",
+      "name": "agent-base",
+      "version": "7.1.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/agent-base@7.1.4"
+    },
+    {
+      "type": "library",
+      "name": "ansi-colors",
+      "version": "4.1.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/ansi-colors@4.1.3"
+    },
+    {
+      "type": "library",
+      "name": "ansi-escapes",
+      "version": "3.2.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/ansi-escapes@3.2.0"
+    },
+    {
+      "type": "library",
+      "name": "ansi-regex",
+      "version": "4.1.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/ansi-regex@4.1.1"
+    },
+    {
+      "type": "library",
+      "name": "ansi-styles",
+      "version": "3.2.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/ansi-styles@3.2.1"
+    },
+    {
+      "type": "library",
+      "name": "argparse",
+      "version": "1.0.10",
+      "scope": "required",
+      "bom-ref": "pkg:npm/argparse@1.0.10"
+    },
+    {
+      "type": "library",
+      "name": "array-flatten",
+      "version": "1.1.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/array-flatten@1.1.1"
+    },
+    {
+      "type": "library",
+      "name": "ast-types",
+      "version": "0.13.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/ast-types@0.13.4"
+    },
+    {
+      "type": "library",
+      "name": "async-retry",
+      "version": "1.3.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/async-retry@1.3.3"
+    },
+    {
+      "type": "library",
+      "name": "axe-core",
+      "version": "4.13.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/axe-core@4.13.0"
+    },
+    {
+      "type": "library",
+      "name": "b4a",
+      "version": "1.8.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/b4a@1.8.1"
+    },
+    {
+      "type": "library",
+      "name": "balanced-match",
+      "version": "1.0.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/balanced-match@1.0.2"
+    },
+    {
+      "type": "library",
+      "name": "bare-events",
+      "version": "2.9.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/bare-events@2.9.1"
+    },
+    {
+      "type": "library",
+      "name": "bare-fs",
+      "version": "4.8.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/bare-fs@4.8.0"
+    },
+    {
+      "type": "library",
+      "name": "bare-path",
+      "version": "3.1.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/bare-path@3.1.1"
+    },
+    {
+      "type": "library",
+      "name": "bare-stream",
+      "version": "2.13.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/bare-stream@2.13.3"
+    },
+    {
+      "type": "library",
+      "name": "bare-url",
+      "version": "2.5.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/bare-url@2.5.2"
+    },
+    {
+      "type": "library",
+      "name": "basic-ftp",
+      "version": "5.3.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/basic-ftp@5.3.1"
+    },
+    {
+      "type": "library",
+      "name": "body-parser",
+      "version": "1.20.6",
+      "scope": "required",
+      "bom-ref": "pkg:npm/body-parser@1.20.6"
+    },
+    {
+      "type": "library",
+      "name": "body-parser/node_modules/debug",
+      "version": "2.6.9",
+      "scope": "required",
+      "bom-ref": "pkg:npm/body-parser%2Fnode_modules%2Fdebug@2.6.9"
+    },
+    {
+      "type": "library",
+      "name": "body-parser/node_modules/ms",
+      "version": "2.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/body-parser%2Fnode_modules%2Fms@2.0.0"
+    },
+    {
+      "type": "library",
+      "name": "brace-expansion",
+      "version": "1.1.18",
+      "scope": "required",
+      "bom-ref": "pkg:npm/brace-expansion@1.1.18"
+    },
+    {
+      "type": "library",
+      "name": "buffer-crc32",
+      "version": "0.2.13",
+      "scope": "required",
+      "bom-ref": "pkg:npm/buffer-crc32@0.2.13"
+    },
+    {
+      "type": "library",
+      "name": "bytes",
+      "version": "3.1.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/bytes@3.1.2"
+    },
+    {
+      "type": "library",
+      "name": "call-bind-apply-helpers",
+      "version": "1.0.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/call-bind-apply-helpers@1.0.2"
+    },
+    {
+      "type": "library",
+      "name": "call-bound",
+      "version": "1.0.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/call-bound@1.0.4"
+    },
+    {
+      "type": "library",
+      "name": "camelcase",
+      "version": "5.3.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/camelcase@5.3.1"
+    },
+    {
+      "type": "library",
+      "name": "cannon-es",
+      "version": "0.20.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/cannon-es@0.20.0"
+    },
+    {
+      "type": "library",
+      "name": "chalk",
+      "version": "2.4.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/chalk@2.4.2"
+    },
+    {
+      "type": "library",
+      "name": "chardet",
+      "version": "0.7.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/chardet@0.7.0"
+    },
+    {
+      "type": "library",
+      "name": "chrome-launcher",
+      "version": "0.13.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/chrome-launcher@0.13.4"
+    },
+    {
+      "type": "library",
+      "name": "chromium-bidi",
+      "version": "14.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/chromium-bidi@14.0.0"
+    },
+    {
+      "type": "library",
+      "name": "chromium-bidi/node_modules/zod",
+      "version": "3.25.76",
+      "scope": "required",
+      "bom-ref": "pkg:npm/chromium-bidi%2Fnode_modules%2Fzod@3.25.76"
+    },
+    {
+      "type": "library",
+      "name": "cli-cursor",
+      "version": "2.1.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/cli-cursor@2.1.0"
+    },
+    {
+      "type": "library",
+      "name": "cli-width",
+      "version": "2.2.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/cli-width@2.2.1"
+    },
+    {
+      "type": "library",
+      "name": "cliui",
+      "version": "6.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/cliui@6.0.0"
+    },
+    {
+      "type": "library",
+      "name": "cliui/node_modules/ansi-regex",
+      "version": "5.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/cliui%2Fnode_modules%2Fansi-regex@5.0.1"
+    },
+    {
+      "type": "library",
+      "name": "cliui/node_modules/is-fullwidth-code-point",
+      "version": "3.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/cliui%2Fnode_modules%2Fis-fullwidth-code-point@3.0.0"
+    },
+    {
+      "type": "library",
+      "name": "cliui/node_modules/string-width",
+      "version": "4.2.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/cliui%2Fnode_modules%2Fstring-width@4.2.3"
+    },
+    {
+      "type": "library",
+      "name": "cliui/node_modules/strip-ansi",
+      "version": "6.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/cliui%2Fnode_modules%2Fstrip-ansi@6.0.1"
+    },
+    {
+      "type": "library",
+      "name": "color-convert",
+      "version": "1.9.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/color-convert@1.9.3"
+    },
+    {
+      "type": "library",
+      "name": "color-name",
+      "version": "1.1.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/color-name@1.1.3"
+    },
+    {
+      "type": "library",
+      "name": "comlink",
+      "version": "4.4.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/comlink@4.4.2"
+    },
+    {
+      "type": "library",
+      "name": "compressible",
+      "version": "2.0.18",
+      "scope": "required",
+      "bom-ref": "pkg:npm/compressible@2.0.18"
+    },
+    {
+      "type": "library",
+      "name": "compression",
+      "version": "1.8.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/compression@1.8.1"
+    },
+    {
+      "type": "library",
+      "name": "compression/node_modules/debug",
+      "version": "2.6.9",
+      "scope": "required",
+      "bom-ref": "pkg:npm/compression%2Fnode_modules%2Fdebug@2.6.9"
+    },
+    {
+      "type": "library",
+      "name": "compression/node_modules/ms",
+      "version": "2.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/compression%2Fnode_modules%2Fms@2.0.0"
+    },
+    {
+      "type": "library",
+      "name": "concat-map",
+      "version": "0.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/concat-map@0.0.1"
+    },
+    {
+      "type": "library",
+      "name": "configstore",
+      "version": "5.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/configstore@5.0.1"
+    },
+    {
+      "type": "library",
+      "name": "content-disposition",
+      "version": "0.5.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/content-disposition@0.5.4"
+    },
+    {
+      "type": "library",
+      "name": "content-type",
+      "version": "1.0.5",
+      "scope": "required",
+      "bom-ref": "pkg:npm/content-type@1.0.5"
+    },
+    {
+      "type": "library",
+      "name": "cookie-signature",
+      "version": "1.0.7",
+      "scope": "required",
+      "bom-ref": "pkg:npm/cookie-signature@1.0.7"
+    },
+    {
+      "type": "library",
+      "name": "cookie",
+      "version": "0.7.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/cookie@0.7.2"
+    },
+    {
+      "type": "library",
+      "name": "crypto-random-string",
+      "version": "2.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/crypto-random-string@2.0.0"
+    },
+    {
+      "type": "library",
+      "name": "csp_evaluator",
+      "version": "1.1.5",
+      "scope": "required",
+      "bom-ref": "pkg:npm/csp_evaluator@1.1.5"
+    },
+    {
+      "type": "library",
+      "name": "data-uri-to-buffer",
+      "version": "6.0.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/data-uri-to-buffer@6.0.2"
+    },
+    {
+      "type": "library",
+      "name": "debug",
+      "version": "4.4.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/debug@4.4.3"
+    },
+    {
+      "type": "library",
+      "name": "decamelize",
+      "version": "1.2.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/decamelize@1.2.0"
+    },
+    {
+      "type": "library",
+      "name": "decimal.js",
+      "version": "10.6.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/decimal.js@10.6.0"
+    },
+    {
+      "type": "library",
+      "name": "define-lazy-prop",
+      "version": "2.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/define-lazy-prop@2.0.0"
+    },
+    {
+      "type": "library",
+      "name": "degenerator",
+      "version": "5.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/degenerator@5.0.1"
+    },
+    {
+      "type": "library",
+      "name": "depd",
+      "version": "2.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/depd@2.0.0"
+    },
+    {
+      "type": "library",
+      "name": "destroy",
+      "version": "1.2.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/destroy@1.2.0"
+    },
+    {
+      "type": "library",
+      "name": "detect-libc",
+      "version": "2.1.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/detect-libc@2.1.2"
+    },
+    {
+      "type": "library",
+      "name": "devtools-protocol",
+      "version": "0.0.1467305",
+      "scope": "required",
+      "bom-ref": "pkg:npm/devtools-protocol@0.0.1467305"
+    },
+    {
+      "type": "library",
+      "name": "dot-prop",
+      "version": "5.3.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/dot-prop@5.3.0"
+    },
+    {
+      "type": "library",
+      "name": "dunder-proto",
+      "version": "1.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/dunder-proto@1.0.1"
+    },
+    {
+      "type": "library",
+      "name": "ee-first",
+      "version": "1.1.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/ee-first@1.1.1"
+    },
+    {
+      "type": "library",
+      "name": "emoji-regex",
+      "version": "8.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/emoji-regex@8.0.0"
+    },
+    {
+      "type": "library",
+      "name": "encodeurl",
+      "version": "2.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/encodeurl@2.0.0"
+    },
+    {
+      "type": "library",
+      "name": "end-of-stream",
+      "version": "1.4.5",
+      "scope": "required",
+      "bom-ref": "pkg:npm/end-of-stream@1.4.5"
+    },
+    {
+      "type": "library",
+      "name": "enquirer",
+      "version": "2.4.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/enquirer@2.4.1"
+    },
+    {
+      "type": "library",
+      "name": "enquirer/node_modules/ansi-regex",
+      "version": "5.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/enquirer%2Fnode_modules%2Fansi-regex@5.0.1"
+    },
+    {
+      "type": "library",
+      "name": "enquirer/node_modules/strip-ansi",
+      "version": "6.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/enquirer%2Fnode_modules%2Fstrip-ansi@6.0.1"
+    },
+    {
+      "type": "library",
+      "name": "es-define-property",
+      "version": "1.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/es-define-property@1.0.1"
+    },
+    {
+      "type": "library",
+      "name": "es-errors",
+      "version": "1.3.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/es-errors@1.3.0"
+    },
+    {
+      "type": "library",
+      "name": "es-object-atoms",
+      "version": "1.1.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/es-object-atoms@1.1.2"
+    },
+    {
+      "type": "library",
+      "name": "esbuild",
+      "version": "^0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/esbuild@%5E0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "esbuild",
+      "version": "0.28.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/esbuild@0.28.2"
+    },
+    {
+      "type": "library",
+      "name": "escalade",
+      "version": "3.2.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/escalade@3.2.0"
+    },
+    {
+      "type": "library",
+      "name": "escape-html",
+      "version": "1.0.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/escape-html@1.0.3"
+    },
+    {
+      "type": "library",
+      "name": "escape-string-regexp",
+      "version": "1.0.5",
+      "scope": "required",
+      "bom-ref": "pkg:npm/escape-string-regexp@1.0.5"
+    },
+    {
+      "type": "library",
+      "name": "escodegen",
+      "version": "2.1.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/escodegen@2.1.0"
+    },
+    {
+      "type": "library",
+      "name": "esprima",
+      "version": "4.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/esprima@4.0.1"
+    },
+    {
+      "type": "library",
+      "name": "estraverse",
+      "version": "5.3.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/estraverse@5.3.0"
+    },
+    {
+      "type": "library",
+      "name": "esutils",
+      "version": "2.0.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/esutils@2.0.3"
+    },
+    {
+      "type": "library",
+      "name": "etag",
+      "version": "1.8.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/etag@1.8.1"
+    },
+    {
+      "type": "library",
+      "name": "events-universal",
+      "version": "1.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/events-universal@1.0.1"
+    },
+    {
+      "type": "library",
+      "name": "express",
+      "version": "4.22.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/express@4.22.2"
+    },
+    {
+      "type": "library",
+      "name": "express/node_modules/debug",
+      "version": "2.6.9",
+      "scope": "required",
+      "bom-ref": "pkg:npm/express%2Fnode_modules%2Fdebug@2.6.9"
+    },
+    {
+      "type": "library",
+      "name": "express/node_modules/ms",
+      "version": "2.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/express%2Fnode_modules%2Fms@2.0.0"
+    },
+    {
+      "type": "library",
+      "name": "external-editor",
+      "version": "3.1.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/external-editor@3.1.0"
+    },
+    {
+      "type": "library",
+      "name": "external-editor/node_modules/tmp",
+      "version": "0.0.33",
+      "scope": "required",
+      "bom-ref": "pkg:npm/external-editor%2Fnode_modules%2Ftmp@0.0.33"
+    },
+    {
+      "type": "library",
+      "name": "extract-zip",
+      "version": "2.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/extract-zip@2.0.1"
+    },
+    {
+      "type": "library",
+      "name": "fast-fifo",
+      "version": "1.3.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/fast-fifo@1.3.2"
+    },
+    {
+      "type": "library",
+      "name": "fast-string-truncated-width",
+      "version": "3.0.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/fast-string-truncated-width@3.0.3"
+    },
+    {
+      "type": "library",
+      "name": "fast-string-width",
+      "version": "3.0.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/fast-string-width@3.0.2"
+    },
+    {
+      "type": "library",
+      "name": "fast-wrap-ansi",
+      "version": "0.2.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/fast-wrap-ansi@0.2.2"
+    },
+    {
+      "type": "library",
+      "name": "fd-slicer",
+      "version": "1.1.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/fd-slicer@1.1.0"
+    },
+    {
+      "type": "library",
+      "name": "figures",
+      "version": "2.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/figures@2.0.0"
+    },
+    {
+      "type": "library",
+      "name": "finalhandler",
+      "version": "1.3.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/finalhandler@1.3.2"
+    },
+    {
+      "type": "library",
+      "name": "finalhandler/node_modules/debug",
+      "version": "2.6.9",
+      "scope": "required",
+      "bom-ref": "pkg:npm/finalhandler%2Fnode_modules%2Fdebug@2.6.9"
+    },
+    {
+      "type": "library",
+      "name": "finalhandler/node_modules/ms",
+      "version": "2.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/finalhandler%2Fnode_modules%2Fms@2.0.0"
+    },
+    {
+      "type": "library",
+      "name": "find-up",
+      "version": "4.1.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/find-up@4.1.0"
+    },
+    {
+      "type": "library",
+      "name": "forwarded",
+      "version": "0.2.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/forwarded@0.2.0"
+    },
+    {
+      "type": "library",
+      "name": "fresh",
+      "version": "0.5.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/fresh@0.5.2"
+    },
+    {
+      "type": "library",
+      "name": "fs.realpath",
+      "version": "1.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/fs.realpath@1.0.0"
+    },
+    {
+      "type": "library",
+      "name": "fsevents",
+      "version": "2.3.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/fsevents@2.3.2"
+    },
+    {
+      "type": "library",
+      "name": "function-bind",
+      "version": "1.1.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/function-bind@1.1.2"
+    },
+    {
+      "type": "library",
+      "name": "get-caller-file",
+      "version": "2.0.5",
+      "scope": "required",
+      "bom-ref": "pkg:npm/get-caller-file@2.0.5"
+    },
+    {
+      "type": "library",
+      "name": "get-intrinsic",
+      "version": "1.3.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/get-intrinsic@1.3.0"
+    },
+    {
+      "type": "library",
+      "name": "get-proto",
+      "version": "1.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/get-proto@1.0.1"
+    },
+    {
+      "type": "library",
+      "name": "get-stream",
+      "version": "5.2.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/get-stream@5.2.0"
+    },
+    {
+      "type": "library",
+      "name": "get-uri",
+      "version": "6.0.5",
+      "scope": "required",
+      "bom-ref": "pkg:npm/get-uri@6.0.5"
+    },
+    {
+      "type": "library",
+      "name": "glob",
+      "version": "7.2.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/glob@7.2.3"
+    },
+    {
+      "type": "library",
+      "name": "gopd",
+      "version": "1.2.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/gopd@1.2.0"
+    },
+    {
+      "type": "library",
+      "name": "graceful-fs",
+      "version": "4.2.11",
+      "scope": "required",
+      "bom-ref": "pkg:npm/graceful-fs@4.2.11"
+    },
+    {
+      "type": "library",
+      "name": "graphql",
+      "version": "16.14.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/graphql@16.14.2"
+    },
+    {
+      "type": "library",
+      "name": "has-flag",
+      "version": "3.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/has-flag@3.0.0"
+    },
+    {
+      "type": "library",
+      "name": "has-symbols",
+      "version": "1.1.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/has-symbols@1.1.0"
+    },
+    {
+      "type": "library",
+      "name": "hasown",
+      "version": "2.0.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/hasown@2.0.4"
+    },
+    {
+      "type": "library",
+      "name": "headers-polyfill",
+      "version": "5.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/headers-polyfill@5.0.1"
+    },
+    {
+      "type": "library",
+      "name": "http-errors",
+      "version": "2.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/http-errors@2.0.1"
+    },
+    {
+      "type": "library",
+      "name": "http-link-header",
+      "version": "1.1.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/http-link-header@1.1.4"
+    },
+    {
+      "type": "library",
+      "name": "http-proxy-agent",
+      "version": "7.0.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/http-proxy-agent@7.0.2"
+    },
+    {
+      "type": "library",
+      "name": "https-proxy-agent",
+      "version": "7.0.6",
+      "scope": "required",
+      "bom-ref": "pkg:npm/https-proxy-agent@7.0.6"
+    },
+    {
+      "type": "library",
+      "name": "iceberg-js",
+      "version": "0.8.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/iceberg-js@0.8.1"
+    },
+    {
+      "type": "library",
+      "name": "iconv-lite",
+      "version": "0.4.24",
+      "scope": "required",
+      "bom-ref": "pkg:npm/iconv-lite@0.4.24"
+    },
+    {
+      "type": "library",
+      "name": "idb-keyval",
+      "version": "6.3.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/idb-keyval@6.3.0"
+    },
+    {
+      "type": "library",
+      "name": "image-ssim",
+      "version": "0.2.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/image-ssim@0.2.0"
+    },
+    {
+      "type": "library",
+      "name": "immediate",
+      "version": "3.0.6",
+      "scope": "required",
+      "bom-ref": "pkg:npm/immediate@3.0.6"
+    },
+    {
+      "type": "library",
+      "name": "imurmurhash",
+      "version": "0.1.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/imurmurhash@0.1.4"
+    },
+    {
+      "type": "library",
+      "name": "inflight",
+      "version": "1.0.6",
+      "scope": "required",
+      "bom-ref": "pkg:npm/inflight@1.0.6"
+    },
+    {
+      "type": "library",
+      "name": "inherits",
+      "version": "2.0.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/inherits@2.0.4"
+    },
+    {
+      "type": "library",
+      "name": "inquirer",
+      "version": "6.5.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/inquirer@6.5.2"
+    },
+    {
+      "type": "library",
+      "name": "intl-messageformat",
+      "version": "10.7.18",
+      "scope": "required",
+      "bom-ref": "pkg:npm/intl-messageformat@10.7.18"
+    },
+    {
+      "type": "library",
+      "name": "ip-address",
+      "version": "10.5.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/ip-address@10.5.0"
+    },
+    {
+      "type": "library",
+      "name": "ipaddr.js",
+      "version": "1.9.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/ipaddr.js@1.9.1"
+    },
+    {
+      "type": "library",
+      "name": "is-docker",
+      "version": "2.2.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/is-docker@2.2.1"
+    },
+    {
+      "type": "library",
+      "name": "is-fullwidth-code-point",
+      "version": "2.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/is-fullwidth-code-point@2.0.0"
+    },
+    {
+      "type": "library",
+      "name": "is-node-process",
+      "version": "1.2.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/is-node-process@1.2.0"
+    },
+    {
+      "type": "library",
+      "name": "is-obj",
+      "version": "2.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/is-obj@2.0.0"
+    },
+    {
+      "type": "library",
+      "name": "is-typedarray",
+      "version": "1.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/is-typedarray@1.0.0"
+    },
+    {
+      "type": "library",
+      "name": "is-wsl",
+      "version": "2.2.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/is-wsl@2.2.0"
+    },
+    {
+      "type": "library",
+      "name": "isomorphic-fetch",
+      "version": "3.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/isomorphic-fetch@3.0.0"
+    },
+    {
+      "type": "library",
+      "name": "jose",
+      "version": "6.2.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/jose@6.2.3"
+    },
+    {
+      "type": "library",
+      "name": "jpeg-js",
+      "version": "0.4.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/jpeg-js@0.4.4"
+    },
+    {
+      "type": "library",
+      "name": "js-library-detector",
+      "version": "6.7.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/js-library-detector@6.7.0"
+    },
+    {
+      "type": "library",
+      "name": "js-yaml",
+      "version": "3.15.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/js-yaml@3.15.1"
+    },
+    {
+      "type": "library",
+      "name": "jsonlines",
+      "version": "0.1.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/jsonlines@0.1.1"
+    },
+    {
+      "type": "library",
+      "name": "legacy-javascript",
+      "version": "0.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/legacy-javascript@0.0.1"
+    },
+    {
+      "type": "library",
+      "name": "lie",
+      "version": "3.1.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lie@3.1.1"
+    },
+    {
+      "type": "library",
+      "name": "lighthouse-logger",
+      "version": "1.2.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lighthouse-logger@1.2.0"
+    },
+    {
+      "type": "library",
+      "name": "lighthouse-logger/node_modules/debug",
+      "version": "2.6.9",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lighthouse-logger%2Fnode_modules%2Fdebug@2.6.9"
+    },
+    {
+      "type": "library",
+      "name": "lighthouse-logger/node_modules/ms",
+      "version": "2.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lighthouse-logger%2Fnode_modules%2Fms@2.0.0"
+    },
+    {
+      "type": "library",
+      "name": "lighthouse-stack-packs",
+      "version": "1.12.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lighthouse-stack-packs@1.12.2"
+    },
+    {
+      "type": "library",
+      "name": "lighthouse",
+      "version": "12.6.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lighthouse@12.6.1"
+    },
+    {
+      "type": "library",
+      "name": "lighthouse/node_modules/ansi-regex",
+      "version": "5.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lighthouse%2Fnode_modules%2Fansi-regex@5.0.1"
+    },
+    {
+      "type": "library",
+      "name": "lighthouse/node_modules/ansi-styles",
+      "version": "4.3.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lighthouse%2Fnode_modules%2Fansi-styles@4.3.0"
+    },
+    {
+      "type": "library",
+      "name": "lighthouse/node_modules/chrome-launcher",
+      "version": "1.2.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lighthouse%2Fnode_modules%2Fchrome-launcher@1.2.1"
+    },
+    {
+      "type": "library",
+      "name": "lighthouse/node_modules/cliui",
+      "version": "8.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lighthouse%2Fnode_modules%2Fcliui@8.0.1"
+    },
+    {
+      "type": "library",
+      "name": "lighthouse/node_modules/color-convert",
+      "version": "2.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lighthouse%2Fnode_modules%2Fcolor-convert@2.0.1"
+    },
+    {
+      "type": "library",
+      "name": "lighthouse/node_modules/color-name",
+      "version": "1.1.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lighthouse%2Fnode_modules%2Fcolor-name@1.1.4"
+    },
+    {
+      "type": "library",
+      "name": "lighthouse/node_modules/escape-string-regexp",
+      "version": "4.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lighthouse%2Fnode_modules%2Fescape-string-regexp@4.0.0"
+    },
+    {
+      "type": "library",
+      "name": "lighthouse/node_modules/is-fullwidth-code-point",
+      "version": "3.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lighthouse%2Fnode_modules%2Fis-fullwidth-code-point@3.0.0"
+    },
+    {
+      "type": "library",
+      "name": "lighthouse/node_modules/lighthouse-logger",
+      "version": "2.0.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lighthouse%2Fnode_modules%2Flighthouse-logger@2.0.2"
+    },
+    {
+      "type": "library",
+      "name": "lighthouse/node_modules/open",
+      "version": "8.4.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lighthouse%2Fnode_modules%2Fopen@8.4.2"
+    },
+    {
+      "type": "library",
+      "name": "lighthouse/node_modules/string-width",
+      "version": "4.2.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lighthouse%2Fnode_modules%2Fstring-width@4.2.3"
+    },
+    {
+      "type": "library",
+      "name": "lighthouse/node_modules/strip-ansi",
+      "version": "6.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lighthouse%2Fnode_modules%2Fstrip-ansi@6.0.1"
+    },
+    {
+      "type": "library",
+      "name": "lighthouse/node_modules/wrap-ansi",
+      "version": "7.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lighthouse%2Fnode_modules%2Fwrap-ansi@7.0.0"
+    },
+    {
+      "type": "library",
+      "name": "lighthouse/node_modules/y18n",
+      "version": "5.0.8",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lighthouse%2Fnode_modules%2Fy18n@5.0.8"
+    },
+    {
+      "type": "library",
+      "name": "lighthouse/node_modules/yargs-parser",
+      "version": "21.1.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lighthouse%2Fnode_modules%2Fyargs-parser@21.1.1"
+    },
+    {
+      "type": "library",
+      "name": "lighthouse/node_modules/yargs",
+      "version": "17.7.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lighthouse%2Fnode_modules%2Fyargs@17.7.3"
+    },
+    {
+      "type": "library",
+      "name": "localforage",
+      "version": "1.10.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/localforage@1.10.0"
+    },
+    {
+      "type": "library",
+      "name": "locate-path",
+      "version": "5.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/locate-path@5.0.0"
+    },
+    {
+      "type": "library",
+      "name": "lodash-es",
+      "version": "4.18.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lodash-es@4.18.1"
+    },
+    {
+      "type": "library",
+      "name": "lodash",
+      "version": "4.18.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lodash@4.18.1"
+    },
+    {
+      "type": "library",
+      "name": "lookup-closest-locale",
+      "version": "6.2.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lookup-closest-locale@6.2.0"
+    },
+    {
+      "type": "library",
+      "name": "lru-cache",
+      "version": "10.4.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/lru-cache@10.4.3"
+    },
+    {
+      "type": "library",
+      "name": "make-dir",
+      "version": "3.1.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/make-dir@3.1.0"
+    },
+    {
+      "type": "library",
+      "name": "make-dir/node_modules/semver",
+      "version": "6.3.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/make-dir%2Fnode_modules%2Fsemver@6.3.1"
+    },
+    {
+      "type": "library",
+      "name": "marky",
+      "version": "1.3.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/marky@1.3.0"
+    },
+    {
+      "type": "library",
+      "name": "math-intrinsics",
+      "version": "1.1.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/math-intrinsics@1.1.0"
+    },
+    {
+      "type": "library",
+      "name": "media-typer",
+      "version": "0.3.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/media-typer@0.3.0"
+    },
+    {
+      "type": "library",
+      "name": "merge-descriptors",
+      "version": "1.0.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/merge-descriptors@1.0.3"
+    },
+    {
+      "type": "library",
+      "name": "metaviewport-parser",
+      "version": "0.3.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/metaviewport-parser@0.3.0"
+    },
+    {
+      "type": "library",
+      "name": "methods",
+      "version": "1.1.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/methods@1.1.2"
+    },
+    {
+      "type": "library",
+      "name": "mime-db",
+      "version": "1.54.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/mime-db@1.54.0"
+    },
+    {
+      "type": "library",
+      "name": "mime-types",
+      "version": "2.1.35",
+      "scope": "required",
+      "bom-ref": "pkg:npm/mime-types@2.1.35"
+    },
+    {
+      "type": "library",
+      "name": "mime-types/node_modules/mime-db",
+      "version": "1.52.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/mime-types%2Fnode_modules%2Fmime-db@1.52.0"
+    },
+    {
+      "type": "library",
+      "name": "mime",
+      "version": "1.6.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/mime@1.6.0"
+    },
+    {
+      "type": "library",
+      "name": "mimic-fn",
+      "version": "1.2.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/mimic-fn@1.2.0"
+    },
+    {
+      "type": "library",
+      "name": "minimatch",
+      "version": "3.1.5",
+      "scope": "required",
+      "bom-ref": "pkg:npm/minimatch@3.1.5"
+    },
+    {
+      "type": "library",
+      "name": "minimist",
+      "version": "1.2.8",
+      "scope": "required",
+      "bom-ref": "pkg:npm/minimist@1.2.8"
+    },
+    {
+      "type": "library",
+      "name": "mitt",
+      "version": "3.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/mitt@3.0.1"
+    },
+    {
+      "type": "library",
+      "name": "mkdirp",
+      "version": "0.5.6",
+      "scope": "required",
+      "bom-ref": "pkg:npm/mkdirp@0.5.6"
+    },
+    {
+      "type": "library",
+      "name": "ms",
+      "version": "2.1.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/ms@2.1.3"
+    },
+    {
+      "type": "library",
+      "name": "msw",
+      "version": "2.15.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/msw@2.15.0"
+    },
+    {
+      "type": "library",
+      "name": "msw/node_modules/ansi-regex",
+      "version": "5.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/msw%2Fnode_modules%2Fansi-regex@5.0.1"
+    },
+    {
+      "type": "library",
+      "name": "msw/node_modules/ansi-styles",
+      "version": "4.3.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/msw%2Fnode_modules%2Fansi-styles@4.3.0"
+    },
+    {
+      "type": "library",
+      "name": "msw/node_modules/cliui",
+      "version": "8.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/msw%2Fnode_modules%2Fcliui@8.0.1"
+    },
+    {
+      "type": "library",
+      "name": "msw/node_modules/color-convert",
+      "version": "2.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/msw%2Fnode_modules%2Fcolor-convert@2.0.1"
+    },
+    {
+      "type": "library",
+      "name": "msw/node_modules/color-name",
+      "version": "1.1.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/msw%2Fnode_modules%2Fcolor-name@1.1.4"
+    },
+    {
+      "type": "library",
+      "name": "msw/node_modules/cookie",
+      "version": "1.1.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/msw%2Fnode_modules%2Fcookie@1.1.1"
+    },
+    {
+      "type": "library",
+      "name": "msw/node_modules/is-fullwidth-code-point",
+      "version": "3.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/msw%2Fnode_modules%2Fis-fullwidth-code-point@3.0.0"
+    },
+    {
+      "type": "library",
+      "name": "msw/node_modules/path-to-regexp",
+      "version": "6.3.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/msw%2Fnode_modules%2Fpath-to-regexp@6.3.0"
+    },
+    {
+      "type": "library",
+      "name": "msw/node_modules/string-width",
+      "version": "4.2.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/msw%2Fnode_modules%2Fstring-width@4.2.3"
+    },
+    {
+      "type": "library",
+      "name": "msw/node_modules/strip-ansi",
+      "version": "6.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/msw%2Fnode_modules%2Fstrip-ansi@6.0.1"
+    },
+    {
+      "type": "library",
+      "name": "msw/node_modules/wrap-ansi",
+      "version": "7.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/msw%2Fnode_modules%2Fwrap-ansi@7.0.0"
+    },
+    {
+      "type": "library",
+      "name": "msw/node_modules/y18n",
+      "version": "5.0.8",
+      "scope": "required",
+      "bom-ref": "pkg:npm/msw%2Fnode_modules%2Fy18n@5.0.8"
+    },
+    {
+      "type": "library",
+      "name": "msw/node_modules/yargs-parser",
+      "version": "21.1.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/msw%2Fnode_modules%2Fyargs-parser@21.1.1"
+    },
+    {
+      "type": "library",
+      "name": "msw/node_modules/yargs",
+      "version": "17.7.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/msw%2Fnode_modules%2Fyargs@17.7.3"
+    },
+    {
+      "type": "library",
+      "name": "mute-stream",
+      "version": "0.0.7",
+      "scope": "required",
+      "bom-ref": "pkg:npm/mute-stream@0.0.7"
+    },
+    {
+      "type": "library",
+      "name": "negotiator",
+      "version": "0.6.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/negotiator@0.6.4"
+    },
+    {
+      "type": "library",
+      "name": "netmask",
+      "version": "2.1.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/netmask@2.1.1"
+    },
+    {
+      "type": "library",
+      "name": "node-fetch",
+      "version": "2.7.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/node-fetch@2.7.0"
+    },
+    {
+      "type": "library",
+      "name": "object-inspect",
+      "version": "1.13.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/object-inspect@1.13.4"
+    },
+    {
+      "type": "library",
+      "name": "on-finished",
+      "version": "2.4.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/on-finished@2.4.1"
+    },
+    {
+      "type": "library",
+      "name": "on-headers",
+      "version": "1.1.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/on-headers@1.1.0"
+    },
+    {
+      "type": "library",
+      "name": "once",
+      "version": "1.4.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/once@1.4.0"
+    },
+    {
+      "type": "library",
+      "name": "onetime",
+      "version": "2.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/onetime@2.0.1"
+    },
+    {
+      "type": "library",
+      "name": "open",
+      "version": "7.4.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/open@7.4.2"
+    },
+    {
+      "type": "library",
+      "name": "os-paths",
+      "version": "4.4.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/os-paths@4.4.0"
+    },
+    {
+      "type": "library",
+      "name": "os-tmpdir",
+      "version": "1.0.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/os-tmpdir@1.0.2"
+    },
+    {
+      "type": "library",
+      "name": "outvariant",
+      "version": "1.4.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/outvariant@1.4.3"
+    },
+    {
+      "type": "library",
+      "name": "p-limit",
+      "version": "2.3.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/p-limit@2.3.0"
+    },
+    {
+      "type": "library",
+      "name": "p-locate",
+      "version": "4.1.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/p-locate@4.1.0"
+    },
+    {
+      "type": "library",
+      "name": "p-try",
+      "version": "2.2.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/p-try@2.2.0"
+    },
+    {
+      "type": "library",
+      "name": "pac-proxy-agent",
+      "version": "7.2.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/pac-proxy-agent@7.2.0"
+    },
+    {
+      "type": "library",
+      "name": "pac-resolver",
+      "version": "7.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/pac-resolver@7.0.1"
+    },
+    {
+      "type": "library",
+      "name": "parse-cache-control",
+      "version": "1.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/parse-cache-control@1.0.1"
+    },
+    {
+      "type": "library",
+      "name": "parseurl",
+      "version": "1.3.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/parseurl@1.3.3"
+    },
+    {
+      "type": "library",
+      "name": "path-exists",
+      "version": "4.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/path-exists@4.0.0"
+    },
+    {
+      "type": "library",
+      "name": "path-is-absolute",
+      "version": "1.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/path-is-absolute@1.0.1"
+    },
+    {
+      "type": "library",
+      "name": "path-to-regexp",
+      "version": "0.1.13",
+      "scope": "required",
+      "bom-ref": "pkg:npm/path-to-regexp@0.1.13"
+    },
+    {
+      "type": "library",
+      "name": "pend",
+      "version": "1.2.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/pend@1.2.0"
+    },
+    {
+      "type": "library",
+      "name": "picocolors",
+      "version": "1.1.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/picocolors@1.1.1"
+    },
+    {
+      "type": "library",
+      "name": "playwright-core",
+      "version": "1.62.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/playwright-core@1.62.1"
+    },
+    {
+      "type": "library",
+      "name": "playwright",
+      "version": "1.62.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/playwright@1.62.1"
+    },
+    {
+      "type": "library",
+      "name": "progress",
+      "version": "2.0.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/progress@2.0.3"
+    },
+    {
+      "type": "library",
+      "name": "proxy-addr",
+      "version": "2.0.7",
+      "scope": "required",
+      "bom-ref": "pkg:npm/proxy-addr@2.0.7"
+    },
+    {
+      "type": "library",
+      "name": "proxy-agent",
+      "version": "6.5.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/proxy-agent@6.5.0"
+    },
+    {
+      "type": "library",
+      "name": "proxy-agent/node_modules/lru-cache",
+      "version": "7.18.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/proxy-agent%2Fnode_modules%2Flru-cache@7.18.3"
+    },
+    {
+      "type": "library",
+      "name": "proxy-from-env",
+      "version": "1.1.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/proxy-from-env@1.1.0"
+    },
+    {
+      "type": "library",
+      "name": "pump",
+      "version": "3.0.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/pump@3.0.4"
+    },
+    {
+      "type": "library",
+      "name": "puppeteer-core",
+      "version": "24.43.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/puppeteer-core@24.43.1"
+    },
+    {
+      "type": "library",
+      "name": "puppeteer-core/node_modules/devtools-protocol",
+      "version": "0.0.1608973",
+      "scope": "required",
+      "bom-ref": "pkg:npm/puppeteer-core%2Fnode_modules%2Fdevtools-protocol@0.0.1608973"
+    },
+    {
+      "type": "library",
+      "name": "puppeteer-core/node_modules/ws",
+      "version": "8.21.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/puppeteer-core%2Fnode_modules%2Fws@8.21.3"
+    },
+    {
+      "type": "library",
+      "name": "qs",
+      "version": "6.15.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/qs@6.15.3"
+    },
+    {
+      "type": "library",
+      "name": "range-parser",
+      "version": "1.2.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/range-parser@1.2.1"
+    },
+    {
+      "type": "library",
+      "name": "raw-body",
+      "version": "2.5.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/raw-body@2.5.3"
+    },
+    {
+      "type": "library",
+      "name": "require-directory",
+      "version": "2.1.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/require-directory@2.1.1"
+    },
+    {
+      "type": "library",
+      "name": "require-main-filename",
+      "version": "2.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/require-main-filename@2.0.0"
+    },
+    {
+      "type": "library",
+      "name": "restore-cursor",
+      "version": "2.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/restore-cursor@2.0.0"
+    },
+    {
+      "type": "library",
+      "name": "retry",
+      "version": "0.13.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/retry@0.13.1"
+    },
+    {
+      "type": "library",
+      "name": "rettime",
+      "version": "0.11.11",
+      "scope": "required",
+      "bom-ref": "pkg:npm/rettime@0.11.11"
+    },
+    {
+      "type": "library",
+      "name": "rimraf",
+      "version": "3.0.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/rimraf@3.0.2"
+    },
+    {
+      "type": "library",
+      "name": "robots-parser",
+      "version": "3.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/robots-parser@3.0.1"
+    },
+    {
+      "type": "library",
+      "name": "run-async",
+      "version": "2.4.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/run-async@2.4.1"
+    },
+    {
+      "type": "library",
+      "name": "rxjs",
+      "version": "6.6.7",
+      "scope": "required",
+      "bom-ref": "pkg:npm/rxjs@6.6.7"
+    },
+    {
+      "type": "library",
+      "name": "rxjs/node_modules/tslib",
+      "version": "1.14.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/rxjs%2Fnode_modules%2Ftslib@1.14.1"
+    },
+    {
+      "type": "library",
+      "name": "safe-buffer",
+      "version": "5.2.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/safe-buffer@5.2.1"
+    },
+    {
+      "type": "library",
+      "name": "safer-buffer",
+      "version": "2.1.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/safer-buffer@2.1.2"
+    },
+    {
+      "type": "library",
+      "name": "semver",
+      "version": "5.7.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/semver@5.7.2"
+    },
+    {
+      "type": "library",
+      "name": "send",
+      "version": "0.19.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/send@0.19.2"
+    },
+    {
+      "type": "library",
+      "name": "send/node_modules/debug",
+      "version": "2.6.9",
+      "scope": "required",
+      "bom-ref": "pkg:npm/send%2Fnode_modules%2Fdebug@2.6.9"
+    },
+    {
+      "type": "library",
+      "name": "send/node_modules/debug/node_modules/ms",
+      "version": "2.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/send%2Fnode_modules%2Fdebug%2Fnode_modules%2Fms@2.0.0"
+    },
+    {
+      "type": "library",
+      "name": "serve-static",
+      "version": "1.16.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/serve-static@1.16.3"
+    },
+    {
+      "type": "library",
+      "name": "set-blocking",
+      "version": "2.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/set-blocking@2.0.0"
+    },
+    {
+      "type": "library",
+      "name": "set-cookie-parser",
+      "version": "3.1.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/set-cookie-parser@3.1.2"
+    },
+    {
+      "type": "library",
+      "name": "setprototypeof",
+      "version": "1.2.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/setprototypeof@1.2.0"
+    },
+    {
+      "type": "library",
+      "name": "sharp",
+      "version": "0.35.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/sharp@0.35.3"
+    },
+    {
+      "type": "library",
+      "name": "sharp/node_modules/semver",
+      "version": "7.8.5",
+      "scope": "required",
+      "bom-ref": "pkg:npm/sharp%2Fnode_modules%2Fsemver@7.8.5"
+    },
+    {
+      "type": "library",
+      "name": "side-channel-list",
+      "version": "1.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/side-channel-list@1.0.1"
+    },
+    {
+      "type": "library",
+      "name": "side-channel-map",
+      "version": "1.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/side-channel-map@1.0.1"
+    },
+    {
+      "type": "library",
+      "name": "side-channel-weakmap",
+      "version": "1.0.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/side-channel-weakmap@1.0.2"
+    },
+    {
+      "type": "library",
+      "name": "side-channel",
+      "version": "1.1.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/side-channel@1.1.1"
+    },
+    {
+      "type": "library",
+      "name": "signal-exit",
+      "version": "3.0.7",
+      "scope": "required",
+      "bom-ref": "pkg:npm/signal-exit@3.0.7"
+    },
+    {
+      "type": "library",
+      "name": "smart-buffer",
+      "version": "4.2.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/smart-buffer@4.2.0"
+    },
+    {
+      "type": "library",
+      "name": "socks-proxy-agent",
+      "version": "8.0.5",
+      "scope": "required",
+      "bom-ref": "pkg:npm/socks-proxy-agent@8.0.5"
+    },
+    {
+      "type": "library",
+      "name": "socks",
+      "version": "2.8.9",
+      "scope": "required",
+      "bom-ref": "pkg:npm/socks@2.8.9"
+    },
+    {
+      "type": "library",
+      "name": "source-map",
+      "version": "0.6.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/source-map@0.6.1"
+    },
+    {
+      "type": "library",
+      "name": "speedline-core",
+      "version": "1.4.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/speedline-core@1.4.3"
+    },
+    {
+      "type": "library",
+      "name": "sprintf-js",
+      "version": "1.0.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/sprintf-js@1.0.3"
+    },
+    {
+      "type": "library",
+      "name": "statuses",
+      "version": "2.0.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/statuses@2.0.2"
+    },
+    {
+      "type": "library",
+      "name": "streamx",
+      "version": "2.28.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/streamx@2.28.0"
+    },
+    {
+      "type": "library",
+      "name": "strict-event-emitter",
+      "version": "0.5.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/strict-event-emitter@0.5.1"
+    },
+    {
+      "type": "library",
+      "name": "string-width",
+      "version": "2.1.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/string-width@2.1.1"
+    },
+    {
+      "type": "library",
+      "name": "string-width/node_modules/ansi-regex",
+      "version": "3.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/string-width%2Fnode_modules%2Fansi-regex@3.0.1"
+    },
+    {
+      "type": "library",
+      "name": "string-width/node_modules/strip-ansi",
+      "version": "4.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/string-width%2Fnode_modules%2Fstrip-ansi@4.0.0"
+    },
+    {
+      "type": "library",
+      "name": "strip-ansi",
+      "version": "5.2.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/strip-ansi@5.2.0"
+    },
+    {
+      "type": "library",
+      "name": "supports-color",
+      "version": "5.5.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/supports-color@5.5.0"
+    },
+    {
+      "type": "library",
+      "name": "tagged-tag",
+      "version": "1.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/tagged-tag@1.0.0"
+    },
+    {
+      "type": "library",
+      "name": "tar-fs",
+      "version": "3.1.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/tar-fs@3.1.3"
+    },
+    {
+      "type": "library",
+      "name": "tar-stream",
+      "version": "3.1.7",
+      "scope": "required",
+      "bom-ref": "pkg:npm/tar-stream@3.1.7"
+    },
+    {
+      "type": "library",
+      "name": "teex",
+      "version": "1.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/teex@1.0.1"
+    },
+    {
+      "type": "library",
+      "name": "text-decoder",
+      "version": "1.2.7",
+      "scope": "required",
+      "bom-ref": "pkg:npm/text-decoder@1.2.7"
+    },
+    {
+      "type": "library",
+      "name": "third-party-web",
+      "version": "0.26.7",
+      "scope": "required",
+      "bom-ref": "pkg:npm/third-party-web@0.26.7"
+    },
+    {
+      "type": "library",
+      "name": "through",
+      "version": "2.3.8",
+      "scope": "required",
+      "bom-ref": "pkg:npm/through@2.3.8"
+    },
+    {
+      "type": "library",
+      "name": "tldts-core",
+      "version": "6.1.86",
+      "scope": "required",
+      "bom-ref": "pkg:npm/tldts-core@6.1.86"
+    },
+    {
+      "type": "library",
+      "name": "tldts-icann",
+      "version": "6.1.86",
+      "scope": "required",
+      "bom-ref": "pkg:npm/tldts-icann@6.1.86"
+    },
+    {
+      "type": "library",
+      "name": "tldts",
+      "version": "7.4.11",
+      "scope": "required",
+      "bom-ref": "pkg:npm/tldts@7.4.11"
+    },
+    {
+      "type": "library",
+      "name": "tldts/node_modules/tldts-core",
+      "version": "7.4.11",
+      "scope": "required",
+      "bom-ref": "pkg:npm/tldts%2Fnode_modules%2Ftldts-core@7.4.11"
+    },
+    {
+      "type": "library",
+      "name": "tmp",
+      "version": "0.1.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/tmp@0.1.0"
+    },
+    {
+      "type": "library",
+      "name": "tmp/node_modules/rimraf",
+      "version": "2.7.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/tmp%2Fnode_modules%2Frimraf@2.7.1"
+    },
+    {
+      "type": "library",
+      "name": "toidentifier",
+      "version": "1.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/toidentifier@1.0.1"
+    },
+    {
+      "type": "library",
+      "name": "tough-cookie",
+      "version": "6.0.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/tough-cookie@6.0.2"
+    },
+    {
+      "type": "library",
+      "name": "tr46",
+      "version": "0.0.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/tr46@0.0.3"
+    },
+    {
+      "type": "library",
+      "name": "tree-kill",
+      "version": "1.2.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/tree-kill@1.2.2"
+    },
+    {
+      "type": "library",
+      "name": "tslib",
+      "version": "2.8.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/tslib@2.8.1"
+    },
+    {
+      "type": "library",
+      "name": "type-fest",
+      "version": "5.8.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/type-fest@5.8.0"
+    },
+    {
+      "type": "library",
+      "name": "type-is",
+      "version": "1.6.18",
+      "scope": "required",
+      "bom-ref": "pkg:npm/type-is@1.6.18"
+    },
+    {
+      "type": "library",
+      "name": "typed-query-selector",
+      "version": "2.12.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/typed-query-selector@2.12.2"
+    },
+    {
+      "type": "library",
+      "name": "typedarray-to-buffer",
+      "version": "3.1.5",
+      "scope": "required",
+      "bom-ref": "pkg:npm/typedarray-to-buffer@3.1.5"
+    },
+    {
+      "type": "library",
+      "name": "undici-types",
+      "version": "8.3.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/undici-types@8.3.0"
+    },
+    {
+      "type": "library",
+      "name": "undici",
+      "version": "7.29.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/undici@7.29.0"
+    },
+    {
+      "type": "library",
+      "name": "unique-string",
+      "version": "2.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/unique-string@2.0.0"
+    },
+    {
+      "type": "library",
+      "name": "unpipe",
+      "version": "1.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/unpipe@1.0.0"
+    },
+    {
+      "type": "library",
+      "name": "until-async",
+      "version": "3.0.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/until-async@3.0.2"
+    },
+    {
+      "type": "library",
+      "name": "utils-merge",
+      "version": "1.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/utils-merge@1.0.1"
+    },
+    {
+      "type": "library",
+      "name": "uuid",
+      "version": "8.3.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/uuid@8.3.2"
+    },
+    {
+      "type": "library",
+      "name": "vary",
+      "version": "1.1.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/vary@1.1.2"
+    },
+    {
+      "type": "library",
+      "name": "webdriver-bidi-protocol",
+      "version": "0.4.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/webdriver-bidi-protocol@0.4.1"
+    },
+    {
+      "type": "library",
+      "name": "webidl-conversions",
+      "version": "3.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/webidl-conversions@3.0.1"
+    },
+    {
+      "type": "library",
+      "name": "whatwg-fetch",
+      "version": "3.6.20",
+      "scope": "required",
+      "bom-ref": "pkg:npm/whatwg-fetch@3.6.20"
+    },
+    {
+      "type": "library",
+      "name": "whatwg-url",
+      "version": "5.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/whatwg-url@5.0.0"
+    },
+    {
+      "type": "library",
+      "name": "which-module",
+      "version": "2.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/which-module@2.0.1"
+    },
+    {
+      "type": "library",
+      "name": "wrap-ansi",
+      "version": "6.2.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/wrap-ansi@6.2.0"
+    },
+    {
+      "type": "library",
+      "name": "wrap-ansi/node_modules/ansi-regex",
+      "version": "5.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/wrap-ansi%2Fnode_modules%2Fansi-regex@5.0.1"
+    },
+    {
+      "type": "library",
+      "name": "wrap-ansi/node_modules/ansi-styles",
+      "version": "4.3.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/wrap-ansi%2Fnode_modules%2Fansi-styles@4.3.0"
+    },
+    {
+      "type": "library",
+      "name": "wrap-ansi/node_modules/color-convert",
+      "version": "2.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/wrap-ansi%2Fnode_modules%2Fcolor-convert@2.0.1"
+    },
+    {
+      "type": "library",
+      "name": "wrap-ansi/node_modules/color-name",
+      "version": "1.1.4",
+      "scope": "required",
+      "bom-ref": "pkg:npm/wrap-ansi%2Fnode_modules%2Fcolor-name@1.1.4"
+    },
+    {
+      "type": "library",
+      "name": "wrap-ansi/node_modules/is-fullwidth-code-point",
+      "version": "3.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/wrap-ansi%2Fnode_modules%2Fis-fullwidth-code-point@3.0.0"
+    },
+    {
+      "type": "library",
+      "name": "wrap-ansi/node_modules/string-width",
+      "version": "4.2.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/wrap-ansi%2Fnode_modules%2Fstring-width@4.2.3"
+    },
+    {
+      "type": "library",
+      "name": "wrap-ansi/node_modules/strip-ansi",
+      "version": "6.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/wrap-ansi%2Fnode_modules%2Fstrip-ansi@6.0.1"
+    },
+    {
+      "type": "library",
+      "name": "wrappy",
+      "version": "1.0.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/wrappy@1.0.2"
+    },
+    {
+      "type": "library",
+      "name": "write-file-atomic",
+      "version": "3.0.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/write-file-atomic@3.0.3"
+    },
+    {
+      "type": "library",
+      "name": "ws",
+      "version": "7.5.13",
+      "scope": "required",
+      "bom-ref": "pkg:npm/ws@7.5.13"
+    },
+    {
+      "type": "library",
+      "name": "xdg-app-paths",
+      "version": "5.1.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/xdg-app-paths@5.1.0"
+    },
+    {
+      "type": "library",
+      "name": "xdg-basedir",
+      "version": "4.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/xdg-basedir@4.0.0"
+    },
+    {
+      "type": "library",
+      "name": "xdg-portable",
+      "version": "7.3.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/xdg-portable@7.3.0"
+    },
+    {
+      "type": "library",
+      "name": "y18n",
+      "version": "4.0.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/y18n@4.0.3"
+    },
+    {
+      "type": "library",
+      "name": "yargs-parser",
+      "version": "13.1.2",
+      "scope": "required",
+      "bom-ref": "pkg:npm/yargs-parser@13.1.2"
+    },
+    {
+      "type": "library",
+      "name": "yargs",
+      "version": "15.4.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/yargs@15.4.1"
+    },
+    {
+      "type": "library",
+      "name": "yargs/node_modules/ansi-regex",
+      "version": "5.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/yargs%2Fnode_modules%2Fansi-regex@5.0.1"
+    },
+    {
+      "type": "library",
+      "name": "yargs/node_modules/is-fullwidth-code-point",
+      "version": "3.0.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/yargs%2Fnode_modules%2Fis-fullwidth-code-point@3.0.0"
+    },
+    {
+      "type": "library",
+      "name": "yargs/node_modules/string-width",
+      "version": "4.2.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/yargs%2Fnode_modules%2Fstring-width@4.2.3"
+    },
+    {
+      "type": "library",
+      "name": "yargs/node_modules/strip-ansi",
+      "version": "6.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/yargs%2Fnode_modules%2Fstrip-ansi@6.0.1"
+    },
+    {
+      "type": "library",
+      "name": "yargs/node_modules/yargs-parser",
+      "version": "18.1.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/yargs%2Fnode_modules%2Fyargs-parser@18.1.3"
+    },
+    {
+      "type": "library",
+      "name": "yauzl",
+      "version": "2.10.0",
+      "scope": "required",
+      "bom-ref": "pkg:npm/yauzl@2.10.0"
+    },
+    {
+      "type": "library",
+      "name": "zod",
+      "version": "4.4.3",
+      "scope": "required",
+      "bom-ref": "pkg:npm/zod@4.4.3"
+    }
+  ]
+}

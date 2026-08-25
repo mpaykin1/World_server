@@ -1,0 +1,4 @@
+(() => {
+'use strict';const G=globalThis;if(G.WorldProceduralCulling)return;function intersects(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y}function contained(a,b){return a.x>=b.x&&a.y>=b.y&&a.x+a.w<=b.x+b.w&&a.y+a.h<=b.y+b.h}function cull(objects,viewport,occluders=[]){let visible=[],culled=0;for(const o of objects){const b=o.box||o;if(!intersects(b,viewport)){culled++;continue}let occ=false;for(const z of occluders){if((z.depth||0)<=(o.depth||0))continue;if((z.opacity??1)<.98)continue;if(contained(b,z.box||z)){occ=true;break}}if(occ)culled++;else visible.push(o)}return{visible,culled,ratio:objects.length?culled/objects.length:0}}
+function budget({fps=60,memory=4,objects=0}={}){let max=objects;if(fps<45)max=Math.floor(objects*.72);if(memory<4)max=Math.floor(max*.72);return{maxDrawCalls:Math.max(32,max),lodBias:fps<40?1.5:fps<52?.7:0}}
+G.WorldProceduralCulling={version:'4.0.0',cull,budget};})();

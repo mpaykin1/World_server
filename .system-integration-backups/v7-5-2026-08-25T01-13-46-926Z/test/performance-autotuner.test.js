@@ -1,0 +1,1 @@
+'use strict';const test=require('node:test'),assert=require('node:assert/strict');function n(d,e,t,min=.75,max=2){if(e<t-7)return Math.max(min,d-.15);if(e>t+8)return Math.min(max,d+.1);return d}test('low FPS lowers DPR',()=>assert.ok(n(2,30,55)<2));test('floor respected',()=>assert.equal(n(.75,10,55),.75));test('headroom raises DPR',()=>assert.ok(n(1,70,55)>1));

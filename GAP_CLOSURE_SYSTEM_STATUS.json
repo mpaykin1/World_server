@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-08-24T05:40:00Z",
+  "liveSupabaseInstalled": true,
+  "dbCycleScheduledEveryMinutes": 5,
+  "firstCycle": {
+    "detected": 4,
+    "queued": 2,
+    "closedAfterEvidenceCorrection": 1
+  },
+  "verifiedClosed": [
+    "runtime.telemetry.stale"
+  ],
+  "knownOpenAtBootstrap": [
+    "pixel.animation.atlas.missing",
+    "runtime.real-device.evidence.missing",
+    "supabase.security.security-definer-exposure"
+  ],
+  "repositoryIntegration": {
+    "githubDirectWriteAvailable": false,
+    "reason": "GitHub integration returned 403 on branch creation",
+    "patchIncluded": true,
+    "desktopAiInstallerIncluded": true
+  },
+  "localTests": {
+    "gapClosureTests": 5,
+    "passed": 5,
+    "failed": 0
+  }
+}

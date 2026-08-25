@@ -1,0 +1,889 @@
+{
+  "schemaVersion": 10,
+  "runtime": "WORLD_FACTORY_QUALITY_CORE_V10",
+  "implementationReadinessPercent": 99.9,
+  "integrationConnectivityPercent": 99.9,
+  "verifiedEndToEndPercent": 94.0,
+  "staticQualityGatePercent": 100.0,
+  "localQualityPipelinePass": true,
+  "systems": [
+    {
+      "id": "immutable-source-fidelity-and-geometry-regression",
+      "weight": 8,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "source SHA locks + anti-decimation/anti-downscale regression verified"
+    },
+    {
+      "id": "spawn-controls-camera-static-world-physics",
+      "weight": 9,
+      "implementedPercent": 100,
+      "verifiedPercent": 96,
+      "note": "fixed 60 Hz capsule/controller invariants verified; full physical browser input remains CI/live-side"
+    },
+    {
+      "id": "auto-collider-mesh-gaussian-ply-and-spz",
+      "weight": 8,
+      "implementedPercent": 100,
+      "verifiedPercent": 99,
+      "note": "mesh/Gaussian PLY verified; native legacy SPZ positions verified on real assets; v4 path implemented without attached v4 sample"
+    },
+    {
+      "id": "auto-orientation-scale-semantics-navigation",
+      "weight": 7,
+      "implementedPercent": 100,
+      "verifiedPercent": 96,
+      "note": "conservative inference + semantic floor/wall analysis + nav graph + fail-closed fallback"
+    },
+    {
+      "id": "lossless-ply-and-static-glb-streaming",
+      "weight": 6,
+      "implementedPercent": 100,
+      "verifiedPercent": 97,
+      "note": "PLY face conservation and static GLB conservation implemented/verified synthetically"
+    },
+    {
+      "id": "byte-identical-animated-skinned-morph-glb-range-streaming",
+      "weight": 6,
+      "implementedPercent": 100,
+      "verifiedPercent": 97,
+      "note": "GLB byte-range plan + exact reconstruction path conserves every byte before GLTF parse"
+    },
+    {
+      "id": "predictive-nearest-first-streaming",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 98,
+      "note": "velocity look-ahead + nearest-first + adaptive concurrency implemented"
+    },
+    {
+      "id": "near-field-lossless-fps-optimizer",
+      "weight": 8,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "near field never loses resolution/source geometry/textures; pressure governor only reduces distant/noncritical work"
+    },
+    {
+      "id": "webgl2-safe-occlusion-fallback",
+      "weight": 3,
+      "implementedPercent": 100,
+      "verifiedPercent": 80,
+      "note": "conservative query fallback with >=42m near bypass; browser GPU execution remains external"
+    },
+    {
+      "id": "webgpu-private-depth-hzb-visibility",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 72,
+      "note": "actual source triangles feed a private depth pass + conservative HZB; fail-visible and near bypass hardcoded; WebGPU browser not available here"
+    },
+    {
+      "id": "webgpu-lossless-meshlet-indirect-kernel",
+      "weight": 4,
+      "implementedPercent": 98,
+      "verifiedPercent": 66,
+      "note": "compute-generated drawIndexedIndirect commands preserve source index ranges; full PBR renderer handoff is capability-gated"
+    },
+    {
+      "id": "compiled-wasm-simd128-fastpath",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "real wasm32 SIMD binary compiled and numerically executed under Node"
+    },
+    {
+      "id": "lossless-meshlet-cluster-metadata",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "sample-city: 683077 source triangles -> 683077 meshlet triangles, 5337 meshlets"
+    },
+    {
+      "id": "immutable-indexeddb-sha-and-bvh-cache",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 91,
+      "note": "source hash verification + serialized MeshBVH cache implemented; browser persistence remains CI-side"
+    },
+    {
+      "id": "worker-ply-decode-safe-fallback",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 91,
+      "note": "binary little-endian worker parser + transferable arrays + PLYLoader fail-safe fallback"
+    },
+    {
+      "id": "exact-material-dedup-static-shadow-cache",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 96,
+      "note": "exact render signature only; shadows freeze only with zero dynamic shadow casters"
+    },
+    {
+      "id": "offline-raytraced-gi-companion",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 93,
+      "note": "source-locked voxel ray-traced irradiance companion executes on synthetic meshes; production-world bake delegated to installer/preparer"
+    },
+    {
+      "id": "offline-source-locked-reflection-probes",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 91,
+      "note": "six-face offline ray-traced cubemap companion executes synthetically with runtime fallback"
+    },
+    {
+      "id": "static-lightmap-glb-uv-companion",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 96,
+      "note": "UV companion verified synthetic; no-UV safe fallback"
+    },
+    {
+      "id": "swept-dynamic-mesh-collision",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 92,
+      "note": "exact local MeshBVH + continuous relative translation sweep + conservative AABB fallback wired into controller"
+    },
+    {
+      "id": "dynamic-platform-elevator-water",
+      "weight": 3,
+      "implementedPercent": 100,
+      "verifiedPercent": 92,
+      "note": "platform carry, elevator and water runtime remain shared/source-safe"
+    },
+    {
+      "id": "atmosphere-fog-haze-mirage-and-wet-style",
+      "weight": 6,
+      "implementedPercent": 100,
+      "verifiedPercent": 95,
+      "note": "far cost concealed by atmosphere; global subtle wet material/post fallback preserves sources"
+    },
+    {
+      "id": "network-interest-and-distant-pose-sharing",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 94,
+      "note": "near entities/rigs untouched; only distant update cadence is reduced"
+    },
+    {
+      "id": "browser-playtest-fuzz-replay",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 67,
+      "note": "automation implemented; Playwright dependencies/browser are CI/desktop-side"
+    },
+    {
+      "id": "visual-golden-regression",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 64,
+      "note": "strict visual diff path implemented; golden capture requires real browser/render target"
+    },
+    {
+      "id": "permanent-error-memory-global-fingerprints",
+      "weight": 8,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "55 protected failure classes compile to prevention rules + mandatory regression tests"
+    },
+    {
+      "id": "compiled-global-protection-pack",
+      "weight": 7,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "every protected incident compiles into one stable cross-project protection hash"
+    },
+    {
+      "id": "unknown-error-quarantine",
+      "weight": 6,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "new fingerprint blocks release until root cause + rule + test + shared fix"
+    },
+    {
+      "id": "transactional-known-antipattern-self-heal",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "exact known repairs only, backup, full tests, automatic rollback on any failure"
+    },
+    {
+      "id": "quality-genome-cross-project-inheritance",
+      "weight": 7,
+      "implementedPercent": 100,
+      "verifiedPercent": 97,
+      "note": "proven traits + protection/runtime hashes are inherited by consumers; external repos unavailable here"
+    },
+    {
+      "id": "optimization-promotion-zero-quality-regression",
+      "weight": 6,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "FPS wins can promote only when visual/source/regression scores stay non-regressed"
+    },
+    {
+      "id": "transactional-canary-rollout-auto-rollback",
+      "weight": 6,
+      "implementedPercent": 100,
+      "verifiedPercent": 93,
+      "note": "canary -> verify -> all -> verify with rollback; no external consumers connected here"
+    },
+    {
+      "id": "proven-pattern-auto-promotion",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 98,
+      "note": "multi-project repeated evidence promotes safe successes into mandatory genome"
+    },
+    {
+      "id": "learning-preservation-across-upgrades",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "installer merges incidents/patterns/genome/evidence/quarantine/history instead of forgetting"
+    },
+    {
+      "id": "global-quality-autopilot",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 98,
+      "note": "telemetry import option -> self-heal -> pipeline -> learn -> fix queue -> protection -> canary/global rollout -> verify"
+    },
+    {
+      "id": "last-known-good-release-state",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 98,
+      "note": "approved runtime/protection hashes retained and rollbackable"
+    },
+    {
+      "id": "production-quality-telemetry-api-export-import",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 71,
+      "note": "global root-cause fingerprint API/export/import is implemented; no connected durable Neon deployment exists here"
+    },
+    {
+      "id": "fix-code-test-rule-global-rollout-agent-interface",
+      "weight": 5,
+      "implementedPercent": 99,
+      "verifiedPercent": 84,
+      "note": "safe repairs autonomous; unknown fixes produce proof-obligation task for desktop code executor rather than guessing"
+    },
+    {
+      "id": "gameplay-action-contracts-and-audio-variation",
+      "weight": 4,
+      "implementedPercent": 98,
+      "verifiedPercent": 90,
+      "note": "feet/attack/shield/weapon invariants + reusable gameplay/audio systems implemented"
+    },
+    {
+      "id": "ci-cd-quality-wall",
+      "weight": 6,
+      "implementedPercent": 100,
+      "verifiedPercent": 94,
+      "note": "static/unit/protection/local consumer gates PASS; browser/visual and live consumer rollout remain external"
+    },
+    {
+      "id": "one-command-world-v10-production-preparation",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "new-world ingest attaches V10 CPU-first lossless fastpaths immediately and queues heavy source-locked bakes to the distributed farm"
+    },
+    {
+      "id": "source-equivalent-webgpu-pbr-core-and-material-audit",
+      "weight": 7,
+      "implementedPercent": 99,
+      "verifiedPercent": 78,
+      "note": "PBR shader/core + strict source-material semantic audit are runtime-wired; authoritative takeover remains fail-closed until real device/golden parity"
+    },
+    {
+      "id": "threaded-wasm-simd-worker-pool",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "Node worker_threads + WASM SIMD parity verified on 1.2M items with exact byte-copy parity"
+    },
+    {
+      "id": "parallel-exact-bvh-prepass",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 88,
+      "note": "exact triangle bounds/centroids worker prepass implemented; browser execution remains device-farm side"
+    },
+    {
+      "id": "monotonic-quality-ratchet",
+      "weight": 7,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "persisted quality floors never decrease; installer preserves max historical floors and any regression blocks release"
+    },
+    {
+      "id": "quality-knowledge-graph",
+      "weight": 6,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "55 protected incidents compile into rule/test/protection/genome graph with zero unprotected incidents"
+    },
+    {
+      "id": "content-addressed-distributed-bake-farm",
+      "weight": 6,
+      "implementedPercent": 100,
+      "verifiedPercent": 90,
+      "note": "deterministic shards/cache/source locks and cached artifact materialization verified; full heavy GI shard is delegated to bake nodes"
+    },
+    {
+      "id": "sandboxed-unknown-fix-proof-agent",
+      "weight": 6,
+      "implementedPercent": 99,
+      "verifiedPercent": 88,
+      "note": "sandbox/executor/proof/apply boundary implemented; real unknown incident with external code executor not available here"
+    },
+    {
+      "id": "representative-device-performance-farm",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 65,
+      "note": "real Playwright desktop/mobile/WebGPU matrix is in CI; browser dependencies/device execution unavailable in this container"
+    },
+    {
+      "id": "durable-neon-quality-evidence",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 62,
+      "note": "migration, APIs and DB smoke tool implemented; no connected Neon project/DATABASE_URL here"
+    },
+    {
+      "id": "representative-canary-and-consumer-drift",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 91,
+      "note": "representative selection + exact runtime/protection drift blocking implemented; external consumer projects unavailable"
+    },
+    {
+      "id": "transactional-v10-installer",
+      "weight": 7,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "V10 installer is transactional: preserve history/worlds -> migrate -> prepare -> self-heal -> tests -> ratchet -> rollout/drift -> readiness"
+    },
+    {
+      "id": "browser-native-shared-memory-zero-copy-decode",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 93,
+      "note": "SharedArrayBuffer arena + COOP/COEP contract + safe transferable fallback verified statically/unit; real isolated browser path remains device-farm side"
+    },
+    {
+      "id": "webgpu-exact-material-table-bindless-capability",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 90,
+      "note": "exact PBR factors/source texture dimensions preserved; bindless remains capability-gated and proven bindgroups are fallback"
+    },
+    {
+      "id": "conservative-webgpu-clustered-lighting",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 88,
+      "note": "cluster assignment is fail-bright with full-light-list overflow fallback; live GPU parity remains device-farm side"
+    },
+    {
+      "id": "full-resolution-virtual-texture-residency",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 97,
+      "note": "near pages pinned at source resolution, eviction limited to far/nonvisible pages, whole-source fallback preserves fidelity"
+    },
+    {
+      "id": "conservative-portal-room-visibility",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "unknown/near rooms fail visible; conservative graph builder and runtime contract tested"
+    },
+    {
+      "id": "screen-space-animation-budget-near-exact",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "near/interacting rigs retain full update rate and deferred time is accumulated rather than discarded"
+    },
+    {
+      "id": "physics-spatial-broadphase-safe-sleep",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "spatial broadphase + distant sleeping; near/player-contact bodies are hard-blocked from sleep"
+    },
+    {
+      "id": "lossless-network-delta-compression",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 99,
+      "note": "changed fields only, no quantization, exact local-player authority contract tested"
+    },
+    {
+      "id": "ratchet-approved-per-device-performance-schedules",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "learner may tune only whitelisted cost knobs after source/near/visual proof; fidelity knobs are rejected"
+    },
+    {
+      "id": "persistent-derived-artifact-cas-local-r2",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 90,
+      "note": "local content-addressed cache/source lock verified; R2 upload adapter requires real credentials/service"
+    },
+    {
+      "id": "pattern-applicability-firewall",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "successful patterns require applicability/capability proof; blind global propagation is forbidden"
+    },
+    {
+      "id": "frame-budget-orchestrator-near-critical",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 99,
+      "note": "background work is budgeted/deferred while near-critical render/physics work is never traded for FPS"
+    },
+    {
+      "id": "p99-hitch-regression-ratchet",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "frame-time p99 and >50ms hitch count gate prevents average-FPS wins that worsen stutter"
+    },
+    {
+      "id": "durable-performance-evidence-v8",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 72,
+      "note": "V8 schema/API records FPS p95/p99/hitches and only quality-safe schedules; live Neon roundtrip not connected here"
+    },
+    {
+      "id": "cpu-first-server-no-paid-gpu",
+      "weight": 7,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "all mandatory preparation/runtime has CPU/cache/client path; server GPU is optional client-side capability only"
+    },
+    {
+      "id": "incremental-world-compiler",
+      "weight": 6,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "content-hash dependency plan rebuilds only affected systems; source unchanged"
+    },
+    {
+      "id": "cpu-pvs-hierarchical-visibility-cache",
+      "weight": 6,
+      "implementedPercent": 100,
+      "verifiedPercent": 96,
+      "note": "precomputed PVS + hierarchy + conservative CPU occlusion cache; browser runtime path awaits consumer E2E"
+    },
+    {
+      "id": "predictive-streaming-v2",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 98,
+      "note": "motion/camera aware prefetch with near-first fidelity lock"
+    },
+    {
+      "id": "incremental-cpu-light-shadow-bake",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 95,
+      "note": "dirty-region CPU bake plan and cached static shadows; full production bake corpus external"
+    },
+    {
+      "id": "nav-collision-source-hash-cache",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "cache key binds source SHA and parameters"
+    },
+    {
+      "id": "near-exact-simulation-lod",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "only distant AI/animation/physics cadence is reduced; near remains exact/full rate"
+    },
+    {
+      "id": "cpu-causality-profiler-and-safe-autotuner",
+      "weight": 6,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "profiler finds CPU bottleneck; tuner whitelist rejects all fidelity knobs and p99/hitch regressions"
+    },
+    {
+      "id": "production-deterministic-replay-memory",
+      "weight": 6,
+      "implementedPercent": 100,
+      "verifiedPercent": 96,
+      "note": "normalized replay/fingerprint storage implemented; real production stream connection remains external"
+    },
+    {
+      "id": "desktop-ai-no-stop-until-green-protocol",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "instructions require diagnose-fix-retest loop until every required gate passes or a proven external hard blocker exists"
+    },
+    {
+      "id": "threaded-exact-cpu-import-pool",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 94,
+      "note": "worker pool preserves exact source bytes with deterministic single-worker fallback; real browser importer fan-out remains consumer-side"
+    },
+    {
+      "id": "bounded-memory-mmap-huge-world-reader",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "mmap/windowed reader self-test reconstructs exact bytes without whole-file materialization"
+    },
+    {
+      "id": "semantic-conservative-pvs-v10",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "semantic room/portal closure tested; unknown and near space fail visible"
+    },
+    {
+      "id": "incremental-gi-cell-reuse-v10",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "only exact input-hash cells reuse baked output; dirty/new cells rebuild"
+    },
+    {
+      "id": "lossless-derived-cache-transport",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "Brotli roundtrip SHA parity verified locally; optional zstd path is capability gated"
+    },
+    {
+      "id": "service-worker-shared-worker-sha-cache",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 88,
+      "note": "version/SHA isolation and source-safe contracts verified statically; real multi-tab/offline browser execution remains device-side"
+    },
+    {
+      "id": "content-defined-lossless-chunking",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "CDC self-test reconstructs byte-identical payload and SHA"
+    },
+    {
+      "id": "exact-derived-binary-delta",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "derived-artifact delta self-test reconstructs exact target SHA"
+    },
+    {
+      "id": "automatic-cpu-flamegraph-evidence-v10",
+      "weight": 4,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "cProfile causality evidence executes before autotuning and touches no source assets"
+    },
+    {
+      "id": "deterministic-network-physics-replay-farm-v10",
+      "weight": 5,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "five seeded network/physics simulations repeat to identical hashes"
+    },
+    {
+      "id": "code-asset-bake-game-dependency-graph",
+      "weight": 6,
+      "implementedPercent": 100,
+      "verifiedPercent": 100,
+      "note": "dependency graph builds and propagates source-asset impact through derived bakes to game manifests"
+    }
+  ],
+  "integrationLinks": [
+    {
+      "id": "world-ingest->v8-production-preparer",
+      "weight": 8,
+      "connectedPercent": 100
+    },
+    {
+      "id": "v8-preparer->source-lock->manifest",
+      "weight": 8,
+      "connectedPercent": 100
+    },
+    {
+      "id": "shared-runtime->near-field-lossless-optimizer",
+      "weight": 8,
+      "connectedPercent": 100
+    },
+    {
+      "id": "meshlet-metadata->webgpu-indirect-kernel",
+      "weight": 5,
+      "connectedPercent": 99
+    },
+    {
+      "id": "world-loader->byte-identical-glb-range-assembler",
+      "weight": 5,
+      "connectedPercent": 100
+    },
+    {
+      "id": "webgpu-hzb->safe-webgl2-fallback",
+      "weight": 5,
+      "connectedPercent": 100
+    },
+    {
+      "id": "offline-bakes->runtime-source-sha-validation",
+      "weight": 5,
+      "connectedPercent": 100
+    },
+    {
+      "id": "dynamic-environment->swept-mesh-collision->player",
+      "weight": 6,
+      "connectedPercent": 100
+    },
+    {
+      "id": "production-telemetry->global-fingerprint->quarantine",
+      "weight": 7,
+      "connectedPercent": 100
+    },
+    {
+      "id": "incident-memory->compiled-protection-pack",
+      "weight": 8,
+      "connectedPercent": 100
+    },
+    {
+      "id": "protection-pack->quality-genome",
+      "weight": 7,
+      "connectedPercent": 100
+    },
+    {
+      "id": "quality-genome->transactional-rollout",
+      "weight": 7,
+      "connectedPercent": 100
+    },
+    {
+      "id": "self-heal->full-tests->rollback",
+      "weight": 6,
+      "connectedPercent": 100
+    },
+    {
+      "id": "upgrade-installer->history-preservation->autopilot",
+      "weight": 6,
+      "connectedPercent": 100
+    },
+    {
+      "id": "unknown-fix-task->desktop-code-executor",
+      "weight": 4,
+      "connectedPercent": 97
+    },
+    {
+      "id": "browser-golden-tests->release-wall",
+      "weight": 4,
+      "connectedPercent": 99
+    },
+    {
+      "id": "world-ingest->distributed-bake-queue",
+      "weight": 8,
+      "connectedPercent": 100
+    },
+    {
+      "id": "quality-ratchet->release-wall",
+      "weight": 7,
+      "connectedPercent": 100
+    },
+    {
+      "id": "incident->rule->test->protection->consumer-graph",
+      "weight": 8,
+      "connectedPercent": 100
+    },
+    {
+      "id": "bake-farm->sha-cache->derived-artifact-materializer",
+      "weight": 5,
+      "connectedPercent": 100
+    },
+    {
+      "id": "webgpu-pbr-material-audit->authority-gate",
+      "weight": 5,
+      "connectedPercent": 99
+    },
+    {
+      "id": "wasm-thread-pool->compatible-fastpath-registry",
+      "weight": 4,
+      "connectedPercent": 100
+    },
+    {
+      "id": "device-farm->renderer-promotion-gate",
+      "weight": 5,
+      "connectedPercent": 100
+    },
+    {
+      "id": "neon-evidence->pattern-promotion-gate",
+      "weight": 5,
+      "connectedPercent": 100
+    },
+    {
+      "id": "representative-canary->rollout->consumer-drift-audit",
+      "weight": 6,
+      "connectedPercent": 100
+    },
+    {
+      "id": "sandbox-fix->proof->ratchet->rollout",
+      "weight": 6,
+      "connectedPercent": 100
+    },
+    {
+      "id": "cross-origin-isolation->shared-memory-decode->safe-fallback",
+      "weight": 5,
+      "connectedPercent": 100
+    },
+    {
+      "id": "exact-material-table->clustered-lighting->webgpu-authority-gate",
+      "weight": 5,
+      "connectedPercent": 99
+    },
+    {
+      "id": "virtual-texture-residency->near-field-quality-lock",
+      "weight": 5,
+      "connectedPercent": 100
+    },
+    {
+      "id": "portal-visibility->fail-visible->near-bypass",
+      "weight": 4,
+      "connectedPercent": 100
+    },
+    {
+      "id": "screen-space-animation->interaction-boundary-exactness",
+      "weight": 4,
+      "connectedPercent": 100
+    },
+    {
+      "id": "physics-broadphase->player-contact-awake",
+      "weight": 4,
+      "connectedPercent": 100
+    },
+    {
+      "id": "lossless-network-delta->local-player-authority",
+      "weight": 4,
+      "connectedPercent": 100
+    },
+    {
+      "id": "device-evidence->safe-schedule-learner->quality-ratchet",
+      "weight": 5,
+      "connectedPercent": 100
+    },
+    {
+      "id": "pattern-evidence->applicability-firewall->consumer-propagation",
+      "weight": 5,
+      "connectedPercent": 100
+    },
+    {
+      "id": "frame-times->p99-hitch-gate->release-wall",
+      "weight": 4,
+      "connectedPercent": 100
+    },
+    {
+      "id": "derived-artifact->content-hash->local-r2-cas",
+      "weight": 4,
+      "connectedPercent": 99
+    },
+    {
+      "id": "source-hash->incremental-compiler->affected-systems-only",
+      "weight": 6,
+      "connectedPercent": 100
+    },
+    {
+      "id": "cpu-pvs->hierarchical-grid->occlusion-cache->near-fail-visible",
+      "weight": 6,
+      "connectedPercent": 100
+    },
+    {
+      "id": "player-motion-camera->predictive-streaming-v2->near-residency",
+      "weight": 5,
+      "connectedPercent": 100
+    },
+    {
+      "id": "changed-bounds->incremental-cpu-light-bake->static-shadow-cache",
+      "weight": 5,
+      "connectedPercent": 100
+    },
+    {
+      "id": "source-sha-params->nav-collision-cache->world-preparer",
+      "weight": 4,
+      "connectedPercent": 100
+    },
+    {
+      "id": "cpu-profiler->safe-autotuner->p99-hitch-ratchet",
+      "weight": 6,
+      "connectedPercent": 100
+    },
+    {
+      "id": "production-replay->incident-fingerprint->mandatory-regression",
+      "weight": 6,
+      "connectedPercent": 100
+    },
+    {
+      "id": "desktop-ai-diagnose->fix->retest-loop->release-wall",
+      "weight": 5,
+      "connectedPercent": 100
+    },
+    {
+      "id": "threaded-import->exact-fallback->source-sha-gate",
+      "weight": 5,
+      "connectedPercent": 100
+    },
+    {
+      "id": "mmap-window->content-defined-chunks->lossless-cache-codec",
+      "weight": 5,
+      "connectedPercent": 100
+    },
+    {
+      "id": "semantic-pvs->near-fail-visible->visibility-runtime",
+      "weight": 5,
+      "connectedPercent": 100
+    },
+    {
+      "id": "cell-input-hash->incremental-gi-reuse->lighting-ratchet",
+      "weight": 5,
+      "connectedPercent": 100
+    },
+    {
+      "id": "service-worker->shared-worker->sha-version-isolation",
+      "weight": 4,
+      "connectedPercent": 100
+    },
+    {
+      "id": "cpu-flamegraph->safe-autotuner->ratchet",
+      "weight": 4,
+      "connectedPercent": 100
+    },
+    {
+      "id": "network-physics-replay-farm->fingerprint->permanent-regression",
+      "weight": 5,
+      "connectedPercent": 100
+    },
+    {
+      "id": "dependency-graph->incremental-impact->release-wall",
+      "weight": 6,
+      "connectedPercent": 100
+    }
+  ],
+  "connectivityMeaning": "internal shared-core wiring. External GitHub/Vercel/Neon consumer execution is deliberately represented in verifiedEndToEndPercent instead of inflating connectivity.",
+  "verificationMeaning": "verifiedPercent counts actual execution possible in this environment; real browser/WebGPU, durable Neon DB, external code executor, heavy distributed GI shard, and external consumer canary runs remain lower until connected."
+}

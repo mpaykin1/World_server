@@ -1,0 +1,244 @@
+{
+  "schemaVersion": "7.5.0",
+  "system": "WORLD_SERVER_SYSTEM_INTEGRATION",
+  "cpuFirst": true,
+  "capabilities": [
+    {
+      "id": "quality-core",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10",
+      "provides": [
+        "dependency-graph",
+        "replay",
+        "ratchet",
+        "quality-knowledge"
+      ]
+    },
+    {
+      "id": "texture-quality",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10",
+      "provides": [
+        "texture-pipeline",
+        "pbr",
+        "atlas",
+        "texture-runtime-evidence"
+      ]
+    },
+    {
+      "id": "mesh-quality",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12",
+      "provides": [
+        "canonical-mesh-optimizer",
+        "lod",
+        "hlod",
+        "mesh-regression"
+      ]
+    },
+    {
+      "id": "procedural-quality",
+      "owner": "PROCEDURAL_QUALITY_ENGINE_V10",
+      "provides": [
+        "procedural-generation",
+        "temporal-qa",
+        "frame-pacing"
+      ]
+    },
+    {
+      "id": "apng-quality",
+      "owner": "WORLD_SERVER_APNG_QUALITY_SYSTEM_V3_MAX",
+      "provides": [
+        "apng-validate",
+        "apng-repair",
+        "apng-release-gate"
+      ]
+    },
+    {
+      "id": "pixel-animation",
+      "owner": "PIXEL_ANIMATION_SYSTEM_V3",
+      "provides": [
+        "pixel-atlas",
+        "animation-culling",
+        "mobile-fallback"
+      ]
+    },
+    {
+      "id": "video2game",
+      "owner": "VIDEO2GAME_VOXEL_V5",
+      "provides": [
+        "video-to-voxel",
+        "cpu-fallback"
+      ]
+    },
+    {
+      "id": "3dgs",
+      "owner": "PIXEL_3DGS_CPU_V6_PHONE_4D_MAX",
+      "provides": [
+        "cpu-3dgs",
+        "phone-capture",
+        "dynamic-4d"
+      ]
+    },
+    {
+      "id": "golden-governance",
+      "owner": "WORLD_SERVER_GOLDEN_STANDARD_V13",
+      "provides": [
+        "no-regression",
+        "self-calibration",
+        "desktop-ai-protocol"
+      ]
+    },
+    {
+      "id": "world-quality-v6",
+      "owner": "WORLD_QUALITY_AUTOPILOT_V6",
+      "provides": [
+        "technology-scout",
+        "cpu-routing",
+        "technology-drift",
+        "quality-slo"
+      ]
+    },
+    {
+      "id": "dream-v5",
+      "owner": "WORLD_SERVER_DREAM_AUTOPILOT_V5_CPU",
+      "provides": [
+        "fresh-real-device-evidence",
+        "physics-guardian",
+        "gameplay-agent"
+      ]
+    },
+    {
+      "id": "pwa-v4",
+      "owner": "WORLD_SERVER_PWA_SELF_IMPROVING_V4_MAX",
+      "provides": [
+        "pwa",
+        "real-ios-evidence",
+        "adaptive-runtime",
+        "production-rollback"
+      ]
+    },
+    {
+      "id": "truth-gate",
+      "owner": "production-100-truth-gate-v1",
+      "provides": [
+        "production-certification",
+        "anti-false-100"
+      ]
+    },
+    {
+      "id": "runtime-v12-3",
+      "owner": "WORLD_SERVER_QUALITY_RUNTIME_V12_3",
+      "provides": [
+        "github-supabase-bridge",
+        "master-protection",
+        "pixel-atlas-v12"
+      ]
+    },
+    {
+      "id": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "provides": [
+        "affected-test-selection",
+        "apng-binary-verification",
+        "appium-compatible-worker-discovery",
+        "asset-batch-atlas-planner",
+        "attack-direction-contract",
+        "audio-variation-gate",
+        "automated-real-device-executor",
+        "automatic-authorized-rollback",
+        "capability-aware-cpu-scheduler",
+        "capability-preservation-gate",
+        "cas-local-redundancy",
+        "cas-read-repair",
+        "cas-replication-quorum",
+        "causal-incident-graph",
+        "central-control-plane",
+        "certified-function-baselines",
+        "change-impact-routing",
+        "checkpoint-resume",
+        "checkpointed-long-soak-runner",
+        "content-addressed-asset-registry",
+        "content-defined-asset-deltas",
+        "cosign-security-floor-3.1.3",
+        "crash-fingerprint-clustering",
+        "cyclonedx-1.7-sbom",
+        "dead-letter-queue",
+        "dependency-impact-graph",
+        "deployment-impact-routing",
+        "desktop-ai-output-contract",
+        "deterministic-record-replay",
+        "deterministic-wit-bindings",
+        "device-worker-authenticated-evidence",
+        "disaster-recovery",
+        "distributed-cas-peer-protocol",
+        "dual-run-replacement-contract",
+        "durable-priority-queue",
+        "evidence-readiness-score",
+        "exhaustive-model-checker",
+        "expand-migrate-contract-coordinator",
+        "explicit-legacy-contract-synthesis",
+        "feet-direction-contract",
+        "fenced-db-migrations",
+        "fenced-leader-lease",
+        "full-file-delivery-contract",
+        "function-contract-coverage-engine",
+        "gameplay-spatial-contract",
+        "graphics-quality-ratchet",
+        "honest-100-function-certification",
+        "idempotency",
+        "in-toto-statement-v1",
+        "incremental-snapshots",
+        "lease-recovery",
+        "legacy-evidence-factory",
+        "legacy-evidence-recipe-expansion",
+        "lexical-dataflow-impact",
+        "mandatory-native-tlc-ci",
+        "merkle-cas",
+        "migration-fencing-runtime-verifier",
+        "minimum-manual-action-gate",
+        "monotonic-function-enhancement",
+        "multi-window-burn-rate",
+        "native-causal-collector-discovery",
+        "native-etw-ebpf-adapters",
+        "native-runtime-truth-separation",
+        "node-crash-diagnostics",
+        "offline-policy-mirror",
+        "opa-rego-policy",
+        "orchestrator-supervisor",
+        "osv-dependency-security",
+        "otlp-http-json",
+        "owned-real-device-lab",
+        "physical-device-fleet-evidence",
+        "physical-device-worker",
+        "pinned-local-toolchain-bootstrap",
+        "production-asset-quality-gate",
+        "production-crash-canary-stop",
+        "production-slo-autopilot",
+        "project-constitution-gate",
+        "rekor-transparency-monitor",
+        "scalability-first-gate",
+        "semantic-merge-ownership",
+        "semantic-symbol-graph",
+        "shadow-first-feature-promotion",
+        "shield-geometry-contract",
+        "sigstore-cosign-bridge",
+        "slo-error-budget-controller",
+        "slsa-provenance-v1",
+        "soak-chaos-verification",
+        "split-brain-prevention",
+        "system-enhancement-orchestrator",
+        "tamper-evident-transparency-log",
+        "technology-consensus",
+        "technology-lock",
+        "tla-plus-specs",
+        "transactional-deployment",
+        "typescript-native-ast-dataflow",
+        "verified-delta-reconstruction",
+        "w3c-trace-context",
+        "wasi-component-model",
+        "weapon-grip-contract",
+        "wit-typed-adapter-contracts",
+        "zero-config-cas-discovery"
+      ]
+    }
+  ],
+  "integrationVersion": "7.4.0"
+}

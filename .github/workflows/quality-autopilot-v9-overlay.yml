@@ -1,0 +1,38 @@
+\
+name: Quality Autopilot v9 Overlay
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '37 2 * * *'
+concurrency:
+  group: quality-autopilot-v9-${{ github.ref }}
+  cancel-in-progress: false
+permissions:
+  contents: read
+jobs:
+  verify-overlay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm ci --ignore-scripts
+      - run: npm run quality:v9:test
+      - run: npm run quality:v9:golden:verify
+      - run: npm run quality:v9:bridge
+      - run: npm run quality:v9:readiness
+      - name: Promotion attestation (evidence only; no production mutation)
+        run: npm run quality:v9:attest
+        env:
+          QUALITY_COMMIT_SHA: ${{ github.sha }}
+          QUALITY_ATTESTATION_SECRET: ${{ secrets.QUALITY_ATTESTATION_SECRET }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: quality-autopilot-v9-evidence
+          path: |
+            data/quality-autopilot/readiness-v9.json
+            data/quality-autopilot/current-stack-v9.json
+            data/quality-autopilot/promotion-attestation-v9.json
+            data/quality-autopilot/golden-quarantine-v9.json

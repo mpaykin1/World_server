@@ -1,0 +1,857 @@
+{
+  "schemaVersion": 4,
+  "incidents": [
+    {
+      "fingerprint": "spawn-not-on-floor",
+      "symptoms": [
+        "player spawns in air",
+        "player spawns underground",
+        "spawn inside geometry"
+      ],
+      "rootCause": "hard-coded or unvalidated spawn transform",
+      "preventionRules": [
+        "PHY-002"
+      ],
+      "mandatoryTests": [
+        "spawn-grounded",
+        "spawn-capsule-clearance"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "jump-moves-forward-instead-of-up",
+      "symptoms": [
+        "space zooms world",
+        "jump translates along camera forward"
+      ],
+      "rootCause": "jump impulse applied in camera/local axis or camera rig moved instead of player body",
+      "preventionRules": [
+        "PHY-003"
+      ],
+      "mandatoryTests": [
+        "jump-world-y-only"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "camera-cannot-look-straight-up",
+      "symptoms": [
+        "sky cannot be seen overhead"
+      ],
+      "rootCause": "pitch clamp too narrow or wrong Euler order",
+      "preventionRules": [
+        "CAM-002"
+      ],
+      "mandatoryTests": [
+        "pitch-plus-minus-89"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "camera-rolls-when-looking-left-right",
+      "symptoms": [
+        "image flips",
+        "horizon rotates on mouse X"
+      ],
+      "rootCause": "yaw applied to wrong local axis / roll left unconstrained",
+      "preventionRules": [
+        "CAM-001",
+        "INP-001"
+      ],
+      "mandatoryTests": [
+        "camera-roll-zero",
+        "horizontal-look-yaw-only"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "world-became-blurry",
+      "symptoms": [
+        "source details disappear",
+        "model looks smeared after import"
+      ],
+      "rootCause": "asset decimation, texture downscale/recompression, low render resolution or wrong splat pipeline",
+      "preventionRules": [
+        "SRC-001",
+        "SRC-002",
+        "GFX-001",
+        "GFX-002",
+        "PERF-002"
+      ],
+      "mandatoryTests": [
+        "source-hash-lock",
+        "geometry-stats-regression",
+        "visual-golden-regression"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "splat-has-no-collision",
+      "symptoms": [
+        "player falls through Gaussian world"
+      ],
+      "rootCause": "Gaussian splats are visual primitives without triangle collision topology",
+      "preventionRules": [
+        "PHY-001"
+      ],
+      "mandatoryTests": [
+        "splat-proxy-required",
+        "collider-raycast-floor"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "controls-inverted-or-world-rotates",
+      "symptoms": [
+        "left/right rotates image incorrectly",
+        "W does not move where camera looks"
+      ],
+      "rootCause": "movement vectors include pitch/roll or wrong sign/basis",
+      "preventionRules": [
+        "INP-001",
+        "CAM-001"
+      ],
+      "mandatoryTests": [
+        "forward-planar-camera",
+        "left-right-basis"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "fps-optimization-degraded-near-graphics",
+      "symptoms": [
+        "nearby geometry or textures lose detail when FPS drops",
+        "dynamic resolution makes player vicinity blurry"
+      ],
+      "rootCause": "performance control changed visible source fidelity instead of reducing invisible/distant work",
+      "preventionRules": [
+        "SRC-002",
+        "PERF-002",
+        "PERF-003",
+        "PERF-004"
+      ],
+      "mandatoryTests": [
+        "source-hash-lock",
+        "near-fps-optimization-no-quality-loss",
+        "near-field-max-quality"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "fixed-error-returned-in-another-project",
+      "symptoms": [
+        "bug fixed in one game reappears in another consumer",
+        "project runs stale rule/test pack"
+      ],
+      "rootCause": "fix was local or consumer did not inherit compiled protection pack",
+      "preventionRules": [
+        "QA-006",
+        "QA-008",
+        "QA-014"
+      ],
+      "mandatoryTests": [
+        "protected-error-never-recur",
+        "quality-genome-inheritance",
+        "compiled-global-protection-pack"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "good-pattern-not-spread-to-all-projects",
+      "symptoms": [
+        "proven optimization or fix only exists in one game"
+      ],
+      "rootCause": "successful pattern was not promoted through quality genome and transactional rollout",
+      "preventionRules": [
+        "QA-004",
+        "QA-007",
+        "QA-013",
+        "QA-014"
+      ],
+      "mandatoryTests": [
+        "promoted-pattern-propagation",
+        "canary-global-rollout",
+        "cross-project-pattern-promotion",
+        "compiled-global-protection-pack"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "webgpu-occlusion-caused-popin-or-overcull",
+      "symptoms": [
+        "visible distant object disappears incorrectly",
+        "near object culled by GPU visibility"
+      ],
+      "rootCause": "non-conservative HZB or missing near bypass/fail-visible behavior",
+      "preventionRules": [
+        "PERF-014",
+        "PERF-006"
+      ],
+      "mandatoryTests": [
+        "webgpu-hzb-conservative-fail-visible",
+        "gpu-occlusion-near-bypass"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "simd-fast-path-changed-geometry",
+      "symptoms": [
+        "SIMD decode differs from scalar source values"
+      ],
+      "rootCause": "fast path numerical/byte mismatch",
+      "preventionRules": [
+        "PERF-015",
+        "SRC-001"
+      ],
+      "mandatoryTests": [
+        "wasm-simd-numerical-parity",
+        "source-hash-lock"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "animated-glb-streaming-broke-animation",
+      "symptoms": [
+        "skin animation or morph target breaks after streaming"
+      ],
+      "rootCause": "animated GLB was structurally split or bytes were not conserved",
+      "preventionRules": [
+        "STR-001",
+        "SRC-001"
+      ],
+      "mandatoryTests": [
+        "animated-glb-range-byte-conservation",
+        "source-hash-lock"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "dynamic-body-tunneling",
+      "symptoms": [
+        "player passes through fast moving platform or moving mesh"
+      ],
+      "rootCause": "discrete AABB-only dynamic collision missed relative motion",
+      "preventionRules": [
+        "PHY-008",
+        "PHY-006"
+      ],
+      "mandatoryTests": [
+        "dynamic-mesh-sweep-contract",
+        "dynamic-moving-side-collision"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "production-error-fingerprint-project-local",
+      "symptoms": [
+        "same fixed bug appears in another project under a different fingerprint"
+      ],
+      "rootCause": "fingerprint included project/world identity",
+      "preventionRules": [
+        "QA-016",
+        "QA-006"
+      ],
+      "mandatoryTests": [
+        "global-production-fingerprint",
+        "protected-error-never-recur"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "offline-bake-mismatched-source",
+      "symptoms": [
+        "lighting/reflection bake belongs to previous world revision"
+      ],
+      "rootCause": "derived bake was applied without source SHA lock",
+      "preventionRules": [
+        "LGT-004",
+        "LGT-005"
+      ],
+      "mandatoryTests": [
+        "offline-gi-source-lock",
+        "offline-reflection-source-lock"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "protected-self-heal-broke-other-invariant",
+      "symptoms": [
+        "automatic repair fixed one protected bug but broke historical behavior"
+      ],
+      "rootCause": "unbounded auto code patch without transactional proof",
+      "preventionRules": [
+        "QA-018",
+        "QA-001"
+      ],
+      "mandatoryTests": [
+        "transactional-protected-self-heal",
+        "known-error-immunity"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "webgpu-pbr-fastpath-lost-source-material-semantics",
+      "symptoms": [
+        "WebGPU path looks different from proven renderer",
+        "normal/metallic/roughness/emissive source response missing"
+      ],
+      "rootCause": "fast renderer became authoritative before source-equivalent material and golden parity proof",
+      "preventionRules": [
+        "PERF-017",
+        "GFX-002"
+      ],
+      "mandatoryTests": [
+        "webgpu-pbr-source-equivalence",
+        "visual-golden-regression"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "threaded-simd-decode-race-or-corruption",
+      "symptoms": [
+        "parallel decode differs from scalar result",
+        "worker chunks reordered or corrupted"
+      ],
+      "rootCause": "threaded fast path lacked deterministic chunk ordering/numerical parity",
+      "preventionRules": [
+        "PERF-018",
+        "PERF-015"
+      ],
+      "mandatoryTests": [
+        "wasm-simd-threaded-parity",
+        "wasm-simd-numerical-parity"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "quality-floor-regressed-after-optimization",
+      "symptoms": [
+        "new build passes locally but a previously achieved quality metric is lower"
+      ],
+      "rootCause": "quality history was advisory instead of a monotonic release floor",
+      "preventionRules": [
+        "QA-019",
+        "QA-003"
+      ],
+      "mandatoryTests": [
+        "monotonic-quality-ratchet",
+        "optimization-promotion-quality-nonregression"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "stale-bake-cache-applied-to-new-source",
+      "symptoms": [
+        "lighting/probe artifact belongs to previous source revision"
+      ],
+      "rootCause": "derived artifact cache was not keyed by source SHA/tool SHA/parameters",
+      "preventionRules": [
+        "QA-021",
+        "LGT-004",
+        "LGT-005"
+      ],
+      "mandatoryTests": [
+        "content-addressed-bake-cache",
+        "offline-gi-source-lock",
+        "offline-reflection-source-lock"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "consumer-drift-missed-global-fix",
+      "symptoms": [
+        "one project does not receive a proven fix or quality genome update"
+      ],
+      "rootCause": "consumer runtime/protection hash drift was not release-blocking",
+      "preventionRules": [
+        "QA-023",
+        "QA-008",
+        "QA-014"
+      ],
+      "mandatoryTests": [
+        "consumer-drift-audit",
+        "quality-genome-inheritance",
+        "compiled-global-protection-pack"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "shared-memory-fastpath-broke-on-nonisolated-deploy",
+      "symptoms": [
+        "browser crashes or decode fails when SharedArrayBuffer unavailable"
+      ],
+      "rootCause": "Shared memory fast path lacked cross-origin isolation capability gate/fallback",
+      "preventionRules": [
+        "PERF-020"
+      ],
+      "mandatoryTests": [
+        "shared-memory-zero-copy-fallback"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "material-table-fastpath-changed-material",
+      "symptoms": [
+        "GPU-driven path renders material differently"
+      ],
+      "rootCause": "material table repacked or omitted exact source semantics/textures",
+      "preventionRules": [
+        "PERF-021",
+        "PERF-017"
+      ],
+      "mandatoryTests": [
+        "webgpu-exact-material-table",
+        "webgpu-pbr-source-equivalence"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "clustered-lighting-dropped-visible-light",
+      "symptoms": [
+        "near light disappears under many lights"
+      ],
+      "rootCause": "cluster overflow discarded relevant light instead of falling back",
+      "preventionRules": [
+        "LGT-006"
+      ],
+      "mandatoryTests": [
+        "clustered-lighting-fail-bright"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "virtual-texture-evicted-near-detail",
+      "symptoms": [
+        "near texture becomes blurry under memory pressure"
+      ],
+      "rootCause": "near full-resolution texture page was evicted or replaced with lower-resolution data",
+      "preventionRules": [
+        "PERF-022",
+        "SRC-002"
+      ],
+      "mandatoryTests": [
+        "virtual-texture-near-full-resolution",
+        "near-field-max-quality"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "portal-overcull-visible-room",
+      "symptoms": [
+        "visible or nearby room/object disappears"
+      ],
+      "rootCause": "portal system hid unknown/near room without conservative semantic proof",
+      "preventionRules": [
+        "PERF-023"
+      ],
+      "mandatoryTests": [
+        "portal-visibility-conservative"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "animation-budget-stuttered-near-character",
+      "symptoms": [
+        "near or interacting character animates at low rate"
+      ],
+      "rootCause": "screen-space animation budget throttled near/interaction rig or discarded accumulated time",
+      "preventionRules": [
+        "ANM-002"
+      ],
+      "mandatoryTests": [
+        "animation-budget-near-interaction-full-rate"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "physics-sleep-disabled-player-contact",
+      "symptoms": [
+        "moving object stops colliding near player"
+      ],
+      "rootCause": "broadphase sleeping applied to near or player-contact body",
+      "preventionRules": [
+        "PHY-009"
+      ],
+      "mandatoryTests": [
+        "physics-broadphase-near-contact-awake"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "network-compression-changed-local-state",
+      "symptoms": [
+        "player/network state drifts after compression"
+      ],
+      "rootCause": "network optimizer quantized or approximated local/near authoritative state",
+      "preventionRules": [
+        "NET-002"
+      ],
+      "mandatoryTests": [
+        "network-delta-lossless"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "device-learning-lowered-graphics",
+      "symptoms": [
+        "one device profile becomes blurry"
+      ],
+      "rootCause": "learned schedule changed fidelity knob instead of scheduling cost",
+      "preventionRules": [
+        "PERF-024",
+        "PERF-003"
+      ],
+      "mandatoryTests": [
+        "device-schedule-safe-knobs-only",
+        "near-fps-optimization-no-quality-loss"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "derived-cache-hash-mismatch",
+      "symptoms": [
+        "cached bake/artifact belongs to different bytes"
+      ],
+      "rootCause": "persistent cache object was not verified by content hash/source lock",
+      "preventionRules": [
+        "QA-025",
+        "QA-021"
+      ],
+      "mandatoryTests": [
+        "derived-artifact-cas-source-lock",
+        "content-addressed-bake-cache"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "good-pattern-propagated-to-incompatible-project",
+      "symptoms": [
+        "global improvement breaks a project family"
+      ],
+      "rootCause": "successful pattern was spread without applicability/capability evidence",
+      "preventionRules": [
+        "QA-026",
+        "QA-013"
+      ],
+      "mandatoryTests": [
+        "pattern-applicability-firewall",
+        "cross-project-pattern-promotion"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "frame-budget-sacrificed-near-quality",
+      "symptoms": [
+        "frame pressure reduces visible detail instead of background work"
+      ],
+      "rootCause": "scheduler deferred near-critical work or touched fidelity knobs",
+      "preventionRules": [
+        "PERF-025",
+        "PERF-003"
+      ],
+      "mandatoryTests": [
+        "frame-budget-near-critical",
+        "near-fps-optimization-no-quality-loss"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "p99-stutter-regressed-after-fps-optimization",
+      "symptoms": [
+        "average FPS improved but hitching became worse"
+      ],
+      "rootCause": "optimization considered mean FPS only and ignored p99/hitch regression",
+      "preventionRules": [
+        "PERF-026"
+      ],
+      "mandatoryTests": [
+        "stutter-p99-regression"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "full-world-rebuild-after-single-object-change",
+      "symptoms": [
+        "whole world recompiled after local edit"
+      ],
+      "rootCause": "compiler had no content dependency graph",
+      "preventionRules": [
+        "PERF-028"
+      ],
+      "mandatoryTests": [
+        "incremental-world-compiler-affected-only"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "cpu-optimization-reduced-near-graphics",
+      "symptoms": [
+        "near graphics became lower to save CPU"
+      ],
+      "rootCause": "optimizer touched fidelity instead of computation cadence/cache",
+      "preventionRules": [
+        "PERF-027",
+        "PERF-032"
+      ],
+      "mandatoryTests": [
+        "cpu-first-no-paid-gpu",
+        "cpu-autotuner-safe-knobs"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "pvs-overculled-near-visible-object",
+      "symptoms": [
+        "near visible object disappeared"
+      ],
+      "rootCause": "visibility fastpath was not conservative/fail-visible",
+      "preventionRules": [
+        "PERF-029"
+      ],
+      "mandatoryTests": [
+        "cpu-pvs-near-fail-visible"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "autotuner-selected-lossy-knob",
+      "symptoms": [
+        "autotuner lowered resolution/texture/geometry"
+      ],
+      "rootCause": "optimizer search space included fidelity knobs",
+      "preventionRules": [
+        "PERF-032"
+      ],
+      "mandatoryTests": [
+        "cpu-autotuner-safe-knobs"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "replay-bug-was-not-promoted-to-regression",
+      "symptoms": [
+        "same production interaction bug returned"
+      ],
+      "rootCause": "production repro was not persisted as mandatory replay",
+      "preventionRules": [
+        "QA-027"
+      ],
+      "mandatoryTests": [
+        "production-replay-permanent"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "cached-nav-collision-used-for-wrong-source",
+      "symptoms": [
+        "wrong nav/collision cache after world change"
+      ],
+      "rootCause": "cache key omitted source SHA/parameters",
+      "preventionRules": [
+        "QA-028"
+      ],
+      "mandatoryTests": [
+        "nav-collision-cache-source-lock"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "background-bake-starved-game-loop",
+      "symptoms": [
+        "CPU bake caused frame stalls"
+      ],
+      "rootCause": "background CPU work was not budgeted/incremental",
+      "preventionRules": [
+        "PERF-025",
+        "LGT-007"
+      ],
+      "mandatoryTests": [
+        "incremental-cpu-light-bake",
+        "frame-budget-near-critical"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "server-required-paid-gpu",
+      "symptoms": [
+        "world pipeline could not run without paid GPU"
+      ],
+      "rootCause": "server path depended on GPU-only work instead of CPU/cache/client split",
+      "preventionRules": [
+        "PERF-027"
+      ],
+      "mandatoryTests": [
+        "cpu-first-no-paid-gpu"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "threaded-importer-race-corrupted-asset",
+      "symptoms": [
+        "threaded importer changed bytes or geometry"
+      ],
+      "rootCause": "concurrent decode/write lacked deterministic exact parity",
+      "preventionRules": [
+        "PERF-033"
+      ],
+      "mandatoryTests": [
+        "threaded-importer-exact-parity"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "huge-world-parser-loaded-whole-file-oom",
+      "symptoms": [
+        "huge asset exhausted RAM during import"
+      ],
+      "rootCause": "parser materialized whole source instead of bounded windows",
+      "preventionRules": [
+        "PERF-034"
+      ],
+      "mandatoryTests": [
+        "mmap-stream-bounded-memory"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "semantic-pvs-overculled-unknown-space",
+      "symptoms": [
+        "semantic visibility hid unknown/near visible object"
+      ],
+      "rootCause": "PVS treated uncertain semantic membership as invisible",
+      "preventionRules": [
+        "PERF-035"
+      ],
+      "mandatoryTests": [
+        "semantic-pvs-fail-visible"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "incremental-gi-reused-dirty-cell",
+      "symptoms": [
+        "lighting stale after local edit"
+      ],
+      "rootCause": "GI cache reused cell without exact input hash parity",
+      "preventionRules": [
+        "LGT-008"
+      ],
+      "mandatoryTests": [
+        "incremental-gi-cell-hash-reuse"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "content-defined-chunking-changed-bytes",
+      "symptoms": [
+        "chunked asset reconstructed to different SHA"
+      ],
+      "rootCause": "CDC implementation was not byte-conservative",
+      "preventionRules": [
+        "STR-002"
+      ],
+      "mandatoryTests": [
+        "content-defined-chunk-byte-reconstruction"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "offline-cache-served-wrong-sha",
+      "symptoms": [
+        "offline runtime showed stale asset"
+      ],
+      "rootCause": "service worker cache was not version/SHA isolated",
+      "preventionRules": [
+        "PERF-036"
+      ],
+      "mandatoryTests": [
+        "offline-sha-cache-version-isolation"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "shared-worker-cache-cross-version-stale",
+      "symptoms": [
+        "another tab reused stale cache entry"
+      ],
+      "rootCause": "multi-tab cache key omitted runtime version or SHA",
+      "preventionRules": [
+        "PERF-036"
+      ],
+      "mandatoryTests": [
+        "shared-worker-cache-sha-isolation"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "cpu-tuning-without-causality-evidence",
+      "symptoms": [
+        "optimization targeted wrong bottleneck"
+      ],
+      "rootCause": "tuning occurred without profiler/flamegraph evidence",
+      "preventionRules": [
+        "PERF-037"
+      ],
+      "mandatoryTests": [
+        "cpu-flamegraph-evidence"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "replay-farm-nondeterministic-network-physics",
+      "symptoms": [
+        "same replay seed diverged"
+      ],
+      "rootCause": "network/physics scheduling used nondeterministic state",
+      "preventionRules": [
+        "QA-030"
+      ],
+      "mandatoryTests": [
+        "network-physics-replay-farm-determinism"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "dependency-impact-missed-required-rebuild",
+      "symptoms": [
+        "incremental build left stale derived/game output"
+      ],
+      "rootCause": "dependency graph failed to propagate change impact",
+      "preventionRules": [
+        "QA-031"
+      ],
+      "mandatoryTests": [
+        "dependency-impact-graph-complete"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "derived-cache-compression-changed-bytes",
+      "symptoms": [
+        "compressed cache decoded to different content"
+      ],
+      "rootCause": "transport codec parity was not SHA-verified",
+      "preventionRules": [
+        "QA-032"
+      ],
+      "mandatoryTests": [
+        "derived-cache-codec-lossless"
+      ],
+      "status": "protected"
+    },
+    {
+      "fingerprint": "binary-delta-reconstruction-mismatch",
+      "symptoms": [
+        "delta-updated derived chunk had wrong target SHA"
+      ],
+      "rootCause": "delta patch lacked exact reconstruction verification",
+      "preventionRules": [
+        "QA-033"
+      ],
+      "mandatoryTests": [
+        "binary-delta-exact-reconstruction"
+      ],
+      "status": "protected"
+    }
+  ]
+}

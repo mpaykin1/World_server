@@ -1,0 +1,43 @@
+{
+  "version": 10,
+  "pass": true,
+  "winner": {
+    "name": "high",
+    "quality": 95,
+    "stability": 93,
+    "cost": 65,
+    "utility": 88.32
+  },
+  "candidates": [
+    {
+      "name": "high",
+      "quality": 95,
+      "stability": 93,
+      "cost": 65,
+      "utility": 88.32
+    },
+    {
+      "name": "balanced",
+      "quality": 86,
+      "stability": 97,
+      "cost": 40,
+      "utility": 87.14
+    },
+    {
+      "name": "cinematic",
+      "quality": 99,
+      "stability": 86,
+      "cost": 90,
+      "utility": 85.68
+    },
+    {
+      "name": "safe",
+      "quality": 72,
+      "stability": 99,
+      "cost": 18,
+      "utility": 82.18
+    }
+  ],
+  "deviceMatrixPass": true,
+  "readiness": 99
+}

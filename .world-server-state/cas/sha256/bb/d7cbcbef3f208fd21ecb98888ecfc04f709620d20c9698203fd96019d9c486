@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "7.2.0",
+  "localInstallRoot": ".world-server/tools",
+  "autoInstallFreeTools": true,
+  "requireChecksumOrPackageLock": true,
+  "neverUseSudo": true,
+  "neverModifyGlobalToolchain": true,
+  "tools": {
+    "typescript": {
+      "version": "6.0.3",
+      "method": "npm-local",
+      "package": "typescript",
+      "requiredFor": "native-ast-dataflow"
+    },
+    "appium": {
+      "version": "3.6.0",
+      "method": "npm-local",
+      "package": "appium",
+      "requiredFor": "owned-real-device-execution"
+    },
+    "tlc": {
+      "version": "1.7.4",
+      "method": "verified-download",
+      "url": "https://github.com/tlaplus/tlaplus/releases/download/v1.7.4/tla2tools.jar",
+      "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "requiredFor": "native-model-check"
+    },
+    "wasmtime": {
+      "version": "48.0.0",
+      "method": "cargo-local-if-available",
+      "package": "wasmtime-cli",
+      "requiredFor": "wasi-component-execution",
+      "lts": true
+    },
+    "cosign": {
+      "minimumSafeVersion": "3.1.3",
+      "ciInstaller": "sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6",
+      "ciCosignRelease": "v3.1.3",
+      "requiredFor": "sigstore-signing",
+      "securityFloorReason": "GHSA-fx35-mq7g-6g98"
+    }
+  }
+}

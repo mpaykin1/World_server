@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "pass": true,
+  "mode": "consumer-drift-audit-v1",
+  "consumers": [],
+  "drifted": []
+}

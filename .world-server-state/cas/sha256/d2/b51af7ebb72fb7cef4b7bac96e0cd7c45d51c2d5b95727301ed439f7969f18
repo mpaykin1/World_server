@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 2,
+  "queue": [],
+  "autoSafeRepairs": [
+    "tools/auto_repair.py --apply",
+    "tools/self_heal_protected_errors.py --apply"
+  ],
+  "codePatchMode": "desktop-ai-executor-with-fail-closed-proof-obligations",
+  "unknownIncidentPolicy": "generate task + block release, never guess-patch"
+}

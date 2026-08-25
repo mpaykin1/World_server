@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "policy": "strict-known-antipattern-only-transactional-rollback-on-test-failure",
+  "recipes": [
+    {
+      "fingerprint": "jump-moves-forward-instead-of-up",
+      "file": "src/player-controller.js",
+      "replacements": [
+        {"old": "this.velocity.z = this.config.jumpSpeed;", "new": "this.velocity.y = this.config.jumpSpeed;"},
+        {"old": "this.velocity.x = this.config.jumpSpeed;", "new": "this.velocity.y = this.config.jumpSpeed;"}
+      ],
+      "mustContainAfter": ["this.velocity.y = this.config.jumpSpeed;"]
+    },
+    {
+      "fingerprint": "camera-rolls-when-looking-left-right",
+      "file": "src/player-controller.js",
+      "regexReplacements": [
+        {"pattern": "this\\.camera\\.rotation\\.set\\(this\\.pitch, this\\.yaw, (?!0\\))[^)]+\\)", "replacement": "this.camera.rotation.set(this.pitch, this.yaw, 0)"}
+      ],
+      "mustContainAfter": ["this.camera.rotation.set(this.pitch, this.yaw, 0)"]
+    },
+    {
+      "fingerprint": "camera-cannot-look-straight-up",
+      "file": "src/player-controller.js",
+      "regexReplacements": [
+        {"pattern": "const maxPitch = THREE\\.MathUtils\\.degToRad\\((?!89\\))\\d+(?:\\.\\d+)?\\)", "replacement": "const maxPitch = THREE.MathUtils.degToRad(89)"}
+      ],
+      "mustContainAfter": ["const maxPitch = THREE.MathUtils.degToRad(89)"]
+    },
+    {
+      "fingerprint": "controls-inverted-or-world-rotates",
+      "file": "src/player-controller.js",
+      "replacements": [
+        {"old": "const forward = new THREE.Vector3(-Math.sin(this.yaw), 0, Math.cos(this.yaw));", "new": "const forward = new THREE.Vector3(Math.sin(this.yaw), 0, -Math.cos(this.yaw));"}
+      ],
+      "mustContainAfter": ["const forward = new THREE.Vector3(Math.sin(this.yaw), 0, -Math.cos(this.yaw));"]
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0.0",
+  "projects": [
+    {
+      "projectKey": "voxel-world",
+      "currentQuality": 97,
+      "userPriority": 100,
+      "activityScore": 100,
+      "releaseBlockers": 0,
+      "daysSinceImprovement": 1
+    },
+    {
+      "projectKey": "ai3d-voxel-city",
+      "currentQuality": 96,
+      "userPriority": 95,
+      "activityScore": 90,
+      "releaseBlockers": 0,
+      "daysSinceImprovement": 1
+    },
+    {
+      "projectKey": "catalog",
+      "currentQuality": 94,
+      "userPriority": 80,
+      "activityScore": 70,
+      "releaseBlockers": 0,
+      "daysSinceImprovement": 2
+    }
+  ]
+}

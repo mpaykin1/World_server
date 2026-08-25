@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "minSampleSize": 50,
+  "maxCrashRate": 0.005,
+  "maxErrorRate": 0.02,
+  "maxP95LatencyMs": 800,
+  "maxFpsDropPercent": 15
+}

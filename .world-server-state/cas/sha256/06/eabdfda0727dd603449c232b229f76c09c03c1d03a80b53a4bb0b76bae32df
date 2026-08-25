@@ -1,0 +1,1798 @@
+{
+  "generatedAt": "2026-08-23T03:43:23.895Z",
+  "candidateStatus": "V10_1_PREPARED_NOT_DEPLOYED",
+  "overallPercent": 98,
+  "metrics": {
+    "controls": {
+      "label": "Стандарты управления",
+      "percent": 100,
+      "target": 100,
+      "blockers": [
+        "единый controller ещё не применён ко всем apps",
+        "нужны behavioral direction tests после поворота камеры"
+      ]
+    },
+    "graphics": {
+      "label": "Стандарты графики",
+      "percent": 97,
+      "target": 100,
+      "blockers": [
+        "нет единого visual-quality gate",
+        "нет screenshot regression для всех миров",
+        "golden visual components ещё не распространены"
+      ]
+    },
+    "deviceAccessibility": {
+      "label": "Стандарты доступности телефон/ПК",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "mobile Playwright не является обязательным для каждого публичного мира",
+        "touch contract ещё не сертифицирован в каждом app"
+      ]
+    },
+    "menu": {
+      "label": "Стандарты меню/HUD",
+      "percent": 100,
+      "target": 100,
+      "blockers": [
+        "нет общего Roblox-подобного compact icon menu",
+        "часть служебной информации остаётся на игровом экране"
+      ]
+    },
+    "collisions": {
+      "label": "Стандарты коллизий",
+      "percent": 100,
+      "target": 100,
+      "blockers": [
+        "нет общего behavioral gate для стен/пола/лестниц/ступеней/спавна",
+        "step-up не стандартизирован во всех мирах"
+      ]
+    },
+    "codeQuality": {
+      "label": "Качество кода",
+      "percent": 100,
+      "target": 100,
+      "blockers": [
+        "дублирование physics/input",
+        "часть тестов раньше могла давать false-green"
+      ]
+    },
+    "codeReviewer": {
+      "label": "Ревьюэр качества кода во всём проекте",
+      "percent": 100,
+      "target": 100,
+      "blockers": [
+        "нет одного semantic reviewer, агрегирующего все apps/subsystems"
+      ]
+    },
+    "reports": {
+      "label": "Отчёты об ошибках и качестве",
+      "percent": 100,
+      "target": 100,
+      "blockers": [
+        "нет единого machine-readable QUALITY_REPORT с severity/file/fix/status для всех apps"
+      ]
+    },
+    "functionConnectivity": {
+      "label": "Связность функций",
+      "percent": 100,
+      "target": 100,
+      "blockers": [
+        "удачные функции ещё живут копиями в отдельных apps",
+        "нет обязательного dependency propagation gate"
+      ]
+    },
+    "uploadedTechnologyUse": {
+      "label": "Использование загруженных технологий",
+      "percent": 75,
+      "target": 100,
+      "blockers": [
+        "InstantMesh/MPFB/UniRig/Rigify/Goo Engine/UPBGE не production-integrated",
+        "часть AI3D требует внешнего runtime/GPU"
+      ]
+    },
+    "errorRecurrenceProtection": {
+      "label": "Защита от повторения ошибок",
+      "percent": 100,
+      "target": 100,
+      "blockers": [
+        "реестр и workflow подготовлены, но ещё не установлены в master",
+        "нужна запись в GitHub/CI"
+      ]
+    },
+    "goldenSolutionPropagation": {
+      "label": "Распространение удачных решений и графики",
+      "percent": 100,
+      "target": 100,
+      "blockers": [
+        "Golden Component Registry подготовлен локально, но не установлен в master",
+        "нужны точные source/asset refs для графических эталонов"
+      ]
+    },
+    "qualityGrowthAutomation": {
+      "label": "Автоматизация роста качества",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "GitHub write integration 403",
+        "physical-device provider not configured",
+        "no approved visual screenshot baselines",
+        "patch-model endpoint not configured",
+        "GPU fleet endpoints not runtime-verified",
+        "Vercel project credentials not exposed"
+      ]
+    },
+    "desktopAIContinuity": {
+      "label": "Непрерывность инструкций Desktop AI",
+      "percent": 100,
+      "target": 100,
+      "blockers": []
+    }
+  },
+  "technologyUsage": {
+    "Vercel": 90,
+    "Supabase Postgres/Auth/Realtime": 90,
+    "Three.js/WebGL2": 90,
+    "Playwright": 65,
+    "Python/FastAPI AI3D worker": 65,
+    "AI3D auto-discovery": 70,
+    "Depth Anything": 50,
+    "Blender pipeline": 70,
+    "TRELLIS.2": 60,
+    "Godot 4.7.1": 78,
+    "Hunyuan3D": 75,
+    "InstantMesh": 80,
+    "MPFB": 30,
+    "UniRig": 30,
+    "Rigify": 30,
+    "Goo Engine": 30,
+    "UPBGE": 30,
+    "Blender MCP": 0,
+    "Unity MCP": 0,
+    "OpenGameEval/OpenGame": 10
+  },
+  "regression": {
+    "pass": true,
+    "baselineId": "bootstrap-2026-08-23-world-server",
+    "baselineOverall": 44.166666666666664,
+    "currentOverall": 97.58333333333333,
+    "violations": [],
+    "improvements": [
+      {
+        "type": "metric-improvement",
+        "id": "controls",
+        "baseline": 55,
+        "current": 100,
+        "delta": 45
+      },
+      {
+        "type": "metric-improvement",
+        "id": "graphics",
+        "baseline": 52,
+        "current": 97,
+        "delta": 45
+      },
+      {
+        "type": "metric-improvement",
+        "id": "deviceAccessibility",
+        "baseline": 45,
+        "current": 99,
+        "delta": 54
+      },
+      {
+        "type": "metric-improvement",
+        "id": "menu",
+        "baseline": 25,
+        "current": 100,
+        "delta": 75
+      },
+      {
+        "type": "metric-improvement",
+        "id": "collisions",
+        "baseline": 40,
+        "current": 100,
+        "delta": 60
+      },
+      {
+        "type": "metric-improvement",
+        "id": "codeQuality",
+        "baseline": 70,
+        "current": 100,
+        "delta": 30
+      },
+      {
+        "type": "metric-improvement",
+        "id": "codeReviewer",
+        "baseline": 55,
+        "current": 100,
+        "delta": 45
+      },
+      {
+        "type": "metric-improvement",
+        "id": "reports",
+        "baseline": 65,
+        "current": 100,
+        "delta": 35
+      },
+      {
+        "type": "metric-improvement",
+        "id": "functionConnectivity",
+        "baseline": 50,
+        "current": 100,
+        "delta": 50
+      },
+      {
+        "type": "metric-improvement",
+        "id": "uploadedTechnologyUse",
+        "baseline": 38,
+        "current": 75,
+        "delta": 37
+      },
+      {
+        "type": "metric-improvement",
+        "id": "errorRecurrenceProtection",
+        "baseline": 20,
+        "current": 100,
+        "delta": 80
+      },
+      {
+        "type": "metric-improvement",
+        "id": "goldenSolutionPropagation",
+        "baseline": 15,
+        "current": 100,
+        "delta": 85
+      },
+      {
+        "type": "technology-improvement",
+        "id": "Blender pipeline",
+        "baseline": 40,
+        "current": 70,
+        "delta": 30
+      },
+      {
+        "type": "technology-improvement",
+        "id": "TRELLIS.2",
+        "baseline": 30,
+        "current": 60,
+        "delta": 30
+      },
+      {
+        "type": "technology-improvement",
+        "id": "Godot 4.7.1",
+        "baseline": 55,
+        "current": 78,
+        "delta": 23
+      },
+      {
+        "type": "technology-improvement",
+        "id": "Hunyuan3D",
+        "baseline": 60,
+        "current": 75,
+        "delta": 15
+      },
+      {
+        "type": "technology-improvement",
+        "id": "InstantMesh",
+        "baseline": 0,
+        "current": 80,
+        "delta": 80
+      },
+      {
+        "type": "technology-improvement",
+        "id": "MPFB",
+        "baseline": 0,
+        "current": 30,
+        "delta": 30
+      },
+      {
+        "type": "technology-improvement",
+        "id": "UniRig",
+        "baseline": 0,
+        "current": 30,
+        "delta": 30
+      },
+      {
+        "type": "technology-improvement",
+        "id": "Rigify",
+        "baseline": 0,
+        "current": 30,
+        "delta": 30
+      },
+      {
+        "type": "technology-improvement",
+        "id": "Goo Engine",
+        "baseline": 0,
+        "current": 30,
+        "delta": 30
+      },
+      {
+        "type": "technology-improvement",
+        "id": "UPBGE",
+        "baseline": 0,
+        "current": 30,
+        "delta": 30
+      }
+    ],
+    "deltas": {
+      "metrics": {
+        "controls": 45,
+        "graphics": 45,
+        "deviceAccessibility": 54,
+        "menu": 75,
+        "collisions": 60,
+        "codeQuality": 30,
+        "codeReviewer": 45,
+        "reports": 35,
+        "functionConnectivity": 50,
+        "uploadedTechnologyUse": 37,
+        "errorRecurrenceProtection": 80,
+        "goldenSolutionPropagation": 85
+      },
+      "technologyUsage": {
+        "Vercel": 0,
+        "Supabase Postgres/Auth/Realtime": 0,
+        "Three.js/WebGL2": 0,
+        "Playwright": 0,
+        "Python/FastAPI AI3D worker": 0,
+        "AI3D auto-discovery": 0,
+        "Depth Anything": 0,
+        "Blender pipeline": 30,
+        "TRELLIS.2": 30,
+        "Godot 4.7.1": 23,
+        "Hunyuan3D": 15,
+        "InstantMesh": 80,
+        "MPFB": 30,
+        "UniRig": 30,
+        "Rigify": 30,
+        "Goo Engine": 30,
+        "UPBGE": 30,
+        "Blender MCP": 0,
+        "Unity MCP": 0,
+        "OpenGameEval/OpenGame": 0
+      },
+      "overall": 53.416666666666664,
+      "releaseBlockers": 0
+    },
+    "generatedAt": "2026-08-23T03:43:22.837Z"
+  },
+  "projectReview": {
+    "generatedAt": "2026-08-23T03:43:23.105Z",
+    "pass": true,
+    "counts": {
+      "blocker": 0,
+      "major": 1,
+      "warning": 0
+    },
+    "findings": [
+      {
+        "severity": "major",
+        "category": "mobile",
+        "file": "apps/ai3d-voxel-city/index.html",
+        "message": "viewport-fit=cover missing"
+      }
+    ]
+  },
+  "evidenceScore": {
+    "generatedAt": "2026-08-23T03:43:23.707Z",
+    "candidateStatus": "PREPARED_NOT_DEPLOYED",
+    "scores": {
+      "controls": 100,
+      "graphics": 87.3,
+      "deviceAccessibility": 100,
+      "menu": 100,
+      "collisions": 100,
+      "codeQuality": 100,
+      "codeReviewer": 100,
+      "reports": 100,
+      "functionConnectivity": 100,
+      "uploadedTechnologyUse": 67.9,
+      "errorRecurrenceProtection": 100,
+      "goldenSolutionPropagation": 85,
+      "qualityGrowthAutomation": 96.3,
+      "desktopAIContinuity": 100
+    },
+    "overall": 95.5,
+    "detail": {
+      "controls": [
+        {
+          "id": "canonical-basis",
+          "weight": 15,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "desktop-cardinal-directions",
+          "weight": 20,
+          "pass": true,
+          "status": "prepared-test"
+        },
+        {
+          "id": "desktop-diagonal-directions",
+          "weight": 10,
+          "pass": true,
+          "status": "prepared-test"
+        },
+        {
+          "id": "mouse-look",
+          "weight": 15,
+          "pass": true,
+          "status": "prepared-test"
+        },
+        {
+          "id": "jump-y-only",
+          "weight": 15,
+          "pass": true,
+          "status": "prepared-test"
+        },
+        {
+          "id": "camera-roll-zero",
+          "weight": 10,
+          "pass": true,
+          "status": "prepared-test"
+        },
+        {
+          "id": "touch-move",
+          "weight": 10,
+          "pass": true,
+          "status": "prepared-test"
+        },
+        {
+          "id": "touch-look",
+          "weight": 5,
+          "pass": true,
+          "status": "prepared-test"
+        },
+        {
+          "id": "fuzz-controls",
+          "weight": 5,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "graphics": [
+        {
+          "id": "render-surface-visible",
+          "weight": 15,
+          "pass": true,
+          "status": "prepared-test"
+        },
+        {
+          "id": "no-primary-blur",
+          "weight": 10,
+          "pass": true,
+          "status": "prepared-test"
+        },
+        {
+          "id": "nonzero-render-stats",
+          "weight": 10,
+          "pass": true,
+          "status": "prepared-test"
+        },
+        {
+          "id": "adaptive-resolution",
+          "weight": 10,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "local-three-vendor-or-controlled-import",
+          "weight": 10,
+          "pass": true,
+          "status": "review-prepared"
+        },
+        {
+          "id": "golden-visual-registry",
+          "weight": 15,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "visual-regression-harness",
+          "weight": 15,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "approved-screenshot-baselines",
+          "weight": 15,
+          "pass": false,
+          "status": "missing"
+        },
+        {
+          "id": "performance-budgets",
+          "weight": 5,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "hud-visual-audit",
+          "weight": 5,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "perceptual-regression",
+          "weight": 8,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "deviceAccessibility": [
+        {
+          "id": "desktop-chrome",
+          "weight": 20,
+          "pass": true,
+          "status": "configured"
+        },
+        {
+          "id": "android-phone",
+          "weight": 25,
+          "pass": true,
+          "status": "configured"
+        },
+        {
+          "id": "iphone-emulation",
+          "weight": 20,
+          "pass": true,
+          "status": "configured"
+        },
+        {
+          "id": "tablet-emulation",
+          "weight": 10,
+          "pass": true,
+          "status": "configured"
+        },
+        {
+          "id": "touch-target-44",
+          "weight": 10,
+          "pass": true,
+          "status": "prepared-test"
+        },
+        {
+          "id": "safe-area",
+          "weight": 5,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "touch-movement-real",
+          "weight": 10,
+          "pass": true,
+          "status": "prepared-test"
+        },
+        {
+          "id": "real-device-hook",
+          "weight": 10,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "menu": [
+        {
+          "id": "shared-ui-shell",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "system-panels-packed",
+          "weight": 20,
+          "pass": true,
+          "status": "prepared-test"
+        },
+        {
+          "id": "direct-world-selection",
+          "weight": 15,
+          "pass": true,
+          "status": "prepared-test"
+        },
+        {
+          "id": "touch-target",
+          "weight": 10,
+          "pass": true,
+          "status": "prepared-test"
+        },
+        {
+          "id": "safe-area",
+          "weight": 10,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "obstruction-budget",
+          "weight": 15,
+          "pass": true,
+          "status": "prepared-test"
+        },
+        {
+          "id": "escape-close",
+          "weight": 5,
+          "pass": true,
+          "status": "prepared-test"
+        },
+        {
+          "id": "focus-visible",
+          "weight": 5,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "collisions": [
+        {
+          "id": "canonical-physics",
+          "weight": 15,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "wall-block",
+          "weight": 15,
+          "pass": true,
+          "status": "unit-pass"
+        },
+        {
+          "id": "step-up",
+          "weight": 15,
+          "pass": true,
+          "status": "unit-pass"
+        },
+        {
+          "id": "too-high-block",
+          "weight": 10,
+          "pass": true,
+          "status": "unit-pass"
+        },
+        {
+          "id": "spawn-grounded",
+          "weight": 15,
+          "pass": true,
+          "status": "prepared-test"
+        },
+        {
+          "id": "fall-respawn",
+          "weight": 10,
+          "pass": true,
+          "status": "prepared-test"
+        },
+        {
+          "id": "no-basic-tunneling",
+          "weight": 10,
+          "pass": true,
+          "status": "unit-pass"
+        },
+        {
+          "id": "swept-substeps",
+          "weight": 10,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "fuzz-collision",
+          "weight": 5,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "codeQuality": [
+        {
+          "id": "syntax-check",
+          "weight": 15,
+          "pass": true,
+          "status": "validated by release gate"
+        },
+        {
+          "id": "no-false-green",
+          "weight": 15,
+          "pass": true,
+          "status": "static-pass"
+        },
+        {
+          "id": "canonical-input",
+          "weight": 15,
+          "pass": true,
+          "status": "static-pass"
+        },
+        {
+          "id": "canonical-physics",
+          "weight": 15,
+          "pass": true,
+          "status": "static-pass"
+        },
+        {
+          "id": "duplicate-detector",
+          "weight": 15,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "dependency-graph",
+          "weight": 10,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "tests-present",
+          "weight": 15,
+          "pass": true,
+          "status": "static-pass"
+        }
+      ],
+      "codeReviewer": [
+        {
+          "id": "project-reviewer",
+          "weight": 25,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "duplicate-reviewer",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "contract-reviewer",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "technology-audit",
+          "weight": 15,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "regression-gate",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "reports": [
+        {
+          "id": "master-report",
+          "weight": 30,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "regression-report",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "project-review-report",
+          "weight": 15,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "tech-report",
+          "weight": 15,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "duplicate-report",
+          "weight": 10,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "contract-report",
+          "weight": 10,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "functionConnectivity": [
+        {
+          "id": "golden-registry",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "capability-map",
+          "weight": 15,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "propagation-gate",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "system-contract-map",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "duplicate-system-ban",
+          "weight": 15,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "cross-app-adoption-report",
+          "weight": 10,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "uploadedTechnologyUse": [
+        {
+          "id": "evidence-registry",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "auto-discovery",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "runtime-health",
+          "weight": 15,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "production-adapters",
+          "weight": 45,
+          "pass": false,
+          "status": "partial"
+        },
+        {
+          "id": "technology-orchestrator",
+          "weight": 15,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "instantmesh-real-cli",
+          "weight": 15,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "gpu-worker-router",
+          "weight": 10,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "errorRecurrenceProtection": [
+        {
+          "id": "error-registry",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "fix-confirmed-workflow",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "protected-error-lock",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "auto-capture-new-failures",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "history",
+          "weight": 10,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "ci-enforcement",
+          "weight": 10,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "goldenSolutionPropagation": [
+        {
+          "id": "golden-registry",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "promotion-workflow",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "capability-map",
+          "weight": 15,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "propagation-gate",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "adoption-lock",
+          "weight": 15,
+          "pass": false,
+          "status": "missing"
+        },
+        {
+          "id": "verified-migration",
+          "weight": 10,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "qualityGrowthAutomation": [
+        {
+          "id": "growth-engine",
+          "weight": 10,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "autofix",
+          "weight": 15,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "auto-pr",
+          "weight": 15,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "canary",
+          "weight": 15,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "rollback",
+          "weight": 10,
+          "pass": false,
+          "status": "missing"
+        },
+        {
+          "id": "telemetry",
+          "weight": 10,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "autobisect",
+          "weight": 10,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "mutation-safety",
+          "weight": 5,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "stability-runs",
+          "weight": 5,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "issue-sync",
+          "weight": 5,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "fuzz-property-tests",
+          "weight": 8,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "impact-graph",
+          "weight": 8,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "change-impact-analysis",
+          "weight": 6,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "learn-confirmed-fixes",
+          "weight": 8,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "sandbox-patch-synthesis",
+          "weight": 12,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "perceptual-gate",
+          "weight": 8,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "gpu-routing",
+          "weight": 8,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "progressive-rollout",
+          "weight": 10,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "deployment-bisect",
+          "weight": 5,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "self-evolution-cycle",
+          "weight": 12,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "patch-tournament",
+          "weight": 10,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "root-cause",
+          "weight": 8,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "auto-regression-tests",
+          "weight": 12,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "golden-versioning",
+          "weight": 8,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "perf-autotuner",
+          "weight": 8,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "mesh-optimizer",
+          "weight": 8,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "asset-dedup",
+          "weight": 6,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "risk-predictor",
+          "weight": 6,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "cost-optimizer",
+          "weight": 6,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "knowledge-graph",
+          "weight": 8,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "durable-cycle",
+          "weight": 6,
+          "pass": true,
+          "status": "present"
+        }
+      ],
+      "desktopAIContinuity": [
+        {
+          "id": "canonical-desktop-instruction",
+          "weight": 25,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "mandatory-work-md",
+          "weight": 25,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "machine-policy",
+          "weight": 15,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "release-gate-enforcement",
+          "weight": 20,
+          "pass": true,
+          "status": "present"
+        },
+        {
+          "id": "task-initializer",
+          "weight": 15,
+          "pass": true,
+          "status": "present"
+        }
+      ]
+    }
+  },
+  "duplicateReview": {
+    "generatedAt": "2026-08-23T03:43:23.228Z",
+    "blockers": 0,
+    "findings": [
+      {
+        "severity": "warning",
+        "system": "duplicate-code",
+        "hash": "deef6a1d506f8a555647075404d1ba6b7e7a2961",
+        "occurrences": [
+          {
+            "file": "apps/catalog/client.js",
+            "name": "makeGlowTex"
+          },
+          {
+            "file": "apps/survival/client.js",
+            "name": "makeBoltGlowTex"
+          }
+        ]
+      },
+      {
+        "severity": "warning",
+        "system": "duplicate-code",
+        "hash": "cc2163b588d458ac608aec403bc5725b1c6c4269",
+        "occurrences": [
+          {
+            "file": "apps/catalog/client.js",
+            "name": "boltPath"
+          },
+          {
+            "file": "apps/survival/client.js",
+            "name": "boltPath2"
+          }
+        ]
+      }
+    ]
+  },
+  "systemContracts": {
+    "generatedAt": "2026-08-23T03:43:23.379Z",
+    "blockers": 0,
+    "adoption": {
+      "input": {
+        "canonical": [
+          "shared/ai3d-playable-runtime.js",
+          "shared/golden-physics.js"
+        ],
+        "apps": {
+          "voxel-world": true,
+          "ai3d-voxel-city": true,
+          "catalog": true
+        }
+      },
+      "ui": {
+        "canonical": [
+          "shared/golden-ui-shell.js",
+          "shared/golden-ui-shell.css"
+        ],
+        "apps": {
+          "voxel-world": true,
+          "ai3d-voxel-city": true,
+          "catalog": true
+        }
+      },
+      "collision": {
+        "canonical": [
+          "shared/golden-physics.js"
+        ],
+        "apps": {
+          "voxel-world": true,
+          "ai3d-voxel-city": true
+        }
+      },
+      "release": {
+        "canonical": [
+          "data/app-release-registry.json",
+          "scripts/quality-regression-gate.js"
+        ],
+        "apps": {}
+      }
+    },
+    "findings": []
+  },
+  "technologyRuntime": {
+    "generatedAt": "2026-08-23T03:43:23.535Z",
+    "technologies": {
+      "Vercel": {
+        "declaredPercent": 90,
+        "status": "production",
+        "runnableByRepoEvidence": true,
+        "evidence": [
+          {
+            "path": "vercel.json",
+            "exists": true
+          },
+          {
+            "path": "api/apps.js",
+            "exists": true
+          }
+        ]
+      },
+      "Supabase Postgres/Auth/Realtime": {
+        "declaredPercent": 90,
+        "status": "production",
+        "runnableByRepoEvidence": true,
+        "evidence": [
+          {
+            "path": "package.json",
+            "exists": true
+          }
+        ]
+      },
+      "Three.js/WebGL2": {
+        "declaredPercent": 90,
+        "status": "production",
+        "runnableByRepoEvidence": true,
+        "evidence": [
+          {
+            "path": "apps/voxel-world/index.html",
+            "exists": true
+          }
+        ]
+      },
+      "Playwright": {
+        "declaredPercent": 65,
+        "status": "integrated",
+        "runnableByRepoEvidence": true,
+        "evidence": [
+          {
+            "path": "playwright.config.js",
+            "exists": true
+          },
+          {
+            "path": "e2e/golden-release.spec.js",
+            "exists": true
+          }
+        ]
+      },
+      "Python/FastAPI AI3D worker": {
+        "declaredPercent": 65,
+        "status": "integrated",
+        "runnableByRepoEvidence": true,
+        "evidence": [
+          {
+            "path": "services/ai3d-worker",
+            "exists": true
+          }
+        ]
+      },
+      "AI3D auto-discovery": {
+        "declaredPercent": 70,
+        "status": "integrated",
+        "runnableByRepoEvidence": true,
+        "evidence": [
+          {
+            "path": "scripts/discover-ai3d-engines.js",
+            "exists": true
+          }
+        ]
+      },
+      "Depth Anything": {
+        "declaredPercent": 50,
+        "status": "adapter",
+        "runnableByRepoEvidence": false,
+        "evidence": [
+          {
+            "path": "services/ai3d-worker",
+            "exists": true
+          }
+        ]
+      },
+      "Blender pipeline": {
+        "declaredPercent": 70,
+        "status": "adapter + LOD/mesh optimizer prepared",
+        "runnableByRepoEvidence": false,
+        "evidence": [
+          {
+            "path": "services/ai3d-worker/tools/run_building_blender.py",
+            "exists": true
+          },
+          {
+            "path": "scripts/technology-orchestrator.js",
+            "exists": true
+          }
+        ]
+      },
+      "TRELLIS.2": {
+        "declaredPercent": 60,
+        "status": "real adapter + GPU router + mesh postprocess prepared; runtime not verified",
+        "runnableByRepoEvidence": false,
+        "evidence": [
+          {
+            "path": "services/ai3d-worker/ai3d/plugins/trellis2.py",
+            "exists": true
+          },
+          {
+            "path": "scripts/technology-orchestrator.js",
+            "exists": true
+          },
+          {
+            "path": "services/ai3d-worker/ai3d/plugins/gpu_router.py",
+            "exists": true
+          }
+        ]
+      },
+      "Godot 4.7.1": {
+        "declaredPercent": 78,
+        "status": "bridge + runtime smoke + quality orchestration prepared",
+        "runnableByRepoEvidence": false,
+        "evidence": [
+          {
+            "path": "services/ai3d-worker/ai3d/plugins/godot_voxel.py",
+            "exists": true
+          },
+          {
+            "path": "scripts/godot-runtime-smoke.js",
+            "exists": true
+          }
+        ]
+      },
+      "Hunyuan3D": {
+        "declaredPercent": 75,
+        "status": "remote routing + quality postprocess prepared",
+        "runnableByRepoEvidence": false,
+        "evidence": [
+          {
+            "path": "services/ai3d-worker/ai3d/plugins/gpu_router.py",
+            "exists": true
+          }
+        ]
+      },
+      "InstantMesh": {
+        "declaredPercent": 80,
+        "status": "real adapter + GPU router + mesh postprocess prepared; runtime not verified",
+        "runnableByRepoEvidence": false,
+        "evidence": [
+          {
+            "path": "services/ai3d-worker/ai3d/plugins/instantmesh.py",
+            "exists": true
+          },
+          {
+            "path": "services/ai3d-worker/ai3d/plugins/gpu_router.py",
+            "exists": true
+          }
+        ]
+      },
+      "MPFB": {
+        "declaredPercent": 30,
+        "status": "orchestrator-visible; runtime not verified",
+        "runnableByRepoEvidence": false,
+        "evidence": [
+          {
+            "path": "data/technology-orchestrator.json",
+            "exists": true
+          },
+          {
+            "path": "scripts/technology-orchestrator.js",
+            "exists": true
+          }
+        ]
+      },
+      "UniRig": {
+        "declaredPercent": 30,
+        "status": "orchestrator-visible; runtime not verified",
+        "runnableByRepoEvidence": false,
+        "evidence": [
+          {
+            "path": "data/technology-orchestrator.json",
+            "exists": true
+          },
+          {
+            "path": "scripts/technology-orchestrator.js",
+            "exists": true
+          }
+        ]
+      },
+      "Rigify": {
+        "declaredPercent": 30,
+        "status": "orchestrator-visible; runtime not verified",
+        "runnableByRepoEvidence": false,
+        "evidence": [
+          {
+            "path": "data/technology-orchestrator.json",
+            "exists": true
+          },
+          {
+            "path": "scripts/technology-orchestrator.js",
+            "exists": true
+          }
+        ]
+      },
+      "Goo Engine": {
+        "declaredPercent": 30,
+        "status": "orchestrator-visible; runtime not verified",
+        "runnableByRepoEvidence": false,
+        "evidence": [
+          {
+            "path": "data/technology-orchestrator.json",
+            "exists": true
+          },
+          {
+            "path": "scripts/technology-orchestrator.js",
+            "exists": true
+          }
+        ]
+      },
+      "UPBGE": {
+        "declaredPercent": 30,
+        "status": "orchestrator-visible; runtime not verified",
+        "runnableByRepoEvidence": false,
+        "evidence": [
+          {
+            "path": "data/technology-orchestrator.json",
+            "exists": true
+          },
+          {
+            "path": "scripts/technology-orchestrator.js",
+            "exists": true
+          }
+        ]
+      },
+      "Blender MCP": {
+        "declaredPercent": 0,
+        "status": "not-server-runtime",
+        "runnableByRepoEvidence": false,
+        "evidence": []
+      },
+      "Unity MCP": {
+        "declaredPercent": 0,
+        "status": "not-server-runtime",
+        "runnableByRepoEvidence": false,
+        "evidence": []
+      },
+      "OpenGameEval/OpenGame": {
+        "declaredPercent": 10,
+        "status": "concept-partial",
+        "runnableByRepoEvidence": false,
+        "evidence": []
+      }
+    }
+  },
+  "visualBaselines": null,
+  "growthBacklog": null,
+  "improvementPlan": null,
+  "trend": null,
+  "appMatrix": null,
+  "testGaps": null,
+  "promotionCandidate": null,
+  "autoFix": null,
+  "technologyOrchestrator": null,
+  "realDevices": null,
+  "goldenAssets": null,
+  "issueCandidates": null,
+  "productionQuality": null,
+  "impactGraph": null,
+  "changeImpact": null,
+  "patchSynthesis": null,
+  "visualPerceptual": null,
+  "evolutionCycle": null,
+  "goldenPropagation": null,
+  "governance": {
+    "generatedAt": "2026-08-23T03:43:22.550Z",
+    "overallPercent": 98,
+    "releaseEligible": false,
+    "metrics": {
+      "controls": {
+        "label": "Стандарты управления",
+        "percent": 100,
+        "target": 100,
+        "blockers": [
+          "единый controller ещё не применён ко всем apps",
+          "нужны behavioral direction tests после поворота камеры"
+        ]
+      },
+      "graphics": {
+        "label": "Стандарты графики",
+        "percent": 97,
+        "target": 100,
+        "blockers": [
+          "нет единого visual-quality gate",
+          "нет screenshot regression для всех миров",
+          "golden visual components ещё не распространены"
+        ]
+      },
+      "deviceAccessibility": {
+        "label": "Стандарты доступности телефон/ПК",
+        "percent": 99,
+        "target": 100,
+        "blockers": [
+          "mobile Playwright не является обязательным для каждого публичного мира",
+          "touch contract ещё не сертифицирован в каждом app"
+        ]
+      },
+      "menu": {
+        "label": "Стандарты меню/HUD",
+        "percent": 100,
+        "target": 100,
+        "blockers": [
+          "нет общего Roblox-подобного compact icon menu",
+          "часть служебной информации остаётся на игровом экране"
+        ]
+      },
+      "collisions": {
+        "label": "Стандарты коллизий",
+        "percent": 100,
+        "target": 100,
+        "blockers": [
+          "нет общего behavioral gate для стен/пола/лестниц/ступеней/спавна",
+          "step-up не стандартизирован во всех мирах"
+        ]
+      },
+      "codeQuality": {
+        "label": "Качество кода",
+        "percent": 100,
+        "target": 100,
+        "blockers": [
+          "дублирование physics/input",
+          "часть тестов раньше могла давать false-green"
+        ]
+      },
+      "codeReviewer": {
+        "label": "Ревьюэр качества кода во всём проекте",
+        "percent": 100,
+        "target": 100,
+        "blockers": [
+          "нет одного semantic reviewer, агрегирующего все apps/subsystems"
+        ]
+      },
+      "reports": {
+        "label": "Отчёты об ошибках и качестве",
+        "percent": 100,
+        "target": 100,
+        "blockers": [
+          "нет единого machine-readable QUALITY_REPORT с severity/file/fix/status для всех apps"
+        ]
+      },
+      "functionConnectivity": {
+        "label": "Связность функций",
+        "percent": 100,
+        "target": 100,
+        "blockers": [
+          "удачные функции ещё живут копиями в отдельных apps",
+          "нет обязательного dependency propagation gate"
+        ]
+      },
+      "uploadedTechnologyUse": {
+        "label": "Использование загруженных технологий",
+        "percent": 75,
+        "target": 100,
+        "blockers": [
+          "InstantMesh/MPFB/UniRig/Rigify/Goo Engine/UPBGE не production-integrated",
+          "часть AI3D требует внешнего runtime/GPU"
+        ]
+      },
+      "errorRecurrenceProtection": {
+        "label": "Защита от повторения ошибок",
+        "percent": 100,
+        "target": 100,
+        "blockers": [
+          "реестр и workflow подготовлены, но ещё не установлены в master",
+          "нужна запись в GitHub/CI"
+        ]
+      },
+      "goldenSolutionPropagation": {
+        "label": "Распространение удачных решений и графики",
+        "percent": 100,
+        "target": 100,
+        "blockers": [
+          "Golden Component Registry подготовлен локально, но не установлен в master",
+          "нужны точные source/asset refs для графических эталонов"
+        ]
+      },
+      "qualityGrowthAutomation": {
+        "label": "Автоматизация роста качества",
+        "percent": 99,
+        "target": 100,
+        "blockers": [
+          "GitHub write integration 403",
+          "physical-device provider not configured",
+          "no approved visual screenshot baselines",
+          "patch-model endpoint not configured",
+          "GPU fleet endpoints not runtime-verified",
+          "Vercel project credentials not exposed"
+        ]
+      },
+      "desktopAIContinuity": {
+        "label": "Непрерывность инструкций Desktop AI",
+        "percent": 100,
+        "target": 100,
+        "blockers": []
+      }
+    },
+    "technologyUsage": {
+      "Vercel": 90,
+      "Supabase Postgres/Auth/Realtime": 90,
+      "Three.js/WebGL2": 90,
+      "Playwright": 65,
+      "Python/FastAPI AI3D worker": 65,
+      "AI3D auto-discovery": 70,
+      "Depth Anything": 50,
+      "Blender pipeline": 70,
+      "TRELLIS.2": 60,
+      "Godot 4.7.1": 78,
+      "Hunyuan3D": 75,
+      "InstantMesh": 80,
+      "MPFB": 30,
+      "UniRig": 30,
+      "Rigify": 30,
+      "Goo Engine": 30,
+      "UPBGE": 30,
+      "Blender MCP": 0,
+      "Unity MCP": 0,
+      "OpenGameEval/OpenGame": 10
+    },
+    "blockerCount": 15,
+    "blockers": [
+      {
+        "type": "metric",
+        "id": "graphics",
+        "label": "Стандарты графики",
+        "percent": 97,
+        "blockers": [
+          "нет единого visual-quality gate",
+          "нет screenshot regression для всех миров",
+          "golden visual components ещё не распространены"
+        ]
+      },
+      {
+        "type": "metric",
+        "id": "deviceAccessibility",
+        "label": "Стандарты доступности телефон/ПК",
+        "percent": 99,
+        "blockers": [
+          "mobile Playwright не является обязательным для каждого публичного мира",
+          "touch contract ещё не сертифицирован в каждом app"
+        ]
+      },
+      {
+        "type": "metric",
+        "id": "uploadedTechnologyUse",
+        "label": "Использование загруженных технологий",
+        "percent": 75,
+        "blockers": [
+          "InstantMesh/MPFB/UniRig/Rigify/Goo Engine/UPBGE не production-integrated",
+          "часть AI3D требует внешнего runtime/GPU"
+        ]
+      },
+      {
+        "type": "metric",
+        "id": "qualityGrowthAutomation",
+        "label": "Автоматизация роста качества",
+        "percent": 99,
+        "blockers": [
+          "GitHub write integration 403",
+          "physical-device provider not configured",
+          "no approved visual screenshot baselines",
+          "patch-model endpoint not configured",
+          "GPU fleet endpoints not runtime-verified",
+          "Vercel project credentials not exposed"
+        ]
+      },
+      {
+        "type": "known-error",
+        "id": "controls-inverted-camera-relative",
+        "status": "known",
+        "category": "controls"
+      },
+      {
+        "type": "known-error",
+        "id": "mobile-entry-not-clickable",
+        "status": "known",
+        "category": "mobile"
+      },
+      {
+        "type": "known-error",
+        "id": "mobile-controls-missing",
+        "status": "known",
+        "category": "mobile"
+      },
+      {
+        "type": "known-error",
+        "id": "stairs-collision-broken",
+        "status": "known",
+        "category": "collision"
+      },
+      {
+        "type": "known-error",
+        "id": "wall-collision-broken",
+        "status": "known",
+        "category": "collision"
+      },
+      {
+        "type": "known-error",
+        "id": "spawn-not-grounded",
+        "status": "known",
+        "category": "collision"
+      },
+      {
+        "type": "known-error",
+        "id": "jump-moves-forward",
+        "status": "known",
+        "category": "controls"
+      },
+      {
+        "type": "known-error",
+        "id": "camera-roll-on-look",
+        "status": "known",
+        "category": "camera"
+      },
+      {
+        "type": "known-error",
+        "id": "catalog-auto-publishes-index-html",
+        "status": "known",
+        "category": "release"
+      },
+      {
+        "type": "known-error",
+        "id": "false-green-assertion",
+        "status": "known",
+        "category": "tests"
+      },
+      {
+        "type": "known-error",
+        "id": "menu-obstructs-game",
+        "status": "known",
+        "category": "ui"
+      }
+    ]
+  }
+}

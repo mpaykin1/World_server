@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "BAYESIAN_QUALITY_PREDICTOR",
+  "betaPrior": {
+    "alpha": 1,
+    "beta": 1
+  },
+  "deltaPrior": {
+    "mean": 0,
+    "weight": 1
+  },
+  "explorationBonus": 0.25,
+  "rule": "Prediction ranks candidate actions only; it never replaces verification."
+}

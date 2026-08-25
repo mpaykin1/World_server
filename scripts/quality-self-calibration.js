@@ -1,0 +1,7 @@
+#!/usr/bin/env node
+'use strict';
+const fs=require('fs'),path=require('path');const ROOT=process.cwd(),policy=JSON.parse(fs.readFileSync(path.join(ROOT,'data/self-calibration-policy.json'),'utf8'));
+const historyPath=process.env.QUALITY_NIGHT_HISTORY||path.join(ROOT,'QUALITY_NIGHT_HISTORY.json'),hist=fs.existsSync(historyPath)?JSON.parse(fs.readFileSync(historyPath,'utf8')).nights||[]:[];
+const valid=hist.filter(n=>n&&Number.isFinite(Number(n.cpuMinutes))&&Number.isFinite(Number(n.qualityDelta))),out={generatedAt:new Date().toISOString(),nights:valid.length,status:'INSUFFICIENT_HISTORY',candidate:null};
+if(valid.length>=policy.minimumNights){const avgCpu=valid.reduce((a,n)=>a+Number(n.cpuMinutes),0)/valid.length,avgDelta=valid.reduce((a,n)=>a+Number(n.qualityDelta),0)/valid.length,failRate=valid.reduce((a,n)=>a+Number(n.failedJobs||0),0)/Math.max(1,valid.reduce((a,n)=>a+Number(n.totalJobs||0),0));let budgetFactor=1;if(avgDelta>0&&failRate<.15)budgetFactor=1+Math.min(policy.maxBudgetChangePerRun,.1);if(avgDelta<=0||failRate>.35)budgetFactor=1-Math.min(policy.maxBudgetChangePerRun,.15);out.status=valid.length>=policy.targetNights?'CALIBRATED_30_NIGHTS':'EARLY_CALIBRATION';out.candidate={averageCpuMinutes:avgCpu,averageQualityDelta:avgDelta,failureRate:failRate,budgetFactor,confidence:Math.min(1,valid.length/policy.targetNights),promotionRequired:true}}
+fs.writeFileSync(path.join(ROOT,'SELF_CALIBRATION_REPORT.json'),JSON.stringify(out,null,2)+'\n');console.log(`[SELF_CALIBRATION] ${out.status} nights=${valid.length}`);

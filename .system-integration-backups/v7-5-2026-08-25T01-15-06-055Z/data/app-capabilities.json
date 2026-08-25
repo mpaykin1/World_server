@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "1.0.0",
+  "policy": "capabilities-drive-golden-propagation",
+  "apps": {
+    "voxel-world": {
+      "type": "game",
+      "capabilities": {
+        "playable": true,
+        "windows": "unknown"
+      }
+    },
+    "ai3d-voxel-city": {
+      "type": "game",
+      "capabilities": {
+        "playable": true,
+        "windows": true
+      }
+    },
+    "survival": {
+      "type": "game",
+      "capabilities": {
+        "playable": true,
+        "windows": "unknown"
+      }
+    },
+    "world-sharabass": {
+      "type": "game",
+      "capabilities": {
+        "playable": true,
+        "windows": "unknown"
+      }
+    },
+    "catalog": {
+      "type": "system",
+      "capabilities": {
+        "playable": false,
+        "windows": false
+      }
+    },
+    "ai-3d": {
+      "type": "tool",
+      "capabilities": {
+        "playable": false,
+        "windows": false
+      }
+    },
+    "chat": {
+      "type": "tool",
+      "capabilities": {
+        "playable": false,
+        "windows": false
+      }
+    },
+    "ai3d-reference-test": {
+      "type": "diagnostic",
+      "capabilities": {
+        "playable": false,
+        "windows": false
+      }
+    }
+  },
+  "rule": "Unknown capability must be audited before claiming full Golden propagation coverage."
+}

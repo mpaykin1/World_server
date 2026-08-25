@@ -1,0 +1,21 @@
+{
+  "generatedAt": "2026-08-24T05:46:04.756Z",
+  "sbom": {
+    "ok": true,
+    "format": "quality-sbom-v10",
+    "package": {
+      "name": "quality-autopilot-v11-cpu-first-overlay-patch",
+      "version": "11.0.0"
+    },
+    "components": [],
+    "manifestHash": "9bc7abf1b4649db7c443a1dd7e80ec03a87e3e682c1b486eb8c03e5184b90401",
+    "lockfile": "package-lock.json",
+    "lockHash": "8723a6355f66be32ca627d581570ebd15e17a57a745a2b4bbb7876ad082d92ba",
+    "unpinned": []
+  },
+  "gate": {
+    "ok": true,
+    "status": "PASS",
+    "findings": []
+  }
+}

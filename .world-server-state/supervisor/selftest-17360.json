@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "7.2.0",
+  "id": "selftest-17360",
+  "restarts": [
+    1787620480441,
+    1787620480551
+  ],
+  "incidents": [
+    {
+      "at": "2026-08-25T01:14:40.441Z",
+      "attempt": 1,
+      "generation": 1,
+      "exitCode": 7,
+      "signal": null,
+      "fingerprint": "bf871476aed35cb81e3e5763",
+      "durationMs": 124,
+      "stderr": "boom 12345\n"
+    },
+    {
+      "at": "2026-08-25T01:14:40.551Z",
+      "attempt": 2,
+      "generation": 2,
+      "exitCode": 7,
+      "signal": null,
+      "fingerprint": "bf871476aed35cb81e3e5763",
+      "durationMs": 102,
+      "stderr": "boom 12345\n"
+    }
+  ],
+  "circuit": "OPEN",
+  "generation": 2,
+  "updatedAt": "2026-08-25T01:14:40.564Z",
+  "lastFingerprint": "bf871476aed35cb81e3e5763",
+  "openedAt": "2026-08-25T01:14:40.552Z",
+  "reason": "restart-budget-exhausted"
+}

@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-08-24",
+  "result": "PASS_LOCAL_V4_PACKAGE_REBASE_AND_FAILURE_GUARDS",
+  "evidence": [
+    "V3 -> V4 installer completed atomically and committed once on a clean git fixture",
+    "28/28 focused V4 unit/integration tests PASS during installer",
+    "PWA gate 51/51 PASS = 100%",
+    "Animation quality gate 9/9 PASS",
+    "Quality convergence returned CLEAN on round 1",
+    "Dedicated V4 renderer fixture integrated renderer + shader/stutter + predictive voxel center + rig scan and was idempotent on second apply",
+    "Forced missing Service Worker returned BLOCKED_UNRESOLVED with exit code 91 and never false-greened",
+    "CPU asset plan is source-preserving and deterministic; no heavy candidate existed in the synthetic fixture",
+    "Learned quality profile tests cover weak, strong and low-evidence device populations",
+    "Local /data and /api/quality-profile routing gap from V3 is fixed",
+    "Rig adapter registerRig signature mismatch from V3 is fixed and regression-tested",
+    "PWA V4 package semantically preserves current master World Quality Autopilot quality:world scripts and release gate",
+    "Current master observed at fa3445713f8f9f84130c2795421b9cb1ca2d6640",
+    "GitHub branch write attempt still returns HTTP 403, so no direct production write was attempted"
+  ],
+  "notClaimed": [
+    "No claim of live production deployment",
+    "No claim of physical iPhone Add-to-Home-Screen verification",
+    "No claim of deployed WebKit PASS from the synthetic fixture; its dev server intentionally lacks several original API files",
+    "No claim that optional AI endpoints are configured",
+    "No claim of actual KTX2/Meshopt output until Desktop AI installs the exact free CPU toolchain and real heavy asset candidates exist"
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "3D_TECHNOLOGY_ORCHESTRATOR",
+  "engines": {
+    "instantmesh": {
+      "kind": "python-repo",
+      "homeEnv": "INSTANTMESH_HOME",
+      "entry": "run.py",
+      "requires": [
+        "python",
+        "cuda"
+      ],
+      "serverAdapter": "services/ai3d-worker/ai3d/plugins/instantmesh.py"
+    },
+    "trellis2": {
+      "kind": "python-repo",
+      "homeEnv": "TRELLIS2_HOME",
+      "entry": "trellis2",
+      "requires": [
+        "linux",
+        "cuda"
+      ],
+      "serverAdapter": "services/ai3d-worker/ai3d/plugins/trellis2.py"
+    },
+    "blender": {
+      "kind": "binary",
+      "binEnv": "BLENDER_BIN",
+      "names": [
+        "blender"
+      ],
+      "requires": []
+    },
+    "godot": {
+      "kind": "binary",
+      "binEnv": "GODOT_BIN",
+      "names": [
+        "godot",
+        "godot4"
+      ],
+      "requires": []
+    },
+    "hunyuan3d": {
+      "kind": "external-or-branch",
+      "endpointEnv": "HUNYUAN3D_URL",
+      "branchEvidence": "ai/desktop/hunyuan-full-quality-v3-20260823-043355"
+    },
+    "mpfb": {
+      "kind": "blender-addon",
+      "homeEnv": "MPFB_HOME"
+    },
+    "unirig": {
+      "kind": "python-repo",
+      "homeEnv": "UNIRIG_HOME"
+    },
+    "rigify": {
+      "kind": "blender-addon",
+      "homeEnv": "RIGIFY_HOME"
+    },
+    "goo-engine": {
+      "kind": "binary",
+      "binEnv": "GOO_ENGINE_BIN"
+    },
+    "upbge": {
+      "kind": "binary",
+      "binEnv": "UPBGE_BIN"
+    },
+    "gpu-router": {
+      "kind": "env-json",
+      "env": "AI3D_GPU_WORKERS_JSON",
+      "serverAdapter": "services/ai3d-worker/ai3d/plugins/gpu_router.py",
+      "supports": [
+        "instantmesh",
+        "trellis2",
+        "hunyuan3d"
+      ]
+    }
+  }
+}

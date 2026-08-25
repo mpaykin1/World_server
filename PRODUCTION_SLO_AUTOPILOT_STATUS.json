@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-25T01:16:06.591Z",
+  "pass": true,
+  "controllerSelftest": {
+    "healthy": {
+      "decision": "ALLOW_CANARY",
+      "authorized": false
+    },
+    "synthetic": {
+      "decision": "DRY_RUN_ROLLBACK_ONLY",
+      "authorized": false,
+      "reason": "no-production-evidence"
+    },
+    "prodNoAuth": {
+      "decision": "STOP_CANARY_AND_REQUIRE_ROLLBACK_AUTH",
+      "authorized": false,
+      "reason": "authorization-required"
+    },
+    "prodAuth": {
+      "decision": "EXECUTE_AUTHORIZED_ROLLBACK",
+      "authorized": true
+    }
+  },
+  "current": {
+    "decision": "ALLOW_CANARY",
+    "authorized": false
+  },
+  "productionEvidence": false,
+  "rollbackActuallyExecuted": false,
+  "truthRule": "Synthetic samples may validate decision logic but can never authorize a production rollback."
+}

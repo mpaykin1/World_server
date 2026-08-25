@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-25T01:14:48.090Z",
+  "pass": true,
+  "protocolSelftest": {
+    "pass": true,
+    "replicationAcks": 3,
+    "readRepair": true,
+    "digestVerified": true
+  },
+  "configuredPeers": 0,
+  "reachablePeers": 0,
+  "independentRemotePeers": 0,
+  "hostDisasterToleranceCertified": false,
+  "externalBlockers": [
+    "independent-remote-cas-peer-required"
+  ],
+  "probes": [],
+  "truthRule": "Protocol self-tests prove replication/read-repair semantics only. Host-disaster tolerance is certified only with a reachable remote peer explicitly marked independentFailureDomain=true."
+}

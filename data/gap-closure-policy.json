@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0.0",
+  "protectedBranches": ["master", "main"],
+  "productionBaseUrl": "https://world-server.vercel.app",
+  "productionTimeoutMs": 20000,
+  "acceptedRuntimeEvidenceMinutes": 20,
+  "gates": {
+    "release": ["blocker"],
+    "perfectReadiness": ["blocker", "major", "warning"]
+  },
+  "deterministicFixes": {
+    "viewportFit": true
+  },
+  "closureRules": {
+    "neverCloseWithoutFreshEvidence": true,
+    "neverAutoMergeMaster": true,
+    "neverApplyUnknownFixOnProtectedBranch": true,
+    "maxAutomaticAttempts": 3,
+    "reopenOnRegression": true
+  }
+}

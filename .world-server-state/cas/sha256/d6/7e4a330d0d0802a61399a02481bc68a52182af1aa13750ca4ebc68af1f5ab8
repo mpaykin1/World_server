@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "4.0.0",
+  "system": "WORLD_ANIMATION_RUNTIME_EVIDENCE",
+  "generatedAt": "2026-08-24T05:15:00Z",
+  "note": "Synthetic local test rigs for animation contract validation (local, no GPU, no physical device). Real generated/Roblox/Godot rigs still required for production 100% animation.",
+  "samples": [
+    {
+      "id": "synthetic-rig-cube-001",
+      "source": "local-test-synthetic",
+      "skeletonMap": {
+        "Hips": "mixamorigHips",
+        "Spine": "mixamorigSpine",
+        "Head": "mixamorigHead",
+        "LeftFoot": "mixamorigLeftFoot",
+        "RightFoot": "mixamorigRightFoot",
+        "LeftHand": "mixamorigLeftHand",
+        "RightHand": "mixamorigRightHand",
+        "LeftUpLeg": "mixamorigLeftUpLeg",
+        "RightUpLeg": "mixamorigRightUpLeg"
+      },
+      "constraints": {
+        "footSlideMetersPerSecond": 0.08,
+        "jitterDegreesPerFrame": 4.2,
+        "twoHandWeapon": true,
+        "rootMotionDirection": "forward"
+      },
+      "evidence": "synthetic-local"
+    },
+    {
+      "id": "synthetic-rig-house-002",
+      "source": "local-test-synthetic",
+      "skeletonMap": {
+        "Hips": "Hips",
+        "Spine": "Spine",
+        "Head": "Head",
+        "LeftFoot": "LeftFoot",
+        "RightFoot": "RightFoot",
+        "LeftHand": "LeftHand",
+        "RightHand": "RightHand"
+      },
+      "constraints": {
+        "footSlideMetersPerSecond": 0.12,
+        "jitterDegreesPerFrame": 7.5,
+        "twoHandWeapon": true,
+        "rootMotionDirection": "forward"
+      },
+      "evidence": "synthetic-local"
+    }
+  ]
+}

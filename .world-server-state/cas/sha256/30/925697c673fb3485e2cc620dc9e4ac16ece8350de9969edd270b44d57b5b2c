@@ -1,0 +1,969 @@
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-25T01:14:35.671Z",
+  "pass": true,
+  "enginePass": true,
+  "autoCertifyByName": false,
+  "recipeCatalogHash": "e8c0c02f52e165bc92b9d26b161bfa78b5d189a6b06784829bcf048d78d734e0",
+  "generatedContractsHash": "d2841789b7b5139f224fd345e61b1b149ee44c6024253a474eef0d0072944e0f",
+  "eligibleContractCount": 11,
+  "totalRecipes": 18,
+  "eligibleCapabilities": [
+    "procedural-generation",
+    "temporal-qa",
+    "frame-pacing",
+    "apng-validate",
+    "apng-repair",
+    "apng-release-gate",
+    "pixel-atlas",
+    "animation-culling",
+    "mobile-fallback",
+    "no-regression",
+    "self-calibration",
+    "desktop-ai-protocol",
+    "technology-scout",
+    "cpu-routing",
+    "technology-drift",
+    "quality-slo",
+    "fresh-real-device-evidence",
+    "physics-guardian",
+    "gameplay-agent",
+    "pwa",
+    "real-ios-evidence",
+    "adaptive-runtime",
+    "production-rollback",
+    "production-certification",
+    "anti-false-100",
+    "quality-autopilot-v11",
+    "quality-security-gate",
+    "quality-readiness-v11",
+    "quiet-quality-autopilot",
+    "quality-proof-gate",
+    "quality-otel-bridge",
+    "gap-closure",
+    "gap-regression-test"
+  ],
+  "checks": {
+    "legacy-quality-core:static": {
+      "pass": false
+    },
+    "legacy-quality-core:integration": {
+      "pass": false
+    },
+    "legacy-quality-core:regression": {
+      "pass": false
+    },
+    "legacy-texture-quality:static": {
+      "pass": false
+    },
+    "legacy-texture-quality:integration": {
+      "pass": false
+    },
+    "legacy-texture-quality:regression": {
+      "pass": false
+    },
+    "legacy-mesh-quality:static": {
+      "pass": true
+    },
+    "legacy-mesh-quality:integration": {
+      "pass": false
+    },
+    "legacy-mesh-quality:regression": {
+      "pass": false
+    },
+    "legacy-procedural-quality:static": {
+      "pass": true
+    },
+    "legacy-procedural-quality:integration": {
+      "pass": true
+    },
+    "legacy-procedural-quality:regression": {
+      "pass": true
+    },
+    "legacy-apng-quality:static": {
+      "pass": true
+    },
+    "legacy-apng-quality:integration": {
+      "pass": true
+    },
+    "legacy-apng-quality:regression": {
+      "pass": true
+    },
+    "legacy-pixel-animation:static": {
+      "pass": true
+    },
+    "legacy-pixel-animation:integration": {
+      "pass": true
+    },
+    "legacy-pixel-animation:regression": {
+      "pass": true
+    },
+    "legacy-golden-governance:static": {
+      "pass": true
+    },
+    "legacy-golden-governance:integration": {
+      "pass": true
+    },
+    "legacy-golden-governance:regression": {
+      "pass": true
+    },
+    "legacy-world-quality-v6:static": {
+      "pass": true
+    },
+    "legacy-world-quality-v6:integration": {
+      "pass": true
+    },
+    "legacy-world-quality-v6:regression": {
+      "pass": true
+    },
+    "legacy-dream-v5:static": {
+      "pass": true
+    },
+    "legacy-dream-v5:integration": {
+      "pass": true
+    },
+    "legacy-dream-v5:regression": {
+      "pass": true
+    },
+    "legacy-pwa-v4:static": {
+      "pass": true
+    },
+    "legacy-pwa-v4:integration": {
+      "pass": true
+    },
+    "legacy-pwa-v4:regression": {
+      "pass": true
+    },
+    "legacy-truth-gate:static": {
+      "pass": true
+    },
+    "legacy-truth-gate:integration": {
+      "pass": true
+    },
+    "legacy-truth-gate:regression": {
+      "pass": true
+    },
+    "legacy-runtime-v12-3:static": {
+      "pass": true
+    },
+    "legacy-runtime-v12-3:integration": {
+      "pass": true
+    },
+    "legacy-runtime-v12-3:regression": {
+      "pass": false
+    },
+    "legacy-video2game-v5:static": {
+      "pass": false
+    },
+    "legacy-video2game-v5:integration": {
+      "pass": false
+    },
+    "legacy-video2game-v5:regression": {
+      "pass": false
+    },
+    "legacy-pixel3dgs-v6:static": {
+      "pass": false
+    },
+    "legacy-pixel3dgs-v6:integration": {
+      "pass": false
+    },
+    "legacy-pixel3dgs-v6:regression": {
+      "pass": false
+    },
+    "legacy-lowfi-25d:static": {
+      "pass": false
+    },
+    "legacy-lowfi-25d:integration": {
+      "pass": true
+    },
+    "legacy-lowfi-25d:regression": {
+      "pass": true
+    },
+    "legacy-quality-autopilot-v11:static": {
+      "pass": true
+    },
+    "legacy-quality-autopilot-v11:integration": {
+      "pass": true
+    },
+    "legacy-quality-autopilot-v11:regression": {
+      "pass": true
+    },
+    "legacy-quiet-autopilot-v6:static": {
+      "pass": true
+    },
+    "legacy-quiet-autopilot-v6:integration": {
+      "pass": true
+    },
+    "legacy-quiet-autopilot-v6:regression": {
+      "pass": true
+    },
+    "legacy-gap-closure-v1:static": {
+      "pass": true
+    },
+    "legacy-gap-closure-v1:integration": {
+      "pass": true
+    },
+    "legacy-gap-closure-v1:regression": {
+      "pass": true
+    }
+  },
+  "results": [
+    {
+      "recipeId": "legacy-quality-core",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10",
+      "capabilities": [
+        "dependency-graph",
+        "replay",
+        "ratchet",
+        "quality-knowledge"
+      ],
+      "workdir": ".",
+      "sourcePaths": [],
+      "static": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "reason": "missing-file",
+            "file": "shared/world-quality-core/tools/quality_ratchet.py"
+          }
+        ]
+      },
+      "integration": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "reason": "missing-file",
+            "file": "shared/world-quality-core/tools/readiness.py"
+          }
+        ]
+      },
+      "regression": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "cmd": "python shared/world-quality-core/tests/test_quality_core.py",
+            "code": 2,
+            "stderr": "python: can't open file 'C:\\\\Users\\\\user\\\\Desktop\\\\World_server\\\\shared\\\\world-quality-core\\\\tests\\\\test_quality_core.py': [Errno 2] No such file or directory\r\n"
+          }
+        ]
+      },
+      "eligible": false
+    },
+    {
+      "recipeId": "legacy-texture-quality",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10",
+      "capabilities": [
+        "texture-pipeline",
+        "pbr",
+        "atlas",
+        "texture-runtime-evidence"
+      ],
+      "workdir": ".",
+      "sourcePaths": [],
+      "static": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "reason": "missing-file",
+            "file": "services/ai3d-worker/tools/verify_texture_runtime.py"
+          }
+        ]
+      },
+      "integration": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "reason": "missing-file",
+            "file": "services/ai3d-worker/tests/test_texture_v10.py"
+          }
+        ]
+      },
+      "regression": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "cmd": "python services/ai3d-worker/tests/test_texture_v10.py",
+            "code": 2,
+            "stderr": "python: can't open file 'C:\\\\Users\\\\user\\\\Desktop\\\\World_server\\\\services\\\\ai3d-worker\\\\tests\\\\test_texture_v10.py': [Errno 2] No such file or directory\r\n"
+          }
+        ]
+      },
+      "eligible": false
+    },
+    {
+      "recipeId": "legacy-mesh-quality",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12",
+      "capabilities": [
+        "canonical-mesh-optimizer",
+        "lod",
+        "hlod",
+        "mesh-regression"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "services/ai3d-worker/ai3d/plugins/mesh_quality_optimizer.py"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "services/ai3d-worker/ai3d/plugins/mesh_quality_optimizer.py"
+          }
+        ]
+      },
+      "integration": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "reason": "missing-file",
+            "file": "services/ai3d-worker/scripts/verify_mesh_pipeline_v12.py"
+          }
+        ]
+      },
+      "regression": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "cmd": "python services/ai3d-worker/tests/test_production_v12.py",
+            "code": 2,
+            "stderr": "python: can't open file 'C:\\\\Users\\\\user\\\\Desktop\\\\World_server\\\\services\\\\ai3d-worker\\\\tests\\\\test_production_v12.py': [Errno 2] No such file or directory\r\n"
+          }
+        ]
+      },
+      "eligible": false
+    },
+    {
+      "recipeId": "legacy-procedural-quality",
+      "owner": "PROCEDURAL_QUALITY_ENGINE_V10",
+      "capabilities": [
+        "procedural-generation",
+        "temporal-qa",
+        "frame-pacing"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "scripts/procedural-quality-v10-gate.js",
+        "scripts/run-procedural-tests.js"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/procedural-quality-v10-gate.js"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "PROCEDURAL_QUALITY_V10_VERIFICATION.json"
+          }
+        ]
+      },
+      "regression": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "cmd": "node --test test/procedural-quality-v10.test.js",
+            "stdout": "✔ V10 temporal artifact detector scores ghosting flicker shimmer (2.436ms)\n✔ V10 frame pacing tracks p95 p99 jank stutter (0.4858ms)\n✔ V10 resource watchdog detects heap/canvas growth (0.4132ms)\n✔ V10 thermal governor has hidden save-data low-battery pressure policies (0.3986ms)\n✔ V10 shader prewarm supports Three compileAsync and budget (0.4404ms)\n✔ V10 replay benchmark is seeded and deterministic interface exists (0.7188ms)\n✔ V10 canary requires runtime health and production evidence (0.5952ms)\n✔ V10 profile exposes all new policies (2.1713ms)\n✔ V10 migration has canary and runtime health tables (0.4849ms)\n✔ V10 doctor has 12-round non-stop repair policy (0.6066ms)\n✔ V10 evidence graph includes temporal pacing leak thermal shader replay canary (0.4101ms)\nℹ tests 11\nℹ suites 0\nℹ pass 11\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 154.7579\n"
+          }
+        ]
+      },
+      "eligible": true
+    },
+    {
+      "recipeId": "legacy-apng-quality",
+      "owner": "WORLD_SERVER_APNG_QUALITY_SYSTEM_V3_MAX",
+      "capabilities": [
+        "apng-validate",
+        "apng-repair",
+        "apng-release-gate"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "scripts/apng-quality-gate.js",
+        "scripts/verify-apng-bundle.js",
+        "scripts/integrate-apng-system.js"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/apng-quality-gate.js"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "test/apng-integration.test.js"
+          }
+        ]
+      },
+      "regression": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "cmd": "node --test test/apng-engine.test.js test/apng-gate.test.js test/apng-integration.test.js",
+            "stdout": "✔ encodes and decodes full-frame APNG losslessly (19.4415ms)\n✔ detects and repairs a one-frame brightness/color flash (25.0157ms)\n✔ detects and repairs single-frame alpha collapse (13.7783ms)\n✔ codec-only repair preserves every displayed pixel and timeline (8.1659ms)\n✔ repair is byte-deterministic and idempotent after normalization (6.3839ms)\n✔ rejects APNG sequence-number corruption even with valid CRC (3.4028ms)\n✔ rejects truncated/corrupt PNG data fail-closed (1.8411ms)\n✔ enforces configured frame/decode resource limits (5.8655ms)\n✔ reports duplicate frames and severe timing jitter as warnings (3.8099ms)\n✔ declared frame-count mismatch is observable instead of silently hidden (2.6357ms)\n✔ decodes 8-bit grayscale tRNS transparency exactly (1.7375ms)\n✔ enforces repaired-output byte budget fail-closed (6.5989ms)\n✔ seeded synthetic corpus roundtrips without pixel or timeline drift (109.0292ms)\n✔ decodes 16-bit RGBA APNG and normalizes it to verified 8-bit RGBA (6.6055ms)\n✔ decodes Adam7-interlaced 8-bit APNG exactly and normalizes to non-interlaced output (3.4137ms)\n✔ detects invisible RGB halo risk and removes fully transparent RGB without visible alpha changes (7.8492ms)\n✔ motion analysis flags a one-frame translation reversal spike (12.0215ms)\n✔ decodes combined 16-bit + Adam7 RGBA source and normalizes safely (1.6558ms)\n✔ mutation fuzz never emits an unverified repaired APNG (9.0728ms)\n✔ repository gate preserves explicitly intentional visual effect but never hides it from report (194.5574ms)\n✔ repository gate blocks unapproved defect and --apply repairs it to zero active errors (293.0218ms)\n✔ integration patcher is idempotent and preserves existing server/package content (273.699ms)\nℹ tests 22\nℹ suites 0\nℹ pass 22\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 706.5343\n"
+          }
+        ]
+      },
+      "eligible": true
+    },
+    {
+      "recipeId": "legacy-pixel-animation",
+      "owner": "PIXEL_ANIMATION_SYSTEM_V3",
+      "capabilities": [
+        "pixel-atlas",
+        "animation-culling",
+        "mobile-fallback"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "scripts/pixel-animation-verify.js",
+        "scripts/pixel-animation-auto-integrate.js"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/pixel-animation-verify.js"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "test/pixel-animation-v3.test.js"
+          }
+        ]
+      },
+      "regression": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "cmd": "node --test test/pixel-animation-v3.test.js test/pixel-animation-engine.test.js",
+            "stdout": "✔ profiles normalize to stable numeric shader params (3.2317ms)\n✔ device tier is conservative on weak/mobile hardware (1.0415ms)\n✔ spatial hash returns only intersecting cells and removes cleanly (1.1375ms)\n✔ grid mesh is a reusable subdivided sprite surface (3.0047ms)\n✔ remote config merge keeps required fallbacks (0.6278ms)\n✔ GPU culling has true compute + indirect-draw building blocks (3.4499ms)\n✔ multi-atlas manifest is deterministic and rejects duplicate pages (2.7243ms)\n✔ region rig creates bounded region deformation (1.7005ms)\n✔ pipeline cache fingerprint is stable (0.7436ms)\n✔ visual regression detects equal and changed sequences (0.8937ms)\n✔ device learning only makes bounded policy changes (1.4817ms)\n✔ auto integrator exports discovery/install (1.7206ms)\n✔ telemetry handles modern Supabase secret keys without JWT Bearer misuse (1.1695ms)\nℹ tests 13\nℹ suites 0\nℹ pass 13\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 211.6274\n"
+          }
+        ]
+      },
+      "eligible": true
+    },
+    {
+      "recipeId": "legacy-golden-governance",
+      "owner": "WORLD_SERVER_GOLDEN_STANDARD_V13",
+      "capabilities": [
+        "no-regression",
+        "self-calibration",
+        "desktop-ai-protocol"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "scripts/quality-regression-gate.js",
+        "scripts/check-desktop-ai-protocol.js",
+        "scripts/quality-self-evolve.js"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/quality-regression-gate.js"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "test/v13-invariant-golden.test.js"
+          }
+        ]
+      },
+      "regression": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "cmd": "node --test test/v13-invariant-golden.test.js test/desktop-ai-error-closure.test.js",
+            "stdout": "✔ strict closure blocks a fixable failed report and passes when clean (182.4264ms)\n✔ invariant miner promotes only high-confidence repeated success to novel candidate (100.8882ms)\n✔ multi-file Golden pattern requires explicit approval and preserves exact hashes (182.1012ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 419.371\n"
+          }
+        ]
+      },
+      "eligible": true
+    },
+    {
+      "recipeId": "legacy-world-quality-v6",
+      "owner": "WORLD_QUALITY_AUTOPILOT_V6",
+      "capabilities": [
+        "technology-scout",
+        "cpu-routing",
+        "technology-drift",
+        "quality-slo"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "scripts/world-graphics-technology-scout.js",
+        "scripts/world-cpu-first-graphics-optimizer.js",
+        "scripts/world-technology-drift-gate.js",
+        "scripts/world-quality-slo.js"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/world-graphics-technology-scout.js"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/world-quality-autopilot.js"
+          }
+        ]
+      },
+      "regression": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "cmd": "node --test test/world-quality-autopilot.test.js",
+            "stdout": "5 exposes pressure, texture and occlusion hooks (0.533ms)\n✔ V5 retarget contract contains root motion and two-hand constraints (0.3727ms)\n✔ V5 visibility optimizer is conservative (0.3781ms)\n✔ V5 candidate lab is prediction only before promotion (0.447ms)\n✔ V5 feedback learner cannot mutate directly (0.5392ms)\n✔ baseline promotion remains explicit and cannot self-approve (0.4038ms)\n✔ weighted readiness remains evidence based (0.8638ms)\n✔ V5 importance budget protects hero landmarks and reacts to pressure (0.9988ms)\n✔ V5 texture baker contract is deterministic and non-destructive (0.9048ms)\n✔ V5 streaming topology prioritizes hero and neighbors (0.814ms)\n✔ V5 shader auditor penalizes expensive paths (0.5037ms)\n✔ V5 animation LOD keeps hero animation floor (0.2994ms)\n✔ V5 deterministic replay contract is stable (0.316ms)\n✔ V5 multiview visual gate never treats partial baselines as complete (0.8913ms)\n✔ V5 quality SLO catches p95 regression (0.2679ms)\n✔ V5 causality guard rejects any regression (0.3012ms)\n✔ V5 canary release never auto-merges or writes master (0.2035ms)\n✔ runtime V5 exposes replay and SLO adapters (0.4108ms)\n✔ V6 graphics technology aliases normalize server audit names (0.2017ms)\n✔ V6 technology integrator requires both detail and optimization adapters (2.2542ms)\n✔ V6 adapter registry covers major current and planned graphics technologies (0.4384ms)\n✔ V6 evidence provenance never promotes synthetic proof to production proof (0.6502ms)\n✔ V6 graphics router prefers CPU-safe routes and keeps GPU routes optional (0.8528ms)\n✔ V6 orchestrator scans graphics technology before quality mutation stages (0.3107ms)\n✔ V6 policy makes technology scan and dual adapters hard gates (0.3601ms)\n✔ V6 candidate branch intake never promotes branch names to runtime evidence (0.6969ms)\n✔ V6 runtime resilience audit detects CDN paths without silently changing versions (0.4258ms)\nℹ tests 32\nℹ suites 0\nℹ pass 32\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 247.0081\n"
+          }
+        ]
+      },
+      "eligible": true
+    },
+    {
+      "recipeId": "legacy-dream-v5",
+      "owner": "WORLD_SERVER_DREAM_AUTOPILOT_V5_CPU",
+      "capabilities": [
+        "fresh-real-device-evidence",
+        "physics-guardian",
+        "gameplay-agent"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "scripts/world-device-profile-matrix.js",
+        "scripts/cv-gameplay-agent.js",
+        "scripts/character-motion-validator.js"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/cv-gameplay-agent.js"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "data/cv-action-policy.json"
+          }
+        ]
+      },
+      "regression": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "cmd": "node scripts/dream-readiness.js",
+            "stdout": "[DREAM_READINESS] implementation=85% verified=64% qualityFramework=98%\n"
+          }
+        ]
+      },
+      "eligible": true
+    },
+    {
+      "recipeId": "legacy-pwa-v4",
+      "owner": "WORLD_SERVER_PWA_SELF_IMPROVING_V4_MAX",
+      "capabilities": [
+        "pwa",
+        "real-ios-evidence",
+        "adaptive-runtime",
+        "production-rollback"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "shared/pwa-runtime.js",
+        "scripts/real-ios-telemetry-gate.js",
+        "scripts/runtime-integration-discovery.js",
+        ".github/workflows/quality-canary.yml"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "shared/pwa-runtime.js"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/check-pwa-system.js"
+          }
+        ]
+      },
+      "regression": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "cmd": "node --test test/pwa-system.test.js test/runtime-integration-adapters.test.js",
+            "stdout": "✔ PWA injector is idempotent and adds iPhone/install metadata (4.2197ms)\n✔ dynamic manifest is scoped to one app (1.2497ms)\n✔ unknown app cannot create an arbitrary manifest scope (0.4262ms)\n✔ service worker bypasses API caching and provides offline navigation fallback (0.6307ms)\n✔ PWA runtime exposes adaptive renderer and quality hooks (0.6733ms)\n✔ asset delivery runtime respects constrained-network policy (1.0198ms)\n✔ stutter and predictive streaming runtimes are installed (1.3972ms)\n✔ device runtime samples memory pressure and WebGL context loss when available (0.7461ms)\n✔ local server exposes learned profile API and data manifests (0.8431ms)\n✔ V4 asset toolchain remains source-preserving and CPU-only (1.0853ms)\n✔ runtime adapter integrator is idempotent and certified-game scoped (1.5961ms)\n✔ AI3D adapter bridges common quality to existing profiles (0.2603ms)\n✔ V4 integrates shader/stutter, predictive streaming and rig discovery (0.2803ms)\nℹ tests 13\nℹ suites 0\nℹ pass 13\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 171.4797\n"
+          }
+        ]
+      },
+      "eligible": true
+    },
+    {
+      "recipeId": "legacy-truth-gate",
+      "owner": "production-100-truth-gate-v1",
+      "capabilities": [
+        "production-certification",
+        "anti-false-100"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "scripts/world-quality-analyzer.js",
+        "scripts/world-quality-autopilot.js"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/world-quality-analyzer.js"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "test/world-quality-truth-gate.test.js"
+          }
+        ]
+      },
+      "regression": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "cmd": "node --test test/world-quality-truth-gate.test.js",
+            "stdout": "✔ 100% requires every declared visual baseline, not just one (2.5529ms)\n✔ synthetic animation evidence can never certify production runtime (0.8107ms)\n✔ production certification fails closed when any proof is missing (2.294ms)\n✔ 100% is allowed only when baseline, real device, real rig and required CI all pass (0.3893ms)\nℹ tests 4\nℹ suites 0\nℹ pass 4\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 172.9688\n"
+          }
+        ]
+      },
+      "eligible": true
+    },
+    {
+      "recipeId": "legacy-runtime-v12-3",
+      "owner": "WORLD_SERVER_QUALITY_RUNTIME_V12_3",
+      "capabilities": [
+        "github-supabase-bridge",
+        "master-protection",
+        "pixel-atlas-v12"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "scripts/github-quality-bridge-v12.cjs",
+        "scripts/build-pixel-atlas-v12.cjs",
+        "scripts/check-supabase-migration-manifest-v12.cjs"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/github-quality-bridge-v12.cjs"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/check-supabase-migration-manifest-v12.cjs"
+          }
+        ]
+      },
+      "regression": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "cmd": "node scripts/check-supabase-migration-manifest-v12.cjs",
+            "code": 12,
+            "stderr": "{\n  \"ok\": false,\n  \"count\": 112,\n  \"expectedCount\": 7,\n  \"digest\": \"e36901788a5e46045e9ac6c58f800497104687178d551927bd8ff94c267c5d88\",\n  \"expectedDigest\": \"4f1c7fb913a11f734062d47bee23b83ac58c009a4a4468209d26f7ee97be1260\"\n}\n"
+          }
+        ]
+      },
+      "eligible": false
+    },
+    {
+      "recipeId": "legacy-video2game-v5",
+      "owner": "VIDEO2GAME_VOXEL_V5",
+      "capabilities": [
+        "video-to-voxel",
+        "cpu-fallback"
+      ],
+      "sourcePaths": [],
+      "workdir": null,
+      "static": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "reason": "workdir-not-found"
+          }
+        ]
+      },
+      "integration": {
+        "pass": false,
+        "checks": []
+      },
+      "regression": {
+        "pass": false,
+        "checks": []
+      },
+      "eligible": false
+    },
+    {
+      "recipeId": "legacy-pixel3dgs-v6",
+      "owner": "PIXEL_3DGS_CPU_V6_PHONE_4D_MAX",
+      "capabilities": [
+        "cpu-3dgs",
+        "phone-capture",
+        "dynamic-4d"
+      ],
+      "sourcePaths": [],
+      "workdir": null,
+      "static": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "reason": "workdir-not-found"
+          }
+        ]
+      },
+      "integration": {
+        "pass": false,
+        "checks": []
+      },
+      "regression": {
+        "pass": false,
+        "checks": []
+      },
+      "eligible": false
+    },
+    {
+      "recipeId": "legacy-lowfi-25d",
+      "owner": "LOWFI_25D_SERVER_PATCH",
+      "capabilities": [
+        "lowfi-25d-runtime"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "api/lowfi-25d-scene.js",
+        "apps/lowfi-25d/index.html"
+      ],
+      "static": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "file": "api/lowfi-25d-scene.js"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "apps/lowfi-25d/index.html"
+          }
+        ]
+      },
+      "regression": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "cmd": "node --check api/lowfi-25d-scene.js",
+            "stdout": ""
+          }
+        ]
+      },
+      "eligible": false
+    },
+    {
+      "recipeId": "legacy-quality-autopilot-v11",
+      "owner": "QUALITY_AUTOPILOT_PATCH_v11_CPU_MAX",
+      "capabilities": [
+        "quality-autopilot-v11",
+        "quality-security-gate",
+        "quality-readiness-v11"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "scripts/quality-readiness-v11.js",
+        "scripts/quality-security-gate.js"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/quality-readiness-v11.js"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "test/quality-autopilot-v11.test.js"
+          }
+        ]
+      },
+      "regression": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "cmd": "node --test test/quality-autopilot-v11.test.js",
+            "stdout": "✔ CPU-first policy uses CPU when GPU is absent (2.9077ms)\n✔ 3DGS does not fake CPU equivalence (0.4768ms)\n✔ GPU is not a promotion blocker in CPU-first config (0.2681ms)\n✔ adaptive scheduler reserves a core and obeys memory budget (0.4075ms)\n✔ adaptive scheduler runs protected tasks first (0.483ms)\n✔ worker thread pool hashes files in parallel (234.3601ms)\n✔ content-addressed CPU cache is stable and hits (6.9165ms)\n✔ checkpoint resume refuses changed input (2.0864ms)\n✔ memory pressure gate detects growth (0.6356ms)\n✔ CPU benchmark score is deterministic from metrics (0.8463ms)\n✔ WASM SIMD detector always exposes scalar fallback (0.8816ms)\n✔ impact planner forces full suite for collision changes (1.0118ms)\n✔ scene CPU pressure never reduces near-field gameplay/collision below floor (0.4451ms)\n✔ CPU toolchain gate can be verified without invoking external tool in test (0.3602ms)\n✔ v11 runtime store refuses fake persistence without server credentials (1.5825ms)\n✔ runtime worker bridge advertises CPU and explicitly no server GPU (1.6056ms)\nℹ tests 16\nℹ suites 0\nℹ pass 16\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 417.1525\n"
+          }
+        ]
+      },
+      "eligible": true
+    },
+    {
+      "recipeId": "legacy-quiet-autopilot-v6",
+      "owner": "WORLD_SERVER_QUIET_QUALITY_AUTOPILOT_V6",
+      "capabilities": [
+        "quiet-quality-autopilot",
+        "quality-proof-gate",
+        "quality-otel-bridge"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "scripts/verify-v6-runtime.js",
+        "scripts/quality-proof-gate.js",
+        "scripts/quality-otel-bridge-check.js"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/verify-v6-runtime.js"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/quality-proof-gate.js"
+          }
+        ]
+      },
+      "regression": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "cmd": "node scripts/verify-v6-runtime.js",
+            "stdout": "[V6_RUNTIME_VERIFY] PASS\n"
+          }
+        ]
+      },
+      "eligible": true
+    },
+    {
+      "recipeId": "legacy-gap-closure-v1",
+      "owner": "GAP_CLOSURE_SYSTEM_V1",
+      "capabilities": [
+        "gap-closure",
+        "gap-regression-test"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "test/gap-closure.test.js"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "test/gap-closure.test.js"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "test/gap-closure.test.js"
+          }
+        ]
+      },
+      "regression": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "cmd": "node --test test/gap-closure.test.js",
+            "stdout": "✔ adds viewport-fit=cover to existing viewport meta exactly once (2.3394ms)\n✔ adds viewport meta when absent (0.5135ms)\n✔ deduplicates gaps and keeps higher severity (0.6881ms)\n✔ release gate blocks releaseBlocking gaps and blockers only (1.689ms)\n✔ perfect gate requires zero warning-or-higher gaps (0.4062ms)\nℹ tests 5\nℹ suites 0\nℹ pass 5\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 138.7891\n"
+          }
+        ]
+      },
+      "eligible": true
+    }
+  ],
+  "truthRule": "Only explicit recipes with static + integration + executed regression evidence produce generated contracts. Missing legacy runtime remains UNVERIFIED."
+}

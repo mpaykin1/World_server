@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-25T01:15:57.506Z",
+  "pass": true,
+  "framework": "TUF-aligned-subset",
+  "tufSpec": "1.0.33",
+  "cryptography": "Ed25519",
+  "rollbackProtection": true,
+  "freezeProtection": true,
+  "consistentSnapshot": true,
+  "metadataVersions": {
+    "root": 4,
+    "targets": 4,
+    "snapshot": 4,
+    "timestamp": 4
+  },
+  "targetCount": 6,
+  "errors": [],
+  "note": "Implements the core signed root/targets/snapshot/timestamp trust properties locally; it does not claim full external TUF client conformance."
+}

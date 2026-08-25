@@ -1,0 +1,629 @@
+name: Quiet Quality Autopilot V6
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: monitor or improve
+        required: false
+        default: monitor
+        type: choice
+        options: [monitor, improve, rollout]
+  schedule:
+    - cron: '17 * * * *'
+    - cron: '47 2 * * *'
+    - cron: '32 * * * *'
+    - cron: '23 23 * * *'
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+env:
+  QUALITY_BASE_URL: https://world-server.vercel.app
+
+concurrency:
+  group: world-server-quiet-quality-autopilot
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    if: >-
+      github.event_name == 'schedule' && github.event.schedule == '17 * * * *' ||
+      github.event_name == 'workflow_dispatch' && inputs.mode == 'monitor'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Restore adaptive memory
+        uses: actions/cache/restore@v4
+        with:
+          path: .quality-autopilot-state
+          key: quiet-autopilot-state-${{ github.run_id }}
+          restore-keys: |
+            quiet-autopilot-state-
+      - name: Refresh learned safety policy
+        continue-on-error: true
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/quality-learning-engine.js
+      - name: Silent adaptive observe/analyze cycle
+        id: autopilot
+        continue-on-error: true
+        env:
+          QUIET_AUTOPILOT_SCHEDULED: ${{ github.event_name == 'schedule' && '1' || '0' }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          AI3D_WORKER_URL: ${{ secrets.AI3D_WORKER_URL }}
+        run: node scripts/quiet-quality-autopilot.js
+      - name: Queue degraded system for improvement
+        if: always()
+        continue-on-error: true
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        shell: bash
+        run: |
+          test -f QUIET_AUTOPILOT_REPORT.json || exit 0
+          DEGRADED="$(node -e "const r=require('./QUIET_AUTOPILOT_REPORT.json');process.stdout.write(String(Boolean(r.productionDegraded)))")"
+          if [ "$DEGRADED" = "true" ]; then
+            node scripts/quality-work-queue.js enqueue --source=monitor --status=degraded --priority=20
+          fi
+      - name: Write durable telemetry record
+        if: always()
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/quality-telemetry-ledger.js
+      - name: Escalate only persistent safety breaker
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          test -f QUIET_AUTOPILOT_REPORT.json || exit 0
+          OPEN="$(node -e "const r=require('./QUIET_AUTOPILOT_REPORT.json');process.stdout.write(String(Boolean((r.circuitBreaker&&r.circuitBreaker.open)||(r.mutationBreaker&&r.mutationBreaker.open))))")"
+          if [ "$OPEN" != "true" ]; then exit 0; fi
+          TITLE="Quiet Quality Autopilot safety breaker open"
+          BODY="Persistent degradation or repeated failed self-improvement exceeded the automatic safety threshold. Source mutation is paused. Inspect the latest V5 evidence artifact."
+          EXISTING="$(gh issue list --state open --search "$TITLE in:title" --json number --jq '.[0].number // empty')"
+          if [ -n "$EXISTING" ]; then gh issue comment "$EXISTING" --body "$BODY"; else gh issue create --title "$TITLE" --body "$BODY"; fi
+      - name: Save adaptive memory
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .quality-autopilot-state
+          key: quiet-autopilot-state-${{ github.run_id }}
+      - name: Upload monitor evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quiet-autopilot-v6-monitor-${{ github.run_id }}
+          retention-days: 14
+          if-no-files-found: ignore
+          path: |
+            QUIET_AUTOPILOT_REPORT.json
+            QUALITY_REAL_DEVICE_RUM_REPORT.json
+            QUALITY_GEOGRAPHIC_DEVICE_REPORT.json
+            QUALITY_MOBILE_GPU_REPORT.json
+            QUALITY_REAL_DEVICE_VISUAL_ORACLE.json
+            QUALITY_RENDERER_TUNER_REPORT.json
+            QUALITY_TRACE_OPTIMIZER_REPORT.json
+            QUALITY_CHAOS_FAILOVER_REPORT.json
+            QUALITY_OTEL_BRIDGE_REPORT.json
+            QUALITY_PROGRESSIVE_ROLLOUT_REPORT.json
+            QUALITY_MULTI_REGION_REPORT.json
+            QUALITY_LEARNING_REPORT.json
+            QUALITY_WORK_QUEUE.json
+            QUALITY_TELEMETRY_RECORD.json
+            PRODUCTION_QUALITY_REPORT.json
+            QUALITY_MASTER_REPORT.json
+            QUALITY_COST_DECISION.json
+            QUALITY_ROOT_CAUSE.json
+            .quality-autopilot-state/state.json
+            .quality-autopilot-state/history.jsonl
+            .quality-autopilot-state/learned-policy.json
+      - name: Respect genuine monitor failure
+        if: steps.autopilot.outcome == 'failure'
+        run: exit 1
+
+  improve:
+    if: >-
+      github.event_name == 'schedule' && github.event.schedule == '47 2 * * *' ||
+      github.event_name == 'workflow_dispatch' && inputs.mode == 'improve'
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Capture immutable base SHA
+        id: base
+        shell: bash
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Restore adaptive memory
+        uses: actions/cache/restore@v4
+        with:
+          path: .quality-autopilot-state
+          key: quiet-autopilot-state-${{ github.run_id }}
+          restore-keys: |
+            quiet-autopilot-state-
+      - name: Refresh learned safety policy
+        continue-on-error: true
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/quality-learning-engine.js
+      - name: Acquire distributed mutation lease
+        id: lease
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          QUALITY_AGENT_ID: gha-${{ github.run_id }}
+        run: node scripts/quality-distributed-coordinator.js acquire
+      - name: Read lease state
+        id: lease_state
+        shell: bash
+        run: |
+          ACQUIRED="$(node -e "const r=require('./QUALITY_DISTRIBUTED_COORDINATOR.json');process.stdout.write(String(r.acquired===true))")"
+          echo "acquired=$ACQUIRED" >> "$GITHUB_OUTPUT"
+      - name: Lease busy — finish without mutation
+        if: steps.lease_state.outputs.acquired != 'true'
+        run: echo "Another verified quality agent owns the mutation lease. No source mutation was attempted."
+      - name: Claim queued degradation task when available
+        if: steps.lease_state.outputs.acquired == 'true'
+        continue-on-error: true
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          QUALITY_AGENT_ID: gha-${{ github.run_id }}
+        run: node scripts/quality-work-queue.js claim
+      - name: Guarded deep self-improvement cycle
+        if: steps.lease_state.outputs.acquired == 'true'
+        id: autopilot
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          AI3D_WORKER_URL: ${{ secrets.AI3D_WORKER_URL }}
+        run: node scripts/quiet-quality-autopilot.js --apply
+      - name: Read candidate readiness
+        if: steps.lease_state.outputs.acquired == 'true'
+        id: candidate
+        shell: bash
+        run: |
+          READY="$(node -e "const r=require('./QUIET_AUTOPILOT_REPORT.json');process.stdout.write(String(r.status==='VERIFIED_IMPROVEMENT_READY_FOR_BROWSER_GATE'))")"
+          echo "ready=$READY" >> "$GITHUB_OUTPUT"
+      - name: No safe candidate — finish quietly
+        if: steps.lease_state.outputs.acquired == 'true' && steps.candidate.outputs.ready != 'true'
+        run: echo "No evidence-backed candidate requires deployment."
+      - name: Install Chromium
+        if: steps.candidate.outputs.ready == 'true'
+        run: npx playwright install --with-deps chromium
+      - name: Golden behavioral gate
+        if: steps.candidate.outputs.ready == 'true'
+        run: npm run golden:e2e
+      - name: Require reproducible Vercel canary configuration
+        if: steps.candidate.outputs.ready == 'true'
+        shell: bash
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_CLI_VERSION: ${{ vars.VERCEL_CLI_VERSION }}
+        run: |
+          test -n "$VERCEL_TOKEN"
+          test -n "$VERCEL_ORG_ID"
+          test -n "$VERCEL_PROJECT_ID"
+          test -n "$VERCEL_CLI_VERSION"
+      - name: Install pinned Vercel CLI
+        if: steps.candidate.outputs.ready == 'true'
+        run: npm install -g "vercel@${{ vars.VERCEL_CLI_VERSION }}"
+      - name: Pull preview environment
+        if: steps.candidate.outputs.ready == 'true'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: vercel pull --yes --environment=preview --token="$VERCEL_TOKEN"
+      - name: Build exact candidate artifact
+        if: steps.candidate.outputs.ready == 'true'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: vercel build --token="$VERCEL_TOKEN"
+      - name: Deploy immutable canary
+        if: steps.candidate.outputs.ready == 'true'
+        id: deploy
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        shell: bash
+        run: |
+          URL="$(vercel deploy --prebuilt --token="$VERCEL_TOKEN")"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+      - name: A/B performance and reliability canary
+        if: steps.candidate.outputs.ready == 'true'
+        id: ab
+        continue-on-error: true
+        env:
+          BASELINE_URL: ${{ env.QUALITY_BASE_URL }}
+          CANDIDATE_URL: ${{ steps.deploy.outputs.url }}
+        run: node scripts/quality-ab-canary.js
+      - name: Multi-region baseline/candidate proof
+        if: steps.candidate.outputs.ready == 'true'
+        id: regional
+        continue-on-error: true
+        env:
+          BASELINE_URL: ${{ env.QUALITY_BASE_URL }}
+          CANDIDATE_URL: ${{ steps.deploy.outputs.url }}
+        run: node scripts/quality-multi-region-probe.js
+      - name: Non-destructive chaos and failover proof
+        if: steps.candidate.outputs.ready == 'true'
+        id: chaos
+        continue-on-error: true
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          AI3D_WORKER_URL: ${{ secrets.AI3D_WORKER_URL }}
+          QUALITY_BASE_URL: ${{ env.QUALITY_BASE_URL }}
+        run: node scripts/quality-chaos-failover.js
+      - name: Final proof gate
+        if: steps.candidate.outputs.ready == 'true'
+        id: proof
+        continue-on-error: true
+        run: node scripts/quality-proof-gate.js
+      - name: Record rejected candidate outcome
+        if: steps.candidate.outputs.ready == 'true' && (steps.ab.outcome != 'success' || steps.regional.outcome != 'success' || steps.chaos.outcome != 'success' || steps.proof.outcome != 'success')
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/quality-patch-outcome.js --accepted=false --classification=canary_rejected --candidate-url=${{ steps.deploy.outputs.url }}
+      - name: Candidate external gate
+        if: steps.candidate.outputs.ready == 'true'
+        shell: bash
+        run: |
+          test "${{ steps.ab.outcome }}" = "success"
+          test "${{ steps.regional.outcome }}" = "success"
+          test "${{ steps.chaos.outcome }}" = "success"
+          test "${{ steps.proof.outcome }}" = "success"
+      - name: Mark canary verification success
+        if: steps.candidate.outputs.ready == 'true' && success()
+        run: node scripts/quality-autopilot-feedback.js --result=success --stage=canary
+      - name: Mark canary verification failure
+        if: steps.candidate.outputs.ready == 'true' && failure()
+        run: node scripts/quality-autopilot-feedback.js --result=failure --stage=canary
+      - name: Stage only allowlisted runtime candidate roots
+        if: steps.candidate.outputs.ready == 'true' && success()
+        id: diff
+        shell: bash
+        run: |
+          git add apps e2e test
+          if git diff --cached --quiet; then echo "changed=false" >> "$GITHUB_OUTPUT"; else echo "changed=true" >> "$GITHUB_OUTPUT"; fi
+      - name: Create verified improvement PR
+        if: steps.diff.outputs.changed == 'true' && success()
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          BRANCH="ai/quiet-autopilot/${GITHUB_RUN_ID}"
+          git config user.name "world-server-quality-autopilot"
+          git config user.email "world-server-quality-autopilot@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git commit -m "fix(quality): quiet verified automatic improvement"
+          git push origin "$BRANCH"
+          PR_URL="$(gh pr create --base master --head "$BRANCH" --title "fix(quality): quiet verified automatic improvement" --body "Quiet Quality Autopilot V6 candidate. Deterministic fixes, release gates, Golden browser behavior, immutable Vercel canary, A/B comparison, multi-region proof, and learned safety policy passed before merge eligibility.")"
+          echo "number=$(gh pr view "$PR_URL" --json number --jq .number)" >> "$GITHUB_OUTPUT"
+      - name: Wait for PR checks
+        if: steps.diff.outputs.changed == 'true' && success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr checks "${{ steps.pr.outputs.number }}" --watch --interval 10
+      - name: Start free RUM-driven rollout at 1 percent
+        if: steps.diff.outputs.changed == 'true' && success()
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        shell: bash
+        run: |
+          FINGERPRINT="$(node -e "const r=require('./QUIET_AUTOPILOT_REPORT.json');process.stdout.write(String(r.candidate?.fingerprint||''))")"
+          node scripts/quality-progressive-rollout.js begin \
+            --candidate-url=${{ steps.deploy.outputs.url }} \
+            --candidate-sha=${{ steps.base.outputs.sha }} \
+            --base-sha=${{ steps.base.outputs.sha }} \
+            --pr=${{ steps.pr.outputs.number }} \
+            --fingerprint="$FINGERPRINT"
+      - name: Rollout handoff
+        if: steps.diff.outputs.changed == 'true' && success()
+        run: echo "Candidate is live only through RUM session routing 1→10→50; source remains unmerged until rollout evidence reaches READY_TO_PROMOTE."
+      - name: Complete claimed queue task
+        if: always() && steps.lease_state.outputs.acquired == 'true'
+        continue-on-error: true
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          QUALITY_AGENT_ID: gha-${{ github.run_id }}
+        shell: bash
+        run: |
+          if [ "${{ job.status }}" = "success" ]; then node scripts/quality-work-queue.js complete; else node scripts/quality-work-queue.js fail; fi
+      - name: Write durable telemetry record
+        if: always()
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/quality-telemetry-ledger.js
+      - name: Release distributed mutation lease
+        if: always() && steps.lease_state.outputs.acquired == 'true'
+        continue-on-error: true
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          QUALITY_AGENT_ID: gha-${{ github.run_id }}
+        run: node scripts/quality-distributed-coordinator.js release
+      - name: Save adaptive memory
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .quality-autopilot-state
+          key: quiet-autopilot-state-${{ github.run_id }}
+      - name: Upload complete V5 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quiet-autopilot-v6-improve-${{ github.run_id }}
+          retention-days: 30
+          if-no-files-found: ignore
+          path: |
+            QUIET_AUTOPILOT_REPORT.json
+            AUTOFIX_REPORT.json
+            QUALITY_AB_CANARY_REPORT.json
+            QUALITY_MULTI_REGION_REPORT.json
+            QUALITY_REAL_DEVICE_RUM_REPORT.json
+            QUALITY_GEOGRAPHIC_DEVICE_REPORT.json
+            QUALITY_MOBILE_GPU_REPORT.json
+            QUALITY_REAL_DEVICE_VISUAL_ORACLE.json
+            QUALITY_RENDERER_TUNER_REPORT.json
+            QUALITY_TRACE_OPTIMIZER_REPORT.json
+            QUALITY_CHAOS_FAILOVER_REPORT.json
+            QUALITY_OTEL_BRIDGE_REPORT.json
+            QUALITY_PROGRESSIVE_ROLLOUT_REPORT.json
+            QUALITY_PROOF_GATE.json
+            QUALITY_LEARNING_REPORT.json
+            QUALITY_PATCH_OUTCOME.json
+            QUALITY_DISTRIBUTED_COORDINATOR.json
+            QUALITY_WORK_QUEUE.json
+            QUALITY_TELEMETRY_RECORD.json
+            QUALITY_MASTER_REPORT.json
+            QUALITY_REGRESSION_REPORT.json
+            PRODUCTION_QUALITY_REPORT.json
+            .quality-autopilot-state/state.json
+            .quality-autopilot-state/history.jsonl
+            .quality-autopilot-state/learned-policy.json
+            .quality-autopilot-state/patch-outcomes.jsonl
+
+  rollout:
+    if: >-
+      github.event_name == 'schedule' && github.event.schedule == '32 * * * *' ||
+      github.event_name == 'workflow_dispatch' && inputs.mode == 'rollout'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Acquire distributed rollout lease
+        id: lease
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          QUALITY_AGENT_ID: rollout-gha-${{ github.run_id }}
+          QUALITY_LEASE_KEY: world-server:quiet-quality-autopilot:rollout
+        run: node scripts/quality-distributed-coordinator.js acquire
+      - name: Read rollout lease state
+        id: rollout_lease_state
+        shell: bash
+        run: |
+          ACQUIRED="$(node -e "const r=require('./QUALITY_DISTRIBUTED_COORDINATOR.json');process.stdout.write(String(r.acquired===true))")"
+          echo "acquired=$ACQUIRED" >> "$GITHUB_OUTPUT"
+      - name: Tick RUM-driven rollout
+        if: steps.rollout_lease_state.outputs.acquired == 'true'
+        id: tick
+        continue-on-error: true
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          QUALITY_BASE_URL: ${{ env.QUALITY_BASE_URL }}
+        run: node scripts/quality-progressive-rollout.js tick
+      - name: Read rollout decision
+        id: state
+        shell: bash
+        run: |
+          test -f QUALITY_PROGRESSIVE_ROLLOUT_REPORT.json || exit 0
+          node - <<'NODE' >> "$GITHUB_OUTPUT"
+          const r=require('./QUALITY_PROGRESSIVE_ROLLOUT_REPORT.json'),s=r.state||{};
+          console.log(`status=${r.status||''}`);console.log(`pr=${s.pr_number||''}`);console.log(`candidate=${s.candidate_url||''}`);console.log(`base=${s.base_sha||''}`);
+          NODE
+      - name: Close rejected rollout PR
+        if: startsWith(steps.state.outputs.status, 'ROLLOUT_ABORTED')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          PR="${{ steps.state.outputs.pr }}"
+          if [ -n "$PR" ]; then gh pr close "$PR" --comment "Quiet Quality Autopilot V6 aborted this candidate from real-user RUM evidence." || true; fi
+      - name: Validate exact source before promotion
+        if: steps.state.outputs.status == 'READY_TO_PROMOTE'
+        id: exact
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        shell: bash
+        run: |
+          CURRENT="$(git ls-remote origin refs/heads/master | awk '{print $1}')"
+          if [ "$CURRENT" != "${{ steps.state.outputs.base }}" ]; then
+            node scripts/quality-progressive-rollout.js abort --reason=master_moved_candidate_stale
+            gh pr close "${{ steps.state.outputs.pr }}" --comment "Master moved after canary build. Stale artifact will never be promoted; a fresh improvement cycle is required." || true
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            gh pr checks "${{ steps.state.outputs.pr }}" --watch --interval 10
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Merge exact RUM-verified source
+        if: steps.exact.outputs.ready == 'true'
+        id: merge
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          PR="${{ steps.state.outputs.pr }}"
+          gh pr merge "$PR" --squash --delete-branch
+          SHA="$(gh pr view "$PR" --json mergeCommit --jq '.mergeCommit.oid')"
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+      - name: Promote exact verified artifact to 100 percent
+        if: steps.exact.outputs.ready == 'true'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          npm install -g "vercel@${{ vars.VERCEL_CLI_VERSION }}"
+          vercel promote "${{ steps.state.outputs.candidate }}" --yes --token="$VERCEL_TOKEN"
+      - name: Mark rollout 100 percent complete
+        if: steps.exact.outputs.ready == 'true'
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/quality-progressive-rollout.js complete
+      - name: Production proof after 100 percent
+        if: steps.exact.outputs.ready == 'true'
+        id: prodproof
+        continue-on-error: true
+        env:
+          QUALITY_BASE_URL: ${{ env.QUALITY_BASE_URL }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        shell: bash
+        run: |
+          node scripts/post-deploy-smoke.js
+          node scripts/production-quality-pull.js
+          node scripts/quality-multi-region-probe.js
+          node scripts/quality-real-device-rum.js
+          node scripts/quality-geographic-device-gate.js
+          node scripts/quality-mobile-gpu-profiler.js
+          node scripts/quality-real-device-visual-oracle.js
+          node scripts/quality-renderer-tuner-gate.js
+          node scripts/quality-trace-critical-path-optimizer.js
+          node scripts/quality-chaos-failover.js
+          node scripts/quality-otel-bridge-check.js
+      - name: Transactional rollback on failed 100 percent proof
+        if: steps.exact.outputs.ready == 'true' && steps.prodproof.outcome == 'failure'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        shell: bash
+        run: |
+          node scripts/quality-progressive-rollout.js abort --reason=production_proof_failed
+          vercel rollback --yes --token="$VERCEL_TOKEN" || true
+          git fetch origin master
+          git checkout -B "ai/quiet-autopilot-revert/${GITHUB_RUN_ID}" origin/master
+          git config user.name "world-server-quality-autopilot"
+          git config user.email "world-server-quality-autopilot@users.noreply.github.com"
+          git revert "${{ steps.merge.outputs.sha }}" --no-edit
+          git push origin HEAD
+          PR_URL="$(gh pr create --base master --head "ai/quiet-autopilot-revert/${GITHUB_RUN_ID}" --title "revert: V6 automatic rollback" --body "100% production proof failed after the staged RUM rollout. Reverting the exact merged source candidate.")"
+          RPR="$(gh pr view "$PR_URL" --json number --jq .number)"
+          gh pr checks "$RPR" --watch --interval 10
+          gh pr merge "$RPR" --squash --delete-branch
+          exit 1
+      - name: Release rollout lease
+        if: always() && steps.rollout_lease_state.outputs.acquired == 'true'
+        continue-on-error: true
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          QUALITY_AGENT_ID: rollout-gha-${{ github.run_id }}
+          QUALITY_LEASE_KEY: world-server:quiet-quality-autopilot:rollout
+        run: node scripts/quality-distributed-coordinator.js release
+      - name: Upload rollout evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quiet-autopilot-v6-rollout-${{ github.run_id }}
+          retention-days: 30
+          if-no-files-found: ignore
+          path: |
+            QUALITY_PROGRESSIVE_ROLLOUT_REPORT.json
+            QUALITY_REAL_DEVICE_RUM_REPORT.json
+            QUALITY_GEOGRAPHIC_DEVICE_REPORT.json
+            QUALITY_MOBILE_GPU_REPORT.json
+            QUALITY_REAL_DEVICE_VISUAL_ORACLE.json
+            QUALITY_RENDERER_TUNER_REPORT.json
+            QUALITY_TRACE_OPTIMIZER_REPORT.json
+            QUALITY_CHAOS_FAILOVER_REPORT.json
+            QUALITY_OTEL_BRIDGE_REPORT.json
+            QUALITY_MULTI_REGION_REPORT.json
+            PRODUCTION_QUALITY_REPORT.json
+
+  telemetry-daily:
+    if: github.event_name == 'schedule' && github.event.schedule == '23 23 * * *'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Restore latest adaptive memory
+        uses: actions/cache/restore@v4
+        with:
+          path: .quality-autopilot-state
+          key: quiet-autopilot-state-${{ github.run_id }}
+          restore-keys: |
+            quiet-autopilot-state-
+      - name: Persist compact daily history to telemetry branch
+        shell: bash
+        env:
+          BRANCH: quality-telemetry
+        run: |
+          test -f .quality-autopilot-state/history.jsonl || exit 0
+          TMP="$(mktemp -d)"
+          if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1; then
+            git fetch origin "$BRANCH:$BRANCH"
+            git worktree add "$TMP" "$BRANCH"
+          else
+            git worktree add --detach "$TMP" HEAD
+            cd "$TMP"
+            git checkout --orphan "$BRANCH"
+            git rm -rf . >/dev/null 2>&1 || true
+            cd - >/dev/null
+          fi
+          DAY="$(date -u +%Y-%m-%d)"
+          DEST="$TMP/telemetry/$(date -u +%Y/%m)"
+          mkdir -p "$DEST"
+          cp .quality-autopilot-state/history.jsonl "$DEST/${DAY}-history.jsonl"
+          test ! -f .quality-autopilot-state/state.json || cp .quality-autopilot-state/state.json "$DEST/${DAY}-state.json"
+          test ! -f .quality-autopilot-state/learned-policy.json || cp .quality-autopilot-state/learned-policy.json "$DEST/${DAY}-learned-policy.json"
+          cd "$TMP"
+          git config user.name "world-server-quality-autopilot"
+          git config user.email "world-server-quality-autopilot@users.noreply.github.com"
+          git add telemetry
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "chore(telemetry): quality V4 summary ${DAY}"
+          git push origin HEAD:"$BRANCH"

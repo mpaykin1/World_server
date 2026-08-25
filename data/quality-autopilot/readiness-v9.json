@@ -1,0 +1,212 @@
+{
+  "generatedAt": "2026-08-23T12:54:42.804Z",
+  "version": 9,
+  "softwareReadiness": 98,
+  "architecturalReadiness": 98,
+  "operationalReadiness": 75,
+  "endToEndAutonomyReadiness": 91,
+  "wholeSystemReadiness": 92,
+  "currentMasterQuality": 98,
+  "currentEvidenceQuality": 95.5,
+  "core": [
+    {
+      "name": "Current-stack non-destructive bridge",
+      "score": 98,
+      "implemented": true
+    },
+    {
+      "name": "Golden adoption SHA-256 lock",
+      "score": 99,
+      "implemented": true
+    },
+    {
+      "name": "Golden quarantine/freeze on drift",
+      "score": 99,
+      "implemented": true
+    },
+    {
+      "name": "Stable-production visual baseline quorum",
+      "score": 96,
+      "implemented": true
+    },
+    {
+      "name": "Near-field graphics invariant",
+      "score": 100,
+      "implemented": true
+    },
+    {
+      "name": "SLO robust anomaly rollback gate",
+      "score": 97,
+      "implemented": true
+    },
+    {
+      "name": "Verified provider capability gate",
+      "score": 98,
+      "implemented": true
+    },
+    {
+      "name": "Tamper-evident promotion attestation",
+      "score": 98,
+      "implemented": true
+    },
+    {
+      "name": "Distributed Supabase run lease adapter",
+      "score": 98,
+      "implemented": true
+    },
+    {
+      "name": "Global atomic compute budget adapter",
+      "score": 98,
+      "implemented": true
+    },
+    {
+      "name": "Depth Anything/OpenGame runtime smoke adapters",
+      "score": 92,
+      "implemented": true
+    },
+    {
+      "name": "Existing release/perceptual/durable stack preservation",
+      "score": 100,
+      "implemented": true
+    }
+  ],
+  "runtime": [
+    {
+      "name": "Supabase telemetry storage live",
+      "score": 100,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "name": "Supabase worker queue live",
+      "score": 100,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "name": "Supabase canary runtime state live",
+      "score": 100,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "name": "Supabase deterministic replay store live",
+      "score": 100,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "name": "Supabase visual oracle store live",
+      "score": 100,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "name": "Supabase v8 control plane live",
+      "score": 100,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "name": "Supabase v6 provider health/jobs live",
+      "score": 100,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "name": "Supabase v7 visual quorum live",
+      "score": 100,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "name": "Supabase v8 procedural quality live",
+      "score": 100,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "name": "Supabase distributed lease RPC live",
+      "score": 100,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "name": "Supabase global compute RPC live",
+      "score": 100,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "name": "Production telemetry endpoint verified",
+      "score": 55,
+      "implemented": true,
+      "verified": false
+    },
+    {
+      "name": "GitHub autonomous branch/PR write",
+      "score": 35,
+      "implemented": true,
+      "verified": false
+    },
+    {
+      "name": "Vercel project/deployment connected",
+      "score": 35,
+      "implemented": true,
+      "verified": false
+    },
+    {
+      "name": "Physical mobile device provider",
+      "score": 45,
+      "implemented": true,
+      "verified": false
+    },
+    {
+      "name": "Real GPU worker provider",
+      "score": 45,
+      "implemented": true,
+      "verified": false
+    },
+    {
+      "name": "Real Godot headless verifier",
+      "score": 50,
+      "implemented": true,
+      "verified": false
+    },
+    {
+      "name": "Real Roblox verification runner",
+      "score": 45,
+      "implemented": true,
+      "verified": false
+    },
+    {
+      "name": "Depth Anything runtime smoke verified",
+      "score": 50,
+      "implemented": true,
+      "verified": false
+    },
+    {
+      "name": "OpenGameEval/OpenGame runtime smoke verified",
+      "score": 35,
+      "implemented": true,
+      "verified": false
+    }
+  ],
+  "currentStack": {
+    "version": 9,
+    "capabilities": {
+      "releaseGate": true,
+      "durableCycle": true,
+      "perceptual": true,
+      "visualCritic": true,
+      "realDevices": true,
+      "gpuAutoscale": true,
+      "knowledge": true
+    },
+    "currentMasterPercent": 98,
+    "currentEvidencePercent": 95.5,
+    "backlogCount": null,
+    "preserveExisting": true
+  },
+  "rule": "No external integration receives 100% without live evidence."
+}

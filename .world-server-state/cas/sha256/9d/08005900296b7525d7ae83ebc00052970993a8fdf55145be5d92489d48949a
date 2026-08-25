@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+  <meta name="theme-color" content="#090b10" />
+  <title>World Factory Quality Core V8</title>
+  <link rel="stylesheet" href="./app.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+      "three-mesh-bvh": "https://cdn.jsdelivr.net/npm/three-mesh-bvh@0.9.14/src/index.js",
+      "@sparkjsdev/spark": "https://sparkjs.dev/releases/spark/2.1.0/spark.module.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="app">
+    <canvas id="viewport" aria-label="3D world"></canvas>
+
+    <div id="loading" class="panel loading">
+      <div class="spinner"></div>
+      <div id="loadingText">Проверяю мир…</div>
+    </div>
+
+    <div id="startPanel" class="panel start-panel hidden">
+      <div class="brand">WORLD FACTORY QUALITY CORE V8</div>
+      <div id="worldTitle" class="world-title">Мир</div>
+      <div id="qualityStatus" class="quality-status">QUALITY: —</div>
+      <button id="enterButton" type="button">ВОЙТИ В МИР</button>
+      <div class="hint desktop-hint">WASD/стрелки — ходьба · Space — прыжок · мышь — обзор</div>
+      <div class="hint mobile-hint">Левый стик — ходьба · справа тянуть — обзор · ↑ — прыжок</div>
+    </div>
+
+    <div id="hud" class="hud hidden">
+      <div id="crosshair" class="crosshair">+</div>
+      <div id="debugBadge" class="debug-badge"></div>
+    </div>
+
+    <div id="mobileControls" class="mobile-controls hidden" aria-hidden="true">
+      <div id="moveZone" class="move-zone">
+        <div class="stick-base"><div id="stickKnob" class="stick-knob"></div></div>
+      </div>
+      <div id="lookZone" class="look-zone"></div>
+      <button id="jumpButton" class="jump-button" type="button" aria-label="Прыжок">↑</button>
+    </div>
+
+    <div id="fatal" class="panel fatal hidden">
+      <div class="fatal-title">МИР НЕ ПРОШЁЛ QUALITY GATE</div>
+      <pre id="fatalText"></pre>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

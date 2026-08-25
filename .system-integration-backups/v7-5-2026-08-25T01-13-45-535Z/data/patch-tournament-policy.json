@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "PATCH_TOURNAMENT",
+  "candidateCount": 5,
+  "roles": [
+    "minimal-regression-fixer",
+    "test-first-fixer",
+    "shared-component-architect",
+    "performance-aware-fixer",
+    "simplicity-reviewer"
+  ],
+  "rule": "Only independently sandbox-verified candidates may win; smallest safe patch wins ties.",
+  "externalRequirements": [
+    "QUALITY_PATCH_MODEL_URL",
+    "@vercel/sandbox credentials"
+  ]
+}

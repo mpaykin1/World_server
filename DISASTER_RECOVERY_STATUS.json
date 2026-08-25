@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "2.0.0",
+  "generatedAt": "2026-08-25T01:15:33.468Z",
+  "status": "SNAPSHOT_CREATED",
+  "latestSnapshot": "2026-08-25T01-15-33-460Z-pre-control-plane-13722823fccd",
+  "merkleRoot": "13722823fccdf15566643561bcd6a452c58c5a5b2e3e76e170532bff4ec24f48",
+  "files": 2679,
+  "casDeduplicated": true
+}

@@ -1,0 +1,76 @@
+name: System Integration V7.4
+on:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 4 * * *'
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  integration-v7:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21'}
+      - uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+        with:
+          cosign-release: v3.1.3
+      - run: npm ci
+      - name: Install pinned free local analysis/model tools
+        run: node scripts/toolchain-bootstrap.cjs apply
+      - name: Reject vulnerable Cosign
+        run: node scripts/toolchain-security-gate.cjs
+      - name: Native TLC is mandatory in CI
+        run: node scripts/tlc-native-runner.cjs --required
+      - name: Native AST/dataflow
+        run: node scripts/native-ast-dataflow.cjs
+      - name: OSV locked dependency scan
+        run: node scripts/dependency-security-orchestrator.cjs scan
+      - name: Full integration V7.4
+        run: npm run integration:full
+      - name: Release gate
+        run: npm run release:gate
+      - name: Sigstore keyless sign integration evidence
+        shell: bash
+        run: |
+          cosign sign-blob --yes --bundle SYSTEM_INTEGRATION_REPORT.sigstore.json SYSTEM_INTEGRATION_REPORT.json
+          IDENTITY="https://github.com/${GITHUB_WORKFLOW_REF}"
+          node scripts/artifact-signing-transparency.cjs verify-external SYSTEM_INTEGRATION_REPORT.json SYSTEM_INTEGRATION_REPORT.sigstore.json "$IDENTITY" https://token.actions.githubusercontent.com
+          node scripts/rekor-monitor.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: system-integration-v7-4-evidence
+          path: |
+            SYSTEM_INTEGRATION_REPORT.json
+            SYSTEM_READINESS_REPORT.json
+            TOOLCHAIN_SECURITY_REPORT.json
+            TOOLCHAIN_BOOTSTRAP_STATUS.json
+            TLC_NATIVE_REPORT.json
+            NATIVE_AST_DATAFLOW_REPORT.json
+            REKOR_MONITOR_REPORT.json
+            CAS_DISCOVERY_STATUS.json
+            CAS_REDUNDANCY_STATUS.json
+            DEVICE_EXECUTOR_STATUS.json
+            DEVICE_WORKER_STATUS.json
+            DEPENDENCY_SECURITY_STATUS.json
+            ORCHESTRATOR_SUPERVISOR_STATUS.json
+            CAPABILITY_SCHEDULER_STATUS.json
+            RECORD_REPLAY_STATUS.json
+            TRANSACTIONAL_DEPLOY_STATUS.json
+            HONEST_100_FUNCTION_REPORT.json
+            FUNCTION_MONOTONIC_ENHANCEMENT_REPORT.json
+            WIT_BINDINGS_STATUS.json
+            LEGACY_EVIDENCE_FACTORY_REPORT.json
+            FUNCTION_CERTIFICATION_COVERAGE.json
+            SLO_ERROR_BUDGET_STATUS.json
+            DB_MIGRATION_COORDINATOR_STATUS.json
+            ASSET_DELTA_STATUS.json
+            CAUSAL_DEBUGGER_STATUS.json
+            CAUSAL_INCIDENT_GRAPH.json
+            CONTROL_PLANE_REPORT.json

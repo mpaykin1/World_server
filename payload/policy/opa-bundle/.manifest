@@ -1,0 +1,7 @@
+{
+  "revision": "system-integration-v4",
+  "rego_version": 1,
+  "roots": [
+    "worldserver/integration"
+  ]
+}

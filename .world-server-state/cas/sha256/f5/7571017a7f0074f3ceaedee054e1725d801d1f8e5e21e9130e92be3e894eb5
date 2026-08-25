@@ -1,0 +1,58 @@
+name: Supabase Schema Auto-Sync PR
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '47 4 * * *'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Require Supabase credentials
+        run: |
+          test -n "$SUPABASE_URL"
+          test -n "$SUPABASE_SERVICE_ROLE_KEY"
+      - run: npm ci
+      - name: Synchronize exact production migration history
+        run: node scripts/sync-supabase-migrations.cjs --apply
+      - name: Verify local manifest
+        run: node scripts/sync-supabase-migrations.cjs --check-offline
+      - name: Verify against live Supabase
+        run: node scripts/sync-supabase-migrations.cjs --check-live
+      - name: Full release gate
+        run: npm run release:gate
+      - name: Detect changes
+        id: diff
+        run: |
+          if git diff --quiet; then echo "changed=false" >> "$GITHUB_OUTPUT"; else echo "changed=true" >> "$GITHUB_OUTPUT"; fi
+      - name: Open sync PR
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BRANCH="ai/quality/supabase-schema-sync-${GITHUB_RUN_ID}"
+          git config user.name "world-server-quality-bot"
+          git config user.email "quality-bot@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add supabase/migrations supabase/migrations_legacy supabase/migration_rollbacks data/supabase-migration-manifest.json
+          git commit -m "chore(supabase): synchronize production migration history"
+          git push origin "$BRANCH"
+          gh pr create --base master --head "$BRANCH" \
+            --title "chore(supabase): synchronize production migration history" \
+            --body "Automated exact migration-history sync from production Supabase. Offline + live drift checks and release gate passed before this PR was opened."

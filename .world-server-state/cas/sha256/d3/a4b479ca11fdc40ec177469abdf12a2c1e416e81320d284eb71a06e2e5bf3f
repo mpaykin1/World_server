@@ -1,0 +1,457 @@
+{
+  "schemaVersion": 9,
+  "id": "WORLD_QUALITY_GENOME_V10",
+  "inheritance": "mandatory-global-defaults-with-explicit-opt-out-only-for-art-direction",
+  "traits": [
+    {
+      "id": "safe-spawn",
+      "state": "mandatory",
+      "source": "proven-regression-protection"
+    },
+    {
+      "id": "vertical-jump",
+      "state": "mandatory",
+      "source": "proven-regression-protection"
+    },
+    {
+      "id": "zero-camera-roll",
+      "state": "mandatory",
+      "source": "proven-regression-protection"
+    },
+    {
+      "id": "source-locked-visuals",
+      "state": "mandatory",
+      "source": "proven-regression-protection"
+    },
+    {
+      "id": "auto-collision",
+      "state": "mandatory",
+      "source": "proven-ingest-pattern"
+    },
+    {
+      "id": "near-field-max-quality",
+      "state": "mandatory",
+      "source": "v3-performance-standard"
+    },
+    {
+      "id": "distance-atmosphere",
+      "state": "mandatory",
+      "source": "v3-performance-standard"
+    },
+    {
+      "id": "subtle-wet-surface-look",
+      "state": "mandatory",
+      "source": "global-art-standard"
+    },
+    {
+      "id": "static-light-bake-companion",
+      "state": "mandatory-for-supported-static-meshes",
+      "source": "v3-lighting-standard"
+    },
+    {
+      "id": "protected-error-never-recur",
+      "state": "mandatory",
+      "source": "v3-error-immunity"
+    },
+    {
+      "id": "canary-first-cross-project-rollout",
+      "state": "mandatory",
+      "source": "v3-propagation-standard"
+    },
+    {
+      "id": "fog-occluded-lossless-culling",
+      "state": "mandatory",
+      "source": "v3.1-performance-standard"
+    },
+    {
+      "id": "wet-post-fallback-all-renderers",
+      "state": "mandatory",
+      "source": "v3.1-art-standard"
+    },
+    {
+      "id": "failed-build-never-propagates",
+      "state": "mandatory",
+      "source": "v3.1-release-safety"
+    },
+    {
+      "id": "automatic-rollback-on-rollout-failure",
+      "state": "mandatory",
+      "source": "v3.1-propagation-safety"
+    },
+    {
+      "id": "last-known-good-pack-runtime-hash",
+      "state": "mandatory",
+      "source": "v3.1-recovery-standard"
+    },
+    {
+      "id": "unknown-error-quarantine",
+      "state": "mandatory",
+      "source": "v3.1-error-immunity"
+    },
+    {
+      "id": "cross-project-evidence-before-promotion",
+      "state": "mandatory",
+      "source": "v3.1-quality-learning"
+    },
+    {
+      "id": "shared-dynamic-environment-runtime",
+      "state": "mandatory",
+      "source": "v3.1-physics-standard"
+    },
+    {
+      "id": "near-field-lossless-fps-optimization",
+      "state": "mandatory",
+      "source": "v4-performance-standard"
+    },
+    {
+      "id": "predictive-nearest-first-streaming",
+      "state": "mandatory",
+      "source": "v4-performance-standard"
+    },
+    {
+      "id": "adaptive-distant-nonphysics-ticks",
+      "state": "mandatory",
+      "source": "v4-performance-standard"
+    },
+    {
+      "id": "native-spz-collision-decoder",
+      "state": "mandatory",
+      "source": "v4-ingest-standard"
+    },
+    {
+      "id": "lossless-glb-spatial-chunking-when-compatible",
+      "state": "mandatory-for-compatible-static-glb",
+      "source": "v4-streaming-standard"
+    },
+    {
+      "id": "uv-lightmap-companion-with-safe-fallback",
+      "state": "mandatory-for-compatible-static-glb",
+      "source": "v4-lighting-standard"
+    },
+    {
+      "id": "moving-body-side-collision",
+      "state": "mandatory",
+      "source": "v4-physics-standard"
+    },
+    {
+      "id": "compiled-protection-pack-same-hash-all-projects",
+      "state": "mandatory",
+      "source": "v4-error-immunity"
+    },
+    {
+      "id": "immutable-sha-asset-cache",
+      "state": "mandatory",
+      "source": "v6-loading-performance-standard"
+    },
+    {
+      "id": "serialized-bvh-cache",
+      "state": "mandatory",
+      "source": "v6-physics-startup-standard"
+    },
+    {
+      "id": "worker-ply-decode-safe-fallback",
+      "state": "mandatory",
+      "source": "v6-loading-performance-standard"
+    },
+    {
+      "id": "exact-material-deduplication",
+      "state": "mandatory",
+      "source": "v6-draw-memory-standard"
+    },
+    {
+      "id": "static-world-reflection-probe",
+      "state": "mandatory",
+      "source": "v6-lighting-quality-standard"
+    },
+    {
+      "id": "gpu-occlusion-near-bypass",
+      "state": "mandatory",
+      "source": "v6-gpu-visibility-standard"
+    },
+    {
+      "id": "lossless-meshlet-metadata",
+      "state": "mandatory-for-compatible-meshes",
+      "source": "v6-gpu-driven-preparation"
+    },
+    {
+      "id": "network-interest-management",
+      "state": "mandatory-for-multiplayer",
+      "source": "v6-network-performance-standard"
+    },
+    {
+      "id": "distant-pose-sharing-safe-radius",
+      "state": "mandatory-for-crowd-projects",
+      "source": "v6-animation-performance-standard"
+    },
+    {
+      "id": "static-shadow-cache-only-when-no-dynamic-casters",
+      "state": "mandatory",
+      "source": "v6-shadow-performance-standard"
+    },
+    {
+      "id": "optimization-promotion-zero-quality-regression",
+      "state": "mandatory",
+      "source": "v6-learning-standard"
+    },
+    {
+      "id": "webgpu-hzb-conservative-visibility",
+      "state": "mandatory-when-webgpu-available",
+      "source": "v6-gpu-visibility-standard"
+    },
+    {
+      "id": "wasm-simd-safe-fastpath",
+      "state": "mandatory-when-simd-available",
+      "source": "v6-decode-performance-standard"
+    },
+    {
+      "id": "webgpu-lossless-meshlet-indirect",
+      "state": "mandatory-for-compatible-webgpu-meshes",
+      "source": "v6-draw-performance-standard"
+    },
+    {
+      "id": "offline-raytraced-gi-companion",
+      "state": "mandatory-for-supported-static-meshes",
+      "source": "v6-lighting-quality-standard"
+    },
+    {
+      "id": "offline-source-locked-reflection-probes",
+      "state": "mandatory-for-supported-static-worlds",
+      "source": "v6-reflection-quality-standard"
+    },
+    {
+      "id": "animated-glb-byte-identical-range-streaming",
+      "state": "mandatory-for-large-animated-glb",
+      "source": "v6-streaming-standard"
+    },
+    {
+      "id": "swept-dynamic-mesh-collision",
+      "state": "mandatory-for-moving-meshes",
+      "source": "v6-physics-standard"
+    },
+    {
+      "id": "global-cross-project-production-fingerprints",
+      "state": "mandatory",
+      "source": "v6-error-immunity-standard"
+    },
+    {
+      "id": "production-telemetry-to-quarantine",
+      "state": "mandatory-when-telemetry-connected",
+      "source": "v6-learning-standard"
+    },
+    {
+      "id": "transactional-known-antipattern-self-heal",
+      "state": "mandatory",
+      "source": "v6-learning-standard"
+    },
+    {
+      "id": "source-equivalent-webgpu-pbr",
+      "state": "mandatory-when-parity-proven",
+      "source": "v7-render-standard"
+    },
+    {
+      "id": "threaded-wasm-simd-deterministic",
+      "state": "mandatory-when-workers-available",
+      "source": "v7-cpu-performance"
+    },
+    {
+      "id": "parallel-exact-bvh-prepass",
+      "state": "mandatory-for-large-meshes",
+      "source": "v7-cpu-performance"
+    },
+    {
+      "id": "monotonic-quality-ratchet",
+      "state": "mandatory",
+      "source": "v7-learning"
+    },
+    {
+      "id": "content-addressed-bake-farm",
+      "state": "mandatory",
+      "source": "v7-build-automation"
+    },
+    {
+      "id": "representative-device-canary",
+      "state": "mandatory-before-global-renderer-promotion",
+      "source": "v7-rollout"
+    },
+    {
+      "id": "sandboxed-unknown-fix-proof",
+      "state": "mandatory",
+      "source": "v7-error-immunity"
+    },
+    {
+      "id": "consumer-drift-release-block",
+      "state": "mandatory",
+      "source": "v7-cross-project-propagation"
+    },
+    {
+      "id": "shared-memory-zero-copy-with-fidelity-fallback",
+      "state": "mandatory-when-isolated",
+      "source": "v8-cpu-performance"
+    },
+    {
+      "id": "exact-webgpu-material-table",
+      "state": "mandatory-when-webgpu",
+      "source": "v8-gpu-performance"
+    },
+    {
+      "id": "clustered-lighting-fail-bright",
+      "state": "mandatory-for-dense-lights",
+      "source": "v8-lighting-performance"
+    },
+    {
+      "id": "full-resolution-virtual-texture-residency",
+      "state": "mandatory-for-tiled-textures",
+      "source": "v8-texture-performance"
+    },
+    {
+      "id": "conservative-portal-visibility",
+      "state": "mandatory-for-tagged-interiors",
+      "source": "v8-visibility"
+    },
+    {
+      "id": "near-interaction-animation-full-rate",
+      "state": "mandatory",
+      "source": "v8-animation"
+    },
+    {
+      "id": "safe-spatial-physics-sleep",
+      "state": "mandatory",
+      "source": "v8-physics"
+    },
+    {
+      "id": "lossless-network-delta",
+      "state": "mandatory",
+      "source": "v8-network"
+    },
+    {
+      "id": "ratchet-approved-device-schedules",
+      "state": "mandatory",
+      "source": "v8-autotuning"
+    },
+    {
+      "id": "content-addressed-derived-artifact-cas",
+      "state": "mandatory",
+      "source": "v8-build-cache"
+    },
+    {
+      "id": "pattern-applicability-firewall",
+      "state": "mandatory",
+      "source": "v8-learning"
+    },
+    {
+      "id": "stutter-p99-ratchet",
+      "state": "mandatory",
+      "source": "v8-performance-quality"
+    },
+    {
+      "id": "cpu-first-no-paid-server-gpu",
+      "state": "mandatory",
+      "source": "v9-cpu-architecture"
+    },
+    {
+      "id": "incremental-world-compiler",
+      "state": "mandatory",
+      "source": "v9-build"
+    },
+    {
+      "id": "cpu-pvs-hierarchical-visibility",
+      "state": "mandatory",
+      "source": "v9-visibility"
+    },
+    {
+      "id": "predictive-streaming-v2",
+      "state": "mandatory",
+      "source": "v9-streaming"
+    },
+    {
+      "id": "incremental-cpu-light-bake",
+      "state": "mandatory",
+      "source": "v9-lighting"
+    },
+    {
+      "id": "nav-collision-source-hash-cache",
+      "state": "mandatory",
+      "source": "v9-cache"
+    },
+    {
+      "id": "near-exact-simulation-lod",
+      "state": "mandatory",
+      "source": "v9-runtime"
+    },
+    {
+      "id": "production-deterministic-replay",
+      "state": "mandatory",
+      "source": "v9-error-immunity"
+    },
+    {
+      "id": "quality-safe-cpu-autotuner",
+      "state": "mandatory",
+      "source": "v9-autotune"
+    },
+    {
+      "id": "no-stop-until-required-gates-green",
+      "state": "mandatory-desktop-ai",
+      "source": "v9-desktop-protocol"
+    },
+    {
+      "id": "threaded-exact-import-pool",
+      "state": "mandatory",
+      "source": "v10-cpu-import-standard"
+    },
+    {
+      "id": "bounded-memory-huge-world-parser",
+      "state": "mandatory",
+      "source": "v10-memory-standard"
+    },
+    {
+      "id": "semantic-conservative-pvs",
+      "state": "mandatory",
+      "source": "v10-visibility-standard"
+    },
+    {
+      "id": "incremental-gi-cell-reuse",
+      "state": "mandatory",
+      "source": "v10-lighting-standard"
+    },
+    {
+      "id": "content-defined-lossless-chunks",
+      "state": "mandatory",
+      "source": "v10-cache-standard"
+    },
+    {
+      "id": "versioned-offline-sha-cache",
+      "state": "mandatory",
+      "source": "v10-offline-standard"
+    },
+    {
+      "id": "multi-tab-sha-cache",
+      "state": "mandatory",
+      "source": "v10-cache-standard"
+    },
+    {
+      "id": "automatic-cpu-flamegraph-evidence",
+      "state": "mandatory",
+      "source": "v10-performance-learning"
+    },
+    {
+      "id": "deterministic-network-physics-replay-farm",
+      "state": "mandatory",
+      "source": "v10-regression-standard"
+    },
+    {
+      "id": "dependency-impact-graph",
+      "state": "mandatory",
+      "source": "v10-incremental-build-standard"
+    },
+    {
+      "id": "lossless-derived-cache-codec",
+      "state": "mandatory",
+      "source": "v10-cache-standard"
+    },
+    {
+      "id": "exact-derived-binary-delta",
+      "state": "mandatory",
+      "source": "v10-cache-standard"
+    }
+  ]
+}

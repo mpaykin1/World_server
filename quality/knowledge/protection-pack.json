@@ -1,0 +1,994 @@
+{
+  "schemaVersion": 1,
+  "runtime": "WORLD_FACTORY_QUALITY_CORE_V10",
+  "policy": "compile-once-propagate-everywhere-fail-closed",
+  "protectedIncidents": [
+    {
+      "fingerprint": "animated-glb-streaming-broke-animation",
+      "rules": [
+        "SRC-001",
+        "STR-001"
+      ],
+      "tests": [
+        "animated-glb-range-byte-conservation",
+        "source-hash-lock"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "animation-budget-stuttered-near-character",
+      "rules": [
+        "ANM-002"
+      ],
+      "tests": [
+        "animation-budget-near-interaction-full-rate"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "autotuner-selected-lossy-knob",
+      "rules": [
+        "PERF-032"
+      ],
+      "tests": [
+        "cpu-autotuner-safe-knobs"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "background-bake-starved-game-loop",
+      "rules": [
+        "LGT-007",
+        "PERF-025"
+      ],
+      "tests": [
+        "frame-budget-near-critical",
+        "incremental-cpu-light-bake"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "binary-delta-reconstruction-mismatch",
+      "rules": [
+        "QA-033"
+      ],
+      "tests": [
+        "binary-delta-exact-reconstruction"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "cached-nav-collision-used-for-wrong-source",
+      "rules": [
+        "QA-028"
+      ],
+      "tests": [
+        "nav-collision-cache-source-lock"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "camera-cannot-look-straight-up",
+      "rules": [
+        "CAM-002"
+      ],
+      "tests": [
+        "pitch-plus-minus-89"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "camera-rolls-when-looking-left-right",
+      "rules": [
+        "CAM-001",
+        "INP-001"
+      ],
+      "tests": [
+        "camera-roll-zero",
+        "horizontal-look-yaw-only"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "clustered-lighting-dropped-visible-light",
+      "rules": [
+        "LGT-006"
+      ],
+      "tests": [
+        "clustered-lighting-fail-bright"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "consumer-drift-missed-global-fix",
+      "rules": [
+        "QA-008",
+        "QA-014",
+        "QA-023"
+      ],
+      "tests": [
+        "compiled-global-protection-pack",
+        "consumer-drift-audit",
+        "quality-genome-inheritance"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "content-defined-chunking-changed-bytes",
+      "rules": [
+        "STR-002"
+      ],
+      "tests": [
+        "content-defined-chunk-byte-reconstruction"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "controls-inverted-or-world-rotates",
+      "rules": [
+        "CAM-001",
+        "INP-001"
+      ],
+      "tests": [
+        "forward-planar-camera",
+        "left-right-basis"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "cpu-optimization-reduced-near-graphics",
+      "rules": [
+        "PERF-027",
+        "PERF-032"
+      ],
+      "tests": [
+        "cpu-autotuner-safe-knobs",
+        "cpu-first-no-paid-gpu"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "cpu-tuning-without-causality-evidence",
+      "rules": [
+        "PERF-037"
+      ],
+      "tests": [
+        "cpu-flamegraph-evidence"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "dependency-impact-missed-required-rebuild",
+      "rules": [
+        "QA-031"
+      ],
+      "tests": [
+        "dependency-impact-graph-complete"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "derived-cache-compression-changed-bytes",
+      "rules": [
+        "QA-032"
+      ],
+      "tests": [
+        "derived-cache-codec-lossless"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "derived-cache-hash-mismatch",
+      "rules": [
+        "QA-021",
+        "QA-025"
+      ],
+      "tests": [
+        "content-addressed-bake-cache",
+        "derived-artifact-cas-source-lock"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "device-learning-lowered-graphics",
+      "rules": [
+        "PERF-003",
+        "PERF-024"
+      ],
+      "tests": [
+        "device-schedule-safe-knobs-only",
+        "near-fps-optimization-no-quality-loss"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "dynamic-body-tunneling",
+      "rules": [
+        "PHY-006",
+        "PHY-008"
+      ],
+      "tests": [
+        "dynamic-mesh-sweep-contract",
+        "dynamic-moving-side-collision"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "fixed-error-returned-in-another-project",
+      "rules": [
+        "QA-006",
+        "QA-008",
+        "QA-014"
+      ],
+      "tests": [
+        "compiled-global-protection-pack",
+        "protected-error-never-recur",
+        "quality-genome-inheritance"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "fps-optimization-degraded-near-graphics",
+      "rules": [
+        "PERF-002",
+        "PERF-003",
+        "PERF-004",
+        "SRC-002"
+      ],
+      "tests": [
+        "near-field-max-quality",
+        "near-fps-optimization-no-quality-loss",
+        "source-hash-lock"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "frame-budget-sacrificed-near-quality",
+      "rules": [
+        "PERF-003",
+        "PERF-025"
+      ],
+      "tests": [
+        "frame-budget-near-critical",
+        "near-fps-optimization-no-quality-loss"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "full-world-rebuild-after-single-object-change",
+      "rules": [
+        "PERF-028"
+      ],
+      "tests": [
+        "incremental-world-compiler-affected-only"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "good-pattern-not-spread-to-all-projects",
+      "rules": [
+        "QA-004",
+        "QA-007",
+        "QA-013",
+        "QA-014"
+      ],
+      "tests": [
+        "canary-global-rollout",
+        "compiled-global-protection-pack",
+        "cross-project-pattern-promotion",
+        "promoted-pattern-propagation"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "good-pattern-propagated-to-incompatible-project",
+      "rules": [
+        "QA-013",
+        "QA-026"
+      ],
+      "tests": [
+        "cross-project-pattern-promotion",
+        "pattern-applicability-firewall"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "huge-world-parser-loaded-whole-file-oom",
+      "rules": [
+        "PERF-034"
+      ],
+      "tests": [
+        "mmap-stream-bounded-memory"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "incremental-gi-reused-dirty-cell",
+      "rules": [
+        "LGT-008"
+      ],
+      "tests": [
+        "incremental-gi-cell-hash-reuse"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "jump-moves-forward-instead-of-up",
+      "rules": [
+        "PHY-003"
+      ],
+      "tests": [
+        "jump-world-y-only"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "material-table-fastpath-changed-material",
+      "rules": [
+        "PERF-017",
+        "PERF-021"
+      ],
+      "tests": [
+        "webgpu-exact-material-table",
+        "webgpu-pbr-source-equivalence"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "network-compression-changed-local-state",
+      "rules": [
+        "NET-002"
+      ],
+      "tests": [
+        "network-delta-lossless"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "offline-bake-mismatched-source",
+      "rules": [
+        "LGT-004",
+        "LGT-005"
+      ],
+      "tests": [
+        "offline-gi-source-lock",
+        "offline-reflection-source-lock"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "offline-cache-served-wrong-sha",
+      "rules": [
+        "PERF-036"
+      ],
+      "tests": [
+        "offline-sha-cache-version-isolation"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "p99-stutter-regressed-after-fps-optimization",
+      "rules": [
+        "PERF-026"
+      ],
+      "tests": [
+        "stutter-p99-regression"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "physics-sleep-disabled-player-contact",
+      "rules": [
+        "PHY-009"
+      ],
+      "tests": [
+        "physics-broadphase-near-contact-awake"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "portal-overcull-visible-room",
+      "rules": [
+        "PERF-023"
+      ],
+      "tests": [
+        "portal-visibility-conservative"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "production-error-fingerprint-project-local",
+      "rules": [
+        "QA-006",
+        "QA-016"
+      ],
+      "tests": [
+        "global-production-fingerprint",
+        "protected-error-never-recur"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "protected-self-heal-broke-other-invariant",
+      "rules": [
+        "QA-001",
+        "QA-018"
+      ],
+      "tests": [
+        "known-error-immunity",
+        "transactional-protected-self-heal"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "pvs-overculled-near-visible-object",
+      "rules": [
+        "PERF-029"
+      ],
+      "tests": [
+        "cpu-pvs-near-fail-visible"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "quality-floor-regressed-after-optimization",
+      "rules": [
+        "QA-003",
+        "QA-019"
+      ],
+      "tests": [
+        "monotonic-quality-ratchet",
+        "optimization-promotion-quality-nonregression"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "replay-bug-was-not-promoted-to-regression",
+      "rules": [
+        "QA-027"
+      ],
+      "tests": [
+        "production-replay-permanent"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "replay-farm-nondeterministic-network-physics",
+      "rules": [
+        "QA-030"
+      ],
+      "tests": [
+        "network-physics-replay-farm-determinism"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "semantic-pvs-overculled-unknown-space",
+      "rules": [
+        "PERF-035"
+      ],
+      "tests": [
+        "semantic-pvs-fail-visible"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "server-required-paid-gpu",
+      "rules": [
+        "PERF-027"
+      ],
+      "tests": [
+        "cpu-first-no-paid-gpu"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "shared-memory-fastpath-broke-on-nonisolated-deploy",
+      "rules": [
+        "PERF-020"
+      ],
+      "tests": [
+        "shared-memory-zero-copy-fallback"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "shared-worker-cache-cross-version-stale",
+      "rules": [
+        "PERF-036"
+      ],
+      "tests": [
+        "shared-worker-cache-sha-isolation"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "simd-fast-path-changed-geometry",
+      "rules": [
+        "PERF-015",
+        "SRC-001"
+      ],
+      "tests": [
+        "source-hash-lock",
+        "wasm-simd-numerical-parity"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "spawn-not-on-floor",
+      "rules": [
+        "PHY-002"
+      ],
+      "tests": [
+        "spawn-capsule-clearance",
+        "spawn-grounded"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "splat-has-no-collision",
+      "rules": [
+        "PHY-001"
+      ],
+      "tests": [
+        "collider-raycast-floor",
+        "splat-proxy-required"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "stale-bake-cache-applied-to-new-source",
+      "rules": [
+        "LGT-004",
+        "LGT-005",
+        "QA-021"
+      ],
+      "tests": [
+        "content-addressed-bake-cache",
+        "offline-gi-source-lock",
+        "offline-reflection-source-lock"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "threaded-importer-race-corrupted-asset",
+      "rules": [
+        "PERF-033"
+      ],
+      "tests": [
+        "threaded-importer-exact-parity"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "threaded-simd-decode-race-or-corruption",
+      "rules": [
+        "PERF-015",
+        "PERF-018"
+      ],
+      "tests": [
+        "wasm-simd-numerical-parity",
+        "wasm-simd-threaded-parity"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "virtual-texture-evicted-near-detail",
+      "rules": [
+        "PERF-022",
+        "SRC-002"
+      ],
+      "tests": [
+        "near-field-max-quality",
+        "virtual-texture-near-full-resolution"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "webgpu-occlusion-caused-popin-or-overcull",
+      "rules": [
+        "PERF-006",
+        "PERF-014"
+      ],
+      "tests": [
+        "gpu-occlusion-near-bypass",
+        "webgpu-hzb-conservative-fail-visible"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "webgpu-pbr-fastpath-lost-source-material-semantics",
+      "rules": [
+        "GFX-002",
+        "PERF-017"
+      ],
+      "tests": [
+        "visual-golden-regression",
+        "webgpu-pbr-source-equivalence"
+      ],
+      "mustNeverRecur": true
+    },
+    {
+      "fingerprint": "world-became-blurry",
+      "rules": [
+        "GFX-001",
+        "GFX-002",
+        "PERF-002",
+        "SRC-001",
+        "SRC-002"
+      ],
+      "tests": [
+        "geometry-stats-regression",
+        "source-hash-lock",
+        "visual-golden-regression"
+      ],
+      "mustNeverRecur": true
+    }
+  ],
+  "mandatoryGenome": [
+    {
+      "id": "adaptive-distant-nonphysics-ticks",
+      "state": "mandatory"
+    },
+    {
+      "id": "animated-glb-byte-identical-range-streaming",
+      "state": "mandatory-for-large-animated-glb"
+    },
+    {
+      "id": "auto-collision",
+      "state": "mandatory"
+    },
+    {
+      "id": "automatic-cpu-flamegraph-evidence",
+      "state": "mandatory"
+    },
+    {
+      "id": "automatic-rollback-on-rollout-failure",
+      "state": "mandatory"
+    },
+    {
+      "id": "bounded-memory-huge-world-parser",
+      "state": "mandatory"
+    },
+    {
+      "id": "canary-first-cross-project-rollout",
+      "state": "mandatory"
+    },
+    {
+      "id": "clustered-lighting-fail-bright",
+      "state": "mandatory-for-dense-lights"
+    },
+    {
+      "id": "compiled-protection-pack-same-hash-all-projects",
+      "state": "mandatory"
+    },
+    {
+      "id": "conservative-portal-visibility",
+      "state": "mandatory-for-tagged-interiors"
+    },
+    {
+      "id": "consumer-drift-release-block",
+      "state": "mandatory"
+    },
+    {
+      "id": "content-addressed-bake-farm",
+      "state": "mandatory"
+    },
+    {
+      "id": "content-addressed-derived-artifact-cas",
+      "state": "mandatory"
+    },
+    {
+      "id": "content-defined-lossless-chunks",
+      "state": "mandatory"
+    },
+    {
+      "id": "cpu-first-no-paid-server-gpu",
+      "state": "mandatory"
+    },
+    {
+      "id": "cpu-pvs-hierarchical-visibility",
+      "state": "mandatory"
+    },
+    {
+      "id": "cross-project-evidence-before-promotion",
+      "state": "mandatory"
+    },
+    {
+      "id": "dependency-impact-graph",
+      "state": "mandatory"
+    },
+    {
+      "id": "deterministic-network-physics-replay-farm",
+      "state": "mandatory"
+    },
+    {
+      "id": "distance-atmosphere",
+      "state": "mandatory"
+    },
+    {
+      "id": "distant-pose-sharing-safe-radius",
+      "state": "mandatory-for-crowd-projects"
+    },
+    {
+      "id": "exact-derived-binary-delta",
+      "state": "mandatory"
+    },
+    {
+      "id": "exact-material-deduplication",
+      "state": "mandatory"
+    },
+    {
+      "id": "exact-webgpu-material-table",
+      "state": "mandatory-when-webgpu"
+    },
+    {
+      "id": "failed-build-never-propagates",
+      "state": "mandatory"
+    },
+    {
+      "id": "fog-occluded-lossless-culling",
+      "state": "mandatory"
+    },
+    {
+      "id": "full-resolution-virtual-texture-residency",
+      "state": "mandatory-for-tiled-textures"
+    },
+    {
+      "id": "global-cross-project-production-fingerprints",
+      "state": "mandatory"
+    },
+    {
+      "id": "gpu-occlusion-near-bypass",
+      "state": "mandatory"
+    },
+    {
+      "id": "immutable-sha-asset-cache",
+      "state": "mandatory"
+    },
+    {
+      "id": "incremental-cpu-light-bake",
+      "state": "mandatory"
+    },
+    {
+      "id": "incremental-gi-cell-reuse",
+      "state": "mandatory"
+    },
+    {
+      "id": "incremental-world-compiler",
+      "state": "mandatory"
+    },
+    {
+      "id": "last-known-good-pack-runtime-hash",
+      "state": "mandatory"
+    },
+    {
+      "id": "lossless-derived-cache-codec",
+      "state": "mandatory"
+    },
+    {
+      "id": "lossless-glb-spatial-chunking-when-compatible",
+      "state": "mandatory-for-compatible-static-glb"
+    },
+    {
+      "id": "lossless-meshlet-metadata",
+      "state": "mandatory-for-compatible-meshes"
+    },
+    {
+      "id": "lossless-network-delta",
+      "state": "mandatory"
+    },
+    {
+      "id": "monotonic-quality-ratchet",
+      "state": "mandatory"
+    },
+    {
+      "id": "moving-body-side-collision",
+      "state": "mandatory"
+    },
+    {
+      "id": "multi-tab-sha-cache",
+      "state": "mandatory"
+    },
+    {
+      "id": "native-spz-collision-decoder",
+      "state": "mandatory"
+    },
+    {
+      "id": "nav-collision-source-hash-cache",
+      "state": "mandatory"
+    },
+    {
+      "id": "near-exact-simulation-lod",
+      "state": "mandatory"
+    },
+    {
+      "id": "near-field-lossless-fps-optimization",
+      "state": "mandatory"
+    },
+    {
+      "id": "near-field-max-quality",
+      "state": "mandatory"
+    },
+    {
+      "id": "near-interaction-animation-full-rate",
+      "state": "mandatory"
+    },
+    {
+      "id": "network-interest-management",
+      "state": "mandatory-for-multiplayer"
+    },
+    {
+      "id": "no-stop-until-required-gates-green",
+      "state": "mandatory-desktop-ai"
+    },
+    {
+      "id": "offline-raytraced-gi-companion",
+      "state": "mandatory-for-supported-static-meshes"
+    },
+    {
+      "id": "offline-source-locked-reflection-probes",
+      "state": "mandatory-for-supported-static-worlds"
+    },
+    {
+      "id": "optimization-promotion-zero-quality-regression",
+      "state": "mandatory"
+    },
+    {
+      "id": "parallel-exact-bvh-prepass",
+      "state": "mandatory-for-large-meshes"
+    },
+    {
+      "id": "pattern-applicability-firewall",
+      "state": "mandatory"
+    },
+    {
+      "id": "predictive-nearest-first-streaming",
+      "state": "mandatory"
+    },
+    {
+      "id": "predictive-streaming-v2",
+      "state": "mandatory"
+    },
+    {
+      "id": "production-deterministic-replay",
+      "state": "mandatory"
+    },
+    {
+      "id": "production-telemetry-to-quarantine",
+      "state": "mandatory-when-telemetry-connected"
+    },
+    {
+      "id": "protected-error-never-recur",
+      "state": "mandatory"
+    },
+    {
+      "id": "quality-safe-cpu-autotuner",
+      "state": "mandatory"
+    },
+    {
+      "id": "ratchet-approved-device-schedules",
+      "state": "mandatory"
+    },
+    {
+      "id": "representative-device-canary",
+      "state": "mandatory-before-global-renderer-promotion"
+    },
+    {
+      "id": "safe-spatial-physics-sleep",
+      "state": "mandatory"
+    },
+    {
+      "id": "safe-spawn",
+      "state": "mandatory"
+    },
+    {
+      "id": "sandboxed-unknown-fix-proof",
+      "state": "mandatory"
+    },
+    {
+      "id": "semantic-conservative-pvs",
+      "state": "mandatory"
+    },
+    {
+      "id": "serialized-bvh-cache",
+      "state": "mandatory"
+    },
+    {
+      "id": "shared-dynamic-environment-runtime",
+      "state": "mandatory"
+    },
+    {
+      "id": "shared-memory-zero-copy-with-fidelity-fallback",
+      "state": "mandatory-when-isolated"
+    },
+    {
+      "id": "source-equivalent-webgpu-pbr",
+      "state": "mandatory-when-parity-proven"
+    },
+    {
+      "id": "source-locked-visuals",
+      "state": "mandatory"
+    },
+    {
+      "id": "static-light-bake-companion",
+      "state": "mandatory-for-supported-static-meshes"
+    },
+    {
+      "id": "static-shadow-cache-only-when-no-dynamic-casters",
+      "state": "mandatory"
+    },
+    {
+      "id": "static-world-reflection-probe",
+      "state": "mandatory"
+    },
+    {
+      "id": "stutter-p99-ratchet",
+      "state": "mandatory"
+    },
+    {
+      "id": "subtle-wet-surface-look",
+      "state": "mandatory"
+    },
+    {
+      "id": "swept-dynamic-mesh-collision",
+      "state": "mandatory-for-moving-meshes"
+    },
+    {
+      "id": "threaded-exact-import-pool",
+      "state": "mandatory"
+    },
+    {
+      "id": "threaded-wasm-simd-deterministic",
+      "state": "mandatory-when-workers-available"
+    },
+    {
+      "id": "transactional-known-antipattern-self-heal",
+      "state": "mandatory"
+    },
+    {
+      "id": "unknown-error-quarantine",
+      "state": "mandatory"
+    },
+    {
+      "id": "uv-lightmap-companion-with-safe-fallback",
+      "state": "mandatory-for-compatible-static-glb"
+    },
+    {
+      "id": "versioned-offline-sha-cache",
+      "state": "mandatory"
+    },
+    {
+      "id": "vertical-jump",
+      "state": "mandatory"
+    },
+    {
+      "id": "wasm-simd-safe-fastpath",
+      "state": "mandatory-when-simd-available"
+    },
+    {
+      "id": "webgpu-hzb-conservative-visibility",
+      "state": "mandatory-when-webgpu-available"
+    },
+    {
+      "id": "webgpu-lossless-meshlet-indirect",
+      "state": "mandatory-for-compatible-webgpu-meshes"
+    },
+    {
+      "id": "wet-post-fallback-all-renderers",
+      "state": "mandatory"
+    },
+    {
+      "id": "worker-ply-decode-safe-fallback",
+      "state": "mandatory"
+    },
+    {
+      "id": "zero-camera-roll",
+      "state": "mandatory"
+    }
+  ],
+  "qualityRulesHash": "c5d7e5552b76a79175c54386b622f40aafc72d48ff9306f52058159fbf6cf4e5",
+  "testCatalogHash": "ceea47039b8d7a6e2cfc8ef118265d10ffcc8432e02c7b1745c9cced8a1d2d7f",
+  "errors": [],
+  "protectionHash": "601e67aea70cd3d9539952ff1fc076a9aea42940ea8b7b3a8cf54d5bf663aeef"
+}

@@ -1,0 +1,668 @@
+{
+  "schemaVersion": 1,
+  "mode": "code-asset-bake-game-dependency-graph-v1",
+  "pass": true,
+  "nodeCount": 67,
+  "edgeCount": 75,
+  "graphSha256": "ab5547a62f1c2b5dcaeb086013fa98fbfc87714d024fa5b0e06568d75d0decf4",
+  "nodes": [
+    {
+      "id": "src/adaptive-tick-scheduler.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/animation-budget.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/asset-cache.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/atmosphere-quality.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/baked-lighting.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/bvh-cache.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/bvh-parallel-prepass.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/cpu-first-orchestrator.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/cpu-import-worker-pool.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/cpu-occlusion-cache.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/device-performance-schedule.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/distant-pose-sharing.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/dynamic-environment.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/dynamic-swept-collision.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/fps-quality-optimizer.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/frame-budget-orchestrator.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/gameplay-core.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/gpu-occlusion-manager.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/hierarchical-spatial-grid.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/input.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/lighting-quality.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/lossless-range-stream.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/main.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/material-deduplicator.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/navigation.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/network-delta-codec.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/network-interest-manager.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/offline-cache-manager.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/optimization-orchestrator.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/performance-governor.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/physics-spatial-broadphase.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/player-controller.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/ply-worker-loader.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/portal-visibility.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/predictive-streaming-v2.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/proximity-quality.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/quality-gate.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/quality-telemetry.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/reflection-probes.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/runtime-pools.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/shared-cache-worker.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/shared-memory-decode.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/simulation-lod.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/sound-bank.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/static-shadow-cache.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/streaming-manager.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/virtual-texture-residency.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/wasm-simd-codec.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/wasm-thread-pool.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/webgpu-clustered-lighting.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/webgpu-hzb-visibility.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/webgpu-material-table.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/webgpu-meshlet-indirect.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/webgpu-pbr-renderer.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/wet-surface-system.js",
+      "kind": "code"
+    },
+    {
+      "id": "src/world-loader.js",
+      "kind": "code"
+    },
+    {
+      "id": "worlds/sample-city/world.json",
+      "kind": "game-manifest"
+    },
+    {
+      "id": "worlds/sample-city/assets/world.ply",
+      "kind": "source-asset"
+    },
+    {
+      "id": "worlds/sample-city/generated/meshlets.json",
+      "kind": "derived-bake"
+    },
+    {
+      "id": "worlds/sample-city/generated/v9-preparation.json",
+      "kind": "derived-bake"
+    },
+    {
+      "id": "worlds/sample-city/generated/v7-preparation.json",
+      "kind": "derived-bake"
+    },
+    {
+      "id": "worlds/sample-city/generated/v6-preparation.json",
+      "kind": "derived-bake"
+    },
+    {
+      "id": "worlds/sample-city/generated/v8-preparation.json",
+      "kind": "derived-bake"
+    },
+    {
+      "id": "worlds/sample-city/generated/navgraph.json",
+      "kind": "derived-bake"
+    },
+    {
+      "id": "worlds/sample-city/generated/semantic.json",
+      "kind": "derived-bake"
+    },
+    {
+      "id": "worlds/sample-city/generated/lighting/lighting-vertex.bin",
+      "kind": "derived-bake"
+    },
+    {
+      "id": "worlds/sample-city/generated/lighting/lighting-bake.json",
+      "kind": "derived-bake"
+    }
+  ],
+  "edges": [
+    {
+      "from": "src/adaptive-tick-scheduler.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/animation-budget.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/asset-cache.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/atmosphere-quality.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/baked-lighting.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/bvh-cache.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/bvh-parallel-prepass.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/cpu-first-orchestrator.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/cpu-import-worker-pool.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/cpu-occlusion-cache.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/device-performance-schedule.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/distant-pose-sharing.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/dynamic-environment.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/dynamic-swept-collision.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/fps-quality-optimizer.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/frame-budget-orchestrator.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/gameplay-core.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/gpu-occlusion-manager.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/hierarchical-spatial-grid.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/input.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/lighting-quality.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/lossless-range-stream.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/main.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/material-deduplicator.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/navigation.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/network-delta-codec.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/network-interest-manager.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/offline-cache-manager.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/optimization-orchestrator.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/performance-governor.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/physics-spatial-broadphase.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/player-controller.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/ply-worker-loader.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/portal-visibility.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/predictive-streaming-v2.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/proximity-quality.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/quality-gate.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/quality-telemetry.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/reflection-probes.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/runtime-pools.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/shared-cache-worker.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/shared-memory-decode.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/simulation-lod.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/sound-bank.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/static-shadow-cache.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/streaming-manager.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/virtual-texture-residency.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/wasm-simd-codec.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/wasm-thread-pool.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/webgpu-clustered-lighting.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/webgpu-hzb-visibility.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/webgpu-material-table.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/webgpu-meshlet-indirect.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/webgpu-pbr-renderer.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/wet-surface-system.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "src/world-loader.js",
+      "to": "worlds/sample-city/world.json",
+      "kind": "runtime-affects-game"
+    },
+    {
+      "from": "worlds/sample-city/assets/world.ply",
+      "to": "worlds/sample-city/world.json",
+      "kind": "asset-used-by-game"
+    },
+    {
+      "from": "worlds/sample-city/generated/meshlets.json",
+      "to": "worlds/sample-city/world.json",
+      "kind": "derived-used-by-game"
+    },
+    {
+      "from": "worlds/sample-city/assets/world.ply",
+      "to": "worlds/sample-city/generated/meshlets.json",
+      "kind": "source-generates-derived"
+    },
+    {
+      "from": "worlds/sample-city/generated/v9-preparation.json",
+      "to": "worlds/sample-city/world.json",
+      "kind": "derived-used-by-game"
+    },
+    {
+      "from": "worlds/sample-city/assets/world.ply",
+      "to": "worlds/sample-city/generated/v9-preparation.json",
+      "kind": "source-generates-derived"
+    },
+    {
+      "from": "worlds/sample-city/generated/v7-preparation.json",
+      "to": "worlds/sample-city/world.json",
+      "kind": "derived-used-by-game"
+    },
+    {
+      "from": "worlds/sample-city/assets/world.ply",
+      "to": "worlds/sample-city/generated/v7-preparation.json",
+      "kind": "source-generates-derived"
+    },
+    {
+      "from": "worlds/sample-city/generated/v6-preparation.json",
+      "to": "worlds/sample-city/world.json",
+      "kind": "derived-used-by-game"
+    },
+    {
+      "from": "worlds/sample-city/assets/world.ply",
+      "to": "worlds/sample-city/generated/v6-preparation.json",
+      "kind": "source-generates-derived"
+    },
+    {
+      "from": "worlds/sample-city/generated/v8-preparation.json",
+      "to": "worlds/sample-city/world.json",
+      "kind": "derived-used-by-game"
+    },
+    {
+      "from": "worlds/sample-city/assets/world.ply",
+      "to": "worlds/sample-city/generated/v8-preparation.json",
+      "kind": "source-generates-derived"
+    },
+    {
+      "from": "worlds/sample-city/generated/navgraph.json",
+      "to": "worlds/sample-city/world.json",
+      "kind": "derived-used-by-game"
+    },
+    {
+      "from": "worlds/sample-city/assets/world.ply",
+      "to": "worlds/sample-city/generated/navgraph.json",
+      "kind": "source-generates-derived"
+    },
+    {
+      "from": "worlds/sample-city/generated/semantic.json",
+      "to": "worlds/sample-city/world.json",
+      "kind": "derived-used-by-game"
+    },
+    {
+      "from": "worlds/sample-city/assets/world.ply",
+      "to": "worlds/sample-city/generated/semantic.json",
+      "kind": "source-generates-derived"
+    },
+    {
+      "from": "worlds/sample-city/generated/lighting/lighting-vertex.bin",
+      "to": "worlds/sample-city/world.json",
+      "kind": "derived-used-by-game"
+    },
+    {
+      "from": "worlds/sample-city/assets/world.ply",
+      "to": "worlds/sample-city/generated/lighting/lighting-vertex.bin",
+      "kind": "source-generates-derived"
+    },
+    {
+      "from": "worlds/sample-city/generated/lighting/lighting-bake.json",
+      "to": "worlds/sample-city/world.json",
+      "kind": "derived-used-by-game"
+    },
+    {
+      "from": "worlds/sample-city/assets/world.ply",
+      "to": "worlds/sample-city/generated/lighting/lighting-bake.json",
+      "kind": "source-generates-derived"
+    }
+  ],
+  "failClosedOnMissingDependency": true,
+  "sampleImpact": [
+    "worlds/sample-city/generated/lighting/lighting-bake.json",
+    "worlds/sample-city/generated/lighting/lighting-vertex.bin",
+    "worlds/sample-city/generated/meshlets.json",
+    "worlds/sample-city/generated/navgraph.json",
+    "worlds/sample-city/generated/semantic.json",
+    "worlds/sample-city/generated/v6-preparation.json",
+    "worlds/sample-city/generated/v7-preparation.json",
+    "worlds/sample-city/generated/v8-preparation.json",
+    "worlds/sample-city/generated/v9-preparation.json",
+    "worlds/sample-city/world.json"
+  ]
+}

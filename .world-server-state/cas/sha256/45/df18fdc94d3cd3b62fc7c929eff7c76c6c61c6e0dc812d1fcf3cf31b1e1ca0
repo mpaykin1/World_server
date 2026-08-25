@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "runtime": "WORLD_FACTORY_QUALITY_CORE_V10",
+  "pass": true,
+  "serverGpuRequired": false,
+  "heavyBakes": "local-cpu-incremental",
+  "steps": [
+    {
+      "cmd": "/opt/pyvenv/bin/python tools/prepare_world_v8.py --quality production --heavy-bakes distributed",
+      "pass": true,
+      "stdout": "{\n  \"runtime\": \"WORLD_FACTORY_QUALITY_CORE_V10\",\n  \"pass\": true,\n  \"worlds\": [\n    {\n      \"schemaVersion\": 2,\n      \"runtime\": \"WORLD_FACTORY_QUALITY_CORE_V10\",\n      \"world\": \"sample-city\",\n      \"qualityTier\": \"production\",\n      \"heavyBakes\": \"distributed\",\n      \"pass\": true,\n      \"sourceSha256\": \"af8b08927d911b259f04975e146f26a1110c574ba3bc465ae319685826ca9473\",\n      \"sourceAssetModified\": false,\n      \"steps\": [\n        {\n          \"system\": \"meshlets\",\n          \"pass\": true,\n          \"triangles\": 683077,\n          \"loss\": 0\n        },\n        {\n          \"system\": \"offline-gi\",\n          \"pass\": true,\n          \"state\": \"queued-content-addressed-bake-farm\",\n          \"sourceSha256\": \"af8b08927d911b259f04975e146f26a1110c574ba3bc465ae319685826ca9473\",\n          \"safeRuntimeFallback\": \"vertex-scalar-ply-v1\"\n        },\n        {\n          \"system\": \"offline-reflection-probes\",\n          \"pass\": true,\n          \"state\": \"queued-content-addressed-bake-farm\",\n          \"sourceSha256\": \"af8b08927d911b259f04975e146f26a1110c574ba3bc465ae319685826ca9473\",\n          \"safeRuntimeFallback\": \"static-world-cubemap-once-v1\"\n        }\n      ]\n    }\n  ],\n  \"sourceAssetsModified\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "cmd": "/opt/pyvenv/bin/python tools/incremental_world_compiler.py /mnt/data/WORLD_FACTORY_QUALITY_CORE_V10/worlds/sample-city",
+      "pass": true,
+      "stdout": "{\n  \"schemaVersion\": 1,\n  \"mode\": \"content-hash-incremental-world-compiler-v1\",\n  \"files\": {\n    \"assets/world.ply\": \"af8b08927d911b259f04975e146f26a1110c574ba3bc465ae319685826ca9473\",\n    \"world.json\": \"fed1f1372f9b4eddba4b156e44836dddfe5b06723e503883daa959abf60c8dbe\"\n  },\n  \"changed\": [\n    \"assets/world.ply\",\n    \"world.json\"\n  ],\n  \"removed\": [],\n  \"affectedSystems\": [\n    \"collision\",\n    \"lighting\",\n    \"meshlets\",\n    \"metadata\",\n    \"nav\",\n    \"pvs\",\n    \"semantic\",\n    \"streaming\"\n  ],\n  \"fullRebuild\": false,\n  \"sourceAssetsModified\": false,\n  \"generatedAt\": 1787549880.9522274\n}\n",
+      "stderr": ""
+    }
+  ],
+  "sourceAssetsModified": false
+}

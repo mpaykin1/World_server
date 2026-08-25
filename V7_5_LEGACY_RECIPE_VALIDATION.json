@@ -1,0 +1,330 @@
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-24T10:40:03.207307Z",
+  "pass": true,
+  "recipes": 18,
+  "mapped": 18,
+  "rows": [
+    {
+      "recipeId": "legacy-quality-core",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10",
+      "archive": "01__WORLD_FACTORY_QUALITY_CORE_V10.zip",
+      "archiveMatchScore": 4,
+      "sourcePathMatches": [
+        "shared/world-quality-core/tools/dependency_graph_v10.py",
+        "shared/world-quality-core/tools/deterministic_replay.py",
+        "shared/world-quality-core/tools/quality_ratchet.py",
+        "shared/world-quality-core/tools/knowledge_engine.py"
+      ],
+      "staticMarkerMatches": [
+        "shared/world-quality-core/tools/quality_ratchet.py"
+      ],
+      "integrationMarkerMatches": [
+        "shared/world-quality-core/tools/readiness.py"
+      ],
+      "recipeMapsToArchive": true
+    },
+    {
+      "recipeId": "legacy-texture-quality",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10",
+      "archive": "02__WORLD_SERVER_TEXTURE_QUALITY_V10.zip",
+      "archiveMatchScore": 4,
+      "sourcePathMatches": [
+        "services/ai3d-worker/tools/optimize_scene_quality.py",
+        "services/ai3d-worker/tools/verify_texture_runtime.py",
+        "services/ai3d-worker/tools/texture_runtime_adapters/blender/autofix_uv_and_atlas.py"
+      ],
+      "staticMarkerMatches": [
+        "services/ai3d-worker/tools/verify_texture_runtime.py"
+      ],
+      "integrationMarkerMatches": [
+        "services/ai3d-worker/tests/test_texture_v10.py"
+      ],
+      "recipeMapsToArchive": true
+    },
+    {
+      "recipeId": "legacy-mesh-quality",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12",
+      "archive": "03__WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12.zip",
+      "archiveMatchScore": 5,
+      "sourcePathMatches": [
+        "services/ai3d-worker/ai3d/plugins/mesh_quality_optimizer.py",
+        "services/ai3d-worker/ai3d/mesh_optimizer.py",
+        "services/ai3d-worker/ai3d/production_v12.py"
+      ],
+      "staticMarkerMatches": [
+        "services/ai3d-worker/ai3d/plugins/mesh_quality_optimizer.py"
+      ],
+      "integrationMarkerMatches": [
+        "services/ai3d-worker/scripts/verify_mesh_pipeline_v12.py"
+      ],
+      "recipeMapsToArchive": true
+    },
+    {
+      "recipeId": "legacy-procedural-quality",
+      "owner": "PROCEDURAL_QUALITY_ENGINE_V10",
+      "archive": "04__PROCEDURAL_QUALITY_ENGINE_V10.zip",
+      "archiveMatchScore": 3,
+      "sourcePathMatches": [
+        "scripts/procedural-quality-v10-gate.js",
+        "scripts/run-procedural-tests.js"
+      ],
+      "staticMarkerMatches": [
+        "scripts/procedural-quality-v10-gate.js"
+      ],
+      "integrationMarkerMatches": [
+        "PROCEDURAL_QUALITY_V10_VERIFICATION.json"
+      ],
+      "recipeMapsToArchive": true
+    },
+    {
+      "recipeId": "legacy-apng-quality",
+      "owner": "WORLD_SERVER_APNG_QUALITY_SYSTEM_V3_MAX",
+      "archive": "06__WORLD_SERVER_APNG_QUALITY_SYSTEM_V3_MAX.zip",
+      "archiveMatchScore": 5,
+      "sourcePathMatches": [
+        "scripts/apng-quality-gate.js",
+        "scripts/verify-apng-bundle.js",
+        "scripts/integrate-apng-system.js"
+      ],
+      "staticMarkerMatches": [
+        "scripts/apng-quality-gate.js"
+      ],
+      "integrationMarkerMatches": [
+        "test/apng-integration.test.js"
+      ],
+      "recipeMapsToArchive": true
+    },
+    {
+      "recipeId": "legacy-pixel-animation",
+      "owner": "PIXEL_ANIMATION_SYSTEM_V3",
+      "archive": "07__PIXEL_ANIMATION_SYSTEM_V3.zip",
+      "archiveMatchScore": 3,
+      "sourcePathMatches": [
+        "scripts/pixel-animation-verify.js",
+        "scripts/pixel-animation-auto-integrate.js"
+      ],
+      "staticMarkerMatches": [
+        "scripts/pixel-animation-verify.js"
+      ],
+      "integrationMarkerMatches": [
+        "test/pixel-animation-v3.test.js"
+      ],
+      "recipeMapsToArchive": true
+    },
+    {
+      "recipeId": "legacy-golden-governance",
+      "owner": "WORLD_SERVER_GOLDEN_STANDARD_V13",
+      "archive": "10__WORLD_SERVER_GOLDEN_STANDARD_V13_SELF_CALIBRATING_CPU_QUALITY.zip",
+      "archiveMatchScore": 4,
+      "sourcePathMatches": [
+        "scripts/quality-regression-gate.js",
+        "scripts/check-desktop-ai-protocol.js",
+        "scripts/quality-self-evolve.js"
+      ],
+      "staticMarkerMatches": [
+        "scripts/quality-regression-gate.js"
+      ],
+      "integrationMarkerMatches": [
+        "test/v13-invariant-golden.test.js"
+      ],
+      "recipeMapsToArchive": true
+    },
+    {
+      "recipeId": "legacy-world-quality-v6",
+      "owner": "WORLD_QUALITY_AUTOPILOT_V6",
+      "archive": "13__WORLD_QUALITY_AUTOPILOT_V6.zip",
+      "archiveMatchScore": 3,
+      "sourcePathMatches": [
+        "scripts/world-graphics-technology-scout.js",
+        "scripts/world-cpu-first-graphics-optimizer.js",
+        "scripts/world-technology-drift-gate.js",
+        "scripts/world-quality-slo.js"
+      ],
+      "staticMarkerMatches": [
+        "scripts/world-graphics-technology-scout.js"
+      ],
+      "integrationMarkerMatches": [
+        "scripts/world-quality-autopilot.js"
+      ],
+      "recipeMapsToArchive": true
+    },
+    {
+      "recipeId": "legacy-dream-v5",
+      "owner": "WORLD_SERVER_DREAM_AUTOPILOT_V5_CPU",
+      "archive": "12__WORLD_SERVER_DREAM_AUTOPILOT_V5_CPU.zip",
+      "archiveMatchScore": 4,
+      "sourcePathMatches": [
+        "scripts/world-device-profile-matrix.js",
+        "scripts/cv-gameplay-agent.js",
+        "scripts/character-motion-validator.js"
+      ],
+      "staticMarkerMatches": [
+        "scripts/cv-gameplay-agent.js"
+      ],
+      "integrationMarkerMatches": [
+        "data/cv-action-policy.json"
+      ],
+      "recipeMapsToArchive": true
+    },
+    {
+      "recipeId": "legacy-pwa-v4",
+      "owner": "WORLD_SERVER_PWA_SELF_IMPROVING_V4_MAX",
+      "archive": "15__WORLD_SERVER_PWA_SELF_IMPROVING_V4_MAX.zip",
+      "archiveMatchScore": 4,
+      "sourcePathMatches": [
+        "shared/pwa-runtime.js",
+        "scripts/real-ios-telemetry-gate.js",
+        "scripts/runtime-integration-discovery.js",
+        ".github/workflows/quality-canary.yml"
+      ],
+      "staticMarkerMatches": [
+        "shared/pwa-runtime.js"
+      ],
+      "integrationMarkerMatches": [
+        "scripts/check-pwa-system.js"
+      ],
+      "recipeMapsToArchive": true
+    },
+    {
+      "recipeId": "legacy-truth-gate",
+      "owner": "production-100-truth-gate-v1",
+      "archive": "17__production-100-truth-gate-v1.zip",
+      "archiveMatchScore": 3,
+      "sourcePathMatches": [
+        "scripts/world-quality-analyzer.js",
+        "scripts/world-quality-autopilot.js"
+      ],
+      "staticMarkerMatches": [
+        "scripts/world-quality-analyzer.js"
+      ],
+      "integrationMarkerMatches": [
+        "test/world-quality-truth-gate.test.js"
+      ],
+      "recipeMapsToArchive": true
+    },
+    {
+      "recipeId": "legacy-runtime-v12-3",
+      "owner": "WORLD_SERVER_QUALITY_RUNTIME_V12_3",
+      "archive": "18__WORLD_SERVER_QUALITY_RUNTIME_V12_3.zip",
+      "archiveMatchScore": 4,
+      "sourcePathMatches": [
+        "scripts/github-quality-bridge-v12.cjs",
+        "scripts/build-pixel-atlas-v12.cjs",
+        "scripts/check-supabase-migration-manifest-v12.cjs"
+      ],
+      "staticMarkerMatches": [
+        "scripts/github-quality-bridge-v12.cjs"
+      ],
+      "integrationMarkerMatches": [
+        "scripts/check-supabase-migration-manifest-v12.cjs"
+      ],
+      "recipeMapsToArchive": true
+    },
+    {
+      "recipeId": "legacy-video2game-v5",
+      "owner": "VIDEO2GAME_VOXEL_V5",
+      "archive": "08__VIDEO2GAME_VOXEL_V5.zip",
+      "archiveMatchScore": 2,
+      "sourcePathMatches": [
+        "video2game_voxel/pipeline.py",
+        "video2game_voxel/voxelize.py",
+        "video2game_voxel/quality_gate.py"
+      ],
+      "staticMarkerMatches": [
+        "video2game_voxel/pipeline.py"
+      ],
+      "integrationMarkerMatches": [
+        "tests/test_regression.py"
+      ],
+      "recipeMapsToArchive": true
+    },
+    {
+      "recipeId": "legacy-pixel3dgs-v6",
+      "owner": "PIXEL_3DGS_CPU_V6_PHONE_4D_MAX",
+      "archive": "09__PIXEL_3DGS_CPU_V6_PHONE_4D_MAX.zip",
+      "archiveMatchScore": 3,
+      "sourcePathMatches": [
+        "pixel3dgs/pipeline.py",
+        "pixel3dgs/dynamic4d_cpu.py",
+        "phone_capture/manifest.webmanifest"
+      ],
+      "staticMarkerMatches": [
+        "pixel3dgs/pipeline.py"
+      ],
+      "integrationMarkerMatches": [
+        "v6_self_test.py"
+      ],
+      "recipeMapsToArchive": true
+    },
+    {
+      "recipeId": "legacy-lowfi-25d",
+      "owner": "LOWFI_25D_SERVER_PATCH",
+      "archive": "05__LOWFI_25D_SERVER_PATCH.zip",
+      "archiveMatchScore": 3,
+      "sourcePathMatches": [
+        "api/lowfi-25d-scene.js",
+        "apps/lowfi-25d/index.html"
+      ],
+      "staticMarkerMatches": [
+        "api/lowfi-25d-scene.js"
+      ],
+      "integrationMarkerMatches": [
+        "apps/lowfi-25d/index.html"
+      ],
+      "recipeMapsToArchive": true
+    },
+    {
+      "recipeId": "legacy-quality-autopilot-v11",
+      "owner": "QUALITY_AUTOPILOT_PATCH_v11_CPU_MAX",
+      "archive": "11__QUALITY_AUTOPILOT_PATCH_v11_CPU_MAX.zip",
+      "archiveMatchScore": 3,
+      "sourcePathMatches": [
+        "scripts/quality-readiness-v11.js",
+        "scripts/quality-security-gate.js"
+      ],
+      "staticMarkerMatches": [
+        "scripts/quality-readiness-v11.js"
+      ],
+      "integrationMarkerMatches": [
+        "test/quality-autopilot-v11.test.js"
+      ],
+      "recipeMapsToArchive": true
+    },
+    {
+      "recipeId": "legacy-quiet-autopilot-v6",
+      "owner": "WORLD_SERVER_QUIET_QUALITY_AUTOPILOT_V6",
+      "archive": "14__WORLD_SERVER_QUIET_QUALITY_AUTOPILOT_V6.zip",
+      "archiveMatchScore": 5,
+      "sourcePathMatches": [
+        "scripts/verify-v6-runtime.js",
+        "scripts/quality-proof-gate.js",
+        "scripts/quality-otel-bridge-check.js"
+      ],
+      "staticMarkerMatches": [
+        "scripts/verify-v6-runtime.js"
+      ],
+      "integrationMarkerMatches": [
+        "scripts/quality-proof-gate.js"
+      ],
+      "recipeMapsToArchive": true
+    },
+    {
+      "recipeId": "legacy-gap-closure-v1",
+      "owner": "GAP_CLOSURE_SYSTEM_V1",
+      "archive": "16__GAP_CLOSURE_SYSTEM_V1.zip",
+      "archiveMatchScore": 2,
+      "sourcePathMatches": [
+        "test/gap-closure.test.js"
+      ],
+      "staticMarkerMatches": [
+        "test/gap-closure.test.js"
+      ],
+      "integrationMarkerMatches": [
+        "test/gap-closure.test.js"
+      ],
+      "recipeMapsToArchive": true
+    }
+  ],
+  "truthRule": "Archive mapping validates recipe paths only; runtime CERTIFIED_100 still requires installed files plus executed regression evidence."
+}

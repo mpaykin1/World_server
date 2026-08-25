@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#07101d">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Pixel 3DGS Capture</title>
+<style>
+html,body{margin:0;background:#05080d;color:#eef;font-family:system-ui,-apple-system,sans-serif;min-height:100%}main{max-width:760px;margin:auto;padding:16px}video{width:100%;border-radius:16px;background:#000;max-height:58vh;object-fit:cover}.row{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}button,select{font:inherit;border:0;border-radius:12px;padding:13px 16px;background:#17324d;color:white}button.primary{background:#1577c8;font-weight:800}button.stop{background:#9f2536}.card{background:#0c1420;border:1px solid #ffffff18;border-radius:16px;padding:14px;margin:12px 0}.ok{color:#90f6b0}.warn{color:#ffcf70}pre{white-space:pre-wrap;font-size:12px;opacity:.82}.meter{height:8px;background:#ffffff12;border-radius:8px;overflow:hidden}.meter>i{display:block;height:100%;width:0;background:#63c6ff}</style>
+</head>
+<body><main>
+<h1>Pixel 3DGS Capture</h1>
+<div class="card">Снимай плавно. Для пространства двигайся вперёд/по дуге. Для персонажа обходи вокруг него, удерживая всего человека в кадре.</div>
+<video id="preview" autoplay playsinline muted></video>
+<div class="row"><select id="mode"><option value="space">Пространство</option><option value="character">Персонаж</option><option value="auto">Авто</option></select><button id="init">Разрешить камеру и датчики</button></div>
+<div class="row"><button class="primary" id="start" disabled>Начать запись</button><button class="stop" id="stop" disabled>Остановить</button></div>
+<div class="card"><b>Датчики:</b> <span id="sensor">не активны</span><div class="meter"><i id="meter"></i></div><div id="stats"></div></div>
+<div class="row"><button id="upload" disabled>Отправить на сервер</button><button id="save" disabled>Сохранить видео + pose JSON</button></div>
+<pre id="log"></pre>
+<script>
+const $=id=>document.getElementById(id);let stream=null,rec=null,chunks=[],samples=[],blob=null,startPerf=0,gpsLast=null,gpsWatch=null;
+function log(x){$('log').textContent=(new Date().toLocaleTimeString()+' '+x+'\n'+$('log').textContent).slice(0,8000)}
+function chooseMime(){for(const m of ['video/mp4;codecs=h264','video/mp4','video/webm;codecs=vp9','video/webm'])if(window.MediaRecorder&&MediaRecorder.isTypeSupported(m))return m;return ''}
+function tsec(){return Math.max(0,(performance.now()-startPerf)/1000)}
+async function sensorPermission(){let ok=true;try{if(typeof DeviceMotionEvent!=='undefined'&&typeof DeviceMotionEvent.requestPermission==='function')ok=(await DeviceMotionEvent.requestPermission())==='granted'}catch(e){ok=false}try{if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function')ok=ok&&((await DeviceOrientationEvent.requestPermission())==='granted')}catch(e){ok=false}return ok}
+function orientation(e){if(!rec||rec.state!=='recording')return;samples.push({t_s:tsec(),orientation:{alpha:e.alpha,beta:e.beta,gamma:e.gamma,absolute:e.absolute},screen_angle:screen.orientation?.angle??0,gps:gpsLast})}
+function motion(e){if(!rec||rec.state!=='recording')return;let s=samples[samples.length-1];if(!s||Math.abs(s.t_s-tsec())>.08){s={t_s:tsec(),gps:gpsLast};samples.push(s)}s.motion={acceleration:e.acceleration,accelerationIncludingGravity:e.accelerationIncludingGravity,rotationRate:e.rotationRate,interval:e.interval}}
+$('init').onclick=async()=>{try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false});$('preview').srcObject=stream;const sensorOK=await sensorPermission();window.addEventListener('deviceorientation',orientation);window.addEventListener('devicemotion',motion);if(navigator.geolocation)gpsWatch=navigator.geolocation.watchPosition(p=>{gpsLast={lat:p.coords.latitude,lon:p.coords.longitude,altitude:p.coords.altitude,accuracy:p.coords.accuracy}},()=>{}, {enableHighAccuracy:true,maximumAge:1000});$('sensor').textContent=sensorOK?'ориентация/IMU разрешены':'камера готова, IMU недоступен';$('sensor').className=sensorOK?'ok':'warn';$('start').disabled=false;log('Камера готова')}catch(e){log('Ошибка: '+e)}};
+$('start').onclick=()=>{chunks=[];samples=[];blob=null;startPerf=performance.now();const mime=chooseMime();rec=new MediaRecorder(stream,mime?{mimeType:mime,videoBitsPerSecond:12000000}:undefined);rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};rec.onstop=()=>{blob=new Blob(chunks,{type:rec.mimeType||'video/webm'});$('upload').disabled=false;$('save').disabled=false;log('Запись готова: '+(blob.size/1024/1024).toFixed(1)+' MB, датчиков '+samples.length)};rec.start(500);$('start').disabled=true;$('stop').disabled=false;log('Запись началась')};
+$('stop').onclick=()=>{if(rec&&rec.state==='recording')rec.stop();$('stop').disabled=true;$('start').disabled=false};
+function poseBlob(){return new Blob([JSON.stringify({version:'pixel3dgs-phone-capture-v1',mode:$('mode').value,user_agent:navigator.userAgent,started_unix_ms:Date.now()-Math.round(tsec()*1000),samples},null,2)],{type:'application/json'})}
+function dl(b,n){const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=n;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000)}
+$('save').onclick=()=>{const ext=blob.type.includes('mp4')?'mp4':'webm';dl(blob,'pixel3dgs_capture.'+ext);dl(poseBlob(),'capture_pose.json')};
+$('upload').onclick=async()=>{try{$('upload').disabled=true;const fd=new FormData();const ext=blob.type.includes('mp4')?'mp4':'webm';fd.append('video',blob,'capture.'+ext);fd.append('pose',poseBlob(),'capture_pose.json');fd.append('mode',$('mode').value);const r=await fetch('/capture/upload',{method:'POST',body:fd});const j=await r.json();log('Задание отправлено: '+JSON.stringify(j));if(j.status_url)poll(j.status_url)}catch(e){log('Upload error: '+e);$('upload').disabled=false}};
+async function poll(url){for(;;){await new Promise(r=>setTimeout(r,1500));const r=await fetch(url);if(!r.ok)break;const j=await r.json();$('stats').textContent=(j.stage||j.state)+' '+Math.round((j.progress||0)*100)+'%';$('meter').style.width=Math.round((j.progress||0)*100)+'%';if(j.state==='complete'||j.state==='failed'){log(JSON.stringify(j));$('upload').disabled=false;break}}}
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script></main></body></html>

@@ -1,0 +1,55 @@
+name: Winner Only Quality PR
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  verified-winner-pr:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      QUALITY_PATCH_MODEL_URL: ${{ secrets.QUALITY_PATCH_MODEL_URL }}
+      QUALITY_PATCH_MODEL_TOKEN: ${{ secrets.QUALITY_PATCH_MODEL_TOKEN }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci --ignore-scripts || npm install
+      - name: Generate sandbox-verified tournament winner
+        run: QUALITY_TOURNAMENT_STRICT=1 npm run quality:tournament
+      - name: Guard winner before apply
+        run: npm run quality:winner-pr:guard
+      - name: Create isolated branch and apply winner
+        shell: bash
+        run: |
+          BRANCH="autofix/verified-winner-${GITHUB_RUN_ID}"
+          git switch -c "$BRANCH"
+          git apply --check QUALITY_PATCH_WINNER.diff
+          git apply QUALITY_PATCH_WINNER.diff
+          echo "BRANCH=$BRANCH" >> "$GITHUB_ENV"
+      - name: Reverify candidate
+        run: |
+          npm run release:gate
+          npm run runtime:proof
+          npm run quality:winner-pr:guard -- --postapply
+      - name: Commit and push candidate only
+        shell: bash
+        run: |
+          git config user.name "world-quality-bot"
+          git config user.email "world-quality-bot@users.noreply.github.com"
+          git add apps shared api lib scripts services test e2e data 2>/dev/null || true
+          git diff --cached --quiet && { echo "No candidate changes"; exit 1; }
+          git commit -m "fix(quality): verified tournament winner"
+          git push origin "$BRANCH"
+      - name: Open PR; never auto-merge
+        shell: bash
+        run: |
+          gh pr create --base master --head "$BRANCH" --title "fix(quality): verified tournament winner" --body "Sandbox winner + release gate + runtime proof passed. Auto-merge is intentionally disabled."

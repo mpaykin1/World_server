@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "CONTROL_STANDARD",
+  "desktop": [
+    "WASD",
+    "ARROW_KEYS",
+    "MOUSE_LOOK",
+    "SPACE_JUMP"
+  ],
+  "mobile": [
+    "TOUCH_MOVE",
+    "TOUCH_LOOK",
+    "TOUCH_JUMP"
+  ],
+  "invariants": [
+    "forward is camera forward",
+    "D is screen-right",
+    "A is screen-left",
+    "jump modifies vertical motion only",
+    "camera roll remains zero"
+  ]
+}

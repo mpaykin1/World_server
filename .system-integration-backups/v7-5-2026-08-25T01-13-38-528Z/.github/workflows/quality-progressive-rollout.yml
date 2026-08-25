@@ -1,0 +1,71 @@
+name: Progressive Quality Rollout
+
+on:
+  workflow_dispatch:
+    inputs:
+      deployment:
+        description: Verified canary deployment ID or URL
+        required: true
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  rollout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Require rollout configuration
+        run: |
+          test -n "${{ secrets.VERCEL_TOKEN }}"
+          test -n "${{ secrets.VERCEL_PROJECT_ID }}"
+          test -n "${{ vars.VERCEL_CLI_VERSION }}"
+      - run: npm install -g "vercel@${{ vars.VERCEL_CLI_VERSION }}"
+      - name: Configure manual quality-controlled stages
+        run: |
+          vercel rolling-release configure --enable --advancement-type=manual-approval             --stage=1 --stage=10 --stage=50             --token="${{ secrets.VERCEL_TOKEN }}" --yes
+      - name: Start at 1 percent
+        run: vercel rolling-release start --dpl="${{ inputs.deployment }}" --token="${{ secrets.VERCEL_TOKEN }}" --yes
+      - name: Gate stage 1 percent
+        env:
+          QUALITY_BASE_URL: https://world-server.vercel.app
+        run: |
+          sleep 60
+          node scripts/production-quality-pull.js
+          node scripts/post-deploy-smoke.js
+      - name: Advance to 10 percent
+        run: vercel rolling-release approve --dpl="${{ inputs.deployment }}" --currentStageIndex=0 --token="${{ secrets.VERCEL_TOKEN }}" --yes
+      - name: Gate stage 10 percent
+        env:
+          QUALITY_BASE_URL: https://world-server.vercel.app
+        run: |
+          sleep 120
+          node scripts/production-quality-pull.js
+          node scripts/post-deploy-smoke.js
+      - name: Advance to 50 percent
+        run: vercel rolling-release approve --dpl="${{ inputs.deployment }}" --currentStageIndex=1 --token="${{ secrets.VERCEL_TOKEN }}" --yes
+      - name: Gate stage 50 percent
+        env:
+          QUALITY_BASE_URL: https://world-server.vercel.app
+        run: |
+          sleep 180
+          node scripts/production-quality-pull.js
+          node scripts/post-deploy-smoke.js
+      - name: Complete to 100 percent
+        run: vercel rolling-release complete --dpl="${{ inputs.deployment }}" --token="${{ secrets.VERCEL_TOKEN }}" --yes
+
+  abort-on-failure:
+    needs: rollout
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm install -g "vercel@${{ vars.VERCEL_CLI_VERSION }}"
+      - name: Abort rolling release and restore previous traffic
+        run: vercel rolling-release abort --dpl="${{ inputs.deployment }}" --token="${{ secrets.VERCEL_TOKEN }}" --yes

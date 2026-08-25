@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "video2game-voxel"
+version = "0.5.0"
+description = "CPU-first video to playable voxel game pipeline V3"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.26",
+  "opencv-python>=4.9",
+  "PyYAML>=6.0",
+  "tqdm>=4.66"
+]
+
+[project.optional-dependencies]
+pose = ["mediapipe>=0.10"]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+video2game-voxel = "video2game_voxel.cli:main"
+
+[tool.setuptools.package-data]
+video2game_voxel = ["web_template/**/*"]

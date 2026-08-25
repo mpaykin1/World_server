@@ -1,0 +1,46 @@
+name: Quality Regression Bisect
+
+on:
+  workflow_dispatch:
+    inputs:
+      good:
+        description: Known-good commit SHA
+        required: true
+      bad:
+        description: Known-bad commit SHA
+        required: true
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  bisect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm ci
+      - name: Find first bad commit
+        id: bisect
+        shell: bash
+        run: |
+          git bisect start "${{ inputs.bad }}" "${{ inputs.good }}"
+          set +e
+          git bisect run node scripts/quality-bisect-check.js > bisect.log 2>&1
+          CODE=$?
+          set -e
+          cat bisect.log
+          FIRST="$(git rev-parse HEAD)"
+          echo "first_bad=$FIRST" >> "$GITHUB_OUTPUT"
+          git bisect reset
+          exit 0
+      - name: Open investigation issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create             --title "Quality regression first bad commit: ${{ steps.bisect.outputs.first_bad }}"             --body "Automated bisect between good=${{ inputs.good }} and bad=${{ inputs.bad }} identified ${{ steps.bisect.outputs.first_bad }} as the candidate first-bad commit. Inspect CI evidence before fixing."

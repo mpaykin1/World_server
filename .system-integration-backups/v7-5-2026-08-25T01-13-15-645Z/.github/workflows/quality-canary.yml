@@ -1,0 +1,83 @@
+name: Quality Canary Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      promote:
+        description: Promote verified canary to production
+        required: true
+        default: false
+        type: boolean
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  canary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    outputs:
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Require Vercel configuration
+        run: |
+          test -n "${{ secrets.VERCEL_TOKEN }}"
+          test -n "${{ secrets.VERCEL_ORG_ID }}"
+          test -n "${{ secrets.VERCEL_PROJECT_ID }}"
+          test -n "${{ vars.VERCEL_CLI_VERSION }}"
+      - name: Install pinned Vercel CLI
+        run: npm install -g "vercel@${{ vars.VERCEL_CLI_VERSION }}"
+      - name: Pull preview environment
+        run: vercel pull --yes --environment=preview --token="${{ secrets.VERCEL_TOKEN }}"
+      - name: Local prebuilt candidate
+        run: |
+          npm run release:gate
+          vercel build --token="${{ secrets.VERCEL_TOKEN }}"
+      - id: deploy
+        name: Deploy immutable preview
+        run: |
+          URL="$(vercel deploy --prebuilt --token="${{ secrets.VERCEL_TOKEN }}")"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+      - name: Browser gate against canary
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          npx playwright install --with-deps chromium webkit
+          npx playwright test
+      - name: Canary HTTP smoke
+        env:
+          QUALITY_BASE_URL: ${{ steps.deploy.outputs.url }}
+        run: node scripts/post-deploy-smoke.js
+
+  promote:
+    needs: canary
+    if: github.ref == 'refs/heads/master' || inputs.promote == true
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm install -g "vercel@${{ vars.VERCEL_CLI_VERSION }}"
+      - name: Promote exact verified artifact
+        run: vercel promote "${{ needs.canary.outputs.url }}" --yes --token="${{ secrets.VERCEL_TOKEN }}"
+      - name: Post-production smoke
+        id: smoke
+        continue-on-error: true
+        env:
+          QUALITY_BASE_URL: https://world-server.vercel.app
+        run: node scripts/post-deploy-smoke.js
+      - name: Automatic rollback on failed post-smoke
+        if: steps.smoke.outcome == 'failure'
+        run: |
+          vercel rollback --yes --token="${{ secrets.VERCEL_TOKEN }}"
+          exit 1

@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "7.4.0",
+  "generatedAt": "2026-08-24T10:13:38Z",
+  "pass": true,
+  "validationMode": "EXACT_PATCH_CONTENT_STAGED_UNDER_CANONICAL_BACKEND_PATH",
+  "recipes": [
+    {
+      "recipeId": "legacy-video2game-v5",
+      "eligible": false,
+      "capabilities": [
+        "video-to-voxel",
+        "cpu-fallback"
+      ],
+      "workdir": "services/video2game-voxel",
+      "staticPass": true,
+      "integrationPass": false,
+      "regressionPass": false,
+      "regressionChecks": [
+        {
+          "pass": false,
+          "cmd": "python REGRESSION_CHECK.py",
+          "code": 2,
+          "stderr": "FAIL missing: PIPELINE_REPORT.json, VALIDATION_REPORT.json, QUALITY_GATE.json, REGRESSION_REPORT.json\n"
+        }
+      ]
+    },
+    {
+      "recipeId": "legacy-pixel3dgs-v6",
+      "eligible": true,
+      "capabilities": [
+        "cpu-3dgs",
+        "phone-capture",
+        "dynamic-4d"
+      ],
+      "workdir": "services/pixel3dgs",
+      "staticPass": true,
+      "integrationPass": true,
+      "regressionPass": true,
+      "regressionChecks": [
+        {
+          "pass": true,
+          "cmd": "python v6_self_test.py",
+          "stdout": "{\n  \"ok\": true,\n  \"checks\": {\n    \"phone_pose_fusion\": true,\n    \"dynamic4d_tracks\": true,\n    \"model_manager\": true,\n    \"phone_capture_api\": true,\n    \"phone_capture_static\": true,\n    \"phone_capture_files\": true\n  },\n  \"pose_report\": {\n    \"used\": true,\n    \"orientation_used\": true,\n    \"native_position_used\": true,\n    \"gps_position_used\": false,\n    \"sample_count\": 40,\n    \"frame_count\": 10,\n    \"coverage_ratio\": 1.0,\n    \"source\": \"/mnt/data/legacy_recipe_test/services/pixel3dgs/output/demo_build/synthetic_capture_pose.json\"\n  },\n  \"dynamic4d_report\": {\n    \"ok\": true,\n    \"backend\": \"cpu_dense_flow_temporal_tracks\",\n    \"track_count\": 39,\n    \"frame_count\": 12,\n    \"median_motion_px\": 0.9063,\n    \"dynamic_score\": 0.1813,\n    \"recommended_mode\": \"rigid_character\",\n    \"tracks_file\": \"/mnt/data/legacy_recipe_test/services/pixel3dgs/output/demo_build/v6_dynamic4d_test/dynamic4d_tracks.npz\",\n    \"note\": \"Temporal deformation tracks are operational; true learned 4D Gaussian deformation remains an optional future backend.\"\n  },\n  \"model_status\": {\n    \"depth\": {\n      \"active\": false,\n      \"path\": null,\n      \"source\": null\n    },\n    \"matcher\": {\n      \"active\": false,\n      \"path\": null,\n      \"source\": null\n    },\n    \"flow\": {\n      \"active\": false,\n      \"path\": null,\n      \"source\": null\n    },\n    \"segmentation\": {\n      \"active\": false,\n      \"path\": null,\n      \"source\": null\n    }\n  }\n}\n"
+        }
+      ]
+    }
+  ],
+  "video2gameTruth": "Raw patch intentionally remains UNVERIFIED until its real pipeline produces all required reports and REGRESSION_CHECK passes.",
+  "pixel3dgsTruth": "CPU V6 patch self-test proves the explicitly contracted CPU/phone/dynamic4d functions on staged exact patch content.",
+  "truthRule": "Recipe behavior is validated; user-server certification occurs only after Desktop AI installs and reruns evidence there."
+}

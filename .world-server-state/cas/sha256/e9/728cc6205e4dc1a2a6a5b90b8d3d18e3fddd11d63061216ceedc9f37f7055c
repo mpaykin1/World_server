@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-25T01:14:46.913Z",
+  "pass": true,
+  "source": "wit/world-server-adapter.wit",
+  "output": "generated/wit/world-server-adapter.d.ts",
+  "deterministic": true,
+  "sourceSha256": "aa3475d2b717e427004a3b3adc27695c3e00d4a2220faae6ef8fc0fbb7e83223",
+  "outputSha256": "11b663adcccd300bd8066207260e6483ccaaaa4c0a51fa0bd3fc9afa30257108",
+  "embeddedGenerator": true
+}

@@ -1,0 +1,7 @@
+#!/usr/bin/env node
+'use strict';
+const path=require('path');const {ROOT,writeJSON,nowIso}=require('./integration-utils.cjs');const ff=require('./feature-flag-engine.cjs'),sandbox=require('./adapter-sandbox.cjs'),cfg=require('./config-contract-validator.cjs');const update=require('./secure-update-metadata.cjs');
+const checks=[];function c(id,pass){checks.push({id,pass:Boolean(pass)})}
+const original={signed:{version:1},signatures:[{sig:Buffer.alloc(64).toString('base64')}]};c('invalid-update-signature-rejected',update.verify(original,'-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=\n-----END PUBLIC KEY-----\n')===false);
+c('safety-flag-cannot-enable-untrusted',ff.evaluate('adapter.untrustedExecution',{targetingKey:'chaos'},true).value===false);let escaped=false;try{sandbox.build('../escape.wasm')}catch{escaped=true}c('sandbox-path-escape-rejected',escaped);const invalid=cfg.embedded({projectDirectives:{workflow:{scalableFirst:false}},flags:{flags:{}},updateTrust:{},sandbox:{}});c('invalid-config-rejected',invalid.length>=3);
+const report={schemaVersion:'7.2.0',generatedAt:nowIso(),pass:checks.every(x=>x.pass),passed:checks.filter(x=>x.pass).length,total:checks.length,checks};writeJSON(path.join(ROOT,'INTEGRATION_CHAOS_REPORT.json'),report);console.log(`[INTEGRATION_CHAOS] ${report.pass?'PASS':'FAIL'} ${report.passed}/${report.total}`);if(!report.pass)process.exitCode=2;

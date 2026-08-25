@@ -1,0 +1,32 @@
+name: Quality Bake Farm V8
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'worlds/**/assets/**'
+      - 'tools/bake_*.py'
+      - 'tools/build_meshlets.py'
+permissions:
+  contents: read
+jobs:
+  bake:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3]
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.13' }
+      - run: pip install -r requirements.txt
+      - name: Source-locked content-addressed bake shard
+        run: python tools/bake_farm.py --shard-index ${{ matrix.shard }} --shard-count 4 --workers 4
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v8-bake-cache-shard-${{ matrix.shard }}
+          include-hidden-files: true
+          path: |
+            .quality-cache/bakes
+            quality/reports/bake-farm.json

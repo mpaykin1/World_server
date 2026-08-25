@@ -1,0 +1,42 @@
+name: World Quality Pipeline V8
+on:
+  pull_request:
+  push:
+    branches: [master, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.13' }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: pip install -r requirements.txt
+      - run: npm install --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium
+      - name: Static + geometry + protection + ratchet wall
+        run: python tools/quality_pipeline.py
+      - name: Start runtime
+        run: |
+          python -m http.server 8000 > /tmp/world-server.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:8000/worlds/registry.json && break; sleep 1; done
+      - name: Automated gameplay regression
+        run: node tools/playtest.mjs
+      - name: Deterministic fuzz/replay regression
+        run: node tools/fuzz_playtest.mjs
+      - name: Visual regression
+        run: node tools/visual_regression.mjs
+      - name: Representative desktop/mobile/WebGPU matrix
+        run: node tools/device_farm_runner.mjs
+      - name: Monotonic quality ratchet
+        run: python tools/quality_ratchet.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: world-quality-v8-reports
+          path: quality/reports

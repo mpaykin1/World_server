@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 12,
+  "status": "ADVERSARIAL_CORPUS_PASS",
+  "passed": true,
+  "requiredFaultClasses": [
+    "bad_magic",
+    "truncated_glb",
+    "length_mismatch",
+    "missing_bin_chunk",
+    "nan_vertex",
+    "index_oob",
+    "degenerate_mesh",
+    "invalid_material_numeric",
+    "invalid_rig_weights",
+    "animation_nan"
+  ],
+  "missing": [],
+  "undetected": [],
+  "results": [
+    {
+      "faultClass": "bad_magic",
+      "detected": true,
+      "detectorFailedClosed": true,
+      "inspection": {
+        "valid": false,
+        "failures": [
+          "bad_magic"
+        ]
+      }
+    },
+    {
+      "faultClass": "truncated_glb",
+      "detected": true,
+      "detectorFailedClosed": true,
+      "inspection": {
+        "valid": false,
+        "failures": [
+          "truncated_glb"
+        ]
+      }
+    },
+    {
+      "faultClass": "length_mismatch",
+      "detected": true,
+      "detectorFailedClosed": true,
+      "inspection": {
+        "valid": false,
+        "failures": [
+          "length_mismatch"
+        ]
+      }
+    },
+    {
+      "faultClass": "missing_bin_chunk",
+      "detected": true,
+      "detectorFailedClosed": true,
+      "inspection": {
+        "valid": false,
+        "failures": [
+          "missing_bin_chunk"
+        ]
+      }
+    },
+    {
+      "faultClass": "nan_vertex",
+      "detected": true,
+      "detectorFailedClosed": true,
+      "inspection": {
+        "valid": false,
+        "failures": [
+          "nan_vertex"
+        ]
+      }
+    },
+    {
+      "faultClass": "index_oob",
+      "detected": true,
+      "detectorFailedClosed": true,
+      "inspection": {
+        "valid": false,
+        "failures": [
+          "index_oob"
+        ]
+      }
+    },
+    {
+      "faultClass": "degenerate_mesh",
+      "detected": true,
+      "detectorFailedClosed": true,
+      "inspection": {
+        "valid": false,
+        "failures": [
+          "degenerate_mesh"
+        ]
+      }
+    },
+    {
+      "faultClass": "invalid_material_numeric",
+      "detected": true,
+      "detectorFailedClosed": true,
+      "inspection": {
+        "valid": false,
+        "failures": [
+          "invalid_material_numeric"
+        ]
+      }
+    },
+    {
+      "faultClass": "invalid_rig_weights",
+      "detected": true,
+      "detectorFailedClosed": true,
+      "inspection": {
+        "valid": false,
+        "failures": [
+          "invalid_rig_weights"
+        ]
+      }
+    },
+    {
+      "faultClass": "animation_nan",
+      "detected": true,
+      "detectorFailedClosed": true,
+      "inspection": {
+        "valid": false,
+        "failures": [
+          "animation_nan"
+        ]
+      }
+    }
+  ]
+}

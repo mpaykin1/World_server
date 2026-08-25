@@ -1,0 +1,2 @@
+#!/usr/bin/env node
+'use strict';const fs=require('node:fs');const {evaluateCapabilities}=require('../lib/quality/provider-capability-gate-v9');const req=(process.env.QUALITY_REQUIRED_CAPABILITIES||'browser,mobile').split(',').filter(Boolean);let providers=[];try{providers=JSON.parse(fs.readFileSync(process.env.QUALITY_PROVIDER_STATUS_FILE||'data/quality-autopilot/provider-status.json','utf8')).providers||[];}catch{}const r=evaluateCapabilities(req,providers);console.log(JSON.stringify(r,null,2));if(!r.ok)process.exitCode=2;

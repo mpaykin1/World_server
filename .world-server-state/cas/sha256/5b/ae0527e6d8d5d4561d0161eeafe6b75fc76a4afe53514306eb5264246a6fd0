@@ -1,0 +1,17 @@
+{
+  "checkedAt": "2026-08-23T12:55:00Z",
+  "source": "connected GitHub current master + live Supabase schema/migrations",
+  "currentMasterPercent": 98,
+  "currentEvidencePercent": 95.5,
+  "capabilities": {
+    "releaseGate": true,
+    "durableCycle": true,
+    "perceptual": true,
+    "visualCritic": true,
+    "realDevices": true,
+    "gpuAutoscale": true,
+    "knowledge": true
+  },
+  "candidateStatus": "V10_1_PREPARED_NOT_DEPLOYED",
+  "knownMajor": "apps/ai3d-voxel-city/index.html viewport-fit=cover missing in observed master"
+}

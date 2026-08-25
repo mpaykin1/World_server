@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "LOCAL_CPU_CODE_MODEL",
+  "backend": "llama.cpp",
+  "gpuLayers": 0,
+  "paidServices": false,
+  "binaryEnv": "QUALITY_LLAMA_CLI",
+  "modelEnv": "QUALITY_CPU_MODEL",
+  "defaultContext": 8192,
+  "defaultThreads": "auto",
+  "rule": "Optional local GGUF model only. If not installed, the quality system continues without AI-generated patches."
+}

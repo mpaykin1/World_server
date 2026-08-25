@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "runtime": "WORLD_FACTORY_QUALITY_CORE_V10",
+  "runtimeHash": "e7012ec0552d308cb4e7a9195ad7e8947338c46dc154f88ee84bc2fdaaf843f9",
+  "qualityPackFiles": {
+    "quality/standards.json": "86bc07af4c8ed7318a6b404e358c2c3d3695b31b16dcbd92d73cb99782feb7ff",
+    "quality/rules.json": "f7bc0bf9e2333bbc4e04ebb73cc9051ef3863ac18703b383a870fdf7d66c8579",
+    "quality/knowledge/incidents.json": "96f5936d12790bc1c0264225a90a0dddb3ef8cfd7fbc4f151aa533d2b0d2f211",
+    "quality/knowledge/patterns.json": "5baffdce686c13c4c0d85a495df190262babfbdce9ef3908028b15a0bf152fdb",
+    "quality/knowledge/quality-genome.json": "d3a4b479ca11fdc40ec177469abdf12a2c1e416e81320d284eb71a06e2e5bf3f",
+    "quality/knowledge/protection-pack.json": "61ba1ebb508f1c768daf1196c816f54bc99a54ff5b9663474f5df8bc630e69fd",
+    "quality/knowledge/quality-ratchet.json": "a91f2be33a9c789f9f3c9572362e190412a24fec38c50f87edbcf078447129b7",
+    "quality/device-matrix.json": "077311b9cd13615092764bd27d64897ae6a894e355a3570f42760a08d52ca6a7"
+  },
+  "pipelineScore": 100.0,
+  "source": "static-quality-pipeline-pass-not-full-release-approval"
+}

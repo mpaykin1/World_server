@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "pass": true,
+  "mode": "content-addressed-distributed-bake-farm-v1",
+  "shardIndex": 0,
+  "shardCount": 1,
+  "workers": 4,
+  "totalDiscovered": 3,
+  "tasksInShard": 3,
+  "results": [
+    {
+      "pass": true,
+      "task": {
+        "world": "sample-city",
+        "kind": "meshlets",
+        "source": "/mnt/data/WORLD_FACTORY_QUALITY_CORE_V10/worlds/sample-city/assets/world.ply",
+        "source_sha": "af8b08927d911b259f04975e146f26a1110c574ba3bc465ae319685826ca9473",
+        "tool": "tools/build_meshlets.py",
+        "params": [
+          [
+            "max-tris",
+            "128"
+          ]
+        ],
+        "output": "/mnt/data/WORLD_FACTORY_QUALITY_CORE_V10/worlds/sample-city/generated/meshlets-v8.json"
+      },
+      "key": "3dfa7b3756e9fa745df6b3d60fa74cd8451abe21e71d1ffba9bd04d57fa0a5e3",
+      "cacheHit": false,
+      "dryRun": true
+    },
+    {
+      "pass": true,
+      "task": {
+        "world": "sample-city",
+        "kind": "reflection",
+        "source": "/mnt/data/WORLD_FACTORY_QUALITY_CORE_V10/worlds/sample-city/assets/world.ply",
+        "source_sha": "af8b08927d911b259f04975e146f26a1110c574ba3bc465ae319685826ca9473",
+        "tool": "tools/bake_reflection_probes.py",
+        "params": [
+          [
+            "resolution",
+            "32"
+          ],
+          [
+            "grid",
+            "48"
+          ]
+        ],
+        "output": "/mnt/data/WORLD_FACTORY_QUALITY_CORE_V10/worlds/sample-city/generated/reflection-v8"
+      },
+      "key": "8e7b6ce715e5dbff066c6a8f14fe474f1359e16fac73cf2e35f87a68f89899de",
+      "cacheHit": false,
+      "dryRun": true
+    },
+    {
+      "pass": true,
+      "task": {
+        "world": "sample-city",
+        "kind": "gi",
+        "source": "/mnt/data/WORLD_FACTORY_QUALITY_CORE_V10/worlds/sample-city/assets/world.ply",
+        "source_sha": "af8b08927d911b259f04975e146f26a1110c574ba3bc465ae319685826ca9473",
+        "tool": "tools/bake_offline_gi.py",
+        "params": [
+          [
+            "grid",
+            "48"
+          ],
+          [
+            "rays",
+            "12"
+          ],
+          [
+            "max-steps",
+            "64"
+          ],
+          [
+            "bounces",
+            "1"
+          ]
+        ],
+        "output": "/mnt/data/WORLD_FACTORY_QUALITY_CORE_V10/worlds/sample-city/generated/gi-v8"
+      },
+      "key": "e6b47d5bc50598ae143abc26ed0a8f16acc269034f6966c265245df1ecfd0351",
+      "cacheHit": false,
+      "dryRun": true
+    }
+  ],
+  "durationSec": 0.015,
+  "sourceAssetsMutable": false
+}

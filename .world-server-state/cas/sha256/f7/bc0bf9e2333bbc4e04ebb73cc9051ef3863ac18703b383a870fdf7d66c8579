@@ -1,0 +1,790 @@
+{
+  "schemaVersion": 9,
+  "rulesetVersion": "9.0.0",
+  "rules": [
+    {
+      "id": "SRC-001",
+      "severity": "block",
+      "scope": "all",
+      "title": "Immutable visual source",
+      "assert": "visual.sha256 matches bytes and visual.fidelity=source-locked"
+    },
+    {
+      "id": "SRC-002",
+      "severity": "block",
+      "scope": "all",
+      "title": "No automatic visual quality loss",
+      "assert": "visualDecimationAllowed=false; textureDownscaleAllowed=false; visualRecompressionAllowed=false"
+    },
+    {
+      "id": "PHY-001",
+      "severity": "block",
+      "scope": "all",
+      "title": "Real collision topology",
+      "assert": "splats use mesh proxy; heavy meshes use collision proxy"
+    },
+    {
+      "id": "PHY-002",
+      "severity": "block",
+      "scope": "all",
+      "title": "Safe spawn clearance",
+      "assert": "spawn is raycast to walkable surface and full capsule is collision-free"
+    },
+    {
+      "id": "PHY-003",
+      "severity": "block",
+      "scope": "all",
+      "title": "Vertical-only jump",
+      "assert": "jump modifies only world Y velocity"
+    },
+    {
+      "id": "PHY-004",
+      "severity": "block",
+      "scope": "all",
+      "title": "Deterministic physics",
+      "assert": "fixed simulation step=60Hz with bounded substeps"
+    },
+    {
+      "id": "PHY-005",
+      "severity": "block",
+      "scope": "all",
+      "title": "Step and slope contract",
+      "assert": "stepHeight<=0.45 and maxSlopeDeg<=55; steep faces cannot become grounded"
+    },
+    {
+      "id": "CAM-001",
+      "severity": "block",
+      "scope": "all",
+      "title": "No camera roll",
+      "assert": "camera roll is exactly zero"
+    },
+    {
+      "id": "CAM-002",
+      "severity": "block",
+      "scope": "all",
+      "title": "Full vertical look",
+      "assert": "pitch clamp >= 88 and <= 89.5 degrees"
+    },
+    {
+      "id": "INP-001",
+      "severity": "block",
+      "scope": "all",
+      "title": "Non-inverted planar movement",
+      "assert": "W/Up follows planar camera forward; horizontal look changes yaw only"
+    },
+    {
+      "id": "ACT-001",
+      "severity": "block",
+      "scope": "combat",
+      "title": "Feet define attack direction",
+      "assert": "weapon forward vector is player body/feet forward"
+    },
+    {
+      "id": "ACT-002",
+      "severity": "block",
+      "scope": "combat",
+      "title": "Shield coverage contract",
+      "assert": "shield stays vertical between threat and torso"
+    },
+    {
+      "id": "ACT-003",
+      "severity": "block",
+      "scope": "combat",
+      "title": "Weapon hand ownership",
+      "assert": "pistol one hand; automatic weapon two hands"
+    },
+    {
+      "id": "GFX-001",
+      "severity": "block",
+      "scope": "all",
+      "title": "Geometry regression protection",
+      "assert": "source hash/stats cannot regress without explicit approved baseline update"
+    },
+    {
+      "id": "GFX-002",
+      "severity": "block",
+      "scope": "all",
+      "title": "Visual regression protection",
+      "assert": "golden camera screenshots must stay within configured perceptual thresholds"
+    },
+    {
+      "id": "GFX-003",
+      "severity": "warn",
+      "scope": "all",
+      "title": "PBR preservation",
+      "assert": "source PBR maps and color spaces are preserved"
+    },
+    {
+      "id": "PERF-001",
+      "severity": "block",
+      "scope": "all",
+      "title": "Performance floor",
+      "assert": "desktop >=55 fps, mobile >=30 fps in benchmark profile or explicit waiver"
+    },
+    {
+      "id": "PERF-002",
+      "severity": "block",
+      "scope": "all",
+      "title": "Non-destructive performance tuning",
+      "assert": "autotuner never alters source geometry/textures/materials"
+    },
+    {
+      "id": "AUD-001",
+      "severity": "warn",
+      "scope": "audio",
+      "title": "Repeated sound variation",
+      "assert": "repeated events contain >=3 variations plus bounded pitch/gain randomization"
+    },
+    {
+      "id": "QA-001",
+      "severity": "block",
+      "scope": "all",
+      "title": "Known-error immunity",
+      "assert": "every recorded incident fingerprint has a prevention rule/test and current build passes it"
+    },
+    {
+      "id": "QA-002",
+      "severity": "block",
+      "scope": "all",
+      "title": "Shared runtime only",
+      "assert": "project-specific copies of core player/camera/physics code are forbidden"
+    },
+    {
+      "id": "QA-003",
+      "severity": "block",
+      "scope": "all",
+      "title": "No quality-score regression",
+      "assert": "new release score must be >= approved baseline unless waiver explains tradeoff"
+    },
+    {
+      "id": "QA-004",
+      "severity": "block",
+      "scope": "all",
+      "title": "Proven pattern propagation",
+      "assert": "all mandatory promoted patterns are active in every registered project/world"
+    },
+    {
+      "id": "QA-005",
+      "severity": "block",
+      "scope": "all",
+      "title": "Deterministic fuzz replay",
+      "assert": "known failing seeds and standard exploration seeds pass before release"
+    },
+    {
+      "id": "LGT-001",
+      "severity": "block",
+      "scope": "all",
+      "title": "Non-destructive static lighting bake",
+      "assert": "supported static meshes ship verified companion baked-light data whose source SHA matches immutable visual source"
+    },
+    {
+      "id": "GFX-004",
+      "severity": "block",
+      "scope": "all",
+      "title": "Near-field maximum quality",
+      "assert": "near player uses maximum dynamic effects while geometry/textures remain full-source at every visible distance"
+    },
+    {
+      "id": "GFX-005",
+      "severity": "block",
+      "scope": "all",
+      "title": "Distance haze/fog optimization",
+      "assert": "far field is concealed with depth fog and optional horizon shimmer before any source asset degradation is considered"
+    },
+    {
+      "id": "MAT-002",
+      "severity": "block",
+      "scope": "all",
+      "title": "Global subtle wet-surface art standard",
+      "assert": "runtime-only wet look is enabled at subtle intensity 0.05..0.25 and never rewrites source materials"
+    },
+    {
+      "id": "QA-006",
+      "severity": "block",
+      "scope": "all",
+      "title": "Protected errors may never recur",
+      "assert": "a recurrence of any protected incident fingerprint blocks release and escalates the incident"
+    },
+    {
+      "id": "QA-007",
+      "severity": "block",
+      "scope": "all",
+      "title": "Canary-first propagation",
+      "assert": "new proven global patterns roll out to canary consumers first, then all consumers only after quality gates pass"
+    },
+    {
+      "id": "QA-008",
+      "severity": "block",
+      "scope": "all",
+      "title": "Quality genome inheritance",
+      "assert": "every consumer inherits all mandatory traits from the current quality genome and locks the pack hash"
+    },
+    {
+      "id": "GFX-006",
+      "severity": "block",
+      "scope": "all",
+      "title": "Fog-occluded culling may not cause visible pop-in",
+      "assert": "objects may be hidden only when entire bounding sphere is beyond fully opaque fog; source geometry/textures remain unchanged"
+    },
+    {
+      "id": "MAT-003",
+      "severity": "block",
+      "scope": "all",
+      "title": "Wet look covers all visible render paths",
+      "assert": "PBR/Phong materials receive runtime wet response and unsupported/custom/splat paths receive subtle post fallback"
+    },
+    {
+      "id": "LGT-002",
+      "severity": "block",
+      "scope": "all",
+      "title": "Every static mesh receives deterministic non-destructive baked response",
+      "assert": "PLY uses locked companion bake; GLB uses deterministic runtime normal scalar; source bytes remain immutable"
+    },
+    {
+      "id": "QA-009",
+      "severity": "block",
+      "scope": "all",
+      "title": "Failed builds never propagate",
+      "assert": "cross-project rollout is allowed only from successful source quality pipeline with no protected incident recurrence"
+    },
+    {
+      "id": "QA-010",
+      "severity": "block",
+      "scope": "all",
+      "title": "Transactional canary rollout with automatic rollback",
+      "assert": "global quality changes verify on canaries before all consumers; any verification failure restores previous consumer pack"
+    },
+    {
+      "id": "QA-011",
+      "severity": "block",
+      "scope": "all",
+      "title": "Last-known-good quality state",
+      "assert": "approved pack/runtime hashes are stored after successful promotion and retained as recovery reference"
+    },
+    {
+      "id": "QA-012",
+      "severity": "block",
+      "scope": "all",
+      "title": "Unknown errors are quarantined",
+      "assert": "new failure fingerprints become needs-protection and block release until rule, regression test and shared fix exist"
+    },
+    {
+      "id": "QA-013",
+      "severity": "block",
+      "scope": "all",
+      "title": "Successful patterns require cross-project evidence",
+      "assert": "candidate improvements promote globally only after threshold passes and evidence from multiple projects"
+    },
+    {
+      "id": "PHY-006",
+      "severity": "block",
+      "scope": "all",
+      "title": "Dynamic environment remains source-safe",
+      "assert": "kinematic platform/elevator carry and water forces run in shared runtime; visual source assets remain immutable"
+    },
+    {
+      "id": "PERF-003",
+      "severity": "block",
+      "scope": "all",
+      "title": "Near-field fidelity may never be traded for FPS",
+      "assert": "FPS optimizers cannot decimate/downscale/recompress/dynamic-resolution the near field; player vicinity stays full-source and maximum sampling quality"
+    },
+    {
+      "id": "PERF-004",
+      "severity": "block",
+      "scope": "all",
+      "title": "CPU work scales with distance, not visual source quality",
+      "assert": "far AI/ambience ticks, streaming decode concurrency and static transform work may throttle; critical physics and near rendering remain full rate"
+    },
+    {
+      "id": "PERF-005",
+      "severity": "block",
+      "scope": "all",
+      "title": "Predictive nearest-first streaming",
+      "assert": "lossless chunks preload toward player velocity and closest chunks win the queue; already-visible full-quality chunks are never evicted inside safe radius"
+    },
+    {
+      "id": "SRC-003",
+      "severity": "block",
+      "scope": "spz",
+      "title": "Native SPZ collision decode",
+      "assert": "SPZ v1-v4 gaussian centers can be decoded directly for collider/semantic generation without rewriting visual source"
+    },
+    {
+      "id": "GFX-007",
+      "severity": "block",
+      "scope": "glb",
+      "title": "Lossless GLB chunk face conservation",
+      "assert": "derived GLB chunks conserve every source triangle and source GLB bytes remain immutable; unsupported animated/skinned assets fail closed"
+    },
+    {
+      "id": "LGT-003",
+      "severity": "block",
+      "scope": "glb",
+      "title": "Non-destructive GLB UV lightmap bake",
+      "assert": "GLB meshes with UVs may use companion static UV irradiance maps; no source texture/material/geometry is rewritten; no-UV meshes use deterministic runtime fallback"
+    },
+    {
+      "id": "PHY-007",
+      "severity": "block",
+      "scope": "all",
+      "title": "Moving-body side collision",
+      "assert": "shared dynamic environment resolves side/top collisions against declared kinematic moving bodies and never patches source geometry"
+    },
+    {
+      "id": "QA-014",
+      "severity": "block",
+      "scope": "all",
+      "title": "Compiled global protection pack",
+      "assert": "all protected incident fingerprints compile with rule+test into one hashed pack propagated identically to every consumer"
+    },
+    {
+      "id": "PERF-006",
+      "severity": "block",
+      "scope": "all",
+      "title": "Near field bypasses GPU occlusion",
+      "assert": "near field inside configured safety radius may never be hidden by GPU occlusion queries"
+    },
+    {
+      "id": "PERF-007",
+      "severity": "block",
+      "scope": "all",
+      "title": "Immutable SHA asset cache",
+      "assert": "cached source asset bytes must be SHA-256 verified before use; mismatch blocks load"
+    },
+    {
+      "id": "PERF-008",
+      "severity": "block",
+      "scope": "all",
+      "title": "Serialized BVH cache is geometry-bound",
+      "assert": "cached BVH key includes immutable source/collision hash and transform; stale/mismatched cache may not be reused"
+    },
+    {
+      "id": "PERF-009",
+      "severity": "block",
+      "scope": "ply",
+      "title": "Worker decode must be fidelity-equivalent",
+      "assert": "worker PLY decode may fall back but may not change vertex/triangle/color data or source bytes"
+    },
+    {
+      "id": "PERF-010",
+      "severity": "block",
+      "scope": "all",
+      "title": "Exact-only material deduplication",
+      "assert": "materials may share runtime instances only when render-relevant signatures are identical and no opt-out is present"
+    },
+    {
+      "id": "PERF-011",
+      "severity": "block",
+      "scope": "mesh",
+      "title": "Lossless meshlet triangle conservation",
+      "assert": "meshlet metadata must cover every source triangle exactly once and never rewrite source geometry"
+    },
+    {
+      "id": "PERF-012",
+      "severity": "block",
+      "scope": "all",
+      "title": "Static reflection probes are one-shot and source-safe",
+      "assert": "reflection probe capture may improve runtime lighting but never rewrites source materials/textures and does not become a per-frame cost"
+    },
+    {
+      "id": "NET-001",
+      "severity": "block",
+      "scope": "multiplayer",
+      "title": "Distance interest never reduces near simulation fidelity",
+      "assert": "near entities keep full precision/update policy; only distant replication cadence may be reduced"
+    },
+    {
+      "id": "ANM-001",
+      "severity": "block",
+      "scope": "characters",
+      "title": "Distant pose sharing never touches near characters",
+      "assert": "pose sharing is allowed only beyond configured far radius and identical animation state; near character pose remains independent"
+    },
+    {
+      "id": "PERF-013",
+      "severity": "block",
+      "scope": "all",
+      "title": "Static shadow cache only when safe",
+      "assert": "shadow map may freeze only when no dynamic shadow caster requires updates; otherwise auto-update remains enabled"
+    },
+    {
+      "id": "QA-015",
+      "severity": "block",
+      "scope": "all",
+      "title": "Optimization promotion requires quality non-regression",
+      "assert": "an optimization can enter global quality genome only after cross-project performance evidence with zero source/visual/regression degradation"
+    },
+    {
+      "id": "PERF-014",
+      "severity": "block",
+      "scope": "all",
+      "title": "WebGPU HZB visibility is conservative and fail-visible",
+      "assert": "private WebGPU depth pyramid uses actual static source triangles, never culls inside near bypass, and any capability/readback failure makes candidates visible"
+    },
+    {
+      "id": "PERF-015",
+      "severity": "block",
+      "scope": "all",
+      "title": "WASM SIMD fast path has bit/number-equivalent safe fallback",
+      "assert": "SIMD decode/copy helpers must pass numerical parity tests; failure falls back without changing source asset bytes"
+    },
+    {
+      "id": "PERF-016",
+      "severity": "block",
+      "scope": "mesh",
+      "title": "WebGPU indirect meshlets preserve source index ranges",
+      "assert": "indirect commands reference original contiguous triangle ranges; invisible meshlets use zero indexCount and source index/vertex buffers are never rewritten"
+    },
+    {
+      "id": "LGT-004",
+      "severity": "block",
+      "scope": "static-mesh",
+      "title": "Offline ray-traced GI companion is source locked",
+      "assert": "offline GI is derived companion data keyed to visual source SHA; runtime refuses mismatched bake and never rewrites source geometry/materials"
+    },
+    {
+      "id": "LGT-005",
+      "severity": "block",
+      "scope": "all",
+      "title": "Offline reflection probes are source locked with runtime fallback",
+      "assert": "baked cubemap descriptor source SHA must match visual source; invalid/missing bake falls back to one-shot runtime capture"
+    },
+    {
+      "id": "STR-001",
+      "severity": "block",
+      "scope": "glb",
+      "title": "Animated/skinned/morph GLB transport is byte-identical",
+      "assert": "parallel range streaming covers every source byte exactly once and reassembled SHA equals original before GLTFLoader parses animations/skins/morphs"
+    },
+    {
+      "id": "PHY-008",
+      "severity": "block",
+      "scope": "all",
+      "title": "Dynamic mesh collision uses continuous sweep when exact mesh is available",
+      "assert": "player relative motion is swept against cloned dynamic mesh BVH; unsupported bodies use conservative AABB fallback; source geometry remains immutable"
+    },
+    {
+      "id": "QA-016",
+      "severity": "block",
+      "scope": "all",
+      "title": "Production error fingerprints are global across projects",
+      "assert": "same runtime error class/detail maps to same fingerprint regardless of project/world so a fixed bug cannot hide in another game"
+    },
+    {
+      "id": "QA-017",
+      "severity": "block",
+      "scope": "all",
+      "title": "Production telemetry feeds quarantine automatically",
+      "assert": "new production incident export becomes needs-protection/quarantine and protected recurrence blocks release before rollout"
+    },
+    {
+      "id": "QA-018",
+      "severity": "block",
+      "scope": "all",
+      "title": "Known protected self-heal is strict and transactional",
+      "assert": "automatic code repair is limited to approved exact anti-pattern recipes and rolls back unless historical regression/unit tests pass"
+    },
+    {
+      "id": "PERF-017",
+      "severity": "block",
+      "scope": "all",
+      "title": "Source-equivalent WebGPU PBR renderer",
+      "assert": "WebGPU PBR may become authoritative only when source geometry/index ranges, source texture dimensions, PBR semantics, ACES/sRGB and golden parity are preserved; unsupported semantics keep proven renderer"
+    },
+    {
+      "id": "PERF-018",
+      "severity": "block",
+      "scope": "all",
+      "title": "Threaded WASM SIMD remains numerically equivalent",
+      "assert": "worker-thread SIMD decode/copy must equal verified scalar/SIMD output and retain a safe fallback"
+    },
+    {
+      "id": "PERF-019",
+      "severity": "block",
+      "scope": "all",
+      "title": "Parallel BVH prepass is exact",
+      "assert": "parallel triangle bounds/centroids preserve exact source triangles; authoritative MeshBVH topology remains geometry-bound"
+    },
+    {
+      "id": "QA-019",
+      "severity": "block",
+      "scope": "all",
+      "title": "Monotonic quality ratchet",
+      "assert": "validated quality floors may rise but may not silently fall; any floor violation blocks release and triggers rollback"
+    },
+    {
+      "id": "QA-020",
+      "severity": "block",
+      "scope": "all",
+      "title": "Unknown-code fixes execute in sandbox with proof",
+      "assert": "unknown incidents may be code-edited only in isolated sandbox; source hashes + all historical tests + rule/test proof must pass before apply"
+    },
+    {
+      "id": "QA-021",
+      "severity": "block",
+      "scope": "all",
+      "title": "Bake artifacts are content-addressed and source locked",
+      "assert": "distributed bake cache key includes source SHA + tool SHA + parameters and source bytes are checked before/after"
+    },
+    {
+      "id": "QA-022",
+      "severity": "block",
+      "scope": "all",
+      "title": "Representative real-device gate before global promotion",
+      "assert": "renderer/performance changes must pass representative desktop/mobile/WebGPU browser matrix without near-field quality loss"
+    },
+    {
+      "id": "QA-023",
+      "severity": "block",
+      "scope": "all",
+      "title": "Consumer drift is forbidden",
+      "assert": "every consumer must inherit current runtime/protection/genome hashes; drift blocks release and propagation"
+    },
+    {
+      "id": "QA-024",
+      "severity": "block",
+      "scope": "all",
+      "title": "Durable cross-project evidence gates promotion",
+      "assert": "successful pattern promotion requires durable distinct-project evidence when telemetry store is configured; missing durable store cannot be claimed verified"
+    },
+    {
+      "id": "PERF-020",
+      "severity": "block",
+      "scope": "all",
+      "title": "Shared-memory decode is zero-copy only when isolated and always has fidelity-safe fallback",
+      "assert": "SharedArrayBuffer output may be used only under cross-origin isolation; otherwise transferable/scalar fallback must preserve exact decoded values"
+    },
+    {
+      "id": "PERF-021",
+      "severity": "block",
+      "scope": "all",
+      "title": "WebGPU material table preserves exact source material semantics",
+      "assert": "GPU material tables may reduce CPU binding overhead but may not resize/repack/downscale source textures or omit material semantics"
+    },
+    {
+      "id": "LGT-006",
+      "severity": "block",
+      "scope": "all",
+      "title": "Clustered lighting fails bright instead of dropping lights",
+      "assert": "cluster overflow or unsupported GPU path must fall back to full relevant light list; near critical lights may never be silently dropped"
+    },
+    {
+      "id": "PERF-022",
+      "severity": "block",
+      "scope": "all",
+      "title": "Virtual texture residency pins full-resolution near pages",
+      "assert": "near pages remain source resolution; page pressure may evict only non-near invisible pages and missing pages fall back to whole source texture"
+    },
+    {
+      "id": "PERF-023",
+      "severity": "block",
+      "scope": "all",
+      "title": "Portal visibility is conservative and fail-visible",
+      "assert": "only semantically assigned rooms behind closed/unreachable portals may be hidden; unknown rooms and near-field objects remain visible"
+    },
+    {
+      "id": "ANM-002",
+      "severity": "block",
+      "scope": "all",
+      "title": "Screen-space animation budgeting preserves near and interaction motion",
+      "assert": "near/interacting rigs remain full-rate; deferred far animation time is accumulated and flushed exactly at interaction boundaries"
+    },
+    {
+      "id": "PHY-009",
+      "severity": "block",
+      "scope": "all",
+      "title": "Physics broadphase never sleeps near or player-contact bodies",
+      "assert": "spatial partitioning/sleeping may reduce distant dynamic cost but any near, critical or player-contact body stays awake and exact collider geometry is unchanged"
+    },
+    {
+      "id": "NET-002",
+      "severity": "block",
+      "scope": "all",
+      "title": "Network delta compression is lossless and local player authoritative",
+      "assert": "unchanged fields may be omitted but values are not quantized for near/local state and local player authority is never approximated"
+    },
+    {
+      "id": "PERF-024",
+      "severity": "block",
+      "scope": "all",
+      "title": "Per-device schedules may change only safe cost knobs",
+      "assert": "learned device schedules cannot touch resolution, source textures, source geometry, material fidelity or near-field quality and require ratchet evidence"
+    },
+    {
+      "id": "QA-025",
+      "severity": "block",
+      "scope": "all",
+      "title": "Persistent derived artifact CAS is content-addressed and source locked",
+      "assert": "local/CDN/R2 derived cache objects are keyed by SHA and source files are hash-checked before/after cache operations"
+    },
+    {
+      "id": "QA-026",
+      "severity": "block",
+      "scope": "all",
+      "title": "Successful pattern propagation has an applicability firewall",
+      "assert": "a good pattern may propagate globally only if global applicability is explicit; scoped patterns propagate only to compatible consumers with cross-project evidence"
+    },
+    {
+      "id": "PERF-025",
+      "severity": "block",
+      "scope": "all",
+      "title": "Frame budget defers background work before visible quality",
+      "assert": "near-critical tasks are never deferred and frame pressure may only postpone background decode/bake/maintenance work"
+    },
+    {
+      "id": "PERF-026",
+      "severity": "block",
+      "scope": "all",
+      "title": "Stutter p99 and hitch counts are regression gates",
+      "assert": "candidate performance schedules may not raise p99 frame time beyond tolerance or increase >50ms hitch count on representative devices"
+    },
+    {
+      "id": "PERF-027",
+      "severity": "block",
+      "scope": "all",
+      "title": "CPU-first server contract",
+      "assert": "server runtime requires no paid/discrete GPU; GPU fastpaths are client-capability-only"
+    },
+    {
+      "id": "PERF-028",
+      "severity": "block",
+      "scope": "all",
+      "title": "Incremental world compilation",
+      "assert": "one-object change recompiles only content-hash affected systems/chunks"
+    },
+    {
+      "id": "PERF-029",
+      "severity": "block",
+      "scope": "all",
+      "title": "Hierarchical CPU visibility",
+      "assert": "PVS/spatial grid/occlusion cache are conservative, fail-visible and bypass near field"
+    },
+    {
+      "id": "PERF-030",
+      "severity": "block",
+      "scope": "all",
+      "title": "Predictive streaming V2",
+      "assert": "prefetch uses motion+camera+route hints without evicting near required data"
+    },
+    {
+      "id": "PERF-031",
+      "severity": "block",
+      "scope": "all",
+      "title": "Simulation LOD preserves near behavior",
+      "assert": "near AI/animation/physics remain exact/full-rate; only distant cadence changes"
+    },
+    {
+      "id": "PERF-032",
+      "severity": "block",
+      "scope": "all",
+      "title": "CPU autotuner cannot select fidelity knobs",
+      "assert": "autotuner whitelist excludes resolution, texture, geometry, material and near-quality changes"
+    },
+    {
+      "id": "LGT-007",
+      "severity": "block",
+      "scope": "all",
+      "title": "Incremental CPU light bake",
+      "assert": "light/shadow rebuild is source-hash locked and dirty-region only; source unchanged"
+    },
+    {
+      "id": "QA-027",
+      "severity": "block",
+      "scope": "all",
+      "title": "Production replay becomes permanent regression",
+      "assert": "reproducible production failure is normalized, fingerprinted and mustPassForever"
+    },
+    {
+      "id": "QA-028",
+      "severity": "block",
+      "scope": "all",
+      "title": "Nav/collision cache is source locked",
+      "assert": "navigation/collision cache identity includes source SHA and parameters"
+    },
+    {
+      "id": "QA-029",
+      "severity": "block",
+      "scope": "all",
+      "title": "No-stop-until-green desktop protocol",
+      "assert": "Desktop AI must continue diagnosis/fix/retest until every required gate passes or an external hard blocker is proven"
+    },
+    {
+      "id": "PERF-033",
+      "severity": "block",
+      "scope": "all",
+      "title": "All importer/BVH CPU fastpaths are threaded and exact",
+      "assert": "WASM/worker concurrency may accelerate decoding/BVH but byte/geometry parity is mandatory and exact single-thread fallback must exist"
+    },
+    {
+      "id": "PERF-034",
+      "severity": "block",
+      "scope": "all",
+      "title": "Huge assets use bounded-memory streamed parsing",
+      "assert": "large source assets are processed in mmap/windowed ranges; whole-file materialization is not required and source bytes are never rewritten"
+    },
+    {
+      "id": "PERF-035",
+      "severity": "block",
+      "scope": "all",
+      "title": "Semantic PVS is conservative and fail-visible",
+      "assert": "semantic room/portal PVS may cull only proven assigned space; unknown space and near field remain visible"
+    },
+    {
+      "id": "LGT-008",
+      "severity": "block",
+      "scope": "all",
+      "title": "Incremental GI reuses only hash-identical cells",
+      "assert": "GI cells are reused only when exact cell input hashes match; dirty/new cells rebuild and source assets stay immutable"
+    },
+    {
+      "id": "STR-002",
+      "severity": "block",
+      "scope": "all",
+      "title": "Content-defined chunks reconstruct source bytes exactly",
+      "assert": "CDC boundaries may improve cache reuse but concatenated chunks must reproduce exact source/derived bytes and SHA"
+    },
+    {
+      "id": "PERF-036",
+      "severity": "block",
+      "scope": "all",
+      "title": "Offline and multi-tab caches are SHA/version isolated",
+      "assert": "service/shared worker caches must key immutable data by version/SHA and may not serve stale bytes across runtime versions"
+    },
+    {
+      "id": "PERF-037",
+      "severity": "block",
+      "scope": "all",
+      "title": "CPU flamegraph evidence precedes performance tuning",
+      "assert": "automatic CPU causality capture identifies hotspots before safe schedule changes; profiler never modifies quality/source assets"
+    },
+    {
+      "id": "QA-030",
+      "severity": "block",
+      "scope": "all",
+      "title": "Network and physics replay farm is deterministic",
+      "assert": "same seed/input must produce the same normalized replay hash; any divergence blocks promotion"
+    },
+    {
+      "id": "QA-031",
+      "severity": "block",
+      "scope": "all",
+      "title": "Dependency impact graph is complete and fail-closed",
+      "assert": "changes propagate through code→asset→derived bake→game dependencies; unresolved dependencies block incremental release"
+    },
+    {
+      "id": "QA-032",
+      "severity": "block",
+      "scope": "all",
+      "title": "Derived-cache compression is lossless",
+      "assert": "brotli/zstd/gzip fallback transport must decode to identical SHA before cache use"
+    },
+    {
+      "id": "QA-033",
+      "severity": "block",
+      "scope": "all",
+      "title": "Binary delta reconstruction is exact",
+      "assert": "delta patching is allowed only for derived artifacts and must reconstruct the exact target SHA"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "runtime": "WORLD_FACTORY_QUALITY_CORE_V10",
+  "pass": true,
+  "problems": [],
+  "requiredModules": 12,
+  "requiredCpuFlags": 12,
+  "serverGpuRequired": false,
+  "nearFieldFidelityFloor": 100,
+  "sourceFidelityFloor": 100
+}

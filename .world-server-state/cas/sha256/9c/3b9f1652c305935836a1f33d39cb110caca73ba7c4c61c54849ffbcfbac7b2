@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-25T01:14:47.121Z",
+  "pass": true,
+  "engineReady": true,
+  "provider": "OSV",
+  "lockedPackageCount": 472,
+  "networkScanClaim": false,
+  "transactionalRemediationReady": true
+}

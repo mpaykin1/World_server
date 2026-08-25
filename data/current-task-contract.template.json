@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "3.0.0",
+  "taskId": "example",
+  "kind": "feature|bugfix|asset|integration",
+  "solution": {
+    "scalable": true,
+    "manualSteps": [],
+    "minimumFeasibleManualSteps": 0,
+    "combinedWorkflow": true
+  },
+  "requirements": {
+    "requiredQuality": "game",
+    "requestedTechnologies": [],
+    "sourceAssets": [],
+    "resultAssets": [],
+    "assetCount": 0,
+    "atlasFeasible": false,
+    "apngRequested": false
+  },
+  "implementation": {
+    "actualTechnologiesUsed": [],
+    "templateAssetsUsed": false,
+    "batchingStrategy": "single-artifact"
+  },
+  "delivery": {
+    "codeChanged": false,
+    "fullFileCode": true,
+    "inlineHtml": false,
+    "downloadableArtifacts": []
+  },
+  "diagnosis": {
+    "rootCause": "",
+    "permanentFix": "",
+    "regressionPrevention": []
+  }
+}

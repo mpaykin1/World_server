@@ -1,0 +1,5901 @@
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-25T01:14:52.012Z",
+  "pass": false,
+  "claim": "Only functions with explicit scoped contracts and passing machine-readable evidence are called CERTIFIED_100. Uncontracted capabilities remain discovered but unverified.",
+  "certified100Count": 72,
+  "contractedCount": 76,
+  "discoveredCapabilityCount": 146,
+  "certified100": [
+    {
+      "id": "system-integration-gate",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "structural integration compatibility",
+      "percent": 100
+    },
+    {
+      "id": "durable-job-queue",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "priority/idempotency/lease/checkpoint/retry/DLQ semantics",
+      "percent": 100
+    },
+    {
+      "id": "cas-merkle-disaster-recovery",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "local content-addressed snapshot integrity and restore verification",
+      "percent": 100
+    },
+    {
+      "id": "project-constitution",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "mandatory project directives and no-regression rules",
+      "percent": 100
+    },
+    {
+      "id": "technology-lock",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "exact user-mandated technology/format preservation",
+      "percent": 100
+    },
+    {
+      "id": "feature-flag-safety",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "deterministic rollout and safety lock",
+      "percent": 100
+    },
+    {
+      "id": "adapter-sandbox-fail-closed",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "untrusted adapters denied when Wasmtime unavailable",
+      "percent": 100
+    },
+    {
+      "id": "model-checker",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "embedded exhaustive queue/control safety model with mutant rejection",
+      "percent": 100
+    },
+    {
+      "id": "capability-aware-scheduler",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "CPU-first capability/resource/cache-locality worker matching",
+      "percent": 100
+    },
+    {
+      "id": "deterministic-record-replay",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "seeded execution replay with hash equivalence",
+      "percent": 100
+    },
+    {
+      "id": "cas-local-redundancy",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "two independent local CAS roots with repair-on-read readiness",
+      "percent": 100
+    },
+    {
+      "id": "device-worker-command-safety",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "constrained authenticated real-device worker; no arbitrary shell",
+      "percent": 100
+    },
+    {
+      "id": "dependency-security-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "OSV locked-dependency scanning engine and transactional remediation mechanism",
+      "percent": 100
+    },
+    {
+      "id": "transactional-deploy-state-machine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "preview-health-promote-rollback deployment state machine",
+      "percent": 100
+    },
+    {
+      "id": "wit-bindings-determinism",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "deterministic WIT adapter binding generation",
+      "percent": 100
+    },
+    {
+      "id": "integration-telemetry",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "W3C trace-context + local JSONL + OTLP HTTP/JSON adapter",
+      "percent": 100
+    },
+    {
+      "id": "content-addressed-asset-registry",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "content-addressed asset inventory and metadata accounting engine",
+      "percent": 100
+    },
+    {
+      "id": "asset-batch-planner",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "task-aware atlas/batch ingestion planning; no forced strategy when no task",
+      "percent": 100
+    },
+    {
+      "id": "gameplay-spatial-library",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "canonical feet/attack/shield/weapon-grip spatial math contracts",
+      "percent": 100
+    },
+    {
+      "id": "cyclonedx-sbom-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "deterministic CycloneDX 1.7 SBOM generation engine",
+      "percent": 100
+    },
+    {
+      "id": "slsa-provenance-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "hash-bound SLSA provenance v1 + in-toto Statement v1 generation",
+      "percent": 100
+    },
+    {
+      "id": "local-signing-transparency",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "local Ed25519 signing + tamper-evident transparency hash chain",
+      "percent": 100
+    },
+    {
+      "id": "rekor-transparency-monitor",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "local hash-chain verification + safe external Sigstore bundle monitoring",
+      "percent": 100
+    },
+    {
+      "id": "technology-consensus-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "free/open CPU-safe offline-fallback technology consensus engine",
+      "percent": 100
+    },
+    {
+      "id": "cosign-security-floor",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "reject vulnerable installed Cosign versions below 3.1.3; absence remains external blocker",
+      "percent": 100
+    },
+    {
+      "id": "toolchain-bootstrap",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "pinned local no-sudo/no-paid tool bootstrap engine",
+      "percent": 100
+    },
+    {
+      "id": "distributed-cas-protocol",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "SHA-256 verified CAS peer protocol with loopback protocol selftest",
+      "percent": 100
+    },
+    {
+      "id": "cas-zero-config-discovery",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "UDP multicast CAS peer discovery engine and replication intent",
+      "percent": 100
+    },
+    {
+      "id": "device-lab-truth-orchestrator",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "Appium-compatible device discovery that never counts emulators as physical evidence",
+      "percent": 100
+    },
+    {
+      "id": "device-executor-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "real-device execution adapter readiness with explicit no-evidence truth state",
+      "percent": 100
+    },
+    {
+      "id": "wit-component-contract",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "typed WIT/WASI Component Model adapter contract with fail-closed execution policy",
+      "percent": 100
+    },
+    {
+      "id": "enhancement-orchestrator",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "P0 auto-fix / P1-P2 shadow-sandbox-regression-canary improvement backlog engine",
+      "percent": 100
+    },
+    {
+      "id": "mandatory-tlc-ci-wiring",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "CI always invokes the TLC runner; native TLC absence is still reported separately",
+      "percent": 100
+    },
+    {
+      "id": "sigstore-cosign-bridge",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "native Cosign/Sigstore bridge is implemented and refuses unsafe versions; native signing availability is not claimed",
+      "percent": 100
+    },
+    {
+      "id": "orchestrator-supervisor",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "backward-compatible Honest-100 watchdog/crash-loop/backoff/persistent incident contract; V7.2 strengthens implementation without changing certified owner identity",
+      "percent": 100
+    },
+    {
+      "id": "orchestrator-supervisor-v7-2",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7_2_ORCHESTRATOR_HARDENED",
+      "scope": "bounded watchdog, circuit breaker, crash fingerprint quarantine, heartbeat timeout and stable preservation",
+      "percent": 100
+    },
+    {
+      "id": "orchestrator-monitor-lifecycle",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7_2_ORCHESTRATOR_HARDENED",
+      "scope": "generation-token lifecycle prevents stale/early/false monitoring events after reconfiguration",
+      "percent": 100
+    },
+    {
+      "id": "orchestrator-patch-safety",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7_2_ORCHESTRATOR_HARDENED",
+      "scope": "manifest/base/payload hash preflight and Working→Candidate→Stable fail-closed patch flow",
+      "percent": 100
+    },
+    {
+      "id": "orchestrator-minimal-repro",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7_2_ORCHESTRATOR_HARDENED",
+      "scope": "automatic redacted reproducible ZIP evidence for persistent orchestrator failures",
+      "percent": 100
+    },
+    {
+      "id": "orchestrator-invariant-model",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7_2_ORCHESTRATOR_HARDENED",
+      "scope": "exhaustive restart/circuit/generation/stable safety model with mutant rejection",
+      "percent": 100
+    },
+    {
+      "id": "leader-lease-fencing",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "atomic leader lease with monotonic fencing against split brain",
+      "percent": 100
+    },
+    {
+      "id": "production-safety-controller",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "certified regression/crash-loop stops canary and prepares authorized rollback",
+      "percent": 100
+    },
+    {
+      "id": "soak-chaos-verifier",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "bounded deterministic soak/chaos invariant verification",
+      "percent": 100
+    },
+    {
+      "id": "crash-diagnostics-cluster",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "secret-safe crash fingerprint clustering and Node diagnostic capture",
+      "percent": 100
+    },
+    {
+      "id": "audio-variation-validator-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "audio variation validation engine",
+      "percent": 100
+    },
+    {
+      "id": "deployment-impact-routing-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "dependency/change impact to test and deployment routing",
+      "percent": 100
+    },
+    {
+      "id": "desktop-ai-output-contract-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "machine-verifiable Desktop AI final output contract",
+      "percent": 100
+    },
+    {
+      "id": "evidence-readiness-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "separates structural, evidence and operational readiness truthfully",
+      "percent": 100
+    },
+    {
+      "id": "function-contract-coverage-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "explicit capability certification coverage without name-based autocertification",
+      "percent": 100
+    },
+    {
+      "id": "native-runtime-truth-separation-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "native/external runtime truth separated from structural readiness",
+      "percent": 100
+    },
+    {
+      "id": "slo-error-budget-controller",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "error-budget burn-rate and latency SLO controller with production-evidence truth separation",
+      "percent": 100
+    },
+    {
+      "id": "database-migration-coordinator",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "fenced expand-migrate-contract database migration safety with snapshot and Supabase 2026 guards",
+      "percent": 100
+    },
+    {
+      "id": "asset-delta-distribution",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "content-defined SHA-256 delta chunking with deduplication and verified reconstruction",
+      "percent": 100
+    },
+    {
+      "id": "causal-debugger",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "correlated trace/queue/deploy/crash evidence graph with secret redaction and native ETW/eBPF probes",
+      "percent": 100
+    },
+    {
+      "id": "cas-replication-controller",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "quorum replication and read-repair semantics; remote host claim separated",
+      "percent": 100
+    },
+    {
+      "id": "physical-device-fleet",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "real-device fleet evidence protocol with freshness and digest verification",
+      "percent": 100
+    },
+    {
+      "id": "production-slo-autopilot",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "SLO decision to canary freeze/rollback with production-evidence and authorization barriers",
+      "percent": 100
+    },
+    {
+      "id": "migration-fencing-runtime-verifier",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "exact fencing token and expand/migrate/contract runtime invariants",
+      "percent": 100
+    },
+    {
+      "id": "checkpointed-long-soak-runner",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "checkpoint/resume long-soak harness with explicit wall-clock certification threshold",
+      "percent": 100
+    },
+    {
+      "id": "native-causal-collector",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "ETW/eBPF/perf/OTel collector discovery with trace correlation and truth separation",
+      "percent": 100
+    },
+    {
+      "id": "legacy-evidence-recipe-expansion",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "explicit recipes cover all 18 legacy patch families without name-only certification",
+      "percent": 100
+    },
+    {
+      "id": "legacy-procedural-quality",
+      "owner": "PROCEDURAL_QUALITY_ENGINE_V10",
+      "scope": "legacy capability family: procedural-generation, temporal-qa, frame-pacing",
+      "percent": 100
+    },
+    {
+      "id": "legacy-apng-quality",
+      "owner": "WORLD_SERVER_APNG_QUALITY_SYSTEM_V3_MAX",
+      "scope": "legacy capability family: apng-validate, apng-repair, apng-release-gate",
+      "percent": 100
+    },
+    {
+      "id": "legacy-pixel-animation",
+      "owner": "PIXEL_ANIMATION_SYSTEM_V3",
+      "scope": "legacy capability family: pixel-atlas, animation-culling, mobile-fallback",
+      "percent": 100
+    },
+    {
+      "id": "legacy-golden-governance",
+      "owner": "WORLD_SERVER_GOLDEN_STANDARD_V13",
+      "scope": "legacy capability family: no-regression, self-calibration, desktop-ai-protocol",
+      "percent": 100
+    },
+    {
+      "id": "legacy-world-quality-v6",
+      "owner": "WORLD_QUALITY_AUTOPILOT_V6",
+      "scope": "legacy capability family: technology-scout, cpu-routing, technology-drift, quality-slo",
+      "percent": 100
+    },
+    {
+      "id": "legacy-dream-v5",
+      "owner": "WORLD_SERVER_DREAM_AUTOPILOT_V5_CPU",
+      "scope": "legacy capability family: fresh-real-device-evidence, physics-guardian, gameplay-agent",
+      "percent": 100
+    },
+    {
+      "id": "legacy-pwa-v4",
+      "owner": "WORLD_SERVER_PWA_SELF_IMPROVING_V4_MAX",
+      "scope": "legacy capability family: pwa, real-ios-evidence, adaptive-runtime, production-rollback",
+      "percent": 100
+    },
+    {
+      "id": "legacy-truth-gate",
+      "owner": "production-100-truth-gate-v1",
+      "scope": "legacy capability family: production-certification, anti-false-100",
+      "percent": 100
+    },
+    {
+      "id": "legacy-quality-autopilot-v11",
+      "owner": "QUALITY_AUTOPILOT_PATCH_v11_CPU_MAX",
+      "scope": "legacy capability family: quality-autopilot-v11, quality-security-gate, quality-readiness-v11",
+      "percent": 100
+    },
+    {
+      "id": "legacy-quiet-autopilot-v6",
+      "owner": "WORLD_SERVER_QUIET_QUALITY_AUTOPILOT_V6",
+      "scope": "legacy capability family: quiet-quality-autopilot, quality-proof-gate, quality-otel-bridge",
+      "percent": 100
+    },
+    {
+      "id": "legacy-gap-closure-v1",
+      "owner": "GAP_CLOSURE_SYSTEM_V1",
+      "scope": "legacy capability family: gap-closure, gap-regression-test",
+      "percent": 100
+    }
+  ],
+  "degraded": [
+    {
+      "id": "graphics-quality-ratchet",
+      "percent": 33,
+      "missingClasses": [
+        "integration",
+        "regression"
+      ]
+    },
+    {
+      "id": "offline-policy-enforcement",
+      "percent": 67,
+      "missingClasses": [
+        "integration"
+      ]
+    },
+    {
+      "id": "semantic-dependency-graph",
+      "percent": 67,
+      "missingClasses": [
+        "regression"
+      ]
+    },
+    {
+      "id": "legacy-evidence-factory",
+      "percent": 67,
+      "missingClasses": [
+        "regression"
+      ]
+    }
+  ],
+  "unverifiedCapabilities": [
+    {
+      "capability": "adaptive-runtime",
+      "systemId": "pwa-v4",
+      "owner": "WORLD_SERVER_PWA_SELF_IMPROVING_V4_MAX"
+    },
+    {
+      "capability": "affected-test-selection",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "animation-culling",
+      "systemId": "pixel-animation",
+      "owner": "PIXEL_ANIMATION_SYSTEM_V3"
+    },
+    {
+      "capability": "anti-false-100",
+      "systemId": "truth-gate",
+      "owner": "production-100-truth-gate-v1"
+    },
+    {
+      "capability": "apng-binary-verification",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "apng-release-gate",
+      "systemId": "apng-quality",
+      "owner": "WORLD_SERVER_APNG_QUALITY_SYSTEM_V3_MAX"
+    },
+    {
+      "capability": "apng-repair",
+      "systemId": "apng-quality",
+      "owner": "WORLD_SERVER_APNG_QUALITY_SYSTEM_V3_MAX"
+    },
+    {
+      "capability": "apng-validate",
+      "systemId": "apng-quality",
+      "owner": "WORLD_SERVER_APNG_QUALITY_SYSTEM_V3_MAX"
+    },
+    {
+      "capability": "appium-compatible-worker-discovery",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "asset-batch-atlas-planner",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "atlas",
+      "systemId": "texture-quality",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10"
+    },
+    {
+      "capability": "attack-direction-contract",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "audio-variation-gate",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "automated-real-device-executor",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "automatic-authorized-rollback",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "canonical-mesh-optimizer",
+      "systemId": "mesh-quality",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12"
+    },
+    {
+      "capability": "capability-aware-cpu-scheduler",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "capability-preservation-gate",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "cas-read-repair",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "cas-replication-quorum",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "causal-incident-graph",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "central-control-plane",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "certified-function-baselines",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "change-impact-routing",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "checkpoint-resume",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "content-defined-asset-deltas",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "cosign-security-floor-3.1.3",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "cpu-3dgs",
+      "systemId": "3dgs",
+      "owner": "PIXEL_3DGS_CPU_V6_PHONE_4D_MAX"
+    },
+    {
+      "capability": "cpu-fallback",
+      "systemId": "video2game",
+      "owner": "VIDEO2GAME_VOXEL_V5"
+    },
+    {
+      "capability": "cpu-routing",
+      "systemId": "world-quality-v6",
+      "owner": "WORLD_QUALITY_AUTOPILOT_V6"
+    },
+    {
+      "capability": "crash-fingerprint-clustering",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "cyclonedx-1.7-sbom",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "dead-letter-queue",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "dependency-graph",
+      "systemId": "quality-core",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10"
+    },
+    {
+      "capability": "dependency-impact-graph",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "deployment-impact-routing",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "desktop-ai-output-contract",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "desktop-ai-protocol",
+      "systemId": "golden-governance",
+      "owner": "WORLD_SERVER_GOLDEN_STANDARD_V13"
+    },
+    {
+      "capability": "deterministic-wit-bindings",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "device-worker-authenticated-evidence",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "disaster-recovery",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "distributed-cas-peer-protocol",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "dual-run-replacement-contract",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "durable-priority-queue",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "dynamic-4d",
+      "systemId": "3dgs",
+      "owner": "PIXEL_3DGS_CPU_V6_PHONE_4D_MAX"
+    },
+    {
+      "capability": "evidence-readiness-score",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "exhaustive-model-checker",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "expand-migrate-contract-coordinator",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "explicit-legacy-contract-synthesis",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "feet-direction-contract",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "fenced-db-migrations",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "fenced-leader-lease",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "frame-pacing",
+      "systemId": "procedural-quality",
+      "owner": "PROCEDURAL_QUALITY_ENGINE_V10"
+    },
+    {
+      "capability": "fresh-real-device-evidence",
+      "systemId": "dream-v5",
+      "owner": "WORLD_SERVER_DREAM_AUTOPILOT_V5_CPU"
+    },
+    {
+      "capability": "full-file-delivery-contract",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "gameplay-agent",
+      "systemId": "dream-v5",
+      "owner": "WORLD_SERVER_DREAM_AUTOPILOT_V5_CPU"
+    },
+    {
+      "capability": "gameplay-spatial-contract",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "github-supabase-bridge",
+      "systemId": "runtime-v12-3",
+      "owner": "WORLD_SERVER_QUALITY_RUNTIME_V12_3"
+    },
+    {
+      "capability": "hlod",
+      "systemId": "mesh-quality",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12"
+    },
+    {
+      "capability": "honest-100-function-certification",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "idempotency",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "in-toto-statement-v1",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "incremental-snapshots",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "lease-recovery",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "lexical-dataflow-impact",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "lod",
+      "systemId": "mesh-quality",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12"
+    },
+    {
+      "capability": "mandatory-native-tlc-ci",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "master-protection",
+      "systemId": "runtime-v12-3",
+      "owner": "WORLD_SERVER_QUALITY_RUNTIME_V12_3"
+    },
+    {
+      "capability": "merkle-cas",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "mesh-regression",
+      "systemId": "mesh-quality",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12"
+    },
+    {
+      "capability": "minimum-manual-action-gate",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "mobile-fallback",
+      "systemId": "pixel-animation",
+      "owner": "PIXEL_ANIMATION_SYSTEM_V3"
+    },
+    {
+      "capability": "monotonic-function-enhancement",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "multi-window-burn-rate",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "native-causal-collector-discovery",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "native-etw-ebpf-adapters",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "native-runtime-truth-separation",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "no-regression",
+      "systemId": "golden-governance",
+      "owner": "WORLD_SERVER_GOLDEN_STANDARD_V13"
+    },
+    {
+      "capability": "node-crash-diagnostics",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "offline-policy-mirror",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "opa-rego-policy",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "osv-dependency-security",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "otlp-http-json",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "owned-real-device-lab",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "pbr",
+      "systemId": "texture-quality",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10"
+    },
+    {
+      "capability": "phone-capture",
+      "systemId": "3dgs",
+      "owner": "PIXEL_3DGS_CPU_V6_PHONE_4D_MAX"
+    },
+    {
+      "capability": "physical-device-fleet-evidence",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "physical-device-worker",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "physics-guardian",
+      "systemId": "dream-v5",
+      "owner": "WORLD_SERVER_DREAM_AUTOPILOT_V5_CPU"
+    },
+    {
+      "capability": "pinned-local-toolchain-bootstrap",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "pixel-atlas",
+      "systemId": "pixel-animation",
+      "owner": "PIXEL_ANIMATION_SYSTEM_V3"
+    },
+    {
+      "capability": "pixel-atlas-v12",
+      "systemId": "runtime-v12-3",
+      "owner": "WORLD_SERVER_QUALITY_RUNTIME_V12_3"
+    },
+    {
+      "capability": "procedural-generation",
+      "systemId": "procedural-quality",
+      "owner": "PROCEDURAL_QUALITY_ENGINE_V10"
+    },
+    {
+      "capability": "production-asset-quality-gate",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "production-certification",
+      "systemId": "truth-gate",
+      "owner": "production-100-truth-gate-v1"
+    },
+    {
+      "capability": "production-crash-canary-stop",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "production-rollback",
+      "systemId": "pwa-v4",
+      "owner": "WORLD_SERVER_PWA_SELF_IMPROVING_V4_MAX"
+    },
+    {
+      "capability": "project-constitution-gate",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "pwa",
+      "systemId": "pwa-v4",
+      "owner": "WORLD_SERVER_PWA_SELF_IMPROVING_V4_MAX"
+    },
+    {
+      "capability": "quality-knowledge",
+      "systemId": "quality-core",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10"
+    },
+    {
+      "capability": "quality-slo",
+      "systemId": "world-quality-v6",
+      "owner": "WORLD_QUALITY_AUTOPILOT_V6"
+    },
+    {
+      "capability": "ratchet",
+      "systemId": "quality-core",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10"
+    },
+    {
+      "capability": "real-ios-evidence",
+      "systemId": "pwa-v4",
+      "owner": "WORLD_SERVER_PWA_SELF_IMPROVING_V4_MAX"
+    },
+    {
+      "capability": "replay",
+      "systemId": "quality-core",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10"
+    },
+    {
+      "capability": "scalability-first-gate",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "self-calibration",
+      "systemId": "golden-governance",
+      "owner": "WORLD_SERVER_GOLDEN_STANDARD_V13"
+    },
+    {
+      "capability": "semantic-merge-ownership",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "semantic-symbol-graph",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "shadow-first-feature-promotion",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "shield-geometry-contract",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "slsa-provenance-v1",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "soak-chaos-verification",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "split-brain-prevention",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "system-enhancement-orchestrator",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "tamper-evident-transparency-log",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "technology-consensus",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "technology-drift",
+      "systemId": "world-quality-v6",
+      "owner": "WORLD_QUALITY_AUTOPILOT_V6"
+    },
+    {
+      "capability": "technology-scout",
+      "systemId": "world-quality-v6",
+      "owner": "WORLD_QUALITY_AUTOPILOT_V6"
+    },
+    {
+      "capability": "temporal-qa",
+      "systemId": "procedural-quality",
+      "owner": "PROCEDURAL_QUALITY_ENGINE_V10"
+    },
+    {
+      "capability": "texture-pipeline",
+      "systemId": "texture-quality",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10"
+    },
+    {
+      "capability": "texture-runtime-evidence",
+      "systemId": "texture-quality",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10"
+    },
+    {
+      "capability": "tla-plus-specs",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "transactional-deployment",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "typescript-native-ast-dataflow",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "verified-delta-reconstruction",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "video-to-voxel",
+      "systemId": "video2game",
+      "owner": "VIDEO2GAME_VOXEL_V5"
+    },
+    {
+      "capability": "w3c-trace-context",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "wasi-component-model",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "weapon-grip-contract",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "wit-typed-adapter-contracts",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "zero-config-cas-discovery",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    }
+  ],
+  "functions": [
+    {
+      "id": "system-integration-gate",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "structural integration compatibility",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "path": "percent",
+          "equals": 100,
+          "pass": true,
+          "actual": 100
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/system-integration-gate.cjs",
+          "text": "checks=[",
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/system-integration-gate.cjs": "8fc3646b1af00cbbdc297263f6bc50fac6a26cf66e7e9bdba67adf0400fa717c"
+      },
+      "contractHash": "bccdf099d4d113274dfdc64e68ad7d4be133efd2838be4ed93b6b336e772f94f",
+      "sourceFingerprint": "a09f926c98f049e5ed35f24af2ac5835e0f32a73c4d4663c56083f125703c0c6",
+      "evidenceFingerprint": "9313e2bf1af5ea3ca221b49d9712642ef266a654000bb8d16113a5a1bdc009c7"
+    },
+    {
+      "id": "durable-job-queue",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "priority/idempotency/lease/checkpoint/retry/DLQ semantics",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "DURABLE_QUEUE_STATUS.json",
+          "path": "ok",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "DURABLE_QUEUE_STATUS.json",
+          "path": "journal",
+          "equals": "WAL",
+          "pass": true,
+          "actual": "WAL"
+        },
+        {
+          "class": "regression",
+          "type": "selftest-prefix",
+          "prefix": "queue-",
+          "pass": true,
+          "details": [
+            {
+              "id": "queue-priority-claim",
+              "pass": true,
+              "details": null
+            },
+            {
+              "id": "queue-dlq",
+              "pass": true,
+              "details": null
+            },
+            {
+              "id": "queue-checkpoint-retry-ack",
+              "pass": true,
+              "details": null
+            },
+            {
+              "id": "queue-idempotency-canonical-json",
+              "pass": true,
+              "details": null
+            }
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "scripts/durable-job-queue.cjs": "6153c70572311bb6afc07cbaab45369a21c6e8df4ba6c9cfc5862a4faa86a016"
+      },
+      "contractHash": "ecd6a91bcacadc6c5741c104b66ab27157f9c3b94ce7b214e19bbbc7c51815b4",
+      "sourceFingerprint": "27740da290cf1145cafbe9813a1361f449bc9d3759e5cbad0912ecb5b78b62a7",
+      "evidenceFingerprint": "2c4f3c52d9ebfd968b6b32f9fe92414bb66233869196421382522a96fcfb0a7d"
+    },
+    {
+      "id": "cas-merkle-disaster-recovery",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "local content-addressed snapshot integrity and restore verification",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "DISASTER_RECOVERY_VERIFY_REPORT.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "DISASTER_RECOVERY_VERIFY_REPORT.json",
+          "path": "failures",
+          "equals": [],
+          "pass": true,
+          "actual": []
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/cas-merkle-store.cjs",
+          "text": "merkleRoot",
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/cas-merkle-store.cjs": "d2b7c5da39060266279acf071b66aa455a634ea78c62af8a2c20e6900db4d4d9"
+      },
+      "contractHash": "bc267b7a48839d022acb214364d0b08443128f44d2b00b42ff4e28ba75fb1098",
+      "sourceFingerprint": "a00c000604cbb416d6f07b9d0d9ec280244ed8db1165c0cb305ae1becf5bf30b",
+      "evidenceFingerprint": "81a0d077bc88b016439466e5c4448a359fdf305a51e240de8ae9e780bb4c11d7"
+    },
+    {
+      "id": "project-constitution",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "mandatory project directives and no-regression rules",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "PROJECT_DIRECTIVE_REPORT.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "PROJECT_DIRECTIVE_REPORT.json",
+          "path": "percent",
+          "equals": 100,
+          "pass": true,
+          "actual": 100
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "data/project-directives.json",
+          "pass": true,
+          "actual": "present"
+        }
+      ],
+      "sourceHashes": {
+        "scripts/project-directive-gate.cjs": "ffd1b65125a7a5928fe910a043b1cf00c82cda46ff6fe1392a85dbb5ec29f46c",
+        "data/project-directives.json": "53fe2cbd10271db9841d3410b6246e91bad62bb3f29b719e15bce1d85085f4af"
+      },
+      "contractHash": "0742e590a37b95e7ca6b82092add862b2878d5306035721ad5ea14da244ad2ec",
+      "sourceFingerprint": "48e9fa94a7684e7facc95f0c637a0b5424d2ece0fca83af4f27fdf7d971e5348",
+      "evidenceFingerprint": "b075750561c8fb1ed0ca71467e6822783ddc8bc3bfebee868a13df929ac718a9"
+    },
+    {
+      "id": "technology-lock",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "exact user-mandated technology/format preservation",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "TECHNOLOGY_LOCK_REPORT.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "contains",
+          "file": "scripts/technology-lock-validator.cjs",
+          "text": "isApng",
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/technology-lock-validator.cjs",
+          "text": "requested",
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/technology-lock-validator.cjs": "f471e26bdb4030826d50c7169712b8a351ef6ee4c2e7ce23184776dc87ff321a"
+      },
+      "contractHash": "df418de7ae0baf1a3ad98d1339cfabbe5572d979ce0a7a9232e72be81681a622",
+      "sourceFingerprint": "d57fbd01f7462026286bba006412ed015acb73ec55748f0b71bb6fac37f6c599",
+      "evidenceFingerprint": "96331764a734be7e24593c58292b2136369d8cb689e2f5257fceb83b4a1f1e35"
+    },
+    {
+      "id": "graphics-quality-ratchet",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "finished graphics cannot be silently removed/simplified/regressed",
+      "critical": true,
+      "applicable": true,
+      "status": "DEGRADED",
+      "percent": 33,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [
+        "integration",
+        "regression"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "GRAPHICS_REGRESSION_GUARD_REPORT.json",
+          "path": "pass",
+          "equals": true,
+          "pass": false,
+          "actual": false
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "GRAPHICS_REGRESSION_GUARD_REPORT.json",
+          "path": "failed",
+          "equals": [],
+          "pass": false,
+          "actual": [
+            {
+              "path": "assets/pixel/world-atlas-v1.png",
+              "status": "A",
+              "pass": false,
+              "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+            },
+            {
+              "path": "e2e/perceptual-visual.spec.js-snapshots/cube-object-desktop-chromium-win32.png",
+              "status": "A",
+              "pass": false,
+              "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+            },
+            {
+              "path": "e2e/perceptual-visual.spec.js-snapshots/cube-object-mobile-chromium-win32.png",
+              "status": "A",
+              "pass": false,
+              "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+            },
+            {
+              "path": "e2e/perceptual-visual.spec.js-snapshots/cube-object-mobile-webkit-win32.png",
+              "status": "A",
+              "pass": false,
+              "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+            },
+            {
+              "path": "e2e/perceptual-visual.spec.js-snapshots/cube-object-tablet-chromium-win32.png",
+              "status": "A",
+              "pass": false,
+              "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+            },
+            {
+              "path": "public/assets/pixel/world-atlas-v1.png",
+              "status": "A",
+              "pass": false,
+              "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+            },
+            {
+              "path": "visual-candidates/desktop-chromium/ai3d-voxel-city.png",
+              "status": "A",
+              "pass": false,
+              "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+            },
+            {
+              "path": "visual-candidates/desktop-chromium/catalog.png",
+              "status": "A",
+              "pass": false,
+              "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+            },
+            {
+              "path": "visual-candidates/desktop-chromium/voxel-world.png",
+              "status": "A",
+              "pass": false,
+              "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+            }
+          ]
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/graphics-regression-guard.cjs",
+          "text": "regress",
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/graphics-regression-guard.cjs": "16b3eb3e788739f6c15888e924c102b4dde2276dc87d14fd292c3650dc0da5f9"
+      },
+      "contractHash": "c74e7b72908ec46519fb8ced5cb3661d574aad9d3b0b6216c4f665cda1b53c62",
+      "sourceFingerprint": "25eba40edfa2641a14c11c2499924b11090be674b71a51eae9ba8e9d6778e79f",
+      "evidenceFingerprint": "4e9635e149d8b4e52a6b9d58b64bc89e45a73af5ed17467f33bf3b044ce0d794"
+    },
+    {
+      "id": "offline-policy-enforcement",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "fail-closed OPA/Rego-compatible offline policy enforcement",
+      "critical": true,
+      "applicable": true,
+      "status": "DEGRADED",
+      "percent": 67,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [
+        "integration"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "POLICY_DECISION_REPORT.json",
+          "path": "pass",
+          "equals": true,
+          "pass": false,
+          "actual": false
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "policy/opa-bundle/worldserver.rego",
+          "pass": true,
+          "actual": "present"
+        },
+        {
+          "class": "regression",
+          "type": "contains",
+          "file": "scripts/policy-engine.cjs",
+          "text": "jsDecision",
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/policy-engine.cjs": "1799a38995ecc07712e25643e84b82b9a213a6550ef59512836fda49fc056099",
+        "policy/opa-bundle/worldserver.rego": "849f76a7ad1cc8e720134100183574e2cb3c7d8049c4a0d3372e44ae3cb06cba"
+      },
+      "contractHash": "6751d46238bb61aadb3428117f8fc822b666381a53cfa3fdfc0d3bd6ddcecda3",
+      "sourceFingerprint": "1daa188063876925e94bdd7122d13f543c22bfe496ae7965d9ba15f0b059c460",
+      "evidenceFingerprint": "10577a0de837a4f0beebd6e58c499e9869bd7921b960eb55ee5c3e18618738c0"
+    },
+    {
+      "id": "feature-flag-safety",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "deterministic rollout and safety lock",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "FEATURE_FLAG_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "FEATURE_FLAG_STATUS.json",
+          "path": "safetyLockVerified",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "FEATURE_FLAG_STATUS.json",
+          "path": "deterministicRollout",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/feature-flag-engine.cjs": "f6d08c5fe5c17f2401707f9627fd59e097e979a3d888cbdd0653da10698c25af",
+        "data/flags.json": "d026753140aefff3f816c661615ee0cb808d0bd616c67a68c585c03023c2104c"
+      },
+      "contractHash": "0aa2d7ea746d4e1175138c1427cb8a488d25f4f615b7067c155a8c5efa0a958e",
+      "sourceFingerprint": "a4b02d4aa93189e0613359e854d32ab7135e389fc152d713ec710659c3eeee3c",
+      "evidenceFingerprint": "67c59f1dabdc10391de823eef4707ad0b426ccbea1a740db05ffe274ecf18db3"
+    },
+    {
+      "id": "adapter-sandbox-fail-closed",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "untrusted adapters denied when Wasmtime unavailable",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "ADAPTER_SANDBOX_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "ADAPTER_SANDBOX_STATUS.json",
+          "path": "untrustedBehavior",
+          "equals": "DENY_UNTRUSTED",
+          "pass": true,
+          "actual": "DENY_UNTRUSTED"
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "ADAPTER_SANDBOX_STATUS.json",
+          "path": "capabilityBased",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/adapter-sandbox.cjs": "b119443056285ffdd345e89b6f6ddc2c32f30fc803e93810f51dc15e27f197cd"
+      },
+      "contractHash": "51baf5bf60c33812269fda35913c77fe838ac299fc55df3f7d73a1400e058dee",
+      "sourceFingerprint": "227d634d4f1776763cefef3168dc0b23a1a211735639dbc5f77f01806cc220c2",
+      "evidenceFingerprint": "5900a4fd9500146de358d19a7a9a639c90c40afe6c6608cfcb7fa96d41aa4fa3"
+    },
+    {
+      "id": "model-checker",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "embedded exhaustive queue/control safety model with mutant rejection",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "MODEL_CHECK_REPORT.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "MODEL_CHECK_REPORT.json",
+          "checkId": "queue-mutant-rejected",
+          "pass": true,
+          "actual": {
+            "id": "queue-mutant-rejected",
+            "pass": true
+          }
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "specs/DurableJobQueue.tla",
+          "pass": true,
+          "actual": "present"
+        }
+      ],
+      "sourceHashes": {
+        "scripts/model-state-checker.cjs": "33d5af939cd16098545f070a8ffba2005cdbee3ed11eb576122f47834cfcb6ae",
+        "specs/DurableJobQueue.tla": "bd2bfe6a6f1c36d932574fbb58ce205efa42a361cc666a74add3bf1cb95894ab",
+        "specs/ControlPlane.tla": "14a06f79b5631fa9d5f22359374faf324caa2983ef7961975cffdea2dc44d61f"
+      },
+      "contractHash": "81f3f0f611ec215b2ce21a228345311dde842b227bbbdd9a016c786322341aaf",
+      "sourceFingerprint": "44de90927d47e164ef392fa4eb9e77c4fe2da8515b68abdc1349430206e6ff65",
+      "evidenceFingerprint": "cd8911c3f65a178d90c90c9c25918e58e90a9edf0da2e1fa0adb14ddd923b041"
+    },
+    {
+      "id": "semantic-dependency-graph",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "module/symbol/dataflow impact graph",
+      "critical": true,
+      "applicable": true,
+      "status": "DEGRADED",
+      "percent": 67,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [
+        "regression"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "SEMANTIC_DEPENDENCY_GRAPH.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "NATIVE_AST_DATAFLOW_REPORT.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "SEMANTIC_DEPENDENCY_GRAPH.json",
+          "path": "nativeAstAdapterAvailable",
+          "equals": true,
+          "pass": false,
+          "actual": false
+        }
+      ],
+      "sourceHashes": {
+        "scripts/semantic-dependency-graph.cjs": "79694f443c8eddc85f2928da442ba9172f9de806b4cb52e9ece79e4339f048c1",
+        "scripts/native-ast-dataflow.cjs": "f1dee4d05baaba629d5fb609678a6f26314dd4d1ab18047591ceecf2ef8ec978"
+      },
+      "contractHash": "8739cf2f35806fbe88cbde0802680a8058dae96001b215d84aef6990d32d9e35",
+      "sourceFingerprint": "a02bf4740d082cf7a48868cd9f9a4fad67e5452cb541bf73e7f07a73e5687efc",
+      "evidenceFingerprint": "ccdee8e47d6d8a13862d11058ccf8e2b5350bfd26bfb68667777b6566c711296"
+    },
+    {
+      "id": "capability-aware-scheduler",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "CPU-first capability/resource/cache-locality worker matching",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "CAPABILITY_SCHEDULER_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "CAPABILITY_SCHEDULER_STATUS.json",
+          "path": "cpuFirst",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "scheduler-capability-match",
+          "pass": true,
+          "details": [
+            {
+              "id": "scheduler-capability-match",
+              "pass": true,
+              "details": null
+            }
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "scripts/capability-aware-scheduler.cjs": "afa786a48a04603f12d926f28d92490a8d2ca7734b5e82fdcf5bbab330a17d35"
+      },
+      "contractHash": "9af35abf9d575dbe1ab8b464e982b6ef4deff05dd79e5b8a2b94dad7c8d45ba0",
+      "sourceFingerprint": "21cf060cbcb89951097f5339148f80c98a0ff96d7c56eb9354f714717e6ecd73",
+      "evidenceFingerprint": "67ea7b5b32dfebc0f2ca1deffd567361f58e7345e2ee28534fd9b316aec15a5b"
+    },
+    {
+      "id": "deterministic-record-replay",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "seeded execution replay with hash equivalence",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "RECORD_REPLAY_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "deterministic-record-replay",
+          "pass": true,
+          "details": [
+            {
+              "id": "deterministic-record-replay",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/deterministic-record-replay.cjs",
+          "text": "stdoutHash",
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/deterministic-record-replay.cjs": "1e92a044a982fc43ef7cf20b5c32ac265aced334f4ad6d880d150029d93fcf1a"
+      },
+      "contractHash": "991aed8301ae46afe3deafb92d8c00d8d8ed79b997a5fe1da2bbcd0c46eefb77",
+      "sourceFingerprint": "b82c92b3c55e0b3e63fb829bd47649fdb3fe07c0f6f2b64d4a10fdb017dd3283",
+      "evidenceFingerprint": "d04698b841e56a075fd3b89f6b68042b27a2dd3b94f801c1a941bb9ce2da28ad"
+    },
+    {
+      "id": "cas-local-redundancy",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "two independent local CAS roots with repair-on-read readiness",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "CAS_REDUNDANCY_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "cas-two-root-recovery",
+          "pass": true,
+          "details": [
+            {
+              "id": "cas-two-root-recovery",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "CAS_REDUNDANCY_STATUS.json",
+          "path": "independentRoots",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/cas-redundancy-verifier.cjs": "c3f6b319ac6d9d857a06259fec9f81b117d5b4477a75d6b668cd32a5da088597"
+      },
+      "contractHash": "ad8246accc5e727474b5c62fffab383e997609208b9a033e2eb260225b80f7d1",
+      "sourceFingerprint": "42f3c5bb7f20e5c2d0069606f99103a131a128340d8cbb9b570b1684b8fb8ef5",
+      "evidenceFingerprint": "f58a74c6dd744a3cf21b0ea89117528aefaff128fe260ebde369c8d9fa928a9e"
+    },
+    {
+      "id": "device-worker-command-safety",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "constrained authenticated real-device worker; no arbitrary shell",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "DEVICE_WORKER_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "device-worker-no-arbitrary-shell",
+          "pass": true,
+          "details": [
+            {
+              "id": "device-worker-no-arbitrary-shell",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "DEVICE_WORKER_STATUS.json",
+          "path": "allowArbitraryCommands",
+          "equals": false,
+          "pass": true,
+          "actual": false
+        }
+      ],
+      "sourceHashes": {
+        "scripts/device-worker-server.cjs": "26ce786733154a64988ac5198c50d28ac052bbfc7f191db090309b9ca7d0ac99"
+      },
+      "contractHash": "bb7d5795472b6e3d27b47ea04c7eb3104b41b51c405f6bebb6ec87b8cb2532fb",
+      "sourceFingerprint": "e1e5810b5c2ed0bbbeabdad3274e790ed9e791993d4c0faeadf9dfde51c3fb19",
+      "evidenceFingerprint": "79417fa36337ab330692b658c8c3df5a1aad8115f272c5477d5171e786ce33c4"
+    },
+    {
+      "id": "dependency-security-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "OSV locked-dependency scanning engine and transactional remediation mechanism",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "DEPENDENCY_SECURITY_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "osv-engine-health",
+          "pass": true,
+          "details": [
+            {
+              "id": "osv-engine-health",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/dependency-security-orchestrator.cjs",
+          "text": "backups",
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/dependency-security-orchestrator.cjs": "1b431a9e5174049fc3c77c9333218c6f02f26c26298e4100c3207ec23b3e18a6"
+      },
+      "contractHash": "4762e63bf8ca33d2f0eb526d7144847c2b599eeef5f8ca742ce8420290a0b5bf",
+      "sourceFingerprint": "3c6b6c5f68099d1c7e8489ac72a7982613adf564c54fde3b35a7bad9d8234d13",
+      "evidenceFingerprint": "ddaf21eb75e083379f6faacc09aacc87c94e08cbf601b3aef02a4bb018225dcf"
+    },
+    {
+      "id": "transactional-deploy-state-machine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "preview-health-promote-rollback deployment state machine",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "TRANSACTIONAL_DEPLOY_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "transactional-deploy-health",
+          "pass": true,
+          "details": [
+            {
+              "id": "transactional-deploy-health",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "TRANSACTIONAL_DEPLOY_STATUS.json",
+          "path": "rollbackOnFailure",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/transactional-deploy.cjs": "c001300a1198cde6b33020a7afa08de2606c8bb6da676a5264bff78e112a58f0"
+      },
+      "contractHash": "f08130f164302ca25a9072fc2f324b0a19e229d694bcea6c7f0c201b61ec4480",
+      "sourceFingerprint": "068b6063a7c76ebf1af779423b138f69b3c484406e3dc82689be0070dcdc869f",
+      "evidenceFingerprint": "b221257ca45b05f43031c148563af8ebaa8d84b6a4a2218e6df3be612fdc3b70"
+    },
+    {
+      "id": "wit-bindings-determinism",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "deterministic WIT adapter binding generation",
+      "critical": false,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "WIT_BINDINGS_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "wit-bindings-deterministic",
+          "pass": true,
+          "details": [
+            {
+              "id": "wit-bindings-deterministic",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "WIT_BINDINGS_STATUS.json",
+          "path": "deterministic",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/wit-bindings-generator.cjs": "43a80b584a07975ac93967a5ae53110ecbdca88950b2dfcfac530d146cab5717",
+        "wit/world-server-adapter.wit": "aa3475d2b717e427004a3b3adc27695c3e00d4a2220faae6ef8fc0fbb7e83223"
+      },
+      "contractHash": "e37d9c3fd95d6738ac753d93350f0521fc7de18d55af123b37dfea968510d3b0",
+      "sourceFingerprint": "e97af8dc609c464bfd7230f2b00db75e889e74badbb7fe703e30bff0298c295b",
+      "evidenceFingerprint": "69ed3335a9794ecff2a895e1aa3cb8baaffd797dc09d6be68cda60c41608498e"
+    },
+    {
+      "id": "integration-telemetry",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "W3C trace-context + local JSONL + OTLP HTTP/JSON adapter",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "INTEGRATION_TELEMETRY_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "telemetry-w3c-otlp",
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/integration-telemetry.cjs",
+          "pass": true,
+          "actual": "present"
+        }
+      ],
+      "sourceHashes": {
+        "scripts/integration-telemetry.cjs": "15d446900874ffe5e110668c51ae6d670150f08db7393e58a9f6837ce962666c",
+        "scripts/integration-telemetry-lib.cjs": "d1340539a6062977d105c537d886d5f57e0860ba468e0c1cc2da3d2a286aadc9"
+      },
+      "contractHash": "275c9a5edaf979ac3ea547d3b8d70ec10141cb2dc534dd81cd378f11d74587d9",
+      "sourceFingerprint": "7c93cf84e09fb091b57250dfcdfeddeee7b9eed116e5694541bd61324b3324c3",
+      "evidenceFingerprint": "08c564a1791059e0ad89811e73f6759424a9e8217713803a2a70782e30c08f49"
+    },
+    {
+      "id": "content-addressed-asset-registry",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "content-addressed asset inventory and metadata accounting engine",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "ASSET_REGISTRY.json",
+          "path": "contentAddressed",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "asset-registry-content-addressed",
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/asset-registry.cjs",
+          "pass": true,
+          "actual": "present"
+        }
+      ],
+      "sourceHashes": {
+        "scripts/asset-registry.cjs": "9596dd4c1a1537e1c7143374b50c4f477f0c89eac5e841742c20cb0871d962b8"
+      },
+      "contractHash": "bcd3e49f6e9f99534b55a9d967df41c499207f6ce6ad4bcd466410c9e252f37a",
+      "sourceFingerprint": "11155912651fa7f1d41bcf992f1dfe6a40221605667d6a910d010284da1ab487",
+      "evidenceFingerprint": "040dc78bd06089112982a4e65386eca5b8ab4766ce8f1d9560b5d03fa1804846"
+    },
+    {
+      "id": "asset-batch-planner",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "task-aware atlas/batch ingestion planning; no forced strategy when no task",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "ASSET_INGESTION_PLAN.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "asset-batch-planner",
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/asset-ingestion-planner.cjs",
+          "pass": true,
+          "actual": "present"
+        }
+      ],
+      "sourceHashes": {
+        "scripts/asset-ingestion-planner.cjs": "e5f29da66b0249d3309d8180f74e5e645e5ed0f325893a95ddd17b552a4238ea"
+      },
+      "contractHash": "eb41b21f61688e806ecb3927e481257614414d6a4a6ce26a2338fbabb4b1da06",
+      "sourceFingerprint": "a7506e78faf066e47bf7e1245eba15d9da627fd944bddfc969eabdd559729c3b",
+      "evidenceFingerprint": "69ea8397efa0dc047f91c263b675c6c02f878f6d2964e6d93f520fbc9647175b"
+    },
+    {
+      "id": "gameplay-spatial-library",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "canonical feet/attack/shield/weapon-grip spatial math contracts",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "gameplay-spatial-contract",
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "feet-follow-travel",
+          "pass": true,
+          "details": [
+            {
+              "id": "feet-follow-travel",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "attack-follows-feet",
+          "pass": true,
+          "details": [
+            {
+              "id": "attack-follows-feet",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "shield-between-enemy-torso",
+          "pass": true,
+          "details": [
+            {
+              "id": "shield-between-enemy-torso",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "pistol-one-hand",
+          "pass": true,
+          "details": [
+            {
+              "id": "pistol-one-hand",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "automatic-two-hands",
+          "pass": true,
+          "details": [
+            {
+              "id": "automatic-two-hands",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/character-spatial-contract-lib.cjs",
+          "pass": true,
+          "actual": "present"
+        }
+      ],
+      "sourceHashes": {
+        "scripts/character-spatial-contract-lib.cjs": "52f56bbae04bb09cc0811a28935820eede714d490c39e4ca1b99b760d7f0b9c0",
+        "data/gameplay-physical-contract.json": "e024954a837e005ceffe8436ede1b1158e87c0072d50a4cd1233a9183f428eca"
+      },
+      "contractHash": "5251af9db96a36f8860ba65acc6cca37f6df8e3a2007bf13f2cd0cc0046d206e",
+      "sourceFingerprint": "f964d90b5c464c16af99995782a2b9e34d3bdce9141f2f3673ed5afe725910d0",
+      "evidenceFingerprint": "be3eff4332b2d0279c42fb970f0d3dca479151f4c2748ee82be3a6a939d3e1d7"
+    },
+    {
+      "id": "cyclonedx-sbom-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "deterministic CycloneDX 1.7 SBOM generation engine",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "SBOM_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "cyclonedx-1.7-sbom",
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/cyclonedx-sbom.cjs",
+          "pass": true,
+          "actual": "present"
+        }
+      ],
+      "sourceHashes": {
+        "scripts/cyclonedx-sbom.cjs": "c1643511768779845db7bdfaf33cf43fffcdf40fec1832699d926ff80894c319"
+      },
+      "contractHash": "bbdda9b2fcac59c9cc0447d995203b17c34829148a3ea438d7a4feae354cf488",
+      "sourceFingerprint": "5963fc4d4c8e4e63a37a75b223706242fe70c3781bef07afaf3df53cbe2e10fc",
+      "evidenceFingerprint": "2e2b453874e9c5e2bdd5bb27cac1b8cdcb9a1d3f439561b1221abe4a1c858fdb"
+    },
+    {
+      "id": "slsa-provenance-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "hash-bound SLSA provenance v1 + in-toto Statement v1 generation",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "PROVENANCE_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "slsa-v1-provenance",
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/provenance.cjs",
+          "pass": true,
+          "actual": "present"
+        }
+      ],
+      "sourceHashes": {
+        "scripts/provenance.cjs": "7433e9675374b2e831eb7eddcf3a892f5f05cb280429ce8a4d43840102afcc33"
+      },
+      "contractHash": "5126c000a734563857a5d385dd4db5caed6412d611ad52f9c7758e59c2995def",
+      "sourceFingerprint": "3ef785da4d7129326b33ac9626c412b5339f3db0875163efb3a1c53cfe9e7d07",
+      "evidenceFingerprint": "793552965daf0be5d1b1642c8e91c28a257a9eba995e78b932e71f6c291df887"
+    },
+    {
+      "id": "local-signing-transparency",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "local Ed25519 signing + tamper-evident transparency hash chain",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "SUPPLY_CHAIN_SIGNATURE_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "sigstore-transparency",
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/artifact-signing-transparency.cjs",
+          "pass": true,
+          "actual": "present"
+        }
+      ],
+      "sourceHashes": {
+        "scripts/artifact-signing-transparency.cjs": "86f7c830174795c535fb08902db5f46160f849e74f51247816ed8d461184a1da"
+      },
+      "contractHash": "3c2bdef02f26c193c833e0c38ee89149079bfc2de9597540132b01c3f27f5793",
+      "sourceFingerprint": "e07f33c3e258596a45efebcbfeacf48d5aca6a31e15aacd6d3efcea9c583902a",
+      "evidenceFingerprint": "a0c32e9b72073de21f897b0757821f1e02e7530b484d77cf9ae4a90e084ac7e0"
+    },
+    {
+      "id": "rekor-transparency-monitor",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "local hash-chain verification + safe external Sigstore bundle monitoring",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "REKOR_MONITOR_REPORT.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "rekor-monitor",
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/rekor-monitor.cjs",
+          "pass": true,
+          "actual": "present"
+        }
+      ],
+      "sourceHashes": {
+        "scripts/rekor-monitor.cjs": "dcf7099d968a8f6ef8e905651b4280546ccb0f6a5817cc3a85abe6a0d1253509"
+      },
+      "contractHash": "79789bccc1e68dc870cd362b8b83cad3dc957c11c59fcdbf7c114383ecf563f5",
+      "sourceFingerprint": "30193fb3b9fcd43fa275f424bafec4cd0bb965dd1b40c235a7173116189f2da8",
+      "evidenceFingerprint": "8ddaadfd7d9fa346e512c95925bca62eaab52081b3e576c5d8679ed1aeff16c1"
+    },
+    {
+      "id": "technology-consensus-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "free/open CPU-safe offline-fallback technology consensus engine",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "TECHNOLOGY_CONSENSUS_REPORT.json",
+          "path": "policy.cpuFirst",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "technology-catalog",
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/technology-consensus.cjs",
+          "pass": true,
+          "actual": "present"
+        }
+      ],
+      "sourceHashes": {
+        "scripts/technology-consensus.cjs": "575f20288d61288ac684fa79d74e05c08138ffe885f6c604915cba44b6b5d0f3",
+        "data/technology-candidate-catalog.json": "4d7e75477fc6879f3fbaa48297af40ad7d38d8252796d586680f5d42dd68795f"
+      },
+      "contractHash": "0955ea4d1e339b0be338dba5ed10676bc5941fb16abd5bb935d36407294f7384",
+      "sourceFingerprint": "92c831122d0fcb06c2f716ab687b8d79fa55aaff1656b327f006c1968283a65a",
+      "evidenceFingerprint": "dbb77b9ff4e9f627cdf5d97e12632e72a563e3a9d1ac010914d0451a0dd5f30b"
+    },
+    {
+      "id": "cosign-security-floor",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "reject vulnerable installed Cosign versions below 3.1.3; absence remains external blocker",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "TOOLCHAIN_SECURITY_REPORT.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "cosign-security-floor",
+          "pass": true,
+          "details": [
+            {
+              "id": "cosign-security-floor",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "TOOLCHAIN_SECURITY_REPORT.json",
+          "path": "cosign.minimumSafeVersion",
+          "equals": "3.1.3",
+          "pass": true,
+          "actual": "3.1.3"
+        }
+      ],
+      "sourceHashes": {
+        "scripts/toolchain-security-gate.cjs": "b575c32629713c3e3eb1d44dcf80b712ee23fca4ab60dd1a609db9c473311190"
+      },
+      "contractHash": "dc1a2922e3d0b5c832bca3316457f420af08074734a524db62da346b9fe37eea",
+      "sourceFingerprint": "f4c4bf838213ddd93b2b2b56ffff2f348280aa8553997a89228054c08d122a2d",
+      "evidenceFingerprint": "cdce751a0683a306c16459022746346056fb17c68d178cefa09f7f90b0aa7ae6"
+    },
+    {
+      "id": "toolchain-bootstrap",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "pinned local no-sudo/no-paid tool bootstrap engine",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "TOOLCHAIN_BOOTSTRAP_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "toolchain-bootstrap",
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/toolchain-bootstrap.cjs",
+          "pass": true,
+          "actual": "present"
+        }
+      ],
+      "sourceHashes": {
+        "scripts/toolchain-bootstrap.cjs": "e26dae5b0ccec4332562c5bee06f1707f0bc1d00360c38d917f34374552aed02"
+      },
+      "contractHash": "fdd0ba2a06f24299975e1ed4065fc5edec0e0c99ce9ab6332d26a61cb33c4248",
+      "sourceFingerprint": "1b14abd3971366dabb65c4eeb4b5e13ed5ea5a03bd03606be1d3662018c599ff",
+      "evidenceFingerprint": "a47fd1fcf644d71abc01d20e0d10baf9b59ab0bc9690e9afabd4d69abe1b1aa7"
+    },
+    {
+      "id": "distributed-cas-protocol",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "SHA-256 verified CAS peer protocol with loopback protocol selftest",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "DISTRIBUTED_CAS_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "distributed-cas",
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/distributed-cas.cjs",
+          "pass": true,
+          "actual": "present"
+        }
+      ],
+      "sourceHashes": {
+        "scripts/distributed-cas.cjs": "08f6f86512bdbf7565381a6bae733e4a17d16723e160f2ad53e8c9dcf4264d62"
+      },
+      "contractHash": "d8ed0ab3017aee4cc61a012961009581aa4d6d52870599e740fe33717f325cf2",
+      "sourceFingerprint": "96fd962e339bd6ecf068dc1ecf52aeb441960afac0ba2add395cb0255d4184bb",
+      "evidenceFingerprint": "209d9c68ba66c2b2a84b238b3037962bec6773f25f68c83e65a1a34b073f6d9c"
+    },
+    {
+      "id": "cas-zero-config-discovery",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "UDP multicast CAS peer discovery engine and replication intent",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "CAS_DISCOVERY_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "cas-zero-config-discovery",
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/cas-peer-discovery.cjs",
+          "pass": true,
+          "actual": "present"
+        }
+      ],
+      "sourceHashes": {
+        "scripts/cas-peer-discovery.cjs": "db8d2080cce8718ed28e362d140ca959ff9d3fe29452b86ad10242b0709b905b"
+      },
+      "contractHash": "2b4bd00d80ee28494e777943ff8cc0646b299606a962ce8048d5acf60b79e1c2",
+      "sourceFingerprint": "8447de3ed817788959968b80e7e4cf4746bedb06d4c2efbcb6efeba8e0a0dd11",
+      "evidenceFingerprint": "6ff074df579d4f9681802e9f18cd7bb9c4cdd5ef06faadda679e8bace50ff845"
+    },
+    {
+      "id": "device-lab-truth-orchestrator",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "Appium-compatible device discovery that never counts emulators as physical evidence",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "DEVICE_LAB_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "real-device-lab",
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/device-lab-orchestrator.cjs",
+          "pass": true,
+          "actual": "present"
+        }
+      ],
+      "sourceHashes": {
+        "scripts/device-lab-orchestrator.cjs": "d16e4c9a696b1b56f017ea20d0382f407a83605a8355913db0e66feb63d24153"
+      },
+      "contractHash": "7c2d726e4909c4e050b269588ff58d702215f2aa74102a90d635cb7abba2083d",
+      "sourceFingerprint": "55a9e31986ad2c415bb956e4f41226eae5055bc54a70d970d6ebf63be15a9324",
+      "evidenceFingerprint": "6d2269859b76f2b562df295c7a7ef2e4cb923c0720bfb3bfcb5417a0478c41e1"
+    },
+    {
+      "id": "device-executor-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "real-device execution adapter readiness with explicit no-evidence truth state",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "DEVICE_EXECUTOR_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "device-executor",
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/device-test-executor.cjs",
+          "pass": true,
+          "actual": "present"
+        }
+      ],
+      "sourceHashes": {
+        "scripts/device-test-executor.cjs": "f27873430294355b70cce2d01cca5d4d4a331784377c744e93690b148c0ad08f"
+      },
+      "contractHash": "4fd24cfa320bb428f38048150766568956b142355efef042baddb9aeb3f806f1",
+      "sourceFingerprint": "d45dfc412e75d907873681f40081f8a1b64d6e7f02fb6520498383d84e0c1ecd",
+      "evidenceFingerprint": "8c69435b354529c2b2a01c4ddece8c9a394280eb11eba8e0f806cbf7e5b8c2fa"
+    },
+    {
+      "id": "wit-component-contract",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "typed WIT/WASI Component Model adapter contract with fail-closed execution policy",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "WIT_COMPONENT_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "wit-component-model",
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/wit-component-validator.cjs",
+          "pass": true,
+          "actual": "present"
+        }
+      ],
+      "sourceHashes": {
+        "scripts/wit-component-validator.cjs": "51b1d71ec5ac7294265fea4c3d79df54a2e3b3bdaffd084e014008ded5705e18",
+        "wit/world-server-adapter.wit": "aa3475d2b717e427004a3b3adc27695c3e00d4a2220faae6ef8fc0fbb7e83223"
+      },
+      "contractHash": "b09f4b99fc5920e0945097369bba1d7b9b860906ca193f856e5813040d9a3a90",
+      "sourceFingerprint": "795306cfba7bb9b65995585a96c0b0df180e25fdea41a5f98613a5da0a92a5ff",
+      "evidenceFingerprint": "b6516a50bea2b4db03f19c644ad8490a1e9f54db7f0930b1c98a101c910427e4"
+    },
+    {
+      "id": "enhancement-orchestrator",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "P0 auto-fix / P1-P2 shadow-sandbox-regression-canary improvement backlog engine",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "SYSTEM_ENHANCEMENT_BACKLOG.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "enhancement-orchestrator",
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/system-enhancement-orchestrator.cjs",
+          "pass": true,
+          "actual": "present"
+        }
+      ],
+      "sourceHashes": {
+        "scripts/system-enhancement-orchestrator.cjs": "59bdb1a737747143181070d8c9e8080e01b2c143ac10cd7c1b0fa221893b887a"
+      },
+      "contractHash": "ec101387bfac9aca167d2d695ea18339d7d76964da15beb6d1c82e9007b29337",
+      "sourceFingerprint": "45eefa77d8ab2879977e7d0b3e1f22392437eeb8070eff664482204104e2ba91",
+      "evidenceFingerprint": "64fb2142d55a65812592934d3e018e281929b9732226100d78d7ad7a920abe61"
+    },
+    {
+      "id": "mandatory-tlc-ci-wiring",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "CI always invokes the TLC runner; native TLC absence is still reported separately",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "native-tlc-wired",
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "contains",
+          "file": ".github/workflows/system-integration-v7.yml",
+          "text": "node scripts/tlc-native-runner.cjs --required",
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/tlc-native-runner.cjs",
+          "pass": true,
+          "actual": "present"
+        }
+      ],
+      "sourceHashes": {
+        ".github/workflows/system-integration-v7.yml": "9f0483773cb0370a12d0b49ae7fd458f473f0b12fcc496c6dc01e6129f0c4808",
+        "scripts/tlc-native-runner.cjs": "2caf255c74c9afce97fddb724cfc1dd951cd477ccc4d90ba4c480864ff06c8bd"
+      },
+      "contractHash": "da1ede5544b219644e49f0d4142a573ec661e917fb023dfa94cf77e96d68c3eb",
+      "sourceFingerprint": "035ed10c124ed96f59f7c6558431bdbec989be88738e34e2eeb018872b8175c6",
+      "evidenceFingerprint": "af3a70114c9e5d823e8d373c0410223e0507d5911e830027f18c5c89c048d108"
+    },
+    {
+      "id": "sigstore-cosign-bridge",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "native Cosign/Sigstore bridge is implemented and refuses unsafe versions; native signing availability is not claimed",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "sigstore-transparency",
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "cosign-security-floor",
+          "pass": true,
+          "details": [
+            {
+              "id": "cosign-security-floor",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/artifact-signing-transparency.cjs",
+          "text": "cosign",
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/artifact-signing-transparency.cjs": "86f7c830174795c535fb08902db5f46160f849e74f51247816ed8d461184a1da",
+        "scripts/toolchain-security-gate.cjs": "b575c32629713c3e3eb1d44dcf80b712ee23fca4ab60dd1a609db9c473311190"
+      },
+      "contractHash": "c3a4467c3d6c35b9babd517d179478bf4e9205d9dd68ce6902ab9dd163ef663f",
+      "sourceFingerprint": "954416571ef7c53a16bbabfe593f893b0c88f70474af10e4147c07b8428f30e1",
+      "evidenceFingerprint": "fb66baf0184f2bf3caed52b91b06789fb42e059b4947fa0028aa9f86c81d0c5f"
+    },
+    {
+      "id": "orchestrator-supervisor",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "backward-compatible Honest-100 watchdog/crash-loop/backoff/persistent incident contract; V7.2 strengthens implementation without changing certified owner identity",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "ORCHESTRATOR_SUPERVISOR_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "ORCHESTRATOR_SUPERVISOR_STATUS.json",
+          "path": "crashLoopProtection",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "supervisor-crash-loop",
+          "pass": true,
+          "details": [
+            {
+              "id": "supervisor-crash-loop",
+              "pass": true,
+              "details": null
+            }
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "scripts/orchestrator-supervisor.cjs": "a105490da954e693637a3a95607ee8b7b59d10c205cb23eaf5360609f242bdfd",
+        "data/orchestrator-supervisor-policy.json": "2a17c7fbd226b43558f7a146cc895e598bb15860cc8a54eb26538d71aac21534"
+      },
+      "contractHash": "0e60f32a0023be01493bedea4ab2d246ff68c77b10ab3da2835eba5ee765d4f6",
+      "sourceFingerprint": "c8694011878e3b61855e9ff7d71553186ca5e97fc2f1144d1b7f9b5460e455e9",
+      "evidenceFingerprint": "9947dc587c7f93889ba15ebf7aee50ab9dba9db1e5e6331b969348d9c9bec1a2"
+    },
+    {
+      "id": "orchestrator-supervisor-v7-2",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7_2_ORCHESTRATOR_HARDENED",
+      "scope": "bounded watchdog, circuit breaker, crash fingerprint quarantine, heartbeat timeout and stable preservation",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "ORCHESTRATOR_SUPERVISOR_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "ORCHESTRATOR_SUPERVISOR_STATUS.json",
+          "path": "circuitBreaker",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "supervisor-crash-loop",
+          "pass": true,
+          "details": [
+            {
+              "id": "supervisor-crash-loop",
+              "pass": true,
+              "details": null
+            }
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "scripts/orchestrator-supervisor.cjs": "a105490da954e693637a3a95607ee8b7b59d10c205cb23eaf5360609f242bdfd",
+        "data/orchestrator-supervisor-policy.json": "2a17c7fbd226b43558f7a146cc895e598bb15860cc8a54eb26538d71aac21534"
+      },
+      "contractHash": "16f6098157925564c81c7f79ad9fb1b883cc184db32c84763ade31cd34d9d03c",
+      "sourceFingerprint": "c8694011878e3b61855e9ff7d71553186ca5e97fc2f1144d1b7f9b5460e455e9",
+      "evidenceFingerprint": "3c7a4f7ab56f6b48c3e35510add9e569b79644121bfa2de00792116772e73b41"
+    },
+    {
+      "id": "orchestrator-monitor-lifecycle",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7_2_ORCHESTRATOR_HARDENED",
+      "scope": "generation-token lifecycle prevents stale/early/false monitoring events after reconfiguration",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "ORCHESTRATOR_MONITOR_LIFECYCLE_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "orchestrator-monitor-generation",
+          "pass": true,
+          "details": [
+            {
+              "id": "orchestrator-monitor-generation",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "data/orchestrator-monitor-policy.json",
+          "pass": true,
+          "actual": "present"
+        }
+      ],
+      "sourceHashes": {
+        "scripts/orchestrator-monitor-lifecycle.cjs": "29e7978a35fb3ba58dc934a9829f93fc2d7ba1485bc40f6ad46d0c66c4a50b54",
+        "data/orchestrator-monitor-policy.json": "20e1e0cbceea15e2faa6fb16b36ab09025177f2fc523bca9d14582515997b281"
+      },
+      "contractHash": "1c473cf380260847b8bb86644cf566ddbf69d7d3c3c0fc810c94c52887923d2f",
+      "sourceFingerprint": "08fd0f028f526dd490856f428f349c0ba1d1407e64f6c32d18c108d131a51c65",
+      "evidenceFingerprint": "b1ccb30016daddfd50f893d8e6e0156d193f3e6ac89f1bc434d7690b8c518691"
+    },
+    {
+      "id": "orchestrator-patch-safety",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7_2_ORCHESTRATOR_HARDENED",
+      "scope": "manifest/base/payload hash preflight and Working→Candidate→Stable fail-closed patch flow",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "ORCHESTRATOR_PATCH_SAFETY_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "orchestrator-bad-patch-rejected",
+          "pass": true,
+          "details": [
+            {
+              "id": "orchestrator-bad-patch-rejected",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "data/orchestrator-patch-safety-policy.json",
+          "pass": true,
+          "actual": "present"
+        }
+      ],
+      "sourceHashes": {
+        "scripts/orchestrator-patch-safety-gate.cjs": "61180addd942de893ff8a0e7917d45e185ea146493f506faca730e8bbfb2746d",
+        "data/orchestrator-patch-safety-policy.json": "288c4ca30d70fd14e39dc5211a9202c254ae60387cc738460865e986abebaae4"
+      },
+      "contractHash": "300b762065aa27a46db21bab817abbf0243e439d3055678317da229a7f49c7fd",
+      "sourceFingerprint": "6fdd4db13d58c261a107e0483e1a715b8a50c9c9b23bf4c852233f8b5edba938",
+      "evidenceFingerprint": "f0e90fbb43c22f927769919434799cd8bf5b901beae8636a85a99152aca009c2"
+    },
+    {
+      "id": "orchestrator-minimal-repro",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7_2_ORCHESTRATOR_HARDENED",
+      "scope": "automatic redacted reproducible ZIP evidence for persistent orchestrator failures",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "ORCHESTRATOR_MINIMAL_REPRO_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "orchestrator-minimal-repro",
+          "pass": true,
+          "details": [
+            {
+              "id": "orchestrator-minimal-repro",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/orchestrator-minimal-repro.cjs",
+          "pass": true,
+          "actual": "present"
+        }
+      ],
+      "sourceHashes": {
+        "scripts/orchestrator-minimal-repro.cjs": "0188d58970e8e52cd33be8b2a4c9e847709afc87f28e1f32b11d0630d800b1f6"
+      },
+      "contractHash": "82da7df64ffc6244a018370198251adefef37db1ac309fb70de9b88c5879cdf8",
+      "sourceFingerprint": "e2828118cc486ae7675ffe1486f0aafd8d7d775ce57dd31328b6f52a2829de0d",
+      "evidenceFingerprint": "dff55876bcf2e97e8a717413a4ff6e84da74b9bf1eb5aa40889b9f806ca37f7c"
+    },
+    {
+      "id": "orchestrator-invariant-model",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7_2_ORCHESTRATOR_HARDENED",
+      "scope": "exhaustive restart/circuit/generation/stable safety model with mutant rejection",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "ORCHESTRATOR_INVARIANT_MODEL_REPORT.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "ORCHESTRATOR_INVARIANT_MODEL_REPORT.json",
+          "path": "mutantRejected",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "orchestrator-model-mutant-rejected",
+          "pass": true,
+          "details": [
+            {
+              "id": "orchestrator-model-mutant-rejected",
+              "pass": true,
+              "details": null
+            }
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "scripts/orchestrator-invariant-model.cjs": "3bafad2bc1b3a0789902132f0509a903405d7bf7270371afd5c64bcb4d49c896"
+      },
+      "contractHash": "e4c56411cdfd3a2d86c5e2922658ddfc9c26237ca431a9d1bb903d4a86f7818c",
+      "sourceFingerprint": "65e62105e1a1c512b1f410789a63cc96a4948c87c173cec878133446f7498703",
+      "evidenceFingerprint": "9f4305b2deb327301f329bfced83febd5da829627946be5ec767cd344d1a7340"
+    },
+    {
+      "id": "leader-lease-fencing",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "atomic leader lease with monotonic fencing against split brain",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "LEADER_LEASE_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "LEADER_LEASE_SELFTEST.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "supabase/migrations/20260824_orchestrator_leader_lease.sql",
+          "text": "fencing_token",
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/leader-lease-fencing.cjs": "42fceca5f578b5c213fef13fa218126c0aafb181c23f31a61d4b6e92e2ed8b03",
+        "supabase/migrations/20260824_orchestrator_leader_lease.sql": "0b34c186579660287a5914165614bce1977d9db6b99cb06c796010fffdcc997b"
+      },
+      "contractHash": "ce4c0daafbf8dd8fbbc041fc94a1fe16169cbb2b8c954173bdf12e58da2ec8ee",
+      "sourceFingerprint": "9cfe445df4a80c0308b1b995345ea9ab48a892610730aa04d1177906fa204a4a",
+      "evidenceFingerprint": "a9256a39f1f1208cb916de886fbd01271497ece67c42ae3d6dbaecc14c289d7b"
+    },
+    {
+      "id": "production-safety-controller",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "certified regression/crash-loop stops canary and prepares authorized rollback",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "PRODUCTION_SAFETY_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "PRODUCTION_SAFETY_SELFTEST.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/production-safety-controller.cjs",
+          "text": "STOP_CANARY",
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/production-safety-controller.cjs": "13caf1dfecd6aefb01fe40ae116dcf0873d59d3d9d68dd31877ea7d38406bf6f"
+      },
+      "contractHash": "5e2db597bb31f8b528f583117ed0fd7af005a4c1de588447bf046b5b54de9812",
+      "sourceFingerprint": "f5b4c55fc2fa858e1a28ca9720c0b4f05abc423f80bfca5c76b872b7c0e90340",
+      "evidenceFingerprint": "2980e3b8189634056623571c86f357e37b77a6cbb87c36e3b19630d3921ce6f5"
+    },
+    {
+      "id": "soak-chaos-verifier",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "bounded deterministic soak/chaos invariant verification",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "SOAK_CHAOS_REPORT.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "SOAK_CHAOS_REPORT.json",
+          "path": "violations",
+          "equals": [],
+          "pass": true,
+          "actual": []
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/soak-chaos-verifier.cjs",
+          "text": "duplicate-delivery",
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/soak-chaos-verifier.cjs": "893cdb8e6c11867add750cc685e102ba662e9ee2fa14001e346513d0dcf1f0fa"
+      },
+      "contractHash": "931420ff7067243a6ba22b90f9b5380c52126d0f92d8991fb371d7d688d3d851",
+      "sourceFingerprint": "e8cb3ac4c2b07a1ea4336a49aa183b22571250def8a295320a1da0f9ace88c22",
+      "evidenceFingerprint": "57944ff72a5cdc1023eb4e0d3e8fe1948e1b7eeddab631a6415400236ba70956"
+    },
+    {
+      "id": "crash-diagnostics-cluster",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "secret-safe crash fingerprint clustering and Node diagnostic capture",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "CRASH_DIAGNOSTICS_REPORT.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "CRASH_DIAGNOSTICS_SELFTEST.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/crash-diagnostics-cluster.cjs",
+          "text": "process.report",
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/crash-diagnostics-cluster.cjs": "641a8427ad69e360724990b8bed11f28425f18681ce645de9bcd49f0719aaee4"
+      },
+      "contractHash": "989a7ce4e2be806a3cc405b152ee27d3cdf2174033f08dd5a707bc54384c4d48",
+      "sourceFingerprint": "698669a1e55fd3ad3ae866d0384be18dd9aee0f2d3c708dd97ce9839480809d6",
+      "evidenceFingerprint": "8cc4b117ea24da6f14c885ea2c53bf0213fe7b7a8400508215b26099be12bea9"
+    },
+    {
+      "id": "audio-variation-validator-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "audio variation validation engine",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "AUDIO_VARIATION_REPORT.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "audio-variation",
+          "pass": true,
+          "details": [
+            {
+              "id": "audio-variation",
+              "pass": true,
+              "details": "AUDIO_VARIATION_REPORT.json"
+            }
+          ]
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/audio-variation-validator.cjs",
+          "text": "minimumVariants",
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/audio-variation-validator.cjs": "eb3fbfedb425cd64cfc68e1edfd98ce3418b293c5739bfbc86c87ce0ad96f471"
+      },
+      "contractHash": "34ade9cc4efb60ff8cf35df76bb6c88d9d4a91250a36bd41c6a0a4035c97ba9e",
+      "sourceFingerprint": "71b4bb33f3d170e7ed9185e51a835a2260a0d27cf1df54bf3faa4182efb9d1db",
+      "evidenceFingerprint": "07cee766da229416cdef358406681452573114c91499e47d9baefbb27e283d66"
+    },
+    {
+      "id": "deployment-impact-routing-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "dependency/change impact to test and deployment routing",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "selftest-id",
+          "id": "v7.3-impact-routing-engine",
+          "pass": true,
+          "details": [
+            {
+              "id": "v7.3-impact-routing-engine",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "v7.3-impact-full-gate",
+          "pass": true,
+          "details": [
+            {
+              "id": "v7.3-impact-full-gate",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/change-impact-orchestrator.cjs",
+          "text": "executionPolicy",
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/change-impact-orchestrator.cjs": "6e15bb94e356b8944da377345a962bd08ece1ad6f936683c2952b89ca8b7240b"
+      },
+      "contractHash": "b1f3835eff378db0c674bef18a53f0af1ca825dea98536b334abb373d2dd4a23",
+      "sourceFingerprint": "4d011acc0a40ef68de0f9f1d61d87795eb4732528464548fc7355cb2948bbdbe",
+      "evidenceFingerprint": "1ae3a485f88eb693ea0531faed11c6c0e377e2b32cdd67c45116062d7f3aa2e1"
+    },
+    {
+      "id": "desktop-ai-output-contract-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "machine-verifiable Desktop AI final output contract",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "DESKTOP_AI_REPORT_VALIDATION.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "desktop-ai-report",
+          "pass": true,
+          "details": [
+            {
+              "id": "desktop-ai-report",
+              "pass": true,
+              "details": "DESKTOP_AI_REPORT_VALIDATION.json"
+            }
+          ]
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/desktop-ai-report-validator.cjs",
+          "text": "full",
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/desktop-ai-report-validator.cjs": "f1d3f42899c3fc714a3e2cf5a286735d7722af7dc7bc8773f8cc10981922ce3e"
+      },
+      "contractHash": "7fa3985a1ac283b2766bd574b1fc98d0f6a125f174c02397d468f10afdefe1a3",
+      "sourceFingerprint": "88181710783e3cd190163548126a48aa8ce779ddf2dd83301a71a21755b1b40d",
+      "evidenceFingerprint": "c445ea00156756d46b4406f62e065589a2de293fef40721e1728c8c3f9860af3"
+    },
+    {
+      "id": "evidence-readiness-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "separates structural, evidence and operational readiness truthfully",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "selftest-id",
+          "id": "v7.3-readiness-evidence-score",
+          "pass": true,
+          "details": [
+            {
+              "id": "v7.3-readiness-evidence-score",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "v7.3-readiness-truth-separation",
+          "pass": true,
+          "details": [
+            {
+              "id": "v7.3-readiness-truth-separation",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/system-readiness.cjs",
+          "text": "evidenceConfidencePercent",
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/system-readiness.cjs": "421e7002f13a26cc101dc2428c18474731adb4a28bf7fea1f5c227e67f83f069"
+      },
+      "contractHash": "16b069556f51d2a274070f7ba8f7cd4f6304a40be6bb19e41f65d616702d2a9a",
+      "sourceFingerprint": "71fcae0c1139124412e13fb6e73fea54b4e95837b050c53c0e031b7e5db475b1",
+      "evidenceFingerprint": "80557a4379af23dd4d10014e6acff44ebf5ac9ad298d69117b0a1027f198d09f"
+    },
+    {
+      "id": "function-contract-coverage-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "explicit capability certification coverage without name-based autocertification",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "selftest-id",
+          "id": "v7.3-function-coverage-engine",
+          "pass": true,
+          "details": [
+            {
+              "id": "v7.3-function-coverage-engine",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "v7.3-function-coverage-no-autocert",
+          "pass": true,
+          "details": [
+            {
+              "id": "v7.3-function-coverage-no-autocert",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/function-contract-coverage.cjs",
+          "text": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/function-contract-coverage.cjs": "a5d772235d6b93dba030e2e57dadd173fba8ca8b6c540c7d5e06f52d9c69515b"
+      },
+      "contractHash": "cc967184c61696f45b7fe8d37635e5d186410ad8bd42d26818ab1ad4cea68692",
+      "sourceFingerprint": "14cb0ca64c3e0349045414ff666788cc5edf3288c2f5335c5b56b3a22b3a3692",
+      "evidenceFingerprint": "9036ce7e9d84825f04d3107b49ebabe4401e431b3455a9ec70070f25cab7fc99"
+    },
+    {
+      "id": "native-runtime-truth-separation-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "native/external runtime truth separated from structural readiness",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "selftest-id",
+          "id": "v7.3-native-truth-separation",
+          "pass": true,
+          "details": [
+            {
+              "id": "v7.3-native-truth-separation",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "v7.3-native-truth-external-blockers",
+          "pass": true,
+          "details": [
+            {
+              "id": "v7.3-native-truth-external-blockers",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/system-readiness.cjs",
+          "text": "nativeExtensionCoveragePercent",
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/system-readiness.cjs": "421e7002f13a26cc101dc2428c18474731adb4a28bf7fea1f5c227e67f83f069"
+      },
+      "contractHash": "f6e6df7a7511ce5a9169e9017fe9cec3bf499f4a64f75da2c6f596f0e8138943",
+      "sourceFingerprint": "71fcae0c1139124412e13fb6e73fea54b4e95837b050c53c0e031b7e5db475b1",
+      "evidenceFingerprint": "80557a4379af23dd4d10014e6acff44ebf5ac9ad298d69117b0a1027f198d09f"
+    },
+    {
+      "id": "legacy-evidence-factory",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "explicit legacy capability recipes to fresh machine evidence contracts without name-based autocertification",
+      "critical": true,
+      "applicable": true,
+      "status": "DEGRADED",
+      "percent": 67,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [
+        "regression"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "v7.4-legacy-evidence-factory",
+          "pass": false,
+          "details": [
+            {
+              "id": "v7.4-legacy-evidence-factory",
+              "pass": false,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/legacy-evidence-factory.cjs",
+          "text": "autoCertifyByName",
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/legacy-evidence-factory.cjs": "b8763043f9a8f547f62c5ec10c0235d560611557e7372a883ec5a5019574d642",
+        "data/legacy-evidence-recipes.json": "32d8541fba0df3cf137cbf1db681588c2559385638289dc052386e465f2a6b42"
+      },
+      "contractHash": "a9c5e91917af7160ed125cb860a57e56748daea5083ce861337019957fe5a172",
+      "sourceFingerprint": "ca63661cea6ca11f66cb064a3a7f18128aa65452bf821863668642e64f254d05",
+      "evidenceFingerprint": "529e1ae5836fc43320f9e8897590ab8ca486db3ebbee894f950c0f4c524d89cc"
+    },
+    {
+      "id": "slo-error-budget-controller",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "error-budget burn-rate and latency SLO controller with production-evidence truth separation",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "SLO_ERROR_BUDGET_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "v7.4-slo-error-budget",
+          "pass": true,
+          "details": [
+            {
+              "id": "v7.4-slo-error-budget",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/slo-error-budget-controller.cjs",
+          "text": "STOP_CANARY_AND_ROLLBACK",
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/slo-error-budget-controller.cjs": "5be79af497982a04bce938a6f021ef53959e03550b2a1022ed580e6174ef92c0",
+        "data/slo-error-budget-policy.json": "338127c28845c4fd58b5be448e47cc620cdbd494b578db02056530f985e5b6a7"
+      },
+      "contractHash": "7f47935742012867e6e040fea166e3958fa0eb3c96ad8039792b50de8cd5a648",
+      "sourceFingerprint": "507467b835d9a3ce1e578be9cd8554e4f52878bd19e817707a3a4e66c62060ff",
+      "evidenceFingerprint": "512ceb05c3c468643a008158f5ce26fac2e63fa22e17025a9f127a187001c973"
+    },
+    {
+      "id": "database-migration-coordinator",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "fenced expand-migrate-contract database migration safety with snapshot and Supabase 2026 guards",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "DB_MIGRATION_COORDINATOR_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "v7.4-db-migration-coordinator",
+          "pass": true,
+          "details": [
+            {
+              "id": "v7.4-db-migration-coordinator",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/database-migration-coordinator.cjs",
+          "text": "extension-version-pinning-deprecated",
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/database-migration-coordinator.cjs": "cbc47f25e88352452f140251e12513e722aacd5592e34ceaf23cd0220542109a",
+        "data/migration-coordinator-policy.json": "9a1f61d53b58dbd08d8933d3d8f707446651e3c4bd68f4a09920e3a5d97d1534"
+      },
+      "contractHash": "ed9b6388b187d3fb0f72f5c009746f017e7870e1f0fad8275e905ae4ca350ad6",
+      "sourceFingerprint": "714d068e3c8bb578a240a35891596bb7449e26a621c791536f5523d43cddd4e2",
+      "evidenceFingerprint": "c5c7bb8d77b791df82b9c634ac6a7923c24ff4addd43741bd958b30a4846a320"
+    },
+    {
+      "id": "asset-delta-distribution",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "content-defined SHA-256 delta chunking with deduplication and verified reconstruction",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "ASSET_DELTA_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "v7.4-asset-delta",
+          "pass": true,
+          "details": [
+            {
+              "id": "v7.4-asset-delta",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/asset-delta-distributor.cjs",
+          "text": "corrupt-chunk",
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/asset-delta-distributor.cjs": "04c9346dc2972f7b23d29ec3f292c563f61213dfa5d2599a6e101f3cd06f8013",
+        "data/asset-delta-policy.json": "08efbca36481bc75d87b1c6643b6ab1aabccbd59a0c2bd778c2768ff5ac70b36"
+      },
+      "contractHash": "d55d8dda0e0528387c4406dccb42ce301dd1193a23f961c735489c2e87bcce8c",
+      "sourceFingerprint": "86985112a558fa4420c2563c3e7bf48cc8351551b1c6886261184c5a0cb3c9af",
+      "evidenceFingerprint": "e1f3189ee80c8923f27692d7f754ac7e2bd8bb5abb5a7d7cede65f6db6548933"
+    },
+    {
+      "id": "causal-debugger",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "correlated trace/queue/deploy/crash evidence graph with secret redaction and native ETW/eBPF probes",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "CAUSAL_DEBUGGER_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "v7.4-causal-debugger",
+          "pass": true,
+          "details": [
+            {
+              "id": "v7.4-causal-debugger",
+              "pass": true,
+              "details": null
+            }
+          ]
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/causal-debugger.cjs",
+          "text": "correlationKeys",
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/causal-debugger.cjs": "1075c9646461af31a81d3b59015d788fc5cec43e06bac3c36db365d6b5641f32",
+        "data/causal-debugger-policy.json": "7c351adf4d3c62a5743c399ba7da26b283370a57941d30c72f333ff44392e8e7"
+      },
+      "contractHash": "7f3549d09218ae937a2c9be85ac24ddc7433f16a0894603ebf5e150144057b35",
+      "sourceFingerprint": "3325d8b47a6ad6410ed791d771bc00245e98b05a05b6aa7aa7f34cf0011a829d",
+      "evidenceFingerprint": "1d2fe6ee242ba3a8bb3329696cc87b0bc50aa94a21e14862ab8579bb274693c4"
+    },
+    {
+      "id": "cas-replication-controller",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "quorum replication and read-repair semantics; remote host claim separated",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/cas-replication-controller.cjs",
+          "text": "readThrough",
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "CAS_REPLICATION_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "CAS_REPLICATION_STATUS.json",
+          "path": "protocolSelftest.pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/cas-replication-controller.cjs": "fd2dadb130bfcce1ec426d12ad60a42bb52f98682a4fc868c548ef891827aafe"
+      },
+      "contractHash": "e30977c6ec84aa87bf7a76fdcd3c4784e2493979ef7e1303978dda400089def7",
+      "sourceFingerprint": "3ea1bed28003c6325f89e4d05fb9272633160d410f999d4bc663c942eaadfbb0",
+      "evidenceFingerprint": "ba7ac1620eadc5d34fddfc5f2e8cbdb50c8ae19c404ac24c2e0cc21df796ea1b"
+    },
+    {
+      "id": "physical-device-fleet",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "real-device fleet evidence protocol with freshness and digest verification",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "file",
+          "file": "data/device-fleet-policy.json",
+          "pass": true,
+          "actual": "present"
+        },
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "PHYSICAL_DEVICE_FLEET_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "PHYSICAL_DEVICE_FLEET_STATUS.json",
+          "path": "protocolSelftest.pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/physical-device-fleet.cjs": "5c581a909b2f0f9798b4b2a5ea61af330e09da74d4b7c2c7c04a92f9fb2b6e20"
+      },
+      "contractHash": "74df20a6ce282957f56aa196e1be6c50cfda37e78849c0bcbe10f2dae3f18ac3",
+      "sourceFingerprint": "d14c0935f7272a06ba8be475290691ba8561cde8765a0d04b810150a7c7a46a9",
+      "evidenceFingerprint": "b6d9f5a9136338333e39ab91de1581b3b3953312b809191a0d53a6e415b27af3"
+    },
+    {
+      "id": "production-slo-autopilot",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "SLO decision to canary freeze/rollback with production-evidence and authorization barriers",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/production-slo-autopilot.cjs",
+          "text": "DRY_RUN_ROLLBACK_ONLY",
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "PRODUCTION_SLO_AUTOPILOT_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "PRODUCTION_SLO_AUTOPILOT_STATUS.json",
+          "path": "controllerSelftest.synthetic.decision",
+          "equals": "DRY_RUN_ROLLBACK_ONLY",
+          "pass": true,
+          "actual": "DRY_RUN_ROLLBACK_ONLY"
+        }
+      ],
+      "sourceHashes": {
+        "scripts/production-slo-autopilot.cjs": "8574046860e68c04e1041b625f820cbda50078a9361e44fda615db039320366b"
+      },
+      "contractHash": "8cc6adf43b16f7ce47839176a3166198d721a75d23fa84a819c8313afa65eb6f",
+      "sourceFingerprint": "e223f1d4d0878985f0cc0008fbb6f46a2d52b758af5d3d68c1cb948fe56fe913",
+      "evidenceFingerprint": "4c5407368e3269bbfe8e149aa2feefc545dae7231ff62e03f47a891f2d0c6636"
+    },
+    {
+      "id": "migration-fencing-runtime-verifier",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "exact fencing token and expand/migrate/contract runtime invariants",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "file",
+          "file": "data/migration-fencing-policy.json",
+          "pass": true,
+          "actual": "present"
+        },
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "MIGRATION_FENCING_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "MIGRATION_FENCING_STATUS.json",
+          "path": "selftest.pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/migration-fencing-verifier.cjs": "b5ade5017ec2e3df63ca9d4ad237f7b06425b8cf0509f91629b0096635d0ed45"
+      },
+      "contractHash": "00e0fe7b84ca17eddbc96e29a43cde50ce9295e8c4e81d64b800366ef965fccb",
+      "sourceFingerprint": "17a05349b00e9460659bf4730b6df50c8c509681326039b073f638e7b7098cee",
+      "evidenceFingerprint": "09bec431fd7a77be3154e327adc12910b6386093f934a63c30d16b27e48c8c8b"
+    },
+    {
+      "id": "checkpointed-long-soak-runner",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "checkpoint/resume long-soak harness with explicit wall-clock certification threshold",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "file",
+          "file": "data/long-soak-policy.json",
+          "pass": true,
+          "actual": "present"
+        },
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "LONG_SOAK_HARNESS_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "LONG_SOAK_HARNESS_STATUS.json",
+          "path": "smokeHarnessVerified",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/long-soak-runner.cjs": "63078e0cbc011c3903f04c2bfabf5b7f170923ff8ebd4d408c53a8e02f12ddbc"
+      },
+      "contractHash": "73f3ac2172eac671e90b5316d0e90680a7f007c03bca6de697b82a9bee43c990",
+      "sourceFingerprint": "1e75871e370ca317981c7404c91c3d3e7308ab571b8c6ced1be9b3cb3a20de88",
+      "evidenceFingerprint": "0d950ef53c6f6d294768234f9b3035bdf04d2bdf502a90110685879245d288bb"
+    },
+    {
+      "id": "native-causal-collector",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "ETW/eBPF/perf/OTel collector discovery with trace correlation and truth separation",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "file",
+          "file": "data/native-causal-collector-policy.json",
+          "pass": true,
+          "actual": "present"
+        },
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "NATIVE_CAUSAL_COLLECTOR_STATUS.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "NATIVE_CAUSAL_COLLECTOR_STATUS.json",
+          "path": "selftest.traceCorrelation",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "scripts/native-causal-collector.cjs": "de1b38bd3bfa5f709e843036e6803445d52f3f9d9d7e1d017be9f1374d0318ed"
+      },
+      "contractHash": "8b14e8416920398f0db1de5cca6e55bf5839383622ec3cbde4fff4f9aa2d407b",
+      "sourceFingerprint": "d053da63848177b3410b577f911b8f370cda2a696a4a5d6788ca9746bd09ca75",
+      "evidenceFingerprint": "5a737f574b4308b4a23f1a6a127b63656fa9c1e2ff58aa19e787ebe653d6e730"
+    },
+    {
+      "id": "legacy-evidence-recipe-expansion",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "explicit recipes cover all 18 legacy patch families without name-only certification",
+      "critical": true,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "report",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "path": "totalRecipes",
+          "equals": 18,
+          "pass": true,
+          "actual": 18
+        },
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "path": "pass",
+          "equals": true,
+          "pass": true,
+          "actual": true
+        },
+        {
+          "class": "regression",
+          "type": "contains",
+          "file": "scripts/legacy-evidence-factory.cjs",
+          "text": "autoCertifyByName:false",
+          "pass": true,
+          "actual": true
+        }
+      ],
+      "sourceHashes": {
+        "data/legacy-evidence-recipes.json": "32d8541fba0df3cf137cbf1db681588c2559385638289dc052386e465f2a6b42",
+        "scripts/legacy-evidence-factory.cjs": "b8763043f9a8f547f62c5ec10c0235d560611557e7372a883ec5a5019574d642"
+      },
+      "contractHash": "fd8cd807dbf7ceb16f819cc159826b051f982a47700ad397f43ef08602a831af",
+      "sourceFingerprint": "2257b4ca8d1ee28ea2fa47896651e51bff9860f5af3c47ee56da11ae68a6735e",
+      "evidenceFingerprint": "b78c75a68685022c44cfa8a6cf7335cb5a8ad4b0db079ed45209562217e6b63f"
+    },
+    {
+      "id": "legacy-procedural-quality",
+      "owner": "PROCEDURAL_QUALITY_ENGINE_V10",
+      "scope": "legacy capability family: procedural-generation, temporal-qa, frame-pacing",
+      "critical": false,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-procedural-quality:static",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        },
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-procedural-quality:integration",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-procedural-quality:regression",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        }
+      ],
+      "sourceHashes": {
+        "scripts/procedural-quality-v10-gate.js": "b0f43916d469e156faa38bf36b580abcce521eac854b1c3957272a54d3ac8cf2",
+        "scripts/run-procedural-tests.js": "060aaf2eddd48013a3a857a892c2ff534c89c39daef3a441981188e16615e34c"
+      },
+      "contractHash": "46bba3ddb6839439305c8b9bed5224f5dba43fa5c88078a1f09220d793b8cda0",
+      "sourceFingerprint": "105f4c461da4a7061152eb955dd94ebef4bf7c6cace9c7c88358b184a7cbefb4",
+      "evidenceFingerprint": "3442b0dc3cacd6c601dd545569ccb3d3889ac4e6abdd3c9d2426a3fd3750183c"
+    },
+    {
+      "id": "legacy-apng-quality",
+      "owner": "WORLD_SERVER_APNG_QUALITY_SYSTEM_V3_MAX",
+      "scope": "legacy capability family: apng-validate, apng-repair, apng-release-gate",
+      "critical": false,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-apng-quality:static",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        },
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-apng-quality:integration",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-apng-quality:regression",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        }
+      ],
+      "sourceHashes": {
+        "scripts/apng-quality-gate.js": "de7915ebde67a7cf4b3cb28bc6d3e024ac4e6d235e460a50491601ca067a81cf",
+        "scripts/verify-apng-bundle.js": "a2d794acedc87f080268b3162376f8c0dde8295fefe90573b1b9162017e7d718",
+        "scripts/integrate-apng-system.js": "b1eea625f7f4ad14b8b1e04bc7900e2c5b61345a7f533f04299f84dc91fd0527"
+      },
+      "contractHash": "04f5af76c1d846720742516a263274c9e6e0ab0da137c118304101e60447b872",
+      "sourceFingerprint": "85a36e8cd4b2c7e62644b3a21f95e053aedc098735bf554e631344156ae908ab",
+      "evidenceFingerprint": "3442b0dc3cacd6c601dd545569ccb3d3889ac4e6abdd3c9d2426a3fd3750183c"
+    },
+    {
+      "id": "legacy-pixel-animation",
+      "owner": "PIXEL_ANIMATION_SYSTEM_V3",
+      "scope": "legacy capability family: pixel-atlas, animation-culling, mobile-fallback",
+      "critical": false,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-pixel-animation:static",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        },
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-pixel-animation:integration",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-pixel-animation:regression",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        }
+      ],
+      "sourceHashes": {
+        "scripts/pixel-animation-verify.js": "4c87f2b2148603696176e0b8fc52a330b65c4f4f5b4990856657c74eb881d936",
+        "scripts/pixel-animation-auto-integrate.js": "b38de5776ac30f6dd83d741327d04ff32ecd9eabab259b2254efab983e0874ac"
+      },
+      "contractHash": "92c0e365d7da213c8f9aa236e4bb365aa03c763cb40133087391071b68244293",
+      "sourceFingerprint": "332b4dc6e1b36911ec2601aa49821d61bc6ec7c5bd4ca3922c61afa45b5c7281",
+      "evidenceFingerprint": "3442b0dc3cacd6c601dd545569ccb3d3889ac4e6abdd3c9d2426a3fd3750183c"
+    },
+    {
+      "id": "legacy-golden-governance",
+      "owner": "WORLD_SERVER_GOLDEN_STANDARD_V13",
+      "scope": "legacy capability family: no-regression, self-calibration, desktop-ai-protocol",
+      "critical": false,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-golden-governance:static",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        },
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-golden-governance:integration",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-golden-governance:regression",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        }
+      ],
+      "sourceHashes": {
+        "scripts/quality-regression-gate.js": "8251fb3c83cf2097bcf72c814f159ae4a6cccb7a5f2cce09d45a0d823198769b",
+        "scripts/check-desktop-ai-protocol.js": "6a75235310d1fdf06251cf5972df221153faf9fabd2e2d3c65977241cdea2bd0",
+        "scripts/quality-self-evolve.js": "d06ae843ffb1ad4c6af43ca36410a1495e3da1b533073ab31265307438a0666e"
+      },
+      "contractHash": "493a885f27da73561a765e47e26204b3ffce517d475311b738d4a598758a1d05",
+      "sourceFingerprint": "950f68e423652d88ad4b0039ac15e36d319a552833b1732e0c0c62af8d1e7675",
+      "evidenceFingerprint": "3442b0dc3cacd6c601dd545569ccb3d3889ac4e6abdd3c9d2426a3fd3750183c"
+    },
+    {
+      "id": "legacy-world-quality-v6",
+      "owner": "WORLD_QUALITY_AUTOPILOT_V6",
+      "scope": "legacy capability family: technology-scout, cpu-routing, technology-drift, quality-slo",
+      "critical": false,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-world-quality-v6:static",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        },
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-world-quality-v6:integration",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-world-quality-v6:regression",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        }
+      ],
+      "sourceHashes": {
+        "scripts/world-graphics-technology-scout.js": "409e9107f2f1301aa8502133b1f57525541e010d68074b46ea3c98e9806a19a8",
+        "scripts/world-cpu-first-graphics-optimizer.js": "2a7dc9686267905f3246955c0e9e798d07bbee503d9d89690c7d572c22907847",
+        "scripts/world-technology-drift-gate.js": "6c65b1bac9123fbc7dfb925902e571d9595bd71e4d88af8d43e9b1dc88b21554",
+        "scripts/world-quality-slo.js": "8caf1834a4f6ce05d248b315b1d19fc4ef71a8601f98795ff3ca1a9c906c52d1"
+      },
+      "contractHash": "125d92c158e6d0b063a8de44c3e8e614eb1213f015bdd44005f361cc8ee3778d",
+      "sourceFingerprint": "ef24d9c20fbfaf7f20598298113b7dc2c6ab2a26b41fd97c390738ab6b8fabdc",
+      "evidenceFingerprint": "3442b0dc3cacd6c601dd545569ccb3d3889ac4e6abdd3c9d2426a3fd3750183c"
+    },
+    {
+      "id": "legacy-dream-v5",
+      "owner": "WORLD_SERVER_DREAM_AUTOPILOT_V5_CPU",
+      "scope": "legacy capability family: fresh-real-device-evidence, physics-guardian, gameplay-agent",
+      "critical": false,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-dream-v5:static",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        },
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-dream-v5:integration",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-dream-v5:regression",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        }
+      ],
+      "sourceHashes": {
+        "scripts/world-device-profile-matrix.js": "5d8f6ed25e05439858c717281560de179cbee098ade7f57126fb200fc2f3bd83",
+        "scripts/cv-gameplay-agent.js": "30651dbe7553c246c7a68406e291b91d3e23924cd522fe19929ba44c4ba93cbe",
+        "scripts/character-motion-validator.js": "4bcbbb5727ab5f076061b93a9557665aff645300fe175649d0989d95996355c9"
+      },
+      "contractHash": "6406a7e5f0b444dc76fdc489da25be621c624fbd8ec4a8a0de14f550dfa66b5b",
+      "sourceFingerprint": "98f08f00685ba75f34538f04e9d63796c059577b382bc830e49ae32a34fbce06",
+      "evidenceFingerprint": "3442b0dc3cacd6c601dd545569ccb3d3889ac4e6abdd3c9d2426a3fd3750183c"
+    },
+    {
+      "id": "legacy-pwa-v4",
+      "owner": "WORLD_SERVER_PWA_SELF_IMPROVING_V4_MAX",
+      "scope": "legacy capability family: pwa, real-ios-evidence, adaptive-runtime, production-rollback",
+      "critical": false,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-pwa-v4:static",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        },
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-pwa-v4:integration",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-pwa-v4:regression",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        }
+      ],
+      "sourceHashes": {
+        "shared/pwa-runtime.js": "9cbf09c135255ce9db32bd64ae29dd60aebfc38a4d35305ea8ed69e548b5ad6a",
+        "scripts/real-ios-telemetry-gate.js": "328c62d3d924586edf93537dd2982bb0d65237ea5ccc4a95393d0ef18789215d",
+        "scripts/runtime-integration-discovery.js": "032b8571dad06a418f4aee412ab87b395a9a9c5da743688ec84721dfb7c37de9",
+        ".github/workflows/quality-canary.yml": "964102707e4f37c5588060e900a9bdffec0a3cefc1a8c5cf95de0e2c4eb0d793"
+      },
+      "contractHash": "8df8059eec2aa1a813c017aa99984b5ea5792a4bde353bdb3f9ae983e3262ad2",
+      "sourceFingerprint": "23f17dc4deeb8530de56bdb98a012f0b9b479a2c91a3cf4ed9f7e1dbb36f9225",
+      "evidenceFingerprint": "3442b0dc3cacd6c601dd545569ccb3d3889ac4e6abdd3c9d2426a3fd3750183c"
+    },
+    {
+      "id": "legacy-truth-gate",
+      "owner": "production-100-truth-gate-v1",
+      "scope": "legacy capability family: production-certification, anti-false-100",
+      "critical": false,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-truth-gate:static",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        },
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-truth-gate:integration",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-truth-gate:regression",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        }
+      ],
+      "sourceHashes": {
+        "scripts/world-quality-analyzer.js": "44b32b12f4e6a9dbe2c62c12f842eee551f4319279aac62a04d6b1449915753b",
+        "scripts/world-quality-autopilot.js": "3b4dc70287b57e56a7b394b33a4023f785be8f2b30d57ac76dde2fba674f3984"
+      },
+      "contractHash": "bba304a229a21151088719a84305cbeb60102c77909a9b579139c446ef0748ed",
+      "sourceFingerprint": "3a1fc6f209967d783dbc065eee0ecea31b2c81146b984c4b319e77a2ae14e17e",
+      "evidenceFingerprint": "3442b0dc3cacd6c601dd545569ccb3d3889ac4e6abdd3c9d2426a3fd3750183c"
+    },
+    {
+      "id": "legacy-quality-autopilot-v11",
+      "owner": "QUALITY_AUTOPILOT_PATCH_v11_CPU_MAX",
+      "scope": "legacy capability family: quality-autopilot-v11, quality-security-gate, quality-readiness-v11",
+      "critical": false,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-quality-autopilot-v11:static",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        },
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-quality-autopilot-v11:integration",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-quality-autopilot-v11:regression",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        }
+      ],
+      "sourceHashes": {
+        "scripts/quality-readiness-v11.js": "147f176b9988081525f66034464ee5144c710af53cb6504c4a47448f0ad5ceca",
+        "scripts/quality-security-gate.js": "1c33d07ac1e662750a1317b1f8e36e308e8edd0537cca76e65563fef1e13260e"
+      },
+      "contractHash": "9c93f725f7dca5672ff7a1aa2c70e65bc355cbcb11e39ab6d78fa93273978f19",
+      "sourceFingerprint": "7bec53cd5f03f05b5df27e308d7888239d4f5d2517bba125a1b30addf92cffe2",
+      "evidenceFingerprint": "3442b0dc3cacd6c601dd545569ccb3d3889ac4e6abdd3c9d2426a3fd3750183c"
+    },
+    {
+      "id": "legacy-quiet-autopilot-v6",
+      "owner": "WORLD_SERVER_QUIET_QUALITY_AUTOPILOT_V6",
+      "scope": "legacy capability family: quiet-quality-autopilot, quality-proof-gate, quality-otel-bridge",
+      "critical": false,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-quiet-autopilot-v6:static",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        },
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-quiet-autopilot-v6:integration",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-quiet-autopilot-v6:regression",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        }
+      ],
+      "sourceHashes": {
+        "scripts/verify-v6-runtime.js": "06cf76e191dc4696fd2934a8664f1e76988478bf35421fe1cffd9ab43007a1df",
+        "scripts/quality-proof-gate.js": "dce14bf8fce0dd3d013cbea33f01550305808685360abe618187a71b2916a786",
+        "scripts/quality-otel-bridge-check.js": "70636ca5713d984cc45c689215d3ea0982373796952625cb496b72816b016dba"
+      },
+      "contractHash": "936ad79a3b90a7dcf63335ea0a6485c531927d3cfed98db40d775bf19d687a48",
+      "sourceFingerprint": "f248fecf043962405db9d0138a53b39f54c5934974b316c12b3a04b4154704eb",
+      "evidenceFingerprint": "3442b0dc3cacd6c601dd545569ccb3d3889ac4e6abdd3c9d2426a3fd3750183c"
+    },
+    {
+      "id": "legacy-gap-closure-v1",
+      "owner": "GAP_CLOSURE_SYSTEM_V1",
+      "scope": "legacy capability family: gap-closure, gap-regression-test",
+      "critical": false,
+      "applicable": true,
+      "status": "CERTIFIED_100",
+      "percent": 100,
+      "requiredEvidenceClasses": [
+        "static",
+        "integration",
+        "regression"
+      ],
+      "missingClasses": [],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-gap-closure-v1:static",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        },
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-gap-closure-v1:integration",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-gap-closure-v1:regression",
+          "pass": true,
+          "actual": {
+            "pass": true
+          }
+        }
+      ],
+      "sourceHashes": {
+        "test/gap-closure.test.js": "921b5125c2f650e64644a13d2f2d8a8aa3d94f48dc9e512e58ef80ed0b42ec93"
+      },
+      "contractHash": "68b614a4e30c624aee542842efcbf4e75bd5f8da91ca93dc3299abec11dbb4f6",
+      "sourceFingerprint": "21003ea08a2f11eca4b4dc029bfe36203b1750daccff52645a9c2eb9483a7495",
+      "evidenceFingerprint": "3442b0dc3cacd6c601dd545569ccb3d3889ac4e6abdd3c9d2426a3fd3750183c"
+    }
+  ],
+  "capabilities": [
+    {
+      "capability": "adaptive-runtime",
+      "systemId": "pwa-v4",
+      "owner": "WORLD_SERVER_PWA_SELF_IMPROVING_V4_MAX"
+    },
+    {
+      "capability": "affected-test-selection",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "animation-culling",
+      "systemId": "pixel-animation",
+      "owner": "PIXEL_ANIMATION_SYSTEM_V3"
+    },
+    {
+      "capability": "anti-false-100",
+      "systemId": "truth-gate",
+      "owner": "production-100-truth-gate-v1"
+    },
+    {
+      "capability": "apng-binary-verification",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "apng-release-gate",
+      "systemId": "apng-quality",
+      "owner": "WORLD_SERVER_APNG_QUALITY_SYSTEM_V3_MAX"
+    },
+    {
+      "capability": "apng-repair",
+      "systemId": "apng-quality",
+      "owner": "WORLD_SERVER_APNG_QUALITY_SYSTEM_V3_MAX"
+    },
+    {
+      "capability": "apng-validate",
+      "systemId": "apng-quality",
+      "owner": "WORLD_SERVER_APNG_QUALITY_SYSTEM_V3_MAX"
+    },
+    {
+      "capability": "appium-compatible-worker-discovery",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "asset-batch-atlas-planner",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "atlas",
+      "systemId": "texture-quality",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10"
+    },
+    {
+      "capability": "attack-direction-contract",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "audio-variation-gate",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "automated-real-device-executor",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "automatic-authorized-rollback",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "canonical-mesh-optimizer",
+      "systemId": "mesh-quality",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12"
+    },
+    {
+      "capability": "capability-aware-cpu-scheduler",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "capability-preservation-gate",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "cas-local-redundancy",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "cas-read-repair",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "cas-replication-quorum",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "causal-incident-graph",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "central-control-plane",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "certified-function-baselines",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "change-impact-routing",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "checkpoint-resume",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "checkpointed-long-soak-runner",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "content-addressed-asset-registry",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "content-defined-asset-deltas",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "cosign-security-floor-3.1.3",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "cpu-3dgs",
+      "systemId": "3dgs",
+      "owner": "PIXEL_3DGS_CPU_V6_PHONE_4D_MAX"
+    },
+    {
+      "capability": "cpu-fallback",
+      "systemId": "video2game",
+      "owner": "VIDEO2GAME_VOXEL_V5"
+    },
+    {
+      "capability": "cpu-routing",
+      "systemId": "world-quality-v6",
+      "owner": "WORLD_QUALITY_AUTOPILOT_V6"
+    },
+    {
+      "capability": "crash-fingerprint-clustering",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "cyclonedx-1.7-sbom",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "dead-letter-queue",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "dependency-graph",
+      "systemId": "quality-core",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10"
+    },
+    {
+      "capability": "dependency-impact-graph",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "deployment-impact-routing",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "desktop-ai-output-contract",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "desktop-ai-protocol",
+      "systemId": "golden-governance",
+      "owner": "WORLD_SERVER_GOLDEN_STANDARD_V13"
+    },
+    {
+      "capability": "deterministic-record-replay",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "deterministic-wit-bindings",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "device-worker-authenticated-evidence",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "disaster-recovery",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "distributed-cas-peer-protocol",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "dual-run-replacement-contract",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "durable-priority-queue",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "dynamic-4d",
+      "systemId": "3dgs",
+      "owner": "PIXEL_3DGS_CPU_V6_PHONE_4D_MAX"
+    },
+    {
+      "capability": "evidence-readiness-score",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "exhaustive-model-checker",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "expand-migrate-contract-coordinator",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "explicit-legacy-contract-synthesis",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "feet-direction-contract",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "fenced-db-migrations",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "fenced-leader-lease",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "frame-pacing",
+      "systemId": "procedural-quality",
+      "owner": "PROCEDURAL_QUALITY_ENGINE_V10"
+    },
+    {
+      "capability": "fresh-real-device-evidence",
+      "systemId": "dream-v5",
+      "owner": "WORLD_SERVER_DREAM_AUTOPILOT_V5_CPU"
+    },
+    {
+      "capability": "full-file-delivery-contract",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "function-contract-coverage-engine",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "gameplay-agent",
+      "systemId": "dream-v5",
+      "owner": "WORLD_SERVER_DREAM_AUTOPILOT_V5_CPU"
+    },
+    {
+      "capability": "gameplay-spatial-contract",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "github-supabase-bridge",
+      "systemId": "runtime-v12-3",
+      "owner": "WORLD_SERVER_QUALITY_RUNTIME_V12_3"
+    },
+    {
+      "capability": "graphics-quality-ratchet",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "hlod",
+      "systemId": "mesh-quality",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12"
+    },
+    {
+      "capability": "honest-100-function-certification",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "idempotency",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "in-toto-statement-v1",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "incremental-snapshots",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "lease-recovery",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "legacy-evidence-factory",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "legacy-evidence-recipe-expansion",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "lexical-dataflow-impact",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "lod",
+      "systemId": "mesh-quality",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12"
+    },
+    {
+      "capability": "mandatory-native-tlc-ci",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "master-protection",
+      "systemId": "runtime-v12-3",
+      "owner": "WORLD_SERVER_QUALITY_RUNTIME_V12_3"
+    },
+    {
+      "capability": "merkle-cas",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "mesh-regression",
+      "systemId": "mesh-quality",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12"
+    },
+    {
+      "capability": "migration-fencing-runtime-verifier",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "minimum-manual-action-gate",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "mobile-fallback",
+      "systemId": "pixel-animation",
+      "owner": "PIXEL_ANIMATION_SYSTEM_V3"
+    },
+    {
+      "capability": "monotonic-function-enhancement",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "multi-window-burn-rate",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "native-causal-collector-discovery",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "native-etw-ebpf-adapters",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "native-runtime-truth-separation",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "no-regression",
+      "systemId": "golden-governance",
+      "owner": "WORLD_SERVER_GOLDEN_STANDARD_V13"
+    },
+    {
+      "capability": "node-crash-diagnostics",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "offline-policy-mirror",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "opa-rego-policy",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "orchestrator-supervisor",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "osv-dependency-security",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "otlp-http-json",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "owned-real-device-lab",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "pbr",
+      "systemId": "texture-quality",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10"
+    },
+    {
+      "capability": "phone-capture",
+      "systemId": "3dgs",
+      "owner": "PIXEL_3DGS_CPU_V6_PHONE_4D_MAX"
+    },
+    {
+      "capability": "physical-device-fleet-evidence",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "physical-device-worker",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "physics-guardian",
+      "systemId": "dream-v5",
+      "owner": "WORLD_SERVER_DREAM_AUTOPILOT_V5_CPU"
+    },
+    {
+      "capability": "pinned-local-toolchain-bootstrap",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "pixel-atlas",
+      "systemId": "pixel-animation",
+      "owner": "PIXEL_ANIMATION_SYSTEM_V3"
+    },
+    {
+      "capability": "pixel-atlas-v12",
+      "systemId": "runtime-v12-3",
+      "owner": "WORLD_SERVER_QUALITY_RUNTIME_V12_3"
+    },
+    {
+      "capability": "procedural-generation",
+      "systemId": "procedural-quality",
+      "owner": "PROCEDURAL_QUALITY_ENGINE_V10"
+    },
+    {
+      "capability": "production-asset-quality-gate",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "production-certification",
+      "systemId": "truth-gate",
+      "owner": "production-100-truth-gate-v1"
+    },
+    {
+      "capability": "production-crash-canary-stop",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "production-rollback",
+      "systemId": "pwa-v4",
+      "owner": "WORLD_SERVER_PWA_SELF_IMPROVING_V4_MAX"
+    },
+    {
+      "capability": "production-slo-autopilot",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "project-constitution-gate",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "pwa",
+      "systemId": "pwa-v4",
+      "owner": "WORLD_SERVER_PWA_SELF_IMPROVING_V4_MAX"
+    },
+    {
+      "capability": "quality-knowledge",
+      "systemId": "quality-core",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10"
+    },
+    {
+      "capability": "quality-slo",
+      "systemId": "world-quality-v6",
+      "owner": "WORLD_QUALITY_AUTOPILOT_V6"
+    },
+    {
+      "capability": "ratchet",
+      "systemId": "quality-core",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10"
+    },
+    {
+      "capability": "real-ios-evidence",
+      "systemId": "pwa-v4",
+      "owner": "WORLD_SERVER_PWA_SELF_IMPROVING_V4_MAX"
+    },
+    {
+      "capability": "rekor-transparency-monitor",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "replay",
+      "systemId": "quality-core",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10"
+    },
+    {
+      "capability": "scalability-first-gate",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "self-calibration",
+      "systemId": "golden-governance",
+      "owner": "WORLD_SERVER_GOLDEN_STANDARD_V13"
+    },
+    {
+      "capability": "semantic-merge-ownership",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "semantic-symbol-graph",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "shadow-first-feature-promotion",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "shield-geometry-contract",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "sigstore-cosign-bridge",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "slo-error-budget-controller",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "slsa-provenance-v1",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "soak-chaos-verification",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "split-brain-prevention",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "system-enhancement-orchestrator",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "tamper-evident-transparency-log",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "technology-consensus",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "technology-drift",
+      "systemId": "world-quality-v6",
+      "owner": "WORLD_QUALITY_AUTOPILOT_V6"
+    },
+    {
+      "capability": "technology-lock",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "technology-scout",
+      "systemId": "world-quality-v6",
+      "owner": "WORLD_QUALITY_AUTOPILOT_V6"
+    },
+    {
+      "capability": "temporal-qa",
+      "systemId": "procedural-quality",
+      "owner": "PROCEDURAL_QUALITY_ENGINE_V10"
+    },
+    {
+      "capability": "texture-pipeline",
+      "systemId": "texture-quality",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10"
+    },
+    {
+      "capability": "texture-runtime-evidence",
+      "systemId": "texture-quality",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10"
+    },
+    {
+      "capability": "tla-plus-specs",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "transactional-deployment",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "typescript-native-ast-dataflow",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "verified-delta-reconstruction",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "video-to-voxel",
+      "systemId": "video2game",
+      "owner": "VIDEO2GAME_VOXEL_V5"
+    },
+    {
+      "capability": "w3c-trace-context",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "wasi-component-model",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "weapon-grip-contract",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "wit-typed-adapter-contracts",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    },
+    {
+      "capability": "zero-config-cas-discovery",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7"
+    }
+  ]
+}

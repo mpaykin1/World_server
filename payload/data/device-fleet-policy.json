@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "7.5.0",
+  "workersEnv": "WORLD_SERVER_DEVICE_WORKERS_JSON",
+  "tokenEnv": "WORLD_SERVER_DEVICE_WORKER_TOKEN",
+  "requiredPlatforms": [
+    "android",
+    "ios"
+  ],
+  "maxEvidenceAgeHours": 24,
+  "requireRealHardware": true,
+  "requireArtifactDigest": true,
+  "truthRule": "Mock workers validate protocol only. Physical-device 100% requires fresh evidence from real Android and iOS hardware."
+}

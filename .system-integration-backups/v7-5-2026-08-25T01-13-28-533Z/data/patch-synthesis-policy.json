@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "SANDBOX_PATCH_SYNTHESIS",
+  "modelEndpointEnv": "QUALITY_PATCH_MODEL_URL",
+  "modelTokenEnv": "QUALITY_PATCH_MODEL_TOKEN",
+  "sandbox": "@vercel/sandbox",
+  "sandboxPackageVersion": "3.x",
+  "allowedPathPrefixes": [
+    "apps/",
+    "shared/",
+    "scripts/",
+    "test/",
+    "e2e/",
+    "data/"
+  ],
+  "forbiddenPaths": [
+    ".github/workflows/quality-regression.yml",
+    "data/quality-baseline.json",
+    "AGENTS.md"
+  ],
+  "maxDiffBytes": 120000,
+  "verificationCommands": [
+    "npm ci",
+    "npm run release:gate",
+    "node --test test/quality-regression.test.js test/golden-physics.test.js test/quality-growth.test.js test/quality-mutation.test.js test/quality-fuzz.test.js"
+  ],
+  "policy": "Generated patches never touch master directly. Candidate must pass in isolated microVM then enter normal PR/canary gates."
+}

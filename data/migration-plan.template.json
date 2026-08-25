@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "example-safe-migration",
+  "phases": [
+    {
+      "phase": "expand",
+      "sql": "-- additive schema only\ncreate table if not exists example_shadow(id bigint primary key);"
+    },
+    {
+      "phase": "migrate",
+      "sql": "-- backfill in bounded/idempotent batches"
+    },
+    {
+      "phase": "contract",
+      "sql": "-- destructive cleanup only after shadow verification and explicit WORLD_SERVER_ALLOW_DB_CONTRACT=1"
+    }
+  ]
+}

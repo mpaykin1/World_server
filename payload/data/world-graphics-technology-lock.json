@@ -1,0 +1,5 @@
+{
+  "schemaVersion": "6.0.0",
+  "technologies": [],
+  "policy": "Installer leaves lock empty on purpose; first verified run may accept current runtime technologies only after integration gate passes. Future new runtime technology becomes drift evidence and must get detail+optimization adapters."
+}

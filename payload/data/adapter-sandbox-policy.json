@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0.0",
+  "mode": "fail-closed",
+  "runtimePreference": [
+    "wasmtime",
+    "deny-untrusted"
+  ],
+  "allowNetwork": false,
+  "allowEnvironment": false,
+  "allowSubprocess": false,
+  "maxWallMs": 30000,
+  "maxStdoutBytes": 1048576,
+  "allowedPreopens": [
+    ".world-server-state/sandbox/input",
+    ".world-server-state/sandbox/output"
+  ],
+  "trustedBuiltinAdapters": [
+    "scripts/integration-telemetry.cjs",
+    "scripts/policy-engine.cjs",
+    "scripts/feature-flag-engine.cjs",
+    "scripts/config-contract-validator.cjs"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.0.0",
+  "weights": {
+    "shared": 20,
+    "certified": 12,
+    "workflow": 15,
+    "api": 10,
+    "worker": 14,
+    "manyFiles": 15,
+    "manyApps": 18
+  },
+  "thresholds": {
+    "low": 20,
+    "medium": 45,
+    "high": 70
+  }
+}

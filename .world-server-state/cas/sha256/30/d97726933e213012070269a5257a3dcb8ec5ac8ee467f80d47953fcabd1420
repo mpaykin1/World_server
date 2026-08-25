@@ -1,0 +1,11 @@
+# These variables are supplied automatically by the Supabase/Vercel integration.
+SUPABASE_URL=
+SUPABASE_PUBLISHABLE_KEY=
+SUPABASE_SECRET_KEY=
+
+# AI 3D server-side generation
+AI3D_WORKER_URL=
+AI3D_SHARED_SECRET=
+AI3D_TOKEN_TTL_SECONDS=600
+AI3D_MAX_UPLOAD_MB=25
+

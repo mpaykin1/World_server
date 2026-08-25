@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "profiles": {
+    "mobile-poor": {
+      "latencyMs": 220,
+      "jitterMs": 80,
+      "dropRate": 0.05,
+      "requests": 30,
+      "minimumServiceAvailability": 0.98
+    },
+    "wifi-bad": {
+      "latencyMs": 100,
+      "jitterMs": 40,
+      "dropRate": 0.02,
+      "requests": 40,
+      "minimumServiceAvailability": 0.99
+    },
+    "severe": {
+      "latencyMs": 450,
+      "jitterMs": 150,
+      "dropRate": 0.1,
+      "requests": 30,
+      "minimumServiceAvailability": 0.95
+    }
+  }
+}

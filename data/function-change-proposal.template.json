@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "1.0.0",
+  "candidateId": "",
+  "mode": "enhance",
+  "enhances": [],
+  "replaces": [],
+  "newCapabilities": [],
+  "dualRunEvidenceFile": null,
+  "fallbackRetained": true,
+  "canaryRequired": true,
+  "notes": ""
+}

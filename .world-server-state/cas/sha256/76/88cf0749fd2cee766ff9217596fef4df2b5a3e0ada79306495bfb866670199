@@ -1,0 +1,532 @@
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-25T01:14:48.556Z",
+  "pass": false,
+  "passed": 88,
+  "total": 91,
+  "checks": [
+    {
+      "id": "queue-priority-claim",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "queue-dlq",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "queue-checkpoint-retry-ack",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "queue-idempotency-canonical-json",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "integration-gate",
+      "pass": true,
+      "details": "SYSTEM_INTEGRATION_REPORT.json"
+    },
+    {
+      "id": "dr-verified",
+      "pass": true,
+      "details": "DISASTER_RECOVERY_VERIFY_REPORT.json"
+    },
+    {
+      "id": "policy-pass",
+      "pass": false,
+      "details": "POLICY_DECISION_REPORT.json"
+    },
+    {
+      "id": "project-directives",
+      "pass": true,
+      "details": "PROJECT_DIRECTIVE_REPORT.json"
+    },
+    {
+      "id": "technology-lock",
+      "pass": true,
+      "details": "TECHNOLOGY_LOCK_REPORT.json"
+    },
+    {
+      "id": "graphics-ratchet",
+      "pass": false,
+      "details": "GRAPHICS_REGRESSION_GUARD_REPORT.json"
+    },
+    {
+      "id": "audio-variation",
+      "pass": true,
+      "details": "AUDIO_VARIATION_REPORT.json"
+    },
+    {
+      "id": "gameplay-contract",
+      "pass": true,
+      "details": "GAMEPLAY_PHYSICAL_CONTRACT_REPORT.json"
+    },
+    {
+      "id": "desktop-ai-report",
+      "pass": true,
+      "details": "DESKTOP_AI_REPORT_VALIDATION.json"
+    },
+    {
+      "id": "asset-batching",
+      "pass": true,
+      "details": "ASSET_INGESTION_PLAN.json"
+    },
+    {
+      "id": "sbom",
+      "pass": true,
+      "details": "SBOM_STATUS.json"
+    },
+    {
+      "id": "update-trust",
+      "pass": true,
+      "details": "UPDATE_TRUST_STATUS.json"
+    },
+    {
+      "id": "feature-flags",
+      "pass": true,
+      "details": "FEATURE_FLAG_STATUS.json"
+    },
+    {
+      "id": "config-contract",
+      "pass": true,
+      "details": "CONFIG_CONTRACT_STATUS.json"
+    },
+    {
+      "id": "adapter-sandbox",
+      "pass": true,
+      "details": "ADAPTER_SANDBOX_STATUS.json"
+    },
+    {
+      "id": "reproducible-build",
+      "pass": true,
+      "details": "REPRODUCIBLE_BUILD_STATUS.json"
+    },
+    {
+      "id": "chaos-safety",
+      "pass": true,
+      "details": "INTEGRATION_CHAOS_REPORT.json"
+    },
+    {
+      "id": "enhancement",
+      "pass": true,
+      "details": "SYSTEM_ENHANCEMENT_BACKLOG.json"
+    },
+    {
+      "id": "supply-chain",
+      "pass": true,
+      "details": "SUPPLY_CHAIN_SIGNATURE_STATUS.json"
+    },
+    {
+      "id": "model-check",
+      "pass": true,
+      "details": "MODEL_CHECK_REPORT.json"
+    },
+    {
+      "id": "distributed-cas",
+      "pass": true,
+      "details": "DISTRIBUTED_CAS_STATUS.json"
+    },
+    {
+      "id": "semantic-graph",
+      "pass": true,
+      "details": "SEMANTIC_DEPENDENCY_GRAPH.json"
+    },
+    {
+      "id": "device-lab",
+      "pass": true,
+      "details": "DEVICE_LAB_STATUS.json"
+    },
+    {
+      "id": "wit-component",
+      "pass": true,
+      "details": "WIT_COMPONENT_STATUS.json"
+    },
+    {
+      "id": "toolchain",
+      "pass": true,
+      "details": "TOOLCHAIN_BOOTSTRAP_STATUS.json"
+    },
+    {
+      "id": "toolchain-security",
+      "pass": true,
+      "details": "TOOLCHAIN_SECURITY_REPORT.json"
+    },
+    {
+      "id": "native-ast",
+      "pass": true,
+      "details": "NATIVE_AST_DATAFLOW_REPORT.json"
+    },
+    {
+      "id": "rekor-monitor",
+      "pass": true,
+      "details": "REKOR_MONITOR_REPORT.json"
+    },
+    {
+      "id": "cas-discovery",
+      "pass": true,
+      "details": "CAS_DISCOVERY_STATUS.json"
+    },
+    {
+      "id": "device-executor",
+      "pass": true,
+      "details": "DEVICE_EXECUTOR_STATUS.json"
+    },
+    {
+      "id": "wit-bindings",
+      "pass": true,
+      "details": "WIT_BINDINGS_STATUS.json"
+    },
+    {
+      "id": "orchestrator-monitor",
+      "pass": true,
+      "details": "ORCHESTRATOR_MONITOR_LIFECYCLE_STATUS.json"
+    },
+    {
+      "id": "orchestrator-patch-safety",
+      "pass": true,
+      "details": "ORCHESTRATOR_PATCH_SAFETY_STATUS.json"
+    },
+    {
+      "id": "orchestrator-minimal-repro-health",
+      "pass": true,
+      "details": "ORCHESTRATOR_MINIMAL_REPRO_STATUS.json"
+    },
+    {
+      "id": "orchestrator-invariant-model",
+      "pass": true,
+      "details": "ORCHESTRATOR_INVARIANT_MODEL_REPORT.json"
+    },
+    {
+      "id": "provenance-v1",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "dependency-merkle",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "telemetry-local",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "feet-follow-travel",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "attack-follows-feet",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "shield-between-enemy-torso",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "pistol-one-hand",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "automatic-two-hands",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "openfeature-safety-lock",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "sandbox-path-escape",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "signature-mutant-rejection",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "model-mutant-rejection",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "semantic-symbol-parser",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "distributed-cas-digest-rejection",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "real-device-emulator-not-real",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "wit-negative-rejection",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "cosign-security-floor",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "toolchain-semver-floor",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "wit-bindings-deterministic",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "supervisor-crash-loop",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "orchestrator-monitor-generation",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "orchestrator-minimal-repro",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "orchestrator-bad-patch-rejected",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "orchestrator-model-mutant-rejected",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "scheduler-capability-match",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "cas-two-root-recovery",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "deterministic-record-replay",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "osv-engine-health",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "transactional-deploy-health",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "device-worker-no-arbitrary-shell",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "v7.3-impact-routing-engine",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "v7.3-impact-full-gate",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "v7.3-readiness-evidence-score",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "v7.3-readiness-truth-separation",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "v7.3-function-coverage-engine",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "v7.3-function-coverage-no-autocert",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "v7.3-native-truth-separation",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "v7.3-native-truth-external-blockers",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "v7.3-supabase-lease-security-invoker",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "v7.3-supabase-lease-rls-revoke",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "v7.4-legacy-evidence-factory",
+      "pass": false,
+      "details": null
+    },
+    {
+      "id": "v7.4-slo-error-budget",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "v7.4-db-migration-coordinator",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "v7.4-asset-delta",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "v7.4-causal-debugger",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "v7.4-supabase-extension-version-guard",
+      "pass": true,
+      "details": null
+    },
+    {
+      "id": "v75-cas-replication-read-repair",
+      "pass": true,
+      "details": {
+        "pass": true,
+        "replicationAcks": 3,
+        "readRepair": true,
+        "digestVerified": true
+      }
+    },
+    {
+      "id": "v75-device-fleet-protocol",
+      "pass": true,
+      "details": {
+        "pass": true,
+        "mockProtocolOnly": true,
+        "evidenceVerified": true,
+        "staleEvidenceRejected": true
+      }
+    },
+    {
+      "id": "v75-production-slo-truth-barrier",
+      "pass": true,
+      "details": {
+        "healthy": {
+          "decision": "ALLOW_CANARY",
+          "authorized": false
+        },
+        "synthetic": {
+          "decision": "DRY_RUN_ROLLBACK_ONLY",
+          "authorized": false,
+          "reason": "no-production-evidence"
+        },
+        "prodNoAuth": {
+          "decision": "STOP_CANARY_AND_REQUIRE_ROLLBACK_AUTH",
+          "authorized": false,
+          "reason": "authorization-required"
+        },
+        "prodAuth": {
+          "decision": "EXECUTE_AUTHORIZED_ROLLBACK",
+          "authorized": true
+        }
+      }
+    },
+    {
+      "id": "v75-migration-fencing-stale-rejected",
+      "pass": true,
+      "details": {
+        "pass": true,
+        "ok": {
+          "pass": true,
+          "errors": [],
+          "currentFencingToken": 8,
+          "callerFencingToken": 8
+        },
+        "stale": {
+          "pass": false,
+          "errors": [
+            "stale-or-missing-fencing-token"
+          ],
+          "currentFencingToken": 8,
+          "callerFencingToken": 7
+        },
+        "early": {
+          "pass": false,
+          "errors": [
+            "contract-before-backfill-verification"
+          ],
+          "currentFencingToken": 8,
+          "callerFencingToken": 8
+        }
+      }
+    },
+    {
+      "id": "v75-long-soak-harness",
+      "pass": true,
+      "details": {
+        "schemaVersion": "7.5.0",
+        "generatedAt": "2026-08-25T01:14:48.538Z",
+        "pass": true,
+        "smokeHarnessVerified": true,
+        "durationHours": 0.000023,
+        "eventCount": 7,
+        "allRecovered": true,
+        "longSoakCertified": false,
+        "minimumCertifiedHours": 8,
+        "stateFile": ".world-server-state/long-soak/selftest-10852.json",
+        "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+      }
+    },
+    {
+      "id": "v75-native-causal-correlation",
+      "pass": true,
+      "details": {
+        "pass": true,
+        "traceCorrelation": true
+      }
+    }
+  ]
+}

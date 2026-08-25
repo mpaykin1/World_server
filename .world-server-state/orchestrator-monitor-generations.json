@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "7.2.0",
+  "scopes": {
+    "service:selftest-17360": {
+      "scope": "service:selftest-17360",
+      "identity": "selftest-17360",
+      "generation": 2,
+      "issuedAt": "2026-08-25T01:14:40.446Z",
+      "readyAt": "2026-08-25T01:14:40.446Z",
+      "cancelled": true,
+      "cancelledAt": "2026-08-25T01:14:40.550Z",
+      "cancelReason": "child-exit"
+    },
+    "selftest-1100": {
+      "scope": "selftest-1100",
+      "identity": "service-a",
+      "generation": 2,
+      "issuedAt": "2026-08-25T01:14:46.920Z",
+      "readyAt": "2026-08-25T01:14:46.920Z",
+      "cancelled": true,
+      "cancelledAt": "2026-08-25T01:14:46.922Z",
+      "cancelReason": "test-finished"
+    },
+    "service:selftest-21940": {
+      "scope": "service:selftest-21940",
+      "identity": "selftest-21940",
+      "generation": 2,
+      "issuedAt": "2026-08-25T01:15:58.273Z",
+      "readyAt": "2026-08-25T01:15:58.273Z",
+      "cancelled": true,
+      "cancelledAt": "2026-08-25T01:15:58.381Z",
+      "cancelReason": "child-exit"
+    },
+    "selftest-21036": {
+      "scope": "selftest-21036",
+      "identity": "service-a",
+      "generation": 2,
+      "issuedAt": "2026-08-25T01:16:04.953Z",
+      "readyAt": "2026-08-25T01:16:04.953Z",
+      "cancelled": true,
+      "cancelledAt": "2026-08-25T01:16:04.955Z",
+      "cancelReason": "test-finished"
+    }
+  },
+  "updatedAt": "2026-08-25T01:16:04.955Z"
+}

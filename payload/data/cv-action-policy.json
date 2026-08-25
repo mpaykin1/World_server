@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "allowedActions": [
+    "forward",
+    "back",
+    "left",
+    "right",
+    "jump",
+    "look_left",
+    "look_right",
+    "look_up",
+    "look_down",
+    "interact",
+    "attack",
+    "wait"
+  ],
+  "rule": "CV proof must be based on rendered image input; hidden runtime coordinates do not count."
+}

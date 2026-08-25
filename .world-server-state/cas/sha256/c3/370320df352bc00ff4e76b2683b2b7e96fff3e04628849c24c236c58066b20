@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "7.4.0",
+  "system": "LEGACY_EVIDENCE_FACTORY",
+  "autoCertifyByName": false,
+  "requireExplicitRecipes": true,
+  "requiredEvidenceClasses": ["static", "integration", "regression"],
+  "maxCommandSeconds": 120,
+  "generatedContractsFile": "data/generated-legacy-function-contracts.json",
+  "reportFile": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+  "recipesFile": "data/legacy-evidence-recipes.json",
+  "rules": [
+    "Never certify from filename/name similarity alone.",
+    "A generated contract is eligible only when an explicit recipe exists and all three evidence classes pass.",
+    "Missing tools/dependencies produce UNVERIFIED, never a false PASS.",
+    "Generated contracts are non-critical until independently promoted by Honest-100.",
+    "Source or evidence changes invalidate freshness through the normal Honest-100 auditor."
+  ]
+}

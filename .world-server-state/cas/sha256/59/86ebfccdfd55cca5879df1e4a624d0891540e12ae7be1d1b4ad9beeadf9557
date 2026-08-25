@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "pass": true,
+  "mode": "monotonic-quality-ratchet-v1",
+  "candidate": {
+    "sourceFidelity": 100.0,
+    "geometryConservation": 100.0,
+    "nearFieldFidelity": 100.0,
+    "protectedErrorImmunity": 100.0,
+    "controllerInvariantPass": 100.0,
+    "staticGate": 100.0,
+    "unitGate": 100.0,
+    "visualSimilarity": 99.0,
+    "desktopFps": 55.0,
+    "mobileFps": 30.0,
+    "integrationConnectivity": 99.9
+  },
+  "floorsBefore": {
+    "sourceFidelity": 100.0,
+    "geometryConservation": 100.0,
+    "nearFieldFidelity": 100.0,
+    "protectedErrorImmunity": 100.0,
+    "controllerInvariantPass": 100.0,
+    "staticGate": 100.0,
+    "unitGate": 100.0,
+    "visualSimilarity": 99.0,
+    "desktopFps": 55.0,
+    "mobileFps": 30.0,
+    "integrationConnectivity": 99.0
+  },
+  "violations": [],
+  "sourceRegressionAllowed": false,
+  "nearFieldRegressionAllowed": false,
+  "floorsAfter": {
+    "sourceFidelity": 100.0,
+    "geometryConservation": 100.0,
+    "nearFieldFidelity": 100.0,
+    "protectedErrorImmunity": 100.0,
+    "controllerInvariantPass": 100.0,
+    "staticGate": 100.0,
+    "unitGate": 100.0,
+    "visualSimilarity": 99.0,
+    "desktopFps": 55.0,
+    "mobileFps": 30.0,
+    "integrationConnectivity": 99.0
+  },
+  "action": "PASS_NO_REGRESSION"
+}

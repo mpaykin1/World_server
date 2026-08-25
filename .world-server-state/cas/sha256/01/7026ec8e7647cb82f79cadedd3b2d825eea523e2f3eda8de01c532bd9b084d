@@ -1,0 +1,7 @@
+(() => {
+'use strict';const G=globalThis;if(G.WorldProceduralTSR?.version==='5.0.0')return;const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function halton(i,b){let f=1,r=0;for(let x=i;x>0;x=Math.floor(x/b)){f/=b;r+=f*(x%b)}return r}function jitter(frame,w,h){return{x:(halton((frame%1024)+1,2)-.5)/Math.max(1,w),y:(halton((frame%1024)+1,3)-.5)/Math.max(1,h)}}
+function historyWeight(x={}){return G.WorldProceduralTemporal?.historyWeight(x)??clamp((x.base??.9)*(1-clamp((x.motion||0)*8+(x.depthDelta||0)*5,0,1)),0,.94)}
+function reactiveMask({alpha=1,lumaDelta=0,motion=0,semanticChanged=false}={}){return G.WorldProceduralTemporal?.reactive({alpha,lumaDelta,motion,semanticChanged})??clamp((1-alpha)+lumaDelta+motion,0,1)}
+const wgsl=String.raw`fn pq_luma(c:vec3<f32>)->f32{return dot(c,vec3<f32>(.2126,.7152,.0722));}fn pq_rcas(c:vec3<f32>,n:vec3<f32>,s:vec3<f32>,e:vec3<f32>,w:vec3<f32>,a:f32)->vec3<f32>{let avg=(n+s+e+w)*.25;let mn=min(c,min(min(n,s),min(e,w)));let mx=max(c,max(max(n,s),max(e,w)));return clamp(c+(c-avg)*a,mn,mx);}fn pq_easu_uv(uv:vec2<f32>,srcSize:vec2<f32>,outSize:vec2<f32>)->vec2<f32>{let p=uv*outSize;let sp=(p+.5)*(srcSize/outSize)-.5;return (sp+.5)/srcSize;}fn pq_reactive(a:f32,dl:f32,m:f32,s:f32)->f32{return clamp((1.0-a)*0.7+dl*0.9+m*0.55+s*0.55,0.0,1.0);}`;
+G.WorldProceduralTSR={version:'5.0.0',halton,jitter,historyWeight,reactiveMask,wgsl};})();

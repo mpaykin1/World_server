@@ -1,0 +1,120 @@
+{
+  "schemaVersion": "3.0.0",
+  "generatedAt": "2026-08-25T01:14:20.161Z",
+  "base": "master",
+  "protectedChanges": 9,
+  "pass": false,
+  "failed": [
+    {
+      "path": "assets/pixel/world-atlas-v1.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "e2e/perceptual-visual.spec.js-snapshots/cube-object-desktop-chromium-win32.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "e2e/perceptual-visual.spec.js-snapshots/cube-object-mobile-chromium-win32.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "e2e/perceptual-visual.spec.js-snapshots/cube-object-mobile-webkit-win32.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "e2e/perceptual-visual.spec.js-snapshots/cube-object-tablet-chromium-win32.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "public/assets/pixel/world-atlas-v1.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "visual-candidates/desktop-chromium/ai3d-voxel-city.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "visual-candidates/desktop-chromium/catalog.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "visual-candidates/desktop-chromium/voxel-world.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    }
+  ],
+  "findings": [
+    {
+      "path": "assets/pixel/world-atlas-v1.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "e2e/perceptual-visual.spec.js-snapshots/cube-object-desktop-chromium-win32.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "e2e/perceptual-visual.spec.js-snapshots/cube-object-mobile-chromium-win32.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "e2e/perceptual-visual.spec.js-snapshots/cube-object-mobile-webkit-win32.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "e2e/perceptual-visual.spec.js-snapshots/cube-object-tablet-chromium-win32.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "public/assets/pixel/world-atlas-v1.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "visual-candidates/desktop-chromium/ai3d-voxel-city.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "visual-candidates/desktop-chromium/catalog.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    },
+    {
+      "path": "visual-candidates/desktop-chromium/voxel-world.png",
+      "status": "A",
+      "pass": false,
+      "reason": "protected graphics change requires visual PASS, non-negative quality delta, and feature preservation evidence"
+    }
+  ],
+  "rule": "Existing finished graphics may be improved but never silently removed, simplified, or regressed."
+}

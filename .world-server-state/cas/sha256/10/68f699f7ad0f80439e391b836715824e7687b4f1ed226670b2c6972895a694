@@ -1,0 +1,5 @@
+'use strict';
+function median(a){const x=[...a].sort((m,n)=>m-n),n=x.length;if(!n)return NaN;return n%2?x[(n-1)/2]:(x[n/2-1]+x[n/2])/2;}
+function mad(a,m=median(a)){return median(a.map(x=>Math.abs(x-m)));}
+function detectAnomalies(baseline,current,policy={}){const higherBad=new Set(policy.higherBad||['crashRate','errorRate','p95LatencyMs','memoryMb','webglContextLossRate']);const protectedMetrics=policy.metrics||Object.keys(current||{});const zLimit=policy.robustZLimit??6,relativeLimit=policy.relativeLimit??0.15;const anomalies=[];for(const k of protectedMetrics){const hist=baseline?.[k];const now=current?.[k];if(!Array.isArray(hist)||hist.length<5||!Number.isFinite(now))continue;const m=median(hist),d=mad(hist,m),rz=d?0.6745*(now-m)/d:0,rel=(now-m)/Math.max(1e-9,Math.abs(m));const bad=higherBad.has(k)?rel>0:rel<0;if(bad&&(Math.abs(rz)>=zLimit||Math.abs(rel)>=relativeLimit))anomalies.push({metric:k,baselineMedian:m,current:now,robustZ:rz,relativeDelta:rel});}return {ok:anomalies.length===0,decision:anomalies.length?'ROLLBACK':'PASS',anomalies};}
+module.exports={median,mad,detectAnomalies};

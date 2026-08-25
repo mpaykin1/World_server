@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "1.0.0",
+  "patch": "SYSTEM_INTEGRATION_LAYER_V7",
+  "version": "7.0.0",
+  "validatedAt": "2026-08-24T08:38:00Z",
+  "upgradeFrom": "6.0.0",
+  "compatibility": {
+    "pass": true,
+    "passed": 85,
+    "total": 85
+  },
+  "controlPlane": {
+    "pass": true,
+    "passed": 48,
+    "total": 48
+  },
+  "selftest": {
+    "pass": true,
+    "passed": 62,
+    "total": 62
+  },
+  "releaseGate": {
+    "pass": true
+  },
+  "structuralReadinessPercent": 100,
+  "evidenceConfidencePercent": 100,
+  "testOperationalReadinessPercent": 93,
+  "negativeTests": {
+    "explicitDeployRequired": "PASS_BLOCKED",
+    "downgradeV7ToV6": "PASS_BLOCKED",
+    "sameVersionLocalDrift": "PASS_BLOCKED"
+  },
+  "externalBlockersOnTestStand": [
+    "native-cosign-unavailable",
+    "remote-cas-peer-unavailable",
+    "physical-device-worker-unavailable",
+    "wasmtime-component-runtime-unavailable",
+    "native-tlc-unavailable",
+    "production-transaction-evidence-unavailable"
+  ],
+  "truth": "Operational percentage belongs to the validation stand only. Desktop AI must recalculate on the actual World_server after installation."
+}

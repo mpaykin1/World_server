@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "GPU_ROUTING",
+  "env": "AI3D_GPU_WORKERS_JSON",
+  "supportedEngines": [
+    "trellis2",
+    "instantmesh",
+    "hunyuan3d"
+  ],
+  "ranking": [
+    "priority",
+    "free VRAM",
+    "queue depth",
+    "latency"
+  ],
+  "failover": true,
+  "failClosed": true,
+  "note": "No runtime percentage is awarded until a real /health and /generate succeeds."
+}

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "7.5.0",
+  "peerEnv": "WORLD_SERVER_CAS_PEERS_JSON",
+  "tokenEnv": "WORLD_SERVER_CAS_TOKEN",
+  "minimumRemoteReplicasForHostDisasterTolerance": 1,
+  "writeQuorumIncludingLocal": 2,
+  "readRepair": true,
+  "verifyEveryTransfer": true,
+  "requireIndependentFailureDomainClaim": true,
+  "requestTimeoutMs": 3500,
+  "truthRule": "Protocol self-tests prove replication/read-repair semantics only. Host-disaster tolerance is certified only with a reachable remote peer explicitly marked independentFailureDomain=true."
+}

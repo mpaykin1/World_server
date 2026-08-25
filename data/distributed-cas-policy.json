@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "7.2.0",
+  "algorithm": "sha256",
+  "protocol": "world-server-cas-http-v1",
+  "contentAddressed": true,
+  "verifyEveryTransfer": true,
+  "requireTokenForNonLoopbackServe": true,
+  "peerEnv": "WORLD_SERVER_CAS_PEERS_JSON",
+  "tokenEnv": "WORLD_SERVER_CAS_TOKEN",
+  "replicationFactorTarget": 2,
+  "remotePeerRequiredForRelease": false,
+  "cpuFirst": true
+}

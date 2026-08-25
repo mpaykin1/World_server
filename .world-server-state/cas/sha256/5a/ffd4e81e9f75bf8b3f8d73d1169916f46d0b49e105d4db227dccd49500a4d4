@@ -1,0 +1,120 @@
+name: Quality Runtime Bridge V12
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+  workflow_dispatch:
+  schedule:
+    - cron: '47 */6 * * *'
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+concurrency:
+  group: quality-runtime-bridge-v12-${{ github.event_name }}
+  cancel-in-progress: false
+
+jobs:
+  quality-bridge-static:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: node --check scripts/github-quality-bridge-v12.cjs
+      - run: node --check scripts/materialize-supabase-bridge-export-v12.cjs
+      - run: node --check scripts/check-supabase-migration-manifest-v12.cjs
+      - run: node --check scripts/build-pixel-atlas-v12.cjs
+      - run: node scripts/check-supabase-migration-manifest-v12.cjs
+
+  sync-production-migrations:
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+    needs: quality-bridge-static
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      QUALITY_GITHUB_BRIDGE_URL: https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/quality-github-bridge
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Export exact production migrations through GitHub OIDC
+        run: node scripts/github-quality-bridge-v12.cjs export-migrations QUALITY_BRIDGE_MIGRATIONS.json
+      - name: Materialize production history
+        run: node scripts/materialize-supabase-bridge-export-v12.cjs QUALITY_BRIDGE_MIGRATIONS.json
+      - name: Verify local migration manifest
+        run: node scripts/check-supabase-migration-manifest-v12.cjs
+      - run: npm ci
+      - name: Full release gate
+        run: npm run release:gate
+      - name: Fetch live work packet
+        run: node scripts/github-quality-bridge-v12.cjs work-packet QUALITY_RUNTIME_WORK_PACKET.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: quality-runtime-work-packet-${{ github.run_id }}
+          path: QUALITY_RUNTIME_WORK_PACKET.json
+      - name: Detect migration changes
+        id: diff
+        shell: bash
+        run: |
+          if git diff --quiet -- supabase/migrations supabase/migration_rollbacks data/supabase-migration-manifest.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Open or update exact schema-sync PR
+        if: steps.diff.outputs.changed == 'true'
+        shell: bash
+        run: |
+          BRANCH="ai/quality/supabase-schema-sync"
+          git config user.name "world-server-quality-bot"
+          git config user.email "quality-bot@users.noreply.github.com"
+          git checkout -B "$BRANCH"
+          git add supabase/migrations supabase/migration_rollbacks data/supabase-migration-manifest.json
+          git commit -m "chore(supabase): synchronize exact production migration history"
+          git push --force-with-lease origin "$BRANCH"
+          PR=$(gh pr list --head "$BRANCH" --base master --state open --json number --jq '.[0].number // empty')
+          if [ -z "$PR" ]; then
+            gh pr create \
+              --base master \
+              --head "$BRANCH" \
+              --title "chore(supabase): synchronize exact production migration history" \
+              --body "Generated from the live Supabase migration registry through GitHub Actions OIDC. Migration-name digest verified before PR creation. Full release gate passed."
+          else
+            gh pr edit "$PR" --body "Refreshed from the live Supabase migration registry through GitHub Actions OIDC. Migration-name digest verified. Full release gate passed."
+          fi
+
+  attest-master:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    needs: quality-bridge-static
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      QUALITY_GITHUB_BRIDGE_URL: https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/quality-github-bridge
+      GITHUB_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Record exact merged master migration manifest
+        run: node scripts/github-quality-bridge-v12.cjs record-manifest
+      - name: Record real GitHub master protection state
+        continue-on-error: true
+        run: node scripts/github-quality-bridge-v12.cjs record-master-protection
+      - name: Fetch post-merge work packet
+        run: node scripts/github-quality-bridge-v12.cjs work-packet QUALITY_RUNTIME_WORK_PACKET.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: quality-runtime-post-merge-${{ github.sha }}
+          path: QUALITY_RUNTIME_WORK_PACKET.json

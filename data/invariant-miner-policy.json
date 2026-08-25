@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "QUALITY_INVARIANT_MINER",
+  "minimumIndependentSuccesses": 3,
+  "minimumConfidence": 0.85,
+  "candidateOnlyUntilReviewed": true,
+  "sources": [
+    "success knowledge base",
+    "Golden components",
+    "protected tests",
+    "system contracts"
+  ],
+  "rule": "Mined invariants are candidates; they become enforced only after deterministic verification."
+}

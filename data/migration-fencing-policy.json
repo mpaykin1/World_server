@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "7.5.0",
+  "requiredStrategy": "expand-migrate-contract",
+  "requireLeaderLease": true,
+  "requireExactFencingToken": true,
+  "forbidContractBeforeBackfillVerification": true,
+  "forbidDestructiveExpandPhase": true,
+  "truthRule": "A migration may execute only while the caller holds the current lease and exact fencing token. Stale leaders are rejected."
+}

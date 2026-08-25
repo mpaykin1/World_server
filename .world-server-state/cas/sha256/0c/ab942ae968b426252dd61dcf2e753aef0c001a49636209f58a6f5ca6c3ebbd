@@ -1,0 +1,20 @@
+{
+  "schema":"ai3d-scene-delivery-v1",
+  "playable":true,
+  "walkable":true,
+  "mouseLook":true,
+  "collisions":true,
+  "grounding":true,
+  "playerSpawn":true,
+  "controls":["WASD","ARROW_KEYS","MOUSE_LOOK"],
+  "publicScenePath":"/apps/REPLACE_ME/",
+  "finalPresentation":"PLAYABLE_SCENE",
+  "multiViewGeometryStatus":"UNTESTED",
+  "heightfieldDominant":false,
+  "reliefDominant":false,
+  "billboardLike":false,
+  "connectedArchitecturalMasses":2,
+  "walkableAreaCells":1,
+  "referenceFidelity":{"status":"UNTESTED","structuralSimilarity":null,"edgeSimilarity":null,"silhouetteSimilarity":null,"colorSimilarity":null,"verifier":null,"referenceSha256":null,"renderSha256":null},
+  "limitations":["Template only — must be replaced by generated scene and VERIFIED before READY."]
+}

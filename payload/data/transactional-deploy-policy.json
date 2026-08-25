@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "7.2.0",
+  "provider": "vercel-cli",
+  "protectedBranches": [
+    "master",
+    "main"
+  ],
+  "preflight": [
+    "npm run integration:full",
+    "npm run release:gate"
+  ],
+  "deployPreviewArgs": [
+    "deploy",
+    "--yes"
+  ],
+  "promotionCommand": "promote",
+  "rollbackCommand": "rollback",
+  "healthPath": "/",
+  "healthTimeoutMs": 60000,
+  "healthAttempts": 6,
+  "rollbackOnFailure": true,
+  "recordDeploymentState": true,
+  "requireExplicitDeployMode": true
+}

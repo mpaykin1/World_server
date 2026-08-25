@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "REAL_DEVICE_GATE",
+  "requiredDevices": [
+    "physical-ios-phone",
+    "physical-android-phone"
+  ],
+  "provider": "external-webhook",
+  "environment": [
+    "REAL_DEVICE_PROVIDER_URL",
+    "REAL_DEVICE_PROVIDER_TOKEN"
+  ],
+  "status": "NOT_CONFIGURED",
+  "policy": "Emulation is not accepted as physical-device evidence."
+}

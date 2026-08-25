@@ -1,0 +1,31 @@
+'use strict';
+const test=require('node:test');const assert=require('node:assert/strict');const fs=require('node:fs');const os=require('node:os');const path=require('node:path');
+const {planCpuFirst,gpuIsPromotionBlocker}=require('../lib/quality/cpu-first-policy-v11');
+const {deriveConcurrency,scheduleCpuTasks}=require('../lib/quality/adaptive-cpu-scheduler-v11');
+const {runCpuTasks}=require('../lib/quality/cpu-worker-pool-v11');
+const {CpuArtifactCache,cacheKey}=require('../lib/quality/cpu-artifact-cache-v11');
+const {CpuCheckpointStore}=require('../lib/quality/cpu-checkpoint-v11');
+const {evaluateMemoryPressure}=require('../lib/quality/memory-pressure-gate-v11');
+const {scoreCpuBenchmark}=require('../lib/quality/cpu-benchmark-v11');
+const {detectWasmSimd}=require('../lib/quality/wasm-simd-capability-v11');
+const {planCpuVerification}=require('../lib/quality/cpu-impact-planner-v11');
+const {tuneCpuSceneBudget}=require('../lib/quality/cpu-scene-budget-v11');
+const {verifyCpuToolchain}=require('../lib/quality/cpu-toolchain-gate-v11');
+function tmp(){return fs.mkdtempSync(path.join(os.tmpdir(),'qa-v11-'));}
+test('CPU-first policy uses CPU when GPU is absent',()=>{const r=planCpuFirst({kind:'mesh-optimize'},{cpuVerified:true,serverGpuVerified:false});assert.equal(r.ok,true);assert.equal(r.mode,'CPU');assert.equal(r.gpuUsed,false);});
+test('3DGS does not fake CPU equivalence',()=>{const r=planCpuFirst({kind:'3dgs-train'},{cpuVerified:true,serverGpuVerified:false});assert.equal(r.ok,false);assert.equal(r.equivalentClaimAllowed,false);assert.match(r.alternative,/photogrammetry/);});
+test('GPU is not a promotion blocker in CPU-first config',()=>assert.equal(gpuIsPromotionBlocker({serverAcceleration:{gpuRequired:false}}),false));
+test('adaptive scheduler reserves a core and obeys memory budget',()=>{const r=deriveConcurrency({logicalCores:8,freeMemory:2*1024**3,totalMemory:8*1024**3,load1:1},{reserveCores:1,maxWorkers:8,memoryPerWorkerBytes:512*1024**2});assert.equal(r.concurrency,4);});
+test('adaptive scheduler runs protected tasks first',()=>{const r=scheduleCpuTasks([{id:1,priority:'background'},{id:2,priority:'protected'},{id:3,priority:'verification'}],{logicalCores:2,freeMemory:4e9,totalMemory:8e9,load1:0},{reserveCores:1});assert.equal(r.running[0].id,2);});
+test('worker thread pool hashes files in parallel',async()=>{const d=tmp(),a=path.join(d,'a'),b=path.join(d,'b');fs.writeFileSync(a,'abc');fs.writeFileSync(b,'def');const r=await runCpuTasks([{op:'sha256-file',path:a},{op:'sha256-file',path:b}],{snapshot:{logicalCores:4,freeMemory:4e9,totalMemory:8e9,load1:0},reserveCores:1,maxWorkers:2});assert.equal(r.ok,true);assert.equal(r.results.length,2);assert.notEqual(r.results[0].result.hash,r.results[1].result.hash);});
+test('content-addressed CPU cache is stable and hits',()=>{const d=tmp(),c=new CpuArtifactCache(d,{maxBytes:1e6});const input={b:2,a:1};const k=cacheKey(input);assert.equal(k,cacheKey({a:1,b:2}));c.put(input,{x:1});const r=c.get(input);assert.equal(r.hit,true);assert.deepEqual(r.value,{x:1});});
+test('checkpoint resume refuses changed input',()=>{const c=new CpuCheckpointStore(tmp());c.save('job',{a:1},{done:5});assert.equal(c.load('job',{a:1}).ok,true);assert.equal(c.load('job',{a:2}).reason,'input-changed');});
+test('memory pressure gate detects growth',()=>{const r=evaluateMemoryPressure([{rss:100,heapUsed:20,heapTotal:100,totalMemory:1000},{rss:200,heapUsed:30,heapTotal:100,totalMemory:1000},{rss:500,heapUsed:40,heapTotal:100,totalMemory:1000}],{maxGrowthBytes:200});assert.equal(r.ok,false);assert.ok(r.findings.includes('rss-growth'));});
+test('CPU benchmark score is deterministic from metrics',()=>assert.equal(scoreCpuBenchmark({hashMBps:100,jsonOpsPerSec:400}),200));
+test('WASM SIMD detector always exposes scalar fallback',()=>assert.equal(detectWasmSimd().fallback,'scalar-cpu'));
+test('impact planner forces full suite for collision changes',()=>{const r=planCpuVerification(['apps/world/collision.js']);assert.equal(r.full,true);assert.ok(r.steps.includes('gameplay'));assert.ok(r.steps.includes('full-suite'));});
+test('scene CPU pressure never reduces near-field gameplay/collision below floor',()=>{const r=tuneCpuSceneBudget({cpuUtilization:.99,eventLoopLagMs:80,memoryRatio:.9},{nearGameplayHz:60,nearCollisionHz:60,nearVisualQuality:'unchanged'});assert.equal(r.level,'high');assert.equal(r.nearFieldPreserved,true);assert.equal(r.nearGameplayHz,60);assert.ok(r.farAiHz<10);});
+test('CPU toolchain gate can be verified without invoking external tool in test',()=>{const r=verifyCpuToolchain('video-frame-extract',{ffmpeg:true});assert.equal(r.ok,true);});
+test('v11 runtime store refuses fake persistence without server credentials',async()=>{const names=['SUPABASE_URL','NEXT_PUBLIC_SUPABASE_URL','SUPABASE_SECRET_KEY','SUPABASE_SERVICE_ROLE_KEY'];const old=Object.fromEntries(names.map(n=>[n,process.env[n]]));for(const n of names)delete process.env[n];const {persistCpuProfile}=require('../lib/quality/runtime-store-v11');const r=await persistCpuProfile({});assert.equal(r.ok,false);assert.equal(r.status,'HOLD');for(const n of names)if(old[n])process.env[n]=old[n];});
+
+test('runtime worker bridge advertises CPU and explicitly no server GPU',()=>{const {cpuCapabilities}=require('../lib/quality/runtime-worker-bridge-v11');const c=cpuCapabilities({snapshot:{logicalCores:8,totalMemory:8e9,freeMemory:6e9,load1:0},reserveCores:1,maxWorkers:8});assert.equal(c.cpu,true);assert.equal(c.gpu,false);assert.equal(c.effectiveParallelism,7);});

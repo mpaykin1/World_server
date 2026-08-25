@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "runtime": "WORLD_FACTORY_QUALITY_CORE_V6",
+  "world": "sample-city",
+  "qualityTier": "balanced",
+  "pass": true,
+  "sourceSha256": "af8b08927d911b259f04975e146f26a1110c574ba3bc465ae319685826ca9473",
+  "sourceAssetModified": false,
+  "steps": [
+    {
+      "system": "meshlets",
+      "pass": true,
+      "triangles": 683077,
+      "loss": 0
+    }
+  ]
+}

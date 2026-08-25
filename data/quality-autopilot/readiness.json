@@ -1,0 +1,266 @@
+{
+  "generatedAt": "2026-08-23T04:11:28.833Z",
+  "systemReadiness": 94,
+  "architecturalReadiness": 94,
+  "operationalReadiness": 60,
+  "endToEndAutonomyReadiness": 82,
+  "core": [
+    {
+      "name": "Static quality analysis",
+      "score": 100,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Safe AutoFix + automatic rollback",
+      "score": 100,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Isolated multi-candidate tournament",
+      "score": 97,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Improvement memory / Never-Retry-Bad-Fix",
+      "score": 100,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Golden cross-project learning + expiry",
+      "score": 97,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Global regression knowledge base",
+      "score": 96,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Executable error→regression compiler",
+      "score": 94,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Night scheduler / concurrency guard / priority",
+      "score": 95,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Exact before→after visual regression",
+      "score": 94,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Desktop + mobile gameplay probe",
+      "score": 94,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Synthetic player army",
+      "score": 94,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "GPU/WebGL runtime profiler",
+      "score": 90,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Asset quality inspector",
+      "score": 90,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Per-device performance budgets",
+      "score": 94,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Semantic world validator",
+      "score": 94,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Engine-specific WebGL/Godot/Roblox optimizer plans",
+      "score": 90,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Live telemetry gate",
+      "score": 95,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Progressive canary decision engine 1→5→20→50→100",
+      "score": 96,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Causal quality learning",
+      "score": 90,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Root-cause clustering",
+      "score": 94,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Quality debt ledger",
+      "score": 97,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Security gate",
+      "score": 90,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Migration safety gate",
+      "score": 85,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "AI candidate patch sandbox",
+      "score": 87,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Flaky-test retry classification",
+      "score": 93,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Human denylist / immutable regions",
+      "score": 100,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Tamper-evident audit chain",
+      "score": 97,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Compute budget hard limits",
+      "score": 95,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Dependency upgrade tournament",
+      "score": 90,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Supabase production telemetry API/client",
+      "score": 94,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Supabase centralized knowledge-store adapter",
+      "score": 94,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Vercel preview/promote/rollback provider",
+      "score": 88,
+      "implemented": true,
+      "note": ""
+    }
+  ],
+  "runtime": [
+    {
+      "name": "Supabase telemetry storage live",
+      "score": 100,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Supabase private knowledge store live",
+      "score": 100,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Production telemetry endpoint deployed and verified",
+      "score": 55,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "GitHub autonomous branch/PR write",
+      "score": 35,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Vercel project bound to automation",
+      "score": 35,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "Progressive real traffic splitter connected",
+      "score": 45,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "GPU worker autoscaling provider connected",
+      "score": 40,
+      "implemented": true,
+      "note": ""
+    },
+    {
+      "name": "High-risk engine rewrites auto-promotable",
+      "score": 70,
+      "implemented": true,
+      "note": "kept candidate-only until synthetic/visual/live evidence is available"
+    }
+  ],
+  "integrations": {
+    "checkedAt": "2026-08-23T04:11:28Z",
+    "supabaseTelemetryStorage": true,
+    "supabaseKnowledgeStore": true,
+    "githubAutonomousWrite": false,
+    "vercelProjectVisibleToConnector": false,
+    "productionTelemetryEndpointVerified": false,
+    "gpuWorkerProviderConnected": false,
+    "progressiveTrafficSplitterConnected": false,
+    "notes": [
+      "Supabase telemetry and private knowledge tables exist and were verified.",
+      "GitHub App branch creation previously returned 403 Resource not accessible by integration.",
+      "Connected Vercel team is visible but returned zero projects in this session."
+    ]
+  }
+}

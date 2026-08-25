@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "GOLDEN_UI_POLICY",
+  "mode": "release-blocking",
+  "rules": {
+    "compactSystemMenu": true,
+    "minimumTouchTargetPx": 44,
+    "mobileSafeArea": true,
+    "persistentTechnicalTextOutsideMenu": false,
+    "directWorldSelection": true,
+    "keyboardEscapeClosesDrawer": true,
+    "essentialGameplayHudAllowed": [
+      "crosshair",
+      "hotbar",
+      "health",
+      "objective",
+      "context-action"
+    ]
+  },
+  "knownSystemPanels": {
+    "catalog": [
+      ".app-title",
+      ".topHint",
+      "#miniMap"
+    ],
+    "voxel-world": [
+      "#vwHud",
+      "#vwHelp",
+      "#vwBack"
+    ],
+    "ai3d-voxel-city": [
+      "header",
+      ".controls",
+      ".metrics"
+    ]
+  }
+}

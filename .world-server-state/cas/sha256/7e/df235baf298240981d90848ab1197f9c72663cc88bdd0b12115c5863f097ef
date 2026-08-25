@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "3.0.0",
+  "events": {
+    "footstep-stone": {
+      "variants": [
+        "step_01",
+        "step_02",
+        "step_03",
+        "step_04"
+      ],
+      "selection": "shuffle-bag",
+      "pitchRange": [
+        0.96,
+        1.04
+      ],
+      "gainRangeDb": [
+        -1.5,
+        1.5
+      ],
+      "avoidImmediateRepeat": true
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "mode": "automatic-cpu-causality-flame-profile-v1",
+  "pass": true,
+  "checksum": 4239296248,
+  "top": [
+    {
+      "function": "workload",
+      "file": "cpu_flamegraph.py",
+      "line": 6,
+      "calls": 1,
+      "selfSec": 0.005068562,
+      "cumulativeSec": 0.005068562
+    },
+    {
+      "function": "<method 'disable' of '_lsprof.Profiler' objects>",
+      "file": "~",
+      "line": 0,
+      "calls": 1,
+      "selfSec": 6.4435e-05,
+      "cumulativeSec": 6.4435e-05
+    }
+  ],
+  "capturesSourceAssets": false
+}
