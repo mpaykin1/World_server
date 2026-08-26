@@ -6,8 +6,10 @@
   "scripts": {
     "start": "node server.js",
     "build:sentry": "node scripts/build-sentry.js",
-    "build": "npm run build:sentry && node scripts/inject-sentry-runtime.js",
-    "check": "node scripts/check-js.js && node --test",
+    "build:posthog": "node scripts/build-posthog.js",
+    "build": "npm run build:sentry && node scripts/inject-sentry-runtime.js && npm run build:posthog && node scripts/inject-posthog-runtime.js",
+    "posthog:check": "node scripts/check-posthog-runtime.js",
+    "check": "node scripts/check-js.js && npm run posthog:check && node --test",
     "discover": "node scripts/discover-ai3d-engines.js",
     "e2e": "node scripts/ai3d-e2e-smoke.js",
     "e2e:python": "python services/ai3d-worker/scripts/e2e-smoke.py",
@@ -92,7 +94,8 @@
     "@sentry/browser": "^10.70.0",
     "@supabase/supabase-js": "2.112.3",
     "@vercel/sandbox": "^3.1.0",
-    "esbuild": "^0.28.2"
+    "esbuild": "^0.28.2",
+    "posthog-js": "^1.419.4"
   },
   "devDependencies": {
     "@lhci/cli": "^0.15.1",
