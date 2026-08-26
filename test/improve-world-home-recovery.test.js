@@ -54,5 +54,5 @@ test('index.html references client.js as a root-relative script (standalone Verc
 
 test('apps/improve-world-home/vercel.json disables the build step (no build tooling was recovered, and none is needed for two static files)', () => {
   const config = JSON.parse(fs.readFileSync(path.join(APP_DIR, 'vercel.json'), 'utf8'));
-  assert.equal(config.buildCommand, false);
+  assert.equal(config.buildCommand, null);
 });
