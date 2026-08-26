@@ -1,116 +1,61 @@
-# WORK IN PROGRESS — WORLD_QUALITY_AUTOPILOT_V4
+# WORK IN PROGRESS — Preview environment isolation + PostHog product analytics
+
+> Superseded 2026-08-26: the previous content here (World Quality Autopilot V4) was stale — PR #8 merged to master days ago (`fa34457`). See git history / `.github` for that work's final state if needed.
 
 ## Task
-Install V4 of the non-destructive World Quality Autopilot: semantic voxel detail, procedural PBR synthesis, texture/visibility budgets, adaptive GPU/CPU/device pressure control, universal retarget contract, feedback learner, candidate lab, evidence ledger and regression-safe evolution.
+Add PostHog product analytics without duplicating Sentry (which already owns Session Replay + Error Tracking), and fix the Vercel Preview environment so `/api/config` and admin-dependent endpoints (login/register/voxel/game) actually work on Preview deployments instead of 500ing.
 
 ## Why
-Generic Golden/Quality automation already exists. V4 adds the world-specific closed loop that decides where detail matters, adds it only behind the reference-facing shell, classifies material intent, adapts rendering/animation to runtime pressure and records machine-readable evidence.
+Every Preview deployment except one specific git branch (`codex/voxel-v3`) was 500ing on `/api/config` because `SUPABASE_URL`/`SUPABASE_PUBLISHABLE_KEY` were scoped to that one branch only in Vercel. Fixing that safely (without widening the production Supabase service-role secret to arbitrary PR/AI branches) required a real architecture decision, not just flipping a checkbox.
 
-## Current state
-- Existing release, Golden, regression, risk/cost, visual critic, patch tournament and device-gate systems must be preserved.
-- V4 installs semantic detail indexing, deterministic PBR candidate synthesis, texture/sector visibility budgets, sustained-pressure thermal proxy, retarget/root-motion/two-hand contracts, feedback learner, cost-quality scheduler, candidate lab, baseline promotion guard and evidence ledger.
+## Current State
+- `/api/config` on Preview returns HTTP 200 with the correct public-only shape (`supabaseUrl`, `supabasePublishableKey`, `posthogKey`, `posthogHost`) — confirmed live on the deployed Preview, not just in tests.
+- `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `POSTHOG_HOST` are now scoped to all Preview branches in Vercel (previously branch-restricted / Production-only).
+- `POSTHOG_KEY` is Production-only still — see Blockers.
+- A dedicated Supabase preview/test project exists: `world-server-preview` (ref `xlcdnlsyvxqtopmkweiy`, org `Improve`, region ap-southeast-1), full schema applied (all 6 original tracked migrations + a `profiles` table/auth-trigger migration this repo never tracked + a security-hardening migration), verified functionally via direct SQL (auth trigger creates a profile row correctly, game/voxel functions work) and via Supabase's own security advisor (clean).
+- `SUPABASE_PREVIEW_URL` is set in Vercel Preview scope, pointing at that project.
+- `SUPABASE_PREVIEW_SECRET_KEY` is NOT set — see Blockers. `lib/env.js`'s `getSecretKey()`/`createAdminClient()` structurally refuse to fall back to the production secret when `VERCEL_ENV === 'preview'`, so admin-dependent Preview endpoints currently fail with a clear, specific error instead of a generic crash or (worse) silently touching production data.
+- Found and fixed a real security bug along the way: `handle_new_user()` (a `SECURITY DEFINER` trigger function) was missing an `EXECUTE` revoke, so PostgREST auto-exposed it as a public RPC anyone could call directly. Fixed via a new tracked migration + a regression test that checks every `SECURITY DEFINER` function in `supabase/migrations/*.sql` for a matching revoke.
 
-## Target state
-- Reference-facing projection remains byte-equivalent while hidden/side volume gains deterministic detail.
-- AI3D worker and Vercel fallback use the same V4 policy.
-- 3D/orbit/playable views can use adaptive PBR, while Front Exact remains unmodified.
-- Runtime adapts DPR/LOD/shadows/particles/lights/animation/material/geometry budgets using FPS, frame p95, GPU time, long tasks, memory and device capability.
-- New visual baselines can never self-approve.
+## Target State
+- `POSTHOG_KEY` also scoped to Preview → PostHog product analytics events actually arrive in PostHog EU (`https://eu.i.posthog.com`) from a live Preview deployment, confirmed via real browser network requests, not just code inspection.
+- `SUPABASE_PREVIEW_SECRET_KEY` set → login/register/voxel/game work end-to-end on Preview against the isolated preview project, confirmed via real HTTP flows, not just SQL-level verification.
+- `mergeSafe: true` once both of the above are live-confirmed and full test/quality gates pass.
 
-## Files / systems involved
-- api/ai3d-voxel-generate.js
-- lib/world-quality-voxel-enhancer.js
-- lib/world-quality-semantic-detail.js
-- lib/world-quality-material-profiler.js
-- services/ai3d-worker/ai3d/runner.py
-- services/ai3d-worker/ai3d/plugins/world_quality.py
-- shared/world-quality-autopilot.js
-- apps/ai3d-voxel-city/*
-- apps/voxel-world/*
-- data/world-quality-autopilot.json
-- scripts/world-*.js
-- .github/workflows/world-quality-autopilot.yml
-- .github/workflows/quality-regression.yml
-- package.json
+## Branch
+`ai/claude/safe-parallel-20260826`
 
-## Golden systems that must be preserved
-- Approved graphics/assets and Golden components.
-- Canonical desktop/mobile controls, collisions, grounding and step-up.
-- AI3D front-reference fidelity and Final Delivery gates.
-- Deny-by-default release policy.
+## Commit
+`48cd7c0` (latest substantive change; a few `chore: trigger preview redeploy` empty commits follow it — check `git log` for the actual tip)
 
-## Errors that must not return
-- Installer failing due to line-ending mismatches (CRLF/LF) — resolved by normalizing to LF before patching.
-- Patch anchor mismatches in runner.py (CRLF), client.js (CRLF), index.html (CRLF) — resolved.
-- spawnSync npm.cmd EINVAL on release:gate — resolved by V4.1 hotfix (cmd.exe /d /s /c npm ...).
-- Quality Regression Lock missing Python PIL (ModuleNotFoundError) — resolved by adding setup-python + pip install pillow numpy requests to quality-regression.yml (parity with ci.yml).
-- Quality Regression Lock missing webkit (mobile-webkit iPhone 13) — resolved by installing chromium+webkit in quality-regression.yml.
-- CI missing webkit for npx playwright test (all 4 projects) — resolved by installing chromium+webkit in ci.yml.
-- Perceptual gate EISDIR on approvedBaselines without path — resolved by adding valid path+sha256 to data/visual-baselines.json (test/fixtures/cube_object.png).
-- AI3D Voxel City autoplay regression (playerSpawn false, move 0) due to V4.1 computeVertexNormals + applyWorldMaterialMode in switch handlers — resolved by removing g.computeVertexNormals and applyWorldMaterialMode calls in switchFront/Orbit/Playable, preserving PBR material creation but avoiding premature dispose.
-- Any regression in controls, collisions, mobile behavior, visuals, performance — must rollback candidate.
+## PR
+#12 — https://github.com/mpaykin1/World_server/pull/12 (open, targets `master`, not merged)
 
-## Exact patch / change plan
-1. Work only in a new AI branch and update this WIP before project edits.
-2. Install semantic server/worker detail enhancement with hard front-projection invariant and voxel budget.
-3. Install material profiler and adaptive PBR hooks without changing Front Exact.
-4. Install frame/GPU/long-task/device-aware runtime budgets and animation semantic rules.
-5. Install baseline candidates + explicit promotion guard, device matrix and evidence ledger.
-6. Run targeted tests, quality:world and full release gate.
-7. Reject/rollback any candidate that regresses controls, collisions, mobile behavior, visuals or performance.
+## Tests
+- `node --test`: 130/130 PASS
+- `node scripts/check-js.js`: PASS (32 files)
+- `node scripts/check-posthog-runtime.js`: PASS
+- `node scripts/check-agent-rules.js`: PASS
+- New regression tests this branch added: `test/posthog-config.test.js`, `test/api-router-dispatch.test.js` (from a related PR, see #11), `test/vercel-function-limit.test.js` (#11), `test/preview-secret-isolation.test.js`, `test/supabase-security-definer-rpc-exposure.test.js`
 
-## Known risks
-- Aesthetic 100% still requires approved screenshots.
-- Animation 100% still requires real rig playback evidence.
-- Optimization 100% still requires physical iOS/Android evidence.
-- GitHub/Vercel winner-only writes require external credentials.
+## Blockers
+1. **`POSTHOG_KEY` not obtainable for Preview scope.** Checked every available avenue: production's live `/api/config` doesn't emit it yet (this PR isn't merged); no authenticated browser session for app.posthog.com/eu.posthog.com exists in this environment (reached the login form, no stored credentials — did not attempt to sign in); `vercel env pull` redacts the value to a placeholder before it can be read, a platform-level control, not a policy choice. Needs a human to open the existing `POSTHOG_KEY` entry in Vercel and additionally check "Preview" — the value itself never needs to be re-typed.
+2. **`SUPABASE_PREVIEW_SECRET_KEY` not obtainable.** The connected Supabase MCP tooling has no tool that returns a service-role/secret key for any project — including `world-server-preview`, which this session created itself — by design (same category of platform safety boundary as #1). Needs a human to open Supabase Dashboard → world-server-preview → Project Settings → API Keys → `service_role`/`secret` key, and add it to Vercel as `SUPABASE_PREVIEW_SECRET_KEY` (Preview scope).
 
-## Tests to run
-- npm run quality:world:materials
-- npm run quality:world:visibility
-- npm run quality:world:retarget
-- npm run quality:world:runtime
-- npm run quality:world:devices
-- npm run quality:world:candidates
-- npm run quality:world:feedback
-- npm run quality:world
-- node --test test/world-quality-autopilot.test.js (expect 12/12 PASS)
-- npm run release:gate
-- Playwright desktop: open apps/ai3d-voxel-city and apps/voxel-world, verify WASD/arrow movement, mouse look, jump, collisions, step-up.
-- Playwright mobile (emulation): left stick movement, right stick look, jump, safe-area buttons, no black screen.
-- Visual baseline candidate capture: verify Front Exact unchanged, orbit/playable views show added volume/PBR.
-- Do not promote baselines without explicit human approval.
+Both are the same shape of blocker: a credential this session is structurally prevented from reading through any available tool, not a step being skipped for convenience.
 
-## Deployment / PR plan
-1. After all gates pass locally, commit to ai/desktop/world-quality-autopilot-v4.
-2. Push to origin (master not modified).
-3. Open PR via gh pr create --base master --head ai/desktop/world-quality-autopilot-v4.
-4. Vercel auto-deploys preview.
-5. Verify preview on desktop Chrome and real iOS/Android (if provider configured).
-6. Only merge after human approval of visual baselines and playable evidence.
-7. Do not auto-merge. Do not push directly to master.
+## Risks
+- The `handle_new_user()` RPC-exposure fix (migration `20260826090000_harden_handle_new_user_rpc_exposure.sql`) has only been applied to the new preview project, not to production — production's Supabase project isn't reachable through the currently-connected Supabase MCP account. Worth applying there too once someone with access reviews it.
+- `SUPABASE_PREVIEW_URL`/`SUPABASE_PREVIEW_SECRET_KEY` pattern is new; once the secret key is set, do a real end-to-end HTTP test (not just the SQL-level check already done) before trusting it in CI.
 
-## Current progress
-- 98% — verified locally (12/12 V4 tests, 156/156 check, release:gate PASS). PR #8 created, CI Quality Regression Lock initially failed on missing PIL, fixed via quality-regression.yml hotfix. Push 5e329eb done, awaiting CI re-run.
+## Next Action
+Once a human sets `POSTHOG_KEY` (Preview scope) and `SUPABASE_PREVIEW_SECRET_KEY` in Vercel: redeploy PR #12's Preview, verify `/api/config` still 200s, exercise login/register/voxel/game over real HTTP against the preview Supabase project, open the Preview in a browser and confirm PostHog events actually reach `https://eu.i.posthog.com` (network request level, not just that the bundle loads), then reassess `mergeSafe`.
 
-## Next action
-Push hotfix commit, re-check CI, verify V4.1 graphics/mechanics preservation, then merge PR to master and verify Vercel production + smoke test.
-
-## Completion criteria
-- Targeted V4 tests PASS.
-- quality:world produces readiness >= 85 with no hard gate failure.
-- release:gate PASS before PR merge/deploy.
-- Front Exact projection unchanged.
-- Desktop/mobile controls and collisions remain protected.
-- New evidence ledger generated.
-
-## Final evidence
-- V4 targeted tests: 12/12 PASS.
-- npm run check: 156/156 PASS.
-- Structural readiness: 98%.
-- Domain readiness: {"detail":100,"graphics":97,"animation":95,"optimization":98,"automation":100}.
-- Evidence ledger: 29dbee226fb2174a6aae51042257f1fb978ffcf5bd090580d6d4d6c01f79f4f5.
-- Full release gate: PASS (local + CI Quality Regression Lock fixed, world-quality PASS, screenshots PASS, Vercel PASS).
-- GitHub push: https://github.com/mpaykin1/World_server branch ai/desktop/world-quality-autopilot-v4 (5e329eb pushed, hotfix pending).
-- PR: https://github.com/mpaykin1/World_server/pull/8
-- CI: world-quality PASS, screenshots PASS, Vercel PASS, quality-regression FAIL due to missing PIL (now hotfixed), check pending.
+## Completion Criteria
+- `/api/config`: PASS (already true).
+- PostHog EU live events: PASS (network-confirmed, not just unit-tested).
+- Preview admin endpoints (login/register/voxel/game): PASS over real HTTP.
+- Full test suite: PASS.
+- `check-agent-rules.js`: PASS.
+- No regression in Sentry (Session Replay/Error Tracking) or in the Vercel Hobby function-count limit (see PR #11).
+- `mergeSafe: true` only once every item above is true — not before.
