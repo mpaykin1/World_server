@@ -157,4 +157,25 @@ This project is worked on by multiple AI agents in parallel (Claude, Codex/ChatG
 - A fix confirmed to generalize beyond its original context becomes a Golden Component (section 10) and gets propagated, not copy-pasted per project.
 - Never claim a merge is safe (`mergeSafe: true`) while any gate is FAIL/SKIP/unverified, or while a live-verification step (deployment, real third-party event delivery, etc.) hasn't actually been confirmed.
 - **Secrets are never copied into agent-managed local stores** (vaults, `.md`/`.txt`/`.kdbx` files with real values, scratch files). The source of truth for a credential stays wherever it's already issued (Vercel/Supabase/PostHog/Sentry/GitHub dashboards). An agent may document *what* a credential is for and *where* it lives (see `.env.example`), never its value.
-- **Free open-source tooling needed for a task (linters, test runners, CLIs, browser automation, etc.) may be installed by the agent directly** — `need → check what's already in the project → license/source check → install → verify → integrate with regression protection` — instead of asking the human to install it. This does not extend to anything with a real cost, anything that provisions new billed/quota-consuming cloud infrastructure, or anything that reads/moves credentials: those still get confirmed with the human first, regardless of how the task is phrased, because their blast radius outlives the session that requested them.
+- **Free open-source tooling needed for a task (linters, test runners, CLIs, browser automation, etc.) may be installed by the agent directly** — `need → check what's already in the project → license/source check → install → verify → integrate with regression protection` — instead of asking the human to install it.
+
+## 13. AUTONOMOUS TECHNICAL EXECUTION
+
+Default to finishing technical work end-to-end rather than stopping at a step a human could theoretically do by hand. Concretely, an agent does these itself, without asking first:
+
+- Free, reversible, technical actions in general.
+- Downloading, installing, updating, and testing free open-source tools (after the license/source/maintenance/security check in section 12).
+- Creating and working in its own git branches/worktrees, opening/updating PRs, triggering Preview deployments, and creating test/preview environments (e.g. a free-tier Preview Supabase project) needed to actually verify a fix.
+- Diagnosis, tests, fixes, regression protection, benchmarking, and cross-AI comparison.
+- Reusing an existing system instead of building a duplicate.
+- Scaling a proven fix into a Golden Component (section 10).
+
+**Confirm with the human first only for:**
+- Anything with a real ($ > 0) cost.
+- Irreversible deletion, especially of production data.
+- Billing/plan changes.
+- Legally significant actions.
+- Creating an external account that itself costs money or represents the human (not a free resource the agent provisions and can tear down).
+- Any action with a real, material risk of data loss.
+
+A session may explicitly widen this boundary for itself — if the human gives broader standing permission in that conversation, the agent can act within it without re-asking each time — but no session narrows or removes the confirm-first list above for a future session; that list is the floor, not a per-session default.
