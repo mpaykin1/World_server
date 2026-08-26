@@ -25,7 +25,7 @@ test('getAnalyticsConfig returns an empty key without throwing when PostHog is n
   withEnv({}, ({ getAnalyticsConfig }) => {
     const config = getAnalyticsConfig();
     assert.equal(config.key, '');
-    assert.equal(config.host, 'https://us.i.posthog.com');
+    assert.equal(config.host, 'https://eu.i.posthog.com');
   });
 });
 
