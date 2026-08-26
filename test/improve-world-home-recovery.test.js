@@ -4,24 +4,31 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 
-// Regression guard for the recovered `improve-world-home` frontend
-// (recovered 2026-08-26 from the live production deployment's served
-// assets — Vercel's Deployment Files API was checked and found
-// inaccessible with any tool available in this session; see
-// WORK_IN_PROGRESS.md for the full provenance record). This is the
-// canonical source now — these tests exist so a later change can't
-// silently drop the questionnaire content or the app's own built-in
-// IW_CONTRACT regression guard.
+// Regression guard for the recovered `improve-world-home` frontend.
+// Recovered 2026-08-26: first from the live production deployment's
+// served assets, then corrected/supplemented against the real Vercel
+// Deployment Files API (`vercel api "/v6/deployments/{id}/files"`),
+// which turned out to be fully accessible via the existing CLI
+// authentication — no separate token needed. That API call returned the
+// project's true source tree (`check.js`, `package.json`, `vercel.json`,
+// `public/app.js`, `public/index.html`); `public/app.js`/`public/index.html`
+// were confirmed byte-identical to the earlier live-asset reconstruction
+// (only the intentional `/app.js` script path was ever a deliberate
+// deviation, now reverted). `check.js`/`package.json`/`vercel.json` are
+// restored here verbatim from that API response — this is the project's
+// real regression-gate build step, not a simplification of it. See
+// WORK_IN_PROGRESS.md for full provenance.
 
 const APP_DIR = path.join(__dirname, '..', 'apps', 'improve-world-home');
+const PUBLIC_DIR = path.join(APP_DIR, 'public');
 
-test('apps/improve-world-home/index.html and client.js exist', () => {
-  assert.ok(fs.existsSync(path.join(APP_DIR, 'index.html')));
-  assert.ok(fs.existsSync(path.join(APP_DIR, 'client.js')));
+test('apps/improve-world-home/public/index.html and public/app.js exist', () => {
+  assert.ok(fs.existsSync(path.join(PUBLIC_DIR, 'index.html')));
+  assert.ok(fs.existsSync(path.join(PUBLIC_DIR, 'app.js')));
 });
 
-test('client.js keeps the exact CREATE (31) and JOIN (28) questionnaire lengths', () => {
-  const source = fs.readFileSync(path.join(APP_DIR, 'client.js'), 'utf8');
+test('app.js keeps the exact CREATE (31) and JOIN (28) questionnaire lengths', () => {
+  const source = fs.readFileSync(path.join(PUBLIC_DIR, 'app.js'), 'utf8');
   // eslint-disable-next-line no-new-func
   const { CREATE, JOIN } = new Function(`${source}\nreturn { CREATE, JOIN };`.replace(
     // The recovered file calls verifyContract()/home() at load time, which
@@ -34,25 +41,39 @@ test('client.js keeps the exact CREATE (31) and JOIN (28) questionnaire lengths'
   assert.equal(JOIN.length, 28, 'JOIN questionnaire must stay at 28 questions (IW_CONTRACT)');
 });
 
-test('client.js still contains its own IW_CONTRACT runtime regression guard', () => {
-  const source = fs.readFileSync(path.join(APP_DIR, 'client.js'), 'utf8');
+test('app.js still contains its own IW_CONTRACT runtime regression guard', () => {
+  const source = fs.readFileSync(path.join(PUBLIC_DIR, 'app.js'), 'utf8');
   assert.ok(source.includes('IW_CONTRACT'), 'the app\'s own built-in regression guard must not be removed');
   assert.ok(source.includes("rule:'ADD_ONLY'"), 'the ADD_ONLY contract rule must not be weakened');
 });
 
 test('index.html declares the same ADD_ONLY regression contract in its meta tag', () => {
-  const html = fs.readFileSync(path.join(APP_DIR, 'index.html'), 'utf8');
+  const html = fs.readFileSync(path.join(PUBLIC_DIR, 'index.html'), 'utf8');
   assert.match(html, /iw-regression-contract/);
   assert.match(html, /create=31/);
   assert.match(html, /join=28/);
 });
 
-test('index.html references client.js as a root-relative script (standalone Vercel deployment, not nested under /apps/)', () => {
-  const html = fs.readFileSync(path.join(APP_DIR, 'index.html'), 'utf8');
-  assert.match(html, /<script src="\/client\.js">/);
+test('index.html references app.js as a root-relative script (standalone Vercel deployment, not nested under /apps/)', () => {
+  const html = fs.readFileSync(path.join(PUBLIC_DIR, 'index.html'), 'utf8');
+  assert.match(html, /<script src="\/app\.js">/);
 });
 
-test('apps/improve-world-home/vercel.json disables the build step (no build tooling was recovered, and none is needed for two static files)', () => {
+test('apps/improve-world-home/vercel.json restores the real original build pipeline (npm run build -> node check.js -> public/)', () => {
   const config = JSON.parse(fs.readFileSync(path.join(APP_DIR, 'vercel.json'), 'utf8'));
-  assert.equal(config.buildCommand, null);
+  assert.equal(config.buildCommand, 'npm run build');
+  assert.equal(config.outputDirectory, 'public');
+});
+
+test('check.js regression gate exists and actually passes against the recovered public/ files', () => {
+  const checkPath = path.join(APP_DIR, 'check.js');
+  assert.ok(fs.existsSync(checkPath));
+  const result = require('node:child_process').spawnSync(process.execPath, [checkPath], { cwd: APP_DIR, encoding: 'utf8' });
+  assert.equal(result.status, 0, `check.js must exit 0 (stdout: ${result.stdout} stderr: ${result.stderr})`);
+  assert.match(result.stdout, /ADD_ONLY_REGRESSION_GATE PASS create=31 join=28/);
+});
+
+test('package.json wires the build script to the real regression gate', () => {
+  const pkg = JSON.parse(fs.readFileSync(path.join(APP_DIR, 'package.json'), 'utf8'));
+  assert.equal(pkg.scripts.build, 'node check.js');
 });
