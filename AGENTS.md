@@ -146,3 +146,14 @@ For every task, patch, repair, upgrade, deployment or quality-improvement run:
 - Do not merge/deploy if any accepted quality metric regresses.
 - Confirmed fixes must become regression protection.
 - Approved reusable successes must become exact Golden Components and be propagated to compatible projects.
+
+## 12. MULTI-AI PEER IMPROVEMENT
+
+This project is worked on by multiple AI agents in parallel (Claude, Codex/ChatGPT, OpenCode, Desktop AI, and future agents), each in its own git worktree/branch. This rule binds all of them equally.
+
+- **Before starting**, always run `git status`, `git branch --show-current`, `git worktree list`, and `git log --oneline --decorate -20` to see what's already active. Never work directly inside another agent's checked-out worktree, never stop another agent's watchdog/scheduler/control-plane/background process, and never `git reset --hard` / `git clean -fd` / force-push / rewrite history on a branch you don't own.
+- **Discover → compare → reuse → improve → verify → protect → generalize.** Before implementing something, check whether another agent's branch, PR, `WORK_IN_PROGRESS.md`, or commit history already solved it. Reuse the better solution instead of re-deriving it; if you improve on it, prove the improvement with tests, don't just assert it.
+- Compare solutions on correctness, reliability, regression risk, test coverage, and maintainability — not on which agent wrote it.
+- A fix confirmed to generalize beyond its original context becomes a Golden Component (section 10) and gets propagated, not copy-pasted per project.
+- Never claim a merge is safe (`mergeSafe: true`) while any gate is FAIL/SKIP/unverified, or while a live-verification step (deployment, real third-party event delivery, etc.) hasn't actually been confirmed.
+- **Secrets are never copied into agent-managed local stores** (vaults, `.md`/`.txt`/`.kdbx` files with real values, scratch files). The source of truth for a credential stays wherever it's already issued (Vercel/Supabase/PostHog/Sentry/GitHub dashboards). An agent may document *what* a credential is for and *where* it lives (see `.env.example`), never its value.
