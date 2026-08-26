@@ -14,13 +14,12 @@ Every Preview deployment except one specific git branch (`codex/voxel-v3`) was 5
 - PostHog config (`getAnalyticsConfig()`) reworked to the same pattern as the Sentry DSN — a hardcoded default in `lib/env.js`, not a per-environment Vercel workflow — since a PostHog Project API Key is a public/client-side token by design. `DEFAULT_POSTHOG_KEY` is currently blank (see Blockers); once set, PostHog works in every environment with zero Vercel configuration.
 - A dedicated Supabase preview/test project exists: `world-server-preview` (ref `xlcdnlsyvxqtopmkweiy`, org `Improve`, region ap-southeast-1). Full schema applied (all 6 original tracked migrations + a `profiles` table/auth-trigger migration this repo never tracked at all + a security-hardening migration for a real `handle_new_user()` public-RPC-exposure bug found via Supabase's own advisor). Verified functionally via direct SQL and REST calls (auth signup/login flow, profiles RLS, game/voxel functions all work); `get_advisors` clean.
 - `register.js` (needs `admin.auth.admin.createUser` to skip email confirmation for synthetic accounts) and `game.js`/`voxel.js`/`quality-*.js` (RLS denies anon/authenticated by design, service-role mediates all writes) remain genuinely admin-dependent — audited, not just assumed; no safe way found to avoid elevated credentials for these specific operations.
-- `release:gate` run on this branch: `desktop-ai:check` FAILED because this file didn't yet carry the older desktop-ai-policy required sections (this rewrite fixes that) — see Tests to run.
+- `release:gate` run on this branch end to end: **PASS** (all ~19 chained sub-steps completed, no break in the `&&` chain, final step `quality:world` reported 100%). This branch's package.json doesn't carry `integration:full`/`functions:audit`/`control-plane`/`honest-100`/`graphics-ratchet`/`monotonic` at all — those exist only on other, more divergent branches (see Known risks); `release:gate` is the full applicable gate here.
 
 ## Target state
 - `DEFAULT_POSTHOG_KEY` set (one line in `lib/env.js`, or a `POSTHOG_KEY` env var as a temporary override) → PostHog product analytics events actually arrive in PostHog EU (`https://eu.i.posthog.com`) from a live Preview deployment, confirmed via real browser network requests.
 - `SUPABASE_PREVIEW_SECRET_KEY` set → register/voxel/game work end-to-end on Preview against the isolated preview project, confirmed via real HTTP flows.
-- `release:gate` passes clean on this branch.
-- `mergeSafe: true` once all of the above are live-confirmed.
+- `mergeSafe: true` once the two blocked items are live-confirmed.
 
 ## Files / systems involved
 - `lib/env.js` (public/secret/preview config resolution — the core of this work)
@@ -58,7 +57,7 @@ Every Preview deployment except one specific git branch (`codex/voxel-v3`) was 5
 5. Make PostHog config unified/hardcoded like Sentry's DSN instead of a Vercel-scoped secret — done; value itself still blank.
 6. Get `DEFAULT_POSTHOG_KEY` and `SUPABASE_PREVIEW_SECRET_KEY` set — **open, see Blockers**.
 7. Full live HTTP verification of register/voxel/game + PostHog EU live events once #6 lands.
-8. `release:gate` clean on this branch.
+8. `release:gate` clean on this branch — **done**.
 
 ## Tests to run
 - `node --test` (136/136 as of this update)
@@ -66,7 +65,7 @@ Every Preview deployment except one specific git branch (`codex/voxel-v3`) was 5
 - `node scripts/check-posthog-runtime.js`
 - `node scripts/check-agent-rules.js`
 - `node scripts/check-desktop-ai-protocol.js` (via `npm run desktop-ai:check`, first step of `release:gate`)
-- `npm run release:gate` — in progress; earlier failed only on this file's structure, now fixed, needs a clean re-run
+- `npm run release:gate` — **PASS**, full chain, run end to end after the WORK_IN_PROGRESS.md structure fix
 - New regression suites added this task: `test/posthog-config.test.js`, `test/preview-secret-isolation.test.js`, `test/supabase-security-definer-rpc-exposure.test.js`, `test/auth-endpoints-no-admin-key.test.js` (plus `test/api-router-dispatch.test.js`/`test/vercel-function-limit.test.js` from the related PR #11)
 
 ## Deployment / PR plan
@@ -76,7 +75,7 @@ Every Preview deployment except one specific git branch (`codex/voxel-v3`) was 5
 4. Do not merge until `mergeSafe: true` — full gates pass, live verification passes, no open blocker.
 
 ## Current progress
-Public Preview config, Preview/production secret isolation, login/me/logout live-verified, PostHog architecture unified, real security bug found+fixed — all done and pushed. Two items open: `DEFAULT_POSTHOG_KEY` and `SUPABASE_PREVIEW_SECRET_KEY` values, both genuinely unobtainable through any tool available in this session (see Blockers). `release:gate` re-run pending after this file's structure fix.
+Public Preview config, Preview/production secret isolation, login/me/logout live-verified, PostHog architecture unified, real security bug found+fixed, `release:gate` clean PASS — all done and pushed. Two items open: `DEFAULT_POSTHOG_KEY` and `SUPABASE_PREVIEW_SECRET_KEY` values, both genuinely unobtainable through any tool available in this session (see Blockers). Everything not dependent on those two values is complete and verified.
 
 ## Blockers
 1. **`DEFAULT_POSTHOG_KEY` (or `POSTHOG_KEY` env var) has no real value yet.** Checked every available avenue: production's live `/api/config` doesn't emit it (this PR isn't merged); no authenticated browser session for app.posthog.com/eu.posthog.com exists here (reached the login form, no stored credentials, did not attempt to sign in); `vercel env pull` redacts the value to a placeholder before it can be read, a platform-level control. Needs a human to paste the real `phc_...` value into `lib/env.js`'s `DEFAULT_POSTHOG_KEY` (or set it as a Vercel env var, either now works identically).
@@ -91,7 +90,7 @@ Once a human sets `DEFAULT_POSTHOG_KEY` and `SUPABASE_PREVIEW_SECRET_KEY`: redep
 - `/api/config`, login, me, logout: PASS (done, live-verified).
 - register, voxel, game over real HTTP: PASS (blocked on `SUPABASE_PREVIEW_SECRET_KEY`).
 - PostHog EU live events: PASS (blocked on `DEFAULT_POSTHOG_KEY`).
-- `release:gate`: clean PASS.
+- `release:gate`: clean PASS — **done**.
 - No regression in Sentry, the Vercel Hobby function-count limit (PR #11), or production secret isolation.
 - `mergeSafe: true` only once every item above is true.
 
