@@ -89,20 +89,12 @@ test.describe('Real multi-user world creation and merge chain (A, B, C -> AB -> 
     const abBody = await abRes.json();
     expect(abBody.spec.provenance.sourceWorldIds).toEqual(expect.arrayContaining([worldA, worldB]));
 
-    // AB+C -> ABC, driven fresh (a brand-new clean context, not reusing A/B/C's).
-    const ctxMerger = await browser.newContext();
-    const pageMerger = await ctxMerger.newPage();
-    await pageMerger.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
-    // This context has no worldId of its own yet -- merging is done purely
-    // by world id, so drive it via a completed publish first (a 4th "world",
-    // representing "whoever performs the AB+C merge doesn't need to be A/B/C").
-    const mergerWorld = await completeQuestionnaireAndPublish(pageMerger, 'Merger');
-    const worldABC1 = await mergeViaUI(pageMerger, worldAB);
-    // mergeViaUI merges mergerWorld with worldAB here -- for the literal
-    // "AB+C" requested, merge AB and C directly via the API instead (the UI
-    // always merges "my current world" with a pasted id, so to combine two
-    // arbitrary existing worlds without a third party's own world in the mix,
-    // go through the API the UI itself calls).
+    // AB+C -> ABC. The UI's "Соединить" always merges "my current world" with
+    // a pasted id, so combining two arbitrary EXISTING worlds (AB and C) with
+    // no third party's own world in the mix goes through the same endpoint
+    // the UI itself calls, driven by a genuinely uninvolved fourth party
+    // (not A, B, or C) -- this is the realistic shape of "someone merges two
+    // already-published worlds together," not "the owner of one of them does."
     const abcRes = await request.post(`${BASE_URL}/api/merge`, {
       data: { action: 'create', sourceWorldIds: [worldAB, worldC], guestId: '99999999-9999-4999-8999-999999999999' }
     });
@@ -116,7 +108,7 @@ test.describe('Real multi-user world creation and merge chain (A, B, C -> AB -> 
     const abcWorldBody = await abcWorldRes.json();
     expect(abcWorldBody.spec.provenance.sourceWorldIds).toEqual(expect.arrayContaining([worldAB, worldC]));
 
-    await ctxA.close(); await ctxB.close(); await ctxC.close(); await ctxMerger.close();
+    await ctxA.close(); await ctxB.close(); await ctxC.close();
   });
 });
 
