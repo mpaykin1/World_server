@@ -26,6 +26,31 @@ test('story.save with finish:true computes and persists a blueprint', async () =
   assert.deepEqual(admin._tables.get('stories')[0].blueprint, result.blueprint);
 });
 
+test('story.save increments version on every successful update', async () => {
+  const admin = createFakeSupabase();
+  const created = await story.handleSave(admin, guestA, { answers: { story: 'v1' } });
+  assert.equal(created.version, 1);
+  const updated = await story.handleSave(admin, guestA, { storyId: created.id, answers: { story: 'v2' }, expectedVersion: 1 });
+  assert.equal(updated.version, 2);
+  assert.equal(admin._tables.get('stories')[0].answers.story, 'v2');
+});
+
+test('story.save detects a version conflict instead of silently overwriting a newer server write', async () => {
+  // Simulates the realistic case: a queued offline write (still holding the
+  // version it saw before going offline) tries to land after a more recent
+  // online write from the same browser already moved the story forward.
+  const admin = createFakeSupabase();
+  const created = await story.handleSave(admin, guestA, { answers: { story: 'v1' } });
+  await story.handleSave(admin, guestA, { storyId: created.id, answers: { story: 'v2 (written online)' }, expectedVersion: 1 });
+
+  const staleWrite = await story.handleSave(admin, guestA, { storyId: created.id, answers: { story: 'v2 (queued while offline)' }, expectedVersion: 1 });
+  assert.equal(staleWrite.conflict, true);
+  assert.equal(staleWrite.server.version, 2);
+  assert.equal(staleWrite.server.answers.story, 'v2 (written online)');
+  // The server's real state must never have been clobbered by the stale write.
+  assert.equal(admin._tables.get('stories')[0].answers.story, 'v2 (written online)');
+});
+
 test('story.save rejects updating a story owned by a different guestId', async () => {
   const admin = createFakeSupabase({ stories: [{ id: 's1', owner_guest_id: guestA.guestId, owner_user_id: null, answers: {} }] });
   await assert.rejects(

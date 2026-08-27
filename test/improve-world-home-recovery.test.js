@@ -29,11 +29,14 @@ test('apps/improve-world-home/public/index.html and public/app.js exist', () => 
 
 test('app.js keeps the exact CREATE (31) and JOIN (28) questionnaire lengths', () => {
   const source = fs.readFileSync(path.join(PUBLIC_DIR, 'app.js'), 'utf8');
-  // The file also reads localStorage.iwStoryId/iwWorldId at top-level module
-  // scope (recovery-cache state for the story/world backend wiring) — stub
-  // just enough of it for evaluation outside a real browser.
+  // The file also reads localStorage.iwStoryId/iwWorldId and registers a
+  // window 'online' listener at top-level module scope (recovery-cache and
+  // offline-sync state for the story/world backend wiring) — stub just
+  // enough of both for evaluation outside a real browser.
   const previousLocalStorage = global.localStorage;
+  const previousWindow = global.window;
   global.localStorage = {};
+  global.window = { addEventListener() {} };
   try {
     // eslint-disable-next-line no-new-func
     const { CREATE, JOIN } = new Function(`${source}\nreturn { CREATE, JOIN };`.replace(
@@ -47,6 +50,7 @@ test('app.js keeps the exact CREATE (31) and JOIN (28) questionnaire lengths', (
     assert.equal(JOIN.length, 28, 'JOIN questionnaire must stay at 28 questions (IW_CONTRACT)');
   } finally {
     global.localStorage = previousLocalStorage;
+    global.window = previousWindow;
   }
 });
 
