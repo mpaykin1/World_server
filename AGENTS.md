@@ -23,6 +23,7 @@
 - Перед изменением архитектуры сначала **анализировать зависимости** (`api/`, `apps/`, `shared/`, `lib/`, `supabase/migrations`, `vercel.json`).
 - Сохранять **обратную совместимость**: маршруты `/api/apps`, `/api/register`, `/api/login`, `/api/me`, `/api/logout`, `/api/voxel`, события `chat:*`, `survival:*`, `sharabass:*`, интерфейс `MiniSocket` и `shared/common.js`.
 - Если задача большая — разбивать на **независимые проверяемые части** (отдельные PR/ветки).
+- **Never choose between a free deterministic fallback and real runtime/AI integration — build both layers, always.** When a feature has both a free/local/deterministic path and a genuinely richer path (a real generative/AI layer, an existing runtime it could plug into), the deterministic path is the mandatory baseline that must always work with zero external dependencies or cost, and the richer path is additive on top of it, never a replacement for it. Concretely: `questionnaire → deterministic World Spec → existing world runtime` must always work; `questionnaire → semantic interpretation (local/open-source, no paid API) → World Spec → existing world runtime` runs when that interpretation layer is available and silently falls back to the deterministic path when it isn't. Do not ask which one to build — build the fallback first (if it doesn't already exist), then the richer layer on top, and verify both paths independently.
 
 ## 3. Безопасность
 
