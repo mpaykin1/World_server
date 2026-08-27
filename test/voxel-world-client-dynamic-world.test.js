@@ -46,6 +46,26 @@ test('biomeAt applies the theme bias instead of using fixed thresholds directly'
   assert.match(SOURCE, /m>\.62\+bias\.forest/);
 });
 
-test('worldTheme is set from the real init response, not left at its default for every world', () => {
-  assert.match(SOURCE, /worldTheme=String\(init\.world\?\.settings\?\.theme\|\|'plains'\);/);
+test('worldTheme, heightScale, treeDensity, and sky/fog atmosphere are all set from the real init response', () => {
+  assert.match(SOURCE, /const vs=init\.world\?\.settings\|\|\{\};/);
+  assert.match(SOURCE, /worldTheme=String\(vs\.theme\|\|'plains'\);/);
+  assert.match(SOURCE, /worldHeightScale=Number\(vs\.heightScale\)\|\|1;/);
+  assert.match(SOURCE, /worldTreeDensity=Number\(vs\.treeDensity\)\|\|1;/);
+  assert.match(SOURCE, /worldSkyHue=hexToHue\(Number\(vs\.skyTint\)\);/);
+  assert.match(SOURCE, /scene\.fog\.near=vs\.fogNear;scene\.fog\.far=vs\.fogFar;/);
+});
+
+test('heightAt scales only the noise-driven variance by worldHeightScale, not the base height (spawn/sea-level stay stable)', () => {
+  assert.match(SOURCE, /let h=16\+n\*21\*worldHeightScale;/);
+  assert.match(SOURCE, /h\+=ridge\*15\*worldHeightScale;/);
+});
+
+test('tree density scales the pass-rate thresholds, bounded so mobile FPS is never at risk from an unbounded increase', () => {
+  assert.match(SOURCE, /const forestThresh=clamp\(1-\(1-\.89\)\*worldTreeDensity,\.6,\.995\)/);
+  assert.match(SOURCE, /plainsThresh=clamp\(1-\(1-\.975\)\*worldTreeDensity,\.9,\.999\)/);
+});
+
+test('daylight() uses the theme-derived hue instead of a hardcoded one, at no extra render cost', () => {
+  assert.match(SOURCE, /setHSL\(worldSkyHue,\.55,\.18\+\.48\*k\)/);
+  assert.doesNotMatch(SOURCE, /setHSL\(\.57,\.55,\.18\+\.48\*k\)/);
 });

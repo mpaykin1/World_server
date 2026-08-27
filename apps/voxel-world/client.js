@@ -76,6 +76,18 @@ let worldSeed=73194217;
 // which biome the same noise field resolves to, without changing the core
 // generator algorithm. 'plains' (the default/unthemed case) is unbiased.
 let worldTheme='plains';
+// Reflects the questionnaire's own tension/conflict answers (embedded in
+// the World Spec's scene text -- see lib/voxel-provisioning.js#deriveHeightScale):
+// a calmer story produces gentler terrain, a tense/conflict-driven one
+// produces more dramatic relief. Only scales the noise-driven variance, not
+// the base height, so spawn logic and sea level stay unaffected.
+let worldHeightScale=1;
+let worldTreeDensity=1;
+// Base hue for the existing day/night sky-color cycle (daylight(), below) --
+// theme shifts which hue the cycle breathes through, at zero extra render
+// cost (same Color object, same per-frame math, just a different constant).
+let worldSkyHue=.57;
+function hexToHue(hex){ try{ const c=new THREE.Color(hex); const hsl={h:0,s:0,l:0}; c.getHSL(hsl); return hsl.h; }catch{ return .57; } }
 const THEME_BIOME_BIAS={
   desert:{desert:-.22,snow:.15,forest:.08},
   snow:{desert:.15,snow:-.2,forest:.05},
@@ -89,7 +101,7 @@ function biomeAt(x,z){
 }
 function heightAt(x,z){
   const b=biomeAt(x,z), n=fbm(x,z,worldSeed), ridge=Math.abs(valueNoise(x,z,105,worldSeed+77)-.5)*2;
-  let h=16+n*21; if(b==='snow') h+=ridge*15; if(b==='desert') h=17+n*11; if(b==='forest') h+=4;
+  let h=16+n*21*worldHeightScale; if(b==='snow') h+=ridge*15*worldHeightScale; if(b==='desert') h=17+n*11*worldHeightScale; if(b==='forest') h+=4;
   return clamp(Math.floor(h),5,WORLD_Y-12);
 }
 function caveAt(x,y,z){ if(y<4||y>55) return false; const a=valueNoise(x+y*7,z-y*5,22,worldSeed+2600); const b=valueNoise(x-y*3,z+y*9,11,worldSeed+2800); return a>.72&&b>.58; }
@@ -142,7 +154,8 @@ function generateChunkData(c,rows=[]){
       c.set(lx,y,lz,b);
     }
     const treeChance=hash32(x,z,worldSeed+5100);
-    const canTree=(biome==='forest'&&treeChance>.89)||(biome==='plains'&&treeChance>.975);
+    const forestThresh=clamp(1-(1-.89)*worldTreeDensity,.6,.995), plainsThresh=clamp(1-(1-.975)*worldTreeDensity,.9,.999);
+    const canTree=(biome==='forest'&&treeChance>forestThresh)||(biome==='plains'&&treeChance>plainsThresh);
     if(canTree&&h>SEA+1&&lx>2&&lz>2&&lx<CHUNK-3&&lz<CHUNK-3){
       const th=4+(hash32(x,z,worldSeed+5200)*3|0);
       for(let y=h+1;y<=h+th&&y<WORLD_Y;y++) c.set(lx,y,lz,BLOCK.WOOD);
@@ -281,7 +294,7 @@ function setupMobile(){
   document.getElementById('jumpBtn').onclick=jump;document.getElementById('breakBtn').onclick=()=>editBlock(false);document.getElementById('placeBtn').onclick=()=>editBlock(true);
 }
 
-function daylight(now){const day=(now*.000015)%1,a=day*Math.PI*2;sun.position.set(Math.cos(a)*65,Math.sin(a)*72+12,30);const k=clamp((sun.position.y+12)/55,.12,1);sun.intensity=.25+2.0*k;hemi.intensity=.28+1.0*k;const sky=new THREE.Color().setHSL(.57,.55,.18+.48*k);scene.background.copy(sky);scene.fog.color.copy(sky);}
+function daylight(now){const day=(now*.000015)%1,a=day*Math.PI*2;sun.position.set(Math.cos(a)*65,Math.sin(a)*72+12,30);const k=clamp((sun.position.y+12)/55,.12,1);sun.intensity=.25+2.0*k;hemi.intensity=.28+1.0*k;const sky=new THREE.Color().setHSL(worldSkyHue,.55,.18+.48*k);scene.background.copy(sky);scene.fog.color.copy(sky);}
 function updateTarget(){const h=rayVoxel();if(!h)return;targetEl.textContent=`${BLOCKS[h.block]?.name||'Блок'} · ${h.hit.x}, ${h.hit.y}, ${h.hit.z}`;}
 
 async function savePlayer(){try{await api('player_save',{worldId,position:{x:player.pos.x,y:player.pos.y,z:player.pos.z},yaw:player.yaw,pitch:player.pitch,selectedBlock:HOTBAR[player.selected]});}catch{} }
@@ -293,7 +306,7 @@ setupDesktop();setupMobile();buildHotbar();
 
 try{
   const appState=await window.AppCore.init('voxel-world');
-  const init=await api('init',{worldId}); worldSeed=Number(init.world?.seed)||worldSeed; worldTheme=String(init.world?.settings?.theme||'plains'); player.id=init.selfId;player.name=init.player?.name||appState.user?.username||'Player'; const p=init.player?.position||{x:0,y:heightAt(0,0)+4,z:0};player.pos.set(Number(p.x)||0,Number(p.y)||heightAt(0,0)+4,Number(p.z)||0);player.yaw=Number(init.player?.yaw)||0;player.pitch=Number(init.player?.pitch)||0;const sel=HOTBAR.indexOf(Number(init.player?.selectedBlock));if(sel>=0)player.selected=sel;buildHotbar(); await connectRealtime(appState); started=true; statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';loading.classList.add('hidden');
+  const init=await api('init',{worldId}); worldSeed=Number(init.world?.seed)||worldSeed; const vs=init.world?.settings||{}; worldTheme=String(vs.theme||'plains'); worldHeightScale=Number(vs.heightScale)||1; worldTreeDensity=Number(vs.treeDensity)||1; if(vs.skyTint!==undefined)worldSkyHue=hexToHue(Number(vs.skyTint)); if(Number.isFinite(vs.fogNear)&&Number.isFinite(vs.fogFar)){scene.fog.near=vs.fogNear;scene.fog.far=vs.fogFar;} player.id=init.selfId;player.name=init.player?.name||appState.user?.username||'Player'; const p=init.player?.position||{x:0,y:heightAt(0,0)+4,z:0};player.pos.set(Number(p.x)||0,Number(p.y)||heightAt(0,0)+4,Number(p.z)||0);player.yaw=Number(init.player?.yaw)||0;player.pitch=Number(init.player?.pitch)||0;const sel=HOTBAR.indexOf(Number(init.player?.selectedBlock));if(sel>=0)player.selected=sel;buildHotbar(); await connectRealtime(appState); started=true; statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';loading.classList.add('hidden');
 }catch(e){console.error(e);statusEl.textContent=e.message;statusEl.className='vwWarn';loading.textContent=`Voxel World: ${e.message}`;setTimeout(()=>loading.classList.add('hidden'),3500);started=true;player.pos.set(0,heightAt(0,0)+4,0);}
 
 window.VoxelWorldRuntime={
