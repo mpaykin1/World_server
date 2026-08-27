@@ -1,7 +1,7 @@
 'use strict';
 const test=require('node:test');
 const assert=require('node:assert/strict');
-const { _private }=require('../api/ai3d-voxel-generate');
+const { _private }=require('../lib/api-handlers/ai3d-voxel-generate');
 
 function body(w=48,h=38){
   const rgb=Buffer.alloc(w*h*3);

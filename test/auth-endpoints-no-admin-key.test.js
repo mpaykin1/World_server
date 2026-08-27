@@ -33,22 +33,26 @@ function withPublicEnvOnly(fn) {
   }
 }
 
+// login/me/logout moved from api/*.js to lib/api-handlers/*.js behind the
+// api/auth.js router (Vercel Hobby function-count consolidation) — this
+// test targets their real module location, not the router that dispatches
+// to them.
 for (const file of ['login', 'me', 'logout']) {
-  test(`api/${file}.js does not require an admin/service-role key to load or run its module body`, () => {
+  test(`lib/api-handlers/${file}.js does not require an admin/service-role key to load or run its module body`, () => {
     withPublicEnvOnly(() => {
-      delete require.cache[require.resolve(`../api/${file}.js`)];
+      delete require.cache[require.resolve(`../lib/api-handlers/${file}.js`)];
       // Loading must not throw even though no SUPABASE_SECRET_KEY is set —
       // if the module called createAdminClient() (or getSecretKey()) at
       // call time with a real request, that would throw "Supabase server
       // secret environment variable is not configured."
-      assert.doesNotThrow(() => require(`../api/${file}.js`));
+      assert.doesNotThrow(() => require(`../lib/api-handlers/${file}.js`));
     });
   });
 
-  test(`api/${file}.js source does not reference createAdminClient`, () => {
+  test(`lib/api-handlers/${file}.js source does not reference createAdminClient`, () => {
     const fs = require('node:fs');
     const path = require('node:path');
-    const source = fs.readFileSync(path.join(__dirname, '..', 'api', `${file}.js`), 'utf8');
-    assert.ok(!source.includes('createAdminClient'), `api/${file}.js must not use the admin/service-role Supabase client`);
+    const source = fs.readFileSync(path.join(__dirname, '..', 'lib', 'api-handlers', `${file}.js`), 'utf8');
+    assert.ok(!source.includes('createAdminClient'), `lib/api-handlers/${file}.js must not use the admin/service-role Supabase client`);
   });
 }

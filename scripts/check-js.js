@@ -7,15 +7,25 @@ const { spawnSync } = require('child_process');
 const root = path.resolve(__dirname, '..');
 const files = ['server.js', 'shared/common.js'];
 const modules = [];
-for (const directory of ['api', 'lib']) {
-  for (const entry of fs.readdirSync(path.join(root, directory))) {
-    if (entry.endsWith('.js')) files.push(`${directory}/${entry}`);
+function walkJsFiles(directory) {
+  const out = [];
+  for (const entry of fs.readdirSync(path.join(root, directory), { withFileTypes: true })) {
+    const rel = `${directory}/${entry.name}`;
+    if (entry.isDirectory()) out.push(...walkJsFiles(rel));
+    else if (entry.name.endsWith('.js')) out.push(rel);
   }
+  return out;
+}
+for (const directory of ['api', 'lib']) {
+  files.push(...walkJsFiles(directory));
 }
 for (const entry of fs.readdirSync(path.join(root, 'apps'), { withFileTypes: true })) {
   if (!entry.isDirectory()) continue;
-  const client = `apps/${entry.name}/client.js`;
-  if (fs.existsSync(path.join(root, client))) modules.push(client);
+  // Most apps/<name>/ use client.js at the app root; improve-world-home is a
+  // standalone Vercel project mirroring its real original public/app.js layout.
+  for (const client of [`apps/${entry.name}/client.js`, `apps/${entry.name}/public/app.js`]) {
+    if (fs.existsSync(path.join(root, client))) modules.push(client);
+  }
 }
 
 for (const file of files) {
