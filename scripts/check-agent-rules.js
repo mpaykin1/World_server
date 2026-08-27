@@ -73,7 +73,8 @@ try {
     { label: 'autonomous technical execution', pattern: /autonomous technical execution/i },
     { label: 'OSS auto-install policy', pattern: /installed by the agent directly|self-install free oss/i },
     { label: 'regression protection requirement', pattern: /regression protection/i },
-    { label: 'safe AI isolation (no touching another agent\'s worktree/watchdog)', pattern: /another agent's checked-out worktree/i }
+    { label: 'safe AI isolation (no touching another agent\'s worktree/watchdog)', pattern: /another agent's checked-out worktree/i },
+    { label: 'API-surface router-reuse / Vercel function budget policy', pattern: /before adding new api surface/i }
   ];
   const missing = requiredConcepts.filter(c => !c.pattern.test(agents)).map(c => c.label);
   check(missing.length === 0, 'AGENTS.md contains all required standing-policy concepts' + (missing.length ? ` (missing: ${missing.join(', ')})` : ''));
