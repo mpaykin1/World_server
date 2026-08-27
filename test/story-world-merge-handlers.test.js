@@ -125,6 +125,30 @@ test('merge.create composes A+B into a new published world with provenance, and 
   assert.equal(admin._tables.get('merges').length, 1);
 });
 
+test('merge.create is safe under concurrency: two simultaneous requests for the same pair never produce two canonical merges', async () => {
+  const admin = createFakeSupabase({
+    worlds: [
+      { id: 'wa', status: 'published', spec: { title: 'A', scene: 'sa', characters: [], worlds: [], provenance: { sourceStoryIds: ['sa'] } }, source_story_ids: ['sa'] },
+      { id: 'wb', status: 'published', spec: { title: 'B', scene: 'sb', characters: [], worlds: [], provenance: { sourceStoryIds: ['sb'] } }, source_story_ids: ['sb'] }
+    ]
+  });
+  // Both requests race past the optimistic findExistingMerge check (neither
+  // sees the other's write yet) -- this is exactly the scenario that would
+  // have produced two merges/two result worlds before the unique-index +
+  // ON CONFLICT upsert fix.
+  const [first, second] = await Promise.all([
+    merge.handleCreate(admin, guestA, { sourceWorldIds: ['wa', 'wb'] }),
+    merge.handleCreate(admin, guestB, { sourceWorldIds: ['wb', 'wa'] })
+  ]);
+
+  assert.equal(first.resultWorldId, second.resultWorldId, 'both racing callers must see the same canonical result world');
+  assert.equal(admin._tables.get('merges').length, 1, 'exactly one canonical merge row must exist for this source pair');
+  // Exactly one of the two calls "won" the race (created the canonical
+  // merge); the other must report reused:true rather than believing it
+  // created a fresh one.
+  assert.equal([first.reused, second.reused].filter((r) => r === false).length, 1);
+});
+
 test('merge.create folds three worlds A+B+C into one result with all three in provenance', async () => {
   const admin = createFakeSupabase({
     worlds: [

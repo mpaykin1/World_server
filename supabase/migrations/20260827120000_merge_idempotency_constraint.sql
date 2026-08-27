@@ -1,0 +1,13 @@
+-- Closes a real race condition in the merge idempotency logic
+-- (lib/api-handlers/merge.js#handleCreate): the original check-then-act
+-- (SELECT for an existing merge, then INSERT if none found) is not atomic --
+-- two concurrent requests for the same source-world pair can both pass the
+-- SELECT before either INSERTs, producing two merge rows and two duplicate
+-- result worlds for what should be one idempotent operation.
+--
+-- Fixed at the database level (the only place a race like this can actually
+-- be closed): source_world_ids is always stored pre-sorted by the
+-- application now, so array equality on the sorted array is a reliable
+-- dedup key, and a unique index on it lets an INSERT ... ON CONFLICT do the
+-- check-and-insert atomically instead of as two separate round-trips.
+create unique index if not exists merges_source_world_ids_key on public.merges (source_world_ids);

@@ -18,18 +18,27 @@ function createFakeSupabase(initialTables = {}) {
     return tables.get(name);
   }
 
+  function valueEquals(a, b) {
+    if (Array.isArray(a) || Array.isArray(b)) {
+      if (!Array.isArray(a) || !Array.isArray(b) || a.length !== b.length) return false;
+      return a.every((v, i) => v === b[i]);
+    }
+    return a === b;
+  }
+
   function matches(row, filters) {
     return filters.every(([type, col, val]) => {
-      if (type === 'eq') return row[col] === val;
+      if (type === 'eq') return valueEquals(row[col], val);
       if (type === 'in') return val.includes(row[col]);
       return true;
     });
   }
 
   function builder(name) {
-    let mode = null; // 'select' | 'insert' | 'update'
+    let mode = null; // 'select' | 'insert' | 'update' | 'upsert'
     let payload = null;
     let selectCols = null;
+    let upsertOpts = null;
     const filters = [];
     let terminal = null; // 'single' | 'maybeSingle' | null (array)
 
@@ -37,6 +46,7 @@ function createFakeSupabase(initialTables = {}) {
       select(cols) { selectCols = cols; if (!mode) mode = 'select'; return api; },
       insert(row) { mode = 'insert'; payload = row; return api; },
       update(row) { mode = 'update'; payload = row; return api; },
+      upsert(row, opts) { mode = 'upsert'; payload = row; upsertOpts = opts || {}; return api; },
       eq(col, val) { filters.push(['eq', col, val]); return api; },
       in(col, vals) { filters.push(['in', col, vals]); return api; },
       single() { terminal = 'single'; return api; },
@@ -55,6 +65,27 @@ function createFakeSupabase(initialTables = {}) {
         if (terminal === 'single') return { data: result, error: null };
         if (terminal === 'maybeSingle') return { data: result, error: null };
         return { data: inserted, error: null };
+      }
+      if (mode === 'upsert') {
+        const conflictCol = upsertOpts.onConflict;
+        const conflictVal = payload[conflictCol];
+        const existing = conflictCol ? rows.find((r) => valueEquals(r[conflictCol], conflictVal)) : null;
+        if (existing) {
+          if (upsertOpts.ignoreDuplicates) {
+            // Real supabase-js/PostgREST: an ignored-duplicate upsert returns
+            // no row at all, not the existing one -- the caller is expected
+            // to re-select for it, exactly like the real conflict-loser path.
+            if (terminal === 'single') return { data: null, error: { message: 'no rows' } };
+            return { data: terminal === 'maybeSingle' ? null : [], error: null };
+          }
+          Object.assign(existing, payload);
+          if (terminal === 'single' || terminal === 'maybeSingle') return { data: existing, error: null };
+          return { data: [existing], error: null };
+        }
+        const inserted = Object.assign({ id: payload.id || String(autoId++) }, payload);
+        rows.push(inserted);
+        if (terminal === 'single' || terminal === 'maybeSingle') return { data: inserted, error: null };
+        return { data: [inserted], error: null };
       }
       if (mode === 'update') {
         const affected = rows.filter((r) => matches(r, filters));
