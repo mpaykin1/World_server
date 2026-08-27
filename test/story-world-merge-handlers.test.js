@@ -77,6 +77,20 @@ test('world.generate creates a published world from a finished story, owned by t
   assert.equal(result.spec.characters[0].name, 'Hero');
 });
 
+test('world.generate also provisions a matching voxel_worlds row and returns a real playUrl (dual-layer: always playable, per AGENTS.md)', async () => {
+  const admin = createFakeSupabase({
+    stories: [{ id: 's1', owner_guest_id: guestA.guestId, owner_user_id: null, answers: { chars: [] }, blueprint: { title: 'Снежный путь', mode: '', scene: 'мороз и лёд' } }]
+  });
+  const result = await world.handleGenerate(admin, guestA, { storyId: 's1' });
+  assert.equal(result.playUrl, world.playUrlFor(result.id));
+  assert.match(result.playUrl, /^https:\/\/world-server\.vercel\.app\/apps\/voxel-world\/\?world=w-[0-9a-f]{12}$/);
+
+  const voxelRow = admin._tables.get('voxel_worlds').find((r) => r.id === result.id);
+  assert.ok(voxelRow, 'a voxel_worlds row must exist for the new world');
+  assert.equal(voxelRow.settings.theme, 'snow', 'the theme must be derived from the actual narrative content');
+  assert.ok(Number.isInteger(voxelRow.seed) && voxelRow.seed > 0);
+});
+
 test('world.get hides a draft world from anyone but its owner', async () => {
   const admin = createFakeSupabase({ worlds: [{ id: 'w1', status: 'draft', owner_guest_id: guestA.guestId, owner_user_id: null, spec: {} }] });
   await assert.rejects(() => world.handleGet(admin, guestB, { worldId: 'w1' }), (err) => err.status === 404);
@@ -123,6 +137,12 @@ test('merge.create composes A+B into a new published world with provenance, and 
   // No new rows were created on the idempotent re-merge.
   assert.equal(admin._tables.get('worlds').length, 3);
   assert.equal(admin._tables.get('merges').length, 1);
+
+  // Dual-layer rule (AGENTS.md): the merged AB world must also be a real,
+  // immediately playable voxel world, not just a data record.
+  assert.equal(first.playUrl, merge.playUrlFor(first.resultWorldId));
+  const voxelRow = admin._tables.get('voxel_worlds').find((r) => r.id === first.resultWorldId);
+  assert.ok(voxelRow, 'the merged world must also get a voxel_worlds row');
 });
 
 test('merge.create is safe under concurrency: two simultaneous requests for the same pair never produce two canonical merges', async () => {

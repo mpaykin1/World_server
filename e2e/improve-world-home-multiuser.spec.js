@@ -37,6 +37,11 @@ async function completeQuestionnaireAndPublish(page, authorName) {
   await expect(worldIdLocator).toBeVisible({ timeout: 15000 });
   const worldId = (await worldIdLocator.textContent()).trim();
   expect(worldId).toMatch(/^w-[0-9a-f]{12}$/);
+  // Dual-layer rule (AGENTS.md): publishing must also produce a real,
+  // immediately playable link into the existing voxel-world runtime, not
+  // just a data id.
+  const playLink = page.locator('#pubBox a', { hasText: 'Открыть мир' });
+  await expect(playLink).toHaveAttribute('href', new RegExp(`world-server\\.vercel\\.app/apps/voxel-world/\\?world=${worldId}$`));
   return worldId;
 }
 
@@ -46,7 +51,10 @@ async function mergeViaUI(page, otherWorldId) {
   await page.locator('#weaveBox').getByRole('button', { name: 'Соединить' }).click();
   const resultLocator = page.locator('#mergeResult code');
   await expect(resultLocator).toBeVisible({ timeout: 15000 });
-  return (await resultLocator.textContent()).trim();
+  const resultWorldId = (await resultLocator.textContent()).trim();
+  const playLink = page.locator('#mergeResult a', { hasText: 'Открыть мир' });
+  await expect(playLink).toHaveAttribute('href', new RegExp(`world-server\\.vercel\\.app/apps/voxel-world/\\?world=${resultWorldId}$`));
+  return resultWorldId;
 }
 
 async function apiGetWorld(request, worldId, guestId) {
