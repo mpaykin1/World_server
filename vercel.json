@@ -54,7 +54,10 @@
     { "source": "/api/ai3d-voxel-generate", "destination": "/api/generative?__route=ai3d-voxel-generate" },
     { "source": "/api/apng", "destination": "/api/generative?__route=apng" },
     { "source": "/api/lowfi-25d-scene", "destination": "/api/generative?__route=lowfi-25d-scene" },
-    { "source": "/api/voxel", "destination": "/api/generative?__route=voxel" }
+    { "source": "/api/voxel", "destination": "/api/generative?__route=voxel" },
+    { "source": "/api/story", "destination": "/api/narrative?__route=story" },
+    { "source": "/api/world", "destination": "/api/narrative?__route=world" },
+    { "source": "/api/merge", "destination": "/api/narrative?__route=merge" }
   ],
   "headers": [
     {

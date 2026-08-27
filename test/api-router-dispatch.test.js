@@ -36,7 +36,8 @@ const ROUTERS = {
     ]
   },
   auth: { file: '../api/auth.js', routes: ['login', 'logout', 'me', 'register'] },
-  generative: { file: '../api/generative.js', routes: ['ai3d', 'ai3d-voxel-generate', 'apng', 'lowfi-25d-scene', 'voxel'] }
+  generative: { file: '../api/generative.js', routes: ['ai3d', 'ai3d-voxel-generate', 'apng', 'lowfi-25d-scene', 'voxel'] },
+  narrative: { file: '../api/narrative.js', routes: ['story', 'world', 'merge'] }
 };
 
 for (const [name, spec] of Object.entries(ROUTERS)) {
@@ -63,8 +64,8 @@ test('api/generative.js dispatches a known route and 404s an unknown one', async
   assert.equal(res2.statusCode, 404);
 });
 
-test('api/quality.js and api/auth.js 404 on an unknown route', async () => {
-  for (const file of ['../api/quality.js', '../api/auth.js']) {
+test('api/quality.js, api/auth.js and api/narrative.js 404 on an unknown route', async () => {
+  for (const file of ['../api/quality.js', '../api/auth.js', '../api/narrative.js']) {
     const handler = require(file);
     const req = { method: 'GET', url: '/x?__route=does-not-exist', query: { __route: 'does-not-exist' } };
     const res = mockRes();
