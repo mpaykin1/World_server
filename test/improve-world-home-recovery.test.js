@@ -29,16 +29,25 @@ test('apps/improve-world-home/public/index.html and public/app.js exist', () => 
 
 test('app.js keeps the exact CREATE (31) and JOIN (28) questionnaire lengths', () => {
   const source = fs.readFileSync(path.join(PUBLIC_DIR, 'app.js'), 'utf8');
-  // eslint-disable-next-line no-new-func
-  const { CREATE, JOIN } = new Function(`${source}\nreturn { CREATE, JOIN };`.replace(
-    // The recovered file calls verifyContract()/home() at load time, which
-    // touch `document`/`location` — stub just enough to evaluate the file
-    // for its data arrays without a real DOM.
-    'verifyContract();location.hash===\'#why\'?showWhy():home();',
-    ''
-  ))();
-  assert.equal(CREATE.length, 31, 'CREATE questionnaire must stay at 31 questions (IW_CONTRACT)');
-  assert.equal(JOIN.length, 28, 'JOIN questionnaire must stay at 28 questions (IW_CONTRACT)');
+  // The file also reads localStorage.iwStoryId/iwWorldId at top-level module
+  // scope (recovery-cache state for the story/world backend wiring) — stub
+  // just enough of it for evaluation outside a real browser.
+  const previousLocalStorage = global.localStorage;
+  global.localStorage = {};
+  try {
+    // eslint-disable-next-line no-new-func
+    const { CREATE, JOIN } = new Function(`${source}\nreturn { CREATE, JOIN };`.replace(
+      // The recovered file calls verifyContract()/home() at load time, which
+      // touch `document`/`location` — stub just enough to evaluate the file
+      // for its data arrays without a real DOM.
+      'verifyContract();location.hash===\'#why\'?showWhy():home();',
+      ''
+    ))();
+    assert.equal(CREATE.length, 31, 'CREATE questionnaire must stay at 31 questions (IW_CONTRACT)');
+    assert.equal(JOIN.length, 28, 'JOIN questionnaire must stay at 28 questions (IW_CONTRACT)');
+  } finally {
+    global.localStorage = previousLocalStorage;
+  }
 });
 
 test('app.js still contains its own IW_CONTRACT runtime regression guard', () => {
@@ -63,6 +72,19 @@ test('apps/improve-world-home/vercel.json restores the real original build pipel
   const config = JSON.parse(fs.readFileSync(path.join(APP_DIR, 'vercel.json'), 'utf8'));
   assert.equal(config.buildCommand, 'npm run build');
   assert.equal(config.outputDirectory, 'public');
+});
+
+test('apps/improve-world-home/vercel.json proxies /api/* to the main world-server API (cross-project, no CORS needed)', () => {
+  // improve-world-home is its own Vercel project (rootDirectory-scoped to
+  // this directory) -- it has no api/ of its own, so a same-origin fetch
+  // like /api/story from public/app.js would 404 in production without
+  // this. An external rewrite keeps the browser's call same-origin (no CORS
+  // headers to maintain on the API side) while Vercel's edge proxies it to
+  // the real api/narrative.js router on the main deployment.
+  const config = JSON.parse(fs.readFileSync(path.join(APP_DIR, 'vercel.json'), 'utf8'));
+  const rewrite = (config.rewrites || []).find((r) => r.source === '/api/:path*');
+  assert.ok(rewrite, 'vercel.json must proxy /api/* to the main world-server deployment');
+  assert.equal(rewrite.destination, 'https://world-server.vercel.app/api/:path*');
 });
 
 test('check.js regression gate exists and actually passes against the recovered public/ files', () => {
