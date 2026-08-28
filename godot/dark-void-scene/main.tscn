@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://cmteo8ggq27q2" path="res://addons/cinematic_voxel_guard/performance_governor.gd" id="7_5vw27"]
 [ext_resource type="Script" uid="uid://bk4pm67fis83s" path="res://midground_ridge.gd" id="8_5vw27"]
 [ext_resource type="Script" uid="uid://b8lmbn4vkl7j0" path="res://valley_floor.gd" id="9_kek77"]
+[ext_resource type="Script" uid="uid://drul3ipe7e43r" path="res://mountain_wall.gd" id="10_4c57u"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5vw27"]
 sky_top_color = Color(0.007843138, 0.007843138, 0.007843138, 1)
@@ -265,3 +266,7 @@ script = ExtResource("9_kek77")
 x_range = Vector2(-35, 40)
 z_range = Vector2(-8, 20)
 base_y = -3.5
+
+[node name="MountainWall" type="Node3D" parent="." unique_id=1254349102 groups=["cinematic_hero", "voxel"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 10)
+script = ExtResource("10_4c57u")
