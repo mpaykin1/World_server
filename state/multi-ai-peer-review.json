@@ -1,5 +1,5 @@
 {
-  "at": "2026-08-28T06:05:40.807Z",
+  "at": "2026-08-28T06:10:42.594Z",
   "branches": 10,
   "worktrees": 3,
   "prCheck": true,
@@ -11544,6 +11544,7 @@
     "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/services/ai3d-worker/ai3d/plugins/world_quality.py",
     "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/shared/world-quality-autopilot.js",
     "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/test/world-quality-autopilot.test.js",
+    "scripts/quality-autoloop-tick.ps1",
     "supabase/migrations_backup_20260824/20260823034319_quality_autopilot_telemetry.sql",
     "supabase/migrations_backup_20260824/20260823040000_quality_autopilot_telemetry.sql",
     "supabase/migrations_backup_20260824/20260823040900_quality_autopilot_knowledge.sql",
