@@ -7,32 +7,36 @@
 [ext_resource type="Script" uid="uid://da3fqfqv6gtgm" path="res://addons/godot_ai/runtime/draw_recipe.gd" id="5_7mycd"]
 [ext_resource type="Script" uid="uid://c3uqiwqqfa83o" path="res://addons/cinematic_voxel_guard/scene_contract.gd" id="6_272bh"]
 [ext_resource type="Script" uid="uid://cmteo8ggq27q2" path="res://addons/cinematic_voxel_guard/performance_governor.gd" id="7_5vw27"]
+[ext_resource type="Script" uid="uid://bk4pm67fis83s" path="res://midground_ridge.gd" id="8_5vw27"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_272bh"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5vw27"]
 sky_top_color = Color(0.007843138, 0.007843138, 0.007843138, 1)
-sky_horizon_color = Color(0.039215688, 0.02745098, 0.019607844, 1)
+sky_horizon_color = Color(0.019607844, 0.011764706, 0.003921569, 1)
 ground_bottom_color = Color(0, 0, 0, 1)
-ground_horizon_color = Color(0.03137255, 0.023529412, 0.015686275, 1)
+ground_horizon_color = Color(0.003921569, 0.003921569, 0.003921569, 1)
 
-[sub_resource type="Sky" id="Sky_5vw27"]
-sky_material = SubResource("ProceduralSkyMaterial_272bh")
+[sub_resource type="Sky" id="Sky_kek77"]
+sky_material = SubResource("ProceduralSkyMaterial_5vw27")
 
-[sub_resource type="Environment" id="Environment_kek77"]
+[sub_resource type="Environment" id="Environment_4c57u"]
 background_mode = 2
 background_color = Color(0.007843138, 0.007843138, 0.003921569, 1)
-sky = SubResource("Sky_5vw27")
+sky = SubResource("Sky_kek77")
 ambient_light_source = 2
-ambient_light_color = Color(0.05882353, 0.047058824, 0.03137255, 1)
-ambient_light_energy = 0.35
+ambient_light_color = Color(0.03137255, 0.023529412, 0.019607844, 1)
+ambient_light_energy = 0.14
 tonemap_mode = 2
-tonemap_exposure = 1.1
 glow_enabled = true
-glow_intensity = 1.7
-glow_bloom = 0.55
-glow_hdr_threshold = 0.65
+glow_intensity = 1.1
+glow_strength = 0.9
+glow_bloom = 0.25
 fog_enabled = true
-fog_light_color = Color(0.047058824, 0.03137255, 0.019607844, 1)
-fog_density = 0.065
+fog_light_color = Color(0.039215688, 0.023529412, 0.011764706, 1)
+fog_density = 0.045
+fog_aerial_perspective = 0.3
+fog_sky_affect = 0.5
+fog_height = -4.0
+fog_height_density = 0.05
 
 [sub_resource type="SphereMesh" id="SphereMesh_272bh"]
 radius = 0.3
@@ -41,7 +45,7 @@ height = 0.6
 [node name="Main" type="Node3D" unique_id=153568782 groups=["cinematic_voxel_scene"]]
 
 [node name="Environment" type="WorldEnvironment" parent="." unique_id=691422043]
-environment = SubResource("Environment_kek77")
+environment = SubResource("Environment_4c57u")
 
 [node name="Eye" type="Node3D" parent="." unique_id=1306085940 groups=["cinematic_hero", "voxel"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 10)
@@ -50,8 +54,8 @@ beacon_path = NodePath("/root/Main/Beacon")
 rig_path = NodePath("/root/Main/Eye/Player")
 
 [node name="Player" type="Node3D" parent="Eye" unique_id=683228359]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 13)
 script = ExtResource("3_h2yge")
+height = 1.4
 
 [node name="Beacon" type="Node3D" parent="." unique_id=979917743 groups=["cinematic_hero", "voxel"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 1.5, -22)
@@ -60,7 +64,8 @@ script = ExtResource("2_lquwl")
 [node name="Flame" type="OmniLight3D" parent="Beacon" unique_id=724933578]
 light_color = Color(1, 0.6, 0.235, 1)
 light_energy = 8.0
-omni_range = 20.0
+light_volumetric_fog_energy = 3.5
+omni_range = 32.0
 
 [node name="FlameMesh" type="MeshInstance3D" parent="Beacon" unique_id=417952086]
 material_override = ExtResource("2_h2yge")
@@ -70,6 +75,7 @@ mesh = SubResource("SphereMesh_272bh")
 transform = Transform3D(0.95105654, 0.17724487, -0.25313193, 0, 0.81915206, 0.57357645, 0.309017, -0.5455036, 0.77905995, 2, 6, 15)
 light_color = Color(0.65, 0.72, 0.95, 1)
 light_energy = 2.6
+light_volumetric_fog_energy = 0.6
 spot_range = 40.0
 spot_angle = 35.0
 
@@ -229,6 +235,20 @@ material_layers = 5
 script = ExtResource("7_5vw27")
 
 [node name="MountainRim" type="DirectionalLight3D" parent="." unique_id=1573667490]
-transform = Transform3D(-0.64278764, -0.43938506, 0.62750685, 0, 0.81915206, 0.57357645, -0.76604444, 0.36868784, -0.5265408, 0, 0, 0)
+transform = Transform3D(-0.81915206, -0.17724487, 0.5455036, 0, 0.95105654, 0.309017, -0.57357645, 0.25313193, -0.77905995, 0, 0, 0)
 light_color = Color(0.75, 0.62, 0.42, 1)
-light_energy = 1.4
+light_energy = 0.55
+sky_mode = 1
+
+[node name="Midground1" type="Node3D" parent="." unique_id=1222379716]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -1, -6)
+script = ExtResource("8_5vw27")
+half_width = 14.0
+peak_height = 6.0
+
+[node name="Midground2" type="Node3D" parent="." unique_id=1388487839]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, -1.5, -14)
+script = ExtResource("8_5vw27")
+half_width = 11.0
+peak_height = 5.0
+seed_offset = 7.3

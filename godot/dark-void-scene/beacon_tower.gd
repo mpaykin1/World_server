@@ -14,11 +14,11 @@ func _build() -> void:
 	box.size = Vector3(VOX, VOX, VOX)
 
 	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color8(0x1a, 0x14, 0x0d)
-	mat.roughness = 0.86
+	mat.albedo_color = Color8(0x0f, 0x0c, 0x08)
+	mat.roughness = 0.8
 	mat.emission_enabled = true
-	mat.emission = Color8(0x33, 0x1e, 0x0d)
-	mat.emission_energy_multiplier = 0.4
+	mat.emission = Color8(0x1a, 0x0f, 0x06)
+	mat.emission_energy_multiplier = 0.06
 
 	var cells: Array = []
 	var levels := 14
