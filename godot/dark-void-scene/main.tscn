@@ -2,32 +2,35 @@
 
 [ext_resource type="Script" uid="uid://cbua1ah2vr65p" path="res://voxel_eye_runtime.gd" id="1_0xm2m"]
 [ext_resource type="Material" uid="uid://cvxn216c2ht26" path="res://materials/flame.tres" id="2_h2yge"]
+[ext_resource type="Script" uid="uid://dgcgth3qkrerp" path="res://beacon_tower.gd" id="2_lquwl"]
+[ext_resource type="Script" uid="uid://u18h5g1jslqn" path="res://player_controller.gd" id="3_h2yge"]
+[ext_resource type="Script" uid="uid://da3fqfqv6gtgm" path="res://addons/godot_ai/runtime/draw_recipe.gd" id="5_7mycd"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0xm2m"]
-sky_top_color = Color(0.02, 0.02, 0.07, 1)
-sky_horizon_color = Color(0.05, 0.07, 0.15, 1)
-ground_bottom_color = Color(0, 0, 0.02, 1)
-ground_horizon_color = Color(0.04, 0.05, 0.1, 1)
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_272bh"]
+sky_top_color = Color(0.007843138, 0.007843138, 0.007843138, 1)
+sky_horizon_color = Color(0.039215688, 0.02745098, 0.019607844, 1)
+ground_bottom_color = Color(0, 0, 0, 1)
+ground_horizon_color = Color(0.03137255, 0.023529412, 0.015686275, 1)
 
-[sub_resource type="Sky" id="Sky_h2yge"]
-sky_material = SubResource("ProceduralSkyMaterial_0xm2m")
+[sub_resource type="Sky" id="Sky_5vw27"]
+sky_material = SubResource("ProceduralSkyMaterial_272bh")
 
-[sub_resource type="Environment" id="Environment_1bvp3"]
-background_mode = 1
-background_color = Color(0.007843138, 0.007843138, 0.011764706, 1)
-sky = SubResource("Sky_h2yge")
+[sub_resource type="Environment" id="Environment_kek77"]
+background_mode = 2
+background_color = Color(0.007843138, 0.007843138, 0.003921569, 1)
+sky = SubResource("Sky_5vw27")
 ambient_light_source = 2
-ambient_light_color = Color(0.05882353, 0.078431375, 0.14117648, 1)
-ambient_light_energy = 0.45
+ambient_light_color = Color(0.05882353, 0.047058824, 0.03137255, 1)
+ambient_light_energy = 0.35
 tonemap_mode = 2
-tonemap_exposure = 1.15
+tonemap_exposure = 1.1
 glow_enabled = true
-glow_intensity = 1.2
-glow_bloom = 0.35
-glow_hdr_threshold = 0.75
+glow_intensity = 1.7
+glow_bloom = 0.55
+glow_hdr_threshold = 0.65
 fog_enabled = true
-fog_light_color = Color(0.039215688, 0.05490196, 0.10980392, 1)
-fog_density = 0.07
+fog_light_color = Color(0.047058824, 0.03137255, 0.019607844, 1)
+fog_density = 0.065
 
 [sub_resource type="SphereMesh" id="SphereMesh_272bh"]
 radius = 0.3
@@ -36,14 +39,17 @@ height = 0.6
 [node name="Main" type="Node3D" unique_id=153568782]
 
 [node name="Environment" type="WorldEnvironment" parent="." unique_id=691422043]
-environment = SubResource("Environment_1bvp3")
+environment = SubResource("Environment_kek77")
 
 [node name="Eye" type="Node3D" parent="." unique_id=1306085940]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0)
 script = ExtResource("1_0xm2m")
+beacon_path = NodePath("/Main/Beacon")
+target_path = NodePath("/Main/Player")
 
 [node name="Beacon" type="Node3D" parent="." unique_id=979917743]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 1.5, -28)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 1.5, -22)
+script = ExtResource("2_lquwl")
 
 [node name="Flame" type="OmniLight3D" parent="Beacon" unique_id=724933578]
 light_color = Color(1, 0.6, 0.235, 1)
@@ -54,15 +60,158 @@ omni_range = 20.0
 material_override = ExtResource("2_h2yge")
 mesh = SubResource("SphereMesh_272bh")
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=639240816]
-transform = Transform3D(0.9781476, 0, -0.2079117, 0, 1, 0, 0.2079117, 0, 0.9781476, -1, 1, 24)
-current = true
-fov = 55.0
-far = 200.0
-
 [node name="EyeFill" type="SpotLight3D" parent="." unique_id=485997795]
 transform = Transform3D(0.95105654, 0.17724487, -0.25313193, 0, 0.81915206, 0.57357645, 0.309017, -0.5455036, 0.77905995, 2, 6, 15)
 light_color = Color(0.65, 0.72, 0.95, 1)
 light_energy = 2.6
 spot_range = 40.0
 spot_angle = 35.0
+
+[node name="Player" type="Node3D" parent="." unique_id=683228359]
+transform = Transform3D(0.9781558, 0, -0.20787305, 0, 1, 0, 0.20787305, 0, 0.9781558, -1, 1, 24)
+script = ExtResource("3_h2yge")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1474073156]
+
+[node name="NavigatorPanel" type="Control" parent="UI" unique_id=2064728340]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Backdrop" type="Control" parent="UI/NavigatorPanel" unique_id=396960020]
+anchors_preset = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 60.0
+offset_top = -260.0
+offset_right = -60.0
+offset_bottom = -40.0
+mouse_filter = 2
+script = ExtResource("5_7mycd")
+metadata/_ops = [{
+"color": Color(0.035, 0.028, 0.02, 0.93),
+"draw": "rect",
+"filled": true,
+"rect": Rect2(0, 0, 1800, 220)
+}, {
+"color": Color(0.72, 0.58, 0.32, 0.85),
+"draw": "rect",
+"filled": false,
+"rect": Rect2(0, 0, 1800, 220),
+"width": 1.5
+}]
+
+[node name="CornerTL" type="Control" parent="UI/NavigatorPanel/Backdrop" unique_id=614686665]
+custom_minimum_size = Vector2(16, 16)
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("5_7mycd")
+metadata/_ops = [{
+"color": Color(0.72, 0.58, 0.32, 0.9),
+"draw": "polygon",
+"points": PackedVector2Array(8, 0, 16, 8, 8, 16, 0, 8),
+"width": 1.4
+}]
+
+[node name="CornerTR" type="Control" parent="UI/NavigatorPanel/Backdrop" unique_id=1049565175]
+custom_minimum_size = Vector2(16, 16)
+anchors_preset = 0
+anchor_left = 1.0
+anchor_right = 1.0
+mouse_filter = 2
+script = ExtResource("5_7mycd")
+metadata/_ops = [{
+"color": Color(0.72, 0.58, 0.32, 0.9),
+"draw": "polygon",
+"points": PackedVector2Array(8, 0, 16, 8, 8, 16, 0, 8),
+"width": 1.4
+}]
+
+[node name="CornerBC" type="Control" parent="UI/NavigatorPanel/Backdrop" unique_id=547076001]
+custom_minimum_size = Vector2(16, 16)
+anchors_preset = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("5_7mycd")
+metadata/_ops = [{
+"color": Color(0.72, 0.58, 0.32, 0.9),
+"draw": "polygon",
+"points": PackedVector2Array(8, 0, 16, 8, 8, 16, 0, 8),
+"width": 1.4
+}]
+
+[node name="Margin" type="MarginContainer" parent="UI/NavigatorPanel/Backdrop" unique_id=1858010436]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 24
+
+[node name="Row" type="HBoxContainer" parent="UI/NavigatorPanel/Backdrop/Margin" unique_id=281376274]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 30
+
+[node name="IconCol" type="VBoxContainer" parent="UI/NavigatorPanel/Backdrop/Margin/Row" unique_id=1415490707]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="IconGlyph" type="Control" parent="UI/NavigatorPanel/Backdrop/Margin/Row/IconCol" unique_id=1038314873]
+custom_minimum_size = Vector2(86, 86)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("5_7mycd")
+metadata/_ops = [{
+"color": Color(0.78, 0.64, 0.36, 1),
+"draw": "polyline",
+"points": PackedVector2Array(43, 3, 50, 36, 83, 43, 50, 50, 43, 83, 36, 50, 3, 43, 36, 36, 43, 3),
+"width": 1.6
+}, {
+"center": Vector2(43, 43),
+"color": Color(0.78, 0.64, 0.36, 1),
+"draw": "arc",
+"end_angle": 6.283,
+"radius": 27.0,
+"start_angle": 0.0,
+"width": 1.4
+}, {
+"color": Color(0.78, 0.64, 0.36, 1),
+"draw": "polyline",
+"points": PackedVector2Array(22, 43, 30, 33, 43, 30, 56, 33, 64, 43, 56, 53, 43, 56, 30, 53, 22, 43),
+"width": 1.6
+}, {
+"center": Vector2(43, 43),
+"color": Color(0.78, 0.64, 0.36, 1),
+"draw": "circle",
+"radius": 5.0
+}]
+
+[node name="NavigatorLabel" type="Label" parent="UI/NavigatorPanel/Backdrop/Margin/Row/IconCol" unique_id=323245699]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.78, 0.64, 0.36, 1)
+theme_override_font_sizes/font_size = 15
+text = "НАВИГАТОР"
+horizontal_alignment = 1
+
+[node name="DialogueText" type="Label" parent="UI/NavigatorPanel/Backdrop/Margin/Row" unique_id=726192875]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.86, 0.8, 0.66, 1)
+theme_override_font_sizes/font_size = 19
+text = "Привет. Я твой навигатор по этому миру.
+Тут может появиться всё, что ты захочешь.
+И всё, что в этом мире появится… это тоже будешь ты…"
+vertical_alignment = 1
+autowrap_mode = 3

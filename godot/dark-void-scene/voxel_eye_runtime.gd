@@ -9,9 +9,20 @@ const VOX := 0.34
 const HALF_W := 17
 const HALF_H := 9
 
-var mode: String = "camera" # camera | user | beacon | idle
+var mode: String = "beacon" # camera | user | beacon | idle
 var beacon: Node3D = null
-var target_cam: Camera3D = null
+var target_cam: Node3D = null # the Player rig - the eye follows it, independently of the beacon
+
+## Set from the editor/MCP so this scene needs no manual _ready() wiring
+## script - resolved once at startup into beacon/target_cam above.
+@export var beacon_path: NodePath
+@export var target_path: NodePath
+
+## The eye drifts along with the player (its own body, not just its gaze) so
+## it reads as something that moves with you - the beacon stays fixed as an
+## unrelated, static, distant landmark. Offset is local to the player rig.
+@export var follow_offset: Vector3 = Vector3(-3.5, -0.3, -9.0)
+@export var follow_speed: float = 1.6
 
 var _blink: float = 0.0
 var _next_blink: float = 0.0
@@ -22,6 +33,10 @@ var _pupil_mesh: MultiMeshInstance3D
 var _eye_root: Node3D
 
 func _ready() -> void:
+	if beacon_path != NodePath(""):
+		beacon = get_node_or_null(beacon_path)
+	if target_path != NodePath(""):
+		target_cam = get_node_or_null(target_path)
 	_rng.randomize()
 	_next_blink = Time.get_ticks_msec() / 1000.0 + randf_range(2.6, 5.2)
 	_build()
@@ -30,6 +45,13 @@ func _ready() -> void:
 func _hash2(x: float, y: float) -> float:
 	var n := sin(x * 127.1 + y * 311.7) * 43758.5453
 	return n - floor(n)
+
+func _ridge_height(x: float) -> float:
+	var n1 := sin(x * 0.10 + 1.1)
+	var n2 := sin(x * 0.27 - 2.0)
+	var n3 := sin(x * 0.045 + 0.5)
+	var jag: float = (_hash2(floor(x / 2.0), 11.3) - 0.5) * 3.0
+	return 9.0 + n1 * 5.0 + n2 * 2.2 + n3 * 6.0 + jag
 
 func _build() -> void:
 	_eye_root = Node3D.new()
@@ -40,24 +62,24 @@ func _build() -> void:
 	box.size = Vector3(VOX, VOX, VOX)
 
 	var mat_dark := StandardMaterial3D.new()
-	mat_dark.albedo_color = Color8(0x0e, 0x11, 0x18)
+	mat_dark.albedo_color = Color8(0x0b, 0x0a, 0x09)
 	mat_dark.roughness = 1.0
 	mat_dark.emission_enabled = true
-	mat_dark.emission = Color8(0x0a, 0x0e, 0x1c)
-	mat_dark.emission_energy_multiplier = 0.4
+	mat_dark.emission = Color8(0x15, 0x0e, 0x07)
+	mat_dark.emission_energy_multiplier = 0.22
 
 	var mat_white := StandardMaterial3D.new()
-	mat_white.albedo_color = Color8(0xd1, 0xce, 0xc0)
+	mat_white.albedo_color = Color8(0xd8, 0xd2, 0xc2)
 	mat_white.roughness = 0.68
 	mat_white.emission_enabled = true
-	mat_white.emission = Color8(0xc8, 0xd4, 0xe8)
-	mat_white.emission_energy_multiplier = 0.55
+	mat_white.emission = Color8(0xd8, 0xcc, 0xb0)
+	mat_white.emission_energy_multiplier = 0.5
 
 	var mat_iris := StandardMaterial3D.new()
-	mat_iris.albedo_color = Color8(0x9a, 0x6a, 0x24)
+	mat_iris.albedo_color = Color8(0xb8, 0x7a, 0x1e)
 	mat_iris.emission_enabled = true
-	mat_iris.emission = Color8(0x41, 0x26, 0x09)
-	mat_iris.emission_energy_multiplier = 0.62
+	mat_iris.emission = Color8(0x8a, 0x4e, 0x0a)
+	mat_iris.emission_energy_multiplier = 0.95
 	mat_iris.roughness = 0.5
 
 	var mat_pupil := StandardMaterial3D.new()
@@ -110,19 +132,24 @@ func _build() -> void:
 		elif key == "pupil":
 			_pupil_mesh = mmi
 
-	# Dark voxel wall the eye sits embedded in - matches the reference image's
-	# pyramid-like dark mass with the eye reading clearly against it.
+	# Jagged mountain silhouette the eye sits embedded in - a real ridge
+	# profile (not scattered ellipse noise) so it actually reads as a
+	# mountain mass against the sky, matching the reference image.
 	var wall_cells: Array = []
-	for y in range(-15, 16):
-		for x in range(-29, 30):
+	for x in range(-33, 34):
+		var top: float = _ridge_height(float(x))
+		var y := -22
+		while y <= int(ceil(top)):
 			var e: float = pow(float(x) / 19.0, 2) + pow(float(y) / 10.5, 2)
 			if e < 1.10:
+				y += 1
 				continue
-			if e > 2.55 and _hash2(x, y) > 0.45:
+			var dist_from_top: float = top - float(y)
+			if dist_from_top < 2.2 and _hash2(x * 1.7, y * 2.3) > 0.5:
+				y += 1
 				continue
-			if _hash2(x + 9, y - 5) > 0.86:
-				continue
-			wall_cells.append(Vector3(x, y, -0.35 - _hash2(x, y) * 1.25))
+			wall_cells.append(Vector3(x, y, -0.35 - _hash2(x, y) * 1.6))
+			y += 1
 
 	var wall_box := BoxMesh.new()
 	wall_box.size = Vector3(VOX * 0.98, VOX * 0.98, VOX * 0.98)
@@ -150,6 +177,13 @@ func cycle_mode() -> String:
 	return mode
 
 func _process(delta: float) -> void:
+	# The eye's body drifts to stay near the player, entirely independent of
+	# the beacon (which never moves) - decouples "where the eye is" from
+	# "where the light is" so they read as two separate things in the world.
+	if target_cam:
+		var desired: Vector3 = target_cam.global_transform * follow_offset
+		global_position = global_position.lerp(desired, clamp(delta * follow_speed, 0.0, 1.0))
+
 	var t := Time.get_ticks_msec() / 1000.0
 	# Auto-blink: squash the iris/pupil vertically for a few frames.
 	if t > _next_blink:
@@ -175,7 +209,9 @@ func _process(delta: float) -> void:
 			gaze = _gaze_user
 		"camera":
 			if target_cam:
-				gaze = Vector2(0, 0)
+				var to_target: Vector3 = (target_cam.global_transform.origin - global_transform.origin)
+				var local_dir: Vector3 = global_transform.basis.inverse() * to_target.normalized()
+				gaze = Vector2(clamp(local_dir.x, -1, 1), clamp(local_dir.y, -1, 1)) * 0.5
 		"beacon":
 			if beacon:
 				var to_beacon: Vector3 = (beacon.global_transform.origin - global_transform.origin).normalized()
