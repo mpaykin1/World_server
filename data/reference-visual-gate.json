@@ -50,21 +50,31 @@
         "ui": 98,
         "cinematicQuality": 98
       },
+      "scoreHistory": [
+        {
+          "scoredAt": "2026-08-28T1",
+          "evidence": "standalone godot.exe screenshot after mountain-silhouette rim-light fix",
+          "compositionIdea": 80, "eyeFirePlacement": 80, "voxelStyle": 55, "geometricDetail": 45,
+          "materials": 50, "lighting": 55, "fogAtmosphere": 45, "spatialDepth": 55,
+          "eye": 75, "fire": 70, "ui": 85, "cinematicQuality": 50
+        }
+      ],
       "lastScore": {
-        "scoredAt": "2026-08-28",
-        "evidence": "standalone godot.exe screenshot after mountain-silhouette rim-light fix",
-        "compositionIdea": 80,
-        "eyeFirePlacement": 80,
-        "voxelStyle": 55,
-        "geometricDetail": 45,
-        "materials": 50,
-        "lighting": 55,
-        "fogAtmosphere": 45,
-        "spatialDepth": 55,
-        "eye": 75,
-        "fire": 70,
+        "scoredAt": "2026-08-28T2",
+        "evidence": "standalone godot.exe console-verified screenshot (final_standalone.png) after: dominant-peak volumetric mountain rewrite (2-6 depth layers + rubble pass + per-instance AO color), true eye-centered orbit camera fix (rig position bug - was orbiting 13 units off the eye, now verified via game_eval to keep the eye pixel-locked across a real yaw change), two midground_ridge.gd depth-band formations, retuned material/light balance after an overcorrected warm-wash pass, rim/key light with sky_mode=LIGHT_ONLY",
+        "compositionIdea": 85,
+        "eyeFirePlacement": 85,
+        "voxelStyle": 70,
+        "geometricDetail": 65,
+        "materials": 65,
+        "lighting": 72,
+        "fogAtmosphere": 55,
+        "spatialDepth": 65,
+        "eye": 78,
+        "fire": 72,
         "ui": 85,
-        "cinematicQuality": 50
+        "cinematicQuality": 65,
+        "notes": "Real, verified progress (avg ~71% vs ~60% prior pass), still BLOCKED on every 98-target category. volumetric_fog_enabled was tried for a beacon haze but this GPU's forced gl_compatibility renderer doesn't support it (confirmed via engine warning in a real standalone run) and was reverted - fogAtmosphere gain is from exponential/height/aerial-perspective fog tuning only. Materials/lighting/cinematicQuality are approaching a practical ceiling for StandardMaterial3D + no custom shaders/baked textures/particles; closing the remaining gap to 98 likely needs those, not just more numeric tuning."
       },
       "gateStatus": "BLOCKED",
       "blockingCategories": [
