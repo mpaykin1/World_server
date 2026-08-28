@@ -14,7 +14,9 @@
     "referenceProxyRequiredForCinematicScenes": true,
     "depthStructureEvidenceRequired": true,
     "multiAngleGoldenEvidencePreferred": true,
-    "cinematicQualityIncreaseRequiresEvidence": true
+    "cinematicQualityIncreaseRequiresEvidence": true,
+    "referenceVisualGateRequired": true
   },
+  "referenceVisualGate": "See data/reference-visual-gate.json - hard, user-set rule: any project with an approved reference image may not be presented as done/ready until every per-category self-score meets or exceeds that project's threshold table. Applies to all current and future reference-image projects, not just one; only the user can relax it.",
   "note": "Structural/runtime visual gates are automated. Aesthetic quality cannot reach 100% until approved screenshot baselines or exact Golden visual assets exist."
 }

@@ -221,6 +221,19 @@
         "add a dedicated rim/key DirectionalLight3D (or equivalent) angled to graze across hero terrain specifically for silhouette definition, separate from any fill light on the main subject",
         "verify by screenshot, not by reading material property values - a material can be 'lit' in the editor properties panel and still be visually indistinguishable from the background at render time"
       ]
+    },
+    {
+      "id": "premature-done-claim-below-reference-gate",
+      "category": "process",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "AI presents a visual result as finished/ready/done while it's still clearly below the user's approved quality bar for that project",
+      "rootCause": "no persistent, checked-every-time threshold table existed - visual completeness was judged by feel in the moment rather than against a fixed, user-set number per category",
+      "protection": [
+        "data/reference-visual-gate.json holds a hard, user-set per-category threshold table per project - see DESKTOP_AI_INSTALL_AND_VERIFY.md's REFERENCE_VISUAL_GATE block",
+        "self-score every category from a fresh screenshot against the reference before using done/ready/final language; if any category is under threshold, report IN PROGRESS with the specific gap instead",
+        "the AI may not lower a threshold or skip the gate itself for any reason, including time or effort constraints - only the user can relax it"
+      ]
     }
   ],
   "confirmationProtocol": {

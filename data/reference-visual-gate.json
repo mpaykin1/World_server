@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "REFERENCE_VISUAL_GATE",
+  "setBy": "user",
+  "setAt": "2026-08-28",
+  "rule": "Whenever a project has an approved reference image, the AI must self-score every category in that project's thresholds table (0-100, honest, no rounding up, no benefit of the doubt) from a fresh screenshot compared directly against the reference before saying the visual result is done/ready/finished. If any category is below its threshold, the AI must NOT present the result as final - it must say the work is IN PROGRESS, name the specific categories still below threshold with current vs target numbers, and either keep iterating or state the next concrete step. This rule is permanent and applies to every current and future project that has a reference image, not just this one. It can only be relaxed or removed by the user explicitly saying so in a future message - the AI may not lower a threshold or drop the gate on its own judgment, including for time/effort reasons.",
+  "forbiddenWhenBlocked": [
+    "готово", "готов", "финальный результат", "результат готов", "done", "ready", "final result",
+    "or any other phrasing that implies the visual work is complete"
+  ],
+  "requiredWhenBlocked": "State it is in progress, list every category still under threshold with current vs target score, and name the next concrete action.",
+  "scoringMethod": "Manual AI self-assessment: a fresh screenshot (not a stale/earlier one) placed side by side against the approved reference image, scored per category independently. No automated CV pipeline is wired up for Godot scenes as of 2026-08-28 - this is a judgment-based discipline, not a script that blocks output; the AI is the enforcement mechanism and must apply it to itself every time before presenting a result.",
+  "categoryTemplate": {
+    "description": "For a NEW project with a reference image, define categories analogous to these (renaming the two subject-specific ones to whatever that project's actual focal subjects are) and ask the user for thresholds, or default to the numbers below if the user doesn't specify.",
+    "categories": [
+      "compositionIdea", "focalSubjectPlacement", "artStyleFidelity", "geometricDetail",
+      "materials", "lighting", "atmosphere", "spatialDepth",
+      "primaryFocalSubject", "secondaryFocalSubject", "ui", "cinematicQuality"
+    ],
+    "defaultThresholds": {
+      "compositionIdea": 90,
+      "focalSubjectPlacement": 80,
+      "artStyleFidelity": 95,
+      "geometricDetail": 95,
+      "materials": 98,
+      "lighting": 98,
+      "atmosphere": 98,
+      "spatialDepth": 98,
+      "primaryFocalSubject": 98,
+      "secondaryFocalSubject": 98,
+      "ui": 98,
+      "cinematicQuality": 98
+    }
+  },
+  "projects": {
+    "dark-void-scene": {
+      "referenceImage": "user-provided reference: dark voxel mountain, large amber eye embedded in rock (left), small distant beacon/flame on a tower silhouette (right), НАВИГАТОР dialogue panel (bottom)",
+      "projectPath": "godot/dark-void-scene (World_server_navigator worktree)",
+      "thresholds": {
+        "compositionIdea": 90,
+        "eyeFirePlacement": 80,
+        "voxelStyle": 95,
+        "geometricDetail": 95,
+        "materials": 98,
+        "lighting": 98,
+        "fogAtmosphere": 98,
+        "spatialDepth": 98,
+        "eye": 98,
+        "fire": 98,
+        "ui": 98,
+        "cinematicQuality": 98
+      },
+      "lastScore": {
+        "scoredAt": "2026-08-28",
+        "evidence": "standalone godot.exe screenshot after mountain-silhouette rim-light fix",
+        "compositionIdea": 80,
+        "eyeFirePlacement": 80,
+        "voxelStyle": 55,
+        "geometricDetail": 45,
+        "materials": 50,
+        "lighting": 55,
+        "fogAtmosphere": 45,
+        "spatialDepth": 55,
+        "eye": 75,
+        "fire": 70,
+        "ui": 85,
+        "cinematicQuality": 50
+      },
+      "gateStatus": "BLOCKED",
+      "blockingCategories": [
+        "voxelStyle", "geometricDetail", "materials", "lighting",
+        "fogAtmosphere", "spatialDepth", "eye", "fire", "cinematicQuality"
+      ]
+    }
+  }
+}

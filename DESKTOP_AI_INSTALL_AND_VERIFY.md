@@ -211,3 +211,14 @@ Never invent a successful deployment, URL, test pass, or integration.
 ## Cinematic Voxel Quality V3 — mandatory graphics gate
 For cinematic/high-detail 3D voxel scenes, primitive placeholder graphics are a release blocker. Reuse WorldQualityAutopilot and existing Golden/telemetry systems; run `npm run quality:cinematic:v3`, desktop/mobile captures and strict candidate scoring before claiming improvement. Preserve hero/near quality first; optimize occluded/offscreen/far work before render resolution or hero geometry. Every failure requires root cause + regression protection. See `docs/CINEMATIC_VOXEL_QUALITY_GUARD.md`.
 <!-- CINEMATIC_VOXEL_QUALITY_V3_END -->
+
+<!-- REFERENCE_VISUAL_GATE_BEGIN -->
+## Reference Visual Gate — mandatory, user-set, permanent
+Set by the user on 2026-08-28. Applies to every current and future project that has an approved reference image, not just one project. Only the user can relax or remove it; the AI may not lower a threshold or skip this on its own judgment, including for time/effort reasons.
+
+Rule: before saying a visual result is done, ready, or finished (in any language - "готово", "результат готов", "final result", etc. are all forbidden while blocked), take a fresh screenshot, put it side by side against the project's approved reference image, and honestly self-score every category in that project's threshold table in `data/reference-visual-gate.json` (0-100, no rounding up, no benefit of the doubt). If ANY category scores below its threshold, the result MUST be reported as IN PROGRESS: name every category still under threshold with its current vs target number, and state the next concrete action. Do not present it as final.
+
+For a new project with a reference image: define categories analogous to `data/reference-visual-gate.json`'s `categoryTemplate` (renaming the two subject-specific slots to that project's real focal subjects), default to `categoryTemplate.defaultThresholds` unless the user gives different numbers, and add a new entry under `projects` in that same file before doing any further work on it.
+
+See `data/reference-visual-gate.json` for the full policy text, current thresholds, and last recorded score per project.
+<!-- REFERENCE_VISUAL_GATE_END -->
