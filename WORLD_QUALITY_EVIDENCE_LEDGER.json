@@ -1,74 +1,74 @@
 {
   "schemaVersion": "4.0.0",
   "system": "WORLD_QUALITY_EVIDENCE_LEDGER",
-  "generatedAt": "2026-08-28T05:10:20.704Z",
+  "generatedAt": "2026-08-28T06:06:01.530Z",
   "entries": [
     {
       "file": "WORLD_QUALITY_AUTOPILOT_REPORT.json",
       "bytes": 10183,
-      "sha256": "b6fe78db05b99e261b99a531c95357f998295fd2dcac40e6479715e774da688e"
+      "sha256": "0f062543fe2416a6a6202aeac2e610ae0e52489492abc8a190cf05a0c518be9a"
     },
     {
       "file": "WORLD_QUALITY_AUTOPILOT_PLAN.json",
       "bytes": 2474,
-      "sha256": "88a72a973e3e8c20ca6cc0f2d6e4a1160c5b146390cc6c07e912a966d7a6560d"
+      "sha256": "bd30219f6090f765a9b5212d0d00191897312dbb9e018c92b97360be14dbbfc5"
     },
     {
       "file": "WORLD_ANIMATION_SEMANTIC_REPORT.json",
       "bytes": 565,
-      "sha256": "f39b4c18b850a232ab570edd41d15f6e43ced3dc823f7a9b721115220a9caba8"
+      "sha256": "d10f2ace39e18e37d269d11710665a3247d9161b7b8eb95db7f3a9e646d96cc7"
     },
     {
       "file": "WORLD_RUNTIME_QUALITY_REPORT.json",
       "bytes": 589,
-      "sha256": "c789c2bdf49f0c5351648f7fe07ef325209dbdf5ecfb5bd7c92b7a611ebfea0d"
+      "sha256": "bc2f6409b2a28d65b255dc93327d1b5d090b43441186289fa907cb71a3cb3b02"
     },
     {
       "file": "WORLD_VISUAL_BASELINE_CANDIDATES.json",
       "bytes": 2379,
-      "sha256": "79750032c330cc525c2b94fad68f743d80027ac97c282deecad5f81fe7583df4"
+      "sha256": "cb2d07623c240f258adceeb3e861c72edbc5e872a6cf3d2a8fbe0999aaa67530"
     },
     {
       "file": "WORLD_SEMANTIC_DETAIL_REPORT.json",
       "bytes": 396,
-      "sha256": "72005c0ce4ced8eb731e57dd408656940213150dd5c65b88dbc9ceb2c75a27b9"
+      "sha256": "90e4b2b5f55863452e120d554283aaca4801a1adfe168f0b854667b996a38233"
     },
     {
       "file": "WORLD_DEVICE_PROFILE_MATRIX.json",
       "bytes": 1131,
-      "sha256": "49a851a7a71fda29b36c3bbb47bb34f6415662b3f29783fcd48f5adba8872bf4"
+      "sha256": "a58dbbaaaf3550aaf2c2ef8ecd89384c0d123979d7f684f1fff02f7e08fa57d3"
     },
     {
       "file": "WORLD_MATERIAL_SYNTHESIS_REPORT.json",
       "bytes": 5503,
-      "sha256": "1470ead6c77bac7f7cdaabb188152d7b7a20a549f9779ad6933271047f11c76a"
+      "sha256": "6ce3ae6c0f1ec88343445d0d610ae34e1f8733ef52f0bbb4cffb4f98e8d5ea5b"
     },
     {
       "file": "WORLD_VISIBILITY_OPTIMIZER_REPORT.json",
       "bytes": 981,
-      "sha256": "e9555b0e0dfcd1cd841940037cfbef8cf610454f23537c5f4499036bdbd91730"
+      "sha256": "a94cd5cab6bd8c9efe84d0474c314f8ebec3325ef013a18de21253b11664a835"
     },
     {
       "file": "WORLD_RETARGET_CONTRACT_REPORT.json",
       "bytes": 1055,
-      "sha256": "a2b3f098e7f37d2a02d882db3d1a84462c9afbab5f3926281b334dd1fdfe684a"
+      "sha256": "e2c8d96a062b3ba3785fce252b47f20b12ce87ce41e72c8b4cc464402a6dad06"
     },
     {
       "file": "WORLD_QUALITY_SCHEDULER_REPORT.json",
       "bytes": 1305,
-      "sha256": "d29803a3b8b2758ba7b644492cac512380ad76fbb16dc2e468512667dde2e0ab"
+      "sha256": "74da66fc5d31fee4e4868a7ee51ee599efbdbe69f2763fb31dd64a54578f8b2c"
     },
     {
       "file": "WORLD_FEEDBACK_LEARNER_REPORT.json",
       "bytes": 525,
-      "sha256": "83b9583b63f61009816fb0137c406a912387d4528ccf794816a798739b80678f"
+      "sha256": "508d4f272c8e15bb43b4b83a91e322c8de45fb1606db9ca07aeb49f6f91c4ab0"
     },
     {
       "file": "WORLD_CANDIDATE_LAB_REPORT.json",
       "bytes": 2975,
-      "sha256": "41cd8fb16201f3793ab85f64c37f114e225f51d3fbb1542c9452420207ed028e"
+      "sha256": "de4616fd5d7d9c85022983c827dea7eb14e4c7aa711fadb0634469f4b455246b"
     }
   ],
-  "ledgerSha256": "45f10268d5f3070eed41181733f48490c7c92535cfb07f992ac4cf8b5c3923e7",
+  "ledgerSha256": "f22e6578e5f255216aecf88e61defc185b42ceac5437878113ca530724b7582e",
   "tamperEvident": true
 }

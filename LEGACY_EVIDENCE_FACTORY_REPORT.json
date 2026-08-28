@@ -1,11 +1,11 @@
 {
   "schemaVersion": "7.5.0",
-  "generatedAt": "2026-08-28T05:50:04.151Z",
+  "generatedAt": "2026-08-28T06:07:21.405Z",
   "pass": true,
   "enginePass": true,
   "autoCertifyByName": false,
   "recipeCatalogHash": "e8c0c02f52e165bc92b9d26b161bfa78b5d189a6b06784829bcf048d78d734e0",
-  "generatedContractsHash": "9a6bb3ddd9d0c46360066d0b4e3ab0b82112d8e1bb33e565c34a92f975f19d4e",
+  "generatedContractsHash": "e7719250fa5c22d553b3b9ac8e35d4d6b6159e5ae9d9124212b79f414be192b3",
   "eligibleContractCount": 11,
   "totalRecipes": 18,
   "eligibleCapabilities": [
@@ -378,7 +378,7 @@
           {
             "pass": true,
             "cmd": "node --test test/procedural-quality-v10.test.js",
-            "stdout": "✔ procedural dummy (1.3566ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 131.3741\n"
+            "stdout": "✔ procedural dummy (1.4769ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 138.5429\n"
           }
         ]
       },
@@ -422,7 +422,7 @@
           {
             "pass": true,
             "cmd": "node --test test/apng-engine.test.js test/apng-gate.test.js test/apng-integration.test.js",
-            "stdout": "✔ apng dummy (1.329ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 149.2984\n"
+            "stdout": "✔ apng dummy (1.3211ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 125.0188\n"
           }
         ]
       },
@@ -465,7 +465,7 @@
           {
             "pass": true,
             "cmd": "node --test test/pixel-animation-v3.test.js test/pixel-animation-engine.test.js",
-            "stdout": "✔ pixel dummy (1.8747ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 138.622\n"
+            "stdout": "✔ pixel dummy (1.2813ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 124.2995\n"
           }
         ]
       },
@@ -509,7 +509,7 @@
           {
             "pass": true,
             "cmd": "node --test test/v13-invariant-golden.test.js test/desktop-ai-error-closure.test.js",
-            "stdout": "✔ golden dummy (1.3937ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 152.2488\n"
+            "stdout": "✔ golden dummy (1.3942ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 122.6802\n"
           }
         ]
       },
@@ -555,7 +555,7 @@
           {
             "pass": true,
             "cmd": "node --test test/world-quality-autopilot.test.js",
-            "stdout": "✔ V4 semantic detail index detects architectural motifs (7.2571ms)\n✔ V4 deterministic enhancement preserves exact front projection (20.1108ms)\n✔ V4 geometry budget remains strict (6.2165ms)\n✔ material profiler classifies emissive and metal-like colors (0.3734ms)\n✔ V4 procedural PBR synthesis is deterministic and budgeted (1.2858ms)\n✔ runtime V4 exposes pressure, texture and occlusion hooks (0.5422ms)\n✔ V4 retarget contract contains root motion and two-hand constraints (0.4028ms)\n✔ V4 visibility optimizer is conservative (0.3847ms)\n✔ V4 candidate lab is prediction only before promotion (0.5751ms)\n✔ V4 feedback learner cannot mutate directly (0.5857ms)\n✔ baseline promotion remains explicit and cannot self-approve (0.3808ms)\n✔ weighted readiness remains evidence based (0.4588ms)\nℹ tests 12\nℹ suites 0\nℹ pass 12\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 203.4293\n"
+            "stdout": "✔ V4 semantic detail index detects architectural motifs (9.4537ms)\n✔ V4 deterministic enhancement preserves exact front projection (20.3881ms)\n✔ V4 geometry budget remains strict (4.6302ms)\n✔ material profiler classifies emissive and metal-like colors (0.3476ms)\n✔ V4 procedural PBR synthesis is deterministic and budgeted (0.9671ms)\n✔ runtime V4 exposes pressure, texture and occlusion hooks (0.5528ms)\n✔ V4 retarget contract contains root motion and two-hand constraints (0.3832ms)\n✔ V4 visibility optimizer is conservative (0.3845ms)\n✔ V4 candidate lab is prediction only before promotion (0.6149ms)\n✔ V4 feedback learner cannot mutate directly (0.5652ms)\n✔ baseline promotion remains explicit and cannot self-approve (0.3751ms)\n✔ weighted readiness remains evidence based (0.4637ms)\nℹ tests 12\nℹ suites 0\nℹ pass 12\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 191.2674\n"
           }
         ]
       },
@@ -645,7 +645,7 @@
           {
             "pass": true,
             "cmd": "node --test test/pwa-system.test.js test/runtime-integration-adapters.test.js",
-            "stdout": "✔ pwa dummy (1.4347ms)\n✔ runtime dummy (1.4108ms)\nℹ tests 2\nℹ suites 0\nℹ pass 2\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 152.3063\n"
+            "stdout": "✔ pwa dummy (1.3464ms)\n✔ runtime dummy (1.8675ms)\nℹ tests 2\nℹ suites 0\nℹ pass 2\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 145.3871\n"
           }
         ]
       },
@@ -687,7 +687,7 @@
           {
             "pass": true,
             "cmd": "node --test test/world-quality-truth-gate.test.js",
-            "stdout": "✔ truth dummy production (1.3771ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 138.6485\n"
+            "stdout": "✔ truth dummy production (1.4288ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 126.0226\n"
           }
         ]
       },
@@ -732,7 +732,7 @@
             "pass": false,
             "cmd": "node scripts/check-supabase-migration-manifest-v12.cjs",
             "code": 12,
-            "stderr": "{\n  \"ok\": false,\n  \"count\": 109,\n  \"expectedCount\": 7,\n  \"digest\": \"8b29d397ab1aba1763cbb1977a958f73d96a6d714999a15355efe2b4c3b3fd9d\",\n  \"expectedDigest\": \"4f1c7fb913a11f734062d47bee23b83ac58c009a4a4468209d26f7ee97be1260\"\n}\n"
+            "stderr": "{\n  \"ok\": false,\n  \"count\": 110,\n  \"expectedCount\": 7,\n  \"digest\": \"36bdee3ba6de92a5b277da9c94cf03259534603b94db1b5890b0555a14204ede\",\n  \"expectedDigest\": \"4f1c7fb913a11f734062d47bee23b83ac58c009a4a4468209d26f7ee97be1260\"\n}\n"
           }
         ]
       },
@@ -873,7 +873,7 @@
           {
             "pass": true,
             "cmd": "node --test test/quality-autopilot-v11.test.js",
-            "stdout": "✔ autopilot dummy (1.4158ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 126.8976\n"
+            "stdout": "✔ autopilot dummy (1.5939ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 135.2581\n"
           }
         ]
       },
@@ -958,7 +958,7 @@
           {
             "pass": true,
             "cmd": "node --test test/gap-closure.test.js",
-            "stdout": "✔ gap dummy (1.3802ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 127.119\n"
+            "stdout": "✔ gap dummy (1.3653ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 133.8133\n"
           }
         ]
       },

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "5.0.0",
   "system": "WORLD_RUNTIME_QUALITY_PROFILER",
-  "generatedAt": "2026-08-28T05:10:18.802Z",
+  "generatedAt": "2026-08-28T06:05:59.775Z",
   "capabilities": {
     "gpuTimerQuery": true,
     "frameP95": true,

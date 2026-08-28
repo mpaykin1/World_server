@@ -1,5 +1,5 @@
 {
-  "at": "2026-08-28T05:41:40.725Z",
+  "at": "2026-08-28T06:04:35.380Z",
   "threshold": 50,
   "discovered": [
     {
@@ -39,11 +39,5 @@
       "license": "MIT"
     }
   ],
-  "installed": [
-    "cannon-es",
-    "comlink",
-    "idb-keyval",
-    "sharp",
-    "msw"
-  ]
+  "installed": []
 }

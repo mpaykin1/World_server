@@ -1,6 +1,6 @@
 {
   "schemaVersion": "7.5.0",
-  "generatedAt": "2026-08-28T05:50:17.656Z",
+  "generatedAt": "2026-08-28T06:07:36.169Z",
   "candidates": [
     {
       "capability": "dependency-graph",
@@ -139,83 +139,6 @@
       "capability": "pixel-atlas-v12",
       "owner": "WORLD_SERVER_QUALITY_RUNTIME_V12_3",
       "systemId": "runtime-v12-3",
-      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
-      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
-    },
-    {
-      "capability": "capability-preservation-gate",
-      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
-      "systemId": "system-integration-v7",
-      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
-      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
-    },
-    {
-      "capability": "central-control-plane",
-      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
-      "systemId": "system-integration-v7",
-      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
-      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
-    },
-    {
-      "capability": "certified-function-baselines",
-      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
-      "systemId": "system-integration-v7",
-      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
-      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
-    },
-    {
-      "capability": "dual-run-replacement-contract",
-      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
-      "systemId": "system-integration-v7",
-      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
-      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
-    },
-    {
-      "capability": "fenced-leader-lease",
-      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
-      "systemId": "system-integration-v7",
-      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
-      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
-    },
-    {
-      "capability": "honest-100-function-certification",
-      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
-      "systemId": "system-integration-v7",
-      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
-      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
-    },
-    {
-      "capability": "monotonic-function-enhancement",
-      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
-      "systemId": "system-integration-v7",
-      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
-      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
-    },
-    {
-      "capability": "offline-policy-mirror",
-      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
-      "systemId": "system-integration-v7",
-      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
-      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
-    },
-    {
-      "capability": "opa-rego-policy",
-      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
-      "systemId": "system-integration-v7",
-      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
-      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
-    },
-    {
-      "capability": "semantic-merge-ownership",
-      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
-      "systemId": "system-integration-v7",
-      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
-      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
-    },
-    {
-      "capability": "split-brain-prevention",
-      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
-      "systemId": "system-integration-v7",
       "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
       "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
     }

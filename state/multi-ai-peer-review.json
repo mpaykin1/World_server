@@ -1,5 +1,5 @@
 {
-  "at": "2026-08-28T05:49:26.518Z",
+  "at": "2026-08-28T06:05:40.807Z",
   "branches": 10,
   "worktrees": 3,
   "prCheck": true,
@@ -24,6 +24,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/agent-rules",
         "opencode/ai3d-full-integration"
       ]
@@ -35,6 +36,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -45,6 +47,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -55,6 +58,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -65,6 +69,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -75,6 +80,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -85,6 +91,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -95,6 +102,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -105,6 +113,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -115,6 +124,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -125,6 +135,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -135,6 +146,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -145,6 +157,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -155,6 +168,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -165,6 +179,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -175,6 +190,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -184,7 +200,8 @@
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
-        "ai/desktop/world-quality-autopilot-v4"
+        "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -193,7 +210,8 @@
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
-        "ai/desktop/world-quality-autopilot-v4"
+        "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -202,7 +220,8 @@
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
-        "ai/desktop/world-quality-autopilot-v4"
+        "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -211,7 +230,8 @@
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
-        "ai/desktop/world-quality-autopilot-v4"
+        "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -220,7 +240,8 @@
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
-        "ai/desktop/world-quality-autopilot-v4"
+        "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -229,7 +250,8 @@
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
-        "ai/desktop/world-quality-autopilot-v4"
+        "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -238,7 +260,8 @@
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
-        "ai/desktop/world-quality-autopilot-v4"
+        "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -247,7 +270,8 @@
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
-        "ai/desktop/world-quality-autopilot-v4"
+        "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -256,7 +280,8 @@
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
-        "ai/desktop/world-quality-autopilot-v4"
+        "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -265,7 +290,8 @@
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
-        "ai/desktop/world-quality-autopilot-v4"
+        "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -274,7 +300,8 @@
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
-        "ai/desktop/world-quality-autopilot-v4"
+        "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -283,7 +310,8 @@
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
-        "ai/desktop/world-quality-autopilot-v4"
+        "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -292,7 +320,8 @@
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
-        "ai/desktop/world-quality-autopilot-v4"
+        "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -301,7 +330,8 @@
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
-        "ai/desktop/world-quality-autopilot-v4"
+        "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -310,7 +340,8 @@
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
-        "ai/desktop/world-quality-autopilot-v4"
+        "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -746,6 +777,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -757,6 +789,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -768,6 +801,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/agent-rules",
         "opencode/ai3d-full-integration"
       ]
@@ -780,6 +814,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -791,6 +826,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -817,6 +853,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -838,6 +875,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -1934,6 +1972,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -1965,6 +2004,13 @@
       ]
     },
     {
+      "file": ".github/workflows/system-integration-v7.yml",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": ".github/workflows/visual-baseline-candidates.yml",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
@@ -1978,7 +2024,22 @@
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
-        "ai/desktop/world-quality-autopilot-v4"
+        "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "ADAPTER_SANDBOX_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "ADVERSARIAL_CORPUS_V12.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -1990,10 +2051,193 @@
       ]
     },
     {
+      "file": "APNG_BUNDLE_SHA256.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "APNG_PATCH_MANIFEST.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "APNG_QUALITY_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "APNG_V3_LOCAL_VERIFICATION.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "ASSET_DELTA_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "ASSET_INGESTION_PLAN.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "ASSET_QUALITY_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "ASSET_REGISTRY.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "AUDIO_VARIATION_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "BLOCKER_REPAIR_V1_INSTALL_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "CAPABILITY_SCHEDULER_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "CAS_DISCOVERY_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "CAS_INDEX.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "CAS_REDUNDANCY_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "CAS_REPLICATION_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "CAUSAL_DEBUGGER_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "CAUSAL_INCIDENT_GRAPH.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "CHANGE_IMPACT_MATRIX.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "CONFIG_CONTRACT_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "CONTROL_PLANE_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "CPU_ASSET_TRANSCODE_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "CRASH_DIAGNOSTICS_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "CRASH_DIAGNOSTICS_SELFTEST.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "DB_MIGRATION_COORDINATOR_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "DEPENDENCY_GRAPH.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "DEPENDENCY_SECURITY_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "DESKTOP_AI_EXTERNAL_BLOCKERS.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2003,6 +2247,496 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "DESKTOP_AI_REPORT_VALIDATION.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "DESKTOP_AI_SYSTEM_INTEGRATION_V7.md",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "DEVICE_EXECUTOR_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "DEVICE_LAB_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "DEVICE_WORKER_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "DISASTER_RECOVERY_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "DISASTER_RECOVERY_VERIFY_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "DISCOVERED_TECHNOLOGIES.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "DISTRIBUTED_CAS_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "DREAM_READINESS_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "DURABLE_QUEUE_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "FEATURE_FLAG_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "FILE_HASHES.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "FUNCTION_CERTIFICATION_COVERAGE.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "FUNCTION_CONTRACT_CANDIDATES.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "FUNCTION_MONOTONIC_ENHANCEMENT_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "GAMEPLAY_PHYSICAL_CONTRACT_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "GAP_CLOSURE_SYSTEM_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "GRAPHICS_REGRESSION_GUARD_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "HONEST_100_FUNCTION_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "INTEGRATION_BUILD_SUBJECT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "INTEGRATION_CHAOS_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "INTEGRATION_SELFTEST_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "INTEGRATION_TELEMETRY_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "KNOWN_VARIANTS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "LEADER_LEASE_SELFTEST.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "LEADER_LEASE_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "LOCAL_PATCH_VERIFICATION.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "LOCAL_VERIFICATION.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "LONG_SOAK_HARNESS_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "MIGRATION_FENCING_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "MODEL_CHECK_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "NATIVE_AST_DATAFLOW_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "NATIVE_CAUSAL_COLLECTOR_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "ORCHESTRATOR_CONTINUITY_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "ORCHESTRATOR_INVARIANT_MODEL_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "ORCHESTRATOR_MINIMAL_REPRO_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "ORCHESTRATOR_MONITOR_LIFECYCLE_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "ORCHESTRATOR_PATCH_SAFETY_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "ORCHESTRATOR_SUPERVISOR_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PACKAGE_MANIFEST.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PATCH_MANIFEST.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PATCH_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PATCH_VALIDATION_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PHYSICAL_DEVICE_FLEET_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "POLICY_DECISION_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PREVIOUS_INTEGRATION_VARIANTS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PROCEDURAL_MODEL_MANIFEST.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PROCEDURAL_NATIVE_RENDERER_AUDIT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PROCEDURAL_QUALITY_CANARY.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PROCEDURAL_QUALITY_CRITIC.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PROCEDURAL_QUALITY_DEVICE_MATRIX.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PROCEDURAL_QUALITY_DOCTOR.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PROCEDURAL_QUALITY_EVIDENCE_V10.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PROCEDURAL_QUALITY_EVIDENCE_V9.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PROCEDURAL_QUALITY_READINESS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PROCEDURAL_QUALITY_ROLLBACK.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PROCEDURAL_QUALITY_RUNTIME_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PROCEDURAL_QUALITY_TOURNAMENT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PROCEDURAL_QUALITY_V10_VERIFICATION.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PROCEDURAL_QUALITY_V6_VERIFICATION.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PROCEDURAL_QUALITY_V8_VERIFICATION.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PROCEDURAL_QUALITY_V9_VERIFICATION.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PROCEDURAL_THREE_NATIVE_PATCH.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PRODUCTION_SAFETY_SELFTEST.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PRODUCTION_SAFETY_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PRODUCTION_SLO_AUTOPILOT_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PROJECT_DIRECTIVE_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PROVENANCE_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2084,12 +2818,321 @@
       ]
     },
     {
+      "file": "QUALITY_V6_RUNTIME_VERIFY.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "RECORD_REPLAY_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "REKOR_MONITOR_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "RELEASE_PROMOTION_DECISION.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "REPRODUCIBLE_BUILD_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "SBOM_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "SEMANTIC_DEPENDENCY_GRAPH.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "SLO_ERROR_BUDGET_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "SLSA_PROVENANCE.intoto.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "SMOKE_TEST_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "SOAK_CHAOS_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "SUPABASE_PROCEDURAL_QUALITY_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "SUPPLY_CHAIN_SIGNATURE_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "SYSTEM_COHESION_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "SYSTEM_ENHANCEMENT_BACKLOG.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "SYSTEM_INTEGRATION_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "SYSTEM_READINESS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "SYSTEM_READINESS_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "TECHNOLOGY_CONSENSUS_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "TECHNOLOGY_LOCK_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "TEST_EVIDENCE.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "TEST_GAP_MANIFEST.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "TOOLCHAIN_BOOTSTRAP_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "TOOLCHAIN_SECURITY_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "TRANSACTIONAL_DEPLOY_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "UPDATE_TRUST_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "V13_LOCAL_VALIDATION.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "V3_LOCAL_VALIDATION.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "V4_LOCAL_VALIDATION.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "V5_LOCAL_VALIDATION.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "V6_LOCAL_VALIDATION.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "V7_1_LOCAL_VALIDATION.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "V7_2_LOCAL_VALIDATION.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "V7_4_LEGACY_RECIPE_VALIDATION.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "V7_4_LOCAL_VALIDATION.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "V7_5_LEGACY_RECIPE_VALIDATION.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "V7_5_LOCAL_VALIDATION.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "V7_LOCAL_VALIDATION.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "VALIDATION_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "VERIFICATION_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "WIT_BINDINGS_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "WIT_COMPONENT_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "WORLD_GRAPHICS_QUALITY_ROUTING_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "WORLD_GRAPHICS_TECHNOLOGY_INTEGRATION_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "WORLD_TECHNOLOGY_CANDIDATE_REPORT.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2123,6 +3166,13 @@
       ]
     },
     {
+      "file": "apng-quality.config.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "apps/catalog/client.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
@@ -2141,10 +3191,39 @@
       ]
     },
     {
+      "file": "bom.cdx.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "config/integration-v7.cue",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/adapter-sandbox-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "data/adaptive-night-budget-policy.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/animation-quality-contract.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2166,10 +3245,60 @@
       ]
     },
     {
+      "file": "data/asset-delta-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/asset-metadata-template.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/asset-quality-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/asset-quality-ratchet-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "data/asset-similarity-policy.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/asset-toolchain-lock.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/asset-transcode-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/audio-events.template.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2194,14 +3323,65 @@
       "file": "data/autopilot-projects.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "data/bayesian-quality-policy.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/blocker-repair-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/capability-scheduler-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/cas-discovery-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/cas-redundancy-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/cas-replication-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/causal-debugger-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/character-motion-contract.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2211,6 +3391,13 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "data/component-model-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2226,42 +3413,90 @@
       "file": "data/cpu-genetic-optimizer-policy.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "data/cpu-night-learning-model.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "data/cpu-texture-policy.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "data/cpu-visual-ensemble-policy.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/crash-diagnostics-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/current-task-contract.template.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/cv-action-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/dependency-security-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/derived-asset-map.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "data/desktop-ai-error-closure-policy.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/desktop-ai-final-report.template.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "data/desktop-ai-fix-loop-policy.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2271,6 +3506,55 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "data/desktop-ai-session-recovery-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/device-fleet-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/device-lab-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/device-scenarios.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/device-worker-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/distributed-cas-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/dream-quality-systems.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2286,7 +3570,64 @@
       "file": "data/failure-knowledge-base.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/feature-flag-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/flags.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/function-change-proposal.template.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/function-contracts.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/function-honest-100-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/gameplay-physical-contract.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/gap-closure-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/generated-legacy-function-contracts.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2320,14 +3661,16 @@
       "file": "data/golden-pattern-policy.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "data/golden-patterns.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2352,28 +3695,67 @@
       "file": "data/hardware-profile-policy.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "data/incremental-test-map.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "data/invariant-miner-policy.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/leader-lease-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/legacy-evidence-factory-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/legacy-evidence-recipes.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "data/local-cpu-code-model.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/long-soak-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/migration-coordinator-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2384,10 +3766,67 @@
       ]
     },
     {
+      "file": "data/migration-plan.template.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/model-check-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/native-analysis-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/native-causal-collector-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/network-chaos-profiles.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "data/night-checkpoint-policy.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/orchestrator-monitor-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/orchestrator-patch-safety-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/orchestrator-supervisor-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2418,12 +3857,124 @@
       ]
     },
     {
+      "file": "data/pixel-atlas-manifest.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/plugin-discovery-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/production-safety-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/production-slo-autopilot-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/project-directives.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/quality-autopilot/cpu-parallel-scan-v11.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/quality-autopilot/cpu-profile-v11.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/quality-autopilot/current-master-observation.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/quality-autopilot/integration-status.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/quality-autopilot/readiness-v10.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/quality-autopilot/readiness-v11.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/quality-autopilot/readiness-v9.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/quality-autopilot/readiness.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/quality-autopilot/sbom-v10.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/quality-autopilot/security-gate.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "data/quality-baseline.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "data/quality-convergence-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2484,7 +4035,8 @@
       "file": "data/quality-improvement-memory.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2533,12 +4085,40 @@
       ]
     },
     {
+      "file": "data/quiet-quality-autopilot.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/real-device-executor-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "data/real-device-provider.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "data/real-device-reports.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/record-replay-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2551,31 +4131,140 @@
       ]
     },
     {
+      "file": "data/rekor-monitor-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/reproducible-build-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/rollout-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/runtime-asset-manifest.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "data/runtime-quality-profile.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "data/self-calibration-policy.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/self-improvement-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/self-improvement-risk-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/semantic-graph-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "data/silent-cpu-autopilot-policy.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/slo-error-budget-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/soak-chaos-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "data/success-knowledge-base.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/supabase-migration-manifest.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/supply-chain-signing-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/swarm-profiles.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/system-capability-registry.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/system-cohesion-registry.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/system-conflict-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2585,6 +4274,20 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "data/system-integration-version.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/technology-candidate-catalog.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2609,7 +4312,22 @@
       "file": "data/test-cache-policy.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/toolchain-bootstrap-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/transactional-deploy-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2619,6 +4337,13 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "data/update-trust-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2649,11 +4374,32 @@
       ]
     },
     {
+      "file": "data/wit-bindings-policy.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "data/world-animation-runtime-evidence.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4"
+      ]
+    },
+    {
+      "file": "data/world-graphics-technology-adapters.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "data/world-graphics-technology-lock.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2816,6 +4562,13 @@
       ]
     },
     {
+      "file": "generated/wit/world-server-adapter.d.ts",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "lib/world-quality-material-profiler.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
@@ -2856,6 +4609,20 @@
       ]
     },
     {
+      "file": "policy/opa-bundle/.manifest",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "policy/opa-bundle/worldserver.rego",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "requirements-cpu-quality.txt",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
@@ -2863,10 +4630,18 @@
       ]
     },
     {
+      "file": "scripts/adapter-sandbox.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/adaptive-night-budget.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2879,12 +4654,54 @@
       ]
     },
     {
+      "file": "scripts/animation-quality-validator.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/apng-quality-gate.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/app-quality-matrix.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "scripts/apply-quality-autopilot-v10.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/apply-quality-autopilot-v11.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/apply-quality-autopilot-v9.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/apply-verified-quality-patch.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2897,6 +4714,13 @@
       ]
     },
     {
+      "file": "scripts/artifact-signing-transparency.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/asset-dedup-cache.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
@@ -2906,10 +4730,46 @@
       ]
     },
     {
+      "file": "scripts/asset-delta-distributor.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/asset-ingestion-planner.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/asset-quality-pipeline.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/asset-registry.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/asset_similarity_scan.py",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/audio-variation-validator.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2922,31 +4782,70 @@
       ]
     },
     {
+      "file": "scripts/auto-wire-plugins.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/automatic-test-synthesizer.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/autonomous-blocker-repair.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "scripts/autopilot-project-priority.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "scripts/autopilot-task-planner.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "scripts/bayesian-quality-predictor.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/bootstrap-free-asset-toolchain.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/build-pixel-atlas-v12.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/build-procedural-vision.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2959,6 +4858,20 @@
       ]
     },
     {
+      "file": "scripts/canary-rollback-gate.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/capability-aware-scheduler.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/capture-regressions.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
@@ -2968,10 +4881,74 @@
       ]
     },
     {
+      "file": "scripts/cas-merkle-store.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/cas-peer-discovery.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/cas-redundancy-verifier.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/cas-replication-controller.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/causal-debugger.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/change-impact-orchestrator.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/character-motion-validator.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/character-spatial-contract-lib.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/check-animation-quality-system.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/check-cpu-only-autopilot.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2980,6 +4957,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -2990,6 +4968,20 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "scripts/check-procedural-quality-runtime.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/check-pwa-system.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3011,6 +5003,27 @@
       ]
     },
     {
+      "file": "scripts/check-supabase-migration-manifest-v12.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/check-supabase-migrations.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/config-contract-validator.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/configure-branch-protection.sh",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
@@ -3020,108 +5033,165 @@
       ]
     },
     {
+      "file": "scripts/cpu-asset-transcode.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/cpu-budget-gate.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "scripts/cpu-genetic-optimizer.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "scripts/cpu-mesh-scan.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "scripts/cpu-nightly-planner.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "scripts/cpu-nightly-report.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "scripts/cpu-patch-tournament.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "scripts/cpu-quality-learner.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "scripts/cpu_collision_simplifier.py",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "scripts/cpu_mesh_factory.py",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "scripts/cpu_ssim_compare.py",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "scripts/cpu_texture_factory.py",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "scripts/cpu_visual_ensemble.py",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/crash-diagnostics-cluster.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "scripts/cross-project-learning.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/cv-gameplay-agent.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/cyclonedx-sbom.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/database-migration-coordinator.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/dependency-security-orchestrator.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "scripts/desktop-ai-error-closure.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "scripts/desktop-ai-fix-loop.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3134,12 +5204,82 @@
       ]
     },
     {
+      "file": "scripts/desktop-ai-report-validator.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/desktop-ai-session-recovery.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/deterministic-record-replay.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/device-lab-orchestrator.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/device-test-executor.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/device-worker-server.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/discover-quality-plugins.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/distributed-cas.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/dream-readiness.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/duplicate-system-review.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "scripts/durable-job-queue.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3152,6 +5292,27 @@
       ]
     },
     {
+      "file": "scripts/enrich-improvement-plan.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/ensure-master-protection-v12.ps1",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/ensure-master-protection.ps1",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/evidence-quality-score.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
@@ -3161,7 +5322,56 @@
       ]
     },
     {
+      "file": "scripts/feature-flag-engine.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/fetch-procedural-models.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/fetch-quality-work-packet.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/function-contract-coverage.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/function-honest-100-auditor.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/function-monotonic-enhancement-gate.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/gameplay-physical-contract-validator.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/gap-closure-engine.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/opencode/multi-ai-peer-improvement"
@@ -3174,6 +5384,13 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "scripts/github-quality-bridge-v12.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3204,17 +5421,40 @@
       ]
     },
     {
+      "file": "scripts/graphics-regression-guard.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/hardware-fingerprint.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "scripts/incremental-test-selector.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/inject-procedural-quality-runtime.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/inject-pwa-runtime.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3227,7 +5467,91 @@
       ]
     },
     {
+      "file": "scripts/install-into-repo.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/install-quality-autopilot-v5.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/install-quality-autopilot-v6.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/install-quality-autopilot.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/integrate-apng-system.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/integrate-runtime-adapters.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/integration-chaos-test.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/integration-selftest.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/integration-telemetry-lib.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/integration-telemetry.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/integration-utils.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/leader-lease-fencing.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/legacy-evidence-factory.cjs",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/opencode/multi-ai-peer-improvement"
@@ -3245,7 +5569,22 @@
       "file": "scripts/local-cpu-code-model.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/long-soak-runner.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/materialize-supabase-bridge-export-v12.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3256,10 +5595,88 @@
       ]
     },
     {
+      "file": "scripts/model-state-checker.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/multiplayer-swarm.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/native-ast-dataflow.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/native-causal-collector.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/network-chaos-runner.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/night-checkpoint.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/orchestrator-continuity-gate.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/orchestrator-invariant-model.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/orchestrator-minimal-repro.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/orchestrator-monitor-lifecycle.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/orchestrator-patch-safety-gate.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/orchestrator-supervisor.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3272,12 +5689,215 @@
       ]
     },
     {
+      "file": "scripts/performance-budget-gate.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/physical-device-fleet.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/pixel-animation-auto-integrate.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/pixel-animation-benchmark.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/pixel-animation-verify.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/pixel-animation-visual-regression.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/policy-engine.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/post-deploy-smoke.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "scripts/procedural-quality-canary-gate.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/procedural-quality-device-certification.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/procedural-quality-doctor.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/procedural-quality-evidence-orchestrator.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/procedural-quality-golden-baselines.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/procedural-quality-golden-verify.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/procedural-quality-native-audit.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/procedural-quality-production-verify.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/procedural-quality-readiness.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/procedural-quality-rollback.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/procedural-quality-three-patcher.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/procedural-quality-tournament.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/procedural-quality-v10-gate.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/procedural-quality-v5-device-matrix.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/procedural-quality-v5-gate.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/procedural-quality-v6-device-matrix.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/procedural-quality-v6-gate.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/procedural-quality-v7-device-matrix.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/procedural-quality-v7-gate.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/procedural-quality-v8-gate.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/procedural-quality-v9-gate.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/procedural-quality-visual-critic.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3290,10 +5910,32 @@
       ]
     },
     {
+      "file": "scripts/production-safety-controller.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/production-slo-autopilot.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/project-directive-gate.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/project-quality-curriculum.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3309,7 +5951,8 @@
       "file": "scripts/promote-golden-pattern.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3340,12 +5983,33 @@
       ]
     },
     {
+      "file": "scripts/provenance.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-ab-canary.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/quality-accept-baseline.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "scripts/quality-audit-verify.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3358,12 +6022,68 @@
       ]
     },
     {
+      "file": "scripts/quality-autopilot-feedback.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-autopilot.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-backup-restore-drill-v10.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/quality-bisect-check.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "scripts/quality-browser-probe.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-budget-reserve-v9.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-budget-reserve.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-canary-decision.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-candidate-sandbox.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3376,12 +6096,96 @@
       ]
     },
     {
+      "file": "scripts/quality-chaos-failover.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-compile-regressions.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-contract-instrument-v10.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-convergence-loop.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/quality-cost-optimizer.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "scripts/quality-cpu-benchmark-v11.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-cpu-impact-v11.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-cpu-parallel-scan-v11.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-cpu-policy-v11.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-cpu-runtime-bridge-v11.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-cpu-toolchain-v11.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-cross-region-probe-v10.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-dependency-tournament.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3394,6 +6198,13 @@
       ]
     },
     {
+      "file": "scripts/quality-distributed-coordinator.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/quality-event.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
@@ -3403,12 +6214,40 @@
       ]
     },
     {
+      "file": "scripts/quality-existing-stack-bridge-v9.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/quality-experiment-engine.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "scripts/quality-external-adapters-v9.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-geographic-device-gate.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-golden-adoptions-v9.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3451,7 +6290,8 @@
       "file": "scripts/quality-invariant-miner.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3476,7 +6316,8 @@
       "file": "scripts/quality-knowledge-learning.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3489,12 +6330,75 @@
       ]
     },
     {
+      "file": "scripts/quality-learning-engine.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-live-telemetry-pull.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/quality-master-report.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "scripts/quality-migration-gate.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-migration-safety-v10.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-mobile-gpu-profiler.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-multi-region-probe.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-near-field-gate-v9.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-otel-bridge-check.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-patch-outcome.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3516,12 +6420,117 @@
       ]
     },
     {
+      "file": "scripts/quality-persist-attestation-v10.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-persist-cpu-profile-v11.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-persist-drill-v10.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-progressive-canary.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-progressive-rollout.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-promotion-attestation-v9.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/quality-promotion-candidate.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "scripts/quality-promotion-chain-v10.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-proof-gate.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-provider-capability-gate-v9.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-readiness-v10.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-readiness-v11.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-readiness-v9.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-readiness.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-real-device-rum.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-real-device-visual-oracle.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3543,6 +6552,20 @@
       ]
     },
     {
+      "file": "scripts/quality-renderer-tuner-gate.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-repair-loop-v5.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/quality-risk-predictor.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
@@ -3561,6 +6584,20 @@
       ]
     },
     {
+      "file": "scripts/quality-run-lock-v9.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-sbom-v10.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/quality-score.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
@@ -3570,10 +6607,18 @@
       ]
     },
     {
+      "file": "scripts/quality-security-gate.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/quality-self-calibration.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3586,12 +6631,110 @@
       ]
     },
     {
+      "file": "scripts/quality-slo-anomaly-v9.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-sync-knowledge.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-synthetic-player-army.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-telemetry-compare.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-telemetry-ledger.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-trace-critical-path-optimizer.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/quality-trend-monitor.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "scripts/quality-vercel-provider.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-visual-baseline-quorum-v9.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-visual-diff.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-visual-regression.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-visual-snapshot.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quality-work-queue.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quiet-quality-autopilot.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/quiet-self-improve.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3604,6 +6747,118 @@
       ]
     },
     {
+      "file": "scripts/real-ios-telemetry-gate.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/record-supabase-repo-manifest.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/rekor-monitor.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/release-promotion-controller.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/reproducible-build-gate.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/run-procedural-tests.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/runtime-integration-discovery.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/runtime-proof.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/secure-update-metadata.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/self-improvement-risk.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/semantic-dependency-graph.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/semantic-texture-baker-smoke.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/slo-error-budget-controller.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/soak-chaos-verifier.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/sync-supabase-migrations.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/system-cohesion-engine.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/system-contract-review.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
@@ -3613,12 +6868,61 @@
       ]
     },
     {
+      "file": "scripts/system-control-plane.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/system-enhancement-orchestrator.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/system-integration-gate.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/system-readiness-v5.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/system-readiness.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/technology-audit.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "scripts/technology-consensus.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/technology-lock-validator.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3643,14 +6947,16 @@
       "file": "scripts/test-cache-runner.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
       "file": "scripts/test-cache-smoke.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3672,7 +6978,28 @@
       ]
     },
     {
+      "file": "scripts/tlc-native-runner.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/toolchain-bootstrap.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/toolchain-security-gate.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/transactional-deploy.cjs",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/opencode/multi-ai-peer-improvement"
@@ -3697,12 +7024,40 @@
       ]
     },
     {
+      "file": "scripts/verify-apng-bundle.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/verify-procedural-models.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/verify-sentry-production.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "scripts/verify-v5-runtime.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/verify-v6-runtime.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3715,11 +7070,46 @@
       ]
     },
     {
+      "file": "scripts/winner-only-pr-guard.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/wit-bindings-generator.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/wit-component-validator.cjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/world-animation-lod-controller.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/world-animation-semantic-validator.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4"
+      ]
+    },
+    {
+      "file": "scripts/world-canary-release.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3731,6 +7121,13 @@
       ]
     },
     {
+      "file": "scripts/world-cpu-first-graphics-optimizer.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/world-detail-planner.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
@@ -3739,11 +7136,33 @@
       ]
     },
     {
+      "file": "scripts/world-deterministic-replay.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/world-device-profile-matrix.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
-        "ai/desktop/world-quality-autopilot-v4"
+        "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/world-device-provider-probe.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/world-evidence-provenance-guard.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3755,6 +7174,27 @@
       ]
     },
     {
+      "file": "scripts/world-graphics-quality-router.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/world-graphics-technology-integrator.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/world-graphics-technology-scout.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/world-material-synthesis.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
@@ -3763,11 +7203,19 @@
       ]
     },
     {
+      "file": "scripts/world-multiview-visual-gate.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/world-quality-analyzer.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
-        "ai/desktop/world-quality-autopilot-v4"
+        "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3775,7 +7223,15 @@
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
-        "ai/desktop/world-quality-autopilot-v4"
+        "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/world-quality-causality.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3787,11 +7243,32 @@
       ]
     },
     {
+      "file": "scripts/world-quality-orchestrator.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/world-quality-scheduler.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4"
+      ]
+    },
+    {
+      "file": "scripts/world-quality-slo.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/world-quality-v5.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3803,11 +7280,19 @@
       ]
     },
     {
+      "file": "scripts/world-runtime-dependency-resilience.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "scripts/world-runtime-quality-profiler.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
-        "ai/desktop/world-quality-autopilot-v4"
+        "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3816,6 +7301,41 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4"
+      ]
+    },
+    {
+      "file": "scripts/world-shader-cost-auditor.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/world-streaming-topology.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/world-technology-candidate-intake.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/world-technology-drift-gate.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "scripts/world-telemetry-harvester.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3857,6 +7377,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -3930,6 +7451,13 @@
       ]
     },
     {
+      "file": "shared/pwa-runtime.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "shared/quality-telemetry.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
@@ -3962,6 +7490,90 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4"
+      ]
+    },
+    {
+      "file": "specs/ControlPlane.tla",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "specs/DurableJobQueue.tla",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "state/blocker-repair/DESKTOP_AI_NEXT_ACTION.md",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "state/blocker-repair/blocker-repair-tick.cmd",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "state/blocker-repair/device-evidence.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "state/blocker-repair/events.jsonl",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "state/blocker-repair/latest-gates.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "state/blocker-repair/platform-evidence.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "state/blocker-repair/scheduler.log",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "state/blocker-repair/state.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "state/blocker-repair/unified-tick.ps1",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "state/blocker-repair/unified.lock",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -4099,13 +7711,6 @@
     },
     {
       "file": "supabase/migrations/20260819081146_voxel_block_type_hardening.sql",
-      "branches": [
-        "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/opencode/multi-ai-peer-improvement"
-      ]
-    },
-    {
-      "file": "supabase/migrations/20260819081500_voxel_world.sql",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/opencode/multi-ai-peer-improvement"
@@ -4728,6 +8333,13 @@
       ]
     },
     {
+      "file": "test/apng-integration.test.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "test/cpu-asset-tools.test.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
@@ -4746,6 +8358,13 @@
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu"
+      ]
+    },
+    {
+      "file": "test/gap-closure.test.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -4812,6 +8431,34 @@
       ]
     },
     {
+      "file": "test/pixel-animation-v3.test.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "test/procedural-quality-v10.test.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "test/pwa-system.test.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "test/quality-autopilot-v11.test.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "test/quality-fuzz.test.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
@@ -4857,6 +8504,13 @@
       ]
     },
     {
+      "file": "test/runtime-integration-adapters.test.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "test/v12-cpu-evolution.test.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
@@ -4874,7 +8528,8 @@
       "file": "test/v13-invariant-golden.test.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
-        "ai/desktop/v13-self-calibrating-cpu"
+        "ai/desktop/v13-self-calibrating-cpu",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -4900,11 +8555,31 @@
       ]
     },
     {
+      "file": "test/world-quality-truth-gate.test.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "vendor/tla2tools.jar",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "wit/world-server-adapter.wit",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "supabase/migrations/20260823063700_quality_telemetry.sql",
       "branches": [
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
-        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     }
@@ -7851,7 +11526,73 @@
     "worlds/sample-city/.quality-cache/incremental-state.json",
     ".quality-cache/tests/51a1e7fbd479d5a830f4f284d7c0331ca01bd740294902f0434ba8160bb1224f.json",
     ".quality-cache/tests/a0bbfa7a8e3f05812c1e7d6ac5d70a76ad46814b6c54becf915fcb211887651c.json",
-    "supabase/migrations/20260823063700_quality_telemetry.sql"
+    "supabase/migrations/20260823063700_quality_telemetry.sql",
+    "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/apply_world_quality_autopilot.bat",
+    "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/apply_world_quality_autopilot.ps1",
+    "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/install-world-quality-autopilot.cjs",
+    "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/.github/workflows/world-quality-autopilot.yml",
+    "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/data/world-quality-autopilot.json",
+    "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/lib/world-quality-material-profiler.js",
+    "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/lib/world-quality-pbr-synthesizer.js",
+    "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/lib/world-quality-semantic-detail.js",
+    "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/lib/world-quality-voxel-enhancer.js",
+    "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/scripts/world-quality-analyzer.js",
+    "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/scripts/world-quality-autopilot.js",
+    "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/scripts/world-quality-evidence-ledger.js",
+    "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/scripts/world-quality-scheduler.js",
+    "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/scripts/world-runtime-quality-profiler.js",
+    "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/services/ai3d-worker/ai3d/plugins/world_quality.py",
+    "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/shared/world-quality-autopilot.js",
+    "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/test/world-quality-autopilot.test.js",
+    "supabase/migrations_backup_20260824/20260823034319_quality_autopilot_telemetry.sql",
+    "supabase/migrations_backup_20260824/20260823040000_quality_autopilot_telemetry.sql",
+    "supabase/migrations_backup_20260824/20260823040900_quality_autopilot_knowledge.sql",
+    "supabase/migrations_backup_20260824/20260823042723_quality_autopilot_runtime.sql",
+    "supabase/migrations_backup_20260824/20260823042923_quality_worker_claim.sql",
+    "supabase/migrations_backup_20260824/20260823043141_quality_canary_passes.sql",
+    "supabase/migrations_backup_20260824/20260823043539_quality_worker_lease_recovery.sql",
+    "supabase/migrations_backup_20260824/20260823044852_quality_autopilot_coordination.sql",
+    "supabase/migrations_backup_20260824/20260823055600_quality_autopilot_v5_improvement_memory.sql",
+    "supabase/migrations_backup_20260824/20260823060051_quality_telemetry_runtime_v5.sql",
+    "supabase/migrations_backup_20260824/20260823060246_quality_autopilot_v5_memory_rpc.sql",
+    "supabase/migrations_backup_20260824/20260823060348_quality_autopilot_v5_memory_hydration.sql",
+    "supabase/migrations_backup_20260824/20260823062335_quality_autopilot_v6_provider_health.sql",
+    "supabase/migrations_backup_20260824/20260823062459_quality_autopilot_v6_provider_jobs.sql",
+    "supabase/migrations_backup_20260824/20260823062749_quality_autopilot_v6_provider_rls.sql",
+    "supabase/migrations_backup_20260824/20260823063700_quality_telemetry.sql",
+    "supabase/migrations_backup_20260824/20260823065000_quality_autopilot_knowledge.sql",
+    "supabase/migrations_backup_20260824/20260823065044_procedural_quality_learning_v5.sql",
+    "supabase/migrations_backup_20260824/20260823065703_procedural_quality_v6_learning_fields.sql",
+    "supabase/migrations_backup_20260824/20260823065704_quality_autopilot_v7_federated.sql",
+    "supabase/migrations_backup_20260824/20260823080037_quality_runtime_control_plane_v8.sql",
+    "supabase/migrations_backup_20260824/20260823081002_quiet_quality_autopilot_v4_runtime_compat.sql",
+    "supabase/migrations_backup_20260824/20260823081405_quiet_quality_autopilot_v4_remove_duplicate_index.sql",
+    "supabase/migrations_backup_20260824/20260823081607_procedural_quality_v7.sql",
+    "supabase/migrations_backup_20260824/20260823081617_quiet_quality_autopilot_v4_release_attribution.sql",
+    "supabase/migrations_backup_20260824/20260823122138_procedural_quality_v8.sql",
+    "supabase/migrations_backup_20260824/20260823153040_quality_autopilot_v10_release_integrity.sql",
+    "supabase/migrations_backup_20260824/20260824051333_quality_runtime_scheduler_v9.sql",
+    "supabase/migrations_backup_20260824/20260824051425_procedural_quality_v9.sql",
+    "supabase/migrations_backup_20260824/20260824051454_quiet_quality_autopilot_v5_runtime.sql",
+    "supabase/migrations_backup_20260824/20260824051713_quality_synthetic_probe_v10.sql",
+    "supabase/migrations_backup_20260824/20260824051740_quality_runtime_slo_v10.sql",
+    "supabase/migrations_backup_20260824/20260824053000_quality_telemetry_v4.sql",
+    "supabase/migrations_backup_20260824/20260824053417_procedural_quality_v10.sql",
+    "supabase/migrations_backup_20260824/20260824053547_quality_autopilot_v6_visual_trace_chaos_renderer.sql",
+    "supabase/migrations_backup_20260824/20260824053613_quality_runtime_worker_v11.sql",
+    "supabase/migrations_backup_20260824/20260824053709_quality_runtime_autonomous_loop_v11.sql",
+    "supabase/migrations_backup_20260824/20260824053745_quality_runtime_secure_worker_invoke_v11.sql",
+    "supabase/migrations_backup_20260824/20260824053834_quality_runtime_worker_kind_whitelist_v11.sql",
+    "supabase/migrations_backup_20260824/20260824054003_quality_gap_reconciliation_v11.sql",
+    "supabase/migrations_backup_20260824/20260824054054_quality_pixel_atlas_acceptance_v11.sql",
+    "supabase/migrations_backup_20260824/20260824054055_quality_autopilot_v11_cpu_first.sql",
+    "supabase/migrations_backup_20260824/20260824054201_quality_repo_manifest_recording_v11.sql",
+    "supabase/migrations_backup_20260824/20260824054254_quality_real_device_evidence_v11.sql",
+    "supabase/migrations_backup_20260824/20260824055829_quality_security_and_external_controls_v12.sql",
+    "supabase/migrations_backup_20260824/20260824055923_quality_github_oidc_bridge_v12.sql",
+    "supabase/migrations_backup_20260824/20260824060050_quality_desktop_work_packet_v12.sql",
+    "supabase/migrations_backup_20260824/20260824060136_quality_gap_orchestrator_v12.sql",
+    "supabase/migrations_backup_20260824/20260824094000_quality_autopilot_v11_cpu_first.sql"
   ],
   "conflicts": [
     "multiple AI branches touch same systems - review blast radius before porting"

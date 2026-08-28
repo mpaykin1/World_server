@@ -1,12 +1,12 @@
 {
   "schemaVersion": "7.2.0",
-  "generatedAt": "2026-08-28T05:50:18.601Z",
-  "pass": false,
-  "status": "BLOCK",
+  "generatedAt": "2026-08-28T06:07:37.009Z",
+  "pass": true,
+  "status": "MONOTONIC_PASS",
   "baselineCreatedAt": "2026-08-27T09:48:59.597Z",
   "baselineCommit": "27944428e77a65d32aab7327ad8cd0c39dc98b73",
   "previousCertifiedCount": 68,
-  "currentCertifiedCount": 73,
+  "currentCertifiedCount": 76,
   "previousCapabilityCount": 146,
   "currentCapabilityCount": 146,
   "changedCertifiedSources": [
@@ -43,10 +43,6 @@
   ],
   "addedCapabilities": [],
   "proposal": null,
-  "blockers": [
-    "certified-function-regressed:system-integration-gate",
-    "certified-function-regressed:offline-policy-enforcement",
-    "certified-function-regressed:leader-lease-fencing"
-  ],
+  "blockers": [],
   "rule": "Every previously CERTIFIED_100 function and capability must remain certified and present. New functionality is additive/shadow-first; replacement requires dual-run evidence and retained fallback until canary promotion."
 }
