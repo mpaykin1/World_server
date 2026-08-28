@@ -1,0 +1,128 @@
+{
+  "schemaVersion": "3.0.0",
+  "system": "QUIET_SELF_IMPROVEMENT_POLICY",
+  "priorities": [
+    {
+      "id": "runtime-performance",
+      "weight": 1.0,
+      "signals": [
+        "p10Fps",
+        "p95FrameMs",
+        "p95InputLatencyMs",
+        "p95LongTaskMs",
+        "p95LoadMs",
+        "p95JsHeapMb",
+        "webglContextLosses"
+      ],
+      "goal": "Improve responsiveness and frame stability without lowering certified visual quality."
+    },
+    {
+      "id": "system-integration",
+      "weight": 0.95,
+      "signals": [
+        "contract failures",
+        "duplicate systems",
+        "runtime errors",
+        "changed-impact graph"
+      ],
+      "goal": "Reduce duplicated logic, improve system contracts, and propagate verified good patterns across apps."
+    },
+    {
+      "id": "animation-quality",
+      "weight": 0.9,
+      "signals": [
+        "avgAnimationJankRate",
+        "frame pacing",
+        "behavioral animation tests"
+      ],
+      "goal": "Increase animation smoothness, physical plausibility, transition quality, and directional consistency."
+    },
+    {
+      "id": "graphics-quality",
+      "weight": 0.9,
+      "signals": [
+        "perceptual visual gate",
+        "visual critic",
+        "golden visual baselines"
+      ],
+      "goal": "Improve geometry detail, PBR material readability, textures, microdetail, lighting, shadows, depth, atmospheric LOD, and stable high-quality rendering."
+    },
+    {
+      "id": "automation-reliability",
+      "weight": 0.85,
+      "signals": [
+        "flaky tests",
+        "rollback events",
+        "failed canary",
+        "missing evidence"
+      ],
+      "goal": "Make every improvement reproducible, testable, reversible, and reusable by future projects."
+    },
+    {
+      "id": "device-adaptation",
+      "weight": 0.92,
+      "signals": [
+        "dominantCapabilityClass",
+        "sustainedPressureP95",
+        "powerPressureP95",
+        "WebGL capability"
+      ],
+      "goal": "Adapt render cost to the device while preserving certified visual features and restoring quality automatically when pressure falls."
+    },
+    {
+      "id": "asset-efficiency",
+      "weight": 0.88,
+      "signals": [
+        "heavy asset candidates",
+        "duplicate bytes",
+        "3D runtime cache hit opportunities",
+        "texture compression candidates"
+      ],
+      "goal": "Reduce transfer, decode and memory cost with caching, compression, streaming and deduplication without destructive detail loss."
+    }
+  ],
+  "animationRules": [
+    "Feet point in the movement direction when locomotion is active.",
+    "Attack and shooting direction stays consistent with character facing and feet.",
+    "Hand-held weapons remain attached to the correct hand; two-handed weapons remain controlled by both hands.",
+    "Shields remain in front of the torso when defending and maximize useful torso coverage.",
+    "When shield coverage can be measured, keep useful chest/abdomen coverage at or above the certified minimum."
+  ],
+  "visualRules": [
+    "Never reduce existing certified visual detail to gain performance; prefer LOD, culling, batching, streaming and adaptive render scale.",
+    "Prefer high-detail near-field rendering and progressively cheaper distant rendering with atmospheric haze/fog where appropriate.",
+    "Preserve PBR separation between albedo, roughness, normal and displacement/detail channels.",
+    "Improve contact shadows, ambient occlusion, material variation, texture fidelity, lighting depth and physically plausible reflections.",
+    "Use subtle material wetness only where it improves readability and remains physically plausible for the scene."
+  ],
+  "safetyRules": {
+    "aiPatchMustPassSandbox": true,
+    "fullReleaseGateRequired": true,
+    "deployedPreviewBrowserGateRequired": true,
+    "postDeploySmokeRequired": true,
+    "automaticRollbackOnProductionRegression": true,
+    "neverRaiseBaselineToHideRegression": true,
+    "preferSharedGoldenFixesOverOneOffAppFixes": true,
+    "autoMergeLowRiskOnly": true,
+    "autoCodeRevertForFailedQuietPatch": true
+  },
+  "deviceRules": [
+    "Never claim real iOS temperature when no thermal sensor API is available; use sustained frame pressure only as a proxy.",
+    "Do not lower certified visual feature sets because a phone is slow; first lower render scale, distant LOD cost, particle density and streaming radius.",
+    "Restore quality upward with hysteresis after sustained recovery.",
+    "Treat Save-Data and low battery signals as power constraints where the browser exposes them."
+  ],
+  "assetRules": [
+    "Cache heavy immutable 3D/audio assets separately from the app shell.",
+    "Detect exact duplicates and oversized hot-path assets automatically.",
+    "Prefer Meshopt/KTX2/Basis/WebP/AVIF/streaming where supported, but require visual evidence before destructive transcoding or simplification.",
+    "Keep source-quality masters available; optimize delivery copies rather than deleting masters."
+  ],
+  "automationRules": [
+    "AI-generated patches must be verified in an isolated sandbox before application.",
+    "A candidate must pass the full release gate, deployed-preview Chromium and WebKit tests, and post-deploy smoke before PR creation.",
+    "Only low-risk source diffs may auto-merge; infrastructure/API/database/dependency changes always require review.",
+    "A failed production smoke must rollback the Vercel deployment and automatically prepare a code revert for a quiet self-improvement commit.",
+    "Run the quality convergence loop; a BLOCKED_UNRESOLVED state is never completion and must be repaired before delivery."
+  ]
+}

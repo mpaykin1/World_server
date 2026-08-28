@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-28T05:50:15.689Z",
+  "pass": true,
+  "wasmtimeAvailable": false,
+  "wasmtimeVersion": null,
+  "capabilityBased": true,
+  "untrustedBehavior": "DENY_UNTRUSTED",
+  "checks": {
+    "fail-closed": true,
+    "network-denied": true,
+    "subprocess-denied": true,
+    "preopens-contained": true
+  },
+  "note": "Absence of Wasmtime never falls back to unrestricted native execution."
+}

@@ -12,7 +12,9 @@ on:
     branches: [master]
 
 permissions:
-  contents: read
+  contents: write
+  pull-requests: write
+  issues: write
 
 jobs:
   canary:
@@ -22,6 +24,8 @@ jobs:
       url: ${{ steps.deploy.outputs.url }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -61,9 +65,11 @@ jobs:
     needs: canary
     if: github.ref == 'refs/heads/master' || inputs.promote == true
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -76,8 +82,48 @@ jobs:
         env:
           QUALITY_BASE_URL: https://world-server.vercel.app
         run: node scripts/post-deploy-smoke.js
-      - name: Automatic rollback on failed post-smoke
+      - name: Collect real iPhone production evidence
+        if: steps.smoke.outcome == 'success'
+        env:
+          QUALITY_BASE_URL: https://world-server.vercel.app
+          QUALITY_REQUIRE_REAL_IOS: ${{ vars.QUALITY_REQUIRE_REAL_IOS }}
+        run: node scripts/real-ios-telemetry-gate.js
+      - name: Upload real iPhone evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-ios-quality-${{ github.run_id }}
+          path: REAL_IOS_QUALITY_REPORT.json
+          if-no-files-found: ignore
+      - name: Automatic Vercel rollback on failed post-smoke
         if: steps.smoke.outcome == 'failure'
+        run: vercel rollback --yes --token="${{ secrets.VERCEL_TOKEN }}"
+      - name: Automatic code revert for failed quiet self-improvement
+        if: steps.smoke.outcome == 'failure'
+        id: code_revert
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
         run: |
-          vercel rollback --yes --token="${{ secrets.VERCEL_TOKEN }}"
-          exit 1
+          SUBJECT="$(git log -1 --pretty=%s "$GITHUB_SHA")"
+          if [[ "$SUBJECT" != *"quiet-self-improve"* ]]; then
+            echo "Not an autonomous quiet patch; code revert requires normal review."
+            exit 0
+          fi
+          BRANCH="ai/quiet-auto-revert/${GITHUB_RUN_ID}"
+          git config user.name "world-server-quality-bot"
+          git config user.email "quality-bot@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git revert --no-edit "$GITHUB_SHA"
+          git push origin "$BRANCH"
+          PR_URL="$(gh pr create --base master --head "$BRANCH" --title "revert(quality): failed quiet self-improvement" --body "Automatic code rollback because production smoke failed after the verified quiet self-improvement was promoted. Vercel traffic was already rolled back.")"
+          gh pr merge "$PR_URL" --squash --delete-branch
+      - name: Open blocker if rollback code path failed
+        if: steps.smoke.outcome == 'failure' && steps.code_revert.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh issue create --title "Quiet self-improvement rollback requires attention" --body "Production smoke failed. Vercel was rolled back, but automatic code revert failed. Inspect run $GITHUB_RUN_ID and revert $GITHUB_SHA before the next production change."
+      - name: Fail deployment after rollback
+        if: steps.smoke.outcome == 'failure'
+        run: exit 1

@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "principles": {
+    "reuseExistingSystemsFirst": true,
+    "deterministicRepairsOnly": true,
+    "noFakeEvidence": true,
+    "noSkipFullVerify": true,
+    "noSudo": true,
+    "noGlobalToolchainMutation": true,
+    "freeResourcesOnly": true,
+    "verifiedDownloadsOnly": true
+  },
+  "lock": {
+    "staleMinutes": 90
+  },
+  "repair": {
+    "reuseExistingToolchainBootstrap": true
+  },
+  "network": {
+    "allowedDownloadHosts": [
+      "github.com",
+      "objects.githubusercontent.com",
+      "release-assets.githubusercontent.com"
+    ]
+  },
+  "freeResources": {
+    "cosign": {
+      "enabled": true,
+      "license": "Apache-2.0",
+      "cost": "free",
+      "releaseApi": "https://api.github.com/repos/sigstore/cosign/releases/latest",
+      "requireSha256Digest": true
+    }
+  },
+  "timers": {
+    "schedulerMinutes": 15,
+    "networkRetryMinutes": 15,
+    "deviceRetryMinutes": 15,
+    "remoteRetryMinutes": 15,
+    "vercelRetryMinutes": 10,
+    "soakPollMinutes": 15
+  },
+  "timeouts": {
+    "toolchainMs": 1200000,
+    "downloadMs": 180000,
+    "probeMs": 30000,
+    "gateMs": 1800000,
+    "vercelInspectMs": 180000
+  },
+  "gates": {
+    "npmScripts": [
+      "integration:full",
+      "integration:functions:audit",
+      "integration:functions:coverage",
+      "desktop-ai:check",
+      "release:gate"
+    ],
+    "stopOnFirstFailure": false,
+    "tailLines": 140
+  },
+  "longSoak": {
+    "productionSeconds": 28800,
+    "realElapsedTimeRequired": true
+  },
+  "merge": {
+    "requiredBlockers": [
+      "toolchain-bootstrap",
+      "tlc",
+      "wasmtime",
+      "native-cosign",
+      "etw-ebpf-perf",
+      "fresh-android-device",
+      "fresh-ios-device",
+      "remote-cas-peer",
+      "fenced-migration",
+      "8h-long-soak",
+      "vercel-deployment",
+      "local-gates",
+      "durable-scheduler"
+    ]
+  }
+}

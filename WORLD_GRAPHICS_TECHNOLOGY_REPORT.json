@@ -1,0 +1,115 @@
+{
+  "schemaVersion": "6.0.0",
+  "system": "WORLD_GRAPHICS_TECHNOLOGY_SCOUT",
+  "generatedAt": "2026-08-28T05:10:17.819Z",
+  "policy": "scan-before-every-quality-cycle",
+  "technologies": [
+    {
+      "id": "three-webgl2",
+      "status": "runtime-detected",
+      "runtimeReady": true,
+      "declared": true
+    },
+    {
+      "id": "godot",
+      "status": "runtime-detected",
+      "runtimeReady": true,
+      "declared": true
+    },
+    {
+      "id": "blender",
+      "status": "runtime-detected",
+      "runtimeReady": true,
+      "declared": true
+    },
+    {
+      "id": "cpu-reconstruction",
+      "status": "runtime-detected",
+      "runtimeReady": true,
+      "declared": false
+    },
+    {
+      "id": "depth-anything",
+      "status": "runtime-detected",
+      "runtimeReady": true,
+      "declared": true
+    },
+    {
+      "id": "instantmesh",
+      "status": "runtime-detected",
+      "runtimeReady": true,
+      "declared": true
+    },
+    {
+      "id": "trellis2",
+      "status": "runtime-detected",
+      "runtimeReady": true,
+      "declared": true
+    },
+    {
+      "id": "hunyuan3d",
+      "status": "declared-only",
+      "runtimeReady": false,
+      "declared": true
+    },
+    {
+      "id": "voxel-greedy",
+      "status": "runtime-detected",
+      "runtimeReady": true,
+      "declared": false
+    },
+    {
+      "id": "goo-engine",
+      "status": "declared-only",
+      "runtimeReady": false,
+      "declared": true
+    },
+    {
+      "id": "upbge",
+      "status": "declared-only",
+      "runtimeReady": false,
+      "declared": true
+    },
+    {
+      "id": "unirig",
+      "status": "declared-only",
+      "runtimeReady": false,
+      "declared": true
+    },
+    {
+      "id": "rigify",
+      "status": "declared-only",
+      "runtimeReady": false,
+      "declared": true
+    },
+    {
+      "id": "mpfb",
+      "status": "declared-only",
+      "runtimeReady": false,
+      "declared": true
+    },
+    {
+      "id": "world-quality",
+      "status": "runtime-detected",
+      "runtimeReady": true,
+      "declared": false
+    }
+  ],
+  "counts": {
+    "total": 15,
+    "runtime": 9,
+    "declaredOnly": 6
+  },
+  "sources": [
+    "package.json",
+    "TECHNOLOGY_AUDIT.json",
+    "data/quality-scorecard.json",
+    "services/ai3d-worker/third_party/local-inventory.json",
+    "AI3D plugin files",
+    "apps runtime files"
+  ],
+  "notes": [
+    "Declared-only technology is not treated as installed runtime.",
+    "Unknown graphics packages require explicit adapter review before production mutation."
+  ]
+}

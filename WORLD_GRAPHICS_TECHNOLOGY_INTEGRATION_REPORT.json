@@ -1,0 +1,300 @@
+{
+  "schemaVersion": "6.0.0",
+  "system": "WORLD_GRAPHICS_TECHNOLOGY_INTEGRATION",
+  "generatedAt": "2026-08-28T05:10:18.218Z",
+  "policy": "every-runtime-tech-gets-detail-plus-optimization",
+  "routes": [
+    {
+      "technology": "three-webgl2",
+      "status": "runtime-detected",
+      "runtimeReady": true,
+      "detailAdapter": [
+        "semantic-detail-zones",
+        "hero-landmark-budget",
+        "material-pbr-profiles"
+      ],
+      "optimizationAdapter": [
+        "instancing",
+        "greedy-meshing",
+        "frustum-culling",
+        "hlod",
+        "adaptive-dpr",
+        "texture-atlas-budget"
+      ],
+      "cpuSafe": true,
+      "experimental": false,
+      "generic": false,
+      "productionReady": true
+    },
+    {
+      "technology": "godot",
+      "status": "runtime-detected",
+      "runtimeReady": true,
+      "detailAdapter": [
+        "multimesh-detail-instances",
+        "visibility-range-detail",
+        "material-override-profiles"
+      ],
+      "optimizationAdapter": [
+        "multimesh",
+        "mesh-lod",
+        "visibility-ranges",
+        "occlusion-culling",
+        "baked-lighting"
+      ],
+      "cpuSafe": true,
+      "experimental": false,
+      "generic": false,
+      "productionReady": true
+    },
+    {
+      "technology": "blender",
+      "status": "runtime-detected",
+      "runtimeReady": true,
+      "detailAdapter": [
+        "geometry-nodes-detail-candidate",
+        "procedural-facade-detail",
+        "bake-detail-maps"
+      ],
+      "optimizationAdapter": [
+        "decimate-lod-candidate",
+        "merge-by-material",
+        "atlas-bake",
+        "remove-hidden-geometry"
+      ],
+      "cpuSafe": true,
+      "experimental": false,
+      "generic": false,
+      "productionReady": true
+    },
+    {
+      "technology": "cpu-reconstruction",
+      "status": "runtime-detected",
+      "runtimeReady": true,
+      "detailAdapter": [
+        "depth-aware-side-volume",
+        "silhouette-preserving-relief",
+        "semantic-priority-detail"
+      ],
+      "optimizationAdapter": [
+        "numpy-vectorization",
+        "bounded-resolution",
+        "chunk-output",
+        "mesh-post-optimizer"
+      ],
+      "cpuSafe": true,
+      "experimental": false,
+      "generic": false,
+      "productionReady": true
+    },
+    {
+      "technology": "depth-anything",
+      "status": "runtime-detected",
+      "runtimeReady": true,
+      "detailAdapter": [
+        "depth-aware-importance",
+        "edge-depth-detail-priority"
+      ],
+      "optimizationAdapter": [
+        "small-model-first",
+        "bounded-input-size",
+        "cache-depth-result"
+      ],
+      "cpuSafe": true,
+      "experimental": false,
+      "generic": false,
+      "productionReady": true
+    },
+    {
+      "technology": "instantmesh",
+      "status": "runtime-detected",
+      "runtimeReady": true,
+      "detailAdapter": [
+        "mesh-detail-preservation-contract",
+        "reference-silhouette-priority"
+      ],
+      "optimizationAdapter": [
+        "mesh-quality-optimizer",
+        "lod-generation",
+        "texture-budget",
+        "asset-dedup"
+      ],
+      "cpuSafe": false,
+      "experimental": false,
+      "generic": false,
+      "productionReady": true
+    },
+    {
+      "technology": "trellis2",
+      "status": "runtime-detected",
+      "runtimeReady": true,
+      "detailAdapter": [
+        "high-detail-mesh-candidate",
+        "pbr-material-preservation"
+      ],
+      "optimizationAdapter": [
+        "mesh-quality-optimizer",
+        "lod-generation",
+        "texture-budget",
+        "remote-gpu-route-only"
+      ],
+      "cpuSafe": false,
+      "experimental": false,
+      "generic": false,
+      "productionReady": true
+    },
+    {
+      "technology": "hunyuan3d",
+      "status": "declared-only",
+      "runtimeReady": false,
+      "detailAdapter": [
+        "high-detail-mesh-candidate",
+        "semantic-surface-preservation"
+      ],
+      "optimizationAdapter": [
+        "triangle-budget-tiers",
+        "mesh-quality-optimizer",
+        "lod-generation",
+        "texture-budget"
+      ],
+      "cpuSafe": false,
+      "experimental": false,
+      "generic": false,
+      "productionReady": false
+    },
+    {
+      "technology": "voxel-greedy",
+      "status": "runtime-detected",
+      "runtimeReady": true,
+      "detailAdapter": [
+        "hidden-side-semantic-voxels",
+        "hero-detail-budget",
+        "ground-microrelief"
+      ],
+      "optimizationAdapter": [
+        "greedy-meshing",
+        "internal-face-culling",
+        "chunk-hlod",
+        "streaming-topology"
+      ],
+      "cpuSafe": true,
+      "experimental": false,
+      "generic": false,
+      "productionReady": true
+    },
+    {
+      "technology": "goo-engine",
+      "status": "declared-only",
+      "runtimeReady": false,
+      "detailAdapter": [
+        "toon-line-detail-contract",
+        "stylized-lighting-detail"
+      ],
+      "optimizationAdapter": [
+        "shader-variant-budget",
+        "outline-distance-lod",
+        "material-pass-budget"
+      ],
+      "cpuSafe": true,
+      "experimental": false,
+      "generic": false,
+      "productionReady": false
+    },
+    {
+      "technology": "upbge",
+      "status": "declared-only",
+      "runtimeReady": false,
+      "detailAdapter": [
+        "blender-procedural-detail-contract",
+        "game-runtime-detail-tiers"
+      ],
+      "optimizationAdapter": [
+        "scene-culling",
+        "lod",
+        "batching",
+        "texture-budget"
+      ],
+      "cpuSafe": true,
+      "experimental": false,
+      "generic": false,
+      "productionReady": false
+    },
+    {
+      "technology": "unirig",
+      "status": "declared-only",
+      "runtimeReady": false,
+      "detailAdapter": [
+        "rig-semantic-bone-map",
+        "deformation-preservation"
+      ],
+      "optimizationAdapter": [
+        "bone-lod",
+        "animation-lod",
+        "pose-cache"
+      ],
+      "cpuSafe": true,
+      "experimental": false,
+      "generic": false,
+      "productionReady": false
+    },
+    {
+      "technology": "rigify",
+      "status": "declared-only",
+      "runtimeReady": false,
+      "detailAdapter": [
+        "rig-semantic-bone-map",
+        "control-rig-retarget"
+      ],
+      "optimizationAdapter": [
+        "deform-bones-only-export",
+        "animation-lod",
+        "pose-cache"
+      ],
+      "cpuSafe": true,
+      "experimental": false,
+      "generic": false,
+      "productionReady": false
+    },
+    {
+      "technology": "mpfb",
+      "status": "declared-only",
+      "runtimeReady": false,
+      "detailAdapter": [
+        "human-detail-profile",
+        "rig-compatible-material-detail"
+      ],
+      "optimizationAdapter": [
+        "lod-meshes",
+        "material-atlas",
+        "animation-lod"
+      ],
+      "cpuSafe": true,
+      "experimental": false,
+      "generic": false,
+      "productionReady": false
+    },
+    {
+      "technology": "world-quality",
+      "status": "runtime-detected",
+      "runtimeReady": true,
+      "detailAdapter": [
+        "semantic-multiscale-detail",
+        "importance-budget",
+        "front-projection-invariant"
+      ],
+      "optimizationAdapter": [
+        "quality-slo",
+        "candidate-tournament",
+        "runtime-budgeting",
+        "regression-rollback"
+      ],
+      "cpuSafe": true,
+      "experimental": false,
+      "generic": false,
+      "productionReady": true
+    }
+  ],
+  "blockers": [],
+  "connectivityPercent": 100,
+  "hardGateReady": true
+}

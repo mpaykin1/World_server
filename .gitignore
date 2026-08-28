@@ -23,4 +23,23 @@ playwright-report/
 .golden-backup/
 WORLD_SERVER_GOLDEN_STANDARD*.zip
 GOLDEN_STANDARD_WORLD_SERVER_V10/
+state/session-recovery/
+.session-recovery-backups/
 
+# secrets index — never commit
+WORLD_SERVER_SECRETS/
+
+# local toolchain cache / disaster-recovery snapshots / backups — large, regenerable, not source
+.cache/
+.world-server-state/
+.blocker-repair-backups/
+*.tmp-*
+
+# stray nested worktree copies living inside the main tree — real worktrees live as siblings
+World_server_claude/
+World_server_quality_autopilot_v7_test/
+
+# scratch verification dumps
+_V11_3_TMP/
+_V13_TMP/
+_WORLD_V41_TMP_VERIFY/

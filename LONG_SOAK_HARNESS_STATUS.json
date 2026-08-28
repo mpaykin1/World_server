@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-28T05:50:12.754Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-1480.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}

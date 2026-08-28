@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "1.0.0",
+  "packages": {
+    "@gltf-transform/cli": "4.4.2",
+    "ktx2-encoder": "0.6.0"
+  },
+  "policy": "Free CPU-only toolchain. Pin exact versions; update deliberately and rerun visual/runtime regression gates."
+}

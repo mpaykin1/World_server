@@ -1,0 +1,2207 @@
+{
+  "schemaVersion": "7.5.0",
+  "functions": [
+    {
+      "id": "system-integration-gate",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "structural integration compatibility",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/system-integration-gate.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "path": "percent",
+          "equals": 100
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/system-integration-gate.cjs",
+          "text": "checks=["
+        }
+      ],
+      "coversCapabilities": [
+        "central-control-plane",
+        "semantic-merge-ownership",
+        "honest-100-function-certification",
+        "monotonic-function-enhancement",
+        "capability-preservation-gate",
+        "shadow-first-feature-promotion",
+        "dual-run-replacement-contract",
+        "certified-function-baselines"
+      ]
+    },
+    {
+      "id": "durable-job-queue",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "priority/idempotency/lease/checkpoint/retry/DLQ semantics",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/durable-job-queue.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "DURABLE_QUEUE_STATUS.json",
+          "path": "ok",
+          "equals": true
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "DURABLE_QUEUE_STATUS.json",
+          "path": "journal",
+          "equals": "WAL"
+        },
+        {
+          "class": "regression",
+          "type": "selftest-prefix",
+          "prefix": "queue-"
+        }
+      ],
+      "coversCapabilities": [
+        "durable-priority-queue",
+        "idempotency",
+        "checkpoint-resume",
+        "lease-recovery",
+        "dead-letter-queue"
+      ]
+    },
+    {
+      "id": "cas-merkle-disaster-recovery",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "local content-addressed snapshot integrity and restore verification",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/cas-merkle-store.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "DISASTER_RECOVERY_VERIFY_REPORT.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "DISASTER_RECOVERY_VERIFY_REPORT.json",
+          "path": "failures",
+          "equals": []
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/cas-merkle-store.cjs",
+          "text": "merkleRoot"
+        }
+      ],
+      "coversCapabilities": [
+        "merkle-cas",
+        "incremental-snapshots",
+        "disaster-recovery"
+      ]
+    },
+    {
+      "id": "project-constitution",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "mandatory project directives and no-regression rules",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/project-directive-gate.cjs",
+        "data/project-directives.json"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "PROJECT_DIRECTIVE_REPORT.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "PROJECT_DIRECTIVE_REPORT.json",
+          "path": "percent",
+          "equals": 100
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "data/project-directives.json"
+        }
+      ],
+      "coversCapabilities": [
+        "project-constitution-gate",
+        "scalability-first-gate",
+        "minimum-manual-action-gate",
+        "production-asset-quality-gate",
+        "full-file-delivery-contract"
+      ]
+    },
+    {
+      "id": "technology-lock",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "exact user-mandated technology/format preservation",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/technology-lock-validator.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "TECHNOLOGY_LOCK_REPORT.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "contains",
+          "file": "scripts/technology-lock-validator.cjs",
+          "text": "isApng"
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/technology-lock-validator.cjs",
+          "text": "requested"
+        }
+      ],
+      "coversCapabilities": [
+        "technology-lock",
+        "apng-binary-verification"
+      ]
+    },
+    {
+      "id": "graphics-quality-ratchet",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "finished graphics cannot be silently removed/simplified/regressed",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/graphics-regression-guard.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "GRAPHICS_REGRESSION_GUARD_REPORT.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "GRAPHICS_REGRESSION_GUARD_REPORT.json",
+          "path": "failed",
+          "equals": []
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/graphics-regression-guard.cjs",
+          "text": "regress"
+        }
+      ],
+      "coversCapabilities": [
+        "graphics-quality-ratchet"
+      ]
+    },
+    {
+      "id": "offline-policy-enforcement",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "fail-closed OPA/Rego-compatible offline policy enforcement",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/policy-engine.cjs",
+        "policy/opa-bundle/worldserver.rego"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "POLICY_DECISION_REPORT.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "policy/opa-bundle/worldserver.rego"
+        },
+        {
+          "class": "regression",
+          "type": "contains",
+          "file": "scripts/policy-engine.cjs",
+          "text": "jsDecision"
+        }
+      ],
+      "coversCapabilities": [
+        "opa-rego-policy",
+        "offline-policy-mirror"
+      ]
+    },
+    {
+      "id": "feature-flag-safety",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "deterministic rollout and safety lock",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/feature-flag-engine.cjs",
+        "data/flags.json"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "FEATURE_FLAG_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "FEATURE_FLAG_STATUS.json",
+          "path": "safetyLockVerified",
+          "equals": true
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "FEATURE_FLAG_STATUS.json",
+          "path": "deterministicRollout",
+          "equals": true
+        }
+      ],
+      "coversCapabilities": [
+        "shadow-first-feature-promotion"
+      ]
+    },
+    {
+      "id": "adapter-sandbox-fail-closed",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "untrusted adapters denied when Wasmtime unavailable",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/adapter-sandbox.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "ADAPTER_SANDBOX_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "ADAPTER_SANDBOX_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "ADAPTER_SANDBOX_STATUS.json",
+          "path": "capabilityBased",
+          "equals": true
+        }
+      ],
+      "coversCapabilities": [
+        "wasi-component-model"
+      ]
+    },
+    {
+      "id": "model-checker",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "embedded exhaustive queue/control safety model with mutant rejection",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/model-state-checker.cjs",
+        "specs/DurableJobQueue.tla",
+        "specs/ControlPlane.tla"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "MODEL_CHECK_REPORT.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "MODEL_CHECK_REPORT.json",
+          "checkId": "queue-mutant-rejected"
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "specs/DurableJobQueue.tla"
+        }
+      ],
+      "coversCapabilities": [
+        "exhaustive-model-checker",
+        "tla-plus-specs"
+      ]
+    },
+    {
+      "id": "semantic-dependency-graph",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "module/symbol/dataflow impact graph",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/semantic-dependency-graph.cjs",
+        "scripts/native-ast-dataflow.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "SEMANTIC_DEPENDENCY_GRAPH.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "NATIVE_AST_DATAFLOW_REPORT.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "SEMANTIC_DEPENDENCY_GRAPH.json",
+          "path": "nativeAstAdapterAvailable",
+          "equals": true
+        }
+      ],
+      "coversCapabilities": [
+        "semantic-symbol-graph",
+        "lexical-dataflow-impact",
+        "typescript-native-ast-dataflow",
+        "dependency-impact-graph",
+        "change-impact-routing",
+        "affected-test-selection"
+      ]
+    },
+    {
+      "id": "capability-aware-scheduler",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "CPU-first capability/resource/cache-locality worker matching",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/capability-aware-scheduler.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "CAPABILITY_SCHEDULER_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "CAPABILITY_SCHEDULER_STATUS.json",
+          "path": "cpuFirst",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "scheduler-capability-match"
+        }
+      ],
+      "coversCapabilities": [
+        "capability-aware-cpu-scheduler"
+      ]
+    },
+    {
+      "id": "deterministic-record-replay",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "seeded execution replay with hash equivalence",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/deterministic-record-replay.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "RECORD_REPLAY_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "deterministic-record-replay"
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/deterministic-record-replay.cjs",
+          "text": "stdoutHash"
+        }
+      ],
+      "coversCapabilities": [
+        "deterministic-record-replay"
+      ]
+    },
+    {
+      "id": "cas-local-redundancy",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "two independent local CAS roots with repair-on-read readiness",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/cas-redundancy-verifier.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "CAS_REDUNDANCY_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "cas-two-root-recovery"
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "CAS_REDUNDANCY_STATUS.json",
+          "path": "independentRoots",
+          "equals": true
+        }
+      ],
+      "coversCapabilities": [
+        "cas-local-redundancy"
+      ]
+    },
+    {
+      "id": "device-worker-command-safety",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "constrained authenticated real-device worker; no arbitrary shell",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/device-worker-server.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "DEVICE_WORKER_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "device-worker-no-arbitrary-shell"
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "DEVICE_WORKER_STATUS.json",
+          "path": "allowArbitraryCommands",
+          "equals": false
+        }
+      ],
+      "coversCapabilities": [
+        "physical-device-worker"
+      ]
+    },
+    {
+      "id": "dependency-security-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "OSV locked-dependency scanning engine and transactional remediation mechanism",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/dependency-security-orchestrator.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "DEPENDENCY_SECURITY_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "osv-engine-health"
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/dependency-security-orchestrator.cjs",
+          "text": "backups"
+        }
+      ],
+      "coversCapabilities": [
+        "osv-dependency-security"
+      ]
+    },
+    {
+      "id": "transactional-deploy-state-machine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "preview-health-promote-rollback deployment state machine",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/transactional-deploy.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "TRANSACTIONAL_DEPLOY_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "transactional-deploy-health"
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "TRANSACTIONAL_DEPLOY_STATUS.json",
+          "path": "rollbackOnFailure",
+          "equals": true
+        }
+      ],
+      "coversCapabilities": [
+        "transactional-deployment"
+      ]
+    },
+    {
+      "id": "wit-bindings-determinism",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "deterministic WIT adapter binding generation",
+      "critical": false,
+      "sourcePaths": [
+        "scripts/wit-bindings-generator.cjs",
+        "wit/world-server-adapter.wit"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "WIT_BINDINGS_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "wit-bindings-deterministic"
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "WIT_BINDINGS_STATUS.json",
+          "path": "deterministic",
+          "equals": true
+        }
+      ],
+      "coversCapabilities": [
+        "deterministic-wit-bindings"
+      ]
+    },
+    {
+      "id": "integration-telemetry",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "W3C trace-context + local JSONL + OTLP HTTP/JSON adapter",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/integration-telemetry.cjs",
+        "scripts/integration-telemetry-lib.cjs"
+      ],
+      "coversCapabilities": [
+        "w3c-trace-context",
+        "otlp-http-json"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "INTEGRATION_TELEMETRY_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "telemetry-w3c-otlp"
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/integration-telemetry.cjs"
+        }
+      ]
+    },
+    {
+      "id": "content-addressed-asset-registry",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "content-addressed asset inventory and metadata accounting engine",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/asset-registry.cjs"
+      ],
+      "coversCapabilities": [
+        "content-addressed-asset-registry"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "ASSET_REGISTRY.json",
+          "path": "contentAddressed",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "asset-registry-content-addressed"
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/asset-registry.cjs"
+        }
+      ]
+    },
+    {
+      "id": "asset-batch-planner",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "task-aware atlas/batch ingestion planning; no forced strategy when no task",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/asset-ingestion-planner.cjs"
+      ],
+      "coversCapabilities": [
+        "asset-batch-atlas-planner"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "ASSET_INGESTION_PLAN.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "asset-batch-planner"
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/asset-ingestion-planner.cjs"
+        }
+      ]
+    },
+    {
+      "id": "gameplay-spatial-library",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "canonical feet/attack/shield/weapon-grip spatial math contracts",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/character-spatial-contract-lib.cjs",
+        "data/gameplay-physical-contract.json"
+      ],
+      "coversCapabilities": [
+        "feet-direction-contract",
+        "attack-direction-contract",
+        "shield-geometry-contract",
+        "weapon-grip-contract",
+        "gameplay-spatial-contract"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "gameplay-spatial-contract"
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "feet-follow-travel"
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "attack-follows-feet"
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "shield-between-enemy-torso"
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "pistol-one-hand"
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "automatic-two-hands"
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/character-spatial-contract-lib.cjs"
+        }
+      ]
+    },
+    {
+      "id": "cyclonedx-sbom-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "deterministic CycloneDX 1.7 SBOM generation engine",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/cyclonedx-sbom.cjs"
+      ],
+      "coversCapabilities": [
+        "cyclonedx-1.7-sbom"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "SBOM_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "cyclonedx-1.7-sbom"
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/cyclonedx-sbom.cjs"
+        }
+      ]
+    },
+    {
+      "id": "slsa-provenance-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "hash-bound SLSA provenance v1 + in-toto Statement v1 generation",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/provenance.cjs"
+      ],
+      "coversCapabilities": [
+        "slsa-provenance-v1",
+        "in-toto-statement-v1"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "PROVENANCE_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "slsa-v1-provenance"
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/provenance.cjs"
+        }
+      ]
+    },
+    {
+      "id": "local-signing-transparency",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "local Ed25519 signing + tamper-evident transparency hash chain",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/artifact-signing-transparency.cjs"
+      ],
+      "coversCapabilities": [
+        "tamper-evident-transparency-log"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "SUPPLY_CHAIN_SIGNATURE_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "sigstore-transparency"
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/artifact-signing-transparency.cjs"
+        }
+      ]
+    },
+    {
+      "id": "rekor-transparency-monitor",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "local hash-chain verification + safe external Sigstore bundle monitoring",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/rekor-monitor.cjs"
+      ],
+      "coversCapabilities": [
+        "rekor-transparency-monitor"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "REKOR_MONITOR_REPORT.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "rekor-monitor"
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/rekor-monitor.cjs"
+        }
+      ]
+    },
+    {
+      "id": "technology-consensus-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "free/open CPU-safe offline-fallback technology consensus engine",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/technology-consensus.cjs",
+        "data/technology-candidate-catalog.json"
+      ],
+      "coversCapabilities": [
+        "technology-consensus"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "TECHNOLOGY_CONSENSUS_REPORT.json",
+          "path": "policy.cpuFirst",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "technology-catalog"
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/technology-consensus.cjs"
+        }
+      ]
+    },
+    {
+      "id": "cosign-security-floor",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "reject vulnerable installed Cosign versions below 3.1.3; absence remains external blocker",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/toolchain-security-gate.cjs"
+      ],
+      "coversCapabilities": [
+        "cosign-security-floor-3.1.3"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "TOOLCHAIN_SECURITY_REPORT.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "cosign-security-floor"
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "TOOLCHAIN_SECURITY_REPORT.json",
+          "path": "cosign.minimumSafeVersion",
+          "equals": "3.1.3"
+        }
+      ]
+    },
+    {
+      "id": "toolchain-bootstrap",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "pinned local no-sudo/no-paid tool bootstrap engine",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/toolchain-bootstrap.cjs"
+      ],
+      "coversCapabilities": [
+        "pinned-local-toolchain-bootstrap"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "TOOLCHAIN_BOOTSTRAP_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "toolchain-bootstrap"
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/toolchain-bootstrap.cjs"
+        }
+      ]
+    },
+    {
+      "id": "distributed-cas-protocol",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "SHA-256 verified CAS peer protocol with loopback protocol selftest",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/distributed-cas.cjs"
+      ],
+      "coversCapabilities": [
+        "distributed-cas-peer-protocol"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "DISTRIBUTED_CAS_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "distributed-cas"
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/distributed-cas.cjs"
+        }
+      ]
+    },
+    {
+      "id": "cas-zero-config-discovery",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "UDP multicast CAS peer discovery engine and replication intent",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/cas-peer-discovery.cjs"
+      ],
+      "coversCapabilities": [
+        "zero-config-cas-discovery"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "CAS_DISCOVERY_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "cas-zero-config-discovery"
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/cas-peer-discovery.cjs"
+        }
+      ]
+    },
+    {
+      "id": "device-lab-truth-orchestrator",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "Appium-compatible device discovery that never counts emulators as physical evidence",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/device-lab-orchestrator.cjs"
+      ],
+      "coversCapabilities": [
+        "appium-compatible-worker-discovery",
+        "owned-real-device-lab"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "DEVICE_LAB_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "real-device-lab"
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/device-lab-orchestrator.cjs"
+        }
+      ]
+    },
+    {
+      "id": "device-executor-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "real-device execution adapter readiness with explicit no-evidence truth state",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/device-test-executor.cjs"
+      ],
+      "coversCapabilities": [
+        "automated-real-device-executor"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "DEVICE_EXECUTOR_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "device-executor"
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/device-test-executor.cjs"
+        }
+      ]
+    },
+    {
+      "id": "wit-component-contract",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "typed WIT/WASI Component Model adapter contract with fail-closed execution policy",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/wit-component-validator.cjs",
+        "wit/world-server-adapter.wit"
+      ],
+      "coversCapabilities": [
+        "wit-typed-adapter-contracts"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "WIT_COMPONENT_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "wit-component-model"
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/wit-component-validator.cjs"
+        }
+      ]
+    },
+    {
+      "id": "enhancement-orchestrator",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "P0 auto-fix / P1-P2 shadow-sandbox-regression-canary improvement backlog engine",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/system-enhancement-orchestrator.cjs"
+      ],
+      "coversCapabilities": [
+        "system-enhancement-orchestrator"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "SYSTEM_ENHANCEMENT_BACKLOG.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "enhancement-orchestrator"
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/system-enhancement-orchestrator.cjs"
+        }
+      ]
+    },
+    {
+      "id": "mandatory-tlc-ci-wiring",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "CI always invokes the TLC runner; native TLC absence is still reported separately",
+      "critical": true,
+      "sourcePaths": [
+        ".github/workflows/system-integration-v7.yml",
+        "scripts/tlc-native-runner.cjs"
+      ],
+      "coversCapabilities": [
+        "mandatory-native-tlc-ci"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "native-tlc-wired"
+        },
+        {
+          "class": "regression",
+          "type": "contains",
+          "file": ".github/workflows/system-integration-v7.yml",
+          "text": "node scripts/tlc-native-runner.cjs --required"
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/tlc-native-runner.cjs"
+        }
+      ]
+    },
+    {
+      "id": "sigstore-cosign-bridge",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "native Cosign/Sigstore bridge is implemented and refuses unsafe versions; native signing availability is not claimed",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/artifact-signing-transparency.cjs",
+        "scripts/toolchain-security-gate.cjs"
+      ],
+      "coversCapabilities": [
+        "sigstore-cosign-bridge"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "SYSTEM_INTEGRATION_REPORT.json",
+          "checkId": "sigstore-transparency"
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "cosign-security-floor"
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/artifact-signing-transparency.cjs",
+          "text": "cosign"
+        }
+      ]
+    },
+    {
+      "id": "orchestrator-supervisor",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "backward-compatible Honest-100 watchdog/crash-loop/backoff/persistent incident contract; V7.2 strengthens implementation without changing certified owner identity",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/orchestrator-supervisor.cjs",
+        "data/orchestrator-supervisor-policy.json"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "ORCHESTRATOR_SUPERVISOR_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "ORCHESTRATOR_SUPERVISOR_STATUS.json",
+          "path": "crashLoopProtection",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "supervisor-crash-loop"
+        }
+      ],
+      "coversCapabilities": [
+        "orchestrator-supervisor"
+      ]
+    },
+    {
+      "id": "orchestrator-supervisor-v7-2",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7_2_ORCHESTRATOR_HARDENED",
+      "scope": "bounded watchdog, circuit breaker, crash fingerprint quarantine, heartbeat timeout and stable preservation",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/orchestrator-supervisor.cjs",
+        "data/orchestrator-supervisor-policy.json"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "ORCHESTRATOR_SUPERVISOR_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "ORCHESTRATOR_SUPERVISOR_STATUS.json",
+          "path": "circuitBreaker",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "supervisor-crash-loop"
+        }
+      ],
+      "coversCapabilities": [
+        "bounded-watchdog-restart-budget",
+        "crash-loop-circuit-breaker",
+        "crash-fingerprint-quarantine",
+        "heartbeat-timeout-supervision"
+      ]
+    },
+    {
+      "id": "orchestrator-monitor-lifecycle",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7_2_ORCHESTRATOR_HARDENED",
+      "scope": "generation-token lifecycle prevents stale/early/false monitoring events after reconfiguration",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/orchestrator-monitor-lifecycle.cjs",
+        "data/orchestrator-monitor-policy.json"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "ORCHESTRATOR_MONITOR_LIFECYCLE_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "orchestrator-monitor-generation"
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "data/orchestrator-monitor-policy.json"
+        }
+      ],
+      "coversCapabilities": [
+        "generation-token-monitor-lifecycle",
+        "stale-watcher-rejection",
+        "orchestrator-startup-stabilization"
+      ]
+    },
+    {
+      "id": "orchestrator-patch-safety",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7_2_ORCHESTRATOR_HARDENED",
+      "scope": "manifest/base/payload hash preflight and Working→Candidate→Stable fail-closed patch flow",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/orchestrator-patch-safety-gate.cjs",
+        "data/orchestrator-patch-safety-policy.json"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "ORCHESTRATOR_PATCH_SAFETY_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "orchestrator-bad-patch-rejected"
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "data/orchestrator-patch-safety-policy.json"
+        }
+      ],
+      "coversCapabilities": [
+        "working-candidate-stable-promotion",
+        "bad-patch-stable-preservation"
+      ]
+    },
+    {
+      "id": "orchestrator-minimal-repro",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7_2_ORCHESTRATOR_HARDENED",
+      "scope": "automatic redacted reproducible ZIP evidence for persistent orchestrator failures",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/orchestrator-minimal-repro.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "ORCHESTRATOR_MINIMAL_REPRO_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "orchestrator-minimal-repro"
+        },
+        {
+          "class": "static",
+          "type": "file",
+          "file": "scripts/orchestrator-minimal-repro.cjs"
+        }
+      ],
+      "coversCapabilities": [
+        "automatic-minimal-repro-zip"
+      ]
+    },
+    {
+      "id": "orchestrator-invariant-model",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7_2_ORCHESTRATOR_HARDENED",
+      "scope": "exhaustive restart/circuit/generation/stable safety model with mutant rejection",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/orchestrator-invariant-model.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "ORCHESTRATOR_INVARIANT_MODEL_REPORT.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "static",
+          "type": "report",
+          "file": "ORCHESTRATOR_INVARIANT_MODEL_REPORT.json",
+          "path": "mutantRejected",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "orchestrator-model-mutant-rejected"
+        }
+      ],
+      "coversCapabilities": [
+        "orchestrator-invariant-model-check"
+      ]
+    },
+    {
+      "id": "leader-lease-fencing",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "atomic leader lease with monotonic fencing against split brain",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/leader-lease-fencing.cjs",
+        "supabase/migrations/20260824_orchestrator_leader_lease.sql"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "LEADER_LEASE_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "LEADER_LEASE_SELFTEST.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "supabase/migrations/20260824_orchestrator_leader_lease.sql",
+          "text": "fencing_token"
+        }
+      ],
+      "coversCapabilities": [
+        "fenced-leader-lease",
+        "split-brain-prevention"
+      ]
+    },
+    {
+      "id": "production-safety-controller",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "certified regression/crash-loop stops canary and prepares authorized rollback",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/production-safety-controller.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "PRODUCTION_SAFETY_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "PRODUCTION_SAFETY_SELFTEST.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/production-safety-controller.cjs",
+          "text": "STOP_CANARY"
+        }
+      ],
+      "coversCapabilities": [
+        "production-crash-canary-stop",
+        "automatic-authorized-rollback"
+      ]
+    },
+    {
+      "id": "soak-chaos-verifier",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "bounded deterministic soak/chaos invariant verification",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/soak-chaos-verifier.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "SOAK_CHAOS_REPORT.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "SOAK_CHAOS_REPORT.json",
+          "path": "violations",
+          "equals": []
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/soak-chaos-verifier.cjs",
+          "text": "duplicate-delivery"
+        }
+      ],
+      "coversCapabilities": [
+        "soak-chaos-verification"
+      ]
+    },
+    {
+      "id": "crash-diagnostics-cluster",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "secret-safe crash fingerprint clustering and Node diagnostic capture",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/crash-diagnostics-cluster.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "CRASH_DIAGNOSTICS_REPORT.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "CRASH_DIAGNOSTICS_SELFTEST.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/crash-diagnostics-cluster.cjs",
+          "text": "process.report"
+        }
+      ],
+      "coversCapabilities": [
+        "node-crash-diagnostics",
+        "crash-fingerprint-clustering"
+      ]
+    },
+    {
+      "id": "audio-variation-validator-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "audio variation validation engine",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/audio-variation-validator.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "AUDIO_VARIATION_REPORT.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "audio-variation"
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/audio-variation-validator.cjs",
+          "text": "minimumVariants"
+        }
+      ],
+      "coversCapabilities": [
+        "audio-variation-gate"
+      ]
+    },
+    {
+      "id": "deployment-impact-routing-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "dependency/change impact to test and deployment routing",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/change-impact-orchestrator.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "selftest-id",
+          "id": "v7.3-impact-routing-engine"
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "v7.3-impact-full-gate"
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/change-impact-orchestrator.cjs",
+          "text": "executionPolicy"
+        }
+      ],
+      "coversCapabilities": [
+        "deployment-impact-routing"
+      ]
+    },
+    {
+      "id": "desktop-ai-output-contract-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "machine-verifiable Desktop AI final output contract",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/desktop-ai-report-validator.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "DESKTOP_AI_REPORT_VALIDATION.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "desktop-ai-report"
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/desktop-ai-report-validator.cjs",
+          "text": "full"
+        }
+      ],
+      "coversCapabilities": [
+        "desktop-ai-output-contract"
+      ]
+    },
+    {
+      "id": "evidence-readiness-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "separates structural, evidence and operational readiness truthfully",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/system-readiness.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "selftest-id",
+          "id": "v7.3-readiness-evidence-score"
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "v7.3-readiness-truth-separation"
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/system-readiness.cjs",
+          "text": "evidenceConfidencePercent"
+        }
+      ],
+      "coversCapabilities": [
+        "evidence-readiness-score"
+      ]
+    },
+    {
+      "id": "function-contract-coverage-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "explicit capability certification coverage without name-based autocertification",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/function-contract-coverage.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "selftest-id",
+          "id": "v7.3-function-coverage-engine"
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "v7.3-function-coverage-no-autocert"
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/function-contract-coverage.cjs",
+          "text": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT"
+        }
+      ],
+      "coversCapabilities": [
+        "function-contract-coverage-engine"
+      ]
+    },
+    {
+      "id": "native-runtime-truth-separation-engine",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "native/external runtime truth separated from structural readiness",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/system-readiness.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "selftest-id",
+          "id": "v7.3-native-truth-separation"
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "v7.3-native-truth-external-blockers"
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/system-readiness.cjs",
+          "text": "nativeExtensionCoveragePercent"
+        }
+      ],
+      "coversCapabilities": [
+        "native-runtime-truth-separation"
+      ]
+    },
+    {
+      "id": "legacy-evidence-factory",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "explicit legacy capability recipes to fresh machine evidence contracts without name-based autocertification",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/legacy-evidence-factory.cjs",
+        "data/legacy-evidence-recipes.json"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "v7.4-legacy-evidence-factory"
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/legacy-evidence-factory.cjs",
+          "text": "autoCertifyByName"
+        }
+      ],
+      "coversCapabilities": [
+        "legacy-evidence-factory",
+        "explicit-legacy-contract-synthesis"
+      ]
+    },
+    {
+      "id": "slo-error-budget-controller",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "error-budget burn-rate and latency SLO controller with production-evidence truth separation",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/slo-error-budget-controller.cjs",
+        "data/slo-error-budget-policy.json"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "SLO_ERROR_BUDGET_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "v7.4-slo-error-budget"
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/slo-error-budget-controller.cjs",
+          "text": "STOP_CANARY_AND_ROLLBACK"
+        }
+      ],
+      "coversCapabilities": [
+        "slo-error-budget-controller",
+        "multi-window-burn-rate"
+      ]
+    },
+    {
+      "id": "database-migration-coordinator",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "fenced expand-migrate-contract database migration safety with snapshot and Supabase 2026 guards",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/database-migration-coordinator.cjs",
+        "data/migration-coordinator-policy.json"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "DB_MIGRATION_COORDINATOR_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "v7.4-db-migration-coordinator"
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/database-migration-coordinator.cjs",
+          "text": "extension-version-pinning-deprecated"
+        }
+      ],
+      "coversCapabilities": [
+        "expand-migrate-contract-coordinator",
+        "fenced-db-migrations"
+      ]
+    },
+    {
+      "id": "asset-delta-distribution",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "content-defined SHA-256 delta chunking with deduplication and verified reconstruction",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/asset-delta-distributor.cjs",
+        "data/asset-delta-policy.json"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "ASSET_DELTA_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "v7.4-asset-delta"
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/asset-delta-distributor.cjs",
+          "text": "corrupt-chunk"
+        }
+      ],
+      "coversCapabilities": [
+        "content-defined-asset-deltas",
+        "verified-delta-reconstruction"
+      ]
+    },
+    {
+      "id": "causal-debugger",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "correlated trace/queue/deploy/crash evidence graph with secret redaction and native ETW/eBPF probes",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/causal-debugger.cjs",
+        "data/causal-debugger-policy.json"
+      ],
+      "evidence": [
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "CAUSAL_DEBUGGER_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "selftest-id",
+          "id": "v7.4-causal-debugger"
+        },
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/causal-debugger.cjs",
+          "text": "correlationKeys"
+        }
+      ],
+      "coversCapabilities": [
+        "causal-incident-graph",
+        "native-etw-ebpf-adapters"
+      ]
+    },
+    {
+      "id": "cas-replication-controller",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "quorum replication and read-repair semantics; remote host claim separated",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/cas-replication-controller.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/cas-replication-controller.cjs",
+          "text": "readThrough"
+        },
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "CAS_REPLICATION_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "CAS_REPLICATION_STATUS.json",
+          "path": "protocolSelftest.pass",
+          "equals": true
+        }
+      ],
+      "coversCapabilities": [
+        "cas-replication-quorum",
+        "cas-read-repair"
+      ]
+    },
+    {
+      "id": "physical-device-fleet",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "real-device fleet evidence protocol with freshness and digest verification",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/physical-device-fleet.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "file",
+          "file": "data/device-fleet-policy.json"
+        },
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "PHYSICAL_DEVICE_FLEET_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "PHYSICAL_DEVICE_FLEET_STATUS.json",
+          "path": "protocolSelftest.pass",
+          "equals": true
+        }
+      ],
+      "coversCapabilities": [
+        "physical-device-fleet-evidence",
+        "device-worker-authenticated-evidence"
+      ]
+    },
+    {
+      "id": "production-slo-autopilot",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "SLO decision to canary freeze/rollback with production-evidence and authorization barriers",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/production-slo-autopilot.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "contains",
+          "file": "scripts/production-slo-autopilot.cjs",
+          "text": "DRY_RUN_ROLLBACK_ONLY"
+        },
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "PRODUCTION_SLO_AUTOPILOT_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "PRODUCTION_SLO_AUTOPILOT_STATUS.json",
+          "path": "controllerSelftest.synthetic.decision",
+          "equals": "DRY_RUN_ROLLBACK_ONLY"
+        }
+      ],
+      "coversCapabilities": [
+        "production-slo-autopilot"
+      ]
+    },
+    {
+      "id": "migration-fencing-runtime-verifier",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "exact fencing token and expand/migrate/contract runtime invariants",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/migration-fencing-verifier.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "file",
+          "file": "data/migration-fencing-policy.json"
+        },
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "MIGRATION_FENCING_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "MIGRATION_FENCING_STATUS.json",
+          "path": "selftest.pass",
+          "equals": true
+        }
+      ],
+      "coversCapabilities": [
+        "migration-fencing-runtime-verifier"
+      ]
+    },
+    {
+      "id": "checkpointed-long-soak-runner",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "checkpoint/resume long-soak harness with explicit wall-clock certification threshold",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/long-soak-runner.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "file",
+          "file": "data/long-soak-policy.json"
+        },
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "LONG_SOAK_HARNESS_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "LONG_SOAK_HARNESS_STATUS.json",
+          "path": "smokeHarnessVerified",
+          "equals": true
+        }
+      ],
+      "coversCapabilities": [
+        "checkpointed-long-soak-runner"
+      ]
+    },
+    {
+      "id": "native-causal-collector",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "ETW/eBPF/perf/OTel collector discovery with trace correlation and truth separation",
+      "critical": true,
+      "sourcePaths": [
+        "scripts/native-causal-collector.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "file",
+          "file": "data/native-causal-collector-policy.json"
+        },
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "NATIVE_CAUSAL_COLLECTOR_STATUS.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "report",
+          "file": "NATIVE_CAUSAL_COLLECTOR_STATUS.json",
+          "path": "selftest.traceCorrelation",
+          "equals": true
+        }
+      ],
+      "coversCapabilities": [
+        "native-causal-collector-discovery"
+      ]
+    },
+    {
+      "id": "legacy-evidence-recipe-expansion",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "scope": "explicit recipes cover all 18 legacy patch families without name-only certification",
+      "critical": true,
+      "sourcePaths": [
+        "data/legacy-evidence-recipes.json",
+        "scripts/legacy-evidence-factory.cjs"
+      ],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "report",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "path": "totalRecipes",
+          "equals": 18
+        },
+        {
+          "class": "integration",
+          "type": "report",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "class": "regression",
+          "type": "contains",
+          "file": "scripts/legacy-evidence-factory.cjs",
+          "text": "autoCertifyByName:false"
+        }
+      ],
+      "coversCapabilities": [
+        "legacy-evidence-recipe-expansion"
+      ]
+    }
+  ]
+}

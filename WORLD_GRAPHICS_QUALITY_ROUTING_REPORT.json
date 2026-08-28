@@ -1,0 +1,148 @@
+{
+  "schemaVersion": "6.0.0",
+  "system": "WORLD_GRAPHICS_QUALITY_ROUTER",
+  "generatedAt": "2026-08-28T05:10:18.298Z",
+  "defaultPolicy": "CPU_FIRST_FREE_LOCAL",
+  "cpuReadiness": 100,
+  "routes": [
+    {
+      "technology": "three-webgl2",
+      "priority": "CPU_FIRST",
+      "detail": [
+        "semantic-detail-zones",
+        "hero-landmark-budget",
+        "material-pbr-profiles"
+      ],
+      "optimization": [
+        "instancing",
+        "greedy-meshing",
+        "frustum-culling",
+        "hlod",
+        "adaptive-dpr",
+        "texture-atlas-budget"
+      ]
+    },
+    {
+      "technology": "godot",
+      "priority": "CPU_FIRST",
+      "detail": [
+        "multimesh-detail-instances",
+        "visibility-range-detail",
+        "material-override-profiles"
+      ],
+      "optimization": [
+        "multimesh",
+        "mesh-lod",
+        "visibility-ranges",
+        "occlusion-culling",
+        "baked-lighting"
+      ]
+    },
+    {
+      "technology": "blender",
+      "priority": "CPU_FIRST",
+      "detail": [
+        "geometry-nodes-detail-candidate",
+        "procedural-facade-detail",
+        "bake-detail-maps"
+      ],
+      "optimization": [
+        "decimate-lod-candidate",
+        "merge-by-material",
+        "atlas-bake",
+        "remove-hidden-geometry"
+      ]
+    },
+    {
+      "technology": "cpu-reconstruction",
+      "priority": "CPU_FIRST",
+      "detail": [
+        "depth-aware-side-volume",
+        "silhouette-preserving-relief",
+        "semantic-priority-detail"
+      ],
+      "optimization": [
+        "numpy-vectorization",
+        "bounded-resolution",
+        "chunk-output",
+        "mesh-post-optimizer"
+      ]
+    },
+    {
+      "technology": "depth-anything",
+      "priority": "CPU_FIRST",
+      "detail": [
+        "depth-aware-importance",
+        "edge-depth-detail-priority"
+      ],
+      "optimization": [
+        "small-model-first",
+        "bounded-input-size",
+        "cache-depth-result"
+      ]
+    },
+    {
+      "technology": "voxel-greedy",
+      "priority": "CPU_FIRST",
+      "detail": [
+        "hidden-side-semantic-voxels",
+        "hero-detail-budget",
+        "ground-microrelief"
+      ],
+      "optimization": [
+        "greedy-meshing",
+        "internal-face-culling",
+        "chunk-hlod",
+        "streaming-topology"
+      ]
+    },
+    {
+      "technology": "world-quality",
+      "priority": "CPU_FIRST",
+      "detail": [
+        "semantic-multiscale-detail",
+        "importance-budget",
+        "front-projection-invariant"
+      ],
+      "optimization": [
+        "quality-slo",
+        "candidate-tournament",
+        "runtime-budgeting",
+        "regression-rollback"
+      ]
+    },
+    {
+      "technology": "instantmesh",
+      "priority": "OPTIONAL_GPU",
+      "detail": [
+        "mesh-detail-preservation-contract",
+        "reference-silhouette-priority"
+      ],
+      "optimization": [
+        "mesh-quality-optimizer",
+        "lod-generation",
+        "texture-budget",
+        "asset-dedup"
+      ]
+    },
+    {
+      "technology": "trellis2",
+      "priority": "OPTIONAL_GPU",
+      "detail": [
+        "high-detail-mesh-candidate",
+        "pbr-material-preservation"
+      ],
+      "optimization": [
+        "mesh-quality-optimizer",
+        "lod-generation",
+        "texture-budget",
+        "remote-gpu-route-only"
+      ]
+    }
+  ],
+  "gpuRoutesOptional": [
+    "instantmesh",
+    "trellis2"
+  ],
+  "hardGateReady": true
+}

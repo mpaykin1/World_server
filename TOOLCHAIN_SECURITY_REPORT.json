@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-28T05:50:15.972Z",
+  "pass": true,
+  "cosign": {
+    "available": false,
+    "version": null,
+    "minimumSafeVersion": "3.1.3",
+    "vulnerable": false
+  },
+  "rule": "Cosign <=3.1.2 is rejected because keyless verification with legacy bundles can bypass certificate policy (GHSA-fx35-mq7g-6g98). Absence is external; vulnerable presence is a hard internal failure."
+}

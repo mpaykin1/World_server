@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-28T05:50:18.601Z",
+  "pass": false,
+  "status": "BLOCK",
+  "baselineCreatedAt": "2026-08-27T09:48:59.597Z",
+  "baselineCommit": "27944428e77a65d32aab7327ad8cd0c39dc98b73",
+  "previousCertifiedCount": 68,
+  "currentCertifiedCount": 73,
+  "previousCapabilityCount": 146,
+  "currentCapabilityCount": 146,
+  "changedCertifiedSources": [
+    {
+      "id": "graphics-quality-ratchet",
+      "old": "25eba40edfa2641a14c11c2499924b11090be674b71a51eae9ba8e9d6778e79f",
+      "current": "40957ccc4f20fb5d45766b42c1d132a2294b68d2c5f978e3359509efa8d80477",
+      "recertified": true
+    },
+    {
+      "id": "semantic-dependency-graph",
+      "old": "a02bf4740d082cf7a48868cd9f9a4fad67e5452cb541bf73e7f07a73e5687efc",
+      "current": "0bb84838a561f80cf6d80618328d07ccf70f579d7641f3885ae89771dc638809",
+      "recertified": true
+    },
+    {
+      "id": "local-signing-transparency",
+      "old": "e07f33c3e258596a45efebcbfeacf48d5aca6a31e15aacd6d3efcea9c583902a",
+      "current": "85c01879cf34709aeeeabaf8d11e47ec82947617a2da3a92185c40eeb2ee5f60",
+      "recertified": true
+    },
+    {
+      "id": "rekor-transparency-monitor",
+      "old": "30193fb3b9fcd43fa275f424bafec4cd0bb965dd1b40c235a7173116189f2da8",
+      "current": "4d12f4c97d045bca9ed7d047178f3d77a6846881778f1ad740993e1f7159f256",
+      "recertified": true
+    },
+    {
+      "id": "sigstore-cosign-bridge",
+      "old": "954416571ef7c53a16bbabfe593f893b0c88f70474af10e4147c07b8428f30e1",
+      "current": "02aa921a7fc2c1af823517624b2ddbb841fffee33d707a6be67dbc0d304cff87",
+      "recertified": true
+    }
+  ],
+  "addedCapabilities": [],
+  "proposal": null,
+  "blockers": [
+    "certified-function-regressed:system-integration-gate",
+    "certified-function-regressed:offline-policy-enforcement",
+    "certified-function-regressed:leader-lease-fencing"
+  ],
+  "rule": "Every previously CERTIFIED_100 function and capability must remain certified and present. New functionality is additive/shadow-first; replacement requires dual-run evidence and retained fallback until canary promotion."
+}

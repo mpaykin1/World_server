@@ -1,0 +1,2 @@
+#!/usr/bin/env node
+'use strict';const {runCrossRegionProbe}=require('../lib/quality/cross-region-probe-v10');(async()=>{const target=process.env.QUALITY_PROBE_TARGET||process.argv[2]||'',raw=process.env.QUALITY_REGION_PROBERS||'[]';let p=[];try{p=JSON.parse(raw);}catch{}const r=await runCrossRegionProbe(target,p,{minRegions:Number(process.env.QUALITY_MIN_REGIONS||3)});console.log(JSON.stringify(r,null,2));if(!r.ok)process.exitCode=2;})().catch(e=>{console.error(e);process.exitCode=2;});

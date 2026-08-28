@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-28T05:50:09.853Z",
+  "pass": true,
+  "cpuFirst": true,
+  "capabilityAware": true,
+  "resourceAware": true,
+  "cacheLocalityAware": true,
+  "localWorker": "local-WIN-GJVRHRQPB5A"
+}

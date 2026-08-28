@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "3.0.0",
+  "coordinateContract": "engine-adapter-normalized",
+  "locomotion": {
+    "feetForward": {
+      "source": "travel-direction",
+      "minimumAlignmentDot": 0.92,
+      "zeroVelocityBehavior": "preserve-last-valid-forward"
+    }
+  },
+  "attack": {
+    "directionSource": "feet-forward",
+    "maximumAngularErrorDegrees": 5
+  },
+  "shield": {
+    "placement": "between-enemy-and-torso",
+    "orientation": "vertical",
+    "minimumTorsoCoverage": 0.8,
+    "frontHemisphereOnly": true
+  },
+  "weapons": {
+    "pistol": {
+      "requiredHands": 1,
+      "attachment": "hand",
+      "allowFloating": false
+    },
+    "rifle": {
+      "requiredHands": 2,
+      "attachments": [
+        "primary-hand",
+        "support-hand"
+      ]
+    },
+    "machineGun": {
+      "requiredHands": 2,
+      "attachments": [
+        "primary-hand",
+        "support-hand"
+      ]
+    }
+  },
+  "engines": {
+    "web": "adapter-required",
+    "godot": "adapter-required",
+    "roblox": "adapter-required"
+  }
+}

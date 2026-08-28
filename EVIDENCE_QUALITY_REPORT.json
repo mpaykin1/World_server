@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-24T05:16:08.930Z",
+  "generatedAt": "2026-08-28T05:10:15.758Z",
   "candidateStatus": "PREPARED_NOT_DEPLOYED",
   "scores": {
     "controls": 100,
@@ -14,10 +14,10 @@
     "uploadedTechnologyUse": 67.9,
     "errorRecurrenceProtection": 100,
     "goldenSolutionPropagation": 85,
-    "qualityGrowthAutomation": 96.3,
+    "qualityGrowthAutomation": 100,
     "desktopAIContinuity": 100
   },
-  "overall": 95.5,
+  "overall": 95.7,
   "detail": {
     "controls": [
       {
@@ -599,8 +599,8 @@
       {
         "id": "rollback",
         "weight": 10,
-        "pass": false,
-        "status": "missing"
+        "pass": true,
+        "status": "present"
       },
       {
         "id": "telemetry",

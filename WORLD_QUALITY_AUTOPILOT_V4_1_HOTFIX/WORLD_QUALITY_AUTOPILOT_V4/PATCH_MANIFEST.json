@@ -1,0 +1,182 @@
+{
+  "schemaVersion": "4.0.0",
+  "patch": "WORLD_QUALITY_AUTOPILOT_V4",
+  "fileCount": 35,
+  "files": [
+    {
+      "path": "DESKTOP_AI_WORLD_QUALITY_AUTOPILOT.md",
+      "bytes": 5800,
+      "sha256": "9b7c9726b9d873691d1c4100f1980c7cf5b4d10766ef1feac8dffc8fe2f8ebf7"
+    },
+    {
+      "path": "PATCH_STATUS.md",
+      "bytes": 2749,
+      "sha256": "9d223220b6260ca7fcd81288484ccce56e85fd2d9b48605dd6670d876ca22139"
+    },
+    {
+      "path": "README_FIRST.txt",
+      "bytes": 312,
+      "sha256": "03c3079c3b3c35443ff051e5323099cae5c312c427f3fa027d75a89c3754b980"
+    },
+    {
+      "path": "SYSTEMS_TO_ADD_NEXT.md",
+      "bytes": 2275,
+      "sha256": "0e5653163711e09efccc28e8698a06b40dbddd36784276f94562fd96a9c6587f"
+    },
+    {
+      "path": "VERIFICATION_REPORT.json",
+      "bytes": 757,
+      "sha256": "28c880a6ae671b57b6b167ecac911b7eb08e8099402edb8cddd107489ef07275"
+    },
+    {
+      "path": "apply_world_quality_autopilot.bat",
+      "bytes": 270,
+      "sha256": "b8393fa07612565af6c9cc254eb46729c8cc523927668bd13b52b92b1b989c3b"
+    },
+    {
+      "path": "apply_world_quality_autopilot.ps1",
+      "bytes": 218,
+      "sha256": "db68c6925c2f1feea01cde3d85814c2c5e0928031a0b58640b9deb11ec88dea7"
+    },
+    {
+      "path": "install-world-quality-autopilot.cjs",
+      "bytes": 20209,
+      "sha256": "4dfd04f79f43dcda4d65013a8fd813ebc2e7a9bad016f29c13753b937bf1c29a"
+    },
+    {
+      "path": "payload/.github/workflows/world-quality-autopilot.yml",
+      "bytes": 1472,
+      "sha256": "cc7427d42695855d88634c2d4b526fb6b0eb426ce31b5b524fda5519ebdaf25a"
+    },
+    {
+      "path": "payload/data/world-quality-autopilot.json",
+      "bytes": 6514,
+      "sha256": "eb139f58d8ecceed1a51b0b7e53262c4b298060abbc3ab399be14443fcebb1ab"
+    },
+    {
+      "path": "payload/docs/DESKTOP_AI_WORLD_QUALITY_AUTOPILOT_V4.md",
+      "bytes": 5800,
+      "sha256": "9b7c9726b9d873691d1c4100f1980c7cf5b4d10766ef1feac8dffc8fe2f8ebf7"
+    },
+    {
+      "path": "payload/docs/WORLD_QUALITY_AUTOPILOT.md",
+      "bytes": 999,
+      "sha256": "9ee9f2846b429517027ff558fe2b321dedaf2968bdcea51b8c4068710cccb472"
+    },
+    {
+      "path": "payload/lib/world-quality-material-profiler.js",
+      "bytes": 1317,
+      "sha256": "369ca1cc7ef4064eb70b49c2e815c0b0a3b74df3f1bde1bc551e1af6ed6c5276"
+    },
+    {
+      "path": "payload/lib/world-quality-pbr-synthesizer.js",
+      "bytes": 2668,
+      "sha256": "d246588590797e988ba6c56740c064c79e6d7d408f99c8d94825f55b01b25e63"
+    },
+    {
+      "path": "payload/lib/world-quality-semantic-detail.js",
+      "bytes": 2692,
+      "sha256": "aa98ab15f12dec7c9c7aa34852846e43cb7dfdffb6e3ef84b1e0dfe91c992703"
+    },
+    {
+      "path": "payload/lib/world-quality-voxel-enhancer.js",
+      "bytes": 7859,
+      "sha256": "f5e24304114e543c855b38738ad87e6cc84c76d78e43abfe4605cc99998b5e52"
+    },
+    {
+      "path": "payload/scripts/world-animation-semantic-validator.js",
+      "bytes": 1674,
+      "sha256": "e943a3cede2d6e6e9cc9417e0dbd795bb16791c1069b95bf09d0074c50814bbe"
+    },
+    {
+      "path": "payload/scripts/world-candidate-lab.js",
+      "bytes": 1580,
+      "sha256": "1a8f485e31707aaff4aea882775b1116314c9ef5b8414aec949fffafbb3f0e55"
+    },
+    {
+      "path": "payload/scripts/world-detail-planner.js",
+      "bytes": 2613,
+      "sha256": "6a255b0c7e7db329b876a15f687d93421346474e445201d08d0edfce606463e6"
+    },
+    {
+      "path": "payload/scripts/world-device-profile-matrix.js",
+      "bytes": 1604,
+      "sha256": "4a1471c672635a0454935262741e20ce07ac4eaf5b211673e9e4c833f7bc3aab"
+    },
+    {
+      "path": "payload/scripts/world-feedback-learner.js",
+      "bytes": 1663,
+      "sha256": "d734eba1bc6a215da60bb1e45fdfd46f72649cf1a6163885b4cf589ba1706fbb"
+    },
+    {
+      "path": "payload/scripts/world-material-synthesis.js",
+      "bytes": 1416,
+      "sha256": "7a41bff74242e5b4c8b8d16441e8038ec5c8a35841281f69b99e2f4faede8b8d"
+    },
+    {
+      "path": "payload/scripts/world-quality-analyzer.js",
+      "bytes": 8349,
+      "sha256": "67521e61f048d38c72c159d2e2ce60f4e23251b7e62371c6618a3137a04069df"
+    },
+    {
+      "path": "payload/scripts/world-quality-autopilot.js",
+      "bytes": 3196,
+      "sha256": "c2f39900d4c328afba65b956c693868ddbfb430b9599a4b5e9a4e04101590cc6"
+    },
+    {
+      "path": "payload/scripts/world-quality-evidence-ledger.js",
+      "bytes": 1286,
+      "sha256": "7faa519f6d92edcffb97e52c2a68b794f11279630c49375201ed613abb207845"
+    },
+    {
+      "path": "payload/scripts/world-quality-scheduler.js",
+      "bytes": 1495,
+      "sha256": "cc153bd72fd48339d2a8e7e78a79dd4677f0720fdfacb4b8f1484324a38c8ec4"
+    },
+    {
+      "path": "payload/scripts/world-retarget-contract.js",
+      "bytes": 1514,
+      "sha256": "d0cc348976018bf7a0eee7ef646a58fe686e1d25077c7da6305a0f9dd0d4e91f"
+    },
+    {
+      "path": "payload/scripts/world-runtime-quality-profiler.js",
+      "bytes": 1654,
+      "sha256": "8a724cad38ebe223e872f811ce8b9e81ded1da9c945abe52d244c10cfb760d9c"
+    },
+    {
+      "path": "payload/scripts/world-semantic-detail-indexer.js",
+      "bytes": 1175,
+      "sha256": "5a99918c524115bd7f7311529b3feed5bb6dcf6d8c46531315cbf63aee943b47"
+    },
+    {
+      "path": "payload/scripts/world-visibility-optimizer.js",
+      "bytes": 1243,
+      "sha256": "303d7255c491c6a4ed9ae691db3a427b6c303ea1ce1a75f49754f5346b07195e"
+    },
+    {
+      "path": "payload/scripts/world-visual-baseline-candidates.js",
+      "bytes": 1212,
+      "sha256": "ff0ab23770ff5ce73576b02769d165be4c92ba2f6e1cd8c0a1d6d3af651791ec"
+    },
+    {
+      "path": "payload/scripts/world-visual-baseline-promote.js",
+      "bytes": 1407,
+      "sha256": "3db844c3970a3e8004933d2ab510aa8d41e89989b4e35aef1ec7473c69600e42"
+    },
+    {
+      "path": "payload/services/ai3d-worker/ai3d/plugins/world_quality.py",
+      "bytes": 8514,
+      "sha256": "e145bacb421b9f8b868f704933890e3ad47bcee5a52d9c68cd33016306eb7679"
+    },
+    {
+      "path": "payload/shared/world-quality-autopilot.js",
+      "bytes": 10405,
+      "sha256": "d85c7765174bcf1dc08850605f31b2406064e0df3964f3d9241fc7a2c340f9c7"
+    },
+    {
+      "path": "payload/test/world-quality-autopilot.test.js",
+      "bytes": 5266,
+      "sha256": "93c3c61231a1dfdd70f21c9b0951fb0c2634b1f803e2cbe97fae8085f0704727"
+    }
+  ]
+}

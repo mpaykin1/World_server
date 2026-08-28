@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "6.0.0",
+  "system": "WORLD_GRAPHICS_TECHNOLOGY_DRIFT_GATE",
+  "generatedAt": "2026-08-28T05:10:18.383Z",
+  "runtimeTechnologies": [
+    "three-webgl2",
+    "godot",
+    "blender",
+    "cpu-reconstruction",
+    "depth-anything",
+    "instantmesh",
+    "trellis2",
+    "voxel-greedy",
+    "world-quality"
+  ],
+  "newRuntimeTechnologies": [
+    "three-webgl2",
+    "godot",
+    "blender",
+    "cpu-reconstruction",
+    "depth-anything",
+    "instantmesh",
+    "trellis2",
+    "voxel-greedy",
+    "world-quality"
+  ],
+  "unintegrated": [],
+  "pass": true,
+  "rule": "new graphics technology may not pass release until both detail and optimization adapters exist"
+}

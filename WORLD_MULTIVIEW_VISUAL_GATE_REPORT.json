@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "6.0.0",
+  "system": "WORLD_MULTIVIEW_VISUAL_GATE",
+  "approved": 0,
+  "structuralOrSyntheticApproved": 1,
+  "required": [
+    "desktop-front",
+    "desktop-playable",
+    "mobile-portrait",
+    "mobile-landscape"
+  ],
+  "missing": [
+    "desktop-front",
+    "desktop-playable",
+    "mobile-portrait",
+    "mobile-landscape"
+  ],
+  "complete": false,
+  "selfApprovalForbidden": true,
+  "hardReleaseBlock": false,
+  "note": "Only explicit human/user-approved non-synthetic baselines count toward aesthetic production proof. Auto-verified front invariants remain structural evidence only."
+}

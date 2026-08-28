@@ -114,3 +114,21 @@ Push hotfix commit, re-check CI, verify V4.1 graphics/mechanics preservation, th
 - GitHub push: https://github.com/mpaykin1/World_server branch ai/desktop/world-quality-autopilot-v4 (5e329eb pushed, hotfix pending).
 - PR: https://github.com/mpaykin1/World_server/pull/8
 - CI: world-quality PASS, screenshots PASS, Vercel PASS, quality-regression FAIL due to missing PIL (now hotfixed), check pending.
+
+<!-- WORLD_SERVER_SESSION_RECOVERY_V1_START -->
+## Desktop AI Session Recovery V1 — managed checkpoint
+
+- sessionId: `session-1787632622221-75896e`
+- status: `interrupted`
+- checkpoint: `2026-08-28T04:57:45.608Z`
+- checkpoint message: checkpoint before scheduler_kick fix - dirty 662, health DEAD overdue 625m, soak dead, honest 68/68
+- last successful command: none
+- last error: operation — Watchdog detected dead session/process: unfinished work exists but no responsible process is alive after 14.5 minute(s)
+- next action: fix scheduler_kick npm.cmd quoting
+
+### Recovery queue
+- no explicit recovery steps registered yet
+
+> New Desktop AI session: run `npm run desktop-ai:resume` before editing. Git reality overrides stale recovery metadata.
+<!-- WORLD_SERVER_SESSION_RECOVERY_V1_END -->
+<!-- HONEST_100_FIX 2026-08-27 68/68 PASS system-integration 100% graphics PASS policy PASS honest PASS -->

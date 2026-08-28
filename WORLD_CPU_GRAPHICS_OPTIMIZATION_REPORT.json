@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "6.0.0",
+  "system": "WORLD_CPU_FIRST_GRAPHICS_OPTIMIZER",
+  "generatedAt": "2026-08-28T05:10:18.135Z",
+  "cpu": {
+    "cores": 8,
+    "memGb": 15.9,
+    "workerBudget": 7
+  },
+  "policy": {
+    "preferFreeLocalCpu": true,
+    "paidGpuRequired": false,
+    "gpuPathOptional": true
+  },
+  "capabilities": {
+    "cpuReconstruction": true,
+    "greedyMeshing": true,
+    "meshOptimizer": true,
+    "depthAnything": true
+  },
+  "recommendations": [
+    {
+      "id": "parallel-chunk-meshing",
+      "enabled": true,
+      "workers": 7
+    },
+    {
+      "id": "cpu-reconstruction-first",
+      "enabled": true
+    },
+    {
+      "id": "bounded-depth-inference",
+      "enabled": true,
+      "inputTier": "small-first"
+    },
+    {
+      "id": "offline-mesh-lod-postprocess",
+      "enabled": true
+    },
+    {
+      "id": "cache-deterministic-intermediates",
+      "enabled": true
+    },
+    {
+      "id": "prebake-static-light-material-metadata",
+      "enabled": true
+    },
+    {
+      "id": "adaptive-runtime-detail-not-raw-triangle-growth",
+      "enabled": true
+    }
+  ],
+  "readinessPercent": 100
+}

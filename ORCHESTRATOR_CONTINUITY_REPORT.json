@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-28T05:50:18.707Z",
+  "pass": false,
+  "status": "BLOCK_PROMOTION",
+  "stableChannelProtected": true,
+  "newFunctionsMustUseShadowCandidateCanary": true,
+  "certified100CannotBeReplacedWithoutDualRun": true,
+  "failed": [
+    "honest100Current",
+    "monotonicGuard",
+    "capabilityRemovalBlocked"
+  ],
+  "checks": {
+    "honest100Current": false,
+    "monotonicGuard": false,
+    "certifiedFunctionRegressions": true,
+    "capabilityRemovalBlocked": false,
+    "supervisorSafe": true,
+    "staleMonitorProtection": true,
+    "patchStableProtection": true,
+    "minimalReproReady": true
+  }
+}

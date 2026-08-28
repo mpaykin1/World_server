@@ -1,7 +1,7 @@
-name: World Quality Autopilot V4
+name: World Quality Autopilot V6
 on:
   pull_request:
-    paths: ['apps/**','api/**','lib/**','shared/**','services/ai3d-worker/**','data/**','scripts/**','test/**']
+    paths: ['apps/**','api/**','lib/**','shared/**','services/ai3d-worker/**','data/**','scripts/**','test/**','TECHNOLOGY_AUDIT.json','.github/workflows/world-quality-autopilot.yml','DESKTOP_AI_INSTALL_AND_VERIFY.md']
   workflow_dispatch:
   schedule:
     - cron: '23 3 * * *'
@@ -16,14 +16,44 @@ jobs:
       - uses: actions/setup-node@v4
         with: {node-version: 24, cache: npm}
       - run: npm ci
+      - name: Scan graphics technologies first
+        run: npm run quality:world:tech-scout
+      - name: Intake candidate graphics branches
+        run: npm run quality:world:tech-candidates
+      - name: Audit runtime dependency resilience
+        run: npm run quality:world:runtime-resilience
+      - name: Require detail + optimization adapters
+        run: npm run quality:world:tech-integrate
+      - name: Technology drift gate
+        run: npm run quality:world:tech-drift
+      - name: CPU-first graphics route
+        run: npm run quality:world:cpu
+      - name: Evidence provenance guard
+        run: npm run quality:world:evidence-provenance
       - run: npm run quality:world:full
       - run: node --test test/world-quality-autopilot.test.js
       - run: npm run quality:regression
+      - name: Required repository checks
+        run: npm run check
+      - name: Production truth-gate regression tests
+        run: node --test test/world-quality-autopilot.test.js test/world-quality-truth-gate.test.js
+      - name: Recompute production certification after required CI
+        env:
+          WQA_REQUIRED_CI_PASS: 'true'
+        run: npm run quality:world
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: world-quality-autopilot-v4-reports
+          name: world-quality-autopilot-v6-reports
           path: |
+            WORLD_GRAPHICS_TECHNOLOGY_REPORT.json
+            WORLD_TECHNOLOGY_CANDIDATE_REPORT.json
+            WORLD_RUNTIME_DEPENDENCY_RESILIENCE_REPORT.json
+            WORLD_GRAPHICS_TECHNOLOGY_INTEGRATION_REPORT.json
+            WORLD_GRAPHICS_TECHNOLOGY_DRIFT_REPORT.json
+            WORLD_CPU_GRAPHICS_OPTIMIZATION_REPORT.json
+            WORLD_GRAPHICS_QUALITY_ROUTING_REPORT.json
+            WORLD_EVIDENCE_PROVENANCE_REPORT.json
             WORLD_QUALITY_AUTOPILOT_REPORT.json
             WORLD_QUALITY_AUTOPILOT_PLAN.json
             WORLD_QUALITY_AUTOPILOT_STATUS.json
@@ -39,3 +69,11 @@ jobs:
             WORLD_QUALITY_SCHEDULER_REPORT.json
             WORLD_FEEDBACK_LEARNER_REPORT.json
             WORLD_CANDIDATE_LAB_REPORT.json
+            WORLD_MULTIVIEW_VISUAL_GATE_REPORT.json
+            WORLD_SHADER_COST_REPORT.json
+            WORLD_STREAMING_TOPOLOGY_REPORT.json
+            WORLD_ANIMATION_LOD_REPORT.json
+            WORLD_DETERMINISTIC_REPLAY_REPORT.json
+            WORLD_QUALITY_SLO_REPORT.json
+            WORLD_QUALITY_CAUSALITY_REPORT.json
+            WORLD_CANARY_RELEASE_REPORT.json

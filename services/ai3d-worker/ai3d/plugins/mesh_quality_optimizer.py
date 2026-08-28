@@ -1,28 +1,50 @@
 from __future__ import annotations
-import json, os, shutil, subprocess
+
 from pathlib import Path
+
+from ..mesh_optimizer import MeshOptimizationPipeline
+
+
 class MeshQualityOptimizer:
-    def __init__(self): self.blender=os.environ.get("BLENDER_BIN","").strip() or shutil.which("blender")
-    def audit(self,p:Path):
-        out={"path":str(p),"bytes":p.stat().st_size if p.is_file() else 0,"valid":False,"vertices":None,"faces":None}
-        if not p.is_file(): return out
-        try:
-            import trimesh
-            scene=trimesh.load(str(p),force="scene",process=False);ms=[g for g in scene.geometry.values() if hasattr(g,"vertices")]
-            out["vertices"]=sum(len(m.vertices) for m in ms);out["faces"]=sum(len(m.faces) for m in ms);out["valid"]=bool(ms and out["vertices"] and out["faces"])
-        except Exception as e: out["error"]=str(e)
-        return out
-    def _lod(self,src:Path,dst:Path,ratio:float):
-        if not self.blender:return False
-        script=f"""import bpy;bpy.ops.wm.read_factory_settings(use_empty=True);bpy.ops.import_scene.gltf(filepath={str(src)!r})
-for o in list(bpy.context.scene.objects):
-    if o.type=='MESH':
-        bpy.context.view_layer.objects.active=o;o.select_set(True);m=o.modifiers.new(name='GoldenLOD',type='DECIMATE');m.ratio={ratio};bpy.ops.object.modifier_apply(modifier=m.name)
-bpy.ops.export_scene.gltf(filepath={str(dst)!r},export_format='GLB')"""
-        dst.parent.mkdir(parents=True,exist_ok=True);r=subprocess.run([self.blender,"--background","--python-expr",script],stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,timeout=600);return r.returncode==0 and dst.is_file() and dst.stat().st_size>1024
-    def prepare(self,src:Path,job:Path,params:dict):
-        lods=[]
-        for name,ratio in (("lod1",.65),("lod2",.35),("lod3",.15)):
-            d=job/f"{src.stem}-{name}.glb"
-            if self._lod(src,d,ratio):lods.append(d)
-        rp=job/"mesh-quality-report.json";rp.write_text(json.dumps({"source":self.audit(src),"lods":[self.audit(x) for x in lods],"originalPreserved":True},indent=2),encoding="utf-8");return rp,lods
+    """Compatibility bridge used by PipelineRunner.
+
+    The old optimizer performed an independent blind Decimate pass. V10 delegates to the
+    canonical quality-gated pipeline so generated and uploaded models share one source of truth.
+    """
+
+    def __init__(self):
+        service_root = Path(__file__).resolve().parents[2]
+        self.pipeline = MeshOptimizationPipeline(service_root)
+
+    def audit(self, path: Path) -> dict:
+        path = Path(path)
+        return {
+            "path": str(path),
+            "bytes": path.stat().st_size if path.is_file() else 0,
+            "valid": bool(path.is_file() and path.stat().st_size >= 64),
+            "pipelineVersion": self.pipeline.status().get("pipelineVersion"),
+            "canonical": True,
+        }
+
+    def prepare(self, src: Path, job: Path, params: dict):
+        src = Path(src)
+        job = Path(job)
+        merged_params = dict(params or {})
+        for candidate in (job / "input.png", job / "input.jpg", job / "input.webp"):
+            if candidate.is_file():
+                merged_params.setdefault("_semanticReferenceImage", str(candidate))
+                break
+        result = self.pipeline.run(
+            {
+                "id": job.name,
+                "mode": "mesh_optimize",
+                "params": merged_params,
+                "input_path": str(src),
+            },
+            lambda _value, _message: None,
+        )
+        report = job / "optimization-report.json"
+        lods = [job / name for name in ("LOD0.glb", "LOD1.glb", "LOD2.glb", "LOD3.glb", "HLOD.glb") if (job / name).is_file()]
+        if not report.is_file():
+            raise RuntimeError(f"Canonical V10 mesh pipeline did not produce optimization-report.json (status={result.get('status')})")
+        return report, lods

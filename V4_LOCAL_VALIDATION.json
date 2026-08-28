@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "1.0.0",
+  "patch": "SYSTEM_INTEGRATION_LAYER_V4",
+  "validatedAt": "2026-08-24T07:31:00Z",
+  "validationScope": "V3->V4 upgrade fixture with repeated full control plane and release gate; not a claim that the user local World_server has already installed V4.",
+  "installUpgradePass": true,
+  "repeatedIntegrationFullPass": true,
+  "releaseGatePass": true,
+  "integrationGate": {
+    "pass": true,
+    "percent": 100,
+    "passed": 55,
+    "total": 55,
+    "failed": []
+  },
+  "controlPlane": {
+    "pass": true,
+    "passed": 28,
+    "total": 28
+  },
+  "selftest": {
+    "pass": true,
+    "passed": 33,
+    "total": 33
+  },
+  "chaos": {
+    "pass": true,
+    "passed": 4,
+    "total": 4
+  },
+  "readiness": {
+    "structuralReadinessPercent": 100,
+    "runtimeConnectivityPercent": 100,
+    "evidenceConfidencePercent": 100,
+    "externalRuntimePercent": null,
+    "blockers": []
+  },
+  "negativeTests": {
+    "sameVersionDriftRefused": true,
+    "downgradeV4ToV3Refused": true,
+    "tamperedPatchRefused": true
+  },
+  "truth": "100% here means structural/evidence readiness of the validated integration fixture. Real server readiness must be recalculated after Desktop AI installs and runs all applicable repository/browser/mobile/runtime tests."
+}

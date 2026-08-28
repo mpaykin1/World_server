@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "5.0.0",
+  "system": "WORLD_ANIMATION_LOD_CONTROLLER",
+  "samples": [
+    {
+      "distance": 0,
+      "hz": 60,
+      "ik": true,
+      "secondary": true,
+      "poseCache": false,
+      "hero": false
+    },
+    {
+      "distance": 10,
+      "hz": 60,
+      "ik": true,
+      "secondary": true,
+      "poseCache": false,
+      "hero": false
+    },
+    {
+      "distance": 20,
+      "hz": 45,
+      "ik": false,
+      "secondary": true,
+      "poseCache": false,
+      "hero": false
+    },
+    {
+      "distance": 40,
+      "hz": 30,
+      "ik": false,
+      "secondary": false,
+      "poseCache": true,
+      "hero": false
+    },
+    {
+      "distance": 80,
+      "hz": 15,
+      "ik": false,
+      "secondary": false,
+      "poseCache": true,
+      "hero": false
+    }
+  ],
+  "policy": {
+    "heroMinimumHz": 45,
+    "crowdPoseCache": true,
+    "offscreenFreeze": true,
+    "rootMotionNeverDropped": true
+  }
+}

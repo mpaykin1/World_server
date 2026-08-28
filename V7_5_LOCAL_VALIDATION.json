@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-24T10:41:04.746972Z",
+  "baseUpgrade": "7.4.0 -> 7.5.0",
+  "pass": true,
+  "integrationGate": {
+    "passed": 127,
+    "total": 127,
+    "pass": true
+  },
+  "controlPlane": {
+    "passed": 75,
+    "total": 75,
+    "pass": true
+  },
+  "selftests": {
+    "passed": 91,
+    "total": 91,
+    "pass": true
+  },
+  "honest100": {
+    "certified": 65,
+    "contracted": 65,
+    "pass": true
+  },
+  "capabilityCertification": {
+    "integrationOwnedPercent": 100,
+    "globalPercent": 69
+  },
+  "readiness": {
+    "structuralPercent": 100,
+    "evidenceConfidencePercent": 100,
+    "operationalPercent": 91,
+    "nativeExtensionCoveragePercent": 8,
+    "externalBlockers": [
+      "native-cosign-unavailable",
+      "independent-remote-cas-peer-unavailable",
+      "fresh-android-and-ios-device-evidence-unavailable",
+      "wasmtime-component-runtime-unavailable",
+      "native-tlc-unavailable",
+      "native-etw-ebpf-perf-collector-unavailable",
+      "8h-long-soak-evidence-unavailable",
+      "live-fenced-migration-evidence-unavailable"
+    ]
+  },
+  "legacyRecipeCatalog": {
+    "mappedArchives": 18,
+    "totalLegacyPatchFamilies": 18,
+    "runtimeEligibleOnSyntheticBase": 0,
+    "truth": "Archive recipe coverage does not equal runtime certification."
+  },
+  "longSoak": {
+    "harnessPass": true,
+    "longSoakCertified": false,
+    "truth": "8-24h wall-clock run was not and cannot be completed inside this response; Desktop AI must execute it on the real environment."
+  },
+  "negativeTests": {
+    "mutatedPreviouslyCertifiedFunctionHonest100Blocked": true,
+    "mutatedPreviouslyCertifiedFunctionMonotonicBlocked": true,
+    "sameVersionLocalDriftOverwriteBlocked": true,
+    "downgradeV75ToV74Blocked": true
+  },
+  "releaseGatePass": true
+}

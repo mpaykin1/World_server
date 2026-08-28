@@ -1,0 +1,18 @@
+{
+  "at": "2026-08-27T20:33:55.576Z",
+  "desktop": {
+    "publicAccess": true,
+    "noVercelAuth": true,
+    "hasImproveWorld": true,
+    "apiConfig": true,
+    "supabaseConfig": true
+  },
+  "mobile": {
+    "publicAccess": true,
+    "noVercelAuth": true,
+    "hasImproveWorld": true,
+    "apiConfig": true,
+    "supabaseConfig": true
+  },
+  "allPass": true
+}

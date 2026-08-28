@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-28T05:50:15.785Z",
+  "pass": true,
+  "embeddedExhaustive": true,
+  "checks": [
+    {
+      "id": "queue-model",
+      "pass": true,
+      "states": 9
+    },
+    {
+      "id": "control-plane-model",
+      "pass": true,
+      "states": 6
+    },
+    {
+      "id": "queue-mutant-rejected",
+      "pass": true
+    },
+    {
+      "id": "control-mutant-rejected",
+      "pass": true
+    },
+    {
+      "id": "tla-specs-present",
+      "pass": true
+    }
+  ],
+  "queue": {
+    "pass": true,
+    "states": 9,
+    "violations": []
+  },
+  "control": {
+    "pass": true,
+    "states": 6,
+    "violations": []
+  },
+  "nativeTlc": {
+    "available": false,
+    "pass": null
+  },
+  "note": "TLA+ specs are shipped; TLC is optional and was not available, so exhaustive embedded models remain the mandatory offline gate."
+}

@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "7.3.0",
+  "canaryStopOn": [
+    "certified-function-regression",
+    "crash-loop",
+    "production-health-fail",
+    "lease-loss"
+  ],
+  "rollbackRequiresPreviousStable": true,
+  "automaticRollbackAllowedOnlyWithExplicitEnv": true,
+  "explicitEnv": "WORLD_SERVER_ALLOW_AUTO_ROLLBACK",
+  "preserveEvidenceBeforeRollback": true,
+  "failClosed": true
+}

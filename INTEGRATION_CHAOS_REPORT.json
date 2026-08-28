@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-28T05:50:08.902Z",
+  "pass": true,
+  "passed": 4,
+  "total": 4,
+  "checks": [
+    {
+      "id": "invalid-update-signature-rejected",
+      "pass": true
+    },
+    {
+      "id": "safety-flag-cannot-enable-untrusted",
+      "pass": true
+    },
+    {
+      "id": "sandbox-path-escape-rejected",
+      "pass": true
+    },
+    {
+      "id": "invalid-config-rejected",
+      "pass": true
+    }
+  ]
+}

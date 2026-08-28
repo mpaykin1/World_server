@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "5.0.0",
+  "system": "WORLD_QUALITY_CAUSALITY",
+  "policy": {
+    "counterfactualComparison": true,
+    "oneChangeClassPerExperiment": true,
+    "mutationAllowed": false,
+    "promotionRequiresTournament": true
+  },
+  "example": {
+    "delta": {
+      "visual": 1,
+      "fps": 1,
+      "controls": 0
+    },
+    "regressions": [],
+    "winner": true,
+    "mutationAllowed": false,
+    "promotionRequiresTournament": true
+  }
+}

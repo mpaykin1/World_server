@@ -1,0 +1,25 @@
+{
+  "patch": "WORLD_SERVER_V7_5_AUTONOMOUS_BLOCKER_REPAIR_V1",
+  "version": "1.0.0",
+  "pass": true,
+  "installedAt": "2026-08-25T18:26:36.153Z",
+  "root": "C:\\Users\\user\\Desktop\\World_server",
+  "backupRoot": "C:\\Users\\user\\Desktop\\World_server\\.blocker-repair-backups\\v1-2026-08-25T18-26-35-308Z",
+  "manifestFiles": 7,
+  "payloadFiles": 2,
+  "selfTest": {
+    "pass": true,
+    "version": "1.0.0",
+    "tests": 5
+  },
+  "scheduler": {
+    "attempted": true,
+    "ok": true,
+    "outputTail": "{\n  \"mode\": \"windows-task-scheduler\",\n  \"taskName\": \"WorldServer-BlockerRepair-ce4c149910\",\n  \"launcher\": \"C:\\\\Users\\\\user\\\\Desktop\\\\World_server\\\\state\\\\blocker-repair\\\\blocker-repair-tick.cmd\",\n  \"ok\": true,\n  \"outputTail\": \"�����. �������஢����� ����� \\\"WorldServer-BlockerRepair-ce4c149910\\\" �뫠 �ᯥ譮 ᮧ����.\",\n  \"at\": \"2026-08-25T18:26:36.133Z\"\n}"
+  },
+  "next": [
+    "npm run blockers:tick",
+    "If state/blocker-repair/DESKTOP_AI_NEXT_ACTION.md exists: Desktop AI fixes ROOT CAUSE then runs blockers:tick again",
+    "Do not merge until npm run blockers:status reports mergeSafe=true"
+  ]
+}

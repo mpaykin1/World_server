@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "5.0.0",
+  "system": "WORLD_SHADER_COST_AUDITOR",
+  "files": [
+    {
+      "path": "apps/ai3d-voxel-city/client.js",
+      "expensive": {
+        "dynamicShadows": 0,
+        "transparency": 1,
+        "doubleSide": 1,
+        "pbr": 1,
+        "postFx": 0
+      },
+      "cost": 15,
+      "grade": "A"
+    },
+    {
+      "path": "apps/voxel-world/client.js",
+      "expensive": {
+        "dynamicShadows": 1,
+        "transparency": 2,
+        "doubleSide": 2,
+        "pbr": 6,
+        "postFx": 0
+      },
+      "cost": 54,
+      "grade": "C"
+    },
+    {
+      "path": "shared/world-quality-autopilot.js",
+      "expensive": {
+        "dynamicShadows": 0,
+        "transparency": 0,
+        "doubleSide": 0,
+        "pbr": 0,
+        "postFx": 0
+      },
+      "cost": 0,
+      "grade": "A"
+    }
+  ],
+  "worstCost": 54,
+  "gate": true,
+  "policy": {
+    "mobileFeatureDowngrade": true,
+    "frontExactNoPbr": true,
+    "shaderMutation": false
+  }
+}

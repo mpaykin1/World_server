@@ -1,0 +1,428 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-28T05:49:58.763Z",
+  "policy": {
+    "cpuFirst": true,
+    "paidRequired": false,
+    "gpuMayBeOptional": true,
+    "minimumVotesForAutomaticAdoption": 5
+  },
+  "consensusModel": "quality + dependency + CPU + security + offline survivability",
+  "decisions": [
+    {
+      "id": "opentelemetry-otlp",
+      "name": "OpenTelemetry / OTLP",
+      "purpose": "Cross-system traces with W3C trace context and optional OTLP export",
+      "freeOpen": true,
+      "cpuSafe": true,
+      "offlineFallback": true,
+      "embeddedAdapter": "scripts/integration-telemetry.cjs",
+      "votes": 5,
+      "threshold": 5,
+      "evidence": [
+        "free/open",
+        "cpu-safe",
+        "offline-fallback",
+        "embedded-adapter-present"
+      ],
+      "status": "ADOPTED_EMBEDDED",
+      "automaticImplementation": true
+    },
+    {
+      "id": "opa-rego",
+      "name": "Open Policy Agent / Rego",
+      "purpose": "Policy-as-code for autonomous changes and release safety",
+      "freeOpen": true,
+      "cpuSafe": true,
+      "offlineFallback": true,
+      "embeddedAdapter": "scripts/policy-engine.cjs",
+      "votes": 5,
+      "threshold": 5,
+      "evidence": [
+        "free/open",
+        "cpu-safe",
+        "offline-fallback",
+        "embedded-adapter-present"
+      ],
+      "status": "ADOPTED_EMBEDDED",
+      "automaticImplementation": true
+    },
+    {
+      "id": "slsa-intoto",
+      "name": "SLSA Provenance + in-toto Statement v1",
+      "purpose": "Verifiable build/patch origin and reproducibility metadata",
+      "freeOpen": true,
+      "cpuSafe": true,
+      "offlineFallback": true,
+      "embeddedAdapter": "scripts/provenance.cjs",
+      "votes": 5,
+      "threshold": 5,
+      "evidence": [
+        "free/open",
+        "cpu-safe",
+        "offline-fallback",
+        "embedded-adapter-present"
+      ],
+      "status": "ADOPTED_EMBEDDED",
+      "automaticImplementation": true
+    },
+    {
+      "id": "merkle-cas",
+      "name": "Merkle DAG + Content Addressed Storage",
+      "purpose": "Deduplicated snapshots, dependency identity and cryptographic restore verification",
+      "freeOpen": true,
+      "cpuSafe": true,
+      "offlineFallback": true,
+      "embeddedAdapter": "scripts/cas-merkle-store.cjs",
+      "votes": 5,
+      "threshold": 5,
+      "evidence": [
+        "free/open",
+        "cpu-safe",
+        "offline-fallback",
+        "embedded-adapter-present"
+      ],
+      "status": "ADOPTED_EMBEDDED",
+      "automaticImplementation": true
+    },
+    {
+      "id": "sqlite-wal-job-log",
+      "name": "SQLite WAL durable queue + event log",
+      "purpose": "Crash-safe idempotent jobs, checkpoint/resume and dead-letter recovery",
+      "freeOpen": true,
+      "cpuSafe": true,
+      "offlineFallback": true,
+      "embeddedAdapter": "scripts/durable-job-queue.cjs",
+      "votes": 5,
+      "threshold": 5,
+      "evidence": [
+        "free/open",
+        "cpu-safe",
+        "offline-fallback",
+        "embedded-adapter-present"
+      ],
+      "status": "ADOPTED_EMBEDDED",
+      "automaticImplementation": true
+    },
+    {
+      "id": "sigstore-cosign",
+      "name": "Sigstore/cosign",
+      "purpose": "Cryptographic signing of provenance when a trusted identity is configured",
+      "freeOpen": true,
+      "cpuSafe": true,
+      "offlineFallback": true,
+      "externalBinary": "cosign",
+      "autoAdopt": true,
+      "embeddedAdapter": "scripts/artifact-signing-transparency.cjs",
+      "nativeMode": "cosign-v3-bundle+Rekor-proof",
+      "nativeOptional": true,
+      "votes": 5,
+      "threshold": 5,
+      "evidence": [
+        "free/open",
+        "cpu-safe",
+        "offline-fallback",
+        "embedded-adapter-present"
+      ],
+      "status": "ADOPTED_EMBEDDED",
+      "automaticImplementation": true
+    },
+    {
+      "id": "opa-native-runtime",
+      "name": "OPA native runtime",
+      "purpose": "Native Rego evaluation and bundle verification in addition to the offline mirror",
+      "freeOpen": true,
+      "cpuSafe": true,
+      "offlineFallback": true,
+      "externalBinary": "opa",
+      "autoAdopt": false,
+      "votes": 3,
+      "threshold": 5,
+      "evidence": [
+        "free/open",
+        "cpu-safe",
+        "offline-fallback"
+      ],
+      "status": "STAGED",
+      "automaticImplementation": false
+    },
+    {
+      "id": "cyclonedx-1.7",
+      "name": "CycloneDX 1.7 SBOM",
+      "purpose": "Machine-readable software supply-chain inventory and dependency transparency",
+      "freeOpen": true,
+      "cpuSafe": true,
+      "offlineFallback": true,
+      "embeddedAdapter": "scripts/cyclonedx-sbom.cjs",
+      "votes": 5,
+      "threshold": 5,
+      "evidence": [
+        "free/open",
+        "cpu-safe",
+        "offline-fallback",
+        "embedded-adapter-present"
+      ],
+      "status": "ADOPTED_EMBEDDED",
+      "automaticImplementation": true
+    },
+    {
+      "id": "openfeature",
+      "name": "OpenFeature",
+      "purpose": "Vendor-neutral feature flag contract for canary, progressive rollout and emergency disable",
+      "freeOpen": true,
+      "cpuSafe": true,
+      "offlineFallback": true,
+      "externalPackage": "@openfeature/server-sdk",
+      "autoAdopt": true,
+      "embeddedAdapter": "scripts/feature-flag-engine.cjs",
+      "specificationTarget": "0.9.0",
+      "votes": 5,
+      "threshold": 5,
+      "evidence": [
+        "free/open",
+        "cpu-safe",
+        "offline-fallback",
+        "embedded-adapter-present"
+      ],
+      "status": "ADOPTED_EMBEDDED",
+      "automaticImplementation": true
+    },
+    {
+      "id": "tuf",
+      "name": "The Update Framework (TUF)",
+      "purpose": "Rollback-resistant signed update metadata for patch distribution",
+      "freeOpen": true,
+      "cpuSafe": true,
+      "offlineFallback": true,
+      "externalPackage": "tuf",
+      "autoAdopt": true,
+      "embeddedAdapter": "scripts/secure-update-metadata.cjs",
+      "specificationTarget": "1.0.33",
+      "votes": 5,
+      "threshold": 5,
+      "evidence": [
+        "free/open",
+        "cpu-safe",
+        "offline-fallback",
+        "embedded-adapter-present"
+      ],
+      "status": "ADOPTED_EMBEDDED",
+      "automaticImplementation": true
+    },
+    {
+      "id": "cue",
+      "name": "CUE",
+      "purpose": "Cross-file configuration constraints, schema validation and generated config",
+      "freeOpen": true,
+      "cpuSafe": true,
+      "offlineFallback": true,
+      "externalBinary": "cue",
+      "autoAdopt": true,
+      "embeddedAdapter": "scripts/config-contract-validator.cjs",
+      "nativeRuntimeOptional": true,
+      "votes": 5,
+      "threshold": 5,
+      "evidence": [
+        "free/open",
+        "cpu-safe",
+        "offline-fallback",
+        "embedded-adapter-present"
+      ],
+      "status": "ADOPTED_EMBEDDED",
+      "automaticImplementation": true
+    },
+    {
+      "id": "wasi-wasmtime",
+      "name": "WASI / Wasmtime",
+      "purpose": "Capability-isolated sandbox for untrusted or experimental technology adapters",
+      "freeOpen": true,
+      "cpuSafe": true,
+      "offlineFallback": true,
+      "externalBinary": "wasmtime",
+      "autoAdopt": true,
+      "embeddedAdapter": "scripts/adapter-sandbox.cjs",
+      "nativeRuntimeOptional": true,
+      "votes": 5,
+      "threshold": 5,
+      "evidence": [
+        "free/open",
+        "cpu-safe",
+        "offline-fallback",
+        "embedded-adapter-present"
+      ],
+      "status": "ADOPTED_EMBEDDED",
+      "automaticImplementation": true
+    },
+    {
+      "id": "tla-plus-model-checking",
+      "name": "TLA+ / TLC + embedded exhaustive state checker",
+      "purpose": "State-machine safety verification for queue/control-plane",
+      "freeOpen": true,
+      "cpuSafe": true,
+      "offlineFallback": true,
+      "autoAdopt": true,
+      "embeddedAdapter": "scripts/model-state-checker.cjs",
+      "externalBinary": "java+TLA2TOOLS_JAR",
+      "nativeRuntimeOptional": true,
+      "votes": 5,
+      "threshold": 5,
+      "evidence": [
+        "free/open",
+        "cpu-safe",
+        "offline-fallback",
+        "embedded-adapter-present"
+      ],
+      "status": "ADOPTED_EMBEDDED",
+      "automaticImplementation": true
+    },
+    {
+      "id": "distributed-cas",
+      "name": "Distributed SHA-256 CAS peer protocol",
+      "purpose": "Cross-runner deduplicated artifact replication",
+      "freeOpen": true,
+      "cpuSafe": true,
+      "offlineFallback": true,
+      "autoAdopt": true,
+      "embeddedAdapter": "scripts/distributed-cas.cjs",
+      "votes": 5,
+      "threshold": 5,
+      "evidence": [
+        "free/open",
+        "cpu-safe",
+        "offline-fallback",
+        "embedded-adapter-present"
+      ],
+      "status": "ADOPTED_EMBEDDED",
+      "automaticImplementation": true
+    },
+    {
+      "id": "semantic-code-graph",
+      "name": "Semantic symbol/dataflow dependency graph",
+      "purpose": "Symbol/call/dataflow impact analysis beyond file imports",
+      "freeOpen": true,
+      "cpuSafe": true,
+      "offlineFallback": true,
+      "autoAdopt": true,
+      "embeddedAdapter": "scripts/semantic-dependency-graph.cjs",
+      "nativeAstRuntimeOptional": true,
+      "votes": 5,
+      "threshold": 5,
+      "evidence": [
+        "free/open",
+        "cpu-safe",
+        "offline-fallback",
+        "embedded-adapter-present"
+      ],
+      "status": "ADOPTED_EMBEDDED",
+      "automaticImplementation": true
+    },
+    {
+      "id": "appium-device-lab",
+      "name": "Appium-compatible owned real-device lab",
+      "purpose": "Physical Android/iOS evidence without mandatory paid farm",
+      "freeOpen": true,
+      "cpuSafe": true,
+      "offlineFallback": true,
+      "autoAdopt": true,
+      "embeddedAdapter": "scripts/device-lab-orchestrator.cjs",
+      "externalRuntime": "owned devices/Appium worker",
+      "nativeRuntimeOptional": true,
+      "votes": 5,
+      "threshold": 5,
+      "evidence": [
+        "free/open",
+        "cpu-safe",
+        "offline-fallback",
+        "embedded-adapter-present"
+      ],
+      "status": "ADOPTED_EMBEDDED",
+      "automaticImplementation": true
+    },
+    {
+      "id": "wasi-component-model",
+      "name": "WASI Component Model / WIT",
+      "purpose": "Typed cross-language contracts for isolated adapters",
+      "freeOpen": true,
+      "cpuSafe": true,
+      "offlineFallback": true,
+      "autoAdopt": true,
+      "embeddedAdapter": "scripts/wit-component-validator.cjs",
+      "externalBinary": "wasmtime",
+      "nativeRuntimeOptional": true,
+      "votes": 5,
+      "threshold": 5,
+      "evidence": [
+        "free/open",
+        "cpu-safe",
+        "offline-fallback",
+        "embedded-adapter-present"
+      ],
+      "status": "ADOPTED_EMBEDDED",
+      "automaticImplementation": true
+    }
+  ],
+  "embeddedAdopted": 16,
+  "externalRuntimeCoverage": {
+    "runnable": 0,
+    "total": 11,
+    "percent": 0,
+    "engines": [
+      {
+        "id": "instantmesh",
+        "available": false,
+        "reason": "repo env not configured"
+      },
+      {
+        "id": "trellis2",
+        "available": false,
+        "reason": "repo env not configured"
+      },
+      {
+        "id": "blender",
+        "available": false,
+        "reason": "binary not detected"
+      },
+      {
+        "id": "godot",
+        "available": false,
+        "reason": "binary not detected"
+      },
+      {
+        "id": "hunyuan3d",
+        "available": false,
+        "reason": "branch may exist but no runtime endpoint"
+      },
+      {
+        "id": "mpfb",
+        "available": false,
+        "reason": "addon not configured"
+      },
+      {
+        "id": "unirig",
+        "available": false,
+        "reason": "repo env not configured"
+      },
+      {
+        "id": "rigify",
+        "available": false,
+        "reason": "addon not configured"
+      },
+      {
+        "id": "goo-engine",
+        "available": false,
+        "reason": "binary not detected"
+      },
+      {
+        "id": "upbge",
+        "available": false,
+        "reason": "binary not detected"
+      },
+      {
+        "id": "gpu-router",
+        "available": false,
+        "reason": "remote workers not configured"
+      }
+    ]
+  },
+  "rule": "A newly discovered technology is never installed because one subsystem likes it. It must be free/open or explicitly approved, CPU-safe or optional-GPU, dependency-compatible, policy-safe, sandbox-testable and regression-gated before promotion."
+}

@@ -1,0 +1,17 @@
+{
+  "version": "10.0.0",
+  "fullTests": "180/180 PASS",
+  "v9ToV10Installer": "PASS",
+  "faultInjectionRollback": "PASS full tree byte-for-byte",
+  "manualRollback": "PASS full tree byte-for-byte",
+  "mixedTexturePack": {
+    "textures": 10,
+    "unique": 8,
+    "duplicates": 2,
+    "beforeReadinessPercent": 70.4,
+    "afterReadinessPercent": 98.2,
+    "sharedCacheSecondRun": "8/8 cache hits"
+  },
+  "githubWrite": "BLOCKED 403 Resource not accessible by integration",
+  "productionVerified": false
+}

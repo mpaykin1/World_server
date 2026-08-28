@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "7.2.0",
+  "appiumVersion": "3.6.0",
+  "requirePhysicalDeviceForRealClaim": true,
+  "allowEmulatorForFunctionalOnly": true,
+  "sessionTimeoutMs": 120000,
+  "workerTimeoutMs": 180000,
+  "maxParallelPerHost": 1,
+  "artifacts": [
+    "screenshot",
+    "page-source",
+    "logs",
+    "capabilities"
+  ],
+  "failClosedForRealDeviceClaim": true
+}

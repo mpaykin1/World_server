@@ -62,6 +62,47 @@ try {
   console.error('WARN: branch check failed', e.message);
 }
 
+// 5. Permanent autonomous multi-AI rules must exist in AGENTS.md
+try {
+  const agents = fs.readFileSync(path.join(root, 'AGENTS.md'), 'utf8');
+  check(/AUTONOMOUS AI TEAM/i.test(agents), 'AGENTS.md contains AUTONOMOUS AI TEAM');
+  check(/MULTI-AI PEER IMPROVEMENT/i.test(agents), 'AGENTS.md contains MULTI-AI PEER IMPROVEMENT');
+  check(/SESSION CONTINUITY/i.test(agents), 'AGENTS.md contains SESSION CONTINUITY');
+  check(/open-source auto-install/i.test(agents), 'AGENTS.md contains open-source auto-install');
+  check(/regression protection/i.test(agents), 'AGENTS.md contains regression protection');
+  check(/safe AI isolation|Isolation AI/i.test(agents), 'AGENTS.md contains safe AI isolation');
+} catch (e) {
+  console.error('WARN: AGENTS.md content check failed', e.message);
+  check(false, 'AGENTS.md permanent rules check');
+}
+
+// 6. WORK_IN_PROGRESS continuity protocol
+try {
+  const wipPath = path.join(root, 'WORK_IN_PROGRESS.md');
+  check(fs.existsSync(wipPath), 'WORK_IN_PROGRESS.md exists');
+  if (fs.existsSync(wipPath)) {
+    const wip = fs.readFileSync(wipPath, 'utf8');
+    const required = ['Current State', 'Target State', 'Progress', 'Branch', 'Commit', 'Tests', 'Blockers', 'Next Action', 'Completion Criteria'];
+    for (const sec of required) {
+      check(new RegExp(`^##\\s+${sec}`, 'mi').test(wip) || new RegExp(sec, 'i').test(wip), `WORK_IN_PROGRESS contains ${sec}`);
+    }
+  }
+} catch (e) {
+  console.error('WARN: WORK_IN_PROGRESS check failed', e.message);
+}
+
+// 7. Multi-AI peer review gate exists and is runnable
+try {
+  const gatePath = path.join(root, 'scripts/multi-ai-peer-review.cjs');
+  check(fs.existsSync(gatePath), 'scripts/multi-ai-peer-review.cjs exists');
+  if (fs.existsSync(gatePath)) {
+    const r = require('child_process').spawnSync(process.execPath, [gatePath], { encoding: 'utf8', cwd: root, timeout: 15000 });
+    check(r.status === 0, 'multi-ai-peer-review gate runnable');
+  }
+} catch (e) {
+  console.error('WARN: peer review gate check failed', e.message);
+}
+
 if (failed) {
   console.error('\nAgent rules check FAILED');
   process.exit(1);

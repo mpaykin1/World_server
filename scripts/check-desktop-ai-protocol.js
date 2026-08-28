@@ -17,6 +17,12 @@ if(!errors.length){
     const base=process.env.QUALITY_BASE_SHA||process.env.GITHUB_BASE_REF||'master';
     const r=cp.spawnSync('git',['diff','--name-only',base,'HEAD'],{cwd:ROOT,encoding:'utf8'});
     if(r.status===0)changed=r.stdout.trim().split(/\r?\n/).filter(Boolean);
+    // Also include dirty working tree and untracked files for local desktop-ai verification
+    const dirty=cp.spawnSync('git',['diff','--name-only'],{cwd:ROOT,encoding:'utf8'});
+    const staged=cp.spawnSync('git',['diff','--cached','--name-only'],{cwd:ROOT,encoding:'utf8'});
+    const untracked=cp.spawnSync('git',['ls-files','--others','--exclude-standard'],{cwd:ROOT,encoding:'utf8'});
+    [dirty,staged,untracked].forEach(x=>{ if(x.status===0&&x.stdout.trim()) changed.push(...x.stdout.trim().split(/\r?\n/).filter(Boolean)); });
+    changed=[...new Set(changed)];
   }
   const meaningful=changed.filter(f=>![
     'WORK_IN_PROGRESS.md','DESKTOP_AI_INSTALL_AND_VERIFY.md',

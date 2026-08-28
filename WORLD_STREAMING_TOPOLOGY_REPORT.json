@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "5.0.0",
+  "system": "WORLD_STREAMING_TOPOLOGY",
+  "nodes": 5,
+  "connected": true,
+  "policy": {
+    "heroFirst": true,
+    "neighborPrefetch": true,
+    "neverDropSpawnRing": true,
+    "mutation": false
+  },
+  "priority": [
+    {
+      "id": "0,0,0",
+      "neighbors": [
+        "1,0,0",
+        "-1,0,0",
+        "0,0,1",
+        "0,0,-1"
+      ],
+      "degree": 4,
+      "priority": 21.4,
+      "hero": false
+    },
+    {
+      "id": "1,0,0",
+      "neighbors": [
+        "0,0,0"
+      ],
+      "degree": 1,
+      "priority": 10.35,
+      "hero": false
+    },
+    {
+      "id": "-1,0,0",
+      "neighbors": [
+        "0,0,0"
+      ],
+      "degree": 1,
+      "priority": 10.35,
+      "hero": false
+    },
+    {
+      "id": "0,0,1",
+      "neighbors": [
+        "0,0,0"
+      ],
+      "degree": 1,
+      "priority": 10.35,
+      "hero": false
+    },
+    {
+      "id": "0,0,-1",
+      "neighbors": [
+        "0,0,0"
+      ],
+      "degree": 1,
+      "priority": 10.35,
+      "hero": false
+    }
+  ]
+}

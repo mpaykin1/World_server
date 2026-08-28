@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-28T05:50:16.048Z",
+  "pass": true,
+  "minimumCopies": 2,
+  "independentRoots": true,
+  "repairOnReadReady": true,
+  "remoteDisasterToleranceClaim": false,
+  "claim": "Two independent local roots verified. A remote peer is still required before claiming host-disaster tolerance."
+}

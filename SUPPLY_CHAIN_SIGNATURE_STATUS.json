@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-28T05:50:07.648Z",
+  "pass": true,
+  "mode": "local-ed25519-transparency-log",
+  "algorithm": "ed25519",
+  "hash": "sha256",
+  "signedArtifacts": [
+    "SYSTEM_INTEGRATION_REPORT.json",
+    "SLSA_PROVENANCE.intoto.json",
+    "DEPENDENCY_GRAPH.json",
+    "SEMANTIC_DEPENDENCY_GRAPH.json",
+    "MODEL_CHECK_REPORT.json",
+    "WIT_COMPONENT_STATUS.json",
+    "DEVICE_LAB_STATUS.json"
+  ],
+  "logEntries": 260,
+  "logHead": null,
+  "nativeCosignAvailable": false,
+  "nativeSigstoreBundleVerified": false,
+  "rekorEvidence": "verified by cosign when an external Sigstore bundle is supplied",
+  "errors": []
+}

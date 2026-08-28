@@ -1,0 +1,96 @@
+{
+  "schemaVersion": "3.0.0",
+  "patch": "SYSTEM_INTEGRATION_LAYER_V3",
+  "version": "3.0.0",
+  "validatedAt": "2026-08-24T06:57:25.985599Z",
+  "patchReadinessPercent": 100,
+  "tests": {
+    "compatibilityGate": {
+      "pass": true,
+      "passed": 42,
+      "total": 42,
+      "percent": 100
+    },
+    "controlPlane": {
+      "pass": true,
+      "passed": 21,
+      "total": 21
+    },
+    "selfTest": {
+      "pass": true,
+      "passed": 24,
+      "total": 24
+    },
+    "projectDirectiveNegative": {
+      "pass": true,
+      "badTaskRejected": true,
+      "observedExitCode": 2
+    },
+    "technologyLockNegative": {
+      "pass": true,
+      "apngSubstitutionRejected": true,
+      "observedExitCode": 2
+    },
+    "apngPositive": {
+      "pass": true,
+      "binaryAcTLFcTLDataVerified": true
+    },
+    "assetBatchNegative": {
+      "pass": true,
+      "looseBatchRejected": true,
+      "observedExitCode": 2
+    },
+    "audioVariationNegative": {
+      "pass": true,
+      "monotoneEventRejected": true,
+      "observedExitCode": 2
+    },
+    "gameplayContractNegative": {
+      "pass": true,
+      "badFeetAttackShieldGripRejected": true,
+      "observedExitCode": 2
+    },
+    "graphicsRatchetNegative": {
+      "pass": true,
+      "deletionWithoutEvidenceRejected": true,
+      "missingReplacementRejected": true,
+      "replacementEvidenceAccepted": true
+    },
+    "desktopAIReportNegative": {
+      "pass": true,
+      "partialCodeInlineHtmlFalseClaimRejected": true,
+      "observedExitCode": 2
+    },
+    "payloadIntegrity": {
+      "pass": true,
+      "manifestFiles": 61,
+      "tamperRejected": true
+    },
+    "upgradeSafety": {
+      "pass": true,
+      "v2KnownUpgradePassed": true,
+      "v2LocalDriftRejected": true,
+      "sameVersionLocalDriftRejected": true,
+      "deprecatedV2ExactFilesRemoved": true
+    },
+    "sbom": {
+      "pass": true,
+      "spec": "CycloneDX 1.7",
+      "components": 0
+    },
+    "technologyConsensus": {
+      "embeddedAdopted": 6,
+      "totalCandidates": 12
+    }
+  },
+  "readiness": {
+    "structuralReadinessPercent": 100,
+    "runtimeConnectivityPercentSynthetic": 100,
+    "evidenceConfidencePercent": 100
+  },
+  "limitations": [
+    "100% values above are validated for the V3 patch and assembled synthetic integration repository; they are not proof that V3 is already installed on the user local World_server checkout.",
+    "Task-specific audio/gameplay/report gates are N/A when those artifacts/contracts do not exist; Desktop AI protocol requires CURRENT_TASK_CONTRACT.json for applicable work.",
+    "External optional runtimes are measured separately on the target machine and must not be reported as available without runtime evidence."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "3.0.0",
+  "truthful": true,
+  "summary": "",
+  "rootCause": "",
+  "permanentFix": "",
+  "tests": [],
+  "readinessPercent": null,
+  "connectivityPercent": null,
+  "limitations": [],
+  "downloadableArtifacts": [],
+  "codeDeliveryMode": "full-files",
+  "htmlInline": false
+}

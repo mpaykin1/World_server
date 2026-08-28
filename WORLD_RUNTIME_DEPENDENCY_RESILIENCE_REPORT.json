@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "6.0.0",
+  "system": "WORLD_RUNTIME_DEPENDENCY_RESILIENCE",
+  "generatedAt": "2026-08-28T05:10:18.051Z",
+  "dependencies": [
+    {
+      "file": "apps/voxel-world/client.js",
+      "url": "https://unpkg.com/three@0.165.0/build/three.module.js",
+      "type": "runtime-cdn",
+      "resilience": "network-dependent"
+    },
+    {
+      "file": "apps/ai3d-voxel-city/client.js",
+      "url": "https://unpkg.com/three@0.165.0/build/three.module.js",
+      "type": "runtime-cdn",
+      "resilience": "network-dependent"
+    }
+  ],
+  "localThreeVendor": null,
+  "networkDependentRuntimeCount": 2,
+  "recommendations": [
+    {
+      "id": "vendor-three-locally",
+      "priority": "high",
+      "reason": "runtime currently depends on external CDN; vendor exact tested version with license and regression tests"
+    }
+  ],
+  "hardGateReady": true,
+  "policy": "do not silently change runtime library version; local-vendor promotion is a tested candidate, not an automatic destructive rewrite"
+}

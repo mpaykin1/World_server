@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "7.4.0",
+  "generatedAt": "2026-08-28T05:50:04.504Z",
+  "pass": true,
+  "contentDefinedChunking": true,
+  "reusePercent": 75,
+  "corruptChunkRejected": true,
+  "reconstructionVerified": true
+}

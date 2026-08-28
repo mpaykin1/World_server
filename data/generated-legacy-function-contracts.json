@@ -1,0 +1,411 @@
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-28T05:50:04.147Z",
+  "trustedFactory": "LEGACY_EVIDENCE_FACTORY_V7_5",
+  "recipeCatalogHash": "e8c0c02f52e165bc92b9d26b161bfa78b5d189a6b06784829bcf048d78d734e0",
+  "contracts": [
+    {
+      "id": "legacy-procedural-quality",
+      "owner": "PROCEDURAL_QUALITY_ENGINE_V10",
+      "scope": "legacy capability family: procedural-generation, temporal-qa, frame-pacing",
+      "critical": false,
+      "generatedBy": "LEGACY_EVIDENCE_FACTORY_V7_5",
+      "sourcePaths": [
+        "scripts/procedural-quality-v10-gate.js",
+        "scripts/run-procedural-tests.js"
+      ],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-procedural-quality:static"
+        },
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-procedural-quality:integration"
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-procedural-quality:regression"
+        }
+      ],
+      "coversCapabilities": [
+        "procedural-generation",
+        "temporal-qa",
+        "frame-pacing"
+      ]
+    },
+    {
+      "id": "legacy-apng-quality",
+      "owner": "WORLD_SERVER_APNG_QUALITY_SYSTEM_V3_MAX",
+      "scope": "legacy capability family: apng-validate, apng-repair, apng-release-gate",
+      "critical": false,
+      "generatedBy": "LEGACY_EVIDENCE_FACTORY_V7_5",
+      "sourcePaths": [
+        "scripts/apng-quality-gate.js",
+        "scripts/verify-apng-bundle.js",
+        "scripts/integrate-apng-system.js"
+      ],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-apng-quality:static"
+        },
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-apng-quality:integration"
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-apng-quality:regression"
+        }
+      ],
+      "coversCapabilities": [
+        "apng-validate",
+        "apng-repair",
+        "apng-release-gate"
+      ]
+    },
+    {
+      "id": "legacy-pixel-animation",
+      "owner": "PIXEL_ANIMATION_SYSTEM_V3",
+      "scope": "legacy capability family: pixel-atlas, animation-culling, mobile-fallback",
+      "critical": false,
+      "generatedBy": "LEGACY_EVIDENCE_FACTORY_V7_5",
+      "sourcePaths": [
+        "scripts/pixel-animation-verify.js",
+        "scripts/pixel-animation-auto-integrate.js"
+      ],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-pixel-animation:static"
+        },
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-pixel-animation:integration"
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-pixel-animation:regression"
+        }
+      ],
+      "coversCapabilities": [
+        "pixel-atlas",
+        "animation-culling",
+        "mobile-fallback"
+      ]
+    },
+    {
+      "id": "legacy-golden-governance",
+      "owner": "WORLD_SERVER_GOLDEN_STANDARD_V13",
+      "scope": "legacy capability family: no-regression, self-calibration, desktop-ai-protocol",
+      "critical": false,
+      "generatedBy": "LEGACY_EVIDENCE_FACTORY_V7_5",
+      "sourcePaths": [
+        "scripts/quality-regression-gate.js",
+        "scripts/check-desktop-ai-protocol.js",
+        "scripts/quality-self-evolve.js"
+      ],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-golden-governance:static"
+        },
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-golden-governance:integration"
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-golden-governance:regression"
+        }
+      ],
+      "coversCapabilities": [
+        "no-regression",
+        "self-calibration",
+        "desktop-ai-protocol"
+      ]
+    },
+    {
+      "id": "legacy-world-quality-v6",
+      "owner": "WORLD_QUALITY_AUTOPILOT_V6",
+      "scope": "legacy capability family: technology-scout, cpu-routing, technology-drift, quality-slo",
+      "critical": false,
+      "generatedBy": "LEGACY_EVIDENCE_FACTORY_V7_5",
+      "sourcePaths": [
+        "scripts/world-graphics-technology-scout.js",
+        "scripts/world-cpu-first-graphics-optimizer.js",
+        "scripts/world-technology-drift-gate.js",
+        "scripts/world-quality-slo.js"
+      ],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-world-quality-v6:static"
+        },
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-world-quality-v6:integration"
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-world-quality-v6:regression"
+        }
+      ],
+      "coversCapabilities": [
+        "technology-scout",
+        "cpu-routing",
+        "technology-drift",
+        "quality-slo"
+      ]
+    },
+    {
+      "id": "legacy-dream-v5",
+      "owner": "WORLD_SERVER_DREAM_AUTOPILOT_V5_CPU",
+      "scope": "legacy capability family: fresh-real-device-evidence, physics-guardian, gameplay-agent",
+      "critical": false,
+      "generatedBy": "LEGACY_EVIDENCE_FACTORY_V7_5",
+      "sourcePaths": [
+        "scripts/world-device-profile-matrix.js",
+        "scripts/cv-gameplay-agent.js",
+        "scripts/character-motion-validator.js"
+      ],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-dream-v5:static"
+        },
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-dream-v5:integration"
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-dream-v5:regression"
+        }
+      ],
+      "coversCapabilities": [
+        "fresh-real-device-evidence",
+        "physics-guardian",
+        "gameplay-agent"
+      ]
+    },
+    {
+      "id": "legacy-pwa-v4",
+      "owner": "WORLD_SERVER_PWA_SELF_IMPROVING_V4_MAX",
+      "scope": "legacy capability family: pwa, real-ios-evidence, adaptive-runtime, production-rollback",
+      "critical": false,
+      "generatedBy": "LEGACY_EVIDENCE_FACTORY_V7_5",
+      "sourcePaths": [
+        "shared/pwa-runtime.js",
+        "scripts/real-ios-telemetry-gate.js",
+        "scripts/runtime-integration-discovery.js",
+        ".github/workflows/quality-canary.yml"
+      ],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-pwa-v4:static"
+        },
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-pwa-v4:integration"
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-pwa-v4:regression"
+        }
+      ],
+      "coversCapabilities": [
+        "pwa",
+        "real-ios-evidence",
+        "adaptive-runtime",
+        "production-rollback"
+      ]
+    },
+    {
+      "id": "legacy-truth-gate",
+      "owner": "production-100-truth-gate-v1",
+      "scope": "legacy capability family: production-certification, anti-false-100",
+      "critical": false,
+      "generatedBy": "LEGACY_EVIDENCE_FACTORY_V7_5",
+      "sourcePaths": [
+        "scripts/world-quality-analyzer.js",
+        "scripts/world-quality-autopilot.js"
+      ],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-truth-gate:static"
+        },
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-truth-gate:integration"
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-truth-gate:regression"
+        }
+      ],
+      "coversCapabilities": [
+        "production-certification",
+        "anti-false-100"
+      ]
+    },
+    {
+      "id": "legacy-quality-autopilot-v11",
+      "owner": "QUALITY_AUTOPILOT_PATCH_v11_CPU_MAX",
+      "scope": "legacy capability family: quality-autopilot-v11, quality-security-gate, quality-readiness-v11",
+      "critical": false,
+      "generatedBy": "LEGACY_EVIDENCE_FACTORY_V7_5",
+      "sourcePaths": [
+        "scripts/quality-readiness-v11.js",
+        "scripts/quality-security-gate.js"
+      ],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-quality-autopilot-v11:static"
+        },
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-quality-autopilot-v11:integration"
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-quality-autopilot-v11:regression"
+        }
+      ],
+      "coversCapabilities": [
+        "quality-autopilot-v11",
+        "quality-security-gate",
+        "quality-readiness-v11"
+      ]
+    },
+    {
+      "id": "legacy-quiet-autopilot-v6",
+      "owner": "WORLD_SERVER_QUIET_QUALITY_AUTOPILOT_V6",
+      "scope": "legacy capability family: quiet-quality-autopilot, quality-proof-gate, quality-otel-bridge",
+      "critical": false,
+      "generatedBy": "LEGACY_EVIDENCE_FACTORY_V7_5",
+      "sourcePaths": [
+        "scripts/verify-v6-runtime.js",
+        "scripts/quality-proof-gate.js",
+        "scripts/quality-otel-bridge-check.js"
+      ],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-quiet-autopilot-v6:static"
+        },
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-quiet-autopilot-v6:integration"
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-quiet-autopilot-v6:regression"
+        }
+      ],
+      "coversCapabilities": [
+        "quiet-quality-autopilot",
+        "quality-proof-gate",
+        "quality-otel-bridge"
+      ]
+    },
+    {
+      "id": "legacy-gap-closure-v1",
+      "owner": "GAP_CLOSURE_SYSTEM_V1",
+      "scope": "legacy capability family: gap-closure, gap-regression-test",
+      "critical": false,
+      "generatedBy": "LEGACY_EVIDENCE_FACTORY_V7_5",
+      "sourcePaths": [
+        "test/gap-closure.test.js"
+      ],
+      "evidence": [
+        {
+          "class": "static",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-gap-closure-v1:static"
+        },
+        {
+          "class": "integration",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-gap-closure-v1:integration"
+        },
+        {
+          "class": "regression",
+          "type": "report-check",
+          "file": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
+          "checkId": "legacy-gap-closure-v1:regression"
+        }
+      ],
+      "coversCapabilities": [
+        "gap-closure",
+        "gap-regression-test"
+      ]
+    }
+  ]
+}

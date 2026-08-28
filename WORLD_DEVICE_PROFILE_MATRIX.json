@@ -1,12 +1,13 @@
 {
-  "schemaVersion": "4.0.0",
+  "schemaVersion": "5.0.0",
   "system": "WORLD_DEVICE_PROFILE_MATRIX",
-  "generatedAt": "2026-08-24T05:16:11.477Z",
+  "generatedAt": "2026-08-28T05:10:19.641Z",
   "percent": 87,
   "evidence": {
     "adaptiveRuntime": true,
     "mobileTouch": true,
-    "physicalProvider": false
+    "physicalProviderConfigured": false,
+    "physicalProviderRuntimeVerified": false
   },
   "profiles": [
     {
@@ -49,5 +50,6 @@
       "memoryMb": 768,
       "physical": false
     }
-  ]
+  ],
+  "providerRuntimeAgeHours": null
 }

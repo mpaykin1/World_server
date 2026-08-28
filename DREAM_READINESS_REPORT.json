@@ -1,0 +1,690 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-28T05:50:01.896Z",
+  "gitSha": "c07d4400831d62e5bc4a50b464fddc006741cc7b",
+  "definition": "Dream = autonomous build/run/play/observe/score/root-cause/fix/retest/canary/deploy loop across Web/Godot/Roblox/devices.",
+  "implementationPercent": 71,
+  "dreamVerifiedPercent": 54,
+  "qualityFrameworkPercent": 98,
+  "systems": [
+    {
+      "id": "unified-orchestrator",
+      "title": "Unified Test Orchestrator",
+      "weight": 8,
+      "implementationPercent": 75,
+      "verifiedPercent": 50,
+      "sourceEvidence": [
+        {
+          "ok": true,
+          "file": "scripts/world-quality-orchestrator.js"
+        }
+      ],
+      "automationEvidence": [
+        {
+          "ok": false,
+          "reason": "content-missing",
+          "file": "package.json"
+        },
+        {
+          "ok": false,
+          "reason": "missing",
+          "file": ".github/workflows/dream-quality-autopilot.yml"
+        }
+      ],
+      "runtimeEvidence": [
+        {
+          "ok": false,
+          "reason": "missing",
+          "file": "WORLD_QUALITY_ORCHESTRATOR_REPORT.json"
+        }
+      ]
+    },
+    {
+      "id": "runtime-proof",
+      "title": "Runtime Proof",
+      "weight": 8,
+      "implementationPercent": 75,
+      "verifiedPercent": 50,
+      "sourceEvidence": [
+        {
+          "ok": true,
+          "file": "scripts/runtime-proof.js"
+        }
+      ],
+      "automationEvidence": [
+        {
+          "ok": false,
+          "reason": "content-missing",
+          "file": "package.json"
+        }
+      ],
+      "runtimeEvidence": [
+        {
+          "ok": false,
+          "reason": "missing",
+          "file": "RUNTIME_PROOF_REPORT.json"
+        }
+      ]
+    },
+    {
+      "id": "ai-gameplay-agent",
+      "title": "AI Gameplay Agent",
+      "weight": 7,
+      "implementationPercent": 38,
+      "verifiedPercent": 25,
+      "sourceEvidence": [
+        {
+          "ok": true,
+          "file": "e2e/ai3d-voxel-city-autoplay.spec.js"
+        },
+        {
+          "ok": false,
+          "reason": "missing",
+          "file": "e2e/ai-gameplay-agent.spec.js"
+        }
+      ],
+      "automationEvidence": [
+        {
+          "ok": false,
+          "reason": "content-missing",
+          "file": "package.json"
+        }
+      ],
+      "runtimeEvidence": []
+    },
+    {
+      "id": "physics-guardian",
+      "title": "Physics Guardian",
+      "weight": 7,
+      "implementationPercent": 38,
+      "verifiedPercent": 25,
+      "sourceEvidence": [
+        {
+          "ok": false,
+          "reason": "missing",
+          "file": "e2e/physics-guardian.spec.js"
+        },
+        {
+          "ok": true,
+          "file": "scripts/check-golden-standard.js"
+        }
+      ],
+      "automationEvidence": [
+        {
+          "ok": false,
+          "reason": "content-missing",
+          "file": "package.json"
+        }
+      ],
+      "runtimeEvidence": []
+    },
+    {
+      "id": "character-motion-validator",
+      "title": "Character Motion Validator",
+      "weight": 6,
+      "implementationPercent": 50,
+      "verifiedPercent": 33,
+      "sourceEvidence": [
+        {
+          "ok": true,
+          "file": "scripts/character-motion-validator.js"
+        },
+        {
+          "ok": true,
+          "file": "data/character-motion-contract.json"
+        },
+        {
+          "ok": false,
+          "reason": "missing",
+          "file": "shared/quality/runtime-telemetry.js"
+        }
+      ],
+      "automationEvidence": [
+        {
+          "ok": false,
+          "reason": "content-missing",
+          "file": "package.json"
+        },
+        {
+          "ok": false,
+          "reason": "content-missing",
+          "file": "package.json"
+        }
+      ],
+      "runtimeEvidence": [
+        {
+          "ok": false,
+          "reason": "missing",
+          "file": "CHARACTER_MOTION_REPORT.json"
+        }
+      ]
+    },
+    {
+      "id": "animation-quality-ai",
+      "title": "Animation Quality AI",
+      "weight": 6,
+      "implementationPercent": 75,
+      "verifiedPercent": 50,
+      "sourceEvidence": [
+        {
+          "ok": true,
+          "file": "scripts/animation-quality-validator.js"
+        },
+        {
+          "ok": true,
+          "file": "data/animation-quality-contract.json"
+        }
+      ],
+      "automationEvidence": [
+        {
+          "ok": false,
+          "reason": "content-missing",
+          "file": "package.json"
+        }
+      ],
+      "runtimeEvidence": [
+        {
+          "ok": false,
+          "reason": "missing",
+          "file": "ANIMATION_QUALITY_REPORT.json"
+        }
+      ]
+    },
+    {
+      "id": "visual-regression",
+      "title": "Visual Regression 2.0",
+      "weight": 6,
+      "implementationPercent": 100,
+      "verifiedPercent": 100,
+      "sourceEvidence": [
+        {
+          "ok": true,
+          "file": "scripts/visual-regression.js"
+        },
+        {
+          "ok": true,
+          "file": "scripts/perceptual-visual-gate.js"
+        }
+      ],
+      "automationEvidence": [
+        {
+          "ok": true,
+          "file": "package.json"
+        }
+      ],
+      "runtimeEvidence": [
+        {
+          "ok": true,
+          "file": "VISUAL_PERCEPTUAL_REPORT.json"
+        }
+      ]
+    },
+    {
+      "id": "graphics-quality-scorer",
+      "title": "Graphics Quality Scorer",
+      "weight": 5,
+      "implementationPercent": 100,
+      "verifiedPercent": 100,
+      "sourceEvidence": [
+        {
+          "ok": true,
+          "file": "scripts/ai-visual-critic.js"
+        },
+        {
+          "ok": true,
+          "file": "scripts/perceptual-visual-gate.js"
+        }
+      ],
+      "automationEvidence": [
+        {
+          "ok": true,
+          "file": "package.json"
+        }
+      ],
+      "runtimeEvidence": [
+        {
+          "ok": true,
+          "file": "VISUAL_PERCEPTUAL_REPORT.json"
+        }
+      ]
+    },
+    {
+      "id": "performance-lab",
+      "title": "Performance Lab",
+      "weight": 7,
+      "implementationPercent": 50,
+      "verifiedPercent": 33,
+      "sourceEvidence": [
+        {
+          "ok": false,
+          "reason": "missing",
+          "file": "e2e/performance-telemetry.spec.js"
+        },
+        {
+          "ok": true,
+          "file": "scripts/performance-budget-gate.js"
+        },
+        {
+          "ok": true,
+          "file": "data/performance-budgets.json"
+        }
+      ],
+      "automationEvidence": [
+        {
+          "ok": false,
+          "reason": "content-missing",
+          "file": "package.json"
+        },
+        {
+          "ok": false,
+          "reason": "missing",
+          "file": ".github/workflows/dream-quality-autopilot.yml"
+        }
+      ],
+      "runtimeEvidence": [
+        {
+          "ok": false,
+          "reason": "missing",
+          "file": "PERFORMANCE_BUDGET_REPORT.json"
+        }
+      ]
+    },
+    {
+      "id": "adaptive-lod",
+      "title": "Adaptive Runtime Quality / LOD",
+      "weight": 6,
+      "implementationPercent": 100,
+      "verifiedPercent": 100,
+      "sourceEvidence": [
+        {
+          "ok": true,
+          "file": "shared/world-quality-autopilot.js"
+        },
+        {
+          "ok": true,
+          "file": "scripts/world-runtime-quality-profiler.js"
+        }
+      ],
+      "automationEvidence": [
+        {
+          "ok": true,
+          "file": "package.json"
+        }
+      ],
+      "runtimeEvidence": [
+        {
+          "ok": true,
+          "file": "WORLD_RUNTIME_QUALITY_REPORT.json"
+        }
+      ]
+    },
+    {
+      "id": "chaos-game-testing",
+      "title": "Chaos Game Testing",
+      "weight": 5,
+      "implementationPercent": 75,
+      "verifiedPercent": 50,
+      "sourceEvidence": [
+        {
+          "ok": true,
+          "file": "test/quality-fuzz.test.js"
+        },
+        {
+          "ok": true,
+          "file": "scripts/test-stability-runner.js"
+        },
+        {
+          "ok": true,
+          "file": "scripts/network-chaos-runner.js"
+        },
+        {
+          "ok": true,
+          "file": "data/network-chaos-profiles.json"
+        }
+      ],
+      "automationEvidence": [
+        {
+          "ok": false,
+          "reason": "content-missing",
+          "file": "package.json"
+        }
+      ],
+      "runtimeEvidence": [
+        {
+          "ok": false,
+          "reason": "missing",
+          "file": "NETWORK_CHAOS_REPORT.json"
+        }
+      ]
+    },
+    {
+      "id": "multiplayer-swarm",
+      "title": "Multiplayer AI Swarm",
+      "weight": 7,
+      "implementationPercent": 75,
+      "verifiedPercent": 50,
+      "sourceEvidence": [
+        {
+          "ok": true,
+          "file": "scripts/multiplayer-swarm.js"
+        },
+        {
+          "ok": true,
+          "file": "data/swarm-profiles.json"
+        }
+      ],
+      "automationEvidence": [
+        {
+          "ok": false,
+          "reason": "content-missing",
+          "file": "package.json"
+        }
+      ],
+      "runtimeEvidence": [
+        {
+          "ok": false,
+          "reason": "missing",
+          "file": "MULTIPLAYER_SWARM_REPORT.json"
+        }
+      ]
+    },
+    {
+      "id": "godot-runtime",
+      "title": "Godot Runtime Bridge",
+      "weight": 5,
+      "implementationPercent": 75,
+      "verifiedPercent": 50,
+      "sourceEvidence": [
+        {
+          "ok": true,
+          "file": "scripts/godot-runtime-smoke.js"
+        }
+      ],
+      "automationEvidence": [
+        {
+          "ok": false,
+          "reason": "content-missing",
+          "file": "package.json"
+        }
+      ],
+      "runtimeEvidence": [
+        {
+          "ok": false,
+          "reason": "missing",
+          "file": "GODOT_RUNTIME_REPORT.json"
+        }
+      ]
+    },
+    {
+      "id": "roblox-test-bridge",
+      "title": "Roblox Test Bridge",
+      "weight": 7,
+      "implementationPercent": 0,
+      "verifiedPercent": 0,
+      "sourceEvidence": [
+        {
+          "ok": false,
+          "reason": "missing",
+          "file": "services/roblox-test-bridge/runner.js"
+        }
+      ],
+      "automationEvidence": [
+        {
+          "ok": false,
+          "reason": "content-missing",
+          "file": "package.json"
+        }
+      ],
+      "runtimeEvidence": [
+        {
+          "ok": false,
+          "reason": "missing",
+          "file": "ROBLOX_BRIDGE_REPORT.json"
+        }
+      ]
+    },
+    {
+      "id": "device-farm",
+      "title": "Real Device Farm",
+      "weight": 6,
+      "implementationPercent": 38,
+      "verifiedPercent": 25,
+      "sourceEvidence": [
+        {
+          "ok": true,
+          "file": "scripts/real-device-gate.js"
+        },
+        {
+          "ok": false,
+          "reason": "missing",
+          "file": "services/device-farm/runner.js"
+        }
+      ],
+      "automationEvidence": [
+        {
+          "ok": false,
+          "reason": "content-missing",
+          "file": "package.json"
+        }
+      ],
+      "runtimeEvidence": [
+        {
+          "ok": false,
+          "reason": "missing",
+          "file": "DEVICE_FARM_REPORT.json"
+        }
+      ]
+    },
+    {
+      "id": "computer-vision-player",
+      "title": "Computer Vision Player",
+      "weight": 7,
+      "implementationPercent": 75,
+      "verifiedPercent": 50,
+      "sourceEvidence": [
+        {
+          "ok": true,
+          "file": "scripts/cv-gameplay-agent.js"
+        },
+        {
+          "ok": true,
+          "file": "data/cv-action-policy.json"
+        },
+        {
+          "ok": true,
+          "file": "scripts/ai-visual-critic.js"
+        }
+      ],
+      "automationEvidence": [
+        {
+          "ok": false,
+          "reason": "content-missing",
+          "file": "package.json"
+        }
+      ],
+      "runtimeEvidence": [
+        {
+          "ok": false,
+          "reason": "missing",
+          "file": "CV_GAMEPLAY_AGENT_REPORT.json"
+        }
+      ]
+    },
+    {
+      "id": "root-cause-ai",
+      "title": "Root Cause AI",
+      "weight": 6,
+      "implementationPercent": 100,
+      "verifiedPercent": 70,
+      "sourceEvidence": [
+        {
+          "ok": true,
+          "file": "scripts/quality-root-cause.js"
+        },
+        {
+          "ok": true,
+          "file": "scripts/quality-impact-graph.js"
+        }
+      ],
+      "automationEvidence": [
+        {
+          "ok": true,
+          "file": "package.json"
+        }
+      ],
+      "runtimeEvidence": [
+        {
+          "ok": false,
+          "reason": "stale",
+          "file": "QUALITY_ROOT_CAUSE_GRAPH.json",
+          "ageHours": 96.7
+        }
+      ]
+    },
+    {
+      "id": "autofix",
+      "title": "Safe AutoFix",
+      "weight": 7,
+      "implementationPercent": 100,
+      "verifiedPercent": 70,
+      "sourceEvidence": [
+        {
+          "ok": true,
+          "file": "scripts/quality-autofix.js"
+        },
+        {
+          "ok": true,
+          "file": "scripts/quality-patch-synthesizer.js"
+        },
+        {
+          "ok": true,
+          "file": "scripts/quality-patch-tournament.js"
+        }
+      ],
+      "automationEvidence": [
+        {
+          "ok": true,
+          "file": ".github/workflows/quality-autofix-pr.yml"
+        }
+      ],
+      "runtimeEvidence": [
+        {
+          "ok": false,
+          "reason": "missing",
+          "file": "AUTOFIX_REPORT.json"
+        }
+      ]
+    },
+    {
+      "id": "quality-gate",
+      "title": "Quality Gate",
+      "weight": 8,
+      "implementationPercent": 100,
+      "verifiedPercent": 100,
+      "sourceEvidence": [
+        {
+          "ok": true,
+          "file": "scripts/quality-regression-gate.js"
+        },
+        {
+          "ok": true,
+          "file": "data/quality-scorecard.json"
+        }
+      ],
+      "automationEvidence": [
+        {
+          "ok": true,
+          "file": "package.json"
+        }
+      ],
+      "runtimeEvidence": [
+        {
+          "ok": true,
+          "file": "QUALITY_REGRESSION_REPORT.json"
+        }
+      ]
+    },
+    {
+      "id": "canary-rollback",
+      "title": "Canary + Rollback",
+      "weight": 7,
+      "implementationPercent": 60,
+      "verifiedPercent": 40,
+      "sourceEvidence": [
+        {
+          "ok": true,
+          "file": "scripts/canary-rollback-gate.js"
+        },
+        {
+          "ok": true,
+          "file": "data/rollout-policy.json"
+        },
+        {
+          "ok": true,
+          "file": ".github/workflows/quality-canary.yml"
+        },
+        {
+          "ok": true,
+          "file": ".github/workflows/quality-progressive-rollout.yml"
+        },
+        {
+          "ok": false,
+          "reason": "missing",
+          "file": ".github/workflows/quality-rollback.yml"
+        }
+      ],
+      "automationEvidence": [
+        {
+          "ok": false,
+          "reason": "content-missing",
+          "file": "package.json"
+        }
+      ],
+      "runtimeEvidence": [
+        {
+          "ok": false,
+          "reason": "missing",
+          "file": "CANARY_ROLLBACK_REPORT.json"
+        }
+      ]
+    },
+    {
+      "id": "self-improvement",
+      "title": "Self-Improvement Engine",
+      "weight": 8,
+      "implementationPercent": 100,
+      "verifiedPercent": 70,
+      "sourceEvidence": [
+        {
+          "ok": true,
+          "file": "scripts/quality-self-evolve.js"
+        },
+        {
+          "ok": true,
+          "file": "scripts/quality-patch-tournament.js"
+        },
+        {
+          "ok": true,
+          "file": "scripts/quality-experiment-engine.js"
+        },
+        {
+          "ok": true,
+          "file": "scripts/quality-learn-fix.js"
+        }
+      ],
+      "automationEvidence": [
+        {
+          "ok": true,
+          "file": "package.json"
+        }
+      ],
+      "runtimeEvidence": [
+        {
+          "ok": false,
+          "reason": "missing",
+          "file": "QUALITY_EVOLUTION_CYCLE.json"
+        }
+      ]
+    }
+  ]
+}

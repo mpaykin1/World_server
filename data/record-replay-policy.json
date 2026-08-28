@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "7.2.0",
+  "hashAlgorithm": "sha256",
+  "capture": [
+    "argv",
+    "cwdRelative",
+    "envAllowlist",
+    "stdinHash",
+    "stdoutHash",
+    "stderrHash",
+    "exitCode",
+    "durationMs",
+    "seed",
+    "artifactHashes"
+  ],
+  "envAllowlist": [
+    "NODE_ENV",
+    "CI",
+    "WORLD_SERVER_SEED",
+    "TRACEPARENT"
+  ],
+  "redactEnvByDefault": true,
+  "deterministicScripts": [
+    "integration:gate",
+    "integration:selftest",
+    "integration:config",
+    "integration:semantic"
+  ],
+  "replayMustMatch": [
+    "exitCode",
+    "stdoutHash",
+    "stderrHash"
+  ]
+}

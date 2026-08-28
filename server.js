@@ -11,15 +11,50 @@ const root = __dirname;
 const apiHandlers = new Map([
   ['/api/apps', require('./api/apps')],
   ['/api/config', require('./api/config')],
-  ['/api/register', require('./api/register')],
-  ['/api/login', require('./api/login')],
-  ['/api/me', require('./api/me')],
-  ['/api/logout', require('./api/logout')],
+  ['/api/auth', require('./api/auth')],
   ['/api/game', require('./api/game')],
-  ['/api/voxel', require('./api/voxel')],
-  ['/api/ai3d', require('./api/ai3d')],
-  ['/api/ai3d-voxel-generate', require('./api/ai3d-voxel-generate')]
+  ['/api/generative', require('./api/generative')],
+  ['/api/quality', require('./api/quality')],
+  ['/api/pwa-manifest', require('./api/pwa-manifest')],
 ]);
+const rewrites = new Map([
+  ['/api/register', '/api/auth?__route=register'],
+  ['/api/login', '/api/auth?__route=login'],
+  ['/api/me', '/api/auth?__route=me'],
+  ['/api/logout', '/api/auth?__route=logout'],
+  ['/api/ai3d', '/api/generative?__route=ai3d'],
+  ['/api/ai3d-voxel-generate', '/api/generative?__route=ai3d-voxel-generate'],
+  ['/api/apng', '/api/generative?__route=apng'],
+  ['/api/lowfi-25d-scene', '/api/generative?__route=lowfi-25d-scene'],
+  ['/api/voxel', '/api/generative?__route=voxel'],
+  ['/api/quality-summary', '/api/quality?__route=quality-summary'],
+  ['/api/quality-profile', '/api/quality?__route=quality-profile'],
+]);
+function resolveHandler(pathname, url) {
+  if (apiHandlers.has(pathname)) return { handler: apiHandlers.get(pathname), url };
+  if (rewrites.has(pathname)) {
+    const dest = rewrites.get(pathname);
+    const [p, q] = dest.split('?');
+    const u = new URL(q ? `${p}?${q}` : p, 'http://localhost');
+    // Merge original query
+    for (const [k, v] of url.searchParams) u.searchParams.set(k, v);
+    return { handler: apiHandlers.get(p), url: u };
+  }
+  // Generic quality rewrites: /api/quality-* -> /api/quality
+  if (pathname.startsWith('/api/quality-') || pathname.startsWith('/api/procedural-quality-')) {
+    const route = pathname.slice(5);
+    const u = new URL(`/api/quality?__route=${route}`, 'http://localhost');
+    for (const [k, v] of url.searchParams) u.searchParams.set(k, v);
+    return { handler: apiHandlers.get('/api/quality'), url: u };
+  }
+  if (pathname.startsWith('/api/procedural-quality-')) {
+    const route = pathname.slice(5);
+    const u = new URL(`/api/quality?__route=${route}`, 'http://localhost');
+    for (const [k, v] of url.searchParams) u.searchParams.set(k, v);
+    return { handler: apiHandlers.get('/api/quality'), url: u };
+  }
+  return null;
+}
 
 const mime = {
   '.html': 'text/html; charset=utf-8',
@@ -64,8 +99,12 @@ function sendFile(res, file) {
 
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
-  const handler = apiHandlers.get(url.pathname);
-  if (handler) return handler(req, res);
+  const resolved = resolveHandler(url.pathname, url);
+  if (resolved) {
+    // Pass the resolved url with __route to handler
+    req.url = resolved.url.pathname + resolved.url.search;
+    return resolved.handler(req, res);
+  }
   if (url.pathname.startsWith('/api/')) return notFound(res);
   if (url.pathname === '/') {
     res.writeHead(302, { Location: '/apps/catalog/' });

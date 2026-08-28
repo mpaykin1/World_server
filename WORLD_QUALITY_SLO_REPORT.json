@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "5.0.0",
+  "system": "WORLD_QUALITY_SLO",
+  "sample": {
+    "fps": 60,
+    "frameP95Ms": 16.7,
+    "errorRate": 0,
+    "crashFree": 1
+  },
+  "rules": {
+    "fps": true,
+    "p95": true,
+    "errorRate": true,
+    "crashFree": true
+  },
+  "percent": 100,
+  "healthy": true,
+  "errorBudgetPolicy": {
+    "freezePromotionOnExhaustion": true,
+    "rollbackCanaryOnBreach": true,
+    "neverTradeControlsForFps": true
+  }
+}

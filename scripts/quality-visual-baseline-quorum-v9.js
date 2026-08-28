@@ -1,0 +1,2 @@
+#!/usr/bin/env node
+'use strict';const fs=require('node:fs');const {stableVisualBaselineQuorum}=require('../lib/quality/visual-baseline-quorum-v9');const p=process.argv[2]||'data/quality-autopilot/visual-captures.json';const xs=fs.existsSync(p)?JSON.parse(fs.readFileSync(p,'utf8')):[];const r=stableVisualBaselineQuorum(Array.isArray(xs)?xs:(xs.captures||[]));console.log(JSON.stringify(r,null,2));if(!r.ok)process.exitCode=2;

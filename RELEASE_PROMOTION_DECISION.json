@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-28T05:50:18.976Z",
+  "pass": false,
+  "decision": "BLOCK",
+  "nextStep": "FIX_BLOCKERS",
+  "checks": [
+    {
+      "file": "SYSTEM_INTEGRATION_REPORT.json",
+      "pass": false
+    },
+    {
+      "file": "UPDATE_TRUST_STATUS.json",
+      "pass": true
+    },
+    {
+      "file": "CONFIG_CONTRACT_STATUS.json",
+      "pass": true
+    },
+    {
+      "file": "ADAPTER_SANDBOX_STATUS.json",
+      "pass": true
+    },
+    {
+      "file": "REPRODUCIBLE_BUILD_STATUS.json",
+      "pass": true
+    },
+    {
+      "file": "POLICY_DECISION_REPORT.json",
+      "pass": false
+    },
+    {
+      "file": "GRAPHICS_REGRESSION_GUARD_REPORT.json",
+      "pass": true
+    },
+    {
+      "file": "SUPPLY_CHAIN_SIGNATURE_STATUS.json",
+      "pass": true
+    },
+    {
+      "file": "MODEL_CHECK_REPORT.json",
+      "pass": true
+    },
+    {
+      "file": "DISTRIBUTED_CAS_STATUS.json",
+      "pass": true
+    },
+    {
+      "file": "SEMANTIC_DEPENDENCY_GRAPH.json",
+      "pass": true
+    },
+    {
+      "file": "DEVICE_LAB_STATUS.json",
+      "pass": true
+    },
+    {
+      "file": "WIT_COMPONENT_STATUS.json",
+      "pass": true
+    },
+    {
+      "file": "HONEST_100_FUNCTION_REPORT.json",
+      "pass": false
+    },
+    {
+      "file": "FUNCTION_MONOTONIC_ENHANCEMENT_REPORT.json",
+      "pass": false
+    }
+  ],
+  "blockers": [
+    "SYSTEM_INTEGRATION_REPORT.json",
+    "POLICY_DECISION_REPORT.json",
+    "HONEST_100_FUNCTION_REPORT.json",
+    "FUNCTION_MONOTONIC_ENHANCEMENT_REPORT.json"
+  ],
+  "rule": "No direct broad promotion. A passing candidate enters canary; promotion requires fresh evidence and no kill switch."
+}

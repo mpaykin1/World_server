@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "7.4.0",
+  "generatedAt": "2026-08-28T05:50:04.340Z",
+  "pass": true,
+  "strategy": "expand-migrate-contract",
+  "expandContractGuard": true,
+  "fencedLeaderRequired": true,
+  "supabase2026ExtensionPinningRejected": true,
+  "syntheticPlanValidation": true
+}

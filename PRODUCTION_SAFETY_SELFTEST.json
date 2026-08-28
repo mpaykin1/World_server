@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "7.4.0",
+  "generatedAt": "2026-08-28T05:50:11.228Z",
+  "pass": true,
+  "cases": [
+    {
+      "name": "healthy",
+      "bad": [],
+      "expect": "NO_ACTION"
+    },
+    {
+      "name": "certified-regression",
+      "bad": [
+        "certified-function-regression"
+      ],
+      "expect": "STOP_CANARY"
+    },
+    {
+      "name": "crash-loop",
+      "bad": [
+        "crash-loop"
+      ],
+      "expect": "STOP_CANARY"
+    }
+  ]
+}

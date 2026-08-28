@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-28T05:50:16.543Z",
+  "pass": true,
+  "allowArbitraryCommands": false,
+  "scenarioCount": 1,
+  "bindHost": "127.0.0.1",
+  "tokenConfigured": false,
+  "evidenceEndpoint": true,
+  "evidenceConfigured": false
+}

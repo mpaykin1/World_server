@@ -1,0 +1,121 @@
+{
+  "patch": "WORLD_SERVER_DESKTOP_AI_SESSION_RECOVERY_V1_3",
+  "version": "1.3.0",
+  "installedAt": "2026-08-25T18:26:00.183Z",
+  "manifestSchemaVersion": 1,
+  "backup": ".session-recovery-backups\\v1-3-2026-08-25T18-25-56-732Z",
+  "payload": [
+    "scripts/desktop-ai-session-recovery.cjs",
+    "data/desktop-ai-session-recovery-policy.json"
+  ],
+  "scripts": [
+    "desktop-ai:resume",
+    "desktop-ai:session:start",
+    "desktop-ai:checkpoint",
+    "desktop-ai:step:add",
+    "desktop-ai:step:done",
+    "desktop-ai:step:fail",
+    "desktop-ai:run",
+    "desktop-ai:heartbeat",
+    "desktop-ai:health",
+    "desktop-ai:watchdog",
+    "desktop-ai:watchdog:install",
+    "desktop-ai:watchdog:remove",
+    "desktop-ai:session:status",
+    "desktop-ai:session:finish",
+    "desktop-ai:unfinished",
+    "desktop-ai:session:self-test",
+    "desktop-ai:auto-recover",
+    "desktop-ai:auto-recover:status"
+  ],
+  "selfTest": {
+    "pass": true,
+    "version": "1.3.0",
+    "tests": [
+      {
+        "name": "managed block is idempotent",
+        "pass": true
+      },
+      {
+        "name": "argument parser preserves command tail",
+        "pass": true
+      },
+      {
+        "name": "WIP headings parser contract",
+        "pass": true
+      },
+      {
+        "name": "live pid detection",
+        "pass": true
+      },
+      {
+        "name": "sha256 deterministic",
+        "pass": true
+      },
+      {
+        "name": "unfinished status classifier",
+        "pass": true
+      },
+      {
+        "name": "optional external capability classifier",
+        "pass": true
+      },
+      {
+        "name": "command marker extraction",
+        "pass": true
+      },
+      {
+        "name": "watchdog waiting marker classifier",
+        "pass": true
+      },
+      {
+        "name": "progress fingerprint deterministic on stable state",
+        "pass": true
+      },
+      {
+        "name": "primary lock reality shape",
+        "pass": true
+      },
+      {
+        "name": "watchdog task name stable",
+        "pass": true
+      },
+      {
+        "name": "hard blocker classifier",
+        "pass": true
+      },
+      {
+        "name": "timer overdue classifier",
+        "pass": true
+      },
+      {
+        "name": "timer future classifier",
+        "pass": true
+      },
+      {
+        "name": "auto recovery prompt includes hard blocker",
+        "pass": true
+      }
+    ],
+    "score": "16/16"
+  },
+  "initOutput": "{\n  \"pass\": true,\n  \"sessionId\": \"session-1787632622221-75896e\",\n  \"status\": \"in_progress\",\n  \"task\": \"Install WORLD_SERVER_ONE_FOLDER_V7_5_RUNTIME_CLOSURE (01-19) + V7_5_AUTONOMOUS_BLOCKER_REPAIR_V1, then autonomous repair of 4 requires_ai blockers (wasmtime, tlc, local-gates, vercel) until honest 100% with timers.\"\n}",
+  "healthOutput": "SESSION_STATUS = LIVE\n{\n  \"schemaVersion\": 2,\n  \"engineVersion\": \"1.3.0\",\n  \"checkedAt\": \"2026-08-25T18:25:59.960Z\",\n  \"status\": \"LIVE\",\n  \"reason\": \"observable durable progress changed since previous watchdog tick\",\n  \"progressChanged\": true,\n  \"activityMinutes\": 0.03,\n  \"nextTimerAt\": null,\n  \"timerReality\": {\n    \"nextFutureAt\": null,\n    \"nextFutureSource\": null,\n    \"overdueAt\": null,\n    \"overdueSource\": null,\n    \"overdueMinutes\": 0,\n    \"total\": 0\n  },\n  \"hardBlockingCount\": 0,\n  \"hardBlockingIds\": [],\n  \"primaryLock\": {\n    \"exists\": false,\n    \"alive\": false,\n    \"pid\": null,\n    \"op\": null,\n    \"ageMinutes\": null,\n    \"raw\": null\n  },\n  \"activeCommand\": null,\n  \"commandProcessAlive\": false,\n  \"unfinishedCounts\": {\n    \"total\": 2,\n    \"blocking\": 0,\n    \"running\": 0,\n    \"waiting\": 0\n  },\n  \"autoAgent\": {\n    \"pid\": null,\n    \"alive\": false,\n    \"startedAt\": null,\n    \"executable\": null,\n    \"launchCount\": 0,\n    \"fingerprint\": null\n  },\n  \"sessionId\": \"session-1787632622221-75896e\",\n  \"task\": \"Install WORLD_SERVER_ONE_FOLDER_V7_5_RUNTIME_CLOSURE (01-19) + V7_5_AUTONOMOUS_BLOCKER_REPAIR_V1, then autonomous repair of 4 requires_ai blockers (wasmtime, tlc, local-gates, vercel) until honest 100% with timers.\",\n  \"nextAction\": \"Push hotfix commit, re-check CI, verify V4.1 graphics/mechanics preservation, then merge PR to master and verify Vercel production + smoke test.\",\n  \"recoveryCheckpointCreated\": false,\n  \"safeToStartNewChat\": false,\n  \"autoRecovery\": {\n    \"enabled\": true,\n    \"launched\": false,\n    \"reason\": \"No auto action for status LIVE\"\n  }\n}",
+  "watchdogInstall": {
+    "exitCode": 0,
+    "stdout": "{\n  \"pass\": true,\n  \"installed\": true,\n  \"platform\": \"win32\",\n  \"taskName\": \"WorldServer-SessionWatchdog-558605bcd9\",\n  \"intervalMinutes\": 2,\n  \"launcher\": \"state\\\\session-recovery\\\\session-watchdog.cmd\",\n  \"stdout\": \"�����. �������஢����� ����� \\\"WorldServer-SessionWatchdog-558605bcd9\\\" �뫠 �ᯥ譮 ᮧ����.\\r\\n\",\n  \"stderr\": \"\"\n}",
+    "stderr": "",
+    "requiredOnWindows": true
+  },
+  "pass": true,
+  "watchdogCorePass": true,
+  "noIdleAutoRecovery": true,
+  "watchdogSchedulerInstalled": true,
+  "next": [
+    "npm run desktop-ai:health",
+    "npm run desktop-ai:auto-recover:status",
+    "npm run desktop-ai:resume",
+    "npm run desktop-ai:unfinished",
+    "npm run desktop-ai:session:status"
+  ]
+}

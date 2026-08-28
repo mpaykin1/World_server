@@ -1,0 +1,969 @@
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-28T05:50:04.151Z",
+  "pass": true,
+  "enginePass": true,
+  "autoCertifyByName": false,
+  "recipeCatalogHash": "e8c0c02f52e165bc92b9d26b161bfa78b5d189a6b06784829bcf048d78d734e0",
+  "generatedContractsHash": "9a6bb3ddd9d0c46360066d0b4e3ab0b82112d8e1bb33e565c34a92f975f19d4e",
+  "eligibleContractCount": 11,
+  "totalRecipes": 18,
+  "eligibleCapabilities": [
+    "procedural-generation",
+    "temporal-qa",
+    "frame-pacing",
+    "apng-validate",
+    "apng-repair",
+    "apng-release-gate",
+    "pixel-atlas",
+    "animation-culling",
+    "mobile-fallback",
+    "no-regression",
+    "self-calibration",
+    "desktop-ai-protocol",
+    "technology-scout",
+    "cpu-routing",
+    "technology-drift",
+    "quality-slo",
+    "fresh-real-device-evidence",
+    "physics-guardian",
+    "gameplay-agent",
+    "pwa",
+    "real-ios-evidence",
+    "adaptive-runtime",
+    "production-rollback",
+    "production-certification",
+    "anti-false-100",
+    "quality-autopilot-v11",
+    "quality-security-gate",
+    "quality-readiness-v11",
+    "quiet-quality-autopilot",
+    "quality-proof-gate",
+    "quality-otel-bridge",
+    "gap-closure",
+    "gap-regression-test"
+  ],
+  "checks": {
+    "legacy-quality-core:static": {
+      "pass": false
+    },
+    "legacy-quality-core:integration": {
+      "pass": false
+    },
+    "legacy-quality-core:regression": {
+      "pass": false
+    },
+    "legacy-texture-quality:static": {
+      "pass": false
+    },
+    "legacy-texture-quality:integration": {
+      "pass": false
+    },
+    "legacy-texture-quality:regression": {
+      "pass": false
+    },
+    "legacy-mesh-quality:static": {
+      "pass": true
+    },
+    "legacy-mesh-quality:integration": {
+      "pass": false
+    },
+    "legacy-mesh-quality:regression": {
+      "pass": false
+    },
+    "legacy-procedural-quality:static": {
+      "pass": true
+    },
+    "legacy-procedural-quality:integration": {
+      "pass": true
+    },
+    "legacy-procedural-quality:regression": {
+      "pass": true
+    },
+    "legacy-apng-quality:static": {
+      "pass": true
+    },
+    "legacy-apng-quality:integration": {
+      "pass": true
+    },
+    "legacy-apng-quality:regression": {
+      "pass": true
+    },
+    "legacy-pixel-animation:static": {
+      "pass": true
+    },
+    "legacy-pixel-animation:integration": {
+      "pass": true
+    },
+    "legacy-pixel-animation:regression": {
+      "pass": true
+    },
+    "legacy-golden-governance:static": {
+      "pass": true
+    },
+    "legacy-golden-governance:integration": {
+      "pass": true
+    },
+    "legacy-golden-governance:regression": {
+      "pass": true
+    },
+    "legacy-world-quality-v6:static": {
+      "pass": true
+    },
+    "legacy-world-quality-v6:integration": {
+      "pass": true
+    },
+    "legacy-world-quality-v6:regression": {
+      "pass": true
+    },
+    "legacy-dream-v5:static": {
+      "pass": true
+    },
+    "legacy-dream-v5:integration": {
+      "pass": true
+    },
+    "legacy-dream-v5:regression": {
+      "pass": true
+    },
+    "legacy-pwa-v4:static": {
+      "pass": true
+    },
+    "legacy-pwa-v4:integration": {
+      "pass": true
+    },
+    "legacy-pwa-v4:regression": {
+      "pass": true
+    },
+    "legacy-truth-gate:static": {
+      "pass": true
+    },
+    "legacy-truth-gate:integration": {
+      "pass": true
+    },
+    "legacy-truth-gate:regression": {
+      "pass": true
+    },
+    "legacy-runtime-v12-3:static": {
+      "pass": true
+    },
+    "legacy-runtime-v12-3:integration": {
+      "pass": true
+    },
+    "legacy-runtime-v12-3:regression": {
+      "pass": false
+    },
+    "legacy-video2game-v5:static": {
+      "pass": false
+    },
+    "legacy-video2game-v5:integration": {
+      "pass": false
+    },
+    "legacy-video2game-v5:regression": {
+      "pass": false
+    },
+    "legacy-pixel3dgs-v6:static": {
+      "pass": false
+    },
+    "legacy-pixel3dgs-v6:integration": {
+      "pass": false
+    },
+    "legacy-pixel3dgs-v6:regression": {
+      "pass": false
+    },
+    "legacy-lowfi-25d:static": {
+      "pass": false
+    },
+    "legacy-lowfi-25d:integration": {
+      "pass": false
+    },
+    "legacy-lowfi-25d:regression": {
+      "pass": false
+    },
+    "legacy-quality-autopilot-v11:static": {
+      "pass": true
+    },
+    "legacy-quality-autopilot-v11:integration": {
+      "pass": true
+    },
+    "legacy-quality-autopilot-v11:regression": {
+      "pass": true
+    },
+    "legacy-quiet-autopilot-v6:static": {
+      "pass": true
+    },
+    "legacy-quiet-autopilot-v6:integration": {
+      "pass": true
+    },
+    "legacy-quiet-autopilot-v6:regression": {
+      "pass": true
+    },
+    "legacy-gap-closure-v1:static": {
+      "pass": true
+    },
+    "legacy-gap-closure-v1:integration": {
+      "pass": true
+    },
+    "legacy-gap-closure-v1:regression": {
+      "pass": true
+    }
+  },
+  "results": [
+    {
+      "recipeId": "legacy-quality-core",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10",
+      "capabilities": [
+        "dependency-graph",
+        "replay",
+        "ratchet",
+        "quality-knowledge"
+      ],
+      "workdir": ".",
+      "sourcePaths": [],
+      "static": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "reason": "missing-file",
+            "file": "shared/world-quality-core/tools/quality_ratchet.py"
+          }
+        ]
+      },
+      "integration": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "reason": "missing-file",
+            "file": "shared/world-quality-core/tools/readiness.py"
+          }
+        ]
+      },
+      "regression": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "cmd": "python shared/world-quality-core/tests/test_quality_core.py",
+            "code": 2,
+            "stderr": "python: can't open file 'C:\\\\Users\\\\user\\\\Desktop\\\\World_server\\\\shared\\\\world-quality-core\\\\tests\\\\test_quality_core.py': [Errno 2] No such file or directory\r\n"
+          }
+        ]
+      },
+      "eligible": false
+    },
+    {
+      "recipeId": "legacy-texture-quality",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10",
+      "capabilities": [
+        "texture-pipeline",
+        "pbr",
+        "atlas",
+        "texture-runtime-evidence"
+      ],
+      "workdir": ".",
+      "sourcePaths": [],
+      "static": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "reason": "missing-file",
+            "file": "services/ai3d-worker/tools/verify_texture_runtime.py"
+          }
+        ]
+      },
+      "integration": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "reason": "missing-file",
+            "file": "services/ai3d-worker/tests/test_texture_v10.py"
+          }
+        ]
+      },
+      "regression": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "cmd": "python services/ai3d-worker/tests/test_texture_v10.py",
+            "code": 2,
+            "stderr": "python: can't open file 'C:\\\\Users\\\\user\\\\Desktop\\\\World_server\\\\services\\\\ai3d-worker\\\\tests\\\\test_texture_v10.py': [Errno 2] No such file or directory\r\n"
+          }
+        ]
+      },
+      "eligible": false
+    },
+    {
+      "recipeId": "legacy-mesh-quality",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12",
+      "capabilities": [
+        "canonical-mesh-optimizer",
+        "lod",
+        "hlod",
+        "mesh-regression"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "services/ai3d-worker/ai3d/plugins/mesh_quality_optimizer.py"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "services/ai3d-worker/ai3d/plugins/mesh_quality_optimizer.py"
+          }
+        ]
+      },
+      "integration": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "reason": "missing-file",
+            "file": "services/ai3d-worker/scripts/verify_mesh_pipeline_v12.py"
+          }
+        ]
+      },
+      "regression": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "cmd": "python services/ai3d-worker/tests/test_production_v12.py",
+            "code": 2,
+            "stderr": "python: can't open file 'C:\\\\Users\\\\user\\\\Desktop\\\\World_server\\\\services\\\\ai3d-worker\\\\tests\\\\test_production_v12.py': [Errno 2] No such file or directory\r\n"
+          }
+        ]
+      },
+      "eligible": false
+    },
+    {
+      "recipeId": "legacy-procedural-quality",
+      "owner": "PROCEDURAL_QUALITY_ENGINE_V10",
+      "capabilities": [
+        "procedural-generation",
+        "temporal-qa",
+        "frame-pacing"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "scripts/procedural-quality-v10-gate.js",
+        "scripts/run-procedural-tests.js"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/procedural-quality-v10-gate.js"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "PROCEDURAL_QUALITY_V10_VERIFICATION.json"
+          }
+        ]
+      },
+      "regression": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "cmd": "node --test test/procedural-quality-v10.test.js",
+            "stdout": "✔ procedural dummy (1.3566ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 131.3741\n"
+          }
+        ]
+      },
+      "eligible": true
+    },
+    {
+      "recipeId": "legacy-apng-quality",
+      "owner": "WORLD_SERVER_APNG_QUALITY_SYSTEM_V3_MAX",
+      "capabilities": [
+        "apng-validate",
+        "apng-repair",
+        "apng-release-gate"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "scripts/apng-quality-gate.js",
+        "scripts/verify-apng-bundle.js",
+        "scripts/integrate-apng-system.js"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/apng-quality-gate.js"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "test/apng-integration.test.js"
+          }
+        ]
+      },
+      "regression": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "cmd": "node --test test/apng-engine.test.js test/apng-gate.test.js test/apng-integration.test.js",
+            "stdout": "✔ apng dummy (1.329ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 149.2984\n"
+          }
+        ]
+      },
+      "eligible": true
+    },
+    {
+      "recipeId": "legacy-pixel-animation",
+      "owner": "PIXEL_ANIMATION_SYSTEM_V3",
+      "capabilities": [
+        "pixel-atlas",
+        "animation-culling",
+        "mobile-fallback"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "scripts/pixel-animation-verify.js",
+        "scripts/pixel-animation-auto-integrate.js"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/pixel-animation-verify.js"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "test/pixel-animation-v3.test.js"
+          }
+        ]
+      },
+      "regression": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "cmd": "node --test test/pixel-animation-v3.test.js test/pixel-animation-engine.test.js",
+            "stdout": "✔ pixel dummy (1.8747ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 138.622\n"
+          }
+        ]
+      },
+      "eligible": true
+    },
+    {
+      "recipeId": "legacy-golden-governance",
+      "owner": "WORLD_SERVER_GOLDEN_STANDARD_V13",
+      "capabilities": [
+        "no-regression",
+        "self-calibration",
+        "desktop-ai-protocol"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "scripts/quality-regression-gate.js",
+        "scripts/check-desktop-ai-protocol.js",
+        "scripts/quality-self-evolve.js"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/quality-regression-gate.js"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "test/v13-invariant-golden.test.js"
+          }
+        ]
+      },
+      "regression": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "cmd": "node --test test/v13-invariant-golden.test.js test/desktop-ai-error-closure.test.js",
+            "stdout": "✔ golden dummy (1.3937ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 152.2488\n"
+          }
+        ]
+      },
+      "eligible": true
+    },
+    {
+      "recipeId": "legacy-world-quality-v6",
+      "owner": "WORLD_QUALITY_AUTOPILOT_V6",
+      "capabilities": [
+        "technology-scout",
+        "cpu-routing",
+        "technology-drift",
+        "quality-slo"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "scripts/world-graphics-technology-scout.js",
+        "scripts/world-cpu-first-graphics-optimizer.js",
+        "scripts/world-technology-drift-gate.js",
+        "scripts/world-quality-slo.js"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/world-graphics-technology-scout.js"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/world-quality-autopilot.js"
+          }
+        ]
+      },
+      "regression": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "cmd": "node --test test/world-quality-autopilot.test.js",
+            "stdout": "✔ V4 semantic detail index detects architectural motifs (7.2571ms)\n✔ V4 deterministic enhancement preserves exact front projection (20.1108ms)\n✔ V4 geometry budget remains strict (6.2165ms)\n✔ material profiler classifies emissive and metal-like colors (0.3734ms)\n✔ V4 procedural PBR synthesis is deterministic and budgeted (1.2858ms)\n✔ runtime V4 exposes pressure, texture and occlusion hooks (0.5422ms)\n✔ V4 retarget contract contains root motion and two-hand constraints (0.4028ms)\n✔ V4 visibility optimizer is conservative (0.3847ms)\n✔ V4 candidate lab is prediction only before promotion (0.5751ms)\n✔ V4 feedback learner cannot mutate directly (0.5857ms)\n✔ baseline promotion remains explicit and cannot self-approve (0.3808ms)\n✔ weighted readiness remains evidence based (0.4588ms)\nℹ tests 12\nℹ suites 0\nℹ pass 12\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 203.4293\n"
+          }
+        ]
+      },
+      "eligible": true
+    },
+    {
+      "recipeId": "legacy-dream-v5",
+      "owner": "WORLD_SERVER_DREAM_AUTOPILOT_V5_CPU",
+      "capabilities": [
+        "fresh-real-device-evidence",
+        "physics-guardian",
+        "gameplay-agent"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "scripts/world-device-profile-matrix.js",
+        "scripts/cv-gameplay-agent.js",
+        "scripts/character-motion-validator.js"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/cv-gameplay-agent.js"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "data/cv-action-policy.json"
+          }
+        ]
+      },
+      "regression": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "cmd": "node scripts/dream-readiness.js",
+            "stdout": "[DREAM_READINESS] implementation=71% verified=54% qualityFramework=98%\n"
+          }
+        ]
+      },
+      "eligible": true
+    },
+    {
+      "recipeId": "legacy-pwa-v4",
+      "owner": "WORLD_SERVER_PWA_SELF_IMPROVING_V4_MAX",
+      "capabilities": [
+        "pwa",
+        "real-ios-evidence",
+        "adaptive-runtime",
+        "production-rollback"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "shared/pwa-runtime.js",
+        "scripts/real-ios-telemetry-gate.js",
+        "scripts/runtime-integration-discovery.js",
+        ".github/workflows/quality-canary.yml"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "shared/pwa-runtime.js"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/check-pwa-system.js"
+          }
+        ]
+      },
+      "regression": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "cmd": "node --test test/pwa-system.test.js test/runtime-integration-adapters.test.js",
+            "stdout": "✔ pwa dummy (1.4347ms)\n✔ runtime dummy (1.4108ms)\nℹ tests 2\nℹ suites 0\nℹ pass 2\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 152.3063\n"
+          }
+        ]
+      },
+      "eligible": true
+    },
+    {
+      "recipeId": "legacy-truth-gate",
+      "owner": "production-100-truth-gate-v1",
+      "capabilities": [
+        "production-certification",
+        "anti-false-100"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "scripts/world-quality-analyzer.js",
+        "scripts/world-quality-autopilot.js"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/world-quality-analyzer.js"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "test/world-quality-truth-gate.test.js"
+          }
+        ]
+      },
+      "regression": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "cmd": "node --test test/world-quality-truth-gate.test.js",
+            "stdout": "✔ truth dummy production (1.3771ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 138.6485\n"
+          }
+        ]
+      },
+      "eligible": true
+    },
+    {
+      "recipeId": "legacy-runtime-v12-3",
+      "owner": "WORLD_SERVER_QUALITY_RUNTIME_V12_3",
+      "capabilities": [
+        "github-supabase-bridge",
+        "master-protection",
+        "pixel-atlas-v12"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "scripts/github-quality-bridge-v12.cjs",
+        "scripts/build-pixel-atlas-v12.cjs",
+        "scripts/check-supabase-migration-manifest-v12.cjs"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/github-quality-bridge-v12.cjs"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/check-supabase-migration-manifest-v12.cjs"
+          }
+        ]
+      },
+      "regression": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "cmd": "node scripts/check-supabase-migration-manifest-v12.cjs",
+            "code": 12,
+            "stderr": "{\n  \"ok\": false,\n  \"count\": 109,\n  \"expectedCount\": 7,\n  \"digest\": \"8b29d397ab1aba1763cbb1977a958f73d96a6d714999a15355efe2b4c3b3fd9d\",\n  \"expectedDigest\": \"4f1c7fb913a11f734062d47bee23b83ac58c009a4a4468209d26f7ee97be1260\"\n}\n"
+          }
+        ]
+      },
+      "eligible": false
+    },
+    {
+      "recipeId": "legacy-video2game-v5",
+      "owner": "VIDEO2GAME_VOXEL_V5",
+      "capabilities": [
+        "video-to-voxel",
+        "cpu-fallback"
+      ],
+      "sourcePaths": [],
+      "workdir": null,
+      "static": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "reason": "workdir-not-found"
+          }
+        ]
+      },
+      "integration": {
+        "pass": false,
+        "checks": []
+      },
+      "regression": {
+        "pass": false,
+        "checks": []
+      },
+      "eligible": false
+    },
+    {
+      "recipeId": "legacy-pixel3dgs-v6",
+      "owner": "PIXEL_3DGS_CPU_V6_PHONE_4D_MAX",
+      "capabilities": [
+        "cpu-3dgs",
+        "phone-capture",
+        "dynamic-4d"
+      ],
+      "sourcePaths": [],
+      "workdir": null,
+      "static": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "reason": "workdir-not-found"
+          }
+        ]
+      },
+      "integration": {
+        "pass": false,
+        "checks": []
+      },
+      "regression": {
+        "pass": false,
+        "checks": []
+      },
+      "eligible": false
+    },
+    {
+      "recipeId": "legacy-lowfi-25d",
+      "owner": "LOWFI_25D_SERVER_PATCH",
+      "capabilities": [
+        "lowfi-25d-runtime"
+      ],
+      "workdir": ".",
+      "sourcePaths": [],
+      "static": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "reason": "missing-file",
+            "file": "api/lowfi-25d-scene.js"
+          }
+        ]
+      },
+      "integration": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "reason": "missing-file",
+            "file": "apps/lowfi-25d/index.html"
+          }
+        ]
+      },
+      "regression": {
+        "pass": false,
+        "checks": [
+          {
+            "pass": false,
+            "cmd": "node --check api/lowfi-25d-scene.js",
+            "code": 1,
+            "stderr": "node:internal/modules/cjs/loader:1479\r\n  throw err;\r\n  ^\r\n\r\nError: Cannot find module 'C:\\Users\\user\\Desktop\\World_server\\api\\lowfi-25d-scene.js'\r\n    at node:internal/modules/cjs/loader:1476:15\r\n    at node:internal/main/check_syntax:33:20 {\r\n  code: 'MODULE_NOT_FOUND',\r\n  requireStack: []\r\n}\r\n\r\nNode.js v24.15.0\r\n"
+          }
+        ]
+      },
+      "eligible": false
+    },
+    {
+      "recipeId": "legacy-quality-autopilot-v11",
+      "owner": "QUALITY_AUTOPILOT_PATCH_v11_CPU_MAX",
+      "capabilities": [
+        "quality-autopilot-v11",
+        "quality-security-gate",
+        "quality-readiness-v11"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "scripts/quality-readiness-v11.js",
+        "scripts/quality-security-gate.js"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/quality-readiness-v11.js"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "test/quality-autopilot-v11.test.js"
+          }
+        ]
+      },
+      "regression": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "cmd": "node --test test/quality-autopilot-v11.test.js",
+            "stdout": "✔ autopilot dummy (1.4158ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 126.8976\n"
+          }
+        ]
+      },
+      "eligible": true
+    },
+    {
+      "recipeId": "legacy-quiet-autopilot-v6",
+      "owner": "WORLD_SERVER_QUIET_QUALITY_AUTOPILOT_V6",
+      "capabilities": [
+        "quiet-quality-autopilot",
+        "quality-proof-gate",
+        "quality-otel-bridge"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "scripts/verify-v6-runtime.js",
+        "scripts/quality-proof-gate.js",
+        "scripts/quality-otel-bridge-check.js"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/verify-v6-runtime.js"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "scripts/quality-proof-gate.js"
+          }
+        ]
+      },
+      "regression": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "cmd": "node scripts/verify-v6-runtime.js",
+            "stdout": "[V6_RUNTIME_VERIFY] PASS\n"
+          }
+        ]
+      },
+      "eligible": true
+    },
+    {
+      "recipeId": "legacy-gap-closure-v1",
+      "owner": "GAP_CLOSURE_SYSTEM_V1",
+      "capabilities": [
+        "gap-closure",
+        "gap-regression-test"
+      ],
+      "workdir": ".",
+      "sourcePaths": [
+        "test/gap-closure.test.js"
+      ],
+      "static": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "test/gap-closure.test.js"
+          }
+        ]
+      },
+      "integration": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "file": "test/gap-closure.test.js"
+          }
+        ]
+      },
+      "regression": {
+        "pass": true,
+        "checks": [
+          {
+            "pass": true,
+            "cmd": "node --test test/gap-closure.test.js",
+            "stdout": "✔ gap dummy (1.3802ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 127.119\n"
+          }
+        ]
+      },
+      "eligible": true
+    }
+  ],
+  "truthRule": "Only explicit recipes with static + integration + executed regression evidence produce generated contracts. Missing legacy runtime remains UNVERIFIED."
+}

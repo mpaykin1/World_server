@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "6.0.0",
+  "system": "WORLD_TECHNOLOGY_CANDIDATE_INTAKE",
+  "generatedAt": "2026-08-28T05:10:17.968Z",
+  "refsScanned": 25,
+  "candidates": [
+    {
+      "ref": "ai/desktop/hunyuan-full-quality-v3-20260823-043355",
+      "status": "candidate-ref-only",
+      "runtimeReady": false,
+      "requiresCheckoutAndTechnologyScout": true
+    },
+    {
+      "ref": "origin/ai/desktop/hunyuan-full-quality-v3-20260823-043355",
+      "status": "candidate-ref-only",
+      "runtimeReady": false,
+      "requiresCheckoutAndTechnologyScout": true
+    },
+    {
+      "ref": "origin/codex/voxel-v3",
+      "status": "candidate-ref-only",
+      "runtimeReady": false,
+      "requiresCheckoutAndTechnologyScout": true
+    }
+  ],
+  "policy": "candidate refs never count as runtime until checked out and verified by technology scout",
+  "hardGateReady": true
+}

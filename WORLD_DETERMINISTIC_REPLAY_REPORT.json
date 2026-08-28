@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "5.0.0",
+  "seed": 220823,
+  "cases": [
+    {
+      "id": "spawn_grounded",
+      "required": true,
+      "deterministic": true
+    },
+    {
+      "id": "forward_after_yaw_90",
+      "required": true,
+      "deterministic": true
+    },
+    {
+      "id": "strafe_after_yaw_90",
+      "required": true,
+      "deterministic": true
+    },
+    {
+      "id": "jump_vertical",
+      "required": true,
+      "deterministic": true
+    },
+    {
+      "id": "wall_collision",
+      "required": true,
+      "deterministic": true
+    },
+    {
+      "id": "step_up",
+      "required": true,
+      "deterministic": true
+    },
+    {
+      "id": "mobile_move_plus_look",
+      "required": true,
+      "deterministic": true
+    },
+    {
+      "id": "respawn",
+      "required": true,
+      "deterministic": true
+    }
+  ],
+  "policy": {
+    "recordInputs": true,
+    "recordStateHashes": true,
+    "compareAgainstGolden": true,
+    "autoApprove": false
+  },
+  "replayHash": "77f40fd9f003979d5d87d0cf6ba9e89bee8313df4fde28ca96074fc45a4b20e4"
+}

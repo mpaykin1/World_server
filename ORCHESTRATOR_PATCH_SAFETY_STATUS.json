@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-08-28T05:50:09.092Z",
+  "pass": true,
+  "manifestFirst": true,
+  "projectIdentityGate": true,
+  "baseHashGate": true,
+  "payloadHashGate": true,
+  "pathTraversalProtection": true,
+  "stagingCopyRequired": true,
+  "selectiveThenFullRegression": true,
+  "backupBeforeCommit": true,
+  "postCommitHashComparison": true,
+  "badPatchMustLeaveStableUnchanged": true,
+  "workingCandidateStable": true
+}

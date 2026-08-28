@@ -1,0 +1,18 @@
+{
+  "version": "0.5.0",
+  "python_syntax": "PASS",
+  "python_files_checked": 37,
+  "new_systems": [
+    "CPU depth fusion fallback + foundation-depth adapter",
+    "external SAM2/SMPL-X/remote-GPU adapter contracts",
+    "motion retargeting",
+    "animation synthesis",
+    "avatar LOD x3",
+    "foot IK + ground lock",
+    "voxel interior completion",
+    "procedural voxel cleanup",
+    "frustum culling",
+    "runtime FPS profiler",
+    "regression gate"
+  ]
+}

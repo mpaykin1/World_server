@@ -1,0 +1,2 @@
+#!/usr/bin/env node
+'use strict';const fs=require('node:fs');const {planCpuVerification}=require('../lib/quality/cpu-impact-planner-v11');const changed=process.argv.slice(2);const out=planCpuVerification(changed);fs.mkdirSync('data/quality-autopilot',{recursive:true});fs.writeFileSync('data/quality-autopilot/cpu-impact-v11.json',JSON.stringify(out,null,2)+'\n');console.log(JSON.stringify(out,null,2));

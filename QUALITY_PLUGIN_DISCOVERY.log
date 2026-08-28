@@ -1,0 +1,71 @@
+[2026-08-24T07:54:02.478Z] CANDIDATE cannon-es (cannon-es) MIT impact +80% gap:stairs-collision-broken|wall-collision-broken -> Lightweight physics with stable step-up/wall collision, fixes 2 blockers
+[2026-08-24T07:54:02.483Z] CANDIDATE comlink (comlink) Apache-2.0 impact +65% gap:quality.worker.queue.stuck -> Worker offload without main-thread jank
+[2026-08-24T07:54:02.484Z] CANDIDATE idb-keyval (idb-keyval) Apache-2.0 impact +55% gap:runtime.real-device.evidence.missing -> Reliable IndexedDB persistence for device evidence
+[2026-08-24T07:54:02.485Z] CANDIDATE sharp (sharp) Apache-2.0 impact +70% gap:pixel.animation.atlas.missing -> Build pixel atlas 2x faster, enables streaming
+[2026-08-24T07:54:02.485Z] CANDIDATE msw (msw) MIT impact +60% gap:quality.test-gaps -> Mock Realtime/Supabase for deterministic regression tests
+[2026-08-24T07:54:02.487Z] OK zod already installed (MIT) impact 55%
+[2026-08-24T07:54:02.489Z] DRY-RUN: 6 candidates >50% found, 5 missing. Set data/plugin-discovery-policy.json automation.dryRunFirst=false to auto-install.
+[2026-08-24T07:54:02.491Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-25T00:55:22.059Z] Graph installed=zod missing=cannon-es,comlink,idb-keyval,sharp,msw synergy=27 synergyWithAll=188
+[2026-08-25T00:55:22.063Z] SKIP cannon-es synergy 38<undefined
+[2026-08-25T00:55:22.063Z] SKIP comlink synergy 46<undefined
+[2026-08-25T00:55:22.064Z] SKIP sharp synergy 43<undefined
+[2026-08-25T00:55:22.064Z] AUTO-INSTALL candidates: idb-keyval, msw
+[2026-08-25T00:55:22.064Z] npm install idb-keyval...
+[2026-08-25T00:55:28.229Z] INSTALLED idb-keyval
+[2026-08-25T00:55:28.230Z] npm install msw...
+[2026-08-25T00:55:39.098Z] INSTALLED msw
+[2026-08-25T00:55:39.105Z] After install installed=idb-keyval,msw,zod synergy=75
+[2026-08-25T00:55:42.132Z] GUARDS PASS
+[2026-08-25T00:55:42.134Z] Created adapter lib/adapters/physics-cannon.js
+[2026-08-25T00:55:42.135Z] Created adapter lib/adapters/worker-comlink.js
+[2026-08-25T00:55:42.136Z] Created adapter lib/adapters/persist-idb.js
+[2026-08-25T00:55:42.136Z] AUTO-WIRE DONE mutualSupport synergy=75
+[2026-08-25T00:55:51.687Z] Graph installed=idb-keyval,msw,zod missing=cannon-es,comlink,sharp synergy=75 synergyWithAll=188
+[2026-08-25T00:55:51.692Z] AUTO-INSTALL candidates: cannon-es, comlink, sharp
+[2026-08-25T00:55:51.692Z] npm install cannon-es...
+[2026-08-25T00:55:54.838Z] INSTALLED cannon-es
+[2026-08-25T00:55:54.838Z] npm install comlink...
+[2026-08-25T00:55:57.947Z] INSTALLED comlink
+[2026-08-25T00:55:57.948Z] npm install sharp...
+[2026-08-25T00:56:05.823Z] INSTALLED sharp
+[2026-08-25T00:56:05.826Z] After install installed=cannon-es,comlink,idb-keyval,sharp,msw,zod synergy=188
+[2026-08-25T00:56:08.858Z] GUARDS PASS
+[2026-08-25T00:56:08.859Z] AUTO-WIRE DONE mutualSupport synergy=188
+[2026-08-25T00:57:16.903Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-25T00:57:16.908Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-25T00:57:16.909Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-25T00:57:16.910Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-25T00:57:16.911Z] OK msw already installed (MIT) impact 60%
+[2026-08-25T00:57:16.912Z] OK zod already installed (MIT) impact 55%
+[2026-08-25T00:57:16.913Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-25T02:11:39.157Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-25T02:11:39.163Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-25T02:11:39.164Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-25T02:11:39.165Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-25T02:11:39.166Z] OK msw already installed (MIT) impact 60%
+[2026-08-25T02:11:39.166Z] OK zod already installed (MIT) impact 55%
+[2026-08-25T02:11:39.167Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-25T02:11:39.270Z] Graph installed=cannon-es,comlink,idb-keyval,sharp,msw,zod missing= synergy=188 synergyWithAll=188
+[2026-08-25T02:11:39.274Z] No candidates meet >50% + mutual support
+[2026-08-25T02:36:01.350Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-25T02:36:01.354Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-25T02:36:01.355Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-25T02:36:01.356Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-25T02:36:01.356Z] OK msw already installed (MIT) impact 60%
+[2026-08-25T02:36:01.357Z] OK zod already installed (MIT) impact 55%
+[2026-08-25T02:36:01.358Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-25T02:36:01.460Z] Graph installed=cannon-es,comlink,idb-keyval,sharp,msw,zod missing= synergy=188 synergyWithAll=188
+[2026-08-25T02:36:01.465Z] No candidates meet >50% + mutual support
+[2026-08-28T05:41:06.529Z] CANDIDATE cannon-es (cannon-es) MIT impact +80% gap:stairs-collision-broken|wall-collision-broken -> Lightweight physics with stable step-up/wall collision, fixes 2 blockers
+[2026-08-28T05:41:06.535Z] AUTO-INSTALL cannon-es
+[2026-08-28T05:41:13.127Z] CANDIDATE comlink (comlink) Apache-2.0 impact +65% gap:quality.worker.queue.stuck -> Worker offload without main-thread jank
+[2026-08-28T05:41:13.128Z] AUTO-INSTALL comlink
+[2026-08-28T05:41:16.206Z] CANDIDATE idb-keyval (idb-keyval) Apache-2.0 impact +55% gap:runtime.real-device.evidence.missing -> Reliable IndexedDB persistence for device evidence
+[2026-08-28T05:41:16.207Z] AUTO-INSTALL idb-keyval
+[2026-08-28T05:41:18.945Z] CANDIDATE sharp (sharp) Apache-2.0 impact +70% gap:pixel.animation.atlas.missing -> Build pixel atlas 2x faster, enables streaming
+[2026-08-28T05:41:18.945Z] AUTO-INSTALL sharp
+[2026-08-28T05:41:26.411Z] CANDIDATE msw (msw) MIT impact +60% gap:quality.test-gaps -> Mock Realtime/Supabase for deterministic regression tests
+[2026-08-28T05:41:26.411Z] AUTO-INSTALL msw
+[2026-08-28T05:41:40.725Z] OK zod already installed (MIT) impact 55%
+[2026-08-28T05:41:40.728Z] Wrote QUALITY_PLUGIN_CANDIDATES.json

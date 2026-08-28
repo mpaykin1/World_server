@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "6.0.0",
+  "system": "WORLD_EVIDENCE_PROVENANCE_GUARD",
+  "generatedAt": "2026-08-28T05:10:18.472Z",
+  "visual": [
+    {
+      "id": "ai3d-voxel-city:desktop-1280x720",
+      "provenance": "synthetic",
+      "countsForAesthetic100": false
+    }
+  ],
+  "rigs": [
+    {
+      "id": "synthetic-rig-cube-001",
+      "provenance": "synthetic",
+      "countsForProductionAnimation100": false
+    },
+    {
+      "id": "synthetic-rig-house-002",
+      "provenance": "synthetic",
+      "countsForProductionAnimation100": false
+    }
+  ],
+  "physicalDeviceStatus": "NOT_CONFIGURED",
+  "proof": {
+    "visualAesthetic": false,
+    "realRig": false,
+    "physicalDevices": false
+  },
+  "productionProofPercent": 0,
+  "rule": "synthetic/emulated evidence validates contracts but cannot unlock production 100%"
+}

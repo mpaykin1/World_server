@@ -1,0 +1,2 @@
+drop index if exists public.pixel_animation_device_baselines_updated_idx;
+drop index if exists public.pixel_animation_learned_policy_updated_idx;

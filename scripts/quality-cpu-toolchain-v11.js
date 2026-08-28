@@ -1,0 +1,2 @@
+#!/usr/bin/env node
+'use strict';const {verifyCpuToolchain,TASKS}=require('../lib/quality/cpu-toolchain-gate-v11');const tasks=process.argv.slice(2);const names=tasks.length?tasks:Object.keys(TASKS);const results=names.map(t=>verifyCpuToolchain(t));const out={ok:results.every(x=>x.ok),status:results.every(x=>x.ok)?'PASS':'HOLD',results};console.log(JSON.stringify(out,null,2));if(process.argv.includes('--strict')&&!out.ok)process.exitCode=2;

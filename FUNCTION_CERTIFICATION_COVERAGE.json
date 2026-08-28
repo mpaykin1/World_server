@@ -1,0 +1,1254 @@
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-28T05:50:17.654Z",
+  "pass": true,
+  "globalCapabilityCertificationPercent": 79,
+  "integrationOwnedCapabilityCertificationPercent": 89,
+  "certifiedCapabilities": 115,
+  "totalCapabilities": 146,
+  "integrationOwnedCertified": 90,
+  "integrationOwnedTotal": 101,
+  "rows": [
+    {
+      "capability": "dependency-graph",
+      "systemId": "quality-core",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10",
+      "contractId": null,
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "replay",
+      "systemId": "quality-core",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10",
+      "contractId": null,
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "ratchet",
+      "systemId": "quality-core",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10",
+      "contractId": null,
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "quality-knowledge",
+      "systemId": "quality-core",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10",
+      "contractId": null,
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "texture-pipeline",
+      "systemId": "texture-quality",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10",
+      "contractId": null,
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "pbr",
+      "systemId": "texture-quality",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10",
+      "contractId": null,
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "atlas",
+      "systemId": "texture-quality",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10",
+      "contractId": null,
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "texture-runtime-evidence",
+      "systemId": "texture-quality",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10",
+      "contractId": null,
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "canonical-mesh-optimizer",
+      "systemId": "mesh-quality",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12",
+      "contractId": null,
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "lod",
+      "systemId": "mesh-quality",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12",
+      "contractId": null,
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "hlod",
+      "systemId": "mesh-quality",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12",
+      "contractId": null,
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "mesh-regression",
+      "systemId": "mesh-quality",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12",
+      "contractId": null,
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "procedural-generation",
+      "systemId": "procedural-quality",
+      "owner": "PROCEDURAL_QUALITY_ENGINE_V10",
+      "contractId": "legacy-procedural-quality",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "temporal-qa",
+      "systemId": "procedural-quality",
+      "owner": "PROCEDURAL_QUALITY_ENGINE_V10",
+      "contractId": "legacy-procedural-quality",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "frame-pacing",
+      "systemId": "procedural-quality",
+      "owner": "PROCEDURAL_QUALITY_ENGINE_V10",
+      "contractId": "legacy-procedural-quality",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "apng-validate",
+      "systemId": "apng-quality",
+      "owner": "WORLD_SERVER_APNG_QUALITY_SYSTEM_V3_MAX",
+      "contractId": "legacy-apng-quality",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "apng-repair",
+      "systemId": "apng-quality",
+      "owner": "WORLD_SERVER_APNG_QUALITY_SYSTEM_V3_MAX",
+      "contractId": "legacy-apng-quality",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "apng-release-gate",
+      "systemId": "apng-quality",
+      "owner": "WORLD_SERVER_APNG_QUALITY_SYSTEM_V3_MAX",
+      "contractId": "legacy-apng-quality",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "pixel-atlas",
+      "systemId": "pixel-animation",
+      "owner": "PIXEL_ANIMATION_SYSTEM_V3",
+      "contractId": "legacy-pixel-animation",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "animation-culling",
+      "systemId": "pixel-animation",
+      "owner": "PIXEL_ANIMATION_SYSTEM_V3",
+      "contractId": "legacy-pixel-animation",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "mobile-fallback",
+      "systemId": "pixel-animation",
+      "owner": "PIXEL_ANIMATION_SYSTEM_V3",
+      "contractId": "legacy-pixel-animation",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "video-to-voxel",
+      "systemId": "video2game",
+      "owner": "VIDEO2GAME_VOXEL_V5",
+      "contractId": null,
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "cpu-fallback",
+      "systemId": "video2game",
+      "owner": "VIDEO2GAME_VOXEL_V5",
+      "contractId": null,
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "cpu-3dgs",
+      "systemId": "3dgs",
+      "owner": "PIXEL_3DGS_CPU_V6_PHONE_4D_MAX",
+      "contractId": null,
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "phone-capture",
+      "systemId": "3dgs",
+      "owner": "PIXEL_3DGS_CPU_V6_PHONE_4D_MAX",
+      "contractId": null,
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "dynamic-4d",
+      "systemId": "3dgs",
+      "owner": "PIXEL_3DGS_CPU_V6_PHONE_4D_MAX",
+      "contractId": null,
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "no-regression",
+      "systemId": "golden-governance",
+      "owner": "WORLD_SERVER_GOLDEN_STANDARD_V13",
+      "contractId": "legacy-golden-governance",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "self-calibration",
+      "systemId": "golden-governance",
+      "owner": "WORLD_SERVER_GOLDEN_STANDARD_V13",
+      "contractId": "legacy-golden-governance",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "desktop-ai-protocol",
+      "systemId": "golden-governance",
+      "owner": "WORLD_SERVER_GOLDEN_STANDARD_V13",
+      "contractId": "legacy-golden-governance",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "technology-scout",
+      "systemId": "world-quality-v6",
+      "owner": "WORLD_QUALITY_AUTOPILOT_V6",
+      "contractId": "legacy-world-quality-v6",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "cpu-routing",
+      "systemId": "world-quality-v6",
+      "owner": "WORLD_QUALITY_AUTOPILOT_V6",
+      "contractId": "legacy-world-quality-v6",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "technology-drift",
+      "systemId": "world-quality-v6",
+      "owner": "WORLD_QUALITY_AUTOPILOT_V6",
+      "contractId": "legacy-world-quality-v6",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "quality-slo",
+      "systemId": "world-quality-v6",
+      "owner": "WORLD_QUALITY_AUTOPILOT_V6",
+      "contractId": "legacy-world-quality-v6",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "fresh-real-device-evidence",
+      "systemId": "dream-v5",
+      "owner": "WORLD_SERVER_DREAM_AUTOPILOT_V5_CPU",
+      "contractId": "legacy-dream-v5",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "physics-guardian",
+      "systemId": "dream-v5",
+      "owner": "WORLD_SERVER_DREAM_AUTOPILOT_V5_CPU",
+      "contractId": "legacy-dream-v5",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "gameplay-agent",
+      "systemId": "dream-v5",
+      "owner": "WORLD_SERVER_DREAM_AUTOPILOT_V5_CPU",
+      "contractId": "legacy-dream-v5",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "pwa",
+      "systemId": "pwa-v4",
+      "owner": "WORLD_SERVER_PWA_SELF_IMPROVING_V4_MAX",
+      "contractId": "legacy-pwa-v4",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "real-ios-evidence",
+      "systemId": "pwa-v4",
+      "owner": "WORLD_SERVER_PWA_SELF_IMPROVING_V4_MAX",
+      "contractId": "legacy-pwa-v4",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "adaptive-runtime",
+      "systemId": "pwa-v4",
+      "owner": "WORLD_SERVER_PWA_SELF_IMPROVING_V4_MAX",
+      "contractId": "legacy-pwa-v4",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "production-rollback",
+      "systemId": "pwa-v4",
+      "owner": "WORLD_SERVER_PWA_SELF_IMPROVING_V4_MAX",
+      "contractId": "legacy-pwa-v4",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "production-certification",
+      "systemId": "truth-gate",
+      "owner": "production-100-truth-gate-v1",
+      "contractId": "legacy-truth-gate",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "anti-false-100",
+      "systemId": "truth-gate",
+      "owner": "production-100-truth-gate-v1",
+      "contractId": "legacy-truth-gate",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "github-supabase-bridge",
+      "systemId": "runtime-v12-3",
+      "owner": "WORLD_SERVER_QUALITY_RUNTIME_V12_3",
+      "contractId": null,
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "master-protection",
+      "systemId": "runtime-v12-3",
+      "owner": "WORLD_SERVER_QUALITY_RUNTIME_V12_3",
+      "contractId": null,
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "pixel-atlas-v12",
+      "systemId": "runtime-v12-3",
+      "owner": "WORLD_SERVER_QUALITY_RUNTIME_V12_3",
+      "contractId": null,
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "affected-test-selection",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "semantic-dependency-graph",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "apng-binary-verification",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "technology-lock",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "appium-compatible-worker-discovery",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "device-lab-truth-orchestrator",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "asset-batch-atlas-planner",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "asset-batch-planner",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "attack-direction-contract",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "gameplay-spatial-library",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "audio-variation-gate",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "audio-variation-validator-engine",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "automated-real-device-executor",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "device-executor-engine",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "automatic-authorized-rollback",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "production-safety-controller",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "capability-aware-cpu-scheduler",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "capability-aware-scheduler",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "capability-preservation-gate",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "system-integration-gate",
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "cas-local-redundancy",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "cas-local-redundancy",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "cas-read-repair",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "cas-replication-controller",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "cas-replication-quorum",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "cas-replication-controller",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "causal-incident-graph",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "causal-debugger",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "central-control-plane",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "system-integration-gate",
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "certified-function-baselines",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "system-integration-gate",
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "change-impact-routing",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "semantic-dependency-graph",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "checkpoint-resume",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "durable-job-queue",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "checkpointed-long-soak-runner",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "checkpointed-long-soak-runner",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "content-addressed-asset-registry",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "content-addressed-asset-registry",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "content-defined-asset-deltas",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "asset-delta-distribution",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "cosign-security-floor-3.1.3",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "cosign-security-floor",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "crash-fingerprint-clustering",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "crash-diagnostics-cluster",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "cyclonedx-1.7-sbom",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "cyclonedx-sbom-engine",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "dead-letter-queue",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "durable-job-queue",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "dependency-impact-graph",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "semantic-dependency-graph",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "deployment-impact-routing",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "deployment-impact-routing-engine",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "desktop-ai-output-contract",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "desktop-ai-output-contract-engine",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "deterministic-record-replay",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "deterministic-record-replay",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "deterministic-wit-bindings",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "wit-bindings-determinism",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "device-worker-authenticated-evidence",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "physical-device-fleet",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "disaster-recovery",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "cas-merkle-disaster-recovery",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "distributed-cas-peer-protocol",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "distributed-cas-protocol",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "dual-run-replacement-contract",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "system-integration-gate",
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "durable-priority-queue",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "durable-job-queue",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "evidence-readiness-score",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "evidence-readiness-engine",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "exhaustive-model-checker",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "model-checker",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "expand-migrate-contract-coordinator",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "database-migration-coordinator",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "explicit-legacy-contract-synthesis",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "legacy-evidence-factory",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "feet-direction-contract",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "gameplay-spatial-library",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "fenced-db-migrations",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "database-migration-coordinator",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "fenced-leader-lease",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "leader-lease-fencing",
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "full-file-delivery-contract",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "project-constitution",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "function-contract-coverage-engine",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "function-contract-coverage-engine",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "gameplay-spatial-contract",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "gameplay-spatial-library",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "graphics-quality-ratchet",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "graphics-quality-ratchet",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "honest-100-function-certification",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "system-integration-gate",
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "idempotency",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "durable-job-queue",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "in-toto-statement-v1",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "slsa-provenance-engine",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "incremental-snapshots",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "cas-merkle-disaster-recovery",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "lease-recovery",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "durable-job-queue",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "legacy-evidence-factory",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "legacy-evidence-factory",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "legacy-evidence-recipe-expansion",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "legacy-evidence-recipe-expansion",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "lexical-dataflow-impact",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "semantic-dependency-graph",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "mandatory-native-tlc-ci",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "mandatory-tlc-ci-wiring",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "merkle-cas",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "cas-merkle-disaster-recovery",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "migration-fencing-runtime-verifier",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "migration-fencing-runtime-verifier",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "minimum-manual-action-gate",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "project-constitution",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "monotonic-function-enhancement",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "system-integration-gate",
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "multi-window-burn-rate",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "slo-error-budget-controller",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "native-causal-collector-discovery",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "native-causal-collector",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "native-etw-ebpf-adapters",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "causal-debugger",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "native-runtime-truth-separation",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "native-runtime-truth-separation-engine",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "node-crash-diagnostics",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "crash-diagnostics-cluster",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "offline-policy-mirror",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "offline-policy-enforcement",
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "opa-rego-policy",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "offline-policy-enforcement",
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "orchestrator-supervisor",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "orchestrator-supervisor",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "osv-dependency-security",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "dependency-security-engine",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "otlp-http-json",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "integration-telemetry",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "owned-real-device-lab",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "device-lab-truth-orchestrator",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "physical-device-fleet-evidence",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "physical-device-fleet",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "physical-device-worker",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "device-worker-command-safety",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "pinned-local-toolchain-bootstrap",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "toolchain-bootstrap",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "production-asset-quality-gate",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "project-constitution",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "production-crash-canary-stop",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "production-safety-controller",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "production-slo-autopilot",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "production-slo-autopilot",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "project-constitution-gate",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "project-constitution",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "rekor-transparency-monitor",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "rekor-transparency-monitor",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "scalability-first-gate",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "project-constitution",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "semantic-merge-ownership",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "system-integration-gate",
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "semantic-symbol-graph",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "semantic-dependency-graph",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "shadow-first-feature-promotion",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "feature-flag-safety",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "shield-geometry-contract",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "gameplay-spatial-library",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "sigstore-cosign-bridge",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "sigstore-cosign-bridge",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "slo-error-budget-controller",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "slo-error-budget-controller",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "slsa-provenance-v1",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "slsa-provenance-engine",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "soak-chaos-verification",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "soak-chaos-verifier",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "split-brain-prevention",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "leader-lease-fencing",
+      "status": "UNVERIFIED"
+    },
+    {
+      "capability": "system-enhancement-orchestrator",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "enhancement-orchestrator",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "tamper-evident-transparency-log",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "local-signing-transparency",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "technology-consensus",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "technology-consensus-engine",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "technology-lock",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "technology-lock",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "tla-plus-specs",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "model-checker",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "transactional-deployment",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "transactional-deploy-state-machine",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "typescript-native-ast-dataflow",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "semantic-dependency-graph",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "verified-delta-reconstruction",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "asset-delta-distribution",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "w3c-trace-context",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "integration-telemetry",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "wasi-component-model",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "adapter-sandbox-fail-closed",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "weapon-grip-contract",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "gameplay-spatial-library",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "wit-typed-adapter-contracts",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "wit-component-contract",
+      "status": "CERTIFIED_100"
+    },
+    {
+      "capability": "zero-config-cas-discovery",
+      "systemId": "system-integration-v7",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "contractId": "cas-zero-config-discovery",
+      "status": "CERTIFIED_100"
+    }
+  ],
+  "candidates": [
+    {
+      "capability": "dependency-graph",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10",
+      "systemId": "quality-core",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "replay",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10",
+      "systemId": "quality-core",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "ratchet",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10",
+      "systemId": "quality-core",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "quality-knowledge",
+      "owner": "WORLD_FACTORY_QUALITY_CORE_V10",
+      "systemId": "quality-core",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "texture-pipeline",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10",
+      "systemId": "texture-quality",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "pbr",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10",
+      "systemId": "texture-quality",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "atlas",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10",
+      "systemId": "texture-quality",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "texture-runtime-evidence",
+      "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10",
+      "systemId": "texture-quality",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "canonical-mesh-optimizer",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12",
+      "systemId": "mesh-quality",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "lod",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12",
+      "systemId": "mesh-quality",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "hlod",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12",
+      "systemId": "mesh-quality",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "mesh-regression",
+      "owner": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12",
+      "systemId": "mesh-quality",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "video-to-voxel",
+      "owner": "VIDEO2GAME_VOXEL_V5",
+      "systemId": "video2game",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "cpu-fallback",
+      "owner": "VIDEO2GAME_VOXEL_V5",
+      "systemId": "video2game",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "cpu-3dgs",
+      "owner": "PIXEL_3DGS_CPU_V6_PHONE_4D_MAX",
+      "systemId": "3dgs",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "phone-capture",
+      "owner": "PIXEL_3DGS_CPU_V6_PHONE_4D_MAX",
+      "systemId": "3dgs",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "dynamic-4d",
+      "owner": "PIXEL_3DGS_CPU_V6_PHONE_4D_MAX",
+      "systemId": "3dgs",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "github-supabase-bridge",
+      "owner": "WORLD_SERVER_QUALITY_RUNTIME_V12_3",
+      "systemId": "runtime-v12-3",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "master-protection",
+      "owner": "WORLD_SERVER_QUALITY_RUNTIME_V12_3",
+      "systemId": "runtime-v12-3",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "pixel-atlas-v12",
+      "owner": "WORLD_SERVER_QUALITY_RUNTIME_V12_3",
+      "systemId": "runtime-v12-3",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "capability-preservation-gate",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "central-control-plane",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "certified-function-baselines",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "dual-run-replacement-contract",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "fenced-leader-lease",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "honest-100-function-certification",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "monotonic-function-enhancement",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "offline-policy-mirror",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "opa-rego-policy",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "semantic-merge-ownership",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    },
+    {
+      "capability": "split-brain-prevention",
+      "owner": "SYSTEM_INTEGRATION_LAYER_V7",
+      "systemId": "system-integration-v7",
+      "status": "NEEDS_EXPLICIT_EVIDENCE_CONTRACT",
+      "rule": "Do not auto-certify by name similarity. Add scoped source paths + integration/regression/runtime evidence first."
+    }
+  ]
+}

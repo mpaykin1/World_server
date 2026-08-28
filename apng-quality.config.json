@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "defaults": {
+    "minConfidence": 0.94,
+    "sanitizeTransparentRgb": true,
+    "allowTemporalRepair": true,
+    "strictWarnings": false
+  },
+  "rules": []
+}

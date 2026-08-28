@@ -1,0 +1,49 @@
+{
+  "at": "2026-08-28T05:41:40.725Z",
+  "threshold": 50,
+  "discovered": [
+    {
+      "key": "cannon-es",
+      "installed": true,
+      "impact": 80,
+      "license": "MIT"
+    },
+    {
+      "key": "comlink",
+      "installed": true,
+      "impact": 65,
+      "license": "Apache-2.0"
+    },
+    {
+      "key": "idb-keyval",
+      "installed": true,
+      "impact": 55,
+      "license": "Apache-2.0"
+    },
+    {
+      "key": "sharp",
+      "installed": true,
+      "impact": 70,
+      "license": "Apache-2.0"
+    },
+    {
+      "key": "msw",
+      "installed": true,
+      "impact": 60,
+      "license": "MIT"
+    },
+    {
+      "key": "zod",
+      "installed": true,
+      "impact": 55,
+      "license": "MIT"
+    }
+  ],
+  "installed": [
+    "cannon-es",
+    "comlink",
+    "idb-keyval",
+    "sharp",
+    "msw"
+  ]
+}
