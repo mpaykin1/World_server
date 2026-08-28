@@ -5,6 +5,8 @@
 [ext_resource type="Script" uid="uid://dgcgth3qkrerp" path="res://beacon_tower.gd" id="2_lquwl"]
 [ext_resource type="Script" uid="uid://u18h5g1jslqn" path="res://player_controller.gd" id="3_h2yge"]
 [ext_resource type="Script" uid="uid://da3fqfqv6gtgm" path="res://addons/godot_ai/runtime/draw_recipe.gd" id="5_7mycd"]
+[ext_resource type="Script" uid="uid://c3uqiwqqfa83o" path="res://addons/cinematic_voxel_guard/scene_contract.gd" id="6_272bh"]
+[ext_resource type="Script" uid="uid://cmteo8ggq27q2" path="res://addons/cinematic_voxel_guard/performance_governor.gd" id="7_5vw27"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_272bh"]
 sky_top_color = Color(0.007843138, 0.007843138, 0.007843138, 1)
@@ -36,12 +38,12 @@ fog_density = 0.065
 radius = 0.3
 height = 0.6
 
-[node name="Main" type="Node3D" unique_id=153568782]
+[node name="Main" type="Node3D" unique_id=153568782 groups=["cinematic_voxel_scene"]]
 
 [node name="Environment" type="WorldEnvironment" parent="." unique_id=691422043]
 environment = SubResource("Environment_kek77")
 
-[node name="Eye" type="Node3D" parent="." unique_id=1306085940]
+[node name="Eye" type="Node3D" parent="." unique_id=1306085940 groups=["cinematic_hero", "voxel"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 10)
 script = ExtResource("1_0xm2m")
 beacon_path = NodePath("/root/Main/Beacon")
@@ -51,7 +53,7 @@ rig_path = NodePath("/root/Main/Eye/Player")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 13)
 script = ExtResource("3_h2yge")
 
-[node name="Beacon" type="Node3D" parent="." unique_id=979917743]
+[node name="Beacon" type="Node3D" parent="." unique_id=979917743 groups=["cinematic_hero", "voxel"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 1.5, -22)
 script = ExtResource("2_lquwl")
 
@@ -215,3 +217,10 @@ text = "Привет. Я твой навигатор по этому миру.
 И всё, что в этом мире появится… это тоже будешь ты…"
 vertical_alignment = 1
 autowrap_mode = 3
+
+[node name="CinematicContract" type="Node" parent="." unique_id=1993035938]
+script = ExtResource("6_272bh")
+material_layers = 5
+
+[node name="CinematicGovernor" type="Node" parent="." unique_id=485650098]
+script = ExtResource("7_5vw27")
