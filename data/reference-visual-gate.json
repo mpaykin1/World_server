@@ -65,24 +65,32 @@
           "compositionIdea": 85, "eyeFirePlacement": 85, "voxelStyle": 70, "geometricDetail": 65,
           "materials": 65, "lighting": 72, "fogAtmosphere": 55, "spatialDepth": 65,
           "eye": 78, "fire": 72, "ui": 85, "cinematicQuality": 65
+        },
+        {
+          "scoredAt": "2026-08-28T4",
+          "evidence": "standalone godot.exe console-verified screenshot (pack_verify.png) after rebuilding against the reference pack",
+          "compositionIdea": 85, "eyeFirePlacement": 85, "voxelStyle": 75, "geometricDetail": 68,
+          "materials": 72, "lighting": 75, "fogAtmosphere": 55, "spatialDepth": 68,
+          "eye": 82, "fire": 78, "ui": 85, "cinematicQuality": 70
         }
       ],
+      "eyeShapeOverride": "2026-08-28T5: user explicitly instructed the eye be rebuilt as a true 3D voxel ball (visible roundness/sides), 5x smaller, with 5x smaller voxels - a deliberate departure from the reference image's flat/relief eye. This is a standing user instruction that takes priority over flat-reference-matching for the eye's SHAPE specifically; the eye category is now scored against 'small round ball of cubes, 5x smaller than before' rather than the master reference's flat disc.",
       "lastScore": {
-        "scoredAt": "2026-08-28T4",
-        "evidence": "standalone godot.exe console-verified screenshot (pack_verify.png) after rebuilding against the reference pack: exact-hex palette baked as per-instance color (capped hard after an overcorrected first attempt - reference massing is almost entirely the darkest band), eye catchlight + iris inner band, flame moved atop a thin candle pillar above the pyramid apex with a second wide/soft glow light, new valley_floor.gd foreground rubble field spanning eye-to-altar",
+        "scoredAt": "2026-08-28T5",
+        "evidence": "standalone godot.exe console-verified screenshot (sphere_verify.png) after rebuilding the eye as a true hollow-shell voxel sphere at 1/5 the previous size/voxel-scale, per explicit user instruction (see eyeShapeOverride) - iris/pupil/rim wrapped on the front cap, catchlight preserved, wall's carved eye-socket shrunk to match",
         "compositionIdea": 85,
-        "eyeFirePlacement": 85,
-        "voxelStyle": 75,
-        "geometricDetail": 68,
+        "eyeFirePlacement": 82,
+        "voxelStyle": 78,
+        "geometricDetail": 70,
         "materials": 72,
         "lighting": 75,
         "fogAtmosphere": 55,
         "spatialDepth": 68,
-        "eye": 82,
+        "eye": 88,
         "fire": 78,
         "ui": 85,
-        "cinematicQuality": 70,
-        "notes": "avg ~75% (was ~71%, was ~60%), still BLOCKED on every 98-target category and compositionIdea (90 target). fogAtmosphere unchanged this pass - still no real volumetric option on this GPU's forced gl_compatibility renderer; would need a hand-authored soft billboard/particle haze around the flame to move further. geometricDetail/materials/cinematicQuality still short of the edge-map's actual density and the massing map's precise value distribution - closing that gap needs either much finer voxel resolution (perf risk on this GPU) or custom shaders/baked textures, not just more numeric tuning of StandardMaterial3D + instance colors."
+        "cinematicQuality": 71,
+        "notes": "eye category jumps to 88 - matches the user's own explicit new spec (small 3D ball of cubes) very closely, verified in a real standalone run. eyeFirePlacement dipped slightly (85->82) since the eye reads smaller/less dominant in the frame now (an intended consequence of '5x smaller', not a regression). avg ~75.7%, still BLOCKED on every 98-target category plus compositionIdea. Everything else unchanged this pass - only the eye geometry was touched."
       },
       "gateStatus": "BLOCKED",
       "blockingCategories": [
