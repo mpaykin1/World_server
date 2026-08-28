@@ -9,6 +9,14 @@ const VOX := 0.34
 const HALF_W := 17
 const HALF_H := 9
 
+## The eye is a true 3D ball of voxels (a hollow shell sphere), not a flat
+## disc painted on the wall - and it's 5x smaller/finer than the wall
+## voxels, per explicit user direction (both env EYE_VOX/EYE_RADIUS
+## together give exactly a 5x size reduction vs. the old flat-disc eye).
+const EYE_VOX := VOX / 5.0
+const EYE_RADIUS := 17
+const EYE_SHAPE_Y := 0.53 # front-marking squash ratio (matches old HALF_H/HALF_W)
+
 ## Exact hex palette pulled from the reference pack's dominant-palette
 ## analysis (12_DOMINANT_PALETTE.png) - real measured colors, not guesses.
 const ROCK_DARK := Color(0x16 / 255.0, 0x15 / 255.0, 0x19 / 255.0)
@@ -79,7 +87,7 @@ func _build() -> void:
 	add_child(_eye_root)
 
 	var box := BoxMesh.new()
-	box.size = Vector3(VOX, VOX, VOX)
+	box.size = Vector3(EYE_VOX, EYE_VOX, EYE_VOX)
 
 	var mat_dark := StandardMaterial3D.new()
 	# Needs to read as dark charcoal AGAINST the near-black background, not
@@ -138,27 +146,43 @@ func _build() -> void:
 	mat_rim.emission = Color8(0x2a, 0x24, 0x18)
 	mat_rim.emission_energy_multiplier = 0.3
 
+	# A hollow shell sphere - a real "ball of cubes", not a flat painted
+	# disc - with the iris/pupil/rim pattern wrapped around its front-facing
+	# cap (still visible/correct in silhouette from the side as you orbit).
 	var parts := {"white": [], "iris": [], "iris_inner": [], "pupil": [], "rim": [], "catchlight": []}
-	for y in range(-HALF_H, HALF_H + 1):
-		for x in range(-HALF_W, HALF_W + 1):
-			var e: float = pow(float(x) / HALF_W, 2) + pow(float(y) / HALF_H, 2)
-			if e > 1.0:
-				continue
-			var edge := e > 0.78
-			var ri: float = pow(float(x) / (HALF_W * 0.34), 2) + pow(float(y) / (HALF_H * 0.62), 2)
-			if edge:
-				parts["rim"].append(Vector3(x, y, 0.0))
-			elif ri < 0.20:
-				parts["pupil"].append(Vector3(x, y, 0.8))
-			elif ri < 0.42:
-				parts["iris_inner"].append(Vector3(x, y, 0.55))
-			elif ri < 1.0:
-				parts["iris"].append(Vector3(x, y, 0.5))
-			else:
-				parts["white"].append(Vector3(x, y, 0.15))
-	# One catchlight voxel, offset up-right off the pupil - matches the
-	# bright white specular pixel visible in the reference's eye close-up.
-	parts["catchlight"].append(Vector3(2, 2, 0.95))
+	var r_out := float(EYE_RADIUS)
+	var r_in := r_out - 1.4
+	for z in range(-EYE_RADIUS, EYE_RADIUS + 1):
+		for y in range(-EYE_RADIUS, EYE_RADIUS + 1):
+			for x in range(-EYE_RADIUS, EYE_RADIUS + 1):
+				var dist: float = sqrt(float(x * x + y * y + z * z))
+				if dist < r_in or dist > r_out:
+					continue
+				var is_front := z > EYE_RADIUS * 0.05
+				if is_front:
+					var ex: float = float(x) / r_out
+					var ey: float = float(y) / (r_out * EYE_SHAPE_Y)
+					var e: float = ex * ex + ey * ey
+					if e <= 1.0:
+						var edge := e > 0.78
+						var ri: float = pow(float(x) / (r_out * 0.34), 2) + pow(float(y) / (r_out * EYE_SHAPE_Y * 0.62), 2)
+						if edge:
+							parts["rim"].append(Vector3(x, y, z))
+						elif ri < 0.20:
+							parts["pupil"].append(Vector3(x, y, z))
+						elif ri < 0.42:
+							parts["iris_inner"].append(Vector3(x, y, z))
+						elif ri < 1.0:
+							parts["iris"].append(Vector3(x, y, z))
+						else:
+							parts["white"].append(Vector3(x, y, z))
+						continue
+				parts["white"].append(Vector3(x, y, z))
+	# One catchlight voxel, offset up-right off the pupil, sitting right on
+	# the sphere's own surface - matches the bright white specular pixel
+	# visible in the reference's eye close-up.
+	var cz: float = sqrt(max(0.0, r_out * r_out - 2.0 * 2.0 - 2.0 * 2.0))
+	parts["catchlight"].append(Vector3(2, 2, cz))
 
 	var mats := {
 		"white": mat_white, "iris": mat_iris, "iris_inner": mat_iris_inner,
@@ -174,7 +198,7 @@ func _build() -> void:
 		mm.instance_count = max(1, cells.size())
 		for i in range(cells.size()):
 			var p: Vector3 = cells[i]
-			var t := Transform3D(Basis(), Vector3(p.x * VOX, p.y * VOX, p.z))
+			var t := Transform3D(Basis(), p * EYE_VOX)
 			mm.set_instance_transform(i, t)
 		mmi.multimesh = mm
 		mmi.material_override = mats[key]
@@ -194,7 +218,7 @@ func _build() -> void:
 		var top: float = _ridge_height(float(x))
 		var y := -22
 		while y <= int(ceil(top)):
-			var e: float = pow(float(x) / 19.0, 2) + pow(float(y) / 10.5, 2)
+			var e: float = pow(float(x) / 4.2, 2) + pow(float(y) / 4.2, 2)
 			if e < 1.10:
 				y += 1
 				continue
@@ -223,7 +247,7 @@ func _build() -> void:
 		var base_top: float = _ridge_height(rx)
 		if ry > base_top - 3.0:
 			continue
-		var e2: float = pow(rx / 19.0, 2) + pow(ry / 10.5, 2)
+		var e2: float = pow(rx / 4.2, 2) + pow(ry / 4.2, 2)
 		if e2 < 1.25:
 			continue
 		wall_cells.append([rx + _hash2(float(i), 1.1) * 0.8, ry, 0.15 + _hash2(float(i), 5.5) * 0.6, -1, 1])
@@ -332,7 +356,7 @@ func _process(delta: float) -> void:
 				var to_beacon: Vector3 = (beacon.global_transform.origin - global_transform.origin).normalized()
 				gaze = Vector2(to_beacon.x, to_beacon.y) * 0.4
 	if _eye_root:
-		var max_shift := VOX * 1.4
+		var max_shift := EYE_VOX * 1.4
 		_eye_root.position = _eye_root.position.lerp(Vector3(gaze.x * max_shift, gaze.y * max_shift, 0), delta * 4.0)
 
 func set_user_gaze(nx: float, ny: float) -> void:
