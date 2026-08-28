@@ -1,0 +1,1 @@
+(function(root){'use strict';function init(){root.WorldGraphicsBus?.registerDetectedSystems?.();root.dispatchEvent?.(new CustomEvent('improveworld:graphics-ready',{detail:root.WorldGraphicsBus?.getState?.()}));}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();})(globalThis);

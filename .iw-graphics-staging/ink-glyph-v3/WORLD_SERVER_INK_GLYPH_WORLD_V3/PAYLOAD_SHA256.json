@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 2,
+  "algorithm": "sha256",
+  "generatedOn": "2026-08-26",
+  "excludedGenerated": [
+    "payload/INK_GLYPH_WORLD_REPORT.json"
+  ],
+  "files": {
+    "00_START_HERE.md": "09f3dfc43a5f04b57b17b71fdbd3603a4d847067c4a737914efc6f82d9d6d7e7",
+    "01_DESKTOP_AI_INSTALL_VERIFY_REPAIR.md": "99e55d22aef21d8a13f03bd977a0530c71ac53a7ebe40a4fbcb80b65cf84dece",
+    "02_NEXT_SYSTEMS.md": "06ebc845becfafe5b32c547fe24e45e2503e7a8678feca8e1ccdb9676c76bc7d",
+    "03_FREE_OPEN_SOURCE_DOWNLOADS.md": "5ac21148037b73137e638f6814fe97ebcb64bb0f09699a2bdb1e990b676e94f1",
+    "04_STATUS_AND_READINESS.md": "24b14d84a88b06bff445a29c8583b4e096b1375666e411621e688157089cf361",
+    "PATCH_MANIFEST.json": "33ba6133eb5bd02a7a6dc4b3f1c1e4c3de7fb72d866f2e56dc3a96de35f8f00c",
+    "VALIDATION_REPORT.json": "62c0b277932d0cec3e8b6d40c37860e4d0445ae86d9d39d74f1cad927c75a845",
+    "install-ink-glyph-world.cjs": "2b5b6cb1a068b83a3c4d867588bc3e2673dbf7e75fccde31dc3d0945b081d1c2",
+    "integration-test.cjs": "b9b7ac718eefb760a65091584809c16e546bc8e3c2f3d0e47c959eb28053a403",
+    "payload/apps/ink-glyph-world/client.js": "1a81962507df52f468b19eb1d58e6c4d15241b9d7257310d9c5fe5e2cb0bb0b5",
+    "payload/apps/ink-glyph-world/index.html": "c51202554942d950f352182f4d8e1b3129207d73d3e94e7406071b178e31d640",
+    "payload/apps/ink-glyph-world/worker.js": "655017b61380ea694c47b588545b4d728d364c583f442a4c3f5efa60db165cd5",
+    "payload/assets/fonts/ink-glyph/.gitkeep": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "payload/assets/hanzi-strokes/.gitkeep": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "payload/data/ink-glyph-font-registry.json": "5422f34bc9506d4a62655fbb57c732f0156c07f19c029f7be0eaf31600b44810",
+    "payload/docs/INK_GLYPH_WORLD.md": "6147d9884acf776adbdde1f7f5113e20c6a35c5ffbd7c1e1f9a279fe5359a78f",
+    "payload/e2e/ink-glyph-world.spec.js": "9c6948fbd5121969985137de9fb66407d30fd7857dcba7758e725cf7dbdb0e0d",
+    "payload/scripts/benchmark-ink-glyph-world.cjs": "774385e266a44a85e191a0637449e3e9fade8efaa6586b70aaa2f582fc42b043",
+    "payload/scripts/check-ink-glyph-world.cjs": "7873740faf0862c412e234f82082265105946e0eee7edf28356514b23aeaf383",
+    "payload/scripts/download-ink-glyph-fonts.cjs": "2ceb39f015a890baafc68af3a8bbf03590ce6fec79bc064fcd72a6e3b48eebcb",
+    "payload/scripts/download-ink-glyph-strokes.cjs": "5dddaf62bb031e85fa9d2ebf91f06f985cc0d8c98c70b49afa89d630f2d385ec",
+    "payload/scripts/download-ink-glyph-vendor.cjs": "b72c87aadb7c2c1f7a3a86cac5f875b6d44757fe192a8e2e8bbd09bebcaa81a2",
+    "payload/scripts/ink-glyph-network-diagnostics.cjs": "f374dda7fe8953bd1d2469a2ecd8fef92e0e5ddebddc5bb8410c37cd9cac4f68",
+    "payload/scripts/install-ink-glyph-tools.cjs": "12976e61aa8b0fe0bee05ff272de3151717ce017157fcad8ba1f98a74710a938",
+    "payload/scripts/optimize-ink-glyph-fonts.py": "dac68417dd291e7479416a16bbea54d8826205b7691d2732bcb04942cd5b633f",
+    "payload/scripts/optimize-ink-glyph-glb.cjs": "410d948cf5e8e2f97194f5ff3db21f10a27afd6a69cadcb53b5fc00547f1dede",
+    "payload/scripts/validate-ink-glyph-glb.cjs": "fe05c6cf88321810e36ea8f381bc95553447bfe7bb45f19ee64fb033edb589f5",
+    "payload/shared/ink-glyph-world-core.js": "c14dd8468400a0f7471a36a904efc324e15fa65b39b7f10aeb53205712bfc34b",
+    "payload/test/ink-glyph-world.test.js": "27c93c09711f476b7045067e7ef2abd17e5b75a6012e771aeb96f6bcf4ec75e5",
+    "verify-local.cjs": "c49ae4094870eaa5bbeb78fb021c42574f7a9e43df78cac84895b0d48ae15b50"
+  }
+}

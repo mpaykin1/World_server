@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "1.0.0",
+  "samples": [
+    {
+      "source": "apps/example",
+      "platform": "web",
+      "category": "character",
+      "pattern": "distance-synced locomotion",
+      "pass": true,
+      "metrics": {
+        "fpsBefore": 55,
+        "fpsAfter": 55,
+        "footSlideMeters": 0.04
+      },
+      "rootCause": null,
+      "fix": null,
+      "regressionTest": "e2e/example-motion.spec.js"
+    }
+  ]
+}

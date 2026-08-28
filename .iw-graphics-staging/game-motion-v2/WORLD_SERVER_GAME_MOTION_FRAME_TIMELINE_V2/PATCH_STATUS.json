@@ -1,0 +1,14 @@
+{
+  "patchPackageReadinessPercent": 99,
+  "liveServerInstallationPercent": 0,
+  "localValidationPass": true,
+  "reason": "V2 is locally validated as an installer/package, including idempotency, quality gate, JS runtime tests and frame-processing tests. The last 1% requires network-dependent bootstrap and real World_server desktop/mobile runtime evidence.",
+  "remainingFor100": [
+    "install V2 into a real World_server branch",
+    "run animation:oss:bootstrap on the target machine",
+    "audit and implement meaningful P0/P1 motion in actual games",
+    "verify GLB/glTF optimizations on real animated assets",
+    "collect desktop/mobile runtime evidence and before/after performance",
+    "pass the repository's full release gate"
+  ]
+}

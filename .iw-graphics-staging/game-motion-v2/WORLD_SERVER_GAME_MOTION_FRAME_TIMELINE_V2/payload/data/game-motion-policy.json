@@ -1,0 +1,106 @@
+{
+  "schemaVersion": "2.0.0",
+  "system": "WORLD_SERVER_GAME_MOTION",
+  "principle": "Animation is a gameplay/visual-quality system. Prefer semantic, physically coherent, performance-adaptive motion; never trade collision correctness for decoration.",
+  "preferredOrder": [
+    "native/procedural engine animation",
+    "skeletal/IK/state graph",
+    "shader/particle animation",
+    "frame timeline/APNG/WebP/sprite sheet",
+    "pre-rendered video only when necessary"
+  ],
+  "globalRules": {
+    "auditEveryGameTask": true,
+    "implementAllMeaningfulP0P1Motion": true,
+    "reuseWorldQualityAutopilot": true,
+    "centralScheduler": true,
+    "distanceVisibilityLOD": true,
+    "deterministicNoiseForReplay": true,
+    "motionManifestForReusableComplexMotion": true,
+    "locomotionDistanceSynchronized": true
+  },
+  "applyWhereAppropriate": {
+    "characters": [
+      "idle micro-motion",
+      "walk/run synchronized to distance",
+      "feet/legs",
+      "weapon/shield follow",
+      "secondary motion",
+      "hit/death/reaction",
+      "state graph"
+    ],
+    "world": [
+      "wind sway",
+      "lamps/signs/ropes/chains",
+      "doors/gears/fans/pistons",
+      "steam/smoke/fire/water",
+      "birds/crowds"
+    ],
+    "camera": [
+      "spring follow",
+      "cinematic travel",
+      "trauma impact shake",
+      "context zoom"
+    ],
+    "destruction": [
+      "exploded-view",
+      "break/debris timeline",
+      "reversible inspection"
+    ],
+    "interactive": [
+      "distance",
+      "speed",
+      "impact",
+      "touch",
+      "mouse",
+      "time",
+      "audio",
+      "game state driven timelines"
+    ]
+  },
+  "safety": {
+    "neverMoveCollisionRootForVisualOnlyMotion": true,
+    "animateVisualChildWhenPhysicsMustStayStable": true,
+    "respectReducedMotionForNonGameplayEffects": true,
+    "mobileAdaptiveQuality": true,
+    "keepGameplayCriticalAnimationReadableAtLowestTier": true,
+    "noBlindAutoTransforms": true,
+    "preserveAnimationClipsDuringGltfOptimization": true,
+    "rollbackOnQualityRegression": true
+  },
+  "quality": {
+    "desktopTargetFps": 55,
+    "mobileTargetFps": 36,
+    "safeTierHz": 24,
+    "balancedTierHz": 36,
+    "highTierHz": 50,
+    "ultraTierHz": 60,
+    "preloadNearestFrames": 4,
+    "maxCachedFrames": 48,
+    "frameSequenceDefaultFps": 15,
+    "webpDefaultQuality": 82,
+    "maxBrightnessJumpWarn": 0.12,
+    "duplicateFrameRatioWarn": 0.2
+  },
+  "formats": [
+    "APNG",
+    "WebP frames",
+    "PNG frames",
+    "sprite sheet",
+    "glTF/GLB animation",
+    "native engine animation"
+  ],
+  "learning": {
+    "recordResolvedAnimationBugs": true,
+    "recordSuccessfulMotionPatterns": true,
+    "deduplicateKnowledge": true,
+    "reuseSuccessfulPatterns": true
+  },
+  "desktopAI": {
+    "auditBeforeChanges": true,
+    "planAfterAudit": true,
+    "runTestsUntilPass": true,
+    "doNotClaim100WithoutRuntimeEvidence": true,
+    "checkOpenSourceUpdatesBeforeMajorAnimationWork": true
+  }
+}

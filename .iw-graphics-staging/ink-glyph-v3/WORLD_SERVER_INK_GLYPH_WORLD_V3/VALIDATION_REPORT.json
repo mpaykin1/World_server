@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 3,
+  "patch": "WORLD_SERVER_INK_GLYPH_WORLD_V3",
+  "version": "3.0.0",
+  "validatedOn": "2026-08-26",
+  "local": {
+    "staticQualityCheck": "PASS",
+    "unitTests": "17/17 PASS",
+    "benchmark": "PASS ~0.20–0.22s latest synthetic 160x160 tournament; 7073 instances; 530 nav nodes; topology enabled; quality 84.83",
+    "syntaxChecks": "PASS",
+    "payloadIntegrity": "30/30 SHA-256 tracked files PASS; installer enforces before write",
+    "glbStructuralValidation": "PASS (valid GLB accepted; corrupt header rejected)",
+    "topologyGrammar": "PASS (junction landmarks + cycle rank regression tests)",
+    "installerIntegration": "11/11 PASS"
+  },
+  "externalNotClaimedAsPass": [
+    "network download of TTF/OFL/opentype/Hanzi data in this sandbox",
+    "full World_server release:gate",
+    "Playwright in the live repository",
+    "real GLB optimization via locally installed gltfpack",
+    "Vercel production and physical mobile-device verification"
+  ],
+  "readinessPercent": 98
+}

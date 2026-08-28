@@ -268,3 +268,22 @@ CLI, npm/Python, Playwright, linters, scanners, profilers, DB/Vercel/Git/FFmpeg/
 - Перед известными точками разрыва (переустановка компьютера, обновление Claude Code/Windows/инструментов) — обязателен полный checkpoint commit + push непосредственно перед действием.
 - Каждая сессия обязана эффективно проверять, не накопились ли давно незакоммиченные ценные изменения (`git status` с содержательным diff, не только report-шум), и если да — сделать checkpoint-коммит раньше, чем продолжать новую работу. Это проверяется `scripts/check-agent-rules.js` как часть `AUTO-ENFORCEMENT` (16).
 - Если объём незакоммиченных изменений становится большим (десятки+ файлов реального кода/скриптов, не только регенерируемые reports) — не копить дальше, а немедленно создать safe checkpoint-коммит.
+
+<!-- GAME_MOTION_POLICY_V2:START -->
+## Game Motion / Frame Timeline policy V2
+- Reuse existing WorldQualityAutopilot; never create a duplicate animation quality governor.
+- Every game/world change: run `npm run animation:audit && npm run animation:plan`. Implement all meaningful P0/P1 animation opportunities unless runtime evidence shows a performance/gameplay regression.
+- Character locomotion cadence must follow real speed/distance (LocomotionClock or native equivalent) to reduce foot sliding. Do not fake walking while physics/root is stationary.
+- Use MotionGraph/state-machine for multi-state characters/mechanisms, central MotionScheduler for secondary motion, and distance/visibility LOD.
+- Visual-only motion must animate visual descendants, not authoritative collision roots. Physical doors/platforms must keep animation and collision synchronized.
+- Prefer native/procedural/skeletal animation. Frame timeline/APNG/WebP/sprite sequences are for exact pre-rendered motion, complex effects, reversible inspection/exploded states, or when native motion is not practical.
+- Preserve user-required APNG format.
+- Register runtime animation adapters with `WorldQualityAutopilot.registerAnimationAdapter`; SAFE tier must retain gameplay-critical motion and reduce only secondary effects.
+- Use deterministic procedural noise when replay/sync consistency matters.
+- Before major animation work run `npm run animation:oss:check`. Useful compatible OSS updates: test on a branch, verify license/changelog, run bootstrap + animation gate + full release gate. Never auto-merge untested upstream updates.
+- For GLB/glTF, use isolated glTF-Transform/Meshopt tooling conservatively and verify animations/rigs before and after optimization.
+- Measure frame sequences with analyze_sequence.py; repair exposure flicker/seams/interpolation only when metrics/runtime observation justify it.
+- Save successful patterns and root-cause fixes through `npm run animation:knowledge` and existing server regression/quality knowledge systems. Deduplicate.
+- Fix root cause and add regression protection. Do not use SKIP to hide patch failures. Iterate until all relevant tests pass.
+- Never claim 100% without real desktop + mobile/runtime evidence for affected games.
+<!-- GAME_MOTION_POLICY_V2:END -->

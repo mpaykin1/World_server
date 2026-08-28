@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "2.0.0",
+  "generatedAt": "2026-08-26",
+  "pass": true,
+  "checks": {
+    "jsUnitTests": {"pass": true, "tests": 10},
+    "installerSyntax": {"pass": true},
+    "installerIdempotency": {"pass": true, "runs": 2, "duplicatePolicyMarkers": 0, "duplicateReleaseGateEntries": 0},
+    "fixtureAnimationVerify": {"pass": true},
+    "fixtureAuditPlanIntegration": {"pass": true, "secondApplyChangedFiles": 0},
+    "fixtureAnimationQualityGate": {"pass": true},
+    "pythonSyntax": {"pass": true},
+    "frameSequenceAnalyzer": {"pass": true},
+    "exposureStabilizer": {"pass": true},
+    "apngGeneration": {"pass": true, "verifiedFrames": 12},
+    "spriteSheetGeneration": {"pass": true},
+    "webpConversion": {"pass": true, "verifiedFrames": 12},
+    "syntheticRuntimeBenchmark": {"pass": true}
+  },
+  "networkDependentChecksDeferred": [
+    "OSS bootstrap downloads",
+    "real glTF-Transform/Meshopt asset optimization"
+  ],
+  "liveRepositoryChecksDeferred": [
+    "real World_server installation",
+    "full existing release gate",
+    "desktop/mobile runtime evidence for affected games"
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "1.0.0",
+  "presets": {
+    "voxel_character_idle": {
+      "type": "breathe",
+      "amount": 0.012,
+      "speed": 1.2,
+      "secondary": true
+    },
+    "voxel_character_locomotion": {
+      "type": "locomotion",
+      "strideLength": 1.0,
+      "speedDriven": true,
+      "antiFootSlide": true
+    },
+    "hanging_sign": {
+      "type": "sway",
+      "amount": 0.035,
+      "speed": 0.85,
+      "secondary": true
+    },
+    "street_lamp": {
+      "type": "sway",
+      "amount": 0.012,
+      "speed": 0.55,
+      "secondary": true
+    },
+    "gear": {
+      "type": "spin",
+      "amount": 1.0,
+      "speed": 0.8
+    },
+    "steam": {
+      "type": "timeline",
+      "loop": true,
+      "secondary": true
+    },
+    "door": {
+      "type": "timeline",
+      "trigger": "distance",
+      "collisionAware": true
+    },
+    "exploded_inspection": {
+      "type": "exploded",
+      "trigger": "manual",
+      "reversible": true
+    },
+    "impact_camera": {
+      "type": "camera-shake",
+      "trauma": 0.35,
+      "decay": 1.9,
+      "secondary": false
+    },
+    "bird_flock": {
+      "type": "state-graph",
+      "states": [
+        "idle",
+        "takeoff",
+        "cruise",
+        "turn",
+        "land"
+      ],
+      "secondary": true
+    }
+  }
+}

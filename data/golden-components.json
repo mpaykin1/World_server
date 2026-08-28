@@ -45,6 +45,45 @@
         "mobile safe area",
         "non-obstructive HUD"
       ]
+    },
+    "pixel-animation-runtime": {
+      "canonical": "shared/pixel-animation-runtime.js",
+      "core": "shared/pixel-animation-engine.js",
+      "webgpu": "shared/pixel-animation-webgpu.js",
+      "gpuCulling": "shared/pixel-animation-gpu-culling.js",
+      "worker": "shared/pixel-animation-worker.js",
+      "pixi8": "shared/pixel-animation-pixi8-adapter.js",
+      "atlasBuilder": "shared/pixel-atlas-builder.js",
+      "multiAtlas": "shared/pixel-animation-multi-atlas.js",
+      "autoProfile": "shared/pixel-animation-auto-profile.js",
+      "regionRig": "shared/pixel-animation-region-rig.js",
+      "pipelineCache": "shared/pixel-animation-pipeline-cache.js",
+      "visualRegression": "shared/pixel-animation-visual-regression.js",
+      "deviceLearning": "shared/pixel-animation-device-learning.js",
+      "autoIntegrator": "shared/pixel-animation-auto-integrator.js",
+      "status": "candidate",
+      "version": "3.0.0",
+      "scope": {
+        "requiresCapability": "pixel-animation"
+      },
+      "rules": [
+        "preserve accepted graphics and gameplay",
+        "nearest-neighbor pixel rendering",
+        "one global animation clock",
+        "GPU instancing for mass rich sprites",
+        "GPU compute culling only with safe fallback",
+        "bounded visible buffers and indirect draw",
+        "multi-atlas texture arrays with legacy layer-0 compatibility",
+        "Pixi ParticleContainer only for lightweight/far-field layers",
+        "spatial culling before rendering fallback",
+        "adaptive LOD and device budget",
+        "bounded learned quality policy",
+        "authenticated telemetry only",
+        "no per-object ambient timers",
+        "automatic backend fallback",
+        "auto-integrate marked game/world canvases only",
+        "promote only after desktop/mobile real-browser evidence"
+      ]
     }
   },
   "schemaVersion": "2.0.0",

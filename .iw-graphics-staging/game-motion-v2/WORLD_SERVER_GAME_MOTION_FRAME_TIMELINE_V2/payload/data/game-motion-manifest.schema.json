@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "world-server://game-motion-manifest.schema.json",
+  "title": "World Server Game Motion Manifest",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "motions"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "game": {
+      "type": "string"
+    },
+    "motions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "target",
+          "type",
+          "trigger"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "target": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "enum": [
+              "sway",
+              "bob",
+              "spin",
+              "pulse",
+              "breathe",
+              "timeline",
+              "frame-sequence",
+              "exploded",
+              "locomotion",
+              "camera-shake",
+              "state-graph"
+            ]
+          },
+          "trigger": {
+            "type": "object",
+            "required": [
+              "source"
+            ],
+            "properties": {
+              "source": {
+                "enum": [
+                  "time",
+                  "speed",
+                  "distance",
+                  "impact",
+                  "touch",
+                  "mouse",
+                  "audio",
+                  "state",
+                  "manual"
+                ]
+              },
+              "channel": {
+                "type": "string"
+              },
+              "min": {
+                "type": "number"
+              },
+              "max": {
+                "type": "number"
+              }
+            }
+          },
+          "params": {
+            "type": "object"
+          },
+          "quality": {
+            "type": "object"
+          },
+          "platforms": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "web",
+                "godot",
+                "roblox"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

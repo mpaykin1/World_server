@@ -1,0 +1,12 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict'),G=require('../shared/game-motion-engine.js');
+test('frame mapping clamps endpoints',()=>{assert.equal(G.progressToFrame(-1,10),0);assert.equal(G.progressToFrame(1,10),9);assert.equal(G.progressToFrame(2,10),9)});
+test('smoothstep endpoints',()=>{assert.equal(G.EASING.smoothstep(0),0);assert.equal(G.EASING.smoothstep(1),1);assert.ok(Math.abs(G.EASING.smoothstep(.5)-.5)<1e-9)});
+test('timeline deterministic seek',()=>{let v=-1;new G.Timeline().addTrack({from:10,to:20,set:x=>v=x}).seek(.25);assert.equal(v,12.5)});
+test('spring converges',()=>{const s=new G.Spring({value:0});s.setTarget(1);for(let i=0;i<300;i++)s.step(1/60);assert.ok(Math.abs(s.value-1)<.001)});
+test('locomotion clock tracks actual distance',()=>{const l=new G.LocomotionClock({strideLength:2});assert.equal(l.stepDistance(.5),.25);assert.equal(l.stepDistance(.5),.5)});
+test('motion graph transitions',()=>{const c={speed:0};const g=new G.MotionGraph({initial:'idle',context:c}).addState('idle').addState('run').addTransition('idle','run',x=>x.speed>1);c.speed=2;assert.equal(g.step(.016),'run')});
+test('event envelope rises and falls',()=>{const e=new G.EventEnvelope({attack:.1,hold:0,release:.1}).trigger();assert.ok(e.step(.05)>0);e.step(.2);assert.equal(e.value,0)});
+test('exploded controller restores',()=>{const parts=[{position:{x:1,y:0,z:0},userData:{}}];const c=G.createExplodedController(parts,{distance:2});c.setProgress(1);assert.ok(parts[0].position.x>1);c.restore();assert.equal(parts[0].position.x,1)});
+test('deterministic rng repeats',()=>{const a=new G.DeterministicRng(7),b=new G.DeterministicRng(7);for(let i=0;i<20;i++)assert.equal(a.next(),b.next())});
+test('scheduler respects enabled flag',()=>{let n=0;const s=new G.MotionScheduler({hz:60,now:()=>100});s.add({enabled:false,update(){n++}});s._last=0;s.step(1000);assert.equal(n,0)});

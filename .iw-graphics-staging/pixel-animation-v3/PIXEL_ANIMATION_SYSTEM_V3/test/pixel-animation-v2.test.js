@@ -1,0 +1,9 @@
+"use strict";
+const test=require('node:test');const assert=require('node:assert/strict');
+const Core=require('../shared/pixel-animation-engine.js');const Auto=require('../shared/pixel-animation-auto-profile.js');const Atlas=require('../shared/pixel-atlas-builder.js');const Runtime=require('../shared/pixel-animation-runtime.js');const WebGPU=require('../shared/pixel-animation-webgpu.js');const Pixi=require('../shared/pixel-animation-pixi8-adapter.js');
+test('v2 exposes extended profiles',()=>{for(const p of ['bird','character','cloth','smoke','foliage','vehicle','weapon','portal','light'])assert.ok(Core.DEFAULT_PROFILES[p],p);});
+test('auto profile resolves common game assets',()=>{assert.equal(Auto.resolve({name:'firebird stained glass'}),'bird');assert.equal(Auto.resolve({name:'old steam locomotive vehicle'}),'vehicle');assert.equal(Auto.resolve({tags:['magic','portal']}),'portal');assert.equal(Auto.resolve({name:'unknown'}),'generic');});
+test('atlas packer is deterministic and non-overlapping',()=>{const a=Atlas.packRects([{key:'a',width:16,height:16},{key:'b',width:24,height:8},{key:'c',width:8,height:32}],{width:64,maxSize:128,padding:2});assert.ok(a.width<=128&&a.height<=128);const r=a.items.map(x=>({x:x.x,y:x.y,w:x.width,h:x.height}));for(let i=0;i<r.length;i++)for(let j=i+1;j<r.length;j++){const A=r[i],B=r[j];assert.ok(A.x+A.w<=B.x||B.x+B.w<=A.x||A.y+A.h<=B.y||B.y+B.h<=A.y);}});
+test('runtime exports async backend selector',()=>{assert.equal(typeof Runtime.create,'function');assert.equal(typeof Runtime.createFromRemote,'function');});
+test('webgpu module is safe when unavailable',()=>{assert.equal(typeof WebGPU.supported,'function');assert.equal(typeof WebGPU.WGSL,'string');assert.ok(WebGPU.WGSL.includes('@vertex'));});
+test('pixi adapter is pinned to current v8 series',()=>{assert.match(Pixi.DEFAULT_MODULE_URL,/pixi\.js@8\.19\.0/);});

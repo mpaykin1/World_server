@@ -43,3 +43,9 @@ World_server_quality_autopilot_v7_test/
 _V11_3_TMP/
 _V13_TMP/
 _WORLD_V41_TMP_VERIFY/
+tools/game-motion/.venv/
+tools/game-motion/vendor/
+tools/game-motion/node/node_modules/
+
+# Ink Glyph World local tool cache
+.ink-glyph-tools/

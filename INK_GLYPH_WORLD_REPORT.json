@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 3,
+  "generatedAt": "2026-08-26T01:20:55.452Z",
+  "pass": true,
+  "requireFonts": false,
+  "requireVendor": false,
+  "requireStrokes": false,
+  "requireTools": false,
+  "errors": [],
+  "warnings": [],
+  "registryFonts": 4,
+  "features": {
+    "worker": true,
+    "cache": true,
+    "semanticRoles": true,
+    "vectorSourceFallback": true,
+    "strokeOrder": true,
+    "cpuNavigationAStar": true,
+    "lod": true,
+    "qualityTournament": true,
+    "glbExport": true,
+    "glbStructuralValidator": true,
+    "gltfpackOptimizer": true,
+    "topologyGrammar": true,
+    "e2e": true
+  },
+  "checkHash": "7cd4f8a0a4311207b2c9eca45ed277147246e07056fa4b97ea60c4096a807aa3"
+}

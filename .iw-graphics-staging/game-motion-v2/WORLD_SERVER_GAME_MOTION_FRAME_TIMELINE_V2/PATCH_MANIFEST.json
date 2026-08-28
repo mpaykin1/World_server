@@ -1,0 +1,31 @@
+{
+  "name": "WORLD_SERVER_GAME_MOTION_FRAME_TIMELINE_V2",
+  "version": "2.0.0",
+  "createdAt": "2026-08-26",
+  "target": "mpaykin1/World_server",
+  "strategy": "upgrade V1 in place; reuse WorldQualityAutopilot and quality systems",
+  "features": [
+    "Frame Timeline v2",
+    "MotionGraph",
+    "LocomotionClock anti-foot-slide",
+    "central MotionScheduler/LOD",
+    "deterministic procedural motion",
+    "trauma camera shake",
+    "progressive frame cache",
+    "Motion Manifest DSL",
+    "motion preset library",
+    "frame quality analyzer",
+    "exposure stabilizer",
+    "seam blender",
+    "FFmpeg CPU frame interpolation",
+    "APNG/WebP/spritesheet pipeline",
+    "glTF-Transform/Meshopt optimization",
+    "Web/Three + Godot + Roblox adapters",
+    "OSS bootstrap + weekly update watch",
+    "knowledge capture",
+    "animation planner",
+    "benchmark",
+    "strict animation quality/release gate"
+  ],
+  "liveInstallRequired": true
+}

@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "2.0.0",
+  "licensePolicy": {
+    "autoAllowed": [
+      "mit",
+      "apache-2.0",
+      "bsd-2-clause",
+      "bsd-3-clause",
+      "isc",
+      "mpl-2.0",
+      "lgpl-2.1",
+      "lgpl-3.0"
+    ],
+    "reviewRequired": [
+      "gpl-2.0",
+      "gpl-3.0",
+      "agpl-3.0",
+      "unknown",
+      "other"
+    ],
+    "rule": "Never auto-install/update a dependency with unknown, non-free, or newly incompatible licensing. Updates are tested on a branch before merge."
+  },
+  "repositories": [
+    {
+      "id": "aironzak-roomwalk",
+      "repo": "Aironzak/instagram",
+      "branch": "main",
+      "purpose": "MIT reference: roomwalk/exploded, extraction, seam/flicker workflow"
+    },
+    {
+      "id": "ffmpeg",
+      "repo": "FFmpeg/FFmpeg",
+      "branch": "master",
+      "purpose": "video/frame extraction and CPU motion interpolation"
+    },
+    {
+      "id": "imageio-ffmpeg",
+      "repo": "imageio/imageio-ffmpeg",
+      "branch": "main",
+      "purpose": "cross-platform FFmpeg binary access"
+    },
+    {
+      "id": "pillow",
+      "repo": "python-pillow/Pillow",
+      "branch": "main",
+      "purpose": "PNG/WebP/APNG/frame processing"
+    },
+    {
+      "id": "numpy",
+      "repo": "numpy/numpy",
+      "branch": "main",
+      "purpose": "sequence quality metrics"
+    },
+    {
+      "id": "gltf-transform",
+      "repo": "donmccurdy/glTF-Transform",
+      "branch": "main",
+      "purpose": "MIT glTF optimization and Meshopt keyframe animation compression"
+    },
+    {
+      "id": "meshoptimizer",
+      "repo": "zeux/meshoptimizer",
+      "branch": "master",
+      "purpose": "MIT mesh and animation data compression"
+    },
+    {
+      "id": "godot",
+      "repo": "godotengine/godot",
+      "branch": "master",
+      "purpose": "MIT native game animation backend when Godot projects are present"
+    }
+  ],
+  "schedule": "weekly plus before major animation work"
+}

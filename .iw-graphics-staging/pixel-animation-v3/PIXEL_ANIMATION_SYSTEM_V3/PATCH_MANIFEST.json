@@ -1,0 +1,53 @@
+{
+  "name": "PIXEL_ANIMATION_SYSTEM_V3",
+  "version": "3.0.0",
+  "generatedAt": "2026-08-24T05:45:00Z",
+  "preserveExistingGraphics": true,
+  "features": [
+    "webgpu-instancing",
+    "webgpu-compute-culling",
+    "webgpu-indirect-draw",
+    "webgl2-instancing",
+    "canvas2d-fallback",
+    "texture-array-multi-atlas",
+    "atlas-streaming",
+    "region-mask-rig",
+    "pipeline-warmup-cache",
+    "animated-visual-regression",
+    "authenticated-device-baselines",
+    "bounded-learned-quality-policy",
+    "safe-idempotent-auto-integration",
+    "pixijs-8-adapter",
+    "runtime-atlas-builder",
+    "auto-profile-resolver",
+    "offscreen-worker",
+    "spatial-culling",
+    "lod",
+    "adaptive-quality",
+    "supabase-config-v3",
+    "supabase-telemetry-v2",
+    "diagnostic-lab"
+  ],
+  "profiles": ["bird","fire","water","tree","grass","flag","monster","machine","glass","character","cloth","smoke","foliage","vehicle","weapon","portal","light"],
+  "verified": {
+    "nodeTests": "20/20 PASS",
+    "animatedFrames": "8/8 PASS",
+    "latestSpatialBenchmark50kMsPerQuery": 0.0649,
+    "serverPolicyVersion": 3,
+    "configEdgeVersion": 3,
+    "telemetryEdgeVersion": 2
+  },
+  "requiredGates": [
+    "pixel-animation:check",
+    "pixel-animation:bench",
+    "pixel-animation:auto-integrate-idempotency",
+    "supabase-migration-history",
+    "config-v3",
+    "authenticated-telemetry",
+    "quality:impact",
+    "release:gate",
+    "desktop-real-browser-backend-matrix",
+    "mobile-real-browser-backend-matrix"
+  ],
+  "nonStopRule": "Do not stop at first PASS. Find every root cause, fix it, add regression protection, rerun the failed test and its complete parent gate, and continue until no mandatory error remains."
+}

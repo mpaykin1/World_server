@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 2,
+  "assetType": "ink-brush-font",
+  "destination": "assets/fonts/ink-glyph",
+  "fonts": [
+    {
+      "id": "liu-jian-mao-cao",
+      "title": "Liu Jian Mao Cao",
+      "family": "Liu Jian Mao Cao",
+      "file": "LiuJianMaoCao-Regular.ttf",
+      "licenseFile": "liu-jian-mao-cao-OFL.txt",
+      "styleTags": [
+        "grass-script",
+        "fluid",
+        "expressive",
+        "ink",
+        "brush"
+      ],
+      "sourcePage": "https://github.com/google/fonts/tree/main/ofl/liujianmaocao",
+      "fontUrl": "https://raw.githubusercontent.com/google/fonts/main/ofl/liujianmaocao/LiuJianMaoCao-Regular.ttf",
+      "licenseUrl": "https://raw.githubusercontent.com/google/fonts/main/ofl/liujianmaocao/OFL.txt",
+      "sourceGitBlobSha": "f380deef04a5ee6d5af2c6fba60d1613d831c1aa",
+      "minBytes": 4000000,
+      "webFile": "LiuJianMaoCao-Regular.woff2",
+      "license": "SIL OFL 1.1"
+    },
+    {
+      "id": "ma-shan-zheng",
+      "title": "Ma Shan Zheng",
+      "family": "Ma Shan Zheng",
+      "file": "MaShanZheng-Regular.ttf",
+      "licenseFile": "ma-shan-zheng-OFL.txt",
+      "styleTags": [
+        "majestic",
+        "heavy",
+        "temple",
+        "ink",
+        "brush"
+      ],
+      "sourcePage": "https://github.com/google/fonts/tree/main/ofl/mashanzheng",
+      "fontUrl": "https://raw.githubusercontent.com/google/fonts/main/ofl/mashanzheng/MaShanZheng-Regular.ttf",
+      "licenseUrl": "https://raw.githubusercontent.com/google/fonts/main/ofl/mashanzheng/OFL.txt",
+      "sourceGitBlobSha": "11bbfb9867d70612158229d037e7a5f622bd0e38",
+      "minBytes": 5000000,
+      "webFile": "MaShanZheng-Regular.woff2",
+      "license": "SIL OFL 1.1"
+    },
+    {
+      "id": "zhi-mang-xing",
+      "title": "Zhi Mang Xing",
+      "family": "Zhi Mang Xing",
+      "file": "ZhiMangXing-Regular.ttf",
+      "licenseFile": "zhi-mang-xing-OFL.txt",
+      "styleTags": [
+        "running-script",
+        "dynamic",
+        "fast",
+        "ink",
+        "brush"
+      ],
+      "sourcePage": "https://github.com/google/fonts/tree/main/ofl/zhimangxing",
+      "fontUrl": "https://raw.githubusercontent.com/google/fonts/main/ofl/zhimangxing/ZhiMangXing-Regular.ttf",
+      "licenseUrl": "https://raw.githubusercontent.com/google/fonts/main/ofl/zhimangxing/OFL.txt",
+      "sourceGitBlobSha": "d037d1f00395175de01de33e62957c30a008a1b1",
+      "minBytes": 3500000,
+      "webFile": "ZhiMangXing-Regular.woff2",
+      "license": "SIL OFL 1.1"
+    },
+    {
+      "id": "long-cang",
+      "title": "Long Cang",
+      "family": "Long Cang",
+      "file": "LongCang-Regular.ttf",
+      "licenseFile": "long-cang-OFL.txt",
+      "styleTags": [
+        "calligraphy",
+        "ancient",
+        "elegant",
+        "ink",
+        "brush"
+      ],
+      "sourcePage": "https://github.com/google/fonts/tree/main/ofl/longcang",
+      "fontUrl": "https://raw.githubusercontent.com/google/fonts/main/ofl/longcang/LongCang-Regular.ttf",
+      "licenseUrl": "https://raw.githubusercontent.com/google/fonts/main/ofl/longcang/OFL.txt",
+      "sourceGitBlobSha": "363bb08696fe4d3827bd36d3d2fbc028d1205161",
+      "minBytes": 4500000,
+      "webFile": "LongCang-Regular.woff2",
+      "license": "SIL OFL 1.1"
+    }
+  ],
+  "runtimePolicy": {
+    "fontAssetsLocalOnly": true,
+    "preferWoff2WhenGenerated": true,
+    "keepOriginalTtf": true,
+    "cacheKeyIncludesSourceGitBlobSha": true
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "name": "WORLD_SERVER_INK_GLYPH_WORLD_V3",
+  "version": "3.0.0",
+  "created": "2026-08-26",
+  "target": "mpaykin1/World_server",
+  "upgradeFrom": [
+    "WORLD_SERVER_INK_GLYPH_WORLD_V1",
+    "WORLD_SERVER_INK_GLYPH_WORLD_V2"
+  ],
+  "principles": [
+    "reuse existing Three.js and release-gate stack; no duplicate engine",
+    "CPU-first deterministic generation",
+    "Web Worker off-main-thread generation",
+    "IndexedDB deterministic recipe cache",
+    "real Hanzi stroke-order mapping with procedural fallback",
+    "semantic glyph-to-world topology",
+    "CPU navigation graph plus A-star preview",
+    "bounded InstancedMesh plus LOD rendering",
+    "deterministic quality tournament",
+    "GLB export plus isolated gltfpack optimization tooling",
+    "strict font/stroke provenance and integrity checks",
+    "idempotent backup installer and regression gate"
+  ],
+  "features": {
+    "worker": true,
+    "indexedDbCache": true,
+    "hanziStrokeOrder": true,
+    "strokeWriteAnimation": true,
+    "cpuNavGraph": true,
+    "aStar": true,
+    "lodTiers": [
+      "full",
+      "medium",
+      "low"
+    ],
+    "qualityTournament": true,
+    "glbExport": true,
+    "gltfpackOptimizer": "1.2.0",
+    "meshoptimizerTool": "1.2.0",
+    "opentypePinned": "2.0.0",
+    "fonttoolsOptional": true,
+    "benchmark": true,
+    "playwrightE2E": true,
+    "payloadSha256": true,
+    "configBackup": true,
+    "glbStructuralValidator": true,
+    "unitTests": 17,
+    "topologyGrammar": true,
+    "topologyLandmarks": [
+      "gate",
+      "plaza"
+    ]
+  },
+  "fonts": [
+    "Liu Jian Mao Cao",
+    "Ma Shan Zheng",
+    "Zhi Mang Xing",
+    "Long Cang"
+  ],
+  "expectedReadinessPercent": 98,
+  "remainingBeforeProduction100": [
+    "install into live World_server",
+    "download and verify pinned TTF/OFL, opentype vendor, and Hanzi stroke data on desktop",
+    "run full existing release:gate",
+    "run Playwright in the real local app and real mobile viewport/device",
+    "export a real GLB and run gltfpack optimization",
+    "verify Vercel production after commit"
+  ]
+}

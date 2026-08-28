@@ -1,0 +1,48 @@
+name: Game Motion OSS Watch
+on:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "24" }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Install and verify open-source animation toolchain
+        run: npm run animation:oss:bootstrap
+      - name: Check upstream updates
+        run: npm run animation:oss:check
+      - name: Run animation quality gate
+        run: npm run animation:gate
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: game-motion-maintenance-evidence
+          path: |
+            ANIMATION_OSS_UPDATE_REPORT.json
+            GAME_MOTION_VERIFY_REPORT.json
+            GAME_MOTION_BENCHMARK_REPORT.json
+            GAME_MOTION_GATE_REPORT.json
+            GAME_MOTION_OPPORTUNITIES.json
+            GAME_MOTION_IMPLEMENTATION_PLAN.json
+      - name: Open/update issue when upstream changed
+        if: always()
+        env: { GH_TOKEN: "${{ github.token }}" }
+        shell: bash
+        run: |
+          test -f ANIMATION_OSS_UPDATE_REPORT.json || exit 0
+          updates="$(node -e "const r=require('./ANIMATION_OSS_UPDATE_REPORT.json');process.stdout.write(String(r.updates||0))")"
+          if [ "$updates" != "0" ]; then
+            existing="$(gh issue list --search '"Animation OSS updates available" in:title' --state open --json number --jq '.[0].number' || true)"
+            body="Found **${updates}** upstream update(s). Desktop AI: review licenses/changelogs, create an update branch, install candidate versions, run animation:gate + release:gate + real runtime tests, and merge only if quality/performance improve."
+            if [ -n "$existing" ]; then gh issue comment "$existing" --body "$body"; else gh issue create --title "Animation OSS updates available" --body "$body"; fi
+          fi

@@ -1,0 +1,42 @@
+Node unit tests PASS=True
+
+TAP version 13
+# Subtest: progressToFrame clamps and maps endpoints
+ok 1 - progressToFrame clamps and maps endpoints
+  ---
+  duration_ms: 0.691531
+  type: 'test'
+  ...
+# Subtest: smoothstep endpoints
+ok 2 - smoothstep endpoints
+  ---
+  duration_ms: 0.161693
+  type: 'test'
+  ...
+# Subtest: timeline seeks deterministically
+ok 3 - timeline seeks deterministically
+  ---
+  duration_ms: 0.270647
+  type: 'test'
+  ...
+# Subtest: spring converges to target
+ok 4 - spring converges to target
+  ---
+  duration_ms: 0.254813
+  type: 'test'
+  ...
+# Subtest: exploded controller restores base transforms
+ok 5 - exploded controller restores base transforms
+  ---
+  duration_ms: 0.375144
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 49.954706

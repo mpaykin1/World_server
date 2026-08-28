@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#efe7d6" />
+  <title>Ink Glyph World V3</title>
+  <style>
+    :root{color-scheme:light;--paper:#efe7d6;--ink:#11100e;--red:#8e1f17}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--paper);font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink)}canvas{display:block}.panel{position:fixed;z-index:5;left:max(12px,env(safe-area-inset-left));top:max(12px,env(safe-area-inset-top));width:min(450px,calc(100vw - 24px));padding:12px;border:1px solid #2c2923;background:rgba(239,231,214,.93);backdrop-filter:blur(9px);box-shadow:0 12px 35px #0002}.row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.row.three{grid-template-columns:1fr 1fr 1fr}.label{font-size:12px;opacity:.72;margin-bottom:3px}input,select,button{width:100%;border:1px solid #2c2923;background:#f7f0df;color:#171512;padding:9px;border-radius:0;font:inherit}input[type=checkbox]{width:auto;vertical-align:middle;margin-right:6px}button{cursor:pointer;font-weight:700}button.primary{background:#171512;color:#f7f0df}.title{display:flex;align-items:center;justify-content:space-between;gap:12px;font-weight:900;letter-spacing:.04em}.seal{background:var(--red);color:#fff;padding:4px 7px;font-weight:900}.status{font-size:12px;margin-top:8px;line-height:1.35;white-space:pre-wrap}.help{position:fixed;z-index:4;right:12px;bottom:max(12px,env(safe-area-inset-bottom));padding:7px 9px;background:#171512cc;color:#fff;font-size:11px;max-width:360px}.check{display:flex;align-items:center;font-size:12px;min-height:38px;border:1px solid #2c2923;padding:8px;background:#f7f0df}.error{color:#941c12;font-weight:700}@media(max-width:640px){.panel{width:calc(100vw - 24px);max-height:70vh;overflow:auto}.row.three{grid-template-columns:1fr 1fr}.help{left:12px;right:auto;max-width:calc(100vw - 24px)}}
+  </style>
+  <script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.165.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.165.0/examples/jsm/"}}</script>
+</head>
+<body>
+  <section class="panel" aria-label="Ink Glyph World controls">
+    <div class="title"><span>INK GLYPH WORLD V3</span><span class="seal">印</span></div>
+    <div class="row"><label><div class="label">Brush font</div><select id="font"></select></label><label><div class="label">Glyph / text</div><input id="glyph" value="龍" maxlength="8" autocomplete="off" /></label></div>
+    <div class="row"><label><div class="label">World preset</div><select id="preset"><option value="city" selected>Ink city</option><option value="temple">Temple</option><option value="mountain">Mountain</option><option value="monolith">Monolith</option></select></label><label><div class="label">Resolution</div><select id="resolution"><option>64</option><option selected>80</option><option>96</option><option>112</option><option>128</option></select></label></div>
+    <div class="row three"><label><div class="label">Height</div><input id="height" type="number" value="8" min="2" max="20" step="1" /></label><label><div class="label">Ink scatter</div><input id="scatter" type="number" value="0.035" min="0" max="0.2" step="0.005" /></label><label><div class="label">LOD</div><select id="lod"><option value="auto" selected>Auto</option><option value="full">Full</option><option value="medium">Medium</option><option value="low">Low</option></select></label></div>
+    <div class="row"><label class="check"><input id="quality" type="checkbox" checked />Quality tournament</label><button id="cache">Clear cache</button></div>
+    <div class="row"><button id="build" class="primary">Build world</button><button id="animate">Write with brush</button></div>
+    <div class="row three"><button id="nav">Hide path</button><button id="exportJson">Export JSON</button><button id="exportGlb">Export GLB</button></div>
+    <div id="status" class="status">Preparing…</div>
+  </section>
+  <div class="help">Drag/touch: orbit · wheel/pinch: zoom · real stroke-order when Hanzi data is installed · Worker + cache · CPU navigation/A* · LOD · GLB export.</div>
+  <script src="../../shared/ink-glyph-world-core.js"></script>
+  <script type="module" src="./client.js"></script>
+</body>
+</html>

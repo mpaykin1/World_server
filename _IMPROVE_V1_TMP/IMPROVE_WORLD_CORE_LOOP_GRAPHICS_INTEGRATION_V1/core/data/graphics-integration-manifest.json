@@ -1,0 +1,301 @@
+{
+  "name": "IMPROVE_WORLD_CORE_LOOP_GRAPHICS_INTEGRATION_V1",
+  "version": "1.0.0",
+  "created": "2026-08-27",
+  "target": "mpaykin1/World_server",
+  "observedMasterSha": "fa3445713f8f9f84130c2795421b9cb1ca2d6640",
+  "goal": "stabilize graphics foundation and make every answer produce an immediate visible world mutation while advanced systems refine progressively",
+  "principles": [
+    "additive/non-destructive",
+    "CPU-first",
+    "first answer reaction never waits for GPU/AI worker",
+    "single capability bus",
+    "adapter failure isolation",
+    "raw answers never enter shareable world state",
+    "progressive refinement",
+    "mobile/desktop parity",
+    "no accepted visual/gameplay regression",
+    "idempotent audit/install"
+  ],
+  "performanceSLO": {
+    "answerImmediateReactionMs": 300,
+    "firstMeaningfulWorldChangeP95Ms": 1500,
+    "interactiveWorldMs": 3000,
+    "note": "new core-loop SLOs; legacy full-world/canvas budgets stay separate until measured"
+  },
+  "phases": {
+    "A": "core-loop and low-conflict capability modules",
+    "B": "global quality/delivery pipelines; run full parent gate after each",
+    "C": "worker/style capabilities; integrate only behind capability registry and evidence gates"
+  },
+  "modules": [
+    {
+      "id": "world-quality-autopilot-v4",
+      "name": "World Quality Autopilot V4",
+      "kind": "existing",
+      "statusObserved": "INSTALLED",
+      "sentinels": [
+        "shared/world-quality-autopilot.js"
+      ],
+      "role": "global adaptive quality governor"
+    },
+    {
+      "id": "ai3d-orchestrator",
+      "name": "AI3D + TRELLIS.2 + InstantMesh + Godot adapters",
+      "kind": "existing",
+      "statusObserved": "INSTALLED/PARTIAL_RUNTIME",
+      "sentinels": [
+        "services/ai3d-worker/ai3d/plugins/trellis2.py",
+        "services/ai3d-worker/ai3d/plugins/instantmesh.py",
+        "services/ai3d-worker/ai3d/plugins/godot_voxel.py"
+      ],
+      "role": "async heavy refinement; never block first answer reaction"
+    },
+    {
+      "id": "pixel-animation-v3",
+      "name": "Pixel Animation System V3",
+      "zip": "PIXEL_ANIMATION_SYSTEM_V3.zip",
+      "statusObserved": "MISSING",
+      "sentinels": [
+        "shared/pixel-animation-engine.js"
+      ],
+      "stageRoot": "PIXEL_ANIMATION_SYSTEM_V3",
+      "install": [
+        "node",
+        "install.cjs",
+        "{repo}"
+      ],
+      "phase": "A",
+      "role": "mass pixel/procedural animation, GPU+fallback"
+    },
+    {
+      "id": "game-motion-v2",
+      "name": "Game Motion Frame Timeline V2",
+      "zip": "WORLD_SERVER_GAME_MOTION_FRAME_TIMELINE_V2.zip",
+      "statusObserved": "MISSING",
+      "sentinels": [
+        "shared/game-motion-engine.js"
+      ],
+      "stageRoot": "WORLD_SERVER_GAME_MOTION_FRAME_TIMELINE_V2",
+      "install": [
+        "node",
+        "install-game-motion-system.cjs",
+        "--root={repo}"
+      ],
+      "phase": "A",
+      "role": "timeline/procedural locomotion/camera/effects"
+    },
+    {
+      "id": "ink-glyph-v3",
+      "name": "Ink Glyph World V3",
+      "zip": "WORLD_SERVER_INK_GLYPH_WORLD_V3.zip",
+      "statusObserved": "MISSING",
+      "sentinels": [
+        "apps/ink-glyph-world/index.html"
+      ],
+      "stageRoot": "WORLD_SERVER_INK_GLYPH_WORLD_V3",
+      "install": [
+        "node",
+        "install-ink-glyph-world.cjs",
+        "--repo",
+        "{repo}",
+        "--skip-fonts",
+        "--skip-vendor",
+        "--skip-strokes",
+        "--skip-tools"
+      ],
+      "phase": "A",
+      "role": "brush-glyph world topology/rendering"
+    },
+    {
+      "id": "characterforge-v2",
+      "name": "CharacterForge CPU V2",
+      "zip": "WORLD_SERVER_CHARACTERFORGE_CPU_V2.zip",
+      "statusObserved": "MISSING",
+      "sentinels": [
+        "services/ai3d-worker/ai3d/plugins/characterforge_cpu.py"
+      ],
+      "stageRoot": "WORLD_SERVER_CHARACTERFORGE_CPU_V2",
+      "install": [
+        "python",
+        "install_characterforge_cpu_v2.py"
+      ],
+      "cwd": "{repo}",
+      "phase": "A",
+      "role": "CPU voxel character reconstruction/LOD/rig"
+    },
+    {
+      "id": "pixel-panorama-360-v4",
+      "name": "Pixel Panorama 360 V4",
+      "zip": "WORLD_SERVER_PIXEL_PANORAMA_360_V4.zip",
+      "statusObserved": "MISSING",
+      "sentinels": [
+        "apps/pixel-panorama-360/index.html"
+      ],
+      "stageRoot": "WORLD_SERVER_PIXEL_PANORAMA_360_V4",
+      "install": [
+        "node",
+        "install-pixel-panorama-360-v4.cjs",
+        "--root",
+        "{repo}"
+      ],
+      "phase": "A",
+      "role": "360 viewer/tiles/touch/gyro/hotspots + durable worker"
+    },
+    {
+      "id": "gs360-v6",
+      "name": "3DGS 360 CPU Quality V6",
+      "zip": "WORLD_SERVER_3DGS_360_CPU_QUALITY_V6.zip",
+      "statusObserved": "MISSING",
+      "sentinels": [
+        "systems/gs360/run.cjs"
+      ],
+      "stageRoot": "WORLD_SERVER_3DGS_360_CPU_QUALITY_V6",
+      "install": [
+        "node",
+        "install-gs360-cpu-quality-v6.cjs",
+        "{repo}"
+      ],
+      "phase": "A",
+      "role": "CPU-first 360 reconstruction, optional GPU backends"
+    },
+    {
+      "id": "pwa-v5",
+      "name": "PWA Self Improving V5 MAX",
+      "zip": "WORLD_SERVER_PWA_SELF_IMPROVING_V5_MAX.zip",
+      "statusObserved": "MISSING",
+      "sentinels": [
+        "shared/pwa-runtime.js"
+      ],
+      "stageRoot": "WORLD_SERVER_PWA_SELF_IMPROVING_V5_MAX",
+      "install": [
+        "node",
+        "install-pwa-self-improve.cjs",
+        "{repo}"
+      ],
+      "phase": "B",
+      "role": "mobile/PWA/update/runtime quality delivery"
+    },
+    {
+      "id": "procedural-quality-v10",
+      "name": "Procedural Quality Engine V10",
+      "zip": "PROCEDURAL_QUALITY_ENGINE_V10.zip",
+      "statusObserved": "MISSING",
+      "sentinels": [
+        "shared/procedural-quality-runtime.js"
+      ],
+      "stageRoot": "PROCEDURAL_QUALITY_ENGINE_V10",
+      "install": [
+        "node",
+        "scripts/install-into-repo.js",
+        "{repo}"
+      ],
+      "phase": "B",
+      "role": "procedural rendering/material/lighting/temporal quality"
+    },
+    {
+      "id": "texture-quality-v10",
+      "name": "Texture Quality V10",
+      "zip": "WORLD_SERVER_TEXTURE_QUALITY_V10.zip",
+      "statusObserved": "MISSING",
+      "sentinels": [
+        "services/ai3d-worker/ai3d/texture_runtime_v10.py"
+      ],
+      "stageRoot": "WORLD_SERVER_TEXTURE_QUALITY_V10",
+      "install": [
+        "python",
+        "APPLY_TEXTURE_PIPELINE.py",
+        "--repo",
+        "{repo}",
+        "--no-git"
+      ],
+      "phase": "B",
+      "role": "texture/material/streaming quality"
+    },
+    {
+      "id": "mesh-aaa-v12",
+      "name": "Mesh AAA Quality Pipeline V12",
+      "zip": "WORLD_SERVER_MESH_AAA_QUALITY_PIPELINE_V12.zip",
+      "statusObserved": "PARTIAL/OLDER CORE PRESENT",
+      "sentinels": [
+        "services/ai3d-worker/ai3d/production_v12.py"
+      ],
+      "stageRoot": "",
+      "install": [
+        "python",
+        "APPLY_MESH_PIPELINE.py",
+        "{repo}",
+        "--no-git"
+      ],
+      "phase": "B",
+      "role": "mesh semantic protection/finalization/quality"
+    },
+    {
+      "id": "apng-v3",
+      "name": "APNG Quality System V3 MAX",
+      "zip": "WORLD_SERVER_APNG_QUALITY_SYSTEM_V3_MAX.zip",
+      "statusObserved": "MISSING",
+      "sentinels": [
+        "lib/apng-engine.js",
+        "apps/apng-lab/index.html"
+      ],
+      "phase": "B",
+      "manualInstall": "Use apng_patch/APPLY_APNG_SYSTEM.ps1 -RepoPath <repo> on Windows; then full cross-browser gate.",
+      "role": "pixel animation asset validation/repair/browser compatibility"
+    },
+    {
+      "id": "pixel-3dgs-phone4d-v6",
+      "name": "Pixel 3DGS CPU V6 Phone 4D MAX",
+      "zip": "PIXEL_3DGS_CPU_V6_PHONE_4D_MAX.zip",
+      "statusObserved": "NOT IN MASTER",
+      "sentinels": [
+        "systems/pixel-3dgs-v6"
+      ],
+      "phase": "C",
+      "manualInstall": "Keep as worker-side capability. Run its regression suite first; integrate as backend, not as Vercel runtime.",
+      "role": "phone capture/video/pseudo-4D temporal-track pipeline"
+    },
+    {
+      "id": "video2game-voxel-v5",
+      "name": "Video2Game Voxel V5",
+      "zip": "VIDEO2GAME_VOXEL_V5.zip",
+      "statusObserved": "NOT IN MASTER",
+      "sentinels": [
+        "services/video2game_voxel"
+      ],
+      "phase": "C",
+      "manualInstall": "Integrate video2game_voxel as a separate CPU worker backend after pytest/pipeline gates.",
+      "role": "video to voxel playable-world pipeline"
+    },
+    {
+      "id": "lowfi-25d",
+      "name": "LowFi 2.5D Server Patch",
+      "zip": "LOWFI_25D_SERVER_PATCH.zip",
+      "statusObserved": "NOT IN MASTER",
+      "sentinels": [
+        "apps/lowfi-25d/index.html"
+      ],
+      "phase": "C",
+      "manualInstall": "Do not use legacy hard-coded .bat; copy app/API through Desktop AI and connect to WorldGraphicsBus.",
+      "role": "2.5D procedural style/runtime example"
+    },
+    {
+      "id": "dreamfog-v2",
+      "name": "DreamFog World Patch V2",
+      "zip": "WORLD_SERVER_DREAMFOG_WORLD_PATCH_v2.zip",
+      "statusObserved": "NOT IN MASTER",
+      "sentinels": [
+        "shared/dreamfog-atmosphere.js"
+      ],
+      "stageRoot": "WORLD_SERVER_DREAMFOG_WORLD_PATCH_v2",
+      "install": [
+        "node",
+        "install.mjs",
+        "--repo",
+        "{repo}"
+      ],
+      "phase": "C",
+      "role": "fog/dream atmosphere style module"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "schema": "improve-world.world-delta/v1",
+  "privateInputsNeverShare": true,
+  "channels": [
+    "sky",
+    "light",
+    "fog",
+    "wind",
+    "terrain",
+    "vegetation",
+    "architecture",
+    "particles",
+    "creatures",
+    "motion",
+    "story"
+  ],
+  "layers": [
+    {
+      "id": "L0",
+      "name": "empty/base world",
+      "latency": "preloaded"
+    },
+    {
+      "id": "L1",
+      "name": "instant client mutation",
+      "targetMs": 300
+    },
+    {
+      "id": "L2",
+      "name": "procedural enrichment",
+      "targetP95Ms": 1500
+    },
+    {
+      "id": "L3",
+      "name": "async AI3D/3DGS/panorama refinement",
+      "blocking": false
+    },
+    {
+      "id": "L4",
+      "name": "motion/character/story enrichment",
+      "blocking": false
+    }
+  ]
+}
