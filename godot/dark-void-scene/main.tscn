@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://dujh84kju2v42"]
+
+[ext_resource type="Script" uid="uid://cbua1ah2vr65p" path="res://voxel_eye_runtime.gd" id="1_0xm2m"]
+[ext_resource type="Material" uid="uid://cvxn216c2ht26" path="res://materials/flame.tres" id="2_h2yge"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0xm2m"]
+sky_top_color = Color(0.02, 0.02, 0.07, 1)
+sky_horizon_color = Color(0.05, 0.07, 0.15, 1)
+ground_bottom_color = Color(0, 0, 0.02, 1)
+ground_horizon_color = Color(0.04, 0.05, 0.1, 1)
+
+[sub_resource type="Sky" id="Sky_h2yge"]
+sky_material = SubResource("ProceduralSkyMaterial_0xm2m")
+
+[sub_resource type="Environment" id="Environment_1bvp3"]
+background_mode = 1
+background_color = Color(0.007843138, 0.007843138, 0.011764706, 1)
+sky = SubResource("Sky_h2yge")
+ambient_light_source = 2
+ambient_light_color = Color(0.05882353, 0.078431375, 0.14117648, 1)
+ambient_light_energy = 0.45
+tonemap_mode = 2
+tonemap_exposure = 1.15
+glow_enabled = true
+glow_intensity = 1.2
+glow_bloom = 0.35
+glow_hdr_threshold = 0.75
+fog_enabled = true
+fog_light_color = Color(0.039215688, 0.05490196, 0.10980392, 1)
+fog_density = 0.07
+
+[sub_resource type="SphereMesh" id="SphereMesh_272bh"]
+radius = 0.3
+height = 0.6
+
+[node name="Main" type="Node3D" unique_id=153568782]
+
+[node name="Environment" type="WorldEnvironment" parent="." unique_id=691422043]
+environment = SubResource("Environment_1bvp3")
+
+[node name="Eye" type="Node3D" parent="." unique_id=1306085940]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0)
+script = ExtResource("1_0xm2m")
+
+[node name="Beacon" type="Node3D" parent="." unique_id=979917743]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 1.5, -28)
+
+[node name="Flame" type="OmniLight3D" parent="Beacon" unique_id=724933578]
+light_color = Color(1, 0.6, 0.235, 1)
+light_energy = 8.0
+omni_range = 20.0
+
+[node name="FlameMesh" type="MeshInstance3D" parent="Beacon" unique_id=417952086]
+material_override = ExtResource("2_h2yge")
+mesh = SubResource("SphereMesh_272bh")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=639240816]
+transform = Transform3D(0.9781476, 0, -0.2079117, 0, 1, 0, 0.2079117, 0, 0.9781476, -1, 1, 24)
+current = true
+fov = 55.0
+far = 200.0
+
+[node name="EyeFill" type="SpotLight3D" parent="." unique_id=485997795]
+transform = Transform3D(0.95105654, 0.17724487, -0.25313193, 0, 0.81915206, 0.57357645, 0.309017, -0.5455036, 0.77905995, 2, 6, 15)
+light_color = Color(0.65, 0.72, 0.95, 1)
+light_energy = 2.6
+spot_range = 40.0
+spot_angle = 35.0
