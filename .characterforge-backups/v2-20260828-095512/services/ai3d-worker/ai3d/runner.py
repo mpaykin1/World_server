@@ -19,8 +19,6 @@ from .plugins.voxel_city import VoxelCityEngine
 from .plugins.gpu_router import RemoteGPU3DRouter
 from .plugins.mesh_quality_optimizer import MeshQualityOptimizer
 from .plugins.world_quality import WorldQualityEnhancer
-from .plugins.pixel_panorama_360 import PixelPanorama360Engine
-from .plugins.characterforge_cpu import CharacterForgeCpuEngine
 from ai3d_voxel_verifier.verifier import verify_voxel_city
 
 
@@ -47,8 +45,6 @@ class PipelineRunner:
         self.gpu_router = RemoteGPU3DRouter()
         self.mesh_optimizer = MeshQualityOptimizer()
         self.world_quality = WorldQualityEnhancer()
-        self.pixel_panorama = PixelPanorama360Engine()
-        self.characterforge = CharacterForgeCpuEngine()
 
     def plugin_status(self) -> dict:
         # Honest engine name based on actually used stages, not claimed Depth+Blender
@@ -64,10 +60,8 @@ class PipelineRunner:
             "voxel_city": {"available": self.voxel_city.available(), "engine": "skyline_dp_reference_shell_piecewise_voxel_depth_cpu", "output": "voxel-city.json"},
             "godot_voxel_factory": self.godot.plugin_status(),
             "remote_gpu_router": self.gpu_router.status(),
-            "pixel_panorama_360": self.pixel_panorama.status(),
             "blender": {"available": self.building.available() or self.procgen.available(), "autoFound": self.building.blender if hasattr(self.building, 'blender') else "blender"},
             "voxel_tools": {"voxelsrv": (Path("C:/Users/user/Desktop/майн/voxelsrv/src").is_dir()), "littlecubes": (Path("C:/Users/user/Desktop/майн/LittleCubes/src").is_dir())},
-            "characterforge_cpu": self.characterforge.status(),
         }
 
     def _choose_image3d_engine(self) -> tuple[str, object]:
@@ -110,7 +104,7 @@ class PipelineRunner:
         started = time.time()
         input_path = Path(job["input_path"]) if job.get("input_path") else None
 
-        if mode in {"auto", "image_to_3d", "depth", "voxel_city", "character_voxel"} and not input_path:
+        if mode in {"auto", "image_to_3d", "depth", "voxel_city"} and not input_path:
             raise RuntimeError("This mode requires an input image.")
 
         depthEngine = None
@@ -139,15 +133,6 @@ class PipelineRunner:
         t0 = started
         # input_validation
         _add_stage("input_validation", t0, t0+0.05, input_path if input_path and input_path.is_file() else job_dir / "input.png", input_sha)
-
-        if mode == "pixel_panorama_360":
-            if not input_path:
-                raise RuntimeError("pixel_panorama_360 requires an input file")
-            progress(5, "Pixel Panorama 360: starting CPU pipeline")
-            panorama_files = self.pixel_panorama.run(input_path, job_dir, params, progress)
-            for panorama_path, panorama_kind in panorama_files:
-                files.append(file_meta(panorama_path, panorama_kind))
-            return {"files": files, "durationSeconds": round(time.time() - started, 3)}
 
         # Separate CPU voxel method: image -> logical cube world (NO GLB heightfield).
         if mode == "voxel_city":
@@ -210,33 +195,6 @@ class PipelineRunner:
             files.append(file_meta(manifest_path, "manifest"))
             progress(99, "Voxel City ready and independently checked")
             return {"files": files, "durationSeconds": manifest["durationSeconds"]}
-
-        if mode == "character_voxel":
-            progress(5, "CharacterForge CPU: starting voxel character pipeline")
-            result = self.characterforge.run(input_path, job_dir, params, progress)
-            for entry in result.get("files", []):
-                p = Path(entry.get("path", ""))
-                if p.is_file():
-                    files.append(file_meta(p, entry.get("role") or "characterforge_artifact"))
-            manifest = {
-                "jobId": job["id"],
-                "mode": mode,
-                "technology": result.get("technology"),
-                "cpuOnly": True,
-                "detail": result.get("detail"),
-                "identity": result.get("identity"),
-                "cacheHit": bool(result.get("cacheHit", False)),
-                "cacheKey": result.get("cacheKey"),
-                "durationSeconds": result.get("durationSeconds"),
-                "files": files,
-                "engines": self.plugin_status(),
-                "truthPolicy": "No GPU backend may be claimed in character_voxel CPU mode.",
-            }
-            manifest_path = job_dir / "characterforge-generation-manifest.json"
-            manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
-            files.append(file_meta(manifest_path, "characterforge-generation-manifest"))
-            progress(99, "CharacterForge CPU: complete")
-            return {"files": files, "durationSeconds": result.get("durationSeconds", round(time.time() - started, 3))}
 
         if mode in {"auto", "depth"} or (mode == "image_to_3d" and bool(params.get("depthPreview", True))):
             progress(8, "Depth Anything V2 Small: estimating depth")

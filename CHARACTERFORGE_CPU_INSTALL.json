@@ -1,0 +1,22 @@
+{
+  "patch": "WORLD_SERVER_CHARACTERFORGE_CPU_V2",
+  "version": "2.0.0",
+  "installedAt": "2026-08-28T09:55:12+0300",
+  "backup": "C:\\Users\\user\\Desktop\\World_server\\.characterforge-backups\\v2-20260828-095512",
+  "backupFiles": [
+    "package.json",
+    "services/ai3d-worker/ai3d/runner.py",
+    "services/ai3d-worker/server.py"
+  ],
+  "createdFiles": [
+    "services/ai3d-worker/ai3d/plugins/characterforge_cpu.py",
+    "services/ai3d-worker/characterforge/presets.json",
+    "services/ai3d-worker/requirements-characterforge-cpu.txt",
+    "services/ai3d-worker/scripts/characterforge_local_smoke.py",
+    "services/ai3d-worker/scripts/characterforge_voxel_blender.py",
+    "services/ai3d-worker/scripts/verify_characterforge_cpu.py"
+  ],
+  "technology": "CharacterForge CPU Voxel Pipeline",
+  "mode": "character_voxel",
+  "multiViewEndpoint": "/v1/characterforge/jobs"
+}

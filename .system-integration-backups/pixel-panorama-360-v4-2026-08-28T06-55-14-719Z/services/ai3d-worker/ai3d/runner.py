@@ -19,7 +19,6 @@ from .plugins.voxel_city import VoxelCityEngine
 from .plugins.gpu_router import RemoteGPU3DRouter
 from .plugins.mesh_quality_optimizer import MeshQualityOptimizer
 from .plugins.world_quality import WorldQualityEnhancer
-from .plugins.pixel_panorama_360 import PixelPanorama360Engine
 from .plugins.characterforge_cpu import CharacterForgeCpuEngine
 from ai3d_voxel_verifier.verifier import verify_voxel_city
 
@@ -47,7 +46,6 @@ class PipelineRunner:
         self.gpu_router = RemoteGPU3DRouter()
         self.mesh_optimizer = MeshQualityOptimizer()
         self.world_quality = WorldQualityEnhancer()
-        self.pixel_panorama = PixelPanorama360Engine()
         self.characterforge = CharacterForgeCpuEngine()
 
     def plugin_status(self) -> dict:
@@ -64,7 +62,6 @@ class PipelineRunner:
             "voxel_city": {"available": self.voxel_city.available(), "engine": "skyline_dp_reference_shell_piecewise_voxel_depth_cpu", "output": "voxel-city.json"},
             "godot_voxel_factory": self.godot.plugin_status(),
             "remote_gpu_router": self.gpu_router.status(),
-            "pixel_panorama_360": self.pixel_panorama.status(),
             "blender": {"available": self.building.available() or self.procgen.available(), "autoFound": self.building.blender if hasattr(self.building, 'blender') else "blender"},
             "voxel_tools": {"voxelsrv": (Path("C:/Users/user/Desktop/майн/voxelsrv/src").is_dir()), "littlecubes": (Path("C:/Users/user/Desktop/майн/LittleCubes/src").is_dir())},
             "characterforge_cpu": self.characterforge.status(),
@@ -139,15 +136,6 @@ class PipelineRunner:
         t0 = started
         # input_validation
         _add_stage("input_validation", t0, t0+0.05, input_path if input_path and input_path.is_file() else job_dir / "input.png", input_sha)
-
-        if mode == "pixel_panorama_360":
-            if not input_path:
-                raise RuntimeError("pixel_panorama_360 requires an input file")
-            progress(5, "Pixel Panorama 360: starting CPU pipeline")
-            panorama_files = self.pixel_panorama.run(input_path, job_dir, params, progress)
-            for panorama_path, panorama_kind in panorama_files:
-                files.append(file_meta(panorama_path, panorama_kind))
-            return {"files": files, "durationSeconds": round(time.time() - started, 3)}
 
         # Separate CPU voxel method: image -> logical cube world (NO GLB heightfield).
         if mode == "voxel_city":

@@ -78,24 +78,6 @@
       "visible": false,
       "status": "system",
       "kind": "hub"
-    },
-    "pixel-panorama-360": {
-      "title": "Pixel Panorama 360",
-      "visible": false,
-      "status": "candidate",
-      "kind": "tool",
-      "goldenStandard": "v2",
-      "description": "Animated pixel-art 360 panorama factory and viewer",
-      "required": [
-        "mouse-look",
-        "touch-look",
-        "pinch-zoom",
-        "gyro",
-        "pixel-crisp",
-        "multires-streaming",
-        "worker-job",
-        "panorama-manifest"
-      ]
     }
   }
 }

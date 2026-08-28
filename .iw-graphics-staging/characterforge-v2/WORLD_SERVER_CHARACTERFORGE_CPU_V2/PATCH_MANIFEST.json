@@ -1,0 +1,46 @@
+{
+  "name": "WORLD_SERVER_CHARACTERFORGE_CPU_V2",
+  "version": "2.0.0",
+  "technology": "CharacterForge CPU Voxel Pipeline",
+  "technology_class": "CPU-first Multi-view Game Character Reconstruction & Parametric Voxel Rigging",
+  "server_mode": "character_voxel",
+  "multi_view_endpoint": "/v1/characterforge/jobs",
+  "gpu_required": false,
+  "required_external_tools": [
+    "Blender 4.x or newer"
+  ],
+  "recommended_external_tools": [
+    "rembg[cpu]"
+  ],
+  "optional_tools": [
+    "ComfyUI",
+    "AutoRemesher",
+    "gltfpack/meshoptimizer"
+  ],
+  "future_optional_gpu_backends": [
+    "TRELLIS.2",
+    "SkinTokens",
+    "InstantMesh"
+  ],
+  "core_features": [
+    "reuses existing services/ai3d-worker and its durable SQLite queue",
+    "CPU canonical front reconstruction",
+    "front/side/back/left multi-view upload endpoint",
+    "side silhouette CPU geometry constraint",
+    "multi-view texture projection",
+    "natural-language parametric voxel resolution",
+    "three synchronized voxel LOD outputs per run",
+    "stable canonical palette identity across all LODs",
+    "shared normalized humanoid rig schema across all LODs",
+    "voxel-safe rigid region weights",
+    "idle/walk/run/jump clips with foot contact markers",
+    "Godot CharacterBody3D scene/controller package",
+    "content-addressed CPU result cache",
+    "identity manifest and regression gate",
+    "Blender end-to-end self-test",
+    "backup and rollback",
+    "strict CPU truth policy",
+    "RAM-aware voxel-resolution governor",
+    "bounded cache TTL/size auto-pruning"
+  ]
+}

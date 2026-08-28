@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pixel Panorama 360</title>
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<canvas id="stage"></canvas><div id="hotspots"></div>
+<aside id="hud">
+  <section class="panel"><h1>Pixel Panorama 360 V4</h1><div id="status">Boot…</div><div class="muted">drag/touch · pinch/wheel zoom · gyro · multires tiles</div></section>
+  <section class="panel">
+    <label>Manifest URL<input id="manifestInput" type="text" placeholder="/shared/panorama360/sample-pixel-world/manifest.json"></label>
+    <div class="row"><button id="loadBtn">Открыть</button><button id="playBtn">Пауза</button><button id="fullscreenBtn">⛶</button></div>
+    <div class="row"><label class="compact">FPS<input id="fpsRange" type="range" min="1" max="24" value="8"></label><span id="fpsValue">8</span></div>
+    <div class="row"><label class="compact">Quality<select id="qualitySelect"><option value="auto">auto</option><option value="mobile">mobile</option><option value="desktop">desktop</option><option value="hq">hq</option></select></label><button id="gyroBtn">Гироскоп</button><a class="buttonLink" id="editorLink" href="./editor.html">Tour editor</a></div>
+  </section>
+  <section class="panel factory">
+    <h2>Factory — создать на сервере</h2>
+    <label>Источник<input id="factoryFile" type="file" accept=".zip,.png,.apng,.gif,.webp,.mp4,.webm,image/*,video/mp4,video/webm,application/zip"></label>
+    <div class="row"><label class="grow">Slug<input id="factorySlug" type="text" placeholder="my-pixel-world"></label><label class="grow">Название<input id="factoryTitle" type="text" placeholder="My Pixel World"></label></div>
+    <div class="row"><label class="compact">FPS<input id="factoryFps" type="number" min="1" max="24" value="8"></label><label class="check"><input id="factoryPublish" type="checkbox"> publish Supabase</label></div>
+    <button id="factoryBuild">Создать на сервере</button>
+    <div class="progress"><i id="factoryBar"></i></div><div id="factoryState" class="muted">Worker not checked</div><div id="factoryFiles"></div>
+  </section>
+  <section class="panel"><div class="row between"><strong>Registry</strong><button id="refreshRegistryBtn">↻</button></div><div id="registryList"></div></section>
+</aside>
+<script type="module" src="./client.js"></script>
+</body></html>

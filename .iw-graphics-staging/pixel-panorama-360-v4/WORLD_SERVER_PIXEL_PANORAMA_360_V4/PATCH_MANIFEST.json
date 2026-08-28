@@ -1,0 +1,25 @@
+{
+  "name": "WORLD_SERVER_PIXEL_PANORAMA_360_V4",
+  "version": "4.0.0",
+  "readinessPercent": 98,
+  "architecture": "existing-ai3d-durable-queue + cpu-first panorama pipeline",
+  "primaryRoute": "/apps/pixel-panorama-360/",
+  "editorRoute": "/apps/pixel-panorama-360/editor.html",
+  "workerMode": "pixel_panorama_360",
+  "features": [
+    "multires-visible-tile-streaming",
+    "tile-lru-cache",
+    "next-frame-prefetch",
+    "mouse-touch-pinch-gyro",
+    "server-factory-ui",
+    "durable-worker-mode",
+    "single-image-cpu-auto-animation",
+    "temporal-seam-pole-validation",
+    "sharp-libvips-fast-path",
+    "supabase-storage-publisher",
+    "tour-editor",
+    "visual-e2e-release-gates",
+    "open-source-generator-adapter-contract",
+    "full-payload-backup-and-rollback"
+  ]
+}

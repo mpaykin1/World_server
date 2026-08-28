@@ -1,0 +1,30 @@
+{
+  "patch": "WORLD_SERVER_PIXEL_PANORAMA_360_V4",
+  "validatedAt": "2026-08-26T01:21:00Z",
+  "status": "PASS_LOCAL",
+  "patchCodeReadinessPercent": 98,
+  "estimatedEndToEndReadinessBeforeLiveInstallPercent": 94,
+  "checks": [
+    {"name":"JavaScript syntax", "status":"PASS"},
+    {"name":"Python PixelPanorama360Engine compile", "status":"PASS"},
+    {"name":"Installer against current-master-compatible anchors", "status":"PASS"},
+    {"name":"verify-only integration assertions", "status":"PASS"},
+    {"name":"idempotent reinstall", "status":"PASS"},
+    {"name":"backup and rollback", "status":"PASS"},
+    {"name":"sample local build using sharp/libvips", "status":"PASS"},
+    {"name":"multires tile generation", "status":"PASS"},
+    {"name":"manifest validation", "status":"PASS"},
+    {"name":"temporal/seam validator", "status":"PASS"},
+    {"name":"CPU auto-animation from one still", "status":"PASS"},
+    {"name":"durable-worker panorama engine on 8-frame ZIP", "status":"PASS"},
+    {"name":"worker result files compatible with existing /files/{filename} root lookup", "status":"PASS"}
+  ],
+  "notExecutedHere": [
+    "npm install sharp 0.35.3 inside the user's live repository",
+    "real Supabase migration and Storage upload",
+    "browser Playwright desktop/mobile-webkit due no browser dependency in this sandbox",
+    "real AI3D worker restart recovery with the user's deployed worker",
+    "Vercel preview and production verification",
+    "external generative panorama adapter because no generator endpoint is configured"
+  ]
+}

@@ -21,7 +21,6 @@ SERVICE_ROOT = Path(__file__).resolve().parent
 RUNTIME = Path(os.environ.get("AI3D_RUNTIME_DIR", SERVICE_ROOT / "runtime")).resolve()
 RUNTIME.mkdir(parents=True, exist_ok=True)
 MAX_UPLOAD = max(1, min(int(os.environ.get("AI3D_MAX_UPLOAD_MB", "25")), 100)) * 1024 * 1024
-PANORAMA_MAX_UPLOAD = max(25, min(int(os.environ.get("PIXEL_PANORAMA_360_MAX_UPLOAD_MB", "250")), 1000)) * 1024 * 1024
 MAX_WORKERS = max(1, min(int(os.environ.get("AI3D_MAX_WORKERS", "1")), 8))
 JOB_TTL_HOURS = max(1, int(os.environ.get("AI3D_JOB_TTL_HOURS", "72")))
 SECRET = os.environ.get("AI3D_SHARED_SECRET", "")
@@ -60,7 +59,7 @@ def public_job(job: dict) -> dict:
     return {
         "id": job["id"], "mode": job["mode"], "status": job["status"], "progress": int(job["progress"]),
         "message": job.get("message") or "", "error": job.get("error"), "createdAt": job["created_at"],
-        "updatedAt": job["updated_at"], "files": files, "panorama": result.get("panorama") or {},
+        "updatedAt": job["updated_at"], "files": files,
     }
 
 
@@ -114,7 +113,7 @@ async def create_job(
     _token=Depends(require_token),
 ):
     mode = mode.strip().lower()
-    if mode not in {"auto", "image_to_3d", "depth", "building", "map", "voxel_city", "character_voxel"}:
+    if mode not in {"auto", "image_to_3d", "depth", "building", "map", "voxel_city"}:
         raise HTTPException(status_code=400, detail="Unsupported mode.")
     try:
         options = json.loads(params or "{}")
@@ -123,7 +122,7 @@ async def create_job(
     if not isinstance(options, dict) or len(params) > 64_000:
         raise HTTPException(status_code=400, detail="params object is invalid or too large.")
 
-    needs_image = mode in {"auto", "image_to_3d", "depth", "voxel_city", "character_voxel"}
+    needs_image = mode in {"auto", "image_to_3d", "depth", "voxel_city"}
     if needs_image and file is None:
         raise HTTPException(status_code=400, detail="This mode requires an image.")
     if file is not None and file.content_type not in ALLOWED_IMAGE_TYPES:
@@ -152,67 +151,6 @@ async def create_job(
             except Exception as exc:
                 raise HTTPException(status_code=400, detail=f"Invalid image: {exc}")
         store.create(job_id, mode, options, str(input_path) if input_path else None)
-    except Exception:
-        shutil.rmtree(job_dir, ignore_errors=True)
-        raise
-    dispatch(job_id)
-    return public_job(store.get(job_id))
-
-
-@app.post("/v1/characterforge/jobs")
-async def create_characterforge_multiview_job(
-    front: UploadFile = File(...),
-    side: UploadFile | None = File(default=None),
-    back: UploadFile | None = File(default=None),
-    left: UploadFile | None = File(default=None),
-    params: str = Form("{}"),
-    _token=Depends(require_token),
-):
-    """CPU CharacterForge multi-view upload endpoint.
-
-    Front is required; side/back/left are optional and improve deterministic
-    silhouette shaping and texture projection without requiring a GPU.
-    """
-    try:
-        options = json.loads(params or "{}")
-    except json.JSONDecodeError:
-        raise HTTPException(status_code=400, detail="params must be valid JSON.")
-    if not isinstance(options, dict) or len(params) > 64_000:
-        raise HTTPException(status_code=400, detail="params object is invalid or too large.")
-
-    uploads = {"front": front, "side": side, "back": back, "left": left}
-    job_id = uuid.uuid4().hex
-    job_dir = RUNTIME / "jobs" / job_id
-    job_dir.mkdir(parents=True, exist_ok=False)
-    saved = {}
-    try:
-        for role, upload in uploads.items():
-            if upload is None:
-                continue
-            if upload.content_type not in ALLOWED_IMAGE_TYPES:
-                raise HTTPException(status_code=415, detail=f"{role}: only PNG, JPEG and WebP images are accepted.")
-            suffix = {"image/png": ".png", "image/jpeg": ".jpg", "image/webp": ".webp"}[upload.content_type]
-            target = job_dir / f"{role}{suffix}"
-            size = 0
-            with target.open("wb") as handle:
-                while True:
-                    chunk = await upload.read(1024 * 1024)
-                    if not chunk:
-                        break
-                    size += len(chunk)
-                    if size > MAX_UPLOAD:
-                        raise HTTPException(status_code=413, detail=f"{role}: image exceeds {MAX_UPLOAD // (1024 * 1024)} MB limit.")
-                    handle.write(chunk)
-            try:
-                verify_image(target)
-            except Exception as exc:
-                raise HTTPException(status_code=400, detail=f"{role}: invalid image: {exc}")
-            saved[role] = target
-        if "front" not in saved:
-            raise HTTPException(status_code=400, detail="front image is required.")
-        options["_characterViews"] = {role: str(path) for role, path in saved.items() if role != "front"}
-        options["multiView"] = len(saved) > 1
-        store.create(job_id, "character_voxel", options, str(saved["front"]))
     except Exception:
         shutil.rmtree(job_dir, ignore_errors=True)
         raise

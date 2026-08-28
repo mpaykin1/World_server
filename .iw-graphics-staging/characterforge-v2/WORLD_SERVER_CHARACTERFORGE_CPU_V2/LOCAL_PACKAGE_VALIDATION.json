@@ -1,0 +1,26 @@
+{
+  "patch": "WORLD_SERVER_CHARACTERFORGE_CPU_V2",
+  "version": "2.0.0",
+  "localValidation": "PASS",
+  "executedChecks": [
+    "tests/test_patch_static.py -> PASS",
+    "tests/test_installer_integration.py -> PASS",
+    "tests/test_full_install_rollback.py -> PASS",
+    "python py_compile core files -> PASS"
+  ],
+  "notExecutableInThisEnvironment": [
+    "Blender headless self-test (Blender binary absent in build container)",
+    "real CharacterForge source-image smoke on target World_server runtime",
+    "headless Godot import/runtime test"
+  ],
+  "sha256": {
+    "install_characterforge_cpu_v2.py": "d6ba14951506530014eb5c1c97da78e0e5a91347e5eeac7f347e4516502f8195",
+    "rollback_characterforge_cpu_v2.py": "f09229bf743401fc387488c504232ca99d5f336b08e58ab3430f30325f01d30f",
+    "payload/services/ai3d-worker/ai3d/plugins/characterforge_cpu.py": "860e7a3aa6781150569b0bfe46098cd49a23814b64102d205c7ef66db32467b6",
+    "payload/services/ai3d-worker/scripts/characterforge_voxel_blender.py": "1709551651bf49ef70df555901a7775a81a636472347e4e6bb74794ccea8f0a4",
+    "payload/services/ai3d-worker/scripts/verify_characterforge_cpu.py": "d23450f5b76f2bbe977f93b77aa2181933636bc29213d3afcd82abf0ecc2eed6",
+    "payload/services/ai3d-worker/scripts/characterforge_local_smoke.py": "68225b70d760d6d5c3667a5ef340e3d21ec23092e56b5512b3cae0da09cbea5f",
+    "payload/services/ai3d-worker/characterforge/presets.json": "c785cb3b80ebe785d7f71330d6c62abbd71c44cb853ba57a9f7904f2bd9987ce"
+  },
+  "truthRule": "Runtime readiness must not be promoted to 95%+ until target-machine Blender self-test passes."
+}

@@ -255,20 +255,7 @@
     "quality:ink-glyph:production": "node scripts/check-ink-glyph-world.cjs --require-fonts --require-vendor --require-strokes && node --test test/ink-glyph-world.test.js",
     "quality:ink-glyph:bench": "node scripts/benchmark-ink-glyph-world.cjs",
     "quality:ink-glyph:e2e": "playwright test e2e/ink-glyph-world.spec.js",
-    "ink:glyph:network": "node scripts/ink-glyph-network-diagnostics.cjs",
-    "characterforge:check": "python services/ai3d-worker/scripts/verify_characterforge_cpu.py",
-    "characterforge:check:strict": "python services/ai3d-worker/scripts/verify_characterforge_cpu.py --require-blender",
-    "characterforge:selftest": "python services/ai3d-worker/scripts/verify_characterforge_cpu.py --require-blender --blender-selftest",
-    "panorama360:sample:build": "node scripts/pixel-panorama-360-build.cjs --input shared/panorama360-source/sample-project/frames --slug sample-pixel-world --title \"Sample Pixel World\" --description \"Sample animated pixel-art panorama\" --fps 8",
-    "panorama360:validate": "node scripts/pixel-panorama-360-validate.cjs --registry data/pixel-panorama-registry.json && node scripts/pixel-panorama-360-validate.cjs --manifest shared/panorama360/sample-pixel-world/manifest.json",
-    "panorama360:temporal": "node scripts/pixel-panorama-360-temporal-check.cjs --input shared/panorama360-source/sample-project/frames",
-    "panorama360:tools:verify": "node scripts/pixel-panorama-360-tools-verify.cjs",
-    "panorama360:auto:animate": "node scripts/pixel-panorama-360-animate-still.cjs",
-    "panorama360:generator": "node scripts/pixel-panorama-360-generator-router.cjs",
-    "panorama360:publish:supabase": "node scripts/pixel-panorama-360-publish-supabase.cjs",
-    "panorama360:certify": "node scripts/pixel-panorama-360-certify.cjs --certify",
-    "panorama360:prod:verify": "node scripts/pixel-panorama-360-prod-verify.cjs --base-url http://localhost:3000 --manifest /shared/panorama360/sample-pixel-world/manifest.json",
-    "panorama360:release:gate": "node scripts/pixel-panorama-360-release-gate.cjs"
+    "ink:glyph:network": "node scripts/ink-glyph-network-diagnostics.cjs"
   },
   "engines": {
     "node": "24.x"
@@ -283,7 +270,7 @@
     "esbuild": "^0.28.2",
     "idb-keyval": "^6.3.0",
     "msw": "^2.15.0",
-    "sharp": "^0.35.3"
+    "sharp": "^0.35.4"
   },
   "devDependencies": {
     "@lhci/cli": "^0.15.1",

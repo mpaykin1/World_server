@@ -1,0 +1,28 @@
+{
+  "mode": "character_voxel",
+  "single_view_endpoint": "/v1/jobs",
+  "multi_view_endpoint": "/v1/characterforge/jobs",
+  "examples": [
+    {
+      "name": "balanced_single_view",
+      "params": {"detailLevel": 55, "paletteSize": 24, "removeBackground": true}
+    },
+    {
+      "name": "larger_voxels_less_detail",
+      "params": {"detailLevel": 55, "detailCommand": "сделай пиксели крупнее", "paletteSize": 20}
+    },
+    {
+      "name": "smaller_voxels_more_detail",
+      "params": {"detailLevel": 55, "detailCommand": "сделай пиксели мельче", "paletteSize": 32}
+    },
+    {
+      "name": "direct_resolution",
+      "params": {"voxelResolution": 72, "paletteSize": 32}
+    },
+    {
+      "name": "multiview_recommended",
+      "multipart_fields": ["front", "side", "back", "left(optional)", "params"],
+      "params": {"voxelResolution": 64, "paletteSize": 32, "sideShapeStrength": 0.85, "removeBackground": true}
+    }
+  ]
+}

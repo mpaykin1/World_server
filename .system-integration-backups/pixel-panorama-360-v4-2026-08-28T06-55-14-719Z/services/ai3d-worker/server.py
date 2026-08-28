@@ -21,7 +21,6 @@ SERVICE_ROOT = Path(__file__).resolve().parent
 RUNTIME = Path(os.environ.get("AI3D_RUNTIME_DIR", SERVICE_ROOT / "runtime")).resolve()
 RUNTIME.mkdir(parents=True, exist_ok=True)
 MAX_UPLOAD = max(1, min(int(os.environ.get("AI3D_MAX_UPLOAD_MB", "25")), 100)) * 1024 * 1024
-PANORAMA_MAX_UPLOAD = max(25, min(int(os.environ.get("PIXEL_PANORAMA_360_MAX_UPLOAD_MB", "250")), 1000)) * 1024 * 1024
 MAX_WORKERS = max(1, min(int(os.environ.get("AI3D_MAX_WORKERS", "1")), 8))
 JOB_TTL_HOURS = max(1, int(os.environ.get("AI3D_JOB_TTL_HOURS", "72")))
 SECRET = os.environ.get("AI3D_SHARED_SECRET", "")
@@ -60,7 +59,7 @@ def public_job(job: dict) -> dict:
     return {
         "id": job["id"], "mode": job["mode"], "status": job["status"], "progress": int(job["progress"]),
         "message": job.get("message") or "", "error": job.get("error"), "createdAt": job["created_at"],
-        "updatedAt": job["updated_at"], "files": files, "panorama": result.get("panorama") or {},
+        "updatedAt": job["updated_at"], "files": files,
     }
 
 

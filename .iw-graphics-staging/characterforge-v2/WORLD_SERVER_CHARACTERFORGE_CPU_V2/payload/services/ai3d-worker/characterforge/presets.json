@@ -1,0 +1,103 @@
+{
+  "technology": "CharacterForge CPU Voxel Pipeline",
+  "version": "2.0.0",
+  "semantic_detail_control": {
+    "less_detail": {
+      "examples": [
+        "сделай меньше детализацию",
+        "сделай пиксели крупнее",
+        "less detail",
+        "bigger pixels"
+      ],
+      "resolution_multiplier": 0.72
+    },
+    "more_detail": {
+      "examples": [
+        "сделай больше детализацию",
+        "сделай пиксели мельче",
+        "more detail",
+        "smaller pixels"
+      ],
+      "resolution_multiplier": 1.35
+    }
+  },
+  "profiles": {
+    "very_coarse": {
+      "voxelsPerCharacterHeight": 16,
+      "paletteSize": 12
+    },
+    "coarse": {
+      "voxelsPerCharacterHeight": 24,
+      "paletteSize": 16
+    },
+    "balanced": {
+      "voxelsPerCharacterHeight": 48,
+      "paletteSize": 24
+    },
+    "detailed": {
+      "voxelsPerCharacterHeight": 72,
+      "paletteSize": 32
+    },
+    "very_detailed": {
+      "voxelsPerCharacterHeight": 96,
+      "paletteSize": 48
+    }
+  },
+  "multiview": {
+    "enabled": true,
+    "preferred_views": [
+      "front",
+      "side",
+      "back"
+    ],
+    "optional_views": [
+      "left"
+    ],
+    "side_shape_strength_default": 0.8,
+    "fallback": "front reconstruction with inferred unseen geometry"
+  },
+  "identity_lock": {
+    "enabled": true,
+    "palette_lock": true,
+    "rig_schema_lock": "voxel-humanoid-v2",
+    "canonical_bounds_lock": true,
+    "fail_if_lod_hashes_diverge": true
+  },
+  "animations": {
+    "default": [
+      "idle",
+      "walk",
+      "run",
+      "jump"
+    ],
+    "foot_contact_markers": true,
+    "full_ik_bake": false
+  },
+  "cache": {
+    "enabled": true,
+    "strategy": "sha256 content-addressed",
+    "scope": "AI3D runtime",
+    "invalidate_on_version_change": true,
+    "default_max_gb": 8,
+    "default_ttl_days": 30,
+    "env_max_gb": "CHARACTERFORGE_CACHE_MAX_GB",
+    "env_ttl_days": "CHARACTERFORGE_CACHE_TTL_DAYS"
+  },
+  "hard_limits": {
+    "minVoxelsPerCharacterHeight": 12,
+    "maxVoxelsPerCharacterHeight": 160,
+    "maxPaletteSize": 64,
+    "maxViews": 4
+  },
+  "resource_governor": {
+    "enabled": true,
+    "free_ram_caps_gb_to_vph": {
+      "<4": 48,
+      "<8": 72,
+      "<16": 96,
+      "<24": 128,
+      ">=24": 160
+    },
+    "env_override": "CHARACTERFORGE_MAX_VPH"
+  }
+}

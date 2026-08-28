@@ -1,0 +1,191 @@
+{
+  "patch": "WORLD_SERVER_PIXEL_PANORAMA_360_V4",
+  "root": "C:\\Users\\user\\Desktop\\World_server",
+  "backupRoot": "C:\\Users\\user\\Desktop\\World_server\\.system-integration-backups\\pixel-panorama-360-v4-2026-08-28T06-55-14-719Z",
+  "backedUp": [
+    "package.json",
+    "server.js",
+    ".env.example",
+    "data/app-release-registry.json",
+    "services/ai3d-worker/server.py",
+    "services/ai3d-worker/ai3d/runner.py"
+  ],
+  "payloadRelativeFiles": [
+    "api\\pixel-panorama.js",
+    "apps\\pixel-panorama-360\\client.js",
+    "apps\\pixel-panorama-360\\editor.html",
+    "apps\\pixel-panorama-360\\editor.js",
+    "apps\\pixel-panorama-360\\index.html",
+    "apps\\pixel-panorama-360\\styles.css",
+    "data\\pixel-panorama-registry.json",
+    "docs\\PIXEL_PANORAMA_360_V4.md",
+    "e2e\\pixel-panorama-360.spec.js",
+    "e2e\\pixel-panorama-360.visual.spec.js",
+    "lib\\pixel-panorama-registry.cjs",
+    "scripts\\pixel-panorama-360-animate-still.cjs",
+    "scripts\\pixel-panorama-360-build.cjs",
+    "scripts\\pixel-panorama-360-certify.cjs",
+    "scripts\\pixel-panorama-360-generator-router.cjs",
+    "scripts\\pixel-panorama-360-prod-verify.cjs",
+    "scripts\\pixel-panorama-360-publish-supabase.cjs",
+    "scripts\\pixel-panorama-360-release-gate.cjs",
+    "scripts\\pixel-panorama-360-temporal-check.cjs",
+    "scripts\\pixel-panorama-360-tools-verify.cjs",
+    "scripts\\pixel-panorama-360-validate.cjs",
+    "services\\ai3d-worker\\ai3d\\plugins\\pixel_panorama_360.py",
+    "services\\ai3d-worker\\scripts\\bootstrap-pixel-panorama.sh",
+    "shared\\panorama360-source\\sample-project\\frames\\000001.png",
+    "shared\\panorama360-source\\sample-project\\frames\\000002.png",
+    "shared\\panorama360-source\\sample-project\\frames\\000003.png",
+    "shared\\panorama360-source\\sample-project\\frames\\000004.png",
+    "shared\\panorama360-source\\sample-project\\frames\\000005.png",
+    "shared\\panorama360-source\\sample-project\\frames\\000006.png",
+    "shared\\panorama360-source\\sample-project\\frames\\000007.png",
+    "shared\\panorama360-source\\sample-project\\frames\\000008.png",
+    "shared\\panorama360-source\\sample-project\\hotspots.json",
+    "shared\\panorama360-source\\sample-project\\README.md",
+    "supabase\\migrations\\20260826011000_pixel_panorama_360_v4.sql",
+    "tools\\bootstrap-pixel-panorama-360-linux.sh",
+    "tools\\bootstrap-pixel-panorama-360-windows.ps1"
+  ],
+  "copiedCount": 36,
+  "changes": [
+    {
+      "label": "server route",
+      "changed": false,
+      "ok": false,
+      "note": "anchor missing"
+    },
+    {
+      "label": "ai3d modes",
+      "changed": false,
+      "ok": false,
+      "note": "file missing"
+    },
+    {
+      "label": "worker max upload",
+      "changed": true,
+      "ok": true
+    },
+    {
+      "label": "worker modes",
+      "changed": false,
+      "ok": false,
+      "note": "anchor missing"
+    },
+    {
+      "label": "worker content types",
+      "changed": false,
+      "ok": false,
+      "note": "anchor missing"
+    },
+    {
+      "label": "worker suffix",
+      "changed": false,
+      "ok": false,
+      "note": "anchor missing"
+    },
+    {
+      "label": "worker limit",
+      "changed": false,
+      "ok": false,
+      "note": "anchor missing"
+    },
+    {
+      "label": "worker verify",
+      "changed": false,
+      "ok": false,
+      "note": "anchor missing"
+    },
+    {
+      "label": "worker public panorama meta",
+      "changed": true,
+      "ok": true
+    },
+    {
+      "label": "runner import",
+      "changed": true,
+      "ok": true
+    },
+    {
+      "label": "runner init",
+      "changed": true,
+      "ok": true
+    },
+    {
+      "label": "runner status",
+      "changed": true,
+      "ok": true
+    },
+    {
+      "label": "runner mode",
+      "changed": true,
+      "ok": true
+    },
+    {
+      "ok": true,
+      "changed": true,
+      "sharp": "^0.35.3"
+    },
+    {
+      "ok": true,
+      "changed": true
+    },
+    {
+      "ok": true,
+      "changed": true
+    }
+  ],
+  "requiredChangesOk": false,
+  "verify": {
+    "pass": false,
+    "missing": [],
+    "integration": [
+      {
+        "file": "server.js",
+        "ok": false,
+        "needle": "/api/pixel-panorama"
+      },
+      {
+        "file": "api/ai3d.js",
+        "ok": false,
+        "needle": "panoramaMaxUploadMb"
+      },
+      {
+        "file": "services/ai3d-worker/server.py",
+        "ok": true,
+        "needle": "PANORAMA_MAX_UPLOAD"
+      },
+      {
+        "file": "services/ai3d-worker/server.py",
+        "ok": false,
+        "needle": "panorama_types"
+      },
+      {
+        "file": "services/ai3d-worker/server.py",
+        "ok": false,
+        "needle": "upload_limit = PANORAMA_MAX_UPLOAD"
+      },
+      {
+        "file": "services/ai3d-worker/server.py",
+        "ok": true,
+        "needle": "result.get(\"panorama\")"
+      },
+      {
+        "file": "services/ai3d-worker/ai3d/runner.py",
+        "ok": true,
+        "needle": "PixelPanorama360Engine"
+      },
+      {
+        "file": "services/ai3d-worker/ai3d/runner.py",
+        "ok": true,
+        "needle": "mode == \"pixel_panorama_360\""
+      },
+      {
+        "file": "package.json",
+        "ok": true,
+        "needle": "\"sharp\""
+      }
+    ]
+  }
+}

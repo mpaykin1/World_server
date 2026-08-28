@@ -1,0 +1,4 @@
+# Optional CharacterForge CPU enhancement.
+# Core worker already supplies Pillow/Numpy and does not require this file to boot.
+# Official rembg currently requires Python >=3.11,<3.14.
+rembg[cpu]>=2.0.0
