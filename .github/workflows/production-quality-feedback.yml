@@ -14,28 +14,65 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
+
       - run: npm ci
+
       - name: Pull real production quality evidence
         id: prod
         continue-on-error: true
         env:
           QUALITY_BASE_URL: https://world-server.vercel.app
         run: node scripts/production-quality-pull.js
-      - name: Open/update production quality blocker
+
+      # Critical invariant: evidence survives both product regressions and monitor failures.
+      - name: Upload production quality evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-quality-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            PRODUCTION_QUALITY_REPORT.json
+            PRODUCTION_QUALITY_ISSUE.md
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Open/update production quality blocker with exact evidence
         if: steps.prod.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
+        shell: bash
         run: |
-          TITLE="Production quality regression detected"
-          EXISTING="$(gh issue list --state open --search "$TITLE in:title" --json number --jq '.[0].number // empty')"
-          BODY="The scheduled production-feedback gate found a runtime quality violation. Inspect the workflow artifact/log and PRODUCTION_QUALITY_REPORT.json. Do not raise the quality baseline until this is resolved."
-          if [ -n "$EXISTING" ]; then
-            gh issue comment "$EXISTING" --body "$BODY"
-          else
-            gh issue create --title "$TITLE" --body "$BODY"
+          set -euo pipefail
+
+          if [ ! -s PRODUCTION_QUALITY_REPORT.json ] || [ ! -s PRODUCTION_QUALITY_ISSUE.md ]; then
+            echo "Production monitor failed without evidence. This is a monitor regression." >&2
+            exit 70
           fi
+
+          CLASSIFICATION="$(node -e "const r=require('./PRODUCTION_QUALITY_REPORT.json');process.stdout.write(r.classification||'unknown')")"
+          if [ "$CLASSIFICATION" = "monitor_failure" ]; then
+            TITLE="Production quality monitor failure"
+          else
+            TITLE="Production quality regression detected"
+          fi
+
+          EXISTING="$(gh issue list --state open --search "$TITLE in:title" --json number --jq '.[0].number // empty')"
+          {
+            cat PRODUCTION_QUALITY_ISSUE.md
+            printf '\n**Workflow:** %s/actions/runs/%s\n' "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" "$GITHUB_RUN_ID"
+            printf '**Commit:** `%s`\n' "$GITHUB_SHA"
+            printf '**Run attempt:** `%s`\n' "$GITHUB_RUN_ATTEMPT"
+          } > PRODUCTION_QUALITY_ISSUE_WITH_RUN.md
+
+          if [ -n "$EXISTING" ]; then
+            gh issue comment "$EXISTING" --body-file PRODUCTION_QUALITY_ISSUE_WITH_RUN.md
+          else
+            gh issue create --title "$TITLE" --body-file PRODUCTION_QUALITY_ISSUE_WITH_RUN.md
+          fi
+
           exit 1
