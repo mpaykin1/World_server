@@ -1,11 +1,12 @@
 {
   "schemaVersion": "2.0.0",
-  "generatedAt": "2026-08-28T14:43:42.612Z",
+  "generatedAt": "2026-08-28T14:47:46.554Z",
   "three": "0.185.1",
   "rapier": "0.20.0",
   "meshoptimizer": "1.2.0",
   "files": [
     "shared/vendor/three/three.module.js",
+    "shared/vendor/three/three.core.js",
     "shared/vendor/three/three.webgpu.js",
     "shared/vendor/three/three.tsl.js",
     "shared/vendor/three/examples/jsm/loaders/KTX2Loader.js",
