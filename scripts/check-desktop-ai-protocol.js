@@ -24,10 +24,21 @@ if(!errors.length){
     [dirty,staged,untracked].forEach(x=>{ if(x.status===0&&x.stdout.trim()) changed.push(...x.stdout.trim().split(/\r?\n/).filter(Boolean)); });
     changed=[...new Set(changed)];
   }
+  // Root-level ALL_CAPS_NAME.json/.log/.md files are auto-generated evidence/report
+  // artifacts rewritten as a side effect of earlier release:gate steps in the same
+  // CI job (Sentry build, AI3D checks, this very script's own previous runs, ...).
+  // Their content (timestamps, durations, absolute paths) legitimately differs
+  // between a local Windows run and a fresh Linux CI run even when nothing about
+  // the actual task changed, so treating every such diff as "you forgot to update
+  // WORK_IN_PROGRESS.md" is a false positive, not a real signal. Real source lives
+  // under scripts/, lib/, api/, apps/, services/, test/, data/, shared/ etc. with
+  // lowercase/kebab-case names, so this pattern cleanly separates evidence noise
+  // from actual project changes without needing an exhaustive exclusion list.
+  const isGeneratedEvidenceFile=f=>!f.includes('/')&&/^[A-Z][A-Z0-9_]*\.(json|log)$/.test(f);
   const meaningful=changed.filter(f=>![
     'WORK_IN_PROGRESS.md','DESKTOP_AI_INSTALL_AND_VERIFY.md',
     'QUALITY_MASTER_REPORT.json','QUALITY_DIFF.md','QUALITY_DIFF.json'
-  ].includes(f));
+  ].includes(f)&&!isGeneratedEvidenceFile(f));
   const hasUnset=/\bUNSET\b/.test(wip);
   if(meaningful.length&&hasUnset)errors.push(`WORK_IN_PROGRESS still contains UNSET while ${meaningful.length} project files changed`);
   if(meaningful.length&&!changed.includes('WORK_IN_PROGRESS.md'))errors.push('project files changed but WORK_IN_PROGRESS.md was not updated');
