@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-24T05:16:01.854Z",
+  "generatedAt": "2026-08-26T10:52:20.404Z",
   "nodes": [
     "app:ai-3d",
     "app:ai3d-reference-test",
@@ -42,6 +42,7 @@
     "shared/golden-physics.js",
     "shared/golden-ui-shell.css",
     "shared/golden-ui-shell.js",
+    "shared/posthog-runtime.js",
     "shared/quality-telemetry.js",
     "shared/sentry-runtime.js",
     "shared/style.css",
@@ -60,6 +61,11 @@
     },
     {
       "from": "shared/sentry-runtime.js",
+      "to": "apps/ai-3d/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/posthog-runtime.js",
       "to": "apps/ai-3d/index.html",
       "kind": "html-dependency"
     },
@@ -89,6 +95,11 @@
       "kind": "html-dependency"
     },
     {
+      "from": "shared/posthog-runtime.js",
+      "to": "apps/ai3d-reference-test/index.html",
+      "kind": "html-dependency"
+    },
+    {
       "from": "apps/ai3d-reference-test/styles.css",
       "to": "app:ai3d-reference-test",
       "kind": "belongs-to"
@@ -110,6 +121,11 @@
     },
     {
       "from": "shared/sentry-runtime.js",
+      "to": "apps/ai3d-voxel-city/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/posthog-runtime.js",
       "to": "apps/ai3d-voxel-city/index.html",
       "kind": "html-dependency"
     },
@@ -174,6 +190,11 @@
       "kind": "html-dependency"
     },
     {
+      "from": "shared/posthog-runtime.js",
+      "to": "apps/catalog/index.html",
+      "kind": "html-dependency"
+    },
+    {
       "from": "shared/common.js",
       "to": "apps/catalog/index.html",
       "kind": "html-dependency"
@@ -224,6 +245,11 @@
       "kind": "html-dependency"
     },
     {
+      "from": "shared/posthog-runtime.js",
+      "to": "apps/chat/index.html",
+      "kind": "html-dependency"
+    },
+    {
       "from": "shared/common.js",
       "to": "apps/chat/index.html",
       "kind": "html-dependency"
@@ -245,6 +271,11 @@
     },
     {
       "from": "shared/sentry-runtime.js",
+      "to": "apps/survival/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/posthog-runtime.js",
       "to": "apps/survival/index.html",
       "kind": "html-dependency"
     },
@@ -299,6 +330,11 @@
       "kind": "html-dependency"
     },
     {
+      "from": "shared/posthog-runtime.js",
+      "to": "apps/voxel-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
       "from": "shared/common.js",
       "to": "apps/voxel-world/index.html",
       "kind": "html-dependency"
@@ -345,6 +381,11 @@
     },
     {
       "from": "shared/sentry-runtime.js",
+      "to": "apps/world-sharabass/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/posthog-runtime.js",
       "to": "apps/world-sharabass/index.html",
       "kind": "html-dependency"
     },
@@ -517,6 +558,16 @@
       "app:ai-3d"
     ],
     "shared/sentry-runtime.js": [
+      "apps/ai-3d/index.html",
+      "apps/ai3d-reference-test/index.html",
+      "apps/ai3d-voxel-city/index.html",
+      "apps/catalog/index.html",
+      "apps/chat/index.html",
+      "apps/survival/index.html",
+      "apps/voxel-world/index.html",
+      "apps/world-sharabass/index.html"
+    ],
+    "shared/posthog-runtime.js": [
       "apps/ai-3d/index.html",
       "apps/ai3d-reference-test/index.html",
       "apps/ai3d-voxel-city/index.html",

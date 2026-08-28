@@ -1,18 +1,35 @@
 {
-  "generatedAt": "2026-08-24T05:16:02.048Z",
+  "generatedAt": "2026-08-26T10:52:20.616Z",
   "changed": [
+    ".env.example",
     ".github/workflows/ci.yml",
+    ".github/workflows/production-quality-feedback.yml",
+    ".github/workflows/quality-autofix-pr.yml",
+    ".github/workflows/quality-bisect.yml",
+    ".github/workflows/quality-canary.yml",
+    ".github/workflows/quality-progressive-rollout.yml",
     ".github/workflows/quality-regression.yml",
+    ".github/workflows/sentry-production-verify.yml",
+    ".github/workflows/visual-baseline-candidates.yml",
     ".github/workflows/world-quality-autopilot.yml",
+    ".gitignore",
+    "AGENTS.md",
     "AI_VISUAL_CRITIC_REPORT.json",
+    "DESKTOP_AI_INSTALL_AND_VERIFY.md",
     "DESKTOP_AI_PROTOCOL_REPORT.json",
     "DUPLICATE_SYSTEM_REPORT.json",
     "EVIDENCE_QUALITY_REPORT.json",
     "PROJECT_QUALITY_REVIEW.json",
     "QUALITY_CHANGE_IMPACT.json",
     "QUALITY_COST_DECISION.json",
+    "QUALITY_DIFF.json",
+    "QUALITY_DIFF.md",
+    "QUALITY_GROWTH_BACKLOG.json",
     "QUALITY_IMPACT_GRAPH.json",
+    "QUALITY_IMPROVEMENT_PLAN.json",
+    "QUALITY_IMPROVEMENT_PLAN.md",
     "QUALITY_ISSUE_CANDIDATES.json",
+    "QUALITY_MASTER_REPORT.json",
     "QUALITY_REGRESSION_REPORT.json",
     "QUALITY_REPORT.json",
     "QUALITY_RISK_PREDICTION.json",
@@ -39,22 +56,212 @@
     "WORLD_SEMANTIC_DETAIL_REPORT.json",
     "WORLD_VISIBILITY_OPTIMIZER_REPORT.json",
     "WORLD_VISUAL_BASELINE_CANDIDATES.json",
+    "ai3d-final-delivery.json",
     "api/ai3d-voxel-generate.js",
+    "api/ai3d.js",
+    "api/apps.js",
+    "api/config.js",
+    "api/login.js",
+    "api/logout.js",
+    "api/me.js",
+    "api/quality-summary.js",
+    "api/quality-telemetry.js",
+    "apps/ai-3d/client.js",
+    "apps/ai-3d/index.html",
+    "apps/ai-3d/styles.css",
+    "apps/ai3d-reference-test/assets/comparison.json",
+    "apps/ai3d-reference-test/assets/generation-manifest.json",
+    "apps/ai3d-reference-test/assets/model.glb",
+    "apps/ai3d-reference-test/assets/previous_html_baseline.html",
+    "apps/ai3d-reference-test/assets/previous_html_baseline.png",
+    "apps/ai3d-reference-test/assets/quality-report.json",
+    "apps/ai3d-reference-test/assets/reference.png",
+    "apps/ai3d-reference-test/assets/renders/camera.json",
+    "apps/ai3d-reference-test/assets/renders/front_clay.png",
+    "apps/ai3d-reference-test/assets/renders/front_textured.png",
+    "apps/ai3d-reference-test/assets/renders/left15_clay.png",
+    "apps/ai3d-reference-test/assets/renders/left15_textured.png",
+    "apps/ai3d-reference-test/assets/renders/left30_clay.png",
+    "apps/ai3d-reference-test/assets/renders/left30_textured.png",
+    "apps/ai3d-reference-test/assets/renders/right15_clay.png",
+    "apps/ai3d-reference-test/assets/renders/right15_textured.png",
+    "apps/ai3d-reference-test/assets/renders/right30_clay.png",
+    "apps/ai3d-reference-test/assets/renders/right30_textured.png",
+    "apps/ai3d-reference-test/assets/renders/top_oblique_clay.png",
+    "apps/ai3d-reference-test/assets/renders/top_oblique_textured.png",
+    "apps/ai3d-reference-test/assets/verification-report.json",
+    "apps/ai3d-reference-test/client.js",
+    "apps/ai3d-reference-test/compare.py",
+    "apps/ai3d-reference-test/index.html",
+    "apps/ai3d-reference-test/render_blender.py",
+    "apps/ai3d-reference-test/styles.css",
     "apps/ai3d-voxel-city/client.js",
+    "apps/ai3d-voxel-city/default-city.json",
+    "apps/ai3d-voxel-city/default-city.sha256",
     "apps/ai3d-voxel-city/index.html",
+    "apps/ai3d-voxel-city/mesher-worker.js",
+    "apps/ai3d-voxel-city/scene-delivery.json",
+    "apps/ai3d-voxel-city/styles.css",
+    "apps/catalog/client.js",
+    "apps/catalog/index.html",
+    "apps/chat/index.html",
+    "apps/survival/client.js",
+    "apps/survival/index.html",
     "apps/voxel-world/client.js",
     "apps/voxel-world/index.html",
+    "apps/world-sharabass/index.html",
+    "data/app-capabilities.json",
+    "data/app-release-registry.json",
+    "data/autofix-learning.json",
+    "data/autofix-recipes.json",
+    "data/collision-policy.json",
+    "data/control-policy.json",
+    "data/desktop-ai-policy.json",
+    "data/error-prevention-registry.json",
+    "data/golden-asset-rules.json",
+    "data/golden-component-evolution.json",
+    "data/golden-components.json",
+    "data/gpu-autoscaling.json",
+    "data/gpu-routing.json",
+    "data/patch-synthesis-policy.json",
+    "data/patch-tournament-policy.json",
+    "data/performance-budgets.json",
+    "data/quality-baseline.json",
+    "data/quality-cost-model.json",
+    "data/quality-debt.json",
+    "data/quality-evidence-state.json",
+    "data/quality-evidence.json",
+    "data/quality-growth-policy.json",
+    "data/quality-history.json",
+    "data/quality-migrations.json",
+    "data/quality-model.json",
+    "data/quality-policy.json",
+    "data/quality-risk-model.json",
+    "data/quality-scorecard.json",
+    "data/real-device-provider.json",
+    "data/regression-test-templates.json",
+    "data/system-contracts.json",
+    "data/technology-orchestrator.json",
+    "data/technology-registry.json",
+    "data/ui-policy.json",
     "data/visual-baselines.json",
+    "data/visual-critic-policy.json",
+    "data/visual-quality-policy.json",
     "data/world-animation-runtime-evidence.json",
     "data/world-quality-autopilot.json",
+    "docs/AI3D_DISCOVERY.md",
+    "docs/AI3D_FAILURE_ANALYSIS.md",
+    "docs/AI3D_FAILURE_ANALYSIS_V2.md",
+    "docs/AI3D_FAILURE_ANALYSIS_V3.md",
+    "docs/AI3D_FINAL_DELIVERY_CONTRACT.md",
+    "docs/AI3D_INTEGRATION.md",
+    "docs/AI3D_LOCAL_HARDWARE.json",
+    "docs/AI3D_LOCAL_HARDWARE.md",
+    "docs/AI3D_TRELLIS_AUDIT.md",
+    "docs/AI3D_WALKABLE_REQUIREMENTS.md",
     "docs/DESKTOP_AI_WORLD_QUALITY_AUTOPILOT_V4.md",
+    "docs/NO_REGRESSION_QUALITY_LOCK.md",
+    "docs/QUALITY_GOVERNANCE.md",
     "docs/WORLD_QUALITY_AUTOPILOT.md",
     "docs/wip-history/WORLD_SERVER_PRE_WORLD_QUALITY_AUTOPILOT_V4.md",
+    "e2e/ai3d-voxel-city-autoplay.spec.js",
+    "e2e/golden-controls.spec.js",
+    "e2e/golden-mobile-behavior.spec.js",
+    "e2e/golden-release.spec.js",
+    "e2e/golden-ui-quality.spec.js",
+    "e2e/hud-visual-audit.spec.js",
+    "e2e/perceptual-visual.spec.js",
+    "e2e/performance-budgets.spec.js",
+    "e2e/sentry-smoke.spec.js",
+    "e2e/visual-candidates.spec.js",
+    "lib/ai3d-auth.js",
+    "lib/ai3d-delivery-policy.js",
+    "lib/ai3d-discovery.js",
+    "lib/env.js",
     "lib/world-quality-material-profiler.js",
     "lib/world-quality-pbr-synthesizer.js",
     "lib/world-quality-semantic-detail.js",
     "lib/world-quality-voxel-enhancer.js",
+    "lighthouserc.cjs",
+    "package-lock.json",
     "package.json",
+    "playwright.config.js",
+    "scripts/ai-visual-critic.js",
+    "scripts/ai3d-e2e-smoke.js",
+    "scripts/app-quality-matrix.js",
+    "scripts/approve-visual-baseline.js",
+    "scripts/asset-dedup-cache.js",
+    "scripts/auto-quality-cycle.js",
+    "scripts/build-posthog.js",
+    "scripts/build-sentry.js",
+    "scripts/capture-regressions.js",
+    "scripts/check-agent-rules.js",
+    "scripts/check-ai3d-claims.py",
+    "scripts/check-ai3d-delivery-policy.js",
+    "scripts/check-ai3d-public-scene.js",
+    "scripts/check-ai3d-v4-combined.js",
+    "scripts/check-desktop-ai-protocol.js",
+    "scripts/check-golden-standard.js",
+    "scripts/check-posthog-runtime.js",
+    "scripts/check-quality-governance.js",
+    "scripts/check-sentry-runtime.js",
+    "scripts/configure-branch-protection.sh",
+    "scripts/desktop-ai-new-task.js",
+    "scripts/discover-ai3d-engines.js",
+    "scripts/duplicate-system-review.js",
+    "scripts/durable-quality-cycle.js",
+    "scripts/evidence-quality-score.js",
+    "scripts/generate-regression-tests.js",
+    "scripts/godot-runtime-smoke.js",
+    "scripts/golden-asset-bot.js",
+    "scripts/gpu-autoscaler.js",
+    "scripts/inject-posthog-runtime.js",
+    "scripts/inject-sentry-runtime.js",
+    "scripts/lhci-start-server.cjs",
+    "scripts/perceptual-visual-gate.js",
+    "scripts/post-deploy-smoke.js",
+    "scripts/production-quality-pull.js",
+    "scripts/project-quality-reviewer.js",
+    "scripts/promote-golden-success.js",
+    "scripts/promote-learned-autofix.js",
+    "scripts/propagate-golden-components.js",
+    "scripts/quality-accept-baseline.js",
+    "scripts/quality-autofix.js",
+    "scripts/quality-bisect-check.js",
+    "scripts/quality-changed-impact.js",
+    "scripts/quality-cost-optimizer.js",
+    "scripts/quality-diff.js",
+    "scripts/quality-event.js",
+    "scripts/quality-experiment-engine.js",
+    "scripts/quality-governance.js",
+    "scripts/quality-growth-engine.js",
+    "scripts/quality-impact-graph.js",
+    "scripts/quality-improvement-planner.js",
+    "scripts/quality-issue-sync.js",
+    "scripts/quality-knowledge-graph.js",
+    "scripts/quality-learn-fix.js",
+    "scripts/quality-master-report.js",
+    "scripts/quality-patch-synthesizer.js",
+    "scripts/quality-patch-tournament.js",
+    "scripts/quality-promotion-candidate.js",
+    "scripts/quality-regression-gate.js",
+    "scripts/quality-regression-lib.js",
+    "scripts/quality-risk-predictor.js",
+    "scripts/quality-root-cause.js",
+    "scripts/quality-score.js",
+    "scripts/quality-self-evolve.js",
+    "scripts/quality-trend-monitor.js",
+    "scripts/real-device-gate.js",
+    "scripts/system-contract-review.js",
+    "scripts/technology-audit.js",
+    "scripts/technology-orchestrator.js",
+    "scripts/technology-runtime-health.js",
+    "scripts/test-gap-synthesizer.js",
+    "scripts/test-stability-runner.js",
+    "scripts/vercel-bisect-test.sh",
+    "scripts/vercel-deployment-bisect.sh",
+    "scripts/verify-sentry-production.js",
+    "scripts/visual-regression.js",
     "scripts/world-animation-semantic-validator.js",
     "scripts/world-candidate-lab.js",
     "scripts/world-detail-planner.js",
@@ -71,16 +278,132 @@
     "scripts/world-visibility-optimizer.js",
     "scripts/world-visual-baseline-candidates.js",
     "scripts/world-visual-baseline-promote.js",
+    "server.js",
+    "services/ai3d-worker/.env.example",
+    "services/ai3d-worker/Dockerfile",
+    "services/ai3d-worker/README.md",
+    "services/ai3d-worker/ai3d/__init__.py",
+    "services/ai3d-worker/ai3d/auth.py",
+    "services/ai3d-worker/ai3d/evidence.py",
+    "services/ai3d-worker/ai3d/plugins/__init__.py",
+    "services/ai3d-worker/ai3d/plugins/blender_building.py",
+    "services/ai3d-worker/ai3d/plugins/cpu_reconstruction.py",
+    "services/ai3d-worker/ai3d/plugins/depth_anything.py",
+    "services/ai3d-worker/ai3d/plugins/godot_voxel.py",
+    "services/ai3d-worker/ai3d/plugins/gpu_router.py",
+    "services/ai3d-worker/ai3d/plugins/instantmesh.py",
+    "services/ai3d-worker/ai3d/plugins/mesh_quality_optimizer.py",
+    "services/ai3d-worker/ai3d/plugins/procgen_maps.py",
+    "services/ai3d-worker/ai3d/plugins/trellis2.py",
+    "services/ai3d-worker/ai3d/plugins/voxel_city.py",
     "services/ai3d-worker/ai3d/plugins/world_quality.py",
     "services/ai3d-worker/ai3d/runner.py",
+    "services/ai3d-worker/ai3d/store.py",
+    "services/ai3d-worker/ai3d/validation.py",
+    "services/ai3d-worker/ai3d_verifier/verifier.py",
+    "services/ai3d-worker/ai3d_voxel_verifier/__init__.py",
+    "services/ai3d-worker/ai3d_voxel_verifier/verifier.py",
+    "services/ai3d-worker/docker-compose.yml",
+    "services/ai3d-worker/requirements.txt",
+    "services/ai3d-worker/scripts/bootstrap-linux.sh",
+    "services/ai3d-worker/scripts/bootstrap-windows.ps1",
+    "services/ai3d-worker/scripts/e2e-smoke.py",
+    "services/ai3d-worker/scripts/run-worker.ps1",
+    "services/ai3d-worker/scripts/run-worker.sh",
+    "services/ai3d-worker/server.py",
+    "services/ai3d-worker/third_party/local-inventory.json",
+    "services/ai3d-worker/third_party/manifest.json",
+    "services/ai3d-worker/tools/mesh_quality_optimize.py",
+    "services/ai3d-worker/tools/run_building_blender.py",
+    "services/ai3d-worker/tools/run_procgen_blender.py",
+    "shared/ai3d-playable-runtime.js",
+    "shared/golden-catalog-menu.js",
+    "shared/golden-performance-autotuner.js",
+    "shared/golden-physics.js",
+    "shared/golden-ui-shell.css",
+    "shared/golden-ui-shell.js",
+    "shared/posthog-runtime.entry.js",
+    "shared/posthog-runtime.js",
+    "shared/quality-telemetry.js",
+    "shared/sentry-runtime.entry.js",
+    "shared/sentry-runtime.js",
     "shared/world-quality-autopilot.js",
-    "test/world-quality-autopilot.test.js"
+    "supabase/migrations/20260823063700_quality_telemetry.sql",
+    "supabase/migrations/20260826090000_harden_handle_new_user_rpc_exposure.sql",
+    "templates/ai3d-playable-scene/client.js",
+    "templates/ai3d-playable-scene/index.html",
+    "templates/ai3d-playable-scene/scene-delivery.json",
+    "templates/ai3d-scene-delivery.json",
+    "test/ai3d-auth.test.js",
+    "test/ai3d-delivery-policy.test.js",
+    "test/ai3d-evidence.test.js",
+    "test/ai3d-voxel-serverless.test.js",
+    "test/auth-endpoints-no-admin-key.test.js",
+    "test/cpu-real3d.test.js",
+    "test/fixtures/city_street.png",
+    "test/fixtures/cube_object.png",
+    "test/fixtures/house.png",
+    "test/fixtures/terrain.png",
+    "test/fixtures/voxel_building.png",
+    "test/generated/controls-inverted-camera-relative.test.js",
+    "test/generated/false-green-assertion.test.js",
+    "test/generated/stairs-collision-broken.test.js",
+    "test/generated/wall-collision-broken.test.js",
+    "test/golden-physics.test.js",
+    "test/patch-tournament.test.js",
+    "test/performance-autotuner.test.js",
+    "test/posthog-config.test.js",
+    "test/preview-secret-isolation.test.js",
+    "test/quality-fuzz.test.js",
+    "test/quality-growth.test.js",
+    "test/quality-mutation.test.js",
+    "test/quality-regression.test.js",
+    "test/regression-generator.test.js",
+    "test/supabase-security-definer-rpc-exposure.test.js",
+    "test/voxel-city.test.js",
+    "test/voxel-performance.test.js",
+    "test/world-quality-autopilot.test.js",
+    "vercel.json"
   ],
   "affectedApps": [
+    "ai-3d",
+    "ai3d-reference-test",
     "ai3d-voxel-city",
-    "voxel-world"
+    "catalog",
+    "chat",
+    "survival",
+    "voxel-world",
+    "world-sharabass"
   ],
   "why": [
+    {
+      "from": "apps/ai-3d/client.js",
+      "to": "app:ai-3d"
+    },
+    {
+      "from": "apps/ai-3d/index.html",
+      "to": "app:ai-3d"
+    },
+    {
+      "from": "apps/ai-3d/styles.css",
+      "to": "app:ai-3d"
+    },
+    {
+      "from": "apps/ai3d-reference-test/assets/previous_html_baseline.html",
+      "to": "app:ai3d-reference-test"
+    },
+    {
+      "from": "apps/ai3d-reference-test/client.js",
+      "to": "app:ai3d-reference-test"
+    },
+    {
+      "from": "apps/ai3d-reference-test/index.html",
+      "to": "app:ai3d-reference-test"
+    },
+    {
+      "from": "apps/ai3d-reference-test/styles.css",
+      "to": "app:ai3d-reference-test"
+    },
     {
       "from": "apps/ai3d-voxel-city/client.js",
       "to": "app:ai3d-voxel-city"
@@ -90,12 +413,436 @@
       "to": "app:ai3d-voxel-city"
     },
     {
+      "from": "apps/ai3d-voxel-city/mesher-worker.js",
+      "to": "app:ai3d-voxel-city"
+    },
+    {
+      "from": "apps/ai3d-voxel-city/styles.css",
+      "to": "app:ai3d-voxel-city"
+    },
+    {
+      "from": "apps/catalog/client.js",
+      "to": "app:catalog"
+    },
+    {
+      "from": "apps/catalog/index.html",
+      "to": "app:catalog"
+    },
+    {
+      "from": "apps/chat/index.html",
+      "to": "app:chat"
+    },
+    {
+      "from": "apps/survival/client.js",
+      "to": "app:survival"
+    },
+    {
+      "from": "apps/survival/index.html",
+      "to": "app:survival"
+    },
+    {
       "from": "apps/voxel-world/client.js",
       "to": "app:voxel-world"
     },
     {
       "from": "apps/voxel-world/index.html",
       "to": "app:voxel-world"
+    },
+    {
+      "from": "apps/world-sharabass/index.html",
+      "to": "app:world-sharabass"
+    },
+    {
+      "from": "shared/ai3d-playable-runtime.js",
+      "to": "apps/ai3d-voxel-city/index.html"
+    },
+    {
+      "from": "apps/ai3d-voxel-city/index.html",
+      "to": "app:ai3d-voxel-city"
+    },
+    {
+      "from": "shared/ai3d-playable-runtime.js",
+      "to": "apps/catalog/index.html"
+    },
+    {
+      "from": "apps/catalog/index.html",
+      "to": "app:catalog"
+    },
+    {
+      "from": "shared/ai3d-playable-runtime.js",
+      "to": "apps/survival/index.html"
+    },
+    {
+      "from": "apps/survival/index.html",
+      "to": "app:survival"
+    },
+    {
+      "from": "shared/ai3d-playable-runtime.js",
+      "to": "app:voxel-world"
+    },
+    {
+      "from": "shared/ai3d-playable-runtime.js",
+      "to": "app:ai3d-voxel-city"
+    },
+    {
+      "from": "shared/ai3d-playable-runtime.js",
+      "to": "app:catalog"
+    },
+    {
+      "from": "shared/golden-catalog-menu.js",
+      "to": "apps/catalog/index.html"
+    },
+    {
+      "from": "apps/catalog/index.html",
+      "to": "app:catalog"
+    },
+    {
+      "from": "shared/golden-performance-autotuner.js",
+      "to": "apps/ai3d-voxel-city/index.html"
+    },
+    {
+      "from": "apps/ai3d-voxel-city/index.html",
+      "to": "app:ai3d-voxel-city"
+    },
+    {
+      "from": "shared/golden-performance-autotuner.js",
+      "to": "apps/voxel-world/index.html"
+    },
+    {
+      "from": "apps/voxel-world/index.html",
+      "to": "app:voxel-world"
+    },
+    {
+      "from": "shared/golden-physics.js",
+      "to": "apps/ai3d-voxel-city/index.html"
+    },
+    {
+      "from": "apps/ai3d-voxel-city/index.html",
+      "to": "app:ai3d-voxel-city"
+    },
+    {
+      "from": "shared/golden-physics.js",
+      "to": "apps/catalog/index.html"
+    },
+    {
+      "from": "apps/catalog/index.html",
+      "to": "app:catalog"
+    },
+    {
+      "from": "shared/golden-physics.js",
+      "to": "apps/survival/index.html"
+    },
+    {
+      "from": "apps/survival/index.html",
+      "to": "app:survival"
+    },
+    {
+      "from": "shared/golden-physics.js",
+      "to": "apps/voxel-world/index.html"
+    },
+    {
+      "from": "apps/voxel-world/index.html",
+      "to": "app:voxel-world"
+    },
+    {
+      "from": "shared/golden-physics.js",
+      "to": "apps/world-sharabass/index.html"
+    },
+    {
+      "from": "apps/world-sharabass/index.html",
+      "to": "app:world-sharabass"
+    },
+    {
+      "from": "shared/golden-physics.js",
+      "to": "app:voxel-world"
+    },
+    {
+      "from": "shared/golden-physics.js",
+      "to": "app:ai3d-voxel-city"
+    },
+    {
+      "from": "shared/golden-physics.js",
+      "to": "app:catalog"
+    },
+    {
+      "from": "shared/golden-physics.js",
+      "to": "app:voxel-world"
+    },
+    {
+      "from": "shared/golden-physics.js",
+      "to": "app:ai3d-voxel-city"
+    },
+    {
+      "from": "shared/golden-ui-shell.css",
+      "to": "apps/ai3d-voxel-city/index.html"
+    },
+    {
+      "from": "apps/ai3d-voxel-city/index.html",
+      "to": "app:ai3d-voxel-city"
+    },
+    {
+      "from": "shared/golden-ui-shell.css",
+      "to": "apps/catalog/index.html"
+    },
+    {
+      "from": "apps/catalog/index.html",
+      "to": "app:catalog"
+    },
+    {
+      "from": "shared/golden-ui-shell.css",
+      "to": "apps/survival/index.html"
+    },
+    {
+      "from": "apps/survival/index.html",
+      "to": "app:survival"
+    },
+    {
+      "from": "shared/golden-ui-shell.css",
+      "to": "apps/voxel-world/index.html"
+    },
+    {
+      "from": "apps/voxel-world/index.html",
+      "to": "app:voxel-world"
+    },
+    {
+      "from": "shared/golden-ui-shell.css",
+      "to": "apps/world-sharabass/index.html"
+    },
+    {
+      "from": "apps/world-sharabass/index.html",
+      "to": "app:world-sharabass"
+    },
+    {
+      "from": "shared/golden-ui-shell.css",
+      "to": "app:voxel-world"
+    },
+    {
+      "from": "shared/golden-ui-shell.css",
+      "to": "app:ai3d-voxel-city"
+    },
+    {
+      "from": "shared/golden-ui-shell.css",
+      "to": "app:catalog"
+    },
+    {
+      "from": "shared/golden-ui-shell.js",
+      "to": "apps/ai3d-voxel-city/index.html"
+    },
+    {
+      "from": "apps/ai3d-voxel-city/index.html",
+      "to": "app:ai3d-voxel-city"
+    },
+    {
+      "from": "shared/golden-ui-shell.js",
+      "to": "apps/catalog/index.html"
+    },
+    {
+      "from": "apps/catalog/index.html",
+      "to": "app:catalog"
+    },
+    {
+      "from": "shared/golden-ui-shell.js",
+      "to": "apps/survival/index.html"
+    },
+    {
+      "from": "apps/survival/index.html",
+      "to": "app:survival"
+    },
+    {
+      "from": "shared/golden-ui-shell.js",
+      "to": "apps/voxel-world/index.html"
+    },
+    {
+      "from": "apps/voxel-world/index.html",
+      "to": "app:voxel-world"
+    },
+    {
+      "from": "shared/golden-ui-shell.js",
+      "to": "apps/world-sharabass/index.html"
+    },
+    {
+      "from": "apps/world-sharabass/index.html",
+      "to": "app:world-sharabass"
+    },
+    {
+      "from": "shared/golden-ui-shell.js",
+      "to": "app:voxel-world"
+    },
+    {
+      "from": "shared/golden-ui-shell.js",
+      "to": "app:ai3d-voxel-city"
+    },
+    {
+      "from": "shared/golden-ui-shell.js",
+      "to": "app:catalog"
+    },
+    {
+      "from": "shared/posthog-runtime.js",
+      "to": "apps/ai-3d/index.html"
+    },
+    {
+      "from": "apps/ai-3d/index.html",
+      "to": "app:ai-3d"
+    },
+    {
+      "from": "shared/posthog-runtime.js",
+      "to": "apps/ai3d-reference-test/index.html"
+    },
+    {
+      "from": "apps/ai3d-reference-test/index.html",
+      "to": "app:ai3d-reference-test"
+    },
+    {
+      "from": "shared/posthog-runtime.js",
+      "to": "apps/ai3d-voxel-city/index.html"
+    },
+    {
+      "from": "apps/ai3d-voxel-city/index.html",
+      "to": "app:ai3d-voxel-city"
+    },
+    {
+      "from": "shared/posthog-runtime.js",
+      "to": "apps/catalog/index.html"
+    },
+    {
+      "from": "apps/catalog/index.html",
+      "to": "app:catalog"
+    },
+    {
+      "from": "shared/posthog-runtime.js",
+      "to": "apps/chat/index.html"
+    },
+    {
+      "from": "apps/chat/index.html",
+      "to": "app:chat"
+    },
+    {
+      "from": "shared/posthog-runtime.js",
+      "to": "apps/survival/index.html"
+    },
+    {
+      "from": "apps/survival/index.html",
+      "to": "app:survival"
+    },
+    {
+      "from": "shared/posthog-runtime.js",
+      "to": "apps/voxel-world/index.html"
+    },
+    {
+      "from": "apps/voxel-world/index.html",
+      "to": "app:voxel-world"
+    },
+    {
+      "from": "shared/posthog-runtime.js",
+      "to": "apps/world-sharabass/index.html"
+    },
+    {
+      "from": "apps/world-sharabass/index.html",
+      "to": "app:world-sharabass"
+    },
+    {
+      "from": "shared/quality-telemetry.js",
+      "to": "apps/ai3d-voxel-city/index.html"
+    },
+    {
+      "from": "apps/ai3d-voxel-city/index.html",
+      "to": "app:ai3d-voxel-city"
+    },
+    {
+      "from": "shared/quality-telemetry.js",
+      "to": "apps/catalog/index.html"
+    },
+    {
+      "from": "apps/catalog/index.html",
+      "to": "app:catalog"
+    },
+    {
+      "from": "shared/quality-telemetry.js",
+      "to": "apps/survival/index.html"
+    },
+    {
+      "from": "apps/survival/index.html",
+      "to": "app:survival"
+    },
+    {
+      "from": "shared/quality-telemetry.js",
+      "to": "apps/voxel-world/index.html"
+    },
+    {
+      "from": "apps/voxel-world/index.html",
+      "to": "app:voxel-world"
+    },
+    {
+      "from": "shared/quality-telemetry.js",
+      "to": "apps/world-sharabass/index.html"
+    },
+    {
+      "from": "apps/world-sharabass/index.html",
+      "to": "app:world-sharabass"
+    },
+    {
+      "from": "shared/sentry-runtime.js",
+      "to": "apps/ai-3d/index.html"
+    },
+    {
+      "from": "apps/ai-3d/index.html",
+      "to": "app:ai-3d"
+    },
+    {
+      "from": "shared/sentry-runtime.js",
+      "to": "apps/ai3d-reference-test/index.html"
+    },
+    {
+      "from": "apps/ai3d-reference-test/index.html",
+      "to": "app:ai3d-reference-test"
+    },
+    {
+      "from": "shared/sentry-runtime.js",
+      "to": "apps/ai3d-voxel-city/index.html"
+    },
+    {
+      "from": "apps/ai3d-voxel-city/index.html",
+      "to": "app:ai3d-voxel-city"
+    },
+    {
+      "from": "shared/sentry-runtime.js",
+      "to": "apps/catalog/index.html"
+    },
+    {
+      "from": "apps/catalog/index.html",
+      "to": "app:catalog"
+    },
+    {
+      "from": "shared/sentry-runtime.js",
+      "to": "apps/chat/index.html"
+    },
+    {
+      "from": "apps/chat/index.html",
+      "to": "app:chat"
+    },
+    {
+      "from": "shared/sentry-runtime.js",
+      "to": "apps/survival/index.html"
+    },
+    {
+      "from": "apps/survival/index.html",
+      "to": "app:survival"
+    },
+    {
+      "from": "shared/sentry-runtime.js",
+      "to": "apps/voxel-world/index.html"
+    },
+    {
+      "from": "apps/voxel-world/index.html",
+      "to": "app:voxel-world"
+    },
+    {
+      "from": "shared/sentry-runtime.js",
+      "to": "apps/world-sharabass/index.html"
+    },
+    {
+      "from": "apps/world-sharabass/index.html",
+      "to": "app:world-sharabass"
     },
     {
       "from": "shared/world-quality-autopilot.js",

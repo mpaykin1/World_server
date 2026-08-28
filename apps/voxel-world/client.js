@@ -49,6 +49,12 @@ function validBlockType(value){ const n=Number(value); return Number.isInteger(n
 function finiteCoord(value,limit=1000000){ const n=Number(value); return Number.isFinite(n)&&Math.abs(n)<=limit?n:null; }
 function uuid(){ return crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16);}); }
 function guestId(){ let id=localStorage.getItem('webgl_hub_guest_id'); if(!id){id=uuid();localStorage.setItem('webgl_hub_guest_id',id);} return id; }
+// A world provisioned by the improve-world-home questionnaire pipeline
+// (lib/api-handlers/world.js / merge.js) links here as
+// /apps/voxel-world/?world=<id>; falls back to the original 'main' world
+// when no id is given, so the pre-existing single-world experience is
+// unchanged for anyone who doesn't pass one.
+const worldId=new URLSearchParams(location.search).get('world')||'main';
 function token(){ return localStorage.getItem('webgl_hub_token') || ''; }
 async function api(action,payload={}){
   const headers={'Content-Type':'application/json','Accept':'application/json'}; const t=token(); if(t) headers.Authorization=`Bearer ${t}`;
@@ -65,10 +71,37 @@ function valueNoise(x,z,scale,seed){
 }
 function fbm(x,z,seed){ return valueNoise(x,z,72,seed)*.52+valueNoise(x,z,31,seed+97)*.28+valueNoise(x,z,13,seed+197)*.14+valueNoise(x,z,6,seed+313)*.06; }
 let worldSeed=73194217;
-function biomeAt(x,z){ const t=valueNoise(x,z,180,worldSeed+900), m=valueNoise(x,z,150,worldSeed+1400); if(t>.72) return 'desert'; if(t<.22) return 'snow'; if(m>.62) return 'forest'; return 'plains'; }
+// A world's `settings.theme` (derived server-side from its narrative content
+// by lib/voxel-provisioning.js -- see AGENTS.md's dual-layer rule) biases
+// which biome the same noise field resolves to, without changing the core
+// generator algorithm. 'plains' (the default/unthemed case) is unbiased.
+let worldTheme='plains';
+// Reflects the questionnaire's own tension/conflict answers (embedded in
+// the World Spec's scene text -- see lib/voxel-provisioning.js#deriveHeightScale):
+// a calmer story produces gentler terrain, a tense/conflict-driven one
+// produces more dramatic relief. Only scales the noise-driven variance, not
+// the base height, so spawn logic and sea level stay unaffected.
+let worldHeightScale=1;
+let worldTreeDensity=1;
+// Base hue for the existing day/night sky-color cycle (daylight(), below) --
+// theme shifts which hue the cycle breathes through, at zero extra render
+// cost (same Color object, same per-frame math, just a different constant).
+let worldSkyHue=.57;
+function hexToHue(hex){ try{ const c=new THREE.Color(hex); const hsl={h:0,s:0,l:0}; c.getHSL(hsl); return hsl.h; }catch{ return .57; } }
+const THEME_BIOME_BIAS={
+  desert:{desert:-.22,snow:.15,forest:.08},
+  snow:{desert:.15,snow:-.2,forest:.05},
+  forest:{desert:.08,snow:.06,forest:-.18},
+  plains:{desert:0,snow:0,forest:0}
+};
+function biomeAt(x,z){
+  const bias=THEME_BIOME_BIAS[worldTheme]||THEME_BIOME_BIAS.plains;
+  const t=valueNoise(x,z,180,worldSeed+900), m=valueNoise(x,z,150,worldSeed+1400);
+  if(t>.72+bias.desert) return 'desert'; if(t<.22+bias.snow) return 'snow'; if(m>.62+bias.forest) return 'forest'; return 'plains';
+}
 function heightAt(x,z){
   const b=biomeAt(x,z), n=fbm(x,z,worldSeed), ridge=Math.abs(valueNoise(x,z,105,worldSeed+77)-.5)*2;
-  let h=16+n*21; if(b==='snow') h+=ridge*15; if(b==='desert') h=17+n*11; if(b==='forest') h+=4;
+  let h=16+n*21*worldHeightScale; if(b==='snow') h+=ridge*15*worldHeightScale; if(b==='desert') h=17+n*11*worldHeightScale; if(b==='forest') h+=4;
   return clamp(Math.floor(h),5,WORLD_Y-12);
 }
 function caveAt(x,y,z){ if(y<4||y>55) return false; const a=valueNoise(x+y*7,z-y*5,22,worldSeed+2600); const b=valueNoise(x-y*3,z+y*9,11,worldSeed+2800); return a>.72&&b>.58; }
@@ -121,7 +154,8 @@ function generateChunkData(c,rows=[]){
       c.set(lx,y,lz,b);
     }
     const treeChance=hash32(x,z,worldSeed+5100);
-    const canTree=(biome==='forest'&&treeChance>.89)||(biome==='plains'&&treeChance>.975);
+    const forestThresh=clamp(1-(1-.89)*worldTreeDensity,.6,.995), plainsThresh=clamp(1-(1-.975)*worldTreeDensity,.9,.999);
+    const canTree=(biome==='forest'&&treeChance>forestThresh)||(biome==='plains'&&treeChance>plainsThresh);
     if(canTree&&h>SEA+1&&lx>2&&lz>2&&lx<CHUNK-3&&lz<CHUNK-3){
       const th=4+(hash32(x,z,worldSeed+5200)*3|0);
       for(let y=h+1;y<=h+th&&y<WORLD_Y;y++) c.set(lx,y,lz,BLOCK.WOOD);
@@ -170,7 +204,7 @@ async function loadNeededChunks(){
   if(streamBusy) return; const pcx=floorDiv(player.pos.x,CHUNK),pcz=floorDiv(player.pos.z,CHUNK),need=[];
   outer: for(let r=0;r<=VIEW;r++) for(let dx=-r;dx<=r;dx++) for(let dz=-r;dz<=r;dz++){ if(Math.max(Math.abs(dx),Math.abs(dz))!==r)continue;const cx=pcx+dx,cz=pcz+dz,k=key2(cx,cz);if(!chunks.has(k)&&!requested.has(k)){requested.add(k);need.push({x:cx,z:cz});if(need.length>=8)break outer;} }
   if(!need.length)return; streamBusy=true;
-  try{ const res=await api('chunks',{chunks:need,worldId:'main'}); const by=new Map(); for(const row of res.blocks||[]){const k=key2(row.cx,row.cz);if(!by.has(k))by.set(k,[]);by.get(k).push(row);} for(const q of need){const k=key2(q.x,q.z),c=generateChunkData(new ChunkData(q.x,q.z),by.get(k)||[]);chunks.set(k,c);rebuildChunk(c);} }
+  try{ const res=await api('chunks',{chunks:need,worldId}); const by=new Map(); for(const row of res.blocks||[]){const k=key2(row.cx,row.cz);if(!by.has(k))by.set(k,[]);by.get(k).push(row);} for(const q of need){const k=key2(q.x,q.z),c=generateChunkData(new ChunkData(q.x,q.z),by.get(k)||[]);chunks.set(k,c);rebuildChunk(c);} }
   catch(e){statusEl.textContent=e.message;statusEl.className='vwWarn'; for(const q of need)requested.delete(key2(q.x,q.z));}
   finally{streamBusy=false;}
   for(const [k,c] of [...chunks]) if(Math.max(Math.abs(c.cx-pcx),Math.abs(c.cz-pcz))>VIEW+1){ for(const m of c.meshes){worldGroup.remove(m);m.geometry.dispose();} chunks.delete(k); requested.delete(k); }
@@ -217,7 +251,7 @@ async function editBlock(place){
   if(place&&collidesWithCell(c.x,c.y,c.z)){targetEl.textContent='Нельзя поставить блок в игрока';return;}
   const old=blockAt(c.x,c.y,c.z); setBlockLocal(c.x,c.y,c.z,b);
   try{
-    await api('set_block',{worldId:'main',x:c.x,y:c.y,z:c.z,blockType:b,playerPosition:{x:player.pos.x,y:player.pos.y,z:player.pos.z}});
+    await api('set_block',{worldId,x:c.x,y:c.y,z:c.z,blockType:b,playerPosition:{x:player.pos.x,y:player.pos.y,z:player.pos.z}});
     if(channel) void channel.send({type:'broadcast',event:'block_set',payload:{x:c.x,y:c.y,z:c.z,block:b}});
     statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';
   }catch(e){setBlockLocal(c.x,c.y,c.z,old);statusEl.textContent=e.message;statusEl.className='vwWarn';}
@@ -240,7 +274,7 @@ function updateRemote(payload){
 }
 function syncPresence(){ if(!channel)return;const state=channel.presenceState(),active=new Set();for(const entries of Object.values(state))for(const p of entries){if(typeof p.id==='string'&&p.id.length<=80)active.add(p.id);}for(const [id,g] of remote)if(!active.has(id)){remoteGroup.remove(g);disposeAvatar(g);remote.delete(id);}playersEl.textContent=`игроков: ${Math.max(1,active.size)}`; }
 async function connectRealtime(appState){
-  const sb=appState.supabase; channel=sb.channel('voxel:main',{config:{presence:{key:player.id},broadcast:{self:false,ack:false}}});
+  const sb=appState.supabase; channel=sb.channel(`voxel:${worldId}`,{config:{presence:{key:player.id},broadcast:{self:false,ack:false}}});
   channel.on('broadcast',{event:'player_state'},({payload})=>updateRemote(payload)); channel.on('broadcast',{event:'block_set'},({payload})=>{const b=validBlockType(payload?.block),x=finiteCoord(payload?.x),y=finiteCoord(payload?.y,320),z=finiteCoord(payload?.z);if(b===null||x===null||y===null||z===null||!Number.isInteger(x)||!Number.isInteger(y)||!Number.isInteger(z)||y<0||y>=WORLD_Y)return;if(Math.hypot(x-player.pos.x,z-player.pos.z)>(VIEW+3)*CHUNK)return;setBlockLocal(x,y,z,b);}); channel.on('presence',{event:'sync'},syncPresence);
   await new Promise((resolve,reject)=>channel.subscribe(async st=>{if(st==='SUBSCRIBED'){await channel.track({id:player.id,name:player.name,online_at:new Date().toISOString()});resolve();}else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT')reject(new Error('Realtime недоступен'));}));
 }
@@ -260,10 +294,10 @@ function setupMobile(){
   document.getElementById('jumpBtn').onclick=jump;document.getElementById('breakBtn').onclick=()=>editBlock(false);document.getElementById('placeBtn').onclick=()=>editBlock(true);
 }
 
-function daylight(now){const day=(now*.000015)%1,a=day*Math.PI*2;sun.position.set(Math.cos(a)*65,Math.sin(a)*72+12,30);const k=clamp((sun.position.y+12)/55,.12,1);sun.intensity=.25+2.0*k;hemi.intensity=.28+1.0*k;const sky=new THREE.Color().setHSL(.57,.55,.18+.48*k);scene.background.copy(sky);scene.fog.color.copy(sky);}
+function daylight(now){const day=(now*.000015)%1,a=day*Math.PI*2;sun.position.set(Math.cos(a)*65,Math.sin(a)*72+12,30);const k=clamp((sun.position.y+12)/55,.12,1);sun.intensity=.25+2.0*k;hemi.intensity=.28+1.0*k;const sky=new THREE.Color().setHSL(worldSkyHue,.55,.18+.48*k);scene.background.copy(sky);scene.fog.color.copy(sky);}
 function updateTarget(){const h=rayVoxel();if(!h)return;targetEl.textContent=`${BLOCKS[h.block]?.name||'Блок'} · ${h.hit.x}, ${h.hit.y}, ${h.hit.z}`;}
 
-async function savePlayer(){try{await api('player_save',{worldId:'main',position:{x:player.pos.x,y:player.pos.y,z:player.pos.z},yaw:player.yaw,pitch:player.pitch,selectedBlock:HOTBAR[player.selected]});}catch{} }
+async function savePlayer(){try{await api('player_save',{worldId,position:{x:player.pos.x,y:player.pos.y,z:player.pos.z},yaw:player.yaw,pitch:player.pitch,selectedBlock:HOTBAR[player.selected]});}catch{} }
 function broadcastPlayer(now){if(!channel||now-lastNet<NET_INTERVAL)return;lastNet=now;channel.send({type:'broadcast',event:'player_state',payload:{id:player.id,name:player.name,x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw}});}
 let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(started){physics(dt);loadNeededChunks();broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);renderer.render(scene,camera);}requestAnimationFrame(loop);
 
@@ -272,7 +306,7 @@ setupDesktop();setupMobile();buildHotbar();
 
 try{
   const appState=await window.AppCore.init('voxel-world');
-  const init=await api('init',{worldId:'main'}); worldSeed=Number(init.world?.seed)||worldSeed; player.id=init.selfId;player.name=init.player?.name||appState.user?.username||'Player'; const p=init.player?.position||{x:0,y:heightAt(0,0)+4,z:0};player.pos.set(Number(p.x)||0,Number(p.y)||heightAt(0,0)+4,Number(p.z)||0);player.yaw=Number(init.player?.yaw)||0;player.pitch=Number(init.player?.pitch)||0;const sel=HOTBAR.indexOf(Number(init.player?.selectedBlock));if(sel>=0)player.selected=sel;buildHotbar(); await connectRealtime(appState); started=true; statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';loading.classList.add('hidden');
+  const init=await api('init',{worldId}); worldSeed=Number(init.world?.seed)||worldSeed; const vs=init.world?.settings||{}; worldTheme=String(vs.theme||'plains'); worldHeightScale=Number(vs.heightScale)||1; worldTreeDensity=Number(vs.treeDensity)||1; if(vs.skyTint!==undefined)worldSkyHue=hexToHue(Number(vs.skyTint)); if(Number.isFinite(vs.fogNear)&&Number.isFinite(vs.fogFar)){scene.fog.near=vs.fogNear;scene.fog.far=vs.fogFar;} player.id=init.selfId;player.name=init.player?.name||appState.user?.username||'Player'; const p=init.player?.position||{x:0,y:heightAt(0,0)+4,z:0};player.pos.set(Number(p.x)||0,Number(p.y)||heightAt(0,0)+4,Number(p.z)||0);player.yaw=Number(init.player?.yaw)||0;player.pitch=Number(init.player?.pitch)||0;const sel=HOTBAR.indexOf(Number(init.player?.selectedBlock));if(sel>=0)player.selected=sel;buildHotbar(); await connectRealtime(appState); started=true; statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';loading.classList.add('hidden');
 }catch(e){console.error(e);statusEl.textContent=e.message;statusEl.className='vwWarn';loading.textContent=`Voxel World: ${e.message}`;setTimeout(()=>loading.classList.add('hidden'),3500);started=true;player.pos.set(0,heightAt(0,0)+4,0);}
 
 window.VoxelWorldRuntime={
