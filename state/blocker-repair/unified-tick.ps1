@@ -17,7 +17,7 @@ try{
   Set-Location $root
   try{
     Log "Step 1: quality_autoloop"
-    & powershell.exe -ExecutionPolicy Bypass -File "$root\scripts\quality-autoloop-tick.ps1" 2>&1 | ForEach-Object { Log "  autoloop: $_" }
+    & powershell.exe -WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -File "$root\scripts\quality-autoloop-tick.ps1" 2>&1 | ForEach-Object { Log "  autoloop: $_" }
   }catch{ Log "autoloop error $_" }
   try{
     Log "Step 1b: supervisor advisory poll"

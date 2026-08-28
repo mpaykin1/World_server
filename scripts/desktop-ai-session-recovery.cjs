@@ -960,7 +960,9 @@ function commandWatchdogInstall() {
     console.log(JSON.stringify(r,null,2)); return r;
   }
   const node=process.execPath;
-  const cmd=`@echo off\r\ncd /d "${ROOT}"\r\n"${node}" "${path.join(ROOT,'scripts','desktop-ai-session-recovery.cjs')}" watchdog >> "${path.join(STATE_DIR,'watchdog.log')}" 2>&1\r\n`;
+  // Headless/hidden launcher: use PowerShell hidden window to avoid flashing CMD
+  const psCmd = `powershell.exe -WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -Command "& '${node.replace(/'/g, "''")}' '${path.join(ROOT,'scripts','desktop-ai-session-recovery.cjs').replace(/'/g, "''")}' watchdog >> '${path.join(STATE_DIR,'watchdog.log').replace(/'/g, "''")}' 2>&1"`;
+  const cmd=`@echo off\r\ncd /d "${ROOT}"\r\n${psCmd}\r\n`;
   fs.writeFileSync(WATCHDOG_CMD_FILE,cmd,'utf8');
   const mins=Math.max(1,Math.round(Number(policy().watchdogIntervalMinutes||5)));
   const r=spawnSync('schtasks.exe',['/Create','/F','/SC','MINUTE','/MO',String(mins),'/TN',taskName,'/TR',WATCHDOG_CMD_FILE],{encoding:'utf8',windowsHide:true});

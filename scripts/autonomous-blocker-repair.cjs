@@ -830,7 +830,10 @@ function writeSchedulerLauncher(root) {
   if (process.platform === 'win32') {
     const node = process.execPath.replace(/"/g, '""');
     const script = path.join(root, 'scripts', 'autonomous-blocker-repair.cjs').replace(/"/g, '""');
-    fs.writeFileSync(p.schedulerCmd, `@echo off\r\ncd /d "${root}"\r\n"${node}" "${script}" tick >> "${path.join(p.dir, 'scheduler.log')}" 2>&1\r\n`, 'utf8');
+    const log = path.join(p.dir, 'scheduler.log').replace(/"/g, '""');
+    // Headless/hidden: use PowerShell hidden window to avoid flashing CMD
+    const hiddenCmd = `@echo off\r\ncd /d "${root}"\r\npowershell.exe -WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -Command "Start-Process -FilePath '${node}' -ArgumentList '\\\"${script}\\\" tick' -WindowStyle Hidden -NoNewWindow -RedirectStandardOutput '${log}' -RedirectStandardError '${log}' -WorkingDirectory '${root}'"\r\n`;
+    fs.writeFileSync(p.schedulerCmd, hiddenCmd, 'utf8');
     return p.schedulerCmd;
   } else {
     fs.writeFileSync(p.schedulerSh, `#!/bin/sh\ncd ${JSON.stringify(root)}\n${JSON.stringify(process.execPath)} ${JSON.stringify(path.join(root, 'scripts', 'autonomous-blocker-repair.cjs'))} tick >> ${JSON.stringify(path.join(p.dir, 'scheduler.log'))} 2>&1\n`, { encoding: 'utf8', mode: 0o755 });
