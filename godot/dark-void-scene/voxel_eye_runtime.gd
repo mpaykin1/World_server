@@ -61,11 +61,15 @@ func _build() -> void:
 	box.size = Vector3(VOX, VOX, VOX)
 
 	var mat_dark := StandardMaterial3D.new()
-	mat_dark.albedo_color = Color8(0x0b, 0x0a, 0x09)
-	mat_dark.roughness = 1.0
+	# Needs to read as dark charcoal AGAINST the near-black background, not
+	# blend into it - a hero silhouette that disappears in the void is a
+	# release-blocking regression (see error-prevention-registry.json:
+	# "voxel-hero-silhouette-invisible-against-void").
+	mat_dark.albedo_color = Color8(0x1e, 0x19, 0x13)
+	mat_dark.roughness = 0.86
 	mat_dark.emission_enabled = true
-	mat_dark.emission = Color8(0x15, 0x0e, 0x07)
-	mat_dark.emission_energy_multiplier = 0.22
+	mat_dark.emission = Color8(0x33, 0x20, 0x0e)
+	mat_dark.emission_energy_multiplier = 0.42
 
 	var mat_white := StandardMaterial3D.new()
 	mat_white.albedo_color = Color8(0xd8, 0xd2, 0xc2)

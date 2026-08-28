@@ -80,6 +80,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 
 [node name="Backdrop" type="Control" parent="UI/NavigatorPanel" unique_id=396960020]
@@ -220,7 +222,13 @@ autowrap_mode = 3
 
 [node name="CinematicContract" type="Node" parent="." unique_id=1993035938]
 script = ExtResource("6_272bh")
+hero_lights = 3
 material_layers = 5
 
 [node name="CinematicGovernor" type="Node" parent="." unique_id=485650098]
 script = ExtResource("7_5vw27")
+
+[node name="MountainRim" type="DirectionalLight3D" parent="." unique_id=1573667490]
+transform = Transform3D(-0.64278764, -0.43938506, 0.62750685, 0, 0.81915206, 0.57357645, -0.76604444, 0.36868784, -0.5265408, 0, 0, 0)
+light_color = Color(0.75, 0.62, 0.42, 1)
+light_energy = 1.4
