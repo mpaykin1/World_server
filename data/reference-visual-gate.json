@@ -50,6 +50,7 @@
         "ui": 98,
         "cinematicQuality": 98
       },
+      "referencePackAdded": "2026-08-28T4: user supplied DESKTOP_AI_DARK_VOXEL_REFERENCE_PACK.zip - value/massing bands, geometry-edge extraction, monocular depth layout, emissive-source map, exact hex dominant palette, pixel-precise eye/flame anchor coordinates. Used directly per its DESKTOP_AI_READ_ME_FIRST.md instead of eyeballing the single reference image.",
       "scoreHistory": [
         {
           "scoredAt": "2026-08-28T1",
@@ -57,28 +58,35 @@
           "compositionIdea": 80, "eyeFirePlacement": 80, "voxelStyle": 55, "geometricDetail": 45,
           "materials": 50, "lighting": 55, "fogAtmosphere": 45, "spatialDepth": 55,
           "eye": 75, "fire": 70, "ui": 85, "cinematicQuality": 50
+        },
+        {
+          "scoredAt": "2026-08-28T2",
+          "evidence": "standalone godot.exe console-verified screenshot (final_standalone.png) after: dominant-peak volumetric mountain rewrite, true eye-centered orbit camera fix, two midground_ridge.gd depth bands, retuned material/light balance after an overcorrected warm-wash pass",
+          "compositionIdea": 85, "eyeFirePlacement": 85, "voxelStyle": 70, "geometricDetail": 65,
+          "materials": 65, "lighting": 72, "fogAtmosphere": 55, "spatialDepth": 65,
+          "eye": 78, "fire": 72, "ui": 85, "cinematicQuality": 65
         }
       ],
       "lastScore": {
-        "scoredAt": "2026-08-28T2",
-        "evidence": "standalone godot.exe console-verified screenshot (final_standalone.png) after: dominant-peak volumetric mountain rewrite (2-6 depth layers + rubble pass + per-instance AO color), true eye-centered orbit camera fix (rig position bug - was orbiting 13 units off the eye, now verified via game_eval to keep the eye pixel-locked across a real yaw change), two midground_ridge.gd depth-band formations, retuned material/light balance after an overcorrected warm-wash pass, rim/key light with sky_mode=LIGHT_ONLY",
+        "scoredAt": "2026-08-28T4",
+        "evidence": "standalone godot.exe console-verified screenshot (pack_verify.png) after rebuilding against the reference pack: exact-hex palette baked as per-instance color (capped hard after an overcorrected first attempt - reference massing is almost entirely the darkest band), eye catchlight + iris inner band, flame moved atop a thin candle pillar above the pyramid apex with a second wide/soft glow light, new valley_floor.gd foreground rubble field spanning eye-to-altar",
         "compositionIdea": 85,
         "eyeFirePlacement": 85,
-        "voxelStyle": 70,
-        "geometricDetail": 65,
-        "materials": 65,
-        "lighting": 72,
+        "voxelStyle": 75,
+        "geometricDetail": 68,
+        "materials": 72,
+        "lighting": 75,
         "fogAtmosphere": 55,
-        "spatialDepth": 65,
-        "eye": 78,
-        "fire": 72,
+        "spatialDepth": 68,
+        "eye": 82,
+        "fire": 78,
         "ui": 85,
-        "cinematicQuality": 65,
-        "notes": "Real, verified progress (avg ~71% vs ~60% prior pass), still BLOCKED on every 98-target category. volumetric_fog_enabled was tried for a beacon haze but this GPU's forced gl_compatibility renderer doesn't support it (confirmed via engine warning in a real standalone run) and was reverted - fogAtmosphere gain is from exponential/height/aerial-perspective fog tuning only. Materials/lighting/cinematicQuality are approaching a practical ceiling for StandardMaterial3D + no custom shaders/baked textures/particles; closing the remaining gap to 98 likely needs those, not just more numeric tuning."
+        "cinematicQuality": 70,
+        "notes": "avg ~75% (was ~71%, was ~60%), still BLOCKED on every 98-target category and compositionIdea (90 target). fogAtmosphere unchanged this pass - still no real volumetric option on this GPU's forced gl_compatibility renderer; would need a hand-authored soft billboard/particle haze around the flame to move further. geometricDetail/materials/cinematicQuality still short of the edge-map's actual density and the massing map's precise value distribution - closing that gap needs either much finer voxel resolution (perf risk on this GPU) or custom shaders/baked textures, not just more numeric tuning of StandardMaterial3D + instance colors."
       },
       "gateStatus": "BLOCKED",
       "blockingCategories": [
-        "voxelStyle", "geometricDetail", "materials", "lighting",
+        "compositionIdea", "voxelStyle", "geometricDetail", "materials", "lighting",
         "fogAtmosphere", "spatialDepth", "eye", "fire", "cinematicQuality"
       ]
     }
