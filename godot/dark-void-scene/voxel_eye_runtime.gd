@@ -11,18 +11,17 @@ const HALF_H := 9
 
 var mode: String = "beacon" # camera | user | beacon | idle
 var beacon: Node3D = null
-var target_cam: Node3D = null # the Player rig - the eye follows it, independently of the beacon
+var rig: Node3D = null # the camera rig - a CHILD of this node, arrow keys move the eye itself
 
 ## Set from the editor/MCP so this scene needs no manual _ready() wiring
-## script - resolved once at startup into beacon/target_cam above.
+## script - resolved once at startup into beacon/rig above.
 @export var beacon_path: NodePath
-@export var target_path: NodePath
+@export var rig_path: NodePath
 
-## The eye drifts along with the player (its own body, not just its gaze) so
-## it reads as something that moves with you - the beacon stays fixed as an
-## unrelated, static, distant landmark. Offset is local to the player rig.
-@export var follow_offset: Vector3 = Vector3(-3.5, -0.3, -9.0)
-@export var follow_speed: float = 1.6
+## The eye IS the player - arrow keys move its own body directly, relative
+## to whichever way the (child) camera rig currently faces. The beacon is a
+## completely separate, static landmark elsewhere in the world.
+@export var move_speed: float = 5.5
 
 var _blink: float = 0.0
 var _next_blink: float = 0.0
@@ -35,8 +34,8 @@ var _eye_root: Node3D
 func _ready() -> void:
 	if beacon_path != NodePath(""):
 		beacon = get_node_or_null(beacon_path)
-	if target_path != NodePath(""):
-		target_cam = get_node_or_null(target_path)
+	if rig_path != NodePath(""):
+		rig = get_node_or_null(rig_path)
 	_rng.randomize()
 	_next_blink = Time.get_ticks_msec() / 1000.0 + randf_range(2.6, 5.2)
 	_build()
@@ -176,14 +175,35 @@ func cycle_mode() -> String:
 	mode = order[(idx + 1) % order.size()]
 	return mode
 
-func _process(delta: float) -> void:
-	# The eye's body drifts to stay near the player, entirely independent of
-	# the beacon (which never moves) - decouples "where the eye is" from
-	# "where the light is" so they read as two separate things in the world.
-	if target_cam:
-		var desired: Vector3 = target_cam.global_transform * follow_offset
-		global_position = global_position.lerp(desired, clamp(delta * follow_speed, 0.0, 1.0))
+func _physics_process(delta: float) -> void:
+	# The eye IS the player - it moves directly, relative to whichever way
+	# the camera rig (its own child) currently faces. Completely separate
+	# from the beacon, which never moves at all.
+	if not rig:
+		return
+	var input_dir := Vector2.ZERO
+	if Input.is_action_pressed("ui_up"):
+		input_dir.y += 1.0
+	if Input.is_action_pressed("ui_down"):
+		input_dir.y -= 1.0
+	if Input.is_action_pressed("ui_left"):
+		input_dir.x -= 1.0
+	if Input.is_action_pressed("ui_right"):
+		input_dir.x += 1.0
+	input_dir = input_dir.normalized()
 
+	var rig_basis: Basis = rig.global_transform.basis
+	var forward: Vector3 = -rig_basis.z
+	forward.y = 0.0
+	forward = forward.normalized()
+	var right: Vector3 = rig_basis.x
+	right.y = 0.0
+	right = right.normalized()
+
+	var wish: Vector3 = forward * input_dir.y + right * input_dir.x
+	global_position += wish * move_speed * delta
+
+func _process(delta: float) -> void:
 	var t := Time.get_ticks_msec() / 1000.0
 	# Auto-blink: squash the iris/pupil vertically for a few frames.
 	if t > _next_blink:
@@ -207,11 +227,6 @@ func _process(delta: float) -> void:
 	match mode:
 		"user":
 			gaze = _gaze_user
-		"camera":
-			if target_cam:
-				var to_target: Vector3 = (target_cam.global_transform.origin - global_transform.origin)
-				var local_dir: Vector3 = global_transform.basis.inverse() * to_target.normalized()
-				gaze = Vector2(clamp(local_dir.x, -1, 1), clamp(local_dir.y, -1, 1)) * 0.5
 		"beacon":
 			if beacon:
 				var to_beacon: Vector3 = (beacon.global_transform.origin - global_transform.origin).normalized()
