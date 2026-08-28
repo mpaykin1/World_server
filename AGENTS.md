@@ -202,3 +202,21 @@ Work counts as incomplete if any of these is true: `mergeSafe: false`, a FAIL, a
 **When the owner interrupts with a new task**: finish (or safely checkpoint) what's running, do the new task, then automatically resume the previous incomplete work from its recorded `Next Action` — don't wait to be told "continue the previous work." If several things are open, prioritize: P0 production/security/data-loss issues → blockers that are blocking other work → work that's nearly done → the owner's current explicit ask → general quality improvements → optional polish. A new priority ask reorders this list temporarily; it doesn't delete anything from it.
 
 **Before a session ends or hands off** (intentionally or by getting cut off), the last thing written for any task still open should be an accurate `WORK_IN_PROGRESS.md`: done vs. not done, last PASS, last FAIL, commit, branch, PR, deployment state, exact blocker, and the precise next command — so the next agent (any agent, this one resumed or a different one entirely) picks it up with effectively no lost time. This is what sections 11 and this one already require; there's no separate checkpoint format to maintain.
+
+## COMMERCIAL 100 — permanent product experiment standard
+
+- Commercial packaging is a permanent project standard.
+- **Commercial score/evidence MUST NOT block publishing a test experiment.**
+- Every user-facing homepage/product hypothesis may be released and measured even below 100.
+- `100/100` is the packaging target and a hard **promotion-to-primary** standard, not a general release gate.
+- Never invent conversion, payment, retention, market validation or winner status.
+- Different homepage hypotheses MUST coexist as independent variants.
+- A previous homepage MUST NEVER be deleted or silently overwritten when a new one is tested.
+- Previous homepages move to the append-only homepage library with their source path, profile, metrics and history preserved.
+- For product surfaces use the `surface` Commercial 100 rubric.
+- For engines/shared/infrastructure use the `platform` rubric and explicitly state which commercial metric the work improves.
+- Every product-facing task should run `npm run commercial:audit`.
+- `npm run commercial:audit` is advisory and MUST exit successfully even when scores/evidence are incomplete.
+- Before promoting a homepage to primary run `node scripts/commercial-promotion-check.js <id>`.
+- Promotion packaging can require 100/100; declaring a real winner also requires comparative real-world metrics.
+- Commercial targets live in `data/commercial-targets.json`; a target of 100 is not a claim that the target is already achieved.

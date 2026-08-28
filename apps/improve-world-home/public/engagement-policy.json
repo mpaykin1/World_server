@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0.0",
+  "policyVersion": 1,
+  "updatedAt": null,
+  "minimumEvidence": {
+    "sessionsPerVariant": 30,
+    "minimumLift": 0.03
+  },
+  "guardrails": {
+    "mobileFpsP10": 30,
+    "desktopFpsP10": 45,
+    "maxErrorRate": 0.02,
+    "maxCrashRate": 0.005
+  },
+  "active": {
+    "navigatorTone": "mysterious",
+    "worldRefreshCadence": "every-step",
+    "revealStrength": "cinematic"
+  },
+  "variants": {
+    "navigatorTone": ["mysterious", "warm", "direct"],
+    "worldRefreshCadence": ["every-step", "meaningful-step"],
+    "revealStrength": ["cinematic", "gentle"]
+  },
+  "note": "The learning loop may change active variants only after minimum evidence and FPS/error/crash guardrails pass. Question content and the 31/28 ADD_ONLY contract are never mutated automatically."
+}

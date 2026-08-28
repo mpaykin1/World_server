@@ -83,6 +83,8 @@ let worldTheme='plains';
 // the base height, so spawn logic and sea level stay unaffected.
 let worldHeightScale=1;
 let worldTreeDensity=1;
+let worldDetailStage=31;
+let worldDetailProgress=1;
 // Base hue for the existing day/night sky-color cycle (daylight(), below) --
 // theme shifts which hue the cycle breathes through, at zero extra render
 // cost (same Color object, same per-frame math, just a different constant).
@@ -140,6 +142,22 @@ const overrides=new Map();
 const requested=new Set();
 let streamBusy=false;
 
+function addProgressiveLandmark(c,bx,bz){
+  if(worldDetailStage<2)return;
+  const reveal=clamp(worldDetailProgress,.03,1);
+  const roll=hash32(c.cx,c.cz,worldSeed+6100);
+  const probability=clamp(.015+reveal*.12,.015,.135);
+  if(roll<1-probability)return;
+  const lx=4+(hash32(c.cx*13,c.cz*7,worldSeed+6111)*8|0),lz=4+(hash32(c.cx*5,c.cz*17,worldSeed+6123)*8|0);
+  const x=bx+lx,z=bz+lz,h=heightAt(x,z);if(h<=SEA+1||h+12>=WORLD_Y)return;
+  const material=worldTheme==='desert'?BLOCK.BRICK:worldTheme==='snow'?BLOCK.GLASS:BLOCK.STONE;
+  const height=Math.min(8,3+Math.floor(worldDetailStage/5));
+  for(let y=h+1;y<=h+height;y++)c.set(lx,y,lz,material);
+  if(worldDetailStage>=8){for(let dx=-2;dx<=2;dx++)c.set(lx+dx,h+2,lz,dx===0?BLOCK.GLASS:material);}
+  if(worldDetailStage>=15){for(let y=h+1;y<=h+Math.max(3,height-1);y++)c.set(lx+3,y,lz,material);for(let dx=0;dx<=3;dx++)c.set(lx+dx,h+height,lz,material);}
+  if(worldDetailStage>=24){for(const [dx,dz] of [[1,1],[-1,1],[1,-1],[-1,-1]])c.set(lx+dx,h+height+1,lz+dz,BLOCK.GLASS);}
+}
+
 function generateChunkData(c,rows=[]){
   const bx=c.cx*CHUNK,bz=c.cz*CHUNK;
   for(let lx=0;lx<CHUNK;lx++) for(let lz=0;lz<CHUNK;lz++){
@@ -164,6 +182,7 @@ function generateChunkData(c,rows=[]){
       }
     }
   }
+  addProgressiveLandmark(c,bx,bz);
   for(const r of rows){ const b=validBlockType(r.block_type); if(b===null||!Number.isInteger(r.x)||!Number.isInteger(r.y)||!Number.isInteger(r.z)||r.y<0||r.y>=WORLD_Y) continue; const lx=mod(r.x,CHUNK),lz=mod(r.z,CHUNK); c.set(lx,r.y,lz,b); overrides.set(key3(r.x,r.y,r.z),b); }
   c.ready=true; return c;
 }
@@ -306,7 +325,7 @@ setupDesktop();setupMobile();buildHotbar();
 
 try{
   const appState=await window.AppCore.init('voxel-world');
-  const init=await api('init',{worldId}); worldSeed=Number(init.world?.seed)||worldSeed; const vs=init.world?.settings||{}; worldTheme=String(vs.theme||'plains'); worldHeightScale=Number(vs.heightScale)||1; worldTreeDensity=Number(vs.treeDensity)||1; if(vs.skyTint!==undefined)worldSkyHue=hexToHue(Number(vs.skyTint)); if(Number.isFinite(vs.fogNear)&&Number.isFinite(vs.fogFar)){scene.fog.near=vs.fogNear;scene.fog.far=vs.fogFar;} player.id=init.selfId;player.name=init.player?.name||appState.user?.username||'Player'; const p=init.player?.position||{x:0,y:heightAt(0,0)+4,z:0};player.pos.set(Number(p.x)||0,Number(p.y)||heightAt(0,0)+4,Number(p.z)||0);player.yaw=Number(init.player?.yaw)||0;player.pitch=Number(init.player?.pitch)||0;const sel=HOTBAR.indexOf(Number(init.player?.selectedBlock));if(sel>=0)player.selected=sel;buildHotbar(); await connectRealtime(appState); started=true; statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';loading.classList.add('hidden');
+  const init=await api('init',{worldId}); worldSeed=Number(init.world?.seed)||worldSeed; const vs=init.world?.settings||{}; worldTheme=String(vs.theme||'plains'); worldHeightScale=Number(vs.heightScale)||1; worldTreeDensity=Number(vs.treeDensity)||1; worldDetailStage=Math.max(1,Math.min(64,Math.trunc(Number(vs.detailStage)||31))); worldDetailProgress=clamp(Number(vs.detailProgress)||1,.03,1); if(vs.skyTint!==undefined)worldSkyHue=hexToHue(Number(vs.skyTint)); if(Number.isFinite(vs.fogNear)&&Number.isFinite(vs.fogFar)){scene.fog.near=vs.fogNear;scene.fog.far=vs.fogFar;} player.id=init.selfId;player.name=init.player?.name||appState.user?.username||'Player'; const p=init.player?.position||{x:0,y:heightAt(0,0)+4,z:0};player.pos.set(Number(p.x)||0,Number(p.y)||heightAt(0,0)+4,Number(p.z)||0);player.yaw=Number(init.player?.yaw)||0;player.pitch=Number(init.player?.pitch)||0;const sel=HOTBAR.indexOf(Number(init.player?.selectedBlock));if(sel>=0)player.selected=sel;buildHotbar(); await connectRealtime(appState); started=true; statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';loading.classList.add('hidden');
 }catch(e){console.error(e);statusEl.textContent=e.message;statusEl.className='vwWarn';loading.textContent=`Voxel World: ${e.message}`;setTimeout(()=>loading.classList.add('hidden'),3500);started=true;player.pos.set(0,heightAt(0,0)+4,0);}
 
 window.VoxelWorldRuntime={

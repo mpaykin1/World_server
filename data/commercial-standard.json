@@ -1,0 +1,64 @@
+{
+  "version": "1.0.0",
+  "name": "IMPROVE WORLD Commercial 100",
+  "principles": {
+    "releasePolicy": "experiments-must-not-be-blocked-by-commercial-score",
+    "promotionPolicy": "primary-promotion-requires-100-packaging-score",
+    "historyPolicy": "append-only-homepage-library",
+    "deletionPolicy": "never-delete-previous-homepages",
+    "measurementPolicy": "score-and-traction-are-separate; never invent traction"
+  },
+  "profiles": {
+    "surface": {
+      "description": "User-facing homepage, game, onboarding, world or feature",
+      "criteria": {
+        "existing_market": 15,
+        "retention_potential": 15,
+        "desire_strength": 12,
+        "three_second_clarity": 10,
+        "time_to_first_wow": 10,
+        "differentiation": 10,
+        "creative_demo_power": 10,
+        "virality": 8,
+        "monetization": 6,
+        "reliability": 4
+      }
+    },
+    "platform": {
+      "description": "Engine, infrastructure, shared system or internal technology",
+      "criteria": {
+        "commercial_impact": 20,
+        "reuse_across_products": 15,
+        "time_to_wow_improvement": 15,
+        "reliability_improvement": 15,
+        "measurement_support": 10,
+        "experiment_velocity": 10,
+        "cost_and_scale": 10,
+        "non_destructive_compatibility": 5
+      }
+    }
+  },
+  "promotion": {
+    "requiredPackagingScore": 100,
+    "requiredState": "ready-for-primary",
+    "requiresRealMetricsToDeclareWinner": true,
+    "winnerMetrics": [
+      "view_to_start",
+      "start_to_first_world",
+      "first_world_to_invite",
+      "invite_to_second_start",
+      "second_start_to_merge",
+      "merge_to_pay",
+      "d1_return",
+      "d7_return"
+    ]
+  },
+  "experienceTargets": {
+    "maxSecondsToFirstWow": 90,
+    "recommendedQuestionsBeforeFirstWow": 5,
+    "authBeforeFirstWow": "not-required",
+    "mustExposeMergeCTA": true,
+    "mustExposeReturnLoop": true,
+    "mustMeasureFullFunnel": true
+  }
+}

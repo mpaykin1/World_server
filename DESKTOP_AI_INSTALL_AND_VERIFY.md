@@ -206,3 +206,20 @@ Desktop AI must report:
 11. Preview / production link only if verified working.
 
 Never invent a successful deployment, URL, test pass, or integration.
+
+## COMMERCIAL 100 / HOMEPAGE EXPERIMENT PROTOCOL
+
+For any new homepage, onboarding, offer, world-entry flow, monetization surface or product experiment:
+
+1. Read `docs/COMMERCIAL_100_STANDARD.md`.
+2. Do not delete or overwrite previous homepages.
+3. Create the new homepage as an independent path/version.
+4. Register it with `scripts/home-experiment-manager.js`.
+5. Run `npm run commercial:audit`.
+6. Publish/test is allowed even below 100; do not fake missing evidence.
+7. Measure the funnel and preserve results.
+8. Move old variants to `library`, never delete their files/history.
+9. Only use the promotion check when making a variant the new primary.
+10. If promotion check fails, keep testing/improving the candidate; this does not invalidate its release.
+11. Fix technical regressions until existing quality gates pass.
+12. Store reusable winning commercial patterns as project knowledge/templates and apply them to compatible future surfaces.

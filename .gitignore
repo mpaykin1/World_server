@@ -24,3 +24,6 @@ playwright-report/
 WORLD_SERVER_GOLDEN_STANDARD*.zip
 GOLDEN_STANDARD_WORLD_SERVER_V10/
 
+
+# commercial-100 pre-install backups — redundant with git history
+.commercial-100-backups/

@@ -1,0 +1,69 @@
+{
+  "id": "example-home-v1",
+  "title": "Example homepage hypothesis",
+  "path": "apps/home-experiments/example-home-v1",
+  "status": "candidate",
+  "profile": "surface",
+  "targetScore": 100,
+  "hypothesis": "One audience → one desire → one clear promise",
+  "audience": "",
+  "promise": "",
+  "primaryCta": "",
+  "firstWow": "",
+  "mergeMechanic": "",
+  "returnLoop": "",
+  "monetization": "",
+  "criteria": {
+    "existing_market": {
+      "score": 0,
+      "evidence": []
+    },
+    "retention_potential": {
+      "score": 0,
+      "evidence": []
+    },
+    "desire_strength": {
+      "score": 0,
+      "evidence": []
+    },
+    "three_second_clarity": {
+      "score": 0,
+      "evidence": []
+    },
+    "time_to_first_wow": {
+      "score": 0,
+      "evidence": []
+    },
+    "differentiation": {
+      "score": 0,
+      "evidence": []
+    },
+    "creative_demo_power": {
+      "score": 0,
+      "evidence": []
+    },
+    "virality": {
+      "score": 0,
+      "evidence": []
+    },
+    "monetization": {
+      "score": 0,
+      "evidence": []
+    },
+    "reliability": {
+      "score": 0,
+      "evidence": []
+    }
+  },
+  "metrics": {
+    "views": null,
+    "starts": null,
+    "firstWorlds": null,
+    "invites": null,
+    "secondStarts": null,
+    "merges": null,
+    "payments": null,
+    "d1Returns": null,
+    "d7Returns": null
+  }
+}

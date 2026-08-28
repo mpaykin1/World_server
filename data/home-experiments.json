@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0",
+  "policy": "append-only-library",
+  "currentPrimary": null,
+  "activeExperiments": [],
+  "experiments": {}
+}

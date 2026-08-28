@@ -87,7 +87,15 @@
     "quality:world:evidence": "node scripts/world-quality-evidence-ledger.js",
     "quality:world": "node scripts/world-quality-autopilot.js",
     "quality:world:full": "node scripts/world-quality-autopilot.js --full",
-    "quality:world:evolve": "node scripts/world-quality-autopilot.js --evolve"
+    "quality:world:evolve": "node scripts/world-quality-autopilot.js --evolve",
+    "commercial:validate": "node scripts/commercial-validate.js",
+    "commercial:report": "node scripts/commercial-report.js",
+    "commercial:audit": "node scripts/commercial-release-audit.js",
+    "commercial:score": "node scripts/commercial-score.js",
+    "commercial:promotion": "node scripts/commercial-promotion-check.js",
+    "home:experiments": "node scripts/home-experiment-manager.js list",
+    "engagement:learn": "node scripts/engagement-learning-loop.js",
+    "engagement:learn:apply": "node scripts/engagement-learning-loop.js --apply"
   },
   "engines": {
     "node": "24.x"

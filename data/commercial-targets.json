@@ -1,0 +1,79 @@
+{
+  "version": "1.0.0",
+  "target": 100,
+  "items": [
+    {
+      "id": "commercial_packaging",
+      "label": "Commercial packaging",
+      "previousEstimate": 55,
+      "target": 100
+    },
+    {
+      "id": "personal_world",
+      "label": "Personal World",
+      "previousEstimate": 83,
+      "target": 100
+    },
+    {
+      "id": "world_merge",
+      "label": "World Merge",
+      "previousEstimate": 87,
+      "target": 100
+    },
+    {
+      "id": "living_world",
+      "label": "Living World",
+      "previousEstimate": 81,
+      "target": 100
+    },
+    {
+      "id": "group_world",
+      "label": "Group World",
+      "previousEstimate": 84,
+      "target": 100
+    },
+    {
+      "id": "multiplayer",
+      "label": "Multiplayer",
+      "previousEstimate": 79,
+      "target": 100
+    },
+    {
+      "id": "ai_game_creator",
+      "label": "AI Game Creator",
+      "previousEstimate": 78,
+      "target": 100
+    },
+    {
+      "id": "children_version",
+      "label": "Children version",
+      "previousEstimate": 77,
+      "target": 100
+    },
+    {
+      "id": "character_voxel_factory",
+      "label": "Character/Voxel Factory",
+      "previousEstimate": 73,
+      "target": 100
+    },
+    {
+      "id": "catalog",
+      "label": "World catalog",
+      "previousEstimate": 68,
+      "target": 100
+    },
+    {
+      "id": "graphics_stack",
+      "label": "3D/Voxel/3DGS graphics stack",
+      "previousEstimate": 67,
+      "target": 100
+    },
+    {
+      "id": "onboarding_questions",
+      "label": "Short progressive onboarding",
+      "previousEstimate": 56,
+      "target": 100
+    }
+  ],
+  "rule": "Targets are objectives, not claims. Scores rise only with explicit criteria and evidence."
+}
