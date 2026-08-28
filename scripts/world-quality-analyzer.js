@@ -127,7 +127,7 @@ function checksForDomain(){
  const dev=read('data/real-device-provider.json',{}),physical=String(dev.status||'').toUpperCase()==='CONFIGURED';
  return{
   detail:[
-   {id:'server-semantic-enhancer-v5',weight:12,ok:has('api/ai3d-voxel-generate.js','enhanceVoxelWorld')},
+   {id:'server-semantic-enhancer-v5',weight:12,ok:has('lib/api-handlers/ai3d-voxel-generate.js','enhanceVoxelWorld')},
    {id:'worker-semantic-enhancer-v5',weight:10,ok:has('services/ai3d-worker/ai3d/plugins/world_quality.py',"VERSION='5.0.0'")||has('services/ai3d-worker/ai3d/plugins/world_quality.py','VERSION = \'5.0.0\'')},
    {id:'semantic-detail-index',weight:10,ok:exists('lib/world-quality-semantic-detail.js')},
    {id:'importance-detail-budget',weight:12,ok:exists('lib/world-quality-detail-budget.js')},
@@ -182,7 +182,7 @@ function checksForDomain(){
    {id:'streaming-topology-prefetch',weight:8,ok:exists('scripts/world-streaming-topology.js')},
    {id:'texture-memory-budget',weight:7,ok:has('shared/world-quality-autopilot.js','textureBudgetScale')},
    {id:'greedy-meshing',weight:7,ok:exists('apps/ai3d-voxel-city/mesher-worker.js')},
-   {id:'hlod-streaming',weight:6,ok:has('api/ai3d-voxel-generate.js','chunk_aabb_hlod')||has('apps/ai3d-voxel-city/client.js','far.visible')},
+   {id:'hlod-streaming',weight:6,ok:has('lib/api-handlers/ai3d-voxel-generate.js','chunk_aabb_hlod')||has('apps/ai3d-voxel-city/client.js','far.visible')},
    {id:'asset-dedup',weight:5,ok:exists('scripts/asset-dedup-cache.js')},
    {id:'gpu-autoscaler',weight:5,ok:exists('scripts/gpu-autoscaler.js')},
    {id:'shader-cost-budget',weight:6,ok:exists('scripts/world-shader-cost-auditor.js')},

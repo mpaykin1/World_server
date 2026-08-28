@@ -22,7 +22,7 @@ for (const rel of [
   'scripts/check-ai3d-delivery-policy.js',
   'scripts/check-ai3d-public-scene.js',
   'shared/ai3d-playable-runtime.js',
-  'api/ai3d-voxel-generate.js',
+  'lib/api-handlers/ai3d-voxel-generate.js',
   'test/ai3d-delivery-policy.test.js',
   'test/ai3d-voxel-serverless.test.js',
   'apps/ai3d-voxel-city/default-city.json',
@@ -31,7 +31,7 @@ for (const rel of [
   'playwright.config.js'
 ]) check(fs.existsSync(path.join(root, rel)), `${rel} exists`);
 
-const ai3d = text('api/ai3d.js');
+const ai3d = text('lib/api-handlers/ai3d.js');
 check(ai3d.includes('deliveryPolicyForClient'), '/api/ai3d exposes delivery policy');
 check(ai3d.includes('deliveryStatusForClient'), '/api/ai3d exposes delivery status');
 check(ai3d.includes("action === 'delivery'"), '/api/ai3d has delivery action');

@@ -25,7 +25,7 @@ check(statusErrors.length === 0, `ai3d-final-delivery.json valid${statusErrors.l
 const agents = read('AGENTS.md').toLowerCase();
 for (const phrase of ['walkable','1в1','wasd','стрел','мыш','heightfield-dominant','not ready for final delivery']) check(agents.includes(phrase), `AGENTS.md includes rule: ${phrase}`);
 
-const api = read('api/ai3d.js');
+const api = read('lib/api-handlers/ai3d.js');
 check(api.includes('deliveryPolicyForClient'), '/api/ai3d imports delivery policy');
 check(api.includes('deliveryStatusForClient'), '/api/ai3d imports delivery status');
 check(api.includes('deliveryPolicy:'), '/api/ai3d session exposes deliveryPolicy');
