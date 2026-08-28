@@ -72,3 +72,20 @@ test('the "Next action" section does not silently omit the most recent substanti
     assert.ok(WIP.includes(marker), `WORK_IN_PROGRESS.md must mention "${marker}" -- it documents already-shipped work`);
   }
 });
+
+test('"## Tests to run" states its node --test count in the exact N/N shape scripts/check-wip-test-count.js can verify', () => {
+  // The actual live-count verification against a real `node --test` run
+  // lives in scripts/check-wip-test-count.js, deliberately NOT here: a
+  // node --test *test file* that spawns `node --test` (the whole suite,
+  // which includes this very file) recurses into itself. The first version
+  // of this check tried exactly that and it was a real, dangerous mess --
+  // caught while writing it (a naive form ballooned/hung; a guarded form
+  // still broke because the nested child runs in a different test-runner
+  // context and its own summary output couldn't be parsed the same way).
+  // A separate top-level script -- this repo's own established convention
+  // for exactly this kind of gate (see the many other scripts/check-*.js
+  // files) -- sidesteps the self-reference entirely. This test only pins
+  // the doc's *format* so that script has something reliable to parse.
+  const testsToRunSection = WIP.split('## Tests to run')[1]?.split('\n## ')[0] || '';
+  assert.match(testsToRunSection, /node --test`\s*—\s*(\d+)\/\1(?!\d)/, '"## Tests to run" must state the current node --test count as an exact N/N right after the command, in a form scripts/check-wip-test-count.js can parse');
+});
