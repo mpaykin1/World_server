@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "3.0.0",
+  "system": "NAVIGATOR_WORLD_COMMAND",
+  "generatedAt": "2026-08-28T14:44:32.016Z",
+  "checks": {
+    "filesPresent": true,
+    "clientImports": true,
+    "batchLocal": true,
+    "batchApi": true,
+    "runtimeStats": true,
+    "serverRoute": true,
+    "referenceBaseline": true
+  },
+  "missing": [],
+  "percent": 100,
+  "pass": true
+}

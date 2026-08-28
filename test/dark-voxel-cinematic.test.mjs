@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {meshPaddedVolume} from '../shared/voxel-greedy-mesher-core.mjs';import {FixedStepPendulum} from '../shared/pendulum-physics.mjs';
+function padded(sx,sy,sz,fill){const a=new Uint8Array((sx+2)*(sy+2)*(sz+2)),px=sx+2,pz=sz+2;for(let y=0;y<sy;y++)for(let z=0;z<sz;z++)for(let x=0;x<sx;x++)a[((y+1)*pz+(z+1))*px+(x+1)]=fill(x,y,z);return a}
+const colors=new Uint32Array(256);colors[1]=0x777777;const kinds=new Uint8Array(256);kinds[1]=1;
+test('greedy meshing collapses a solid 2x2x2 cube to 6 quads',()=>{const r=meshPaddedVolume({blocks:padded(2,2,2,()=>1),dims:[2,2,2],colors,kinds});assert.equal(r.stats.quads,6);assert.equal(r.stats.triangles,12)});
+test('greedy meshing preserves an isolated voxel as 6 quads',()=>{const r=meshPaddedVolume({blocks:padded(3,3,3,(x,y,z)=>x===1&&y===1&&z===1?1:0),dims:[3,3,3],colors,kinds});assert.equal(r.stats.quads,6)});
+test('fixed-step rope fallback stays bounded',()=>{const p=new FixedStepPendulum({length:5,angle:.5});for(let i=0;i<3600;i++)p.step(1/60);const s=p.state();assert.ok(Number.isFinite(s.angle));assert.ok(Math.abs(s.angle)<.5);assert.ok(Math.hypot(s.x,s.y)<=5.000001)});

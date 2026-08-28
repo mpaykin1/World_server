@@ -30,3 +30,6 @@ GOLDEN_STANDARD_WORLD_SERVER_V10/
 
 # progressive-onboarding installer backups — redundant with git history
 .patch-backups/
+
+# dark-voxel-cinematic installer pre-install backups — redundant with git history
+.dark-voxel-backup/

@@ -1,9 +1,16 @@
-import * as THREE from 'https://unpkg.com/three@0.165.0/build/three.module.js';
+import * as THREE from 'three';
+import { DarkVoxelCinematic } from '/shared/dark-voxel-cinematic.mjs';
+import { GreedyMesherPool } from '/shared/voxel-greedy-mesher-client.mjs';
+import { WorldVisibilityRuntime } from '/shared/world-visibility-runtime.mjs';
+import { WorldManifestationEngine } from '/shared/world-manifestation-engine.mjs';
+import { WorldSummoningVisual } from '/shared/world-summoning-visual.mjs';
+import { NavigatorDialog } from '/shared/navigator-dialog.mjs';
+import { VoxelEyeRuntime } from '/shared/voxel-eye-runtime.mjs';
 
 const CHUNK = 16;
 const WORLD_Y = 96;
 const SEA = 22;
-const VIEW = matchMedia('(pointer:coarse)').matches ? 2 : 3;
+let VIEW = matchMedia('(pointer:coarse)').matches ? 2 : 3;
 const REACH = 6.2;
 const PLAYER_H = 1.78;
 const PLAYER_R = 0.31;
@@ -62,6 +69,12 @@ async function api(action,payload={}){
   const j=await r.json().catch(()=>({})); if(!r.ok) throw new Error(j.error||'Ошибка Voxel API'); return j;
 }
 
+const WORLD_BATCH_OUTBOX='navigator_world_batch_outbox_v1';
+function queueWorldBatch(payload){try{const q=JSON.parse(localStorage.getItem(WORLD_BATCH_OUTBOX)||'[]');q.push(payload);while(q.length>80)q.shift();localStorage.setItem(WORLD_BATCH_OUTBOX,JSON.stringify(q))}catch{}}
+async function sendWorldBatchPayload(payload){const headers={'Content-Type':'application/json','Accept':'application/json'};const t=token();if(t)headers.Authorization='Bearer '+t;const r=await fetch('/api/voxel-batch',{method:'POST',headers,body:JSON.stringify(payload)});const j=await r.json().catch(()=>({}));if(!r.ok){const e=new Error(j.error||'Не удалось сохранить созданный объект');e.status=r.status;throw e}return j;}
+async function persistWorldBatch({worldId='main',blocks=[],playerPosition}){const payload={action:'apply',guestId:guestId(),worldId,blocks,playerPosition};try{return await sendWorldBatchPayload(payload)}catch(e){if(e?.status>=400&&e.status<500)throw e;queueWorldBatch(payload);return{ok:true,offlineQueued:true,count:blocks.length}}}
+async function flushWorldBatchOutbox(){let q=[];try{q=JSON.parse(localStorage.getItem(WORLD_BATCH_OUTBOX)||'[]')}catch{}if(!q.length)return;const left=[];for(const payload of q){try{await sendWorldBatchPayload(payload)}catch{left.push(payload)}}try{localStorage.setItem(WORLD_BATCH_OUTBOX,JSON.stringify(left))}catch{}}
+addEventListener('online',()=>void flushWorldBatchOutbox());setTimeout(()=>void flushWorldBatchOutbox(),2500);
 function hash32(x,z,seed){ let h=(Math.imul(x,374761393)^Math.imul(z,668265263)^seed)|0; h=Math.imul(h^(h>>>13),1274126177); return ((h^(h>>>16))>>>0)/4294967295; }
 function smooth(t){ return t*t*(3-2*t); }
 function valueNoise(x,z,scale,seed){
@@ -114,6 +127,9 @@ const camera=new THREE.PerspectiveCamera(72,innerWidth/innerHeight,.05,420);
 const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'}); renderer.setPixelRatio(Math.min(devicePixelRatio,1.65)); renderer.setSize(innerWidth,innerHeight); renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap; renderer.outputColorSpace=THREE.SRGBColorSpace; document.body.prepend(renderer.domElement);
 const sun=new THREE.DirectionalLight(0xfff1d2,2.1); sun.position.set(45,70,20); sun.castShadow=true; sun.shadow.mapSize.set(1024,1024); sun.shadow.camera.left=-55;sun.shadow.camera.right=55;sun.shadow.camera.top=55;sun.shadow.camera.bottom=-55; scene.add(sun);
 const hemi=new THREE.HemisphereLight(0xbfe1ff,0x31412c,1.15); scene.add(hemi);
+const cinematic=new DarkVoxelCinematic({renderer,scene,camera,sun,hemi});
+const visibilityRuntime=new WorldVisibilityRuntime({chunkSize:CHUNK}).bindAutopilot(window.WorldQualityAutopilot);
+if(new URLSearchParams(location.search).get('cinematic')==='dark-void')void cinematic.enable();
 window.WorldQualityAutopilot?.registerRenderer('voxel-world',renderer,{initialTier:matchMedia('(pointer:coarse)').matches?'BALANCED':'HIGH',targetFps:matchMedia('(pointer:coarse)').matches?40:55,onQualityChange(q){renderer.shadowMap.enabled=q.shadowQuality>0;const shadowSize=q.shadowQuality>1?1024:512;if(sun?.shadow?.mapSize){sun.shadow.mapSize.set(shadowSize,shadowSize);sun.shadow.needsUpdate=true}},getStats(){return{calls:renderer.info.render.calls,triangles:renderer.info.render.triangles}}});
 const worldGroup=new THREE.Group(); scene.add(worldGroup);
 const remoteGroup=new THREE.Group(); scene.add(remoteGroup);
@@ -200,7 +216,7 @@ function pushFace(arr,x,y,z,face,color){
   for(const v of face.v){arr.pos.push(x+v[0],y+v[1],z+v[2]);arr.col.push(col.r,col.g,col.b);} arr.idx.push(base,base+1,base+2,base,base+2,base+3);
 }
 function makeGeometry(data){ const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(data.pos,3)); g.setAttribute('color',new THREE.Float32BufferAttribute(data.col,3)); g.setIndex(data.idx); g.computeVertexNormals(); g.computeBoundingSphere(); return g; }
-function rebuildChunk(c){
+function rebuildChunkLegacy(c){
   for(const m of c.meshes){ worldGroup.remove(m); m.geometry.dispose(); } c.meshes=[];
   const solid={pos:[],col:[],idx:[]}, translucent={pos:[],col:[],idx:[]}, water={pos:[],col:[],idx:[]}; const bx=c.cx*CHUNK,bz=c.cz*CHUNK;
   for(let lx=0;lx<CHUNK;lx++)for(let lz=0;lz<CHUNK;lz++)for(let y=0;y<WORLD_Y;y++){
@@ -214,11 +230,23 @@ function rebuildChunk(c){
   }
   for(const [data,mat] of [[solid,solidMaterial],[translucent,transparentMaterial],[water,waterMaterial]]) if(data.idx.length){ const m=new THREE.Mesh(makeGeometry(data),mat);m.position.set(bx,0,bz);m.receiveShadow=true;m.castShadow=mat===solidMaterial;c.meshes.push(m);worldGroup.add(m); }
 }
+
+const greedyMesher=new GreedyMesherPool('/shared/voxel-greedy-mesher-worker.mjs');
+const MESH_KINDS=new Uint8Array(256),MESH_COLORS=new Uint32Array(256);for(const [id,meta] of Object.entries(BLOCKS)){const n=Number(id);MESH_COLORS[n]=meta.color||0xffffff;MESH_KINDS[n]=n===BLOCK.WATER?3:meta.alpha!==undefined?2:meta.solid?1:0;}
+function buildPaddedChunk(c){const px=CHUNK+2,py=WORLD_Y+2,pz=CHUNK+2,a=new Uint8Array(px*py*pz),bx=c.cx*CHUNK,bz=c.cz*CHUNK;for(let y=-1;y<=WORLD_Y;y++)for(let z=-1;z<=CHUNK;z++)for(let x=-1;x<=CHUNK;x++)a[((y+1)*pz+(z+1))*px+(x+1)]=blockAt(bx+x,y,bz+z);return a;}
+function geometryFromWorker(p){const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(p.positions,3));g.setAttribute('color',new THREE.BufferAttribute(p.colors,3));g.setIndex(new THREE.BufferAttribute(p.indices,1));g.computeVertexNormals();g.computeBoundingSphere();return g;}
+async function rebuildChunkOptimized(c,version){const result=await greedyMesher.mesh({blocks:buildPaddedChunk(c),dims:[CHUNK,WORLD_Y,CHUNK],colors:MESH_COLORS.slice(),kinds:MESH_KINDS.slice()});if(c.meshBuildVersion!==version||chunks.get(key2(c.cx,c.cz))!==c)return;for(const m of c.meshes){worldGroup.remove(m);m.geometry.dispose();}c.meshes=[];const bx=c.cx*CHUNK,bz=c.cz*CHUNK;for(const [name,mat] of [['solid',solidMaterial],['translucent',transparentMaterial],['water',waterMaterial]]){const p=result[name];if(!p.indices.length)continue;const m=new THREE.Mesh(geometryFromWorker(p),mat);m.position.set(bx,0,bz);m.receiveShadow=true;m.castShadow=name==='solid';c.meshes.push(m);worldGroup.add(m);}}
+function rebuildChunk(c){if(!greedyMesher.available)return rebuildChunkLegacy(c);const version=c.meshBuildVersion=(c.meshBuildVersion||0)+1;void rebuildChunkOptimized(c,version).catch(error=>{console.warn('[GreedyMesher] fallback',error);if(c.meshBuildVersion===version)rebuildChunkLegacy(c);});}
 function setBlockLocal(x,y,z,b){
   const safe=validBlockType(b); if(safe===null||!Number.isInteger(x)||!Number.isInteger(y)||!Number.isInteger(z)||y<0||y>=WORLD_Y)return false;
   overrides.set(key3(x,y,z),safe); const cx=floorDiv(x,CHUNK),cz=floorDiv(z,CHUNK),c=chunks.get(key2(cx,cz)); if(c){c.set(mod(x,CHUNK),y,mod(z,CHUNK),safe);rebuildChunk(c);} const lx=mod(x,CHUNK),lz=mod(z,CHUNK); if(lx===0)chunks.get(key2(cx-1,cz))&&rebuildChunk(chunks.get(key2(cx-1,cz))); if(lx===15)chunks.get(key2(cx+1,cz))&&rebuildChunk(chunks.get(key2(cx+1,cz))); if(lz===0)chunks.get(key2(cx,cz-1))&&rebuildChunk(chunks.get(key2(cx,cz-1))); if(lz===15)chunks.get(key2(cx,cz+1))&&rebuildChunk(chunks.get(key2(cx,cz+1))); return true;
 }
 
+function setBlocksLocalBatch(rows){
+  const touched=new Set();let count=0;
+  for(const q of rows||[]){const b=validBlockType(q?.blockType);if(b===null)continue;const x=Math.trunc(Number(q.x)),y=Math.trunc(Number(q.y)),z=Math.trunc(Number(q.z));if(!Number.isFinite(x)||!Number.isFinite(y)||!Number.isFinite(z)||y<0||y>=WORLD_Y)continue;overrides.set(key3(x,y,z),b);const cx=floorDiv(x,CHUNK),cz=floorDiv(z,CHUNK),c=chunks.get(key2(cx,cz));if(c){c.set(mod(x,CHUNK),y,mod(z,CHUNK),b);touched.add(c);const lx=mod(x,CHUNK),lz=mod(z,CHUNK);if(lx===0&&chunks.get(key2(cx-1,cz)))touched.add(chunks.get(key2(cx-1,cz)));if(lx===CHUNK-1&&chunks.get(key2(cx+1,cz)))touched.add(chunks.get(key2(cx+1,cz)));if(lz===0&&chunks.get(key2(cx,cz-1)))touched.add(chunks.get(key2(cx,cz-1)));if(lz===CHUNK-1&&chunks.get(key2(cx,cz+1)))touched.add(chunks.get(key2(cx,cz+1)));}count++;}
+  for(const c of touched)rebuildChunk(c);return{count,touchedChunks:touched.size};
+}
 async function loadNeededChunks(){
   if(streamBusy) return; const pcx=floorDiv(player.pos.x,CHUNK),pcz=floorDiv(player.pos.z,CHUNK),need=[];
   outer: for(let r=0;r<=VIEW;r++) for(let dx=-r;dx<=r;dx++) for(let dz=-r;dz<=r;dz++){ if(Math.max(Math.abs(dx),Math.abs(dz))!==r)continue;const cx=pcx+dx,cz=pcz+dz,k=key2(cx,cz);if(!chunks.has(k)&&!requested.has(k)){requested.add(k);need.push({x:cx,z:cz});if(need.length>=8)break outer;} }
@@ -231,6 +259,18 @@ async function loadNeededChunks(){
 
 const player={pos:new THREE.Vector3(0,35,0),vel:new THREE.Vector3(),yaw:0,pitch:0,onGround:false,selected:0,id:'',name:'Player'};
 const keys=new Set(); let mobileMove={x:0,y:0}; let channel=null; let lastSave=0,lastNet=0; let started=false;
+const summoningVisual=new WorldSummoningVisual({scene,camera});
+const heroEye=new VoxelEyeRuntime({scene,camera});
+let navigatorDialog=null;
+const worldCommands=new WorldManifestationEngine({
+  getPlayerPose:()=>({x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw,pitch:player.pitch}),blockAt,isSolid:t=>!!BLOCKS[t]?.solid,setBlocksLocalBatch,persistBatch:persistWorldBatch,
+  broadcastBatch:rows=>{if(!channel)return;for(let i=0;i<rows.length;i+=128)void channel.send({type:'broadcast',event:'world_batch',payload:{blocks:rows.slice(i,i+128)}})},
+  onPreview:p=>summoningVisual.preview(p),onProgress:p=>navigatorDialog?.setProgress(p),onCommit:p=>{summoningVisual.commit();navigatorDialog?.setStatus('Готово · '+p.intent.type+' · '+p.blocks.length+' вокселей')},onError:e=>navigatorDialog?.setStatus(e?.message||'Ошибка'),
+  palette:{AIR:BLOCK.AIR,GRASS:BLOCK.GRASS,DIRT:BLOCK.DIRT,STONE:BLOCK.STONE,SAND:BLOCK.SAND,WOOD:BLOCK.WOOD,LEAVES:BLOCK.LEAVES,SNOW:BLOCK.SNOW,WATER:BLOCK.WATER,GLASS:BLOCK.GLASS,BRICK:BLOCK.BRICK,PLANK:BLOCK.PLANK,COAL:BLOCK.COAL,IRON:BLOCK.IRON},maxBlocks:7000,batchSize:512,worldId
+});
+function ensureNavigator(){if(navigatorDialog)return navigatorDialog;heroEye.beacon=cinematic.beacon||null;heroEye.enable();if(cinematic.hero)cinematic.hero.visible=false;if(cinematic.rope)cinematic.rope.visible=false;document.body.classList.add('navigator-scene');navigatorDialog=new NavigatorDialog({onSubmit:t=>worldCommands.execute(t),onUndo:()=>worldCommands.undo(),onRedo:()=>worldCommands.redo(),onEyeMode:()=>heroEye.cycleMode()});return navigatorDialog;}
+const navParams=new URLSearchParams(location.search);if(navParams.get('navigator')==='1'||navParams.get('cinematic')==='dark-void')queueMicrotask(ensureNavigator);
+
 function collides(px,py,pz){
   const minX=Math.floor(px-PLAYER_R),maxX=Math.floor(px+PLAYER_R),minY=Math.floor(py),maxY=Math.floor(py+PLAYER_H-.02),minZ=Math.floor(pz-PLAYER_R),maxZ=Math.floor(pz+PLAYER_R);
   for(let x=minX;x<=maxX;x++)for(let y=minY;y<=maxY;y++)for(let z=minZ;z<=maxZ;z++){const b=blockAt(x,y,z);if(BLOCKS[b]?.solid)return true;} return false;
@@ -302,7 +342,7 @@ function setupDesktop(){
   renderer.domElement.addEventListener('click',()=>{if(!matchMedia('(pointer:coarse)').matches&&document.pointerLockElement!==renderer.domElement)renderer.domElement.requestPointerLock?.();});
   document.addEventListener('pointerlockchange',()=>{targetEl.textContent=document.pointerLockElement===renderer.domElement?'ЛКМ ломать · ПКМ ставить':'Нажми на экран, чтобы играть';});
   document.addEventListener('mousemove',e=>{if(document.pointerLockElement!==renderer.domElement)return;player.yaw-=e.movementX*.0022;player.pitch=clamp(player.pitch-e.movementY*.0022,-1.48,1.48);});
-  document.addEventListener('keydown',e=>{if(document.activeElement?.tagName==='INPUT')return;keys.add(e.code);if(e.code==='Space'){e.preventDefault();jump();}if(/^Digit[1-9]$/.test(e.code)){player.selected=Number(e.code.slice(5))-1;buildHotbar();}});document.addEventListener('keyup',e=>keys.delete(e.code));
+  document.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA'].includes(document.activeElement?.tagName))return;keys.add(e.code);if(e.code==='Space'){e.preventDefault();jump();}if(/^Digit[1-9]$/.test(e.code)){player.selected=Number(e.code.slice(5))-1;buildHotbar();}});document.addEventListener('keyup',e=>keys.delete(e.code));
   renderer.domElement.addEventListener('mousedown',e=>{if(document.pointerLockElement!==renderer.domElement)return;if(e.button===0)editBlock(false);if(e.button===2)editBlock(true);});renderer.domElement.addEventListener('contextmenu',e=>e.preventDefault());
 }
 function setupMobile(){
@@ -313,23 +353,28 @@ function setupMobile(){
   document.getElementById('jumpBtn').onclick=jump;document.getElementById('breakBtn').onclick=()=>editBlock(false);document.getElementById('placeBtn').onclick=()=>editBlock(true);
 }
 
-function daylight(now){const day=(now*.000015)%1,a=day*Math.PI*2;sun.position.set(Math.cos(a)*65,Math.sin(a)*72+12,30);const k=clamp((sun.position.y+12)/55,.12,1);sun.intensity=.25+2.0*k;hemi.intensity=.28+1.0*k;const sky=new THREE.Color().setHSL(worldSkyHue,.55,.18+.48*k);scene.background.copy(sky);scene.fog.color.copy(sky);}
+function daylight(now){if(cinematic.enabled){cinematic.updateLighting(now);return;}const day=(now*.000015)%1,a=day*Math.PI*2;sun.position.set(Math.cos(a)*65,Math.sin(a)*72+12,30);const k=clamp((sun.position.y+12)/55,.12,1);sun.intensity=.25+2.0*k;hemi.intensity=.28+1.0*k;const sky=new THREE.Color().setHSL(worldSkyHue,.55,.18+.48*k);scene.background.copy(sky);scene.fog.color.copy(sky);}
 function updateTarget(){const h=rayVoxel();if(!h)return;targetEl.textContent=`${BLOCKS[h.block]?.name||'Блок'} · ${h.hit.x}, ${h.hit.y}, ${h.hit.z}`;}
 
 async function savePlayer(){try{await api('player_save',{worldId,position:{x:player.pos.x,y:player.pos.y,z:player.pos.z},yaw:player.yaw,pitch:player.pitch,selectedBlock:HOTBAR[player.selected]});}catch{} }
 function broadcastPlayer(now){if(!channel||now-lastNet<NET_INTERVAL)return;lastNet=now;channel.send({type:'broadcast',event:'player_state',payload:{id:player.id,name:player.name,x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw}});}
-let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(started){physics(dt);loadNeededChunks();broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);renderer.render(scene,camera);}requestAnimationFrame(loop);
+let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(started){physics(dt);loadNeededChunks();broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);visibilityRuntime.update(camera,chunks,now);heroEye?.update?.(now,dt);summoningVisual?.update?.(now);window.WorldQualityAutopilot?.beginFrame?.(renderer);try{cinematic.render(now,dt);}finally{window.WorldQualityAutopilot?.endFrame?.(renderer);}}requestAnimationFrame(loop);
 
-addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});addEventListener('beforeunload',()=>savePlayer());
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);cinematic.resize(innerWidth,innerHeight);});addEventListener('beforeunload',()=>savePlayer());
 setupDesktop();setupMobile();buildHotbar();
 
 try{
   const appState=await window.AppCore.init('voxel-world');
-  const init=await api('init',{worldId}); worldSeed=Number(init.world?.seed)||worldSeed; const vs=init.world?.settings||{}; worldTheme=String(vs.theme||'plains'); worldHeightScale=Number(vs.heightScale)||1; worldTreeDensity=Number(vs.treeDensity)||1; worldDetailStage=Math.max(1,Math.min(64,Math.trunc(Number(vs.detailStage)||31))); worldDetailProgress=clamp(Number(vs.detailProgress)||1,.03,1); if(vs.skyTint!==undefined)worldSkyHue=hexToHue(Number(vs.skyTint)); if(Number.isFinite(vs.fogNear)&&Number.isFinite(vs.fogFar)){scene.fog.near=vs.fogNear;scene.fog.far=vs.fogFar;} player.id=init.selfId;player.name=init.player?.name||appState.user?.username||'Player'; const p=init.player?.position||{x:0,y:heightAt(0,0)+4,z:0};player.pos.set(Number(p.x)||0,Number(p.y)||heightAt(0,0)+4,Number(p.z)||0);player.yaw=Number(init.player?.yaw)||0;player.pitch=Number(init.player?.pitch)||0;const sel=HOTBAR.indexOf(Number(init.player?.selectedBlock));if(sel>=0)player.selected=sel;buildHotbar(); await connectRealtime(appState); started=true; statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';loading.classList.add('hidden');
+  const init=await api('init',{worldId}); worldSeed=Number(init.world?.seed)||worldSeed; const vs=init.world?.settings||{}; worldTheme=String(vs.theme||'plains'); worldHeightScale=Number(vs.heightScale)||1; worldTreeDensity=Number(vs.treeDensity)||1; worldDetailStage=Math.max(1,Math.min(64,Math.trunc(Number(vs.detailStage)||31))); worldDetailProgress=clamp(Number(vs.detailProgress)||1,.03,1); if(vs.skyTint!==undefined)worldSkyHue=hexToHue(Number(vs.skyTint)); if(Number.isFinite(vs.fogNear)&&Number.isFinite(vs.fogFar)){scene.fog.near=vs.fogNear;scene.fog.far=vs.fogFar;} player.id=init.selfId;player.name=init.player?.name||appState.user?.username||'Player'; const p=init.player?.position||{x:0,y:heightAt(0,0)+4,z:0};player.pos.set(Number(p.x)||0,Number(p.y)||heightAt(0,0)+4,Number(p.z)||0);player.yaw=Number(init.player?.yaw)||0;player.pitch=Number(init.player?.pitch)||0;const sel=HOTBAR.indexOf(Number(init.player?.selectedBlock));if(sel>=0)player.selected=sel;buildHotbar(); await connectRealtime(appState); started=true; void cinematic.warmup(); statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';loading.classList.add('hidden');
 }catch(e){console.error(e);statusEl.textContent=e.message;statusEl.className='vwWarn';loading.textContent=`Voxel World: ${e.message}`;setTimeout(()=>loading.classList.add('hidden'),3500);started=true;player.pos.set(0,heightAt(0,0)+4,0);}
 
 window.VoxelWorldRuntime={
-    stats(){return {player:{x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw,onGround:player.onGround},renderer:renderer?.info?.render,pixelRatio:renderer?.getPixelRatio?.()||1};},
+    stats(){return {player:{x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw,onGround:player.onGround},renderer:renderer?.info?.render,pixelRatio:renderer?.getPixelRatio?.()||1,cinematic:cinematic.stats(),mesher:{workerAvailable:greedyMesher.available,...greedyMesher.stats()},visibility:visibilityRuntime.stats(),worldCommands:worldCommands.stats(),eye:heroEye.stats(),navigator:{visible:!!navigatorDialog&&navigatorDialog.root?.style?.display!=='none'}};},
+    submitWorldCommand(text){ensureNavigator();return worldCommands.execute(text);},
+    undoWorldCommand(){return worldCommands.undo();},
+    redoWorldCommand(){return worldCommands.redo();},
+    cycleEyeMode(){ensureNavigator();return heroEye.cycleMode();},
+    setCinematicMode(mode){return mode==='dark-void'?cinematic.enable():cinematic.disable();},
     setView(nextYaw,nextPitch=0){player.yaw=Number(nextYaw)||0;player.pitch=Number(nextPitch)||0;}
   };
 

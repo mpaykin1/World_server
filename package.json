@@ -21,7 +21,7 @@
     "quality:regression": "node scripts/quality-regression-gate.js",
     "quality:diff": "node scripts/quality-diff.js",
     "quality:accept": "node scripts/quality-accept-baseline.js",
-    "release:gate": "npm run desktop-ai:check && npm run check && npm run wip:test-count && npm run golden:check && npm run quality:check && npm run quality:regression && npm run quality:fuzz && npm run quality:impact && npm run quality:perceptual && npm run tech:audit && npm run tech:health && npm run quality:tech-orchestrator && npm run duplicates:check && npm run contracts:check && npm run project:review && npm run quality:stability && npm run evidence:score && npm run regressions:capture && npm run quality:issue-candidates && npm run quality:world",
+    "release:gate": "npm run navigator:check && npm run navigator:test && npm run cinematic:check && npm run cinematic:test && npm run desktop-ai:check && npm run check && npm run wip:test-count && npm run golden:check && npm run quality:check && npm run quality:regression && npm run quality:fuzz && npm run quality:impact && npm run quality:perceptual && npm run tech:audit && npm run tech:health && npm run quality:tech-orchestrator && npm run duplicates:check && npm run contracts:check && npm run project:review && npm run quality:stability && npm run evidence:score && npm run regressions:capture && npm run quality:issue-candidates && npm run quality:world",
     "duplicates:check": "node scripts/duplicate-system-review.js",
     "contracts:check": "node scripts/system-contract-review.js",
     "regressions:capture": "node scripts/capture-regressions.js",
@@ -97,7 +97,17 @@
     "engagement:learn": "node scripts/engagement-learning-loop.js",
     "engagement:learn:apply": "node scripts/engagement-learning-loop.js --apply",
     "onboarding:verify": "node scripts/verify-progressive-onboarding.cjs",
-    "onboarding:e2e": "playwright test e2e/progressive-onboarding.spec.js"
+    "onboarding:e2e": "playwright test e2e/progressive-onboarding.spec.js",
+    "graphics:vendor": "node scripts/vendor-graphics-deps.mjs",
+    "assets:ktx2": "node scripts/build-ktx2-assets.mjs",
+    "cinematic:check": "node scripts/check-dark-voxel-cinematic.mjs",
+    "cinematic:test": "node --test test/dark-voxel-cinematic.test.mjs",
+    "cinematic:e2e": "playwright test e2e/dark-voxel-cinematic.spec.js",
+    "cinematic:gate": "node scripts/dark-voxel-cinematic-gate.mjs",
+    "navigator:check": "node scripts/check-world-command.mjs",
+    "navigator:test": "node --test test/world-command.test.mjs",
+    "navigator:e2e": "playwright test e2e/world-command-dialog.spec.js",
+    "navigator:gate": "node scripts/world-command-gate.mjs"
   },
   "engines": {
     "node": "24.x"
@@ -108,7 +118,10 @@
     "@supabase/supabase-js": "2.112.3",
     "@vercel/sandbox": "^3.1.0",
     "esbuild": "^0.28.2",
-    "posthog-js": "^1.419.4"
+    "posthog-js": "^1.419.4",
+    "three": "0.185.1",
+    "@dimforge/rapier3d-compat": "0.20.0",
+    "meshoptimizer": "1.2.0"
   },
   "devDependencies": {
     "@lhci/cli": "^0.15.1",

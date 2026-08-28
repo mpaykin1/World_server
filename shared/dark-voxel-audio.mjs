@@ -1,0 +1,11 @@
+export class DarkVoxelAudio{
+  constructor(camera,beacon){this.camera=camera;this.beacon=beacon;this.ctx=null;this.enabled=false;this.ropeEnergy=0;this._gesture=()=>this.start();addEventListener('pointerdown',this._gesture,{once:true,passive:true});}
+  async start(){if(this.ctx)return;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;this.ctx=new AC();await this.ctx.resume();const c=this.ctx;
+    this.master=c.createGain();this.master.gain.value=.18;this.master.connect(c.destination);
+    this.panner=c.createPanner();this.panner.panningModel='HRTF';this.panner.distanceModel='inverse';this.panner.refDistance=2;this.panner.maxDistance=120;this.panner.rolloffFactor=.9;this.panner.connect(this.master);
+    this.hum=c.createOscillator();this.hum.type='sine';this.hum.frequency.value=74;const hg=c.createGain();hg.gain.value=.055;this.hum.connect(hg).connect(this.panner);this.hum.start();
+    const len=c.sampleRate*2,buf=c.createBuffer(1,len,c.sampleRate),d=buf.getChannelData(0);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*(.6+.4*Math.sin(i*.021));this.noise=c.createBufferSource();this.noise.buffer=buf;this.noise.loop=true;const filter=c.createBiquadFilter();filter.type='bandpass';filter.frequency.value=780;filter.Q.value=.7;this.fireGain=c.createGain();this.fireGain.gain.value=.025;this.noise.connect(filter).connect(this.fireGain).connect(this.panner);this.noise.start();
+    this.creak=c.createOscillator();this.creak.type='triangle';this.creak.frequency.value=145;this.creakGain=c.createGain();this.creakGain.gain.value=0;this.creak.connect(this.creakGain).connect(this.master);this.creak.start();this.enabled=true;}
+  update(ropeEnergy=0){if(!this.ctx||!this.enabled)return;const p=this.beacon.position.clone();this.camera.worldToLocal(p);const pan=this.panner;pan.positionX.value=p.x;pan.positionY.value=p.y;pan.positionZ.value=p.z;this.ropeEnergy+=(ropeEnergy-this.ropeEnergy)*.08;this.creakGain.gain.setTargetAtTime(Math.min(.018,this.ropeEnergy*.006),this.ctx.currentTime,.08);this.creak.frequency.setTargetAtTime(110+Math.min(100,this.ropeEnergy*18),this.ctx.currentTime,.1);}
+  setBudget(scale){if(this.master)this.master.gain.setTargetAtTime(.08+.12*Math.max(.2,scale),this.ctx.currentTime,.2);}
+}

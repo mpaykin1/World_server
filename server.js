@@ -39,6 +39,10 @@ for (const rewrite of vercelConfig.rewrites || []) {
 const mime = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',
+  '.mjs': 'text/javascript; charset=utf-8',
+  '.ktx2': 'image/ktx2',
+  '.gltf': 'model/gltf+json',
+  '.glb': 'model/gltf-binary',
   '.css': 'text/css; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
   '.png': 'image/png',
