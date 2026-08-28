@@ -1,14 +1,14 @@
 {
   "schemaVersion": "7.2.0",
-  "generatedAt": "2026-08-28T06:07:08.827Z",
+  "generatedAt": "2026-08-28T06:11:12.522Z",
   "pass": true,
   "analysisMode": "module+symbol+lexical-dataflow",
   "truth": "Symbol/dataflow edges are confidence-scored static evidence; they are not claimed as a complete compiler/CodeQL proof.",
   "filesAnalyzed": 513,
   "symbolDefinitions": 2993,
-  "callEdges": 64220,
+  "callEdges": 64217,
   "dataflowEdges": 2632,
-  "nativeAstAdapterAvailable": true,
+  "nativeAstAdapterAvailable": false,
   "moduleMerkleRoot": "cb2d0923788825cb1f46881051b3aebac9ca175a7c7753e26b1fc7e2734b7e79",
   "nodes": [
     {
@@ -112414,24 +112414,28 @@
           "offset": 2546
         },
         {
+          "name": "some",
+          "offset": 2689
+        },
+        {
           "name": "Number",
-          "offset": 2765
+          "offset": 2812
         },
         {
           "name": "writeJSON",
-          "offset": 2803
+          "offset": 2850
         },
         {
           "name": "join",
-          "offset": 2818
+          "offset": 2865
         },
         {
           "name": "log",
-          "offset": 2878
+          "offset": 2925
         },
         {
           "name": "build",
-          "offset": 3039
+          "offset": 3086
         }
       ],
       "assignments": [
@@ -185520,104 +185524,104 @@
       "definitions": [],
       "calls": [
         {
+          "name": "join",
+          "offset": 259
+        },
+        {
+          "name": "homedir",
+          "offset": 267
+        },
+        {
+          "name": "existsSync",
+          "offset": 333
+        },
+        {
+          "name": "join",
+          "offset": 349
+        },
+        {
           "name": "test",
-          "offset": 236
+          "offset": 376
+        },
+        {
+          "name": "path",
+          "offset": 550
         },
         {
           "name": "join",
-          "offset": 340
+          "offset": 713
         },
         {
           "name": "homedir",
-          "offset": 348
-        },
-        {
-          "name": "ok",
-          "offset": 396
+          "offset": 721
         },
         {
           "name": "existsSync",
-          "offset": 402
-        },
-        {
-          "name": "join",
-          "offset": 418
-        },
-        {
-          "name": "join",
-          "offset": 498
-        },
-        {
-          "name": "homedir",
-          "offset": 506
-        },
-        {
-          "name": "existsSync",
-          "offset": 548
+          "offset": 763
         },
         {
           "name": "mkdtempSync",
-          "offset": 678
+          "offset": 893
         },
         {
           "name": "join",
-          "offset": 695
+          "offset": 910
         },
         {
           "name": "tmpdir",
-          "offset": 703
+          "offset": 918
         },
         {
           "name": "spawnSync",
-          "offset": 747
+          "offset": 962
         },
         {
           "name": "join",
-          "offset": 781
+          "offset": 996
         },
         {
           "name": "match",
-          "offset": 968
+          "offset": 1183
         },
         {
           "name": "spawnSync",
-          "offset": 1091
+          "offset": 1306
         },
         {
           "name": "join",
-          "offset": 1125
+          "offset": 1340
         },
         {
           "name": "ok",
-          "offset": 1399
+          "offset": 1614
         },
         {
           "name": "includes",
-          "offset": 1406
+          "offset": 1621
         },
         {
           "name": "includes",
-          "offset": 1438
+          "offset": 1653
         },
         {
           "name": "includes",
-          "offset": 1472
+          "offset": 1687
         },
         {
           "name": "slice",
-          "offset": 1568
+          "offset": 1783
         },
         {
           "name": "ok",
-          "offset": 1594
+          "offset": 1809
         },
         {
           "name": "includes",
-          "offset": 1601
+          "offset": 1816
         },
         {
           "name": "includes",
-          "offset": 1645
+          "offset": 1860
         }
       ],
       "assignments": [
@@ -185644,12 +185648,12 @@
         {
           "target": "r",
           "sourceCall": "spawnSync",
-          "offset": 737
+          "offset": 952
         },
         {
           "target": "r",
           "sourceCall": "spawnSync",
-          "offset": 1081
+          "offset": 1296
         }
       ],
       "imports": [
@@ -570394,24 +570398,6 @@
         "fromFile": "test/regression-generator.test.js",
         "toFile": "scripts/semantic-dependency-graph.cjs",
         "symbol": "parse",
-        "confidence": 0.6
-      },
-      {
-        "fromFile": "test/session-recovery-wrong-workdir.test.js",
-        "toFile": "scripts/check-golden-standard.js",
-        "symbol": "ok",
-        "confidence": 0.6
-      },
-      {
-        "fromFile": "test/session-recovery-wrong-workdir.test.js",
-        "toFile": "scripts/check-sentry-runtime.js",
-        "symbol": "ok",
-        "confidence": 0.6
-      },
-      {
-        "fromFile": "test/session-recovery-wrong-workdir.test.js",
-        "toFile": "shared/sentry-runtime.js",
-        "symbol": "ok",
         "confidence": 0.6
       },
       {

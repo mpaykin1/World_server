@@ -1,12 +1,12 @@
 {
   "schemaVersion": "7.4.0",
-  "generatedAt": "2026-08-28T06:07:21.509Z",
+  "generatedAt": "2026-08-28T06:11:25.489Z",
   "pass": true,
   "syntheticControllerValidation": true,
   "productionEvidence": false,
   "healthyCase": {
     "schemaVersion": "7.4.0",
-    "generatedAt": "2026-08-28T06:07:21.507Z",
+    "generatedAt": "2026-08-28T06:11:25.488Z",
     "pass": true,
     "source": "synthetic",
     "sampleCount": 100,
@@ -21,7 +21,7 @@
   },
   "burnCase": {
     "schemaVersion": "7.4.0",
-    "generatedAt": "2026-08-28T06:07:21.508Z",
+    "generatedAt": "2026-08-28T06:11:25.489Z",
     "pass": true,
     "source": "synthetic",
     "sampleCount": 100,

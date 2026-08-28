@@ -1,8 +1,8 @@
 {
   "schemaVersion": "7.2.0",
-  "generatedAt": "2026-08-28T06:07:33.467Z",
+  "generatedAt": "2026-08-28T06:11:31.406Z",
   "pass": true,
-  "name": "selftest-6492",
+  "name": "selftest-10252",
   "mismatches": [],
   "expected": {
     "exitCode": 0,

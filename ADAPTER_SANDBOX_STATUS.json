@@ -1,11 +1,11 @@
 {
   "schemaVersion": "7.2.0",
-  "generatedAt": "2026-08-28T06:07:32.913Z",
+  "generatedAt": "2026-08-28T06:11:29.843Z",
   "pass": true,
-  "wasmtimeAvailable": false,
-  "wasmtimeVersion": null,
+  "wasmtimeAvailable": true,
+  "wasmtimeVersion": "wasmtime 27.0.0 (8eefa236f 2024-11-20)",
   "capabilityBased": true,
-  "untrustedBehavior": "DENY_UNTRUSTED",
+  "untrustedBehavior": "EXECUTE_ONLY_WITH_EXPLICIT_PREOPENS",
   "checks": {
     "fail-closed": true,
     "network-denied": true,

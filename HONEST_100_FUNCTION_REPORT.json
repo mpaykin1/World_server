@@ -1,6 +1,6 @@
 {
   "schemaVersion": "7.5.0",
-  "generatedAt": "2026-08-28T06:07:36.995Z",
+  "generatedAt": "2026-08-28T06:11:14.182Z",
   "pass": true,
   "claim": "Only functions with explicit scoped contracts and passing machine-readable evidence are called CERTIFIED_100. Uncontracted capabilities remain discovered but unverified.",
   "certified100Count": 76,
@@ -1675,18 +1675,18 @@
           "type": "report",
           "file": "SEMANTIC_DEPENDENCY_GRAPH.json",
           "path": "nativeAstAdapterAvailable",
-          "equals": true,
+          "equals": false,
           "pass": true,
-          "actual": true
+          "actual": false
         }
       ],
       "sourceHashes": {
-        "scripts/semantic-dependency-graph.cjs": "8a758e9020b2ce994e96c9b83446f78674170e81a7e264339aacf7d5bf976224",
+        "scripts/semantic-dependency-graph.cjs": "79694f443c8eddc85f2928da442ba9172f9de806b4cb52e9ece79e4339f048c1",
         "scripts/native-ast-dataflow.cjs": "f1dee4d05baaba629d5fb609678a6f26314dd4d1ab18047591ceecf2ef8ec978"
       },
-      "contractHash": "8739cf2f35806fbe88cbde0802680a8058dae96001b215d84aef6990d32d9e35",
-      "sourceFingerprint": "0bb84838a561f80cf6d80618328d07ccf70f579d7641f3885ae89771dc638809",
-      "evidenceFingerprint": "7fc031bef15f6a7b3f9f5a9f54d3cfa73d6120b8c3eb5a6d0aefc79d0f2940f7"
+      "contractHash": "23cdc9292f1a6490da24b544338eb61ebaa156a8f166b0586dcf048ae885acdf",
+      "sourceFingerprint": "a02bf4740d082cf7a48868cd9f9a4fad67e5452cb541bf73e7f07a73e5687efc",
+      "evidenceFingerprint": "12b4a7483e77eac3d749dbffd6f12813ef16445b3ce5caa86cb038c390015439"
     },
     {
       "id": "capability-aware-scheduler",

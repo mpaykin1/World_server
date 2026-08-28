@@ -3975,3 +3975,24 @@ C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 знак:
 [2026-08-28 09:07:37][UNIFIED] === UNIFIED TICK END ===
 [2026-08-28 09:07:37][UNIFIED] state nextRunAt=2026-08-28T06:17:06.129Z blockers pass= requires_ai= waiting= mergeSafe=False
 [2026-08-28 09:07:37][UNIFIED] LOCK released
+[2026-08-28 09:11:01][UNIFIED] LOCK acquired C:\Users\user\Desktop\World_server\state\blocker-repair\unified.lock
+[2026-08-28 09:11:01][UNIFIED] === UNIFIED TICK START quality_autoloop -> supervisor poll -> blocker-repair -> verification ===
+[2026-08-28 09:11:01][UNIFIED] Step 1: quality_autoloop
+[2026-08-28 09:11:01][UNIFIED]   autoloop: [2026-08-28 09:11:01] === AUTOLOOP TICK START ===
+[2026-08-28 09:11:01][UNIFIED]   autoloop: [2026-08-28 09:11:01]   guard: [MIGRATION_GUARD] PASS 110 migrations digest 36bdee3ba6de92a5b277da9c94cf03259534603b94db1b5890b0555a14204ede latest 20260826140000_ai_supervisor_control_plane.sql
+[2026-08-28 09:11:01][UNIFIED]   autoloop: [2026-08-28 09:11:01] LOCAL migrations match the committed guard (scripts/check-supabase-migrations.js) - OK
+[2026-08-28 09:11:01][UNIFIED]   autoloop: [2026-08-28 09:11:01] commits ahead of master: 8 (need PR if >0)
+[2026-08-28 09:11:01][UNIFIED]   autoloop: [2026-08-28 09:11:01] PLUGIN DISCOVER: [2026-08-28T06:11:01.851Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-28 09:11:01][UNIFIED]   autoloop: [2026-08-28T06:11:01.858Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-28 09:11:01][UNIFIED]   autoloop: [2026-08-28T06:11:01.859Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-28 09:11:01][UNIFIED]   autoloop: [2026-08-28T06:11:01.860Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-28 09:11:01][UNIFIED]   autoloop: [2026-08-28T06:11:01.861Z] OK msw already installed (MIT) impact 60%
+[2026-08-28 09:11:01][UNIFIED]   autoloop: [2026-08-28T06:11:01.862Z] OK zod already installed (MIT) impact 55%
+[2026-08-28 09:11:01][UNIFIED]   autoloop: [2026-08-28T06:11:01.863Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-28 09:11:01][UNIFIED]   autoloop: 
+[2026-08-28 09:11:02][UNIFIED]   autoloop: [2026-08-28 09:11:02] PLUGIN AUTO-WIRE tick done
+[2026-08-28 09:11:02][UNIFIED]   autoloop: [2026-08-28 09:11:02] === AUTOLOOP TICK END ===
+[2026-08-28 09:11:02][UNIFIED] Step 1b: supervisor advisory poll
+[2026-08-28 09:11:02][UNIFIED]   supervisor: ADVISORY READ: PASS (0 pending)
+[2026-08-28 09:11:02][UNIFIED]   supervisor: No pending advisories
+[2026-08-28 09:11:02][UNIFIED] Step 2: blocker-repair tick

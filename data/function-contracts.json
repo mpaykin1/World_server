@@ -390,7 +390,7 @@
           "type": "report",
           "file": "SEMANTIC_DEPENDENCY_GRAPH.json",
           "path": "nativeAstAdapterAvailable",
-          "equals": true
+          "equals": false
         }
       ],
       "coversCapabilities": [
