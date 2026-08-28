@@ -1,0 +1,29 @@
+{
+  "reference": {
+    "mean_luminance": 0.04454856,
+    "p95_luminance": 0.12151215,
+    "dark_ratio": 0.79612656,
+    "mean_saturation": 0.31532940,
+    "edge_density": 0.05956573,
+    "gradient_mean": 0.01088812,
+    "block_contrast_mean": 0.03069176,
+    "luminance_entropy_bits": 2.84947038,
+    "warm_pixel_ratio": 0.04468384,
+    "bright_pixel_ratio": 0.00924606,
+    "bottom_ui_occupancy_proxy": 0.13839082
+  },
+  "primitiveFailureExample": {
+    "mean_luminance": 0.09843568,
+    "p95_luminance": 0.16862746,
+    "dark_ratio": 0.0,
+    "mean_saturation": 0.66022307,
+    "edge_density": 0.01083322,
+    "gradient_mean": 0.00445380,
+    "block_contrast_mean": 0.01593536,
+    "luminance_entropy_bits": 1.40280659,
+    "warm_pixel_ratio": 0.00015919,
+    "bright_pixel_ratio": 0.00409880,
+    "bottom_ui_occupancy_proxy": 0.06663572
+  },
+  "note": "Metrics were measured from the two supplied screenshots. They are perceptual proxies, not claims of semantic/aesthetic equivalence."
+}

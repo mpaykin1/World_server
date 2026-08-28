@@ -8,7 +8,13 @@
     "nonZeroTrianglesWhenRuntimeExposesStats": true,
     "cssBlurOnPrimaryCanvasForbidden": true,
     "approvedGoldenGraphicsMustNotBeReplaced": true,
-    "screenshotRegressionRequiredFor100Percent": true
+    "screenshotRegressionRequiredFor100Percent": true,
+    "cinematicVoxelGuardRequired": true,
+    "primitivePrototypeCannotShip": true,
+    "referenceProxyRequiredForCinematicScenes": true,
+    "depthStructureEvidenceRequired": true,
+    "multiAngleGoldenEvidencePreferred": true,
+    "cinematicQualityIncreaseRequiresEvidence": true
   },
   "note": "Structural/runtime visual gates are automated. Aesthetic quality cannot reach 100% until approved screenshot baselines or exact Golden visual assets exist."
 }

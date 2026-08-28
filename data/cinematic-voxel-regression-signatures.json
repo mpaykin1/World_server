@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "CINEMATIC_VOXEL_REGRESSION_SIGNATURES",
+  "signatures": [
+    {
+      "id": "primitive-flat-voxel-scene",
+      "severity": "release-blocker",
+      "symptom": "large flat background, sparse geometry, weak depth, simple eye/fire placeholders or missing cinematic UI",
+      "rootCause": "scene accepted before high-detail world, lighting, atmosphere, material and reference-evidence gates were satisfied",
+      "protections": ["cinematic V3 reference gate", "Godot export gate", "device matrix", "depth/perceptual evidence", "evidence-locked readiness"]
+    },
+    {
+      "id": "fps-fix-destroys-hero-quality",
+      "severity": "release-blocker",
+      "symptom": "FPS rises only because near hero geometry, eye/fire quality or Navigator art is visibly degraded",
+      "rootCause": "quality scaling lacks importance-aware degradation order",
+      "protections": ["hero quality floor", "visibility supervisor", "temporal governor", "near hero geometry last"]
+    },
+    {
+      "id": "false-green-single-frame",
+      "severity": "release-blocker",
+      "symptom": "one screenshot passes while other camera angles or devices expose primitive graphics",
+      "rootCause": "single-view visual verification",
+      "protections": ["multi-angle evidence", "desktop/mobile device matrix", "depth structure regression"]
+    }
+  ]
+}

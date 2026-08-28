@@ -206,3 +206,8 @@ Desktop AI must report:
 11. Preview / production link only if verified working.
 
 Never invent a successful deployment, URL, test pass, or integration.
+
+<!-- CINEMATIC_VOXEL_QUALITY_V3_BEGIN -->
+## Cinematic Voxel Quality V3 — mandatory graphics gate
+For cinematic/high-detail 3D voxel scenes, primitive placeholder graphics are a release blocker. Reuse WorldQualityAutopilot and existing Golden/telemetry systems; run `npm run quality:cinematic:v3`, desktop/mobile captures and strict candidate scoring before claiming improvement. Preserve hero/near quality first; optimize occluded/offscreen/far work before render resolution or hero geometry. Every failure requires root cause + regression protection. See `docs/CINEMATIC_VOXEL_QUALITY_GUARD.md`.
+<!-- CINEMATIC_VOXEL_QUALITY_V3_END -->

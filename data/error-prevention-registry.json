@@ -148,6 +148,54 @@
       "protection": [
         "direct world-selection menu gate"
       ]
+    },
+    {
+      "id": "godot-nodepath-absolute-unresolvable",
+      "category": "godot",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "an @export NodePath like \"/Main/Beacon\" resolves to null via get_node_or_null() when called from a nested node, silently breaking gaze/follow/reference wiring with no error",
+      "rootCause": "a leading-slash NodePath resolves from the actual SceneTree root (get_tree().root), not the edited scene's own root node - it needs the \"/root/<SceneRootName>/...\" prefix, not \"/<SceneRootName>/...\"",
+      "protection": [
+        "always prefix absolute Godot NodePaths with /root/<SceneName>/",
+        "verify resolution with a game_eval read of the exported var immediately after wiring, not just visually"
+      ]
+    },
+    {
+      "id": "godot-camera-orbit-wrong-pivot",
+      "category": "controls",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "mouse-look makes the tracked subject appear to spin/swing across the screen instead of staying anchored while the world rotates around it",
+      "rootCause": "mouse yaw/pitch was applied to a rig that only rotates in place at a fixed offset (first-person look), instead of a true orbit rig whose camera swings in an arc around the subject's origin",
+      "protection": [
+        "orbit rigs must rotate at the tracked subject's own origin, with the camera offset behind/above and pre-tilted to face back at that origin",
+        "verify by checking the subject's screen-space position stays roughly constant while yaw/pitch change, not just that the view moves at all"
+      ]
+    },
+    {
+      "id": "godot-gdscript-undefined-class-is-check",
+      "category": "godot",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "an EditorPlugin or gate script fails to load at all (parse error), silently disabling every check it contains",
+      "rootCause": "an `is SomeClassName` type check referenced a class that doesn't exist as a native Godot type or a registered class_name in the project",
+      "protection": [
+        "use n.get_class() == \"ClassName\" (string compare) instead of `is ClassName` when a class's existence in the target project isn't guaranteed",
+        "smoke-test any new editor plugin actually enables without a parse error before relying on its gate"
+      ]
+    },
+    {
+      "id": "powershell-utf8-mojibake-on-install",
+      "category": "tooling",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "Cyrillic text, curly quotes, or em-dashes in an existing file turn into mojibake (e.g. Ра…-style garbage) and a stray BOM appears at the top, after a PowerShell install/patch script touches that file",
+      "rootCause": "Windows PowerShell 5.1's Get-Content -Raw defaults to the system ANSI codepage when no -Encoding is given, misreading a BOM-less UTF-8 source file; the corrupted string is then re-saved via Set-Content -Encoding UTF8 (which also adds a BOM in 5.1), baking the corruption in",
+      "protection": [
+        "always pass -Encoding UTF8 to both Get-Content -Raw and Set-Content when a PowerShell script reads-then-writes an existing text file",
+        "diff every file an installer touches for mojibake/BOM before committing, not just for the intended content change"
+      ]
     }
   ],
   "confirmationProtocol": {

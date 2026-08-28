@@ -1,0 +1,41 @@
+name: cinematic-voxel-quality-v3
+on:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  cinematic-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '24', cache: npm}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: npm ci
+      - run: python -m pip install --disable-pip-version-check pillow numpy
+      - run: npx playwright install --with-deps chromium
+      - run: node --test test/cinematic-voxel-policy.test.js test/cinematic-v3-systems.test.js
+      - run: npm run start > /tmp/world-server.log 2>&1 &
+      - name: Wait for World_server
+        run: |
+          for i in {1..60}; do
+            if curl -fsS http://127.0.0.1:3000/apps/voxel-world/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/world-server.log || true
+          exit 1
+      - run: npx playwright test e2e/cinematic-voxel-quality.spec.js e2e/cinematic-device-matrix.spec.js --project=desktop-chromium
+      - run: CINEMATIC_CANDIDATE=artifacts/cinematic/voxel-world-desktop.png npm run quality:cinematic:v3:strict
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cinematic-voxel-quality-v3-evidence
+          path: |
+            artifacts/cinematic
+            CINEMATIC_REFERENCE_REPORT.json
+            CINEMATIC_ML_REPORT.json
+            CINEMATIC_DEPTH_REPORT.json
+            CINEMATIC_ASSET_PIPELINE_REPORT.json
+            CINEMATIC_V3_QUALITY_REPORT.json
+            CINEMATIC_VOXEL_QUALITY_REPORT.json
