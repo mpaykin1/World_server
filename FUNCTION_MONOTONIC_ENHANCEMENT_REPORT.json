@@ -1,6 +1,6 @@
 {
   "schemaVersion": "7.2.0",
-  "generatedAt": "2026-08-28T06:07:37.009Z",
+  "generatedAt": "2026-08-28T06:11:40.818Z",
   "pass": true,
   "status": "MONOTONIC_PASS",
   "baselineCreatedAt": "2026-08-27T09:48:59.597Z",
@@ -14,12 +14,6 @@
       "id": "graphics-quality-ratchet",
       "old": "25eba40edfa2641a14c11c2499924b11090be674b71a51eae9ba8e9d6778e79f",
       "current": "40957ccc4f20fb5d45766b42c1d132a2294b68d2c5f978e3359509efa8d80477",
-      "recertified": true
-    },
-    {
-      "id": "semantic-dependency-graph",
-      "old": "a02bf4740d082cf7a48868cd9f9a4fad67e5452cb541bf73e7f07a73e5687efc",
-      "current": "0bb84838a561f80cf6d80618328d07ccf70f579d7641f3885ae89771dc638809",
       "recertified": true
     },
     {

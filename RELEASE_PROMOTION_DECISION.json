@@ -1,6 +1,6 @@
 {
   "schemaVersion": "7.2.0",
-  "generatedAt": "2026-08-28T06:07:37.377Z",
+  "generatedAt": "2026-08-28T06:11:41.151Z",
   "pass": true,
   "decision": "CANARY",
   "nextStep": "CANARY_THEN_PROMOTE_ON_EVIDENCE",
