@@ -1,134 +1,135 @@
-# WORK IN PROGRESS — WORLD_QUALITY_AUTOPILOT_V4
+# WORK IN PROGRESS — SESSION RECOVERY + CI STABILIZATION (2026-08-28)
 
 ## Task
-Install V4 of the non-destructive World Quality Autopilot: semantic voxel detail, procedural PBR synthesis, texture/visibility budgets, adaptive GPU/CPU/device pressure control, universal retarget contract, feedback learner, candidate lab, evidence ledger and regression-safe evolution.
+Recover World_server after a local environment crash/reinstall on branch
+`ai/opencode/multi-ai-peer-improvement`: rescue substantial uncommitted
+local work, get CI green again, and fix the automation that caused the
+crash's aftermath to actively fight the recovery.
 
 ## Why
-Generic Golden/Quality automation already exists. V4 adds the world-specific closed loop that decides where detail matters, adds it only behind the reference-facing shell, classifies material intent, adapts rendering/animation to runtime pressure and records machine-readable evidence.
+The previous session left ~250 files of a large "integration/control-plane"
+system on disk (scripts, data policies, tests, an AI Supervisor Control
+Plane Supabase migration) that were never committed, plus an in-progress
+`api/` -> `lib/api-handlers/` consolidation whose CI-breaking follow-ups
+were sitting uncommitted. Per AGENTS.md rule 17 (COMMIT DISCIPLINE, added
+this session): work that only exists on local disk does not survive a
+reinstall and must be checkpointed into Git immediately.
 
 ## Current state
-- Existing release, Golden, regression, risk/cost, visual critic, patch tournament and device-gate systems must be preserved.
-- V4 installs semantic detail indexing, deterministic PBR candidate synthesis, texture/sector visibility budgets, sustained-pressure thermal proxy, retarget/root-motion/two-hand contracts, feedback learner, cost-quality scheduler, candidate lab, baseline promotion guard and evidence ledger.
+- Checkpoint commit `a33114e` (and follow-ups through `a6c5bea`) landed all
+  recoverable local work on `ai/opencode/multi-ai-peer-improvement` and
+  pushed to `origin`.
+- Fixed and pushed, in order: (1) finished the `api/` -> `lib/api-handlers/`
+  consolidation follow-ups (test import path, server.js, vercel.json);
+  (2) wired the `ai_supervisor_control_plane` and `orchestrator_leader_lease`
+  migrations from `supabase/migrations_backup_20260824/` into the live
+  `supabase/migrations/` dir and bumped `scripts/check-supabase-migrations.js`
+  to 110/new digest; (3) found and fixed the root cause of two migrations
+  getting silently deleted and force-pushed away mid-session: a stale
+  `%TEMP%\opencode\quality_autoloop.ps1` (outside git, from a previous
+  session, wired into the `WorldServer-BlockerRepair` scheduled task) that
+  hardcoded the old 108-file/old-digest baseline and auto-restored +
+  auto-committed + auto-pushed on any mismatch. Replaced with
+  `scripts/quality-autoloop-tick.ps1` (versioned, reads the guard script as
+  single source of truth, only logs on mismatch instead of auto-reverting);
+  (4) reverted `services/ai3d-worker/ai3d/plugins/mesh_quality_optimizer.py`
+  to its last working version (the uncommitted rewrite imported a
+  `services/ai3d-worker/ai3d/mesh_optimizer.py` module that was never
+  created, breaking the AI3D E2E smoke test); (5) fixed 4 more scripts
+  (`check-ai3d-delivery-policy.js`, `check-ai3d-v4-combined.js`,
+  `world-quality-analyzer.js`, `world-runtime-quality-profiler.js`) that
+  still read from the pre-consolidation `api/ai3d.js` /
+  `api/ai3d-voxel-generate.js` paths.
+- CI progression on this branch: `check` job now passes `npm run check`
+  (142/142), AI3D discovery/E2E smoke, AI3D evidence gate, AI3D final
+  delivery policy, and AI3D V4 combined integration. Currently blocked on
+  `npm run release:gate` -> `desktop-ai:check`, which is this very file
+  being stale (fixed by this update).
 
 ## Target state
-- Reference-facing projection remains byte-equivalent while hidden/side volume gains deterministic detail.
-- AI3D worker and Vercel fallback use the same V4 policy.
-- 3D/orbit/playable views can use adaptive PBR, while Front Exact remains unmodified.
-- Runtime adapts DPR/LOD/shadows/particles/lights/animation/material/geometry budgets using FPS, frame p95, GPU time, long tasks, memory and device capability.
-- New visual baselines can never self-approve.
+- `npm run release:gate` passes in CI on this branch (or fails only on
+  gates that are legitimately incomplete work, never on stale-path bugs).
+- The two new Supabase migrations exist as reviewed, guard-passing SQL
+  files ready to apply; actual application to the live production
+  Supabase project is a separate, deliberate step (see Known risks).
+- No automation on this machine can silently revert or force-push over
+  committed work again.
 
 ## Files / systems involved
-- api/ai3d-voxel-generate.js
-- lib/world-quality-voxel-enhancer.js
-- lib/world-quality-semantic-detail.js
-- lib/world-quality-material-profiler.js
-- services/ai3d-worker/ai3d/runner.py
-- services/ai3d-worker/ai3d/plugins/world_quality.py
-- shared/world-quality-autopilot.js
-- apps/ai3d-voxel-city/*
-- apps/voxel-world/*
-- data/world-quality-autopilot.json
-- scripts/world-*.js
-- .github/workflows/world-quality-autopilot.yml
-- .github/workflows/quality-regression.yml
-- package.json
-
-## Golden systems that must be preserved
-- Approved graphics/assets and Golden components.
-- Canonical desktop/mobile controls, collisions, grounding and step-up.
-- AI3D front-reference fidelity and Final Delivery gates.
-- Deny-by-default release policy.
-
-## Errors that must not return
-- Installer failing due to line-ending mismatches (CRLF/LF) — resolved by normalizing to LF before patching.
-- Patch anchor mismatches in runner.py (CRLF), client.js (CRLF), index.html (CRLF) — resolved.
-- spawnSync npm.cmd EINVAL on release:gate — resolved by V4.1 hotfix (cmd.exe /d /s /c npm ...).
-- Quality Regression Lock missing Python PIL (ModuleNotFoundError) — resolved by adding setup-python + pip install pillow numpy requests to quality-regression.yml (parity with ci.yml).
-- Quality Regression Lock missing webkit (mobile-webkit iPhone 13) — resolved by installing chromium+webkit in quality-regression.yml.
-- CI missing webkit for npx playwright test (all 4 projects) — resolved by installing chromium+webkit in ci.yml.
-- Perceptual gate EISDIR on approvedBaselines without path — resolved by adding valid path+sha256 to data/visual-baselines.json (test/fixtures/cube_object.png).
-- AI3D Voxel City autoplay regression (playerSpawn false, move 0) due to V4.1 computeVertexNormals + applyWorldMaterialMode in switch handlers — resolved by removing g.computeVertexNormals and applyWorldMaterialMode calls in switchFront/Orbit/Playable, preserving PBR material creation but avoiding premature dispose.
-- Any regression in controls, collisions, mobile behavior, visuals, performance — must rollback candidate.
-
-## Exact patch / change plan
-1. Work only in a new AI branch and update this WIP before project edits.
-2. Install semantic server/worker detail enhancement with hard front-projection invariant and voxel budget.
-3. Install material profiler and adaptive PBR hooks without changing Front Exact.
-4. Install frame/GPU/long-task/device-aware runtime budgets and animation semantic rules.
-5. Install baseline candidates + explicit promotion guard, device matrix and evidence ledger.
-6. Run targeted tests, quality:world and full release gate.
-7. Reject/rollback any candidate that regresses controls, collisions, mobile behavior, visuals or performance.
+- `lib/api-handlers/*`, `server.js`, `vercel.json`, `test/ai3d-voxel-serverless.test.js`
+- `supabase/migrations/`, `supabase/migrations_backup_20260824/`, `scripts/check-supabase-migrations.js`
+- `scripts/quality-autoloop-tick.ps1`, `state/blocker-repair/unified-tick.ps1`, `%TEMP%\opencode\quality_autoloop.ps1`
+- `services/ai3d-worker/ai3d/plugins/mesh_quality_optimizer.py`
+- `scripts/check-ai3d-delivery-policy.js`, `scripts/check-ai3d-v4-combined.js`, `scripts/world-quality-analyzer.js`, `scripts/world-runtime-quality-profiler.js`
+- `AGENTS.md` (new rule 17: COMMIT DISCIPLINE)
+- The large uncommitted `integration/control-plane` framework under `scripts/`, `data/*-policy.json`, `policy/`, `config/`, `test/*.test.js`
 
 ## Known risks
-- Aesthetic 100% still requires approved screenshots.
-- Animation 100% still requires real rig playback evidence.
-- Optimization 100% still requires physical iOS/Android evidence.
-- GitHub/Vercel winner-only writes require external credentials.
+- `services/ai3d-worker/ai3d/mesh_optimizer.py` (the "V10 canonical
+  quality-gated mesh pipeline") was referenced by an uncommitted rewrite
+  but never implemented anywhere in the repo. The plugin was reverted to
+  the working Blender-Decimate version instead of inventing that module
+  blind. A future session with the original design intent should either
+  implement it properly or drop the delegation comment.
+- The two new Supabase migrations are NOT yet applied to any live Supabase
+  project. `list_projects` via the connected Supabase MCP only shows
+  `Improve` (empty) and `world-server-preview` (unrelated 11-migration
+  history) — neither matches the 110-migration history tracked here, so
+  the actual production project for this repo is not reachable from this
+  session's Supabase MCP connection. Do not apply blind to either listed
+  project.
+- Two other AI worktrees are active in sibling directories
+  (`World_server_claude` on `ai/claude/safe-parallel-20260826`,
+  `World_server_quality_autopilot_v7_test` on
+  `opencode/quality-autopilot-v7-test`) — not touched this session.
+- Stray nested copies of those same worktree names exist *inside* this
+  main tree with another AI's `.env.local` secrets in them; excluded via
+  `.gitignore`, left untouched, not investigated further.
+- `system-control-plane.cjs --verify` currently reports 67-70/75 gates
+  passing; the remaining gates (`honest-100-functions`,
+  `monotonic-100-guard`, `orchestrator-continuity`, `release-promotion`,
+  `readiness`) are honestly-tracked incomplete work (physical device /
+  native evidence gaps), not faked.
+
+## Golden systems that must be preserved
+- Desktop/mobile controls, collisions, grounding, step-up (untouched this session).
+- AI3D front-reference fidelity and Final Delivery gate (untouched; policy checkers fixed, not weakened).
+- Deny-by-default release policy (`data/app-release-registry.json`).
+
+## Errors that must not return
+- CI must not fail due to stale `api/*.js` path references after any future consolidation of `api/` — grep for `api/<name>.js` string literals across `scripts/` whenever files move out of `api/`.
+- No script/scheduled task may auto-commit and auto-push without a human/AI review step in the loop (see AGENTS.md rule 17).
+- `supabase/migrations/` file count and digest must only change together with `scripts/check-supabase-migrations.js` in the same commit.
+
+## Exact patch / change plan
+1. Update this file (done) so `desktop-ai:check` stops blocking `release:gate`.
+2. Re-run `npm run release:gate` in CI; triage any further legitimate failures one at a time, smallest safe fix first, commit+push after each (rule 17).
+3. Leave genuinely incomplete gates (honest-100, monotonic-100, readiness, release-promotion) as known-incomplete rather than forcing a fake pass.
 
 ## Tests to run
-- npm run quality:world:materials
-- npm run quality:world:visibility
-- npm run quality:world:retarget
-- npm run quality:world:runtime
-- npm run quality:world:devices
-- npm run quality:world:candidates
-- npm run quality:world:feedback
-- npm run quality:world
-- node --test test/world-quality-autopilot.test.js (expect 12/12 PASS)
-- npm run release:gate
-- Playwright desktop: open apps/ai3d-voxel-city and apps/voxel-world, verify WASD/arrow movement, mouse look, jump, collisions, step-up.
-- Playwright mobile (emulation): left stick movement, right stick look, jump, safe-area buttons, no black screen.
-- Visual baseline candidate capture: verify Front Exact unchanged, orbit/playable views show added volume/PBR.
-- Do not promote baselines without explicit human approval.
+- `npm run check` (142/142 expected)
+- `node scripts/check-supabase-migrations.js` (PASS 110 expected)
+- `node scripts/check-ai3d-delivery-policy.js`, `node scripts/check-ai3d-v4-combined.js`
+- `npm run release:gate` (in progress, iterating in CI)
 
 ## Deployment / PR plan
-1. After all gates pass locally, commit to ai/desktop/world-quality-autopilot-v4.
-2. Push to origin (master not modified).
-3. Open PR via gh pr create --base master --head ai/desktop/world-quality-autopilot-v4.
-4. Vercel auto-deploys preview.
-5. Verify preview on desktop Chrome and real iOS/Android (if provider configured).
-6. Only merge after human approval of visual baselines and playable evidence.
-7. Do not auto-merge. Do not push directly to master.
+1. Keep pushing verified fixes to `ai/opencode/multi-ai-peer-improvement` (never `master`).
+2. Once `release:gate` is green (or only blocked on documented incomplete work), open/refresh a PR to `master` via `gh pr create`.
+3. Do not merge without human review; do not auto-merge.
 
 ## Current progress
-- 98% — verified locally (12/12 V4 tests, 156/156 check, release:gate PASS). PR #8 created, CI Quality Regression Lock initially failed on missing PIL, fixed via quality-regression.yml hotfix. Push 5e329eb done, awaiting CI re-run.
+- Recovery + 6 fix commits pushed (`a33114e` .. `a6c5bea`). CI check job now clears `npm run check`, AI3D smoke/evidence/delivery/V4 gates. `release:gate` blocked on `desktop-ai:check` until this file was updated (this commit).
 
 ## Next action
-Push hotfix commit, re-check CI, verify V4.1 graphics/mechanics preservation, then merge PR to master and verify Vercel production + smoke test.
+Push this WORK_IN_PROGRESS.md update, re-run CI, and continue triaging whatever `release:gate` step fails next (expected candidates: `golden:check`, `quality:check`, `tech:audit`, `integration:verify` — the same class of stale-path or genuinely-incomplete-gate issues seen so far).
 
 ## Completion criteria
-- Targeted V4 tests PASS.
-- quality:world produces readiness >= 85 with no hard gate failure.
-- release:gate PASS before PR merge/deploy.
-- Front Exact projection unchanged.
-- Desktop/mobile controls and collisions remain protected.
-- New evidence ledger generated.
+- `npm run release:gate` passes in CI, or every remaining failure is a documented, honestly-incomplete gate (not a bug this session introduced or could trivially fix).
+- All recovered work committed and pushed; nothing valuable left only on local disk.
 
 ## Final evidence
-- V4 targeted tests: 12/12 PASS.
-- npm run check: 156/156 PASS.
-- Structural readiness: 98%.
-- Domain readiness: {"detail":100,"graphics":97,"animation":95,"optimization":98,"automation":100}.
-- Evidence ledger: 29dbee226fb2174a6aae51042257f1fb978ffcf5bd090580d6d4d6c01f79f4f5.
-- Full release gate: PASS (local + CI Quality Regression Lock fixed, world-quality PASS, screenshots PASS, Vercel PASS).
-- GitHub push: https://github.com/mpaykin1/World_server branch ai/desktop/world-quality-autopilot-v4 (5e329eb pushed, hotfix pending).
-- PR: https://github.com/mpaykin1/World_server/pull/8
-- CI: world-quality PASS, screenshots PASS, Vercel PASS, quality-regression FAIL due to missing PIL (now hotfixed), check pending.
-
-<!-- WORLD_SERVER_SESSION_RECOVERY_V1_START -->
-## Desktop AI Session Recovery V1 — managed checkpoint
-
-- sessionId: `session-1787632622221-75896e`
-- status: `interrupted`
-- checkpoint: `2026-08-28T04:57:45.608Z`
-- checkpoint message: checkpoint before scheduler_kick fix - dirty 662, health DEAD overdue 625m, soak dead, honest 68/68
-- last successful command: none
-- last error: operation — Watchdog detected dead session/process: unfinished work exists but no responsible process is alive after 14.5 minute(s)
-- next action: fix scheduler_kick npm.cmd quoting
-
-### Recovery queue
-- no explicit recovery steps registered yet
-
-> New Desktop AI session: run `npm run desktop-ai:resume` before editing. Git reality overrides stale recovery metadata.
-<!-- WORLD_SERVER_SESSION_RECOVERY_V1_END -->
-<!-- HONEST_100_FIX 2026-08-27 68/68 PASS system-integration 100% graphics PASS policy PASS honest PASS -->
+- `npm run check`: 142/142 PASS (local and CI).
+- `node scripts/check-supabase-migrations.js`: PASS 110 migrations.
+- `node scripts/system-integration-gate.cjs`: 127/127 PASS.
+- `node scripts/policy-engine.cjs`: PASS.
+- CI run history on `ai/opencode/multi-ai-peer-improvement`: progressed from failing at `npm run check` (import error) through AI3D E2E/evidence/delivery/V4 gates all green, currently at `release:gate` / `desktop-ai:check`.
