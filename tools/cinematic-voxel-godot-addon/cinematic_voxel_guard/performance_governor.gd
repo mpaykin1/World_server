@@ -22,8 +22,8 @@ func _process(delta: float) -> void:
 	if _frames.size() < 60 or now - _last_adjust_ms < 2500: return
 	var sorted := _frames.duplicate(); sorted.sort()
 	var p95: float = sorted[int((sorted.size()-1)*0.95)]
-	var target := target_fps_mobile if OS.has_feature("mobile") else target_fps_desktop
-	var budget := 1000.0 / max(target,1.0)
+	var target: float = target_fps_mobile if OS.has_feature("mobile") else target_fps_desktop
+	var budget: float = 1000.0 / maxf(target, 1.0)
 	if p95 > budget * 1.55:
 		far_detail = max(0.35, far_detail - 0.08)
 		shadow_quality = max(0.45, shadow_quality - 0.06)

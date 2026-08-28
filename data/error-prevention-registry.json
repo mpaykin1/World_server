@@ -196,6 +196,18 @@
         "always pass -Encoding UTF8 to both Get-Content -Raw and Set-Content when a PowerShell script reads-then-writes an existing text file",
         "diff every file an installer touches for mojibake/BOM before committing, not just for the intended content change"
       ]
+    },
+    {
+      "id": "godot-editor-play-hides-standalone-parse-errors",
+      "category": "godot",
+      "severity": "release-blocker",
+      "symptom": "a scene renders fine when launched via the MCP/editor Play button but shows a blank grey screen with no visible error when run as a real standalone .exe/window",
+      "rootCause": "a `var x := expr` where expr's type can't be statically inferred (e.g. the builtin generic max()/min()/clamp() instead of maxi/mini/clampi/maxf/minf/clampf) is only a warning in the editor's live Play session, but the same project can have warnings-as-errors enabled for exported/standalone runs - the affected script (often an autoload or a node's own controller) fails to load entirely, so its Camera3D/logic never runs and the viewport shows nothing but the default clear color",
+      "status": "protected",
+      "protection": [
+        "always give `var x := ...` an explicit type, or use the typed builtin variant (maxi/maxf/mini/minf/clampi/clampf), for any value assigned from a generic Variant-returning builtin",
+        "before calling a scene 'done', launch it via the real standalone executable (godot.exe --path <project>, not just the editor's embedded Play) and check its console/log for SCRIPT ERROR / Parse Error lines, not only a visual screenshot"
+      ]
     }
   ],
   "confirmationProtocol": {
