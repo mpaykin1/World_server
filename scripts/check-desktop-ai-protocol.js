@@ -11,13 +11,35 @@ if(!errors.length){
     if(!new RegExp(`^##\\s+${section.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}\\s*$`,'mi').test(wip))errors.push(`WORK_IN_PROGRESS missing section: ${section}`);
   }
   let changed=[];
+  let baseDiffAvailable=true;
   if(process.env.DESKTOP_AI_CHANGED_FILES){
     changed=process.env.DESKTOP_AI_CHANGED_FILES.split(/[,\n]/).map(x=>x.trim()).filter(Boolean);
   }else{
     const base=process.env.QUALITY_BASE_SHA||process.env.GITHUB_BASE_REF||'master';
-    const r=cp.spawnSync('git',['diff','--name-only',base,'HEAD'],{cwd:ROOT,encoding:'utf8'});
-    if(r.status===0)changed=r.stdout.trim().split(/\r?\n/).filter(Boolean);
-    // Also include dirty working tree and untracked files for local desktop-ai verification
+    let r=cp.spawnSync('git',['diff','--name-only',base,'HEAD'],{cwd:ROOT,encoding:'utf8'});
+    if(r.status!==0){
+      // Shallow CI checkouts (fetch-depth: 1) don't have `base` locally - fetch just
+      // that ref before giving up, so the real branch-vs-base diff still applies.
+      cp.spawnSync('git',['fetch','--depth=1','origin',base],{cwd:ROOT,encoding:'utf8'});
+      r=cp.spawnSync('git',['diff','--name-only',`origin/${base}`,'HEAD'],{cwd:ROOT,encoding:'utf8'});
+    }
+    if(r.status===0){
+      changed=r.stdout.trim().split(/\r?\n/).filter(Boolean);
+    }else{
+      // Base truly unavailable (offline, unknown ref, ...). Falling back to raw
+      // working-tree dirty/staged/untracked state is NOT a substitute: on a fully
+      // committed CI checkout it only reflects side effects of earlier release:gate
+      // steps (build artifacts, regenerated lockfiles/reports), not "did this task
+      // update WORK_IN_PROGRESS.md" - that produced false failures on every CI run.
+      // Skip the meaningful-file gate rather than guess from noise; other checks
+      // (required sections, UNSET marker) still run below.
+      baseDiffAvailable=false;
+    }
+  }
+  if(!process.env.DESKTOP_AI_CHANGED_FILES&&baseDiffAvailable){
+    // Local/dirty-workspace verification (not CI, which diffs a fully committed
+    // checkout): also count uncommitted work so an AI mid-task still gets the
+    // "update WORK_IN_PROGRESS.md" reminder before committing.
     const dirty=cp.spawnSync('git',['diff','--name-only'],{cwd:ROOT,encoding:'utf8'});
     const staged=cp.spawnSync('git',['diff','--cached','--name-only'],{cwd:ROOT,encoding:'utf8'});
     const untracked=cp.spawnSync('git',['ls-files','--others','--exclude-standard'],{cwd:ROOT,encoding:'utf8'});
