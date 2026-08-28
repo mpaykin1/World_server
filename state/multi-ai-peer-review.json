@@ -1,5 +1,5 @@
 {
-  "at": "2026-08-28T06:10:42.594Z",
+  "at": "2026-08-28T06:24:47.657Z",
   "branches": 10,
   "worktrees": 3,
   "prCheck": true,
@@ -1416,6 +1416,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -1436,6 +1437,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -7377,7 +7379,6 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
-        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },

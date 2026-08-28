@@ -1,6 +1,6 @@
 {
   "schemaVersion": "2.0.0",
-  "generatedAt": "2026-08-28T06:07:09.474Z",
+  "generatedAt": "2026-08-28T06:26:13.214Z",
   "changed": [
     "ADAPTER_SANDBOX_STATUS.json",
     "ASSET_DELTA_STATUS.json",
@@ -98,6 +98,7 @@
     "VISUAL_PERCEPTUAL_REPORT.json",
     "WIT_BINDINGS_STATUS.json",
     "WIT_COMPONENT_STATUS.json",
+    "WORK_IN_PROGRESS.md",
     "WORLD_ANIMATION_SEMANTIC_REPORT.json",
     "WORLD_CANDIDATE_LAB_REPORT.json",
     "WORLD_CPU_GRAPHICS_OPTIMIZATION_REPORT.json",
@@ -123,6 +124,7 @@
     "WORLD_VISUAL_BASELINE_CANDIDATES.json",
     "bom.cdx.json",
     "data/generated-legacy-function-contracts.json",
+    "scripts/quality-autoloop-tick.ps1",
     "state/blocker-repair/DESKTOP_AI_NEXT_ACTION.md",
     "state/blocker-repair/device-evidence.json",
     "state/blocker-repair/events.jsonl",
@@ -229,6 +231,7 @@
     "VISUAL_PERCEPTUAL_REPORT.json",
     "WIT_BINDINGS_STATUS.json",
     "WIT_COMPONENT_STATUS.json",
+    "WORK_IN_PROGRESS.md",
     "WORLD_ANIMATION_SEMANTIC_REPORT.json",
     "WORLD_CANDIDATE_LAB_REPORT.json",
     "WORLD_CPU_GRAPHICS_OPTIMIZATION_REPORT.json",
@@ -254,6 +257,7 @@
     "WORLD_VISUAL_BASELINE_CANDIDATES.json",
     "bom.cdx.json",
     "data/generated-legacy-function-contracts.json",
+    "scripts/quality-autoloop-tick.ps1",
     "state/blocker-repair/DESKTOP_AI_NEXT_ACTION.md",
     "state/blocker-repair/device-evidence.json",
     "state/blocker-repair/events.jsonl",
@@ -266,7 +270,7 @@
     "tmp_check2.js",
     "tmp_honest.js"
   ],
-  "affectedCount": 132,
+  "affectedCount": 134,
   "systems": [
     {
       "id": "system-integration-v2",
@@ -306,7 +310,7 @@
   ],
   "apps": [],
   "deployments": [],
-  "riskScore": 35,
+  "riskScore": 55,
   "recommendedTests": [
     "check",
     "quality:regression",

@@ -1,12 +1,14 @@
 {
   "schemaVersion": "7.5.0",
   "system": "SYSTEM_INTEGRATION_GATE",
-  "generatedAt": "2026-08-28T06:07:21.904Z",
-  "percent": 100,
-  "pass": true,
-  "passed": 127,
+  "generatedAt": "2026-08-28T06:26:24.643Z",
+  "percent": 99,
+  "pass": false,
+  "passed": 126,
   "total": 127,
-  "failed": [],
+  "failed": [
+    "canonical-mesh"
+  ],
   "checks": {
     "analyzer-v6-tech": true,
     "analyzer-truth-cert": true,
@@ -14,7 +16,7 @@
     "autopilot-truth-status": true,
     "fresh-device-evidence": true,
     "fresh-runtime-evidence": true,
-    "canonical-mesh": true,
+    "canonical-mesh": false,
     "pwa-telemetry": true,
     "real-ios-canary": true,
     "truth-ci-workflow": true,

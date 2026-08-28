@@ -1,7 +1,7 @@
 {
   "schemaVersion": "6.0.0",
   "system": "WORLD_RUNTIME_DEPENDENCY_RESILIENCE",
-  "generatedAt": "2026-08-28T06:05:59.014Z",
+  "generatedAt": "2026-08-28T06:25:05.638Z",
   "dependencies": [
     {
       "file": "apps/voxel-world/client.js",

@@ -1,16 +1,16 @@
 {
   "schemaVersion": "6.0.0",
-  "generatedAt": "2026-08-28T06:06:01.556Z",
-  "readinessPercent": 86,
+  "generatedAt": "2026-08-28T06:25:08.178Z",
+  "readinessPercent": 89,
   "domainPercent": {
-    "detail": 61,
+    "detail": 72,
     "graphics": 83,
     "animation": 98,
     "optimization": 99,
     "automation": 100
   },
   "hardGateReady": true,
-  "diagnosticReadinessPercent": 86,
+  "diagnosticReadinessPercent": 89,
   "production100Certified": false,
   "productionEvidencePercent": 6,
   "productionCertification": {
@@ -49,7 +49,7 @@
   "productionProofTargetPercent": 100,
   "runtimeQualityPercent": 97,
   "deviceEvidencePercent": 87,
-  "evidenceLedgerSha256": "f22e6578e5f255216aecf88e61defc185b42ceac5437878113ca530724b7582e",
+  "evidenceLedgerSha256": "7ae10ca9db878dbf6cb0ffb3e25becc50cd3ef239215981b17b657309e01baad",
   "materialProfiles": 64,
   "visibilityPercent": 100,
   "retargetContractReady": true,

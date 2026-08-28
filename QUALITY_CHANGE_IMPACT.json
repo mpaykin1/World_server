@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-28T06:05:49.577Z",
+  "generatedAt": "2026-08-28T06:24:56.105Z",
   "changed": [
     ".env.example",
     ".github/workflows/ci.yml",
@@ -739,6 +739,7 @@
     "scripts/quality-accept-baseline.js",
     "scripts/quality-audit-verify.js",
     "scripts/quality-autofix.js",
+    "scripts/quality-autoloop-tick.ps1",
     "scripts/quality-autopilot-feedback.js",
     "scripts/quality-autopilot.js",
     "scripts/quality-backup-restore-drill-v10.js",
@@ -1230,6 +1231,7 @@
     "test/ai3d-voxel-serverless.test.js",
     "test/api-router-dispatch.test.js",
     "test/apng-integration.test.js",
+    "test/background-headless.test.js",
     "test/cpu-real3d.test.js",
     "test/fixtures/city_street.png",
     "test/fixtures/cube_object.png",

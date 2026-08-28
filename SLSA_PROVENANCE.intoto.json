@@ -4,7 +4,7 @@
     {
       "name": "INTEGRATION_BUILD_SUBJECT.json",
       "digest": {
-        "sha256": "67be04d9342f8f2ba5da986046bc41e59e7cde773440f91b7162a2fa53e824cb"
+        "sha256": "ce4325a97429a1b5b54c67ad7d42be58beac1a82ac087ea725e225ca5de92ab5"
       }
     }
   ],
@@ -26,9 +26,9 @@
       "resolvedDependencies": [
         {
           "name": "git-commit",
-          "uri": "git+https://github.com/mpaykin1/World_server@c3c5515adb94d6fc48109fd6766c0bccf2f8d284",
+          "uri": "git+https://github.com/mpaykin1/World_server@5dfe76f1f0c05b7fd018672b9c78dee70e505e8d",
           "digest": {
-            "sha1": "c3c5515adb94d6fc48109fd6766c0bccf2f8d284"
+            "sha1": "5dfe76f1f0c05b7fd018672b9c78dee70e505e8d"
           }
         },
         {
@@ -65,45 +65,45 @@
         }
       },
       "metadata": {
-        "invocationId": "local-1787897244678-12628",
-        "startedOn": "2026-08-28T06:07:24.429Z",
-        "finishedOn": "2026-08-28T06:07:24.678Z"
+        "invocationId": "local-1787898387387-11524",
+        "startedOn": "2026-08-28T06:26:27.125Z",
+        "finishedOn": "2026-08-28T06:26:27.387Z"
       },
       "byproducts": [
         {
           "name": "SYSTEM_INTEGRATION_REPORT.json",
           "digest": {
-            "sha256": "62422225268f477df33747f87508e54e716ee2ea5956ea4ece63a0246e1d8c2f"
+            "sha256": "db2e4930323aeb256b7f6d5f1ab1b2307de567a22680bb19d06f2ac6221d8aab"
           }
         },
         {
           "name": "POLICY_DECISION_REPORT.json",
           "digest": {
-            "sha256": "38da0bf7a91cbf5387b2f76d670b14a0f64fb2d862c6fb022e09b91b4acb420b"
+            "sha256": "4261a338ad4c0988f9e1c46424adab038ee8401fd3e478d863b67d3ff4007f37"
           }
         },
         {
           "name": "DISASTER_RECOVERY_VERIFY_REPORT.json",
           "digest": {
-            "sha256": "47fc0eb52aa4651834e01ac27dc3a0872ad2571963d576c1f6c3f18d95af601f"
+            "sha256": "de8af7f5d96acf38bbbce2f02e1f8902db8ef64e9fd42c2781384cc10ee44b33"
           }
         },
         {
           "name": "TECHNOLOGY_CONSENSUS_REPORT.json",
           "digest": {
-            "sha256": "196d21cc59663267938d6e26e191928c4fb9d2df1f0088ba0c3cefbb980e642d"
+            "sha256": "fa96b619c078471d573f35209f7675071c57230533a6e25443bd288c77068ca0"
           }
         },
         {
           "name": "DURABLE_QUEUE_STATUS.json",
           "digest": {
-            "sha256": "4e5d7f4bd305ed7201dea5f3eae454599acac7364ac853b6338a478c97000857"
+            "sha256": "604e3902e7038b48119fa1ae31155ac6fd9a983d6fbfc6c2c382ce5fd653f8cd"
           }
         },
         {
           "name": "INTEGRATION_TELEMETRY_STATUS.json",
           "digest": {
-            "sha256": "dac2fea3e281ebc0ccdd09536c587d16ec7a6b33d8a567d8021b69a2c4d3268b"
+            "sha256": "c6be0bb9b8ffbdd0060494623921a8698313e4f5584e10e3689f5c6378f8c684"
           }
         }
       ]

@@ -3975,3 +3975,610 @@ C:\Users\user\Desktop\World_server\state\blocker-repair\unified-tick.ps1:5 §­ ª:
 [2026-08-28 09:07:37][UNIFIED] === UNIFIED TICK END ===
 [2026-08-28 09:07:37][UNIFIED] state nextRunAt=2026-08-28T06:17:06.129Z blockers pass= requires_ai= waiting= mergeSafe=False
 [2026-08-28 09:07:37][UNIFIED] LOCK released
+[2026-08-28 09:11:01][UNIFIED] LOCK acquired C:\Users\user\Desktop\World_server\state\blocker-repair\unified.lock
+[2026-08-28 09:11:01][UNIFIED] === UNIFIED TICK START quality_autoloop -> supervisor poll -> blocker-repair -> verification ===
+[2026-08-28 09:11:01][UNIFIED] Step 1: quality_autoloop
+[2026-08-28 09:11:01][UNIFIED]   autoloop: [2026-08-28 09:11:01] === AUTOLOOP TICK START ===
+[2026-08-28 09:11:01][UNIFIED]   autoloop: [2026-08-28 09:11:01]   guard: [MIGRATION_GUARD] PASS 110 migrations digest 36bdee3ba6de92a5b277da9c94cf03259534603b94db1b5890b0555a14204ede latest 20260826140000_ai_supervisor_control_plane.sql
+[2026-08-28 09:11:01][UNIFIED]   autoloop: [2026-08-28 09:11:01] LOCAL migrations match the committed guard (scripts/check-supabase-migrations.js) - OK
+[2026-08-28 09:11:01][UNIFIED]   autoloop: [2026-08-28 09:11:01] commits ahead of master: 8 (need PR if >0)
+[2026-08-28 09:11:01][UNIFIED]   autoloop: [2026-08-28 09:11:01] PLUGIN DISCOVER: [2026-08-28T06:11:01.851Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-28 09:11:01][UNIFIED]   autoloop: [2026-08-28T06:11:01.858Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-28 09:11:01][UNIFIED]   autoloop: [2026-08-28T06:11:01.859Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-28 09:11:01][UNIFIED]   autoloop: [2026-08-28T06:11:01.860Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-28 09:11:01][UNIFIED]   autoloop: [2026-08-28T06:11:01.861Z] OK msw already installed (MIT) impact 60%
+[2026-08-28 09:11:01][UNIFIED]   autoloop: [2026-08-28T06:11:01.862Z] OK zod already installed (MIT) impact 55%
+[2026-08-28 09:11:01][UNIFIED]   autoloop: [2026-08-28T06:11:01.863Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-28 09:11:01][UNIFIED]   autoloop: 
+[2026-08-28 09:11:02][UNIFIED]   autoloop: [2026-08-28 09:11:02] PLUGIN AUTO-WIRE tick done
+[2026-08-28 09:11:02][UNIFIED]   autoloop: [2026-08-28 09:11:02] === AUTOLOOP TICK END ===
+[2026-08-28 09:11:02][UNIFIED] Step 1b: supervisor advisory poll
+[2026-08-28 09:11:02][UNIFIED]   supervisor: ADVISORY READ: PASS (0 pending)
+[2026-08-28 09:11:02][UNIFIED]   supervisor: No pending advisories
+[2026-08-28 09:11:02][UNIFIED] Step 2: blocker-repair tick
+[2026-08-28 09:12:38][UNIFIED]   blocker: {
+[2026-08-28 09:12:38][UNIFIED]   blocker:   "pass": false,
+[2026-08-28 09:12:38][UNIFIED]   blocker:   "version": "1.0.0",
+[2026-08-28 09:12:38][UNIFIED]   blocker:   "cycle": 15,
+[2026-08-28 09:12:38][UNIFIED]   blocker:   "counts": {
+[2026-08-28 09:12:38][UNIFIED]   blocker:     "pass": 7,
+[2026-08-28 09:12:38][UNIFIED]   blocker:     "waiting": 4,
+[2026-08-28 09:12:38][UNIFIED]   blocker:     "requires_ai": 2
+[2026-08-28 09:12:38][UNIFIED]   blocker:   },
+[2026-08-28 09:12:38][UNIFIED]   blocker:   "gatesPass": false,
+[2026-08-28 09:12:38][UNIFIED]   blocker:   "mergeSafe": false,
+[2026-08-28 09:12:38][UNIFIED]   blocker:   "nextRunAt": "2026-08-28T06:26:09.234Z",
+[2026-08-28 09:12:38][UNIFIED]   blocker:   "aiAction": "state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md",
+[2026-08-28 09:12:38][UNIFIED]   blocker:   "blockers": {
+[2026-08-28 09:12:38][UNIFIED]   blocker:     "durable-scheduler": {
+[2026-08-28 09:12:38][UNIFIED]   blocker:       "id": "durable-scheduler",
+[2026-08-28 09:12:38][UNIFIED]   blocker:       "status": "pass",
+[2026-08-28 09:12:38][UNIFIED]   blocker:       "updatedAt": "2026-08-25T18:26:36.133Z",
+[2026-08-28 09:12:38][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:36.133Z",
+[2026-08-28 09:12:38][UNIFIED]   blocker:       "attempts": 0,
+[2026-08-28 09:12:38][UNIFIED]   blocker:       "reason": "Task Scheduler every 15 minutes"
+[2026-08-28 09:12:38][UNIFIED]   blocker:     },
+[2026-08-28 09:12:38][UNIFIED]   blocker:     "toolchain-bootstrap": {
+[2026-08-28 09:12:38][UNIFIED]   blocker:       "id": "toolchain-bootstrap",
+[2026-08-28 09:12:38][UNIFIED]   blocker:       "status": "pass",
+[2026-08-28 09:12:38][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:11:02.708Z",
+[2026-08-28 09:12:38][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:37.199Z",
+[2026-08-28 09:12:38][UNIFIED]   blocker:       "attempts": 3,
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "reason": "Existing bootstrap PASS",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "attempted": true,
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "outputTail": "[TOOLCHAIN_V6] FAIL TypeError: Cannot read properties of undefined (reading 'typescript')\n    at main (C:\\Users\\user\\Desktop\\World_server\\scripts\\toolchain-bootstrap.cjs:16:468)\n    at Object.<anonymous> (C:\\Users\\user\\Desktop\\World_server\\scripts\\toolchain-bootstrap.cjs:17:26)\n    at Module._compile (node:internal/modules/cjs/loader:1830:14)\n    at Object..js (node:internal/modules/cjs/loader:1961:10)\n    at Module.load (node:internal/modules/cjs/loader:1553:32)\n    at Module._load (node:internal/modules/cjs/loader:1355:12)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\n    at node:internal/main/run_main_module:33:47",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "nextRunAt": null
+[2026-08-28 09:12:39][UNIFIED]   blocker:     },
+[2026-08-28 09:12:39][UNIFIED]   blocker:     "wasmtime": {
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "id": "wasmtime",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "status": "pass",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:11:02.743Z",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:37.249Z",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "attempts": 0,
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "reason": "wasmtime 27.0.0 (8eefa236f 2024-11-20)"
+[2026-08-28 09:12:39][UNIFIED]   blocker:     },
+[2026-08-28 09:12:39][UNIFIED]   blocker:     "tlc": {
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "id": "tlc",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "status": "pass",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:11:03.131Z",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:37.249Z",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "attempts": 0,
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "reason": "TLC native Java invocation verified"
+[2026-08-28 09:12:39][UNIFIED]   blocker:     },
+[2026-08-28 09:12:39][UNIFIED]   blocker:     "native-cosign": {
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "id": "native-cosign",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "status": "pass",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:11:03.224Z",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:37.555Z",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "attempts": 0,
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "reason": "Compiler:      gc\nPlatform:      windows/amd64"
+[2026-08-28 09:12:39][UNIFIED]   blocker:     },
+[2026-08-28 09:12:39][UNIFIED]   blocker:     "etw-ebpf-perf": {
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "id": "etw-ebpf-perf",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "status": "pass",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:11:09.083Z",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:48.732Z",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "attempts": 0,
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "reason": "Real Windows ETW/WPR capability evidence collected; eBPF/perf not falsely required on Windows"
+[2026-08-28 09:12:39][UNIFIED]   blocker:     },
+[2026-08-28 09:12:39][UNIFIED]   blocker:     "fresh-android-device": {
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "id": "fresh-android-device",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "status": "waiting",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:11:09.234Z",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:48.908Z",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "attempts": 0,
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "reason": "adb is not available or no physical Android evidence can be collected",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "nextRunAt": "2026-08-28T06:26:09.234Z"
+[2026-08-28 09:12:39][UNIFIED]   blocker:     },
+[2026-08-28 09:12:39][UNIFIED]   blocker:     "fresh-ios-device": {
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "id": "fresh-ios-device",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "status": "waiting",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:11:09.382Z",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:49.092Z",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "attempts": 0,
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "reason": "No physical iOS probe available on win32; simulator/fake evidence is forbidden",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "nextRunAt": "2026-08-28T06:26:09.382Z"
+[2026-08-28 09:12:39][UNIFIED]   blocker:     },
+[2026-08-28 09:12:39][UNIFIED]   blocker:     "remote-cas-peer": {
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "id": "remote-cas-peer",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "status": "waiting",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:11:09.383Z",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:49.094Z",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "attempts": 0,
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "reason": "WORLD_SERVER_REMOTE_CAS_URL/REMOTE_CAS_URL not configured; localhost is not accepted as remote evidence",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "nextRunAt": "2026-08-28T06:26:09.383Z"
+[2026-08-28 09:12:39][UNIFIED]   blocker:     },
+[2026-08-28 09:12:39][UNIFIED]   blocker:     "fenced-migration": {
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "id": "fenced-migration",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "status": "pass",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:11:09.485Z",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:49.096Z",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "attempts": 2,
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "reason": "C:\\Program Files\\nodejs\\node.exe C:\\Users\\user\\Desktop\\World_server\\scripts\\migration-fencing-verifier.cjs PASS",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "attempted": true,
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "outputTail": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-08-26T00:52:32.557Z\",\n  \"pass\": false,\n  \"selftest\": {\n    \"pass\": false,\n    \"ok\": {\n      \"pass\": false,\n      \"errors\": [\n        \"wrong-migration-strategy\"\n      ],\n      \"currentFencingToken\": 8,\n      \"callerFencingToken\": 8\n    },\n    \"stale\": {\n      \"pass\": false,\n      \"errors\": [\n        \"wrong-migration-strategy\"\n      ],\n      \"currentFencingToken\": 8,\n      \"callerFencingToken\": 7\n    },\n    \"early\": {\n      \"pass\": false,\n      \"errors\": [\n        \"wrong-migration-strategy\"\n      ],\n      \"currentFencingToken\": 8,\n      \"callerFencingToken\": 8\n    }\n  },\n  \"liveConfigured\": false,\n  \"liveVerified\": false,\n  \"live\": {\n    \"pass\": false,\n    \"errors\": [\n      \"no-live-migration-plan\"\n    ]\n  }\n}"
+[2026-08-28 09:12:39][UNIFIED]   blocker:     },
+[2026-08-28 09:12:39][UNIFIED]   blocker:     "local-gates": {
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "id": "local-gates",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "status": "requires_ai",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:12:38.283Z",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:49.102Z",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "attempts": 0,
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "reason": "3/6 gates PASS"
+[2026-08-28 09:12:39][UNIFIED]   blocker:     },
+[2026-08-28 09:12:39][UNIFIED]   blocker:     "vercel-deployment": {
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "id": "vercel-deployment",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "status": "requires_ai",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:12:38.902Z",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:49.867Z",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "attempts": 3,
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "reason": "Vercel state=failure: Deployment has failed â€” run this Vercel CLI command: npx vercel inspect dpl_Aj3i3utqGYSh85RWWd7nTqUaUF5S --logs",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "targetUrl": "https://vercel.com/improve-world/improve-world-home/Aj3i3utqGYSh85RWWd7nTqUaUF5S",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "attempted": true,
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "deploymentId": "dpl_Aj3i3utqGYSh85RWWd7nTqUaUF5S",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "outputTail": "",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "nextRunAt": null
+[2026-08-28 09:12:39][UNIFIED]   blocker:     },
+[2026-08-28 09:12:39][UNIFIED]   blocker:     "8h-long-soak": {
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "id": "8h-long-soak",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "status": "waiting",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:12:38.913Z",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:49.872Z",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "attempts": 2,
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "reason": "Long-soak will start only after deterministic local prerequisites are green",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "nextRunAt": "2026-08-28T06:27:38.912Z",
+[2026-08-28 09:12:39][UNIFIED]   blocker:       "attempted": true
+[2026-08-28 09:12:39][UNIFIED]   blocker:     }
+[2026-08-28 09:12:39][UNIFIED]   blocker:   }
+[2026-08-28 09:12:39][UNIFIED]   blocker: }
+[2026-08-28 09:12:39][UNIFIED] Step 3: verification
+[2026-08-28 09:12:39][UNIFIED]   verify: [CONTROL_PLANE] PASS toolchain-security
+[2026-08-28 09:12:39][UNIFIED]   verify: [CONTROL_PLANE] PASS toolchain-health
+[2026-08-28 09:12:39][UNIFIED]   verify: [CONTROL_PLANE] PASS telemetry
+[2026-08-28 09:12:40][UNIFIED]   verify: [CONTROL_PLANE] FAIL snapshot:     at Module._load (node:internal/modules/cjs/loader:1355:12)
+[2026-08-28 09:12:40][UNIFIED]   verify: [CONTROL_PLANE] PASS native-ast-dataflow
+[2026-08-28 09:12:41][UNIFIED]   verify: [CONTROL_PLANE] PASS semantic-graph
+[2026-08-28 09:12:41][UNIFIED]   verify: [CONTROL_PLANE] PASS change-impact
+[2026-08-28 09:12:42][UNIFIED]   verify: [CONTROL_PLANE] PASS assets
+[2026-08-28 09:12:42][UNIFIED]   verify: [CONTROL_PLANE] PASS project-directives
+[2026-08-28 09:12:42][UNIFIED]   verify: [CONTROL_PLANE] PASS asset-ingestion-plan
+[2026-08-28 09:12:42][UNIFIED]   verify: [CONTROL_PLANE] PASS technology-lock
+[2026-08-28 09:12:43][UNIFIED]   verify: [CONTROL_PLANE] PASS graphics-ratchet
+[2026-08-28 09:12:43][UNIFIED]   verify: [CONTROL_PLANE] PASS audio-variation
+[2026-08-28 09:12:43][UNIFIED]   verify: [CONTROL_PLANE] PASS gameplay-spatial-contract
+[2026-08-28 09:12:43][UNIFIED]   verify: [CONTROL_PLANE] PASS desktop-ai-report-contract
+[2026-08-28 09:12:43][UNIFIED]   verify: [CONTROL_PLANE] PASS queue
+[2026-08-28 09:12:44][UNIFIED]   verify: [CONTROL_PLANE] PASS config-contract
+[2026-08-28 09:12:44][UNIFIED]   verify: [CONTROL_PLANE] PASS feature-flags
+[2026-08-28 09:12:44][UNIFIED]   verify: [CONTROL_PLANE] PASS wit-component-contract
+[2026-08-28 09:12:44][UNIFIED]   verify: [CONTROL_PLANE] PASS adapter-sandbox
+[2026-08-28 09:12:44][UNIFIED]   verify: [CONTROL_PLANE] PASS secure-update
+[2026-08-28 09:12:45][UNIFIED]   verify: [CONTROL_PLANE] FAIL reproducible-build: Node.js v24.15.0
+[2026-08-28 09:12:45][UNIFIED]   verify: [CONTROL_PLANE] PASS model-check
+[2026-08-28 09:12:46][UNIFIED]   verify: [CONTROL_PLANE] PASS cas-peer-discovery
+[2026-08-28 09:12:46][UNIFIED]   verify: [CONTROL_PLANE] PASS distributed-cas
+[2026-08-28 09:12:47][UNIFIED]   verify: [CONTROL_PLANE] PASS device-lab
+[2026-08-28 09:12:47][UNIFIED]   verify: [CONTROL_PLANE] PASS device-executor
+[2026-08-28 09:12:47][UNIFIED]   verify: [CONTROL_PLANE] PASS wit-bindings
+[2026-08-28 09:12:47][UNIFIED]   verify: [CONTROL_PLANE] PASS rekor-monitor
+[2026-08-28 09:12:48][UNIFIED]   verify: [CONTROL_PLANE] PASS technology-consensus
+[2026-08-28 09:12:48][UNIFIED]   verify: [CONTROL_PLANE] PASS sbom
+[2026-08-28 09:12:52][UNIFIED]   verify: [CONTROL_PLANE] PASS legacy-evidence-factory
+[2026-08-28 09:12:52][UNIFIED]   verify: [CONTROL_PLANE] PASS slo-error-budget
+[2026-08-28 09:12:53][UNIFIED]   verify: [CONTROL_PLANE] PASS db-migration-coordinator
+[2026-08-28 09:12:53][UNIFIED]   verify: [CONTROL_PLANE] PASS asset-delta
+[2026-08-28 09:12:53][UNIFIED]   verify: [CONTROL_PLANE] PASS integration-gate
+[2026-08-28 09:12:55][UNIFIED]   verify: [CONTROL_PLANE] PASS disaster-recovery-verify
+[2026-08-28 09:12:55][UNIFIED]   verify: [CONTROL_PLANE] PASS provenance
+[2026-08-28 09:12:56][UNIFIED]   verify: [CONTROL_PLANE] PASS supply-chain-signing
+[2026-08-28 09:12:56][UNIFIED]   verify: [CONTROL_PLANE] PASS policy
+[2026-08-28 09:12:57][UNIFIED]   verify: [CONTROL_PLANE] PASS chaos-safety
+[2026-08-28 09:12:57][UNIFIED]   verify: [CONTROL_PLANE] PASS orchestrator-monitor-lifecycle
+[2026-08-28 09:12:57][UNIFIED]   verify: [CONTROL_PLANE] PASS orchestrator-patch-safety
+[2026-08-28 09:12:57][UNIFIED]   verify: [CONTROL_PLANE] PASS orchestrator-minimal-repro
+[2026-08-28 09:12:57][UNIFIED]   verify: [CONTROL_PLANE] PASS orchestrator-invariant-model
+[2026-08-28 09:12:57][UNIFIED]   verify: [CONTROL_PLANE] PASS orchestrator-supervisor-negative
+[2026-08-28 09:12:57][UNIFIED]   verify: [CONTROL_PLANE] PASS orchestrator-supervisor
+[2026-08-28 09:12:58][UNIFIED]   verify: [CONTROL_PLANE] PASS capability-scheduler
+[2026-08-28 09:12:58][UNIFIED]   verify: [CONTROL_PLANE] PASS cas-redundancy
+[2026-08-28 09:12:58][UNIFIED]   verify: [CONTROL_PLANE] PASS device-worker
+[2026-08-28 09:12:58][UNIFIED]   verify: [CONTROL_PLANE] PASS record-replay
+[2026-08-28 09:12:58][UNIFIED]   verify: [CONTROL_PLANE] PASS dependency-security
+[2026-08-28 09:12:58][UNIFIED]   verify: [CONTROL_PLANE] PASS transactional-deploy
+[2026-08-28 09:12:58][UNIFIED]   verify: [CONTROL_PLANE] PASS enhancement-orchestrator
+[2026-08-28 09:12:58][UNIFIED]   verify: [CONTROL_PLANE] PASS leader-lease-health
+[2026-08-28 09:12:59][UNIFIED]   verify: [CONTROL_PLANE] PASS leader-lease-selftest
+[2026-08-28 09:12:59][UNIFIED]   verify: [CONTROL_PLANE] PASS production-safety-health
+[2026-08-28 09:12:59][UNIFIED]   verify: [CONTROL_PLANE] PASS production-safety-selftest
+[2026-08-28 09:12:59][UNIFIED]   verify: [CONTROL_PLANE] PASS soak-chaos
+[2026-08-28 09:12:59][UNIFIED]   verify: [CONTROL_PLANE] PASS crash-diagnostics
+[2026-08-28 09:12:59][UNIFIED]   verify: [CONTROL_PLANE] PASS crash-diagnostics-selftest
+[2026-08-28 09:12:59][UNIFIED]   verify: [CONTROL_PLANE] PASS causal-debugger
+[2026-08-28 09:12:59][UNIFIED]   verify: [CONTROL_PLANE] PASS cas-replication-controller
+[2026-08-28 09:13:00][UNIFIED]   verify: [CONTROL_PLANE] PASS physical-device-fleet
+[2026-08-28 09:13:00][UNIFIED]   verify: [CONTROL_PLANE] PASS production-slo-autopilot
+[2026-08-28 09:13:00][UNIFIED]   verify: [CONTROL_PLANE] PASS migration-fencing-runtime
+[2026-08-28 09:13:00][UNIFIED]   verify: [CONTROL_PLANE] PASS long-soak-smoke
+[2026-08-28 09:13:01][UNIFIED]   verify: [CONTROL_PLANE] PASS native-causal-collector
+[2026-08-28 09:13:04][UNIFIED]   verify: [CONTROL_PLANE] PASS selftest
+[2026-08-28 09:13:05][UNIFIED]   verify: [CONTROL_PLANE] PASS honest-100-functions
+[2026-08-28 09:13:05][UNIFIED]   verify: [CONTROL_PLANE] PASS function-contract-coverage
+[2026-08-28 09:13:06][UNIFIED]   verify: [CONTROL_PLANE] PASS monotonic-100-guard
+[2026-08-28 09:13:06][UNIFIED]   verify: [CONTROL_PLANE] PASS orchestrator-continuity
+[2026-08-28 09:13:06][UNIFIED]   verify: [CONTROL_PLANE] PASS release-promotion
+[2026-08-28 09:13:07][UNIFIED]   verify: [CONTROL_PLANE] PASS readiness
+[2026-08-28 09:13:07][UNIFIED]   verify: [CONTROL_PLANE] FAIL 73/75 trace=380361ef9da238f9540f71a072936ca5
+[2026-08-28 09:13:07][UNIFIED] === UNIFIED TICK END ===
+[2026-08-28 09:13:07][UNIFIED] state nextRunAt=2026-08-28T06:26:09.234Z blockers pass= requires_ai= waiting= mergeSafe=False
+[2026-08-28 09:13:07][UNIFIED] LOCK released
+[2026-08-28 09:21:17][UNIFIED] LOCK acquired C:\Users\user\Desktop\World_server\state\blocker-repair\unified.lock
+[2026-08-28 09:21:17][UNIFIED] === UNIFIED TICK START quality_autoloop -> supervisor poll -> blocker-repair -> verification ===
+[2026-08-28 09:21:17][UNIFIED] Step 1: quality_autoloop
+[2026-08-28 09:21:17][UNIFIED]   autoloop: [2026-08-28 09:21:17] === AUTOLOOP TICK START ===
+[2026-08-28 09:21:17][UNIFIED]   autoloop: [2026-08-28 09:21:17]   guard: [MIGRATION_GUARD] PASS 110 migrations digest 36bdee3ba6de92a5b277da9c94cf03259534603b94db1b5890b0555a14204ede latest 20260826140000_ai_supervisor_control_plane.sql
+[2026-08-28 09:21:17][UNIFIED]   autoloop: [2026-08-28 09:21:17] LOCAL migrations match the committed guard (scripts/check-supabase-migrations.js) - OK
+[2026-08-28 09:21:17][UNIFIED]   autoloop: [2026-08-28 09:21:17] commits ahead of master: 10 (need PR if >0)
+[2026-08-28 09:21:17][UNIFIED]   autoloop: [2026-08-28 09:21:17] PLUGIN DISCOVER: [2026-08-28T06:21:17.671Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-28 09:21:17][UNIFIED]   autoloop: [2026-08-28T06:21:17.676Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-28 09:21:17][UNIFIED]   autoloop: [2026-08-28T06:21:17.677Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-28 09:21:17][UNIFIED]   autoloop: [2026-08-28T06:21:17.677Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-28 09:21:17][UNIFIED]   autoloop: [2026-08-28T06:21:17.678Z] OK msw already installed (MIT) impact 60%
+[2026-08-28 09:21:17][UNIFIED]   autoloop: [2026-08-28T06:21:17.678Z] OK zod already installed (MIT) impact 55%
+[2026-08-28 09:21:17][UNIFIED]   autoloop: [2026-08-28T06:21:17.679Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-28 09:21:17][UNIFIED]   autoloop: 
+[2026-08-28 09:21:17][UNIFIED]   autoloop: [2026-08-28 09:21:17] PLUGIN AUTO-WIRE tick done
+[2026-08-28 09:21:17][UNIFIED]   autoloop: [2026-08-28 09:21:17] === AUTOLOOP TICK END ===
+[2026-08-28 09:23:44][UNIFIED]   autoloop: {
+[2026-08-28 09:23:44][UNIFIED]   autoloop:   "pass": false,
+[2026-08-28 09:23:44][UNIFIED]   autoloop:   "version": "1.0.0",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:   "cycle": 16,
+[2026-08-28 09:23:44][UNIFIED]   autoloop:   "counts": {
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     "pass": 7,
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     "waiting": 4,
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     "requires_ai": 2
+[2026-08-28 09:23:44][UNIFIED]   autoloop:   },
+[2026-08-28 09:23:44][UNIFIED]   autoloop:   "gatesPass": false,
+[2026-08-28 09:23:44][UNIFIED]   autoloop:   "mergeSafe": false,
+[2026-08-28 09:23:44][UNIFIED]   autoloop:   "nextRunAt": "2026-08-28T06:36:24.814Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:   "aiAction": "state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:   "blockers": {
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     "durable-scheduler": {
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "id": "durable-scheduler",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "status": "pass",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "updatedAt": "2026-08-28T06:19:04.187Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "firstSeenAt": "2026-08-25T18:26:36.133Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "attempts": 0,
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "reason": "Reused existing autoloop scripts\\quality-autoloop-tick.ps1"
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     },
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     "toolchain-bootstrap": {
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "id": "toolchain-bootstrap",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "status": "pass",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "updatedAt": "2026-08-28T06:21:18.331Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "firstSeenAt": "2026-08-25T18:26:37.199Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "attempts": 3,
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "reason": "Existing bootstrap PASS",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "attempted": true,
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "outputTail": "[TOOLCHAIN_V6] FAIL TypeError: Cannot read properties of undefined (reading 'typescript')\n    at main (C:\\Users\\user\\Desktop\\World_server\\scripts\\toolchain-bootstrap.cjs:16:468)\n    at Object.<anonymous> (C:\\Users\\user\\Desktop\\World_server\\scripts\\toolchain-bootstrap.cjs:17:26)\n    at Module._compile (node:internal/modules/cjs/loader:1830:14)\n    at Object..js (node:internal/modules/cjs/loader:1961:10)\n    at Module.load (node:internal/modules/cjs/loader:1553:32)\n    at Module._load (node:internal/modules/cjs/loader:1355:12)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\n    at node:internal/main/run_main_module:33:47",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "nextRunAt": null
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     },
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     "wasmtime": {
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "id": "wasmtime",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "status": "pass",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "updatedAt": "2026-08-28T06:21:18.363Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "firstSeenAt": "2026-08-25T18:26:37.249Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "attempts": 0,
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "reason": "wasmtime 27.0.0 (8eefa236f 2024-11-20)"
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     },
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     "tlc": {
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "id": "tlc",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "status": "pass",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "updatedAt": "2026-08-28T06:21:18.751Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "firstSeenAt": "2026-08-25T18:26:37.249Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "attempts": 0,
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "reason": "TLC native Java invocation verified"
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     },
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     "native-cosign": {
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "id": "native-cosign",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "status": "pass",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "updatedAt": "2026-08-28T06:21:18.846Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "firstSeenAt": "2026-08-25T18:26:37.555Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "attempts": 0,
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "reason": "Compiler:      gc\nPlatform:      windows/amd64"
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     },
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     "etw-ebpf-perf": {
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "id": "etw-ebpf-perf",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "status": "pass",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "updatedAt": "2026-08-28T06:21:24.536Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "firstSeenAt": "2026-08-25T18:26:48.732Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "attempts": 0,
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "reason": "Real Windows ETW/WPR capability evidence collected; eBPF/perf not falsely required on Windows"
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     },
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     "fresh-android-device": {
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "id": "fresh-android-device",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "status": "waiting",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "updatedAt": "2026-08-28T06:21:24.814Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "firstSeenAt": "2026-08-25T18:26:48.908Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "attempts": 0,
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "reason": "adb is not available or no physical Android evidence can be collected",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "nextRunAt": "2026-08-28T06:36:24.814Z"
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     },
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     "fresh-ios-device": {
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "id": "fresh-ios-device",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "status": "waiting",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "updatedAt": "2026-08-28T06:21:25.017Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "firstSeenAt": "2026-08-25T18:26:49.092Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "attempts": 0,
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "reason": "No physical iOS probe available on win32; simulator/fake evidence is forbidden",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "nextRunAt": "2026-08-28T06:36:25.017Z"
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     },
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     "remote-cas-peer": {
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "id": "remote-cas-peer",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "status": "waiting",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "updatedAt": "2026-08-28T06:21:25.019Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "firstSeenAt": "2026-08-25T18:26:49.094Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "attempts": 0,
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "reason": "WORLD_SERVER_REMOTE_CAS_URL/REMOTE_CAS_URL not configured; localhost is not accepted as remote evidence",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "nextRunAt": "2026-08-28T06:36:25.019Z"
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     },
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     "fenced-migration": {
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "id": "fenced-migration",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "status": "pass",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "updatedAt": "2026-08-28T06:21:25.156Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "firstSeenAt": "2026-08-25T18:26:49.096Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "attempts": 2,
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "reason": "C:\\Program Files\\nodejs\\node.exe C:\\Users\\user\\Desktop\\World_server\\scripts\\migration-fencing-verifier.cjs PASS",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "attempted": true,
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "outputTail": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-08-26T00:52:32.557Z\",\n  \"pass\": false,\n  \"selftest\": {\n    \"pass\": false,\n    \"ok\": {\n      \"pass\": false,\n      \"errors\": [\n        \"wrong-migration-strategy\"\n      ],\n      \"currentFencingToken\": 8,\n      \"callerFencingToken\": 8\n    },\n    \"stale\": {\n      \"pass\": false,\n      \"errors\": [\n        \"wrong-migration-strategy\"\n      ],\n      \"currentFencingToken\": 8,\n      \"callerFencingToken\": 7\n    },\n    \"early\": {\n      \"pass\": false,\n      \"errors\": [\n        \"wrong-migration-strategy\"\n      ],\n      \"currentFencingToken\": 8,\n      \"callerFencingToken\": 8\n    }\n  },\n  \"liveConfigured\": false,\n  \"liveVerified\": false,\n  \"live\": {\n    \"pass\": false,\n    \"errors\": [\n      \"no-live-migration-plan\"\n    ]\n  }\n}"
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     },
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     "local-gates": {
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "id": "local-gates",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "status": "requires_ai",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "updatedAt": "2026-08-28T06:23:43.771Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "firstSeenAt": "2026-08-25T18:26:49.102Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "attempts": 0,
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "reason": "2/6 gates PASS"
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     },
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     "vercel-deployment": {
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "id": "vercel-deployment",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "status": "requires_ai",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "updatedAt": "2026-08-28T06:23:44.368Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "firstSeenAt": "2026-08-25T18:26:49.867Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "attempts": 4,
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "reason": "Vercel state=failure: Deployment has failed â€” run this Vercel CLI command: npx vercel inspect dpl_9NR4ew4CkcmFxdhgMMmG4hYvxD3D --logs",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "targetUrl": "https://vercel.com/improve-world/improve-world-home-git/9NR4ew4CkcmFxdhgMMmG4hYvxD3D",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "attempted": true,
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "deploymentId": "dpl_9NR4ew4CkcmFxdhgMMmG4hYvxD3D",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "outputTail": "",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "nextRunAt": null
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     },
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     "8h-long-soak": {
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "id": "8h-long-soak",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "status": "waiting",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "updatedAt": "2026-08-28T06:23:44.377Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "firstSeenAt": "2026-08-25T18:26:49.872Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "attempts": 2,
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "reason": "Long-soak will start only after deterministic local prerequisites are green",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "nextRunAt": "2026-08-28T06:38:44.377Z",
+[2026-08-28 09:23:44][UNIFIED]   autoloop:       "attempted": true
+[2026-08-28 09:23:44][UNIFIED]   autoloop:     }
+[2026-08-28 09:23:44][UNIFIED]   autoloop:   }
+[2026-08-28 09:23:44][UNIFIED]   autoloop: }
+[2026-08-28 09:23:44][UNIFIED] Step 1b: supervisor advisory poll
+[2026-08-28 09:23:44][UNIFIED]   supervisor: ADVISORY READ: PASS (0 pending)
+[2026-08-28 09:23:44][UNIFIED]   supervisor: No pending advisories
+[2026-08-28 09:23:44][UNIFIED] Step 2: blocker-repair tick
+[2026-08-28 09:26:10][UNIFIED]   blocker: {
+[2026-08-28 09:26:10][UNIFIED]   blocker:   "pass": false,
+[2026-08-28 09:26:10][UNIFIED]   blocker:   "version": "1.0.0",
+[2026-08-28 09:26:10][UNIFIED]   blocker:   "cycle": 17,
+[2026-08-28 09:26:10][UNIFIED]   blocker:   "counts": {
+[2026-08-28 09:26:10][UNIFIED]   blocker:     "pass": 7,
+[2026-08-28 09:26:10][UNIFIED]   blocker:     "waiting": 4,
+[2026-08-28 09:26:10][UNIFIED]   blocker:     "requires_ai": 2
+[2026-08-28 09:26:10][UNIFIED]   blocker:   },
+[2026-08-28 09:26:10][UNIFIED]   blocker:   "gatesPass": false,
+[2026-08-28 09:26:10][UNIFIED]   blocker:   "mergeSafe": false,
+[2026-08-28 09:26:10][UNIFIED]   blocker:   "nextRunAt": "2026-08-28T06:38:51.501Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:   "aiAction": "state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md",
+[2026-08-28 09:26:10][UNIFIED]   blocker:   "blockers": {
+[2026-08-28 09:26:10][UNIFIED]   blocker:     "durable-scheduler": {
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "id": "durable-scheduler",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "status": "pass",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:19:04.187Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:36.133Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "attempts": 0,
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "reason": "Reused existing autoloop scripts\\quality-autoloop-tick.ps1"
+[2026-08-28 09:26:10][UNIFIED]   blocker:     },
+[2026-08-28 09:26:10][UNIFIED]   blocker:     "toolchain-bootstrap": {
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "id": "toolchain-bootstrap",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "status": "pass",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:23:45.253Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:37.199Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "attempts": 3,
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "reason": "Existing bootstrap PASS",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "attempted": true,
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "outputTail": "[TOOLCHAIN_V6] FAIL TypeError: Cannot read properties of undefined (reading 'typescript')\n    at main (C:\\Users\\user\\Desktop\\World_server\\scripts\\toolchain-bootstrap.cjs:16:468)\n    at Object.<anonymous> (C:\\Users\\user\\Desktop\\World_server\\scripts\\toolchain-bootstrap.cjs:17:26)\n    at Module._compile (node:internal/modules/cjs/loader:1830:14)\n    at Object..js (node:internal/modules/cjs/loader:1961:10)\n    at Module.load (node:internal/modules/cjs/loader:1553:32)\n    at Module._load (node:internal/modules/cjs/loader:1355:12)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\n    at node:internal/main/run_main_module:33:47",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "nextRunAt": null
+[2026-08-28 09:26:10][UNIFIED]   blocker:     },
+[2026-08-28 09:26:10][UNIFIED]   blocker:     "wasmtime": {
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "id": "wasmtime",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "status": "pass",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:23:45.286Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:37.249Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "attempts": 0,
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "reason": "wasmtime 27.0.0 (8eefa236f 2024-11-20)"
+[2026-08-28 09:26:10][UNIFIED]   blocker:     },
+[2026-08-28 09:26:10][UNIFIED]   blocker:     "tlc": {
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "id": "tlc",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "status": "pass",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:23:45.671Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:37.249Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "attempts": 0,
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "reason": "TLC native Java invocation verified"
+[2026-08-28 09:26:10][UNIFIED]   blocker:     },
+[2026-08-28 09:26:10][UNIFIED]   blocker:     "native-cosign": {
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "id": "native-cosign",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "status": "pass",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:23:45.760Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:37.555Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "attempts": 0,
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "reason": "Compiler:      gc\nPlatform:      windows/amd64"
+[2026-08-28 09:26:10][UNIFIED]   blocker:     },
+[2026-08-28 09:26:10][UNIFIED]   blocker:     "etw-ebpf-perf": {
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "id": "etw-ebpf-perf",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "status": "pass",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:23:51.342Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:48.732Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "attempts": 0,
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "reason": "Real Windows ETW/WPR capability evidence collected; eBPF/perf not falsely required on Windows"
+[2026-08-28 09:26:10][UNIFIED]   blocker:     },
+[2026-08-28 09:26:10][UNIFIED]   blocker:     "fresh-android-device": {
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "id": "fresh-android-device",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "status": "waiting",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:23:51.501Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:48.908Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "attempts": 0,
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "reason": "adb is not available or no physical Android evidence can be collected",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "nextRunAt": "2026-08-28T06:38:51.501Z"
+[2026-08-28 09:26:10][UNIFIED]   blocker:     },
+[2026-08-28 09:26:10][UNIFIED]   blocker:     "fresh-ios-device": {
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "id": "fresh-ios-device",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "status": "waiting",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:23:51.662Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:49.092Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "attempts": 0,
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "reason": "No physical iOS probe available on win32; simulator/fake evidence is forbidden",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "nextRunAt": "2026-08-28T06:38:51.662Z"
+[2026-08-28 09:26:10][UNIFIED]   blocker:     },
+[2026-08-28 09:26:10][UNIFIED]   blocker:     "remote-cas-peer": {
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "id": "remote-cas-peer",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "status": "waiting",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:23:51.663Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:49.094Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "attempts": 0,
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "reason": "WORLD_SERVER_REMOTE_CAS_URL/REMOTE_CAS_URL not configured; localhost is not accepted as remote evidence",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "nextRunAt": "2026-08-28T06:38:51.663Z"
+[2026-08-28 09:26:10][UNIFIED]   blocker:     },
+[2026-08-28 09:26:10][UNIFIED]   blocker:     "fenced-migration": {
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "id": "fenced-migration",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "status": "pass",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:23:51.767Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:49.096Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "attempts": 2,
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "reason": "C:\\Program Files\\nodejs\\node.exe C:\\Users\\user\\Desktop\\World_server\\scripts\\migration-fencing-verifier.cjs PASS",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "attempted": true,
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "outputTail": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-08-26T00:52:32.557Z\",\n  \"pass\": false,\n  \"selftest\": {\n    \"pass\": false,\n    \"ok\": {\n      \"pass\": false,\n      \"errors\": [\n        \"wrong-migration-strategy\"\n      ],\n      \"currentFencingToken\": 8,\n      \"callerFencingToken\": 8\n    },\n    \"stale\": {\n      \"pass\": false,\n      \"errors\": [\n        \"wrong-migration-strategy\"\n      ],\n      \"currentFencingToken\": 8,\n      \"callerFencingToken\": 7\n    },\n    \"early\": {\n      \"pass\": false,\n      \"errors\": [\n        \"wrong-migration-strategy\"\n      ],\n      \"currentFencingToken\": 8,\n      \"callerFencingToken\": 8\n    }\n  },\n  \"liveConfigured\": false,\n  \"liveVerified\": false,\n  \"live\": {\n    \"pass\": false,\n    \"errors\": [\n      \"no-live-migration-plan\"\n    ]\n  }\n}"
+[2026-08-28 09:26:10][UNIFIED]   blocker:     },
+[2026-08-28 09:26:10][UNIFIED]   blocker:     "local-gates": {
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "id": "local-gates",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "status": "requires_ai",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:26:09.529Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:49.102Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "attempts": 0,
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "reason": "2/6 gates PASS"
+[2026-08-28 09:26:10][UNIFIED]   blocker:     },
+[2026-08-28 09:26:10][UNIFIED]   blocker:     "vercel-deployment": {
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "id": "vercel-deployment",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "status": "requires_ai",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:26:10.107Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:49.867Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "attempts": 5,
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "reason": "Vercel state=failure: Deployment has failed â€” run this Vercel CLI command: npx vercel inspect dpl_J8MDqH4XgDFasbP9MzdVmpqjDN5n --logs",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "targetUrl": "https://vercel.com/improve-world/improve-world-home/J8MDqH4XgDFasbP9MzdVmpqjDN5n",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "attempted": true,
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "deploymentId": "dpl_J8MDqH4XgDFasbP9MzdVmpqjDN5n",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "outputTail": "",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "nextRunAt": null
+[2026-08-28 09:26:10][UNIFIED]   blocker:     },
+[2026-08-28 09:26:10][UNIFIED]   blocker:     "8h-long-soak": {
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "id": "8h-long-soak",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "status": "waiting",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "updatedAt": "2026-08-28T06:26:10.113Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "firstSeenAt": "2026-08-25T18:26:49.872Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "attempts": 2,
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "reason": "Long-soak will start only after deterministic local prerequisites are green",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "nextRunAt": "2026-08-28T06:41:10.113Z",
+[2026-08-28 09:26:10][UNIFIED]   blocker:       "attempted": true
+[2026-08-28 09:26:10][UNIFIED]   blocker:     }
+[2026-08-28 09:26:10][UNIFIED]   blocker:   }
+[2026-08-28 09:26:10][UNIFIED]   blocker: }
+[2026-08-28 09:26:10][UNIFIED] Step 3: verification
+[2026-08-28 09:26:10][UNIFIED]   verify: [CONTROL_PLANE] PASS toolchain-security
+[2026-08-28 09:26:10][UNIFIED]   verify: [CONTROL_PLANE] PASS toolchain-health
+[2026-08-28 09:26:10][UNIFIED]   verify: [CONTROL_PLANE] PASS telemetry
+[2026-08-28 09:26:12][UNIFIED]   verify: [CONTROL_PLANE] FAIL snapshot:     at Module._load (node:internal/modules/cjs/loader:1355:12)
+[2026-08-28 09:26:12][UNIFIED]   verify: [CONTROL_PLANE] PASS native-ast-dataflow
+[2026-08-28 09:26:12][UNIFIED]   verify: [CONTROL_PLANE] PASS semantic-graph
+[2026-08-28 09:26:13][UNIFIED]   verify: [CONTROL_PLANE] PASS change-impact
+[2026-08-28 09:26:13][UNIFIED]   verify: [CONTROL_PLANE] PASS assets
+[2026-08-28 09:26:13][UNIFIED]   verify: [CONTROL_PLANE] PASS project-directives
+[2026-08-28 09:26:13][UNIFIED]   verify: [CONTROL_PLANE] PASS asset-ingestion-plan
+[2026-08-28 09:26:13][UNIFIED]   verify: [CONTROL_PLANE] PASS technology-lock
+[2026-08-28 09:26:14][UNIFIED]   verify: [CONTROL_PLANE] PASS graphics-ratchet
+[2026-08-28 09:26:14][UNIFIED]   verify: [CONTROL_PLANE] PASS audio-variation
+[2026-08-28 09:26:14][UNIFIED]   verify: [CONTROL_PLANE] PASS gameplay-spatial-contract
+[2026-08-28 09:26:14][UNIFIED]   verify: [CONTROL_PLANE] PASS desktop-ai-report-contract
+[2026-08-28 09:26:14][UNIFIED]   verify: [CONTROL_PLANE] PASS queue
+[2026-08-28 09:26:15][UNIFIED]   verify: [CONTROL_PLANE] PASS config-contract
+[2026-08-28 09:26:15][UNIFIED]   verify: [CONTROL_PLANE] PASS feature-flags
+[2026-08-28 09:26:15][UNIFIED]   verify: [CONTROL_PLANE] PASS wit-component-contract
+[2026-08-28 09:26:15][UNIFIED]   verify: [CONTROL_PLANE] PASS adapter-sandbox
+[2026-08-28 09:26:15][UNIFIED]   verify: [CONTROL_PLANE] PASS secure-update
+[2026-08-28 09:26:16][UNIFIED]   verify: [CONTROL_PLANE] FAIL reproducible-build: Node.js v24.15.0
+[2026-08-28 09:26:16][UNIFIED]   verify: [CONTROL_PLANE] PASS model-check
+[2026-08-28 09:26:17][UNIFIED]   verify: [CONTROL_PLANE] PASS cas-peer-discovery
+[2026-08-28 09:26:17][UNIFIED]   verify: [CONTROL_PLANE] PASS distributed-cas
+[2026-08-28 09:26:18][UNIFIED]   verify: [CONTROL_PLANE] PASS device-lab
+[2026-08-28 09:26:18][UNIFIED]   verify: [CONTROL_PLANE] PASS device-executor
+[2026-08-28 09:26:18][UNIFIED]   verify: [CONTROL_PLANE] PASS wit-bindings
+[2026-08-28 09:26:18][UNIFIED]   verify: [CONTROL_PLANE] PASS rekor-monitor
+[2026-08-28 09:26:19][UNIFIED]   verify: [CONTROL_PLANE] PASS technology-consensus
+[2026-08-28 09:26:19][UNIFIED]   verify: [CONTROL_PLANE] PASS sbom
+[2026-08-28 09:26:24][UNIFIED]   verify: [CONTROL_PLANE] PASS legacy-evidence-factory
+[2026-08-28 09:26:24][UNIFIED]   verify: [CONTROL_PLANE] PASS slo-error-budget
+[2026-08-28 09:26:24][UNIFIED]   verify: [CONTROL_PLANE] PASS db-migration-coordinator
+[2026-08-28 09:26:24][UNIFIED]   verify: [CONTROL_PLANE] PASS asset-delta
+[2026-08-28 09:26:24][UNIFIED]   verify: [CONTROL_PLANE] FAIL integration-gate: [SYSTEM_INTEGRATION_V7] 99% FAIL 126/127 canonical-mesh
+[2026-08-28 09:26:27][UNIFIED]   verify: [CONTROL_PLANE] PASS disaster-recovery-verify
+[2026-08-28 09:26:27][UNIFIED]   verify: [CONTROL_PLANE] PASS provenance
+[2026-08-28 09:26:27][UNIFIED]   verify: [CONTROL_PLANE] PASS supply-chain-signing
+[2026-08-28 09:26:28][UNIFIED]   verify: [CONTROL_PLANE] FAIL policy: warning: in the working copy of 'state/multi-ai-peer-review.json', LF will be replaced by CRLF the next time Git touches it
+[2026-08-28 09:26:28][UNIFIED]   verify: [CONTROL_PLANE] PASS chaos-safety
+[2026-08-28 09:26:28][UNIFIED]   verify: [CONTROL_PLANE] PASS orchestrator-monitor-lifecycle
+[2026-08-28 09:26:28][UNIFIED]   verify: [CONTROL_PLANE] PASS orchestrator-patch-safety
+[2026-08-28 09:26:29][UNIFIED]   verify: [CONTROL_PLANE] PASS orchestrator-minimal-repro
+[2026-08-28 09:26:29][UNIFIED]   verify: [CONTROL_PLANE] PASS orchestrator-invariant-model
+[2026-08-28 09:26:29][UNIFIED]   verify: [CONTROL_PLANE] PASS orchestrator-supervisor-negative
+[2026-08-28 09:26:29][UNIFIED]   verify: [CONTROL_PLANE] PASS orchestrator-supervisor
+[2026-08-28 09:26:29][UNIFIED]   verify: [CONTROL_PLANE] PASS capability-scheduler
+[2026-08-28 09:26:29][UNIFIED]   verify: [CONTROL_PLANE] PASS cas-redundancy
+[2026-08-28 09:26:29][UNIFIED]   verify: [CONTROL_PLANE] PASS device-worker
+[2026-08-28 09:26:30][UNIFIED]   verify: [CONTROL_PLANE] PASS record-replay
+[2026-08-28 09:26:30][UNIFIED]   verify: [CONTROL_PLANE] PASS dependency-security
+[2026-08-28 09:26:30][UNIFIED]   verify: [CONTROL_PLANE] PASS transactional-deploy
+[2026-08-28 09:26:30][UNIFIED]   verify: [CONTROL_PLANE] PASS enhancement-orchestrator
+[2026-08-28 09:26:30][UNIFIED]   verify: [CONTROL_PLANE] PASS leader-lease-health
+[2026-08-28 09:26:30][UNIFIED]   verify: [CONTROL_PLANE] PASS leader-lease-selftest
+[2026-08-28 09:26:30][UNIFIED]   verify: [CONTROL_PLANE] PASS production-safety-health
+[2026-08-28 09:26:30][UNIFIED]   verify: [CONTROL_PLANE] PASS production-safety-selftest
+[2026-08-28 09:26:30][UNIFIED]   verify: [CONTROL_PLANE] PASS soak-chaos
+[2026-08-28 09:26:31][UNIFIED]   verify: [CONTROL_PLANE] PASS crash-diagnostics
+[2026-08-28 09:26:31][UNIFIED]   verify: [CONTROL_PLANE] PASS crash-diagnostics-selftest
+[2026-08-28 09:26:31][UNIFIED]   verify: [CONTROL_PLANE] PASS causal-debugger
+[2026-08-28 09:26:31][UNIFIED]   verify: [CONTROL_PLANE] PASS cas-replication-controller
+[2026-08-28 09:26:31][UNIFIED]   verify: [CONTROL_PLANE] PASS physical-device-fleet
+[2026-08-28 09:26:31][UNIFIED]   verify: [CONTROL_PLANE] PASS production-slo-autopilot
+[2026-08-28 09:26:32][UNIFIED]   verify: [CONTROL_PLANE] PASS migration-fencing-runtime
+[2026-08-28 09:26:32][UNIFIED]   verify: [CONTROL_PLANE] PASS long-soak-smoke
+[2026-08-28 09:26:33][UNIFIED]   verify: [CONTROL_PLANE] PASS native-causal-collector
+[2026-08-28 09:26:36][UNIFIED]   verify: [CONTROL_PLANE] FAIL selftest: [DISTRIBUTED_CAS] PASS peers=0/0
+[2026-08-28 09:26:37][UNIFIED]   verify: [CONTROL_PLANE] FAIL honest-100-functions: [HONEST_100] FAIL certified=74/76 discovered=146
+[2026-08-28 09:26:37][UNIFIED]   verify: [CONTROL_PLANE] PASS function-contract-coverage
+[2026-08-28 09:26:38][UNIFIED]   verify: [CONTROL_PLANE] FAIL monotonic-100-guard: [MONOTONIC_100] BLOCK previous=68 current=74 addedCaps=0
+[2026-08-28 09:26:38][UNIFIED]   verify: [CONTROL_PLANE] FAIL orchestrator-continuity: [ORCHESTRATOR_CONTINUITY] FAIL 5/8
+[2026-08-28 09:26:38][UNIFIED]   verify: [CONTROL_PLANE] FAIL release-promotion: [RELEASE_PROMOTION] BLOCK decision=BLOCK
+[2026-08-28 09:26:39][UNIFIED]   verify: [CONTROL_PLANE] FAIL readiness: [READINESS_V75] structural=87% operational=79% evidence=89% native=8%
+[2026-08-28 09:26:39][UNIFIED]   verify: [CONTROL_PLANE] FAIL 65/75 trace=62b8600c9cfc8cfc6a4e4cc57dc61b5a
+[2026-08-28 09:26:39][UNIFIED] === UNIFIED TICK END ===
+[2026-08-28 09:26:39][UNIFIED] state nextRunAt=2026-08-28T06:38:51.501Z blockers pass= requires_ai= waiting= mergeSafe=False
+[2026-08-28 09:26:39][UNIFIED] LOCK released

@@ -1,12 +1,12 @@
 {
   "schemaVersion": "7.2.0",
-  "generatedAt": "2026-08-28T06:07:25.777Z",
+  "generatedAt": "2026-08-28T06:26:28.371Z",
   "policy": "OPA/Rego + deterministic offline mirror",
   "input": {
     "schemaVersion": "7.2.0",
-    "generatedAt": "2026-08-28T06:07:25.201Z",
+    "generatedAt": "2026-08-28T06:26:27.860Z",
     "branch": "ai/opencode/multi-ai-peer-improvement",
-    "commit": "c3c5515adb94d6fc48109fd6766c0bccf2f8d284",
+    "commit": "5dfe76f1f0c05b7fd018672b9c78dee70e505e8d",
     "changed_files": [
       "ADAPTER_SANDBOX_STATUS.json",
       "ASSET_DELTA_STATUS.json",
@@ -104,6 +104,7 @@
       "VISUAL_PERCEPTUAL_REPORT.json",
       "WIT_BINDINGS_STATUS.json",
       "WIT_COMPONENT_STATUS.json",
+      "WORK_IN_PROGRESS.md",
       "WORLD_ANIMATION_SEMANTIC_REPORT.json",
       "WORLD_CANDIDATE_LAB_REPORT.json",
       "WORLD_CPU_GRAPHICS_OPTIMIZATION_REPORT.json",
@@ -129,6 +130,7 @@
       "WORLD_VISUAL_BASELINE_CANDIDATES.json",
       "bom.cdx.json",
       "data/generated-legacy-function-contracts.json",
+      "scripts/quality-autoloop-tick.ps1",
       "state/blocker-repair/DESKTOP_AI_NEXT_ACTION.md",
       "state/blocker-repair/device-evidence.json",
       "state/blocker-repair/events.jsonl",
@@ -141,7 +143,7 @@
     "release_gate_wired": true,
     "dr_verified": true,
     "provenance_valid": true,
-    "integration_gate_pass": true,
+    "integration_gate_pass": false,
     "project_directives_pass": true,
     "technology_lock_pass": true,
     "graphics_ratchet_pass": true,
@@ -161,8 +163,10 @@
     "cpu_first": true
   },
   "jsDecision": {
-    "allow": true,
-    "deny": []
+    "allow": false,
+    "deny": [
+      "system integration gate failed"
+    ]
   },
   "opaDecision": {
     "available": false,
@@ -171,7 +175,7 @@
     "reason": "opa binary not installed; deterministic JS mirror enforced"
   },
   "decisionParity": true,
-  "pass": true,
+  "pass": false,
   "warnings": [
     "OPA binary is optional; Rego bundle is installed and the JS mirror enforces the same critical rules offline"
   ]

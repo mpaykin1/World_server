@@ -1,11 +1,11 @@
 {
   "schemaVersion": "6.1.0",
   "system": "WORLD_QUALITY_AUTOPILOT",
-  "generatedAt": "2026-08-28T06:06:01.148Z",
-  "readinessPercent": 86,
-  "diagnosticReadinessPercent": 86,
+  "generatedAt": "2026-08-28T06:25:07.802Z",
+  "readinessPercent": 89,
+  "diagnosticReadinessPercent": 89,
   "domainPercent": {
-    "detail": 61,
+    "detail": 72,
     "graphics": 83,
     "animation": 98,
     "optimization": 99,
@@ -51,11 +51,6 @@
   "blockers": [
     {
       "domain": "detail",
-      "id": "server-semantic-enhancer-v5",
-      "weight": 12
-    },
-    {
-      "domain": "detail",
       "id": "worker-semantic-enhancer-v5",
       "weight": 10
     },
@@ -99,7 +94,7 @@
     "detail": [
       {
         "id": "server-semantic-enhancer-v5",
-        "ok": false,
+        "ok": true,
         "weight": 12
       },
       {

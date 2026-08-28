@@ -1,8 +1,8 @@
 {
   "schemaVersion": "4.0.0",
   "system": "WORLD_QUALITY_COST_SCHEDULER",
-  "generatedAt": "2026-08-28T06:06:01.345Z",
-  "readiness": 86,
+  "generatedAt": "2026-08-28T06:25:07.989Z",
+  "readiness": 89,
   "runtimePercent": 97,
   "materialProfiles": 64,
   "routes": [

@@ -1,10 +1,12 @@
 {
   "schemaVersion": "7.4.0",
-  "generatedAt": "2026-08-28T06:07:28.408Z",
+  "generatedAt": "2026-08-28T06:26:30.740Z",
   "pass": true,
   "armed": true,
   "dryRun": true,
-  "badSignals": [],
-  "action": "NO_ACTION",
+  "badSignals": [
+    "certified-function-regression"
+  ],
+  "action": "STOP_CANARY_AND_ROLLBACK_IF_AUTHORIZED",
   "rollbackAuthorized": false
 }

@@ -1,13 +1,13 @@
 {
   "schemaVersion": "7.2.0",
-  "generatedAt": "2026-08-28T06:07:08.827Z",
+  "generatedAt": "2026-08-28T06:26:12.672Z",
   "pass": true,
   "analysisMode": "module+symbol+lexical-dataflow",
   "truth": "Symbol/dataflow edges are confidence-scored static evidence; they are not claimed as a complete compiler/CodeQL proof.",
-  "filesAnalyzed": 513,
+  "filesAnalyzed": 514,
   "symbolDefinitions": 2993,
-  "callEdges": 64220,
-  "dataflowEdges": 2632,
+  "callEdges": 64232,
+  "dataflowEdges": 2637,
   "nativeAstAdapterAvailable": true,
   "moduleMerkleRoot": "cb2d0923788825cb1f46881051b3aebac9ca175a7c7753e26b1fc7e2734b7e79",
   "nodes": [
@@ -43014,52 +43014,52 @@
         {
           "name": "installScheduler",
           "kind": "function",
-          "offset": 36705
+          "offset": 37090
         },
         {
           "name": "removeScheduler",
           "kind": "function",
-          "offset": 38246
+          "offset": 38631
         },
         {
           "name": "selfTest",
           "kind": "function",
-          "offset": 38552
+          "offset": 38937
         },
         {
           "name": "tick",
           "kind": "function",
-          "offset": 39568
+          "offset": 39953
         },
         {
           "name": "loop",
           "kind": "function",
-          "offset": 41853
+          "offset": 42238
         },
         {
           "name": "status",
           "kind": "function",
-          "offset": 42402
+          "offset": 42787
         },
         {
           "name": "schedulerInstall",
           "kind": "function",
-          "offset": 42500
+          "offset": 42885
         },
         {
           "name": "schedulerRemove",
           "kind": "function",
-          "offset": 42783
+          "offset": 43168
         },
         {
           "name": "main",
           "kind": "function",
-          "offset": 42967
+          "offset": 43352
         },
         {
           "name": "assert",
           "kind": "arrow",
-          "offset": 38599
+          "offset": 38984
         }
       ],
       "calls": [
@@ -45364,556 +45364,560 @@
           "offset": 36158
         },
         {
+          "name": "join",
+          "offset": 36200
+        },
+        {
+          "name": "replace",
+          "offset": 36229
+        },
+        {
           "name": "writeFileSync",
-          "offset": 36186
-        },
-        {
-          "name": "join",
-          "offset": 36287
+          "offset": 36673
         },
         {
           "name": "writeFileSync",
-          "offset": 36383
+          "offset": 36768
         },
         {
           "name": "stringify",
-          "offset": 36434
+          "offset": 36819
         },
         {
           "name": "stringify",
-          "offset": 36459
+          "offset": 36844
         },
         {
           "name": "stringify",
-          "offset": 36495
+          "offset": 36880
         },
         {
           "name": "join",
-          "offset": 36510
+          "offset": 36895
         },
         {
           "name": "stringify",
-          "offset": 36582
+          "offset": 36967
         },
         {
           "name": "join",
-          "offset": 36597
+          "offset": 36982
         },
         {
           "name": "installScheduler",
-          "offset": 36714
+          "offset": 37099
         },
         {
           "name": "injectExistingAutoloop",
-          "offset": 36773
+          "offset": 37158
         },
         {
           "name": "relative",
-          "offset": 36891
+          "offset": 37276
         },
         {
           "name": "nowIso",
-          "offset": 36957
+          "offset": 37342
         },
         {
           "name": "setBlocker",
-          "offset": 36973
+          "offset": 37358
         },
         {
           "name": "event",
-          "offset": 37091
+          "offset": 37476
         },
         {
           "name": "writeSchedulerLauncher",
-          "offset": 37185
+          "offset": 37570
         },
         {
           "name": "schedulerTaskName",
-          "offset": 37270
+          "offset": 37655
         },
         {
           "name": "String",
-          "offset": 37312
+          "offset": 37697
         },
         {
           "name": "max",
-          "offset": 37324
+          "offset": 37709
         },
         {
           "name": "Number",
-          "offset": 37331
+          "offset": 37716
         },
         {
           "name": "run",
-          "offset": 37393
+          "offset": 37778
         },
         {
           "name": "tailText",
-          "offset": 37638
+          "offset": 38023
         },
         {
           "name": "nowIso",
-          "offset": 37684
+          "offset": 38069
         },
         {
           "name": "setBlocker",
-          "offset": 37711
+          "offset": 38096
         },
         {
           "name": "setBlocker",
-          "offset": 37837
+          "offset": 38222
         },
         {
           "name": "nowIso",
-          "offset": 38036
+          "offset": 38421
         },
         {
           "name": "setBlocker",
-          "offset": 38050
+          "offset": 38435
         },
         {
           "name": "removeScheduler",
-          "offset": 38255
+          "offset": 38640
         },
         {
           "name": "schedulerTaskName",
-          "offset": 38390
+          "offset": 38775
         },
         {
           "name": "run",
-          "offset": 38419
+          "offset": 38804
         },
         {
           "name": "nowIso",
-          "offset": 38537
+          "offset": 38922
         },
         {
           "name": "selfTest",
-          "offset": 38561
+          "offset": 38946
         },
         {
           "name": "push",
-          "offset": 38643
+          "offset": 39028
         },
         {
           "name": "assert",
-          "offset": 38657
+          "offset": 39042
         },
         {
           "name": "parseAdbPhysical",
-          "offset": 38664
+          "offset": 39049
         },
         {
           "name": "assert",
-          "offset": 38808
+          "offset": 39193
         },
         {
           "name": "parseAdbPhysical",
-          "offset": 38815
+          "offset": 39200
         },
         {
           "name": "defaultState",
-          "offset": 38900
+          "offset": 39285
         },
         {
           "name": "setBlocker",
-          "offset": 38918
+          "offset": 39303
         },
         {
           "name": "timerAfterMinutes",
-          "offset": 38961
+          "offset": 39346
         },
         {
           "name": "assert",
-          "offset": 38988
+          "offset": 39373
         },
         {
           "name": "Boolean",
-          "offset": 38995
+          "offset": 39380
         },
         {
           "name": "earliestTimer",
-          "offset": 39003
+          "offset": 39388
         },
         {
           "name": "assert",
-          "offset": 39058
+          "offset": 39443
         },
         {
           "name": "platformCosignAsset",
-          "offset": 39065
+          "offset": 39450
         },
         {
           "name": "platformCosignAsset",
-          "offset": 39108
+          "offset": 39493
         },
         {
           "name": "createHash",
-          "offset": 39188
+          "offset": 39573
         },
         {
           "name": "update",
-          "offset": 39209
+          "offset": 39594
         },
         {
           "name": "digest",
-          "offset": 39223
+          "offset": 39608
         },
         {
           "name": "assert",
-          "offset": 39240
+          "offset": 39625
         },
         {
           "name": "error",
-          "offset": 39379
+          "offset": 39764
         },
         {
           "name": "stringify",
-          "offset": 39390
+          "offset": 39775
         },
         {
           "name": "log",
-          "offset": 39487
+          "offset": 39872
         },
         {
           "name": "stringify",
-          "offset": 39496
+          "offset": 39881
         },
         {
           "name": "tick",
-          "offset": 39583
+          "offset": 39968
         },
         {
           "name": "loadPolicy",
-          "offset": 39619
+          "offset": 40004
         },
         {
           "name": "acquireLock",
-          "offset": 39655
+          "offset": 40040
         },
         {
           "name": "Number",
-          "offset": 39673
+          "offset": 40058
         },
         {
           "name": "loadState",
-          "offset": 39736
+          "offset": 40121
         },
         {
           "name": "Number",
-          "offset": 39779
+          "offset": 40164
         },
         {
           "name": "nowIso",
-          "offset": 39831
+          "offset": 40216
         },
         {
           "name": "event",
-          "offset": 39845
+          "offset": 40230
         },
         {
           "name": "addExistingLocalToolPaths",
-          "offset": 39918
+          "offset": 40303
         },
         {
           "name": "ensureExistingBootstrap",
-          "offset": 39989
+          "offset": 40374
         },
         {
           "name": "probeBootstrappedTools",
-          "offset": 40066
+          "offset": 40451
         },
         {
           "name": "ensureCosign",
-          "offset": 40137
+          "offset": 40522
         },
         {
           "name": "collectPerformanceEvidence",
-          "offset": 40176
+          "offset": 40561
         },
         {
           "name": "collectDeviceEvidence",
-          "offset": 40221
+          "offset": 40606
         },
         {
           "name": "checkRemoteCas",
-          "offset": 40275
+          "offset": 40660
         },
         {
           "name": "checkFencedMigration",
-          "offset": 40340
+          "offset": 40725
         },
         {
           "name": "runGates",
-          "offset": 40425
+          "offset": 40810
         },
         {
           "name": "checkVercelStatus",
-          "offset": 40490
+          "offset": 40875
         },
         {
           "name": "summarizeRequiresAi",
-          "offset": 40568
+          "offset": 40953
         },
         {
           "name": "some",
-          "offset": 40595
+          "offset": 40980
         },
         {
           "name": "includes",
-          "offset": 40668
+          "offset": 41053
         },
         {
           "name": "manageLongSoak",
-          "offset": 40689
+          "offset": 41074
         },
         {
           "name": "earliestTimer",
-          "offset": 40836
+          "offset": 41221
         },
         {
           "name": "computeMergeSafe",
-          "offset": 40862
+          "offset": 41247
         },
         {
           "name": "updateAiActionFromState",
-          "offset": 40914
+          "offset": 41299
         },
         {
           "name": "saveState",
-          "offset": 40956
+          "offset": 41341
         },
         {
           "name": "event",
-          "offset": 40984
+          "offset": 41369
         },
         {
           "name": "summarizeRequiresAi",
-          "offset": 41122
+          "offset": 41507
         },
         {
           "name": "map",
-          "offset": 41149
+          "offset": 41534
         },
         {
           "name": "relative",
-          "offset": 41195
+          "offset": 41580
         },
         {
           "name": "values",
-          "offset": 41284
+          "offset": 41669
         },
         {
           "name": "log",
-          "offset": 41374
+          "offset": 41759
         },
         {
           "name": "stringify",
-          "offset": 41383
+          "offset": 41768
         },
         {
           "name": "summarizeRequiresAi",
-          "offset": 41407
+          "offset": 41792
         },
         {
           "name": "Boolean",
-          "offset": 41529
+          "offset": 41914
         },
         {
           "name": "relative",
-          "offset": 41672
+          "offset": 42057
         },
         {
           "name": "summarizeRequiresAi",
-          "offset": 41760
+          "offset": 42145
         },
         {
           "name": "release",
-          "offset": 41835
+          "offset": 42220
         },
         {
           "name": "loop",
-          "offset": 41868
+          "offset": 42253
         },
         {
           "name": "loadPolicy",
-          "offset": 41904
+          "offset": 42289
         },
         {
           "name": "max",
-          "offset": 41946
+          "offset": 42331
         },
         {
           "name": "Number",
-          "offset": 41953
+          "offset": 42338
         },
         {
           "name": "tick",
-          "offset": 42049
+          "offset": 42434
         },
         {
           "name": "error",
-          "offset": 42095
+          "offset": 42480
         },
         {
           "name": "loadState",
-          "offset": 42174
+          "offset": 42559
         },
         {
           "name": "parse",
-          "offset": 42232
+          "offset": 42617
         },
         {
           "name": "now",
-          "offset": 42262
+          "offset": 42647
         },
         {
           "name": "max",
-          "offset": 42311
+          "offset": 42696
         },
         {
           "name": "min",
-          "offset": 42327
+          "offset": 42712
         },
         {
           "name": "now",
-          "offset": 42362
+          "offset": 42747
         },
         {
           "name": "sleep",
-          "offset": 42381
+          "offset": 42766
         },
         {
           "name": "status",
-          "offset": 42411
+          "offset": 42796
         },
         {
           "name": "loadState",
-          "offset": 42438
+          "offset": 42823
         },
         {
           "name": "log",
-          "offset": 42465
+          "offset": 42850
         },
         {
           "name": "stringify",
-          "offset": 42474
+          "offset": 42859
         },
         {
           "name": "schedulerInstall",
-          "offset": 42509
+          "offset": 42894
         },
         {
           "name": "loadPolicy",
-          "offset": 42551
+          "offset": 42936
         },
         {
           "name": "loadState",
-          "offset": 42585
+          "offset": 42970
         },
         {
           "name": "installScheduler",
-          "offset": 42619
+          "offset": 43004
         },
         {
           "name": "saveState",
-          "offset": 42660
+          "offset": 43045
         },
         {
           "name": "log",
-          "offset": 42694
+          "offset": 43079
         },
         {
           "name": "stringify",
-          "offset": 42703
+          "offset": 43088
         },
         {
           "name": "schedulerRemove",
-          "offset": 42792
+          "offset": 43177
         },
         {
           "name": "loadState",
-          "offset": 42832
+          "offset": 43217
         },
         {
           "name": "removeScheduler",
-          "offset": 42851
+          "offset": 43236
         },
         {
           "name": "saveState",
-          "offset": 42883
+          "offset": 43268
         },
         {
           "name": "log",
-          "offset": 42917
+          "offset": 43302
         },
         {
           "name": "stringify",
-          "offset": 42926
+          "offset": 43311
         },
         {
           "name": "main",
-          "offset": 42982
+          "offset": 43367
         },
         {
           "name": "parseArgs",
-          "offset": 43006
+          "offset": 43391
         },
         {
           "name": "slice",
-          "offset": 43029
+          "offset": 43414
         },
         {
           "name": "discoverRoot",
-          "offset": 43092
+          "offset": 43477
         },
         {
           "name": "selfTest",
-          "offset": 43151
+          "offset": 43536
         },
         {
           "name": "exists",
-          "offset": 43170
+          "offset": 43555
         },
         {
           "name": "join",
-          "offset": 43182
+          "offset": 43567
         },
         {
           "name": "Error",
-          "offset": 43221
+          "offset": 43606
         },
         {
           "name": "tick",
-          "offset": 43304
+          "offset": 43689
         },
         {
           "name": "loop",
-          "offset": 43351
+          "offset": 43736
         },
         {
           "name": "status",
-          "offset": 43400
+          "offset": 43785
         },
         {
           "name": "schedulerInstall",
-          "offset": 43456
+          "offset": 43841
         },
         {
           "name": "schedulerRemove",
-          "offset": 43521
+          "offset": 43906
         },
         {
           "name": "Error",
-          "offset": 43556
+          "offset": 43941
         },
         {
           "name": "main",
-          "offset": 43592
+          "offset": 43977
         },
         {
           "name": "error",
-          "offset": 43622
+          "offset": 44007
         }
       ],
       "assignments": [
@@ -46175,102 +46179,102 @@
         {
           "target": "injected",
           "sourceCall": "injectExistingAutoloop",
-          "offset": 36756
+          "offset": 37141
         },
         {
           "target": "launcher",
           "sourceCall": "writeSchedulerLauncher",
-          "offset": 37168
+          "offset": 37553
         },
         {
           "target": "name",
           "sourceCall": "schedulerTaskName",
-          "offset": 37257
+          "offset": 37642
         },
         {
           "target": "mins",
           "sourceCall": "String",
-          "offset": 37299
+          "offset": 37684
         },
         {
           "target": "r",
           "sourceCall": "run",
-          "offset": 37383
+          "offset": 37768
         },
         {
           "target": "s",
           "sourceCall": "defaultState",
-          "offset": 38890
+          "offset": 39275
         },
         {
           "target": "policy",
           "sourceCall": "loadPolicy",
-          "offset": 39604
+          "offset": 39989
         },
         {
           "target": "release",
           "sourceCall": "acquireLock",
-          "offset": 39639
+          "offset": 40024
         },
         {
           "target": "state",
           "sourceCall": "loadState",
-          "offset": 39724
+          "offset": 40109
         },
         {
           "target": "hardRequiresAiBeforeSoak",
           "sourceCall": "summarizeRequiresAi",
-          "offset": 40535
+          "offset": 40920
         },
         {
           "target": "aiPath",
           "sourceCall": "updateAiActionFromState",
-          "offset": 40899
+          "offset": 41284
         },
         {
           "target": "policy",
           "sourceCall": "loadPolicy",
-          "offset": 41889
+          "offset": 42274
         },
         {
           "target": "state",
           "sourceCall": "loadState",
-          "offset": 42160
+          "offset": 42545
         },
         {
           "target": "s",
           "sourceCall": "loadState",
-          "offset": 42428
+          "offset": 42813
         },
         {
           "target": "policy",
           "sourceCall": "loadPolicy",
-          "offset": 42536
+          "offset": 42921
         },
         {
           "target": "state",
           "sourceCall": "loadState",
-          "offset": 42571
+          "offset": 42956
         },
         {
           "target": "result",
           "sourceCall": "installScheduler",
-          "offset": 42604
+          "offset": 42989
         },
         {
           "target": "state",
           "sourceCall": "loadState",
-          "offset": 42818
+          "offset": 43203
         },
         {
           "target": "args",
           "sourceCall": "parseArgs",
-          "offset": 42993
+          "offset": 43378
         },
         {
           "target": "root",
           "sourceCall": "discoverRoot",
-          "offset": 43079
+          "offset": 43464
         }
       ],
       "imports": [
@@ -51819,399 +51823,399 @@
         },
         {
           "name": "check",
-          "offset": 2128
+          "offset": 2141
         },
         {
           "name": "includes",
-          "offset": 2138
+          "offset": 2151
         },
         {
           "name": "check",
-          "offset": 2213
+          "offset": 2226
         },
         {
           "name": "includes",
-          "offset": 2223
+          "offset": 2236
         },
         {
           "name": "check",
-          "offset": 2298
+          "offset": 2311
         },
         {
           "name": "includes",
-          "offset": 2308
+          "offset": 2321
         },
         {
           "name": "check",
-          "offset": 2382
+          "offset": 2395
         },
         {
           "name": "includes",
-          "offset": 2392
+          "offset": 2405
         },
         {
           "name": "check",
-          "offset": 2466
+          "offset": 2479
         },
         {
           "name": "includes",
-          "offset": 2476
+          "offset": 2489
         },
         {
           "name": "read",
-          "offset": 2569
+          "offset": 2582
         },
         {
           "name": "check",
-          "offset": 2614
+          "offset": 2627
         },
         {
           "name": "includes",
-          "offset": 2631
+          "offset": 2644
         },
         {
           "name": "check",
-          "offset": 2698
+          "offset": 2711
         },
         {
           "name": "includes",
-          "offset": 2715
+          "offset": 2728
         },
         {
           "name": "read",
-          "offset": 2803
+          "offset": 2816
         },
         {
           "name": "check",
-          "offset": 2837
+          "offset": 2850
         },
         {
           "name": "includes",
-          "offset": 2846
+          "offset": 2859
         },
         {
           "name": "policy",
-          "offset": 2876
+          "offset": 2889
         },
         {
           "name": "check",
-          "offset": 2928
+          "offset": 2941
         },
         {
           "name": "includes",
-          "offset": 2937
+          "offset": 2950
         },
         {
           "name": "check",
-          "offset": 3028
+          "offset": 3041
         },
         {
           "name": "test",
-          "offset": 3082
+          "offset": 3095
         },
         {
           "name": "check",
-          "offset": 3131
+          "offset": 3144
         },
         {
           "name": "test",
-          "offset": 3205
+          "offset": 3218
         },
         {
           "name": "check",
-          "offset": 3253
+          "offset": 3266
         },
         {
           "name": "includes",
-          "offset": 3262
+          "offset": 3275
         },
         {
           "name": "includes",
-          "offset": 3305
+          "offset": 3318
         },
         {
           "name": "check",
-          "offset": 3380
+          "offset": 3393
         },
         {
           "name": "includes",
-          "offset": 3389
+          "offset": 3402
         },
         {
           "name": "includes",
-          "offset": 3427
+          "offset": 3440
         },
         {
           "name": "check",
-          "offset": 3809
+          "offset": 3822
         },
         {
           "name": "existsSync",
-          "offset": 3818
+          "offset": 3831
         },
         {
           "name": "join",
-          "offset": 3834
+          "offset": 3847
         },
         {
           "name": "exists",
-          "offset": 3860
+          "offset": 3873
         },
         {
           "name": "parse",
-          "offset": 3907
+          "offset": 3920
         },
         {
           "name": "readFileSync",
-          "offset": 3916
+          "offset": 3929
         },
         {
           "name": "join",
-          "offset": 3934
+          "offset": 3947
         },
         {
           "name": "check",
-          "offset": 3996
+          "offset": 4009
         },
         {
           "name": "isArray",
-          "offset": 4008
+          "offset": 4021
         },
         {
           "name": "check",
-          "offset": 4125
+          "offset": 4138
         },
         {
           "name": "check",
-          "offset": 4204
+          "offset": 4217
         },
         {
           "name": "readFileSync",
-          "offset": 4213
+          "offset": 4226
         },
         {
           "name": "join",
-          "offset": 4231
+          "offset": 4244
         },
         {
           "name": "trim",
-          "offset": 4293
+          "offset": 4306
         },
         {
           "name": "parse",
-          "offset": 4366
+          "offset": 4379
         },
         {
           "name": "readFileSync",
-          "offset": 4375
+          "offset": 4388
         },
         {
           "name": "join",
-          "offset": 4393
+          "offset": 4406
         },
         {
           "name": "check",
-          "offset": 4457
+          "offset": 4470
         },
         {
           "name": "check",
-          "offset": 4563
+          "offset": 4576
         },
         {
           "name": "check",
-          "offset": 4712
+          "offset": 4725
         },
         {
           "name": "includes",
-          "offset": 4737
+          "offset": 4750
         },
         {
           "name": "includes",
-          "offset": 4776
+          "offset": 4789
         },
         {
           "name": "check",
-          "offset": 4840
+          "offset": 4853
         },
         {
           "name": "check",
-          "offset": 4965
+          "offset": 4978
         },
         {
           "name": "read",
-          "offset": 5151
+          "offset": 5164
         },
         {
           "name": "check",
-          "offset": 5191
+          "offset": 5204
         },
         {
           "name": "includes",
-          "offset": 5209
+          "offset": 5222
         },
         {
           "name": "check",
-          "offset": 5290
+          "offset": 5303
         },
         {
           "name": "includes",
-          "offset": 5308
+          "offset": 5321
         },
         {
           "name": "json",
-          "offset": 5382
+          "offset": 5395
         },
         {
           "name": "check",
-          "offset": 5400
+          "offset": 5413
         },
         {
           "name": "test",
-          "offset": 5451
+          "offset": 5464
         },
         {
           "name": "check",
-          "offset": 5518
+          "offset": 5531
         },
         {
           "name": "includes",
-          "offset": 5536
+          "offset": 5549
         },
         {
           "name": "includes",
-          "offset": 5574
+          "offset": 5587
         },
         {
           "name": "check",
-          "offset": 5643
+          "offset": 5656
         },
         {
           "name": "includes",
-          "offset": 5661
+          "offset": 5674
         },
         {
           "name": "includes",
-          "offset": 5701
+          "offset": 5714
         },
         {
           "name": "check",
-          "offset": 5775
+          "offset": 5788
         },
         {
           "name": "includes",
-          "offset": 5793
+          "offset": 5806
         },
         {
           "name": "check",
-          "offset": 5873
+          "offset": 5886
         },
         {
           "name": "includes",
-          "offset": 5891
+          "offset": 5904
         },
         {
           "name": "read",
-          "offset": 5990
+          "offset": 6003
         },
         {
           "name": "check",
-          "offset": 6036
+          "offset": 6049
         },
         {
           "name": "includes",
-          "offset": 6053
+          "offset": 6066
         },
         {
           "name": "includes",
-          "offset": 6095
+          "offset": 6108
         },
         {
           "name": "check",
-          "offset": 6154
+          "offset": 6167
         },
         {
           "name": "includes",
-          "offset": 6171
+          "offset": 6184
         },
         {
           "name": "includes",
-          "offset": 6204
+          "offset": 6217
         },
         {
           "name": "includes",
-          "offset": 6237
+          "offset": 6250
         },
         {
           "name": "check",
-          "offset": 6308
+          "offset": 6321
         },
         {
           "name": "includes",
-          "offset": 6325
+          "offset": 6338
         },
         {
           "name": "includes",
-          "offset": 6357
+          "offset": 6370
         },
         {
           "name": "check",
-          "offset": 6410
+          "offset": 6423
         },
         {
           "name": "includes",
-          "offset": 6427
+          "offset": 6440
         },
         {
           "name": "includes",
-          "offset": 6458
+          "offset": 6471
         },
         {
           "name": "check",
-          "offset": 6512
+          "offset": 6525
         },
         {
           "name": "includes",
-          "offset": 6529
+          "offset": 6542
         },
         {
           "name": "includes",
-          "offset": 6566
+          "offset": 6579
         },
         {
           "name": "check",
-          "offset": 6621
+          "offset": 6634
         },
         {
           "name": "includes",
-          "offset": 6638
+          "offset": 6651
         },
         {
           "name": "includes",
-          "offset": 6673
+          "offset": 6686
         },
         {
           "name": "check",
-          "offset": 6733
+          "offset": 6746
         },
         {
           "name": "includes",
-          "offset": 6750
+          "offset": 6763
         },
         {
           "name": "includes",
-          "offset": 6804
+          "offset": 6817
         },
         {
           "name": "error",
-          "offset": 6897
+          "offset": 6910
         },
         {
           "name": "exit",
-          "offset": 6951
+          "offset": 6964
         },
         {
           "name": "log",
-          "offset": 6970
+          "offset": 6983
         }
       ],
       "assignments": [
@@ -52248,22 +52252,22 @@
         {
           "target": "diagnostic",
           "sourceCall": "read",
-          "offset": 2550
+          "offset": 2563
         },
         {
           "target": "ci",
           "sourceCall": "read",
-          "offset": 2792
+          "offset": 2805
         },
         {
           "target": "voxelClient",
           "sourceCall": "read",
-          "offset": 5131
+          "offset": 5144
         },
         {
           "target": "playwright",
           "sourceCall": "read",
-          "offset": 5971
+          "offset": 5984
         }
       ],
       "imports": [
@@ -52464,211 +52468,211 @@
         },
         {
           "name": "check",
-          "offset": 857
+          "offset": 870
         },
         {
           "name": "existsSync",
-          "offset": 866
+          "offset": 879
         },
         {
           "name": "join",
-          "offset": 882
+          "offset": 895
         },
         {
           "name": "text",
-          "offset": 932
+          "offset": 945
         },
         {
           "name": "check",
-          "offset": 953
+          "offset": 979
         },
         {
           "name": "includes",
-          "offset": 964
+          "offset": 990
         },
         {
           "name": "check",
-          "offset": 1039
+          "offset": 1065
         },
         {
           "name": "includes",
-          "offset": 1050
+          "offset": 1076
         },
         {
           "name": "check",
-          "offset": 1125
+          "offset": 1151
         },
         {
           "name": "includes",
-          "offset": 1136
+          "offset": 1162
         },
         {
           "name": "text",
-          "offset": 1221
+          "offset": 1247
         },
         {
           "name": "check",
-          "offset": 1240
+          "offset": 1266
         },
         {
           "name": "includes",
-          "offset": 1253
+          "offset": 1279
         },
         {
           "name": "text",
-          "offset": 1360
+          "offset": 1386
         },
         {
           "name": "check",
-          "offset": 1400
+          "offset": 1426
         },
         {
           "name": "includes",
-          "offset": 1413
+          "offset": 1439
         },
         {
           "name": "check",
-          "offset": 1488
+          "offset": 1514
         },
         {
           "name": "includes",
-          "offset": 1501
+          "offset": 1527
         },
         {
           "name": "check",
-          "offset": 1586
+          "offset": 1612
         },
         {
           "name": "includes",
-          "offset": 1599
+          "offset": 1625
         },
         {
           "name": "check",
-          "offset": 1668
+          "offset": 1694
         },
         {
           "name": "includes",
-          "offset": 1681
+          "offset": 1707
         },
         {
           "name": "autoplay",
-          "offset": 1743
+          "offset": 1769
         },
         {
           "name": "check",
-          "offset": 1767
+          "offset": 1793
         },
         {
           "name": "includes",
-          "offset": 1780
+          "offset": 1806
         },
         {
           "name": "includes",
-          "offset": 1813
+          "offset": 1839
         },
         {
           "name": "check",
-          "offset": 1872
+          "offset": 1898
         },
         {
           "name": "includes",
-          "offset": 1885
+          "offset": 1911
         },
         {
           "name": "check",
-          "offset": 1961
+          "offset": 1987
         },
         {
           "name": "includes",
-          "offset": 1975
+          "offset": 2001
         },
         {
           "name": "includes",
-          "offset": 2006
+          "offset": 2032
         },
         {
           "name": "text",
-          "offset": 2093
+          "offset": 2119
         },
         {
           "name": "check",
-          "offset": 2127
+          "offset": 2153
         },
         {
           "name": "includes",
-          "offset": 2136
+          "offset": 2162
         },
         {
           "name": "policy",
-          "offset": 2166
+          "offset": 2192
         },
         {
           "name": "check",
-          "offset": 2217
+          "offset": 2243
         },
         {
           "name": "includes",
-          "offset": 2226
+          "offset": 2252
         },
         {
           "name": "check",
-          "offset": 2317
+          "offset": 2343
         },
         {
           "name": "includes",
-          "offset": 2326
+          "offset": 2352
         },
         {
           "name": "includes",
-          "offset": 2355
+          "offset": 2381
         },
         {
           "name": "check",
-          "offset": 2434
+          "offset": 2460
         },
         {
           "name": "includes",
-          "offset": 2443
+          "offset": 2469
         },
         {
           "name": "text",
-          "offset": 2529
+          "offset": 2555
         },
         {
           "name": "check",
-          "offset": 2574
+          "offset": 2600
         },
         {
           "name": "includes",
-          "offset": 2591
+          "offset": 2617
         },
         {
           "name": "text",
-          "offset": 2684
+          "offset": 2710
         },
         {
           "name": "check",
-          "offset": 2718
+          "offset": 2744
         },
         {
           "name": "includes",
-          "offset": 2731
+          "offset": 2757
         },
         {
           "name": "includes",
-          "offset": 2782
+          "offset": 2808
         },
         {
           "name": "error",
-          "offset": 2895
+          "offset": 2921
         },
         {
           "name": "exit",
-          "offset": 2957
+          "offset": 2983
         },
         {
           "name": "log",
-          "offset": 2976
+          "offset": 3002
         }
       ],
       "assignments": [
@@ -52685,32 +52689,32 @@
         {
           "target": "ai3d",
           "sourceCall": "text",
-          "offset": 919
+          "offset": 932
         },
         {
           "target": "server",
           "sourceCall": "text",
-          "offset": 1206
+          "offset": 1232
         },
         {
           "target": "client",
           "sourceCall": "text",
-          "offset": 1345
+          "offset": 1371
         },
         {
           "target": "ci",
           "sourceCall": "text",
-          "offset": 2082
+          "offset": 2108
         },
         {
           "target": "diagnostic",
           "sourceCall": "text",
-          "offset": 2510
+          "offset": 2536
         },
         {
           "target": "status",
           "sourceCall": "text",
-          "offset": 2669
+          "offset": 2695
         }
       ],
       "imports": [
@@ -60152,42 +60156,42 @@
         {
           "name": "commandWatchdogRemove",
           "kind": "function",
-          "offset": 61888
+          "offset": 62141
         },
         {
           "name": "commandHealth",
           "kind": "function",
-          "offset": 62485
+          "offset": 62738
         },
         {
           "name": "commandStatus",
           "kind": "function",
-          "offset": 62554
+          "offset": 62807
         },
         {
           "name": "commandUnfinished",
           "kind": "function",
-          "offset": 63511
+          "offset": 63764
         },
         {
           "name": "commandFinish",
           "kind": "function",
-          "offset": 63903
+          "offset": 64156
         },
         {
           "name": "commandSelfTest",
           "kind": "function",
-          "offset": 65487
+          "offset": 65740
         },
         {
           "name": "t",
           "kind": "function",
-          "offset": 65538
+          "offset": 65791
         },
         {
           "name": "main",
           "kind": "function",
-          "offset": 69265
+          "offset": 69518
         },
         {
           "name": "flush",
@@ -63689,732 +63693,744 @@
           "offset": 61040
         },
         {
-          "name": "join",
-          "offset": 61170
-        },
-        {
-          "name": "join",
-          "offset": 61247
-        },
-        {
-          "name": "writeFileSync",
+          "name": "replace",
           "offset": 61296
         },
         {
-          "name": "max",
-          "offset": 61359
-        },
-        {
-          "name": "round",
-          "offset": 61370
-        },
-        {
-          "name": "Number",
-          "offset": 61376
-        },
-        {
-          "name": "policy",
-          "offset": 61383
-        },
-        {
-          "name": "spawnSync",
-          "offset": 61433
-        },
-        {
-          "name": "String",
-          "offset": 61495
-        },
-        {
-          "name": "relative",
-          "offset": 61700
-        },
-        {
-          "name": "tailText",
-          "offset": 61740
-        },
-        {
-          "name": "tailText",
-          "offset": 61771
-        },
-        {
-          "name": "log",
-          "offset": 61807
-        },
-        {
-          "name": "stringify",
-          "offset": 61816
-        },
-        {
-          "name": "commandWatchdogRemove",
-          "offset": 61897
-        },
-        {
-          "name": "watchdogTaskName",
-          "offset": 61940
-        },
-        {
-          "name": "log",
-          "offset": 62003
-        },
-        {
-          "name": "stringify",
-          "offset": 62012
-        },
-        {
-          "name": "spawnSync",
-          "offset": 62113
-        },
-        {
-          "name": "test",
-          "offset": 62276
-        },
-        {
-          "name": "String",
-          "offset": 62281
-        },
-        {
-          "name": "log",
-          "offset": 62324
-        },
-        {
-          "name": "stringify",
-          "offset": 62333
-        },
-        {
-          "name": "tailText",
-          "offset": 62389
-        },
-        {
-          "name": "tailText",
-          "offset": 62420
-        },
-        {
-          "name": "commandHealth",
-          "offset": 62494
-        },
-        {
-          "name": "commandWatchdog",
-          "offset": 62519
-        },
-        {
-          "name": "commandStatus",
-          "offset": 62563
-        },
-        {
-          "name": "acquireReadGuard",
-          "offset": 62597
-        },
-        {
-          "name": "loadState",
-          "offset": 62680
-        },
-        {
-          "name": "log",
-          "offset": 62720
-        },
-        {
-          "name": "stringify",
-          "offset": 62729
-        },
-        {
-          "name": "gitReality",
-          "offset": 62823
-        },
-        {
-          "name": "classifyGit",
-          "offset": 62854
-        },
-        {
-          "name": "unresolvedStep",
-          "offset": 62892
-        },
-        {
-          "name": "scanUnfinished",
-          "offset": 62924
-        },
-        {
-          "name": "persistUnfinished",
-          "offset": 62943
-        },
-        {
-          "name": "safeJson",
-          "offset": 62984
-        },
-        {
-          "name": "log",
-          "offset": 63024
-        },
-        {
-          "name": "stringify",
-          "offset": 63033
-        },
-        {
-          "name": "bestNextAction",
-          "offset": 63407
-        },
-        {
-          "name": "release",
-          "offset": 63495
-        },
-        {
-          "name": "commandUnfinished",
-          "offset": 63520
-        },
-        {
-          "name": "acquireReadGuard",
-          "offset": 63558
-        },
-        {
-          "name": "loadState",
-          "offset": 63650
-        },
-        {
-          "name": "scanUnfinished",
-          "offset": 63680
-        },
-        {
-          "name": "persistUnfinished",
-          "offset": 63699
-        },
-        {
-          "name": "saveState",
-          "offset": 63754
-        },
-        {
-          "name": "syncWip",
-          "offset": 63811
-        },
-        {
-          "name": "log",
-          "offset": 63837
-        },
-        {
-          "name": "stringify",
-          "offset": 63846
-        },
-        {
-          "name": "release",
-          "offset": 63887
-        },
-        {
-          "name": "commandFinish",
-          "offset": 63912
-        },
-        {
-          "name": "acquireLock",
-          "offset": 63952
-        },
-        {
-          "name": "loadState",
-          "offset": 63997
-        },
-        {
-          "name": "filter",
-          "offset": 64041
-        },
-        {
-          "name": "includes",
-          "offset": 64074
-        },
-        {
-          "name": "scanUnfinished",
-          "offset": 64108
-        },
-        {
-          "name": "persistUnfinished",
-          "offset": 64127
-        },
-        {
-          "name": "filter",
-          "offset": 64190
-        },
-        {
-          "name": "Error",
-          "offset": 64315
-        },
-        {
-          "name": "step",
-          "offset": 64373
-        },
-        {
-          "name": "command",
-          "offset": 64419
-        },
-        {
-          "name": "snapshot",
-          "offset": 64532
-        },
-        {
-          "name": "nowIso",
-          "offset": 64615
-        },
-        {
-          "name": "String",
-          "offset": 64656
-        },
-        {
-          "name": "nowIso",
-          "offset": 64749
-        },
-        {
-          "name": "saveState",
-          "offset": 64849
-        },
-        {
-          "name": "syncWip",
-          "offset": 64901
-        },
-        {
-          "name": "ensureDir",
-          "offset": 64917
-        },
-        {
           "name": "join",
-          "offset": 64966
+          "offset": 61326
         },
         {
           "name": "replace",
-          "offset": 65000
-        },
-        {
-          "name": "writeJsonAtomic",
-          "offset": 65050
-        },
-        {
-          "name": "appendJsonl",
-          "offset": 65083
+          "offset": 61381
         },
         {
           "name": "join",
-          "offset": 65100
+          "offset": 61423
+        },
+        {
+          "name": "replace",
+          "offset": 61454
+        },
+        {
+          "name": "writeFileSync",
+          "offset": 61549
+        },
+        {
+          "name": "max",
+          "offset": 61612
+        },
+        {
+          "name": "round",
+          "offset": 61623
+        },
+        {
+          "name": "Number",
+          "offset": 61629
+        },
+        {
+          "name": "policy",
+          "offset": 61636
+        },
+        {
+          "name": "spawnSync",
+          "offset": 61686
+        },
+        {
+          "name": "String",
+          "offset": 61748
         },
         {
           "name": "relative",
-          "offset": 65212
+          "offset": 61953
+        },
+        {
+          "name": "tailText",
+          "offset": 61993
+        },
+        {
+          "name": "tailText",
+          "offset": 62024
         },
         {
           "name": "log",
-          "offset": 65332
+          "offset": 62060
         },
         {
           "name": "stringify",
-          "offset": 65341
-        },
-        {
-          "name": "relative",
-          "offset": 65419
-        },
-        {
-          "name": "release",
-          "offset": 65471
-        },
-        {
-          "name": "commandSelfTest",
-          "offset": 65496
-        },
-        {
-          "name": "t",
-          "offset": 65547
-        },
-        {
-          "name": "fn",
-          "offset": 65567
-        },
-        {
-          "name": "push",
-          "offset": 65579
-        },
-        {
-          "name": "push",
-          "offset": 65627
-        },
-        {
-          "name": "t",
-          "offset": 65680
-        },
-        {
-          "name": "managedReplace",
-          "offset": 65784
-        },
-        {
-          "name": "managedReplace",
-          "offset": 65824
-        },
-        {
-          "name": "Error",
-          "offset": 65869
-        },
-        {
-          "name": "t",
-          "offset": 65912
-        },
-        {
-          "name": "parseArgs",
-          "offset": 65978
-        },
-        {
-          "name": "join",
-          "offset": 66070
-        },
-        {
-          "name": "Error",
-          "offset": 66111
-        },
-        {
-          "name": "t",
-          "offset": 66144
-        },
-        {
-          "name": "parseWipSections",
-          "offset": 66207
-        },
-        {
-          "name": "Error",
-          "offset": 66337
-        },
-        {
-          "name": "t",
-          "offset": 66378
-        },
-        {
-          "name": "processAlive",
-          "offset": 66415
-        },
-        {
-          "name": "Error",
-          "offset": 66452
-        },
-        {
-          "name": "t",
-          "offset": 66497
-        },
-        {
-          "name": "sha256Text",
-          "offset": 66535
-        },
-        {
-          "name": "sha256Text",
-          "offset": 66555
-        },
-        {
-          "name": "sha256Text",
-          "offset": 66574
-        },
-        {
-          "name": "sha256Text",
-          "offset": 66594
-        },
-        {
-          "name": "Error",
-          "offset": 66621
-        },
-        {
-          "name": "t",
-          "offset": 66651
-        },
-        {
-          "name": "isUnfinishedStatus",
-          "offset": 66698
-        },
-        {
-          "name": "isUnfinishedStatus",
-          "offset": 66736
-        },
-        {
-          "name": "isUnfinishedStatus",
-          "offset": 66769
-        },
-        {
-          "name": "Error",
-          "offset": 66807
-        },
-        {
-          "name": "t",
-          "offset": 66850
-        },
-        {
-          "name": "isOptionalExternalId",
-          "offset": 66908
-        },
-        {
-          "name": "isOptionalExternalId",
-          "offset": 66957
-        },
-        {
-          "name": "isOptionalExternalId",
-          "offset": 67000
-        },
-        {
-          "name": "Error",
-          "offset": 67047
-        },
-        {
-          "name": "t",
-          "offset": 67092
-        },
-        {
-          "name": "markerForCommand",
-          "offset": 67135
-        },
-        {
-          "name": "Error",
-          "offset": 67233
-        },
-        {
-          "name": "t",
-          "offset": 67273
-        },
-        {
-          "name": "waitingMarkerHit",
-          "offset": 67326
-        },
-        {
-          "name": "Error",
-          "offset": 67406
-        },
-        {
-          "name": "t",
-          "offset": 67447
-        },
-        {
-          "name": "progressFingerprint",
-          "offset": 67569
-        },
-        {
-          "name": "progressFingerprint",
-          "offset": 67594
-        },
-        {
-          "name": "Error",
-          "offset": 67628
-        },
-        {
-          "name": "t",
-          "offset": 67665
-        },
-        {
-          "name": "primaryLockReality",
-          "offset": 67713
-        },
-        {
-          "name": "Error",
-          "offset": 67805
-        },
-        {
-          "name": "t",
-          "offset": 67842
-        },
-        {
-          "name": "watchdogTaskName",
-          "offset": 67884
-        },
-        {
-          "name": "watchdogTaskName",
-          "offset": 67905
-        },
-        {
-          "name": "watchdogTaskName",
-          "offset": 67926
-        },
-        {
-          "name": "startsWith",
-          "offset": 67945
-        },
-        {
-          "name": "Error",
-          "offset": 67999
-        },
-        {
-          "name": "t",
-          "offset": 68034
-        },
-        {
-          "name": "hardBlockingItems",
-          "offset": 68079
-        },
-        {
-          "name": "Error",
-          "offset": 68236
-        },
-        {
-          "name": "t",
-          "offset": 68274
-        },
-        {
-          "name": "timerReality",
-          "offset": 68320
-        },
-        {
-          "name": "Date",
-          "offset": 68363
-        },
-        {
-          "name": "now",
-          "offset": 68373
-        },
-        {
-          "name": "toISOString",
-          "offset": 68387
-        },
-        {
-          "name": "Error",
-          "offset": 68461
-        },
-        {
-          "name": "t",
-          "offset": 68504
-        },
-        {
-          "name": "timerReality",
-          "offset": 68549
-        },
-        {
-          "name": "Date",
-          "offset": 68592
-        },
-        {
-          "name": "now",
-          "offset": 68602
-        },
-        {
-          "name": "toISOString",
-          "offset": 68616
-        },
-        {
-          "name": "Error",
-          "offset": 68686
-        },
-        {
-          "name": "t",
-          "offset": 68724
-        },
-        {
-          "name": "buildAutoRecoveryPrompt",
-          "offset": 68949
-        },
-        {
-          "name": "includes",
-          "offset": 68979
-        },
-        {
-          "name": "Error",
-          "offset": 69014
-        },
-        {
-          "name": "every",
-          "offset": 69072
-        },
-        {
-          "name": "log",
-          "offset": 69102
-        },
-        {
-          "name": "stringify",
-          "offset": 69111
-        },
-        {
-          "name": "filter",
-          "offset": 69170
-        },
-        {
-          "name": "main",
-          "offset": 69274
-        },
-        {
-          "name": "ensureDir",
-          "offset": 69285
-        },
-        {
-          "name": "parseArgs",
-          "offset": 69365
-        },
-        {
-          "name": "slice",
-          "offset": 69388
-        },
-        {
-          "name": "commandInit",
-          "offset": 69457
-        },
-        {
-          "name": "commandResume",
-          "offset": 69508
-        },
-        {
-          "name": "commandHeartbeat",
-          "offset": 69561
-        },
-        {
-          "name": "commandHealth",
-          "offset": 69614
-        },
-        {
-          "name": "commandWatchdog",
-          "offset": 69666
-        },
-        {
-          "name": "commandWatchdogInstall",
-          "offset": 69728
+          "offset": 62069
         },
         {
           "name": "commandWatchdogRemove",
-          "offset": 69796
+          "offset": 62150
         },
         {
-          "name": "commandAutoRecover",
-          "offset": 69860
+          "name": "watchdogTaskName",
+          "offset": 62193
         },
         {
-          "name": "commandAutoStatus",
-          "offset": 69928
+          "name": "log",
+          "offset": 62256
         },
         {
-          "name": "commandCheckpoint",
-          "offset": 69986
+          "name": "stringify",
+          "offset": 62265
         },
         {
-          "name": "commandStepAdd",
-          "offset": 70046
+          "name": "spawnSync",
+          "offset": 62366
         },
         {
-          "name": "commandStepDone",
-          "offset": 70104
+          "name": "test",
+          "offset": 62529
         },
         {
-          "name": "commandStepFail",
-          "offset": 70163
+          "name": "String",
+          "offset": 62534
         },
         {
-          "name": "commandRun",
-          "offset": 70216
+          "name": "log",
+          "offset": 62577
+        },
+        {
+          "name": "stringify",
+          "offset": 62586
+        },
+        {
+          "name": "tailText",
+          "offset": 62642
+        },
+        {
+          "name": "tailText",
+          "offset": 62673
+        },
+        {
+          "name": "commandHealth",
+          "offset": 62747
+        },
+        {
+          "name": "commandWatchdog",
+          "offset": 62772
         },
         {
           "name": "commandStatus",
-          "offset": 70267
+          "offset": 62816
+        },
+        {
+          "name": "acquireReadGuard",
+          "offset": 62850
+        },
+        {
+          "name": "loadState",
+          "offset": 62933
+        },
+        {
+          "name": "log",
+          "offset": 62973
+        },
+        {
+          "name": "stringify",
+          "offset": 62982
+        },
+        {
+          "name": "gitReality",
+          "offset": 63076
+        },
+        {
+          "name": "classifyGit",
+          "offset": 63107
+        },
+        {
+          "name": "unresolvedStep",
+          "offset": 63145
+        },
+        {
+          "name": "scanUnfinished",
+          "offset": 63177
+        },
+        {
+          "name": "persistUnfinished",
+          "offset": 63196
+        },
+        {
+          "name": "safeJson",
+          "offset": 63237
+        },
+        {
+          "name": "log",
+          "offset": 63277
+        },
+        {
+          "name": "stringify",
+          "offset": 63286
+        },
+        {
+          "name": "bestNextAction",
+          "offset": 63660
+        },
+        {
+          "name": "release",
+          "offset": 63748
         },
         {
           "name": "commandUnfinished",
-          "offset": 70350
+          "offset": 63773
+        },
+        {
+          "name": "acquireReadGuard",
+          "offset": 63811
+        },
+        {
+          "name": "loadState",
+          "offset": 63903
+        },
+        {
+          "name": "scanUnfinished",
+          "offset": 63933
+        },
+        {
+          "name": "persistUnfinished",
+          "offset": 63952
+        },
+        {
+          "name": "saveState",
+          "offset": 64007
+        },
+        {
+          "name": "syncWip",
+          "offset": 64064
+        },
+        {
+          "name": "log",
+          "offset": 64090
+        },
+        {
+          "name": "stringify",
+          "offset": 64099
+        },
+        {
+          "name": "release",
+          "offset": 64140
         },
         {
           "name": "commandFinish",
-          "offset": 70404
+          "offset": 64165
         },
         {
-          "name": "commandSelfTest",
-          "offset": 70461
+          "name": "acquireLock",
+          "offset": 64205
+        },
+        {
+          "name": "loadState",
+          "offset": 64250
+        },
+        {
+          "name": "filter",
+          "offset": 64294
+        },
+        {
+          "name": "includes",
+          "offset": 64327
+        },
+        {
+          "name": "scanUnfinished",
+          "offset": 64361
+        },
+        {
+          "name": "persistUnfinished",
+          "offset": 64380
+        },
+        {
+          "name": "filter",
+          "offset": 64443
         },
         {
           "name": "Error",
-          "offset": 70494
+          "offset": 64568
         },
         {
-          "name": "error",
-          "offset": 70556
+          "name": "step",
+          "offset": 64626
+        },
+        {
+          "name": "command",
+          "offset": 64672
+        },
+        {
+          "name": "snapshot",
+          "offset": 64785
+        },
+        {
+          "name": "nowIso",
+          "offset": 64868
+        },
+        {
+          "name": "String",
+          "offset": 64909
+        },
+        {
+          "name": "nowIso",
+          "offset": 65002
+        },
+        {
+          "name": "saveState",
+          "offset": 65102
+        },
+        {
+          "name": "syncWip",
+          "offset": 65154
+        },
+        {
+          "name": "ensureDir",
+          "offset": 65170
+        },
+        {
+          "name": "join",
+          "offset": 65219
+        },
+        {
+          "name": "replace",
+          "offset": 65253
+        },
+        {
+          "name": "writeJsonAtomic",
+          "offset": 65303
+        },
+        {
+          "name": "appendJsonl",
+          "offset": 65336
+        },
+        {
+          "name": "join",
+          "offset": 65353
+        },
+        {
+          "name": "relative",
+          "offset": 65465
+        },
+        {
+          "name": "log",
+          "offset": 65585
+        },
+        {
+          "name": "stringify",
+          "offset": 65594
+        },
+        {
+          "name": "relative",
+          "offset": 65672
+        },
+        {
+          "name": "release",
+          "offset": 65724
+        },
+        {
+          "name": "commandSelfTest",
+          "offset": 65749
+        },
+        {
+          "name": "t",
+          "offset": 65800
+        },
+        {
+          "name": "fn",
+          "offset": 65820
+        },
+        {
+          "name": "push",
+          "offset": 65832
+        },
+        {
+          "name": "push",
+          "offset": 65880
+        },
+        {
+          "name": "t",
+          "offset": 65933
+        },
+        {
+          "name": "managedReplace",
+          "offset": 66037
+        },
+        {
+          "name": "managedReplace",
+          "offset": 66077
+        },
+        {
+          "name": "Error",
+          "offset": 66122
+        },
+        {
+          "name": "t",
+          "offset": 66165
+        },
+        {
+          "name": "parseArgs",
+          "offset": 66231
+        },
+        {
+          "name": "join",
+          "offset": 66323
+        },
+        {
+          "name": "Error",
+          "offset": 66364
+        },
+        {
+          "name": "t",
+          "offset": 66397
+        },
+        {
+          "name": "parseWipSections",
+          "offset": 66460
+        },
+        {
+          "name": "Error",
+          "offset": 66590
+        },
+        {
+          "name": "t",
+          "offset": 66631
+        },
+        {
+          "name": "processAlive",
+          "offset": 66668
+        },
+        {
+          "name": "Error",
+          "offset": 66705
+        },
+        {
+          "name": "t",
+          "offset": 66750
+        },
+        {
+          "name": "sha256Text",
+          "offset": 66788
+        },
+        {
+          "name": "sha256Text",
+          "offset": 66808
+        },
+        {
+          "name": "sha256Text",
+          "offset": 66827
+        },
+        {
+          "name": "sha256Text",
+          "offset": 66847
+        },
+        {
+          "name": "Error",
+          "offset": 66874
+        },
+        {
+          "name": "t",
+          "offset": 66904
+        },
+        {
+          "name": "isUnfinishedStatus",
+          "offset": 66951
+        },
+        {
+          "name": "isUnfinishedStatus",
+          "offset": 66989
+        },
+        {
+          "name": "isUnfinishedStatus",
+          "offset": 67022
+        },
+        {
+          "name": "Error",
+          "offset": 67060
+        },
+        {
+          "name": "t",
+          "offset": 67103
+        },
+        {
+          "name": "isOptionalExternalId",
+          "offset": 67161
+        },
+        {
+          "name": "isOptionalExternalId",
+          "offset": 67210
+        },
+        {
+          "name": "isOptionalExternalId",
+          "offset": 67253
+        },
+        {
+          "name": "Error",
+          "offset": 67300
+        },
+        {
+          "name": "t",
+          "offset": 67345
+        },
+        {
+          "name": "markerForCommand",
+          "offset": 67388
+        },
+        {
+          "name": "Error",
+          "offset": 67486
+        },
+        {
+          "name": "t",
+          "offset": 67526
+        },
+        {
+          "name": "waitingMarkerHit",
+          "offset": 67579
+        },
+        {
+          "name": "Error",
+          "offset": 67659
+        },
+        {
+          "name": "t",
+          "offset": 67700
+        },
+        {
+          "name": "progressFingerprint",
+          "offset": 67822
+        },
+        {
+          "name": "progressFingerprint",
+          "offset": 67847
+        },
+        {
+          "name": "Error",
+          "offset": 67881
+        },
+        {
+          "name": "t",
+          "offset": 67918
+        },
+        {
+          "name": "primaryLockReality",
+          "offset": 67966
+        },
+        {
+          "name": "Error",
+          "offset": 68058
+        },
+        {
+          "name": "t",
+          "offset": 68095
+        },
+        {
+          "name": "watchdogTaskName",
+          "offset": 68137
+        },
+        {
+          "name": "watchdogTaskName",
+          "offset": 68158
+        },
+        {
+          "name": "watchdogTaskName",
+          "offset": 68179
+        },
+        {
+          "name": "startsWith",
+          "offset": 68198
+        },
+        {
+          "name": "Error",
+          "offset": 68252
+        },
+        {
+          "name": "t",
+          "offset": 68287
+        },
+        {
+          "name": "hardBlockingItems",
+          "offset": 68332
+        },
+        {
+          "name": "Error",
+          "offset": 68489
+        },
+        {
+          "name": "t",
+          "offset": 68527
+        },
+        {
+          "name": "timerReality",
+          "offset": 68573
+        },
+        {
+          "name": "Date",
+          "offset": 68616
+        },
+        {
+          "name": "now",
+          "offset": 68626
+        },
+        {
+          "name": "toISOString",
+          "offset": 68640
+        },
+        {
+          "name": "Error",
+          "offset": 68714
+        },
+        {
+          "name": "t",
+          "offset": 68757
+        },
+        {
+          "name": "timerReality",
+          "offset": 68802
+        },
+        {
+          "name": "Date",
+          "offset": 68845
+        },
+        {
+          "name": "now",
+          "offset": 68855
+        },
+        {
+          "name": "toISOString",
+          "offset": 68869
+        },
+        {
+          "name": "Error",
+          "offset": 68939
+        },
+        {
+          "name": "t",
+          "offset": 68977
+        },
+        {
+          "name": "buildAutoRecoveryPrompt",
+          "offset": 69202
+        },
+        {
+          "name": "includes",
+          "offset": 69232
+        },
+        {
+          "name": "Error",
+          "offset": 69267
+        },
+        {
+          "name": "every",
+          "offset": 69325
+        },
+        {
+          "name": "log",
+          "offset": 69355
+        },
+        {
+          "name": "stringify",
+          "offset": 69364
+        },
+        {
+          "name": "filter",
+          "offset": 69423
         },
         {
           "name": "main",
-          "offset": 70672
+          "offset": 69527
+        },
+        {
+          "name": "ensureDir",
+          "offset": 69538
+        },
+        {
+          "name": "parseArgs",
+          "offset": 69618
+        },
+        {
+          "name": "slice",
+          "offset": 69641
+        },
+        {
+          "name": "commandInit",
+          "offset": 69710
+        },
+        {
+          "name": "commandResume",
+          "offset": 69761
+        },
+        {
+          "name": "commandHeartbeat",
+          "offset": 69814
+        },
+        {
+          "name": "commandHealth",
+          "offset": 69867
+        },
+        {
+          "name": "commandWatchdog",
+          "offset": 69919
+        },
+        {
+          "name": "commandWatchdogInstall",
+          "offset": 69981
+        },
+        {
+          "name": "commandWatchdogRemove",
+          "offset": 70049
+        },
+        {
+          "name": "commandAutoRecover",
+          "offset": 70113
+        },
+        {
+          "name": "commandAutoStatus",
+          "offset": 70181
+        },
+        {
+          "name": "commandCheckpoint",
+          "offset": 70239
+        },
+        {
+          "name": "commandStepAdd",
+          "offset": 70299
+        },
+        {
+          "name": "commandStepDone",
+          "offset": 70357
+        },
+        {
+          "name": "commandStepFail",
+          "offset": 70416
+        },
+        {
+          "name": "commandRun",
+          "offset": 70469
+        },
+        {
+          "name": "commandStatus",
+          "offset": 70520
+        },
+        {
+          "name": "commandUnfinished",
+          "offset": 70603
+        },
+        {
+          "name": "commandFinish",
+          "offset": 70657
+        },
+        {
+          "name": "commandSelfTest",
+          "offset": 70714
+        },
+        {
+          "name": "Error",
+          "offset": 70747
+        },
+        {
+          "name": "error",
+          "offset": 70809
+        },
+        {
+          "name": "main",
+          "offset": 70925
         }
       ],
       "assignments": [
@@ -65081,132 +65097,132 @@
         {
           "target": "r",
           "sourceCall": "spawnSync",
-          "offset": 61425
+          "offset": 61678
         },
         {
           "target": "taskName",
           "sourceCall": "watchdogTaskName",
-          "offset": 61925
+          "offset": 62178
         },
         {
           "target": "r",
           "sourceCall": "spawnSync",
-          "offset": 62105
+          "offset": 62358
         },
         {
           "target": "guard",
           "sourceCall": "acquireReadGuard",
-          "offset": 62583
+          "offset": 62836
         },
         {
           "target": "s",
           "sourceCall": "loadState",
-          "offset": 62670
+          "offset": 62923
         },
         {
           "target": "current",
           "sourceCall": "gitReality",
-          "offset": 62807
+          "offset": 63060
         },
         {
           "target": "warnings",
           "sourceCall": "classifyGit",
-          "offset": 62837
+          "offset": 63090
         },
         {
           "target": "step",
           "sourceCall": "unresolvedStep",
-          "offset": 62879
+          "offset": 63132
         },
         {
           "target": "scan",
           "sourceCall": "scanUnfinished",
-          "offset": 62911
+          "offset": 63164
         },
         {
           "target": "health",
           "sourceCall": "safeJson",
-          "offset": 62971
+          "offset": 63224
         },
         {
           "target": "guard",
           "sourceCall": "acquireReadGuard",
-          "offset": 63544
+          "offset": 63797
         },
         {
           "target": "s",
           "sourceCall": "loadState",
-          "offset": 63640
+          "offset": 63893
         },
         {
           "target": "scan",
           "sourceCall": "scanUnfinished",
-          "offset": 63667
+          "offset": 63920
         },
         {
           "target": "release",
           "sourceCall": "acquireLock",
-          "offset": 63936
+          "offset": 64189
         },
         {
           "target": "s",
           "sourceCall": "loadState",
-          "offset": 63987
+          "offset": 64240
         },
         {
           "target": "scan",
           "sourceCall": "scanUnfinished",
-          "offset": 64095
+          "offset": 64348
         },
         {
           "target": "snap",
           "sourceCall": "snapshot",
-          "offset": 64519
+          "offset": 64772
         },
         {
           "target": "a",
           "sourceCall": "managedReplace",
-          "offset": 65774
+          "offset": 66027
         },
         {
           "target": "c",
           "sourceCall": "managedReplace",
-          "offset": 65814
+          "offset": 66067
         },
         {
           "target": "a",
           "sourceCall": "parseArgs",
-          "offset": 65968
+          "offset": 66221
         },
         {
           "target": "sections",
           "sourceCall": "parseWipSections",
-          "offset": 66190
+          "offset": 66443
         },
         {
           "target": "x",
           "sourceCall": "primaryLockReality",
-          "offset": 67705
+          "offset": 67958
         },
         {
           "target": "x",
           "sourceCall": "hardBlockingItems",
-          "offset": 68071
+          "offset": 68324
         },
         {
           "target": "x",
           "sourceCall": "timerReality",
-          "offset": 68312
+          "offset": 68565
         },
         {
           "target": "x",
           "sourceCall": "timerReality",
-          "offset": 68541
+          "offset": 68794
         },
         {
           "target": "args",
           "sourceCall": "parseArgs",
-          "offset": 69352
+          "offset": 69605
         }
       ],
       "imports": [
@@ -112232,223 +112248,223 @@
         {
           "name": "parse",
           "kind": "function",
-          "offset": 412
+          "offset": 416
         },
         {
           "name": "build",
           "kind": "function",
-          "offset": 1301
+          "offset": 1306
         }
       ],
       "calls": [
         {
           "name": "readJSON",
-          "offset": 193
+          "offset": 196
         },
         {
           "name": "join",
-          "offset": 207
+          "offset": 210
         },
         {
           "name": "Set",
-          "offset": 265
+          "offset": 268
         },
         {
           "name": "Set",
-          "offset": 299
+          "offset": 302
         },
         {
           "name": "parse",
-          "offset": 421
+          "offset": 425
         },
         {
           "name": "b",
-          "offset": 514
+          "offset": 518
         },
         {
           "name": "b",
-          "offset": 624
+          "offset": 628
         },
         {
           "name": "exec",
-          "offset": 768
+          "offset": 772
         },
         {
           "name": "push",
-          "offset": 792
+          "offset": 796
         },
         {
           "name": "exec",
-          "offset": 927
+          "offset": 931
         },
         {
           "name": "push",
-          "offset": 947
+          "offset": 951
         },
         {
           "name": "b",
-          "offset": 970
+          "offset": 974
         },
         {
           "name": "exec",
-          "offset": 1010
+          "offset": 1014
         },
         {
           "name": "has",
-          "offset": 1029
+          "offset": 1033
         },
         {
           "name": "push",
-          "offset": 1045
+          "offset": 1049
         },
         {
           "name": "b",
-          "offset": 1090
+          "offset": 1094
         },
         {
           "name": "exec",
-          "offset": 1175
+          "offset": 1179
         },
         {
           "name": "push",
-          "offset": 1199
+          "offset": 1203
         },
         {
           "name": "build",
-          "offset": 1310
+          "offset": 1315
         },
         {
           "name": "readJSON",
-          "offset": 1331
+          "offset": 1336
         },
         {
           "name": "join",
-          "offset": 1345
+          "offset": 1350
         },
         {
           "name": "projectFiles",
-          "offset": 1390
+          "offset": 1395
         },
         {
           "name": "filter",
-          "offset": 1405
+          "offset": 1410
         },
         {
           "name": "has",
-          "offset": 1420
+          "offset": 1425
         },
         {
           "name": "extname",
-          "offset": 1429
+          "offset": 1434
         },
         {
           "name": "toLowerCase",
-          "offset": 1440
+          "offset": 1445
         },
         {
           "name": "join",
-          "offset": 1505
+          "offset": 1510
         },
         {
           "name": "statSync",
-          "offset": 1537
+          "offset": 1542
         },
         {
           "name": "Number",
-          "offset": 1577
+          "offset": 1582
         },
         {
           "name": "readFileSync",
-          "offset": 1647
+          "offset": 1652
         },
         {
           "name": "push",
-          "offset": 1694
-        },
-        {
-          "name": "parse",
           "offset": 1699
         },
         {
+          "name": "parse",
+          "offset": 1704
+        },
+        {
           "name": "Map",
-          "offset": 1731
+          "offset": 1736
         },
         {
           "name": "get",
-          "offset": 1810
+          "offset": 1815
         },
         {
           "name": "set",
-          "offset": 1823
+          "offset": 1828
         },
         {
           "name": "get",
-          "offset": 1833
+          "offset": 1838
         },
         {
           "name": "push",
-          "offset": 1841
+          "offset": 1846
         },
         {
           "name": "get",
-          "offset": 1949
+          "offset": 1954
         },
         {
           "name": "push",
-          "offset": 1998
+          "offset": 2003
         },
         {
           "name": "push",
-          "offset": 2165
+          "offset": 2170
         },
         {
           "name": "nowIso",
-          "offset": 2289
+          "offset": 2294
         },
         {
           "name": "values",
-          "offset": 2536
+          "offset": 2541
         },
         {
           "name": "reduce",
-          "offset": 2546
+          "offset": 2551
         },
         {
           "name": "Number",
-          "offset": 2765
+          "offset": 2770
         },
         {
           "name": "writeJSON",
-          "offset": 2803
+          "offset": 2808
         },
         {
           "name": "join",
-          "offset": 2818
+          "offset": 2823
         },
         {
           "name": "log",
-          "offset": 2878
+          "offset": 2883
         },
         {
           "name": "build",
-          "offset": 3039
+          "offset": 3045
         }
       ],
       "assignments": [
         {
           "target": "fs",
           "sourceCall": "require",
-          "offset": 34
+          "offset": 36
         },
         {
           "target": "policy",
           "sourceCall": "readJSON",
-          "offset": 180
+          "offset": 183
         },
         {
           "target": "module",
           "sourceCall": "readJSON",
-          "offset": 1318
+          "offset": 1323
         }
       ],
       "imports": [
@@ -122513,7 +122529,7 @@
         {
           "name": "analyze",
           "kind": "function",
-          "offset": 13608
+          "offset": 13634
         },
         {
           "name": "exists",
@@ -122863,487 +122879,487 @@
         },
         {
           "name": "has",
-          "offset": 5103
+          "offset": 5116
         },
         {
           "name": "has",
-          "offset": 5180
+          "offset": 5193
         },
         {
           "name": "exists",
-          "offset": 5306
+          "offset": 5319
         },
         {
           "name": "exists",
-          "offset": 5402
+          "offset": 5415
         },
         {
           "name": "has",
-          "offset": 5495
+          "offset": 5508
         },
         {
           "name": "exists",
-          "offset": 5594
+          "offset": 5607
         },
         {
           "name": "has",
-          "offset": 5692
+          "offset": 5705
         },
         {
           "name": "exists",
-          "offset": 5795
+          "offset": 5808
         },
         {
           "name": "exists",
-          "offset": 5866
+          "offset": 5879
         },
         {
           "name": "exists",
-          "offset": 5956
+          "offset": 5969
         },
         {
           "name": "has",
-          "offset": 6020
+          "offset": 6033
         },
         {
           "name": "has",
-          "offset": 6133
+          "offset": 6146
         },
         {
           "name": "exists",
-          "offset": 6240
+          "offset": 6253
         },
         {
           "name": "exists",
-          "offset": 6339
+          "offset": 6352
         },
         {
           "name": "exists",
-          "offset": 6395
+          "offset": 6408
         },
         {
           "name": "exists",
-          "offset": 6507
+          "offset": 6520
         },
         {
           "name": "exists",
-          "offset": 6588
+          "offset": 6601
         },
         {
           "name": "exists",
-          "offset": 6669
+          "offset": 6682
         },
         {
           "name": "exists",
-          "offset": 6744
+          "offset": 6757
         },
         {
           "name": "has",
-          "offset": 6828
+          "offset": 6841
         },
         {
           "name": "has",
-          "offset": 6888
+          "offset": 6901
         },
         {
           "name": "exists",
-          "offset": 6998
+          "offset": 7011
         },
         {
           "name": "exists",
-          "offset": 7097
+          "offset": 7110
         },
         {
           "name": "exists",
-          "offset": 7190
+          "offset": 7203
         },
         {
           "name": "has",
-          "offset": 7285
+          "offset": 7298
         },
         {
           "name": "has",
-          "offset": 7393
+          "offset": 7406
         },
         {
           "name": "exists",
-          "offset": 7500
+          "offset": 7513
         },
         {
           "name": "exists",
-          "offset": 7592
+          "offset": 7605
         },
         {
           "name": "exists",
-          "offset": 7694
+          "offset": 7707
         },
         {
           "name": "exists",
-          "offset": 7799
+          "offset": 7812
         },
         {
           "name": "exists",
-          "offset": 7954
+          "offset": 7967
         },
         {
           "name": "exists",
-          "offset": 8056
+          "offset": 8069
         },
         {
           "name": "has",
-          "offset": 8177
+          "offset": 8190
         },
         {
           "name": "has",
-          "offset": 8283
+          "offset": 8296
         },
         {
           "name": "exists",
-          "offset": 8398
+          "offset": 8411
         },
         {
           "name": "has",
-          "offset": 8487
+          "offset": 8500
         },
         {
           "name": "has",
-          "offset": 8595
+          "offset": 8608
         },
         {
           "name": "has",
-          "offset": 8664
+          "offset": 8677
         },
         {
           "name": "exists",
-          "offset": 8790
+          "offset": 8803
         },
         {
           "name": "has",
-          "offset": 8889
+          "offset": 8902
         },
         {
           "name": "has",
-          "offset": 8954
+          "offset": 8967
         },
         {
           "name": "exists",
-          "offset": 9070
+          "offset": 9083
         },
         {
           "name": "exists",
-          "offset": 9176
+          "offset": 9189
         },
         {
           "name": "exists",
-          "offset": 9344
+          "offset": 9357
         },
         {
           "name": "exists",
-          "offset": 9424
+          "offset": 9437
         },
         {
           "name": "has",
-          "offset": 9508
+          "offset": 9521
         },
         {
           "name": "has",
-          "offset": 9638
+          "offset": 9651
         },
         {
           "name": "has",
-          "offset": 9702
+          "offset": 9715
         },
         {
           "name": "has",
-          "offset": 9814
+          "offset": 9827
         },
         {
           "name": "has",
-          "offset": 9917
+          "offset": 9930
         },
         {
           "name": "exists",
-          "offset": 10037
+          "offset": 10050
         },
         {
           "name": "exists",
-          "offset": 10136
+          "offset": 10149
         },
         {
           "name": "has",
-          "offset": 10227
+          "offset": 10240
         },
         {
           "name": "exists",
-          "offset": 10327
+          "offset": 10340
         },
         {
           "name": "has",
-          "offset": 10413
+          "offset": 10426
         },
         {
           "name": "has",
-          "offset": 10466
+          "offset": 10492
         },
         {
           "name": "exists",
-          "offset": 10553
+          "offset": 10579
         },
         {
           "name": "exists",
-          "offset": 10630
+          "offset": 10656
         },
         {
           "name": "exists",
-          "offset": 10708
+          "offset": 10734
         },
         {
           "name": "exists",
-          "offset": 10790
+          "offset": 10816
         },
         {
           "name": "exists",
-          "offset": 10938
+          "offset": 10964
         },
         {
           "name": "exists",
-          "offset": 11050
+          "offset": 11076
         },
         {
           "name": "exists",
-          "offset": 11153
+          "offset": 11179
         },
         {
           "name": "has",
-          "offset": 11266
+          "offset": 11292
         },
         {
           "name": "exists",
-          "offset": 11380
+          "offset": 11406
         },
         {
           "name": "exists",
-          "offset": 11484
+          "offset": 11510
         },
         {
           "name": "exists",
-          "offset": 11575
+          "offset": 11601
         },
         {
           "name": "exists",
-          "offset": 11676
+          "offset": 11702
         },
         {
           "name": "exists",
-          "offset": 11766
+          "offset": 11792
         },
         {
           "name": "exists",
-          "offset": 11862
+          "offset": 11888
         },
         {
           "name": "exists",
-          "offset": 11940
+          "offset": 11966
         },
         {
           "name": "exists",
-          "offset": 12028
+          "offset": 12054
         },
         {
           "name": "exists",
-          "offset": 12122
+          "offset": 12148
         },
         {
           "name": "exists",
-          "offset": 12213
+          "offset": 12239
         },
         {
           "name": "exists",
-          "offset": 12298
+          "offset": 12324
         },
         {
           "name": "exists",
-          "offset": 12379
+          "offset": 12405
         },
         {
           "name": "exists",
-          "offset": 12459
+          "offset": 12485
         },
         {
           "name": "exists",
-          "offset": 12558
+          "offset": 12584
         },
         {
           "name": "exists",
-          "offset": 12646
+          "offset": 12672
         },
         {
           "name": "exists",
-          "offset": 12728
+          "offset": 12754
         },
         {
           "name": "exists",
-          "offset": 12813
+          "offset": 12839
         },
         {
           "name": "exists",
-          "offset": 12898
+          "offset": 12924
         },
         {
           "name": "exists",
-          "offset": 12943
+          "offset": 12969
         },
         {
           "name": "exists",
-          "offset": 13023
+          "offset": 13049
         },
         {
           "name": "exists",
-          "offset": 13124
+          "offset": 13150
         },
         {
           "name": "exists",
-          "offset": 13168
+          "offset": 13194
         },
         {
           "name": "has",
-          "offset": 13250
+          "offset": 13276
         },
         {
           "name": "exists",
-          "offset": 13381
+          "offset": 13407
         },
         {
           "name": "exists",
-          "offset": 13440
+          "offset": 13466
         },
         {
           "name": "exists",
-          "offset": 13545
+          "offset": 13571
         },
         {
           "name": "analyze",
-          "offset": 13617
+          "offset": 13643
         },
         {
           "name": "read",
-          "offset": 13637
+          "offset": 13663
         },
         {
           "name": "checksForDomain",
-          "offset": 13799
+          "offset": 13825
         },
         {
           "name": "computeReadiness",
-          "offset": 13819
+          "offset": 13845
         },
         {
           "name": "entries",
-          "offset": 13891
+          "offset": 13917
         },
         {
           "name": "push",
-          "offset": 13937
+          "offset": 13963
         },
         {
           "name": "baselineCoverage",
-          "offset": 13995
+          "offset": 14021
         },
         {
           "name": "productionRigCoverage",
-          "offset": 14018
+          "offset": 14044
         },
         {
           "name": "read",
-          "offset": 14051
+          "offset": 14077
         },
         {
           "name": "read",
-          "offset": 14100
+          "offset": 14126
         },
         {
           "name": "evaluateProductionCertification",
-          "offset": 14176
+          "offset": 14202
         },
         {
           "name": "String",
-          "offset": 14247
+          "offset": 14273
         },
         {
           "name": "toUpperCase",
-          "offset": 14275
+          "offset": 14301
         },
         {
           "name": "String",
-          "offset": 14479
+          "offset": 14505
         },
         {
           "name": "toLowerCase",
-          "offset": 14524
+          "offset": 14550
         },
         {
           "name": "certifiedReadiness",
-          "offset": 14574
+          "offset": 14600
         },
         {
           "name": "Date",
-          "offset": 14715
+          "offset": 14741
         },
         {
           "name": "toISOString",
-          "offset": 14722
+          "offset": 14748
         },
         {
           "name": "fromEntries",
-          "offset": 15114
+          "offset": 15140
         },
         {
           "name": "entries",
-          "offset": 15133
+          "offset": 15159
         },
         {
           "name": "map",
-          "offset": 15144
+          "offset": 15170
         },
         {
           "name": "map",
-          "offset": 15162
+          "offset": 15188
         },
         {
           "name": "writeFileSync",
-          "offset": 15215
+          "offset": 15241
         },
         {
           "name": "join",
-          "offset": 15234
+          "offset": 15260
         },
         {
           "name": "stringify",
-          "offset": 15288
+          "offset": 15314
         },
         {
           "name": "analyze",
-          "offset": 15369
+          "offset": 15395
         },
         {
           "name": "log",
-          "offset": 15387
+          "offset": 15413
         },
         {
           "name": "entries",
-          "offset": 15593
+          "offset": 15619
         },
         {
           "name": "log",
-          "offset": 15626
+          "offset": 15652
         },
         {
           "name": "log",
-          "offset": 15702
+          "offset": 15728
         },
         {
           "name": "join",
-          "offset": 15761
+          "offset": 15787
         }
       ],
       "assignments": [
@@ -123380,27 +123396,27 @@
         {
           "target": "p",
           "sourceCall": "read",
-          "offset": 13629
+          "offset": 13655
         },
         {
           "target": "baseline",
           "sourceCall": "baselineCoverage",
-          "offset": 13980
+          "offset": 14006
         },
         {
           "target": "productionCertification",
           "sourceCall": "evaluateProductionCertification",
-          "offset": 14146
+          "offset": 14172
         },
         {
           "target": "readinessPercent",
           "sourceCall": "certifiedReadiness",
-          "offset": 14551
+          "offset": 14577
         },
         {
           "target": "r",
           "sourceCall": "analyze",
-          "offset": 15361
+          "offset": 15387
         }
       ],
       "imports": [
@@ -124595,47 +124611,47 @@
         },
         {
           "name": "has",
-          "offset": 1124
+          "offset": 1137
         },
         {
           "name": "round",
-          "offset": 1194
-        },
-        {
-          "name": "values",
           "offset": 1207
         },
         {
+          "name": "values",
+          "offset": 1220
+        },
+        {
           "name": "filter",
-          "offset": 1228
+          "offset": 1241
         },
         {
           "name": "keys",
-          "offset": 1258
+          "offset": 1271
         },
         {
           "name": "Date",
-          "offset": 1374
+          "offset": 1387
         },
         {
           "name": "toISOString",
-          "offset": 1381
+          "offset": 1394
         },
         {
           "name": "writeFileSync",
-          "offset": 1528
+          "offset": 1541
         },
         {
           "name": "join",
-          "offset": 1547
+          "offset": 1560
         },
         {
           "name": "stringify",
-          "offset": 1599
+          "offset": 1612
         },
         {
           "name": "log",
-          "offset": 1638
+          "offset": 1651
         }
       ],
       "assignments": [
@@ -183037,6 +183053,154 @@
       ]
     },
     {
+      "rel": "test/background-headless.test.js",
+      "definitions": [],
+      "calls": [
+        {
+          "name": "test",
+          "offset": 152
+        },
+        {
+          "name": "resolve",
+          "offset": 246
+        },
+        {
+          "name": "join",
+          "offset": 499
+        },
+        {
+          "name": "existsSync",
+          "offset": 528
+        },
+        {
+          "name": "readFileSync",
+          "offset": 576
+        },
+        {
+          "name": "includes",
+          "offset": 685
+        },
+        {
+          "name": "includes",
+          "offset": 727
+        },
+        {
+          "name": "includes",
+          "offset": 762
+        },
+        {
+          "name": "includes",
+          "offset": 802
+        },
+        {
+          "name": "ok",
+          "offset": 846
+        },
+        {
+          "name": "slice",
+          "offset": 930
+        },
+        {
+          "name": "readFileSync",
+          "offset": 1048
+        },
+        {
+          "name": "join",
+          "offset": 1066
+        },
+        {
+          "name": "ok",
+          "offset": 1139
+        },
+        {
+          "name": "includes",
+          "offset": 1151
+        },
+        {
+          "name": "ok",
+          "offset": 1263
+        },
+        {
+          "name": "includes",
+          "offset": 1275
+        },
+        {
+          "name": "readFileSync",
+          "offset": 1452
+        },
+        {
+          "name": "join",
+          "offset": 1470
+        },
+        {
+          "name": "ok",
+          "offset": 1541
+        },
+        {
+          "name": "includes",
+          "offset": 1552
+        },
+        {
+          "name": "test",
+          "offset": 1656
+        },
+        {
+          "name": "async",
+          "offset": 1702
+        },
+        {
+          "name": "spawnSync",
+          "offset": 1913
+        },
+        {
+          "name": "String",
+          "offset": 2098
+        },
+        {
+          "name": "ok",
+          "offset": 2133
+        },
+        {
+          "name": "includes",
+          "offset": 2140
+        }
+      ],
+      "assignments": [
+        {
+          "target": "assert",
+          "sourceCall": "require",
+          "offset": 39
+        },
+        {
+          "target": "fs",
+          "sourceCall": "require",
+          "offset": 85
+        },
+        {
+          "target": "path",
+          "sourceCall": "require",
+          "offset": 116
+        },
+        {
+          "target": "r",
+          "sourceCall": "spawnSync",
+          "offset": 1903
+        },
+        {
+          "target": "xml",
+          "sourceCall": "String",
+          "offset": 2086
+        }
+      ],
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:child_process"
+      ]
+    },
+    {
       "rel": "test/cpu-real3d.test.js",
       "definitions": [],
       "calls": [
@@ -185520,104 +185684,104 @@
       "definitions": [],
       "calls": [
         {
+          "name": "join",
+          "offset": 259
+        },
+        {
+          "name": "homedir",
+          "offset": 267
+        },
+        {
+          "name": "existsSync",
+          "offset": 333
+        },
+        {
+          "name": "join",
+          "offset": 349
+        },
+        {
           "name": "test",
-          "offset": 236
+          "offset": 376
+        },
+        {
+          "name": "path",
+          "offset": 550
         },
         {
           "name": "join",
-          "offset": 340
+          "offset": 713
         },
         {
           "name": "homedir",
-          "offset": 348
-        },
-        {
-          "name": "ok",
-          "offset": 396
+          "offset": 721
         },
         {
           "name": "existsSync",
-          "offset": 402
-        },
-        {
-          "name": "join",
-          "offset": 418
-        },
-        {
-          "name": "join",
-          "offset": 498
-        },
-        {
-          "name": "homedir",
-          "offset": 506
-        },
-        {
-          "name": "existsSync",
-          "offset": 548
+          "offset": 763
         },
         {
           "name": "mkdtempSync",
-          "offset": 678
+          "offset": 893
         },
         {
           "name": "join",
-          "offset": 695
+          "offset": 910
         },
         {
           "name": "tmpdir",
-          "offset": 703
+          "offset": 918
         },
         {
           "name": "spawnSync",
-          "offset": 747
+          "offset": 962
         },
         {
           "name": "join",
-          "offset": 781
+          "offset": 996
         },
         {
           "name": "match",
-          "offset": 968
+          "offset": 1183
         },
         {
           "name": "spawnSync",
-          "offset": 1091
+          "offset": 1306
         },
         {
           "name": "join",
-          "offset": 1125
+          "offset": 1340
         },
         {
           "name": "ok",
-          "offset": 1399
+          "offset": 1614
         },
         {
           "name": "includes",
-          "offset": 1406
+          "offset": 1621
         },
         {
           "name": "includes",
-          "offset": 1438
+          "offset": 1653
         },
         {
           "name": "includes",
-          "offset": 1472
+          "offset": 1687
         },
         {
           "name": "slice",
-          "offset": 1568
+          "offset": 1783
         },
         {
           "name": "ok",
-          "offset": 1594
+          "offset": 1809
         },
         {
           "name": "includes",
-          "offset": 1601
+          "offset": 1816
         },
         {
           "name": "includes",
-          "offset": 1645
+          "offset": 1860
         }
       ],
       "assignments": [
@@ -185644,12 +185808,12 @@
         {
           "target": "r",
           "sourceCall": "spawnSync",
-          "offset": 737
+          "offset": 952
         },
         {
           "target": "r",
           "sourceCall": "spawnSync",
-          "offset": 1081
+          "offset": 1296
         }
       ],
       "imports": [
@@ -566995,6 +567159,96 @@
         "confidence": 0.9
       },
       {
+        "fromFile": "test/background-headless.test.js",
+        "toFile": "scripts/check-golden-standard.js",
+        "symbol": "ok",
+        "confidence": 0.6
+      },
+      {
+        "fromFile": "test/background-headless.test.js",
+        "toFile": "scripts/check-sentry-runtime.js",
+        "symbol": "ok",
+        "confidence": 0.6
+      },
+      {
+        "fromFile": "test/background-headless.test.js",
+        "toFile": "shared/sentry-runtime.js",
+        "symbol": "ok",
+        "confidence": 0.6
+      },
+      {
+        "fromFile": "test/background-headless.test.js",
+        "toFile": "scripts/check-golden-standard.js",
+        "symbol": "ok",
+        "confidence": 0.6
+      },
+      {
+        "fromFile": "test/background-headless.test.js",
+        "toFile": "scripts/check-sentry-runtime.js",
+        "symbol": "ok",
+        "confidence": 0.6
+      },
+      {
+        "fromFile": "test/background-headless.test.js",
+        "toFile": "shared/sentry-runtime.js",
+        "symbol": "ok",
+        "confidence": 0.6
+      },
+      {
+        "fromFile": "test/background-headless.test.js",
+        "toFile": "scripts/check-golden-standard.js",
+        "symbol": "ok",
+        "confidence": 0.6
+      },
+      {
+        "fromFile": "test/background-headless.test.js",
+        "toFile": "scripts/check-sentry-runtime.js",
+        "symbol": "ok",
+        "confidence": 0.6
+      },
+      {
+        "fromFile": "test/background-headless.test.js",
+        "toFile": "shared/sentry-runtime.js",
+        "symbol": "ok",
+        "confidence": 0.6
+      },
+      {
+        "fromFile": "test/background-headless.test.js",
+        "toFile": "scripts/check-golden-standard.js",
+        "symbol": "ok",
+        "confidence": 0.6
+      },
+      {
+        "fromFile": "test/background-headless.test.js",
+        "toFile": "scripts/check-sentry-runtime.js",
+        "symbol": "ok",
+        "confidence": 0.6
+      },
+      {
+        "fromFile": "test/background-headless.test.js",
+        "toFile": "shared/sentry-runtime.js",
+        "symbol": "ok",
+        "confidence": 0.6
+      },
+      {
+        "fromFile": "test/background-headless.test.js",
+        "toFile": "scripts/check-golden-standard.js",
+        "symbol": "ok",
+        "confidence": 0.6
+      },
+      {
+        "fromFile": "test/background-headless.test.js",
+        "toFile": "scripts/check-sentry-runtime.js",
+        "symbol": "ok",
+        "confidence": 0.6
+      },
+      {
+        "fromFile": "test/background-headless.test.js",
+        "toFile": "shared/sentry-runtime.js",
+        "symbol": "ok",
+        "confidence": 0.6
+      },
+      {
         "fromFile": "test/cpu-real3d.test.js",
         "toFile": "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/install-world-quality-autopilot.cjs",
         "symbol": "run",
@@ -570394,24 +570648,6 @@
         "fromFile": "test/regression-generator.test.js",
         "toFile": "scripts/semantic-dependency-graph.cjs",
         "symbol": "parse",
-        "confidence": 0.6
-      },
-      {
-        "fromFile": "test/session-recovery-wrong-workdir.test.js",
-        "toFile": "scripts/check-golden-standard.js",
-        "symbol": "ok",
-        "confidence": 0.6
-      },
-      {
-        "fromFile": "test/session-recovery-wrong-workdir.test.js",
-        "toFile": "scripts/check-sentry-runtime.js",
-        "symbol": "ok",
-        "confidence": 0.6
-      },
-      {
-        "fromFile": "test/session-recovery-wrong-workdir.test.js",
-        "toFile": "shared/sentry-runtime.js",
-        "symbol": "ok",
         "confidence": 0.6
       },
       {
@@ -587490,6 +587726,36 @@
         "file": "test/auth.test.js",
         "fromCall": "accountEmail",
         "toVariable": "email",
+        "confidence": 0.8
+      },
+      {
+        "file": "test/background-headless.test.js",
+        "fromCall": "require",
+        "toVariable": "assert",
+        "confidence": 0.8
+      },
+      {
+        "file": "test/background-headless.test.js",
+        "fromCall": "require",
+        "toVariable": "fs",
+        "confidence": 0.8
+      },
+      {
+        "file": "test/background-headless.test.js",
+        "fromCall": "require",
+        "toVariable": "path",
+        "confidence": 0.8
+      },
+      {
+        "file": "test/background-headless.test.js",
+        "fromCall": "spawnSync",
+        "toVariable": "r",
+        "confidence": 0.8
+      },
+      {
+        "file": "test/background-headless.test.js",
+        "fromCall": "String",
+        "toVariable": "xml",
         "confidence": 0.8
       },
       {
