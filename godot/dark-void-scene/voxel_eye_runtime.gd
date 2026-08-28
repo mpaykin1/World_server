@@ -9,6 +9,13 @@ const VOX := 0.34
 const HALF_W := 17
 const HALF_H := 9
 
+## Exact hex palette pulled from the reference pack's dominant-palette
+## analysis (12_DOMINANT_PALETTE.png) - real measured colors, not guesses.
+const ROCK_DARK := Color(0x16 / 255.0, 0x15 / 255.0, 0x19 / 255.0)
+const ROCK_MID := Color(0x3C / 255.0, 0x2A / 255.0, 0x26 / 255.0)
+const ROCK_LIT := Color(0x7A / 255.0, 0x4C / 255.0, 0x38 / 255.0)
+const ROCK_HILITE := Color(0xC6 / 255.0, 0x8E / 255.0, 0x66 / 255.0)
+
 var mode: String = "beacon" # camera | user | beacon | idle
 var beacon: Node3D = null
 var rig: Node3D = null # the camera rig - a CHILD of this node, arrow keys move the eye itself
@@ -79,13 +86,13 @@ func _build() -> void:
 	# blend into it - a hero silhouette that disappears in the void is a
 	# release-blocking regression (see error-prevention-registry.json:
 	# "voxel-hero-silhouette-invisible-against-void").
-	mat_dark.albedo_color = Color8(0x10, 0x0d, 0x0a)
+	# White base + per-instance color carries the ACTUAL palette (dark to
+	# lit-warm hue shift, not just a brightness scalar) - see ROCK_* above.
+	mat_dark.albedo_color = Color(1, 1, 1)
 	mat_dark.roughness = 0.8
 	mat_dark.emission_enabled = true
-	mat_dark.emission = Color8(0x14, 0x0c, 0x05)
-	mat_dark.emission_energy_multiplier = 0.045
-	# Per-voxel color variation (weathered rock, not flat plastic blocks) -
-	# instance color multiplies albedo/emission per cell.
+	mat_dark.emission = ROCK_DARK
+	mat_dark.emission_energy_multiplier = 0.03
 	mat_dark.vertex_color_use_as_albedo = true
 
 	var mat_white := StandardMaterial3D.new()
@@ -102,9 +109,27 @@ func _build() -> void:
 	mat_iris.emission_energy_multiplier = 0.95
 	mat_iris.roughness = 0.5
 
+	# Inner iris band - darker radial striation toward the pupil, matching
+	# the reference's textured (not flat-color) iris close-up.
+	var mat_iris_inner := StandardMaterial3D.new()
+	mat_iris_inner.albedo_color = Color8(0x7a, 0x4e, 0x14)
+	mat_iris_inner.emission_enabled = true
+	mat_iris_inner.emission = Color8(0x5a, 0x30, 0x06)
+	mat_iris_inner.emission_energy_multiplier = 0.75
+	mat_iris_inner.roughness = 0.5
+
 	var mat_pupil := StandardMaterial3D.new()
 	mat_pupil.albedo_color = Color8(0x01, 0x01, 0x01)
 	mat_pupil.roughness = 0.92
+
+	# Tiny bright catchlight (specular pixel) offset on the pupil/iris edge -
+	# a single-voxel highlight is what makes the reference's eye read as a
+	# real wet/reflective eye instead of a flat emissive disc.
+	var mat_catchlight := StandardMaterial3D.new()
+	mat_catchlight.albedo_color = Color8(0xff, 0xff, 0xff)
+	mat_catchlight.emission_enabled = true
+	mat_catchlight.emission = Color8(0xff, 0xf6, 0xe0)
+	mat_catchlight.emission_energy_multiplier = 3.0
 
 	var mat_rim := StandardMaterial3D.new()
 	mat_rim.albedo_color = Color8(0x24, 0x22, 0x1f)
@@ -113,7 +138,7 @@ func _build() -> void:
 	mat_rim.emission = Color8(0x2a, 0x24, 0x18)
 	mat_rim.emission_energy_multiplier = 0.3
 
-	var parts := {"white": [], "iris": [], "pupil": [], "rim": []}
+	var parts := {"white": [], "iris": [], "iris_inner": [], "pupil": [], "rim": [], "catchlight": []}
 	for y in range(-HALF_H, HALF_H + 1):
 		for x in range(-HALF_W, HALF_W + 1):
 			var e: float = pow(float(x) / HALF_W, 2) + pow(float(y) / HALF_H, 2)
@@ -125,12 +150,20 @@ func _build() -> void:
 				parts["rim"].append(Vector3(x, y, 0.0))
 			elif ri < 0.20:
 				parts["pupil"].append(Vector3(x, y, 0.8))
+			elif ri < 0.42:
+				parts["iris_inner"].append(Vector3(x, y, 0.55))
 			elif ri < 1.0:
 				parts["iris"].append(Vector3(x, y, 0.5))
 			else:
 				parts["white"].append(Vector3(x, y, 0.15))
+	# One catchlight voxel, offset up-right off the pupil - matches the
+	# bright white specular pixel visible in the reference's eye close-up.
+	parts["catchlight"].append(Vector3(2, 2, 0.95))
 
-	var mats := {"white": mat_white, "iris": mat_iris, "pupil": mat_pupil, "rim": mat_rim}
+	var mats := {
+		"white": mat_white, "iris": mat_iris, "iris_inner": mat_iris_inner,
+		"pupil": mat_pupil, "rim": mat_rim, "catchlight": mat_catchlight
+	}
 	for key in parts.keys():
 		var cells: Array = parts[key]
 		var mmi := MultiMeshInstance3D.new()
@@ -215,11 +248,22 @@ func _build() -> void:
 		var kz: float = 0.82 + _hash2(py, px) * 0.7
 		var basis := Basis().scaled(Vector3(k, k, kz))
 		wall_mm.set_instance_transform(i, Transform3D(basis, Vector3(px * VOX, py * VOX, pz)))
-		# Pseudo-AO: voxels buried deeper in the mass read darker/cooler;
-		# surface voxels get a little natural per-cell weathering variation.
+		# Real palette hue-shift, not a grayscale brightness multiply: deep/
+		# buried voxels stay near ROCK_DARK, surface voxels catching light
+		# lerp toward ROCK_LIT/ROCK_HILITE per the reference's measured
+		# dark-to-warm gradient. Kept mostly dark (pow curve) so only true
+		# edges pop, matching the reference's near-black massing.
 		var depth_t: float = 0.0 if depth_count <= 1 else float(d) / float(max(1, depth_count - 1))
-		var shade: float = lerp(1.0, 0.16, depth_t) * (0.8 + _hash2(px * 5.1, py * 2.3) * 0.3)
-		wall_mm.set_instance_color(i, Color(shade, shade * 0.94, shade * 0.86, 1.0))
+		var lit_t: float = clamp((1.0 - depth_t) + (_hash2(px * 5.1, py * 2.3) - 0.5) * 0.35, 0.0, 1.0)
+		lit_t = pow(lit_t, 4.5) # reference massing is almost entirely the
+		# darkest band (05_MASSING_VALUE_BANDS.png) - only near-surface,
+		# lucky-hash voxels should show any warmth at all, and even those
+		# should only partway close the gap to MID/LIT, not reach it -
+		# the raw palette hexes are too saturated to use at full strength
+		# over the whole silhouette without reading as a warm wash.
+		var col: Color = ROCK_DARK.lerp(ROCK_MID, clamp(lit_t * 1.3, 0.0, 0.16))
+		col = col.lerp(ROCK_LIT, clamp((lit_t - 0.9) * 5.0, 0.0, 0.14))
+		wall_mm.set_instance_color(i, col)
 	wall_mmi.multimesh = wall_mm
 	wall_mmi.material_override = mat_dark
 	wall_mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
