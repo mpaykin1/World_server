@@ -1,0 +1,8 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Procedural Quality V9 Certification</title>
+<style>body{font-family:system-ui;margin:0;background:#111;color:#eee}.w{max-width:900px;margin:auto;padding:24px}.card{background:#1d1d1d;border:1px solid #333;border-radius:14px;padding:16px;margin:12px 0}.ok{color:#7ee787}.bad{color:#ff7b72}.muted{color:#aaa}</style></head>
+<body><div class="w"><h1>Procedural Quality V9</h1><div id="s" class="card">Loading…</div><div id="d"></div><div class="card muted">Keep this page open for ~10 seconds on each real device. Device evidence is collected automatically.</div></div>
+<script src="/shared/procedural-quality-device-certifier.js"></script><script>
+async function load(){let c={certified:false,coverage:[]},b={baselines:[]},p={};try{c=await fetch('/api/procedural-quality-certification').then(r=>r.json())}catch(e){}try{b=await fetch('/api/procedural-quality-baseline').then(r=>r.json())}catch(e){}try{p=await fetch('/api/procedural-quality-profile?webgpu='+(navigator.gpu?1:0)+'&webgl2=1').then(r=>r.json())}catch(e){}
+s.innerHTML='<b>Version:</b> '+(p.version||9)+'<br><b>Physical certified:</b> <span class="'+(c.certified?'ok':'bad')+'">'+c.certified+'</span><br><b>Golden baselines:</b> '+((b.baselines||[]).length);
+d.innerHTML=(c.coverage||[]).map(x=>'<div class=card><b>'+x.deviceClass+'</b> — <span class="'+(x.pass?'ok':'bad')+'">'+(x.pass?'PASS':'MISSING')+'</span><br><span class=muted>samples '+x.samples+', good '+x.good+'</span></div>').join('');}
+load();setInterval(load,5000);</script></body></html>

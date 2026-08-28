@@ -59,6 +59,8 @@ function init3D(){
   activeCamera=ortho;
 
   renderer=new THREE.WebGLRenderer({antialias:false,powerPreference:'high-performance',alpha:true});
+  globalThis.WorldProceduralThreeNative?.attach?.(renderer, THREE);
+  if(typeof world!=='undefined'&&typeof activeCamera!=='undefined')globalThis.WorldProceduralVoxelDDGI?.attach?.({renderer:renderer,worldGetter:()=>world,cameraGetter:()=>activeCamera});
   renderer.setClearColor(0x000000,0);
   renderer.outputColorSpace=THREE.SRGBColorSpace;
   renderer.shadowMap.enabled=false;

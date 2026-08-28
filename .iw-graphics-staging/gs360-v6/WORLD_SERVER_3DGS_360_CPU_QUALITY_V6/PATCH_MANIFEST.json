@@ -1,0 +1,40 @@
+{
+  "schema": "world-server.patch/v6",
+  "name": "WORLD_SERVER_3DGS_360_CPU_QUALITY_V6",
+  "version": "6.0.0",
+  "target": "existing World_server repository",
+  "strategy": "upgrade the existing GS360 system in-place; reuse server registries/queues/backends; do not create duplicate subsystems",
+  "features": [
+    "AUTO / accurate / approximate / preview-then-refine modes",
+    "CPU/GPU/RAM detection and ETA learning",
+    "cached ONNX Runtime depth session",
+    "cached OpenVINO compiled depth model and model cache",
+    "Depth Anything V2 Small CPU adapter",
+    "COLMAP pose hook",
+    "OpenSplat CPU/GPU backend registry",
+    "OpenSplat checkpoint/resume preservation",
+    "input/config fingerprint resume invalidation",
+    "synthetic-view consistency gate",
+    "input quality gate",
+    "artifact audit and quality gate",
+    "capture coach and next-action planner",
+    "persistent queue / retry / stale recovery / DLQ",
+    "safe wait-and-verify timer",
+    "safe SplatTransform adapter",
+    "SPZ / SOG / LOD / HTML delivery variants",
+    "NaN/Inf cleanup into a copy with rollback",
+    "open-source catalog and license gate",
+    "doctor/self-repair and storage manager"
+  ],
+  "entrypoints": {
+    "install": "node install-gs360-cpu-quality-v6.cjs <World_server>",
+    "setup": "npm run gs360:setup",
+    "test": "npm run test:gs360",
+    "system_test": "npm run gs360:system-test",
+    "autopilot": "npm run gs360:autopilot -- --input <panorama> --output <dir> --preference auto",
+    "consistency": "npm run gs360:consistency -- --output <dir>",
+    "optimize": "npm run gs360:optimize -- --output <dir> --target spz",
+    "resources": "npm run gs360:resources",
+    "doctor": "npm run gs360:doctor -- --repair"
+  }
+}

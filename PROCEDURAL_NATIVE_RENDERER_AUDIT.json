@@ -1,25 +1,95 @@
 {
   "version": 10,
-  "candidates": 2,
-  "native": 0,
-  "coveragePct": 0,
-  "three": 0,
+  "candidates": 12,
+  "native": 8,
+  "coveragePct": 67,
+  "three": 9,
   "canvas2d": 1,
-  "webgl": 0,
+  "webgl": 10,
   "webgpu": 1,
   "genericBridge": 0,
   "exactMotion": 0,
   "detail": [
     {
-      "file": "apps/procedural-quality-certification/index.html",
+      "file": "apps\\ai3d-reference-test\\assets\\previous_html_baseline.html",
+      "type": "webgl",
+      "native": false,
+      "genericBridge": false,
+      "exactMotion": false
+    },
+    {
+      "file": "apps\\ai3d-reference-test\\client.js",
+      "type": "three",
+      "native": true,
+      "genericBridge": false,
+      "exactMotion": false
+    },
+    {
+      "file": "apps\\ai3d-voxel-city\\client.js",
+      "type": "three",
+      "native": true,
+      "genericBridge": false,
+      "exactMotion": false
+    },
+    {
+      "file": "apps\\catalog\\client.js",
+      "type": "three",
+      "native": true,
+      "genericBridge": false,
+      "exactMotion": false
+    },
+    {
+      "file": "apps\\dreamfog-world\\client.js",
+      "type": "three",
+      "native": true,
+      "genericBridge": false,
+      "exactMotion": false
+    },
+    {
+      "file": "apps\\ink-glyph-world\\client.js",
+      "type": "three",
+      "native": true,
+      "genericBridge": false,
+      "exactMotion": false
+    },
+    {
+      "file": "apps\\pixel-panorama-360\\client.js",
+      "type": "three",
+      "native": true,
+      "genericBridge": false,
+      "exactMotion": false
+    },
+    {
+      "file": "apps\\procedural-quality-certification\\index.html",
       "type": "webgpu",
       "native": false,
       "genericBridge": false,
       "exactMotion": false
     },
     {
-      "file": "apps/procedural-quality-lab/index.html",
+      "file": "apps\\procedural-quality-lab\\index.html",
       "type": "canvas2d",
+      "native": false,
+      "genericBridge": false,
+      "exactMotion": false
+    },
+    {
+      "file": "apps\\survival\\client.js",
+      "type": "three",
+      "native": true,
+      "genericBridge": false,
+      "exactMotion": false
+    },
+    {
+      "file": "apps\\voxel-world\\client.js",
+      "type": "three",
+      "native": true,
+      "genericBridge": false,
+      "exactMotion": false
+    },
+    {
+      "file": "apps\\world-sharabass\\index.html",
+      "type": "three",
       "native": false,
       "genericBridge": false,
       "exactMotion": false

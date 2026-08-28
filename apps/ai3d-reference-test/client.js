@@ -8,6 +8,8 @@ scene.background = new THREE.Color(0x1a1a2a);
 const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
 camera.position.set(0, -5, 1.5);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
+  globalThis.WorldProceduralThreeNative?.attach?.(renderer, THREE);
+  if(typeof world!=='undefined'&&typeof activeCamera!=='undefined')globalThis.WorldProceduralVoxelDDGI?.attach?.({renderer:renderer,worldGetter:()=>world,cameraGetter:()=>activeCamera});
 renderer.setPixelRatio(devicePixelRatio);
 viewer.appendChild(renderer.domElement);
 const controls = new OrbitControls(camera, renderer.domElement);

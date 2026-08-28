@@ -1,10 +1,10 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.7",
-  "serialNumber": "urn:uuid:18187c08-5584-4b7d-8e7a-336e1374265a",
+  "serialNumber": "urn:uuid:7213a0d6-5039-4d0d-9eb0-9c33aa7fafa1",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-08-28T06:26:19.604Z",
+    "timestamp": "2026-08-28T14:16:57.863Z",
     "component": {
       "type": "application",
       "name": "webgl-survival-hub-no-npm",
@@ -501,6 +501,13 @@
       "version": "0.15.1",
       "scope": "required",
       "bom-ref": "pkg:npm/%40lhci%2Futils@0.15.1"
+    },
+    {
+      "type": "library",
+      "name": "@mediapipe/tasks-vision",
+      "version": "^1.0.1",
+      "scope": "required",
+      "bom-ref": "pkg:npm/%40mediapipe%2Ftasks-vision@%5E1.0.1"
     },
     {
       "type": "library",
@@ -2653,6 +2660,13 @@
     },
     {
       "type": "library",
+      "name": "pngjs",
+      "version": "^7.0.0",
+      "scope": "optional",
+      "bom-ref": "pkg:npm/pngjs@%5E7.0.0"
+    },
+    {
+      "type": "library",
       "name": "postgres-array",
       "version": "3.0.4",
       "scope": "required",
@@ -2913,9 +2927,9 @@
     {
       "type": "library",
       "name": "sharp",
-      "version": "^0.35.4",
+      "version": "^0.35.3",
       "scope": "required",
-      "bom-ref": "pkg:npm/sharp@%5E0.35.4"
+      "bom-ref": "pkg:npm/sharp@%5E0.35.3"
     },
     {
       "type": "library",

@@ -1,11 +1,16 @@
 {
-  "generatedAt": "2026-08-28T06:24:55.867Z",
+  "generatedAt": "2026-08-28T14:15:19.568Z",
   "nodes": [
     "app:ai-3d",
     "app:ai3d-reference-test",
     "app:ai3d-voxel-city",
     "app:catalog",
     "app:chat",
+    "app:dreamfog-world",
+    "app:ink-glyph-world",
+    "app:pixel-panorama-360",
+    "app:procedural-quality-certification",
+    "app:procedural-quality-lab",
     "app:survival",
     "app:voxel-world",
     "app:world-sharabass",
@@ -23,6 +28,19 @@
     "apps/catalog/client.js",
     "apps/catalog/index.html",
     "apps/chat/index.html",
+    "apps/dreamfog-world/client.js",
+    "apps/dreamfog-world/index.html",
+    "apps/dreamfog-world/style.css",
+    "apps/ink-glyph-world/client.js",
+    "apps/ink-glyph-world/index.html",
+    "apps/ink-glyph-world/worker.js",
+    "apps/pixel-panorama-360/client.js",
+    "apps/pixel-panorama-360/editor.html",
+    "apps/pixel-panorama-360/editor.js",
+    "apps/pixel-panorama-360/index.html",
+    "apps/pixel-panorama-360/styles.css",
+    "apps/procedural-quality-certification/index.html",
+    "apps/procedural-quality-lab/index.html",
     "apps/survival/client.js",
     "apps/survival/index.html",
     "apps/voxel-world/client.js",
@@ -30,6 +48,7 @@
     "apps/world-sharabass/index.html",
     "capability:playable",
     "capability:windows",
+    "release:candidate",
     "release:certified",
     "release:diagnostic",
     "release:quarantine",
@@ -42,6 +61,27 @@
     "shared/golden-physics.js",
     "shared/golden-ui-shell.css",
     "shared/golden-ui-shell.js",
+    "shared/procedural-quality-animation.js",
+    "shared/procedural-quality-compute-materials.js",
+    "shared/procedural-quality-culling.js",
+    "shared/procedural-quality-device-certifier.js",
+    "shared/procedural-quality-gbuffer.js",
+    "shared/procedural-quality-locomotion.js",
+    "shared/procedural-quality-materials.js",
+    "shared/procedural-quality-native-gbuffer.js",
+    "shared/procedural-quality-pbr.js",
+    "shared/procedural-quality-profiler.js",
+    "shared/procedural-quality-radiance.js",
+    "shared/procedural-quality-recorder.js",
+    "shared/procedural-quality-runtime.js",
+    "shared/procedural-quality-sdf.js",
+    "shared/procedural-quality-sdf3d.js",
+    "shared/procedural-quality-semantics.js",
+    "shared/procedural-quality-simd-pool.js",
+    "shared/procedural-quality-tsr.js",
+    "shared/procedural-quality-webgl2.js",
+    "shared/procedural-quality-webgpu.js",
+    "shared/procedural-quality-worker-client.js",
     "shared/quality-telemetry.js",
     "shared/sentry-runtime.js",
     "shared/style.css",
@@ -226,6 +266,226 @@
     {
       "from": "shared/common.js",
       "to": "apps/chat/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "apps/dreamfog-world/client.js",
+      "to": "app:dreamfog-world",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/dreamfog-world/index.html",
+      "to": "app:dreamfog-world",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "shared/style.css",
+      "to": "apps/dreamfog-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-ui-shell.css",
+      "to": "apps/dreamfog-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/sentry-runtime.js",
+      "to": "apps/dreamfog-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/common.js",
+      "to": "apps/dreamfog-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/ai3d-playable-runtime.js",
+      "to": "apps/dreamfog-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-physics.js",
+      "to": "apps/dreamfog-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-ui-shell.js",
+      "to": "apps/dreamfog-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/quality-telemetry.js",
+      "to": "apps/dreamfog-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-performance-autotuner.js",
+      "to": "apps/dreamfog-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/world-quality-autopilot.js",
+      "to": "apps/dreamfog-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "apps/dreamfog-world/style.css",
+      "to": "app:dreamfog-world",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/ink-glyph-world/client.js",
+      "to": "app:ink-glyph-world",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/ink-glyph-world/index.html",
+      "to": "app:ink-glyph-world",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/ink-glyph-world/worker.js",
+      "to": "app:ink-glyph-world",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/pixel-panorama-360/client.js",
+      "to": "app:pixel-panorama-360",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/pixel-panorama-360/editor.html",
+      "to": "app:pixel-panorama-360",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/pixel-panorama-360/editor.js",
+      "to": "app:pixel-panorama-360",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/pixel-panorama-360/index.html",
+      "to": "app:pixel-panorama-360",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/pixel-panorama-360/styles.css",
+      "to": "app:pixel-panorama-360",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/procedural-quality-certification/index.html",
+      "to": "app:procedural-quality-certification",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "shared/procedural-quality-device-certifier.js",
+      "to": "apps/procedural-quality-certification/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "apps/procedural-quality-lab/index.html",
+      "to": "app:procedural-quality-lab",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "shared/procedural-quality-animation.js",
+      "to": "apps/procedural-quality-lab/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/procedural-quality-materials.js",
+      "to": "apps/procedural-quality-lab/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/procedural-quality-sdf.js",
+      "to": "apps/procedural-quality-lab/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/procedural-quality-webgpu.js",
+      "to": "apps/procedural-quality-lab/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/procedural-quality-runtime.js",
+      "to": "apps/procedural-quality-lab/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/procedural-quality-recorder.js",
+      "to": "apps/procedural-quality-lab/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/procedural-quality-webgl2.js",
+      "to": "apps/procedural-quality-lab/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/procedural-quality-semantics.js",
+      "to": "apps/procedural-quality-lab/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/procedural-quality-gbuffer.js",
+      "to": "apps/procedural-quality-lab/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/procedural-quality-worker-client.js",
+      "to": "apps/procedural-quality-lab/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/procedural-quality-profiler.js",
+      "to": "apps/procedural-quality-lab/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/procedural-quality-native-gbuffer.js",
+      "to": "apps/procedural-quality-lab/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/procedural-quality-tsr.js",
+      "to": "apps/procedural-quality-lab/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/procedural-quality-radiance.js",
+      "to": "apps/procedural-quality-lab/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/procedural-quality-pbr.js",
+      "to": "apps/procedural-quality-lab/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/procedural-quality-compute-materials.js",
+      "to": "apps/procedural-quality-lab/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/procedural-quality-sdf3d.js",
+      "to": "apps/procedural-quality-lab/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/procedural-quality-simd-pool.js",
+      "to": "apps/procedural-quality-lab/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/procedural-quality-culling.js",
+      "to": "apps/procedural-quality-lab/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/procedural-quality-locomotion.js",
+      "to": "apps/procedural-quality-lab/index.html",
       "kind": "html-dependency"
     },
     {
@@ -507,6 +767,31 @@
       "from": "release:system",
       "to": "app:catalog",
       "kind": "release-status"
+    },
+    {
+      "from": "release:candidate",
+      "to": "app:pixel-panorama-360",
+      "kind": "release-status"
+    },
+    {
+      "from": "release:quarantine",
+      "to": "app:dreamfog-world",
+      "kind": "release-status"
+    },
+    {
+      "from": "release:candidate",
+      "to": "app:ink-glyph-world",
+      "kind": "release-status"
+    },
+    {
+      "from": "release:candidate",
+      "to": "app:procedural-quality-certification",
+      "kind": "release-status"
+    },
+    {
+      "from": "release:candidate",
+      "to": "app:procedural-quality-lab",
+      "kind": "release-status"
     }
   ],
   "reverse": {
@@ -522,6 +807,7 @@
       "apps/ai3d-voxel-city/index.html",
       "apps/catalog/index.html",
       "apps/chat/index.html",
+      "apps/dreamfog-world/index.html",
       "apps/survival/index.html",
       "apps/voxel-world/index.html",
       "apps/world-sharabass/index.html"
@@ -550,6 +836,7 @@
     "shared/ai3d-playable-runtime.js": [
       "apps/ai3d-voxel-city/index.html",
       "apps/catalog/index.html",
+      "apps/dreamfog-world/index.html",
       "apps/survival/index.html",
       "app:voxel-world",
       "app:ai3d-voxel-city",
@@ -558,6 +845,7 @@
     "shared/golden-ui-shell.css": [
       "apps/ai3d-voxel-city/index.html",
       "apps/catalog/index.html",
+      "apps/dreamfog-world/index.html",
       "apps/survival/index.html",
       "apps/voxel-world/index.html",
       "apps/world-sharabass/index.html",
@@ -568,6 +856,7 @@
     "shared/golden-physics.js": [
       "apps/ai3d-voxel-city/index.html",
       "apps/catalog/index.html",
+      "apps/dreamfog-world/index.html",
       "apps/survival/index.html",
       "apps/voxel-world/index.html",
       "apps/world-sharabass/index.html",
@@ -580,6 +869,7 @@
     "shared/golden-ui-shell.js": [
       "apps/ai3d-voxel-city/index.html",
       "apps/catalog/index.html",
+      "apps/dreamfog-world/index.html",
       "apps/survival/index.html",
       "apps/voxel-world/index.html",
       "apps/world-sharabass/index.html",
@@ -590,16 +880,19 @@
     "shared/quality-telemetry.js": [
       "apps/ai3d-voxel-city/index.html",
       "apps/catalog/index.html",
+      "apps/dreamfog-world/index.html",
       "apps/survival/index.html",
       "apps/voxel-world/index.html",
       "apps/world-sharabass/index.html"
     ],
     "shared/golden-performance-autotuner.js": [
       "apps/ai3d-voxel-city/index.html",
+      "apps/dreamfog-world/index.html",
       "apps/voxel-world/index.html"
     ],
     "shared/world-quality-autopilot.js": [
       "apps/ai3d-voxel-city/index.html",
+      "apps/dreamfog-world/index.html",
       "apps/voxel-world/index.html"
     ],
     "apps/ai3d-voxel-city/mesher-worker.js": [
@@ -617,6 +910,7 @@
     "shared/style.css": [
       "apps/catalog/index.html",
       "apps/chat/index.html",
+      "apps/dreamfog-world/index.html",
       "apps/survival/index.html",
       "apps/voxel-world/index.html",
       "apps/world-sharabass/index.html"
@@ -624,6 +918,7 @@
     "shared/common.js": [
       "apps/catalog/index.html",
       "apps/chat/index.html",
+      "apps/dreamfog-world/index.html",
       "apps/survival/index.html",
       "apps/voxel-world/index.html",
       "apps/world-sharabass/index.html"
@@ -633,6 +928,108 @@
     ],
     "apps/chat/index.html": [
       "app:chat"
+    ],
+    "apps/dreamfog-world/client.js": [
+      "app:dreamfog-world"
+    ],
+    "apps/dreamfog-world/index.html": [
+      "app:dreamfog-world"
+    ],
+    "apps/dreamfog-world/style.css": [
+      "app:dreamfog-world"
+    ],
+    "apps/ink-glyph-world/client.js": [
+      "app:ink-glyph-world"
+    ],
+    "apps/ink-glyph-world/index.html": [
+      "app:ink-glyph-world"
+    ],
+    "apps/ink-glyph-world/worker.js": [
+      "app:ink-glyph-world"
+    ],
+    "apps/pixel-panorama-360/client.js": [
+      "app:pixel-panorama-360"
+    ],
+    "apps/pixel-panorama-360/editor.html": [
+      "app:pixel-panorama-360"
+    ],
+    "apps/pixel-panorama-360/editor.js": [
+      "app:pixel-panorama-360"
+    ],
+    "apps/pixel-panorama-360/index.html": [
+      "app:pixel-panorama-360"
+    ],
+    "apps/pixel-panorama-360/styles.css": [
+      "app:pixel-panorama-360"
+    ],
+    "apps/procedural-quality-certification/index.html": [
+      "app:procedural-quality-certification"
+    ],
+    "shared/procedural-quality-device-certifier.js": [
+      "apps/procedural-quality-certification/index.html"
+    ],
+    "apps/procedural-quality-lab/index.html": [
+      "app:procedural-quality-lab"
+    ],
+    "shared/procedural-quality-animation.js": [
+      "apps/procedural-quality-lab/index.html"
+    ],
+    "shared/procedural-quality-materials.js": [
+      "apps/procedural-quality-lab/index.html"
+    ],
+    "shared/procedural-quality-sdf.js": [
+      "apps/procedural-quality-lab/index.html"
+    ],
+    "shared/procedural-quality-webgpu.js": [
+      "apps/procedural-quality-lab/index.html"
+    ],
+    "shared/procedural-quality-runtime.js": [
+      "apps/procedural-quality-lab/index.html"
+    ],
+    "shared/procedural-quality-recorder.js": [
+      "apps/procedural-quality-lab/index.html"
+    ],
+    "shared/procedural-quality-webgl2.js": [
+      "apps/procedural-quality-lab/index.html"
+    ],
+    "shared/procedural-quality-semantics.js": [
+      "apps/procedural-quality-lab/index.html"
+    ],
+    "shared/procedural-quality-gbuffer.js": [
+      "apps/procedural-quality-lab/index.html"
+    ],
+    "shared/procedural-quality-worker-client.js": [
+      "apps/procedural-quality-lab/index.html"
+    ],
+    "shared/procedural-quality-profiler.js": [
+      "apps/procedural-quality-lab/index.html"
+    ],
+    "shared/procedural-quality-native-gbuffer.js": [
+      "apps/procedural-quality-lab/index.html"
+    ],
+    "shared/procedural-quality-tsr.js": [
+      "apps/procedural-quality-lab/index.html"
+    ],
+    "shared/procedural-quality-radiance.js": [
+      "apps/procedural-quality-lab/index.html"
+    ],
+    "shared/procedural-quality-pbr.js": [
+      "apps/procedural-quality-lab/index.html"
+    ],
+    "shared/procedural-quality-compute-materials.js": [
+      "apps/procedural-quality-lab/index.html"
+    ],
+    "shared/procedural-quality-sdf3d.js": [
+      "apps/procedural-quality-lab/index.html"
+    ],
+    "shared/procedural-quality-simd-pool.js": [
+      "apps/procedural-quality-lab/index.html"
+    ],
+    "shared/procedural-quality-culling.js": [
+      "apps/procedural-quality-lab/index.html"
+    ],
+    "shared/procedural-quality-locomotion.js": [
+      "apps/procedural-quality-lab/index.html"
     ],
     "apps/survival/client.js": [
       "app:survival"
@@ -664,7 +1061,8 @@
     ],
     "release:quarantine": [
       "app:survival",
-      "app:world-sharabass"
+      "app:world-sharabass",
+      "app:dreamfog-world"
     ],
     "release:diagnostic": [
       "app:ai3d-reference-test"
@@ -675,6 +1073,12 @@
     ],
     "release:system": [
       "app:catalog"
+    ],
+    "release:candidate": [
+      "app:pixel-panorama-360",
+      "app:ink-glyph-world",
+      "app:procedural-quality-certification",
+      "app:procedural-quality-lab"
     ]
   }
 }

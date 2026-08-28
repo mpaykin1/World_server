@@ -9,6 +9,8 @@ scene.background = new THREE.Color(0x8fc5f1);
 scene.fog = new THREE.Fog(0x8fc5f1, 90, 420);
 const camera = new THREE.PerspectiveCamera(72, innerWidth/innerHeight, .1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias:true });
+  globalThis.WorldProceduralThreeNative?.attach?.(renderer, THREE);
+  if(typeof world!=='undefined'&&typeof activeCamera!=='undefined')globalThis.WorldProceduralVoxelDDGI?.attach?.({renderer:renderer,worldGetter:()=>world,cameraGetter:()=>activeCamera});
 renderer.setPixelRatio(Math.min(devicePixelRatio, 1.65)); renderer.setSize(innerWidth, innerHeight); renderer.shadowMap.enabled=true;
 document.body.prepend(renderer.domElement);
 

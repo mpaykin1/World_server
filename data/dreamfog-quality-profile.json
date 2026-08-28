@@ -1,0 +1,32 @@
+{
+  "version": 2,
+  "contract": "DREAMFOG_WORLD_QUALITY_V2",
+  "targets": {
+    "desktop": {"targetFps": 52, "minimumFps": 36, "tier": "balanced"},
+    "highDesktop": {"targetFps": 58, "minimumFps": 45, "tier": "cinematic"},
+    "mobile": {"targetFps": 38, "minimumFps": 26, "tier": "mobile"},
+    "lowMobile": {"targetFps": 30, "minimumFps": 22, "tier": "low"}
+  },
+  "budgets": {
+    "maxFogBanks": 10,
+    "maxMistParticles": 4200,
+    "maxProceduralCreatures": 30,
+    "maxDynamicFogLights": 4,
+    "maxDevicePixelRatio": 1.8
+  },
+  "requiredReuse": [
+    "shared/ai3d-playable-runtime.js",
+    "shared/golden-physics.js",
+    "shared/golden-performance-autotuner.js",
+    "shared/quality-telemetry.js",
+    "shared/world-quality-autopilot.js",
+    "services/ai3d-worker/ai3d/plugins/depth_anything.py"
+  ],
+  "rules": {
+    "noDuplicatePhysics": true,
+    "noDuplicateDprAutotuner": true,
+    "depthMustBeHonest": true,
+    "mobileFallbackRequired": true,
+    "publicCatalogRequiresFullVerification": true
+  }
+}

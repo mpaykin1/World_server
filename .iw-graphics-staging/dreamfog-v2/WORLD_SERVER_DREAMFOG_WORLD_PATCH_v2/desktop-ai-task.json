@@ -1,0 +1,13 @@
+{
+  "task": "Install, verify and harden WORLD_SERVER_DREAMFOG_WORLD_PATCH_v2",
+  "mode": "root-cause-until-pass",
+  "rules": [
+    "Do not replace existing golden physics, controls, DPR autotuner, telemetry, world quality autopilot or Depth Anything integration.",
+    "Use existing systems first; patch only missing DreamFog-specific behavior.",
+    "Never mark DreamFog certified or public until node verify.mjs --full exits 0.",
+    "On every failure: reproduce, identify root cause, fix, add or strengthen regression test, rerun failing gate, then rerun full gate.",
+    "After a verified fix run quality:learn-fix and regressions:capture so the server can reuse the solution.",
+    "Do not remove visual effects to make tests pass. Degrade cost adaptively by device/FPS while preserving the visual intent.",
+    "CPU/no-GPU path is mandatory for image depth preparation; GPU is optional acceleration only."
+  ]
+}

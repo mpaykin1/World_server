@@ -1,0 +1,12 @@
+{
+  "accepted": true,
+  "strict": false,
+  "score_percent": 89.1,
+  "issues": [],
+  "metrics": {
+    "neighbor_overlap_mean": 0.7966,
+    "feature_matches_mean": 57.29,
+    "blur_score_mean": 722.08,
+    "seam_error_mean": 0.0332
+  }
+}

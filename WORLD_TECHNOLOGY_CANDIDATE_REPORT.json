@@ -1,8 +1,8 @@
 {
   "schemaVersion": "6.0.0",
   "system": "WORLD_TECHNOLOGY_CANDIDATE_INTAKE",
-  "generatedAt": "2026-08-28T06:25:05.549Z",
-  "refsScanned": 28,
+  "generatedAt": "2026-08-28T14:15:29.022Z",
+  "refsScanned": 30,
   "candidates": [
     {
       "ref": "ai/desktop/hunyuan-full-quality-v3-20260823-043355",

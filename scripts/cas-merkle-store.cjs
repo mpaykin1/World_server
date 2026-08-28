@@ -13,7 +13,7 @@ ensureDir(CAS_ROOT); ensureDir(SNAP_ROOT);
 function objectPath(hash) { return path.join(CAS_ROOT, hash.slice(0, 2), hash.slice(2)); }
 function storeObject(abs, hash) {
   const dst = objectPath(hash);
-  if (!fs.existsSync(dst)) { ensureDir(path.dirname(dst)); fs.copyFileSync(abs, dst); }
+  if (!fs.existsSync(dst) || shaFile(dst) !== hash) { ensureDir(path.dirname(dst)); fs.copyFileSync(abs, dst); }
   return dst;
 }
 function merkleRoot(entries) {

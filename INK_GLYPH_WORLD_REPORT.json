@@ -1,12 +1,25 @@
 {
   "schemaVersion": 3,
-  "generatedAt": "2026-08-26T01:20:55.452Z",
-  "pass": true,
-  "requireFonts": false,
-  "requireVendor": false,
-  "requireStrokes": false,
+  "generatedAt": "2026-08-28T14:13:20.165Z",
+  "pass": false,
+  "requireFonts": true,
+  "requireVendor": true,
+  "requireStrokes": true,
   "requireTools": false,
-  "errors": [],
+  "errors": [
+    "font missing LiuJianMaoCao-Regular.ttf",
+    "license missing liu-jian-mao-cao-OFL.txt",
+    "font missing MaShanZheng-Regular.ttf",
+    "license missing ma-shan-zheng-OFL.txt",
+    "font missing ZhiMangXing-Regular.ttf",
+    "license missing zhi-mang-xing-OFL.txt",
+    "font missing LongCang-Regular.ttf",
+    "license missing long-cang-OFL.txt",
+    "opentype vendor missing/too small",
+    "opentype license missing",
+    "stroke license missing/invalid",
+    "stroke manifest missing"
+  ],
   "warnings": [],
   "registryFonts": 4,
   "features": {
@@ -24,5 +37,5 @@
     "topologyGrammar": true,
     "e2e": true
   },
-  "checkHash": "7cd4f8a0a4311207b2c9eca45ed277147246e07056fa4b97ea60c4096a807aa3"
+  "checkHash": "b1d196ea68971e6a9e9c2739b9b0d3f8747ed8cfe9907f3ae4fef071eda71e43"
 }

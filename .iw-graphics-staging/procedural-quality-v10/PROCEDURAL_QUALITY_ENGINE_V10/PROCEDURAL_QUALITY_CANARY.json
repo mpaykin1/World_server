@@ -1,0 +1,7 @@
+{
+  "version": 10,
+  "production": false,
+  "pass": true,
+  "reasons": [],
+  "stage": "preview-canary"
+}

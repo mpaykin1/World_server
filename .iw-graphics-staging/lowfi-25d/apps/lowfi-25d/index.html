@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Procedural Low-Fi 2.5D</title>
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#101010}
+body{display:grid;place-items:center}
+canvas{
+  display:block;width:100vw;height:100vh;
+  image-rendering:pixelated;image-rendering:crisp-edges;
+  background:#101010
+}
+</style>
+</head>
+<body>
+<canvas id="c" width="160" height="90"></canvas>
+<script>
+(() => {
+  "use strict";
+  const canvas = document.getElementById("c");
+  const ctx = canvas.getContext("2d",{alpha:false});
+  ctx.imageSmoothingEnabled = false;
+
+  const FALLBACK = {
+    version:2, seed:"offline-fallback",
+    render:{width:160,height:90,targetFps:60,pixelated:true},
+    palette:{
+      void:"#101010",wall:"#282828",wallDark:"#1d1d1d",floor:"#202020",
+      ink:"#050505",wood:"#472b09",woodHi:"#55340b",skin:"#8a7c42",
+      cloth:"#090b0f",bulb:"#d1d15d",glow:"#9f9d39"
+    },
+    animation:{
+      breathHz:2.1,breathPx:.55,handHz:1.25,handPx:.8,headHz:.28,headPx:.4,
+      shadowHz:.53,shadowPx:1,blinkHz:.62,flickerA:10.5,flickerB:23.7,flickerDropHz:2.1
+    },
+    dirt:[
+      {x:17,y:18,s:1,a:.07},{x:26,y:34,s:2,a:.05},{x:43,y:14,s:1,a:.06},
+      {x:56,y:27,s:1,a:.08},{x:79,y:21,s:2,a:.04},{x:103,y:31,s:1,a:.07},
+      {x:128,y:17,s:2,a:.05},{x:142,y:39,s:1,a:.08},{x:31,y:54,s:1,a:.06}
+    ],
+    cracks:[{x:21,y:28,len:5,dir:1},{x:132,y:25,len:4,dir:-1}]
+  };
+
+  let spec = FALLBACK, t = 0, last = performance.now();
+  let serverDriven = false;
+
+  function rect(x,y,w,h,c,a=1){
+    ctx.globalAlpha=a;ctx.fillStyle=c;
+    ctx.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h));
+    ctx.globalAlpha=1;
+  }
+  function line(x1,y1,x2,y2,c,w=1,a=1){
+    ctx.globalAlpha=a;ctx.strokeStyle=c;ctx.lineWidth=w;
+    ctx.beginPath();ctx.moveTo(Math.round(x1)+.5,Math.round(y1)+.5);
+    ctx.lineTo(Math.round(x2)+.5,Math.round(y2)+.5);ctx.stroke();
+    ctx.globalAlpha=1;
+  }
+
+  async function loadServerSpec(){
+    try{
+      const seed = new URLSearchParams(location.search).get("seed") || "interrogation-room-v2";
+      const ctl = new AbortController();
+      const timer=setTimeout(()=>ctl.abort(),1800);
+      const r=await fetch("/api/lowfi-25d-scene?seed="+encodeURIComponent(seed),
+        {cache:"no-store",signal:ctl.signal});
+      clearTimeout(timer);
+      if(!r.ok) throw new Error("HTTP "+r.status);
+      const s=await r.json();
+      if(!s || !s.render || !s.palette || !s.animation) throw new Error("bad spec");
+      spec=s; serverDriven=true;
+      canvas.width=s.render.width||160; canvas.height=s.render.height||90;
+      ctx.imageSmoothingEnabled=false;
+    }catch(_){
+      spec=FALLBACK;serverDriven=false;
+    }
+  }
+
+  function room(f){
+    const p=spec.palette;
+    rect(0,0,160,90,p.void);
+    rect(10,8,140,65,p.wall);
+    rect(0,73,160,17,p.floor);
+
+    line(10,8,10,73,p.ink,1);
+    line(150,8,150,73,p.ink,1);
+    line(10,73,0,90,p.ink,1);
+    line(150,73,160,90,p.ink,1);
+    line(10,73,150,73,p.ink,1);
+
+    for(let x=18;x<=142;x+=20) line(80,73,x,90,p.wallDark,1,.7);
+    for(let y=79;y<90;y+=6) line(0,y,160,y,p.wallDark,1,.7);
+
+    for(const n of spec.dirt||[]) rect(n.x,n.y,n.s,n.s,"#000",n.a);
+    for(const q of spec.cracks||[]){
+      line(q.x,q.y,q.x+q.len*q.dir,q.y+q.len*.45,"#111",1,.4);
+    }
+
+    rect(79,0,2,23,p.ink);
+    rect(77,23,6,4,p.ink);
+    rect(78,27,4,4,p.bulb);
+
+    rect(64,29,32,27,p.glow,.025+f*.035);
+    rect(70,31,20,22,p.glow,.035+f*.045);
+  }
+
+  function chair(){
+    const p=spec.palette;
+    rect(102,52,3,27,"#241605");
+    rect(95,56,8,2,"#2e1c08");
+    rect(95,67,10,3,"#231506");
+    rect(95,69,2,13,"#1c1105");
+  }
+
+  function table(){
+    const p=spec.palette;
+    rect(48,59,65,8,p.wood);
+    rect(51,57,59,3,p.woodHi);
+    rect(49,67,5,18,"#2b1907");
+    rect(106,66,5,19,"#251507");
+    rect(73,66,4,14,"#2b1907");
+  }
+
+  function person(tt){
+    const p=spec.palette,a=spec.animation;
+    const breathe=Math.sin(tt*a.breathHz)*a.breathPx;
+    const hand=Math.sin(tt*a.handHz)*a.handPx;
+    const head=Math.sin(tt*a.headHz)*a.headPx;
+    const blink=(Math.sin(tt*a.blinkHz)>0.993);
+
+    rect(75,67,4,13,p.ink); rect(83,67,4,13,p.ink);
+    rect(73,79,7,3,p.ink); rect(82,79,7,3,p.ink);
+
+    rect(70,46+breathe,21,16,p.cloth);
+    rect(68,49+breathe,4,13,p.ink);
+    rect(90,49+breathe,4,13,p.ink);
+
+    rect(66,53+breathe,5,10,p.ink);
+    rect(93,53+breathe,5,10,p.ink);
+    rect(69,61+hand,9,3,p.ink);
+    rect(87,61-hand,8,3,p.ink);
+
+    rect(76,61+hand,3,3,p.skin);
+    rect(84,61-hand,3,3,p.skin);
+
+    rect(74+head,39+breathe,13,10,p.skin);
+    rect(75+head,37+breathe,11,3,"#151009");
+    rect(77+head,42+breathe,2,2,blink?p.skin:p.ink);
+    rect(83+head,42+breathe,2,2,blink?p.skin:p.ink);
+    rect(79+head,46+breathe,4,1,p.ink);
+  }
+
+  function shadow(tt){
+    const a=spec.animation;
+    const sx=Math.sin(tt*a.shadowHz)*a.shadowPx;
+    rect(88+sx,70,26,2,spec.palette.ink,.34);
+    rect(94+sx,72,18,1,spec.palette.ink,.25);
+  }
+
+  function scanlines(){
+    for(let y=0;y<90;y+=3) rect(0,y,160,1,"#000",.055);
+  }
+
+  function frame(now){
+    const dt=Math.min(.05,(now-last)/1000);last=now;t+=dt;
+    const a=spec.animation;
+    let f=.62+Math.sin(t*a.flickerA)*.08+Math.sin(t*a.flickerB)*.05;
+    if(Math.sin(t*a.flickerDropHz)>.965) f-=.28;
+
+    room(f);chair();table();person(t);shadow(t);scanlines();
+    requestAnimationFrame(frame);
+  }
+
+  loadServerSpec();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

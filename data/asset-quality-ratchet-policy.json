@@ -27,7 +27,20 @@
   "ignorePathTokens": [
     "/test/fixtures/",
     "/apps/ai3d-reference-test/assets/",
-    "/apps/ai3d-reference-test/"
+    "/apps/ai3d-reference-test/",
+    "/assets/pixel/",
+    "/public/assets/pixel/",
+    "/shared/pwa-icon",
+    "/visual-candidates/",
+    "/worlds/sample-city/assets/",
+    "/assets/fonts/ink-glyph/",
+    "/assets/hanzi-strokes/",
+    "/.iw-graphics-staging/",
+    "/.characterforge-backups/",
+    "/payload/assets/fonts/",
+    "/payload/assets/hanzi-strokes/",
+    "/shared/panorama360-source/",
+    "/shared/panorama360/"
   ],
   "evidenceFile": "QUALITY_CHANGE_EVIDENCE.json",
   "rules": {

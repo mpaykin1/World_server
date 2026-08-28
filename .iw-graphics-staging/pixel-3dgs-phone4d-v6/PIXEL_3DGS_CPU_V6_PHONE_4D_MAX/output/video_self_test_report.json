@@ -1,0 +1,21 @@
+{
+  "ok": true,
+  "tests": {
+    "space": {
+      "quality": 72.2,
+      "lod_counts": {
+        "lod0": 42529,
+        "lod1": 20667,
+        "lod2": 10035
+      }
+    },
+    "character": {
+      "quality": 64.5,
+      "lod_counts": {
+        "lod0": 8261,
+        "lod1": 6494,
+        "lod2": 4393
+      }
+    }
+  }
+}

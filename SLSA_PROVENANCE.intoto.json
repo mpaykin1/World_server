@@ -4,7 +4,7 @@
     {
       "name": "INTEGRATION_BUILD_SUBJECT.json",
       "digest": {
-        "sha256": "ce4325a97429a1b5b54c67ad7d42be58beac1a82ac087ea725e225ca5de92ab5"
+        "sha256": "c14f3a6cb9f5c9568f430795411a5e591fb633b8380f8c58b3d9ec472d6832e7"
       }
     }
   ],
@@ -26,33 +26,33 @@
       "resolvedDependencies": [
         {
           "name": "git-commit",
-          "uri": "git+https://github.com/mpaykin1/World_server@5dfe76f1f0c05b7fd018672b9c78dee70e505e8d",
+          "uri": "git+https://github.com/mpaykin1/World_server@c854c74515ec342f86af7d554443ef411f115e28",
           "digest": {
-            "sha1": "5dfe76f1f0c05b7fd018672b9c78dee70e505e8d"
+            "sha1": "c854c74515ec342f86af7d554443ef411f115e28"
           }
         },
         {
           "name": "package-lock.json",
           "digest": {
-            "sha256": "3d9d00874b6cc5b474db6d80370ca6ea37b0f4b18e2aca05859af973fb09f124"
+            "sha256": "a18a96a90a8010969cdcf8a77153ef09300fbfecfac6d75e581a99ecb5801246"
           }
         },
         {
           "name": "data/system-capability-registry.json",
           "digest": {
-            "sha256": "4acc698baaf4c1d35412c96efe6640d832bb81e1892bae4671cf2749fa0801a2"
+            "sha256": "0b73d394176aba3c926b0039e9c3d8b9fecede3a0023d055d3725242c99edb16"
           }
         },
         {
           "name": "policy/opa-bundle/worldserver.rego",
           "digest": {
-            "sha256": "849f76a7ad1cc8e720134100183574e2cb3c7d8049c4a0d3372e44ae3cb06cba"
+            "sha256": "e6cd0b539e53e58c2b7a6ec929e5d4e4baa8cca62afdaf2ae4f81910d4b5fd3a"
           }
         },
         {
           "name": "project-merkle-root",
           "digest": {
-            "sha256": "cb2d0923788825cb1f46881051b3aebac9ca175a7c7753e26b1fc7e2734b7e79"
+            "sha256": "f07aad7060e5f7790ae0a197f34ed033a86b4a88ac2dbe5a0c68b306e1ec7082"
           }
         }
       ]
@@ -65,45 +65,45 @@
         }
       },
       "metadata": {
-        "invocationId": "local-1787898387387-11524",
-        "startedOn": "2026-08-28T06:26:27.125Z",
-        "finishedOn": "2026-08-28T06:26:27.387Z"
+        "invocationId": "local-1787926625951-4444",
+        "startedOn": "2026-08-28T14:17:05.658Z",
+        "finishedOn": "2026-08-28T14:17:05.951Z"
       },
       "byproducts": [
         {
           "name": "SYSTEM_INTEGRATION_REPORT.json",
           "digest": {
-            "sha256": "db2e4930323aeb256b7f6d5f1ab1b2307de567a22680bb19d06f2ac6221d8aab"
+            "sha256": "10c8e24d89efafe468daa1d97025da47283e9036207115a572eed8473a757b39"
           }
         },
         {
           "name": "POLICY_DECISION_REPORT.json",
           "digest": {
-            "sha256": "4261a338ad4c0988f9e1c46424adab038ee8401fd3e478d863b67d3ff4007f37"
+            "sha256": "3116f5dce788c92c584901b94887473613065d73bc0628229bcba8b837f45cfe"
           }
         },
         {
           "name": "DISASTER_RECOVERY_VERIFY_REPORT.json",
           "digest": {
-            "sha256": "de8af7f5d96acf38bbbce2f02e1f8902db8ef64e9fd42c2781384cc10ee44b33"
+            "sha256": "b328c3d1ea4a8491a0bcc77292614a0922f3e82199abc38aa39cb5e270f29c61"
           }
         },
         {
           "name": "TECHNOLOGY_CONSENSUS_REPORT.json",
           "digest": {
-            "sha256": "fa96b619c078471d573f35209f7675071c57230533a6e25443bd288c77068ca0"
+            "sha256": "44fb075ecc54fac7f09cf686ed0a7aece0b5ffa687bb1d4e6fef051baef6ddae"
           }
         },
         {
           "name": "DURABLE_QUEUE_STATUS.json",
           "digest": {
-            "sha256": "604e3902e7038b48119fa1ae31155ac6fd9a983d6fbfc6c2c382ce5fd653f8cd"
+            "sha256": "958c012b1d1b8df9580fc3313bf0941d27c8a38a1a228cbc15f6d3f85bb85d95"
           }
         },
         {
           "name": "INTEGRATION_TELEMETRY_STATUS.json",
           "digest": {
-            "sha256": "c6be0bb9b8ffbdd0060494623921a8698313e4f5584e10e3689f5c6378f8c684"
+            "sha256": "4ab99bd4eb678ed432808865b0ea8a83a47836af81acb733e076303fe7a86f6d"
           }
         }
       ]

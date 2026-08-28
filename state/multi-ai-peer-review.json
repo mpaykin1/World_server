@@ -1,7 +1,7 @@
 {
-  "at": "2026-08-28T06:24:47.657Z",
+  "at": "2026-08-28T14:21:26.092Z",
   "branches": 10,
-  "worktrees": 3,
+  "worktrees": 4,
   "prCheck": true,
   "wipExists": true,
   "duplicates": [
@@ -13,6 +13,8 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -25,6 +27,7 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/agent-rules",
         "opencode/ai3d-full-integration"
       ]
@@ -37,6 +40,7 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -48,6 +52,7 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -59,6 +64,7 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -70,6 +76,7 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -81,6 +88,7 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -92,6 +100,7 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -103,6 +112,7 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -114,6 +124,7 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -125,6 +136,7 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -136,6 +148,7 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -147,6 +160,7 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -158,6 +172,7 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -169,6 +184,7 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -180,6 +196,7 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -191,6 +208,7 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -201,7 +219,8 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -211,7 +230,8 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -221,7 +241,8 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -231,7 +252,8 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -241,7 +263,8 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -251,7 +274,8 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -261,7 +285,8 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -271,7 +296,8 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -281,7 +307,8 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -291,7 +318,8 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -301,7 +329,8 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -311,7 +340,8 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -321,7 +351,8 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -331,7 +362,8 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -341,7 +373,8 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -349,7 +382,15 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "api/config.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -357,7 +398,29 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "api/logout.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "api/me.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "api/narrative.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -366,7 +429,8 @@
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -378,6 +442,7 @@
         "ai/desktop/vercel-function-consolidation",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -390,6 +455,7 @@
         "ai/desktop/vercel-function-consolidation",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -398,7 +464,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -409,6 +476,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -420,6 +488,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -431,6 +500,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -441,6 +511,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -451,7 +522,50 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "apps/improve-world-home/.gitignore",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "apps/improve-world-home/check.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "apps/improve-world-home/package.json",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "apps/improve-world-home/public/app.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "apps/improve-world-home/public/index.html",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "apps/improve-world-home/vercel.json",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -461,6 +575,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -471,6 +586,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -481,6 +597,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -491,7 +608,29 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "e2e/improve-world-home-baseline.spec.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "e2e/improve-world-home-baseline.spec.js-snapshots/improve-world-home-landing-desktop-chromium-win32.png",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "e2e/improve-world-home-multiuser.spec.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -499,7 +638,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -507,7 +647,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -515,7 +656,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -523,7 +665,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -531,7 +674,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -539,7 +683,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -547,7 +692,15 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "lib/api-handlers/merge.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -555,7 +708,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -563,7 +717,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -571,7 +726,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -579,7 +735,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -587,7 +744,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -595,7 +753,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -603,7 +762,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -611,7 +771,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -619,7 +780,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -627,7 +789,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -635,7 +798,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -643,7 +807,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -651,7 +816,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -659,7 +825,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -667,7 +834,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -675,7 +843,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -683,7 +852,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -691,7 +861,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -699,7 +870,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -707,7 +879,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -715,7 +888,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -723,7 +897,8 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -731,7 +906,15 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "lib/api-handlers/story.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -739,7 +922,15 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "lib/api-handlers/world.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -748,7 +939,22 @@
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "lib/env.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "lib/narrative-blueprint.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -757,7 +963,8 @@
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -766,7 +973,29 @@
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "lib/semantic-provider.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "lib/voxel-provisioning.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "lib/world-spec.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -778,6 +1007,7 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -790,7 +1020,15 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "scripts/build-posthog.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -802,8 +1040,44 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/agent-rules",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "scripts/check-js.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "scripts/check-posthog-runtime.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "scripts/check-vercel-team-public-access.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "scripts/check-wip-test-count.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "scripts/inject-posthog-runtime.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -815,7 +1089,43 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "shared/posthog-runtime.entry.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "shared/posthog-runtime.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "supabase/migrations/20260826090000_harden_handle_new_user_rpc_exposure.sql",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "supabase/migrations/20260827100000_story_world_merge.sql",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "supabase/migrations/20260827120000_merge_idempotency_constraint.sql",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -827,6 +1137,7 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -835,7 +1146,92 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "test/auth-endpoints-no-admin-key.test.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "test/helpers/fake-supabase.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "test/improve-world-home-offline-sync.test.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "test/improve-world-home-recovery.test.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "test/narrative-blueprint.test.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "test/posthog-config.test.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "test/preview-secret-isolation.test.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "test/semantic-provider.test.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "test/server-local-dev-routing.test.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "test/story-world-merge-handlers.test.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "test/story-world-merge-migration.test.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "test/supabase-security-definer-rpc-exposure.test.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -843,7 +1239,36 @@
       "branches": [
         "ai/claude/safe-parallel-20260826",
         "ai/desktop/vercel-function-consolidation",
-        "ai/opencode/multi-ai-peer-improvement"
+        "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "test/voxel-provisioning.test.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "test/voxel-world-client-dynamic-world.test.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "test/wip-doc-freshness.test.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
+      ]
+    },
+    {
+      "file": "test/world-spec.test.js",
+      "branches": [
+        "ai/claude/safe-parallel-20260826",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -854,6 +1279,7 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -876,6 +1302,7 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -1608,6 +2035,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -1738,6 +2166,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -2248,7 +2677,15 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "DESKTOP_AI_PIXEL_ANIMATION_V3.md",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -2568,6 +3005,13 @@
     },
     {
       "file": "PHYSICAL_DEVICE_FLEET_STATUS.json",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "PIXEL_ANIMATION_V3_STATUS.md",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/opencode/multi-ai-peer-improvement"
@@ -2973,6 +3417,7 @@
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
         "ai/opencode/multi-ai-peer-improvement",
+        "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -3243,6 +3688,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -3656,6 +4102,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -7452,6 +7899,111 @@
       ]
     },
     {
+      "file": "shared/pixel-animation-auto-integrator.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-auto-profile.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-device-learning.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-engine.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-gpu-culling.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-multi-atlas.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-pipeline-cache.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-pixi8-adapter.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-region-rig.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-runtime.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-visual-regression.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-webgpu.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-worker-bridge.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-worker.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/pixel-atlas-builder.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "shared/pwa-runtime.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
@@ -7572,6 +8124,20 @@
     },
     {
       "file": "state/blocker-repair/unified.lock",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "supabase/functions/pixel-animation-config/index.ts",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "supabase/functions/pixel-animation-telemetry/index.ts",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/opencode/multi-ai-peer-improvement"
@@ -8432,6 +8998,27 @@
       ]
     },
     {
+      "file": "test/pixel-animation-engine.test.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "test/pixel-animation-syntax.test.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "test/pixel-animation-v2.test.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "test/pixel-animation-v3.test.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
@@ -8557,6 +9144,13 @@
     },
     {
       "file": "test/world-quality-truth-gate.test.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "tools/pixel-animation-lab/index.html",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/opencode/multi-ai-peer-improvement"
@@ -11528,6 +12122,9 @@
     ".quality-cache/tests/51a1e7fbd479d5a830f4f284d7c0331ca01bd740294902f0434ba8160bb1224f.json",
     ".quality-cache/tests/a0bbfa7a8e3f05812c1e7d6ac5d70a76ad46814b6c54becf915fcb211887651c.json",
     "supabase/migrations/20260823063700_quality_telemetry.sql",
+    ".iw-graphics-staging/game-motion-v2/WORLD_SERVER_GAME_MOTION_FRAME_TIMELINE_V2/payload/scripts/game-motion-quality-gate.mjs",
+    ".iw-graphics-staging/pixel-animation-v3/PIXEL_ANIMATION_SYSTEM_V3/scripts/pixel-animation-visual-regression.js",
+    ".iw-graphics-staging/pixel-animation-v3/PIXEL_ANIMATION_SYSTEM_V3/shared/pixel-animation-visual-regression.js",
     "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/apply_world_quality_autopilot.bat",
     "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/apply_world_quality_autopilot.ps1",
     "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/install-world-quality-autopilot.cjs",
@@ -11545,6 +12142,7 @@
     "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/services/ai3d-worker/ai3d/plugins/world_quality.py",
     "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/shared/world-quality-autopilot.js",
     "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/test/world-quality-autopilot.test.js",
+    "scripts/game-motion-quality-gate.mjs",
     "scripts/quality-autoloop-tick.ps1",
     "supabase/migrations_backup_20260824/20260823034319_quality_autopilot_telemetry.sql",
     "supabase/migrations_backup_20260824/20260823040000_quality_autopilot_telemetry.sql",

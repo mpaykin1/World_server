@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "navigator-world-server",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "cd /d C:\\Users\\user\\Desktop\\World_server_navigator && set PORT=3010 && npm start"],
+      "port": 3010
+    }
+  ]
+}

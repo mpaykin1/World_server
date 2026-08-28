@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "models": [
+    {
+      "id": "mediapipe-pose-landmarker-lite-f16-v1",
+      "path": "shared/models/pose_landmarker_lite.task",
+      "url": "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task",
+      "minBytes": 100000,
+      "sha256": null,
+      "lockPolicy": "first-successful-install-locks-sha256"
+    }
+  ],
+  "runtimePackage": {
+    "name": "@mediapipe/tasks-vision",
+    "range": "^1.0.1"
+  }
+}

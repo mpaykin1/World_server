@@ -96,6 +96,54 @@
         "worker-job",
         "panorama-manifest"
       ]
+    },
+    "dreamfog-world": {
+      "title": "DreamFog World",
+      "description": "DreamFog candidate. Hidden until full verification passes.",
+      "visible": false,
+      "status": "quarantine",
+      "kind": "game",
+      "goldenStandard": "v2",
+      "reason": "Installer keeps deny-by-default policy. Run full verification before promotion.",
+      "required": [
+        "desktop-controls",
+        "camera-relative-directions",
+        "mobile-controls",
+        "mouse-look",
+        "touch-look",
+        "grounding",
+        "wall-collision",
+        "spawn",
+        "render",
+        "adaptive-quality"
+      ]
+    },
+    "ink-glyph-world": {
+      "title": "Ink Glyph World",
+      "visible": false,
+      "status": "candidate",
+      "kind": "tool",
+      "goldenStandard": "v2",
+      "description": "Brush-glyph world topology/rendering",
+      "required": [
+        "mouse-look",
+        "touch-look",
+        "render"
+      ]
+    },
+    "procedural-quality-certification": {
+      "title": "Procedural Quality Certification",
+      "visible": false,
+      "status": "candidate",
+      "kind": "tool",
+      "description": "Certification harness for procedural quality"
+    },
+    "procedural-quality-lab": {
+      "title": "Procedural Quality Lab",
+      "visible": false,
+      "status": "candidate",
+      "kind": "tool",
+      "description": "Lab for procedural quality"
     }
   }
 }

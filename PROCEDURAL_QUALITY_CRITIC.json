@@ -1,10 +1,10 @@
 {
   "version": 10,
-  "score": 93,
+  "score": 97,
   "pass": true,
   "architecturalReadiness": 99,
   "verifiedReadiness": 98,
-  "nativeRendererCoverage": 0,
+  "nativeRendererCoverage": 67,
   "physicalCertified": false,
   "note": "Critic scores implementation/evidence coverage; it does not claim arbitrary photorealism."
 }

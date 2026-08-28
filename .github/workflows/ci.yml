@@ -26,6 +26,8 @@ jobs:
           npm run build:sentry
           node scripts/inject-sentry-runtime.js
           node scripts/check-sentry-runtime.js
+      - name: Procedural Quality V10 gate (hard)
+        run: npm run procedural:check
       - run: npm run check
       - run: python -m py_compile services/ai3d-worker/server.py services/ai3d-worker/ai3d/*.py services/ai3d-worker/ai3d/plugins/*.py services/ai3d-worker/tools/*.py services/ai3d-worker/scripts/e2e-smoke.py
       - name: AI3D discovery smoke

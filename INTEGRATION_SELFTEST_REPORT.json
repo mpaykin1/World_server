@@ -1,8 +1,8 @@
 {
   "schemaVersion": "7.5.0",
-  "generatedAt": "2026-08-28T06:26:36.558Z",
-  "pass": false,
-  "passed": 89,
+  "generatedAt": "2026-08-28T14:17:17.740Z",
+  "pass": true,
+  "passed": 91,
   "total": 91,
   "checks": [
     {
@@ -27,7 +27,7 @@
     },
     {
       "id": "integration-gate",
-      "pass": false,
+      "pass": true,
       "details": "SYSTEM_INTEGRATION_REPORT.json"
     },
     {
@@ -37,7 +37,7 @@
     },
     {
       "id": "policy-pass",
-      "pass": false,
+      "pass": true,
       "details": "POLICY_DECISION_REPORT.json"
     },
     {
@@ -508,15 +508,15 @@
       "pass": true,
       "details": {
         "schemaVersion": "7.5.0",
-        "generatedAt": "2026-08-28T06:26:36.538Z",
+        "generatedAt": "2026-08-28T14:17:17.720Z",
         "pass": true,
         "smokeHarnessVerified": true,
-        "durationHours": 0.000022,
-        "eventCount": 5,
+        "durationHours": 0.000024,
+        "eventCount": 6,
         "allRecovered": true,
         "longSoakCertified": false,
         "minimumCertifiedHours": 8,
-        "stateFile": ".world-server-state/long-soak/selftest-4312.json",
+        "stateFile": ".world-server-state/long-soak/selftest-6428.json",
         "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
       }
     },

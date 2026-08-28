@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-28T06:26:22.187Z",
-  "gitSha": "5dfe76f1f0c05b7fd018672b9c78dee70e505e8d",
+  "generatedAt": "2026-08-28T14:17:01.405Z",
+  "gitSha": "c854c74515ec342f86af7d554443ef411f115e28",
   "definition": "Dream = autonomous build/run/play/observe/score/root-cause/fix/retest/canary/deploy loop across Web/Godot/Roblox/devices.",
   "implementationPercent": 71,
   "dreamVerifiedPercent": 54,
@@ -537,7 +537,7 @@
           "ok": false,
           "reason": "stale",
           "file": "QUALITY_ROOT_CAUSE_GRAPH.json",
-          "ageHours": 97.3
+          "ageHours": 105.2
         }
       ]
     },

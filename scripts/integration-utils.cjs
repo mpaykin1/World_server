@@ -6,7 +6,7 @@ const cp = require('child_process');
 
 const ROOT = process.cwd();
 const STATE_DIR = path.join(ROOT, '.world-server-state');
-const SKIP_DIRS = new Set(['.git', 'node_modules', '.world-server-state', '.system-integration-backups', '.quality-autopilot-state']);
+const SKIP_DIRS = new Set(['.git', 'node_modules', '.world-server-state', '.system-integration-backups', '.quality-autopilot-state', '.blocker-repair-backups', '.characterforge-backups', '.ink-glyph-backups', '.iw-graphics-staging', 'state', '.cache', '_IMPROVE_V1_TMP', '_V11_3_TMP', '_V13_TMP', '_WORLD_V41_TMP_VERIFY']);
 
 function norm(p) { return p.replaceAll('\\', '/').replace(/^\.\//, ''); }
 function ensureDir(p) { fs.mkdirSync(p, { recursive: true }); }
@@ -52,7 +52,7 @@ function projectFiles() {
   const files = r.ok && r.stdout ? r.stdout.split('\0').filter(Boolean).map(norm) : walkFallback();
   return [...new Set(files)].filter(rel => {
     const parts = rel.split('/');
-    return !parts.some(p => SKIP_DIRS.has(p)) && fs.existsSync(path.join(ROOT, rel)) && fs.statSync(path.join(ROOT, rel)).isFile();
+    return !parts.some(p => SKIP_DIRS.has(p)) && !rel.endsWith('.lock') && !rel.endsWith('.tmp') && fs.existsSync(path.join(ROOT, rel)) && fs.statSync(path.join(ROOT, rel)).isFile();
   }).sort();
 }
 function commandExists(name) {

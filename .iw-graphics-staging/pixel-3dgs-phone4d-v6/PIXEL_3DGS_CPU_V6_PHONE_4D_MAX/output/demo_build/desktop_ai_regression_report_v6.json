@@ -1,0 +1,50 @@
+{
+  "ok": true,
+  "results": [
+    {
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "-m",
+        "compileall",
+        "-q",
+        "pixel3dgs",
+        "tools"
+      ],
+      "returncode": 0,
+      "seconds": 1.14,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "v6_self_test.py"
+      ],
+      "returncode": 0,
+      "seconds": 1.57,
+      "stdout": "{\n  \"ok\": true,\n  \"checks\": {\n    \"phone_pose_fusion\": true,\n    \"dynamic4d_tracks\": true,\n    \"model_manager\": true,\n    \"phone_capture_api\": true,\n    \"phone_capture_static\": true,\n    \"phone_capture_files\": true\n  },\n  \"pose_report\": {\n    \"used\": true,\n    \"orientation_used\": true,\n    \"native_position_used\": true,\n    \"gps_position_used\": false,\n    \"sample_count\": 40,\n    \"frame_count\": 10,\n    \"coverage_ratio\": 1.0,\n    \"source\": \"/mnt/data/PIXEL_3DGS_CPU_V6_PHONE_4D_MAX/output/demo_build/synthetic_capture_pose.json\"\n  },\n  \"dynamic4d_report\": {\n    \"ok\": true,\n    \"backend\": \"cpu_dense_flow_temporal_tracks\",\n    \"track_count\": 39,\n    \"frame_count\": 12,\n    \"median_motion_px\": 0.9063,\n    \"dynamic_score\": 0.1813,\n    \"recommended_mode\": \"rigid_character\",\n    \"tracks_file\": \"/mnt/data/PIXEL_3DGS_CPU_V6_PHONE_4D_MAX/output/demo_build/v6_dynamic4d_test/dynamic4d_tracks.npz\",\n    \"note\": \"Temporal deformation tracks are operational; true learned 4D Gaussian deformation remains an optional future backend.\"\n  },\n  \"model_status\": {\n    \"depth\": {\n      \"active\": false,\n      \"path\": null,\n      \"source\": null\n    },\n    \"matcher\": {\n      \"active\": false,\n      \"path\": null,\n      \"source\": null\n    },\n    \"flow\": {\n      \"active\": false,\n      \"path\": null,\n      \"source\": null\n    },\n    \"segmentation\": {\n      \"active\": false,\n      \"path\": null,\n      \"source\": null\n    }\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "self_test.py"
+      ],
+      "returncode": 0,
+      "seconds": 1.36,
+      "stdout": "{\n  \"ok\": true,\n  \"pipeline_health_percent\": 67.9,\n  \"capture_quality_percent\": 89.1,\n  \"lod_counts\": {\n    \"lod0\": 67709,\n    \"lod1\": 46367,\n    \"lod2\": 30315\n  },\n  \"feature_count\": 26,\n  \"collision_vertices\": 100\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "video_self_test.py"
+      ],
+      "returncode": 0,
+      "seconds": 7.14,
+      "stdout": "{\n  \"ok\": true,\n  \"tests\": {\n    \"space\": {\n      \"quality\": 72.2,\n      \"lod_counts\": {\n        \"lod0\": 42529,\n        \"lod1\": 20667,\n        \"lod2\": 10035\n      }\n    },\n    \"character\": {\n      \"quality\": 64.5,\n      \"lod_counts\": {\n        \"lod0\": 8261,\n        \"lod1\": 6494,\n        \"lod2\": 4393\n      }\n    }\n  }\n}\n",
+      "stderr": ""
+    }
+  ],
+  "rule": "Do not stop until every failed check is fixed and the full regression chain is re-run green."
+}

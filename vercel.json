@@ -17,40 +17,150 @@
     }
   ],
   "rewrites": [
-    { "source": "/api/quality-summary", "destination": "/api/quality?__route=quality-summary" },
-    { "source": "/api/quality-profile", "destination": "/api/quality?__route=quality-profile" },
-    { "source": "/api/quality-project-state", "destination": "/api/quality?__route=quality-project-state" },
-    { "source": "/api/quality-rollout-config", "destination": "/api/quality?__route=quality-rollout-config" },
-    { "source": "/api/quality-telemetry", "destination": "/api/quality?__route=quality-telemetry" },
-    { "source": "/api/quality-telemetry-export", "destination": "/api/quality?__route=quality-telemetry-export" },
-    { "source": "/api/quality-trace", "destination": "/api/quality?__route=quality-trace" },
-    { "source": "/api/quality-pattern-evidence", "destination": "/api/quality?__route=quality-pattern-evidence" },
-    { "source": "/api/quality-performance-evidence", "destination": "/api/quality?__route=quality-performance-evidence" },
-    { "source": "/api/quality-autopilot-nightly", "destination": "/api/quality?__route=quality-autopilot-nightly" },
-    { "source": "/api/quality-autopilot-summary", "destination": "/api/quality?__route=quality-autopilot-summary" },
-    { "source": "/api/quality-autopilot-worker", "destination": "/api/quality?__route=quality-autopilot-worker" },
-    { "source": "/api/procedural-quality-baseline", "destination": "/api/quality?__route=procedural-quality-baseline" },
-    { "source": "/api/procedural-quality-canary", "destination": "/api/quality?__route=procedural-quality-canary" },
-    { "source": "/api/procedural-quality-certification", "destination": "/api/quality?__route=procedural-quality-certification" },
-    { "source": "/api/procedural-quality-device-report", "destination": "/api/quality?__route=procedural-quality-device-report" },
-    { "source": "/api/procedural-quality-learn", "destination": "/api/quality?__route=procedural-quality-learn" },
-    { "source": "/api/procedural-quality-orchestrate", "destination": "/api/quality?__route=procedural-quality-orchestrate" },
-    { "source": "/api/procedural-quality-profile", "destination": "/api/quality?__route=procedural-quality-profile" },
-    { "source": "/api/procedural-quality-repair-report", "destination": "/api/quality?__route=procedural-quality-repair-report" },
-    { "source": "/api/procedural-quality-runtime-health", "destination": "/api/quality?__route=procedural-quality-runtime-health" },
-    { "source": "/api/procedural-quality-system-status", "destination": "/api/quality?__route=procedural-quality-system-status" },
-    { "source": "/api/quality-probe-ap", "destination": "/api/quality?__route=quality-probe-ap" },
-    { "source": "/api/quality-probe-eu", "destination": "/api/quality?__route=quality-probe-eu" },
-    { "source": "/api/quality-probe-us", "destination": "/api/quality?__route=quality-probe-us" },
-    { "source": "/api/login", "destination": "/api/auth?__route=login" },
-    { "source": "/api/logout", "destination": "/api/auth?__route=logout" },
-    { "source": "/api/me", "destination": "/api/auth?__route=me" },
-    { "source": "/api/register", "destination": "/api/auth?__route=register" },
-    { "source": "/api/ai3d", "destination": "/api/generative?__route=ai3d" },
-    { "source": "/api/ai3d-voxel-generate", "destination": "/api/generative?__route=ai3d-voxel-generate" },
-    { "source": "/api/apng", "destination": "/api/generative?__route=apng" },
-    { "source": "/api/lowfi-25d-scene", "destination": "/api/generative?__route=lowfi-25d-scene" },
-    { "source": "/api/voxel", "destination": "/api/generative?__route=voxel" },
+    {
+      "source": "/api/quality-summary",
+      "destination": "/api/quality?__route=quality-summary"
+    },
+    {
+      "source": "/api/quality-profile",
+      "destination": "/api/quality?__route=quality-profile"
+    },
+    {
+      "source": "/api/quality-project-state",
+      "destination": "/api/quality?__route=quality-project-state"
+    },
+    {
+      "source": "/api/quality-rollout-config",
+      "destination": "/api/quality?__route=quality-rollout-config"
+    },
+    {
+      "source": "/api/quality-telemetry",
+      "destination": "/api/quality?__route=quality-telemetry"
+    },
+    {
+      "source": "/api/quality-telemetry-export",
+      "destination": "/api/quality?__route=quality-telemetry-export"
+    },
+    {
+      "source": "/api/quality-trace",
+      "destination": "/api/quality?__route=quality-trace"
+    },
+    {
+      "source": "/api/quality-pattern-evidence",
+      "destination": "/api/quality?__route=quality-pattern-evidence"
+    },
+    {
+      "source": "/api/quality-performance-evidence",
+      "destination": "/api/quality?__route=quality-performance-evidence"
+    },
+    {
+      "source": "/api/quality-autopilot-nightly",
+      "destination": "/api/quality?__route=quality-autopilot-nightly"
+    },
+    {
+      "source": "/api/quality-autopilot-summary",
+      "destination": "/api/quality?__route=quality-autopilot-summary"
+    },
+    {
+      "source": "/api/quality-autopilot-worker",
+      "destination": "/api/quality?__route=quality-autopilot-worker"
+    },
+    {
+      "source": "/api/procedural-quality-baseline",
+      "destination": "/api/quality?__route=procedural-quality-baseline"
+    },
+    {
+      "source": "/api/procedural-quality-canary",
+      "destination": "/api/quality?__route=procedural-quality-canary"
+    },
+    {
+      "source": "/api/procedural-quality-certification",
+      "destination": "/api/quality?__route=procedural-quality-certification"
+    },
+    {
+      "source": "/api/procedural-quality-device-report",
+      "destination": "/api/quality?__route=procedural-quality-device-report"
+    },
+    {
+      "source": "/api/procedural-quality-learn",
+      "destination": "/api/quality?__route=procedural-quality-learn"
+    },
+    {
+      "source": "/api/procedural-quality-orchestrate",
+      "destination": "/api/quality?__route=procedural-quality-orchestrate"
+    },
+    {
+      "source": "/api/procedural-quality-profile",
+      "destination": "/api/quality?__route=procedural-quality-profile"
+    },
+    {
+      "source": "/api/procedural-quality-repair-report",
+      "destination": "/api/quality?__route=procedural-quality-repair-report"
+    },
+    {
+      "source": "/api/procedural-quality-runtime-health",
+      "destination": "/api/quality?__route=procedural-quality-runtime-health"
+    },
+    {
+      "source": "/api/procedural-quality-system-status",
+      "destination": "/api/quality?__route=procedural-quality-system-status"
+    },
+    {
+      "source": "/api/quality-probe-ap",
+      "destination": "/api/quality?__route=quality-probe-ap"
+    },
+    {
+      "source": "/api/quality-probe-eu",
+      "destination": "/api/quality?__route=quality-probe-eu"
+    },
+    {
+      "source": "/api/quality-probe-us",
+      "destination": "/api/quality?__route=quality-probe-us"
+    },
+    {
+      "source": "/api/login",
+      "destination": "/api/auth?__route=login"
+    },
+    {
+      "source": "/api/logout",
+      "destination": "/api/auth?__route=logout"
+    },
+    {
+      "source": "/api/me",
+      "destination": "/api/auth?__route=me"
+    },
+    {
+      "source": "/api/register",
+      "destination": "/api/auth?__route=register"
+    },
+    {
+      "source": "/api/ai3d",
+      "destination": "/api/generative?__route=ai3d"
+    },
+    {
+      "source": "/api/ai3d-voxel-generate",
+      "destination": "/api/generative?__route=ai3d-voxel-generate"
+    },
+    {
+      "source": "/api/apng",
+      "destination": "/api/generative?__route=apng"
+    },
+    {
+      "source": "/api/lowfi-25d-scene",
+      "destination": "/api/generative?__route=lowfi-25d-scene"
+    },
+    {
+      "source": "/api/voxel",
+      "destination": "/api/generative?__route=voxel"
+    },
+    {
+      "source": "/api/pixel-panorama",
+      "destination": "/api/generative?__route=pixel-panorama"
+    },
+    {
+      "source": "/api/pixel-panorama/:path*",
+      "destination": "/api/generative?__route=pixel-panorama"
+    },
     {
       "source": "/apps/:app/",
       "destination": "/apps/:app/index.html"
@@ -68,5 +178,5 @@
     }
   ],
   "outputDirectory": ".",
-  "buildCommand": "node scripts/inject-sentry-runtime.js"
+  "buildCommand": "node scripts/inject-sentry-runtime.js && node scripts/inject-procedural-quality-runtime.js"
 }

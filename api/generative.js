@@ -8,13 +8,16 @@ const ai3dVoxelGenerate = require('../lib/api-handlers/ai3d-voxel-generate');
 const apng = require('../lib/api-handlers/apng');
 const lowfi25dScene = require('../lib/api-handlers/lowfi-25d-scene');
 const voxel = require('../lib/api-handlers/voxel');
+const pixelPanorama = require('../lib/api-handlers/pixel-panorama');
 
 const routes = {
   ai3d,
   'ai3d-voxel-generate': ai3dVoxelGenerate,
   apng,
   'lowfi-25d-scene': lowfi25dScene,
-  voxel
+  voxel,
+  'pixel-panorama': pixelPanorama,
+  pixelPanorama
 };
 
 function routeName(req) {

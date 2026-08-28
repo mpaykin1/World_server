@@ -1,0 +1,27 @@
+{
+  "schema": "world-server.local-validation/v6",
+  "name": "WORLD_SERVER_3DGS_360_CPU_QUALITY_V6",
+  "pass": true,
+  "core_checks": {
+    "python_regression": {"passed": 11, "failed": 0},
+    "system_checks": {"passed": 11, "failed": 0}
+  },
+  "integration_checks": [
+    {"name": "installer-first-run", "status": "PASS"},
+    {"name": "installer-idempotent-second-run", "status": "PASS"},
+    {"name": "approximate-autopilot", "status": "PASS", "result": "READY_FOR_GAME_PREVIEW"},
+    {"name": "autopilot-resume", "status": "PASS"},
+    {"name": "changed-input-fingerprint-invalidation", "status": "PASS"},
+    {"name": "synthetic-consistency", "status": "PASS", "example_score": 91},
+    {"name": "artifact-audit", "status": "PASS", "example_score": 100},
+    {"name": "optimizer-without-splat-transform", "status": "PASS", "result": "TOOL_MISSING truthful fallback"},
+    {"name": "doctor-fast-diagnostic", "status": "PASS", "result": "HEALTHY"}
+  ],
+  "not_certified_here": [
+    "Live integration into the user's real World_server repository",
+    "Real COLMAP multi-panorama reconstruction on the user's Windows machine",
+    "Real OpenSplat CPU training on the user's Windows machine",
+    "Real SplatTransform SPZ/SOG/LOD conversion because the tool is not installed in this sandbox",
+    "Real OpenVINO/ONNX depth-model speedup because compatible model/runtime packages are not installed in this sandbox"
+  ]
+}

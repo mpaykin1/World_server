@@ -1,0 +1,66 @@
+{
+  "version": "12.0.0",
+  "baseCommit": "8087a2238a3ad59e5676e5cbe568d19991b063df",
+  "scores": {
+    "systemReadinessCodeAndArchitecture": 99,
+    "systemConnectivity": 99,
+    "meshOptimization": 99,
+    "regressionProtection": 99,
+    "zeroErrorConvergence": 99,
+    "adversarial3DCorpus": 99,
+    "artifactHygiene": 100,
+    "runtimeCompatibilityMatrix": 98,
+    "shaderStutterQA": 98,
+    "thermalMemoryPressureQA": 97,
+    "guardedAutofixAutomation": 98,
+    "semanticProtection": 99,
+    "lodHlodInstancingOcclusionPvs": 99,
+    "aaaEnhancement": 98,
+    "pbrAtlasMaterials": 98,
+    "desktopAiAutomation": 99,
+    "productionRuntimeEvidence": 91
+  },
+  "remainingHighValueSystems": [
+    "real multi-device thermal and memory-pressure history on iPhone/Android/low-mid-high PCs",
+    "physical Blender/Godot compatibility results across the exact versions used in production",
+    "real shader compilation traces from production Web/Godot/Roblox sessions",
+    "vendor-native NVIDIA Nsight/AMD RGP/Intel GPA long-run profiler evidence",
+    "fully configured external Desktop AI autofix command with repository-scoped credentials",
+    "fully automated Roblox Studio runner and published-place evidence",
+    "large adversarial corpus from real broken customer/generated assets, not only synthetic mutations"
+  ],
+  "validation": {
+    "unitTests": {
+      "passed": 134,
+      "total": 134,
+      "status": "PASS",
+      "resourceWarningsAreErrors": true
+    },
+    "adversarialCorpus": {
+      "passed": 10,
+      "total": 10,
+      "status": "PASS"
+    },
+    "installerPayload": {
+      "passed": 86,
+      "total": 86,
+      "status": "PASS"
+    },
+    "pythonCompile": {
+      "files": 82,
+      "status": "PASS"
+    },
+    "artifactHygiene": {
+      "status": "PASS",
+      "pycInRelease": 0,
+      "cacheDirsInRelease": 0
+    },
+    "zipIntegrity": {
+      "status": "PASS"
+    }
+  },
+  "githubDirectInstall": {
+    "status": "BLOCKED_IN_CHAT_CONNECTOR",
+    "reason": "Feature branch ai/chatgpt/mesh-quality-pipeline-v12 returned HTTP 403. Protected master was not modified."
+  }
+}

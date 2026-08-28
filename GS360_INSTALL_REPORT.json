@@ -1,0 +1,75 @@
+{
+  "schema": "world-server.gs360-install/v6",
+  "pass": true,
+  "target": "C:\\Users\\user\\Desktop\\World_server",
+  "dryRun": false,
+  "actions": [
+    {
+      "action": "install_or_update",
+      "path": "systems/gs360"
+    },
+    {
+      "action": "patch_package_scripts",
+      "path": "package.json",
+      "scripts": {
+        "gs360": "node systems/gs360/run.cjs",
+        "gs360:setup": "node systems/gs360/setup.cjs",
+        "test:gs360": "node systems/gs360/test.cjs",
+        "gs360:resources": "node systems/gs360/resource-advisor.cjs",
+        "gs360:wait": "node systems/gs360/wait-and-verify.cjs",
+        "gs360:autopilot": "node systems/gs360/autopilot.cjs",
+        "gs360:health": "node systems/gs360/health-check.cjs",
+        "gs360:quality": "node systems/gs360/quality.cjs",
+        "gs360:backend": "node systems/gs360/backend-registry.cjs",
+        "gs360:depth": "node systems/gs360/depth-registry.cjs",
+        "gs360:license": "node systems/gs360/license-gate.cjs",
+        "gs360:next": "node systems/gs360/next-action.cjs",
+        "gs360:benchmark": "node systems/gs360/resource-benchmark.cjs",
+        "gs360:train": "node systems/gs360/trainer-runner.cjs",
+        "gs360:queue": "node systems/gs360/job-queue.cjs",
+        "gs360:system-test": "node systems/gs360/system-test.cjs",
+        "gs360:doctor": "node systems/gs360/doctor.cjs",
+        "gs360:storage": "node systems/gs360/storage-manager.cjs",
+        "gs360:optimize": "node systems/gs360/splat-optimizer.cjs",
+        "gs360:consistency": "node systems/gs360/consistency.cjs"
+      }
+    },
+    {
+      "action": "install_desktop_ai_instructions",
+      "path": "systems/gs360/DESKTOP_AI_INSTRUCTIONS.md"
+    }
+  ],
+  "safeguards": [
+    "idempotent-copy",
+    "package-json-backup-before-change",
+    "no-existing-module-deletion",
+    "truthful-status-contract",
+    "checkpoint-resume",
+    "shared-benchmark-registry",
+    "quality-gate",
+    "backend-registry",
+    "persistent-job-queue",
+    "dead-letter-queue",
+    "artifact-audit",
+    "capture-coach",
+    "cpu-depth-registry",
+    "license-gate",
+    "input-quality-gate",
+    "next-action-planner",
+    "synthetic-consistency-gate",
+    "resume-fingerprint-invalidation",
+    "safe-splat-optimizer",
+    "spz-sog-lod-export"
+  ],
+  "next": [
+    "npm run gs360:setup",
+    "npm run test:gs360",
+    "npm run gs360:system-test",
+    "npm run gs360:health",
+    "npm run gs360:depth",
+    "npm run gs360:backend",
+    "npm run gs360:license",
+    "npm run gs360:resources",
+    "npm run gs360:optimize -- --output <output> --target spz"
+  ]
+}

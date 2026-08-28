@@ -50,3 +50,20 @@ NOT COMPLETE until Desktop AI records exact branch/commit/PR/preview, all gate o
 
 ## Non-stop error rule
 Do not stop at first PASS. Find every root cause, fix it, add regression protection, rerun the failed test and its complete parent gate, and continue until no mandatory error remains. External blockers must be proven and documented and do not justify claiming completion.
+
+<!-- WORLD_SERVER_SESSION_RECOVERY_V1_START -->
+## Desktop AI Session Recovery V1 — managed checkpoint
+
+- sessionId: `session-1787632622221-75896e`
+- status: `interrupted`
+- checkpoint: `2026-08-28T04:57:45.608Z`
+- checkpoint message: checkpoint before scheduler_kick fix - dirty 662, health DEAD overdue 625m, soak dead, honest 68/68
+- last successful command: none
+- last error: operation — Watchdog detected dead session/process: unfinished work exists but no responsible process is alive after 14.5 minute(s)
+- next action: fix scheduler_kick npm.cmd quoting
+
+### Recovery queue
+- no explicit recovery steps registered yet
+
+> New Desktop AI session: run `npm run desktop-ai:resume` before editing. Git reality overrides stale recovery metadata.
+<!-- WORLD_SERVER_SESSION_RECOVERY_V1_END -->

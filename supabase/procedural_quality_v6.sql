@@ -1,0 +1,15 @@
+alter table public.procedural_quality_learning alter column id set default gen_random_uuid();
+alter table public.procedural_quality_learning add column if not exists schema_version integer not null default 6;
+alter table public.procedural_quality_learning add column if not exists render_backend text;
+alter table public.procedural_quality_learning add column if not exists device_class text;
+alter table public.procedural_quality_learning add column if not exists scene_fingerprint text;
+alter table public.procedural_quality_learning add column if not exists settings_hash text;
+alter table public.procedural_quality_learning add column if not exists visual_score double precision;
+alter table public.procedural_quality_learning add column if not exists animation_score double precision;
+alter table public.procedural_quality_learning add column if not exists stability_score double precision;
+alter table public.procedural_quality_learning add column if not exists p50_frame_ms double precision;
+alter table public.procedural_quality_learning add column if not exists p95_frame_ms double precision;
+alter table public.procedural_quality_learning add column if not exists verified boolean not null default false;
+alter table public.procedural_quality_learning add column if not exists source text not null default 'runtime';
+create index if not exists pql_v6_scene_device_verified_score on public.procedural_quality_learning(scene, device_class, verified, score desc, created_at desc);
+create index if not exists pql_v6_fingerprint_backend on public.procedural_quality_learning(scene_fingerprint, render_backend, score desc);

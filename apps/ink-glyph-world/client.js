@@ -15,6 +15,8 @@ let revealPlaying=false, revealStart=0, revealDuration=5600;
 const scene=new THREE.Scene(); scene.background=new THREE.Color(0xefe7d6); scene.fog=new THREE.FogExp2(0xefe7d6,.012);
 const camera=new THREE.PerspectiveCamera(52,innerWidth/innerHeight,.1,500);
 const renderer=new THREE.WebGLRenderer({antialias:!mobile,powerPreference:'high-performance'});
+  globalThis.WorldProceduralThreeNative?.attach?.(renderer, THREE);
+  if(typeof world!=='undefined'&&typeof activeCamera!=='undefined')globalThis.WorldProceduralVoxelDDGI?.attach?.({renderer:renderer,worldGetter:()=>world,cameraGetter:()=>activeCamera});
 renderer.setPixelRatio(Math.min(devicePixelRatio,mobile?1.25:1.7)); renderer.setSize(innerWidth,innerHeight); renderer.shadowMap.enabled=!mobile; renderer.shadowMap.type=THREE.PCFSoftShadowMap; renderer.outputColorSpace=THREE.SRGBColorSpace; document.body.prepend(renderer.domElement);
 window.WorldQualityAutopilot?.registerRenderer?.('ink-glyph-world',renderer,{initialTier:mobile?'BALANCED':'HIGH',targetFps:mobile?40:55,getStats(){return{calls:renderer.info.render.calls,triangles:renderer.info.render.triangles}}});
 scene.add(new THREE.HemisphereLight(0xfff7e8,0x6f6557,2));

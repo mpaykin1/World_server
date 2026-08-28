@@ -1,0 +1,1897 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "GAME_MOTION_AUDIT",
+  "generatedAt": "2026-08-28T14:13:19.380Z",
+  "filesScanned": 115,
+  "opportunityFiles": 93,
+  "opportunities": [
+    {
+      "file": "apps/ai-3d/client.js",
+      "hits": [
+        {
+          "category": "mechanical",
+          "signals": [
+            "engine"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "apps/ai-3d/index.html",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "run"
+          ]
+        },
+        {
+          "category": "effects",
+          "signals": [
+            "dust"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "apps/ai3d-reference-test/assets/previous_html_baseline.html",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "npc",
+            "rig",
+            "walk",
+            "run"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "tree",
+            "flag",
+            "rope",
+            "lamp",
+            "sign",
+            "wind"
+          ]
+        },
+        {
+          "category": "mechanical",
+          "signals": [
+            "gear",
+            "fan",
+            "wheel",
+            "engine",
+            "door"
+          ]
+        },
+        {
+          "category": "effects",
+          "signals": [
+            "fire",
+            "dust"
+          ]
+        },
+        {
+          "category": "destruction",
+          "signals": [
+            "fragment"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "zoom"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "apps/ai3d-reference-test/client.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "rig"
+          ]
+        },
+        {
+          "category": "mechanical",
+          "signals": [
+            "engine"
+          ]
+        },
+        {
+          "category": "effects",
+          "signals": [
+            "water"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "camera",
+            "orbit"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "apps/ai3d-reference-test/index.html",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "rig",
+            "walk",
+            "run"
+          ]
+        },
+        {
+          "category": "mechanical",
+          "signals": [
+            "engine"
+          ]
+        },
+        {
+          "category": "effects",
+          "signals": [
+            "water"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "apps/ai3d-voxel-city/client.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "player",
+            "rig",
+            "walk",
+            "run"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "wind"
+          ]
+        },
+        {
+          "category": "mechanical",
+          "signals": [
+            "wheel"
+          ]
+        },
+        {
+          "category": "destruction",
+          "signals": [
+            "break"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "camera",
+            "zoom",
+            "orbit",
+            "lookat"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "apps/ai3d-voxel-city/index.html",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "run"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "orbit"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "apps/ai3d-voxel-city/mesher-worker.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ]
+        },
+        {
+          "category": "destruction",
+          "signals": [
+            "break"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "apps/catalog/client.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "player",
+            "rig"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "tree",
+            "wind"
+          ]
+        },
+        {
+          "category": "mechanical",
+          "signals": [
+            "fan"
+          ]
+        },
+        {
+          "category": "destruction",
+          "signals": [
+            "break"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "camera",
+            "lookat"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "apps/catalog/index.html",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "rig",
+            "run"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "apps/chat/index.html",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "run"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "apps/dreamfog-world/client.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "player",
+            "rig",
+            "walk",
+            "run"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "wind"
+          ]
+        },
+        {
+          "category": "effects",
+          "signals": [
+            "particle"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "camera"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "apps/dreamfog-world/index.html",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "run"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "apps/ink-glyph-world/client.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "run"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "wind"
+          ]
+        },
+        {
+          "category": "mechanical",
+          "signals": [
+            "wheel"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "camera",
+            "lookat"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "apps/ink-glyph-world/index.html",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "rig"
+          ]
+        },
+        {
+          "category": "mechanical",
+          "signals": [
+            "wheel"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "zoom",
+            "orbit"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "apps/pixel-panorama-360/client.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "sign",
+            "wind"
+          ]
+        },
+        {
+          "category": "mechanical",
+          "signals": [
+            "wheel"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "camera"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "apps/pixel-panorama-360/editor.html",
+      "hits": [
+        {
+          "category": "destruction",
+          "signals": [
+            "break"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "apps/pixel-panorama-360/editor.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "wind"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "apps/pixel-panorama-360/index.html",
+      "hits": [
+        {
+          "category": "mechanical",
+          "signals": [
+            "wheel"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "zoom"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "apps/procedural-quality-lab/index.html",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "locomotion",
+            "run"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "apps/survival/client.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "player",
+            "rig",
+            "walk",
+            "run"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "tree",
+            "grass",
+            "sign",
+            "wind"
+          ]
+        },
+        {
+          "category": "mechanical",
+          "signals": [
+            "door"
+          ]
+        },
+        {
+          "category": "effects",
+          "signals": [
+            "fire"
+          ]
+        },
+        {
+          "category": "destruction",
+          "signals": [
+            "break"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "camera",
+            "lookat"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "apps/survival/index.html",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "player",
+            "rig",
+            "run"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "apps/voxel-world/client.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "player",
+            "avatar",
+            "rig",
+            "walk",
+            "run"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "tree",
+            "grass",
+            "rope",
+            "lamp",
+            "sign",
+            "wind"
+          ]
+        },
+        {
+          "category": "effects",
+          "signals": [
+            "water"
+          ]
+        },
+        {
+          "category": "destruction",
+          "signals": [
+            "break"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "camera"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "apps/voxel-world/index.html",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "player",
+            "rig",
+            "run"
+          ]
+        },
+        {
+          "category": "destruction",
+          "signals": [
+            "break"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "apps/world-sharabass/index.html",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "character",
+            "player",
+            "npc",
+            "rig",
+            "walk",
+            "run"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "sign",
+            "wind"
+          ]
+        },
+        {
+          "category": "effects",
+          "signals": [
+            "smoke"
+          ]
+        },
+        {
+          "category": "destruction",
+          "signals": [
+            "break",
+            "fragment"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "camera",
+            "lookat"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/ai3d-playable-runtime.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "player",
+            "rig",
+            "walk",
+            "run"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "sign",
+            "wind"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "camera"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/answer-world-engine.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "tree",
+            "lamp",
+            "wind"
+          ]
+        },
+        {
+          "category": "mechanical",
+          "signals": [
+            "engine"
+          ]
+        },
+        {
+          "category": "effects",
+          "signals": [
+            "particle",
+            "water"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/common.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "player",
+            "rig",
+            "run"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "sign",
+            "wind"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "camera"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/dreamfog-atmosphere.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "sign",
+            "wind"
+          ]
+        },
+        {
+          "category": "effects",
+          "signals": [
+            "dust",
+            "particle",
+            "water"
+          ]
+        },
+        {
+          "category": "destruction",
+          "signals": [
+            "fragment"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "camera",
+            "lookat"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/game-motion-engine.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "rig",
+            "locomotion",
+            "walk",
+            "run"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "sign"
+          ]
+        },
+        {
+          "category": "mechanical",
+          "signals": [
+            "engine"
+          ]
+        },
+        {
+          "category": "destruction",
+          "signals": [
+            "explode",
+            "exploded",
+            "break"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "shake"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/game-motion-three-adapter.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ]
+        },
+        {
+          "category": "mechanical",
+          "signals": [
+            "engine"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "camera"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/golden-catalog-menu.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "rig"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/golden-performance-autotuner.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "wind"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/golden-physics.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "rig"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "wind"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/golden-ui-shell.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "wind"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/ink-glyph-world-core.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "walk"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "sign",
+            "wind"
+          ]
+        },
+        {
+          "category": "destruction",
+          "signals": [
+            "break"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-auto-integrator.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "run"
+          ]
+        },
+        {
+          "category": "mechanical",
+          "signals": [
+            "engine"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-auto-profile.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "character",
+            "player",
+            "npc",
+            "skeleton"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "tree",
+            "foliage",
+            "grass",
+            "flag",
+            "banner",
+            "lamp",
+            "wind"
+          ]
+        },
+        {
+          "category": "mechanical",
+          "signals": [
+            "gear",
+            "fan",
+            "engine",
+            "machine"
+          ]
+        },
+        {
+          "category": "effects",
+          "signals": [
+            "steam",
+            "smoke",
+            "fire",
+            "flame",
+            "water"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-engine.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "character",
+            "rig",
+            "run"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "tree",
+            "foliage",
+            "grass",
+            "flag",
+            "lamp",
+            "sign",
+            "wind"
+          ]
+        },
+        {
+          "category": "mechanical",
+          "signals": [
+            "machine"
+          ]
+        },
+        {
+          "category": "effects",
+          "signals": [
+            "smoke",
+            "fire",
+            "spark",
+            "water"
+          ]
+        },
+        {
+          "category": "destruction",
+          "signals": [
+            "break",
+            "fragment"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "camera"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-gpu-culling.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "camera"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-pixi8-adapter.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "character"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "foliage",
+            "flag",
+            "rope",
+            "sign"
+          ]
+        },
+        {
+          "category": "effects",
+          "signals": [
+            "smoke",
+            "fire",
+            "particle"
+          ]
+        },
+        {
+          "category": "destruction",
+          "signals": [
+            "break"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-region-rig.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "character",
+            "rig"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-runtime.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "run"
+          ]
+        },
+        {
+          "category": "mechanical",
+          "signals": [
+            "engine"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-visual-regression.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "sign"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-webgpu.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "rig",
+            "run"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "wind"
+          ]
+        },
+        {
+          "category": "mechanical",
+          "signals": [
+            "engine"
+          ]
+        },
+        {
+          "category": "effects",
+          "signals": [
+            "spark"
+          ]
+        },
+        {
+          "category": "destruction",
+          "signals": [
+            "fragment"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "camera"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-worker-bridge.js",
+      "hits": [
+        {
+          "category": "mechanical",
+          "signals": [
+            "engine"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "camera"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-worker.js",
+      "hits": [
+        {
+          "category": "mechanical",
+          "signals": [
+            "engine"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "camera"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/pixel-atlas-builder.js",
+      "hits": [
+        {
+          "category": "destruction",
+          "signals": [
+            "break"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-animation.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "chain",
+            "lamp"
+          ]
+        },
+        {
+          "category": "destruction",
+          "signals": [
+            "break"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-budget-controller.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "wind"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-culling.js",
+      "hits": [
+        {
+          "category": "destruction",
+          "signals": [
+            "break"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-ddgi.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-framegraph.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "run"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-gbuffer.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "character"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "sign"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-generic-renderer.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "rope"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-humanoid.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "rig"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-lighting.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "sign"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-locomotion.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "rig",
+            "locomotion"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-materials.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-native-gbuffer.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "rope"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-pass-budget.js",
+      "hits": [
+        {
+          "category": "destruction",
+          "signals": [
+            "break"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-pbr.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-perceptual.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-radiance.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "rig"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "sign"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-recorder.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "rig"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "sign"
+          ]
+        },
+        {
+          "category": "destruction",
+          "signals": [
+            "break"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-renderer-contract.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-resource-watchdog.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "wind"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-runtime.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "rig",
+            "locomotion",
+            "run"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "tree",
+            "lamp",
+            "sign",
+            "wind"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-scheduler.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-sdf.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-sdf3d.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "rig"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-semantics.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "character",
+            "rig"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "sign"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-shader-prewarm.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "run"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "camera"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-simd-pool.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "rig",
+            "run"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-style-calibration.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "rig"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-temporal-artifacts.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-temporal.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-three-native.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "rig"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ]
+        },
+        {
+          "category": "destruction",
+          "signals": [
+            "fragment"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "camera"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-three-skinned-motion.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "skeleton"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ]
+        },
+        {
+          "category": "destruction",
+          "signals": [
+            "fragment"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-tsr-source.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "camera"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-tsr.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-vision.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "run"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-voxel-ddgi.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "rig"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "camera"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-webgl2.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "sign"
+          ]
+        },
+        {
+          "category": "destruction",
+          "signals": [
+            "fragment"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-webgpu-ddgi.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "rig"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ]
+        },
+        {
+          "category": "camera",
+          "signals": [
+            "camera"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-webgpu.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "rig"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "sign"
+          ]
+        },
+        {
+          "category": "destruction",
+          "signals": [
+            "fragment"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-worker.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/pwa-runtime.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "run"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/quality-telemetry.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "wind"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/sentry-runtime.entry.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "run"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "wind"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/sentry-runtime.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "character",
+            "player",
+            "npc",
+            "rig",
+            "run"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "tree",
+            "flag",
+            "rope",
+            "chain",
+            "lamp",
+            "sign",
+            "wind"
+          ]
+        },
+        {
+          "category": "effects",
+          "signals": [
+            "fire"
+          ]
+        },
+        {
+          "category": "destruction",
+          "signals": [
+            "break",
+            "fragment"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/world-graphics-bus.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "run"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "rope"
+          ]
+        },
+        {
+          "category": "mechanical",
+          "signals": [
+            "engine"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/world-quality-autopilot.js",
+      "hits": [
+        {
+          "category": "character",
+          "signals": [
+            "character",
+            "locomotion",
+            "run"
+          ]
+        },
+        {
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "wind"
+          ]
+        },
+        {
+          "category": "mechanical",
+          "signals": [
+            "machine"
+          ]
+        },
+        {
+          "category": "effects",
+          "signals": [
+            "particle"
+          ]
+        }
+      ]
+    }
+  ]
+}

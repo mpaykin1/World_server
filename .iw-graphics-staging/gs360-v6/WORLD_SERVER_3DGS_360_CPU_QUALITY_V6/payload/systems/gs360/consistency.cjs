@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+'use strict';
+const {spawnSync}=require('node:child_process');const fs=require('node:fs');const path=require('node:path');const here=__dirname;
+const candidates=process.platform==='win32'?[[path.join(here,'.venv','Scripts','python.exe'),[]],['python',[]],['py',['-3']]]:[[path.join(here,'.venv','bin','python'),[]],['python3',[]],['python',[]]];let chosen=null;for(const [cmd,prefix] of candidates){if((cmd.includes('/')||cmd.includes('\\'))&&!fs.existsSync(cmd))continue;const t=spawnSync(cmd,[...prefix,'-c','import numpy,PIL'],{stdio:'ignore'});if(t.status===0){chosen=[cmd,prefix];break;}}if(!chosen){console.error('[GS360 CONSISTENCY] Python deps missing. Run npm run gs360:setup');process.exit(2);}const [cmd,prefix]=chosen;const r=spawnSync(cmd,[...prefix,path.join(here,'synthetic-consistency.py'),...process.argv.slice(2)],{stdio:'inherit'});process.exit(Number.isInteger(r.status)?r.status:1);

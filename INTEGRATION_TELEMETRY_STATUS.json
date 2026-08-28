@@ -1,14 +1,14 @@
 {
   "schemaVersion": "2.0.0",
-  "generatedAt": "2026-08-28T06:26:39.264Z",
+  "generatedAt": "2026-08-28T14:17:23.277Z",
   "localJsonl": true,
   "w3cTraceContext": true,
   "otlpHttpJson": true,
   "endpointConfigured": false,
   "lastExported": false,
   "lastExportError": null,
-  "lastTraceId": "62b8600c9cfc8cfc6a4e4cc57dc61b5a",
-  "lastSpanId": "b2d3e94abf34bc38",
+  "lastTraceId": "6981b3fd9ee76e94167b9a6649679d2b",
+  "lastSpanId": "a44c30960e04842d",
   "pass": true,
   "status": "PASS"
 }

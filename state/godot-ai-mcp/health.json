@@ -1,0 +1,13 @@
+﻿{
+    "schemaVersion":  "1.0.0",
+    "generatedAt":  "2026-08-28T14:17:24.006Z",
+    "endpoint":  "http://127.0.0.1:8000/mcp",
+    "mcpInitializeOk":  true,
+    "reason":  "initialize OK",
+    "venvHealthy":  true,
+    "repaired":  false,
+    "actions":  [
+
+                ],
+    "pass":  true
+}

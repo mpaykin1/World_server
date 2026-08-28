@@ -1,0 +1,4 @@
+(() => {
+'use strict';const G=globalThis;if(G.WorldProceduralPBR)return;const PI=Math.PI,clamp=(v,a,b)=>Math.max(a,Math.min(b,v));function D_GGX(NoH,r){const a=r*r,a2=a*a,d=NoH*NoH*(a2-1)+1;return a2/(PI*d*d+1e-6)}function V_Smith(NoV,NoL,r){const a=r*r,gv=NoL*Math.sqrt(NoV*NoV*(1-a)+a),gl=NoV*Math.sqrt(NoL*NoL*(1-a)+a);return .5/(gv+gl+1e-6)}function F_Schlick(u,f0){const f=(1-u)**5;return f0+(1-f0)*f}function brdf({NoV=.8,NoL=.8,NoH=.9,VoH=.9,roughness=.5,metallic=0,f0=.04}={}){const spec=D_GGX(NoH,roughness)*V_Smith(NoV,NoL,roughness)*F_Schlick(VoH,f0+(1-f0)*metallic);return{diffuse:(1-metallic)/PI,specular:spec}}
+const wgsl=String.raw`const PQ_PI:f32=3.14159265;fn pq_DGGX(NoH:f32,r:f32)->f32{let a=r*r;let a2=a*a;let d=NoH*NoH*(a2-1.0)+1.0;return a2/(PQ_PI*d*d+1e-5);}fn pq_FSchlick(u:f32,f0:vec3<f32>)->vec3<f32>{return f0+(vec3<f32>(1)-f0)*pow(1.0-u,5.0);}`;
+G.WorldProceduralPBR={version:'4.0.0',D_GGX,V_Smith,F_Schlick,brdf,wgsl};})();

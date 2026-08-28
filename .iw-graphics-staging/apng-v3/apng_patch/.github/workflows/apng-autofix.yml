@@ -1,0 +1,124 @@
+name: APNG Quality Gate + Auto Repair
+
+on:
+  pull_request:
+    paths:
+      - 'apps/**/*.png'
+      - 'apps/**/*.apng'
+      - 'shared/**/*.png'
+      - 'shared/**/*.apng'
+      - 'assets/**/*.png'
+      - 'assets/**/*.apng'
+      - 'public/**/*.png'
+      - 'public/**/*.apng'
+      - 'lib/apng-engine.js'
+      - 'api/apng.js'
+      - 'scripts/apng-quality-gate.js'
+      - 'apng-quality.config.json'
+      - 'test/apng-*.test.js'
+      - 'e2e/apng-browser-compat.spec.js'
+      - 'playwright.apng.config.js'
+      - '.github/workflows/apng-autofix.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '17 3 * * 1'
+
+jobs:
+  quality:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: APNG syntax
+        run: |
+          node -c lib/apng-engine.js
+          node -c api/apng.js
+          node -c scripts/apng-quality-gate.js
+          node -c e2e/apng-browser-compat.spec.js
+          node -c playwright.apng.config.js
+      - name: APNG regression tests
+        run: npm run apng:test
+      - name: Repository APNG quality gate
+        run: node scripts/apng-quality-gate.js
+      - name: Existing project tests
+        run: npm run check
+
+  browser-differential:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install project dependencies
+        run: npm ci
+      - name: Install browser engines
+        run: npx playwright install --with-deps chromium firefox webkit
+      - name: Chromium Firefox WebKit APNG playback gate
+        run: npm run apng:browser
+
+  repair:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: master
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Repair error-level, legacy 16-bit/Adam7 and codec-risk APNG assets atomically
+        run: node scripts/apng-quality-gate.js --apply
+      - name: Verify repaired repository has no active error-level APNG defects
+        run: node scripts/apng-quality-gate.js
+      - name: Verify APNG engine + API
+        run: npm run apng:test
+      - name: Verify cross-browser playback
+        run: |
+          npx playwright install --with-deps chromium firefox webkit
+          npm run apng:browser
+      - name: Verify whole project
+        run: npm run check
+      - name: Refuse unrelated generated changes
+        shell: bash
+        run: |
+          git diff --check
+          bad="$(git diff --name-only | grep -Ev '^(apps|shared|assets|public)/.*\.(png|apng)$|^APNG_QUALITY_REPORT\.json$' || true)"
+          if [ -n "$bad" ]; then
+            echo "Unexpected files changed by APNG autofix:"
+            echo "$bad"
+            exit 1
+          fi
+      - name: Open repair PR when assets changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo "No APNG asset changes."
+            exit 0
+          fi
+          branch="ai/apng-autofix-${GITHUB_RUN_ID}"
+          git config user.name "world-server-apng-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add apps shared assets public APNG_QUALITY_REPORT.json 2>/dev/null || true
+          git commit -m "fix(apng): automatic verified APNG repair"
+          git push origin "$branch"
+          gh pr create --base master --head "$branch" --title "fix(apng): automatic verified APNG repair" --body "Automated APNG v3 repair. Includes 8/16-bit + Adam7 decode, edge/halo and motion QA, policy-aware intentional-effect handling, full-frame normalization, pixel/timeline verification, resource guards, atomic replacement, cross-browser Chromium/Firefox/WebKit playback checks and full project tests. Never writes directly to master."

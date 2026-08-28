@@ -1,0 +1,230 @@
+{
+  "schema": "improve-world.graphics-audit/v1",
+  "repo": "C:\\Users\\user\\Desktop\\World_server",
+  "at": "2026-08-28T06:59:44.220Z",
+  "modules": [
+    {
+      "id": "world-quality-autopilot-v4",
+      "name": "World Quality Autopilot V4",
+      "phase": null,
+      "observed": "INSTALLED",
+      "sentinels": [
+        "shared/world-quality-autopilot.js"
+      ],
+      "found": [
+        "shared/world-quality-autopilot.js"
+      ],
+      "status": "INSTALLED"
+    },
+    {
+      "id": "ai3d-orchestrator",
+      "name": "AI3D + TRELLIS.2 + InstantMesh + Godot adapters",
+      "phase": null,
+      "observed": "INSTALLED/PARTIAL_RUNTIME",
+      "sentinels": [
+        "services/ai3d-worker/ai3d/plugins/trellis2.py",
+        "services/ai3d-worker/ai3d/plugins/instantmesh.py",
+        "services/ai3d-worker/ai3d/plugins/godot_voxel.py"
+      ],
+      "found": [
+        "services/ai3d-worker/ai3d/plugins/trellis2.py",
+        "services/ai3d-worker/ai3d/plugins/instantmesh.py",
+        "services/ai3d-worker/ai3d/plugins/godot_voxel.py"
+      ],
+      "status": "INSTALLED"
+    },
+    {
+      "id": "pixel-animation-v3",
+      "name": "Pixel Animation System V3",
+      "phase": "A",
+      "observed": "MISSING",
+      "sentinels": [
+        "shared/pixel-animation-engine.js"
+      ],
+      "found": [
+        "shared/pixel-animation-engine.js"
+      ],
+      "status": "INSTALLED"
+    },
+    {
+      "id": "game-motion-v2",
+      "name": "Game Motion Frame Timeline V2",
+      "phase": "A",
+      "observed": "MISSING",
+      "sentinels": [
+        "shared/game-motion-engine.js"
+      ],
+      "found": [
+        "shared/game-motion-engine.js"
+      ],
+      "status": "INSTALLED"
+    },
+    {
+      "id": "ink-glyph-v3",
+      "name": "Ink Glyph World V3",
+      "phase": "A",
+      "observed": "MISSING",
+      "sentinels": [
+        "apps/ink-glyph-world/index.html"
+      ],
+      "found": [
+        "apps/ink-glyph-world/index.html"
+      ],
+      "status": "INSTALLED"
+    },
+    {
+      "id": "characterforge-v2",
+      "name": "CharacterForge CPU V2",
+      "phase": "A",
+      "observed": "MISSING",
+      "sentinels": [
+        "services/ai3d-worker/ai3d/plugins/characterforge_cpu.py"
+      ],
+      "found": [
+        "services/ai3d-worker/ai3d/plugins/characterforge_cpu.py"
+      ],
+      "status": "INSTALLED"
+    },
+    {
+      "id": "pixel-panorama-360-v4",
+      "name": "Pixel Panorama 360 V4",
+      "phase": "A",
+      "observed": "MISSING",
+      "sentinels": [
+        "apps/pixel-panorama-360/index.html"
+      ],
+      "found": [
+        "apps/pixel-panorama-360/index.html"
+      ],
+      "status": "INSTALLED"
+    },
+    {
+      "id": "gs360-v6",
+      "name": "3DGS 360 CPU Quality V6",
+      "phase": "A",
+      "observed": "MISSING",
+      "sentinels": [
+        "systems/gs360/run.cjs"
+      ],
+      "found": [
+        "systems/gs360/run.cjs"
+      ],
+      "status": "INSTALLED"
+    },
+    {
+      "id": "pwa-v5",
+      "name": "PWA Self Improving V5 MAX",
+      "phase": "B",
+      "observed": "MISSING",
+      "sentinels": [
+        "shared/pwa-runtime.js"
+      ],
+      "found": [
+        "shared/pwa-runtime.js"
+      ],
+      "status": "INSTALLED"
+    },
+    {
+      "id": "procedural-quality-v10",
+      "name": "Procedural Quality Engine V10",
+      "phase": "B",
+      "observed": "MISSING",
+      "sentinels": [
+        "shared/procedural-quality-runtime.js"
+      ],
+      "found": [
+        "shared/procedural-quality-runtime.js"
+      ],
+      "status": "INSTALLED"
+    },
+    {
+      "id": "texture-quality-v10",
+      "name": "Texture Quality V10",
+      "phase": "B",
+      "observed": "MISSING",
+      "sentinels": [
+        "services/ai3d-worker/ai3d/texture_runtime_v10.py"
+      ],
+      "found": [],
+      "status": "MISSING"
+    },
+    {
+      "id": "mesh-aaa-v12",
+      "name": "Mesh AAA Quality Pipeline V12",
+      "phase": "B",
+      "observed": "PARTIAL/OLDER CORE PRESENT",
+      "sentinels": [
+        "services/ai3d-worker/ai3d/production_v12.py"
+      ],
+      "found": [
+        "services/ai3d-worker/ai3d/production_v12.py"
+      ],
+      "status": "INSTALLED"
+    },
+    {
+      "id": "apng-v3",
+      "name": "APNG Quality System V3 MAX",
+      "phase": "B",
+      "observed": "MISSING",
+      "sentinels": [
+        "lib/apng-engine.js",
+        "apps/apng-lab/index.html"
+      ],
+      "found": [
+        "lib/apng-engine.js"
+      ],
+      "status": "PARTIAL"
+    },
+    {
+      "id": "pixel-3dgs-phone4d-v6",
+      "name": "Pixel 3DGS CPU V6 Phone 4D MAX",
+      "phase": "C",
+      "observed": "NOT IN MASTER",
+      "sentinels": [
+        "systems/pixel-3dgs-v6"
+      ],
+      "found": [],
+      "status": "MISSING"
+    },
+    {
+      "id": "video2game-voxel-v5",
+      "name": "Video2Game Voxel V5",
+      "phase": "C",
+      "observed": "NOT IN MASTER",
+      "sentinels": [
+        "services/video2game_voxel"
+      ],
+      "found": [],
+      "status": "MISSING"
+    },
+    {
+      "id": "lowfi-25d",
+      "name": "LowFi 2.5D Server Patch",
+      "phase": "C",
+      "observed": "NOT IN MASTER",
+      "sentinels": [
+        "apps/lowfi-25d/index.html"
+      ],
+      "found": [],
+      "status": "MISSING"
+    },
+    {
+      "id": "dreamfog-v2",
+      "name": "DreamFog World Patch V2",
+      "phase": "C",
+      "observed": "NOT IN MASTER",
+      "sentinels": [
+        "shared/dreamfog-atmosphere.js"
+      ],
+      "found": [
+        "shared/dreamfog-atmosphere.js"
+      ],
+      "status": "INSTALLED"
+    }
+  ],
+  "summary": {
+    "installed": 12,
+    "partial": 1,
+    "missing": 4
+  }
+}

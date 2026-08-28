@@ -1,0 +1,48 @@
+{
+  "code_quality_percent": 96,
+  "optimization_percent": 94,
+  "automation_percent": 98,
+  "system_operation_percent": 96,
+  "function_coverage_percent": 98,
+  "current_panorama_demo_reconstruction_consistency_percent": 67.9,
+  "current_panorama_capture_quality_percent": 89.1,
+  "synthetic_video_smoke": {
+    "space": {
+      "quality": 72.2,
+      "lod_counts": {
+        "lod0": 42529,
+        "lod1": 20667,
+        "lod2": 10035
+      }
+    },
+    "character": {
+      "quality": 64.5,
+      "lod_counts": {
+        "lod0": 8261,
+        "lod1": 6494,
+        "lod2": 4393
+      }
+    }
+  },
+  "checks": {
+    "code_compile": true,
+    "panorama_regression_assets": true,
+    "video_space_e2e": true,
+    "video_character_e2e": true,
+    "video_ingest": true,
+    "perspective_geometry": true,
+    "character_segmentation": true,
+    "hybrid_mesh": true,
+    "dense_flow_fallback": true,
+    "api_upload_jobs": true,
+    "cli": true,
+    "lod_chunking": true,
+    "ewa_oit": true
+  },
+  "limitations": [
+    "No CUDA-trained 3DGS without a GPU.",
+    "Strongly deforming characters require a future 4D temporal Gaussian pipeline.",
+    "COLMAP/ONNX/Open3D upgrades are optional external CPU backends/models."
+  ],
+  "scoring_note": "Engineering percentages describe implementation/readiness. Visual reconstruction quality depends on capture consistency and is reported separately."
+}

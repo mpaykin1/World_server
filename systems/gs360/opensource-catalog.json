@@ -1,0 +1,101 @@
+{
+  "schema": "world-server.gs360-opensource-catalog/v2",
+  "generated_for": "GS360 V6 CPU-first quality + delivery pipeline",
+  "resources": [
+    {
+      "id": "openvino",
+      "name": "OpenVINO Runtime",
+      "official_url": "https://github.com/openvinotoolkit/openvino",
+      "license": "Apache-2.0",
+      "policy": "auto_allowed",
+      "cpu_value": "High-performance neural inference on CPU; supports caching, performance hints and automatic device selection.",
+      "install_hint": "python -m pip install openvino",
+      "verify": "python -c \"import openvino; print(openvino.__version__)\"",
+      "env": "GS360_DEPTH_OPENVINO=<compatible .onnx/.xml depth model>"
+    },
+    {
+      "id": "colmap",
+      "name": "COLMAP",
+      "official_url": "https://github.com/colmap/colmap/releases",
+      "license": "BSD-3-Clause (COLMAP itself; dependencies separate)",
+      "policy": "auto_allowed",
+      "cpu_value": "CPU feature extraction/matching/mapping is supported; useful for multi-view pose estimation.",
+      "install_hint": "Use the official Windows release or existing package manager; put colmap in PATH.",
+      "verify": "colmap --help"
+    },
+    {
+      "id": "midas",
+      "name": "MiDaS 3.1",
+      "official_url": "https://github.com/isl-org/MiDaS",
+      "license": "MIT (repository; verify individual model artifacts/dependencies)",
+      "policy": "auto_allowed_with_model_license_check",
+      "cpu_value": "Official repository documents an OpenVINO small model for Intel CPU inference.",
+      "install_hint": "Prefer the documented OpenVINO MiDaS small model on CPU-only machines.",
+      "verify": "Run one depth smoke image and compare latency/quality against GS360 proxy depth."
+    },
+    {
+      "id": "depth_anything_v2_small",
+      "name": "Depth Anything V2 Small",
+      "official_url": "https://github.com/DepthAnything/Depth-Anything-V2",
+      "license": "Apache-2.0 model",
+      "policy": "auto_allowed",
+      "cpu_value": "Small official model; code automatically falls back to CPU when CUDA/MPS is unavailable.",
+      "install_hint": "Use only the Small checkpoint in automatic permissive mode; optionally convert/wire a compatible ONNX/OpenVINO representation.",
+      "verify": "Benchmark one representative panorama crop before making it the default depth provider."
+    },
+    {
+      "id": "depth_anything_v2_large_models",
+      "name": "Depth Anything V2 Base/Large/Giant",
+      "official_url": "https://github.com/DepthAnything/Depth-Anything-V2",
+      "license": "CC-BY-NC-4.0 models",
+      "policy": "blocked_by_default_for_commercial_or_unknown_use",
+      "cpu_value": "Higher-capacity models but heavier and non-commercial licensed.",
+      "install_hint": "Do not auto-install for a commercial/unknown-use server. Require explicit license review.",
+      "verify": "N/A until license policy explicitly permits it."
+    },
+    {
+      "id": "opensplat",
+      "name": "OpenSplat",
+      "official_url": "https://github.com/WebODM/OpenSplat",
+      "license": "AGPL-3.0",
+      "policy": "review_required",
+      "cpu_value": "True 3DGS training on CPU is supported; official docs warn CPU can be about 100x slower than GPU. Supports resume and compressed output formats.",
+      "install_hint": "On CPU-only Windows, build from source with CPU LibTorch if acceptable under project licensing; do not silently vendor it into proprietary code.",
+      "verify": "opensplat --help; then train a tiny COLMAP dataset with --cpu / low iteration count."
+    },
+    {
+      "id": "splat_transform",
+      "name": "PlayCanvas SplatTransform",
+      "official_url": "https://github.com/playcanvas/splat-transform",
+      "license": "MIT",
+      "policy": "auto_allowed",
+      "cpu_value": "CLI/library for cleanup, NaN/Inf filtering, decimation, SPZ/SOG/LOD/HTML export and statistics. CPU mode is available for SOG compression.",
+      "install_hint": "npm install -g @playcanvas/splat-transform",
+      "verify": "splat-transform --version",
+      "env": "GS360_SPLAT_TRANSFORM=<optional explicit path>",
+      "automatic_install": true
+    },
+    {
+      "id": "niantic_spz",
+      "name": "Niantic SPZ",
+      "official_url": "https://github.com/nianticlabs/spz",
+      "license": "MIT",
+      "policy": "auto_allowed",
+      "cpu_value": "Native/Python SPZ pack/unpack library. SPZ is typically around 10x smaller than PLY with minimal perceptual difference.",
+      "install_hint": "Optional if SplatTransform is insufficient: clone official repo and build/install Python bindings. Prefer SplatTransform first to avoid duplicate tooling.",
+      "verify": "Convert a copy of one trained PLY to SPZ, compare size, and visually validate before activation.",
+      "automatic_install": false
+    },
+    {
+      "id": "supersplat",
+      "name": "PlayCanvas SuperSplat",
+      "official_url": "https://github.com/playcanvas/supersplat",
+      "license": "MIT",
+      "policy": "auto_allowed",
+      "cpu_value": "Browser-based open-source editor for inspecting, cleaning, optimizing and publishing Gaussian splats; useful as a manual/visual fallback validator.",
+      "install_hint": "No installation required for hosted editor; for offline/local use clone the repo, npm install, npm run develop. Do not make it a mandatory server dependency.",
+      "verify": "Load an exported PLY/SPZ/SOG and visually inspect holes, floaters, orientation and cropping.",
+      "automatic_install": false
+    }
+  ]
+}

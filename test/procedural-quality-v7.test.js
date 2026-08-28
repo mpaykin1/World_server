@@ -1,0 +1,13 @@
+ 'use strict';
+const test=require('node:test'),assert=require('node:assert/strict'),fs=require('fs'),path=require('path'),vm=require('vm');const root=path.resolve(__dirname,'..');
+function txt(p){return fs.readFileSync(path.join(root,p),'utf8')}
+function load(rel){const code=txt(rel),ctx={globalThis:{},console,Math,Uint8Array,Float32Array,performance:{now:()=>0}};ctx.globalThis.globalThis=ctx.globalThis;vm.createContext(ctx);vm.runInContext(code,ctx);return ctx.globalThis}
+test('V7 Three native adapter has six GPU auxiliary channels and source jitter',()=>{const s=txt('shared/procedural-quality-three-native.js');for(const x of ['MeshDepthMaterial','MeshNormalMaterial','semantic','motion','reactive','transparency','projectionMatrix.elements[8]'])assert.ok(s.includes(x),x)});
+test('V7 WebGPU DDGI uses 3D storage textures and clip levels',()=>{const s=txt('shared/procedural-quality-webgpu-ddgi.js');assert.ok(s.includes("dimension:'3d'"));assert.ok(s.includes('texture_storage_3d'));assert.ok(s.includes('visibility'));assert.ok(s.includes('scroll'))});
+test('V7 promotion blocks unverified/regressing candidates',()=>{const P=load('shared/procedural-quality-promotion.js').WorldProceduralPromotion;assert.equal(P.assess({score:99,visualScore:99,animationScore:99,stabilityScore:99,nativeCoveragePct:100,verified:false,regressionFree:true}).promote,false);assert.equal(P.assess({score:92,visualScore:90,animationScore:89,stabilityScore:94,nativeCoveragePct:80,verified:true,regressionFree:true,baselinePass:true}).promote,true)});
+test('V7 Three patcher targets actual module-style renderer construction',()=>{const s=txt('scripts/procedural-quality-three-patcher.js');assert.ok(s.includes('THREE.WebGLRenderer'));assert.ok(s.includes('WorldProceduralThreeNative'))});
+test('V7 golden baseline pipeline has screenshots, PNG metrics and SHA256',()=>{const s=txt('scripts/procedural-quality-golden-baselines.js');for(const x of ['chromium','PNG','meanLuma','edgeEnergy','sha256'])assert.ok(s.includes(x),x)});
+test('V7 profile advertises new native systems',()=>{const p=require('../lib/api-handlers/procedural-quality-profile.js').buildProfile({webgpu:'1',webgl2:'1',memory:16,cores:16,dpr:2});assert.ok(p.version>=7);assert.equal(p.policy.threeNativeGBuffer,true);assert.equal(p.policy.webgpuDDGIClipmaps,true);assert.equal(p.policy.verifiedPromotion,true)});
+test('V7 migration and baseline API exist',()=>{for(const f of ['supabase/procedural_quality_v7.sql','lib/api-handlers/procedural-quality-baseline.js','scripts/procedural-quality-golden-verify.js'])assert.ok(fs.existsSync(path.join(root,f)),f)});
+
+

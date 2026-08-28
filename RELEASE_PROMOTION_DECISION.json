@@ -1,13 +1,13 @@
 {
   "schemaVersion": "7.2.0",
-  "generatedAt": "2026-08-28T06:26:38.856Z",
-  "pass": false,
-  "decision": "BLOCK",
-  "nextStep": "FIX_BLOCKERS",
+  "generatedAt": "2026-08-28T14:17:22.596Z",
+  "pass": true,
+  "decision": "CANARY",
+  "nextStep": "CANARY_THEN_PROMOTE_ON_EVIDENCE",
   "checks": [
     {
       "file": "SYSTEM_INTEGRATION_REPORT.json",
-      "pass": false
+      "pass": true
     },
     {
       "file": "UPDATE_TRUST_STATUS.json",
@@ -27,7 +27,7 @@
     },
     {
       "file": "POLICY_DECISION_REPORT.json",
-      "pass": false
+      "pass": true
     },
     {
       "file": "GRAPHICS_REGRESSION_GUARD_REPORT.json",
@@ -59,18 +59,13 @@
     },
     {
       "file": "HONEST_100_FUNCTION_REPORT.json",
-      "pass": false
+      "pass": true
     },
     {
       "file": "FUNCTION_MONOTONIC_ENHANCEMENT_REPORT.json",
-      "pass": false
+      "pass": true
     }
   ],
-  "blockers": [
-    "SYSTEM_INTEGRATION_REPORT.json",
-    "POLICY_DECISION_REPORT.json",
-    "HONEST_100_FUNCTION_REPORT.json",
-    "FUNCTION_MONOTONIC_ENHANCEMENT_REPORT.json"
-  ],
+  "blockers": [],
   "rule": "No direct broad promotion. A passing candidate enters canary; promotion requires fresh evidence and no kill switch."
 }

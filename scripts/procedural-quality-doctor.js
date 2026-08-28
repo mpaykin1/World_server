@@ -5,7 +5,7 @@ const required=[
 'shared/procedural-quality-runtime.js','shared/procedural-quality-generic-renderer.js','shared/procedural-quality-deformation-velocity.js',
 'shared/procedural-quality-temporal-artifacts.js','shared/procedural-quality-frame-pacing.js','shared/procedural-quality-resource-watchdog.js',
 'shared/procedural-quality-thermal-governor.js','shared/procedural-quality-shader-prewarm.js','shared/procedural-quality-replay-benchmark.js',
-'shared/procedural-quality-canary.js','api/procedural-quality-profile.js','api/procedural-quality-runtime-health.js','scripts/procedural-quality-evidence-orchestrator.js'
+'shared/procedural-quality-canary.js','lib/api-handlers/procedural-quality-profile.js','lib/api-handlers/procedural-quality-runtime-health.js','scripts/procedural-quality-evidence-orchestrator.js'
 ];
 function read(p){return fs.existsSync(path.join(root,p))?fs.readFileSync(path.join(root,p),'utf8'):''}
 function inspect(){

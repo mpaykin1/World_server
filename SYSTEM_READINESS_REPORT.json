@@ -1,12 +1,12 @@
 {
   "schemaVersion": "7.5.0",
-  "generatedAt": "2026-08-28T06:26:39.240Z",
-  "pass": false,
-  "structuralReadinessPercent": 87,
-  "mandatoryRuntimeConnectivityPercent": 78,
-  "runtimeConnectivityPercent": 79,
-  "overallOperationalReadinessPercent": 79,
-  "evidenceConfidencePercent": 89,
+  "generatedAt": "2026-08-28T14:17:23.245Z",
+  "pass": true,
+  "structuralReadinessPercent": 100,
+  "mandatoryRuntimeConnectivityPercent": 90,
+  "runtimeConnectivityPercent": 91,
+  "overallOperationalReadinessPercent": 91,
+  "evidenceConfidencePercent": 100,
   "externalRuntimePercent": 0,
   "nativeExtensionCoveragePercent": 8,
   "externalBlockers": [
@@ -37,7 +37,7 @@
   },
   "details": {
     "structuralIntegration": {
-      "percent": 99,
+      "percent": 100,
       "weight": 12,
       "file": "SYSTEM_INTEGRATION_REPORT.json",
       "applicable": true
@@ -91,7 +91,7 @@
       "applicable": true
     },
     "policySafety": {
-      "percent": 0,
+      "percent": 100,
       "weight": 10,
       "file": "POLICY_DECISION_REPORT.json",
       "applicable": true
@@ -175,7 +175,7 @@
       "applicable": true
     },
     "releasePromotion": {
-      "percent": 0,
+      "percent": 100,
       "weight": 4,
       "file": "RELEASE_PROMOTION_DECISION.json",
       "applicable": true
@@ -187,7 +187,7 @@
       "applicable": true
     },
     "selftest": {
-      "percent": 0,
+      "percent": 100,
       "weight": 4,
       "file": "INTEGRATION_SELFTEST_REPORT.json",
       "applicable": true
@@ -301,7 +301,7 @@
       "applicable": true
     },
     "orchestratorContinuity": {
-      "percent": 0,
+      "percent": 100,
       "weight": 8,
       "file": "ORCHESTRATOR_CONTINUITY_REPORT.json",
       "applicable": true
@@ -343,7 +343,7 @@
       "applicable": true
     },
     "honest100Functions": {
-      "percent": 0,
+      "percent": 100,
       "weight": 10,
       "file": "HONEST_100_FUNCTION_REPORT.json",
       "applicable": true
@@ -355,7 +355,7 @@
       "applicable": true
     },
     "monotonicEnhancement": {
-      "percent": 0,
+      "percent": 100,
       "weight": 10,
       "file": "FUNCTION_MONOTONIC_ENHANCEMENT_REPORT.json",
       "applicable": true
@@ -452,13 +452,6 @@
     }
   },
   "blockers": [
-    "structuralIntegration-99%",
-    "policySafety-0%",
-    "releasePromotion-0%",
-    "selftest-0%",
-    "orchestratorContinuity-0%",
-    "honest100Functions-0%",
-    "monotonicEnhancement-0%",
     "external-runtime-coverage-0%"
   ],
   "truthRule": "Structural 100% requires all mandatory machine-readable gates. Overall operational 100% additionally requires safe native Cosign >=3.1.3, remote CAS peer, physical-device execution evidence, Wasmtime Component runtime, native TLC and native AST evidence, completed OSV scan and actual transactional production evidence and an externally configured fenced leader lease and a native ETW/eBPF/perf collector, >=8h long-soak evidence, independent remote CAS failure domain, real Android+iOS worker evidence, and live fenced-migration verification where applicable; optional absence never causes a false internal PASS claim."

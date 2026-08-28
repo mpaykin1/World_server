@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "2.0.0",
+  "system": "GAME_MOTION_VERIFY",
+  "generatedAt": "2026-08-28T14:13:19.025Z",
+  "missing": [],
+  "packagePass": true,
+  "gatePass": true,
+  "autopilotPass": true,
+  "agentsPass": true,
+  "unitPass": true,
+  "pythonSyntaxPass": true,
+  "pass": true
+}

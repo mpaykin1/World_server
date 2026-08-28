@@ -11,7 +11,7 @@ const checks=[
  ['fresh-device-evidence',has('scripts/world-device-profile-matrix.js','REAL_DEVICE_RUNTIME_EVIDENCE.json')&&has('scripts/world-device-profile-matrix.js','age<=24')],
  ['fresh-runtime-evidence',has('scripts/world-runtime-quality-profiler.js','REAL_DEVICE_RUNTIME_EVIDENCE.json')&&has('scripts/world-runtime-quality-profiler.js','age<=24')],
  ['canonical-mesh',has('services/ai3d-worker/ai3d/plugins/mesh_quality_optimizer.py','MeshOptimizationPipeline')],
- ['pwa-telemetry',has('api/quality-summary.js','pwaSamples')&&has('api/quality-telemetry.js','standalone_pwa')],
+  ['pwa-telemetry',has('lib/api-handlers/quality-summary.js','pwaSamples')&&has('lib/api-handlers/quality-telemetry.js','standalone_pwa')],
  ['real-ios-canary',has('.github/workflows/quality-canary.yml','real-ios-telemetry-gate.js')],
  ['truth-ci-workflow',has('.github/workflows/world-quality-autopilot.yml','WQA_REQUIRED_CI_PASS')],
  ['capability-registry',exists('data/system-capability-registry.json')],

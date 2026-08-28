@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "GAME_MOTION_QUALITY_GATE",
+  "generatedAt": "2026-08-28T14:13:19.524Z",
+  "results": [
+    {
+      "name": "verify",
+      "pass": true
+    },
+    {
+      "name": "benchmark",
+      "pass": true
+    },
+    {
+      "name": "audit",
+      "pass": true
+    },
+    {
+      "name": "plan",
+      "pass": true
+    }
+  ],
+  "pass": true
+}

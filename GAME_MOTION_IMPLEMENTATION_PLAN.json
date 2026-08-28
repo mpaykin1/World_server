@@ -1,0 +1,2320 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "GAME_MOTION_PLAN",
+  "generatedAt": "2026-08-28T14:13:19.504Z",
+  "files": 93,
+  "plans": [
+    {
+      "file": "apps/ai-3d/client.js",
+      "tasks": [
+        {
+          "priority": "P1",
+          "category": "mechanical",
+          "signals": [
+            "engine"
+          ],
+          "rule": "Use state/timeline driven by gameplay; keep collision synchronized when physical."
+        }
+      ]
+    },
+    {
+      "file": "apps/ai-3d/index.html",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P2",
+          "category": "effects",
+          "signals": [
+            "dust"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "apps/ai3d-reference-test/assets/previous_html_baseline.html",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "npc",
+            "rig",
+            "walk",
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "mechanical",
+          "signals": [
+            "gear",
+            "fan",
+            "wheel",
+            "engine",
+            "door"
+          ],
+          "rule": "Use state/timeline driven by gameplay; keep collision synchronized when physical."
+        },
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "fragment"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        },
+        {
+          "priority": "P2",
+          "category": "effects",
+          "signals": [
+            "fire",
+            "dust"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "zoom"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "tree",
+            "flag",
+            "rope",
+            "lamp",
+            "sign",
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "apps/ai3d-reference-test/client.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "rig"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "mechanical",
+          "signals": [
+            "engine"
+          ],
+          "rule": "Use state/timeline driven by gameplay; keep collision synchronized when physical."
+        },
+        {
+          "priority": "P2",
+          "category": "effects",
+          "signals": [
+            "water"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "camera",
+            "orbit"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        }
+      ]
+    },
+    {
+      "file": "apps/ai3d-reference-test/index.html",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "rig",
+            "walk",
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "mechanical",
+          "signals": [
+            "engine"
+          ],
+          "rule": "Use state/timeline driven by gameplay; keep collision synchronized when physical."
+        },
+        {
+          "priority": "P2",
+          "category": "effects",
+          "signals": [
+            "water"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "apps/ai3d-voxel-city/client.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "player",
+            "rig",
+            "walk",
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "mechanical",
+          "signals": [
+            "wheel"
+          ],
+          "rule": "Use state/timeline driven by gameplay; keep collision synchronized when physical."
+        },
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "break"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "camera",
+            "zoom",
+            "orbit",
+            "lookat"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "apps/ai3d-voxel-city/index.html",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "orbit"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        }
+      ]
+    },
+    {
+      "file": "apps/ai3d-voxel-city/mesher-worker.js",
+      "tasks": [
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "break"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "apps/catalog/client.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "player",
+            "rig"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "mechanical",
+          "signals": [
+            "fan"
+          ],
+          "rule": "Use state/timeline driven by gameplay; keep collision synchronized when physical."
+        },
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "break"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "camera",
+            "lookat"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "tree",
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "apps/catalog/index.html",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "rig",
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        }
+      ]
+    },
+    {
+      "file": "apps/chat/index.html",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        }
+      ]
+    },
+    {
+      "file": "apps/dreamfog-world/client.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "player",
+            "rig",
+            "walk",
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P2",
+          "category": "effects",
+          "signals": [
+            "particle"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "camera"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "apps/dreamfog-world/index.html",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        }
+      ]
+    },
+    {
+      "file": "apps/ink-glyph-world/client.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "mechanical",
+          "signals": [
+            "wheel"
+          ],
+          "rule": "Use state/timeline driven by gameplay; keep collision synchronized when physical."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "camera",
+            "lookat"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "apps/ink-glyph-world/index.html",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "rig"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "mechanical",
+          "signals": [
+            "wheel"
+          ],
+          "rule": "Use state/timeline driven by gameplay; keep collision synchronized when physical."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "zoom",
+            "orbit"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        }
+      ]
+    },
+    {
+      "file": "apps/pixel-panorama-360/client.js",
+      "tasks": [
+        {
+          "priority": "P1",
+          "category": "mechanical",
+          "signals": [
+            "wheel"
+          ],
+          "rule": "Use state/timeline driven by gameplay; keep collision synchronized when physical."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "camera"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "sign",
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "apps/pixel-panorama-360/editor.html",
+      "tasks": [
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "break"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        }
+      ]
+    },
+    {
+      "file": "apps/pixel-panorama-360/editor.js",
+      "tasks": [
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "apps/pixel-panorama-360/index.html",
+      "tasks": [
+        {
+          "priority": "P1",
+          "category": "mechanical",
+          "signals": [
+            "wheel"
+          ],
+          "rule": "Use state/timeline driven by gameplay; keep collision synchronized when physical."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "zoom"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        }
+      ]
+    },
+    {
+      "file": "apps/procedural-quality-lab/index.html",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "locomotion",
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "apps/survival/client.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "player",
+            "rig",
+            "walk",
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "mechanical",
+          "signals": [
+            "door"
+          ],
+          "rule": "Use state/timeline driven by gameplay; keep collision synchronized when physical."
+        },
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "break"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        },
+        {
+          "priority": "P2",
+          "category": "effects",
+          "signals": [
+            "fire"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "camera",
+            "lookat"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "tree",
+            "grass",
+            "sign",
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "apps/survival/index.html",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "player",
+            "rig",
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        }
+      ]
+    },
+    {
+      "file": "apps/voxel-world/client.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "player",
+            "avatar",
+            "rig",
+            "walk",
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "break"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        },
+        {
+          "priority": "P2",
+          "category": "effects",
+          "signals": [
+            "water"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "camera"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "tree",
+            "grass",
+            "rope",
+            "lamp",
+            "sign",
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "apps/voxel-world/index.html",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "player",
+            "rig",
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "break"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        }
+      ]
+    },
+    {
+      "file": "apps/world-sharabass/index.html",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "character",
+            "player",
+            "npc",
+            "rig",
+            "walk",
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "break",
+            "fragment"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        },
+        {
+          "priority": "P2",
+          "category": "effects",
+          "signals": [
+            "smoke"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "camera",
+            "lookat"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "sign",
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/ai3d-playable-runtime.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "player",
+            "rig",
+            "walk",
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "camera"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "sign",
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/answer-world-engine.js",
+      "tasks": [
+        {
+          "priority": "P1",
+          "category": "mechanical",
+          "signals": [
+            "engine"
+          ],
+          "rule": "Use state/timeline driven by gameplay; keep collision synchronized when physical."
+        },
+        {
+          "priority": "P2",
+          "category": "effects",
+          "signals": [
+            "particle",
+            "water"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "tree",
+            "lamp",
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/common.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "player",
+            "rig",
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "camera"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "sign",
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/dreamfog-atmosphere.js",
+      "tasks": [
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "fragment"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        },
+        {
+          "priority": "P2",
+          "category": "effects",
+          "signals": [
+            "dust",
+            "particle",
+            "water"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "camera",
+            "lookat"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "sign",
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/game-motion-engine.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "rig",
+            "locomotion",
+            "walk",
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "mechanical",
+          "signals": [
+            "engine"
+          ],
+          "rule": "Use state/timeline driven by gameplay; keep collision synchronized when physical."
+        },
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "explode",
+            "exploded",
+            "break"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "shake"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "sign"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/game-motion-three-adapter.js",
+      "tasks": [
+        {
+          "priority": "P1",
+          "category": "mechanical",
+          "signals": [
+            "engine"
+          ],
+          "rule": "Use state/timeline driven by gameplay; keep collision synchronized when physical."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "camera"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/golden-catalog-menu.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "rig"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        }
+      ]
+    },
+    {
+      "file": "shared/golden-performance-autotuner.js",
+      "tasks": [
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/golden-physics.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "rig"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/golden-ui-shell.js",
+      "tasks": [
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/ink-glyph-world-core.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "walk"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "break"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "sign",
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-auto-integrator.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "mechanical",
+          "signals": [
+            "engine"
+          ],
+          "rule": "Use state/timeline driven by gameplay; keep collision synchronized when physical."
+        }
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-auto-profile.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "character",
+            "player",
+            "npc",
+            "skeleton"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "mechanical",
+          "signals": [
+            "gear",
+            "fan",
+            "engine",
+            "machine"
+          ],
+          "rule": "Use state/timeline driven by gameplay; keep collision synchronized when physical."
+        },
+        {
+          "priority": "P2",
+          "category": "effects",
+          "signals": [
+            "steam",
+            "smoke",
+            "fire",
+            "flame",
+            "water"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "tree",
+            "foliage",
+            "grass",
+            "flag",
+            "banner",
+            "lamp",
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-engine.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "character",
+            "rig",
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "mechanical",
+          "signals": [
+            "machine"
+          ],
+          "rule": "Use state/timeline driven by gameplay; keep collision synchronized when physical."
+        },
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "break",
+            "fragment"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        },
+        {
+          "priority": "P2",
+          "category": "effects",
+          "signals": [
+            "smoke",
+            "fire",
+            "spark",
+            "water"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "camera"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "tree",
+            "foliage",
+            "grass",
+            "flag",
+            "lamp",
+            "sign",
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-gpu-culling.js",
+      "tasks": [
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "camera"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-pixi8-adapter.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "character"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "break"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        },
+        {
+          "priority": "P2",
+          "category": "effects",
+          "signals": [
+            "smoke",
+            "fire",
+            "particle"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "foliage",
+            "flag",
+            "rope",
+            "sign"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-region-rig.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "character",
+            "rig"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-runtime.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "mechanical",
+          "signals": [
+            "engine"
+          ],
+          "rule": "Use state/timeline driven by gameplay; keep collision synchronized when physical."
+        }
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-visual-regression.js",
+      "tasks": [
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "sign"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-webgpu.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "rig",
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "mechanical",
+          "signals": [
+            "engine"
+          ],
+          "rule": "Use state/timeline driven by gameplay; keep collision synchronized when physical."
+        },
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "fragment"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        },
+        {
+          "priority": "P2",
+          "category": "effects",
+          "signals": [
+            "spark"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "camera"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-worker-bridge.js",
+      "tasks": [
+        {
+          "priority": "P1",
+          "category": "mechanical",
+          "signals": [
+            "engine"
+          ],
+          "rule": "Use state/timeline driven by gameplay; keep collision synchronized when physical."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "camera"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/pixel-animation-worker.js",
+      "tasks": [
+        {
+          "priority": "P1",
+          "category": "mechanical",
+          "signals": [
+            "engine"
+          ],
+          "rule": "Use state/timeline driven by gameplay; keep collision synchronized when physical."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "camera"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/pixel-atlas-builder.js",
+      "tasks": [
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "break"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-animation.js",
+      "tasks": [
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "break"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "chain",
+            "lamp"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-budget-controller.js",
+      "tasks": [
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-culling.js",
+      "tasks": [
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "break"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-ddgi.js",
+      "tasks": [
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-framegraph.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-gbuffer.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "character"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "sign"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-generic-renderer.js",
+      "tasks": [
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "rope"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-humanoid.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "rig"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-lighting.js",
+      "tasks": [
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "sign"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-locomotion.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "rig",
+            "locomotion"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-materials.js",
+      "tasks": [
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-native-gbuffer.js",
+      "tasks": [
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "rope"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-pass-budget.js",
+      "tasks": [
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "break"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-pbr.js",
+      "tasks": [
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-perceptual.js",
+      "tasks": [
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-radiance.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "rig"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "sign"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-recorder.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "rig"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "break"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "sign"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-renderer-contract.js",
+      "tasks": [
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-resource-watchdog.js",
+      "tasks": [
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-runtime.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "rig",
+            "locomotion",
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "tree",
+            "lamp",
+            "sign",
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-scheduler.js",
+      "tasks": [
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-sdf.js",
+      "tasks": [
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-sdf3d.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "rig"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-semantics.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "character",
+            "rig"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "sign"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-shader-prewarm.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "camera"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-simd-pool.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "rig",
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-style-calibration.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "rig"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-temporal-artifacts.js",
+      "tasks": [
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-temporal.js",
+      "tasks": [
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-three-native.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "rig"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "fragment"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "camera"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-three-skinned-motion.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "skeleton"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "fragment"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-tsr-source.js",
+      "tasks": [
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "camera"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-tsr.js",
+      "tasks": [
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-vision.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-voxel-ddgi.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "rig"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "camera"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-webgl2.js",
+      "tasks": [
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "fragment"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "sign"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-webgpu-ddgi.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "rig"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P2",
+          "category": "camera",
+          "signals": [
+            "camera"
+          ],
+          "rule": "Use spring/trauma camera motion with mobile/reduced-motion budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-webgpu.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "rig"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "fragment"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "sign"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-worker.js",
+      "tasks": [
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/pwa-runtime.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        }
+      ]
+    },
+    {
+      "file": "shared/quality-telemetry.js",
+      "tasks": [
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/sentry-runtime.entry.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/sentry-runtime.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "character",
+            "player",
+            "npc",
+            "rig",
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "destruction",
+          "signals": [
+            "break",
+            "fragment"
+          ],
+          "rule": "Use reversible exploded/frame timeline when appropriate; do not replace authoritative physics."
+        },
+        {
+          "priority": "P2",
+          "category": "effects",
+          "signals": [
+            "fire"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "tree",
+            "flag",
+            "rope",
+            "chain",
+            "lamp",
+            "sign",
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/world-graphics-bus.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "mechanical",
+          "signals": [
+            "engine"
+          ],
+          "rule": "Use state/timeline driven by gameplay; keep collision synchronized when physical."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "rope"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/world-quality-autopilot.js",
+      "tasks": [
+        {
+          "priority": "P0",
+          "category": "character",
+          "signals": [
+            "character",
+            "locomotion",
+            "run"
+          ],
+          "rule": "Synchronize locomotion to real velocity/distance; preserve collision root; validate foot slide."
+        },
+        {
+          "priority": "P1",
+          "category": "mechanical",
+          "signals": [
+            "machine"
+          ],
+          "rule": "Use state/timeline driven by gameplay; keep collision synchronized when physical."
+        },
+        {
+          "priority": "P2",
+          "category": "effects",
+          "signals": [
+            "particle"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    }
+  ]
+}
