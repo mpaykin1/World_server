@@ -222,3 +222,18 @@ For a new project with a reference image: define categories analogous to `data/r
 
 See `data/reference-visual-gate.json` for the full policy text, current thresholds, and last recorded score per project.
 <!-- REFERENCE_VISUAL_GATE_END -->
+
+<!-- GODOT_VOXEL_GAME_BASELINE_BEGIN -->
+## Godot Voxel Game Baseline — mandatory, user-set, permanent
+Set by the user on 2026-08-28, proven in `godot/dark-void-scene`. Every new Godot voxel-art project starts from this baseline instead of rediscovering it from scratch. Only the user can relax or remove it.
+
+Copy `templates/godot-voxel-game-starter/` (camera rig + noise/palette utils + full explanation) into any new Godot voxel project before writing project-specific code. The hard rules, in one line each — full detail and the exact bugs each one prevents are in `data/godot-voxel-game-baseline.json` and the matching entries in `data/error-prevention-registry.json`:
+- Hero voxels are always exactly 5x smaller than world voxels (`HERO_VOX := WORLD_VOX / 5.0`) — both per-cube and overall subject scale.
+- Camera is a true orbit rig: the rig node's own `position` is `(0,0,0)` at the tracked subject's origin; the back/up offset lives only inside the rig's internally-built camera child, never duplicated on the rig's own transform.
+- World/terrain and the hero are always siblings, never parent/child in either direction.
+- Materials: white albedo + `vertex_color_use_as_albedo`, `roughness < 1.0`, real per-instance palette colors capped hard (~15-20% toward the lit anchor) rather than a grayscale multiply or full-strength hex.
+- A dedicated rim/key `DirectionalLight3D` with `sky_mode = LIGHT_ONLY` for silhouette definition against a dark/void sky.
+- Old/weak target GPU: `renderer/rendering_method = "gl_compatibility"` + `--rendering-driver opengl3`; volumetric fog silently doesn't work there, use exponential/height fog instead.
+- Verify every "done" claim with a REAL standalone run (`godot.exe --path <project> --rendering-driver opengl3`, not `--editor`), checking console output for `SCRIPT ERROR`/`Parse Error` — the editor's live Play session hides type-inference parse errors that a standalone build treats as fatal.
+- godot-ai MCP's `node_create` parent parameter is `parent_path`, not `parent` (silently ignored otherwise).
+<!-- GODOT_VOXEL_GAME_BASELINE_END -->

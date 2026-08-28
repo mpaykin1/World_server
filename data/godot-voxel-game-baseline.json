@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "GODOT_VOXEL_GAME_BASELINE",
+  "setBy": "user",
+  "setAt": "2026-08-28",
+  "rule": "Every new Godot voxel-art project on World_server starts from this baseline, not from scratch. These parameters were arrived at through real, verified iteration on dark-void-scene (including fixing the exact bugs listed below) and are now permanent defaults, not per-project choices. Only the user can relax or remove this rule.",
+  "templatePath": "templates/godot-voxel-game-starter/",
+  "provenIn": "godot/dark-void-scene (World_server_navigator worktree, ai/opencode/navigator-engagement-v1)",
+  "rules": {
+    "heroVoxelToWorldVoxelRatio": {
+      "value": 5,
+      "description": "Hero/character voxels are always exactly 5x smaller than world/terrain voxels, both in individual cube size AND overall subject scale. Never build a hero at world voxel scale.",
+      "implementation": "const WORLD_VOX := 0.34; const HERO_VOX := WORLD_VOX / 5.0"
+    },
+    "cameraPattern": {
+      "value": "true-orbit-rig",
+      "description": "Camera rig node is a child of the tracked subject, rig's OWN position is (0,0,0) at the subject's exact origin. The back/up offset lives only in the rig's internally-built camera child (set in _ready()), never duplicated as a second offset on the rig node's own scene-file transform. Movement lives on the tracked subject, driven by the rig's current facing.",
+      "referenceFile": "templates/godot-voxel-game-starter/orbit_camera_rig.gd",
+      "verification": "game_eval-check the subject's global_position is identical before/after a real yaw change - only the camera should move"
+    },
+    "worldHeroSeparation": {
+      "value": "always-siblings",
+      "description": "World/terrain objects and the hero are never parent/child. A 'hero embedded in the world' look at spawn is achieved by positioning the hero at the world object's socket coordinates, not by parenting."
+    },
+    "materialPattern": {
+      "value": "white-albedo-plus-capped-instance-palette",
+      "description": "StandardMaterial3D albedo_color=(1,1,1), vertex_color_use_as_albedo=true, roughness < 1.0 (never exactly 1.0 - it can't take a specular highlight, so no light can ever define its silhouette edges). Real per-instance colors from a dark/mid/lit palette lerp (extracted from an actual reference image when one exists), capped hard (~15-20% max toward the lit anchor, pow()-curved) so most of the silhouette stays dark - full-strength palette reads as a uniform warm wash.",
+      "referenceFile": "templates/godot-voxel-game-starter/voxel_noise_utils.gd (palette_lerp)"
+    },
+    "lightingPattern": {
+      "value": "dedicated-rim-key-light",
+      "description": "A DirectionalLight3D angled to graze across the hero/terrain silhouette, sky_mode=LIGHT_ONLY (value 1) so it doesn't paint an unwanted sun disc into a dark/void ProceduralSkyMaterial sky."
+    },
+    "rendererForOldGpu": {
+      "value": "gl_compatibility",
+      "description": "If the target machine has an old/weak GPU, Forward+ can silently crash on device selection with zero error output. Set renderer/rendering_method=\"gl_compatibility\" (both desktop and .mobile) in project.godot and launch with --rendering-driver opengl3. Volumetric fog silently does not work under gl_compatibility (engine warning, not a crash) - use exponential/height fog properties instead for atmosphere on such targets."
+    },
+    "verificationMethod": {
+      "value": "real-standalone-run-required",
+      "description": "A type-inference-from-Variant issue (var x := expr where expr is a generic builtin like max()/min()/clamp() instead of the typed maxi/minf/clampf variants) is only a warning in the editor's live Play session, but can be a hard parse error in a real standalone run - the affected script fails to load with no player-visible error, often silently disabling the camera/controller. Always give such a var an explicit type, and always verify with a real standalone launch (godot.exe --path <project> --rendering-driver opengl3, NOT --editor), checking console output for SCRIPT ERROR / Parse Error lines - a screenshot from editor Play does not catch this."
+    },
+    "mcpToolGotcha": {
+      "value": "node_create-parent_path-not-parent",
+      "description": "godot-ai MCP's node_create tool's parent parameter is literally named parent_path, not parent. Passing parent is silently accepted and ignored (node lands at scene root). Always use parent_path."
+    }
+  }
+}

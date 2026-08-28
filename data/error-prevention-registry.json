@@ -234,6 +234,55 @@
         "self-score every category from a fresh screenshot against the reference before using done/ready/final language; if any category is under threshold, report IN PROGRESS with the specific gap instead",
         "the AI may not lower a threshold or skip the gate itself for any reason, including time or effort constraints - only the user can relax it"
       ]
+    },
+    {
+      "id": "godot-orbit-rig-position-duplicates-camera-offset",
+      "category": "controls",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "an orbit-style camera rig visibly orbits SOMETHING and looks correct in a single static screenshot, but a real mouse/yaw sweep sends the tracked subject drifting off-frame instead of staying centered",
+      "rootCause": "the rig node's own scene-level `position` was set to the intended back/up camera offset (e.g. (0, 1.4, 13)), duplicating an offset the rig's script ALSO applies internally to its camera child in _ready() - so the actual orbit center ended up 13 units away from the tracked subject instead of at the subject's own origin",
+      "protection": [
+        "the orbit rig's own position must be exactly (0,0,0), at the tracked subject's origin - the back/up offset belongs only on the rig's internally-built camera child, never duplicated on the rig node's own transform",
+        "verify with game_eval: the subject's global_position must be byte-identical before and after a real yaw change, not just 'the view moved' - see templates/godot-voxel-game-starter/orbit_camera_rig.gd for the canonical, verified-correct shape"
+      ]
+    },
+    {
+      "id": "godot-ai-node-create-parent-param-silently-ignored",
+      "category": "tooling",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "a node created via the godot-ai MCP's node_create tool lands as a direct child of the scene root instead of the intended parent, with no error",
+      "rootCause": "the tool's parent parameter is named `parent_path`, not `parent` - passing `parent` is accepted as an unrecognized-but-harmless extra field and silently ignored rather than rejected",
+      "protection": [
+        "always pass `parent_path` (never `parent`) to node_create",
+        "after creating a node with a non-root intended parent, verify its actual path in the tool's own result before proceeding, rather than assuming the requested parent was honored"
+      ]
+    },
+    {
+      "id": "godot-world-parented-under-hero",
+      "category": "controls",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "moving/flying the player-controlled subject drags the surrounding terrain/world geometry along with it instead of leaving it behind",
+      "rootCause": "the world/terrain generator node was added as a CHILD of the hero node (often done for convenience, to get a 'hero embedded in the world' look for free at spawn) - any transform change on the hero then applies to the whole subtree including the world",
+      "protection": [
+        "world/terrain and the hero are always siblings under a common static parent, never parent/child in either direction",
+        "to get an 'embedded at spawn' look, position the hero at the world object's socket coordinates instead of parenting - see godot-voxel-game-baseline.json's worldHeroSeparation rule and mountain_wall.gd / voxel_eye_runtime.gd in dark-void-scene for the fixed pattern",
+        "verify with game_eval: after moving the hero, the world object's global_position must be unchanged"
+      ]
+    },
+    {
+      "id": "godot-hero-built-at-world-voxel-scale",
+      "category": "graphics",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "a hero/character built from voxels reads as a flat sheet or an oversized blob pasted onto the world instead of a distinct, detailed subject",
+      "rootCause": "the hero was built using the same voxel size and roughly the same overall scale as the surrounding world/terrain geometry, so nothing visually distinguishes 'the thing you play as' from 'the environment'",
+      "protection": [
+        "standing rule (data/godot-voxel-game-baseline.json, heroVoxelToWorldVoxelRatio): hero voxels are always exactly 5x smaller than world voxels, both per-cube and in overall subject scale - const HERO_VOX := WORLD_VOX / 5.0",
+        "apply this from the start of every new Godot voxel project, not as a later fix"
+      ]
     }
   ],
   "confirmationProtocol": {
