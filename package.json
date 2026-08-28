@@ -95,7 +95,9 @@
     "commercial:promotion": "node scripts/commercial-promotion-check.js",
     "home:experiments": "node scripts/home-experiment-manager.js list",
     "engagement:learn": "node scripts/engagement-learning-loop.js",
-    "engagement:learn:apply": "node scripts/engagement-learning-loop.js --apply"
+    "engagement:learn:apply": "node scripts/engagement-learning-loop.js --apply",
+    "onboarding:verify": "node scripts/verify-progressive-onboarding.cjs",
+    "onboarding:e2e": "playwright test e2e/progressive-onboarding.spec.js"
   },
   "engines": {
     "node": "24.x"

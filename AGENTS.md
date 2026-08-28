@@ -220,3 +220,11 @@ Work counts as incomplete if any of these is true: `mergeSafe: false`, a FAIL, a
 - Before promoting a homepage to primary run `node scripts/commercial-promotion-check.js <id>`.
 - Promotion packaging can require 100/100; declaring a real winner also requires comparative real-world metrics.
 - Commercial targets live in `data/commercial-targets.json`; a target of 100 is not a claim that the target is already achieved.
+
+
+## IMPROVE_WORLD_PROGRESSIVE_ONBOARDING_V1
+- User-facing world creation MUST show a first visual reward after no more than 3 initial questions.
+- Existing deep questions are preserved but may not block first reward or entry.
+- Every onboarding question must be skippable; auth may not block the first visual seed.
+- Prefer progressive profiling inside the living world over a long pre-world questionnaire.
+- Regression tests must protect mobile touch, anonymous first reward, and the <=3-question contract.

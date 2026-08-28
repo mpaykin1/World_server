@@ -1,0 +1,67 @@
+{
+  "id": "improve-world-progressive-onboarding-v1",
+  "version": "1.0.0",
+  "status": "required",
+  "principle": "world-first-progressive-profiling",
+  "hardRequirements": {
+    "maxQuestionsBeforeFirstVisualReward": 3,
+    "targetFirstRewardMs": 60000,
+    "skipAvailableOnEveryQuestion": true,
+    "registrationMayBlockFirstVisualReward": false,
+    "deepQuestionnaireMayBlockFirstVisualReward": false,
+    "preserveExistingDeepQuestions": true,
+    "eachAnswerMutatesVisualSeed": true,
+    "mobileTouchTargetMinPx": 44,
+    "respectReducedMotion": true,
+    "persistDraftInSession": true
+  },
+  "flows": {
+    "create": [
+      {
+        "id": "world",
+        "prompt": "Какой мир ты сейчас представляешь?",
+        "completion": 0.12
+      },
+      {
+        "id": "focus",
+        "prompt": "Кто или что в нём главное?",
+        "completion": 0.2
+      },
+      {
+        "id": "desire",
+        "prompt": "Чего оно хочет?",
+        "completion": 0.27
+      }
+    ],
+    "join": [
+      {
+        "id": "association",
+        "prompt": "Что первым приходит в голову, когда ты смотришь на этот мир?",
+        "completion": 0.12
+      },
+      {
+        "id": "focus",
+        "prompt": "Кто или что здесь для тебя главное?",
+        "completion": 0.2
+      },
+      {
+        "id": "desire",
+        "prompt": "Чего тебе хочется, чтобы здесь произошло?",
+        "completion": 0.27
+      }
+    ]
+  },
+  "postRewardActions": [
+    "enter-now",
+    "clarify-world",
+    "connect-worlds"
+  ],
+  "telemetryEvents": [
+    "iw_onboarding_opened",
+    "iw_onboarding_answered",
+    "iw_first_snapshot_ready",
+    "iw_enter_now",
+    "iw_clarify_world",
+    "iw_connect_worlds"
+  ]
+}

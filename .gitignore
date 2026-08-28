@@ -27,3 +27,6 @@ GOLDEN_STANDARD_WORLD_SERVER_V10/
 
 # commercial-100 pre-install backups — redundant with git history
 .commercial-100-backups/
+
+# progressive-onboarding installer backups — redundant with git history
+.patch-backups/
