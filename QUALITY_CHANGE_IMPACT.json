@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-29T05:31:12.673Z",
+  "generatedAt": "2026-08-29T05:47:35.190Z",
   "changed": [
     ".characterforge-backups/v2-20260828-095512/package.json",
     ".characterforge-backups/v2-20260828-095512/services/ai3d-worker/ai3d/runner.py",

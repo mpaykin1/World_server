@@ -720,3 +720,10 @@
 [2026-08-29T05:26:03.131Z] OK msw already installed (MIT) impact 60%
 [2026-08-29T05:26:03.132Z] OK zod already installed (MIT) impact 55%
 [2026-08-29T05:26:03.133Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-29T05:41:02.158Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-29T05:41:02.165Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-29T05:41:02.167Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-29T05:41:02.168Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-29T05:41:02.169Z] OK msw already installed (MIT) impact 60%
+[2026-08-29T05:41:02.170Z] OK zod already installed (MIT) impact 55%
+[2026-08-29T05:41:02.172Z] Wrote QUALITY_PLUGIN_CANDIDATES.json

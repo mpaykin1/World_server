@@ -1,6 +1,6 @@
 {
   "schemaVersion": "7.2.0",
-  "generatedAt": "2026-08-29T05:32:14.088Z",
+  "generatedAt": "2026-08-29T05:49:10.407Z",
   "pass": true,
   "mode": "local-ed25519-transparency-log",
   "algorithm": "ed25519",
@@ -16,7 +16,7 @@
   ],
   "logEntries": 260,
   "logHead": null,
-  "nativeCosignAvailable": true,
+  "nativeCosignAvailable": false,
   "nativeSigstoreBundleVerified": false,
   "rekorEvidence": "verified by cosign when an external Sigstore bundle is supplied",
   "errors": []

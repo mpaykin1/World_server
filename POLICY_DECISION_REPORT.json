@@ -1,12 +1,12 @@
 {
   "schemaVersion": "7.2.0",
-  "generatedAt": "2026-08-29T05:32:15.612Z",
+  "generatedAt": "2026-08-29T05:49:11.872Z",
   "policy": "OPA/Rego + deterministic offline mirror",
   "input": {
     "schemaVersion": "7.2.0",
-    "generatedAt": "2026-08-29T05:32:14.554Z",
+    "generatedAt": "2026-08-29T05:49:10.849Z",
     "branch": "ai/opencode/multi-ai-peer-improvement",
-    "commit": "d5bd02729c5b2665fcfe0f53f8889da6771580c0",
+    "commit": "faa6971ddd5783b4b7c6ccd6db149a3a8fc730bd",
     "changed_files": [
       "ADAPTER_SANDBOX_STATUS.json",
       "ASSET_DELTA_STATUS.json",
@@ -81,9 +81,12 @@
       "PROJECT_DIRECTIVE_REPORT.json",
       "PROJECT_QUALITY_REVIEW.json",
       "PROVENANCE_STATUS.json",
+      "QUALITY_AUTOLOOP.log",
       "QUALITY_CHANGE_IMPACT.json",
       "QUALITY_IMPACT_GRAPH.json",
       "QUALITY_ISSUE_CANDIDATES.json",
+      "QUALITY_PLUGIN_CANDIDATES.json",
+      "QUALITY_PLUGIN_DISCOVERY.log",
       "QUALITY_REGRESSION_REPORT.json",
       "QUALITY_REPORT.json",
       "QUALITY_V6_RUNTIME_VERIFY.json",

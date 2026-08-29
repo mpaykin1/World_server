@@ -1,6 +1,6 @@
 {
   "schemaVersion": "2.0.0",
-  "generatedAt": "2026-08-29T05:31:45.435Z",
+  "generatedAt": "2026-08-29T05:48:45.304Z",
   "changed": [
     "ADAPTER_SANDBOX_STATUS.json",
     "ASSET_DELTA_STATUS.json",
@@ -75,9 +75,12 @@
     "PROJECT_DIRECTIVE_REPORT.json",
     "PROJECT_QUALITY_REVIEW.json",
     "PROVENANCE_STATUS.json",
+    "QUALITY_AUTOLOOP.log",
     "QUALITY_CHANGE_IMPACT.json",
     "QUALITY_IMPACT_GRAPH.json",
     "QUALITY_ISSUE_CANDIDATES.json",
+    "QUALITY_PLUGIN_CANDIDATES.json",
+    "QUALITY_PLUGIN_DISCOVERY.log",
     "QUALITY_REGRESSION_REPORT.json",
     "QUALITY_REPORT.json",
     "QUALITY_V6_RUNTIME_VERIFY.json",
@@ -207,9 +210,12 @@
     "PROJECT_DIRECTIVE_REPORT.json",
     "PROJECT_QUALITY_REVIEW.json",
     "PROVENANCE_STATUS.json",
+    "QUALITY_AUTOLOOP.log",
     "QUALITY_CHANGE_IMPACT.json",
     "QUALITY_IMPACT_GRAPH.json",
     "QUALITY_ISSUE_CANDIDATES.json",
+    "QUALITY_PLUGIN_CANDIDATES.json",
+    "QUALITY_PLUGIN_DISCOVERY.log",
     "QUALITY_REGRESSION_REPORT.json",
     "QUALITY_REPORT.json",
     "QUALITY_V6_RUNTIME_VERIFY.json",
@@ -265,7 +271,7 @@
     "bom.cdx.json",
     "data/generated-legacy-function-contracts.json"
   ],
-  "affectedCount": 130,
+  "affectedCount": 133,
   "systems": [
     {
       "id": "system-integration-v2",

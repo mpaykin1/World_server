@@ -16,6 +16,7 @@ from ai3d.auth import verify_token
 from ai3d.mesh_optimizer import ALLOWED_MESH_EXTENSIONS, MeshOptimizationPipeline, verify_mesh_upload
 from ai3d.runner import PipelineRunner
 from ai3d.store import JobStore
+from ai3d.texture_optimizer import TextureOptimizer
 from ai3d.validation import ALLOWED_IMAGE_TYPES, verify_image
 
 SERVICE_ROOT = Path(__file__).resolve().parent
@@ -23,6 +24,7 @@ RUNTIME = Path(os.environ.get("AI3D_RUNTIME_DIR", SERVICE_ROOT / "runtime")).res
 RUNTIME.mkdir(parents=True, exist_ok=True)
 MAX_UPLOAD = max(1, min(int(os.environ.get("AI3D_MAX_UPLOAD_MB", "25")), 100)) * 1024 * 1024
 MAX_MESH_UPLOAD = max(1, min(int(os.environ.get("AI3D_MAX_MESH_UPLOAD_MB", "250")), 2048)) * 1024 * 1024
+MAX_TEXTURE_UPLOAD = max(1, min(int(os.environ.get("AI3D_MAX_TEXTURE_UPLOAD_MB", "250")), 2048)) * 1024 * 1024
 MAX_WORKERS = max(1, min(int(os.environ.get("AI3D_MAX_WORKERS", "1")), 8))
 JOB_TTL_HOURS = max(1, int(os.environ.get("AI3D_JOB_TTL_HOURS", "72")))
 SECRET = os.environ.get("AI3D_SHARED_SECRET", "")
@@ -30,11 +32,12 @@ SECRET = os.environ.get("AI3D_SHARED_SECRET", "")
 store = JobStore(RUNTIME / "jobs.sqlite3")
 runner = PipelineRunner(RUNTIME)
 mesh_optimizer = MeshOptimizationPipeline(SERVICE_ROOT)
+texture_optimizer = TextureOptimizer()
 executor = ThreadPoolExecutor(max_workers=MAX_WORKERS, thread_name_prefix="ai3d-job")
 _inflight: set[str] = set()
 _inflight_lock = threading.Lock()
 
-app = FastAPI(title="World Server AI3D Worker", version="1.9.0")
+app = FastAPI(title="World Server AI3D Worker", version="1.3.0")
 origins_raw = os.environ.get("AI3D_ALLOWED_ORIGINS", "*").strip()
 origins = [x.strip() for x in origins_raw.split(",") if x.strip()] or ["*"]
 app.add_middleware(
@@ -80,36 +83,9 @@ def public_job(job: dict) -> dict:
         "animationGate": result.get("animationGate"),
         "performanceGate": result.get("performanceGate"),
         "compression": result.get("compression"),
-        "productionReadinessV8": result.get("productionReadinessV8"),
-        "runtimeBenchmarkGateV8": result.get("runtimeBenchmarkGateV8"),
-        "deviceMatrixV8": result.get("deviceMatrixV8"),
-        "semanticFusionV8": result.get("semanticFusionV8"),
-        "gpuTelemetryV8": result.get("gpuTelemetryV8"),
-        "robloxPlaceVerificationV8": result.get("robloxPlaceVerificationV8"),
-        "productionReadinessV9": result.get("productionReadinessV9"),
-        "runtimeBenchmarkGateV9": result.get("runtimeBenchmarkGateV9"),
-        "fleetEvidenceV9": result.get("fleetEvidenceV9"),
-        "fleetLongitudinalV9": result.get("fleetLongitudinalV9"),
-        "shaderMemoryTelemetryV9": result.get("shaderMemoryTelemetryV9"),
-        "advancedGpuCountersV9": result.get("advancedGpuCountersV9"),
-        "deviceFarmV9": result.get("deviceFarmV9"),
-        "deviceFarmResultV9": result.get("deviceFarmResultV9"),
-        "semanticMeshV9": result.get("semanticMeshV9"),
-        "robloxStudioAutomationV9": result.get("robloxStudioAutomationV9"),
-        "productionEvidenceV10": result.get("productionEvidenceV10"),
-        "qualityConfidenceV11": result.get("qualityConfidenceV11"),
-        "shaderStutterV12": result.get("shaderStutterV12"),
-        "thermalMemoryPressureV12": result.get("thermalMemoryPressureV12"),
-        "compatibilityMatrixV12": result.get("compatibilityMatrixV12"),
-        "semanticModelContractV10": result.get("semanticModelContractV10"),
-        "profilerEvidenceV10": result.get("profilerEvidenceV10"),
-        "deviceFarmIntegrityV10": result.get("deviceFarmIntegrityV10"),
-        "fleetDriftV10": result.get("fleetDriftV10"),
-        "pvsPruningProofV10": result.get("pvsPruningProofV10"),
-        "pvsCanaryV10": result.get("pvsCanaryV10"),
-        "robloxVerificationV10": result.get("robloxVerificationV10"),
         "metrics": result.get("metrics"),
         "resultStatus": result.get("status"),
+        "textureQuality": result.get("textureQuality"),
     }
 
 
@@ -130,6 +106,8 @@ def execute_job(job_id: str) -> None:
         job = store.get(job_id)
         if job["mode"] == "mesh_optimize":
             result = mesh_optimizer.run(job, progress)
+        elif job["mode"] == "texture_optimize":
+            result = texture_optimizer.run(job, progress)
         else:
             result = runner.run(job, progress)
         store.update(job_id, status="completed", progress=100, message="Completed", result_json=result, error=None)
@@ -160,6 +138,7 @@ def health():
         "service": "world-server-ai3d-worker",
         "plugins": runner.plugin_status(),
         "meshOptimizer": mesh_optimizer.status(),
+        "textureOptimizer": texture_optimizer.status(),
         "maxWorkers": MAX_WORKERS,
     }
 
@@ -189,7 +168,7 @@ async def create_job(
     _token=Depends(require_token),
 ):
     mode = mode.strip().lower()
-    supported = {"auto", "image_to_3d", "depth", "building", "map", "voxel_city", "mesh_optimize"}
+    supported = {"auto", "image_to_3d", "depth", "building", "map", "voxel_city", "mesh_optimize", "texture_optimize"}
     if mode not in supported:
         raise HTTPException(status_code=400, detail="Unsupported mode.")
     try:
@@ -201,7 +180,8 @@ async def create_job(
 
     needs_image = mode in {"auto", "image_to_3d", "depth", "voxel_city"}
     needs_mesh = mode == "mesh_optimize"
-    if (needs_image or needs_mesh) and file is None:
+    needs_texture = mode == "texture_optimize"
+    if (needs_image or needs_mesh or needs_texture) and file is None:
         raise HTTPException(status_code=400, detail="This mode requires a file.")
     if needs_image and file is not None and file.content_type not in ALLOWED_IMAGE_TYPES:
         raise HTTPException(status_code=415, detail="Only PNG, JPEG and WebP images are accepted.")
@@ -212,8 +192,9 @@ async def create_job(
     input_path = None
     try:
         if file is not None:
+            original = Path(file.filename or "input")
+            options["_originalFilename"] = original.name
             if needs_mesh:
-                original = Path(file.filename or "input.glb")
                 suffix = original.suffix.lower()
                 if suffix not in ALLOWED_MESH_EXTENSIONS:
                     raise HTTPException(
@@ -226,6 +207,17 @@ async def create_job(
                     verify_mesh_upload(input_path)
                 except Exception as exc:
                     raise HTTPException(status_code=400, detail=f"Invalid 3D model: {exc}")
+            elif needs_texture:
+                suffix = original.suffix.lower()
+                if suffix not in {".png", ".jpg", ".jpeg", ".webp", ".zip"}:
+                    raise HTTPException(status_code=415, detail="Texture input must be PNG, JPEG, WebP or ZIP.")
+                input_path = job_dir / f"input{suffix}"
+                await _stream_upload(file, input_path, MAX_TEXTURE_UPLOAD, "Texture pack")
+                if suffix != ".zip":
+                    try:
+                        verify_image(input_path)
+                    except Exception as exc:
+                        raise HTTPException(status_code=400, detail=f"Invalid texture: {exc}")
             else:
                 suffix = {"image/png": ".png", "image/jpeg": ".jpg", "image/webp": ".webp"}[file.content_type]
                 input_path = job_dir / f"input{suffix}"

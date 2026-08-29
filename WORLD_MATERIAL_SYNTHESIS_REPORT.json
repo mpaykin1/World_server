@@ -1,7 +1,7 @@
 {
   "schemaVersion": "4.0.0",
   "system": "WORLD_MATERIAL_SYNTHESIS",
-  "generatedAt": "2026-08-29T05:31:33.030Z",
+  "generatedAt": "2026-08-29T05:43:26.730Z",
   "source": "apps/ai3d-voxel-city/default-city.json",
   "profiles": 64,
   "proceduralOnly": true,

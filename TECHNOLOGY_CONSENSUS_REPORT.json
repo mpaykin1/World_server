@@ -1,6 +1,6 @@
 {
   "schemaVersion": "7.2.0",
-  "generatedAt": "2026-08-29T05:32:00.035Z",
+  "generatedAt": "2026-08-29T05:48:57.593Z",
   "policy": {
     "cpuFirst": true,
     "paidRequired": false,
@@ -116,14 +116,13 @@
       "embeddedAdapter": "scripts/artifact-signing-transparency.cjs",
       "nativeMode": "cosign-v3-bundle+Rekor-proof",
       "nativeOptional": true,
-      "votes": 7,
+      "votes": 5,
       "threshold": 5,
       "evidence": [
         "free/open",
         "cpu-safe",
         "offline-fallback",
-        "embedded-adapter-present",
-        "cosign-available"
+        "embedded-adapter-present"
       ],
       "status": "ADOPTED_EMBEDDED",
       "automaticImplementation": true
@@ -243,14 +242,13 @@
       "autoAdopt": true,
       "embeddedAdapter": "scripts/adapter-sandbox.cjs",
       "nativeRuntimeOptional": true,
-      "votes": 7,
+      "votes": 5,
       "threshold": 5,
       "evidence": [
         "free/open",
         "cpu-safe",
         "offline-fallback",
-        "embedded-adapter-present",
-        "wasmtime-available"
+        "embedded-adapter-present"
       ],
       "status": "ADOPTED_EMBEDDED",
       "automaticImplementation": true
@@ -351,14 +349,13 @@
       "embeddedAdapter": "scripts/wit-component-validator.cjs",
       "externalBinary": "wasmtime",
       "nativeRuntimeOptional": true,
-      "votes": 7,
+      "votes": 5,
       "threshold": 5,
       "evidence": [
         "free/open",
         "cpu-safe",
         "offline-fallback",
-        "embedded-adapter-present",
-        "wasmtime-available"
+        "embedded-adapter-present"
       ],
       "status": "ADOPTED_EMBEDDED",
       "automaticImplementation": true

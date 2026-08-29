@@ -1,6 +1,6 @@
 {
   "schemaVersion": "7.2.0",
-  "generatedAt": "2026-08-29T05:31:37.606Z",
+  "generatedAt": "2026-08-29T05:48:38.727Z",
   "pass": true,
   "apply": false,
   "localInstallRoot": ".world-server\\tools",
@@ -22,8 +22,8 @@
     },
     {
       "tool": "wasmtime",
-      "installed": true,
-      "version": "wasmtime 27.0.0 (8eefa236f 2024-11-20)"
+      "installed": false,
+      "version": null
     },
     {
       "tool": "cosign",
@@ -39,6 +39,7 @@
     "typescript-unavailable",
     "appium-unavailable",
     "tlc-unavailable",
+    "wasmtime-unavailable",
     "cosign-unavailable"
   ]
 }

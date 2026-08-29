@@ -1,0 +1,306 @@
+{
+  "schemaVersion": 1,
+  "patchVersion": "10.0.0",
+  "entries": [
+    {
+      "path": "services/ai3d-worker/server.py",
+      "existedBefore": true,
+      "wasDirectory": false
+    },
+    {
+      "path": "api/ai3d.js",
+      "existedBefore": true,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/ai3d/texture_optimizer.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/ai3d/texture_advanced.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/ai3d/texture_runtime_v4.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/ai3d/texture_runtime_v5.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/ai3d/texture_runtime_v6.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/ai3d/texture_runtime_v7.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/ai3d/texture_runtime_v8.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/ai3d/texture_runtime_v9.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/ai3d/texture_runtime_v10.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/ai3d/renderback_compare.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/verify_texture_runtime.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/compare_texture_renderbacks.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/capture_texture_renderback.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/verify_texture_compression.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/aggregate_texture_telemetry.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/sync_golden_texture_library.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/train_texture_streaming_policy.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/promote_texture_streaming_policy.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/runtime_metrics_example.json",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/benchmark_texture_farm.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/check_texture_policy_drift.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/generate_texture_exploration_mission.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/analyze_texture_residency.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/evaluate_texture_canary.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/allocate_texture_resources.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/build_texture_cdn_packages.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/distributed_texture_queue.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/analyze_texture_soak.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/classify_texture_regression.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/verify_signed_texture_manifest.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/analyze_texture_temporal_quality.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/multi_host_texture_queue.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/verify_promotion_ledger.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/publish_texture_cdn_atomic.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/device_lab_texture_results.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/managed_texture_queue_backend.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/publish_texture_cdn_remote.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/compare_texture_optical_flow.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/analyze_shader_hitches_v10.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/train_route_prefetch_v2.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/material_provenance_graph.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/run_texture_device_farm.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/profile_texture_frame_graph.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/bisect_texture_regression.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/optimize_scene_quality.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/forecast_texture_resource_risk.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/verify_texture_build_attestation.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/texture_runtime_adapters",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tools/texture_runtime_collectors",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tests/test_texture_optimizer.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tests/test_texture_v4.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tests/test_texture_v5.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tests/test_texture_v6.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tests/test_texture_v7.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tests/test_texture_v8.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tests/test_texture_v9.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "services/ai3d-worker/tests/test_texture_v10.py",
+      "existedBefore": false,
+      "wasDirectory": false
+    },
+    {
+      "path": "docs/TEXTURE_QUALITY_SYSTEM.md",
+      "existedBefore": false,
+      "wasDirectory": false
+    }
+  ]
+}

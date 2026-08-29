@@ -145,6 +145,7 @@ def main() -> int:
     original_server = server.read_bytes()
     server_blob = git_blob_sha(original_server)
     server_has_texture_hook = b'from ai3d.texture_optimizer import TextureOptimizer' in original_server and b'texture_optimize' in original_server
+    print(f"DEBUG server_blob={server_blob} has_mesh={b'from ai3d.mesh_optimizer import' in original_server} has_texture={server_has_texture_hook} CURRENT={CURRENT_MASTER_SERVER_BLOB} KNOWN_V4={KNOWN_V4_SERVER_BLOB}")
 
     if not server_has_texture_hook:
         if server_blob == CURRENT_MASTER_SERVER_BLOB:
@@ -301,7 +302,9 @@ def main() -> int:
 
         npm_result = 'SKIPPED'
         if shutil.which('npm') and (repo / 'package.json').is_file():
-            rc, output = run(['npm', 'run', 'check'], repo, required=False)
+            # Windows: npm is npm.cmd, need shell
+            npm_cmd = 'npm.cmd' if os.name == 'nt' else 'npm'
+            rc, output = run([npm_cmd, 'run', 'check'], repo, required=False)
             npm_result = 'PASS' if rc == 0 else 'WARN_EXISTING_PROJECT_CHECK_FAILED'
             (backup / 'npm-check.log').write_text(output, encoding='utf-8', errors='replace')
 
