@@ -1,5 +1,5 @@
 {
-  "at": "2026-08-29T05:28:25.955Z",
+  "at": "2026-08-29T05:30:56.981Z",
   "branches": 10,
   "worktrees": 4,
   "prCheck": true,
@@ -12675,6 +12675,7 @@
     ".quality-cache/tests/51a1e7fbd479d5a830f4f284d7c0331ca01bd740294902f0434ba8160bb1224f.json",
     ".quality-cache/tests/a0bbfa7a8e3f05812c1e7d6ac5d70a76ad46814b6c54becf915fcb211887651c.json",
     "supabase/migrations/20260823063700_quality_telemetry.sql",
+    ".cinematic-voxel-guard-backup-20260828-190316/data/visual-quality-policy.json",
     ".github/workflows/cinematic-voxel-quality.yml",
     ".iw-graphics-staging/apng-v3/apng_patch/apng-quality.config.json",
     ".iw-graphics-staging/apng-v3/apng_patch/scripts/apng-quality-gate.js",
@@ -12965,6 +12966,7 @@
     "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/services/ai3d-worker/ai3d/plugins/world_quality.py",
     "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/shared/world-quality-autopilot.js",
     "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/test/world-quality-autopilot.test.js",
+    "World_server_production_quality_evidence_patch_v1.zip",
     "data/cinematic-voxel-quality-policy.json",
     "data/cinematic-voxel-regression-signatures.json",
     "data/dreamfog-quality-profile.json",

@@ -1,9 +1,9 @@
 {
   "schemaVersion": "2.0.0",
-  "generatedAt": "2026-08-29T05:28:30.319Z",
+  "generatedAt": "2026-08-29T05:32:13.211Z",
   "pass": true,
   "statement": "SLSA_PROVENANCE.intoto.json",
-  "statementSha256": "618dbd5ef3bc34d5586b4ffa22e7691aa12f25c2913ab401c5c7a559d646420a",
+  "statementSha256": "cfb1f8e63bc45bca5f6d9715a2cd4685ab05252421481af5fc96d1598fa9d76d",
   "signed": false,
   "signatureNote": "Local provenance is generated and hash-bound. Add Sigstore/cosign signing only when a trusted key/OIDC identity is configured; unsigned provenance is never presented as signed."
 }

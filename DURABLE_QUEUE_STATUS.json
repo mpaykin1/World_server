@@ -1,6 +1,6 @@
 {
   "schemaVersion": "2.0.0",
-  "generatedAt": "2026-08-29T05:29:17.575Z",
+  "generatedAt": "2026-08-29T05:32:28.627Z",
   "ok": true,
   "backend": "node:sqlite",
   "journal": "WAL",
@@ -11,6 +11,8 @@
   "leaseRecovery": true,
   "deadLetterQueue": true,
   "retry": true,
-  "counts": {},
+  "counts": {
+    "done": 1
+  },
   "oldestActiveAt": null
 }
