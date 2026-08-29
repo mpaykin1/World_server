@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://u18h5g1jslqn" path="res://player_controller.gd" id="3_h2yge"]
 [ext_resource type="Script" uid="uid://da3fqfqv6gtgm" path="res://addons/godot_ai/runtime/draw_recipe.gd" id="5_7mycd"]
 [ext_resource type="Script" uid="uid://c3uqiwqqfa83o" path="res://addons/cinematic_voxel_guard/scene_contract.gd" id="6_272bh"]
+[ext_resource type="Script" uid="uid://ddbfywsgxpvxl" path="res://navigator_ui_controller.gd" id="6_efxa6"]
 [ext_resource type="Script" uid="uid://cmteo8ggq27q2" path="res://addons/cinematic_voxel_guard/performance_governor.gd" id="7_5vw27"]
 [ext_resource type="Script" uid="uid://bk4pm67fis83s" path="res://midground_ridge.gd" id="8_5vw27"]
 [ext_resource type="Script" uid="uid://b8lmbn4vkl7j0" path="res://valley_floor.gd" id="9_kek77"]
@@ -104,7 +105,7 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 60.0
-offset_top = -260.0
+offset_top = -360.0
 offset_right = -60.0
 offset_bottom = -40.0
 mouse_filter = 2
@@ -113,12 +114,12 @@ metadata/_ops = [{
 "color": Color(0.035, 0.028, 0.02, 0.93),
 "draw": "rect",
 "filled": true,
-"rect": Rect2(0, 0, 1800, 220)
+"rect": Rect2(0, 0, 1800, 320)
 }, {
 "color": Color(0.72, 0.58, 0.32, 0.85),
 "draw": "rect",
 "filled": false,
-"rect": Rect2(0, 0, 1800, 220),
+"rect": Rect2(0, 0, 1800, 320),
 "width": 1.5
 }]
 
@@ -223,16 +224,70 @@ theme_override_font_sizes/font_size = 15
 text = "НАВИГАТОР"
 horizontal_alignment = 1
 
-[node name="DialogueText" type="Label" parent="UI/NavigatorPanel/Backdrop/Margin/Row" unique_id=726192875]
+[node name="ResponseArea" type="VBoxContainer" parent="UI/NavigatorPanel/Backdrop/Margin/Row" unique_id=265143895]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 12
+script = ExtResource("6_efxa6")
+
+[node name="DialogueText" type="Label" parent="UI/NavigatorPanel/Backdrop/Margin/Row/ResponseArea" unique_id=360761825]
+layout_mode = 2
 theme_override_colors/font_color = Color(0.86, 0.8, 0.66, 1)
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 18
 text = "Привет. Я твой навигатор по этому миру.
 Тут может появиться всё, что ты захочешь.
 И всё, что в этом мире появится… это тоже будешь ты…"
-vertical_alignment = 1
 autowrap_mode = 3
+
+[node name="InputRow" type="HBoxContainer" parent="UI/NavigatorPanel/Backdrop/Margin/Row/ResponseArea" unique_id=1995562023]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="NavigatorInput" type="LineEdit" parent="UI/NavigatorPanel/Backdrop/Margin/Row/ResponseArea/InputRow" unique_id=1331882430]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.85, 0.65, 1)
+theme_override_colors/font_placeholder_color = Color(0.6, 0.52, 0.4, 1)
+theme_override_font_sizes/font_size = 16
+placeholder_text = "Напиши, что хочешь создать…"
+
+[node name="CreateButton" type="Button" parent="UI/NavigatorPanel/Backdrop/Margin/Row/ResponseArea/InputRow" unique_id=90167838]
+custom_minimum_size = Vector2(140, 44)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.94, 0.79, 0.56, 1)
+theme_override_font_sizes/font_size = 15
+text = "Создать ›"
+
+[node name="ToolsRow" type="HBoxContainer" parent="UI/NavigatorPanel/Backdrop/Margin/Row/ResponseArea" unique_id=955051477]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="UndoButton" type="Button" parent="UI/NavigatorPanel/Backdrop/Margin/Row/ResponseArea/ToolsRow" unique_id=1475928270]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Отменить"
+
+[node name="RedoButton" type="Button" parent="UI/NavigatorPanel/Backdrop/Margin/Row/ResponseArea/ToolsRow" unique_id=1653824855]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Вернуть"
+
+[node name="EyeModeButton" type="Button" parent="UI/NavigatorPanel/Backdrop/Margin/Row/ResponseArea/ToolsRow" unique_id=69864379]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Глаз: следит"
+
+[node name="StatusLabel" type="Label" parent="UI/NavigatorPanel/Backdrop/Margin/Row/ResponseArea/ToolsRow" unique_id=41742656]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7, 0.61, 0.47, 1)
+theme_override_font_sizes/font_size = 12
+text = "готов"
+horizontal_alignment = 2
 
 [node name="CinematicContract" type="Node" parent="." unique_id=1993035938]
 script = ExtResource("6_272bh")
