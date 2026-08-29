@@ -1,0 +1,11 @@
+{
+  "generatedAt": "2026-08-29T05:28:44.782Z",
+  "strict": false,
+  "pass": true,
+  "failures": [],
+  "warnings": [
+    "runtime-candidate-missing:artifacts\\cinematic\\voxel-world-desktop.png"
+  ],
+  "reports": {},
+  "candidate": "artifacts\\cinematic\\voxel-world-desktop.png"
+}

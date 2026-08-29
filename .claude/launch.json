@@ -6,6 +6,12 @@
       "runtimeExecutable": "cmd",
       "runtimeArgs": ["/c", "cd /d C:\\Users\\user\\Desktop\\World_server_navigator && set PORT=3010 && npm start"],
       "port": 3010
+    },
+    {
+      "name": "hunyuan-godot-web-export",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "cd /d \"C:\\Users\\user\\AppData\\Local\\Temp\\hunyuan_backup\\HUNYUAN_CITY_GODOT_FULL_QUALITY_V3\\HUNYUAN_CITY_GODOT_FULL_QUALITY_V3\\godot\\web\" && npx --yes serve -l 3012 -s ."],
+      "port": 3012
     }
   ]
 }

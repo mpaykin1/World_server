@@ -1,6 +1,6 @@
 ﻿{
     "schemaVersion":  "1.0.0",
-    "generatedAt":  "2026-08-28T14:17:24.006Z",
+    "generatedAt":  "2026-08-29T05:19:17.584Z",
     "endpoint":  "http://127.0.0.1:8000/mcp",
     "mcpInitializeOk":  true,
     "reason":  "initialize OK",

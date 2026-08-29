@@ -230,3 +230,365 @@
 {"at":"2026-08-28T14:13:56.748Z","type":"tick-start","cycle":77,"pid":9044}
 {"at":"2026-08-28T14:13:56.993Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
 {"at":"2026-08-28T14:16:43.264Z","type":"tick-end","cycle":77,"mergeSafe":false,"nextRunAt":"2026-08-28T14:29:03.541Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T14:26:01.664Z","type":"tick-start","cycle":78,"pid":728}
+{"at":"2026-08-28T14:26:01.934Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T14:28:55.819Z","type":"tick-end","cycle":78,"mergeSafe":false,"nextRunAt":"2026-08-28T14:41:08.716Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T14:28:56.505Z","type":"tick-start","cycle":79,"pid":15224}
+{"at":"2026-08-28T14:28:56.759Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T14:31:47.125Z","type":"tick-end","cycle":79,"mergeSafe":false,"nextRunAt":"2026-08-28T14:44:03.817Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T14:41:01.797Z","type":"tick-start","cycle":80,"pid":12832}
+{"at":"2026-08-28T14:41:02.107Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T14:44:06.414Z","type":"tick-end","cycle":80,"mergeSafe":false,"nextRunAt":"2026-08-28T14:56:08.875Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T14:44:07.208Z","type":"tick-start","cycle":81,"pid":14968}
+{"at":"2026-08-28T14:44:07.509Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T14:47:09.735Z","type":"tick-end","cycle":81,"mergeSafe":false,"nextRunAt":"2026-08-28T14:59:14.306Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T14:56:01.595Z","type":"tick-start","cycle":82,"pid":4816}
+{"at":"2026-08-28T14:56:01.852Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T14:58:43.628Z","type":"tick-end","cycle":82,"mergeSafe":false,"nextRunAt":"2026-08-28T15:11:08.577Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T14:58:44.277Z","type":"tick-start","cycle":83,"pid":12572}
+{"at":"2026-08-28T14:58:44.513Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T15:01:30.879Z","type":"tick-end","cycle":83,"mergeSafe":false,"nextRunAt":"2026-08-28T15:13:52.186Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T15:11:01.577Z","type":"tick-start","cycle":84,"pid":13948}
+{"at":"2026-08-28T15:11:01.833Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T15:13:05.778Z","type":"tick-end","cycle":84,"mergeSafe":false,"nextRunAt":"2026-08-28T15:26:09.192Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T15:13:06.426Z","type":"tick-start","cycle":85,"pid":9564}
+{"at":"2026-08-28T15:13:06.678Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T15:15:00.961Z","type":"tick-end","cycle":85,"mergeSafe":false,"nextRunAt":"2026-08-28T15:28:13.221Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T15:26:01.511Z","type":"tick-start","cycle":86,"pid":11012}
+{"at":"2026-08-28T15:26:01.768Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T15:29:14.889Z","type":"tick-end","cycle":86,"mergeSafe":false,"nextRunAt":"2026-08-28T15:41:08.427Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T15:29:15.821Z","type":"tick-start","cycle":87,"pid":13408}
+{"at":"2026-08-28T15:29:16.152Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T15:33:13.051Z","type":"tick-end","cycle":87,"mergeSafe":false,"nextRunAt":"2026-08-28T15:44:25.035Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T15:41:02.307Z","type":"tick-start","cycle":88,"pid":11632}
+{"at":"2026-08-28T15:41:02.647Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T15:44:55.111Z","type":"tick-end","cycle":88,"mergeSafe":false,"nextRunAt":"2026-08-28T15:56:11.593Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T15:44:55.848Z","type":"tick-start","cycle":89,"pid":15276}
+{"at":"2026-08-28T15:44:56.093Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T15:47:42.386Z","type":"tick-end","cycle":89,"mergeSafe":false,"nextRunAt":"2026-08-28T16:00:02.941Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T15:56:02.100Z","type":"tick-start","cycle":90,"pid":3316}
+{"at":"2026-08-28T15:56:02.432Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T15:59:57.422Z","type":"tick-end","cycle":90,"mergeSafe":false,"nextRunAt":"2026-08-28T16:11:11.627Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T15:59:58.363Z","type":"tick-start","cycle":91,"pid":7772}
+{"at":"2026-08-28T15:59:58.755Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T16:04:07.590Z","type":"tick-end","cycle":91,"mergeSafe":false,"nextRunAt":"2026-08-28T16:15:08.169Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T16:11:01.771Z","type":"tick-start","cycle":92,"pid":14372}
+{"at":"2026-08-28T16:11:02.047Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T16:11:44.580Z","type":"tick-end","cycle":92,"mergeSafe":false,"nextRunAt":"2026-08-28T16:26:09.045Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T16:11:45.284Z","type":"tick-start","cycle":93,"pid":11992}
+{"at":"2026-08-28T16:11:45.516Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T16:12:28.416Z","type":"tick-end","cycle":93,"mergeSafe":false,"nextRunAt":"2026-08-28T16:26:52.734Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T16:26:01.517Z","type":"tick-start","cycle":94,"pid":14812}
+{"at":"2026-08-28T16:26:01.745Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T16:28:39.351Z","type":"tick-end","cycle":94,"mergeSafe":false,"nextRunAt":"2026-08-28T16:41:08.155Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T16:28:40.016Z","type":"tick-start","cycle":95,"pid":2860}
+{"at":"2026-08-28T16:28:40.251Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T16:32:00.375Z","type":"tick-end","cycle":95,"mergeSafe":false,"nextRunAt":"2026-08-28T16:43:46.647Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T16:41:02.123Z","type":"tick-start","cycle":96,"pid":13660}
+{"at":"2026-08-28T16:41:02.453Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T16:44:31.494Z","type":"tick-end","cycle":96,"mergeSafe":false,"nextRunAt":"2026-08-28T16:56:11.136Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T16:44:32.434Z","type":"tick-start","cycle":97,"pid":15308}
+{"at":"2026-08-28T16:44:32.716Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T16:48:02.148Z","type":"tick-end","cycle":97,"mergeSafe":false,"nextRunAt":"2026-08-28T16:59:41.049Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T16:56:01.970Z","type":"tick-start","cycle":98,"pid":3560}
+{"at":"2026-08-28T16:56:02.278Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T16:59:30.474Z","type":"tick-end","cycle":98,"mergeSafe":false,"nextRunAt":"2026-08-28T17:11:10.522Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T16:59:31.346Z","type":"tick-start","cycle":99,"pid":6488}
+{"at":"2026-08-28T16:59:31.647Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T17:02:58.272Z","type":"tick-end","cycle":99,"mergeSafe":false,"nextRunAt":"2026-08-28T17:14:40.015Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T17:11:02.172Z","type":"tick-start","cycle":100,"pid":6328}
+{"at":"2026-08-28T17:11:02.518Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T17:14:29.810Z","type":"tick-end","cycle":100,"mergeSafe":false,"nextRunAt":"2026-08-28T17:26:11.049Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T17:14:30.670Z","type":"tick-start","cycle":101,"pid":8632}
+{"at":"2026-08-28T17:14:30.958Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T17:17:59.643Z","type":"tick-end","cycle":101,"mergeSafe":false,"nextRunAt":"2026-08-28T17:29:39.268Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T17:26:01.984Z","type":"tick-start","cycle":102,"pid":9764}
+{"at":"2026-08-28T17:26:02.290Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T17:29:29.959Z","type":"tick-end","cycle":102,"mergeSafe":false,"nextRunAt":"2026-08-28T17:41:10.587Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T17:29:30.864Z","type":"tick-start","cycle":103,"pid":6980}
+{"at":"2026-08-28T17:29:31.153Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T17:32:58.681Z","type":"tick-end","cycle":103,"mergeSafe":false,"nextRunAt":"2026-08-28T17:44:39.447Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T17:41:02.160Z","type":"tick-start","cycle":104,"pid":10904}
+{"at":"2026-08-28T17:41:02.499Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T17:44:30.960Z","type":"tick-end","cycle":104,"mergeSafe":false,"nextRunAt":"2026-08-28T17:56:11.026Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T17:44:31.813Z","type":"tick-start","cycle":105,"pid":12668}
+{"at":"2026-08-28T17:44:32.105Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T17:48:00.023Z","type":"tick-end","cycle":105,"mergeSafe":false,"nextRunAt":"2026-08-28T17:59:40.597Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T17:56:01.990Z","type":"tick-start","cycle":106,"pid":4708}
+{"at":"2026-08-28T17:56:02.305Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T17:59:30.810Z","type":"tick-end","cycle":106,"mergeSafe":false,"nextRunAt":"2026-08-28T18:11:10.655Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T17:59:31.762Z","type":"tick-start","cycle":107,"pid":14704}
+{"at":"2026-08-28T17:59:32.058Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T18:02:59.179Z","type":"tick-end","cycle":107,"mergeSafe":false,"nextRunAt":"2026-08-28T18:14:40.356Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T18:11:02.348Z","type":"tick-start","cycle":108,"pid":13156}
+{"at":"2026-08-28T18:11:02.683Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T18:14:31.930Z","type":"tick-end","cycle":108,"mergeSafe":false,"nextRunAt":"2026-08-28T18:26:11.180Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T18:14:32.790Z","type":"tick-start","cycle":109,"pid":6580}
+{"at":"2026-08-28T18:14:33.099Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T18:18:00.813Z","type":"tick-end","cycle":109,"mergeSafe":false,"nextRunAt":"2026-08-28T18:29:41.437Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T18:26:01.991Z","type":"tick-start","cycle":110,"pid":9236}
+{"at":"2026-08-28T18:26:02.281Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T18:28:45.571Z","type":"tick-end","cycle":110,"mergeSafe":false,"nextRunAt":"2026-08-28T18:41:10.727Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T18:28:46.478Z","type":"tick-start","cycle":111,"pid":13096}
+{"at":"2026-08-28T18:28:46.767Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T18:32:23.575Z","type":"tick-end","cycle":111,"mergeSafe":false,"nextRunAt":"2026-08-28T18:43:55.103Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T18:41:02.567Z","type":"tick-start","cycle":112,"pid":8908}
+{"at":"2026-08-28T18:41:02.933Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T18:44:54.723Z","type":"tick-end","cycle":112,"mergeSafe":false,"nextRunAt":"2026-08-28T18:56:11.739Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T18:44:55.678Z","type":"tick-start","cycle":113,"pid":13584}
+{"at":"2026-08-28T18:44:56.009Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T18:49:06.610Z","type":"tick-end","cycle":113,"mergeSafe":false,"nextRunAt":"2026-08-28T19:00:06.690Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T18:56:03.024Z","type":"tick-start","cycle":114,"pid":13524}
+{"at":"2026-08-28T18:56:03.423Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T18:59:07.546Z","type":"tick-end","cycle":114,"mergeSafe":false,"nextRunAt":"2026-08-28T19:11:12.992Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T18:59:08.518Z","type":"tick-start","cycle":115,"pid":6368}
+{"at":"2026-08-28T18:59:08.875Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T19:03:17.771Z","type":"tick-end","cycle":115,"mergeSafe":false,"nextRunAt":"2026-08-28T19:14:18.253Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T19:11:02.330Z","type":"tick-start","cycle":116,"pid":14452}
+{"at":"2026-08-28T19:11:02.690Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T19:14:44.018Z","type":"tick-end","cycle":116,"mergeSafe":false,"nextRunAt":"2026-08-28T19:26:12.751Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T19:14:44.987Z","type":"tick-start","cycle":117,"pid":14252}
+{"at":"2026-08-28T19:14:45.287Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T19:18:24.057Z","type":"tick-end","cycle":117,"mergeSafe":false,"nextRunAt":"2026-08-28T19:29:53.854Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T19:26:02.290Z","type":"tick-start","cycle":118,"pid":13848}
+{"at":"2026-08-28T19:26:02.627Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T19:28:55.389Z","type":"tick-end","cycle":118,"mergeSafe":false,"nextRunAt":"2026-08-28T19:41:12.446Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T19:28:56.488Z","type":"tick-start","cycle":119,"pid":1380}
+{"at":"2026-08-28T19:28:56.798Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T19:33:04.988Z","type":"tick-end","cycle":119,"mergeSafe":false,"nextRunAt":"2026-08-28T19:44:07.124Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T19:41:02.358Z","type":"tick-start","cycle":120,"pid":8600}
+{"at":"2026-08-28T19:41:02.699Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T19:44:43.101Z","type":"tick-end","cycle":120,"mergeSafe":false,"nextRunAt":"2026-08-28T19:56:11.677Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T19:44:44.088Z","type":"tick-start","cycle":121,"pid":10388}
+{"at":"2026-08-28T19:44:44.399Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T19:48:25.456Z","type":"tick-end","cycle":121,"mergeSafe":false,"nextRunAt":"2026-08-28T19:59:53.041Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T19:56:02.153Z","type":"tick-start","cycle":122,"pid":6116}
+{"at":"2026-08-28T19:56:02.482Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T19:59:43.143Z","type":"tick-end","cycle":122,"mergeSafe":false,"nextRunAt":"2026-08-28T20:11:11.209Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T19:59:44.042Z","type":"tick-start","cycle":123,"pid":13292}
+{"at":"2026-08-28T19:59:44.409Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T20:03:25.775Z","type":"tick-end","cycle":123,"mergeSafe":false,"nextRunAt":"2026-08-28T20:14:53.225Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T20:11:02.585Z","type":"tick-start","cycle":124,"pid":10928}
+{"at":"2026-08-28T20:11:02.965Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T20:14:06.022Z","type":"tick-end","cycle":124,"mergeSafe":false,"nextRunAt":"2026-08-28T20:26:12.948Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T20:14:07.106Z","type":"tick-start","cycle":125,"pid":6124}
+{"at":"2026-08-28T20:14:07.443Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T20:17:18.252Z","type":"tick-end","cycle":125,"mergeSafe":false,"nextRunAt":"2026-08-28T20:29:16.980Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T20:26:02.281Z","type":"tick-start","cycle":126,"pid":6328}
+{"at":"2026-08-28T20:26:02.598Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T20:30:06.858Z","type":"tick-end","cycle":126,"mergeSafe":false,"nextRunAt":"2026-08-28T20:41:11.518Z","requiresAi":["local-gates","vercel-deployment"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T20:30:07.832Z","type":"tick-start","cycle":127,"pid":2012}
+{"at":"2026-08-28T20:30:08.153Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T20:33:49.182Z","type":"tick-end","cycle":127,"mergeSafe":false,"nextRunAt":"2026-08-28T20:45:17.680Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T20:41:02.386Z","type":"tick-start","cycle":128,"pid":14248}
+{"at":"2026-08-28T20:41:02.735Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T20:44:43.616Z","type":"tick-end","cycle":128,"mergeSafe":false,"nextRunAt":"2026-08-28T20:56:12.013Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T20:44:44.586Z","type":"tick-start","cycle":129,"pid":12464}
+{"at":"2026-08-28T20:44:44.892Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T20:48:24.378Z","type":"tick-end","cycle":129,"mergeSafe":false,"nextRunAt":"2026-08-28T20:59:53.559Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T20:56:02.162Z","type":"tick-start","cycle":130,"pid":14392}
+{"at":"2026-08-28T20:56:02.472Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T20:59:41.220Z","type":"tick-end","cycle":130,"mergeSafe":false,"nextRunAt":"2026-08-28T21:11:11.059Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T20:59:42.171Z","type":"tick-start","cycle":131,"pid":12772}
+{"at":"2026-08-28T20:59:42.474Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T21:03:21.875Z","type":"tick-end","cycle":131,"mergeSafe":false,"nextRunAt":"2026-08-28T21:14:51.157Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T21:11:02.379Z","type":"tick-start","cycle":132,"pid":11208}
+{"at":"2026-08-28T21:11:02.747Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T21:13:51.876Z","type":"tick-end","cycle":132,"mergeSafe":false,"nextRunAt":"2026-08-28T21:26:11.630Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T21:13:52.836Z","type":"tick-start","cycle":133,"pid":11072}
+{"at":"2026-08-28T21:13:53.139Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T21:17:32.618Z","type":"tick-end","cycle":133,"mergeSafe":false,"nextRunAt":"2026-08-28T21:29:01.721Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T21:26:02.176Z","type":"tick-start","cycle":134,"pid":4996}
+{"at":"2026-08-28T21:26:02.492Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T21:29:41.788Z","type":"tick-end","cycle":134,"mergeSafe":false,"nextRunAt":"2026-08-28T21:41:11.225Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T21:29:42.696Z","type":"tick-start","cycle":135,"pid":13644}
+{"at":"2026-08-28T21:29:43.082Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T21:33:22.960Z","type":"tick-end","cycle":135,"mergeSafe":false,"nextRunAt":"2026-08-28T21:44:51.674Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T21:41:02.480Z","type":"tick-start","cycle":136,"pid":4932}
+{"at":"2026-08-28T21:41:02.826Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T21:43:52.583Z","type":"tick-end","cycle":136,"mergeSafe":false,"nextRunAt":"2026-08-28T21:56:11.545Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T21:43:53.532Z","type":"tick-start","cycle":137,"pid":5524}
+{"at":"2026-08-28T21:43:53.834Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T21:47:33.579Z","type":"tick-end","cycle":137,"mergeSafe":false,"nextRunAt":"2026-08-28T21:59:02.486Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T21:56:02.256Z","type":"tick-start","cycle":138,"pid":4392}
+{"at":"2026-08-28T21:56:02.563Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T21:59:43.188Z","type":"tick-end","cycle":138,"mergeSafe":false,"nextRunAt":"2026-08-28T22:11:11.135Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T21:59:44.174Z","type":"tick-start","cycle":139,"pid":5604}
+{"at":"2026-08-28T21:59:44.472Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T22:03:24.218Z","type":"tick-end","cycle":139,"mergeSafe":false,"nextRunAt":"2026-08-28T22:14:53.106Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T22:11:02.491Z","type":"tick-start","cycle":140,"pid":6856}
+{"at":"2026-08-28T22:11:02.871Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T22:13:52.690Z","type":"tick-end","cycle":140,"mergeSafe":false,"nextRunAt":"2026-08-28T22:26:11.861Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T22:13:53.586Z","type":"tick-start","cycle":141,"pid":13352}
+{"at":"2026-08-28T22:13:53.892Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T22:17:34.087Z","type":"tick-end","cycle":141,"mergeSafe":false,"nextRunAt":"2026-08-28T22:29:02.528Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T22:26:02.257Z","type":"tick-start","cycle":142,"pid":7772}
+{"at":"2026-08-28T22:26:02.611Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T22:29:45.094Z","type":"tick-end","cycle":142,"mergeSafe":false,"nextRunAt":"2026-08-28T22:41:11.282Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T22:29:46.093Z","type":"tick-start","cycle":143,"pid":11464}
+{"at":"2026-08-28T22:29:46.390Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T22:33:29.382Z","type":"tick-end","cycle":143,"mergeSafe":false,"nextRunAt":"2026-08-28T22:44:55.103Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T22:41:02.525Z","type":"tick-start","cycle":144,"pid":14808}
+{"at":"2026-08-28T22:41:02.865Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T22:43:53.197Z","type":"tick-end","cycle":144,"mergeSafe":false,"nextRunAt":"2026-08-28T22:56:11.813Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T22:43:54.092Z","type":"tick-start","cycle":145,"pid":12512}
+{"at":"2026-08-28T22:43:54.390Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T22:47:35.744Z","type":"tick-end","cycle":145,"mergeSafe":false,"nextRunAt":"2026-08-28T22:59:03.086Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T22:56:02.257Z","type":"tick-start","cycle":146,"pid":15040}
+{"at":"2026-08-28T22:56:02.570Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T22:59:44.085Z","type":"tick-end","cycle":146,"mergeSafe":false,"nextRunAt":"2026-08-28T23:11:11.274Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T22:59:45.083Z","type":"tick-start","cycle":147,"pid":14800}
+{"at":"2026-08-28T22:59:45.395Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T23:03:26.674Z","type":"tick-end","cycle":147,"mergeSafe":false,"nextRunAt":"2026-08-28T23:14:54.014Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T23:11:02.547Z","type":"tick-start","cycle":148,"pid":652}
+{"at":"2026-08-28T23:11:02.872Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T23:13:54.740Z","type":"tick-end","cycle":148,"mergeSafe":false,"nextRunAt":"2026-08-28T23:26:11.713Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T23:13:55.730Z","type":"tick-start","cycle":149,"pid":15276}
+{"at":"2026-08-28T23:13:56.022Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T23:17:38.201Z","type":"tick-end","cycle":149,"mergeSafe":false,"nextRunAt":"2026-08-28T23:29:04.728Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T23:26:02.349Z","type":"tick-start","cycle":150,"pid":9044}
+{"at":"2026-08-28T23:26:02.662Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T23:29:44.716Z","type":"tick-end","cycle":150,"mergeSafe":false,"nextRunAt":"2026-08-28T23:41:11.294Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T23:29:45.736Z","type":"tick-start","cycle":151,"pid":1612}
+{"at":"2026-08-28T23:29:46.031Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T23:33:29.237Z","type":"tick-end","cycle":151,"mergeSafe":false,"nextRunAt":"2026-08-28T23:44:54.529Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T23:41:02.457Z","type":"tick-start","cycle":152,"pid":3248}
+{"at":"2026-08-28T23:41:02.827Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T23:44:44.518Z","type":"tick-end","cycle":152,"mergeSafe":false,"nextRunAt":"2026-08-28T23:56:11.824Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T23:44:45.545Z","type":"tick-start","cycle":153,"pid":14356}
+{"at":"2026-08-28T23:44:45.844Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T23:48:26.902Z","type":"tick-end","cycle":153,"mergeSafe":false,"nextRunAt":"2026-08-28T23:59:54.364Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T23:56:02.289Z","type":"tick-start","cycle":154,"pid":13028}
+{"at":"2026-08-28T23:56:02.593Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-28T23:59:45.564Z","type":"tick-end","cycle":154,"mergeSafe":false,"nextRunAt":"2026-08-29T00:11:11.266Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-28T23:59:46.564Z","type":"tick-start","cycle":155,"pid":8668}
+{"at":"2026-08-28T23:59:46.868Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T00:03:29.042Z","type":"tick-end","cycle":155,"mergeSafe":false,"nextRunAt":"2026-08-29T00:14:55.424Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T00:11:02.506Z","type":"tick-start","cycle":156,"pid":12936}
+{"at":"2026-08-29T00:11:02.919Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T00:13:54.610Z","type":"tick-end","cycle":156,"mergeSafe":false,"nextRunAt":"2026-08-29T00:26:11.848Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T00:13:55.505Z","type":"tick-start","cycle":157,"pid":10108}
+{"at":"2026-08-29T00:13:55.860Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T00:17:37.107Z","type":"tick-end","cycle":157,"mergeSafe":false,"nextRunAt":"2026-08-29T00:29:04.453Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T00:26:02.298Z","type":"tick-start","cycle":158,"pid":7164}
+{"at":"2026-08-29T00:26:02.594Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T00:29:45.391Z","type":"tick-end","cycle":158,"mergeSafe":false,"nextRunAt":"2026-08-29T00:41:11.187Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T00:29:46.450Z","type":"tick-start","cycle":159,"pid":12972}
+{"at":"2026-08-29T00:29:46.767Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T00:33:29.417Z","type":"tick-end","cycle":159,"mergeSafe":false,"nextRunAt":"2026-08-29T00:44:55.783Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T00:41:02.487Z","type":"tick-start","cycle":160,"pid":14276}
+{"at":"2026-08-29T00:41:02.918Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T00:43:54.097Z","type":"tick-end","cycle":160,"mergeSafe":false,"nextRunAt":"2026-08-29T00:56:11.978Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T00:43:55.118Z","type":"tick-start","cycle":161,"pid":12280}
+{"at":"2026-08-29T00:43:55.422Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T00:47:36.954Z","type":"tick-end","cycle":161,"mergeSafe":false,"nextRunAt":"2026-08-29T00:59:04.005Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T00:56:02.323Z","type":"tick-start","cycle":162,"pid":2316}
+{"at":"2026-08-29T00:56:02.633Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T00:59:44.201Z","type":"tick-end","cycle":162,"mergeSafe":false,"nextRunAt":"2026-08-29T01:11:11.306Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T00:59:45.205Z","type":"tick-start","cycle":163,"pid":9432}
+{"at":"2026-08-29T00:59:45.504Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T01:03:27.787Z","type":"tick-end","cycle":163,"mergeSafe":false,"nextRunAt":"2026-08-29T01:14:54.057Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T01:11:02.526Z","type":"tick-start","cycle":164,"pid":15116}
+{"at":"2026-08-29T01:11:02.852Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T01:13:54.063Z","type":"tick-end","cycle":164,"mergeSafe":false,"nextRunAt":"2026-08-29T01:26:11.802Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T01:13:55.057Z","type":"tick-start","cycle":165,"pid":14056}
+{"at":"2026-08-29T01:13:55.356Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T01:17:37.053Z","type":"tick-end","cycle":165,"mergeSafe":false,"nextRunAt":"2026-08-29T01:29:03.866Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T01:26:02.371Z","type":"tick-start","cycle":166,"pid":7812}
+{"at":"2026-08-29T01:26:02.694Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T01:29:45.485Z","type":"tick-end","cycle":166,"mergeSafe":false,"nextRunAt":"2026-08-29T01:41:11.261Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T01:29:46.476Z","type":"tick-start","cycle":167,"pid":15344}
+{"at":"2026-08-29T01:29:46.804Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T01:33:29.592Z","type":"tick-end","cycle":167,"mergeSafe":false,"nextRunAt":"2026-08-29T01:44:55.424Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T01:41:02.559Z","type":"tick-start","cycle":168,"pid":14924}
+{"at":"2026-08-29T01:41:02.901Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T01:43:53.313Z","type":"tick-end","cycle":168,"mergeSafe":false,"nextRunAt":"2026-08-29T01:56:11.610Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T01:43:54.290Z","type":"tick-start","cycle":169,"pid":1600}
+{"at":"2026-08-29T01:43:54.595Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T01:47:38.617Z","type":"tick-end","cycle":169,"mergeSafe":false,"nextRunAt":"2026-08-29T01:59:03.295Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T01:56:02.354Z","type":"tick-start","cycle":170,"pid":11480}
+{"at":"2026-08-29T01:56:02.664Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T01:59:45.010Z","type":"tick-end","cycle":170,"mergeSafe":false,"nextRunAt":"2026-08-29T02:11:11.349Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T01:59:46.052Z","type":"tick-start","cycle":171,"pid":12640}
+{"at":"2026-08-29T01:59:46.347Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T02:03:28.179Z","type":"tick-end","cycle":171,"mergeSafe":false,"nextRunAt":"2026-08-29T02:14:54.870Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T02:11:02.657Z","type":"tick-start","cycle":172,"pid":14600}
+{"at":"2026-08-29T02:11:03.018Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T02:14:43.972Z","type":"tick-end","cycle":172,"mergeSafe":false,"nextRunAt":"2026-08-29T02:26:11.870Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T02:14:45.000Z","type":"tick-start","cycle":173,"pid":13516}
+{"at":"2026-08-29T02:14:45.348Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T02:18:28.658Z","type":"tick-end","cycle":173,"mergeSafe":false,"nextRunAt":"2026-08-29T02:29:53.891Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T02:26:02.376Z","type":"tick-start","cycle":174,"pid":10372}
+{"at":"2026-08-29T02:26:02.682Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T02:29:45.839Z","type":"tick-end","cycle":174,"mergeSafe":false,"nextRunAt":"2026-08-29T02:41:11.439Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T02:29:46.852Z","type":"tick-start","cycle":175,"pid":13952}
+{"at":"2026-08-29T02:29:47.171Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T02:33:29.404Z","type":"tick-end","cycle":175,"mergeSafe":false,"nextRunAt":"2026-08-29T02:44:55.806Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T02:41:02.637Z","type":"tick-start","cycle":176,"pid":13468}
+{"at":"2026-08-29T02:41:02.979Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T02:44:44.864Z","type":"tick-end","cycle":176,"mergeSafe":false,"nextRunAt":"2026-08-29T02:56:11.855Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T02:44:45.868Z","type":"tick-start","cycle":177,"pid":15076}
+{"at":"2026-08-29T02:44:46.183Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T02:48:28.181Z","type":"tick-end","cycle":177,"mergeSafe":false,"nextRunAt":"2026-08-29T02:59:54.736Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T02:56:02.383Z","type":"tick-start","cycle":178,"pid":12240}
+{"at":"2026-08-29T02:56:02.691Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T02:59:44.588Z","type":"tick-end","cycle":178,"mergeSafe":false,"nextRunAt":"2026-08-29T03:11:11.381Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T02:59:45.657Z","type":"tick-start","cycle":179,"pid":728}
+{"at":"2026-08-29T02:59:45.963Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T03:03:27.709Z","type":"tick-end","cycle":179,"mergeSafe":false,"nextRunAt":"2026-08-29T03:14:54.452Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T03:11:02.645Z","type":"tick-start","cycle":180,"pid":7860}
+{"at":"2026-08-29T03:11:02.986Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T03:14:44.185Z","type":"tick-end","cycle":180,"mergeSafe":false,"nextRunAt":"2026-08-29T03:26:12.114Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T03:14:45.184Z","type":"tick-start","cycle":181,"pid":12352}
+{"at":"2026-08-29T03:14:45.494Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T03:18:27.489Z","type":"tick-end","cycle":181,"mergeSafe":false,"nextRunAt":"2026-08-29T03:29:53.992Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T03:26:02.551Z","type":"tick-start","cycle":182,"pid":12752}
+{"at":"2026-08-29T03:26:02.867Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T03:29:45.166Z","type":"tick-end","cycle":182,"mergeSafe":false,"nextRunAt":"2026-08-29T03:41:11.614Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T03:29:46.171Z","type":"tick-start","cycle":183,"pid":1436}
+{"at":"2026-08-29T03:29:46.480Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T03:33:29.382Z","type":"tick-end","cycle":183,"mergeSafe":false,"nextRunAt":"2026-08-29T03:44:55.202Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T03:41:02.664Z","type":"tick-start","cycle":184,"pid":14256}
+{"at":"2026-08-29T03:41:03.001Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T03:44:44.669Z","type":"tick-end","cycle":184,"mergeSafe":false,"nextRunAt":"2026-08-29T03:56:11.769Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T03:44:45.698Z","type":"tick-start","cycle":185,"pid":12312}
+{"at":"2026-08-29T03:44:45.996Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T03:48:28.519Z","type":"tick-end","cycle":185,"mergeSafe":false,"nextRunAt":"2026-08-29T03:59:54.644Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T03:56:02.421Z","type":"tick-start","cycle":186,"pid":2848}
+{"at":"2026-08-29T03:56:02.743Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T03:59:45.537Z","type":"tick-end","cycle":186,"mergeSafe":false,"nextRunAt":"2026-08-29T04:11:11.391Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T03:59:46.560Z","type":"tick-start","cycle":187,"pid":11416}
+{"at":"2026-08-29T03:59:46.854Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T04:03:30.159Z","type":"tick-end","cycle":187,"mergeSafe":false,"nextRunAt":"2026-08-29T04:14:55.340Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T04:11:02.830Z","type":"tick-start","cycle":188,"pid":13956}
+{"at":"2026-08-29T04:11:03.173Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T04:14:45.367Z","type":"tick-end","cycle":188,"mergeSafe":false,"nextRunAt":"2026-08-29T04:26:12.244Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T04:14:46.370Z","type":"tick-start","cycle":189,"pid":15180}
+{"at":"2026-08-29T04:14:46.671Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T04:18:29.427Z","type":"tick-end","cycle":189,"mergeSafe":false,"nextRunAt":"2026-08-29T04:29:55.390Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T04:26:02.425Z","type":"tick-start","cycle":190,"pid":1760}
+{"at":"2026-08-29T04:26:02.730Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T04:29:45.700Z","type":"tick-end","cycle":190,"mergeSafe":false,"nextRunAt":"2026-08-29T04:41:11.393Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T04:29:46.682Z","type":"tick-start","cycle":191,"pid":3932}
+{"at":"2026-08-29T04:29:46.986Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T04:33:30.846Z","type":"tick-end","cycle":191,"mergeSafe":false,"nextRunAt":"2026-08-29T04:44:55.552Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T04:41:02.632Z","type":"tick-start","cycle":192,"pid":768}
+{"at":"2026-08-29T04:41:02.986Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T04:44:44.279Z","type":"tick-end","cycle":192,"mergeSafe":false,"nextRunAt":"2026-08-29T04:56:11.924Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T04:44:45.293Z","type":"tick-start","cycle":193,"pid":15200}
+{"at":"2026-08-29T04:44:45.594Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T04:48:28.296Z","type":"tick-end","cycle":193,"mergeSafe":false,"nextRunAt":"2026-08-29T04:59:54.120Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T04:56:02.453Z","type":"tick-start","cycle":194,"pid":7544}
+{"at":"2026-08-29T04:56:02.780Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T04:59:45.526Z","type":"tick-end","cycle":194,"mergeSafe":false,"nextRunAt":"2026-08-29T05:11:11.450Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T04:59:46.527Z","type":"tick-start","cycle":195,"pid":6516}
+{"at":"2026-08-29T04:59:46.832Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T05:03:37.019Z","type":"tick-end","cycle":195,"mergeSafe":false,"nextRunAt":"2026-08-29T05:14:55.424Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T05:11:02.659Z","type":"tick-start","cycle":196,"pid":1436}
+{"at":"2026-08-29T05:11:03.008Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T05:14:44.296Z","type":"tick-end","cycle":196,"mergeSafe":false,"nextRunAt":"2026-08-29T05:26:11.816Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T05:14:45.283Z","type":"tick-start","cycle":197,"pid":9664}
+{"at":"2026-08-29T05:14:45.592Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}
+{"at":"2026-08-29T05:18:27.714Z","type":"tick-end","cycle":197,"mergeSafe":false,"nextRunAt":"2026-08-29T05:29:54.179Z","requiresAi":["local-gates"],"aiAction":"state\\blocker-repair\\DESKTOP_AI_NEXT_ACTION.md"}
+{"at":"2026-08-29T05:26:04.149Z","type":"tick-start","cycle":198,"pid":12924}
+{"at":"2026-08-29T05:26:04.626Z","type":"toolchain-bootstrap","ok":true,"code":0,"tail":"[TOOLCHAIN_V6] PASS apply=false installed=1/5\n\nError: unknown flag: --version\nerror during command execution: unknown flag: --version"}

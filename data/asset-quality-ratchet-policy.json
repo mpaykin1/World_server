@@ -40,7 +40,8 @@
     "/payload/assets/fonts/",
     "/payload/assets/hanzi-strokes/",
     "/shared/panorama360-source/",
-    "/shared/panorama360/"
+    "/shared/panorama360/",
+    "/reference/"
   ],
   "evidenceFile": "QUALITY_CHANGE_EVIDENCE.json",
   "rules": {

@@ -1,9 +1,9 @@
 {
   "schemaVersion": "1.0.0",
   "system": "GAME_MOTION_AUDIT",
-  "generatedAt": "2026-08-28T14:13:19.380Z",
-  "filesScanned": 115,
-  "opportunityFiles": 93,
+  "generatedAt": "2026-08-29T05:29:05.960Z",
+  "filesScanned": 119,
+  "opportunityFiles": 97,
   "opportunities": [
     {
       "file": "apps/ai-3d/client.js",
@@ -676,6 +676,62 @@
           "signals": [
             "particle",
             "water"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/cinematic-scene-adapter-contract.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "wind"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/cinematic-temporal-quality-governor.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "wind"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/cinematic-visibility-supervisor.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "sign",
+            "wind"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "shared/cinematic-voxel-quality-guard.js",
+      "hits": [
+        {
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "sign",
+            "wind"
+          ]
+        },
+        {
+          "category": "effects",
+          "signals": [
+            "fire",
+            "particle"
           ]
         }
       ]

@@ -1,0 +1,50 @@
+{
+  "generatedAt": "2026-08-29T05:28:44.750Z",
+  "tools": {
+    "gltfpack": {
+      "available": false,
+      "version": ""
+    },
+    "basisu": {
+      "available": false,
+      "version": ""
+    },
+    "toktx": {
+      "available": false,
+      "version": ""
+    },
+    "ffmpeg": {
+      "available": false,
+      "version": ""
+    }
+  },
+  "policy": {
+    "meshopt": {
+      "enabled": false,
+      "commands": [
+        "-cc",
+        "-tc",
+        "-kn",
+        "-km"
+      ],
+      "note": "Use gltfpack only on generated/imported assets, preserve original source."
+    },
+    "ktx2": {
+      "enabled": false,
+      "mode": "ETC1S/UASTC by importance",
+      "hero": "UASTC or uncompressed if artifact risk",
+      "far": "ETC1S"
+    },
+    "atlas": {
+      "textureArraysPreferred": true,
+      "materialMergeOnlyWhenVisuallyEquivalent": true
+    },
+    "instancing": {
+      "staticRepeatThreshold": 8,
+      "clusterByMaterial": true,
+      "clusterCellMeters": 16
+    },
+    "applyRequested": false
+  },
+  "pass": true
+}

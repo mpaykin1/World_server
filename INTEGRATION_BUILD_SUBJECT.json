@@ -1,9 +1,9 @@
 {
   "schemaVersion": "2.0.0",
-  "commit": "c854c74515ec342f86af7d554443ef411f115e28",
+  "commit": "d0abf20b66efa729709fc015261907c8b98d3151",
   "branch": "ai/opencode/multi-ai-peer-improvement",
-  "merkleRoot": "f07aad7060e5f7790ae0a197f34ed033a86b4a88ac2dbe5a0c68b306e1ec7082",
-  "latestSnapshot": "2026-08-28T14-16-46-648Z-pre-control-plane-f07aad7060e5",
+  "merkleRoot": "6320e853f84a7c34a4ebe42a5d7bef7c2c5b5962a75d0edb51d757295d961d3f",
+  "latestSnapshot": "2026-08-29T05-28-02-007Z-pre-control-plane-6320e853f84a",
   "capabilityRegistry": "0b73d394176aba3c926b0039e9c3d8b9fecede3a0023d055d3725242c99edb16",
   "policy": "e6cd0b539e53e58c2b7a6ec929e5d4e4baa8cca62afdaf2ae4f81910d4b5fd3a"
 }

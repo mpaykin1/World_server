@@ -1,6 +1,6 @@
 {
   "schemaVersion": "7.4.0",
-  "generatedAt": "2026-08-28T14:17:10.692Z",
+  "generatedAt": "2026-08-29T05:28:37.983Z",
   "pass": true,
   "nodes": [
     {
@@ -8,8 +8,8 @@
       "type": "control-plane",
       "file": "CONTROL_PLANE_REPORT.json",
       "keys": {
-        "traceId": "a9d3e19ae185d4c6efd1ccea2587f59d",
-        "traceparent": "00-a9d3e19ae185d4c6efd1ccea2587f59d-18423daa37ed97bb-01"
+        "traceId": "705cb52869e85892309ba4d2d2a3dd63",
+        "traceparent": "00-705cb52869e85892309ba4d2d2a3dd63-81bd9d158ddad746-01"
       }
     },
     {

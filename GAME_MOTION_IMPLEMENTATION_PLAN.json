@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0.0",
   "system": "GAME_MOTION_PLAN",
-  "generatedAt": "2026-08-28T14:13:19.504Z",
-  "files": 93,
+  "generatedAt": "2026-08-29T05:29:06.140Z",
+  "files": 97,
   "plans": [
     {
       "file": "apps/ai-3d/client.js",
@@ -829,6 +829,72 @@
           "signals": [
             "tree",
             "lamp",
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/cinematic-scene-adapter-contract.js",
+      "tasks": [
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/cinematic-temporal-quality-governor.js",
+      "tasks": [
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/cinematic-visibility-supervisor.js",
+      "tasks": [
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "sign",
+            "wind"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        }
+      ]
+    },
+    {
+      "file": "shared/cinematic-voxel-quality-guard.js",
+      "tasks": [
+        {
+          "priority": "P2",
+          "category": "effects",
+          "signals": [
+            "fire",
+            "particle"
+          ],
+          "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."
+        },
+        {
+          "priority": "P3",
+          "category": "environment",
+          "signals": [
+            "lamp",
+            "sign",
             "wind"
           ],
           "rule": "Use procedural secondary motion with visibility/distance LOD and quality budget."

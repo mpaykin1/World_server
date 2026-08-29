@@ -1,11 +1,36 @@
 {
   "schemaVersion": "2.0.0",
-  "generatedAt": "2026-08-28T14:16:46.628Z",
-  "merkleRoot": "f07aad7060e5f7790ae0a197f34ed033a86b4a88ac2dbe5a0c68b306e1ec7082",
+  "generatedAt": "2026-08-29T05:29:11.489Z",
+  "merkleRoot": "f189650bcc24a632d87ad75f447b4765be4a8a46a1ce809c23fd07d0662a52c5",
   "nodes": [
     {
+      "path": ".cinematic-voxel-guard-backup-20260828-190316/DESKTOP_AI_INSTALL_AND_VERIFY.md",
+      "sha256": "ea64f340f0d12026f47211b5a318c8ee0f5eea788ea925f06b7f3600c6ed8424",
+      "dependencies": []
+    },
+    {
+      "path": ".cinematic-voxel-guard-backup-20260828-190316/apps/voxel-world/index.html",
+      "sha256": "e56a708295f834190dac8fba1f5e28d851621aeb2a75c64e1c8b6879255451fa",
+      "dependencies": []
+    },
+    {
+      "path": ".cinematic-voxel-guard-backup-20260828-190316/data/error-prevention-registry.json",
+      "sha256": "daba46955b1f3e37366b3790f02c1e0dc70ed109edde8b2242319726f11fcdb3",
+      "dependencies": []
+    },
+    {
+      "path": ".cinematic-voxel-guard-backup-20260828-190316/data/visual-quality-policy.json",
+      "sha256": "5473e7d8eae637047d567c5a6b3e373d6c607edb8b39ae37f591878c2e6aa088",
+      "dependencies": []
+    },
+    {
+      "path": ".cinematic-voxel-guard-backup-20260828-190316/package.json",
+      "sha256": "407e393d81f61bb0973813494d6697a4bc4dc2e9bac1fad39f10054527b85b52",
+      "dependencies": []
+    },
+    {
       "path": ".claude/launch.json",
-      "sha256": "85e7fcc4a6f8f5e30655b9d56db7fe0a78144d3c3847b13fe8dbcf8e8d6cbde0",
+      "sha256": "afee63cd0f77671e5d129ac2d25c3594db8a8cc557278a344305021edf45e2a0",
       "dependencies": []
     },
     {
@@ -19,13 +44,18 @@
       "dependencies": []
     },
     {
+      "path": ".github/workflows/cinematic-voxel-quality.yml",
+      "sha256": "6837294d10af8d81f7e0f49001806e3c1a9cdf0744aff69f5203d257cdf64092",
+      "dependencies": []
+    },
+    {
       "path": ".github/workflows/game-motion-oss-watch.yml",
       "sha256": "0e829870a8cb7ba76e4b809c2f1ce511374896c7f7edd847e70b48fa1160462d",
       "dependencies": []
     },
     {
       "path": ".github/workflows/production-quality-feedback.yml",
-      "sha256": "c65697cd54b1ad28220a139cf50cf7711b938c5b10647b07c62531c7ba149699",
+      "sha256": "2e8827fbbed57bdc35224006a884fe6774c9821f88d722d0871cbce3576bf388",
       "dependencies": []
     },
     {
@@ -95,7 +125,7 @@
     },
     {
       "path": "ADAPTER_SANDBOX_STATUS.json",
-      "sha256": "8ca22c487badd0e611772ea6b7743cc391eedc9e42fbc962310399ccef861393",
+      "sha256": "ab40f27df931e89e3ee718c2c773385950c3be24ed426ac378b9e56b81bb0296",
       "dependencies": []
     },
     {
@@ -135,12 +165,12 @@
     },
     {
       "path": "ASSET_DELTA_STATUS.json",
-      "sha256": "ec72d76cd33df7b80da1af67c4096b076169aafd28ef44bbb8ea13ade31bb96c",
+      "sha256": "7b7feb488dafc4142cfe51cd65ae552e80a68214ad51101803140e527fcbc354",
       "dependencies": []
     },
     {
       "path": "ASSET_INGESTION_PLAN.json",
-      "sha256": "f4df537387e6286679d8866709e53b2f62a88347bb2496329946a0a0aafe9406",
+      "sha256": "0ba32fee10b973ab23cfa6f147b2701ee21570c063fedc10725d60ea0dfe1095",
       "dependencies": []
     },
     {
@@ -150,12 +180,12 @@
     },
     {
       "path": "ASSET_REGISTRY.json",
-      "sha256": "cbe75574ab1632a71e673a43a9999de234873a0157fb8e9662911464e778692a",
+      "sha256": "a5cc824616b3117894c478988256d7dd4d79565ffe08318955b5e02c56d8f960",
       "dependencies": []
     },
     {
       "path": "AUDIO_VARIATION_REPORT.json",
-      "sha256": "2ac639669836a0ee65bb78c26f0b6c6c119e8b8b5f41dce0f3a209a8ff3c219a",
+      "sha256": "88561b6eb356181df3dec79a823fabf1d2c51cd2e8d2636d8f5d1fcf2712a74e",
       "dependencies": []
     },
     {
@@ -165,47 +195,57 @@
     },
     {
       "path": "CAPABILITY_SCHEDULER_STATUS.json",
-      "sha256": "2e16582850628cbfa96b984fa8c967434c57f1c7f45d539b9a22a1573360ebeb",
+      "sha256": "aa885f04f34ebf0e69c40e1eba339f0d2efdfbba9f21158f4e227cdf8becdede",
       "dependencies": []
     },
     {
       "path": "CAS_DISCOVERY_STATUS.json",
-      "sha256": "dd152c7473d389ffc302459f54b35c64bcba4bd17f474e8060b63f741f610b45",
+      "sha256": "2f8c9509fb40313465d6a2733241a0bb989fd84d1b3560bd3b3ebadc1ccc1a09",
       "dependencies": []
     },
     {
       "path": "CAS_INDEX.json",
-      "sha256": "a8bb2ac5434612512457c901266e04b987eb9e906c053afe8a7f982a43382062",
+      "sha256": "2125ac90b42f12327bf5f6f2f7c34a6e040759b51bb83bb6c793a525b0d45b24",
       "dependencies": []
     },
     {
       "path": "CAS_REDUNDANCY_STATUS.json",
-      "sha256": "5e79d1aaf189aa5b1f24400fbf1735e352cedc9ed9e4371ae606011f1d239d49",
+      "sha256": "51af06012abeefcd266951710dca9e6253aad11733ea15b87331b3b06e10b9f7",
       "dependencies": []
     },
     {
       "path": "CAS_REPLICATION_STATUS.json",
-      "sha256": "e74526b90889bdf3b9ed9be8a20ec2c481de561464c82d0cc0bb3199fa33152a",
+      "sha256": "3b1e97672d2c29649a0d64b36a7b64e375f9d9f89eb8bc21ab4c3a338b52febe",
       "dependencies": []
     },
     {
       "path": "CAUSAL_DEBUGGER_STATUS.json",
-      "sha256": "c736ea967ac58d3a1faca4e5a8108fcf7280e31bd31e47737cb8717ad0407df9",
+      "sha256": "cec80629a81833a095466d9e4ac2796f4e6daa34b6f63c61616ef384b99d5e34",
       "dependencies": []
     },
     {
       "path": "CAUSAL_INCIDENT_GRAPH.json",
-      "sha256": "6a729c8d5c1331cad5ae2f79e621f18b622285d948a168a0a87909b06c38076f",
+      "sha256": "0fcf5086a1af706fef32b81cecd39158af072cf0d4203c033de4e5d0a20c93b4",
       "dependencies": []
     },
     {
       "path": "CHANGE_IMPACT_MATRIX.json",
-      "sha256": "469012f0329f2a11ee5d148615325104fa782609f9c76c422efa254499df8f9a",
+      "sha256": "9bbf50dac82697435d44a5e222fad25636887ae33af063535dd16cb81ceec822",
       "dependencies": []
     },
     {
       "path": "CHARACTERFORGE_CPU_INSTALL.json",
       "sha256": "6118d7dd3b742e588584cff36148fc826a157082bc158a57153e1aadbaa5a29a",
+      "dependencies": []
+    },
+    {
+      "path": "CINEMATIC_ASSET_PIPELINE_REPORT.json",
+      "sha256": "24a435b776e37b4bbca94fde68a1a52d63afb378a1938e33f50f7ff4d4aeca12",
+      "dependencies": []
+    },
+    {
+      "path": "CINEMATIC_V3_QUALITY_REPORT.json",
+      "sha256": "9753133339a6459dbecf0d8cb01be2d20044c503bc7e8c7a9426b518887100e7",
       "dependencies": []
     },
     {
@@ -215,12 +255,12 @@
     },
     {
       "path": "CONFIG_CONTRACT_STATUS.json",
-      "sha256": "bf244ceffc49ce9aacd24131a08b1cdd1bea8f245802054d28701c913fbb0f74",
+      "sha256": "92af207a57dff210ee56f7008600183ab7b4e312bf3d6b6ca9657ee2fac1a235",
       "dependencies": []
     },
     {
       "path": "CONTROL_PLANE_REPORT.json",
-      "sha256": "c933cd5415570389a93ff402efc49d4c83e1071774416b4387eb2f4ecece63c0",
+      "sha256": "74eda14b499c2a41bdd39ec55dc4078eff6894650fa25bc8b0da135cc04a8012",
       "dependencies": []
     },
     {
@@ -230,27 +270,42 @@
     },
     {
       "path": "CRASH_DIAGNOSTICS_REPORT.json",
-      "sha256": "7a605a3a1178a00671207daecc1d0791971ef4c8e378edb1cdc9adabc045ee3b",
+      "sha256": "9cc713efd866222f1384bf1aac6168482dc98cd18d225c3e85c9996a4ecb49f2",
       "dependencies": []
     },
     {
       "path": "CRASH_DIAGNOSTICS_SELFTEST.json",
-      "sha256": "9386dd386680da1d40ea072fc7c01025fd7241f837cddad5f813a2aaeb55aedd",
+      "sha256": "0174d5af650f0d94e90ef5c51571dffd020e8568fbdab1c910e938f5d237a5df",
+      "dependencies": []
+    },
+    {
+      "path": "Cinematic_Voxel_Quality_Guard_V3.zip",
+      "sha256": "a7b2cb32ea0c0f286e5ac21a5cdbbaca24fd951211878ebe66165c2c764d7d28",
+      "dependencies": []
+    },
+    {
+      "path": "DARK_VOXEL_CINEMATIC_100_PATCH_v3.zip",
+      "sha256": "86627ecccbbf89dd78e55f6a574f757872d46bd4af6027c1bfc9f439a4f27426",
       "dependencies": []
     },
     {
       "path": "DB_MIGRATION_COORDINATOR_STATUS.json",
-      "sha256": "5313c96f976951ad6782f081828d2ce1ed77ad5bffd30a7c1b0304d9bcf78911",
+      "sha256": "d15419a0fd94454d87c5b0fc0a693058ab33ff41f5f3ba8592716d4145962f68",
       "dependencies": []
     },
     {
       "path": "DEPENDENCY_GRAPH.json",
-      "sha256": "e59793a6b2072f93638393eaf1d14b61fd3a87a98181ce58f76371b8c1bbf28c",
+      "sha256": "2c27e00ca3a8a885f6d8bfed22cc9f27e2986d167d57530a5d92e9b55be2b9ea",
       "dependencies": []
     },
     {
       "path": "DEPENDENCY_SECURITY_STATUS.json",
-      "sha256": "7c288df358ecf105704cf38f9bc20a98c9ef4b4f7d348a7bbf40846bead35b60",
+      "sha256": "b08a2b73db2d57aaac2e33764d9dcf4362a885d30dccda74149fef6c8b4245f9",
+      "dependencies": []
+    },
+    {
+      "path": "DESKTOP_AI_DARK_VOXEL_REFERENCE_PACK.zip",
+      "sha256": "9554ef1be97b3eca98b19459a3ae0de9a2b82483f6d0f581f346693e17e9da26",
       "dependencies": []
     },
     {
@@ -260,7 +315,7 @@
     },
     {
       "path": "DESKTOP_AI_INSTALL_AND_VERIFY.md",
-      "sha256": "ea64f340f0d12026f47211b5a318c8ee0f5eea788ea925f06b7f3600c6ed8424",
+      "sha256": "155c907e32f915debf7a1d183dfcefcaf41c1ad15eadd4d066f09f7c6eaa5101",
       "dependencies": []
     },
     {
@@ -280,12 +335,12 @@
     },
     {
       "path": "DESKTOP_AI_PROTOCOL_REPORT.json",
-      "sha256": "e5255cda2718f62732e6406302f353766d1c4a0a7feef364e3e50f9692ccc85d",
+      "sha256": "f617d37205d7bd6e38d2bb63bbfbf2587e5b19fe1ce12be1ac8ee93581605167",
       "dependencies": []
     },
     {
       "path": "DESKTOP_AI_REPORT_VALIDATION.json",
-      "sha256": "f288fb59095c7cea76ecd5b40b8317e0bcdf16281729066f1d2f0e987fee94ed",
+      "sha256": "944a520cf3cd8ef844837b80d156ae4c9f0def0e0a4a958f71616af41b24f17a",
       "dependencies": []
     },
     {
@@ -295,27 +350,27 @@
     },
     {
       "path": "DEVICE_EXECUTOR_STATUS.json",
-      "sha256": "86ef9d6d7c1fa46d2b6d8b5806af465468341fde964d67d697a31304bd586594",
+      "sha256": "b7571b2a5e3c09f074ddfe5a0f3d94a17acce3a0a5108d0c42471ae22cdbd8d4",
       "dependencies": []
     },
     {
       "path": "DEVICE_LAB_STATUS.json",
-      "sha256": "b9167a475dbb6fe828529648d5e4f839a3273ed0808c1c30003c6572e904ee82",
+      "sha256": "b6558badb4ecdee80bbc08e76c5f07b5e980f686a92cad084d3874c3a82c7e16",
       "dependencies": []
     },
     {
       "path": "DEVICE_WORKER_STATUS.json",
-      "sha256": "597444bb25d0a09351469331c6cafffa5ed33659fea41c546286c72ccbdf2730",
+      "sha256": "d5263819b7ac508558e4cfd144ac0babb8dae0ad48d65f9a97f733b3cdbd947f",
       "dependencies": []
     },
     {
       "path": "DISASTER_RECOVERY_STATUS.json",
-      "sha256": "08931b262362c2765d4da29ee7dbfc1961c8f62b28cb73e8362ba040a1848bc5",
+      "sha256": "66132b564b7d931d29eb8e754bf632e45701d5aa2e0a197ba06b9cc11fa9600f",
       "dependencies": []
     },
     {
       "path": "DISASTER_RECOVERY_VERIFY_REPORT.json",
-      "sha256": "2e9aaa47515fbe5d0f80b9ed7fab833b2c7fb965f0f35ce57aecc770a1634d72",
+      "sha256": "3f76ef97defc0420aa882e91d2e36b2f96f155f7d38883263b7c13cb7ca615f3",
       "dependencies": []
     },
     {
@@ -325,32 +380,32 @@
     },
     {
       "path": "DISTRIBUTED_CAS_STATUS.json",
-      "sha256": "93c56ddc6e77cb83d49fa5ab9caa67e8e87bab896fba8c58ffe788797d5eb954",
+      "sha256": "8f0245325dfe980066c9063ac333e4943be0163cd14b9a1f5021f1acc92d4e54",
       "dependencies": []
     },
     {
       "path": "DREAM_READINESS_REPORT.json",
-      "sha256": "734bf660114c2cb2c6888e5b29cdc2385db1ec23b63b15c36f19702819a9ff09",
+      "sha256": "66da32b79e4bae21f28ad63829ba7087d098996a6f8930311277b423cd92563b",
       "dependencies": []
     },
     {
       "path": "DUPLICATE_SYSTEM_REPORT.json",
-      "sha256": "04d1f989a55168f7822209cc2b80e7babcc5f418e4dfd12ecd7dc51e4c1fe0f7",
+      "sha256": "1bc2d30e97c9ada1d5d66d6f5a699f9d1782d9dae892181994d8cd290f3d11a2",
       "dependencies": []
     },
     {
       "path": "DURABLE_QUEUE_STATUS.json",
-      "sha256": "a0df8543a393273ca1981d3c4cbb764c6e0fc2371f1dffa80ada73e7523e2556",
+      "sha256": "067e735154179991a3b75dd376c115defcd18fcc19cccdec177afdc2ab84fd82",
       "dependencies": []
     },
     {
       "path": "EVIDENCE_QUALITY_REPORT.json",
-      "sha256": "5c83de7a4315395396183c6dad1914b36a7c7d3e5ca065a40b6953b0f057a85d",
+      "sha256": "348725307880abdf936b02f1f5a2ac1ff76c4e217f654fd93067f4c0769f667c",
       "dependencies": []
     },
     {
       "path": "FEATURE_FLAG_STATUS.json",
-      "sha256": "a072c59aedd33be1fb0730f7b271de720450cd8cbcb1422ca2cb337ad6730ea6",
+      "sha256": "456eb1e5e6d5fea050d3e03a44fb624bd916de780bb39ea4debd2e038a8c12bf",
       "dependencies": []
     },
     {
@@ -370,47 +425,47 @@
     },
     {
       "path": "FUNCTION_CERTIFICATION_COVERAGE.json",
-      "sha256": "3cc1f83ae1dc6134bfe453a057e6b9bba5918327a769ebb76291c257ca3c0569",
+      "sha256": "77895adfa5d043095e549ec0d6b8b1d06e522224447b4cd8f48e3e0c253a40c2",
       "dependencies": []
     },
     {
       "path": "FUNCTION_CONTRACT_CANDIDATES.json",
-      "sha256": "40ad3cc0613c0e8f54f9a7d1c7e9bd9336df6aa9f7ab06b71b17c04b551245cc",
+      "sha256": "52e7affa9ddf0ad9c544f3fa5ebeba1a125c6751753085f66a0cf604321c353f",
       "dependencies": []
     },
     {
       "path": "FUNCTION_MONOTONIC_ENHANCEMENT_REPORT.json",
-      "sha256": "09f87587b6b24e193028c5e23b90c7a4198eb92ffc37c43bf887598573d1efeb",
+      "sha256": "255fa2a9217265c6307f5f65825a3372424dad1ae02ae15a1be798f918488bd5",
       "dependencies": []
     },
     {
       "path": "GAMEPLAY_PHYSICAL_CONTRACT_REPORT.json",
-      "sha256": "453b0f39070b850f4442bf69006c1299e7436f8f7d091e328febcc677bb393eb",
+      "sha256": "07f472fc40e6f5bc55ffff423b541e10360f6142e0175c51c07cd721622a57cb",
       "dependencies": []
     },
     {
       "path": "GAME_MOTION_BENCHMARK_REPORT.json",
-      "sha256": "268b3578ce98030ab42a0b1aac69cbbdd449437ef195cf4c4b3982849da38ed0",
+      "sha256": "3fc5b22cd9cc4baefa5ee19a9aefd0b0c097682c76239b595904d8453e009af9",
       "dependencies": []
     },
     {
       "path": "GAME_MOTION_GATE_REPORT.json",
-      "sha256": "dde2ff0a00ad9752f4d25d2e5955bedb035a583c5306b639b8f0e9f7e9280aef",
+      "sha256": "1ecbf916adc60d581629c2fd0c6fc8f5fb707b865444ccfe9c467ca55980b4b7",
       "dependencies": []
     },
     {
       "path": "GAME_MOTION_IMPLEMENTATION_PLAN.json",
-      "sha256": "5d532b9fe58410ce028005afadc57e7362b9d3559658f89a750ed75ea76a4f7f",
+      "sha256": "5455dfcda6c553d12a3bc7045eb9de4e1d5e72fc739c1c0e67b8259f606f32ef",
       "dependencies": []
     },
     {
       "path": "GAME_MOTION_OPPORTUNITIES.json",
-      "sha256": "2029c287e88eeb72ca4e6d5f7e71ec9ffc21a51505ce9774799a839bf507289b",
+      "sha256": "c80659896805008253018a9f685b35084ffe66ca8d53030a31b482dafdfcbcf7",
       "dependencies": []
     },
     {
       "path": "GAME_MOTION_VERIFY_REPORT.json",
-      "sha256": "be2e39d93326a2db59be6b3719f76abb9758a9c3478f78b37509703b62454370",
+      "sha256": "9076027e1ad33525ac3d2b12b6b1cc6401484563780e94915dc2d06fb3201b7f",
       "dependencies": []
     },
     {
@@ -420,7 +475,7 @@
     },
     {
       "path": "GRAPHICS_REGRESSION_GUARD_REPORT.json",
-      "sha256": "20158e35bc246cd44511beac8282abbb4e04fa5cd8b497b4a9bd21c313e6b769",
+      "sha256": "1d692776082b29dd946a0958172b0bf530f66e9dc65de7b3898fc95c12a1e937",
       "dependencies": []
     },
     {
@@ -435,7 +490,7 @@
     },
     {
       "path": "HONEST_100_FUNCTION_REPORT.json",
-      "sha256": "83bc79d3c8505df707283388618c290bf255b51330269953247de8ceb29fb89d",
+      "sha256": "ef372777723c8fc522e216615d28604efb4c9a4a6975e1195a49fcbe7006eaf6",
       "dependencies": []
     },
     {
@@ -450,27 +505,27 @@
     },
     {
       "path": "INK_GLYPH_WORLD_REPORT.json",
-      "sha256": "d3db0510cf9ffdc4f98e83946bd6fa30a32390c083130eebeae1c210dd03ee5d",
+      "sha256": "3be190b8eae5286f7adc1e8c82fb73a5b43246438d38194735bd18dd6b5baaaf",
       "dependencies": []
     },
     {
       "path": "INTEGRATION_BUILD_SUBJECT.json",
-      "sha256": "d82de3f5b9c602a8c6ae04af4cb1d2002b4a5fd50d296b1b96453738f73dde07",
+      "sha256": "346d0cf782b30a740c93deee61e85f198ef9458ccb9e02f78cc7faf80e50191b",
       "dependencies": []
     },
     {
       "path": "INTEGRATION_CHAOS_REPORT.json",
-      "sha256": "03a4871b44a56dbc558e464c68e27e0472a081ac505b55fa988e6317e145b1cd",
+      "sha256": "9896fffb8a8f2b47e45b64f25867bf78f886f61647133edb4dc8ffa7474f952f",
       "dependencies": []
     },
     {
       "path": "INTEGRATION_SELFTEST_REPORT.json",
-      "sha256": "cf3b9ab5519e9f98dfa43d3a043ac5dec99384b24c3bca29958361a9de45aacd",
+      "sha256": "0d797e811283e07e8b49e2364b91d8621fb1628b7c9ad09491e6a627d9aff06a",
       "dependencies": []
     },
     {
       "path": "INTEGRATION_TELEMETRY_STATUS.json",
-      "sha256": "a5e17b142d0c04263e50a14b1aa9d82277238e5f56b38b336507e40e1c8aa360",
+      "sha256": "7b736f56825dce2b6199a419279432d44461aa1f25ac9056bf44467c17bdfaa7",
       "dependencies": []
     },
     {
@@ -480,17 +535,17 @@
     },
     {
       "path": "LEADER_LEASE_SELFTEST.json",
-      "sha256": "b751d95a171d8f4a1e4dd1291d6c5612362aa4c0a1dcac5ade138e00154ea294",
+      "sha256": "f84baea5aa3d7f29a79db211192f3e8b1e57621944eefc20bdd7713f5b8c762c",
       "dependencies": []
     },
     {
       "path": "LEADER_LEASE_STATUS.json",
-      "sha256": "f9255b8dde564b6dac1d63993be01345cea1633ae8709ed9d4280149d951e1ec",
+      "sha256": "ecc672c84619415b4d1287404d816db43aed2b39b5139146b84eb05192bf19cf",
       "dependencies": []
     },
     {
       "path": "LEGACY_EVIDENCE_FACTORY_REPORT.json",
-      "sha256": "448f5cab772f6220a67981f6a76aebec62ea93ceda75a4852c939f285169f0ea",
+      "sha256": "4ff65f14b0e4f26ab2758962a07774eb56f64aa43cb151352e276c64d28af501",
       "dependencies": []
     },
     {
@@ -505,57 +560,57 @@
     },
     {
       "path": "LONG_SOAK_HARNESS_STATUS.json",
-      "sha256": "7c7deadac48b664ce9f27387f31127f5d98088eb1143c2ff292fbb9e8768c2d8",
+      "sha256": "7d3c78f9bb64b0dc93d58d91af52c7c19167b5f208f8f041c564f64a324acc3a",
       "dependencies": []
     },
     {
       "path": "MIGRATION_FENCING_STATUS.json",
-      "sha256": "aaea1e1e2332d972b5e797042d26807c3ab083b9cd10e4a6e4dd6a0a100d0a2e",
+      "sha256": "02fce3e7b402a5c2c2c46ce0c5445f6bbbeab038f27448dd38919acfb1c73993",
       "dependencies": []
     },
     {
       "path": "MODEL_CHECK_REPORT.json",
-      "sha256": "5e84e44ec1f608f14945eb4b0e68539b937a73b4a87621de98edef53ea4887e3",
+      "sha256": "19e57503241474e9ad26f52fa07aad29c856b6f5f6b52f1b846fc4d5708bd4f6",
       "dependencies": []
     },
     {
       "path": "NATIVE_AST_DATAFLOW_REPORT.json",
-      "sha256": "a07bd1324107d433bed05fa43d29b021048d4d72c7964e9042f343bc48af824c",
+      "sha256": "df2efe835b5bae369126a55e2d30538c0ee59eef47e20e4c59bc8254ee510714",
       "dependencies": []
     },
     {
       "path": "NATIVE_CAUSAL_COLLECTOR_STATUS.json",
-      "sha256": "c4c49afbf42e48022e7845407d08ccca927c6da5efd2b994a2c3ea7a57986b52",
+      "sha256": "7701fddd51dc1132f034d400a82b6aa68c482ed06b1bc4330d991489b92d03f3",
       "dependencies": []
     },
     {
       "path": "ORCHESTRATOR_CONTINUITY_REPORT.json",
-      "sha256": "a485c85a8274f35a1de1ea8a71e301672683a8929f512551e789a133b6516834",
+      "sha256": "2cbb96501b34f835e3617c94bd6d8399ff3989fed2706358e314173ad17d1f18",
       "dependencies": []
     },
     {
       "path": "ORCHESTRATOR_INVARIANT_MODEL_REPORT.json",
-      "sha256": "a0396fb91301f738a291cf29062ce1b0322889347ddc9827f0c2f7d6f83f2acf",
+      "sha256": "ae84fb496e1c9234789e25c2b9bd406b553f4e694910b0f1546c89701dfc356b",
       "dependencies": []
     },
     {
       "path": "ORCHESTRATOR_MINIMAL_REPRO_STATUS.json",
-      "sha256": "501f22219d5a39583d3b49fde77ecc5ccb03abf02429844e92e799a79f8a0063",
+      "sha256": "1141325d4e7ae085c49054cc026feda75f49d19675af0024e835ca1e7d9e37f6",
       "dependencies": []
     },
     {
       "path": "ORCHESTRATOR_MONITOR_LIFECYCLE_STATUS.json",
-      "sha256": "4663e07d959b1798a8fc8303c4c349618554f4ea064fdb38895405c9d9c10ede",
+      "sha256": "0695589ad0aaf315e6809e639ca0788573fcb8745298d32531f9330bb48888e0",
       "dependencies": []
     },
     {
       "path": "ORCHESTRATOR_PATCH_SAFETY_STATUS.json",
-      "sha256": "3ac597d44459766f22f17617c9c5b008097424a871b2c3ec0d0933bb91cf8fba",
+      "sha256": "7244fbbe6e132e46578ae536c566fada56490304f71bb7ae9a7f3ddc232592c7",
       "dependencies": []
     },
     {
       "path": "ORCHESTRATOR_SUPERVISOR_STATUS.json",
-      "sha256": "473a9a6533cbb70a7a422b3023c547a2cdbd3f5f9221cbe727da53a9154dd417",
+      "sha256": "3f0340149628eb5e4d25bb614a9dfbf4535594863597b4eeca2cf3f4e5984460",
       "dependencies": []
     },
     {
@@ -585,7 +640,7 @@
     },
     {
       "path": "PHYSICAL_DEVICE_FLEET_STATUS.json",
-      "sha256": "2d417acbb0a72b5ed0703e1346fa926cf7af96db88d44f7a7e8a6e175ea7e4f6",
+      "sha256": "3825c563506b4c97e989e1ef75a73d27e8a1b421dfa351c189e846fe93dceb3a",
       "dependencies": []
     },
     {
@@ -595,7 +650,7 @@
     },
     {
       "path": "POLICY_DECISION_REPORT.json",
-      "sha256": "3116f5dce788c92c584901b94887473613065d73bc0628229bcba8b837f45cfe",
+      "sha256": "e224b13f08b9cd97d0e5e58749935ac76976e977775d012841c3f08d8e429cb5",
       "dependencies": []
     },
     {
@@ -690,42 +745,42 @@
     },
     {
       "path": "PRODUCTION_SAFETY_SELFTEST.json",
-      "sha256": "e303fddbe85902d5202006cf78ec8016f56c6a35095af34aaf460e067da2888f",
+      "sha256": "9587edaa744f9829e4c998bd2d2f797a2a32ff1aba18b86c97c5f74f9a5d212f",
       "dependencies": []
     },
     {
       "path": "PRODUCTION_SAFETY_STATUS.json",
-      "sha256": "fc4507adc4c4d54d93913280863ba7cb752f289b67018f2a85ab8eba891f398c",
+      "sha256": "891582cbf6570335a14c95f5f6a1c7b7245162f88a107d9602f402a746d8fe8e",
       "dependencies": []
     },
     {
       "path": "PRODUCTION_SLO_AUTOPILOT_STATUS.json",
-      "sha256": "63d33a3dc23d0dd1362813f5d388834f9ae9beabfcdcba36a20eee3f5d962403",
+      "sha256": "7872d251c8e41ad8119474618a61767cc9e587df052596d4bbd00c838db60209",
       "dependencies": []
     },
     {
       "path": "PROJECT_DIRECTIVE_REPORT.json",
-      "sha256": "cce92234efbf0e80f94b490e7d06016c2019f4e850f1d40890586af1681c2dd2",
+      "sha256": "050a66bc521889a3ef042b20b3baf7af415308d44bc7b9ba1690ca99be047e98",
       "dependencies": []
     },
     {
       "path": "PROJECT_QUALITY_REVIEW.json",
-      "sha256": "70c7bd29025a2cf87da21e182b3347d86c45596abdd128b2f4b029287e4ada34",
+      "sha256": "2a48d41af38c53bb9b16b260da5af1e6202e87b6d3a07f62173e38b6128399ce",
       "dependencies": []
     },
     {
       "path": "PROVENANCE_STATUS.json",
-      "sha256": "86715c158d36a0d7073c1b8bf133399e8ae34602b5018dd5a58a1827cc145272",
+      "sha256": "578e687a946698f25a4b59cac1d9e00107be802ece804cb7831ac1b4ea848b84",
       "dependencies": []
     },
     {
       "path": "QUALITY_AUTOLOOP.log",
-      "sha256": "598c77eced4962e175cb133b96071b9cb083d5441b98e9efc7fd47023eaa8b7d",
+      "sha256": "6197f933df0dc47d8cf46cbcaeb3d7968cc882f47966c4310270cda4a2a14063",
       "dependencies": []
     },
     {
       "path": "QUALITY_CHANGE_IMPACT.json",
-      "sha256": "f374ce40bf9104d46cd5f4a146aa2ad34c39b51c45ef968af0764299602bf0c8",
+      "sha256": "e7d0454648c6a90053083b73e9c1b788dc8aa466c4097c8e341978bf720d7cac",
       "dependencies": []
     },
     {
@@ -750,7 +805,7 @@
     },
     {
       "path": "QUALITY_IMPACT_GRAPH.json",
-      "sha256": "acacd0209b2821cef55841a509cb745a5347b756a83ea783a079e5fd4a1066a5",
+      "sha256": "b6b60f555fdcbf5f0e8563aba2a4c1a170222269fb93166707ca362dd0964cbd",
       "dependencies": []
     },
     {
@@ -765,7 +820,7 @@
     },
     {
       "path": "QUALITY_ISSUE_CANDIDATES.json",
-      "sha256": "46909948f5c704e44e74e1d0ecc5015b2e9f11a2f35266c26475bfbc90711f1a",
+      "sha256": "55f33440e44ab41dd5648736044be603c3cab6b397c9002833f114c56f2170b6",
       "dependencies": []
     },
     {
@@ -775,22 +830,22 @@
     },
     {
       "path": "QUALITY_PLUGIN_CANDIDATES.json",
-      "sha256": "885f65b0fbb8f90517f725dfdf2dd23ee7fed3c59efd28da1bf7a766c143a06d",
+      "sha256": "1dfdf02479a900d59925c90f06a5d971b9a3ad082086e4ff7da05cd3465eb20d",
       "dependencies": []
     },
     {
       "path": "QUALITY_PLUGIN_DISCOVERY.log",
-      "sha256": "b8bb1f1d17be288cb8a38f767b2bf2e34fb0f68b835a6d2f8ed580c846bb0996",
+      "sha256": "03f98f0128595565844ecfc5f02e3d2e4f203c788fa5d33940243bb355d4f0a7",
       "dependencies": []
     },
     {
       "path": "QUALITY_REGRESSION_REPORT.json",
-      "sha256": "364b4c5fc068a087cad1ef8f59277da997c6d10daabe1ae51cff0b8b4cf8fe80",
+      "sha256": "6a17b9c79b09fed12fa7c6ae5cd8d5021dcadd16edc21823fc7dec28edeceb10",
       "dependencies": []
     },
     {
       "path": "QUALITY_REPORT.json",
-      "sha256": "efe1330f0f30317b5f2c97e0b44b4e78c286457d634b633f57ea9dc38a287126",
+      "sha256": "5ac030a4208bd04e1e296b98f158f9dcdaca756d1bd79caeff65bc6d25e0484a",
       "dependencies": []
     },
     {
@@ -810,7 +865,7 @@
     },
     {
       "path": "QUALITY_V6_RUNTIME_VERIFY.json",
-      "sha256": "454e188ded406693035e017805050b16eee9ea4b21689824f0619bc6ebeb50e0",
+      "sha256": "d356e637299a5b695fa99edaacb217a32dcf18a8d6dae555e2f7bd6025d56280",
       "dependencies": []
     },
     {
@@ -820,32 +875,32 @@
     },
     {
       "path": "RECORD_REPLAY_STATUS.json",
-      "sha256": "7aaa6cb873484f14071e323d24fe92c73eabb18bd3c794b4625f8b7896e5ed19",
+      "sha256": "ef4763eab4132835bd2604cb02e41dec3b3ad88ef769b798bf63c25ec39b0f2e",
       "dependencies": []
     },
     {
       "path": "REKOR_MONITOR_REPORT.json",
-      "sha256": "f14068e5c43aceda800cbf7bd7a6990b3e50bcb0838dc491de675f1c38e41116",
+      "sha256": "32e407c54f3a1fc71d059ed15395e79b5b3c127201b596c199b865f78047df59",
       "dependencies": []
     },
     {
       "path": "RELEASE_PROMOTION_DECISION.json",
-      "sha256": "3a06ffcc1b19f998dec274cb419943fe61ede878b01cccbc5f9ad638995b54e3",
+      "sha256": "8849ef54fd0893f50dc53a0fd4d639d7446f03a1aa01ea8765be4afcf756c892",
       "dependencies": []
     },
     {
       "path": "REPRODUCIBLE_BUILD_STATUS.json",
-      "sha256": "e45e8d3a5476634afd78c2e4c015a516adf124a7f0419d05e0d47d84be2e4646",
+      "sha256": "d3f41ff4f6bf408304437e430d74a9f67853af4b8f1196d4b3235337b1fa21d8",
       "dependencies": []
     },
     {
       "path": "SBOM_STATUS.json",
-      "sha256": "3e84ed7ca5514d471e5f3c209f4184d78aab27de4c35428dcb263de4bd688570",
+      "sha256": "83c5a38a43e9941290d59f1212412dff4528b16c3dc5197b063face735acbff4",
       "dependencies": []
     },
     {
       "path": "SEMANTIC_DEPENDENCY_GRAPH.json",
-      "sha256": "7d2865b4a67c3332f2f5610a44c163033db7a3a0f8abde00017f7e756ce5e007",
+      "sha256": "d211ee01befafba8d10e9709b508144ac8d6a892b4cee9bdcb3bc64c78d17766",
       "dependencies": []
     },
     {
@@ -855,12 +910,12 @@
     },
     {
       "path": "SLO_ERROR_BUDGET_STATUS.json",
-      "sha256": "6ec467b50f8b956097311694ee118a510f539053d66096fab499b1b3dd585789",
+      "sha256": "ce300498d2427ff3faf47e411839cf6714a97152f115de29672cee30a00ab5d3",
       "dependencies": []
     },
     {
       "path": "SLSA_PROVENANCE.intoto.json",
-      "sha256": "0a979ec9628491d4524b93294c4312ea19b6f4147fac711011cb941e34d4ce5e",
+      "sha256": "618dbd5ef3bc34d5586b4ffa22e7691aa12f25c2913ab401c5c7a559d646420a",
       "dependencies": []
     },
     {
@@ -870,7 +925,7 @@
     },
     {
       "path": "SOAK_CHAOS_REPORT.json",
-      "sha256": "0e2d0978adb1533286894a2b0423148045f6cdcc87fdc26aaf87ac67016c7a65",
+      "sha256": "eb168ec090376db41aa97d9d659519ad8d6db50cb65b6fd9f9937eae5a4f6813",
       "dependencies": []
     },
     {
@@ -885,7 +940,7 @@
     },
     {
       "path": "SUPPLY_CHAIN_SIGNATURE_STATUS.json",
-      "sha256": "4ba44b619195610bcb1c1027ac7e7a25bdb6631d01ca5085015bd98f92c0979b",
+      "sha256": "0529d1af498475464b263a800fa9b4556944ed4143eb36b16c1c12336f6108f6",
       "dependencies": []
     },
     {
@@ -895,17 +950,17 @@
     },
     {
       "path": "SYSTEM_CONTRACT_REPORT.json",
-      "sha256": "d1577e0de2a2293e486dacee572789db8b90c96eec3ce20bc945e557fdd1cd49",
+      "sha256": "14810ff8c9bc4a3d7b72415560657303b9e3febe6662bde6306cc14f717628a4",
       "dependencies": []
     },
     {
       "path": "SYSTEM_ENHANCEMENT_BACKLOG.json",
-      "sha256": "9dfc4673ef936c401628bbcb1ae36d3e3871e0a8229721893c1869729b76f855",
+      "sha256": "8a8a2c12aba4899c74694f409885d3e97f89a9d7d853499d9d6c11c7b61475ae",
       "dependencies": []
     },
     {
       "path": "SYSTEM_INTEGRATION_REPORT.json",
-      "sha256": "e58d4882d4ec89d804ed63cc2ef25b395176109a77742ead7f311af3995671ba",
+      "sha256": "54d7c9e9a248bcfd6f8c20d746e2ad582211ebc078c76d57e9989ba611370702",
       "dependencies": []
     },
     {
@@ -915,32 +970,32 @@
     },
     {
       "path": "SYSTEM_READINESS_REPORT.json",
-      "sha256": "61345db5edf995235f619d36eab61f2c35488e0d199cad51ed44533421cadbd3",
+      "sha256": "c8a5c723a583c163b26298bbbe92eb90a0eb380568721148613085e134edf7e3",
       "dependencies": []
     },
     {
       "path": "TECHNOLOGY_AUDIT.json",
-      "sha256": "f80558f13dc16ecc5e3b0fbcd46be6fb748c9fbe39b8a238a8eee190c6584eb9",
+      "sha256": "f7de83b254c33ce6506388208e5780d3c829aa055aeb9a40dad5df52ea7d1b73",
       "dependencies": []
     },
     {
       "path": "TECHNOLOGY_CONSENSUS_REPORT.json",
-      "sha256": "8d657f14679fd0abf0359a35d746e6b8adb17111002eed525d2ef45095b85721",
+      "sha256": "e88a33b92a6caff512ee43e73e503e51871e19746bfc0b18ae7efda3877d67a1",
       "dependencies": []
     },
     {
       "path": "TECHNOLOGY_LOCK_REPORT.json",
-      "sha256": "ce41bd7e6af18718d94e29ef5f3c9af3a56aca378415409a47f763246a69d875",
+      "sha256": "32cb8d379f209b7a65d4da0f34ddeb16b357944bd5a56514589d1565305a553e",
       "dependencies": []
     },
     {
       "path": "TECHNOLOGY_ORCHESTRATOR_REPORT.json",
-      "sha256": "cc17a109e79d68d47546e08f9439934997a33f5b54bdf16277f0d71cddd4ef8b",
+      "sha256": "feb55e0e7d1526791e82770fa5c2cfa9c0aa14b6ff8e7da3b50f3fdf8442a29d",
       "dependencies": []
     },
     {
       "path": "TECHNOLOGY_RUNTIME_HEALTH.json",
-      "sha256": "357e5c44973479ba8f5bb1075f9cf1c904fe2d38bd1bd5afba35f53f310e5a0f",
+      "sha256": "7c4ca390d67c6f58354b829f92d377f8106cf01c33083bc559a10bcaf4f193a4",
       "dependencies": []
     },
     {
@@ -955,22 +1010,22 @@
     },
     {
       "path": "TOOLCHAIN_BOOTSTRAP_STATUS.json",
-      "sha256": "f36f24008c4b53843ffa9cc923833c3ab5d6317fb59bc3dc6bf1b1fd58a23987",
+      "sha256": "a5a5b383844b43dc18269e24f8fe183183517728366e1cfc53c45f4021244500",
       "dependencies": []
     },
     {
       "path": "TOOLCHAIN_SECURITY_REPORT.json",
-      "sha256": "6fdfd257c41b6be47b388b129396b53c73e954a856ddb8323dbacd331952edd6",
+      "sha256": "7a1b73d5f677d161677f0f17fe54d309f625033ac9b72e149352b251639a3e13",
       "dependencies": []
     },
     {
       "path": "TRANSACTIONAL_DEPLOY_STATUS.json",
-      "sha256": "af7c7fd4da2a46bdf25a50e3616035fe86feff16f6a67cc4281715ae2d92742a",
+      "sha256": "cf0e8fbe43fe7e14183d35052516ddf7596d7bc063e1a194d4542e5fe9d9db42",
       "dependencies": []
     },
     {
       "path": "UPDATE_TRUST_STATUS.json",
-      "sha256": "da9b1104a238ad40159b5394ba3d070e11229973cd62107ffc28541135986ce1",
+      "sha256": "f3a61bb6e942e538d263269357d35b7bc33ba1e45c7af7798e1342fb3523cbc8",
       "dependencies": []
     },
     {
@@ -1045,17 +1100,17 @@
     },
     {
       "path": "VISUAL_PERCEPTUAL_REPORT.json",
-      "sha256": "975959abccfb1aa2586cfe96586a0b105012c31ce6404f3fb9fe26fd9d29aaba",
+      "sha256": "5657cd0079577cca68efe50acdb38788b4267ec38a3dfaf7aaa3cc75fcdd97c5",
       "dependencies": []
     },
     {
       "path": "WIT_BINDINGS_STATUS.json",
-      "sha256": "94c4cb661dfa72c2a5a4085a87675abda991be6e7ef4c7c2355afdb32dedef62",
+      "sha256": "944a00f3e7333f113161e3d234d4106c9f618a57a291ae6c756d36570fece094",
       "dependencies": []
     },
     {
       "path": "WIT_COMPONENT_STATUS.json",
-      "sha256": "d864aca2d8ad6f4adfab3da9b8904fe5ca503fa11d9b0d16da54af124e36c2c2",
+      "sha256": "9ab36d2214a55990d9c77a9f66ef0dc4ed11fe5862ff24c3657ba45cdeda8c38",
       "dependencies": []
     },
     {
@@ -1070,7 +1125,7 @@
     },
     {
       "path": "WORLD_ANIMATION_SEMANTIC_REPORT.json",
-      "sha256": "93e19b736656dd74ccca045a79bbbe3f3b39837dcd0789e9793523658a3e58f8",
+      "sha256": "834ac0c22a94551378fe65ab04c01704334e0acac90caf0698ce4f719d755019",
       "dependencies": []
     },
     {
@@ -1080,12 +1135,12 @@
     },
     {
       "path": "WORLD_CANDIDATE_LAB_REPORT.json",
-      "sha256": "511e05ebd0d2a2f7dbb0909e6d623ace8adb4c03a4f43d10dff012ea3313d485",
+      "sha256": "c272c621dea71cb1e24d95af3d242e0d2ebddd63166737d058bff2801b0ad76b",
       "dependencies": []
     },
     {
       "path": "WORLD_CPU_GRAPHICS_OPTIMIZATION_REPORT.json",
-      "sha256": "cafa12242d3ceaa855d5f12a5ac6fe0428bb77476c4155d04e9243b3971be5e0",
+      "sha256": "e418744bd32b4ce4963c367f7a47a14545552428106236a1d149565a9ddd66e7",
       "dependencies": []
     },
     {
@@ -1095,42 +1150,42 @@
     },
     {
       "path": "WORLD_DEVICE_PROFILE_MATRIX.json",
-      "sha256": "0d4c6c920f18fe72c60cbeda5623c2ec4d10fe6f64024e44308ab64bc282df03",
+      "sha256": "e187d3824ae3397ce209f6855eb5c440c49c261ce62c67b09373fb9d0b44b13d",
       "dependencies": []
     },
     {
       "path": "WORLD_EVIDENCE_PROVENANCE_REPORT.json",
-      "sha256": "ee228c188706d408305040ba1974546f01de79cac9736c26c0d3249b41f6d6f1",
+      "sha256": "c023b3d995609cb70e8b3c0c310c0822b89a51911973d48b68819320893f1d21",
       "dependencies": []
     },
     {
       "path": "WORLD_FEEDBACK_LEARNER_REPORT.json",
-      "sha256": "ead47d179b11aa3c1e4218746c34a0fe27c4d834dab5dd4617a044672c3304d2",
+      "sha256": "f99051c0c3975815d062b852c1a3ec60d10251629e753c97c18132aa6722c15f",
       "dependencies": []
     },
     {
       "path": "WORLD_GRAPHICS_QUALITY_ROUTING_REPORT.json",
-      "sha256": "8f3d490dda5634089e70524678f9868caad9b12e2df75aa58849909cc0eda5dc",
+      "sha256": "94f7a2e17afdfb275620df705e36199cb845235675e0d7b81c232f286fd23717",
       "dependencies": []
     },
     {
       "path": "WORLD_GRAPHICS_TECHNOLOGY_DRIFT_REPORT.json",
-      "sha256": "b2675c62ff5c9d3d907ffd8c27f9913545b85aeea4dce2fb1e21963d78ce9a96",
+      "sha256": "afc56ea9a5c8d3eb100d0b3540be2c2ceaa7216440a52a9ce56e648eaf86a090",
       "dependencies": []
     },
     {
       "path": "WORLD_GRAPHICS_TECHNOLOGY_INTEGRATION_REPORT.json",
-      "sha256": "108b5f8d087a43dcc2a665ac05860bfdaef004ab1c5f12514e0e5caa9b0c612f",
+      "sha256": "b826d76bd8ebfeafab18012e7246f4473dc3807bcd2d831f05abdc130215aac3",
       "dependencies": []
     },
     {
       "path": "WORLD_GRAPHICS_TECHNOLOGY_REPORT.json",
-      "sha256": "aa6071f82c4edf275cbd23504b19016cc9de6b3d2774dc6321c41f91cd9cb3e8",
+      "sha256": "ba591a03ef9047dd4c633df4f29308072cb4358f0fcd2ead7952d5c1caf03428",
       "dependencies": []
     },
     {
       "path": "WORLD_MATERIAL_SYNTHESIS_REPORT.json",
-      "sha256": "1b763f60ec1ed5bad54ac45368ceb7f69db31703d7680b0c013e75196ab54edf",
+      "sha256": "8a0556d5dfda4ff5a10c8c8110d284c8f0cdbc31e79e98715ca744341525c676",
       "dependencies": []
     },
     {
@@ -1140,17 +1195,17 @@
     },
     {
       "path": "WORLD_QUALITY_AUTOPILOT_PLAN.json",
-      "sha256": "8e45ea65cd9c2011f8356fadb66c2b8a231f01854ddb05b911f2136e3030ceaa",
+      "sha256": "2b5597dfbfddfb32741aee662d0a085d3b5856c1406fc774b065c5ae638c13a1",
       "dependencies": []
     },
     {
       "path": "WORLD_QUALITY_AUTOPILOT_REPORT.json",
-      "sha256": "266a70612baf71800c96ad4952a6c095c2914e8aea115d4b8aa485f1d7da6dd5",
+      "sha256": "74c1954c6de0e3cf5ec5df425fabe1a799fe27637cc5caae5c5ed15a282885fe",
       "dependencies": []
     },
     {
       "path": "WORLD_QUALITY_AUTOPILOT_STATUS.json",
-      "sha256": "23ff19123e63f56e1c2f25e62239158006c4a2c4e176f3cf070cd817599cf5dc",
+      "sha256": "109844dda500a13a561fbd0c16af7f12f142a9130e7d3f48094cd788c8994855",
       "dependencies": []
     },
     {
@@ -1360,12 +1415,12 @@
     },
     {
       "path": "WORLD_QUALITY_EVIDENCE_LEDGER.json",
-      "sha256": "fa3f43a837cf0893b4703747d0f272435f2991ef28860fb97b4e0b2e521cab27",
+      "sha256": "cc5e3251a6ec0c4ee8d76554ebcc234ef5fff3ef1f86c7da5333cf9e05a17a6a",
       "dependencies": []
     },
     {
       "path": "WORLD_QUALITY_SCHEDULER_REPORT.json",
-      "sha256": "9b591ec989e7e866911625520f83c07f81fc361bfef1769f33a2620d6a327258",
+      "sha256": "edb1095955f4864c59b68a5d63e2c89f1311d754db28d40531a0075fc84d37ec",
       "dependencies": []
     },
     {
@@ -1375,22 +1430,27 @@
     },
     {
       "path": "WORLD_RETARGET_CONTRACT_REPORT.json",
-      "sha256": "5440b35852182865b12fb570f4aaf522eaf557bcc3b281f4fedbac1825eb5413",
+      "sha256": "2ceb615cb82e6466dbf6b16d6422682ca71eb8703693907ffd97303c76196c9e",
       "dependencies": []
     },
     {
       "path": "WORLD_RUNTIME_DEPENDENCY_RESILIENCE_REPORT.json",
-      "sha256": "d70da483ed43c1d3548c4191a0486b414e71fc82d21e08eb9e542a453ec85511",
+      "sha256": "67cd8db38caf255c7f7eb916ac022d7d889f44c6af65e8ac4c958b21f014b6e5",
       "dependencies": []
     },
     {
       "path": "WORLD_RUNTIME_QUALITY_REPORT.json",
-      "sha256": "ceba28ccda3b7a70552bce5e89486856af2819ca12d919b673e07984793e5613",
+      "sha256": "ff54b430275eb3c0f27c3e40a86c9b3413db58bd2221670c6565e72544207317",
       "dependencies": []
     },
     {
       "path": "WORLD_SEMANTIC_DETAIL_REPORT.json",
-      "sha256": "74a6f0dec0136b49d2523abe0981c48ec6c958706b03d86d1be3ceb164c61c8a",
+      "sha256": "0d1e8a36f7fab2f1fbc0d0ac54146749e38686747b3a6dd7a6943de201817831",
+      "dependencies": []
+    },
+    {
+      "path": "WORLD_SERVER_ALL_TASKS_MASTER_BUNDLE_2026-08-28.zip",
+      "sha256": "af1dd0fc1ca6ceae787a473007640a16761ca438e00be317d65b71f8a6be3175",
       "dependencies": []
     },
     {
@@ -1425,17 +1485,22 @@
     },
     {
       "path": "WORLD_TECHNOLOGY_CANDIDATE_REPORT.json",
-      "sha256": "43c18e5362dec2456191329f2e48d4100255ca8e13486bd956b0818ffe8bae75",
+      "sha256": "9192de5a3c1d619821bceb674e2a9d0b8a9d4f7c5de8b6be21db8e66a6463795",
       "dependencies": []
     },
     {
       "path": "WORLD_VISIBILITY_OPTIMIZER_REPORT.json",
-      "sha256": "b3fc5d2d2b0c88027cf0922a0aacc37d619c73d0dca2f7a5384ce18eb3266588",
+      "sha256": "631cd83c1689223ae38fdfd0ad5310cfb2f2a14f83ae0a5e8928627083b662f8",
       "dependencies": []
     },
     {
       "path": "WORLD_VISUAL_BASELINE_CANDIDATES.json",
-      "sha256": "6c96c8f30ab9a47ee9416cf6af859f2fa8216a2d9e9f571ce551927334eb7df8",
+      "sha256": "967f4612b4e15f72dcc04f7e4d18738bf2d4a6f37cebbf77367f0e706a4146a7",
+      "dependencies": []
+    },
+    {
+      "path": "World_server_production_quality_evidence_patch_v1.zip",
+      "sha256": "d3d9c5eeb89a1d988f1c016fd354f507ac7f6a4f775b2c0ecf55b7e636262b12",
       "dependencies": []
     },
     {
@@ -1869,7 +1934,7 @@
     },
     {
       "path": "apps/voxel-world/index.html",
-      "sha256": "e56a708295f834190dac8fba1f5e28d851621aeb2a75c64e1c8b6879255451fa",
+      "sha256": "7e1f159de3da769d5bf6d46024c68905993c735402b2aa936bbcdd620b096fa2",
       "dependencies": [
         "apps/voxel-world/client.js"
       ]
@@ -1896,7 +1961,7 @@
     },
     {
       "path": "bom.cdx.json",
-      "sha256": "cfaa66afa7e7611e6dd673dfe69153c76a2d2ef61e39316c63dd1cca1130f51e",
+      "sha256": "768d68f81df5587576b24960b8ad307e7bf4e8d17463850666deba8e80f25200",
       "dependencies": []
     },
     {
@@ -1951,7 +2016,7 @@
     },
     {
       "path": "data/asset-quality-ratchet-policy.json",
-      "sha256": "9121b25d975bed25bcac3c4504ec3771197634f375c2e0ff6a5821c36493a970",
+      "sha256": "86ca0bf12e0499455ca4f659d0eabdf40df95c117e1b9f68b5e7cf12ca8fa59f",
       "dependencies": []
     },
     {
@@ -2027,6 +2092,16 @@
     {
       "path": "data/character-motion-contract.json",
       "sha256": "94f7e377dc03d0c1a9f05430ea9747669163a16b192429494cde31f505973a27",
+      "dependencies": []
+    },
+    {
+      "path": "data/cinematic-voxel-quality-policy.json",
+      "sha256": "f07143fb61a79998c5e451c2d5ebff3c0b9c94a014f203bf1c27bc50ee119d26",
+      "dependencies": []
+    },
+    {
+      "path": "data/cinematic-voxel-regression-signatures.json",
+      "sha256": "044b86abcb87e21d175c135ce1380aeab855664d56899f3b890631598424dcfd",
       "dependencies": []
     },
     {
@@ -2151,7 +2226,7 @@
     },
     {
       "path": "data/error-prevention-registry.json",
-      "sha256": "daba46955b1f3e37366b3790f02c1e0dc70ed109edde8b2242319726f11fcdb3",
+      "sha256": "221dc71fad30766e909c833a4145875c3423fffff9ddc8d1381dec5f664e494c",
       "dependencies": []
     },
     {
@@ -2231,7 +2306,12 @@
     },
     {
       "path": "data/generated-legacy-function-contracts.json",
-      "sha256": "f5ba26a08ac94a7798606a9112645d5fa6fd515608762757cbfd211805a34f84",
+      "sha256": "ac37a831af94d7dcfafa6c458d60d63b17c12bfbe94a8f0df32c76913ab390c2",
+      "dependencies": []
+    },
+    {
+      "path": "data/godot-voxel-game-baseline.json",
+      "sha256": "12db09534fc679cafc284637e3f743f8655b98462f101d290110d8c81747ff90",
       "dependencies": []
     },
     {
@@ -2565,6 +2645,11 @@
       "dependencies": []
     },
     {
+      "path": "data/reference-visual-gate.json",
+      "sha256": "d4855a7f3ed76e2dc138fa3ebfae9e9b4cefae8fa1758b7d847a4a49166a6ac1",
+      "dependencies": []
+    },
+    {
       "path": "data/regression-test-templates.json",
       "sha256": "edca824e8b756e1b1fe4a6284b6838146d81d60cd2c1634d1985decf347a5cd3",
       "dependencies": []
@@ -2741,7 +2826,7 @@
     },
     {
       "path": "data/visual-quality-policy.json",
-      "sha256": "5473e7d8eae637047d567c5a6b3e373d6c607edb8b39ae37f591878c2e6aa088",
+      "sha256": "91d5ec9ecf060213c590907d9589a0c176283367202cdc02839522eb802938ad",
       "dependencies": []
     },
     {
@@ -2825,6 +2910,11 @@
       "dependencies": []
     },
     {
+      "path": "docs/CINEMATIC_VOXEL_QUALITY_GUARD.md",
+      "sha256": "6639804bc42969209f35d08a526de255c636411ca28417f01ee1f8d2a4c8c8ec",
+      "dependencies": []
+    },
+    {
       "path": "docs/DESKTOP_AI_MESH_PIPELINE_V12.md",
       "sha256": "c689c199b804c582f8437828fdbcd0b98fea843e455cd8cd96bdea2d9d49c688",
       "dependencies": []
@@ -2897,6 +2987,16 @@
     {
       "path": "e2e/ai3d-voxel-city-autoplay.spec.js",
       "sha256": "7549f565317ab5ffdb62d7ead6147e6dddb450331d24d4b1b5b0fc36ec9dd25e",
+      "dependencies": []
+    },
+    {
+      "path": "e2e/cinematic-device-matrix.spec.js",
+      "sha256": "0a97447edcf04f0406c153bdc6d7e6271d028b2151c10b5a9fa90fef1b620b50",
+      "dependencies": []
+    },
+    {
+      "path": "e2e/cinematic-voxel-quality.spec.js",
+      "sha256": "dc361146a9bfa5b1bd97c1a8a01366c1676aea9f719de0a5814877aedf1e045f",
       "dependencies": []
     },
     {
@@ -3294,7 +3394,7 @@
     },
     {
       "path": "package.json",
-      "sha256": "407e393d81f61bb0973813494d6697a4bc4dc2e9bac1fad39f10054527b85b52",
+      "sha256": "4e9048b2b710afd4b6c4b155cd64ba8d5083f98a638a17f3f9317a6552a35a5f",
       "dependencies": []
     },
     {
@@ -3315,6 +3415,21 @@
     {
       "path": "policy/opa-bundle/worldserver.rego",
       "sha256": "e6cd0b539e53e58c2b7a6ec929e5d4e4baa8cca62afdaf2ae4f81910d4b5fd3a",
+      "dependencies": []
+    },
+    {
+      "path": "reference/cinematic_eye_fire_reference.png",
+      "sha256": "c6ac5a469f5c795f5728d2772f7d212bbb2e3659e31b0def0bae5ab931f68da1",
+      "dependencies": []
+    },
+    {
+      "path": "reference/primitive_failure_example.png",
+      "sha256": "4bc6b4422429b5b4505e6e3bfc385f0f2b04286c1b65369120d08bade6f76a4e",
+      "dependencies": []
+    },
+    {
+      "path": "reference/reference_metrics.json",
+      "sha256": "ca273ca40096a52d7f8d3ca4bf1f1f7b9d628f3f06d5f56fec2cccbaebc6cc64",
       "dependencies": []
     },
     {
@@ -3673,6 +3788,36 @@
     {
       "path": "scripts/check-supabase-migrations.js",
       "sha256": "4b7176518ac7cc4e3df8524b7429846e305c0dcfbe277e11cef6da7209616e33",
+      "dependencies": []
+    },
+    {
+      "path": "scripts/cinematic-asset-pipeline.js",
+      "sha256": "d290c0bae26a2730a7a3881678fd5218ccc789c46a121fc6e064809b0702da32",
+      "dependencies": []
+    },
+    {
+      "path": "scripts/cinematic-depth-regression.py",
+      "sha256": "6506bea2d86df69f39aa3d9ac9a5352b68d71839d590cb8652077e81b80ec981",
+      "dependencies": []
+    },
+    {
+      "path": "scripts/cinematic-ml-score.py",
+      "sha256": "49c03cf650cad6e77d6a13cfc327dc1336868a71154aa7d8b14f94f6dd5f8895",
+      "dependencies": []
+    },
+    {
+      "path": "scripts/cinematic-reference-score.py",
+      "sha256": "a0532aa620cf387a109e60b36693cf60695ea5b813f29cd2ab74db0c48112253",
+      "dependencies": []
+    },
+    {
+      "path": "scripts/cinematic-v3-quality-gate.js",
+      "sha256": "0e40c5c15e80678fe75f3b0485f3de857f82de5c293b29d58517498fada3320f",
+      "dependencies": []
+    },
+    {
+      "path": "scripts/cinematic-voxel-quality-gate.js",
+      "sha256": "1377c346e86b1552fa96c5220fba91911ff39e8ba604629258aa6ccd2c29a186",
       "dependencies": []
     },
     {
@@ -4587,7 +4732,7 @@
     },
     {
       "path": "scripts/production-quality-pull.js",
-      "sha256": "3810ced6310f717f66e6f776b3fa45400ddc418a5e16f08c007086e0f9c69fdb",
+      "sha256": "a7f5dc9baee7fc7f5acf4ad1e6e13ff0f80a9a1d72101ea61bde5bb7b5aba0a4",
       "dependencies": []
     },
     {
@@ -6273,6 +6418,26 @@
     {
       "path": "shared/answer-world-engine.js",
       "sha256": "5037d3675810875a286e350026e8d831788df27b26fb085b7d6e76fec73121a5",
+      "dependencies": []
+    },
+    {
+      "path": "shared/cinematic-scene-adapter-contract.js",
+      "sha256": "d4bc545bceb5698df163218b50f9887649ff5e8141e8a65934cb7453bcd1638f",
+      "dependencies": []
+    },
+    {
+      "path": "shared/cinematic-temporal-quality-governor.js",
+      "sha256": "cba9ea96dea78cde97f72ddc3829f41eb08e2782d665b55e0e01891bdbdf3075",
+      "dependencies": []
+    },
+    {
+      "path": "shared/cinematic-visibility-supervisor.js",
+      "sha256": "5f47a509939bd1993a94ae0eff798a0ccc6d3fcdd966046faa333137f2c7b69b",
+      "dependencies": []
+    },
+    {
+      "path": "shared/cinematic-voxel-quality-guard.js",
+      "sha256": "52149a70e79c7d74589798e5249277e634a2cee0390278d9b5afb2649381dccf",
       "dependencies": []
     },
     {
@@ -8243,6 +8408,21 @@
       "dependencies": []
     },
     {
+      "path": "templates/godot-voxel-game-starter/README.md",
+      "sha256": "7a54d20da80e05c850e12cf8973dbc6ea0a1aa84af7e7a5b24c9621c89dd70f1",
+      "dependencies": []
+    },
+    {
+      "path": "templates/godot-voxel-game-starter/orbit_camera_rig.gd",
+      "sha256": "bace7c82ea43a41c78f3cda11ad022129fc1d157f5e383c1432245642c45d0b7",
+      "dependencies": []
+    },
+    {
+      "path": "templates/godot-voxel-game-starter/voxel_noise_utils.gd",
+      "sha256": "ea5053fc76e0ddaa41787340c1201021ac8d6d9b3682d1279b28a1853dc430c6",
+      "dependencies": []
+    },
+    {
       "path": "test/ai-supervisor-control-plane.test.js",
       "sha256": "8e92d1f484f3035d006d61b0f68e9092d1cb8b5aec0818df1ed3da98d9998385",
       "dependencies": []
@@ -8303,6 +8483,16 @@
     {
       "path": "test/background-headless.test.js",
       "sha256": "5d7cd80eb7cc5d2e5652fe01bde8a0f6dab62d89468a5a45dc93124eb06091a2",
+      "dependencies": []
+    },
+    {
+      "path": "test/cinematic-v3-systems.test.js",
+      "sha256": "30765c08bce151f04596c6b395258f9bd38d37cd4e00baaf2275ed2ea325b9f5",
+      "dependencies": []
+    },
+    {
+      "path": "test/cinematic-voxel-policy.test.js",
+      "sha256": "7b780fef8bc102b113da7176c69c5d96ed947e128d9f7b35a307d4ac0a64470b",
       "dependencies": []
     },
     {
@@ -8520,6 +8710,11 @@
       "dependencies": []
     },
     {
+      "path": "test/production-quality-evidence.test.js",
+      "sha256": "7112edce16e29cb9d93638d51643c277c27696f611b4fcf916bdef492c2bae2c",
+      "dependencies": []
+    },
+    {
       "path": "test/pwa-system.test.js",
       "sha256": "80f1c60bb4f2909082004e5277deaf6683dc842771ca442c42f086ee0b6afea6",
       "dependencies": []
@@ -8619,6 +8814,36 @@
     {
       "path": "tools/bootstrap-pixel-panorama-360-windows.ps1",
       "sha256": "c17a800a1abfa6cd76af8b10d7e3484a15d880821bfe0cd29eb7853fc60960e1",
+      "dependencies": []
+    },
+    {
+      "path": "tools/cinematic-voxel-godot-addon/cinematic_voxel_guard/export_gate.gd",
+      "sha256": "f68c0d338bdfad412eac0d40af4ed31930004d5ad5808a0f15c82836b1e0ef32",
+      "dependencies": []
+    },
+    {
+      "path": "tools/cinematic-voxel-godot-addon/cinematic_voxel_guard/performance_governor.gd",
+      "sha256": "96d87deee0f1da195c753518a730d7aae8cf797410aa4c8d51165ee4f99a91c3",
+      "dependencies": []
+    },
+    {
+      "path": "tools/cinematic-voxel-godot-addon/cinematic_voxel_guard/plugin.cfg",
+      "sha256": "dad90a4776a41792c7eab9c20af2e9ae69bd85bc7085cbc0cd1ad2f8d0f084d7",
+      "dependencies": []
+    },
+    {
+      "path": "tools/cinematic-voxel-godot-addon/cinematic_voxel_guard/plugin.gd",
+      "sha256": "5323a7df463add95fa4523093f9d6d1ac3726efdc792f08b1601c7d7906b52a7",
+      "dependencies": []
+    },
+    {
+      "path": "tools/cinematic-voxel-godot-addon/cinematic_voxel_guard/runtime_guard.gd",
+      "sha256": "1fb7de983a870efda22fea81605027796ce82baa8a9732f9351f4de705e9c243",
+      "dependencies": []
+    },
+    {
+      "path": "tools/cinematic-voxel-godot-addon/cinematic_voxel_guard/scene_contract.gd",
+      "sha256": "c366dc131a4170e557b9e78999ca03c3d269755ce88aee91aad911e96624ef30",
       "dependencies": []
     },
     {

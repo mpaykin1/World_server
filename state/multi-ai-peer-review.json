@@ -1,5 +1,5 @@
 {
-  "at": "2026-08-28T14:21:26.092Z",
+  "at": "2026-08-29T05:28:25.955Z",
   "branches": 10,
   "worktrees": 4,
   "prCheck": true,
@@ -586,6 +586,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
@@ -597,6 +598,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
@@ -1290,6 +1292,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/agent-rules",
         "opencode/ai3d-full-integration"
       ]
@@ -1573,6 +1576,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -1613,6 +1617,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -2376,6 +2381,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -2677,12 +2683,20 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "ai/opencode/navigator-engagement-v1",
         "opencode/ai3d-full-integration"
       ]
     },
     {
       "file": "DESKTOP_AI_PIXEL_ANIMATION_V3.md",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "DESKTOP_AI_PROCEDURAL_QUALITY.md",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/opencode/multi-ai-peer-improvement"
@@ -3271,6 +3285,13 @@
       ]
     },
     {
+      "file": "README.md",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "RECORD_REPLAY_STATUS.json",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
@@ -3625,7 +3646,22 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
+      ]
+    },
+    {
+      "file": "apps/procedural-quality-certification/index.html",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "apps/procedural-quality-lab/index.html",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
       ]
     },
     {
@@ -3634,6 +3670,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -4011,6 +4048,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -4819,6 +4857,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -6355,6 +6394,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -7826,6 +7866,7 @@
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
         "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/multi-ai-peer-improvement",
         "opencode/ai3d-full-integration"
       ]
     },
@@ -8004,6 +8045,412 @@
       ]
     },
     {
+      "file": "shared/pq-kernel-v5-simd.wasm",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/pq-kernel-v5-threads.wasm",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/pq-kernel.wasm",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-animation.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-budget-controller.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-canary.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-compute-materials.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-culling.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-ddgi.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-deformation-velocity.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-device-certifier.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-frame-pacing.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-framegraph.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-gbuffer.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-generic-renderer.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-gpu-timing.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-humanoid.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-learning.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-lighting.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-locomotion.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-materials.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-native-bridge.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-native-gbuffer.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-pass-budget.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-pbr.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-perceptual.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-pose-provider.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-profiler.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-promotion.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-radiance.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-recorder.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-renderer-contract.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-replay-benchmark.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-resource-watchdog.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-runtime.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-scheduler.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-sdf.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-sdf3d.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-semantics.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-shader-prewarm.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-simd-pool.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-style-calibration.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-temporal-artifacts.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-temporal.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-thermal-governor.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-three-native.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-three-skinned-motion.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-tsr-source.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-tsr.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-vision-vendor.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-vision.entry.mjs",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-vision.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-voxel-ddgi.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-webgl2.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-webgpu-ddgi.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-webgpu.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-worker-client.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "shared/procedural-quality-worker.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "shared/pwa-runtime.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
@@ -8042,7 +8489,8 @@
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/desktop/v13-self-calibrating-cpu",
-        "ai/desktop/world-quality-autopilot-v4"
+        "ai/desktop/world-quality-autopilot-v4",
+        "ai/opencode/navigator-engagement-v1"
       ]
     },
     {
@@ -8900,6 +9348,48 @@
       ]
     },
     {
+      "file": "supabase/procedural_quality_learning.sql",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "supabase/procedural_quality_v10.sql",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "supabase/procedural_quality_v6.sql",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "supabase/procedural_quality_v7.sql",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "supabase/procedural_quality_v8.sql",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "supabase/procedural_quality_v9.sql",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
       "file": "test/apng-integration.test.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
@@ -9027,6 +9517,69 @@
     },
     {
       "file": "test/procedural-quality-v10.test.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "test/procedural-quality-v2.test.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "test/procedural-quality-v3.test.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "test/procedural-quality-v4.test.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "test/procedural-quality-v5.test.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "test/procedural-quality-v6.test.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "test/procedural-quality-v7.test.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "test/procedural-quality-v8.test.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "test/procedural-quality-v9.test.js",
+      "branches": [
+        "ai/desktop/quality-runtime-v11-20260824-090217",
+        "ai/opencode/multi-ai-peer-improvement"
+      ]
+    },
+    {
+      "file": "test/procedural-quality.test.js",
       "branches": [
         "ai/desktop/quality-runtime-v11-20260824-090217",
         "ai/opencode/multi-ai-peer-improvement"
@@ -12122,9 +12675,279 @@
     ".quality-cache/tests/51a1e7fbd479d5a830f4f284d7c0331ca01bd740294902f0434ba8160bb1224f.json",
     ".quality-cache/tests/a0bbfa7a8e3f05812c1e7d6ac5d70a76ad46814b6c54becf915fcb211887651c.json",
     "supabase/migrations/20260823063700_quality_telemetry.sql",
+    ".github/workflows/cinematic-voxel-quality.yml",
+    ".iw-graphics-staging/apng-v3/apng_patch/apng-quality.config.json",
+    ".iw-graphics-staging/apng-v3/apng_patch/scripts/apng-quality-gate.js",
+    ".iw-graphics-staging/dreamfog-v2/WORLD_SERVER_DREAMFOG_WORLD_PATCH_v2/patch/data/dreamfog-quality-profile.json",
     ".iw-graphics-staging/game-motion-v2/WORLD_SERVER_GAME_MOTION_FRAME_TIMELINE_V2/payload/scripts/game-motion-quality-gate.mjs",
+    ".iw-graphics-staging/gs360-v6/WORLD_SERVER_3DGS_360_CPU_QUALITY_V6/install-gs360-cpu-quality-v6.cjs",
+    ".iw-graphics-staging/gs360-v6/WORLD_SERVER_3DGS_360_CPU_QUALITY_V6/payload/systems/gs360/input-quality.py",
+    ".iw-graphics-staging/gs360-v6/WORLD_SERVER_3DGS_360_CPU_QUALITY_V6/payload/systems/gs360/quality-gate.py",
+    ".iw-graphics-staging/gs360-v6/WORLD_SERVER_3DGS_360_CPU_QUALITY_V6/payload/systems/gs360/quality.cjs",
+    ".iw-graphics-staging/mesh-aaa-v12/files/services/ai3d-worker/ai3d/engine_quality_adapters.py",
+    ".iw-graphics-staging/mesh-aaa-v12/files/services/ai3d-worker/ai3d/plugins/mesh_quality_optimizer.py",
+    ".iw-graphics-staging/mesh-aaa-v12/files/services/ai3d-worker/ai3d/quality_extensions.py",
+    ".iw-graphics-staging/mesh-aaa-v12/files/services/ai3d-worker/ai3d/quality_registry_v5.py",
+    ".iw-graphics-staging/mesh-aaa-v12/files/services/ai3d-worker/tests/test_mesh_quality_bridge_v6.py",
+    ".iw-graphics-staging/mesh-aaa-v12/files/services/ai3d-worker/tests/test_quality_extensions.py",
+    ".iw-graphics-staging/mesh-aaa-v12/files/services/ai3d-worker/tests/test_quality_registry_v5.py",
+    ".iw-graphics-staging/pixel-3dgs-phone4d-v6/PIXEL_3DGS_CPU_V6_PHONE_4D_MAX/output/demo_build/capture_quality.json",
+    ".iw-graphics-staging/pixel-3dgs-phone4d-v6/PIXEL_3DGS_CPU_V6_PHONE_4D_MAX/output/demo_build/desktop_ai_regression_report.json",
+    ".iw-graphics-staging/pixel-3dgs-phone4d-v6/PIXEL_3DGS_CPU_V6_PHONE_4D_MAX/output/demo_build/desktop_ai_regression_report_v6.json",
+    ".iw-graphics-staging/pixel-3dgs-phone4d-v6/PIXEL_3DGS_CPU_V6_PHONE_4D_MAX/output/demo_build/quality_report.json",
+    ".iw-graphics-staging/pixel-3dgs-phone4d-v6/PIXEL_3DGS_CPU_V6_PHONE_4D_MAX/tools/regression_runner.py",
     ".iw-graphics-staging/pixel-animation-v3/PIXEL_ANIMATION_SYSTEM_V3/scripts/pixel-animation-visual-regression.js",
     ".iw-graphics-staging/pixel-animation-v3/PIXEL_ANIMATION_SYSTEM_V3/shared/pixel-animation-visual-regression.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/DESKTOP_AI_PROCEDURAL_QUALITY.md",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/INSTALL_TO_WORLD_SERVER.bat",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/PROCEDURAL_MODEL_MANIFEST.json",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/PROCEDURAL_NATIVE_RENDERER_AUDIT.json",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/PROCEDURAL_QUALITY_CANARY.json",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/PROCEDURAL_QUALITY_CRITIC.json",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/PROCEDURAL_QUALITY_DEVICE_MATRIX.json",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/PROCEDURAL_QUALITY_DOCTOR.json",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/PROCEDURAL_QUALITY_EVIDENCE_V10.json",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/PROCEDURAL_QUALITY_EVIDENCE_V9.json",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/PROCEDURAL_QUALITY_READINESS.json",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/PROCEDURAL_QUALITY_ROLLBACK.json",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/PROCEDURAL_QUALITY_RUNTIME_REPORT.json",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/PROCEDURAL_QUALITY_TOURNAMENT.json",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/PROCEDURAL_QUALITY_V10_VERIFICATION.json",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/PROCEDURAL_QUALITY_V6_VERIFICATION.json",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/PROCEDURAL_QUALITY_V8_VERIFICATION.json",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/PROCEDURAL_QUALITY_V9_VERIFICATION.json",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/PROCEDURAL_THREE_NATIVE_PATCH.json",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/README.md",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/SUPABASE_PROCEDURAL_QUALITY_STATUS.json",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/VERIFY_AFTER_INSTALL.bat",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/api/procedural-quality-baseline.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/api/procedural-quality-canary.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/api/procedural-quality-certification.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/api/procedural-quality-device-report.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/api/procedural-quality-learn.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/api/procedural-quality-orchestrate.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/api/procedural-quality-profile.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/api/procedural-quality-repair-report.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/api/procedural-quality-runtime-health.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/api/procedural-quality-system-status.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/apps/procedural-quality-certification/index.html",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/apps/procedural-quality-lab/index.html",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/build-procedural-vision.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/check-procedural-quality-runtime.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/fetch-procedural-models.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/inject-procedural-quality-runtime.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/install-into-repo.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/procedural-quality-canary-gate.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/procedural-quality-device-certification.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/procedural-quality-doctor.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/procedural-quality-evidence-orchestrator.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/procedural-quality-golden-baselines.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/procedural-quality-golden-verify.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/procedural-quality-native-audit.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/procedural-quality-production-verify.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/procedural-quality-readiness.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/procedural-quality-rollback.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/procedural-quality-three-patcher.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/procedural-quality-tournament.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/procedural-quality-v10-gate.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/procedural-quality-v5-device-matrix.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/procedural-quality-v5-gate.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/procedural-quality-v6-device-matrix.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/procedural-quality-v6-gate.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/procedural-quality-v7-device-matrix.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/procedural-quality-v7-gate.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/procedural-quality-v8-gate.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/procedural-quality-v9-gate.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/procedural-quality-visual-critic.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/run-procedural-tests.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/scripts/verify-procedural-models.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/pq-kernel-v5-simd.wasm",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/pq-kernel-v5-threads.wasm",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/pq-kernel.wasm",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-animation.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-budget-controller.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-canary.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-compute-materials.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-culling.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-ddgi.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-deformation-velocity.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-device-certifier.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-frame-pacing.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-framegraph.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-gbuffer.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-generic-renderer.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-gpu-timing.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-humanoid.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-learning.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-lighting.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-locomotion.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-materials.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-native-bridge.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-native-gbuffer.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-pass-budget.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-pbr.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-perceptual.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-pose-provider.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-profiler.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-promotion.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-radiance.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-recorder.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-renderer-contract.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-replay-benchmark.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-resource-watchdog.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-runtime.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-scheduler.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-sdf.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-sdf3d.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-semantics.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-shader-prewarm.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-simd-pool.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-style-calibration.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-temporal-artifacts.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-temporal.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-thermal-governor.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-three-native.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-three-skinned-motion.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-tsr-source.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-tsr.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-vision-vendor.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-vision.entry.mjs",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-vision.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-voxel-ddgi.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-webgl2.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-webgpu-ddgi.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-webgpu.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-worker-client.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/shared/procedural-quality-worker.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/supabase/procedural_quality_learning.sql",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/supabase/procedural_quality_v10.sql",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/supabase/procedural_quality_v6.sql",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/supabase/procedural_quality_v7.sql",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/supabase/procedural_quality_v8.sql",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/supabase/procedural_quality_v9.sql",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/test/procedural-quality-v10.test.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/test/procedural-quality-v2.test.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/test/procedural-quality-v3.test.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/test/procedural-quality-v4.test.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/test/procedural-quality-v5.test.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/test/procedural-quality-v6.test.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/test/procedural-quality-v7.test.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/test/procedural-quality-v8.test.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/test/procedural-quality-v9.test.js",
+    ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/test/procedural-quality.test.js",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/APPLY_TEXTURE_PIPELINE.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/DESKTOP_AI_INSTRUCTIONS.md",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/LOCAL_VERIFICATION.json",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/NEXT_SYSTEMS.md",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/ROLLBACK_TEXTURE_PIPELINE.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/SHA256SUMS.txt",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/SYSTEM_READINESS.json",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/V10_UPGRADE_SUMMARY.md",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/V5_UPGRADE_SUMMARY.md",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/V6_UPGRADE_SUMMARY.md",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/V7_UPGRADE_SUMMARY.md",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/V8_UPGRADE_SUMMARY.md",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/V9_UPGRADE_SUMMARY.md",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/api_ai3d_texture.js",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/docs/TEXTURE_QUALITY_SYSTEM.md",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/ai3d/renderback_compare.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/ai3d/texture_advanced.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/ai3d/texture_optimizer.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/ai3d/texture_runtime_v10.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/ai3d/texture_runtime_v4.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/ai3d/texture_runtime_v5.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/ai3d/texture_runtime_v6.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/ai3d/texture_runtime_v7.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/ai3d/texture_runtime_v8.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/ai3d/texture_runtime_v9.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tests/test_texture_optimizer.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tests/test_texture_v10.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tests/test_texture_v4.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tests/test_texture_v5.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tests/test_texture_v6.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tests/test_texture_v7.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tests/test_texture_v8.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tests/test_texture_v9.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/aggregate_texture_telemetry.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/allocate_texture_resources.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/analyze_shader_hitches_v10.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/analyze_texture_residency.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/analyze_texture_soak.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/analyze_texture_temporal_quality.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/benchmark_texture_farm.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/bisect_texture_regression.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/build_texture_cdn_packages.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/capture_texture_renderback.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/check_texture_policy_drift.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/classify_texture_regression.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/compare_texture_optical_flow.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/compare_texture_renderbacks.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/device_lab_texture_results.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/distributed_texture_queue.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/evaluate_texture_canary.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/forecast_texture_resource_risk.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/generate_texture_exploration_mission.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/managed_texture_queue_backend.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/material_provenance_graph.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/multi_host_texture_queue.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/optimize_scene_quality.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/profile_texture_frame_graph.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/promote_texture_streaming_policy.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/publish_texture_cdn_atomic.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/publish_texture_cdn_remote.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/run_texture_device_farm.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/runtime_metrics_example.json",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/sync_golden_texture_library.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/blender/apply_texture_uv_rebind.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/blender/autofix_uv_and_atlas.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/blender/material_set_mapping.example.json",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/blender/repair_uv_health.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/blender/scan_texel_density.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/godot/ExplorationBot.gd",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/godot/GpuCapabilityProbe.gd",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/godot/RenderingDeviceVirtualTextureCache.gd",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/godot/ShaderHitchCollectorV10.gd",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/godot/ShaderPrewarmV9.gd",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/godot/TextureResidencyWatchdog.gd",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/godot/TextureRuntimeAdapter.gd",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/godot/UnifiedQualityGovernor.gd",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/godot/UnifiedQualityGovernorV9.gd",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/godot/VirtualTexturePager.gd",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/roblox/AssetPrewarmV9.luau",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/roblox/ExplorationBot.luau",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/roblox/GpuCapabilityProbe.luau",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/roblox/MipAssetStreamer.luau",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/roblox/ShaderHitchCollectorV10.luau",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/roblox/TextureQualityGovernor.luau",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/roblox/TextureRuntimeAdapter.luau",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/roblox/UnifiedQualityGovernor.luau",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/roblox/UnifiedQualityGovernorV9.luau",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/web/exploration_bot.js",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/web/gpu_capability_probe.js",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/web/shader_hitch_collector_v10.js",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/web/shader_prewarm_v9.js",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/web/specular_normal_aa.js",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/web/texture_residency_watchdog.js",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/web/texture_runtime_adapter.js",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/web/unified_quality_governor_v9.js",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/web/virtual_texture_pager.js",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_adapters/web/webgpu_virtual_texture_cache.js",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_collectors/godot/TextureMetricsCollector.gd",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_collectors/roblox/TextureMetricsCollector.luau",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/texture_runtime_collectors/web/texture_metrics_collector.js",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/train_route_prefetch_v2.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/train_texture_streaming_policy.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/verify_promotion_ledger.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/verify_signed_texture_manifest.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/verify_texture_build_attestation.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/verify_texture_compression.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/files/services/ai3d-worker/tools/verify_texture_runtime.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/server_variants/server_master_texture.py",
+    ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/server_variants/server_v4_texture.py",
+    ".iw-graphics-staging/video2game-voxel-v5/VIDEO2GAME_VOXEL_V5/tests/test_regression.py",
+    ".iw-graphics-staging/video2game-voxel-v5/VIDEO2GAME_VOXEL_V5/video2game_voxel/quality.py",
+    ".iw-graphics-staging/video2game-voxel-v5/VIDEO2GAME_VOXEL_V5/video2game_voxel/quality_gate.py",
+    ".iw-graphics-staging/video2game-voxel-v5/VIDEO2GAME_VOXEL_V5/video2game_voxel/regression.py",
     "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/apply_world_quality_autopilot.bat",
     "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/apply_world_quality_autopilot.ps1",
     "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/install-world-quality-autopilot.cjs",
@@ -12142,8 +12965,23 @@
     "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/services/ai3d-worker/ai3d/plugins/world_quality.py",
     "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/shared/world-quality-autopilot.js",
     "WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/WORLD_QUALITY_AUTOPILOT_V4/payload/test/world-quality-autopilot.test.js",
+    "data/cinematic-voxel-quality-policy.json",
+    "data/cinematic-voxel-regression-signatures.json",
+    "data/dreamfog-quality-profile.json",
+    "e2e/cinematic-voxel-quality.spec.js",
+    "scripts/cinematic-depth-regression.py",
+    "scripts/cinematic-v3-quality-gate.js",
+    "scripts/cinematic-voxel-quality-gate.js",
     "scripts/game-motion-quality-gate.mjs",
     "scripts/quality-autoloop-tick.ps1",
+    "services/ai3d-worker/ai3d/engine_quality_adapters.py",
+    "services/ai3d-worker/ai3d/quality_extensions.py",
+    "services/ai3d-worker/ai3d/quality_registry_v5.py",
+    "services/ai3d-worker/tests/test_mesh_quality_bridge_v6.py",
+    "services/ai3d-worker/tests/test_quality_extensions.py",
+    "services/ai3d-worker/tests/test_quality_registry_v5.py",
+    "shared/cinematic-temporal-quality-governor.js",
+    "shared/cinematic-voxel-quality-guard.js",
     "supabase/migrations_backup_20260824/20260823034319_quality_autopilot_telemetry.sql",
     "supabase/migrations_backup_20260824/20260823040000_quality_autopilot_telemetry.sql",
     "supabase/migrations_backup_20260824/20260823040900_quality_autopilot_knowledge.sql",
@@ -12192,7 +13030,12 @@
     "supabase/migrations_backup_20260824/20260824055923_quality_github_oidc_bridge_v12.sql",
     "supabase/migrations_backup_20260824/20260824060050_quality_desktop_work_packet_v12.sql",
     "supabase/migrations_backup_20260824/20260824060136_quality_gap_orchestrator_v12.sql",
-    "supabase/migrations_backup_20260824/20260824094000_quality_autopilot_v11_cpu_first.sql"
+    "supabase/migrations_backup_20260824/20260824094000_quality_autopilot_v11_cpu_first.sql",
+    "systems/gs360/input-quality.py",
+    "systems/gs360/quality-gate.py",
+    "systems/gs360/quality.cjs",
+    "test/production-quality-evidence.test.js",
+    "data/quality-reference/navigator-scene-target.jpeg"
   ],
   "conflicts": [
     "multiple AI branches touch same systems - review blast radius before porting"

@@ -1,9 +1,9 @@
 {
   "schemaVersion": "2.0.0",
-  "generatedAt": "2026-08-28T14:16:49.157Z",
+  "generatedAt": "2026-08-29T05:29:15.396Z",
   "contentAddressed": true,
-  "total": 31,
-  "unique": 31,
+  "total": 33,
+  "unique": 33,
   "duplicateGroups": 0,
   "missingDependencies": [],
   "metadataCoverage": {
@@ -349,6 +349,44 @@
       "dependencies": []
     },
     {
+      "id": "sha256:c6ac5a469f5c795f5728d2772f7d212bbb2e3659e31b0def0bae5ab931f68da1",
+      "path": "reference/cinematic_eye_fire_reference.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 555962,
+      "sha256": "c6ac5a469f5c795f5728d2772f7d212bbb2e3659e31b0def0bae5ab931f68da1",
+      "cas": "cas+sha256:c6ac5a469f5c795f5728d2772f7d212bbb2e3659e31b0def0bae5ab931f68da1",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 1024,
+        "height": 1280
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
+      "id": "sha256:4bc6b4422429b5b4505e6e3bfc385f0f2b04286c1b65369120d08bade6f76a4e",
+      "path": "reference/primitive_failure_example.png",
+      "type": "texture",
+      "ext": ".png",
+      "bytes": 419171,
+      "sha256": "4bc6b4422429b5b4505e6e3bfc385f0f2b04286c1b65369120d08bade6f76a4e",
+      "cas": "cas+sha256:4bc6b4422429b5b4505e6e3bfc385f0f2b04286c1b65369120d08bade6f76a4e",
+      "version": null,
+      "license": null,
+      "quality": null,
+      "lod": null,
+      "dimensions": {
+        "width": 1366,
+        "height": 768
+      },
+      "animation": null,
+      "dependencies": []
+    },
+    {
       "id": "sha256:1451c51a629b3ce54527e98c276a144202c60a921cc5fc006ad052bf210d9d04",
       "path": "shared/panorama360-source/sample-project/frames/000001.png",
       "type": "texture",
@@ -617,6 +655,8 @@
       "apps/catalog/ico.png",
       "apps/chat/ico.png",
       "apps/survival/ico.png",
+      "reference/cinematic_eye_fire_reference.png",
+      "reference/primitive_failure_example.png",
       "shared/panorama360-source/sample-project/frames/000001.png",
       "shared/panorama360-source/sample-project/frames/000002.png",
       "shared/panorama360-source/sample-project/frames/000003.png",
@@ -650,6 +690,8 @@
       "apps/catalog/ico.png",
       "apps/chat/ico.png",
       "apps/survival/ico.png",
+      "reference/cinematic_eye_fire_reference.png",
+      "reference/primitive_failure_example.png",
       "shared/panorama360-source/sample-project/frames/000001.png",
       "shared/panorama360-source/sample-project/frames/000002.png",
       "shared/panorama360-source/sample-project/frames/000003.png",
@@ -683,6 +725,8 @@
       "apps/catalog/ico.png",
       "apps/chat/ico.png",
       "apps/survival/ico.png",
+      "reference/cinematic_eye_fire_reference.png",
+      "reference/primitive_failure_example.png",
       "shared/panorama360-source/sample-project/frames/000001.png",
       "shared/panorama360-source/sample-project/frames/000002.png",
       "shared/panorama360-source/sample-project/frames/000003.png",

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-28T14:15:19.568Z",
+  "generatedAt": "2026-08-29T05:28:41.529Z",
   "nodes": [
     "app:ai-3d",
     "app:ai3d-reference-test",
@@ -55,6 +55,10 @@
     "release:system",
     "release:tool",
     "shared/ai3d-playable-runtime.js",
+    "shared/cinematic-scene-adapter-contract.js",
+    "shared/cinematic-temporal-quality-governor.js",
+    "shared/cinematic-visibility-supervisor.js",
+    "shared/cinematic-voxel-quality-guard.js",
     "shared/common.js",
     "shared/golden-catalog-menu.js",
     "shared/golden-performance-autotuner.js",
@@ -594,6 +598,26 @@
       "kind": "html-dependency"
     },
     {
+      "from": "shared/cinematic-voxel-quality-guard.js",
+      "to": "apps/voxel-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/cinematic-visibility-supervisor.js",
+      "to": "apps/voxel-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/cinematic-temporal-quality-governor.js",
+      "to": "apps/voxel-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/cinematic-scene-adapter-contract.js",
+      "to": "apps/voxel-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
       "from": "apps/world-sharabass/index.html",
       "to": "app:world-sharabass",
       "kind": "belongs-to"
@@ -1042,6 +1066,18 @@
     ],
     "apps/voxel-world/index.html": [
       "app:voxel-world"
+    ],
+    "shared/cinematic-voxel-quality-guard.js": [
+      "apps/voxel-world/index.html"
+    ],
+    "shared/cinematic-visibility-supervisor.js": [
+      "apps/voxel-world/index.html"
+    ],
+    "shared/cinematic-temporal-quality-governor.js": [
+      "apps/voxel-world/index.html"
+    ],
+    "shared/cinematic-scene-adapter-contract.js": [
+      "apps/voxel-world/index.html"
     ],
     "apps/world-sharabass/index.html": [
       "app:world-sharabass"

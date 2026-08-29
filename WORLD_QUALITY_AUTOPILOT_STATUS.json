@@ -1,6 +1,6 @@
 {
   "schemaVersion": "6.0.0",
-  "generatedAt": "2026-08-28T14:15:31.676Z",
+  "generatedAt": "2026-08-29T05:29:06.064Z",
   "readinessPercent": 89,
   "domainPercent": {
     "detail": 72,
@@ -49,7 +49,7 @@
   "productionProofTargetPercent": 100,
   "runtimeQualityPercent": 97,
   "deviceEvidencePercent": 87,
-  "evidenceLedgerSha256": "87c47da7f498a14655fffe4ff3fbeb583851033e9259e7d2908a89da9d473708",
+  "evidenceLedgerSha256": "927c9c92868c89bf60e179f54b1397439ffa164d636e67b3412447eb86446581",
   "materialProfiles": 64,
   "visibilityPercent": 100,
   "retargetContractReady": true,
