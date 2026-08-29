@@ -283,6 +283,18 @@
         "standing rule (data/godot-voxel-game-baseline.json, heroVoxelToWorldVoxelRatio): hero voxels are always exactly 5x smaller than world voxels, both per-cube and in overall subject scale - const HERO_VOX := WORLD_VOX / 5.0",
         "apply this from the start of every new Godot voxel project, not as a later fix"
       ]
+    },
+    {
+      "id": "threejs-object3d-subclass-pivot-property-corrupts-matrix",
+      "category": "tooling",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "a three.js Object3D subclass's own local matrix gets NaN in its translation (elements 12-14) after scene.updateMatrixWorld() / renderer.render(), with everything appearing to construct correctly beforehand (position/rotation/quaternion all read as valid, non-NaN numbers) - camera/rig ends up nowhere, or the whole canvas stays blank/background-only",
+      "rootCause": "isolated and reproduced in this repo's vendored three.js build (shared/vendor/three) plus this session's browser-automation test harness: an Object3D subclass instance with an own property literally named `pivot` (assigned a THREE.Object3D, even if never added to the scene tree) reproducibly triggers the corruption; renaming the property alone fixes it with everything else identical. The string is not present anywhere in the vendored three.js source, so the exact mechanism is unconfirmed (likely a harness/JIT-specific interaction, not a documented library bug) - but it is 100% reproducible and trivial to avoid",
+      "protection": [
+        "never name an Object3D subclass's own instance property `pivot` in this codebase - use `pitchGroup` or similar instead, as shared/dark-void-scene-runtime.mjs's OrbitCameraRig does",
+        "if a scene renders blank/background-only despite no console errors, check camera.matrixWorld.elements for NaN (Number.isNaN, not just falsy/JSON-null) as a first diagnostic step, then binary-search which own property on which Object3D ancestor triggers it by renaming"
+      ]
     }
   ],
   "confirmationProtocol": {

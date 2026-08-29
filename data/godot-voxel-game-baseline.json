@@ -3,9 +3,10 @@
   "system": "GODOT_VOXEL_GAME_BASELINE",
   "setBy": "user",
   "setAt": "2026-08-28",
-  "rule": "Every new Godot voxel-art project on World_server starts from this baseline, not from scratch. These parameters were arrived at through real, verified iteration on dark-void-scene (including fixing the exact bugs listed below) and are now permanent defaults, not per-project choices. Only the user can relax or remove this rule.",
-  "templatePath": "templates/godot-voxel-game-starter/",
-  "provenIn": "godot/dark-void-scene (World_server_navigator worktree, ai/opencode/navigator-engagement-v1)",
+  "rule": "Every new voxel-art project on World_server starts from this baseline, not from scratch - Godot OR browser/Three.js, this file name predates the browser port but the rules are engine-agnostic. These parameters were arrived at through real, verified iteration on dark-void-scene (including fixing the exact bugs listed below) and are now permanent defaults, not per-project choices. Only the user can relax or remove this rule.",
+  "engineAgnostic": "2026-08-29: user explicitly required the same rules to apply in the browser, not just Godot. shared/dark-void-scene-runtime.mjs (Three.js) is a verified port of the exact same formulas as the Godot version - same hash2/fbm1/ridgeHeight math, same ROCK_DARK/MID/LIT hex, same 5:1 voxel ratio, same true-orbit rig shape, same world/hero sibling separation. Use it as the browser reference implementation the same way orbit_camera_rig.gd/voxel_noise_utils.gd are the Godot reference.",
+  "templatePath": "templates/godot-voxel-game-starter/ (Godot) and shared/dark-void-scene-runtime.mjs (browser/Three.js)",
+  "provenIn": "godot/dark-void-scene (World_server_navigator worktree, ai/opencode/navigator-engagement-v1) and apps/dark-void-scene (browser port, same worktree)",
   "rules": {
     "heroVoxelToWorldVoxelRatio": {
       "value": 5,
@@ -42,6 +43,10 @@
     "mcpToolGotcha": {
       "value": "node_create-parent_path-not-parent",
       "description": "godot-ai MCP's node_create tool's parent parameter is literally named parent_path, not parent. Passing parent is silently accepted and ignored (node lands at scene root). Always use parent_path."
+    },
+    "browserOrbitRigPropertyNameGotcha": {
+      "value": "avoid-naming-an-object3d-subclass-property-pivot",
+      "description": "In the vendored three.js build used by this repo (shared/vendor/three), verified in isolation: an Object3D subclass instance with an own property literally named `pivot` (holding another Object3D) reproducibly corrupts that instance's own local matrix translation (NaN in elements[12..14]) during scene.updateMatrixWorld() - happens even with the child never added to the tree, and a different property name (same structure otherwise) does not reproduce it. Root cause unconfirmed (not present in the library's own source, so likely a harness/JIT-specific quirk), but trivial to avoid: never name such a property `pivot` on an Object3D subclass in this codebase - see shared/dark-void-scene-runtime.mjs's OrbitCameraRig, which uses `pitchGroup` instead."
     }
   }
 }
