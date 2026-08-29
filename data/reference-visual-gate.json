@@ -97,6 +97,23 @@
         "compositionIdea", "voxelStyle", "geometricDetail", "materials", "lighting",
         "fogAtmosphere", "spatialDepth", "eye", "fire", "cinematicQuality"
       ]
+    },
+    "dark-void-navigator-browser": {
+      "referenceImage": "same reference as dark-void-scene - this is the browser/Three.js port, deployed live at https://dark-void-navigator.vercel.app",
+      "projectPath": "apps/dark-void-scene + shared/dark-void-scene-runtime.mjs (World_server_navigator worktree)",
+      "portedFrom": "godot/dark-void-scene, formula-for-formula (same hash2/fbm1/ridgeHeight, same ROCK_DARK/MID/LIT hex, same 5:1 voxel ratio, same orbit-rig shape, same world/hero separation)",
+      "thresholds": {
+        "compositionIdea": 90, "eyeFirePlacement": 80, "voxelStyle": 95, "geometricDetail": 95,
+        "materials": 98, "lighting": 98, "fogAtmosphere": 98, "spatialDepth": 98,
+        "eye": 98, "fire": 98, "ui": 98, "cinematicQuality": 98
+      },
+      "lastScore": {
+        "scoredAt": "2026-08-29",
+        "evidence": "NOT a visual/aesthetic score - this port has only been verified structurally (no console errors, correct camera world position, correct geometry instance counts, brightest-pixel-near-frame-center matching the eye's sclera color, eye-moves/mountain-stays-fixed via live position readback), not eyeballed side-by-side against the reference the way the Godot version's scores were. This environment could not produce a literal screenshot of the browser tab at verification time.",
+        "gateStatus": "UNSCORED - do not treat as passing or failing any category; a real visual comparison against the reference is still needed before this can be scored the same way as dark-void-scene."
+      },
+      "gateStatus": "BLOCKED",
+      "blockingCategories": ["ALL - unscored, see lastScore.evidence"]
     }
   }
 }
