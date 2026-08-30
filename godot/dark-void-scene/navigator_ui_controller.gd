@@ -1,23 +1,27 @@
 extends VBoxContainer
 ## Wires the НАВИГАТОР panel's input box + tool buttons - the same
 ## interactive controls the browser version already has
-## (shared/navigator-dialog.mjs), which the static Godot panel was
-## missing. No world-generation backend exists in this standalone scene
-## yet, so Create just acknowledges the input rather than building
-## anything - Undo/Redo are placeholders for the same reason. Eye-mode
-## is real: it calls the Eye's own cycle_mode().
+## (shared/navigator-dialog.mjs). Create/Undo/Redo call the real
+## WorldManifestation backend (/Main/WorldManifestation - GDScript port
+## of the same deterministic text->shape engine the browser uses, see
+## world_manifestation.gd's docstring). Eye-mode is real too: it calls
+## the Eye's own cycle_mode().
 
 ## Absolute NodePaths in this project need the /root/ prefix to resolve
 ## from a nested caller - see error-prevention-registry.json's
 ## "godot-nodepath-absolute-unresolvable".
 @export var eye_path: NodePath = ^"/root/Main/Eye"
+@export var world_path: NodePath = ^"/root/Main/WorldManifestation"
 
 var _eye: Node = null
+var _world: WorldManifestation = null
 var _mode_names := {"user": "ручной", "beacon": "огонёк", "idle": "живой"}
 
 func _ready() -> void:
 	if eye_path != NodePath(""):
 		_eye = get_node_or_null(eye_path)
+	if world_path != NodePath(""):
+		_world = get_node_or_null(world_path)
 	var create_btn := get_node_or_null("InputRow/CreateButton")
 	var input := get_node_or_null("InputRow/NavigatorInput")
 	var undo_btn := get_node_or_null("ToolsRow/UndoButton")
@@ -28,9 +32,9 @@ func _ready() -> void:
 	if input:
 		input.text_submitted.connect(func(_t): _on_create_pressed())
 	if undo_btn:
-		undo_btn.pressed.connect(func(): _set_status("нечего отменять"))
+		undo_btn.pressed.connect(_on_undo_pressed)
 	if redo_btn:
-		redo_btn.pressed.connect(func(): _set_status("нечего вернуть"))
+		redo_btn.pressed.connect(_on_redo_pressed)
 	if eye_btn:
 		eye_btn.pressed.connect(_on_eye_mode_pressed)
 
@@ -39,12 +43,30 @@ func _on_create_pressed() -> void:
 	if not input:
 		return
 	var text: String = String(input.text).strip_edges()
-	if text == "":
+	if text == "" or not _world:
 		return
 	input.text = ""
 	_set_status("навигатор думает…")
-	await get_tree().create_timer(0.5).timeout
-	_set_status("услышал: \"%s\"" % text)
+	await get_tree().create_timer(0.15).timeout
+	var result: Dictionary = _world.execute(text)
+	if result.has("error"):
+		_set_status(String(result["error"]))
+	else:
+		var intent: Dictionary = result.get("intent", {})
+		var blocks: Array = result.get("blocks", [])
+		_set_status("появилось: %s (%d)" % [String(intent.get("type", "?")), blocks.size()])
+
+func _on_undo_pressed() -> void:
+	if not _world:
+		return
+	var result: Dictionary = _world.undo()
+	_set_status(String(result["error"]) if result.has("error") else "отменено")
+
+func _on_redo_pressed() -> void:
+	if not _world:
+		return
+	var result: Dictionary = _world.redo()
+	_set_status(String(result["error"]) if result.has("error") else "возвращено")
 
 func _on_eye_mode_pressed() -> void:
 	if not _eye or not _eye.has_method("cycle_mode"):
