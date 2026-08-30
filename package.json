@@ -107,7 +107,8 @@
     "navigator:check": "node scripts/check-world-command.mjs",
     "navigator:test": "node --test test/world-command.test.mjs",
     "navigator:e2e": "playwright test e2e/world-command-dialog.spec.js",
-    "navigator:gate": "node scripts/world-command-gate.mjs"
+    "navigator:gate": "node scripts/world-command-gate.mjs",
+    "mobile-ui:audit": "node scripts/check-mobile-playable-ui-standard.cjs"
   },
   "engines": {
     "node": "24.x"

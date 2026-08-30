@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "1.0.0",
+  "standard": "MOBILE_PLAYABLE_UI_STANDARD_V3",
+  "target": "C:\\Users\\user\\Desktop\\World_server_navigator\\apps\\dark-void-scene",
+  "installedAt": "2026-08-30T06:13:20.267Z",
+  "targetLayout": "static-root",
+  "assetBase": "./",
+  "nativeGoldenLookDetected": false,
+  "sourceFilesScanned": 2,
+  "desktopChange": false,
+  "serverCanonicalRuntime": "shared/ai3d-playable-runtime.js",
+  "verification": "PASS"
+}

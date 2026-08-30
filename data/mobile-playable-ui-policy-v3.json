@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "3.0.0",
+  "system": "MOBILE_PLAYABLE_UI_STANDARD",
+  "status": "golden-candidate",
+  "scope": {
+    "allPlayableGamesWhenMobileEnabled": true,
+    "desktop": "NO_CHANGE",
+    "darkVoidNavigatorProfile": {
+      "portraitEyeScale": 0.70,
+      "landscapeEyeScale": 1.00,
+      "showControlTextHints": false,
+      "showJumpButton": false
+    }
+  },
+  "canonicalDependencies": {
+    "controls": "shared/ai3d-playable-runtime.js",
+    "uiShell": "shared/golden-ui-shell.js",
+    "controlPolicy": "data/control-policy.json",
+    "uiPolicy": "data/ui-policy.json"
+  },
+  "requiredRules": [
+    "reuse and harden the canonical Golden Standard controls; never fork movement signs or camera-relative basis",
+    "mobile movement uses the canonical left touch joystick",
+    "mobile look uses the canonical goldenlook channel rendered as a visible right joystick",
+    "desktop DOM, layout and input behavior are a no-change regression lock",
+    "hide redundant keyboard/mouse hints and do not add joystick labels when controls are self-explanatory",
+    "keep the world as the dominant screen surface in portrait and landscape",
+    "portrait Dark Void eye visual scale is exactly 0.70 of its base size; landscape remains 1.00",
+    "compact Navigator; landscape is a thin bottom strip",
+    "move secondary actions into the existing Golden UI menu when available; otherwise use one fallback menu",
+    "provide a 44px+ fullscreen icon on every mobile playable game",
+    "retry Fullscreen API without navigationUI options if browser rejects the options object",
+    "never claim fullscreen success unless fullscreenElement or standalone display mode is actually active",
+    "use PWA standalone fallback where browser chrome cannot be removed programmatically",
+    "use viewport-fit=cover, dynamic visual viewport tracking and safe-area insets",
+    "when the software keyboard opens, keep Navigator above it and disable joysticks while typing",
+    "support any-pointer coarse and iPad desktop-UA touch detection without activating on normal desktop",
+    "async-rendered Navigator/buttons/hints are reconciled by one MutationObserver, not polling forever",
+    "regression tests cover installer idempotence, canonical runtime hardening, portrait, landscape, async DOM, fullscreen failure fallback, safe-area, menu and desktop-no-change"
+  ],
+  "promotionRule": "Promote to golden only after target integration, automated gates and real-device pass on iPhone + Android with desktop no-regression."
+}

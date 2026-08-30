@@ -228,3 +228,18 @@ Work counts as incomplete if any of these is true: `mergeSafe: false`, a FAIL, a
 - Every onboarding question must be skippable; auth may not block the first visual seed.
 - Prefer progressive profiling inside the living world over a long pre-world questionnaire.
 - Regression tests must protect mobile touch, anonymous first reward, and the <=3-question contract.
+
+
+<!-- MOBILE_PLAYABLE_UI_STANDARD_V3 -->
+## Mobile playable UI standard (release-blocking when a playable app is mobile-enabled)
+- Desktop is a hard NO_CHANGE regression zone for mobile-shell work.
+- Reuse and strengthen `shared/ai3d-playable-runtime.js`; never fork camera-forward/screen-right movement semantics.
+- Mobile gameplay uses two visible controls: left movement + right look via `goldenlook`; no redundant control text hints.
+- Reuse `shared/golden-ui-shell.js` menu when present; do not create a second system menu.
+- Navigator/chat must remain compact; landscape is a thin bottom strip.
+- Every mobile playable game gets a >=44px fullscreen icon; verify actual fullscreen state. iPhone fallback is standalone PWA, never fake success.
+- Use viewport-fit=cover, safe-area insets, 100dvh/visualViewport and keyboard avoidance.
+- Async UI must be reconciled idempotently; do not assume all DOM exists at DOMContentLoaded.
+- Never auto-scale a WebGL canvas to resize a player object. Register the eye/player Object3D and scale that object only.
+- Before promotion run `npm run mobile-ui:audit`, Golden controls tests, portrait/landscape target tests and desktop no-regression.
+<!-- /MOBILE_PLAYABLE_UI_STANDARD_V3 -->

@@ -11,8 +11,11 @@
         "desktop",
         "touch",
         "mouse-look",
-        "touch-look"
-      ]
+        "touch-look",
+        "any-pointer-touch-detection",
+        "structural-golden-control-readiness"
+      ],
+      "mobileHardening": "GOLDEN_MOBILE_INPUT_HARDENING_V3"
     },
     "collision": {
       "canonical": "step-up-v1",
@@ -44,6 +47,30 @@
         "settings inside menu",
         "mobile safe area",
         "non-obstructive HUD"
+      ]
+    },
+    "mobile-game-shell": {
+      "canonical": "shared/mobile-game-shell.js",
+      "css": "shared/mobile-game-shell.css",
+      "status": "golden-candidate",
+      "standardVersion": "3.0.0",
+      "scope": {
+        "allPlayableAppsWhenMobileEnabled": true,
+        "desktopNoChange": true
+      },
+      "dependencies": [
+        "controls",
+        "compact-menu"
+      ],
+      "rules": [
+        "dual visible joysticks",
+        "no redundant mobile hints",
+        "compact Navigator",
+        "reuse Golden UI menu",
+        "truthful fullscreen/PWA fallback",
+        "visualViewport keyboard handling",
+        "safe area",
+        "desktop NO_CHANGE"
       ]
     }
   },

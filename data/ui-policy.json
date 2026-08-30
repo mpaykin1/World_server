@@ -15,7 +15,16 @@
       "health",
       "objective",
       "context-action"
-    ]
+    ],
+    "mobileDualJoysticks": true,
+    "mobileFullscreenButton": true,
+    "mobilePwaStandaloneFallback": true,
+    "mobileNavigatorCompact": true,
+    "mobileSecondaryActionsInMenu": true,
+    "mobileRedundantControlHints": false,
+    "mobileVisualViewportKeyboardAvoidance": true,
+    "mobileReuseGoldenUiMenu": true,
+    "desktopNoChangeForMobileShell": true
   },
   "knownSystemPanels": {
     "catalog": [

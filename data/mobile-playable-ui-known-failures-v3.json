@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "MOBILE_PLAYABLE_UI_KNOWN_FAILURES",
+  "entries": [
+    {
+      "id": "fullscreen-api-options-false-positive",
+      "rootCause": "requestFullscreen may exist but reject the navigationUI options object; V1 then hid the PWA fallback merely because the function existed",
+      "prevention": "retry requestFullscreen without options and show fallback unless fullscreenElement/standalone is actually true",
+      "regressionTest": "fullscreen fallback static/browser gate"
+    },
+    {
+      "id": "async-dom-missed",
+      "rootCause": "V1 only searched Navigator, buttons, hints and eye once at startup",
+      "prevention": "single idempotent MutationObserver reconcile path plus bounded startup reconciles",
+      "regressionTest": "async DOM policy/static gate"
+    },
+    {
+      "id": "webgl-canvas-accidental-eye-scale",
+      "rootCause": "V1 eye fallback included canvas and could shrink the entire WebGL scene if canvas naming matched eye",
+      "prevention": "never auto-scale canvas; WebGL eye must register its Object3D",
+      "regressionTest": "no canvas eye selector gate"
+    },
+    {
+      "id": "coarse-primary-pointer-only",
+      "rootCause": "canonical runtime used only pointer:coarse and could miss touch-capable iPad/hybrid profiles",
+      "prevention": "canonical runtime hardening uses pointer + any-pointer + touch/mobile detection while retaining desktop lock",
+      "regressionTest": "golden runtime hardening gate"
+    },
+    {
+      "id": "foreign-mobile-controls-false-ready",
+      "rootCause": "canonical runtime treated any #mobileControls node as proof that Golden controls were installed",
+      "prevention": "only a structurally valid #goldenMobileControls with move/look nodes can satisfy readiness",
+      "regressionTest": "golden structure validation gate"
+    },
+    {
+      "id": "duplicate-mobile-menu",
+      "rootCause": "V1 always created a second menu even if shared Golden UI shell was already present",
+      "prevention": "reuse GoldenUIShell.packed first; create exactly one local fallback only when absent",
+      "regressionTest": "menu reuse static gate"
+    },
+    {
+      "id": "ios-keyboard-overlap",
+      "rootCause": "fixed bottom HUD used innerHeight only and could overlap the virtual keyboard",
+      "prevention": "visualViewport keyboard inset and joystick suppression during text input",
+      "regressionTest": "visual viewport static gate"
+    },
+    {
+      "id": "mobile-hints-reintroduced",
+      "rootCause": "V1 hid old keyboard hints but added new textual joystick labels despite the final UX requirement",
+      "prevention": "control labels are explicitly suppressed by policy and CSS",
+      "regressionTest": "no mobile control labels gate"
+    }
+  ]
+}

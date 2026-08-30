@@ -148,6 +148,32 @@
       "protection": [
         "direct world-selection menu gate"
       ]
+    },
+    {
+      "id": "godot-ai-new-class-name-invisible-until-scan",
+      "category": "godot-ai-mcp",
+      "severity": "major",
+      "status": "fixed",
+      "symptom": "A brand-new script with class_name (written via Write/filesystem_manage write_text, not through the running editor gaining focus) is readable at its res:// path and script_attach succeeds, but any other script that references it as a static type (e.g. \"var w: WorldManifestation\") fails project_run with \"Parser Error: Could not find type X in the current scope\", and the game freezes at a debugger break before the game helper registers.",
+      "rootCause": "The global class_name table is only rebuilt by EditorFileSystem scanning newly-changed files; write_text/Write register the file itself but do not trigger that rebuild the way the editor regaining window focus does.",
+      "protection": [
+        "call filesystem_manage(op=\"scan\") once after adding any class_name script before referencing it as a static type elsewhere, or from an external run",
+        "if project_run still reports \"Could not find type X\" after adding a class_name script, re-run filesystem_manage(op=\"scan\") and project_run again rather than assuming the code itself is wrong",
+        "ok to loosen the referencing var to a plain Node/RefCounted type if the scan step is inconvenient - duck-typed method calls (.execute()/.undo()/.redo()) still work without the static type"
+      ]
+    },
+    {
+      "id": "mobile-touch-detection-requires-maxtouchpoints-even-with-mobile-ua",
+      "category": "mobile-controls",
+      "severity": "major",
+      "status": "fixed",
+      "symptom": "DARK_VOID_MOBILE_CONTROLS_PATCH_V2 hardened isTouchMobile()/needsTouchControls() (shared/mobile-game-shell.js, shared/ai3d-playable-runtime.js) to require navigator.maxTouchPoints > 0 as a multiplicative gate before checking the UA string. Playwright mobile-webkit (iPhone 13 device emulation) and possibly some real WebKit builds report maxTouchPoints=0 despite a clear iPhone UA and pointer:coarse - the whole check then silently returned false, so #goldenMovePad/#goldenLookZone never rendered and mobile joysticks were missing entirely, with no error thrown.",
+      "rootCause": "A UA-confirmed mobile browser (Android/iPhone/iPad/iPod/Mobile in the UA) was still gated behind maxTouchPoints>0, but that property is not reliably populated by every engine/automation harness even on genuinely touch-only devices.",
+      "protection": [
+        "when the UA unambiguously says mobile (Android/iPhone/iPad/iPod/Mobile), return true immediately - do not additionally require maxTouchPoints>0",
+        "keep maxTouchPoints>0 required only for the desktop-touchscreen fallback branch (coarse-pointer + compact-screen, no trustworthy UA signal) - that branch exists specifically to avoid false positives, so it still needs a real touch signal",
+        "verify any touch-detection change against Playwright devices['iPhone 13']/mobile-webkit specifically, not just Chromium mobile emulation - the two engines report navigator.maxTouchPoints differently under emulation"
+      ]
     }
   ],
   "confirmationProtocol": {

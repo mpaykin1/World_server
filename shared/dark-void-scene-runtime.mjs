@@ -311,7 +311,13 @@ export class OrbitCameraRig extends THREE.Object3D {
     this._locked = document.pointerLockElement === this.domElement;
   }
   _onMouseMove(e) {
-    if (!this._locked) return;
+    // Pointer Lock never engages from a touch drag, so the mobile golden
+    // look-joystick can't rely on _locked - it bridges through a
+    // synthetic mousemove tagged __fromGoldenMobile instead (see
+    // shared/mobile-game-shell.js's bridgeGoldenLookToExistingMouseLook,
+    // installed by DARK_VOID_MOBILE_CONTROLS_PATCH_V2). Real desktop
+    // mouse movement still requires an actual lock.
+    if (!this._locked && !e.__fromGoldenMobile) return;
     this.rotation.y -= e.movementX * this.sensitivity;
     this._pitch = THREE.MathUtils.clamp(this._pitch - e.movementY * this.sensitivity, -this.pitchLimit, this.pitchLimit);
     this.pitchGroup.rotation.x = this._pitch;
