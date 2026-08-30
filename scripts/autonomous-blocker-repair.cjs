@@ -728,7 +728,9 @@ async function checkVercelStatus(root, policy, state) {
   const sha = shaR.stdout.trim();
   try {
     const st = await httpsJson(`https://api.github.com/repos/${encodeURIComponent(repo.owner)}/${encodeURIComponent(repo.repo)}/commits/${sha}/status`, policy.timeouts.probeMs);
-    const vercel = (st.statuses || []).find(x => /vercel/i.test(String(x.context || '')));
+    const statuses = st.statuses || [];
+    // Prefer world-server project explicitly — other Vercel projects (improve-world-home) share same repo but have different Root Directory and should not block world-server. See VERCEL_ROOT_DIRECTORY_STATUS.json
+    let vercel = statuses.find(x => /vercel.*world-server/i.test(String(x.context || ''))) || statuses.find(x => String(x.target_url||'').includes('/world-server/')) || statuses.find(x => /vercel/i.test(String(x.context || '')));
     if (!vercel) {
       setBlocker(state, 'vercel-deployment', 'waiting', {
         reason: `No Vercel commit status yet for ${sha.slice(0, 8)}`,
