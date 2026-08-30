@@ -5,11 +5,19 @@ const {evaluateQualityRegression}=require('./quality-regression-lib');
 
 const ROOT=process.cwd();
 function load(rel){return JSON.parse(fs.readFileSync(path.join(ROOT,rel),'utf8'))}
+const SKIP_DIRS=new Set(['node_modules','.git','.hg','.svn','.next','.vercel','.turbo','.cache','dist','build','coverage','.world-server-state','.session-recovery-backups','.system-integration-backups','.blocker-repair-backups','.characterforge-backups','.golden-backup','.patch-backups','.texture-pipeline-backup','.cinematic-voxel-guard-backup-20260828-190316','.pytest_cache','.claude']);
 function walk(dir,base=''){
   const out=[]; if(!fs.existsSync(dir))return out;
-  for(const ent of fs.readdirSync(dir,{withFileTypes:true})){
+  let entries;
+  try{ entries=fs.readdirSync(dir,{withFileTypes:true}); }catch{ return out; }
+  for(const ent of entries){
+    // Never follow symlinks — prevents junction/symlink cycles (node_modules/.bin on Windows) causing stack overflow
+    if(ent.isSymbolicLink()) continue;
     const rel=path.posix.join(base,ent.name),abs=path.join(dir,ent.name);
-    if(ent.isDirectory())out.push(...walk(abs,rel)); else out.push(rel);
+    if(ent.isDirectory()){
+      if(SKIP_DIRS.has(ent.name)) continue;
+      out.push(...walk(abs,rel));
+    } else out.push(rel);
   } return out;
 }
 const existingFiles=walk(ROOT);

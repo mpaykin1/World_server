@@ -29,6 +29,7 @@ const {startSpan}=require('./integration-telemetry-lib.cjs');
     {id:'adapter-sandbox',args:['scripts/adapter-sandbox.cjs','health'],required:true},
     {id:'secure-update',args:['scripts/secure-update-metadata.cjs','health'],required:true},
     {id:'reproducible-build',args:['scripts/reproducible-build-gate.cjs'],required:true},
+    {id:'vercel-root-check',args:['scripts/check-vercel-root-directory.cjs'],required:true},
     {id:'model-check',args:['scripts/model-state-checker.cjs'],required:true},
     {id:'cas-peer-discovery',args:['scripts/cas-peer-discovery.cjs'],required:true},
     {id:'distributed-cas',args:['scripts/distributed-cas.cjs','health'],required:true},

@@ -226,6 +226,8 @@
     "integration:enhance": "node scripts/system-enhancement-orchestrator.cjs",
     "integration:readiness": "node scripts/system-readiness.cjs",
     "integration:selftest": "node scripts/integration-selftest.cjs",
+    "vercel:check": "node scripts/check-vercel-root-directory.cjs",
+    "vercel:root:check": "node scripts/check-vercel-root-directory.cjs",
     "integration:verify": "node scripts/system-control-plane.cjs --verify",
     "integration:full": "node scripts/system-control-plane.cjs",
     "iw:graphics:audit": "node scripts/iw-graphics-audit.cjs . --write",
