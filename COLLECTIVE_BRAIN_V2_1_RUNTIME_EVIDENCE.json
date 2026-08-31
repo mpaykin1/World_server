@@ -1,0 +1,12 @@
+﻿{
+    "schemaVersion":  "1.0.0",
+    "patch":  "OPENHUMAN_COLLECTIVE_BRAIN_PATCH_V2_1",
+    "generatedAt":  "2026-08-31T13:50:54.0436766Z",
+    "worktree":  "C:\\Users\\user\\Desktop\\World_server_openhuman",
+    "branch":  "ai/desktop/openhuman-collective-brain-v2",
+    "agentmemory":  "PASS",
+    "openhuman":  "PASS",
+    "collectiveBrain":  "PASS",
+    "releaseGate":  "PASS",
+    "mergeReady":  true
+}
