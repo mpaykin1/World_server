@@ -125,5 +125,20 @@
     "C:\\Users\\user\\Desktop\\START_COLLECTIVE_BRAIN.cmd",
     "C:\\Users\\user\\Desktop\\REPAIR_COLLECTIVE_BRAIN.cmd",
     "C:\\Users\\user\\Desktop\\World_server\\HOW_TO_USE_COLLECTIVE_BRAIN_RU.md"
-  ]
+  ],
+  "openHumanOrdinaryChatCycle": {
+    "addedAt": "2026-08-31T22:44:51.448Z",
+    "addedBySourceCommit": "fea6f6c1",
+    "pr": "https://github.com/mpaykin1/World_server/pull/15",
+    "summary": "This field is additive to the V2.1 evidence above (not a re-verification of it). It documents the follow-up finding that REST cross-memory PASS did not imply OpenHuman ordinary chat actually surfaced World_server knowledge, and the fix.",
+    "rootCause": "agentmemory World_server project held only 78 shallow install-verification probes (from CHECK_COLLECTIVE_BRAIN.cmd's own connectivity smoke test), never real project knowledge.",
+    "fix": "scripts/collective-brain-knowledge-pack.js — 12 curated knowledge entries written via the existing remember() mechanism.",
+    "restCrossMemory": "PASS (verified: agentmemory healthy, knowledge present, smart-search ranks curated entries above the 0.25 relevance floor for representative queries including the user's literal Russian test query)",
+    "ordinaryChatUiTurn": "NOT_VERIFIED (no GUI-automation tool for OpenHuman's native app in this environment; its local /rpc bearer token could not be located in plaintext on disk)",
+    "seeAlso": [
+      "OPENHUMAN_WORLD_SERVER_KNOWLEDGE_EVIDENCE.json",
+      "OPENHUMAN_ORDINARY_CHAT_CHECK.json",
+      "data/error-prevention-registry.json#openhuman-chat-memory-not-recalling-world-server"
+    ]
+  }
 }
