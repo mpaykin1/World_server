@@ -486,6 +486,86 @@
         "full release:gate mandatory before merge/production claim",
         "record exact failing step instead of skipping"
       ]
+    },
+    {
+      "id": "mjs-wrong-mime-type",
+      "category": "server",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "browser refuses to load an ES module with \"Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of application/octet-stream\"",
+      "rootCause": "server.js's static-file mime table only mapped .js, not .mjs — every .mjs file served by the local dev server (server.js) fell through to the application/octet-stream default, which browsers refuse to execute as a module script",
+      "protection": [
+        "server.js's mime table must include '.mjs': 'text/javascript; charset=utf-8' alongside '.js'",
+        "verify any new .mjs-based runtime with a live browser load (curl -I on the URL is not sufficient — confirm Content-Type AND that the module actually evaluates), not just a Node unit test"
+      ],
+      "solution": "add '.mjs': 'text/javascript; charset=utf-8' to server.js's mime map"
+    },
+    {
+      "id": "multi-ai-peer-review-maxbuffer",
+      "category": "tests",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "test/multi-ai-peer-review.test.js fails with 'SyntaxError: Unterminated string in JSON' or an assertion that exit code is null instead of 0",
+      "rootCause": "scripts/multi-ai-peer-review.cjs shells out to `git diff --name-only origin/master...<branch>` for up to 10 long-lived ai/*/opencode/* branches via spawnSync with no maxBuffer override (Node default ~1MB); the test's own spawnSync wrapping the whole script also had no override. As the repo accumulates more branches and diff volume, either call point silently truncates output mid-JSON once it crosses ~1MB, which can happen from unrelated commits on unrelated branches, not from the branch under test",
+      "protection": [
+        "scripts/multi-ai-peer-review.cjs's run() helper must set a generous maxBuffer (64MB) on every spawnSync call",
+        "test/multi-ai-peer-review.test.js's runGate() must also set maxBuffer (32MB) on its own spawnSync wrapping the script",
+        "when this test fails, first reproduce it in an unrelated worktree/branch to rule out an environment-wide (branch-count/diff-volume) cause before assuming a regression in the branch under test"
+      ],
+      "solution": "add maxBuffer overrides to both the inner script spawnSync calls and the outer test spawnSync call"
+    },
+    {
+      "id": "npm-ci-lockfile-drift",
+      "category": "ci",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "GitHub Actions CI fails at the very first `npm ci` step with `npm error code EUSAGE ... can only install packages when your package.json and package-lock.json ... are in sync`, blocking every check on every PR based on the affected branch",
+      "rootCause": "a dependency (e.g. @mediapipe/tasks-vision, pngjs) was added to package.json without running `npm install` to regenerate package-lock.json and committing the result — npm ci (used in CI, unlike npm install used locally) refuses to proceed on a stale lock file",
+      "protection": [
+        "whenever package.json dependencies/devDependencies change, run `npm install` and commit the resulting package-lock.json diff in the same change",
+        "if CI's npm ci step fails, check the error for 'Missing: <pkg>@<version> from lock file' before assuming a real test regression — it means the base branch itself has lockfile drift, unrelated to the PR's own changes"
+      ],
+      "solution": "run `npm install` to regenerate package-lock.json and commit it alongside the package.json change"
+    },
+    {
+      "id": "supabase-environment-project-mismatch",
+      "category": "database",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "a claimed Supabase database state (e.g. 'this migration is already applied') does not match what direct queries via the Supabase MCP tools show, or an MCP session cannot see a project the user references by name",
+      "rootCause": "more than one Supabase project can share a similar or identical human-readable name (e.g. two projects both nameable as some variant of \"Improve world\"), and a given MCP/tool session may only have access to a subset of an organization's projects — trusting a project by display name alone, or assuming an MCP session sees every project, produces false conclusions about database state",
+      "protection": [
+        "always confirm the exact project_id (ref), never just the display name, before running any migration or destructive query",
+        "if a claimed database state can't be reproduced via direct query, report the discrepancy honestly (what you see vs. what was claimed) and ask for the correct project_id rather than either blindly trusting the claim or unilaterally overriding it",
+        "a project MCP tools cannot see is not necessarily wrong or nonexistent — the user may have access this session does not"
+      ]
+    },
+    {
+      "id": "supabase-preview-migration-drift",
+      "category": "database",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "a migration that works in production fails at runtime (missing table/column) when applied to a preview/staging Supabase project, even though `create or replace function` itself succeeded with no error",
+      "rootCause": "Postgres does not validate table/column references inside a plpgsql function body at CREATE FUNCTION time, only at first EXECUTE — so a migration file that only creates a function assuming certain base tables/columns already exist (e.g. 'using existing voxel_worlds + voxel_world_events') can be applied cleanly to an environment that lacks those prerequisites, deploying a function that is silently broken until first called. Preview/staging projects can have a materially different (often older, consolidated, or partially-provisioned) base schema than production, even when the migration file history in the repo looks linear",
+      "protection": [
+        "before applying any migration to a non-production project, run a schema-compatibility check against the exact tables/columns/constraints the migration body references — do not infer compatibility from the migration file list or CREATE FUNCTION succeeding",
+        "list_migrations output on a target project can use a completely different naming/versioning scheme than the repo's local migration filenames (e.g. consolidated/squashed history) — do not assume version-number alignment implies schema alignment",
+        "if a migration assumes prerequisite schema (tables/columns) that the target project does not have, do not apply it — report the gap and let a human decide whether/how to backfill the prerequisite schema, since inventing new table/column/RLS design unilaterally is a real architectural decision"
+      ]
+    },
+    {
+      "id": "openhuman-chat-memory-not-recalling-world-server",
+      "category": "agent-memory",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "OpenHuman's ordinary chat UI reports knowing nothing about a project, even though agentmemory is healthy, OpenHuman's config correctly points at it, and a REST-level cross-memory roundtrip test (write a probe, search for it, find it) passes",
+      "rootCause": "REST cross-memory PASS only proves agentmemory is reachable and can round-trip an arbitrary probe string — it does not prove the memory store contains real, substantive project knowledge. A connectivity smoke test (e.g. CHECK_COLLECTIVE_BRAIN.cmd's own 'Memory save/recall' probe) that writes a short random string and confirms it comes back can itself be the only thing populating a project's memory, crowding out (or simply being mistaken for) actual curated knowledge — this repo's own health check had been doing exactly that for days before anyone noticed the project's memory had no real facts in it",
+      "protection": [
+        "treat \"REST cross-memory roundtrip PASS\" and \"ordinary chat surfaces real knowledge PASS\" as two distinct claims, never conflate them — a doctor/test reporting both separately (not just one combined status) is required",
+        "before diagnosing an ordinary-chat memory gap, actually list/search the target memory store's content for the project (not just probe for a freshly-written test string) — a project can have dozens of memory entries and still contain zero real facts",
+        "a connectivity health-check script that writes its own probe data into the same durable memory store it is checking will pollute that store over repeated runs — prefer a dedicated ephemeral/test namespace, or at minimum distinct low-relevance concepts, for pure connectivity probes so they do not compete with real knowledge in search ranking"
+      ],
+      "solution": "build a curated, hand-authored knowledge pack (not a raw dump) and write it into the real memory store via the existing remember() mechanism; verify via the same search path the chat UI itself uses"
     }
   ],
   "confirmationProtocol": {
