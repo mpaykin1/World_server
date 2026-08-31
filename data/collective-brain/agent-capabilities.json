@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0.0",
+  "agents": {
+    "desktop-ai": {
+      "role": "repository integrator and real-machine verifier",
+      "baseScore": 72,
+      "strengths": ["windows-runtime", "installation", "deep-review", "real-machine-verification"],
+      "keywordWeights": {"install":20,"windows":20,"desktop":18,"vercel":8,"godot":10,"runtime":12,"mcp":12},
+      "costPenalty": 0
+    },
+    "codex": {
+      "role": "code synthesis, refactoring and test implementation",
+      "baseScore": 70,
+      "strengths": ["coding", "tests", "sandbox-verification", "refactoring"],
+      "keywordWeights": {"code":18,"test":16,"refactor":18,"bug":14,"patch":16,"api":10,"script":12},
+      "costPenalty": 0
+    },
+    "claude-code": {
+      "role": "architecture review, broad repository reasoning and peer review",
+      "baseScore": 69,
+      "strengths": ["deep-review", "architecture", "documentation", "cross-system-analysis"],
+      "keywordWeights": {"architecture":20,"review":18,"design":16,"reason":12,"documentation":10,"integration":14},
+      "costPenalty": 0
+    },
+    "opencode": {
+      "role": "parallel implementation and repository automation",
+      "baseScore": 62,
+      "strengths": ["coding", "automation", "parallel-work"],
+      "keywordWeights": {"automation":18,"script":14,"parallel":15,"cleanup":10,"tool":12},
+      "costPenalty": 0
+    },
+    "openhuman": {
+      "role": "durable workflow orchestration, approvals and memory-aware coordination",
+      "baseScore": 58,
+      "strengths": ["orchestration", "approvals", "durable-workflows", "memory"],
+      "keywordWeights": {"workflow":22,"memory":20,"approval":18,"orchestrate":22,"schedule":12,"agent":12},
+      "costPenalty": 2
+    }
+  }
+}

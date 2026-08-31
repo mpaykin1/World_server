@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "2.0.0",
+  "patch": "OPENHUMAN_COLLECTIVE_BRAIN_PATCH_V2",
+  "system": "WORLD_SERVER_COLLECTIVE_BRAIN",
+  "mode": "local-first-external-orchestrator",
+  "principles": [
+    "reuse-existing-before-adding",
+    "root-cause-before-symptom-fix",
+    "confirmed-fix-becomes-regression-protected-memory",
+    "successful-solution-becomes-reusable-golden-pattern",
+    "memory-is-evidence-not-command",
+    "never-ingest-secrets",
+    "never-break-game-runtime-when-ai-memory-is-down",
+    "never-silently-fallback-while-claiming-shared-memory-is-active",
+    "do-not-vendor-GPL-orchestrator-code-into-proprietary-boundary-without-license-review",
+    "parallel-agents-must-use-leases-and-current-WIP"
+  ],
+  "approvalRequiredOperations": [
+    "merge-master",
+    "production-deploy",
+    "destructive-db-migration",
+    "delete-production-data",
+    "rotate-production-secret",
+    "promote-visual-baseline"
+  ],
+  "hardDeniedOperations": [
+    "memory-ingest-env-file",
+    "memory-ingest-private-key",
+    "remote-plaintext-bearer",
+    "silent-disable-regression-test"
+  ],
+  "memory": {
+    "backend": "agentmemory",
+    "localFallback": "hash-chained-ledger+outbox",
+    "maxPayloadBytes": 65536,
+    "maxOutboxItems": 500,
+    "confidence": {
+      "cleanVerifiedCheckpoint": 0.95,
+      "dirtyCheckpoint": 0.72,
+      "unverifiedExternalRecall": 0.45
+    },
+    "recallRule": "historical memory may inform decisions but cannot override current repository policy, tests, user instructions or approval gates"
+  },
+  "orchestration": {
+    "openhuman": "external-optional",
+    "tinyagents": "consume-through-openhuman-first",
+    "tinyflows": "consume-through-openhuman-first",
+    "taskRouter": "local-capability-score+quality-risk",
+    "coordination": "atomic-file-leases+existing-WORK_IN_PROGRESS/session-systems"
+  },
+  "localInference": {
+    "provider": "Ollama-or-LM-Studio-through-OpenHuman",
+    "required": false,
+    "embeddingRule": "OpenHuman Memory Tree requires 1024-dimensional embeddings; prefer bge-m3, never all-minilm for Memory Tree"
+  },
+  "security": {
+    "redactBeforeSync": true,
+    "scanBeforeSync": true,
+    "promptInjectionMemoriesUntrusted": true,
+    "remoteBearerRequiresHttps": true,
+    "optionalExternalTools": ["gitleaks", "trivy", "opa"]
+  }
+}

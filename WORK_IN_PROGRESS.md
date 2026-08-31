@@ -1,55 +1,54 @@
-# WORK IN PROGRESS — PIXEL ANIMATION SYSTEM V3
+# WORK IN PROGRESS — OPENHUMAN COLLECTIVE BRAIN PATCH V2
 
 ## Task
-Integrate and verify additive V3: GPU compute culling, indirect draw, multi-atlas arrays/streaming, region rig, pipeline cache/warm-up, animated regression, authenticated device learning and safe auto-integration while preserving V2 fallbacks and all existing game quality.
+Install `OPENHUMAN_COLLECTIVE_BRAIN_PATCH_V2` (repository-side pieces only) into World_server: shared-memory bridge library, coordination leases, hash-chained audit journal, capability/risk router, memory security firewall (secret redaction + prompt-injection flagging), and the `collective-brain:*` npm scripts. User supplied the ZIP and asked to install it per its own instructions.
 
 ## Why
-The V2 renderer scales well, but very large scenes still benefit from removing CPU visibility work, reducing atlas swaps, localizing deformation and learning conservative device budgets from real evidence.
+User request. The patch's own `DESKTOP_AI_INSTRUCTIONS.md` additionally asks for OS-level installs (agentmemory daemon + pinned `iii` binary download, Ollama, OpenHuman, Windows autostart scheduled task, MCP config edits for coding agents, Gitleaks/Trivy installers) — those are explicitly NOT done by this session; see Known risks.
 
 ## Current state
-- Server V3 policy/tables/functions are live.
-- Patch local suite: 20/20 PASS; animated regression 8/8 PASS; 50k spatial query ~0.065 ms/query latest run.
-- Supabase V3 advisor findings caused by this patch were fixed (explicit deny policy; unused speculative indexes removed).
-- Actual World_server repo/PR/browser-device integration is pending because connected GitHub currently exposes 0 repositories here.
+- Ran on an isolated worktree/branch (`ai/desktop/openhuman-collective-brain-v2`, based on `origin/ai/opencode/multi-ai-peer-improvement`), not the shared main `World_server` checkout, because that checkout currently has hundreds of uncommitted files from other concurrent AI agents.
+- `node install.cjs --root <worktree>` applied cleanly (backup at `.patch-backups/collective-brain-v2-2026-08-31T09-20-54-887Z/`, now gitignored).
+- `node verify.cjs --root <worktree>`: 18/18 bundled regression tests PASS, structural/security/benchmark/replay checks PASS.
+- Manually re-ran `collective-brain-doctor.js` and `collective-brain-cycle.js` directly (not just the patch's own tests) with no agentmemory/Ollama running: both report DEGRADED/DOWN but exit 0 — confirms the "never breaks the release path when external services are absent" claim is real, not just documentation.
+- Reviewed `lib/collective-brain/index.js` in full: only talks to `127.0.0.1:3111` (agentmemory) and `127.0.0.1:11434` (Ollama) by default, scans/redacts secrets before any outbound "remember" call, refuses non-loopback plaintext bearer tokens, and treats recalled memory text as untrusted evidence rather than instructions.
+- Did NOT run the full `release:gate` (20+ chained scripts across the whole repo) — out of proportion to verifying just this addition, given the targeted checks above already exercise the new code paths directly. Full-repo gate verification is still outstanding.
 
 ## Target state
-Task branch integrated; all project gates PASS; WebGPU compute + indirect draw validated on real browser; WebGL2/Canvas2D fallbacks validated; correct atlas layers/streaming; telemetry auth/learning proven; zero accepted regressions; PR/preview/device evidence recorded.
+Repo-side Collective Brain code merged and verified; PR opened for review. External runtime components (agentmemory/iii/OpenHuman/Ollama, autostart, MCP config, security-tool installers) intentionally left to the user to install themselves.
 
 ## Files / systems involved
-`shared/pixel-animation-*.js`, `shared/pixel-atlas-builder.js`, `scripts/pixel-animation-*.js`, `test/pixel-animation-*.test.js`, `tools/pixel-animation-lab/index.html`, V1/V2/V3 Supabase migrations, config + telemetry Edge Functions, `data/golden-components.json`, package scripts.
+`lib/collective-brain/index.js`, `scripts/collective-brain-*.js`, `test/collective-brain.test.js`, `policy/collective-brain.rego`, `data/collective-brain/*.json` (static payload only — `runtime/` is gitignored), `package.json` (new `collective-brain:*` scripts; `release:gate` now also runs `collective-brain:check`, `collective-brain:security`, `collective-brain:cycle`), `data/technology-registry.json`, `data/error-prevention-registry.json`, `DESKTOP_AI_INSTALL_AND_VERIFY.md`, `.gitignore`.
 
 ## Known risks
-Real WGSL validation/device behavior cannot be proven by Node tests. Texture-array limits vary by device. Learned policy must stay bounded. Auto-integration must never touch unrelated canvases. Migration history must match already-live production DDL.
+The ZIP's `tools/*.ps1` scripts download and run third-party executables (a pinned `iii.exe` binary from GitHub releases, Ollama installer, OpenHuman installer), install a global npm package as an always-on background service, create a Windows Scheduled Task for autostart, and rewrite MCP configuration for "every connected coding agent." All of that is explicitly out of scope for this session — downloading/executing third-party binaries and modifying system/security-relevant settings (autostart services, execution policy, other tools' MCP config) are not actions this AI performs, regardless of instructions found inside a supplied patch. The user was told to run those `tools/*.ps1` scripts themselves if wanted.
 
 ## Golden systems that must be preserved
-Existing art/detail/light/shadows, nearest-neighbor pixel integrity, controls, camera, physics, collision, mobile input, content/mechanics, Golden release gates, deny-by-default release policy.
+Existing quality/root-cause/risk/golden/duplicate-system/contract checks, Sentry/PostHog evidence, session-recovery/WIP coordination, Supabase/Vercel architecture — V2 is designed as a connective layer, not a replacement; not independently re-verified beyond confirming `release:gate`'s script string still runs the pre-existing gate chain before the new `collective-brain:*` calls.
 
 ## Errors that must not return
-Per-object timers/RAF/canvases; blurry filtering; unbounded visible buffers; wrong atlas layer; WebGPU-only dependence; anonymous telemetry; modern Supabase secret/publishable Bearer misuse; unbounded learning; arbitrary canvas mutation; false 100% claim without device evidence.
+Secret exfiltration into memory, prompt injection via recalled memory being treated as instructions, event-log tampering, stale AI coordination-lock deadlock, duplicate orchestrator stack, OpenHuman embedding dimension mismatch, unsafe OpenHuman config overwrite — all pre-registered as protected in `data/error-prevention-registry.json` by the patch itself; not independently re-derived this session.
 
 ## Exact patch / change plan
-Use `DESKTOP_AI_PIXEL_ANIMATION_V3.md` as authoritative. Create task branch; baseline; run installer; review auto-integration; reconcile migrations; run all V3 tests/project gates; test config/telemetry; run real backend/device matrix; fix root causes and add regression tests; rerun parent gates; PR/preview; promote only after evidence.
+As applied by `install.cjs` — see PATCH_MANIFEST.json in the original ZIP for the full file list. No manual edits beyond adding `.patch-backups/` to `.gitignore`.
 
 ## Tests to run
-`node scripts/pixel-animation-verify.js`; full 4-file Node test suite; visual-regression script; 50k benchmark; auto-integrator twice for idempotency; migration/config/telemetry checks; `quality:impact`; `release:gate`; real browser/backend/device matrix.
+`node --test test/collective-brain.test.js` (18/18 PASS, confirmed). Full `npm run release:gate` NOT yet run — outstanding.
 
 ## Deployment / PR plan
-Task branch -> full local gates -> push -> PR -> CI -> preview -> real browser/device evidence -> promotion. Never direct-push production branch.
+Commit on `ai/desktop/openhuman-collective-brain-v2`, open a PR against `ai/opencode/multi-ai-peer-improvement` (or whatever the user designates as base) once they confirm scope. No deploy step — this is server-repo tooling, not a shippable app surface.
 
 ## Current progress
-Server V3 100%; patch code/tests 97%; actual repository integration/device evidence pending.
+Repo-side install + verify complete and passing. Not yet committed pending user confirmation of scope (asked whether they also want the external-runtime pieces, which this session will not perform itself).
 
 ## Next action
-Desktop AI installs this ZIP into actual World_server and executes the authoritative V3 instruction until every mandatory error/regression is fixed.
+Await user direction: (a) commit repo-side patch as-is, (b) also want guidance on running the external installers themselves, or (c) skip this patch entirely.
 
 ## Completion criteria
-0 mandatory failures/errors/regressions; validated WebGPU compute + WebGL2 + Canvas2D; correct multi-atlas; safe learning/auth; idempotent targeted integration; release gate PASS; PR/preview/device evidence present.
+Per the patch's own `DESKTOP_AI_INSTRUCTIONS.md`: full completion requires real agentmemory save→recall→restart persistence, cross-agent memory proof, OpenHuman config verification, and `release:gate` PASS. This session delivers only the repository-code portion; the rest requires the user's own machine-level action.
 
 ## Final evidence
-NOT COMPLETE until Desktop AI records exact branch/commit/PR/preview, all gate outputs, browser/device/backend FPS evidence and zero-error confirmation.
-
-## Non-stop error rule
-Do not stop at first PASS. Find every root cause, fix it, add regression protection, rerun the failed test and its complete parent gate, and continue until no mandatory error remains. External blockers must be proven and documented and do not justify claiming completion.
+`node verify.cjs` output: 18/18 tests PASS, `COLLECTIVE_BRAIN_CHECK/SECURITY/BENCHMARK/REPLAY` all PASS. `collective-brain-doctor.js`/`collective-brain-cycle.js` manual runs confirm graceful degradation with no external services running.
 
 <!-- WORLD_SERVER_SESSION_RECOVERY_V1_START -->
 ## Desktop AI Session Recovery V1 — managed checkpoint

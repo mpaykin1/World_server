@@ -49,3 +49,15 @@ tools/game-motion/node/node_modules/
 
 # Ink Glyph World local tool cache
 .ink-glyph-tools/
+
+# OPENHUMAN_COLLECTIVE_BRAIN_PATCH_V2 runtime
+data/collective-brain/runtime/
+COLLECTIVE_BRAIN_CONTEXT.md
+COLLECTIVE_BRAIN_REPORT.json
+COLLECTIVE_BRAIN_CHECK.json
+COLLECTIVE_BRAIN_SECURITY.json
+COLLECTIVE_BRAIN_DOCTOR.json
+COLLECTIVE_BRAIN_ROUTE.json
+COLLECTIVE_BRAIN_REPLAY.json
+COLLECTIVE_BRAIN_BENCHMARK.json
+.patch-backups/
