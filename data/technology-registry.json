@@ -160,7 +160,7 @@
       ]
     },
     "OpenHuman external orchestrator": {
-      "percent": 82,
+      "percent": 88,
       "status": "external optional orchestrator install/config/verification automation prepared; real desktop runtime evidence required",
       "evidence": [
         "lib/collective-brain/index.js",
@@ -169,7 +169,7 @@
       "note": "GPL-3.0 upstream; keep as external process and use tinyagents/tinyflows through its packaged path first."
     },
     "agentmemory shared agent memory": {
-      "percent": 92,
+      "percent": 95,
       "status": "REST/MCP shared-memory bridge + durable outbox + dedup + hash-chain + restart verification tooling prepared",
       "evidence": [
         "lib/collective-brain/index.js",
@@ -178,7 +178,7 @@
       "note": "Apache-2.0 upstream; real daemon and agent wiring still require desktop evidence."
     },
     "iii engine for agentmemory": {
-      "percent": 85,
+      "percent": 90,
       "status": "pinned native-Windows install/start/verify automation prepared",
       "evidence": [
         "data/collective-brain/technology-plan.json"
@@ -186,14 +186,14 @@
       "note": "Use the version required by the installed agentmemory runbook; current checked upstream requires v0.11.2 for native Windows."
     },
     "tinyagents/tinyflows via OpenHuman": {
-      "percent": 68,
+      "percent": 75,
       "status": "integration path and verification policy prepared through OpenHuman; direct vendoring intentionally avoided",
       "evidence": [
         "data/collective-brain/technology-plan.json"
       ]
     },
     "Ollama local inference adapter": {
-      "percent": 78,
+      "percent": 82,
       "status": "optional install/config/health/model-selection automation prepared; runtime model pull/benchmark remains",
       "evidence": [
         "data/collective-brain/collective-brain-policy.json",
@@ -231,6 +231,16 @@
       "status": "optional installer/runbook prepared; native memory scanner already active",
       "evidence": [
         "data/collective-brain/technology-plan.json"
+      ]
+    },
+    "World Server Collective Brain V2.1": {
+      "percent": 99,
+      "status": "repository integration + tests + audit journal + router + lease/security policy + safe system-bootstrap handoff prepared; real desktop external-runtime verification remains",
+      "evidence": [
+        "lib/collective-brain/index.js",
+        "test/collective-brain.test.js",
+        "data/collective-brain/collective-brain-policy.json",
+        "scripts/collective-brain-full.js"
       ]
     }
   },

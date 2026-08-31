@@ -446,6 +446,46 @@
         "parse/verify after write",
         "rollback on ambiguity"
       ]
+    },
+    {
+      "id": "collective-brain-dirty-main-bootstrap",
+      "category": "coordination",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "user-run system bootstrap applies repository patch into a dirty shared main worktree",
+      "rootCause": "V2 full-install mixed machine-level installation with repository mutation",
+      "protection": [
+        "V2.1 system bootstrap never writes World_server",
+        "repository patch only in isolated task worktree",
+        "post-bootstrap verifier accepts explicit task worktree path"
+      ]
+    },
+    {
+      "id": "desktop-ai-system-installer-boundary",
+      "category": "automation",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "Desktop AI stops progress because it refuses to download/install third-party system software",
+      "rootCause": "repo-install and machine-bootstrap responsibilities were coupled",
+      "protection": [
+        "split repo phase from user-run machine bootstrap",
+        "Desktop AI must continue through commit/push/draft-PR",
+        "one-command user bootstrap",
+        "resume with verification after bootstrap"
+      ]
+    },
+    {
+      "id": "release-gate-skipped-as-heavy",
+      "category": "tests",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "agent reports patch ready without full release gate because it is expensive or slow",
+      "rootCause": "targeted tests were incorrectly treated as completion evidence",
+      "protection": [
+        "targeted tests may run first",
+        "full release:gate mandatory before merge/production claim",
+        "record exact failing step instead of skipping"
+      ]
     }
   ],
   "confirmationProtocol": {
