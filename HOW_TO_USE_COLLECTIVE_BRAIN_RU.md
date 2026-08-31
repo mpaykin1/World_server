@@ -13,6 +13,13 @@
 - Если `CHECK` показывает `NEEDS REPAIR` — запусти `REPAIR_COLLECTIVE_BRAIN.cmd` (не удаляет память, не трогает репозиторий).
 - Если `REPAIR` не помогает — запусти `START_COLLECTIVE_BRAIN.cmd`.
 
+**Если OpenHuman в обычном чате говорит, что ничего не знает про World_server:**
+
+- Это отдельная, более узкая проблема, чем просто "agentmemory работает" — `CHECK` проверяет только связь, а не содержимое. `CHECK_COLLECTIVE_BRAIN.cmd` теперь дополнительно печатает строку `World_server knowledge: PRESENT/MISSING/STALE`.
+- Если там `MISSING` или `STALE` — запусти `npm run collective-brain:knowledge-pack` в папке `World_server` (или попроси ИИ-агента это сделать). Это безопасная, неразрушающая операция: она пишет структурированные факты о проекте в ту же общую память, не трогает код и не требует перезапуска.
+- После этого закрой и заново открой OpenHuman, начни новый чат и спроси ещё раз.
+- Строка `OpenHuman ordinary chat shared memory: PASS/NOT_VERIFIED/STALE_EVIDENCE` — это отдельный, более строгий статус: `PASS` означает, что кто-то реально прошёл ручной тест в самом окне чата OpenHuman (не просто через REST-запрос) и записал это в `OPENHUMAN_ORDINARY_CHAT_MANUAL_EVIDENCE.json`. `NOT_VERIFIED` — это честно, а не ошибка: значит, такой ручной проверки в чате ещё не было.
+
 **Что где хранится:**
 
 - Локально: `agentmemory` (`~/.agentmemory/`, `~/.agentmemory/.env` с `EMBEDDING_PROVIDER=local`), `OpenHuman` (`%APPDATA%\OpenHuman\config.toml` с `backend="agentmemory"`), общая память — на этом компьютере.

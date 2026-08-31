@@ -30,6 +30,7 @@ const cp = require('child_process');
 const { health, smartSearch } = require('../lib/collective-brain');
 
 const MANUAL_EVIDENCE_TTL_DAYS = 14;
+const KNOWLEDGE_TTL_DAYS = 30;
 const RELEVANCE_FLOOR = 0.25; // matches OpenHuman config.toml [memory] min_relevance_score
 const KNOWLEDGE_QUERIES = ['What do you know about the World_server project?', 'World_server architecture Navigator Supabase Collective Brain'];
 
@@ -69,7 +70,12 @@ async function checkKnowledge(root) {
   const entries = Object.values(ledger.entries || {});
   if (!entries.length) return { status: 'MISSING', reason: 'ledger exists but has zero entries' };
   const currentHead = gitHead(root);
-  const stale = entries.filter((e) => e.sourceCommit !== currentHead);
+  // Staleness is age-based, not commit-equality-based: an entry's sourceCommit only changes
+  // when the knowledge-pack run last WROTE that entry (dedup skips unchanged content), so most
+  // commits to the repo legitimately leave it untouched without making the fact wrong. Treat an
+  // entry as stale only once it hasn't been re-verified within KNOWLEDGE_TTL_DAYS.
+  const ages = entries.map((e) => (e.updatedAt ? (Date.now() - Date.parse(e.updatedAt)) / 86400000 : Infinity));
+  const stale = ages.filter((ageDays) => ageDays > KNOWLEDGE_TTL_DAYS);
   const staleness = stale.length === entries.length ? 'ALL_STALE' : stale.length > 0 ? 'PARTIALLY_STALE' : 'FRESH';
 
   const searchProof = [];
@@ -131,7 +137,10 @@ async function run(root = process.cwd()) {
 }
 
 if (require.main === module) {
-  run(process.cwd()).then((r) => {
+  // Default to the repo root next to this script, not process.cwd() — this file is invoked
+  // directly (not just via `npm run`) from CHECK_COLLECTIVE_BRAIN.cmd, whose caller's cwd is
+  // not guaranteed to be the repo root.
+  run(path.resolve(__dirname, '..')).then((r) => {
     console.log(`[OPENHUMAN_ORDINARY_CHAT_CHECK] restCrossMemory=${r.restCrossMemory} ordinaryChat=${r.ordinaryChat} knowledge=${r.knowledge.status} manualE2e=${r.manualE2e.status}`);
   }).catch((e) => { console.error('[OPENHUMAN_ORDINARY_CHAT_CHECK]', e.message); process.exitCode = 1; });
 }

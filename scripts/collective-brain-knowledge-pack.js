@@ -161,7 +161,10 @@ async function run(root = process.cwd(), opts = {}) {
 }
 
 if (require.main === module) {
-  run(process.cwd()).then((r) => {
+  // Default to the repo root next to this script, not process.cwd() — matches
+  // openhuman-ordinary-chat-check.js so direct `node scripts/...` invocations from any
+  // working directory still resolve the ledger/outbox against the right repo root.
+  run(path.resolve(__dirname, '..')).then((r) => {
     console.log(`[KNOWLEDGE_PACK] source=${r.sourceCommit.slice(0, 8)} agentmemory=${r.agentmemoryOk ? 'online' : 'OFFLINE(queued)'}`);
     for (const e of r.entries) console.log(`  - ${e.slug}: ${e.status}`);
     const failed = r.entries.some((e) => e.status === 'REFUSED_SECRET_LIKE');
