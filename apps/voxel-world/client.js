@@ -1,4 +1,5 @@
 import * as THREE from 'https://unpkg.com/three@0.165.0/build/three.module.js';
+import { createProductionVfxRuntime } from '../../shared/world-procedural-vfx/runtime/index.mjs';
 
 const CHUNK = 16;
 const WORLD_Y = 96;
@@ -79,6 +80,16 @@ const camera=new THREE.PerspectiveCamera(72,innerWidth/innerHeight,.05,420);
 const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
   globalThis.WorldProceduralThreeNative?.attach?.(renderer, THREE);
   if(typeof world!=='undefined'&&typeof activeCamera!=='undefined')globalThis.WorldProceduralVoxelDDGI?.attach?.({renderer:renderer,worldGetter:()=>world,cameraGetter:()=>activeCamera}); renderer.setPixelRatio(Math.min(devicePixelRatio,1.65)); renderer.setSize(innerWidth,innerHeight); renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap; renderer.outputColorSpace=THREE.SRGBColorSpace; document.body.prepend(renderer.domElement);
+// world-procedural-vfx V3 - reuses this scene/renderer/camera, no second render loop.
+// world-procedural-recipe-engine V3 reinforcement: lib/world-procedural-vfx-bridge.js
+// turns a Navigator recipe patch into a window.WorldProceduralVfx.semantic(...) call;
+// listening for 'world:vfx' here is the same contract the VFX patch's own
+// apps/ai3d-voxel-city auto-wiring uses, so both integration paths stay consistent.
+const worldProceduralVfx=createProductionVfxRuntime({THREE,scene,renderer,camera,worldQuality:window.WorldQualityAutopilot});
+worldProceduralVfx.warmup().catch(()=>{});
+window.WorldProceduralVfx={version:'3.0.0',runtime:worldProceduralVfx,engine:worldProceduralVfx.engine,spawn:event=>worldProceduralVfx.spawn(event),semantic:detail=>worldProceduralVfx.semantic(detail||{}),stats:()=>worldProceduralVfx.stats()};
+addEventListener('world:vfx',e=>{const d=e.detail||{};if(d.semantic||d.intent)window.WorldProceduralVfx.semantic({...d,intent:d.intent||d.semantic});else window.WorldProceduralVfx.spawn(d);});
+let worldProceduralVfxLastFrame=performance.now();
 const sun=new THREE.DirectionalLight(0xfff1d2,2.1); sun.position.set(45,70,20); sun.castShadow=true; sun.shadow.mapSize.set(1024,1024); sun.shadow.camera.left=-55;sun.shadow.camera.right=55;sun.shadow.camera.top=55;sun.shadow.camera.bottom=-55; scene.add(sun);
 const hemi=new THREE.HemisphereLight(0xbfe1ff,0x31412c,1.15); scene.add(hemi);
 window.WorldQualityAutopilot?.registerRenderer('voxel-world',renderer,{initialTier:matchMedia('(pointer:coarse)').matches?'BALANCED':'HIGH',targetFps:matchMedia('(pointer:coarse)').matches?40:55,onQualityChange(q){renderer.shadowMap.enabled=q.shadowQuality>0;const shadowSize=q.shadowQuality>1?1024:512;if(sun?.shadow?.mapSize){sun.shadow.mapSize.set(shadowSize,shadowSize);sun.shadow.needsUpdate=true}},getStats(){return{calls:renderer.info.render.calls,triangles:renderer.info.render.triangles}}});
@@ -267,7 +278,7 @@ function updateTarget(){const h=rayVoxel();if(!h)return;targetEl.textContent=`${
 
 async function savePlayer(){try{await api('player_save',{worldId:'main',position:{x:player.pos.x,y:player.pos.y,z:player.pos.z},yaw:player.yaw,pitch:player.pitch,selectedBlock:HOTBAR[player.selected]});}catch{} }
 function broadcastPlayer(now){if(!channel||now-lastNet<NET_INTERVAL)return;lastNet=now;channel.send({type:'broadcast',event:'player_state',payload:{id:player.id,name:player.name,x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw}});}
-let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(started){physics(dt);loadNeededChunks();broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);renderer.render(scene,camera);}requestAnimationFrame(loop);
+let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(started){physics(dt);loadNeededChunks();broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);const worldVfxNow=performance.now();worldProceduralVfx.setCamera(camera);worldProceduralVfx.tick(Math.min(.1,Math.max(0,(worldVfxNow-worldProceduralVfxLastFrame)/1000)),worldVfxNow/1000);worldProceduralVfxLastFrame=worldVfxNow;renderer.render(scene,camera);}requestAnimationFrame(loop);
 
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});addEventListener('beforeunload',()=>savePlayer());
 setupDesktop();setupMobile();buildHotbar();
