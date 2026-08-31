@@ -2,7 +2,7 @@
 'use strict';
 const fs=require('fs'),path=require('path'),cp=require('child_process');
 const ROOT=process.cwd();
-function run(cmd,args,opts={}){ return require('child_process').spawnSync(cmd,args,{cwd:ROOT,encoding:'utf8',...opts}); }
+function run(cmd,args,opts={}){ return require('child_process').spawnSync(cmd,args,{cwd:ROOT,encoding:'utf8',maxBuffer:64*1024*1024,...opts}); }
 function getBranches(){ const r=run('git',['branch','-a','--format=%(refname)'],{windowsHide:true}); return (r.stdout||'').split('\n').filter(Boolean); }
 function getWorktrees(){ const r=run('git',['worktree','list','--porcelain'],{windowsHide:true}); return r.stdout||''; }
 function getChanged(branch){ const r=run('git',['diff','--name-only',`origin/master...${branch}`],{windowsHide:true}); return (r.stdout||'').split('\n').filter(Boolean); }
