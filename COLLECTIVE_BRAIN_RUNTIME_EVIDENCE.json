@@ -103,11 +103,27 @@
   ],
   "systemRuntimeReadiness": 92,
   "mergeReady": true,
+  "integrationMergeSha": "70fef1e382c42d17feb911c5fa3a3c4f464890f3",
+  "postMergeReleaseGate": "PASS 2026-08-31T16:58 (World_server integration 70fef1e3, 76/76 control-plane, release:gate PASS after multi-ai-peer-review maxBuffer fix)",
+  "freshMemoryProbe": "final-merge-probe-20260831-172546-1448373484 PASS (smart-search + collective-brain:recall mode=agentmemory results=8)",
+  "scheduledTaskHealth": "PASS (WorldServer-AgentMemory Ready, manual Start-ScheduledTask 14:12:12, health healthy, no duplicate)",
+  "openHumanLaunch": "PASS (OpenHuman.exe pid 4164, config.toml backend agentmemory, webview_apis 127.0.0.1:58726)",
+  "openHumanAgentmemoryBackend": "PASS (C:\\Users\\user\\AppData\\Roaming\\OpenHuman\\config.toml backend=agentmemory)",
+  "persistence": "PASS (save/recall after restart, user-flow-test-20260831-180313 PASS)",
+  "oneClickStart": "PASS (START_COLLECTIVE_BRAIN.cmd created, checks agentmemory, starts if needed, launches OpenHuman, no reinstall, no admin required)",
+  "oneClickCheck": "PASS (CHECK_COLLECTIVE_BRAIN.cmd created, read-only, shows AgentMemory/OpenHuman/backend/memory/autostart/collective-brain)",
+  "oneClickRepair": "PASS (REPAIR_COLLECTIVE_BRAIN.cmd created, idempotent, non-destructive, resume-safe)",
+  "userFlowPass": "PASS (Windows-side healthy → OpenHuman backend agentmemory → create memory → close → restart agentmemory → reopen → memory still available → World_server sees same)",
+  "masterMergePath": "A/B evaluation: integration branch ai/opencode/multi-ai-peer-improvement contains peer-improvement work + Collective Brain (29 files, 1109 insertions). Direct merge to master would mix unfinished peer work. Correct path: Collective Brain → ai/opencode/multi-ai-peer-improvement (done, 70fef1e3) → master via separate integration PR when peer-improvement is green. Collective Brain safely integrated in integration branch, master merge waits for overall readiness.",
   "evidence": [
     "C:\\Users\\user\\WorldServerBootstrapLogs\\collective-brain-v2-1-bootstrap-20260831-141457.log",
     "C:\\Users\\user\\WorldServerBootstrapLogs\\COLLECTIVE_BRAIN_MACHINE_BOOTSTRAP.json",
     "C:\\Users\\user\\AppData\\Roaming\\OpenHuman\\config.toml",
     "C:\\Users\\user\\Desktop\\World_server_openhuman\\COLLECTIVE_BRAIN_V2_1_RUNTIME_EVIDENCE.json",
-    "C:\\Users\\user\\Desktop\\World_server_openhuman\\COLLECTIVE_BRAIN_REPORT.json"
+    "C:\\Users\\user\\Desktop\\World_server_openhuman\\COLLECTIVE_BRAIN_REPORT.json",
+    "C:\\Users\\user\\Desktop\\CHECK_COLLECTIVE_BRAIN.cmd",
+    "C:\\Users\\user\\Desktop\\START_COLLECTIVE_BRAIN.cmd",
+    "C:\\Users\\user\\Desktop\\REPAIR_COLLECTIVE_BRAIN.cmd",
+    "C:\\Users\\user\\Desktop\\World_server\\HOW_TO_USE_COLLECTIVE_BRAIN_RU.md"
   ]
 }
