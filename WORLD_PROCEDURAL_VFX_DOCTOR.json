@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "3.0.0",
+  "generatedAt": "2026-08-31T14:47:37.884Z",
+  "repo": "C:\\Users\\user\\Desktop\\World_server_procedural",
+  "candidates": [
+    {
+      "file": "apps/voxel-world/client.js",
+      "score": 10,
+      "signals": [
+        "THREE",
+        "renderer",
+        "renderLoop",
+        "realtime"
+      ]
+    },
+    {
+      "file": "apps/ai3d-voxel-city/client.js",
+      "score": 9,
+      "signals": [
+        "THREE",
+        "renderer",
+        "renderLoop"
+      ]
+    },
+    {
+      "file": "apps/survival/client.js",
+      "score": 9,
+      "signals": [
+        "THREE",
+        "renderer",
+        "renderLoop"
+      ]
+    },
+    {
+      "file": "apps/world-sharabass/index.html",
+      "score": 9,
+      "signals": [
+        "THREE",
+        "renderer",
+        "renderLoop"
+      ]
+    }
+  ],
+  "primaryIntegrationTarget": "apps/voxel-world/client.js",
+  "wiring": [
+    "apps/voxel-world/client.js"
+  ],
+  "gates": {
+    "moduleInstalled": true,
+    "primaryAppDetected": true,
+    "appWired": true,
+    "productionOrchestrator": true,
+    "telemetryReuse": true,
+    "worldQualityReuse": true,
+    "serverInterest": true,
+    "devicePolicy": true,
+    "godotContract": true,
+    "crossPlatformSchema": true,
+    "e2eInstalled": false,
+    "releaseGateIntegrated": true
+  },
+  "readinessPercent": 95,
+  "status": "WIRED_STATIC_PASS_NEEDS_LIVE_BROWSER_EVIDENCE"
+}

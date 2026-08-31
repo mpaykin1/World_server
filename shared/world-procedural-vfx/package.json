@@ -1,0 +1,15 @@
+{
+  "name": "@world-server/procedural-vfx",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "peerDependencies": {
+    "three": ">=0.160.0 <1"
+  },
+  "peerDependenciesMeta": {
+    "three": {
+      "optional": true
+    }
+  },
+  "description": "Deterministic procedural Three.js VFX runtime with adaptive quality, replay, network codecs and World_server adapters"
+}

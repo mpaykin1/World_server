@@ -1,0 +1,17 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"world-vfx-event-v2",
+  "type":"object",
+  "required":["id","type","position","seed"],
+  "properties":{
+    "id":{"type":"string","maxLength":160},
+    "type":{"enum":["pulse","sparks","beam","ribbon","decal"]},
+    "position":{"type":"array","items":{"type":"number"},"minItems":3,"maxItems":3},
+    "target":{"type":"array","items":{"type":"number"},"minItems":3,"maxItems":3},
+    "seed":{"type":["integer","string"]},
+    "priority":{"type":"integer","minimum":-100,"maximum":100},
+    "semantic":{"type":"string","maxLength":48},
+    "params":{"type":"object","additionalProperties":true}
+  },
+  "additionalProperties":true
+}

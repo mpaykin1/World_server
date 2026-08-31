@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {attachOffscreenCanvasToExistingWorker} from '../runtime/offscreen-adapter.mjs';
+test('offscreen adapter reuses injected worker',()=>{const off={};let sent;const canvas={transferControlToOffscreen:()=>off},worker={postMessage:(m,t)=>sent=[m,t]};const r=attachOffscreenCanvasToExistingWorker({canvas,worker});assert.equal(r.enabled,true);assert.equal(sent[0].canvas,off);assert.equal(sent[1][0],off);});

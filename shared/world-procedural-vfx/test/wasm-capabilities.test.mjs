@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {supportsWasmSimd,chooseComputePath} from '../runtime/wasm-capabilities.mjs';
+test('WASM SIMD probe never throws and routing is deterministic',()=>{assert.equal(typeof supportsWasmSimd(),'boolean');assert.equal(chooseComputePath({gpu:true,worker:true,wasmSimd:true}),'gpu');assert.equal(chooseComputePath({gpu:false,worker:true,wasmSimd:true}),'worker-wasm-simd');});

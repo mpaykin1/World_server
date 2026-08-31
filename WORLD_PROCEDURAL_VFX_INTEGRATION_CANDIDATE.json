@@ -1,0 +1,23 @@
+{
+  "generatedAt": "2026-08-31T14:47:38.027Z",
+  "candidates": [
+    {
+      "file": "apps/voxel-world/client.js",
+      "score": 12
+    },
+    {
+      "file": "apps/ai3d-voxel-city/client.js",
+      "score": 11
+    },
+    {
+      "file": "apps/survival/client.js",
+      "score": 11
+    },
+    {
+      "file": "apps/world-sharabass/index.html",
+      "score": 11
+    }
+  ],
+  "recommended": "apps/voxel-world/client.js",
+  "rule": "Patch exactly one primary playable integration first; reuse its renderer/scene/camera/render loop. Do not create a parallel app."
+}
