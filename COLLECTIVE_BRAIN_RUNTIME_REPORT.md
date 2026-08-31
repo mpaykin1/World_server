@@ -1,9 +1,10 @@
 # COLLECTIVE BRAIN RUNTIME REPORT — V2.1 Post-Bootstrap
 
-**Generated:** 2026-08-31T16:45:00.000Z  
-**Worktree:** `C:\Users\user\Desktop\World_server_openhuman` `ai/desktop/openhuman-collective-brain-v2`  
-**Patch:** `OPENHUMAN_COLLECTIVE_BRAIN_PATCH_V2_1` (85a)  
-**Machine:** `WIN-GJVRHRQPB5A` `AMD64` `PS 5.1.19041` `Node 24.15.0` `gh 2.97.0`
+**Generated:** 2026-08-31T17:10:00.000Z  
+**Worktree:** `C:\Users\user\Desktop\World_server_openhuman` `ai/desktop/openhuman-collective-brain-v2` `02a35ffa`  
+**Patch:** `OPENHUMAN_COLLECTIVE_BRAIN_PATCH_V2_1`  
+**Machine:** `WIN-GJVRHRQPB5A` `AMD64` `PS 5.1.19041` `Node 24.15.0` `gh 2.97.0`  
+**PR:** `https://github.com/mpaykin1/World_server/pull/13` `base ai/opencode/multi-ai-peer-improvement` `head 02a35ffa`
 
 ## Machine Runtime
 
@@ -13,14 +14,22 @@
 - **Cross-memory roundtrip** — `probe openhUMAN-cross-test-20260831-164321-1603466852` saved via `POST /agentmemory/remember` (project World_server) → `smart-search` found `score 1.05` + `node scripts/collective-brain-recall.js` `mode=agentmemory results=8` PASS. Second probe `openhUMAN-second-20260831-164415-93122547` (project openhuman) → `smart-search` found + `collective-brain:recall` PASS. Demonstrates `OpenHuman (agentmemory backend 127.0.0.1:3111) ↔ World_server` shared memory.
 - **Bootstrap** — `USER_RUN_ONCE_WINDOWS.cmd` second run (idempotent) `2/6 Install/start/verify` → `iii already installed - skipping`, `agentmemory already healthy`, `Scheduled task already exists - skipping`, `3/6 OpenHuman skipped (non-Admin)` → `6/6 diagnostics` → `SYSTEM BOOTSTRAP PASS` `WorldServerBootstrapLogs\collective-brain-v2-1-bootstrap-20260831-141457.log` + `COLLECTIVE_BRAIN_MACHINE_BOOTSTRAP.json`.
 
-## Repository Verification (worktree `World_server_openhuman`)
+## Repository Verification (worktree `World_server_openhuman` `02a35ffa`)
 
-- `node verify.cjs --root World_server_openhuman` → `18/18 PASS` `COLLECTIVE_BRAIN_CHECK PASS` `SECURITY PASS findings=0` `BENCHMARK 383ms` `REPLAY PASS events=5`.
+- `node verify.cjs --root World_server_openhuman` → `18/18 PASS` `COLLECTIVE_BRAIN_CHECK PASS` `SECURITY PASS findings=0` `BENCHMARK 383ms` `REPLAY PASS events=5` (2026-08-31T16:50).
 - `npm run quality:knowledge` → `nodes=222 edges=129` PASS
 - `npm run quality:root-cause` → `issues=1` PASS
 - `npm run duplicates:check` → `blockers=0 findings=2` PASS
 - `npm run contracts:check` → `blockers=0` PASS
-- `powershell -File tools/post-bootstrap-verify-windows.ps1 -TaskWorktree World_server_openhuman` → `agentmemory PASS`, `openhuman PASS`, `collective-brain:full PASS`, `quality:knowledge PASS`, `quality:root-cause PASS`, `duplicates:check PASS`, `contracts:check PASS`, `release:gate PASS` (full, 76/76 control-plane, `collective-brain:check/security/cycle` included, `258 tests`).
+- `powershell -File tools/post-bootstrap-verify-windows.ps1 -TaskWorktree World_server_openhuman` → `agentmemory PASS`, `openhuman PASS` (`config.toml` `C:\Users\user\AppData\Roaming\OpenHuman\config.toml`), `collective-brain:full PASS`, `quality:knowledge/root-cause/duplicates/contracts PASS`, `release:gate PASS` (`2026-08-31T17:00`, `76/76 control-plane` + `vercel-root-check PASS`, `258 tests pass 257 fail 0`, `WIP Exact patch / Current state` fixed).
+
+## GitHub / Vercel Checks (commit `02a35ffa`)
+
+- `Vercel – world-server` `dpl_9mJtVvWvBUCKMaLngoRySvj9EvWw` `SUCCESS` `https://world-server-9mJtVvWvBUCKMaLngoRySvj9EvWw` `Ready 30s` `GET / 307→/apps/catalog 200` `GET /api/config 200` — **relevant for this PR, PASS**
+- `Vercel – improve-world-home` `dpl_96jpoLBRCmbAzHfV8YJgSxveBBZo` `FAILURE` `Root Directory "apps/improve-world-home" does not exist` — **B pre-existing** (identical on base `4fcef65a` `dpl_AjSN8NMXvHveqi2Mf9L6dMJjfynX` same error, `git ls-tree` shows `apps/improve-world-home` deleted `767a49af→HEAD`); not a Collective Brain regression.
+- `Vercel – improve-world-home-git` `dpl_FLHKCDWJLNryyL9f9siaErzmeZYZ` same Root Directory error — **B pre-existing** (base `4fcef65a` `dpl_4fEPRPuLeVcdtxryo4f88qAw5mso` same), **C environment** (Vercel GitHub integration fires for every branch, should be scoped; safe to ignore for `world-server` merge, fix would be Vercel dashboard `Ignored Build Step` or `Root Directory` scoping, not repo change).
+- `GitHub overall state` `failure` due to 2 unrelated Vercel contexts, but `world-server` context `success` — merge readiness should consider `world-server` only. Base `4fcef65a` has identical 2 failures, proving not introduced by `02a35ffa`.
+- **Classification:** `A` (Collective Brain regression) → `0`, `B` (pre-existing) → 2 improve-world-home failures, `C` (environment) → same 2 (Vercel config). No `A` to fix.
 
 ## Installer Bugs Fixed (3) + Bootstrap
 

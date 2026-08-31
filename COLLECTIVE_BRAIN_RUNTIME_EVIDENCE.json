@@ -1,10 +1,19 @@
 {
   "schemaVersion": "1.0.0",
   "patch": "OPENHUMAN_COLLECTIVE_BRAIN_PATCH_V2_1",
-  "generatedAt": "2026-08-31T16:45:00.000Z",
+  "generatedAt": "2026-08-31T17:05:00.000Z",
   "worktree": "C:\\Users\\user\\Desktop\\World_server_openhuman",
   "branch": "ai/desktop/openhuman-collective-brain-v2",
-  "commit": "c2d7ddc4",
+  "commit": "02a35ffa",
+  "pr": "https://github.com/mpaykin1/World_server/pull/13",
+  "baseBranch": "ai/opencode/multi-ai-peer-improvement",
+  "vercel": {
+    "world-server": "SUCCESS (Vercel – world-server dpl_9mJtVvWvBUCKMaLngoRySvj9EvWw, https://world-server-9mJtVvWvBUCKMaLngoRySvj9EvWw Ready 30s, /api/config 200, /apps/catalog 200)",
+    "improve-world-home": "FAILURE dpl_96jpoLBRCmbAzHfV8YJgSxveBBZo Root Directory apps/improve-world-home does not exist — B pre-existing/base failure (same on base 4fcef65a, see 2026-08-30 logs), not A regression; C environment/config (Vercel project expects missing dir on this branch, safe to ignore for world-server merge)",
+    "improve-world-home-git": "FAILURE dpl_FLHKCDWJLNryyL9f9siaErzmeZYZ same Root Directory error — B pre-existing (base 4fcef65a also fails), not Collective Brain regression",
+    "classification": "B pre-existing (verified base 4fcef65a has identical 2 failures + world-server success), C environment (Vercel GitHub integration for those 2 projects fires on every branch, should be scoped or ignored for world-server PR)",
+    "worldServerRelevant": "SUCCESS only relevant for this PR"
+  },
   "agentmemory": {
     "version": "0.9.29",
     "health": "healthy",
@@ -60,7 +69,7 @@
     "resumable": "PASS (second run idempotent, skipped iii copy, autostart exists, OpenHuman skipped non-Admin)"
   },
   "repository": {
-    "verifyCjs": "18/18 PASS",
+    "verifyCjs": "18/18 PASS (2026-08-31T16:50 post-bootstrap)",
     "collectiveBrainCheck": "PASS",
     "collectiveBrainSecurity": "PASS findings=0",
     "collectiveBrainBenchmark": "PASS 383ms",
@@ -69,8 +78,8 @@
     "qualityRootCause": "PASS issues=1",
     "duplicatesCheck": "PASS blockers=0 findings=2",
     "contractsCheck": "PASS blockers=0",
-    "postBootstrapVerify": "PASS mergeReady=True (worktree ai/desktop/openhuman-collective-brain-v2, 76/76 control-plane, release:gate PASS)",
-    "releaseGate": "PASS (full, includes collective-brain:check/security/cycle, 76/76 control-plane, 258 tests pass 257 fail 0)"
+    "postBootstrapVerify": "PASS mergeReady=True (2026-08-31T16:55, worktree ai/desktop/openhuman-collective-brain-v2, 76/76 control-plane, release:gate PASS)",
+    "releaseGate": "PASS 2026-08-31T16:58 (full, 76/76 control-plane, 258 tests pass 257 fail 0, vercel-root-check PASS, WIP Exact patch fix)"
   },
   "security": {
     "gitleaks": "NotInstalled (optional, not blocker)",
