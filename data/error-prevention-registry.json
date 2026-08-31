@@ -295,6 +295,197 @@
         "never name an Object3D subclass's own instance property `pivot` in this codebase - use `pitchGroup` or similar instead, as shared/dark-void-scene-runtime.mjs's OrbitCameraRig does",
         "if a scene renders blank/background-only despite no console errors, check camera.matrixWorld.elements for NaN (Number.isNaN, not just falsy/JSON-null) as a first diagnostic step, then binary-search which own property on which Object3D ancestor triggers it by renaming"
       ]
+    },
+    {
+      "id": "collective-brain-secret-leak",
+      "category": "security",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "credentials or tokens are exported into durable AI memory",
+      "rootCause": "memory ingestion lacked secret scanning/redaction and file exclusion",
+      "protection": [
+        "secret scanner before sync",
+        "redaction before payload",
+        "never ingest .env/private keys",
+        "release-gated collective-brain:security",
+        "remote bearer requires HTTPS or loopback"
+      ]
+    },
+    {
+      "id": "collective-brain-prompt-injection-memory",
+      "category": "ai-memory",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "historical/external memory contains instructions that manipulate the active agent",
+      "rootCause": "recalled text was treated as executable instruction instead of untrusted evidence",
+      "protection": [
+        "prompt-injection flagging",
+        "recalled-memory trust boundary banner",
+        "current repository policy always wins"
+      ]
+    },
+    {
+      "id": "agentmemory-silent-fallback",
+      "category": "ai-memory",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "agents believe shared memory is active while daemon is unavailable",
+      "rootCause": "silent backend fallback hides broken shared-memory state",
+      "protection": [
+        "explicit health report",
+        "DEGRADED + persistent outbox",
+        "COLLECTIVE_BRAIN_REQUIRE_AGENTMEMORY hard gate when explicitly required"
+      ]
+    },
+    {
+      "id": "agentmemory-port-conflict",
+      "category": "ai-memory",
+      "severity": "major",
+      "status": "known",
+      "symptom": "agentmemory fails to start or exposes reduced MCP surface",
+      "rootCause": "ports 3111/3112/3113/49134 occupied or iii version conflict",
+      "protection": [
+        "preflight four ports",
+        "agentmemory doctor/status",
+        "do not kill unrelated AI workers",
+        "pinned iii version from active agentmemory runbook"
+      ]
+    },
+    {
+      "id": "collective-brain-memory-duplication",
+      "category": "ai-memory",
+      "severity": "minor",
+      "status": "protected",
+      "symptom": "same server state is stored repeatedly",
+      "rootCause": "non-deterministic checkpoints or no idempotency key",
+      "protection": [
+        "sha256 content hash",
+        "lastSyncedHash",
+        "outbox dedup",
+        "bounded ledger"
+      ]
+    },
+    {
+      "id": "collective-brain-event-corruption",
+      "category": "ai-memory",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "audit/replay history can be silently edited or reordered",
+      "rootCause": "plain mutable log without integrity chain",
+      "protection": [
+        "sha256 hash-chained events",
+        "replay verification",
+        "doctor hard failure on chain corruption"
+      ]
+    },
+    {
+      "id": "collective-brain-stale-lease-deadlock",
+      "category": "coordination",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "crashed AI permanently blocks future work",
+      "rootCause": "coordination lock had no expiry/reclaim path",
+      "protection": [
+        "lease TTL",
+        "atomic exclusive creation",
+        "stale reclaim event",
+        "owner-only release"
+      ]
+    },
+    {
+      "id": "duplicate-orchestrator-stack",
+      "category": "architecture",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "parallel workflow/memory stacks duplicate existing OpenHuman/World_server systems",
+      "rootCause": "adding infrastructure without reuse audit",
+      "protection": [
+        "duplicate-system review first",
+        "OpenHuman remains external",
+        "tinyagents/tinyflows through OpenHuman first",
+        "reuse Supabase/quality systems"
+      ]
+    },
+    {
+      "id": "openhuman-embedding-dimension-mismatch",
+      "category": "ai-memory",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "OpenHuman Memory Tree embedding fails after local AI preset/model change",
+      "rootCause": "384-dimension all-minilm used where current Memory Tree format expects 1024 dimensions",
+      "protection": [
+        "configure bge-m3 for OpenHuman Memory Tree",
+        "verify embedding_model_id",
+        "local AI post-config smoke"
+      ]
+    },
+    {
+      "id": "openhuman-vision-capability-mismatch",
+      "category": "ai-routing",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "vision/chat silently behaves as text-only or image is ignored",
+      "rootCause": "chat-only local model assigned to vision/image workload or registry flag missing",
+      "protection": [
+        "select documented vision-capable model",
+        "set model_registry vision=true where required",
+        "vision smoke with known image"
+      ]
+    },
+    {
+      "id": "openhuman-config-overwrite",
+      "category": "configuration",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "automation destroys unrelated OpenHuman settings",
+      "rootCause": "blind replacement of config.toml",
+      "protection": [
+        "discover exactly one config",
+        "timestamped backup",
+        "surgical section update",
+        "parse/verify after write",
+        "rollback on ambiguity"
+      ]
+    },
+    {
+      "id": "collective-brain-dirty-main-bootstrap",
+      "category": "coordination",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "user-run system bootstrap applies repository patch into a dirty shared main worktree",
+      "rootCause": "V2 full-install mixed machine-level installation with repository mutation",
+      "protection": [
+        "V2.1 system bootstrap never writes World_server",
+        "repository patch only in isolated task worktree",
+        "post-bootstrap verifier accepts explicit task worktree path"
+      ]
+    },
+    {
+      "id": "desktop-ai-system-installer-boundary",
+      "category": "automation",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "Desktop AI stops progress because it refuses to download/install third-party system software",
+      "rootCause": "repo-install and machine-bootstrap responsibilities were coupled",
+      "protection": [
+        "split repo phase from user-run machine bootstrap",
+        "Desktop AI must continue through commit/push/draft-PR",
+        "one-command user bootstrap",
+        "resume with verification after bootstrap"
+      ]
+    },
+    {
+      "id": "release-gate-skipped-as-heavy",
+      "category": "tests",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "agent reports patch ready without full release gate because it is expensive or slow",
+      "rootCause": "targeted tests were incorrectly treated as completion evidence",
+      "protection": [
+        "targeted tests may run first",
+        "full release:gate mandatory before merge/production claim",
+        "record exact failing step instead of skipping"
+      ]
     }
   ],
   "confirmationProtocol": {
