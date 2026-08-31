@@ -1,0 +1,11 @@
+'use strict';
+const fs = require('fs');
+const path = require('path');
+const { verifyGoldenVector } = require('../lib/world-procedural-cross-platform');
+const file = path.join(process.cwd(), 'data', 'world-procedural-golden-vectors.json');
+if (!fs.existsSync(file)) throw new Error('world-procedural-golden-vectors.json missing');
+const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+const results = data.vectors.map((vector, index) => ({ index, ...verifyGoldenVector(vector) }));
+const failed = results.filter((r) => !r.ok);
+console.log(JSON.stringify({ system: 'WORLD_PROCEDURAL_CROSS_PLATFORM', engineVersion: data.engineVersion, vectors: results.length, failed }, null, 2));
+if (failed.length) process.exitCode = 1;
