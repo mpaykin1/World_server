@@ -566,6 +566,34 @@
         "a connectivity health-check script that writes its own probe data into the same durable memory store it is checking will pollute that store over repeated runs — prefer a dedicated ephemeral/test namespace, or at minimum distinct low-relevance concepts, for pure connectivity probes so they do not compete with real knowledge in search ranking"
       ],
       "solution": "build a curated, hand-authored knowledge pack (not a raw dump) and write it into the real memory store via the existing remember() mechanism; verify via the same search path the chat UI itself uses"
+    },
+    {
+      "id": "openhuman-single-instance-silent-noop",
+      "category": "desktop-ai",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "a launcher/script that starts OpenHuman.exe with a special env var (e.g. OPENHUMAN_ACTION_DIR) reports success (exit code 0) but no new window appears and the setting has no visible effect",
+      "rootCause": "OpenHuman enforces a pre-CEF single-instance mutex (real log line: '[single-instance] pre-CEF mutex held by primary; secondary exiting (OPENHUMAN-TAURI-A fix)'). If ANY OpenHuman.exe is already running — including invisibly, with no taskbar entry the user notices — a second launch exits almost instantly, cleanly, having created no window and applied no env var to the already-running primary. There is no supported way to push a new action_dir into an already-running instance from outside it.",
+      "protection": [
+        "before launching, check for an existing OpenHuman.exe process and tell the user explicitly if one is found, instead of launching into the trap and reporting a false success",
+        "never treat 'exit code 0' as proof a GUI actually appeared — check for a live process with a nonzero MainWindowHandle a few seconds after Start-Process",
+        "the real fix requires the existing instance to be fully closed first; CloseMainWindow() may not be enough (the app can ignore WM_CLOSE or minimize to tray) — Stop-Process may be needed as a second step"
+      ],
+      "solution": "scripts/openhuman-launch-check.js (OPENHUMAN_GUI_LAUNCH_CHECK) — distinguishes executableExists from guiLaunchVerified using a written launch log, never inferring PASS from exit code alone"
+    },
+    {
+      "id": "openhuman-action-dir-insufficient-without-trusted-roots",
+      "category": "desktop-ai",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "OpenHuman's ordinary chat correctly attempts to read a file at the right action_dir path (visible in its own tool-call trace) but the read is blocked: 'This action is blocked by your safety settings... path is outside the allowed workspace'",
+      "rootCause": "action_dir and actual file-read permission are two separate settings. OpenHuman's [autonomy] workspace_only=true confines file/glob/list tools to an internal workspace_dir regardless of what action_dir points at (action_dir is 'the acting-tool CWD', workspace_dir is a separate 'internal state, agent-blocked' root per OpenHuman's own RPC schema). Setting action_dir alone is necessary but not sufficient for the agent to actually read files there.",
+      "protection": [
+        "to grant real read (or read/write) access to a directory outside the workspace while leaving workspace_only=true and everything else locked down, add an entry to [autonomy] trusted_roots: { path = \"...\", access = \"read\" } — the official mechanism per config_update_autonomy_settings' own RPC schema description",
+        "forbidden_paths entries still apply on top of trusted_roots (documented: \"credential dirs stay blocked regardless\") — granting a trusted_root does not bypass secret-path protection added separately",
+        "verify with a real ordinary-chat probe request in a genuinely NEW chat thread after any autonomy-settings change — an existing chat thread that already got blocked once may not retry the tool call even after the underlying config is fixed"
+      ],
+      "solution": "add the target directory to autonomy.trusted_roots with access='read' (or 'readwrite' only if genuinely needed), restart OpenHuman, and re-test in a new chat thread"
     }
   ],
   "confirmationProtocol": {
