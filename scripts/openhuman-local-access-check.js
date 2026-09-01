@@ -16,21 +16,32 @@ const fs = require('fs');
 const path = require('path');
 
 const WORLD_SERVER_ROOT = 'C:\\Users\\user\\Desktop\\World_server';
-const LAUNCHER_CMD = 'C:\\Users\\user\\Desktop\\OPENHUMAN_WORLD_SERVER.cmd';
-const LAUNCHER_LNK = 'C:\\Users\\user\\Desktop\\OpenHuman World_server.lnk';
+// Desktop hygiene policy: all AI-created support tools live under "World_server AI",
+// with a single canonical Desktop shortcut/launcher — see World_server AI\README_RU.txt.
+// Older single-purpose launcher paths are kept as a fallback for one release cycle in case
+// this check runs before a given machine's cleanup has happened.
+const LAUNCHER_CMD_CANDIDATES = [
+  'C:\\Users\\user\\Desktop\\World_server AI\\Launchers\\WORLD_SERVER_AI.cmd',
+  'C:\\Users\\user\\Desktop\\World_server AI\\Launchers\\OPENHUMAN_WORLD_SERVER.cmd',
+  'C:\\Users\\user\\Desktop\\OPENHUMAN_WORLD_SERVER.cmd',
+];
+const LAUNCHER_LNK_CANDIDATES = [
+  'C:\\Users\\user\\Desktop\\World_server AI.lnk',
+  'C:\\Users\\user\\Desktop\\OpenHuman World_server.lnk',
+];
 const PROBE_FILE = path.join(WORLD_SERVER_ROOT, 'OPENHUMAN_LOCAL_ACCESS_PROBE.txt');
 const MANUAL_EVIDENCE_FILE = path.join(WORLD_SERVER_ROOT, 'OPENHUMAN_LOCAL_ACCESS_MANUAL_EVIDENCE.json');
 const MANUAL_EVIDENCE_TTL_DAYS = 14;
 
 function checkLauncher() {
-  const cmdExists = fs.existsSync(LAUNCHER_CMD);
-  const lnkExists = fs.existsSync(LAUNCHER_LNK);
+  const cmdPath = LAUNCHER_CMD_CANDIDATES.find((p) => fs.existsSync(p)) || null;
+  const lnkPath = LAUNCHER_LNK_CANDIDATES.find((p) => fs.existsSync(p)) || null;
   let cmdSetsActionDir = false;
-  if (cmdExists) {
-    const text = fs.readFileSync(LAUNCHER_CMD, 'utf8');
+  if (cmdPath) {
+    const text = fs.readFileSync(cmdPath, 'utf8');
     cmdSetsActionDir = new RegExp(`OPENHUMAN_ACTION_DIR=${WORLD_SERVER_ROOT.replace(/\\/g, '\\\\')}`, 'i').test(text);
   }
-  return { cmdExists, lnkExists, cmdSetsActionDir };
+  return { cmdExists: !!cmdPath, cmdPath, lnkExists: !!lnkPath, lnkPath, cmdSetsActionDir };
 }
 
 function checkPersistedOverride() {
