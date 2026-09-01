@@ -1,15 +1,15 @@
 {
   "test": "OPENHUMAN_GUI_LAUNCH_CHECK + OPENHUMAN_PROVIDER_ROUTING_CHECK",
-  "generatedAt": "2026-09-01T06:48:57.478Z",
+  "generatedAt": "2026-09-01T07:06:08.649Z",
   "gui": {
     "executableExists": true,
     "guiLaunchVerified": "PASS",
-    "ageMinutes": 1,
+    "ageMinutes": 4,
     "lastLog": [
-      "--- launch attempt 2026-09-01T09:47:57 ---\r",
-      "2026-09-01T09:47:57  AgentMemory: OK\r",
-      "2026-09-01T09:47:58  OPENHUMAN_ACTION_DIR = C:\\Users\\user\\Desktop\\World_server\r",
-      "2026-09-01T09:48:02  RESULT: LAUNCHED_OK (PID 13316, window visible)"
+      "--- launch attempt 2026-09-01T10:02:13 ---\r",
+      "2026-09-01T10:02:13  AgentMemory: OK\r",
+      "2026-09-01T10:02:13  OPENHUMAN_ACTION_DIR = C:\\Users\\user\\Desktop\\World_server\r",
+      "2026-09-01T10:02:17  RESULT: LAUNCHED_OK (PID 18272, window visible)"
     ]
   },
   "routing": {

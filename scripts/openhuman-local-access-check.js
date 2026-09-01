@@ -92,10 +92,13 @@ function checkManualEvidence() {
   }
   let evidence;
   try { evidence = JSON.parse(fs.readFileSync(MANUAL_EVIDENCE_FILE, 'utf8')); } catch { return { status: 'NOT_VERIFIED', reason: 'evidence file is not valid JSON' }; }
-  if (!evidence.probeValue || evidence.result !== 'PASS') return { status: 'FAIL', evidence };
+  // Real PASS requires the actual value read by OpenHuman to match the expected probe value,
+  // not just a top-level result:"PASS" flag someone could set without a real match.
+  const valuesMatch = evidence.expectedValue && evidence.actualValue && evidence.expectedValue === evidence.actualValue;
+  if (evidence.result !== 'PASS' || !valuesMatch) return { status: 'FAIL', evidence };
   const ageDays = evidence.recordedAt ? (Date.now() - Date.parse(evidence.recordedAt)) / 86400000 : Infinity;
   if (ageDays > MANUAL_EVIDENCE_TTL_DAYS) return { status: 'STALE', ageDays: Math.round(ageDays) };
-  return { status: 'PASS', ageDays: Math.round(ageDays), probeValue: evidence.probeValue };
+  return { status: 'PASS', ageDays: Math.round(ageDays), probeValue: evidence.actualValue };
 }
 
 function run() {

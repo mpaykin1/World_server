@@ -1,6 +1,6 @@
 {
   "test": "OPENHUMAN_LOCAL_WORLD_SERVER_ACCESS_CHECK",
-  "generatedAt": "2026-09-01T06:48:57.456Z",
+  "generatedAt": "2026-09-01T07:06:08.621Z",
   "worldServerRoot": "C:\\Users\\user\\Desktop\\World_server",
   "launcher": {
     "cmdExists": true,
@@ -11,10 +11,11 @@
   },
   "persistedOverride": null,
   "configured": "CONFIGURED",
-  "uiVerified": "NOT_VERIFIED",
+  "uiVerified": "PASS",
   "uiVerifiedDetail": {
-    "status": "NOT_VERIFIED",
-    "reason": "no manual evidence file — the real OpenHuman ordinary chat UI has not been asked to read OPENHUMAN_LOCAL_ACCESS_PROBE.txt yet"
+    "status": "PASS",
+    "ageDays": 0,
+    "probeValue": "1788239088481-s3ebwko2"
   },
   "note": "CONFIGURED means a launcher or persisted override exists that WOULD give OpenHuman direct filesystem access to World_server on its next launch. It does NOT mean OpenHuman has actually done so in a real chat turn — that is uiVerified, which starts NOT_VERIFIED until a real manual GUI test records OPENHUMAN_LOCAL_ACCESS_MANUAL_EVIDENCE.json."
 }
