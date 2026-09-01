@@ -20,6 +20,17 @@
 - После этого закрой и заново открой OpenHuman, начни новый чат и спроси ещё раз.
 - Строка `OpenHuman ordinary chat shared memory: PASS/NOT_VERIFIED/STALE_EVIDENCE` — это отдельный, более строгий статус: `PASS` означает, что кто-то реально прошёл ручной тест в самом окне чата OpenHuman (не просто через REST-запрос) и записал это в `OPENHUMAN_ORDINARY_CHAT_MANUAL_EVIDENCE.json`. `NOT_VERIFIED` — это честно, а не ошибка: значит, такой ручной проверки в чате ещё не было.
 
+**Чтобы OpenHuman читал живые файлы World_server напрямую (не через GitHub):**
+
+- Обычный ярлык `OpenHuman.lnk` не трогается и продолжает работать как раньше.
+- Для прямого доступа к `C:\Users\user\Desktop\World_server` используй новый ярлык **"OpenHuman World_server"** на рабочем столе (или `OPENHUMAN_WORLD_SERVER.cmd`) — он на этот один запуск задаёт `OPENHUMAN_ACTION_DIR`, ничего не меняя в системе навсегда.
+- Проверка: `CHECK_COLLECTIVE_BRAIN.cmd` теперь также печатает `Local World_server access: CONFIGURED/NOT_CONFIGURED (UI verified: ...)`. `CONFIGURED` значит, что ярлык настроен правильно — но НЕ значит, что OpenHuman уже реально прочитал файлы через чат. Для этого нужен настоящий тест:
+  1. Закрой OpenHuman (если он не занят важной задачей).
+  2. Запусти **"OpenHuman World_server"**.
+  3. Новый чат → спроси: *"Найди файл OPENHUMAN_LOCAL_ACCESS_PROBE.txt в своей рабочей области и скажи точное значение WORLD_SERVER_LOCAL_ACCESS_PROBE."*
+  4. PASS только если пришло правильное значение — GitHub тут использоваться не должен.
+- ⚠️ Известный открытый вопрос: в `C:\Users\user\Desktop\World_server` есть реальный `.env.local` с настоящими секретами (Supabase и т.д.). Штатная политика OpenHuman (`file_read` в auto-approve, `forbidden_paths` — только директории, не паттерны имён файлов) пока не гарантированно блокирует чтение таких файлов при прямом доступе к папке. До отдельной проверки не проси OpenHuman читать/пересказывать `.env*`/`*.pem`/`*.key`.
+
 **Что где хранится:**
 
 - Локально: `agentmemory` (`~/.agentmemory/`, `~/.agentmemory/.env` с `EMBEDDING_PROVIDER=local`), `OpenHuman` (`%APPDATA%\OpenHuman\config.toml` с `backend="agentmemory"`), общая память — на этом компьютере.
