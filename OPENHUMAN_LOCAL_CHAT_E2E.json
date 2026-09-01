@@ -1,10 +1,10 @@
 {
   "test": "OPENHUMAN_LOCAL_CHAT_E2E",
-  "generatedAt": "2026-09-01T14:30:42.288Z",
+  "generatedAt": "2026-09-01T14:46:06.471Z",
   "ollamaServer": "PASS",
-  "modelDirect": "PASS",
+  "modelDirect": "FAIL",
   "openhumanLocalModelConfig": "PASS",
-  "openhumanOrdinaryChatLocal": "FAIL",
+  "openhumanOrdinaryChatLocal": "CONTEXT_BUDGET_EXCEEDED",
   "detail": {
     "ollama": {
       "status": "PASS",
@@ -16,8 +16,8 @@
       ]
     },
     "modelDirect": {
-      "status": "PASS",
-      "response": "OK"
+      "status": "FAIL",
+      "reason": "The operation was aborted due to timeout"
     },
     "localConfig": {
       "status": "PASS",
@@ -26,43 +26,53 @@
       "modelPresent": true
     },
     "ordinaryChatLocal": {
-      "status": "FAIL",
-      "reason": "at least one local-model turn sent a prompt far exceeding a plausible small-model context window (likely tool-catalog injection) — matches the known hang signature",
+      "status": "CONTEXT_BUDGET_EXCEEDED",
+      "reason": "at least one local-model turn used >80% of the model's actual loaded context window (tool-catalog injection is the known cause here, see error-prevention-registry#openhuman-local-model-tool-context-overflow) — reported precisely, not just as a generic HANG",
       "turns": [
         {
-          "model": "models",
-          "sawFurtherActivity": false,
-          "oversizedTrimTokens": null
-        },
-        {
-          "model": "models",
-          "sawFurtherActivity": true,
-          "oversizedTrimTokens": null
-        },
-        {
           "model": "qwen3:4b",
-          "sawFurtherActivity": false,
-          "oversizedTrimTokens": 49064
+          "toolCount": 315,
+          "maxIterations": 15,
+          "totalInputTokens": 49064,
+          "modelContextWindow": null,
+          "contextUtilizationPercent": null,
+          "result": "HANG_UNKNOWN_CAUSE"
         },
         {
           "model": "qwen3:1.7b",
-          "sawFurtherActivity": false,
-          "oversizedTrimTokens": 49119
+          "toolCount": 315,
+          "maxIterations": 15,
+          "totalInputTokens": 49119,
+          "modelContextWindow": 4096,
+          "contextUtilizationPercent": 1199.2,
+          "result": "CONTEXT_BUDGET_EXCEEDED"
         },
         {
           "model": "qwen3:1.7b",
-          "sawFurtherActivity": false,
-          "oversizedTrimTokens": 48750
+          "toolCount": 315,
+          "maxIterations": 15,
+          "totalInputTokens": 48750,
+          "modelContextWindow": 4096,
+          "contextUtilizationPercent": 1190.2,
+          "result": "CONTEXT_BUDGET_EXCEEDED"
         },
         {
           "model": "qwen3:1.7b",
-          "sawFurtherActivity": true,
-          "oversizedTrimTokens": 48873
+          "toolCount": 315,
+          "maxIterations": 15,
+          "totalInputTokens": 48873,
+          "modelContextWindow": 4096,
+          "contextUtilizationPercent": 1193.2,
+          "result": "COMPLETED"
         },
         {
           "model": "gemma3:1b-it-qat",
-          "sawFurtherActivity": true,
-          "oversizedTrimTokens": 48808
+          "toolCount": 315,
+          "maxIterations": 15,
+          "totalInputTokens": 48808,
+          "modelContextWindow": null,
+          "contextUtilizationPercent": null,
+          "result": "COMPLETED"
         }
       ]
     }

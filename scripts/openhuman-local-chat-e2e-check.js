@@ -78,7 +78,21 @@ async function checkOpenHumanLocalModelConfig(ollamaModels) {
   return { status: enabled && modelPresent ? 'PASS' : 'FAIL', enabled, modelId, modelPresent };
 }
 
-function checkOrdinaryChatLocal() {
+async function getLoadedModelContexts() {
+  // GET /api/ps reports the ACTUAL runtime context window Ollama allocated per
+  // currently-loaded model — not the model's trained max (which /api/show reports and
+  // is usually much larger and misleading for this purpose).
+  try {
+    const res = await fetch(`${OLLAMA_URL}/api/ps`, { signal: AbortSignal.timeout(3000) });
+    if (!res.ok) return {};
+    const j = await res.json();
+    const map = {};
+    for (const m of j.models || []) map[m.name] = m.context_length;
+    return map;
+  } catch { return {}; }
+}
+
+function checkOrdinaryChatLocal(loadedContexts = {}) {
   let files;
   try { files = fs.readdirSync(RUNTIME_LOG_DIR).filter((f) => f.endsWith('.log')).sort(); } catch { return { status: 'NOT_VERIFIED', reason: 'no runtime log dir' }; }
   const latest = files[files.length - 1];
@@ -93,29 +107,47 @@ function checkOrdinaryChatLocal() {
     // Only the [core] agent_loop line carries the resolved model unambiguously — the
     // [tinyagents] line right after it repeats "model=" inside a differently-shaped
     // log line that this regex used to also match, picking up unrelated words.
-    const mStart = line.match(/^\d\d:\d\d:\d\d:INF:core \[agent_loop\] routing chat turn through the tinyagents harness model=([\w.:\-]+)/);
-    if (mStart && !/openrouter|groq|google|^chat-v1$|^openai$/i.test(mStart[1])) localStarts.push({ line: i, model: mStart[1], text: line });
+    const mStart = line.match(/^\d\d:\d\d:\d\d:INF:core \[agent_loop\] routing chat turn through the tinyagents harness model=([\w.:\-]+) max_iterations=(\d+) tools=(\d+)/);
+    if (mStart && !/openrouter|groq|google|^chat-v1$|^openai$/i.test(mStart[1])) {
+      localStarts.push({ line: i, model: mStart[1], maxIterations: Number(mStart[2]), toolCount: Number(mStart[3]) });
+    }
     const mTrim = line.match(/message_trim evicted.*tokens_before=(\d+) tokens_after=(\d+) budget=(\d+)/);
     if (mTrim) trims.push({ line: i, tokensBefore: Number(mTrim[1]), tokensAfter: Number(mTrim[2]), budget: Number(mTrim[3]) });
   });
 
   if (!localStarts.length) return { status: 'NOT_VERIFIED', reason: 'no local-model chat turn found in the current log — nothing to check yet' };
 
-  const results = localStarts.map(({ line, model }) => {
+  const results = localStarts.map(({ line, model, toolCount, maxIterations }) => {
     // A completed turn is expected to log something in the next ~200 lines indicating
     // a final answer or at minimum a clean generation span close; a hang shows the
     // log falling straight back to steady-state jsonrpc polling with nothing about
     // this thread in between.
     const window = lines.slice(line, line + 200).join('\n');
-    const sawFurtherActivity = /Generation\|llm\.|final|response_id|answer/i.test(window.split('\n').slice(1).join('\n'));
-    const oversizedTrim = trims.find((t) => t.line >= line && t.line < line + 50 && t.tokensBefore > (4096 * CONTEXT_OVERFLOW_RATIO_WARN));
-    return { model, sawFurtherActivity, oversizedTrimTokens: oversizedTrim ? oversizedTrim.tokensBefore : null };
+    const completed = /Generation\|llm\.[\w.:\-]+\|Ok/.test(window);
+    const oversizedTrim = trims.find((t) => t.line >= line && t.line < line + 50);
+    const totalInputTokens = oversizedTrim ? oversizedTrim.tokensBefore : null;
+    const modelContextWindow = loadedContexts[model] ?? null;
+    const contextUtilizationPercent = totalInputTokens != null && modelContextWindow
+      ? Math.round((totalInputTokens / modelContextWindow) * 1000) / 10
+      : null;
+    const budgetExceeded = contextUtilizationPercent != null && contextUtilizationPercent > 80;
+    // first_token_latency / generation_tokens_per_second are only meaningful for a turn
+    // that actually reached a completed Generation span — not available for a genuinely
+    // hung turn by definition, so left null rather than fabricated for those.
+    const turnStatus = completed ? 'COMPLETED' : budgetExceeded ? 'CONTEXT_BUDGET_EXCEEDED' : totalInputTokens != null ? 'HANG_UNKNOWN_CAUSE' : 'NOT_VERIFIED';
+    return { model, toolCount, maxIterations, totalInputTokens, modelContextWindow, contextUtilizationPercent, result: turnStatus };
   });
 
-  const anyHung = results.some((r) => r.oversizedTrimTokens);
+  const anyBudgetExceeded = results.some((r) => r.result === 'CONTEXT_BUDGET_EXCEEDED');
+  const anyHangUnknown = results.some((r) => r.result === 'HANG_UNKNOWN_CAUSE');
+  const status = anyBudgetExceeded ? 'CONTEXT_BUDGET_EXCEEDED' : anyHangUnknown ? 'FAIL' : 'NOT_VERIFIED';
   return {
-    status: anyHung ? 'FAIL' : 'NOT_VERIFIED',
-    reason: anyHung ? 'at least one local-model turn sent a prompt far exceeding a plausible small-model context window (likely tool-catalog injection) — matches the known hang signature' : 'no oversized-prompt signature found in the current log for a local-model turn; does not by itself prove chat works, just that this specific failure mode was not observed',
+    status,
+    reason: anyBudgetExceeded
+      ? 'at least one local-model turn used >80% of the model\'s actual loaded context window (tool-catalog injection is the known cause here, see error-prevention-registry#openhuman-local-model-tool-context-overflow) — reported precisely, not just as a generic HANG'
+      : anyHangUnknown
+        ? 'a local-model turn did not complete but no context-budget signature was found — a different, not-yet-diagnosed cause'
+        : 'no incomplete local-model turn found in the current log',
     turns: results,
   };
 }
@@ -126,7 +158,8 @@ async function run() {
     ? await checkModelDirect(ollama.models[0])
     : { status: 'SKIPPED', reason: 'no ollama models to test' };
   const localConfig = await checkOpenHumanLocalModelConfig(ollama.models || []);
-  const ordinaryChatLocal = checkOrdinaryChatLocal();
+  const loadedContexts = await getLoadedModelContexts();
+  const ordinaryChatLocal = checkOrdinaryChatLocal(loadedContexts);
 
   const report = {
     test: 'OPENHUMAN_LOCAL_CHAT_E2E',
