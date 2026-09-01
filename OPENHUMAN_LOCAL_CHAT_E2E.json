@@ -1,0 +1,71 @@
+{
+  "test": "OPENHUMAN_LOCAL_CHAT_E2E",
+  "generatedAt": "2026-09-01T14:30:42.288Z",
+  "ollamaServer": "PASS",
+  "modelDirect": "PASS",
+  "openhumanLocalModelConfig": "PASS",
+  "openhumanOrdinaryChatLocal": "FAIL",
+  "detail": {
+    "ollama": {
+      "status": "PASS",
+      "models": [
+        "qwen3:1.7b",
+        "qwen3:4b",
+        "bge-m3:latest",
+        "gemma3:1b-it-qat"
+      ]
+    },
+    "modelDirect": {
+      "status": "PASS",
+      "response": "OK"
+    },
+    "localConfig": {
+      "status": "PASS",
+      "enabled": true,
+      "modelId": "gemma3:1b-it-qat",
+      "modelPresent": true
+    },
+    "ordinaryChatLocal": {
+      "status": "FAIL",
+      "reason": "at least one local-model turn sent a prompt far exceeding a plausible small-model context window (likely tool-catalog injection) — matches the known hang signature",
+      "turns": [
+        {
+          "model": "models",
+          "sawFurtherActivity": false,
+          "oversizedTrimTokens": null
+        },
+        {
+          "model": "models",
+          "sawFurtherActivity": true,
+          "oversizedTrimTokens": null
+        },
+        {
+          "model": "qwen3:4b",
+          "sawFurtherActivity": false,
+          "oversizedTrimTokens": 49064
+        },
+        {
+          "model": "qwen3:1.7b",
+          "sawFurtherActivity": false,
+          "oversizedTrimTokens": 49119
+        },
+        {
+          "model": "qwen3:1.7b",
+          "sawFurtherActivity": false,
+          "oversizedTrimTokens": 48750
+        },
+        {
+          "model": "qwen3:1.7b",
+          "sawFurtherActivity": true,
+          "oversizedTrimTokens": 48873
+        },
+        {
+          "model": "gemma3:1b-it-qat",
+          "sawFurtherActivity": true,
+          "oversizedTrimTokens": 48808
+        }
+      ]
+    }
+  },
+  "note": "PASS on the first three does NOT imply openhumanOrdinaryChatLocal PASS. A prior 'Local Model Debug: all checks passed' result covered only checks 1-3 and was wrongly read as proof ordinary chat works — it never tested a real agentic turn under the actual tool catalog."
+}

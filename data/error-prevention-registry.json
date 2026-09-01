@@ -608,6 +608,20 @@
         "verify a new trusted_root actually works with a real write attempt (not just assuming the config is correct) before relying on it — this bug produces a real, well-formed error, not a silent failure, so it is catchable if tested"
       ],
       "solution": "move the write target to a folder path with no shared text prefix against any other trusted_root, restart OpenHuman, and confirm with a real write attempt"
+    },
+    {
+      "id": "openhuman-local-model-tool-context-overflow",
+      "category": "desktop-ai",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "OpenHuman ordinary chat hangs indefinitely on 'Thinking' when routed to a small local Ollama model (tested: gemma3:1b-it-qat, qwen3:1.7b, qwen3:4b), even though: the Ollama server is reachable, `ollama run <model>` works fine directly from the CLI, and OpenHuman's own 'Local Model Debug' reports all checks passed. No error is ever shown — the turn simply never completes and the app falls back to idle polling.",
+      "rootCause": "OpenHuman's agent harness reports supports_native_tools=false for these local models and falls back to injecting the FULL tool catalog (76-315 tools, observed via 'tools=' counts in the agent_loop log) as prompt text, rather than a native tool-calling API. This produced prompts of ~48,750-49,119 tokens in every local-model turn observed (via the [middleware] message_trim log line's tokens_before field). Ollama's actual runtime context window for the loaded small models was only 4096 tokens (confirmed via GET /api/ps -> context_length), and they were running with size_vram=0 (pure CPU inference). A >10x prompt-to-context overflow on CPU-only small models never produces a usable response within OpenHuman's iteration budget — it is not a crash or a reported error, just silence. 'Local Model Debug: all checks passed' only verifies the Ollama server/model are reachable and can generate SOMETHING in isolation — it does not exercise a real agentic turn under the actual tool catalog, so it gives false confidence.",
+      "protection": [
+        "never treat REST/CLI-level Ollama health (server reachable, model responds to a bare prompt) as proof that OpenHuman ordinary chat works with that model — they are different claims; use OPENHUMAN_LOCAL_CHAT_E2E (scripts/openhuman-local-chat-e2e-check.js), which checks both independently",
+        "before recommending a small (1B-4B) local model as OpenHuman's primary chat/agentic provider, check the actual tool count it would be asked to carry (agent_loop log: 'tools=N') — a model without native tool-calling support realistically cannot process a catalog that size as prompt text",
+        "small local models are a reasonable fit for narrow, tool-free workloads (embeddings, heartbeat, learning-reflection) — which is what local_ai.usage flags are actually for — not as a drop-in replacement for a cloud model handling full agentic orchestration"
+      ],
+      "solution": "keep local Ollama models scoped to narrow non-agentic workloads (e.g. embeddings, via local_ai.usage.embeddings=true) rather than as chat_provider/agentic_provider; if local chat is genuinely required, it needs either a model with real native tool-calling support and enough context, or a way to restrict the tool catalog exposed to that specific provider/profile (not available via the settings this session had access to)"
     }
   ],
   "confirmationProtocol": {
