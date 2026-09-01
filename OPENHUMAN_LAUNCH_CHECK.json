@@ -1,0 +1,40 @@
+{
+  "test": "OPENHUMAN_GUI_LAUNCH_CHECK + OPENHUMAN_PROVIDER_ROUTING_CHECK",
+  "generatedAt": "2026-09-01T06:41:54.082Z",
+  "gui": {
+    "executableExists": true,
+    "guiLaunchVerified": "BLOCKED_SINGLE_INSTANCE",
+    "ageMinutes": 4,
+    "lastLog": [
+      "--- launch attempt 2026-09-01T09:38:04 ---\r",
+      "2026-09-01T09:38:05  AgentMemory: OK\r",
+      "2026-09-01T09:38:05  BLOCKED: OpenHuman is already running (PID 7912). Its single-instance lock means launching again will NOT give it World_server access. Close OpenHuman completely first, then run this shortcut again.\r",
+      "2026-09-01T09:38:05  RESULT: BLOCKED_ALREADY_RUNNING"
+    ]
+  },
+  "routing": {
+    "status": "OPENROUTER_FREE_PRIMARY",
+    "routing": {
+      "chat_provider": "openrouter:openrouter/free",
+      "reasoning_provider": "openrouter:openrouter/free",
+      "agentic_provider": "openrouter:openrouter/free",
+      "coding_provider": "openrouter:openrouter/free",
+      "vision_provider": "openrouter:openrouter/free"
+    },
+    "registeredProviders": [
+      "groq",
+      "google",
+      "openrouter"
+    ],
+    "configPath": "C:\\Users\\user\\.openhuman\\users\\6a95a408b339ec0ca292a12d\\config.toml"
+  },
+  "runtimeLog": {
+    "status": "OK",
+    "file": "openhuman.2026-09-01.log",
+    "foundSignatures": [
+      "fatal",
+      "single-instance"
+    ]
+  },
+  "note": "executableExists=true and exit code 0 do NOT imply guiLaunchVerified=PASS — OpenHuman's single-instance mutex makes a second launch exit cleanly having done nothing. Only RESULT: LAUNCHED_OK in the launch log (a real PID with a non-zero MainWindowHandle) counts as PASS."
+}

@@ -33,13 +33,30 @@ const PROBE_FILE = path.join(WORLD_SERVER_ROOT, 'OPENHUMAN_LOCAL_ACCESS_PROBE.tx
 const MANUAL_EVIDENCE_FILE = path.join(WORLD_SERVER_ROOT, 'OPENHUMAN_LOCAL_ACCESS_MANUAL_EVIDENCE.json');
 const MANUAL_EVIDENCE_TTL_DAYS = 14;
 
+function fileSetsActionDir(filePath) {
+  try {
+    const text = fs.readFileSync(filePath, 'utf8');
+    // Matches both `set "OPENHUMAN_ACTION_DIR=...` (.cmd) and `$env:OPENHUMAN_ACTION_DIR = '...` (.ps1).
+    return new RegExp(`OPENHUMAN_ACTION_DIR['"]?\\s*=\\s*['"]?${WORLD_SERVER_ROOT.replace(/\\/g, '\\\\')}`, 'i').test(text);
+  } catch { return false; }
+}
+
 function checkLauncher() {
   const cmdPath = LAUNCHER_CMD_CANDIDATES.find((p) => fs.existsSync(p)) || null;
   const lnkPath = LAUNCHER_LNK_CANDIDATES.find((p) => fs.existsSync(p)) || null;
   let cmdSetsActionDir = false;
   if (cmdPath) {
-    const text = fs.readFileSync(cmdPath, 'utf8');
-    cmdSetsActionDir = new RegExp(`OPENHUMAN_ACTION_DIR=${WORLD_SERVER_ROOT.replace(/\\/g, '\\\\')}`, 'i').test(text);
+    cmdSetsActionDir = fileSetsActionDir(cmdPath);
+    // The canonical launcher delegates to a sibling .ps1 (kept small/testable rather than a
+    // giant single-line cmd -Command string) — check every file in that directory too.
+    if (!cmdSetsActionDir) {
+      const dir = path.dirname(cmdPath);
+      try {
+        cmdSetsActionDir = fs.readdirSync(dir)
+          .filter((f) => f.endsWith('.cmd') || f.endsWith('.ps1'))
+          .some((f) => fileSetsActionDir(path.join(dir, f)));
+      } catch {}
+    }
   }
   return { cmdExists: !!cmdPath, cmdPath, lnkExists: !!lnkPath, lnkPath, cmdSetsActionDir };
 }
