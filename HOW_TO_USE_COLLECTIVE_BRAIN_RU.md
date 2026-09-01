@@ -22,14 +22,20 @@
 
 **Чтобы OpenHuman читал живые файлы World_server напрямую (не через GitHub):**
 
-- Обычный ярлык `OpenHuman.lnk` не трогается и продолжает работать как раньше.
-- Для прямого доступа к `C:\Users\user\Desktop\World_server` используй новый ярлык **"OpenHuman World_server"** на рабочем столе (или `OPENHUMAN_WORLD_SERVER.cmd`) — он на этот один запуск задаёт `OPENHUMAN_ACTION_DIR`, ничего не меняя в системе навсегда.
-- Проверка: `CHECK_COLLECTIVE_BRAIN.cmd` теперь также печатает `Local World_server access: CONFIGURED/NOT_CONFIGURED (UI verified: ...)`. `CONFIGURED` значит, что ярлык настроен правильно — но НЕ значит, что OpenHuman уже реально прочитал файлы через чат. Для этого нужен настоящий тест:
-  1. Закрой OpenHuman (если он не занят важной задачей).
-  2. Запусти **"OpenHuman World_server"**.
+- Единственный ярлык на рабочем столе для этого: **"World_server AI"** (папка `C:\Users\user\Desktop\World_server AI\`, launcher `Launchers\WORLD_SERVER_AI.cmd`). Обычный ярлык `OpenHuman.lnk` не трогается и продолжает работать как раньше, отдельно.
+- ⚠️ **Главная причина, по которой запуск может "ничего не делать":** OpenHuman — single-instance приложение (pre-CEF mutex). Если OpenHuman уже открыт (даже свёрнут/не на переднем плане), повторный запуск тихо завершается и НЕ применяет `OPENHUMAN_ACTION_DIR` к уже открытому окну — это не баг лаунчера, это штатное поведение single-instance, которое лаунчер теперь обнаруживает и показывает явным сообщением "OpenHuman is ALREADY RUNNING". Решение: закрыть OpenHuman полностью, затем снова запустить "World_server AI".
+- Лог последнего запуска: `World_server AI\Logs\OpenHuman-launch-latest.log`.
+- Проверка: `CHECK_COLLECTIVE_BRAIN.cmd` печатает четыре независимых статуса — не путать их:
+  - `World_server knowledge: PRESENT/MISSING/STALE` — есть ли реальные факты о проекте в памяти.
+  - `Local World_server access: CONFIGURED/NOT_CONFIGURED (UI verified: ...)` — настроен ли launcher (не значит, что OpenHuman уже реально читал файлы).
+  - `OPENHUMAN_LAUNCH_CHECK ... guiLaunchVerified=...` — `LAUNCHED_OK` (реально открылось окно) отличается от `BLOCKED_SINGLE_INSTANCE` (уже был открыт) и от `FAIL`. Просто "exe существует, exit code 0" никогда не считается PASS.
+  - `routing=OPENROUTER_FREE_PRIMARY` — какой провайдер сейчас реально используется для чата.
+- Настоящий тест доступа к файлам:
+  1. Закрой OpenHuman полностью.
+  2. Запусти **"World_server AI"**.
   3. Новый чат → спроси: *"Найди файл OPENHUMAN_LOCAL_ACCESS_PROBE.txt в своей рабочей области и скажи точное значение WORLD_SERVER_LOCAL_ACCESS_PROBE."*
   4. PASS только если пришло правильное значение — GitHub тут использоваться не должен.
-- ⚠️ Известный открытый вопрос: в `C:\Users\user\Desktop\World_server` есть реальный `.env.local` с настоящими секретами (Supabase и т.д.). Штатная политика OpenHuman (`file_read` в auto-approve, `forbidden_paths` — только директории, не паттерны имён файлов) пока не гарантированно блокирует чтение таких файлов при прямом доступе к папке. До отдельной проверки не проси OpenHuman читать/пересказывать `.env*`/`*.pem`/`*.key`.
+- Защита секретов: реальные секретные файлы (`World_server\.env.local`, `WORLD_SERVER_SECRETS\`, приватные ключи в `.world-server-state\`) добавлены в `forbidden_paths` OpenHuman (штатный механизм, не отдельная песочница) — обычное чтение файлов их не откроет. Список не гарантированно полон на 100% для будущих новых секретных файлов — при сомнении не проси OpenHuman читать файл с "secret"/"key"/"token"/"credential" в названии напрямую.
 
 **Что где хранится:**
 
