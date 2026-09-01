@@ -594,6 +594,20 @@
         "verify with a real ordinary-chat probe request in a genuinely NEW chat thread after any autonomy-settings change — an existing chat thread that already got blocked once may not retry the tool call even after the underlying config is fixed"
       ],
       "solution": "add the target directory to autonomy.trusted_roots with access='read' (or 'readwrite' only if genuinely needed), restart OpenHuman, and re-test in a new chat thread"
+    },
+    {
+      "id": "openhuman-trusted-root-prefix-collision",
+      "category": "desktop-ai",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "a write to a folder granted readwrite via autonomy.trusted_roots is blocked with 'policy-blocked: Resolved parent path escapes workspace: <a DIFFERENT, unrelated read-only trusted_root path>' — the error names a path that is NOT the target folder and NOT its actual parent",
+      "rootCause": "OpenHuman's workspace-boundary check appears to match trusted_roots by raw string prefix without a path-separator boundary check. Two trusted_roots whose absolute paths share a text prefix — e.g. 'C:\\...\\World_server' (read) and 'C:\\...\\World_server AI\\SomeSubfolder' (readwrite) — collide: 'World_server AI' textually starts with 'World_server' even though it is a sibling directory, not a subdirectory (the next character is a space, not a path separator). The checker resolves the write target against the wrong (read-only) entry and blocks it.",
+      "protection": [
+        "when granting a new trusted_root for OpenHuman, verify its full path does not begin with the same characters as any OTHER trusted_root path already granted, even if the two are semantically unrelated siblings (not nested) — a shared text prefix is enough to trigger this bug",
+        "confirmed fix: give any new readwrite trusted_root a name whose full path shares no character-prefix with an existing entry (e.g. use 'C:\\Users\\<user>\\Desktop\\OpenHumanReports' as a standalone top-level folder rather than nesting it under 'World_server AI', which itself shares a prefix with 'World_server')",
+        "verify a new trusted_root actually works with a real write attempt (not just assuming the config is correct) before relying on it — this bug produces a real, well-formed error, not a silent failure, so it is catchable if tested"
+      ],
+      "solution": "move the write target to a folder path with no shared text prefix against any other trusted_root, restart OpenHuman, and confirm with a real write attempt"
     }
   ],
   "confirmationProtocol": {
