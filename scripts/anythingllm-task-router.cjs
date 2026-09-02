@@ -238,6 +238,7 @@ async function runTask(taskText, opts = {}) {
 
   for (let attemptNum = 1; attemptNum <= 1 + MAX_RETRIES; attemptNum++) {
     let attempt;
+    const attemptStart = Date.now();
     try {
       const r = await sendChat(workspaceSlug, threadSlug, message, timeoutMs);
       if (!r.ok) {
@@ -259,7 +260,13 @@ async function runTask(taskText, opts = {}) {
         };
       }
     } catch (e) {
-      attempt = { attemptNum, ok: false, reason: e.name === 'TimeoutError' ? 'timeout' : `error_${e.message}`, timedOut: e.name === 'TimeoutError', durationMs: timeoutMs };
+      // Real elapsed time, not the configured timeout constant - a thrown fetch
+      // error (e.g. AnythingLLM's own upstream Ollama call dying early, see
+      // error-prevention-registry.json#anythingllm-ollama-response-timeout-not-
+      // configured) can fail well before timeoutMs, and reporting timeoutMs here
+      // unconditionally previously made every such failure look identical to a
+      // real client-side timeout regardless of how long it actually ran.
+      attempt = { attemptNum, ok: false, reason: e.name === 'TimeoutError' ? 'timeout' : `error_${e.message}`, timedOut: e.name === 'TimeoutError', durationMs: Date.now() - attemptStart };
     }
     attempts.push(attempt);
     finalAttempt = attempt;
