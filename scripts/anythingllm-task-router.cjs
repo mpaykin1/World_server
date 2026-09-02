@@ -21,10 +21,22 @@ const { route, primaryToolFor } = require('../lib/mcp-intent-router');
 const { decide: decideResources, enqueueTask } = require('../lib/ai-resource-scheduler');
 const { pickBestBackend, recordOutcome } = require('../lib/model-suitability');
 const { rankToolsByCost } = require('../lib/tool-cost-model');
+const collectiveBrain = require('../lib/collective-brain');
 
 const ANYTHINGLLM_URL = process.env.ANYTHINGLLM_URL || 'http://127.0.0.1:3001';
 const ANYTHINGLLM_API_KEY = process.env.ANYTHINGLLM_API_KEY;
 const PROFILE_PATH = path.join(__dirname, '..', 'data', 'mcp-router-profile.json');
+// Concurrency protection: setWorkspaceModel() mutates AnythingLLM's shared
+// workspace state (agentModel/chatModel), which is process-wide, not per-
+// request - two concurrent dispatches to the same workspace could otherwise
+// race (one sets the model, the other overwrites it before the first turn's
+// request goes out). Reuses the EXISTING collective-brain lease primitive
+// (lib/collective-brain#acquireLease/releaseLease, already used elsewhere in
+// this project for exactly this kind of exclusive-section problem) scoped to
+// the main tree so it is the same lock regardless of which worktree a caller
+// runs from - not a new, parallel locking mechanism.
+const LEASE_ROOT = process.env.WORLD_SERVER_MAIN_TREE || 'C:\\Users\\user\\Desktop\\World_server';
+const LEASE_TTL_MS = 650000; // covers the 600s default timeout plus margin
 // 150s was tuned during the empty-response-defect investigation, when EVERY
 // turn looked broken regardless of budget. Now that the real defect (router
 // hint using unprefixed tool names - see error-prevention-registry.json#
@@ -153,6 +165,24 @@ async function runTask(taskText, opts = {}) {
   // tool-call-generation).
   let selectedModel = opts.model || pickBestBackend(capabilityClass).backend;
 
+  // Concurrency protection: exclusive lease on this workspace before touching
+  // its shared agentModel/chatModel state. Checked BEFORE the resource gate
+  // (below) and independently controlled (opts.respectConcurrencyLock,
+  // default true) - this is a correctness concern (never let two dispatches
+  // race on shared workspace state), not a performance-tuning knob like the
+  // resource gate, so a caller diagnosing resource-gate behavior with
+  // respectResourceGate:false does not accidentally also disable this. If
+  // another dispatch already holds the lease, this one queues (same UX as a
+  // resource-contended dispatch) rather than racing or blocking indefinitely.
+  const leaseScope = `anythingllm-workspace-${workspaceSlug}`;
+  const lease = opts.respectConcurrencyLock !== false
+    ? collectiveBrain.acquireLease(LEASE_ROOT, leaseScope, { ttlMs: LEASE_TTL_MS, owner: `anythingllm-task-router:${process.pid}:${Date.now()}` })
+    : { ok: true, lease: null };
+  if (!lease.ok) {
+    const enq = enqueueTask({ taskText, workspaceSlug, threadSlug, timeoutMs }, { priority: opts.priority || 0 });
+    return { capabilityClass, allowedTools, attempts: [], result: 'QUEUED', retries: 0, resourceGate: { action: 'queue', reason: `workspace '${workspaceSlug}' is already in use by another dispatch (lease held by ${lease.existing && lease.existing.owner})` }, queueJobId: enq.id };
+  }
+
   // Resource-aware gate: don't dispatch a CPU-bound local inference job into a
   // contended machine and let it silently eat a full timeout window. Real E2E
   // testing hit 100% CPU (Win32_Processor.LoadPercentage) with repeated 150s
@@ -161,24 +191,33 @@ async function runTask(taskText, opts = {}) {
   // suitable models -> resources -> fastest viable backend -> queue only if none
   // viable) rather than jumping straight to queueing. Callers that genuinely want
   // to force a run regardless (e.g. the reproducibility harness intentionally
-  // probing under load) can pass respectResourceGate:false.
+  // probing under load) can pass respectResourceGate:false - this does NOT
+  // affect the concurrency lease above.
   if (opts.respectResourceGate !== false) {
     const estimatedCost = opts.estimatedCost || (capabilityClass === 'filesystem-write' ? 'medium' : 'low');
     const gate = await decideResources({ capabilityClass, estimatedCost, currentModel: selectedModel });
     if (gate.action === 'queue') {
+      if (lease.lease) collectiveBrain.releaseLease(LEASE_ROOT, leaseScope, lease.lease.owner);
       const enq = enqueueTask({ taskText, workspaceSlug, threadSlug, timeoutMs }, { priority: opts.priority || 0 });
       return { capabilityClass, allowedTools, attempts: [], result: 'QUEUED', retries: 0, resourceGate: gate, queueJobId: enq.id };
     }
     if (gate.action !== 'run_now') {
+      if (lease.lease) collectiveBrain.releaseLease(LEASE_ROOT, leaseScope, lease.lease.owner);
       return { capabilityClass, allowedTools, attempts: [], result: 'ESCALATE', retries: 0, resourceGate: gate };
     }
     if (gate.recommendedModel) selectedModel = gate.recommendedModel;
   }
 
-  if (selectedModel && opts.respectModelRouting !== false) {
-    await setWorkspaceModel(workspaceSlug, selectedModel);
+  try {
+    if (selectedModel && opts.respectModelRouting !== false) {
+      await setWorkspaceModel(workspaceSlug, selectedModel);
+    }
+    return await runDispatchLoop();
+  } finally {
+    if (lease.lease) collectiveBrain.releaseLease(LEASE_ROOT, leaseScope, lease.lease.owner);
   }
 
+  async function runDispatchLoop() {
   const attempts = [];
   // AnythingLLM's agent/tool mode is triggered by an "@agent" prefix in the message
   // text itself (the API's `mode` field is a separate RAG chat-mode concept) - the
@@ -253,6 +292,7 @@ async function runTask(taskText, opts = {}) {
     result,
     retries: attempts.length - 1,
   };
+  }
 }
 
 module.exports = { runTask, looksLikeMismatch, writeProfile, prefixedToolName, MCP_SERVER_NAME, PROFILE_PATH };
