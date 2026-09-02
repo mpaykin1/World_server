@@ -17,7 +17,7 @@
 // pattern is visible in the output rather than silently absorbed.
 const fs = require('fs');
 const path = require('path');
-const { route } = require('../lib/mcp-intent-router');
+const { route, primaryToolFor } = require('../lib/mcp-intent-router');
 
 const ANYTHINGLLM_URL = process.env.ANYTHINGLLM_URL || 'http://127.0.0.1:3001';
 const ANYTHINGLLM_API_KEY = process.env.ANYTHINGLLM_API_KEY;
@@ -76,7 +76,18 @@ async function runTask(taskText, opts = {}) {
   // AnythingLLM's agent/tool mode is triggered by an "@agent" prefix in the message
   // text itself (the API's `mode` field is a separate RAG chat-mode concept) - the
   // router's whole purpose is dispatching agent tool-use tasks, so add it if missing.
-  let message = /^\s*@agent\b/i.test(taskText) ? taskText : `@agent ${taskText}`;
+  //
+  // The explicit tool-name hint is included from attempt 1, not just on retry: live
+  // testing showed AnythingLLM's IntelligentSkillSelector reranks candidate tools by
+  // embedding similarity to the QUERY TEXT before the LLM ever sees a prompt, and
+  // document-summarizer's description consistently out-scored the correct MCP tools
+  // for a plainly-worded "read this file, tell me what's in it" query (that phrasing
+  // reads as document summarization to the embedding model). Naming the exact allowed
+  // tool names in the query itself shifts the embedding, not just the LLM's reasoning -
+  // a system-prompt-level instruction alone does NOT reach the reranker, since
+  // reranking happens upstream of the model call.
+  const toolHint = allowedTools.length ? `Use exactly one of these tools: ${allowedTools.join(', ')}. Do not use document-summarizer, rag-memory, or web-scraping for this.` : '';
+  let message = `@agent ${taskText}\n\n${toolHint}`.trim();
   let finalAttempt = null;
 
   for (let attemptNum = 1; attemptNum <= 1 + MAX_RETRIES; attemptNum++) {
@@ -107,13 +118,16 @@ async function runTask(taskText, opts = {}) {
     attempts.push(attempt);
     finalAttempt = attempt;
 
-    const needsRetry = attempt.ok ? attempt.mismatchDetected : true;
+    // Retry ONLY on a detected tool-selection mismatch, never blindly on a timeout -
+    // a timeout with byte-identical content would just burn another full timeoutMs
+    // window for the same likely outcome, which is exactly the "не отправлять тот же
+    // запрос вслепую ещё раз" this router exists to avoid.
+    const needsRetry = attempt.ok && attempt.mismatchDetected;
     if (!needsRetry || attemptNum > MAX_RETRIES) break;
-    // Self-healing retry: keep the same (already-minimal) allowlist, but make the
-    // prompt name the expected tool explicitly rather than resending byte-identical
-    // input and hoping for a different outcome.
-    const toolHint = allowedTools.length ? `Use exactly one of these tools: ${allowedTools.join(', ')}. Do not use document-summarizer or any document/RAG tool for this.` : '';
-    message = `@agent ${taskText}\n\n${toolHint}`;
+    // Message already carries the tool-name hint from attempt 1; a repeat mismatch
+    // means the hint alone wasn't enough - escalate to naming the single best tool.
+    const singleTool = primaryToolFor(capabilityClass) || allowedTools[0];
+    message = `@agent ${taskText}\n\nCall the ${singleTool} tool directly. Do not use document-summarizer, rag-memory, or web-scraping.`;
   }
 
   return {
