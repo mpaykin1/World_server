@@ -32,7 +32,7 @@ async function runN(taskText, n = 3, opts = {}) {
   const runs = [];
   for (let i = 1; i <= n; i++) {
     const threadSlug = await newThread();
-    const r = await runTask(taskText, { workspaceSlug: WORKSPACE_SLUG, threadSlug, timeoutMs: opts.timeoutMs });
+    const r = await runTask(taskText, { workspaceSlug: WORKSPACE_SLUG, threadSlug, timeoutMs: opts.timeoutMs, respectResourceGate: opts.respectResourceGate });
     recordOutcome(MODEL_NAME, capabilityClass, r.result);
     runs.push({ run: i, threadSlug, ...r });
     if (opts.onRun) opts.onRun(runs[runs.length - 1]);
@@ -63,7 +63,8 @@ if (require.main === module) {
   const taskText = process.argv[2];
   const n = Number(process.argv[3] || 3);
   if (!taskText) { console.error('usage: node anythingllm-e2e-reproducibility.cjs "<task text>" [n]'); process.exit(1); }
-  runN(taskText, n, { onRun: (r) => console.error(`[run ${r.run}/${n}] ${r.result}`) })
+  const respectResourceGate = process.env.ANYTHINGLLM_E2E_RESPECT_GATE !== 'false';
+  runN(taskText, n, { respectResourceGate, onRun: (r) => console.error(`[run ${r.run}/${n}] ${r.result}`) })
     .then((report) => {
       fs.writeFileSync(path.join(__dirname, '..', 'ANYTHINGLLM_E2E_REPRODUCIBILITY.json'), JSON.stringify(report, null, 2) + '\n');
       console.log(JSON.stringify(report, null, 2));

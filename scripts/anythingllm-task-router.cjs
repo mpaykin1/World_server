@@ -18,7 +18,7 @@
 const fs = require('fs');
 const path = require('path');
 const { route, primaryToolFor } = require('../lib/mcp-intent-router');
-const { decide: decideResources } = require('../lib/ai-resource-scheduler');
+const { decide: decideResources, enqueueTask } = require('../lib/ai-resource-scheduler');
 
 const ANYTHINGLLM_URL = process.env.ANYTHINGLLM_URL || 'http://127.0.0.1:3001';
 const ANYTHINGLLM_API_KEY = process.env.ANYTHINGLLM_API_KEY;
@@ -88,8 +88,12 @@ async function runTask(taskText, opts = {}) {
   if (opts.respectResourceGate !== false) {
     const estimatedCost = opts.estimatedCost || (capabilityClass === 'filesystem-write' ? 'medium' : 'low');
     const gate = await decideResources({ capabilityClass, estimatedCost });
+    if (gate.action === 'queue') {
+      const enq = enqueueTask({ taskText, workspaceSlug, threadSlug, timeoutMs }, { priority: opts.priority || 0 });
+      return { capabilityClass, allowedTools, attempts: [], result: 'QUEUED', retries: 0, resourceGate: gate, queueJobId: enq.id };
+    }
     if (gate.action !== 'run_now') {
-      return { capabilityClass, allowedTools, attempts: [], result: gate.action === 'queue' ? 'QUEUED' : 'ESCALATE', retries: 0, resourceGate: gate };
+      return { capabilityClass, allowedTools, attempts: [], result: 'ESCALATE', retries: 0, resourceGate: gate };
     }
   }
 
