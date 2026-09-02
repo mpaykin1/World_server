@@ -13,10 +13,29 @@ test('idle machine + low-cost task -> run_now', async () => {
   assert.equal(r.action, 'run_now');
 });
 
-test('overloaded CPU + low-cost task -> queue, not a silent block or crash', async () => {
-  const r = await decide({ capabilityClass: 'filesystem-read', estimatedCost: 'low' }, { resources: loaded, ollama: noModels });
+test('overloaded CPU + a capability class with no registered candidates -> queue, not a silent block or crash', async () => {
+  // 'filesystem-read' has real candidates in data/model-registry.json, so it would
+  // now try a lighter one first (see the dedicated tests below) - use a class with
+  // no declared candidates to exercise the genuine "nothing viable, must queue" path.
+  const r = await decide({ capabilityClass: 'nonexistent-class-xyz', estimatedCost: 'low' }, { resources: loaded, ollama: noModels });
   assert.equal(r.action, 'queue');
   assert.match(r.reason, /cpu=95%/);
+});
+
+test('overloaded CPU + a task class WITH a lighter suitable candidate -> run_now with recommendedModel, not queue (task -> suitable models -> resources -> fastest viable backend -> queue only if none viable)', async () => {
+  const r = await decide({ capabilityClass: 'filesystem-read', estimatedCost: 'low', currentModel: 'some-heavy-model-not-in-registry' }, { resources: loaded, ollama: noModels });
+  assert.equal(r.action, 'run_now');
+  assert.ok(r.recommendedModel, JSON.stringify(r));
+  assert.match(r.reason, /lighter suitable candidate/);
+});
+
+test('overloaded CPU + already using the lightest candidate -> no lighter option, queues', async () => {
+  const { candidatesFor } = require('../lib/model-suitability');
+  const registry = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '..', 'data', 'model-registry.json'), 'utf8'));
+  const candidates = candidatesFor('filesystem-read');
+  const lightest = [...candidates].sort((a, b) => registry.models[a].sizeGb - registry.models[b].sizeGb)[0];
+  const r = await decide({ capabilityClass: 'filesystem-read', estimatedCost: 'low', currentModel: lightest }, { resources: loaded, ollama: noModels });
+  assert.equal(r.action, 'queue');
 });
 
 test('overloaded CPU + high-cost task -> use_alternate_backend, not queue (queueing a slow task under load just delays the inevitable timeout)', async () => {

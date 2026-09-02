@@ -655,6 +655,17 @@
       "fix": "scripts/ollama-think-proxy.cjs now only forces think:false when body.tools is absent/empty (plain chat) - tool-calling requests (body.tools non-empty) are left at Ollama/Qwen3s natural default (thinking on) instead of a single global switch. This is a mitigation (avoids the proxy actively causing empty responses), not a fix for qwen3:1.7bs underlying tool-calling reliability, which remains a real limitation.",
       "test": "ANYTHINGLLM_E2E_REPRODUCIBILITY.json records the 0/3 PASS run with think forced off; the fixed tools-aware proxy logic is exercised live by scripts/anythingllm-task-router.cjs on every dispatch.",
       "prevention": "Recommend a model with more reliable native tool-calling for agentic World_server tasks (see final integration report for the specific recommendation) rather than continuing to tune qwen3:1.7b think settings - this class of small quantized model appears to need either thinking enabled (accepting latency) or a different model entirely for structured tool output, not a thinking-mode toggle."
+    },
+    {
+      "id": "anythingllm-agentmodel-requires-agentprovider",
+      "severity": "operational",
+      "status": "fixed",
+      "discoveredAt": "2026-09-02T11:57:38.389Z",
+      "rootCause": "AnythingLLM workspace update accepts agentModel independently of agentProvider, and the API returns the new agentModel value as if it took effect - but a live-tested @agent turn kept using the system-default model (qwen3:1.7b) while agentProvider stayed null, even with agentModel explicitly set to a different model. agentProvider must be set alongside agentModel (and chatProvider alongside chatModel) for the override to actually apply.",
+      "symptom": "Workspace GET/update responses show the intended agentModel, but the backend log AgentLLM line still names the old/default model for the actual turn.",
+      "fix": "scripts/anythingllm-task-router.cjs#setWorkspaceModel now always sets {agentProvider:\"ollama\", agentModel, chatProvider:\"ollama\", chatModel} together.",
+      "test": "Live-verified: a plain chat with just chatModel/chatProvider set both together returned metrics.model=qwen2.5:3b-instruct correctly.",
+      "prevention": "Any future per-request/per-workspace model override in this codebase should set the *Provider field alongside the *Model field - never assume the model field alone is sufficient."
     }
   ],
   "confirmationProtocol": {

@@ -19,6 +19,7 @@ const fs = require('fs');
 const path = require('path');
 const { route, primaryToolFor } = require('../lib/mcp-intent-router');
 const { decide: decideResources, enqueueTask } = require('../lib/ai-resource-scheduler');
+const { pickBestBackend, recordOutcome } = require('../lib/model-suitability');
 
 const ANYTHINGLLM_URL = process.env.ANYTHINGLLM_URL || 'http://127.0.0.1:3001';
 const ANYTHINGLLM_API_KEY = process.env.ANYTHINGLLM_API_KEY;
@@ -37,6 +38,26 @@ const MISMATCH_PATTERNS = [
 function writeProfile(capabilityClass, allowedTools) {
   fs.mkdirSync(path.dirname(PROFILE_PATH), { recursive: true });
   fs.writeFileSync(PROFILE_PATH, JSON.stringify({ capabilityClass, allowedTools, writtenAt: new Date().toISOString() }, null, 2));
+}
+
+// setWorkspaceModel(): AnythingLLM's per-workspace agentModel field is live and
+// settable via /workspace/{slug}/update (confirmed) - this is the actual model-
+// routing lever, since the chat API itself has no per-request model override.
+// null resets to the system default. This mutates shared workspace state, so
+// callers dispatch one task at a time through this router (true for both the
+// CLI entry point and the reproducibility harness) - documented as a known
+// limitation, not silently assumed safe under real concurrent dispatch.
+async function setWorkspaceModel(workspaceSlug, model) {
+  // agentModel alone is inert - live-tested: with agentProvider left null, the
+  // agent chat kept using the system-default model regardless of agentModel.
+  // Both fields must be set together for the override to actually take effect.
+  const res = await fetch(`${ANYTHINGLLM_URL}/api/v1/workspace/${workspaceSlug}/update`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${ANYTHINGLLM_API_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ agentProvider: 'ollama', agentModel: model, chatProvider: 'ollama', chatModel: model }),
+  });
+  if (!res.ok) throw new Error(`setWorkspaceModel failed: HTTP ${res.status}`);
+  return res.json();
 }
 
 function looksLikeMismatch(textResponse, thoughts, allowedTools) {
@@ -79,15 +100,27 @@ async function runTask(taskText, opts = {}) {
   const { capabilityClass, allowedTools } = route(taskText);
   writeProfile(capabilityClass, allowedTools);
 
+  // Model routing: pick the best-scoring candidate for this capability class from
+  // data/model-registry.json + the live suitability ledger (success rate, then
+  // latency) rather than always using the system-default model - qwen3:1.7b is
+  // suitable for 'unknown' (plain, non-agentic) but was measured 0/3 for
+  // filesystem-read's actual tool-calling workload (data/model-suitability-
+  // ledger.json, error-prevention-registry.json#qwen3-thinking-disabled-breaks-
+  // tool-call-generation).
+  let selectedModel = opts.model || pickBestBackend(capabilityClass).backend;
+
   // Resource-aware gate: don't dispatch a CPU-bound local inference job into a
   // contended machine and let it silently eat a full timeout window. Real E2E
   // testing hit 100% CPU (Win32_Processor.LoadPercentage) with repeated 150s
-  // timeouts before this was wired in - see lib/ai-resource-scheduler.js. Callers
-  // that genuinely want to force a run regardless (e.g. the reproducibility
-  // harness intentionally probing under load) can pass respectResourceGate:false.
+  // timeouts before this was wired in - see lib/ai-resource-scheduler.js. Under
+  // CPU pressure the gate tries a lighter suitable candidate model FIRST (task ->
+  // suitable models -> resources -> fastest viable backend -> queue only if none
+  // viable) rather than jumping straight to queueing. Callers that genuinely want
+  // to force a run regardless (e.g. the reproducibility harness intentionally
+  // probing under load) can pass respectResourceGate:false.
   if (opts.respectResourceGate !== false) {
     const estimatedCost = opts.estimatedCost || (capabilityClass === 'filesystem-write' ? 'medium' : 'low');
-    const gate = await decideResources({ capabilityClass, estimatedCost });
+    const gate = await decideResources({ capabilityClass, estimatedCost, currentModel: selectedModel });
     if (gate.action === 'queue') {
       const enq = enqueueTask({ taskText, workspaceSlug, threadSlug, timeoutMs }, { priority: opts.priority || 0 });
       return { capabilityClass, allowedTools, attempts: [], result: 'QUEUED', retries: 0, resourceGate: gate, queueJobId: enq.id };
@@ -95,6 +128,11 @@ async function runTask(taskText, opts = {}) {
     if (gate.action !== 'run_now') {
       return { capabilityClass, allowedTools, attempts: [], result: 'ESCALATE', retries: 0, resourceGate: gate };
     }
+    if (gate.recommendedModel) selectedModel = gate.recommendedModel;
+  }
+
+  if (selectedModel && opts.respectModelRouting !== false) {
+    await setWorkspaceModel(workspaceSlug, selectedModel);
   }
 
   const attempts = [];
@@ -155,11 +193,20 @@ async function runTask(taskText, opts = {}) {
     message = `@agent ${taskText}\n\nCall the ${singleTool} tool directly. Do not use document-summarizer, rag-memory, or web-scraping.`;
   }
 
+  const result = finalAttempt && finalAttempt.ok && !finalAttempt.mismatchDetected ? 'PASS' : finalAttempt && finalAttempt.timedOut ? 'TIMEOUT' : 'FAIL';
+
+  if (selectedModel && opts.respectModelRouting !== false) {
+    const totalLatencyMs = attempts.reduce((sum, a) => sum + (a.durationMs || 0), 0);
+    const totalTokens = attempts.reduce((sum, a) => sum + (a.totalTokens || 0), 0);
+    recordOutcome(selectedModel, capabilityClass, result, { latencyMs: totalLatencyMs, tokens: totalTokens || undefined });
+  }
+
   return {
     capabilityClass,
     allowedTools,
+    model: selectedModel,
     attempts,
-    result: finalAttempt && finalAttempt.ok && !finalAttempt.mismatchDetected ? 'PASS' : finalAttempt && finalAttempt.timedOut ? 'TIMEOUT' : 'FAIL',
+    result,
     retries: attempts.length - 1,
   };
 }
