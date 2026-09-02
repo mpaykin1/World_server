@@ -18,6 +18,7 @@
 const fs = require('fs');
 const path = require('path');
 const { route, primaryToolFor } = require('../lib/mcp-intent-router');
+const { decide: decideResources } = require('../lib/ai-resource-scheduler');
 
 const ANYTHINGLLM_URL = process.env.ANYTHINGLLM_URL || 'http://127.0.0.1:3001';
 const ANYTHINGLLM_API_KEY = process.env.ANYTHINGLLM_API_KEY;
@@ -40,6 +41,12 @@ function writeProfile(capabilityClass, allowedTools) {
 
 function looksLikeMismatch(textResponse, thoughts, allowedTools) {
   const text = textResponse || '';
+  // An empty (or near-empty) final response is NOT a pass just because it doesn't
+  // match a known bad-text pattern - a real E2E run against thread fffd7db4 showed
+  // "ok: true, mismatchDetected: false" with an entirely empty textResponse (the
+  // agent loop exhausted AgentSkillMaxToolCalls before ever synthesizing an answer).
+  // Absence of a bad pattern is not presence of a good one.
+  if (text.trim().length < 2) return true;
   if (MISMATCH_PATTERNS.some((re) => re.test(text))) return true;
   const thoughtText = Array.isArray(thoughts) ? thoughts.join(' ') : String(thoughts || '');
   // A thought naming document-summarizer (or any tool outside our allowlist) on a
@@ -71,6 +78,20 @@ async function runTask(taskText, opts = {}) {
 
   const { capabilityClass, allowedTools } = route(taskText);
   writeProfile(capabilityClass, allowedTools);
+
+  // Resource-aware gate: don't dispatch a CPU-bound local inference job into a
+  // contended machine and let it silently eat a full timeout window. Real E2E
+  // testing hit 100% CPU (Win32_Processor.LoadPercentage) with repeated 150s
+  // timeouts before this was wired in - see lib/ai-resource-scheduler.js. Callers
+  // that genuinely want to force a run regardless (e.g. the reproducibility
+  // harness intentionally probing under load) can pass respectResourceGate:false.
+  if (opts.respectResourceGate !== false) {
+    const estimatedCost = opts.estimatedCost || (capabilityClass === 'filesystem-write' ? 'medium' : 'low');
+    const gate = await decideResources({ capabilityClass, estimatedCost });
+    if (gate.action !== 'run_now') {
+      return { capabilityClass, allowedTools, attempts: [], result: gate.action === 'queue' ? 'QUEUED' : 'ESCALATE', retries: 0, resourceGate: gate };
+    }
+  }
 
   const attempts = [];
   // AnythingLLM's agent/tool mode is triggered by an "@agent" prefix in the message

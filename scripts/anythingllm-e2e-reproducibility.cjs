@@ -6,7 +6,7 @@
 // in a fresh thread (so no run is biased by a prior failed attempt's history), and
 // records every outcome into the model-suitability ledger. A single lucky PASS is
 // not evidence the routing fix works - this is what actually proves it.
-const { runTask } = require('./anythingllm-task-router');
+const { runTask } = require('./anythingllm-task-router.cjs');
 const { recordOutcome } = require('../lib/model-suitability');
 const { route } = require('../lib/mcp-intent-router');
 const fs = require('fs');
