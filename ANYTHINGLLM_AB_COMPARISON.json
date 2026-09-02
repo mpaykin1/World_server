@@ -1,0 +1,51 @@
+{
+  "report": "ANYTHINGLLM_VS_OPENHUMAN_LOCAL_CHAT_AB_TEST",
+  "generatedAt": "2026-09-02T05:00:00.000Z",
+  "sameModel": "qwen3:1.7b",
+  "sameOllamaServer": "http://127.0.0.1:11434 (existing instance, not reinstalled)",
+  "openhuman": {
+    "version": "0.63.12",
+    "promptTokens": "~48750-49119",
+    "modelContextWindow": 4096,
+    "contextUtilizationPercent": "~1190-1199",
+    "toolsSent": 315,
+    "result": "HANG / no completion in log",
+    "evidence": "data/error-prevention-registry.json#openhuman-local-model-tool-context-overflow, OPENHUMAN_LOCAL_CHAT_E2E.json"
+  },
+  "anythingllm": {
+    "version": "1.16.1",
+    "installSource": "official GitHub release, Mintplex-Labs/anything-llm, exact byte-size match verified (410516264 bytes)",
+    "ollamaReinstalled": false,
+    "ollamaInstallLogQuote": "Ollama already installed (v0.20.7) - skipping download",
+    "plainChat": {
+      "promptTokens": 98,
+      "modelContextWindowRequested": "16384 (of model's declared max 40960)",
+      "completionTokens": 531,
+      "outputTokensPerSecond": 5.39,
+      "totalDurationSeconds": 98.5,
+      "result": "PASS - correct one-word answer 'РАБОТАЕТ' in a fresh thread",
+      "note": "First attempt in a continued thread answered incorrectly ('ДЕЙСТВУЕТ') likely due to a garbled earlier turn (this session's own curl UTF-8 encoding bug, not an AnythingLLM bug) polluting thread history - a fresh thread produced the correct answer."
+    },
+    "agentMode": {
+      "defaultToolCount": 3,
+      "defaultTools": ["rag-memory", "document-summarizer", "web-scraping"],
+      "mcpServersConfigured": 0,
+      "intelligentSkillSelectorLog": "[IntelligentSkillSelector] 3 tools <= 15, skipping reranking",
+      "promptTokens": 542,
+      "completionTokens": 505,
+      "totalDurationSeconds": 157.2,
+      "result": "PASS (technical) - real completion, no hang; answered 'ДА' instead of the literal requested word, a small-model instruction-following quirk under @agent framing, not an architecture failure",
+      "note": "Confirms AnythingLLM does not inject a large tool catalog by default - the exact class of fix OpenHuman's unreleased 'toolpacks' work is building. IntelligentSkillSelector only activates reranking above 15 tools. 542 prompt tokens even WITH real agent tools active is ~90x smaller than OpenHuman's 48750-49119 for the same model."
+    }
+  },
+  "unresolvedGap": {
+    "phase": "5 - World_server live filesystem access",
+    "issue": "The official reference MCP filesystem server (@modelcontextprotocol/server-filesystem) provides read AND write tools (read_text_file, write_file, create_directory, move, etc.) with no built-in read-only flag found in its documentation.",
+    "decision": "NOT wired up this cycle rather than granting broader write access to World_server than OpenHuman itself has (OpenHuman's trusted_root for World_server is explicitly read-only). This is a real open question for the user to decide, not silently resolved either way.",
+    "options": [
+      "accept read+write MCP filesystem access for AnythingLLM (a real, deliberate risk tradeoff)",
+      "find/vet a read-only-capable filesystem MCP server or wrapper",
+      "defer live filesystem access for AnythingLLM and keep it scoped to RAG-ingested documents only, at least initially"
+    ]
+  }
+}
