@@ -1,6 +1,6 @@
 {
   "test": "OPENHUMAN_LOCAL_WORLD_SERVER_ACCESS_CHECK",
-  "generatedAt": "2026-09-01T07:06:08.621Z",
+  "generatedAt": "2026-09-01T14:30:20.288Z",
   "worldServerRoot": "C:\\Users\\user\\Desktop\\World_server",
   "launcher": {
     "cmdExists": true,

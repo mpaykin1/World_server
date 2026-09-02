@@ -1,30 +1,31 @@
 {
   "test": "OPENHUMAN_GUI_LAUNCH_CHECK + OPENHUMAN_PROVIDER_ROUTING_CHECK",
-  "generatedAt": "2026-09-01T07:06:08.649Z",
+  "generatedAt": "2026-09-01T14:30:20.347Z",
   "gui": {
     "executableExists": true,
     "guiLaunchVerified": "PASS",
-    "ageMinutes": 4,
+    "ageMinutes": 241,
     "lastLog": [
-      "--- launch attempt 2026-09-01T10:02:13 ---\r",
-      "2026-09-01T10:02:13  AgentMemory: OK\r",
-      "2026-09-01T10:02:13  OPENHUMAN_ACTION_DIR = C:\\Users\\user\\Desktop\\World_server\r",
-      "2026-09-01T10:02:17  RESULT: LAUNCHED_OK (PID 18272, window visible)"
+      "--- launch attempt 2026-09-01T13:29:13 ---\r",
+      "2026-09-01T13:29:13  AgentMemory: OK\r",
+      "2026-09-01T13:29:13  OPENHUMAN_ACTION_DIR = C:\\Users\\user\\Desktop\\World_server\r",
+      "2026-09-01T13:29:17  RESULT: LAUNCHED_OK (PID 17592, window visible)"
     ]
   },
   "routing": {
-    "status": "OPENROUTER_FREE_PRIMARY",
+    "status": "OTHER",
     "routing": {
-      "chat_provider": "openrouter:openrouter/free",
-      "reasoning_provider": "openrouter:openrouter/free",
-      "agentic_provider": "openrouter:openrouter/free",
-      "coding_provider": "openrouter:openrouter/free",
-      "vision_provider": "openrouter:openrouter/free"
+      "chat_provider": "ollama:gemma3:1b-it-qat",
+      "reasoning_provider": "ollama:gemma3:1b-it-qat",
+      "agentic_provider": "ollama:gemma3:1b-it-qat",
+      "coding_provider": "ollama:gemma3:1b-it-qat",
+      "vision_provider": "ollama:gemma3:1b-it-qat"
     },
     "registeredProviders": [
       "groq",
       "google",
-      "openrouter"
+      "openrouter",
+      "ollama"
     ],
     "configPath": "C:\\Users\\user\\.openhuman\\users\\6a95a408b339ec0ca292a12d\\config.toml"
   },
@@ -32,8 +33,7 @@
     "status": "OK",
     "file": "openhuman.2026-09-01.log",
     "foundSignatures": [
-      "fatal",
-      "single-instance"
+      "fatal"
     ]
   },
   "note": "executableExists=true and exit code 0 do NOT imply guiLaunchVerified=PASS — OpenHuman's single-instance mutex makes a second launch exit cleanly having done nothing. Only RESULT: LAUNCHED_OK in the launch log (a real PID with a non-zero MainWindowHandle) counts as PASS."

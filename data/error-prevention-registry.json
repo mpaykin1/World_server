@@ -622,6 +622,17 @@
         "small local models are a reasonable fit for narrow, tool-free workloads (embeddings, heartbeat, learning-reflection) — which is what local_ai.usage flags are actually for — not as a drop-in replacement for a cloud model handling full agentic orchestration"
       ],
       "solution": "keep local Ollama models scoped to narrow non-agentic workloads (e.g. embeddings, via local_ai.usage.embeddings=true) rather than as chat_provider/agentic_provider; if local chat is genuinely required, it needs either a model with real native tool-calling support and enough context, or a way to restrict the tool catalog exposed to that specific provider/profile (not available via the settings this session had access to)"
+    },
+    {
+      "id": "anythingllm-small-model-tool-selection-miss",
+      "severity": "quality-degradation",
+      "status": "documented",
+      "discoveredAt": "2026-09-02T05:29:09.723Z",
+      "rootCause": "A small local model (qwen3:1.7b) served via AnythingLLM @agent mode, when given 15 simultaneously-selected tools including the correct MCP read_file/read_text_file for a file-read task, instead invoked the built-in document-summarizer tool on \"/\" and reported the task impossible. Real, reproduced, not a hallucination of the harness: verified via AnythingLLM backend log thoughts field and full response text.",
+      "symptom": "@agent responds that no tool could find/read a file that is actually present and readable via an attached MCP filesystem tool.",
+      "fix": "No automatic fix applied - documented as a genuine small-model tool-selection limitation, distinct from a plumbing/config bug. Mitigation options for future attempts: (a) prefer a model with native tool-calling support (supports_native_tools=true) over these local instruct-tuned models for @agent tasks that require precise tool selection, (b) keep the attached tool count as low as practical for the specific task (fewer simultaneous choices reduces mis-selection), (c) phrase the task to name the expected tool class explicitly (e.g. \"use your file-reading tool\") as a prompt-level nudge.",
+      "test": "ANYTHINGLLM_AB_COMPARISON.json#realE2eTest.attempt1 records the full reproduction (prompt, tool set, response, token/latency metrics).",
+      "prevention": "scripts/anythingllm-health-check.js checkSelectiveToolEvidence() confirms the selective-tool mechanism itself (bounding tool count, correct tools attached) is working from the plumbing side, so a future FAIL of this shape can be triaged directly to model tool-selection rather than re-investigating the MCP/config layer from scratch."
     }
   ],
   "confirmationProtocol": {

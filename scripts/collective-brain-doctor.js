@@ -5,6 +5,7 @@ const {run: ordinaryChatCheck}=require('./openhuman-ordinary-chat-check');
 const {run: localAccessCheck}=require('./openhuman-local-access-check');
 const {run: launchCheck}=require('./openhuman-launch-check');
 const {run: localChatE2eCheck}=require('./openhuman-local-chat-e2e-check');
+const {run: anythingllmHealthCheck}=require('./anythingllm-health-check');
 doctor(process.cwd()).then(async r=>{
   console.log(`[COLLECTIVE_BRAIN_DOCTOR] ${r.status} agentmemory=${r.agentmemory.ok?'UP':'DOWN'} ollama=${r.ollama.ok?'UP':'DOWN'}`);
   try {
@@ -33,6 +34,12 @@ doctor(process.cwd()).then(async r=>{
     console.log(`[COLLECTIVE_BRAIN_DOCTOR] Ollama server: ${le.ollamaServer} | model direct: ${le.modelDirect} | OpenHuman local-model config: ${le.openhumanLocalModelConfig} | OpenHuman ordinary chat (local model): ${le.openhumanOrdinaryChatLocal}`);
   } catch (e) {
     console.log(`[COLLECTIVE_BRAIN_DOCTOR] OpenHuman local chat E2E: UNKNOWN (check failed: ${e.message})`);
+  }
+  try {
+    const ah = await anythingllmHealthCheck();
+    console.log(`[COLLECTIVE_BRAIN_DOCTOR] AnythingLLM integration: ${ah.status} (anythingllm=${ah.anythingllm.up?'UP':'DOWN'} ollama=${ah.ollama.up?'UP':'DOWN'} mcp=${ah.mcpFilesystem.configured?'CONFIGURED':'MISSING'} secretGuard=${ah.secretGuard.status} unsafeMainTreeGrant=${ah.mcpFilesystem.unsafeMainTreeGrant})`);
+  } catch (e) {
+    console.log(`[COLLECTIVE_BRAIN_DOCTOR] AnythingLLM integration: UNKNOWN (check failed: ${e.message})`);
   }
   if(r.status!=='PASS')process.exitCode=1;
 }).catch(e=>{console.error(e);process.exitCode=1;});
