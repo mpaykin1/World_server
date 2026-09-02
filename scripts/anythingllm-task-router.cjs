@@ -24,7 +24,19 @@ const { pickBestBackend, recordOutcome } = require('../lib/model-suitability');
 const ANYTHINGLLM_URL = process.env.ANYTHINGLLM_URL || 'http://127.0.0.1:3001';
 const ANYTHINGLLM_API_KEY = process.env.ANYTHINGLLM_API_KEY;
 const PROFILE_PATH = path.join(__dirname, '..', 'data', 'mcp-router-profile.json');
-const DEFAULT_TIMEOUT_MS = Number(process.env.ANYTHINGLLM_TASK_TIMEOUT_MS || 150000);
+// 150s was tuned during the empty-response-defect investigation, when EVERY
+// turn looked broken regardless of budget. Now that the real defect (router
+// hint using unprefixed tool names - see error-prevention-registry.json#
+// anythingllm-router-hint-tool-name-mismatch) is fixed, live testing shows
+// tool-calling turns genuinely completing (confirmed: a real read_text_file
+// call returned the correct package.json content) but taking 150-350s+ of
+// real wall-clock time under actual multi-AI CPU contention on this shared
+// machine (other concurrent agents, not a bug - see lib/ai-resource-
+// scheduler.js). 150s was cutting off completions that were working correctly,
+// just slowly. This is a genuine external-load constraint the resource-aware
+// gate already handles via queueing BEFORE dispatch; this timeout only
+// governs how long an already-dispatched call is allowed to keep running.
+const DEFAULT_TIMEOUT_MS = Number(process.env.ANYTHINGLLM_TASK_TIMEOUT_MS || 400000);
 const MAX_RETRIES = 1;
 // AnythingLLM's MCPHypervisor names each MCP tool `<mcpServerName>-<toolName>`
 // (confirmed via anythingllm_mcp_servers.json's "world-server-sandbox" key and
