@@ -28,7 +28,11 @@
     },
     "agentMode": {
       "defaultToolCount": 3,
-      "defaultTools": ["rag-memory", "document-summarizer", "web-scraping"],
+      "defaultTools": [
+        "rag-memory",
+        "document-summarizer",
+        "web-scraping"
+      ],
       "mcpServersConfigured": 0,
       "intelligentSkillSelectorLog": "[IntelligentSkillSelector] 3 tools <= 15, skipping reranking",
       "promptTokens": 542,
@@ -65,5 +69,43 @@
       "durationSeconds": 612.94,
       "note": "3820 prompt tokens is ~7x the earlier 542-token agentMode baseline (before MCP tools were attached) but still ~13x smaller than OpenHuman's 48750-49119 for a comparable local-model turn. This is genuine negative evidence for small-model tool selection reliability with 15 simultaneously-available tools, not a reason to claim the integration is broken - the plumbing (MCP server, tool attachment, selective tool-count limiting) all verified working; the gap is model-side tool choice."
     }
+  },
+  "rawOllamaBenchmark": {
+    "test": "Raw Ollama A/B - thinking on vs off, bypassing AnythingLLM/MCP entirely",
+    "model": "qwen3:1.7b",
+    "coldLoad": {
+      "loadDurationS": 8,
+      "promptEvalDurationS": 2.09,
+      "evalCount": 125,
+      "evalDurationS": 23.69,
+      "tokensPerSec": 5.28,
+      "wallClockS": 33.99
+    },
+    "warmThinkingTrue": {
+      "evalCount": 211,
+      "evalDurationS": 40.44,
+      "tokensPerSec": 5.22,
+      "wallClockS": 42.06
+    },
+    "warmThinkingFalse": {
+      "evalCount": 2,
+      "evalDurationS": 0.2,
+      "tokensPerSec": 9.9,
+      "wallClockS": 2.34
+    },
+    "conclusion": "thinking=false is 18x faster wall-clock for a trivial plain-text query (42.06s -> 2.34s), driven mostly by output token count (211 vs 2), not raw tokens/sec (5.22 vs 9.90, only ~2x). Applied as scripts/ollama-think-proxy.cjs default for non-tool requests only."
+  },
+  "toolCallingReliabilityFinding": {
+    "test": "think:false vs think:true(default) on AGENTIC tool-calling turns specifically (body.tools non-empty)",
+    "thinkFalse": {
+      "result": "0/3 PASS across 3 independent reproducibility runs (6 attempts total)",
+      "symptom": "empty final content, 19-28 completion tokens, no tool-call ever logged"
+    },
+    "thinkTrueOrUnset": {
+      "result": "TIMEOUT at 150-200s, twice, zero tool-call attempts logged in either run",
+      "symptom": "never even attempts a tool call within budget under current CPU contention"
+    },
+    "conclusion": "Neither thinking setting reliably completes an agentic tool-calling turn for qwen3:1.7b under current real CPU contention on this machine (observed 18%-100% load, driven by other concurrent AI-agent processes). This is a genuine, currently-unresolved model-capability/throughput limitation, not a routing or proxy defect - the deterministic router, MCP proxy, and reranker-narrowing fixes from the prior cycle are all independently verified working (see structural test counts). Recorded in error-prevention-registry.json and lib/model-suitability.js (qwen3:1.7b now correctly flagged unsuitable for filesystem-read: 100% fail rate over last 5 real attempts).",
+    "recommendation": "qwen2.5:3b-instruct (or similar non-hybrid-thinking small instruct model with established Ollama tool-calling support) - see final integration report for full justification. Not downloaded without explicit approval."
   }
 }
