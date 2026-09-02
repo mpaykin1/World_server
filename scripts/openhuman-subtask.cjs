@@ -24,6 +24,29 @@ const { route } = require('../lib/mcp-intent-router');
 
 const MAIN_TREE_ROOT = process.env.WORLD_SERVER_MAIN_TREE || 'C:\\Users\\user\\Desktop\\World_server';
 const REPORT_LOG_PATH = process.env.AI_AGENT_REPORTS_PATH || path.join(MAIN_TREE_ROOT, 'state', 'ai-agent-reports.jsonl');
+const ANYTHINGLLM_URL = process.env.ANYTHINGLLM_URL || 'http://127.0.0.1:3001';
+const ANYTHINGLLM_API_KEY = process.env.ANYTHINGLLM_API_KEY;
+
+// A coordinator calling runSubtask() should not need to know AnythingLLM has
+// its own thread-creation step (a real gap found live: every manual
+// validation dispatch this session first had to POST .../thread/new and pull
+// the real generated slug out of the response before runTask() would accept
+// it - a coordinator calling this entry point blind would get an immediate
+// http_404). Only used when the caller doesn't already have a stable
+// threadSlug (e.g. a fresh coordinator-initiated subtask); the queue-drain
+// retry path always passes its own already-established threadSlug through
+// runTask() directly, so this never runs on a retry.
+async function createThread(workspaceSlug, name) {
+  const res = await fetch(`${ANYTHINGLLM_URL}/api/v1/workspace/${workspaceSlug}/thread/new`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${ANYTHINGLLM_API_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name }),
+  });
+  if (!res.ok) throw new Error(`createThread failed: HTTP ${res.status}`);
+  const body = await res.json();
+  if (!body.thread || !body.thread.slug) throw new Error('createThread: no thread.slug in response');
+  return body.thread.slug;
+}
 
 function appendReport(entry, reportLogPath = REPORT_LOG_PATH) {
   try {
@@ -68,27 +91,35 @@ function buildReportEntry(result, capabilityClass, opts = {}) {
 // `opts.workspaceSlug` are required (same as runTask - a fresh thread per
 // subtask keeps results uncontaminated by prior turns' history).
 async function runSubtask(taskText, opts = {}) {
-  if (!opts.threadSlug) throw new Error('runSubtask requires opts.threadSlug');
   const { capabilityClass } = route(taskText);
   const startedAt = new Date().toISOString();
   const start = Date.now();
 
-  const result = await runTask(taskText, opts);
+  let threadSlug = opts.threadSlug;
+  let autoCreatedThread = false;
+  if (!threadSlug) {
+    if (!ANYTHINGLLM_API_KEY) throw new Error('runSubtask requires opts.threadSlug, or ANYTHINGLLM_API_KEY set in env to auto-create one');
+    threadSlug = await createThread(opts.workspaceSlug || 'world', opts.taskId || `openhuman-subtask-${start}`);
+    autoCreatedThread = true;
+  }
+
+  const result = await runTask(taskText, { ...opts, threadSlug });
   const durationMs = Date.now() - start;
 
   const reported = appendReport(buildReportEntry(result, capabilityClass, { taskId: `openhuman-subtask-${start}`, callerAgent: opts.callerAgent }), opts.reportLogPath);
 
-  return { ...result, capabilityClass, startedAt, durationMs, reportedToSharedPipeline: reported };
+  return { ...result, capabilityClass, threadSlug, autoCreatedThread, startedAt, durationMs, reportedToSharedPipeline: reported };
 }
 
-module.exports = { runSubtask, buildReportEntry, appendReport, REPORT_LOG_PATH };
+module.exports = { runSubtask, buildReportEntry, appendReport, createThread, REPORT_LOG_PATH };
 
 if (require.main === module) {
   const taskText = process.argv[2];
-  const threadSlug = process.argv[3];
+  const threadSlug = process.argv[3] || undefined; // omit/pass "" to auto-create
   const callerAgent = process.argv[4] || 'cli';
-  if (!taskText || !threadSlug) {
-    console.error('usage: node openhuman-subtask.cjs "<task text>" <threadSlug> [callerAgent] [workspaceSlug]');
+  if (!taskText) {
+    console.error('usage: node openhuman-subtask.cjs "<task text>" [threadSlug] [callerAgent] [workspaceSlug]');
+    console.error('  threadSlug: omit or pass "" to auto-create a fresh AnythingLLM thread');
     process.exit(1);
   }
   runSubtask(taskText, { threadSlug, workspaceSlug: process.argv[5] || 'world', callerAgent })
