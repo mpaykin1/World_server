@@ -12,17 +12,26 @@ const os = require('os');
 // that would actually need a valid key runs.
 if (!process.env.ANYTHINGLLM_API_KEY) process.env.ANYTHINGLLM_API_KEY = 'test-dummy-key';
 
+// WORLD_SERVER_QUEUE_DB (the job DATABASE FILE) is set to an isolated temp path
+// before requiring, same pattern as test/ai-resource-scheduler-queue.test.js -
+// a real bug was found and fixed here: this test's lease-busy path calls the
+// REAL enqueueTask(), which without this isolation wrote a job for a fake
+// "test-concurrency-<pid>-<timestamp>" workspace slug into the SHARED
+// PRODUCTION queue, which a later drain attempt then genuinely tried to
+// dispatch and failed on (setWorkspaceModel HTTP 400 - the workspace doesn't
+// exist). WORLD_SERVER_MAIN_TREE is deliberately NOT redirected - only the
+// database file needs isolating, not the durable-job-queue.cjs SCRIPT path
+// (ai-resource-scheduler.js resolves the script from WORLD_SERVER_MAIN_TREE
+// but the actual job data file from WORLD_SERVER_QUEUE_DB independently) or
+// the collective-brain lease root (LEASE_ROOT below still uses the real main
+// tree, scoped to a test-unique workspace slug so it cannot collide with a
+// real concurrent dispatch's "anythingllm-workspace-world" lease).
+if (!process.env.WORLD_SERVER_QUEUE_DB) {
+  process.env.WORLD_SERVER_QUEUE_DB = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'router-test-queue-')), 'jobs.sqlite');
+}
+
 const { looksLikeMismatch, prefixedToolName, MCP_SERVER_NAME, runTask } = require('../scripts/anythingllm-task-router.cjs');
 const collectiveBrain = require('../lib/collective-brain');
-
-// The router's concurrency lease and lib/ai-resource-scheduler.js's queue DB
-// both default to the SAME WORLD_SERVER_MAIN_TREE root (by design - one real
-// shared root regardless of which worktree a caller runs from), so this test
-// deliberately does NOT redirect that env var - it would break enqueueTask's
-// subprocess call to <root>/scripts/durable-job-queue.cjs. Instead it uses a
-// workspace slug unique to this test run so its lease scope
-// ("anythingllm-workspace-<slug>") cannot collide with any real concurrent
-// dispatch's "anythingllm-workspace-world" lease.
 const TEST_WORKSPACE_SLUG = `test-concurrency-${process.pid}-${Date.now()}`;
 const LEASE_ROOT = 'C:\\Users\\user\\Desktop\\World_server';
 const LEASE_SCOPE = `anythingllm-workspace-${TEST_WORKSPACE_SLUG}`;
