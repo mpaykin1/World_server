@@ -26,6 +26,21 @@ const ANYTHINGLLM_API_KEY = process.env.ANYTHINGLLM_API_KEY;
 const PROFILE_PATH = path.join(__dirname, '..', 'data', 'mcp-router-profile.json');
 const DEFAULT_TIMEOUT_MS = Number(process.env.ANYTHINGLLM_TASK_TIMEOUT_MS || 150000);
 const MAX_RETRIES = 1;
+// AnythingLLM's MCPHypervisor names each MCP tool `<mcpServerName>-<toolName>`
+// (confirmed via anythingllm_mcp_servers.json's "world-server-sandbox" key and
+// live backend log Transport messages). lib/mcp-intent-router.js's allowedTools
+// are the SHORT, unprefixed names the raw MCP protocol itself returns (and what
+// the proxy's tools/list filter matches against) - the two are NOT the same
+// string, and this was the actual root cause of the empty-tool-call-response
+// defect (see error-prevention-registry.json#anythingllm-router-hint-tool-name-
+// mismatch): the hint text told the model to call a tool name that does not
+// exist in its own tool list, and the model's attempted call at that
+// nonexistent name failed to parse into anything, silently producing empty
+// content. Prefix must be added ONLY when naming tools in text sent to the
+// model - never when writing the MCP proxy's profile (that layer speaks the
+// raw, unprefixed MCP protocol name).
+const MCP_SERVER_NAME = process.env.ANYTHINGLLM_MCP_SERVER_NAME || 'world-server-sandbox';
+const prefixedToolName = (name) => `${MCP_SERVER_NAME}-${name}`;
 
 const MISMATCH_PATTERNS = [
   /cannot be performed with the available tools/i,
@@ -149,7 +164,7 @@ async function runTask(taskText, opts = {}) {
   // tool names in the query itself shifts the embedding, not just the LLM's reasoning -
   // a system-prompt-level instruction alone does NOT reach the reranker, since
   // reranking happens upstream of the model call.
-  const toolHint = allowedTools.length ? `Use exactly one of these tools: ${allowedTools.join(', ')}. Do not use document-summarizer, rag-memory, or web-scraping for this.` : '';
+  const toolHint = allowedTools.length ? `Use exactly one of these tools: ${allowedTools.map(prefixedToolName).join(', ')}. Do not use document-summarizer, rag-memory, or web-scraping for this.` : '';
   let message = `@agent ${taskText}\n\n${toolHint}`.trim();
   let finalAttempt = null;
 
@@ -189,7 +204,7 @@ async function runTask(taskText, opts = {}) {
     if (!needsRetry || attemptNum > MAX_RETRIES) break;
     // Message already carries the tool-name hint from attempt 1; a repeat mismatch
     // means the hint alone wasn't enough - escalate to naming the single best tool.
-    const singleTool = primaryToolFor(capabilityClass) || allowedTools[0];
+    const singleTool = prefixedToolName(primaryToolFor(capabilityClass) || allowedTools[0]);
     message = `@agent ${taskText}\n\nCall the ${singleTool} tool directly. Do not use document-summarizer, rag-memory, or web-scraping.`;
   }
 
@@ -211,7 +226,7 @@ async function runTask(taskText, opts = {}) {
   };
 }
 
-module.exports = { runTask, looksLikeMismatch, writeProfile, PROFILE_PATH };
+module.exports = { runTask, looksLikeMismatch, writeProfile, prefixedToolName, MCP_SERVER_NAME, PROFILE_PATH };
 
 if (require.main === module) {
   const taskText = process.argv[2];
