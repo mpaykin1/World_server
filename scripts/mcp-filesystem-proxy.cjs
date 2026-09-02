@@ -1,0 +1,79 @@
+#!/usr/bin/env node
+'use strict';
+// MCP_FILESYSTEM_PROXY
+//
+// Sits between AnythingLLM's MCPHypervisor and the official
+// @modelcontextprotocol/server-filesystem, filtering tools/list and tools/call
+// against a profile file written by scripts/anythingllm-task-router.cjs. This is
+// the hard, structural half of the intent -> capability class -> minimal
+// allowlist -> LLM pipeline: whatever this proxy advertises is the ONLY thing a
+// small model can pick from among our filesystem tools (AnythingLLM's own
+// built-in skills like document-summarizer are attached separately by
+// AnythingLLM itself and are outside this proxy's control - see
+// scripts/anythingllm-task-router.cjs for the mitigation there).
+//
+// Usage: node mcp-filesystem-proxy.cjs <sandboxRoot> [profilePath]
+// MCP stdio transport is newline-delimited JSON-RPC (no embedded newlines per
+// message) - see modelcontextprotocol.io's stdio transport spec.
+const { spawn } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+const readline = require('readline');
+
+const sandboxRoot = process.argv[2];
+if (!sandboxRoot) {
+  process.stderr.write('mcp-filesystem-proxy: missing <sandboxRoot> argument\n');
+  process.exit(1);
+}
+const profilePath = process.argv[3] || path.join(__dirname, '..', 'data', 'mcp-router-profile.json');
+const FAILSAFE_ALLOWLIST = ['list_directory', 'search_files', 'read_file', 'read_text_file'];
+
+function currentAllowlist() {
+  try {
+    const j = JSON.parse(fs.readFileSync(profilePath, 'utf8'));
+    if (Array.isArray(j.allowedTools)) return new Set(j.allowedTools);
+  } catch { /* fall through to failsafe */ }
+  return new Set(FAILSAFE_ALLOWLIST);
+}
+
+const child = spawn('npx', ['-y', '@modelcontextprotocol/server-filesystem', sandboxRoot], {
+  stdio: ['pipe', 'pipe', 'inherit'],
+  shell: true,
+});
+
+const rlIn = readline.createInterface({ input: process.stdin, terminal: false });
+rlIn.on('line', (line) => {
+  if (!line.trim()) return;
+  let msg;
+  try { msg = JSON.parse(line); } catch { child.stdin.write(line + '\n'); return; }
+  if (msg.method === 'tools/call') {
+    const allowed = currentAllowlist();
+    const name = msg.params && msg.params.name;
+    if (!allowed.has(name)) {
+      const err = {
+        jsonrpc: '2.0',
+        id: msg.id,
+        error: { code: -32601, message: `capability_mismatch: tool '${name}' is not in the current router profile (allowed: ${[...allowed].join(', ') || 'none'})` },
+      };
+      process.stdout.write(JSON.stringify(err) + '\n');
+      return;
+    }
+  }
+  child.stdin.write(line + '\n');
+});
+
+const rlOut = readline.createInterface({ input: child.stdout, terminal: false });
+rlOut.on('line', (line) => {
+  if (!line.trim()) return;
+  let msg;
+  try { msg = JSON.parse(line); } catch { process.stdout.write(line + '\n'); return; }
+  if (msg.result && Array.isArray(msg.result.tools)) {
+    const allowed = currentAllowlist();
+    msg.result.tools = msg.result.tools.filter((t) => allowed.has(t.name));
+  }
+  process.stdout.write(JSON.stringify(msg) + '\n');
+});
+
+child.on('exit', (code) => process.exit(code || 0));
+process.on('SIGINT', () => child.kill());
+process.on('SIGTERM', () => child.kill());

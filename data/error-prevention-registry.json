@@ -633,6 +633,17 @@
       "fix": "No automatic fix applied - documented as a genuine small-model tool-selection limitation, distinct from a plumbing/config bug. Mitigation options for future attempts: (a) prefer a model with native tool-calling support (supports_native_tools=true) over these local instruct-tuned models for @agent tasks that require precise tool selection, (b) keep the attached tool count as low as practical for the specific task (fewer simultaneous choices reduces mis-selection), (c) phrase the task to name the expected tool class explicitly (e.g. \"use your file-reading tool\") as a prompt-level nudge.",
       "test": "ANYTHINGLLM_AB_COMPARISON.json#realE2eTest.attempt1 records the full reproduction (prompt, tool set, response, token/latency metrics).",
       "prevention": "scripts/anythingllm-health-check.js checkSelectiveToolEvidence() confirms the selective-tool mechanism itself (bounding tool count, correct tools attached) is working from the plumbing side, so a future FAIL of this shape can be triaged directly to model tool-selection rather than re-investigating the MCP/config layer from scratch."
+    },
+    {
+      "id": "anythingllm-external-mcp-kill-leaves-hypervisor-stuck",
+      "severity": "operational",
+      "status": "documented",
+      "discoveredAt": "2026-09-02T05:52:55.247Z",
+      "rootCause": "AnythingLLM Desktop MCPHypervisor tracks an MCP server as booted independently of whether its child process is actually alive. Externally killing the child (e.g. Stop-Process on the npx-spawned server-filesystem process) after changing anythingllm_mcp_servers.json does NOT trigger a respawn on the next @agent call: MCPHypervisor logs \"MCP Servers already running, skipping boot\", then \"Failed to list tools ... Error: Not connected\", then silently excludes that server from the agent cluster entirely for that turn.",
+      "symptom": "An @agent turn completes using only built-in skills (rag-memory/document-summarizer/web-scraping), with zero MCP filesystem tools attached, and no error surfaced to the caller - looks like a normal turn but the MCP server config change never took effect.",
+      "fix": "A full AnythingLLM Desktop app restart (kill all AnythingLLM.exe processes, relaunch, poll /api/ping until online) is required after changing anythingllm_mcp_servers.json for a server name that was already running - do not just kill the child process and expect a clean respawn.",
+      "test": "Reproduced this session: killed the npx-spawned server-filesystem process after swapping to scripts/mcp-filesystem-proxy.cjs, next @agent turn showed \"MCP Servers already running, skipping boot\" then \"not found in MCP server config. Skipping inclusion\" in backend-*.log. Full app restart fixed it - confirmed by the next Transport message log line showing exactly the proxy-filtered 4-tool set.",
+      "prevention": "Any future MCP server config change (new server, changed command/args, changed profile mechanism) should restart AnythingLLM Desktop, not rely on MCPHypervisor to detect the change."
     }
   ],
   "confirmationProtocol": {

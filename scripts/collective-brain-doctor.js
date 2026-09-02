@@ -6,6 +6,7 @@ const {run: localAccessCheck}=require('./openhuman-local-access-check');
 const {run: launchCheck}=require('./openhuman-launch-check');
 const {run: localChatE2eCheck}=require('./openhuman-local-chat-e2e-check');
 const {run: anythingllmHealthCheck}=require('./anythingllm-health-check');
+const fs=require('fs'),path=require('path');
 doctor(process.cwd()).then(async r=>{
   console.log(`[COLLECTIVE_BRAIN_DOCTOR] ${r.status} agentmemory=${r.agentmemory.ok?'UP':'DOWN'} ollama=${r.ollama.ok?'UP':'DOWN'}`);
   try {
@@ -40,6 +41,17 @@ doctor(process.cwd()).then(async r=>{
     console.log(`[COLLECTIVE_BRAIN_DOCTOR] AnythingLLM integration: ${ah.status} (anythingllm=${ah.anythingllm.up?'UP':'DOWN'} ollama=${ah.ollama.up?'UP':'DOWN'} mcp=${ah.mcpFilesystem.configured?'CONFIGURED':'MISSING'} secretGuard=${ah.secretGuard.status} unsafeMainTreeGrant=${ah.mcpFilesystem.unsafeMainTreeGrant})`);
   } catch (e) {
     console.log(`[COLLECTIVE_BRAIN_DOCTOR] AnythingLLM integration: UNKNOWN (check failed: ${e.message})`);
+  }
+  try {
+    const reproPath = path.join(__dirname, '..', 'ANYTHINGLLM_E2E_REPRODUCIBILITY.json');
+    if (fs.existsSync(reproPath)) {
+      const rp = JSON.parse(fs.readFileSync(reproPath, 'utf8'));
+      console.log(`[COLLECTIVE_BRAIN_DOCTOR] AnythingLLM E2E reproducibility (${rp.capabilityClass}): ${rp.result} (${rp.passCount}/${rp.totalRuns} PASS, model=${rp.model})`);
+    } else {
+      console.log('[COLLECTIVE_BRAIN_DOCTOR] AnythingLLM E2E reproducibility: NOT_YET_RUN');
+    }
+  } catch (e) {
+    console.log(`[COLLECTIVE_BRAIN_DOCTOR] AnythingLLM E2E reproducibility: UNKNOWN (check failed: ${e.message})`);
   }
   if(r.status!=='PASS')process.exitCode=1;
 }).catch(e=>{console.error(e);process.exitCode=1;});
