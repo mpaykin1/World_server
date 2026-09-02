@@ -53,5 +53,19 @@ doctor(process.cwd()).then(async r=>{
   } catch (e) {
     console.log(`[COLLECTIVE_BRAIN_DOCTOR] AnythingLLM E2E reproducibility: UNKNOWN (check failed: ${e.message})`);
   }
+  try {
+    const { getResourceState, getOllamaState } = require('../lib/ai-resource-scheduler');
+    const [res, oll] = await Promise.all([getResourceState(), getOllamaState()]);
+    console.log(`[COLLECTIVE_BRAIN_DOCTOR] Resource scheduler live state: cpu=${res.cpuLoadPercent}% ram_free=${res.ramFreePercent}% ollama=${oll.up ? 'UP' : 'DOWN'} loadedModels=[${oll.loadedModels.map((m) => m.name).join(', ')}]`);
+  } catch (e) {
+    console.log(`[COLLECTIVE_BRAIN_DOCTOR] Resource scheduler: UNKNOWN (check failed: ${e.message})`);
+  }
+  try {
+    const { rankToolsByCost } = require('../lib/tool-cost-model');
+    const ranked = rankToolsByCost(['search_files', 'list_directory', 'read_text_file', 'read_file']);
+    console.log(`[COLLECTIVE_BRAIN_DOCTOR] Tool-cost model: cheapest-first order = [${ranked.join(', ')}]`);
+  } catch (e) {
+    console.log(`[COLLECTIVE_BRAIN_DOCTOR] Tool-cost model: UNKNOWN (check failed: ${e.message})`);
+  }
   if(r.status!=='PASS')process.exitCode=1;
 }).catch(e=>{console.error(e);process.exitCode=1;});
