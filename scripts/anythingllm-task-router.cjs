@@ -20,6 +20,7 @@ const path = require('path');
 const { route, primaryToolFor } = require('../lib/mcp-intent-router');
 const { decide: decideResources, enqueueTask } = require('../lib/ai-resource-scheduler');
 const { pickBestBackend, recordOutcome } = require('../lib/model-suitability');
+const { rankToolsByCost } = require('../lib/tool-cost-model');
 
 const ANYTHINGLLM_URL = process.env.ANYTHINGLLM_URL || 'http://127.0.0.1:3001';
 const ANYTHINGLLM_API_KEY = process.env.ANYTHINGLLM_API_KEY;
@@ -124,7 +125,14 @@ async function runTask(taskText, opts = {}) {
   if (!threadSlug) throw new Error('runTask requires opts.threadSlug');
   if (!ANYTHINGLLM_API_KEY) throw new Error('ANYTHINGLLM_API_KEY not set in env');
 
-  const { capabilityClass, allowedTools } = route(taskText);
+  const { capabilityClass, allowedTools: unrankedTools } = route(taskText);
+  // Router should prefer known path/read -> list_directory -> scoped search ->
+  // global recursive search, weighted by real cost history (lib/tool-cost-
+  // model.js): world-server-sandbox-search_files measured an MCP -32001 timeout
+  // scanning the full sandbox tree while read_text_file/list_directory both
+  // completed quickly for the same task - a task resolvable with a cheap
+  // targeted read should never be steered toward an expensive recursive scan.
+  const allowedTools = rankToolsByCost(unrankedTools);
   writeProfile(capabilityClass, allowedTools);
 
   // Model routing: pick the best-scoring candidate for this capability class from

@@ -71,6 +71,30 @@ test('RAM starved -> queue regardless of CPU (avoid starting a new model load th
 test('thresholds are the documented values (regression guard against silent threshold drift)', () => {
   assert.equal(THRESHOLDS.cpuLoadPercentMax, 70);
   assert.equal(THRESHOLDS.ramFreePercentMin, 15);
+  assert.equal(THRESHOLDS.ramFreePercentMinForColdLoad, 40);
+});
+
+test('a cold model load (not in /api/ps loadedModels) under moderate RAM pressure -> queue, even though ram is above the plain minimum (real bug: a "hi" call at ram_free=33-40% took 107 minutes to cold-load)', async () => {
+  const moderateRam = { cpuLoadPercent: 20, ramFreePercent: 35 }; // above ramFreePercentMin(15), below ramFreePercentMinForColdLoad(40)
+  const r = await decide({ capabilityClass: 'filesystem-read', estimatedCost: 'low', currentModel: 'qwen2.5:3b-instruct' }, { resources: moderateRam, ollama: noModels });
+  assert.equal(r.action, 'queue');
+  assert.equal(r.isColdLoad, true);
+  assert.match(r.reason, /cold load/);
+});
+
+test('a WARM model (already in /api/ps loadedModels) is not penalized by the cold-load threshold, even under the same moderate RAM', async () => {
+  const moderateRam = { cpuLoadPercent: 20, ramFreePercent: 35 };
+  const warm = { up: true, loadedModels: [{ name: 'qwen2.5:3b-instruct', sizeVram: 0, contextLength: 16384 }] };
+  const r = await decide({ capabilityClass: 'filesystem-read', estimatedCost: 'low', currentModel: 'qwen2.5:3b-instruct' }, { resources: moderateRam, ollama: warm });
+  assert.equal(r.action, 'run_now');
+  assert.equal(r.isColdLoad, false);
+});
+
+test('no currentModel specified -> isColdLoad is false, no false-positive queueing', async () => {
+  const moderateRam = { cpuLoadPercent: 20, ramFreePercent: 35 };
+  const r = await decide({ capabilityClass: 'filesystem-read', estimatedCost: 'low' }, { resources: moderateRam, ollama: noModels });
+  assert.equal(r.isColdLoad, false);
+  assert.equal(r.action, 'run_now');
 });
 
 test('a resource-sensing failure fails open to a conservative loaded posture, not a crash', () => {

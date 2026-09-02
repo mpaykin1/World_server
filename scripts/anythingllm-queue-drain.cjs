@@ -33,9 +33,36 @@ async function drainOne(worker) {
   }
 }
 
-module.exports = { drainOne };
+// watchLoop(): point 4's "auto-drain when a window opens" - a lightweight loop
+// that periodically re-checks resources and drains the queue itself, so a
+// queued job gets retried automatically rather than requiring a human (or an
+// external scheduler) to remember to invoke drainOne again. Intended to be
+// started once (as a background process, or by whatever existing periodic-tick
+// infrastructure the caller already has - this does not create a competing
+// scheduler, it's just the drain step) and left running.
+async function watchLoop(worker, intervalMs = 30000, opts = {}) {
+  const maxTicks = opts.maxTicks || Infinity;
+  for (let tick = 0; tick < maxTicks; tick++) {
+    const r = await drainOne(`${worker}-tick${tick}`);
+    if (opts.onTick) opts.onTick(r, tick);
+    if (opts.stopWhenEmpty && r.reason === 'queue empty') break;
+    if (tick < maxTicks - 1) await new Promise((res) => setTimeout(res, intervalMs));
+  }
+}
+
+module.exports = { drainOne, watchLoop };
 
 if (require.main === module) {
-  const worker = process.argv[2] || `drain-${process.pid}`;
-  drainOne(worker).then((r) => { console.log(JSON.stringify(r, null, 2)); }).catch((e) => { console.error(e); process.exitCode = 1; });
+  const args = process.argv.slice(2);
+  const watchIdx = args.indexOf('--watch');
+  if (watchIdx !== -1) {
+    const worker = args[0] && !args[0].startsWith('--') ? args[0] : `drain-${process.pid}`;
+    const intervalMs = Number(args[watchIdx + 1]) || 30000;
+    console.error(`[ANYTHINGLLM_QUEUE_DRAIN] watching, interval=${intervalMs}ms`);
+    watchLoop(worker, intervalMs, { onTick: (r, tick) => console.error(`[tick ${tick}] ${JSON.stringify(r)}`) })
+      .catch((e) => { console.error(e); process.exitCode = 1; });
+  } else {
+    const worker = args[0] || `drain-${process.pid}`;
+    drainOne(worker).then((r) => { console.log(JSON.stringify(r, null, 2)); }).catch((e) => { console.error(e); process.exitCode = 1; });
+  }
 }

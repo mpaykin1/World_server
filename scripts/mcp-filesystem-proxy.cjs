@@ -19,6 +19,7 @@ const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
+const { recordToolOutcome } = require('../lib/tool-cost-model');
 
 const sandboxRoot = process.argv[2];
 if (!sandboxRoot) {
@@ -27,6 +28,11 @@ if (!sandboxRoot) {
 }
 const profilePath = process.argv[3] || path.join(__dirname, '..', 'data', 'mcp-router-profile.json');
 const FAILSAFE_ALLOWLIST = ['list_directory', 'search_files', 'read_file', 'read_text_file'];
+// Tracks in-flight tools/call requests by id so the matching response can be
+// timed and recorded into lib/tool-cost-model.js's ledger - real latency/
+// success/error history for the router's cost-aware tool ordering, not just
+// the static seed priors.
+const pendingCalls = new Map();
 
 function currentAllowlist() {
   try {
@@ -58,6 +64,7 @@ rlIn.on('line', (line) => {
       process.stdout.write(JSON.stringify(err) + '\n');
       return;
     }
+    pendingCalls.set(msg.id, { name, startedAt: Date.now() });
   }
   child.stdin.write(line + '\n');
 });
@@ -70,6 +77,15 @@ rlOut.on('line', (line) => {
   if (msg.result && Array.isArray(msg.result.tools)) {
     const allowed = currentAllowlist();
     msg.result.tools = msg.result.tools.filter((t) => allowed.has(t.name));
+  }
+  if (pendingCalls.has(msg.id)) {
+    const { name, startedAt } = pendingCalls.get(msg.id);
+    pendingCalls.delete(msg.id);
+    const latencyMs = Date.now() - startedAt;
+    const outcome = msg.error ? 'error' : (msg.result && msg.result.isError) ? 'error' : 'success';
+    const costOpts = { latencyMs };
+    if (process.env.TOOL_COST_LEDGER_PATH) costOpts.ledgerPath = process.env.TOOL_COST_LEDGER_PATH;
+    try { recordToolOutcome(name, outcome, costOpts); } catch { /* cost-model recording must never break the actual tool response */ }
   }
   process.stdout.write(JSON.stringify(msg) + '\n');
 });

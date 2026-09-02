@@ -10,7 +10,7 @@ const readline = require('readline');
 
 const PROXY = path.join(__dirname, '..', 'scripts', 'mcp-filesystem-proxy.cjs');
 
-function withProxy(profile, fn) {
+function withProxy(profile, fn, extraEnv = {}) {
   return new Promise((resolve, reject) => {
     const sandbox = fs.mkdtempSync(path.join(os.tmpdir(), 'mcp-proxy-sandbox-'));
     fs.writeFileSync(path.join(sandbox, 'package.json'), JSON.stringify({ name: 'fixture', scripts: { a: '1', b: '2' } }));
@@ -18,7 +18,7 @@ function withProxy(profile, fn) {
     const profileFile = path.join(profilePath, 'profile.json');
     fs.writeFileSync(profileFile, JSON.stringify({ capabilityClass: 'test', allowedTools: profile }));
 
-    const child = spawn(process.execPath, [PROXY, sandbox, profileFile], { stdio: ['pipe', 'pipe', 'pipe'] });
+    const child = spawn(process.execPath, [PROXY, sandbox, profileFile], { stdio: ['pipe', 'pipe', 'pipe'], env: { ...process.env, ...extraEnv } });
     const rl = readline.createInterface({ input: child.stdout, terminal: false });
     const pending = new Map();
     let nextId = 1;
@@ -76,4 +76,18 @@ test('a real read_text_file call through the proxy returns the fixture package.j
   const parsed = JSON.parse(content);
   assert.equal(parsed.name, 'fixture');
   assert.equal(Object.keys(parsed.scripts).length, 2);
+});
+
+test('a real tools/call is recorded into the tool-cost ledger with a real latency', { timeout: 35000 }, async () => {
+  const ledgerDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mcp-proxy-costledger-'));
+  const ledgerPath = path.join(ledgerDir, 'ledger.json');
+  await withProxy(['list_directory', 'search_files', 'read_file', 'read_text_file'], async (call, sandbox) => {
+    await call('initialize', { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'test', version: '0' } });
+    await call('tools/call', { name: 'read_text_file', arguments: { path: path.join(sandbox, 'package.json') } });
+  }, { TOOL_COST_LEDGER_PATH: ledgerPath });
+  const ledger = JSON.parse(fs.readFileSync(ledgerPath, 'utf8'));
+  assert.ok(ledger.entries.read_text_file, JSON.stringify(ledger));
+  const entry = ledger.entries.read_text_file.history[0];
+  assert.equal(entry.outcome, 'success');
+  assert.ok(typeof entry.latencyMs === 'number' && entry.latencyMs >= 0);
 });

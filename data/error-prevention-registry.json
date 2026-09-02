@@ -701,6 +701,17 @@
       "fix": "scripts/ollama-think-proxy.cjs sets server.requestTimeout=0, server.headersTimeout=0, server.timeout=0 after creating the http.Server - a slow-but-working local model turn must never be truncated by an invisible proxy-layer default the LLM call itself has no knowledge of.",
       "test": "test/ollama-think-proxy.test.js asserts these three properties are 0 on the live server instance.",
       "prevention": "Any future Node http.Server used as a proxy/adapter in this stack for LLM traffic must explicitly disable requestTimeout/headersTimeout/timeout - Node changed these defaults from 0 (disabled) to nonzero in v18/v19, which silently breaks any long-running proxied request written before that change or without awareness of it."
+    },
+    {
+      "id": "ollama-model-load-thrashing-under-extreme-system-pressure",
+      "severity": "release-blocker",
+      "status": "documented-mitigated",
+      "discoveredAt": "2026-09-02T15:59:39.984Z",
+      "rootCause": "A direct, minimal (\"hi\") call through the proxy to Ollama returned total_duration=6451s (107.5 min), of which load_duration alone was 6443s (107.4 min) - prompt_eval_duration (5.3s) and eval_duration (2.8s) were both entirely normal once the model was actually loaded. This is NOT a proxy/transport bug (the earlier requestTimeout fix and the tool-name-mismatch fix are both real and correct) and NOT a tool-calling correctness defect - it is the Ollama model-load phase itself (reading ~2.7GB of weights into RAM and initializing) taking on the order of MINUTES to HOURS under genuine, extreme, system-wide resource contention on this shared machine (observed concurrently: Godot, multiple OpenHuman processes, multiple Claude/OpenCode sessions). This class of slowdown (OS-level memory/disk thrashing, not CPU%) is invisible to a plain Win32_Processor.LoadPercentage check - a machine can show 90-100% CPU OR a deceptively normal-looking % and still take 100x longer than expected to page a model back into resident memory if the OS is under severe combined memory+disk pressure from many processes at once.",
+      "symptom": "A request that should take seconds takes minutes-to-hours with NO error, no timeout, no log distinguishing loading from hung - the only way to see it is comparing load_duration to total_duration in the eventual response metrics, which are unavailable until the (very slow) call finally completes.",
+      "fix": "lib/ai-resource-scheduler.js#decide() now also checks live Ollama model residency via /api/ps (loadedModels) before dispatch - a target model that is NOT currently resident is treated as a materially higher-risk dispatch (cold-load risk under contention), factored into the run_now/queue decision alongside CPU/RAM. This does not eliminate the underlying OS-level thrashing risk (outside this codebases control) but stops the router from confidently dispatching into a cold-load-under-pressure scenario that could take arbitrarily long.",
+      "test": "test/ai-resource-scheduler.test.js - modelResidency-aware decide() tests with a mocked /api/ps response.",
+      "prevention": "Do not interpret a normal-looking CPU% reading alone as \"safe to dispatch\" - always also check whether the target model is already resident (fast path) vs needs a cold load (risky path) before treating a machine as available. If this recurs, consider raising OLLAMA_KEEP_ALIVE (model residency TTL) so models are evicted less aggressively between calls, reducing how often a cold load is needed at all."
     }
   ],
   "confirmationProtocol": {
