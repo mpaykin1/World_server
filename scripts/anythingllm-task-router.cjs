@@ -37,7 +37,16 @@ const PROFILE_PATH = path.join(__dirname, '..', 'data', 'mcp-router-profile.json
 // just slowly. This is a genuine external-load constraint the resource-aware
 // gate already handles via queueing BEFORE dispatch; this timeout only
 // governs how long an already-dispatched call is allowed to keep running.
-const DEFAULT_TIMEOUT_MS = Number(process.env.ANYTHINGLLM_TASK_TIMEOUT_MS || 400000);
+//
+// Raised again 400000 -> 600000: live-observed a full 2-turn conversation
+// (tool call -> real correct read_text_file result -> follow-up LLM call to
+// synthesize the final answer) get cut off mid-synthesis at 400s, AFTER the
+// tool execution had already succeeded with the correct content
+// (webgl-survival-hub-no-npm). 600s matches AnythingLLM's own internal
+// convention for a single provider call (see its "[SDK Timeout Patch] ...
+// OpenAI SDK - timeout 600s" log line) - a multi-turn agentic exchange under
+// real contention legitimately needs more than one turn's worth of budget.
+const DEFAULT_TIMEOUT_MS = Number(process.env.ANYTHINGLLM_TASK_TIMEOUT_MS || 600000);
 const MAX_RETRIES = 1;
 // AnythingLLM's MCPHypervisor names each MCP tool `<mcpServerName>-<toolName>`
 // (confirmed via anythingllm_mcp_servers.json's "world-server-sandbox" key and
