@@ -666,6 +666,17 @@
       "fix": "scripts/anythingllm-task-router.cjs#setWorkspaceModel now always sets {agentProvider:\"ollama\", agentModel, chatProvider:\"ollama\", chatModel} together.",
       "test": "Live-verified: a plain chat with just chatModel/chatProvider set both together returned metrics.model=qwen2.5:3b-instruct correctly.",
       "prevention": "Any future per-request/per-workspace model override in this codebase should set the *Provider field alongside the *Model field - never assume the model field alone is sufficient."
+    },
+    {
+      "id": "anythingllm-ollama-tool-calling-fixed-timeout-signature",
+      "severity": "release-blocker",
+      "status": "unresolved-escalated",
+      "discoveredAt": "2026-09-02T12:15:06.150Z",
+      "rootCause": "The empty-content tool-calling failure (see #qwen3-thinking-disabled-breaks-tool-call-generation) was initially attributed to CPU contention, but decisive controlled testing disproves that as the SOLE cause: the exact same failure signature (~130-150s duration, ~19-28 completion tokens, empty final content, zero tool-call ever logged) recurred IDENTICALLY across qwen3:1.7b (thinking on AND off) and qwen2.5:3b-instruct (no hybrid thinking), and recurred even at 18% system CPU load (a genuinely idle window, confirmed via Win32_Processor.LoadPercentage at test start) exactly as it did at 93-100% load. Two different model families, two different thinking-mode configurations, and two very different load conditions all produced the same narrow duration/token-count band - this is inconsistent with a pure compute-throughput explanation and points to something structural in the AnythingLLM<->Ollama tool-calling wire protocol/timeout handling for this MCP tool-schema setup (AnythingLLM 1.16.1, Ollama 0.33.2), not a model capability or resource-availability limitation.",
+      "symptom": "An @agent turn with MCP tools attached consistently takes ~130-150s and produces ~19-28 completion tokens of empty/invisible content, regardless of which local model or CPU load is in play.",
+      "fix": "NOT YET FOUND. Ruled out: model choice (2 families tested), thinking mode (both settings tested), CPU contention (both idle and loaded tested). Router-level mitigations remain correct and should stay: resource-aware queueing, deterministic tool allowlisting, timeout/cancellation, model-suitability tracking (now correctly marks both tested models unsuitable for filesystem-read based on real data, not a false PASS).",
+      "test": "ANYTHINGLLM_E2E_REPRODUCIBILITY.json and the model-suitability ledger record the real, reproduced attempts.",
+      "prevention": "Recommend NOT continuing to cycle through additional local models chasing this - the evidence points to a pipeline-level issue. Next investigation step: test the exact same MCP tool-schema turn against a CLOUD provider (e.g. via OpenHuman OpenRouter free tier) to isolate whether the defect is Ollama-side or AnythingLLM-side; separately, check AnythingLLM/Ollama GitHub issues for known qwen tool-calling defects in these exact versions before assuming this project introduced the bug."
     }
   ],
   "confirmationProtocol": {

@@ -1,12 +1,18 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('fs'), path = require('path'), os = require('os');
 const { decide, THRESHOLDS } = require('../lib/ai-resource-scheduler');
 
 const idle = { cpuLoadPercent: 20, ramFreePercent: 50 };
 const loaded = { cpuLoadPercent: 95, ramFreePercent: 40 };
 const ramStarved = { cpuLoadPercent: 20, ramFreePercent: 5 };
 const noModels = { up: true, loadedModels: [] };
+
+// Isolated ledger for tests that exercise suitability-dependent behavior (which
+// candidate counts as "suitable") - the real ledger accumulates live data from
+// actual dispatches and must not leak into these deterministic assertions.
+function tmpLedger() { return path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'scheduler-test-')), 'ledger.json'); }
 
 test('idle machine + low-cost task -> run_now', async () => {
   const r = await decide({ capabilityClass: 'filesystem-read', estimatedCost: 'low' }, { resources: idle, ollama: noModels });
@@ -23,19 +29,32 @@ test('overloaded CPU + a capability class with no registered candidates -> queue
 });
 
 test('overloaded CPU + a task class WITH a lighter suitable candidate -> run_now with recommendedModel, not queue (task -> suitable models -> resources -> fastest viable backend -> queue only if none viable)', async () => {
-  const r = await decide({ capabilityClass: 'filesystem-read', estimatedCost: 'low', currentModel: 'some-heavy-model-not-in-registry' }, { resources: loaded, ollama: noModels });
+  const ledgerPath = tmpLedger(); // no history yet -> every candidate defaults to suitable
+  const r = await decide({ capabilityClass: 'filesystem-read', estimatedCost: 'low', currentModel: 'some-heavy-model-not-in-registry' }, { resources: loaded, ollama: noModels, ledgerPath });
   assert.equal(r.action, 'run_now');
   assert.ok(r.recommendedModel, JSON.stringify(r));
   assert.match(r.reason, /lighter suitable candidate/);
 });
 
 test('overloaded CPU + already using the lightest candidate -> no lighter option, queues', async () => {
+  const ledgerPath = tmpLedger();
   const { candidatesFor } = require('../lib/model-suitability');
-  const registry = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '..', 'data', 'model-registry.json'), 'utf8'));
+  const registry = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'model-registry.json'), 'utf8'));
   const candidates = candidatesFor('filesystem-read');
   const lightest = [...candidates].sort((a, b) => registry.models[a].sizeGb - registry.models[b].sizeGb)[0];
-  const r = await decide({ capabilityClass: 'filesystem-read', estimatedCost: 'low', currentModel: lightest }, { resources: loaded, ollama: noModels });
+  const r = await decide({ capabilityClass: 'filesystem-read', estimatedCost: 'low', currentModel: lightest }, { resources: loaded, ollama: noModels, ledgerPath });
   assert.equal(r.action, 'queue');
+});
+
+test('overloaded CPU + a candidate already known-unsuitable per the ledger is skipped, not recommended', async () => {
+  const ledgerPath = tmpLedger();
+  const { recordOutcome } = require('../lib/model-suitability');
+  for (let i = 0; i < 3; i++) recordOutcome('qwen2.5:3b-instruct', 'filesystem-read', 'FAIL', { ledgerPath });
+  const r = await decide({ capabilityClass: 'filesystem-read', estimatedCost: 'low', currentModel: 'some-heavy-model-not-in-registry' }, { resources: loaded, ollama: noModels, ledgerPath });
+  // qwen2.5:3b-instruct is the only declared filesystem-read candidate and is now
+  // marked unsuitable in THIS isolated ledger - nothing viable to recommend, queue.
+  assert.equal(r.action, 'queue');
+  assert.notEqual(r.recommendedModel, 'qwen2.5:3b-instruct');
 });
 
 test('overloaded CPU + high-cost task -> use_alternate_backend, not queue (queueing a slow task under load just delays the inevitable timeout)', async () => {
