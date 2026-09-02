@@ -43,3 +43,17 @@ test('an empty queue returns null from claimTask, not an error', () => {
   while ((c = claimTask('drainer'))) ackTask(c.id, 'drainer', { drained: true });
   assert.equal(claimTask('drainer'), null);
 });
+
+test('a job survives many consecutive "still contended" deferrals before dead-lettering, not just 3 (real bug: durable-job-queue.cjs#claim increments attempts on every claim, even a deferral where the job was never actually executed)', () => {
+  const enq = enqueueTask({ taskText: 'a task that keeps getting deferred by real CPU contention', workspaceSlug: 'world', threadSlug: 'thread-3', timeoutMs: 150000 });
+  let lastStatus = null;
+  for (let i = 0; i < 4; i++) {
+    const claimed = claimTask('drain-worker');
+    assert.ok(claimed, `expected the job to still be claimable on deferral #${i + 1} - it should not be dead-lettered after only 3 attempts`);
+    const failed = failTask(claimed.id, 'drain-worker', 'still contended, requeued', 0);
+    lastStatus = failed.status;
+  }
+  // 4 deferrals (more than the OLD default of 3) and it must still be alive.
+  assert.equal(lastStatus, 'queued', 'the job was dead-lettered by pure contention deferrals before ever being executed once');
+  ackTask(claimTask('drain-worker').id, 'drain-worker', { result: 'finally ran' });
+});
