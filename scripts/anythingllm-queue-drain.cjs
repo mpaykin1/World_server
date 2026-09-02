@@ -12,6 +12,37 @@
 const { claimTask, ackTask, failTask, decide } = require('../lib/ai-resource-scheduler');
 const { runTask } = require('./anythingllm-task-router.cjs');
 
+// Real production incident (job 3877989c...f2acdaa, 2026-09-02): the resource
+// gate correctly deferred this job for several ticks while CPU sat at 88-100%
+// (other real AI-agent processes + Godot on the same machine), then let it
+// dispatch once CPU briefly dipped under the 70% threshold. CPU climbed back up
+// during the run, and the 10-minute dispatch (scripts/anythingllm-task-
+// router.cjs's own AbortSignal.timeout(600000)) fired without ever getting a
+// real response from AnythingLLM. The abort surfaced as a generic
+// `TypeError: fetch failed` (undici's wrapper for a connection-level failure),
+// NOT `TimeoutError` - confirmed via isolated repro against a real Node
+// http.Server (a hung connection with no bytes sent DOES throw TimeoutError
+// directly; a connection that gets torn down mid-flight, which is what a
+// contention-starved backend looks like, does not). drainOne() previously
+// ack'd this as a terminal FAIL, permanently losing a job that was never
+// actually answered, one connection hiccup under known real contention - even
+// though lib/ai-resource-scheduler.js's own maxAttempts=50 budget exists
+// specifically so a job survives exactly this kind of transient deferral. This
+// classifier extends that same "queue only if none viable, don't force a
+// doomed dispatch" philosophy to cover failures that happen DURING dispatch,
+// not just the pre-dispatch resource check. See error-prevention-registry.json
+// #anythingllm-transient-dispatch-failure-terminally-failed.
+function isTransientDispatchFailure(result) {
+  if (!result || (result.result !== 'FAIL' && result.result !== 'TIMEOUT')) return false;
+  const attempts = result.attempts || [];
+  const last = attempts[attempts.length - 1];
+  if (!last) return false;
+  if (last.timedOut) return true;
+  if (typeof last.reason === 'string' && last.reason.startsWith('error_')) return true;
+  if (typeof last.reason === 'string' && /^http_5\d\d$/.test(last.reason)) return true;
+  return false;
+}
+
 async function drainOne(worker) {
   const job = claimTask(worker);
   if (!job) return { drained: false, reason: 'queue empty' };
@@ -25,6 +56,11 @@ async function drainOne(worker) {
   }
   try {
     const result = await runTask(payload.taskText, { workspaceSlug: payload.workspaceSlug, threadSlug: payload.threadSlug, timeoutMs: payload.timeoutMs, respectResourceGate: false });
+    if (isTransientDispatchFailure(result)) {
+      const last = result.attempts[result.attempts.length - 1];
+      failTask(job.id, worker, `transient dispatch failure, requeued: ${last.reason || 'timeout'}`, 30000);
+      return { drained: false, reason: 'transient dispatch failure, requeued', jobId: job.id, result };
+    }
     ackTask(job.id, worker, result);
     return { drained: true, jobId: job.id, result };
   } catch (e) {
@@ -50,7 +86,7 @@ async function watchLoop(worker, intervalMs = 30000, opts = {}) {
   }
 }
 
-module.exports = { drainOne, watchLoop };
+module.exports = { drainOne, watchLoop, isTransientDispatchFailure };
 
 if (require.main === module) {
   const args = process.argv.slice(2);
