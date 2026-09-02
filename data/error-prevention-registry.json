@@ -690,6 +690,17 @@
       "fix": "scripts/anythingllm-task-router.cjs now has a prefixedToolName() helper (MCP_SERVER_NAME=\"world-server-sandbox\", overridable via ANYTHINGLLM_MCP_SERVER_NAME env) and both hint-construction sites (the attempt-1 multi-tool hint and the retry single-tool escalation) map through it before sending tool names to the model. The workspace system prompt (set via /workspace/{slug}/update earlier this session) was also corrected to use prefixed names for consistency, though live testing showed that alone was NOT the trigger - only the hint was.",
       "test": "test/anythingllm-task-router.test.js: prefixedToolName unit test + a source-inspection regression guard that fails if a future edit reintroduces allowedTools.join(...) or an unwrapped singleTool without routing through prefixedToolName.",
       "prevention": "Any future text sent to the model that names a specific MCP tool (hints, error messages, retry prompts) must go through prefixedToolName() - never reference lib/mcp-intent-router.js allowedTools names directly in model-facing text."
+    },
+    {
+      "id": "ollama-think-proxy-default-request-timeout",
+      "severity": "release-blocker",
+      "status": "fixed",
+      "discoveredAt": "2026-09-02T13:50:32.419Z",
+      "rootCause": "Node http.Server defaults to requestTimeout=300000ms and headersTimeout=60000ms since Node 18. scripts/ollama-think-proxy.cjs never overrode these, so once the real tool-calling defect was fixed (see #anythingllm-router-hint-tool-name-mismatch) and turns started genuinely completing under real CPU contention (observed 150-350s+, other concurrent AI agents on the same machine), requests exceeding 5 minutes got silently force-closed by Node itself at the proxy layer - not by Ollama, not by AnythingLLM, not by the router client. This surfaced on AnythingLLMs side as \"[AIbitat] Provider error: fetch failed\", indistinguishable from a genuine network failure, and caused a full 3x reproducibility run to fail 3/3 with error_fetch failed even though the underlying tool-calling mechanism was already proven correct.",
+      "symptom": "A long-running (>5min) request through the proxy fails with a generic fetch error on the calling side (AnythingLLM), with no timeout-specific error message anywhere in the chain - looks exactly like a network/model failure.",
+      "fix": "scripts/ollama-think-proxy.cjs sets server.requestTimeout=0, server.headersTimeout=0, server.timeout=0 after creating the http.Server - a slow-but-working local model turn must never be truncated by an invisible proxy-layer default the LLM call itself has no knowledge of.",
+      "test": "test/ollama-think-proxy.test.js asserts these three properties are 0 on the live server instance.",
+      "prevention": "Any future Node http.Server used as a proxy/adapter in this stack for LLM traffic must explicitly disable requestTimeout/headersTimeout/timeout - Node changed these defaults from 0 (disabled) to nonzero in v18/v19, which silently breaks any long-running proxied request written before that change or without awareness of it."
     }
   ],
   "confirmationProtocol": {

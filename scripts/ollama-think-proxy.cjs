@@ -130,8 +130,24 @@ function forward(req, res, overrideBody, wrapAsStream) {
   else req.pipe(proxyReq);
 }
 
+// Node's http.Server defaults to requestTimeout=300000ms (5 min) and
+// headersTimeout=60000ms since Node 18 - under real CPU contention, tool-
+// calling turns were observed taking 150-350s+ (see error-prevention-
+// registry.json#anythingllm-router-hint-tool-name-mismatch for the underlying
+// fix that made these turns actually complete correctly). Without disabling
+// these, Node itself force-closes the connection between AnythingLLM and this
+// proxy once a request runs past 5 minutes, which surfaces on AnythingLLM's
+// side as "[AIbitat] Provider error: fetch failed" - indistinguishable from a
+// real network failure, but actually this proxy silently killing a request
+// that was going to succeed. Disabled (0 = no timeout) since a slow-but-
+// working local model turn should never be truncated by an invisible proxy
+// default the actual LLM call itself has no knowledge of.
+server.requestTimeout = 0;
+server.headersTimeout = 0;
+server.timeout = 0;
+
 server.listen(LISTEN_PORT, '127.0.0.1', () => {
-  console.log(`[OLLAMA_THINK_PROXY] listening on 127.0.0.1:${LISTEN_PORT} -> ${TARGET_HOST}:${TARGET_PORT} (fast-path think:false for non-tool requests, destream tool-calling requests: ${DESTREAM_TOOL_CALLS})`);
+  console.log(`[OLLAMA_THINK_PROXY] listening on 127.0.0.1:${LISTEN_PORT} -> ${TARGET_HOST}:${TARGET_PORT} (fast-path think:false for non-tool requests, destream tool-calling requests: ${DESTREAM_TOOL_CALLS}, requestTimeout disabled)`);
 });
 
 module.exports = { server };
