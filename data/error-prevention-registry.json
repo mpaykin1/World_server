@@ -644,6 +644,17 @@
       "fix": "A full AnythingLLM Desktop app restart (kill all AnythingLLM.exe processes, relaunch, poll /api/ping until online) is required after changing anythingllm_mcp_servers.json for a server name that was already running - do not just kill the child process and expect a clean respawn.",
       "test": "Reproduced this session: killed the npx-spawned server-filesystem process after swapping to scripts/mcp-filesystem-proxy.cjs, next @agent turn showed \"MCP Servers already running, skipping boot\" then \"not found in MCP server config. Skipping inclusion\" in backend-*.log. Full app restart fixed it - confirmed by the next Transport message log line showing exactly the proxy-filtered 4-tool set.",
       "prevention": "Any future MCP server config change (new server, changed command/args, changed profile mechanism) should restart AnythingLLM Desktop, not rely on MCPHypervisor to detect the change."
+    },
+    {
+      "id": "qwen3-thinking-disabled-breaks-tool-call-generation",
+      "severity": "quality-degradation",
+      "status": "mitigated",
+      "discoveredAt": "2026-09-02T06:46:45.315Z",
+      "rootCause": "Forcing think:false via scripts/ollama-think-proxy.cjs (proven 18x faster for plain text: 2.34s vs 42.06s on an identical prompt) made qwen3:1.7b produce EMPTY final content on agentic/tool-calling turns - 6/6 reproduced across 3 independent runs (2 attempts each), all with mismatchDetected:true and 19-28 completion tokens producing zero visible text or logged tool-call attempt. Re-enabling thinking for the same tool-calling turns did not restore reliability either - it timed out at 150s without ever attempting a tool call once. This is a genuine, currently-unresolved qwen3:1.7b tool-calling reliability limitation under this specific harness (AnythingLLM agent mode + MCP tools), not a routing or proxy plumbing defect.",
+      "symptom": "An @agent turn with tools attached returns ok:true, mismatchDetected:true (after the fix to catch this), empty final content, ~19-28 completion tokens, no tool-call ever logged - looks superficially like a fast failure but is actually the model producing malformed/incomplete structured output.",
+      "fix": "scripts/ollama-think-proxy.cjs now only forces think:false when body.tools is absent/empty (plain chat) - tool-calling requests (body.tools non-empty) are left at Ollama/Qwen3s natural default (thinking on) instead of a single global switch. This is a mitigation (avoids the proxy actively causing empty responses), not a fix for qwen3:1.7bs underlying tool-calling reliability, which remains a real limitation.",
+      "test": "ANYTHINGLLM_E2E_REPRODUCIBILITY.json records the 0/3 PASS run with think forced off; the fixed tools-aware proxy logic is exercised live by scripts/anythingllm-task-router.cjs on every dispatch.",
+      "prevention": "Recommend a model with more reliable native tool-calling for agentic World_server tasks (see final integration report for the specific recommendation) rather than continuing to tune qwen3:1.7b think settings - this class of small quantized model appears to need either thinking enabled (accepting latency) or a different model entirely for structured tool output, not a thinking-mode toggle."
     }
   ],
   "confirmationProtocol": {
