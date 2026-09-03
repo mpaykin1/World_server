@@ -1,0 +1,12 @@
+{
+  "name": "Dark Void Navigator",
+  "short_name": "Navigator",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "display_override": ["fullscreen", "standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "description": "Mobile full-screen playable shell for Dark Void Navigator"
+}

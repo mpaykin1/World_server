@@ -1,116 +1,138 @@
-# WORK IN PROGRESS — WORLD_QUALITY_AUTOPILOT_V4
+# WORK IN PROGRESS — REAL NAVIGATOR APP TO MASTER (Google AI Studio deploy prep)
 
 ## Task
-Install V4 of the non-destructive World Quality Autopilot: semantic voxel detail, procedural PBR synthesis, texture/visibility budgets, adaptive GPU/CPU/device pressure control, universal retarget contract, feedback learner, candidate lab, evidence ledger and regression-safe evolution.
+Add the real World_server Navigator app (`apps/dark-void-scene/` + its
+`shared/*.mjs` runtime dependency closure) to `master`, so Google AI
+Studio's GitHub import (which only ever tracks the default branch and does
+not stay synced with it) can publish the real, already-live production
+Navigator instead of falling back to the generic `/apps/catalog/` page.
+Also fixes a real `server.js` MIME bug found while verifying this.
 
 ## Why
-Generic Golden/Quality automation already exists. V4 adds the world-specific closed loop that decides where detail matters, adds it only behind the reference-facing shell, classifies material intent, adapts rendering/animation to runtime pressure and records machine-readable evidence.
+User is publishing exactly two Google AI Studio Starter Tier apps
+(navigator + sandbox, no billing account, no 90-day Free Trial limit) for
+`https://dark-void-navigator.vercel.app/`'s real content. AI Studio's
+import only reads the default branch, and the real Navigator source lived
+only on branch `ai/opencode/navigator-engagement-v1` (922 files diverged
+from any other integration branch here - not something to merge wholesale).
+This PR is a minimal, targeted checkout of exactly the real app's
+dependency closure onto master, not a merge of that whole branch, and not
+a new/simplified Google-only app.
 
 ## Current state
-- Existing release, Golden, regression, risk/cost, visual critic, patch tournament and device-gate systems must be preserved.
-- V4 installs semantic detail indexing, deterministic PBR candidate synthesis, texture/sector visibility budgets, sustained-pressure thermal proxy, retarget/root-motion/two-hand contracts, feedback learner, cost-quality scheduler, candidate lab, baseline promotion guard and evidence ledger.
+- Real Navigator source located and confirmed via Vercel API (project
+  `dark-void-navigator`, `prj_PuQ2JJgqHveLEy68yTRrmglygOb3`) plus a
+  byte-for-byte match of the live `index.html` against
+  `apps/dark-void-scene/index.html` (only the three.js import path differs
+  - swapped to the same jsdelivr CDN URL the live deployment already
+  proves works, since master has no `/shared/vendor/three/`).
+- `apps/dark-void-scene/` (7 files) + its full transitive `shared/*.mjs`
+  closure (`dark-void-scene-runtime`, `navigator-dialog`,
+  `dark-void-manifestation`, `world-manifestation-engine`,
+  `world-command-parser`, `world-shape-library`) checked out onto this
+  branch, traced import-by-import to closure (confirmed no further
+  transitive imports, no `/api/*` calls).
+- `server.js`: added `.mjs` and `.webmanifest` to the static-file MIME
+  table - real bug found live-testing this locally (browsers refused to
+  load the Navigator's ES module scripts under strict MIME checking with
+  no `.mjs` entry present).
+- `data/app-release-registry.json`: registered `dark-void-scene` (the
+  deny-by-default release registry requires every `apps/*` directory to be
+  explicitly listed). Registered `visible:false, status:"quarantine"` -
+  NOT `certified`, because `certified` here specifically means the Golden
+  voxel-collision UI/physics contract `voxel-world`/`ai3d-voxel-city`
+  implement, which this app deliberately does not have (it is a
+  dialog+look navigator experience, not a walkable voxel world - no
+  wall-collision movement by design). `project-quality-reviewer.js`
+  confirmed this distinction live: marking it `certified` produced 2 real
+  blockers ("lacks Golden UI shell", "lacks canonical Golden physics");
+  `quarantine` (matching the same pattern `survival`/`world-sharabass`
+  already use for real-but-not-Golden-certified apps) resolved both with
+  zero blockers.
 
 ## Target state
-- Reference-facing projection remains byte-equivalent while hidden/side volume gains deterministic detail.
-- AI3D worker and Vercel fallback use the same V4 policy.
-- 3D/orbit/playable views can use adaptive PBR, while Front Exact remains unmodified.
-- Runtime adapts DPR/LOD/shadows/particles/lights/animation/material/geometry budgets using FPS, frame p95, GPU time, long tasks, memory and device capability.
-- New visual baselines can never self-approve.
+- `master` carries the real Navigator content so any future Google AI
+  Studio import/publish reflects the true, already-live app.
+- `npm run release:gate` (this repo's full hard gate chain) passes clean.
 
 ## Files / systems involved
-- api/ai3d-voxel-generate.js
-- lib/world-quality-voxel-enhancer.js
-- lib/world-quality-semantic-detail.js
-- lib/world-quality-material-profiler.js
-- services/ai3d-worker/ai3d/runner.py
-- services/ai3d-worker/ai3d/plugins/world_quality.py
-- shared/world-quality-autopilot.js
-- apps/ai3d-voxel-city/*
-- apps/voxel-world/*
-- data/world-quality-autopilot.json
-- scripts/world-*.js
-- .github/workflows/world-quality-autopilot.yml
-- .github/workflows/quality-regression.yml
-- package.json
-
-## Golden systems that must be preserved
-- Approved graphics/assets and Golden components.
-- Canonical desktop/mobile controls, collisions, grounding and step-up.
-- AI3D front-reference fidelity and Final Delivery gates.
-- Deny-by-default release policy.
-
-## Errors that must not return
-- Installer failing due to line-ending mismatches (CRLF/LF) — resolved by normalizing to LF before patching.
-- Patch anchor mismatches in runner.py (CRLF), client.js (CRLF), index.html (CRLF) — resolved.
-- spawnSync npm.cmd EINVAL on release:gate — resolved by V4.1 hotfix (cmd.exe /d /s /c npm ...).
-- Quality Regression Lock missing Python PIL (ModuleNotFoundError) — resolved by adding setup-python + pip install pillow numpy requests to quality-regression.yml (parity with ci.yml).
-- Quality Regression Lock missing webkit (mobile-webkit iPhone 13) — resolved by installing chromium+webkit in quality-regression.yml.
-- CI missing webkit for npx playwright test (all 4 projects) — resolved by installing chromium+webkit in ci.yml.
-- Perceptual gate EISDIR on approvedBaselines without path — resolved by adding valid path+sha256 to data/visual-baselines.json (test/fixtures/cube_object.png).
-- AI3D Voxel City autoplay regression (playerSpawn false, move 0) due to V4.1 computeVertexNormals + applyWorldMaterialMode in switch handlers — resolved by removing g.computeVertexNormals and applyWorldMaterialMode calls in switchFront/Orbit/Playable, preserving PBR material creation but avoiding premature dispose.
-- Any regression in controls, collisions, mobile behavior, visuals, performance — must rollback candidate.
-
-## Exact patch / change plan
-1. Work only in a new AI branch and update this WIP before project edits.
-2. Install semantic server/worker detail enhancement with hard front-projection invariant and voxel budget.
-3. Install material profiler and adaptive PBR hooks without changing Front Exact.
-4. Install frame/GPU/long-task/device-aware runtime budgets and animation semantic rules.
-5. Install baseline candidates + explicit promotion guard, device matrix and evidence ledger.
-6. Run targeted tests, quality:world and full release gate.
-7. Reject/rollback any candidate that regresses controls, collisions, mobile behavior, visuals or performance.
+- `apps/dark-void-scene/*` (new)
+- `shared/dark-void-manifestation.mjs`, `dark-void-scene-runtime.mjs`,
+  `navigator-dialog.mjs`, `world-command-parser.mjs`,
+  `world-manifestation-engine.mjs`, `world-shape-library.mjs` (new)
+- `server.js` (MIME table only)
+- `data/app-release-registry.json` (one new entry)
 
 ## Known risks
-- Aesthetic 100% still requires approved screenshots.
-- Animation 100% still requires real rig playback evidence.
-- Optimization 100% still requires physical iOS/Android evidence.
-- GitHub/Vercel winner-only writes require external credentials.
+- Registering as `quarantine`/`visible:false` keeps it out of the internal
+  public 3D-games catalog grid - intentional, since it is not a Golden
+  voxel-collision game and should not be presented as one. It remains
+  directly servable by URL (`server.js`'s static routing is not gated by
+  the registry - only `/api/apps`'s catalog *listing* is), which is all
+  Google AI Studio/Cloud Run needs to serve it as the Navigator entrypoint.
+- This branch intentionally does NOT include the larger
+  `WORLD_SERVER_GOOGLE_AI_STUDIO_2_SLOTS_V6` patch (Google Cloud evidence
+  loop, GDD capability planner, function provenance, WASI sandbox, etc.) -
+  that stays on a separate branch
+  (`ai/desktop/google-ai-studio-v6-slots`) since master did not need that
+  full apparatus just to serve the real Navigator, and cherry-picking it
+  here hit real, substantive merge conflicts (`package.json`,
+  `data/supply-chain-signing-policy.json`) against master's own
+  independent evolution of those files - out of scope for this PR.
+
+## Golden systems that must be preserved
+`voxel-world` and `ai3d-voxel-city`'s existing Golden certification
+(collision/mobile/direction contracts) - untouched by this change; this PR
+only adds a new, separately-classified registry entry alongside them.
+
+## Errors that must not return
+- `GOLDEN STANDARD FAIL: unregistered app: dark-void-scene` - fixed by the
+  registry entry above; regression-proofed by the registry entry itself
+  staying present.
+- `project-quality-reviewer.js` blockers from mis-certifying a
+  non-Golden-physics app as `certified` - fixed by using `quarantine`
+  instead; do not change this app's `status` to `certified` without first
+  actually implementing the Golden UI shell/physics contract for real.
+- `.mjs`/`.webmanifest` served as `application/octet-stream` - fixed in
+  `server.js`'s MIME table; do not remove those two entries.
+
+## Exact patch / change plan
+Already applied on this branch (commits `2aea948c`, `9f5a50b0`) - see PR
+#16 (`ai/desktop/google-ai-studio-v6-slots-pr` -> `master`) for the full
+diff.
 
 ## Tests to run
-- npm run quality:world:materials
-- npm run quality:world:visibility
-- npm run quality:world:retarget
-- npm run quality:world:runtime
-- npm run quality:world:devices
-- npm run quality:world:candidates
-- npm run quality:world:feedback
-- npm run quality:world
-- node --test test/world-quality-autopilot.test.js (expect 12/12 PASS)
-- npm run release:gate
-- Playwright desktop: open apps/ai3d-voxel-city and apps/voxel-world, verify WASD/arrow movement, mouse look, jump, collisions, step-up.
-- Playwright mobile (emulation): left stick movement, right stick look, jump, safe-area buttons, no black screen.
-- Visual baseline candidate capture: verify Front Exact unchanged, orbit/playable views show added volume/PBR.
-- Do not promote baselines without explicit human approval.
+- `node --test` (full existing suite): 118/118 PASS (verified before the
+  registry fix; unaffected by the registry-only follow-up commit).
+- `node scripts/check-golden-standard.js`: PASS.
+- `node scripts/project-quality-reviewer.js`: `blockers=0` (one
+  pre-existing `major` finding on `apps/ai3d-voxel-city/index.html`,
+  unrelated file this PR never touched - not introduced by this change).
+- `npm run release:gate` (full chain): run locally before the final push,
+  must be clean before merge.
 
 ## Deployment / PR plan
-1. After all gates pass locally, commit to ai/desktop/world-quality-autopilot-v4.
-2. Push to origin (master not modified).
-3. Open PR via gh pr create --base master --head ai/desktop/world-quality-autopilot-v4.
-4. Vercel auto-deploys preview.
-5. Verify preview on desktop Chrome and real iOS/Android (if provider configured).
-6. Only merge after human approval of visual baselines and playable evidence.
-7. Do not auto-merge. Do not push directly to master.
+PR #16, `ai/desktop/google-ai-studio-v6-slots-pr` -> `master`. Merge once
+`release:gate` is clean in CI. After merge, user re-imports/re-syncs
+Google AI Studio's existing "World_server" app (or creates the sandbox/
+navigator Starter Tier apps fresh) from the updated master, sets
+`WORLD_NAVIGATOR_ENTRYPOINT=/apps/dark-void-scene/` (or the Sandbox
+equivalent) as the entrypoint override, and publishes sandbox first.
 
 ## Current progress
-- 98% — verified locally (12/12 V4 tests, 156/156 check, release:gate PASS). PR #8 created, CI Quality Regression Lock initially failed on missing PIL, fixed via quality-regression.yml hotfix. Push 5e329eb done, awaiting CI re-run.
+Registry fix committed and pushed; running the full local `release:gate`
+chain now before pushing again / requesting merge.
 
 ## Next action
-Push hotfix commit, re-check CI, verify V4.1 graphics/mechanics preservation, then merge PR to master and verify Vercel production + smoke test.
+Confirm `release:gate` is clean locally, push this WORK_IN_PROGRESS.md
+update alongside, wait for CI to go green, then merge PR #16.
 
 ## Completion criteria
-- Targeted V4 tests PASS.
-- quality:world produces readiness >= 85 with no hard gate failure.
-- release:gate PASS before PR merge/deploy.
-- Front Exact projection unchanged.
-- Desktop/mobile controls and collisions remain protected.
-- New evidence ledger generated.
+CI on PR #16 fully green (all required checks pass, the two pre-existing
+unrelated `improve-world-home` Vercel failures aside), then merged to
+master.
 
 ## Final evidence
-- V4 targeted tests: 12/12 PASS.
-- npm run check: 156/156 PASS.
-- Structural readiness: 98%.
-- Domain readiness: {"detail":100,"graphics":97,"animation":95,"optimization":98,"automation":100}.
-- Evidence ledger: 29dbee226fb2174a6aae51042257f1fb978ffcf5bd090580d6d4d6c01f79f4f5.
-- Full release gate: PASS (local + CI Quality Regression Lock fixed, world-quality PASS, screenshots PASS, Vercel PASS).
-- GitHub push: https://github.com/mpaykin1/World_server branch ai/desktop/world-quality-autopilot-v4 (5e329eb pushed, hotfix pending).
-- PR: https://github.com/mpaykin1/World_server/pull/8
-- CI: world-quality PASS, screenshots PASS, Vercel PASS, quality-regression FAIL due to missing PIL (now hotfixed), check pending.
+Not completed - PR not yet merged. Will update this section (or the next
+WORK_IN_PROGRESS entry) with the CI-green confirmation and merge commit
+once done.

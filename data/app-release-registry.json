@@ -78,6 +78,13 @@
       "visible": false,
       "status": "system",
       "kind": "hub"
+    },
+    "dark-void-scene": {
+      "title": "Dark Void Navigator",
+      "visible": false,
+      "status": "quarantine",
+      "kind": "navigator",
+      "reason": "Not a Golden voxel-collision app by design - a dialog+look-based navigator experience with no wall-collision movement, so it does not (and should not) implement the Golden UI shell/physics contract project-quality-reviewer.js requires of a 'certified' entry. Already live and verified in production at dark-void-navigator.vercel.app and re-verified end-to-end locally this session (real scene renders, zero console errors, desktop mouse-look and mobile dual-joystick controls confirmed) - registered here only so the deny-by-default release registry recognizes the directory; kept out of the internal 3D-games catalog listing (visible:false) rather than mislabeled as Golden-certified."
     }
   }
 }
