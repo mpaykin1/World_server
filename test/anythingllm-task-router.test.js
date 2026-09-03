@@ -99,6 +99,43 @@ test('concurrency protection: runTask queues instead of racing when another disp
   }
 });
 
+// Live-proven 2026-09-03: AnythingLLM's MCPHypervisor cannot register any MCP
+// server in this installed instance (systemic, config-content-independent,
+// survives a full restart - see error-prevention-registry.json#anythingllm-
+// mcphypervisor-cannot-register-any-mcp-server). Agentic/tool-calling
+// capability classes now dispatch directly to Ollama (lib/direct-ollama-mcp-
+// transport.js) instead of requiring AnythingLLM at all - proven here by a
+// real filesystem-read task reaching the (still-shared, unchanged) lease/
+// resource-gate/queue path without ANYTHINGLLM_API_KEY set, which the OLD
+// unconditional check would have rejected before ever reaching that logic.
+test('a filesystem task no longer requires ANYTHINGLLM_API_KEY or threadSlug - it uses the direct-Ollama transport, not AnythingLLM', async () => {
+  const savedKey = process.env.ANYTHINGLLM_API_KEY;
+  delete process.env.ANYTHINGLLM_API_KEY;
+  const owner = `test-holder-direct:${process.pid}`;
+  const scope = `anythingllm-workspace-${TEST_WORKSPACE_SLUG}-direct`;
+  const acquired = collectiveBrain.acquireLease(LEASE_ROOT, scope, { ttlMs: 30000, owner });
+  assert.equal(acquired.ok, true, 'test setup: could not acquire the simulated concurrent lease');
+  try {
+    // No threadSlug passed at all - the old code path threw synchronously
+    // before ever reaching the lease check if this were missing.
+    const r = await runTask('read package.json', { workspaceSlug: `${TEST_WORKSPACE_SLUG}-direct` });
+    assert.equal(r.result, 'QUEUED', 'expected the shared lease/queue mechanism to still gate this dispatch, unchanged');
+  } finally {
+    collectiveBrain.releaseLease(LEASE_ROOT, scope, owner);
+    if (savedKey !== undefined) process.env.ANYTHINGLLM_API_KEY = savedKey;
+  }
+});
+
+test('a plain/unknown-capability task still requires threadSlug and ANYTHINGLLM_API_KEY - it stays on the AnythingLLM transport', async () => {
+  const savedKey = process.env.ANYTHINGLLM_API_KEY;
+  delete process.env.ANYTHINGLLM_API_KEY;
+  try {
+    await assert.rejects(() => runTask('hello, how are you today', { workspaceSlug: 'world' }), /ANYTHINGLLM_API_KEY not set in env|requires opts.threadSlug/);
+  } finally {
+    if (savedKey !== undefined) process.env.ANYTHINGLLM_API_KEY = savedKey;
+  }
+});
+
 test('concurrency protection: an expired (stale) lease is reclaimed, not treated as still-busy', () => {
   // The router is a thin wrapper around lib/collective-brain#acquireLease,
   // which already has its own dedicated "stale lease is reclaimed" test - this

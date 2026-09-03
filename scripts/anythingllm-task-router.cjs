@@ -22,6 +22,7 @@ const { decide: decideResources, enqueueTask } = require('../lib/ai-resource-sch
 const { pickBestBackend, recordOutcome } = require('../lib/model-suitability');
 const { rankToolsByCost } = require('../lib/tool-cost-model');
 const collectiveBrain = require('../lib/collective-brain');
+const { runAgenticTurn } = require('../lib/direct-ollama-mcp-transport');
 
 const ANYTHINGLLM_URL = process.env.ANYTHINGLLM_URL || 'http://127.0.0.1:3001';
 const ANYTHINGLLM_API_KEY = process.env.ANYTHINGLLM_API_KEY;
@@ -143,10 +144,27 @@ async function runTask(taskText, opts = {}) {
   const workspaceSlug = opts.workspaceSlug || 'world';
   const threadSlug = opts.threadSlug;
   const timeoutMs = opts.timeoutMs || DEFAULT_TIMEOUT_MS;
-  if (!threadSlug) throw new Error('runTask requires opts.threadSlug');
-  if (!ANYTHINGLLM_API_KEY) throw new Error('ANYTHINGLLM_API_KEY not set in env');
 
   const { capabilityClass, allowedTools: unrankedTools } = route(taskText);
+  // Live-proven 2026-09-03: AnythingLLM's MCPHypervisor cannot register ANY
+  // MCP server in this installed instance (systemic, config-content-
+  // independent, survives a full app restart with a fresh singleton - see
+  // error-prevention-registry.json#anythingllm-mcphypervisor-cannot-register-
+  // any-mcp-server). Per the standing "don't keep AnythingLLM mandatory if
+  // its MCP pipeline is proven broken" guidance, every agentic/tool-calling
+  // capability class (anything but 'unknown') now dispatches directly to
+  // Ollama's own tool-calling API instead (lib/direct-ollama-mcp-transport.js),
+  // bypassing AnythingLLM's broken MCP layer entirely - callers that
+  // explicitly want the old AnythingLLM @agent path (e.g. for comparison)
+  // can force it with opts.transport:'anythingllm'. 'unknown' (plain,
+  // non-agentic chat) still goes through AnythingLLM, where it already works
+  // and its selective-context economy is a real benefit.
+  const useDirect = capabilityClass !== 'unknown' && opts.transport !== 'anythingllm';
+
+  if (!useDirect) {
+    if (!threadSlug) throw new Error('runTask requires opts.threadSlug when using the anythingllm transport');
+    if (!ANYTHINGLLM_API_KEY) throw new Error('ANYTHINGLLM_API_KEY not set in env');
+  }
   // Router should prefer known path/read -> list_directory -> scoped search ->
   // global recursive search, weighted by real cost history (lib/tool-cost-
   // model.js): world-server-sandbox-search_files measured an MCP -32001 timeout
@@ -209,12 +227,41 @@ async function runTask(taskText, opts = {}) {
   }
 
   try {
+    if (useDirect) return await runDirectDispatchLoop();
     if (selectedModel && opts.respectModelRouting !== false) {
       await setWorkspaceModel(workspaceSlug, selectedModel);
     }
     return await runDispatchLoop();
   } finally {
     if (lease.lease) collectiveBrain.releaseLease(LEASE_ROOT, leaseScope, lease.lease.owner);
+  }
+
+  async function runDirectDispatchLoop() {
+    const attemptStart = Date.now();
+    let attempt;
+    try {
+      const r = await runAgenticTurn(taskText, { model: selectedModel, allowedTools, timeoutMs });
+      const mismatch = !r.toolCallsMade.length || !r.textResponse || !r.textResponse.trim() || !!r.iterationLimitExceeded;
+      attempt = {
+        attemptNum: 1,
+        ok: true,
+        textResponse: r.textResponse,
+        toolCallsMade: r.toolCallsMade,
+        promptTokens: r.promptTokens,
+        completionTokens: r.completionTokens,
+        totalTokens: r.totalTokens,
+        durationSeconds: r.durationSeconds,
+        durationMs: Date.now() - attemptStart,
+        mismatchDetected: mismatch,
+      };
+    } catch (e) {
+      attempt = { attemptNum: 1, ok: false, reason: e.name === 'TimeoutError' ? 'timeout' : `error_${e.message}`, timedOut: e.name === 'TimeoutError', durationMs: Date.now() - attemptStart };
+    }
+    const result = attempt.ok && !attempt.mismatchDetected ? 'PASS' : attempt.timedOut ? 'TIMEOUT' : 'FAIL';
+    if (selectedModel && opts.respectModelRouting !== false) {
+      recordOutcome(selectedModel, capabilityClass, result, { latencyMs: attempt.durationMs, tokens: attempt.totalTokens });
+    }
+    return { capabilityClass, allowedTools, model: selectedModel, transport: 'direct-ollama', attempts: [attempt], result, retries: 0 };
   }
 
   async function runDispatchLoop() {
@@ -295,6 +342,7 @@ async function runTask(taskText, opts = {}) {
     capabilityClass,
     allowedTools,
     model: selectedModel,
+    transport: 'anythingllm',
     attempts,
     result,
     retries: attempts.length - 1,
