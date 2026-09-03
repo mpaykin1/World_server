@@ -21,7 +21,8 @@ User's explicit instruction: "Не останавливайся на 60%... ма
 заверши всё остальное самостоятельно" before asking for the one remaining
 manual GitHub step.
 
-## Current state (all verified real, not aspirational)
+## Current state
+All of the following is verified real, not aspirational.
 
 **0. Infra survey before writing anything** (to honor "не создавай новую
 параллельную систему"): searched the whole repo for
@@ -242,6 +243,26 @@ Untouched - no app/game code modified. Verified via
 - `git checkout master`-style stale-shared-branch-ref bugs (already
   registered from the prior PR) - not reintroduced here; this branch's own
   scripts never do that.
+
+## Exact patch / change plan
+Two migrations on the live Supabase project
+(`world_remote_task_bridge_v2_retry_dead_letter` adding
+`retry_count`/`max_retries`/`worker_id` + the `dead_letter` status;
+`world_remote_task_bridge_v3_expand_commands` extending the `command` CHECK
+constraint to the 9 new commands) plus, in this branch: rewrote
+`scripts/collective-brain-remote-bridge.cjs` (lease wrap, stuck-task
+reclaim, retry/dead-letter via new `decideOutcomeStatus()`, known-issue
+auto-lookup on failure, `fixMetadata` auto-registration, structured logs,
+status snapshot, graceful shutdown, Supabase-failure resilience fix, 5 new
+executor branches for the new command kinds); added
+`scripts/collective-brain-remote-bridge-watchdog.js` (spawn/track/restart/
+healthcheck/stop); extended `data/collective-brain/remote-task-commands.json`
+(9 new commands, `restart_known_worker` allowlist populated) and
+`data/collective-brain/agent-capabilities.json` (costPenalty calibration +
+`anythingllm`); added a 6-line opt-in autostart block to `server.js`; added
+`perf:lighthouse` to `package.json`; added
+`test/collective-brain-remote-bridge.test.js` (18 tests). No other files
+touched.
 
 ## Tests to run
 - `node --test`: 162/162 PASS (145 pre-existing + 17 new in
