@@ -1,280 +1,142 @@
-# WORK IN PROGRESS — Safe remote-task bridge for Browser ChatGPT (Collective Brain V2.1 port)
+# WORK IN PROGRESS — GitHub write-access regression probe + connector-403 diagnosis
 
 ## Task
-Give a remote client (Browser ChatGPT, using its own existing Supabase access)
-a SAFE way to trigger real local work in World_server, without ever exposing
-a shell, a tunnel, or production secrets to the browser session. Concretely:
-(1) port the existing Collective Brain V2.1 coordination substrate
-(`lib/collective-brain/*`, `scripts/collective-brain-*.js`,
-`data/collective-brain/*`, `policy/collective-brain.rego`,
-`test/collective-brain.test.js`) from branch
-`ai/opencode/multi-ai-peer-improvement` (where it already exists, merged
-there as PR #13, commit `70fef1e3`) onto real `master`, since it is not an
-ancestor of `origin/master` and the new bridge must reuse it rather than
-duplicate it; (2) add a typed, allowlisted remote-task queue
-(`data/collective-brain/remote-task-commands.json` +
-`scripts/collective-brain-remote-bridge.cjs`) backed by a new Supabase table
-`public.world_remote_tasks`, where every `command` maps to exactly one
-pre-approved local script/action - never an arbitrary shell string.
+Per the user's explicit point 11 in the safe remote-bridge specification:
+diagnose the GitHub Connector 403 root cause conclusively, apply the
+minimal-necessary fix (or hand the user exactly one concrete manual action
+if the fix requires it), add a regression test proving GitHub write access
+genuinely works end-to-end, and record the finding into
+`data/error-prevention-registry.json`.
 
 ## Why
-User explicitly declined a raw-shell/tunnel/`local.exec` bridge with
-unrestricted secrets (GitHub App private key, Supabase service-role key,
-Vercel production tokens) for a browser AI session, and instead requested
-this safe design: official-connector + PR-based flow for anything reaching
-master, plus a typed/allowlisted, outbound-only polling worker for local
-execution. User's explicit instruction: "Не создавай дубликат существующего
-coordinator/control-plane. Сначала найди существующие World_server systems и
-усиливай их" (don't duplicate the existing coordinator - find and strengthen
-it), hence porting `lib/collective-brain` rather than building a second,
-parallel policy/audit system from scratch.
+Earlier this engagement, a Browser ChatGPT GitHub connector hit a 403 when
+trying to read/write this repo. The root cause was only inferred, not
+conclusively diagnosed or protected with a regression test - this task
+closes that gap.
 
 ## Current state
-- Worktree `World_server_remote_bridge`, branch `ai/desktop/remote-task-bridge`,
-  based on `origin/master` (real master, at `4ee41f13` - the
-  `WORLD_ENTRYPOINT` follow-up merge, not the divergent
-  `ai/opencode/multi-ai-peer-improvement` branch).
-- New Supabase table `public.world_remote_tasks` created (id, command
-  CHECK-constrained to the 10 allowlisted commands, args jsonb,
-  requested_by, status CHECK-constrained to
-  queued/claimed/running/done/failed/rejected, claimed_by/claimed_at,
-  started_at/finished_at, result jsonb, error, created_at, updated_at);
-  RLS enabled; `authenticated` granted INSERT+SELECT only (via explicit
-  `CREATE POLICY`, not just a table GRANT - RLS defaults to deny-all
-  with a grant but no policy, caught by `get_advisors`'s
-  `rls_enabled_no_policy` lint and fixed with a follow-up migration);
-  no UPDATE/DELETE policy for `authenticated` - only the local worker's
-  service-role key (never exposed to the browser) may transition task
-  status/write results. Re-verified clean via `get_advisors`.
-- `data/collective-brain/remote-task-commands.json` (new): the command
-  allowlist - `run_tests`, `run_linter`, `run_benchmark`, `build_web`,
-  `build_native` (unavailable, reports status honestly), `inspect_logs`
-  (reads one of 5 pre-approved report files), `run_existing_script` (runs
-  one of 5 pre-approved scripts by scriptId, never a raw path),
-  `apply_patch` (guarded: isolated worktree only, `git apply --check`
-  first, forbidden path prefixes incl. `.env`/`data/collective-brain`/
-  `.git/`/`node_modules/`, 64KB diff cap), `verify_patch`,
-  `restart_known_worker` (empty allowlist by design - safe no-op until a
-  worker is deliberately registered).
-- `scripts/collective-brain-remote-bridge.cjs` (new): local, outbound-only
-  polling worker. Never opens a port. `claimNextTask` does an atomic
-  conditional UPDATE (`status=queued -> claimed`) against Supabase so
-  concurrent workers don't double-claim. `executeTask` runs every command
-  through the EXISTING `lib/collective-brain` `policyGate` first (hard-deny
-  / approval-required), then dispatches by `def.kind`. Results are scanned
-  with the existing `securityScanText` before being written back to
-  Supabase, and mirrored into `state/ai-agent-reports.jsonl` (the existing
-  shared multi-agent coordination log) and the collective-brain hash-chained
-  audit event log - not a new competing reporting channel.
-- Cherry-picked `70fef1e3` (Collective Brain V2.1) onto this branch via
-  `git cherry-pick -x --no-commit`. 23 files added cleanly with no conflict.
-  5 files conflicted; all 5 now resolved:
-  - `.gitignore`: purely additive (HEAD side of the hunk was empty) - took
-    the incoming block (secrets index, local toolchain cache, generated
-    `COLLECTIVE_BRAIN_*.json` report entries, `.patch-backups/`, etc).
-  - `package.json`: NOT purely additive - naive "take incoming" would have
-    silently pulled in ~207 references to nonexistent scripts belonging to
-    unrelated systems from the divergent branch (`procedural:*`,
-    `gs360:*`, `panorama360:*`, `ink-glyph:*`, `pwa:*`,
-    `integration:*`, `animation:gate`, etc - none of which exist on
-    master). Root cause: `git show --stat <commit>` only reflects a
-    commit's diff against its OWN parent, not against the actual
-    cherry-pick target base, so an apparently small/clean commit can still
-    apply large unrelated additive hunks onto a different base. Fixed by
-    restoring master's exact clean `package.json`
-    (`git show origin/master:package.json`) and manually re-applying only
-    the two real, verified changes: 13 new `collective-brain:*` script
-    entries, and extending `release:gate` with
-    `&& npm run collective-brain:check && npm run collective-brain:security
-    && npm run collective-brain:cycle` (explicitly excluding the incoming
-    side's references to systems absent from master). Verified via a script
-    that checks every `npm run` script's referenced file actually exists:
-    207 missing -> 0 missing.
-  - `DESKTOP_AI_INSTALL_AND_VERIFY.md`: purely additive (HEAD side empty) -
-    took the incoming block (Cinematic Voxel Quality V3 gate, Reference
-    Visual Gate, Voxel Game Baseline, Collective Brain V2.1 mandatory-loop
-    section) unchanged.
-  - `WORK_IN_PROGRESS.md`: this file - both sides were stale WIP entries for
-    already-completed/already-merged prior tasks (HEAD: the
-    `world-entrypoint-followup` task, merged as PR #17; incoming: the
-    `openhuman-collective-brain-v2` task, merged separately as PR #13 on the
-    other branch) - discarded both, replaced with this fresh entry for the
-    actual current task, matching this session's established pattern.
-  - `data/error-prevention-registry.json`: not yet inspected/resolved (next
-    conflict to resolve).
+- Root cause, as conclusively as it can be determined without the user's own
+  GitHub UI access: GitHub Apps default their repository access to "Only
+  select repositories" on install. If `World_server` was not explicitly
+  selected for the connector's App installation, every API call against
+  this repo 403s, independent of anything in this repo's own code or CI.
+- **This cannot be confirmed or fixed via the REST API**, even with a
+  personal-access-token-authenticated `gh` CLI that has full repo `admin`
+  permission on `World_server` (verified this session: `permissions.admin`
+  is `true` for this token, yet `GET /user/installations` and
+  `GET /repos/{owner}/{repo}/installation` both still require the App's own
+  installation/JWT auth and 403 regardless). App-installation repository
+  selection is genuinely only visible/editable in GitHub's own web UI
+  (Settings -> Applications -> Installed GitHub Apps). This is the one
+  concrete manual action for the user - see "Next action".
+- Also checked and ruled out: repo collaborators list only shows
+  `mpaykin1` (no bot/App user with explicit collaborator access); repo
+  events show no chatgpt/openai bot activity at all (consistent with the
+  App never successfully reaching this repo, not with a narrower
+  permission problem).
+- Registered `github-app-connector-403-repo-not-selected` in
+  `data/error-prevention-registry.json` with this root cause and the
+  concrete fix + verification step.
+- Built and verified `scripts/github-write-access-probe.js`: a real,
+  repeatable regression test that proves the *official* write path (a
+  properly-scoped token going through branch -> commit -> push -> PR ->
+  verify -> cleanup, the same flow every AI-authored PR in this repo already
+  uses) genuinely works, rather than relying on "it worked last time". Run
+  via `npm run github:probe`.
+- **Found and fixed a real bug while building the probe itself**: the
+  script's cleanup originally did `git checkout master` to return the
+  worktree to a "known-good" state. Local branch refs (including `master`)
+  are shared across every `git worktree add` worktree of the same
+  repository - a stale local `master` ref left over from an earlier
+  worktree/session landed this worktree on 338-line-old content instead of
+  real `origin/master` after the probe ran once. Fixed by capturing
+  `git symbolic-ref --short -q HEAD` (or the exact commit SHA) at script
+  start and restoring exactly that on cleanup - never a hardcoded branch
+  name. Registered as `git-worktree-shared-local-branch-refs` in the same
+  registry file. Re-ran the probe after the fix and confirmed the worktree
+  correctly returns to its own prior branch.
+- Ran the probe for real twice against the live repo (before and after the
+  fix): both times it created a real branch, committed a real probe file,
+  pushed, opened a real PR (#19 on the second run), verified it via the API,
+  then closed the PR and deleted the branch - `[GITHUB_WRITE_ACCESS_PROBE]
+  PASS` both times, fully cleaned up (confirmed via `git ls-remote` showing
+  no leftover probe branch).
 
 ## Target state
-- `lib/collective-brain` present on `master` (via this PR), so the remote
-  bridge's `require('../lib/collective-brain')` resolves to a real,
-  already-audited module - not a stub, not a duplicate.
-- Browser ChatGPT can enqueue a row into `world_remote_tasks` using its own
-  Supabase access; the local worker (run manually or via `--watch`) picks it
-  up, executes exactly one pre-approved action, and writes a security-scanned
-  result back - with zero shell access and zero secret exposure to the
-  browser session.
-- Full `npm run release:gate` (including the 3 newly-appended
-  `collective-brain:*` steps) passes on this branch before it is proposed for
-  merge.
+- `data/error-prevention-registry.json` has a permanent record of the 403
+  root cause, so a future session hitting the same symptom doesn't have to
+  re-diagnose it from scratch.
+- `npm run github:probe` is available as a standing, reusable regression
+  test - for this session's own credentials, and equally usable by any
+  future properly-scoped credential (including the connector itself, once
+  the user adds repo access) to prove write access actually works, not just
+  that an App shows as "installed".
 
 ## Files / systems involved
-- Ported: `lib/collective-brain/index.js`, 11 `scripts/collective-brain-*.js`
-  files, `policy/collective-brain.rego`, `test/collective-brain.test.js`,
-  `data/collective-brain/agent-capabilities.json`,
-  `data/collective-brain/collective-brain-policy.json`,
-  `data/collective-brain/knowledge-ledger.json`,
-  `data/collective-brain/technology-plan.json`,
-  `.collective-brain-install.json`, `COLLECTIVE_BRAIN_RUNTIME_EVIDENCE.json`,
-  `COLLECTIVE_BRAIN_RUNTIME_REPORT.md`,
-  `COLLECTIVE_BRAIN_V2_1_RUNTIME_EVIDENCE.json`.
-- New this task: `data/collective-brain/remote-task-commands.json`,
-  `scripts/collective-brain-remote-bridge.cjs`, Supabase migrations
-  `world_remote_task_bridge_v1` + `world_remote_task_bridge_v1_rls_policies`.
-- Modified: `.gitignore`, `package.json`, `DESKTOP_AI_INSTALL_AND_VERIFY.md`.
+- `scripts/github-write-access-probe.js` (new)
+- `data/error-prevention-registry.json` (2 new entries)
+- `package.json` (`github:probe` script)
 
 ## Known risks
-- `apply_patch` is the highest-risk command in the allowlist even though it
-  is guarded (isolated-worktree-only, `git apply --check` first, forbidden
-  path prefixes, size cap) - it is intentionally the one most worth extra
-  scrutiny in review.
-- `restart_known_worker`'s allowlist is intentionally empty - no live
-  process can be restarted via this bridge yet, by design, until one is
-  deliberately registered.
-- This PR does not by itself close the GitHub Connector 403 gap - that still
-  requires separate root-cause diagnosis + a user action in GitHub's App
-  installation settings (tracked separately, not part of this PR's scope).
+- The probe script performs real, live branch/commit/push/PR/close/delete
+  operations against the real repo every time it runs. It is self-cleaning
+  (tested twice), scoped to a uniquely-timestamped throwaway branch/file
+  each run, and never touches any existing branch or file - but it is not a
+  dry-run, by design (a read-only check would not actually prove write
+  access).
 
 ## Golden systems that must be preserved
-`app-release-registry.json` deny-by-default gate and Golden voxel-collision
-UI/physics contract (from PR #16) - untouched by this branch; will be
-reverified via `node scripts/check-golden-standard.js` before push.
+Untouched by this change - no app/game code modified.
 
 ## Errors that must not return
-- `lib/collective-brain` silently absent from `master` while other code
-  depends on it (this port's entire purpose).
-- RLS enabled with a GRANT but no explicit POLICY, making the grant silently
-  inert (`rls_enabled_no_policy`) - already fixed and re-verified for
-  `world_remote_tasks`; worth registering as a general error-prevention entry
-  once `data/error-prevention-registry.json`'s conflict is resolved.
-- A cherry-pick's `git show --stat` diff being read as "this is the full,
-  isolated scope of what will be added" - it is only the diff against the
-  commit's own original parent, not against the real target base.
+- GitHub Connector 403 being re-diagnosed from scratch in a future session
+  instead of being looked up in `data/error-prevention-registry.json`.
+- A future script assuming `git checkout master` (or any bare branch name)
+  safely returns a worktree to a known-good state.
 
 ## Exact patch / change plan
-See "Current state" above for the precise per-file resolution already
-applied. Remaining: resolve `data/error-prevention-registry.json`, finish the
-cherry-pick with a real commit, run full local verification, write final
-evidence into this file, commit, push, open a PR
-(`ai/desktop/remote-task-bridge` -> `master`), matching the exact proven
-PR #16/#17 pattern (verify own-relevant CI green, confirm any remaining red
-is pre-existing/unrelated via `gh run list --branch master`, ask before
-merging with any red).
+Single new script + two registry entries + one npm script line. No other
+files touched.
 
 ## Tests to run
-- `node --test test/collective-brain.test.js`: 18/18 PASS.
-- `node --test` (full suite): 145/145 PASS.
-- `node scripts/check-golden-standard.js`: PASS.
-- `node scripts/check-desktop-ai-protocol.js`: PASS.
-- `node scripts/collective-brain-check.js` / `-security-scan.js` /
-  `-cycle.js`: all PASS (cycle DEGRADED/sync=queued when no local
-  agentmemory is running, PASS/sync=synced when it is - both exit 0 by
-  design, agentmemory absence must never break the game/gate path).
-- `node scripts/project-quality-reviewer.js`: `blockers=0` (same
-  pre-existing unrelated `ai3d-voxel-city` major finding as PR #16/#17).
-- Full `npm run release:gate` (all ~21 chained gates, now including
-  `collective-brain:check`/`security`/`cycle`): **PASS, exit 0.**
-  `quality:check` reports `overall=98% blockers=15 releaseEligible=false`
-  but still exits `[QUALITY_CHECK] PASS` - pre-existing tracked blockers,
-  not introduced by this branch, same semantics as PR #16/#17's pre-existing
-  unrelated CI red.
+- `node --test` (full suite): 145/145 PASS (after `npm install` in this
+  freshly created worktree, which had no `node_modules` yet).
+- `npm run release:gate`: running in background at time of writing this
+  entry; result to be recorded before push.
+- `npm run github:probe`: PASS (run twice, live, including after the
+  worktree-ref bug fix).
 
 ## Deployment / PR plan
-`ai/desktop/remote-task-bridge` -> `master`. Merge only after this branch's
-own relevant checks are green (pre-existing unrelated red on master is
-acceptable, matching PR #16/#17 precedent, but must be reconfirmed for this
-diff, not assumed carried over).
+`ai/desktop/github-write-access-probe` -> `master`. Merge once this PR's own
+checks are green (pre-existing unrelated red on master, e.g. the
+`hud-visual-audit`/`golden-controls`/`perceptual-visual` Playwright suite
+for `ai3d-voxel-city`/`voxel-world`/`catalog`, confirmed present on master's
+own current HEAD before PR #18 too, is acceptable per PR #16/#17/#18
+precedent).
 
 ## Current progress
-- Cherry-pick fully resolved and committed (all 5 conflicts, see "Current
-  state" above) - `lib/collective-brain` now present on this branch.
-- Closed a real gate gap found during review: `apply_patch` (the highest-risk
-  remote command) was NOT in `collective-brain-policy.json`'s
-  `approvalRequiredOperations`, so it would have auto-executed despite the
-  command's own description claiming it is "subject to policyGate" - added
-  `"remote-task:apply_patch"` to `approvalRequiredOperations`, so it now
-  requires `COLLECTIVE_BRAIN_HUMAN_APPROVED=1` before it can run at all.
-- Full local verification PASS (see "Tests to run").
-- **Real E2E proof of the remote-task-bridge loop**, run against the actual
-  Supabase project `xlcdnlsyvxqtopmkweiy` ("world-server-preview"):
-  1. Inserted a task row into `public.world_remote_tasks`
-     (`command='run_existing_script'`, `args={"scriptId":"collective-brain-check"}`,
-     `requested_by='browser-chatgpt-e2e-test'`) via the Supabase MCP,
-     simulating what Browser ChatGPT would do with its own `authenticated`
-     Supabase access - confirmed row created with `status='queued'`.
-  2. Performed the worker's atomic claim (`status: queued -> claimed`,
-     conditional on `status='queued'`) - succeeded, matching
-     `claimNextTask()`'s logic.
-  3. Ran the actual allowlisted local action for real:
-     `node scripts/collective-brain-check.js` -> `[COLLECTIVE_BRAIN_CHECK]
-     PASS`, exit 0 - the exact command `run_existing_script` with
-     `scriptId=collective-brain-check` maps to.
-  4. Wrote the real result back (`status='running'` -> `status='done'`,
-     `result={ok:true, exitCode:0, scriptId, stdout, stderr}`) - matching
-     `runOnce()`'s finishing update.
-  5. Appended and verified a matching entry in
-     `state/ai-agent-reports.jsonl` (`agent:
-     'collective-brain-remote-bridge'`, `status:'done'`, `progress:100`),
-     then removed the synthetic test artifact (both the DB row and the local
-     report-log entry) since it was a simulation, not genuine agent
-     activity, and should not be mistaken for one.
-  6. Re-ran `get_advisors(type:'security')`: `world_remote_tasks` does not
-     appear in the `rls_enabled_no_policy` list - the RLS/policy fix holds.
-  - **Caveat, honestly noted**: steps 2-4's Supabase read/write calls were
-    made directly via the Supabase MCP (which has project-level access),
-    not by literally invoking `scripts/collective-brain-remote-bridge.cjs`
-    end-to-end - this machine has no local `.env` with
-    `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY` configured (checked; none
-    exists anywhere on this machine for World_server), and there is no tool
-    available to this session that can read a Supabase project's secret
-    key (by design - `get_publishable_keys` only returns the public
-    key). The script's own logic (`claimNextTask`'s exact atomic-UPDATE
-    query, `executeTask`'s dispatch, `securityScanText` before write-back)
-    was verified by direct code review against this same real schema, and
-    every command kind it dispatches to was independently exercised
-    (`collective-brain-check.js` run for real above; `npm run check`/
-    `collective-brain:*` all run for real during `release:gate`). Running
-    the literal `.cjs` file end-to-end needs exactly one user action: copy
-    `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` (or
-    `SUPABASE_SECRET_KEY`) into a local `.env` in whichever checkout runs
-    the worker, per `.env.example` - never pasted into chat.
+Probe script built, bug found and fixed, verified live twice. Registry
+entries added. `release:gate` running.
 
 ## Next action
-Commit the new remote-bridge files
-(`data/collective-brain/remote-task-commands.json`,
-`scripts/collective-brain-remote-bridge.cjs`) plus this WIP update, push
-`ai/desktop/remote-task-bridge`, open the PR against `master`, wait for CI,
-confirm this PR's own checks are green (pre-existing unrelated red is
-acceptable per PR #16/#17 precedent, but must be reconfirmed for this diff),
-then merge.
+Wait for `release:gate` to finish, commit, push, open PR, wait for CI,
+merge. Then hand the user the one concrete manual action from the registry
+entry: open https://github.com/settings/installations (or the org
+equivalent), find the ChatGPT/Browser AI connector's GitHub App, and under
+Repository access add `World_server` (or switch to All repositories) -
+this is the one step that requires the user's own GitHub UI access and
+cannot be done via API by this session.
 
 ## Completion criteria
-PR merged to master with: full `release:gate` PASS locally before push
-(done); this PR's own CI checks green; a genuine E2E proof of the
-remote-task-bridge loop (done, see above, with an honestly-noted caveat on
-which layer was exercised directly vs. via code review); GitHub-403 root
-cause diagnosed and either fixed or handed to the user as one concrete
-manual action, with a regression test and an error-prevention-registry
-entry (separate, not yet started).
+PR merged; registry entries in place; `npm run github:probe` available and
+proven working; user has the one concrete manual action needed to actually
+close the connector's 403 (verifying that fix itself is out of this
+session's reach until the user performs it - re-running the probe cannot
+substitute for the connector's own credential, only for proving what the
+*official* write path is capable of).
 
 ## Final evidence
-- `node --test test/collective-brain.test.js`: 18/18 PASS.
-- `node --test` (full suite): 145/145 PASS.
-- `node scripts/check-golden-standard.js`: PASS.
-- `node scripts/check-desktop-ai-protocol.js`: PASS.
-- `node scripts/project-quality-reviewer.js`: blockers=0.
-- Full `npm run release:gate`: PASS, exit 0 (log captured this session).
-- E2E remote-task-bridge proof: real Supabase row
-  queued -> claimed -> running -> done, real local script executed and its
-  real result written back, verified via `get_advisors` that RLS/policy
-  remains correctly configured. Details and caveat above.
-- Not yet completed: PR not yet opened; GitHub-403 root cause not yet
-  finalized.
+- `node --test`: 145/145 PASS.
+- `npm run github:probe`: PASS x2 (live, real PR opened/closed each time -
+  PR #19 on the fix-verification run).
+- `release:gate`: pending at time of writing, to be updated before push.
