@@ -21,7 +21,8 @@
     "destructive-db-migration",
     "delete-production-data",
     "rotate-production-secret",
-    "promote-visual-baseline"
+    "promote-visual-baseline",
+    "remote-task:apply_patch"
   ],
   "hardDeniedOperations": [
     "memory-ingest-env-file",
