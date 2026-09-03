@@ -511,6 +511,44 @@
         "scripts/github-write-access-probe.js: capture `git symbolic-ref --short -q HEAD` (falling back to the exact commit SHA) at start, restore exactly that on cleanup - never a hardcoded branch name",
         "prefer an explicit `origin/<branch>` or a captured commit SHA over a bare local branch name whenever a script must return a worktree to a known state"
       ]
+    },
+    {
+      "id": "windows-spawnsync-timeout-does-not-kill-process-tree",
+      "category": "tooling",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "on Windows, a Node `spawnSync(cmd, args, {timeout, shell:true})` call whose target is itself a shim (a `.cmd` file that launches a real `.exe`, e.g. `opencode.cmd` -> `opencode.exe`, or `npm.cmd` -> node running the target script) appears to hang far past the configured `timeout` - the OS process the shim launched keeps running as an orphan (confirmed live: `opencode.exe` kept running and consuming CPU minutes after a 90s spawnSync timeout, while the calling script sat blocked waiting for stdio to close)",
+      "rootCause": "with shell:true on Windows, the real process tree is cmd.exe -> the .cmd shim -> the actual .exe/node process. spawnSync's own `timeout` option only signals its immediate child (cmd.exe); it does not walk the tree, so the deeper process(es) are never terminated and keep the stdio pipes open, which is what the parent is actually waiting on",
+      "protection": [
+        "lib/agent-adapters.js's runWithTreeKill(): use async `spawn` instead of `spawnSync`, with a manual timer that on expiry calls `taskkill /PID <pid> /T /F` (Windows) or kills the process group (POSIX) - and only resolves once the real 'close' event fires, never assuming a timeout alone means the process is gone",
+        "any new spawnSync(...,{timeout}) call wrapping a .cmd-shimmed tool on Windows should be reviewed against this pattern before being trusted to actually bound wall-clock time",
+        "known, not yet applied here: the pre-existing scripts/collective-brain-remote-bridge.cjs helpers (runNpmScript, runAllowlistedScript, restartNamedWorker, verifyPatchAndMaybeRegisterFix) merged in PR #18/#22 use the same vulnerable spawnSync+timeout+shell:true pattern for `npm run <script>` - not yet migrated to runWithTreeKill in this pass, flagged as a real follow-up rather than silently left undocumented"
+      ]
+    },
+    {
+      "id": "ollama-thinking-models-exceed-typical-timeouts-on-cpu",
+      "category": "tooling",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "a local Ollama model call via /api/generate never returns within a normal (15-30s) request timeout, even though /api/tags (listing models) responds instantly and the model shows as installed",
+      "rootCause": "verified live on this machine: models advertising a 'thinking' capability in `ollama list`/`/api/tags` (qwen3:4b, qwen3-fast:1.7b despite its name) generate a hidden chain-of-thought before their visible answer, which on CPU-only inference reliably exceeds 30s even for a one-word answer. A non-'thinking' model of similar or smaller size (qwen2.5:3b-instruct, no 'thinking' capability) answers the same prompt correctly in ~13s.",
+      "protection": [
+        "lib/agent-adapters.js's default OLLAMA_MODEL is qwen2.5:3b-instruct specifically because it lacks 'thinking' mode, not because it is the largest model available - do not 'upgrade' the default to a thinking-capable model without also raising timeouts substantially and testing real latency first",
+        "before picking any Ollama model for a bounded-timeout use case, check its capabilities array for 'thinking' and measure a real request's latency rather than assuming model size alone predicts response time"
+      ]
+    },
+    {
+      "id": "opencode-free-tier-timeout-on-full-repo-context",
+      "category": "tooling",
+      "severity": "major",
+      "status": "known",
+      "symptom": "agent_implement (OpenCode CLI + a free hosted model, via lib/agent-adapters.js) reliably times out (classification 'timeout') on a real, full-size worktree of this repo, even for a small, precisely-scoped one-file edit that the exact same mechanism completes correctly in seconds against a tiny throwaway repo",
+      "rootCause": "verified live: a genuine, narrowly-worded one-line edit to apps/ai3d-voxel-city/index.html (add viewport-fit=cover) was given to all 3 configured free models (opencode/mimo-v2.5-free, opencode/nemotron-3.5-lightning-free, opencode/ling-3.0-flash-fin-free) against a real World_server worktree; every one timed out at 280000ms (total ~14 minutes across the 3-model fallback chain), while the same models edited a single-file throwaway repo correctly within seconds to tens of seconds during development. Root cause is presumed to be the agent's own repo-exploration behavior scaling with the number of files/size of the worktree it is pointed at (`--dir`) rather than the edit itself, but this was not fully isolated - only the symptom and its reproducibility are confirmed, not the exact internal reason inside OpenCode's own agent loop.",
+      "protection": [
+        "the fallback/timeout/cleanup mechanism itself worked correctly throughout (each failed attempt was cleanly killed via runWithTreeKill with zero orphaned processes, git state was reset between attempts via `git checkout -- . && git clean -fd`, and the pipeline correctly returned needsEscalation:true with full per-model diagnostics rather than hanging or reporting a false success) - this is a real capability/latency limit of the current free-tier backend on this hardware against a repo this size, not a bug in the bridge",
+        "do not assume raising timeoutMs alone fixes this without new evidence - it was not verified whether a longer budget (e.g. 10+ minutes per model) would succeed or whether the agent is doing unbounded exploration; the more reliable current use of agent_implement is a narrowly-scoped worktree/task, matching the pattern the throwaway-repo tests actually validated",
+        "when a real production use needs full-repo-context edits, scope the task's targetWorktree or instructions to point the agent at a specific subdirectory/file set explicitly rather than the whole tree, and/or budget significantly more wall-clock time and treat needsEscalation as the expected fallback to a human/Claude session, not a failure to fix"
+      ]
     }
   ],
   "confirmationProtocol": {

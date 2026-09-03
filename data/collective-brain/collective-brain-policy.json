@@ -22,7 +22,8 @@
     "delete-production-data",
     "rotate-production-secret",
     "promote-visual-baseline",
-    "remote-task:apply_patch"
+    "remote-task:apply_patch",
+    "remote-task:prepare_commit_and_pr"
   ],
   "hardDeniedOperations": [
     "memory-ingest-env-file",

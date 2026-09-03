@@ -63,6 +63,7 @@ const os = require('os');
 const { spawnSync } = require('child_process');
 const collectiveBrain = require('../lib/collective-brain');
 const { createAdminClient } = require('../lib/env');
+const agentAdapters = require('../lib/agent-adapters');
 
 const ROOT = path.resolve(__dirname, '..');
 const REPORT_LOG_PATH = process.env.AI_AGENT_REPORTS_PATH || path.join(ROOT, 'state', 'ai-agent-reports.jsonl');
@@ -228,6 +229,93 @@ function restartNamedWorker(args, def) {
   return { ok: r.status === 0, retriable: r.status !== 0, workerId, stdout: String(r.stdout || '').slice(-4000), stderr: String(r.stderr || '').slice(-2000) };
 }
 
+function createWorktree(args) {
+  const r = agentAdapters.createIsolatedWorktree(ROOT, (args && args.name) || 'task');
+  if (r.ok) collectiveBrain.appendEvent(ROOT, 'AGENT_WORKTREE_CREATED', { worktreePath: r.worktreePath, branch: r.branch });
+  return r;
+}
+
+function removeWorktree(args) {
+  const target = args && args.targetWorktree;
+  const r = agentAdapters.removeIsolatedWorktree(ROOT, target);
+  if (r.ok) collectiveBrain.appendEvent(ROOT, 'AGENT_WORKTREE_REMOVED', { worktreePath: target });
+  return r;
+}
+
+function inspectWorktreeDiff(args) {
+  const target = args && args.targetWorktree;
+  const guard = agentAdapters.assertIsolatedWorktree(ROOT, target);
+  if (!guard.ok) return { ok: false, retriable: false, error: guard.error };
+  const r = spawnSync('git', ['diff', '--stat'], { cwd: target, encoding: 'utf8', timeout: 15000 });
+  const full = spawnSync('git', ['diff'], { cwd: target, encoding: 'utf8', timeout: 15000 });
+  return { ok: true, stat: String(r.stdout || '').trim(), diff: String(full.stdout || '').slice(-40000) };
+}
+
+async function agentImplement(args) {
+  const target = args && args.targetWorktree;
+  const repair = agentAdapters.repairWorktreeIfCorrupted(ROOT, target);
+  if (repair.repaired) return { ok: false, retriable: false, error: 'targetWorktree was corrupted and has been removed - create a fresh one with create_worktree and retry', repaired: true };
+  // per-worktree lease: two agent_implement/agent_autofix calls must never
+  // edit the same worktree concurrently.
+  const scope = `agent-invoke:${collectiveBrain.sha256 ? collectiveBrain.sha256(target) : target.replace(/[^a-z0-9]/gi, '_').slice(-40)}`;
+  const lease = collectiveBrain.acquireLease(ROOT, scope, { ttlMs: 15 * 60 * 1000 });
+  if (!lease.ok) return { ok: false, retriable: true, error: 'another agent is already working in this worktree', existingLease: lease.existing || null };
+  try {
+    const result = await agentAdapters.implementGoal({ mainRoot: ROOT, goal: args && args.goal, targetWorktree: target, timeoutMs: Number((args && args.timeoutMs) || 240000) });
+    collectiveBrain.appendEvent(ROOT, 'AGENT_IMPLEMENT_COMPLETED', { targetWorktree: target, ok: result.ok, attempts: (result.attempts || []).map((a) => a.classification) });
+    return { ...result, retriable: result.retriable !== undefined ? result.retriable : !result.ok };
+  } finally {
+    collectiveBrain.releaseLease(ROOT, scope);
+  }
+}
+
+async function agentAutofix(args) {
+  const target = args && args.targetWorktree;
+  const guard = agentAdapters.assertIsolatedWorktree(ROOT, target);
+  if (!guard.ok) return { ok: false, retriable: false, error: guard.error };
+  const testOutput = (args && args.testOutput) || await (async () => {
+    const r = await agentAdapters.runWithTreeKill('npm', ['run', 'check'], { cwd: target, timeout: 480000 });
+    return { ok: r.status === 0, stdout: String(r.stdout || '').slice(-6000), stderr: String(r.stderr || '').slice(-3000) };
+  })();
+  if (testOutput.ok) return { ok: true, message: 'tests already pass - nothing to fix', retriable: false };
+  const goal = `The test suite in this worktree is failing. Fix the root cause (do not just delete or skip the failing test) so \`npm run check\` passes. Failing output:\n\n${String(testOutput.stdout || '').slice(-3000)}\n${String(testOutput.stderr || '').slice(-1500)}`;
+  return agentImplement({ targetWorktree: target, goal, timeoutMs: args && args.timeoutMs });
+}
+
+function preparePr(args) {
+  const target = args && args.targetWorktree;
+  const guard = agentAdapters.assertIsolatedWorktree(ROOT, target);
+  if (!guard.ok) return { ok: false, retriable: false, error: guard.error };
+  const title = String((args && args.title) || '').trim();
+  const body = String((args && args.body) || 'Prepared by the remote-task bridge (agent_implement -> prepare_commit_and_pr).');
+  if (!title) return { ok: false, retriable: false, error: 'title is required' };
+  const diffCheck = spawnSync('git', ['status', '--porcelain'], { cwd: target, encoding: 'utf8', timeout: 15000 });
+  if (!String(diffCheck.stdout || '').trim()) return { ok: false, retriable: false, error: 'nothing to commit in targetWorktree' };
+  const add = spawnSync('git', ['add', '-A'], { cwd: target, encoding: 'utf8', timeout: 30000 });
+  if (add.status !== 0) return { ok: false, retriable: true, error: `git add failed: ${String(add.stderr || '').slice(-1000)}` };
+  const commit = spawnSync('git', ['commit', '-m', title, '-m', 'Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>'], { cwd: target, encoding: 'utf8', timeout: 30000 });
+  if (commit.status !== 0) return { ok: false, retriable: true, error: `git commit failed: ${String(commit.stderr || '').slice(-1000)}` };
+  const branch = spawnSync('git', ['branch', '--show-current'], { cwd: target, encoding: 'utf8', timeout: 10000 }).stdout.trim();
+  const push = spawnSync('git', ['push', '-u', 'origin', branch], { cwd: target, encoding: 'utf8', timeout: 60000 });
+  if (push.status !== 0) return { ok: false, retriable: true, error: `git push failed: ${String(push.stderr || '').slice(-1500)}` };
+  const goalFile = path.join(os.tmpdir(), `pr-body-${Date.now()}.md`);
+  fs.writeFileSync(goalFile, body);
+  const pr = spawnSync('gh', ['pr', 'create', '--base', 'master', '--head', branch, '--title', title, '--body-file', goalFile], { cwd: target, encoding: 'utf8', timeout: 30000, shell: true });
+  try { fs.unlinkSync(goalFile); } catch { /* best effort */ }
+  if (pr.status !== 0) return { ok: false, retriable: true, error: `gh pr create failed: ${String(pr.stderr || '').slice(-1500)}`, branch, pushed: true };
+  const url = String(pr.stdout || '').trim();
+  collectiveBrain.appendEvent(ROOT, 'AGENT_PR_PREPARED', { branch, url });
+  return { ok: true, branch, url };
+}
+
+async function aiQuery(args) {
+  const prompt = (args && args.prompt) || '';
+  if (!prompt.trim()) return { ok: false, retriable: false, error: 'prompt is required' };
+  if (!(await agentAdapters.ollamaAvailable())) return { ok: false, retriable: true, error: 'Ollama is not reachable on this host' };
+  const r = await agentAdapters.queryOllama(prompt, { timeoutMs: Number((args && args.timeoutMs) || 60000) });
+  return r;
+}
+
 async function executeTask(task) {
   const def = commandDefs[task.command];
   if (!def) return { ok: false, retriable: false, error: `unknown command: ${task.command}` };
@@ -248,6 +336,13 @@ async function executeTask(task) {
     case 'local-recall': return { ok: true, matches: knownIssueMatches((task.args && task.args.query) || '') };
     case 'route-recommendation': return { ok: true, route: collectiveBrain.routeTask(ROOT, (task.args && task.args.goal) || '') };
     case 'gh-cli-readonly': return runGhCliReadonly(def.op, task.args || {});
+    case 'create-worktree': return createWorktree(task.args || {});
+    case 'remove-worktree': return removeWorktree(task.args || {});
+    case 'inspect-diff': return inspectWorktreeDiff(task.args || {});
+    case 'agent-invoke-implement': return agentImplement(task.args || {});
+    case 'agent-invoke-autofix': return agentAutofix(task.args || {});
+    case 'prepare-pr': return preparePr(task.args || {});
+    case 'ai-query': return aiQuery(task.args || {});
     case 'health-status': return healthStatus();
     case 'unavailable': return { ok: false, retriable: false, status: 'unavailable', message: def.description };
     default: return { ok: false, retriable: false, error: `unhandled command kind: ${def.kind}` };
