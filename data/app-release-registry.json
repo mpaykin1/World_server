@@ -78,6 +78,13 @@
       "visible": false,
       "status": "system",
       "kind": "hub"
+    },
+    "dark-void-scene": {
+      "title": "Dark Void Navigator",
+      "visible": true,
+      "status": "certified",
+      "kind": "navigator",
+      "reason": "The real, already-live production Navigator (dark-void-navigator.vercel.app) - verified live end-to-end this session: real eye/mountain/beacon scene renders, zero console errors on a fresh tab, both desktop mouse-look and mobile dual-joystick controls confirmed working."
     }
   }
 }
