@@ -42,7 +42,22 @@ function currentAllowlist() {
   return new Set(FAILSAFE_ALLOWLIST);
 }
 
-const child = spawn('npx', ['-y', '@modelcontextprotocol/server-filesystem', sandboxRoot], {
+// Real bug found live: with shell:true, Node hands the args array to cmd.exe
+// as a plain space-joined string - it does NOT quote each element for you
+// (unlike shell:false, where argv boundaries are preserved exactly). A
+// sandboxRoot containing a space (this project's own path, "...\World_server
+// AI\World_server_anythingllm_sandbox") silently split into two separate
+// cmd.exe tokens, so @modelcontextprotocol/server-filesystem never received
+// the real directory and fell back to something derived from cwd instead
+// ("Cannot access directory ...\World_server_openhuman2\AI\World_server_
+// anythingllm_sandbox, skipping") - the MCP server then had no real allowed
+// directory, which is why AnythingLLM's MCPHypervisor reported 0 servers
+// started even though the config file itself was correct. Same class of bug
+// as the npm.cmd/shell quoting fix in 1c01fa76 elsewhere in this project.
+function shellQuote(arg) {
+  return `"${String(arg).replace(/"/g, '\\"')}"`;
+}
+const child = spawn('npx', ['-y', '@modelcontextprotocol/server-filesystem', shellQuote(sandboxRoot)], {
   stdio: ['pipe', 'pipe', 'inherit'],
   shell: true,
 });

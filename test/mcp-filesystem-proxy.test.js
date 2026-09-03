@@ -10,9 +10,9 @@ const readline = require('readline');
 
 const PROXY = path.join(__dirname, '..', 'scripts', 'mcp-filesystem-proxy.cjs');
 
-function withProxy(profile, fn, extraEnv = {}) {
+function withProxy(profile, fn, extraEnv = {}, sandboxPrefix = 'mcp-proxy-sandbox-') {
   return new Promise((resolve, reject) => {
-    const sandbox = fs.mkdtempSync(path.join(os.tmpdir(), 'mcp-proxy-sandbox-'));
+    const sandbox = fs.mkdtempSync(path.join(os.tmpdir(), sandboxPrefix));
     fs.writeFileSync(path.join(sandbox, 'package.json'), JSON.stringify({ name: 'fixture', scripts: { a: '1', b: '2' } }));
     const profilePath = fs.mkdtempSync(path.join(os.tmpdir(), 'mcp-proxy-profile-'));
     const profileFile = path.join(profilePath, 'profile.json');
@@ -76,6 +76,29 @@ test('a real read_text_file call through the proxy returns the fixture package.j
   const parsed = JSON.parse(content);
   assert.equal(parsed.name, 'fixture');
   assert.equal(Object.keys(parsed.scripts).length, 2);
+});
+
+// Real bug found live: this project's real sandbox lives under a path with a
+// space ("...\World_server AI\World_server_anythingllm_sandbox"). The proxy
+// spawns npx with {shell:true}, which on Windows hands the args array to
+// cmd.exe as a plain space-joined string WITHOUT quoting each element -
+// sandboxRoot's embedded space silently split into two separate cmd.exe
+// tokens, so @modelcontextprotocol/server-filesystem never received the real
+// directory ("Cannot access directory ...\<cwd>\AI\...sandbox, skipping") and
+// AnythingLLM's MCPHypervisor reported 0 servers started even though its
+// config file correctly pointed at this exact proxy. None of the existing
+// tests above caught this because os.tmpdir() sandboxes happen not to
+// contain a space. Fixed via shellQuote() wrapping sandboxRoot before it
+// reaches the shell:true spawn.
+test('a sandbox path containing a space (this project real path shape) still resolves correctly - not silently swapped for a cwd-derived path', { timeout: 35000 }, async () => {
+  const { readRes } = await withProxy(['list_directory', 'search_files', 'read_file', 'read_text_file'], async (call, sandbox) => {
+    await call('initialize', { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'test', version: '0' } });
+    const readRes = await call('tools/call', { name: 'read_text_file', arguments: { path: path.join(sandbox, 'package.json') } });
+    return { readRes };
+  }, {}, 'mcp proxy sandbox with space-');
+  assert.ok(!readRes.error, JSON.stringify(readRes));
+  const content = readRes.result.content[0].text;
+  assert.equal(JSON.parse(content).name, 'fixture');
 });
 
 test('a real tools/call is recorded into the tool-cost ledger with a real latency', { timeout: 35000 }, async () => {
