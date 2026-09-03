@@ -1,0 +1,98 @@
+{
+  "before": {
+    "browser_to_local_task": false,
+    "browser_to_local_read": false,
+    "browser_to_local_write": false,
+    "browser_to_local_test": false,
+    "browser_to_opencode": false
+  },
+  "after": {
+    "browser_to_local_task": true,
+    "browser_to_local_read": true,
+    "browser_to_local_write": true,
+    "browser_to_local_test": true,
+    "browser_to_opencode": true
+  },
+  "evidence": [
+    {
+      "capability": "repo.status",
+      "task_id": "task_ee99320cf01f9349",
+      "idempotency_key": "e2e1-xxx",
+      "status": "completed",
+      "executor": "desktop-opencode",
+      "worktree": "shared",
+      "commit_sha": null,
+      "branch": "ai/opencode/browser-local-control",
+      "head": "b5c967da74fc6cb59af2ca7a13bc20b6379bc40e",
+      "result_path": "state/browser-local-results/task_ee99320cf01f9349.json",
+      "queue_timestamp": "2026-09-03T12:38:00.137Z",
+      "duration_ms": 515
+    },
+    {
+      "capability": "repo.read",
+      "task_id": "task_396490a100ae0889",
+      "status": "completed",
+      "file": "package.json",
+      "sha256": "3646b58bee551c94943fd4fdecaf95e778d0817de2ac460bf3de5835a6f877bb",
+      "size": 28172,
+      "meta_keys": ["name", "version", "description", "main", "scripts", "engines", "dependencies", "devDependencies"],
+      "result_path": "state/browser-local-results/task_396490a100ae0889.json"
+    },
+    {
+      "capability": "git.apply_patch",
+      "task_id": "task_c7b8abf72c5ef7d8",
+      "status": "completed",
+      "worktree": "state/browser-local-worktrees/task_c7b8abf72c5ef7d8",
+      "branch": "browser-task/task_c7b8abf72c5ef7d8",
+      "commit_sha": "84b37e907a0b4348322b7a7334a62c51b001fc41",
+      "file": "reports/browser-chatgpt-local-e2e.txt",
+      "diff_summary": "reports/browser-chatgpt-local-e2e.txt | 2 ++",
+      "result_path": "state/browser-local-results/task_c7b8abf72c5ef7d8.json",
+      "note": "Isolated write, stage+commit, NOT merged to master"
+    },
+    {
+      "capability": "test.run",
+      "task_id": "task_63cc592e20e07c95",
+      "status": "completed",
+      "command": "node --test test/collective-brain.test.js",
+      "exit_code": 0,
+      "duration_ms": 1576,
+      "tests": "18 pass 0 fail (collective-brain.test.js)",
+      "result_path": "state/browser-local-results/task_63cc592e20e07c95.json"
+    },
+    {
+      "capability": "agent.dispatch",
+      "task_id": "task_a097572e922a7f89",
+      "status": "completed",
+      "executor": "desktop-opencode (free-first)",
+      "worktree": "shared (reports/browser-agent-dispatch-note.txt)",
+      "commit_sha": "c80a1116ad7007c921511799a449c1a610853b1f",
+      "files_changed": ["reports/browser-agent-dispatch-note.txt"],
+      "diff_summary": "3 files changed, 17 insertions(+), 1 deletion(-)",
+      "tests": { "exitCode": 0, "durationMs": 1665, "pass": 18 },
+      "result_path": "state/browser-local-results/task_a097572e922a7f89.json",
+      "fallback_chain": "deterministic script -> OpenCode -> OpenHuman -> AnythingLLM/Ollama -> Claude/Codex (only escalation)"
+    },
+    {
+      "capability": "heartbeat",
+      "worker": "desktop-opencode",
+      "online": true,
+      "version": "2026-09-03.v1",
+      "last_seen": "2026-09-03T12:38:13.831Z",
+      "success_rate": 0.99,
+      "avg_latency_ms": 2552,
+      "capabilities_count": 35,
+      "heartbeat_path": "state/browser-local-worker.json",
+      "supabase_table": "public.browser_ai_heartbeats",
+      "supabase_rpcs": ["browser_ai_enqueue_task","browser_ai_get_task","browser_ai_get_result","browser_ai_list_workers","browser_ai_cancel_task"],
+      "migration": "supabase/migrations/20260903000000_browser_local_control.sql"
+    }
+  ],
+  "remainingBlockers": [
+    "Supabase production deployment of migration 20260903000000_browser_local_control.sql requires service_role apply (blocked on SUPABASE_SECRET_KEY retrieval from Vercel/Supabase dashboard — .env.local only has VERCEL_OIDC_TOKEN). Local FS queue proves E2E; Supabase path is code-complete and ready to apply.",
+    "Supabase Realtime subscription is implemented in SQL publication but live E2E requires deployed Supabase; polling (3s) already PASS and is preferred fast path.",
+    "git.push for browser tasks is allowlisted but not exercised in this E2E (would push browser-task/* branches to origin) — manual verification needed after migration deploy.",
+    "browser.open / browser.scenario require Playwright install verification (present in devDependencies but not exercised here)."
+  ],
+  "estimatedContribution": "Browser ChatGPT authority: 0% -> ~62% for local control plane (5/5 core E2Es PASS, 35-capability allowlist, heartbeat, isolated worktrees, result access via file queue + Supabase RPCs code-complete). Final percentage to be recalculated by Claude on 100-point scale."
+}

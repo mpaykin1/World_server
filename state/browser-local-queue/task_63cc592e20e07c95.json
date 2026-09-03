@@ -1,0 +1,55 @@
+{
+  "task_id": "task_63cc592e20e07c95",
+  "requested_by": "browser-chatgpt",
+  "capability": "test.run",
+  "args": {
+    "target": "test/collective-brain.test.js",
+    "command": "node --test test/collective-brain.test.js"
+  },
+  "repo": "mpaykin1/World_server",
+  "worktree_mode": "isolated",
+  "risk": "medium",
+  "created_at": "2026-09-03T12:38:08.606Z",
+  "expires_at": "2026-09-03T12:41:08.606Z",
+  "idempotency_key": "e2e4-1788439088605",
+  "status": "completed",
+  "lease_owner": "desktop-opencode",
+  "lease_expires_at": null,
+  "started_at": "2026-09-03T12:38:08.730Z",
+  "executor": "desktop-opencode",
+  "attempts": 1,
+  "finished_at": "2026-09-03T12:38:10.314Z",
+  "updated_at": "2026-09-03T12:38:10.314Z",
+  "result": {
+    "task_id": "task_63cc592e20e07c95",
+    "status": "completed",
+    "executor": "desktop-opencode",
+    "started_at": "2026-09-03T12:38:08.730Z",
+    "finished_at": "2026-09-03T12:38:10.314Z",
+    "files_changed": [],
+    "git_diff_summary": "{\"command\":\"node --test test/collective-brain.test.js\",\"target\":\"test/collective-brain.test.js\",\"exitCode\":0,\"durationMs\":1576,\"stdout\":\"✔ redacts bearer and secret assignments (4.482ms)\\n✔ detects secret-like payloads (1.8092ms)\\n✔ marks prompt injection as untrusted finding (0.9287ms)\\n✔ rejects remote plaintext bearer (1.016ms)\\n✔ allows loopback plaintext bearer (1.9665ms)\\n✔ builds deterministic snapshot content hash shape (234.2614ms)\\n✔ creates safe agentmemory payload (228.6987ms)\\n✔ event journal is hash chained (17.4258ms)\\n✔ event tampering is detected (16.9366ms)\\n✔ lease prevents concurrent owner (17.8046ms)\\n✔ stale lease is reclaimed (17.4941ms)\\n✔ router selects coding agent for code task (17.8642ms)\\n✔ policy requires approval for production deploy (15.4864ms)\\n✔ policy hard-denies secret-memory ingestion (17.7313ms)\\n✔ structural check passes complete fixture (18.0342ms)\\n✔ cycle works fully offline without breaking runtime (347.8115ms)\\n✔ security repo scan does not ingest env files (18.878ms)\\n✔ benchmark exercises router, redaction and chain (237.6787ms)\\nℹ tests 18\\nℹ suites 0\\nℹ pass 18\\nℹ fail 0\\nℹ cancelled 0\\nℹ skipped 0\\nℹ todo 0\\nℹ duration_ms 1422.0246\\n\",\"stderr\":\"\",\"success\":true}",
+    "commit_sha": "",
+    "tests": [
+      {
+        "command": "node --test test/collective-brain.test.js",
+        "exitCode": 0,
+        "durationMs": 1576,
+        "success": true
+      }
+    ],
+    "artifacts": [],
+    "stdout_summary": "✔ redacts bearer and secret assignments (4.482ms)\n✔ detects secret-like payloads (1.8092ms)\n✔ marks prompt injection as untrusted finding (0.9287ms)\n✔ rejects remote plaintext bearer (1.016ms)\n✔ allows loopback plaintext bearer (1.9665ms)\n✔ builds deterministic snapshot content hash shape (234.2614ms)\n✔ creates safe agentmemory payload (228.6987ms)\n✔ event journal is hash chained (17.4258ms)\n✔ event tampering is detected (16.9366ms)\n✔ lease prevents concurrent owner (17.8046ms)\n✔ stale lease is reclaimed (17.4941ms)\n✔ router selects coding agent for code task (17.8642ms)\n✔ policy requires approval for production deploy (15.4864ms)\n✔ policy hard-denies secret-memory ingestion (17.7313ms)\n✔ structural check passes complete fixture (18.0342ms)\n✔ cycle works fully offline without breaking runtime (347.8115ms)\n✔ security repo scan does not ingest env files (18.878ms)\n✔ benchmark exercises router, redaction and chain (237.6787ms)\nℹ tests 18\nℹ suites 0\nℹ pass 18\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1422.0246\n",
+    "stderr_summary": "",
+    "blockers": [],
+    "confidence": 0.92,
+    "detail": {
+      "command": "node --test test/collective-brain.test.js",
+      "target": "test/collective-brain.test.js",
+      "exitCode": 0,
+      "durationMs": 1576,
+      "stdout": "✔ redacts bearer and secret assignments (4.482ms)\n✔ detects secret-like payloads (1.8092ms)\n✔ marks prompt injection as untrusted finding (0.9287ms)\n✔ rejects remote plaintext bearer (1.016ms)\n✔ allows loopback plaintext bearer (1.9665ms)\n✔ builds deterministic snapshot content hash shape (234.2614ms)\n✔ creates safe agentmemory payload (228.6987ms)\n✔ event journal is hash chained (17.4258ms)\n✔ event tampering is detected (16.9366ms)\n✔ lease prevents concurrent owner (17.8046ms)\n✔ stale lease is reclaimed (17.4941ms)\n✔ router selects coding agent for code task (17.8642ms)\n✔ policy requires approval for production deploy (15.4864ms)\n✔ policy hard-denies secret-memory ingestion (17.7313ms)\n✔ structural check passes complete fixture (18.0342ms)\n✔ cycle works fully offline without breaking runtime (347.8115ms)\n✔ security repo scan does not ingest env files (18.878ms)\n✔ benchmark exercises router, redaction and chain (237.6787ms)\nℹ tests 18\nℹ suites 0\nℹ pass 18\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1422.0246\n",
+      "stderr": "",
+      "success": true
+    }
+  }
+}

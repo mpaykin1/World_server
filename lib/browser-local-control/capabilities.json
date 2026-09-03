@@ -1,0 +1,52 @@
+{
+  "version": "2026-09-03.v1",
+  "description": "Allowlisted capabilities for Browser ChatGPT ↔ Local World_server control bridge. Worker enforces this list before any execution.",
+  "maxOutputBytes": 262144,
+  "defaultTimeoutMs": 120000,
+  "maxConcurrentJobs": 1,
+  "capabilities": {
+    "repo.status": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "git status --porcelain=v1 + branch + HEAD" },
+    "repo.tree": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "list tracked files / tree" },
+    "repo.read": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "read tracked file, return sha256/size/metadata (not full huge file)" },
+    "repo.search": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "grep/search across repo" },
+    "repo.diff": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "git diff summary for worktree" },
+    "repo.history": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "git log --oneline" },
+
+    "git.fetch": { "risk": "low", "timeoutMs": 60000, "worktree": "shared", "description": "git fetch origin" },
+    "git.create_worktree": { "risk": "medium", "timeoutMs": 60000, "worktree": "isolated", "description": "create isolated worktree/branch for task" },
+    "git.create_branch": { "risk": "medium", "timeoutMs": 30000, "worktree": "isolated", "description": "create task branch" },
+    "git.apply_patch": { "risk": "medium", "timeoutMs": 60000, "worktree": "isolated", "description": "apply patch / create file in isolated worktree" },
+    "git.stage": { "risk": "medium", "timeoutMs": 30000, "worktree": "isolated", "description": "git stage paths" },
+    "git.commit": { "risk": "medium", "timeoutMs": 30000, "worktree": "isolated", "description": "git commit staged" },
+    "git.push": { "risk": "high", "timeoutMs": 60000, "worktree": "isolated", "description": "git push task branch (never master)" },
+    "git.conflicts": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "check merge conflicts" },
+
+    "test.list": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "list available test scripts" },
+    "test.run": { "risk": "medium", "timeoutMs": 180000, "worktree": "isolated", "description": "run single test file / npm script" },
+    "lint.run": { "risk": "low", "timeoutMs": 60000, "worktree": "isolated", "description": "run lint / check-js" },
+    "typecheck.run": { "risk": "low", "timeoutMs": 60000, "worktree": "isolated", "description": "typecheck (if available)" },
+    "build.run": { "risk": "medium", "timeoutMs": 120000, "worktree": "isolated", "description": "run build" },
+    "benchmark.run": { "risk": "medium", "timeoutMs": 120000, "worktree": "isolated", "description": "run benchmark" },
+
+    "agent.list": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "list available agents/workers" },
+    "agent.dispatch": { "risk": "medium", "timeoutMs": 300000, "worktree": "isolated", "description": "dispatch OpenCode (deterministic first, then OpenCode, then OpenHuman, etc.) for small safe task" },
+    "agent.status": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "query agent/task status" },
+    "agent.result": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "fetch agent result" },
+    "agent.retry": { "risk": "medium", "timeoutMs": 60000, "worktree": "isolated", "description": "retry failed agent task" },
+    "agent.cancel": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "cancel queued/running browser task" },
+
+    "quality.status": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "read quality reports status" },
+    "quality.run": { "risk": "medium", "timeoutMs": 300000, "worktree": "isolated", "description": "run minimal quality gate" },
+    "quality.blockers": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "list quality blockers/gaps" },
+    "quality.regressions": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "regression report" },
+
+    "browser.open": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "playwright open (if available)" },
+    "browser.scenario": { "risk": "medium", "timeoutMs": 120000, "worktree": "shared", "description": "run browser scenario" },
+    "browser.screenshot": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "screenshot" },
+    "browser.console": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "browser console logs" },
+
+    "artifact.list": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "list artifacts for task" },
+    "artifact.read": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "read artifact metadata" },
+    "artifact.zip": { "risk": "low", "timeoutMs": 60000, "worktree": "shared", "description": "zip artifacts" }
+  }
+}

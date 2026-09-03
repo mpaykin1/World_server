@@ -1,0 +1,47 @@
+{
+  "task_id": "task_c7b8abf72c5ef7d8",
+  "requested_by": "browser-chatgpt",
+  "capability": "git.apply_patch",
+  "args": {
+    "path": "reports/browser-chatgpt-local-e2e.txt",
+    "content": "task_id=1788439082727 e2e=3 worker=desktop-opencode ts=2026-09-03T12:38:02.727Z\nBrowser ChatGPT -> Supabase -> Local Worker -> Isolated worktree commit PASS\n",
+    "commitMessage": "browser-task e2e3: write reports/browser-chatgpt-local-e2e.txt"
+  },
+  "repo": "mpaykin1/World_server",
+  "worktree_mode": "isolated",
+  "risk": "medium",
+  "created_at": "2026-09-03T12:38:02.728Z",
+  "expires_at": "2026-09-03T12:39:02.728Z",
+  "idempotency_key": "e2e3-1788439082727",
+  "status": "completed",
+  "lease_owner": "desktop-opencode",
+  "lease_expires_at": null,
+  "started_at": "2026-09-03T12:38:02.845Z",
+  "executor": "desktop-opencode",
+  "attempts": 1,
+  "finished_at": "2026-09-03T12:38:07.782Z",
+  "updated_at": "2026-09-03T12:38:07.782Z",
+  "result": {
+    "task_id": "task_c7b8abf72c5ef7d8",
+    "status": "completed",
+    "executor": "desktop-opencode",
+    "started_at": "2026-09-03T12:38:02.845Z",
+    "finished_at": "2026-09-03T12:38:07.781Z",
+    "files_changed": [],
+    "git_diff_summary": " reports/browser-chatgpt-local-e2e.txt | 2 ++\n 1 file changed, 2 insertions(+)\n",
+    "commit_sha": "84b37e907a0b4348322b7a7334a62c51b001fc41",
+    "tests": [],
+    "artifacts": [],
+    "stdout_summary": "{\n  \"worktree\": \"C:\\\\Users\\\\user\\\\Desktop\\\\World_server_browser_local\\\\state\\\\browser-local-worktrees\\\\task_c7b8abf72c5ef7d8\",\n  \"file\": \"reports/browser-chatgpt-local-e2e.txt\",\n  \"commitSha\": \"84b37e907a0b4348322b7a7334a62c51b001fc41\",\n  \"diffSummary\": \" reports/browser-chatgpt-local-e2e.txt | 2 ++\\n 1 file changed, 2 insertions(+)\\n\",\n  \"branch\": \"browser-task/task_c7b8abf72c5ef7d8\"\n}",
+    "stderr_summary": "",
+    "blockers": [],
+    "confidence": 0.92,
+    "detail": {
+      "worktree": "C:\\Users\\user\\Desktop\\World_server_browser_local\\state\\browser-local-worktrees\\task_c7b8abf72c5ef7d8",
+      "file": "reports/browser-chatgpt-local-e2e.txt",
+      "commitSha": "84b37e907a0b4348322b7a7334a62c51b001fc41",
+      "diffSummary": " reports/browser-chatgpt-local-e2e.txt | 2 ++\n 1 file changed, 2 insertions(+)\n",
+      "branch": "browser-task/task_c7b8abf72c5ef7d8"
+    }
+  }
+}

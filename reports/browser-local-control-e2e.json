@@ -1,0 +1,285 @@
+{
+  "version": "2026-09-03.v1",
+  "startedAt": "2026-09-03T12:38:00.137Z",
+  "tasks": [
+    {
+      "e2e": 1,
+      "capability": "repo.status",
+      "task_id": "task_ee99320cf01f9349",
+      "result": {
+        "task_id": "task_ee99320cf01f9349",
+        "status": "completed",
+        "executor": "desktop-opencode",
+        "started_at": "2026-09-03T12:38:00.399Z",
+        "finished_at": "2026-09-03T12:38:00.912Z",
+        "files_changed": [],
+        "git_diff_summary": "{\"branch\":\"ai/opencode/browser-local-control\",\"head\":\"b5c967da74fc6cb59af2ca7a13bc20b6379bc40e\",\"dirtyCount\":11,\"dirty\":[\"M .env.example\",\" M package.json\",\"?? docs/BROWSER_LOCAL_CONTROL.md\",\"?? lib/browser-local-control/\",\"?? reports/\",\"?? scripts/browser-local-e2e.cjs\",\"?? scripts/browser-local-queue.cjs\",\"?? scripts/browser-local-worker.cjs\",\"?? state/browser-local-queue/\",\"?? state/browser-local-worker.json\",\"?? supabase/migrations/20260903000000_browser_local_control.sql\"],\"statusRaw\":\"M .env.example\\n M package.json\\n?? docs/BROWSER_LOCAL_CONTROL.md\\n?? lib/browser-local-control/\\n?? reports/\\n?? scripts/browser-local-e2e.cjs\\n?? scripts/browser-local-queue.cjs\\n?? scripts/browser-local-worker.cjs\\n?? state/browser-local-queue/\\n?? state/browser-local-worker.json\\n?? supabase/migrations/20260903000000_browser_local_control.sql\"}",
+        "commit_sha": "",
+        "tests": [],
+        "artifacts": [],
+        "stdout_summary": "{\n  \"branch\": \"ai/opencode/browser-local-control\",\n  \"head\": \"b5c967da74fc6cb59af2ca7a13bc20b6379bc40e\",\n  \"dirtyCount\": 11,\n  \"dirty\": [\n    \"M .env.example\",\n    \" M package.json\",\n    \"?? docs/BROWSER_LOCAL_CONTROL.md\",\n    \"?? lib/browser-local-control/\",\n    \"?? reports/\",\n    \"?? scripts/browser-local-e2e.cjs\",\n    \"?? scripts/browser-local-queue.cjs\",\n    \"?? scripts/browser-local-worker.cjs\",\n    \"?? state/browser-local-queue/\",\n    \"?? state/browser-local-worker.json\",\n    \"?? supabase/migrations/20260903000000_browser_local_control.sql\"\n  ],\n  \"statusRaw\": \"M .env.example\\n M package.json\\n?? docs/BROWSER_LOCAL_CONTROL.md\\n?? lib/browser-local-control/\\n?? reports/\\n?? scripts/browser-local-e2e.cjs\\n?? scripts/browser-local-queue.cjs\\n?? scripts/browser-local-worker.cjs\\n?? state/browser-local-queue/\\n?? state/browser-local-worker.json\\n?? supabase/migrations/20260903000000_browser_local_control.sql\"\n}",
+        "stderr_summary": "",
+        "blockers": [],
+        "confidence": 0.92,
+        "detail": {
+          "branch": "ai/opencode/browser-local-control",
+          "head": "b5c967da74fc6cb59af2ca7a13bc20b6379bc40e",
+          "dirtyCount": 11,
+          "dirty": [
+            "M .env.example",
+            " M package.json",
+            "?? docs/BROWSER_LOCAL_CONTROL.md",
+            "?? lib/browser-local-control/",
+            "?? reports/",
+            "?? scripts/browser-local-e2e.cjs",
+            "?? scripts/browser-local-queue.cjs",
+            "?? scripts/browser-local-worker.cjs",
+            "?? state/browser-local-queue/",
+            "?? state/browser-local-worker.json",
+            "?? supabase/migrations/20260903000000_browser_local_control.sql"
+          ],
+          "statusRaw": "M .env.example\n M package.json\n?? docs/BROWSER_LOCAL_CONTROL.md\n?? lib/browser-local-control/\n?? reports/\n?? scripts/browser-local-e2e.cjs\n?? scripts/browser-local-queue.cjs\n?? scripts/browser-local-worker.cjs\n?? state/browser-local-queue/\n?? state/browser-local-worker.json\n?? supabase/migrations/20260903000000_browser_local_control.sql"
+        }
+      },
+      "status": "completed",
+      "duration": 515
+    },
+    {
+      "e2e": 2,
+      "capability": "repo.read",
+      "task_id": "task_396490a100ae0889",
+      "result": {
+        "task_id": "task_396490a100ae0889",
+        "status": "completed",
+        "executor": "desktop-opencode",
+        "started_at": "2026-09-03T12:38:01.878Z",
+        "finished_at": "2026-09-03T12:38:01.890Z",
+        "files_changed": [],
+        "git_diff_summary": "{\"path\":\"package.json\",\"sha256\":\"3646b58bee551c94943fd4fdecaf95e778d0817de2ac460bf3de5835a6f877bb\",\"size\":28172,\"meta\":{\"keys\":[\"name\",\"version\",\"description\",\"main\",\"scripts\",\"engines\",\"dependencies\",\"devDependencies\"],\"topLevelSummary\":{\"name\":\"webgl-survival-hub-no-npm\",\"version\":\"2.1.0\",\"description\":\"WebGL World Hub с Voxel World на Supabase Realtime/Auth и Vercel Functions.\",\"main\":\"server.js\",\"scripts\":\"object:336\",\"engines\":\"object:1\",\"dependencies\":\"object:11\",\"devDependencies\":\"object:4\"}},\"truncated\":true,\"preview\":\"{\\r\\n  \\\"name\\\": \\\"webgl-survival-hub-no-npm\\\",\\r\\n  \\\"version\\\": \\\"2.1.0\\\",\\r\\n  \\\"description\\\": \\\"WebGL World Hub с Voxel World на Supabase Realtime/Auth и Vercel Functions.\\\",\\r\\n  \\\"main\\\": \\\"server.js\\\",\\r\\n  \\\"scripts\\\": {\\r\\n    \\\"start\\\": \\\"node server.js\\\",\\r\\n    \\\"build:sentry\\\": \\\"node scripts/build-sentry.js\\\",\\r\\n    \\\"build\\\": \\\"npm run build:sentry && node scripts/inject-sentry-runtime.js && node scripts/inject-procedural-quality-runtime.js\\\",\\r\\n    \\\"check\\\": \\\"node scripts/check-js.js && node --test test/*.test.js\\\",\\r\\n    \\\"discover\\\": \\\"node scripts/discover-ai3d-engines.js\\\",\\r\\n    \\\"e2e\\\": \\\"node scripts/ai3d-e2e-smoke.js\\\",\\r\\n    \\\"e2e:python\\\": \\\"python services/ai3d-worker/scripts/e2e-smoke.py\\\",\\r\\n    \\\"golden:check\\\": \\\"node scripts/check-golden-standard.js\\\",\\r\\n    \\\"golden:e2e\\\": \\\"playwright test e2e/golden-release.spec.js\\\",\\r\\n    \\\"quality:sync\\\": \\\"node scripts/quality-governance.js\\\",\\r\\n    \\\"quality:check\\\": \\\"node scripts/check-quality-governance.js\\\",\\r\\n    \\\"quality:regression\\\": \\\"node scripts/quality-regression-gate.js\\\",\\r\\n    \\\"quality:diff\\\": \\\"node scripts/quality-diff.js\\\",\\r\\n    \\\"quality:accept\\\": \\\"node scripts/quality-accept-baseline.js\\\",\\r\\n    \\\"release:gate\\\": \\\"npm run procedural:check && npm run desktop-ai:check && npm run check && npm run golden:check && npm run quality:check && npm run quality:regression && npm run quality:fuzz && npm run quality:impact && npm run quality:per",
+        "commit_sha": "",
+        "tests": [],
+        "artifacts": [],
+        "stdout_summary": "{\n  \"path\": \"package.json\",\n  \"sha256\": \"3646b58bee551c94943fd4fdecaf95e778d0817de2ac460bf3de5835a6f877bb\",\n  \"size\": 28172,\n  \"meta\": {\n    \"keys\": [\n      \"name\",\n      \"version\",\n      \"description\",\n      \"main\",\n      \"scripts\",\n      \"engines\",\n      \"dependencies\",\n      \"devDependencies\"\n    ],\n    \"topLevelSummary\": {\n      \"name\": \"webgl-survival-hub-no-npm\",\n      \"version\": \"2.1.0\",\n      \"description\": \"WebGL World Hub с Voxel World на Supabase Realtime/Auth и Vercel Functions.\",\n      \"main\": \"server.js\",\n      \"scripts\": \"object:336\",\n      \"engines\": \"object:1\",\n      \"dependencies\": \"object:11\",\n      \"devDependencies\": \"object:4\"\n    }\n  },\n  \"truncated\": true,\n  \"preview\": \"{\\r\\n  \\\"name\\\": \\\"webgl-survival-hub-no-npm\\\",\\r\\n  \\\"version\\\": \\\"2.1.0\\\",\\r\\n  \\\"description\\\": \\\"WebGL World Hub с Voxel World на Supabase Realtime/Auth и Vercel Functions.\\\",\\r\\n  \\\"main\\\": \\\"server.js\\\",\\r\\n  \\\"scripts\\\": {\\r\\n    \\\"start\\\": \\\"node server.js\\\",\\r\\n    \\\"build:sentry\\\": \\\"node scripts/build-sentry.js\\\",\\r\\n    \\\"build\\\": \\\"npm run build:sentry && node scripts/inject-sentry-runtime.js && node scripts/inject-procedural-quality-runtime.js\\\",\\r\\n    \\\"check\\\": \\\"node scripts/check-js.js && node --test test/*.test.js\\\",\\r\\n    \\\"discover\\\": \\\"node scripts/discover-ai3d-engines.js\\\",\\r\\n    \\\"e2e\\\": \\\"node scripts/ai3d-e2e-smoke.js\\\",\\r\\n    \\\"e2e:python\\\": \\\"python services/ai3d-worker/scripts/e2e-smoke.py\\\",\\r\\n    \\\"golden:check\\\": \\\"node scripts/check-golden-standard.js\\\",\\r\\n    \\\"golden:e2e\\\": \\\"playwright test e2e/golden-release.spec.js\\\",\\r\\n    \\\"quality:sync\\\": \\\"node scripts/quality-governance.js\\\",\\r\\n    \\\"quality:check\\\": \\\"node scripts/check-quality-governance.js\\\",\\r\\n    \\\"quality:regression\\\": \\\"node scripts/quality-regression-gate.js\\\",\\r\\n    \\\"quality:diff\\\": \\\"node scripts/quality-diff.js\\\",\\r\\n    \\\"quality:accept\\\": \\\"node scripts/quality-accept-baseline.js\\\",\\r\\n    \\\"release:gate\\\": \\\"npm run procedural:check && npm run desktop-ai:check && npm run check && npm run golden:check && npm run quality:check && npm run quality:regression && npm run quality:fuzz && npm run quality:impact && npm run quality:perceptual && npm run quality:cinematic:v3 && npm run tech:audit && npm run tech:health && npm run quality:tech-orchestrator && npm run duplicates:check && npm run contracts:check && npm run project:review && npm run quality:stability && npm run evidence:score && npm run regressions:capture && npm run quality:issue-candidates && npm run quality:world && npm run integration:verify && npm run animation:gate && npm run quality:ink-glyph && npm run collective-brain:check && npm run collective-brain:security && npm run collective-brain:cycle\\\",\\r\\n    \\\"quality:cinematic\\\": \\\"node scripts/cinematic-voxel-quality-gate.js\\\",\\r\\n    \\\"quality:cinematic:strict\\\": \\\"node scripts/cinematic-voxel-quality-gate.js --strict\\\",\\r\\n    \\\"quality:cinematic:v3\\\": \\\"node scripts/cinematic-v3-quality-gate.js\\\",\\r\\n    \\\"quality:cinematic:v3:strict\\\": \\\"node scripts/cinematic-v3-quality-gate.js --strict\\\",\\r\\n    \\\"quality:cinematic:devices\\\": \\\"playwright test e2e/cinematic-device-matrix.spec.js --project=desktop-chromium\\\",\\r\\n    \\\"quality:cinematic:assets\\\": \\\"node scripts/cinematic-asset-pipeline.js\\\",\\r\\n    \\\"duplicates:check\\\": \\\"node scripts/duplicate-system-review.js\\\",\\r\\n    \\\"contracts:check\\\": \\\"node scripts/system-contract-review.js\\\",\\r\\n    \\\"regressions:capture\\\": \\\"node scripts/capture-regressions.js\\\",\\r\\n    \\\"visual:check\\\": \\\"node scripts/visual-regression.js\\\",\\r\\n    \\\"tech:health\\\": \\\"node scripts/technology-runtime-health.js\\\",\\r\\n    \\\"evidence:score\\\": \\\"node scripts/evidence-quality-score.js\\\",\\r\\n    \\\"quality:growth\\\": \\\"node scripts/quality-growth-engine.js\\\",\\r\\n    \\\"quality:plan\\\": \\\"node scripts/quality-improvement-planner.js\\\",\\r\\n    \\\"quality:trend\\\": \\\"node scripts/quality-trend-monitor.js\\\",\\r\\n    \\\"quality:test-gaps\\\": \\\"node scripts/test-gap-synthesizer.js\\\",\\r\\n    \\\"quality:apps\n...[truncated 26 chars]",
+        "stderr_summary": "",
+        "blockers": [],
+        "confidence": 0.92,
+        "detail": {
+          "path": "package.json",
+          "sha256": "3646b58bee551c94943fd4fdecaf95e778d0817de2ac460bf3de5835a6f877bb",
+          "size": 28172,
+          "meta": {
+            "keys": [
+              "name",
+              "version",
+              "description",
+              "main",
+              "scripts",
+              "engines",
+              "dependencies",
+              "devDependencies"
+            ],
+            "topLevelSummary": {
+              "name": "webgl-survival-hub-no-npm",
+              "version": "2.1.0",
+              "description": "WebGL World Hub с Voxel World на Supabase Realtime/Auth и Vercel Functions.",
+              "main": "server.js",
+              "scripts": "object:336",
+              "engines": "object:1",
+              "dependencies": "object:11",
+              "devDependencies": "object:4"
+            }
+          },
+          "truncated": true,
+          "preview": "{\r\n  \"name\": \"webgl-survival-hub-no-npm\",\r\n  \"version\": \"2.1.0\",\r\n  \"description\": \"WebGL World Hub с Voxel World на Supabase Realtime/Auth и Vercel Functions.\",\r\n  \"main\": \"server.js\",\r\n  \"scripts\": {\r\n    \"start\": \"node server.js\",\r\n    \"build:sentry\": \"node scripts/build-sentry.js\",\r\n    \"build\": \"npm run build:sentry && node scripts/inject-sentry-runtime.js && node scripts/inject-procedural-quality-runtime.js\",\r\n    \"check\": \"node scripts/check-js.js && node --test test/*.test.js\",\r\n    \"discover\": \"node scripts/discover-ai3d-engines.js\",\r\n    \"e2e\": \"node scripts/ai3d-e2e-smoke.js\",\r\n    \"e2e:python\": \"python services/ai3d-worker/scripts/e2e-smoke.py\",\r\n    \"golden:check\": \"node scripts/check-golden-standard.js\",\r\n    \"golden:e2e\": \"playwright test e2e/golden-release.spec.js\",\r\n    \"quality:sync\": \"node scripts/quality-governance.js\",\r\n    \"quality:check\": \"node scripts/check-quality-governance.js\",\r\n    \"quality:regression\": \"node scripts/quality-regression-gate.js\",\r\n    \"quality:diff\": \"node scripts/quality-diff.js\",\r\n    \"quality:accept\": \"node scripts/quality-accept-baseline.js\",\r\n    \"release:gate\": \"npm run procedural:check && npm run desktop-ai:check && npm run check && npm run golden:check && npm run quality:check && npm run quality:regression && npm run quality:fuzz && npm run quality:impact && npm run quality:perceptual && npm run quality:cinematic:v3 && npm run tech:audit && npm run tech:health && npm run quality:tech-orchestrator && npm run duplicates:check && npm run contracts:check && npm run project:review && npm run quality:stability && npm run evidence:score && npm run regressions:capture && npm run quality:issue-candidates && npm run quality:world && npm run integration:verify && npm run animation:gate && npm run quality:ink-glyph && npm run collective-brain:check && npm run collective-brain:security && npm run collective-brain:cycle\",\r\n    \"quality:cinematic\": \"node scripts/cinematic-voxel-quality-gate.js\",\r\n    \"quality:cinematic:strict\": \"node scripts/cinematic-voxel-quality-gate.js --strict\",\r\n    \"quality:cinematic:v3\": \"node scripts/cinematic-v3-quality-gate.js\",\r\n    \"quality:cinematic:v3:strict\": \"node scripts/cinematic-v3-quality-gate.js --strict\",\r\n    \"quality:cinematic:devices\": \"playwright test e2e/cinematic-device-matrix.spec.js --project=desktop-chromium\",\r\n    \"quality:cinematic:assets\": \"node scripts/cinematic-asset-pipeline.js\",\r\n    \"duplicates:check\": \"node scripts/duplicate-system-review.js\",\r\n    \"contracts:check\": \"node scripts/system-contract-review.js\",\r\n    \"regressions:capture\": \"node scripts/capture-regressions.js\",\r\n    \"visual:check\": \"node scripts/visual-regression.js\",\r\n    \"tech:health\": \"node scripts/technology-runtime-health.js\",\r\n    \"evidence:score\": \"node scripts/evidence-quality-score.js\",\r\n    \"quality:growth\": \"node scripts/quality-growth-engine.js\",\r\n    \"quality:plan\": \"node scripts/quality-improvement-planner.js\",\r\n    \"quality:trend\": \"node scripts/quality-trend-monitor.js\",\r\n    \"quality:test-gaps\": \"node scripts/test-gap-synthesizer.js\",\r\n    \"quality:apps\": \"node scripts/app-quality-matrix.js\",\r\n    \"quality:promotion-candidate\": \"node scripts/quality-promotion-candidate.js\",\r\n    \"quality:auto-cycle\": \"node scripts/auto-quality-cycle.js\",\r\n    \"quality:autofix:plan\": \"node scripts/quality-autofix.js\",\r\n    \"quality:autofix\": \"node scripts/quality-autofix.js --apply\",\r\n    \"quality:assets\": \"node scripts/golden-asset-bot.js\",\r\n    \"quality:assets:apply\": \"node scripts/golden-asset-bot.js --apply\",\r\n    \"quality:real-devices\": \"node scripts/real-device-gate.js\",\r\n    \"quality:tech-orchestrator\": \"node scripts/technology-orchestrator.js\",\r\n    \"quality:stability\": \"node scripts/test-stability-runner.js\",\r\n    \"quality:issue-candidates\": \"node scripts/quality-issue-sync.js\",\r\n    \"visual:candidates\": \"playwright test e2e/visual-candidates.spec.js --project=desktop-chromium\",\r\n    \"quality:production\": \"node scripts/production-quality-pull.js\",\r\n    \"quality:fuzz\": \"node --test test/quality-fuzz.test.js\",\r\n    \"quality:impact\": \"node scripts/quality-impact-graph.js && node scripts/quality-changed-impact.js\",\r\n    \"quality:learn-fix\": \"node scripts/quality-learn-fix.js\",\r\n    \"quality:patch-synth\": \"node scripts/quality-patch-synthesizer.js\",\r\n    \"quality:perceptual\": \"node scripts/perceptual-visual-gate.js\",\r\n    \"quality:evolve\": \"node scripts/quality-self-evolve.js\",\r\n    \"quality:tournament\": \"node scripts/quality-patch-tournament.js\",\r\n    \"quality:root-cause\": \"node scripts/quality-root-cause.js\",\r\n    \"quality:generate-tests\": \"node scripts/generate-regression-tests.js\",\r\n    \"quality:risk\": \"node scripts/quality-risk-predictor.js\",\r\n    \"quality:cost\": \"node scripts/quality-cost-optimizer.js\",\r\n    \"quality:gpu-autoscale\": \"node scripts/gpu-autoscaler.js\",\r\n    \"quality:knowledge\": \"node scripts/quality-knowledge-graph.js\",\r\n    \"quality:visual-critic\": \"node scripts/ai-visual-critic.js\",\r\n    \"quality:experiment\": \"node scripts/quality-experiment-engine.js\",\r\n    \"quality:durable-cycle\": \"node scripts/durable-quality-cycle.js && npm run collective-brain:cycle\",\r\n    \"quality:assets-dedup\": \"node scripts/asset-dedup-cache.js\",\r\n    \"desktop-ai:check\": \"node scripts/check-desktop-ai-protocol.js\",\r\n    \"desktop-ai:new-task\": \"node scripts/desktop-ai-new-task.js\",\r\n    \"tech:audit\": \"node scripts/technology-audit.js\",\r\n    \"project:review\": \"node scripts/project-quality-reviewer.js\",\r\n    \"quality:master-report\": \"node scripts/quality-master-report.js\",\r\n    \"sentry:check\": \"node scripts/check-sentry-runtime.js\",\r\n    \"sentry:verify:prod\": \"node scripts/verify-sentry-production.js\",\r\n    \"sentry:e2e\": \"playwright test e2e/sentry-smoke.spec.js --project=desktop-chromium\",\r\n    \"quality:world:analyze\": \"node scripts/world-quality-analyzer.js\",\r\n    \"quality:world:animation\": \"node scripts/world-animation-semantic-validator.js\",\r\n    \"quality:world:retarget\": \"node scripts/world-retarget-contract.js\",\r\n    \"quality:wor"
+        }
+      },
+      "status": "completed"
+    },
+    {
+      "e2e": 3,
+      "capability": "git.apply_patch",
+      "task_id": "task_c7b8abf72c5ef7d8",
+      "result": {
+        "task_id": "task_c7b8abf72c5ef7d8",
+        "status": "completed",
+        "executor": "desktop-opencode",
+        "started_at": "2026-09-03T12:38:02.845Z",
+        "finished_at": "2026-09-03T12:38:07.781Z",
+        "files_changed": [],
+        "git_diff_summary": " reports/browser-chatgpt-local-e2e.txt | 2 ++\n 1 file changed, 2 insertions(+)\n",
+        "commit_sha": "84b37e907a0b4348322b7a7334a62c51b001fc41",
+        "tests": [],
+        "artifacts": [],
+        "stdout_summary": "{\n  \"worktree\": \"C:\\\\Users\\\\user\\\\Desktop\\\\World_server_browser_local\\\\state\\\\browser-local-worktrees\\\\task_c7b8abf72c5ef7d8\",\n  \"file\": \"reports/browser-chatgpt-local-e2e.txt\",\n  \"commitSha\": \"84b37e907a0b4348322b7a7334a62c51b001fc41\",\n  \"diffSummary\": \" reports/browser-chatgpt-local-e2e.txt | 2 ++\\n 1 file changed, 2 insertions(+)\\n\",\n  \"branch\": \"browser-task/task_c7b8abf72c5ef7d8\"\n}",
+        "stderr_summary": "",
+        "blockers": [],
+        "confidence": 0.92,
+        "detail": {
+          "worktree": "C:\\Users\\user\\Desktop\\World_server_browser_local\\state\\browser-local-worktrees\\task_c7b8abf72c5ef7d8",
+          "file": "reports/browser-chatgpt-local-e2e.txt",
+          "commitSha": "84b37e907a0b4348322b7a7334a62c51b001fc41",
+          "diffSummary": " reports/browser-chatgpt-local-e2e.txt | 2 ++\n 1 file changed, 2 insertions(+)\n",
+          "branch": "browser-task/task_c7b8abf72c5ef7d8"
+        }
+      },
+      "status": "completed"
+    },
+    {
+      "e2e": 4,
+      "capability": "test.run",
+      "task_id": "task_63cc592e20e07c95",
+      "result": {
+        "task_id": "task_63cc592e20e07c95",
+        "status": "completed",
+        "executor": "desktop-opencode",
+        "started_at": "2026-09-03T12:38:08.730Z",
+        "finished_at": "2026-09-03T12:38:10.314Z",
+        "files_changed": [],
+        "git_diff_summary": "{\"command\":\"node --test test/collective-brain.test.js\",\"target\":\"test/collective-brain.test.js\",\"exitCode\":0,\"durationMs\":1576,\"stdout\":\"✔ redacts bearer and secret assignments (4.482ms)\\n✔ detects secret-like payloads (1.8092ms)\\n✔ marks prompt injection as untrusted finding (0.9287ms)\\n✔ rejects remote plaintext bearer (1.016ms)\\n✔ allows loopback plaintext bearer (1.9665ms)\\n✔ builds deterministic snapshot content hash shape (234.2614ms)\\n✔ creates safe agentmemory payload (228.6987ms)\\n✔ event journal is hash chained (17.4258ms)\\n✔ event tampering is detected (16.9366ms)\\n✔ lease prevents concurrent owner (17.8046ms)\\n✔ stale lease is reclaimed (17.4941ms)\\n✔ router selects coding agent for code task (17.8642ms)\\n✔ policy requires approval for production deploy (15.4864ms)\\n✔ policy hard-denies secret-memory ingestion (17.7313ms)\\n✔ structural check passes complete fixture (18.0342ms)\\n✔ cycle works fully offline without breaking runtime (347.8115ms)\\n✔ security repo scan does not ingest env files (18.878ms)\\n✔ benchmark exercises router, redaction and chain (237.6787ms)\\nℹ tests 18\\nℹ suites 0\\nℹ pass 18\\nℹ fail 0\\nℹ cancelled 0\\nℹ skipped 0\\nℹ todo 0\\nℹ duration_ms 1422.0246\\n\",\"stderr\":\"\",\"success\":true}",
+        "commit_sha": "",
+        "tests": [
+          {
+            "command": "node --test test/collective-brain.test.js",
+            "exitCode": 0,
+            "durationMs": 1576,
+            "success": true
+          }
+        ],
+        "artifacts": [],
+        "stdout_summary": "✔ redacts bearer and secret assignments (4.482ms)\n✔ detects secret-like payloads (1.8092ms)\n✔ marks prompt injection as untrusted finding (0.9287ms)\n✔ rejects remote plaintext bearer (1.016ms)\n✔ allows loopback plaintext bearer (1.9665ms)\n✔ builds deterministic snapshot content hash shape (234.2614ms)\n✔ creates safe agentmemory payload (228.6987ms)\n✔ event journal is hash chained (17.4258ms)\n✔ event tampering is detected (16.9366ms)\n✔ lease prevents concurrent owner (17.8046ms)\n✔ stale lease is reclaimed (17.4941ms)\n✔ router selects coding agent for code task (17.8642ms)\n✔ policy requires approval for production deploy (15.4864ms)\n✔ policy hard-denies secret-memory ingestion (17.7313ms)\n✔ structural check passes complete fixture (18.0342ms)\n✔ cycle works fully offline without breaking runtime (347.8115ms)\n✔ security repo scan does not ingest env files (18.878ms)\n✔ benchmark exercises router, redaction and chain (237.6787ms)\nℹ tests 18\nℹ suites 0\nℹ pass 18\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1422.0246\n",
+        "stderr_summary": "",
+        "blockers": [],
+        "confidence": 0.92,
+        "detail": {
+          "command": "node --test test/collective-brain.test.js",
+          "target": "test/collective-brain.test.js",
+          "exitCode": 0,
+          "durationMs": 1576,
+          "stdout": "✔ redacts bearer and secret assignments (4.482ms)\n✔ detects secret-like payloads (1.8092ms)\n✔ marks prompt injection as untrusted finding (0.9287ms)\n✔ rejects remote plaintext bearer (1.016ms)\n✔ allows loopback plaintext bearer (1.9665ms)\n✔ builds deterministic snapshot content hash shape (234.2614ms)\n✔ creates safe agentmemory payload (228.6987ms)\n✔ event journal is hash chained (17.4258ms)\n✔ event tampering is detected (16.9366ms)\n✔ lease prevents concurrent owner (17.8046ms)\n✔ stale lease is reclaimed (17.4941ms)\n✔ router selects coding agent for code task (17.8642ms)\n✔ policy requires approval for production deploy (15.4864ms)\n✔ policy hard-denies secret-memory ingestion (17.7313ms)\n✔ structural check passes complete fixture (18.0342ms)\n✔ cycle works fully offline without breaking runtime (347.8115ms)\n✔ security repo scan does not ingest env files (18.878ms)\n✔ benchmark exercises router, redaction and chain (237.6787ms)\nℹ tests 18\nℹ suites 0\nℹ pass 18\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1422.0246\n",
+          "stderr": "",
+          "success": true
+        }
+      },
+      "status": "completed"
+    },
+    {
+      "e2e": 5,
+      "capability": "agent.dispatch",
+      "task_id": "task_a097572e922a7f89",
+      "result": {
+        "task_id": "task_a097572e922a7f89",
+        "status": "completed",
+        "executor": "desktop-opencode",
+        "started_at": "2026-09-03T12:38:11.275Z",
+        "finished_at": "2026-09-03T12:38:13.827Z",
+        "files_changed": [
+          "reports/browser-agent-dispatch-note.txt"
+        ],
+        "git_diff_summary": " .env.example                            | 9 +++++++++\n package.json                            | 8 +++++++-\n reports/browser-agent-dispatch-note.txt | 1 +\n 3 files changed, 17 insertions(+), 1 deletion(-)\n",
+        "commit_sha": "c80a1116ad7007c921511799a449c1a610853b1f",
+        "tests": [
+          {
+            "command": "node --test test/collective-brain.test.js",
+            "target": "test/collective-brain.test.js",
+            "exitCode": 0,
+            "durationMs": 1665,
+            "stdout": "✔ redacts bearer and secret assignments (5.6204ms)\n✔ detects secret-like payloads (2.184ms)\n✔ marks prompt injection as untrusted finding (1.6638ms)\n✔ rejects remote plaintext bearer (1.8702ms)\n✔ allows loopback plaintext bearer (0.6472ms)\n✔ builds deterministic snapshot content hash shape (254.4155ms)\n✔ creates safe agentmemory payload (331.9552ms)\n✔ event journal is hash chained (23.3374ms)\n✔ event tampering is detected (22.7058ms)\n✔ lease prevents concurrent owner (31.8493ms)\n✔ stale lease is reclaimed (26.9897ms)\n✔ router selects coding agent for code task (24.9178ms)\n✔ policy requires approval for production deploy (19.2199ms)\n✔ policy hard-denies secret-memory ingestion (19.6704ms)\n✔ structural check passes complete fixture (21.2653ms)\n✔ cycle works fully offline without breaking runtime (264.0628ms)\n✔ security repo scan does not ingest env files (27.1905ms)\n✔ benchmark exercises router, redaction and chain (231.0911ms)\nℹ tests 18\nℹ suites 0\nℹ pass 18\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1500.6286\n",
+            "stderr": "",
+            "success": true
+          }
+        ],
+        "artifacts": [],
+        "stdout_summary": "{\n  \"worktree\": \"C:\\\\Users\\\\user\\\\Desktop\\\\World_server_browser_local\",\n  \"hits\": [\n    \".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/DESKTOP_AI_INSTRUCTIONS.md:394:3. search TODO/FIXME/temporary bypass в изменённых V10 файлах;\\r\",\n    \".patch-backups/game-motion-v2/2026-08-28T06-52-30-346Z/AGENTS.md:224:Считать незавершённой если: `mergeSafe=false`, FAIL, blocker, тест, deploy, TODO, PR, patch, live verification, regression, `waiting` которое можно продолжить, `requires_ai`, `Next Action`, `<100%`.\\r\",\n    \"AGENTS.md:224:Считать незавершённой если: `mergeSafe=false`, FAIL, blocker, тест, deploy, TODO, PR, patch, live verification, regression, `waiting` которое можно продолжить, `requires_ai`, `Next Action`, `<100%`.\\r\"\n  ],\n  \"filesChanged\": [\n    \"reports/browser-agent-dispatch-note.txt\"\n  ],\n  \"commitSha\": \"c80a1116ad7007c921511799a449c1a610853b1f\",\n  \"diffSummary\": \" .env.example                            | 9 +++++++++\\n package.json                            | 8 +++++++-\\n reports/browser-agent-dispatch-note.txt | 1 +\\n 3 files changed, 17 insertions(+), 1 deletion(-)\\n\",\n  \"tests\": [\n    {\n      \"command\": \"node --test test/collective-brain.test.js\",\n      \"target\": \"test/collective-brain.test.js\",\n      \"exitCode\": 0,\n      \"durationMs\": 1665,\n      \"stdout\": \"✔ redacts bearer and secret assignments (5.6204ms)\\n✔ detects secret-like payloads (2.184ms)\\n✔ marks prompt injection as untrusted finding (1.6638ms)\\n✔ rejects remote plaintext bearer (1.8702ms)\\n✔ allows loopback plaintext bearer (0.6472ms)\\n✔ builds deterministic snapshot content hash shape (254.4155ms)\\n✔ creates safe agentmemory payload (331.9552ms)\\n✔ event journal is hash chained (23.3374ms)\\n✔ event tampering is detected (22.7058ms)\\n✔ lease prevents concurrent owner (31.8493ms)\\n✔ stale lease is reclaimed (26.9897ms)\\n✔ router selects coding agent for code task (24.9178ms)\\n✔ policy requires approval for production deploy (19.2199ms)\\n✔ policy hard-denies secret-memory ingestion (19.6704ms)\\n✔ structural check passes complete fixture (21.2653ms)\\n✔ cycle works fully offline without breaking runtime (264.0628ms)\\n✔ security repo scan does not ingest env files (27.1905ms)\\n✔ benchmark exercises router, redaction and chain (231.0911ms)\\nℹ tests 18\\nℹ suites 0\\nℹ pass 18\\nℹ fail 0\\nℹ cancelled 0\\nℹ skipped 0\\nℹ todo 0\\nℹ duration_ms 1500.6286\\n\",\n      \"stderr\": \"\",\n      \"success\": true\n    }\n  ],\n  \"branch\": \"ai/opencode/browser-local-control\"\n}",
+        "stderr_summary": "",
+        "blockers": [],
+        "confidence": 0.92,
+        "detail": {
+          "worktree": "C:\\Users\\user\\Desktop\\World_server_browser_local",
+          "hits": [
+            ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/DESKTOP_AI_INSTRUCTIONS.md:394:3. search TODO/FIXME/temporary bypass в изменённых V10 файлах;\r",
+            ".patch-backups/game-motion-v2/2026-08-28T06-52-30-346Z/AGENTS.md:224:Считать незавершённой если: `mergeSafe=false`, FAIL, blocker, тест, deploy, TODO, PR, patch, live verification, regression, `waiting` которое можно продолжить, `requires_ai`, `Next Action`, `<100%`.\r",
+            "AGENTS.md:224:Считать незавершённой если: `mergeSafe=false`, FAIL, blocker, тест, deploy, TODO, PR, patch, live verification, regression, `waiting` которое можно продолжить, `requires_ai`, `Next Action`, `<100%`.\r"
+          ],
+          "filesChanged": [
+            "reports/browser-agent-dispatch-note.txt"
+          ],
+          "commitSha": "c80a1116ad7007c921511799a449c1a610853b1f",
+          "diffSummary": " .env.example                            | 9 +++++++++\n package.json                            | 8 +++++++-\n reports/browser-agent-dispatch-note.txt | 1 +\n 3 files changed, 17 insertions(+), 1 deletion(-)\n",
+          "tests": [
+            {
+              "command": "node --test test/collective-brain.test.js",
+              "target": "test/collective-brain.test.js",
+              "exitCode": 0,
+              "durationMs": 1665,
+              "stdout": "✔ redacts bearer and secret assignments (5.6204ms)\n✔ detects secret-like payloads (2.184ms)\n✔ marks prompt injection as untrusted finding (1.6638ms)\n✔ rejects remote plaintext bearer (1.8702ms)\n✔ allows loopback plaintext bearer (0.6472ms)\n✔ builds deterministic snapshot content hash shape (254.4155ms)\n✔ creates safe agentmemory payload (331.9552ms)\n✔ event journal is hash chained (23.3374ms)\n✔ event tampering is detected (22.7058ms)\n✔ lease prevents concurrent owner (31.8493ms)\n✔ stale lease is reclaimed (26.9897ms)\n✔ router selects coding agent for code task (24.9178ms)\n✔ policy requires approval for production deploy (19.2199ms)\n✔ policy hard-denies secret-memory ingestion (19.6704ms)\n✔ structural check passes complete fixture (21.2653ms)\n✔ cycle works fully offline without breaking runtime (264.0628ms)\n✔ security repo scan does not ingest env files (27.1905ms)\n✔ benchmark exercises router, redaction and chain (231.0911ms)\nℹ tests 18\nℹ suites 0\nℹ pass 18\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1500.6286\n",
+              "stderr": "",
+              "success": true
+            }
+          ],
+          "branch": "ai/opencode/browser-local-control"
+        }
+      },
+      "status": "completed"
+    }
+  ],
+  "heartbeat": {
+    "worker": "desktop-opencode",
+    "online": true,
+    "version": "2026-09-03.v1",
+    "capabilities": [
+      "repo.status",
+      "repo.tree",
+      "repo.read",
+      "repo.search",
+      "repo.diff",
+      "repo.history",
+      "git.fetch",
+      "git.create_worktree",
+      "git.create_branch",
+      "git.apply_patch",
+      "git.stage",
+      "git.commit",
+      "git.push",
+      "git.conflicts",
+      "test.list",
+      "test.run",
+      "lint.run",
+      "typecheck.run",
+      "build.run",
+      "benchmark.run",
+      "agent.list",
+      "agent.dispatch",
+      "agent.status",
+      "agent.result",
+      "agent.retry",
+      "agent.cancel",
+      "quality.status",
+      "quality.run",
+      "quality.blockers",
+      "quality.regressions",
+      "browser.open",
+      "browser.scenario",
+      "browser.screenshot",
+      "browser.console",
+      "artifact.list",
+      "artifact.read",
+      "artifact.zip"
+    ],
+    "current_task": null,
+    "last_seen": "2026-09-03T12:38:13.831Z",
+    "success_rate": 0.99,
+    "avg_latency_ms": 2552,
+    "detail": {
+      "lastTask": "task_a097572e922a7f89",
+      "lastCapability": "agent.dispatch",
+      "latency": 2552
+    }
+  },
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0,
+    "allCompleted": true
+  },
+  "finishedAt": "2026-09-03T12:38:14.668Z"
+}

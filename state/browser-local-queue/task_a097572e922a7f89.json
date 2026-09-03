@@ -1,0 +1,75 @@
+{
+  "task_id": "task_a097572e922a7f89",
+  "requested_by": "browser-chatgpt",
+  "capability": "agent.dispatch",
+  "args": {
+    "applyFix": true
+  },
+  "repo": "mpaykin1/World_server",
+  "worktree_mode": "isolated",
+  "risk": "medium",
+  "created_at": "2026-09-03T12:38:11.158Z",
+  "expires_at": "2026-09-03T12:43:11.158Z",
+  "idempotency_key": "e2e5-1788439091158",
+  "status": "completed",
+  "lease_owner": "desktop-opencode",
+  "lease_expires_at": null,
+  "started_at": "2026-09-03T12:38:11.275Z",
+  "executor": "desktop-opencode",
+  "attempts": 1,
+  "finished_at": "2026-09-03T12:38:13.828Z",
+  "updated_at": "2026-09-03T12:38:13.828Z",
+  "result": {
+    "task_id": "task_a097572e922a7f89",
+    "status": "completed",
+    "executor": "desktop-opencode",
+    "started_at": "2026-09-03T12:38:11.275Z",
+    "finished_at": "2026-09-03T12:38:13.827Z",
+    "files_changed": [
+      "reports/browser-agent-dispatch-note.txt"
+    ],
+    "git_diff_summary": " .env.example                            | 9 +++++++++\n package.json                            | 8 +++++++-\n reports/browser-agent-dispatch-note.txt | 1 +\n 3 files changed, 17 insertions(+), 1 deletion(-)\n",
+    "commit_sha": "c80a1116ad7007c921511799a449c1a610853b1f",
+    "tests": [
+      {
+        "command": "node --test test/collective-brain.test.js",
+        "target": "test/collective-brain.test.js",
+        "exitCode": 0,
+        "durationMs": 1665,
+        "stdout": "✔ redacts bearer and secret assignments (5.6204ms)\n✔ detects secret-like payloads (2.184ms)\n✔ marks prompt injection as untrusted finding (1.6638ms)\n✔ rejects remote plaintext bearer (1.8702ms)\n✔ allows loopback plaintext bearer (0.6472ms)\n✔ builds deterministic snapshot content hash shape (254.4155ms)\n✔ creates safe agentmemory payload (331.9552ms)\n✔ event journal is hash chained (23.3374ms)\n✔ event tampering is detected (22.7058ms)\n✔ lease prevents concurrent owner (31.8493ms)\n✔ stale lease is reclaimed (26.9897ms)\n✔ router selects coding agent for code task (24.9178ms)\n✔ policy requires approval for production deploy (19.2199ms)\n✔ policy hard-denies secret-memory ingestion (19.6704ms)\n✔ structural check passes complete fixture (21.2653ms)\n✔ cycle works fully offline without breaking runtime (264.0628ms)\n✔ security repo scan does not ingest env files (27.1905ms)\n✔ benchmark exercises router, redaction and chain (231.0911ms)\nℹ tests 18\nℹ suites 0\nℹ pass 18\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1500.6286\n",
+        "stderr": "",
+        "success": true
+      }
+    ],
+    "artifacts": [],
+    "stdout_summary": "{\n  \"worktree\": \"C:\\\\Users\\\\user\\\\Desktop\\\\World_server_browser_local\",\n  \"hits\": [\n    \".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/DESKTOP_AI_INSTRUCTIONS.md:394:3. search TODO/FIXME/temporary bypass в изменённых V10 файлах;\\r\",\n    \".patch-backups/game-motion-v2/2026-08-28T06-52-30-346Z/AGENTS.md:224:Считать незавершённой если: `mergeSafe=false`, FAIL, blocker, тест, deploy, TODO, PR, patch, live verification, regression, `waiting` которое можно продолжить, `requires_ai`, `Next Action`, `<100%`.\\r\",\n    \"AGENTS.md:224:Считать незавершённой если: `mergeSafe=false`, FAIL, blocker, тест, deploy, TODO, PR, patch, live verification, regression, `waiting` которое можно продолжить, `requires_ai`, `Next Action`, `<100%`.\\r\"\n  ],\n  \"filesChanged\": [\n    \"reports/browser-agent-dispatch-note.txt\"\n  ],\n  \"commitSha\": \"c80a1116ad7007c921511799a449c1a610853b1f\",\n  \"diffSummary\": \" .env.example                            | 9 +++++++++\\n package.json                            | 8 +++++++-\\n reports/browser-agent-dispatch-note.txt | 1 +\\n 3 files changed, 17 insertions(+), 1 deletion(-)\\n\",\n  \"tests\": [\n    {\n      \"command\": \"node --test test/collective-brain.test.js\",\n      \"target\": \"test/collective-brain.test.js\",\n      \"exitCode\": 0,\n      \"durationMs\": 1665,\n      \"stdout\": \"✔ redacts bearer and secret assignments (5.6204ms)\\n✔ detects secret-like payloads (2.184ms)\\n✔ marks prompt injection as untrusted finding (1.6638ms)\\n✔ rejects remote plaintext bearer (1.8702ms)\\n✔ allows loopback plaintext bearer (0.6472ms)\\n✔ builds deterministic snapshot content hash shape (254.4155ms)\\n✔ creates safe agentmemory payload (331.9552ms)\\n✔ event journal is hash chained (23.3374ms)\\n✔ event tampering is detected (22.7058ms)\\n✔ lease prevents concurrent owner (31.8493ms)\\n✔ stale lease is reclaimed (26.9897ms)\\n✔ router selects coding agent for code task (24.9178ms)\\n✔ policy requires approval for production deploy (19.2199ms)\\n✔ policy hard-denies secret-memory ingestion (19.6704ms)\\n✔ structural check passes complete fixture (21.2653ms)\\n✔ cycle works fully offline without breaking runtime (264.0628ms)\\n✔ security repo scan does not ingest env files (27.1905ms)\\n✔ benchmark exercises router, redaction and chain (231.0911ms)\\nℹ tests 18\\nℹ suites 0\\nℹ pass 18\\nℹ fail 0\\nℹ cancelled 0\\nℹ skipped 0\\nℹ todo 0\\nℹ duration_ms 1500.6286\\n\",\n      \"stderr\": \"\",\n      \"success\": true\n    }\n  ],\n  \"branch\": \"ai/opencode/browser-local-control\"\n}",
+    "stderr_summary": "",
+    "blockers": [],
+    "confidence": 0.92,
+    "detail": {
+      "worktree": "C:\\Users\\user\\Desktop\\World_server_browser_local",
+      "hits": [
+        ".iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/DESKTOP_AI_INSTRUCTIONS.md:394:3. search TODO/FIXME/temporary bypass в изменённых V10 файлах;\r",
+        ".patch-backups/game-motion-v2/2026-08-28T06-52-30-346Z/AGENTS.md:224:Считать незавершённой если: `mergeSafe=false`, FAIL, blocker, тест, deploy, TODO, PR, patch, live verification, regression, `waiting` которое можно продолжить, `requires_ai`, `Next Action`, `<100%`.\r",
+        "AGENTS.md:224:Считать незавершённой если: `mergeSafe=false`, FAIL, blocker, тест, deploy, TODO, PR, patch, live verification, regression, `waiting` которое можно продолжить, `requires_ai`, `Next Action`, `<100%`.\r"
+      ],
+      "filesChanged": [
+        "reports/browser-agent-dispatch-note.txt"
+      ],
+      "commitSha": "c80a1116ad7007c921511799a449c1a610853b1f",
+      "diffSummary": " .env.example                            | 9 +++++++++\n package.json                            | 8 +++++++-\n reports/browser-agent-dispatch-note.txt | 1 +\n 3 files changed, 17 insertions(+), 1 deletion(-)\n",
+      "tests": [
+        {
+          "command": "node --test test/collective-brain.test.js",
+          "target": "test/collective-brain.test.js",
+          "exitCode": 0,
+          "durationMs": 1665,
+          "stdout": "✔ redacts bearer and secret assignments (5.6204ms)\n✔ detects secret-like payloads (2.184ms)\n✔ marks prompt injection as untrusted finding (1.6638ms)\n✔ rejects remote plaintext bearer (1.8702ms)\n✔ allows loopback plaintext bearer (0.6472ms)\n✔ builds deterministic snapshot content hash shape (254.4155ms)\n✔ creates safe agentmemory payload (331.9552ms)\n✔ event journal is hash chained (23.3374ms)\n✔ event tampering is detected (22.7058ms)\n✔ lease prevents concurrent owner (31.8493ms)\n✔ stale lease is reclaimed (26.9897ms)\n✔ router selects coding agent for code task (24.9178ms)\n✔ policy requires approval for production deploy (19.2199ms)\n✔ policy hard-denies secret-memory ingestion (19.6704ms)\n✔ structural check passes complete fixture (21.2653ms)\n✔ cycle works fully offline without breaking runtime (264.0628ms)\n✔ security repo scan does not ingest env files (27.1905ms)\n✔ benchmark exercises router, redaction and chain (231.0911ms)\nℹ tests 18\nℹ suites 0\nℹ pass 18\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1500.6286\n",
+          "stderr": "",
+          "success": true
+        }
+      ],
+      "branch": "ai/opencode/browser-local-control"
+    }
+  }
+}
