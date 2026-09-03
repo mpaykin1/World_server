@@ -33,7 +33,8 @@ const fakeServer = fakeAnythingLLM.listen(fakePort);
 process.env.ANYTHINGLLM_URL = `http://127.0.0.1:${fakePort}`;
 process.env.ANYTHINGLLM_API_KEY = 'test-dummy-key';
 
-const { buildReportEntry, appendReport, createThread } = require('../scripts/openhuman-subtask.cjs');
+const { runSubtask, buildReportEntry, appendReport, createThread } = require('../scripts/openhuman-subtask.cjs');
+const collectiveBrain = require('../lib/collective-brain');
 
 test.after(() => { fakeServer.close(); });
 
@@ -103,6 +104,36 @@ test('createThread throws when AnythingLLM returns a non-2xx status for thread c
     await assert.rejects(() => createThread('world', 'x'), /createThread failed: HTTP 500/);
   } finally {
     global.fetch = origFetch;
+  }
+});
+
+// Real gap found live 2026-09-03: runSubtask() unconditionally required an
+// AnythingLLM thread (and therefore ANYTHINGLLM_API_KEY) before dispatching
+// ANY task - but agentic/tool-calling capability classes now bypass
+// AnythingLLM entirely via lib/direct-ollama-mcp-transport.js (see error-
+// prevention-registry.json#anythingllm-mcphypervisor-cannot-register-any-mcp-
+// server). A real end-to-end OpenHuman call for a filesystem-read task threw
+// "createThread failed: HTTP 403" simply because no API key was set, even
+// though the actual dispatch path never needed one. Fixed: thread
+// auto-creation only runs for capabilityClass 'unknown' or an explicit
+// opts.transport:'anythingllm'.
+test('runSubtask does not attempt AnythingLLM thread creation for a filesystem task, even with no ANYTHINGLLM_API_KEY set', async () => {
+  const savedKey = process.env.ANYTHINGLLM_API_KEY;
+  delete process.env.ANYTHINGLLM_API_KEY;
+  const workspaceSlug = `subtask-test-direct-${process.pid}`;
+  const leaseRoot = 'C:\\Users\\user\\Desktop\\World_server';
+  const leaseScope = `anythingllm-workspace-${workspaceSlug}`;
+  const owner = `test-holder:${process.pid}`;
+  const acquired = collectiveBrain.acquireLease(leaseRoot, leaseScope, { ttlMs: 30000, owner });
+  assert.equal(acquired.ok, true, 'test setup: could not acquire the simulated concurrent lease');
+  const requestCountBefore = fakeServerRequests.length;
+  try {
+    const r = await runSubtask('read package.json', { workspaceSlug });
+    assert.equal(r.result, 'QUEUED', 'expected the shared lease/queue mechanism to gate this, not an AnythingLLM auth error');
+    assert.equal(fakeServerRequests.length, requestCountBefore, 'no request should have been sent to AnythingLLM for a filesystem task');
+  } finally {
+    collectiveBrain.releaseLease(leaseRoot, leaseScope, owner);
+    if (savedKey !== undefined) process.env.ANYTHINGLLM_API_KEY = savedKey;
   }
 });
 

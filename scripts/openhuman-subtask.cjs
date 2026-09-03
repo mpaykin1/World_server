@@ -95,9 +95,18 @@ async function runSubtask(taskText, opts = {}) {
   const startedAt = new Date().toISOString();
   const start = Date.now();
 
+  // Agentic/tool-calling tasks (anything but 'unknown') now dispatch through
+  // lib/direct-ollama-mcp-transport.js by default (see error-prevention-
+  // registry.json#anythingllm-mcphypervisor-cannot-register-any-mcp-server) -
+  // they need no AnythingLLM thread at all. Only 'unknown' (plain chat) or an
+  // explicitly forced opts.transport:'anythingllm' call actually needs one,
+  // so auto-creation only runs then - a real gap found live: this function
+  // unconditionally required ANYTHINGLLM_API_KEY even for a task that would
+  // never touch AnythingLLM, blocking direct-Ollama dispatches for no reason.
+  const usesAnythingLLM = capabilityClass === 'unknown' || opts.transport === 'anythingllm';
   let threadSlug = opts.threadSlug;
   let autoCreatedThread = false;
-  if (!threadSlug) {
+  if (usesAnythingLLM && !threadSlug) {
     if (!ANYTHINGLLM_API_KEY) throw new Error('runSubtask requires opts.threadSlug, or ANYTHINGLLM_API_KEY set in env to auto-create one');
     threadSlug = await createThread(opts.workspaceSlug || 'world', opts.taskId || `openhuman-subtask-${start}`);
     autoCreatedThread = true;
