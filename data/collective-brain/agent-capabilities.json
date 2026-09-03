@@ -1,32 +1,37 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
+  "costPenaltyNote": "costPenalty is subtracted from an agent's score in routeTask() (lib/collective-brain/index.js) before ranking. Calibrated 2026-09 so free/local agents (opencode, openhuman, anythingllm - no paid model API call) rank ahead of paid model-backed agents (desktop-ai, codex, claude-code) on generic/ambiguous tasks, while a strong keyword match (e.g. 'architecture' for claude-code, 'install'/'windows' for desktop-ai) can still out-rank the cost penalty when the task genuinely needs that agent's specific strength - this is the 'cheapest capable executor first, escalate only when needed' policy, implemented with the existing scoring mechanism rather than a new one.",
   "agents": {
     "desktop-ai": {
       "role": "repository integrator and real-machine verifier",
       "baseScore": 72,
       "strengths": ["windows-runtime", "installation", "deep-review", "real-machine-verification"],
       "keywordWeights": {"install":20,"windows":20,"desktop":18,"vercel":8,"godot":10,"runtime":12,"mcp":12},
-      "costPenalty": 0
+      "costTier": "paid",
+      "costPenalty": 15
     },
     "codex": {
       "role": "code synthesis, refactoring and test implementation",
       "baseScore": 70,
       "strengths": ["coding", "tests", "sandbox-verification", "refactoring"],
       "keywordWeights": {"code":18,"test":16,"refactor":18,"bug":14,"patch":16,"api":10,"script":12},
-      "costPenalty": 0
+      "costTier": "paid",
+      "costPenalty": 15
     },
     "claude-code": {
       "role": "architecture review, broad repository reasoning and peer review",
       "baseScore": 69,
       "strengths": ["deep-review", "architecture", "documentation", "cross-system-analysis"],
       "keywordWeights": {"architecture":20,"review":18,"design":16,"reason":12,"documentation":10,"integration":14},
-      "costPenalty": 0
+      "costTier": "paid",
+      "costPenalty": 15
     },
     "opencode": {
       "role": "parallel implementation and repository automation",
       "baseScore": 62,
       "strengths": ["coding", "automation", "parallel-work"],
       "keywordWeights": {"automation":18,"script":14,"parallel":15,"cleanup":10,"tool":12},
+      "costTier": "free-local",
       "costPenalty": 0
     },
     "openhuman": {
@@ -34,7 +39,16 @@
       "baseScore": 58,
       "strengths": ["orchestration", "approvals", "durable-workflows", "memory"],
       "keywordWeights": {"workflow":22,"memory":20,"approval":18,"orchestrate":22,"schedule":12,"agent":12},
+      "costTier": "free-local",
       "costPenalty": 2
+    },
+    "anythingllm": {
+      "role": "local knowledge-base Q&A and document/context retrieval over locally-hosted models",
+      "baseScore": 55,
+      "strengths": ["knowledge-base", "retrieval", "local-model", "qa"],
+      "keywordWeights": {"knowledge":20,"question":14,"lookup":16,"retrieve":16,"document":12,"explain":10},
+      "costTier": "free-local",
+      "costPenalty": 0
     }
   }
 }

@@ -106,5 +106,20 @@ const server = http.createServer(async (req, res) => {
 const port = Number(process.env.PORT) || 3000;
 server.listen(port, () => console.log(`World Server local development: http://localhost:${port}`));
 
+// Opt-in autostart of the remote-task-bridge watchdog (off by default -
+// unset/anything other than "1" changes nothing). Safe to wire here because
+// this file is never invoked in production: Vercel serves this repo via the
+// api/*.js serverless functions declared in vercel.json, not via
+// `node server.js` - so this only ever runs for a long-lived local/self-
+// hosted process (local dev, or a Cloud Run-style deployment using this same
+// server.js), exactly where a background poller can meaningfully live.
+if (process.env.REMOTE_BRIDGE_AUTOSTART === '1') {
+  try {
+    require('./scripts/collective-brain-remote-bridge-watchdog.js').ensureRunning('server-autostart');
+  } catch (e) {
+    console.error('REMOTE_BRIDGE_AUTOSTART: watchdog failed to start (non-fatal, server keeps running):', e.message);
+  }
+}
+
 module.exports = { server, safeJoin, resolveEntrypoint, DEFAULT_ENTRYPOINT, ENTRYPOINT_WHITELIST };
 

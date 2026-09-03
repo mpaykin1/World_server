@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "system": "WORLD_SERVER_REMOTE_TASK_BRIDGE",
   "rule": "Every command maps to exactly one pre-approved local script/action. No command accepts an arbitrary shell string. run_existing_script accepts only a scriptId from allowedScripts below, never a raw path.",
   "commands": {
@@ -7,7 +7,7 @@
     "run_linter": { "kind": "npm-script", "script": "check", "description": "Reuses the same check script (this project's check-js.js is its lint/static-check gate; there is no separate lint script to duplicate)." },
     "run_benchmark": { "kind": "npm-script", "script": "collective-brain:benchmark", "description": "node scripts/collective-brain-benchmark.js - existing Collective Brain benchmark, not a new one." },
     "build_web": { "kind": "npm-script", "script": "build", "description": "Existing build:sentry + inject-sentry-runtime + build:posthog + inject-posthog-runtime chain." },
-    "build_native": { "kind": "unavailable", "description": "No native (Godot/EXE) build script is wired into this bridge yet - reports a clear unavailable status rather than a fabricated result. Safe to add once a specific existing script is identified." },
+    "build_native": { "kind": "unavailable", "description": "No native (Godot/EXE) build/export pipeline exists anywhere in this repo (confirmed by search before writing this - no --export, electron-builder, pkg, nexe, or a native/desktop build script; scripts/godot-runtime-smoke.js only launches one scene headless as a smoke test, it does not build/export an artifact). Reports a clear unavailable status rather than fabricating one. Wire this to a real script the moment one exists - do not point it at godot-runtime-smoke.js, which is not a build." },
     "inspect_logs": {
       "kind": "read-allowlisted-file",
       "description": "Reads the tail of one pre-approved status/report file - never an arbitrary path.",
@@ -32,15 +32,43 @@
     },
     "apply_patch": {
       "kind": "guarded-patch",
-      "description": "Applies a unified diff to an isolated worktree ONLY (never the main tree), after `git apply --check` validates it cleanly. Requires verify_patch afterward before any promotion. Subject to collective-brain policyGate('apply-remote-patch').",
+      "description": "Applies a unified diff to an isolated worktree ONLY (never the main tree), after `git apply --check` validates it cleanly. Requires verify_patch afterward before any promotion. Gated by collective-brain policyGate('remote-task:apply_patch') which requires COLLECTIVE_BRAIN_HUMAN_APPROVED=1 (see collective-brain-policy.json's approvalRequiredOperations). Accepts an optional args.fixMetadata ({id, rootCause, solution, protection[], evidence[]}); if the matching verify_patch on the same targetWorktree then succeeds, the fix is auto-registered via collective-brain-register-fix.js.",
       "maxDiffBytes": 65536,
       "forbiddenPathPrefixes": [".env", "data/collective-brain", ".git/", "node_modules/"]
     },
-    "verify_patch": { "kind": "npm-script", "script": "check", "description": "Runs the same test suite as run_tests, scoped to the worktree a patch was applied to." },
+    "verify_patch": { "kind": "npm-script", "script": "check", "description": "Runs the same test suite as run_tests, scoped to args.targetWorktree if given (the worktree a patch was applied to)." },
+    "run_integration_tests": { "kind": "npm-script", "script": "golden:e2e", "description": "playwright test e2e/golden-release.spec.js - the existing Golden Standard end-to-end/integration suite, not a new one." },
+    "run_release_gate": { "kind": "npm-script", "script": "release:gate", "description": "The existing full ~24-step release gate chain (desktop-ai, tests, golden, quality, tech, contracts, collective-brain, etc). Long-running (several minutes)." },
+    "run_visual_regression": { "kind": "npm-script", "script": "visual:check", "description": "node scripts/visual-regression.js - the existing visual regression gate." },
+    "run_performance_benchmark": { "kind": "npm-script", "script": "perf:lighthouse", "description": "lhci autorun against lighthouserc.cjs - the same Lighthouse config CI's own `lighthouse` job already uses. Distinct from run_benchmark, which is collective-brain's own internal (redaction/routing/event-chain) benchmark." },
+    "read_ci_status": {
+      "kind": "gh-cli-readonly",
+      "op": "ci_status",
+      "description": "Read-only: `gh run list --limit 5` for the current repo, via whatever `gh` auth already exists on the machine running this bridge. Never receives or forwards any credential to the task requester. Returns {configured:false} honestly if `gh` isn't authenticated on this host instead of failing unclearly."
+    },
+    "read_deployment_status": {
+      "kind": "gh-cli-readonly",
+      "op": "deployment_status",
+      "description": "Read-only: current git HEAD/branch plus the last 5 merged PRs (`gh pr list --state merged --limit 5`), via whatever `gh` auth already exists on the machine running this bridge. This is git/PR history, not a live Vercel deployment poll - no Vercel token is introduced by this bridge."
+    },
+    "known_issues_lookup": {
+      "kind": "local-recall",
+      "description": "Keyword-matches args.query against data/error-prevention-registry.json's knownErrors (the same data collective-brain:recall already reads) and returns the best matches with their root cause/solution/protection - read-only, no execution."
+    },
+    "health_status": {
+      "kind": "health-status",
+      "description": "Reports this bridge's own health: whether its watchdog-supervised worker process is alive and recently active (via collective-brain-remote-bridge-watchdog.js --healthcheck), plus the collective-brain audit-event-chain integrity."
+    },
+    "route_goal": {
+      "kind": "route-recommendation",
+      "description": "Wraps the existing lib/collective-brain routeTask() keyword-weighted scorer: given args.goal (a natural-language description of work, not a typed command), returns the ranked recommended agent(s) from data/collective-brain/agent-capabilities.json. Local/free agents (opencode, openhuman) are weighted ahead of paid model-backed agents (claude-code, codex, desktop-ai) via costPenalty unless the task's keywords clearly need the stronger agent's specific strength. This is a recommendation only - it does not itself dispatch to or execute via any external agent; no safe local invocation mechanism for opencode/openhuman/AnythingLLM was found to build a real auto-dispatch loop on, so none is faked here."
+    },
     "restart_known_worker": {
       "kind": "named-allowlist",
-      "description": "Restarts exactly one pre-registered named worker - empty by default (safe no-op) until a specific process is deliberately registered here.",
-      "allowedWorkers": {}
+      "description": "Restarts exactly one pre-registered named worker via its own watchdog script's --restart mode.",
+      "allowedWorkers": {
+        "collective-brain-remote-bridge": "scripts/collective-brain-remote-bridge-watchdog.js"
+      }
     }
   }
 }
