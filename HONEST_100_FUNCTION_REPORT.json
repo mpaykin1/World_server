@@ -1,6 +1,6 @@
 {
   "schemaVersion": "7.5.0",
-  "generatedAt": "2026-08-29T05:49:30.566Z",
+  "generatedAt": "2026-09-03T19:41:58.007Z",
   "pass": true,
   "claim": "Only functions with explicit scoped contracts and passing machine-readable evidence are called CERTIFIED_100. Uncontracted capabilities remain discovered but unverified.",
   "certified100Count": 76,
@@ -1166,10 +1166,10 @@
         }
       ],
       "sourceHashes": {
-        "scripts/system-integration-gate.cjs": "16b1845c9512dc2c9d4aad7b59a3c3260d2f876aa8f99ab98dab811003f918f2"
+        "scripts/system-integration-gate.cjs": "8d1442d8572d3778480cb5678bbba85c2c44a790db835b0adc24238769b5423b"
       },
       "contractHash": "bccdf099d4d113274dfdc64e68ad7d4be133efd2838be4ed93b6b336e772f94f",
-      "sourceFingerprint": "825d9cd92d35c9d2e5edaf2c50ad32d4f7d603762fd4529daad0c30cef8165df",
+      "sourceFingerprint": "be33bdba5f94746a0368dabce6a17090fb5b67b215fe3962d0469ab77224bdf4",
       "evidenceFingerprint": "9313e2bf1af5ea3ca221b49d9712642ef266a654000bb8d16113a5a1bdc009c7"
     },
     {
@@ -3079,11 +3079,11 @@
         }
       ],
       "sourceHashes": {
-        "scripts/orchestrator-supervisor.cjs": "c6a37bcc06425f78ec9393d53cd9ad50b2216d535cdfe665ac82c7f624d9d85d",
+        "scripts/orchestrator-supervisor.cjs": "c31c6ece7b78d6a64029c86dfed634feb9699186b087acaf97a6101b8f08a325",
         "data/orchestrator-supervisor-policy.json": "91c5ff1b3b1ae3ca507df4c647bbc5aa4c967061928126e5001bf39be6f56d3d"
       },
       "contractHash": "0e60f32a0023be01493bedea4ab2d246ff68c77b10ab3da2835eba5ee765d4f6",
-      "sourceFingerprint": "e77153cbabde95955c8db204d2a3bb14be985d57d500f643a1ce14a68d0da50f",
+      "sourceFingerprint": "341fc786513cff9572c823ac239907286cec9f5253c162ce17aac2d221ed61c6",
       "evidenceFingerprint": "9947dc587c7f93889ba15ebf7aee50ab9dba9db1e5e6331b969348d9c9bec1a2"
     },
     {
@@ -3134,11 +3134,11 @@
         }
       ],
       "sourceHashes": {
-        "scripts/orchestrator-supervisor.cjs": "c6a37bcc06425f78ec9393d53cd9ad50b2216d535cdfe665ac82c7f624d9d85d",
+        "scripts/orchestrator-supervisor.cjs": "c31c6ece7b78d6a64029c86dfed634feb9699186b087acaf97a6101b8f08a325",
         "data/orchestrator-supervisor-policy.json": "91c5ff1b3b1ae3ca507df4c647bbc5aa4c967061928126e5001bf39be6f56d3d"
       },
       "contractHash": "16f6098157925564c81c7f79ad9fb1b883cc184db32c84763ade31cd34d9d03c",
-      "sourceFingerprint": "e77153cbabde95955c8db204d2a3bb14be985d57d500f643a1ce14a68d0da50f",
+      "sourceFingerprint": "341fc786513cff9572c823ac239907286cec9f5253c162ce17aac2d221ed61c6",
       "evidenceFingerprint": "3c7a4f7ab56f6b48c3e35510add9e569b79644121bfa2de00792116772e73b41"
     },
     {
@@ -4541,11 +4541,11 @@
         }
       ],
       "sourceHashes": {
-        "scripts/procedural-quality-v10-gate.js": "b0f43916d469e156faa38bf36b580abcce521eac854b1c3957272a54d3ac8cf2",
-        "scripts/run-procedural-tests.js": "060aaf2eddd48013a3a857a892c2ff534c89c39daef3a441981188e16615e34c"
+        "scripts/procedural-quality-v10-gate.js": "1513b938c608a669c7894294a98a884c354afe218460aacb11848e7e44cbbbfb",
+        "scripts/run-procedural-tests.js": "a92cf67bec6cb4b6e9cd4f3c61874614600988fc7b2c90a44d143473d297e212"
       },
       "contractHash": "46bba3ddb6839439305c8b9bed5224f5dba43fa5c88078a1f09220d793b8cda0",
-      "sourceFingerprint": "105f4c461da4a7061152eb955dd94ebef4bf7c6cace9c7c88358b184a7cbefb4",
+      "sourceFingerprint": "2567872939d5c92bd83ac7328772703523884c736ab6f0a8b94567c69f27e28b",
       "evidenceFingerprint": "3442b0dc3cacd6c601dd545569ccb3d3889ac4e6abdd3c9d2426a3fd3750183c"
     },
     {
@@ -4650,11 +4650,11 @@
         }
       ],
       "sourceHashes": {
-        "scripts/pixel-animation-verify.js": "4c87f2b2148603696176e0b8fc52a330b65c4f4f5b4990856657c74eb881d936",
-        "scripts/pixel-animation-auto-integrate.js": "b38de5776ac30f6dd83d741327d04ff32ecd9eabab259b2254efab983e0874ac"
+        "scripts/pixel-animation-verify.js": "50105bfaa7943fc703fb5751b3e8c93b2d66bca269e2fdec9b5ca8522d7bd73c",
+        "scripts/pixel-animation-auto-integrate.js": "03f3020e0ed4a2b39d6abc579ca14b204f457abe3516f4b191fe8633e59c2955"
       },
       "contractHash": "92c0e365d7da213c8f9aa236e4bb365aa03c763cb40133087391071b68244293",
-      "sourceFingerprint": "332b4dc6e1b36911ec2601aa49821d61bc6ec7c5bd4ca3922c61afa45b5c7281",
+      "sourceFingerprint": "65d962c1d7d97423c5b78ff5818fea1085a1c6225b690672b83f43a45349c41d",
       "evidenceFingerprint": "3442b0dc3cacd6c601dd545569ccb3d3889ac4e6abdd3c9d2426a3fd3750183c"
     },
     {
@@ -4704,12 +4704,12 @@
         }
       ],
       "sourceHashes": {
-        "scripts/quality-regression-gate.js": "8251fb3c83cf2097bcf72c814f159ae4a6cccb7a5f2cce09d45a0d823198769b",
+        "scripts/quality-regression-gate.js": "1174454f06a6f39f80a962fbbd93678406a8c3ac72b765cf1b726dd6e725dff8",
         "scripts/check-desktop-ai-protocol.js": "87c35bdca61c3bf24e9732c48974f395e10283b5393c1fc12c492330fd7e1988",
-        "scripts/quality-self-evolve.js": "d06ae843ffb1ad4c6af43ca36410a1495e3da1b533073ab31265307438a0666e"
+        "scripts/quality-self-evolve.js": "75c0435743be70aa3be22c8f2a28bd829955d09c3c47fe529a65784134031379"
       },
       "contractHash": "493a885f27da73561a765e47e26204b3ffce517d475311b738d4a598758a1d05",
-      "sourceFingerprint": "0664ea36700b378109d3ea50cae29583d89400186e9dad6bf50fd5bf931e5b5b",
+      "sourceFingerprint": "8bbbcc28f961c145d47a440013f2caa9b70aa2fbd107b58266ccd6c017925518",
       "evidenceFingerprint": "3442b0dc3cacd6c601dd545569ccb3d3889ac4e6abdd3c9d2426a3fd3750183c"
     },
     {

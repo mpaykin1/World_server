@@ -1,6 +1,6 @@
 {
   "schemaVersion": "7.2.0",
-  "generatedAt": "2026-08-29T05:49:12.438Z",
+  "generatedAt": "2026-09-03T19:41:45.808Z",
   "pass": true,
   "framework": "TUF-aligned-subset",
   "tufSpec": "1.0.33",
@@ -9,10 +9,10 @@
   "freezeProtection": true,
   "consistentSnapshot": true,
   "metadataVersions": {
-    "root": 1390,
-    "targets": 1390,
-    "snapshot": 1390,
-    "timestamp": 1390
+    "root": 6,
+    "targets": 6,
+    "snapshot": 6,
+    "timestamp": 6
   },
   "targetCount": 6,
   "errors": [],

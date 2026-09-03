@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-29T05:47:39.217Z",
+  "generatedAt": "2026-09-03T19:40:30.201Z",
   "technologies": {
     "Vercel": {
       "declaredPercent": 90,
@@ -253,6 +253,179 @@
       "status": "concept-partial",
       "runnableByRepoEvidence": false,
       "evidence": []
+    },
+    "World Server Collective Brain V2": {
+      "declaredPercent": 98,
+      "status": "repository integration + tests + audit journal + router + lease/security policy prepared; real desktop external-runtime verification remains",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "lib/collective-brain/index.js",
+          "exists": true
+        },
+        {
+          "path": "test/collective-brain.test.js",
+          "exists": true
+        },
+        {
+          "path": "data/collective-brain/collective-brain-policy.json",
+          "exists": true
+        },
+        {
+          "path": "scripts/collective-brain-full.js",
+          "exists": true
+        }
+      ]
+    },
+    "OpenHuman external orchestrator": {
+      "declaredPercent": 88,
+      "status": "external optional orchestrator install/config/verification automation prepared; real desktop runtime evidence required",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "lib/collective-brain/index.js",
+          "exists": true
+        },
+        {
+          "path": "data/collective-brain/technology-plan.json",
+          "exists": true
+        }
+      ]
+    },
+    "agentmemory shared agent memory": {
+      "declaredPercent": 95,
+      "status": "REST/MCP shared-memory bridge + durable outbox + dedup + hash-chain + restart verification tooling prepared",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "lib/collective-brain/index.js",
+          "exists": true
+        },
+        {
+          "path": "test/collective-brain.test.js",
+          "exists": true
+        }
+      ]
+    },
+    "iii engine for agentmemory": {
+      "declaredPercent": 90,
+      "status": "pinned native-Windows install/start/verify automation prepared",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "data/collective-brain/technology-plan.json",
+          "exists": true
+        }
+      ]
+    },
+    "tinyagents/tinyflows via OpenHuman": {
+      "declaredPercent": 75,
+      "status": "integration path and verification policy prepared through OpenHuman; direct vendoring intentionally avoided",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "data/collective-brain/technology-plan.json",
+          "exists": true
+        }
+      ]
+    },
+    "Ollama local inference adapter": {
+      "declaredPercent": 82,
+      "status": "optional install/config/health/model-selection automation prepared; runtime model pull/benchmark remains",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "data/collective-brain/collective-brain-policy.json",
+          "exists": true
+        },
+        {
+          "path": "data/collective-brain/technology-plan.json",
+          "exists": true
+        }
+      ]
+    },
+    "Collective Brain memory security firewall": {
+      "declaredPercent": 100,
+      "status": "secret scan/redaction + untrusted recall boundary + release gate installed",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "lib/collective-brain/index.js",
+          "exists": true
+        },
+        {
+          "path": "test/collective-brain.test.js",
+          "exists": true
+        }
+      ]
+    },
+    "Collective Brain coordination leases/audit replay": {
+      "declaredPercent": 100,
+      "status": "atomic stale-reclaiming leases + hash-chained runtime event journal installed",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "lib/collective-brain/index.js",
+          "exists": true
+        },
+        {
+          "path": "test/collective-brain.test.js",
+          "exists": true
+        }
+      ]
+    },
+    "OPA policy adapter": {
+      "declaredPercent": 65,
+      "status": "Rego policy + optional parity smoke installed; native JSON policy remains fallback when OPA binary is absent",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "policy/collective-brain.rego",
+          "exists": true
+        },
+        {
+          "path": "scripts/collective-brain-opa-check.js",
+          "exists": true
+        },
+        {
+          "path": "data/collective-brain/technology-plan.json",
+          "exists": true
+        }
+      ]
+    },
+    "Gitleaks/Trivy security adapters": {
+      "declaredPercent": 45,
+      "status": "optional installer/runbook prepared; native memory scanner already active",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "data/collective-brain/technology-plan.json",
+          "exists": true
+        }
+      ]
+    },
+    "World Server Collective Brain V2.1": {
+      "declaredPercent": 99,
+      "status": "repository integration + tests + audit journal + router + lease/security policy + safe system-bootstrap handoff prepared; real desktop external-runtime verification remains",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "lib/collective-brain/index.js",
+          "exists": true
+        },
+        {
+          "path": "test/collective-brain.test.js",
+          "exists": true
+        },
+        {
+          "path": "data/collective-brain/collective-brain-policy.json",
+          "exists": true
+        },
+        {
+          "path": "scripts/collective-brain-full.js",
+          "exists": true
+        }
+      ]
     }
   }
 }

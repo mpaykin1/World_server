@@ -4,7 +4,7 @@
     {
       "name": "INTEGRATION_BUILD_SUBJECT.json",
       "digest": {
-        "sha256": "df5989ec4427d059cff9cf7cbdfa5ef5cc323ad6bae3dce83673e16f69cc5992"
+        "sha256": "b9ad203c1f7c4a86bea89c114312f086dba5afd489cf2001a3a426448a83eff1"
       }
     }
   ],
@@ -13,7 +13,7 @@
     "buildDefinition": {
       "buildType": "https://github.com/mpaykin1/World_server/blob/master/docs/buildtypes/system-integration-v2.md",
       "externalParameters": {
-        "branch": "ai/opencode/multi-ai-peer-improvement",
+        "branch": "ai/opencode/browser-local-control",
         "cpuFirst": true,
         "gpuRequired": false,
         "integrationLayer": "2.0.0"
@@ -26,9 +26,9 @@
       "resolvedDependencies": [
         {
           "name": "git-commit",
-          "uri": "git+https://github.com/mpaykin1/World_server@faa6971ddd5783b4b7c6ccd6db149a3a8fc730bd",
+          "uri": "git+https://github.com/mpaykin1/World_server@8109364831f821a754359f08acc3fed4cbd97584",
           "digest": {
-            "sha1": "faa6971ddd5783b4b7c6ccd6db149a3a8fc730bd"
+            "sha1": "8109364831f821a754359f08acc3fed4cbd97584"
           }
         },
         {
@@ -52,7 +52,7 @@
         {
           "name": "project-merkle-root",
           "digest": {
-            "sha256": "982d3a01e897912395eb0112d142de4bc6fd1d049fe56350b317ec10e979e813"
+            "sha256": "daae05692d80f3bb39d9985da52edaa5f8df0ca22e3846067b249864d6ba4b0f"
           }
         }
       ]
@@ -65,45 +65,45 @@
         }
       },
       "metadata": {
-        "invocationId": "local-1787982549471-6816",
-        "startedOn": "2026-08-29T05:49:09.015Z",
-        "finishedOn": "2026-08-29T05:49:09.471Z"
+        "invocationId": "local-1788464504233-15232",
+        "startedOn": "2026-09-03T19:41:43.947Z",
+        "finishedOn": "2026-09-03T19:41:44.233Z"
       },
       "byproducts": [
         {
           "name": "SYSTEM_INTEGRATION_REPORT.json",
           "digest": {
-            "sha256": "37e1f339f2329c45eecb03d62482d0dc9627ab7adb3f88846f81b92fce1dbe57"
+            "sha256": "72529d9b8949e8e25fc01f6382c7a45a50d15f3f75efe71ecd00ee7003d76dbd"
           }
         },
         {
           "name": "POLICY_DECISION_REPORT.json",
           "digest": {
-            "sha256": "2238f3554d4e372c77aa5ad009e679836a718ed7349653af0ea9c086dbc2c43d"
+            "sha256": "3c496bb0579f9077a0b10b4294ced2f71de244f986aec6aa3c8ff934d8d0d3cb"
           }
         },
         {
           "name": "DISASTER_RECOVERY_VERIFY_REPORT.json",
           "digest": {
-            "sha256": "9bc726ba84bfc06e6ff541b43d0524c4af457bab20671640b776b0ba93b691b1"
+            "sha256": "9e2a0cadd1e017e7eca7aec685510699c77d98d26c333f920cbb16f6e76d65de"
           }
         },
         {
           "name": "TECHNOLOGY_CONSENSUS_REPORT.json",
           "digest": {
-            "sha256": "6ca1ba0a563d63f535dae80754ebf4e4f35299b7aa0f6ae472618f30733dd39d"
+            "sha256": "f010a476d61d1f11702b7ada5c3e070b176d7685ab52c8fcad87336f6724d0a7"
           }
         },
         {
           "name": "DURABLE_QUEUE_STATUS.json",
           "digest": {
-            "sha256": "d892f66dd5dd1a871e15785fe10df7d1de4d7ce071a87129ee2956d1c9ad348d"
+            "sha256": "595ee0fd74b81675e94eeb64739df065f5db26805a0ae27b81e5614b1b644994"
           }
         },
         {
           "name": "INTEGRATION_TELEMETRY_STATUS.json",
           "digest": {
-            "sha256": "031eaa8e6395a53df8daeca70685ad7c4da5362c3e5e0208e1a3e4e044269bd2"
+            "sha256": "0780371cd10caa5a1e851e6a55a5797e3df9aa18239d2c4b9d719ce4615302c8"
           }
         }
       ]

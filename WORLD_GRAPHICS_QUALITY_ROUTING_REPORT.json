@@ -1,7 +1,7 @@
 {
   "schemaVersion": "6.0.0",
   "system": "WORLD_GRAPHICS_QUALITY_ROUTER",
-  "generatedAt": "2026-08-29T05:43:25.332Z",
+  "generatedAt": "2026-09-03T19:40:37.987Z",
   "defaultPolicy": "CPU_FIRST_FREE_LOCAL",
   "cpuReadiness": 100,
   "routes": [

@@ -76,7 +76,15 @@ async function rpc(name, body){
 async function heartbeat(currentTask=null, detail={}){
   try{
     const caps = ALL_CAPS;
-    const r = await rpc('browser_ai_worker_heartbeat',{ p_worker: WORKER_ID, p_token: WORKER_TOKEN, p_capabilities: caps, p_current_task: currentTask, p_detail: detail });
+    const version = String(CAPS.version||'2026-09-03.v3').slice(0,32);
+    let r;
+    try{
+      r = await rpc('browser_ai_worker_heartbeat',{ p_worker: WORKER_ID, p_token: WORKER_TOKEN, p_capabilities: caps, p_current_task: currentTask, p_detail: detail, p_version: version });
+    }catch(e){
+      if(String(e.message||'').includes('p_version') || String(e.body||'').includes('p_version')){
+        r = await rpc('browser_ai_worker_heartbeat',{ p_worker: WORKER_ID, p_token: WORKER_TOKEN, p_capabilities: caps, p_current_task: currentTask, p_detail: detail });
+      } else throw e;
+    }
     const hbPath = path.join(ROOT,'state/browser-local-worker.json');
     const hb = { worker: WORKER_ID, online:true, version: CAPS.version||'2026-09-03.v2', capabilities: caps, current_task: currentTask, last_seen: nowIso(), success_rate:0.99, avg_latency_ms:detail.latency||0, detail };
     fs.mkdirSync(path.dirname(hbPath),{recursive:true});
@@ -741,7 +749,7 @@ async function main(){
   if(cmd==='tick'){ const r=await tick(); console.log(JSON.stringify(r,null,2)); process.exit(r.status==='failed'?1:0); }
   if(cmd==='loop'){ await loop(); }
   if(cmd==='heartbeat'){ const r=await heartbeat(null,{}); console.log(JSON.stringify(r,null,2)); }
-  if(cmd==='health'){ const caps=Object.keys(CAPS.capabilities); const audit={ total:caps.length, executors:Object.keys(EXECUTORS).length, implemented: caps.filter(c=> CAPS.capabilities[c].status==='IMPLEMENTED'||CAPS.capabilities[c].status==='VERIFIED').length, verified: caps.filter(c=> CAPS.capabilities[c].status==='VERIFIED').length, declaredOnly: caps.filter(c=> CAPS.capabilities[c].status==='DECLARED_ONLY').length }; console.log(JSON.stringify({ worker:WORKER_ID, version:CAPS.version, audit, capabilities: caps, executors: Object.keys(EXECUTORS), url: SUPABASE_URL, token: WORKER_TOKEN? 'set':'missing' },null,2)); }
+  if(cmd==='health'){ const caps=Object.keys(CAPS.capabilities); const audit={ total:caps.length, executors:Object.keys(EXECUTORS).length, implemented: caps.filter(c=> ['IMPLEMENTED','VERIFIED','SIDE_EFFECTING'].includes(CAPS.capabilities[c].status)).length, verified: caps.filter(c=> CAPS.capabilities[c].status==='VERIFIED').length, declaredOnly: caps.filter(c=> CAPS.capabilities[c].status==='DECLARED_ONLY').length, sideEffecting: caps.filter(c=> CAPS.capabilities[c].status==='SIDE_EFFECTING').length }; console.log(JSON.stringify({ worker:WORKER_ID, version:CAPS.version, audit, capabilities: caps, executors: Object.keys(EXECUTORS), url: SUPABASE_URL, token: WORKER_TOKEN? 'set':'missing' },null,2)); }
   if(cmd==='audit'){ const caps=CAPS.capabilities; for(const [k,v] of Object.entries(caps)) console.log(`${k}: ${v.status} executor=${v.executor||'none'} ${EXECUTORS[k]?'OK':'MISSING'}`); }
 }
 

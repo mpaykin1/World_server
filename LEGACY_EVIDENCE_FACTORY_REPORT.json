@@ -1,11 +1,11 @@
 {
   "schemaVersion": "7.5.0",
-  "generatedAt": "2026-08-29T05:49:06.657Z",
+  "generatedAt": "2026-09-03T19:41:42.367Z",
   "pass": true,
   "enginePass": true,
   "autoCertifyByName": false,
   "recipeCatalogHash": "e8c0c02f52e165bc92b9d26b161bfa78b5d189a6b06784829bcf048d78d734e0",
-  "generatedContractsHash": "41cf75c9f9fdb660612cd157a441a69171bac67e991147f618ea6c0573778e6a",
+  "generatedContractsHash": "9d05d3a2fc06f31ba79bf38aef6a68b961f3e0f6859b22399ee65047981ac5b3",
   "eligibleContractCount": 11,
   "totalRecipes": 18,
   "eligibleCapabilities": [
@@ -54,10 +54,10 @@
       "pass": false
     },
     "legacy-texture-quality:static": {
-      "pass": false
+      "pass": true
     },
     "legacy-texture-quality:integration": {
-      "pass": false
+      "pass": true
     },
     "legacy-texture-quality:regression": {
       "pass": false
@@ -246,7 +246,7 @@
             "pass": false,
             "cmd": "python shared/world-quality-core/tests/test_quality_core.py",
             "code": 2,
-            "stderr": "python: can't open file 'C:\\\\Users\\\\user\\\\Desktop\\\\World_server\\\\shared\\\\world-quality-core\\\\tests\\\\test_quality_core.py': [Errno 2] No such file or directory\r\n"
+            "stderr": "python: can't open file 'C:\\\\Users\\\\user\\\\Desktop\\\\World_server_browser_local\\\\shared\\\\world-quality-core\\\\tests\\\\test_quality_core.py': [Errno 2] No such file or directory\r\n"
           }
         ]
       },
@@ -262,23 +262,25 @@
         "texture-runtime-evidence"
       ],
       "workdir": ".",
-      "sourcePaths": [],
+      "sourcePaths": [
+        "services/ai3d-worker/tools/optimize_scene_quality.py",
+        "services/ai3d-worker/tools/verify_texture_runtime.py",
+        "services/ai3d-worker/tools/texture_runtime_adapters/blender/autofix_uv_and_atlas.py"
+      ],
       "static": {
-        "pass": false,
+        "pass": true,
         "checks": [
           {
-            "pass": false,
-            "reason": "missing-file",
+            "pass": true,
             "file": "services/ai3d-worker/tools/verify_texture_runtime.py"
           }
         ]
       },
       "integration": {
-        "pass": false,
+        "pass": true,
         "checks": [
           {
-            "pass": false,
-            "reason": "missing-file",
+            "pass": true,
             "file": "services/ai3d-worker/tests/test_texture_v10.py"
           }
         ]
@@ -289,8 +291,8 @@
           {
             "pass": false,
             "cmd": "python services/ai3d-worker/tests/test_texture_v10.py",
-            "code": 2,
-            "stderr": "python: can't open file 'C:\\\\Users\\\\user\\\\Desktop\\\\World_server\\\\services\\\\ai3d-worker\\\\tests\\\\test_texture_v10.py': [Errno 2] No such file or directory\r\n"
+            "code": 1,
+            "stderr": "Traceback (most recent call last):\r\n  File \"C:\\Users\\user\\Desktop\\World_server_browser_local\\services\\ai3d-worker\\tests\\test_texture_v10.py\", line 11, in <module>\r\n    from ai3d.texture_runtime_v10 import (\r\nModuleNotFoundError: No module named 'ai3d'\r\n"
           }
         ]
       },
@@ -336,7 +338,7 @@
             "pass": false,
             "cmd": "python services/ai3d-worker/tests/test_production_v12.py",
             "code": 1,
-            "stderr": "Traceback (most recent call last):\r\n  File \"C:\\Users\\user\\Desktop\\World_server\\services\\ai3d-worker\\tests\\test_production_v12.py\", line 3, in <module>\r\n    from ai3d.production_v12 import artifact_hygiene_gate_v12,compatibility_matrix_gate_v12,shader_stutter_gate_v12,thermal_memory_pressure_gate_v12,adversarial_corpus_gate_v12,autofix_progress_gate_v12,quality_confidence_v12,convergence_gate_v12\r\nModuleNotFoundError: No module named 'ai3d'\r\n"
+            "stderr": "Traceback (most recent call last):\r\n  File \"C:\\Users\\user\\Desktop\\World_server_browser_local\\services\\ai3d-worker\\tests\\test_production_v12.py\", line 3, in <module>\r\n    from ai3d.production_v12 import artifact_hygiene_gate_v12,compatibility_matrix_gate_v12,shader_stutter_gate_v12,thermal_memory_pressure_gate_v12,adversarial_corpus_gate_v12,autofix_progress_gate_v12,quality_confidence_v12,convergence_gate_v12\r\nModuleNotFoundError: No module named 'ai3d'\r\n"
           }
         ]
       },
@@ -379,7 +381,7 @@
           {
             "pass": true,
             "cmd": "node --test test/procedural-quality-v10.test.js",
-            "stdout": "✔ V10 temporal artifact detector scores ghosting flicker shimmer (3.1221ms)\n✔ V10 frame pacing tracks p95 p99 jank stutter (0.8106ms)\n✔ V10 resource watchdog detects heap/canvas growth (0.5787ms)\n✔ V10 thermal governor has hidden save-data low-battery pressure policies (0.5177ms)\n✔ V10 shader prewarm supports Three compileAsync and budget (0.6675ms)\n✔ V10 replay benchmark is seeded and deterministic interface exists (1.2696ms)\n✔ V10 canary requires runtime health and production evidence (1.0154ms)\n✔ V10 profile exposes all new policies (4.3782ms)\n✔ V10 migration has canary and runtime health tables (0.684ms)\n✔ V10 doctor has 12-round non-stop repair policy (0.7953ms)\n✔ V10 evidence graph includes temporal pacing leak thermal shader replay canary (0.5446ms)\nℹ tests 11\nℹ suites 0\nℹ pass 11\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 218.3949\n"
+            "stdout": "✔ V10 temporal artifact detector scores ghosting flicker shimmer (2.4394ms)\n✔ V10 frame pacing tracks p95 p99 jank stutter (0.5076ms)\n✔ V10 resource watchdog detects heap/canvas growth (0.42ms)\n✔ V10 thermal governor has hidden save-data low-battery pressure policies (0.3931ms)\n✔ V10 shader prewarm supports Three compileAsync and budget (1.3126ms)\n✔ V10 replay benchmark is seeded and deterministic interface exists (0.4626ms)\n✔ V10 canary requires runtime health and production evidence (0.4396ms)\n✔ V10 profile exposes all new policies (2.1592ms)\n✔ V10 migration has canary and runtime health tables (0.6137ms)\n✔ V10 doctor has 12-round non-stop repair policy (0.7746ms)\n✔ V10 evidence graph includes temporal pacing leak thermal shader replay canary (0.4873ms)\nℹ tests 11\nℹ suites 0\nℹ pass 11\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 158.1083\n"
           }
         ]
       },
@@ -423,7 +425,7 @@
           {
             "pass": true,
             "cmd": "node --test test/apng-engine.test.js test/apng-gate.test.js test/apng-integration.test.js",
-            "stdout": "✔ apng dummy (1.7651ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 202.712\n"
+            "stdout": "✔ apng dummy (1.4547ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 135.0263\n"
           }
         ]
       },
@@ -466,7 +468,7 @@
           {
             "pass": true,
             "cmd": "node --test test/pixel-animation-v3.test.js test/pixel-animation-engine.test.js",
-            "stdout": "✔ profiles normalize to stable numeric shader params (3.063ms)\n✔ device tier is conservative on weak/mobile hardware (0.8734ms)\n✔ spatial hash returns only intersecting cells and removes cleanly (1.6736ms)\n✔ grid mesh is a reusable subdivided sprite surface (1.3305ms)\n✔ remote config merge keeps required fallbacks (0.8212ms)\n✔ GPU culling has true compute + indirect-draw building blocks (4.5795ms)\n✔ multi-atlas manifest is deterministic and rejects duplicate pages (3.8698ms)\n✔ region rig creates bounded region deformation (2.0654ms)\n✔ pipeline cache fingerprint is stable (3.0468ms)\n✔ visual regression detects equal and changed sequences (1.3442ms)\n✔ device learning only makes bounded policy changes (2.1458ms)\n✔ auto integrator exports discovery/install (0.4995ms)\n✔ telemetry handles modern Supabase secret keys without JWT Bearer misuse (1.1812ms)\nℹ tests 13\nℹ suites 0\nℹ pass 13\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 294.2491\n"
+            "stdout": "✔ profiles normalize to stable numeric shader params (2.781ms)\n✔ device tier is conservative on weak/mobile hardware (0.6468ms)\n✔ spatial hash returns only intersecting cells and removes cleanly (0.7934ms)\n✔ grid mesh is a reusable subdivided sprite surface (0.4743ms)\n✔ remote config merge keeps required fallbacks (0.323ms)\n✔ GPU culling has true compute + indirect-draw building blocks (2.6173ms)\n✔ multi-atlas manifest is deterministic and rejects duplicate pages (2.1329ms)\n✔ region rig creates bounded region deformation (1.3073ms)\n✔ pipeline cache fingerprint is stable (0.6229ms)\n✔ visual regression detects equal and changed sequences (0.6445ms)\n✔ device learning only makes bounded policy changes (0.9378ms)\n✔ auto integrator exports discovery/install (0.2493ms)\n✔ telemetry handles modern Supabase secret keys without JWT Bearer misuse (0.6717ms)\nℹ tests 13\nℹ suites 0\nℹ pass 13\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 204.2819\n"
           }
         ]
       },
@@ -510,7 +512,7 @@
           {
             "pass": true,
             "cmd": "node --test test/v13-invariant-golden.test.js test/desktop-ai-error-closure.test.js",
-            "stdout": "✔ golden dummy (3.9414ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 212.3229\n"
+            "stdout": "✔ golden dummy (1.3196ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 141.2744\n"
           }
         ]
       },
@@ -556,7 +558,7 @@
           {
             "pass": true,
             "cmd": "node --test test/world-quality-autopilot.test.js",
-            "stdout": "✔ V4 semantic detail index detects architectural motifs (10.4363ms)\n✔ V4 deterministic enhancement preserves exact front projection (41.1291ms)\n✔ V4 geometry budget remains strict (10.0116ms)\n✔ material profiler classifies emissive and metal-like colors (0.7969ms)\n✔ V4 procedural PBR synthesis is deterministic and budgeted (2.3748ms)\n✔ runtime V4 exposes pressure, texture and occlusion hooks (1.037ms)\n✔ V4 retarget contract contains root motion and two-hand constraints (1.0642ms)\n✔ V4 visibility optimizer is conservative (0.7581ms)\n✔ V4 candidate lab is prediction only before promotion (1.1607ms)\n✔ V4 feedback learner cannot mutate directly (1.2958ms)\n✔ baseline promotion remains explicit and cannot self-approve (0.984ms)\n✔ weighted readiness remains evidence based (1.2122ms)\nℹ tests 12\nℹ suites 0\nℹ pass 12\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 338.3717\n"
+            "stdout": "✔ V4 semantic detail index detects architectural motifs (7.3395ms)\n✔ V4 deterministic enhancement preserves exact front projection (18.4604ms)\n✔ V4 geometry budget remains strict (4.4812ms)\n✔ material profiler classifies emissive and metal-like colors (0.3584ms)\n✔ V4 procedural PBR synthesis is deterministic and budgeted (1.0027ms)\n✔ runtime V4 exposes pressure, texture and occlusion hooks (0.5476ms)\n✔ V4 retarget contract contains root motion and two-hand constraints (0.3749ms)\n✔ V4 visibility optimizer is conservative (0.3643ms)\n✔ V4 candidate lab is prediction only before promotion (0.478ms)\n✔ V4 feedback learner cannot mutate directly (0.5155ms)\n✔ baseline promotion remains explicit and cannot self-approve (0.3299ms)\n✔ weighted readiness remains evidence based (0.4389ms)\nℹ tests 12\nℹ suites 0\nℹ pass 12\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 188.0761\n"
           }
         ]
       },
@@ -646,7 +648,7 @@
           {
             "pass": true,
             "cmd": "node --test test/pwa-system.test.js test/runtime-integration-adapters.test.js",
-            "stdout": "✔ pwa dummy (1.8725ms)\n✔ runtime dummy (2.5666ms)\nℹ tests 2\nℹ suites 0\nℹ pass 2\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 244.5985\n"
+            "stdout": "✔ pwa dummy (1.3193ms)\n✔ runtime dummy (1.4091ms)\nℹ tests 2\nℹ suites 0\nℹ pass 2\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 143.9184\n"
           }
         ]
       },
@@ -688,7 +690,7 @@
           {
             "pass": true,
             "cmd": "node --test test/world-quality-truth-gate.test.js",
-            "stdout": "✔ truth dummy production (1.8388ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 197.1523\n"
+            "stdout": "✔ truth dummy production (1.3468ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 129.5361\n"
           }
         ]
       },
@@ -733,7 +735,7 @@
             "pass": false,
             "cmd": "node scripts/check-supabase-migration-manifest-v12.cjs",
             "code": 12,
-            "stderr": "{\n  \"ok\": false,\n  \"count\": 116,\n  \"expectedCount\": 7,\n  \"digest\": \"d5c468f409e958382b7ce264c9bc928843d8c79da150da92caca19d841ecb0a9\",\n  \"expectedDigest\": \"4f1c7fb913a11f734062d47bee23b83ac58c009a4a4468209d26f7ee97be1260\"\n}\n"
+            "stderr": "{\n  \"ok\": false,\n  \"count\": 118,\n  \"expectedCount\": 7,\n  \"digest\": \"eecd390a06d06eaf4da55e937bd628938bffc14f39f35dcf5490a42e792f91af\",\n  \"expectedDigest\": \"4f1c7fb913a11f734062d47bee23b83ac58c009a4a4468209d26f7ee97be1260\"\n}\n"
           }
         ]
       },
@@ -831,7 +833,7 @@
             "pass": false,
             "cmd": "node --check api/lowfi-25d-scene.js",
             "code": 1,
-            "stderr": "node:internal/modules/cjs/loader:1479\r\n  throw err;\r\n  ^\r\n\r\nError: Cannot find module 'C:\\Users\\user\\Desktop\\World_server\\api\\lowfi-25d-scene.js'\r\n    at node:internal/modules/cjs/loader:1476:15\r\n    at node:internal/main/check_syntax:33:20 {\r\n  code: 'MODULE_NOT_FOUND',\r\n  requireStack: []\r\n}\r\n\r\nNode.js v24.15.0\r\n"
+            "stderr": "node:internal/modules/cjs/loader:1479\r\n  throw err;\r\n  ^\r\n\r\nError: Cannot find module 'C:\\Users\\user\\Desktop\\World_server_browser_local\\api\\lowfi-25d-scene.js'\r\n    at node:internal/modules/cjs/loader:1476:15\r\n    at node:internal/main/check_syntax:33:20 {\r\n  code: 'MODULE_NOT_FOUND',\r\n  requireStack: []\r\n}\r\n\r\nNode.js v24.15.0\r\n"
           }
         ]
       },
@@ -874,7 +876,7 @@
           {
             "pass": true,
             "cmd": "node --test test/quality-autopilot-v11.test.js",
-            "stdout": "✔ autopilot dummy (3.0408ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 522.156\n"
+            "stdout": "✔ autopilot dummy (1.2829ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 124.5011\n"
           }
         ]
       },
@@ -959,7 +961,7 @@
           {
             "pass": true,
             "cmd": "node --test test/gap-closure.test.js",
-            "stdout": "✔ gap dummy (2.0874ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 197.4611\n"
+            "stdout": "✔ gap dummy (1.3513ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 130.489\n"
           }
         ]
       },

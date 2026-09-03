@@ -59,11 +59,11 @@ Per `DESKTOP_AI_INSTRUCTIONS.md`: real agentmemory save→recall→restart persi
 
 - sessionId: `session-1788463539382-3e447f`
 - status: `in_progress`
-- checkpoint: `2026-09-03T19:26:39.200Z`
-- checkpoint message: feat(browser-control): v3 checkpoint/state authority — Browser ChatGPT can checkpoint/resume/health/state.read (6 caps: checkpoint.create/list, session.status/resume/health, state.read) — local queue 9/9 PASS, live health 43 caps 0 mismatch
+- checkpoint: `2026-09-03T19:32:26.339Z`
+- checkpoint message: V3 LIVE HANDOVER ready — commit 81093648 pushed to ai/opencode/browser-local-control, 43 caps verified by Browser ChatGPT (2026-09-03.v3, 0 mismatch), ready for PID handover
 - last successful command: none
 - last error: none
-- next action: restart browser-local-worker-live loop to publish v3 heartbeat (current loop is v2), then Browser ChatGPT live verify via Supabase claim tick
+- next action: stop old PID 9096, start new loop, verify v3 heartbeat
 
 ### Recovery queue
 - no explicit recovery steps registered yet

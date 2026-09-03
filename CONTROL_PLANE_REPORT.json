@@ -1,8 +1,8 @@
 {
   "schemaVersion": "7.5.0",
-  "generatedAt": "2026-08-29T05:49:32.011Z",
-  "traceId": "ebb6d4d1fab659aad48707f025bd34f7",
-  "traceparent": "00-ebb6d4d1fab659aad48707f025bd34f7-b625ea27aa11b7b8-01",
+  "generatedAt": "2026-09-03T19:41:59.104Z",
+  "traceId": "3f6b168b978ebd2559a12481d34fa9d5",
+  "traceparent": "00-3f6b168b978ebd2559a12481d34fa9d5-0003352d26de78dc-01",
   "pass": true,
   "requiredFailures": [],
   "steps": [
@@ -10,505 +10,512 @@
       "id": "toolchain-security",
       "required": true,
       "pass": true,
-      "durationMs": 149,
+      "durationMs": 265,
       "stdout": "[TOOLCHAIN_SECURITY] PASS cosign=absent min=3.1.3"
     },
     {
       "id": "toolchain-health",
       "required": true,
       "pass": true,
-      "durationMs": 160,
+      "durationMs": 189,
       "stdout": "[TOOLCHAIN_V6] PASS apply=false installed=0/5"
     },
     {
       "id": "telemetry",
       "required": true,
       "pass": true,
-      "durationMs": 152,
-      "stdout": "{\n  \"schemaVersion\": \"2.0.0\",\n  \"generatedAt\": \"2026-08-29T05:48:38.867Z\",\n  \"w3cTraceContext\": true,\n  \"otlpHttpJson\": true,\n  \"localJsonl\": true,\n  \"logPath\": \".world-server-state/telemetry/integration-spans.jsonl\",\n  \"endpointConfigured\": false,\n  \"pass\": true\n}"
+      "durationMs": 108,
+      "stdout": "{\n  \"schemaVersion\": \"2.0.0\",\n  \"generatedAt\": \"2026-09-03T19:41:24.614Z\",\n  \"w3cTraceContext\": true,\n  \"otlpHttpJson\": true,\n  \"localJsonl\": true,\n  \"logPath\": \".world-server-state/telemetry/integration-spans.jsonl\",\n  \"endpointConfigured\": false,\n  \"pass\": true\n}"
     },
     {
       "id": "snapshot",
       "required": true,
       "pass": true,
-      "durationMs": 3533,
-      "stdout": "[CAS_SNAPSHOT] 2026-08-29T05-48-42-410Z-pre-control-plane-982d3a01e897 files=1687 root=982d3a01e897912395eb0112d142de4bc6fd1d049fe56350b317ec10e979e813"
+      "durationMs": 2336,
+      "stdout": "[CAS_SNAPSHOT] 2026-09-03T19-41-26-947Z-pre-control-plane-daae05692d80 files=1831 root=daae05692d80f3bb39d9985da52edaa5f8df0ca22e3846067b249864d6ba4b0f"
     },
     {
       "id": "native-ast-dataflow",
       "required": true,
       "pass": true,
-      "durationMs": 121,
+      "durationMs": 96,
       "stdout": "[NATIVE_AST] PASS fallback-v5"
     },
     {
       "id": "semantic-graph",
       "required": true,
       "pass": true,
-      "durationMs": 1566,
-      "stdout": "[SEMANTIC_GRAPH] PASS files=686 symbols=3738 calls=106061"
+      "durationMs": 1124,
+      "stdout": "[SEMANTIC_GRAPH] PASS files=721 symbols=3923 calls=114898"
     },
     {
       "id": "change-impact",
       "required": true,
       "pass": true,
-      "durationMs": 1182,
-      "stdout": "[CHANGE_IMPACT] changed=133 affected=133 systems=4 risk=35 tests=check,quality:regression,quality:world,integration:verify"
+      "durationMs": 587,
+      "stdout": "[CHANGE_IMPACT] changed=133 affected=133 systems=4 risk=55 tests=check,quality:regression,quality:world,integration:verify"
     },
     {
       "id": "assets",
       "required": true,
       "pass": true,
-      "durationMs": 809,
+      "durationMs": 578,
       "stdout": "[ASSET_REGISTRY_V2] assets=33 unique=33 duplicates=0 missingDeps=0"
     },
     {
       "id": "project-directives",
       "required": true,
       "pass": true,
-      "durationMs": 139,
+      "durationMs": 94,
       "stdout": "[DIRECTIVES] PASS 100%"
     },
     {
       "id": "asset-ingestion-plan",
       "required": true,
       "pass": true,
-      "durationMs": 126,
+      "durationMs": 88,
       "stdout": "[ASSET_PLAN] PASS NO_TASK"
     },
     {
       "id": "technology-lock",
       "required": true,
       "pass": true,
-      "durationMs": 145,
+      "durationMs": 87,
       "stdout": "[TECH_LOCK] PASS requested=0 missing=0"
     },
     {
       "id": "graphics-ratchet",
       "required": true,
       "pass": true,
-      "durationMs": 1177,
+      "durationMs": 754,
       "stdout": "[GRAPHICS_GUARD] PASS protectedChanges=0 failed=0"
     },
     {
       "id": "audio-variation",
       "required": true,
       "pass": true,
-      "durationMs": 133,
+      "durationMs": 102,
       "stdout": "[AUDIO_VARIATION] PASS N/A"
     },
     {
       "id": "gameplay-spatial-contract",
       "required": true,
       "pass": true,
-      "durationMs": 125,
+      "durationMs": 104,
       "stdout": "[GAMEPLAY_CONTRACT] PASS N/A"
     },
     {
       "id": "desktop-ai-report-contract",
       "required": true,
       "pass": true,
-      "durationMs": 120,
+      "durationMs": 97,
       "stdout": "[DESKTOP_AI_REPORT] PASS N/A"
     },
     {
       "id": "queue",
       "required": true,
       "pass": true,
-      "durationMs": 128,
-      "stdout": "{\n  \"schemaVersion\": \"2.0.0\",\n  \"generatedAt\": \"2026-08-29T05:48:48.216Z\",\n  \"ok\": true,\n  \"backend\": \"node:sqlite\",\n  \"journal\": \"WAL\",\n  \"synchronous\": \"FULL\",\n  \"idempotency\": true,\n  \"priorityQueue\": true,\n  \"checkpointResume\": true,\n  \"leaseRecovery\": true,\n  \"deadLetterQueue\": true,\n  \"retry\": true,\n  \"counts\": {},\n  \"oldestActiveAt\": null\n}"
+      "durationMs": 96,
+      "stdout": "{\n  \"schemaVersion\": \"2.0.0\",\n  \"generatedAt\": \"2026-09-03T19:41:30.784Z\",\n  \"ok\": true,\n  \"backend\": \"node:sqlite\",\n  \"journal\": \"WAL\",\n  \"synchronous\": \"FULL\",\n  \"idempotency\": true,\n  \"priorityQueue\": true,\n  \"checkpointResume\": true,\n  \"leaseRecovery\": true,\n  \"deadLetterQueue\": true,\n  \"retry\": true,\n  \"counts\": {},\n  \"oldestActiveAt\": null\n}"
     },
     {
       "id": "config-contract",
       "required": true,
       "pass": true,
-      "durationMs": 314,
+      "durationMs": 217,
       "stdout": "[CONFIG_CONTRACT] PASS cue=embedded"
     },
     {
       "id": "feature-flags",
       "required": true,
       "pass": true,
-      "durationMs": 137,
+      "durationMs": 106,
       "stdout": "[FEATURE_FLAGS] PASS 6/6"
     },
     {
       "id": "wit-component-contract",
       "required": true,
       "pass": true,
-      "durationMs": 482,
+      "durationMs": 240,
       "stdout": "[WIT_COMPONENT] PASS wasmtime=false"
     },
     {
       "id": "adapter-sandbox",
       "required": true,
       "pass": true,
-      "durationMs": 546,
+      "durationMs": 228,
       "stdout": "[ADAPTER_SANDBOX] PASS runtime=deny-untrusted"
     },
     {
       "id": "secure-update",
       "required": true,
       "pass": true,
-      "durationMs": 237,
+      "durationMs": 117,
       "stdout": "[UPDATE_TRUST] PASS targets=6"
     },
     {
       "id": "reproducible-build",
       "required": true,
       "pass": true,
-      "durationMs": 3634,
-      "stdout": "[REPRO_BUILD] PASS files=1561"
+      "durationMs": 2042,
+      "stdout": "[REPRO_BUILD] PASS files=1608"
+    },
+    {
+      "id": "vercel-root-check",
+      "required": true,
+      "pass": true,
+      "durationMs": 88,
+      "stdout": "[VERCEL_ROOT] PASS project=? root=. catalog=true"
     },
     {
       "id": "model-check",
       "required": true,
       "pass": true,
-      "durationMs": 125,
+      "durationMs": 90,
       "stdout": "[MODEL_CHECK] PASS embeddedStates=15 tlc=optional-unavailable"
     },
     {
       "id": "cas-peer-discovery",
       "required": true,
       "pass": true,
-      "durationMs": 1057,
+      "durationMs": 1019,
       "stdout": "[CAS_DISCOVERY] PASS peers=0"
     },
     {
       "id": "distributed-cas",
       "required": true,
       "pass": true,
-      "durationMs": 377,
+      "durationMs": 214,
       "stdout": "[DISTRIBUTED_CAS] PASS peers=0/0"
     },
     {
       "id": "device-lab",
       "required": true,
       "pass": true,
-      "durationMs": 552,
+      "durationMs": 352,
       "stdout": "[DEVICE_LAB] PASS real=0 platforms=none"
     },
     {
       "id": "device-executor",
       "required": true,
       "pass": true,
-      "durationMs": 119,
+      "durationMs": 87,
       "stdout": "[DEVICE_EXECUTOR] PASS evidence=0"
     },
     {
       "id": "wit-bindings",
       "required": true,
       "pass": true,
-      "durationMs": 136,
+      "durationMs": 88,
       "stdout": "[WIT_BINDINGS] PASS generated/wit/world-server-adapter.d.ts"
     },
     {
       "id": "rekor-monitor",
       "required": true,
       "pass": true,
-      "durationMs": 326,
-      "stdout": "[REKOR_MONITOR] PASS localEntries=4837 bundles=0"
+      "durationMs": 181,
+      "stdout": "[REKOR_MONITOR] PASS localEntries=14 bundles=0"
     },
     {
       "id": "technology-consensus",
       "required": true,
       "pass": true,
-      "durationMs": 1305,
+      "durationMs": 1009,
       "stdout": "[TECH_CONSENSUS_V4] embedded=16/17 external=0/11"
     },
     {
       "id": "sbom",
       "required": true,
       "pass": true,
-      "durationMs": 227,
+      "durationMs": 156,
       "stdout": "[SBOM] PASS CycloneDX-1.7 components=497"
     },
     {
       "id": "legacy-evidence-factory",
       "required": true,
       "pass": true,
-      "durationMs": 8831,
-      "stdout": "    },\n      \"regression\": {\n        \"pass\": false,\n        \"checks\": [\n          {\n            \"pass\": false,\n            \"cmd\": \"node --check api/lowfi-25d-scene.js\",\n            \"code\": 1,\n            \"stderr\": \"node:internal/modules/cjs/loader:1479\\r\\n  throw err;\\r\\n  ^\\r\\n\\r\\nError: Cannot find module 'C:\\\\Users\\\\user\\\\Desktop\\\\World_server\\\\api\\\\lowfi-25d-scene.js'\\r\\n    at node:internal/modules/cjs/loader:1476:15\\r\\n    at node:internal/main/check_syntax:33:20 {\\r\\n  code: 'MODULE_NOT_FOUND',\\r\\n  requireStack: []\\r\\n}\\r\\n\\r\\nNode.js v24.15.0\\r\\n\"\n          }\n        ]\n      },\n      \"eligible\": false\n    },\n    {\n      \"recipeId\": \"legacy-quality-autopilot-v11\",\n      \"owner\": \"QUALITY_AUTOPILOT_PATCH_v11_CPU_MAX\",\n      \"capabilities\": [\n        \"quality-autopilot-v11\",\n        \"quality-security-gate\",\n        \"quality-readiness-v11\"\n      ],\n      \"workdir\": \".\",\n      \"sourcePaths\": [\n        \"scripts/quality-readiness-v11.js\",\n        \"scripts/quality-security-gate.js\"\n      ],\n      \"static\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"file\": \"scripts/quality-readiness-v11.js\"\n          }\n        ]\n      },\n      \"integration\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"file\": \"test/quality-autopilot-v11.test.js\"\n          }\n        ]\n      },\n      \"regression\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"cmd\": \"node --test test/quality-autopilot-v11.test.js\",\n            \"stdout\": \"✔ autopilot dummy (3.0408ms)\\nℹ tests 1\\nℹ suites 0\\nℹ pass 1\\nℹ fail 0\\nℹ cancelled 0\\nℹ skipped 0\\nℹ todo 0\\nℹ duration_ms 522.156\\n\"\n          }\n        ]\n      },\n      \"eligible\": true\n    },\n    {\n      \"recipeId\": \"legacy-quiet-autopilot-v6\",\n      \"owner\": \"WORLD_SERVER_QUIET_QUALITY_AUTOPILOT_V6\",\n      \"capabilities\": [\n        \"quiet-quality-autopilot\",\n        \"quality-proof-gate\",\n        \"quality-otel-bridge\"\n      ],\n      \"workdir\": \".\",\n      \"sourcePaths\": [\n        \"scripts/verify-v6-runtime.js\",\n        \"scripts/quality-proof-gate.js\",\n        \"scripts/quality-otel-bridge-check.js\"\n      ],\n      \"static\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"file\": \"scripts/verify-v6-runtime.js\"\n          }\n        ]\n      },\n      \"integration\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"file\": \"scripts/quality-proof-gate.js\"\n          }\n        ]\n      },\n      \"regression\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"cmd\": \"node scripts/verify-v6-runtime.js\",\n            \"stdout\": \"[V6_RUNTIME_VERIFY] PASS\\n\"\n          }\n        ]\n      },\n      \"eligible\": true\n    },\n    {\n      \"recipeId\": \"legacy-gap-closure-v1\",\n      \"owner\": \"GAP_CLOSURE_SYSTEM_V1\",\n      \"capabilities\": [\n        \"gap-closure\",\n        \"gap-regression-test\"\n      ],\n      \"workdir\": \".\",\n      \"sourcePaths\": [\n        \"test/gap-closure.test.js\"\n      ],\n      \"static\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"file\": \"test/gap-closure.test.js\"\n          }\n        ]\n      },\n      \"integration\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"file\": \"test/gap-closure.test.js\"\n          }\n        ]\n      },\n      \"regression\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"cmd\": \"node --test test/gap-closure.test.js\",\n            \"stdout\": \"✔ gap dummy (2.0874ms)\\nℹ tests 1\\nℹ suites 0\\nℹ pass 1\\nℹ fail 0\\nℹ cancelled 0\\nℹ skipped 0\\nℹ todo 0\\nℹ duration_ms 197.4611\\n\"\n          }\n        ]\n      },\n      \"eligible\": true\n    }\n  ],\n  \"truthRule\": \"Only explicit recipes with static + integration + executed regression evidence produce generated contracts. Missing legacy runtime remains UNVERIFIED.\"\n}"
+      "durationMs": 5351,
+      "stdout": "regression\": {\n        \"pass\": false,\n        \"checks\": [\n          {\n            \"pass\": false,\n            \"cmd\": \"node --check api/lowfi-25d-scene.js\",\n            \"code\": 1,\n            \"stderr\": \"node:internal/modules/cjs/loader:1479\\r\\n  throw err;\\r\\n  ^\\r\\n\\r\\nError: Cannot find module 'C:\\\\Users\\\\user\\\\Desktop\\\\World_server_browser_local\\\\api\\\\lowfi-25d-scene.js'\\r\\n    at node:internal/modules/cjs/loader:1476:15\\r\\n    at node:internal/main/check_syntax:33:20 {\\r\\n  code: 'MODULE_NOT_FOUND',\\r\\n  requireStack: []\\r\\n}\\r\\n\\r\\nNode.js v24.15.0\\r\\n\"\n          }\n        ]\n      },\n      \"eligible\": false\n    },\n    {\n      \"recipeId\": \"legacy-quality-autopilot-v11\",\n      \"owner\": \"QUALITY_AUTOPILOT_PATCH_v11_CPU_MAX\",\n      \"capabilities\": [\n        \"quality-autopilot-v11\",\n        \"quality-security-gate\",\n        \"quality-readiness-v11\"\n      ],\n      \"workdir\": \".\",\n      \"sourcePaths\": [\n        \"scripts/quality-readiness-v11.js\",\n        \"scripts/quality-security-gate.js\"\n      ],\n      \"static\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"file\": \"scripts/quality-readiness-v11.js\"\n          }\n        ]\n      },\n      \"integration\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"file\": \"test/quality-autopilot-v11.test.js\"\n          }\n        ]\n      },\n      \"regression\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"cmd\": \"node --test test/quality-autopilot-v11.test.js\",\n            \"stdout\": \"✔ autopilot dummy (1.2829ms)\\nℹ tests 1\\nℹ suites 0\\nℹ pass 1\\nℹ fail 0\\nℹ cancelled 0\\nℹ skipped 0\\nℹ todo 0\\nℹ duration_ms 124.5011\\n\"\n          }\n        ]\n      },\n      \"eligible\": true\n    },\n    {\n      \"recipeId\": \"legacy-quiet-autopilot-v6\",\n      \"owner\": \"WORLD_SERVER_QUIET_QUALITY_AUTOPILOT_V6\",\n      \"capabilities\": [\n        \"quiet-quality-autopilot\",\n        \"quality-proof-gate\",\n        \"quality-otel-bridge\"\n      ],\n      \"workdir\": \".\",\n      \"sourcePaths\": [\n        \"scripts/verify-v6-runtime.js\",\n        \"scripts/quality-proof-gate.js\",\n        \"scripts/quality-otel-bridge-check.js\"\n      ],\n      \"static\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"file\": \"scripts/verify-v6-runtime.js\"\n          }\n        ]\n      },\n      \"integration\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"file\": \"scripts/quality-proof-gate.js\"\n          }\n        ]\n      },\n      \"regression\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"cmd\": \"node scripts/verify-v6-runtime.js\",\n            \"stdout\": \"[V6_RUNTIME_VERIFY] PASS\\n\"\n          }\n        ]\n      },\n      \"eligible\": true\n    },\n    {\n      \"recipeId\": \"legacy-gap-closure-v1\",\n      \"owner\": \"GAP_CLOSURE_SYSTEM_V1\",\n      \"capabilities\": [\n        \"gap-closure\",\n        \"gap-regression-test\"\n      ],\n      \"workdir\": \".\",\n      \"sourcePaths\": [\n        \"test/gap-closure.test.js\"\n      ],\n      \"static\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"file\": \"test/gap-closure.test.js\"\n          }\n        ]\n      },\n      \"integration\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"file\": \"test/gap-closure.test.js\"\n          }\n        ]\n      },\n      \"regression\": {\n        \"pass\": true,\n        \"checks\": [\n          {\n            \"pass\": true,\n            \"cmd\": \"node --test test/gap-closure.test.js\",\n            \"stdout\": \"✔ gap dummy (1.3513ms)\\nℹ tests 1\\nℹ suites 0\\nℹ pass 1\\nℹ fail 0\\nℹ cancelled 0\\nℹ skipped 0\\nℹ todo 0\\nℹ duration_ms 130.489\\n\"\n          }\n        ]\n      },\n      \"eligible\": true\n    }\n  ],\n  \"truthRule\": \"Only explicit recipes with static + integration + executed regression evidence produce generated contracts. Missing legacy runtime remains UNVERIFIED.\"\n}"
     },
     {
       "id": "slo-error-budget",
       "required": true,
       "pass": true,
-      "durationMs": 116,
-      "stdout": "{\n  \"schemaVersion\": \"7.4.0\",\n  \"generatedAt\": \"2026-08-29T05:49:06.781Z\",\n  \"pass\": true,\n  \"syntheticControllerValidation\": true,\n  \"productionEvidence\": false,\n  \"healthyCase\": {\n    \"schemaVersion\": \"7.4.0\",\n    \"generatedAt\": \"2026-08-29T05:49:06.779Z\",\n    \"pass\": true,\n    \"source\": \"synthetic\",\n    \"sampleCount\": 100,\n    \"successRate\": 1,\n    \"p95Ms\": 118,\n    \"errorBudgetAllowedRate\": 0.0050000000000000044,\n    \"errorBudgetBurnRate\": 0,\n    \"latencyBad\": false,\n    \"productionEvidence\": false,\n    \"action\": \"ALLOW_CANARY\",\n    \"truthRule\": \"No production rollback decision is claimed from synthetic samples. Synthetic mode validates controller math only.\"\n  },\n  \"burnCase\": {\n    \"schemaVersion\": \"7.4.0\",\n    \"generatedAt\": \"2026-08-29T05:49:06.781Z\",\n    \"pass\": true,\n    \"source\": \"synthetic\",\n    \"sampleCount\": 100,\n    \"successRate\": 0.8,\n    \"p95Ms\": 2500,\n    \"errorBudgetAllowedRate\": 0.0050000000000000044,\n    \"errorBudgetBurnRate\": 40,\n    \"latencyBad\": true,\n    \"productionEvidence\": false,\n    \"action\": \"STOP_CANARY_AND_ROLLBACK\",\n    \"truthRule\": \"No production rollback decision is claimed from synthetic samples. Synthetic mode validates controller math only.\"\n  },\n  \"action\": \"NO_PRODUCTION_DECISION\"\n}"
+      "durationMs": 110,
+      "stdout": "{\n  \"schemaVersion\": \"7.4.0\",\n  \"generatedAt\": \"2026-09-03T19:41:42.505Z\",\n  \"pass\": true,\n  \"syntheticControllerValidation\": true,\n  \"productionEvidence\": false,\n  \"healthyCase\": {\n    \"schemaVersion\": \"7.4.0\",\n    \"generatedAt\": \"2026-09-03T19:41:42.504Z\",\n    \"pass\": true,\n    \"source\": \"synthetic\",\n    \"sampleCount\": 100,\n    \"successRate\": 1,\n    \"p95Ms\": 118,\n    \"errorBudgetAllowedRate\": 0.0050000000000000044,\n    \"errorBudgetBurnRate\": 0,\n    \"latencyBad\": false,\n    \"productionEvidence\": false,\n    \"action\": \"ALLOW_CANARY\",\n    \"truthRule\": \"No production rollback decision is claimed from synthetic samples. Synthetic mode validates controller math only.\"\n  },\n  \"burnCase\": {\n    \"schemaVersion\": \"7.4.0\",\n    \"generatedAt\": \"2026-09-03T19:41:42.505Z\",\n    \"pass\": true,\n    \"source\": \"synthetic\",\n    \"sampleCount\": 100,\n    \"successRate\": 0.8,\n    \"p95Ms\": 2500,\n    \"errorBudgetAllowedRate\": 0.0050000000000000044,\n    \"errorBudgetBurnRate\": 40,\n    \"latencyBad\": true,\n    \"productionEvidence\": false,\n    \"action\": \"STOP_CANARY_AND_ROLLBACK\",\n    \"truthRule\": \"No production rollback decision is claimed from synthetic samples. Synthetic mode validates controller math only.\"\n  },\n  \"action\": \"NO_PRODUCTION_DECISION\"\n}"
     },
     {
       "id": "db-migration-coordinator",
       "required": true,
       "pass": true,
-      "durationMs": 133,
-      "stdout": "{\n  \"schemaVersion\": \"7.4.0\",\n  \"generatedAt\": \"2026-08-29T05:49:06.912Z\",\n  \"pass\": true,\n  \"strategy\": \"expand-migrate-contract\",\n  \"expandContractGuard\": true,\n  \"fencedLeaderRequired\": true,\n  \"supabase2026ExtensionPinningRejected\": true,\n  \"syntheticPlanValidation\": true\n}"
+      "durationMs": 96,
+      "stdout": "{\n  \"schemaVersion\": \"7.4.0\",\n  \"generatedAt\": \"2026-09-03T19:41:42.603Z\",\n  \"pass\": true,\n  \"strategy\": \"expand-migrate-contract\",\n  \"expandContractGuard\": true,\n  \"fencedLeaderRequired\": true,\n  \"supabase2026ExtensionPinningRejected\": true,\n  \"syntheticPlanValidation\": true\n}"
     },
     {
       "id": "asset-delta",
       "required": true,
       "pass": true,
-      "durationMs": 239,
-      "stdout": "{\n  \"schemaVersion\": \"7.4.0\",\n  \"generatedAt\": \"2026-08-29T05:49:07.153Z\",\n  \"pass\": true,\n  \"contentDefinedChunking\": true,\n  \"reusePercent\": 75,\n  \"corruptChunkRejected\": true,\n  \"reconstructionVerified\": true\n}"
+      "durationMs": 159,
+      "stdout": "{\n  \"schemaVersion\": \"7.4.0\",\n  \"generatedAt\": \"2026-09-03T19:41:42.762Z\",\n  \"pass\": true,\n  \"contentDefinedChunking\": true,\n  \"reusePercent\": 75,\n  \"corruptChunkRejected\": true,\n  \"reconstructionVerified\": true\n}"
     },
     {
       "id": "integration-gate",
       "required": true,
       "pass": true,
-      "durationMs": 228,
+      "durationMs": 110,
       "stdout": "[SYSTEM_INTEGRATION_V7] 100% PASS 127/127"
     },
     {
       "id": "disaster-recovery-verify",
       "required": true,
       "pass": true,
-      "durationMs": 1474,
-      "stdout": "[DR_VERIFY] PASS 1687/1687 snapshot=2026-08-29T05-48-42-410Z-pre-control-plane-982d3a01e897"
+      "durationMs": 973,
+      "stdout": "[DR_VERIFY] PASS 1831/1831 snapshot=2026-09-03T19-41-26-947Z-pre-control-plane-daae05692d80"
     },
     {
       "id": "provenance",
       "required": true,
       "pass": true,
-      "durationMs": 625,
+      "durationMs": 385,
       "stdout": "[PROVENANCE] PASS subjects=1 dependencies=5"
     },
     {
       "id": "supply-chain-signing",
       "required": true,
       "pass": true,
-      "durationMs": 1209,
-      "stdout": "[SUPPLY_CHAIN_SIGN] PASS signed=7 cosign=false"
+      "durationMs": 367,
+      "stdout": "[SUPPLY_CHAIN_SIGN] PASS signed=7 cosign=true"
     },
     {
       "id": "policy",
       "required": true,
       "pass": true,
-      "durationMs": 1169,
+      "durationMs": 799,
       "stdout": "[POLICY_V4] PASS js=true opa=offline-mirror parity=true"
     },
     {
       "id": "chaos-safety",
       "required": true,
       "pass": true,
-      "durationMs": 568,
+      "durationMs": 404,
       "stdout": "[FEATURE_FLAGS] PASS 6/6\n[ADAPTER_SANDBOX] PASS runtime=deny-untrusted\n[CONFIG_CONTRACT] PASS cue=embedded\n[UPDATE_TRUST] PASS targets=6\n[INTEGRATION_CHAOS] PASS 4/4"
     },
     {
       "id": "orchestrator-monitor-lifecycle",
       "required": true,
       "pass": true,
-      "durationMs": 137,
-      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-29T05:49:12.580Z\",\n  \"pass\": true,\n  \"generationTokens\": true,\n  \"cancelPreviousGeneration\": true,\n  \"identityPredicate\": true,\n  \"stabilizationBarrier\": true,\n  \"recursiveEventPolicy\": true,\n  \"defaultSettleMs\": 1250\n}"
+      "durationMs": 93,
+      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-09-03T19:41:45.903Z\",\n  \"pass\": true,\n  \"generationTokens\": true,\n  \"cancelPreviousGeneration\": true,\n  \"identityPredicate\": true,\n  \"stabilizationBarrier\": true,\n  \"recursiveEventPolicy\": true,\n  \"defaultSettleMs\": 1250\n}"
     },
     {
       "id": "orchestrator-patch-safety",
       "required": true,
       "pass": true,
-      "durationMs": 123,
-      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-29T05:49:12.699Z\",\n  \"pass\": true,\n  \"manifestFirst\": true,\n  \"projectIdentityGate\": true,\n  \"baseHashGate\": true,\n  \"payloadHashGate\": true,\n  \"pathTraversalProtection\": true,\n  \"stagingCopyRequired\": true,\n  \"selectiveThenFullRegression\": true,\n  \"backupBeforeCommit\": true,\n  \"postCommitHashComparison\": true,\n  \"badPatchMustLeaveStableUnchanged\": true,\n  \"workingCandidateStable\": true\n}"
+      "durationMs": 96,
+      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-09-03T19:41:45.997Z\",\n  \"pass\": true,\n  \"manifestFirst\": true,\n  \"projectIdentityGate\": true,\n  \"baseHashGate\": true,\n  \"payloadHashGate\": true,\n  \"pathTraversalProtection\": true,\n  \"stagingCopyRequired\": true,\n  \"selectiveThenFullRegression\": true,\n  \"backupBeforeCommit\": true,\n  \"postCommitHashComparison\": true,\n  \"badPatchMustLeaveStableUnchanged\": true,\n  \"workingCandidateStable\": true\n}"
     },
     {
       "id": "orchestrator-minimal-repro",
       "required": true,
       "pass": true,
-      "durationMs": 124,
-      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-29T05:49:12.828Z\",\n  \"pass\": true,\n  \"zip\": true,\n  \"redaction\": true,\n  \"allowlistedEvidence\": true,\n  \"stablePreservationEvidence\": true\n}"
+      "durationMs": 130,
+      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-09-03T19:41:46.131Z\",\n  \"pass\": true,\n  \"zip\": true,\n  \"redaction\": true,\n  \"allowlistedEvidence\": true,\n  \"stablePreservationEvidence\": true\n}"
     },
     {
       "id": "orchestrator-invariant-model",
       "required": true,
       "pass": true,
-      "durationMs": 132,
+      "durationMs": 103,
       "stdout": "[ORCHESTRATOR_MODEL] PASS states=20"
     },
     {
       "id": "orchestrator-supervisor-negative",
       "required": true,
       "pass": true,
-      "durationMs": 641,
+      "durationMs": 345,
       "stdout": "{\n  \"pass\": true,\n  \"crashLoopBlocked\": true,\n  \"normalizedFingerprintStable\": true,\n  \"minimalReproCreated\": true\n}"
     },
     {
       "id": "orchestrator-supervisor",
       "required": true,
       "pass": true,
-      "durationMs": 148,
-      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-29T05:49:13.751Z\",\n  \"pass\": true,\n  \"watchdog\": true,\n  \"crashLoopProtection\": true,\n  \"restartBudget\": true,\n  \"circuitBreaker\": true,\n  \"exponentialBackoff\": true,\n  \"jitter\": true,\n  \"persistentIncidents\": true,\n  \"crashFingerprinting\": true,\n  \"generationLease\": true,\n  \"staleMonitorCancellation\": true,\n  \"startupStabilization\": true,\n  \"heartbeatTimeoutSupport\": true,\n  \"minimalReproOnCircuitOpen\": true,\n  \"stablePreserved\": true,\n  \"managedServiceCount\": 0\n}"
+      "durationMs": 119,
+      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-09-03T19:41:46.701Z\",\n  \"pass\": true,\n  \"watchdog\": true,\n  \"crashLoopProtection\": true,\n  \"restartBudget\": true,\n  \"circuitBreaker\": true,\n  \"exponentialBackoff\": true,\n  \"jitter\": true,\n  \"persistentIncidents\": true,\n  \"crashFingerprinting\": true,\n  \"generationLease\": true,\n  \"staleMonitorCancellation\": true,\n  \"startupStabilization\": true,\n  \"heartbeatTimeoutSupport\": true,\n  \"minimalReproOnCircuitOpen\": true,\n  \"stablePreserved\": true,\n  \"managedServiceCount\": 0\n}"
     },
     {
       "id": "capability-scheduler",
       "required": true,
       "pass": true,
-      "durationMs": 149,
-      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-29T05:49:13.902Z\",\n  \"pass\": true,\n  \"cpuFirst\": true,\n  \"capabilityAware\": true,\n  \"resourceAware\": true,\n  \"cacheLocalityAware\": true,\n  \"localWorker\": \"local-WIN-GJVRHRQPB5A\"\n}"
+      "durationMs": 98,
+      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-09-03T19:41:46.800Z\",\n  \"pass\": true,\n  \"cpuFirst\": true,\n  \"capabilityAware\": true,\n  \"resourceAware\": true,\n  \"cacheLocalityAware\": true,\n  \"localWorker\": \"local-WIN-GJVRHRQPB5A\"\n}"
     },
     {
       "id": "cas-redundancy",
       "required": true,
       "pass": true,
-      "durationMs": 130,
-      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-29T05:49:14.042Z\",\n  \"pass\": true,\n  \"minimumCopies\": 2,\n  \"independentRoots\": true,\n  \"repairOnReadReady\": true,\n  \"remoteDisasterToleranceClaim\": false,\n  \"claim\": \"Two independent local roots verified. A remote peer is still required before claiming host-disaster tolerance.\"\n}"
+      "durationMs": 93,
+      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-09-03T19:41:46.896Z\",\n  \"pass\": true,\n  \"minimumCopies\": 2,\n  \"independentRoots\": true,\n  \"repairOnReadReady\": true,\n  \"remoteDisasterToleranceClaim\": false,\n  \"claim\": \"Two independent local roots verified. A remote peer is still required before claiming host-disaster tolerance.\"\n}"
     },
     {
       "id": "device-worker",
       "required": true,
       "pass": true,
-      "durationMs": 129,
-      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-08-29T05:49:14.163Z\",\n  \"pass\": true,\n  \"allowArbitraryCommands\": false,\n  \"scenarioCount\": 1,\n  \"bindHost\": \"127.0.0.1\",\n  \"tokenConfigured\": false,\n  \"evidenceEndpoint\": true,\n  \"evidenceConfigured\": false\n}"
+      "durationMs": 91,
+      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-09-03T19:41:46.992Z\",\n  \"pass\": true,\n  \"allowArbitraryCommands\": false,\n  \"scenarioCount\": 1,\n  \"bindHost\": \"127.0.0.1\",\n  \"tokenConfigured\": false,\n  \"evidenceEndpoint\": true,\n  \"evidenceConfigured\": false\n}"
     },
     {
       "id": "record-replay",
       "required": true,
       "pass": true,
-      "durationMs": 359,
-      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-29T05:49:14.534Z\",\n  \"pass\": true,\n  \"name\": \"selftest-15936\",\n  \"mismatches\": [],\n  \"expected\": {\n    \"exitCode\": 0,\n    \"stdoutHash\": \"9fa528fa3271e27a3d6f4089b7c25ffdb115c3732e07229ca9d2ad4c7e73bde2\",\n    \"stderrHash\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\"\n  },\n  \"actual\": {\n    \"exitCode\": 0,\n    \"stdoutHash\": \"9fa528fa3271e27a3d6f4089b7c25ffdb115c3732e07229ca9d2ad4c7e73bde2\",\n    \"stderrHash\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\"\n  }\n}"
+      "durationMs": 259,
+      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-09-03T19:41:47.253Z\",\n  \"pass\": true,\n  \"name\": \"selftest-12828\",\n  \"mismatches\": [],\n  \"expected\": {\n    \"exitCode\": 0,\n    \"stdoutHash\": \"9fa528fa3271e27a3d6f4089b7c25ffdb115c3732e07229ca9d2ad4c7e73bde2\",\n    \"stderrHash\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\"\n  },\n  \"actual\": {\n    \"exitCode\": 0,\n    \"stdoutHash\": \"9fa528fa3271e27a3d6f4089b7c25ffdb115c3732e07229ca9d2ad4c7e73bde2\",\n    \"stderrHash\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\"\n  }\n}"
     },
     {
       "id": "dependency-security",
       "required": true,
       "pass": true,
-      "durationMs": 129,
-      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-29T05:49:14.659Z\",\n  \"pass\": true,\n  \"engineReady\": true,\n  \"provider\": \"OSV\",\n  \"lockedPackageCount\": 484,\n  \"networkScanClaim\": false,\n  \"transactionalRemediationReady\": true\n}"
+      "durationMs": 95,
+      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-09-03T19:41:47.346Z\",\n  \"pass\": true,\n  \"engineReady\": true,\n  \"provider\": \"OSV\",\n  \"lockedPackageCount\": 484,\n  \"networkScanClaim\": false,\n  \"transactionalRemediationReady\": true\n}"
     },
     {
       "id": "transactional-deploy",
       "required": true,
       "pass": true,
-      "durationMs": 322,
-      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-08-29T05:49:14.790Z\",\n  \"pass\": true,\n  \"provider\": \"vercel-cli\",\n  \"vercelAvailable\": false,\n  \"transactionalStateMachine\": true,\n  \"previewBeforePromote\": true,\n  \"rollbackOnFailure\": true,\n  \"explicitDeployRequired\": true\n}"
+      "durationMs": 221,
+      "stdout": "{\n  \"schemaVersion\": \"7.2.0\",\n  \"generatedAt\": \"2026-09-03T19:41:47.436Z\",\n  \"pass\": true,\n  \"provider\": \"vercel-cli\",\n  \"vercelAvailable\": false,\n  \"transactionalStateMachine\": true,\n  \"previewBeforePromote\": true,\n  \"rollbackOnFailure\": true,\n  \"explicitDeployRequired\": true\n}"
     },
     {
       "id": "enhancement-orchestrator",
       "required": true,
       "pass": true,
-      "durationMs": 128,
+      "durationMs": 91,
       "stdout": "[ENHANCEMENT_V7] PASS next=9"
     },
     {
       "id": "leader-lease-health",
       "required": true,
       "pass": true,
-      "durationMs": 132,
-      "stdout": "{\n  \"schemaVersion\": \"7.3.0\",\n  \"generatedAt\": \"2026-08-29T05:49:15.246Z\",\n  \"pass\": true,\n  \"productionConfigured\": false,\n  \"backend\": \"local-model-only\",\n  \"fencingVerified\": true,\n  \"splitBrainMutationsBlocked\": true,\n  \"holderId\": \"local-15816\",\n  \"migration\": \"supabase/migrations/20260824_orchestrator_leader_lease.sql\"\n}"
+      "durationMs": 90,
+      "stdout": "{\n  \"schemaVersion\": \"7.3.0\",\n  \"generatedAt\": \"2026-09-03T19:41:47.753Z\",\n  \"pass\": true,\n  \"productionConfigured\": false,\n  \"backend\": \"local-model-only\",\n  \"fencingVerified\": true,\n  \"splitBrainMutationsBlocked\": true,\n  \"holderId\": \"local-11380\",\n  \"migration\": \"supabase/migrations/20260824_orchestrator_leader_lease.sql\"\n}"
     },
     {
       "id": "leader-lease-selftest",
       "required": true,
       "pass": true,
-      "durationMs": 133,
-      "stdout": "{\n  \"schemaVersion\": \"7.3.0\",\n  \"generatedAt\": \"2026-08-29T05:49:15.383Z\",\n  \"pass\": true,\n  \"checks\": {\n    \"singleLeader\": true,\n    \"fencingIncrements\": true,\n    \"staleLeaderRejected\": true\n  }\n}"
+      "durationMs": 94,
+      "stdout": "{\n  \"schemaVersion\": \"7.3.0\",\n  \"generatedAt\": \"2026-09-03T19:41:47.852Z\",\n  \"pass\": true,\n  \"checks\": {\n    \"singleLeader\": true,\n    \"fencingIncrements\": true,\n    \"staleLeaderRejected\": true\n  }\n}"
     },
     {
       "id": "production-safety-health",
       "required": true,
       "pass": true,
-      "durationMs": 269,
-      "stdout": "{\n  \"schemaVersion\": \"7.4.0\",\n  \"generatedAt\": \"2026-08-29T05:49:15.643Z\",\n  \"pass\": true,\n  \"armed\": true,\n  \"dryRun\": true,\n  \"badSignals\": [],\n  \"action\": \"NO_ACTION\",\n  \"rollbackAuthorized\": false\n}"
+      "durationMs": 88,
+      "stdout": "{\n  \"schemaVersion\": \"7.4.0\",\n  \"generatedAt\": \"2026-09-03T19:41:47.936Z\",\n  \"pass\": true,\n  \"armed\": true,\n  \"dryRun\": true,\n  \"badSignals\": [],\n  \"action\": \"NO_ACTION\",\n  \"rollbackAuthorized\": false\n}"
     },
     {
       "id": "production-safety-selftest",
       "required": true,
       "pass": true,
-      "durationMs": 138,
-      "stdout": "{\n  \"schemaVersion\": \"7.4.0\",\n  \"generatedAt\": \"2026-08-29T05:49:15.795Z\",\n  \"pass\": true,\n  \"cases\": [\n    {\n      \"name\": \"healthy\",\n      \"bad\": [],\n      \"expect\": \"NO_ACTION\"\n    },\n    {\n      \"name\": \"certified-regression\",\n      \"bad\": [\n        \"certified-function-regression\"\n      ],\n      \"expect\": \"STOP_CANARY\"\n    },\n    {\n      \"name\": \"crash-loop\",\n      \"bad\": [\n        \"crash-loop\"\n      ],\n      \"expect\": \"STOP_CANARY\"\n    }\n  ]\n}"
+      "durationMs": 92,
+      "stdout": "{\n  \"schemaVersion\": \"7.4.0\",\n  \"generatedAt\": \"2026-09-03T19:41:48.028Z\",\n  \"pass\": true,\n  \"cases\": [\n    {\n      \"name\": \"healthy\",\n      \"bad\": [],\n      \"expect\": \"NO_ACTION\"\n    },\n    {\n      \"name\": \"certified-regression\",\n      \"bad\": [\n        \"certified-function-regression\"\n      ],\n      \"expect\": \"STOP_CANARY\"\n    },\n    {\n      \"name\": \"crash-loop\",\n      \"bad\": [\n        \"crash-loop\"\n      ],\n      \"expect\": \"STOP_CANARY\"\n    }\n  ]\n}"
     },
     {
       "id": "soak-chaos",
       "required": true,
       "pass": true,
-      "durationMs": 151,
-      "stdout": "{\n  \"schemaVersion\": \"7.3.0\",\n  \"generatedAt\": \"2026-08-29T05:49:15.945Z\",\n  \"pass\": true,\n  \"cycles\": 200,\n  \"faultCounts\": {\n    \"process-kill\": 40,\n    \"disk-full\": 33,\n    \"network-partition\": 31,\n    \"lease-expiry\": 34,\n    \"corrupt-checkpoint\": 29,\n    \"duplicate-delivery\": 33\n  },\n  \"uniqueProcessed\": 39,\n  \"violations\": [],\n  \"invariantsChecked\": [\n    \"no-two-leaders\",\n    \"certified-functions-preserved\",\n    \"queue-idempotent\",\n    \"stable-not-mutated-on-failure\",\n    \"rollback-available\"\n  ]\n}"
+      "durationMs": 95,
+      "stdout": "{\n  \"schemaVersion\": \"7.3.0\",\n  \"generatedAt\": \"2026-09-03T19:41:48.126Z\",\n  \"pass\": true,\n  \"cycles\": 200,\n  \"faultCounts\": {\n    \"process-kill\": 40,\n    \"disk-full\": 33,\n    \"network-partition\": 31,\n    \"lease-expiry\": 34,\n    \"corrupt-checkpoint\": 29,\n    \"duplicate-delivery\": 33\n  },\n  \"uniqueProcessed\": 39,\n  \"violations\": [],\n  \"invariantsChecked\": [\n    \"no-two-leaders\",\n    \"certified-functions-preserved\",\n    \"queue-idempotent\",\n    \"stable-not-mutated-on-failure\",\n    \"rollback-available\"\n  ]\n}"
     },
     {
       "id": "crash-diagnostics",
       "required": true,
       "pass": true,
-      "durationMs": 255,
-      "stdout": "{\n  \"schemaVersion\": \"7.3.0\",\n  \"generatedAt\": \"2026-08-29T05:49:16.144Z\",\n  \"pass\": true,\n  \"eventCount\": 0,\n  \"clusterCount\": 0,\n  \"clusters\": [],\n  \"nodeDiagnosticReportAvailable\": true\n}"
+      "durationMs": 89,
+      "stdout": "{\n  \"schemaVersion\": \"7.3.0\",\n  \"generatedAt\": \"2026-09-03T19:41:48.217Z\",\n  \"pass\": true,\n  \"eventCount\": 0,\n  \"clusterCount\": 0,\n  \"clusters\": [],\n  \"nodeDiagnosticReportAvailable\": true\n}"
     },
     {
       "id": "crash-diagnostics-selftest",
       "required": true,
       "pass": true,
-      "durationMs": 312,
-      "stdout": "{\n  \"schemaVersion\": \"7.3.0\",\n  \"generatedAt\": \"2026-08-29T05:49:16.517Z\",\n  \"pass\": true,\n  \"secretRedaction\": true,\n  \"deterministicFingerprint\": true\n}"
+      "durationMs": 87,
+      "stdout": "{\n  \"schemaVersion\": \"7.3.0\",\n  \"generatedAt\": \"2026-09-03T19:41:48.312Z\",\n  \"pass\": true,\n  \"secretRedaction\": true,\n  \"deterministicFingerprint\": true\n}"
     },
     {
       "id": "causal-debugger",
       "required": true,
       "pass": true,
-      "durationMs": 509,
-      "stdout": "{\n  \"schemaVersion\": \"7.4.0\",\n  \"generatedAt\": \"2026-08-29T05:49:17.029Z\",\n  \"pass\": true,\n  \"correlationValidated\": true,\n  \"nativeCollectorAvailable\": true,\n  \"nativeCollectorRequiredForInternalPass\": false,\n  \"secretRedaction\": true,\n  \"graphNodes\": 8,\n  \"graphEdges\": 0\n}"
+      "durationMs": 227,
+      "stdout": "{\n  \"schemaVersion\": \"7.4.0\",\n  \"generatedAt\": \"2026-09-03T19:41:48.535Z\",\n  \"pass\": true,\n  \"correlationValidated\": true,\n  \"nativeCollectorAvailable\": true,\n  \"nativeCollectorRequiredForInternalPass\": false,\n  \"secretRedaction\": true,\n  \"graphNodes\": 8,\n  \"graphEdges\": 0\n}"
     },
     {
       "id": "cas-replication-controller",
       "required": true,
       "pass": true,
-      "durationMs": 474,
-      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-08-29T05:49:17.407Z\",\n  \"pass\": true,\n  \"protocolSelftest\": {\n    \"pass\": true,\n    \"replicationAcks\": 3,\n    \"readRepair\": true,\n    \"digestVerified\": true\n  },\n  \"configuredPeers\": 0,\n  \"reachablePeers\": 0,\n  \"independentRemotePeers\": 0,\n  \"hostDisasterToleranceCertified\": false,\n  \"externalBlockers\": [\n    \"independent-remote-cas-peer-required\"\n  ],\n  \"probes\": [],\n  \"truthRule\": \"Protocol self-tests prove replication/read-repair semantics only. Host-disaster tolerance is certified only with a reachable remote peer explicitly marked independentFailureDomain=true.\"\n}"
+      "durationMs": 285,
+      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-09-03T19:41:48.756Z\",\n  \"pass\": true,\n  \"protocolSelftest\": {\n    \"pass\": true,\n    \"replicationAcks\": 3,\n    \"readRepair\": true,\n    \"digestVerified\": true\n  },\n  \"configuredPeers\": 0,\n  \"reachablePeers\": 0,\n  \"independentRemotePeers\": 0,\n  \"hostDisasterToleranceCertified\": false,\n  \"externalBlockers\": [\n    \"independent-remote-cas-peer-required\"\n  ],\n  \"probes\": [],\n  \"truthRule\": \"Protocol self-tests prove replication/read-repair semantics only. Host-disaster tolerance is certified only with a reachable remote peer explicitly marked independentFailureDomain=true.\"\n}"
     },
     {
       "id": "physical-device-fleet",
       "required": true,
       "pass": true,
-      "durationMs": 307,
-      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-08-29T05:49:17.815Z\",\n  \"pass\": true,\n  \"protocolSelftest\": {\n    \"pass\": true,\n    \"mockProtocolOnly\": true,\n    \"evidenceVerified\": true,\n    \"staleEvidenceRejected\": true\n  },\n  \"configuredWorkers\": 0,\n  \"freshAuthenticatedRealEvidenceCount\": 0,\n  \"platforms\": [],\n  \"productionCertified\": false,\n  \"externalBlockers\": [\n    \"fresh-authenticated-real-android-worker-evidence-required\",\n    \"fresh-authenticated-real-ios-worker-evidence-required\"\n  ],\n  \"truthRule\": \"Mock workers validate protocol only. Physical-device 100% requires fresh evidence from real Android and iOS hardware.\"\n}"
+      "durationMs": 211,
+      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-09-03T19:41:49.024Z\",\n  \"pass\": true,\n  \"protocolSelftest\": {\n    \"pass\": true,\n    \"mockProtocolOnly\": true,\n    \"evidenceVerified\": true,\n    \"staleEvidenceRejected\": true\n  },\n  \"configuredWorkers\": 0,\n  \"freshAuthenticatedRealEvidenceCount\": 0,\n  \"platforms\": [],\n  \"productionCertified\": false,\n  \"externalBlockers\": [\n    \"fresh-authenticated-real-android-worker-evidence-required\",\n    \"fresh-authenticated-real-ios-worker-evidence-required\"\n  ],\n  \"truthRule\": \"Mock workers validate protocol only. Physical-device 100% requires fresh evidence from real Android and iOS hardware.\"\n}"
     },
     {
       "id": "production-slo-autopilot",
       "required": true,
       "pass": true,
-      "durationMs": 132,
-      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-08-29T05:49:17.957Z\",\n  \"pass\": true,\n  \"controllerSelftest\": {\n    \"healthy\": {\n      \"decision\": \"ALLOW_CANARY\",\n      \"authorized\": false\n    },\n    \"synthetic\": {\n      \"decision\": \"DRY_RUN_ROLLBACK_ONLY\",\n      \"authorized\": false,\n      \"reason\": \"no-production-evidence\"\n    },\n    \"prodNoAuth\": {\n      \"decision\": \"STOP_CANARY_AND_REQUIRE_ROLLBACK_AUTH\",\n      \"authorized\": false,\n      \"reason\": \"authorization-required\"\n    },\n    \"prodAuth\": {\n      \"decision\": \"EXECUTE_AUTHORIZED_ROLLBACK\",\n      \"authorized\": true\n    }\n  },\n  \"current\": {\n    \"decision\": \"ALLOW_CANARY\",\n    \"authorized\": false\n  },\n  \"productionEvidence\": false,\n  \"rollbackActuallyExecuted\": false,\n  \"truthRule\": \"Synthetic samples may validate decision logic but can never authorize a production rollback.\"\n}"
+      "durationMs": 93,
+      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-09-03T19:41:49.126Z\",\n  \"pass\": true,\n  \"controllerSelftest\": {\n    \"healthy\": {\n      \"decision\": \"ALLOW_CANARY\",\n      \"authorized\": false\n    },\n    \"synthetic\": {\n      \"decision\": \"DRY_RUN_ROLLBACK_ONLY\",\n      \"authorized\": false,\n      \"reason\": \"no-production-evidence\"\n    },\n    \"prodNoAuth\": {\n      \"decision\": \"STOP_CANARY_AND_REQUIRE_ROLLBACK_AUTH\",\n      \"authorized\": false,\n      \"reason\": \"authorization-required\"\n    },\n    \"prodAuth\": {\n      \"decision\": \"EXECUTE_AUTHORIZED_ROLLBACK\",\n      \"authorized\": true\n    }\n  },\n  \"current\": {\n    \"decision\": \"ALLOW_CANARY\",\n    \"authorized\": false\n  },\n  \"productionEvidence\": false,\n  \"rollbackActuallyExecuted\": false,\n  \"truthRule\": \"Synthetic samples may validate decision logic but can never authorize a production rollback.\"\n}"
     },
     {
       "id": "migration-fencing-runtime",
       "required": true,
       "pass": true,
-      "durationMs": 128,
-      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-08-29T05:49:18.081Z\",\n  \"pass\": true,\n  \"selftest\": {\n    \"pass\": true,\n    \"ok\": {\n      \"pass\": true,\n      \"errors\": [],\n      \"currentFencingToken\": 8,\n      \"callerFencingToken\": 8\n    },\n    \"stale\": {\n      \"pass\": false,\n      \"errors\": [\n        \"stale-or-missing-fencing-token\"\n      ],\n      \"currentFencingToken\": 8,\n      \"callerFencingToken\": 7\n    },\n    \"early\": {\n      \"pass\": false,\n      \"errors\": [\n        \"contract-before-backfill-verification\"\n      ],\n      \"currentFencingToken\": 8,\n      \"callerFencingToken\": 8\n    }\n  },\n  \"liveConfigured\": false,\n  \"liveVerified\": false,\n  \"live\": {\n    \"pass\": false,\n    \"errors\": [\n      \"no-live-migration-plan\"\n    ]\n  },\n  \"truthRule\": \"A migration may execute only while the caller holds the current lease and exact fencing token. Stale leaders are rejected.\"\n}"
+      "durationMs": 86,
+      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-09-03T19:41:49.213Z\",\n  \"pass\": true,\n  \"selftest\": {\n    \"pass\": true,\n    \"ok\": {\n      \"pass\": true,\n      \"errors\": [],\n      \"currentFencingToken\": 8,\n      \"callerFencingToken\": 8\n    },\n    \"stale\": {\n      \"pass\": false,\n      \"errors\": [\n        \"stale-or-missing-fencing-token\"\n      ],\n      \"currentFencingToken\": 8,\n      \"callerFencingToken\": 7\n    },\n    \"early\": {\n      \"pass\": false,\n      \"errors\": [\n        \"contract-before-backfill-verification\"\n      ],\n      \"currentFencingToken\": 8,\n      \"callerFencingToken\": 8\n    }\n  },\n  \"liveConfigured\": false,\n  \"liveVerified\": false,\n  \"live\": {\n    \"pass\": false,\n    \"errors\": [\n      \"no-live-migration-plan\"\n    ]\n  },\n  \"truthRule\": \"A migration may execute only while the caller holds the current lease and exact fencing token. Stale leaders are rejected.\"\n}"
     },
     {
       "id": "long-soak-smoke",
       "required": true,
       "pass": true,
-      "durationMs": 198,
-      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-08-29T05:49:18.286Z\",\n  \"pass\": true,\n  \"smokeHarnessVerified\": true,\n  \"durationHours\": 0.000021,\n  \"eventCount\": 5,\n  \"allRecovered\": true,\n  \"longSoakCertified\": false,\n  \"minimumCertifiedHours\": 8,\n  \"stateFile\": \".world-server-state/long-soak/selftest-5448.json\",\n  \"truthRule\": \"Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation.\"\n}"
+      "durationMs": 178,
+      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-09-03T19:41:49.392Z\",\n  \"pass\": true,\n  \"smokeHarnessVerified\": true,\n  \"durationHours\": 0.000024,\n  \"eventCount\": 6,\n  \"allRecovered\": true,\n  \"longSoakCertified\": false,\n  \"minimumCertifiedHours\": 8,\n  \"stateFile\": \".world-server-state/long-soak/selftest-16100.json\",\n  \"truthRule\": \"Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation.\"\n}"
     },
     {
       "id": "native-causal-collector",
       "required": true,
       "pass": true,
-      "durationMs": 1629,
-      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-08-29T05:49:19.907Z\",\n  \"pass\": true,\n  \"collectorDiscovery\": {\n    \"platform\": \"win32\",\n    \"windowsCollectors\": [\n      \"wpr\",\n      \"logman\"\n    ],\n    \"linuxCollectors\": [],\n    \"otelCollectors\": [],\n    \"nativeAvailable\": true,\n    \"otelAvailable\": false\n  },\n  \"selftest\": {\n    \"pass\": true,\n    \"traceCorrelation\": true\n  },\n  \"nativeCollectorAvailable\": true,\n  \"otelCollectorAvailable\": false,\n  \"externalBlockers\": [\n    \"otel-collector-unavailable\"\n  ],\n  \"truthRule\": \"Collector availability is reported separately from causal graph logic. Missing privileged/native collectors never becomes a false 100% native-runtime claim.\"\n}"
+      "durationMs": 1935,
+      "stdout": "{\n  \"schemaVersion\": \"7.5.0\",\n  \"generatedAt\": \"2026-09-03T19:41:51.312Z\",\n  \"pass\": true,\n  \"collectorDiscovery\": {\n    \"platform\": \"win32\",\n    \"windowsCollectors\": [\n      \"wpr\",\n      \"logman\"\n    ],\n    \"linuxCollectors\": [],\n    \"otelCollectors\": [],\n    \"nativeAvailable\": true,\n    \"otelAvailable\": false\n  },\n  \"selftest\": {\n    \"pass\": true,\n    \"traceCorrelation\": true\n  },\n  \"nativeCollectorAvailable\": true,\n  \"otelCollectorAvailable\": false,\n  \"externalBlockers\": [\n    \"otel-collector-unavailable\"\n  ],\n  \"truthRule\": \"Collector availability is reported separately from causal graph logic. Missing privileged/native collectors never becomes a false 100% native-runtime claim.\"\n}"
     },
     {
       "id": "selftest",
       "required": true,
       "pass": true,
-      "durationMs": 6802,
+      "durationMs": 4252,
       "stdout": "[FEATURE_FLAGS] PASS 6/6\n[ADAPTER_SANDBOX] PASS runtime=deny-untrusted\n[MODEL_CHECK] PASS embeddedStates=15 tlc=optional-unavailable\n[WIT_COMPONENT] PASS wasmtime=false\n[TOOLCHAIN_SECURITY] PASS cosign=absent min=3.1.3\n[WIT_BINDINGS] PASS generated/wit/world-server-adapter.d.ts\n[INTEGRATION_SELFTEST_V75] PASS 91/91\n[DISTRIBUTED_CAS] PASS peers=0/0"
     },
     {
       "id": "honest-100-functions",
       "required": true,
       "pass": true,
-      "durationMs": 1977,
+      "durationMs": 1145,
       "stdout": "[HONEST_100] PASS certified=76/76 discovered=146"
     },
     {
       "id": "function-contract-coverage",
       "required": true,
       "pass": true,
-      "durationMs": 138,
+      "durationMs": 97,
       "stdout": "[FUNCTION_COVERAGE] integration=100% global=86% candidates=20"
     },
     {
       "id": "monotonic-100-guard",
       "required": true,
       "pass": true,
-      "durationMs": 1750,
-      "stdout": "[HONEST_100] PASS certified=76/76 discovered=146\n[MONOTONIC_100] PASS previous=68 current=76 addedCaps=0"
+      "durationMs": 1209,
+      "stdout": "[HONEST_100] PASS certified=76/76 discovered=146\n[MONOTONIC_100] PASS previous=76 current=76 addedCaps=0"
     },
     {
       "id": "orchestrator-continuity",
@@ -521,15 +528,15 @@
       "id": "release-promotion",
       "required": true,
       "pass": true,
-      "durationMs": 464,
+      "durationMs": 361,
       "stdout": "[FEATURE_FLAGS] PASS 6/6\n[RELEASE_PROMOTION] PASS decision=CANARY"
     },
     {
       "id": "readiness",
       "required": true,
       "pass": true,
-      "durationMs": 796,
-      "stdout": "[READINESS_V75] structural=100% operational=91% evidence=100% native=8%"
+      "durationMs": 548,
+      "stdout": "[READINESS_V75] structural=100% operational=92% evidence=100% native=17%"
     }
   ]
 }

@@ -1,21 +1,15 @@
 # Desktop AI — autonomous blocker repair action
 
-Generated: 2026-08-29T05:48:37.729Z
+Generated: 2026-09-03T19:42:00.148Z
 Repair engine: 1.0.0
 
-## 2 blocker(s) require Desktop AI root-cause repair
+## 1 blocker(s) require Desktop AI root-cause repair
 
-### local-gates
-
-Status: **requires_ai**
-
-Reason: 4/6 gates PASS
-
-### vercel-deployment
+### wasmtime
 
 Status: **requires_ai**
 
-Reason: Vercel state=failure: Deployment has failed — run this Vercel CLI command: npx vercel inspect dpl_DtxH1wiDeM4u3jTtoesW3hgsVYjk --logs
+Reason: wasmtime unavailable after existing bootstrap: spawnSync wasmtime ENOENT
 
 
 ## Mandatory repair loop

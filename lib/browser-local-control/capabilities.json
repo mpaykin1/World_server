@@ -53,7 +53,7 @@
     "checkpoint.list": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "list checkpoints from state/session-recovery", "status": "IMPLEMENTED", "executor": "execCheckpointList" },
     "session.status": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "desktop-ai:session:status + SESSION_HEALTH + current.json", "status": "IMPLEMENTED", "executor": "execSessionStatus" },
     "session.resume": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "read DESKTOP_AI_RESUME.md + UNFINISHED_WORK.json", "status": "IMPLEMENTED", "executor": "execSessionResume" },
-    "session.health": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "SESSION_HEALTH.json + health check", "status": "IMPLEMENTED", "executor": "execSessionHealth" },
+    "session.health": { "risk": "medium", "timeoutMs": 30000, "worktree": "shared", "description": "SESSION_HEALTH.json + health check — SIDE EFFECT: may trigger blockers:tick recovery if overdue timers detected", "status": "SIDE_EFFECTING", "executor": "execSessionHealth", "sideEffects": ["may_trigger_recovery"], "sideEffecting": true },
     "state.read": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "read allowlisted state file (session-recovery/*, blocker-repair/state.json)", "status": "IMPLEMENTED", "executor": "execStateRead" }
   }
 }

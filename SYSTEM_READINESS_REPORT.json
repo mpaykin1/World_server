@@ -1,16 +1,15 @@
 {
   "schemaVersion": "7.5.0",
-  "generatedAt": "2026-08-29T05:49:31.967Z",
+  "generatedAt": "2026-09-03T19:41:59.066Z",
   "pass": true,
   "structuralReadinessPercent": 100,
   "mandatoryRuntimeConnectivityPercent": 90,
-  "runtimeConnectivityPercent": 91,
-  "overallOperationalReadinessPercent": 91,
+  "runtimeConnectivityPercent": 92,
+  "overallOperationalReadinessPercent": 92,
   "evidenceConfidencePercent": 100,
   "externalRuntimePercent": 0,
-  "nativeExtensionCoveragePercent": 8,
+  "nativeExtensionCoveragePercent": 17,
   "externalBlockers": [
-    "native-cosign-unavailable",
     "independent-remote-cas-peer-unavailable",
     "fresh-android-and-ios-device-evidence-unavailable",
     "wasmtime-component-runtime-unavailable",
@@ -20,7 +19,7 @@
     "live-fenced-migration-evidence-unavailable"
   ],
   "nativeExtensions": {
-    "cosign": false,
+    "cosign": true,
     "remoteCasPeers": 0,
     "realDeviceEvidence": 0,
     "wasmtime": false,
