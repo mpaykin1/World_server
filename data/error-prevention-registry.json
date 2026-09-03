@@ -541,13 +541,79 @@
       "id": "opencode-free-tier-timeout-on-full-repo-context",
       "category": "tooling",
       "severity": "major",
-      "status": "known",
+      "status": "protected",
       "symptom": "agent_implement (OpenCode CLI + a free hosted model, via lib/agent-adapters.js) reliably times out (classification 'timeout') on a real, full-size worktree of this repo, even for a small, precisely-scoped one-file edit that the exact same mechanism completes correctly in seconds against a tiny throwaway repo",
       "rootCause": "verified live: a genuine, narrowly-worded one-line edit to apps/ai3d-voxel-city/index.html (add viewport-fit=cover) was given to all 3 configured free models (opencode/mimo-v2.5-free, opencode/nemotron-3.5-lightning-free, opencode/ling-3.0-flash-fin-free) against a real World_server worktree; every one timed out at 280000ms (total ~14 minutes across the 3-model fallback chain), while the same models edited a single-file throwaway repo correctly within seconds to tens of seconds during development. Root cause is presumed to be the agent's own repo-exploration behavior scaling with the number of files/size of the worktree it is pointed at (`--dir`) rather than the edit itself, but this was not fully isolated - only the symptom and its reproducibility are confirmed, not the exact internal reason inside OpenCode's own agent loop.",
       "protection": [
         "the fallback/timeout/cleanup mechanism itself worked correctly throughout (each failed attempt was cleanly killed via runWithTreeKill with zero orphaned processes, git state was reset between attempts via `git checkout -- . && git clean -fd`, and the pipeline correctly returned needsEscalation:true with full per-model diagnostics rather than hanging or reporting a false success) - this is a real capability/latency limit of the current free-tier backend on this hardware against a repo this size, not a bug in the bridge",
         "do not assume raising timeoutMs alone fixes this without new evidence - it was not verified whether a longer budget (e.g. 10+ minutes per model) would succeed or whether the agent is doing unbounded exploration; the more reliable current use of agent_implement is a narrowly-scoped worktree/task, matching the pattern the throwaway-repo tests actually validated",
-        "when a real production use needs full-repo-context edits, scope the task's targetWorktree or instructions to point the agent at a specific subdirectory/file set explicitly rather than the whole tree, and/or budget significantly more wall-clock time and treat needsEscalation as the expected fallback to a human/Claude session, not a failure to fix"
+        "when a real production use needs full-repo-context edits, scope the task's targetWorktree or instructions to point the agent at a specific subdirectory/file set explicitly rather than the whole tree, and/or budget significantly more wall-clock time and treat needsEscalation as the expected fallback to a human/Claude session, not a failure to fix",
+        "FIXED (next round): lib/scoped-task-compiler.js's compileContext() extracts explicit file mentions + known-issue registry matches + keyword-ranked files, and implementGoal() now attaches only those files via OpenCode's -f flag (progressive expansion: level 1 = ~5 files, level 2 = ~20, level 3 = the old full-repo fallback) with per-level timeouts scaled from the caller's budget, trying all context levels for one model before moving to the next model - real fix, not just documented as a limitation"
+      ]
+    },
+    {
+      "id": "gdscript-64bit-int-does-not-replicate-js-32bit-bitops",
+      "category": "tooling",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "a GDScript port of a JS hash/noise function that uses plain `*`, `^`, `>>` on GDScript's 64-bit `int` produces completely different output from the JS original for the same inputs - in this case, the native Godot client rendered visibly wrong terrain (all-'snow' biome regardless of seed/coordinates) instead of matching the web client's real terrain for the same seed",
+      "rootCause": "JS's Math.imul is a 32-bit signed multiply with wraparound, and `>>>` is an UNSIGNED right shift performed on the 32-bit representation - GDScript's `int` is 64-bit signed with no built-in 32-bit wraparound multiply and no unsigned-shift operator, so `h >> 13` on a value that is negative in its 32-bit interpretation sign-extends across the full 64 bits instead of shifting in zeros, and `a * b` on two 32-bit-range values does not wrap the way Math.imul does. Caught by scripts/compare-worldgen.js (a real, automated JS-vs-Godot comparison at several seeds/coordinates), not by visual inspection alone.",
+      "protection": [
+        "godot/world-client/WorldGen.gd: to_int32(v) (mask to low 32 bits, then reinterpret as signed if >= 0x80000000), imul32(a,b) (multiply then to_int32), ushr32(v,n) (mask to unsigned 32-bit, then normal right-shift) - use these three helpers for ANY further port of a JS bitwise/hash function to GDScript, never plain */^/>>",
+        "scripts/compare-worldgen.js is the regression test - it computes the same sample points via the real apps/voxel-world/client.js formulas (copied verbatim from that file, not reimplemented) and the real Godot binary in --smoke-test mode, and fails loudly on any height/biome mismatch across multiple seeds. Run it after any change to WorldGen.gd or client.js's terrain formulas.",
+        "coverage expanded to 7 seeds x 20 coordinates (140 points, both quadrants, small and large magnitudes, including 0 and a negative seed) after the initial 3 seeds x 5 points suite passed - a narrow suite can pass while missing a real divergence at an untested coordinate/seed combination."
+      ]
+    },
+    {
+      "id": "unmanaged-concurrent-network-heavy-plus-llm-remote-misdiagnosed-as-model-timeout",
+      "category": "tooling",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "agent_implement (real free-tier OpenCode execution) reported classification:'timeout' for all 3 free models on a real, precisely-scoped (5-file) World_server task - the exact task and context that, tested moments later in isolation, succeeded in 10-13 seconds against all 3 models",
+      "rootCause": "a 1.19GB Godot export-templates download was running concurrently (via curl, started to prepare the native pipeline) while the scoped-context E2E test executed. The download saturated local network bandwidth, starving the free-hosted OpenCode models' own remote API calls, which then genuinely failed to respond within their budget. This was NOT a flaw in the Scoped Task Compiler (verified separately - the same scoped context succeeded immediately once the download was not competing) and NOT a weakness of the free-tier models themselves (all 3 succeeded on direct re-test). Two of the three models additionally surfaced as classification:'agent_error' rather than 'timeout' during the contended run and 'timeout' on isolated re-test with a manual raw call succeeding in ~13s - the exact error text of those in-contention agent_errors was not captured (the session moved on to root-causing via reproduction rather than digging into that specific log), so the precise agent_error mechanism under contention remains only partially explained, but the outcome (success once contention was removed) is the same for all 3 models either way.",
+      "protection": [
+        "lib/resource-scheduler.js: NETWORK_HEAVY and LLM_REMOTE are declared as mutually conflicting resource classes; agent_implement now exclusively holds an LLM_REMOTE slot for its whole attempt loop via withResourceSlot(), so it can never run concurrently with another scheduler-aware NETWORK_HEAVY/LLM_REMOTE task in this process tree again",
+        "invokeOpencodeOnce() now samples system memory pressure at the exact moment a timeout fires and classifies it as 'resource_contention' (distinct from plain 'timeout') when pressure is high, rather than always blaming the model - an honest, if partial, diagnostic signal (see lib/resource-scheduler.js's own comment on what systemPressure() does and does not measure - free-memory ratio only, not network throughput, which Node cannot read cross-platform without a new dependency)",
+        "large trusted downloads (e.g. a future re-download of Godot templates) should be classified as NETWORK_HEAVY and run through the same scheduler once a typed command wraps them, so this specific incident cannot recur even indirectly",
+        "before concluding any AI-execution failure is about model capability, first rule out concurrent heavy local resource usage - this incident is the concrete example to check future similar reports against"
+      ]
+    },
+    {
+      "id": "resource-scheduler-lightweight-class-was-accidentally-self-serializing",
+      "category": "tooling",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "two independent LIGHTWEIGHT-classified tasks (the class explicitly defined to never conflict with anything) could not run concurrently in lib/resource-scheduler.js - the second call to tryAcquire() failed even though nothing should have blocked it",
+      "rootCause": "tryAcquire() unconditionally took an exclusive lease named `resource:<class>` for every resource class a task belonged to, including LIGHTWEIGHT - so the lease acquisition itself (not the conflict table) serialized same-class tasks regardless of whether that class was declared self-conflicting. Caught by this module's own regression test, not by production use.",
+      "protection": [
+        "tryAcquire() now only takes an exclusive lease for classes that list themselves in their own CONFLICTS entry (the existing self-conflict declarations for NETWORK_HEAVY/LLM_REMOTE/CPU_HEAVY/BUILD/LLM_LOCAL/MEMORY_HEAVY already implied this - LIGHTWEIGHT's empty conflict list was the one case not being honored)",
+        "test/resource-scheduler.test.js: 'LIGHTWEIGHT tasks never conflict with anything, including each other' is the regression test for this exact bug"
+      ]
+    },
+    {
+      "id": "opencode-process-hangs-after-completing-edit-when-spawned-from-node",
+      "category": "tooling",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "invokeOpencodeOnce() (lib/agent-adapters.js) intermittently classified a task as 'timeout' and rolled back the worktree via `git checkout -- .`, even though the actual edit had already been applied correctly - confirmed by watching the raw --format json event stream with stdio:'inherit': the file was correctly edited (real tool_use/step_finish events, ~2s) but the opencode.exe process never exited and had to be killed by the external timeout ~38 seconds later. This is a DIFFERENT bug from the earlier windows-spawnsync-timeout-does-not-kill-process-tree entry - that one was about the KILL mechanism not reaching the whole process tree; this one is about the process not exiting on its own even when its actual work is done, and the wrapper wrongly discarding real, completed work as if nothing had happened.",
+      "rootCause": "not fully isolated (see below), but conclusively demonstrated: raw shell invocation (`opencode run ...` typed directly, or run via bash -lc from inside this same session) reliably completes AND exits; the identical command spawned as a child of a Node.js process (via child_process.spawn, with shell:true+cmd.exe, or via bash.exe, or with stdio:'inherit' vs piped - all three were tried) can hang after finishing its work. The exact mechanism (console/TTY handle detection inside opencode's own process, an internal keep-alive the CLI doesn't tear down when it detects a non-interactive/piped parent, or something else) was not identified - this is recorded as a confirmed, reproducible SYMPTOM and a real, tested FIX for its consequence, not a full root-cause explanation of opencode's own internal behavior.",
+      "protection": [
+        "invokeOpencodeOnce(): on ETIMEDOUT, check `git diff` in the target worktree BEFORE concluding failure - if a real diff exists, the agent actually finished (classification 'ok', processHangAfterCompletion:true in the result) and verification still runs normally; only an empty diff at timeout is classified as a real failure (process_hang, or resource_contention if system memory pressure is high at that moment)",
+        "this must never regress to 'any timeout means rollback' - a future refactor of invokeOpencodeOnce must preserve the diff-check-before-rollback ordering",
+        "taxonomy used across this bridge for a failed/timed-out AI-execution attempt, so future incidents are classified precisely instead of a single generic 'timeout': 'timeout'/'process_hang' (no work done, no evidence of contention), 'resource_contention' (no work done, high memory pressure sampled at the moment of failure), 'agent_error' (the process exited non-zero with real stderr), 'verification_failed' (real edit, but `npm run check` failed), 'no_changes' (process exited 0 but touched nothing)"
+      ]
+    },
+    {
+      "id": "opencode-free-tier-reliability-degrades-with-sustained-session-usage",
+      "category": "tooling",
+      "severity": "major",
+      "status": "known",
+      "symptom": "a full clean benchmark of 3 real, small, correctly-scoped World_server tasks (this exact mechanism, verified correct multiple times earlier in the same session) scored 0/3 through the automated agent_implement pipeline - every attempt at scoped context levels 1-2 failed fast (~2.5s, classification agent_error) across all 3 free models, and level 3 (full-repo, single attached file) hung until the timeout (classification process_hang) - later re-tests of the SAME single-attached-file invocation that had worked reliably earlier in the session also hung with zero output at all, ruling out the initially-suspected 'multiple -f flags' explanation.",
+      "rootCause": "NOT conclusively identified - recorded honestly as an open question rather than a guessed answer. The most evidence-consistent hypothesis (not proven): this session made several dozen calls to the same free-tier hosted OpenCode models over a few hours, and the observed degradation (inconsistent fast-fail / slow-hang / zero-output-hang, all inconsistent with any single code-level variable tested: -f flag count, stdio mode, shell choice, resource contention alone) resembles session-cumulative rate-limiting or backend overload on the free-tier provider's side rather than a bug in this repo's own code. This was NOT re-tested after a cooldown period to confirm the hypothesis, for lack of remaining session time - a genuine, stated limitation of this investigation, not a swept-under-the-rug conclusion.",
+      "protection": [
+        "do not report agent_implement's free-tier success rate as a fixed/universal number - it varies with how much this session (or others sharing the same free-tier account/IP) has already used the same free models recently; always report the REAL observed rate from the actual run, never the best-case rate from earlier/isolated testing",
+        "before re-diagnosing a new instance of this symptom as a code bug, first check whether it reproduces after a cooldown period with no opencode calls, and whether it reproduces from a fresh/different network path - neither was tried here due to time constraints",
+        "the underlying mechanisms this session DID prove correct and should not be re-litigated by a future occurrence of this symptom: the Scoped Task Compiler's file-selection logic (test/scoped-task-compiler.test.js), the injection-safety of the -f attachment method (test/agent-adapters.test.js), and the hang-recovery fix's diff-before-rollback logic (opencode-process-hangs-after-completing-edit-when-spawned-from-node, above) - none of those were invalidated by this incident, only the current session's ability to get a live opencode response reliably"
       ]
     }
   ],
