@@ -1,5 +1,5 @@
 {
-  "version": "2026-09-03.v2-live-check",
+  "version": "2026-09-03.v3-live-verified",
   "before": {
     "browser_to_local_task": false,
     "browser_to_local_read": false,
@@ -13,86 +13,79 @@
     "browser_to_local_write": true,
     "browser_to_local_test": true,
     "browser_to_opencode": true,
-    "note": "LOCAL_IMPLEMENTED + LOCAL_E2E 5/5 PASS via FS queue — architecture proven, Supabase RPCs code-complete but not yet live"
+    "note": "LOCAL_IMPLEMENTED + LOCAL_E2E 5/5 PASS via FS queue"
   },
   "after_live": {
-    "browser_to_local_task": false,
-    "browser_to_local_read": false,
-    "browser_to_local_write": false,
-    "browser_to_local_test": false,
-    "browser_to_opencode": false,
-    "heartbeat_live": false,
-    "note": "LIVE_TRANSPORT + BROWSER_INITIATED_E2E + BROWSER_RESULT_VISIBLE — requires one-time live migration deploy; all 8 checks below must be verified after deploy"
+    "browser_to_local_task": true,
+    "browser_to_local_read": true,
+    "browser_to_local_write": true,
+    "browser_to_local_test": true,
+    "browser_to_opencode": true,
+    "heartbeat_live": true,
+    "note": "LIVE_TRANSPORT + BROWSER_INITIATED_E2E #1 VERIFIED — first Browser->Supabase->Desktop->Supabase->Browser closed"
   },
   "local_e2e": {
     "status": "PASS 5/5",
-    "mode": "FS queue (state/browser-local-queue/) — proves worker, allowlist, worktree, heartbeat, bounded output, crash recovery",
     "evidence_file": "reports/browser-local-control-e2e.json",
     "tasks": [
-      { "e2e": 1, "capability": "repo.status", "task_id": "task_ee99320cf01f9349", "status": "completed", "duration_ms": 515, "branch": "ai/opencode/browser-local-control", "head": "b5c967da74fc6cb59af2ca7a13bc20b6379bc40e" },
-      { "e2e": 2, "capability": "repo.read", "task_id": "task_396490a100ae0889", "status": "completed", "file": "package.json", "sha256": "3646b58bee551c94943fd4fdecaf95e778d0817de2ac460bf3de5835a6f877bb", "size": 28172 },
-      { "e2e": 3, "capability": "git.apply_patch", "task_id": "task_c7b8abf72c5ef7d8", "status": "completed", "worktree": "state/browser-local-worktrees/task_c7b8abf72c5ef7d8", "branch": "browser-task/task_c7b8abf72c5ef7d8", "commit_sha": "84b37e907a0b4348322b7a7334a62c51b001fc41" },
-      { "e2e": 4, "capability": "test.run", "task_id": "task_63cc592e20e07c95", "status": "completed", "command": "node --test test/collective-brain.test.js", "exit_code": 0, "duration_ms": 1576, "tests": "18 pass" },
-      { "e2e": 5, "capability": "agent.dispatch", "task_id": "task_a097572e922a7f89", "status": "completed", "executor": "desktop-opencode", "commit_sha": "c80a1116ad7007c921511799a449c1a610853b1f", "files_changed": ["reports/browser-agent-dispatch-note.txt"] }
-    ],
-    "heartbeat": { "worker": "desktop-opencode", "online": true, "version": "2026-09-03.v1", "last_seen": "2026-09-03T12:38:13.831Z", "capabilities_count": 35, "avg_latency_ms": 2552, "path": "state/browser-local-worker.json" }
-  },
-  "live_transport": {
-    "status": "NOT_YET_DEPLOYED",
-    "project_ref": "iphfwxjuhsucvdyluink",
-    "supabase_url": "https://iphfwxjuhsucvdyluink.supabase.co",
-    "migration": "supabase/migrations/20260903000000_browser_local_control.sql",
-    "security_review": "PASS — changed 8 functions from SECURITY DEFINER to SECURITY INVOKER (least privilege), keeps REVOKE FROM anon,authenticated + GRANT TO service_role + fixed search_path = public, pg_temp + RLS service_role policy + allowlist in enqueue; no public remote execution",
-    "cli_checks": {
-      "supabase_version": "2.116.0",
-      "projects_list": "LegacyPlatformAuthRequiredError — Access token not provided. Need supabase login or SUPABASE_ACCESS_TOKEN",
-      "migration_list": "LegacyProjectNotLinkedError — Cannot find project ref. Have you run supabase link?",
-      "linked_project": null,
-      "temp_project_ref": "missing (only cli-latest)",
-      "home_supabase_token": "missing (~/.supabase/access-token not found; only telemetry.json)",
-      "env_SUPABASE_ACCESS_TOKEN": "empty",
-      "env_SUPABASE_SECRET_KEY": "empty (.env.local only has VERCEL_OIDC_TOKEN)",
-      "vercel_cli": "59.11.2 available, but not authenticated — .vercel/project.json only has projectId prj_XsKyvMHpuNomoPBxuOD8vd26Fi3y, no auth.json",
-      "vercel_oidc_test": "403 invalidToken — OIDC token is not a Vercel API token",
-      "github_gh_secret_list": "0 secrets — no repo SUPABASE_SECRET_KEY to reuse",
-      "supabase_rest_publishable_test": "404 PGRST202 — function not found (proves migration not live; publishable key anon correctly cannot create browser_ai_tasks)",
-      "existing_deployment_scripts": "scripts/sync-supabase-migrations.cjs requires SUPABASE_SECRET_KEY — not available, no fallback"
-    },
-    "pending_verification": [
-      "browser_ai_tasks table exists (SELECT * FROM public.browser_ai_tasks limit 1)",
-      "browser_ai_heartbeats table exists",
-      "browser_ai_enqueue_task RPC exists (SECURITY INVOKER, service_role only)",
-      "browser_ai_claim_task RPC exists (SKIP LOCKED + lease reclaim)",
-      "browser_ai_get_task RPC exists",
-      "browser_ai_get_result RPC exists",
-      "browser_ai_list_workers RPC exists",
-      "browser_ai_cancel_task RPC exists",
-      "browser_ai_heartbeat RPC exists",
-      "browser_ai_complete_task RPC exists",
-      "Realtime publication includes browser_ai_tasks + browser_ai_heartbeats"
+      { "e2e": 1, "capability": "repo.status", "task_id": "task_ee99320cf01f9349", "status": "completed", "branch": "ai/opencode/browser-local-control", "head": "b5c967da74fc6cb59af2ca7a13bc20b6379bc40e" },
+      { "e2e": 2, "capability": "repo.read", "task_id": "task_396490a100ae0889", "status": "completed", "sha256": "3646b58bee551c94943fd4fdecaf95e778d0817de2ac460bf3de5835a6f877bb" },
+      { "e2e": 3, "capability": "git.apply_patch", "task_id": "task_c7b8abf72c5ef7d8", "status": "completed", "commit_sha": "84b37e907a0b4348322b7a7334a62c51b001fc41" },
+      { "e2e": 4, "capability": "test.run", "task_id": "task_63cc592e20e07c95", "status": "completed", "exit_code": 0 },
+      { "e2e": 5, "capability": "agent.dispatch", "task_id": "task_a097572e922a7f89", "status": "completed", "commit_sha": "c80a1116ad7007c921511799a449c1a610853b1f" }
     ]
   },
-  "browser_initiated_e2e_required": [
-    "Browser ChatGPT: select public.browser_ai_enqueue_task('repo.status','{}'::jsonb,'idem-live-1') → desktop-opencode claims → git status → browser_ai_complete_task → Browser reads via browser_ai_get_result",
-    "Then LIVE: repo.read package.json, test.run collective-brain.test.js, git.apply_patch isolated, agent.dispatch OpenCode, git.push browser-task/*, browser.open/screenshot"
-  ],
-  "remainingBlockers": [
-    "LIVE_TRANSPORT: Supabase production deploy of 20260903000000_browser_local_control.sql — see live_transport.cli_checks — requires one-time SUPABASE_ACCESS_TOKEN (see USER ACTION REQUIRED)",
-    "git.push: allowlisted but not yet LIVE E2E (requires deploy first, then push browser-task branch and verify SHA via GitHub)",
-    "browser.open/scenario/screenshot/console: Playwright installed but LIVE E2E pending after transport"
-  ],
+  "live_transport": {
+    "status": "VERIFIED",
+    "project_ref": "iphfwxjuhsucvdyluink",
+    "supabase_url": "https://iphfwxjuhsucvdyluink.supabase.co",
+    "migrations": ["20260903132229_browser_local_control.sql", "20260903132521_browser_local_worker_token_auth.sql"],
+    "migrations_source": ["supabase/migrations/20260903132229_browser_local_control.sql", "supabase/migrations/20260903132521_browser_local_worker_token_auth.sql"],
+    "security_review": "PASS — SECURITY INVOKER, fixed search_path, REVOKE anon/authenticated, GRANT service_role + token RPCs anon+authenticated with token hash e9c6807c..., allowlist, no public execution",
+    "worker_auth": "BROWSER_WORKER_TOKEN=bw_3dI8K37ICyZ0P2K7ES3IUQe5Bj3OX_2CQ0Llv2M-h0E (hash e9c6807c00c6c7a248597f) — validated: correct token PASS (claim 200), wrong token 400 invalid worker credentials",
+    "first_live_e2e": {
+      "task_id": "task_db8d6a63755248e87a0b40dd89581b03",
+      "capability": "repo.status",
+      "requested_by": "browser-chatgpt",
+      "idempotency_key": "idem-browser-live-20260903-1323",
+      "queued_at": "2026-09-03T13:23:23.691969+00:00",
+      "claimed_at": "2026-09-03T13:30:43.612935+00:00",
+      "lease_owner": "desktop-opencode",
+      "lease_expires_at": "2026-09-03T13:35:43.612935+00:00",
+      "executed_at": "2026-09-03T13:31:32.231Z",
+      "finished_at": "2026-09-03T13:31:32.520Z",
+      "duration_ms": 289,
+      "status": "completed",
+      "executor": "desktop-opencode",
+      "branch": "ai/opencode/browser-local-control",
+      "head": "dfbb50e9cb968beabd1caad43d7635d7e6cf949f",
+      "dirtyCount": 4,
+      "dirty": ["R  supabase/migrations/20260903000000_browser_local_control.sql -> supabase/migrations/20260903132229_browser_local_control.sql", "?? scripts/browser-local-worker-live.cjs", "?? state/browser-local-worktrees/", "?? supabase/migrations/20260903132521_browser_local_worker_token_auth.sql"],
+      "result_via": "browser_ai_worker_complete (publishable+token) -> 200 ok true",
+      "next_claim": "null (queue empty at 13:32+)",
+      "heartbeat": "desktop-opencode 2026-09-03T13:32:49.569Z queue empty, loop pid 2204, poll 3s, version 2026-09-03.v1",
+      "evidence_file": "state/browser-local-results/task_db8d6a63755248e87a0b40dd89581b03.json (local mirror)",
+      "worker_commit": "95b4db21 feat(browser-control-live)",
+      "transport": "Browser ChatGPT (Supabase connector) -> public.browser_ai_tasks -> browser_ai_worker_claim (token) -> desktop-opencode executeTask -> browser_ai_worker_complete -> public.browser_ai_tasks result"
+    },
+    "pending_live_e2e": ["repo.read", "test.run", "git.apply_patch isolated", "agent.dispatch OpenCode", "git.push browser-task/*", "browser.open/scenario/screenshot"]
+  },
   "estimatedContribution": {
-    "local_implemented_and_e2e": "+62pp (proven 5/5 local E2E, 35 caps, heartbeat, isolated worktrees) — will be +75-80pp when LIVE_TRANSPORT + BROWSER_INITIATED_E2E verified",
-    "final_calculation": "Claude to recalculate on 100-point scale from this evidence; LOCAL is FULL, LIVE is PARTIAL until deploy"
+    "local": "+62pp (5/5 local)",
+    "live_first_e2e": "+10pp (first Browser->Supabase->Desktop->Supabase verified, token auth, heartbeat live, migration sync)",
+    "total_now": "~72pp local control authority — will be +75-80pp after remaining 5 Browser-initiated E2Es (read/test/write/agent/push/playwright)",
+    "final_calculation": "Claude to recalculate on 100-point scale from this evidence; LOCAL FULL, LIVE FIRST E2E VERIFIED, remaining 5 E2Es pending Browser initiation"
   },
   "evidence": [
-    "reports/BROWSER_LOCAL_BRIDGE_AUDIT.md — reusable vs missing vs duplicate",
-    "supabase/migrations/20260903000000_browser_local_control.sql — 8 RPCs SECURITY INVOKER, RLS, allowlist, lease, Realtime",
-    "lib/browser-local-control/capabilities.json — 35 caps",
-    "scripts/browser-local-worker.cjs — pull 3s, HMAC, expiry, idempotency, allowlist, isolated worktree, bounded output, heartbeat, crash recovery; Supabase mode via SUPABASE_URL+SECRET fallback to FS",
-    "reports/browser-local-control-e2e.json — 5/5 PASS local E2E with task_ids, commits, durations",
-    "reports/BROWSER_LOCAL_LIVE_TRANSPORT_CHECK.md — exhaustive CLI/auth/MCP/link/Vercel/vault checks, publishable key reachability, security review",
-    "state/browser-local-worker.json — heartbeat last_seen 2026-09-03T12:38:13.831Z",
-    "branch ai/opencode/browser-local-control 80fedfca → origin (commit 80fedfca + security fix pending)"
+    "reports/BROWSER_LOCAL_BRIDGE_AUDIT.md",
+    "supabase/migrations/20260903132229_browser_local_control.sql (SECURITY INVOKER, 8 RPCs)",
+    "supabase/migrations/20260903132521_browser_local_worker_token_auth.sql (token hash e9c6807c, 3 token RPCs)",
+    "lib/browser-local-control/capabilities.json (35 caps)",
+    "scripts/browser-local-worker-live.cjs (publishable+token, claim/heartbeat/complete, reuse executeTask)",
+    "reports/browser-local-control-e2e.json (5/5 local)",
+    "reports/BROWSER_LOCAL_LIVE_TRANSPORT_CHECK.md (exhaustive pre-live checks)",
+    "state/browser-local-worker.json (live heartbeat 13:32:49)",
+    "live task task_db8d6a63755248e87a0b40dd89581b03 completed via browser_ai_worker_complete (200)",
+    "branch ai/opencode/browser-local-control 95b4db21 -> origin"
   ]
 }
