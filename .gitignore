@@ -61,3 +61,12 @@ COLLECTIVE_BRAIN_ROUTE.json
 COLLECTIVE_BRAIN_REPLAY.json
 COLLECTIVE_BRAIN_BENCHMARK.json
 .patch-backups/
+
+# Browser Local Control — runtime state (must not pollute git; use Supabase for sharing)
+state/browser-local-queue/
+state/browser-local-results/
+state/browser-local-worktrees/
+state/browser-local-artifacts/
+state/browser-local-worker.json
+# keep schemas, not live state
+!state/browser-local-worker.example.json
