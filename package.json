@@ -339,7 +339,11 @@
     "browser:worker:tick": "node scripts/browser-local-worker.cjs tick",
     "browser:worker:loop": "node scripts/browser-local-worker.cjs loop",
     "browser:worker:health": "node scripts/browser-local-worker.cjs health",
-    "browser:e2e": "node scripts/browser-local-e2e.cjs"
+    "browser:worker:live": "node scripts/browser-local-worker-live.cjs loop",
+    "browser:worker:live:tick": "node scripts/browser-local-worker-live.cjs tick",
+    "browser:worker:live:heartbeat": "node scripts/browser-local-worker-live.cjs heartbeat",
+    "browser:e2e": "node scripts/browser-local-e2e.cjs",
+    "browser:e2e:live": "node scripts/browser-local-worker-live.cjs tick"
   },
   "engines": {
     "node": "24.x"

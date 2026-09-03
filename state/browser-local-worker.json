@@ -42,12 +42,10 @@
     "artifact.zip"
   ],
   "current_task": null,
-  "last_seen": "2026-09-03T12:38:13.831Z",
+  "last_seen": "2026-09-03T13:33:07.095Z",
   "success_rate": 0.99,
-  "avg_latency_ms": 2552,
+  "avg_latency_ms": 0,
   "detail": {
-    "lastTask": "task_a097572e922a7f89",
-    "lastCapability": "agent.dispatch",
-    "latency": 2552
+    "queue": "empty"
   }
 }
