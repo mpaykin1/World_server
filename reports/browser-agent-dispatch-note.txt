@@ -1,0 +1,1 @@
+agent.dispatch task_a097572e922a7f89 @ 2026-09-03T12:38:11.636Z - found 3 TODOs, sample: .iw-graphics-staging/texture-quality-v10/WORLD_SERVER_TEXTURE_QUALITY_V10/DESKTOP_AI_INSTRUCTIONS.md:394:3. search TODO/FIXME/temporary bypass в изменённых V10 файлах;
