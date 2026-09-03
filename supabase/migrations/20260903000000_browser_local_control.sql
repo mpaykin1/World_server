@@ -73,7 +73,7 @@ create or replace function public.browser_ai_enqueue_task(
   p_task_id text default null
 ) returns jsonb
 language plpgsql
-security definer
+security invoker
 set search_path = public, pg_temp
 as $$
 declare
@@ -111,7 +111,7 @@ grant execute on function public.browser_ai_enqueue_task(text,jsonb,text,text,in
 
 -- 4. RPC: get task / result
 create or replace function public.browser_ai_get_task(p_task_id text) returns jsonb
-language sql security definer set search_path = public, pg_temp as $$
+language sql security invoker set search_path = public, pg_temp as $$
   select case when t.task_id is null then jsonb_build_object('ok',false,'error','not found')
   else jsonb_build_object('ok',true,'task', jsonb_build_object('task_id',t.task_id,'requested_by',t.requested_by,'capability',t.capability,'args',t.args,'repo',t.repo,'worktree_mode',t.worktree_mode,'risk',t.risk,'created_at',t.created_at,'expires_at',t.expires_at,'idempotency_key',t.idempotency_key,'status',t.status,'lease_owner',t.lease_owner,'lease_expires_at',t.lease_expires_at,'executor',t.executor,'started_at',t.started_at,'finished_at',t.finished_at,'result',t.result,'attempts',t.attempts,'updated_at',t.updated_at))
   end from (select * from public.browser_ai_tasks where task_id = p_task_id limit 1) t;
@@ -120,7 +120,7 @@ revoke all on function public.browser_ai_get_task(text) from public, anon, authe
 grant execute on function public.browser_ai_get_task(text) to service_role;
 
 create or replace function public.browser_ai_get_result(p_task_id text) returns jsonb
-language sql security definer set search_path = public, pg_temp as $$
+language sql security invoker set search_path = public, pg_temp as $$
   select case when t.task_id is null then jsonb_build_object('ok',false,'error','not found')
   when t.status not in ('completed','failed','blocked','cancelled') then jsonb_build_object('ok',false,'error','not finished','status',t.status)
   else jsonb_build_object('ok',true,'task_id',t.task_id,'status',t.status,'executor',t.executor,'started_at',t.started_at,'finished_at',t.finished_at,'result',t.result)
@@ -131,7 +131,7 @@ grant execute on function public.browser_ai_get_result(text) to service_role;
 
 -- 5. RPC: list workers (heartbeats)
 create or replace function public.browser_ai_list_workers() returns jsonb
-language sql security definer set search_path = public, pg_temp as $$
+language sql security invoker set search_path = public, pg_temp as $$
   select jsonb_build_object('ok',true,'workers', coalesce((select jsonb_agg(jsonb_build_object('worker',worker,'online',online,'version',version,'capabilities',capabilities,'current_task',current_task,'last_seen',last_seen,'success_rate',success_rate,'avg_latency_ms',avg_latency_ms,'detail',detail) order by last_seen desc) from public.browser_ai_heartbeats where last_seen > now() - interval '10 minutes'), '[]'::jsonb),'generatedAt', now());
 $$;
 revoke all on function public.browser_ai_list_workers() from public, anon, authenticated;
@@ -139,7 +139,7 @@ grant execute on function public.browser_ai_list_workers() to service_role;
 
 -- 6. RPC: cancel
 create or replace function public.browser_ai_cancel_task(p_task_id text) returns jsonb
-language plpgsql security definer set search_path = public, pg_temp as $$
+language plpgsql security invoker set search_path = public, pg_temp as $$
 declare v_row public.browser_ai_tasks;
 begin
   update public.browser_ai_tasks set status='cancelled', updated_at=now(), finished_at=now(), result=coalesce(result,'{}'::jsonb) || jsonb_build_object('cancelledAt', now(), 'cancelReason','user request')
@@ -156,7 +156,7 @@ grant execute on function public.browser_ai_cancel_task(text) to service_role;
 -- 7. Internal RPCs for worker: claim (SKIP LOCKED + lease reclaim) and heartbeat/complete
 create or replace function public.browser_ai_claim_task(p_worker text, p_capabilities jsonb default '[]'::jsonb, p_lease_seconds integer default 300)
 returns setof public.browser_ai_tasks
-language plpgsql security definer set search_path = public, pg_temp as $$
+language plpgsql security invoker set search_path = public, pg_temp as $$
 begin
   if p_worker is null or char_length(trim(p_worker)) < 3 then raise exception 'worker id required'; end if;
   return query
@@ -182,7 +182,7 @@ grant execute on function public.browser_ai_claim_task(text,jsonb,integer) to se
 
 create or replace function public.browser_ai_heartbeat(p_worker text, p_capabilities jsonb default '[]'::jsonb, p_detail jsonb default '{}'::jsonb)
 returns jsonb
-language plpgsql security definer set search_path = public, pg_temp as $$
+language plpgsql security invoker set search_path = public, pg_temp as $$
 begin
   if p_worker is null or char_length(trim(p_worker)) < 3 then raise exception 'worker required'; end if;
   insert into public.browser_ai_heartbeats(worker, capabilities, detail, last_seen, online)
@@ -196,7 +196,7 @@ grant execute on function public.browser_ai_heartbeat(text,jsonb,jsonb) to servi
 
 create or replace function public.browser_ai_complete_task(p_task_id text, p_status text, p_result jsonb default '{}'::jsonb)
 returns jsonb
-language plpgsql security definer set search_path = public, pg_temp as $$
+language plpgsql security invoker set search_path = public, pg_temp as $$
 declare v_row public.browser_ai_tasks;
 begin
   if p_status not in ('completed','failed','blocked','cancelled') then raise exception 'invalid status %', p_status; end if;
