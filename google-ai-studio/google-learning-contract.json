@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "5.0.0",
+  "name": "World_server Google Deployment Learning Loop",
+  "purpose": "Turn real Cloud Run runtime evidence into guarded development candidates without autonomous production mutation.",
+  "sources": [
+    "Cloud Run structured request logs",
+    "Cloud Run revision identity (K_SERVICE/K_REVISION/K_CONFIGURATION)",
+    "latency/status/memory/cold-start signals",
+    "feedback clusters",
+    "replay/regression evidence"
+  ],
+  "loop": [
+    "observe",
+    "aggregate by route/revision",
+    "correlate with feedback/replay",
+    "create candidate",
+    "update Game Design Spec delta",
+    "derive function/test needs",
+    "sandbox",
+    "canary",
+    "last-green or rollback"
+  ],
+  "hardRules": [
+    "exactly two AI Studio app slots",
+    "no secrets in logs",
+    "no raw chat/feedback bodies in runtime logs",
+    "no automatic production mutation",
+    "no third Google app",
+    "all changes pass existing release gates"
+  ]
+}

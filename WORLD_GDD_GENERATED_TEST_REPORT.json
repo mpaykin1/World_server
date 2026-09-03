@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "6.0.0",
+  "generatedAt": "2026-09-03T07:45:50.036Z",
+  "pass": true,
+  "checks": [
+    {
+      "name": "Navigator API/runtime",
+      "pass": true
+    },
+    {
+      "name": "Create/Join GDD",
+      "pass": true
+    },
+    {
+      "name": "multiplayer bridge",
+      "pass": true
+    },
+    {
+      "name": "eye/mobile controls contract",
+      "pass": true
+    },
+    {
+      "name": "11-language runtime",
+      "pass": true
+    },
+    {
+      "name": "feedback loop",
+      "pass": true
+    },
+    {
+      "name": "safe functions",
+      "pass": true
+    },
+    {
+      "name": "Google slots",
+      "pass": true
+    },
+    {
+      "name": "replay",
+      "pass": true
+    },
+    {
+      "name": "AOI authority",
+      "pass": true
+    }
+  ],
+  "generatedFrom": "Game Design Spec + capability plan",
+  "note": "These are executable repository contracts. Browser/device acceptance remains a separate live gate."
+}

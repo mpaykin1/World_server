@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "6.0.0",
+  "generatedAt": "2026-09-03T07:45:53.188Z",
+  "pass": true,
+  "missing": [],
+  "hardRules": [
+    "admin auth",
+    "no code upload in browser",
+    "rollout is config only",
+    "Navigator needs evidence",
+    "rollback command is operator-approved"
+  ]
+}

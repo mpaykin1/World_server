@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "protectedTerms": ["IMPROVE WORLD", "Improve World", "Navigator", "World_server", "Supabase", "Vercel", "Godot", "World Spec"],
+  "rules": [
+    "Never translate player @mentions or slash commands.",
+    "Preserve URLs, numeric values and world identifiers.",
+    "Prefer the established localized UI term when one exists; otherwise preserve the canonical product term."
+  ]
+}

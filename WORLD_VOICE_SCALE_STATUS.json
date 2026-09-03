@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "6.0.0",
+  "generatedAt": "2026-09-03T07:45:56.441Z",
+  "pass": true,
+  "contract": {
+    "schemaVersion": "6.0.0",
+    "meshMaxParticipants": 6,
+    "largeRoomMode": "livekit-sfu",
+    "turn": "coturn-or-LiveKit-managed-TURN",
+    "fallback": [
+      "WebRTC mesh for small rooms",
+      "translated text",
+      "original audio if translation unavailable"
+    ],
+    "security": [
+      "LiveKit API secret server-only",
+      "short-lived participant token",
+      "opaque participant and room identifiers",
+      "no PII in LiveKit identity/room"
+    ],
+    "liveEvidenceRequired": [
+      "two users same room",
+      "8+ participant synthetic/real scale test",
+      "TURN path",
+      "reconnect",
+      "moderation mute/block compatibility"
+    ]
+  },
+  "liveConfigured": false
+}

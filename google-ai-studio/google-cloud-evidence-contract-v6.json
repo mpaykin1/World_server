@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "6.0.0",
+  "system": "WORLD_GOOGLE_CLOUD_EVIDENCE",
+  "sources": [
+    "Cloud Run structured world_runtime_signal logs",
+    "Cloud Run service/revision traffic description",
+    "existing World_server telemetry/replay/feedback"
+  ],
+  "requiredIdentity": [
+    "projectId",
+    "region",
+    "service",
+    "revision",
+    "configuration",
+    "slot",
+    "buildSha"
+  ],
+  "requiredSignals": [
+    "status",
+    "latencyMs",
+    "coldStart",
+    "route",
+    "at"
+  ],
+  "privacy": [
+    "no request bodies",
+    "no chat text",
+    "no feedback text",
+    "no secrets",
+    "route IDs normalized"
+  ],
+  "pullModes": [
+    "gcloud logging read",
+    "gcloud run services describe",
+    "offline JSON evidence import"
+  ],
+  "hardRule": "Evidence informs guarded development and rollback. It never mutates production without explicit operator approval."
+}

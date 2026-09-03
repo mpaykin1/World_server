@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "defaultLocale": "en",
+  "supportedLocales": [
+    "en",
+    "zh-CN",
+    "ja",
+    "ko",
+    "de",
+    "fr",
+    "es",
+    "pt-BR",
+    "it",
+    "ar",
+    "ru"
+  ],
+  "rtlLocales": [
+    "ar"
+  ],
+  "rules": {
+    "autoDetect": true,
+    "userOverridePersisted": true,
+    "fallback": "en",
+    "chatStoresOriginal": true,
+    "chatTranslationLazyPerRecipient": true,
+    "translationFailureNeverBlocksChat": true
+  }
+}

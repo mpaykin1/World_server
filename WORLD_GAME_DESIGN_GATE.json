@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "5.0.0",
+  "system": "WORLD_GAME_DESIGN_GATE",
+  "generatedAt": "2026-09-03T07:46:07.566Z",
+  "pass": true,
+  "validation": {
+    "ok": true,
+    "errors": []
+  },
+  "links": {
+    "eye": true,
+    "navigator": true,
+    "multiplayer": true,
+    "feedback": true,
+    "google": true,
+    "functions": true,
+    "languages": true,
+    "authoritative": true
+  },
+  "acceptanceTests": 9,
+  "specHash": "353eab9a91f78e722ca8fb57b46d42a59a5930ce2d846547c74316e47ea75801"
+}

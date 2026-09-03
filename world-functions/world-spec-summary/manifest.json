@@ -1,0 +1,22 @@
+{
+  "id": "world-spec-summary",
+  "name": "World Spec Summary",
+  "version": "1.0.0",
+  "description": "Returns a safe compact summary of an already-loaded Game Design Spec supplied by the caller.",
+  "runtime": "server",
+  "entry": "handler.js",
+  "installMode": "revision",
+  "hotCode": false,
+  "capabilities": [
+    "world.spec.read"
+  ],
+  "gameDesignSections": [
+    "coreLoop",
+    "quality"
+  ],
+  "acceptance": [
+    "returns only a compact summary of a caller-supplied spec",
+    "does not access secrets or persistent state"
+  ],
+  "rollbackSafe": true
+}

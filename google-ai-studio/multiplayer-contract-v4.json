@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 4,
+  "transport": {
+    "presence": ["online", "nickname", "locale", "room"],
+    "broadcastTransient": ["player_state", "player_state_bin", "emote", "typing", "voice_signal"],
+    "durableChat": "server insert -> world_chat_messages -> realtime.send -> private Broadcast + replay",
+    "durableGameState": ["inventory", "building", "ownership", "quests", "world mutations"]
+  },
+  "performance": {
+    "binaryPlayerState": true,
+    "adaptiveTickHz": {"1-8": 20, "9-32": 12, "33-100": 6, "100+": 3, "background": 2},
+    "largeActionWorld": "dedicated authoritative game server with spatial interest management"
+  },
+  "reliability": {
+    "broadcastReplay": true,
+    "offlineChatOutbox": true,
+    "idempotentChat": "unique(user_id, client_message_id)",
+    "exponentialReconnect": true,
+    "sequenceDedupe": true
+  },
+  "authority": {
+    "browserMovementValidation": "defense-in-depth only",
+    "durable": "server/RPC authoritative",
+    "fastActionMode": "dedicated authoritative Godot/realtime server",
+    "rule": "never label client-side validation as anti-cheat authority"
+  },
+  "voice": {
+    "smallRooms": "WebRTC mesh capped by WORLD_VOICE_MESH_MAX_PEERS",
+    "turn": "coturn REST-style ephemeral HMAC credentials when configured",
+    "translation": "Gemini 3.5 Live Translate via server-minted constrained ephemeral token",
+    "largeRooms": "SFU required; prefer self-hosted LiveKit + coturn"
+  },
+  "communitySafety": {
+    "serverRateLimit": true,
+    "localMuteBlock": true,
+    "reportsPersisted": true,
+    "automaticPunishmentFromModelOnly": false
+  },
+  "compatibility": {
+    "inheritsV3": "google-ai-studio/multiplayer-contract-v3.json",
+    "legacyGodotRule": "discover and merge existing NetworkServerAuthority/WorldStateReplicator systems; never duplicate authority"
+  }
+}

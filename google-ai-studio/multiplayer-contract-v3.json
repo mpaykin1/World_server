@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 3,
+  "transport": {
+    "presence": [
+      "online",
+      "nickname",
+      "locale",
+      "room"
+    ],
+    "broadcast": [
+      "player_state",
+      "chat_message",
+      "emote",
+      "typing"
+    ],
+    "durable": [
+      "inventory",
+      "building",
+      "ownership",
+      "quests",
+      "world mutations"
+    ]
+  },
+  "authority": {
+    "highFrequency": "client intent + sequence checked broadcast",
+    "durable": "existing server/Supabase authority",
+    "fastActionMode": "dedicated authoritative Godot/realtime server"
+  },
+  "compatibility": {
+    "legacyGodotComponents": [
+      "MultiplayerBootstrap.gd",
+      "NetworkClient.gd",
+      "NetworkServerAuthority.gd",
+      "PlayerNetworkReplicator.gd",
+      "WorldStateReplicator.gd",
+      "PersonalWorldManager.gd",
+      "FriendWorldPortal.gd"
+    ],
+    "rule": "discover and merge; never duplicate existing authoritative state"
+  },
+  "chat": {
+    "storeOriginal": true,
+    "sourceLanguage": "BCP-47",
+    "translations": "lazy/cache by target language",
+    "nonBlockingFallback": "original"
+  },
+  "security": {
+    "privateChannels": true,
+    "realtimeRlsRequired": true,
+    "clientSecretForbidden": true
+  }
+}

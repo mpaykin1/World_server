@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "4.0.0",
+  "generatedAt": "2026-09-03T07:46:13.280Z",
+  "system": "FEEDBACK_TO_EXISTING_FEATURE_FLAG_EXPERIMENT_BRIDGE",
+  "featureFlagEngineAvailable": true,
+  "experimentEngineAvailable": true,
+  "cohortEvidenceAvailable": false,
+  "plans": [],
+  "rule": "Never auto-enable an experiment from feedback. Reuse the existing flag and experiment systems; sandbox first; promote only with statistical/evidence and release gates."
+}

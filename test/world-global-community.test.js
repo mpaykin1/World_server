@@ -1,0 +1,17 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict'),fs=require('fs'),path=require('path');const root=path.resolve(__dirname,'..');const loc=require('../shared/i18n/world-locales.json'),msg=require('../shared/i18n/world-messages.json');const F=require('../lib/world-feedback'),T=require('../lib/world-translation');
+test('11 commercially prioritized locales are complete',()=>{assert.equal(loc.locales.length,11);for(const l of loc.locales){assert.ok(msg[l.code]?.send);assert.ok(msg[l.code]?.feedback);assert.ok(msg[l.code]?.chat)}});
+test('Arabic is RTL and English fallback exists',()=>{assert.equal(loc.locales.find(x=>x.code==='ar').dir,'rtl');assert.ok(msg.en)});
+test('locale canonicalization handles regional variants',()=>{assert.equal(T.canonical('zh-TW'),'zh-CN');assert.equal(T.canonical('pt-PT'),'pt-BR');assert.equal(T.canonical('de-DE'),'de')});
+test('feedback validation sanitizes and hashes',()=>{const f=F.normalizeFeedback({message:'  broken\u0001 thing ',category:'bug',severity:'critical',rating:1});assert.equal(f.message,'broken thing');assert.equal(f.category,'bug');assert.equal(f.content_hash.length,64)});
+test('feedback validation rejects invalid rating',()=>assert.throws(()=>F.normalizeFeedback({message:'abc',rating:9}),/Rating/));
+test('critical repeated bug receives high priority',()=>assert.ok(F.priorityScore({category:'bug',severity:'critical',rating:1,occurrences:4})>=90));
+test('translation identity primitives are deterministic',()=>{assert.equal(T.cleanText(' hi\u0001 '),'hi');assert.equal(T.hashKey('x','en','de'),T.hashKey('x','en','de'))});
+test('multiplayer contract separates transient and durable state',()=>{const c=require('../google-ai-studio/multiplayer-contract-v3.json');assert.ok(c.transport.broadcast.includes('player_state'));assert.ok(!c.transport.presence.includes('player_state'));assert.ok(c.transport.durable.includes('world mutations'))});
+test('browser bridge requires private channels and nonblocking translate endpoint',()=>{const s=fs.readFileSync(path.join(root,'shared/multiplayer/world-multiplayer-bridge.js'),'utf8');assert.match(s,/private:true/);assert.match(s,/\/api\/translate/);assert.match(s,/catch\{\}/)});
+test('feedback SQL enforces RLS and no public insert policy',()=>{const s=fs.readFileSync(path.join(root,'supabase/migration_templates/world_feedback_translation.sql'),'utf8');assert.match(s,/enable row level security/i);assert.match(s,/revoke all/i);assert.doesNotMatch(s,/for insert to anon/i)});
+test('server handlers provided for feedback translation and locales',()=>{for(const f of ['api/feedback.js','api/translate.js','api/locales.js'])assert.ok(fs.existsSync(path.join(root,f)))});
+test('legacy multiplayer component discovery contract is retained',()=>{const c=require('../google-ai-studio/multiplayer-contract-v3.json');assert.ok(c.compatibility.legacyGodotComponents.includes('NetworkServerAuthority.gd'));assert.ok(c.compatibility.legacyGodotComponents.includes('WorldStateReplicator.gd'))});
+
+test('language switcher and UI integrator are installed',()=>{assert.ok(fs.existsSync(path.join(root,'shared/i18n/world-language-switcher.js')));const x=fs.readFileSync(path.join(root,'scripts/world-global-ui-integrator.cjs'),'utf8');assert.match(x,/WorldLanguageSwitcher/)})
+test('translation cache avoids duplicating source chat text',()=>{const sql=fs.readFileSync(path.join(root,'supabase/migration_templates/world_feedback_translation.sql'),'utf8');assert.doesNotMatch(sql,/source_text text/)})

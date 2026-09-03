@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "deviceProfiles": [
+    "Desktop Chrome",
+    "iPhone 13",
+    "Pixel 7",
+    "iPad Mini"
+  ],
+  "budgets": {
+    "rootHttpMs": 5000,
+    "healthMs": 2500,
+    "readyMs": 4000,
+    "probeMs": 2500,
+    "maxConsoleErrorsPerSmoke": 0,
+    "maxPageErrorsPerSmoke": 0,
+    "maxHorizontalOverflowPx": 2
+  },
+  "promotion": {
+    "requireSandboxVerify": true,
+    "requireReferenceCompare": true,
+    "requirePublicAnonymousAccess": true,
+    "requireIndependentNavigator": true,
+    "requireNoThirdSlot": true,
+    "requireBrowserParityWhenConfigured": true,
+    "requireMultiplayerParityWhenConfigured": true
+  },
+  "chaos": {
+    "sandboxOnly": true,
+    "productionFaultInjectionForbidden": true
+  }
+}

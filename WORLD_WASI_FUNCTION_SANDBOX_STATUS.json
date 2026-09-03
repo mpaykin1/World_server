@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "6.0.0",
+  "generatedAt": "2026-09-03T07:45:54.442Z",
+  "pass": true,
+  "checks": {
+    "runner": true,
+    "witContract": true,
+    "existingToolchain": true,
+    "existingWitGate": true,
+    "wasmtimeAvailable": false
+  },
+  "policy": {
+    "trustedBundledJs": "immutable revision + capability audit",
+    "untrustedFutureFunctions": "WASM/WASI only",
+    "networkByDefault": false,
+    "filesystemByDefault": false,
+    "runtimeDownload": false,
+    "wasmtimeLiveRequiredBeforeUntrustedProduction": true
+  }
+}

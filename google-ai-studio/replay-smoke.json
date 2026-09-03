@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "description": "App-specific actions may be added by Desktop AI after source discovery. Keep selectors stable and reuse the same sequence on reference, navigator and sandbox.",
+  "actions": [
+    { "type": "wait", "ms": 500 },
+    { "type": "assert-body-visible" }
+  ]
+}

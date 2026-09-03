@@ -1,0 +1,5 @@
+'use strict';
+const {requireUser}=require('../lib/world-api-auth');
+const crypto=require('crypto');const {createAdminClient}=require('../lib/env');const {sendJson,methodNotAllowed,withErrors,httpError}=require('../lib/http');
+function urls(){return String(process.env.WORLD_TURN_URLS||'').split(',').map(x=>x.trim()).filter(Boolean)}
+module.exports=withErrors(async(req,res)=>{if(req.method!=='GET')return methodNotAllowed(res,['GET']);const admin=createAdminClient(),user=await requireUser(admin,req,httpError),turnUrls=urls(),secret=String(process.env.WORLD_TURN_SECRET||'');const iceServers=[{urls:['stun:stun.l.google.com:19302']}];let degraded=true;if(turnUrls.length&&secret){const expiry=Math.floor(Date.now()/1000)+3600,username=`${expiry}:${user.id}`,credential=crypto.createHmac('sha1',secret).update(username).digest('base64');iceServers.push({urls:turnUrls,username,credential});degraded=false}sendJson(res,200,{ok:true,iceServers,degraded,expiresInSeconds:degraded?null:3600,maxMeshPeers:Number(process.env.WORLD_VOICE_MESH_MAX_PEERS||4)})});

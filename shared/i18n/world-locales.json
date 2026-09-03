@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "defaultLocale": "en",
+  "locales": [
+    {
+      "code": "en",
+      "name": "English",
+      "nativeName": "English",
+      "dir": "ltr",
+      "marketTier": 1
+    },
+    {
+      "code": "zh-CN",
+      "name": "Chinese (Simplified)",
+      "nativeName": "简体中文",
+      "dir": "ltr",
+      "marketTier": 1
+    },
+    {
+      "code": "ja",
+      "name": "Japanese",
+      "nativeName": "日本語",
+      "dir": "ltr",
+      "marketTier": 1
+    },
+    {
+      "code": "ko",
+      "name": "Korean",
+      "nativeName": "한국어",
+      "dir": "ltr",
+      "marketTier": 1
+    },
+    {
+      "code": "de",
+      "name": "German",
+      "nativeName": "Deutsch",
+      "dir": "ltr",
+      "marketTier": 1
+    },
+    {
+      "code": "fr",
+      "name": "French",
+      "nativeName": "Français",
+      "dir": "ltr",
+      "marketTier": 1
+    },
+    {
+      "code": "es",
+      "name": "Spanish",
+      "nativeName": "Español",
+      "dir": "ltr",
+      "marketTier": 1
+    },
+    {
+      "code": "pt-BR",
+      "name": "Portuguese (Brazil)",
+      "nativeName": "Português (Brasil)",
+      "dir": "ltr",
+      "marketTier": 1
+    },
+    {
+      "code": "it",
+      "name": "Italian",
+      "nativeName": "Italiano",
+      "dir": "ltr",
+      "marketTier": 2
+    },
+    {
+      "code": "ar",
+      "name": "Arabic",
+      "nativeName": "العربية",
+      "dir": "rtl",
+      "marketTier": 1
+    },
+    {
+      "code": "ru",
+      "name": "Russian",
+      "nativeName": "Русский",
+      "dir": "ltr",
+      "marketTier": 2
+    }
+  ]
+}

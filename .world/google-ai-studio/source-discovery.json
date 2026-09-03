@@ -1,0 +1,180 @@
+{
+  "ok": true,
+  "strongNavigatorCandidates": [
+    {
+      "path": "_IMPROVE_V1_TMP/IMPROVE_WORLD_CORE_LOOP_GRAPHICS_INTEGRATION_V1/core/shared/improve-world-graphics-bootstrap.js",
+      "score": 100
+    },
+    {
+      "path": "game-design/IMPROVE_WORLD_GAME_DESIGN_BASELINE.json",
+      "score": 100
+    },
+    {
+      "path": "google-ai-studio/AI_STUDIO_NAVIGATOR_PROMPT.md",
+      "score": 100
+    },
+    {
+      "path": "IMPROVE_WORLD_CORE_LOOP_GRAPHICS_INTEGRATION_V1.zip",
+      "score": 100
+    },
+    {
+      "path": "IMPROVE_WORLD_PROGRESSIVE_ONBOARDING_V1.zip",
+      "score": 100
+    },
+    {
+      "path": "shared/improve-world-graphics-bootstrap.js",
+      "score": 100
+    },
+    {
+      "path": "supabase/migrations_backup_20260824/20260819044616_create_improve_world_core.sql",
+      "score": 100
+    },
+    {
+      "path": "supabase/migrations_backup_20260824/20260819065408_add_improve_world_product_context.sql",
+      "score": 100
+    },
+    {
+      "path": "supabase/migrations_backup_20260824/20260819162458_improve_world_frontend_ready_rpcs.sql",
+      "score": 100
+    },
+    {
+      "path": "supabase/migrations/20260819044616_create_improve_world_core.sql",
+      "score": 100
+    },
+    {
+      "path": "supabase/migrations/20260819065408_add_improve_world_product_context.sql",
+      "score": 100
+    },
+    {
+      "path": "supabase/migrations/20260819162458_improve_world_frontend_ready_rpcs.sql",
+      "score": 100
+    },
+    {
+      "path": "WORLD_SERVER_NAVIGATOR_ENGAGEMENT_ML_V1.zip",
+      "score": 100
+    }
+  ],
+  "topCandidates": [
+    {
+      "path": "_IMPROVE_V1_TMP/IMPROVE_WORLD_CORE_LOOP_GRAPHICS_INTEGRATION_V1/core/shared/improve-world-graphics-bootstrap.js",
+      "score": 100
+    },
+    {
+      "path": "game-design/IMPROVE_WORLD_GAME_DESIGN_BASELINE.json",
+      "score": 100
+    },
+    {
+      "path": "google-ai-studio/AI_STUDIO_NAVIGATOR_PROMPT.md",
+      "score": 100
+    },
+    {
+      "path": "IMPROVE_WORLD_CORE_LOOP_GRAPHICS_INTEGRATION_V1.zip",
+      "score": 100
+    },
+    {
+      "path": "IMPROVE_WORLD_PROGRESSIVE_ONBOARDING_V1.zip",
+      "score": 100
+    },
+    {
+      "path": "shared/improve-world-graphics-bootstrap.js",
+      "score": 100
+    },
+    {
+      "path": "supabase/migrations_backup_20260824/20260819044616_create_improve_world_core.sql",
+      "score": 100
+    },
+    {
+      "path": "supabase/migrations_backup_20260824/20260819065408_add_improve_world_product_context.sql",
+      "score": 100
+    },
+    {
+      "path": "supabase/migrations_backup_20260824/20260819162458_improve_world_frontend_ready_rpcs.sql",
+      "score": 100
+    },
+    {
+      "path": "supabase/migrations/20260819044616_create_improve_world_core.sql",
+      "score": 100
+    },
+    {
+      "path": "supabase/migrations/20260819065408_add_improve_world_product_context.sql",
+      "score": 100
+    },
+    {
+      "path": "supabase/migrations/20260819162458_improve_world_frontend_ready_rpcs.sql",
+      "score": 100
+    },
+    {
+      "path": "WORLD_SERVER_NAVIGATOR_ENGAGEMENT_ML_V1.zip",
+      "score": 100
+    },
+    {
+      "path": ".cinematic-voxel-guard-backup-20260828-190316/apps/voxel-world/index.html",
+      "score": 30
+    },
+    {
+      "path": ".iw-graphics-staging/apng-v3/apng_patch/apps/apng-lab/index.html",
+      "score": 30
+    },
+    {
+      "path": ".iw-graphics-staging/dreamfog-v2/WORLD_SERVER_DREAMFOG_WORLD_PATCH_v2/patch/apps/dreamfog-world/index.html",
+      "score": 30
+    },
+    {
+      "path": ".iw-graphics-staging/ink-glyph-v3/WORLD_SERVER_INK_GLYPH_WORLD_V3/payload/apps/ink-glyph-world/index.html",
+      "score": 30
+    },
+    {
+      "path": ".iw-graphics-staging/lowfi-25d/apps/lowfi-25d/index.html",
+      "score": 30
+    },
+    {
+      "path": ".iw-graphics-staging/pixel-panorama-360-v4/WORLD_SERVER_PIXEL_PANORAMA_360_V4/payload/apps/pixel-panorama-360/index.html",
+      "score": 30
+    },
+    {
+      "path": ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/apps/procedural-quality-certification/index.html",
+      "score": 30
+    },
+    {
+      "path": ".iw-graphics-staging/procedural-quality-v10/PROCEDURAL_QUALITY_ENGINE_V10/apps/procedural-quality-lab/index.html",
+      "score": 30
+    },
+    {
+      "path": "apps/ai-3d/index.html",
+      "score": 30
+    },
+    {
+      "path": "apps/ai3d-reference-test/index.html",
+      "score": 30
+    },
+    {
+      "path": "apps/ai3d-voxel-city/index.html",
+      "score": 30
+    },
+    {
+      "path": "apps/catalog/index.html",
+      "score": 30
+    },
+    {
+      "path": "apps/chat/index.html",
+      "score": 30
+    },
+    {
+      "path": "apps/community-chat/index.html",
+      "score": 30
+    },
+    {
+      "path": "apps/dreamfog-world/index.html",
+      "score": 30
+    },
+    {
+      "path": "apps/feedback/index.html",
+      "score": 30
+    },
+    {
+      "path": "apps/function-admin/index.html",
+      "score": 30
+    }
+  ],
+  "note": "Inspect strong candidates; reuse source-of-truth and do not duplicate it."
+}

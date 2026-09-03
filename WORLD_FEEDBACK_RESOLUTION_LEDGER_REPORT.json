@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "6.0.0",
+  "generatedAt": "2026-09-03T07:45:57.443Z",
+  "links": {
+    "feedbackCandidates": 0,
+    "gddCandidates": 0,
+    "functionProvenance": 1,
+    "releaseDecision": "CANARY"
+  },
+  "requiredChain": [
+    "feedback/cluster",
+    "GDD change candidate",
+    "function or reused capability",
+    "commit SHA",
+    "regression/replay evidence",
+    "sandbox revision",
+    "production revision",
+    "post-release outcome verification"
+  ],
+  "automaticClosure": false,
+  "rule": "A feedback item is resolved only after post-release evidence shows the requested outcome improved; shipping code alone is not resolution."
+}

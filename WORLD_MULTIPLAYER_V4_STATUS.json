@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "4.0.0",
+  "generatedAt": "2026-09-03T07:46:15.541Z",
+  "percent": 100,
+  "checks": [
+    {
+      "name": "supabase-binary-capable",
+      "pass": true
+    },
+    {
+      "name": "supabase-replay-capable",
+      "pass": true
+    },
+    {
+      "name": "binary-state-codec",
+      "pass": true
+    },
+    {
+      "name": "adaptive-tick",
+      "pass": true
+    },
+    {
+      "name": "broadcast-replay",
+      "pass": true
+    },
+    {
+      "name": "durable-chat-server",
+      "pass": true
+    },
+    {
+      "name": "offline-outbox",
+      "pass": true
+    },
+    {
+      "name": "voice-signaling",
+      "pass": true
+    },
+    {
+      "name": "webrtc-voice",
+      "pass": true
+    },
+    {
+      "name": "turn-ephemeral-config",
+      "pass": true
+    },
+    {
+      "name": "server-broadcast-chat",
+      "pass": true
+    },
+    {
+      "name": "private-realtime-contract",
+      "pass": true
+    }
+  ],
+  "productionNotes": [
+    "Client movement validation is defense-in-depth, not authoritative anti-cheat. High-impact durable actions remain server/RPC authoritative.",
+    "WebRTC mesh is capped; rooms above the mesh cap require an SFU such as self-hosted LiveKit plus coturn.",
+    "Spatial interest management for large action worlds belongs in the dedicated authoritative game server, not a Vercel/Cloud Run request handler."
+  ]
+}

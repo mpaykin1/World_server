@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "6.0.0",
+  "role": "authoritative-realtime-game-core",
+  "clientSends": [
+    "input intent",
+    "camera/look intent",
+    "interaction intent"
+  ],
+  "serverValidates": [
+    "sequence",
+    "movement bounds",
+    "permissions/cooldowns",
+    "persistent mutations"
+  ],
+  "replication": [
+    "AOI cells",
+    "adaptive tick",
+    "binary/delta transport may be layered later"
+  ],
+  "persistence": "Supabase/Postgres remains durable source for persistent world state",
+  "deployment": "long-lived realtime transport adapter; do not use ordinary Vercel Function as authoritative socket process"
+}

@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "6.0.0",
+  "generatedAt": "2026-09-03T07:45:52.227Z",
+  "records": [
+    {
+      "schemaVersion": "6.0.0",
+      "functionId": "world-spec-summary",
+      "version": "1.0.0",
+      "manifestSha256": "be0462d417b609cc892208f93f307ba9cf05714f97481fa777cd8ea7cadfa555",
+      "sourceSha256": "2bf0d62fc310f0e9afee823abd716d093f80f18dbebe47ffab3b53445cb3cb54",
+      "gddSha256": "b6b6cc2f9fa691522ad016b941762c6a2fac095966e2230417a92ce208748c6f",
+      "acceptanceSha256": null,
+      "capabilities": [
+        "world.spec.read"
+      ],
+      "gameDesignSections": [
+        "coreLoop",
+        "quality"
+      ],
+      "installMode": "revision",
+      "rollbackSafe": true,
+      "envelopeSha256": "e3acc9bfc4e4252fdbec658dde29287794b5653addda7f27521c52f38044bdd5",
+      "gitCommit": null,
+      "sandboxRevision": null,
+      "productionRevision": null,
+      "immutableRevisionRequired": true
+    }
+  ],
+  "rule": "Each function is bound to code+manifest+GDD+acceptance+git/revision evidence. Bundle is signed by the existing World_server supply-chain signer when available."
+}

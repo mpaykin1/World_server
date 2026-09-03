@@ -61,3 +61,13 @@ COLLECTIVE_BRAIN_ROUTE.json
 COLLECTIVE_BRAIN_REPLAY.json
 COLLECTIVE_BRAIN_BENCHMARK.json
 .patch-backups/
+# Google AI Studio two-slot local state
+.world/google-ai-studio/slots.local.json
+.world/google-ai-studio/reports/
+.world/google-ai-studio/tmp/
+.world/google-ai-studio/evidence-ledger.jsonl
+.world/google-ai-studio/platform-env-keys.local.json
+.world/google-ai-studio/feedback-development-candidates.json
+.world/google-ai-studio/multiplayer-discovery.json
+.world/google-ai-studio/google-runtime-signals.jsonl
+.world/google-ai-studio/google-development-candidates.json

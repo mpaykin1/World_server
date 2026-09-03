@@ -1,0 +1,111 @@
+{
+  "schemaVersion": "6.0.0",
+  "generatedAt": "2026-09-03T07:45:48.920Z",
+  "specHash": "353eab9a91f78e722ca8fb57b46d42a59a5930ce2d846547c74316e47ea75801",
+  "pass": true,
+  "plan": [
+    {
+      "section": "coreLoop",
+      "capability": "navigator.tool",
+      "decision": "REUSE",
+      "reuse": [
+        "navigator"
+      ],
+      "automaticCodeGeneration": false
+    },
+    {
+      "section": "coreLoop",
+      "capability": "world.spec.read",
+      "decision": "REUSE",
+      "reuse": [
+        "world-spec",
+        "world-spec-summary"
+      ],
+      "automaticCodeGeneration": false
+    },
+    {
+      "section": "coreLoop",
+      "capability": "world.read",
+      "decision": "REUSE",
+      "reuse": [
+        "world-spec"
+      ],
+      "automaticCodeGeneration": false
+    },
+    {
+      "section": "start.controls",
+      "capability": "world.read",
+      "decision": "REUSE",
+      "reuse": [
+        "world-spec"
+      ],
+      "automaticCodeGeneration": false
+    },
+    {
+      "section": "start.controls",
+      "capability": "telemetry.summary.read",
+      "decision": "REUSE",
+      "reuse": [
+        "telemetry"
+      ],
+      "automaticCodeGeneration": false
+    },
+    {
+      "section": "multiplayer",
+      "capability": "multiplayer.presence.read",
+      "decision": "REUSE",
+      "reuse": [
+        "multiplayer"
+      ],
+      "automaticCodeGeneration": false
+    },
+    {
+      "section": "multiplayer",
+      "capability": "world.read",
+      "decision": "REUSE",
+      "reuse": [
+        "world-spec"
+      ],
+      "automaticCodeGeneration": false
+    },
+    {
+      "section": "quality",
+      "capability": "telemetry.summary.read",
+      "decision": "REUSE",
+      "reuse": [
+        "telemetry"
+      ],
+      "automaticCodeGeneration": false
+    },
+    {
+      "section": "quality",
+      "capability": "feedback.summary.read",
+      "decision": "REUSE",
+      "reuse": [
+        "feedback-loop"
+      ],
+      "automaticCodeGeneration": false
+    },
+    {
+      "section": "creativeEventLayers",
+      "capability": "world.spec.read",
+      "decision": "REUSE",
+      "reuse": [
+        "world-spec",
+        "world-spec-summary"
+      ],
+      "automaticCodeGeneration": false
+    },
+    {
+      "section": "creativeEventLayers",
+      "capability": "navigator.tool",
+      "decision": "REUSE",
+      "reuse": [
+        "navigator"
+      ],
+      "automaticCodeGeneration": false
+    }
+  ],
+  "uncovered": 0,
+  "principle": "Strengthen/reuse existing systems before creating another function."
+}

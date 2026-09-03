@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "6.0.0",
+  "generatedAt": "2026-09-03T07:45:58.548Z",
+  "currentRevision": "",
+  "lastGreen": "",
+  "threshold": {
+    "errorRate": 0.05,
+    "p95": 2500
+  },
+  "current": null,
+  "shouldRollback": false,
+  "command": null,
+  "applied": false,
+  "applyResult": null,
+  "operatorApprovalRequired": true,
+  "automaticTrafficMutation": false
+}

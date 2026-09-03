@@ -1,0 +1,11 @@
+{
+  "proxies": [
+    {
+      "name": "supabase-realtime",
+      "listen": "127.0.0.1:18640",
+      "upstream": "CHANGE_ME.supabase.co:443",
+      "enabled": true
+    }
+  ],
+  "note": "Use only in local/CI sandbox. Production Navigator must never route through fault injection."
+}

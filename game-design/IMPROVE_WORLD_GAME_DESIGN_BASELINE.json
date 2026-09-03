@@ -1,0 +1,125 @@
+{
+  "schemaVersion": "5.0.0",
+  "id": "improve-world-baseline",
+  "title": "Improve World — Shared Living Story World",
+  "status": "baseline",
+  "vision": "A shared high-detail 3D voxel-art world where players control an Eye, talk with Navigator, turn stories/intentions into playable changes, and co-create one persistent world.",
+  "start": {
+    "entry": [
+      "Open public link without mandatory email friction",
+      "Create anonymous guest identity and choose/detect interface language",
+      "Enter the same shared world",
+      "See Navigator greeting and choose Create or Join",
+      "Create: express intent/story/image/idea; every question can be skipped",
+      "Join: select or receive a shared story/world thread"
+    ],
+    "controls": {
+      "desktop": [
+        "WASD/keyboard movement",
+        "mouse/look"
+      ],
+      "mobile": [
+        "left joystick = Eye movement",
+        "right joystick = look around"
+      ],
+      "principle": "Eye/camera control must remain usable while Navigator chat stays visible and compact."
+    }
+  },
+  "playerFantasy": "I enter a living world that listens to my story, visibly changes because of what I say and do, remembers my contribution, and lets other people affect the same reality.",
+  "coreLoop": [
+    "observe/explore",
+    "speak or act",
+    "Navigator interprets intention",
+    "World Spec / Game Design Spec proposes a safe change",
+    "authoritative world commits the change",
+    "all players see the result",
+    "players cooperate/communicate/create",
+    "feedback + telemetry + Google runtime evidence improve the next cycle"
+  ],
+  "outcome": [
+    "A playable evolving story/world, not only text",
+    "Persistent visible changes and authorship",
+    "Shared multiplayer consequences",
+    "A personal narrative path connected to the common world",
+    "A reusable World Spec/seed/replay that works in Web and Native"
+  ],
+  "multiplayer": {
+    "goal": "Players inhabit the same authoritative world and can see, talk to, help, challenge and co-create with each other without language being a barrier.",
+    "interactions": [
+      "presence and visible Eye/player state",
+      "translated text chat with original preserved",
+      "optional translated voice",
+      "emotes/reactions",
+      "cooperative world/story actions",
+      "shared tasks/quests",
+      "join/connect stories",
+      "build/change permitted world objects",
+      "vote on improvement candidates",
+      "report/block/mute for safety"
+    ],
+    "authority": "Clients send intent/input; authoritative server validates and commits persistent gameplay state. Supabase Broadcast/Presence handles scalable transient collaboration; durable state lives in Postgres/RPC; fast PvP requires dedicated realtime server."
+  },
+  "creativeEventLayers": [
+    {
+      "id": "mechanic",
+      "question": "What does the player physically do, and what rule changes?"
+    },
+    {
+      "id": "visual",
+      "question": "What does the player see, and how is it detailed/readable?"
+    },
+    {
+      "id": "audio",
+      "question": "What does the player hear, and how is repetition avoided?"
+    },
+    {
+      "id": "riskReward",
+      "question": "What is risked and what is earned?"
+    },
+    {
+      "id": "progression",
+      "question": "Is this teaching, escalation, climax, release, or turning point?"
+    },
+    {
+      "id": "story",
+      "question": "Why does this exist in the world and what does it reveal about the story/lore?"
+    }
+  ],
+  "progression": {
+    "principle": "The world grows richer through conversation, exploration, collaboration and consequences rather than a detached menu-only progression.",
+    "signals": [
+      "new accessible areas",
+      "new story connections",
+      "world detail and atmosphere",
+      "relationships/cooperation",
+      "authorship and contributions",
+      "capabilities unlocked by demonstrated need"
+    ]
+  },
+  "quality": {
+    "visual": "high-detail 3D voxel-art with adaptive quality",
+    "performance": "maximize FPS per device without changing game rules",
+    "accessibility": [
+      "11-language UI",
+      "Arabic RTL",
+      "translated multiplayer chat",
+      "mobile portrait/landscape"
+    ],
+    "resilience": [
+      "reconnect/replay",
+      "offline feedback/chat outboxes",
+      "last-green rollback"
+    ]
+  },
+  "acceptance": [
+    "all clients with same world id converge on authoritative state",
+    "at least two clients can occupy different positions and observe each other",
+    "Eye movement and look controls work on desktop/mobile",
+    "visible geometry/world loads after restart/reconnect",
+    "Navigator dialogue can create a visible governed world change",
+    "translated chat preserves original text",
+    "feedback becomes a guarded development candidate",
+    "new function reaches sandbox before Navigator",
+    "Google revision/runtime evidence is linked to the development loop"
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "5.0.0",
+  "specHash": "353eab9a91f78e722ca8fb57b46d42a59a5930ce2d846547c74316e47ea75801",
+  "valid": true,
+  "validationErrors": [],
+  "tests": [
+    {
+      "id": "gdd-01",
+      "criterion": "all clients with same world id converge on authoritative state",
+      "type": "multiplayer",
+      "required": true
+    },
+    {
+      "id": "gdd-02",
+      "criterion": "at least two clients can occupy different positions and observe each other",
+      "type": "multiplayer",
+      "required": true
+    },
+    {
+      "id": "gdd-03",
+      "criterion": "Eye movement and look controls work on desktop/mobile",
+      "type": "device",
+      "required": true
+    },
+    {
+      "id": "gdd-04",
+      "criterion": "visible geometry/world loads after restart/reconnect",
+      "type": "world",
+      "required": true
+    },
+    {
+      "id": "gdd-05",
+      "criterion": "Navigator dialogue can create a visible governed world change",
+      "type": "world",
+      "required": true
+    },
+    {
+      "id": "gdd-06",
+      "criterion": "translated chat preserves original text",
+      "type": "multiplayer",
+      "required": true
+    },
+    {
+      "id": "gdd-07",
+      "criterion": "feedback becomes a guarded development candidate",
+      "type": "development-loop",
+      "required": true
+    },
+    {
+      "id": "gdd-08",
+      "criterion": "new function reaches sandbox before Navigator",
+      "type": "development-loop",
+      "required": true
+    },
+    {
+      "id": "gdd-09",
+      "criterion": "Google revision/runtime evidence is linked to the development loop",
+      "type": "deployment",
+      "required": true
+    }
+  ],
+  "generatedAt": "2026-09-03T07:46:08.787Z",
+  "reuse": [
+    "integration:record-replay",
+    "google:slots:browser",
+    "google:slots:multiplayer",
+    "world:multiplayer:scale-gate",
+    "world:i18n:check",
+    "world:feedback:semantic-gate",
+    "world:functions:delivery-gate"
+  ]
+}

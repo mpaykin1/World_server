@@ -1,0 +1,3 @@
+'use strict';
+const {createAdminClient}=require('../lib/env');const {sendJson,methodNotAllowed,withErrors}=require('../lib/http');
+module.exports=withErrors(async(req,res)=>{if(req.method!=='GET')return methodNotAllowed(res,['GET']);const admin=createAdminClient();const {data,error}=await admin.from('world_feedback_development_candidates').select('cluster_key,public_title,category,occurrences,priority_score,vote_score,status,last_seen_at').in('status',['candidate','accepted','planned','in_progress','shipped']).order('priority_score',{ascending:false}).limit(100);if(error)throw Object.assign(new Error(error.message),{status:503});sendJson(res,200,{ok:true,items:(data||[]).map(x=>({...x,title:x.public_title||`Community ${x.category||'request'}`}))})});

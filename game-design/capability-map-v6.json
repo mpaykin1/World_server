@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "6.0.0",
+  "principle": "reuse-before-create",
+  "sections": {
+    "coreLoop": [
+      "navigator.tool",
+      "world.spec.read",
+      "world.read"
+    ],
+    "start.controls": [
+      "world.read",
+      "telemetry.summary.read"
+    ],
+    "multiplayer": [
+      "multiplayer.presence.read",
+      "world.read"
+    ],
+    "quality": [
+      "telemetry.summary.read",
+      "feedback.summary.read"
+    ],
+    "creativeEventLayers": [
+      "world.spec.read",
+      "navigator.tool"
+    ]
+  },
+  "existingSystems": [
+    {
+      "id": "navigator",
+      "provides": [
+        "navigator.tool"
+      ]
+    },
+    {
+      "id": "world-spec",
+      "provides": [
+        "world.spec.read",
+        "world.read"
+      ]
+    },
+    {
+      "id": "feedback-loop",
+      "provides": [
+        "feedback.summary.read"
+      ]
+    },
+    {
+      "id": "multiplayer",
+      "provides": [
+        "multiplayer.presence.read"
+      ]
+    },
+    {
+      "id": "telemetry",
+      "provides": [
+        "telemetry.summary.read"
+      ]
+    },
+    {
+      "id": "translation",
+      "provides": [
+        "translation.translate"
+      ]
+    }
+  ]
+}

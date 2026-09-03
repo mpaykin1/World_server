@@ -1,0 +1,4 @@
+package improve-world:function-sandbox@0.1.0;
+world world-function {
+  export run: func(input: string) -> result<string, string>;
+}

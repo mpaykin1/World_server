@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 2,
+  "maxActiveDeployments": 2,
+  "slots": {
+    "navigator": {
+      "purpose": "Public Improve World / Navigator",
+      "requiredEnv": ["WORLD_SLOT=navigator", "WORLD_SLOT_ENTRYPOINT", "WORLD_BUILD_SHA"],
+      "requiredEndpoints": ["/", "/healthz", "/readyz", "/api/deployment-meta", "/api/runtime-budget", "/api/cross-platform-probe"],
+      "productionRules": ["public", "https", "independent", "no-auth-wall", "no-remote-proxy", "fault-injection-forbidden", "last-green-known"]
+    },
+    "sandbox": {
+      "purpose": "Independent pre-production test node",
+      "requiredEnv": ["WORLD_SLOT=sandbox", "WORLD_SLOT_ENTRYPOINT", "WORLD_BUILD_SHA"],
+      "requiredEndpoints": ["/", "/healthz", "/readyz", "/api/deployment-meta", "/api/runtime-budget", "/api/cross-platform-probe"],
+      "productionRules": ["public", "https", "independent", "no-auth-wall", "promotion-only-after-green"]
+    }
+  },
+  "sharedRules": {
+    "durableState": "Supabase/shared backend only",
+    "correlationHeader": "x-world-correlation-id",
+    "promotion": "sandbox -> evidence -> update existing navigator",
+    "thirdSlot": "forbidden"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "5.0.0",
+  "requiredSections": [
+    "start",
+    "playerFantasy",
+    "coreLoop",
+    "outcome",
+    "multiplayer",
+    "creativeEventLayers",
+    "progression",
+    "quality",
+    "acceptance"
+  ],
+  "creativeEventLayers": [
+    "mechanic",
+    "visual",
+    "audio",
+    "riskReward",
+    "progression",
+    "story"
+  ],
+  "changePolicy": "Conversation/feedback may propose a draft spec revision. Stable spec changes require evidence, derived tests, sandbox validation, regression gates and promotion.",
+  "systemLinks": {
+    "navigator": "conversation -> intent/spec delta",
+    "feedback": "clusters -> spec section candidates",
+    "functions": "spec gap -> function request",
+    "google": "runtime evidence -> quality/spec candidates",
+    "multiplayer": "spec defines authority/interactions",
+    "i18n": "spec requires locale/translation behavior",
+    "release": "stable spec hash becomes release evidence"
+  }
+}

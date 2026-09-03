@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "6.0.0",
+  "generatedAt": "2026-09-03T07:46:22.415Z",
+  "staticPercent": 100,
+  "livePercent": 0,
+  "overallPercent": 55,
+  "staticChecks": {
+    "cloudEvidence": true,
+    "monitoringTrace": true,
+    "rollback": true,
+    "provenance": true,
+    "capabilityPlanner": true,
+    "generatedTests": true,
+    "adminConsole": true,
+    "wasiSandbox": true,
+    "aoi": true,
+    "voiceSfu": true,
+    "feedbackResolution": true,
+    "distributedRateLimit": true,
+    "costQuality": true,
+    "connectivity": true,
+    "v5": true
+  },
+  "liveChecks": {
+    "googleCloudEvidence": false,
+    "monitoringTrace": false,
+    "rollbackDrill": false,
+    "signedFunctionRevision": false,
+    "gddCapabilityRoundTrip": false,
+    "adminCanary": false,
+    "wasiSandbox": false,
+    "aoiTwoClient": false,
+    "voiceSfu": false,
+    "feedbackResolution": false,
+    "distributedRateLimit": false,
+    "costQualityExperiment": false,
+    "v5": false
+  },
+  "productionReady": false,
+  "meaning": "Repository implementation and real production evidence are deliberately independent."
+}

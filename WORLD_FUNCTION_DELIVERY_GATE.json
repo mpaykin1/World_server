@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "5.0.0",
+  "system": "WORLD_FUNCTION_DELIVERY_GATE",
+  "generatedAt": "2026-09-03T07:46:06.480Z",
+  "pass": true,
+  "packages": 1,
+  "issues": [],
+  "hardRules": [
+    "no runtime-downloaded code",
+    "no eval/new Function",
+    "no direct process.env in function packages",
+    "new code becomes immutable revision",
+    "sandbox before navigator",
+    "canary + rollback",
+    "capability allowlist"
+  ]
+}

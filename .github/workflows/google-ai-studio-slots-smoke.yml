@@ -1,0 +1,147 @@
+name: Google AI Studio two-slot + V6 mutually-reinforcing quality loop
+on:
+  workflow_dispatch:
+  push:
+    branches: [master, ai/opencode/multi-ai-peer-improvement]
+    paths:
+      - "google-ai-studio/**"
+      - "scripts/google-ai-studio-*.cjs"
+      - "scripts/world-*.cjs"
+      - "scripts/multiplayer-contract-discovery.cjs"
+      - "shared/i18n/**"
+      - "shared/feedback/**"
+      - "shared/multiplayer/**"
+      - "api/feedback.js"
+      - "api/translate.js"
+      - "api/locales.js"
+      - "api/community-*.js"
+      - "api/feature-vote.js"
+      - "api/feedback-roadmap.js"
+      - "api/live-translate-token.js"
+      - "api/rtc-config.js"
+      - "api/translation-correction.js"
+      - "quality/**"
+      - "test/google-ai-studio-slots.test.js"
+      - "test/world-global-community.test.js"
+      - "test/world-v4-systems.test.js"
+      - "test/world-v5-systems.test.js"
+      - "test/world-v6-systems.test.js"
+      - "game-design/**"
+      - "world-functions/**"
+      - "services/world-authority/**"
+      - "wit/**"
+      - ".github/workflows/google-ai-studio-slots-smoke.yml"
+  schedule:
+    - cron: "17 */6 * * *"
+permissions:
+  contents: read
+concurrency:
+  group: google-ai-studio-two-slots-global-community
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GOOGLE_NAVIGATOR_URL: ${{ vars.GOOGLE_NAVIGATOR_URL }}
+      GOOGLE_SANDBOX_URL: ${{ vars.GOOGLE_SANDBOX_URL }}
+      GOOGLE_NAVIGATOR_REFERENCE_URL: ${{ vars.GOOGLE_NAVIGATOR_REFERENCE_URL }}
+      GOOGLE_SANDBOX_REFERENCE_URL: ${{ vars.GOOGLE_SANDBOX_REFERENCE_URL }}
+      WORLD_MULTIPLAYER_PROBE_PATH: ${{ vars.WORLD_MULTIPLAYER_PROBE_PATH }}
+      WORLD_MULTIPLAYER_COMPARE_FIELDS: ${{ vars.WORLD_MULTIPLAYER_COMPARE_FIELDS }}
+      GOOGLE_NAVIGATOR_ENV_KEYS: ${{ vars.GOOGLE_NAVIGATOR_ENV_KEYS }}
+      GOOGLE_SANDBOX_ENV_KEYS: ${{ vars.GOOGLE_SANDBOX_ENV_KEYS }}
+      VERCEL_REFERENCE_ENV_KEYS: ${{ vars.VERCEL_REFERENCE_ENV_KEYS }}
+      WORLD_GOOGLE_ACTIVE_APP_COUNT: ${{ vars.WORLD_GOOGLE_ACTIVE_APP_COUNT }}
+      WORLD_GOOGLE_REQUESTS_CURRENT: ${{ vars.WORLD_GOOGLE_REQUESTS_CURRENT }}
+      WORLD_GOOGLE_REQUESTS_LIMIT: ${{ vars.WORLD_GOOGLE_REQUESTS_LIMIT }}
+      WORLD_GOOGLE_CPU_SECONDS_CURRENT: ${{ vars.WORLD_GOOGLE_CPU_SECONDS_CURRENT }}
+      WORLD_GOOGLE_CPU_SECONDS_LIMIT: ${{ vars.WORLD_GOOGLE_CPU_SECONDS_LIMIT }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "24" }
+      - name: Unit/regression tests
+        run: node --test test/google-ai-studio-slots.test.js test/world-global-community.test.js test/world-v4-systems.test.js test/world-v5-systems.test.js test/world-v6-systems.test.js
+      - name: Global community static gates
+        run: |
+          node scripts/world-i18n-gate.cjs
+          node scripts/world-multiplayer-language-gate.cjs
+          node scripts/world-observability-contract.cjs
+          node scripts/multiplayer-contract-discovery.cjs
+          node scripts/world-feedback-semantic-gate.cjs
+          node scripts/world-community-moderation-gate.cjs
+          node scripts/world-multiplayer-scale-gate.cjs
+          node scripts/world-feedback-experiment-bridge.cjs
+      - name: V6 mutual reinforcement static gate
+        run: npm run world:v6:gate
+      - name: V6 honest readiness
+        if: always()
+        run: npm run world:readiness:v6
+      - name: Initialize exact two-slot policy
+        run: node scripts/google-ai-studio-slots.cjs init
+      - name: Configure URLs
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ -z "${GOOGLE_NAVIGATOR_URL:-}" ]] || node scripts/google-ai-studio-slots.cjs configure navigator "$GOOGLE_NAVIGATOR_URL"
+          [[ -z "${GOOGLE_SANDBOX_URL:-}" ]] || node scripts/google-ai-studio-slots.cjs configure sandbox "$GOOGLE_SANDBOX_URL"
+          [[ -z "${GOOGLE_NAVIGATOR_REFERENCE_URL:-}" ]] || node scripts/google-ai-studio-slots.cjs set-reference navigator "$GOOGLE_NAVIGATOR_REFERENCE_URL"
+          [[ -z "${GOOGLE_SANDBOX_REFERENCE_URL:-}" ]] || node scripts/google-ai-studio-slots.cjs set-reference sandbox "$GOOGLE_SANDBOX_REFERENCE_URL"
+      - name: Static/control-plane gates
+        run: |
+          node scripts/google-ai-studio-slots.cjs guard
+          node scripts/google-ai-studio-slots.cjs env-contract
+          node scripts/google-ai-studio-slots.cjs quota-guard
+          node scripts/google-ai-studio-slots.cjs fs-guard
+          node scripts/google-ai-studio-slots.cjs tools-plan
+      - name: Environment inventories
+        shell: bash
+        run: |
+          [[ -z "${GOOGLE_NAVIGATOR_ENV_KEYS:-}" ]] || node scripts/google-ai-studio-slots.cjs set-env-keys google-navigator "$GOOGLE_NAVIGATOR_ENV_KEYS"
+          [[ -z "${GOOGLE_SANDBOX_ENV_KEYS:-}" ]] || node scripts/google-ai-studio-slots.cjs set-env-keys google-sandbox "$GOOGLE_SANDBOX_ENV_KEYS"
+          [[ -z "${VERCEL_REFERENCE_ENV_KEYS:-}" ]] || node scripts/google-ai-studio-slots.cjs set-env-keys vercel-reference "$VERCEL_REFERENCE_ENV_KEYS"
+      - name: Environment parity
+        if: ${{ vars.GOOGLE_NAVIGATOR_ENV_KEYS != '' && vars.GOOGLE_SANDBOX_ENV_KEYS != '' }}
+        run: node scripts/google-ai-studio-slots.cjs env-parity
+      - name: Verify real deployments when configured
+        run: node scripts/google-ai-studio-slots.cjs verify --allow-unconfigured
+      - name: Differential HTTP check
+        run: node scripts/google-ai-studio-slots.cjs compare
+      - name: Install Playwright only when live URLs exist
+        if: ${{ vars.GOOGLE_NAVIGATOR_URL != '' && vars.GOOGLE_SANDBOX_URL != '' }}
+        run: |
+          if ! node -e "require.resolve('playwright')" >/dev/null 2>&1; then npm install --no-save --package-lock=false playwright; fi
+          npx playwright install --with-deps chromium
+      - name: Mobile/desktop replay
+        if: ${{ vars.GOOGLE_NAVIGATOR_URL != '' && vars.GOOGLE_SANDBOX_URL != '' }}
+        run: node scripts/google-ai-studio-browser-parity.cjs --require
+      - name: Shared-world multiplayer parity
+        if: ${{ vars.GOOGLE_NAVIGATOR_URL != '' && vars.GOOGLE_SANDBOX_URL != '' && vars.WORLD_MULTIPLAYER_PROBE_PATH != '' }}
+        run: node scripts/google-ai-studio-multiplayer-parity.cjs --require
+      - name: Promotion gate
+        if: ${{ vars.GOOGLE_NAVIGATOR_URL != '' && vars.GOOGLE_SANDBOX_URL != '' }}
+        run: node scripts/google-ai-studio-slots.cjs promotion-gate
+      - name: Readiness
+        if: always()
+        run: |
+          node scripts/google-ai-studio-slots.cjs readiness
+          node scripts/world-v4-readiness.cjs
+          node scripts/world-v5-readiness.cjs
+          node scripts/world-v6-readiness.cjs
+      - name: Diagnose failures
+        if: failure()
+        continue-on-error: true
+        run: |
+          node scripts/google-ai-studio-slots.cjs diagnose || true
+          node scripts/google-ai-studio-slots.cjs rollback-plan || true
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: google-ai-studio-global-community-evidence
+          path: .world/google-ai-studio/
+          if-no-files-found: warn
+          retention-days: 30
+
+# V6 gate must run after install; live Google Monitoring/Trace and traffic writes stay explicit/operator-authenticated.

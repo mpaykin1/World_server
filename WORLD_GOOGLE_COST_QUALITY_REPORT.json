@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "6.0.0",
+  "generatedAt": "2026-09-03T07:45:59.896Z",
+  "samples": 1,
+  "p95Ms": 1200,
+  "errorRate": 1,
+  "coldStartRate": 1,
+  "recommendations": [
+    {
+      "action": "collect-more-evidence",
+      "reason": "fewer than 50 samples"
+    },
+    {
+      "action": "evaluate-min-instances-only-if-business-value-justifies-cost",
+      "reason": "coldStartRate=1.000"
+    }
+  ],
+  "automaticCloudMutation": false,
+  "qualityFirst": true
+}
