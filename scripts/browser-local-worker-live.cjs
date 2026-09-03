@@ -346,6 +346,89 @@ async function execAgentDispatchReal(root, args, task){
   };
 }
 
+// checkpoint / session / state executors (v3)
+const CHECKPOINT_STATE_ALLOWLIST = [
+  'state/session-recovery/current.json',
+  'state/session-recovery/UNFINISHED_WORK.json',
+  'state/session-recovery/DESKTOP_AI_RESUME.md',
+  'state/session-recovery/SESSION_HEALTH.json',
+  'state/session-recovery/events.jsonl',
+  'state/session-recovery/commands.jsonl',
+  'state/blocker-repair/state.json',
+  'state/browser-local-worker.json',
+  'WORK_IN_PROGRESS.md'
+];
+function isStatePathAllowed(p){
+  const norm = String(p||'').replace(/\\/g,'/').replace(/^\//,'');
+  if(norm.includes('..')) return false;
+  if(CHECKPOINT_STATE_ALLOWLIST.includes(norm)) return true;
+  if(norm.startsWith('state/session-recovery/snapshots/') && norm.endsWith('.json')) return true;
+  return false;
+}
+async function execCheckpointCreate(root, args){
+  const message = String(args.message||args.msg||'').trim();
+  const next = String(args.next||args.nextAction||'').trim();
+  if(!message) throw new Error('message required for checkpoint.create');
+  const cmdArgs = ['scripts/desktop-ai-session-recovery.cjs','checkpoint','--message',message];
+  if(next) cmdArgs.push('--next', next);
+  const r = cp.spawnSync('node', cmdArgs, { cwd: root, encoding:'utf8', timeout: 20000, windowsHide:true });
+  if(r.status!==0) throw new Error(`checkpoint failed: ${r.stderr||r.stdout}`);
+  let out=null; try{ out=JSON.parse(String(r.stdout||'').trim().split('\n').slice(-1)[0]); }catch{ out={ raw: String(r.stdout||'').slice(0,4000)}; }
+  return { checkpoint: out.checkpoint||out, message, next, stdout: String(r.stdout||'').slice(0,4000) };
+}
+async function execCheckpointList(root){
+  const snapDir = path.join(root,'state/session-recovery/snapshots');
+  const curPath = path.join(root,'state/session-recovery/current.json');
+  const cur = fs.existsSync(curPath) ? JSON.parse(fs.readFileSync(curPath,'utf8')) : null;
+  let snaps=[];
+  if(fs.existsSync(snapDir)){
+    snaps = fs.readdirSync(snapDir).filter(f=>f.endsWith('.json')).sort().slice(-20).map(f=>{
+      try{ const j=JSON.parse(fs.readFileSync(path.join(snapDir,f),'utf8')); return { file:f, id:j.id, at:j.at, message:j.message, head: j.git?.head?.slice(0,8) }; }catch{ return { file:f }; }
+    });
+  }
+  return { current: cur ? { checkpoint: cur.checkpoint, sessionId: cur.sessionId, status: cur.status } : null, snapshots: snaps };
+}
+async function execSessionStatus(root){
+  const curPath = path.join(root,'state/session-recovery/current.json');
+  const healthPath = path.join(root,'state/session-recovery/SESSION_HEALTH.json');
+  const r = cp.spawnSync('node',['scripts/desktop-ai-session-recovery.cjs','status'],{ cwd: root, encoding:'utf8', timeout:15000, windowsHide:true });
+  let statusOut='';
+  try{ statusOut = String(r.stdout||'').slice(0,6000); }catch{}
+  const cur = fs.existsSync(curPath) ? JSON.parse(fs.readFileSync(curPath,'utf8')) : null;
+  const health = fs.existsSync(healthPath) ? JSON.parse(fs.readFileSync(healthPath,'utf8')) : null;
+  return { statusOutput: statusOut, current: cur, health, branch: getBranch(root), head: getCommitSha(root) };
+}
+async function execSessionResume(root){
+  const resumePath = path.join(root,'state/session-recovery/DESKTOP_AI_RESUME.md');
+  const unfinishedPath = path.join(root,'state/session-recovery/UNFINISHED_WORK.json');
+  // trigger fresh resume generation best-effort
+  const r = cp.spawnSync('node',['scripts/desktop-ai-session-recovery.cjs','resume'],{ cwd: root, encoding:'utf8', timeout:20000, windowsHide:true });
+  const resume = fs.existsSync(resumePath) ? fs.readFileSync(resumePath,'utf8').slice(0,10000) : null;
+  const unfinished = fs.existsSync(unfinishedPath) ? JSON.parse(fs.readFileSync(unfinishedPath,'utf8')) : null;
+  return { resume: resume ? resume.slice(0,8000) : null, resumePath: resume? resumePath : null, unfinished, resumeStdout: String(r.stdout||'').slice(0,4000) };
+}
+async function execSessionHealth(root){
+  const healthPath = path.join(root,'state/session-recovery/SESSION_HEALTH.json');
+  const r = cp.spawnSync('node',['scripts/desktop-ai-session-recovery.cjs','health'],{ cwd: root, encoding:'utf8', timeout:15000, windowsHide:true });
+  const health = fs.existsSync(healthPath) ? JSON.parse(fs.readFileSync(healthPath,'utf8')) : null;
+  return { health, stdout: String(r.stdout||'').slice(0,4000), stderr: String(r.stderr||'').slice(0,2000) };
+}
+async function execStateRead(root, args){
+  const rel = String(args.path||args.file||'').replace(/\\/g,'/').replace(/^\//,'');
+  if(!rel) throw new Error('path required');
+  if(!isStatePathAllowed(rel)) throw new Error(`state path not allowlisted: ${rel}. Allowed: ${CHECKPOINT_STATE_ALLOWLIST.join(', ')} or snapshots/*.json`);
+  const abs = path.join(root, rel);
+  if(!fs.existsSync(abs)) throw new Error(`file not found: ${rel}`);
+  const stat = fs.statSync(abs);
+  const buf = fs.readFileSync(abs);
+  const hash = crypto.createHash('sha256').update(buf).digest('hex');
+  const content = buf.toString('utf8');
+  const preview = content.slice(0,8000);
+  let parsed=null;
+  if(rel.endsWith('.json')){ try{ parsed=JSON.parse(content); }catch{} }
+  return { path: rel, size: buf.length, mtimeMs: stat.mtimeMs, sha256: hash, preview, jsonKeys: parsed? Object.keys(parsed).slice(0,30): null };
+}
+
 // browser executors via playwright
 const BROWSER_ALLOWLIST = [
   'https://world-server.vercel.app',
@@ -519,6 +602,12 @@ const EXECUTORS = {
     const buf=fs.readFileSync(abs);
     return { size: buf.length, sha256: crypto.createHash('sha256').update(buf).digest('hex') };
   },
+  'checkpoint.create': async (root, args)=> execCheckpointCreate(root, args),
+  'checkpoint.list': async (root)=> execCheckpointList(root),
+  'session.status': async (root)=> execSessionStatus(root),
+  'session.resume': async (root)=> execSessionResume(root),
+  'session.health': async (root)=> execSessionHealth(root),
+  'state.read': async (root, args)=> execStateRead(root, args),
 };
 
 // re-audit after EXECUTORS defined

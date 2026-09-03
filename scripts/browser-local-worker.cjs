@@ -170,6 +170,80 @@ async function execQualityStatus(root){
   for(const f of files){ const p=path.join(root,f); if(fs.existsSync(p)){ try{ const j=JSON.parse(fs.readFileSync(p,'utf8')); out[f]={ exists:true, keys:Object.keys(j).slice(0,20), status: j.status||j.level||null }; }catch{ out[f]={ exists:true, parseError:true }; } } else out[f]={ exists:false }; }
   return out;
 }
+const CHECKPOINT_STATE_ALLOWLIST = [
+  'state/session-recovery/current.json',
+  'state/session-recovery/UNFINISHED_WORK.json',
+  'state/session-recovery/DESKTOP_AI_RESUME.md',
+  'state/session-recovery/SESSION_HEALTH.json',
+  'state/session-recovery/events.jsonl',
+  'state/session-recovery/commands.jsonl',
+  'state/blocker-repair/state.json',
+  'state/browser-local-worker.json',
+  'WORK_IN_PROGRESS.md'
+];
+function isStatePathAllowed(p){
+  const norm = String(p||'').replace(/\\/g,'/').replace(/^\//,'');
+  if(norm.includes('..')) return false;
+  if(CHECKPOINT_STATE_ALLOWLIST.includes(norm)) return true;
+  if(norm.startsWith('state/session-recovery/snapshots/') && norm.endsWith('.json')) return true;
+  return false;
+}
+async function execCheckpointCreate(root, args){
+  const message = String(args.message||args.msg||'').trim();
+  const next = String(args.next||args.nextAction||'').trim();
+  if(!message) throw new Error('message required for checkpoint.create');
+  const cmdArgs = ['scripts/desktop-ai-session-recovery.cjs','checkpoint','--message',message];
+  if(next) cmdArgs.push('--next', next);
+  const r = cp.spawnSync('node', cmdArgs, { cwd: root, encoding:'utf8', timeout: 20000, windowsHide:true });
+  if(r.status!==0) throw new Error(`checkpoint failed: ${r.stderr||r.stdout}`);
+  let out=null; try{ out=JSON.parse(String(r.stdout||'').trim().split('\n').slice(-1)[0]); }catch{ out={ raw: String(r.stdout||'').slice(0,4000)}; }
+  return { checkpoint: out.checkpoint||out, message, next, stdout: String(r.stdout||'').slice(0,4000) };
+}
+async function execCheckpointList(root){
+  const snapDir = path.join(root,'state/session-recovery/snapshots');
+  const curPath = path.join(root,'state/session-recovery/current.json');
+  const cur = fs.existsSync(curPath) ? JSON.parse(fs.readFileSync(curPath,'utf8')) : null;
+  let snaps=[];
+  if(fs.existsSync(snapDir)){
+    snaps = fs.readdirSync(snapDir).filter(f=>f.endsWith('.json')).sort().slice(-20).map(f=>{
+      try{ const j=JSON.parse(fs.readFileSync(path.join(snapDir,f),'utf8')); return { file:f, id:j.id, at:j.at, message:j.message, head: j.git?.head?.slice(0,8) }; }catch{ return { file:f }; }
+    });
+  }
+  return { current: cur ? { checkpoint: cur.checkpoint, sessionId: cur.sessionId, status: cur.status } : null, snapshots: snaps };
+}
+async function execSessionStatus(root){
+  const curPath = path.join(root,'state/session-recovery/current.json');
+  const healthPath = path.join(root,'state/session-recovery/SESSION_HEALTH.json');
+  const r = cp.spawnSync('node',['scripts/desktop-ai-session-recovery.cjs','status'],{ cwd: root, encoding:'utf8', timeout:15000, windowsHide:true });
+  const cur = fs.existsSync(curPath) ? JSON.parse(fs.readFileSync(curPath,'utf8')) : null;
+  const health = fs.existsSync(healthPath) ? JSON.parse(fs.readFileSync(healthPath,'utf8')) : null;
+  return { statusOutput: String(r.stdout||'').slice(0,6000), current: cur, health, branch: git(root,['branch','--show-current']).stdout.trim(), head: git(root,['rev-parse','HEAD']).stdout.trim() };
+}
+async function execSessionResume(root){
+  const resumePath = path.join(root,'state/session-recovery/DESKTOP_AI_RESUME.md');
+  const unfinishedPath = path.join(root,'state/session-recovery/UNFINISHED_WORK.json');
+  const r = cp.spawnSync('node',['scripts/desktop-ai-session-recovery.cjs','resume'],{ cwd: root, encoding:'utf8', timeout:20000, windowsHide:true });
+  const resume = fs.existsSync(resumePath) ? fs.readFileSync(resumePath,'utf8').slice(0,10000) : null;
+  const unfinished = fs.existsSync(unfinishedPath) ? JSON.parse(fs.readFileSync(unfinishedPath,'utf8')) : null;
+  return { resume: resume ? resume.slice(0,8000) : null, resumePath: resume? resumePath : null, unfinished, resumeStdout: String(r.stdout||'').slice(0,4000) };
+}
+async function execSessionHealth(root){
+  const healthPath = path.join(root,'state/session-recovery/SESSION_HEALTH.json');
+  const r = cp.spawnSync('node',['scripts/desktop-ai-session-recovery.cjs','health'],{ cwd: root, encoding:'utf8', timeout:15000, windowsHide:true });
+  const health = fs.existsSync(healthPath) ? JSON.parse(fs.readFileSync(healthPath,'utf8')) : null;
+  return { health, stdout: String(r.stdout||'').slice(0,4000), stderr: String(r.stderr||'').slice(0,2000) };
+}
+async function execStateRead(root, args){
+  const rel = String(args.path||args.file||'').replace(/\\/g,'/').replace(/^\//,'');
+  if(!rel) throw new Error('path required');
+  if(!isStatePathAllowed(rel)) throw new Error(`state path not allowlisted: ${rel}. Allowed: ${CHECKPOINT_STATE_ALLOWLIST.join(', ')}`);
+  const abs = path.join(root, rel);
+  if(!fs.existsSync(abs)) throw new Error(`file not found: ${rel}`);
+  const stat = fs.statSync(abs);
+  const buf = fs.readFileSync(abs);
+  const hash = sha256(buf);
+  return { path: rel, size: buf.length, mtimeMs: stat.mtimeMs, sha256: hash, preview: buf.toString('utf8').slice(0,8000), jsonKeys: rel.endsWith('.json') ? (()=>{ try{ return Object.keys(JSON.parse(buf.toString('utf8'))).slice(0,30)}catch{return null}})() : null };
+}
 
 const EXECUTORS = {
   'repo.status': execRepoStatus,
@@ -185,7 +259,13 @@ const EXECUTORS = {
   'test.run': execTestRun,
   'agent.dispatch': execAgentDispatch,
   'quality.status': execQualityStatus,
-  'artifact.list': async (root,args)=>{ const dir=ARTIFACTS_DIR; ensureDir(dir); const files=fs.existsSync(dir)? fs.readdirSync(dir).slice(0,50):[]; return { files }; }
+  'artifact.list': async (root,args)=>{ const dir=ARTIFACTS_DIR; ensureDir(dir); const files=fs.existsSync(dir)? fs.readdirSync(dir).slice(0,50):[]; return { files }; },
+  'checkpoint.create': execCheckpointCreate,
+  'checkpoint.list': execCheckpointList,
+  'session.status': execSessionStatus,
+  'session.resume': execSessionResume,
+  'session.health': execSessionHealth,
+  'state.read': execStateRead,
 };
 
 async function ensureTaskWorktree(task, createIfMissing=true){

@@ -57,13 +57,13 @@ Per `DESKTOP_AI_INSTRUCTIONS.md`: real agentmemory save→recall→restart persi
 <!-- WORLD_SERVER_SESSION_RECOVERY_V1_START -->
 ## Desktop AI Session Recovery V1 — managed checkpoint
 
-- sessionId: `session-1787632622221-75896e`
-- status: `interrupted`
-- checkpoint: `2026-08-28T04:57:45.608Z`
-- checkpoint message: checkpoint before scheduler_kick fix - dirty 662, health DEAD overdue 625m, soak dead, honest 68/68
+- sessionId: `session-1788463539382-3e447f`
+- status: `in_progress`
+- checkpoint: `2026-09-03T19:26:39.200Z`
+- checkpoint message: feat(browser-control): v3 checkpoint/state authority — Browser ChatGPT can checkpoint/resume/health/state.read (6 caps: checkpoint.create/list, session.status/resume/health, state.read) — local queue 9/9 PASS, live health 43 caps 0 mismatch
 - last successful command: none
-- last error: operation — Watchdog detected dead session/process: unfinished work exists but no responsible process is alive after 14.5 minute(s)
-- next action: fix scheduler_kick npm.cmd quoting
+- last error: none
+- next action: restart browser-local-worker-live loop to publish v3 heartbeat (current loop is v2), then Browser ChatGPT live verify via Supabase claim tick
 
 ### Recovery queue
 - no explicit recovery steps registered yet

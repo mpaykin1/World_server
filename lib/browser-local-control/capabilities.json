@@ -1,6 +1,6 @@
 {
-  "version": "2026-09-03.v2",
-  "description": "Allowlisted capabilities for Browser ChatGPT ↔ Local World_server control bridge. Worker enforces this list before any execution.",
+  "version": "2026-09-03.v3",
+  "description": "Allowlisted capabilities for Browser ChatGPT ↔ Local World_server control bridge. Worker enforces this list before any execution. v3 adds checkpoint/state authority.",
   "maxOutputBytes": 262144,
   "defaultTimeoutMs": 120000,
   "maxConcurrentJobs": 1,
@@ -47,6 +47,13 @@
 
     "artifact.list": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "list artifacts for task", "status": "IMPLEMENTED", "executor": "execArtifactList" },
     "artifact.read": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "read artifact metadata", "status": "IMPLEMENTED", "executor": "execArtifactRead" },
-    "artifact.zip": { "risk": "low", "timeoutMs": 60000, "worktree": "shared", "description": "zip artifacts", "status": "PARTIAL", "executor": null }
+    "artifact.zip": { "risk": "low", "timeoutMs": 60000, "worktree": "shared", "description": "zip artifacts", "status": "PARTIAL", "executor": null },
+
+    "checkpoint.create": { "risk": "medium", "timeoutMs": 30000, "worktree": "shared", "description": "desktop-ai:checkpoint --message <msg> --next <next>", "status": "IMPLEMENTED", "executor": "execCheckpointCreate" },
+    "checkpoint.list": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "list checkpoints from state/session-recovery", "status": "IMPLEMENTED", "executor": "execCheckpointList" },
+    "session.status": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "desktop-ai:session:status + SESSION_HEALTH + current.json", "status": "IMPLEMENTED", "executor": "execSessionStatus" },
+    "session.resume": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "read DESKTOP_AI_RESUME.md + UNFINISHED_WORK.json", "status": "IMPLEMENTED", "executor": "execSessionResume" },
+    "session.health": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "SESSION_HEALTH.json + health check", "status": "IMPLEMENTED", "executor": "execSessionHealth" },
+    "state.read": { "risk": "low", "timeoutMs": 30000, "worktree": "shared", "description": "read allowlisted state file (session-recovery/*, blocker-repair/state.json)", "status": "IMPLEMENTED", "executor": "execStateRead" }
   }
 }

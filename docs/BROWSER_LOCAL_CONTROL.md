@@ -2,7 +2,7 @@
 
 > Supabase queue (pull) → Desktop OpenCode worker → isolated git worktree → result queue → Browser ChatGPT
 
-Version: `2026-09-03.v1` — Worktree: `ai/opencode/browser-local-control`
+Version: `2026-09-03.v3` — Worktree: `ai/opencode/browser-local-control` — Authority +checkpoint/state (Browser ChatGPT can checkpoint/resume/health/state.read)
 
 ## Architecture
 
@@ -129,13 +129,14 @@ Large stdout is truncated to 4k; full output → `state/browser-local-artifacts/
 
 Allowlisted in `lib/browser-local-control/capabilities.json` (timeout, risk, worktree). Worker rejects any capability not in list. Highlights:
 
-- READ: `repo.status`, `repo.tree`, `repo.read`, `repo.search`, `repo.diff`, `repo.history`
-- GIT: `git.fetch/create_worktree/create_branch/apply_patch/stage/commit/push/conflicts`
-- TEST: `test.list/run`, `lint.run`, `build.run`, `benchmark.run`
-- AGENTS: `agent.list/dispatch/status/result/retry/cancel`
-- QUALITY: `quality.status/run/blockers/regressions`
-- BROWSER: `browser.open/scenario/screenshot/console` (when Playwright available)
-- ARTIFACTS: `artifact.list/read/zip`
+ - READ: `repo.status`, `repo.tree`, `repo.read`, `repo.search`, `repo.diff`, `repo.history`
+ - GIT: `git.fetch/create_worktree/create_branch/apply_patch/stage/commit/push/conflicts`
+ - TEST: `test.list/run`, `lint.run`, `build.run`, `benchmark.run`
+ - AGENTS: `agent.list/dispatch/status/result/retry/cancel`
+ - QUALITY: `quality.status/run/blockers/regressions`
+ - BROWSER: `browser.open/scenario/screenshot/console` (when Playwright available)
+ - ARTIFACTS: `artifact.list/read/zip`
+ - CHECKPOINT/STATE (v3): `checkpoint.create/list`, `session.status/resume/health`, `state.read` — Browser ChatGPT controls recovery checkpoint + reads DESKTOP_AI_RESUME.md / SESSION_HEALTH.json / UNFINISHED_WORK.json (allowlist only, no path traversal)
 
 ## Worker guarantees
 
@@ -157,7 +158,7 @@ File: `state/browser-local-worker.json` + Supabase `browser_ai_heartbeats` when 
 {
   "worker": "desktop-opencode",
   "online": true,
-  "version": "2026-09-03.v1",
+  "version": "2026-09-03.v3",
   "capabilities": ["repo.status","repo.read","git.apply_patch","test.run","agent.dispatch", "..."],
   "current_task": null,
   "last_seen": "2026-09-03T00:00:00.000Z",
