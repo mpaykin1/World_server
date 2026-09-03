@@ -486,6 +486,31 @@
         "full release:gate mandatory before merge/production claim",
         "record exact failing step instead of skipping"
       ]
+    },
+    {
+      "id": "github-app-connector-403-repo-not-selected",
+      "category": "integration",
+      "severity": "major",
+      "status": "known",
+      "symptom": "a GitHub App-based connector (e.g. a ChatGPT/Browser AI GitHub connector) gets 403 'You must authenticate with an access token authorized to a GitHub App' or otherwise cannot read/write this repo, even though the App is installed on the account",
+      "rootCause": "most likely the App's installation has its repository access scoped to 'Only select repositories' and this repo (World_server) is not in that list - GitHub Apps default to per-repo opt-in, not account-wide access. This cannot be confirmed or fixed via the REST API with a personal access token/OAuth token, even one with full repo `admin` permission (verified: GET /user/installations and GET /repos/{owner}/{repo}/installation both require the App's own installation/JWT auth and 403 for a PAT-authenticated `gh` CLI regardless of the token's own repo permissions) - App-installation repository selection is only visible/editable in GitHub's own web UI.",
+      "protection": [
+        "one concrete manual action: repo owner opens https://github.com/settings/installations (or the org equivalent), opens the connector's App, and under Repository access adds World_server (or switches to All repositories)",
+        "after that, re-run scripts/github-write-access-probe.js (or have the connector itself perform an equivalent real branch->commit->push->PR->verify->cleanup) to confirm write access actually works, not just that the App shows as installed",
+        "do not assume App installation implies repo access - always verify with a real write, not a read-only check"
+      ]
+    },
+    {
+      "id": "git-worktree-shared-local-branch-refs",
+      "category": "tooling",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "a script running in one git worktree does `git checkout <branch-name>` (e.g. 'master') expecting to return to a known-good state, and ends up on unexpected/stale content instead",
+      "rootCause": "all `git worktree add` worktrees of the same repository share the same local branch refs (not just remote-tracking refs) - a local branch named e.g. 'master' created in one worktree/session at some earlier point is the SAME ref every other worktree sees, and may be far behind origin/master. Checking out a branch by a hardcoded name (rather than the worktree's own actual prior ref, or an explicit origin/<branch> / commit SHA) can silently land a worktree on that stale shared ref.",
+      "protection": [
+        "scripts/github-write-access-probe.js: capture `git symbolic-ref --short -q HEAD` (falling back to the exact commit SHA) at start, restore exactly that on cleanup - never a hardcoded branch name",
+        "prefer an explicit `origin/<branch>` or a captured commit SHA over a bare local branch name whenever a script must return a worktree to a known state"
+      ]
     }
   ],
   "confirmationProtocol": {

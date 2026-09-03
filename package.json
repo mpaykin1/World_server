@@ -61,6 +61,7 @@
     "quality:assets-dedup": "node scripts/asset-dedup-cache.js",
     "desktop-ai:check": "node scripts/check-desktop-ai-protocol.js",
     "desktop-ai:new-task": "node scripts/desktop-ai-new-task.js",
+    "github:probe": "node scripts/github-write-access-probe.js",
     "tech:audit": "node scripts/technology-audit.js",
     "project:review": "node scripts/project-quality-reviewer.js",
     "quality:master-report": "node scripts/quality-master-report.js",
