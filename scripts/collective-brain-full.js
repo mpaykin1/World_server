@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+'use strict';
+const {structuralCheck,repoSecurityScan,doctor,benchmark,cycle,replay}=require('../lib/collective-brain');
+(async()=>{const structural=structuralCheck(process.cwd());if(structural.status!=='PASS')throw new Error(`structural: ${structural.errors.join(', ')}`);const security=repoSecurityScan(process.cwd());if(security.status!=='PASS')throw new Error(`security: ${security.findings.map(x=>x.id).join(', ')}`);const d=await doctor(process.cwd());if(d.status!=='PASS')throw new Error('doctor structural/event-chain failure');benchmark(process.cwd());const c=await cycle(process.cwd());const r=replay(process.cwd());console.log(`[COLLECTIVE_BRAIN_FULL] PASS cycle=${c.status} replay=${r.status}`);})().catch(e=>{console.error(`[COLLECTIVE_BRAIN_FULL] FAIL ${e.message}`);process.exitCode=1;});

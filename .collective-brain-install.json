@@ -1,0 +1,7 @@
+{
+  "patch": "OPENHUMAN_COLLECTIVE_BRAIN_PATCH_V2_1",
+  "installedAt": "2026-08-31T09:58:01.089Z",
+  "branch": "ai/desktop/openhuman-collective-brain-v2",
+  "backupDir": ".patch-backups\\collective-brain-v2-1-2026-08-31T09-58-00-899Z",
+  "baseHead": "5d26fa5b130fcf83376c28c9cbebeedc94265635"
+}

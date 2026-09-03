@@ -1,0 +1,73 @@
+{
+  "schemaVersion": "1.0.0",
+  "implementedNow": [
+    {
+      "technology": "agentmemory",
+      "purpose": "one durable shared memory for Claude Code, Codex, OpenCode and OpenHuman",
+      "integration": "REST/MCP + local outbox + restart persistence verification",
+      "license": "Apache-2.0"
+    },
+    {
+      "technology": "OpenHuman",
+      "purpose": "external durable workflow/orchestration/approval layer",
+      "integration": "signed desktop install + agentmemory backend + optional local AI",
+      "license": "GPL-3.0",
+      "boundary": "external process; do not vendor source into World_server"
+    },
+    {
+      "technology": "tinyagents/tinyflows",
+      "purpose": "checkpointed agent graphs and durable workflows",
+      "integration": "use through OpenHuman packaged path first",
+      "license": "GPL-3.0"
+    },
+    {
+      "technology": "Ollama",
+      "purpose": "free local CPU/GPU inference and embeddings",
+      "integration": "optional OpenHuman local_ai route; bge-m3 for 1024-dim Memory Tree embeddings"
+    },
+    {
+      "technology": "hash-chained audit journal",
+      "purpose": "tamper-evident replay of memory/checkpoint/policy/fix events",
+      "integration": "native Node implementation in patch"
+    },
+    {
+      "technology": "capability router + lease guard",
+      "purpose": "send work to the best agent and prevent concurrent AI collisions",
+      "integration": "native Node implementation reusing existing quality risk/WIP systems"
+    },
+    {
+      "technology": "memory security firewall",
+      "purpose": "secret redaction, prompt-injection marking and safe recall",
+      "integration": "native Node implementation; release-gated"
+    }
+  ],
+  "nextHighImpact": [
+    {
+      "technology": "Open Policy Agent (OPA)",
+      "priority": "high",
+      "reason": "formal deny-by-default tool/deploy/DB approval policies shared by every AI",
+      "rule": "only add after native policy adapter passes; keep optional executable dependency"
+    },
+    {
+      "technology": "Gitleaks",
+      "priority": "high",
+      "reason": "prevent secrets entering commits, logs or durable memory"
+    },
+    {
+      "technology": "Trivy",
+      "priority": "high",
+      "reason": "dependency/container/filesystem vulnerability and misconfiguration scanning"
+    },
+    {
+      "technology": "Sigstore/Cosign + SBOM (Syft)",
+      "priority": "medium-high",
+      "reason": "sign patch/build artifacts and prove provenance of downloaded binaries"
+    },
+    {
+      "technology": "OpenTelemetry Collector",
+      "priority": "medium",
+      "reason": "unify AI/workflow/runtime traces and forward them to existing observability instead of adding a new dashboard"
+    }
+  ],
+  "avoidWithoutMeasuredGap": ["second vector database", "Mem0/Zep in parallel with agentmemory", "Temporal/n8n in parallel with OpenHuman tinyflows", "Redis/NATS only for memory feature", "duplicate telemetry dashboard"]
+}

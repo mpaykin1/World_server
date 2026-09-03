@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "WORLD_SERVER_REMOTE_TASK_BRIDGE",
+  "rule": "Every command maps to exactly one pre-approved local script/action. No command accepts an arbitrary shell string. run_existing_script accepts only a scriptId from allowedScripts below, never a raw path.",
+  "commands": {
+    "run_tests": { "kind": "npm-script", "script": "check", "description": "node scripts/check-js.js && node --test - the project's own full unit/integration suite." },
+    "run_linter": { "kind": "npm-script", "script": "check", "description": "Reuses the same check script (this project's check-js.js is its lint/static-check gate; there is no separate lint script to duplicate)." },
+    "run_benchmark": { "kind": "npm-script", "script": "collective-brain:benchmark", "description": "node scripts/collective-brain-benchmark.js - existing Collective Brain benchmark, not a new one." },
+    "build_web": { "kind": "npm-script", "script": "build", "description": "Existing build:sentry + inject-sentry-runtime + build:posthog + inject-posthog-runtime chain." },
+    "build_native": { "kind": "unavailable", "description": "No native (Godot/EXE) build script is wired into this bridge yet - reports a clear unavailable status rather than a fabricated result. Safe to add once a specific existing script is identified." },
+    "inspect_logs": {
+      "kind": "read-allowlisted-file",
+      "description": "Reads the tail of one pre-approved status/report file - never an arbitrary path.",
+      "allowedFiles": [
+        "DESKTOP_AI_PROTOCOL_REPORT.json",
+        "PROJECT_QUALITY_REVIEW.json",
+        "COLLECTIVE_BRAIN_DOCTOR.json",
+        "COLLECTIVE_BRAIN_REPLAY.json",
+        "QUALITY_MASTER_REPORT.json"
+      ]
+    },
+    "run_existing_script": {
+      "kind": "read-allowlisted-script",
+      "description": "Runs one pre-approved script by scriptId - never a raw path from the task.",
+      "allowedScripts": {
+        "golden-standard": "scripts/check-golden-standard.js",
+        "project-quality-review": "scripts/project-quality-reviewer.js",
+        "desktop-ai-protocol": "scripts/check-desktop-ai-protocol.js",
+        "collective-brain-doctor": "scripts/collective-brain-doctor.js",
+        "collective-brain-check": "scripts/collective-brain-check.js"
+      }
+    },
+    "apply_patch": {
+      "kind": "guarded-patch",
+      "description": "Applies a unified diff to an isolated worktree ONLY (never the main tree), after `git apply --check` validates it cleanly. Requires verify_patch afterward before any promotion. Subject to collective-brain policyGate('apply-remote-patch').",
+      "maxDiffBytes": 65536,
+      "forbiddenPathPrefixes": [".env", "data/collective-brain", ".git/", "node_modules/"]
+    },
+    "verify_patch": { "kind": "npm-script", "script": "check", "description": "Runs the same test suite as run_tests, scoped to the worktree a patch was applied to." },
+    "restart_known_worker": {
+      "kind": "named-allowlist",
+      "description": "Restarts exactly one pre-registered named worker - empty by default (safe no-op) until a specific process is deliberately registered here.",
+      "allowedWorkers": {}
+    }
+  }
+}

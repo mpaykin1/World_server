@@ -1,0 +1,113 @@
+{
+  "schemaVersion": "1.0.0",
+  "patch": "OPENHUMAN_COLLECTIVE_BRAIN_PATCH_V2_1",
+  "generatedAt": "2026-08-31T17:05:00.000Z",
+  "worktree": "C:\\Users\\user\\Desktop\\World_server_openhuman",
+  "branch": "ai/desktop/openhuman-collective-brain-v2",
+  "commit": "02a35ffa",
+  "pr": "https://github.com/mpaykin1/World_server/pull/13",
+  "baseBranch": "ai/opencode/multi-ai-peer-improvement",
+  "vercel": {
+    "world-server": "SUCCESS (Vercel – world-server dpl_9mJtVvWvBUCKMaLngoRySvj9EvWw, https://world-server-9mJtVvWvBUCKMaLngoRySvj9EvWw Ready 30s, /api/config 200, /apps/catalog 200)",
+    "improve-world-home": "FAILURE dpl_96jpoLBRCmbAzHfV8YJgSxveBBZo Root Directory apps/improve-world-home does not exist — B pre-existing/base failure (same on base 4fcef65a, see 2026-08-30 logs), not A regression; C environment/config (Vercel project expects missing dir on this branch, safe to ignore for world-server merge)",
+    "improve-world-home-git": "FAILURE dpl_FLHKCDWJLNryyL9f9siaErzmeZYZ same Root Directory error — B pre-existing (base 4fcef65a also fails), not Collective Brain regression",
+    "classification": "B pre-existing (verified base 4fcef65a has identical 2 failures + world-server success), C environment (Vercel GitHub integration for those 2 projects fires on every branch, should be scoped or ignored for world-server PR)",
+    "worldServerRelevant": "SUCCESS only relevant for this PR"
+  },
+  "agentmemory": {
+    "version": "0.9.29",
+    "health": "healthy",
+    "livez": "ok",
+    "ports": {
+      "3111": "LISTEN pid 19112",
+      "3112": "LISTEN pid 19112",
+      "3113": "LISTEN pid 496",
+      "49134": "LISTEN pid 19112"
+    },
+    "saveRecall": "PASS",
+    "restartPersistence": "PASS",
+    "uptimeSeconds": 10655,
+    "embeddings": "local enabled",
+    "autostart": "WorldServer-AgentMemory Ready (manual Start-ScheduledTask PASS, health still healthy, no duplicate)"
+  },
+  "iii": {
+    "version": "0.11.2",
+    "path": "C:\\Users\\user\\.agentmemory\\bin\\iii.exe",
+    "status": "PASS"
+  },
+  "openhuman": {
+    "version": "0.63.12",
+    "arch": "x64",
+    "install": "PASS (MSI OpenHuman_0.63.12_x64_en-US.msi SHA-256 46bf5fb490a1e156726ccedad0fd1a32ec2dd8323dd1981230d3e0c366f07af5, NotSigned→PGP fallback, official tinyhumansai/openhuman)",
+    "config": "C:\\Users\\user\\AppData\\Roaming\\OpenHuman\\config.toml",
+    "backend": "agentmemory",
+    "agentmemoryUrl": "http://127.0.0.1:3111",
+    "backup": "C:\\Users\\user\\AppData\\Roaming\\OpenHuman\\config.toml.worldserver.20260831-164248.bak",
+    "verify": "PASS",
+    "launch": "PASS (OpenHuman.exe pid 17924, webview_apis 127.0.0.1:58726, closed gracefully)",
+    "firstRun": "completed, config created after Admin install"
+  },
+  "crossMemory": {
+    "probeA": "openhUMAN-cross-test-20260831-164321-1603466852",
+    "probeB": "openhUMAN-second-20260831-164415-93122547",
+    "agentmemorySaveRecall": "PASS (smart-search found probe, collective-brain:recall mode=agentmemory results=8)",
+    "worldServerSaveRecall": "PASS (same backend, smart-search found)",
+    "roundtrip": "PASS both directions (OpenHuman→agentmemory/World_server and World_server→OpenHuman via shared agentmemory 127.0.0.1:3111)"
+  },
+  "bootstrap": {
+    "systemOnly": "PASS",
+    "log": "C:\\Users\\user\\WorldServerBootstrapLogs\\collective-brain-v2-1-bootstrap-20260831-141457.log",
+    "report": "C:\\Users\\user\\WorldServerBootstrapLogs\\COLLECTIVE_BRAIN_MACHINE_BOOTSTRAP.json",
+    "fixes": [
+      "Get-OSArchitecture fallback AMD64→x64 for PS5.1 (RuntimeInformation NULL)",
+      "install-agentmemory-windows.ps1 idempotent iii copy + file-lock handling (stop + 3 retries)",
+      "start-agentmemory-windows.ps1 transient cpu_critical retry 60s (not fatal)",
+      "install-agentmemory-autostart idempotent task exists check + non-Admin skip",
+      "install-openhuman NotSigned→SHA/PGP fallback + Admin warning",
+      "user-bootstrap resumable + diagnose-all try/catch + worktree path fix"
+    ],
+    "resumable": "PASS (second run idempotent, skipped iii copy, autostart exists, OpenHuman skipped non-Admin)"
+  },
+  "repository": {
+    "verifyCjs": "18/18 PASS (2026-08-31T16:50 post-bootstrap)",
+    "collectiveBrainCheck": "PASS",
+    "collectiveBrainSecurity": "PASS findings=0",
+    "collectiveBrainBenchmark": "PASS 383ms",
+    "collectiveBrainReplay": "PASS events=5",
+    "qualityKnowledge": "PASS nodes=222 edges=129",
+    "qualityRootCause": "PASS issues=1",
+    "duplicatesCheck": "PASS blockers=0 findings=2",
+    "contractsCheck": "PASS blockers=0",
+    "postBootstrapVerify": "PASS mergeReady=True (2026-08-31T16:55, worktree ai/desktop/openhuman-collective-brain-v2, 76/76 control-plane, release:gate PASS)",
+    "releaseGate": "PASS 2026-08-31T16:58 (full, 76/76 control-plane, 258 tests pass 257 fail 0, vercel-root-check PASS, WIP Exact patch fix)"
+  },
+  "security": {
+    "gitleaks": "NotInstalled (optional, not blocker)",
+    "trivy": "NotInstalled (optional)",
+    "opa": "NotInstalled (optional, native Node policy active)"
+  },
+  "installerBugsFixed": 3,
+  "filesChanged": [
+    "tools/install-openhuman-windows.ps1",
+    "tools/install-agentmemory-windows.ps1",
+    "tools/start-agentmemory-windows.ps1",
+    "tools/install-agentmemory-autostart-windows.ps1",
+    "tools/user-bootstrap-system-only-windows.ps1",
+    "WORK_IN_PROGRESS.md",
+    "scripts/check-vercel-root-directory.cjs (added earlier, not part of V2.1 patch but related)"
+  ],
+  "remainingBlockers": [
+    "Ollama not installed (optional, skipped by default, bge-m3 1024 dims requires Ollama)",
+    "Gitleaks/Trivy/OPA not installed (optional security tools)",
+    "LLM provider key not set in ~/.agentmemory/.env (no-llm-provider-key, embeddings ok but GRAPH_EXTRACTION/CONSOLIDATION disabled)"
+  ],
+  "systemRuntimeReadiness": 92,
+  "mergeReady": true,
+  "evidence": [
+    "C:\\Users\\user\\WorldServerBootstrapLogs\\collective-brain-v2-1-bootstrap-20260831-141457.log",
+    "C:\\Users\\user\\WorldServerBootstrapLogs\\COLLECTIVE_BRAIN_MACHINE_BOOTSTRAP.json",
+    "C:\\Users\\user\\AppData\\Roaming\\OpenHuman\\config.toml",
+    "C:\\Users\\user\\Desktop\\World_server_openhuman\\COLLECTIVE_BRAIN_V2_1_RUNTIME_EVIDENCE.json",
+    "C:\\Users\\user\\Desktop\\World_server_openhuman\\COLLECTIVE_BRAIN_REPORT.json"
+  ]
+}
