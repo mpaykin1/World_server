@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "6.0.0",
+  "appliedAt": "2026-09-03T08:18:00.000Z",
+  "targetProject": {
+    "ref": "xlcdnlsyvxqtopmkweiy",
+    "name": "world-server-preview",
+    "region": "ap-southeast-1",
+    "note": "Only Supabase project reachable via this session's MCP access under mmmpaykin@gmail.com (an inactive 'Improve' project also exists, unrelated). Could not confirm this matches iphfwxjuhsucvdyluink.supabase.co referenced elsewhere in this environment's context - if that is the real production project, these migrations need to be re-applied there after user confirmation, following the same reviewed SQL."
+  },
+  "migrationsApplied": [
+    "world_feedback_translation_v3",
+    "world_community_v4",
+    "world_functions_v5",
+    "world_game_design_v5",
+    "world_rate_limit_v6",
+    "world_feedback_resolution_v6"
+  ],
+  "dependencyOrderVerified": true,
+  "advisors": {
+    "security": {
+      "level": "INFO only",
+      "finding": "rls_enabled_no_policy on all new tables - expected and correct: every V6/V5/V4/V3 table is RLS-enabled with zero client-facing policies by design (server/service-role only), matching each migration's own 'no client write policy exists' comments."
+    },
+    "performance": {
+      "level": "INFO + one pre-existing WARN unrelated to this patch",
+      "finding": "unindexed_foreign_keys and unused_index are both expected for brand-new, zero-traffic tables. The one WARN (auth_rls_initplan on public.profiles) is a pre-existing table/policy this patch never touched - all new policies already use (select auth.uid()) correctly."
+    }
+  },
+  "result": "PASS"
+}
