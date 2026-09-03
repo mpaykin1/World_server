@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "system": "WORLD_SERVER_REMOTE_TASK_BRIDGE",
   "rule": "Every command maps to exactly one pre-approved local script/action. No command accepts an arbitrary shell string. run_existing_script accepts only a scriptId from allowedScripts below, never a raw path.",
   "commands": {
@@ -61,7 +61,36 @@
     },
     "route_goal": {
       "kind": "route-recommendation",
-      "description": "Wraps the existing lib/collective-brain routeTask() keyword-weighted scorer: given args.goal (a natural-language description of work, not a typed command), returns the ranked recommended agent(s) from data/collective-brain/agent-capabilities.json. Local/free agents (opencode, openhuman) are weighted ahead of paid model-backed agents (claude-code, codex, desktop-ai) via costPenalty unless the task's keywords clearly need the stronger agent's specific strength. This is a recommendation only - it does not itself dispatch to or execute via any external agent; no safe local invocation mechanism for opencode/openhuman/AnythingLLM was found to build a real auto-dispatch loop on, so none is faked here."
+      "description": "Wraps the existing lib/collective-brain routeTask() keyword-weighted scorer: given args.goal, returns the ranked recommended agent(s) from data/collective-brain/agent-capabilities.json. Recommendation only - does not itself execute. For an actual free-tier code-editing execution, use agent_implement, which really does dispatch to OpenCode with a free model (verified working); AnythingLLM/OpenHuman still have no safe invocation surface on this host and are not dispatched to."
+    },
+    "create_worktree": {
+      "kind": "create-worktree",
+      "description": "Creates a fresh, isolated git worktree off origin/master under the OS temp directory (self-cleaning, never inside the visible repo tree) with a new ai/agent-invoke/<name>-<timestamp> branch. args: {name}. Returns {worktreePath, branch}. This is the isolation boundary every other agent_* command below requires."
+    },
+    "remove_worktree": {
+      "kind": "remove-worktree",
+      "description": "Removes an isolated worktree created by create_worktree (git worktree remove --force). args: {targetWorktree}. Refuses the main tree (same guard as apply_patch)."
+    },
+    "inspect_worktree_diff": {
+      "kind": "inspect-diff",
+      "description": "Read-only `git diff --stat` + full diff for one isolated worktree. args: {targetWorktree}."
+    },
+    "agent_implement": {
+      "kind": "agent-invoke-implement",
+      "description": "Real free-tier code-editing execution: given args.goal and args.targetWorktree (from create_worktree), runs OpenCode CLI non-interactively against a free hosted model (opencode/mimo-v2.5-free, then 2 other free models as fallback if the first fails/times out/produces no useful change/fails verification), verifies the result with `npm run check` in that worktree, and returns the verified diff. Never touches the main tree. Per-worktree lease prevents two agent_implement/agent_autofix calls editing the same worktree concurrently. Every argument that reaches the underlying process is either a fixed literal, a vetted free-model name, or a generated temp-file path - the goal text itself is never placed on a command line, it is written to a temp file and attached, eliminating shell-injection risk. If every free model fails, returns needsEscalation:true with full diagnostics instead of silently failing or auto-invoking a paid model.",
+      "timeoutMsDefault": 240000
+    },
+    "agent_autofix": {
+      "kind": "agent-invoke-autofix",
+      "description": "Runs `npm run check` in args.targetWorktree; if it already passes, returns immediately with nothing to do. If it fails, builds a goal from the real failure output and calls agent_implement's same free-tier fallback chain to fix the root cause (not just delete/skip the failing test) and re-verify."
+    },
+    "prepare_commit_and_pr": {
+      "kind": "prepare-pr",
+      "description": "Commits args.targetWorktree's changes, pushes the branch, and opens a real PR against master via `gh pr create` (args: {targetWorktree, title, body}). This reaches the public GitHub repo, so it is gated the same way apply_patch is - see collective-brain-policy.json's approvalRequiredOperations (remote-task:prepare_commit_and_pr). Still only opens a PR; merging to master still requires the existing PR -> CI -> gates -> merge-on-green flow, which this command cannot bypass."
+    },
+    "ai_query": {
+      "kind": "ai-query",
+      "description": "Read-only Q&A/analysis against a local Ollama model (qwen3:4b by default) on this host - genuinely local, zero network egress beyond localhost, zero cost. For classification/explanation/lookup tasks, not code editing (no tool-execution harness is built around Ollama here - see agent_implement for real code changes)."
     },
     "restart_known_worker": {
       "kind": "named-allowlist",

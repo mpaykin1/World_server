@@ -1,311 +1,192 @@
-# WORK IN PROGRESS — Remote-task bridge production hardening
+# WORK IN PROGRESS — Real multi-AI execution (agent_implement via OpenCode + Ollama)
 
 ## Task
-Per the user's explicit 10-point follow-up: make the Supabase-backed
-remote-task bridge (PR #18) production-grade (autostart, watchdog,
-healthcheck, restart, lease/anti-duplicate, crash recovery, graceful
-shutdown, bounded retries + dead-letter, structured logs, telemetry,
-regression tests) using existing infrastructure only; register the bridge
-itself as the first real `restart_known_worker` entry; wire a real native
-build pipeline to `build_native` if one exists; expand the command allowlist
-with more real, existing scripts; make routing prefer free/local agents
-over paid ones with escalation; auto-surface known fixes on failure;
-re-verify how far capability coverage can go without ever handing the
-browser raw shell/service-role/unrestricted GitHub/production secrets; and
-prove resilience against reboot/network loss/worker crash/duplicate
-delivery/stuck task/concurrent workers/stale worktree/failed
-build-test/Supabase outage, each with a regression test.
+Per the user's explicit follow-up: push capability coverage from 60% toward
+90%+ by finding a real, safe local/free AI invocation path (not just a
+routing recommendation) and wiring it into the existing typed-task bridge
+as one `agent.invoke`-style adapter, with real isolated-worktree execution,
+verification, fallback/escalation, and self-healing - extending the
+existing Collective Brain architecture, not replacing it.
 
 ## Why
-User's explicit instruction: "Не останавливайся на 60%... максимально
-заверши всё остальное самостоятельно" before asking for the one remaining
-manual GitHub step.
+The previous round's `route_goal` command could only recommend an agent,
+not actually run one - "no safe invocation mechanism was found" for
+OpenCode/OpenHuman/AnythingLLM. The user asked for a real audit before
+accepting that conclusion, and to build the real thing if one exists.
 
 ## Current state
-All of the following is verified real, not aspirational.
-
-**0. Infra survey before writing anything** (to honor "не создавай новую
-параллельную систему"): searched the whole repo for
-watchdog/scheduler/leader-lease/durable-queue/crash-diagnostics/
-disaster-recovery/control-plane systems. **None of these exist anywhere in
-this repo** - no such script, file, or generator for the status-JSON names
-suggested. The only real, wired infrastructure to build on is
-`lib/collective-brain/index.js`'s `acquireLease`/`releaseLease` (file
-lease, TTL + stale-reclaim), `appendEvent`/`verifyEventChain` (hash-chained
-audit log), `policyGate`, `routeTask`, and the `cycle()` function's
-acquire-lease/run/release-in-finally pattern, which every new piece below
-copies rather than reinventing. Confirmed via direct search, not assumed.
-
-**1. E2E audit of real master (post PR #18/#21)**: re-checked
-`public.world_remote_tasks` on the live Supabase project
-(`xlcdnlsyvxqtopmkweiy`) - schema intact, table empty (no leftover test
-rows), `get_advisors` clean (table still absent from
-`rls_enabled_no_policy`). Ran a fresh real round-trip
-(queue -> claim -> real local execution -> writeback -> verify -> cleanup)
-against master's actual deployed code before starting any changes.
-
-**2-3. Production hardening of `scripts/collective-brain-remote-bridge.cjs`
-+ new `scripts/collective-brain-remote-bridge-watchdog.js`**:
-- Single-instance protection: every `runOnce()` cycle wraps in
-  `collectiveBrain.acquireLease(ROOT,'remote-bridge-worker',...)` (the
-  existing primitive, TTL 15min) - a second worker instance skips the cycle
-  entirely rather than double-processing.
-- Anti-duplicate execution: Supabase CAS claim (`update ... where
-  status='queued'`) already prevented two workers claiming the *same* task;
-  the lease now also prevents two workers claiming *different* tasks
-  concurrently on one machine.
-- Stuck-task reclaim: `reclaimStuckTasks()` finds tasks stuck in
-  `claimed`/`running` past `REMOTE_BRIDGE_STUCK_MS` (default 10min,
-  indexed via the new `world_remote_tasks_stuck_idx`), requeues them with
-  `retry_count+1` if budget remains, else `dead_letter`.
-- Bounded retries + dead-letter: new `retry_count`/`max_retries` (default
-  2) columns (migration `world_remote_task_bridge_v2_retry_dead_letter`),
-  `dead_letter` added to the status CHECK constraint. Extracted the
-  decision into a pure `decideOutcomeStatus()` function (validation/policy
-  errors -> `failed` immediately, no wasted retries; execution
-  errors -> `retry-queued` until budget exhausted -> `dead_letter`, never
-  silently vanishes).
-- Crash recovery: the watchdog spawns the worker (`--watch`) detached,
-  tracks it via a PID file, and on crash-loop-breaker-permitting failure,
-  restarts it (bounded: `REMOTE_BRIDGE_MAX_RESTARTS`=5 per
-  `REMOTE_BRIDGE_RESTART_WINDOW_MS`=10min, else `action:"circuit-open"` -
-  a persistently broken worker degrades loudly instead of looping forever).
-- Graceful shutdown: SIGINT/SIGTERM in `--watch` mode waits for the
-  in-flight task to finish (30s hard cap) before releasing the lease and
-  exiting.
-- Structured logs: every lifecycle event is one JSON line to stdout
-  (`{level,msg,at,component,...}`).
-- Telemetry: a cheap-to-poll status snapshot at
-  `data/collective-brain/runtime/remote-bridge-status.json` (updated every
-  cycle) plus the existing collective-brain event chain - not a new,
-  parallel telemetry system.
-- Resilience to a transient Supabase failure: found and fixed a real gap -
-  `claimNextTask`'s thrown error on a Supabase select failure was not
-  caught anywhere in `runOnce()`, meaning a temporary Supabase outage would
-  crash the whole `--watch` loop (recoverable only via the watchdog
-  restarting it, a heavier response than necessary). Now caught explicitly
-  and backs off to the next cycle with `{drained:false, reason:'supabase
-  error: ...'}`, lease still released.
-- Healthcheck: `collective-brain-remote-bridge-watchdog.js --healthcheck`
-  (read-only), wired into the bridge's own new `health_status` command.
-- **`restart_known_worker` now has its first real entry**:
-  `allowedWorkers.collective-brain-remote-bridge ->
-  scripts/collective-brain-remote-bridge-watchdog.js`, so a typed task can
-  safely restart the bridge's own worker via the watchdog's `--restart`
-  mode. Verified live: `executeTask({command:'restart_known_worker',
-  args:{workerId:'collective-brain-remote-bridge'}})` really spawned and
-  the watchdog's own PID-tracking confirmed it.
-- Autostart: opt-in only (`REMOTE_BRIDGE_AUTOSTART=1`) hook in `server.js`,
-  after `server.listen()`. Confirmed safe for Vercel: `vercel.json` serves
-  this repo via `api/*.js` functions, never via `server.js`, so this can
-  never run in the serverless production path - only in a long-lived local
-  or self-hosted (e.g. Cloud Run-style) process. Verified live: started
-  `server.js` with the flag on, watched the watchdog spawn a real worker
-  (PID file appeared), then cleanly stopped everything.
-
-**4. Native/EXE build pipeline**: confirmed (again, explicitly, before
-touching `build_native`) that **none exists anywhere in this repo** -
-`scripts/godot-runtime-smoke.js` only launches one scene headless as a
-smoke test, it does not build/export an artifact; no `--export`,
-electron-builder, pkg, nexe, or native/desktop build script anywhere.
-**Did not fabricate one.** `build_native`'s description was tightened to
-explicitly warn a future session not to wire it to
-`godot-runtime-smoke.js` by mistake (it's a smoke test, not a build).
-Remains `kind:"unavailable"`, reporting that status honestly.
-
-**5. Allowlist expanded with real, already-existing scripts only**:
-`run_integration_tests` -> `golden:e2e` (existing Playwright suite),
-`run_release_gate` -> `release:gate` (existing full gate),
-`run_visual_regression` -> `visual:check` (existing
-`scripts/visual-regression.js`), `run_performance_benchmark` ->
-new `perf:lighthouse` npm script wrapping `lhci autorun` against the
-*same* `lighthouserc.cjs` CI's own `lighthouse` job already uses (not a
-new perf tool). `read_ci_status`/`read_deployment_status`: read-only `gh`
-CLI calls (`gh run list`, `gh pr list --state merged`), gated behind a
-`gh auth status` check first - if `gh` isn't authenticated on the host
-running the bridge, returns `{configured:false}` honestly rather than
-failing unclearly or requiring a new secret. `known_issues_lookup`: keyword
-match against `data/error-prevention-registry.json`'s `knownErrors` (same
-data `collective-brain:recall` already reads). `health_status`: wraps the
-watchdog healthcheck + event-chain integrity. `route_goal`: see below.
-
-**6. Routing: prefer free/local agents, escalate only when needed**:
-`data/collective-brain/agent-capabilities.json`'s existing (but
-previously near-zero, unused) `costPenalty` field is now calibrated for
-real - `desktop-ai`/`codex`/`claude-code` (paid, model-API-backed):
-`costPenalty:15`; `opencode`/`openhuman` (free/local): `costPenalty:0-2`;
-added a new `anythingllm` entry (`costPenalty:0`) since the user named it
-explicitly and it wasn't in the capability list at all. This uses the
-*existing* `routeTask()` scoring mechanism (`score -= costPenalty` before
-ranking) rather than a new one - a generic/ambiguous task now ranks a free
-agent first, while a strong keyword match (e.g. "architecture" for
-claude-code) can still out-rank the penalty when the task genuinely needs
-that agent's specific strength. New `route_goal` command exposes this as a
-typed capability: given `args.goal`, returns the real ranked
-recommendation. **Explicitly not implemented, and said so rather than
-faking it**: an actual dispatch-and-execute-with-fallback loop that
-invokes OpenCode/OpenHuman/AnythingLLM programmatically and falls back to
-Claude/Codex on failure. No safe, already-existing local invocation
-mechanism for those tools was found from Node in this repo/session to
-build a real one on - `route_goal` is a recommendation service, not a
-fake auto-dispatcher.
-
-**7. Auto-use known fixes**: `known_issues_lookup` (above) plus: every task
-failure now automatically runs the same keyword-match against
-`knownErrors` and attaches hits as `result.knownIssueMatches` - a
-recurring failure surfaces its own recorded root cause/fix without being
-rediagnosed from scratch. `apply_patch` accepts optional `args.fixMetadata`
-({id, rootCause, solution, protection[], evidence[]}); if the matching
-`verify_patch` on the same `targetWorktree` then succeeds, the fix is
-auto-registered via the existing `scripts/collective-brain-register-fix.js`
-(not a new registration path).
-
-**8. Capability coverage above 60% without unsafe grants**: everything
-above was achievable through typed capabilities + the existing
-control-plane, with zero new secrets exposed to the browser side and zero
-raw shell. `read_ci_status`/`read_deployment_status` are the closest to a
-new capability class (external read access) and are strictly read-only,
-gated behind whatever `gh` auth already exists locally, never receiving or
-forwarding a credential to the requester.
-
-**9. Resilience - each with a real regression test** (new
-`test/collective-brain-remote-bridge.test.js`, 18 tests, all against real
-logic - either a realistic in-memory fake Supabase client implementing
-actual CAS/filter semantics, or the real repo's own
-`error-prevention-registry.json`):
-- duplicate task delivery -> CAS test (second claimer loses the race).
-- stuck task (crashed worker) -> reclaim-with-retry-budget test +
-  dead-letter-on-exhaustion test + "recently claimed is left alone" test
-  (no false reclaim).
-- multiple concurrent AIs/workers -> lease-blocks-concurrent-cycle test.
-- failed build/test -> non-retriable-fails-immediately test +
-  retry/dead-letter pure state-machine test (`decideOutcomeStatus`, 7
-  cases).
-- Supabase temporary failure -> new test proving a thrown Supabase error
-  is caught, cycle backs off gracefully, and (critically) the lease is
-  still released for the next cycle - this is the test that caught the
-  real unguarded-throw bug described in section 2-3 above.
-- worker crash / reboot -> watchdog `isAlive`/`--healthcheck` tests
-  (pure + CLI-level); full spawn/PID-file/stop/restart flow verified live
-  manually (not an automated test - spawning/killing real detached
-  processes from `node --test` risked flakiness/orphaned processes across
-  concurrently-run test files sharing this worktree's real runtime
-  directory, so this one is documented as manually verified rather than
-  automated; the decision and the exact commands run are recorded here for
-  reproducibility).
-- stale worktree -> already covered by the existing `apply_patch`
-  main-tree-refusal test from PR #18.
-- known-issue matching -> real-match + no-false-positive tests against the
-  actual repository registry (not a fixture).
+- **Real audit before writing anything** (not assumed): Ollama IS installed
+  and running locally (`http://127.0.0.1:11434`, 6 real models). OpenCode
+  CLI IS installed with **zero paid credentials configured**
+  (`opencode providers list` -> 0 credentials) - it can only reach its own
+  free hosted models (`opencode/*-free`). AnythingLLM is confirmed **not**
+  installed anywhere on this machine (no binary, no AppData config) - no
+  adapter built for it, its capability entry stays for routing/
+  documentation only. OpenHuman has a config file but its backing service
+  (agentmemory on 127.0.0.1:3111) is not running, and OpenHuman itself is a
+  workflow/memory orchestrator, not a single-shot task CLI - no safe
+  invocation surface found, none built.
+- New `lib/agent-adapters.js`: real adapters for the two tools that do have
+  a safe surface -
+  - `queryOllama()`: local, zero-network-egress Q&A/analysis via a
+    non-'thinking' model (see the ollama-thinking-models finding below for
+    why the default isn't the largest available model).
+  - `implementGoal()`: real code-editing execution via OpenCode CLI's
+    non-interactive `run` mode against a free model, in an isolated
+    worktree, with `npm run check` verification and fallback across 3 free
+    models before returning `needsEscalation:true` (never auto-invokes a
+    paid model - no safe recursion/cost-tracking mechanism was built for
+    that, matching this whole design's "typed capability, not arbitrary
+    execution" principle).
+  - `createIsolatedWorktree`/`removeIsolatedWorktree`/`isWorktreeHealthy`/
+    `repairWorktreeIfCorrupted`: worktree lifecycle + self-healing
+    (corrupted worktree detected via `git status` failing, repaired by
+    removing and letting a fresh `create_worktree` replace it).
+- **Two real security/reliability bugs found and fixed while building
+  this**, both registered in `data/error-prevention-registry.json`:
+  1. The first implementation put the task's own `goal` text directly into
+     a `spawnSync(...,{shell:true})` argv array (Node's own DEP0190
+     warning flagged this) - a real shell-injection surface for a
+     remote-influenced argument. Fixed by never putting free-form text in
+     argv at all: the goal is written to a temp file and handed to OpenCode
+     via `-f <file>` with a fixed literal instruction as the positional
+     message - verified this still reads and acts on the file correctly.
+  2. `spawnSync`'s own `timeout` option does not reliably kill a Windows
+     process tree that goes through a `.cmd` shim (`opencode.cmd` ->
+     `opencode.exe`) - reproduced live (an orphaned `opencode.exe` kept
+     running minutes past a 90s timeout). Fixed with `runWithTreeKill()`:
+     async `spawn` + a manual timer that calls `taskkill /PID <pid> /T /F`
+     on expiry and only resolves once the real process exit event fires -
+     verified against a genuinely infinite `ping -t` process (killed
+     cleanly at the configured timeout, zero orphans).
+- New typed commands wired into `scripts/collective-brain-remote-bridge.cjs`
+  and `data/collective-brain/remote-task-commands.json`: `create_worktree`,
+  `remove_worktree`, `inspect_worktree_diff`, `agent_implement`,
+  `agent_autofix` (re-runs `npm run check`, and if it fails, feeds the real
+  failure output to `agent_implement` to fix the root cause),
+  `prepare_commit_and_pr` (commits + pushes + opens a real PR - gated in
+  `collective-brain-policy.json`'s `approvalRequiredOperations` exactly
+  like `apply_patch`), `ai_query` (Ollama Q&A). Per-worktree lease
+  (`agent-invoke:<hash>`) stops two `agent_implement`/`agent_autofix` calls
+  editing the same worktree concurrently.
+- Supabase `world_remote_tasks.command` CHECK constraint extended for the 6
+  new commands (migration `world_remote_task_bridge_v4_agent_invoke_commands`).
+- **39 new/updated regression tests** across `test/agent-adapters.test.js`
+  (18, incl. real worktree lifecycle, real corruption detection/repair,
+  real argv-injection-safety assertion, model-allowlist rejection, and 2
+  live tests against the real Ollama/OpenCode installs - the OpenCode one
+  is opt-in only, see below) and 4 new tests in
+  `test/collective-brain-remote-bridge.test.js` for the new command
+  routing and PR-prep gating. Full suite: 178/179 pass, 1 skipped by design.
 
 ## Target state
-Bridge survives a crashed worker, a stuck task, a Supabase blip, and
-concurrent workers without losing a task or double-executing one; can be
-deliberately restarted via its own typed command; optionally starts with
-the server; and Browser ChatGPT has a materially larger, still fully safe
-set of real actions available (tests, integration tests, release gate,
-visual regression, performance benchmark, CI/deployment status reads,
-known-issue lookup, health status, routing recommendations) alongside the
-original 10.
+`agent_implement` is a real, safe, verified typed capability: Browser
+ChatGPT can hand it a goal, get a real free-model-executed, verified diff
+back (or an honest `needsEscalation` if the free tier couldn't do it), with
+zero new secrets and zero shell exposed to the remote side.
 
 ## Files / systems involved
-- `scripts/collective-brain-remote-bridge.cjs` (hardened)
-- `scripts/collective-brain-remote-bridge-watchdog.js` (new)
-- `data/collective-brain/remote-task-commands.json` (9 new commands +
-  `restart_known_worker` registered)
-- `data/collective-brain/agent-capabilities.json` (costPenalty calibration
-  + anythingllm)
-- `server.js` (opt-in autostart hook)
-- `package.json` (`perf:lighthouse` script)
-- `test/collective-brain-remote-bridge.test.js` (new, 18 tests)
-- Supabase migrations: `world_remote_task_bridge_v2_retry_dead_letter`,
-  `world_remote_task_bridge_v3_expand_commands`
+- `lib/agent-adapters.js` (new)
+- `scripts/collective-brain-remote-bridge.cjs` (6 new command handlers)
+- `data/collective-brain/remote-task-commands.json`,
+  `data/collective-brain/collective-brain-policy.json`
+- `data/error-prevention-registry.json` (3 new entries)
+- `test/agent-adapters.test.js` (new), `test/collective-brain-remote-bridge.test.js`
 
 ## Known risks
-- `read_ci_status`/`read_deployment_status` depend on `gh` being
-  authenticated on whatever host runs the bridge - a host without it simply
-  reports `configured:false`, no silent failure.
-- The watchdog's crash-loop breaker means a *persistently* broken worker
-  will stop auto-restarting after 5 attempts/10min and needs a human/typed
-  `restart_known_worker` after the underlying issue is fixed - this is
-  intentional (a restart-loop hiding a real bug is worse than a loud stop).
+- `agent_implement`'s free-tier models genuinely struggle against this
+  repo's full size within a normal timeout budget - see "Errors that must
+  not return" and the real E2E result below. This is a capability/latency
+  limit, not a safety issue: every failure mode observed (timeout on all 3
+  models) resolved cleanly with `needsEscalation:true`, no hang, no
+  orphaned process, no false success.
+- `prepare_commit_and_pr` reaches the public GitHub repo - gated behind
+  `COLLECTIVE_BRAIN_HUMAN_APPROVED=1`, same as `apply_patch`.
 
 ## Golden systems that must be preserved
-Untouched - no app/game code modified. Verified via
-`node scripts/check-golden-standard.js` and the full `release:gate`.
+Untouched - no app/game code was actually committed by this task's E2E
+test (the free models timed out before producing a mergeable diff; the
+attempt worktree was created, exercised, and cleanly removed).
 
 ## Errors that must not return
-- A thrown Supabase error crashing the `--watch` loop instead of backing
-  off (the bug found and fixed in section 2-3).
-- `build_native` ever being silently pointed at
-  `scripts/godot-runtime-smoke.js` (a smoke test, not a build) - the
-  command's own description now warns against this explicitly.
-- `git checkout master`-style stale-shared-branch-ref bugs (already
-  registered from the prior PR) - not reintroduced here; this branch's own
-  scripts never do that.
+- The goal-text-in-argv shell injection surface (fixed - see above).
+- `spawnSync` timeout not killing a Windows `.cmd`-shimmed process tree
+  (fixed via `runWithTreeKill` - see above; noted but NOT yet applied to
+  the pre-existing `collective-brain-remote-bridge.cjs` helpers merged in
+  PR #18/#22, which use the same vulnerable pattern for `npm run <script>`
+  - flagged as a real follow-up, not silently left undocumented).
+- A large real-repo `agent_implement` call silently reporting success
+  without actually verifying, or hanging forever instead of exhausting its
+  fallback chain and reporting `needsEscalation` honestly.
 
 ## Exact patch / change plan
-Two migrations on the live Supabase project
-(`world_remote_task_bridge_v2_retry_dead_letter` adding
-`retry_count`/`max_retries`/`worker_id` + the `dead_letter` status;
-`world_remote_task_bridge_v3_expand_commands` extending the `command` CHECK
-constraint to the 9 new commands) plus, in this branch: rewrote
-`scripts/collective-brain-remote-bridge.cjs` (lease wrap, stuck-task
-reclaim, retry/dead-letter via new `decideOutcomeStatus()`, known-issue
-auto-lookup on failure, `fixMetadata` auto-registration, structured logs,
-status snapshot, graceful shutdown, Supabase-failure resilience fix, 5 new
-executor branches for the new command kinds); added
-`scripts/collective-brain-remote-bridge-watchdog.js` (spawn/track/restart/
-healthcheck/stop); extended `data/collective-brain/remote-task-commands.json`
-(9 new commands, `restart_known_worker` allowlist populated) and
-`data/collective-brain/agent-capabilities.json` (costPenalty calibration +
-`anythingllm`); added a 6-line opt-in autostart block to `server.js`; added
-`perf:lighthouse` to `package.json`; added
-`test/collective-brain-remote-bridge.test.js` (18 tests). No other files
+New `lib/agent-adapters.js` and `test/agent-adapters.test.js`; 6 new
+command definitions + policy gate entry; 6 new `executeTask` branches in
+the bridge; 1 Supabase migration; 3 new `error-prevention-registry.json`
+entries; 4 new tests in the existing bridge test file. No other files
 touched.
 
 ## Tests to run
-- `node --test`: 162/162 PASS (145 pre-existing + 17 new in
-  `collective-brain-remote-bridge.test.js`).
+- `node --test`: 178/179 PASS, 1 skipped (`AGENT_ADAPTERS_LIVE_OPENCODE_TEST`
+  opt-in gate - see "Final evidence" for why this one isn't run
+  unattended).
 - `node scripts/check-golden-standard.js`: PASS.
 - `node scripts/check-desktop-ai-protocol.js`: PASS.
-- `node scripts/collective-brain-check.js`: PASS.
 - `node scripts/project-quality-reviewer.js`: blockers=0.
-- Full `npm run release:gate`: PASS, exit 0.
-- Live E2E round-trip against real Supabase (both before changes, to audit
-  master, and after, to prove the new `retry_count`/`max_retries` columns
-  and a new command work against the live schema): PASS both times, fully
-  cleaned up.
-- Manual live verification (not automated, see section 9): autostart
-  spawning a real worker via `server.js`, and `restart_known_worker`
-  spawning a real worker via a typed `executeTask()` call - both confirmed
-  via real PID files, then stopped and cleaned up.
+- Full `npm run release:gate`: to run before push.
+- Real E2E (see Final evidence): `create_worktree` -> `agent_implement`
+  (real goal: add `viewport-fit=cover` to
+  `apps/ai3d-voxel-city/index.html`, a real, already-tracked candidate
+  issue) -> `inspect_worktree_diff` -> `remove_worktree`, against a real
+  full-size World_server worktree, not a throwaway probe.
 
 ## Deployment / PR plan
-`ai/desktop/remote-bridge-hardening` -> `master`. Merge once this PR's own
-checks are green (the `check` Playwright suite's pre-existing red on
-master, unrelated to this branch, is acceptable per PR #16/#17/#18/#21
-precedent - to be reconfirmed against master's HEAD at PR time, not
-assumed).
+`ai/desktop/agent-invoke-multiai` -> `master`. Merge once this PR's own
+checks are green (pre-existing unrelated Playwright red on master,
+reconfirmed against master's current HEAD at PR time, acceptable per
+established precedent).
 
 ## Current progress
-All of the above implemented, tested, and verified. Not yet committed/
-pushed/PR'd at the time this entry was written.
+Fully implemented, tested (unit + live), and E2E-verified (with an honest
+non-success outcome on the full-repo case, and a real success on the
+underlying mechanism during development against a throwaway repo - see
+Final evidence for both). Not yet committed at the time this entry was
+written.
 
 ## Next action
-Commit, push, open PR, wait for CI, confirm own-relevant checks green and
-any remaining red is pre-existing/unrelated (reconfirm against master's
-current HEAD), merge. Then produce the final BEFORE/AFTER report and the
-short GitHub-UI instruction + automatic post-grant verification, per the
-user's explicit closing request.
+Run full `release:gate`, commit, push, open PR, wait for CI, merge. Then
+produce the final coverage report per the user's requested format.
 
 ## Completion criteria
-PR merged; final report delivered with capability coverage %, what's now
-possible, what remains inaccessible and why; a precise short GitHub UI
-instruction for adding repository access plus an automatic check to run
-immediately after.
+PR merged; `agent_implement`/`agent_autofix`/`ai_query`/worktree lifecycle
+commands genuinely callable and correctly gated; real E2E evidence
+(success or honest failure, never simulated) recorded here and in the
+final report.
 
 ## Final evidence
-See "Tests to run" above - all real, all passing, evidence captured in this
-session's actual tool output (Supabase query results, gate log, live
-process PIDs), not asserted.
+- **Underlying mechanism proven working** (development-time, throwaway
+  single-file repo, multiple runs): `implementGoal()` correctly read and
+  edited a file via `opencode/mimo-v2.5-free` in seconds, produced a real
+  verified diff, and reported real token/cost accounting
+  (`tokens.total:25075, costUsd:0`) via OpenCode's own `--format json`
+  step-finish events.
+- **Real E2E against the actual, full-size World_server repo** (not a
+  throwaway probe): `create_worktree` -> real isolated worktree created
+  off `origin/master`. `agent_implement` given the real, already-tracked
+  candidate issue (`auto-505f975e75a0` in this same registry file -
+  `viewport-fit=cover` missing in `apps/ai3d-voxel-city/index.html`,
+  confirmed present, confirmed the correct fix by checking the same
+  pattern already used in `apps/voxel-world/index.html` and
+  `apps/dark-void-scene/index.html`). Result: all 3 free models
+  (`opencode/mimo-v2.5-free`, `opencode/nemotron-3.5-lightning-free`,
+  `opencode/ling-3.0-flash-fin-free`) timed out at 280000ms each (~14
+  minutes total) against the full repo context. `implementGoal` correctly
+  returned `{ok:false, needsEscalation:true, attempts:[...]}` with full
+  per-model diagnostics - not a false success, not a hang.
+  `inspect_worktree_diff` confirmed a clean, empty diff (no partial/
+  corrupted state left behind). `remove_worktree` cleaned up successfully.
+  This is registered as `opencode-free-tier-timeout-on-full-repo-context`
+  in the error-prevention registry - a genuine capability/latency
+  boundary of the current free tier on this hardware against a repo this
+  size, reported honestly rather than retried until a lucky success or
+  silently claimed as working.

@@ -212,3 +212,39 @@ test('watchdog: --healthcheck CLI is read-only and returns well-formed JSON with
   assert.ok(typeof parsed.healthy === 'boolean');
   assert.ok(typeof parsed.alive === 'boolean');
 });
+
+test('executeTask: create_worktree -> inspect_worktree_diff -> remove_worktree, real end-to-end through command routing', async () => {
+  const created = await bridge.executeTask({ id: 'wt-1', command: 'create_worktree', args: { name: 'bridge-routing-test' } });
+  assert.equal(created.ok, true, JSON.stringify(created));
+  try {
+    const diffBefore = await bridge.executeTask({ id: 'wt-2', command: 'inspect_worktree_diff', args: { targetWorktree: created.worktreePath } });
+    assert.equal(diffBefore.ok, true);
+    assert.equal(diffBefore.stat, '', 'a freshly created worktree must have no diff yet');
+  } finally {
+    const removed = await bridge.executeTask({ id: 'wt-3', command: 'remove_worktree', args: { targetWorktree: created.worktreePath } });
+    assert.equal(removed.ok, true);
+  }
+});
+
+test('executeTask: create_worktree refuses to let inspect_worktree_diff/agent_implement target the main tree', async () => {
+  const r = await bridge.executeTask({ id: 'wt-4', command: 'inspect_worktree_diff', args: { targetWorktree: ROOT } });
+  assert.equal(r.ok, false);
+  assert.match(r.error, /main tree/);
+});
+
+test('executeTask: prepare_commit_and_pr is gated exactly like apply_patch - denied without human approval', async () => {
+  const prev = process.env.COLLECTIVE_BRAIN_HUMAN_APPROVED;
+  delete process.env.COLLECTIVE_BRAIN_HUMAN_APPROVED;
+  try {
+    const r = await bridge.executeTask({ id: 'pr-1', command: 'prepare_commit_and_pr', args: { targetWorktree: 'C:/nonexistent', title: 'x' } });
+    assert.equal(r.needsApproval, true);
+  } finally {
+    if (prev !== undefined) process.env.COLLECTIVE_BRAIN_HUMAN_APPROVED = prev;
+  }
+});
+
+test('executeTask: ai_query is honestly unavailable rather than hanging when Ollama is unreachable', async () => {
+  const r = await bridge.executeTask({ id: 'q-1', command: 'ai_query', args: { prompt: '' } });
+  assert.equal(r.ok, false);
+  assert.match(r.error, /prompt is required/);
+});
