@@ -1,0 +1,80 @@
+# Cloud Run declarative manifest for the "world-navigator" slot.
+# Reference only for `gcloud run services replace` / infra-as-code later -
+# the first deploy is done via Cloud Console "Deploy container" ->
+# "Continuously deploy from a repository" (source repo: mpaykin1/World_server,
+# branch: ai/desktop/google-ai-studio-v6-slots, build context: repo root,
+# Dockerfile: google-ai-studio/Dockerfile). Values below MUST match what is
+# entered there. Secrets (SUPABASE_SECRET_KEY, GEMINI_API_KEY, LIVEKIT_*) are
+# referenced via Secret Manager `secretKeyRef`, never as plain env values -
+# fill in the real secret resource names once created in Secret Manager.
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: world-navigator
+  labels:
+    world-slot: navigator
+  annotations:
+    run.googleapis.com/ingress: all
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "0"
+        autoscaling.knative.dev/maxScale: "4"
+    spec:
+      containerConcurrency: 40
+      timeoutSeconds: 300
+      containers:
+        - image: gcr.io/PROJECT_ID/world-navigator:latest # replaced by the source-based Cloud Build trigger
+          ports:
+            - name: http1
+              containerPort: 8080
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          startupProbe:
+            httpGet:
+              path: /healthz
+            initialDelaySeconds: 0
+            periodSeconds: 2
+            failureThreshold: 20
+          livenessProbe:
+            httpGet:
+              path: /healthz
+            periodSeconds: 30
+          env:
+            - name: WORLD_SLOT
+              value: navigator
+            - name: WORLD_NAVIGATOR_ENTRYPOINT
+              value: /apps/dark-void-scene/
+            - name: WORLD_MAX_RSS_MB
+              value: "1024"
+            - name: WORLD_MAX_HEAP_MB
+              value: "768"
+            - name: SUPABASE_URL
+              value: https://xlcdnlsyvxqtopmkweiy.supabase.co
+            - name: SUPABASE_PUBLISHABLE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: world-supabase-publishable-key
+                  key: latest
+            - name: SUPABASE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: world-supabase-secret-key
+                  key: latest
+            - name: GEMINI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: world-gemini-api-key
+                  key: latest
+            # Optional - only add if large-room voice (LiveKit SFU) is enabled.
+            # Omitting these keeps voice on WebRTC mesh / text fallback, which
+            # is a valid, honestly-reported state (see V6 README Phase G).
+            # - name: LIVEKIT_URL
+            #   value: wss://<project>.livekit.cloud
+            # - name: LIVEKIT_API_KEY
+            #   valueFrom: { secretKeyRef: { name: world-livekit-api-key, key: latest } }
+            # - name: LIVEKIT_API_SECRET
+            #   valueFrom: { secretKeyRef: { name: world-livekit-api-secret, key: latest } }
