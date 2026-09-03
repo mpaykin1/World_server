@@ -68,6 +68,7 @@
     "sentry:check": "node scripts/check-sentry-runtime.js",
     "sentry:verify:prod": "node scripts/verify-sentry-production.js",
     "sentry:e2e": "playwright test e2e/sentry-smoke.spec.js --project=desktop-chromium",
+    "perf:lighthouse": "lhci autorun",
     "quality:world:analyze": "node scripts/world-quality-analyzer.js",
     "quality:world:animation": "node scripts/world-animation-semantic-validator.js",
     "quality:world:retarget": "node scripts/world-retarget-contract.js",
