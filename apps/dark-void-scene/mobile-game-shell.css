@@ -1,0 +1,206 @@
+/* MOBILE GAME SHELL V2 — mobile-gated. Desktop layout/input stays untouched. */
+html[data-mobile-game-shell="1"] {
+  --mgs-gold:#e8bd72;
+  --mgs-gold-soft:rgba(232,189,114,.48);
+  --mgs-bg:rgba(7,7,9,.90);
+  --mgs-safe-l:env(safe-area-inset-left,0px);
+  --mgs-safe-r:env(safe-area-inset-right,0px);
+  --mgs-safe-t:env(safe-area-inset-top,0px);
+  --mgs-safe-b:env(safe-area-inset-bottom,0px);
+  --mgs-keyboard-inset:0px;
+  --mgs-vv-height:100dvh;
+  --mgs-nav-height:230px;
+  --mgs-joy-size:clamp(108px,29vw,142px);
+  --mgs-joy-knob:clamp(42px,11vw,54px);
+  --mgs-eye-scale:.70;
+  background:#000;
+  color-scheme:dark;
+}
+
+html[data-mobile-game-shell="1"],
+html[data-mobile-game-shell="1"] body {
+  width:100%;
+  min-width:100%;
+  height:var(--mgs-vv-height,100dvh);
+  min-height:100dvh;
+  margin:0;
+  padding:0;
+  overflow:hidden;
+  overscroll-behavior:none;
+  background:#000 !important;
+  touch-action:none;
+  -webkit-text-size-adjust:100%;
+}
+html[data-mobile-game-shell="1"] body > #root,
+html[data-mobile-game-shell="1"] body > #app,
+html[data-mobile-game-shell="1"] body > main { min-height:100%; background:#000; }
+
+html[data-mobile-game-shell="1"] canvas,
+html[data-mobile-game-shell="1"] [data-game-canvas],
+html[data-mobile-game-shell="1"] .game-canvas { max-width:100vw; max-height:var(--mgs-vv-height,100dvh); }
+
+/* Canonical Golden runtime keeps input mechanics; shell only makes both controls visible and ergonomic. */
+html[data-mobile-game-shell="1"] #goldenMobileControls {
+  z-index:2147482200 !important;
+  pointer-events:none !important;
+  inset:0 !important;
+}
+html[data-mobile-game-shell="1"] #goldenMovePad,
+html[data-mobile-game-shell="1"] #goldenLookZone {
+  position:fixed !important;
+  width:var(--mgs-joy-size) !important;
+  height:var(--mgs-joy-size) !important;
+  border-radius:50% !important;
+  border:1px solid var(--mgs-gold-soft) !important;
+  background:radial-gradient(circle at 50% 50%,rgba(232,189,114,.10),rgba(0,0,0,.27) 58%,rgba(0,0,0,.43)) !important;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.04),0 8px 34px rgba(0,0,0,.34) !important;
+  backdrop-filter:blur(5px) !important;
+  -webkit-backdrop-filter:blur(5px) !important;
+  pointer-events:auto !important;
+  touch-action:none !important;
+  user-select:none !important;
+  -webkit-user-select:none !important;
+  opacity:.88;
+}
+html[data-mobile-game-shell="1"] #goldenMovePad {
+  left:max(16px,calc(var(--mgs-safe-l) + 12px)) !important;
+  right:auto !important;
+  top:auto !important;
+  bottom:calc(var(--mgs-nav-height) + max(18px,var(--mgs-safe-b)) + var(--mgs-keyboard-inset)) !important;
+}
+html[data-mobile-game-shell="1"] #goldenLookZone {
+  right:max(16px,calc(var(--mgs-safe-r) + 12px)) !important;
+  left:auto !important;
+  top:auto !important;
+  bottom:calc(var(--mgs-nav-height) + max(18px,var(--mgs-safe-b)) + var(--mgs-keyboard-inset)) !important;
+}
+html[data-mobile-game-shell="1"] #goldenMoveKnob,
+html[data-mobile-game-shell="1"] #mgsLookKnob {
+  position:absolute !important;
+  left:50% !important;
+  top:50% !important;
+  width:var(--mgs-joy-knob) !important;
+  height:var(--mgs-joy-knob) !important;
+  margin-left:calc(var(--mgs-joy-knob)/-2) !important;
+  margin-top:calc(var(--mgs-joy-knob)/-2) !important;
+  border-radius:50% !important;
+  border:1px solid rgba(232,189,114,.62) !important;
+  background:rgba(232,189,114,.12) !important;
+  box-shadow:0 3px 16px rgba(0,0,0,.45) !important;
+  pointer-events:none !important;
+  transition:transform 50ms linear;
+}
+/* User requested no redundant mobile control tips/labels. */
+html[data-mobile-game-shell="1"] #goldenMovePad::before,
+html[data-mobile-game-shell="1"] #goldenLookZone::before { content:none !important; display:none !important; }
+/* Dark Void has only move + look; canonical jump semantics remain in runtime but floating jump is suppressed for this profile. */
+html[data-mobile-game-shell="1"] #goldenJump { display:none !important; }
+
+/* Compact Navigator dock. */
+html[data-mobile-game-shell="1"] .mgs-navigator-panel {
+  position:fixed !important;
+  left:max(12px,var(--mgs-safe-l)) !important;
+  right:max(12px,var(--mgs-safe-r)) !important;
+  bottom:calc(max(10px,var(--mgs-safe-b)) + var(--mgs-keyboard-inset)) !important;
+  z-index:2147482500 !important;
+  width:auto !important;
+  max-width:none !important;
+  height:auto !important;
+  max-height:var(--mgs-nav-height) !important;
+  margin:0 !important;
+  padding:12px 14px !important;
+  overflow:auto !important;
+  border:1px solid rgba(232,189,114,.36) !important;
+  border-radius:18px !important;
+  background:linear-gradient(180deg,rgba(10,10,12,.92),rgba(5,5,7,.96)) !important;
+  box-shadow:0 -16px 50px rgba(0,0,0,.38) !important;
+  backdrop-filter:blur(10px) !important;
+  -webkit-backdrop-filter:blur(10px) !important;
+  box-sizing:border-box !important;
+  touch-action:pan-y !important;
+  overscroll-behavior:contain;
+}
+html[data-mobile-game-shell="1"] .mgs-navigator-panel textarea,
+html[data-mobile-game-shell="1"] .mgs-navigator-panel input[type="text"] {
+  min-height:46px !important;
+  max-height:82px !important;
+  font-size:16px !important;
+  box-sizing:border-box !important;
+  touch-action:manipulation !important;
+}
+html[data-mobile-game-shell="1"] .mgs-control-hint-hidden { display:none !important; }
+html[data-mobile-game-shell="1"] .mgs-menu-action { min-height:44px !important; }
+
+/* Portrait profile: eye is exactly 70% of the pre-patch visual size. */
+html[data-mobile-game-shell="1"][data-mobile-orientation="portrait"] {
+  --mgs-nav-height:min(27dvh,248px);
+  --mgs-joy-size:clamp(108px,29vw,142px);
+  --mgs-eye-scale:.70;
+}
+html[data-mobile-game-shell="1"][data-mobile-orientation="portrait"] .mgs-eye-dom {
+  scale:var(--mgs-eye-scale) !important;
+  transform-origin:center center !important;
+}
+
+/* Landscape profile: world dominates, Navigator becomes a thin bottom strip. */
+html[data-mobile-game-shell="1"][data-mobile-orientation="landscape"] {
+  --mgs-nav-height:clamp(88px,25dvh,118px);
+  --mgs-joy-size:clamp(88px,25vh,108px);
+  --mgs-joy-knob:clamp(36px,9vh,46px);
+  --mgs-eye-scale:1;
+}
+html[data-mobile-game-shell="1"][data-mobile-orientation="landscape"] .mgs-navigator-panel {
+  padding:8px 12px !important;
+  overflow:auto !important;
+}
+html[data-mobile-game-shell="1"][data-mobile-orientation="landscape"] .mgs-navigator-panel textarea,
+html[data-mobile-game-shell="1"][data-mobile-orientation="landscape"] .mgs-navigator-panel input[type="text"] {
+  min-height:40px !important;
+  max-height:52px !important;
+}
+html[data-mobile-game-shell="1"][data-mobile-orientation="landscape"] .mgs-eye-dom { scale:1 !important; }
+
+/* While typing, keyboard owns the lower half; hide joysticks to prevent accidental world movement. */
+html[data-mobile-game-shell="1"][data-mobile-keyboard="1"] #goldenMovePad,
+html[data-mobile-game-shell="1"][data-mobile-keyboard="1"] #goldenLookZone { opacity:0 !important; pointer-events:none !important; }
+
+/* Fullscreen/menu chrome. */
+html[data-mobile-game-shell="1"] #mgsChrome {
+  position:fixed;
+  top:max(10px,calc(var(--mgs-safe-t) + 8px));
+  right:max(10px,calc(var(--mgs-safe-r) + 8px));
+  z-index:2147483000;
+  display:flex;
+  gap:8px;
+  pointer-events:auto;
+  touch-action:manipulation;
+}
+html[data-mobile-game-shell="1"] .mgs-icon-btn {
+  width:46px;height:46px;min-width:46px;min-height:46px;
+  display:grid;place-items:center;padding:0;
+  border:1px solid rgba(232,189,114,.48);border-radius:50%;
+  background:rgba(5,5,7,.68);color:var(--mgs-gold);
+  font:600 22px/1 system-ui,-apple-system,sans-serif;
+  box-shadow:0 5px 22px rgba(0,0,0,.25);
+  backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+}
+html[data-mobile-game-shell="1"] #mgsMenu {
+  position:fixed;
+  top:calc(max(10px,calc(var(--mgs-safe-t) + 8px)) + 54px);
+  right:max(10px,calc(var(--mgs-safe-r) + 8px));
+  z-index:2147483001;
+  width:min(280px,calc(100vw - 24px));
+  max-height:min(60dvh,440px);
+  overflow:auto;display:none;padding:10px;
+  border:1px solid rgba(232,189,114,.42);border-radius:14px;
+  background:rgba(7,7,9,.97);box-shadow:0 14px 44px rgba(0,0,0,.48);
+  touch-action:pan-y;overscroll-behavior:contain;
+}
+html[data-mobile-game-shell="1"] #mgsMenu[data-open="1"] { display:block; }
+html[data-mobile-game-shell="1"] #mgsMenu button,
+html[data-mobile-game-shell="1"] #mgsMenu [role="button"] { width:100%;min-height:44px;margin:4px 0; }
+html[data-mobile-game-shell="1"] #mgsPwaNotice {
+  margin:6px 2px 2px;padding:10px;color:#e7cfaa;
+  font:500 13px/1.35 system-ui,-apple-system,sans-serif;
+  border-radius:10px;background:rgba(232,189,114,.08);
+}
