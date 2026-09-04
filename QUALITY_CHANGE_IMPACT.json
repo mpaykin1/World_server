@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-03T19:40:27.453Z",
+  "generatedAt": "2026-09-04T04:48:59.731Z",
   "changed": [
     ".characterforge-backups/v2-20260828-095512/package.json",
     ".characterforge-backups/v2-20260828-095512/services/ai3d-worker/ai3d/runner.py",
@@ -1185,6 +1185,7 @@
     "V7_5_LOCAL_VALIDATION.json",
     "V7_LOCAL_VALIDATION.json",
     "VALIDATION_REPORT.json",
+    "VERCEL_ROOT_DIRECTORY_STATUS.json",
     "VERIFICATION_REPORT.json",
     "VISUAL_PERCEPTUAL_REPORT.json",
     "WIT_BINDINGS_STATUS.json",
@@ -2546,6 +2547,7 @@
     "supabase/migrations/20260826140000_ai_supervisor_control_plane.sql",
     "supabase/migrations/20260903132229_browser_local_control.sql",
     "supabase/migrations/20260903132521_browser_local_worker_token_auth.sql",
+    "supabase/migrations/20260903133000_browser_local_control_v3_parity.sql",
     "supabase/migrations_backup_20260824/20260819044616_create_improve_world_core.sql",
     "supabase/migrations_backup_20260824/20260819044636_harden_core_function_permissions.sql",
     "supabase/migrations_backup_20260824/20260819055525_world_game_backend.sql",

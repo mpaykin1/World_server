@@ -1,9 +1,9 @@
 {
   "schemaVersion": "7.2.0",
-  "generatedAt": "2026-09-03T19:41:53.813Z",
+  "generatedAt": "2026-09-04T04:50:31.442Z",
   "pass": true,
-  "file": ".world-server-state/repro/AI_MIN_REPRO_2026-09-03T19-41-53-782Z.zip",
-  "sha256": "b6cf657c88d0fc6748326ffeb51adaf4926e7b8a11cb999c6aff402d9f7b01ed",
+  "file": ".world-server-state/repro/AI_MIN_REPRO_2026-09-04T04-50-31-407Z.zip",
+  "sha256": "dd2def02135cf2ef2680e3804cc67919429c65077de666e70c5a7e3f1baa2b54",
   "entries": [
     "REPRO_MANIFEST.json",
     "files/package.json",

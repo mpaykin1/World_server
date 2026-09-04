@@ -1,6 +1,6 @@
 {
   "schemaVersion": "7.2.0",
-  "generatedAt": "2026-09-03T19:41:44.465Z",
+  "generatedAt": "2026-09-04T04:50:22.999Z",
   "pass": true,
   "mode": "local-ed25519-transparency-log",
   "algorithm": "ed25519",
@@ -14,8 +14,8 @@
     "WIT_COMPONENT_STATUS.json",
     "DEVICE_LAB_STATUS.json"
   ],
-  "logEntries": 21,
-  "logHead": "c3d24d7683f6eb0ce5801ab0b61f568948c2cc0e68611e6408394164545b8d4a",
+  "logEntries": 70,
+  "logHead": "559a277157a76c1d9dd6d9a1336627c9832555cbf51ced6a93c57a8cf3f5aed3",
   "nativeCosignAvailable": true,
   "nativeSigstoreBundleVerified": false,
   "rekorEvidence": "verified by cosign when an external Sigstore bundle is supplied",

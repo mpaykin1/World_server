@@ -1,6 +1,6 @@
 {
   "schemaVersion": "7.5.0",
-  "generatedAt": "2026-09-03T19:41:55.477Z",
+  "generatedAt": "2026-09-04T04:50:32.996Z",
   "pass": true,
   "passed": 91,
   "total": 91,
@@ -508,15 +508,15 @@
       "pass": true,
       "details": {
         "schemaVersion": "7.5.0",
-        "generatedAt": "2026-09-03T19:41:55.456Z",
+        "generatedAt": "2026-09-04T04:50:32.969Z",
         "pass": true,
         "smokeHarnessVerified": true,
-        "durationHours": 0.000021,
+        "durationHours": 0.000022,
         "eventCount": 6,
         "allRecovered": true,
         "longSoakCertified": false,
         "minimumCertifiedHours": 8,
-        "stateFile": ".world-server-state/long-soak/selftest-13480.json",
+        "stateFile": ".world-server-state/long-soak/selftest-11800.json",
         "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
       }
     },

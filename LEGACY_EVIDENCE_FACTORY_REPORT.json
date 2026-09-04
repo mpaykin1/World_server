@@ -1,11 +1,11 @@
 {
   "schemaVersion": "7.5.0",
-  "generatedAt": "2026-09-03T19:41:42.367Z",
+  "generatedAt": "2026-09-04T04:50:20.655Z",
   "pass": true,
   "enginePass": true,
   "autoCertifyByName": false,
   "recipeCatalogHash": "e8c0c02f52e165bc92b9d26b161bfa78b5d189a6b06784829bcf048d78d734e0",
-  "generatedContractsHash": "9d05d3a2fc06f31ba79bf38aef6a68b961f3e0f6859b22399ee65047981ac5b3",
+  "generatedContractsHash": "3c4ce997a5ad65ea03c93e04783e42df726582c22b3bd63ed188f0dbb5f8e62b",
   "eligibleContractCount": 11,
   "totalRecipes": 18,
   "eligibleCapabilities": [
@@ -381,7 +381,7 @@
           {
             "pass": true,
             "cmd": "node --test test/procedural-quality-v10.test.js",
-            "stdout": "✔ V10 temporal artifact detector scores ghosting flicker shimmer (2.4394ms)\n✔ V10 frame pacing tracks p95 p99 jank stutter (0.5076ms)\n✔ V10 resource watchdog detects heap/canvas growth (0.42ms)\n✔ V10 thermal governor has hidden save-data low-battery pressure policies (0.3931ms)\n✔ V10 shader prewarm supports Three compileAsync and budget (1.3126ms)\n✔ V10 replay benchmark is seeded and deterministic interface exists (0.4626ms)\n✔ V10 canary requires runtime health and production evidence (0.4396ms)\n✔ V10 profile exposes all new policies (2.1592ms)\n✔ V10 migration has canary and runtime health tables (0.6137ms)\n✔ V10 doctor has 12-round non-stop repair policy (0.7746ms)\n✔ V10 evidence graph includes temporal pacing leak thermal shader replay canary (0.4873ms)\nℹ tests 11\nℹ suites 0\nℹ pass 11\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 158.1083\n"
+            "stdout": "✔ V10 temporal artifact detector scores ghosting flicker shimmer (2.4057ms)\n✔ V10 frame pacing tracks p95 p99 jank stutter (0.4614ms)\n✔ V10 resource watchdog detects heap/canvas growth (0.3963ms)\n✔ V10 thermal governor has hidden save-data low-battery pressure policies (0.3806ms)\n✔ V10 shader prewarm supports Three compileAsync and budget (1.3487ms)\n✔ V10 replay benchmark is seeded and deterministic interface exists (0.4754ms)\n✔ V10 canary requires runtime health and production evidence (0.3962ms)\n✔ V10 profile exposes all new policies (2.0578ms)\n✔ V10 migration has canary and runtime health tables (0.4642ms)\n✔ V10 doctor has 12-round non-stop repair policy (0.5653ms)\n✔ V10 evidence graph includes temporal pacing leak thermal shader replay canary (0.3831ms)\nℹ tests 11\nℹ suites 0\nℹ pass 11\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 156.6772\n"
           }
         ]
       },
@@ -425,7 +425,7 @@
           {
             "pass": true,
             "cmd": "node --test test/apng-engine.test.js test/apng-gate.test.js test/apng-integration.test.js",
-            "stdout": "✔ apng dummy (1.4547ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 135.0263\n"
+            "stdout": "✔ apng dummy (2.2726ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 146.5979\n"
           }
         ]
       },
@@ -468,7 +468,7 @@
           {
             "pass": true,
             "cmd": "node --test test/pixel-animation-v3.test.js test/pixel-animation-engine.test.js",
-            "stdout": "✔ profiles normalize to stable numeric shader params (2.781ms)\n✔ device tier is conservative on weak/mobile hardware (0.6468ms)\n✔ spatial hash returns only intersecting cells and removes cleanly (0.7934ms)\n✔ grid mesh is a reusable subdivided sprite surface (0.4743ms)\n✔ remote config merge keeps required fallbacks (0.323ms)\n✔ GPU culling has true compute + indirect-draw building blocks (2.6173ms)\n✔ multi-atlas manifest is deterministic and rejects duplicate pages (2.1329ms)\n✔ region rig creates bounded region deformation (1.3073ms)\n✔ pipeline cache fingerprint is stable (0.6229ms)\n✔ visual regression detects equal and changed sequences (0.6445ms)\n✔ device learning only makes bounded policy changes (0.9378ms)\n✔ auto integrator exports discovery/install (0.2493ms)\n✔ telemetry handles modern Supabase secret keys without JWT Bearer misuse (0.6717ms)\nℹ tests 13\nℹ suites 0\nℹ pass 13\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 204.2819\n"
+            "stdout": "✔ profiles normalize to stable numeric shader params (2.9223ms)\n✔ device tier is conservative on weak/mobile hardware (0.7522ms)\n✔ spatial hash returns only intersecting cells and removes cleanly (0.8212ms)\n✔ grid mesh is a reusable subdivided sprite surface (0.4931ms)\n✔ remote config merge keeps required fallbacks (0.3308ms)\n✔ GPU culling has true compute + indirect-draw building blocks (3.0672ms)\n✔ multi-atlas manifest is deterministic and rejects duplicate pages (2.334ms)\n✔ region rig creates bounded region deformation (1.1693ms)\n✔ pipeline cache fingerprint is stable (0.6844ms)\n✔ visual regression detects equal and changed sequences (0.5346ms)\n✔ device learning only makes bounded policy changes (0.9941ms)\n✔ auto integrator exports discovery/install (0.2271ms)\n✔ telemetry handles modern Supabase secret keys without JWT Bearer misuse (0.5801ms)\nℹ tests 13\nℹ suites 0\nℹ pass 13\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 179.0397\n"
           }
         ]
       },
@@ -512,7 +512,7 @@
           {
             "pass": true,
             "cmd": "node --test test/v13-invariant-golden.test.js test/desktop-ai-error-closure.test.js",
-            "stdout": "✔ golden dummy (1.3196ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 141.2744\n"
+            "stdout": "✔ golden dummy (1.3831ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 136.678\n"
           }
         ]
       },
@@ -558,7 +558,7 @@
           {
             "pass": true,
             "cmd": "node --test test/world-quality-autopilot.test.js",
-            "stdout": "✔ V4 semantic detail index detects architectural motifs (7.3395ms)\n✔ V4 deterministic enhancement preserves exact front projection (18.4604ms)\n✔ V4 geometry budget remains strict (4.4812ms)\n✔ material profiler classifies emissive and metal-like colors (0.3584ms)\n✔ V4 procedural PBR synthesis is deterministic and budgeted (1.0027ms)\n✔ runtime V4 exposes pressure, texture and occlusion hooks (0.5476ms)\n✔ V4 retarget contract contains root motion and two-hand constraints (0.3749ms)\n✔ V4 visibility optimizer is conservative (0.3643ms)\n✔ V4 candidate lab is prediction only before promotion (0.478ms)\n✔ V4 feedback learner cannot mutate directly (0.5155ms)\n✔ baseline promotion remains explicit and cannot self-approve (0.3299ms)\n✔ weighted readiness remains evidence based (0.4389ms)\nℹ tests 12\nℹ suites 0\nℹ pass 12\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 188.0761\n"
+            "stdout": "✔ V4 semantic detail index detects architectural motifs (7.3379ms)\n✔ V4 deterministic enhancement preserves exact front projection (19.4106ms)\n✔ V4 geometry budget remains strict (4.6377ms)\n✔ material profiler classifies emissive and metal-like colors (0.3491ms)\n✔ V4 procedural PBR synthesis is deterministic and budgeted (1.0168ms)\n✔ runtime V4 exposes pressure, texture and occlusion hooks (0.556ms)\n✔ V4 retarget contract contains root motion and two-hand constraints (0.4876ms)\n✔ V4 visibility optimizer is conservative (0.5942ms)\n✔ V4 candidate lab is prediction only before promotion (0.5883ms)\n✔ V4 feedback learner cannot mutate directly (0.694ms)\n✔ baseline promotion remains explicit and cannot self-approve (0.4548ms)\n✔ weighted readiness remains evidence based (0.499ms)\nℹ tests 12\nℹ suites 0\nℹ pass 12\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 186.9034\n"
           }
         ]
       },
@@ -648,7 +648,7 @@
           {
             "pass": true,
             "cmd": "node --test test/pwa-system.test.js test/runtime-integration-adapters.test.js",
-            "stdout": "✔ pwa dummy (1.3193ms)\n✔ runtime dummy (1.4091ms)\nℹ tests 2\nℹ suites 0\nℹ pass 2\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 143.9184\n"
+            "stdout": "✔ pwa dummy (1.5246ms)\n✔ runtime dummy (1.7995ms)\nℹ tests 2\nℹ suites 0\nℹ pass 2\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 143.6176\n"
           }
         ]
       },
@@ -690,7 +690,7 @@
           {
             "pass": true,
             "cmd": "node --test test/world-quality-truth-gate.test.js",
-            "stdout": "✔ truth dummy production (1.3468ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 129.5361\n"
+            "stdout": "✔ truth dummy production (1.5023ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 131.323\n"
           }
         ]
       },
@@ -735,7 +735,7 @@
             "pass": false,
             "cmd": "node scripts/check-supabase-migration-manifest-v12.cjs",
             "code": 12,
-            "stderr": "{\n  \"ok\": false,\n  \"count\": 118,\n  \"expectedCount\": 7,\n  \"digest\": \"eecd390a06d06eaf4da55e937bd628938bffc14f39f35dcf5490a42e792f91af\",\n  \"expectedDigest\": \"4f1c7fb913a11f734062d47bee23b83ac58c009a4a4468209d26f7ee97be1260\"\n}\n"
+            "stderr": "{\n  \"ok\": false,\n  \"count\": 119,\n  \"expectedCount\": 7,\n  \"digest\": \"ffed0fb8bf432fa965a6b0ac7740e114ebaecdb45ca103395054bd5d6a8f96ee\",\n  \"expectedDigest\": \"4f1c7fb913a11f734062d47bee23b83ac58c009a4a4468209d26f7ee97be1260\"\n}\n"
           }
         ]
       },
@@ -876,7 +876,7 @@
           {
             "pass": true,
             "cmd": "node --test test/quality-autopilot-v11.test.js",
-            "stdout": "✔ autopilot dummy (1.2829ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 124.5011\n"
+            "stdout": "✔ autopilot dummy (1.3125ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 144.4052\n"
           }
         ]
       },
@@ -961,7 +961,7 @@
           {
             "pass": true,
             "cmd": "node --test test/gap-closure.test.js",
-            "stdout": "✔ gap dummy (1.3513ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 130.489\n"
+            "stdout": "✔ gap dummy (1.3375ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 131.2995\n"
           }
         ]
       },

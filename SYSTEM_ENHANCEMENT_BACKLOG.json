@@ -1,6 +1,6 @@
 {
   "schemaVersion": "7.4.0",
-  "generatedAt": "2026-09-03T19:41:47.661Z",
+  "generatedAt": "2026-09-04T04:50:26.334Z",
   "pass": true,
   "automaticPolicy": "P0 must be fixed automatically before release. P1/P2 enter shadow -> sandbox -> regression -> canary -> promotion. Paid services are never silently required.",
   "implemented": [

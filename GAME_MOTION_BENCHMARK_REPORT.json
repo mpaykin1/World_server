@@ -1,10 +1,10 @@
 {
   "schemaVersion": "1.0.0",
-  "generatedAt": "2026-09-03T19:41:20.378Z",
+  "generatedAt": "2026-09-04T04:49:57.325Z",
   "iterations": 200000,
-  "easingMs": 11.21,
-  "springMs": 9.44,
-  "locomotionMs": 8.41,
+  "easingMs": 16.67,
+  "springMs": 11.36,
+  "locomotionMs": 9.99,
   "sink": 12202221.333,
   "pass": true
 }

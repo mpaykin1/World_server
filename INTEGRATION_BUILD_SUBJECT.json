@@ -1,9 +1,9 @@
 {
   "schemaVersion": "2.0.0",
-  "commit": "8109364831f821a754359f08acc3fed4cbd97584",
+  "commit": "7fb92f73f74aa8d661ac70069545e27d0c732f4a",
   "branch": "ai/opencode/browser-local-control",
-  "merkleRoot": "daae05692d80f3bb39d9985da52edaa5f8df0ca22e3846067b249864d6ba4b0f",
-  "latestSnapshot": "2026-09-03T19-41-26-947Z-pre-control-plane-daae05692d80",
+  "merkleRoot": "24a702407ba9fed1664e773c2dcf8ef05971ae77e1f64f3fa9d7ab53b404ac3e",
+  "latestSnapshot": "2026-09-04T04-50-04-572Z-pre-control-plane-24a702407ba9",
   "capabilityRegistry": "0b73d394176aba3c926b0039e9c3d8b9fecede3a0023d055d3725242c99edb16",
   "policy": "e6cd0b539e53e58c2b7a6ec929e5d4e4baa8cca62afdaf2ae4f81910d4b5fd3a"
 }

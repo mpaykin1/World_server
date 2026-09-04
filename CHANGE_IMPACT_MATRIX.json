@@ -1,7 +1,9 @@
 {
   "schemaVersion": "2.0.0",
-  "generatedAt": "2026-09-03T19:41:28.773Z",
+  "generatedAt": "2026-09-04T04:50:06.392Z",
   "changed": [
+    ".world-server/tools/cargo/bin/wasmtime.exe",
+    ".world-server/tools/wasmtime.exe",
     "ADAPTER_SANDBOX_STATUS.json",
     "ASSET_DELTA_STATUS.json",
     "ASSET_INGESTION_PLAN.json",
@@ -37,7 +39,6 @@
     "DURABLE_QUEUE_STATUS.json",
     "EVIDENCE_QUALITY_REPORT.json",
     "FEATURE_FLAG_STATUS.json",
-    "FUNCTION_100_BASELINE_REPORT.json",
     "FUNCTION_CERTIFICATION_COVERAGE.json",
     "FUNCTION_CONTRACT_CANDIDATES.json",
     "FUNCTION_MONOTONIC_ENHANCEMENT_REPORT.json",
@@ -109,7 +110,6 @@
     "VISUAL_PERCEPTUAL_REPORT.json",
     "WIT_BINDINGS_STATUS.json",
     "WIT_COMPONENT_STATUS.json",
-    "WORK_IN_PROGRESS.md",
     "WORLD_ANIMATION_SEMANTIC_REPORT.json",
     "WORLD_CANDIDATE_LAB_REPORT.json",
     "WORLD_CPU_GRAPHICS_OPTIMIZATION_REPORT.json",
@@ -134,9 +134,12 @@
     "WORLD_VISIBILITY_OPTIMIZER_REPORT.json",
     "WORLD_VISUAL_BASELINE_CANDIDATES.json",
     "bom.cdx.json",
-    "data/generated-legacy-function-contracts.json"
+    "data/generated-legacy-function-contracts.json",
+    "supabase/migrations/20260903133000_browser_local_control_v3_parity.sql"
   ],
   "affectedFiles": [
+    ".world-server/tools/cargo/bin/wasmtime.exe",
+    ".world-server/tools/wasmtime.exe",
     "ADAPTER_SANDBOX_STATUS.json",
     "ASSET_DELTA_STATUS.json",
     "ASSET_INGESTION_PLAN.json",
@@ -172,7 +175,6 @@
     "DURABLE_QUEUE_STATUS.json",
     "EVIDENCE_QUALITY_REPORT.json",
     "FEATURE_FLAG_STATUS.json",
-    "FUNCTION_100_BASELINE_REPORT.json",
     "FUNCTION_CERTIFICATION_COVERAGE.json",
     "FUNCTION_CONTRACT_CANDIDATES.json",
     "FUNCTION_MONOTONIC_ENHANCEMENT_REPORT.json",
@@ -244,7 +246,6 @@
     "VISUAL_PERCEPTUAL_REPORT.json",
     "WIT_BINDINGS_STATUS.json",
     "WIT_COMPONENT_STATUS.json",
-    "WORK_IN_PROGRESS.md",
     "WORLD_ANIMATION_SEMANTIC_REPORT.json",
     "WORLD_CANDIDATE_LAB_REPORT.json",
     "WORLD_CPU_GRAPHICS_OPTIMIZATION_REPORT.json",
@@ -269,10 +270,21 @@
     "WORLD_VISIBILITY_OPTIMIZER_REPORT.json",
     "WORLD_VISUAL_BASELINE_CANDIDATES.json",
     "bom.cdx.json",
-    "data/generated-legacy-function-contracts.json"
+    "data/generated-legacy-function-contracts.json",
+    "supabase/migrations/20260903133000_browser_local_control_v3_parity.sql"
   ],
-  "affectedCount": 133,
+  "affectedCount": 134,
   "systems": [
+    {
+      "id": "world-quality-v6",
+      "owner": "WORLD_QUALITY_AUTOPILOT_V6",
+      "provides": [
+        "technology-scout",
+        "cpu-routing",
+        "technology-drift",
+        "quality-slo"
+      ]
+    },
     {
       "id": "system-integration-v2",
       "owner": null,
@@ -289,16 +301,6 @@
       ]
     },
     {
-      "id": "world-quality-v6",
-      "owner": "WORLD_QUALITY_AUTOPILOT_V6",
-      "provides": [
-        "technology-scout",
-        "cpu-routing",
-        "technology-drift",
-        "quality-slo"
-      ]
-    },
-    {
       "id": "texture-quality",
       "owner": "WORLD_SERVER_TEXTURE_QUALITY_V10",
       "provides": [
@@ -311,7 +313,7 @@
   ],
   "apps": [],
   "deployments": [],
-  "riskScore": 55,
+  "riskScore": 35,
   "recommendedTests": [
     "check",
     "quality:regression",
