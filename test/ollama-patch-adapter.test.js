@@ -11,6 +11,193 @@ function tmpWorktree() {
   return dir;
 }
 
+// --- buildPatchPrompt: point 3 this cycle - a compact, patch-first prompt
+// for the common single-file case, since a generic multi-file
+// disambiguation preamble is pure prompt-eval cost with no benefit when
+// there's only one valid path anyway. ---
+
+test('buildPatchPrompt: single-file prompt hard-codes the only valid path and drops the multi-file framing/rules text', () => {
+  const p = adapter.buildPatchPrompt('do the thing', [{ path: 'a.txt', content: 'hello world' }]);
+  assert.ok(p.includes('"path":"a.txt"'), 'the single valid path should be hard-coded into the schema example');
+  assert.ok(p.includes('hello world'));
+  assert.ok(!p.includes('You are a precise code-editing assistant'), 'the generic multi-file framing sentence should be dropped for the single-file case');
+  assert.ok(!p.includes('MUST be exactly one of the file paths listed below'), 'multi-file path-disambiguation rule text is unnecessary with only one file');
+});
+
+test('buildPatchPrompt: single-file prompt is meaningfully shorter than the equivalent multi-file-style prompt would be', () => {
+  const file = { path: 'a.txt', content: 'hello world' };
+  const compact = adapter.buildPatchPrompt('do the thing', [file]);
+  const multi = adapter.buildPatchPrompt('do the thing', [file, { path: 'b.txt', content: 'other' }]);
+  // not a strict per-file comparison (multi has 2 files' content) - just
+  // confirms the compact single-file template isn't secretly the same
+  // verbose preamble with one file slotted in.
+  assert.ok(compact.length < multi.length);
+  assert.ok(!compact.includes('---')); // the multi-file block separator should not appear at all
+});
+
+test('buildPatchPrompt: multi-file prompt still includes real path-disambiguation rules and every file block', () => {
+  const p = adapter.buildPatchPrompt('do the thing', [{ path: 'a.txt', content: 'AAA' }, { path: 'b.txt', content: 'BBB' }]);
+  assert.ok(p.includes('FILE PATH: a.txt'));
+  assert.ok(p.includes('FILE PATH: b.txt'));
+  assert.ok(p.includes('MUST be exactly one of the file paths listed below'));
+});
+
+// --- buildRepairPrompt / invokeOllamaRepair: point 6 this cycle - a
+// cheap repair attempt after a verifier failure, reusing the previous
+// edit + the real error instead of re-sending the whole original task. ---
+
+test('buildRepairPrompt: includes the previous edit, the real verifier error, and the CURRENT file content - never the original task text', () => {
+  const p = adapter.buildRepairPrompt(
+    [{ path: 'a.js', find: 'x', replace: 'y' }],
+    'TypeError: y is not defined',
+    [{ path: 'a.js', content: 'const y = something();' }]
+  );
+  assert.ok(p.includes('TypeError: y is not defined'));
+  assert.ok(p.includes('"find":"x"'));
+  assert.ok(p.includes('const y = something();'));
+});
+
+test('invokeOllamaRepair: refuses cleanly when none of the given paths exist on disk (no_scope, not a crash)', async () => {
+  const wt = tmpWorktree();
+  try {
+    const r = await adapter.invokeOllamaRepair('any-model', [{ path: 'a.js', find: 'x', replace: 'y' }], 'some error', wt, ['does-not-exist.js']);
+    assert.equal(r.ok, false);
+    assert.equal(r.classification, 'no_scope');
+  } finally { fs.rmSync(wt, { recursive: true, force: true }); }
+});
+
+// --- estimateTimeoutMs: point 4 this cycle - a dynamic per-call budget
+// derived from real prompt size and (once enough exist) real historical
+// tokens/sec, instead of one flat number for every attempt. ---
+
+test('estimateTimeoutMs: a small (ultra-scoped) prompt gets a meaningfully smaller estimate than a large one', () => {
+  const small = adapter.estimateTimeoutMs(1500); // roughly one ULTRA_SCOPED_SNIPPET_BYTES-sized prompt
+  const large = adapter.estimateTimeoutMs(15000); // roughly a full large file
+  assert.ok(small < large, `expected small=${small} < large=${large}`);
+});
+
+test('estimateTimeoutMs: never returns below a sane floor even for a near-empty prompt', () => {
+  assert.ok(adapter.estimateTimeoutMs(10) >= 20000);
+});
+
+test('estimateTimeoutMs: real historical rates (≥3 samples) override the fallback constant', () => {
+  const fallback = adapter.estimateTimeoutMs(3500);
+  // a real history showing a MUCH faster measured rate than the 12 tok/s
+  // fallback should produce a meaningfully smaller estimate for the same prompt size
+  const fastHistory = [
+    { promptEvalCount: 1000, promptEvalDurationMs: 10000 }, // 100 tok/s
+    { promptEvalCount: 1200, promptEvalDurationMs: 12000 },
+    { promptEvalCount: 900, promptEvalDurationMs: 9000 },
+  ];
+  const withFastHistory = adapter.estimateTimeoutMs(3500, { history: fastHistory });
+  assert.ok(withFastHistory < fallback, `expected history-informed estimate (${withFastHistory}) < fallback (${fallback})`);
+});
+
+test('estimateTimeoutMs: fewer than 3 historical samples still uses the fallback rate, not an unreliable tiny sample', () => {
+  const fallback = adapter.estimateTimeoutMs(3500);
+  const tooFewSamples = adapter.estimateTimeoutMs(3500, { history: [{ promptEvalCount: 5000, promptEvalDurationMs: 1000 }] });
+  assert.equal(tooFewSamples, fallback);
+});
+
+// --- callOllama streaming/stall-detection: point 4 this cycle, and the
+// real bug found while building it (see the long comment on callOllama
+// itself). Uses a real local HTTP mock server, not the actual Ollama
+// service, so this is deterministic and runs in CI - the mock speaks the
+// same NDJSON streaming shape /api/generate uses, with a controllable
+// delay pattern. OLLAMA_URL is read once as a module-level const at
+// require time, so each test here isolates its own fresh module instance
+// pointed at the mock via the require-cache-clear + re-require pattern
+// below, rather than mutating the shared module other tests in this file
+// depend on. ---
+
+function withMockOllamaServer(handler) {
+  const http = require('node:http');
+  return new Promise((resolve, reject) => {
+    const server = http.createServer(handler);
+    server.listen(0, '127.0.0.1', () => {
+      const { port } = server.address();
+      resolve({ url: `http://127.0.0.1:${port}`, close: () => new Promise((r) => server.close(r)) });
+    });
+    server.on('error', reject);
+  });
+}
+
+function freshAdapterAgainst(mockUrl) {
+  const modPath = require.resolve('../lib/ollama-patch-adapter');
+  delete require.cache[modPath];
+  const prevUrl = process.env.OLLAMA_URL;
+  process.env.OLLAMA_URL = mockUrl;
+  const fresh = require('../lib/ollama-patch-adapter');
+  if (prevUrl === undefined) delete process.env.OLLAMA_URL; else process.env.OLLAMA_URL = prevUrl;
+  delete require.cache[modPath]; // don't leave the mock-pointed module cached for other tests in this file
+  return fresh;
+}
+
+function ndjson(obj) { return JSON.stringify(obj) + '\n'; }
+
+test('callOllama: does NOT abort during a long silent prefill phase (the exact real bug found this cycle) - only the stall-clock, which starts at the first chunk, can trigger an early abort', async () => {
+  const mock = await withMockOllamaServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'application/x-ndjson' });
+    // Real observed shape: 154s of total silence during prefill, then
+    // generation. Simulated here as a real ~600ms silent gap before the
+    // first chunk - short enough to keep this test fast, but exercised
+    // through the exact same "no chunk yet -> stall-clock not running"
+    // code path a genuinely long real prefill would hit.
+    setTimeout(() => {
+      res.write(ndjson({ response: 'HEA', done: false }));
+      setTimeout(() => {
+        res.write(ndjson({ response: 'LTHY', done: true, eval_count: 2, prompt_eval_count: 5, prompt_eval_duration: 1e8, eval_duration: 5e7, load_duration: 1e7 }));
+        res.end();
+      }, 50);
+    }, 600);
+  });
+  try {
+    const adapter = freshAdapterAgainst(mock.url);
+    // stallMs shorter than the silent prefill gap - if the stall-clock
+    // incorrectly ran during prefill, this would abort at 300ms into the
+    // 600ms silent gap and fail. It must not.
+    const r = await adapter.callOllama('mock-model', 'irrelevant prompt', { timeoutMs: 5000, stallMs: 300 });
+    assert.equal(r.ok, true, JSON.stringify(r));
+    assert.equal(r.text, 'HEALTHY');
+    assert.equal(r.resolvedVia, 'stream-complete');
+  } finally { await mock.close(); }
+});
+
+test('callOllama: DOES abort as a real stall once generation has genuinely started and then goes silent', async () => {
+  const mock = await withMockOllamaServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'application/x-ndjson' });
+    res.write(ndjson({ response: 'partial', done: false }));
+    // never sends another chunk and never closes the response - a real stall after real output.
+  });
+  try {
+    const adapter = freshAdapterAgainst(mock.url);
+    const start = Date.now();
+    const r = await adapter.callOllama('mock-model', 'irrelevant prompt', { timeoutMs: 30000, stallMs: 500 });
+    const elapsedMs = Date.now() - start;
+    assert.equal(r.ok, false);
+    assert.equal(r.resolvedVia, 'stalled');
+    assert.equal(r.timedOut, true);
+    assert.ok(elapsedMs < 5000, `a real post-generation stall should be caught quickly via stallMs, not wait for the full 30000ms timeoutMs (took ${elapsedMs}ms)`);
+  } finally { await mock.close(); }
+});
+
+test('callOllama: the outer maxTotalMs cap still applies during a real, never-ending silent prefill (never truly unbounded)', async () => {
+  const mock = await withMockOllamaServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'application/x-ndjson' });
+    // never writes anything and never closes - simulates prefill that never finishes
+  });
+  try {
+    const adapter = freshAdapterAgainst(mock.url);
+    const start = Date.now();
+    const r = await adapter.callOllama('mock-model', 'irrelevant prompt', { timeoutMs: 500, stallMs: 100000 });
+    const elapsedMs = Date.now() - start;
+    assert.equal(r.ok, false);
+    assert.equal(r.resolvedVia, 'max-total-exceeded');
+    assert.ok(r.error.includes('still in prefill'));
+    assert.ok(elapsedMs < 3000, `the outer timeoutMs cap must still bound a call with no stall-clock running (took ${elapsedMs}ms)`);
+  } finally { await mock.close(); }
+});
+
 // --- extractJson: robust against real local-model output quirks ---
 
 test('extractJson: plain JSON object', () => {

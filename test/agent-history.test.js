@@ -71,6 +71,81 @@ test('recommendTimeoutMs: with real successful-attempt history, scales from actu
   assert.ok(t >= 20000);
 });
 
+// --- shouldSkipModelForTaskClass: point 8 this cycle - don't retry a
+// model that has reliably failed a specific task class first. ---
+
+test('shouldSkipModelForTaskClass: does not skip with too little history to conclude anything', () => {
+  const root = tmpRoot();
+  history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'model-a', durationMs: 1000, success: false });
+  const r = history.shouldSkipModelForTaskClass(root, { model: 'model-a', taskType: 'markup-fix' });
+  assert.equal(r.skip, false);
+});
+
+test('shouldSkipModelForTaskClass: skips once a model has real evidence of reliable failure on this exact task class', () => {
+  const root = tmpRoot();
+  for (let i = 0; i < 3; i++) history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'model-a', durationMs: 1000, success: false });
+  const r = history.shouldSkipModelForTaskClass(root, { model: 'model-a', taskType: 'markup-fix' });
+  assert.equal(r.skip, true);
+  assert.equal(r.attempts, 3);
+});
+
+test('shouldSkipModelForTaskClass: does not skip a model with any real success in its history, even with several failures too', () => {
+  const root = tmpRoot();
+  history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'model-a', durationMs: 1000, success: true });
+  history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'model-a', durationMs: 1000, success: false });
+  history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'model-a', durationMs: 1000, success: false });
+  const r = history.shouldSkipModelForTaskClass(root, { model: 'model-a', taskType: 'markup-fix' });
+  assert.equal(r.skip, false);
+});
+
+test('shouldSkipModelForTaskClass: never bleeds across a different task type', () => {
+  const root = tmpRoot();
+  for (let i = 0; i < 3; i++) history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'model-a', durationMs: 1000, success: false });
+  const r = history.shouldSkipModelForTaskClass(root, { model: 'model-a', taskType: 'config-change' });
+  assert.equal(r.skip, false);
+});
+
+// --- scoreModelForTask: point 9 this cycle - route on P(success) x
+// quality / latency / resource cost / money, not raw cost alone. ---
+
+test('scoreModelForTask: a model that reliably succeeds fast scores higher than one that reliably fails slowly', () => {
+  const root = tmpRoot();
+  for (let i = 0; i < 3; i++) history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'fast-good', durationMs: 20000, success: true });
+  for (let i = 0; i < 3; i++) history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'slow-bad', durationMs: 240000, success: false });
+  const good = history.scoreModelForTask(root, { model: 'fast-good', taskType: 'markup-fix', provider: 'opencode-free' });
+  const bad = history.scoreModelForTask(root, { model: 'slow-bad', taskType: 'markup-fix', provider: 'opencode-free' });
+  assert.ok(good.score > bad.score, `expected fast-good score (${good.score}) > slow-bad score (${bad.score})`);
+});
+
+test('scoreModelForTask: real evidence beats raw $0-cost equality — a $0 model that almost always fails does not automatically win', () => {
+  const root = tmpRoot();
+  for (let i = 0; i < 4; i++) history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'unreliable-free', durationMs: 200000, success: i === 0 });
+  for (let i = 0; i < 4; i++) history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'reliable-free', durationMs: 20000, success: true });
+  const unreliable = history.scoreModelForTask(root, { model: 'unreliable-free', taskType: 'markup-fix', provider: 'opencode-free', costUsd: 0 });
+  const reliable = history.scoreModelForTask(root, { model: 'reliable-free', taskType: 'markup-fix', provider: 'opencode-free', costUsd: 0 });
+  assert.equal(unreliable.moneyWeight, reliable.moneyWeight, 'both are real $0 - cost alone must not be what decides this');
+  assert.ok(reliable.score > unreliable.score);
+});
+
+test('scoreModelForTask: an untested model gets a neutral prior, neither favored nor excluded', () => {
+  const root = tmpRoot();
+  const r = history.scoreModelForTask(root, { model: 'never-seen', taskType: 'markup-fix', provider: 'opencode-free' });
+  assert.equal(r.pSuccess, 0.5);
+  assert.equal(r.sampleSize, 0);
+});
+
+test('scoreModelForTask: a local model carries a real resource-cost weight a remote model of equal reliability/latency does not', () => {
+  const root = tmpRoot();
+  for (let i = 0; i < 3; i++) history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'local-model', durationMs: 30000, success: true });
+  for (let i = 0; i < 3; i++) history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'remote-model', durationMs: 30000, success: true });
+  const local = history.scoreModelForTask(root, { model: 'local-model', taskType: 'markup-fix', provider: 'ollama-local' });
+  const remote = history.scoreModelForTask(root, { model: 'remote-model', taskType: 'markup-fix', provider: 'opencode-free' });
+  assert.equal(local.pSuccess, remote.pSuccess);
+  assert.equal(local.avgLatencyMs, remote.avgLatencyMs);
+  assert.ok(local.resourceWeight > remote.resourceWeight, 'local CPU-bound inference must carry a real, higher resource-cost weight than a remote call with identical success/latency');
+  assert.ok(local.score < remote.score);
+});
+
 test('recordAttempt + readHistory: real round-trip, survives a fresh module require', () => {
   const root = tmpRoot();
   history.recordAttempt(root, { taskType: 'general', contextBucket: 'small', model: 'x', durationMs: 1, success: true });
