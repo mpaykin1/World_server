@@ -56,3 +56,40 @@ test('compileContext: a goal with zero signal at level 1 still returns a small (
   assert.equal(ctx.full, false);
   assert.ok(Array.isArray(ctx.files));
 });
+
+// --- Regression: root cause found live this cycle via a real A/B trace.
+// A real, single-file goal was pulling in lib/agent-adapters.js,
+// lib/resource-scheduler.js, lib/ollama-patch-adapter.js and a benchmark
+// JSON as "context" for a one-line HTML fix, because (1) plain substring
+// matching matched "cover" inside "discover-ai3d-engines.js"/"discovery"
+// and generic short words ("name","meta","existing") almost everywhere,
+// and (2) this project's own knownErrors entries about the agent
+// pipeline's OWN reliability mention its own lib/ source files in their
+// rootCause text and share vocabulary with this exact recurring benchmark
+// task. This directly explained real production 'timeout' classifications
+// that were actually a router/context-compiler misroute, not a model
+// failure - the bloated multi-file prompt blew past the timeout ceiling
+// every time. ---
+
+test('knownIssueFileRefs/keywordSearch: real word-boundary matching, not substring - "cover" must not match inside "discover"', () => {
+  const refs = compiler.keywordSearch(ROOT, 'add viewport-fit=cover to the meta tag', 8);
+  assert.ok(!refs.some((r) => r.includes('discover-ai3d-engines')), `must not match "cover" as a substring of "discover": got ${JSON.stringify(refs)}`);
+});
+
+test('compileContext: the exact real goal that exposed the bug now scopes to ONLY the explicit target file at level 1', () => {
+  const goal = 'In apps/ai3d-voxel-city/index.html, add viewport-fit=cover to the content attribute of the existing <meta name="viewport"> tag.';
+  const ctx = compiler.compileContext(ROOT, goal, 1);
+  assert.deepEqual(ctx.files, ['apps/ai3d-voxel-city/index.html'], `level 1 must not attach unrelated pipeline-infrastructure files: got ${JSON.stringify(ctx.files)}`);
+});
+
+test('knownIssueFileRefs: never returns this agent pipeline\'s own lib/ source files, even when a registry entry mentions them', () => {
+  const refs = compiler.knownIssueFileRefs(ROOT, 'meta viewport name existing cover ollama local patch');
+  for (const r of refs) {
+    assert.ok(!/^lib\/(agent-|ollama-|resource-scheduler|scoped-task-compiler|autonomous-issue-picker)/.test(r), `must not self-reference agent pipeline source: got ${r}`);
+  }
+});
+
+test('knownIssueFileRefs: a single incidental generic-word overlap is not enough evidence to contribute a file ref', () => {
+  const refs = compiler.knownIssueFileRefs(ROOT, 'the existing name of the cover');
+  assert.deepEqual(refs, [], `a lone generic-word match must not pull in unrelated files: got ${JSON.stringify(refs)}`);
+});

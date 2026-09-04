@@ -146,6 +146,46 @@ test('scoreModelForTask: a local model carries a real resource-cost weight a rem
   assert.ok(local.score < remote.score);
 });
 
+// --- evidenceWeightedSkip: point 6 this cycle - confidence-weighted,
+// recency-decayed evidence reacts faster than the flat >=3-attempts rule
+// when the signal is strong, but never bans a model from one lone failure.
+
+test('evidenceWeightedSkip: never skips from a single failure - not enough weighted evidence to conclude anything', () => {
+  const root = tmpRoot();
+  history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'model-a', durationMs: 1000, success: false });
+  const r = history.evidenceWeightedSkip(root, { model: 'model-a', taskType: 'markup-fix' });
+  assert.equal(r.skip, false);
+});
+
+test('evidenceWeightedSkip: skips FASTER than the flat rule when 2 strong, recent, back-to-back failures give decisive evidence', () => {
+  const root = tmpRoot();
+  history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'model-a', durationMs: 1000, success: false });
+  history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'model-a', durationMs: 1000, success: false });
+  const r = history.evidenceWeightedSkip(root, { model: 'model-a', taskType: 'markup-fix' });
+  assert.equal(r.skip, true, '2 recent, unanimous real failures must be enough decayed evidence to skip - the old flat rule needed a 3rd wasted attempt for this');
+});
+
+test('evidenceWeightedSkip: a recent real success recovers a model\'s standing even after older failures', () => {
+  const root = tmpRoot();
+  const old = new Date(Date.now() - 40 * 86400000).toISOString(); // 40 days ago, well past the 14-day half-life
+  const fp = require('fs');
+  const p = history.historyPath(root);
+  fp.mkdirSync(require('path').dirname(p), { recursive: true });
+  fp.appendFileSync(p, JSON.stringify({ at: old, taskType: 'markup-fix', model: 'model-a', success: false }) + '\n');
+  fp.appendFileSync(p, JSON.stringify({ at: old, taskType: 'markup-fix', model: 'model-a', success: false }) + '\n');
+  history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'model-a', durationMs: 1000, success: true });
+  const r = history.evidenceWeightedSkip(root, { model: 'model-a', taskType: 'markup-fix' });
+  assert.equal(r.skip, false, 'a recent real success plus decayed old failures must not still read as reliable failure');
+});
+
+test('evidenceWeightedSkip: never bleeds across a different task type', () => {
+  const root = tmpRoot();
+  history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'model-a', durationMs: 1000, success: false });
+  history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'model-a', durationMs: 1000, success: false });
+  const r = history.evidenceWeightedSkip(root, { model: 'model-a', taskType: 'config-change' });
+  assert.equal(r.skip, false);
+});
+
 test('recordAttempt + readHistory: real round-trip, survives a fresh module require', () => {
   const root = tmpRoot();
   history.recordAttempt(root, { taskType: 'general', contextBucket: 'small', model: 'x', durationMs: 1, success: true });
