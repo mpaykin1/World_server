@@ -1,0 +1,12 @@
+{
+  "schemaVersion":"1.0.0",
+  "system":"CREATURE_LOD_POLICY",
+  "tiers":{
+    "full":{"maxDistance":30,"tickRate":1.0,"animDetail":"full","aiEnabled":true,"physicsDetail":"full","despawn":false},
+    "high":{"maxDistance":60,"tickRate":0.5,"animDetail":"reduced","aiEnabled":true,"physicsDetail":"reduced","despawn":false},
+    "medium":{"maxDistance":100,"tickRate":0.25,"animDetail":"minimal","aiEnabled":false,"physicsDetail":"bbox","despawn":false},
+    "low":{"maxDistance":160,"tickRate":0.0,"animDetail":"none","aiEnabled":false,"physicsDetail":"none","despawn":true}
+  },
+  "tierOrder":["full","high","medium","low"],
+  "spawnPolicy":{"maxPerChunk":6,"minSpawnInterval":2.0,"respawnDelay":30.0,"despawnIfDeadTooLong":60.0}
+}
