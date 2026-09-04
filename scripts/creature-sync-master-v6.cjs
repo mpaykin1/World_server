@@ -12,6 +12,6 @@ run('git',['merge','--no-edit','origin/master'],{inherit:true});
 const after=run('git',['rev-parse','HEAD']);
 run(process.execPath,['--test','test/creature-factory-master.test.js'],{inherit:true});
 run(process.execPath,['scripts/creature-runtime-benchmark.cjs','--strict'],{inherit:true});
-const npm=process.platform==='win32'?'npm.cmd':'npm';
-run(npm,['run','check'],{inherit:true});
+if(process.platform==='win32') run(process.env.ComSpec||'cmd.exe',['/d','/s','/c','npm run check'],{inherit:true});
+else run('npm',['run','check'],{inherit:true});
 console.log(JSON.stringify({status:'PASS',branch,before,after,master:run('git',['rev-parse','origin/master'])}));
