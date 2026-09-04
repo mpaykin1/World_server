@@ -602,6 +602,33 @@ function localPrereqsGreen(state) {
   const hard = ['toolchain-bootstrap', 'native-cosign', 'fenced-migration'];
   return hard.every(id => state.blockers[id] && state.blockers[id].status === 'pass');
 }
+function longSoakRunnerStatePath(root) {
+  return path.join(root, '.world-server-state', 'long-soak', 'state.json');
+}
+function readLongSoakRunnerState(root) {
+  const p = longSoakRunnerStatePath(root);
+  if (!exists(p)) return {};
+  const j = safeJson(p, null);
+  return j || {};
+}
+function longSoakHeartbeatTimeoutMs(root, policy) {
+  const lp = safeJson(path.join(root, 'data', 'long-soak-policy.json'), {});
+  const s = Number(lp.heartbeatTimeoutSeconds || policy.timers.soakPollMinutes * 60 * 2 || 1800);
+  return s * 1000;
+}
+function longSoakRunnerAlive(root, policy) {
+  // A pid being alive is NOT sufficient. The actual detached runner must be a
+  // genuine PRODUCTION run whose heartbeat is fresh (proves real continuous progress).
+  const st = readLongSoakRunnerState(root);
+  if (!(st && st.mode === 'production' && st.pid)) return null;
+  if (!isPidAlive(st.pid)) return null;
+  const last = st.lastHeartbeatAt || st.updatedAt || st.startedAt;
+  if (!last) return null;
+  const lastMs = Date.parse(last);
+  if (!Number.isFinite(lastMs)) return null;
+  if ((Date.now() - lastMs) > longSoakHeartbeatTimeoutMs(root, policy)) return null;
+  return st;
+}
 function manageLongSoak(root, policy, state, allowStart) {
   const cert = findLongSoakEvidence(root);
   if (cert) {
@@ -609,10 +636,17 @@ function manageLongSoak(root, policy, state, allowStart) {
     setBlocker(state, '8h-long-soak', 'pass', { reason: `longSoakCertified=true in ${path.relative(root, cert.path)}` });
     return;
   }
-  const existing = state.longSoak || {};
-  if (existing.pid && isPidAlive(existing.pid)) {
+  const runnerState = longSoakRunnerAlive(root, policy);
+  if (runnerState) {
+    state.longSoak = {
+      certified: false,
+      pid: runnerState.pid,
+      startedAt: runnerState.startedAt,
+      lastHeartbeatAt: runnerState.lastHeartbeatAt || runnerState.updatedAt,
+      seconds: runnerState.targetDurationSeconds || policy.longSoak.productionSeconds
+    };
     setBlocker(state, '8h-long-soak', 'waiting', {
-      reason: `Real long-soak running pid=${existing.pid}; waiting for certification`,
+      reason: `Real long-soak running pid=${runnerState.pid} mode=${runnerState.mode} heartbeat=${runnerState.lastHeartbeatAt}; waiting for certification`,
       nextRunAt: timerAfterMinutes(policy.timers.soakPollMinutes)
     });
     return;
@@ -631,7 +665,10 @@ function manageLongSoak(root, policy, state, allowStart) {
   }
   ensureDir(statePaths(root).dir);
   const out = fs.openSync(statePaths(root).soakLog, 'a');
-  const child = spawn(process.execPath, [runner], {
+  // ALWAYS launch the real 'run' production mode for exactly productionSeconds.
+  // A bare spawn with no command defaults to selftest and exits instantly — that
+  // must never happen for the certified 8h soak.
+  const child = spawn(process.execPath, [runner, 'run'], {
     cwd: root,
     env: { ...process.env, WORLD_SERVER_LONG_SOAK_SECONDS: String(policy.longSoak.productionSeconds) },
     detached: true,
@@ -642,7 +679,7 @@ function manageLongSoak(root, policy, state, allowStart) {
   state.longSoak = { certified: false, pid: child.pid, startedAt: nowIso(), seconds: policy.longSoak.productionSeconds };
   setBlocker(state, '8h-long-soak', 'waiting', {
     attempted: true,
-    reason: `Started real long-soak pid=${child.pid}; production duration=${policy.longSoak.productionSeconds}s`,
+    reason: `Started real long-soak pid=${child.pid} via 'run'; production duration=${policy.longSoak.productionSeconds}s`,
     nextRunAt: timerAfterMinutes(policy.timers.soakPollMinutes)
   });
   event(root, 'long-soak-started', { pid: child.pid, seconds: policy.longSoak.productionSeconds });

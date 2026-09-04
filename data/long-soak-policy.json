@@ -3,6 +3,7 @@
   "minimumCertifiedHours": 8,
   "recommendedHours": 24,
   "checkpointEverySeconds": 60,
+  "heartbeatTimeoutSeconds": 1800,
   "maxConsecutiveFailures": 3,
   "faults": [
     "child-crash",
