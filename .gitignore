@@ -31,6 +31,7 @@ WORLD_SERVER_SECRETS/
 
 # local toolchain cache / disaster-recovery snapshots / backups — large, regenerable, not source
 .cache/
+.world-server/
 .world-server-state/
 .blocker-repair-backups/
 *.tmp-*
