@@ -119,6 +119,11 @@ test('compileContext: a knownIssue candidate below the relevance floor is droppe
   assert.ok(!ctx.files.some((f) => f !== 'apps/ai3d-voxel-city/index.html' && f.startsWith('lib/')), `a weak match must never occupy a context slot: got ${JSON.stringify(ctx.files)}`);
 });
 
+test('compileContext: a generic bug-description word ("broken") alone does not pull in unrelated test files - real bug found live checking a "broken navigation link" goal', () => {
+  const ctx = compiler.compileContext(ROOT, 'In apps/catalog/index.html, fix a broken navigation link.', 1);
+  assert.deepEqual(ctx.files, ['apps/catalog/index.html'], `a generic word like "broken" must not admit unrelated files: got ${JSON.stringify(ctx.files)}`);
+});
+
 test('compileContext: exposes a real, inspectable whySelected reason for every selected file', () => {
   const goal = 'In apps/ai3d-voxel-city/index.html, add viewport-fit=cover to the content attribute of the existing <meta name="viewport"> tag.';
   const ctx = compiler.compileContext(ROOT, goal, 1);
