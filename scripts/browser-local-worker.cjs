@@ -138,31 +138,59 @@ async function execTestRun(root, args, task){
   return { command: cmd, target, exitCode: r.status, durationMs, stdout: String(r.stdout||'').slice(0,8000), stderr: String(r.stderr||'').slice(0,8000), success: r.status===0 };
 }
 async function execAgentDispatch(root, args, task){
-  const worktreeRoot = await ensureTaskWorktree(task, false);
-  // Find a TODO (deterministic first)
-  const grep = cp.spawnSync('git',['grep','-n','TODO'],{ cwd: worktreeRoot, encoding:'utf8', timeout:10000, windowsHide:true });
-  const hits = String(grep.stdout||'').split('\n').filter(Boolean).slice(0,20);
-  let filesChanged=[], commitSha='', diffSummary='', tests=[];
-  if (hits.length){
-    // propose a trivial safe patch: append TODO resolution note to a non-critical file if requested, else just report
-    if (args.applyFix){
-      const p = 'reports/browser-agent-dispatch-note.txt';
-      const abs = path.join(worktreeRoot, p);
-      ensureDir(path.dirname(abs));
-      fs.writeFileSync(abs, `agent.dispatch ${task.task_id} @ ${nowIso()} - found ${hits.length} TODOs, sample: ${hits[0].slice(0,300)}\n`, 'utf8');
-      git(worktreeRoot,['add', p]);
-      const c = git(worktreeRoot,['commit','-m', `agent.dispatch ${task.task_id}: record TODO scan`]);
-      commitSha = git(worktreeRoot,['rev-parse','HEAD']).stdout.trim();
-      diffSummary = git(worktreeRoot,['diff','HEAD~1','--stat']).stdout.slice(0,3000);
-      filesChanged=[p];
-    }
-    tests = [{ name: 'todo-scan', hitsCount: hits.length, sample: hits.slice(0,3), commitSha }];
-  } else {
-    tests=[{name:'todo-scan', hitsCount:0, note:'no TODO found'}];
+  // REAL dispatch (same as live worker) — prefer opencode
+  const prompt = String(args.prompt||args.goal||args.task||'').trim();
+  if(!prompt) throw new Error('prompt/goal required for agent.dispatch');
+  const allowedPaths = Array.isArray(args.allowedPaths) ? args.allowedPaths : (Array.isArray(args.allowed_paths)? args.allowed_paths : null);
+  const maxRuntimeMs = Math.min(Number(args.maxRuntimeMs||args.max_runtime_ms||180000), 300000);
+  const providerPreference = String(args.providerPreference||args.provider||'opencode').toLowerCase();
+  const expectedTests = Array.isArray(args.expectedTests) ? args.expectedTests : (args.expected_tests||null);
+  function getFilesChangedLocal(wt){
+    const out=new Set();
+    const staged = git(wt,['diff','--cached','--name-only']).stdout.trim().split('\n').filter(Boolean);
+    const unstaged = git(wt,['diff','--name-only']).stdout.trim().split('\n').filter(Boolean);
+    const untracked = git(wt,['ls-files','--others','--exclude-standard']).stdout.trim().split('\n').filter(Boolean);
+    for(const f of [...staged,...unstaged,...untracked]) out.add(f);
+    const last = git(wt,['diff','--name-only','HEAD~1','HEAD']).stdout.trim().split('\n').filter(Boolean);
+    for(const f of last) out.add(f);
+    return Array.from(out).filter(Boolean).slice(0,100);
   }
-  // also run a tiny targeted test if exists
-  const t = await execTestRun(worktreeRoot, { target: 'test/collective-brain.test.js', command: 'node --test test/collective-brain.test.js' }, task).catch(e=>({ error:String(e.message) }));
-  return { worktree: worktreeRoot, hits, filesChanged, commitSha, diffSummary, tests: [t], branch: git(worktreeRoot,['branch','--show-current']).stdout.trim() };
+  function getCommitShaLocal(wt){ const s=git(wt,['rev-parse','HEAD']).stdout.trim(); return /^[0-9a-f]{4,40}$/.test(s)?s:''; }
+  function getBranchLocal(wt){ return git(wt,['branch','--show-current']).stdout.trim()||'UNKNOWN'; }
+  const wt = await ensureTaskWorktree(task);
+  const branch = getBranchLocal(wt);
+  const baseSha = getCommitShaLocal(wt);
+  let providerUsed='opencode', opencodeOutput='', filesChanged=[], commitSha='', diffSummary='', tests=[], blockers=[], confidence=0.85;
+  if(providerPreference.includes('opencode')){
+    providerUsed='opencode';
+    const safePrompt = prompt.replace(/"/g,'\\"').slice(0,4000);
+    const cmd = `npx opencode run --format json --dir "${wt}" "${safePrompt}"`;
+    const r = cp.spawnSync(cmd, { cwd: wt, encoding:'utf8', timeout: maxRuntimeMs, shell:true, windowsHide:true, maxBuffer: 10*1024*1024 });
+    opencodeOutput = String(r.stdout||'') + String(r.stderr||'');
+    filesChanged = getFilesChangedLocal(wt);
+    diffSummary = git(wt,['diff','--stat']).stdout.slice(0,4000) || git(wt,['diff','HEAD~1','--stat']).stdout.slice(0,4000);
+    commitSha = getCommitShaLocal(wt);
+    if(filesChanged.length && commitSha===baseSha){
+      git(wt,['add','-A']);
+      const cc = git(wt,['commit','-m',`agent.dispatch ${task.task_id} opencode: ${prompt.slice(0,72)}`]);
+      commitSha = getCommitShaLocal(wt);
+      diffSummary = git(wt,['diff','HEAD~1','--stat']).stdout.slice(0,4000);
+    }
+    if(r.status!==0 && !filesChanged.length) blockers.push(`opencode exit ${r.status}`);
+    if(expectedTests && expectedTests.length){
+      for(const t of expectedTests.slice(0,3)){
+        const tr = await execTestRun(wt, { target: t, command: `node --test ${t}` }, task).catch(e=> ({ success:false, error:String(e.message) }));
+        tests.push(tr);
+      }
+    } else {
+      const tr = await execTestRun(wt, { target:'test/collective-brain.test.js', command:'node --test test/collective-brain.test.js' }, task).catch(e=> ({ success:false, error:String(e.message) }));
+      tests.push(tr);
+    }
+    confidence = filesChanged.length ? 0.88 : 0.6;
+    return { provider: providerUsed, prompt: prompt.slice(0,500), worktree: wt, branch, baseSha, files_changed: filesChanged, filesChanged, commit_sha: commitSha, commitSha, diffSummary, git_diff_summary: diffSummary, tests, stdout_summary: opencodeOutput.slice(0,6000), stderr_summary: r.status!==0? String(r.stderr||'').slice(0,2000):'', blockers, confidence, detail: { provider: providerUsed, worktree: wt, branch, baseSha, commitSha, filesChanged, opencodeOutput: opencodeOutput.slice(0,3000) } };
+  } else {
+    throw new Error(`provider ${providerPreference} not supported for REAL dispatch`);
+  }
 }
 async function execQualityStatus(root){
   const files = ['QUALITY_REPORT.json','QUALITY_REGRESSION_REPORT.json','WORLD_QUALITY_AUTOPILOT_STATUS.json','COLLECTIVE_BRAIN_REPORT.json'];
