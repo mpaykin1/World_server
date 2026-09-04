@@ -629,6 +629,20 @@
         "validated end-to-end: after this fix, 3 independent real World_server tasks (viewport-fit edits on apps/survival, apps/ai3d-voxel-city, apps/chat) succeeded through the full agent_implement pipeline in two separate confirmation runs (3/3 both times)",
         "residual, smaller effect observed and left as expected/self-healing behavior, not a bug: an individual model attempt can still occasionally exceed its own (now correctly shorter, history-adaptive) per-level timeout and get killed - the existing multi-model/multi-level fallback loop in implementGoal absorbs this and still reaches 100% success across the 3-task benchmark"
       ]
+    },
+    {
+      "id": "ollama-local-patch-reliability-lower-than-opencode-on-cpu-only-hardware",
+      "category": "tooling",
+      "severity": "major",
+      "status": "known",
+      "symptom": "lib/ollama-patch-adapter.js (the local, $0, shell-free structured-patch fallback added this cycle) succeeded in an isolated live test (63.4s, correct edit) but failed in 4/4 real attempts routed through the full lib/agent-adapters.js implementGoal fallback chain during a 9-task multi-category benchmark - two different task types (an alt-text edit and a JSON key addition), each tried at 2 context levels, all 4 timed out at the 120s floor with no output at all, while OpenCode succeeded on the same tasks shortly after.",
+      "rootCause": "Not conclusively identified - the chosen model (qwen3:1.7b) is real, live-benchmarked, and does work (see OLLAMA_MODEL_BENCHMARK.json and the passing live E2E test), so this is not a broken adapter. The most evidence-consistent explanation: on this CPU-only dev hardware (Intel i7-3612QM, 4c/8t @2.1GHz), prompt evaluation dominates local inference cost, and task-specific prompt content/structure (e.g. HTML with a nested img tag vs a flat viewport meta tag) appears to meaningfully affect how long the model takes to produce a valid response - not systematically reproduced or isolated further due to session time constraints.",
+      "protection": [
+        "lib/agent-adapters.js: the fallback chain never depends on the local path succeeding - every local failure (including a full 120s timeout) cleanly falls through to the next context level, then to OpenCode, exactly as designed; this incident happened WITHIN that safety net, not around it - the 9-task benchmark still finished at 8/9 real task-level success",
+        "the self-improvement router (agentHistory.rankModelsForTask, combined with the local-first-only-until-real-history fix in implementGoal) already recorded these 4 real failures and correctly stopped preferring local for the affected task type on the very next attempt in the same session (confirmed live: a follow-up markup-fix task went straight to OpenCode)",
+        "do not raise capability-coverage or claim local-first is reliable on this hardware based on the one isolated live-test success alone - report the real combined rate (1 success out of 5 total real local attempts this cycle) honestly, as this entry does",
+        "before increasing OLLAMA_PATCH_MODELS or lowering the 120s/150s timeouts, gather more real per-task-type samples first - 4 attempts is not enough to distinguish 'this task type is genuinely harder for a 1.7B model' from 'this was noise/contention'"
+      ]
     }
   ],
   "confirmationProtocol": {

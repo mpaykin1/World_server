@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "OLLAMA_MODEL_BENCHMARK",
+  "generatedAt": "2026-09-04T05:15:00Z",
+  "hardware": {
+    "cpu": "Intel(R) Core(TM) i7-3612QM CPU @ 2.10GHz (Ivy Bridge, 2012-era laptop CPU)",
+    "cores": 4,
+    "logicalProcessors": 8,
+    "ramTotalGB": 15.9,
+    "gpu": "none used — CPU-only inference, per this cycle's explicit requirement"
+  },
+  "methodology": "Real, live calls against Ollama's HTTP API (http://127.0.0.1:11434/api/generate) for every installed candidate model, using the SAME real production task (add viewport-fit=cover to apps/survival/index.html's viewport meta tag) and the SAME prompt template lib/ollama-patch-adapter.js's buildPatchPrompt() uses in production. Not a synthetic/trivial probe — this measures the actual structured-patch-generation capability the production adapter depends on. num_ctx=8192 for all calls.",
+  "note": "The first attempt at this benchmark used a 60s timeout and every single model timed out with zero exceptions — that number was corrected after a direct diagnostic call showed even the smallest model needs ~100s+ for a real ~5.3KB file (prompt EVALUATION, not generation, dominates cost on this CPU: 2095 prompt tokens took over 100s). Results below use the corrected, evidence-based timeout.",
+  "results": [
+    {
+      "model": "gemma3:1b-it-qat",
+      "parameters": "999.89M",
+      "durationMs": 103090,
+      "ok": true,
+      "schemaValid": true,
+      "editsCount": 1,
+      "findMatchesOnce": false,
+      "verdict": "REJECTED — completed and returned schema-valid JSON, but the 'find' field was a literal echo of the prompt's placeholder text ('<exact substring>'), not real content copied from the file. Too small/weak to reliably follow the find/replace instruction on this task."
+    },
+    {
+      "model": "qwen2.5:3b-instruct",
+      "parameters": "3.1B",
+      "durationMs": null,
+      "ok": false,
+      "error": "timed out at 220000ms without completing",
+      "verdict": "REJECTED — this was the pre-cycle default (chosen for trivial-prompt speed in an earlier cycle), but it is measurably too slow for a real file-editing prompt on this hardware. Never completed within 220s."
+    },
+    {
+      "model": "qwen3-fast:1.7b",
+      "parameters": "2.0B",
+      "durationMs": 203029,
+      "ok": true,
+      "schemaValid": true,
+      "editsCount": 1,
+      "findMatchesOnce": true,
+      "verdict": "PASS but slow — correct output, but 203s is close to the timeout boundary and much slower than qwen3:1.7b despite being a similar-sized model. Its 'thinking'/reasoning mode (noted in an earlier cycle) likely adds real overhead here."
+    },
+    {
+      "model": "qwen3:1.7b",
+      "parameters": "2.0B",
+      "durationMs": 56735,
+      "ok": true,
+      "schemaValid": true,
+      "editsCount": 1,
+      "findMatchesOnce": true,
+      "verdict": "SELECTED — fastest AND correct: valid schema, and the 'find' text matched the real file content exactly once. Beat every other model on both speed and correctness, including larger ones."
+    },
+    {
+      "model": "qwen3:4b",
+      "parameters": "4.0B",
+      "durationMs": null,
+      "ok": false,
+      "error": "timed out at 220000ms without completing",
+      "verdict": "REJECTED — the largest installed model, and the slowest: timed out just like qwen2.5:3b-instruct. Confirms bigger is not better on this CPU-only hardware for this task."
+    }
+  ],
+  "decision": {
+    "chosenDefault": "qwen3:1.7b",
+    "reasoning": "The smallest model that actually works well won, not the biggest — matching this cycle's explicit instruction to pick the minimal model that genuinely improves the result rather than escalating size by default. No new model was downloaded; all 5 candidates were already installed.",
+    "defaultTimeoutMs": 150000,
+    "timeoutReasoning": "~2.6x margin above the winning model's real 56.7s observed duration, to absorb normal variance and the MAX_PROMPT_CONTENT_BYTES budget (6000 bytes) being larger than the single file tested here."
+  }
+}
