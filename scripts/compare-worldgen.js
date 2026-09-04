@@ -77,7 +77,26 @@ function compare(worldSeed) {
   return { ok, worldSeed, web, godot: { sampleHeights: godot.sampleHeights, sampleBiomes: godot.sampleBiomes }, maxHeightDiff, biomeMismatches, samplePoints: SAMPLE_POINTS };
 }
 
+// Real regression found this cycle: a genuinely fresh git worktree has no
+// godot/world-client/.godot/ cache (gitignored - see .gitignore's comment;
+// it is editor-generated, never source). Without it, class_name-declared
+// scripts like WorldGen.gd are not yet registered in Godot's global class
+// cache, so a bare `--headless --path <project> -- --smoke-test` run fails
+// every seed with "Identifier WorldGen not declared in the current scope" -
+// this had been silently masked before because the worktree used during
+// initial development had already been opened in the editor once. Fixed by
+// running Godot's own documented headless project-import pass
+// (`--headless --editor --quit-after <n>`) once before the seed loop,
+// idempotent and cheap on a worktree that already has a cache.
+function ensureProjectImported() {
+  if (!fs.existsSync(GODOT_BIN)) return;
+  const cacheMarker = path.join(GODOT_PROJECT, '.godot', 'global_script_class_cache.cfg');
+  if (fs.existsSync(cacheMarker)) return;
+  spawnSync(GODOT_BIN, ['--headless', '--editor', '--path', GODOT_PROJECT, '--quit-after', '20'], { encoding: 'utf8', timeout: 90000 });
+}
+
 if (require.main === module) {
+  ensureProjectImported();
   const seeds = process.argv.slice(2).map(Number).filter((n) => Number.isFinite(n));
   const testSeeds = seeds.length ? seeds : [73194217, 1, 999999, 0, -1, 42, 1000000007];
   const results = testSeeds.map(compare);
