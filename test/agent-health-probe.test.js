@@ -75,9 +75,36 @@ test('classifyOllama: OLLAMA_UNAVAILABLE when the HTTP API is not reachable at a
   assert.equal(r.state, 'OLLAMA_UNAVAILABLE');
 });
 
-test('classifyOllama: OLLAMA_OOM when free RAM is below the safety margin for the target model, checked before any live call', () => {
+test('classifyOllama: OLLAMA_OOM when free RAM is below the safety margin for a COLD load of the target model', () => {
   const r = probe.classifyOllama({ available: true, freeBytes: 1e9, modelSizeBytes: 2e9, wasLoaded: false, tier2: null });
   assert.equal(r.state, 'OLLAMA_OOM');
+});
+
+// --- Real bug found and fixed live this cycle: a direct call succeeded
+// using a model on this exact machine, then the health probe blocked the
+// SAME model moments later with OLLAMA_OOM, because the direct call's own
+// success had left the model resident (reducing os.freemem() by roughly
+// the model's own size), measured against the SAME cold-load margin. An
+// already-loaded model needs no new weight allocation to serve another
+// call - the full 1.5x-of-model-size margin must only apply before a cold
+// load, not after the model is already resident. ---
+
+test('classifyOllama: does NOT apply the cold-load 1.5x margin to an already-loaded model - only a real near-zero-RAM floor', () => {
+  // freeBytes (1GB) is well below 1.5x of modelSizeBytes (2GB -> needs 3GB
+  // under the old unconditional rule) but the model is already loaded -
+  // this exact real scenario must now pass, not OOM.
+  const r = probe.classifyOllama({ available: true, freeBytes: 1e9, modelSizeBytes: 2e9, wasLoaded: true, tier2: null });
+  assert.notEqual(r.state, 'OLLAMA_OOM', 'an already-resident model must not be blocked by the cold-load margin');
+});
+
+test('classifyOllama: an already-loaded model IS still blocked once free RAM drops below the real near-zero working-memory floor', () => {
+  const r = probe.classifyOllama({ available: true, freeBytes: 100 * 1024 * 1024, modelSizeBytes: 2e9, wasLoaded: true, tier2: null });
+  assert.equal(r.state, 'OLLAMA_OOM', 'genuinely near-zero free RAM must still block even a warm model - this is not a blanket removal of the safety check');
+});
+
+test('classifyOllama: a NOT-yet-loaded model still gets the full cold-load margin - the fix is scoped to wasLoaded, not a global loosening', () => {
+  const r = probe.classifyOllama({ available: true, freeBytes: 1e9, modelSizeBytes: 2e9, wasLoaded: false, tier2: null });
+  assert.equal(r.state, 'OLLAMA_OOM', 'a genuine cold load with insufficient headroom must still be blocked');
 });
 
 test('classifyOllama: OLLAMA_MODEL_LOADING (not a failure state) when tier2 was not run and the model was not already loaded', () => {

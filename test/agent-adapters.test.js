@@ -63,6 +63,22 @@ test('buildOpencodeRunArgs: the raw goal text never appears in the constructed a
   assert.equal(args.filter((a) => a === dangerousGoal).length, 0);
 });
 
+// --- shouldSkipRemainingLevels: point 5 this cycle - real history showed
+// expanding context after a LOCAL timeout produced a second guaranteed
+// timeout 3/3 times, wasting a full attempt for zero benefit. ---
+
+test('shouldSkipRemainingLevels: skips expanding to a bigger context after a LOCAL Ollama timeout', () => {
+  assert.equal(adapters.shouldSkipRemainingLevels(true, 'timeout'), true);
+});
+
+test('shouldSkipRemainingLevels: does not skip a local failure that was not a timeout (e.g. a real, fixable validation error)', () => {
+  assert.equal(adapters.shouldSkipRemainingLevels(true, 'validation_rejected'), false);
+});
+
+test('shouldSkipRemainingLevels: never skips for a remote OpenCode timeout - no equivalent evidence exists for that path', () => {
+  assert.equal(adapters.shouldSkipRemainingLevels(false, 'timeout'), false);
+});
+
 test('implementGoal: rejects a model outside the free allowlist before ever invoking anything', async () => {
   const { dir, branch } = makeThrowawayWorktree('modelcheck');
   try {

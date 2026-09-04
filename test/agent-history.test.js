@@ -146,6 +146,93 @@ test('scoreModelForTask: a local model carries a real resource-cost weight a rem
   assert.ok(local.score < remote.score);
 });
 
+// --- isModelInformative + routing exclusion: point 7 (new cycle) - the
+// failure taxonomy must influence routing, not just get recorded. A
+// pipeline/resource-layer failure is not evidence the MODEL is bad. ---
+
+test('isModelInformative: a pipeline-layer failure is not informative about the model', () => {
+  assert.equal(history.isModelInformative({ success: false, failureLayer: 'pipeline' }), false);
+});
+
+test('isModelInformative: a resource-layer failure (e.g. a real RAM-pressure health skip) is not informative about the model', () => {
+  assert.equal(history.isModelInformative({ success: false, failureLayer: 'resource' }), false);
+});
+
+test('isModelInformative: a model-layer failure IS informative - real evidence the model itself struggled', () => {
+  assert.equal(history.isModelInformative({ success: false, failureLayer: 'model' }), true);
+});
+
+test('isModelInformative: any real success is always informative regardless of layer field', () => {
+  assert.equal(history.isModelInformative({ success: true }), true);
+});
+
+test('isModelInformative: a legacy entry with no failureLayer field at all is kept (never silently discards pre-cycle history)', () => {
+  assert.equal(history.isModelInformative({ success: false }), true);
+});
+
+test('rankModelsForTask: a pipeline-layer failure (e.g. a context-compiler misroute) is never counted as a real attempt against the model - the model never even got a fair try', () => {
+  const root = tmpRoot();
+  history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'model-a', durationMs: 1000, success: false, failureLayer: 'pipeline' });
+  history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'model-a', durationMs: 1000, success: false, failureLayer: 'pipeline' });
+  const r = history.rankModelsForTask(root, { goal: 'fix viewport meta tag', contextFileCount: 3 }, ['model-a', 'model-b']);
+  assert.equal(r.detail.find((d) => d.model === 'model-a').attempts, 0, 'pipeline-layer failures must not count as real attempts against the model');
+  assert.equal(r.detail.find((d) => d.model === 'model-a').successRate, null, 'with zero informative attempts the model must read as untested, not as a real failure');
+});
+
+test('shouldSkipModelForTaskClass: never prunes a model purely on pipeline-layer failures, no matter how many', () => {
+  const root = tmpRoot();
+  for (let i = 0; i < 5; i++) history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'model-a', durationMs: 1000, success: false, failureLayer: 'pipeline' });
+  const r = history.shouldSkipModelForTaskClass(root, { model: 'model-a', taskType: 'markup-fix' });
+  assert.equal(r.skip, false, '5 pipeline-layer failures are zero real evidence against the model itself');
+});
+
+test('evidenceWeightedSkip: never skips a model from resource-layer failures (e.g. repeated real RAM-pressure blocks) alone', () => {
+  const root = tmpRoot();
+  for (let i = 0; i < 4; i++) history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'model-a', durationMs: 1000, success: false, failureLayer: 'resource' });
+  const r = history.evidenceWeightedSkip(root, { model: 'model-a', taskType: 'markup-fix' });
+  assert.equal(r.skip, false);
+});
+
+// --- evidenceWeightedSkip: point 6 this cycle - confidence-weighted,
+// recency-decayed evidence reacts faster than the flat >=3-attempts rule
+// when the signal is strong, but never bans a model from one lone failure.
+
+test('evidenceWeightedSkip: never skips from a single failure - not enough weighted evidence to conclude anything', () => {
+  const root = tmpRoot();
+  history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'model-a', durationMs: 1000, success: false });
+  const r = history.evidenceWeightedSkip(root, { model: 'model-a', taskType: 'markup-fix' });
+  assert.equal(r.skip, false);
+});
+
+test('evidenceWeightedSkip: skips FASTER than the flat rule when 2 strong, recent, back-to-back failures give decisive evidence', () => {
+  const root = tmpRoot();
+  history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'model-a', durationMs: 1000, success: false });
+  history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'model-a', durationMs: 1000, success: false });
+  const r = history.evidenceWeightedSkip(root, { model: 'model-a', taskType: 'markup-fix' });
+  assert.equal(r.skip, true, '2 recent, unanimous real failures must be enough decayed evidence to skip - the old flat rule needed a 3rd wasted attempt for this');
+});
+
+test('evidenceWeightedSkip: a recent real success recovers a model\'s standing even after older failures', () => {
+  const root = tmpRoot();
+  const old = new Date(Date.now() - 40 * 86400000).toISOString(); // 40 days ago, well past the 14-day half-life
+  const fp = require('fs');
+  const p = history.historyPath(root);
+  fp.mkdirSync(require('path').dirname(p), { recursive: true });
+  fp.appendFileSync(p, JSON.stringify({ at: old, taskType: 'markup-fix', model: 'model-a', success: false }) + '\n');
+  fp.appendFileSync(p, JSON.stringify({ at: old, taskType: 'markup-fix', model: 'model-a', success: false }) + '\n');
+  history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'model-a', durationMs: 1000, success: true });
+  const r = history.evidenceWeightedSkip(root, { model: 'model-a', taskType: 'markup-fix' });
+  assert.equal(r.skip, false, 'a recent real success plus decayed old failures must not still read as reliable failure');
+});
+
+test('evidenceWeightedSkip: never bleeds across a different task type', () => {
+  const root = tmpRoot();
+  history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'model-a', durationMs: 1000, success: false });
+  history.recordAttempt(root, { taskType: 'markup-fix', contextBucket: 'small', model: 'model-a', durationMs: 1000, success: false });
+  const r = history.evidenceWeightedSkip(root, { model: 'model-a', taskType: 'config-change' });
+  assert.equal(r.skip, false);
+});
+
 test('recordAttempt + readHistory: real round-trip, survives a fresh module require', () => {
   const root = tmpRoot();
   history.recordAttempt(root, { taskType: 'general', contextBucket: 'small', model: 'x', durationMs: 1, success: true });
