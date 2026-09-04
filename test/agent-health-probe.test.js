@@ -67,3 +67,58 @@ test('classify: UNKNOWN (never a specific guessed label) when tier 2 was never r
   const r = probe.classify(T1_OK, null);
   assert.equal(r.state, 'UNKNOWN');
 });
+
+// --- classifyOllama: no coverage existed for this before this cycle ---
+
+test('classifyOllama: OLLAMA_UNAVAILABLE when the HTTP API is not reachable at all', () => {
+  const r = probe.classifyOllama({ available: false });
+  assert.equal(r.state, 'OLLAMA_UNAVAILABLE');
+});
+
+test('classifyOllama: OLLAMA_OOM when free RAM is below the safety margin for the target model, checked before any live call', () => {
+  const r = probe.classifyOllama({ available: true, freeBytes: 1e9, modelSizeBytes: 2e9, wasLoaded: false, tier2: null });
+  assert.equal(r.state, 'OLLAMA_OOM');
+});
+
+test('classifyOllama: OLLAMA_MODEL_LOADING (not a failure state) when tier2 was not run and the model was not already loaded', () => {
+  const r = probe.classifyOllama({ available: true, freeBytes: 8e9, modelSizeBytes: 1e9, wasLoaded: false, tier2: null });
+  assert.equal(r.state, 'OLLAMA_MODEL_LOADING');
+});
+
+test('classifyOllama: OLLAMA_HEALTHY (not a failure state) when tier2 was not run but the model was already loaded', () => {
+  const r = probe.classifyOllama({ available: true, freeBytes: 8e9, modelSizeBytes: 1e9, wasLoaded: true, tier2: null });
+  assert.equal(r.state, 'OLLAMA_HEALTHY');
+});
+
+test('classifyOllama: OLLAMA_MODEL_LOADING when tier2 got zero output and the model was not yet loaded (first-call disk load, not a failure)', () => {
+  const r = probe.classifyOllama({ available: true, freeBytes: 8e9, modelSizeBytes: 1e9, wasLoaded: false, tier2: { ok: false, durationMs: 20000, gotAnyOutput: false } });
+  assert.equal(r.state, 'OLLAMA_MODEL_LOADING');
+});
+
+test('classifyOllama: OLLAMA_SLOW when tier2 got zero output and the model WAS already loaded (a real degradation signal, not just a cold load)', () => {
+  const r = probe.classifyOllama({ available: true, freeBytes: 8e9, modelSizeBytes: 1e9, wasLoaded: true, tier2: { ok: false, durationMs: 20000, gotAnyOutput: false } });
+  assert.equal(r.state, 'OLLAMA_SLOW');
+});
+
+// Regression guard for this cycle's real fix: think:false removed Qwen3's
+// default chain-of-thought overhead (measured live: 245-511 generated
+// tokens, 28-58s, for a trivial one-word-expected prompt, dropping to 3
+// tokens / ~1s with think:false set). The healthy-range threshold was
+// recalibrated from the old 30000ms (tuned for the thinking-inflated
+// baseline) down to 10000ms (real cold-load worst case ~7.5s) - this pins
+// the new boundary so a future change can't silently widen it back out
+// without a deliberate, evidenced reason.
+test('classifyOllama: OLLAMA_HEALTHY for a real post-think:false cold-load duration (~7.5s)', () => {
+  const r = probe.classifyOllama({ available: true, freeBytes: 8e9, modelSizeBytes: 1e9, wasLoaded: false, tier2: { ok: true, durationMs: 7500, gotAnyOutput: true } });
+  assert.equal(r.state, 'OLLAMA_HEALTHY');
+});
+
+test('classifyOllama: OLLAMA_SLOW once duration exceeds the recalibrated 10s healthy range', () => {
+  const r = probe.classifyOllama({ available: true, freeBytes: 8e9, modelSizeBytes: 1e9, wasLoaded: true, tier2: { ok: true, durationMs: 10001, gotAnyOutput: true } });
+  assert.equal(r.state, 'OLLAMA_SLOW');
+});
+
+test('classifyOllama: a real pre-fix thinking-mode duration (30s+) is now correctly classified SLOW, not silently accepted as healthy', () => {
+  const r = probe.classifyOllama({ available: true, freeBytes: 8e9, modelSizeBytes: 1e9, wasLoaded: true, tier2: { ok: true, durationMs: 30000, gotAnyOutput: true } });
+  assert.equal(r.state, 'OLLAMA_SLOW');
+});

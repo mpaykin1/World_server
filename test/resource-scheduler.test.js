@@ -26,6 +26,34 @@ test('systemPressure: reports a real, sane free-memory ratio, not a placeholder'
   assert.ok(p.totalBytes > 0);
 });
 
+// --- unloadOllamaIfWarranted: point 5 this cycle - free a warm local
+// model's RAM before a genuinely RAM-hungry BUILD/CPU_HEAVY task, not for
+// every task (that would defeat the whole point of keeping it warm). ---
+
+test('unloadOllamaIfWarranted: does NOT attempt any network call for a non-BUILD/CPU_HEAVY command - resolves immediately', async () => {
+  const start = Date.now();
+  await scheduler.unloadOllamaIfWarranted('agent_implement'); // LLM_REMOTE only
+  const elapsedMs = Date.now() - start;
+  assert.ok(elapsedMs < 200, `expected a near-instant no-op for a non-heavy command, took ${elapsedMs}ms`);
+});
+
+test('unloadOllamaIfWarranted: does NOT attempt a network call for an unknown/LIGHTWEIGHT command either', async () => {
+  const start = Date.now();
+  await scheduler.unloadOllamaIfWarranted('totally_unknown_command');
+  assert.ok(Date.now() - start < 200);
+});
+
+test('unloadOllamaIfWarranted: never throws for a BUILD-class command, even if Ollama is unreachable - best-effort only', async () => {
+  // build_native maps to ['BUILD','CPU_HEAVY'] - this SHOULD attempt a
+  // real call to lib/ollama-patch-adapter.js's unloadAllModels(), whose
+  // own try/catch already guarantees a clean {ok:false} rather than a
+  // throw on failure - this test just confirms that guarantee holds
+  // through the resource-scheduler's own wrapper too, without asserting
+  // on whether a real Ollama happens to be reachable on the machine
+  // running this test.
+  await assert.doesNotReject(scheduler.unloadOllamaIfWarranted('build_native'));
+});
+
 test('tryAcquire: two NETWORK_HEAVY-conflicting tasks cannot both hold a slot at once', () => {
   const root = tmpRoot();
   const a = scheduler.tryAcquire(root, 'agent_implement', 'task-a'); // LLM_REMOTE
