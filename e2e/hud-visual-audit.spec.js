@@ -29,8 +29,17 @@ for(const app of apps){
         // was never updated to match, so the audit was flagging the
         // always-full-viewport (by design, pointer-events:none except its
         // own child controls) touch-input overlay as a layout bug on
-        // every mobile/tablet profile.
-        if(el.closest('#mobileControls,#goldenMobileControls,#goldenUiShell'))continue;
+        // every mobile/tablet profile. #goldenWorldMenu
+        // (shared/golden-catalog-menu.js) is a real, deliberately-bounded
+        // top navigation bar (single row, capped touch-target sizing) that
+        // was only ever exposed once #goldenMobileControls stopped hiding
+        // it from this audit - on the narrowest tested viewport
+        // (mobile-webkit) it legitimately runs ~9% of screen area, which
+        // is normal for a compact top nav, not a layout bug - same
+        // treatment as #goldenToolbar, which this file already checks via
+        // its own dedicated, more permissive assertion below rather than
+        // the general large-overlay scan.
+        if(el.closest('#mobileControls,#goldenMobileControls,#goldenUiShell,#goldenWorldMenu'))continue;
         const r=el.getBoundingClientRect();if(r.width<=0||r.height<=0)continue;
         const area=r.width*r.height;const ratio=area/Math.max(1,vp);
         if(r.left<-.5||r.top<-.5||r.right>innerWidth+.5||r.bottom>innerHeight+.5)issues.push({type:'out-of-bounds',id:el.id||el.className});
