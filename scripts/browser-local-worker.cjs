@@ -37,7 +37,7 @@ function heartbeat(currentTask=null, extra={}){
     worker: WORKER_ID,
     online: true,
     version: caps.version || '2026-09-03.v1',
-    capabilities: Object.keys(caps.capabilities||{}),
+    capabilities: Object.keys(caps.capabilities||{}).filter(cap => Object.prototype.hasOwnProperty.call(EXECUTORS, cap)),
     current_task: currentTask,
     last_seen: nowIso(),
     success_rate: extra.success_rate ?? 0.98,
@@ -186,7 +186,13 @@ async function execAgentDispatch(root, args, task){
       const tr = await execTestRun(wt, { target:'test/collective-brain.test.js', command:'node --test test/collective-brain.test.js' }, task).catch(e=> ({ success:false, error:String(e.message) }));
       tests.push(tr);
     }
-    confidence = filesChanged.length ? 0.88 : 0.6;
+    if (allowedPaths && allowedPaths.length) {
+      const normalizedAllowed = allowedPaths.map(p => String(p).replace(/\\/g,'/').replace(/^\//,''));
+      const escaped = filesChanged.filter(f => !normalizedAllowed.some(a => f === a || f.startsWith(a.endsWith('/') ? a : a + '/')));
+      if (escaped.length) blockers.push('agent changed files outside allowedPaths: ' + escaped.join(', '));
+    }
+    confidence = blockers.length ? 0.2 : (filesChanged.length ? 0.88 : 0.6);
+    if (blockers.length) throw new Error(blockers.join('; '));
     return { provider: providerUsed, prompt: prompt.slice(0,500), worktree: wt, branch, baseSha, files_changed: filesChanged, filesChanged, commit_sha: commitSha, commitSha, diffSummary, git_diff_summary: diffSummary, tests, stdout_summary: opencodeOutput.slice(0,6000), stderr_summary: r.status!==0? String(r.stderr||'').slice(0,2000):'', blockers, confidence, detail: { provider: providerUsed, worktree: wt, branch, baseSha, commitSha, filesChanged, opencodeOutput: opencodeOutput.slice(0,3000) } };
   } else {
     throw new Error(`provider ${providerPreference} not supported for REAL dispatch`);
@@ -285,6 +291,7 @@ const EXECUTORS = {
   'git.commit': async (root,args,task)=>{ const wr=await ensureTaskWorktree(task,false); const r=git(wr,['commit','-m', String(args.message||`task ${task.task_id}`)]); return { stdout:r.stdout, stderr:r.stderr, status:r.status, sha: git(wr,['rev-parse','HEAD']).stdout.trim() }; },
   'git.create_branch': async (root,args,task)=>{ const wr=await ensureTaskWorktree(task,false); return { branch: git(wr,['branch','--show-current']).stdout.trim() }; },
   'test.run': execTestRun,
+  'benchmark.run': execTestRun,
   'agent.dispatch': execAgentDispatch,
   'quality.status': execQualityStatus,
   'artifact.list': async (root,args)=>{ const dir=ARTIFACTS_DIR; ensureDir(dir); const files=fs.existsSync(dir)? fs.readdirSync(dir).slice(0,50):[]; return { files }; },
