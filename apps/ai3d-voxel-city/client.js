@@ -19,6 +19,13 @@ let dynamicPixelRatio=1;
 let occupancySet=new Set();
 let playableMode=false;
 let player={ x:0, y:1.65, z:0, vx:0, vy:0, vz:0, yaw:0, pitch:0, radius:0.35, eyeHeight:1.65, height:1.65, speed:4.2, onGround:false };
+// matches apps/voxel-world/client.js's jump()/JUMP pattern, scaled to this
+// runtime's own gravity (9.8 here vs 25 there) for a comparable ~1-voxel
+// jump height (v^2/2g): input capture existed (Space was added to
+// keysHeld and preventDefault'd) but nothing ever actually applied an
+// upward impulse - e2e/golden-controls.spec.js's jump-y-only test caught
+// this real, previously-untested gap.
+const JUMP_SPEED = 5.0;
 let keysHeld=new Set();
 let pointerLocked=false;
 let lastPlayerUpdate=performance.now();
@@ -100,6 +107,10 @@ function init3D(){
     if(playableMode && ['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code)){
       keysHeld.add(e.code);
       if(e.code.startsWith('Arrow')) e.preventDefault();
+      if(e.code==='Space'){
+        e.preventDefault();
+        if(player.onGround){ player.vy=JUMP_SPEED; player.onGround=false; }
+      }
     }
   });
   addEventListener('keyup',e=>{
@@ -643,6 +654,10 @@ window.AI3DVoxelRuntime={
   clearStreamingCenter(){streamingCenter=null;updateStreaming(true);},
   setQuality(name){const n=String(name||'').toUpperCase();if(n==='AUTO'||PROFILES[n]){$('quality').value=n;$('quality').dispatchEvent(new Event('change'));}},
   setPlayerView(nextYaw,nextPitch=0){yaw=Number(nextYaw)||0;pitch=Math.max(-1.45,Math.min(1.45,Number(nextPitch)||0));player.yaw=yaw;player.pitch=pitch;},
+  // alias: VoxelWorldRuntime (apps/voxel-world) exposes the same operation as
+  // setView - e2e/golden-controls.spec.js calls the canonical setView name
+  // against both runtimes, so this runtime needs to answer to it too.
+  setView(nextYaw,nextPitch=0){this.setPlayerView(nextYaw,nextPitch);},
   stats(){return {fps:measuredFps,pixelRatio:dynamicPixelRatio,renderer:renderer?.info?.render,mesher:mesherStats,chunks:chunkObjects.size, voxels:world?world.voxels.length:0, player:{x:player.x,y:player.y,z:player.z,yaw,onGround:player.onGround, playable:playableMode}, defaultCityLoaded};},
   collidesAt(x,y,z){ return collidesAt(x,y,z); },
   getOccupancySize(){ return occupancySet.size; }

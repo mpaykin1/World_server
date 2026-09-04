@@ -71,6 +71,7 @@
     "perf:lighthouse": "lhci autorun",
     "build:native": "node scripts/godot-native-build.js",
     "worldgen:compare": "node scripts/compare-worldgen.js",
+    "native:regression-loop": "node scripts/native-regression-loop.js",
     "quality:world:analyze": "node scripts/world-quality-analyzer.js",
     "quality:world:animation": "node scripts/world-animation-semantic-validator.js",
     "quality:world:retarget": "node scripts/world-retarget-contract.js",
