@@ -662,7 +662,7 @@
   "candidates": [
     {
       "id": "auto-505f975e75a0",
-      "status": "candidate",
+      "status": "resolved",
       "severity": "release-blocker",
       "sourceReport": "PROJECT_QUALITY_REVIEW.json",
       "detectedAt": "2026-08-23T03:43:23.807Z",
@@ -671,7 +671,9 @@
         "category": "mobile",
         "file": "apps/ai3d-voxel-city/index.html",
         "message": "viewport-fit=cover missing"
-      }
+      },
+      "resolvedAt": "2026-09-04T11:00:31.848Z",
+      "resolvedNote": "Confirmed fixed on master: apps/ai3d-voxel-city/index.html already contains viewport-fit=cover (merged via PR #29, the autonomous issue picker's own real result from the prior cycle). This registry entry was stale - the source scan (PROJECT_QUALITY_REVIEW.json) had not been re-run since the merge. Marked resolved directly after confirming via grep against the real file content, not re-derived from a fresh scan."
     }
   ]
 }

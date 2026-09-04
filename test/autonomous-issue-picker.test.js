@@ -86,11 +86,47 @@ test('findCandidate: also scans knownErrors entries still in candidate status, n
   const dir = tmpRepo();
   try {
     fs.mkdirSync(path.join(dir, 'apps', 'demo'), { recursive: true });
-    fs.writeFileSync(path.join(dir, 'apps', 'demo', 'index.html'), 'content');
+    fs.writeFileSync(path.join(dir, 'apps', 'demo', 'index.html'), '<img src="hero.png">');
     writeRegistry(dir, { candidates: [], knownErrors: [{ id: 'k1', status: 'candidate', details: { file: 'apps/demo/index.html', message: 'missing loading="lazy"' } }] });
     const r = picker.findCandidate(dir);
     assert.equal(r.found, true);
     assert.equal(r.id, 'k1');
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
+// --- issueStillApplies / stale-candidate prevention: point 8 (new cycle)
+// - a real stale candidate (already fixed by an earlier merged PR, before
+// the registry's own source scan had re-run) was found live this cycle.
+// findCandidate must re-check the issue against real CURRENT content, not
+// just that the target file exists. ---
+
+test('issueStillApplies: a viewport-fit=cover candidate no longer applies once the file already has it', () => {
+  const applies = picker.issueStillApplies({ message: 'viewport-fit=cover missing' }, '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">');
+  assert.equal(applies, false);
+});
+
+test('issueStillApplies: a viewport-fit=cover candidate still applies when the file genuinely lacks it', () => {
+  const applies = picker.issueStillApplies({ message: 'viewport-fit=cover missing' }, '<meta name="viewport" content="width=device-width,initial-scale=1">');
+  assert.equal(applies, true);
+});
+
+test('issueStillApplies: an unrecognized message with no real content check defaults to still-applies rather than guessing resolved', () => {
+  const applies = picker.issueStillApplies({ message: 'some future issue shape' }, 'anything');
+  assert.equal(applies, true);
+});
+
+test('findCandidate: a real stale candidate (file already fixed) is marked resolved and skipped, never handed to the agent', () => {
+  const dir = tmpRepo();
+  try {
+    fs.mkdirSync(path.join(dir, 'apps', 'demo'), { recursive: true });
+    fs.writeFileSync(path.join(dir, 'apps', 'demo', 'index.html'), '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">');
+    writeRegistry(dir, { candidates: [{ id: 'stale1', status: 'candidate', details: { file: 'apps/demo/index.html', message: 'viewport-fit=cover missing' } }], knownErrors: [] });
+    const r = picker.findCandidate(dir);
+    assert.equal(r.found, false, 'must never hand an already-fixed file to the agent as if it were a live task');
+    const registry = JSON.parse(fs.readFileSync(path.join(dir, 'data', 'error-prevention-registry.json'), 'utf8'));
+    const entry = registry.candidates.find((e) => e.id === 'stale1');
+    assert.equal(entry.status, 'resolved', 'the stale candidate must be marked resolved as real, honest bookkeeping');
+    assert.ok(entry.resolvedNote, 'must leave a real note explaining why it was auto-resolved');
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
 

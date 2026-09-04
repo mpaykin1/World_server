@@ -8,6 +8,7 @@
     "build:sentry": "node scripts/build-sentry.js",
     "build": "npm run build:sentry && node scripts/inject-sentry-runtime.js",
     "check": "node scripts/check-js.js && node --test",
+    "check:fast": "node scripts/check-js.js",
     "discover": "node scripts/discover-ai3d-engines.js",
     "e2e": "node scripts/ai3d-e2e-smoke.js",
     "e2e:python": "python services/ai3d-worker/scripts/e2e-smoke.py",
