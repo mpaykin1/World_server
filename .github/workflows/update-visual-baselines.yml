@@ -1,0 +1,33 @@
+name: Update Visual Baselines
+
+# Manual-only tool: regenerates e2e/perceptual-visual.spec.js's Playwright
+# snapshot baselines on the exact OS/browser environment CI itself uses
+# (screenshot pixels are not portable across OSes - a baseline captured on
+# Windows will not match Ubuntu's font/AA rendering, which is why this
+# can't just be generated locally and committed from a dev machine). Run
+# this after a deliberate, reviewed visual change to apps/ai3d-voxel-city,
+# or once to seed a baseline that was never captured. The resulting PNGs
+# come back as a workflow artifact for a human/agent to review and commit
+# - this workflow never commits on its own.
+on:
+  workflow_dispatch: {}
+
+jobs:
+  update-baselines:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+      - run: npm ci --ignore-scripts || npm install
+      - run: npx playwright install --with-deps chromium webkit
+      - name: Generate real baseline screenshots (failure here is expected/normal - --update-snapshots always writes then exits nonzero on first creation)
+        run: npx playwright test e2e/perceptual-visual.spec.js --update-snapshots
+        continue-on-error: true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: visual-baselines
+          path: e2e/perceptual-visual.spec.js-snapshots/
+          if-no-files-found: error
