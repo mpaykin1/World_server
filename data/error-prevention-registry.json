@@ -643,17 +643,6 @@
         "do not raise capability-coverage or claim local-first is reliable on this hardware based on the one isolated live-test success alone - report the real combined rate (1 success out of 5 total real local attempts this cycle) honestly, as this entry does",
         "before increasing OLLAMA_PATCH_MODELS or lowering the 120s/150s timeouts, gather more real per-task-type samples first - 4 attempts is not enough to distinguish 'this task type is genuinely harder for a 1.7B model' from 'this was noise/contention'"
       ]
-    },
-    {
-      "id": "mobile-webkit-voxel-city-canvas-underrender-2026-09-04",
-      "category": "e2e-flake",
-      "severity": "release-blocker",
-      "status": "known",
-      "symptom": "e2e/ai3d-voxel-city-autoplay.spec.js fails on [mobile-webkit] only: expect(canvasInfo.dataLen).toBeGreaterThan(1000) receives exactly 818, reproducibly, across independent CI runner instances",
-      "rootCause": "Confirmed live 2026-09-04 via a real isolated probe: pushed a no-op commit to a fresh branch off unmodified origin/master (commit 4eea4242) and reproduced the exact identical failure (818, same test) on a completely clean CI run with zero code changes - this is a real, currently-active mobile-webkit rendering/timing condition in this CI environment, not caused by any specific PR. The exact, non-varying repeated value across independent runner VMs suggests a deterministic under-render by a fixed wait deadline (e.g. a WebKit/Playwright browser version or CI runner image change since this test last reliably passed), not simple random flakiness.",
-      "protection": [
-        "not yet fixed - flagged for a dedicated future investigation, out of scope for this cycle's agent-pipeline-reliability mandate"
-      ]
     }
   ],
   "confirmationProtocol": {
