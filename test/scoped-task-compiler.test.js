@@ -93,3 +93,38 @@ test('knownIssueFileRefs: a single incidental generic-word overlap is not enough
   const refs = compiler.knownIssueFileRefs(ROOT, 'the existing name of the cover');
   assert.deepEqual(refs, [], `a lone generic-word match must not pull in unrelated files: got ${JSON.stringify(refs)}`);
 });
+
+// --- Real relevance scoring + WHY_SELECTED transparency (this cycle) ---
+
+test('scoreCandidate: an explicit mention always scores far above any keyword/knownIssue match', () => {
+  const explicitScore = compiler.scoreCandidate({ file: 'apps/x/index.html', source: 'explicit', explicitPaths: ['apps/x/index.html'] }).score;
+  const keywordScore = compiler.scoreCandidate({ file: 'apps/y/index.html', source: 'keyword', matchedWords: ['voxel', 'city', 'terrain'] }).score;
+  assert.ok(explicitScore > keywordScore * 10, 'explicit must dominate even a strong multi-word keyword match');
+});
+
+test('scoreCandidate: a specific (>=6 char) matched word is weighted higher than a short generic one', () => {
+  const specific = compiler.scoreCandidate({ file: 'a.js', source: 'keyword', matchedWords: ['viewport'] }).score;
+  const generic = compiler.scoreCandidate({ file: 'a.js', source: 'keyword', matchedWords: ['meta'] }).score;
+  assert.ok(specific > generic, `a specific word ("viewport") must score higher than a short generic one ("meta"): ${specific} vs ${generic}`);
+});
+
+test('scoreCandidate: a file sharing a top-level directory with an explicit file gets a real relevance bonus', () => {
+  const withBonus = compiler.scoreCandidate({ file: 'apps/x/styles.css', source: 'keyword', matchedWords: ['style'], explicitPaths: ['apps/x/index.html'] }).score;
+  const withoutBonus = compiler.scoreCandidate({ file: 'apps/y/styles.css', source: 'keyword', matchedWords: ['style'], explicitPaths: ['apps/x/index.html'] }).score;
+  assert.ok(withBonus > withoutBonus, 'a sibling of an explicitly-named file must score higher than an unrelated file matched by the same keyword');
+});
+
+test('compileContext: a knownIssue candidate below the relevance floor is dropped, not silently truncated by the cap', () => {
+  const ctx = compiler.compileContext(ROOT, 'the existing name of the cover apps/ai3d-voxel-city/index.html', 1);
+  assert.ok(!ctx.files.some((f) => f !== 'apps/ai3d-voxel-city/index.html' && f.startsWith('lib/')), `a weak match must never occupy a context slot: got ${JSON.stringify(ctx.files)}`);
+});
+
+test('compileContext: exposes a real, inspectable whySelected reason for every selected file', () => {
+  const goal = 'In apps/ai3d-voxel-city/index.html, add viewport-fit=cover to the content attribute of the existing <meta name="viewport"> tag.';
+  const ctx = compiler.compileContext(ROOT, goal, 1);
+  assert.ok(ctx.whySelected, 'compileContext must return a whySelected map');
+  const entry = ctx.whySelected['apps/ai3d-voxel-city/index.html'];
+  assert.ok(entry, 'the selected file must have a real whySelected entry');
+  assert.equal(entry.source, 'explicit');
+  assert.ok(Array.isArray(entry.reasons) && entry.reasons.length > 0);
+});
