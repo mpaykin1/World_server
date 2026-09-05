@@ -257,3 +257,9 @@ result reported exactly as observed, not adjusted to look more favorable.
   `data/error-prevention-registry.json`'s
   `opencode-free-tier-reliability-degrades-with-sustained-session-usage`
   entry.
+
+## 2026-09-06 — PR31 AI3D runtime FPS V45
+- Root cause: ai3d-voxel-city repeatedly scanned every chunk on the 180ms streaming cadence even when origin/profile were unchanged; collision/input paths also allocated avoidable temporary values.
+- Fix: unchanged-origin/profile streaming short-circuit with force-refresh bypass; squared-distance streaming; player-origin reuse; numeric occupancy lookup; hoisted collision bounds; sqrt-free digital normalization; rAF timestamp reuse; lifecycle held-key reset.
+- Regression: test/ai3d-voxel-city-runtime-fps-v45.test.js; npm run check PASS x3 before release gate.
+- Safety: no HLOD/render-distance/material/shadow threshold reduction; PR31 worker-token auth and agent-invoke branch cleanup untouched.

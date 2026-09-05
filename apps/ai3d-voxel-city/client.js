@@ -13,6 +13,7 @@ let yaw=0,pitch=0,radius=180,target=new THREE.Vector3(),frontMode=true,skyVisibl
 let chunkObjects=new Map(),mesherStats=null,profileName='HIGH',adaptive=true;
 let streamingCenter=null;
 let frameCount=0,lastFpsTime=performance.now(),measuredFps=0,lastStreamUpdate=0;
+let lastStreamOriginX=NaN,lastStreamOriginZ=NaN,lastStreamProfile='';
 let dynamicPixelRatio=1;
 
 // --- Playable controller state (independent of AI worker) ---
@@ -116,6 +117,18 @@ function init3D(){
   addEventListener('keyup',e=>{
     keysHeld.delete(e.code);
   });
+  function releasePlayableInputs(reason='unknown'){
+    if(!keysHeld.size)return;
+    keysHeld.clear();
+    if(window.__AI3D_PLAYABLE_SCENE__){
+      const st=window.__AI3D_PLAYABLE_SCENE__.state||(window.__AI3D_PLAYABLE_SCENE__.state={});
+      st.inputResetCount=(Number(st.inputResetCount)||0)+1;
+      st.lastInputResetReason=reason;
+    }
+  }
+  addEventListener('blur',()=>releasePlayableInputs('window-blur'));
+  addEventListener('pagehide',()=>releasePlayableInputs('pagehide'));
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState!=='visible')releasePlayableInputs('visibility-hidden');});
   addEventListener('goldenlook',e=>{if(!playableMode)return;const d=e.detail||{};yaw-=(Number(d.dx)||0)*.005;pitch=Math.max(-1.45,Math.min(1.45,pitch-(Number(d.dy)||0)*.005));player.yaw=yaw;player.pitch=pitch;});
   addEventListener('resize',fitCameras);
   animate();
@@ -250,28 +263,30 @@ async function buildOptimizedChunks(data){
   buildOccupancy(data);
 }
 function buildOccupancy(data){
-  occupancySet=new Set();
+  occupancySet=new Map();
   for(const v of (data.voxels||[])){
     const x=v[0], y=v[1], z=v[2];
-    occupancySet.add(`${x},${y},${z}`);
+    let byY=occupancySet.get(x);
+    if(!byY){byY=new Map();occupancySet.set(x,byY);}
+    let zs=byY.get(y);
+    if(!zs){zs=new Set();byY.set(y,zs);}
+    zs.add(z);
   }
 }
 function isOccupied(ix,iy,iz){
-  return occupancySet.has(`${ix},${iy},${iz}`);
+  return occupancySet.get(ix)?.get(iy)?.has(iz)===true;
 }
 function collidesAt(x,y,z){
   // check player cylinder collision: check voxels around player's feet/head
   const r=player.radius;
-  const h=player.height;
   const minY=Math.floor(y - player.eyeHeight + 0.1);
   const maxY=Math.floor(y + 0.2);
   const minX=Math.floor(x - r), maxX=Math.floor(x + r);
   const minZ=Math.floor(z - r), maxZ=Math.floor(z + r);
+  const px0=x-r,px1=x+r,pz0=z-r,pz1=z+r,py0=y-player.eyeHeight,py1=y+0.2;
   for(let ix=minX;ix<=maxX;ix++) for(let iy=minY;iy<=maxY;iy++) for(let iz=minZ;iz<=maxZ;iz++){
     if(isOccupied(ix,iy,iz)){
-      // precise AABB vs cylinder check simplified to box
       const bx0=ix-0.5,bx1=ix+0.5,by0=iy-0.5,by1=iy+0.5,bz0=iz-0.5,bz1=iz+0.5;
-      const px0=x - r, px1=x + r, pz0=z - r, pz1=z + r, py0=y - player.eyeHeight, py1=y + 0.2;
       if(px1>bx0 && px0<bx1 && py1>by0 && py0<by1 && pz1>bz0 && pz0<bz1) return true;
     }
   }
@@ -330,21 +345,28 @@ async function renderWorld(data){
 }
 
 function streamingOrigin(){
-  if(playableMode) return new THREE.Vector3(player.x, player.y, player.z);
+  if(playableMode) return player;
   if(streamingCenter)return streamingCenter;
   return activeCamera?.position||target;
 }
-function updateStreaming(force=false){
+function updateStreaming(force=false,now=performance.now()){
   if(frontMode)return;
-  const now=performance.now();if(!force&&now-lastStreamUpdate<180)return;lastStreamUpdate=now;
+  if(!force&&now-lastStreamUpdate<180)return;
   const p=profile(),origin=streamingOrigin();
+  if(!force&&origin.x===lastStreamOriginX&&origin.z===lastStreamOriginZ&&profileName===lastStreamProfile){
+    lastStreamUpdate=now;
+    return;
+  }
+  lastStreamUpdate=now;
+  lastStreamOriginX=origin.x;lastStreamOriginZ=origin.z;lastStreamProfile=profileName;
   const maxDist=p.renderChunks*CHUNK_SIZE,detailDist=p.detailChunks*CHUNK_SIZE;
+  const maxDistSq=maxDist*maxDist,detailDistSq=detailDist*detailDist;
   for(const o of chunkObjects.values()){
     const dx=o.center.x-origin.x,dz=o.center.z-origin.z;
-    const d=Math.hypot(dx,dz);
-    const show=d<=maxDist;
-    o.detail.visible=show&&d<=detailDist;
-    o.far.visible=show&&d>detailDist;
+    const dSq=dx*dx+dz*dz;
+    const show=dSq<=maxDistSq;
+    o.detail.visible=show&&dSq<=detailDistSq;
+    o.far.visible=show&&dSq>detailDistSq;
   }
 }
 function updatePerformanceLabel(){
@@ -396,8 +418,7 @@ function updatePlayer(dt){
     if(keysHeld.has('KeyD')||keysHeld.has('ArrowRight')) s+=1;
     if(keysHeld.has('KeyA')||keysHeld.has('ArrowLeft')) s-=1;
   }
-  const len=Math.hypot(f,s);
-  if(len>0){ f/=len; s/=len; }
+  if(f!==0 && s!==0){ f*=Math.SQRT1_2; s*=Math.SQRT1_2; }
   const speed=player.speed * ((sceneInput && sceneInput.run)|| keysHeld.has('ShiftLeft') ? 1.8 : 1);
   const move=window.GameGoldenPhysics.canonicalXZ(yaw,f,s,speed);
   const wishX=move.x;
@@ -457,7 +478,7 @@ function animate(now=performance.now()){
   const dt=Math.min(0.05,(now - lastPlayerUpdate)/1000); lastPlayerUpdate=now;
   frameCount++;
   if(playableMode) updatePlayer(dt);
-  if(!frontMode)updateStreaming();
+  if(!frontMode)updateStreaming(false,now);
   if(now-lastFpsTime>=1500){
     measuredFps=Math.round(frameCount*1000/(now-lastFpsTime));frameCount=0;lastFpsTime=now;
     adaptResolution();updatePerformanceLabel();
@@ -669,3 +690,4 @@ init3D();health();
 autoLoadDefaultCity();
 
 try{if(typeof renderer!=='undefined')window.GoldenPerformanceAutoTune?.registerRenderer(renderer,{targetFps:matchMedia('(pointer:coarse)').matches?45:55,minDpr:.75,maxDpr:Math.min(devicePixelRatio||1,2)});}catch{}
+
