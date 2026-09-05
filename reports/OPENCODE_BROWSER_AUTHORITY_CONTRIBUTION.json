@@ -42,7 +42,7 @@
     "migrations": ["20260903132229_browser_local_control.sql", "20260903132521_browser_local_worker_token_auth.sql"],
     "migrations_source": ["supabase/migrations/20260903132229_browser_local_control.sql", "supabase/migrations/20260903132521_browser_local_worker_token_auth.sql"],
     "security_review": "PASS — SECURITY INVOKER, fixed search_path, REVOKE anon/authenticated, GRANT service_role + token RPCs anon+authenticated with token hash e9c6807c..., allowlist, no public execution",
-    "worker_auth": "BROWSER_WORKER_TOKEN=bw_3dI8K37ICyZ0P2K7ES3IUQe5Bj3OX_2CQ0Llv2M-h0E (hash e9c6807c00c6c7a248597f) — validated: correct token PASS (claim 200), wrong token 400 invalid worker credentials",
+    "worker_auth": "BROWSER_WORKER_TOKEN=<REDACTED-see-.env.local, rotate-required-2026-09-05-P0-audit> (hash e9c6807c00c6c7a248597f) — validated: correct token PASS (claim 200), wrong token 400 invalid worker credentials",
     "first_live_e2e": {
       "task_id": "task_db8d6a63755248e87a0b40dd89581b03",
       "capability": "repo.status",

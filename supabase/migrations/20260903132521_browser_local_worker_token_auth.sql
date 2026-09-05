@@ -16,7 +16,10 @@ create table if not exists private.browser_ai_worker_auth (
 alter table private.browser_ai_worker_auth enable row level security;
 revoke all on table private.browser_ai_worker_auth from public, anon, authenticated;
 
--- store hash of bw_3dI8K37ICyZ0P2K7ES3IUQe5Bj3OX_2CQ0Llv2M-h0E (sha256 e9c6807c00c6c7a248597f19637ad8037cd76614f7a777f4bf3aebe3533374c7)
+-- P0 SECURITY AUDIT 2026-09-05: the cleartext worker token previously committed
+-- here was removed from source control (it remains in git history and MUST be
+-- rotated in production; do not treat the value below as still secret).
+-- store hash of <REDACTED, rotate required> (sha256 e9c6807c00c6c7a248597f19637ad8037cd76614f7a777f4bf3aebe3533374c7)
 insert into private.browser_ai_worker_auth(singleton, token_hash, worker, updated_at)
 values (true, 'e9c6807c00c6c7a248597f19637ad8037cd76614f7a777f4bf3aebe3533374c7', 'desktop-opencode', now())
 on conflict (singleton) do update set token_hash = excluded.token_hash, updated_at = now();
