@@ -1,0 +1,10 @@
+{
+  "patchVersion": "3.0.0",
+  "installedAt": "2026-08-31T14:37:03.730Z",
+  "backup": "C:\\Users\\user\\Desktop\\World_server_procedural\\.patch-backups\\world-procedural-vfx-v3-2026-08-31T14-36-48-037Z",
+  "releaseGateIntegrated": true,
+  "runtimeAutoWired": false,
+  "e2eAutoInstalled": false,
+  "staticReadinessPercent": 63,
+  "liveEvidenceRequired": true
+}

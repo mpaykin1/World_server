@@ -1,0 +1,65 @@
+{
+  "id": "world-procedural-vfx",
+  "version": "3.0.0",
+  "status": "patch-ready-runtime-evidence-required",
+  "upstreamReference": {
+    "repository": "https://github.com/achrefelouafi/LinearAbiltyCastingThreeJS",
+    "commit": "ba61847cb6887e5ccae9cd591e6390082cac5f05",
+    "license": "MIT"
+  },
+  "reuseFirst": [
+    "shared/quality-telemetry.js",
+    "shared/world-quality-autopilot.js",
+    "shared/golden-performance-autotuner.js",
+    "apps/ai3d-voxel-city/mesher-worker.js",
+    "data/error-prevention-registry.json",
+    "data/autofix-learning.json",
+    "data/performance-budgets.json"
+  ],
+  "runtimeFeatures": [
+    "five procedural GLSL effects",
+    "GPU particle motion",
+    "seeded deterministic recipes",
+    "JSON and compact binary event codecs",
+    "TTL retry dedupe",
+    "priority/cost budget controller",
+    "adaptive quality with CPU/GPU hysteresis",
+    "semantic reaction planner",
+    "terrain resolver",
+    "deterministic replay",
+    "WebGL context recovery",
+    "post-FX governor",
+    "optional pooled lights",
+    "shader warmup"
+  ],
+  "optionalAdapters": [
+    "three-mesh-bvh",
+    "MeshoptDecoder",
+    "KTX2Loader/Basis",
+    "Spector.js dev inspector",
+    "existing Worker/idle scheduler"
+  ],
+  "requiredGates": [
+    "vfx:procedural:test",
+    "vfx:procedural:audit",
+    "vfx:procedural:doctor",
+    "vfx:procedural:verify",
+    "duplicates:check",
+    "contracts:check",
+    "tech:audit",
+    "tech:health",
+    "quality:world",
+    "release:gate"
+  ],
+  "capabilities": [
+    "procedural-glsl-vfx",
+    "gpu-particles",
+    "adaptive-quality",
+    "interest-management",
+    "binary-replication",
+    "webgpu-compute-contract",
+    "capability-policy-rollback",
+    "surface-response-memory",
+    "web-godot-contract"
+  ]
+}

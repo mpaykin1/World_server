@@ -1,0 +1,71 @@
+{
+  "system": "WORLD_PROCEDURAL_RECIPE_ENGINE_V3",
+  "pass": 16,
+  "fail": 0,
+  "checks": [
+    {
+      "id": "exists:lib/world-procedural-live-supabase.js",
+      "ok": true
+    },
+    {
+      "id": "exists:lib/world-procedural-navigator-commit.js",
+      "ok": true
+    },
+    {
+      "id": "exists:lib/world-procedural-grammar.js",
+      "ok": true
+    },
+    {
+      "id": "exists:lib/world-procedural-sparse-voxel.js",
+      "ok": true
+    },
+    {
+      "id": "exists:lib/world-procedural-distributed-cache.js",
+      "ok": true
+    },
+    {
+      "id": "exists:lib/world-procedural-gpu-visibility.js",
+      "ok": true
+    },
+    {
+      "id": "exists:lib/world-procedural-audio-runtime.js",
+      "ok": true
+    },
+    {
+      "id": "exists:lib/world-procedural-telemetry-tournament.js",
+      "ok": true
+    },
+    {
+      "id": "exists:lib/world-procedural-native-contract.js",
+      "ok": true
+    },
+    {
+      "id": "exists:native/godot/world_procedural_contract.gd",
+      "ok": true
+    },
+    {
+      "id": "exists:supabase/migrations/20260831072856_world_procedural_recipe_atomic_commit_v3.sql",
+      "ok": true
+    },
+    {
+      "id": "migration:no-new-table",
+      "ok": true
+    },
+    {
+      "id": "migration:security-invoker",
+      "ok": true
+    },
+    {
+      "id": "migration:no-anon-exec",
+      "ok": true
+    },
+    {
+      "id": "migration:service-only",
+      "ok": true
+    },
+    {
+      "id": "migration:no-realtime-schema-write",
+      "ok": true
+    }
+  ]
+}

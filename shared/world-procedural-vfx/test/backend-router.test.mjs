@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createVfxBackend} from '../runtime/backend-router.mjs';
+test('WebGPU failure safely falls back to WebGL',async()=>{let fallback=0;const x=await createVfxBackend({capabilities:{webgpu:true},preferWebGPU:true,webgpuFactory:async()=>{throw new Error('unsupported')},webglFactory:async()=>42,onFallback:()=>fallback++});assert.equal(x.kind,'webgl');assert.equal(x.engine,42);assert.equal(fallback,1);});

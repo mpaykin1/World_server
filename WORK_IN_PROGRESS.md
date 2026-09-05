@@ -1,58 +1,63 @@
-# WORK IN PROGRESS — OPENHUMAN COLLECTIVE BRAIN PATCH V2.1
+# WORK IN PROGRESS — WORLD PROCEDURAL RECIPE ENGINE V3 + VFX ENGINE V3
 
 ## Task
-Install `OPENHUMAN_COLLECTIVE_BRAIN_PATCH_V2` then `V2.1` (repository-side pieces only) into World_server: shared-memory bridge library, coordination leases, hash-chained audit journal, capability/risk router, memory security firewall (secret redaction + prompt-injection flagging), and the `collective-brain:*` npm scripts. V2.1 additionally splits repo mutation from machine-level installation and adds a permanent "desktop-agent system-install boundary" rule to `DESKTOP_AI_INSTALL_AND_VERIFY.md` (satisfies the user's explicit ask for a standing server rule — it's now the patch's own content, not something written by hand).
+Install two patches (`WORLD_PROCEDURAL_RECIPE_ENGINE_V3_PATCH.zip`, `WORLD_PROCEDURAL_VFX_ENGINE_V3_PRODUCTION.zip`) and make them reinforce each other, per explicit user request.
 
 ## Why
-User request, in two rounds: V2 first, then V2.1 (a fix targeting exactly this session's real V2 install attempt — the patch author's README literally cites "Claude correctly used an isolated worktree... then refused to download/install system software").
+User request. "Reinforce each other" was the operative ask — not just installing two unrelated patches side by side.
 
 ## Current state
-- Isolated worktree/branch `ai/desktop/openhuman-collective-brain-v2`, based on `origin/ai/opencode/multi-ai-peer-improvement` (the shared main `World_server` checkout has hundreds of uncommitted files from other concurrent AI agents; never touched it).
-- V2 installed, then V2.1 applied on top (idempotent — confirmed via a second `install.cjs`+`verify.cjs` pass). V2.1's payload code is byte-identical to V2 (`diff -rq` confirmed); only install.cjs metadata, docs, and the new `tools/*.ps1` bootstrap-split scripts changed.
-- `node verify.cjs`: 18/18 bundled regression tests PASS on both the V2 and V2.1 install.
-- Patch's own `verify-v2-1-handoff.cjs` self-check: PASS (confirms the old `full-install-windows.ps1` is now a hard stop — not a silent installer — post-bootstrap verifier requires the full release gate, one-click user launcher only calls the system-only script).
-- Reviewed `lib/collective-brain/index.js` in full: only talks to `127.0.0.1:3111`/`127.0.0.1:11434` (loopback) by default, redacts secrets before any outbound call, refuses non-loopback plaintext bearer tokens, treats recalled memory as untrusted evidence.
-- Manually ran `collective-brain-doctor.js`/`collective-brain-cycle.js` directly with no agentmemory/Ollama running: DEGRADED/DOWN but exit 0.
-- Fixed a pre-existing `npm ci` lockfile drift in this worktree (`@mediapipe/tasks-vision`, `pngjs` missing from `package-lock.json` — unrelated to this patch; not committed, left for a separate fix) to get real dependencies installed for gate verification.
-- **Ran the FULL `npm run release:gate` (all ~24 chained gates) — PASS.** Includes the new `collective-brain:check`/`security`/`cycle` steps alongside every pre-existing gate (procedural, desktop-ai, golden, quality:regression/fuzz/impact/perceptual/cinematic:v3, tech:audit/health, duplicates, contracts, project:review, quality:stability, evidence:score, regressions:capture, quality:issue-candidates/world, integration:verify, animation:gate, quality:ink-glyph). Zero regressions.
-- Committed (2 commits: V2 install, V2.1 update), pushed to `origin/ai/desktop/openhuman-collective-brain-v2`, draft PR opened: https://github.com/mpaykin1/World_server/pull/13
-- **2026-08-31 14:30 UTC — SYSTEM BOOTSTRAP PASSED on this machine:** `agentmemory 0.9.29 healthy` (`/livez`, `/health`, 3111/3112/3113/49134, save/recall/restart-persistence PASS, local embeddings, `Scheduled Task WorldServer-AgentMemory Ready`), `iii 0.11.2 PASS`, `17 agentmemory skills` installed, `OpenHuman 0.63.12 x64` installed (MSI verified, first run completed, `config.toml` created at `%APPDATA%\OpenHuman\config.toml` with `backend="agentmemory" agentmemory_url="http://127.0.0.1:3111"`), cross-memory roundtrip `openhUMAN-cross-test` and `openhUMAN-second` both PASS (`smart-search` + `collective-brain:recall` mode=agentmemory results=8).
+- Isolated worktree/branch `ai/desktop/world-procedural-v3`, based on `origin/ai/opencode/multi-ai-peer-improvement` (post Collective Brain V2.1 merge, PR #13). Never touched the dirty shared `World_server` checkout.
+- Recipe Engine V3 installed via its `install.cjs`: 40/40 bundled tests PASS, V3 static audit 16/16 PASS.
+- VFX Engine V3 installed via its `install.cjs` with `--no-wire` (its default auto-wire target, `apps/ai3d-voxel-city/client.js`, now uses `renderer?.render(...)` not the literal `renderer.render(...)` its marker regex expects — the installer's own safety check correctly aborted rather than mis-patching). 31/31 bundled tests PASS.
+- Wired `apps/voxel-world/client.js` by hand instead — it's the VFX installer's own top-scored integration candidate (score 12 vs. `ai3d-voxel-city`'s 11) and the same app Recipe Engine's `voxel_worlds`/`voxel_world_events` Supabase tables back.
+- Wrote `lib/world-procedural-vfx-bridge.js` (+ 8/8 tests): the actual reinforcement. Maps a Recipe Engine recipe to a VFX semantic reaction (architecture.kind → intent, atmosphere as fallback, density/ruin/darkness/fog → importance). Mirrors the existing `world-procedural-animation-bridge.js` shape exactly.
+- Found and fixed a real bug while verifying live in-browser: `server.js` had no `.mjs` MIME entry, so all ~50 VFX runtime modules 404'd as `application/octet-stream` and refused to load as ES modules. Added `.mjs → text/javascript`.
+- **Live browser verification** (not just Node tests): after the MIME fix, `window.WorldProceduralVfx` exists in `apps/voxel-world/`, `.semantic({intent:'transformation',...})` (the bridge's real output shape) spawned 3 real pooled VFX instances, `world:vfx` DOM CustomEvent path also confirmed independently.
+- **Full `npm run release:gate`: PASS except one pre-existing, unrelated failure** — `test/multi-ai-peer-review.test.js` hits Node's default 1MB `spawnSync` buffer scanning `git diff` across many long-lived `ai/`/`opencode/` branches. Reproduced the identical failure in `World_server_openhuman` (Collective Brain only, zero procedural-patch files) to confirm it predates and is unrelated to this branch.
+- Committed as 3 commits (Recipe Engine, VFX Engine + server.js fix, bridge + live wiring), pushed, draft PR opened: https://github.com/mpaykin1/World_server/pull/14
 
 ## Target state
-Repo-side Collective Brain merged. External runtime (agentmemory/iii/OpenHuman/Ollama, autostart, MCP config, security-tool installers) is the user's one-time action via `USER_RUN_ONCE_WINDOWS.cmd`, then this session resumes with `tools/post-bootstrap-verify-windows.ps1 -TaskWorktree C:\Users\user\Desktop\World_server_openhuman`.
+Both engines merged, reinforcement bridge in place and tested. Supabase migration applied to whichever project the user designates (or explicitly deferred).
 
 ## Files / systems involved
-Same as V2 plus: `tools/user-bootstrap-system-only-windows.ps1`, `tools/post-bootstrap-verify-windows.ps1`, `tools/complete-openhuman-after-first-run.ps1`, `USER_RUN_ONCE_WINDOWS.cmd` (all in the patch ZIP, not copied into the repo — they're user/session tooling, not repo payload).
+Recipe: `lib/world-procedural-*.js` (27 files), `shared/world-procedural-{core,worker}.js`, `scripts/world-procedural-*.js`, `native/godot/world_procedural_contract.gd`, `supabase/migrations/20260831072856_world_procedural_recipe_atomic_commit_v3.sql`, `test/world-procedural-*.test.js`.
+VFX: `shared/world-procedural-vfx/**` (runtime/test/tools, ~90 files), `lib/world-vfx-interest.js`, `integrations/godot/world_vfx_contract.gd`.
+Bridge: `lib/world-procedural-vfx-bridge.js`, `test/world-procedural-vfx-bridge.test.js`.
+Wiring: `apps/voxel-world/client.js` (VFX runtime init + tick/render hook + `world:vfx` listener), `server.js` (`.mjs` MIME fix), `package.json` (both patches' scripts + `release:gate` hooks), `data/technology-registry.json`.
 
 ## Known risks
-Same third-party-installer boundary as V2 (see prior entries below this file's history) — V2.1 does not change what this session will or won't install, only how the handoff is sequenced so refusing to install software never blocks repo progress.
+Same third-party-installer boundary as every prior patch this session — neither patch's `tools/*.ps1`/optional-toolchain-fetch scripts were run (they download a pinned native toolchain and an upstream GitHub VFX example repo; both are explicitly optional accelerators with safe fallback if absent). Supabase migration is written and reviewed but **not applied anywhere** — see Errors/decisions below.
 
 ## Golden systems that must be preserved
-Confirmed via the full `release:gate` PASS this round (not just an assumption) — every pre-existing gate ran and passed alongside the new Collective Brain steps.
+Confirmed via the full `release:gate` PASS — every pre-existing gate ran (procedural, desktop-ai, golden, quality:*, tech:*, duplicates, contracts, project:review, evidence:score, collective-brain:*, world:recipe:*, vfx:procedural:gate) alongside the two new engines with zero regressions, modulo the one pre-existing unrelated failure below.
 
 ## Errors that must not return
-Same as V2, plus three V2.1-specific protections now registered in `data/error-prevention-registry.json`: `collective-brain-dirty-main-bootstrap` (old full-install could target the dirty shared worktree), `desktop-ai-system-installer-boundary` (refusing installers must not stop repo progress), `release-gate-skipped-as-heavy` ("too heavy" is never a valid reason to skip the full gate before a merge claim). Also protected in this session: `openhuman-PS51-architecture-NULL`, `iii-file-in-use-on-reinstall`, `agentmemory-transient-cpu-spike`.
+- `world-procedural-toolchain.js`'s optional binary invocation (`gltfpack`/`zstd`) throws cleanly rather than silently no-oping if the optional native toolchain was never fetched/built — verified by reading the code, not just trusting docs.
+- The VFX auto-wire script's marker-based abort-on-mismatch (rather than blind-patch) is itself the protection against exactly what almost happened here (`ai3d-voxel-city`'s `?.` mismatch) — worth keeping in mind for the *next* patch that tries to auto-wire that same app.
+- `server.js` missing `.mjs` MIME type — now fixed; anything else in this repo shipping `.mjs` runtime modules for the browser was silently broken until this commit.
 
 ## Exact patch / change plan
-V2.1 repository payload (via `payload/` + `install.cjs`): `lib/collective-brain/*`, `scripts/collective-brain-*.js`, `policy/collective-brain.rego`, `test/collective-brain.test.js`, `data/error-prevention-registry.json` (3 new protections), `data/desktop-ai-policy.json` etc. — applied idempotently to isolated worktree `World_server_openhuman` only. Machine bootstrap (via `tools/*.ps1` in patch ZIP, not repo): fix `install-openhuman-windows.ps1` arch fallback (`Get-OSArchitecture` AMD64→x64), fix `install-agentmemory-windows.ps1` idempotent iii copy, fix `start-agentmemory-windows.ps1` health retry 60s, fix `install-agentmemory-autostart` idempotent task check, fix `user-bootstrap-system-only-windows.ps1` resume + non-Admin skip + diagnose-all try/catch. OpenHuman first-run config created at `%APPDATA%\OpenHuman\config.toml` with `[memory] backend="agentmemory"`.
+As applied by each patch's own `install.cjs`, plus the hand-wiring and bridge module described above. No other manual edits.
 
 ## Tests to run
-`node --test test/collective-brain.test.js` (18/18 PASS). `npm run release:gate` (PASS, full run, confirmed this round). `node verify.cjs --root World_server_openhuman` (18/18 PASS). `tools/post-bootstrap-verify-windows.ps1 -TaskWorktree World_server_openhuman` (now PASS after OpenHuman config).
+`node --test test/world-procedural-*.test.js` (40/40), `node --test shared/world-procedural-vfx/test/*.test.mjs test/world-vfx-interest.test.js` (31/31), `node --test test/world-procedural-vfx-bridge.test.js` (8/8). `npm run release:gate` — PASS except the one pre-existing `multi-ai-peer-review` failure (confirmed independently reproducible without this branch).
+Not run this session: `npm run world:recipe:native:strict` (Godot differential — no Godot native build available here), `npm run world:recipe:live` (needs configured Supabase env vars — `/api/config` 500s locally, pre-existing), real device/mobile matrix.
 
 ## Deployment / PR plan
-Draft PR #13 open against `ai/opencode/multi-ai-peer-improvement`. Do not mark ready-for-review/merge until post-bootstrap runtime evidence (agentmemory health, cross-agent recall) exists.
+Draft PR #14 open against `ai/opencode/multi-ai-peer-improvement`. Do not merge until the Supabase migration decision is made and (if applied) verified live.
 
 ## Current progress
-Repo-side V2.1 installed, verified 18/18, full `release:gate` PASS on 2026-08-28, PR #13 `5d26fa5b`/`f010f7d0` pushed. **2026-08-31 16:40 UTC — SYSTEM BOOTSTRAP PASSED** (second run, idempotent): `agentmemory 0.9.29 healthy` (3111/3112/3113/49134, save/recall/restart-persistence PASS, local embeddings, Scheduled Task Ready, 17 skills), `iii 0.11.2 PASS`, `OpenHuman 0.63.12 x64` installed (MSI SHA PASS, NotSigned→PGP fallback, first run completed, `config.toml` at `%APPDATA%\OpenHuman\config.toml` with `backend="agentmemory" agentmemory_url="http://127.0.0.1:3111"`), `cross-memory roundtrip` `openhUMAN-cross-test` + `openhUMAN-second` both PASS (`smart-search` + `collective-brain:recall` mode=agentmemory results=8), `diagnose-all` now idempotent (PS5.1 fallback, transient health retry, worktree path fix).
+Repo-side install + wiring + bridge + live browser verification + full release:gate all complete and passing (modulo the one pre-existing unrelated failure). Supabase migration intentionally not applied — awaiting user decision.
 
 ## Next action
-Run `tools/post-bootstrap-verify-windows.ps1 -TaskWorktree C:\Users\user\Desktop\World_server_openhuman` (now PASS with OpenHuman config), then `npm run release:gate` in worktree, classify any failures, create `COLLECTIVE_BRAIN_RUNTIME_EVIDENCE.json` + `REPORT.md`, commit → push → draft PR update (no auto-merge, no dirty main).
+User decides: apply `20260831072856_world_procedural_recipe_atomic_commit_v3.sql` to `world-server-preview` (the project whose migration history actually matches this app's tables), a different project, or skip for now. Once decided (or explicitly deferred), this PR is otherwise ready for review.
 
 ## Completion criteria
-Per `DESKTOP_AI_INSTRUCTIONS.md`: real agentmemory save→recall→restart persistence, cross-agent memory proof (save from one agent, recall from a different one), OpenHuman config verification, full release gate PASS with real (not DEGRADED) agentmemory sync. Repo-side + full offline release gate are done; runtime proof now has OpenHuman config + cross-memory evidence, remaining is worktree `release:gate` re-run and runtime evidence files.
+Repo integration + tests + live browser evidence + full release gate: DONE. Supabase migration: PENDING a decision, not a technical blocker. Godot native differential and real device matrix: NOT DONE this session, flagged honestly rather than assumed.
 
 ## Final evidence
-`node verify.cjs --root World_server_openhuman`: 18/18 PASS (2026-08-31 15:27 UTC, collective-brain check/security/benchmark/replay PASS). `verify-v2-1-handoff.cjs`: PASS. `node verify.cjs` in worktree still PASS. `SYSTEM BOOTSTRAP` log `collective-brain-v2-1-bootstrap-20260831-141457.log` + `COLLECTIVE_BRAIN_MACHINE_BOOTSTRAP.json` PASS. `OpenHuman` `0.63.12` `config.toml` `C:\Users\user\AppData\Roaming\OpenHuman\config.toml` `backend="agentmemory"` `PASS`. `cross-memory` probes `openhUMAN-cross-test-20260831-164321` and `openhUMAN-second-20260831-164415` both `smart-search` found + `collective-brain:recall mode=agentmemory results=8`. PR: https://github.com/mpaykin1/World_server/pull/13 — commits `5d26fa5b`, `f010f7d0` + pending bootstrap fixes + WIP update.
+40/40 + 31/31 + 8/8 tests PASS. `release:gate` real exit code captured directly (not through a pipe that would mask it) — PASS except the one reproduced-elsewhere pre-existing failure. Live browser: `window.WorldProceduralVfx.stats().active` 0→3→5 across two independent trigger paths. PR: https://github.com/mpaykin1/World_server/pull/14 — commits `a9a3a1bb`, `775048d3`, `6b74d586`.
 
 <!-- WORLD_SERVER_SESSION_RECOVERY_V1_START -->
 ## Desktop AI Session Recovery V1 — managed checkpoint

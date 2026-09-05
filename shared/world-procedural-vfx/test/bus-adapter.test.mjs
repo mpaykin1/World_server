@@ -1,0 +1,2 @@
+import test from 'node:test'; import assert from 'node:assert/strict'; import {EventEmitter} from 'node:events'; import {connectWorldBus} from '../runtime/bus-adapter.mjs';
+test('bus adapter reuses EventEmitter contract',()=>{const bus=new EventEmitter(); let got=null; const engine={spawn:e=>got=e}; const off=connectWorldBus(engine,bus); bus.emit('world:vfx',{type:'pulse'}); assert.equal(got.type,'pulse'); off(); got=null; bus.emit('world:vfx',{type:'beam'}); assert.equal(got,null);});

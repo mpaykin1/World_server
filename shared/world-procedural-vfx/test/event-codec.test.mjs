@@ -1,0 +1,2 @@
+import test from 'node:test'; import assert from 'node:assert/strict'; import {canonicalizeVfxEvent,encodeVfxEvent,decodeVfxEvent} from '../runtime/event-codec.mjs';
+test('canonical event bounded and deterministic',()=>{ const a=canonicalizeVfxEvent({id:'x',type:'sparks',position:[1,2,3],seed:7,params:{particleCount:99999,intensity:99}}); assert.equal(a.params.particleCount,4096); assert.equal(a.params.intensity,4); assert.equal(a.seed,7); assert.deepEqual(decodeVfxEvent(encodeVfxEvent(a)),a); });

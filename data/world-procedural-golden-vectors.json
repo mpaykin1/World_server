@@ -1,0 +1,243 @@
+{
+  "schemaVersion": "1.0.0",
+  "engineVersion": "2.0.0",
+  "purpose": "Web/Native deterministic compatibility vectors with portable Godot signature",
+  "vectors": [
+    {
+      "engineVersion": "2.0.0",
+      "schemaVersion": "1.0.0",
+      "recipe": {
+        "schemaVersion": "1.0.0",
+        "engineVersion": "2.0.0",
+        "worldId": "golden-flat",
+        "revision": 0,
+        "seed": 42,
+        "source": {
+          "sourceMessageHash32": 0,
+          "navigatorTurn": 0
+        },
+        "style": {
+          "artStyle": "voxel",
+          "voxelScale": 1,
+          "detail": 0.72,
+          "pixelScale": 1,
+          "materialTheme": "inherit",
+          "wetness": 0.12,
+          "emissive": 0.05
+        },
+        "terrain": {
+          "kind": "organic",
+          "baseHeight": 6,
+          "amplitude": 0,
+          "frequency": 0.035,
+          "octaves": 4,
+          "lacunarity": 2,
+          "gain": 0.5,
+          "erosion": 0.15,
+          "caveDensity": 0
+        },
+        "architecture": {
+          "kind": "none",
+          "density": 0,
+          "verticality": 0.5,
+          "ruin": 0.08,
+          "repetition": 0.35
+        },
+        "atmosphere": {
+          "fog": 0.35,
+          "darkness": 0.55,
+          "wind": 0.15,
+          "weather": "none"
+        },
+        "animation": {
+          "enabled": true,
+          "frameTimeline": true,
+          "ambientMotion": 0.3
+        },
+        "audio": {
+          "mode": "procedural",
+          "ambience": "dark-air",
+          "intensity": 0.25,
+          "seedOffset": 193
+        },
+        "performance": {
+          "targetFps": 60,
+          "priority": "adaptive",
+          "maxChunkVoxels": 12000
+        }
+      },
+      "contentHash": "e652f1c3e1aa0be7fc89e1afc4363be5a00ad4c715ca8a10dfc05d9fde9c26e8",
+      "chunks": [
+        {
+          "x": 0,
+          "z": 0,
+          "signature": "ccb1ecffed9df074682021dd8304ada1a42daedd9dd816c7fce4dc00582bff5d",
+          "voxels": 768,
+          "portableSignature": "515c87222607a96a92227bd1c0af1202dfb04ab39ab326903c99a7dc207cd1d3"
+        },
+        {
+          "x": 1,
+          "z": 0,
+          "signature": "7dbaec1bd269953b9629b48b8612041168b402c8bc0d03f0e270e4d5267c7b9e",
+          "voxels": 768,
+          "portableSignature": "1b3555c4528a0e5dfb6132ccfe8bfdf55f58abe8229c3aaa8ec3a64ae5a76bdd"
+        }
+      ]
+    },
+    {
+      "engineVersion": "2.0.0",
+      "schemaVersion": "1.0.0",
+      "recipe": {
+        "schemaVersion": "1.0.0",
+        "engineVersion": "2.0.0",
+        "worldId": "golden-gothic",
+        "revision": 0,
+        "seed": 20260831,
+        "source": {
+          "sourceMessageHash32": 0,
+          "navigatorTurn": 0
+        },
+        "style": {
+          "artStyle": "voxel",
+          "voxelScale": 1,
+          "detail": 0.9,
+          "pixelScale": 1,
+          "materialTheme": "inherit",
+          "wetness": 0.7,
+          "emissive": 0.05
+        },
+        "terrain": {
+          "kind": "organic",
+          "baseHeight": 8,
+          "amplitude": 9,
+          "frequency": 0.035,
+          "octaves": 4,
+          "lacunarity": 2,
+          "gain": 0.5,
+          "erosion": 0.15,
+          "caveDensity": 0
+        },
+        "architecture": {
+          "kind": "gothic",
+          "density": 0.8,
+          "verticality": 0.9,
+          "ruin": 0.08,
+          "repetition": 0.35
+        },
+        "atmosphere": {
+          "fog": 0.35,
+          "darkness": 0.55,
+          "wind": 0.15,
+          "weather": "none"
+        },
+        "animation": {
+          "enabled": true,
+          "frameTimeline": true,
+          "ambientMotion": 0.3
+        },
+        "audio": {
+          "mode": "procedural",
+          "ambience": "dark-air",
+          "intensity": 0.25,
+          "seedOffset": 193
+        },
+        "performance": {
+          "targetFps": 60,
+          "priority": "adaptive",
+          "maxChunkVoxels": 12000
+        }
+      },
+      "contentHash": "00c718258426e573deeaceee7c1164a347076496d0e06d1a0fe86360c6d40fd8",
+      "chunks": [
+        {
+          "x": 0,
+          "z": 0,
+          "signature": "8b3f5755723db47a34904f00ee2647b4c44ab07bae72c42a9fad6d24f44f94b4",
+          "voxels": 793,
+          "portableSignature": "dcfe4653c7a065e4ffe692f43c81205e682c1bcb37a964661e94a077b02f5931"
+        },
+        {
+          "x": -1,
+          "z": 2,
+          "signature": "2b9d4d05b280952d5feae1854f11df45e0a1a91ae088220efac8e6246271cc50",
+          "voxels": 793,
+          "portableSignature": "980623f38c95349b380374c2af95305e41dff8fb647b0850915557521427eb67"
+        }
+      ]
+    },
+    {
+      "engineVersion": "2.0.0",
+      "schemaVersion": "1.0.0",
+      "recipe": {
+        "schemaVersion": "1.0.0",
+        "engineVersion": "2.0.0",
+        "worldId": "golden-mobile",
+        "revision": 0,
+        "seed": 2191590183,
+        "source": {
+          "sourceMessageHash32": 0,
+          "navigatorTurn": 0
+        },
+        "style": {
+          "artStyle": "voxel",
+          "voxelScale": 1,
+          "detail": 0.55,
+          "pixelScale": 1.5,
+          "materialTheme": "inherit",
+          "wetness": 0.12,
+          "emissive": 0.05
+        },
+        "terrain": {
+          "kind": "organic",
+          "baseHeight": 8,
+          "amplitude": 12,
+          "frequency": 0.035,
+          "octaves": 4,
+          "lacunarity": 2,
+          "gain": 0.5,
+          "erosion": 0.15,
+          "caveDensity": 0
+        },
+        "architecture": {
+          "kind": "none",
+          "density": 0.08,
+          "verticality": 0.5,
+          "ruin": 0.08,
+          "repetition": 0.35
+        },
+        "atmosphere": {
+          "fog": 0.7,
+          "darkness": 0.8,
+          "wind": 0.15,
+          "weather": "none"
+        },
+        "animation": {
+          "enabled": true,
+          "frameTimeline": true,
+          "ambientMotion": 0.3
+        },
+        "audio": {
+          "mode": "procedural",
+          "ambience": "dark-air",
+          "intensity": 0.25,
+          "seedOffset": 193
+        },
+        "performance": {
+          "targetFps": 60,
+          "priority": "adaptive",
+          "maxChunkVoxels": 12000
+        }
+      },
+      "contentHash": "2602ed5c3a081f0185b72d97d6b95c0460897b2a9bd4ca242aa8b6e49a290e65",
+      "chunks": [
+        {
+          "x": 2,
+          "z": -2,
+          "signature": "a31e486b5d1b9612c6a7e0106cbafc20c1f078492c276a2657237f05b4c31b9d",
+          "voxels": 768,
+          "portableSignature": "4deaadeab674c51542522564f800e3d95cd23ee632e58482de400aa06d861bee"
+        }
+      ]
+    }
+  ]
+}

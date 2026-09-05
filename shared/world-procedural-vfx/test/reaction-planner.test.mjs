@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {planSemanticVfx} from '../runtime/reaction-planner.mjs';
+test('semantic plan deterministic and meaningful',()=>{const a=planSemanticVfx({intent:'connection',position:[0,0,0],target:[1,0,0],seed:44}),b=planSemanticVfx({intent:'connection',position:[0,0,0],target:[1,0,0],seed:44});assert.deepEqual(a,b);assert.ok(a.some(x=>x.type==='beam'));});
