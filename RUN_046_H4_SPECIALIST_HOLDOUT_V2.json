@@ -1,0 +1,288 @@
+{
+  "experiment": "RUN_046_H4_SPECIALIST_HOLDOUT_V2",
+  "seed": "46046",
+  "taskIds": [
+    "spawn-not-grounded",
+    "openhuman-vision-capability-mismatch",
+    "H4-SPECIALIST-PROMOTION-CALIBRATION-OVERFIT",
+    "godot-orbit-rig-position-duplicates-camera-offset",
+    "WQ-CAUSAL-MISSING-EVIDENCE-PROMOTION",
+    "menu-obstructs-game",
+    "godot-hero-built-at-world-voxel-scale",
+    "mobile-entry-not-clickable"
+  ],
+  "criterion": "8 unseen deterministic tasks; >=75% paired wins by >=0.03; median delta >=0.03; candidate errors <= baseline errors",
+  "timeoutMs": 15000,
+  "rows": [
+    {
+      "id": "spawn-not-grounded",
+      "model": "qwen2.5:3b-instruct",
+      "ms": 9896,
+      "q": 1,
+      "n": 0.3333333333333333,
+      "er": 0,
+      "timeout": false,
+      "output": "ROOT_CAUSE: The spawn is not derived from a valid walkable surface, which could be due to a misalignment or incorrect detection of the player's position relative to the ground. This misalignment might cause the spawn to occur in an invalid location, such as in the air or inside geometry, or with the wrong orientation.\n\nSOLUTION: Adjust the spawn logic to ensure that the player's position"
+    },
+    {
+      "id": "spawn-not-grounded",
+      "model": "qwen3-fast:1.7b",
+      "ms": 1187,
+      "q": 0.2,
+      "n": 1,
+      "er": 0,
+      "timeout": false,
+      "output": "SOLUTION: Perform grounded spawn behavioral test; ensure orientation invariant."
+    },
+    {
+      "id": "openhuman-vision-capability-mismatch",
+      "model": "qwen2.5:3b-instruct",
+      "ms": 10006,
+      "q": 1,
+      "n": 0.5,
+      "er": 0,
+      "timeout": false,
+      "output": "ROOT_CAUSE: The repository is configured with a chat-only local model for vision/image workload, or the registry flag for vision is missing, leading to the model not recognizing or processing images correctly.\n\nSOLUTION: \n1. Ensure that the model assigned to the vision workload is a vision-capable model by selecting a documented vision-capable model.\n2. Set the model_registry vision=true flag for the"
+    },
+    {
+      "id": "openhuman-vision-capability-mismatch",
+      "model": "qwen3-fast:1.7b",
+      "ms": 2626,
+      "q": 0.4444444444444444,
+      "n": 0.4166666666666667,
+      "er": 0,
+      "timeout": false,
+      "output": "SOLUTION:  \nSet model_registry vision=true for the chat-only local model and ensure that the vision-capable model is selected and used for vision/image workloads."
+    },
+    {
+      "id": "H4-SPECIALIST-PROMOTION-CALIBRATION-OVERFIT",
+      "model": "qwen2.5:3b-instruct",
+      "ms": 10512,
+      "q": 0.7,
+      "n": 0.18181818181818182,
+      "er": 0,
+      "timeout": false,
+      "output": "**ROOT_CAUSE:** The specialist promotion used a mean-only ranking approach for calibration tasks, leading to category overfitting. Additionally, the routing decisions for RUN_043 and RUN_044 were made based on a single model (qwen2.5) rather than leveraging the results from a more robust model (qwen3-fast) that performed better on independent holdout.\n\n"
+    },
+    {
+      "id": "H4-SPECIALIST-PROMOTION-CALIBRATION-OVERFIT",
+      "model": "qwen3-fast:1.7b",
+      "ms": 15011,
+      "q": 0,
+      "n": 0,
+      "er": 1,
+      "timeout": true,
+      "error": "This operation was aborted",
+      "output": ""
+    },
+    {
+      "id": "godot-orbit-rig-position-duplicates-camera-offset",
+      "model": "qwen2.5:3b-instruct",
+      "ms": 15005,
+      "q": 0,
+      "n": 0,
+      "er": 1,
+      "timeout": true,
+      "error": "This operation was aborted",
+      "output": ""
+    },
+    {
+      "id": "godot-orbit-rig-position-duplicates-camera-offset",
+      "model": "qwen3-fast:1.7b",
+      "ms": 15004,
+      "q": 0,
+      "n": 0,
+      "er": 1,
+      "timeout": true,
+      "error": "This operation was aborted",
+      "output": ""
+    },
+    {
+      "id": "WQ-CAUSAL-MISSING-EVIDENCE-PROMOTION",
+      "model": "qwen2.5:3b-instruct",
+      "ms": 15004,
+      "q": 0,
+      "n": 0,
+      "er": 1,
+      "timeout": true,
+      "error": "This operation was aborted",
+      "output": ""
+    },
+    {
+      "id": "WQ-CAUSAL-MISSING-EVIDENCE-PROMOTION",
+      "model": "qwen3-fast:1.7b",
+      "ms": 7934,
+      "q": 0.9375,
+      "n": 0.3333333333333333,
+      "er": 0,
+      "timeout": false,
+      "output": "ROOT_CAUSE: compare() skipped non-finite or absent required metrics, leaving regressions empty and allowing winner=true with incomplete counterfactual evidence"
+    },
+    {
+      "id": "menu-obstructs-game",
+      "model": "qwen2.5:3b-instruct",
+      "ms": 14100,
+      "q": 0.75,
+      "n": 0,
+      "er": 0,
+      "timeout": false,
+      "output": "ROOT_CAUSE: The system information rendering is persistently causing the technical/status text or large panels to obstruct the gameplay, likely due to the system information being displayed in a way that interferes with the user interface, despite the protections in place.\n\nSOLUTION: Adjust the system information rendering to ensure it does not overlap with the gameplay interface. This may involve optimizing the layout and positioning of system information elements"
+    },
+    {
+      "id": "menu-obstructs-game",
+      "model": "qwen3-fast:1.7b",
+      "ms": 4708,
+      "q": 0.75,
+      "n": 0.2222222222222222,
+      "er": 0,
+      "timeout": false,
+      "output": "SOLUTION: Implement dynamic layout adjustments to prevent system information from rendering persistently, ensuring gameplay area is not obstructed by HUD elements or compact icon menus."
+    },
+    {
+      "id": "godot-hero-built-at-world-voxel-scale",
+      "model": "qwen2.5:3b-instruct",
+      "ms": 15007,
+      "q": 0,
+      "n": 0,
+      "er": 1,
+      "timeout": true,
+      "error": "This operation was aborted",
+      "output": ""
+    },
+    {
+      "id": "godot-hero-built-at-world-voxel-scale",
+      "model": "qwen3-fast:1.7b",
+      "ms": 13938,
+      "q": 0.7222222222222222,
+      "n": 0.375,
+      "er": 0,
+      "timeout": false,
+      "output": "ROOT_CAUSE: the hero/character is built using the same voxel size and roughly the same overall scale as the surrounding world/terrain geometry, leading to visual indistinguishability between the hero and the environment.\n\nSOLUTION: Apply the standing rule to ensure the hero's voxel size is exactly 5x smaller than the world's, maintaining consistent scale and visual distinction."
+    },
+    {
+      "id": "mobile-entry-not-clickable",
+      "model": "qwen2.5:3b-instruct",
+      "ms": 14375,
+      "q": 0,
+      "n": 0.25,
+      "er": 0,
+      "timeout": false,
+      "output": "ROOT_CAUSE: The issue arises because the application is designed to recognize pointer events (like touch and mouse events) and is not configured to handle touch events properly on mobile devices, leading to the inability to activate the primary enter/play control.\n\nSOLUTION: Ensure that the application is configured to cover touch events, especially for the primary enter/play control, by adding touch event handlers and logic to handle these"
+    },
+    {
+      "id": "mobile-entry-not-clickable",
+      "model": "qwen3-fast:1.7b",
+      "ms": 4020,
+      "q": 0.4,
+      "n": 0.5,
+      "er": 0,
+      "timeout": false,
+      "output": "SOLUTION: Disable overlay interception and enable mobile emulation to allow proper pointer/touch event handling."
+    }
+  ],
+  "pairs": [
+    {
+      "id": "spawn-not-grounded",
+      "candidate": 0.520741678324784,
+      "baseline": 0.2960924655252815,
+      "delta": 0.2246492127995025,
+      "candidateError": 0,
+      "baselineError": 0,
+      "candidateTimeout": false,
+      "baselineTimeout": false,
+      "candidateMs": 9896,
+      "baselineMs": 1187
+    },
+    {
+      "id": "openhuman-vision-capability-mismatch",
+      "candidate": 0.5533422157084804,
+      "baseline": 0.29695060659220274,
+      "delta": 0.2563916091162777,
+      "candidateError": 0,
+      "baselineError": 0,
+      "candidateTimeout": false,
+      "baselineTimeout": false,
+      "candidateMs": 10006,
+      "baselineMs": 2626
+    },
+    {
+      "id": "H4-SPECIALIST-PROMOTION-CALIBRATION-OVERFIT",
+      "candidate": 0.3303349907037869,
+      "baseline": -0.28,
+      "delta": 0.6103349907037869,
+      "candidateError": 0,
+      "baselineError": 1,
+      "candidateTimeout": false,
+      "baselineTimeout": true,
+      "candidateMs": 10512,
+      "baselineMs": 15011
+    },
+    {
+      "id": "godot-orbit-rig-position-duplicates-camera-offset",
+      "candidate": -0.279960029311838,
+      "baseline": -0.2799533675304776,
+      "delta": -0.0000066617813603842,
+      "candidateError": 1,
+      "baselineError": 1,
+      "candidateTimeout": true,
+      "baselineTimeout": true,
+      "candidateMs": 15005,
+      "baselineMs": 15004
+    },
+    {
+      "id": "WQ-CAUSAL-MISSING-EVIDENCE-PROMOTION",
+      "candidate": -0.2799533675304776,
+      "baseline": 0.5013120933537628,
+      "delta": -0.7812654608842404,
+      "candidateError": 1,
+      "baselineError": 0,
+      "candidateTimeout": true,
+      "baselineTimeout": false,
+      "candidateMs": 15004,
+      "baselineMs": 7934
+    },
+    {
+      "id": "menu-obstructs-game",
+      "candidate": 0.2960688828192659,
+      "baseline": 0.40308077779998375,
+      "delta": -0.10701189498071784,
+      "candidateError": 0,
+      "baselineError": 0,
+      "candidateTimeout": false,
+      "baselineTimeout": false,
+      "candidateMs": 14100,
+      "baselineMs": 4708
+    },
+    {
+      "id": "godot-hero-built-at-world-voxel-scale",
+      "candidate": -0.27997335287455866,
+      "baseline": 0.35770364695519585,
+      "delta": -0.6376769998297545,
+      "candidateError": 1,
+      "baselineError": 0,
+      "candidateTimeout": true,
+      "baselineTimeout": false,
+      "candidateMs": 15007,
+      "baselineMs": 13938
+    },
+    {
+      "id": "mobile-entry-not-clickable",
+      "candidate": -0.04576310705482646,
+      "baseline": 0.2812196389314503,
+      "delta": -0.32698274598627675,
+      "candidateError": 0,
+      "baselineError": 0,
+      "candidateTimeout": false,
+      "baselineTimeout": false,
+      "candidateMs": 14375,
+      "baselineMs": 4020
+    }
+  ],
+  "wins": 3,
+  "winRate": 0.375,
+  "medianDelta": -0.0000066617813603842,
+  "candidateErrors": 3,
+  "baselineErrors": 2,
+  "promoteQwen25": false,
+  "pass": true
+}
