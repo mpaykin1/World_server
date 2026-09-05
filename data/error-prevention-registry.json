@@ -486,6 +486,309 @@
         "full release:gate mandatory before merge/production claim",
         "record exact failing step instead of skipping"
       ]
+    },
+    {
+      "id": "mjs-wrong-mime-type",
+      "category": "server",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "browser refuses to load an ES module with \"Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of application/octet-stream\"",
+      "rootCause": "server.js's static-file mime table only mapped .js, not .mjs — every .mjs file served by the local dev server (server.js) fell through to the application/octet-stream default, which browsers refuse to execute as a module script",
+      "protection": [
+        "server.js's mime table must include '.mjs': 'text/javascript; charset=utf-8' alongside '.js'",
+        "verify any new .mjs-based runtime with a live browser load (curl -I on the URL is not sufficient — confirm Content-Type AND that the module actually evaluates), not just a Node unit test"
+      ],
+      "solution": "add '.mjs': 'text/javascript; charset=utf-8' to server.js's mime map"
+    },
+    {
+      "id": "multi-ai-peer-review-maxbuffer",
+      "category": "tests",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "test/multi-ai-peer-review.test.js fails with 'SyntaxError: Unterminated string in JSON' or an assertion that exit code is null instead of 0",
+      "rootCause": "scripts/multi-ai-peer-review.cjs shells out to `git diff --name-only origin/master...<branch>` for up to 10 long-lived ai/*/opencode/* branches via spawnSync with no maxBuffer override (Node default ~1MB); the test's own spawnSync wrapping the whole script also had no override. As the repo accumulates more branches and diff volume, either call point silently truncates output mid-JSON once it crosses ~1MB, which can happen from unrelated commits on unrelated branches, not from the branch under test",
+      "protection": [
+        "scripts/multi-ai-peer-review.cjs's run() helper must set a generous maxBuffer (64MB) on every spawnSync call",
+        "test/multi-ai-peer-review.test.js's runGate() must also set maxBuffer (32MB) on its own spawnSync wrapping the script",
+        "when this test fails, first reproduce it in an unrelated worktree/branch to rule out an environment-wide (branch-count/diff-volume) cause before assuming a regression in the branch under test"
+      ],
+      "solution": "add maxBuffer overrides to both the inner script spawnSync calls and the outer test spawnSync call"
+    },
+    {
+      "id": "npm-ci-lockfile-drift",
+      "category": "ci",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "GitHub Actions CI fails at the very first `npm ci` step with `npm error code EUSAGE ... can only install packages when your package.json and package-lock.json ... are in sync`, blocking every check on every PR based on the affected branch",
+      "rootCause": "a dependency (e.g. @mediapipe/tasks-vision, pngjs) was added to package.json without running `npm install` to regenerate package-lock.json and committing the result — npm ci (used in CI, unlike npm install used locally) refuses to proceed on a stale lock file",
+      "protection": [
+        "whenever package.json dependencies/devDependencies change, run `npm install` and commit the resulting package-lock.json diff in the same change",
+        "if CI's npm ci step fails, check the error for 'Missing: <pkg>@<version> from lock file' before assuming a real test regression — it means the base branch itself has lockfile drift, unrelated to the PR's own changes"
+      ],
+      "solution": "run `npm install` to regenerate package-lock.json and commit it alongside the package.json change"
+    },
+    {
+      "id": "supabase-environment-project-mismatch",
+      "category": "database",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "a claimed Supabase database state (e.g. 'this migration is already applied') does not match what direct queries via the Supabase MCP tools show, or an MCP session cannot see a project the user references by name",
+      "rootCause": "more than one Supabase project can share a similar or identical human-readable name (e.g. two projects both nameable as some variant of \"Improve world\"), and a given MCP/tool session may only have access to a subset of an organization's projects — trusting a project by display name alone, or assuming an MCP session sees every project, produces false conclusions about database state",
+      "protection": [
+        "always confirm the exact project_id (ref), never just the display name, before running any migration or destructive query",
+        "if a claimed database state can't be reproduced via direct query, report the discrepancy honestly (what you see vs. what was claimed) and ask for the correct project_id rather than either blindly trusting the claim or unilaterally overriding it",
+        "a project MCP tools cannot see is not necessarily wrong or nonexistent — the user may have access this session does not"
+      ]
+    },
+    {
+      "id": "supabase-preview-migration-drift",
+      "category": "database",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "a migration that works in production fails at runtime (missing table/column) when applied to a preview/staging Supabase project, even though `create or replace function` itself succeeded with no error",
+      "rootCause": "Postgres does not validate table/column references inside a plpgsql function body at CREATE FUNCTION time, only at first EXECUTE — so a migration file that only creates a function assuming certain base tables/columns already exist (e.g. 'using existing voxel_worlds + voxel_world_events') can be applied cleanly to an environment that lacks those prerequisites, deploying a function that is silently broken until first called. Preview/staging projects can have a materially different (often older, consolidated, or partially-provisioned) base schema than production, even when the migration file history in the repo looks linear",
+      "protection": [
+        "before applying any migration to a non-production project, run a schema-compatibility check against the exact tables/columns/constraints the migration body references — do not infer compatibility from the migration file list or CREATE FUNCTION succeeding",
+        "list_migrations output on a target project can use a completely different naming/versioning scheme than the repo's local migration filenames (e.g. consolidated/squashed history) — do not assume version-number alignment implies schema alignment",
+        "if a migration assumes prerequisite schema (tables/columns) that the target project does not have, do not apply it — report the gap and let a human decide whether/how to backfill the prerequisite schema, since inventing new table/column/RLS design unilaterally is a real architectural decision"
+      ]
+    },
+    {
+      "id": "openhuman-chat-memory-not-recalling-world-server",
+      "category": "agent-memory",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "OpenHuman's ordinary chat UI reports knowing nothing about a project, even though agentmemory is healthy, OpenHuman's config correctly points at it, and a REST-level cross-memory roundtrip test (write a probe, search for it, find it) passes",
+      "rootCause": "REST cross-memory PASS only proves agentmemory is reachable and can round-trip an arbitrary probe string — it does not prove the memory store contains real, substantive project knowledge. A connectivity smoke test (e.g. CHECK_COLLECTIVE_BRAIN.cmd's own 'Memory save/recall' probe) that writes a short random string and confirms it comes back can itself be the only thing populating a project's memory, crowding out (or simply being mistaken for) actual curated knowledge — this repo's own health check had been doing exactly that for days before anyone noticed the project's memory had no real facts in it",
+      "protection": [
+        "treat \"REST cross-memory roundtrip PASS\" and \"ordinary chat surfaces real knowledge PASS\" as two distinct claims, never conflate them — a doctor/test reporting both separately (not just one combined status) is required",
+        "before diagnosing an ordinary-chat memory gap, actually list/search the target memory store's content for the project (not just probe for a freshly-written test string) — a project can have dozens of memory entries and still contain zero real facts",
+        "a connectivity health-check script that writes its own probe data into the same durable memory store it is checking will pollute that store over repeated runs — prefer a dedicated ephemeral/test namespace, or at minimum distinct low-relevance concepts, for pure connectivity probes so they do not compete with real knowledge in search ranking"
+      ],
+      "solution": "build a curated, hand-authored knowledge pack (not a raw dump) and write it into the real memory store via the existing remember() mechanism; verify via the same search path the chat UI itself uses"
+    },
+    {
+      "id": "openhuman-single-instance-silent-noop",
+      "category": "desktop-ai",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "a launcher/script that starts OpenHuman.exe with a special env var (e.g. OPENHUMAN_ACTION_DIR) reports success (exit code 0) but no new window appears and the setting has no visible effect",
+      "rootCause": "OpenHuman enforces a pre-CEF single-instance mutex (real log line: '[single-instance] pre-CEF mutex held by primary; secondary exiting (OPENHUMAN-TAURI-A fix)'). If ANY OpenHuman.exe is already running — including invisibly, with no taskbar entry the user notices — a second launch exits almost instantly, cleanly, having created no window and applied no env var to the already-running primary. There is no supported way to push a new action_dir into an already-running instance from outside it.",
+      "protection": [
+        "before launching, check for an existing OpenHuman.exe process and tell the user explicitly if one is found, instead of launching into the trap and reporting a false success",
+        "never treat 'exit code 0' as proof a GUI actually appeared — check for a live process with a nonzero MainWindowHandle a few seconds after Start-Process",
+        "the real fix requires the existing instance to be fully closed first; CloseMainWindow() may not be enough (the app can ignore WM_CLOSE or minimize to tray) — Stop-Process may be needed as a second step"
+      ],
+      "solution": "scripts/openhuman-launch-check.js (OPENHUMAN_GUI_LAUNCH_CHECK) — distinguishes executableExists from guiLaunchVerified using a written launch log, never inferring PASS from exit code alone"
+    },
+    {
+      "id": "openhuman-action-dir-insufficient-without-trusted-roots",
+      "category": "desktop-ai",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "OpenHuman's ordinary chat correctly attempts to read a file at the right action_dir path (visible in its own tool-call trace) but the read is blocked: 'This action is blocked by your safety settings... path is outside the allowed workspace'",
+      "rootCause": "action_dir and actual file-read permission are two separate settings. OpenHuman's [autonomy] workspace_only=true confines file/glob/list tools to an internal workspace_dir regardless of what action_dir points at (action_dir is 'the acting-tool CWD', workspace_dir is a separate 'internal state, agent-blocked' root per OpenHuman's own RPC schema). Setting action_dir alone is necessary but not sufficient for the agent to actually read files there.",
+      "protection": [
+        "to grant real read (or read/write) access to a directory outside the workspace while leaving workspace_only=true and everything else locked down, add an entry to [autonomy] trusted_roots: { path = \"...\", access = \"read\" } — the official mechanism per config_update_autonomy_settings' own RPC schema description",
+        "forbidden_paths entries still apply on top of trusted_roots (documented: \"credential dirs stay blocked regardless\") — granting a trusted_root does not bypass secret-path protection added separately",
+        "verify with a real ordinary-chat probe request in a genuinely NEW chat thread after any autonomy-settings change — an existing chat thread that already got blocked once may not retry the tool call even after the underlying config is fixed"
+      ],
+      "solution": "add the target directory to autonomy.trusted_roots with access='read' (or 'readwrite' only if genuinely needed), restart OpenHuman, and re-test in a new chat thread"
+    },
+    {
+      "id": "openhuman-trusted-root-prefix-collision",
+      "category": "desktop-ai",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "a write to a folder granted readwrite via autonomy.trusted_roots is blocked with 'policy-blocked: Resolved parent path escapes workspace: <a DIFFERENT, unrelated read-only trusted_root path>' — the error names a path that is NOT the target folder and NOT its actual parent",
+      "rootCause": "OpenHuman's workspace-boundary check appears to match trusted_roots by raw string prefix without a path-separator boundary check. Two trusted_roots whose absolute paths share a text prefix — e.g. 'C:\\...\\World_server' (read) and 'C:\\...\\World_server AI\\SomeSubfolder' (readwrite) — collide: 'World_server AI' textually starts with 'World_server' even though it is a sibling directory, not a subdirectory (the next character is a space, not a path separator). The checker resolves the write target against the wrong (read-only) entry and blocks it.",
+      "protection": [
+        "when granting a new trusted_root for OpenHuman, verify its full path does not begin with the same characters as any OTHER trusted_root path already granted, even if the two are semantically unrelated siblings (not nested) — a shared text prefix is enough to trigger this bug",
+        "confirmed fix: give any new readwrite trusted_root a name whose full path shares no character-prefix with an existing entry (e.g. use 'C:\\Users\\<user>\\Desktop\\OpenHumanReports' as a standalone top-level folder rather than nesting it under 'World_server AI', which itself shares a prefix with 'World_server')",
+        "verify a new trusted_root actually works with a real write attempt (not just assuming the config is correct) before relying on it — this bug produces a real, well-formed error, not a silent failure, so it is catchable if tested"
+      ],
+      "solution": "move the write target to a folder path with no shared text prefix against any other trusted_root, restart OpenHuman, and confirm with a real write attempt"
+    },
+    {
+      "id": "openhuman-local-model-tool-context-overflow",
+      "category": "desktop-ai",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "OpenHuman ordinary chat hangs indefinitely on 'Thinking' when routed to a small local Ollama model (tested: gemma3:1b-it-qat, qwen3:1.7b, qwen3:4b), even though: the Ollama server is reachable, `ollama run <model>` works fine directly from the CLI, and OpenHuman's own 'Local Model Debug' reports all checks passed. No error is ever shown — the turn simply never completes and the app falls back to idle polling.",
+      "rootCause": "OpenHuman's agent harness reports supports_native_tools=false for these local models and falls back to injecting the FULL tool catalog (76-315 tools, observed via 'tools=' counts in the agent_loop log) as prompt text, rather than a native tool-calling API. This produced prompts of ~48,750-49,119 tokens in every local-model turn observed (via the [middleware] message_trim log line's tokens_before field). Ollama's actual runtime context window for the loaded small models was only 4096 tokens (confirmed via GET /api/ps -> context_length), and they were running with size_vram=0 (pure CPU inference). A >10x prompt-to-context overflow on CPU-only small models never produces a usable response within OpenHuman's iteration budget — it is not a crash or a reported error, just silence. 'Local Model Debug: all checks passed' only verifies the Ollama server/model are reachable and can generate SOMETHING in isolation — it does not exercise a real agentic turn under the actual tool catalog, so it gives false confidence.",
+      "protection": [
+        "never treat REST/CLI-level Ollama health (server reachable, model responds to a bare prompt) as proof that OpenHuman ordinary chat works with that model — they are different claims; use OPENHUMAN_LOCAL_CHAT_E2E (scripts/openhuman-local-chat-e2e-check.js), which checks both independently",
+        "before recommending a small (1B-4B) local model as OpenHuman's primary chat/agentic provider, check the actual tool count it would be asked to carry (agent_loop log: 'tools=N') — a model without native tool-calling support realistically cannot process a catalog that size as prompt text",
+        "small local models are a reasonable fit for narrow, tool-free workloads (embeddings, heartbeat, learning-reflection) — which is what local_ai.usage flags are actually for — not as a drop-in replacement for a cloud model handling full agentic orchestration"
+      ],
+      "solution": "keep local Ollama models scoped to narrow non-agentic workloads (e.g. embeddings, via local_ai.usage.embeddings=true) rather than as chat_provider/agentic_provider; if local chat is genuinely required, it needs either a model with real native tool-calling support and enough context, or a way to restrict the tool catalog exposed to that specific provider/profile (not available via the settings this session had access to)"
+    },
+    {
+      "id": "anythingllm-small-model-tool-selection-miss",
+      "severity": "quality-degradation",
+      "status": "documented",
+      "discoveredAt": "2026-09-02T05:29:09.723Z",
+      "rootCause": "A small local model (qwen3:1.7b) served via AnythingLLM @agent mode, when given 15 simultaneously-selected tools including the correct MCP read_file/read_text_file for a file-read task, instead invoked the built-in document-summarizer tool on \"/\" and reported the task impossible. Real, reproduced, not a hallucination of the harness: verified via AnythingLLM backend log thoughts field and full response text.",
+      "symptom": "@agent responds that no tool could find/read a file that is actually present and readable via an attached MCP filesystem tool.",
+      "fix": "No automatic fix applied - documented as a genuine small-model tool-selection limitation, distinct from a plumbing/config bug. Mitigation options for future attempts: (a) prefer a model with native tool-calling support (supports_native_tools=true) over these local instruct-tuned models for @agent tasks that require precise tool selection, (b) keep the attached tool count as low as practical for the specific task (fewer simultaneous choices reduces mis-selection), (c) phrase the task to name the expected tool class explicitly (e.g. \"use your file-reading tool\") as a prompt-level nudge.",
+      "test": "ANYTHINGLLM_AB_COMPARISON.json#realE2eTest.attempt1 records the full reproduction (prompt, tool set, response, token/latency metrics).",
+      "prevention": "scripts/anythingllm-health-check.js checkSelectiveToolEvidence() confirms the selective-tool mechanism itself (bounding tool count, correct tools attached) is working from the plumbing side, so a future FAIL of this shape can be triaged directly to model tool-selection rather than re-investigating the MCP/config layer from scratch."
+    },
+    {
+      "id": "anythingllm-external-mcp-kill-leaves-hypervisor-stuck",
+      "severity": "operational",
+      "status": "documented",
+      "discoveredAt": "2026-09-02T05:52:55.247Z",
+      "rootCause": "AnythingLLM Desktop MCPHypervisor tracks an MCP server as booted independently of whether its child process is actually alive. Externally killing the child (e.g. Stop-Process on the npx-spawned server-filesystem process) after changing anythingllm_mcp_servers.json does NOT trigger a respawn on the next @agent call: MCPHypervisor logs \"MCP Servers already running, skipping boot\", then \"Failed to list tools ... Error: Not connected\", then silently excludes that server from the agent cluster entirely for that turn.",
+      "symptom": "An @agent turn completes using only built-in skills (rag-memory/document-summarizer/web-scraping), with zero MCP filesystem tools attached, and no error surfaced to the caller - looks like a normal turn but the MCP server config change never took effect.",
+      "fix": "A full AnythingLLM Desktop app restart (kill all AnythingLLM.exe processes, relaunch, poll /api/ping until online) is required after changing anythingllm_mcp_servers.json for a server name that was already running - do not just kill the child process and expect a clean respawn.",
+      "test": "Reproduced this session: killed the npx-spawned server-filesystem process after swapping to scripts/mcp-filesystem-proxy.cjs, next @agent turn showed \"MCP Servers already running, skipping boot\" then \"not found in MCP server config. Skipping inclusion\" in backend-*.log. Full app restart fixed it - confirmed by the next Transport message log line showing exactly the proxy-filtered 4-tool set.",
+      "prevention": "Any future MCP server config change (new server, changed command/args, changed profile mechanism) should restart AnythingLLM Desktop, not rely on MCPHypervisor to detect the change."
+    },
+    {
+      "id": "qwen3-thinking-disabled-breaks-tool-call-generation",
+      "severity": "quality-degradation",
+      "status": "mitigated",
+      "discoveredAt": "2026-09-02T06:46:45.315Z",
+      "rootCause": "Forcing think:false via scripts/ollama-think-proxy.cjs (proven 18x faster for plain text: 2.34s vs 42.06s on an identical prompt) made qwen3:1.7b produce EMPTY final content on agentic/tool-calling turns - 6/6 reproduced across 3 independent runs (2 attempts each), all with mismatchDetected:true and 19-28 completion tokens producing zero visible text or logged tool-call attempt. Re-enabling thinking for the same tool-calling turns did not restore reliability either - it timed out at 150s without ever attempting a tool call once. This is a genuine, currently-unresolved qwen3:1.7b tool-calling reliability limitation under this specific harness (AnythingLLM agent mode + MCP tools), not a routing or proxy plumbing defect.",
+      "symptom": "An @agent turn with tools attached returns ok:true, mismatchDetected:true (after the fix to catch this), empty final content, ~19-28 completion tokens, no tool-call ever logged - looks superficially like a fast failure but is actually the model producing malformed/incomplete structured output.",
+      "fix": "scripts/ollama-think-proxy.cjs now only forces think:false when body.tools is absent/empty (plain chat) - tool-calling requests (body.tools non-empty) are left at Ollama/Qwen3s natural default (thinking on) instead of a single global switch. This is a mitigation (avoids the proxy actively causing empty responses), not a fix for qwen3:1.7bs underlying tool-calling reliability, which remains a real limitation.",
+      "test": "ANYTHINGLLM_E2E_REPRODUCIBILITY.json records the 0/3 PASS run with think forced off; the fixed tools-aware proxy logic is exercised live by scripts/anythingllm-task-router.cjs on every dispatch.",
+      "prevention": "Recommend a model with more reliable native tool-calling for agentic World_server tasks (see final integration report for the specific recommendation) rather than continuing to tune qwen3:1.7b think settings - this class of small quantized model appears to need either thinking enabled (accepting latency) or a different model entirely for structured tool output, not a thinking-mode toggle."
+    },
+    {
+      "id": "anythingllm-agentmodel-requires-agentprovider",
+      "severity": "operational",
+      "status": "fixed",
+      "discoveredAt": "2026-09-02T11:57:38.389Z",
+      "rootCause": "AnythingLLM workspace update accepts agentModel independently of agentProvider, and the API returns the new agentModel value as if it took effect - but a live-tested @agent turn kept using the system-default model (qwen3:1.7b) while agentProvider stayed null, even with agentModel explicitly set to a different model. agentProvider must be set alongside agentModel (and chatProvider alongside chatModel) for the override to actually apply.",
+      "symptom": "Workspace GET/update responses show the intended agentModel, but the backend log AgentLLM line still names the old/default model for the actual turn.",
+      "fix": "scripts/anythingllm-task-router.cjs#setWorkspaceModel now always sets {agentProvider:\"ollama\", agentModel, chatProvider:\"ollama\", chatModel} together.",
+      "test": "Live-verified: a plain chat with just chatModel/chatProvider set both together returned metrics.model=qwen2.5:3b-instruct correctly.",
+      "prevention": "Any future per-request/per-workspace model override in this codebase should set the *Provider field alongside the *Model field - never assume the model field alone is sufficient."
+    },
+    {
+      "id": "anythingllm-ollama-tool-calling-fixed-timeout-signature",
+      "severity": "release-blocker",
+      "status": "superseded",
+      "discoveredAt": "2026-09-02T12:15:06.150Z",
+      "rootCause": "The empty-content tool-calling failure (see #qwen3-thinking-disabled-breaks-tool-call-generation) was initially attributed to CPU contention, but decisive controlled testing disproves that as the SOLE cause: the exact same failure signature (~130-150s duration, ~19-28 completion tokens, empty final content, zero tool-call ever logged) recurred IDENTICALLY across qwen3:1.7b (thinking on AND off) and qwen2.5:3b-instruct (no hybrid thinking), and recurred even at 18% system CPU load (a genuinely idle window, confirmed via Win32_Processor.LoadPercentage at test start) exactly as it did at 93-100% load. Two different model families, two different thinking-mode configurations, and two very different load conditions all produced the same narrow duration/token-count band - this is inconsistent with a pure compute-throughput explanation and points to something structural in the AnythingLLM<->Ollama tool-calling wire protocol/timeout handling for this MCP tool-schema setup (AnythingLLM 1.16.1, Ollama 0.33.2), not a model capability or resource-availability limitation.",
+      "symptom": "An @agent turn with MCP tools attached consistently takes ~130-150s and produces ~19-28 completion tokens of empty/invisible content, regardless of which local model or CPU load is in play.",
+      "fix": "NOT YET FOUND. Ruled out: model choice (2 families tested), thinking mode (both settings tested), CPU contention (both idle and loaded tested). Router-level mitigations remain correct and should stay: resource-aware queueing, deterministic tool allowlisting, timeout/cancellation, model-suitability tracking (now correctly marks both tested models unsuitable for filesystem-read based on real data, not a false PASS).",
+      "test": "ANYTHINGLLM_E2E_REPRODUCIBILITY.json and the model-suitability ledger record the real, reproduced attempts.",
+      "prevention": "Recommend NOT continuing to cycle through additional local models chasing this - the evidence points to a pipeline-level issue. Next investigation step: test the exact same MCP tool-schema turn against a CLOUD provider (e.g. via OpenHuman OpenRouter free tier) to isolate whether the defect is Ollama-side or AnythingLLM-side; separately, check AnythingLLM/Ollama GitHub issues for known qwen tool-calling defects in these exact versions before assuming this project introduced the bug.",
+      "supersededBy": "anythingllm-router-hint-tool-name-mismatch",
+      "note": "Root cause found via matrix-test bisection - see the new entry. Streaming/CPU-load/model-choice were all real contributing factors to LATENCY (destreaming tool-calling requests is still a genuine improvement, kept), but the actual EMPTY-CONTENT trigger was the router own tool-name hint using unprefixed names."
+    },
+    {
+      "id": "anythingllm-router-hint-tool-name-mismatch",
+      "severity": "release-blocker",
+      "status": "fixed",
+      "discoveredAt": "2026-09-02T13:11:18.666Z",
+      "rootCause": "scripts/anythingllm-task-router.cjs appended a tool-name hint to the user message (\"Use exactly one of these tools: list_directory, search_files, read_file, read_text_file...\") using the SHORT, unprefixed names from lib/mcp-intent-router.js allowedTools. AnythingLLM registers MCP tools under a PREFIXED name, <mcpServerName>-<toolName> (confirmed live: \"world-server-sandbox-read_text_file\", not \"read_text_file\"). Instructing the model to call a tool name that does not exist in its own declared tools list broke generation entirely - not a timeout, not a CPU issue, not a model-capability limitation. Proven via matrix-test bisection against raw Ollama (bypassing AnythingLLM and the think-proxy entirely): the EXACT SAME request (system prompt, task text, tool schema, model, num_ctx) succeeded with hasToolCalls:true and the correct tool name when the hint was removed, and failed with hasToolCalls:false/empty content when the hint was present - the single controlled variable.",
+      "symptom": "@agent tool-calling turns consistently return empty content with no tool_calls, regardless of model, thinking-mode setting, CPU load, or streaming mode - this masked the real cause behind what looked like a resource/model/protocol problem for an entire diagnostic cycle.",
+      "fix": "scripts/anythingllm-task-router.cjs now has a prefixedToolName() helper (MCP_SERVER_NAME=\"world-server-sandbox\", overridable via ANYTHINGLLM_MCP_SERVER_NAME env) and both hint-construction sites (the attempt-1 multi-tool hint and the retry single-tool escalation) map through it before sending tool names to the model. The workspace system prompt (set via /workspace/{slug}/update earlier this session) was also corrected to use prefixed names for consistency, though live testing showed that alone was NOT the trigger - only the hint was.",
+      "test": "test/anythingllm-task-router.test.js: prefixedToolName unit test + a source-inspection regression guard that fails if a future edit reintroduces allowedTools.join(...) or an unwrapped singleTool without routing through prefixedToolName.",
+      "prevention": "Any future text sent to the model that names a specific MCP tool (hints, error messages, retry prompts) must go through prefixedToolName() - never reference lib/mcp-intent-router.js allowedTools names directly in model-facing text."
+    },
+    {
+      "id": "ollama-think-proxy-default-request-timeout",
+      "severity": "release-blocker",
+      "status": "fixed",
+      "discoveredAt": "2026-09-02T13:50:32.419Z",
+      "rootCause": "Node http.Server defaults to requestTimeout=300000ms and headersTimeout=60000ms since Node 18. scripts/ollama-think-proxy.cjs never overrode these, so once the real tool-calling defect was fixed (see #anythingllm-router-hint-tool-name-mismatch) and turns started genuinely completing under real CPU contention (observed 150-350s+, other concurrent AI agents on the same machine), requests exceeding 5 minutes got silently force-closed by Node itself at the proxy layer - not by Ollama, not by AnythingLLM, not by the router client. This surfaced on AnythingLLMs side as \"[AIbitat] Provider error: fetch failed\", indistinguishable from a genuine network failure, and caused a full 3x reproducibility run to fail 3/3 with error_fetch failed even though the underlying tool-calling mechanism was already proven correct.",
+      "symptom": "A long-running (>5min) request through the proxy fails with a generic fetch error on the calling side (AnythingLLM), with no timeout-specific error message anywhere in the chain - looks exactly like a network/model failure.",
+      "fix": "scripts/ollama-think-proxy.cjs sets server.requestTimeout=0, server.headersTimeout=0, server.timeout=0 after creating the http.Server - a slow-but-working local model turn must never be truncated by an invisible proxy-layer default the LLM call itself has no knowledge of.",
+      "test": "test/ollama-think-proxy.test.js asserts these three properties are 0 on the live server instance.",
+      "prevention": "Any future Node http.Server used as a proxy/adapter in this stack for LLM traffic must explicitly disable requestTimeout/headersTimeout/timeout - Node changed these defaults from 0 (disabled) to nonzero in v18/v19, which silently breaks any long-running proxied request written before that change or without awareness of it."
+    },
+    {
+      "id": "ollama-model-load-thrashing-under-extreme-system-pressure",
+      "severity": "release-blocker",
+      "status": "documented-mitigated",
+      "discoveredAt": "2026-09-02T15:59:39.984Z",
+      "rootCause": "A direct, minimal (\"hi\") call through the proxy to Ollama returned total_duration=6451s (107.5 min), of which load_duration alone was 6443s (107.4 min) - prompt_eval_duration (5.3s) and eval_duration (2.8s) were both entirely normal once the model was actually loaded. This is NOT a proxy/transport bug (the earlier requestTimeout fix and the tool-name-mismatch fix are both real and correct) and NOT a tool-calling correctness defect - it is the Ollama model-load phase itself (reading ~2.7GB of weights into RAM and initializing) taking on the order of MINUTES to HOURS under genuine, extreme, system-wide resource contention on this shared machine (observed concurrently: Godot, multiple OpenHuman processes, multiple Claude/OpenCode sessions). This class of slowdown (OS-level memory/disk thrashing, not CPU%) is invisible to a plain Win32_Processor.LoadPercentage check - a machine can show 90-100% CPU OR a deceptively normal-looking % and still take 100x longer than expected to page a model back into resident memory if the OS is under severe combined memory+disk pressure from many processes at once.",
+      "symptom": "A request that should take seconds takes minutes-to-hours with NO error, no timeout, no log distinguishing loading from hung - the only way to see it is comparing load_duration to total_duration in the eventual response metrics, which are unavailable until the (very slow) call finally completes.",
+      "fix": "lib/ai-resource-scheduler.js#decide() now also checks live Ollama model residency via /api/ps (loadedModels) before dispatch - a target model that is NOT currently resident is treated as a materially higher-risk dispatch (cold-load risk under contention), factored into the run_now/queue decision alongside CPU/RAM. This does not eliminate the underlying OS-level thrashing risk (outside this codebases control) but stops the router from confidently dispatching into a cold-load-under-pressure scenario that could take arbitrarily long.",
+      "test": "test/ai-resource-scheduler.test.js - modelResidency-aware decide() tests with a mocked /api/ps response.",
+      "prevention": "Do not interpret a normal-looking CPU% reading alone as \"safe to dispatch\" - always also check whether the target model is already resident (fast path) vs needs a cold load (risky path) before treating a machine as available. If this recurs, consider raising OLLAMA_KEEP_ALIVE (model residency TTL) so models are evicted less aggressively between calls, reducing how often a cold load is needed at all."
+    },
+    {
+      "id": "anythingllm-ollama-investigation-eliminated-hypotheses",
+      "severity": "informational",
+      "status": "documented",
+      "discoveredAt": "2026-09-02T16:17:19.471Z",
+      "rootCause": "Not a defect itself - a record of hypotheses tested and ELIMINATED during the AnythingLLM<->Ollama<->MCP tool-calling investigation, so a future session does not re-walk the same branches. In order tested: (1) CPU load alone - eliminated: the empty-content defect reproduced identically at 18% CPU (genuinely idle) and at 93-100% CPU. (2) Model choice - eliminated: reproduced identically on qwen3:1.7b AND qwen2.5:3b-instruct, two different model families/architectures. (3) Qwen3 hybrid thinking mode - eliminated: reproduced with thinking forced off, thinking forced on, and thinking left at natural default. (4) Number of tools attached - eliminated: reproduced with exactly 1 tool attached (not just 5-7). (5) stream:true - a REAL, measurable latency factor (destreaming tool-calling requests is a kept, genuine improvement) but NOT the root cause of the empty-content defect itself - the defect reproduced with stream:false too once tested precisely. (6)  field in tool parameters / long hyphenated MCP-prefixed tool names - eliminated via a controlled 4-way bisection (short/long name x with/without ), all 4 variants succeeded.",
+      "symptom": "N/A - this entry exists to save future investigation time, not to describe a live symptom.",
+      "fix": "N/A - see #anythingllm-router-hint-tool-name-mismatch for the actual fix (the router own hint used unprefixed tool names that do not exist in AnythingLLMs actual tool registry) and #ollama-model-load-thrashing-under-extreme-system-pressure for the separate, later-discovered reliability issue (cold model loads under severe real system memory/disk contention can take many minutes).",
+      "test": "N/A",
+      "prevention": "Before spending more time varying model/thinking-mode/tool-count/streaming on this exact symptom (empty tool-calling content, no tool_calls, done_reason=stop), first check: (a) does the routers own hint/prompt text name any tool by a name that does not EXACTLY match what tools/list actually returns for this MCP server (the real root cause found here), and (b) is Ollama currently under genuine OS-level memory/disk thrashing (check load_duration vs total_duration in the eventual response, not just CPU%) before assuming a fresh model-selection or protocol-level defect."
+    },
+    {
+      "id": "durable-queue-contention-deferral-consumes-retry-budget",
+      "severity": "release-blocker",
+      "status": "fixed",
+      "discoveredAt": "2026-09-02T16:36:16.974Z",
+      "rootCause": "scripts/durable-job-queue.cjs#claim() increments a jobs attempts counter unconditionally on EVERY claim, not only on a genuine execution failure. scripts/anythingllm-queue-drain.cjs#drainOne() re-checks resources after claiming and, if still contended, calls failTask() to requeue - a real, honest \"not yet, try again later\" deferral, not a failure. But because attempts already incremented at claim time, each of these deferrals silently consumed one of the jobs limited maxAttempts (default 3). Live-observed: a genuinely valid, correctly-enqueued task was permanently dead-lettered after exactly 3 consecutive \"still contended\" re-checks during sustained real CPU load (72-100% across the observation window) - the job was NEVER actually executed even once, only deferred, yet exhausted its retry budget purely from contention. This defeated the entire \"queue and wait for a window\" design.",
+      "symptom": "A task that was correctly queued under load silently disappears from the queue (goes to dead-letter status) after a small number of drain-loop ticks, even though the machine never actually attempted to run it - looks like a lost job with no error message pointing at the real cause (the retry counter, not the task itself).",
+      "fix": "lib/ai-resource-scheduler.js#enqueueTask default maxAttempts raised 3 -> 50, giving roughly 25 minutes of headroom at the drain loops 30s tick interval before a genuinely stuck job is abandoned, rather than 3 ticks (~1.5 minutes) worth.",
+      "test": "Documented here; a live reproduction requires sustained real CPU contention over multiple drain ticks, which is not practical to force deterministically in a fast unit test - the fix (higher default) is a direct, verifiable code change.",
+      "prevention": "Any future use of durable-job-queue.cjs for a pattern where a claim can be immediately re-deferred without real execution (not just genuine work-attempted-and-failed) should set a generously high maxAttempts, or durable-job-queue.cjs itself should eventually distinguish claim-count from failure-count - out of scope to change here since that script is shared, general-purpose infrastructure used by other systems in this project."
+    },
+    {
+      "id": "anythingllm-transient-dispatch-failure-terminally-failed",
+      "severity": "release-blocker",
+      "status": "fixed",
+      "discoveredAt": "2026-09-02T16:46:57.536Z",
+      "rootCause": "Live production validation job 3877989cf15fa657720fa3c3fdc45e0191c37b15197351cbafb2f1d4bb2acdaa: the resource gate correctly deferred dispatch across several ticks while real CPU (other concurrently-running AI-agent processes plus Godot on the same machine) sat at 88-100%, then allowed dispatch once CPU briefly read under the 70% threshold. CPU climbed back up during the ~10-minute dispatch and AnythingLLM never returned a response; scripts/anythingllm-task-router.cjs's own AbortSignal.timeout(600000) fired, which surfaced through Node's fetch (undici) as a generic `TypeError: fetch failed` (e.message exactly 'fetch failed'), NOT as `e.name === 'TimeoutError'` - confirmed via an isolated repro (Node v24.15.0): a connection that never receives any bytes throws TimeoutError directly on abort, but a connection torn down mid-flight (the actual shape of a contention-starved backend) does not. scripts/anythingllm-queue-drain.cjs#drainOne() called ackTask() on ANY result runTask() returned, without distinguishing a transient dispatch-level failure from a genuine semantic result - permanently losing a job to a single connection hiccup under known real contention, even though lib/ai-resource-scheduler.js's own maxAttempts=50 budget (see #durable-queue-contention-deferral-consumes-retry-budget) exists specifically to survive exactly this kind of transient condition. That budget only helps jobs that get requeued, not ones that get ack'd as terminal.",
+      "symptom": "A queued job that the resource gate correctly waited to dispatch runs once, gets no real response within the timeout window, and is permanently marked FAIL/dead - indistinguishable in the job record from a genuine semantic failure (wrong tool chosen, bad answer), even though the real cause was the machine being too busy at that exact moment, not anything wrong with the request or the fix already validated in #anythingllm-router-hint-tool-name-mismatch.",
+      "fix": "scripts/anythingllm-queue-drain.cjs#isTransientDispatchFailure(result) classifies a runTask() result as transient (requeue via failTask, preserving the maxAttempts budget) when the last attempt timed out, or its reason starts with 'error_' (any fetch/network-level exception, exactly the live 'error_fetch failed' shape), or is an http_5xx response - and as terminal (ackTask, no further retry) when it is a real completed response with a genuine semantic mismatch, or an http_4xx client/config error that retrying would not fix.",
+      "test": "test/anythingllm-queue-drain.test.js - covers the exact live shape (reason 'error_fetch failed', timedOut:false), a genuine TIMEOUT result, http_503 (transient), http_400 (terminal), a real semantic mismatch after a completed response (terminal), a PASS result, and null/undefined input.",
+      "prevention": "Any future dispatch path that can fail mid-flight under real resource contention (not just at the pre-dispatch gate check) should classify failures by whether a real response was ever received, not just by whether the call returned ok:false - a network/timeout-level failure under known contention is evidence the machine was busy, not evidence the request itself was wrong."
+    },
+    {
+      "id": "anythingllm-ollama-response-timeout-not-configured",
+      "severity": "release-blocker",
+      "status": "fixed",
+      "discoveredAt": "2026-09-02T18:05:00.000Z",
+      "rootCause": "Confirmed by direct source inspection of the installed AnythingLLM Desktop backend (C:\\Users\\user\\AppData\\Local\\Programs\\AnythingLLM\\resources\\backend\\server.js, OllamaAILLM.applyOllamaFetch()) - NOT a guess. AnythingLLM constructs its own outbound `ollama` client with a custom fetch ONLY if process.env.OLLAMA_RESPONSE_TIMEOUT is set to a valid number >= 300000ms (5 minutes); if that env var is unset (the default on this machine), it falls straight back to the plain global `fetch`, which under Node/undici carries a default headersTimeout of exactly 300000ms (5 minutes) on the dispatcher used for AnythingLLM's own request TO Ollama. This is a completely separate timeout from scripts/anythingllm-task-router.cjs's own client-side AbortSignal.timeout (600000ms) - AnythingLLM's own outbound call to Ollama was dying at ~5 minutes, long before our own 10-minute client timeout would ever fire. This is the true explanation for both live 'error_fetch failed' incidents (job 3877989c...f2acdaa and simple-e2e run1: wallClockMs 306464, i.e. ~5m6s - the ~6s of overhead is AnythingLLM's own pre-processing/resource checks before the actual Ollama chat() call starts). Note the previously-recorded durationMs:600000 on both incidents was NOT a real measurement - scripts/anythingllm-task-router.cjs's catch block for a thrown fetch error hardcodes `durationMs: timeoutMs` (the configured constant) rather than computing real elapsed time, which is itself a minor observability bug worth fixing separately but did not affect the classification fix in #anythingllm-transient-dispatch-failure-terminally-failed, which remains correct and necessary regardless of the exact failure cause.",
+      "symptom": "Any real agentic tool-calling turn through AnythingLLM's chat API that genuinely takes longer than ~5 minutes of wall-clock time (plausible under real CPU contention on a CPU-only qwen2.5:3b-instruct backend, or on any slower/larger model) fails with a generic connection-level error ('fetch failed'), regardless of how high the CALLING code's own client-side timeout is set - raising scripts/anythingllm-task-router.cjs's own timeout further would have had zero effect, since AnythingLLM's own internal call to Ollama was always going to die first at the fixed 5-minute undici default.",
+      "fix": "Set OLLAMA_RESPONSE_TIMEOUT=900000 (15 minutes, AnythingLLM's own documented mechanism for this exact case, requires >=300000 to take effect at all) as a persistent Windows User environment variable via `setx`, then restart AnythingLLM Desktop so the Electron app's process environment picks up the new value (a running GUI app does not re-read env vars; only killing/relaunching it applies this - the actual process restart required user action since terminating the app process was correctly blocked by this session's safety classifier as a killing-a-running-application action).",
+      "test": "Live-confirmed post-restart (2026-09-03, run4): two real dispatch attempts completed in 75.3s and 67.6s respectively with zero 'fetch failed'/network-level errors, versus two prior live incidents that both died around the ~5-minute mark before this fix - the failure class this fix targets is confirmed gone. (The run itself still returned FAIL for an unrelated reason - see #mcp-filesystem-proxy-shell-true-unquoted-space-path - not a regression of this fix.)",
+      "prevention": "Any future timeout-tuning work on this pipeline must account for THREE independent timeout layers, not just the router's own: (1) scripts/anythingllm-task-router.cjs's client-side AbortSignal.timeout, (2) AnythingLLM's own outbound fetch to Ollama (OLLAMA_RESPONSE_TIMEOUT env var, undici headersTimeout, 5-minute default if unset), (3) Ollama's own model-load/inference time under real system contention (#ollama-model-load-thrashing-under-extreme-system-pressure). All three must be raised together for a slow real turn to have a chance of completing - raising only the outermost (our own client timeout) is not sufficient, as directly proven here."
+    },
+    {
+      "id": "anythingllm-restart-resets-workspace-list-until-workspace-recreated",
+      "severity": "release-blocker",
+      "status": "fixed",
+      "discoveredAt": "2026-09-03T04:44:00.000Z",
+      "rootCause": "A full AnythingLLM Desktop restart+reinitialize (the user's own \"reinitialize with Ollama\" action, not something this session performed) left the on-disk SQLite DB (anythingllm.db) containing a 'world' workspace row (id 2, confirmed via direct DB read), but the live server's own /api/v1/workspaces and /api/v1/workspace/world endpoints returned an empty list / {\"workspace\":[]} for it - a real divergence between the DB file's contents and what the running process's own API considered to exist, discovered live rather than assumed. GET/POST calls against a workspace slug the live API does not recognize fail (thread creation returned http_400, chat would have failed identically) regardless of how correct the DB file looks from outside the process.",
+      "symptom": "After restarting/reinitializing AnythingLLM Desktop, API calls referencing a workspace slug that demonstrably worked before the restart (and still exists as a row in the SQLite file) fail with generic errors (400 on thread creation, empty array on workspace lookup) with no indication in AnythingLLM's own logs of why.",
+      "fix": "POST /api/v1/workspace/new with the same name ('world') - AnythingLLM's own workspace-creation endpoint reconciles this (returned the same workspace id 2, now correctly visible via GET afterward) rather than requiring any DB surgery.",
+      "test": "Live-confirmed: GET /api/v1/workspace/world returned {\"workspace\":[]} before this call and a real populated object after it; thread creation succeeded immediately afterward.",
+      "prevention": "After any AnythingLLM restart/reinitialize (not just a plain process restart), verify a workspace this pipeline depends on is actually visible via its own API (not just present in the DB file) before dispatching - POST /api/v1/workspace/new with the expected name first if not, since it is a safe, idempotent-in-effect reconciliation step, not a destructive one."
+    },
+    {
+      "id": "mcp-filesystem-proxy-shell-true-unquoted-space-path",
+      "severity": "release-blocker",
+      "status": "fixed",
+      "discoveredAt": "2026-09-03T04:52:00.000Z",
+      "rootCause": "scripts/mcp-filesystem-proxy.cjs spawns the real @modelcontextprotocol/server-filesystem via `spawn('npx', ['-y', '@modelcontextprotocol/server-filesystem', sandboxRoot], {shell:true})`. With shell:true, Node hands the args array to cmd.exe (on Windows) as a plain SPACE-JOINED STRING - it does NOT quote each array element for you the way shell:false preserves exact argv boundaries. This project's real sandbox path contains a space ('...\\\\World_server AI\\\\World_server_anythingllm_sandbox'), so cmd.exe split it into two separate tokens at that space, and @modelcontextprotocol/server-filesystem's own arg parsing fell back to something derived from process.cwd() instead of the intended sandbox root (observed directly: 'Cannot access directory ...\\\\World_server_openhuman2\\\\AI\\\\World_server_anythingllm_sandbox, skipping' - cwd with a mangled tail appended, not the real path). Reproduced identically via a plain shell command AND via a clean child_process.spawn() call with a proper argv array (ruling out a Bash-quoting artifact on this session's own side) - the bug is inside the proxy script itself. This silently broke the MCP server for AnythingLLM's MCPHypervisor too: with no real accessible directory, the spawned process could not fully initialize the way AnythingLLM's hypervisor expects, and AnythingLLM's own force-reload/list endpoints reported 'Successfully started 0 MCP servers: []' even though anythingllm_mcp_servers.json correctly referenced this exact proxy script and path - a completely different symptom (empty tool list, 3 default-only tools active) with the same real cause. Same class of bug as the npm.cmd/shell quoting fix in commit 1c01fa76 elsewhere in this project.",
+      "symptom": "The MCP filesystem proxy appears to start (prints 'Secure MCP Filesystem Server running on stdio') but silently serves the wrong (inaccessible or cwd-derived) directory instead of the real sandbox; AnythingLLM's own MCPHypervisor reports 0 servers started with no error, so a model dispatching through it can only see the 3 default built-in tools (rag-memory, document-summarizer, web-scraping) and produces an empty/short non-answer to a filesystem task - visually identical to the ALREADY-FIXED #anythingllm-router-hint-tool-name-mismatch empty-response defect, but with a completely different root cause (no real tools attached at all, vs. a wrong tool-name hint).",
+      "fix": "scripts/mcp-filesystem-proxy.cjs#shellQuote() wraps sandboxRoot in double quotes (escaping any embedded quote) before it reaches the shell:true spawn, so cmd.exe treats a space-containing path as one token, matching how it already behaves with shell:false/no shell involved.",
+      "test": "test/mcp-filesystem-proxy.test.js - new case spawns the proxy against a sandbox directory created with a deliberately space-containing prefix ('mcp proxy sandbox with space-') and asserts a real read_text_file call still resolves the correct fixture content - none of the pre-existing tests caught this because os.tmpdir() sandboxes happen not to contain a space.",
+      "prevention": "Any future spawn() call in this codebase using shell:true on an argument that could contain a space (a path, in particular) must be explicitly quoted before being added to the args array - shell:true does not do this automatically, unlike shell:false. Prefer shell:false plus an explicit .cmd/.exe extension resolution where the target platform allows it, to avoid this whole class of bug outright; shell:true remains necessary here specifically for npx's Windows .cmd shim resolution."
+    },
+    {
+      "id": "anythingllm-mcphypervisor-cannot-register-any-mcp-server",
+      "severity": "release-blocker",
+      "status": "bypassed",
+      "discoveredAt": "2026-09-03T05:00:00.000Z",
+      "rootCause": "After the #mcp-filesystem-proxy-shell-true-unquoted-space-path fix, AnythingLLM's MCPHypervisor still reported 'Successfully started 0 MCP servers: []' - across a force-reload, a direct per-server toggle call ('MCP server world-server-sandbox not found in config file'), AND a full app restart (fresh singleton, fresh boot log, same result). Isolated as systemic and config-content-independent: adding a second, completely standard @modelcontextprotocol/server-everything reference entry to anythingllm_mcp_servers.json failed identically alongside our own real entry - proving this is not about our specific config's shape. The config file itself was verified correct via direct byte-level JSON.parse (matching content both before and after every reload attempt), and the resolved config path matched exactly what the running process's own boot log reported. The exact internal mechanism inside AnythingLLM's minified, closed-source bundle could not be pinned down further without a live debugger. Notably, this same AnythingLLM version (1.16.1) DID successfully register and use this exact MCP server earlier the same session (a real live validation read package.json through it) - something about a subsequent restart/reinitialize broke MCP registration in a way that persists across further restarts and is not fixable through this project's configuration or code.",
+      "symptom": "AnythingLLM's agent chat can only ever see its 3 default built-in tools (rag-memory, document-summarizer, web-scraping) for any workspace/task, never any configured MCP server's real tools, regardless of config content or app restarts.",
+      "fix": "BYPASSED rather than further chased: scripts/anythingllm-task-router.cjs now dispatches every agentic/tool-calling capability class (anything but 'unknown') through lib/direct-ollama-mcp-transport.js instead of AnythingLLM's @agent chat - a direct MCP client (talking to the same already-fixed scripts/mcp-filesystem-proxy.cjs) using Ollama's own native tool-calling API. This also structurally eliminates the entire class of bug behind #anythingllm-router-hint-tool-name-mismatch, since the tools handed to Ollama ARE exactly what it may call - no separate hint text that can drift from the real registered names. AnythingLLM remains available and unchanged for the 'unknown' (plain, non-agentic) capability class, and callers can force the old path with opts.transport:'anythingllm' for comparison. Per the standing 'don't keep AnythingLLM mandatory if its MCP pipeline is proven broken' guidance - not a new parallel system, but a swap of the model-call transport inside the SAME runTask() entry point, reusing the exact same resource gate, concurrency lease, and durable queue.",
+      "test": "Live-confirmed: a real end-to-end filesystem-read task through the full runTask() (lease + resource gate + direct-Ollama transport, zero AnythingLLM involvement, ANYTHINGLLM_API_KEY unset) returned result:PASS with a real read_text_file tool call and the correct package.json content. test/anythingllm-task-router.test.js covers the transport-selection logic (a filesystem task no longer requires threadSlug/API key; a plain/unknown task still does).",
+      "prevention": "If AnythingLLM's MCP registration is ever fixed/reinstalled cleanly, opts.transport:'anythingllm' remains available to re-compare before switching the default back - do not assume a future AnythingLLM update silently un-breaks this without a live re-test, given the exact internal cause was never conclusively identified."
     }
   ],
   "confirmationProtocol": {

@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "1.0.0",
+  "entries": {
+    "project-identity": {
+      "hash": "6b0888dbd3913fbab16e5751a945a24c5f87e36487a1ab7ae2bb98fe84a1dbef",
+      "sourceCommit": "0c47a96852774184e6d7d4a2a2ac2800970fc455",
+      "updatedAt": "2026-08-31T22:15:21.699Z",
+      "memoryId": "mem_mthsr7di_f66987661a1d"
+    },
+    "navigator": {
+      "hash": "2e9272678be2da21578637062164e6a6cbd8b821bd76423bd4fb37037d4417d2",
+      "sourceCommit": "0c47a96852774184e6d7d4a2a2ac2800970fc455",
+      "updatedAt": "2026-08-31T22:15:21.989Z",
+      "memoryId": "mem_mthsr7q1_6fa3fe5f7244"
+    },
+    "user-experience": {
+      "hash": "5cf75436e8ab2709ad42cf3c4128c9b87e2c848f5ebfdf362e7fc1ce178b0e66",
+      "sourceCommit": "0c47a96852774184e6d7d4a2a2ac2800970fc455",
+      "updatedAt": "2026-08-31T22:15:22.326Z",
+      "memoryId": "mem_mthsr7xe_48f9d75cdded"
+    },
+    "procedural-systems": {
+      "hash": "846a04464294ca50e841777d9b18b90f0dc087ea245bd16b5917aa6babaa9cd4",
+      "sourceCommit": "0c47a96852774184e6d7d4a2a2ac2800970fc455",
+      "updatedAt": "2026-08-31T22:15:22.728Z",
+      "memoryId": "mem_mthsr86o_4b4db4589a3c"
+    },
+    "supabase-schema": {
+      "hash": "d9aa4e92ca7518431f24176449a568047570562e3873ecb6a0b13eb9a196c8e0",
+      "sourceCommit": "0c47a96852774184e6d7d4a2a2ac2800970fc455",
+      "updatedAt": "2026-08-31T22:15:23.130Z",
+      "memoryId": "mem_mthsr8hz_78969c480b87"
+    },
+    "supabase-environments": {
+      "hash": "9e9d9d99ea31891664ea7c9449ea0feec2145da51b3c62bff888d740e0de8139",
+      "sourceCommit": "0c47a96852774184e6d7d4a2a2ac2800970fc455",
+      "updatedAt": "2026-08-31T22:15:23.414Z",
+      "memoryId": "mem_mthsr8t7_54002dba1a96"
+    },
+    "collective-brain": {
+      "hash": "db440a80e31dd113cfdc36902de1b8fee3686a4f17b9b55647463a950101e64e",
+      "sourceCommit": "0c47a96852774184e6d7d4a2a2ac2800970fc455",
+      "updatedAt": "2026-08-31T22:15:23.850Z",
+      "memoryId": "mem_mthsr90y_6a2778fbfd9f"
+    },
+    "quality-system": {
+      "hash": "963e11e669a294147e42a5f274f9a33e9c72ed071a63854ceb896e55b3b897c6",
+      "sourceCommit": "0c47a96852774184e6d7d4a2a2ac2800970fc455",
+      "updatedAt": "2026-08-31T22:15:24.332Z",
+      "memoryId": "mem_mthsr9d6_329bcd0c7a9e"
+    },
+    "multi-ai-rules": {
+      "hash": "0befd3b8b1b447ec4e2562a5d78de9a7edebb1da3fbea74ae4404b061fd71a9f",
+      "sourceCommit": "0c47a96852774184e6d7d4a2a2ac2800970fc455",
+      "updatedAt": "2026-08-31T22:15:24.722Z",
+      "memoryId": "mem_mthsr9rx_923903b78555"
+    },
+    "deployment": {
+      "hash": "1b08bc76dd447646278296b97d1d586b80913f5403fd6784dff090931a217eba",
+      "sourceCommit": "0c47a96852774184e6d7d4a2a2ac2800970fc455",
+      "updatedAt": "2026-08-31T22:15:25.023Z",
+      "memoryId": "mem_mthsra1k_7ad78ea3c9f6"
+    },
+    "operational-rules": {
+      "hash": "a34954582175c2402bf5e589abd0ccbac183ea0665edced7da09fdee74974a8b",
+      "sourceCommit": "0c47a96852774184e6d7d4a2a2ac2800970fc455",
+      "updatedAt": "2026-08-31T22:15:25.350Z",
+      "memoryId": "mem_mthsra9j_c3fecafaf463"
+    },
+    "index": {
+      "hash": "3cdc92d7dee31c541a989a4de01bed244e1f35bddb2aa63995f9f7faf27cb57b",
+      "sourceCommit": "0c47a96852774184e6d7d4a2a2ac2800970fc455",
+      "updatedAt": "2026-08-31T22:15:25.684Z",
+      "memoryId": "mem_mthsraip_1c0c3358861a"
+    }
+  }
+}
