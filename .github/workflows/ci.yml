@@ -47,7 +47,7 @@ jobs:
       - name: Sentry runtime smoke (Playwright) - window.WorldServerSentry + ingest (hard)
         run: npx playwright test e2e/sentry-smoke.spec.js --project=desktop-chromium
       - name: AI3D Voxel City autoplay (Playwright) ai3d-voxel-city-autoplay (hard)
-        run: npx playwright test
+        run: npx playwright test e2e/ai3d-voxel-city-autoplay.spec.js
 
   lighthouse:
     runs-on: ubuntu-latest
