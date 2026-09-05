@@ -117,5 +117,13 @@
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.62.1",
     "esbuild": "^0.28.2"
+  },
+  "overrides": {
+    "tmp": "0.2.7",
+    "uuid": "11.1.1",
+    "qs": "6.16.0",
+    "lighthouse": "13.4.1",
+    "puppeteer-core": "25.10.0",
+    "@puppeteer/browsers": "3.2.2"
   }
 }
