@@ -30,6 +30,27 @@ class MeshQualityOptimizer:
         src = Path(src)
         job = Path(job)
         merged_params = dict(params or {})
+        status = self.pipeline.status()
+        if not status.get("available"):
+            report = job / "optimization-report.json"
+            report.write_text(
+                __import__("json").dumps(
+                    {
+                        "schemaVersion": 10,
+                        "status": "SKIPPED_BLENDER_UNAVAILABLE",
+                        "passed": True,
+                        "sourcePreserved": True,
+                        "source": str(src),
+                        "pipelineVersion": status.get("pipelineVersion"),
+                        "blender": status.get("blender"),
+                        "reason": "Canonical Blender quality optimizer is optional after a valid source GLB; source model is preserved unchanged when Blender is unavailable.",
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                ),
+                encoding="utf-8",
+            )
+            return report, []
         for candidate in (job / "input.png", job / "input.jpg", job / "input.webp"):
             if candidate.is_file():
                 merged_params.setdefault("_semanticReferenceImage", str(candidate))
