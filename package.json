@@ -264,6 +264,8 @@
     "quality:ink-glyph:bench": "node scripts/benchmark-ink-glyph-world.cjs",
     "quality:ink-glyph:e2e": "playwright test e2e/ink-glyph-world.spec.js",
     "ink:glyph:network": "node scripts/ink-glyph-network-diagnostics.cjs",
+    "creature-factory:test": "node --test test/creature-factory.test.js",
+    "creature-factory:bench": "node scripts/creature-factory-benchmark.cjs",
     "characterforge:check": "python services/ai3d-worker/scripts/verify_characterforge_cpu.py",
     "characterforge:check:strict": "python services/ai3d-worker/scripts/verify_characterforge_cpu.py --require-blender",
     "characterforge:selftest": "python services/ai3d-worker/scripts/verify_characterforge_cpu.py --require-blender --blender-selftest",

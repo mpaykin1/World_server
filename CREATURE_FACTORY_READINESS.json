@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "system": "CREATURE_FACTORY (round-2 verified)",
+  "generatedAt": "2026-09-05T05:18:53.897Z",
+  "status": "CPU/RUNTIME VERIFIED",
+  "implementedFeatures": [
+    "Procedural editor asset runtime adapter (asset-runtime.js)",
+    "Canonical recipe building with seed-aware deterministic hashing",
+    "Source payload canonicalization (strips heavy mesh object, bounds settings, secret-safe)",
+    "Stable instancing keys by recipe-hash + LOD tier",
+    "AnimationScheduler phase-spread of per-frame animation updates without duplicates",
+    "LodHysteresis anti-oscillation for LOD switching",
+    "LOD tier policy engine (full/high/medium/low) with monotonic distance degradation",
+    "planCreatureQuality degradation under mobile/cpu/frame pressure, sleeping for invisible creatures",
+    "Culling via tickRate=0 / despawn tiers",
+    "Creature species engine, seeded chunk spawning, creature tick/combat/loot",
+    "Legacy creature gameplay API preserved (seeded, creatureId, spawnChunk, tickCreature)"
+  ],
+  "verifiedTests": {
+    "command": "node --test test/creature-factory.test.js",
+    "pass": 15,
+    "fail": 0,
+    "coverage": [
+      "accepts both user editor formats",
+      "accepts exactly the 13 editor categories",
+      "rejects malformed format/category/null",
+      "deterministic + seed-aware recipe building",
+      "canonical recipe bounds/strips heavy source object",
+      "Godot controls survive canonicalization",
+      "stable instancing keys",
+      "monotonic LOD degradation",
+      "low tier never ticks / full tier ticks at interval",
+      "sleeps invisible creatures",
+      "never improves farther creatures",
+      "pressure only degrades quality",
+      "AnimationScheduler phase-spread",
+      "LodHysteresis anti-oscillation",
+      "legacy creature gameplay API available"
+    ]
+  },
+  "benchmarkEvidence": {
+    "command": "node scripts/creature-factory-benchmark.cjs",
+    "output": "CREATURE_FACTORY_BENCHMARK.json",
+    "totalBenchmarkMs": 2074,
+    "counts": [1, 100, 1000, 5000],
+    "note": "CPU/runtime planning + update simulation ONLY. NOT rendered GPU FPS."
+  },
+  "formats": [
+    "zero-signal-procedural-asset-v1",
+    "zero-signal-godot-procedural-asset-v1"
+  ],
+  "categories": [
+    "reptile",
+    "croc_teeth",
+    "fish",
+    "dragon",
+    "dragon_fire",
+    "human",
+    "human_sword",
+    "human_torch",
+    "human_gun",
+    "ship",
+    "steampunk_vehicle",
+    "creature",
+    "monster"
+  ],
+  "categoryCount": 13,
+  "remainingGaps": {
+    "renderedWebFPS": "Not measured. Benchmark evidence is headless CPU planning/update cost, NOT rendered Web/GPU frame times. Requires a live browser game-loop FPS benchmark.",
+    "godotNativeRendererParity": "Godot asset format is validated and canonicalized (sourceFormat zero-signal-godot-procedural-asset-v1, controls preserved), but no Godot-native renderer parity / in-Godot render verification exists.",
+    "physicalMobileEvidence": "No physical iOS/Android device evidence collected (mobile/cpu/frame pressure paths are unit-tested for degradation semantics only).",
+    "editorIngestionUI": "Asset runtime API is verified, but no user-facing editor ingestion UI exists / is not exercised end-to-end."
+  },
+  "notReadyClaims": [
+    "No rendered Web FPS claim from CPU measurements",
+    "No GPU/rendered benchmark claim",
+    "No production deployment performed"
+  ]
+}

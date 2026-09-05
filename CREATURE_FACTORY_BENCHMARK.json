@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "generator": "creature-factory-benchmark.cjs",
+  "generatedAt": "2026-09-05T05:18:53.897Z",
+  "platform": "win32 10.0.19045 x64",
+  "nodeVersion": "v24.15.0",
+  "unit": "CPU/runtime planning + update simulation (NOT rendered GPU FPS)",
+  "note": "CREATURE_FACTORY_BENCHMARK measures headless CPU cost of LOD planning, quality planning and update budgeting only. It does NOT render, rasterize, skin or measure WebGL/GPU frame time. It must NOT be reported or interpreted as rendered FPS. Rendered Web FPS requires a live browser/game loop benchmark.",
+  "counts": [
+    {
+      "count": 1,
+      "iterations": 713,
+      "totalMs": 252.431,
+      "avgMsPerCreature": 0.35404,
+      "creaturesPerSecond": 2824.5,
+      "lodDistribution": {
+        "full": 1,
+        "high": 0,
+        "medium": 0,
+        "low": 0
+      },
+      "sleepingCount": 0,
+      "instancingGroupCount": 1
+    },
+    {
+      "count": 100,
+      "iterations": 12,
+      "totalMs": 264.187,
+      "avgMsPerCreature": 0.220156,
+      "creaturesPerSecond": 4542.2,
+      "lodDistribution": {
+        "full": 30,
+        "high": 14,
+        "medium": 28,
+        "low": 28
+      },
+      "sleepingCount": 28,
+      "instancingGroupCount": 16
+    },
+    {
+      "count": 1000,
+      "iterations": 2,
+      "totalMs": 433.691,
+      "avgMsPerCreature": 0.216846,
+      "creaturesPerSecond": 4611.6,
+      "lodDistribution": {
+        "full": 286,
+        "high": 143,
+        "medium": 286,
+        "low": 285
+      },
+      "sleepingCount": 285,
+      "instancingGroupCount": 16
+    },
+    {
+      "count": 5000,
+      "iterations": 1,
+      "totalMs": 1123.694,
+      "avgMsPerCreature": 0.224739,
+      "creaturesPerSecond": 4449.6,
+      "lodDistribution": {
+        "full": 1430,
+        "high": 714,
+        "medium": 1428,
+        "low": 1428
+      },
+      "sleepingCount": 1428,
+      "instancingGroupCount": 16
+    }
+  ]
+}
