@@ -2,7 +2,15 @@
   "schemaVersion": "1.0.0",
   "system": "ERROR_RECURRENCE_PROTECTION",
   "policy": "confirmed-fix-becomes-permanent-regression-rule",
-  "events": [],
+  "events": [
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "godot-runtime-version-discovery",
+      "at": "2026-09-05T17:06:28.438Z",
+      "lessonHash": "1a6f770a5e34aeea09103c6369f72cf842ec0f7e2d2db0282fae62ee056cea60",
+      "supersedes": null
+    }
+  ],
   "knownErrors": [
     {
       "id": "controls-inverted-camera-relative",
@@ -643,6 +651,27 @@
         "do not raise capability-coverage or claim local-first is reliable on this hardware based on the one isolated live-test success alone - report the real combined rate (1 success out of 5 total real local attempts this cycle) honestly, as this entry does",
         "before increasing OLLAMA_PATCH_MODELS or lowering the 120s/150s timeouts, gather more real per-task-type samples first - 4 attempts is not enough to distinguish 'this task type is genuinely harder for a 1.7B model' from 'this was noise/contention'"
       ]
+    },
+    {
+      "id": "godot-runtime-version-discovery",
+      "category": "collective-brain-learned",
+      "severity": "major",
+      "status": "protected",
+      "history": [],
+      "rootCause": "Cross-platform worldgen and native build hardcoded one Godot 4.7.2 path; installed runtimes/templates can live in GameServerStudio or app package caches and versions can differ.",
+      "solution": "Centralize Godot runtime discovery, scan known local/package locations, select the highest installed runtime, and require a binary with matching export templates for native builds.",
+      "protection": [
+        "test/godot-discovery.test.cjs",
+        "scripts/compare-worldgen.js",
+        "scripts/godot-native-build.js"
+      ],
+      "evidence": [
+        "GODOT_NATIVE_BUILD_REPORT.json",
+        "COMPARE_WORLDGEN 7-seed PASS"
+      ],
+      "confirmedAt": "2026-09-05T17:06:28.436Z",
+      "lessonHash": "1a6f770a5e34aeea09103c6369f72cf842ec0f7e2d2db0282fae62ee056cea60",
+      "supersedes": null
     }
   ],
   "confirmationProtocol": {

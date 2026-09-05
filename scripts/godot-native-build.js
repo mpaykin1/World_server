@@ -22,14 +22,16 @@ const { spawnSync } = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
 const GODOT_PROJECT = path.join(ROOT, 'godot', 'world-client');
-const GODOT_BIN = process.env.GODOT_BIN || 'C:/Users/user/AppData/Local/GodotEngine/Godot_v4.7.2-stable_win64_console.exe';
+const { findGodot, templateVersionOf } = require('./lib/godot-discovery.cjs');
+const GODOT_BIN = findGodot({ requireTemplates: true });
 const BUILD_DIR = path.join(ROOT, 'GODOT_BUILD');
 const ARTIFACT_PATH = path.join(BUILD_DIR, 'world-server-native-windows.exe');
 const MIN_PLAUSIBLE_SIZE_BYTES = 20 * 1024 * 1024; // a real Godot export is never smaller than ~20MB
 
 function templatesInstalled() {
   const versionFile = path.join(ROOT, '..'); // not used - see below for the real check
-  const dir = path.join(os.homedir(), 'AppData', 'Roaming', 'Godot', 'export_templates', '4.7.2.stable');
+  const templateVersion = templateVersionOf(GODOT_BIN) || '4.7.2.stable';
+  const dir = path.join(os.homedir(), 'AppData', 'Roaming', 'Godot', 'export_templates', templateVersion);
   const marker = path.join(dir, 'windows_release_x86_64_console.exe');
   return fs.existsSync(marker);
 }
@@ -48,9 +50,9 @@ function run() {
   const steps = [];
 
   const preflight = step('preflight', () => {
-    if (!fs.existsSync(GODOT_BIN)) throw new Error(`Godot binary not found at ${GODOT_BIN} - GODOT_BIN env var can override the path`);
+    if (!GODOT_BIN || !fs.existsSync(GODOT_BIN)) throw new Error('No installed Godot runtime with matching Windows export templates was found - GODOT_BIN may override discovery');
     if (!fs.existsSync(GODOT_PROJECT)) throw new Error(`Godot project not found at ${GODOT_PROJECT}`);
-    if (!templatesInstalled()) throw new Error('Godot export templates for 4.7.2.stable are not installed - run: copy the extracted templates/ contents from the official export_templates.tpz into %APPDATA%/Godot/export_templates/4.7.2.stable/');
+    if (!templatesInstalled()) throw new Error(`Godot export templates for ${templateVersionOf(GODOT_BIN) || 'detected runtime'} are not installed`);
     return { godotBin: GODOT_BIN, project: GODOT_PROJECT };
   });
   steps.push(preflight);

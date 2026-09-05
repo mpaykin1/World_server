@@ -17,7 +17,8 @@ const fs = require('fs');
 const { spawnSync } = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const GODOT_BIN = process.env.GODOT_BIN || 'C:/Users/user/AppData/Local/GodotEngine/Godot_v4.7.2-stable_win64_console.exe';
+const { findGodot } = require('./lib/godot-discovery.cjs');
+const GODOT_BIN = findGodot();
 const GODOT_PROJECT = path.join(ROOT, 'godot', 'world-client');
 
 // --- 1. Web client's real terrain formulas (apps/voxel-world/client.js:59-72) ---
