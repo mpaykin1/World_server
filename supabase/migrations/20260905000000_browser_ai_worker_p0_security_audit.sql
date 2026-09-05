@@ -1,104 +1,104 @@
 -- P0 SUPABASE SECURITY DEFINER RPC AUDIT — browser_ai_worker_* functions
--- 2026-09-05
+-- 2026-09-05 (updated same day after direct live-schema access confirmed
+-- the earlier reconciliation proposal, and surfaced a new P0 finding)
 --
--- *** NOT YET APPLIED TO ANY LIVE PROJECT. DO NOT APPLY WITHOUT RECONCILING
--- *** AGAINST THE ACTUAL LIVE SCHEMA FIRST (see notes below). ***
+-- *** STILL NOT APPLIED TO ANY LIVE PROJECT. Repo-side only. Applying this
+-- *** to production is a separate, explicit action requiring its own
+-- *** sign-off — see the per-section notes below for what is now CONFIRMED
+-- *** vs. what remains unresolved. ***
 --
 -- Context: Supabase Security Advisor flagged public.browser_ai_worker_claim,
 -- public.browser_ai_worker_complete, both signatures of
 -- public.browser_ai_worker_heartbeat, and public.browser_ai_reconcile_worker_health
--- as publicly-callable SECURITY DEFINER functions on the live "Improve" project
--- (project_ref referenced in reports/OPENCODE_BROWSER_AUTHORITY_CONTRIBUTION.json
--- as iphfwxjuhsucvdyluink — NOT one of the two Supabase projects reachable from
--- this session's MCP connection; ground truth for that specific project could
--- not be queried directly this round).
+-- as publicly-callable SECURITY DEFINER functions on the live "Improve"
+-- project (project_ref iphfwxjuhsucvdyluink). This project is not reachable
+-- from this session's own Supabase MCP connection; the first pass of this
+-- audit relied on repo migration history plus 3 disposable, fully-rolled-
+-- back empirical probes against the reachable "world-server-preview"
+-- project (same Postgres 17 engine) to reason about likely live behavior
+-- without ever touching the flagged project directly.
 --
--- Findings from a read-only audit of this repo's migration history, cross-
--- checked with 3 disposable, fully-rolled-back empirical probes against the
--- reachable "world-server-preview" project (same Postgres 17 engine; zero
--- residue left, verified via pg_namespace after each probe):
+-- 2026-09-05 UPDATE: direct read access to the actual live project
+-- (iphfwxjuhsucvdyluink) was obtained via a separate channel (ChatGPT) and
+-- confirmed the following as PRODUCTION FACT, not inference:
 --
---   1. public.browser_ai_worker_heartbeat (both overloads) is genuinely
---      SECURITY DEFINER-by-design and correctly scoped: it does its own
---      inline token check against private.browser_ai_worker_tokens
---      (worker/active/expires_at/token_hash), and is GRANTed to
---      anon/authenticated/service_role — this is the correct, intentional
---      "publicly callable + internally authenticated" pattern (category A).
---      The only real gap: search_path lists `public` before `extensions`,
---      and calls the pgcrypto `digest()` function unqualified — if `public`
---      schema CREATE were ever re-granted to a non-privileged role, a
---      same-named function planted in public could shadow the real
---      extensions.digest() inside this SECURITY DEFINER function. Fixed
---      below by schema-qualifying the call (zero behavior change).
+--   1. public.browser_ai_worker_claim — SECURITY DEFINER, EXECUTE granted to
+--      anon/authenticated/service_role, inline auth against
+--      private.browser_ai_worker_tokens using extensions.digest(...),
+--      invalid token raises an exception. This CONFIRMS the reconciliation
+--      already proposed in section 1 below (this file already replaced the
+--      stale repo INVOKER version from 20260903132521_browser_local_worker_token_auth.sql
+--      with exactly this pattern before live access existed — the guess was
+--      correct). Do NOT revert this function to the old INVOKER +
+--      private.browser_ai_validate_worker_token version; that version was
+--      empirically proven non-functional for anon/authenticated callers
+--      (see the "why this pattern was rejected" note kept below section 1
+--      for the reasoning and the exact permission-denied proof).
 --
---   2. public.browser_ai_worker_claim and public.browser_ai_worker_complete,
---      AS CURRENTLY COMMITTED in supabase/migrations/20260903132521_browser_local_worker_token_auth.sql,
---      are SECURITY INVOKER and validate via a call to
---      private.browser_ai_validate_worker_token(text) — a SECURITY DEFINER
---      helper that is REVOKEd from public/anon/authenticated with no
---      compensating GRANT. Empirically proven (probe against
---      world-server-preview, rolled back, zero residue):
+--   2. public.browser_ai_worker_complete — same confirmation: SECURITY
+--      DEFINER, anon/authenticated/service_role, inline token validation.
+--      Same "do not revert to INVOKER" instruction applies.
 --
---        ERROR: 42501: permission denied for function definer_helper
+--   3. public.browser_ai_worker_heartbeat (both signatures) — SECURITY
+--      DEFINER, inline token validation, live already uses
+--      extensions.digest(...) (schema-qualified) — confirms the hardening
+--      in section 1 below was not a behavior change, it matches what is
+--      already deployed.
 --
---      i.e. a SECURITY INVOKER function calling a SECURITY DEFINER helper
---      the CALLER cannot directly EXECUTE fails with a permission error —
---      this is standard, documented PostgreSQL behavior (EXECUTE privilege
---      is checked against the currently-executing role at every call site,
---      nested or not; SECURITY DEFINER only changes which role's privileges
---      apply to the objects the definer function itself touches, not
---      whether external callers may invoke it). A second probe proved the
---      same failure mode when such a helper is referenced from an RLS
---      policy's USING clause instead of a plpgsql call.
+--   4. NEW P0 FINDING — public.browser_ai_reconcile_worker_health(integer):
+--      SECURITY DEFINER, EXECUTE granted to anon AND authenticated AND
+--      service_role, with NO worker-token validation and NO auth.uid()
+--      ownership check at all. The function mutates public.browser_ai_heartbeats
+--      (marks workers offline based on its integer argument — presumed a
+--      staleness-threshold in seconds, exact body still not recovered, but
+--      irrelevant to the grant fix below: REVOKE/GRANT statements only need
+--      the function's signature, never its body). No caller for this RPC
+--      exists anywhere in this repo (re-grepped across every worktree:
+--      zero matches outside this migration and its own test file) — this is
+--      a real, live, unauthenticated privilege-surface bug: any anonymous
+--      caller holding only the publishable key can currently force any
+--      worker's heartbeat row offline. Hardened in section 3 below:
+--      REVOKE ALL FROM PUBLIC/anon/authenticated, GRANT EXECUTE TO
+--      service_role only (function body is NOT redefined — unknown, and a
+--      GRANT/REVOKE change never requires it). Table owner (postgres)
+--      privileges are unaffected by REVOKE ALL on non-owner roles, so
+--      dashboard/migration-runner access is preserved automatically.
 --
---      Conclusion: the migration file's claim/complete definitions, AS
---      WRITTEN, cannot be working live for anon/authenticated callers.
---      Since scripts/browser-local-worker-live.cjs calls these RPCs with
---      only the publishable (anon) key and reports live E2E PASS, the ACTUAL
---      live definitions must differ from this repo's "reconstructed" source
---      — most likely already converted to the same SECURITY DEFINER +
---      inline private.browser_ai_worker_tokens check that heartbeat v3 uses
---      (the v3-parity migration's own comment says "Preserve LIVE security
---      model: SECURITY DEFINER, private.browser_ai_worker_tokens" for the
---      system as a whole), but that update was never written back as a
---      migration file the way heartbeat's was.
---
---      This migration proposes reconciling claim/complete to that same
---      proven-correct pattern (mirrors heartbeat exactly: SECURITY DEFINER,
---      inline check, no dependency on the private.browser_ai_worker_auth
---      singleton table or the validate_worker_token helper). The exact
---      SQL below (function bodies, not just the security posture) was
---      validated end-to-end against a disposable sandbox on
---      world-server-preview: wrong token -> exception, valid token ->
---      task actually claimed, second claim on an empty queue -> task: null.
---
---      *** THIS IS STILL A PROPOSAL, NOT A CONFIRMED MATCH FOR THE REAL
---      *** LIVE "Improve" PROJECT SCHEMA. Before applying: pull the actual
---      *** live definition via `select pg_get_functiondef(oid) from pg_proc
---      *** where proname in ('browser_ai_worker_claim','browser_ai_worker_complete')`
---      *** on project iphfwxjuhsucvdyluink and diff against this file.
---
---   3. public.browser_ai_reconcile_worker_health has NO source anywhere in
---      any of the ~15 worktrees of this repo searched (migrations, scripts,
---      docs, reports) — it is a live-only object. Its grants/logic cannot
---      be assessed, classified, or safely modified from this repo. Treated
---      as UNKNOWN (category D) pending recovery of its live source.
---
---   4. A live worker token (BROWSER_WORKER_TOKEN) was found committed in
+--   5. A live worker token (BROWSER_WORKER_TOKEN) was found committed in
 --      cleartext in this repo (migration comment + a report JSON). Removed
---      from both files in this same change (see separate commit diff) —
---      git HISTORY still contains it, so production MUST rotate this token
---      independent of any of the SQL below. Not something a migration file
---      can fix.
+--      from both files in a prior commit — git HISTORY still contains it.
+--      Treated as compromised; see the separate rotation plan (not part of
+--      this migration file — grants/DDL cannot rotate a secret value).
 --
--- What this migration does NOT do: touch browser_ai_reconcile_worker_health
--- (no source), touch the "story" domain SECURITY DEFINER functions (separate
--- feature area, already using the sound auth.uid()-ownership pattern per a
--- read-only review — not part of this P0's scope), or REVOKE/GRANT anything
--- on browser_ai_enqueue_task/get_task/get_result/list_workers/cancel_task/
--- claim_task/heartbeat/complete_task (original, service_role-only set) —
--- those are already correctly scoped (SECURITY INVOKER, revoked from
--- anon/authenticated, service_role only) and match their actual caller
+-- ---------------------------------------------------------------------
+-- Why the OLD repo INVOKER pattern for claim/complete was rejected (kept
+-- for anyone reviewing this file's history/rationale):
+-- ---------------------------------------------------------------------
+-- public.browser_ai_worker_claim and public.browser_ai_worker_complete, as
+-- committed in supabase/migrations/20260903132521_browser_local_worker_token_auth.sql,
+-- were SECURITY INVOKER and validated via a call to
+-- private.browser_ai_validate_worker_token(text) — a SECURITY DEFINER
+-- helper REVOKEd from public/anon/authenticated with no compensating GRANT.
+-- Empirically proven broken (probe against world-server-preview, rolled
+-- back, zero residue): `ERROR: 42501: permission denied for function
+-- definer_helper`. A SECURITY INVOKER function calling a SECURITY DEFINER
+-- helper the CALLER cannot directly EXECUTE fails with a permission error —
+-- standard PostgreSQL behavior (EXECUTE privilege is checked against the
+-- currently-executing role at every call site, nested or not). A second
+-- probe proved the same failure mode when such a helper is referenced from
+-- an RLS policy's USING clause. This is why section 1 below defines
+-- claim/complete/heartbeat with an INLINE check instead of calling out to
+-- validate_worker_token — now directly confirmed to match live reality.
+--
+-- What this migration does NOT do: redefine browser_ai_reconcile_worker_health's
+-- body (unknown — only its grants are changed), touch the "story" domain
+-- SECURITY DEFINER functions (separate feature area, already using the
+-- sound auth.uid()-ownership pattern per a read-only review — not part of
+-- this P0's scope), or REVOKE/GRANT anything on browser_ai_enqueue_task/
+-- get_task/get_result/list_workers/cancel_task/claim_task/heartbeat/
+-- complete_task (original, service_role-only set) — those are already
+-- correctly scoped (SECURITY INVOKER, revoked from anon/authenticated,
+-- service_role only) and match their actual caller
 -- (scripts/browser-local-worker.cjs, service-role admin client).
 
 begin;
@@ -268,5 +268,21 @@ end;
 $$;
 revoke all on function public.browser_ai_worker_complete(text,text,text,text,jsonb) from public;
 grant execute on function public.browser_ai_worker_complete(text,text,text,text,jsonb) to anon, authenticated, service_role;
+
+-- ---------------------------------------------------------------------
+-- 3. P0 fix: browser_ai_reconcile_worker_health(integer) currently has no
+--    auth check at all and is EXECUTABLE by anon and authenticated. Grants-
+--    only change — the function body is not known and is NOT redefined
+--    here; CREATE OR REPLACE is deliberately not used. Confirmed zero
+--    callers anywhere in this repo across every worktree, so no legitimate
+--    anon/authenticated caller is broken by this revoke. service_role
+--    (the only role this repo's own service-role-authenticated worker
+--    scripts use) keeps EXECUTE; the function owner (postgres) is
+--    unaffected by REVOKE ALL on non-owner roles and keeps implicit access
+--    regardless (dashboard / migration runner access is preserved).
+-- ---------------------------------------------------------------------
+
+revoke all on function public.browser_ai_reconcile_worker_health(integer) from public, anon, authenticated;
+grant execute on function public.browser_ai_reconcile_worker_health(integer) to service_role;
 
 commit;

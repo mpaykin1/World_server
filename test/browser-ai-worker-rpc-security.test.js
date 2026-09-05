@@ -115,11 +115,31 @@ test('no cleartext worker token or secret is present in this migration file', ()
   assert.doesNotMatch(sql, /bw_[A-Za-z0-9_-]{20,}/, 'a cleartext worker token must never be committed');
 });
 
-test('this migration never touches browser_ai_reconcile_worker_health (no verified source exists for it)', () => {
-  // the header comment DOES name this function, in prose, to document why
-  // it's out of scope - that's fine. What must never appear is an actual
-  // DDL/DML statement defining, granting, or revoking on it.
-  assert.doesNotMatch(code, /browser_ai_reconcile_worker_health/i, 'must not guess at a definition for a function whose live source was never recovered');
+test('browser_ai_reconcile_worker_health is hardened via GRANT/REVOKE only, never redefined', () => {
+  // Confirmed live 2026-09-05 via direct production access: this function is
+  // SECURITY DEFINER with NO token/ownership check at all, and was EXECUTABLE
+  // by anon AND authenticated - a real P0 unauthenticated privilege-surface
+  // bug (any anon caller could force any worker offline). Its body is still
+  // unknown, so this migration must fix ONLY the grants - never guess at
+  // (and risk breaking) logic no one has verified.
+  assert.doesNotMatch(code, /create (or replace )?function public\.browser_ai_reconcile_worker_health/i,
+    'must not define/redefine a body for a function whose live source was never recovered - grants-only fix');
+});
+
+test('browser_ai_reconcile_worker_health(integer) is revoked from PUBLIC/anon/authenticated and granted only to service_role', () => {
+  assert.match(code, /revoke all on function public\.browser_ai_reconcile_worker_health\(integer\) from public, anon, authenticated;/i,
+    'expected an explicit REVOKE ALL ... FROM public, anon, authenticated for this exact signature');
+  const grantLine = code.split('\n').find((l) => /grant execute on function public\.browser_ai_reconcile_worker_health/i.test(l));
+  assert.ok(grantLine, 'expected a GRANT EXECUTE line for browser_ai_reconcile_worker_health');
+  assert.match(grantLine, /to service_role;\s*$/i, `expected GRANT ... TO service_role only, got: ${grantLine}`);
+  assert.doesNotMatch(grantLine, /\banon\b|\bauthenticated\b/i, `must not grant anon/authenticated: ${grantLine}`);
+});
+
+test('the REVOKE for browser_ai_reconcile_worker_health comes before its GRANT (order matters: revoke-then-grant, never grant-then-revoke)', () => {
+  const revokeIdx = code.search(/revoke all on function public\.browser_ai_reconcile_worker_health/i);
+  const grantIdx = code.search(/grant execute on function public\.browser_ai_reconcile_worker_health/i);
+  assert.ok(revokeIdx >= 0 && grantIdx >= 0, 'both statements must be present');
+  assert.ok(revokeIdx < grantIdx, 'REVOKE must precede GRANT so there is never a window where the old (over-permissive) grant and the new one coexist ambiguously');
 });
 
 test('redacted token file no longer contains the leaked cleartext token', () => {
@@ -175,15 +195,28 @@ test('live: a valid token for a DIFFERENT worker id is rejected (cross-worker to
   assert.notEqual(res.status, 200, 'a token valid for one worker id must never authenticate a different worker id');
 });
 
-test('live: browser_ai_reconcile_worker_health is not publicly callable unless explicitly intended (opt-in)', { skip: !LIVE && 'opt-in only' }, async () => {
+// Confirmed live 2026-09-05 via direct production access: BEFORE this
+// migration is applied, anon/authenticated genuinely get a 200 from this
+// RPC today (the P0 bug this migration exists to close). These two opt-in
+// tests assert the POST-FIX expected state and are meant to be run against
+// production only after the REVOKE/GRANT statements in section 3 of
+// 20260905000000_browser_ai_worker_p0_security_audit.sql have actually been
+// applied - running them before that will correctly FAIL, which is the
+// intended signal that the fix is not live yet.
+test('live: anon cannot call browser_ai_reconcile_worker_health after the fix is applied (opt-in)', { skip: !LIVE && 'opt-in only' }, async () => {
   const res = await fetch(`${process.env.SECURITY_AUDIT_LIVE_SUPABASE_URL}/rest/v1/rpc/browser_ai_reconcile_worker_health`, {
     method: 'POST',
     headers: { apikey: process.env.SECURITY_AUDIT_LIVE_SUPABASE_ANON_KEY, Authorization: `Bearer ${process.env.SECURITY_AUDIT_LIVE_SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({}),
+    body: JSON.stringify({ p_stale_seconds: 300 }),
   });
-  // Documents whatever the live project actually does today (404 = function
-  // does not exist under this name/signature to PostgREST, 401/403 = exists
-  // but correctly gated, 200 = confirmed public - only acceptable if that is
-  // a deliberate, documented decision, which as of this audit it is not).
-  assert.notEqual(res.status, 200, `browser_ai_reconcile_worker_health returned ${res.status} — if this is genuinely intended to be public, document why in the migration; otherwise this is the audit's D-classified finding confirmed live`);
+  assert.notEqual(res.status, 200, `expected anon to be rejected (401/403/404) after the fix; got ${res.status} - either the fix is not applied yet, or the real parameter name differs from the guessed p_stale_seconds`);
+});
+
+test('live: authenticated cannot call browser_ai_reconcile_worker_health after the fix is applied (opt-in, requires SECURITY_AUDIT_LIVE_AUTHENTICATED_JWT)', { skip: (!LIVE || !process.env.SECURITY_AUDIT_LIVE_AUTHENTICATED_JWT) && 'opt-in only - also requires SECURITY_AUDIT_LIVE_AUTHENTICATED_JWT' }, async () => {
+  const res = await fetch(`${process.env.SECURITY_AUDIT_LIVE_SUPABASE_URL}/rest/v1/rpc/browser_ai_reconcile_worker_health`, {
+    method: 'POST',
+    headers: { apikey: process.env.SECURITY_AUDIT_LIVE_SUPABASE_ANON_KEY, Authorization: `Bearer ${process.env.SECURITY_AUDIT_LIVE_AUTHENTICATED_JWT}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ p_stale_seconds: 300 }),
+  });
+  assert.notEqual(res.status, 200, `expected an authenticated (non-service-role) caller to be rejected after the fix; got ${res.status}`);
 });
