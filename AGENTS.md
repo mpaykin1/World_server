@@ -332,3 +332,26 @@ CLI, npm/Python, Playwright, linters, scanners, profilers, DB/Vercel/Git/FFmpeg/
 - Объект, который использует активный процесс (обнаруживается по `<path>.lock`/`<path>.release.lock`), никогда не трогается.
 - Только объекты с доказанно нулевым риском (например строго `\.tmp-<pid>-<ts>` файлы-сироты, не директории) могут быть удалены сразу (`autoDeleteIfProvenSafe`) — всё остальное только перемещается в `SESSION_SAFE_TO_DELETE` с записью в README, либо, если небезопасно и переместить, регистрируется в разделе `MANUAL_DELETE_CANDIDATES` с `SAFE TO DELETE MANUALLY: YES/NO/UNKNOWN` и остаётся на месте нетронутым.
 - Регрессионные тесты: `test/session-safe-to-delete-policy.test.js` (13/13 PASS), покрывают: мусор вне папки → FAIL; зарегистрированный кандидат → не проваливает gate; dirty worktree → отказ; уникальный unpushed коммит → отказ; активный процесс/lock → отказ; дубликат `SAFE_TO_DELETE_2` → FAIL; повторный вызов переиспользует единую папку; README не теряет чужие записи; доказанно безопасный temp-файл удаляется сразу; неизвестный по риску объект → `MANUAL_DELETE_CANDIDATES`, не удаляется.
+
+## 20. AI COMMIT PROVENANCE — обязательные trailer-поля для коммитов AI
+
+**Распространяется на всех:** Claude, Claude Code, Claude Desktop, ChatGPT, Codex, OpenCode, OpenHuman, AnythingLLM, локальные модели, browser-агенты и любые будущие агенты, коммитящие в `World_server`.
+
+Каждый коммит любого AI-агента обязан содержать в теле commit message следующие trailer-поля:
+
+```
+AI-Agent: <Claude-Code|Claude-Desktop|ChatGPT|Codex|OpenCode|OpenHuman|...>
+AI-Session: <уникальный ID текущей рабочей сессии>
+Worktree: <полный путь к рабочему дереву>
+Branch: <текущая ветка>
+Ownership: <краткая зона ответственности, напр. "housekeeping/CAS" или "browser-local worktree lifecycle">
+```
+
+Правила:
+- `AI-Session` обязан быть уникальным для конкретной активной рабочей сессии. **Запрещено** переиспользовать `AI-Session` другой, независимо активной сессии, и **запрещено** копировать в новый коммит устаревший/шаблонный идентификатор из более раннего коммита без проверки, что это действительно та же непрерывная сессия.
+- `Worktree` и `Branch` должны совпадать с фактическим `git rev-parse --show-toplevel` / `git rev-parse --abbrev-ref HEAD` на момент коммита.
+- Старое поле `Claude-Session:` (использовалось до введения этого правила) по-прежнему распознаётся проверкой ради обратной совместимости истории, но новые коммиты обязаны использовать `AI-Session:` вместе со всеми остальными обязательными полями выше.
+
+**Зафиксированное несоответствие (историю не переписывать):** коммиты `ba85e730` (ветка `ai/opencode/multi-ai-peer-improvement`, worktree `World_server`) и `dc402529` (ветка `ai/opencode/browser-local-control`, worktree `World_server_browser_local`) — два независимых, параллельно активных изменения — оба содержат идентичный `Claude-Session: https://claude.ai/code/session_01MJjnYYUZ8cAMDG8LD8T4r7`, несмотря на разные worktree/branch/задачи. Это провенанс-несоответствие, обнаруженное координационным мониторингом 2026-09-05. Сами коммиты не изменяются — правило и проверка ниже существуют, чтобы это не повторилось.
+
+**Автоматическая проверка (WARN, не блокирует CI):** `node scripts/check-agent-rules.js` (реализация: `scripts/lib/ai-commit-provenance.cjs`) сканирует tip-коммиты локальных веток, изменённых за последние `activeWindowMs` (по умолчанию 24 часа — прокси для «активная сессия»), и выводит `WARN`, если один и тот же `AI-Session`/`Claude-Session` id одновременно встречается на tip двух и более разных веток. Это не `FAIL` — обнаруженная коллизия требует расследования (совпадение легитимно или это ошибка копирования шаблона), а не автоматической блокировки merge. Регрессионные тесты: `test/ai-commit-provenance.test.js`.
