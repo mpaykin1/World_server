@@ -138,6 +138,26 @@ async function execTestRun(root, args, task){
   const durationMs = Date.now() - started;
   return { command: cmd, target, exitCode: r.status, durationMs, stdout: String(r.stdout||'').slice(0,8000), stderr: String(r.stderr||'').slice(0,8000), success: r.status===0 };
 }
+function normalizeRepoPath(v){ return String(v||'').replace(/\\/g,'/').replace(/^\.\//,'').replace(/^\//,''); }
+function allowedPathMatches(file, allowed){
+  const f=normalizeRepoPath(file), a=normalizeRepoPath(allowed);
+  if(!f||!a||a.includes('..')) return false;
+  if(a.endsWith('/')||a.endsWith('-')) return f.startsWith(a);
+  if(!path.posix.extname(a)) return f===a || f.startsWith(a+'/');
+  return f===a;
+}
+function validateAllowedFileChanges(files, allowedPaths){
+  if(!Array.isArray(allowedPaths)||!allowedPaths.length) return {ok:true,outOfScope:[]};
+  const outOfScope=(files||[]).map(normalizeRepoPath).filter(Boolean).filter(f=>!allowedPaths.some(a=>allowedPathMatches(f,a)));
+  return {ok:outOfScope.length===0,outOfScope};
+}
+function collectTaskFilesChanged(wt, baselineSha){
+  const out=new Set();
+  for(const args of [['diff','--cached','--name-only'],['diff','--name-only'],['ls-files','--others','--exclude-standard']])
+    for(const f of git(wt,args).stdout.trim().split('\n').filter(Boolean)) out.add(normalizeRepoPath(f));
+  if(baselineSha){ for(const f of git(wt,['diff','--name-only',baselineSha,'HEAD']).stdout.trim().split('\n').filter(Boolean)) out.add(normalizeRepoPath(f)); }
+  return Array.from(out).filter(Boolean).slice(0,100);
+}
 async function execAgentDispatch(root, args, task){
   // REAL dispatch (same as live worker) — prefer opencode
   const prompt = String(args.prompt||args.goal||args.task||'').trim();
@@ -146,15 +166,8 @@ async function execAgentDispatch(root, args, task){
   const maxRuntimeMs = Math.min(Number(args.maxRuntimeMs||args.max_runtime_ms||180000), 300000);
   const providerPreference = String(args.providerPreference||args.provider||'opencode').toLowerCase();
   const expectedTests = Array.isArray(args.expectedTests) ? args.expectedTests : (args.expected_tests||null);
-  function getFilesChangedLocal(wt){
-    const out=new Set();
-    const staged = git(wt,['diff','--cached','--name-only']).stdout.trim().split('\n').filter(Boolean);
-    const unstaged = git(wt,['diff','--name-only']).stdout.trim().split('\n').filter(Boolean);
-    const untracked = git(wt,['ls-files','--others','--exclude-standard']).stdout.trim().split('\n').filter(Boolean);
-    for(const f of [...staged,...unstaged,...untracked]) out.add(f);
-    const last = git(wt,['diff','--name-only','HEAD~1','HEAD']).stdout.trim().split('\n').filter(Boolean);
-    for(const f of last) out.add(f);
-    return Array.from(out).filter(Boolean).slice(0,100);
+  function getFilesChangedLocal(wt, baselineSha){
+    return collectTaskFilesChanged(wt, baselineSha);
   }
   function getCommitShaLocal(wt){ const s=git(wt,['rev-parse','HEAD']).stdout.trim(); return /^[0-9a-f]{4,40}$/.test(s)?s:''; }
   function getBranchLocal(wt){ return git(wt,['branch','--show-current']).stdout.trim()||'UNKNOWN'; }
@@ -168,8 +181,10 @@ async function execAgentDispatch(root, args, task){
     const cmd = `npx opencode run --format json --dir "${wt}" "${safePrompt}"`;
     const r = cp.spawnSync(cmd, { cwd: wt, encoding:'utf8', timeout: maxRuntimeMs, shell:true, windowsHide:true, maxBuffer: 10*1024*1024 });
     opencodeOutput = String(r.stdout||'') + String(r.stderr||'');
-    filesChanged = getFilesChangedLocal(wt);
-    diffSummary = git(wt,['diff','--stat']).stdout.slice(0,4000) || git(wt,['diff','HEAD~1','--stat']).stdout.slice(0,4000);
+    filesChanged = getFilesChangedLocal(wt, baseSha);
+    const scopeCheck = validateAllowedFileChanges(filesChanged, allowedPaths);
+    if(!scopeCheck.ok) throw new Error(`agent.dispatch changed files outside allowedPaths: ${scopeCheck.outOfScope.join(', ')}`);
+    diffSummary = git(wt,['diff','--stat']).stdout.slice(0,4000) || git(wt,['diff',baseSha,'HEAD','--stat']).stdout.slice(0,4000);
     commitSha = getCommitShaLocal(wt);
     if(filesChanged.length && commitSha===baseSha){
       git(wt,['add','-A']);
@@ -525,4 +540,4 @@ async function main(){
 }
 
 if(require.main===module) main().catch(e=>{ console.error(e); process.exit(1); });
-module.exports={ tick, heartbeat, executeTask, listQueuedTasks, completeLocalTask, sweep, ensureTaskWorktree, releaseTaskWorktreeIfIsolated };
+module.exports={ tick, heartbeat, executeTask, listQueuedTasks, completeLocalTask, sweep, ensureTaskWorktree, releaseTaskWorktreeIfIsolated, normalizeRepoPath, allowedPathMatches, validateAllowedFileChanges, collectTaskFilesChanged };

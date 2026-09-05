@@ -486,6 +486,20 @@
         "full release:gate mandatory before merge/production claim",
         "record exact failing step instead of skipping"
       ]
+    },
+    {
+      "id": "browser-agent-dispatch-scope-integrity",
+      "category": "ai-control-plane",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "agent.dispatch can report completed with files_changed outside allowedPaths or inherited from the pre-task baseline commit",
+      "rootCause": "browser-local-worker collected HEAD~1..HEAD unconditionally and did not fail closed on allowedPaths violations",
+      "protection": [
+        "compute changed files from exact task baseline SHA",
+        "fail closed before commit when any file is outside allowedPaths",
+        "browser-local-agent-dispatch-integrity regression test"
+      ],
+      "solution": "collectTaskFilesChanged(baselineSha) plus validateAllowedFileChanges() before commit/result persistence"
     }
   ],
   "confirmationProtocol": {
