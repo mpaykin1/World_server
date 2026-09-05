@@ -13,6 +13,7 @@ let yaw=0,pitch=0,radius=180,target=new THREE.Vector3(),frontMode=true,skyVisibl
 let chunkObjects=new Map(),mesherStats=null,profileName='HIGH',adaptive=true;
 let streamingCenter=null;
 let frameCount=0,lastFpsTime=performance.now(),measuredFps=0,lastStreamUpdate=0;
+let perfLastFrameNow=0,frameTimeSamples=[];
 let lastStreamOriginX=NaN,lastStreamOriginZ=NaN,lastStreamProfile='';
 let dynamicPixelRatio=1;
 
@@ -475,6 +476,11 @@ function updatePlayer(dt){
 }
 function animate(now=performance.now()){
   requestAnimationFrame(animate);
+  if(perfLastFrameNow>0){
+    frameTimeSamples.push(now-perfLastFrameNow);
+    if(frameTimeSamples.length>240)frameTimeSamples.splice(0,frameTimeSamples.length-240);
+  }
+  perfLastFrameNow=now;
   const dt=Math.min(0.05,(now - lastPlayerUpdate)/1000); lastPlayerUpdate=now;
   frameCount++;
   if(playableMode) updatePlayer(dt);
@@ -670,6 +676,15 @@ async function autoLoadDefaultCity(){
   }
 }
 
+function performanceSnapshot(){
+  const samples=frameTimeSamples.filter(Number.isFinite);
+  if(!samples.length)return {fps:measuredFps,samples:0,p95FrameMs:0,longFrameRatio:0,windowMs:0};
+  const sorted=[...samples].sort((a,b)=>a-b);
+  const p95=sorted[Math.min(sorted.length-1,Math.floor((sorted.length-1)*.95))];
+  const longFrames=samples.filter(ms=>ms>50).length;
+  return {fps:measuredFps,samples:samples.length,p95FrameMs:Number(p95.toFixed(2)),longFrameRatio:Number((longFrames/samples.length).toFixed(4)),windowMs:Number(samples.reduce((a,b)=>a+b,0).toFixed(1))};
+}
+
 window.AI3DVoxelRuntime={
   setStreamingCenter(x,y,z){streamingCenter=new THREE.Vector3(Number(x)||0,Number(y)||0,Number(z)||0);updateStreaming(true);},
   clearStreamingCenter(){streamingCenter=null;updateStreaming(true);},
@@ -679,7 +694,7 @@ window.AI3DVoxelRuntime={
   // setView - e2e/golden-controls.spec.js calls the canonical setView name
   // against both runtimes, so this runtime needs to answer to it too.
   setView(nextYaw,nextPitch=0){this.setPlayerView(nextYaw,nextPitch);},
-  stats(){return {fps:measuredFps,pixelRatio:dynamicPixelRatio,renderer:renderer?.info?.render,mesher:mesherStats,chunks:chunkObjects.size, voxels:world?world.voxels.length:0, player:{x:player.x,y:player.y,z:player.z,yaw,onGround:player.onGround, playable:playableMode}, defaultCityLoaded};},
+  stats(){return {fps:measuredFps,performance:performanceSnapshot(),pixelRatio:dynamicPixelRatio,renderer:renderer?.info?.render,mesher:mesherStats,chunks:chunkObjects.size, voxels:world?world.voxels.length:0, player:{x:player.x,y:player.y,z:player.z,yaw,onGround:player.onGround, playable:playableMode}, defaultCityLoaded};},
   collidesAt(x,y,z){ return collidesAt(x,y,z); },
   getOccupancySize(){ return occupancySet.size; }
 };

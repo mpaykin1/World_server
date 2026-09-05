@@ -13,8 +13,20 @@ test.describe('AI3D Voxel City - default-city autoplay (no user actions)', () =>
       return s.defaultCityLoaded === true && s.voxels > 0 && s.chunks > 0;
     }, { timeout: 25000 });
 
+    // Do not accept startup fps=0 as performance evidence. Runtime publishes measuredFps only after its first 1500ms window.
+    await page.waitForFunction(() => {
+      const s = window.AI3DVoxelRuntime?.stats();
+      return s?.fps > 0 && s?.performance?.samples >= 30 && s?.performance?.p95FrameMs > 0;
+    }, { timeout: 10000 });
+
     const stats = await page.evaluate(() => window.AI3DVoxelRuntime.stats());
     console.log('autoplay stats', stats);
+    console.log('performance evidence', stats.performance);
+    expect(stats.fps).toBeGreaterThan(0);
+    expect(stats.performance.samples).toBeGreaterThanOrEqual(30);
+    expect(stats.performance.p95FrameMs).toBeGreaterThan(0);
+    expect(stats.performance.longFrameRatio).toBeGreaterThanOrEqual(0);
+    expect(stats.performance.longFrameRatio).toBeLessThanOrEqual(1);
     expect(stats.voxels).toBeGreaterThan(0);
     expect(stats.chunks).toBeGreaterThan(0);
     // triangles from mesher or renderer
@@ -37,8 +49,11 @@ test.describe('AI3D Voxel City - default-city autoplay (no user actions)', () =>
     expect(canvasInfo.exists).toBe(true);
     expect(canvasInfo.width).toBeGreaterThan(50);
     expect(canvasInfo.height).toBeGreaterThan(50);
-    expect(canvasInfo.dataLen).toBeGreaterThan(1000);
     expect(canvasInfo.hasGL).toBe(true);
+    // dataURL byte length varies with browser PNG encoding/DPR and is not a render oracle.
+    // Use Playwright's portable canvas screenshot as direct painted-output evidence.
+    const canvasShot = await page.locator('#viewer canvas').screenshot();
+    expect(canvasShot.length).toBeGreaterThan(1000);
 
     // Character spawned inside city
     const spawnState = await page.evaluate(() => {

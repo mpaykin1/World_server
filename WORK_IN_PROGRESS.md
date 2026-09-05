@@ -263,3 +263,11 @@ result reported exactly as observed, not adjusted to look more favorable.
 - Fix: unchanged-origin/profile streaming short-circuit with force-refresh bypass; squared-distance streaming; player-origin reuse; numeric occupancy lookup; hoisted collision bounds; sqrt-free digital normalization; rAF timestamp reuse; lifecycle held-key reset.
 - Regression: test/ai3d-voxel-city-runtime-fps-v45.test.js; npm run check PASS x3 before release gate.
 - Safety: no HLOD/render-distance/material/shadow threshold reduction; PR31 worker-token auth and agent-invoke branch cleanup untouched.
+
+## AI3D V46 performance evidence repair
+- Root cause: autoplay captured runtime stats immediately after default-city load, before the 1500ms FPS accumulator emitted its first sample, so `fps: 0` was instrumentation timing, not measured performance.
+- Fix: rolling 240-frame evidence window exposes measured FPS, p95 frame time, long-frame (>50ms) ratio, sample count and window duration; autoplay waits for >=30 real samples and non-zero FPS/p95.
+- Render-proof repair: browser-dependent `canvas.toDataURL().length > 1000` produced a false mobile-WebKit failure (934 bytes); replaced with Playwright canvas screenshot bytes using the same >1000 threshold.
+- Regression: `test/ai3d-voxel-city-performance-evidence-v46.test.js`. Focused regression 7/7 PASS; autoplay 8/8 PASS across desktop-chromium/mobile-chromium/mobile-webkit/tablet-chromium.
+- Measured run: desktop 52 FPS p95=16.8ms long=1.47%; mobile Chromium 40 FPS p95=33.4ms long=3.67%; mobile WebKit 11 FPS p95=244ms long=53.33%; tablet Chromium 31 FPS p95=50ms long=4.29%. Mobile WebKit is now the measured worst target.
+- No thresholds weakened; no master/dirty-worktree edits.
