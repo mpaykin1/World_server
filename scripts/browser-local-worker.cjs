@@ -5,6 +5,7 @@ const path = require('path');
 const crypto = require('crypto');
 const cp = require('child_process');
 const { loadCaps, isAllowed, sha256, truncate, verifySignature, validateTask, buildResult, nowIso } = require('../lib/browser-local-control');
+const worktreeLifecycle = require('../lib/task-worktree-lifecycle.cjs');
 
 const ROOT = path.resolve(__dirname, '..');
 const STATE_DIR = path.join(ROOT, 'state');
@@ -306,7 +307,7 @@ const EXECUTORS = {
 async function ensureTaskWorktree(task, createIfMissing=true){
   const branch = `browser-task/${task.task_id}`;
   const wtPath = path.join(WORKTREES_DIR, task.task_id);
-  if (fs.existsSync(wtPath)) return wtPath;
+  if (fs.existsSync(wtPath)) { worktreeLifecycle.touchLease(WORKTREES_DIR, task.task_id, { owner: WORKER_ID }); return wtPath; }
   if (!createIfMissing) return ROOT;
   if (task.worktree_mode !== 'isolated') return ROOT;
   // check if branch already exists
@@ -319,7 +320,23 @@ async function ensureTaskWorktree(task, createIfMissing=true){
     const add = git(ROOT, ['worktree','add','-b', branch, wtPath, baseSha]);
     if (add.status!==0) throw new Error(`worktree add failed: ${add.stderr||add.stdout}`);
   }
+  worktreeLifecycle.touchLease(WORKTREES_DIR, task.task_id, { owner: WORKER_ID });
   return wtPath;
+}
+
+// TASK LIFECYCLE (root-cause fix for the worktree leak): every isolated task
+// worktree created above is released here, unconditionally, via try/finally
+// in tick() below — regardless of whether the task succeeded or failed. This
+// never deletes the task's branch (browser-task/<task_id>), never touches a
+// dirty worktree, and never runs concurrently with another release of the
+// same worktree (see scripts/lib/task-worktree-lifecycle.cjs).
+function releaseTaskWorktreeIfIsolated(task){
+  if (task.worktree_mode !== 'isolated') return null;
+  const result = worktreeLifecycle.releaseTaskWorktree(ROOT, WORKTREES_DIR, task.task_id);
+  if (!result.released && result.reason !== 'not_found') {
+    console.error(`[worktree-release] kept ${task.task_id}: ${result.reason}`);
+  }
+  return result;
 }
 
 function listQueuedTasks(){
@@ -455,6 +472,10 @@ async function tick(){
     heartbeat(null,{ detail:{ lastError: String(e.message).slice(0,400)} });
     await trySupabaseComplete(task.task_id, 'failed', result);
     return { claimed:true, task_id: task.task_id, status:'failed', error: String(e.message) };
+  } finally {
+    // Root-cause fix: release the isolated task worktree no matter how the
+    // task ended. Never removes a dirty worktree or the task's branch.
+    releaseTaskWorktreeIfIsolated(task);
   }
 }
 
@@ -469,9 +490,23 @@ async function trySupabaseComplete(taskId, status, result){
   }catch{}
 }
 
+function sweep(){
+  ensureDir(QUEUE_DIR); ensureDir(RESULTS_DIR);
+  return worktreeLifecycle.sweepOrphanedTaskWorktrees(ROOT, WORKTREES_DIR, QUEUE_DIR, RESULTS_DIR);
+}
+
 async function loop(){
   const intervalMs = Number(process.env.BROWSER_WORKER_POLL_MS || 3000);
   console.log(`[browser-local-worker] loop worker=${WORKER_ID} poll=${intervalMs}ms secret=${SECRET?'set':'none'} requireSig=${REQUIRE_SIGNATURE}`);
+  // Startup-recovery: reclaim worktrees whose task already finished before a
+  // prior crash/restart had a chance to release them. Never touches a
+  // worktree with no task record, or a still-queued/running/dirty one.
+  try{
+    const startupSweep = sweep();
+    if (startupSweep.released.length || startupSweep.skipped.length){
+      console.log(`[browser-local-worker] startup sweep: released=${startupSweep.released.length} skipped=${startupSweep.skipped.length}`);
+    }
+  }catch(e){ console.error('[startup sweep error]', e.message); }
   heartbeat(null);
   while(true){
     try{ const r = await tick(); if(r.claimed) console.log(`[tick] ${r.task_id} -> ${r.status}`); }catch(e){ console.error('[tick error]', e.message); }
@@ -486,7 +521,8 @@ async function main(){
   if (cmd==='heartbeat'){ const h=heartbeat(null); console.log(JSON.stringify(h,null,2)); }
   if (cmd==='health'){ const q=listQueuedTasks(); const hb=readJson(HEARTBEAT_PATH,null); console.log(JSON.stringify({ worker: WORKER_ID, heartbeat: hb, queue: q.map(x=>({task_id:x.task.task_id, status:x.task.status, capability:x.task.capability})), version: loadCaps(ROOT).version },null,2)); }
   if (cmd==='claim'){ const r=await tick(); console.log(JSON.stringify(r,null,2)); }
+  if (cmd==='sweep'){ const r=sweep(); console.log(JSON.stringify(r,null,2)); process.exit(0); }
 }
 
 if(require.main===module) main().catch(e=>{ console.error(e); process.exit(1); });
-module.exports={ tick, heartbeat, executeTask, listQueuedTasks, completeLocalTask };
+module.exports={ tick, heartbeat, executeTask, listQueuedTasks, completeLocalTask, sweep, ensureTaskWorktree, releaseTaskWorktreeIfIsolated };

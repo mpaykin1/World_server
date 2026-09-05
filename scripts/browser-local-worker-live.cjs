@@ -7,6 +7,7 @@ const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
 const { loadCaps, validateTask, buildResult, nowIso, sha256 } = require('../lib/browser-local-control');
+const worktreeLifecycle = require('../lib/task-worktree-lifecycle.cjs');
 
 // load .env.local if present (untracked)
 try{
@@ -133,7 +134,7 @@ const WORKTREES_DIR = path.join(ROOT,'state/browser-local-worktrees');
 async function ensureTaskWorktree(task){
   const branch = `browser-task/${task.task_id}`;
   const wtPath = path.join(WORKTREES_DIR, task.task_id);
-  if(fs.existsSync(wtPath)) return wtPath;
+  if(fs.existsSync(wtPath)) { worktreeLifecycle.touchLease(WORKTREES_DIR, task.task_id, { owner: WORKER_ID }); return wtPath; }
   if(task.worktree_mode !== 'isolated') return ROOT;
   const branchExists = git(ROOT,['branch','--list',branch]).stdout.trim().length>0;
   const baseSha = String(task.args&&task.args.baseSha || git(ROOT,['rev-parse','HEAD']).stdout.trim() || 'HEAD').trim();
@@ -145,7 +146,21 @@ async function ensureTaskWorktree(task){
     add = git(ROOT,['worktree','add','-b',branch,wtPath,base]);
   }
   if(add.status!==0) throw new Error(`worktree add failed: ${add.stderr||add.stdout}`);
+  worktreeLifecycle.touchLease(WORKTREES_DIR, task.task_id, { owner: WORKER_ID });
   return wtPath;
+}
+
+// TASK LIFECYCLE (root-cause fix, shared with browser-local-worker.cjs — see
+// scripts/lib/task-worktree-lifecycle.cjs): released unconditionally via
+// try/finally in tick() below, regardless of success/failure. Never removes
+// a dirty worktree or the task's browser-task/<id> branch.
+function releaseTaskWorktreeIfIsolated(task){
+  if (task.worktree_mode !== 'isolated') return null;
+  const result = worktreeLifecycle.releaseTaskWorktree(ROOT, WORKTREES_DIR, task.task_id);
+  if (!result.released && result.reason !== 'not_found') {
+    log(`[worktree-release] kept ${task.task_id}: ${result.reason}`);
+  }
+  return result;
 }
 
 // executors
@@ -729,14 +744,37 @@ async function tick(){
     failResult.desktop_started_at = nowIso();
     failResult.desktop_finished_at = nowIso();
     try{ await complete(task.task_id, 'failed', failResult); }catch(err){ log('complete failed', err.message); }
+    try{
+      const resPath = path.join(ROOT,'state/browser-local-results', `${task.task_id}.json`);
+      ensureDir(path.dirname(resPath));
+      fs.writeFileSync(resPath, JSON.stringify({ ...task, status:'failed', finished_at: failResult.finished_at, result: failResult },null,2),'utf8');
+    }catch{}
     await heartbeat(null, { lastError:String(e.message).slice(0,400) });
     return { claimed:true, task_id: task.task_id, status:'failed', error:String(e.message) };
+  } finally {
+    // Root-cause fix: release the isolated task worktree no matter how the
+    // task ended. Never removes a dirty worktree or the task's branch.
+    releaseTaskWorktreeIfIsolated(task);
   }
+}
+
+function sweep(){
+  ensureDir(path.join(ROOT,'state/browser-local-queue'));
+  ensureDir(path.join(ROOT,'state/browser-local-results'));
+  return worktreeLifecycle.sweepOrphanedTaskWorktrees(ROOT, WORKTREES_DIR, path.join(ROOT,'state/browser-local-queue'), path.join(ROOT,'state/browser-local-results'));
 }
 
 async function loop(){
   const interval = Number(process.env.BROWSER_WORKER_POLL_MS||3000);
   log(`loop worker=${WORKER_ID} url=${SUPABASE_URL} poll=${interval}ms version=${CAPS.version}`);
+  // Startup-recovery: reclaim worktrees whose task already finished before a
+  // prior crash/restart had a chance to release them.
+  try{
+    const startupSweep = sweep();
+    if (startupSweep.released.length || startupSweep.skipped.length){
+      log(`startup sweep: released=${startupSweep.released.length} skipped=${startupSweep.skipped.length}`);
+    }
+  }catch(e){ log('startup sweep error', e.message); }
   await heartbeat(null, { loopStart:true });
   while(true){
     try{ await tick(); }catch(e){ log('tick error', e.message); }
@@ -751,6 +789,7 @@ async function main(){
   if(cmd==='heartbeat'){ const r=await heartbeat(null,{}); console.log(JSON.stringify(r,null,2)); }
   if(cmd==='health'){ const caps=Object.keys(CAPS.capabilities); const audit={ total:caps.length, executors:Object.keys(EXECUTORS).length, implemented: caps.filter(c=> ['IMPLEMENTED','VERIFIED','SIDE_EFFECTING'].includes(CAPS.capabilities[c].status)).length, verified: caps.filter(c=> CAPS.capabilities[c].status==='VERIFIED').length, declaredOnly: caps.filter(c=> CAPS.capabilities[c].status==='DECLARED_ONLY').length, sideEffecting: caps.filter(c=> CAPS.capabilities[c].status==='SIDE_EFFECTING').length }; console.log(JSON.stringify({ worker:WORKER_ID, version:CAPS.version, audit, capabilities: caps, executors: Object.keys(EXECUTORS), url: SUPABASE_URL, token: WORKER_TOKEN? 'set':'missing' },null,2)); }
   if(cmd==='audit'){ const caps=CAPS.capabilities; for(const [k,v] of Object.entries(caps)) console.log(`${k}: ${v.status} executor=${v.executor||'none'} ${EXECUTORS[k]?'OK':'MISSING'}`); }
+  if(cmd==='sweep'){ const r=sweep(); console.log(JSON.stringify(r,null,2)); process.exit(0); }
 }
 
 if(require.main===module) main().catch(e=>{ console.error(e); process.exit(1); });
