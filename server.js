@@ -8,18 +8,33 @@ const path = require('path');
 const { URL } = require('url');
 
 const root = __dirname;
-const apiHandlers = new Map([
-  ['/api/apps', require('./api/apps')],
-  ['/api/config', require('./api/config')],
-  ['/api/register', require('./api/register')],
-  ['/api/login', require('./api/login')],
-  ['/api/me', require('./api/me')],
-  ['/api/logout', require('./api/logout')],
-  ['/api/game', require('./api/game')],
-  ['/api/voxel', require('./api/voxel')],
-  ['/api/ai3d', require('./api/ai3d')],
-  ['/api/ai3d-voxel-generate', require('./api/ai3d-voxel-generate')]
-]);
+
+// Every api/*.js file is its own Vercel Function at /api/<filename> by
+// default -- register all of them generically instead of hand-picking a
+// subset (that hand-picked list silently went stale and broke local dev
+// entirely once api/ was consolidated into routers).
+const directHandlers = new Map();
+for (const entry of fs.readdirSync(path.join(root, 'api'))) {
+  if (!entry.endsWith('.js')) continue;
+  const name = entry.slice(0, -3);
+  directHandlers.set(`/api/${name}`, require(`./api/${name}`));
+}
+
+// The consolidated routers (api/quality.js, api/auth.js, api/generative.js,
+// and any future one) dispatch by `req.query.__route`, which only exists
+// under Vercel's real runtime -- locally we inject it ourselves from
+// vercel.json's own rewrites, so local dev matches production exactly
+// instead of drifting from it. A rewrite whose destination isn't of this
+// exact shape (e.g. the /apps/:app/ static rewrite) is left to the normal
+// static-file path below.
+const routedHandlers = new Map();
+const vercelConfig = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8'));
+for (const rewrite of vercelConfig.rewrites || []) {
+  const match = /^\/api\/([\w-]+)\?__route=([\w-]+)$/.exec(rewrite.destination);
+  if (!match) continue;
+  const [, routerName, routeName] = match;
+  routedHandlers.set(rewrite.source, { handler: directHandlers.get(`/api/${routerName}`), route: routeName });
+}
 
 const mime = {
   '.html': 'text/html; charset=utf-8',
@@ -69,6 +84,28 @@ function safeJoin(urlPath) {
   return full;
 }
 
+// Vercel's real runtime augments the Node response with an Express-like
+// status()/json()/send() API; several handlers (lowfi-25d-scene.js, the
+// quality/procedural-quality handlers) rely on it directly instead of the
+// plain writeHead/end API lib/http.js's helpers use. Without this, those
+// handlers throw synchronously on the first request, which crashes this
+// entire process (an uncaught exception in a raw http.createServer request
+// listener is fatal), taking down every other route with it.
+function vercelizeResponse(res) {
+  res.status = function status(code) { res.statusCode = code; return res; };
+  res.json = function json(body) {
+    if (!res.headersSent) res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.end(JSON.stringify(body));
+    return res;
+  };
+  res.send = function send(body) {
+    if (typeof body === 'object' && body !== null && !Buffer.isBuffer(body)) return res.json(body);
+    res.end(body);
+    return res;
+  };
+  return res;
+}
+
 function sendFile(res, file) {
   fs.stat(file, (error, stats) => {
     if (error || !stats.isFile()) return notFound(res);
@@ -81,10 +118,32 @@ function sendFile(res, file) {
   });
 }
 
+async function callHandler(handler, req, res) {
+  // Vercel isolates every function invocation in its own process -- one
+  // handler throwing must not take the whole local dev server down with it.
+  try {
+    await handler(req, res);
+  } catch (error) {
+    console.error('API handler error:', error);
+    if (!res.headersSent) {
+      res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.end(JSON.stringify({ ok: false, error: 'internal-error' }));
+    } else {
+      res.end();
+    }
+  }
+}
+
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
-  const handler = apiHandlers.get(url.pathname);
-  if (handler) return handler(req, res);
+  vercelizeResponse(res);
+  const routed = routedHandlers.get(url.pathname);
+  if (routed && routed.handler) {
+    req.query = Object.assign({}, req.query, { __route: routed.route });
+    return callHandler(routed.handler, req, res);
+  }
+  const direct = directHandlers.get(url.pathname);
+  if (direct) return callHandler(direct, req, res);
   if (url.pathname.startsWith('/api/')) return notFound(res);
   if (url.pathname === '/') {
     res.writeHead(302, { Location: resolveEntrypoint() });

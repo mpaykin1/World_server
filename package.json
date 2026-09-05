@@ -108,6 +108,7 @@
     "node": "24.x"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^0.10.4",
     "@sentry/browser": "^10.70.0",
     "@supabase/supabase-js": "2.112.3",
     "@vercel/sandbox": "^3.1.0",
