@@ -287,3 +287,48 @@ CLI, npm/Python, Playwright, linters, scanners, profilers, DB/Vercel/Git/FFmpeg/
 - Fix root cause and add regression protection. Do not use SKIP to hide patch failures. Iterate until all relevant tests pass.
 - Never claim 100% without real desktop + mobile/runtime evidence for affected games.
 <!-- GAME_MOTION_POLICY_V2:END -->
+
+## 18. WORKTREE & PHYSICAL-COPY HYGIENE — ZERO-JUNK POLICY
+
+**Распространяется на всех:** Claude, Claude Code, Cowork, OpenCode, Codex, OpenHuman, AnythingLLM, локальные модели, desktop-агенты, browser-агенты с доступом к файлам, и любые будущие агенты, работающие с `World_server`. Это правило дополняет раздел 17 (COMMIT DISCIPLINE), а не заменяет его. Не создавать вторую параллельную систему — усиливать `scripts/check-agent-rules.js`, `desktop-ai-session-recovery.cjs` и `data/blocker-repair-policy.json` (раздел 16).
+
+**Запрещено** создавать ad-hoc полные копии `World_server` на диске без жизненного цикла (в т.ч. имена вида `World_server_copy`, `World_server_backup`, `World_server_new`, `World_server_fixed`, `World_server_final`, `World_server_final*`). Для параллельной работы — Git branch/worktree, никогда — ручное копирование дерева.
+
+Каждый временный worktree (созданный человеком, агентом, или автоматикой вроде `browser-local-worker`/`browser-local-worker-live`) обязан иметь понятные owner/purpose/branch/createdAt/TTL и по завершении задачи пройти: `commit → verify → merge или archive branch (archive/cleanup-YYYYMMDD/<task-name>) → git worktree remove → git worktree prune`. Автоматика, которая программно вызывает `git worktree add` (сейчас: `ensureTaskWorktree()` в `scripts/browser-local-worker.cjs` и `scripts/browser-local-worker-live.cjs`), обязана вызывать соответствующий cleanup по завершении task (success или failure) — отсутствие такого cleanup является багом, а не нормой.
+
+Никогда не удалять worktree удалением папки напрямую в обход `git worktree remove`/`prune` — это оставляет мусорную запись в реестре. Никогда не удалять недостижимую (detached/unmerged) работу — сначала `archive branch`, потом `verify`, потом уже можно освобождать место.
+
+**Автоматизированная проверка (не удаляет, только классифицирует):** `npm run desktop-ai:worktree-audit` (реализация: `scripts/desktop-ai-session-housekeeping.cjs audit`, конфиг лимитов: `config/desktop-worktree-policy.json`) — встроена в `data/blocker-repair-policy.json` → `gates.npmScripts`, как ранее `integration:cas:gc`. Пайплайн всегда: `DISCOVER → CLASSIFY → DRY-RUN → SAVE USEFUL → COMMIT/ARCHIVE → VERIFY → PREPARE SAFE_TO_DELETE → VERIFY AGAIN`. Никогда: `DELETE FIRST`.
+
+## 19. SESSION-END HOUSEKEEPING & SESSION SAFE_TO_DELETE
+
+Каждая рабочая сессия любого Desktop AI обязана заканчиваться раскладкой результата ровно по четырём категориям — пятой («оставим где-нибудь на диске») не существует:
+
+1. **ПОЛЕЗНЫЙ КОД → COMMIT В GIT** (раздел 17).
+2. **НЕЗАКОНЧЕННАЯ РАБОТА → BRANCH/CHECKPOINT** (`npm run desktop-ai:checkpoint`, WIP-ветка — не рабочее дерево, не stash).
+3. **НУЖНЫЕ ЛОКАЛЬНЫЕ ДАННЫЕ (вне Git) → ПРОВЕРЕННЫЙ ZIP + MANIFEST**, имя `WORLD_SERVER_ARCHIVE_YYYYMMDD_<purpose>.zip`, с README.txt и MANIFEST.json внутри, ZIP обязательно открыть и проверить после создания. Никогда не архивировать `node_modules`, `.cache`, build/dist, обычные логи.
+4. **НЕНУЖНОЕ → ОДНА SESSION SAFE_TO_DELETE ПАПКА** для пользователя.
+
+Перед завершением сессии: `git status` → `git diff` → классифицировать untracked/modified → закоммитить готовое → сохранить незавершённое через branch/checkpoint → проверить detached HEAD и worktrees → выполнить `npm run desktop-ai:worktree-audit` → выполнить `node scripts/desktop-ai-session-housekeeping.cjs run [--apply]` → сообщить пользователю точный путь, размер и статус удаляемости папки.
+
+**Канонический корень:** `%USERPROFILE%\Desktop\WORLD_SERVER_SESSION_CLEANUP` (переопределяется `WORLD_SERVER_SESSION_CLEANUP_ROOT`). Ровно одна папка на сессию: `SESSION_<YYYYMMDD-HHMM>_<AGENT>\{SAFE_TO_DELETE\, README.txt, MANIFEST.json}` — не десятки произвольных папок. Реализация переиспользует `state/session-recovery/current.json` (sessionId/startedAt) из существующего `desktop-ai-session-recovery.cjs`, чтобы повторные вызовы в рамках одной сессии обновляли ту же папку, а не плодили новые.
+
+В `SAFE_TO_DELETE` может попасть только то, что доказано: не единственная копия полезных данных; полезный код уже закоммичен и достижим через branch/ref; нет нужных untracked-изменений; нет секретов; нет recovery-only данных; нет уникальных assets; нет неархивированного detached HEAD; не является активной зависимостью работающей системы. При любом сомнении — не трогать (`needs_manual_save`/`stale_unmerged` в отчёте `desktop-ai-session-housekeeping.cjs`).
+
+**Claude (и любой другой Desktop AI) НЕ удаляет папку `SAFE_TO_DELETE` сам.** Он обязан сообщить: путь; размер; можно ли удалить целиком (ДА/НЕТ) — итоговая строка в README.txt: `ЭТУ ПАПКУ SAFE_TO_DELETE МОЖНО УДАЛИТЬ ЦЕЛИКОМ` (если всё доказано) или `НЕ УДАЛЯТЬ SAFE_TO_DELETE` (если нет). Удаляет только пользователь.
+
+Механизм не должен сам плодить мусор: не хранить внутри SESSION-папки полную копию репозитория; не хранить node_modules «на всякий случай» (удалять напрямую, если безопасно воспроизводимо); крупные файлы **перемещать**, а не копировать; не дублировать один и тот же мусор дважды; никогда не архивировать SAFE_TO_DELETE в zip; после того как пользователь удалил SAFE_TO_DELETE, старые метаданные сессии со временем сворачиваются в маленький audit-манифест (retention — `config/desktop-worktree-policy.json` → `sessionCleanup`).
+
+### 19.1 GLOBAL SESSION SAFE-TO-DELETE — единый межагентный реестр (все AI, все сессии)
+
+В дополнение к per-session `SAFE_TO_DELETE` из §19 (вывод одного прогона `desktop-ai-session-housekeeping.cjs run`), для объектов, которые **ни один** агент не смог безопасно удалить или переместить сам, существует ровно одна общая, постоянная папка на всех агентов и все сессии:
+
+**`%USERPROFILE%\Desktop\SESSION_SAFE_TO_DELETE`** (переопределяется `SESSION_SAFE_TO_DELETE_ROOT`), с ровно одним общим `README.txt` внутри (не по одному на сессию). Реализация: `scripts/lib/session-safe-to-delete-registry.cjs`, вызывается через `node scripts/desktop-ai-session-housekeeping.cjs safe-register --path <p> [--manual] [--reason ...] [--why-not-auto ...] [--agent NAME]` и `... safe-gate` (возвращает PASS/WARN/FAIL, exit code 0/1/2).
+
+Правила (общие для Claude, Claude Code, ChatGPT, Codex, OpenCode, OpenHuman, AnythingLLM, локальных моделей, browser-агентов и любых будущих агентов):
+- **Запрещено** создавать вторую подобную папку (`SAFE_TO_DELETE_2`, `_NEW`, `_FINAL`, `backup-final`, `tmp-copy` и т.п.) — `safe-gate` детектирует такие и возвращает FAIL.
+- `README.txt` **только дополняется** внутри маркеров (`<!-- SAFE_TO_DELETE_ENTRIES_* -->` / `<!-- MANUAL_DELETE_CANDIDATES_* -->`), запись любого агента никогда не стирается записью другого. Если маркеры повреждены — модуль отказывается писать (бросает ошибку), а не переписывает файл вслепую.
+- Перед перемещением worktree проверяется: не dirty (`git status --porcelain`), нет уникальных unpushed коммитов (нет upstream и HEAD не предок master/main, либо есть коммиты впереди upstream) — `worktreeSafetyCheck()`. При отказе объект остаётся на месте.
+- Объект, который использует активный процесс (обнаруживается по `<path>.lock`/`<path>.release.lock`), никогда не трогается.
+- Только объекты с доказанно нулевым риском (например строго `\.tmp-<pid>-<ts>` файлы-сироты, не директории) могут быть удалены сразу (`autoDeleteIfProvenSafe`) — всё остальное только перемещается в `SESSION_SAFE_TO_DELETE` с записью в README, либо, если небезопасно и переместить, регистрируется в разделе `MANUAL_DELETE_CANDIDATES` с `SAFE TO DELETE MANUALLY: YES/NO/UNKNOWN` и остаётся на месте нетронутым.
+- Регрессионные тесты: `test/session-safe-to-delete-policy.test.js` (13/13 PASS), покрывают: мусор вне папки → FAIL; зарегистрированный кандидат → не проваливает gate; dirty worktree → отказ; уникальный unpushed коммит → отказ; активный процесс/lock → отказ; дубликат `SAFE_TO_DELETE_2` → FAIL; повторный вызов переиспользует единую папку; README не теряет чужие записи; доказанно безопасный temp-файл удаляется сразу; неизвестный по риску объект → `MANUAL_DELETE_CANDIDATES`, не удаляется.
