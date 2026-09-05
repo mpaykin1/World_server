@@ -62,7 +62,7 @@ const fs = require('fs');
 const os = require('os');
 const { spawnSync } = require('child_process');
 const collectiveBrain = require('../lib/collective-brain');
-const { createAdminClient } = require('../lib/env');
+const { createWorkerAuthedClient } = require('../lib/env');
 const agentAdapters = require('../lib/agent-adapters');
 
 const ROOT = path.resolve(__dirname, '..');
@@ -414,9 +414,23 @@ async function runOnce(workerId = `remote-bridge-${os.hostname()}-${process.pid}
   // injectedSupabase exists purely for regression tests, so runOnce()'s full
   // lease/reclaim/claim/execute/writeback logic can be exercised without a
   // live Supabase project - production callers never pass it.
+  //
+  // Auth: this worker no longer holds SUPABASE_SECRET_KEY/SERVICE_ROLE_KEY
+  // at all - it connects with the same public/publishable Supabase client
+  // as scripts/browser-local-worker-live.cjs already proved live, plus a
+  // worker identity (BROWSER_WORKER_ID/BROWSER_WORKER_TOKEN) sent as
+  // request headers, which the row-level-security policy
+  // private.remote_inbox_worker_authorized() checks server-side. Fails
+  // closed and BEFORE the lease is ever acquired: a real config problem
+  // here is not a transient "Supabase unreachable" condition and must
+  // never be miscategorized or silently retried as one.
+  let supabase = null;
   if (!injectedSupabase) {
-    const url = process.env.SUPABASE_URL;
-    if (!url) return { drained: false, reason: 'SUPABASE_URL not set' };
+    try {
+      supabase = createWorkerAuthedClient();
+    } catch (e) {
+      return { drained: false, reason: `worker auth not configured: ${e.message}` };
+    }
   }
 
   const lease = collectiveBrain.acquireLease(ROOT, 'remote-bridge-worker', { owner: workerId });
@@ -426,7 +440,7 @@ async function runOnce(workerId = `remote-bridge-${os.hostname()}-${process.pid}
   }
 
   try {
-    const supabase = injectedSupabase || createAdminClient();
+    supabase = injectedSupabase || supabase;
     let reclaim, task;
     try {
       reclaim = await reclaimStuckTasks(supabase, workerId);
