@@ -20,6 +20,7 @@ let occupancySet=new Set();
 let playableMode=false;
 let player={ x:0, y:1.65, z:0, vx:0, vy:0, vz:0, yaw:0, pitch:0, radius:0.35, eyeHeight:1.65, height:1.65, speed:4.2, onGround:false };
 let keysHeld=new Set();
+let jumpRequested=false;
 let pointerLocked=false;
 let lastPlayerUpdate=performance.now();
 let defaultCityLoaded=false;
@@ -100,6 +101,10 @@ function init3D(){
   });
   addEventListener('keydown',e=>{
     if(playableMode && ['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code)){
+      if(e.code==='Space'){
+        if(!e.repeat && !keysHeld.has('Space')) jumpRequested=true;
+        e.preventDefault();
+      }
       keysHeld.add(e.code);
       if(e.code.startsWith('Arrow')) e.preventDefault();
     }
@@ -375,6 +380,9 @@ function goldenPlayableHorizontal(axis,delta,allowStep){
 function updatePlayer(dt){
   if(!playableMode || !world) return;
   const wasGrounded=player.onGround;
+  // Queue the key edge so a quick tap between animation frames is not lost.
+  if(jumpRequested && wasGrounded){player.vy=6.2;player.onGround=false;}
+  jumpRequested=false;
   // gather input from both custom keysHeld and __AI3D_PLAYABLE_SCENE__ input (WASD/arrows)
   let f=0,s=0;
   const sceneInput = window.__AI3D_PLAYABLE_SCENE__ ? window.__AI3D_PLAYABLE_SCENE__.input() : null;
@@ -440,6 +448,7 @@ function updatePlayer(dt){
   persp.rotation.order='YXZ';
   persp.rotation.y=yaw;
   persp.rotation.x=pitch;
+  persp.rotation.z=0;
   // frame notify
   if(window.__AI3D_PLAYABLE_SCENE__) window.__AI3D_PLAYABLE_SCENE__.frame();
 }
@@ -645,7 +654,7 @@ window.AI3DVoxelRuntime={
   clearStreamingCenter(){streamingCenter=null;updateStreaming(true);},
   setQuality(name){const n=String(name||'').toUpperCase();if(n==='AUTO'||PROFILES[n]){$('quality').value=n;$('quality').dispatchEvent(new Event('change'));}},
   setPlayerView(nextYaw,nextPitch=0){yaw=Number(nextYaw)||0;pitch=Math.max(-1.45,Math.min(1.45,Number(nextPitch)||0));player.yaw=yaw;player.pitch=pitch;},
-  stats(){return {fps:measuredFps,pixelRatio:dynamicPixelRatio,renderer:renderer?.info?.render,mesher:mesherStats,chunks:chunkObjects.size, voxels:world?world.voxels.length:0, player:{x:player.x,y:player.y,z:player.z,yaw,onGround:player.onGround, playable:playableMode}, defaultCityLoaded};},
+  stats(){return {fps:measuredFps,pixelRatio:dynamicPixelRatio,renderer:renderer?.info?.render,mesher:mesherStats,chunks:chunkObjects.size, voxels:world?world.voxels.length:0, cameraRoll:persp?.rotation.z??null, player:{x:player.x,y:player.y,z:player.z,yaw,onGround:player.onGround, playable:playableMode}, defaultCityLoaded};},
   collidesAt(x,y,z){ return collidesAt(x,y,z); },
   getOccupancySize(){ return occupancySet.size; }
 };

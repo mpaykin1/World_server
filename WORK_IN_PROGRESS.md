@@ -57,9 +57,9 @@ Per `DESKTOP_AI_INSTRUCTIONS.md`: real agentmemory save→recall→restart persi
 <!-- WORLD_SERVER_SESSION_RECOVERY_V1_START -->
 ## Desktop AI Session Recovery V1 — managed checkpoint
 
-- sessionId: `session-1788687671008-5bbbad`
+- sessionId: `session-1788689703129-026e65`
 - status: `in_progress`
-- checkpoint: `2026-09-06T09:41:11.009Z`
+- checkpoint: `2026-09-06T10:15:03.129Z`
 - checkpoint message: Session recovery initialized
 - last successful command: none
 - last error: none
@@ -224,3 +224,9 @@ Owner: current Codex session; branch ai/codex/recovery-integration; isolated che
 Readiness continuation checkpoint: memory real sync PASS (5 queued records delivered,0remaining,493-event chain valid); OpenCode review accepted via regressions; OpenHuman actual MCP read matched package.name. Zero ownership3/3; memory24/24; defer14/14; catalog1/1; peer9/9. Four inherited records closed with proof; 17 release-error and4metric blockers remain. Runtime300613ms/1178requests/5restarts, no errors; incomplete child memory prevents8h certification. Linux: noDocker/Podman, WSLexit50. No foreign cleanup/push/deploy. Final detailed evidence READINESS_BLOCKER_AUDIT.json.
 
 Final verification: syntax54files PASS; fullunit602PASS/1SKIP/0FAIL (603tests); integration76/76PASS. Four inherited blockers closed with reproducible tests; no policy relaxation. Free-agent results checked against regressions/actual package file. Pending original blockers retained explicitly. Own runtime test processes stopped; cleanup follows preservation.
+
+### Active readiness continuation — user requires sustained work
+Owner current Codex; base3bce4e76; isolated codex-readiness-active. Next: independently verify shared negated-git routing defect, fix without widening permissions, then continue remaining readiness blockers. No push/deploy or foreign WIP edits.
+
+Active readiness checkpoint: negated Git routing and transport preconditions fixed; AI3D grounded jump consumes press edges, camera roll is measured; mobile catalog overlap fixed with actual tap proof; Voxel World arrows restored and failed streaming retries capped with recovery protection. Full unit prior to voxel patch606PASS/1SKIP; voxel browser4/4 and recovery unit1/1 PASS. Global inherited blockers remain pending until their full scope is proven. Next: final combined tests, local preservation, free immutable review, then remaining blockers. No push/deploy/foreign edits.
+Verified checkpoint: full check607PASS/1SKIP; combined desktop/mobile Playwright44PASS/4desktop-onlySKIP; Golden gate PASS; governance remains21blockers. Preserve in local commit and continue with independent free review and remaining readiness gaps.

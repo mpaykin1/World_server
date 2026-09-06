@@ -12,4 +12,14 @@ test.describe('Behavioral mobile control',()=>{
     const after=await page.evaluate(()=>window.AI3DVoxelRuntime.stats().player);
     expect(Math.hypot(after.x-before.x,after.z-before.z)).toBeGreaterThan(.03);
   });
+  test('AI3D touch jump changes only player height',async({page},testInfo)=>{
+    test.skip(!/mobile/i.test(testInfo.project.name),'mobile only');
+    await page.goto('/apps/ai3d-voxel-city/',{waitUntil:'domcontentloaded'});
+    await page.waitForFunction(()=>window.AI3DVoxelRuntime?.stats().player.onGround);
+    const before=await page.evaluate(()=>window.AI3DVoxelRuntime.stats().player);
+    await page.locator('#goldenJump').tap();
+    await expect.poll(()=>page.evaluate(()=>window.AI3DVoxelRuntime.stats().player.y)).toBeGreaterThan(before.y+.05);
+    const after=await page.evaluate(()=>window.AI3DVoxelRuntime.stats().player);
+    expect(after.x).toBeCloseTo(before.x,5);expect(after.z).toBeCloseTo(before.z,5);
+  });
 });
