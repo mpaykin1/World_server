@@ -37,8 +37,11 @@ test.describe('AI3D Voxel City - default-city autoplay (no user actions)', () =>
     expect(canvasInfo.exists).toBe(true);
     expect(canvasInfo.width).toBeGreaterThan(50);
     expect(canvasInfo.height).toBeGreaterThan(50);
-    expect(canvasInfo.dataLen).toBeGreaterThan(1000);
     expect(canvasInfo.hasGL).toBe(true);
+    // Browser PNG/dataURL encoding size is not a stable render oracle (WebKit can be <1000 bytes).
+    // Reuse the proven V46 fix: assert directly on Playwright canvas screenshot bytes.
+    const canvasShot = await page.locator('#viewer canvas').screenshot();
+    expect(canvasShot.length).toBeGreaterThan(1000);
 
     // Character spawned inside city
     const spawnState = await page.evaluate(() => {
