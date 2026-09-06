@@ -1,0 +1,252 @@
+{
+  "experiment": "RUN_071_H2_REDUNDANCY_DURING_GROWTH",
+  "source": "RUN_062 growth + RUN_066 damage/LCC + production lib/game-rules.js snapBuilding/validateBuild",
+  "subhypothesis": "A minimal local cycle-closing preference applied during growth creates redundant organized topology that remains connected after random damage, without post-damage repair or a global blueprint.",
+  "preregistration": {
+    "holdoutSeeds": [
+      71071,
+      71129,
+      71237,
+      71339,
+      71453,
+      71569
+    ],
+    "foundations": 256,
+    "damageFractions": [
+      0.1,
+      0.2,
+      0.3
+    ],
+    "confirm": "6/6 cycleRank>=1.5x baseline; >=5/6 LCC>=.90/.80/.65 after 10/20/30% damage; >=5/6 lift>=.25 at 20%; >=5/6 lift>=.35 at 30%.",
+    "refute": "Any criterion fails; preserve FAIL and never retune holdout."
+  },
+  "rows": [
+    {
+      "seed": 71071,
+      "baseGraph": {
+        "vertices": 256,
+        "edges": 320,
+        "components": 1,
+        "cycleRank": 65
+      },
+      "redundantGraph": {
+        "vertices": 256,
+        "edges": 478,
+        "components": 1,
+        "cycleRank": 223
+      },
+      "cycleRankRatio": 3.4307692307692306,
+      "damage": [
+        {
+          "frac": 0.1,
+          "baselineLcc": 0.7619047619047619,
+          "redundantLcc": 1,
+          "lift": 0.23809523809523814
+        },
+        {
+          "frac": 0.2,
+          "baselineLcc": 0.28292682926829266,
+          "redundantLcc": 0.9951219512195122,
+          "lift": 0.7121951219512195
+        },
+        {
+          "frac": 0.3,
+          "baselineLcc": 0.15,
+          "redundantLcc": 0.95,
+          "lift": 0.7999999999999999
+        }
+      ]
+    },
+    {
+      "seed": 71129,
+      "baseGraph": {
+        "vertices": 256,
+        "edges": 320,
+        "components": 1,
+        "cycleRank": 65
+      },
+      "redundantGraph": {
+        "vertices": 256,
+        "edges": 478,
+        "components": 1,
+        "cycleRank": 223
+      },
+      "cycleRankRatio": 3.4307692307692306,
+      "damage": [
+        {
+          "frac": 0.1,
+          "baselineLcc": 0.2727272727272727,
+          "redundantLcc": 1,
+          "lift": 0.7272727272727273
+        },
+        {
+          "frac": 0.2,
+          "baselineLcc": 0.18536585365853658,
+          "redundantLcc": 0.9902439024390244,
+          "lift": 0.8048780487804879
+        },
+        {
+          "frac": 0.3,
+          "baselineLcc": 0.17777777777777778,
+          "redundantLcc": 0.9944444444444445,
+          "lift": 0.8166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 71237,
+      "baseGraph": {
+        "vertices": 256,
+        "edges": 318,
+        "components": 1,
+        "cycleRank": 63
+      },
+      "redundantGraph": {
+        "vertices": 256,
+        "edges": 477,
+        "components": 1,
+        "cycleRank": 222
+      },
+      "cycleRankRatio": 3.5238095238095237,
+      "damage": [
+        {
+          "frac": 0.1,
+          "baselineLcc": 0.4025974025974026,
+          "redundantLcc": 1,
+          "lift": 0.5974025974025974
+        },
+        {
+          "frac": 0.2,
+          "baselineLcc": 0.1951219512195122,
+          "redundantLcc": 0.9951219512195122,
+          "lift": 0.8
+        },
+        {
+          "frac": 0.3,
+          "baselineLcc": 0.18333333333333332,
+          "redundantLcc": 0.9722222222222222,
+          "lift": 0.7888888888888889
+        }
+      ]
+    },
+    {
+      "seed": 71339,
+      "baseGraph": {
+        "vertices": 256,
+        "edges": 323,
+        "components": 1,
+        "cycleRank": 68
+      },
+      "redundantGraph": {
+        "vertices": 256,
+        "edges": 478,
+        "components": 1,
+        "cycleRank": 223
+      },
+      "cycleRankRatio": 3.2794117647058822,
+      "damage": [
+        {
+          "frac": 0.1,
+          "baselineLcc": 0.37662337662337664,
+          "redundantLcc": 0.9956709956709957,
+          "lift": 0.6190476190476191
+        },
+        {
+          "frac": 0.2,
+          "baselineLcc": 0.24390243902439024,
+          "redundantLcc": 0.9804878048780488,
+          "lift": 0.7365853658536585
+        },
+        {
+          "frac": 0.3,
+          "baselineLcc": 0.13333333333333333,
+          "redundantLcc": 0.9444444444444444,
+          "lift": 0.8111111111111111
+        }
+      ]
+    },
+    {
+      "seed": 71453,
+      "baseGraph": {
+        "vertices": 256,
+        "edges": 333,
+        "components": 1,
+        "cycleRank": 78
+      },
+      "redundantGraph": {
+        "vertices": 256,
+        "edges": 478,
+        "components": 1,
+        "cycleRank": 223
+      },
+      "cycleRankRatio": 2.858974358974359,
+      "damage": [
+        {
+          "frac": 0.1,
+          "baselineLcc": 0.35064935064935066,
+          "redundantLcc": 1,
+          "lift": 0.6493506493506493
+        },
+        {
+          "frac": 0.2,
+          "baselineLcc": 0.4097560975609756,
+          "redundantLcc": 1,
+          "lift": 0.5902439024390245
+        },
+        {
+          "frac": 0.3,
+          "baselineLcc": 0.22777777777777777,
+          "redundantLcc": 0.9222222222222223,
+          "lift": 0.6944444444444445
+        }
+      ]
+    },
+    {
+      "seed": 71569,
+      "baseGraph": {
+        "vertices": 256,
+        "edges": 345,
+        "components": 1,
+        "cycleRank": 90
+      },
+      "redundantGraph": {
+        "vertices": 256,
+        "edges": 477,
+        "components": 1,
+        "cycleRank": 222
+      },
+      "cycleRankRatio": 2.466666666666667,
+      "damage": [
+        {
+          "frac": 0.1,
+          "baselineLcc": 0.21645021645021645,
+          "redundantLcc": 0.9913419913419913,
+          "lift": 0.7748917748917749
+        },
+        {
+          "frac": 0.2,
+          "baselineLcc": 0.3853658536585366,
+          "redundantLcc": 0.9951219512195122,
+          "lift": 0.6097560975609756
+        },
+        {
+          "frac": 0.3,
+          "baselineLcc": 0.38333333333333336,
+          "redundantLcc": 0.9888888888888889,
+          "lift": 0.6055555555555556
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "cycleRankImproved": 6,
+    "damage10Recovered": 6,
+    "damage20Recovered": 6,
+    "damage30Recovered": 6,
+    "damage20BeatsBaseline": 6,
+    "damage30BeatsBaseline": 6,
+    "mean20Lift": 0.7089430894308943,
+    "mean30Lift": 0.7527777777777779
+  },
+  "pass": true
+}
