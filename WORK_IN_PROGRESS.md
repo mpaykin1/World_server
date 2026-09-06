@@ -264,3 +264,9 @@ result reported exactly as observed, not adjusted to look more favorable.
 - Fix: worker now imports and calls `buildWorldShape`; `WorkerPlanAdvisor` uses the same library for deterministic fallback and exposes explicit disposal. No duplicate generator was created.
 - Regression: `test/dark-void-worker-shape-differential-v5.test.mjs` proves exact worker-vs-sync equality across 12 types Г— 4 seeds Г— 5 scales Г— 3 transforms = 720 cases; focused V5 suite 18/18 PASS; mobile browser smoke PASS.
 - Full `npm run check` reached 367 PASS / 1 FAIL / 2 opt-in skips; only failure was unrelated live local-Ollama probe, which immediately passed in isolated rerun. Do not weaken or skip that test; parallel agent/Ollama work owns it.
+
+## Dark Void V5 ? IndexedDB RecipeJournal migration (2026-09-06)
+- Root cause: the existing hash-chained RecipeJournal persisted only the newest 512 rows in localStorage, so long sessions had no IndexedDB crash-safe mirror despite the V5 target architecture.
+- Fix: strengthen the same RecipeJournal with async IndexedDB hydration/migration (`darkVoidV5/recipeJournal`) while retaining synchronous localStorage startup/offline fallback and the exact existing append/verify/replay API. No duplicate journal/storage runtime.
+- Regression: production invariant test requires IndexedDB open/put, ready hydration and localStorage fallback semantics.
+- Browser reload regression exposed an async persistence race: concurrent fire-and-forget IndexedDB puts could restore an older snapshot. Fix serializes journal writes through `_persistTail` and exposes `flushPersistence()` for deterministic crash/reload verification.
