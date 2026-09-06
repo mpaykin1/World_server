@@ -35,3 +35,20 @@ test('recurring blocker repair never runs full release/integration suites', () =
   assert.ok(!policy.gates.npmScripts.includes('release:gate'));
   assert.ok(!policy.gates.npmScripts.includes('integration:full'));
 });
+
+test('performance guard protects RAM without killing interactive apps', () => {
+  const p = path.join(ROOT, 'tools', 'windows-ai-performance-guard.ps1');
+  const s = fs.readFileSync(p, 'utf8');
+  assert.match(s, /OLLAMA|llama-server/i);
+  assert.match(s, /UsedPct\s+-ge\s+75|FreeGB\s+-lt\s+4/);
+  assert.match(s, /BelowNormal/);
+  assert.match(s, /autonomous-blocker-repair|desktop-ai-session-recovery/);
+  assert.doesNotMatch(s, /Stop-Process[^\n]*(ChatGPT|chrome|codex)/i);
+});
+
+test('performance guard only deduplicates known managed schedulers', () => {
+  const s = fs.readFileSync(path.join(ROOT, 'tools', 'windows-ai-performance-guard.ps1'), 'utf8');
+  assert.match(s, /dupePatterns/);
+  assert.match(s, /quality-autoloop-tick/);
+  assert.doesNotMatch(s, /Get-Process\s+node[^\n]*Stop-Process/i);
+});

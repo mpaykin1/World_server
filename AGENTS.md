@@ -344,6 +344,8 @@ The shared quarantine implementation is `scripts/lib/session-safe-to-delete-regi
 
 AI work must not make the machine progressively slower. Background automation must be deduplicated, bounded and low priority. Lightweight hygiene/health checks may run periodically; full integration/release suites run on-demand or in CI, not every short scheduler tick. Do not run the same repair loop recursively or twice in one scheduler cycle. Do not leave duplicate Node/Python/PowerShell workers, orphan watchers, stale scheduled tasks, runaway logs/caches, or redundant local model processes.
 
+Machine-level guard: `%LOCALAPPDATA%\WorldServerAI\PerformanceGuard.ps1` (versioned source: `tools/windows-ai-performance-guard.ps1`) must stay enabled as scheduled task `WorldServer-PerformanceGuard`. Local Ollama must use `OLLAMA_KEEP_ALIVE=0`, `OLLAMA_MAX_LOADED_MODELS=1`, `OLLAMA_NUM_PARALLEL=1`; idle loaded models are unloaded under RAM pressure, managed background workers run BelowNormal/Idle priority, and exact duplicate managed scheduler processes are terminated. Never kill an interactive user app or dirty/unpushed work merely to reduce load.
+
 Before finishing a session, verify: Desktop hygiene PASS, no accidental duplicate workers, no newly created full repo copies, and no avoidable disk/RAM pressure caused by the session.
 
 ## 20. AI COMMIT PROVENANCE — обязательные trailer-поля для коммитов AI
