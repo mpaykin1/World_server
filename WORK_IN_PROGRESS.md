@@ -372,3 +372,11 @@ PR #38 exposed nine Linux-only failures because the reused AI queue stack embedd
 - Regression: `test/dependency-security-lock.test.js` fails if critical packages fall below the remediated floors or extract-zip returns.
 - Local full `npm run check` reached 461 PASS / 2 resource-scheduler failures caused by live system free RAM 13.3% while many parallel AIs were active; failures are resource-gate behavior, not dependency assertions. CI on clean GitHub runner is authoritative for full suite.
 - Local LHCI healthcheck passed with the upgraded graph; collection could not start only because port 3100 was already occupied by another active agent/server. Do not kill that process; GitHub CI will verify an isolated run.
+
+## 2026-09-06 catalog production performance root-cause fix
+- Production evidence: catalog p10 FPS 12 (<30), p95 load 13231ms (>10500).
+- Root cause: top-level await AppCore.init blocked module/load on Supabase CDN/network; mobile renderer also started at DPR up to 1.8 with antialias + shadows.
+- Fix: non-blocking AppCore init, device-aware rendering budget, adaptive DPR, flat ground geometry, bounded mobile lightning bursts.
+- Regression: test/catalog-production-performance.test.js 3/3 PASS; check:fast/golden/desktop-ai PASS.
+- Remaining proof: full npm check + GitHub CI + post-deploy Production Quality Feedback.
+
