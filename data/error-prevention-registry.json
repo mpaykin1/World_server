@@ -16,6 +16,13 @@
       "at": "2026-09-05T20:12:04.811Z",
       "lessonHash": "389a7c49ebdbb935edc5ae088547f1ce591e1c94dd8b0819200da205ca8ca2fd",
       "supersedes": null
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "world-deterministic-replay-spec-only",
+      "at": "2026-09-06T05:07:04.857Z",
+      "lessonHash": "2cd98d7d990ba96fcbf075a556c3538984c91b63d0d745c5cdd47ce64bd92335",
+      "supersedes": null
     }
   ],
   "knownErrors": [
@@ -861,6 +868,26 @@
         "test/science-h4-specialist-promotion-integrity.test.js",
         "scientific holdouts must fail closed on per-call timeout"
       ]
+    },
+    {
+      "id": "world-deterministic-replay-spec-only",
+      "category": "collective-brain-learned",
+      "severity": "major",
+      "status": "protected",
+      "history": [],
+      "rootCause": "world replay hashed metadata but never replayed production state",
+      "solution": "replay resource delta through generateChunk with exact hash and wrong-id control",
+      "protection": [
+        "test/world-deterministic-replay.test.js",
+        "test/science-h1-dynamic-delta-reconstruction.test.cjs"
+      ],
+      "evidence": [
+        "WORLD_DETERMINISTIC_REPLAY_REPORT.json",
+        "SCIENCE_RUN_059_H1.json"
+      ],
+      "confirmedAt": "2026-09-06T05:07:04.854Z",
+      "lessonHash": "2cd98d7d990ba96fcbf075a556c3538984c91b63d0d745c5cdd47ce64bd92335",
+      "supersedes": null
     }
   ],
   "confirmationProtocol": {

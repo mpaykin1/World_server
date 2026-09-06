@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "5.0.0",
+  "schemaVersion": "5.1.0",
   "seed": 220823,
   "cases": [
     {
@@ -49,5 +49,19 @@
     "compareAgainstGolden": true,
     "autoApprove": false
   },
-  "replayHash": "77f40fd9f003979d5d87d0cf6ba9e89bee8313df4fde28ca96074fc45a4b20e4"
+  "stateReplay": {
+    "productionPath": "lib/game-rules.js::generateChunk",
+    "history": [
+      [
+        "r:0:0:3",
+        0
+      ]
+    ],
+    "expectedHash": "f73c47ceb72378d9aa8765148a2b71a0796ce36d8774139cae5b31d4c2ce20d4",
+    "actualHash": "f73c47ceb72378d9aa8765148a2b71a0796ce36d8774139cae5b31d4c2ce20d4",
+    "wrongControlHash": "71de1f17bd5722644ad2130d9b74eaa1b75e9252479b5f99d638f15cb76476f7",
+    "exact": true,
+    "wrongControlMismatch": true
+  },
+  "replayHash": "913317979861e68ed937344341260c3264a8c4b2ffb57e1325561b8eb21b76ae"
 }

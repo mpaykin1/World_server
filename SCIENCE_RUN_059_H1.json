@@ -1,0 +1,344 @@
+{
+  "experiment": "RUN_059_H1_DYNAMIC_DELTA_RECONSTRUCTION",
+  "productionPath": "lib/game-rules.js::generateChunk",
+  "subhypothesis": "A large modified survival world can be represented exactly by deterministic procedural chunk rules plus a sparse history of resource deltas, with description size tracking edits rather than full world state.",
+  "seedAndControl": {
+    "editSeed": 59059,
+    "windows": [
+      {
+        "id": "w0",
+        "ox": 0,
+        "oz": 0
+      },
+      {
+        "id": "w1",
+        "ox": 37,
+        "oz": -19
+      },
+      {
+        "id": "w2",
+        "ox": -101,
+        "oz": 88
+      },
+      {
+        "id": "w3",
+        "ox": 1000,
+        "oz": -1000
+      }
+    ],
+    "radii": [
+      2,
+      4,
+      8,
+      16
+    ],
+    "control": "cyclically reassign the same remaining values to the wrong resource IDs; explicit baseline is Brotli-compressed full resource state"
+  },
+  "confirmation": "All exact; wrong-ID control mismatches when >=2 edits; every radius-16 compressed explicit state >=8x descriptor; edit rate <=3%; median descriptor growth 8->16 <=4.8x while compressed explicit state grows >=3.2x.",
+  "refutation": "Any fixed confirmation criterion fails.",
+  "criterion": {
+    "exactAll": true,
+    "controlMismatchAll": true,
+    "minLargestRatio": 38.36369626091253,
+    "maxLargestEditRate": 0.022109203927385745,
+    "medianDescriptorGrowth": 4.04594180704441,
+    "medianExplicitGrowth": 3.816066718005014
+  },
+  "growth": [
+    {
+      "window": "w0",
+      "descriptorGrowth": 4.04594180704441,
+      "explicitGrowth": 3.838536450599164
+    },
+    {
+      "window": "w1",
+      "descriptorGrowth": 3.5015384615384617,
+      "explicitGrowth": 3.7953116924256824
+    },
+    {
+      "window": "w2",
+      "descriptorGrowth": 3.313701177929324,
+      "explicitGrowth": 3.8042101029061777
+    },
+    {
+      "window": "w3",
+      "descriptorGrowth": 4.3148542999289266,
+      "explicitGrowth": 3.816066718005014
+    }
+  ],
+  "rows": [
+    {
+      "window": "w0",
+      "origin": [
+        0,
+        0
+      ],
+      "radius": 2,
+      "chunks": 25,
+      "resources": 325,
+      "edits": 7,
+      "descriptorBytes": 170,
+      "compressedExplicitBytes": 4865,
+      "exact": true,
+      "controlMismatch": true,
+      "compressedToDescriptor": 28.61764705882353,
+      "editRate": 0.021538461538461538
+    },
+    {
+      "window": "w0",
+      "origin": [
+        0,
+        0
+      ],
+      "radius": 4,
+      "chunks": 81,
+      "resources": 1053,
+      "edits": 19,
+      "descriptorBytes": 356,
+      "compressedExplicitBytes": 15988,
+      "exact": true,
+      "controlMismatch": true,
+      "compressedToDescriptor": 44.91011235955056,
+      "editRate": 0.018043684710351376
+    },
+    {
+      "window": "w0",
+      "origin": [
+        0,
+        0
+      ],
+      "radius": 8,
+      "chunks": 289,
+      "resources": 3757,
+      "edits": 77,
+      "descriptorBytes": 1306,
+      "compressedExplicitBytes": 57914,
+      "exact": true,
+      "controlMismatch": true,
+      "compressedToDescriptor": 44.34456355283308,
+      "editRate": 0.020495075858397657
+    },
+    {
+      "window": "w0",
+      "origin": [
+        0,
+        0
+      ],
+      "radius": 16,
+      "chunks": 1089,
+      "resources": 14157,
+      "edits": 306,
+      "descriptorBytes": 5284,
+      "compressedExplicitBytes": 222305,
+      "exact": true,
+      "controlMismatch": true,
+      "compressedToDescriptor": 42.07134746404239,
+      "editRate": 0.02161474888747616
+    },
+    {
+      "window": "w1",
+      "origin": [
+        37,
+        -19
+      ],
+      "radius": 2,
+      "chunks": 25,
+      "resources": 325,
+      "edits": 1,
+      "descriptorBytes": 79,
+      "compressedExplicitBytes": 4986,
+      "exact": true,
+      "controlMismatch": true,
+      "compressedToDescriptor": 63.11392405063291,
+      "editRate": 0.003076923076923077
+    },
+    {
+      "window": "w1",
+      "origin": [
+        37,
+        -19
+      ],
+      "radius": 4,
+      "chunks": 81,
+      "resources": 1053,
+      "edits": 21,
+      "descriptorBytes": 443,
+      "compressedExplicitBytes": 16454,
+      "exact": true,
+      "controlMismatch": true,
+      "compressedToDescriptor": 37.14221218961625,
+      "editRate": 0.019943019943019943
+    },
+    {
+      "window": "w1",
+      "origin": [
+        37,
+        -19
+      ],
+      "radius": 8,
+      "chunks": 289,
+      "resources": 3757,
+      "edits": 86,
+      "descriptorBytes": 1625,
+      "compressedExplicitBytes": 59979,
+      "exact": true,
+      "controlMismatch": true,
+      "compressedToDescriptor": 36.91015384615385,
+      "editRate": 0.022890604205483098
+    },
+    {
+      "window": "w1",
+      "origin": [
+        37,
+        -19
+      ],
+      "radius": 16,
+      "chunks": 1089,
+      "resources": 14157,
+      "edits": 313,
+      "descriptorBytes": 5690,
+      "compressedExplicitBytes": 227639,
+      "exact": true,
+      "controlMismatch": true,
+      "compressedToDescriptor": 40.00685413005272,
+      "editRate": 0.022109203927385745
+    },
+    {
+      "window": "w2",
+      "origin": [
+        -101,
+        88
+      ],
+      "radius": 2,
+      "chunks": 25,
+      "resources": 325,
+      "edits": 7,
+      "descriptorBytes": 195,
+      "compressedExplicitBytes": 5003,
+      "exact": true,
+      "controlMismatch": true,
+      "compressedToDescriptor": 25.656410256410258,
+      "editRate": 0.021538461538461538
+    },
+    {
+      "window": "w2",
+      "origin": [
+        -101,
+        88
+      ],
+      "radius": 4,
+      "chunks": 81,
+      "resources": 1053,
+      "edits": 19,
+      "descriptorBytes": 417,
+      "compressedExplicitBytes": 16501,
+      "exact": true,
+      "controlMismatch": true,
+      "compressedToDescriptor": 39.57074340527578,
+      "editRate": 0.018043684710351376
+    },
+    {
+      "window": "w2",
+      "origin": [
+        -101,
+        88
+      ],
+      "radius": 8,
+      "chunks": 289,
+      "resources": 3757,
+      "edits": 83,
+      "descriptorBytes": 1613,
+      "compressedExplicitBytes": 59666,
+      "exact": true,
+      "controlMismatch": true,
+      "compressedToDescriptor": 36.99070055796652,
+      "editRate": 0.022092094756454617
+    },
+    {
+      "window": "w2",
+      "origin": [
+        -101,
+        88
+      ],
+      "radius": 16,
+      "chunks": 1089,
+      "resources": 14157,
+      "edits": 279,
+      "descriptorBytes": 5345,
+      "compressedExplicitBytes": 226982,
+      "exact": true,
+      "controlMismatch": true,
+      "compressedToDescriptor": 42.46623012160898,
+      "editRate": 0.019707565162110616
+    },
+    {
+      "window": "w3",
+      "origin": [
+        1000,
+        -1000
+      ],
+      "radius": 2,
+      "chunks": 25,
+      "resources": 325,
+      "edits": 12,
+      "descriptorBytes": 321,
+      "compressedExplicitBytes": 5172,
+      "exact": true,
+      "controlMismatch": true,
+      "compressedToDescriptor": 16.11214953271028,
+      "editRate": 0.036923076923076927
+    },
+    {
+      "window": "w3",
+      "origin": [
+        1000,
+        -1000
+      ],
+      "radius": 4,
+      "chunks": 81,
+      "resources": 1053,
+      "edits": 22,
+      "descriptorBytes": 532,
+      "compressedExplicitBytes": 16835,
+      "exact": true,
+      "controlMismatch": true,
+      "compressedToDescriptor": 31.644736842105264,
+      "editRate": 0.020892687559354226
+    },
+    {
+      "window": "w3",
+      "origin": [
+        1000,
+        -1000
+      ],
+      "radius": 8,
+      "chunks": 289,
+      "resources": 3757,
+      "edits": 63,
+      "descriptorBytes": 1407,
+      "compressedExplicitBytes": 61033,
+      "exact": true,
+      "controlMismatch": true,
+      "compressedToDescriptor": 43.37810945273632,
+      "editRate": 0.016768698429598085
+    },
+    {
+      "window": "w3",
+      "origin": [
+        1000,
+        -1000
+      ],
+      "radius": 16,
+      "chunks": 1089,
+      "resources": 14157,
+      "edits": 282,
+      "descriptorBytes": 6071,
+      "compressedExplicitBytes": 232906,
+      "exact": true,
+      "controlMismatch": true,
+      "compressedToDescriptor": 38.36369626091253,
+      "editRate": 0.01991947446492901
+    }
+  ],
+  "pass": true
+}
