@@ -121,12 +121,19 @@
       "id": "catalog-auto-publishes-index-html",
       "category": "release",
       "severity": "release-blocker",
-      "status": "known",
+      "status": "protected",
       "symptom": "diagnostic/incomplete apps become public automatically",
       "rootCause": "allow-by-existence catalog discovery",
       "protection": [
-        "deny-by-default certified registry"
-      ]
+        "deny-by-default certified registry",
+        "test/catalog-deny-default.test.js"
+      ],
+      "previousStatus": "known",
+      "verification": {
+        "at": "2026-09-06T09:51:03.957Z",
+        "result": "PASS",
+        "scope": "Actual api/apps.js with unregistered/quarantine/corrupt registry/missing index fixtures"
+      }
     },
     {
       "id": "false-green-assertion",
@@ -769,7 +776,7 @@
     {
       "id": "durable-queue-contention-deferral-consumes-retry-budget",
       "severity": "release-blocker",
-      "status": "fixed",
+      "status": "protected",
       "discoveredAt": "2026-09-02T16:36:16.974Z",
       "rootCause": "scripts/durable-job-queue.cjs#claim() increments a jobs attempts counter unconditionally on EVERY claim, not only on a genuine execution failure. scripts/anythingllm-queue-drain.cjs#drainOne() re-checks resources after claiming and, if still contended, calls failTask() to requeue - a real, honest \"not yet, try again later\" deferral, not a failure. But because attempts already incremented at claim time, each of these deferrals silently consumed one of the jobs limited maxAttempts (default 3). Live-observed: a genuinely valid, correctly-enqueued task was permanently dead-lettered after exactly 3 consecutive \"still contended\" re-checks during sustained real CPU load (72-100% across the observation window) - the job was NEVER actually executed even once, only deferred, yet exhausted its retry budget purely from contention. This defeated the entire \"queue and wait for a window\" design.",
       "symptom": "A task that was correctly queued under load silently disappears from the queue (goes to dead-letter status) after a small number of drain-loop ticks, even though the machine never actually attempted to run it - looks like a lost job with no error message pointing at the real cause (the retry counter, not the task itself).",
@@ -777,13 +784,21 @@
       "test": "Documented here; a live reproduction requires sustained real CPU contention over multiple drain ticks, which is not practical to force deterministically in a fast unit test - the fix (higher default) is a direct, verifiable code change.",
       "prevention": "Any future use of durable-job-queue.cjs for a pattern where a claim can be immediately re-deferred without real execution (not just genuine work-attempted-and-failed) should set a generously high maxAttempts, or durable-job-queue.cjs itself should eventually distinguish claim-count from failure-count - out of scope to change here since that script is shared, general-purpose infrastructure used by other systems in this project.",
       "protection": [
-        "Documented prevention (not runtime verification): Any future use of durable-job-queue.cjs for a pattern where a claim can be immediately re-deferred without real execution (not just genuine work-attempted-and-failed) should set a generously high maxAttempts, or durable-job-queue.cjs itself should eventually distinguish claim-count from failure-count - out of scope to change here since that script is shared, general-purpose infrastructure used by other systems in this project."
-      ]
+        "Documented prevention (not runtime verification): Any future use of durable-job-queue.cjs for a pattern where a claim can be immediately re-deferred without real execution (not just genuine work-attempted-and-failed) should set a generously high maxAttempts, or durable-job-queue.cjs itself should eventually distinguish claim-count from failure-count - out of scope to change here since that script is shared, general-purpose infrastructure used by other systems in this project.",
+        "test/durable-queue-defer.test.js"
+      ],
+      "previousStatus": "fixed",
+      "solution": "Separate transactional defer command releases ownership and refunds only the unexecuted claim; genuine failures retain retry accounting.",
+      "verification": {
+        "at": "2026-09-06T09:53:59.363Z",
+        "result": "14/14 PASS",
+        "scope": "Four pre-execution deferrals with maxAttempts=1, wrong-owner rejection, then real failure dead-letters"
+      }
     },
     {
       "id": "anythingllm-transient-dispatch-failure-terminally-failed",
       "severity": "release-blocker",
-      "status": "fixed",
+      "status": "protected",
       "discoveredAt": "2026-09-02T16:46:57.536Z",
       "rootCause": "Live production validation job 3877989cf15fa657720fa3c3fdc45e0191c37b15197351cbafb2f1d4bb2acdaa: the resource gate correctly deferred dispatch across several ticks while real CPU (other concurrently-running AI-agent processes plus Godot on the same machine) sat at 88-100%, then allowed dispatch once CPU briefly read under the 70% threshold. CPU climbed back up during the ~10-minute dispatch and AnythingLLM never returned a response; scripts/anythingllm-task-router.cjs's own AbortSignal.timeout(600000) fired, which surfaced through Node's fetch (undici) as a generic `TypeError: fetch failed` (e.message exactly 'fetch failed'), NOT as `e.name === 'TimeoutError'` - confirmed via an isolated repro (Node v24.15.0): a connection that never receives any bytes throws TimeoutError directly on abort, but a connection torn down mid-flight (the actual shape of a contention-starved backend) does not. scripts/anythingllm-queue-drain.cjs#drainOne() called ackTask() on ANY result runTask() returned, without distinguishing a transient dispatch-level failure from a genuine semantic result - permanently losing a job to a single connection hiccup under known real contention, even though lib/ai-resource-scheduler.js's own maxAttempts=50 budget (see #durable-queue-contention-deferral-consumes-retry-budget) exists specifically to survive exactly this kind of transient condition. That budget only helps jobs that get requeued, not ones that get ack'd as terminal.",
       "symptom": "A queued job that the resource gate correctly waited to dispatch runs once, gets no real response within the timeout window, and is permanently marked FAIL/dead - indistinguishable in the job record from a genuine semantic failure (wrong tool chosen, bad answer), even though the real cause was the machine being too busy at that exact moment, not anything wrong with the request or the fix already validated in #anythingllm-router-hint-tool-name-mismatch.",
@@ -791,8 +806,16 @@
       "test": "test/anythingllm-queue-drain.test.js - covers the exact live shape (reason 'error_fetch failed', timedOut:false), a genuine TIMEOUT result, http_503 (transient), http_400 (terminal), a real semantic mismatch after a completed response (terminal), a PASS result, and null/undefined input.",
       "prevention": "Any future dispatch path that can fail mid-flight under real resource contention (not just at the pre-dispatch gate check) should classify failures by whether a real response was ever received, not just by whether the call returned ok:false - a network/timeout-level failure under known contention is evidence the machine was busy, not evidence the request itself was wrong.",
       "protection": [
-        "Documented prevention (not runtime verification): Any future dispatch path that can fail mid-flight under real resource contention (not just at the pre-dispatch gate check) should classify failures by whether a real response was ever received, not just by whether the call returned ok:false - a network/timeout-level failure under known contention is evidence the machine was busy, not evidence the request itself was wrong."
-      ]
+        "Documented prevention (not runtime verification): Any future dispatch path that can fail mid-flight under real resource contention (not just at the pre-dispatch gate check) should classify failures by whether a real response was ever received, not just by whether the call returned ok:false - a network/timeout-level failure under known contention is evidence the machine was busy, not evidence the request itself was wrong.",
+        "test/anythingllm-queue-drain.test.js"
+      ],
+      "previousStatus": "fixed",
+      "verification": {
+        "at": "2026-09-06T09:44:49.880Z",
+        "suite": "23/23 PASS",
+        "test": "test/anythingllm-queue-drain.test.js",
+        "scope": "regression reproduces original queue classification or space-containing path bug; not model E2E certification"
+      }
     },
     {
       "id": "anythingllm-ollama-response-timeout-not-configured",
@@ -825,7 +848,7 @@
     {
       "id": "mcp-filesystem-proxy-shell-true-unquoted-space-path",
       "severity": "release-blocker",
-      "status": "fixed",
+      "status": "protected",
       "discoveredAt": "2026-09-03T04:52:00.000Z",
       "rootCause": "scripts/mcp-filesystem-proxy.cjs spawns the real @modelcontextprotocol/server-filesystem via `spawn('npx', ['-y', '@modelcontextprotocol/server-filesystem', sandboxRoot], {shell:true})`. With shell:true, Node hands the args array to cmd.exe (on Windows) as a plain SPACE-JOINED STRING - it does NOT quote each array element for you the way shell:false preserves exact argv boundaries. This project's real sandbox path contains a space ('...\\\\World_server AI\\\\World_server_anythingllm_sandbox'), so cmd.exe split it into two separate tokens at that space, and @modelcontextprotocol/server-filesystem's own arg parsing fell back to something derived from process.cwd() instead of the intended sandbox root (observed directly: 'Cannot access directory ...\\\\World_server_openhuman2\\\\AI\\\\World_server_anythingllm_sandbox, skipping' - cwd with a mangled tail appended, not the real path). Reproduced identically via a plain shell command AND via a clean child_process.spawn() call with a proper argv array (ruling out a Bash-quoting artifact on this session's own side) - the bug is inside the proxy script itself. This silently broke the MCP server for AnythingLLM's MCPHypervisor too: with no real accessible directory, the spawned process could not fully initialize the way AnythingLLM's hypervisor expects, and AnythingLLM's own force-reload/list endpoints reported 'Successfully started 0 MCP servers: []' even though anythingllm_mcp_servers.json correctly referenced this exact proxy script and path - a completely different symptom (empty tool list, 3 default-only tools active) with the same real cause. Same class of bug as the npm.cmd/shell quoting fix in commit 1c01fa76 elsewhere in this project.",
       "symptom": "The MCP filesystem proxy appears to start (prints 'Secure MCP Filesystem Server running on stdio') but silently serves the wrong (inaccessible or cwd-derived) directory instead of the real sandbox; AnythingLLM's own MCPHypervisor reports 0 servers started with no error, so a model dispatching through it can only see the 3 default built-in tools (rag-memory, document-summarizer, web-scraping) and produces an empty/short non-answer to a filesystem task - visually identical to the ALREADY-FIXED #anythingllm-router-hint-tool-name-mismatch empty-response defect, but with a completely different root cause (no real tools attached at all, vs. a wrong tool-name hint).",
@@ -833,8 +856,16 @@
       "test": "test/mcp-filesystem-proxy.test.js - new case spawns the proxy against a sandbox directory created with a deliberately space-containing prefix ('mcp proxy sandbox with space-') and asserts a real read_text_file call still resolves the correct fixture content - none of the pre-existing tests caught this because os.tmpdir() sandboxes happen not to contain a space.",
       "prevention": "Any future spawn() call in this codebase using shell:true on an argument that could contain a space (a path, in particular) must be explicitly quoted before being added to the args array - shell:true does not do this automatically, unlike shell:false. Prefer shell:false plus an explicit .cmd/.exe extension resolution where the target platform allows it, to avoid this whole class of bug outright; shell:true remains necessary here specifically for npx's Windows .cmd shim resolution.",
       "protection": [
-        "Documented prevention (not runtime verification): Any future spawn() call in this codebase using shell:true on an argument that could contain a space (a path, in particular) must be explicitly quoted before being added to the args array - shell:true does not do this automatically, unlike shell:false. Prefer shell:false plus an explicit .cmd/.exe extension resolution where the target platform allows it, to avoid this whole class of bug outright; shell:true remains necessary here specifically for npx's Windows .cmd shim resolution."
-      ]
+        "Documented prevention (not runtime verification): Any future spawn() call in this codebase using shell:true on an argument that could contain a space (a path, in particular) must be explicitly quoted before being added to the args array - shell:true does not do this automatically, unlike shell:false. Prefer shell:false plus an explicit .cmd/.exe extension resolution where the target platform allows it, to avoid this whole class of bug outright; shell:true remains necessary here specifically for npx's Windows .cmd shim resolution.",
+        "test/mcp-filesystem-proxy.test.js"
+      ],
+      "previousStatus": "fixed",
+      "verification": {
+        "at": "2026-09-06T09:44:49.881Z",
+        "suite": "23/23 PASS",
+        "test": "test/mcp-filesystem-proxy.test.js",
+        "scope": "regression reproduces original queue classification or space-containing path bug; not model E2E certification"
+      }
     },
     {
       "id": "anythingllm-mcphypervisor-cannot-register-any-mcp-server",
@@ -1052,6 +1083,58 @@
       ],
       "evidence": [
         "31/31 late Google tests PASS on production-only install; Windows unavailable branch exercised, Linux unverified."
+      ]
+    },
+    {
+      "id": "collective-brain-outbox-loss-and-false-pass",
+      "rootCause": "Parse errors became empty queues; overflow sliced pending records; stale pending counts and corrupt journals could PASS.",
+      "protection": [
+        "test/collective-brain.test.js"
+      ],
+      "solution": "Fail closed while retaining original bytes; backpressure at capacity; report actual pending count and validate journal.",
+      "severity": "release-blocker",
+      "status": "protected",
+      "evidence": [
+        "Reproduced before/after in current readiness continuation."
+      ]
+    },
+    {
+      "id": "zero-chaos-ownership-blind-pass",
+      "rootCause": "Clean published duplicate branch owners and ignored active/stale/corrupt lease files did not block Git readiness.",
+      "protection": [
+        "test/zero-chaos-ownership.test.js"
+      ],
+      "solution": "Live ownership collision and lease inspection in existing gate; no automatic removal.",
+      "severity": "release-blocker",
+      "status": "protected",
+      "evidence": [
+        "Reproduced before/after in current readiness continuation."
+      ]
+    },
+    {
+      "id": "synthetic-soak-certified-by-wall-clock",
+      "rootCause": "Simulated recovered=true events plus elapsed time could certify a real long runtime.",
+      "protection": [
+        "test/soak-evidence.test.js"
+      ],
+      "solution": "Synthetic harness never grants runtime certification; existing runner offers bounded real HTTP mode.",
+      "severity": "release-blocker",
+      "status": "protected",
+      "evidence": [
+        "Reproduced before/after in current readiness continuation."
+      ]
+    },
+    {
+      "id": "peer-review-commit-slogan-false-quality",
+      "status": "protected",
+      "severity": "release-blocker",
+      "rootCause": "Peer review inferred test quality from PASS/100% commit slogans; its tests wrote shared reports against mutable live branches.",
+      "solution": "Report unmeasured quality as unknown; actual overlap tests run in a disposable real Git fixture.",
+      "protection": [
+        "test/multi-ai-peer-review.test.js"
+      ],
+      "evidence": [
+        "9/9 PASS, including misleading PASS100% commit messages that must not imply coverage."
       ]
     }
   ],

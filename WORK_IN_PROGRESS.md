@@ -57,9 +57,9 @@ Per `DESKTOP_AI_INSTRUCTIONS.md`: real agentmemory save→recall→restart persi
 <!-- WORLD_SERVER_SESSION_RECOVERY_V1_START -->
 ## Desktop AI Session Recovery V1 — managed checkpoint
 
-- sessionId: `session-1788674330975-c4a7d9`
+- sessionId: `session-1788687671008-5bbbad`
 - status: `in_progress`
-- checkpoint: `2026-09-06T05:58:50.975Z`
+- checkpoint: `2026-09-06T09:41:11.009Z`
 - checkpoint message: Session recovery initialized
 - last successful command: none
 - last error: none
@@ -217,3 +217,10 @@ Google d20a7cfd and coordinator f762419e integrated, preserving peer 469abbe8 hi
 Reconcile immutable Google peer head58016f7a in owned off-Desktop checkout. Preserve current runtime routing/readiness, keep conservative build exclusions, review new build guard and child RSS test; no foreign edits or deploy.
 
 Late peer58016f7a merged: production-only npm ci PASS115packages/audit0; Google31/31 PASS; build-guard PASS. Added recursive dockerignore matcher regression, owned process-tree test cleanup and fail-closed unavailable child RSS. Linux container execution remains unverified. Release regression unchanged; no push/deploy.
+
+### Codex readiness blockers continuation — 2026-09-06
+Owner: current Codex session; branch ai/codex/recovery-integration; isolated checkout codex-readiness-blockers. Scope: Zero-Chaos evidence/gaps, inherited blocker classification, memory sync, bounded soak, available Linux checks. Base ea0f030e; no push/deploy/foreign cleanup. Reuse previous proof and existing coordinator.
+
+Readiness continuation checkpoint: memory real sync PASS (5 queued records delivered,0remaining,493-event chain valid); OpenCode review accepted via regressions; OpenHuman actual MCP read matched package.name. Zero ownership3/3; memory24/24; defer14/14; catalog1/1; peer9/9. Four inherited records closed with proof; 17 release-error and4metric blockers remain. Runtime300613ms/1178requests/5restarts, no errors; incomplete child memory prevents8h certification. Linux: noDocker/Podman, WSLexit50. No foreign cleanup/push/deploy. Final detailed evidence READINESS_BLOCKER_AUDIT.json.
+
+Final verification: syntax54files PASS; fullunit602PASS/1SKIP/0FAIL (603tests); integration76/76PASS. Four inherited blockers closed with reproducible tests; no policy relaxation. Free-agent results checked against regressions/actual package file. Pending original blockers retained explicitly. Own runtime test processes stopped; cleanup follows preservation.

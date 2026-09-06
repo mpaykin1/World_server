@@ -40,16 +40,10 @@ function main(){
   }
   // Simple conflict detection: same file modified in multiple branches with different content hash would be detected via git merge-base, simplified here
   if(report.duplicates.length>3) report.conflicts.push('multiple AI branches touch same systems - review blast radius before porting');
-  // Quality metrics: check if any branch has better test coverage (simulated via last commit message)
-  const coverage={};
-  for(const br of Object.keys(branchFiles)){
-    const log=run('git',['log','--oneline','-1',br],{windowsHide:true}).stdout||'';
-    if(log.includes('100%')||log.includes('PASS')) coverage[br]='high';
-  }
-  report.bestCoverageBranch=Object.entries(coverage).sort((a,b)=>b[1].length-a[1].length)[0]?.[0]||null;
-  // Block quality regression: check if any branch reduces test count
-  const testCount=run('git',['log','--oneline','--grep=test',...Object.keys(branchFiles)],{windowsHide:true}).stdout.split('\n').length;
-  report.qualityGate=testCount>0?'pass':'unknown';
+  // Commit messages are claims, not test execution evidence.
+  report.bestCoverageBranch=null;
+  report.qualityGate='unknown';
+  report.qualityEvidence='No verified test artifact supplied; branch overlap only.';
   console.log(JSON.stringify(report,null,2));
   // Also write to control-plane friendly location
   fs.mkdirSync(path.join(ROOT,'state'),{recursive:true});

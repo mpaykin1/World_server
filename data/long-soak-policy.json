@@ -11,6 +11,7 @@
     "network-partition-simulated",
     "stale-lease"
   ],
-  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation.",
-  "faultEverySeconds": 30
+  "truthRule": "Synthetic harness events never certify runtime. Long certification requires >=8 hours of fresh real runtime measurements, verified recovery and complete resource evidence; downtime is not test duration.",
+  "faultEverySeconds": 30,
+  "requiresRealRuntime": true
 }

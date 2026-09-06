@@ -428,7 +428,10 @@ function gitZeroChaosReadiness(repoRoot = ROOT) {
     ? Number(branches.stdout.trim()) : null;
   if (unpublishedBranchCommits === null) reasons.push('Local branch publication state unavailable');
   else if (unpublishedBranchCommits > 0) reasons.push(`Unpublished local branch commits (${unpublishedBranchCommits})`);
+  const branchOwners = new Map();
   for (const entry of entries.filter(x => !x.bare)) {
+    if (entry.branch && branchOwners.has(entry.branch)) reasons.push(`Ownership collision: ${entry.branch} in ${branchOwners.get(entry.branch)} and ${entry.worktree}`);
+    if (entry.branch) branchOwners.set(entry.branch, entry.worktree);
     const status = git(entry.worktree, ['status', '--porcelain', '--untracked-files=all']);
     // Count unique local commits even without an upstream. A local master/main
     // reference is not proof that anything has been pushed.
@@ -440,8 +443,19 @@ function gitZeroChaosReadiness(repoRoot = ROOT) {
     if (item.dirty === null || item.unpublishedCommits === null) reasons.push(`Git state unavailable: ${entry.worktree}`);
     if (item.dirty) reasons.push(`Dirty/untracked work: ${entry.worktree}`);
     if (item.unpublishedCommits > 0) reasons.push(`Unpublished commits (${item.unpublishedCommits}): ${entry.worktree}`);
+    const lockDir = path.join(entry.worktree, 'data', 'collective-brain', 'runtime', 'locks');
+    try {
+      for (const name of fs.readdirSync(lockDir).filter(n => n.endsWith('.json'))) {
+        const file = path.join(lockDir, name);
+        let state = 'invalid';
+        try { const lease = JSON.parse(fs.readFileSync(file, 'utf8')); const expiry = Date.parse(lease.expiresAt);
+          if (lease.owner && Number.isFinite(expiry)) state = expiry <= Date.now() ? 'stale' : 'active';
+        } catch { /* Retain malformed ownership records for recovery. */ }
+        reasons.push(`Unfinished ownership lease (${state}): ${file}`);
+      }
+    } catch (error) { if (error.code !== 'ENOENT') reasons.push(`Ownership state unavailable: ${lockDir}`); }
   }
-  return { verdict: reasons.length ? 'FAIL' : 'PASS', unpublishedBranchCommits, worktrees, reasons };
+  return { verdict: reasons.length ? 'FAIL' : 'PASS', generatedAt: nowIso(), evidenceSource: 'live-git-and-ownership-leases', unpublishedBranchCommits, worktrees, reasons };
 }
 
 function parseArgs(argv) {

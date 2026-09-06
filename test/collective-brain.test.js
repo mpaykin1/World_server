@@ -40,3 +40,32 @@ test('structural check passes complete fixture',()=>{const root=fixture(),r=cb.s
 test('cycle works fully offline without breaking runtime',async()=>{const root=fixture(),r=await cb.cycle(root,{skipNetwork:true});assert.equal(r.status,'PASS');assert.equal(r.sync,'ci-local-only');assert.equal(cb.verifyEventChain(root).ok,true);});
 test('security repo scan does not ingest env files',()=>{const root=fixture();fs.writeFileSync(path.join(root,'.env'),'API_KEY=do-not-read');const r=cb.repoSecurityScan(root);assert.equal(r.status,'PASS');assert.ok(r.findings.some(x=>x.id==='secret-file-present'));});
 test('benchmark exercises router, redaction and chain',()=>{const root=fixture(),r=cb.benchmark(root);assert.equal(r.status,'PASS');assert.equal(r.eventChain.ok,true);assert.ok(r.securitySamples.length>=4);});
+
+test('corrupt outbox is preserved and blocks a cycle instead of becoming empty',async t=>{
+ const root=fixture();t.after(()=>fs.rmSync(root,{recursive:true,force:true}));const dir=path.join(root,'data/collective-brain/runtime');fs.mkdirSync(dir,{recursive:true});
+ const file=path.join(dir,'outbox.jsonl'),bytes='{"hash":"keep","payload":{}}\n{broken\n';fs.writeFileSync(file,bytes);
+ await assert.rejects(cb.cycle(root,{skipNetwork:true}),/outbox/i);assert.equal(fs.readFileSync(file,'utf8'),bytes);
+});
+test('full outbox applies backpressure without dropping the oldest record',async t=>{
+ const root=fixture();t.after(()=>fs.rmSync(root,{recursive:true,force:true}));const dir=path.join(root,'data/collective-brain/runtime');fs.mkdirSync(dir,{recursive:true});
+ const file=path.join(dir,'outbox.jsonl'),bytes=Array.from({length:500},(_,i)=>JSON.stringify({hash:String(i),payload:{},attempts:0})).join('\n')+'\n';fs.writeFileSync(file,bytes);
+ await assert.rejects(cb.cycle(root,{url:'http://127.0.0.1:1',timeoutMs:100}),/outbox.*full/i);assert.equal(fs.readFileSync(file,'utf8'),bytes);
+});
+test('deferred backlog cannot produce PASS when current snapshot sync succeeds',async t=>{
+ const root=fixture();t.after(()=>fs.rmSync(root,{recursive:true,force:true}));const dir=path.join(root,'data/collective-brain/runtime');fs.mkdirSync(dir,{recursive:true});
+ fs.writeFileSync(path.join(dir,'outbox.jsonl'),JSON.stringify({hash:'old',payload:{},nextAttemptAt:'2099-01-01T00:00:00Z'})+'\n');
+ const server=require('http').createServer((req,res)=>{req.resume();res.setHeader('Content-Type','application/json');res.end('{}');});await new Promise(r=>server.listen(0,'127.0.0.1',r));t.after(()=>new Promise(r=>server.close(r)));
+ const r=await cb.cycle(root,{url:'http://127.0.0.1:'+server.address().port});assert.equal(r.outbox.remaining,1);assert.equal(r.status,'DEGRADED');
+});
+
+test('malformed event journal never verifies as an empty valid chain',async t=>{
+ const root=fixture();t.after(()=>fs.rmSync(root,{recursive:true,force:true}));const dir=path.join(root,'data/collective-brain/runtime');fs.mkdirSync(dir,{recursive:true});const file=path.join(dir,'events.jsonl');const bytes='{broken\n';fs.writeFileSync(file,bytes);
+ assert.equal(cb.verifyEventChain(root).ok,false);await assert.rejects(cb.cycle(root,{skipNetwork:true}),/journal/);assert.equal(fs.readFileSync(file,'utf8'),bytes);
+});
+
+test('offline restart deduplicates pending snapshots and concurrent cycles respect ownership',async t=>{
+ const root=fixture();t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
+ await cb.cycle(root,{url:'http://127.0.0.1:1',timeoutMs:100});await cb.cycle(root,{url:'http://127.0.0.1:1',timeoutMs:100});
+ const rows=fs.readFileSync(path.join(root,'data/collective-brain/runtime/outbox.jsonl'),'utf8').trim().split('\n').map(JSON.parse);assert.equal(new Set(rows.map(x=>x.hash)).size,rows.length);
+ const lease=cb.acquireLease(root,'cycle',{owner:'other-cycle',ttlMs:10000});assert.equal(lease.ok,true);const r=await cb.cycle(root,{skipNetwork:true});assert.equal(r.status,'SKIPPED_ACTIVE');cb.releaseLease(root,'cycle','other-cycle');
+});

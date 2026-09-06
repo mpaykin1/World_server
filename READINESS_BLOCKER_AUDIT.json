@@ -1,0 +1,3190 @@
+{
+  "at": "2026-09-06T09:53:59.958Z",
+  "base": "ea0f030e",
+  "releaseBlocked": true,
+  "unresolvedReleaseErrors": [
+    {
+      "id": "controls-inverted-camera-relative",
+      "status": "known",
+      "classification": "C: current verification blocked / not established",
+      "isProvenExternal": false,
+      "rootCause": "inconsistent camera-forward/screen-right basis math",
+      "existingEvidence": [
+        "canonical movement basis",
+        "behavioral yaw regression test"
+      ],
+      "closureRequirement": "Reproduce the named original defect against the owning application/runtime, then pass a targeted regression; status text alone is insufficient.",
+      "blockerEvidence": "Registry names broad game/device behavior without an application-specific reproduction. Canonical helper tests alone do not prove all active foreign-owned app integrations."
+    },
+    {
+      "id": "mobile-entry-not-clickable",
+      "status": "known",
+      "classification": "C: current verification blocked / not established",
+      "isProvenExternal": false,
+      "rootCause": "desktop-only pointer/input path or overlay interception",
+      "existingEvidence": [
+        "real mobile emulation",
+        "tap target test",
+        "pointer/touch event coverage"
+      ],
+      "closureRequirement": "Reproduce the named original defect against the owning application/runtime, then pass a targeted regression; status text alone is insufficient.",
+      "blockerEvidence": "Registry names broad game/device behavior without an application-specific reproduction. Canonical helper tests alone do not prove all active foreign-owned app integrations."
+    },
+    {
+      "id": "mobile-controls-missing",
+      "status": "known",
+      "classification": "C: current verification blocked / not established",
+      "isProvenExternal": false,
+      "rootCause": "no shared touch movement/look contract",
+      "existingEvidence": [
+        "mobile Playwright project",
+        "touch joystick/look/jump gate"
+      ],
+      "closureRequirement": "Reproduce the named original defect against the owning application/runtime, then pass a targeted regression; status text alone is insufficient.",
+      "blockerEvidence": "Registry names broad game/device behavior without an application-specific reproduction. Canonical helper tests alone do not prove all active foreign-owned app integrations."
+    },
+    {
+      "id": "stairs-collision-broken",
+      "status": "known",
+      "classification": "C: current verification blocked / not established",
+      "isProvenExternal": false,
+      "rootCause": "collision without standardized step-up behavior",
+      "existingEvidence": [
+        "step-up<=1.05 behavioral test",
+        "canonical collision helper"
+      ],
+      "closureRequirement": "Reproduce the named original defect against the owning application/runtime, then pass a targeted regression; status text alone is insufficient.",
+      "blockerEvidence": "Registry names broad game/device behavior without an application-specific reproduction. Canonical helper tests alone do not prove all active foreign-owned app integrations."
+    },
+    {
+      "id": "wall-collision-broken",
+      "status": "known",
+      "classification": "C: current verification blocked / not established",
+      "isProvenExternal": false,
+      "rootCause": "missing/incorrect horizontal collision behavior",
+      "existingEvidence": [
+        "wall traversal negative test",
+        "spawn/ground/wall collision contract"
+      ],
+      "closureRequirement": "Reproduce the named original defect against the owning application/runtime, then pass a targeted regression; status text alone is insufficient.",
+      "blockerEvidence": "Registry names broad game/device behavior without an application-specific reproduction. Canonical helper tests alone do not prove all active foreign-owned app integrations."
+    },
+    {
+      "id": "spawn-not-grounded",
+      "status": "known",
+      "classification": "C: current verification blocked / not established",
+      "isProvenExternal": false,
+      "rootCause": "spawn not derived from valid walkable surface",
+      "existingEvidence": [
+        "grounded spawn behavioral test",
+        "orientation invariant"
+      ],
+      "closureRequirement": "Reproduce the named original defect against the owning application/runtime, then pass a targeted regression; status text alone is insufficient.",
+      "blockerEvidence": "Registry names broad game/device behavior without an application-specific reproduction. Canonical helper tests alone do not prove all active foreign-owned app integrations."
+    },
+    {
+      "id": "jump-moves-forward",
+      "status": "known",
+      "classification": "C: current verification blocked / not established",
+      "isProvenExternal": false,
+      "rootCause": "jump coupled to camera/world transform",
+      "existingEvidence": [
+        "Space-only-Y invariant",
+        "world transform lock"
+      ],
+      "closureRequirement": "Reproduce the named original defect against the owning application/runtime, then pass a targeted regression; status text alone is insufficient.",
+      "blockerEvidence": "Registry names broad game/device behavior without an application-specific reproduction. Canonical helper tests alone do not prove all active foreign-owned app integrations."
+    },
+    {
+      "id": "camera-roll-on-look",
+      "status": "known",
+      "classification": "C: current verification blocked / not established",
+      "isProvenExternal": false,
+      "rootCause": "yaw/pitch/roll axes mixed",
+      "existingEvidence": [
+        "yaw body Y only",
+        "pitch camera X only",
+        "roll==0 invariant"
+      ],
+      "closureRequirement": "Reproduce the named original defect against the owning application/runtime, then pass a targeted regression; status text alone is insufficient.",
+      "blockerEvidence": "Registry names broad game/device behavior without an application-specific reproduction. Canonical helper tests alone do not prove all active foreign-owned app integrations."
+    },
+    {
+      "id": "false-green-assertion",
+      "status": "known",
+      "classification": "C: current verification blocked / not established",
+      "isProvenExternal": false,
+      "rootCause": "matcher referenced without invocation",
+      "existingEvidence": [
+        "static matcher invocation scan",
+        "CI hard failure"
+      ],
+      "closureRequirement": "Reproduce the named original defect against the owning application/runtime, then pass a targeted regression; status text alone is insufficient.",
+      "blockerEvidence": "Registry names broad game/device behavior without an application-specific reproduction. Canonical helper tests alone do not prove all active foreign-owned app integrations."
+    },
+    {
+      "id": "menu-obstructs-game",
+      "status": "known",
+      "classification": "C: current verification blocked / not established",
+      "isProvenExternal": false,
+      "rootCause": "system information rendered persistently",
+      "existingEvidence": [
+        "compact icon menu contract",
+        "HUD obstruction audit",
+        "mobile safe-area test"
+      ],
+      "closureRequirement": "Reproduce the named original defect against the owning application/runtime, then pass a targeted regression; status text alone is insufficient.",
+      "blockerEvidence": "Registry names broad game/device behavior without an application-specific reproduction. Canonical helper tests alone do not prove all active foreign-owned app integrations."
+    },
+    {
+      "id": "anythingllm-ollama-tool-calling-fixed-timeout-signature",
+      "status": "superseded",
+      "classification": "C: current verification blocked / not established",
+      "isProvenExternal": true,
+      "rootCause": "The empty-content tool-calling failure (see #qwen3-thinking-disabled-breaks-tool-call-generation) was initially attributed to CPU contention, but decisive controlled testing disproves that as the SOLE cause: the exact same failure signature (~130-150s duration, ~19-28 completion tokens, empty final content, zero tool-call ever logged) recurred IDENTICALLY across qwen3:1.7b (thinking on AND off) and qwen2.5:3b-instruct (no hybrid thinking), and recurred even at 18% system CPU load (a genuinely idle window, confirmed via Win32_Processor.LoadPercentage at test start) exactly as it did at 93-100% load. Two different model families, two different thinking-mode configurations, and two very different load conditions all produced the same narrow duration/token-count band - this is inconsistent with a pure compute-throughput explanation and points to something structural in the AnythingLLM<->Ollama tool-calling wire protocol/timeout handling for this MCP tool-schema setup (AnythingLLM 1.16.1, Ollama 0.33.2), not a model capability or resource-availability limitation.",
+      "existingEvidence": "ANYTHINGLLM_E2E_REPRODUCIBILITY.json and the model-suitability ledger record the real, reproduced attempts.",
+      "closureRequirement": "Existing owner must provide current live AnythingLLM/model E2E proof; do not infer it from unrelated HTTP health.",
+      "blockerEvidence": "AnythingLLM process absent in this session; local model dispatch uses existing resource gating. Host service/model behavior cannot be certified by source-only tests."
+    },
+    {
+      "id": "anythingllm-router-hint-tool-name-mismatch",
+      "status": "fixed",
+      "classification": "C: current verification blocked / not established",
+      "isProvenExternal": true,
+      "rootCause": "scripts/anythingllm-task-router.cjs appended a tool-name hint to the user message (\"Use exactly one of these tools: list_directory, search_files, read_file, read_text_file...\") using the SHORT, unprefixed names from lib/mcp-intent-router.js allowedTools. AnythingLLM registers MCP tools under a PREFIXED name, <mcpServerName>-<toolName> (confirmed live: \"world-server-sandbox-read_text_file\", not \"read_text_file\"). Instructing the model to call a tool name that does not exist in its own declared tools list broke generation entirely - not a timeout, not a CPU issue, not a model-capability limitation. Proven via matrix-test bisection against raw Ollama (bypassing AnythingLLM and the think-proxy entirely): the EXACT SAME request (system prompt, task text, tool schema, model, num_ctx) succeeded with hasToolCalls:true and the correct tool name when the hint was removed, and failed with hasToolCalls:false/empty content when the hint was present - the single controlled variable.",
+      "existingEvidence": "test/anythingllm-task-router.test.js: prefixedToolName unit test + a source-inspection regression guard that fails if a future edit reintroduces allowedTools.join(...) or an unwrapped singleTool without routing through prefixedToolName.",
+      "closureRequirement": "Existing owner must provide current live AnythingLLM/model E2E proof; do not infer it from unrelated HTTP health.",
+      "blockerEvidence": "AnythingLLM process absent in this session; local model dispatch uses existing resource gating. Host service/model behavior cannot be certified by source-only tests."
+    },
+    {
+      "id": "ollama-think-proxy-default-request-timeout",
+      "status": "fixed",
+      "classification": "C: current verification blocked / not established",
+      "isProvenExternal": true,
+      "rootCause": "Node http.Server defaults to requestTimeout=300000ms and headersTimeout=60000ms since Node 18. scripts/ollama-think-proxy.cjs never overrode these, so once the real tool-calling defect was fixed (see #anythingllm-router-hint-tool-name-mismatch) and turns started genuinely completing under real CPU contention (observed 150-350s+, other concurrent AI agents on the same machine), requests exceeding 5 minutes got silently force-closed by Node itself at the proxy layer - not by Ollama, not by AnythingLLM, not by the router client. This surfaced on AnythingLLMs side as \"[AIbitat] Provider error: fetch failed\", indistinguishable from a genuine network failure, and caused a full 3x reproducibility run to fail 3/3 with error_fetch failed even though the underlying tool-calling mechanism was already proven correct.",
+      "existingEvidence": "test/ollama-think-proxy.test.js asserts these three properties are 0 on the live server instance.",
+      "closureRequirement": "Existing owner must provide current live AnythingLLM/model E2E proof; do not infer it from unrelated HTTP health.",
+      "blockerEvidence": "AnythingLLM process absent in this session; local model dispatch uses existing resource gating. Host service/model behavior cannot be certified by source-only tests."
+    },
+    {
+      "id": "ollama-model-load-thrashing-under-extreme-system-pressure",
+      "status": "documented-mitigated",
+      "classification": "C: current verification blocked / not established",
+      "isProvenExternal": true,
+      "rootCause": "A direct, minimal (\"hi\") call through the proxy to Ollama returned total_duration=6451s (107.5 min), of which load_duration alone was 6443s (107.4 min) - prompt_eval_duration (5.3s) and eval_duration (2.8s) were both entirely normal once the model was actually loaded. This is NOT a proxy/transport bug (the earlier requestTimeout fix and the tool-name-mismatch fix are both real and correct) and NOT a tool-calling correctness defect - it is the Ollama model-load phase itself (reading ~2.7GB of weights into RAM and initializing) taking on the order of MINUTES to HOURS under genuine, extreme, system-wide resource contention on this shared machine (observed concurrently: Godot, multiple OpenHuman processes, multiple Claude/OpenCode sessions). This class of slowdown (OS-level memory/disk thrashing, not CPU%) is invisible to a plain Win32_Processor.LoadPercentage check - a machine can show 90-100% CPU OR a deceptively normal-looking % and still take 100x longer than expected to page a model back into resident memory if the OS is under severe combined memory+disk pressure from many processes at once.",
+      "existingEvidence": "test/ai-resource-scheduler.test.js - modelResidency-aware decide() tests with a mocked /api/ps response.",
+      "closureRequirement": "Existing owner must provide current live AnythingLLM/model E2E proof; do not infer it from unrelated HTTP health.",
+      "blockerEvidence": "AnythingLLM process absent in this session; local model dispatch uses existing resource gating. Host service/model behavior cannot be certified by source-only tests."
+    },
+    {
+      "id": "anythingllm-ollama-response-timeout-not-configured",
+      "status": "fixed",
+      "classification": "C: current verification blocked / not established",
+      "isProvenExternal": true,
+      "rootCause": "Confirmed by direct source inspection of the installed AnythingLLM Desktop backend (C:\\Users\\user\\AppData\\Local\\Programs\\AnythingLLM\\resources\\backend\\server.js, OllamaAILLM.applyOllamaFetch()) - NOT a guess. AnythingLLM constructs its own outbound `ollama` client with a custom fetch ONLY if process.env.OLLAMA_RESPONSE_TIMEOUT is set to a valid number >= 300000ms (5 minutes); if that env var is unset (the default on this machine), it falls straight back to the plain global `fetch`, which under Node/undici carries a default headersTimeout of exactly 300000ms (5 minutes) on the dispatcher used for AnythingLLM's own request TO Ollama. This is a completely separate timeout from scripts/anythingllm-task-router.cjs's own client-side AbortSignal.timeout (600000ms) - AnythingLLM's own outbound call to Ollama was dying at ~5 minutes, long before our own 10-minute client timeout would ever fire. This is the true explanation for both live 'error_fetch failed' incidents (job 3877989c...f2acdaa and simple-e2e run1: wallClockMs 306464, i.e. ~5m6s - the ~6s of overhead is AnythingLLM's own pre-processing/resource checks before the actual Ollama chat() call starts). Note the previously-recorded durationMs:600000 on both incidents was NOT a real measurement - scripts/anythingllm-task-router.cjs's catch block for a thrown fetch error hardcodes `durationMs: timeoutMs` (the configured constant) rather than computing real elapsed time, which is itself a minor observability bug worth fixing separately but did not affect the classification fix in #anythingllm-transient-dispatch-failure-terminally-failed, which remains correct and necessary regardless of the exact failure cause.",
+      "existingEvidence": "Live-confirmed post-restart (2026-09-03, run4): two real dispatch attempts completed in 75.3s and 67.6s respectively with zero 'fetch failed'/network-level errors, versus two prior live incidents that both died around the ~5-minute mark before this fix - the failure class this fix targets is confirmed gone. (The run itself still returned FAIL for an unrelated reason - see #mcp-filesystem-proxy-shell-true-unquoted-space-path - not a regression of this fix.)",
+      "closureRequirement": "Existing owner must provide current live AnythingLLM/model E2E proof; do not infer it from unrelated HTTP health.",
+      "blockerEvidence": "AnythingLLM process absent in this session; local model dispatch uses existing resource gating. Host service/model behavior cannot be certified by source-only tests."
+    },
+    {
+      "id": "anythingllm-restart-resets-workspace-list-until-workspace-recreated",
+      "status": "fixed",
+      "classification": "C: current verification blocked / not established",
+      "isProvenExternal": true,
+      "rootCause": "A full AnythingLLM Desktop restart+reinitialize (the user's own \"reinitialize with Ollama\" action, not something this session performed) left the on-disk SQLite DB (anythingllm.db) containing a 'world' workspace row (id 2, confirmed via direct DB read), but the live server's own /api/v1/workspaces and /api/v1/workspace/world endpoints returned an empty list / {\"workspace\":[]} for it - a real divergence between the DB file's contents and what the running process's own API considered to exist, discovered live rather than assumed. GET/POST calls against a workspace slug the live API does not recognize fail (thread creation returned http_400, chat would have failed identically) regardless of how correct the DB file looks from outside the process.",
+      "existingEvidence": "Live-confirmed: GET /api/v1/workspace/world returned {\"workspace\":[]} before this call and a real populated object after it; thread creation succeeded immediately afterward.",
+      "closureRequirement": "Existing owner must provide current live AnythingLLM/model E2E proof; do not infer it from unrelated HTTP health.",
+      "blockerEvidence": "AnythingLLM process absent in this session; local model dispatch uses existing resource gating. Host service/model behavior cannot be certified by source-only tests."
+    },
+    {
+      "id": "anythingllm-mcphypervisor-cannot-register-any-mcp-server",
+      "status": "bypassed",
+      "classification": "C: current verification blocked / not established",
+      "isProvenExternal": true,
+      "rootCause": "After the #mcp-filesystem-proxy-shell-true-unquoted-space-path fix, AnythingLLM's MCPHypervisor still reported 'Successfully started 0 MCP servers: []' - across a force-reload, a direct per-server toggle call ('MCP server world-server-sandbox not found in config file'), AND a full app restart (fresh singleton, fresh boot log, same result). Isolated as systemic and config-content-independent: adding a second, completely standard @modelcontextprotocol/server-everything reference entry to anythingllm_mcp_servers.json failed identically alongside our own real entry - proving this is not about our specific config's shape. The config file itself was verified correct via direct byte-level JSON.parse (matching content both before and after every reload attempt), and the resolved config path matched exactly what the running process's own boot log reported. The exact internal mechanism inside AnythingLLM's minified, closed-source bundle could not be pinned down further without a live debugger. Notably, this same AnythingLLM version (1.16.1) DID successfully register and use this exact MCP server earlier the same session (a real live validation read package.json through it) - something about a subsequent restart/reinitialize broke MCP registration in a way that persists across further restarts and is not fixable through this project's configuration or code.",
+      "existingEvidence": "Live-confirmed: a real end-to-end filesystem-read task through the full runTask() (lease + resource gate + direct-Ollama transport, zero AnythingLLM involvement, ANYTHINGLLM_API_KEY unset) returned result:PASS with a real read_text_file tool call and the correct package.json content. test/anythingllm-task-router.test.js covers the transport-selection logic (a filesystem task no longer requires threadSlug/API key; a plain/unknown task still does).",
+      "closureRequirement": "Existing owner must provide current live AnythingLLM/model E2E proof; do not infer it from unrelated HTTP health.",
+      "blockerEvidence": "AnythingLLM process absent in this session; local model dispatch uses existing resource gating. Host service/model behavior cannot be certified by source-only tests."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "graphics",
+      "label": "Стандарты графики",
+      "percent": 97,
+      "target": 100,
+      "blockers": [
+        "нет единого visual-quality gate",
+        "нет screenshot regression для всех миров",
+        "golden visual components ещё не распространены"
+      ],
+      "classification": "C: missing cross-application or external runtime evidence",
+      "isProvenExternal": false
+    },
+    {
+      "id": "deviceAccessibility",
+      "label": "Стандарты доступности телефон/ПК",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "mobile Playwright не является обязательным для каждого публичного мира",
+        "touch contract ещё не сертифицирован в каждом app"
+      ],
+      "classification": "C: missing cross-application or external runtime evidence",
+      "isProvenExternal": false
+    },
+    {
+      "id": "uploadedTechnologyUse",
+      "label": "Использование загруженных технологий",
+      "percent": 75,
+      "target": 100,
+      "blockers": [
+        "InstantMesh/MPFB/UniRig/Rigify/Goo Engine/UPBGE не production-integrated",
+        "часть AI3D требует внешнего runtime/GPU"
+      ],
+      "classification": "C: missing cross-application or external runtime evidence",
+      "isProvenExternal": true
+    },
+    {
+      "id": "qualityGrowthAutomation",
+      "label": "Автоматизация роста качества",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "GitHub write integration 403",
+        "physical-device provider not configured",
+        "no approved visual screenshot baselines",
+        "patch-model endpoint not configured",
+        "GPU fleet endpoints not runtime-verified",
+        "Vercel project credentials not exposed"
+      ],
+      "classification": "C: missing cross-application or external runtime evidence",
+      "isProvenExternal": true
+    }
+  ],
+  "closedWithEvidence": [
+    {
+      "id": "catalog-auto-publishes-index-html",
+      "previousStatus": "known",
+      "verification": {
+        "at": "2026-09-06T09:51:03.957Z",
+        "result": "PASS",
+        "scope": "Actual api/apps.js with unregistered/quarantine/corrupt registry/missing index fixtures"
+      }
+    },
+    {
+      "id": "durable-queue-contention-deferral-consumes-retry-budget",
+      "previousStatus": "fixed",
+      "verification": {
+        "at": "2026-09-06T09:53:59.363Z",
+        "result": "14/14 PASS",
+        "scope": "Four pre-execution deferrals with maxAttempts=1, wrong-owner rejection, then real failure dead-letters"
+      }
+    },
+    {
+      "id": "anythingllm-transient-dispatch-failure-terminally-failed",
+      "previousStatus": "fixed",
+      "verification": {
+        "at": "2026-09-06T09:44:49.880Z",
+        "suite": "23/23 PASS",
+        "test": "test/anythingllm-queue-drain.test.js",
+        "scope": "regression reproduces original queue classification or space-containing path bug; not model E2E certification"
+      }
+    },
+    {
+      "id": "mcp-filesystem-proxy-shell-true-unquoted-space-path",
+      "previousStatus": "fixed",
+      "verification": {
+        "at": "2026-09-06T09:44:49.881Z",
+        "suite": "23/23 PASS",
+        "test": "test/mcp-filesystem-proxy.test.js",
+        "scope": "regression reproduces original queue classification or space-containing path bug; not model E2E certification"
+      }
+    }
+  ],
+  "zeroChaos": {
+    "policy": "unchanged: no dirty, untracked, unpublished commits or unfinished ownership",
+    "snapshot": {
+      "verdict": "FAIL",
+      "generatedAt": "2026-09-06T09:55:36.369Z",
+      "evidenceSource": "live-git-and-ownership-leases",
+      "unpublishedBranchCommits": 84,
+      "worktrees": [
+        {
+          "path": "C:/Users/user/Desktop/World_server",
+          "dirty": true,
+          "unpublishedCommits": 0
+        },
+        {
+          "path": "C:/Users/user/AppData/Local/World_server_worktrees/chatgpt-ai-mutual-reinforcement",
+          "dirty": true,
+          "unpublishedCommits": 0
+        },
+        {
+          "path": "C:/Users/user/AppData/Local/World_server_worktrees/chatgpt-cloud-opencode-qwen",
+          "dirty": true,
+          "unpublishedCommits": 0
+        },
+        {
+          "path": "C:/Users/user/AppData/Local/World_server_worktrees/chatgpt-master-coordinator-hardening",
+          "dirty": false,
+          "unpublishedCommits": 0
+        },
+        {
+          "path": "C:/Users/user/AppData/Local/World_server_worktrees/chatgpt-release-blocker-review",
+          "dirty": true,
+          "unpublishedCommits": 4
+        },
+        {
+          "path": "C:/Users/user/AppData/Local/World_server_worktrees/codex-readiness-blockers",
+          "dirty": true,
+          "unpublishedCommits": 4
+        },
+        {
+          "path": "C:/Users/user/AppData/Local/World_server_worktrees/codex-tool-autoconnect",
+          "dirty": true,
+          "unpublishedCommits": 0
+        },
+        {
+          "path": "C:/Users/user/Desktop/.tools/ws-unified-catalog",
+          "dirty": true,
+          "unpublishedCommits": 0
+        },
+        {
+          "path": "C:/Users/user/Desktop/World_server_chatgpt_anim",
+          "dirty": true,
+          "unpublishedCommits": 0
+        },
+        {
+          "path": "C:/Users/user/Desktop/World_server_dark_void_v4",
+          "dirty": true,
+          "unpublishedCommits": 0
+        },
+        {
+          "path": "C:/Users/user/Desktop/World_server_google_v6",
+          "dirty": true,
+          "unpublishedCommits": 0
+        },
+        {
+          "path": "C:/Users/user/Desktop/World_server_science_run055",
+          "dirty": true,
+          "unpublishedCommits": 0
+        },
+        {
+          "path": "C:/Users/user/Desktop/World_server_science_run058",
+          "dirty": false,
+          "unpublishedCommits": 0
+        },
+        {
+          "path": "C:/Users/user/Desktop/World_server_science_run059",
+          "dirty": false,
+          "unpublishedCommits": 0
+        },
+        {
+          "path": "C:/Users/user/Desktop/World_server_science_run060",
+          "dirty": false,
+          "unpublishedCommits": 0
+        },
+        {
+          "path": "C:/Users/user/Desktop/World_server_science_run062",
+          "dirty": false,
+          "unpublishedCommits": 0
+        },
+        {
+          "path": "C:/Users/user/Desktop/World_server_science_run063",
+          "dirty": false,
+          "unpublishedCommits": 0
+        },
+        {
+          "path": "C:/Users/user/Desktop/World_server_science_run065",
+          "dirty": true,
+          "unpublishedCommits": 0
+        },
+        {
+          "path": "C:/Users/user/Desktop/World_server_science_run066",
+          "dirty": false,
+          "unpublishedCommits": 0
+        }
+      ],
+      "reasons": [
+        "Unpublished local branch commits (84)",
+        "Dirty/untracked work: C:/Users/user/Desktop/World_server",
+        "Dirty/untracked work: C:/Users/user/AppData/Local/World_server_worktrees/chatgpt-ai-mutual-reinforcement",
+        "Dirty/untracked work: C:/Users/user/AppData/Local/World_server_worktrees/chatgpt-cloud-opencode-qwen",
+        "Dirty/untracked work: C:/Users/user/AppData/Local/World_server_worktrees/chatgpt-release-blocker-review",
+        "Unpublished commits (4): C:/Users/user/AppData/Local/World_server_worktrees/chatgpt-release-blocker-review",
+        "Dirty/untracked work: C:/Users/user/AppData/Local/World_server_worktrees/codex-readiness-blockers",
+        "Unpublished commits (4): C:/Users/user/AppData/Local/World_server_worktrees/codex-readiness-blockers",
+        "Dirty/untracked work: C:/Users/user/AppData/Local/World_server_worktrees/codex-tool-autoconnect",
+        "Dirty/untracked work: C:/Users/user/Desktop/.tools/ws-unified-catalog",
+        "Dirty/untracked work: C:/Users/user/Desktop/World_server_chatgpt_anim",
+        "Dirty/untracked work: C:/Users/user/Desktop/World_server_dark_void_v4",
+        "Dirty/untracked work: C:/Users/user/Desktop/World_server_google_v6",
+        "Dirty/untracked work: C:/Users/user/Desktop/World_server_science_run055",
+        "Dirty/untracked work: C:/Users/user/Desktop/World_server_science_run065"
+      ]
+    },
+    "externalConstraint": "Push forbidden; active foreign WIP cannot be cleaned or relocated without violating ownership. No exceptions added."
+  },
+  "linux": {
+    "docker": "not found",
+    "podman": "not found",
+    "wslStatusExit": 50,
+    "buildExecuted": false
+  },
+  "memory": {
+    "patch": "OPENHUMAN_COLLECTIVE_BRAIN_PATCH_V2",
+    "status": "PASS",
+    "sync": "synced",
+    "hash": "ecc8df8577305bc40753c605066f7552d2048fbb845df8073fd7b375a412e640",
+    "health": {
+      "ok": true,
+      "latencyMs": 89,
+      "livez": {
+        "service": "agentmemory",
+        "status": "ok",
+        "streamsPort": 3112,
+        "viewerPort": 3113,
+        "viewerSkipped": false
+      },
+      "detail": {
+        "circuitBreaker": {
+          "failures": 0,
+          "lastFailureAt": null,
+          "openedAt": null,
+          "state": "closed"
+        },
+        "functionMetrics": [],
+        "health": {
+          "alerts": [],
+          "connectionState": "connected",
+          "cpu": {
+            "percent": 0,
+            "systemMicros": 34484000,
+            "userMicros": 205203000
+          },
+          "eventLoopLagMs": 0.05829998850822449,
+          "kvConnectivity": {
+            "latencyMs": 0.96,
+            "status": "ok"
+          },
+          "memory": {
+            "external": 6918369,
+            "heapTotal": 40161280,
+            "heapUsed": 37387752,
+            "rss": 30994432
+          },
+          "notes": [
+            "memory_heap_tight_93%_rss30mb"
+          ],
+          "status": "healthy",
+          "uptimeSeconds": 101751.9026997,
+          "workers": [
+            {
+              "active_invocations": 1,
+              "connected_at_ms": 1788586070336,
+              "function_count": 272,
+              "functions": [
+                "api::checkpoint-resolve",
+                "mem::auto-crystallize",
+                "mem::lesson-recall",
+                "api::claude-bridge-read",
+                "api::snapshot-create",
+                "api::crystal-list",
+                "mcp::prompts::list",
+                "mem::import",
+                "mem::skill-extract",
+                "api::config-flags",
+                "api::branch-sessions",
+                "api::sketch-add",
+                "api::sketch-create",
+                "mem::routine-freeze",
+                "api::branch-detect",
+                "api::facet-stats",
+                "api::observe",
+                "api::replay::load",
+                "mem::consolidate",
+                "api::team-feed",
+                "mem::skill-list",
+                "mem::routine-list",
+                "mem::replay::import-jsonl",
+                "api::diagnose",
+                "mem::next",
+                "mem::sketch-gc",
+                "api::export",
+                "api::claude-bridge-sync",
+                "api::sketch-gc",
+                "api::facet-untag",
+                "event::session::stopped",
+                "mem::governance-bulk",
+                "mem::auto-forget",
+                "mem::enrich",
+                "api::snapshots",
+                "mcp::resources::list",
+                "mem::lease-release",
+                "api::sketch-list",
+                "api::evict",
+                "api::timeline",
+                "mem::mesh-remove",
+                "mem::heal",
+                "api::graph-build",
+                "api::action-update",
+                "mem::evolve",
+                "mem::graph-snapshot-rebuild",
+                "api::remember",
+                "mem::signal-cleanup",
+                "api::session::start",
+                "api::sessions",
+                "mem::graph::import-graphify",
+                "mem::branch-sessions",
+                "mem::relate",
+                "api::signal-send",
+                "api::memory-by-id",
+                "api::lesson-search",
+                "mem::core-list",
+                "api::profile",
+                "api::graph-query",
+                "mem::observe",
+                "event::session::ended",
+                "mcp::tools::call",
+                "api::routine-create",
+                "api::session::commit",
+                "api::slot-replace",
+                "mem::sketch-discard",
+                "mem::signal-threads",
+                "mem::enrich-session",
+                "api::session::end",
+                "mem::frontier",
+                "mem::verify",
+                "mem::sentinel-create",
+                "mem::insight-list",
+                "mem::routine-status",
+                "mem::generate-rules",
+                "mem::graph-stats",
+                "mem::sentinel-trigger",
+                "api::frontier",
+                "api::liveness",
+                "api::facet-query",
+                "mem::signal-send",
+                "api::sketch-discard",
+                "mcp::tools::list",
+                "mem::get-related",
+                "api::lease-renew",
+                "event::observation",
+                "mem::checkpoint-expire",
+                "mem::profile",
+                "mem::facet-untag",
+                "mem::retention-evict",
+                "mem::diagnostic::followup-stats",
+                "api::enrich",
+                "mem::lease-renew",
+                "mem::enrich-window",
+                "api::team-share",
+                "api::vision-embed",
+                "api::slot-list",
+                "mem::crystal-get",
+                "api::compress-file",
+                "api::auto-crystallize",
+                "mem::vision-embed",
+                "mem::replay::load",
+                "mem::facet-dimensions",
+                "api::checkpoint-list",
+                "api::insight-search",
+                "mem::mesh-receive",
+                "mem::sketch-list",
+                "mem::cascade-update",
+                "mem::flow-compress",
+                "mem::checkpoint-list",
+                "mem::sketch-promote",
+                "api::slot-append",
+                "api::import",
+                "mem::governance-delete",
+                "api::auto-forget",
+                "mem::facet-get",
+                "api::graph-extract",
+                "mcp::resources::read",
+                "api::action-get",
+                "mem::lesson-strengthen",
+                "api::sketch-promote",
+                "mem::insight-search",
+                "mem::working-context",
+                "mem::patterns",
+                "mem::graph-reset",
+                "mem::lesson-save",
+                "mem::action-create",
+                "mem::sketch-create",
+                "mem::summarize",
+                "mem::graph-extract",
+                "api::lease-release",
+                "mem::diagnostic::recent-searches-sweep",
+                "api::cascade-update",
+                "mem::mesh-register",
+                "api::verify",
+                "mem::auto-page",
+                "api::memories",
+                "api::mesh-sync",
+                "api::facet-get",
+                "mem::evict",
+                "mem::insight-decay-sweep",
+                "api::search",
+                "mem::disk-size-delta",
+                "api::lesson-save",
+                "api::lesson-strengthen",
+                "mem::signal-read",
+                "mem::lesson-list",
+                "mem::core-add",
+                "api::graph-stats",
+                "mem::obsidian-export",
+                "mem::lesson-decay-sweep",
+                "mem::audit-query",
+                "api::action-create",
+                "api::team-profile",
+                "api::sentinel-create",
+                "mem::checkpoint-resolve",
+                "api::lesson-list",
+                "api::checkpoint-create",
+                "mem::compress-file",
+                "api::slot-get",
+                "mem::expand-query",
+                "mem::temporal-query",
+                "mem::retention-score",
+                "api::summarize",
+                "mem::timeline",
+                "api::context",
+                "api::slot-create",
+                "api::health",
+                "api::replay::import",
+                "api::commits",
+                "mem::sentinel-expire",
+                "api::diagnostic-followup",
+                "api::vision-search",
+                "api::graph-reset",
+                "api::sentinel-list",
+                "api::snapshot-restore",
+                "mem::lease-cleanup",
+                "mem::routine-create",
+                "mem::action-get",
+                "api::relations-list",
+                "api::heal",
+                "mem::vision-search",
+                "api::lesson-delete",
+                "api::generate-rules",
+                "api::facet-tag",
+                "mem::facet-tag",
+                "api::file-context",
+                "mem::diagnose",
+                "middleware::api-auth",
+                "api::signal-read",
+                "api::governance-bulk",
+                "mem::detect-worktree",
+                "mem::core-remove",
+                "api::graph-snapshot-rebuild",
+                "api::audit",
+                "api::governance-delete",
+                "api::routine-status",
+                "api::consolidate",
+                "api::observations",
+                "api::mesh-export",
+                "api::flow-compress",
+                "api::routine-list",
+                "event::session::observation-count-changed",
+                "api::lease-acquire",
+                "mem::crystallize",
+                "api::replay::sessions",
+                "mem::temporal-graph-extract",
+                "mem::forget",
+                "mem::crystal-list",
+                "mem::facet-query",
+                "api::forget",
+                "api::sentinel-cancel",
+                "mem::context",
+                "mem::smart-search",
+                "api::sentinel-trigger",
+                "mem::migrate",
+                "api::slot-reflect",
+                "api::mesh-list",
+                "api::crystallize",
+                "mem::reflect",
+                "api::viewer",
+                "api::action-list",
+                "mem::action-edge-create",
+                "api::sentinel-check",
+                "mem::checkpoint-create",
+                "api::session::by-commit",
+                "mem::lease-acquire",
+                "mem::sentinel-list",
+                "mem::image-quota-cleanup",
+                "mcp::prompts::get",
+                "api::mesh-receive",
+                "mem::sentinel-cancel",
+                "event::session::started",
+                "mem::replay::sessions",
+                "mem::facet-stats",
+                "api::reflect",
+                "api::mesh-register",
+                "mem::action-list",
+                "mem::sentinel-check",
+                "mem::routine-run",
+                "mem::mesh-list",
+                "api::migrate",
+                "mem::differential-state",
+                "mem::skill-match",
+                "api::semantic-list",
+                "mem::remember",
+                "api::graph-import-graphify",
+                "api::slot-delete",
+                "api::branch-worktrees",
+                "mem::search",
+                "api::relations",
+                "api::consolidate-pipeline",
+                "mem::export",
+                "api::evolve",
+                "api::obsidian-export",
+                "mem::compress",
+                "mem::privacy",
+                "mem::list-worktrees",
+                "mem::mesh-sync",
+                "api::action-edge",
+                "mem::file-context",
+                "mem::consolidate-pipeline",
+                "mem::action-update",
+                "api::insight-list",
+                "api::next",
+                "api::procedural-list",
+                "api::routine-run",
+                "mem::sketch-add",
+                "mem::lesson-delete",
+                "api::patterns",
+                "api::smart-search",
+                "mem::graph-query"
+              ],
+              "id": "026c7f41-5df6-41f3-b654-552066265423",
+              "ip_address": "127.0.0.1",
+              "latest_metrics": {
+                "cpu_percent": 0,
+                "cpu_system_micros": 34484000,
+                "cpu_user_micros": 205203000,
+                "event_loop_lag_ms": 31.1689760997921,
+                "memory_external": 6906155,
+                "memory_heap_total": 40161280,
+                "memory_heap_used": 37282616,
+                "memory_rss": 30994432,
+                "runtime": "node",
+                "timestamp_ms": 1788687814210,
+                "uptime_seconds": 101743
+              },
+              "name": "agentmemory",
+              "os": "win32 10.0.19045 (x64)",
+              "pid": 12280,
+              "runtime": "node",
+              "status": "connected",
+              "version": "0.11.2"
+            }
+          ]
+        },
+        "service": "agentmemory",
+        "status": "healthy",
+        "streamsPort": 3112,
+        "version": "0.9.29",
+        "viewerPort": 3113,
+        "viewerSkipped": false
+      }
+    },
+    "outbox": {
+      "sent": 5,
+      "remaining": 0,
+      "deferred": 0
+    },
+    "lessonSync": {
+      "synced": 0,
+      "skipped": 37,
+      "failed": []
+    },
+    "eventChain": {
+      "ok": true,
+      "count": 493,
+      "head": "0aa43777a46363a0ffd04762dbfa7f6d098b6e56734f1185643d014b3ec26a1f"
+    },
+    "generatedAt": "2026-09-06T09:43:46.764Z"
+  },
+  "agentReview": {
+    "source": "free OpenCode via existing coordinator",
+    "accepted": [
+      "MAX_OUTBOX silent loss",
+      "stale outbox count"
+    ],
+    "notAccepted": [
+      "queuePayload race: only private caller cycle owns common lease; regression tests verify contention handling"
+    ]
+  },
+  "openhuman": {
+    "verified": true,
+    "evidence": "direct-ollama read_text_file package.json; response matches actual package.name",
+    "durationMs": 343663
+  },
+  "runtimeSoak": {
+    "generatedAt": "2026-09-06T09:54:02.626Z",
+    "evidenceKind": "real-local-http",
+    "pass": true,
+    "durationMs": 300613,
+    "requests": 1178,
+    "restarts": 5,
+    "logBytes": 1418387,
+    "samples": [
+      {
+        "at": "2026-09-06T09:49:02.709Z",
+        "coldStartMs": 615,
+        "latencyMs": 9,
+        "freeRatio": 0.363330244001119,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:03.729Z",
+        "coldStartMs": 615,
+        "latencyMs": 3,
+        "freeRatio": 0.362943456079967,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:04.753Z",
+        "coldStartMs": 615,
+        "latencyMs": 3,
+        "freeRatio": 0.36297496678747376,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:05.779Z",
+        "coldStartMs": 615,
+        "latencyMs": 3,
+        "freeRatio": 0.3629619776408679,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:06.801Z",
+        "coldStartMs": 615,
+        "latencyMs": 3,
+        "freeRatio": 0.36444779168872615,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:07.819Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.3641702088149641,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:08.845Z",
+        "coldStartMs": 615,
+        "latencyMs": 3,
+        "freeRatio": 0.36382190725412566,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:09.864Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.36383850449701094,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:10.896Z",
+        "coldStartMs": 615,
+        "latencyMs": 5,
+        "freeRatio": 0.36439391078428707,
+        "rssMb": 52,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:11.911Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.36416756287769253,
+        "rssMb": 51,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:12.927Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.3640405578886575,
+        "rssMb": 52,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:13.949Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.3640869820607858,
+        "rssMb": 52,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:14.975Z",
+        "coldStartMs": 615,
+        "latencyMs": 3,
+        "freeRatio": 0.3640509010979918,
+        "rssMb": 52,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:15.999Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.3641059847011907,
+        "rssMb": 52,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:17.023Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.3640610037675741,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:18.037Z",
+        "coldStartMs": 615,
+        "latencyMs": 3,
+        "freeRatio": 0.36407615777194763,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:19.061Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.36062585556983023,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:20.084Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.36049235600749235,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:21.106Z",
+        "coldStartMs": 615,
+        "latencyMs": 3,
+        "freeRatio": 0.36039060769241316,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:22.128Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.3604447291366042,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:23.153Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.3604471345341238,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:24.177Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.3604533885676748,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:25.190Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.3604591615217218,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:26.209Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.3604695047310561,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:27.221Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.3611160755843252,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:28.239Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.36124452381187194,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:29.264Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.36125727241872585,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:30.283Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.36130129119333454,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:31.302Z",
+        "coldStartMs": 615,
+        "latencyMs": 4,
+        "freeRatio": 0.361304658749862,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:32.318Z",
+        "coldStartMs": 615,
+        "latencyMs": 3,
+        "freeRatio": 0.3613320802815855,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:33.331Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.3613251046287786,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:34.348Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.3613342451393531,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:35.367Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.3611033269774713,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:36.396Z",
+        "coldStartMs": 615,
+        "latencyMs": 7,
+        "freeRatio": 0.36103284883014697,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:37.421Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.3608976654895453,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:38.441Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.360572936824399,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:39.462Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.36039301308993277,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:40.482Z",
+        "coldStartMs": 615,
+        "latencyMs": 4,
+        "freeRatio": 0.3603619834619299,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:41.496Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.3598849931337928,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:42.518Z",
+        "coldStartMs": 615,
+        "latencyMs": 1,
+        "freeRatio": 0.35986454725487615,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:43.539Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.35986045807909284,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:44.563Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.3598462662337272,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:45.587Z",
+        "coldStartMs": 615,
+        "latencyMs": 3,
+        "freeRatio": 0.3591465360952749,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:46.598Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.3556916636378703,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:47.618Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.3553171432440682,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:48.646Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.3543160167964098,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:49.662Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.3558706252133287,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:50.687Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.35569551227390167,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:51.715Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.35572461758388885,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:52.743Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.35565750699309195,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:53.763Z",
+        "coldStartMs": 615,
+        "latencyMs": 3,
+        "freeRatio": 0.35547710217912176,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:54.782Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.3553842538348651,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:55.802Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.3522221182555961,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:56.821Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.35278041101989577,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:57.840Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.35172829014482176,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:58.917Z",
+        "coldStartMs": 615,
+        "latencyMs": 3,
+        "freeRatio": 0.35184807894129794,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:49:59.938Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.35291872137727287,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:00.959Z",
+        "coldStartMs": 615,
+        "latencyMs": 2,
+        "freeRatio": 0.35009261983149226,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:01.980Z",
+        "coldStartMs": 615,
+        "latencyMs": 3,
+        "freeRatio": 0.3500348902910218,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:04.482Z",
+        "coldStartMs": 945,
+        "latencyMs": 4,
+        "freeRatio": 0.3506458612610008,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:05.509Z",
+        "coldStartMs": 945,
+        "latencyMs": 3,
+        "freeRatio": 0.34863494893461333,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:06.540Z",
+        "coldStartMs": 945,
+        "latencyMs": 3,
+        "freeRatio": 0.34693770044478206,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:07.576Z",
+        "coldStartMs": 945,
+        "latencyMs": 3,
+        "freeRatio": 0.34952975681190535,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:08.606Z",
+        "coldStartMs": 945,
+        "latencyMs": 3,
+        "freeRatio": 0.3500510064544032,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:09.646Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.3509549548422697,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:10.699Z",
+        "coldStartMs": 945,
+        "latencyMs": 3,
+        "freeRatio": 0.3478464596276878,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:11.712Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.3482012557618291,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:12.742Z",
+        "coldStartMs": 945,
+        "latencyMs": 4,
+        "freeRatio": 0.34862532734453494,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:13.762Z",
+        "coldStartMs": 945,
+        "latencyMs": 5,
+        "freeRatio": 0.35059101819755384,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:14.785Z",
+        "coldStartMs": 945,
+        "latencyMs": 3,
+        "freeRatio": 0.34883267261072465,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:15.807Z",
+        "coldStartMs": 945,
+        "latencyMs": 3,
+        "freeRatio": 0.3482736582271691,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:16.840Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.34603206827865185,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:17.882Z",
+        "coldStartMs": 945,
+        "latencyMs": 3,
+        "freeRatio": 0.34602220614882145,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:18.903Z",
+        "coldStartMs": 945,
+        "latencyMs": 3,
+        "freeRatio": 0.3452173601387626,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:19.926Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.34886658871575105,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:20.946Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.3512051161843083,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:21.979Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.35210208891936795,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:23.004Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.3518894517786351,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:24.026Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.35244726346343086,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:25.056Z",
+        "coldStartMs": 945,
+        "latencyMs": 4,
+        "freeRatio": 0.3535142978031264,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:26.073Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.35378249962656205,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:27.099Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.35224280467426466,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:28.121Z",
+        "coldStartMs": 945,
+        "latencyMs": 3,
+        "freeRatio": 0.3530250399476393,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:29.143Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.35251148757720424,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:30.171Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.35207851602367585,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:31.193Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.3523803934123859,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:32.241Z",
+        "coldStartMs": 945,
+        "latencyMs": 14,
+        "freeRatio": 0.35195439751166435,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:33.262Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.3526659140979627,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:34.287Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.3513289941565678,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:35.319Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.3524107014211329,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:36.340Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.3523986744335349,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:37.363Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.35168403083046107,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:38.397Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.3506477855790165,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:39.415Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.351503385476739,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:40.448Z",
+        "coldStartMs": 945,
+        "latencyMs": 4,
+        "freeRatio": 0.35130566180062767,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:41.463Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.3474029043250731,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:42.484Z",
+        "coldStartMs": 945,
+        "latencyMs": 3,
+        "freeRatio": 0.3428836434652445,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:43.506Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.35211122942994244,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:44.530Z",
+        "coldStartMs": 945,
+        "latencyMs": 3,
+        "freeRatio": 0.3494640894596202,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:45.548Z",
+        "coldStartMs": 945,
+        "latencyMs": 5,
+        "freeRatio": 0.34753375795013947,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:46.589Z",
+        "coldStartMs": 945,
+        "latencyMs": 11,
+        "freeRatio": 0.3474668878990945,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:47.612Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.34543817563106205,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:48.634Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.3446246701899326,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:49.655Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.34436993859260673,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:50.682Z",
+        "coldStartMs": 945,
+        "latencyMs": 3,
+        "freeRatio": 0.3404481784766473,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:51.712Z",
+        "coldStartMs": 945,
+        "latencyMs": 3,
+        "freeRatio": 0.34921248487906986,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:52.738Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.34607921407003606,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:53.759Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.34435646836649697,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:54.786Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.34266042257542545,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:55.813Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.34192148445740367,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:56.837Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.34191739528162035,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:57.869Z",
+        "coldStartMs": 945,
+        "latencyMs": 3,
+        "freeRatio": 0.34178966867332944,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:58.897Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.34149813449395366,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:50:59.926Z",
+        "coldStartMs": 945,
+        "latencyMs": 3,
+        "freeRatio": 0.33702505726650145,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:00.946Z",
+        "coldStartMs": 945,
+        "latencyMs": 3,
+        "freeRatio": 0.34102258740432834,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:01.978Z",
+        "coldStartMs": 945,
+        "latencyMs": 3,
+        "freeRatio": 0.34298707555858743,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:02.998Z",
+        "coldStartMs": 945,
+        "latencyMs": 2,
+        "freeRatio": 0.3386912761283299,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:05.758Z",
+        "coldStartMs": 937,
+        "latencyMs": 5,
+        "freeRatio": 0.3398374480464203,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:06.780Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.34849736019649213,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:07.802Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.34656582598825153,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:08.825Z",
+        "coldStartMs": 937,
+        "latencyMs": 1,
+        "freeRatio": 0.34469611049626475,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:09.849Z",
+        "coldStartMs": 937,
+        "latencyMs": 3,
+        "freeRatio": 0.34367405709018584,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:10.879Z",
+        "coldStartMs": 937,
+        "latencyMs": 3,
+        "freeRatio": 0.34195973027796533,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:11.904Z",
+        "coldStartMs": 937,
+        "latencyMs": 3,
+        "freeRatio": 0.341846917134296,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:12.930Z",
+        "coldStartMs": 937,
+        "latencyMs": 1,
+        "freeRatio": 0.3403890056976651,
+        "rssMb": 56,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:13.961Z",
+        "coldStartMs": 937,
+        "latencyMs": 3,
+        "freeRatio": 0.3500952657687638,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:14.991Z",
+        "coldStartMs": 937,
+        "latencyMs": 7,
+        "freeRatio": 0.3469896570312055,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:16.009Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.3462324378920347,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:17.035Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.3444190087020066,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:18.054Z",
+        "coldStartMs": 937,
+        "latencyMs": 3,
+        "freeRatio": 0.34405483151753885,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:19.087Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.3422356293734637,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:20.102Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.3412486947711709,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:21.117Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.35162269319371126,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:22.134Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.34892816689225287,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:23.167Z",
+        "coldStartMs": 937,
+        "latencyMs": 3,
+        "freeRatio": 0.3514338694884225,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:24.195Z",
+        "coldStartMs": 937,
+        "latencyMs": 3,
+        "freeRatio": 0.3508394957613288,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:25.217Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.34822795567429665,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:26.231Z",
+        "coldStartMs": 937,
+        "latencyMs": 1,
+        "freeRatio": 0.3484429982125491,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:27.257Z",
+        "coldStartMs": 937,
+        "latencyMs": 1,
+        "freeRatio": 0.34526426539039484,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:28.281Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.3514259316766078,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:29.332Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.3486234030265193,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:30.347Z",
+        "coldStartMs": 937,
+        "latencyMs": 3,
+        "freeRatio": 0.3473932827349947,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:31.365Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.3518774247910371,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:32.382Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.3516089824278495,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:33.402Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.3511796189706005,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:34.428Z",
+        "coldStartMs": 937,
+        "latencyMs": 3,
+        "freeRatio": 0.35020928161119297,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:35.450Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.35476558559282345,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:36.472Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.3550898331784658,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:37.491Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.35298174279228645,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:38.515Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.35675773581855796,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:39.537Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.3566706604283484,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:40.551Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.3568053626894461,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:41.575Z",
+        "coldStartMs": 937,
+        "latencyMs": 1,
+        "freeRatio": 0.3569910593779594,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:42.613Z",
+        "coldStartMs": 937,
+        "latencyMs": 4,
+        "freeRatio": 0.3569727783568104,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:43.626Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.3573174718213694,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:44.639Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.3570665888600749,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:45.661Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.3572145208075304,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:46.681Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.3571161400489787,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:47.697Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.356938862251784,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:48.717Z",
+        "coldStartMs": 937,
+        "latencyMs": 1,
+        "freeRatio": 0.3573569203406909,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:49.738Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.35728090977907145,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:50.760Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.357846178196178,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:51.774Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.35686333276966853,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:52.801Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.3540191907424909,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:53.827Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.3559718924489039,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:54.861Z",
+        "coldStartMs": 937,
+        "latencyMs": 3,
+        "freeRatio": 0.35734128525681347,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:55.879Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.3569010975107263,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:56.897Z",
+        "coldStartMs": 937,
+        "latencyMs": 3,
+        "freeRatio": 0.35680945186522944,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:57.922Z",
+        "coldStartMs": 937,
+        "latencyMs": 1,
+        "freeRatio": 0.36607263771321746,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:58.935Z",
+        "coldStartMs": 937,
+        "latencyMs": 1,
+        "freeRatio": 0.3658727491793385,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:51:59.957Z",
+        "coldStartMs": 937,
+        "latencyMs": 2,
+        "freeRatio": 0.3659429867869109,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:00.978Z",
+        "coldStartMs": 937,
+        "latencyMs": 1,
+        "freeRatio": 0.36603751890943126,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:01.990Z",
+        "coldStartMs": 937,
+        "latencyMs": 1,
+        "freeRatio": 0.3658871815644561,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:03.011Z",
+        "coldStartMs": 937,
+        "latencyMs": 1,
+        "freeRatio": 0.3660129838547313,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:04.027Z",
+        "coldStartMs": 937,
+        "latencyMs": 1,
+        "freeRatio": 0.36594250570740694,
+        "rssMb": 55,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:05.758Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.3645146617397711,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:06.770Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.3630211504198501,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:07.783Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.363880358413852,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:08.802Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.3640956414918564,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:09.819Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.3651429515718912,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:10.841Z",
+        "coldStartMs": 460,
+        "latencyMs": 1,
+        "freeRatio": 0.36450046989440543,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:11.862Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.3650849814916688,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:12.886Z",
+        "coldStartMs": 460,
+        "latencyMs": 1,
+        "freeRatio": 0.3655172314259413,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:13.908Z",
+        "coldStartMs": 460,
+        "latencyMs": 3,
+        "freeRatio": 0.3664570202368499,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:14.929Z",
+        "coldStartMs": 460,
+        "latencyMs": 3,
+        "freeRatio": 0.3660406459262067,
+        "rssMb": 52,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:15.943Z",
+        "coldStartMs": 460,
+        "latencyMs": 1,
+        "freeRatio": 0.3660033622646529,
+        "rssMb": 52,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:16.966Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.36649117688162824,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:17.977Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.36465225047789235,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:18.990Z",
+        "coldStartMs": 460,
+        "latencyMs": 1,
+        "freeRatio": 0.36613902668475845,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:20.015Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.36619290758919754,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:21.035Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.36577196302326714,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:22.058Z",
+        "coldStartMs": 460,
+        "latencyMs": 1,
+        "freeRatio": 0.36586649514578756,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:23.068Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.3661515347518604,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:24.087Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.36612531591889674,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:25.099Z",
+        "coldStartMs": 460,
+        "latencyMs": 1,
+        "freeRatio": 0.3655754420459157,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:26.114Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.366250637129668,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:27.138Z",
+        "coldStartMs": 460,
+        "latencyMs": 3,
+        "freeRatio": 0.3656666066119086,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:28.160Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.3656550607038145,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:29.182Z",
+        "coldStartMs": 460,
+        "latencyMs": 1,
+        "freeRatio": 0.36570268757470265,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:30.203Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.3658614438109964,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:31.213Z",
+        "coldStartMs": 460,
+        "latencyMs": 1,
+        "freeRatio": 0.3634803408063422,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:32.226Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.36578663594813676,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:33.238Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.3660014379466372,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:34.255Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.36543713168853853,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:35.277Z",
+        "coldStartMs": 460,
+        "latencyMs": 1,
+        "freeRatio": 0.3654611856637346,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:36.285Z",
+        "coldStartMs": 460,
+        "latencyMs": 1,
+        "freeRatio": 0.36548427747992274,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:37.305Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.3654429046425856,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:38.327Z",
+        "coldStartMs": 460,
+        "latencyMs": 1,
+        "freeRatio": 0.36548668287744235,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:39.350Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.36544482896060126,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:40.364Z",
+        "coldStartMs": 460,
+        "latencyMs": 1,
+        "freeRatio": 0.36544194248357775,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:41.383Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.3634579706094099,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:42.406Z",
+        "coldStartMs": 460,
+        "latencyMs": 1,
+        "freeRatio": 0.3635043947815382,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:43.424Z",
+        "coldStartMs": 460,
+        "latencyMs": 1,
+        "freeRatio": 0.3635051164007941,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:44.435Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.3630358233447197,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:45.457Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.36265095974158335,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:46.467Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.3605229045559913,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:47.489Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.3601329896180638,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:48.511Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.36192573238942327,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:49.519Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.36189879193720376,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:50.534Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.35872968070512784,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:51.543Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.36107350004822825,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:52.550Z",
+        "coldStartMs": 460,
+        "latencyMs": 1,
+        "freeRatio": 0.36414230620373667,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:53.562Z",
+        "coldStartMs": 460,
+        "latencyMs": 1,
+        "freeRatio": 0.36416467640066896,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:54.581Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.3644008864370939,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:55.592Z",
+        "coldStartMs": 460,
+        "latencyMs": 1,
+        "freeRatio": 0.36401313635693405,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:56.615Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.3640191498507331,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:57.635Z",
+        "coldStartMs": 460,
+        "latencyMs": 1,
+        "freeRatio": 0.36405956052906235,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:58.656Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.3642086951752777,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:52:59.665Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.3642897570716883,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:00.686Z",
+        "coldStartMs": 460,
+        "latencyMs": 1,
+        "freeRatio": 0.36426474093748445,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:01.709Z",
+        "coldStartMs": 460,
+        "latencyMs": 2,
+        "freeRatio": 0.36446005921607616,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:02.725Z",
+        "coldStartMs": 460,
+        "latencyMs": 1,
+        "freeRatio": 0.3642315464517139,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:03.747Z",
+        "coldStartMs": 460,
+        "latencyMs": 1,
+        "freeRatio": 0.3645413616522387,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:04.761Z",
+        "coldStartMs": 460,
+        "latencyMs": 1,
+        "freeRatio": 0.3643895810687518,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:06.488Z",
+        "coldStartMs": 454,
+        "latencyMs": 3,
+        "freeRatio": 0.36445933759682025,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:07.501Z",
+        "coldStartMs": 454,
+        "latencyMs": 1,
+        "freeRatio": 0.3639505960214244,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:08.522Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.36397873917240375,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:09.544Z",
+        "coldStartMs": 454,
+        "latencyMs": 1,
+        "freeRatio": 0.3641791087857866,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:10.563Z",
+        "coldStartMs": 454,
+        "latencyMs": 1,
+        "freeRatio": 0.36426642471574816,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:11.585Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.36434267581711954,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:12.603Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.3641983519659434,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:13.628Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.36426931119277167,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:14.654Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.36253429796188263,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:15.674Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.3649649521554406,
+        "rssMb": 52,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:16.693Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.3649777007622945,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:17.716Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.3645310184429044,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:18.740Z",
+        "coldStartMs": 454,
+        "latencyMs": 1,
+        "freeRatio": 0.3647364393910784,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:19.763Z",
+        "coldStartMs": 454,
+        "latencyMs": 1,
+        "freeRatio": 0.364708777319603,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:20.774Z",
+        "coldStartMs": 454,
+        "latencyMs": 1,
+        "freeRatio": 0.3647472636799166,
+        "rssMb": 53,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:21.791Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.35831859826902784,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:22.815Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.35788514563599555,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:23.836Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.3563935586340902,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:24.847Z",
+        "coldStartMs": 454,
+        "latencyMs": 1,
+        "freeRatio": 0.36143671507368813,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:25.861Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.3614595663501244,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:26.872Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.358626008072033,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:27.893Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.3612466886696396,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:28.916Z",
+        "coldStartMs": 454,
+        "latencyMs": 1,
+        "freeRatio": 0.3612120509453573,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:29.928Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.3605825584144774,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:30.936Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.360663620310888,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:31.945Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.36090175466532864,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:32.956Z",
+        "coldStartMs": 454,
+        "latencyMs": 1,
+        "freeRatio": 0.36077041996075837,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:33.967Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.3608868412007071,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:34.989Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.3607858145048838,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:36.009Z",
+        "coldStartMs": 454,
+        "latencyMs": 1,
+        "freeRatio": 0.36079327123719457,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:37.017Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.361050648771792,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:38.028Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.3608916519957463,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:39.046Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.3609491409964648,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:40.052Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.36097415713066866,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:41.073Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.3609811327834755,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:42.090Z",
+        "coldStartMs": 454,
+        "latencyMs": 1,
+        "freeRatio": 0.36100374352015974,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:43.098Z",
+        "coldStartMs": 454,
+        "latencyMs": 1,
+        "freeRatio": 0.36100278136115194,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:44.112Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.35998072795507297,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:45.121Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.3603833914998544,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:46.130Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.36101817590527735,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:47.139Z",
+        "coldStartMs": 454,
+        "latencyMs": 1,
+        "freeRatio": 0.36056523955233627,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:48.150Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.3606328312226371,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:49.172Z",
+        "coldStartMs": 454,
+        "latencyMs": 1,
+        "freeRatio": 0.3606612149133684,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:50.190Z",
+        "coldStartMs": 454,
+        "latencyMs": 1,
+        "freeRatio": 0.3606934472401311,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:51.211Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.36068623104757225,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:52.219Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.3607023472109536,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:53.239Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.36064942846552234,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:54.258Z",
+        "coldStartMs": 454,
+        "latencyMs": 1,
+        "freeRatio": 0.3607203876923506,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:55.275Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.3606200826157832,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:56.293Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.36035428618986715,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:57.304Z",
+        "coldStartMs": 454,
+        "latencyMs": 1,
+        "freeRatio": 0.3595564158326151,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:58.327Z",
+        "coldStartMs": 454,
+        "latencyMs": 1,
+        "freeRatio": 0.35851680302464306,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:53:59.344Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.35518989771528126,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:54:00.365Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.35530078654093494,
+        "rssMb": 54,
+        "measurementComplete": false
+      },
+      {
+        "at": "2026-09-06T09:54:01.381Z",
+        "coldStartMs": 454,
+        "latencyMs": 2,
+        "freeRatio": 0.35423327112173547,
+        "rssMb": 54,
+        "measurementComplete": false
+      }
+    ],
+    "failures": [],
+    "longSoakCertified": false,
+    "limitations": [
+      "Bounded local HTTP evidence, not eight-hour certification",
+      "Windows child RSS unavailable; Windows process-tree termination does not prove Linux SIGTERM",
+      "No live Cloud Run, native-device or browser FPS evidence"
+    ]
+  },
+  "readiness": {
+    "percent": 29,
+    "completedCriteria": [
+      "memory synchronization",
+      "verified coordinator agent execution"
+    ],
+    "totalCriteria": 7,
+    "definition": "Strict stage completion: Zero-Chaos, release, Linux/container, Cloud Run, memory, 8h soak, coordinator; partial local evidence does not complete a stage."
+  },
+  "tests": {
+    "unitInitial": "599 PASS/1 SKIP",
+    "unitFinal": "602 PASS/1 SKIP/0 FAIL; 603 tests, 73.087 seconds",
+    "integration": "76/76 PASS",
+    "defer": "14/14 PASS",
+    "memory": "24/24 PASS",
+    "zeroOwnership": "3/3 PASS",
+    "peerReview": "9/9 PASS",
+    "catalog": "1/1 PASS",
+    "soakProtection": "2/2 PASS"
+  },
+  "limitations": [
+    "17 release error records and4 metric blockers remain; not all are proven external. No blanket closure or baseline reset.",
+    "No Docker/Podman command; WSL status exit50. Linux image execution unavailable.",
+    "Global unpushed branches and active foreign WIP remain; push prohibited.",
+    "Whole-child memory unavailable on Windows; 5-minute HTTP run is not8-hour soak."
+  ],
+  "finalSourceChanges": [
+    "Lossless memory queue/backpressure and corruption detection",
+    "Actual pending status and event chain validation",
+    "All-branch/ownership Zero-Chaos checks",
+    "No-cost resource deferral preserves attempts",
+    "Catalog deny-by-default proof closes stale blocker",
+    "Peer-review commit slogans no longer imply tested quality",
+    "Synthetic soak never certifies runtime; bounded real HTTP runner"
+  ]
+}

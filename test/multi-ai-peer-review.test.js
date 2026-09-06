@@ -1,13 +1,19 @@
-const { describe, it } = require('node:test');
+const { describe, it, after } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const cp = require('node:child_process');
 
 const ROOT = path.resolve(__dirname, '..');
+const fixture=fs.mkdtempSync(path.join(require('os').tmpdir(),'peer-review-fixture-'));
+after(()=>fs.rmSync(fixture,{recursive:true,force:true}));
+function git(...a){return cp.execFileSync('git',a,{cwd:fixture,encoding:'utf8',stdio:['ignore','pipe','pipe']}).trim();}
+git('init','-q');git('config','user.name','Fixture');git('config','user.email','fixture@example.invalid');
+fs.writeFileSync(path.join(fixture,'WORK_IN_PROGRESS.md'),'fixture');fs.writeFileSync(path.join(fixture,'shared.txt'),'base');git('add','.');git('commit','-qm','base');git('update-ref','refs/remotes/origin/master','HEAD');
+for(const name of ['ai/one','ai/two']){git('checkout','-qb',name,'origin/master');fs.writeFileSync(path.join(fixture,'shared.txt'),name);git('commit','-qam','claim PASS 100% without running tests');}
 
 function runGate(){
-  const r = cp.spawnSync(process.execPath, [path.join(ROOT,'scripts/multi-ai-peer-review.cjs')], { encoding:'utf8', cwd:ROOT, timeout:15000, maxBuffer: 32*1024*1024 });
+  const r = cp.spawnSync(process.execPath, [path.join(ROOT,'scripts/multi-ai-peer-review.cjs')], { encoding:'utf8', cwd:fixture, timeout:15000, maxBuffer: 32*1024*1024 });
   return { code:r.status, out:r.stdout||'', err:r.stderr||'' };
 }
 
@@ -30,14 +36,15 @@ describe('multi-ai peer review gate', () => {
     const {out} = runGate();
     const j = JSON.parse(out);
     // If duplicates exist, they should be reported, not hidden
-    assert.ok(Array.isArray(j.duplicates));
+    assert.ok(j.duplicates.some(d=>d.file==='shared.txt'));
   });
 
   it('found better solution of another AI - best coverage branch', () => {
     const {out} = runGate();
     const j = JSON.parse(out);
     // Gate should identify best coverage branch if any
-    assert.ok('bestCoverageBranch' in j);
+    assert.equal(j.bestCoverageBranch,null, 'commit slogans are not coverage proof');
+    assert.equal(j.qualityGate,'unknown');
   });
 
   it('found duplicate - reported', () => {

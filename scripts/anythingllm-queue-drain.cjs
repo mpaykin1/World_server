@@ -9,7 +9,7 @@
 // compute, not a blocker" - a queued job gets retried automatically, not lost.
 // Intended to be invoked periodically (e.g. from an existing scheduler tick, or
 // a cron-style loop) rather than run once and forgotten.
-const { claimTask, ackTask, failTask, decide } = require('../lib/ai-resource-scheduler');
+const { claimTask, ackTask, failTask, deferTask, decide } = require('../lib/ai-resource-scheduler');
 const { runTask } = require('./anythingllm-task-router.cjs');
 
 // Real production incident (job 3877989c...f2acdaa, 2026-09-02): the resource
@@ -51,7 +51,7 @@ async function drainOne(worker) {
   if (gate.action !== 'run_now') {
     // Still contended - release it back to the queue rather than failing it, so
     // it gets picked up on a future drain instead of burning an attempt.
-    failTask(job.id, worker, `still contended: ${gate.reason}`, 30000);
+    deferTask(job.id, worker, `still contended: ${gate.reason}`, 30000);
     return { drained: false, reason: 'still contended, requeued', jobId: job.id, gate };
   }
   try {
