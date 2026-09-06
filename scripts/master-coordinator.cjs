@@ -86,6 +86,7 @@ const OPENCODE_CLI_PATH = resolveOpencodeExe();
 const MAIN_TREE_ROOT = process.env.WORLD_SERVER_MAIN_TREE || 'C:\\Users\\user\\Desktop\\World_server';
 const REPORT_LOG_PATH = process.env.AI_AGENT_REPORTS_PATH || path.join(MAIN_TREE_ROOT, 'state', 'ai-agent-reports.jsonl');
 const WORKTREES_ROOT = process.env.WORLD_SERVER_WORKTREES_ROOT || path.join(os.homedir(), 'AppData', 'Local', 'World_server_worktrees');
+const RECOVERY_ROOT = process.env.WORLD_SERVER_RECOVERY_ROOT || path.join(os.homedir(), 'AppData', 'Local', 'World_server_recovery');
 const MAX_SUBTASK_ATTEMPTS = Number(process.env.MASTER_COORDINATOR_MAX_ATTEMPTS || 2);
 
 // Agents this coordinator can automatically dispatch to, and how.
@@ -132,60 +133,56 @@ function removeIsolatedWorktree(dir, branch, { deleteBranch = false } = {}) {
   if (deleteBranch) git(MAIN_TREE_ROOT, ['branch', '-D', branch]);
 }
 
+
+function preserveFailedDirtyWorktree(dir, branch, taskId) {
+  const status = git(dir, ['status', '--porcelain']).stdout;
+  if (!status) return { preserved: false, keepWorktree: false };
+  fs.mkdirSync(RECOVERY_ROOT, { recursive: true });
+  const safeId = String(taskId || 'unknown').replace(/[^A-Za-z0-9._-]/g, '_');
+  const recoveryDir = path.join(RECOVERY_ROOT, safeId);
+  fs.mkdirSync(recoveryDir, { recursive: true });
+  const trackedPatch = git(dir, ['diff', '--binary', 'HEAD']).stdout;
+  const untracked = git(dir, ['ls-files', '--others', '--exclude-standard']).stdout.split(/\r?\n/).filter(Boolean);
+  if (trackedPatch) fs.writeFileSync(path.join(recoveryDir, 'WORK_IN_PROGRESS.patch'), trackedPatch + '\n');
+  fs.writeFileSync(path.join(recoveryDir, 'STATUS.txt'), status + '\n');
+  fs.writeFileSync(path.join(recoveryDir, 'RECOVERY.json'), JSON.stringify({ taskId, branch, worktree: dir, untrackedCount: untracked.length, createdAt: nowIso() }, null, 2) + '\n');
+  return { preserved: true, recoveryDir, recoveryPatch: trackedPatch ? path.join(recoveryDir, 'WORK_IN_PROGRESS.patch') : null, untrackedCount: untracked.length, keepWorktree: untracked.length > 0 };
+}
+
 async function invokeOpencode(taskText, opts = {}) {
   if (!OPENCODE_CLI_PATH) return { ok: false, result: 'NOT_AVAILABLE', reason: 'opencode CLI not found on PATH' };
   const taskId = opts.taskId || `opencode-${Date.now()}`;
   const { dir, branch } = createIsolatedWorktree(taskId);
-  const startedAt = nowIso();
   const start = Date.now();
   let committed = null;
   let pushed = false;
+  let recovery = null;
+  let keepWorktree = false;
   try {
     const r = cp.spawnSync(OPENCODE_CLI_PATH, ['run', taskText, '--format', 'json', '--dir', dir], {
-      encoding: 'utf8',
-      timeout: opts.timeoutMs || 600000,
-      windowsHide: true,
-      maxBuffer: 32 * 1024 * 1024,
+      encoding: 'utf8', timeout: opts.timeoutMs || 600000, windowsHide: true, maxBuffer: 32 * 1024 * 1024,
     });
     const durationMs = Date.now() - start;
     const ranCleanly = r.status === 0 && !r.error;
     const dirtyStatus = git(dir, ['status', '--porcelain']).stdout;
     if (ranCleanly && dirtyStatus) {
       git(dir, ['add', '-A']);
-      const msg = [
-        `opencode(auto-dispatch): ${String(taskText).slice(0, 72)}`,
-        '',
-        'AI-Agent: OpenCode',
-        `AI-Session: master-coordinator:${taskId}`,
-        `Worktree: ${dir}`,
-        `Branch: ${branch}`,
-        'Ownership: master-coordinator-subtask',
-      ].join('\n');
+      const msg = [`opencode(auto-dispatch): ${String(taskText).slice(0, 72)}`, '', 'AI-Agent: OpenCode', `AI-Session: master-coordinator:${taskId}`, `Worktree: ${dir}`, `Branch: ${branch}`, 'Ownership: master-coordinator-subtask'].join('\n');
       const c = git(dir, ['commit', '-qm', msg]);
       if (c.status === 0) {
         committed = git(dir, ['rev-parse', 'HEAD']).stdout;
-        if (opts.push !== false) {
-          const p = git(dir, ['push', 'origin', `HEAD:refs/heads/${branch}`]);
-          pushed = p.status === 0;
-        }
+        if (opts.push !== false) pushed = git(dir, ['push', 'origin', `HEAD:refs/heads/${branch}`]).status === 0;
+      } else {
+        recovery = preserveFailedDirtyWorktree(dir, branch, taskId);
+        keepWorktree = recovery.keepWorktree;
       }
+    } else if (!ranCleanly && dirtyStatus) {
+      recovery = preserveFailedDirtyWorktree(dir, branch, taskId);
+      keepWorktree = recovery.keepWorktree;
     }
-    return {
-      ok: ranCleanly,
-      result: ranCleanly ? 'PASS' : 'FAIL',
-      stdout: (r.stdout || '').slice(0, 8000),
-      stderr: (r.stderr || '').slice(0, 4000),
-      durationMs,
-      branch,
-      committed,
-      pushed,
-      worktree: dir,
-    };
+    return { ok: ranCleanly, result: ranCleanly ? 'PASS' : 'FAIL', stdout: (r.stdout || '').slice(0, 8000), stderr: (r.stderr || '').slice(0, 4000), durationMs, branch, committed, pushed, worktree: dir, recovery };
   } finally {
-    // Always remove the worktree checkout itself (Zero-Chaos: never leave a
-    // temp worktree behind); keep the branch ref only if it holds a real
-    // commit worth preserving, otherwise delete it too.
-    removeIsolatedWorktree(dir, branch, { deleteBranch: !committed });
+    if (!keepWorktree) removeIsolatedWorktree(dir, branch, { deleteBranch: !committed });
   }
 }
 
@@ -356,36 +353,41 @@ async function dispatchSubtask(root, subtask, opts = {}) {
 }
 
 // ---------------------------------------------------------------------------
-// runMasterGoal(): GOAL -> recall -> route (logged) -> subtasks -> dispatch
-// (parallel-safe: each subtask leases its own scope) -> collect -> report.
-// `subtasks` is an explicit array of {text, agent?, taskId?} - this
-// coordinator does not attempt free-form NLP goal decomposition; the caller
-// (a human, or a future planning layer) supplies the breakdown. When omitted,
-// the whole goal is treated as a single subtask routed automatically.
+// runMasterGoal(): one goal -> deterministic role split -> dispatch -> collect.
 // ---------------------------------------------------------------------------
+function buildDefaultSubtasks(goal, opts = {}) {
+  const base = collectiveBrain.redactText(String(goal || '')).slice(0, 3000);
+  const subtasks = [
+    { taskId: `opencode-${Date.now()}`, agent: 'opencode', text: `Implementation/test slice for master goal: ${base}. Inspect relevant existing code, reuse architecture, fix only safe root causes, add focused regression tests, and report evidence. Do not perform production deployment.` },
+    { taskId: `openhuman-${Date.now()}`, agent: 'openhuman', text: `Independent read-only verification slice for master goal: ${base}. Read relevant World_server files and report existing systems, blockers, regression risks, and evidence. Do not modify files.` },
+  ];
+  const includeAnythingLLM = opts.includeAnythingLLM === true || process.env.MASTER_COORDINATOR_INCLUDE_ANYTHINGLLM === '1';
+  if (includeAnythingLLM) subtasks.push({ taskId: `anythingllm-${Date.now()}`, agent: 'anythingllm', text: `Knowledge/documentation audit for master goal: ${base}. Compare current repo docs/contracts and report stale or conflicting instructions. Do not modify files.` });
+  return subtasks;
+}
+
+function summarizeMasterResults(results) {
+  const terminalFail = new Set(['FAIL', 'REFUSED', 'UNKNOWN_AGENT', 'NO_AGENT', 'NOT_AVAILABLE']);
+  const pending = new Set(['QUEUED', 'SKIPPED_ACTIVE', 'ASSIGNED', 'SELF_EXECUTE']);
+  if (results.some((r) => terminalFail.has(r.result))) return 'FAIL';
+  if (results.some((r) => pending.has(r.result))) return 'PENDING';
+  return results.length > 0 && results.every((r) => r.result === 'PASS') ? 'PASS' : 'FAIL';
+}
+
 async function runMasterGoal(goal, subtasks, opts = {}) {
   const root = opts.root || MAIN_TREE_ROOT;
   const recall = await collectiveBrain.recall(root, goal, { skipNetwork: opts.skipNetwork });
   const route = collectiveBrain.routeTask(root, goal);
-  const plan = subtasks && subtasks.length ? subtasks : [{ text: goal }];
-
+  const plan = subtasks && subtasks.length ? subtasks : buildDefaultSubtasks(goal, opts);
+  const dispatchFn = opts.dispatchFn || dispatchSubtask;
   const results = [];
   for (const subtask of plan) {
-    // Sequential by default (safe default for a first real run); a caller
-    // that wants true parallel dispatch can call dispatchSubtask() directly
-    // per subtask - each already leases its own scope so it is race-safe.
     // eslint-disable-next-line no-await-in-loop
-    results.push(await dispatchSubtask(root, subtask, opts));
+    results.push(await dispatchFn(root, subtask, opts));
   }
-
-  collectiveBrain.appendEvent(root, 'MASTER_GOAL_DISPATCHED', {
-    goalHash: collectiveBrain.sha256(goal),
-    subtaskCount: plan.length,
-    agents: results.map((r) => r.agentId),
-    results: results.map((r) => r.result),
-  });
-
-  return { goal, recall, route, results, generatedAt: nowIso() };
+  const overallStatus = summarizeMasterResults(results);
+  collectiveBrain.appendEvent(root, 'MASTER_GOAL_DISPATCHED', { goalHash: collectiveBrain.sha256(goal), subtaskCount: plan.length, agents: results.map((r) => r.agentId), results: results.map((r) => r.result), overallStatus });
+  return { goal, recall, route, plan, results, overallStatus, generatedAt: nowIso() };
 }
 
 module.exports = {
@@ -400,8 +402,14 @@ module.exports = {
   withSubtaskLease,
   resourceGateOk,
   appendReport,
+  preserveFailedDirtyWorktree,
+  buildDefaultSubtasks,
+  summarizeMasterResults,
+  resolveOpencodeExe,
+  OPENCODE_CLI_PATH,
   REPORT_LOG_PATH,
   WORKTREES_ROOT,
+  RECOVERY_ROOT,
   OFFLINE_ONLY_AGENTS,
   LOCAL_MODEL_AGENTS,
   SELF_EXECUTE_AGENTS,
@@ -413,5 +421,5 @@ if (require.main === module) {
     console.error('usage: node master-coordinator.cjs "<master goal>"');
     process.exit(1);
   }
-  runMasterGoal(goal).then((r) => { console.log(JSON.stringify(r, null, 2)); }).catch((e) => { console.error(e); process.exitCode = 1; });
+  runMasterGoal(goal).then((r) => { console.log(JSON.stringify(r, null, 2)); if (r.overallStatus !== 'PASS') process.exitCode = 1; }).catch((e) => { console.error(e); process.exitCode = 1; });
 }
