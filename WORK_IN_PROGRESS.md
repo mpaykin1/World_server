@@ -283,3 +283,10 @@ result reported exactly as observed, not adjusted to look more favorable.
 - No new Navigator runtime, telemetry SDK, audio framework, scheduler, world generator, science framework or persistence system.
 - Regression: focused Dark Void suite 23/23 PASS; full npm run check 373 PASS / 0 FAIL / 2 opt-in skips after restoring shared node_modules; real desktop Chromium + mobile WebKit smoke both PASS with canvas present, English accessibility controls, aria-live, and no public H4.
 - Initial full-check dependency failures were reproduced as isolated-worktree missing node_modules, not product regressions; linking the existing repo dependency tree made the same 38 affected tests PASS before the full green run.
+
+## Dark Void V5 H2 organized-complexity production metrics (2026-09-06)
+- Root cause: H2 production evidence stored only blocks/types/density/novelty, so it could not distinguish organized structure from a shuffled control or preserve topology/compressibility evidence.
+- Fix: existing planMetrics + ScienceEvidenceRecorder now record deterministic entropy-rate, adjacent mutual information, seeded shuffled-control mutual information, signed organized lift, run compressibility, connected components, and mean 6-neighbor degree from the actual manifested production plan.
+- Negative results are preserved: organizedLift is signed and never clamped upward. No threshold/evidence percentage is changed by this patch.
+- Regression: structured contiguous two-type production plan must beat its deterministic shuffled control while topology remains one connected component.
+- Architecture: reuses existing H2 journey/evidence recorder; no duplicate science runtime, telemetry, storage, world generator, or scheduler.
