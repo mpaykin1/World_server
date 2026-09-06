@@ -861,6 +861,26 @@
         "test/science-h4-specialist-promotion-integrity.test.js",
         "scientific holdouts must fail closed on per-call timeout"
       ]
+    },
+    {
+      "id": "SCIENCE-HARNESS-UTF8-BOM-SHEBANG",
+      "category": "science-infrastructure",
+      "severity": "major",
+      "status": "protected",
+      "history": [],
+      "rootCause": "Windows PowerShell Set-Content -Encoding UTF8 wrote a UTF-8 BOM before a #! shebang in a .cjs science harness; Node 24 treated the BOM+shebang prefix as invalid syntax before experiment execution.",
+      "solution": "Write executable JS/CJS science harnesses as UTF-8 without BOM and add a regression assertion on the first three bytes before counting a run as executed.",
+      "protection": [
+        "test/science-h2-temporal-organized-build-growth.test.cjs",
+        "node --check scripts/science-h2-temporal-organized-build-growth.cjs",
+        "npm run check"
+      ],
+      "evidence": [
+        "SCIENCE_RUN_062_H2.json"
+      ],
+      "confirmedAt": "2026-09-06T07:06:32.905Z",
+      "lessonHash": "005dddcae501bc66dc01e7e554032f99d192617139a3946aa756e45ae251b58b",
+      "supersedes": null
     }
   ],
   "confirmationProtocol": {

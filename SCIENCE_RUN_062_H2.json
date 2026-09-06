@@ -1,0 +1,1663 @@
+{
+  "experiment": "RUN_062_H2_TEMPORAL_ORGANIZED_BUILD_GROWTH",
+  "source": "lib/game-rules.js::snapBuilding + validateBuild",
+  "subhypothesis": "A minimal local frontier-growth rule, executed through World_server production building snap/validation rules, produces temporally growing organized construction whose spatial organization exceeds a matched-density, matched-piece-count random control.",
+  "preregistration": {
+    "seeds": [
+      62062,
+      104729,
+      271828,
+      314159,
+      1618033,
+      999983
+    ],
+    "checkpoints": [
+      32,
+      64,
+      128,
+      256
+    ],
+    "control": "At each checkpoint: same foundation count, exact structured bounding box, same piece counts; all pieces built through same production snapBuilding/validateBuild; foundation sites uniformly shuffled within that box.",
+    "confirm": "All seeds monotonic piece growth; >=5/6 monotonic organizedScore; all structured final LCC>=0.98; >=5/6 controls final LCC<=0.65; >=5/6 structured-control neighbor MI delta>=0.02 bits; >=5/6 organizedScore ratio>=1.5.",
+    "refute": "Any confirmation count fails; do not retune thresholds after execution."
+  },
+  "rows": [
+    {
+      "seed": 62062,
+      "n": 32,
+      "structured": {
+        "n": 32,
+        "buildingCount": 69,
+        "bounds": {
+          "minX": -20,
+          "maxX": 16,
+          "minZ": -12,
+          "maxZ": 24
+        },
+        "cells": 100,
+        "density": 0.32,
+        "graph": {
+          "vertices": 32,
+          "edges": 38,
+          "components": 1,
+          "lccRatio": 1,
+          "cycleRank": 7
+        },
+        "mutualInformationBits": 0.11966807113968916,
+        "organizedScore": 6.88355732231026,
+        "compressedBytes": 271,
+        "pieceCounts": {
+          "foundation": 32,
+          "wall": 27,
+          "doorway": 4,
+          "door": 4,
+          "stairs": 2
+        }
+      },
+      "control": {
+        "n": 32,
+        "buildingCount": 69,
+        "bounds": {
+          "minX": -20,
+          "maxX": 16,
+          "minZ": -12,
+          "maxZ": 24
+        },
+        "cells": 100,
+        "density": 0.32,
+        "graph": {
+          "vertices": 32,
+          "edges": 24,
+          "components": 12,
+          "lccRatio": 0.25,
+          "cycleRank": 4
+        },
+        "mutualInformationBits": 0.009802523344600612,
+        "organizedScore": 1.4326430373204837,
+        "compressedBytes": 276,
+        "pieceCounts": {
+          "foundation": 32,
+          "wall": 27,
+          "doorway": 4,
+          "door": 4,
+          "stairs": 2
+        }
+      },
+      "scoreRatio": 4.804795851438882,
+      "miDelta": 0.10986554779508856,
+      "compressionRatio": 0.9818840579710145
+    },
+    {
+      "seed": 62062,
+      "n": 64,
+      "structured": {
+        "n": 64,
+        "buildingCount": 141,
+        "bounds": {
+          "minX": -36,
+          "maxX": 40,
+          "minZ": -12,
+          "maxZ": 32
+        },
+        "cells": 240,
+        "density": 0.26666666666666666,
+        "graph": {
+          "vertices": 64,
+          "edges": 73,
+          "components": 1,
+          "lccRatio": 1,
+          "cycleRank": 10
+        },
+        "mutualInformationBits": 0.12404639489404835,
+        "organizedScore": 7.827142833485682,
+        "compressedBytes": 478,
+        "pieceCounts": {
+          "foundation": 64,
+          "wall": 54,
+          "doorway": 9,
+          "door": 9,
+          "stairs": 5
+        }
+      },
+      "control": {
+        "n": 64,
+        "buildingCount": 141,
+        "bounds": {
+          "minX": -36,
+          "maxX": 40,
+          "minZ": -12,
+          "maxZ": 32
+        },
+        "cells": 240,
+        "density": 0.26666666666666666,
+        "graph": {
+          "vertices": 64,
+          "edges": 36,
+          "components": 30,
+          "lccRatio": 0.125,
+          "cycleRank": 2
+        },
+        "mutualInformationBits": 0.00118134812322011,
+        "organizedScore": 0.7772379560784245,
+        "compressedBytes": 488,
+        "pieceCounts": {
+          "foundation": 64,
+          "wall": 54,
+          "doorway": 9,
+          "door": 9,
+          "stairs": 5
+        }
+      },
+      "scoreRatio": 10.070458824447723,
+      "miDelta": 0.12286504677082824,
+      "compressionRatio": 0.9795081967213115
+    },
+    {
+      "seed": 62062,
+      "n": 128,
+      "structured": {
+        "n": 128,
+        "buildingCount": 284,
+        "bounds": {
+          "minX": -48,
+          "maxX": 92,
+          "minZ": -12,
+          "maxZ": 48
+        },
+        "cells": 576,
+        "density": 0.2222222222222222,
+        "graph": {
+          "vertices": 128,
+          "edges": 151,
+          "components": 1,
+          "lccRatio": 1,
+          "cycleRank": 24
+        },
+        "mutualInformationBits": 0.14675358717921616,
+        "organizedScore": 9.547678131751303,
+        "compressedBytes": 849,
+        "pieceCounts": {
+          "foundation": 128,
+          "wall": 109,
+          "doorway": 18,
+          "door": 18,
+          "stairs": 11
+        }
+      },
+      "control": {
+        "n": 128,
+        "buildingCount": 284,
+        "bounds": {
+          "minX": -48,
+          "maxX": 92,
+          "minZ": -12,
+          "maxZ": 48
+        },
+        "cells": 576,
+        "density": 0.2222222222222222,
+        "graph": {
+          "vertices": 128,
+          "edges": 54,
+          "components": 74,
+          "lccRatio": 0.0546875,
+          "cycleRank": 0
+        },
+        "mutualInformationBits": 0.00001944019121412192,
+        "organizedScore": 0.3834339444152517,
+        "compressedBytes": 900,
+        "pieceCounts": {
+          "foundation": 128,
+          "wall": 109,
+          "doorway": 18,
+          "door": 18,
+          "stairs": 11
+        }
+      },
+      "scoreRatio": 24.900450966363447,
+      "miDelta": 0.14673414698800205,
+      "compressionRatio": 0.9433333333333334
+    },
+    {
+      "seed": 62062,
+      "n": 256,
+      "structured": {
+        "n": 256,
+        "buildingCount": 570,
+        "bounds": {
+          "minX": -48,
+          "maxX": 192,
+          "minZ": -12,
+          "maxZ": 68
+        },
+        "cells": 1281,
+        "density": 0.19984387197501952,
+        "graph": {
+          "vertices": 256,
+          "edges": 328,
+          "components": 1,
+          "lccRatio": 1,
+          "cycleRank": 73
+        },
+        "mutualInformationBits": 0.18839615334127302,
+        "organizedScore": 12.226788183469838,
+        "compressedBytes": 1570,
+        "pieceCounts": {
+          "foundation": 256,
+          "wall": 219,
+          "doorway": 36,
+          "door": 36,
+          "stairs": 23
+        }
+      },
+      "control": {
+        "n": 256,
+        "buildingCount": 570,
+        "bounds": {
+          "minX": -48,
+          "maxX": 192,
+          "minZ": -12,
+          "maxZ": 68
+        },
+        "cells": 1281,
+        "density": 0.19984387197501952,
+        "graph": {
+          "vertices": 256,
+          "edges": 87,
+          "components": 172,
+          "lccRatio": 0.0234375,
+          "cycleRank": 3
+        },
+        "mutualInformationBits": 0.0004945862836527133,
+        "organizedScore": 0.1899245234540028,
+        "compressedBytes": 1726,
+        "pieceCounts": {
+          "foundation": 256,
+          "wall": 219,
+          "doorway": 36,
+          "door": 36,
+          "stairs": 23
+        }
+      },
+      "scoreRatio": 64.37709023095695,
+      "miDelta": 0.18790156705762032,
+      "compressionRatio": 0.9096176129779838
+    },
+    {
+      "seed": 104729,
+      "n": 32,
+      "structured": {
+        "n": 32,
+        "buildingCount": 69,
+        "bounds": {
+          "minX": -20,
+          "maxX": 12,
+          "minZ": -8,
+          "maxZ": 28
+        },
+        "cells": 90,
+        "density": 0.35555555555555557,
+        "graph": {
+          "vertices": 32,
+          "edges": 34,
+          "components": 1,
+          "lccRatio": 1,
+          "cycleRank": 3
+        },
+        "mutualInformationBits": 0.05494895191404833,
+        "organizedScore": 5.820476253876582,
+        "compressedBytes": 268,
+        "pieceCounts": {
+          "foundation": 32,
+          "wall": 27,
+          "doorway": 4,
+          "door": 4,
+          "stairs": 2
+        }
+      },
+      "control": {
+        "n": 32,
+        "buildingCount": 69,
+        "bounds": {
+          "minX": -20,
+          "maxX": 12,
+          "minZ": -8,
+          "maxZ": 28
+        },
+        "cells": 90,
+        "density": 0.35555555555555557,
+        "graph": {
+          "vertices": 32,
+          "edges": 20,
+          "components": 13,
+          "lccRatio": 0.15625,
+          "cycleRank": 1
+        },
+        "mutualInformationBits": 0.00472723705103174,
+        "organizedScore": 0.8166597923955237,
+        "compressedBytes": 275,
+        "pieceCounts": {
+          "foundation": 32,
+          "wall": 27,
+          "doorway": 4,
+          "door": 4,
+          "stairs": 2
+        }
+      },
+      "scoreRatio": 7.127173773063161,
+      "miDelta": 0.05022171486301659,
+      "compressionRatio": 0.9745454545454545
+    },
+    {
+      "seed": 104729,
+      "n": 64,
+      "structured": {
+        "n": 64,
+        "buildingCount": 141,
+        "bounds": {
+          "minX": -56,
+          "maxX": 20,
+          "minZ": -8,
+          "maxZ": 44
+        },
+        "cells": 280,
+        "density": 0.22857142857142856,
+        "graph": {
+          "vertices": 64,
+          "edges": 76,
+          "components": 1,
+          "lccRatio": 1,
+          "cycleRank": 13
+        },
+        "mutualInformationBits": 0.15319762368890263,
+        "organizedScore": 8.355679364442201,
+        "compressedBytes": 481,
+        "pieceCounts": {
+          "foundation": 64,
+          "wall": 54,
+          "doorway": 9,
+          "door": 9,
+          "stairs": 5
+        }
+      },
+      "control": {
+        "n": 64,
+        "buildingCount": 141,
+        "bounds": {
+          "minX": -56,
+          "maxX": 20,
+          "minZ": -8,
+          "maxZ": 44
+        },
+        "cells": 280,
+        "density": 0.22857142857142856,
+        "graph": {
+          "vertices": 64,
+          "edges": 27,
+          "components": 38,
+          "lccRatio": 0.125,
+          "cycleRank": 1
+        },
+        "mutualInformationBits": 6.225726460900877e-7,
+        "organizedScore": 0.7645588897565327,
+        "compressedBytes": 500,
+        "pieceCounts": {
+          "foundation": 64,
+          "wall": 54,
+          "doorway": 9,
+          "door": 9,
+          "stairs": 5
+        }
+      },
+      "scoreRatio": 10.9287583682442,
+      "miDelta": 0.15319700111625653,
+      "compressionRatio": 0.962
+    },
+    {
+      "seed": 104729,
+      "n": 128,
+      "structured": {
+        "n": 128,
+        "buildingCount": 284,
+        "bounds": {
+          "minX": -108,
+          "maxX": 24,
+          "minZ": -16,
+          "maxZ": 52
+        },
+        "cells": 612,
+        "density": 0.20915032679738563,
+        "graph": {
+          "vertices": 128,
+          "edges": 163,
+          "components": 1,
+          "lccRatio": 1,
+          "cycleRank": 36
+        },
+        "mutualInformationBits": 0.18725482124726783,
+        "organizedScore": 10.665270244885056,
+        "compressedBytes": 852,
+        "pieceCounts": {
+          "foundation": 128,
+          "wall": 109,
+          "doorway": 18,
+          "door": 18,
+          "stairs": 11
+        }
+      },
+      "control": {
+        "n": 128,
+        "buildingCount": 284,
+        "bounds": {
+          "minX": -108,
+          "maxX": 24,
+          "minZ": -16,
+          "maxZ": 52
+        },
+        "cells": 612,
+        "density": 0.20915032679738563,
+        "graph": {
+          "vertices": 128,
+          "edges": 42,
+          "components": 87,
+          "lccRatio": 0.0625,
+          "cycleRank": 1
+        },
+        "mutualInformationBits": 0.0009846151614906293,
+        "organizedScore": 0.44205998509485767,
+        "compressedBytes": 907,
+        "pieceCounts": {
+          "foundation": 128,
+          "wall": 109,
+          "doorway": 18,
+          "door": 18,
+          "stairs": 11
+        }
+      },
+      "scoreRatio": 24.126296440507936,
+      "miDelta": 0.1862702060857772,
+      "compressionRatio": 0.9393605292171996
+    },
+    {
+      "seed": 104729,
+      "n": 256,
+      "structured": {
+        "n": 256,
+        "buildingCount": 570,
+        "bounds": {
+          "minX": -200,
+          "maxX": 24,
+          "minZ": -28,
+          "maxZ": 52
+        },
+        "cells": 1197,
+        "density": 0.21386800334168754,
+        "graph": {
+          "vertices": 256,
+          "edges": 344,
+          "components": 1,
+          "lccRatio": 1,
+          "cycleRank": 89
+        },
+        "mutualInformationBits": 0.21736128918552797,
+        "organizedScore": 13.133903947538984,
+        "compressedBytes": 1565,
+        "pieceCounts": {
+          "foundation": 256,
+          "wall": 219,
+          "doorway": 36,
+          "door": 36,
+          "stairs": 23
+        }
+      },
+      "control": {
+        "n": 256,
+        "buildingCount": 570,
+        "bounds": {
+          "minX": -200,
+          "maxX": 24,
+          "minZ": -28,
+          "maxZ": 52
+        },
+        "cells": 1197,
+        "density": 0.21386800334168754,
+        "graph": {
+          "vertices": 256,
+          "edges": 104,
+          "components": 154,
+          "lccRatio": 0.02734375,
+          "cycleRank": 2
+        },
+        "mutualInformationBits": 0.0000192335935516319,
+        "organizedScore": 0.22061822537502115,
+        "compressedBytes": 1714,
+        "pieceCounts": {
+          "foundation": 256,
+          "wall": 219,
+          "doorway": 36,
+          "door": 36,
+          "stairs": 23
+        }
+      },
+      "scoreRatio": 59.532270850303156,
+      "miDelta": 0.21734205559197634,
+      "compressionRatio": 0.9130688448074679
+    },
+    {
+      "seed": 271828,
+      "n": 32,
+      "structured": {
+        "n": 32,
+        "buildingCount": 69,
+        "bounds": {
+          "minX": -32,
+          "maxX": 8,
+          "minZ": -12,
+          "maxZ": 24
+        },
+        "cells": 110,
+        "density": 0.2909090909090909,
+        "graph": {
+          "vertices": 32,
+          "edges": 37,
+          "components": 1,
+          "lccRatio": 1,
+          "cycleRank": 6
+        },
+        "mutualInformationBits": 0.11996734450496624,
+        "organizedScore": 6.708848565212047,
+        "compressedBytes": 282,
+        "pieceCounts": {
+          "foundation": 32,
+          "wall": 27,
+          "doorway": 4,
+          "door": 4,
+          "stairs": 2
+        }
+      },
+      "control": {
+        "n": 32,
+        "buildingCount": 69,
+        "bounds": {
+          "minX": -32,
+          "maxX": 8,
+          "minZ": -12,
+          "maxZ": 24
+        },
+        "cells": 110,
+        "density": 0.2909090909090909,
+        "graph": {
+          "vertices": 32,
+          "edges": 20,
+          "components": 13,
+          "lccRatio": 0.3125,
+          "cycleRank": 1
+        },
+        "mutualInformationBits": 0.007796359023274253,
+        "organizedScore": 1.6383088563470662,
+        "compressedBytes": 271,
+        "pieceCounts": {
+          "foundation": 32,
+          "wall": 27,
+          "doorway": 4,
+          "door": 4,
+          "stairs": 2
+        }
+      },
+      "scoreRatio": 4.094984006966032,
+      "miDelta": 0.11217098548169199,
+      "compressionRatio": 1.040590405904059
+    },
+    {
+      "seed": 271828,
+      "n": 64,
+      "structured": {
+        "n": 64,
+        "buildingCount": 141,
+        "bounds": {
+          "minX": -48,
+          "maxX": 8,
+          "minZ": -12,
+          "maxZ": 48
+        },
+        "cells": 240,
+        "density": 0.26666666666666666,
+        "graph": {
+          "vertices": 64,
+          "edges": 79,
+          "components": 1,
+          "lccRatio": 1,
+          "cycleRank": 16
+        },
+        "mutualInformationBits": 0.16646209207255028,
+        "organizedScore": 8.78107969801945,
+        "compressedBytes": 474,
+        "pieceCounts": {
+          "foundation": 64,
+          "wall": 54,
+          "doorway": 9,
+          "door": 9,
+          "stairs": 5
+        }
+      },
+      "control": {
+        "n": 64,
+        "buildingCount": 141,
+        "bounds": {
+          "minX": -48,
+          "maxX": 8,
+          "minZ": -12,
+          "maxZ": 48
+        },
+        "cells": 240,
+        "density": 0.26666666666666666,
+        "graph": {
+          "vertices": 64,
+          "edges": 35,
+          "components": 30,
+          "lccRatio": 0.09375,
+          "cycleRank": 1
+        },
+        "mutualInformationBits": 0.0012998514772777133,
+        "organizedScore": 0.5741641696102302,
+        "compressedBytes": 496,
+        "pieceCounts": {
+          "foundation": 64,
+          "wall": 54,
+          "doorway": 9,
+          "door": 9,
+          "stairs": 5
+        }
+      },
+      "scoreRatio": 15.293674114113498,
+      "miDelta": 0.16516224059527257,
+      "compressionRatio": 0.9556451612903226
+    },
+    {
+      "seed": 271828,
+      "n": 128,
+      "structured": {
+        "n": 128,
+        "buildingCount": 284,
+        "bounds": {
+          "minX": -100,
+          "maxX": 8,
+          "minZ": -12,
+          "maxZ": 88
+        },
+        "cells": 728,
+        "density": 0.17582417582417584,
+        "graph": {
+          "vertices": 128,
+          "edges": 162,
+          "components": 1,
+          "lccRatio": 1,
+          "cycleRank": 35
+        },
+        "mutualInformationBits": 0.18275911913349577,
+        "organizedScore": 10.56009886363339,
+        "compressedBytes": 859,
+        "pieceCounts": {
+          "foundation": 128,
+          "wall": 109,
+          "doorway": 18,
+          "door": 18,
+          "stairs": 11
+        }
+      },
+      "control": {
+        "n": 128,
+        "buildingCount": 284,
+        "bounds": {
+          "minX": -100,
+          "maxX": 8,
+          "minZ": -12,
+          "maxZ": 88
+        },
+        "cells": 728,
+        "density": 0.17582417582417584,
+        "graph": {
+          "vertices": 128,
+          "edges": 52,
+          "components": 76,
+          "lccRatio": 0.0546875,
+          "cycleRank": 0
+        },
+        "mutualInformationBits": 0.0011575960107413474,
+        "organizedScore": 0.3838703435068104,
+        "compressedBytes": 914,
+        "pieceCounts": {
+          "foundation": 128,
+          "wall": 109,
+          "doorway": 18,
+          "door": 18,
+          "stairs": 11
+        }
+      },
+      "scoreRatio": 27.509545976286237,
+      "miDelta": 0.18160152312275443,
+      "compressionRatio": 0.9398249452954048
+    },
+    {
+      "seed": 271828,
+      "n": 256,
+      "structured": {
+        "n": 256,
+        "buildingCount": 570,
+        "bounds": {
+          "minX": -196,
+          "maxX": 8,
+          "minZ": -12,
+          "maxZ": 88
+        },
+        "cells": 1352,
+        "density": 0.1893491124260355,
+        "graph": {
+          "vertices": 256,
+          "edges": 319,
+          "components": 1,
+          "lccRatio": 1,
+          "cycleRank": 64
+        },
+        "mutualInformationBits": 0.17298236456284588,
+        "organizedScore": 11.738070516894755,
+        "compressedBytes": 1642,
+        "pieceCounts": {
+          "foundation": 256,
+          "wall": 219,
+          "doorway": 36,
+          "door": 36,
+          "stairs": 23
+        }
+      },
+      "control": {
+        "n": 256,
+        "buildingCount": 570,
+        "bounds": {
+          "minX": -196,
+          "maxX": 8,
+          "minZ": -12,
+          "maxZ": 88
+        },
+        "cells": 1352,
+        "density": 0.1893491124260355,
+        "graph": {
+          "vertices": 256,
+          "edges": 91,
+          "components": 166,
+          "lccRatio": 0.03515625,
+          "cycleRank": 1
+        },
+        "mutualInformationBits": 0.000036910282753791325,
+        "organizedScore": 0.28255757217933475,
+        "compressedBytes": 1725,
+        "pieceCounts": {
+          "foundation": 256,
+          "wall": 219,
+          "doorway": 36,
+          "door": 36,
+          "stairs": 23
+        }
+      },
+      "scoreRatio": 41.542225983753816,
+      "miDelta": 0.1729454542800921,
+      "compressionRatio": 0.9518840579710145
+    },
+    {
+      "seed": 314159,
+      "n": 32,
+      "structured": {
+        "n": 32,
+        "buildingCount": 69,
+        "bounds": {
+          "minX": -28,
+          "maxX": 8,
+          "minZ": -24,
+          "maxZ": 20
+        },
+        "cells": 120,
+        "density": 0.26666666666666666,
+        "graph": {
+          "vertices": 32,
+          "edges": 37,
+          "components": 1,
+          "lccRatio": 1,
+          "cycleRank": 6
+        },
+        "mutualInformationBits": 0.14545736120085667,
+        "organizedScore": 6.861539322470726,
+        "compressedBytes": 262,
+        "pieceCounts": {
+          "foundation": 32,
+          "wall": 27,
+          "doorway": 4,
+          "door": 4,
+          "stairs": 2
+        }
+      },
+      "control": {
+        "n": 32,
+        "buildingCount": 69,
+        "bounds": {
+          "minX": -28,
+          "maxX": 8,
+          "minZ": -24,
+          "maxZ": 20
+        },
+        "cells": 120,
+        "density": 0.26666666666666666,
+        "graph": {
+          "vertices": 32,
+          "edges": 16,
+          "components": 17,
+          "lccRatio": 0.15625,
+          "cycleRank": 1
+        },
+        "mutualInformationBits": 0.00009410947526072161,
+        "organizedScore": 0.8128939056307966,
+        "compressedBytes": 271,
+        "pieceCounts": {
+          "foundation": 32,
+          "wall": 27,
+          "doorway": 4,
+          "door": 4,
+          "stairs": 2
+        }
+      },
+      "scoreRatio": 8.44087927703954,
+      "miDelta": 0.14536325172559594,
+      "compressionRatio": 0.966789667896679
+    },
+    {
+      "seed": 314159,
+      "n": 64,
+      "structured": {
+        "n": 64,
+        "buildingCount": 141,
+        "bounds": {
+          "minX": -48,
+          "maxX": 8,
+          "minZ": -56,
+          "maxZ": 20
+        },
+        "cells": 300,
+        "density": 0.21333333333333335,
+        "graph": {
+          "vertices": 64,
+          "edges": 73,
+          "components": 1,
+          "lccRatio": 1,
+          "cycleRank": 10
+        },
+        "mutualInformationBits": 0.13564836367545538,
+        "organizedScore": 7.907931551117103,
+        "compressedBytes": 456,
+        "pieceCounts": {
+          "foundation": 64,
+          "wall": 54,
+          "doorway": 9,
+          "door": 9,
+          "stairs": 5
+        }
+      },
+      "control": {
+        "n": 64,
+        "buildingCount": 141,
+        "bounds": {
+          "minX": -48,
+          "maxX": 8,
+          "minZ": -56,
+          "maxZ": 20
+        },
+        "cells": 300,
+        "density": 0.21333333333333335,
+        "graph": {
+          "vertices": 64,
+          "edges": 29,
+          "components": 37,
+          "lccRatio": 0.125,
+          "cycleRank": 2
+        },
+        "mutualInformationBits": 0.0009836155415882016,
+        "organizedScore": 0.7770844521524015,
+        "compressedBytes": 464,
+        "pieceCounts": {
+          "foundation": 64,
+          "wall": 54,
+          "doorway": 9,
+          "door": 9,
+          "stairs": 5
+        }
+      },
+      "scoreRatio": 10.176412009291111,
+      "miDelta": 0.13466474813386717,
+      "compressionRatio": 0.9827586206896551
+    },
+    {
+      "seed": 314159,
+      "n": 128,
+      "structured": {
+        "n": 128,
+        "buildingCount": 284,
+        "bounds": {
+          "minX": -48,
+          "maxX": 24,
+          "minZ": -104,
+          "maxZ": 20
+        },
+        "cells": 608,
+        "density": 0.21052631578947367,
+        "graph": {
+          "vertices": 128,
+          "edges": 160,
+          "components": 1,
+          "lccRatio": 1,
+          "cycleRank": 33
+        },
+        "mutualInformationBits": 0.17800434211096222,
+        "organizedScore": 10.388595626694267,
+        "compressedBytes": 812,
+        "pieceCounts": {
+          "foundation": 128,
+          "wall": 109,
+          "doorway": 18,
+          "door": 18,
+          "stairs": 11
+        }
+      },
+      "control": {
+        "n": 128,
+        "buildingCount": 284,
+        "bounds": {
+          "minX": -48,
+          "maxX": 24,
+          "minZ": -104,
+          "maxZ": 20
+        },
+        "cells": 608,
+        "density": 0.21052631578947367,
+        "graph": {
+          "vertices": 128,
+          "edges": 48,
+          "components": 80,
+          "lccRatio": 0.0390625,
+          "cycleRank": 0
+        },
+        "mutualInformationBits": 0.00030224252756095357,
+        "organizedScore": 0.2739588416589936,
+        "compressedBytes": 897,
+        "pieceCounts": {
+          "foundation": 128,
+          "wall": 109,
+          "doorway": 18,
+          "door": 18,
+          "stairs": 11
+        }
+      },
+      "scoreRatio": 37.92027869509437,
+      "miDelta": 0.17770209958340127,
+      "compressionRatio": 0.9052396878483835
+    },
+    {
+      "seed": 314159,
+      "n": 256,
+      "structured": {
+        "n": 256,
+        "buildingCount": 570,
+        "bounds": {
+          "minX": -48,
+          "maxX": 72,
+          "minZ": -204,
+          "maxZ": 20
+        },
+        "cells": 1767,
+        "density": 0.144878324844369,
+        "graph": {
+          "vertices": 256,
+          "edges": 317,
+          "components": 1,
+          "lccRatio": 1,
+          "cycleRank": 62
+        },
+        "mutualInformationBits": 0.1659088238443733,
+        "organizedScore": 11.594364844251203,
+        "compressedBytes": 1570,
+        "pieceCounts": {
+          "foundation": 256,
+          "wall": 219,
+          "doorway": 36,
+          "door": 36,
+          "stairs": 23
+        }
+      },
+      "control": {
+        "n": 256,
+        "buildingCount": 570,
+        "bounds": {
+          "minX": -48,
+          "maxX": 72,
+          "minZ": -204,
+          "maxZ": 20
+        },
+        "cells": 1767,
+        "density": 0.144878324844369,
+        "graph": {
+          "vertices": 256,
+          "edges": 84,
+          "components": 175,
+          "lccRatio": 0.02734375,
+          "cycleRank": 3
+        },
+        "mutualInformationBits": 0.0005690376450326658,
+        "organizedScore": 0.22159509937048352,
+        "compressedBytes": 1699,
+        "pieceCounts": {
+          "foundation": 256,
+          "wall": 219,
+          "doorway": 36,
+          "door": 36,
+          "stairs": 23
+        }
+      },
+      "scoreRatio": 52.32229808867142,
+      "miDelta": 0.16533978619934064,
+      "compressionRatio": 0.924072984108299
+    },
+    {
+      "seed": 1618033,
+      "n": 32,
+      "structured": {
+        "n": 32,
+        "buildingCount": 69,
+        "bounds": {
+          "minX": -20,
+          "maxX": 28,
+          "minZ": -20,
+          "maxZ": 8
+        },
+        "cells": 104,
+        "density": 0.3076923076923077,
+        "graph": {
+          "vertices": 32,
+          "edges": 36,
+          "components": 1,
+          "lccRatio": 1,
+          "cycleRank": 5
+        },
+        "mutualInformationBits": 0.10820447803704653,
+        "organizedScore": 6.463692050815654,
+        "compressedBytes": 265,
+        "pieceCounts": {
+          "foundation": 32,
+          "wall": 27,
+          "doorway": 4,
+          "door": 4,
+          "stairs": 2
+        }
+      },
+      "control": {
+        "n": 32,
+        "buildingCount": 69,
+        "bounds": {
+          "minX": -20,
+          "maxX": 28,
+          "minZ": -20,
+          "maxZ": 8
+        },
+        "cells": 104,
+        "density": 0.3076923076923077,
+        "graph": {
+          "vertices": 32,
+          "edges": 17,
+          "components": 16,
+          "lccRatio": 0.1875,
+          "cycleRank": 1
+        },
+        "mutualInformationBits": 0.00006452170441071216,
+        "organizedScore": 0.9754438274105675,
+        "compressedBytes": 270,
+        "pieceCounts": {
+          "foundation": 32,
+          "wall": 27,
+          "doorway": 4,
+          "door": 4,
+          "stairs": 2
+        }
+      },
+      "scoreRatio": 6.626411351614474,
+      "miDelta": 0.10813995633263582,
+      "compressionRatio": 0.9814814814814815
+    },
+    {
+      "seed": 1618033,
+      "n": 64,
+      "structured": {
+        "n": 64,
+        "buildingCount": 141,
+        "bounds": {
+          "minX": -20,
+          "maxX": 56,
+          "minZ": -20,
+          "maxZ": 32
+        },
+        "cells": 280,
+        "density": 0.22857142857142856,
+        "graph": {
+          "vertices": 64,
+          "edges": 76,
+          "components": 1,
+          "lccRatio": 1,
+          "cycleRank": 13
+        },
+        "mutualInformationBits": 0.15097664392525187,
+        "organizedScore": 8.339586897376048,
+        "compressedBytes": 475,
+        "pieceCounts": {
+          "foundation": 64,
+          "wall": 54,
+          "doorway": 9,
+          "door": 9,
+          "stairs": 5
+        }
+      },
+      "control": {
+        "n": 64,
+        "buildingCount": 141,
+        "bounds": {
+          "minX": -20,
+          "maxX": 56,
+          "minZ": -20,
+          "maxZ": 32
+        },
+        "cells": 280,
+        "density": 0.22857142857142856,
+        "graph": {
+          "vertices": 64,
+          "edges": 20,
+          "components": 45,
+          "lccRatio": 0.0625,
+          "cycleRank": 1
+        },
+        "mutualInformationBits": 0.005384544004395874,
+        "organizedScore": 0.38433760609310896,
+        "compressedBytes": 487,
+        "pieceCounts": {
+          "foundation": 64,
+          "wall": 54,
+          "doorway": 9,
+          "door": 9,
+          "stairs": 5
+        }
+      },
+      "scoreRatio": 21.6985971842571,
+      "miDelta": 0.145592099920856,
+      "compressionRatio": 0.9753593429158111
+    },
+    {
+      "seed": 1618033,
+      "n": 128,
+      "structured": {
+        "n": 128,
+        "buildingCount": 284,
+        "bounds": {
+          "minX": -20,
+          "maxX": 104,
+          "minZ": -20,
+          "maxZ": 40
+        },
+        "cells": 512,
+        "density": 0.25,
+        "graph": {
+          "vertices": 128,
+          "edges": 162,
+          "components": 1,
+          "lccRatio": 1,
+          "cycleRank": 35
+        },
+        "mutualInformationBits": 0.17681853920711144,
+        "organizedScore": 10.507059229176043,
+        "compressedBytes": 855,
+        "pieceCounts": {
+          "foundation": 128,
+          "wall": 109,
+          "doorway": 18,
+          "door": 18,
+          "stairs": 11
+        }
+      },
+      "control": {
+        "n": 128,
+        "buildingCount": 284,
+        "bounds": {
+          "minX": -20,
+          "maxX": 104,
+          "minZ": -20,
+          "maxZ": 40
+        },
+        "cells": 512,
+        "density": 0.25,
+        "graph": {
+          "vertices": 128,
+          "edges": 62,
+          "components": 68,
+          "lccRatio": 0.0703125,
+          "cycleRank": 2
+        },
+        "mutualInformationBits": 0.0000014464337643392794,
+        "organizedScore": 0.5006804049156451,
+        "compressedBytes": 924,
+        "pieceCounts": {
+          "foundation": 128,
+          "wall": 109,
+          "doorway": 18,
+          "door": 18,
+          "stairs": 11
+        }
+      },
+      "scoreRatio": 20.985561100491395,
+      "miDelta": 0.1768170927733471,
+      "compressionRatio": 0.9253246753246753
+    },
+    {
+      "seed": 1618033,
+      "n": 256,
+      "structured": {
+        "n": 256,
+        "buildingCount": 570,
+        "bounds": {
+          "minX": -20,
+          "maxX": 192,
+          "minZ": -44,
+          "maxZ": 48
+        },
+        "cells": 1296,
+        "density": 0.19753086419753085,
+        "graph": {
+          "vertices": 256,
+          "edges": 335,
+          "components": 1,
+          "lccRatio": 1,
+          "cycleRank": 80
+        },
+        "mutualInformationBits": 0.20147245499124794,
+        "organizedScore": 12.624330312376351,
+        "compressedBytes": 1593,
+        "pieceCounts": {
+          "foundation": 256,
+          "wall": 219,
+          "doorway": 36,
+          "door": 36,
+          "stairs": 23
+        }
+      },
+      "control": {
+        "n": 256,
+        "buildingCount": 570,
+        "bounds": {
+          "minX": -16,
+          "maxX": 192,
+          "minZ": -44,
+          "maxZ": 48
+        },
+        "cells": 1272,
+        "density": 0.20125786163522014,
+        "graph": {
+          "vertices": 256,
+          "edges": 81,
+          "components": 175,
+          "lccRatio": 0.0234375,
+          "cycleRank": 0
+        },
+        "mutualInformationBits": 0.0015403711676226176,
+        "organizedScore": 0.18792084802566253,
+        "compressedBytes": 1726,
+        "pieceCounts": {
+          "foundation": 256,
+          "wall": 219,
+          "doorway": 36,
+          "door": 36,
+          "stairs": 23
+        }
+      },
+      "scoreRatio": 67.17897692039134,
+      "miDelta": 0.19993208382362532,
+      "compressionRatio": 0.9229432213209734
+    },
+    {
+      "seed": 999983,
+      "n": 32,
+      "structured": {
+        "n": 32,
+        "buildingCount": 69,
+        "bounds": {
+          "minX": -24,
+          "maxX": 4,
+          "minZ": -24,
+          "maxZ": 16
+        },
+        "cells": 88,
+        "density": 0.36363636363636365,
+        "graph": {
+          "vertices": 32,
+          "edges": 36,
+          "components": 1,
+          "lccRatio": 1,
+          "cycleRank": 5
+        },
+        "mutualInformationBits": 0.08979737327032136,
+        "organizedScore": 6.35633112680102,
+        "compressedBytes": 273,
+        "pieceCounts": {
+          "foundation": 32,
+          "wall": 27,
+          "doorway": 4,
+          "door": 4,
+          "stairs": 2
+        }
+      },
+      "control": {
+        "n": 32,
+        "buildingCount": 69,
+        "bounds": {
+          "minX": -24,
+          "maxX": 4,
+          "minZ": -24,
+          "maxZ": 16
+        },
+        "cells": 88,
+        "density": 0.36363636363636365,
+        "graph": {
+          "vertices": 32,
+          "edges": 23,
+          "components": 11,
+          "lccRatio": 0.375,
+          "cycleRank": 2
+        },
+        "mutualInformationBits": 0.0040239487104844,
+        "organizedScore": 2.0179634189928226,
+        "compressedBytes": 260,
+        "pieceCounts": {
+          "foundation": 32,
+          "wall": 27,
+          "doorway": 4,
+          "door": 4,
+          "stairs": 2
+        }
+      },
+      "scoreRatio": 3.1498743074210447,
+      "miDelta": 0.08577342455983697,
+      "compressionRatio": 1.05
+    },
+    {
+      "seed": 999983,
+      "n": 64,
+      "structured": {
+        "n": 64,
+        "buildingCount": 141,
+        "bounds": {
+          "minX": -36,
+          "maxX": 8,
+          "minZ": -48,
+          "maxZ": 16
+        },
+        "cells": 204,
+        "density": 0.3137254901960784,
+        "graph": {
+          "vertices": 64,
+          "edges": 76,
+          "components": 1,
+          "lccRatio": 1,
+          "cycleRank": 13
+        },
+        "mutualInformationBits": 0.1247774055158521,
+        "organizedScore": 8.149756090197261,
+        "compressedBytes": 453,
+        "pieceCounts": {
+          "foundation": 64,
+          "wall": 54,
+          "doorway": 9,
+          "door": 9,
+          "stairs": 5
+        }
+      },
+      "control": {
+        "n": 64,
+        "buildingCount": 141,
+        "bounds": {
+          "minX": -36,
+          "maxX": 8,
+          "minZ": -48,
+          "maxZ": 16
+        },
+        "cells": 204,
+        "density": 0.3137254901960784,
+        "graph": {
+          "vertices": 64,
+          "edges": 35,
+          "components": 31,
+          "lccRatio": 0.125,
+          "cycleRank": 2
+        },
+        "mutualInformationBits": 0.0004596691011559545,
+        "organizedScore": 0.7766777016059403,
+        "compressedBytes": 482,
+        "pieceCounts": {
+          "foundation": 64,
+          "wall": 54,
+          "doorway": 9,
+          "door": 9,
+          "stairs": 5
+        }
+      },
+      "scoreRatio": 10.493099098050543,
+      "miDelta": 0.12431773641469615,
+      "compressionRatio": 0.9398340248962656
+    },
+    {
+      "seed": 999983,
+      "n": 128,
+      "structured": {
+        "n": 128,
+        "buildingCount": 284,
+        "bounds": {
+          "minX": -48,
+          "maxX": 12,
+          "minZ": -100,
+          "maxZ": 16
+        },
+        "cells": 480,
+        "density": 0.26666666666666666,
+        "graph": {
+          "vertices": 128,
+          "edges": 153,
+          "components": 1,
+          "lccRatio": 1,
+          "cycleRank": 26
+        },
+        "mutualInformationBits": 0.1373301319535232,
+        "organizedScore": 9.593815023541147,
+        "compressedBytes": 817,
+        "pieceCounts": {
+          "foundation": 128,
+          "wall": 109,
+          "doorway": 18,
+          "door": 18,
+          "stairs": 11
+        }
+      },
+      "control": {
+        "n": 128,
+        "buildingCount": 284,
+        "bounds": {
+          "minX": -48,
+          "maxX": 12,
+          "minZ": -100,
+          "maxZ": 16
+        },
+        "cells": 480,
+        "density": 0.26666666666666666,
+        "graph": {
+          "vertices": 128,
+          "edges": 72,
+          "components": 59,
+          "lccRatio": 0.125,
+          "cycleRank": 3
+        },
+        "mutualInformationBits": 0.0009665688554683135,
+        "organizedScore": 0.8978110700213197,
+        "compressedBytes": 875,
+        "pieceCounts": {
+          "foundation": 128,
+          "wall": 109,
+          "doorway": 18,
+          "door": 18,
+          "stairs": 11
+        }
+      },
+      "scoreRatio": 10.685783840149497,
+      "miDelta": 0.1363635630980549,
+      "compressionRatio": 0.9337142857142857
+    },
+    {
+      "seed": 999983,
+      "n": 256,
+      "structured": {
+        "n": 256,
+        "buildingCount": 570,
+        "bounds": {
+          "minX": -60,
+          "maxX": 12,
+          "minZ": -196,
+          "maxZ": 16
+        },
+        "cells": 1026,
+        "density": 0.24951267056530213,
+        "graph": {
+          "vertices": 256,
+          "edges": 339,
+          "components": 1,
+          "lccRatio": 1,
+          "cycleRank": 84
+        },
+        "mutualInformationBits": 0.2016140471118456,
+        "organizedScore": 12.776125432941535,
+        "compressedBytes": 1471,
+        "pieceCounts": {
+          "foundation": 256,
+          "wall": 219,
+          "doorway": 36,
+          "door": 36,
+          "stairs": 23
+        }
+      },
+      "control": {
+        "n": 256,
+        "buildingCount": 570,
+        "bounds": {
+          "minX": -60,
+          "maxX": 12,
+          "minZ": -196,
+          "maxZ": 16
+        },
+        "cells": 1026,
+        "density": 0.24951267056530213,
+        "graph": {
+          "vertices": 256,
+          "edges": 116,
+          "components": 144,
+          "lccRatio": 0.03125,
+          "cycleRank": 4
+        },
+        "mutualInformationBits": 0.00021222590408253791,
+        "organizedScore": 0.2541386868928723,
+        "compressedBytes": 1650,
+        "pieceCounts": {
+          "foundation": 256,
+          "wall": 219,
+          "doorway": 36,
+          "door": 36,
+          "stairs": 23
+        }
+      },
+      "scoreRatio": 50.27225720390649,
+      "miDelta": 0.20140182120776307,
+      "compressionRatio": 0.8915151515151515
+    }
+  ],
+  "bySeed": [
+    {
+      "seed": 62062,
+      "monotonicPieceGrowth": true,
+      "monotonicOrganizedScore": true,
+      "scoreGrowth": 1.7762310402851824,
+      "finalLcc": 1,
+      "controlLcc": 0.0234375,
+      "finalMiDelta": 0.18790156705762032,
+      "finalScoreRatio": 64.37709023095695,
+      "finalCompressionRatio": 0.9096176129779838
+    },
+    {
+      "seed": 104729,
+      "monotonicPieceGrowth": true,
+      "monotonicOrganizedScore": true,
+      "scoreGrowth": 2.256499876413288,
+      "finalLcc": 1,
+      "controlLcc": 0.02734375,
+      "finalMiDelta": 0.21734205559197634,
+      "finalScoreRatio": 59.532270850303156,
+      "finalCompressionRatio": 0.9130688448074679
+    },
+    {
+      "seed": 271828,
+      "monotonicPieceGrowth": true,
+      "monotonicOrganizedScore": true,
+      "scoreGrowth": 1.7496401063158815,
+      "finalLcc": 1,
+      "controlLcc": 0.03515625,
+      "finalMiDelta": 0.1729454542800921,
+      "finalScoreRatio": 41.542225983753816,
+      "finalCompressionRatio": 0.9518840579710145
+    },
+    {
+      "seed": 314159,
+      "monotonicPieceGrowth": true,
+      "monotonicOrganizedScore": true,
+      "scoreGrowth": 1.6897614805297458,
+      "finalLcc": 1,
+      "controlLcc": 0.02734375,
+      "finalMiDelta": 0.16533978619934064,
+      "finalScoreRatio": 52.32229808867142,
+      "finalCompressionRatio": 0.924072984108299
+    },
+    {
+      "seed": 1618033,
+      "monotonicPieceGrowth": true,
+      "monotonicOrganizedScore": true,
+      "scoreGrowth": 1.9531144449840065,
+      "finalLcc": 1,
+      "controlLcc": 0.0234375,
+      "finalMiDelta": 0.19993208382362532,
+      "finalScoreRatio": 67.17897692039134,
+      "finalCompressionRatio": 0.9229432213209734
+    },
+    {
+      "seed": 999983,
+      "monotonicPieceGrowth": true,
+      "monotonicOrganizedScore": true,
+      "scoreGrowth": 2.0099842468986404,
+      "finalLcc": 1,
+      "controlLcc": 0.03125,
+      "finalMiDelta": 0.20140182120776307,
+      "finalScoreRatio": 50.27225720390649,
+      "finalCompressionRatio": 0.8915151515151515
+    }
+  ],
+  "successes": {
+    "monotonicPieceGrowth": 6,
+    "monotonicOrganizedScore": 6,
+    "structuredLcc": 6,
+    "controlSeparated": 6,
+    "miSeparated": 6,
+    "scoreSeparated": 6
+  },
+  "pass": true
+}

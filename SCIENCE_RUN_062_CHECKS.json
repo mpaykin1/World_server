@@ -1,0 +1,20 @@
+{
+  "focused": {
+    "command": "node --test test/game-rules.test.js test/science-h2-temporal-organized-build-growth.test.cjs",
+    "pass": 14,
+    "fail": 0,
+    "skip": 0
+  },
+  "full": {
+    "command": "npm run check",
+    "pass": 438,
+    "fail": 0,
+    "skip": 1,
+    "durationMs": 96686.1474
+  },
+  "notes": [
+    "full check reused existing main node_modules through a host-local junction; junction is gitignored and not committed",
+    "pre-experiment UTF-8 BOM parse blocker was fixed before first scientific result and protected by regression test",
+    "focused regression independently re-run after evidence generation: 14/14 PASS"
+  ]
+}
