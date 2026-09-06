@@ -1,0 +1,244 @@
+{
+  "experiment": "RUN_048_H4_CRITIC_REVISION_AB",
+  "seed": 48048,
+  "models": {
+    "baseline": "qwen3-fast:1.7b",
+    "critic": "qwen2.5:3b-instruct",
+    "revision": "qwen3-fast:1.7b"
+  },
+  "taskIds": [
+    "powershell-utf8-mojibake-on-install",
+    "catalog-auto-publishes-index-html",
+    "collective-brain-memory-duplication",
+    "godot-ai-node-create-parent-param-silently-ignored",
+    "collective-brain-event-corruption",
+    "agentmemory-silent-fallback"
+  ],
+  "criterion": "6 unseen deterministic tasks; collective wins >=67% by utility delta >=0.03; median delta >=0.03; quality and useful-novelty non-worse on >=83% tasks; errors non-higher; median latency <=3.5x",
+  "controls": "same tasks, same retrieved AgentMemory, same baseline model and deterministic seed; only critic+revision differs",
+  "rows": [
+    {
+      "id": "powershell-utf8-mojibake-on-install",
+      "memoryHash": "36dd33214881699693b4f90e85afce4d30196e9eef6584d236b89a9dfe0a8a8a",
+      "base": {
+        "output": "",
+        "ms": 15005,
+        "timeout": true,
+        "error": 0,
+        "quality": 0,
+        "novelty": 0
+      },
+      "collective": {
+        "output": "",
+        "ms": 42228,
+        "timeout": true,
+        "quality": 0,
+        "novelty": 0,
+        "error": 0
+      },
+      "stages": {
+        "draftMs": 10812,
+        "criticMs": 15012,
+        "revisionMs": 16404
+      }
+    },
+    {
+      "id": "catalog-auto-publishes-index-html",
+      "memoryHash": "db7c806fc932f65a1c2fb4e292ff4364292370db7e2318e8f494f1f182061046",
+      "base": {
+        "output": "",
+        "ms": 16044,
+        "timeout": true,
+        "error": 0,
+        "quality": 0,
+        "novelty": 0
+      },
+      "collective": {
+        "output": "",
+        "ms": 43403,
+        "timeout": true,
+        "quality": 0,
+        "novelty": 0,
+        "error": 0
+      },
+      "stages": {
+        "draftMs": 13389,
+        "criticMs": 15010,
+        "revisionMs": 15004
+      }
+    },
+    {
+      "id": "collective-brain-memory-duplication",
+      "memoryHash": "1381089f80be0259cd630c5dbc6a28640d641265e726e8e1e3dc3ae92d4edafc",
+      "base": {
+        "output": "",
+        "ms": 15007,
+        "timeout": true,
+        "error": 0,
+        "quality": 0,
+        "novelty": 0
+      },
+      "collective": {
+        "output": "",
+        "ms": 33283,
+        "timeout": true,
+        "quality": 0,
+        "novelty": 0,
+        "error": 0
+      },
+      "stages": {
+        "draftMs": 3273,
+        "criticMs": 15003,
+        "revisionMs": 15007
+      }
+    },
+    {
+      "id": "godot-ai-node-create-parent-param-silently-ignored",
+      "memoryHash": "712ce06521f2db0ff83b7549224cffd3925b33ef9106c4c69a705541c5cb0e64",
+      "base": {
+        "output": "",
+        "ms": 15008,
+        "timeout": true,
+        "error": 0,
+        "quality": 0,
+        "novelty": 0
+      },
+      "collective": {
+        "output": "",
+        "ms": 37116,
+        "timeout": true,
+        "quality": 0,
+        "novelty": 0,
+        "error": 0
+      },
+      "stages": {
+        "draftMs": 6557,
+        "criticMs": 15005,
+        "revisionMs": 15554
+      }
+    },
+    {
+      "id": "collective-brain-event-corruption",
+      "memoryHash": "0dc726a33894fd7059bb72bb6310ef8320aa86a75baa2b6794376142b6148527",
+      "base": {
+        "output": "",
+        "ms": 15005,
+        "timeout": true,
+        "error": 0,
+        "quality": 0,
+        "novelty": 0
+      },
+      "collective": {
+        "output": "",
+        "ms": 38083,
+        "timeout": true,
+        "quality": 0,
+        "novelty": 0,
+        "error": 0
+      },
+      "stages": {
+        "draftMs": 8065,
+        "criticMs": 15003,
+        "revisionMs": 15015
+      }
+    },
+    {
+      "id": "agentmemory-silent-fallback",
+      "memoryHash": "0d2c20d9524d5f1662bb46ad2dca1064084eafd49b646939f9c1d4426ed981cd",
+      "base": {
+        "output": "",
+        "ms": 15011,
+        "timeout": true,
+        "error": 0,
+        "quality": 0,
+        "novelty": 0
+      },
+      "collective": {
+        "output": "",
+        "ms": 32333,
+        "timeout": true,
+        "quality": 0,
+        "novelty": 0,
+        "error": 0
+      },
+      "stages": {
+        "draftMs": 2321,
+        "criticMs": 15010,
+        "revisionMs": 15002
+      }
+    }
+  ],
+  "pairs": [
+    {
+      "id": "powershell-utf8-mojibake-on-install",
+      "base": -0.034571342994723864,
+      "collective": -0.09729281386079304,
+      "delta": -0.06272147086606918,
+      "qualityDelta": 0,
+      "noveltyDelta": 0,
+      "errorDelta": 0,
+      "latencyRatio": 2.814261912695768
+    },
+    {
+      "id": "catalog-auto-publishes-index-html",
+      "base": -0.0369651867382439,
+      "collective": -0.1,
+      "delta": -0.06303481326175611,
+      "qualityDelta": 0,
+      "noveltyDelta": 0,
+      "errorDelta": 0,
+      "latencyRatio": 2.7052480678135127
+    },
+    {
+      "id": "collective-brain-memory-duplication",
+      "base": -0.03457595097113103,
+      "collective": -0.07668363937976638,
+      "delta": -0.04210768840863535,
+      "qualityDelta": 0,
+      "noveltyDelta": 0,
+      "errorDelta": 0,
+      "latencyRatio": 2.21783167855001
+    },
+    {
+      "id": "godot-ai-node-create-parent-param-silently-ignored",
+      "base": -0.034578254959334614,
+      "collective": -0.08551482616409005,
+      "delta": -0.050936571204755435,
+      "qualityDelta": 0,
+      "noveltyDelta": 0,
+      "errorDelta": 0,
+      "latencyRatio": 2.473081023454158
+    },
+    {
+      "id": "collective-brain-event-corruption",
+      "base": -0.034571342994723864,
+      "collective": -0.08774278275695228,
+      "delta": -0.05317143976222842,
+      "qualityDelta": 0,
+      "noveltyDelta": 0,
+      "errorDelta": 0,
+      "latencyRatio": 2.538020659780073
+    },
+    {
+      "id": "agentmemory-silent-fallback",
+      "base": -0.03458516692394535,
+      "collective": -0.074494850586365,
+      "delta": -0.03990968366241965,
+      "qualityDelta": 0,
+      "noveltyDelta": 0,
+      "errorDelta": 0,
+      "latencyRatio": 2.1539537672373594
+    }
+  ],
+  "wins": 0,
+  "winRate": 0,
+  "medianDelta": -0.050936571204755435,
+  "qualityNonWorseRate": 1,
+  "noveltyNonWorseRate": 1,
+  "errorsBase": 0,
+  "errorsCollective": 0,
+  "medianLatencyRatio": 2.538020659780073,
+  "hypothesisPass": false,
+  "executionPass": false,
+  "pass": false
+}

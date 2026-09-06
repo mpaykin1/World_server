@@ -1,0 +1,256 @@
+{
+  "experiment": "RUN_049_H4_CRITIC_REVISION_AB_NO_ABORT",
+  "seed": 48049,
+  "models": {
+    "baseline": "qwen3-fast:1.7b",
+    "critic": "qwen2.5:3b-instruct",
+    "revision": "qwen3-fast:1.7b"
+  },
+  "taskIds": [
+    "godot-hero-built-at-world-voxel-scale",
+    "stairs-collision-broken",
+    "godot-world-parented-under-hero",
+    "duplicate-orchestrator-stack",
+    "collective-brain-memory-duplication",
+    "collective-brain-prompt-injection-memory"
+  ],
+  "criterion": "6 unseen deterministic tasks; collective wins >=67% by utility delta >=0.03; median delta >=0.03; quality and useful-novelty non-worse on >=83% tasks; errors non-higher; median latency <=3.5x",
+  "controls": "same tasks, same retrieved AgentMemory, same baseline model and deterministic seed; only critic+revision differs",
+  "rows": [
+    {
+      "id": "godot-hero-built-at-world-voxel-scale",
+      "memoryHash": "9a1b0a905fdbcc79ebde95f43f5a68684c10d61a90806d3bb02e45f09514c96e",
+      "base": {
+        "output": "ROOT_CAUSE: Shared memory conflict due to duplicate position offset and improper scaling/transforming of the hero node, leading to visual distortion and misalignment with the world geometry.\n\nFIX: Use shared memory only if relevant, and ensure the hero node is not parented under the world/terrain generator.",
+        "ms": 18335,
+        "ollamaTotalMs": 18323.5301,
+        "evalMs": 5561.247,
+        "evalCount": 60,
+        "failed": false,
+        "quality": 0.16666666666666666,
+        "novelty": 0.041666666666666664,
+        "error": 0
+      },
+      "collective": {
+        "output": "CRITIQUE:  \nYour diagnosis and proposed fixes are quite thorough and address several key issues related to the symptoms you've described. Here are some critiques and suggestions to refine your critique:\n\n### Factual Gaps  \n1. **Shared Memory**: The root cause explanation for the shared memory conflict is accurate",
+        "ms": 69297,
+        "quality": 0,
+        "novelty": 0,
+        "error": 0
+      },
+      "stages": {
+        "draftMs": 5660,
+        "criticMs": 37490,
+        "revisionMs": 26147
+      }
+    },
+    {
+      "id": "stairs-collision-broken",
+      "memoryHash": "68402f77874bf4eed2592c3437c1a943fa8d6af1bbe342711e1eb80b972687df",
+      "base": {
+        "output": "ROOT_CAUSE: Shared memory corruption in three.js Object3D subclass due to pivot property corruption affecting matrix calculations.  \nFIX: Use shared memory cautiously, only when relevant, and consider updating three.js to a stable version or using a different rendering engine.",
+        "ms": 16712,
+        "ollamaTotalMs": 16706.4335,
+        "evalMs": 4911.747,
+        "evalCount": 52,
+        "failed": false,
+        "quality": 0,
+        "novelty": 0,
+        "error": 0
+      },
+      "collective": {
+        "output": "CRITIQUE:  \nYour diagnosis contains several gaps, unsafe advice, and missed root causes. Here's a revised critique with only useful information:\n\n1. **Factual Gaps:**  \n   - **Premature Done Claim:** The root cause and solution for the \"no persistent, checked-every",
+        "ms": 74308,
+        "quality": 0,
+        "novelty": 0,
+        "error": 0
+      },
+      "stages": {
+        "draftMs": 4327,
+        "criticMs": 42628,
+        "revisionMs": 27353
+      }
+    },
+    {
+      "id": "godot-world-parented-under-hero",
+      "memoryHash": "b2f976b1feb5b3c05ee25b2839f4fc5206ef9124dfe77eb19262fee0f1b9852c",
+      "base": {
+        "output": "ROOT_CAUSE: Shared memory conflict involving position offsets in rig nodes, leading to incorrect transformation of terrain/world geometry  \nFIX: Clear and reset shared memory offsets for rig nodes to prevent duplication of camera offsets, ensuring proper transformation of terrain/world geometry.",
+        "ms": 24048,
+        "ollamaTotalMs": 24040.4274,
+        "evalMs": 6562.359,
+        "evalCount": 50,
+        "failed": false,
+        "quality": 0,
+        "novelty": 0.029411764705882353,
+        "error": 0
+      },
+      "collective": {
+        "output": "CRITIQUE: Your diagnosis is quite thorough and addresses several key issues related to the symptom you described. Here are some critiques and suggestions to refine your critique:\n\n### Factual Gaps\n1. **Shared Memory Issue**: The root cause you've identified for the shared memory conflict is correct. However",
+        "ms": 81588,
+        "quality": 0,
+        "novelty": 0,
+        "error": 0
+      },
+      "stages": {
+        "draftMs": 7243,
+        "criticMs": 44035,
+        "revisionMs": 30310
+      }
+    },
+    {
+      "id": "duplicate-orchestrator-stack",
+      "memoryHash": "c88f620408535c16ae77916c08856b269ee6e383e74ac7c8bbd2ffbfb8091fa8",
+      "base": {
+        "output": "ROOT_CAUSE: Shared memory may be stale; use it only if relevant.  \nFIX: Preserve existing regression protection.",
+        "ms": 15202,
+        "ollamaTotalMs": 15190.4103,
+        "evalMs": 2738.93,
+        "evalCount": 25,
+        "failed": false,
+        "quality": 0,
+        "novelty": 0,
+        "error": 0
+      },
+      "collective": {
+        "output": "ROOT_CAUSE: Shared memory may be stale; use it only if relevant.  \nFIX: Preserve existing regression protection.  \nCRITIQUE: Your diagnosis contains several gaps and potential issues that need to be addressed for a more comprehensive and accurate understanding of the problems and solutions. Here are some critiques:\n\n",
+        "ms": 57957,
+        "quality": 0,
+        "novelty": 0,
+        "error": 0
+      },
+      "stages": {
+        "draftMs": 2927,
+        "criticMs": 33268,
+        "revisionMs": 21762
+      }
+    },
+    {
+      "id": "collective-brain-memory-duplication",
+      "memoryHash": "032d6ddb08f2b9f6b20aab07055840a3d5898885b44abb31505f84d645563136",
+      "base": {
+        "output": "ROOT_CAUSE: Shared memory may be stale; use it only if relevant.\n\nFIX: Check shared memory consistency and ensure proper synchronization before using it.",
+        "ms": 3823,
+        "ollamaTotalMs": 3816.6888,
+        "evalMs": 3645.323,
+        "evalCount": 31,
+        "failed": false,
+        "quality": 0,
+        "novelty": 0,
+        "error": 0
+      },
+      "collective": {
+        "output": "CRITIQUE: Your diagnosis contains several elements that are well-articulated, but there are some areas that could be improved for clarity and completeness. Here are some critiques:\n\n1. **Factual Gaps:**\n   - **Shared Memory:** The root cause explanation is somewhat convoluted.",
+        "ms": 25757,
+        "quality": 0,
+        "novelty": 0,
+        "error": 0
+      },
+      "stages": {
+        "draftMs": 3208,
+        "criticMs": 10285,
+        "revisionMs": 12264
+      }
+    },
+    {
+      "id": "collective-brain-prompt-injection-memory",
+      "memoryHash": "dcd56ca5ba108cd188a0cf3a6340e39b8a130920e34757feb709c5f3b0c16d60",
+      "base": {
+        "output": "ROOT_CAUSE: Shared memory contains instructions that manipulate the active agent  \nFIX: Use shared memory only if relevant, and ensure proper validation and protection mechanisms are in place.",
+        "ms": 18849,
+        "ollamaTotalMs": 18841.8333,
+        "evalMs": 4464.409,
+        "evalCount": 35,
+        "failed": false,
+        "quality": 0,
+        "novelty": 0,
+        "error": 0
+      },
+      "collective": {
+        "output": "CRITIQUE:  \nYour diagnosis and critique are quite thorough, but let's refine it a bit to ensure all aspects are covered comprehensively:\n\n### Factual Gaps:\n1. **Shared Memory**: The diagnosis mentions that the shared memory contains instructions that manipulate the active agent. However, the solution",
+        "ms": 102364,
+        "quality": 0,
+        "novelty": 0,
+        "error": 0
+      },
+      "stages": {
+        "draftMs": 27512,
+        "criticMs": 40605,
+        "revisionMs": 34247
+      }
+    }
+  ],
+  "pairs": [
+    {
+      "id": "godot-hero-built-at-world-voxel-scale",
+      "base": 0.07708842952600524,
+      "collective": -0.0676966511664257,
+      "delta": -0.14478508069243096,
+      "qualityDelta": -0.16666666666666666,
+      "noveltyDelta": -0.041666666666666664,
+      "errorDelta": 0,
+      "latencyRatio": 3.779492773384238
+    },
+    {
+      "id": "stairs-collision-broken",
+      "base": -0.016326052127701145,
+      "collective": -0.07259192684928295,
+      "delta": -0.0562658747215818,
+      "qualityDelta": 0,
+      "noveltyDelta": 0,
+      "errorDelta": 0,
+      "latencyRatio": 4.446385830540929
+    },
+    {
+      "id": "godot-world-parented-under-hero",
+      "base": -0.01761028118800957,
+      "collective": -0.07970380211793208,
+      "delta": -0.06209352092992251,
+      "qualityDelta": 0,
+      "noveltyDelta": -0.029411764705882353,
+      "errorDelta": 0,
+      "latencyRatio": 3.3927145708582835
+    },
+    {
+      "id": "duplicate-orchestrator-stack",
+      "base": -0.014850924153022547,
+      "collective": -0.056618537767183785,
+      "delta": -0.04176761361416124,
+      "qualityDelta": 0,
+      "noveltyDelta": 0,
+      "errorDelta": 0,
+      "latencyRatio": 3.812458886988554
+    },
+    {
+      "id": "collective-brain-memory-duplication",
+      "base": -0.0037347114219842916,
+      "collective": -0.025162166386620298,
+      "delta": -0.021427454964636005,
+      "qualityDelta": 0,
+      "noveltyDelta": 0,
+      "errorDelta": 0,
+      "latencyRatio": 6.737379021710699
+    },
+    {
+      "id": "collective-brain-prompt-injection-memory",
+      "base": -0.018413700128951587,
+      "collective": -0.10000000000000002,
+      "delta": -0.08158629987104843,
+      "qualityDelta": 0,
+      "noveltyDelta": 0,
+      "errorDelta": 0,
+      "latencyRatio": 5.430739031248342
+    }
+  ],
+  "wins": 0,
+  "winRate": 0,
+  "medianDelta": -0.0562658747215818,
+  "qualityNonWorseRate": 0.8333333333333334,
+  "noveltyNonWorseRate": 0.6666666666666666,
+  "errorsBase": 0,
+  "errorsCollective": 0,
+  "medianLatencyRatio": 4.446385830540929,
+  "hypothesisPass": false,
+  "executionPass": true,
+  "pass": false
+}

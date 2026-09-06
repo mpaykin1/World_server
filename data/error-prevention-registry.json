@@ -2,7 +2,22 @@
   "schemaVersion": "1.0.0",
   "system": "ERROR_RECURRENCE_PROTECTION",
   "policy": "confirmed-fix-becomes-permanent-regression-rule",
-  "events": [],
+  "events": [
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "WQ-CAUSAL-MISSING-EVIDENCE-PROMOTION",
+      "at": "2026-09-05T20:02:00.447Z",
+      "lessonHash": "bdb2039bff801d3df6d541b7af1eb5272392a5ba23b209252fa2718351651c11",
+      "supersedes": null
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "COLLECTIVE-BRAIN-PROTECTED-FIXES-NOT-IN-LESSON-STORE",
+      "at": "2026-09-05T20:12:04.811Z",
+      "lessonHash": "389a7c49ebdbb935edc5ae088547f1ce591e1c94dd8b0819200da205ca8ca2fd",
+      "supersedes": null
+    }
+  ],
   "knownErrors": [
     {
       "id": "controls-inverted-camera-relative",
@@ -485,6 +500,63 @@
         "targeted tests may run first",
         "full release:gate mandatory before merge/production claim",
         "record exact failing step instead of skipping"
+      ]
+    },
+    {
+      "id": "WQ-CAUSAL-MISSING-EVIDENCE-PROMOTION",
+      "category": "collective-brain-learned",
+      "severity": "major",
+      "status": "protected",
+      "history": [],
+      "rootCause": "world-quality-causality compare() skipped non-finite or absent required metrics, leaving regressions empty and allowing winner=true with incomplete counterfactual evidence",
+      "solution": "Fail closed: enumerate required metrics, expose missingMetrics/evidenceComplete, and require complete evidence before winner=true",
+      "protection": [
+        "test/world-quality-causality-integrity.test.js",
+        "npm run check"
+      ],
+      "evidence": [
+        "WORLD_QUALITY_CAUSALITY_REPORT.json"
+      ],
+      "confirmedAt": "2026-09-05T20:02:00.445Z",
+      "lessonHash": "bdb2039bff801d3df6d541b7af1eb5272392a5ba23b209252fa2718351651c11",
+      "supersedes": null
+    },
+    {
+      "id": "COLLECTIVE-BRAIN-PROTECTED-FIXES-NOT-IN-LESSON-STORE",
+      "category": "collective-brain-learned",
+      "severity": "major",
+      "status": "protected",
+      "history": [],
+      "rootCause": "World_server persisted protected root causes in error-prevention-registry and checkpoint memory, but collective-brain cycle never synchronized them into AgentMemory lessons; smartSearch therefore returned generic checkpoints and supplied irrelevant context during RUN_041",
+      "solution": "Reuse AgentMemory lesson store: cycle syncs changed protected fixes as deduplicated lessons; recall queries project-scoped lessons first and falls back to smartSearch only when no lesson matches",
+      "protection": [
+        "test/collective-brain-lessons.test.js",
+        "npm run collective-brain:cycle",
+        "npm run check"
+      ],
+      "evidence": [
+        "COLLECTIVE_BRAIN_REPORT.json",
+        "COLLECTIVE_BRAIN_CONTEXT.md"
+      ],
+      "confirmedAt": "2026-09-05T20:12:04.809Z",
+      "lessonHash": "389a7c49ebdbb935edc5ae088547f1ce591e1c94dd8b0819200da205ca8ca2fd",
+      "supersedes": null
+    },
+    {
+      "id": "H4-SPECIALIST-PROMOTION-CALIBRATION-OVERFIT",
+      "symptom": "specialist routing looks superior on calibration but loses quality/novelty and costs more on independent holdout",
+      "rootCause": "specialist promotion used too few calibration tasks and mean-only ranking, allowing category overfit; RUN_043 and RUN_044 routed ops work to qwen2.5 despite qwen3-fast winning independent holdout",
+      "solution": "fail safe to global best single unless candidate has at least 3 independent paired calibration tasks and beats global best on every task by >=0.03 multiobjective utility; preserve failed holdout evidence",
+      "protection": [
+        "test/science-h4-specialist-promotion-integrity.test.cjs",
+        "RUN_043_H4_REAL_MULTI_MODEL_ROUTING_AB.json",
+        "RUN_044_H4_EVIDENCE_GATED_SPECIALIST_ROUTING.json",
+        "RUN_045_H4_SPECIALIST_CALIBRATION_GATE.json",
+        "never claim full H4 superiority from calibration-only routing",
+        "scripts/science-h4-specialist-holdout-v2.cjs",
+        "RUN_046_H4_SPECIALIST_HOLDOUT_V2.json",
+        "test/science-h4-specialist-promotion-integrity.test.js",
+        "scientific holdouts must fail closed on per-call timeout"
       ]
     }
   ],
