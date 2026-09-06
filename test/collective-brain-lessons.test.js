@@ -27,3 +27,9 @@ test('lesson sync is idempotent and re-syncs only changed evidence',async()=>{
   const c=await syncProtectedLessons(root,state,{saveLessonFn});assert.equal(c.synced,1);assert.equal(saved.length,2);
   fs.rmSync(root,{recursive:true,force:true});
 });
+test('lesson recall drops clearly weak distractors',()=>{
+  const {selectRelevantLessons}=require('../lib/collective-brain');
+  const got=selectRelevantLessons([{id:'exact',score:.92},{id:'near',score:.70},{id:'noise',score:.39}],8);
+  assert.deepEqual(got.map(x=>x.id),['exact','near']);
+  assert.deepEqual(selectRelevantLessons([{id:'weak',score:.3}],8),[]);
+});

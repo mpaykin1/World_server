@@ -70,7 +70,6 @@ Per `DESKTOP_AI_INSTRUCTIONS.md`: real agentmemory save→recall→restart persi
 
 > New Desktop AI session: run `npm run desktop-ai:resume` before editing. Git reality overrides stale recovery metadata.
 <!-- WORLD_SERVER_SESSION_RECOVERY_V1_END -->
-
 <!-- WORLD_SERVER_DESKTOP_CLEANUP_20260905_START -->
 ## ADDITIONAL ACTIVE TASK — Desktop consolidation / Zero-Junk (started 2026-09-05)
 

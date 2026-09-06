@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
@@ -17,7 +17,20 @@ function atomicWrite(file, content) {
   ensureDir(path.dirname(file));
   const tmp = `${file}.tmp-${process.pid}-${Date.now()}`;
   fs.writeFileSync(tmp, content);
-  fs.renameSync(tmp, file);
+  const retryable = new Set(['EPERM', 'EBUSY', 'EACCES']);
+  for (let attempt = 0; ; attempt += 1) {
+    try {
+      fs.renameSync(tmp, file);
+      return;
+    } catch (error) {
+      if (!retryable.has(error && error.code) || attempt >= 7) {
+        try { if (fs.existsSync(tmp)) fs.unlinkSync(tmp); } catch {}
+        throw error;
+      }
+      const delayMs = Math.min(25 * (2 ** attempt), 400);
+      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, delayMs);
+    }
+  }
 }
 function writeJSON(file, value) { atomicWrite(file, `${JSON.stringify(value, null, 2)}\n`); }
 function run(cmd, args = [], options = {}) {
@@ -63,3 +76,4 @@ function nowIso() { return new Date().toISOString(); }
 function safeLabel(s = 'snapshot') { return String(s).toLowerCase().replace(/[^a-z0-9._-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80) || 'snapshot'; }
 
 module.exports = { ROOT, STATE_DIR, SKIP_DIRS, norm, ensureDir, shaBuffer, shaFile, readJSON, writeJSON, atomicWrite, run, git, gitBranch, gitCommit, gitStatusFiles, projectFiles, commandExists, nowIso, safeLabel };
+
