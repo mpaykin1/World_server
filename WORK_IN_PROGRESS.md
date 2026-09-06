@@ -363,3 +363,12 @@ PR #38 exposed nine Linux-only failures because the reused AI queue stack embedd
 
 ### Portability regression protection
 `test/world-server-paths.test.js` verifies that source root is the active checkout, `durable-job-queue.cjs` exists inside it, and the canonical main worktree is discoverable. Machine-specific World_server path literals were removed from runtime/test code so Linux CI cannot regress to a Windows path again.
+
+## 2026-09-06 dependency-security readiness closure
+- Owner: ChatGPT automation; branch `ai/chatgpt/dependency-security`; isolated off-Desktop worktree.
+- Root cause: latest `@lhci/cli@0.15.1` still resolves vulnerable Lighthouse/Puppeteer/qs/tmp/uuid transitive versions; `extract-zip@2.0.1` has no fixed npm release.
+- Fix: keep LHCI API surface but override its security-sensitive transitive graph to current compatible fixed versions: Lighthouse 13.4.1, puppeteer-core 25.10.0, @puppeteer/browsers 3.2.2, qs 6.16.0, tmp 0.2.7, uuid 11.1.1. This also removes extract-zip entirely because browsers 3.x uses modern-tar.
+- Evidence: `npm audit --json` reports 0 vulnerabilities after install; dependency tree confirms all overrides and no extract-zip.
+- Regression: `test/dependency-security-lock.test.js` fails if critical packages fall below the remediated floors or extract-zip returns.
+- Local full `npm run check` reached 461 PASS / 2 resource-scheduler failures caused by live system free RAM 13.3% while many parallel AIs were active; failures are resource-gate behavior, not dependency assertions. CI on clean GitHub runner is authoritative for full suite.
+- Local LHCI healthcheck passed with the upgraded graph; collection could not start only because port 3100 was already occupied by another active agent/server. Do not kill that process; GitHub CI will verify an isolated run.
