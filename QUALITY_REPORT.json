@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-29T05:47:27.705Z",
+  "generatedAt": "2026-09-06T10:30:12.050Z",
   "overallPercent": 98,
   "releaseEligible": false,
   "metrics": {
@@ -152,7 +152,7 @@
     "Unity MCP": 0,
     "OpenGameEval/OpenGame": 10
   },
-  "blockerCount": 15,
+  "blockerCount": 21,
   "blockers": [
     {
       "type": "metric",
@@ -249,12 +249,6 @@
     },
     {
       "type": "known-error",
-      "id": "catalog-auto-publishes-index-html",
-      "status": "known",
-      "category": "release"
-    },
-    {
-      "type": "known-error",
       "id": "false-green-assertion",
       "status": "known",
       "category": "tests"
@@ -264,6 +258,41 @@
       "id": "menu-obstructs-game",
       "status": "known",
       "category": "ui"
+    },
+    {
+      "type": "known-error",
+      "id": "anythingllm-ollama-tool-calling-fixed-timeout-signature",
+      "status": "superseded"
+    },
+    {
+      "type": "known-error",
+      "id": "anythingllm-router-hint-tool-name-mismatch",
+      "status": "fixed"
+    },
+    {
+      "type": "known-error",
+      "id": "ollama-think-proxy-default-request-timeout",
+      "status": "fixed"
+    },
+    {
+      "type": "known-error",
+      "id": "ollama-model-load-thrashing-under-extreme-system-pressure",
+      "status": "documented-mitigated"
+    },
+    {
+      "type": "known-error",
+      "id": "anythingllm-ollama-response-timeout-not-configured",
+      "status": "fixed"
+    },
+    {
+      "type": "known-error",
+      "id": "anythingllm-restart-resets-workspace-list-until-workspace-recreated",
+      "status": "fixed"
+    },
+    {
+      "type": "known-error",
+      "id": "anythingllm-mcphypervisor-cannot-register-any-mcp-server",
+      "status": "bypassed"
     }
   ]
 }

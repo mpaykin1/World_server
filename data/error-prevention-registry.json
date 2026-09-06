@@ -16,6 +16,36 @@
       "at": "2026-09-05T20:12:04.811Z",
       "lessonHash": "389a7c49ebdbb935edc5ae088547f1ce591e1c94dd8b0819200da205ca8ca2fd",
       "supersedes": null
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "mcp-negated-git-review-routing",
+      "at": "2026-09-06T10:28:53.538Z",
+      "evidence": "13 focused tests passed; full check 606 PASS/1 SKIP."
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "ai3d-space-jump-never-consumed",
+      "at": "2026-09-06T10:28:53.539Z",
+      "evidence": "Real desktop/mobile controls 9 PASS/1 SKIP; touch jump passed in UI run."
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "catalog-mobile-toolbar-intercepts-world-link",
+      "at": "2026-09-06T10:28:53.539Z",
+      "evidence": "Mobile tap failed before patch; desktop and mobile actual navigation 2/2 PASS after patch."
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "voxel-stream-error-frame-retry",
+      "at": "2026-09-06T10:28:53.539Z",
+      "evidence": "Both browser projects pass error-rate bounds; actual loop unit test verifies recovery and immediate next-chunk loading."
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "voxel-arrow-input-ignored",
+      "at": "2026-09-06T10:28:53.539Z",
+      "evidence": "ArrowUp failed with zero movement before patch, passed on desktop/mobile after patch."
     }
   ],
   "knownErrors": [
@@ -1135,6 +1165,79 @@
       ],
       "evidence": [
         "9/9 PASS, including misleading PASS100% commit messages that must not imply coverage."
+      ]
+    },
+    {
+      "id": "mcp-negated-git-review-routing",
+      "category": "readiness",
+      "severity": "release-blocker",
+      "status": "protected",
+      "rootCause": "Safety prohibitions mentioning commit or push selected unsupported Git capability for read-only file review.",
+      "solution": "Exclude negated clauses from action routing, preserve positive Git commands, and reject empty tools/model before transport startup.",
+      "protection": [
+        "test/mcp-intent-router.test.js",
+        "test/direct-ollama-input-validation.test.js"
+      ],
+      "evidence": [
+        "13 focused tests passed; full check 606 PASS/1 SKIP."
+      ]
+    },
+    {
+      "id": "ai3d-space-jump-never-consumed",
+      "category": "readiness",
+      "severity": "release-blocker",
+      "status": "protected",
+      "rootCause": "AI3D input recorded Space but physics never consumed a jump; camera-roll test substituted zero for absent telemetry.",
+      "solution": "Queue the press edge across animation frames, apply grounded vertical impulse, and expose actual camera roll.",
+      "protection": [
+        "e2e/golden-controls.spec.js",
+        "e2e/golden-mobile-behavior.spec.js"
+      ],
+      "evidence": [
+        "Real desktop/mobile controls 9 PASS/1 SKIP; touch jump passed in UI run."
+      ]
+    },
+    {
+      "id": "catalog-mobile-toolbar-intercepts-world-link",
+      "category": "readiness",
+      "severity": "release-blocker",
+      "status": "protected",
+      "rootCause": "Fixed catalog links and the higher toolbar occupied the same mobile top edge; href-only assertion missed blocked taps.",
+      "solution": "Place compact catalog navigation below the safe-area toolbar and require real click/tap navigation.",
+      "protection": [
+        "e2e/golden-release.spec.js"
+      ],
+      "evidence": [
+        "Mobile tap failed before patch; desktop and mobile actual navigation 2/2 PASS after patch."
+      ]
+    },
+    {
+      "id": "voxel-stream-error-frame-retry",
+      "category": "readiness",
+      "severity": "release-blocker",
+      "status": "protected",
+      "rootCause": "A failed chunk request cleared the busy flag and was retried on the next animation frame indefinitely.",
+      "solution": "Use capped exponential retry delay, preserve visible failure, and reset delay after success.",
+      "protection": [
+        "test/voxel-stream-retry.test.js",
+        "e2e/voxel-readiness.spec.js"
+      ],
+      "evidence": [
+        "Both browser projects pass error-rate bounds; actual loop unit test verifies recovery and immediate next-chunk loading."
+      ]
+    },
+    {
+      "id": "voxel-arrow-input-ignored",
+      "category": "readiness",
+      "severity": "release-blocker",
+      "status": "protected",
+      "rootCause": "Keyboard handler stored Arrow keys but movement physics read only WASD.",
+      "solution": "Map Arrow keys through the existing canonical camera-relative movement calculation.",
+      "protection": [
+        "e2e/voxel-readiness.spec.js"
+      ],
+      "evidence": [
+        "ArrowUp failed with zero movement before patch, passed on desktop/mobile after patch."
       ]
     }
   ],

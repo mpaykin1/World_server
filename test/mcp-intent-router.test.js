@@ -60,3 +60,16 @@ test('an unrelated/unknown task falls back to the minimal read-only default, not
   assert.equal(r.capabilityClass, 'unknown');
   assert.ok(r.allowedTools.length <= 4);
 });
+
+test('read-only review safety prohibitions do not request Git or write capabilities',()=>{
+ for(const prompt of ['READ-ONLY review. Inspect files lib/mcp-intent-router.js. Do not edit files, commit, push, or deploy.', 'Read package.json; never commit or merge.', 'Прочитай файл package.json. Не изменяй файлы и не выполняй git commit.']){
+  const r=route(prompt);assert.equal(r.capabilityClass,'filesystem-read',prompt);assert.ok(!r.allowedTools.includes('write_file'));
+ }
+});
+test('positive Git commands retain precedence outside negated clauses',()=>{
+ for(const prompt of ['Read package.json then run git status.', 'Do not push, but run git status.', 'READ-ONLY review: run git diff.'])assert.equal(classifyIntent(prompt),'git');
+});
+
+test('file extensions inside safety clauses do not expose forbidden Git keywords',()=>{
+ assert.equal(classifyIntent('Read package.json. Do not edit server.js, commit, or push.'),'filesystem-read');
+});

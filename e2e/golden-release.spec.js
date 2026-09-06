@@ -15,7 +15,7 @@ test.describe('World Server Golden Standard', () => {
     expect(ids).not.toContain('world-sharabass');
   });
 
-  test('catalog has direct tap/click world selection; walking to a portal is never required', async ({ page }) => {
+  test('catalog has direct tap/click world selection; walking to a portal is never required', async ({ page, isMobile }) => {
     await page.goto('/apps/catalog/', {waitUntil:'domcontentloaded'});
     const menu = page.locator('#goldenWorldMenu');
     await expect(menu).toBeVisible();
@@ -23,6 +23,8 @@ test.describe('World Server Golden Standard', () => {
     expect(await links.count()).toBeGreaterThan(0);
     const href = await links.first().getAttribute('href');
     expect(href).toMatch(/^\/apps\/[^/]+\/$/);
+    if(isMobile) await links.first().tap(); else await links.first().click();
+    await expect(page).toHaveURL(new RegExp(href.replaceAll('/', '\\/')+'$'));
   });
 
   test('canonical basis always maps right to screen-right', async ({ page }) => {
