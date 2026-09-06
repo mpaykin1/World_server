@@ -66,3 +66,7 @@ COLLECTIVE_BRAIN_BENCHMARK.json
 godot/**/.godot/
 GODOT_BUILD/
 GODOT_NATIVE_BUILD_REPORT.json
+
+# World fleet audit runtime evidence — regenerated automatically
+artifacts/world-fleet-audit/
+WORLD_FLEET_AUDIT.json
