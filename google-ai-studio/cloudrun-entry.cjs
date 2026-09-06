@@ -6,6 +6,7 @@
  * sandbox-only deterministic fault injection without duplicating app state.
  */
 
+const fs = require('fs');
 const http = require('http');
 const https = require('https');
 const { spawn } = require('child_process');
@@ -138,14 +139,37 @@ async function waitForChild() {
   }
   return false;
 }
+// The container's real memory pressure comes from the spawned `server.js`
+// child (it does the actual rendering/asset/DB work); this wrapper is a
+// thin proxy. Cloud Run's OOM killer acts on total container RSS, so a
+// budget that only ever measures the wrapper's own low RSS would silently
+// stay "ok" while the child alone approaches the container memory limit.
+// /proc/<pid>/status is Linux-only (fine — Cloud Run containers are Linux);
+// falls back to null (not 0) on any other platform or if the child already
+// exited, so callers can tell "known small" apart from "unmeasured".
+function childRssMb() {
+  if (!child.pid) return null;
+  try {
+    const status = fs.readFileSync(`/proc/${child.pid}/status`, 'utf8');
+    const match = status.match(/^VmRSS:\s+(\d+)\s*kB/m);
+    return match ? Math.round(Number(match[1]) / 1024) : null;
+  } catch {
+    return null;
+  }
+}
 function runtimeBudget() {
   const memory = process.memoryUsage();
-  const rssMb = Math.round(memory.rss / 1024 / 1024);
+  const wrapperRssMb = Math.round(memory.rss / 1024 / 1024);
   const heapMb = Math.round(memory.heapUsed / 1024 / 1024);
+  const childMb = childRssMb();
+  const rssMb = wrapperRssMb + (childMb || 0);
   return {
     ok: rssMb <= maxRssMb && heapMb <= maxHeapMb,
     rssMb,
     heapMb,
+    wrapperRssMb,
+    childRssMb: childMb,
+    childMemorySource: childMb === null ? 'unavailable' : 'proc',
     limits: { maxRssMb, maxHeapMb }
   };
 }
