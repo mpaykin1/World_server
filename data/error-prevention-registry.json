@@ -918,6 +918,23 @@
         "SCIENCE_RUN_067_H2.json"
       ],
       "confirmedAt": "2026-09-06T09:06:00.290117Z"
+    },
+    {
+      "id": "SCIENCE-HARNESS-EXPENSIVE-RUN-MUST-BE-CACHED",
+      "category": "science-infrastructure",
+      "severity": "major",
+      "status": "protected",
+      "history": [],
+      "symptom": "RUN_068 regression suite recomputed the full multi-seed experiment once per assertion, causing multi-minute tests and apparent hangs",
+      "rootCause": "test assertions called run() independently instead of sharing one immutable experiment result inside the test process",
+      "solution": "compute the expensive preregistered experiment once per test process and assert all invariants against that cached result",
+      "protection": [
+        "test/science-h2-local-repair-rule-selection.test.cjs"
+      ],
+      "evidence": [
+        "SCIENCE_RUN_068_H2.json"
+      ],
+      "confirmedAt": "2026-09-06T10:07:37.779Z"
     }
   ],
   "confirmationProtocol": {

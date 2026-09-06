@@ -1,0 +1,11 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs');
+const {run,repair}=require('../scripts/science-h2-local-repair-rule-selection.cjs');
+const {grow}=require('../scripts/science-h2-temporal-organized-build-growth.cjs');
+const {damage,lcc}=require('../scripts/science-h2-organized-growth-damage-robustness.cjs');
+const RESULT=run();
+test('RUN_068 training and holdout seeds are disjoint',()=>{const r=RESULT;for(const s of r.preregistration.trainingSeeds)assert.equal(r.preregistration.holdoutSeeds.includes(s),false)});
+test('RUN_068 selected repair is deterministic and budget-bounded',()=>{const s=grow(68113,256).at(-1),d=damage(s.foundations,.2,1),r=RESULT,a=repair(d,51,9,r.selected),b=repair(d,51,9,r.selected);assert.ok(a.added<=51);assert.deepEqual(a.foundations.map(x=>[x.position.x,x.position.z]),b.foundations.map(x=>[x.position.x,x.position.z]))});
+test('RUN_068 selected repair never lowers LCC on holdout',()=>{const r=RESULT;for(const x of r.rows)assert.ok(x.repairedLcc>=x.damagedLcc)});
+test('RUN_068 preserves preregistered scientific outcome without retuning',()=>{const r=RESULT;assert.equal(r.rows.length,6);assert.ok(typeof r.pass==='boolean');assert.equal(r.selected,r.ranking[0].rule)});
+test('RUN_068 harness has no UTF-8 BOM',()=>{const b=fs.readFileSync(require.resolve('../scripts/science-h2-local-repair-rule-selection.cjs'));assert.notDeepEqual([...b.subarray(0,3)],[0xef,0xbb,0xbf])});

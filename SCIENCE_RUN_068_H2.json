@@ -1,0 +1,349 @@
+{
+  "experiment": "RUN_068_H2_LOCAL_REPAIR_RULE_SELECTION",
+  "source": "RUN_062 growth + lib/game-rules.js::snapBuilding/validateBuild on every repair placement",
+  "subhypothesis": "A repair policy selected only from simple local occupancy features on training worlds can generalize to unseen damaged worlds and recover high connectivity without a global blueprint.",
+  "preregistration": {
+    "trainingSeeds": [
+      68001,
+      68003,
+      68011,
+      68023,
+      68041,
+      68059
+    ],
+    "holdoutSeeds": [
+      68113,
+      68141,
+      68147,
+      68161,
+      68171,
+      68207
+    ],
+    "damageFraction": 0.2,
+    "candidateRules": [
+      "n2",
+      "opposite",
+      "ray2",
+      "ray3"
+    ],
+    "selection": "highest mean repaired LCC on training; tie by mean gain then rule name",
+    "control": "matched-density RUN_062 random control receives the selected local rule and identical damage/budget",
+    "confirm": "on blind holdout >=5/6 repaired structured LCC>=0.70; >=5/6 gain>=0.30; >=5/6 control LCC<=0.20; >=5/6 structured/control ratio>=4; repair used in 6/6",
+    "refute": "any confirmation count fails; preserve the result; never reselect using holdout"
+  },
+  "ranking": [
+    {
+      "rule": "ray2",
+      "meanLcc": 0.7239583333333334,
+      "meanGain": 0.4215193089430895,
+      "minLcc": 0.5546875
+    },
+    {
+      "rule": "ray3",
+      "meanLcc": 0.7239583333333334,
+      "meanGain": 0.4215193089430895,
+      "minLcc": 0.5546875
+    },
+    {
+      "rule": "opposite",
+      "meanLcc": 0.5963541666666666,
+      "meanGain": 0.2939151422764228,
+      "minLcc": 0.4296875
+    },
+    {
+      "rule": "n2",
+      "meanLcc": 0.5729166666666666,
+      "meanGain": 0.2704776422764228,
+      "minLcc": 0.4296875
+    }
+  ],
+  "selected": "ray2",
+  "trainRows": [
+    {
+      "seed": 68001,
+      "rule": "n2",
+      "control": false,
+      "damagedLcc": 0.2682926829268293,
+      "repairedLcc": 0.578125,
+      "gain": 0.3098323170731707,
+      "added": 51
+    },
+    {
+      "seed": 68003,
+      "rule": "n2",
+      "control": false,
+      "damagedLcc": 0.36097560975609755,
+      "repairedLcc": 0.4296875,
+      "gain": 0.06871189024390245,
+      "added": 51
+    },
+    {
+      "seed": 68011,
+      "rule": "n2",
+      "control": false,
+      "damagedLcc": 0.2048780487804878,
+      "repairedLcc": 0.89453125,
+      "gain": 0.6896532012195122,
+      "added": 51
+    },
+    {
+      "seed": 68023,
+      "rule": "n2",
+      "control": false,
+      "damagedLcc": 0.2634146341463415,
+      "repairedLcc": 0.46875,
+      "gain": 0.20533536585365852,
+      "added": 51
+    },
+    {
+      "seed": 68041,
+      "rule": "n2",
+      "control": false,
+      "damagedLcc": 0.47804878048780486,
+      "repairedLcc": 0.4765625,
+      "gain": -0.0014862804878048586,
+      "added": 51
+    },
+    {
+      "seed": 68059,
+      "rule": "n2",
+      "control": false,
+      "damagedLcc": 0.23902439024390243,
+      "repairedLcc": 0.58984375,
+      "gain": 0.35081935975609757,
+      "added": 51
+    },
+    {
+      "seed": 68001,
+      "rule": "opposite",
+      "control": false,
+      "damagedLcc": 0.2682926829268293,
+      "repairedLcc": 0.578125,
+      "gain": 0.3098323170731707,
+      "added": 51
+    },
+    {
+      "seed": 68003,
+      "rule": "opposite",
+      "control": false,
+      "damagedLcc": 0.36097560975609755,
+      "repairedLcc": 0.4296875,
+      "gain": 0.06871189024390245,
+      "added": 51
+    },
+    {
+      "seed": 68011,
+      "rule": "opposite",
+      "control": false,
+      "damagedLcc": 0.2048780487804878,
+      "repairedLcc": 0.89453125,
+      "gain": 0.6896532012195122,
+      "added": 51
+    },
+    {
+      "seed": 68023,
+      "rule": "opposite",
+      "control": false,
+      "damagedLcc": 0.2634146341463415,
+      "repairedLcc": 0.46875,
+      "gain": 0.20533536585365852,
+      "added": 51
+    },
+    {
+      "seed": 68041,
+      "rule": "opposite",
+      "control": false,
+      "damagedLcc": 0.47804878048780486,
+      "repairedLcc": 0.5703125,
+      "gain": 0.09226371951219514,
+      "added": 51
+    },
+    {
+      "seed": 68059,
+      "rule": "opposite",
+      "control": false,
+      "damagedLcc": 0.23902439024390243,
+      "repairedLcc": 0.63671875,
+      "gain": 0.39769435975609757,
+      "added": 51
+    },
+    {
+      "seed": 68001,
+      "rule": "ray2",
+      "control": false,
+      "damagedLcc": 0.2682926829268293,
+      "repairedLcc": 0.5859375,
+      "gain": 0.3176448170731707,
+      "added": 51
+    },
+    {
+      "seed": 68003,
+      "rule": "ray2",
+      "control": false,
+      "damagedLcc": 0.36097560975609755,
+      "repairedLcc": 0.84375,
+      "gain": 0.48277439024390245,
+      "added": 51
+    },
+    {
+      "seed": 68011,
+      "rule": "ray2",
+      "control": false,
+      "damagedLcc": 0.2048780487804878,
+      "repairedLcc": 0.8046875,
+      "gain": 0.5998094512195122,
+      "added": 51
+    },
+    {
+      "seed": 68023,
+      "rule": "ray2",
+      "control": false,
+      "damagedLcc": 0.2634146341463415,
+      "repairedLcc": 0.5546875,
+      "gain": 0.2912728658536585,
+      "added": 51
+    },
+    {
+      "seed": 68041,
+      "rule": "ray2",
+      "control": false,
+      "damagedLcc": 0.47804878048780486,
+      "repairedLcc": 0.91796875,
+      "gain": 0.43991996951219514,
+      "added": 51
+    },
+    {
+      "seed": 68059,
+      "rule": "ray2",
+      "control": false,
+      "damagedLcc": 0.23902439024390243,
+      "repairedLcc": 0.63671875,
+      "gain": 0.39769435975609757,
+      "added": 51
+    },
+    {
+      "seed": 68001,
+      "rule": "ray3",
+      "control": false,
+      "damagedLcc": 0.2682926829268293,
+      "repairedLcc": 0.5859375,
+      "gain": 0.3176448170731707,
+      "added": 51
+    },
+    {
+      "seed": 68003,
+      "rule": "ray3",
+      "control": false,
+      "damagedLcc": 0.36097560975609755,
+      "repairedLcc": 0.84375,
+      "gain": 0.48277439024390245,
+      "added": 51
+    },
+    {
+      "seed": 68011,
+      "rule": "ray3",
+      "control": false,
+      "damagedLcc": 0.2048780487804878,
+      "repairedLcc": 0.8046875,
+      "gain": 0.5998094512195122,
+      "added": 51
+    },
+    {
+      "seed": 68023,
+      "rule": "ray3",
+      "control": false,
+      "damagedLcc": 0.2634146341463415,
+      "repairedLcc": 0.5546875,
+      "gain": 0.2912728658536585,
+      "added": 51
+    },
+    {
+      "seed": 68041,
+      "rule": "ray3",
+      "control": false,
+      "damagedLcc": 0.47804878048780486,
+      "repairedLcc": 0.91796875,
+      "gain": 0.43991996951219514,
+      "added": 51
+    },
+    {
+      "seed": 68059,
+      "rule": "ray3",
+      "control": false,
+      "damagedLcc": 0.23902439024390243,
+      "repairedLcc": 0.63671875,
+      "gain": 0.39769435975609757,
+      "added": 51
+    }
+  ],
+  "rows": [
+    {
+      "seed": 68113,
+      "selected": "ray2",
+      "damagedLcc": 0.3073170731707317,
+      "repairedLcc": 0.45703125,
+      "gain": 0.1497141768292683,
+      "added": 51,
+      "controlLcc": 0.125,
+      "ratio": 3.65625
+    },
+    {
+      "seed": 68141,
+      "selected": "ray2",
+      "damagedLcc": 0.2097560975609756,
+      "repairedLcc": 0.76171875,
+      "gain": 0.5519626524390244,
+      "added": 51,
+      "controlLcc": 0.12890625,
+      "ratio": 5.909090909090909
+    },
+    {
+      "seed": 68147,
+      "selected": "ray2",
+      "damagedLcc": 0.15121951219512195,
+      "repairedLcc": 0.9765625,
+      "gain": 0.825342987804878,
+      "added": 51,
+      "controlLcc": 0.09765625,
+      "ratio": 10
+    },
+    {
+      "seed": 68161,
+      "selected": "ray2",
+      "damagedLcc": 0.14146341463414633,
+      "repairedLcc": 0.4921875,
+      "gain": 0.35072408536585364,
+      "added": 51,
+      "controlLcc": 0.0625,
+      "ratio": 7.875
+    },
+    {
+      "seed": 68171,
+      "selected": "ray2",
+      "damagedLcc": 0.2975609756097561,
+      "repairedLcc": 0.97265625,
+      "gain": 0.6750952743902439,
+      "added": 51,
+      "controlLcc": 0.140625,
+      "ratio": 6.916666666666667
+    },
+    {
+      "seed": 68207,
+      "selected": "ray2",
+      "damagedLcc": 0.34146341463414637,
+      "repairedLcc": 0.453125,
+      "gain": 0.11166158536585363,
+      "added": 51,
+      "controlLcc": 0.140625,
+      "ratio": 3.2222222222222223
+    }
+  ],
+  "successes": {
+    "recovered": 3,
+    "gain": 4,
+    "controlLow": 6,
+    "separated": 4,
+    "repairUsed": 6
+  },
+  "pass": false
+}
