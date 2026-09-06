@@ -1,6 +1,12 @@
 'use strict';
 const test=require('node:test');const assert=require('node:assert/strict');const fs=require('fs'),path=require('path'),os=require('os');
 const cb=require('../lib/collective-brain');
+test('protected lessons tolerate legacy scalar evidence without losing it',()=>{
+ const p=cb.protectedLessonPayload({id:'legacy',protection:'documented guard',evidence:'observed reproduction'});
+ assert.match(p.context,/documented guard/);assert.match(p.context,/observed reproduction/);
+ assert.doesNotThrow(()=>cb.protectedLessonPayload({id:'invalid',protection:{},evidence:42}));
+ const a=cb.protectedLessonPayload({id:'array',evidence:['first','second']});assert.match(a.context,/first; second/);
+});
 
 function fixture(){const root=fs.mkdtempSync(path.join(os.tmpdir(),'cb-v2-'));fs.mkdirSync(path.join(root,'data','collective-brain'),{recursive:true});fs.mkdirSync(path.join(root,'lib','collective-brain'),{recursive:true});fs.mkdirSync(path.join(root,'scripts'),{recursive:true});fs.mkdirSync(path.join(root,'test'),{recursive:true});
  const scripts={};for(const s of ['check','cycle','recall','export','test','protect-fix','security','doctor','route','benchmark','replay','full','opa'])scripts[`collective-brain:${s}`]='x';scripts['release:gate']='x collective-brain:check collective-brain:security';

@@ -61,6 +61,24 @@ COLLECTIVE_BRAIN_ROUTE.json
 COLLECTIVE_BRAIN_REPLAY.json
 COLLECTIVE_BRAIN_BENCHMARK.json
 .patch-backups/
+
+# local verified toolchain cache (regenerable; never commit binaries)
+.world-server/tools/
+
+# Desktop consolidation 2026-09-06: user-acknowledged local backup copies
+# (node_modules already manually removed from these by the user; kept as
+# backups, not part of the repo - see WORK_IN_PROGRESS.md history) and a
+# local tool-call output cache. Never delete these automatically.
+/World_server_openhuman/
+/World_server_procedural/
+/artifacts/
+
+# Master coordinator / AnythingLLM task router - local, machine-specific
+# runtime learning state (regenerates on first real dispatch, not source)
+/data/model-suitability-ledger.json
+/data/tool-cost-ledger.json
+/data/mcp-router-profile.json
+
 # Google AI Studio two-slot local state
 .world/google-ai-studio/slots.local.json
 .world/google-ai-studio/reports/

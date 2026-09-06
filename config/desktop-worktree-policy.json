@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "description": "Limits and retention for Desktop/worktree/session hygiene (Zero-Junk policy). Mirrors config/cas-gc.config.json style. Any *_ENV override documented in .env.example may take precedence in the checker script.",
+  "worktrees": {
+    "maxActiveWorktrees": 12,
+    "warnActiveWorktrees": 8,
+    "worktreeTtlDays": 7,
+    "requireMetadataFields": ["owner", "purpose", "branch", "createdAt", "lastUsedAt", "ttlDays"]
+  },
+  "temp": {
+    "tempTtlDays": 2,
+    "cacheTtlDays": 7,
+    "orphanTmpFilePattern": "\\.tmp-\\d+-\\d+$",
+    "maxTempGB": 2
+  },
+  "logs": {
+    "logRetentionDays": 14,
+    "maxSingleLogMB": 50
+  },
+  "testOutput": {
+    "testOutputRetentionDays": 7
+  },
+  "archives": {
+    "archiveRetentionDays": 180,
+    "namingPattern": "WORLD_SERVER_ARCHIVE_YYYYMMDD_<purpose>.zip"
+  },
+  "sessionCleanup": {
+    "root": "SESSION_SAFE_TO_DELETE",
+    "sessionCleanupRetentionDays": 30,
+    "collapseAfterUserDeletionDays": 3
+  },
+  "physicalCopies": {
+    "forbiddenNamePatterns": [
+      "World_server_copy",
+      "World_server_backup",
+      "World_server_new",
+      "World_server_fixed",
+      "World_server_final",
+      "World_server_final2"
+    ],
+    "maxPhysicalCopiesOutsideGit": 0
+  },
+  "cas": {
+    "note": "Authoritative CAS limits live in config/cas-gc.config.json / .env (CAS_GC_*). Not duplicated here.",
+    "warnGB": 5,
+    "autoGB": 10,
+    "emergencyGB": 20
+  },
+  "audit": {
+    "trackFields": ["lastCleanupAt", "reclaimedBytes", "cleanupReason", "agent", "sessionId", "dryRun", "verificationStatus"],
+    "auditLogPath": "state/session-recovery/worktree-audit-log.jsonl"
+  }
+}

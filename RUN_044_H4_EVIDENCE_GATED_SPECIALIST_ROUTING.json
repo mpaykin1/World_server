@@ -1,0 +1,178 @@
+{
+  "experiment": "RUN_044_H4_EVIDENCE_GATED_SPECIALIST_ROUTING",
+  "bestSingle": "qwen3-fast:1.7b",
+  "specialists": {
+    "godot": "qwen3-fast:1.7b",
+    "memory": "qwen3-fast:1.7b",
+    "ops": "qwen2.5:3b-instruct"
+  },
+  "stats": [
+    {
+      "model": "qwen3-fast:1.7b",
+      "u": 0.3902267586198162
+    },
+    {
+      "model": "qwen2.5:3b-instruct",
+      "u": 0.2866506937667017
+    }
+  ],
+  "calibration": [
+    [
+      "godot-ai-node-create-parent-param-silently-ignored",
+      "godot"
+    ],
+    [
+      "godot-hero-built-at-world-voxel-scale",
+      "godot"
+    ],
+    [
+      "collective-brain-secret-leak",
+      "memory"
+    ],
+    [
+      "collective-brain-prompt-injection-memory",
+      "memory"
+    ],
+    [
+      "release-gate-skipped-as-heavy",
+      "ops"
+    ],
+    [
+      "collective-brain-dirty-main-bootstrap",
+      "ops"
+    ]
+  ],
+  "holdout": [
+    [
+      "godot-world-parented-under-hero",
+      "godot"
+    ],
+    [
+      "threejs-object3d-subclass-pivot-property-corrupts-matrix",
+      "godot"
+    ],
+    [
+      "collective-brain-event-corruption",
+      "memory"
+    ],
+    [
+      "openhuman-embedding-dimension-mismatch",
+      "memory"
+    ],
+    [
+      "openhuman-config-overwrite",
+      "ops"
+    ],
+    [
+      "desktop-ai-system-installer-boundary",
+      "ops"
+    ]
+  ],
+  "rows": [
+    {
+      "id": "godot-world-parented-under-hero",
+      "cat": "godot",
+      "arm": "single",
+      "model": "qwen3-fast:1.7b",
+      "ms": 5345,
+      "quality": 0.2222222222222222,
+      "novelty": 0.35294117647058826,
+      "errors": 0
+    },
+    {
+      "id": "threejs-object3d-subclass-pivot-property-corrupts-matrix",
+      "cat": "godot",
+      "arm": "single",
+      "model": "qwen3-fast:1.7b",
+      "ms": 2730,
+      "quality": 0.10204081632653061,
+      "novelty": 0.2222222222222222,
+      "errors": 0
+    },
+    {
+      "id": "collective-brain-event-corruption",
+      "cat": "memory",
+      "arm": "single",
+      "model": "qwen3-fast:1.7b",
+      "ms": 906,
+      "quality": 0.4,
+      "novelty": 0.1,
+      "errors": 0
+    },
+    {
+      "id": "openhuman-embedding-dimension-mismatch",
+      "cat": "memory",
+      "arm": "single",
+      "model": "qwen3-fast:1.7b",
+      "ms": 1895,
+      "quality": 0.1,
+      "novelty": 1,
+      "errors": 0
+    },
+    {
+      "id": "openhuman-config-overwrite",
+      "cat": "ops",
+      "arm": "single",
+      "model": "qwen3-fast:1.7b",
+      "ms": 1876,
+      "quality": 1,
+      "novelty": 0.5,
+      "errors": 0
+    },
+    {
+      "id": "openhuman-config-overwrite",
+      "cat": "ops",
+      "arm": "collective",
+      "model": "qwen2.5:3b-instruct",
+      "ms": 9211,
+      "quality": 0.5,
+      "novelty": 0.25,
+      "errors": 0
+    },
+    {
+      "id": "desktop-ai-system-installer-boundary",
+      "cat": "ops",
+      "arm": "single",
+      "model": "qwen3-fast:1.7b",
+      "ms": 2907,
+      "quality": 1,
+      "novelty": 0.7142857142857143,
+      "errors": 0
+    },
+    {
+      "id": "desktop-ai-system-installer-boundary",
+      "cat": "ops",
+      "arm": "collective",
+      "model": "qwen2.5:3b-instruct",
+      "ms": 8989,
+      "quality": 0.5,
+      "novelty": 0.42857142857142855,
+      "errors": 0
+    }
+  ],
+  "bestFixed": {
+    "quality": 0.4707105064247921,
+    "novelty": 0.48157485216308743,
+    "errors": 0,
+    "meanMs": 2609.8333333333335,
+    "utility": 0.31275055761095016
+  },
+  "collective": {
+    "quality": 0.3040438397581255,
+    "novelty": 0.39228913787737313,
+    "errors": 0,
+    "meanMs": 4846,
+    "utility": 0.18394961567299814
+  },
+  "delta": {
+    "quality": -0.16666666666666663,
+    "novelty": -0.0892857142857143,
+    "errors": 0,
+    "costRatio": 1.8568235519509546,
+    "utility": -0.12880094193795202
+  },
+  "promotionRule": ">=2 calibration tasks/category AND specialist calibration utility >= global-best +0.03; otherwise fail-safe to best single",
+  "superiorityCriterion": "utility +0.03; quality/novelty non-worse; errors non-higher; wall time <=1.5x",
+  "nonRegressionPass": false,
+  "superiorityPass": false
+}

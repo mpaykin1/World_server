@@ -1,0 +1,81 @@
+{
+  "experiment": "RUN_045_H4_SPECIALIST_CALIBRATION_GATE",
+  "tasks": [
+    "release-gate-skipped-as-heavy",
+    "collective-brain-dirty-main-bootstrap",
+    "agentmemory-port-conflict"
+  ],
+  "rows": [
+    {
+      "id": "release-gate-skipped-as-heavy",
+      "model": "qwen2.5:3b-instruct",
+      "ms": 16311,
+      "q": 1,
+      "n": 0.4,
+      "er": 0
+    },
+    {
+      "id": "release-gate-skipped-as-heavy",
+      "model": "qwen3-fast:1.7b",
+      "ms": 6120,
+      "q": 0.3333333333333333,
+      "n": 0.4,
+      "er": 0
+    },
+    {
+      "id": "collective-brain-dirty-main-bootstrap",
+      "model": "qwen2.5:3b-instruct",
+      "ms": 15708,
+      "q": 0.3333333333333333,
+      "n": 0.6666666666666666,
+      "er": 0
+    },
+    {
+      "id": "collective-brain-dirty-main-bootstrap",
+      "model": "qwen3-fast:1.7b",
+      "ms": 6428,
+      "q": 1,
+      "n": 0.5333333333333333,
+      "er": 0
+    },
+    {
+      "id": "agentmemory-port-conflict",
+      "model": "qwen2.5:3b-instruct",
+      "ms": 15940,
+      "q": 0.8,
+      "n": 0.25,
+      "er": 0
+    },
+    {
+      "id": "agentmemory-port-conflict",
+      "model": "qwen3-fast:1.7b",
+      "ms": 7683,
+      "q": 0.8,
+      "n": 0.6666666666666666,
+      "er": 0
+    }
+  ],
+  "pairs": [
+    {
+      "id": "release-gate-skipped-as-heavy",
+      "qwen25": 0.5000000000000001,
+      "qwen3fast": 0.21581264177548895,
+      "delta": 0.28418735822451113
+    },
+    {
+      "id": "collective-brain-dirty-main-bootstrap",
+      "qwen25": 0.210363558334866,
+      "qwen3fast": 0.5872576788670223,
+      "delta": -0.3768941205321563
+    },
+    {
+      "id": "agentmemory-port-conflict",
+      "qwen25": 0.3682745386548955,
+      "qwen3fast": 0.5022301514315493,
+      "delta": -0.13395561277665374
+    }
+  ],
+  "criterion": ">=3 independent calibration tasks; candidate beats global best on every paired task by >=0.03 utility",
+  "promoteQwen25": false,
+  "pass": true
+}

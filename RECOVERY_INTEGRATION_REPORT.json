@@ -1,0 +1,323 @@
+{
+  "at": "2026-09-06T05:56:36.432Z",
+  "branch": "ai/codex/recovery-integration",
+  "parents": [
+    "d20a7cfd",
+    "f762419e"
+  ],
+  "peerPrerequisite": "469abbe8",
+  "mainTestFix": "8ab51740 (exact test content incorporated)",
+  "status": "LOCAL_RECOVERY_COMMITTED_RELEASE_BLOCKED",
+  "mergeSafe": false,
+  "push": false,
+  "deploy": false,
+  "changes": [
+    "Google startup rejects 4xx/5xx; root redirect repairs relative assets; startup probes use readyz; Node24 container and clean build context",
+    "16 feature handlers share router, preserving public URLs and reducing Vercel function count to 9",
+    "Lossless coordinator retains dirty/untracked/ignored work and worker-created commits; safe ownership checks; durable shared outcome logging",
+    "OpenCode execution success becomes PENDING_REVIEW until caller supplies explicit artifact validation evidence",
+    "Zero-Chaos checks every worktree plus unpublished commits in all local branches; no cleanup-induced false PASS",
+    "Dependency overrides synchronized with lockfile; portable coordinator test fixture",
+    "Legacy scalar lesson evidence no longer crashes shared-memory serialization; documented prevention fields normalized without changing error status"
+  ],
+  "tests": {
+    "unit": {
+      "pass": 573,
+      "skip": 1,
+      "fail": 0,
+      "note": "Full integrated unit suite before final branch-publication and legacy-lesson changes; those changes have focused regression runs."
+    },
+    "coordinatorFocused": {
+      "pass": 40,
+      "fail": 0
+    },
+    "finalZeroChaosRegression": {
+      "pass": 1,
+      "fail": 0
+    },
+    "finalCollectiveBrain": {
+      "pass": 19,
+      "fail": 0
+    },
+    "npmCi": "PASS, 421 packages; audit 0 vulnerabilities",
+    "googleBaselineRelease": "Full release:gate exit0 on d20a7cfd source work; 381 pass/1 skip, integration 76/76",
+    "integration": "76/76 PASS",
+    "browser": "Desktop and 390x844 viewport, canvas rendered, loading hidden, zero console errors; native mobile not certified",
+    "stages": [
+      {
+        "name": "procedural:check",
+        "exitCode": 0,
+        "error": null,
+        "log": "work/integration-gate-procedural-check.log"
+      },
+      {
+        "name": "desktop-ai:check",
+        "exitCode": 0,
+        "error": null,
+        "log": "work/integration-gate-desktop-ai-check.log"
+      },
+      {
+        "name": "golden:check",
+        "exitCode": 0,
+        "error": null,
+        "log": "work/integration-gate-golden-check.log"
+      },
+      {
+        "name": "quality:check",
+        "exitCode": 1,
+        "error": null,
+        "log": "work/integration-gate-quality-check.log"
+      },
+      {
+        "name": "quality:regression",
+        "exitCode": 3,
+        "error": null,
+        "log": "work/integration-gate-quality-regression.log"
+      },
+      {
+        "name": "quality:fuzz",
+        "exitCode": 0,
+        "error": null,
+        "log": "work/integration-gate-quality-fuzz.log"
+      },
+      {
+        "name": "quality:impact",
+        "exitCode": 0,
+        "error": null,
+        "log": "work/integration-gate-quality-impact.log"
+      },
+      {
+        "name": "quality:perceptual",
+        "exitCode": 0,
+        "error": null,
+        "log": "work/integration-gate-quality-perceptual.log"
+      },
+      {
+        "name": "quality:cinematic:v3",
+        "exitCode": 0,
+        "error": null,
+        "log": "work/integration-gate-quality-cinematic-v3.log"
+      },
+      {
+        "name": "tech:audit",
+        "exitCode": 0,
+        "error": null,
+        "log": "work/integration-gate-tech-audit.log"
+      },
+      {
+        "name": "tech:health",
+        "exitCode": 0,
+        "error": null,
+        "log": "work/integration-gate-tech-health.log"
+      },
+      {
+        "name": "quality:tech-orchestrator",
+        "exitCode": 0,
+        "error": null,
+        "log": "work/integration-gate-quality-tech-orchestrator.log"
+      },
+      {
+        "name": "duplicates:check",
+        "exitCode": 0,
+        "error": null,
+        "log": "work/integration-gate-duplicates-check.log"
+      },
+      {
+        "name": "contracts:check",
+        "exitCode": 0,
+        "error": null,
+        "log": "work/integration-gate-contracts-check.log"
+      },
+      {
+        "name": "project:review",
+        "exitCode": 0,
+        "error": null,
+        "log": "work/integration-gate-project-review.log"
+      },
+      {
+        "name": "quality:stability",
+        "exitCode": 0,
+        "error": null,
+        "log": "work/integration-gate-quality-stability.log"
+      },
+      {
+        "name": "evidence:score",
+        "exitCode": 0,
+        "error": null,
+        "log": "work/integration-gate-evidence-score.log"
+      },
+      {
+        "name": "regressions:capture",
+        "exitCode": 0,
+        "error": null,
+        "log": "work/integration-gate-regressions-capture.log"
+      },
+      {
+        "name": "quality:issue-candidates",
+        "exitCode": 0,
+        "error": null,
+        "log": "work/integration-gate-quality-issue-candidates.log"
+      },
+      {
+        "name": "quality:world",
+        "exitCode": 0,
+        "error": null,
+        "log": "work/integration-gate-quality-world.log"
+      },
+      {
+        "name": "integration:verify",
+        "exitCode": 0,
+        "error": null,
+        "log": "work/integration-gate-integration-verify.log"
+      },
+      {
+        "name": "animation:gate",
+        "exitCode": 0,
+        "error": null,
+        "log": "work/integration-gate-animation-gate.log"
+      },
+      {
+        "name": "quality:ink-glyph",
+        "exitCode": 0,
+        "error": null,
+        "log": "work/integration-gate-quality-ink-glyph.log"
+      },
+      {
+        "name": "collective-brain:check",
+        "exitCode": 0,
+        "error": null,
+        "log": "work/integration-gate-collective-brain-check.log"
+      },
+      {
+        "name": "collective-brain:security",
+        "exitCode": 0,
+        "error": null,
+        "log": "work/integration-gate-collective-brain-security.log"
+      },
+      {
+        "name": "collective-brain:cycle",
+        "exitCode": 1,
+        "error": null,
+        "log": "work/integration-gate-collective-brain-cycle.log"
+      }
+    ],
+    "reruns": {
+      "quality:check": "PASS after schema normalization; governance still releaseEligible=false,25 blockers",
+      "collective-brain:cycle": "exit0 DEGRADED sync=queued after regression fix"
+    },
+    "overallRelease": "BLOCKED: quality:regression baseline 11 active blockers versus current 21; inherited fixed/superseded/bypassed statuses are not automatically certified protected"
+  },
+  "zeroChaosSnapshot": {
+    "verdict": "FAIL",
+    "unpublishedBranchCommits": 82,
+    "worktrees": [
+      {
+        "path": "C:/Users/user/Desktop/World_server",
+        "dirty": true,
+        "unpublishedCommits": 0
+      },
+      {
+        "path": "C:/Users/user/AppData/Local/World_server_worktrees/chatgpt-cloud-opencode-qwen",
+        "dirty": true,
+        "unpublishedCommits": 0
+      },
+      {
+        "path": "C:/Users/user/AppData/Local/World_server_worktrees/chatgpt-master-coordinator-hardening",
+        "dirty": false,
+        "unpublishedCommits": 0
+      },
+      {
+        "path": "C:/Users/user/AppData/Local/World_server_worktrees/codex-coordinator-lossless",
+        "dirty": true,
+        "unpublishedCommits": 1
+      },
+      {
+        "path": "C:/Users/user/AppData/Local/World_server_worktrees/codex-google-readiness",
+        "dirty": true,
+        "unpublishedCommits": 1
+      },
+      {
+        "path": "C:/Users/user/AppData/Local/World_server_worktrees/codex-tool-autoconnect",
+        "dirty": true,
+        "unpublishedCommits": 0
+      },
+      {
+        "path": "C:/Users/user/Desktop/.tools/ws-unified-catalog",
+        "dirty": true,
+        "unpublishedCommits": 0
+      },
+      {
+        "path": "C:/Users/user/Desktop/World_server_chatgpt_anim",
+        "dirty": true,
+        "unpublishedCommits": 0
+      },
+      {
+        "path": "C:/Users/user/Desktop/World_server_dark_void_v4",
+        "dirty": true,
+        "unpublishedCommits": 0
+      },
+      {
+        "path": "C:/Users/user/Desktop/World_server_google_v6",
+        "dirty": true,
+        "unpublishedCommits": 0
+      },
+      {
+        "path": "C:/Users/user/Desktop/World_server_science_run055",
+        "dirty": true,
+        "unpublishedCommits": 0
+      },
+      {
+        "path": "C:/Users/user/Desktop/World_server_science_run058",
+        "dirty": false,
+        "unpublishedCommits": 0
+      },
+      {
+        "path": "C:/Users/user/Desktop/World_server_science_run059",
+        "dirty": false,
+        "unpublishedCommits": 0
+      },
+      {
+        "path": "C:/Users/user/Desktop/World_server_science_run060",
+        "dirty": true,
+        "unpublishedCommits": 0
+      }
+    ],
+    "reasons": [
+      "Unpublished local branch commits (82)",
+      "Dirty/untracked work: C:/Users/user/Desktop/World_server",
+      "Dirty/untracked work: C:/Users/user/AppData/Local/World_server_worktrees/chatgpt-cloud-opencode-qwen",
+      "Dirty/untracked work: C:/Users/user/AppData/Local/World_server_worktrees/codex-coordinator-lossless",
+      "Unpublished commits (1): C:/Users/user/AppData/Local/World_server_worktrees/codex-coordinator-lossless",
+      "Dirty/untracked work: C:/Users/user/AppData/Local/World_server_worktrees/codex-google-readiness",
+      "Unpublished commits (1): C:/Users/user/AppData/Local/World_server_worktrees/codex-google-readiness",
+      "Dirty/untracked work: C:/Users/user/AppData/Local/World_server_worktrees/codex-tool-autoconnect",
+      "Dirty/untracked work: C:/Users/user/Desktop/.tools/ws-unified-catalog",
+      "Dirty/untracked work: C:/Users/user/Desktop/World_server_chatgpt_anim",
+      "Dirty/untracked work: C:/Users/user/Desktop/World_server_dark_void_v4",
+      "Dirty/untracked work: C:/Users/user/Desktop/World_server_google_v6",
+      "Dirty/untracked work: C:/Users/user/Desktop/World_server_science_run055",
+      "Dirty/untracked work: C:/Users/user/Desktop/World_server_science_run060"
+    ]
+  },
+  "agents": {
+    "coordinator": "Existing scripts/master-coordinator.cjs; no parallel architecture",
+    "codex": "Implementation, independent tests and integration",
+    "opencode": "Free immutable Git-object review completed; findings independently verified and incorporated. Prior external_directory refusal handled by safe committed-object review.",
+    "openhuman": "Existing coordinator task queued because free RAM below40% cold-load floor; no forced model load",
+    "anythingllm": "Not running; not started under resource pressure"
+  },
+  "limitations": [
+    "No Docker/Linux image execution, live Cloud Run slots, production deployment, native touch device or 8-hour soak evidence",
+    "Runtime budget probe measures parent process; aggregate child RAM remains unverified",
+    "Existing foreign WIP and unpublished local branches keep Zero-Chaos FAIL; no automatic deletion or push",
+    "Shared memory sync queued; no remote synchronization claim",
+    "Two historical reports remain as point-in-time evidence; this report supersedes their integration status",
+    "Inherited peer history contains large tracked runtime logs and whitespace findings; no history rewrite or unrelated log cleanup"
+  ],
+  "nextActions": [
+    "Existing coordinator: review evidence for the 10 inherited blocker statuses; do not change baseline to hide them",
+    "Run Linux/container and live-slot validation only in an authorized environment; keep production deploy held",
+    "Reconcile foreign worktree ownership and publication separately; preserve user work"
+  ],
+  "userActionRequired": "NONE"
+}

@@ -8,6 +8,11 @@ const {
 
 const CAS_ROOT = path.join(STATE_DIR, 'cas', 'sha256');
 const SNAP_ROOT = path.join(STATE_DIR, 'snapshots');
+const GC_RECOVERY_DIR = path.join(STATE_DIR, 'cas-gc-recovery');
+const GB = 1024 * 1024 * 1024;
+const EMERGENCY_BLOCK_FILE = path.join(ROOT, 'CAS_EMERGENCY_BLOCK.json');
+const GC_ALARM_FILE = path.join(ROOT, 'CAS_GC_ALARM.json');
+const GC_STATUS_FILE = path.join(ROOT, 'CAS_GC_STATUS.json');
 ensureDir(CAS_ROOT); ensureDir(SNAP_ROOT);
 
 function objectPath(hash) { return path.join(CAS_ROOT, hash.slice(0, 2), hash.slice(2)); }
@@ -59,7 +64,309 @@ function extractSpecs(rel, text) {
   }
   return [...specs].filter(Boolean);
 }
+
+// ---------------------------------------------------------------------------
+// CAS garbage-collection: configuration, observability and safety helpers.
+//
+// Root cause of unbounded CAS growth (see WORK_IN_PROGRESS.md incident notes):
+// every snapshot() call content-addresses and stores a copy of the *entire*
+// project tree, and this repo has hundreds of frequently-rewritten report/
+// status JSON files. Snapshots are created automatically, very frequently
+// (system-control-plane.cjs runs `snapshot` as a step, and is itself invoked
+// every scheduler tick by scripts/autonomous-blocker-repair.cjs), so distinct
+// CAS objects accumulate forever unless something reaps the ones no longer
+// referenced by any retained snapshot. Nothing did. gc() existed but was a
+// purely manual command that nobody ever wired up.
+//
+// The fix lives here, in the one function (`snapshot`) and one code path
+// (`buildIndex({store:true})`) that every producer of CAS growth already
+// funnels through, rather than as a separate daemon/process.
+// ---------------------------------------------------------------------------
+
+function envNumber(key) {
+  const v = process.env[key];
+  if (v === undefined || v === '') return undefined;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : undefined;
+}
+function envBool(key) {
+  const v = process.env[key];
+  if (v === undefined || v === '') return undefined;
+  return /^(1|true|yes|on)$/i.test(String(v).trim());
+}
+function resolveBytes(envBytesKey, envGbKey, fileGbVal, defaultBytes) {
+  const bytesOverride = envNumber(envBytesKey);
+  if (bytesOverride !== undefined && bytesOverride >= 0) return Math.round(bytesOverride);
+  const gbOverride = envNumber(envGbKey);
+  if (gbOverride !== undefined && gbOverride >= 0) return Math.round(gbOverride * GB);
+  if (fileGbVal !== undefined && fileGbVal !== null) {
+    const n = Number(fileGbVal);
+    if (Number.isFinite(n) && n >= 0) return Math.round(n * GB);
+  }
+  return defaultBytes;
+}
+function loadGcConfig() {
+  const fileCfg = readJSON(path.join(ROOT, 'config', 'cas-gc.config.json'), {}) || {};
+  const keepEnv = envNumber('CAS_GC_KEEP_SNAPSHOTS');
+  const emergencyKeepEnv = envNumber('CAS_GC_EMERGENCY_KEEP_SNAPSHOTS');
+  const enabledEnv = envBool('CAS_GC_ENABLED');
+  const blockEnv = envBool('CAS_GC_BLOCK_ON_EMERGENCY');
+  const keepSnapshots = Math.max(1, Math.round(keepEnv ?? fileCfg.keepSnapshots ?? 20));
+  return {
+    enabled: enabledEnv ?? (fileCfg.enabled !== false),
+    keepSnapshots,
+    emergencyKeepSnapshots: Math.max(1, Math.round(emergencyKeepEnv ?? fileCfg.emergencyKeepSnapshots ?? Math.max(1, Math.round(keepSnapshots / 4)))),
+    warnBytes: resolveBytes('CAS_GC_WARN_BYTES', 'CAS_GC_WARN_GB', fileCfg.warnGB, 5 * GB),
+    autoGcBytes: resolveBytes('CAS_GC_AUTO_BYTES', 'CAS_GC_AUTO_GB', fileCfg.autoGcGB, 10 * GB),
+    emergencyBytes: resolveBytes('CAS_GC_EMERGENCY_BYTES', 'CAS_GC_EMERGENCY_GB', fileCfg.emergencyGB, 20 * GB),
+    blockOnEmergency: blockEnv ?? (fileCfg.blockOnEmergency !== false)
+  };
+}
+function gb(bytes) { return +(bytes / GB).toFixed(3); }
+
+function casStats() {
+  let bytes = 0, objects = 0;
+  if (fs.existsSync(CAS_ROOT)) {
+    for (const prefix of fs.readdirSync(CAS_ROOT)) {
+      const d = path.join(CAS_ROOT, prefix);
+      let st; try { st = fs.statSync(d); } catch { continue; }
+      if (!st.isDirectory()) continue;
+      for (const name of fs.readdirSync(d)) {
+        try { bytes += fs.statSync(path.join(d, name)).size; objects++; } catch {}
+      }
+    }
+  }
+  const snapshotCount = fs.existsSync(SNAP_ROOT) ? fs.readdirSync(SNAP_ROOT).filter(x => x.endsWith('.json')).length : 0;
+  return { bytes, objects, snapshotCount };
+}
+
+// Reachable-set computation. FAIL-SAFE: a kept snapshot manifest that cannot
+// be read or parsed aborts GC entirely instead of silently contributing zero
+// references (the original gc() used readJSON(...,{}) here, which would have
+// treated a corrupt "kept" manifest as referencing nothing and could delete
+// objects that manifest actually needs).
+function collectReachableHashes(keep) {
+  ensureDir(SNAP_ROOT);
+  const manifests = fs.readdirSync(SNAP_ROOT).filter(x => x.endsWith('.json')).sort().reverse();
+  const kept = manifests.slice(0, Math.max(1, keep));
+  const removeManifests = manifests.slice(Math.max(1, keep));
+  const refs = new Set();
+  for (const f of kept) {
+    const p = path.join(SNAP_ROOT, f);
+    let raw;
+    try { raw = fs.readFileSync(p, 'utf8'); } catch (e) { throw new Error(`cannot read kept snapshot manifest ${f}: ${e.message}`); }
+    let m;
+    try { m = JSON.parse(raw); } catch (e) { throw new Error(`corrupt kept snapshot manifest ${f}: ${e.message}`); }
+    if (!Array.isArray(m.entries)) throw new Error(`kept snapshot manifest ${f} is missing its entries array`);
+    for (const e of m.entries) if (e && e.sha256) refs.add(e.sha256);
+  }
+  const idx = readJSON(path.join(ROOT, 'CAS_INDEX.json'), null);
+  if (idx && Array.isArray(idx.entries)) for (const e of idx.entries) if (e && e.sha256) refs.add(e.sha256);
+  return { refs, keptManifests: kept, removeManifests };
+}
+
+function dryRunGc(keep) {
+  const { refs, keptManifests, removeManifests } = collectReachableHashes(keep);
+  let reclaimableBytes = 0, reclaimableObjects = 0;
+  const sampleRemoved = [];
+  if (fs.existsSync(CAS_ROOT)) {
+    for (const prefix of fs.readdirSync(CAS_ROOT)) {
+      const d = path.join(CAS_ROOT, prefix);
+      let st; try { st = fs.statSync(d); } catch { continue; }
+      if (!st.isDirectory()) continue;
+      for (const name of fs.readdirSync(d)) {
+        const h = prefix + name;
+        if (!refs.has(h)) {
+          let sz = 0; try { sz = fs.statSync(path.join(d, name)).size; } catch {}
+          reclaimableObjects++; reclaimableBytes += sz;
+          if (sampleRemoved.length < 50) sampleRemoved.push(h);
+        }
+      }
+    }
+  }
+  return {
+    keepSnapshotIds: keptManifests.map(f => f.replace(/\.json$/, '')),
+    removeSnapshotIds: removeManifests.map(f => f.replace(/\.json$/, '')),
+    referencedObjects: refs.size,
+    reclaimableObjects, reclaimableBytes, sampleRemoved
+  };
+}
+
+function writeRecoveryManifest(report) {
+  ensureDir(GC_RECOVERY_DIR);
+  const file = path.join(GC_RECOVERY_DIR, `${new Date().toISOString().replace(/[:.]/g, '-')}.json`);
+  writeJSON(file, report);
+  return file;
+}
+
+function writeObservability({ trigger, lastResult, config, stats }) {
+  const s = stats || casStats();
+  const cfg = config || loadGcConfig();
+  const status = {
+    schemaVersion: '1.0.0',
+    generatedAt: nowIso(),
+    currentBytes: s.bytes,
+    currentGB: gb(s.bytes),
+    objectCount: s.objects,
+    snapshotCount: s.snapshotCount,
+    limits: { keepSnapshots: cfg.keepSnapshots, emergencyKeepSnapshots: cfg.emergencyKeepSnapshots, warnGB: gb(cfg.warnBytes), autoGcGB: gb(cfg.autoGcBytes), emergencyGB: gb(cfg.emergencyBytes), enabled: cfg.enabled },
+    lastGcAt: nowIso(),
+    lastGcTrigger: trigger,
+    lastGcRan: Boolean(lastResult),
+    lastGcOk: lastResult ? Boolean(lastResult.ok) : null,
+    lastGcReclaimedBytes: lastResult ? (lastResult.removedBytes || 0) : 0,
+    lastGcReclaimedObjects: lastResult ? (lastResult.removedObjects || 0) : 0,
+    lastGcRemovedSnapshots: lastResult ? (lastResult.removedSnapshots || 0) : 0
+  };
+  writeJSON(GC_STATUS_FILE, status);
+  return status;
+}
+
+// Safe GC: dry-run + report -> recovery manifest -> delete only unreferenced
+// objects/old snapshots -> verify the retained latest snapshot -> observability.
+// Used by every caller (manual `gc`, watermark-triggered `gcAuto`, and the
+// scheduled `integration:cas:gc` npm script) so there is exactly one deletion
+// code path in the whole project.
+function safeGc({ keep = 20, reason = 'manual' } = {}) {
+  let plan;
+  try {
+    plan = dryRunGc(keep);
+  } catch (e) {
+    const report = { schemaVersion: '1.0.0', generatedAt: nowIso(), ok: false, aborted: true, reason, error: String(e.message || e) };
+    writeJSON(GC_ALARM_FILE, report);
+    console.error('[CAS_GC] ABORTED refs/index check failed, nothing deleted:', e.message || e);
+    return report;
+  }
+  const before = casStats();
+  const recoveryFile = writeRecoveryManifest({
+    schemaVersion: '1.0.0', generatedAt: nowIso(), reason,
+    beforeBytes: before.bytes, beforeObjects: before.objects, beforeSnapshots: before.snapshotCount,
+    keepSnapshotIds: plan.keepSnapshotIds, removeSnapshotIds: plan.removeSnapshotIds,
+    reclaimableBytes: plan.reclaimableBytes, reclaimableObjects: plan.reclaimableObjects,
+    referencedObjects: plan.referencedObjects, sampleRemoved: plan.sampleRemoved
+  });
+  console.log(`[CAS_GC] plan reason=${reason} reclaimable=${plan.reclaimableObjects} objects (~${gb(plan.reclaimableBytes)}GB) removeSnapshots=${plan.removeSnapshotIds.length} recovery=${recoveryFile}`);
+
+  // Recompute the reachable set right before deleting (defends against the
+  // snapshot directory changing between plan and execution); this throws
+  // (fail-safe abort, nothing deleted) on a corrupt kept manifest.
+  let refs;
+  try { ({ refs } = collectReachableHashes(keep)); }
+  catch (e) {
+    const report = { schemaVersion: '1.0.0', generatedAt: nowIso(), ok: false, aborted: true, reason, error: String(e.message || e), recoveryFile };
+    writeJSON(GC_ALARM_FILE, report);
+    console.error('[CAS_GC] ABORTED refs/index check failed on execute, nothing deleted:', e.message || e);
+    return report;
+  }
+  let removedObjects = 0, removedBytes = 0;
+  if (fs.existsSync(CAS_ROOT)) {
+    for (const prefix of fs.readdirSync(CAS_ROOT)) {
+      const d = path.join(CAS_ROOT, prefix);
+      let st; try { st = fs.statSync(d); } catch { continue; }
+      if (!st.isDirectory()) continue;
+      for (const name of fs.readdirSync(d)) {
+        const h = prefix + name;
+        if (!refs.has(h)) {
+          const fp = path.join(d, name);
+          let sz = 0; try { sz = fs.statSync(fp).size; } catch {}
+          try { fs.unlinkSync(fp); removedObjects++; removedBytes += sz; } catch {}
+        }
+      }
+    }
+  }
+  const manifests = fs.readdirSync(SNAP_ROOT).filter(x => x.endsWith('.json')).sort().reverse();
+  const removeManifests = manifests.slice(Math.max(1, keep));
+  for (const f of removeManifests) { try { fs.unlinkSync(path.join(SNAP_ROOT, f)); } catch {} }
+
+  const after = casStats();
+  let verifyReport = null, verifyPass = true;
+  const latest = latestId();
+  if (latest) {
+    try { verifyReport = verify(latest); verifyPass = Boolean(verifyReport && verifyReport.pass); }
+    catch (e) { verifyPass = false; verifyReport = { pass: false, error: String(e.message || e) }; }
+  }
+  const result = {
+    schemaVersion: '1.0.0', ok: verifyPass, reason,
+    keptSnapshots: manifests.length - removeManifests.length, removedSnapshots: removeManifests.length,
+    removedObjects, removedBytes, beforeBytes: before.bytes, afterBytes: after.bytes,
+    beforeObjects: before.objects, afterObjects: after.objects,
+    verifyPass, verifySnapshot: latest || null, recoveryFile
+  };
+  if (!verifyPass) {
+    writeJSON(GC_ALARM_FILE, {
+      schemaVersion: '1.0.0', generatedAt: nowIso(), ok: false, reason, verifyReport, recoveryFile,
+      guidance: `GC removed unreferenced objects/old snapshots, but post-GC verify of the retained latest snapshot (${latest}) FAILED. Do not run GC again until this is understood. Inspect ${recoveryFile} and DISASTER_RECOVERY_VERIFY_REPORT.json, then restore with: node scripts/cas-merkle-store.cjs restore ${latest} --apply`
+    });
+    console.error(`[CAS_GC] FAIL post-gc verify failed for snapshot=${latest}; wrote ${GC_ALARM_FILE}`);
+  } else {
+    try { fs.unlinkSync(GC_ALARM_FILE); } catch {}
+    console.log(`[CAS_GC] OK reason=${reason} removedObjects=${removedObjects} removedSnapshots=${removeManifests.length} reclaimed=${gb(removedBytes)}GB kept=${manifests.length - removeManifests.length}`);
+  }
+  writeObservability({ trigger: reason, lastResult: result, stats: after });
+  return result;
+}
+
+function decideWatermarkAction(bytes, cfg) {
+  if (!cfg.enabled) return 'disabled';
+  if (bytes >= cfg.emergencyBytes) return 'emergency';
+  if (bytes >= cfg.autoGcBytes) return 'auto';
+  if (bytes >= cfg.warnBytes) return 'warn';
+  return 'none';
+}
+
+// The single entry point both triggers described in the task funnel through:
+//  - called automatically at the end of every snapshot() (post-snapshot trigger)
+//  - called on a timer via the existing autopilot (npm run integration:cas:gc,
+//    wired into data/blocker-repair-policy.json gates.npmScripts - by-schedule trigger)
+function gcAuto({ trigger = 'schedule' } = {}) {
+  const cfg = loadGcConfig();
+  const stats = casStats();
+  const action = decideWatermarkAction(stats.bytes, cfg);
+  if (action === 'none' || action === 'disabled') {
+    writeObservability({ trigger, lastResult: null, config: cfg, stats });
+    console.log(`[CAS_GC_AUTO] trigger=${trigger} action=${action} sizeGB=${gb(stats.bytes)}`);
+    return { ok: true, action, stats };
+  }
+  if (action === 'warn') {
+    console.warn(`[CAS_GC_AUTO] WARNING CAS size ${gb(stats.bytes)}GB exceeds warn threshold ${gb(cfg.warnBytes)}GB (auto-gc triggers at ${gb(cfg.autoGcBytes)}GB)`);
+    writeObservability({ trigger, lastResult: null, config: cfg, stats });
+    return { ok: true, action, stats };
+  }
+  if (action === 'auto') {
+    const result = safeGc({ keep: cfg.keepSnapshots, reason: `auto-gc-watermark-${gb(stats.bytes)}GB` });
+    return { ok: result.ok, action, stats, result };
+  }
+  // emergency
+  const result = safeGc({ keep: cfg.emergencyKeepSnapshots, reason: `emergency-gc-watermark-${gb(stats.bytes)}GB` });
+  const after = casStats();
+  if (cfg.blockOnEmergency && after.bytes >= cfg.emergencyBytes) {
+    writeJSON(EMERGENCY_BLOCK_FILE, {
+      schemaVersion: '1.0.0', generatedAt: nowIso(), ok: false, blocked: true,
+      reason: 'emergency-threshold-still-exceeded-after-gc',
+      beforeBytes: stats.bytes, afterBytes: after.bytes, emergencyBytes: cfg.emergencyBytes,
+      guidance: 'CAS is still over the emergency limit even after emergency GC (the retained/reachable data itself is that large). New snapshots and index builds are blocked until this is resolved: raise CAS_GC_EMERGENCY_GB / config/cas-gc.config.json, lower CAS_GC_KEEP_SNAPSHOTS, or reduce what is tracked as project files.'
+    });
+    console.error(`[CAS_GC_AUTO] EMERGENCY size still ${gb(after.bytes)}GB after GC >= limit ${gb(cfg.emergencyBytes)}GB; blocking further CAS growth (${EMERGENCY_BLOCK_FILE})`);
+  } else {
+    try { fs.unlinkSync(EMERGENCY_BLOCK_FILE); } catch {}
+  }
+  return { ok: result.ok, action, stats, result };
+}
+
+// Cheap guard called at the top of buildIndex({store:true}): the expensive
+// full CAS walk only happens when the emergency block flag is actually
+// present, so this costs nothing on the hot path in normal operation.
+function enforceCapacityBeforeStore() {
+  if (!fs.existsSync(EMERGENCY_BLOCK_FILE)) return;
+  const cfg = loadGcConfig();
+  if (!cfg.blockOnEmergency) { try { fs.unlinkSync(EMERGENCY_BLOCK_FILE); } catch {} return; }
+  const stats = casStats();
+  if (stats.bytes < cfg.emergencyBytes) { try { fs.unlinkSync(EMERGENCY_BLOCK_FILE); } catch {} return; }
+  throw new Error(`CAS emergency block active: size ${gb(stats.bytes)}GB >= emergency limit ${gb(cfg.emergencyBytes)}GB. Run "node scripts/cas-merkle-store.cjs gc-auto" or raise CAS_GC_EMERGENCY_GB before creating new snapshots/index entries.`);
+}
+
 function buildIndex({ store = true } = {}) {
+  if (store) enforceCapacityBeforeStore();
   const files = projectFiles();
   const known = new Set(files);
   const entries = [];
@@ -95,6 +402,12 @@ function snapshot(label = 'manual') {
   fs.writeFileSync(path.join(SNAP_ROOT, 'LATEST'), `${id}\n`);
   writeJSON(path.join(ROOT, 'DISASTER_RECOVERY_STATUS.json'), { schemaVersion:'2.0.0', generatedAt:nowIso(), status:'SNAPSHOT_CREATED', latestSnapshot:id, merkleRoot:out.root, files:manifest.entries.length, casDeduplicated:true });
   console.log(`[CAS_SNAPSHOT] ${id} files=${manifest.entries.length} root=${out.root}`);
+  // Every snapshot is exactly the moment CAS can grow, so this is where the
+  // automatic, config-driven GC watermark check runs (requirement: GC after
+  // every snapshot). A GC hiccup must never fail an already-successful
+  // snapshot, so this is best-effort from snapshot()'s point of view - a
+  // failed/aborted GC still shows up in CAS_GC_STATUS.json / CAS_GC_ALARM.json.
+  try { gcAuto({ trigger: 'post-snapshot' }); } catch (e) { console.error('[CAS_GC_AUTO] post-snapshot check failed:', e.message || e); }
   return manifest;
 }
 function latestId() { try { return fs.readFileSync(path.join(SNAP_ROOT,'LATEST'),'utf8').trim(); } catch { return ''; } }
@@ -139,25 +452,33 @@ function impact(rel) {
   const out={schemaVersion:'2.0.0',generatedAt:nowIso(),source:rel,affected:[...seen].sort(),count:seen.size};
   writeJSON(path.join(ROOT,'DEPENDENCY_IMPACT_REPORT.json'),out); console.log(JSON.stringify(out,null,2));
 }
+// Manual/explicit GC entry point. Now routed through the same safeGc() used
+// by the automatic triggers, so `npm run integration:cas:gc:manual` gets the
+// exact same dry-run/report, refs/index check, recovery manifest and
+// post-GC verify as the automatic paths - one implementation, not a parallel one.
 function gc(keep = 20) {
-  const manifests = fs.readdirSync(SNAP_ROOT).filter(x=>x.endsWith('.json')).sort().reverse();
-  const kept=manifests.slice(0,Math.max(1,keep)); const removeManifests=manifests.slice(Math.max(1,keep));
-  const refs=new Set();
-  for(const f of kept){const m=readJSON(path.join(SNAP_ROOT,f),{});for(const e of m.entries||[])refs.add(e.sha256)}
-  const idx=readJSON(path.join(ROOT,'CAS_INDEX.json'),{});for(const e of idx.entries||[])refs.add(e.sha256);
-  let removedObjects=0;
-  if(fs.existsSync(CAS_ROOT))for(const prefix of fs.readdirSync(CAS_ROOT)){const d=path.join(CAS_ROOT,prefix);if(!fs.statSync(d).isDirectory())continue;for(const name of fs.readdirSync(d)){const h=prefix+name;if(!refs.has(h)){fs.unlinkSync(path.join(d,name));removedObjects++}}}
-  for(const f of removeManifests)fs.unlinkSync(path.join(SNAP_ROOT,f));
-  console.log(JSON.stringify({ok:true,keptSnapshots:kept.length,removedSnapshots:removeManifests.length,removedObjects},null,2));
+  const r = safeGc({ keep: Number(keep) || 20, reason: 'manual' });
+  console.log(JSON.stringify({ ok: r.ok, keptSnapshots: r.keptSnapshots, removedSnapshots: r.removedSnapshots, removedObjects: r.removedObjects, removedBytes: r.removedBytes, verifyPass: r.verifyPass, recoveryFile: r.recoveryFile }, null, 2));
+  return r;
 }
 
-const [cmd='index', arg, ...rest] = process.argv.slice(2);
-try {
-  if (cmd === 'index') { const {out}=buildIndex({store:true}); console.log(`[CAS_INDEX] files=${out.files} root=${out.root}`); }
-  else if (cmd === 'snapshot') snapshot(arg || 'manual');
-  else if (cmd === 'verify') verify(arg);
-  else if (cmd === 'restore') restore(arg, rest.includes('--apply'), rest.includes('--exact'));
-  else if (cmd === 'impact') impact(arg || 'package.json');
-  else if (cmd === 'gc') gc(Number(arg || 20));
-  else { console.error('usage: cas-merkle-store.cjs index | snapshot [label] | verify [id] | restore <id> [--apply] [--exact] | impact <path> | gc [keep]'); process.exit(2); }
-} catch (e) { console.error('[CAS_MERKLE] FAIL', e.stack || e.message); process.exit(2); }
+if (require.main === module) {
+  const [cmd='index', arg, ...rest] = process.argv.slice(2);
+  try {
+    if (cmd === 'index') { const {out}=buildIndex({store:true}); console.log(`[CAS_INDEX] files=${out.files} root=${out.root}`); }
+    else if (cmd === 'snapshot') snapshot(arg || 'manual');
+    else if (cmd === 'verify') verify(arg);
+    else if (cmd === 'restore') restore(arg, rest.includes('--apply'), rest.includes('--exact'));
+    else if (cmd === 'impact') impact(arg || 'package.json');
+    else if (cmd === 'gc') { const r = gc(arg === undefined ? loadGcConfig().keepSnapshots : Number(arg)); if (!r.ok) process.exitCode = 2; }
+    else if (cmd === 'gc-auto') { const r = gcAuto({ trigger: arg || 'schedule' }); console.log(JSON.stringify(r, null, 2)); if (!r.ok) process.exitCode = 2; }
+    else if (cmd === 'stats') { const s = casStats(); const cfg = loadGcConfig(); writeObservability({ trigger: 'manual-stats', lastResult: null, config: cfg, stats: s }); console.log(JSON.stringify({ ...s, gbUsed: gb(s.bytes), limits: cfg }, null, 2)); }
+    else { console.error('usage: cas-merkle-store.cjs index | snapshot [label] | verify [id] | restore <id> [--apply] [--exact] | impact <path> | gc [keep] | gc-auto [trigger] | stats'); process.exit(2); }
+  } catch (e) { console.error('[CAS_MERKLE] FAIL', e.stack || e.message); process.exit(2); }
+}
+
+module.exports = {
+  buildIndex, snapshot, verify, restore, impact, gc, gcAuto, safeGc, casStats,
+  loadGcConfig, collectReachableHashes, dryRunGc, decideWatermarkAction,
+  latestId, loadSnapshot, objectPath, CAS_ROOT, SNAP_ROOT
+};

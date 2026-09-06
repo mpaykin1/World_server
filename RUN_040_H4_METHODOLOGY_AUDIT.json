@@ -1,0 +1,13 @@
+{
+  "experiment": "RUN_040_H4_REAL_HOLDOUT_MEMORY_ABLATION",
+  "status": "PARTIAL_SUPPORT_NOT_FULL_H4_PASS",
+  "preregisteredCriterionPass": true,
+  "methodologyGap": "The preregistered PASS criterion omitted novelty even though H4 is explicitly multi-objective: quality/cost/errors/novelty.",
+  "quality": {"baseline": 0.611111111111111, "memory": 0.8888888888888888, "gain": 0.2777777777777778, "supportsMemoryBenefit": true},
+  "errors": {"baseline": 0, "memory": 0, "supportsMemoryBenefit": true},
+  "cost": {"metric": "wall_time", "ratio": 1.5832082787574924, "gateMax": 2, "supportsMemoryBenefit": true},
+  "novelty": {"metric": "lexical_unique_terms_proxy", "baseline": 21.666666666666668, "memory": 19.333333333333332, "delta": -2.3333333333333357, "supportsMemoryBenefit": false},
+  "fullH4Pass": false,
+  "interpretation": "Independent holdout replicates a strong shared-memory quality benefit without extra rubric errors and within the cost gate, but does not establish superiority on novelty or full collective-vs-best-single execution.",
+  "regressionProtection": "test/science-h4-multiobjective-contract.test.cjs"
+}

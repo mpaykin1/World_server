@@ -103,6 +103,24 @@ try {
   console.error('WARN: peer review gate check failed', e.message);
 }
 
+// 8. AI commit provenance — WARN (non-blocking) if two independent active
+// AI sessions (different branches, both touched recently) claim the same
+// AI-Session/Claude-Session id. See AGENTS.md "AI COMMIT PROVENANCE".
+try {
+  const { auditActiveSessionProvenance } = require('./lib/ai-commit-provenance.cjs');
+  const { collisions } = auditActiveSessionProvenance({ cwd: root });
+  if (collisions.length) {
+    for (const c of collisions) {
+      const branches = [...new Set(c.records.map((r) => r.branch))].join(', ');
+      console.error(`WARN: AI-Session provenance collision — session "${c.sessionId}" claimed by tip commits on multiple active branches (${branches}). Reusing an AI-Session id across independent active sessions is a provenance violation (AGENTS.md "AI COMMIT PROVENANCE") — investigate before merging either branch. This does not fail the gate.`);
+    }
+  } else {
+    console.log('OK: no duplicate AI-Session id across active branches (provenance check)');
+  }
+} catch (e) {
+  console.error('WARN: AI commit provenance check failed to run:', e.message);
+}
+
 if (failed) {
   console.error('\nAgent rules check FAILED');
   process.exit(1);

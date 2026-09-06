@@ -287,3 +287,106 @@ CLI, npm/Python, Playwright, linters, scanners, profilers, DB/Vercel/Git/FFmpeg/
 - Fix root cause and add regression protection. Do not use SKIP to hide patch failures. Iterate until all relevant tests pass.
 - Never claim 100% without real desktop + mobile/runtime evidence for affected games.
 <!-- GAME_MOTION_POLICY_V2:END -->
+
+## 18. WORKTREE & PHYSICAL-COPY HYGIENE — ZERO-JUNK POLICY
+
+**Распространяется на всех:** Claude, Claude Code, Cowork, OpenCode, Codex, OpenHuman, AnythingLLM, локальные модели, desktop-агенты, browser-агенты с доступом к файлам, и любые будущие агенты, работающие с `World_server`. Это правило дополняет раздел 17 (COMMIT DISCIPLINE), а не заменяет его. Не создавать вторую параллельную систему — усиливать `scripts/check-agent-rules.js`, `desktop-ai-session-recovery.cjs` и `data/blocker-repair-policy.json` (раздел 16).
+
+**Запрещено** создавать ad-hoc полные копии `World_server` на диске без жизненного цикла (в т.ч. имена вида `World_server_copy`, `World_server_backup`, `World_server_new`, `World_server_fixed`, `World_server_final`, `World_server_final*`). Для параллельной работы — Git branch/worktree, никогда — ручное копирование дерева.
+
+Каждый временный worktree (созданный человеком, агентом, или автоматикой вроде `browser-local-worker`/`browser-local-worker-live`) обязан иметь понятные owner/purpose/branch/createdAt/TTL и по завершении задачи пройти: `commit → verify → merge или archive branch (archive/cleanup-YYYYMMDD/<task-name>) → git worktree remove → git worktree prune`. Автоматика, которая программно вызывает `git worktree add` (сейчас: `ensureTaskWorktree()` в `scripts/browser-local-worker.cjs` и `scripts/browser-local-worker-live.cjs`), обязана вызывать соответствующий cleanup по завершении task (success или failure) — отсутствие такого cleanup является багом, а не нормой.
+
+Никогда не удалять worktree удалением папки напрямую в обход `git worktree remove`/`prune` — это оставляет мусорную запись в реестре. Никогда не удалять недостижимую (detached/unmerged) работу — сначала `archive branch`, потом `verify`, потом уже можно освобождать место.
+
+**Автоматизированная проверка (не удаляет, только классифицирует):** `npm run desktop-ai:worktree-audit` (реализация: `scripts/desktop-ai-session-housekeeping.cjs audit`, конфиг лимитов: `config/desktop-worktree-policy.json`) — встроена в `data/blocker-repair-policy.json` → `gates.npmScripts`, как ранее `integration:cas:gc`. Пайплайн всегда: `DISCOVER → CLASSIFY → DRY-RUN → SAVE USEFUL → COMMIT/ARCHIVE → VERIFY → PREPARE SAFE_TO_DELETE → VERIFY AGAIN`. Никогда: `DELETE FIRST`.
+
+## 19. SESSION-END HOUSEKEEPING & SESSION SAFE_TO_DELETE
+
+Каждая рабочая сессия любого Desktop AI обязана заканчиваться раскладкой результата ровно по четырём категориям — пятой («оставим где-нибудь на диске») не существует:
+
+1. **ПОЛЕЗНЫЙ КОД → COMMIT В GIT** (раздел 17).
+2. **НЕЗАКОНЧЕННАЯ РАБОТА → BRANCH/CHECKPOINT** (`npm run desktop-ai:checkpoint`, WIP-ветка — не рабочее дерево, не stash).
+3. **НУЖНЫЕ УНИКАЛЬНЫЕ ЛОКАЛЬНЫЕ ДАННЫЕ (вне Git, не гарантированные origin) → ОДИН ZIP**, канонический путь **`%USERPROFILE%\Desktop\WORLD_SERVER_KEEP.zip`** (не `WORLD_SERVER_ARCHIVE_YYYYMMDD_<purpose>.zip` — тот датированный формат устарел; один файл, перезаписывается каждой сессией, а не плодится). Внутри обязателен `KEEP_README.txt` (project, ветки+SHA, что pushed, какие миграции READY TO APPLY, blockers, инструкции следующему AI, список файлов). Если всё полезное уже committed+pushed — ZIP содержит только `KEEP_README.txt`, не копирует repo. Никогда не архивировать `node_modules`, `.git`, `.cache`, `.env*`, токены/секреты, build/dist, test-results, reproducible reports, чужие dirty worktree.
+4. **НЕНУЖНОЕ → ОДНА SESSION SAFE_TO_DELETE ПАПКА** для пользователя.
+
+Перед завершением сессии: `git status` → `git diff` → классифицировать untracked/modified → закоммитить готовое → сохранить незавершённое через branch/checkpoint → проверить detached HEAD и worktrees → выполнить `npm run desktop-ai:worktree-audit` → выполнить `node scripts/desktop-ai-session-housekeeping.cjs run [--apply]` → выполнить `npm run desktop-ai:zero-chaos-gate` (§19.2) → сообщить пользователю точный путь, размер и статус удаляемости папки.
+
+**Канонический корень:** `%USERPROFILE%\Desktop\SESSION_SAFE_TO_DELETE` (переопределяется `SESSION_SAFE_TO_DELETE_ROOT`; старое имя `WORLD_SERVER_SESSION_CLEANUP`/`WORLD_SERVER_SESSION_CLEANUP_ROOT` — retired 2026-09-06, консолидировано в единую папку §19.1, старый env var всё ещё принимается ради обратной совместимости). Внутри — подпапка на сессию: `SESSION_<YYYYMMDD-HHMM>_<AGENT>\{SAFE_TO_DELETE\, README.txt, MANIFEST.json}` (это ЕДИНСТВЕННЫЙ разрешённый уровень вложенности — не отдельная папка на Desktop). Реализация переиспользует `state/session-recovery/current.json` (sessionId/startedAt) из существующего `desktop-ai-session-recovery.cjs`, чтобы повторные вызовы в рамках одной сессии обновляли ту же папку, а не плодили новые.
+
+В `SAFE_TO_DELETE` может попасть только то, что доказано: не единственная копия полезных данных; полезный код уже закоммичен и достижим через branch/ref; нет нужных untracked-изменений; нет секретов; нет recovery-only данных; нет уникальных assets; нет неархивированного detached HEAD; не является активной зависимостью работающей системы. При любом сомнении — не трогать (`needs_manual_save`/`stale_unmerged` в отчёте `desktop-ai-session-housekeeping.cjs`).
+
+**Claude (и любой другой Desktop AI) НЕ удаляет папку `SAFE_TO_DELETE` сам.** Он обязан сообщить: путь; размер; можно ли удалить целиком (ДА/НЕТ) — итоговая строка в README.txt: `ЭТУ ПАПКУ SAFE_TO_DELETE МОЖНО УДАЛИТЬ ЦЕЛИКОМ` (если всё доказано) или `НЕ УДАЛЯТЬ SAFE_TO_DELETE` (если нет). Удаляет только пользователь.
+
+Механизм не должен сам плодить мусор: не хранить внутри SESSION-папки полную копию репозитория; не хранить node_modules «на всякий случай» (удалять напрямую, если безопасно воспроизводимо); крупные файлы **перемещать**, а не копировать; не дублировать один и тот же мусор дважды; никогда не архивировать SAFE_TO_DELETE в zip; после того как пользователь удалил SAFE_TO_DELETE, старые метаданные сессии со временем сворачиваются в маленький audit-манифест (retention — `config/desktop-worktree-policy.json` → `sessionCleanup`).
+
+### 19.1 GLOBAL SESSION SAFE-TO-DELETE — единый межагентный реестр (все AI, все сессии)
+
+В дополнение к per-session `SAFE_TO_DELETE` из §19 (вывод одного прогона `desktop-ai-session-housekeeping.cjs run`), для объектов, которые **ни один** агент не смог безопасно удалить или переместить сам, существует ровно одна общая, постоянная папка на всех агентов и все сессии:
+
+**`%USERPROFILE%\Desktop\SESSION_SAFE_TO_DELETE`** (переопределяется `SESSION_SAFE_TO_DELETE_ROOT`), с ровно одним общим `README.txt` внутри (не по одному на сессию). Реализация: `scripts/lib/session-safe-to-delete-registry.cjs`, вызывается через `node scripts/desktop-ai-session-housekeeping.cjs safe-register --path <p> [--manual] [--reason ...] [--why-not-auto ...] [--agent NAME]` и `... safe-gate` (возвращает PASS/WARN/FAIL, exit code 0/1/2).
+
+Правила (общие для Claude, Claude Code, ChatGPT, Codex, OpenCode, OpenHuman, AnythingLLM, локальных моделей, browser-агентов и любых будущих агентов):
+- **Запрещено** создавать вторую подобную папку (`SAFE_TO_DELETE_2`, `_NEW`, `_FINAL`, `backup-final`, `tmp-copy` и т.п.) — `safe-gate` детектирует такие и возвращает FAIL.
+- `README.txt` **только дополняется** внутри маркеров (`<!-- SAFE_TO_DELETE_ENTRIES_* -->` / `<!-- MANUAL_DELETE_CANDIDATES_* -->`), запись любого агента никогда не стирается записью другого. Если маркеры повреждены — модуль отказывается писать (бросает ошибку), а не переписывает файл вслепую.
+- Перед перемещением worktree проверяется: не dirty (`git status --porcelain`), нет уникальных unpushed коммитов (нет upstream и HEAD не предок master/main, либо есть коммиты впереди upstream) — `worktreeSafetyCheck()`. При отказе объект остаётся на месте.
+- Объект, который использует активный процесс (обнаруживается по `<path>.lock`/`<path>.release.lock`), никогда не трогается.
+- Только объекты с доказанно нулевым риском (например строго `\.tmp-<pid>-<ts>` файлы-сироты, не директории) могут быть удалены сразу (`autoDeleteIfProvenSafe`) — всё остальное только перемещается в `SESSION_SAFE_TO_DELETE` с записью в README, либо, если небезопасно и переместить, регистрируется в разделе `MANUAL_DELETE_CANDIDATES` с `SAFE TO DELETE MANUALLY: YES/NO/UNKNOWN` и остаётся на месте нетронутым.
+- Регрессионные тесты: `test/session-safe-to-delete-policy.test.js` (13/13 PASS), покрывают: мусор вне папки → FAIL; зарегистрированный кандидат → не проваливает gate; dirty worktree → отказ; уникальный unpushed коммит → отказ; активный процесс/lock → отказ; дубликат `SAFE_TO_DELETE_2` → FAIL; повторный вызов переиспользует единую папку; README не теряет чужие записи; доказанно безопасный temp-файл удаляется сразу; неизвестный по риску объект → `MANUAL_DELETE_CANDIDATES`, не удаляется.
+
+### 19.2 DESKTOP ZERO-CHAOS HARD GATE (STRICT, без исключений — v2, 2026-09-06)
+
+**Обновлено 2026-09-06 (Final Desktop Consolidation):** предыдущая версия этого правила разрешала «зарегистрированный git worktree» как постоянное исключение из проверки, независимо от того, чистый он или грязный, запушен или нет. Это было ОШИБКОЙ и отменено полностью. Новое правило не имеет исключений вида «но это настоящий worktree» / «но он чистый и запушен» / «но это именованный launcher, а не AI-мусор».
+
+После **каждой** рабочей сессии на Desktop любого AI (Claude, Claude Code, ChatGPT, Codex, OpenCode, OpenHuman, AnythingLLM, локальных моделей, browser-агентов, будущих агентов) на Desktop разрешены **ровно три** объекта верхнего уровня, связанных с `World_server` — и никогда больше:
+
+1. `%USERPROFILE%\Desktop\World_server` (единственный основной checkout).
+2. `%USERPROFILE%\Desktop\SESSION_SAFE_TO_DELETE` (см. §19.1).
+3. `%USERPROFILE%\Desktop\WORLD_SERVER_KEEP.zip` (см. §19 п.3).
+
+Любой другой файл или папка на Desktop, чьё имя содержит «world»+«server» (в любом регистре, с любым разделителем — `_`, ` `, `-` или без него) — это **FAIL**, без исключений. Это касается: `World_server_copy`, `World_server_test`, `World_server_tmp`, `World_server_AI_2`, `*_backup`, `*_backup-final`, `*_old`, `*sandbox-copy*`, `*integration_tmp*`, любого temp/integration/task worktree независимо от того, зарегистрирован ли он в `git worktree list`, чистый он или грязный, запушен или нет — а также именованных launcher-папок (напр. `World_server AI`), даже если они представляют собой настоящую, документированную пользовательскую инфраструктуру, а не AI-мусор. Единственно правильное действие для такой папки — закоммитить/запушить полезное в origin, заархивировать уникальное-неопубликуемое в `WORLD_SERVER_KEEP.zip` (см. §19 п.3), и либо удалить папку, либо перенести её ЗА ПРЕДЕЛЫ Desktop (temp worktree на будущее создавать не на Desktop, см. ниже).
+
+**Проверка:** `npm run desktop-ai:zero-chaos-gate` (реализация: `scripts/desktop-ai-session-housekeeping.cjs zero-chaos-gate`, использует `scanForbiddenDesktopClutter`/`desktopZeroChaosGate` из `scripts/lib/session-safe-to-delete-registry.cjs`). Функция больше не принимает и не использует `registeredWorktreePaths` как список исключений — параметр удалён из сигнатуры `desktopZeroChaosGate`, а не просто перестал на что-то влиять, чтобы исключить случайное возвращение старого поведения. Сверяет ВСЕ Desktop-элементы (файлы и папки), чьё имя матчит `/world[-_ ]?server/i`, против фиксированного allowlist из трёх точных имён (`world_server`, `session_safe_to_delete`, `world_server_keep.zip`, сравнение без учёта регистра) — никакого сопоставления по паттернам «похоже на мусор» больше нет, только allowlist.
+
+**PASS** только если:
+- на Desktop нет ни одного `World_server`-подобного объекта, кроме указанных выше трёх (gate: `verdict !== 'FAIL'`, `clutter.length === 0`);
+- полезное закоммичено/запушено (агент проверяет сам — gate не имеет видимости во все worktree сразу);
+- уникальное неопубликуемое — в `WORLD_SERVER_KEEP.zip`;
+- ненужное удалено или лежит только в `SESSION_SAFE_TO_DELETE`;
+- нет второй `SAFE_TO_DELETE`-подобной папки.
+
+**FAIL**, если после сессии на Desktop остался хотя бы один `World_server`-подобный объект сверх разрешённых трёх (по любой причине: worktree, backup, launcher, дубликат zip и т.д.), или существует дубликат `SAFE_TO_DELETE`-папки. Агент обязан честно вернуть `FAIL`, если это условие не выполнено — недопустимо завершать сессию отчётом `PASS`, когда на Desktop остались лишние `World_server`-папки/файлы.
+
+**Будущие temp/integration worktree:** любой временный/изолированный worktree, создаваемый в течение сессии (`git worktree add --detach` и т.п.), должен создаваться ВНЕ Desktop (например, под системным temp-каталогом или отдельным рабочим каталогом вне `%USERPROFILE%\Desktop`) — не как временное исключение "разрешено, пока сессия идёт", а как обязательное место создания с самого начала, чтобы этот gate был честным PASS в любой момент, а не только в конце сессии.
+
+Регрессионные тесты (`test/session-safe-to-delete-policy.test.js`, 10 новых сценариев для этой версии + существующие): PASS на Desktop ровно с тремя разрешёнными объектами; FAIL на чистом+запушенном лишнем worktree (никакого исключения "safe worktree"); FAIL на грязном/неопубликованном worktree; FAIL даже если лишняя папка передана как `registeredWorktreePaths`-подобный аргумент (сам механизм исключения удалён, а не просто перестал быть используемым); FAIL на документированной launcher-папке `World_server AI`; PASS на вариантах регистра/разделителя канонических имён; FAIL на дубликате/переименованном `WORLD_SERVER_KEEP*.zip`; репорт перечисляет ВСЕ лишние объекты одновременно, а не только первый; PASS — посторонние пользовательские файлы/папки без «world»+«server» в имени никогда не флагуются; FAIL комбинирует находки clutter и duplicate-registry одновременно, обе причины присутствуют в отчёте.
+
+## 20. AI COMMIT PROVENANCE — обязательные trailer-поля для коммитов AI
+
+**Распространяется на всех:** Claude, Claude Code, Claude Desktop, ChatGPT, Codex, OpenCode, OpenHuman, AnythingLLM, локальные модели, browser-агенты и любые будущие агенты, коммитящие в `World_server`.
+
+Каждый коммит любого AI-агента обязан содержать в теле commit message следующие trailer-поля:
+
+```
+AI-Agent: <Claude-Code|Claude-Desktop|ChatGPT|Codex|OpenCode|OpenHuman|...>
+AI-Session: <уникальный ID текущей рабочей сессии>
+Worktree: <полный путь к рабочему дереву>
+Branch: <текущая ветка>
+Ownership: <краткая зона ответственности, напр. "housekeeping/CAS" или "browser-local worktree lifecycle">
+```
+
+Правила:
+- `AI-Session` обязан быть уникальным для конкретной активной рабочей сессии. **Запрещено** переиспользовать `AI-Session` другой, независимо активной сессии, и **запрещено** копировать в новый коммит устаревший/шаблонный идентификатор из более раннего коммита без проверки, что это действительно та же непрерывная сессия.
+- `Worktree` и `Branch` должны совпадать с фактическим `git rev-parse --show-toplevel` / `git rev-parse --abbrev-ref HEAD` на момент коммита.
+- Старое поле `Claude-Session:` (использовалось до введения этого правила) по-прежнему распознаётся проверкой ради обратной совместимости истории, но новые коммиты обязаны использовать `AI-Session:` вместе со всеми остальными обязательными полями выше.
+
+**Зафиксированное несоответствие (историю не переписывать):** коммиты `ba85e730` (ветка `ai/opencode/multi-ai-peer-improvement`, worktree `World_server`) и `dc402529` (ветка `ai/opencode/browser-local-control`, worktree `World_server_browser_local`) — два независимых, параллельно активных изменения — оба содержат идентичный `Claude-Session: https://claude.ai/code/session_01MJjnYYUZ8cAMDG8LD8T4r7`, несмотря на разные worktree/branch/задачи. Это провенанс-несоответствие, обнаруженное координационным мониторингом 2026-09-05. Сами коммиты не изменяются — правило и проверка ниже существуют, чтобы это не повторилось.
+
+**Автоматическая проверка (WARN, не блокирует CI):** `node scripts/check-agent-rules.js` (реализация: `scripts/lib/ai-commit-provenance.cjs`) сканирует tip-коммиты локальных веток, изменённых за последние `activeWindowMs` (по умолчанию 24 часа — прокси для «активная сессия»), и выводит `WARN`, если один и тот же `AI-Session`/`Claude-Session` id одновременно встречается на tip двух и более разных веток. Это не `FAIL` — обнаруженная коллизия требует расследования (совпадение легитимно или это ошибка копирования шаблона), а не автоматической блокировки merge. Регрессионные тесты: `test/ai-commit-provenance.test.js`.
+
+### Zero-Chaos Git evidence (Codex recovery, 2026-09-06)
+`desktop-ai:zero-chaos-gate` combines Desktop layout checks with read-only Git
+checks for every registered worktree (including canonical and off-Desktop
+copies). Dirty/untracked files, commits unreachable from all known remote
+tracking refs, or failed Git inspection prevent PASS. A local master/main
+branch alone is never evidence of push. The gate does not commit, push,
+move or delete files; active foreign work remains preserved.

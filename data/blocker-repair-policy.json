@@ -50,6 +50,8 @@
   },
   "gates": {
     "npmScripts": [
+      "integration:cas:gc",
+      "desktop-ai:worktree-audit",
       "integration:full",
       "integration:functions:audit",
       "integration:functions:coverage",

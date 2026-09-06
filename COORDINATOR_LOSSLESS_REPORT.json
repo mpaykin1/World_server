@@ -1,0 +1,27 @@
+{
+  "at": "2026-09-06T05:13:54.645Z",
+  "base": "469abbe8",
+  "branch": "ai/codex/coordinator-lossless",
+  "status": "FOCUSED_TESTS_PASS_NOT_INTEGRATED",
+  "mergeSafe": false,
+  "changes": [
+    "No force cleanup; verified owned clean paths only; original failed/ignored/untracked work retained",
+    "Worker-created commits retained; failed add/commit/status/push cannot PASS",
+    "Recovery persistence exception cannot remove checkout",
+    "Lease survives bounded second attempt and releases after synchronous callback error",
+    "OpenCode final text extracted independently of large tool output; blank/tool-only completion and permission refusal fail closed; refusal not retried",
+    "Zero-Chaos CLI aggregates dirty/untracked/unpublished Git state for every checkout"
+  ],
+  "tests": {
+    "before": "7/7 regression cases fail against immutable 469abbe8",
+    "after": "35/35 coordinator and lossless tests PASS; 35/35 existing housekeeping/safe-to-delete tests PASS in earlier combined run",
+    "syntax": "both changed scripts PASS",
+    "realZeroChaos": "FAIL as expected; active foreign dirty work and unpublished local Google commit reported"
+  },
+  "limitations": [
+    "Peer commit 469abbe8 is prerequisite; not cherry-picked into active main",
+    "Read-only OpenCode final audit blocked by external-directory policy; committed Git-object review is the safe retry path",
+    "No production deploy or general push performed",
+    "Known remote refs are local evidence; no remote network fetch is forced by Zero-Chaos gate"
+  ]
+}

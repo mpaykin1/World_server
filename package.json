@@ -108,6 +108,10 @@
     "desktop-ai:session:self-test": "node scripts/desktop-ai-session-recovery.cjs self-test",
     "desktop-ai:auto-recover": "node scripts/desktop-ai-session-recovery.cjs auto-recover",
     "desktop-ai:auto-recover:status": "node scripts/desktop-ai-session-recovery.cjs auto-recover-status",
+    "desktop-ai:worktree-audit": "node scripts/desktop-ai-session-housekeeping.cjs audit",
+    "desktop-ai:housekeeping": "node scripts/desktop-ai-session-housekeeping.cjs run",
+    "desktop-ai:safe-gate": "node scripts/desktop-ai-session-housekeeping.cjs safe-gate",
+    "desktop-ai:zero-chaos-gate": "node scripts/desktop-ai-session-housekeeping.cjs zero-chaos-gate",
     "blockers:tick": "node scripts/autonomous-blocker-repair.cjs tick",
     "blockers:loop": "node scripts/autonomous-blocker-repair.cjs loop",
     "blockers:status": "node scripts/autonomous-blocker-repair.cjs status",
@@ -143,6 +147,9 @@
     "integration:impact:auto": "node scripts/change-impact-orchestrator.cjs",
     "integration:snapshot": "node scripts/cas-merkle-store.cjs snapshot",
     "integration:dr:verify": "node scripts/cas-merkle-store.cjs verify",
+    "integration:cas:gc": "node scripts/cas-merkle-store.cjs gc-auto schedule",
+    "integration:cas:gc:manual": "node scripts/cas-merkle-store.cjs gc",
+    "integration:cas:stats": "node scripts/cas-merkle-store.cjs stats",
     "integration:policy": "node scripts/policy-engine.cjs",
     "integration:provenance": "node scripts/provenance.cjs",
     "integration:directives": "node scripts/project-directive-gate.cjs",
@@ -334,6 +341,10 @@
     "collective-brain:replay": "node scripts/collective-brain-replay.js",
     "collective-brain:full": "node scripts/collective-brain-full.js",
     "collective-brain:opa": "node scripts/collective-brain-opa-check.js",
+    "collective-brain:knowledge-pack": "node scripts/collective-brain-knowledge-pack.js",
+    "collective-brain:ordinary-chat-check": "node scripts/openhuman-ordinary-chat-check.js",
+    "master-coordinator": "node scripts/master-coordinator.cjs",
+    "master-coordinator:test": "node --test test/master-coordinator.test.js",
     "quality:world:feedback:telemetry": "node scripts/world-feedback-learner.js",
     "google:slots:init": "node scripts/google-ai-studio-slots.cjs init",
     "google:slots:discover": "node scripts/google-ai-studio-slots.cjs discover",
@@ -437,5 +448,12 @@
     "@playwright/test": "^1.62.1",
     "esbuild": "^0.28.2",
     "pngjs": "^7.0.0"
+  },
+  "overrides": {
+    "lighthouse": "13.4.1",
+    "qs": "6.16.0",
+    "tmp": "0.2.7",
+    "uuid": "11.1.1",
+    "@puppeteer/browsers": "3.2.2"
   }
 }

@@ -24,3 +24,4228 @@
   "stateFile": ".world-server-state/long-soak/selftest-14988.json",
   "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
 }
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T14:53:08.209Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000026,
+  "eventCount": 3,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-12988.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T15:01:44.633Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15172.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T15:07:11.526Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15984.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T15:15:39.535Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-14316.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T15:20:07.187Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 7,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16668.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T15:30:28.922Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 4,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15864.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T15:34:57.756Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16048.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T15:45:29.098Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17492.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T15:50:04.353Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-7568.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T16:01:34.084Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-11860.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T16:07:05.463Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-8584.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T16:16:02.420Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 7,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15332.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T16:21:01.388Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-8732.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T16:31:00.456Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15692.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T16:35:57.348Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-14056.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T16:45:58.178Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-1112.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T16:50:50.879Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-19060.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T17:00:57.455Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18196.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T17:05:53.300Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-6556.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T17:15:57.629Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18512.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T17:20:54.731Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-10480.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T17:30:55.579Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-13420.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T17:35:50.735Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-8832.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T17:45:54.437Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-14876.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T17:50:46.547Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18772.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T18:00:53.502Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16196.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T18:05:45.894Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16520.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T18:15:56.486Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17576.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T18:20:50.786Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16132.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T18:30:56.012Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-14644.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T18:35:50.979Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-10708.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T18:45:55.585Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-14640.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T18:50:48.323Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-1944.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T19:00:57.260Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-3476.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T19:05:51.354Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-13412.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T19:15:54.957Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-13948.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T19:20:53.674Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18340.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T19:30:56.684Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 4,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-11688.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T19:35:51.221Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-4276.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T19:45:56.000Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16984.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T19:50:50.488Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15416.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T20:00:57.947Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-11540.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T20:05:52.508Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16564.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T20:15:56.507Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-7736.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T20:20:54.824Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-9840.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T20:30:54.399Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-3320.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T20:35:50.598Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-7012.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T20:45:55.278Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-8832.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T20:50:49.510Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16408.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T21:00:57.333Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15640.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T21:05:55.556Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15552.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T21:16:00.696Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15032.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T21:21:02.429Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-11416.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T21:31:03.794Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16248.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T21:36:02.947Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15376.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T21:49:32.630Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16216.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T22:01:28.835Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00003,
+  "eventCount": 2,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-232.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T22:31:35.801Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-4512.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T22:49:32.273Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16496.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T23:00:27.969Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15588.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T23:04:54.621Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-2472.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T23:15:27.906Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 4,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-12568.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T23:19:54.744Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-6700.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T23:30:28.385Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15496.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T23:34:57.179Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15396.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T23:45:28.976Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15624.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-08-31T23:49:55.576Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-11540.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T00:00:30.659Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-6584.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T00:04:57.456Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18828.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T00:15:28.832Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15652.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T00:19:54.074Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15880.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T00:30:31.393Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18300.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T00:34:58.845Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-8872.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T00:45:29.758Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 8,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15648.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T00:49:56.038Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-4516.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T01:00:57.024Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-13032.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T01:15:28.571Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18996.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T01:19:55.068Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15720.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T01:30:29.493Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17400.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T01:34:57.413Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-8576.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T01:45:34.058Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-13112.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T01:50:01.168Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-14980.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T02:00:29.917Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16580.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T02:04:56.289Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15276.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T02:15:30.377Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15516.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T02:19:57.354Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-6780.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T02:30:29.539Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-14804.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T02:34:57.056Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-1620.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T02:45:31.507Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-13668.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T02:49:58.649Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18552.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T03:00:34.259Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15480.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T03:05:01.831Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15328.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T03:15:30.228Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-8536.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T03:19:56.530Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-8748.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T03:30:29.841Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16444.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T03:34:59.418Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-2420.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T03:45:28.304Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 7,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-7420.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T03:49:54.584Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17548.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T04:00:30.879Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-6080.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T04:04:59.050Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-2004.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T04:15:33.641Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-6240.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T04:20:00.899Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17252.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T04:31:04.995Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 4,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-9872.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T04:36:00.443Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17932.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T04:45:38.630Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-4856.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T04:50:51.845Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-11748.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T05:01:54.786Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15008.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T05:39:58.263Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000026,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17376.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T07:56:10.829Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-14140.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T08:14:19.760Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17964.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T08:17:40.408Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-4264.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T08:29:11.705Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-6296.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T08:32:31.509Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17668.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T08:44:07.020Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-13812.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T08:47:26.108Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-7720.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T08:59:15.088Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15148.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T09:02:34.462Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15680.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T09:14:06.378Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-6976.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T09:17:27.894Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-19304.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T09:29:01.849Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-11152.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T09:32:19.790Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-4752.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T09:44:08.269Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18512.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T09:47:30.825Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-9848.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T09:59:13.845Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-13116.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T10:02:42.746Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-5592.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T10:14:41.294Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17092.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T10:32:19.964Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16128.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T10:45:45.610Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17624.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T10:49:55.584Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16608.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T10:59:47.423Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16000.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T11:03:41.669Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17864.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T11:14:59.090Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 4,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-1752.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T11:19:00.826Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-11136.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T11:29:43.346Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-8584.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T11:33:25.582Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-10860.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T11:44:47.977Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000032,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-6944.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T11:48:36.757Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-8168.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T11:59:47.215Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15556.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T12:03:35.619Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18924.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T12:14:53.779Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18604.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T12:18:46.033Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17996.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T12:29:44.475Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18244.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T12:33:30.739Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-13632.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T12:44:47.936Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-2144.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T12:48:31.039Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18992.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T12:59:35.726Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000025,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17380.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T13:03:24.077Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15716.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T13:14:29.248Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-5932.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T13:18:22.090Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-4464.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T13:29:45.928Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 8,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-13648.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T13:33:32.589Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-8796.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T13:44:29.986Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-5316.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T13:48:12.003Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-19256.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T14:02:12.608Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-4228.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T14:05:26.870Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-19316.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T14:19:25.215Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-2320.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T14:36:12.690Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18252.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T14:45:39.314Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15460.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T14:50:57.732Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-14820.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T15:15:18.991Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 7,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15648.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T15:19:30.854Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 7,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17844.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T15:34:24.015Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-13392.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T15:45:11.006Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-8928.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T15:49:23.615Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-10004.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T16:00:10.463Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-12604.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T16:04:23.622Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-13760.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T16:15:11.382Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-10516.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T16:19:32.791Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 7,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-11440.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T16:30:10.744Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15424.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T16:34:23.021Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-19056.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T16:45:10.430Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-13176.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T16:49:21.011Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-1156.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T17:00:10.817Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17824.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T17:04:21.648Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 7,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15400.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T17:15:11.658Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-1136.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T17:19:21.972Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-11912.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T17:30:11.301Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-14684.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T17:34:24.221Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-2420.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T17:45:12.006Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 8,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16744.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T17:49:23.341Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17964.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T18:00:10.930Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18640.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T18:04:23.023Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16972.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T18:16:06.429Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-3152.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T18:20:25.121Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-13328.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T18:30:31.166Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-14792.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T18:35:00.214Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-4512.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T18:45:28.964Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 8,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-1576.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T18:50:12.251Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18720.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T19:00:26.859Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18564.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T19:04:58.995Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15996.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T19:15:20.323Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16464.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T19:19:40.072Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-7860.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T19:30:11.638Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17184.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T19:34:28.267Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17128.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T19:45:13.372Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-8872.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T19:49:28.026Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15412.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T20:00:11.450Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-9084.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T20:04:30.143Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18804.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T20:15:14.323Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-8156.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T20:19:29.231Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-9564.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T20:30:17.795Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-10276.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T20:34:31.187Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 4,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16680.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T20:45:17.965Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 7,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-1620.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T20:49:32.100Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-9268.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T21:00:31.802Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17988.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T21:04:43.772Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18124.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T21:15:07.946Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-5128.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T21:19:24.806Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16244.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T21:30:10.710Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-19188.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T21:34:13.523Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16496.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T21:45:22.845Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-536.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T21:49:44.327Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 7,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-11920.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T22:00:09.719Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-9712.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T22:04:17.162Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-14484.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T22:15:09.823Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-13392.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T22:19:22.009Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15556.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T22:30:14.620Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-13480.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T22:34:27.307Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17104.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T22:45:13.403Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15556.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T22:49:26.470Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-14200.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T23:00:13.183Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-384.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T23:04:26.037Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-7860.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T23:15:11.214Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-9288.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T23:19:22.855Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15244.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T23:30:16.637Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 7,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17336.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T23:34:33.699Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16512.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T23:45:16.771Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16540.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-01T23:49:30.120Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-4160.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T00:00:10.200Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16112.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T00:04:24.119Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-2200.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T00:15:12.941Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-3252.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T00:19:28.724Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 4,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15972.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T00:30:10.635Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-13400.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T00:34:27.059Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-9236.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T00:45:17.045Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18348.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T00:49:27.140Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-10516.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T01:00:08.327Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15856.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T01:04:21.792Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-14236.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T01:15:15.630Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17420.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T01:19:28.061Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-8580.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T01:30:12.345Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-11440.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T01:34:27.101Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15712.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T01:45:17.838Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18620.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T01:49:35.948Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-12004.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T02:00:11.511Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 4,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-8976.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T02:04:24.321Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 4,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16140.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T02:15:12.392Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-9980.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T02:19:23.647Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-14924.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T02:30:17.006Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18756.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T02:34:32.723Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 4,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-12800.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T02:45:16.978Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-13404.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T02:49:27.775Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 3,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18852.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T03:00:09.328Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17132.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T03:04:22.106Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-13924.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T03:15:11.220Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-7512.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T03:19:26.846Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-5912.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T03:30:12.034Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 4,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16096.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T03:34:28.115Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16508.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T03:45:16.278Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16708.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T03:49:30.551Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17636.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T04:00:13.593Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-12576.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T04:04:28.406Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18664.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T04:30:12.480Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-12004.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T04:46:12.539Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18176.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T05:05:39.076Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18820.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T05:48:47.133Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-14732.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T06:22:11.337Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-11600.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T06:30:35.589Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-9480.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T07:00:02.181Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-8148.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T07:04:02.754Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-19884.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T07:15:00.827Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-14944.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T07:19:02.206Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-4176.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T07:30:01.340Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-13784.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T07:34:01.107Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 4,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-2420.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T07:45:04.356Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-6924.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T07:49:05.059Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-14176.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T08:00:00.799Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-3172.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T08:04:01.258Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18188.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T08:15:01.692Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 4,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17464.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T08:19:01.411Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 3,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-9840.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T08:30:00.268Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-1448.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T08:34:01.976Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-20392.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T08:45:05.056Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15228.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T08:49:05.665Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-19056.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T09:00:01.485Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15276.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T09:04:02.955Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-2928.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T09:15:03.014Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-2128.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T09:19:04.518Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-8896.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T09:30:04.470Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 7,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-4220.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T09:34:07.983Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-9320.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T09:45:05.028Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18424.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T09:49:08.882Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17844.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T10:00:03.171Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-1464.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T10:04:08.415Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-4512.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T10:15:04.460Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 4,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-7648.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T10:19:06.357Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15416.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T10:30:03.839Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-14520.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T10:34:04.057Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-16268.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T10:45:03.217Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15440.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T10:49:04.243Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000028,
+  "eventCount": 7,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-9144.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T11:00:03.927Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-9140.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T11:04:07.894Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18684.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T11:15:01.975Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15016.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T11:19:04.624Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 4,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15560.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T11:30:01.792Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-11548.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T11:34:06.127Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15620.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T11:45:09.023Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15416.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T12:20:11.305Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-13392.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T12:30:03.280Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 4,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18008.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T12:34:05.245Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18216.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T12:48:34.122Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-15172.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T12:55:28.352Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 4,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-14052.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T16:01:09.280Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-18944.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T16:32:57.748Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 4,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-19580.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T17:04:11.595Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17848.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T17:14:45.724Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000022,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17796.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T17:18:26.887Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-8928.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T17:29:50.947Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17988.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T17:33:47.652Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.00002,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-19884.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T17:44:56.847Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000023,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-17452.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-02T17:49:42.475Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-19724.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-03T04:29:15.159Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000024,
+  "eventCount": 6,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-2340.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-03T04:32:09.225Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-13128.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-05T05:44:02.123Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-5580.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}
+{
+  "schemaVersion": "7.5.0",
+  "generatedAt": "2026-09-05T05:46:53.859Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 0.000021,
+  "eventCount": 5,
+  "allRecovered": true,
+  "longSoakCertified": false,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/selftest-10504.json",
+  "truthRule": "Short smoke validates harness behavior only. LONG_SOAK_CERTIFIED requires >=8 wall-clock hours of fresh evidence with no unrecovered invariant violation."
+}

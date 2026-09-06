@@ -69,7 +69,21 @@ if(!errors.length){
   if(process.env.DESKTOP_AI_REQUIRE_COMPLETE==='1'&&/Not completed\.|UNSET/i.test(final))errors.push('completion requested but Final evidence is not completed');
 }
 const report={generatedAt:new Date().toISOString(),pass:errors.length===0,errors,warnings};
-fs.writeFileSync(path.join(ROOT,'DESKTOP_AI_PROTOCOL_REPORT.json'),JSON.stringify(report,null,2)+'\n');
+const __reportPath=path.join(ROOT,'DESKTOP_AI_PROTOCOL_REPORT.json');
+const __reportBody=JSON.stringify(report,null,2)+'\n';
+let __wrote=false,__lastErr=null;
+for(let __a=0;__a<5;__a++){
+  try{ fs.writeFileSync(__reportPath,__reportBody); __wrote=true; break; }catch(__e){
+    __lastErr=__e;
+    const __code=(__e&&__e.code)||'';
+    const __msg=String(__e&&__e.message||'');
+    const __retryable=__code==='UNKNOWN'||__code==='EBUSY'||__code==='EPERM'||__code==='EACCES'||/unknown error/i.test(__msg);
+    if(!__retryable||__a===4) throw __e;
+    const __backoff=120*(Math.pow(2,__a));
+    const __t=Date.now()+__backoff; while(Date.now()<__t){}
+  }
+}
+if(!__wrote&&__lastErr) throw __lastErr;
 for(const w of warnings)console.warn('[DESKTOP_AI_PROTOCOL] warning:',w);
 for(const e of errors)console.error('[DESKTOP_AI_PROTOCOL] error:',e);
 if(errors.length)process.exit(61);

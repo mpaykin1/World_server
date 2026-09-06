@@ -1,0 +1,90 @@
+{
+  "experiment": "RUN_040_H4_REAL_HOLDOUT_MEMORY_ABLATION",
+  "model": "qwen2.5:3b-instruct",
+  "seeds": [
+    40040,
+    40041,
+    40042
+  ],
+  "criterion": "memory quality >= baseline + 0.15; no task quality worsens; memory errors <= baseline errors; wall time <=2x baseline",
+  "rows": [
+    {
+      "id": "absolute-nodepath",
+      "retrieved": "- godot-nodepath-absolute-unresolvable: a leading-slash NodePath resolves from the actual SceneTree root (get_tree().root), not the edited scene's own root node - it needs the \"/root/<SceneRootName>/...\" prefix, not \"/<SceneRootName>/...\"\n- godot-editor-play-hides-standalone-parse-errors: a `var x := expr` where expr's type can't be statically inferred (e.g. the builtin generic max()/min()/clamp() instead of maxi/mini/clampi/maxf/minf/clampf) is only a warning in the editor's live Play session, but the same project can have warnings-as-errors enabled for exported/standalone runs - the affected script (often an autoload or a node's own controller) fails to load entirely, so its Camera3D/logic never runs and the viewport shows nothing but the default clear color",
+      "baseline": {
+        "quality": 0.5,
+        "errors": 0,
+        "novelty": 15,
+        "text": "ROOT_CAUSE: In Godot, absolute NodePaths are not directly supported. They need to be relative to the current scene root. The error occurs because the path `/Hero/Camera` is interpreted as an absolute path, which is not valid in the context of the current scene.\n\nFIX: Use a relative NodePath. Assuming Hero is the current scene root, the correct path would be `Hero/Camera`. If Hero is not the current scene root, you need to provide the correct relative path from the current scene root to the Camera node.\n\nMinimal correct path form: `Hero/Camera`",
+        "ms": 31262,
+        "promptEval": 86,
+        "eval": 121
+      },
+      "memory": {
+        "quality": 1,
+        "errors": 0,
+        "novelty": 15,
+        "text": "**ROOT_CAUSE**: The absolute NodePath `/Hero/Camera` is not resolvable because it is relative to the SceneTree root, not the current scene's root node. The correct form should include the prefix for the current scene's root node, e.g., `/root/Hero/Camera`.\n\n**FIX**: Replace the absolute NodePath `/Hero/Camera` with the correct form, which would be `/root/Hero/Camera` if the current scene's root node is named \"Hero\". Adjust the NodePath according to the actual root node name of the current scene.",
+        "ms": 43838,
+        "promptEval": 291,
+        "eval": 118
+      }
+    },
+    {
+      "id": "orbit-double-offset",
+      "retrieved": "- godot-orbit-rig-position-duplicates-camera-offset: the rig node's own scene-level `position` was set to the intended back/up camera offset (e.g. (0, 1.4, 13)), duplicating an offset the rig's script ALSO applies internally to its camera child in _ready() - so the actual orbit center ended up 13 units away from the tracked subject instead of at the subject's own origin\n- godot-camera-orbit-wrong-pivot: mouse yaw/pitch was applied to a rig that only rotates in place at a fixed offset (first-person look), instead of a true orbit rig whose camera swings in an arc around the subject's origin",
+      "baseline": {
+        "quality": 0.6666666666666666,
+        "errors": 0,
+        "novelty": 23,
+        "text": "ROOT_CAUSE: The orbit camera is orbiting around a point that is far behind the hero, likely due to incorrect positioning or offset calculations in the script.\n\nFIX: \n1. Ensure the rig node is correctly positioned back/up in the scene and verify its position and orientation.\n2. Check the offset calculations in the `_ready()` function to ensure they are correctly offsetting the Camera3D child relative to the hero's position.\n3. Verify that the hero's position and the offset calculation are consistent and correctly applied to the camera.\n4. If the hero is moving, ensure the offset is recalculated or adjusted dynamically to maintain the correct orbit around the hero.\n\nMake sure to test the camera",
+        "ms": 62637,
+        "promptEval": 95,
+        "eval": 140
+      },
+      "memory": {
+        "quality": 0.6666666666666666,
+        "errors": 0,
+        "novelty": 17,
+        "text": "### ROOT_CAUSE\nThe root cause of the issue is that the Godot camera rig is positioned and offset incorrectly. The rig node's `position` is set to a back/up camera offset, and the script also offsets the Camera3D child in the `_ready()` method. This results in the camera orbiting around a point that is 13 units behind the hero instead of at the hero's origin.\n\n### FIX\nTo fix this issue, you need to adjust the positioning and offset of the camera rig. Here are the steps to correct the setup:\n\n1. **Remove the Offset in `_ready()`**:\n   - In the `_ready()` method of the rig node, remove",
+        "ms": 47535,
+        "promptEval": 259,
+        "eval": 140
+      }
+    },
+    {
+      "id": "powershell-mojibake",
+      "retrieved": "- powershell-utf8-mojibake-on-install: Windows PowerShell 5.1's Get-Content -Raw defaults to the system ANSI codepage when no -Encoding is given, misreading a BOM-less UTF-8 source file; the corrupted string is then re-saved via Set-Content -Encoding UTF8 (which also adds a BOM in 5.1), baking the corruption in\n- godot-editor-play-hides-standalone-parse-errors: a `var x := expr` where expr's type can't be statically inferred (e.g. the builtin generic max()/min()/clamp() instead of maxi/mini/clampi/maxf/minf/clampf) is only a warning in the editor's live Play session, but the same project can have warnings-as-errors enabled for exported/standalone runs - the affected script (often an autoload or a node's own controller) fails to load entirely, so its Camera3D/logic never runs and the viewport shows nothing but the default clear color",
+      "baseline": {
+        "quality": 0.6666666666666666,
+        "errors": 0,
+        "novelty": 27,
+        "text": "ROOT_CAUSE: The script likely reads the file in Windows-1252 encoding, which cannot represent Cyrillic characters, and then writes it again without specifying the correct encoding, resulting in mojibake.\n\nFIX: Ensure the script specifies UTF-8 encoding when reading and writing the file. Use the following commands in the script:\n\n```powershell\n# Read the file with UTF-8 encoding\n(Get-Content -Path \"path\\to\\file\" -Encoding UTF8) | Out-File -FilePath \"path\\to\\file\" -Encoding UTF8\n```\n\nThis ensures the file is read and written in UTF-8 encoding, preserving the Cyrillic characters correctly",
+        "ms": 72292,
+        "promptEval": 92,
+        "eval": 140
+      },
+      "memory": {
+        "quality": 1,
+        "errors": 0,
+        "novelty": 31,
+        "text": "ROOT_CAUSE: Windows PowerShell 5.1's Get-Content -Raw defaults to the system ANSI codepage when no -Encoding is given, leading to misreading a BOM-less UTF-8 source file. The corrupted string is then re-saved via Set-Content -Encoding UTF8, which also adds a BOM, resulting in the corruption being baked in.\n\nFIX: To avoid this issue, ensure that the PowerShell script uses the correct encoding when reading and writing files. Specifically, use the `-Encoding UTF8` parameter with the `Get-Content` and `Set-Content` commands to explicitly specify UTF-8 encoding. This will prevent the corruption of the BOM-less",
+        "ms": 22035,
+        "promptEval": 322,
+        "eval": 140
+      }
+    }
+  ],
+  "baselineMeanQuality": 0.611111111111111,
+  "memoryMeanQuality": 0.8888888888888888,
+  "qualityGain": 0.2777777777777778,
+  "baselineErrors": 0,
+  "memoryErrors": 0,
+  "baselineNovelty": 21.666666666666668,
+  "memoryNovelty": 21,
+  "noveltyDelta": -0.6666666666666679,
+  "baselineMs": 166191,
+  "memoryMs": 113408,
+  "timeRatio": 0.6823955569194481,
+  "pass": true
+}
