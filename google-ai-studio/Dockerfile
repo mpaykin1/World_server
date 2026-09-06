@@ -1,6 +1,9 @@
 # Optional fallback for direct Cloud Run/container testing.
 # Google AI Studio Starter Tier remains the default publish path.
-FROM node:22-alpine
+# Node major matches package.json "engines".node (24.x) — keep these two in
+# sync; scripts/google-ai-studio-slots.cjs build-guard fails the gate if they
+# drift again.
+FROM node:24-alpine
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
