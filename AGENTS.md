@@ -176,3 +176,22 @@ This rule applies to every current and future AI agent working on `World_server`
 - A local agent must not continue heavy implementation after the work is safely available to cloud agents unless the remaining step is impossible remotely.
 - Any confirmed clutter/performance regression must get a root-cause fix plus regression protection, not just one-time cleanup.
 - Cloud/browser agents must preserve existing architecture, use `World_server` as the single source of truth, and avoid duplicate repositories/projects/services.
+
+
+## 13. MANUAL-ACTION & DEPLOYMENT CONFIDENCE GATE — HARD RULE
+
+This rule is mandatory for every current and future AI agent and coordinator.
+
+- Before asking the user to click, publish, deploy, sync, force-push, delete, unpublish, reconnect, recreate, enter credentials, enable billing, or perform any other consequential manual action, the agent must reach **>=95% confidence** that the exact proposed action is correct for the exact target.
+- Confidence must be based on **at least two independent current evidence sources**. For an external platform, at least one source must be authoritative/current platform documentation or an authenticated platform state read. A guess from names, timestamps, UI ordering, memory, or an old handoff is never sufficient.
+- Prove the exact target identity first: repository, branch/SHA, app/workspace ID, public URL, service/slot/project when applicable. If duplicated names exist, names alone are insufficient.
+- Always distinguish **repository-integrated** from **live-deployed**. A patch is not "installed in production" until the live target proves the expected behavior/version through a route, build SHA, deployment metadata, or equivalent runtime evidence.
+- If confidence is below 95%, continue investigating and **do not instruct the user to act**. State what is known/unknown instead of guessing.
+- Existing published production is **update-in-place by default**. Never delete/unpublish/recreate an existing app/service/project merely to deliver an update.
+- For Google AI Studio Starter Tier, preserve the existing published app slot and overwrite/update that slot. Do not manually delete the backing Cloud Run service to replace it.
+- Never use AI Studio `Force push` from a stale/uncertain workspace into canonical `master`. Canonical source is `mpaykin1/World_server` `master`; external workspaces pull/sync from canonical source unless a separately reviewed flow explicitly says otherwise.
+- Never create duplicate repositories, AI Studio apps, Cloud Run services, slots, or deployment systems when the intended target already exists.
+- A destructive exception requires all three: authoritative evidence that in-place update is impossible; a verified rollback + public-URL preservation plan; and explicit user approval for that destructive action.
+- After a deployment/update, independently probe the canonical public URL and the capability-specific endpoint/behavior before declaring success.
+- Machine-readable source of this rule: `data/deployment-safety-policy.json`. CI enforcement: `node scripts/check-agent-rules.js`.
+- Canonical production target for this project is `https://world-server.ai.studio`; never substitute another host when verifying or updating production unless the user explicitly changes the canonical target.

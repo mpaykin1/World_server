@@ -435,3 +435,27 @@ Focused RUN_072 tests, syntax checks, one deterministic experiment replay, and A
 
 ## Completion
 Clean commit/push/PR, cloud checks, merge, existing production sync, then external HTTP 200 verification at `https://world-server.ai.studio/api/science-run072`.
+
+
+---
+
+# Addendum — Deployment/manual-action 95% confidence gate
+
+## Task
+Make it a hard project rule that no AI asks the user to perform a deployment, sync, publish, destructive, or other consequential manual action until the proposed action has at least 95% confidence from current evidence.
+
+## Why
+During the RUN_072 Google AI Studio publication flow, agents guessed which duplicated `World_server` workspace owned production and alternated between unsafe paths (`Force push`, new publish, Cloud Run paid path, delete/recreate assumptions). The repository patch and live deployment state were also conflated.
+
+## Current state
+RUN_072 source/test files in `master` match the latest ZIP byte-for-byte and `SCIENCE_RUN_072_H2.json` has `pass:true`, while `https://world-server.ai.studio/api/science-run072` is still 404. Therefore repository integration is confirmed but production deployment is not.
+
+## Target state / completion criteria
+A machine-readable policy plus `AGENTS.md` hard rule requires >=0.95 confidence, two independent evidence sources, authoritative platform evidence, exact target identity, current-state probing, update-in-place for existing production, and a ban on guess-based destructive instructions. `scripts/check-agent-rules.js` must fail CI if the policy regresses.
+
+## Files / tests
+- `data/deployment-safety-policy.json`
+- `AGENTS.md`
+- `scripts/check-agent-rules.js`
+- `WORK_IN_PROGRESS.md`
+- Verify: `node scripts/check-agent-rules.js`; inspect diff; push PR; cloud CI before merge.

@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "policyId": "deployment-manual-action-confidence-gate",
+  "manualActionConfidenceThreshold": 0.95,
+  "canonical": {
+    "repository": "mpaykin1/World_server",
+    "branch": "master",
+    "productionUrl": "https://world-server.ai.studio"
+  },
+  "evidenceRequirements": {
+    "minimumIndependentSources": 2,
+    "requireAuthoritativeSourceForExternalPlatform": true,
+    "requireTargetIdentityProof": true,
+    "requireCurrentStateProbe": true,
+    "distinguishRepositoryIntegratedFromLiveDeployed": true
+  },
+  "deploymentRules": {
+    "neverClaimInstalledWithoutLiveEvidence": true,
+    "preferExistingPublishedAppUpdateInPlace": true,
+    "neverDeleteOrUnpublishExistingProductionToUpdate": true,
+    "neverCreateDuplicateProjectAppOrServiceWhenTargetExists": true,
+    "neverForcePushStaleAiStudioWorkspaceIntoCanonicalMaster": true,
+    "aiStudioStarterTierOverwriteExistingSlot": true
+  },
+  "belowThresholdAction": "continue_investigation_do_not_instruct_user",
+  "destructiveExceptionRequires": [
+    "authoritative evidence that in-place update is impossible",
+    "verified rollback and public URL preservation plan",
+    "explicit user approval for the destructive action"
+  ]
+}
