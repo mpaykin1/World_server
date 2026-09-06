@@ -1,0 +1,6 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict');
+const run57=require('../scripts/science-h4-high-capability-selective-escalation.cjs');
+test('critic parser accepts plain and markdown-bold VERDICT without accepting prose prefix',()=>{for(const mod of [run57]){assert.deepEqual(mod.parseCritic('VERDICT: KEEP'),{verdict:'KEEP',valid:true});assert.deepEqual(mod.parseCritic('**VERDICT: KEEP**'),{verdict:'KEEP',valid:true});assert.equal(mod.parseCritic('I think VERDICT: KEEP').valid,false);assert.equal(mod.parseCritic('**VERDICT: REVISE**\nROOT_CAUSE: x\nFIX: y').valid,true)}});
+test('RUN057 gate escalates only very-low confidence or invalid structure',()=>{assert.equal(run57.gate('CONFIDENCE: 0.30\nROOT_CAUSE: x\nFIX: y').escalate,true);assert.equal(run57.gate('CONFIDENCE: 0.31\nROOT_CAUSE: x\nFIX: y').escalate,false);assert.equal(run57.gate('CONFIDENCE: 0.90\nROOT_CAUSE: x').escalate,true)});
+test('RUN057 superiority contract is fail-closed',()=>{assert.equal(run57.passes({u:.03,q:0,n:0,er:0,costRatio:1.75},2,1),true);assert.equal(run57.passes({u:.029,q:0,n:0,er:0,costRatio:1.2},2,1),false);assert.equal(run57.passes({u:.04,q:0,n:0,er:0,costRatio:1.2},4,1),false)});
