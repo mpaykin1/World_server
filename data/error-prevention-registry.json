@@ -2,7 +2,15 @@
   "schemaVersion": "1.0.0",
   "system": "ERROR_RECURRENCE_PROTECTION",
   "policy": "confirmed-fix-becomes-permanent-regression-rule",
-  "events": [],
+  "events": [
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "science-h3-intervention-harness-noncausal-control",
+      "at": "2026-09-06T05:59:06.248Z",
+      "lessonHash": "8dabc094806bc71a2c4ac0c50028bed7b6c25779049193b2271af2b70cd5a65a",
+      "supersedes": null
+    }
+  ],
   "knownErrors": [
     {
       "id": "controls-inverted-camera-relative",
@@ -643,6 +651,27 @@
         "do not raise capability-coverage or claim local-first is reliable on this hardware based on the one isolated live-test success alone - report the real combined rate (1 success out of 5 total real local attempts this cycle) honestly, as this entry does",
         "before increasing OLLAMA_PATCH_MODELS or lowering the 120s/150s timeouts, gather more real per-task-type samples first - 4 attempts is not enough to distinguish 'this task type is genuinely harder for a 1.7B model' from 'this was noise/contention'"
       ]
+    },
+    {
+      "id": "science-h3-intervention-harness-noncausal-control",
+      "category": "collective-brain-learned",
+      "severity": "major",
+      "status": "protected",
+      "history": [],
+      "rootCause": "RUN_060 candidate edge predictions omitted y=0 and intervention sampling often moved non-causal objects, artificially lowering model accuracy while making the no-change control look correct.",
+      "solution": "Preserve RUN_060 as negative evidence. RUN_061 adds the missing coordinate invariant and restricts interventions to support-linked rows where moving the actual support changes production output.",
+      "protection": [
+        "science-h3-blind-build-causal-selection.test.cjs preserves RUN_060 FAIL",
+        "RUN_061 requires at least 20 informative interventions per seed",
+        "RUN_061 rejects no-change and shuffled-label controls"
+      ],
+      "evidence": [
+        "evidence/RUN_060_RESULT.json",
+        "evidence/RUN_061_RESULT.json"
+      ],
+      "confirmedAt": "2026-09-06T05:59:06.246Z",
+      "lessonHash": "8dabc094806bc71a2c4ac0c50028bed7b6c25779049193b2271af2b70cd5a65a",
+      "supersedes": null
     }
   ],
   "confirmationProtocol": {

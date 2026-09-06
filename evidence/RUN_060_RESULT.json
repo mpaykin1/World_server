@@ -1,0 +1,206 @@
+{
+  "experiment": "RUN_060_H3_BLIND_BUILD_CAUSAL_MODEL_SELECTION",
+  "subhypothesis": "A model family selected only from observed production snapBuilding input/output examples can identify relational support causality and predict held-out support interventions.",
+  "seedAndControl": {
+    "seeds": [
+      60061,
+      60071,
+      60083,
+      60101,
+      60103,
+      60107
+    ],
+    "trainPerSeed": 360,
+    "holdoutPerSeed": 180,
+    "controls": [
+      "no-change support control",
+      "shuffled support-piece labels"
+    ]
+  },
+  "confirmation": "relational model selected on >=5/6 seeds; each holdout exact >=97%; each intervention exact >=95%; both controls <=90%.",
+  "refutation": "Any fixed threshold fails.",
+  "results": [
+    {
+      "seed": 60061,
+      "selected": "relational",
+      "trainScores": {
+        "gridOnly": {
+          "score": 0.5972222222222222,
+          "par": {}
+        },
+        "globalSupport": {
+          "score": 0.5083333333333333,
+          "par": {
+            "radius": 3.2
+          }
+        },
+        "relational": {
+          "score": 0.7833333333333333,
+          "par": {
+            "score": 0.7833333333333333,
+            "wall": 1.6,
+            "door": 1.6,
+            "stairs": 3.2
+          }
+        }
+      },
+      "holdAcc": 0.7555555555555555,
+      "intAcc": 0.9888888888888889,
+      "noChangeControl": 0.9888888888888889,
+      "shuffledLabelControl": 0.6722222222222223
+    },
+    {
+      "seed": 60071,
+      "selected": "relational",
+      "trainScores": {
+        "gridOnly": {
+          "score": 0.6083333333333333,
+          "par": {}
+        },
+        "globalSupport": {
+          "score": 0.5111111111111111,
+          "par": {
+            "radius": 3.2
+          }
+        },
+        "relational": {
+          "score": 0.7444444444444445,
+          "par": {
+            "score": 0.7444444444444445,
+            "wall": 1.6,
+            "door": 1.6,
+            "stairs": 3.2
+          }
+        }
+      },
+      "holdAcc": 0.7666666666666667,
+      "intAcc": 0.9777777777777777,
+      "noChangeControl": 0.9777777777777777,
+      "shuffledLabelControl": 0.6611111111111111
+    },
+    {
+      "seed": 60083,
+      "selected": "relational",
+      "trainScores": {
+        "gridOnly": {
+          "score": 0.625,
+          "par": {}
+        },
+        "globalSupport": {
+          "score": 0.5138888888888888,
+          "par": {
+            "radius": 3.2
+          }
+        },
+        "relational": {
+          "score": 0.7694444444444445,
+          "par": {
+            "score": 0.7694444444444445,
+            "wall": 1.6,
+            "door": 1.6,
+            "stairs": 3.2
+          }
+        }
+      },
+      "holdAcc": 0.7888888888888889,
+      "intAcc": 0.9722222222222222,
+      "noChangeControl": 0.9722222222222222,
+      "shuffledLabelControl": 0.7111111111111111
+    },
+    {
+      "seed": 60101,
+      "selected": "relational",
+      "trainScores": {
+        "gridOnly": {
+          "score": 0.5777777777777777,
+          "par": {}
+        },
+        "globalSupport": {
+          "score": 0.4722222222222222,
+          "par": {
+            "radius": 3.2
+          }
+        },
+        "relational": {
+          "score": 0.7472222222222222,
+          "par": {
+            "score": 0.7472222222222222,
+            "wall": 1.6,
+            "door": 1.6,
+            "stairs": 3.2
+          }
+        }
+      },
+      "holdAcc": 0.8111111111111111,
+      "intAcc": 0.9666666666666667,
+      "noChangeControl": 0.9666666666666667,
+      "shuffledLabelControl": 0.7555555555555555
+    },
+    {
+      "seed": 60103,
+      "selected": "relational",
+      "trainScores": {
+        "gridOnly": {
+          "score": 0.6027777777777777,
+          "par": {}
+        },
+        "globalSupport": {
+          "score": 0.5305555555555556,
+          "par": {
+            "radius": 3.2
+          }
+        },
+        "relational": {
+          "score": 0.7722222222222223,
+          "par": {
+            "score": 0.7722222222222223,
+            "wall": 1.6,
+            "door": 1.6,
+            "stairs": 3.2
+          }
+        }
+      },
+      "holdAcc": 0.7444444444444445,
+      "intAcc": 0.9777777777777777,
+      "noChangeControl": 0.9777777777777777,
+      "shuffledLabelControl": 0.65
+    },
+    {
+      "seed": 60107,
+      "selected": "relational",
+      "trainScores": {
+        "gridOnly": {
+          "score": 0.5805555555555556,
+          "par": {}
+        },
+        "globalSupport": {
+          "score": 0.5277777777777778,
+          "par": {
+            "radius": 3.2
+          }
+        },
+        "relational": {
+          "score": 0.7638888888888888,
+          "par": {
+            "score": 0.7638888888888888,
+            "wall": 1.6,
+            "door": 1.6,
+            "stairs": 3.2
+          }
+        }
+      },
+      "holdAcc": 0.7777777777777778,
+      "intAcc": 0.9777777777777777,
+      "noChangeControl": 0.9777777777777777,
+      "shuffledLabelControl": 0.6888888888888889
+    }
+  ],
+  "criterion": {
+    "relationalWins": 6,
+    "minHold": 0.7444444444444445,
+    "minIntervention": 0.9666666666666667,
+    "maxNoChangeControl": 0.9888888888888889,
+    "maxShuffledLabelControl": 0.7555555555555555
+  },
+  "pass": false
+}
