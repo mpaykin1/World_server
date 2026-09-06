@@ -13,6 +13,7 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+const cp = require('child_process');
 
 function mkTmpRoot() {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'wsh-master-coordinator-'));
@@ -20,6 +21,7 @@ function mkTmpRoot() {
 
 const REPORT_LOG = path.join(mkTmpRoot(), 'ai-agent-reports.jsonl');
 process.env.AI_AGENT_REPORTS_PATH = REPORT_LOG;
+process.env.WORLD_SERVER_RECOVERY_ROOT = path.join(mkTmpRoot(), 'recovery');
 
 const mc = require('../scripts/master-coordinator.cjs');
 const collectiveBrain = require('../lib/collective-brain');
@@ -140,4 +142,77 @@ test('OFFLINE_ONLY_AGENTS and LOCAL_MODEL_AGENTS are disjoint (no agent is both 
     assert.ok(!mc.LOCAL_MODEL_AGENTS.has(id), `${id} cannot be in both OFFLINE_ONLY_AGENTS and LOCAL_MODEL_AGENTS`);
     assert.ok(!mc.SELF_EXECUTE_AGENTS.has(id), `${id} cannot be in both OFFLINE_ONLY_AGENTS and SELF_EXECUTE_AGENTS`);
   }
+});
+
+
+test('buildDefaultSubtasks turns one goal into distinct OpenCode + OpenHuman slices', () => {
+  const plan = mc.buildDefaultSubtasks('Deploy World_server to Google AI Studio / Cloud Run');
+  assert.ok(plan.length >= 2);
+  assert.deepEqual(plan.slice(0, 2).map((x) => x.agent), ['opencode', 'openhuman']);
+  assert.notEqual(plan[0].taskId, plan[1].taskId);
+  assert.match(plan[0].text, /Implementation\/test slice/);
+  assert.match(plan[1].text, /read-only verification slice/);
+});
+
+test('summarizeMasterResults never reports PASS for queued, assigned, self-execute or failed work', () => {
+  assert.equal(mc.summarizeMasterResults([{ result: 'PASS' }, { result: 'PASS' }]), 'PASS');
+  for (const result of ['QUEUED', 'ASSIGNED', 'SELF_EXECUTE', 'SKIPPED_ACTIVE']) {
+    assert.equal(mc.summarizeMasterResults([{ result: 'PASS' }, { result }]), 'PENDING');
+  }
+  assert.equal(mc.summarizeMasterResults([{ result: 'PASS' }, { result: 'FAIL' }]), 'FAIL');
+});
+
+function initGitFixture() {
+  const dir = mkTmpRoot();
+  cp.execFileSync('git', ['init', '-q'], { cwd: dir });
+  cp.execFileSync('git', ['config', 'user.email', 'test@example.invalid'], { cwd: dir });
+  cp.execFileSync('git', ['config', 'user.name', 'Test User'], { cwd: dir });
+  fs.writeFileSync(path.join(dir, 'tracked.txt'), 'base\n');
+  cp.execFileSync('git', ['add', 'tracked.txt'], { cwd: dir });
+  cp.execFileSync('git', ['commit', '-qm', 'base'], { cwd: dir });
+  return dir;
+}
+
+test('preserveFailedDirtyWorktree writes a binary-capable recovery patch for tracked dirty work', () => {
+  const dir = initGitFixture();
+  fs.writeFileSync(path.join(dir, 'tracked.txt'), 'changed\n');
+  const r = mc.preserveFailedDirtyWorktree(dir, 'ai/test/recovery', 'tracked-recovery-test');
+  assert.equal(r.preserved, true);
+  assert.equal(r.keepWorktree, false);
+  assert.equal(r.untrackedCount, 0);
+  assert.ok(r.recoveryPatch && fs.existsSync(r.recoveryPatch));
+  assert.match(fs.readFileSync(r.recoveryPatch, 'utf8'), /changed/);
+});
+
+test('preserveFailedDirtyWorktree keeps an off-Desktop worktree when untracked files exist', () => {
+  const dir = initGitFixture();
+  fs.writeFileSync(path.join(dir, 'new-file.txt'), 'unique untracked work\n');
+  const r = mc.preserveFailedDirtyWorktree(dir, 'ai/test/recovery', 'untracked-recovery-test');
+  assert.equal(r.preserved, true);
+  assert.equal(r.keepWorktree, true);
+  assert.equal(r.untrackedCount, 1);
+  assert.ok(fs.existsSync(path.join(r.recoveryDir, 'STATUS.txt')));
+});
+
+test('Windows OpenCode resolver uses the real executable when OpenCode is installed', { skip: process.platform !== 'win32' || !mc.OPENCODE_CLI_PATH }, () => {
+  assert.match(mc.OPENCODE_CLI_PATH, /\.exe$/i);
+  const r = cp.spawnSync(mc.OPENCODE_CLI_PATH, ['--version'], { encoding: 'utf8', windowsHide: true });
+  assert.equal(r.status, 0);
+  assert.match(r.stdout, /\d+\.\d+\.\d+/);
+});
+
+test('runMasterGoal with one goal auto-dispatches the default multi-agent plan and gates overall PASS', async () => {
+  const root = mkTmpRoot();
+  const seen = [];
+  const r = await mc.runMasterGoal('Deploy World_server safely', undefined, {
+    root,
+    skipNetwork: true,
+    dispatchFn: async (_root, subtask) => {
+      seen.push(subtask.agent);
+      return { agentId: subtask.agent, ok: true, result: 'PASS' };
+    },
+  });
+  assert.deepEqual(seen, ['opencode', 'openhuman']);
+  assert.equal(r.plan.length, 2);
+  assert.equal(r.overallStatus, 'PASS');
 });
