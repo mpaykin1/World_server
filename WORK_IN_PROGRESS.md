@@ -57,9 +57,9 @@ Per `DESKTOP_AI_INSTRUCTIONS.md`: real agentmemory save→recall→restart persi
 <!-- WORLD_SERVER_SESSION_RECOVERY_V1_START -->
 ## Desktop AI Session Recovery V1 — managed checkpoint
 
-- sessionId: `session-1788670513402-10f86c`
+- sessionId: `session-1788674330975-c4a7d9`
 - status: `in_progress`
-- checkpoint: `2026-09-06T04:55:13.403Z`
+- checkpoint: `2026-09-06T05:58:50.975Z`
 - checkpoint message: Session recovery initialized
 - last successful command: none
 - last error: none
@@ -212,3 +212,8 @@ Task: combine d20a7cfd and f762419e without changing active main. All four confl
 
 ### Codex recovery integration — 2026-09-06 final local milestone
 Google d20a7cfd and coordinator f762419e integrated, preserving peer 469abbe8 history. Full unit 573 PASS/1 SKIP; coordinator 40 PASS; final branch-publication regression 1 PASS; lesson serialization 19 PASS; integration 76/76. Lockfile aligned with overrides: npm ci PASS, audit 0. Quality schema normalized without certifying inherited errors. Remaining release: quality:regression reports baseline11/current21 blockers; governance25 blockers, releaseEligible=false; shared memory DEGRADED queued. No push/deploy. Details: RECOVERY_INTEGRATION_REPORT.json. Own temporary worktrees may be removed only after commits and compact evidence are preserved. Foreign WIP remains untouched.
+
+### Codex late peer reconciliation
+Reconcile immutable Google peer head58016f7a in owned off-Desktop checkout. Preserve current runtime routing/readiness, keep conservative build exclusions, review new build guard and child RSS test; no foreign edits or deploy.
+
+Late peer58016f7a merged: production-only npm ci PASS115packages/audit0; Google31/31 PASS; build-guard PASS. Added recursive dockerignore matcher regression, owned process-tree test cleanup and fail-closed unavailable child RSS. Linux container execution remains unverified. Release regression unchanged; no push/deploy.

@@ -308,16 +308,33 @@
   },
   "limitations": [
     "No Docker/Linux image execution, live Cloud Run slots, production deployment, native touch device or 8-hour soak evidence",
-    "Runtime budget probe measures parent process; aggregate child RAM remains unverified",
     "Existing foreign WIP and unpublished local branches keep Zero-Chaos FAIL; no automatic deletion or push",
     "Shared memory sync queued; no remote synchronization claim",
     "Two historical reports remain as point-in-time evidence; this report supersedes their integration status",
-    "Inherited peer history contains large tracked runtime logs and whitespace findings; no history rewrite or unrelated log cleanup"
+    "Inherited peer history contains large tracked runtime logs and whitespace findings; no history rewrite or unrelated log cleanup",
+    "Child RSS implemented for Linux; measured RSS unavailable on Windows now fails budget closed. Child heap and whole-cgroup aggregate remain unverified."
   ],
   "nextActions": [
     "Existing coordinator: review evidence for the 10 inherited blocker statuses; do not change baseline to hide them",
     "Run Linux/container and live-slot validation only in an authorized environment; keep production deploy held",
     "Reconcile foreign worktree ownership and publication separately; preserve user work"
   ],
-  "userActionRequired": "NONE"
+  "userActionRequired": "NONE",
+  "latePeerIntegration": {
+    "head": "58016f7a",
+    "priorIntegration": "d02c78c6",
+    "tests": "31/31 PASS with production-only dependencies",
+    "npmCiProduction": "115 packages, audit 0 vulnerabilities",
+    "buildGuard": "PASS",
+    "fixes": [
+      "Merged peer build-guard and Linux child RSS accounting",
+      "Unknown child RSS cannot return budget PASS; one sample per response",
+      "Dockerignore guard supports recursive patterns at root and nested directories",
+      "Runtime budget test cleans entire owned child tree on Windows"
+    ],
+    "limits": [
+      "Linux /proc branch not executed on Windows; no Docker deployment evidence",
+      "Broad release proof remains d02c78c6 stages plus focused late-change tests; inherited quality regression unchanged"
+    ]
+  }
 }

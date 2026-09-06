@@ -14,3 +14,16 @@ artifacts
 state
 work
 DELETE_MANUALLY_AFTER_AI_SESSION
+
+# Non-runtime archives and editor/build caches
+coverage/
+.pytest_cache/
+.iw-graphics-staging/
+WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/
+_IMPROVE_V1_TMP/
+.texture-pipeline-backup/
+*.zip
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

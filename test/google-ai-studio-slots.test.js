@@ -3,6 +3,8 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const http = require('http');
+const fs = require('fs');
+const os = require('os');
 const path = require('path');
 const { spawnSync } = require('child_process');
 
@@ -127,4 +129,94 @@ test('navigator hard-rejects sandbox fault injection flag', () => {
   });
   assert.equal(child.status, 66);
   assert.match(child.stderr, /Fault injection can never be enabled on navigator/);
+});
+
+// --- build-guard: Cloud Run image build-context safety (Dockerfile, .dockerignore, Node version) ---
+
+const SLOTS_CLI = path.join(__dirname, '..', 'scripts', 'google-ai-studio-slots.cjs');
+
+function mkFixtureRoot() {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'google-slots-build-guard-'));
+  fs.mkdirSync(path.join(root, 'google-ai-studio'), { recursive: true });
+  fs.mkdirSync(path.join(root, 'shared'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'server.js'), '// fixture\n');
+  fs.writeFileSync(path.join(root, 'shared', 'common.js'), '// fixture\n');
+  fs.writeFileSync(path.join(root, 'package-lock.json'), '{}\n');
+  fs.writeFileSync(path.join(root, 'google-ai-studio', 'cloudrun-entry.cjs'), '// fixture\n');
+  fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify({ name: 'fixture', engines: { node: '24.x' } }, null, 2));
+  fs.writeFileSync(
+    path.join(root, 'google-ai-studio', 'Dockerfile'),
+    'FROM node:24-alpine\nWORKDIR /app\nCOPY package.json package-lock.json ./\nRUN npm ci --omit=dev\nCOPY . .\nCMD ["node", "google-ai-studio/cloudrun-entry.cjs"]\n'
+  );
+  fs.writeFileSync(path.join(root, '.dockerignore'), '.git/\nnode_modules/\n.env*\n!.env.example\n');
+  return root;
+}
+
+function runBuildGuard(root) {
+  const result = spawnSync(process.execPath, [SLOTS_CLI, 'build-guard'], {
+    cwd: root,
+    env: { ...process.env, WORLD_REPO_ROOT: root },
+    encoding: 'utf8',
+    timeout: 5000
+  });
+  return { ...result, json: JSON.parse(result.stdout) };
+}
+
+test('build-guard passes on a well-formed Dockerfile/.dockerignore/package.json triple', () => {
+  const root = mkFixtureRoot();
+  const { status, json } = runBuildGuard(root);
+  assert.deepEqual(json.findings, []);
+  assert.equal(json.ok, true);
+  assert.equal(status, 0);
+});
+
+test('build-guard fails when the Dockerfile has no npm ci before COPY . .', () => {
+  const root = mkFixtureRoot();
+  fs.writeFileSync(
+    path.join(root, 'google-ai-studio', 'Dockerfile'),
+    'FROM node:24-alpine\nWORKDIR /app\nCOPY . .\nCMD ["node", "google-ai-studio/cloudrun-entry.cjs"]\n'
+  );
+  const { status, json } = runBuildGuard(root);
+  assert.equal(status, 1);
+  assert.ok(json.findings.some((f) => f.id === 'dockerfile-missing-npm-ci'));
+});
+
+test('build-guard fails when the Dockerfile Node major diverges from package.json engines.node', () => {
+  const root = mkFixtureRoot();
+  fs.writeFileSync(
+    path.join(root, 'google-ai-studio', 'Dockerfile'),
+    'FROM node:22-alpine\nWORKDIR /app\nCOPY package.json package-lock.json ./\nRUN npm ci --omit=dev\nCOPY . .\nCMD ["node", "google-ai-studio/cloudrun-entry.cjs"]\n'
+  );
+  const { status, json } = runBuildGuard(root);
+  assert.equal(status, 1);
+  const finding = json.findings.find((f) => f.id === 'node-version-mismatch');
+  assert.ok(finding, 'expected a node-version-mismatch finding');
+  assert.match(finding.detail, /node:22-alpine/);
+  assert.match(finding.detail, /24\.x/);
+});
+
+test('build-guard fails when .dockerignore is missing entirely', () => {
+  const root = mkFixtureRoot();
+  fs.unlinkSync(path.join(root, '.dockerignore'));
+  const { status, json } = runBuildGuard(root);
+  assert.equal(status, 1);
+  assert.ok(json.findings.some((f) => f.id === 'dockerignore-missing'));
+});
+
+test('build-guard fails when .dockerignore shadows a runtime-required file', () => {
+  const root = mkFixtureRoot();
+  fs.appendFileSync(path.join(root, '.dockerignore'), 'server.js\n');
+  const { status, json } = runBuildGuard(root);
+  assert.equal(status, 1);
+  const finding = json.findings.find((f) => f.id === 'dockerignore-shadows-runtime-path');
+  assert.ok(finding);
+  assert.match(finding.detail, /server\.js/);
+});
+
+test('build-guard fails when the Dockerfile itself is missing', () => {
+  const root = mkFixtureRoot();
+  fs.unlinkSync(path.join(root, 'google-ai-studio', 'Dockerfile'));
+  const { status, json } = runBuildGuard(root);
+  assert.equal(status, 1);
+  assert.ok(json.findings.some((f) => f.id === 'dockerfile-missing'));
 });

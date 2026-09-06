@@ -1040,6 +1040,19 @@
       "evidence": [
         "Integrated collective-brain:cycle reproduced the TypeError before repair."
       ]
+    },
+    {
+      "id": "cloudrun-unmeasured-child-budget-pass",
+      "status": "protected",
+      "severity": "release-blocker",
+      "rootCause": "Unavailable child RSS was treated as zero, permitting an incomplete memory sample to certify budget.",
+      "solution": "Require complete child RSS measurement; sample once per endpoint response.",
+      "protection": [
+        "test/cloudrun-entry-runtime-budget.test.js"
+      ],
+      "evidence": [
+        "31/31 late Google tests PASS on production-only install; Windows unavailable branch exercised, Linux unverified."
+      ]
     }
   ],
   "confirmationProtocol": {
