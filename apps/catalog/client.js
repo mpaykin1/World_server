@@ -1,20 +1,24 @@
 import * as THREE from 'https://unpkg.com/three@0.165.0/build/three.module.js';
 
-await window.AppCore.init('catalog');
+const appCoreReady = window.AppCore.init('catalog').catch(error => console.warn('[catalog] AppCore init deferred:', error?.message || error));
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x89bdec);
 scene.fog = new THREE.Fog(0x89bdec, 80, 420);
 const camera = new THREE.PerspectiveCamera(70, innerWidth/innerHeight, 0.1, 900);
-const renderer = new THREE.WebGLRenderer({ antialias:true });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 1.8));
+const isMobileGpu = matchMedia('(pointer: coarse)').matches || Math.min(innerWidth, innerHeight) < 700;
+const lowCpu = (navigator.hardwareConcurrency || 8) <= 4;
+const initialDprCap = isMobileGpu ? 1.15 : (lowCpu ? 1.3 : 1.6);
+let renderDpr = Math.min(devicePixelRatio || 1, initialDprCap);
+const renderer = new THREE.WebGLRenderer({ antialias: !isMobileGpu, powerPreference:'high-performance' });
+renderer.setPixelRatio(renderDpr);
 renderer.setSize(innerWidth, innerHeight);
-renderer.shadowMap.enabled = true;
+renderer.shadowMap.enabled = !isMobileGpu && !lowCpu;
 document.body.prepend(renderer.domElement);
 
 const sun = new THREE.DirectionalLight(0xffffff, 2.2); sun.position.set(30,70,20); sun.castShadow=true; scene.add(sun);
 scene.add(new THREE.HemisphereLight(0xcfe9ff, 0x334422, 1.1));
-const ground = new THREE.Mesh(new THREE.PlaneGeometry(1500,1500,64,64), new THREE.MeshStandardMaterial({color:0x344627, roughness:.95}));
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(1500,1500,1,1), new THREE.MeshStandardMaterial({color:0x344627, roughness:.95}));
 ground.rotation.x = -Math.PI/2; ground.receiveShadow = true; scene.add(ground);
 const grid = new THREE.GridHelper(1200, 60, 0x446655, 0x2b382f); grid.position.y=.03; scene.add(grid);
 
@@ -62,11 +66,11 @@ function createPortal(app, index){
   const x = (col - 2) * portalSpacing;
   const z = row * portalSpacing + 60;
   const g = new THREE.Group(); g.position.set(x,0,z); g.userData.app = app;
-  const ring = new THREE.Mesh(new THREE.TorusGeometry(4.2,.22,16,80), portalMat); ring.rotation.y=Math.PI/2; ring.position.y=4; ring.castShadow=true; g.add(ring);
-  const inner = new THREE.Mesh(new THREE.CircleGeometry(3.6,48), new THREE.MeshBasicMaterial({color:0x4fd8ff, transparent:true, opacity:.22, side:THREE.DoubleSide})); inner.rotation.y=Math.PI/2; inner.position.y=4; g.add(inner);
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(4.2,.22,isMobileGpu?10:16,isMobileGpu?40:80), portalMat); ring.rotation.y=Math.PI/2; ring.position.y=4; ring.castShadow=true; g.add(ring);
+  const inner = new THREE.Mesh(new THREE.CircleGeometry(3.6,isMobileGpu?24:48), new THREE.MeshBasicMaterial({color:0x4fd8ff, transparent:true, opacity:.22, side:THREE.DoubleSide})); inner.rotation.y=Math.PI/2; inner.position.y=4; g.add(inner);
   const left = new THREE.Mesh(new THREE.BoxGeometry(.5,6,.5),baseMat); left.position.set(0,3,-4.1); left.castShadow=true; g.add(left);
   const right = left.clone(); right.position.z=4.1; g.add(right);
-  const pad = new THREE.Mesh(new THREE.CylinderGeometry(5.2,5.2,.25,32), new THREE.MeshStandardMaterial({color:0x263142})); pad.position.y=.12; pad.receiveShadow=true; g.add(pad);
+  const pad = new THREE.Mesh(new THREE.CylinderGeometry(5.2,5.2,.25,isMobileGpu?20:32), new THREE.MeshStandardMaterial({color:0x263142})); pad.position.y=.12; pad.receiveShadow=true; g.add(pad);
   const label = makeTextSprite(app.title); label.position.set(0,8.2,0); g.add(label);
   portalGroup.add(g); portals.push(g);
 }
@@ -86,6 +90,21 @@ renderer.domElement.addEventListener('click',()=>renderer.domElement.requestPoin
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
 
 let last=performance.now(); let teleportLock=false;
+let perfFrames=0, perfWindowStart=last;
+function adaptRenderDpr(now){
+  perfFrames++;
+  const elapsed=now-perfWindowStart;
+  if(elapsed<2000) return;
+  const fps=perfFrames*1000/elapsed;
+  if(fps<28 && renderDpr>0.75){
+    renderDpr=Math.max(0.75, renderDpr-0.15);
+    renderer.setPixelRatio(renderDpr); renderer.setSize(innerWidth,innerHeight,false);
+  } else if(fps>52 && renderDpr<initialDprCap){
+    renderDpr=Math.min(initialDprCap, renderDpr+0.05);
+    renderer.setPixelRatio(renderDpr); renderer.setSize(innerWidth,innerHeight,false);
+  }
+  perfFrames=0; perfWindowStart=now;
+}
 
 // ─── Lightning Sounds ──────────────────────────────────────────────────────
 let boltAudioCtx = null;
@@ -561,7 +580,7 @@ function spawnLightning() {
 }
 
 function animate(now){
-  requestAnimationFrame(animate); const dt=Math.min(.05,(now-last)/1000); last=now;
+  requestAnimationFrame(animate); adaptRenderDpr(now); const dt=Math.min(.05,(now-last)/1000); last=now;
   const speed = keys.has('ShiftLeft') ? 20 : 10;
   const forward = new THREE.Vector3(Math.sin(yaw),0,Math.cos(yaw));
   const basis=window.GameGoldenStandard?.basisFromForward(forward.x,forward.z);
@@ -586,9 +605,9 @@ function animate(now){
   lightningTimer -= dt;
   if (lightningTimer <= 0) {
     spawnLightning();
-    const typesPerBurst = Math.random() > 0.7 ? 2 + Math.floor(Math.random() * 3) : 1;
+    const typesPerBurst = isMobileGpu ? 1 : (Math.random() > 0.7 ? 2 + Math.floor(Math.random() * 3) : 1);
     for (let i = 0; i < typesPerBurst; i++) setTimeout(spawnLightning, i * 200 + 100);
-    lightningTimer = 2 + Math.random() * 7;
+    lightningTimer = (isMobileGpu ? 5 : 2) + Math.random() * (isMobileGpu ? 8 : 7);
   }
   for (let i = lightningGroup.children.length - 1; i >= 0; i--) {
     const b = lightningGroup.children[i];
