@@ -1,0 +1,333 @@
+name: World Cloud AI - OpenCode Free Failover
+
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: Task for World Cloud AI
+        required: true
+        type: string
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: world-cloud-ai-${{ github.event.issue.number || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  agent:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'issue_comment' &&
+       github.actor == github.repository_owner &&
+       contains(github.event.comment.body, '/worldai'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      OPENCODE_VERSION: 1.18.29
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY || secrets.WORLD }}
+      GH_TOKEN: ${{ github.token }}
+      DISPATCH_TASK: ${{ inputs.task }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Set up Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Validate free-model credential
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "${OPENROUTER_API_KEY:-}" ]]; then
+            echo "::error::Missing repository secret OPENROUTER_API_KEY (or compatibility alias WORLD)."
+            exit 2
+          fi
+
+      - name: Install pinned OpenCode
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --global "opencode-ai@${OPENCODE_VERSION}"
+          opencode --version
+
+      - name: Resolve live zero-cost model pool
+        shell: bash
+        run: |
+          set -euo pipefail
+          CATALOG="${RUNNER_TEMP}/openrouter-models.json"
+          CONFIG="${RUNNER_TEMP}/world-opencode.json"
+          curl --fail --silent --show-error https://openrouter.ai/api/v1/models > "${CATALOG}"
+
+          APPROVED=(
+            "cohere/north-mini-code:free"
+            "minimax/minimax-m3:free"
+            "nvidia/nemotron-3-ultra-550b-a55b:free"
+            "z-ai/glm-5.2:free"
+            "openrouter/free"
+          )
+          LIVE=()
+          for CANDIDATE in "${APPROVED[@]}"; do
+            if jq -e --arg id "${CANDIDATE}" '
+              .data[] |
+              select(.id == $id) |
+              select(.pricing.prompt == "0" and .pricing.completion == "0") |
+              select((.supported_parameters // []) | index("tools"))
+            ' "${CATALOG}" >/dev/null; then
+              LIVE+=("${CANDIDATE}")
+            fi
+          done
+
+          if [[ "${#LIVE[@]}" -eq 0 ]]; then
+            echo "::error::No approved zero-cost tool-capable model is live. Refusing paid fallback."
+            exit 3
+          fi
+
+          MODELS_JSON="$(printf '%s\n' "${LIVE[@]}" | jq -Rsc '
+            split("\n") | map(select(length > 0)) |
+            map({key: ., value: {name: ., limit: {context: 200000, output: 32768}}}) |
+            from_entries
+          ')"
+          jq -n --argjson models "${MODELS_JSON}" '
+            {
+              "$schema": "https://opencode.ai/config.json",
+              "provider": {
+                "worldrouter": {
+                  "npm": "@ai-sdk/openai-compatible",
+                  "name": "World OpenRouter",
+                  "options": {
+                    "baseURL": "https://openrouter.ai/api/v1",
+                    "apiKey": "{env:OPENROUTER_API_KEY}"
+                  },
+                  "models": $models
+                }
+              }
+            }
+          ' > "${CONFIG}"
+
+          echo "OPENCODE_CONFIG=${CONFIG}" >> "${GITHUB_ENV}"
+          {
+            echo 'WORLD_FREE_MODELS<<WORLD_FREE_MODELS_EOF'
+            printf 'worldrouter/%s\n' "${LIVE[@]}"
+            echo 'WORLD_FREE_MODELS_EOF'
+          } >> "${GITHUB_ENV}"
+          printf 'Live zero-cost model pool: %s\n' "${LIVE[*]}"
+      - name: Resolve task
+        id: task
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            TASK="${DISPATCH_TASK}"
+          else
+            BODY="$(jq -r '.comment.body // ""' "${GITHUB_EVENT_PATH}")"
+            TASK="${BODY#*/worldai}"
+          fi
+          TASK="$(printf '%s' "${TASK}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+          if [[ -z "${TASK}" ]]; then
+            echo "::error::No task provided. Use /worldai <task> or workflow_dispatch."
+            exit 2
+          fi
+          {
+            echo 'task<<WORLD_AI_TASK'
+            printf '%s\n' "${TASK}"
+            echo 'WORLD_AI_TASK'
+          } >> "${GITHUB_OUTPUT}"
+
+      - name: Install project dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci
+
+      - name: Create isolated agent branch
+        id: branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          BRANCH="world-ai/run-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          git config user.name "world-cloud-ai[bot]"
+          git config user.email "world-cloud-ai[bot]@users.noreply.github.com"
+          git switch -c "${BRANCH}"
+          echo "name=${BRANCH}" >> "${GITHUB_OUTPUT}"
+
+      - name: Run open-source coding agent with zero-cost failover
+        id: agent
+        shell: bash
+        env:
+          TASK: ${{ steps.task.outputs.task }}
+        run: |
+          set -euo pipefail
+          PROMPT="$(cat <<'WORLD_AI_PROMPT'
+          You are World Cloud AI, an autonomous coding agent for World_server.
+
+          Rules:
+          - Work only inside this repository.
+          - Inspect and reuse existing systems before adding anything new.
+          - Fix root causes, not symptoms, and add regression protection when practical.
+          - Preserve existing graphics, physics, animation, lighting, audio, textures and performance; do not simplify working visuals.
+          - Prefer scalable production solutions with minimal manual steps.
+          - Reuse the project's existing automation, tests, Collective Brain, known-issue and quality systems.
+          - For any project change, update WORK_IN_PROGRESS.md so desktop-ai:check sees the task, risks, tests and evidence.
+          - Never expose, print, commit or invent secrets.
+          - Do not push or open pull requests; the workflow handles Git.
+          - Keep the patch focused on the requested task.
+          - Run relevant tests while working when useful.
+          WORLD_AI_PROMPT
+          )"
+
+          START_HEAD="$(git rev-parse HEAD)"
+          mapfile -t MODELS < <(printf '%s\n' "${WORLD_FREE_MODELS}" | sed '/^[[:space:]]*$/d')
+          if [[ "${#MODELS[@]}" -eq 0 ]]; then
+            echo "::error::Zero-cost model pool unexpectedly empty."
+            exit 3
+          fi
+
+          for MODEL in "${MODELS[@]}"; do
+            echo "Trying zero-cost model: ${MODEL}"
+            git reset --hard "${START_HEAD}" >/dev/null
+            git clean -fd >/dev/null
+            set +e
+            opencode run --print-logs --log-level INFO --model "${MODEL}" --agent build "${PROMPT}
+
+          Requested task:
+          ${TASK}"
+            STATUS=$?
+            set -e
+            if [[ "${STATUS}" -eq 0 ]]; then
+              echo "MODEL=${MODEL}" >> "${GITHUB_ENV}"
+              echo "Selected working zero-cost model: ${MODEL}"
+              exit 0
+            fi
+            echo "::warning::Zero-cost model ${MODEL} failed with exit ${STATUS}; trying the next verified-free model."
+          done
+
+          git reset --hard "${START_HEAD}" >/dev/null
+          git clean -fd >/dev/null
+          echo "::error::All live approved zero-cost models failed. Refusing paid fallback."
+          exit 4
+      - name: Save candidate commit
+        id: candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add -A
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "${GITHUB_OUTPUT}"
+            echo "World Cloud AI produced no repository changes."
+            exit 0
+          fi
+          git commit -m "ai(world-cloud): implement requested task"
+          echo "changed=true" >> "${GITHUB_OUTPUT}"
+
+      - name: Verify and self-repair
+        if: steps.candidate.outputs.changed == 'true'
+        shell: bash
+        env:
+          TASK: ${{ steps.task.outputs.task }}
+        run: |
+          set -euo pipefail
+
+          verify() {
+            npm run check &&
+            npm run desktop-ai:check &&
+            npm run golden:check
+          }
+
+          for ATTEMPT in 1 2 3; do
+            if verify 2>&1 | tee /tmp/world-ai-verify.log; then
+              git reset --hard HEAD
+              echo "Verification passed on attempt ${ATTEMPT}."
+              exit 0
+            fi
+
+            if [[ "${ATTEMPT}" == "3" ]]; then
+              echo "::error::Verification still fails after two automated repair passes."
+              tail -n 220 /tmp/world-ai-verify.log || true
+              exit 1
+            fi
+
+            FAILURE="$(tail -n 220 /tmp/world-ai-verify.log)"
+            git reset --hard HEAD
+
+            REPAIR_PROMPT="$(cat <<'WORLD_AI_REPAIR'
+          The candidate implementation failed repository verification.
+          Diagnose the root cause and repair it without weakening, skipping or deleting tests.
+          Preserve the requested behavior and existing production quality.
+          Do not push or create a pull request.
+          WORLD_AI_REPAIR
+            )"
+
+            opencode run --model "${MODEL}" --agent build "${REPAIR_PROMPT}
+
+          Original task:
+          ${TASK}
+
+          Verification failure:
+          ${FAILURE}"
+
+            git add -A
+            if ! git diff --cached --quiet; then
+              git commit -m "fix(world-cloud): repair verification failure ${ATTEMPT}"
+            fi
+          done
+
+      - name: Push verified branch
+        if: steps.candidate.outputs.changed == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git push --set-upstream origin "${{ steps.branch.outputs.name }}"
+
+      - name: Open pull request
+        if: steps.candidate.outputs.changed == 'true'
+        id: pr
+        shell: bash
+        env:
+          TASK: ${{ steps.task.outputs.task }}
+        run: |
+          set -euo pipefail
+          TITLE="World Cloud AI: ${TASK}"
+          TITLE="${TITLE:0:120}"
+          BODY="$(cat <<EOF
+          Automated by World Cloud AI.
+
+          Model: ${MODEL} selected from the verified zero-cost OpenRouter pool
+          Agent: OpenCode ${OPENCODE_VERSION}
+          Verification: npm run check + desktop-ai:check + golden:check
+          Source run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}
+
+          Task:
+          ${TASK}
+          EOF
+          )"
+          PR_URL="$(gh pr create \
+            --base "${GITHUB_DEFAULT_BRANCH:-master}" \
+            --head "${{ steps.branch.outputs.name }}" \
+            --title "${TITLE}" \
+            --body "${BODY}")"
+          echo "url=${PR_URL}" >> "${GITHUB_OUTPUT}"
+          echo "Created ${PR_URL}"
+
+      - name: Report result to issue
+        if: >-
+          steps.candidate.outputs.changed == 'true' &&
+          github.event_name == 'issue_comment' &&
+          steps.pr.outputs.url != ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          ISSUE="$(jq -r '.issue.number' "${GITHUB_EVENT_PATH}")"
+          gh issue comment "${ISSUE}" --body "World Cloud AI finished and opened: ${{ steps.pr.outputs.url }}"
