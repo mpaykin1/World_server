@@ -26,7 +26,7 @@
     "namingPattern": "WORLD_SERVER_ARCHIVE_YYYYMMDD_<purpose>.zip"
   },
   "sessionCleanup": {
-    "root": "WORLD_SERVER_SESSION_CLEANUP",
+    "root": "SESSION_SAFE_TO_DELETE",
     "sessionCleanupRetentionDays": 30,
     "collapseAfterUserDeletionDays": 3
   },

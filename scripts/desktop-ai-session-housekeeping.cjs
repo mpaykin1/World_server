@@ -54,7 +54,7 @@ function loadPolicy() {
     temp: { tempTtlDays: 2, cacheTtlDays: 7, orphanTmpFilePattern: '\\.tmp-\\d+-\\d+$', maxTempGB: 2 },
     logs: { logRetentionDays: 14 },
     testOutput: { testOutputRetentionDays: 7 },
-    sessionCleanup: { root: 'WORLD_SERVER_SESSION_CLEANUP' }
+    sessionCleanup: { root: 'SESSION_SAFE_TO_DELETE' }
   });
 }
 
@@ -213,8 +213,15 @@ function sessionIdentity(agentArg) {
 
 function desktopSessionRoot(cliRoot, policy) {
   if (cliRoot) return cliRoot;
-  if (process.env.WORLD_SERVER_SESSION_CLEANUP_ROOT) return process.env.WORLD_SERVER_SESSION_CLEANUP_ROOT;
-  return path.join(os.homedir(), 'Desktop', policy.sessionCleanup.root || 'WORLD_SERVER_SESSION_CLEANUP');
+  // DESKTOP ZERO-CHAOS: this used to default to a dedicated
+  // WORLD_SERVER_SESSION_CLEANUP folder - retired in favor of the one
+  // canonical SESSION_SAFE_TO_DELETE folder shared by every agent (see
+  // scripts/lib/session-safe-to-delete-registry.cjs and AGENTS.md sec 19.2).
+  // SESSION_SAFE_TO_DELETE_ROOT is the same override var that module uses,
+  // so both tools always agree on where "the one folder" is.
+  if (process.env.SESSION_SAFE_TO_DELETE_ROOT) return process.env.SESSION_SAFE_TO_DELETE_ROOT;
+  if (process.env.WORLD_SERVER_SESSION_CLEANUP_ROOT) return process.env.WORLD_SERVER_SESSION_CLEANUP_ROOT; // legacy test/override compat
+  return path.join(os.homedir(), 'Desktop', policy.sessionCleanup.root || 'SESSION_SAFE_TO_DELETE');
 }
 
 // ---------------------------------------------------------------------------
@@ -396,6 +403,16 @@ function commandSafeGate(args) {
   return report;
 }
 
+function commandZeroChaosGate(args) {
+  const desktopRoot = args['desktop-root'] || safeRegistry.defaultDesktopRoot();
+  const root = args.root || safeRegistry.defaultRoot();
+  const registeredWorktreePaths = listWorktrees().map((w) => w.worktree);
+  const report = safeRegistry.desktopZeroChaosGate({ desktopRoot, root, registeredWorktreePaths });
+  console.log(JSON.stringify(report, null, 2));
+  process.exitCode = report.verdict === 'FAIL' ? 2 : 0;
+  return report;
+}
+
 function parseArgs(argv) {
   const args = { _: [] };
   for (let i = 0; i < argv.length; i++) {
@@ -417,10 +434,11 @@ function main() {
   if (cmd === 'run') return commandRun(args);
   if (cmd === 'safe-register') return commandSafeRegister(args);
   if (cmd === 'safe-gate') return commandSafeGate(args);
-  console.log('Usage: node scripts/desktop-ai-session-housekeeping.cjs <audit|run|safe-register|safe-gate> [--json] [--apply] [--agent NAME] [--desktop-root PATH]');
+  if (cmd === 'zero-chaos-gate') return commandZeroChaosGate(args);
+  console.log('Usage: node scripts/desktop-ai-session-housekeeping.cjs <audit|run|safe-register|safe-gate|zero-chaos-gate> [--json] [--apply] [--agent NAME] [--desktop-root PATH]');
   process.exitCode = 2;
 }
 
 if (require.main === module) main();
 
-module.exports = { listWorktrees, classifyWorktree, scanDisposableJunk, loadPolicy, commandAudit, commandRun, commandSafeRegister, commandSafeGate, safeRegistry };
+module.exports = { listWorktrees, classifyWorktree, scanDisposableJunk, loadPolicy, commandAudit, commandRun, commandSafeRegister, commandSafeGate, commandZeroChaosGate, safeRegistry };

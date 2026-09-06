@@ -111,6 +111,7 @@
     "desktop-ai:worktree-audit": "node scripts/desktop-ai-session-housekeeping.cjs audit",
     "desktop-ai:housekeeping": "node scripts/desktop-ai-session-housekeeping.cjs run",
     "desktop-ai:safe-gate": "node scripts/desktop-ai-session-housekeeping.cjs safe-gate",
+    "desktop-ai:zero-chaos-gate": "node scripts/desktop-ai-session-housekeeping.cjs zero-chaos-gate",
     "blockers:tick": "node scripts/autonomous-blocker-repair.cjs tick",
     "blockers:loop": "node scripts/autonomous-blocker-repair.cjs loop",
     "blockers:status": "node scripts/autonomous-blocker-repair.cjs status",
@@ -362,5 +363,12 @@
     "@playwright/test": "^1.62.1",
     "esbuild": "^0.28.2",
     "pngjs": "^7.0.0"
+  },
+  "overrides": {
+    "lighthouse": "13.4.1",
+    "qs": "6.16.0",
+    "tmp": "0.2.7",
+    "uuid": "11.1.1",
+    "@puppeteer/browsers": "3.2.2"
   }
 }

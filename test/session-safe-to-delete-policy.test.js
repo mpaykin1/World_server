@@ -206,3 +206,62 @@ test('a corrupt README (missing markers) is refused rather than silently overwri
   fs.writeFileSync(path.join(canonicalRoot, 'README.txt'), 'not a valid registry file\n');
   assert.throws(() => registry.registerManualCandidate(canonicalRoot, 'C:/x', { reason: 'r', agent: 'CLAUDE' }), /markers missing or corrupt/);
 });
+
+// ---------------------------------------------------------------------------
+// DESKTOP ZERO-CHAOS HARD GATE
+// ---------------------------------------------------------------------------
+
+test('scanForbiddenDesktopClutter flags an unregistered World_server_copy-style folder', () => {
+  const { desktopRoot } = mkDesktop();
+  fs.mkdirSync(path.join(desktopRoot, 'World_server_copy'), { recursive: true });
+  const clutter = registry.scanForbiddenDesktopClutter(desktopRoot, []);
+  assert.deepEqual(clutter, ['World_server_copy']);
+});
+
+test('scanForbiddenDesktopClutter never flags a registered worktree, even with a suspicious-looking name', () => {
+  const { desktopRoot } = mkDesktop();
+  const wt = path.join(desktopRoot, 'World_server_backup_task_runner');
+  fs.mkdirSync(wt, { recursive: true });
+  const clutter = registry.scanForbiddenDesktopClutter(desktopRoot, [wt]);
+  assert.deepEqual(clutter, [], 'a real registered worktree must never be flagged as clutter regardless of its name');
+});
+
+test('scanForbiddenDesktopClutter ignores ordinary World_server folders that match no forbidden pattern', () => {
+  const { desktopRoot } = mkDesktop();
+  fs.mkdirSync(path.join(desktopRoot, 'World_server_chatgpt_hourly'), { recursive: true });
+  const clutter = registry.scanForbiddenDesktopClutter(desktopRoot, []);
+  assert.deepEqual(clutter, [], 'an ordinary task-named worktree folder must not be flagged just for being unregistered in this test');
+});
+
+test('scanForbiddenDesktopClutter catches backup/tmp/sandbox-copy/integration_tmp variants', () => {
+  const { desktopRoot } = mkDesktop();
+  const names = ['World_server_backup', 'World_server_tmp', 'World_server_sandbox_copy', 'World_server_integration_tmp', 'World_server_AI_2'];
+  for (const n of names) fs.mkdirSync(path.join(desktopRoot, n), { recursive: true });
+  const clutter = registry.scanForbiddenDesktopClutter(desktopRoot, []).sort();
+  assert.deepEqual(clutter, names.sort());
+});
+
+test('desktopZeroChaosGate: PASS when Desktop has only registered worktrees and the canonical folder', () => {
+  const { desktopRoot, canonicalRoot } = mkDesktop();
+  const wt = path.join(desktopRoot, 'World_server');
+  fs.mkdirSync(wt, { recursive: true });
+  fs.mkdirSync(canonicalRoot, { recursive: true });
+  const report = registry.desktopZeroChaosGate({ desktopRoot, root: canonicalRoot, registeredWorktreePaths: [wt] });
+  assert.equal(report.verdict, 'PASS');
+});
+
+test('desktopZeroChaosGate: FAIL when an unregistered backup/copy-style folder exists on Desktop', () => {
+  const { desktopRoot, canonicalRoot } = mkDesktop();
+  fs.mkdirSync(path.join(desktopRoot, 'World_server_backup_final'), { recursive: true });
+  const report = registry.desktopZeroChaosGate({ desktopRoot, root: canonicalRoot, registeredWorktreePaths: [] });
+  assert.equal(report.verdict, 'FAIL');
+  assert.match(report.reasons.join(' | '), /World_server_backup_final/);
+});
+
+test('desktopZeroChaosGate: FAIL when a duplicate SAFE_TO_DELETE-style folder exists, even with zero clutter', () => {
+  const { desktopRoot, canonicalRoot } = mkDesktop();
+  fs.mkdirSync(canonicalRoot, { recursive: true });
+  fs.mkdirSync(path.join(desktopRoot, 'SAFE_TO_DELETE_2'), { recursive: true });
+  const report = registry.desktopZeroChaosGate({ desktopRoot, root: canonicalRoot, registeredWorktreePaths: [] });
+  assert.equal(report.verdict, 'FAIL');
+});

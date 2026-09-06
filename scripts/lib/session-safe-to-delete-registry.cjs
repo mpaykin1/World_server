@@ -46,6 +46,27 @@ const DUPLICATE_NAME_PATTERNS = [
   /session[-_]?junk/i,
 ];
 
+// DESKTOP ZERO-CHAOS: names that indicate a World_server-related folder is a
+// disposable/ad-hoc physical copy rather than a real registered git worktree
+// (e.g. World_server_copy, World_server_test, World_server_tmp,
+// World_server_AI_2, *backup*, *backup-final*, *old*, *sandbox-copy*,
+// *integration_tmp*). Only flags a name matching one of these AND not
+// already a registered worktree path - a legitimate worktree is never
+// flagged just because its name happens to contain one of these words.
+const FORBIDDEN_WORLD_SERVER_CLUTTER_PATTERNS = [
+  /_copy$/i,
+  /_test$/i,
+  /_tmp$/i,
+  /_final\d*$/i,
+  /_new$/i,
+  /_fixed$/i,
+  /_\d+$/i,
+  /backup/i,
+  /\bold\b/i,
+  /sandbox[-_]?copy/i,
+  /integration[-_]?tmp/i,
+];
+
 function defaultDesktopRoot() {
   return process.env.SESSION_SAFE_TO_DELETE_DESKTOP_ROOT || path.join(os.homedir(), 'Desktop');
 }
@@ -226,6 +247,52 @@ function detectDuplicateSafeFolders(desktopRoot = defaultDesktopRoot(), canonica
 }
 
 /**
+ * DESKTOP ZERO-CHAOS: scan Desktop for World_server-named folders that look
+ * like disposable ad-hoc physical copies (backup/tmp/copy/sandbox-copy/
+ * integration_tmp/_2 etc.) and are NOT a currently-registered git worktree.
+ * `registeredWorktreePaths` should come from the caller's own
+ * `git worktree list` (this module has no repo context of its own) - a
+ * legitimate worktree is never flagged just because its name matches one of
+ * these patterns.
+ */
+function scanForbiddenDesktopClutter(desktopRoot = defaultDesktopRoot(), registeredWorktreePaths = []) {
+  let entries = [];
+  try { entries = fs.readdirSync(desktopRoot, { withFileTypes: true }); } catch { return []; }
+  const registered = new Set(registeredWorktreePaths.map((p) => path.resolve(p).toLowerCase()));
+  return entries
+    .filter((e) => e.isDirectory() && /world[-_]?server/i.test(e.name))
+    .filter((e) => !registered.has(path.resolve(desktopRoot, e.name).toLowerCase()))
+    .filter((e) => FORBIDDEN_WORLD_SERVER_CLUTTER_PATTERNS.some((re) => re.test(e.name)))
+    .map((e) => e.name);
+}
+
+/**
+ * DESKTOP ZERO-CHAOS HARD GATE. Filesystem-only check (does not itself know
+ * about git commit/push state across worktrees - the agent running this
+ * gate must separately confirm useful work is committed/pushed, per
+ * AGENTS.md sec 19.2). Returns { verdict: PASS|FAIL, reasons }.
+ * FAIL: a duplicate SAFE_TO_DELETE-style folder exists, or an unregistered
+ *       World_server-named backup/tmp/copy/sandbox-style folder is found on
+ *       Desktop.
+ * PASS: neither condition holds.
+ */
+function desktopZeroChaosGate({ desktopRoot = defaultDesktopRoot(), root = defaultRoot(), registeredWorktreePaths = [] } = {}) {
+  const reasons = [];
+  let verdict = 'PASS';
+  const duplicateSafeFolders = detectDuplicateSafeFolders(desktopRoot, root);
+  if (duplicateSafeFolders.length) {
+    verdict = 'FAIL';
+    reasons.push(`duplicate SAFE_TO_DELETE-style folder(s) found: ${duplicateSafeFolders.join(', ')}`);
+  }
+  const clutter = scanForbiddenDesktopClutter(desktopRoot, registeredWorktreePaths);
+  if (clutter.length) {
+    verdict = 'FAIL';
+    reasons.push(`unregistered backup/tmp/copy/sandbox-style World_server folder(s) on Desktop: ${clutter.join(', ')}`);
+  }
+  return { checkedAt: new Date().toISOString(), desktopRoot, duplicateSafeFolders, clutter, verdict, reasons };
+}
+
+/**
  * End-of-session housekeeping gate. Returns { verdict: PASS|WARN|FAIL, reasons }.
  * FAIL: proven-safe junk left outside the shared folder, or a duplicate
  *       SAFE_TO_DELETE-style folder exists.
@@ -272,4 +339,5 @@ module.exports = {
   registerMoved, registerManualCandidate,
   worktreeSafetyCheck, isLocked, moveToSafeToDelete, autoDeleteIfProvenSafe,
   detectDuplicateSafeFolders, gate,
+  scanForbiddenDesktopClutter, desktopZeroChaosGate,
 };
