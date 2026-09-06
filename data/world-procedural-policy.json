@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "2.0.0",
+  "system": "WORLD_PROCEDURAL_RECIPE_ENGINE",
+  "strategy": "recipe-first deterministic generation inspired by demoscene procedural content",
+  "status": "candidate-until-repo-gates-pass",
+  "principles": {
+    "reuseExistingSystems": true,
+    "preserveExistingGraphics": true,
+    "deterministic": true,
+    "cpuFallbackRequired": true,
+    "adaptiveDeviceBudget": true,
+    "contentAddressedCache": true,
+    "compactRecipeTransport": true,
+    "noDirectMasterWrites": true,
+    "regressionGateRequired": true,
+    "offMainThreadPreferred": true,
+    "authoritativeSharedRecipe": true,
+    "crossPlatformGoldenVectors": true,
+    "incrementalInvalidation": true,
+    "hlodVisibility": true,
+    "proceduralAudio": true,
+    "shaderPermutationCache": true,
+    "qualitySearchTuner": true
+  },
+  "existingIntegrations": {
+    "voxelRules": "lib/voxel-rules.js",
+    "voxelEnhancer": "lib/world-quality-voxel-enhancer.js",
+    "materialProfiler": "lib/world-quality-material-profiler.js",
+    "pbrSynthesizer": "lib/world-quality-pbr-synthesizer.js"
+  },
+  "runtimeDefaults": {
+    "chunkSize": 16,
+    "targetFps": 60,
+    "generation": "surface-shell-first",
+    "cache": "memory + optional WORLD_RECIPE_CACHE_DIR Brotli cache",
+    "network": "full recipe or verified delta packet",
+    "rawNavigatorTextStored": false,
+    "workers": "Web Worker + worker_threads with deterministic in-process fallback",
+    "invalidation": "incremental chunk DAG",
+    "visibility": "adaptive HLOD/occlusion scheduling",
+    "audio": "deterministic procedural synth plan",
+    "shaderCache": "content-addressed permutation cache",
+    "authority": "optimistic concurrency adapter; bind to existing Supabase/control-plane",
+    "navigator": "validated structured recipePatch; heuristic fallback only",
+    "crossPlatform": "golden recipe/chunk signatures"
+  },
+  "optionalToolchain": {
+    "FastNoiseLite": "v1.1.1",
+    "meshoptimizer": "v1.2",
+    "basis_universal": "v2_50",
+    "KTX-Software": "v4.4.2",
+    "zstd": "v1.5.7",
+    "kkriegerWerkkzeugReferenceCommit": "72f7697c8b5be6fadae41f9ca6312cd5f88fdc4c"
+  },
+  "engineVersion": "2.0.0",
+  "readiness": "candidate-until-live-repository-integration-and-release-gates-pass"
+}

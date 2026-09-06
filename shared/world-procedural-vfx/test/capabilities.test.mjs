@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {detectVfxCapabilities,recommendedInitialTier} from '../runtime/capabilities.mjs';
+test('capability profile drives conservative mobile tier',()=>{const c=detectVfxCapabilities({renderer:{capabilities:{isWebGL2:true},getContext:()=>({getExtension:()=>null})},navigatorLike:{hardwareConcurrency:2,deviceMemory:2,connection:{saveData:true}}});assert.equal(c.webgl2,true);assert.equal(recommendedInitialTier(c),'low');});

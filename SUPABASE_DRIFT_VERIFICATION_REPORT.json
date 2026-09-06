@@ -1,0 +1,58 @@
+{
+  "report": "SUPABASE_DRIFT_VERIFICATION_REPORT",
+  "generatedAt": "2026-08-31T22:39:28.133Z",
+  "migration": "supabase/migrations/20260831072856_world_procedural_recipe_atomic_commit_v3.sql",
+  "targetFunction": "public.world_procedural_recipe_commit_v3",
+  "productionProject": {
+    "ref": "iphfwxjuhsucvdyluink",
+    "name": "Improve world Project",
+    "visibleToThisMcpSession": false,
+    "status": "ALREADY_APPLIED_PER_USER_VERIFICATION",
+    "note": "The user independently verified (outside this session's MCP access) that this project already has the function with SECURITY INVOKER, EXECUTE restricted to postgres+service_role, and optimistic-revision/idempotency/hash-validation/event-append behavior matching this migration file. This session's MCP tools do not have access to this project and did not re-verify it directly — the user's report is trusted per their explicit instruction not to touch it further.",
+    "actionTaken": "NONE — migration intentionally NOT reapplied here, per explicit instruction."
+  },
+  "projectsVisibleToThisMcpSession": [
+    {
+      "ref": "bmufrivwbjdmircmlkfw",
+      "name": "Improve",
+      "publicSchemaTableCount": 0,
+      "note": "Confirmed empty via list_tables — not a valid migration target, never touched."
+    },
+    {
+      "ref": "xlcdnlsyvxqtopmkweiy",
+      "name": "world-server-preview",
+      "note": "The real World_server preview/staging project — has voxel_worlds/voxel_player_states/voxel_block_overrides/etc. This is the preview drift-check target."
+    }
+  ],
+  "previewProject": {
+    "ref": "xlcdnlsyvxqtopmkweiy",
+    "name": "world-server-preview",
+    "schemaCompatibilityCheck": {
+      "status": "INCOMPATIBLE",
+      "checkedVia": "mcp__supabase__list_tables(verbose=true) against the actual live schema, not inferred from migration filenames",
+      "findings": [
+        {
+          "requirement": "public.voxel_worlds must have a 'revision' column (bigint) for the function's optimistic-concurrency CAS: `where id = p_world_id and revision = p_expected_revision`",
+          "actual": "public.voxel_worlds columns are: id (text), seed (bigint), settings (jsonb), created_at, updated_at. There is NO 'revision' column — 'seed' exists instead, which is unrelated.",
+          "result": "MISSING"
+        },
+        {
+          "requirement": "public.voxel_world_events table must exist with columns id/world_id/revision/event_type/cx/cz/radius_chunks/payload/source/created_by_user/created_by_guest/idempotency_key/event_checksum, since the function inserts into it and also selects from it for idempotency-key lookups",
+          "actual": "public.voxel_world_events does not exist on this project at all (not in the public schema table list).",
+          "result": "MISSING"
+        }
+      ],
+      "rootCauseOfGap": "supabase/migrations/20260831072856_world_procedural_recipe_atomic_commit_v3.sql only contains `create or replace function` — it assumes voxel_worlds.revision and the whole voxel_world_events table already exist ('using existing voxel_worlds + voxel_world_events', per the migration's own comment). No migration anywhere in this repo's supabase/migrations/ directory creates voxel_world_events or adds a revision column to voxel_worlds (grepped the full migrations directory — zero other matches). Production apparently has this prerequisite schema already (per the user's own verification); this preview project does not — the two environments' base schemas have diverged, not just their applied-migration lists.",
+      "postgresBehaviorNote": "CREATE OR REPLACE FUNCTION would very likely SUCCEED even against this incompatible schema — Postgres does not validate table/column references inside a plpgsql function body at creation time, only at first EXECUTE. Applying the migration as-is would therefore appear to succeed and then fail (or silently do the wrong thing) the first time anything actually calls the function. This is why a compatibility check against live columns, not just 'did CREATE FUNCTION return an error', was necessary."
+    },
+    "migrationApplied": false,
+    "reasonNotApplied": "Schema is incompatible (see findings above). The user's own instruction was explicit: check compatibility first, apply ONLY if compatible. It is not. Applying a NEW prerequisite migration (adding voxel_worlds.revision, creating voxel_world_events with appropriate constraints/indexes/RLS/grants) would be a real, unreviewed schema-design decision — new table, new column, new RLS policy — that was not part of what was asked, and this project already holds one live row of real data in voxel_worlds (rows:1) that a wrong backfill choice on a new NOT NULL/default column could affect. Recommending a human decision rather than inventing the prerequisite migration unilaterally.",
+    "dbSmokeTestSuite": {
+      "status": "NOT_RUN",
+      "reason": "Blocked by migrationApplied=false — there is nothing to smoke-test yet on this project. The safe-test requirements (transaction rollback or disposable fixture, never a real user world) are documented and ready to apply once a prerequisite-schema migration is authored and approved."
+    }
+  },
+  "databaseDriftStatus": "OPEN",
+  "databaseDriftStatusDetail": "Production: applied and (per the user) verified — closed. Preview: migration correctly NOT applied due to a genuine, evidenced schema incompatibility (missing voxel_worlds.revision column and the entire voxel_world_events table) — open, pending a decision on how to backfill the prerequisite schema on preview, or a decision that preview does not need this feature yet.",
+  "recommendedNextStep": "A human (or a follow-up session with explicit authorization) should decide: (a) author and review a prerequisite migration adding voxel_worlds.revision + creating voxel_world_events on preview, matching however production actually defines them (which this session cannot inspect), or (b) treat preview as intentionally behind on this feature for now and skip it."
+}

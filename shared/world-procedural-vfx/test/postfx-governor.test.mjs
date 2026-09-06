@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {PostFxGovernor} from '../runtime/postfx-governor.mjs';
+test('optional post FX disables only after sustained overload',()=>{const pass={enabled:true};const g=new PostFxGovernor({passes:[pass],disableAfter:2,enableAfter:2});g.observe(30);assert.equal(pass.enabled,true);g.observe(30);assert.equal(pass.enabled,false);g.observe(5);g.observe(5);assert.equal(pass.enabled,true);});

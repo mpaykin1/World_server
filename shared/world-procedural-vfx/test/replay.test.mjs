@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {VfxReplayBuffer} from '../runtime/replay.mjs';
+test('replay survives export/import deterministically',()=>{const r=new VfxReplayBuffer();r.start(10);r.record({id:'a',type:'pulse',seed:1,position:[0,0,0]},11);const copy=new VfxReplayBuffer().import(r.export());assert.equal(copy.events.length,1);assert.equal(copy.events[0].event.id,'a');assert.equal(copy.events[0].t,1);});

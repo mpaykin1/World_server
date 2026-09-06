@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "3.0.0",
+  "requiredOrReuse": [
+    {
+      "name": "Three.js/WebGL2",
+      "mode": "reuse existing"
+    },
+    {
+      "name": "WorldQualityAutopilot",
+      "mode": "reuse existing"
+    },
+    {
+      "name": "Supabase Realtime",
+      "mode": "reuse existing for recipe replication"
+    }
+  ],
+  "recommended": [
+    {
+      "name": "three-mesh-bvh",
+      "purpose": "terrain raycasts/occlusion acceleration",
+      "install": "npm install three-mesh-bvh"
+    },
+    {
+      "name": "meshoptimizer",
+      "purpose": "geometry + glTF meshopt compression",
+      "install": "npm install meshoptimizer"
+    },
+    {
+      "name": "KTX2/Basis Universal",
+      "purpose": "compressed textures when procedural-only is insufficient",
+      "install": "use Three KTX2Loader + basis transcoder"
+    },
+    {
+      "name": "Spector.js",
+      "purpose": "WebGL capture/profile in development only",
+      "install": "npm install spectorjs"
+    }
+  ],
+  "native": {
+    "WebGPU": "optional only when renderer shares the same WebGPU device; never create a second production renderer just for VFX",
+    "Godot": "use packaged contract bridge and GPU particles/shaders"
+  }
+}

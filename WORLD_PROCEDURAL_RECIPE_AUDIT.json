@@ -1,0 +1,222 @@
+{
+  "schemaVersion": "2.0.0",
+  "system": "WORLD_PROCEDURAL_RECIPE_ENGINE",
+  "engineVersion": "2.0.0",
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "required:shared/world-procedural-core.js",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "required:shared/world-procedural-worker.js",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "required:lib/world-procedural-recipe-engine.js",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "required:lib/world-procedural-budget.js",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "required:lib/world-procedural-cache.js",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "required:lib/world-procedural-bridge.js",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "required:lib/world-procedural-worker-pool.js",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "required:lib/world-procedural-chunk-dag.js",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "required:lib/world-procedural-visibility.js",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "required:lib/world-procedural-audio.js",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "required:lib/world-procedural-shader-cache.js",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "required:lib/world-procedural-navigator-distiller.js",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "required:lib/world-procedural-authority.js",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "required:lib/world-procedural-supabase-adapter.js",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "required:lib/world-procedural-cross-platform.js",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "required:lib/world-procedural-tuner.js",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "required:lib/world-procedural-motifs.js",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "required:lib/world-procedural-toolchain.js",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "required:lib/world-procedural-animation-bridge.js",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "required:lib/world-procedural-texture-plan.js",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "required:data/world-procedural-policy.json",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "required:data/world-procedural-golden-vectors.json",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "required:docs/WORLD_PROCEDURAL_RECIPE_ENGINE.md",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "reuse:lib/voxel-rules.js",
+      "required": false,
+      "status": "PASS"
+    },
+    {
+      "name": "reuse:lib/world-quality-voxel-enhancer.js",
+      "required": false,
+      "status": "PASS"
+    },
+    {
+      "name": "reuse:lib/world-quality-material-profiler.js",
+      "required": false,
+      "status": "PASS"
+    },
+    {
+      "name": "reuse:lib/world-quality-pbr-synthesizer.js",
+      "required": false,
+      "status": "PASS"
+    },
+    {
+      "name": "deterministic:compile-hash",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "deterministic:chunk",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "transport:delta-roundtrip",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "bridge:standalone-world",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "navigator:ru-gothic-regression",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "cross-platform:golden-vectors",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "name": "package:scripts",
+      "required": true,
+      "status": "PASS"
+    }
+  ],
+  "optionalTools": [
+    {
+      "name": "FastNoiseLite",
+      "path": null,
+      "installed": false
+    },
+    {
+      "name": "meshoptimizer",
+      "path": null,
+      "installed": false
+    },
+    {
+      "name": "gltfpack",
+      "path": null,
+      "installed": false
+    },
+    {
+      "name": "basis_universal",
+      "path": null,
+      "installed": false
+    },
+    {
+      "name": "KTX-Software",
+      "path": null,
+      "installed": false
+    },
+    {
+      "name": "zstd",
+      "path": null,
+      "installed": false
+    },
+    {
+      "name": "zstd-bin",
+      "path": null,
+      "installed": false
+    }
+  ],
+  "summary": {
+    "pass": 34,
+    "fail": 0,
+    "skip": 0,
+    "requiredFail": 0,
+    "optionalToolsInstalled": 0
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "3.0.0",
+  "system": "WORLD_VFX_DEVICE_AND_NETWORK_POLICY",
+  "privacy": "capability buckets only; no persistent GPU/browser fingerprint required",
+  "network": {
+    "maxBatchEvents": 32,
+    "maxHz": 20,
+    "defaultInterestRadius": 52,
+    "priorityAlways": 50
+  },
+  "rollback": {
+    "gpuPressureSamples": 2,
+    "webglContextLosses": 1,
+    "shaderCompileFailures": 1,
+    "action": "downgrade one tier; disable optional backend after repeated failure"
+  },
+  "classes": {},
+  "default": {
+    "ceilingTier": "ultra",
+    "particleScale": 1,
+    "intensityScale": 1
+  }
+}

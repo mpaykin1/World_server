@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "World VFX Cross Platform Event v3",
+  "type": "object",
+  "required": [
+    "contractVersion",
+    "id",
+    "type",
+    "position",
+    "seed",
+    "priority",
+    "semantic",
+    "params"
+  ],
+  "properties": {
+    "contractVersion": {
+      "const": 3
+    },
+    "id": {
+      "type": "string"
+    },
+    "type": {
+      "enum": [
+        "pulse",
+        "sparks",
+        "beam",
+        "ribbon",
+        "decal"
+      ]
+    },
+    "position": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "target": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "number"
+      },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "seed": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "priority": {
+      "type": "integer"
+    },
+    "semantic": {
+      "type": "string"
+    },
+    "params": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": false
+}

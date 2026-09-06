@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "3.0.0",
+  "generatedAt": "2026-08-31T14:47:37.737Z",
+  "runtimeMissing": [],
+  "scriptMissing": [],
+  "releaseIntegrated": true,
+  "reuse": {
+    "qualityTelemetry": true,
+    "worldQualityAutopilot": true,
+    "performanceAutotuner": true,
+    "existingMesherWorker": true,
+    "errorPrevention": true,
+    "autofixLearning": true,
+    "technologyRegistry": true,
+    "performanceBudgets": true,
+    "gpuRouting": true,
+    "gpuAutoscaling": true
+  },
+  "extra": {
+    "serverInterest": true,
+    "serverInterestTest": true,
+    "devicePolicy": true,
+    "godotContract": true,
+    "crossPlatformSchema": true,
+    "e2e": false
+  },
+  "packageReadinessPercent": 98,
+  "status": "V3_PACKAGE_COMPLETE_WITH_OPTIONAL_GAPS"
+}
