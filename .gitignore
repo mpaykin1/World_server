@@ -61,3 +61,14 @@ COLLECTIVE_BRAIN_ROUTE.json
 COLLECTIVE_BRAIN_REPLAY.json
 COLLECTIVE_BRAIN_BENCHMARK.json
 .patch-backups/
+
+# local verified toolchain cache (regenerable; never commit binaries)
+.world-server/tools/
+
+# Desktop consolidation 2026-09-06: user-acknowledged local backup copies
+# (node_modules already manually removed from these by the user; kept as
+# backups, not part of the repo - see WORK_IN_PROGRESS.md history) and a
+# local tool-call output cache. Never delete these automatically.
+/World_server_openhuman/
+/World_server_procedural/
+/artifacts/

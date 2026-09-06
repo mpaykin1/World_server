@@ -727,3 +727,1368 @@
 [2026-08-29T05:41:02.169Z] OK msw already installed (MIT) impact 60%
 [2026-08-29T05:41:02.170Z] OK zod already installed (MIT) impact 55%
 [2026-08-29T05:41:02.172Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T14:41:02.723Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T14:41:02.734Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T14:41:02.735Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T14:41:02.736Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T14:41:02.737Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T14:41:02.739Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T14:41:02.741Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T14:56:02.744Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T14:56:02.754Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T14:56:02.755Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T14:56:02.758Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T14:56:02.761Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T14:56:02.763Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T14:56:02.765Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T15:11:02.426Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T15:11:02.434Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T15:11:02.435Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T15:11:02.437Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T15:11:02.439Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T15:11:02.441Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T15:11:02.444Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T15:26:02.063Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T15:26:02.070Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T15:26:02.071Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T15:26:02.072Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T15:26:02.073Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T15:26:02.074Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T15:26:02.075Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T15:41:02.283Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T15:41:02.291Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T15:41:02.292Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T15:41:02.293Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T15:41:02.294Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T15:41:02.295Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T15:41:02.296Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T15:56:02.276Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T15:56:02.283Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T15:56:02.285Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T15:56:02.287Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T15:56:02.288Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T15:56:02.290Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T15:56:02.291Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T16:11:02.470Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T16:11:02.479Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T16:11:02.480Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T16:11:02.482Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T16:11:02.484Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T16:11:02.486Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T16:11:02.488Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T16:26:02.261Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T16:26:02.269Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T16:26:02.270Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T16:26:02.271Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T16:26:02.272Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T16:26:02.273Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T16:26:02.274Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T16:41:02.591Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T16:41:02.599Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T16:41:02.601Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T16:41:02.602Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T16:41:02.603Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T16:41:02.604Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T16:41:02.605Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T16:56:02.263Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T16:56:02.269Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T16:56:02.270Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T16:56:02.270Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T16:56:02.271Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T16:56:02.272Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T16:56:02.274Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T17:11:02.555Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T17:11:02.563Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T17:11:02.565Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T17:11:02.566Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T17:11:02.567Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T17:11:02.568Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T17:11:02.570Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T17:26:02.283Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T17:26:02.290Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T17:26:02.292Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T17:26:02.294Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T17:26:02.295Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T17:26:02.296Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T17:26:02.297Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T17:41:02.552Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T17:41:02.561Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T17:41:02.563Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T17:41:02.564Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T17:41:02.564Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T17:41:02.565Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T17:41:02.567Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T17:56:02.317Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T17:56:02.326Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T17:56:02.327Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T17:56:02.328Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T17:56:02.329Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T17:56:02.329Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T17:56:02.331Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T18:11:02.612Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T18:11:02.619Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T18:11:02.622Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T18:11:02.624Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T18:11:02.626Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T18:11:02.627Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T18:11:02.629Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T18:26:02.408Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T18:26:02.414Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T18:26:02.415Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T18:26:02.416Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T18:26:02.416Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T18:26:02.417Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T18:26:02.421Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T18:41:02.664Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T18:41:02.675Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T18:41:02.677Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T18:41:02.678Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T18:41:02.680Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T18:41:02.681Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T18:41:02.683Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T18:56:02.354Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T18:56:02.360Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T18:56:02.361Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T18:56:02.362Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T18:56:02.363Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T18:56:02.364Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T18:56:02.366Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T19:11:02.678Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T19:11:02.688Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T19:11:02.689Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T19:11:02.691Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T19:11:02.692Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T19:11:02.694Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T19:11:02.697Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T19:26:02.375Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T19:26:02.388Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T19:26:02.389Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T19:26:02.390Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T19:26:02.391Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T19:26:02.393Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T19:26:02.395Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T19:41:02.648Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T19:41:02.656Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T19:41:02.657Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T19:41:02.659Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T19:41:02.661Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T19:41:02.662Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T19:41:02.665Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T19:56:02.423Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T19:56:02.431Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T19:56:02.433Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T19:56:02.433Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T19:56:02.434Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T19:56:02.435Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T19:56:02.437Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T20:11:02.684Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T20:11:02.693Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T20:11:02.696Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T20:11:02.698Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T20:11:02.699Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T20:11:02.700Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T20:11:02.702Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T20:26:02.403Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T20:26:02.412Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T20:26:02.413Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T20:26:02.414Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T20:26:02.415Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T20:26:02.416Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T20:26:02.417Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T20:41:02.690Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T20:41:02.699Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T20:41:02.700Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T20:41:02.701Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T20:41:02.702Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T20:41:02.703Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T20:41:02.704Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T20:56:02.396Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T20:56:02.402Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T20:56:02.403Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T20:56:02.406Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T20:56:02.408Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T20:56:02.409Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T20:56:02.410Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T21:11:02.695Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T21:11:02.706Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T21:11:02.708Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T21:11:02.710Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T21:11:02.711Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T21:11:02.712Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T21:11:02.714Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T21:26:02.462Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T21:26:02.469Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T21:26:02.471Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T21:26:02.473Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T21:26:02.474Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T21:26:02.475Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T21:26:02.477Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T21:41:02.683Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T21:41:02.692Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T21:41:02.694Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T21:41:02.695Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T21:41:02.696Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T21:41:02.697Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T21:41:02.699Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T21:56:02.676Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T21:56:02.684Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T21:56:02.685Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T21:56:02.687Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T21:56:02.688Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T21:56:02.690Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T21:56:02.692Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T22:11:03.141Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T22:11:03.148Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T22:11:03.152Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T22:11:03.154Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T22:11:03.156Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T22:11:03.157Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T22:11:03.159Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T22:26:03.308Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T22:26:03.363Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T22:26:03.364Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T22:26:03.366Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T22:26:03.370Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T22:26:03.372Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T22:26:03.374Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T22:41:04.013Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T22:41:04.030Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T22:41:04.032Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T22:41:04.034Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T22:41:04.036Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T22:41:04.038Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T22:41:04.041Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T22:56:02.345Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T22:56:02.351Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T22:56:02.352Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T22:56:02.353Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T22:56:02.354Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T22:56:02.354Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T22:56:02.356Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T23:11:02.637Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T23:11:02.644Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T23:11:02.646Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T23:11:02.647Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T23:11:02.648Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T23:11:02.650Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T23:11:02.652Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T23:26:02.371Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T23:26:02.380Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T23:26:02.381Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T23:26:02.382Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T23:26:02.383Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T23:26:02.384Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T23:26:02.385Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T23:41:02.587Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T23:41:02.595Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T23:41:02.597Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T23:41:02.598Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T23:41:02.599Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T23:41:02.599Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T23:41:02.601Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-08-31T23:56:02.333Z] OK cannon-es already installed (MIT) impact 80%
+[2026-08-31T23:56:02.340Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-08-31T23:56:02.341Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-08-31T23:56:02.342Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-08-31T23:56:02.343Z] OK msw already installed (MIT) impact 60%
+[2026-08-31T23:56:02.344Z] OK zod already installed (MIT) impact 55%
+[2026-08-31T23:56:02.345Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T00:11:02.571Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T00:11:02.579Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T00:11:02.580Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T00:11:02.581Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T00:11:02.583Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T00:11:02.584Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T00:11:02.586Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T00:26:02.389Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T00:26:02.395Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T00:26:02.396Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T00:26:02.398Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T00:26:02.399Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T00:26:02.399Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T00:26:02.402Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T00:41:02.589Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T00:41:02.595Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T00:41:02.596Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T00:41:02.597Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T00:41:02.598Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T00:41:02.599Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T00:41:02.602Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T00:56:02.422Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T00:56:02.429Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T00:56:02.430Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T00:56:02.431Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T00:56:02.433Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T00:56:02.434Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T00:56:02.436Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T01:11:02.571Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T01:11:02.579Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T01:11:02.580Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T01:11:02.582Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T01:11:02.584Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T01:11:02.586Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T01:11:02.588Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T01:26:02.382Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T01:26:02.388Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T01:26:02.389Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T01:26:02.390Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T01:26:02.391Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T01:26:02.392Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T01:26:02.393Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T01:41:02.657Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T01:41:02.664Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T01:41:02.666Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T01:41:02.668Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T01:41:02.669Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T01:41:02.670Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T01:41:02.672Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T01:56:02.432Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T01:56:02.438Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T01:56:02.439Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T01:56:02.440Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T01:56:02.440Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T01:56:02.442Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T01:56:02.444Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T02:11:01.675Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T02:11:01.681Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T02:11:01.682Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T02:11:01.683Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T02:11:01.684Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T02:11:01.685Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T02:11:01.687Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T02:26:01.472Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T02:26:01.478Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T02:26:01.479Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T02:26:01.480Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T02:26:01.481Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T02:26:01.482Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T02:26:01.483Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T02:41:01.786Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T02:41:01.794Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T02:41:01.795Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T02:41:01.796Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T02:41:01.797Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T02:41:01.798Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T02:41:01.799Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T02:56:01.464Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T02:56:01.472Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T02:56:01.473Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T02:56:01.473Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T02:56:01.474Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T02:56:01.475Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T02:56:01.476Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T03:11:01.649Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T03:11:01.659Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T03:11:01.661Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T03:11:01.662Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T03:11:01.664Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T03:11:01.665Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T03:11:01.668Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T03:26:01.489Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T03:26:01.496Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T03:26:01.497Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T03:26:01.499Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T03:26:01.500Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T03:26:01.501Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T03:26:01.502Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T03:41:01.629Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T03:41:01.636Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T03:41:01.637Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T03:41:01.638Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T03:41:01.639Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T03:41:01.640Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T03:41:01.641Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T03:56:01.506Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T03:56:01.514Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T03:56:01.515Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T03:56:01.516Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T03:56:01.517Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T03:56:01.518Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T03:56:01.520Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T04:11:01.849Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T04:11:01.858Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T04:11:01.860Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T04:11:01.861Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T04:11:01.862Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T04:11:01.863Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T04:11:01.865Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T04:26:01.806Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T04:26:01.814Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T04:26:01.815Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T04:26:01.816Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T04:26:01.817Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T04:26:01.819Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T04:26:01.821Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T04:41:01.802Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T04:41:01.813Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T04:41:01.815Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T04:41:01.816Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T04:41:01.817Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T04:41:01.818Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T04:41:01.821Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T04:56:02.307Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T04:56:02.318Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T04:56:02.319Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T04:56:02.321Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T04:56:02.322Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T04:56:02.323Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T04:56:02.325Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T05:26:02.130Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T05:26:02.136Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T05:26:02.141Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T05:26:02.143Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T05:26:02.145Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T05:26:02.146Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T05:26:02.148Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T05:56:02.163Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T05:56:02.175Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T05:56:02.177Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T05:56:02.178Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T05:56:02.179Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T05:56:02.181Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T05:56:02.182Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T06:26:01.321Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T06:26:01.326Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T06:26:01.327Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T06:26:01.328Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T06:26:01.330Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T06:26:01.331Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T06:26:01.332Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T06:41:01.405Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T06:41:01.410Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T06:41:01.411Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T06:41:01.413Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T06:41:01.414Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T06:41:01.414Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T06:41:01.416Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T07:11:01.613Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T07:11:01.620Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T07:11:01.622Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T07:11:01.623Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T07:11:01.625Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T07:11:01.627Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T07:11:01.629Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T07:56:02.218Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T07:56:02.226Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T07:56:02.228Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T07:56:02.230Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T07:56:02.232Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T07:56:02.234Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T07:56:02.236Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T08:11:01.262Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T08:11:01.267Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T08:11:01.268Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T08:11:01.269Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T08:11:01.270Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T08:11:01.270Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T08:11:01.272Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T08:26:01.226Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T08:26:01.230Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T08:26:01.231Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T08:26:01.232Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T08:26:01.233Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T08:26:01.234Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T08:26:01.235Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T08:41:01.291Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T08:41:01.296Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T08:41:01.296Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T08:41:01.297Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T08:41:01.298Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T08:41:01.299Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T08:41:01.300Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T08:56:01.215Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T08:56:01.219Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T08:56:01.220Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T08:56:01.221Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T08:56:01.221Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T08:56:01.222Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T08:56:01.223Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T09:11:01.439Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T09:11:01.444Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T09:11:01.444Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T09:11:01.446Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T09:11:01.447Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T09:11:01.447Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T09:11:01.449Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T09:26:01.249Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T09:26:01.254Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T09:26:01.255Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T09:26:01.255Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T09:26:01.256Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T09:26:01.256Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T09:26:01.257Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T09:41:01.423Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T09:41:01.428Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T09:41:01.430Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T09:41:01.431Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T09:41:01.432Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T09:41:01.433Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T09:41:01.434Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T09:56:01.247Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T09:56:01.254Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T09:56:01.255Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T09:56:01.256Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T09:56:01.256Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T09:56:01.257Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T09:56:01.258Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T10:11:01.426Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T10:11:01.431Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T10:11:01.432Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T10:11:01.433Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T10:11:01.434Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T10:11:01.435Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T10:11:01.436Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T10:26:01.440Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T10:26:01.445Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T10:26:01.446Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T10:26:01.448Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T10:26:01.450Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T10:26:01.451Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T10:26:01.452Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T10:41:01.792Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T10:41:01.798Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T10:41:01.799Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T10:41:01.801Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T10:41:01.803Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T10:41:01.805Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T10:41:01.808Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T10:56:01.332Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T10:56:01.337Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T10:56:01.339Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T10:56:01.340Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T10:56:01.340Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T10:56:01.341Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T10:56:01.342Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T11:11:01.447Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T11:11:01.453Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T11:11:01.454Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T11:11:01.455Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T11:11:01.456Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T11:11:01.456Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T11:11:01.458Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T11:26:01.334Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T11:26:01.339Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T11:26:01.339Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T11:26:01.340Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T11:26:01.341Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T11:26:01.341Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T11:26:01.342Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T11:41:01.439Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T11:41:01.445Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T11:41:01.446Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T11:41:01.447Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T11:41:01.449Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T11:41:01.450Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T11:41:01.452Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T11:56:01.398Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T11:56:01.403Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T11:56:01.404Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T11:56:01.404Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T11:56:01.405Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T11:56:01.406Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T11:56:01.407Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T12:11:01.447Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T12:11:01.453Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T12:11:01.454Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T12:11:01.455Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T12:11:01.455Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T12:11:01.456Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T12:11:01.458Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T12:26:01.385Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T12:26:01.390Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T12:26:01.391Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T12:26:01.391Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T12:26:01.392Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T12:26:01.393Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T12:26:01.394Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T12:41:01.664Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T12:41:01.669Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T12:41:01.671Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T12:41:01.672Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T12:41:01.674Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T12:41:01.675Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T12:41:01.678Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T12:56:01.379Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T12:56:01.383Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T12:56:01.384Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T12:56:01.385Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T12:56:01.386Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T12:56:01.386Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T12:56:01.387Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T13:11:01.464Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T13:11:01.470Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T13:11:01.471Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T13:11:01.472Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T13:11:01.473Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T13:11:01.474Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T13:11:01.476Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T13:26:01.418Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T13:26:01.424Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T13:26:01.425Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T13:26:01.426Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T13:26:01.427Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T13:26:01.427Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T13:26:01.428Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T13:41:01.707Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T13:41:01.713Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T13:41:01.714Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T13:41:01.715Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T13:41:01.716Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T13:41:01.717Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T13:41:01.718Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T13:56:02.230Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T13:56:02.239Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T13:56:02.241Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T13:56:02.243Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T13:56:02.244Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T13:56:02.246Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T13:56:02.248Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T14:11:03.230Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T14:11:03.237Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T14:11:03.239Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T14:11:03.240Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T14:11:03.241Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T14:11:03.242Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T14:11:03.245Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T14:26:01.753Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T14:26:01.760Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T14:26:01.761Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T14:26:01.762Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T14:26:01.763Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T14:26:01.764Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T14:26:01.765Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T14:41:01.812Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T14:41:01.820Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T14:41:01.821Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T14:41:01.822Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T14:41:01.823Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T14:41:01.823Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T14:41:01.825Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T14:56:01.946Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T14:56:01.955Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T14:56:01.957Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T14:56:01.958Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T14:56:01.960Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T14:56:01.961Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T14:56:01.963Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T15:11:01.609Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T15:11:01.615Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T15:11:01.617Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T15:11:01.618Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T15:11:01.619Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T15:11:01.620Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T15:11:01.622Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T15:26:01.631Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T15:26:01.637Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T15:26:01.638Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T15:26:01.639Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T15:26:01.640Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T15:26:01.641Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T15:26:01.642Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T15:41:01.638Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T15:41:01.645Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T15:41:01.646Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T15:41:01.647Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T15:41:01.648Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T15:41:01.648Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T15:41:01.650Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T15:56:01.627Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T15:56:01.632Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T15:56:01.633Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T15:56:01.634Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T15:56:01.634Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T15:56:01.635Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T15:56:01.637Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T16:11:01.603Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T16:11:01.610Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T16:11:01.611Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T16:11:01.611Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T16:11:01.612Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T16:11:01.613Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T16:11:01.614Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T16:26:01.663Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T16:26:01.669Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T16:26:01.670Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T16:26:01.671Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T16:26:01.672Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T16:26:01.673Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T16:26:01.674Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T16:41:01.648Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T16:41:01.654Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T16:41:01.655Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T16:41:01.656Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T16:41:01.656Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T16:41:01.657Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T16:41:01.658Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T16:56:01.658Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T16:56:01.663Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T16:56:01.664Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T16:56:01.665Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T16:56:01.666Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T16:56:01.666Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T16:56:01.668Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T17:11:01.660Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T17:11:01.665Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T17:11:01.666Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T17:11:01.668Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T17:11:01.669Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T17:11:01.670Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T17:11:01.672Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T17:26:01.654Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T17:26:01.661Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T17:26:01.662Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T17:26:01.663Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T17:26:01.664Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T17:26:01.665Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T17:26:01.667Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T17:41:01.659Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T17:41:01.665Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T17:41:01.666Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T17:41:01.667Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T17:41:01.667Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T17:41:01.668Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T17:41:01.669Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T17:56:01.722Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T17:56:01.727Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T17:56:01.728Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T17:56:01.728Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T17:56:01.729Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T17:56:01.730Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T17:56:01.732Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T18:11:02.187Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T18:11:02.195Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T18:11:02.196Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T18:11:02.198Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T18:11:02.200Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T18:11:02.202Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T18:11:02.204Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T18:26:01.739Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T18:26:01.746Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T18:26:01.748Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T18:26:01.749Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T18:26:01.750Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T18:26:01.752Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T18:26:01.754Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T18:41:01.705Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T18:41:01.712Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T18:41:01.713Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T18:41:01.713Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T18:41:01.714Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T18:41:01.715Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T18:41:01.717Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T18:56:01.755Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T18:56:01.761Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T18:56:01.762Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T18:56:01.763Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T18:56:01.764Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T18:56:01.764Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T18:56:01.766Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T19:11:01.694Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T19:11:01.700Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T19:11:01.701Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T19:11:01.703Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T19:11:01.704Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T19:11:01.705Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T19:11:01.706Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T19:26:01.689Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T19:26:01.695Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T19:26:01.697Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T19:26:01.697Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T19:26:01.698Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T19:26:01.699Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T19:26:01.700Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T19:41:01.745Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T19:41:01.751Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T19:41:01.752Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T19:41:01.753Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T19:41:01.754Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T19:41:01.755Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T19:41:01.757Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T19:56:01.735Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T19:56:01.740Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T19:56:01.741Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T19:56:01.742Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T19:56:01.743Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T19:56:01.744Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T19:56:01.746Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T20:11:01.736Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T20:11:01.742Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T20:11:01.743Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T20:11:01.744Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T20:11:01.745Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T20:11:01.746Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T20:11:01.747Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T20:26:01.768Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T20:26:01.775Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T20:26:01.777Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T20:26:01.778Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T20:26:01.779Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T20:26:01.779Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T20:26:01.781Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T20:41:01.747Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T20:41:01.754Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T20:41:01.755Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T20:41:01.756Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T20:41:01.758Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T20:41:01.759Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T20:41:01.761Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T20:56:01.749Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T20:56:01.756Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T20:56:01.758Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T20:56:01.759Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T20:56:01.760Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T20:56:01.761Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T20:56:01.762Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T21:11:01.776Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T21:11:01.781Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T21:11:01.783Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T21:11:01.784Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T21:11:01.785Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T21:11:01.786Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T21:11:01.787Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T21:26:01.773Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T21:26:01.779Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T21:26:01.780Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T21:26:01.780Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T21:26:01.781Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T21:26:01.782Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T21:26:01.783Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T21:41:01.826Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T21:41:01.833Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T21:41:01.835Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T21:41:01.836Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T21:41:01.837Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T21:41:01.838Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T21:41:01.839Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T21:56:01.724Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T21:56:01.729Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T21:56:01.731Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T21:56:01.732Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T21:56:01.733Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T21:56:01.734Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T21:56:01.735Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T22:11:01.775Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T22:11:01.782Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T22:11:01.783Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T22:11:01.784Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T22:11:01.784Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T22:11:01.785Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T22:11:01.787Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T22:26:01.774Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T22:26:01.779Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T22:26:01.780Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T22:26:01.781Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T22:26:01.782Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T22:26:01.782Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T22:26:01.785Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T22:41:01.791Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T22:41:01.797Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T22:41:01.799Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T22:41:01.801Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T22:41:01.802Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T22:41:01.803Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T22:41:01.805Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T22:56:01.789Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T22:56:01.795Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T22:56:01.796Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T22:56:01.797Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T22:56:01.798Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T22:56:01.799Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T22:56:01.800Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T23:11:01.795Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T23:11:01.801Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T23:11:01.802Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T23:11:01.803Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T23:11:01.804Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T23:11:01.804Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T23:11:01.806Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T23:26:01.822Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T23:26:01.827Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T23:26:01.828Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T23:26:01.829Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T23:26:01.830Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T23:26:01.831Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T23:26:01.832Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T23:41:01.799Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T23:41:01.805Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T23:41:01.806Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T23:41:01.807Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T23:41:01.808Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T23:41:01.809Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T23:41:01.810Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-01T23:56:01.791Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-01T23:56:01.796Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-01T23:56:01.797Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-01T23:56:01.798Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-01T23:56:01.798Z] OK msw already installed (MIT) impact 60%
+[2026-09-01T23:56:01.799Z] OK zod already installed (MIT) impact 55%
+[2026-09-01T23:56:01.800Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T00:11:01.851Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T00:11:01.857Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T00:11:01.858Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T00:11:01.859Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T00:11:01.860Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T00:11:01.860Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T00:11:01.862Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T00:26:01.800Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T00:26:01.805Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T00:26:01.805Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T00:26:01.806Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T00:26:01.807Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T00:26:01.808Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T00:26:01.809Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T00:41:01.826Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T00:41:01.833Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T00:41:01.834Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T00:41:01.836Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T00:41:01.837Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T00:41:01.837Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T00:41:01.839Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T00:56:01.829Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T00:56:01.835Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T00:56:01.836Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T00:56:01.837Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T00:56:01.837Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T00:56:01.838Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T00:56:01.839Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T01:11:01.831Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T01:11:01.836Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T01:11:01.837Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T01:11:01.838Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T01:11:01.838Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T01:11:01.839Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T01:11:01.840Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T01:26:01.853Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T01:26:01.858Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T01:26:01.859Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T01:26:01.860Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T01:26:01.860Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T01:26:01.861Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T01:26:01.862Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T01:41:01.898Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T01:41:01.906Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T01:41:01.907Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T01:41:01.908Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T01:41:01.909Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T01:41:01.910Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T01:41:01.911Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T01:56:01.897Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T01:56:01.904Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T01:56:01.906Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T01:56:01.907Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T01:56:01.908Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T01:56:01.909Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T01:56:01.911Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T02:11:01.914Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T02:11:01.920Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T02:11:01.921Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T02:11:01.921Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T02:11:01.922Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T02:11:01.923Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T02:11:01.926Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T02:26:01.881Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T02:26:01.887Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T02:26:01.887Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T02:26:01.888Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T02:26:01.889Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T02:26:01.890Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T02:26:01.892Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T02:41:01.879Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T02:41:01.886Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T02:41:01.887Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T02:41:01.888Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T02:41:01.889Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T02:41:01.890Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T02:41:01.891Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T02:56:01.893Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T02:56:01.901Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T02:56:01.903Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T02:56:01.904Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T02:56:01.905Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T02:56:01.905Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T02:56:01.907Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T03:11:01.907Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T03:11:01.913Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T03:11:01.914Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T03:11:01.915Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T03:11:01.916Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T03:11:01.916Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T03:11:01.918Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T03:26:01.869Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T03:26:01.874Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T03:26:01.875Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T03:26:01.876Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T03:26:01.877Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T03:26:01.877Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T03:26:01.879Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T03:41:02.066Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T03:41:02.072Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T03:41:02.073Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T03:41:02.074Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T03:41:02.075Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T03:41:02.076Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T03:41:02.078Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T03:56:01.907Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T03:56:01.912Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T03:56:01.914Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T03:56:01.915Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T03:56:01.916Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T03:56:01.916Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T03:56:01.918Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T04:11:01.944Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T04:11:01.950Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T04:11:01.951Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T04:11:01.952Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T04:11:01.952Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T04:11:01.953Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T04:11:01.955Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T04:26:01.924Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T04:26:01.930Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T04:26:01.931Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T04:26:01.932Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T04:26:01.933Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T04:26:01.933Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T04:26:01.935Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T04:41:02.123Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T04:41:02.129Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T04:41:02.130Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T04:41:02.131Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T04:41:02.132Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T04:41:02.133Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T04:41:02.134Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T04:56:04.977Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T04:56:05.002Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T04:56:05.011Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T04:56:05.018Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T04:56:05.024Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T04:56:05.028Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T04:56:05.030Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T05:11:02.256Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T05:11:02.263Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T05:11:02.264Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T05:11:02.265Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T05:11:02.266Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T05:11:02.267Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T05:11:02.270Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T05:41:04.181Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T05:41:04.192Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T05:41:04.196Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T05:41:04.199Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T05:41:04.202Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T05:41:04.204Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T05:41:04.206Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T06:11:04.791Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T06:11:04.805Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T06:11:04.809Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T06:11:04.814Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T06:11:04.817Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T06:11:04.820Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T06:11:04.822Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T06:26:03.019Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T06:26:03.030Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T06:26:03.032Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T06:26:03.034Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T06:26:03.038Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T06:26:03.039Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T06:26:03.042Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T06:41:02.157Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T06:41:02.162Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T06:41:02.163Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T06:41:02.164Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T06:41:02.165Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T06:41:02.166Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T06:41:02.168Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T06:56:02.037Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T06:56:02.042Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T06:56:02.043Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T06:56:02.044Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T06:56:02.045Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T06:56:02.046Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T06:56:02.048Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T07:11:02.101Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T07:11:02.106Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T07:11:02.107Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T07:11:02.108Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T07:11:02.110Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T07:11:02.111Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T07:11:02.113Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T07:26:02.055Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T07:26:02.061Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T07:26:02.062Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T07:26:02.063Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T07:26:02.063Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T07:26:02.064Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T07:26:02.066Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T07:41:02.087Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T07:41:02.093Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T07:41:02.094Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T07:41:02.095Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T07:41:02.096Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T07:41:02.097Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T07:41:02.098Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T07:56:02.077Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T07:56:02.081Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T07:56:02.082Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T07:56:02.083Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T07:56:02.084Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T07:56:02.085Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T07:56:02.086Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T08:11:02.092Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T08:11:02.098Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T08:11:02.099Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T08:11:02.100Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T08:11:02.101Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T08:11:02.102Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T08:11:02.103Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T08:26:02.064Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T08:26:02.070Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T08:26:02.071Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T08:26:02.072Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T08:26:02.073Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T08:26:02.074Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T08:26:02.075Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T08:41:02.133Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T08:41:02.139Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T08:41:02.140Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T08:41:02.141Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T08:41:02.141Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T08:41:02.142Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T08:41:02.144Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T08:56:02.072Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T08:56:02.077Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T08:56:02.077Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T08:56:02.078Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T08:56:02.079Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T08:56:02.080Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T08:56:02.081Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T09:11:02.185Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T09:11:02.191Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T09:11:02.192Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T09:11:02.193Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T09:11:02.194Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T09:11:02.195Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T09:11:02.196Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T09:26:02.193Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T09:26:02.199Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T09:26:02.200Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T09:26:02.201Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T09:26:02.202Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T09:26:02.203Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T09:26:02.205Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T09:41:02.116Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T09:41:02.121Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T09:41:02.122Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T09:41:02.123Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T09:41:02.124Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T09:41:02.125Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T09:41:02.126Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T09:56:02.142Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T09:56:02.148Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T09:56:02.149Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T09:56:02.150Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T09:56:02.151Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T09:56:02.152Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T09:56:02.153Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T10:11:02.166Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T10:11:02.171Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T10:11:02.172Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T10:11:02.173Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T10:11:02.173Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T10:11:02.174Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T10:11:02.175Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T10:26:02.202Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T10:26:02.210Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T10:26:02.211Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T10:26:02.213Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T10:26:02.214Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T10:26:02.215Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T10:26:02.216Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T10:41:02.112Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T10:41:02.118Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T10:41:02.119Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T10:41:02.120Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T10:41:02.121Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T10:41:02.122Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T10:41:02.123Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T10:56:02.178Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T10:56:02.183Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T10:56:02.184Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T10:56:02.185Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T10:56:02.186Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T10:56:02.186Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T10:56:02.187Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T11:11:01.202Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T11:11:01.208Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T11:11:01.209Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T11:11:01.210Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T11:11:01.211Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T11:11:01.211Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T11:11:01.212Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T11:26:01.202Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T11:26:01.208Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T11:26:01.209Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T11:26:01.209Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T11:26:01.210Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T11:26:01.211Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T11:26:01.213Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T11:41:01.187Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T11:41:01.192Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T11:41:01.193Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T11:41:01.194Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T11:41:01.195Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T11:41:01.197Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T11:41:01.198Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T12:11:02.800Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T12:11:02.811Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T12:11:02.813Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T12:11:02.816Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T12:11:02.820Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T12:11:02.822Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T12:11:02.824Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T12:26:01.225Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T12:26:01.230Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T12:26:01.231Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T12:26:01.232Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T12:26:01.233Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T12:26:01.234Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T12:26:01.235Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T12:41:03.848Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T12:41:03.864Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T12:41:03.867Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T12:41:03.869Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T12:41:03.876Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T12:41:03.878Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T12:41:03.881Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T13:11:01.335Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T13:11:01.341Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T13:11:01.342Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T13:11:01.343Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T13:11:01.344Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T13:11:01.344Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T13:11:01.346Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T13:41:02.672Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T13:41:02.681Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T13:41:02.684Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T13:41:02.686Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T13:41:02.688Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T13:41:02.690Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T13:41:02.693Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T13:56:02.793Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T13:56:02.803Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T13:56:02.805Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T13:56:02.807Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T13:56:02.808Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T13:56:02.810Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T13:56:02.812Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T14:11:02.720Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T14:11:02.731Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T14:11:02.733Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T14:11:02.735Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T14:11:02.736Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T14:11:02.737Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T14:11:02.739Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T14:26:05.198Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T14:26:05.216Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T14:26:05.218Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T14:26:05.220Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T14:26:05.222Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T14:26:05.226Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T14:26:05.231Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T14:56:04.556Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T14:56:04.574Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T14:56:04.576Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T14:56:04.577Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T14:56:04.579Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T14:56:04.580Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T14:56:04.588Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T15:26:05.663Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T15:26:05.701Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T15:26:05.704Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T15:26:05.706Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T15:26:05.708Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T15:26:05.711Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T15:26:05.717Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T15:56:02.498Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T15:56:02.509Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T15:56:02.511Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T15:56:02.512Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T15:56:02.514Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T15:56:02.515Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T15:56:02.517Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T16:11:02.381Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T16:11:02.390Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T16:11:02.391Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T16:11:02.393Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T16:11:02.394Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T16:11:02.395Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T16:11:02.397Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T16:26:02.803Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T16:26:02.815Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T16:26:02.818Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T16:26:02.821Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T16:26:02.822Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T16:26:02.823Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T16:26:02.826Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T16:56:04.980Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T16:56:04.989Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T16:56:04.990Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T16:56:04.993Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T16:56:04.994Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T16:56:04.995Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T16:56:04.998Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T17:11:01.513Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T17:11:01.518Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T17:11:01.519Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T17:11:01.520Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T17:11:01.521Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T17:11:01.521Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T17:11:01.522Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T17:26:01.457Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T17:26:01.463Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T17:26:01.463Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T17:26:01.464Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T17:26:01.465Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T17:26:01.465Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T17:26:01.467Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T17:41:01.493Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T17:41:01.497Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T17:41:01.498Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T17:41:01.499Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T17:41:01.499Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T17:41:01.500Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T17:41:01.502Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T17:56:03.045Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T17:56:03.054Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T17:56:03.056Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T17:56:03.058Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T17:56:03.060Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T17:56:03.061Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T17:56:03.064Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T18:11:08.734Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T18:11:08.745Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T18:11:08.746Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T18:11:08.748Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T18:11:08.750Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T18:11:08.752Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T18:11:08.755Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-02T18:26:04.790Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-02T18:26:04.805Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-02T18:26:04.809Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-02T18:26:04.812Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-02T18:26:04.814Z] OK msw already installed (MIT) impact 60%
+[2026-09-02T18:26:04.816Z] OK zod already installed (MIT) impact 55%
+[2026-09-02T18:26:04.819Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-03T04:26:02.772Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-03T04:26:02.777Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-03T04:26:02.779Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-03T04:26:02.780Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-03T04:26:02.781Z] OK msw already installed (MIT) impact 60%
+[2026-09-03T04:26:02.782Z] OK zod already installed (MIT) impact 55%
+[2026-09-03T04:26:02.783Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
+[2026-09-05T05:41:01.746Z] OK cannon-es already installed (MIT) impact 80%
+[2026-09-05T05:41:01.752Z] OK comlink already installed (Apache-2.0) impact 65%
+[2026-09-05T05:41:01.754Z] OK idb-keyval already installed (Apache-2.0) impact 55%
+[2026-09-05T05:41:01.756Z] OK sharp already installed (Apache-2.0) impact 70%
+[2026-09-05T05:41:01.758Z] OK msw already installed (MIT) impact 60%
+[2026-09-05T05:41:01.760Z] OK zod already installed (MIT) impact 55%
+[2026-09-05T05:41:01.761Z] Wrote QUALITY_PLUGIN_CANDIDATES.json
