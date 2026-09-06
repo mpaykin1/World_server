@@ -727,6 +727,25 @@
       "confirmedAt": "2026-09-06T15:44:53.276Z",
       "lessonHash": "d50bc27d7c61501fcb75e400aac6e58d87ad155e41a938954a64dad9a214682a",
       "supersedes": null
+    },
+    {
+      "id": "SCIENCE-RUN-072-EXPENSIVE-HARNESS-EVIDENCE",
+      "category": "science-infrastructure",
+      "severity": "major",
+      "status": "protected",
+      "history": [],
+      "symptom": "Repeated-damage science harness can be rerun or retuned inconsistently, losing exact holdout evidence.",
+      "rootCause": "Experiment configuration and evidence lifecycle were not explicitly protected as one immutable preregistered run.",
+      "solution": "Keep RUN_072 seeds, thresholds, one-run evidence JSON, and focused grammar tests fixed; treat pass:false as valid scientific evidence.",
+      "protection": [
+        "scripts/science-h2-repeated-damage-regrowth.cjs",
+        "test/science-h2-repeated-damage-regrowth.test.cjs",
+        "SCIENCE_RUN_072_H2.json"
+      ],
+      "evidence": [
+        "SCIENCE_RUN_072_H2.json"
+      ],
+      "confirmedAt": "2026-09-06T00:00:00.000Z"
     }
   ],
   "confirmationProtocol": {
