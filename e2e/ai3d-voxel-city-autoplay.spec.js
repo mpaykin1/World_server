@@ -27,18 +27,17 @@ test.describe('AI3D Voxel City - default-city autoplay (no user actions)', () =>
       const canvas = document.querySelector('#viewer canvas');
       if (!canvas) return { exists: false };
       const rect = canvas.getBoundingClientRect();
-      // toDataURL length is a lightweight check that canvas was painted
-      let dataLen = 0;
-      try { dataLen = canvas.toDataURL().length; } catch {}
       const gl = canvas.getContext('webgl') || canvas.getContext('webgl2');
       const hasGL = !!gl;
-      return { exists: true, width: rect.width, height: rect.height, dataLen, hasGL };
+      return { exists: true, width: rect.width, height: rect.height, hasGL };
     });
     expect(canvasInfo.exists).toBe(true);
     expect(canvasInfo.width).toBeGreaterThan(50);
     expect(canvasInfo.height).toBeGreaterThan(50);
-    expect(canvasInfo.dataLen).toBeGreaterThan(1000);
     expect(canvasInfo.hasGL).toBe(true);
+    // Capture what the browser compositor actually presents instead of inspecting a discarded WebGL buffer.
+    const renderedPng = await page.locator('#viewer canvas').screenshot({ animations: 'disabled' });
+    expect(renderedPng.length).toBeGreaterThan(256);
 
     // Character spawned inside city
     const spawnState = await page.evaluate(() => {

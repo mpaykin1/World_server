@@ -2,7 +2,15 @@
   "schemaVersion": "1.0.0",
   "system": "ERROR_RECURRENCE_PROTECTION",
   "policy": "confirmed-fix-becomes-permanent-regression-rule",
-  "events": [],
+  "events": [
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "ai3d-webgl-canvas-proof-dpr",
+      "at": "2026-09-06T15:22:23.166Z",
+      "lessonHash": "2dea383c561e51c754b614c465fc16d59a1a6ef15c754336618c979261e35aa8",
+      "supersedes": null
+    }
+  ],
   "knownErrors": [
     {
       "id": "controls-inverted-camera-relative",
@@ -643,6 +651,27 @@
         "do not raise capability-coverage or claim local-first is reliable on this hardware based on the one isolated live-test success alone - report the real combined rate (1 success out of 5 total real local attempts this cycle) honestly, as this entry does",
         "before increasing OLLAMA_PATCH_MODELS or lowering the 120s/150s timeouts, gather more real per-task-type samples first - 4 attempts is not enough to distinguish 'this task type is genuinely harder for a 1.7B model' from 'this was noise/contention'"
       ]
+    },
+    {
+      "id": "ai3d-webgl-canvas-proof-dpr",
+      "category": "collective-brain-learned",
+      "severity": "major",
+      "status": "protected",
+      "history": [],
+      "rootCause": "AI3D autoplay CI used WebGL canvas toDataURL PNG byte length greater than 1000 as paint proof; reduced mobile DPR made valid WebKit output compress to 698 bytes and caused a false failure.",
+      "solution": "Use Playwright compositor screenshot as paint proof while retaining runtime voxel, chunk, triangle and WebGL assertions; keep the mobile DPR performance optimization.",
+      "protection": [
+        "e2e/ai3d-voxel-city-autoplay.spec.js",
+        "mobile-webkit targeted autoplay"
+      ],
+      "evidence": [
+        "GitHub Actions run 34038654105",
+        "targeted mobile-webkit 2/2 PASS",
+        "check:fast Syntax OK 48 files"
+      ],
+      "confirmedAt": "2026-09-06T15:22:23.161Z",
+      "lessonHash": "2dea383c561e51c754b614c465fc16d59a1a6ef15c754336618c979261e35aa8",
+      "supersedes": null
     }
   ],
   "confirmationProtocol": {
