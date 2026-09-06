@@ -216,3 +216,52 @@ test('runMasterGoal with one goal auto-dispatches the default multi-agent plan a
   assert.equal(r.plan.length, 2);
   assert.equal(r.overallStatus, 'PASS');
 });
+
+test('cloud/paid agent classes are distinct and never overlap offline/local agents', () => {
+  for (const id of mc.CLOUD_MODEL_AGENTS) {
+    assert.ok(!mc.LOCAL_MODEL_AGENTS.has(id));
+    assert.ok(!mc.OFFLINE_ONLY_AGENTS.has(id));
+  }
+  for (const id of mc.PAID_FALLBACK_AGENTS) {
+    assert.ok(!mc.CLOUD_MODEL_AGENTS.has(id));
+    assert.ok(!mc.LOCAL_MODEL_AGENTS.has(id));
+    assert.ok(!mc.OFFLINE_ONLY_AGENTS.has(id));
+  }
+});
+
+test('full-free plan adds cloud + AnythingLLM but never Codex', () => {
+  const plan = mc.buildDefaultSubtasks('Improve all AI coordination', { includeCloud: true, includeAnythingLLM: true });
+  const agents = plan.map((x) => x.agent);
+  assert.deepEqual(agents, ['opencode', 'openhuman', 'world-cloud-ai', 'anythingllm']);
+  assert.ok(!agents.includes('codex'));
+});
+
+test('Codex is added only when explicitly requested', () => {
+  const plan = mc.buildDefaultSubtasks('Hard unresolved integration bug', { includeCodex: true });
+  assert.ok(plan.some((x) => x.agent === 'codex'));
+});
+
+test('pending cloud dispatch and disabled paid fallback can never false-green PASS', () => {
+  for (const result of ['DISPATCHED', 'PAID_FALLBACK_DISABLED']) {
+    assert.equal(mc.summarizeMasterResults([{ result: 'PASS' }, { result }]), 'PENDING');
+  }
+});
+
+test('automated-agent report shares cloud/codex results through the common log', () => {
+  const before = readReports().length;
+  const entry = mc.reportAutomatedAgentResult('world-cloud-ai', 'safe cloud verification task', {
+    ok: true,
+    result: 'DISPATCHED',
+    runId: 12345,
+    runUrl: 'https://github.com/example/repo/actions/runs/12345',
+  }, { taskId: 'cloud-report-test' });
+  assert.equal(entry.status, 'queued');
+  assert.equal(entry.pr, 'https://github.com/example/repo/actions/runs/12345');
+  assert.equal(readReports().length, before + 1);
+});
+
+test('Codex adapter fails closed without explicit paid permission', async () => {
+  const r = await mc.invokeCodex('review a tiny safe change', { allowPaid: false });
+  assert.equal(r.ok, false);
+  assert.equal(r.result, 'PAID_FALLBACK_DISABLED');
+});

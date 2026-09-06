@@ -106,7 +106,9 @@
     "collective-brain:knowledge-pack": "node scripts/collective-brain-knowledge-pack.js",
     "collective-brain:ordinary-chat-check": "node scripts/openhuman-ordinary-chat-check.js",
     "master-coordinator": "node scripts/master-coordinator.cjs",
-    "master-coordinator:test": "node --test test/master-coordinator.test.js"
+    "master-coordinator:test": "node --test test/master-coordinator.test.js",
+    "master-coordinator:full-free": "node scripts/master-coordinator.cjs --full-free",
+    "master-coordinator:paid-review": "node scripts/master-coordinator.cjs --full-free --allow-paid"
   },
   "engines": {
     "node": "24.x"

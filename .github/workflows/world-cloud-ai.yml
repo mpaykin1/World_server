@@ -64,54 +64,36 @@ jobs:
           npm install --global "opencode-ai@${OPENCODE_VERSION}"
           opencode --version
 
-      - name: Resolve live free open-weight model
+      - name: Resolve live free open-weight models
         shell: bash
         run: |
           set -euo pipefail
           CATALOG="${RUNNER_TEMP}/openrouter-models.json"
-          CONFIG="${RUNNER_TEMP}/world-opencode.json"
+          MODELS_FILE="${RUNNER_TEMP}/world-free-models.txt"
           curl --fail --silent --show-error https://openrouter.ai/api/v1/models > "${CATALOG}"
+          : > "${MODELS_FILE}"
 
-          MODEL_ID=""
+          # Approved zero-cost open-weight/tool-capable candidates, ordered by coding suitability.
           for CANDIDATE in \
             "qwen/qwen3-coder:free" \
-            "z-ai/glm-5.2:free"; do
-            if jq -e --arg id "${CANDIDATE}" '.data[] | select(.id == $id and .pricing.prompt == "0" and .pricing.completion == "0")' "${CATALOG}" >/dev/null; then
-              MODEL_ID="${CANDIDATE}"
-              break
+            "z-ai/glm-5.2:free" \
+            "nvidia/nemotron-3.5-lightning:free" \
+            "nvidia/nemotron-3-super-120b-a12b:free" \
+            "google/gemma-4-31b-it:free"; do
+            if jq -e --arg id "${CANDIDATE}" '.data[] | select(.id == $id and .pricing.prompt == "0" and .pricing.completion == "0" and (.supported_parameters // [] | index("tools")))' "${CATALOG}" >/dev/null; then
+              echo "${CANDIDATE}" >> "${MODELS_FILE}"
             fi
           done
 
-          if [[ -z "${MODEL_ID}" ]]; then
-            echo "::error::No approved zero-cost open-weight coding model is currently live on OpenRouter. Refusing paid fallback."
+          if [[ ! -s "${MODELS_FILE}" ]]; then
+            echo "::error::No approved zero-cost open-weight tool-capable model is live. Refusing paid fallback."
             exit 3
           fi
 
-          jq -n --arg model "${MODEL_ID}" '
-            {
-              "$schema": "https://opencode.ai/config.json",
-              "provider": {
-                "worldrouter": {
-                  "npm": "@ai-sdk/openai-compatible",
-                  "name": "World OpenRouter",
-                  "options": {
-                    "baseURL": "https://openrouter.ai/api/v1",
-                    "apiKey": "{env:OPENROUTER_API_KEY}"
-                  },
-                  "models": {
-                    ($model): {
-                      "name": $model,
-                      "limit": { "context": 200000, "output": 32768 }
-                    }
-                  }
-                }
-              }
-            }
-          ' > "${CONFIG}"
+          echo "WORLD_FREE_MODELS_FILE=${MODELS_FILE}" >> "${GITHUB_ENV}"
+          echo "Live free model failover order:"
+          cat "${MODELS_FILE}"
 
-          echo "OPENCODE_CONFIG=${CONFIG}" >> "${GITHUB_ENV}"
-          echo "MODEL=worldrouter/${MODEL_ID}" >> "${GITHUB_ENV}"
-          echo "Selected zero-cost open-weight model: ${MODEL_ID}"
       - name: Resolve task
         id: task
         shell: bash
@@ -175,10 +157,11 @@ jobs:
           - Run relevant tests while working when useful.
           WORLD_AI_PROMPT
           )"
-          opencode run --model "${MODEL}" --agent build "${PROMPT}
-
-          Requested task:
-          ${TASK}"
+          PROMPT_FILE="${RUNNER_TEMP}/world-ai-prompt.txt"
+          printf '%s\n\nRequested task:\n%s\n' "${PROMPT}" "${TASK}" > "${PROMPT_FILE}"
+          node scripts/world-cloud-opencode-failover.cjs \
+            --prompt-file "${PROMPT_FILE}" \
+            --models-file "${WORLD_FREE_MODELS_FILE}"
 
       - name: Save candidate commit
         id: candidate
@@ -232,13 +215,12 @@ jobs:
           WORLD_AI_REPAIR
             )"
 
-            opencode run --model "${MODEL}" --agent build "${REPAIR_PROMPT}
-
-          Original task:
-          ${TASK}
-
-          Verification failure:
-          ${FAILURE}"
+            REPAIR_FILE="${RUNNER_TEMP}/world-ai-repair-${ATTEMPT}.txt"
+            printf '%s\n\nOriginal task:\n%s\n\nVerification failure:\n%s\n' \
+              "${REPAIR_PROMPT}" "${TASK}" "${FAILURE}" > "${REPAIR_FILE}"
+            node scripts/world-cloud-opencode-failover.cjs \
+              --prompt-file "${REPAIR_FILE}" \
+              --models-file "${WORLD_FREE_MODELS_FILE}"
 
             git add -A
             if ! git diff --cached --quiet; then
@@ -266,7 +248,7 @@ jobs:
           BODY="$(cat <<EOF
           Automated by World Cloud AI.
 
-          Model: Qwen3-Coder via the free OpenRouter endpoint
+          Model: ${MODEL} via zero-cost OpenRouter failover
           Agent: OpenCode ${OPENCODE_VERSION}
           Verification: npm run check + desktop-ai:check + golden:check
           Source run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}
