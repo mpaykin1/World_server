@@ -177,3 +177,14 @@ This rule applies to every current and future AI agent working on `World_server`
 - A local agent must not continue heavy implementation after the work is safely available to cloud agents unless the remaining step is impossible remotely.
 - Any confirmed clutter/performance regression must get a root-cause fix plus regression protection, not just one-time cleanup.
 - Cloud/browser agents must preserve existing architecture, use `World_server` as the single source of truth, and avoid duplicate repositories/projects/services.
+
+
+## 13. SCIENCE -> GAMEPLAY — mandatory
+
+- Starting with RUN_072, a science evidence patch is never considered 100% implemented until it also has production runtime behavior, a visible player effect, player interaction, Navigator explanation, telemetry and regression protection.
+- Every `SCIENCE_RUN_###*.json` (RUN_072+) must have `science/gameplay/RUN_###.gameplay.json` and use the shared `lib/science-gameplay-adapter.js`; do not build one-off science runtimes.
+- Verified PASS science may activate gameplay. Failed/refuted science remains inactive and must be explained honestly.
+- Navigator always explains science at roughly age-5 comprehension: short sentences, one idea at a time, concrete everyday analogies, no unexplained jargon, no distortion of scientific meaning.
+- Always distinguish a small playable demonstration from the full experiment and never present unmeasured live gameplay metrics as scientific proof.
+- Preserve existing graphics, physics, controls, persistence, multiplayer and performance. Science integration must add quality, not weaken the game.
+- Canonical details: `docs/SCIENCE_GAMEPLAY_STANDARD.md`.

@@ -8,6 +8,7 @@ const {
   CHUNK, WORLD_ID, finite, safeWorldId: ruleSafeWorldId, safePosition: ruleSafePosition,
   safeBlockCoordinate: ruleSafeBlockCoordinate, safeBlockType: ruleSafeBlockType, chunkCoord, distance
 } = require('../lib/voxel-rules');
+const scienceGameplay = require('../lib/science-gameplay-adapter');
 
 function dbFailure(error, fallback = 'Ошибка базы данных Voxel World.') {
   if (!error) return;
@@ -78,7 +79,7 @@ async function actionInit(admin, identity, body) {
     ensurePlayer(admin, identity, worldId)
   ]);
   dbFailure(worldError, 'Мир Voxel World не найден.');
-  return { selfId: identity.userId || identity.guestId, world, player: clientPlayer(player, identity) };
+  return { selfId: identity.userId || identity.guestId, world, player: clientPlayer(player, identity), scienceGameplay: scienceGameplay.listPublicRuns() };
 }
 
 async function actionChunks(admin, body) {
@@ -116,28 +117,82 @@ async function actionSetBlock(admin, identity, body) {
   if (distance(position, { x: x + 0.5, y: y + 0.5, z: z + 0.5 }) > 8.2) throw httpError(400, 'Блок слишком далеко от игрока.');
   if (player.last_block_at && Date.now() - new Date(player.last_block_at).getTime() < 45) throw httpError(429, 'Слишком частое изменение блоков.');
 
+  const scienceContexts = [];
+  if (blockType === 0) {
+    const contracts = scienceGameplay.getActiveContractsForEvent('player_break');
+    if (contracts.length) {
+      const { data: previous, error: previousError } = await admin.from('voxel_block_overrides')
+        .select('block_type').eq('world_id', worldId).eq('x', x).eq('y', y).eq('z', z).maybeSingle();
+      dbFailure(previousError);
+      const previousBlockType = Number(previous?.block_type);
+      const relevant = contracts.filter(contract => (contract.mechanic.eligibleBlockTypes || []).includes(previousBlockType));
+      if (relevant.length) {
+        const radius = Math.max(...relevant.map(contract => Math.max(1, Math.min(12, Number(contract.mechanic.radius) || 8))));
+        const verticalRadius = Math.max(...relevant.map(contract => Math.max(0, Math.min(2, Number(contract.mechanic.verticalRadius) || 1))));
+        const { data: nearby, error: nearbyError } = await admin.from('voxel_block_overrides')
+          .select('x,y,z,block_type').eq('world_id', worldId)
+          .gte('x', x - radius).lte('x', x + radius)
+          .gte('y', y - verticalRadius).lte('y', y + verticalRadius)
+          .gte('z', z - radius).lte('z', z + radius).limit(512);
+        dbFailure(nearbyError);
+        for (const contract of relevant) scienceContexts.push({ contract, nearby: nearby || [], previousBlockType });
+      }
+    }
+  }
+
   const now = new Date().toISOString();
   const { error: playerError } = await admin.from('voxel_player_states').update({
-    position,
-    last_block_at: now,
-    updated_at: now
+    position, last_block_at: now, updated_at: now
   }).eq('id', player.id);
   dbFailure(playerError);
-
   const row = {
-    world_id: worldId,
-    cx: chunkCoord(x),
-    cz: chunkCoord(z),
-    x, y, z,
+    world_id: worldId, cx: chunkCoord(x), cz: chunkCoord(z), x, y, z,
     block_type: blockType,
     updated_by_user: identity.userId,
     updated_by_guest: identity.guestId,
     updated_at: now
   };
-  const { data, error } = await admin.from('voxel_block_overrides').upsert(row, { onConflict: 'world_id,x,y,z' }).select('cx,cz,x,y,z,block_type,updated_at').single();
+  const { data, error } = await admin.from('voxel_block_overrides')
+    .upsert(row, { onConflict: 'world_id,x,y,z' })
+    .select('cx,cz,x,y,z,block_type,updated_at').single();
   dbFailure(error);
-  return { block: data };
+
+  const scienceEvents = [];
+  const claimedScienceCells = new Set();
+  for (const scienceContext of scienceContexts) {
+    const proposal = scienceGameplay.handleEvent(scienceContext.contract.runId, {
+      event: 'player_break', previousBlockType: scienceContext.previousBlockType,
+      removed: { x, y, z }, playerPosition: position,
+      nodes: scienceContext.nearby.filter(n => Number(n.block_type) !== 0 && !(n.x === x && n.y === y && n.z === z)),
+      emptyCells: scienceContext.nearby.filter(n => Number(n.block_type) === 0 && !(n.x === x && n.y === y && n.z === z))
+    });
+    const effects = (proposal?.effects || []).filter(effect => {
+      const cell = `${effect.x},${effect.y},${effect.z}`;
+      if (claimedScienceCells.has(cell)) return false;
+      claimedScienceCells.add(cell); return true;
+    });
+    if (!effects.length) continue;
+    const growthRows = effects.map(effect => ({
+      world_id: worldId, cx: chunkCoord(effect.x), cz: chunkCoord(effect.z),
+      x: effect.x, y: effect.y, z: effect.z, block_type: effect.blockType,
+      updated_by_user: identity.userId, updated_by_guest: identity.guestId, updated_at: now
+    }));
+    const { data: grown, error: growthError } = await admin.from('voxel_block_overrides')
+      .upsert(growthRows, { onConflict: 'world_id,x,y,z' })
+      .select('cx,cz,x,y,z,block_type,updated_at');
+    if (growthError) {
+      console.warn(`[science-gameplay] ${scienceContext.contract.runId} growth skipped`, growthError.code || 'database_error');
+      continue;
+    }
+    const persisted = (grown?.length ? grown : effects).map(block => ({
+      type: 'set_block', x: block.x, y: block.y, z: block.z,
+      blockType: Number(block.block_type ?? block.blockType), reason: 'cycle_closure'
+    }));
+    scienceEvents.push({ ...proposal, effects: persisted });
+  }
+  return { block: data, science: scienceEvents[0] || null, scienceEvents };
 }
+
 
 async function actionSavePlayer(admin, identity, body) {
   const worldId = safeWorldId(body.worldId);
