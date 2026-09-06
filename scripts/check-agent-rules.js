@@ -62,6 +62,39 @@ try {
   console.error('WARN: branch check failed', e.message);
 }
 
+
+// 5. Every executable AI entrypoint inherits the shared zero-chaos lifecycle policy.
+try {
+  const desktopPolicy = JSON.parse(fs.readFileSync(path.join(root, 'data', 'desktop-ai-policy.json'), 'utf8'));
+  const registry = JSON.parse(fs.readFileSync(path.join(root, 'data', 'collective-brain', 'agent-capabilities.json'), 'utf8'));
+  const hygiene = desktopPolicy.sessionHygiene || {};
+  const sessionPolicy = registry.sessionPolicy || {};
+  check(hygiene.requiredForEveryAgent === true, 'Session hygiene is mandatory for every agent');
+  check(hygiene.inheritForFutureAgents === true && sessionPolicy.inheritByDefault === true, 'Future agent entries inherit session hygiene by default');
+  check(!/[\\/]Desktop[\\/]/i.test(String(hygiene.worktreesRoot || '')), 'Configured AI worktree root is never Desktop');
+  check(!/[\\/]Desktop[\\/]/i.test(String(hygiene.scratchRoot || '')), 'Configured AI scratch root is never Desktop');
+
+  const covered = new Set([...(sessionPolicy.runtimeEnforced || []), ...(sessionPolicy.contractEnforced || [])]);
+  const missing = Object.keys(registry.agents || {}).filter((id) => !covered.has(id));
+  check(missing.length === 0, `Every registered agent has session-policy coverage (missing: ${missing.join(', ') || 'none'})`);
+
+  const coordinatorSource = fs.readFileSync(path.join(root, 'scripts', 'master-coordinator.cjs'), 'utf8');
+  const adapterSource = fs.readFileSync(path.join(root, 'lib', 'agent-adapters.js'), 'utf8');
+  const newTaskSource = fs.readFileSync(path.join(root, 'scripts', 'desktop-ai-new-task.js'), 'utf8');
+  check(coordinatorSource.includes("require('../lib/agent-session-guard')") && coordinatorSource.includes('withAgentSessionGuard('), 'Master coordinator wraps executable dispatch in shared session guard');
+  check(adapterSource.includes("require('./agent-session-guard')") && adapterSource.includes('implementGoalGuarded'), 'Direct agent adapter path is wrapped by shared session guard');
+  check(!adapterSource.includes("path.join(os.tmpdir(), 'world-server-agent-worktrees')"), 'Agent worktrees cannot regress to generic OS temp');
+  check(newTaskSource.includes("require('../lib/agent-session-guard')") && newTaskSource.includes("preflight('desktop-ai'"), 'Direct Desktop AI task startup runs zero-chaos preflight');
+
+  for (const rel of ['scripts/master-coordinator.cjs', 'scripts/desktop-ai-new-task.js']) {
+    const bytes = fs.readFileSync(path.join(root, rel));
+    check(!(bytes[0] === 0xef && bytes[1] === 0xbb && bytes[2] === 0xbf), `${rel} has no UTF-8 BOM before shebang`);
+  }
+} catch (e) {
+  console.error('WARN: session hygiene policy check failed', e.message);
+  failed = true;
+}
+
 if (failed) {
   console.error('\nAgent rules check FAILED');
   process.exit(1);

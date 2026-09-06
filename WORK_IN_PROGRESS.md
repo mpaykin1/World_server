@@ -380,3 +380,31 @@ PR #38 exposed nine Linux-only failures because the reused AI queue stack embedd
 - Regression: test/catalog-production-performance.test.js 3/3 PASS; check:fast/golden/desktop-ai PASS.
 - Remaining proof: full npm check + GitHub CI + post-deploy Production Quality Feedback.
 
+
+
+## 2026-09-06 — Zero-Chaos / Computer-Health for all AI entrypoints
+
+### Task
+Make Desktop hygiene and low-impact computer-health enforcement mandatory for every controllable World_server AI session without creating a parallel subsystem.
+
+### Root causes fixed
+- `master-coordinator.cjs` dispatched agents without one shared pre/post session guard.
+- `agent-adapters.js` used generic OS temp for disposable worktrees instead of the canonical LOCALAPPDATA worktree root.
+- Remote bridge temporary patch/PR-body files used generic OS temp.
+- Direct Desktop AI task startup had no mandatory zero-chaos preflight.
+
+### Implemented
+- Added shared `lib/agent-session-guard.js` driven by `data/desktop-ai-policy.json`.
+- Enforced shared lifecycle for OpenCode, OpenHuman/direct Ollama, AnythingLLM, World Cloud AI, Codex, Claude Code/Desktop AI; browser-only agents receive the mandatory start/end contract.
+- Worktrees now live under `%LOCALAPPDATA%\World_server_worktrees`; scratch/recovery under `%LOCALAPPDATA%\WorldServerAI`.
+- Guard never terminates user/unrelated processes and deletes only proven owned, regenerable stale scratch.
+- Future registered agents inherit the policy; unknown executable adapters fail closed.
+
+### Evidence
+- Focused regression suite: 47 PASS / 0 FAIL / 1 opt-in skip.
+- `scripts/check-agent-rules.js`: PASS, including future-agent inheritance, off-Desktop roots, common guard coverage, and no-BOM shebang regression.
+- Real-machine preflight/postflight: PASS; Desktop violations: 0; free RAM ~53%; free disk ~205 GB.
+- Removed two stale owned AI goal temp files and the empty legacy temp-worktree root; no registered Git worktree was deleted.
+
+### Completion
+Commit and push this branch after final `git diff --check` / fast syntax gate.

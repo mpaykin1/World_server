@@ -37,6 +37,7 @@ const { runSubtask } = require('./openhuman-subtask.cjs');
 const resourceScheduler = require('../lib/ai-resource-scheduler');
 const { classifyIntent } = require('../lib/mcp-intent-router');
 const { resolveMainTreeRoot } = require('../lib/world-server-paths');
+const sessionGuard = require('../lib/agent-session-guard');
 
 // Read-only capability classes get sandboxRoot pointed at the REAL repo (the
 // local model's tool allowlist for these classes is read_file/read_text_file/
@@ -101,7 +102,7 @@ const CLOUD_WORKFLOW = process.env.WORLD_CLOUD_WORKFLOW || 'world-cloud-ai.yml';
 const MAIN_TREE_ROOT = resolveMainTreeRoot();
 const REPORT_LOG_PATH = process.env.AI_AGENT_REPORTS_PATH || path.join(MAIN_TREE_ROOT, 'state', 'ai-agent-reports.jsonl');
 const WORKTREES_ROOT = process.env.WORLD_SERVER_WORKTREES_ROOT || path.join(os.homedir(), 'AppData', 'Local', 'World_server_worktrees');
-const RECOVERY_ROOT = process.env.WORLD_SERVER_RECOVERY_ROOT || path.join(os.homedir(), 'AppData', 'Local', 'World_server_recovery');
+const RECOVERY_ROOT = process.env.WORLD_SERVER_RECOVERY_ROOT || path.join(sessionGuard.loadPolicy().aiRoot, 'Recovery');
 const MAX_SUBTASK_ATTEMPTS = Number(process.env.MASTER_COORDINATOR_MAX_ATTEMPTS || 2);
 
 // Agents this coordinator can automatically dispatch to, and how.
@@ -380,21 +381,24 @@ function assignOffline(agentId, taskText, opts = {}) {
 // subtask directly with its own tools and reports the result here.
 // ---------------------------------------------------------------------------
 function reportSelfExecuted(taskText, result, opts = {}) {
+  const selfAgentId = opts.agentId || 'claude-code';
+  const hygienePost = sessionGuard.postflight(selfAgentId);
+  const effectiveOk = Boolean(result.ok) && hygienePost.ok;
   const entry = {
     at: nowIso(),
-    agent: 'claude-code',
-    task_id: opts.taskId || `claude-code-${Date.now()}`,
-    status: result.status || (result.ok ? 'done' : 'failed'),
-    progress: result.ok ? 100 : (result.progress ?? 50),
+    agent: selfAgentId,
+    task_id: opts.taskId || `${selfAgentId}-${Date.now()}`,
+    status: hygienePost.ok ? (result.status || (effectiveOk ? 'done' : 'failed')) : 'failed',
+    progress: effectiveOk ? 100 : (result.progress ?? 50),
     branch: result.branch || null,
     worktree: result.worktree || null,
     commit: result.commit || null,
     pr: result.pr || null,
     tests: result.tests || {},
-    blockers: result.blockers || (result.ok ? [] : [{ id: 'self-executed-fail', status: 'needs_review', reason: result.reason || 'unspecified' }]),
-    merge_safe: result.mergeSafe ?? false,
+    blockers: result.blockers || (effectiveOk ? [] : [{ id: hygienePost.ok ? 'self-executed-fail' : 'zero-chaos-postflight', status: 'needs_review', reason: hygienePost.ok ? (result.reason || 'unspecified') : 'mandatory session postflight failed' }]),
+    merge_safe: hygienePost.ok ? (result.mergeSafe ?? false) : false,
     next_action: result.nextAction || 'awaiting review',
-    findings: { task: collectiveBrain.redactText(taskText), ...(result.findings || {}) },
+    findings: { task: collectiveBrain.redactText(taskText), sessionHygiene: hygienePost, ...(result.findings || {}) },
     reusable_improvements: result.reusableImprovements || [],
   };
   appendReport(entry);
@@ -458,52 +462,48 @@ async function dispatchSubtask(root, subtask, opts = {}) {
 
   if (OFFLINE_ONLY_AGENTS.has(agentId)) {
     const r = assignOffline(agentId, taskText, { taskId });
-    return { taskId, agentId, routePlan, attempts: 0, ...r };
+    return { taskId, agentId, routePlan, attempts: 0, ...r, sessionPolicy: { inherited: true, mode: 'offline-contract', preflight: 'npm run agent-session:preflight', postflight: 'npm run agent-session:postflight' } };
   }
 
-  return withSubtaskLease(root, taskId, async () => {
+  if (SELF_EXECUTE_AGENTS.has(agentId)) {
+    const pre = sessionGuard.preflight(agentId, { localHeavy: false });
+    if (!pre.ok) return { taskId, agentId, routePlan, attempts: 0, ok: false, result: 'ZERO_CHAOS_BLOCKED', sessionGuard: { pre, post: null } };
+    return { taskId, agentId, routePlan, attempts: 0, ok: true, result: 'SELF_EXECUTE', taskText, sessionGuard: { pre, post: 'required-via-reportSelfExecuted' } };
+  }
+
+  if (![...LOCAL_MODEL_AGENTS, ...CLOUD_MODEL_AGENTS, ...PAID_FALLBACK_AGENTS, 'opencode'].includes(agentId)) {
+    return { taskId, agentId, routePlan, attempts: 0, ok: false, result: 'UNKNOWN_AGENT', reason: `no adapter for agent id '${agentId}'` };
+  }
+
+  const localHeavy = LOCAL_MODEL_AGENTS.has(agentId);
+  return sessionGuard.withAgentSessionGuard(agentId, () => withSubtaskLease(root, taskId, async () => {
     let lastResult = null;
     for (let attempt = 1; attempt <= MAX_SUBTASK_ATTEMPTS; attempt++) {
       if (agentId === 'opencode') {
         const gate = opts.respectResourceGate === false ? true : await resourceGateOk('opencode');
-        if (gate !== true) {
-          lastResult = { ok: false, result: 'QUEUED', resourceGate: gate };
-          break; // resource gate says wait - do not burn a retry attempt on contention
-        }
+        if (gate !== true) { lastResult = { ok: false, result: 'QUEUED', resourceGate: gate }; break; }
         lastResult = await invokeOpencode(taskText, { taskId: `${taskId}-a${attempt}`, push: opts.push });
       } else if (CLOUD_MODEL_AGENTS.has(agentId)) {
         const gate = opts.respectResourceGate === false ? true : await resourceGateOk('network-agent');
-        if (gate !== true) {
-          lastResult = { ok: false, result: 'QUEUED', resourceGate: gate };
-          break;
-        }
+        if (gate !== true) { lastResult = { ok: false, result: 'QUEUED', resourceGate: gate }; break; }
         lastResult = await invokeCloudWorldAi(taskText, { taskId: `${taskId}-a${attempt}`, ref: opts.cloudRef, waitForCompletion: opts.waitForCloud, waitTimeoutMs: opts.cloudWaitTimeoutMs });
-        break; // dispatch is idempotently owned by the GitHub workflow; never duplicate it on retry
+        break;
       } else if (PAID_FALLBACK_AGENTS.has(agentId)) {
         const gate = opts.respectResourceGate === false ? true : await resourceGateOk('network-agent');
-        if (gate !== true) {
-          lastResult = { ok: false, result: 'QUEUED', resourceGate: gate };
-          break;
-        }
+        if (gate !== true) { lastResult = { ok: false, result: 'QUEUED', resourceGate: gate }; break; }
         lastResult = await invokeCodex(taskText, { taskId: `${taskId}-a${attempt}`, push: opts.push, allowPaid: opts.allowPaid });
         if (lastResult.result === 'PAID_FALLBACK_DISABLED') break;
       } else if (LOCAL_MODEL_AGENTS.has(agentId)) {
         lastResult = await invokeLocalModelAgent(agentId, taskText, { taskId: `${taskId}-a${attempt}`, respectResourceGate: opts.respectResourceGate, respectConcurrencyLock: opts.respectConcurrencyLock });
-        if (lastResult.result === 'QUEUED') break; // already durably queued by the underlying scheduler
-      } else if (SELF_EXECUTE_AGENTS.has(agentId)) {
-        // Nothing to invoke - the coordinator's caller performs this subtask
-        // directly and calls reportSelfExecuted() itself; signal that back.
-        return { taskId, agentId, routePlan, attempts: 0, ok: true, result: 'SELF_EXECUTE', taskText };
-      } else {
-        return { taskId, agentId, routePlan, attempts: attempt, ok: false, result: 'UNKNOWN_AGENT', reason: `no adapter for agent id '${agentId}'` };
+        if (lastResult.result === 'QUEUED') break;
       }
-      if (lastResult.ok) break;
+      if (lastResult && lastResult.ok) break;
     }
     if (lastResult && (agentId === 'opencode' || CLOUD_MODEL_AGENTS.has(agentId) || PAID_FALLBACK_AGENTS.has(agentId))) {
       reportAutomatedAgentResult(agentId, taskText, lastResult, { taskId });
     }
     return { taskId, agentId, routePlan, ...lastResult };
-  });
+  }), { localHeavy });
 }
 
 // ---------------------------------------------------------------------------
@@ -525,7 +525,7 @@ function buildDefaultSubtasks(goal, opts = {}) {
 }
 
 function summarizeMasterResults(results) {
-  const terminalFail = new Set(['FAIL', 'REFUSED', 'UNKNOWN_AGENT', 'NO_AGENT', 'NOT_AVAILABLE']);
+  const terminalFail = new Set(['FAIL', 'REFUSED', 'UNKNOWN_AGENT', 'NO_AGENT', 'NOT_AVAILABLE', 'ZERO_CHAOS_BLOCKED', 'ZERO_CHAOS_POSTFAIL']);
   const pending = new Set(['QUEUED', 'SKIPPED_ACTIVE', 'ASSIGNED', 'SELF_EXECUTE', 'DISPATCHED', 'PAID_FALLBACK_DISABLED']);
   if (results.some((r) => terminalFail.has(r.result))) return 'FAIL';
   if (results.some((r) => pending.has(r.result))) return 'PENDING';
