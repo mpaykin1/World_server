@@ -1,0 +1,64 @@
+# Cloud Run / Docker build context exclusions for google-ai-studio/Dockerfile.
+# Build context is repo root ("/") per GOOGLE_CLOUD_RUN_DEPLOYMENT.md, and the
+# Dockerfile does `COPY . .` — without this file EVERYTHING on disk in this
+# directory (or in whatever Cloud Build clones) is sent to the builder and
+# baked into the image, including secrets that happen to sit on disk (.env),
+# full git history, and ~1500 files this app never reads at runtime.
+#
+# Verified before adding each entry below: no runtime require()/readFile
+# reference from server.js, api/, lib/, shared/, apps/dark-void-scene/, or
+# google-ai-studio/cloudrun-entry.cjs into any of these paths (grepped the
+# actual request-serving code paths, not just "looks unused").
+#
+# Kept in the image (do not add these without re-verifying runtime use):
+#   data/, shared/, apps/, lib/, api/, google-ai-studio/, state/,
+#   package.json, package-lock.json, server.js
+
+# Version control / secrets — never let local disk state leak into an image layer.
+.git/
+.gitignore
+.env
+.env.*
+!.env.example
+
+# Dependencies — installed fresh by `RUN npm ci` in the Dockerfile; copying a
+# host node_modules (e.g. from a local `docker build .`) would ship
+# host-platform native binaries (sharp) into a Linux container.
+node_modules/
+
+# Dev/CI-only tooling and content — not on any request path the deployed
+# container serves.
+scripts/
+supabase/
+services/
+systems/
+tools/
+test/
+e2e/
+docs/
+.github/
+
+# Large "not yet integrated" holding areas — self-contained patch bundles
+# with their own manual INSTALL_TO_WORLD_SERVER.bat, not wired into
+# server.js/apps/dark-void-scene. ~1500 files combined; biggest single
+# contributor to build-context size.
+.iw-graphics-staging/
+WORLD_QUALITY_AUTOPILOT_V4_1_HOTFIX/
+_IMPROVE_V1_TMP/
+.texture-pipeline-backup/
+
+# Build/test artifacts, caches, logs, archives.
+node_modules/.cache/
+.cache/
+coverage/
+test-results/
+.pytest_cache/
+*.log
+*.zip
+*.tmp-*
+
+# Editor/OS noise.
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
