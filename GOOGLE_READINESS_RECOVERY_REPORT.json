@@ -1,0 +1,37 @@
+{
+  "at": "2026-09-06T05:01:48.726Z",
+  "base": "90502c9c",
+  "branch": "ai/codex/google-readiness-recovery",
+  "status": "LOCAL_GATES_PASS_CLOUD_NOT_VERIFIED",
+  "mergeSafe": false,
+  "fixes": [
+    "Node24 image matches engine; dockerignore prevents host dependencies and local secrets in build context",
+    "startupProbe uses readyz; 4xx/5xx reject readiness",
+    "root redirect fixes relative JS/CSS paths",
+    "16 feature handlers reuse existing router pattern; public URLs preserved; 9 Vercel functions",
+    "moved function package discovery retains repository root",
+    "unsupported GDD method rejected before database config",
+    "four new apps registered without public certification"
+  ],
+  "tests": {
+    "npmCi": "PASS; audit reports 13 vulnerabilities (2 low,4 moderate,7 high); not automatically upgraded",
+    "releaseGate": "exit 0 full run; includes 381 unit PASS,1 skipped; integration 76/76",
+    "extraPackageRoot": "1/1 PASS after full gate",
+    "browser": "desktop + 390x844 viewport: 0 console errors; canvas rendered; loading hidden; native touch hardware not tested",
+    "googleSlotGate": "exit0 with unconfigured live slots skipped; not cloud evidence",
+    "collectiveBrainCycle": "DEGRADED sync=queued despite exit0"
+  },
+  "limits": [
+    "Docker daemon unavailable; Linux image execution not verified",
+    "No live Cloud Run deployment, secrets injection or authenticated database writes tested",
+    "No real mobile hardware, sustained FPS/CPU/RAM load or SIGTERM on Linux tested",
+    "Cloud runtimeBudget measures adapter process only, not aggregate child RSS",
+    "governance releaseEligible=false; existing 15 blockers remain",
+    "original main has active foreign WIP; no integration/push/deploy performed"
+  ],
+  "sources": [
+    "https://docs.cloud.google.com/run/docs/container-contract",
+    "https://docs.docker.com/build/concepts/context/"
+  ],
+  "generatedFilesRestored": 136
+}

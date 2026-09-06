@@ -486,6 +486,74 @@
         "full release:gate mandatory before merge/production claim",
         "record exact failing step instead of skipping"
       ]
+    },
+    {
+      "id": "cloudrun-false-ready-and-host-context",
+      "category": "deployment",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "Missing entrypoint returned ready=200; local build could overlay Linux dependencies and include secrets.",
+      "rootCause": "Readiness accepted HTTP 4xx; startup checked liveness only; Docker had no context exclusions and a mismatched Node major.",
+      "solution": "Reject 4xx/5xx, startupProbe readyz, Node 24, Docker context exclusions.",
+      "regressionTest": "test/cloudrun-startup.test.js",
+      "scope": "google-ai-studio",
+      "evidence": "Before: 2/2 failing; after: 12/12 Google startup/slot tests passing on 2026-09-06.",
+      "protection": [
+        "test/cloudrun-startup.test.js"
+      ]
+    },
+    {
+      "category": "deployment",
+      "severity": "release-blocker",
+      "status": "protected",
+      "scope": "google-ai-studio",
+      "id": "cloudrun-root-relative-assets",
+      "rootCause": "Proxying application HTML at / resolved ./client.js and mobile assets at the wrong URL.",
+      "solution": "302 redirect to the local entrypoint; keep app-relative asset URLs intact.",
+      "regressionTest": "test/cloudrun-startup.test.js",
+      "evidence": "Browser before: 8 errors; after: 0 errors, canvas renders, loading hidden.",
+      "protection": [
+        "test/cloudrun-startup.test.js"
+      ]
+    },
+    {
+      "category": "deployment",
+      "severity": "release-blocker",
+      "status": "protected",
+      "scope": "google-ai-studio",
+      "id": "google-feature-function-limit",
+      "rootCause": "16 standalone API files bypassed existing Vercel router consolidation.",
+      "solution": "Reuse router + lib/api-handlers and preserve 16 public URL rewrites; 9 function files remain.",
+      "regressionTest": "test/api-router-dispatch.test.js; test/vercel-function-limit.test.js; test/cloudrun-startup.test.js",
+      "protection": [
+        "test/api-router-dispatch.test.js; test/vercel-function-limit.test.js; test/cloudrun-startup.test.js"
+      ]
+    },
+    {
+      "category": "deployment",
+      "severity": "release-blocker",
+      "status": "protected",
+      "scope": "google-ai-studio",
+      "id": "google-service-app-registry",
+      "rootCause": "New feedback and function-admin tools omitted release registry.",
+      "solution": "Register invisible diagnostic tools, never certify them as playable games.",
+      "regressionTest": "scripts/check-golden-standard.js",
+      "protection": [
+        "scripts/check-golden-standard.js"
+      ]
+    },
+    {
+      "category": "deployment",
+      "severity": "release-blocker",
+      "status": "protected",
+      "scope": "google-ai-studio",
+      "id": "gdd-method-before-config",
+      "rootCause": "Unsupported HTTP methods constructed the database client before rejection.",
+      "solution": "Reject unsupported methods before requiring external configuration.",
+      "regressionTest": "test/api-router-dispatch.test.js",
+      "protection": [
+        "test/api-router-dispatch.test.js"
+      ]
     }
   ],
   "confirmationProtocol": {

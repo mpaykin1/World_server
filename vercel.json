@@ -164,6 +164,70 @@
     {
       "source": "/apps/:app/",
       "destination": "/apps/:app/index.html"
+    },
+    {
+      "source": "/api/community-message",
+      "destination": "/api/features?__route=community-message"
+    },
+    {
+      "source": "/api/community-report",
+      "destination": "/api/features?__route=community-report"
+    },
+    {
+      "source": "/api/feature-vote",
+      "destination": "/api/features?__route=feature-vote"
+    },
+    {
+      "source": "/api/feedback",
+      "destination": "/api/features?__route=feedback"
+    },
+    {
+      "source": "/api/feedback-roadmap",
+      "destination": "/api/features?__route=feedback-roadmap"
+    },
+    {
+      "source": "/api/function-admin",
+      "destination": "/api/features?__route=function-admin"
+    },
+    {
+      "source": "/api/function-catalog",
+      "destination": "/api/features?__route=function-catalog"
+    },
+    {
+      "source": "/api/function-install-request",
+      "destination": "/api/features?__route=function-install-request"
+    },
+    {
+      "source": "/api/function-invoke",
+      "destination": "/api/features?__route=function-invoke"
+    },
+    {
+      "source": "/api/game-design-spec",
+      "destination": "/api/features?__route=game-design-spec"
+    },
+    {
+      "source": "/api/live-translate-token",
+      "destination": "/api/features?__route=live-translate-token"
+    },
+    {
+      "source": "/api/livekit-token",
+      "destination": "/api/features?__route=livekit-token"
+    },
+    {
+      "source": "/api/locales",
+      "destination": "/api/features?__route=locales"
+    },
+    {
+      "source": "/api/rtc-config",
+      "destination": "/api/features?__route=rtc-config"
+    },
+    {
+      "source": "/api/translate",
+      "destination": "/api/features?__route=translate"
+    },
+    {
+      "source": "/api/translation-correction",
+      "destination": "/api/features?__route=translation-correction"
     }
   ],
   "headers": [

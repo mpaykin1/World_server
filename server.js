@@ -9,6 +9,7 @@ const { URL } = require('url');
 
 const root = __dirname;
 const apiHandlers = new Map([
+  ['/api/features', require('./api/features')],
   ['/api/apps', require('./api/apps')],
   ['/api/config', require('./api/config')],
   ['/api/auth', require('./api/auth')],
@@ -16,24 +17,40 @@ const apiHandlers = new Map([
   ['/api/generative', require('./api/generative')],
   ['/api/quality', require('./api/quality')],
   ['/api/pwa-manifest', require('./api/pwa-manifest')],
-  ['/api/feedback', require('./api/feedback')],
-  ['/api/translate', require('./api/translate')],
-  ['/api/locales', require('./api/locales')],
-  ['/api/feature-vote', require('./api/feature-vote')],
-  ['/api/feedback-roadmap', require('./api/feedback-roadmap')],
-  ['/api/community-report', require('./api/community-report')],
-  ['/api/community-message', require('./api/community-message')],
-  ['/api/live-translate-token', require('./api/live-translate-token')],
-  ['/api/rtc-config', require('./api/rtc-config')],
-  ['/api/translation-correction', require('./api/translation-correction')],
-  ['/api/function-catalog', require('./api/function-catalog')],
-  ['/api/function-invoke', require('./api/function-invoke')],
-  ['/api/function-install-request', require('./api/function-install-request')],
-  ['/api/function-admin', require('./api/function-admin')],
-  ['/api/game-design-spec', require('./api/game-design-spec')],
-  ['/api/livekit-token', require('./api/livekit-token')],
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ]);
 const rewrites = new Map([
+  ['/api/community-message', '/api/features?__route=community-message'],
+  ['/api/community-report', '/api/features?__route=community-report'],
+  ['/api/feature-vote', '/api/features?__route=feature-vote'],
+  ['/api/feedback', '/api/features?__route=feedback'],
+  ['/api/feedback-roadmap', '/api/features?__route=feedback-roadmap'],
+  ['/api/function-admin', '/api/features?__route=function-admin'],
+  ['/api/function-catalog', '/api/features?__route=function-catalog'],
+  ['/api/function-install-request', '/api/features?__route=function-install-request'],
+  ['/api/function-invoke', '/api/features?__route=function-invoke'],
+  ['/api/game-design-spec', '/api/features?__route=game-design-spec'],
+  ['/api/live-translate-token', '/api/features?__route=live-translate-token'],
+  ['/api/livekit-token', '/api/features?__route=livekit-token'],
+  ['/api/locales', '/api/features?__route=locales'],
+  ['/api/rtc-config', '/api/features?__route=rtc-config'],
+  ['/api/translate', '/api/features?__route=translate'],
+  ['/api/translation-correction', '/api/features?__route=translation-correction'],
   ['/api/register', '/api/auth?__route=register'],
   ['/api/login', '/api/auth?__route=login'],
   ['/api/me', '/api/auth?__route=me'],

@@ -57,16 +57,43 @@ Per `DESKTOP_AI_INSTRUCTIONS.md`: real agentmemory save→recall→restart persi
 <!-- WORLD_SERVER_SESSION_RECOVERY_V1_START -->
 ## Desktop AI Session Recovery V1 — managed checkpoint
 
-- sessionId: `session-1787632622221-75896e`
-- status: `interrupted`
-- checkpoint: `2026-08-28T04:57:45.608Z`
-- checkpoint message: checkpoint before scheduler_kick fix - dirty 662, health DEAD overdue 625m, soak dead, honest 68/68
+- sessionId: `session-1788669362128-ec659b`
+- status: `in_progress`
+- checkpoint: `2026-09-06T04:36:02.129Z`
+- checkpoint message: Session recovery initialized
 - last successful command: none
-- last error: operation — Watchdog detected dead session/process: unfinished work exists but no responsible process is alive after 14.5 minute(s)
-- next action: fix scheduler_kick npm.cmd quoting
+- last error: none
+- next action: Run `tools/post-bootstrap-verify-windows.ps1 -TaskWorktree C:\Users\user\Desktop\World_server_openhuman` (now PASS with OpenHuman config), then `npm run release:gate` in worktree, classify any failures, create `COLLECTIVE_BRAIN_RUNTIME_EVIDENCE.json` + `REPORT.md`, commit → push → draft PR update (no auto-merge, no dirty main).
 
 ### Recovery queue
 - no explicit recovery steps registered yet
 
 > New Desktop AI session: run `npm run desktop-ai:resume` before editing. Git reality overrides stale recovery metadata.
 <!-- WORLD_SERVER_SESSION_RECOVERY_V1_END -->
+
+## Codex Google readiness recovery — 2026-09-06
+- Task / Why: validate 90502c9c and eliminate reproducible first-start failures without deployment.
+- Current state: isolated ai/codex/google-readiness-recovery at 90502c9c; main dirty WIP/reports preserved. Coordinator hardening owned by chatgpt in another active worktree; do not edit it.
+- Target state: honest startup/readiness, isolated Docker context, passing regression evidence; continue existing architecture.
+- Files / systems involved: google-ai-studio Dockerfile, probes, adapter, test/google-ai-studio-slots.test.js, existing error registry.
+- Known risks: Node 22 image vs Node 24 engine; no Docker context exclusions; HTTP 404 currently passes readiness. Docker unavailable locally. No cloud deploy, billing, force push or foreign-work cleanup.
+- Golden systems that must be preserved: API paths, slot guards, existing playable assets and quality contracts.
+- Errors that must not return: false-positive readiness; host dependencies/secrets copied into image.
+- Exact patch / change plan: reproduce readiness with isolated child fixture; reject failed entrypoint responses; startup probe uses readyz; align Node and exclude local context files; add regressions and repair rules.
+- Tests to run: npm ci; baseline release:gate and quality:diff; Google slot unit/integration tests; check; local browser desktop/mobile; Zero-Chaos regression in current implementation.
+- Deployment / PR plan: local verified commit only, hold general push/deploy until combined changes are reviewed.
+- Current progress: baseline running. OpenHuman queued by existing coordinator resource gate (26% free RAM below 40% cold-load floor).
+- Next action: collect baseline, reproduce defects, implement smallest fixes and rerun.
+- Completion criteria: regressions PASS and actual gates reported without masking failures; preserve others' work; cleanup own temporary worktree after committed evidence.
+- Final evidence: IN PROGRESS; no readiness claim.
+- Ownership: Codex; purpose google readiness recovery; created 2026-09-06; TTL 24h; checkout C:/Users/user/AppData/Local/World_server_worktrees/codex-google-readiness.
+- Scope update: baseline Vercel function guard fails (24 functions). OpenCode review through coordinator confirms 16 new standalone handlers should reuse router + lib/api-handlers pattern. Preserve URLs and handler logic; add api/features.js (9 functions total), rewrite parity and behavioral dispatch tests. OpenCode incorrectly claimed guard tests absent; independently verified they exist and fail. No paid call/deploy used.
+- Baseline gates: npm ci PASS (13 audit findings); release:gate FAIL in existing Vercel function-count guard (375 pass, 1 fail, 1 skipped); quality:diff exit 0, score metadata is not runtime certification.
+- Browser reproduction: root served HTML at / and broke relative assets with 8 console errors; redirect patch restores correct path, canvas and navigation UI with 0 console errors.
+
+### Codex recovery final local evidence — 2026-09-06
+- FIXED: readiness 4xx false-positive, startup probe, Node engine mismatch, unsafe Docker context, root-relative asset 404s, 24-to-9 API function consolidation with unchanged URLs, GDD unsupported-method ordering, absent service app registrations. Known-error registry protections added.
+- TESTS: full npm run release:gate exit 0; 381 unit PASS / 1 SKIP; integration 76/76. Final clean-source startup/routing/package-root tests 11/11 PASS. Before fixes startup regression 2/2 FAIL and root redirect regression FAIL. Desktop + 390x844 viewport rendering: canvas + navigator UI + loading hidden, zero console errors.
+- LIMITATIONS: Docker/Linux container and live Cloud Run not executed. Native mobile touch and load/soak not certified. Collective Brain sync DEGRADED/queued despite successful exit; releaseEligible remains false. GOOGLE_READINESS_RECOVERY_REPORT.json records exact scope.
+- CLEANUP: own reproducible generated reports and auto-injected unrelated client instrumentation restored; no foreign files modified or removed. No ZIP created. Logs/evidence retained in task output report; temporary checkout removed after committed source evidence.
+- NEXT ACTION: integrate reviewed Google branch with existing coordinator fixes when all shared ownership is released; push/deploy remain held. This is LOCAL_GATES_PASS_CLOUD_NOT_VERIFIED, not full project completion.

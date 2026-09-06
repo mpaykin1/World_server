@@ -22,6 +22,7 @@ function mockRes() {
 }
 
 const ROUTERS = {
+  features: { file: '../api/features.js', routes: ['community-message', 'community-report', 'feature-vote', 'feedback', 'feedback-roadmap', 'function-admin', 'function-catalog', 'function-install-request', 'function-invoke', 'game-design-spec', 'live-translate-token', 'livekit-token', 'locales', 'rtc-config', 'translate', 'translation-correction'] },
   quality: {
     file: '../api/quality.js',
     routes: [
@@ -61,6 +62,30 @@ test('api/generative.js dispatches a known route and 404s an unknown one', async
   const res2 = mockRes();
   await handler(unknown, res2);
   assert.equal(res2.statusCode, 404);
+});
+
+test('features preserves method rejection through public, Vercel and plain Node routes', async () => {
+  const handler = require('../api/features');
+  for (const route of ROUTERS.features.routes) {
+    for (const req of [
+      { url: `/api/${route}` },
+      { url: '/api/features', query: { __route: route } },
+      { url: `/api/features?__route=${route}` }
+    ]) {
+      const res = mockRes();
+      await handler({ ...req, method: 'TRACE', headers: {} }, res);
+      assert.equal(res.statusCode, 405, `${route} via ${req.url}`);
+    }
+  }
+  for (const route of ['unknown', '__proto__', 'constructor']) {
+    const res = mockRes();
+    await handler({ method: 'GET', url: `/api/features?__route=${route}` }, res);
+    assert.equal(res.statusCode, 404);
+  }
+  const res = mockRes();
+  await handler({ method: 'GET', url: '/api/locales?__route=function-admin' }, res);
+  assert.equal(res.statusCode, 200);
+  assert.equal(JSON.parse(res.body).ok, true);
 });
 
 test('api/quality.js and api/auth.js 404 on an unknown route', async () => {

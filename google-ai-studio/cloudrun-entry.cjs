@@ -132,7 +132,7 @@ async function waitForChild() {
   while (Date.now() < deadline) {
     try {
       const status = await requestLocal(entrypoint, 1200);
-      if (status >= 200 && status < 500) { childReady = true; return true; }
+      if (status >= 200 && status < 400) { childReady = true; return true; }
     } catch {}
     await new Promise(r => setTimeout(r, 250));
   }
@@ -247,7 +247,7 @@ const server = http.createServer(async (req, res) => {
   if (url.pathname === '/readyz') {
     try {
       const status = await requestLocal(entrypoint, 3000);
-      const ready = status >= 200 && status < 500;
+      const ready = !shuttingDown && !childExit && status >= 200 && status < 400;
       childReady = ready;
       return json(res, ready ? 200 : 503, { ok: ready, childStatus: status, correlationId: id, traceparent: trace, ...deploymentMeta() }, id, {}, trace);
     } catch (error) {
@@ -264,8 +264,11 @@ const server = http.createServer(async (req, res) => {
 
   if (remoteUpstream) return proxyToRemote(req, res, id, trace);
   if (url.pathname === '/' && req.method === 'GET') {
-    if (/^https?:\/\//i.test(entrypoint)) return text(res, 500, 'Remote entrypoint is forbidden unless WORLD_SLOT_UPSTREAM migration bridge is explicitly enabled.', id);
-    return proxyToLocal(req, res, entrypoint, id, trace);
+    if (!entrypoint.startsWith('/') || entrypoint.startsWith('//') || /[\\\r\n]/.test(entrypoint) || entrypoint === '/') return text(res, 500, 'Entrypoint must be a local application path.', id);
+    // Preserve the document URL so relative scripts, styles and module imports
+    // resolve inside the selected world instead of the adapter root.
+    res.writeHead(302, { location: entrypoint, 'cache-control': 'no-store', ...securityHeaders(id, trace) });
+    return res.end();
   }
   return proxyToLocal(req, res, undefined, id, trace);
 });

@@ -1,0 +1,16 @@
+# Build from repository root: docker build -f google-ai-studio/Dockerfile .
+# Never overlay Linux dependencies with host dependencies or ship local secrets.
+**/node_modules
+**/.git
+**/.env
+**/.env.*
+**/.npmrc
+**/.cache
+**/.ssh
+**/*.log
+test-results
+playwright-report
+artifacts
+state
+work
+DELETE_MANUALLY_AFTER_AI_SESSION

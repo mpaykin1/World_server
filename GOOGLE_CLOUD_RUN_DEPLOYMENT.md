@@ -12,6 +12,9 @@ No third slot, no separate cut-down Google-only game.
 - Dockerfile: `google-ai-studio/Dockerfile` (repo root as build context — it
   does `COPY . .`, so the Cloud Build trigger's build context must be `/`,
   not a subdirectory).
+- The image uses Node 24 (matching `package.json`) and `npm ci --omit=dev`.
+  The root `.dockerignore` excludes host dependencies, Git metadata, local
+  credentials and reproducible runtime output. Keep package-lock.json committed.
 - No build step beyond `npm ci` implied by the image; the app is served
   directly by `node google-ai-studio/cloudrun-entry.cjs` (the `CMD`).
 - Cloud Run port: **8080**, read from the `PORT` env var Cloud Run injects
@@ -32,11 +35,12 @@ For both slots that entrypoint is the real Navigator app:
 disconnected AI Studio "World_server" master-snapshot import currently shows —
 not what we want for either real slot.)
 
-## Health / readiness endpoints (already implemented, no code changes needed)
+## Health / readiness endpoints
 
 - `GET /healthz` — liveness. Returns `{ok, ...deploymentMeta()}`; `ok:false`
   (HTTP 503) once the child process has exited. Use this for Cloud Run's
-  startup and liveness probes.
+  liveness probe. Startup must use `/readyz` so traffic cannot arrive before
+  the selected application is available; HTTP 4xx/5xx fail readiness.
 - `GET /readyz` — readiness. Actively probes the internal child server at the
   configured entrypoint; `ok:false`/503 until the real app responds.
 - `GET /api/deployment-meta` — full revision/slot/entrypoint/independence

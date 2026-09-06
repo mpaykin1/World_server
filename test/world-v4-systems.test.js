@@ -69,7 +69,7 @@ test('feature votes are unique per user/candidate and limited to +/-1',()=>{
 test('chat persistence is idempotent by client message id',()=>{
   const sql=read('supabase/migration_templates/world_community_v4.sql');
   assert.match(sql,/unique\(user_id,client_message_id\)/i);
-  assert.match(read('api/community-message.js'),/client_message_id/);
+  assert.match(read('lib/api-handlers/community-message.js'),/client_message_id/);
 });
 
 test('community report normalization requires a target and bounds content',()=>{
@@ -121,7 +121,7 @@ test('WebRTC voice is mesh-limited and explicitly signals SFU requirement',()=>{
 });
 
 test('RTC config supports short-lived TURN credentials and mesh cap',()=>{
-  const s=read('api/rtc-config.js');
+  const s=read('lib/api-handlers/rtc-config.js');
   assert.match(s,/WORLD_TURN_SECRET/); assert.match(s,/createHmac/); assert.match(s,/WORLD_VOICE_MESH_MAX_PEERS/);
   assert.match(s,/requireUser/);
 });
@@ -131,7 +131,7 @@ test('Live Translate token is ephemeral, constrained, single-use and API key nev
   assert.equal(live.MODEL,'gemini-3.5-live-translate-preview');
   assert.equal(live.targetLanguage('pt-BR'),'pt-BR'); assert.equal(live.targetLanguage('bad code!'),'en');
   assert.match(s,/uses:1/); assert.match(s,/liveConnectConstraints/); assert.match(s,/translationConfig/); assert.match(s,/auth_tokens/);
-  const api=read('api/live-translate-token.js'); assert.doesNotMatch(api,/apiKey\s*:/); assert.match(api,/requireUser/);
+  const api=read('lib/api-handlers/live-translate-token.js'); assert.doesNotMatch(api,/apiKey\s*:/); assert.match(api,/requireUser/);
 });
 
 test('Live Translate client uses 16k PCM input, 24k playback and transcripts',()=>{
@@ -157,7 +157,7 @@ test('glossary protects project terms and all 11 commercial locales remain confi
 
 test('feedback public roadmap never needs raw private feedback text',()=>{
   const triage=read('scripts/world-user-feedback-loop.cjs');
-  const roadmap=read('api/feedback-roadmap.js');
+  const roadmap=read('lib/api-handlers/feedback-roadmap.js');
   assert.match(triage,/public_consent/); assert.match(triage,/public_title/);
   assert.match(roadmap,/public_title/); assert.doesNotMatch(roadmap,/select\([^)]*raw_text/i);
 });
@@ -178,14 +178,14 @@ test('multiplayer contract explicitly distinguishes validation from authority an
 test('per-world translation glossary and user corrections are review-gated',()=>{
   const sql=read('supabase/migration_templates/world_community_v4.sql');
   const tr=read('lib/world-translation.js');
-  const api=read('api/translation-correction.js');
+  const api=read('lib/api-handlers/translation-correction.js');
   assert.match(sql,/world_translation_terms/); assert.match(sql,/world_translation_corrections/);
   assert.match(sql,/status text not null default 'pending'/); assert.match(tr,/loadDynamicGlossary/); assert.match(tr,/exactCorrection/);
   assert.match(api,/status:'pending'/); assert.match(api,/requireUser/);
 });
 
 test('chat translation is authenticated and scoped to world glossary',()=>{
-  const bridge=read('shared/multiplayer/world-multiplayer-bridge.js'); const api=read('api/translate.js');
+  const bridge=read('shared/multiplayer/world-multiplayer-bridge.js'); const api=read('lib/api-handlers/translate.js');
   assert.match(bridge,/authorization:`Bearer \$\{token\}`/); assert.match(bridge,/worldId:this\.worldId/);
   assert.match(api,/requireUser/); assert.match(api,/loadDynamicGlossary/); assert.match(api,/glossaryRevision/);
 });
@@ -197,7 +197,7 @@ test('feedback-to-experiment bridge reuses existing flags and experiment engines
 
 test('shared auth helper centralizes bearer session validation for community APIs',()=>{
   const a=read('lib/world-api-auth.js'); assert.match(a,/admin\.auth\.getUser/); assert.match(a,/Authentication required/);
-  for(const f of ['api/community-message.js','api/community-report.js','api/feature-vote.js','api/rtc-config.js','api/live-translate-token.js','api/translation-correction.js']) assert.match(read(f),/world-api-auth/);
+  for(const f of ['lib/api-handlers/community-message.js','lib/api-handlers/community-report.js','lib/api-handlers/feature-vote.js','lib/api-handlers/rtc-config.js','lib/api-handlers/live-translate-token.js','lib/api-handlers/translation-correction.js']) assert.match(read(f),/world-api-auth/);
 });
 
 test('V4 readiness never converts static PASS into live PASS',()=>{

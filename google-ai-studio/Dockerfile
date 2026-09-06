@@ -1,6 +1,6 @@
 # Optional fallback for direct Cloud Run/container testing.
 # Google AI Studio Starter Tier remains the default publish path.
-FROM node:22-alpine
+FROM node:24-alpine
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev

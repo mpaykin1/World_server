@@ -5,7 +5,7 @@
 ['multiplayer bridge',has('shared/multiplayer/world-multiplayer-bridge.js')],
 ['eye/mobile controls contract',has('game-design/IMPROVE_WORLD_GAME_DESIGN_BASELINE.json')],
 ['11-language runtime',has('shared/i18n/world-locales.json')],
-['feedback loop',has('api/feedback.js')&&has('scripts/world-feedback-development-bridge.cjs')],
+['feedback loop',has('lib/api-handlers/feedback.js')&&has('scripts/world-feedback-development-bridge.cjs')],
 ['safe functions',has('lib/world-function-registry.js')&&has('scripts/world-function-delivery-gate.cjs')],
 ['Google slots',has('google-ai-studio/slot-contract.json')],
 ['replay',has('scripts/deterministic-record-replay.cjs')||has('google-ai-studio/replay-smoke.json')],

@@ -144,6 +144,34 @@
       "status": "candidate",
       "kind": "tool",
       "description": "Lab for procedural quality"
+    },
+    "feedback": {
+      "title": "Feedback",
+      "visible": false,
+      "status": "diagnostic",
+      "kind": "tool",
+      "reason": "Service interface; excluded from public playable catalog. No gameplay certification claimed."
+    },
+    "function-admin": {
+      "title": "Function administration",
+      "visible": false,
+      "status": "diagnostic",
+      "kind": "tool",
+      "reason": "Service interface; excluded from public playable catalog. No gameplay certification claimed."
+    },
+    "community-chat": {
+      "title": "Community chat",
+      "visible": false,
+      "status": "diagnostic",
+      "kind": "tool",
+      "reason": "Community interface; not a certified playable game."
+    },
+    "dark-void-scene": {
+      "title": "Dark Void Navigator",
+      "visible": false,
+      "status": "quarantine",
+      "kind": "game",
+      "reason": "Direct sandbox startup verified; full gameplay/device certification and cloud evidence still required."
     }
   }
 }
