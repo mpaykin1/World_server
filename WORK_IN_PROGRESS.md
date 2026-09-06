@@ -70,3 +70,90 @@ Per `DESKTOP_AI_INSTRUCTIONS.md`: real agentmemory save→recall→restart persi
 
 > New Desktop AI session: run `npm run desktop-ai:resume` before editing. Git reality overrides stale recovery metadata.
 <!-- WORLD_SERVER_SESSION_RECOVERY_V1_END -->
+
+<!-- WORLD_SERVER_GOOGLE_CLOUD_RUN_READINESS_20260906_START -->
+## ADDITIONAL ACTIVE TASK — Google AI Studio / Cloud Run deploy-readiness review (started 2026-09-06)
+
+Unrelated to the OpenHuman Collective Brain task above (different concern,
+same branch because this branch is where the google-ai-studio/ Cloud Run
+work already lives — see commit 90502c9c and `GOOGLE_CLOUD_RUN_DEPLOYMENT.md`).
+Real Cloud Run deploy remains user-gated; nothing below touched `gcloud`,
+billing, or any paid service.
+
+### Task
+Independent production-reviewer pass over this branch's Cloud Run deploy
+path (`google-ai-studio/Dockerfile`, `cloudrun-entry.cjs`, the two
+`cloudrun-service-*.yaml` manifests) looking specifically for defects that
+would only surface *after* pressing Deploy — build context, Dockerfile,
+package-lock consistency, PORT/host binding, env/secrets handling,
+startup/shutdown, health/readiness, filesystem/writable-path assumptions,
+cold start, memory/CPU limits.
+
+### Findings (all fixed, each with a regression test — see commits)
+1. **Missing `.dockerignore`** (HIGH) — build context is repo root and the
+   Dockerfile does `COPY . .`; with no `.dockerignore`, ~1500 files this app
+   never reads at runtime (`.iw-graphics-staging/` alone: 934 files) and
+   any local `.env` would be sent to the builder. Verified zero runtime
+   references from `server.js`/`api/`/`lib/`/`shared/`/`apps/dark-void-scene/`
+   into each excluded path before excluding it. Fixed: `.dockerignore` (commit `0077075f`).
+2. **Node version mismatch** (MEDIUM) — Dockerfile pinned `node:22-alpine`,
+   package.json declares `engines.node: "24.x"`. Fixed: bumped to
+   `node:24-alpine` (commit `853ab266`).
+3. **`runtimeBudget()` measured the wrong process** (MEDIUM-HIGH, silent) —
+   `cloudrun-entry.cjs` spawns the real `server.js` as a child and proxies to
+   it; `/api/runtime-budget` (this branch's own documented OOM early-warning
+   signal) called `process.memoryUsage()` on the *wrapper* only — the one
+   process that never does real work. The child sharing the same 1Gi
+   container cgroup was invisible to it, so the budget endpoint could report
+   "ok" right up to an actual OOM kill. Fixed: reads the child's real RSS via
+   `/proc/<pid>/status` (Linux-only — exactly what Cloud Run is; degrades to
+   `childMemorySource: 'unavailable'` elsewhere rather than guessing).
+   Commit `58016f7a`.
+4. **No automated gate for any of the above** — added `build-guard` to the
+   existing `scripts/google-ai-studio-slots.cjs` controller (reuses its
+   report/evidence-ledger conventions; did not create a parallel tool),
+   wired into `npm run google:slots:build-guard`, `google:slots:gate`, and
+   `fullGate()`. Commit `a356aae8`.
+
+Checked and found already correct, no fix needed: PORT read from
+`process.env.PORT || 8080` ✓, binds `0.0.0.0` ✓, `/healthz`+`/readyz`
+already real (not self-reported-only) ✓, SIGTERM/SIGINT graceful shutdown
+with a bounded force-exit fallback ✓, secrets already routed through Cloud
+Run Secret Manager `secretKeyRef` in both `cloudrun-service-*.yaml` (never
+plain env) ✓, `package-lock.json` already in sync with `package.json`
+(`npm ci --omit=dev --dry-run` clean, 114 packages) ✓, no durable
+app-state writes to Cloud Run's ephemeral disk (`fs-guard`, pre-existing
+tool, still 0 findings) ✓.
+
+### Tests
+`node --test test/google-ai-studio-slots.test.js test/dockerignore-guard.test.js test/cloudrun-entry-runtime-budget.test.js` — **25/25 PASS**.
+`node scripts/check-js.js` (repo-wide syntax gate) — 64/64 files PASS.
+`node scripts/google-ai-studio-slots.cjs build-guard` / `fs-guard` — both `ok:true` on the real repo post-fix.
+
+### Provenance correction
+Commit `0077075f` on this branch mistakenly carried
+`AI-Session: https://claude.ai/code/session_01MJjnYYUZ8cAMDG8LD8T4r7` copied
+from an earlier commit rather than checking AGENTS.md's own "AI COMMIT
+PROVENANCE" rule against reusing another session's id. Every commit after
+it in this task uses `local-cli-20260906-google-cloud-run-review` instead.
+Not rewriting `0077075f` itself (history stays as-is) — noted here and in
+`853ab266`'s own commit message for anyone auditing provenance later.
+
+### Not done here (still user/owner-gated or out of this task's scope)
+- The actual `gcloud`/Console "Deploy container" click — per
+  `GOOGLE_CLOUD_RUN_DEPLOYMENT.md`, that remains the user's own action.
+- A deeper require-graph-based case-sensitivity audit (Windows dev vs. Linux
+  container filesystem) — checked the obvious risk areas by hand, found
+  nothing, but didn't build dedicated tooling for it this round; worth a
+  follow-up if a future Linux-only failure ever looks path-case-shaped.
+- `services/`, `.iw-graphics-staging/`, and the other excluded-from-image
+  directories were only checked for *runtime* references from the served
+  app, not reviewed for their own correctness — out of this task's scope.
+
+### Next action
+Pick the next real blocker from shared reports (this repo's existing
+`CHANGE_IMPACT_MATRIX.json`/`SYSTEM_ENHANCEMENT_BACKLOG.json`/quality
+reports) that doesn't overlap PowerShell-Claude's or OpenCode's currently
+active branches/worktrees, and continue the same fix-root-cause +
+regression-test + shared-report loop.
+<!-- WORLD_SERVER_GOOGLE_CLOUD_RUN_READINESS_20260906_END -->
