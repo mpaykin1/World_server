@@ -135,6 +135,15 @@ node scripts/check-agent-rules.js
 
 ## 11. DESKTOP AI — mandatory work instruction
 
+### 11.0 WORKTREE HYGIENE — HARD RULE FOR EVERY AI
+
+- Never create `World_server_*` copies, numbered Desktop folders, or temporary checkout folders on Desktop.
+- Reuse the canonical checkout and at most one owned off-Desktop worktree for the active task.
+- Put logs, screenshots, scratch files and temporary reports only in the current checkout's ignored `work/` directory. Delete them before finishing.
+- If deletion is unsafe, move the artifact to the single `Desktop/DELETE_MANUALLY_AFTER_AI_SESSION/` folder and record why. Never scatter manual-cleanup folders.
+- Before creating a worktree, inspect existing ownership and reuse an existing one. Before ending, commit useful source changes, remove the owned worktree and verify Desktop contains no new `World_server_*` copies.
+- This rule applies equally to Codex, OpenCode, OpenHuman, ChatGPT, recovery workers, coordinators and retries. Violating it is a task failure.
+
 For every task, patch, repair, upgrade, deployment or quality-improvement run:
 
 - Read `DESKTOP_AI_INSTALL_AND_VERIFY.md` first.
