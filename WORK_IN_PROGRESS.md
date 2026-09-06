@@ -296,3 +296,8 @@ result reported exactly as observed, not adjusted to look more favorable.
 - Fix: reuse the existing manifestation preview/execute path with deterministic pre-build causal families (scale-up, scale-down, seed-shift); select family from step only, record modelFamily, and execute the exact predicted intervention.
 - Regression: deterministic bounded family selection plus existing prediction-before-build/delta tests.
 - Negative outcomes remain recorded; no thresholds changed and no duplicate science/runtime system added.
+
+## Dark Void V5 H3 blind family selection
+- Root cause: causal family choice was step modulo only; it was pre-build but not conditioned on pre-intervention state.
+- Fix: deterministic selection hashes only whitelisted pre-intervention intent fields plus step; outcome/geometry fields cannot affect the current family choice.
+- Evidence records selectionBlind + selectionHash before manifestation.
