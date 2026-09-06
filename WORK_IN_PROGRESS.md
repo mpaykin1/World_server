@@ -380,3 +380,9 @@ PR #38 exposed nine Linux-only failures because the reused AI queue stack embedd
 - Regression: test/catalog-production-performance.test.js 3/3 PASS; check:fast/golden/desktop-ai PASS.
 - Remaining proof: full npm check + GitHub CI + post-deploy Production Quality Feedback.
 
+
+## 2026-09-06 production evidence freshness hardening
+- Root cause: production-quality-pull used only a 24h aggregate, so stale pre-deploy sessions could mask post-deploy reality; zero fresh sessions could be interpreted as a clean pass.
+- Fix: evaluate a fresh 1h window separately from the 24h history and emit PASS / BLOCK / INCONCLUSIVE. Zero fresh sessions is INCONCLUSIVE; fresh FPS/load/error violations remain BLOCK.
+- Regression: production-quality fresh-evidence + Node 24 tests 4/4 PASS; check:fast PASS.
+- Live probe: freshSessions=0 => INCONCLUSIVE, proving the false-PASS path is closed.
