@@ -128,13 +128,46 @@ test('runSubtask does not attempt AnythingLLM thread creation for a filesystem t
   assert.equal(acquired.ok, true, 'test setup: could not acquire the simulated concurrent lease');
   const requestCountBefore = fakeServerRequests.length;
   try {
-    const r = await runSubtask('read package.json', { workspaceSlug });
+    const r = await runSubtask('read package.json', { workspaceSlug, reportLogPath: tmpLog() });
     assert.equal(r.result, 'QUEUED', 'expected the shared lease/queue mechanism to gate this, not an AnythingLLM auth error');
     assert.equal(fakeServerRequests.length, requestCountBefore, 'no request should have been sent to AnythingLLM for a filesystem task');
   } finally {
     collectiveBrain.releaseLease(leaseRoot, leaseScope, owner);
     if (savedKey !== undefined) process.env.ANYTHINGLLM_API_KEY = savedKey;
   }
+});
+
+// Real leak found live 2026-09-06: this exact test called runSubtask()
+// without a reportLogPath override, so it fell through to the module's
+// default REPORT_LOG_PATH - the REAL production state/ai-agent-reports.jsonl
+// in the main tree - and appended a fake "subtask-test-direct-<pid>" /
+// "test-holder:<pid>" entry into the actual shared coordination log every
+// time this test suite ran. tmpLog() already existed for exactly this
+// purpose; it just wasn't being passed at this one call site. Regression
+// test: running runSubtask() through its real dispatch path must never grow
+// the real production log, regardless of which options object it's called
+// with, since no test in this suite should have a path to production state.
+test('runSubtask never appends to the real production state/ai-agent-reports.jsonl when reportLogPath is overridden', async () => {
+  const { REPORT_LOG_PATH: realProductionLogPath } = require('../scripts/openhuman-subtask.cjs');
+  let before = 0;
+  try { before = fs.readFileSync(realProductionLogPath, 'utf8').split(/\r?\n/).filter(Boolean).length; } catch { /* file may not exist in a fresh checkout */ }
+
+  const workspaceSlug = `subtask-test-no-leak-${process.pid}`;
+  const leaseRoot = 'C:\\Users\\user\\Desktop\\World_server';
+  const leaseScope = `anythingllm-workspace-${workspaceSlug}`;
+  const owner = `test-holder-no-leak:${process.pid}`;
+  const acquired = collectiveBrain.acquireLease(leaseRoot, leaseScope, { ttlMs: 30000, owner });
+  assert.equal(acquired.ok, true, 'test setup: could not acquire the simulated concurrent lease');
+  try {
+    const r = await runSubtask('read package.json', { workspaceSlug, reportLogPath: tmpLog() });
+    assert.equal(r.result, 'QUEUED');
+  } finally {
+    collectiveBrain.releaseLease(leaseRoot, leaseScope, owner);
+  }
+
+  let after = 0;
+  try { after = fs.readFileSync(realProductionLogPath, 'utf8').split(/\r?\n/).filter(Boolean).length; } catch { /* file may not exist */ }
+  assert.equal(after, before, 'a test run must never grow the real production shared coordination log');
 });
 
 test('createThread throws when the response has no thread.slug', async () => {
