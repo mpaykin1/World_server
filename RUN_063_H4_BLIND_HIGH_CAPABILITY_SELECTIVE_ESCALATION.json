@@ -1,0 +1,316 @@
+{
+  "experiment": "RUN_063_H4_BLIND_HIGH_CAPABILITY_SELECTIVE_ESCALATION",
+  "preregisteredBeforeExecution": true,
+  "seed": "63063",
+  "bestSingle": "qwen3-fast:1.7b",
+  "specialist": "qwen3:4b",
+  "sharedMemory": "same top-2 lexical retrieval from COLLECTIVE_BRAIN_CONTEXT.md for both arms",
+  "priorResultsPreserved": "RUN_055 FAIL and RUN_056 FAIL remain unchanged; all prior H4 task IDs are excluded using existing RUN_* evidence from the prior science worktree",
+  "subhypothesis": "Escalating only very-low-confidence best-single outputs to a stronger 4B specialist can improve multiobjective utility while keeping specialist usage a minority.",
+  "taskSelection": "8 deterministic unseen registry tasks excluding all task IDs found in prior RUN_*_H4_*.json",
+  "gate": "observable baseline only: first-line confidence <=0.30 OR invalid confidence/structure; scorer never routes or selects",
+  "confirmation": "1..3 escalations of 8; utility +0.03; q/n non-worse; errors non-higher; wall <=1.75x; >=1 escalated task utility improvement >=0.03",
+  "refutation": "any confirmation component fails; preserve result and do not relax thresholds",
+  "taskIds": [
+    "openhuman-action-dir-insufficient-without-trusted-roots",
+    "multi-ai-peer-review-maxbuffer",
+    "mjs-wrong-mime-type",
+    "openhuman-single-instance-silent-noop",
+    "supabase-preview-migration-drift",
+    "openhuman-local-model-tool-context-overflow",
+    "npm-ci-lockfile-drift",
+    "supabase-environment-project-mismatch"
+  ],
+  "rows": [
+    {
+      "id": "openhuman-action-dir-insufficient-without-trusted-roots",
+      "memoryScore": 2,
+      "gate": {
+        "escalate": false,
+        "reasons": [],
+        "confidence": 0.5
+      },
+      "baseline": {
+        "text": "CONFIDENCE: 0.5  \nROOT_CAUSE: The file action_dir is outside the allowed workspace, indicating a security policy or access control issue. The system's safety settings prevent access to external paths, but the file was intended to be read, suggesting a misconfiguration or a bypass mechanism.  \nFIX: Verify the allowed workspace settings in the safety configuration. Ensure the action_dir is within the permitted",
+        "ms": 22947,
+        "q": 0.1,
+        "n": 0.10294117647058823,
+        "er": 0
+      },
+      "critic": null,
+      "criticParse": null,
+      "final": {
+        "text": "CONFIDENCE: 0.5  \nROOT_CAUSE: The file action_dir is outside the allowed workspace, indicating a security policy or access control issue. The system's safety settings prevent access to external paths, but the file was intended to be read, suggesting a misconfiguration or a bypass mechanism.  \nFIX: Verify the allowed workspace settings in the safety configuration. Ensure the action_dir is within the permitted",
+        "ms": 22947,
+        "q": 0.1,
+        "n": 0.10294117647058823,
+        "er": 0
+      },
+      "collectiveMs": 22947
+    },
+    {
+      "id": "multi-ai-peer-review-maxbuffer",
+      "memoryScore": 3,
+      "gate": {
+        "escalate": true,
+        "reasons": [
+          "very-low-confidence"
+        ],
+        "confidence": 0.1
+      },
+      "baseline": {
+        "text": "CONFIDENCE: 0.1  \nROOT_CAUSE: The JavaScript code in `test/multi-ai-peer-review.test.js` contains an unterminated JSON string, which causes a syntax error during execution. This error is not caught by the editor's live Play session but is triggered during the actual run, leading to the assertion failure.  \nFIX: Ensure the JSON string is properly terminated with a closing",
+        "ms": 18879,
+        "q": 0.05714285714285714,
+        "n": 0.06451612903225806,
+        "er": 0
+      },
+      "critic": {
+        "text": "We are given:\n- MEMORY: two items (both are about Godot editor issues, but note: the symptom is about a JavaScript test failing)\n- SYMPTOM: test/multi-ai-peer-review.test.js fails with 'SyntaxError: Unterminated string in JSON' or an assertion that exit code is null instead of 0\n- DRAFT: a draft with CONFIDENCE 0.1, ROOT_CAUSE and FIX\n\nThe task: Review the draft using ONLY symptom",
+        "ms": 81006
+      },
+      "criticParse": {
+        "verdict": null,
+        "valid": false
+      },
+      "final": {
+        "text": "CONFIDENCE: 0.1  \nROOT_CAUSE: The JavaScript code in `test/multi-ai-peer-review.test.js` contains an unterminated JSON string, which causes a syntax error during execution. This error is not caught by the editor's live Play session but is triggered during the actual run, leading to the assertion failure.  \nFIX: Ensure the JSON string is properly terminated with a closing",
+        "ms": 18879,
+        "q": 0.05714285714285714,
+        "n": 0.06451612903225806,
+        "er": 0
+      },
+      "collectiveMs": 99885
+    },
+    {
+      "id": "mjs-wrong-mime-type",
+      "memoryScore": 7,
+      "gate": {
+        "escalate": true,
+        "reasons": [
+          "very-low-confidence"
+        ],
+        "confidence": 0.1
+      },
+      "baseline": {
+        "text": "CONFIDENCE: 0.1  \nROOT_CAUSE: server.js's static-file mime table only mapped .js, not .mjs — the .mjs file was served by the local dev server as application/octet-stream, which browsers refuse to execute as a module script.  \nFIX: Update the server configuration to correctly map .mjs files to a supported MIME type, such as application/javascript.",
+        "ms": 21004,
+        "q": 0.7777777777777778,
+        "n": 0.13043478260869565,
+        "er": 0
+      },
+      "critic": {
+        "text": "We are given:\n- MEMORY: two entries (mjs-wrong-mime-type and godot-editor-play-hides-standas-standalone-parse-errors)\n- SYMPTOM: \"browser refuses to load an ES module with 'Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of application/octet-stream'\"\n- DRAFT: a text with CONFIDENCE, ROOT_CAUSE, and FIX\n\nThe task: Review the draft using ONLY symptom, same un",
+        "ms": 62989
+      },
+      "criticParse": {
+        "verdict": null,
+        "valid": false
+      },
+      "final": {
+        "text": "CONFIDENCE: 0.1  \nROOT_CAUSE: server.js's static-file mime table only mapped .js, not .mjs — the .mjs file was served by the local dev server as application/octet-stream, which browsers refuse to execute as a module script.  \nFIX: Update the server configuration to correctly map .mjs files to a supported MIME type, such as application/javascript.",
+        "ms": 21004,
+        "q": 0.7777777777777778,
+        "n": 0.13043478260869565,
+        "er": 0
+      },
+      "collectiveMs": 83993
+    },
+    {
+      "id": "openhuman-single-instance-silent-noop",
+      "memoryScore": 1,
+      "gate": {
+        "escalate": true,
+        "reasons": [
+          "structure"
+        ],
+        "confidence": 0.5
+      },
+      "baseline": {
+        "text": "CONFIDENCE: 0.5  \nROOT_CAUSE: The launcher/script is configured to start OpenHuman.exe with a special env var, but the system is not properly handling the env var or the OpenHuman.exe is not correctly configured to respond to it. The lack of a new window suggests that the application is not being launched or is being launched in a mode that suppresses window creation. The absence",
+        "ms": 18499,
+        "q": 0.05405405405405406,
+        "n": 0.018867924528301886,
+        "er": 0
+      },
+      "critic": {
+        "text": "We are given:\n- MEMORY: a description of a problem with a voxel-hero-silhouette (but note: the symptom and draft are about a launcher for OpenHuman.exe)\n- SYMPTOM: a launcher/script that starts OpenHuman.exe with a special env var (e.g. OPENHUMAN_ACTION_DIR) reports success (exit code 0) but no new window appears and the setting has no visible effect\n- DRAFT: a text that we are to review\n\nThe instruction",
+        "ms": 54591
+      },
+      "criticParse": {
+        "verdict": null,
+        "valid": false
+      },
+      "final": {
+        "text": "CONFIDENCE: 0.5  \nROOT_CAUSE: The launcher/script is configured to start OpenHuman.exe with a special env var, but the system is not properly handling the env var or the OpenHuman.exe is not correctly configured to respond to it. The lack of a new window suggests that the application is not being launched or is being launched in a mode that suppresses window creation. The absence",
+        "ms": 18499,
+        "q": 0.05405405405405406,
+        "n": 0.018867924528301886,
+        "er": 0
+      },
+      "collectiveMs": 73090
+    },
+    {
+      "id": "supabase-preview-migration-drift",
+      "memoryScore": 3,
+      "gate": {
+        "escalate": true,
+        "reasons": [
+          "very-low-confidence"
+        ],
+        "confidence": 0.1
+      },
+      "baseline": {
+        "text": "CONFIDENCE: 0.1  \nROOT_CAUSE: The migration script contains a `CREATE OR REPLACE FUNCTION` that fails at runtime due to a missing table/column in the preview/staging environment, even though it succeeded in production. This suggests a difference in database schema or configuration between the two environments.  \nFIX: Verify that the migration script correctly references the schema and table names in the preview/staging",
+        "ms": 10997,
+        "q": 0.19230769230769232,
+        "n": 0.09433962264150944,
+        "er": 0
+      },
+      "critic": {
+        "text": "We are given:\n- MEMORY: two items (about Godot editor and camera orbit)\n- SYMPTOM: a migration that works in production fails at runtime (missing table/column) when applied to a preview/staging Supabase project, even though `create or replace function` itself succeeded with no error\n- DRAFT: a text with CONFIDENCE 0.1, ROOT_CAUSE and FIX\n\nThe task: Review the draft using ONLY symptom, same untrusted memory,",
+        "ms": 39730
+      },
+      "criticParse": {
+        "verdict": null,
+        "valid": false
+      },
+      "final": {
+        "text": "CONFIDENCE: 0.1  \nROOT_CAUSE: The migration script contains a `CREATE OR REPLACE FUNCTION` that fails at runtime due to a missing table/column in the preview/staging environment, even though it succeeded in production. This suggests a difference in database schema or configuration between the two environments.  \nFIX: Verify that the migration script correctly references the schema and table names in the preview/staging",
+        "ms": 10997,
+        "q": 0.19230769230769232,
+        "n": 0.09433962264150944,
+        "er": 0
+      },
+      "collectiveMs": 50727
+    },
+    {
+      "id": "openhuman-local-model-tool-context-overflow",
+      "memoryScore": 2,
+      "gate": {
+        "escalate": true,
+        "reasons": [
+          "very-low-confidence"
+        ],
+        "confidence": 0.3
+      },
+      "baseline": {
+        "text": "CONFIDENCE: 0.3  \nROOT_CAUSE: The OpenHuman application is routing traffic to a local Ollama model, but the model's API is not properly configured to handle the specific request format or protocol expected by OpenHuman. The model's response is not being parsed correctly, leading to a failure in the 'Thinking' phase.  \nFIX: Ensure the local Ollama model is",
+        "ms": 22186,
+        "q": 0.07228915662650602,
+        "n": 0.054945054945054944,
+        "er": 0
+      },
+      "critic": {
+        "text": "We are given:\n- MEMORY: two specific issues (godot-editor-play-hides-standalone-parse-errors and mjs-wrong-mime-type)\n- SYMPTOM: OpenHuman chat hangs indefinitely on 'Thinking' when routed to a small local Ollama model (tested models: gemma3:1b-it-qat, qwen3:1.7b, qwen3:4b). Conditions: Ollama server is reachable, `ollama run",
+        "ms": 49093
+      },
+      "criticParse": {
+        "verdict": null,
+        "valid": false
+      },
+      "final": {
+        "text": "CONFIDENCE: 0.3  \nROOT_CAUSE: The OpenHuman application is routing traffic to a local Ollama model, but the model's API is not properly configured to handle the specific request format or protocol expected by OpenHuman. The model's response is not being parsed correctly, leading to a failure in the 'Thinking' phase.  \nFIX: Ensure the local Ollama model is",
+        "ms": 22186,
+        "q": 0.07228915662650602,
+        "n": 0.054945054945054944,
+        "er": 0
+      },
+      "collectiveMs": 71279
+    },
+    {
+      "id": "npm-ci-lockfile-drift",
+      "memoryScore": 3,
+      "gate": {
+        "escalate": true,
+        "reasons": [
+          "very-low-confidence"
+        ],
+        "confidence": 0.1
+      },
+      "baseline": {
+        "text": "CONFIDENCE: 0.1  \nROOT_CAUSE: The project's `package.json` and `package-lock.json` are out of sync, causing the GitHub Actions CI to fail during `npm ci`. This is likely due to a change in the project's dependencies or a misconfiguration in the CI pipeline that doesn't properly handle the sync requirement.  \nFIX: Ensure `package.json` and `",
+        "ms": 11722,
+        "q": 0.14285714285714285,
+        "n": 0.125,
+        "er": 0
+      },
+      "critic": {
+        "text": "We are given:\n- MEMORY: two specific issues (but note: the symptom is about npm ci failing, so we focus on the symptom and the memory items that might be relevant)\n- SYMPTOM: GitHub Actions CI fails at the very first `npm ci` step with `npm error code EUSAGE ... can only install packages when your package.json and package-lock.json ... are in sync`\n- DRAFT: a draft with CONFIDENCE 0.1 and a ROOT_CAUSE",
+        "ms": 39244
+      },
+      "criticParse": {
+        "verdict": null,
+        "valid": false
+      },
+      "final": {
+        "text": "CONFIDENCE: 0.1  \nROOT_CAUSE: The project's `package.json` and `package-lock.json` are out of sync, causing the GitHub Actions CI to fail during `npm ci`. This is likely due to a change in the project's dependencies or a misconfiguration in the CI pipeline that doesn't properly handle the sync requirement.  \nFIX: Ensure `package.json` and `",
+        "ms": 11722,
+        "q": 0.14285714285714285,
+        "n": 0.125,
+        "er": 0
+      },
+      "collectiveMs": 50966
+    },
+    {
+      "id": "supabase-environment-project-mismatch",
+      "memoryScore": 3,
+      "gate": {
+        "escalate": true,
+        "reasons": [
+          "very-low-confidence"
+        ],
+        "confidence": 0.1
+      },
+      "baseline": {
+        "text": "CONFIDENCE: 0.1  \nROOT_CAUSE: The project's Supabase integration is using a deprecated or misconfigured migration script, leading to inconsistent database states between the MCP tools and the claimed state in the UI.  \nFIX: Update the Supabase migration script to ensure consistency between the MCP tools and the UI claims, and verify the script's correctness via direct database queries.",
+        "ms": 11597,
+        "q": 0.125,
+        "n": 0.18421052631578946,
+        "er": 0
+      },
+      "critic": {
+        "text": "We are given:\n- MEMORY: two items (one about Godot editor warnings and another about camera orbit)\n- SYMPTOM: a claimed Supabase database state (e.g. 'this migration is already applied') does not match what direct queries via the Supabase MCP tools show, or an MCP session cannot see a project the user references by name\n- DRAFT: a confidence of 0.1, a root cause and a fix\n\nThe task: Review the draft",
+        "ms": 39368
+      },
+      "criticParse": {
+        "verdict": null,
+        "valid": false
+      },
+      "final": {
+        "text": "CONFIDENCE: 0.1  \nROOT_CAUSE: The project's Supabase integration is using a deprecated or misconfigured migration script, leading to inconsistent database states between the MCP tools and the claimed state in the UI.  \nFIX: Update the Supabase migration script to ensure consistency between the MCP tools and the UI claims, and verify the script's correctness via direct database queries.",
+        "ms": 11597,
+        "q": 0.125,
+        "n": 0.18421052631578946,
+        "er": 0
+      },
+      "collectiveMs": 50965
+    }
+  ],
+  "baseline": {
+    "q": 0.19017858509575378,
+    "n": 0.09690690206777472,
+    "er": 0,
+    "ms": 137831,
+    "u": 0.10102553364567657
+  },
+  "collective": {
+    "q": 0.19017858509575378,
+    "n": 0.09690690206777472,
+    "er": 0,
+    "ms": 503852,
+    "u": 0.05522023254941588
+  },
+  "delta": {
+    "q": 0,
+    "n": 0,
+    "er": 0,
+    "costRatio": 3.655578208095421,
+    "u": -0.04580530109626069,
+    "escalationRate": 0.875,
+    "improvedTriggered": 0
+  },
+  "executionPass": false,
+  "hypothesisPass": false,
+  "pass": false
+}

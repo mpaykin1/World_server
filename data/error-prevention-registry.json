@@ -861,6 +861,19 @@
         "test/science-h4-specialist-promotion-integrity.test.js",
         "scientific holdouts must fail closed on per-call timeout"
       ]
+    },
+    {
+      "id": "H4-FREEFORM-STRUCTURED-OUTPUT-CONTRACT-FAILURE",
+      "symptom": "H4 specialist/baseline calls return fluent reasoning but omit required machine-readable confidence or verdict, making routing/evaluation invalid or degenerating uncertainty selection to a hash tie-break",
+      "rootCause": "science H4 harness trusted prompt-only text formatting from local Qwen models; qwen3:4b consumed the num_predict budget on reasoning before VERDICT in RUN_063, while qwen3-fast omitted first-line CONFIDENCE on all 8 RUN_064 holdout tasks",
+      "solution": "Use Ollama structured JSON format for every machine-routed metadata field (confidence, verdict, root_cause, fix), validate schema fail-closed, and treat missing structured routing fields as execution-invalid rather than silently interpreting prose; keep a hard specialist-call budget",
+      "protection": [
+        "test/science-h4-structured-output-integrity.test.cjs",
+        "RUN_063_H4_BLIND_HIGH_CAPABILITY_SELECTIVE_ESCALATION.json",
+        "RUN_064_H4_BLIND_BUDGETED_JSON_ESCALATION.json",
+        "future H4 routing harnesses must use structured output for both baseline confidence and critic verdict"
+      ],
+      "status": "protected"
     }
   ],
   "confirmationProtocol": {

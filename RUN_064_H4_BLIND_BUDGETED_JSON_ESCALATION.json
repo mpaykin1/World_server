@@ -1,0 +1,303 @@
+{
+  "experiment": "RUN_064_H4_BLIND_BUDGETED_JSON_ESCALATION",
+  "preregisteredBeforeExecution": true,
+  "seed": "64064",
+  "bestSingle": "qwen3-fast:1.7b",
+  "specialist": "qwen3:4b",
+  "sharedMemory": "same top-2 lexical retrieval from COLLECTIVE_BRAIN_CONTEXT.md for both arms",
+  "priorResultsPreserved": "RUN_063 execution-invalid and hypothesis-fail is preserved; its 8 task IDs are excluded. RUN_055/056 also preserved.",
+  "subhypothesis": "A strict two-call uncertainty budget to a stronger 4B specialist can improve multiobjective utility while keeping specialist usage at 25% or less.",
+  "taskSelection": "8 deterministic unseen registry tasks excluding all task IDs found in prior RUN_*_H4_*.json",
+  "gate": "collect all baseline outputs; eligible if confidence<=0.30 or invalid structure; escalate at most two lowest-confidence eligible outputs, deterministic hash tie-break; hidden scorer never routes",
+  "specialistProtocol": "Ollama format=json; JSON verdict/root_cause/fix; 180-token budget to prevent reasoning from consuming the required verdict",
+  "confirmation": "1..2 escalations of 8; utility +0.03; q/n non-worse; errors non-higher; wall <=1.60x; >=1 escalated task utility improvement >=0.03",
+  "refutation": "any confirmation component fails; preserve result and do not relax thresholds",
+  "taskIds": [
+    "openhuman-trusted-root-prefix-collision",
+    "catalog-auto-publishes-index-html",
+    "spawn-not-grounded",
+    "powershell-utf8-mojibake-on-install",
+    "voxel-hero-silhouette-invisible-against-void",
+    "godot-world-parented-under-hero",
+    "premature-done-claim-below-reference-gate",
+    "openhuman-chat-memory-not-recalling-world-server"
+  ],
+  "selectedTaskIds": [
+    "openhuman-trusted-root-prefix-collision",
+    "catalog-auto-publishes-index-html"
+  ],
+  "rows": [
+    {
+      "id": "openhuman-trusted-root-prefix-collision",
+      "memoryScore": 0,
+      "gate": {
+        "eligible": true,
+        "reasons": [
+          "confidence-format",
+          "structure"
+        ],
+        "confidence": null
+      },
+      "baseline": {
+        "text": "CONFIDENCE: 0.0  \nROOT_CAUSE: The error indicates that the system attempted to write to a folder that was granted readwrite access via `autonomy.trusted_roots`, but the write operation was blocked due to a policy restriction. The error message specifies a different, unrelated trusted_root path that escaped the workspace, leading to the block.  \n\nFIX: Verify the trusted_root path used",
+        "ms": 9711,
+        "q": 0.09523809523809523,
+        "n": 0.12121212121212122,
+        "er": 0
+      },
+      "final": {
+        "text": "ROOT_CAUSE: The error message specifies a different, unrelated trusted_root path that escaped the workspace, but the draft's root cause explanation does not correctly identify the specific issue. The draft states that the write operation was blocked due to a policy restriction, but the error message explicitly names a path that is NOT the target folder and NOT its actual parent, indicating a misinterpretation of the error message.\\nFIX: The fix should be to verify the trusted_root path configuration to ensure it does not contain paths that escape the workspace. Specifically, check that the trusted_root path does not include a read-only trusted_root path that is unrelated to the target folder and is causing the policy block.",
+        "ms": 49264,
+        "q": 0.14285714285714285,
+        "n": 0.12121212121212122,
+        "er": 0
+      },
+      "critic": {
+        "text": "{\n  \"verdict\": \"REVISE\",\n  \"root_cause\": \"The error message specifies a different, unrelated trusted_root path that escaped the workspace, but the draft's root cause explanation does not correctly identify the specific issue. The draft states that the write operation was blocked due to a policy restriction, but the error message explicitly names a path that is NOT the target folder and NOT its actual parent, indicating a misinterpretation of the error message.\",\n  \"fix\": \"The fix should be to verify the trusted_root path configuration to ensure it does not contain paths that escape the workspace. Specifically, check that the trusted_root path does not include a read-only trusted_root path that is unrelated to the target folder and is causing the policy block.\"\n}",
+        "ms": 49264
+      },
+      "criticParse": {
+        "verdict": "REVISE",
+        "valid": true,
+        "text": "ROOT_CAUSE: The error message specifies a different, unrelated trusted_root path that escaped the workspace, but the draft's root cause explanation does not correctly identify the specific issue. The draft states that the write operation was blocked due to a policy restriction, but the error message explicitly names a path that is NOT the target folder and NOT its actual parent, indicating a misinterpretation of the error message.\\nFIX: The fix should be to verify the trusted_root path configuration to ensure it does not contain paths that escape the workspace. Specifically, check that the trusted_root path does not include a read-only trusted_root path that is unrelated to the target folder and is causing the policy block."
+      },
+      "collectiveMs": 58975
+    },
+    {
+      "id": "catalog-auto-publishes-index-html",
+      "memoryScore": 0,
+      "gate": {
+        "eligible": true,
+        "reasons": [
+          "confidence-format",
+          "structure"
+        ],
+        "confidence": null
+      },
+      "baseline": {
+        "text": "CONFIDENCE: 0.3  \nROOT_CAUSE: Incomplete app installation process due to missing installation steps or corrupted installation files  \nFIX: Verify installation process with step-by-step troubleshooting, check for corrupted files, and ensure all required components are installed.",
+        "ms": 4603,
+        "q": 0,
+        "n": 0,
+        "er": 0
+      },
+      "final": {
+        "text": "CONFIDENCE: 0.3  \nROOT_CAUSE: Incomplete app installation process due to missing installation steps or corrupted installation files  \nFIX: Verify installation process with step-by-step troubleshooting, check for corrupted files, and ensure all required components are installed.",
+        "ms": 4603,
+        "q": 0,
+        "n": 0,
+        "er": 0
+      },
+      "critic": {
+        "text": "{\n  \"verdict\": \"KEEP\",\n  \"root_cause\": \"Incomplete app installation process due to missing installation steps or corrupted installation files\",\n  \"fix\": \"Verify installation process with step-by-step troubleshooting, check for corrupted files, and ensure all required components are installed.\"\n}",
+        "ms": 18421
+      },
+      "criticParse": {
+        "verdict": "KEEP",
+        "valid": true,
+        "text": ""
+      },
+      "collectiveMs": 23024
+    },
+    {
+      "id": "spawn-not-grounded",
+      "memoryScore": 0,
+      "gate": {
+        "eligible": true,
+        "reasons": [
+          "confidence-format",
+          "structure"
+        ],
+        "confidence": null
+      },
+      "baseline": {
+        "text": "CONFIDENCE: 0.3  \nROOT_CAUSE: Misalignment in the orientation sensor or gimbal system  \nFIX: Calibrate the orientation sensor or adjust the gimbal alignment to correct the player's incorrect orientation.",
+        "ms": 4200,
+        "q": 0,
+        "n": 0.16666666666666666,
+        "er": 0
+      },
+      "final": {
+        "text": "CONFIDENCE: 0.3  \nROOT_CAUSE: Misalignment in the orientation sensor or gimbal system  \nFIX: Calibrate the orientation sensor or adjust the gimbal alignment to correct the player's incorrect orientation.",
+        "ms": 4200,
+        "q": 0,
+        "n": 0.16666666666666666,
+        "er": 0
+      },
+      "critic": null,
+      "criticParse": null,
+      "collectiveMs": 4200
+    },
+    {
+      "id": "powershell-utf8-mojibake-on-install",
+      "memoryScore": 0,
+      "gate": {
+        "eligible": true,
+        "reasons": [
+          "confidence-format",
+          "structure"
+        ],
+        "confidence": null
+      },
+      "baseline": {
+        "text": "CONFIDENCE: 0.3  \nROOT_CAUSE: The PowerShell script introduced a BOM (Byte Order Mark) and corrupted Cyrillic text with em-dashes, likely due to improper encoding handling in the script or file system.  \nFIX: Remove the BOM and ensure proper encoding (UTF-8 without BOM) in the file, and verify encoding settings in the PowerShell script.",
+        "ms": 8693,
+        "q": 0.20833333333333334,
+        "n": 0.17391304347826086,
+        "er": 0
+      },
+      "final": {
+        "text": "CONFIDENCE: 0.3  \nROOT_CAUSE: The PowerShell script introduced a BOM (Byte Order Mark) and corrupted Cyrillic text with em-dashes, likely due to improper encoding handling in the script or file system.  \nFIX: Remove the BOM and ensure proper encoding (UTF-8 without BOM) in the file, and verify encoding settings in the PowerShell script.",
+        "ms": 8693,
+        "q": 0.20833333333333334,
+        "n": 0.17391304347826086,
+        "er": 0
+      },
+      "critic": null,
+      "criticParse": null,
+      "collectiveMs": 8693
+    },
+    {
+      "id": "voxel-hero-silhouette-invisible-against-void",
+      "memoryScore": 0,
+      "gate": {
+        "eligible": true,
+        "reasons": [
+          "confidence-format",
+          "structure"
+        ],
+        "confidence": null
+      },
+      "baseline": {
+        "text": "CONFIDENCE: 0.3  \nROOT_CAUSE: The hero's terrain/mountain silhouette blends into the near-black background, causing the scene to appear static despite camera movement.  \nFIX: Adjust the terrain/mountain rendering to create a visible edge or contrast with the background, ensuring the focal object remains distinguishable.",
+        "ms": 7336,
+        "q": 0.1,
+        "n": 0.06976744186046512,
+        "er": 0
+      },
+      "final": {
+        "text": "CONFIDENCE: 0.3  \nROOT_CAUSE: The hero's terrain/mountain silhouette blends into the near-black background, causing the scene to appear static despite camera movement.  \nFIX: Adjust the terrain/mountain rendering to create a visible edge or contrast with the background, ensuring the focal object remains distinguishable.",
+        "ms": 7336,
+        "q": 0.1,
+        "n": 0.06976744186046512,
+        "er": 0
+      },
+      "critic": null,
+      "criticParse": null,
+      "collectiveMs": 7336
+    },
+    {
+      "id": "godot-world-parented-under-hero",
+      "memoryScore": 0,
+      "gate": {
+        "eligible": true,
+        "reasons": [
+          "confidence-format",
+          "structure"
+        ],
+        "confidence": null
+      },
+      "baseline": {
+        "text": "CONFIDENCE: 0.3  \nROOT_CAUSE: The player-controlled subject's movement is not properly decoupled from the terrain geometry, leading to terrain dragging.  \nFIX: Implement a physics-based decoupling mechanism to prevent the subject from interacting with the terrain during movement.",
+        "ms": 5661,
+        "q": 0,
+        "n": 0,
+        "er": 0
+      },
+      "final": {
+        "text": "CONFIDENCE: 0.3  \nROOT_CAUSE: The player-controlled subject's movement is not properly decoupled from the terrain geometry, leading to terrain dragging.  \nFIX: Implement a physics-based decoupling mechanism to prevent the subject from interacting with the terrain during movement.",
+        "ms": 5661,
+        "q": 0,
+        "n": 0,
+        "er": 0
+      },
+      "critic": null,
+      "criticParse": null,
+      "collectiveMs": 5661
+    },
+    {
+      "id": "premature-done-claim-below-reference-gate",
+      "memoryScore": 0,
+      "gate": {
+        "eligible": true,
+        "reasons": [
+          "confidence-format",
+          "structure"
+        ],
+        "confidence": null
+      },
+      "baseline": {
+        "text": "CONFIDENCE: 0.3  \nROOT_CAUSE: The AI model's visual output is not being properly validated against the user's approved quality standards, leading to a discrepancy between the presented result and the expected quality level.  \nFIX: Implement a quality validation step in the AI's output pipeline that checks against the user's approved standards before finalizing the visual result.",
+        "ms": 7111,
+        "q": 0.125,
+        "n": 0.05263157894736842,
+        "er": 0
+      },
+      "final": {
+        "text": "CONFIDENCE: 0.3  \nROOT_CAUSE: The AI model's visual output is not being properly validated against the user's approved quality standards, leading to a discrepancy between the presented result and the expected quality level.  \nFIX: Implement a quality validation step in the AI's output pipeline that checks against the user's approved standards before finalizing the visual result.",
+        "ms": 7111,
+        "q": 0.125,
+        "n": 0.05263157894736842,
+        "er": 0
+      },
+      "critic": null,
+      "criticParse": null,
+      "collectiveMs": 7111
+    },
+    {
+      "id": "openhuman-chat-memory-not-recalling-world-server",
+      "memoryScore": 0,
+      "gate": {
+        "eligible": true,
+        "reasons": [
+          "confidence-format",
+          "structure"
+        ],
+        "confidence": null
+      },
+      "baseline": {
+        "text": "CONFIDENCE: 0.0  \nROOT_CAUSE: The chat UI is not correctly retrieving data from the agentmemory, despite the config and cross-memory test passing.  \nFIX: Implement a debug probe to explicitly check the UI's data retrieval logic, ensuring it correctly maps agentmemory keys to the UI's display.",
+        "ms": 7425,
+        "q": 0.10416666666666667,
+        "n": 0.0625,
+        "er": 0
+      },
+      "final": {
+        "text": "CONFIDENCE: 0.0  \nROOT_CAUSE: The chat UI is not correctly retrieving data from the agentmemory, despite the config and cross-memory test passing.  \nFIX: Implement a debug probe to explicitly check the UI's data retrieval logic, ensuring it correctly maps agentmemory keys to the UI's display.",
+        "ms": 7425,
+        "q": 0.10416666666666667,
+        "n": 0.0625,
+        "er": 0
+      },
+      "critic": null,
+      "criticParse": null,
+      "collectiveMs": 7425
+    }
+  ],
+  "baseline": {
+    "q": 0.0790922619047619,
+    "n": 0.08083635652061028,
+    "er": 0,
+    "ms": 54740,
+    "u": 0.04569287360735789
+  },
+  "collective": {
+    "q": 0.08504464285714285,
+    "n": 0.08083635652061028,
+    "er": 0,
+    "ms": 122425,
+    "u": 0.03444199046478335
+  },
+  "delta": {
+    "q": 0.005952380952380945,
+    "n": 0,
+    "er": 0,
+    "costRatio": 2.236481549141396,
+    "u": -0.011250883142574539,
+    "escalationRate": 0.25,
+    "improvedTriggered": 0
+  },
+  "executionPass": true,
+  "hypothesisPass": false,
+  "pass": false
+}

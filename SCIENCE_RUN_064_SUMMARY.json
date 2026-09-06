@@ -1,0 +1,23 @@
+{
+  "run": "RUN_064",
+  "H4_before": 89,
+  "H4_after": 88,
+  "reason": "Valid blind 8-task budgeted escalation used specialist on 2/8 tasks, improved mean root-cause overlap only +0.00595, no novelty gain, no error change, cost 2.236x, utility -0.01125, zero escalated tasks improved utility >=0.03. Shared-memory benefit remains previously supported, but another collective architecture failed best-single comparison.",
+  "run063": {
+    "executionPass": false,
+    "hypothesisPass": false,
+    "costRatio": 3.655578208095421,
+    "utilityDelta": -0.04580530109626069
+  },
+  "run064": {
+    "executionPass": true,
+    "hypothesisPass": false,
+    "qualityDelta": 0.005952380952380945,
+    "noveltyDelta": 0,
+    "errorDelta": 0,
+    "costRatio": 2.236481549141396,
+    "utilityDelta": -0.011250883142574539,
+    "escalationRate": 0.25,
+    "improvedTriggered": 0
+  }
+}
