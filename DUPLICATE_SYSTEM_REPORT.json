@@ -1,0 +1,36 @@
+{
+  "generatedAt": "2026-08-24T05:16:05.534Z",
+  "blockers": 0,
+  "findings": [
+    {
+      "severity": "warning",
+      "system": "duplicate-code",
+      "hash": "deef6a1d506f8a555647075404d1ba6b7e7a2961",
+      "occurrences": [
+        {
+          "file": "apps/catalog/client.js",
+          "name": "makeGlowTex"
+        },
+        {
+          "file": "apps/survival/client.js",
+          "name": "makeBoltGlowTex"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "system": "duplicate-code",
+      "hash": "cc2163b588d458ac608aec403bc5725b1c6c4269",
+      "occurrences": [
+        {
+          "file": "apps/catalog/client.js",
+          "name": "boltPath"
+        },
+        {
+          "file": "apps/survival/client.js",
+          "name": "boltPath2"
+        }
+      ]
+    }
+  ]
+}

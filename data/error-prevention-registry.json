@@ -1,0 +1,679 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "ERROR_RECURRENCE_PROTECTION",
+  "policy": "confirmed-fix-becomes-permanent-regression-rule",
+  "events": [],
+  "knownErrors": [
+    {
+      "id": "controls-inverted-camera-relative",
+      "category": "controls",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "W/S or A/D reverse after camera yaw or feel inverted",
+      "rootCause": "inconsistent camera-forward/screen-right basis math",
+      "protection": [
+        "canonical movement basis",
+        "behavioral yaw regression test"
+      ]
+    },
+    {
+      "id": "mobile-entry-not-clickable",
+      "category": "mobile",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "primary enter/play control cannot be activated on phone",
+      "rootCause": "desktop-only pointer/input path or overlay interception",
+      "protection": [
+        "real mobile emulation",
+        "tap target test",
+        "pointer/touch event coverage"
+      ]
+    },
+    {
+      "id": "mobile-controls-missing",
+      "category": "mobile",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "world loads on phone but cannot be played",
+      "rootCause": "no shared touch movement/look contract",
+      "protection": [
+        "mobile Playwright project",
+        "touch joystick/look/jump gate"
+      ]
+    },
+    {
+      "id": "stairs-collision-broken",
+      "category": "collision",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "player is blocked by stairs or cannot step onto valid steps",
+      "rootCause": "collision without standardized step-up behavior",
+      "protection": [
+        "step-up<=1.05 behavioral test",
+        "canonical collision helper"
+      ]
+    },
+    {
+      "id": "wall-collision-broken",
+      "category": "collision",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "player passes through walls",
+      "rootCause": "missing/incorrect horizontal collision behavior",
+      "protection": [
+        "wall traversal negative test",
+        "spawn/ground/wall collision contract"
+      ]
+    },
+    {
+      "id": "spawn-not-grounded",
+      "category": "collision",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "player appears in air/inside geometry/wrong orientation",
+      "rootCause": "spawn not derived from valid walkable surface",
+      "protection": [
+        "grounded spawn behavioral test",
+        "orientation invariant"
+      ]
+    },
+    {
+      "id": "jump-moves-forward",
+      "category": "controls",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "Space moves forward/depth instead of jumping vertically",
+      "rootCause": "jump coupled to camera/world transform",
+      "protection": [
+        "Space-only-Y invariant",
+        "world transform lock"
+      ]
+    },
+    {
+      "id": "camera-roll-on-look",
+      "category": "camera",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "horizontal look rolls/flips image",
+      "rootCause": "yaw/pitch/roll axes mixed",
+      "protection": [
+        "yaw body Y only",
+        "pitch camera X only",
+        "roll==0 invariant"
+      ]
+    },
+    {
+      "id": "catalog-auto-publishes-index-html",
+      "category": "release",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "diagnostic/incomplete apps become public automatically",
+      "rootCause": "allow-by-existence catalog discovery",
+      "protection": [
+        "deny-by-default certified registry"
+      ]
+    },
+    {
+      "id": "false-green-assertion",
+      "category": "tests",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "test passes without evaluating matcher",
+      "rootCause": "matcher referenced without invocation",
+      "protection": [
+        "static matcher invocation scan",
+        "CI hard failure"
+      ]
+    },
+    {
+      "id": "menu-obstructs-game",
+      "category": "ui",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "technical/status text or large panels obstruct gameplay",
+      "rootCause": "system information rendered persistently",
+      "protection": [
+        "compact icon menu contract",
+        "HUD obstruction audit",
+        "mobile safe-area test"
+      ]
+    },
+    {
+      "id": "world-selection-walk-only",
+      "category": "ui",
+      "severity": "major",
+      "status": "known",
+      "symptom": "user must walk to portal to choose a world",
+      "rootCause": "no direct tappable/clickable world picker",
+      "protection": [
+        "direct world-selection menu gate"
+      ]
+    },
+    {
+      "id": "godot-nodepath-absolute-unresolvable",
+      "category": "godot",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "an @export NodePath like \"/Main/Beacon\" resolves to null via get_node_or_null() when called from a nested node, silently breaking gaze/follow/reference wiring with no error",
+      "rootCause": "a leading-slash NodePath resolves from the actual SceneTree root (get_tree().root), not the edited scene's own root node - it needs the \"/root/<SceneRootName>/...\" prefix, not \"/<SceneRootName>/...\"",
+      "protection": [
+        "always prefix absolute Godot NodePaths with /root/<SceneName>/",
+        "verify resolution with a game_eval read of the exported var immediately after wiring, not just visually"
+      ]
+    },
+    {
+      "id": "godot-camera-orbit-wrong-pivot",
+      "category": "controls",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "mouse-look makes the tracked subject appear to spin/swing across the screen instead of staying anchored while the world rotates around it",
+      "rootCause": "mouse yaw/pitch was applied to a rig that only rotates in place at a fixed offset (first-person look), instead of a true orbit rig whose camera swings in an arc around the subject's origin",
+      "protection": [
+        "orbit rigs must rotate at the tracked subject's own origin, with the camera offset behind/above and pre-tilted to face back at that origin",
+        "verify by checking the subject's screen-space position stays roughly constant while yaw/pitch change, not just that the view moves at all"
+      ]
+    },
+    {
+      "id": "godot-gdscript-undefined-class-is-check",
+      "category": "godot",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "an EditorPlugin or gate script fails to load at all (parse error), silently disabling every check it contains",
+      "rootCause": "an `is SomeClassName` type check referenced a class that doesn't exist as a native Godot type or a registered class_name in the project",
+      "protection": [
+        "use n.get_class() == \"ClassName\" (string compare) instead of `is ClassName` when a class's existence in the target project isn't guaranteed",
+        "smoke-test any new editor plugin actually enables without a parse error before relying on its gate"
+      ]
+    },
+    {
+      "id": "powershell-utf8-mojibake-on-install",
+      "category": "tooling",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "Cyrillic text, curly quotes, or em-dashes in an existing file turn into mojibake (e.g. Ра…-style garbage) and a stray BOM appears at the top, after a PowerShell install/patch script touches that file",
+      "rootCause": "Windows PowerShell 5.1's Get-Content -Raw defaults to the system ANSI codepage when no -Encoding is given, misreading a BOM-less UTF-8 source file; the corrupted string is then re-saved via Set-Content -Encoding UTF8 (which also adds a BOM in 5.1), baking the corruption in",
+      "protection": [
+        "always pass -Encoding UTF8 to both Get-Content -Raw and Set-Content when a PowerShell script reads-then-writes an existing text file",
+        "diff every file an installer touches for mojibake/BOM before committing, not just for the intended content change"
+      ]
+    },
+    {
+      "id": "godot-editor-play-hides-standalone-parse-errors",
+      "category": "godot",
+      "severity": "release-blocker",
+      "symptom": "a scene renders fine when launched via the MCP/editor Play button but shows a blank grey screen with no visible error when run as a real standalone .exe/window",
+      "rootCause": "a `var x := expr` where expr's type can't be statically inferred (e.g. the builtin generic max()/min()/clamp() instead of maxi/mini/clampi/maxf/minf/clampf) is only a warning in the editor's live Play session, but the same project can have warnings-as-errors enabled for exported/standalone runs - the affected script (often an autoload or a node's own controller) fails to load entirely, so its Camera3D/logic never runs and the viewport shows nothing but the default clear color",
+      "status": "protected",
+      "protection": [
+        "always give `var x := ...` an explicit type, or use the typed builtin variant (maxi/maxf/mini/minf/clampi/clampf), for any value assigned from a generic Variant-returning builtin",
+        "before calling a scene 'done', launch it via the real standalone executable (godot.exe --path <project>, not just the editor's embedded Play) and check its console/log for SCRIPT ERROR / Parse Error lines, not only a visual screenshot"
+      ]
+    },
+    {
+      "id": "voxel-hero-silhouette-invisible-against-void",
+      "category": "graphics",
+      "severity": "release-blocker",
+      "symptom": "moving the camera around a dark voxel scene doesn't visibly read as the world moving, because the hero terrain/mountain silhouette around the focal object (eye, character, etc.) blends into the near-black background instead of having a readable edge",
+      "rootCause": "a 'dark' material was tuned by albedo/emission numbers alone (e.g. albedo #0b0a09 on a #020201 background) without checking rendered contrast, and roughness=1.0 gave it zero specular response, so no light source - however placed - could ever put a visible highlight on its edges; darkness in a cinematic void scene must still contain readable geometry, not just be technically non-zero brightness",
+      "status": "protected",
+      "protection": [
+        "give hero-adjacent dark materials roughness < 1.0 (e.g. ~0.85) so a grazing rim/key light can actually put a specular highlight on their silhouette edges",
+        "add a dedicated rim/key DirectionalLight3D (or equivalent) angled to graze across hero terrain specifically for silhouette definition, separate from any fill light on the main subject",
+        "verify by screenshot, not by reading material property values - a material can be 'lit' in the editor properties panel and still be visually indistinguishable from the background at render time"
+      ]
+    },
+    {
+      "id": "premature-done-claim-below-reference-gate",
+      "category": "process",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "AI presents a visual result as finished/ready/done while it's still clearly below the user's approved quality bar for that project",
+      "rootCause": "no persistent, checked-every-time threshold table existed - visual completeness was judged by feel in the moment rather than against a fixed, user-set number per category",
+      "protection": [
+        "data/reference-visual-gate.json holds a hard, user-set per-category threshold table per project - see DESKTOP_AI_INSTALL_AND_VERIFY.md's REFERENCE_VISUAL_GATE block",
+        "self-score every category from a fresh screenshot against the reference before using done/ready/final language; if any category is under threshold, report IN PROGRESS with the specific gap instead",
+        "the AI may not lower a threshold or skip the gate itself for any reason, including time or effort constraints - only the user can relax it"
+      ]
+    },
+    {
+      "id": "godot-orbit-rig-position-duplicates-camera-offset",
+      "category": "controls",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "an orbit-style camera rig visibly orbits SOMETHING and looks correct in a single static screenshot, but a real mouse/yaw sweep sends the tracked subject drifting off-frame instead of staying centered",
+      "rootCause": "the rig node's own scene-level `position` was set to the intended back/up camera offset (e.g. (0, 1.4, 13)), duplicating an offset the rig's script ALSO applies internally to its camera child in _ready() - so the actual orbit center ended up 13 units away from the tracked subject instead of at the subject's own origin",
+      "protection": [
+        "the orbit rig's own position must be exactly (0,0,0), at the tracked subject's origin - the back/up offset belongs only on the rig's internally-built camera child, never duplicated on the rig node's own transform",
+        "verify with game_eval: the subject's global_position must be byte-identical before and after a real yaw change, not just 'the view moved' - see templates/godot-voxel-game-starter/orbit_camera_rig.gd for the canonical, verified-correct shape"
+      ]
+    },
+    {
+      "id": "godot-ai-node-create-parent-param-silently-ignored",
+      "category": "tooling",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "a node created via the godot-ai MCP's node_create tool lands as a direct child of the scene root instead of the intended parent, with no error",
+      "rootCause": "the tool's parent parameter is named `parent_path`, not `parent` - passing `parent` is accepted as an unrecognized-but-harmless extra field and silently ignored rather than rejected",
+      "protection": [
+        "always pass `parent_path` (never `parent`) to node_create",
+        "after creating a node with a non-root intended parent, verify its actual path in the tool's own result before proceeding, rather than assuming the requested parent was honored"
+      ]
+    },
+    {
+      "id": "godot-world-parented-under-hero",
+      "category": "controls",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "moving/flying the player-controlled subject drags the surrounding terrain/world geometry along with it instead of leaving it behind",
+      "rootCause": "the world/terrain generator node was added as a CHILD of the hero node (often done for convenience, to get a 'hero embedded in the world' look for free at spawn) - any transform change on the hero then applies to the whole subtree including the world",
+      "protection": [
+        "world/terrain and the hero are always siblings under a common static parent, never parent/child in either direction",
+        "to get an 'embedded at spawn' look, position the hero at the world object's socket coordinates instead of parenting - see godot-voxel-game-baseline.json's worldHeroSeparation rule and mountain_wall.gd / voxel_eye_runtime.gd in dark-void-scene for the fixed pattern",
+        "verify with game_eval: after moving the hero, the world object's global_position must be unchanged"
+      ]
+    },
+    {
+      "id": "godot-hero-built-at-world-voxel-scale",
+      "category": "graphics",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "a hero/character built from voxels reads as a flat sheet or an oversized blob pasted onto the world instead of a distinct, detailed subject",
+      "rootCause": "the hero was built using the same voxel size and roughly the same overall scale as the surrounding world/terrain geometry, so nothing visually distinguishes 'the thing you play as' from 'the environment'",
+      "protection": [
+        "standing rule (data/godot-voxel-game-baseline.json, heroVoxelToWorldVoxelRatio): hero voxels are always exactly 5x smaller than world voxels, both per-cube and in overall subject scale - const HERO_VOX := WORLD_VOX / 5.0",
+        "apply this from the start of every new Godot voxel project, not as a later fix"
+      ]
+    },
+    {
+      "id": "threejs-object3d-subclass-pivot-property-corrupts-matrix",
+      "category": "tooling",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "a three.js Object3D subclass's own local matrix gets NaN in its translation (elements 12-14) after scene.updateMatrixWorld() / renderer.render(), with everything appearing to construct correctly beforehand (position/rotation/quaternion all read as valid, non-NaN numbers) - camera/rig ends up nowhere, or the whole canvas stays blank/background-only",
+      "rootCause": "isolated and reproduced in this repo's vendored three.js build (shared/vendor/three) plus this session's browser-automation test harness: an Object3D subclass instance with an own property literally named `pivot` (assigned a THREE.Object3D, even if never added to the scene tree) reproducibly triggers the corruption; renaming the property alone fixes it with everything else identical. The string is not present anywhere in the vendored three.js source, so the exact mechanism is unconfirmed (likely a harness/JIT-specific interaction, not a documented library bug) - but it is 100% reproducible and trivial to avoid",
+      "protection": [
+        "never name an Object3D subclass's own instance property `pivot` in this codebase - use `pitchGroup` or similar instead, as shared/dark-void-scene-runtime.mjs's OrbitCameraRig does",
+        "if a scene renders blank/background-only despite no console errors, check camera.matrixWorld.elements for NaN (Number.isNaN, not just falsy/JSON-null) as a first diagnostic step, then binary-search which own property on which Object3D ancestor triggers it by renaming"
+      ]
+    },
+    {
+      "id": "collective-brain-secret-leak",
+      "category": "security",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "credentials or tokens are exported into durable AI memory",
+      "rootCause": "memory ingestion lacked secret scanning/redaction and file exclusion",
+      "protection": [
+        "secret scanner before sync",
+        "redaction before payload",
+        "never ingest .env/private keys",
+        "release-gated collective-brain:security",
+        "remote bearer requires HTTPS or loopback"
+      ]
+    },
+    {
+      "id": "collective-brain-prompt-injection-memory",
+      "category": "ai-memory",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "historical/external memory contains instructions that manipulate the active agent",
+      "rootCause": "recalled text was treated as executable instruction instead of untrusted evidence",
+      "protection": [
+        "prompt-injection flagging",
+        "recalled-memory trust boundary banner",
+        "current repository policy always wins"
+      ]
+    },
+    {
+      "id": "agentmemory-silent-fallback",
+      "category": "ai-memory",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "agents believe shared memory is active while daemon is unavailable",
+      "rootCause": "silent backend fallback hides broken shared-memory state",
+      "protection": [
+        "explicit health report",
+        "DEGRADED + persistent outbox",
+        "COLLECTIVE_BRAIN_REQUIRE_AGENTMEMORY hard gate when explicitly required"
+      ]
+    },
+    {
+      "id": "agentmemory-port-conflict",
+      "category": "ai-memory",
+      "severity": "major",
+      "status": "known",
+      "symptom": "agentmemory fails to start or exposes reduced MCP surface",
+      "rootCause": "ports 3111/3112/3113/49134 occupied or iii version conflict",
+      "protection": [
+        "preflight four ports",
+        "agentmemory doctor/status",
+        "do not kill unrelated AI workers",
+        "pinned iii version from active agentmemory runbook"
+      ]
+    },
+    {
+      "id": "collective-brain-memory-duplication",
+      "category": "ai-memory",
+      "severity": "minor",
+      "status": "protected",
+      "symptom": "same server state is stored repeatedly",
+      "rootCause": "non-deterministic checkpoints or no idempotency key",
+      "protection": [
+        "sha256 content hash",
+        "lastSyncedHash",
+        "outbox dedup",
+        "bounded ledger"
+      ]
+    },
+    {
+      "id": "collective-brain-event-corruption",
+      "category": "ai-memory",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "audit/replay history can be silently edited or reordered",
+      "rootCause": "plain mutable log without integrity chain",
+      "protection": [
+        "sha256 hash-chained events",
+        "replay verification",
+        "doctor hard failure on chain corruption"
+      ]
+    },
+    {
+      "id": "collective-brain-stale-lease-deadlock",
+      "category": "coordination",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "crashed AI permanently blocks future work",
+      "rootCause": "coordination lock had no expiry/reclaim path",
+      "protection": [
+        "lease TTL",
+        "atomic exclusive creation",
+        "stale reclaim event",
+        "owner-only release"
+      ]
+    },
+    {
+      "id": "duplicate-orchestrator-stack",
+      "category": "architecture",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "parallel workflow/memory stacks duplicate existing OpenHuman/World_server systems",
+      "rootCause": "adding infrastructure without reuse audit",
+      "protection": [
+        "duplicate-system review first",
+        "OpenHuman remains external",
+        "tinyagents/tinyflows through OpenHuman first",
+        "reuse Supabase/quality systems"
+      ]
+    },
+    {
+      "id": "openhuman-embedding-dimension-mismatch",
+      "category": "ai-memory",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "OpenHuman Memory Tree embedding fails after local AI preset/model change",
+      "rootCause": "384-dimension all-minilm used where current Memory Tree format expects 1024 dimensions",
+      "protection": [
+        "configure bge-m3 for OpenHuman Memory Tree",
+        "verify embedding_model_id",
+        "local AI post-config smoke"
+      ]
+    },
+    {
+      "id": "openhuman-vision-capability-mismatch",
+      "category": "ai-routing",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "vision/chat silently behaves as text-only or image is ignored",
+      "rootCause": "chat-only local model assigned to vision/image workload or registry flag missing",
+      "protection": [
+        "select documented vision-capable model",
+        "set model_registry vision=true where required",
+        "vision smoke with known image"
+      ]
+    },
+    {
+      "id": "openhuman-config-overwrite",
+      "category": "configuration",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "automation destroys unrelated OpenHuman settings",
+      "rootCause": "blind replacement of config.toml",
+      "protection": [
+        "discover exactly one config",
+        "timestamped backup",
+        "surgical section update",
+        "parse/verify after write",
+        "rollback on ambiguity"
+      ]
+    },
+    {
+      "id": "collective-brain-dirty-main-bootstrap",
+      "category": "coordination",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "user-run system bootstrap applies repository patch into a dirty shared main worktree",
+      "rootCause": "V2 full-install mixed machine-level installation with repository mutation",
+      "protection": [
+        "V2.1 system bootstrap never writes World_server",
+        "repository patch only in isolated task worktree",
+        "post-bootstrap verifier accepts explicit task worktree path"
+      ]
+    },
+    {
+      "id": "desktop-ai-system-installer-boundary",
+      "category": "automation",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "Desktop AI stops progress because it refuses to download/install third-party system software",
+      "rootCause": "repo-install and machine-bootstrap responsibilities were coupled",
+      "protection": [
+        "split repo phase from user-run machine bootstrap",
+        "Desktop AI must continue through commit/push/draft-PR",
+        "one-command user bootstrap",
+        "resume with verification after bootstrap"
+      ]
+    },
+    {
+      "id": "release-gate-skipped-as-heavy",
+      "category": "tests",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "agent reports patch ready without full release gate because it is expensive or slow",
+      "rootCause": "targeted tests were incorrectly treated as completion evidence",
+      "protection": [
+        "targeted tests may run first",
+        "full release:gate mandatory before merge/production claim",
+        "record exact failing step instead of skipping"
+      ]
+    },
+    {
+      "id": "github-app-connector-403-repo-not-selected",
+      "category": "integration",
+      "severity": "major",
+      "status": "known",
+      "symptom": "a GitHub App-based connector (e.g. a ChatGPT/Browser AI GitHub connector) gets 403 'You must authenticate with an access token authorized to a GitHub App' or otherwise cannot read/write this repo, even though the App is installed on the account",
+      "rootCause": "most likely the App's installation has its repository access scoped to 'Only select repositories' and this repo (World_server) is not in that list - GitHub Apps default to per-repo opt-in, not account-wide access. This cannot be confirmed or fixed via the REST API with a personal access token/OAuth token, even one with full repo `admin` permission (verified: GET /user/installations and GET /repos/{owner}/{repo}/installation both require the App's own installation/JWT auth and 403 for a PAT-authenticated `gh` CLI regardless of the token's own repo permissions) - App-installation repository selection is only visible/editable in GitHub's own web UI.",
+      "protection": [
+        "one concrete manual action: repo owner opens https://github.com/settings/installations (or the org equivalent), opens the connector's App, and under Repository access adds World_server (or switches to All repositories)",
+        "after that, re-run scripts/github-write-access-probe.js (or have the connector itself perform an equivalent real branch->commit->push->PR->verify->cleanup) to confirm write access actually works, not just that the App shows as installed",
+        "do not assume App installation implies repo access - always verify with a real write, not a read-only check"
+      ]
+    },
+    {
+      "id": "git-worktree-shared-local-branch-refs",
+      "category": "tooling",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "a script running in one git worktree does `git checkout <branch-name>` (e.g. 'master') expecting to return to a known-good state, and ends up on unexpected/stale content instead",
+      "rootCause": "all `git worktree add` worktrees of the same repository share the same local branch refs (not just remote-tracking refs) - a local branch named e.g. 'master' created in one worktree/session at some earlier point is the SAME ref every other worktree sees, and may be far behind origin/master. Checking out a branch by a hardcoded name (rather than the worktree's own actual prior ref, or an explicit origin/<branch> / commit SHA) can silently land a worktree on that stale shared ref.",
+      "protection": [
+        "scripts/github-write-access-probe.js: capture `git symbolic-ref --short -q HEAD` (falling back to the exact commit SHA) at start, restore exactly that on cleanup - never a hardcoded branch name",
+        "prefer an explicit `origin/<branch>` or a captured commit SHA over a bare local branch name whenever a script must return a worktree to a known state"
+      ]
+    },
+    {
+      "id": "windows-spawnsync-timeout-does-not-kill-process-tree",
+      "category": "tooling",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "on Windows, a Node `spawnSync(cmd, args, {timeout, shell:true})` call whose target is itself a shim (a `.cmd` file that launches a real `.exe`, e.g. `opencode.cmd` -> `opencode.exe`, or `npm.cmd` -> node running the target script) appears to hang far past the configured `timeout` - the OS process the shim launched keeps running as an orphan (confirmed live: `opencode.exe` kept running and consuming CPU minutes after a 90s spawnSync timeout, while the calling script sat blocked waiting for stdio to close)",
+      "rootCause": "with shell:true on Windows, the real process tree is cmd.exe -> the .cmd shim -> the actual .exe/node process. spawnSync's own `timeout` option only signals its immediate child (cmd.exe); it does not walk the tree, so the deeper process(es) are never terminated and keep the stdio pipes open, which is what the parent is actually waiting on",
+      "protection": [
+        "lib/agent-adapters.js's runWithTreeKill(): use async `spawn` instead of `spawnSync`, with a manual timer that on expiry calls `taskkill /PID <pid> /T /F` (Windows) or kills the process group (POSIX) - and only resolves once the real 'close' event fires, never assuming a timeout alone means the process is gone",
+        "any new spawnSync(...,{timeout}) call wrapping a .cmd-shimmed tool on Windows should be reviewed against this pattern before being trusted to actually bound wall-clock time",
+        "known, not yet applied here: the pre-existing scripts/collective-brain-remote-bridge.cjs helpers (runNpmScript, runAllowlistedScript, restartNamedWorker, verifyPatchAndMaybeRegisterFix) merged in PR #18/#22 use the same vulnerable spawnSync+timeout+shell:true pattern for `npm run <script>` - not yet migrated to runWithTreeKill in this pass, flagged as a real follow-up rather than silently left undocumented"
+      ]
+    },
+    {
+      "id": "ollama-thinking-models-exceed-typical-timeouts-on-cpu",
+      "category": "tooling",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "a local Ollama model call via /api/generate never returns within a normal (15-30s) request timeout, even though /api/tags (listing models) responds instantly and the model shows as installed",
+      "rootCause": "verified live on this machine: models advertising a 'thinking' capability in `ollama list`/`/api/tags` (qwen3:4b, qwen3-fast:1.7b despite its name) generate a hidden chain-of-thought before their visible answer, which on CPU-only inference reliably exceeds 30s even for a one-word answer. A non-'thinking' model of similar or smaller size (qwen2.5:3b-instruct, no 'thinking' capability) answers the same prompt correctly in ~13s.",
+      "protection": [
+        "lib/agent-adapters.js's default OLLAMA_MODEL is qwen2.5:3b-instruct specifically because it lacks 'thinking' mode, not because it is the largest model available - do not 'upgrade' the default to a thinking-capable model without also raising timeouts substantially and testing real latency first",
+        "before picking any Ollama model for a bounded-timeout use case, check its capabilities array for 'thinking' and measure a real request's latency rather than assuming model size alone predicts response time"
+      ]
+    },
+    {
+      "id": "opencode-free-tier-timeout-on-full-repo-context",
+      "category": "tooling",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "agent_implement (OpenCode CLI + a free hosted model, via lib/agent-adapters.js) reliably times out (classification 'timeout') on a real, full-size worktree of this repo, even for a small, precisely-scoped one-file edit that the exact same mechanism completes correctly in seconds against a tiny throwaway repo",
+      "rootCause": "verified live: a genuine, narrowly-worded one-line edit to apps/ai3d-voxel-city/index.html (add viewport-fit=cover) was given to all 3 configured free models (opencode/mimo-v2.5-free, opencode/nemotron-3.5-lightning-free, opencode/ling-3.0-flash-fin-free) against a real World_server worktree; every one timed out at 280000ms (total ~14 minutes across the 3-model fallback chain), while the same models edited a single-file throwaway repo correctly within seconds to tens of seconds during development. Root cause is presumed to be the agent's own repo-exploration behavior scaling with the number of files/size of the worktree it is pointed at (`--dir`) rather than the edit itself, but this was not fully isolated - only the symptom and its reproducibility are confirmed, not the exact internal reason inside OpenCode's own agent loop.",
+      "protection": [
+        "the fallback/timeout/cleanup mechanism itself worked correctly throughout (each failed attempt was cleanly killed via runWithTreeKill with zero orphaned processes, git state was reset between attempts via `git checkout -- . && git clean -fd`, and the pipeline correctly returned needsEscalation:true with full per-model diagnostics rather than hanging or reporting a false success) - this is a real capability/latency limit of the current free-tier backend on this hardware against a repo this size, not a bug in the bridge",
+        "do not assume raising timeoutMs alone fixes this without new evidence - it was not verified whether a longer budget (e.g. 10+ minutes per model) would succeed or whether the agent is doing unbounded exploration; the more reliable current use of agent_implement is a narrowly-scoped worktree/task, matching the pattern the throwaway-repo tests actually validated",
+        "when a real production use needs full-repo-context edits, scope the task's targetWorktree or instructions to point the agent at a specific subdirectory/file set explicitly rather than the whole tree, and/or budget significantly more wall-clock time and treat needsEscalation as the expected fallback to a human/Claude session, not a failure to fix",
+        "FIXED (next round): lib/scoped-task-compiler.js's compileContext() extracts explicit file mentions + known-issue registry matches + keyword-ranked files, and implementGoal() now attaches only those files via OpenCode's -f flag (progressive expansion: level 1 = ~5 files, level 2 = ~20, level 3 = the old full-repo fallback) with per-level timeouts scaled from the caller's budget, trying all context levels for one model before moving to the next model - real fix, not just documented as a limitation"
+      ]
+    },
+    {
+      "id": "gdscript-64bit-int-does-not-replicate-js-32bit-bitops",
+      "category": "tooling",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "a GDScript port of a JS hash/noise function that uses plain `*`, `^`, `>>` on GDScript's 64-bit `int` produces completely different output from the JS original for the same inputs - in this case, the native Godot client rendered visibly wrong terrain (all-'snow' biome regardless of seed/coordinates) instead of matching the web client's real terrain for the same seed",
+      "rootCause": "JS's Math.imul is a 32-bit signed multiply with wraparound, and `>>>` is an UNSIGNED right shift performed on the 32-bit representation - GDScript's `int` is 64-bit signed with no built-in 32-bit wraparound multiply and no unsigned-shift operator, so `h >> 13` on a value that is negative in its 32-bit interpretation sign-extends across the full 64 bits instead of shifting in zeros, and `a * b` on two 32-bit-range values does not wrap the way Math.imul does. Caught by scripts/compare-worldgen.js (a real, automated JS-vs-Godot comparison at several seeds/coordinates), not by visual inspection alone.",
+      "protection": [
+        "godot/world-client/WorldGen.gd: to_int32(v) (mask to low 32 bits, then reinterpret as signed if >= 0x80000000), imul32(a,b) (multiply then to_int32), ushr32(v,n) (mask to unsigned 32-bit, then normal right-shift) - use these three helpers for ANY further port of a JS bitwise/hash function to GDScript, never plain */^/>>",
+        "scripts/compare-worldgen.js is the regression test - it computes the same sample points via the real apps/voxel-world/client.js formulas (copied verbatim from that file, not reimplemented) and the real Godot binary in --smoke-test mode, and fails loudly on any height/biome mismatch across multiple seeds. Run it after any change to WorldGen.gd or client.js's terrain formulas.",
+        "coverage expanded to 7 seeds x 20 coordinates (140 points, both quadrants, small and large magnitudes, including 0 and a negative seed) after the initial 3 seeds x 5 points suite passed - a narrow suite can pass while missing a real divergence at an untested coordinate/seed combination."
+      ]
+    },
+    {
+      "id": "unmanaged-concurrent-network-heavy-plus-llm-remote-misdiagnosed-as-model-timeout",
+      "category": "tooling",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "agent_implement (real free-tier OpenCode execution) reported classification:'timeout' for all 3 free models on a real, precisely-scoped (5-file) World_server task - the exact task and context that, tested moments later in isolation, succeeded in 10-13 seconds against all 3 models",
+      "rootCause": "a 1.19GB Godot export-templates download was running concurrently (via curl, started to prepare the native pipeline) while the scoped-context E2E test executed. The download saturated local network bandwidth, starving the free-hosted OpenCode models' own remote API calls, which then genuinely failed to respond within their budget. This was NOT a flaw in the Scoped Task Compiler (verified separately - the same scoped context succeeded immediately once the download was not competing) and NOT a weakness of the free-tier models themselves (all 3 succeeded on direct re-test). Two of the three models additionally surfaced as classification:'agent_error' rather than 'timeout' during the contended run and 'timeout' on isolated re-test with a manual raw call succeeding in ~13s - the exact error text of those in-contention agent_errors was not captured (the session moved on to root-causing via reproduction rather than digging into that specific log), so the precise agent_error mechanism under contention remains only partially explained, but the outcome (success once contention was removed) is the same for all 3 models either way.",
+      "protection": [
+        "lib/resource-scheduler.js: NETWORK_HEAVY and LLM_REMOTE are declared as mutually conflicting resource classes; agent_implement now exclusively holds an LLM_REMOTE slot for its whole attempt loop via withResourceSlot(), so it can never run concurrently with another scheduler-aware NETWORK_HEAVY/LLM_REMOTE task in this process tree again",
+        "invokeOpencodeOnce() now samples system memory pressure at the exact moment a timeout fires and classifies it as 'resource_contention' (distinct from plain 'timeout') when pressure is high, rather than always blaming the model - an honest, if partial, diagnostic signal (see lib/resource-scheduler.js's own comment on what systemPressure() does and does not measure - free-memory ratio only, not network throughput, which Node cannot read cross-platform without a new dependency)",
+        "large trusted downloads (e.g. a future re-download of Godot templates) should be classified as NETWORK_HEAVY and run through the same scheduler once a typed command wraps them, so this specific incident cannot recur even indirectly",
+        "before concluding any AI-execution failure is about model capability, first rule out concurrent heavy local resource usage - this incident is the concrete example to check future similar reports against"
+      ]
+    },
+    {
+      "id": "resource-scheduler-lightweight-class-was-accidentally-self-serializing",
+      "category": "tooling",
+      "severity": "major",
+      "status": "protected",
+      "symptom": "two independent LIGHTWEIGHT-classified tasks (the class explicitly defined to never conflict with anything) could not run concurrently in lib/resource-scheduler.js - the second call to tryAcquire() failed even though nothing should have blocked it",
+      "rootCause": "tryAcquire() unconditionally took an exclusive lease named `resource:<class>` for every resource class a task belonged to, including LIGHTWEIGHT - so the lease acquisition itself (not the conflict table) serialized same-class tasks regardless of whether that class was declared self-conflicting. Caught by this module's own regression test, not by production use.",
+      "protection": [
+        "tryAcquire() now only takes an exclusive lease for classes that list themselves in their own CONFLICTS entry (the existing self-conflict declarations for NETWORK_HEAVY/LLM_REMOTE/CPU_HEAVY/BUILD/LLM_LOCAL/MEMORY_HEAVY already implied this - LIGHTWEIGHT's empty conflict list was the one case not being honored)",
+        "test/resource-scheduler.test.js: 'LIGHTWEIGHT tasks never conflict with anything, including each other' is the regression test for this exact bug"
+      ]
+    },
+    {
+      "id": "opencode-process-hangs-after-completing-edit-when-spawned-from-node",
+      "category": "tooling",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "invokeOpencodeOnce() (lib/agent-adapters.js) intermittently classified a task as 'timeout' and rolled back the worktree via `git checkout -- .`, even though the actual edit had already been applied correctly - confirmed by watching the raw --format json event stream with stdio:'inherit': the file was correctly edited (real tool_use/step_finish events, ~2s) but the opencode.exe process never exited and had to be killed by the external timeout ~38 seconds later. This is a DIFFERENT bug from the earlier windows-spawnsync-timeout-does-not-kill-process-tree entry - that one was about the KILL mechanism not reaching the whole process tree; this one is about the process not exiting on its own even when its actual work is done, and the wrapper wrongly discarding real, completed work as if nothing had happened.",
+      "rootCause": "not fully isolated (see below), but conclusively demonstrated: raw shell invocation (`opencode run ...` typed directly, or run via bash -lc from inside this same session) reliably completes AND exits; the identical command spawned as a child of a Node.js process (via child_process.spawn, with shell:true+cmd.exe, or via bash.exe, or with stdio:'inherit' vs piped - all three were tried) can hang after finishing its work. The exact mechanism (console/TTY handle detection inside opencode's own process, an internal keep-alive the CLI doesn't tear down when it detects a non-interactive/piped parent, or something else) was not identified - this is recorded as a confirmed, reproducible SYMPTOM and a real, tested FIX for its consequence, not a full root-cause explanation of opencode's own internal behavior.",
+      "protection": [
+        "invokeOpencodeOnce(): on ETIMEDOUT, check `git diff` in the target worktree BEFORE concluding failure - if a real diff exists, the agent actually finished (classification 'ok', processHangAfterCompletion:true in the result) and verification still runs normally; only an empty diff at timeout is classified as a real failure (process_hang, or resource_contention if system memory pressure is high at that moment)",
+        "this must never regress to 'any timeout means rollback' - a future refactor of invokeOpencodeOnce must preserve the diff-check-before-rollback ordering",
+        "taxonomy used across this bridge for a failed/timed-out AI-execution attempt, so future incidents are classified precisely instead of a single generic 'timeout': 'timeout'/'process_hang' (no work done, no evidence of contention), 'resource_contention' (no work done, high memory pressure sampled at the moment of failure), 'agent_error' (the process exited non-zero with real stderr), 'verification_failed' (real edit, but `npm run check` failed), 'no_changes' (process exited 0 but touched nothing)"
+      ]
+    },
+    {
+      "id": "opencode-free-tier-reliability-degrades-with-sustained-session-usage",
+      "category": "tooling",
+      "severity": "major",
+      "status": "known",
+      "symptom": "a full clean benchmark of 3 real, small, correctly-scoped World_server tasks (this exact mechanism, verified correct multiple times earlier in the same session) scored 0/3 through the automated agent_implement pipeline - every attempt at scoped context levels 1-2 failed fast (~2.5s, classification agent_error) across all 3 free models, and level 3 (full-repo, single attached file) hung until the timeout (classification process_hang) - later re-tests of the SAME single-attached-file invocation that had worked reliably earlier in the session also hung with zero output at all, ruling out the initially-suspected 'multiple -f flags' explanation.",
+      "rootCause": "NOT conclusively identified - recorded honestly as an open question rather than a guessed answer. The most evidence-consistent hypothesis (not proven): this session made several dozen calls to the same free-tier hosted OpenCode models over a few hours, and the observed degradation (inconsistent fast-fail / slow-hang / zero-output-hang, all inconsistent with any single code-level variable tested: -f flag count, stdio mode, shell choice, resource contention alone) resembles session-cumulative rate-limiting or backend overload on the free-tier provider's side rather than a bug in this repo's own code. This was NOT re-tested after a cooldown period to confirm the hypothesis, for lack of remaining session time - a genuine, stated limitation of this investigation, not a swept-under-the-rug conclusion. SUPERSEDED this cycle: a direct, reproducible A/B test (same trivial prompt, same model - real terminal invocation completed cleanly in 13.4s every time, the identical command via Node child_process.spawn hung with zero output every time) proved the real mechanism was NOT rate-limiting or provider load at all - see opencode-cli-hangs-on-node-spawn-due-to-unclosed-stdin below for the confirmed cause and fix. This entry is kept for its historical record and its still-valid protection notes (do not re-litigate the Scoped Task Compiler/injection-safety/hang-recovery mechanisms based on this symptom alone), but its rootCause guess should no longer be treated as the working theory.",
+      "protection": [
+        "do not report agent_implement's free-tier success rate as a fixed/universal number - it varies with how much this session (or others sharing the same free-tier account/IP) has already used the same free models recently; always report the REAL observed rate from the actual run, never the best-case rate from earlier/isolated testing",
+        "before re-diagnosing a new instance of this symptom as a code bug, first check whether it reproduces after a cooldown period with no opencode calls, and whether it reproduces from a fresh/different network path - neither was tried here due to time constraints",
+        "the underlying mechanisms this session DID prove correct and should not be re-litigated by a future occurrence of this symptom: the Scoped Task Compiler's file-selection logic (test/scoped-task-compiler.test.js), the injection-safety of the -f attachment method (test/agent-adapters.test.js), and the hang-recovery fix's diff-before-rollback logic (opencode-process-hangs-after-completing-edit-when-spawned-from-node, above) - none of those were invalidated by this incident, only the current session's ability to get a live opencode response reliably"
+      ]
+    },
+    {
+      "id": "opencode-cli-hangs-on-node-spawn-due-to-unclosed-stdin",
+      "category": "tooling",
+      "severity": "major",
+      "status": "known",
+      "symptom": "opencode run invoked via Node child_process.spawn (as agent_implement/invokeOpencodeOnce does) hung indefinitely with ZERO stdout/stderr output on every attempt, while the exact same command run directly in a real terminal completed cleanly in ~10-15s with correct output every time. This produced a full session of 0/3 real E2E task successes despite every other mechanism (Scoped Task Compiler file selection, injection-safe -f attachment, resource scheduling, hang-after-completion diff recovery) independently verifying as correct.",
+      "rootCause": "Node spawn()'s default stdio configuration ('pipe' for all three streams) leaves the child process's stdin open with nothing ever written to it and no EOF ever sent. OpenCode's CLI (built on a terminal-UI framework) reads an open, silent stdin as 'wait for interactive or piped input' and blocks forever - it never reaches the point of processing the message/attached files at all. A real terminal invocation does not have this open-forever-unfed pipe, which is why direct terminal calls always worked while every Node-spawned call hung. Confirmed via a direct, reproducible A/B test (2 consecutive runs each way) and by isolating the single variable: adding stdio:['ignore','pipe','pipe'] (closing stdin explicitly) to an otherwise-identical spawn call reliably fixed it, while an earlier attempted fix (setting CI/FORCE_COLOR/NO_COLOR/TERM env vars) did not.",
+      "protection": [
+        "lib/agent-adapters.js: both spawn() call sites that launch opencode (runWithTreeKill and runOpencodeResultFirst) now explicitly set stdio:['ignore','pipe','pipe'] - never spawn opencode (or any other TUI-framework-based CLI) from Node with default piped stdin unless something will actually write to and close it",
+        "lib/agent-health-probe.js exists specifically to catch a regression of this class quickly with real evidence (a bounded live probe call) rather than requiring a multi-hour diagnostic session to rediscover it",
+        "validated end-to-end: after this fix, 3 independent real World_server tasks (viewport-fit edits on apps/survival, apps/ai3d-voxel-city, apps/chat) succeeded through the full agent_implement pipeline in two separate confirmation runs (3/3 both times)",
+        "residual, smaller effect observed and left as expected/self-healing behavior, not a bug: an individual model attempt can still occasionally exceed its own (now correctly shorter, history-adaptive) per-level timeout and get killed - the existing multi-model/multi-level fallback loop in implementGoal absorbs this and still reaches 100% success across the 3-task benchmark"
+      ]
+    },
+    {
+      "id": "ollama-local-patch-reliability-lower-than-opencode-on-cpu-only-hardware",
+      "category": "tooling",
+      "severity": "major",
+      "status": "known",
+      "symptom": "lib/ollama-patch-adapter.js (the local, $0, shell-free structured-patch fallback added this cycle) succeeded in an isolated live test (63.4s, correct edit) but failed in 4/4 real attempts routed through the full lib/agent-adapters.js implementGoal fallback chain during a 9-task multi-category benchmark - two different task types (an alt-text edit and a JSON key addition), each tried at 2 context levels, all 4 timed out at the 120s floor with no output at all, while OpenCode succeeded on the same tasks shortly after.",
+      "rootCause": "Not conclusively identified - the chosen model (qwen3:1.7b) is real, live-benchmarked, and does work (see OLLAMA_MODEL_BENCHMARK.json and the passing live E2E test), so this is not a broken adapter. The most evidence-consistent explanation: on this CPU-only dev hardware (Intel i7-3612QM, 4c/8t @2.1GHz), prompt evaluation dominates local inference cost, and task-specific prompt content/structure (e.g. HTML with a nested img tag vs a flat viewport meta tag) appears to meaningfully affect how long the model takes to produce a valid response - not systematically reproduced or isolated further due to session time constraints.",
+      "protection": [
+        "lib/agent-adapters.js: the fallback chain never depends on the local path succeeding - every local failure (including a full 120s timeout) cleanly falls through to the next context level, then to OpenCode, exactly as designed; this incident happened WITHIN that safety net, not around it - the 9-task benchmark still finished at 8/9 real task-level success",
+        "the self-improvement router (agentHistory.rankModelsForTask, combined with the local-first-only-until-real-history fix in implementGoal) already recorded these 4 real failures and correctly stopped preferring local for the affected task type on the very next attempt in the same session (confirmed live: a follow-up markup-fix task went straight to OpenCode)",
+        "do not raise capability-coverage or claim local-first is reliable on this hardware based on the one isolated live-test success alone - report the real combined rate (1 success out of 5 total real local attempts this cycle) honestly, as this entry does",
+        "before increasing OLLAMA_PATCH_MODELS or lowering the 120s/150s timeouts, gather more real per-task-type samples first - 4 attempts is not enough to distinguish 'this task type is genuinely harder for a 1.7B model' from 'this was noise/contention'"
+      ]
+    }
+  ],
+  "confirmationProtocol": {
+    "triggerExamples": [
+      "ошибка исправлена",
+      "теперь работает",
+      "коллизии исправлены",
+      "управление правильное"
+    ],
+    "requiredAction": [
+      "status=protected",
+      "append FIX_CONFIRMED event",
+      "attach regression rule/test",
+      "run quality:sync"
+    ]
+  },
+  "candidates": [
+    {
+      "id": "auto-505f975e75a0",
+      "status": "resolved",
+      "severity": "release-blocker",
+      "sourceReport": "PROJECT_QUALITY_REVIEW.json",
+      "detectedAt": "2026-08-23T03:43:23.807Z",
+      "details": {
+        "severity": "major",
+        "category": "mobile",
+        "file": "apps/ai3d-voxel-city/index.html",
+        "message": "viewport-fit=cover missing"
+      },
+      "resolvedAt": "2026-09-04T11:00:31.848Z",
+      "resolvedNote": "Confirmed fixed on master: apps/ai3d-voxel-city/index.html already contains viewport-fit=cover (merged via PR #29, the autonomous issue picker's own real result from the prior cycle). This registry entry was stale - the source scan (PROJECT_QUALITY_REVIEW.json) had not been re-run since the merge. Marked resolved directly after confirming via grep against the real file content, not re-derived from a fresh scan."
+    }
+  ]
+}

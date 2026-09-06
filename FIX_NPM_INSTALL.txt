@@ -1,0 +1,11 @@
+Если npm install пытается скачать packages.applied-caas-gateway1.internal.api.openai.org:
+1) Удали package-lock.json и node_modules, если они есть.
+2) Установи публичный registry:
+   npm config set registry https://registry.npmjs.org/
+3) Очисти кэш:
+   npm cache clean --force
+4) Выполни:
+   npm install
+   npm start
+
+Причина: старый package-lock.json мог содержать internal registry URL, недоступный на твоём ПК.

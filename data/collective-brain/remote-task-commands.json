@@ -1,0 +1,103 @@
+{
+  "schemaVersion": "1.2.0",
+  "system": "WORLD_SERVER_REMOTE_TASK_BRIDGE",
+  "rule": "Every command maps to exactly one pre-approved local script/action. No command accepts an arbitrary shell string. run_existing_script accepts only a scriptId from allowedScripts below, never a raw path.",
+  "commands": {
+    "run_tests": { "kind": "npm-script", "script": "check", "description": "node scripts/check-js.js && node --test - the project's own full unit/integration suite." },
+    "run_linter": { "kind": "npm-script", "script": "check", "description": "Reuses the same check script (this project's check-js.js is its lint/static-check gate; there is no separate lint script to duplicate)." },
+    "run_benchmark": { "kind": "npm-script", "script": "collective-brain:benchmark", "description": "node scripts/collective-brain-benchmark.js - existing Collective Brain benchmark, not a new one." },
+    "build_web": { "kind": "npm-script", "script": "build", "description": "Existing build:sentry + inject-sentry-runtime + build:posthog + inject-posthog-runtime chain." },
+    "build_native": { "kind": "npm-script", "script": "build:native", "description": "Real headless Godot export pipeline (scripts/godot-native-build.js -> godot/world-client, a Godot 4.7.2 project that shares the exact same World Spec/seed/terrain formulas as the web voxel-world client - see WorldGen.gd and scripts/compare-worldgen.js). Preflight (Godot + export templates installed) -> headless --export-release -> artifact existence/size verification -> real smoke test (runs the exported EXE, parses its output) -> web/native terrain-equivalence check. Every step is real; a failing step is reported exactly, never simulated as PASS. Long-running (Godot export can take 1-2 minutes)." },
+    "inspect_logs": {
+      "kind": "read-allowlisted-file",
+      "description": "Reads the tail of one pre-approved status/report file - never an arbitrary path.",
+      "allowedFiles": [
+        "DESKTOP_AI_PROTOCOL_REPORT.json",
+        "PROJECT_QUALITY_REVIEW.json",
+        "COLLECTIVE_BRAIN_DOCTOR.json",
+        "COLLECTIVE_BRAIN_REPLAY.json",
+        "QUALITY_MASTER_REPORT.json"
+      ]
+    },
+    "run_existing_script": {
+      "kind": "read-allowlisted-script",
+      "description": "Runs one pre-approved script by scriptId - never a raw path from the task.",
+      "allowedScripts": {
+        "golden-standard": "scripts/check-golden-standard.js",
+        "project-quality-review": "scripts/project-quality-reviewer.js",
+        "desktop-ai-protocol": "scripts/check-desktop-ai-protocol.js",
+        "collective-brain-doctor": "scripts/collective-brain-doctor.js",
+        "collective-brain-check": "scripts/collective-brain-check.js"
+      }
+    },
+    "apply_patch": {
+      "kind": "guarded-patch",
+      "description": "Applies a unified diff to an isolated worktree ONLY (never the main tree), after `git apply --check` validates it cleanly. Requires verify_patch afterward before any promotion. Gated by collective-brain policyGate('remote-task:apply_patch') which requires COLLECTIVE_BRAIN_HUMAN_APPROVED=1 (see collective-brain-policy.json's approvalRequiredOperations). Accepts an optional args.fixMetadata ({id, rootCause, solution, protection[], evidence[]}); if the matching verify_patch on the same targetWorktree then succeeds, the fix is auto-registered via collective-brain-register-fix.js.",
+      "maxDiffBytes": 65536,
+      "forbiddenPathPrefixes": [".env", "data/collective-brain", ".git/", "node_modules/"]
+    },
+    "verify_patch": { "kind": "npm-script", "script": "check", "description": "Runs the same test suite as run_tests, scoped to args.targetWorktree if given (the worktree a patch was applied to)." },
+    "run_integration_tests": { "kind": "npm-script", "script": "golden:e2e", "description": "playwright test e2e/golden-release.spec.js - the existing Golden Standard end-to-end/integration suite, not a new one." },
+    "run_release_gate": { "kind": "npm-script", "script": "release:gate", "description": "The existing full ~24-step release gate chain (desktop-ai, tests, golden, quality, tech, contracts, collective-brain, etc). Long-running (several minutes)." },
+    "run_visual_regression": { "kind": "npm-script", "script": "visual:check", "description": "node scripts/visual-regression.js - the existing visual regression gate." },
+    "run_performance_benchmark": { "kind": "npm-script", "script": "perf:lighthouse", "description": "lhci autorun against lighthouserc.cjs - the same Lighthouse config CI's own `lighthouse` job already uses. Distinct from run_benchmark, which is collective-brain's own internal (redaction/routing/event-chain) benchmark." },
+    "read_ci_status": {
+      "kind": "gh-cli-readonly",
+      "op": "ci_status",
+      "description": "Read-only: `gh run list --limit 5` for the current repo, via whatever `gh` auth already exists on the machine running this bridge. Never receives or forwards any credential to the task requester. Returns {configured:false} honestly if `gh` isn't authenticated on this host instead of failing unclearly."
+    },
+    "read_deployment_status": {
+      "kind": "gh-cli-readonly",
+      "op": "deployment_status",
+      "description": "Read-only: current git HEAD/branch plus the last 5 merged PRs (`gh pr list --state merged --limit 5`), via whatever `gh` auth already exists on the machine running this bridge. This is git/PR history, not a live Vercel deployment poll - no Vercel token is introduced by this bridge."
+    },
+    "known_issues_lookup": {
+      "kind": "local-recall",
+      "description": "Keyword-matches args.query against data/error-prevention-registry.json's knownErrors (the same data collective-brain:recall already reads) and returns the best matches with their root cause/solution/protection - read-only, no execution."
+    },
+    "health_status": {
+      "kind": "health-status",
+      "description": "Reports this bridge's own health: whether its watchdog-supervised worker process is alive and recently active (via collective-brain-remote-bridge-watchdog.js --healthcheck), plus the collective-brain audit-event-chain integrity."
+    },
+    "route_goal": {
+      "kind": "route-recommendation",
+      "description": "Wraps the existing lib/collective-brain routeTask() keyword-weighted scorer: given args.goal, returns the ranked recommended agent(s) from data/collective-brain/agent-capabilities.json. Recommendation only - does not itself execute. For an actual free-tier code-editing execution, use agent_implement, which really does dispatch to OpenCode with a free model (verified working); AnythingLLM/OpenHuman still have no safe invocation surface on this host and are not dispatched to."
+    },
+    "create_worktree": {
+      "kind": "create-worktree",
+      "description": "Creates a fresh, isolated git worktree off origin/master under the OS temp directory (self-cleaning, never inside the visible repo tree) with a new ai/agent-invoke/<name>-<timestamp> branch. args: {name}. Returns {worktreePath, branch}. This is the isolation boundary every other agent_* command below requires."
+    },
+    "remove_worktree": {
+      "kind": "remove-worktree",
+      "description": "Removes an isolated worktree created by create_worktree (git worktree remove --force). args: {targetWorktree}. Refuses the main tree (same guard as apply_patch)."
+    },
+    "inspect_worktree_diff": {
+      "kind": "inspect-diff",
+      "description": "Read-only `git diff --stat` + full diff for one isolated worktree. args: {targetWorktree}."
+    },
+    "agent_implement": {
+      "kind": "agent-invoke-implement",
+      "description": "Real free-tier code-editing execution: given args.goal and args.targetWorktree (from create_worktree), runs OpenCode CLI non-interactively against a free hosted model (opencode/mimo-v2.5-free, then 2 other free models as fallback if the first fails/times out/produces no useful change/fails verification), verifies the result with `npm run check` in that worktree, and returns the verified diff. Never touches the main tree. Per-worktree lease prevents two agent_implement/agent_autofix calls editing the same worktree concurrently. Every argument that reaches the underlying process is either a fixed literal, a vetted free-model name, or a generated temp-file path - the goal text itself is never placed on a command line, it is written to a temp file and attached, eliminating shell-injection risk. If every free model fails, returns needsEscalation:true with full diagnostics instead of silently failing or auto-invoking a paid model.",
+      "timeoutMsDefault": 240000
+    },
+    "agent_autofix": {
+      "kind": "agent-invoke-autofix",
+      "description": "Runs `npm run check` in args.targetWorktree; if it already passes, returns immediately with nothing to do. If it fails, builds a goal from the real failure output and calls agent_implement's same free-tier fallback chain to fix the root cause (not just delete/skip the failing test) and re-verify."
+    },
+    "prepare_commit_and_pr": {
+      "kind": "prepare-pr",
+      "description": "Commits args.targetWorktree's changes, pushes the branch, and opens a real PR against master via `gh pr create` (args: {targetWorktree, title, body}). This reaches the public GitHub repo, so it is gated the same way apply_patch is - see collective-brain-policy.json's approvalRequiredOperations (remote-task:prepare_commit_and_pr). Still only opens a PR; merging to master still requires the existing PR -> CI -> gates -> merge-on-green flow, which this command cannot bypass."
+    },
+    "ai_query": {
+      "kind": "ai-query",
+      "description": "Read-only Q&A/analysis against a local Ollama model (qwen3:4b by default) on this host - genuinely local, zero network egress beyond localhost, zero cost. For classification/explanation/lookup tasks, not code editing (no tool-execution harness is built around Ollama here - see agent_implement for real code changes)."
+    },
+    "restart_known_worker": {
+      "kind": "named-allowlist",
+      "description": "Restarts exactly one pre-registered named worker via its own watchdog script's --restart mode.",
+      "allowedWorkers": {
+        "collective-brain-remote-bridge": "scripts/collective-brain-remote-bridge-watchdog.js"
+      }
+    }
+  }
+}

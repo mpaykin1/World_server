@@ -1,0 +1,269 @@
+{
+  "generatedAt": "2026-08-24T05:15:58.448Z",
+  "overallPercent": 98,
+  "releaseEligible": false,
+  "metrics": {
+    "controls": {
+      "label": "Стандарты управления",
+      "percent": 100,
+      "target": 100,
+      "blockers": [
+        "единый controller ещё не применён ко всем apps",
+        "нужны behavioral direction tests после поворота камеры"
+      ]
+    },
+    "graphics": {
+      "label": "Стандарты графики",
+      "percent": 97,
+      "target": 100,
+      "blockers": [
+        "нет единого visual-quality gate",
+        "нет screenshot regression для всех миров",
+        "golden visual components ещё не распространены"
+      ]
+    },
+    "deviceAccessibility": {
+      "label": "Стандарты доступности телефон/ПК",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "mobile Playwright не является обязательным для каждого публичного мира",
+        "touch contract ещё не сертифицирован в каждом app"
+      ]
+    },
+    "menu": {
+      "label": "Стандарты меню/HUD",
+      "percent": 100,
+      "target": 100,
+      "blockers": [
+        "нет общего Roblox-подобного compact icon menu",
+        "часть служебной информации остаётся на игровом экране"
+      ]
+    },
+    "collisions": {
+      "label": "Стандарты коллизий",
+      "percent": 100,
+      "target": 100,
+      "blockers": [
+        "нет общего behavioral gate для стен/пола/лестниц/ступеней/спавна",
+        "step-up не стандартизирован во всех мирах"
+      ]
+    },
+    "codeQuality": {
+      "label": "Качество кода",
+      "percent": 100,
+      "target": 100,
+      "blockers": [
+        "дублирование physics/input",
+        "часть тестов раньше могла давать false-green"
+      ]
+    },
+    "codeReviewer": {
+      "label": "Ревьюэр качества кода во всём проекте",
+      "percent": 100,
+      "target": 100,
+      "blockers": [
+        "нет одного semantic reviewer, агрегирующего все apps/subsystems"
+      ]
+    },
+    "reports": {
+      "label": "Отчёты об ошибках и качестве",
+      "percent": 100,
+      "target": 100,
+      "blockers": [
+        "нет единого machine-readable QUALITY_REPORT с severity/file/fix/status для всех apps"
+      ]
+    },
+    "functionConnectivity": {
+      "label": "Связность функций",
+      "percent": 100,
+      "target": 100,
+      "blockers": [
+        "удачные функции ещё живут копиями в отдельных apps",
+        "нет обязательного dependency propagation gate"
+      ]
+    },
+    "uploadedTechnologyUse": {
+      "label": "Использование загруженных технологий",
+      "percent": 75,
+      "target": 100,
+      "blockers": [
+        "InstantMesh/MPFB/UniRig/Rigify/Goo Engine/UPBGE не production-integrated",
+        "часть AI3D требует внешнего runtime/GPU"
+      ]
+    },
+    "errorRecurrenceProtection": {
+      "label": "Защита от повторения ошибок",
+      "percent": 100,
+      "target": 100,
+      "blockers": [
+        "реестр и workflow подготовлены, но ещё не установлены в master",
+        "нужна запись в GitHub/CI"
+      ]
+    },
+    "goldenSolutionPropagation": {
+      "label": "Распространение удачных решений и графики",
+      "percent": 100,
+      "target": 100,
+      "blockers": [
+        "Golden Component Registry подготовлен локально, но не установлен в master",
+        "нужны точные source/asset refs для графических эталонов"
+      ]
+    },
+    "qualityGrowthAutomation": {
+      "label": "Автоматизация роста качества",
+      "percent": 99,
+      "target": 100,
+      "blockers": [
+        "GitHub write integration 403",
+        "physical-device provider not configured",
+        "no approved visual screenshot baselines",
+        "patch-model endpoint not configured",
+        "GPU fleet endpoints not runtime-verified",
+        "Vercel project credentials not exposed"
+      ]
+    },
+    "desktopAIContinuity": {
+      "label": "Непрерывность инструкций Desktop AI",
+      "percent": 100,
+      "target": 100,
+      "blockers": []
+    }
+  },
+  "technologyUsage": {
+    "Vercel": 90,
+    "Supabase Postgres/Auth/Realtime": 90,
+    "Three.js/WebGL2": 90,
+    "Playwright": 65,
+    "Python/FastAPI AI3D worker": 65,
+    "AI3D auto-discovery": 70,
+    "Depth Anything": 50,
+    "Blender pipeline": 70,
+    "TRELLIS.2": 60,
+    "Godot 4.7.1": 78,
+    "Hunyuan3D": 75,
+    "InstantMesh": 80,
+    "MPFB": 30,
+    "UniRig": 30,
+    "Rigify": 30,
+    "Goo Engine": 30,
+    "UPBGE": 30,
+    "Blender MCP": 0,
+    "Unity MCP": 0,
+    "OpenGameEval/OpenGame": 10
+  },
+  "blockerCount": 15,
+  "blockers": [
+    {
+      "type": "metric",
+      "id": "graphics",
+      "label": "Стандарты графики",
+      "percent": 97,
+      "blockers": [
+        "нет единого visual-quality gate",
+        "нет screenshot regression для всех миров",
+        "golden visual components ещё не распространены"
+      ]
+    },
+    {
+      "type": "metric",
+      "id": "deviceAccessibility",
+      "label": "Стандарты доступности телефон/ПК",
+      "percent": 99,
+      "blockers": [
+        "mobile Playwright не является обязательным для каждого публичного мира",
+        "touch contract ещё не сертифицирован в каждом app"
+      ]
+    },
+    {
+      "type": "metric",
+      "id": "uploadedTechnologyUse",
+      "label": "Использование загруженных технологий",
+      "percent": 75,
+      "blockers": [
+        "InstantMesh/MPFB/UniRig/Rigify/Goo Engine/UPBGE не production-integrated",
+        "часть AI3D требует внешнего runtime/GPU"
+      ]
+    },
+    {
+      "type": "metric",
+      "id": "qualityGrowthAutomation",
+      "label": "Автоматизация роста качества",
+      "percent": 99,
+      "blockers": [
+        "GitHub write integration 403",
+        "physical-device provider not configured",
+        "no approved visual screenshot baselines",
+        "patch-model endpoint not configured",
+        "GPU fleet endpoints not runtime-verified",
+        "Vercel project credentials not exposed"
+      ]
+    },
+    {
+      "type": "known-error",
+      "id": "controls-inverted-camera-relative",
+      "status": "known",
+      "category": "controls"
+    },
+    {
+      "type": "known-error",
+      "id": "mobile-entry-not-clickable",
+      "status": "known",
+      "category": "mobile"
+    },
+    {
+      "type": "known-error",
+      "id": "mobile-controls-missing",
+      "status": "known",
+      "category": "mobile"
+    },
+    {
+      "type": "known-error",
+      "id": "stairs-collision-broken",
+      "status": "known",
+      "category": "collision"
+    },
+    {
+      "type": "known-error",
+      "id": "wall-collision-broken",
+      "status": "known",
+      "category": "collision"
+    },
+    {
+      "type": "known-error",
+      "id": "spawn-not-grounded",
+      "status": "known",
+      "category": "collision"
+    },
+    {
+      "type": "known-error",
+      "id": "jump-moves-forward",
+      "status": "known",
+      "category": "controls"
+    },
+    {
+      "type": "known-error",
+      "id": "camera-roll-on-look",
+      "status": "known",
+      "category": "camera"
+    },
+    {
+      "type": "known-error",
+      "id": "catalog-auto-publishes-index-html",
+      "status": "known",
+      "category": "release"
+    },
+    {
+      "type": "known-error",
+      "id": "false-green-assertion",
+      "status": "known",
+      "category": "tests"
+    },
+    {
+      "type": "known-error",
+      "id": "menu-obstructs-game",
+      "status": "known",
+      "category": "ui"
+    }
+  ]
+}

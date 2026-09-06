@@ -1,0 +1,258 @@
+{
+  "generatedAt": "2026-08-24T05:16:03.898Z",
+  "technologies": {
+    "Vercel": {
+      "declaredPercent": 90,
+      "status": "production",
+      "runnableByRepoEvidence": true,
+      "evidence": [
+        {
+          "path": "vercel.json",
+          "exists": true
+        },
+        {
+          "path": "api/apps.js",
+          "exists": true
+        }
+      ]
+    },
+    "Supabase Postgres/Auth/Realtime": {
+      "declaredPercent": 90,
+      "status": "production",
+      "runnableByRepoEvidence": true,
+      "evidence": [
+        {
+          "path": "package.json",
+          "exists": true
+        }
+      ]
+    },
+    "Three.js/WebGL2": {
+      "declaredPercent": 90,
+      "status": "production",
+      "runnableByRepoEvidence": true,
+      "evidence": [
+        {
+          "path": "apps/voxel-world/index.html",
+          "exists": true
+        }
+      ]
+    },
+    "Playwright": {
+      "declaredPercent": 65,
+      "status": "integrated",
+      "runnableByRepoEvidence": true,
+      "evidence": [
+        {
+          "path": "playwright.config.js",
+          "exists": true
+        },
+        {
+          "path": "e2e/golden-release.spec.js",
+          "exists": true
+        }
+      ]
+    },
+    "Python/FastAPI AI3D worker": {
+      "declaredPercent": 65,
+      "status": "integrated",
+      "runnableByRepoEvidence": true,
+      "evidence": [
+        {
+          "path": "services/ai3d-worker",
+          "exists": true
+        }
+      ]
+    },
+    "AI3D auto-discovery": {
+      "declaredPercent": 70,
+      "status": "integrated",
+      "runnableByRepoEvidence": true,
+      "evidence": [
+        {
+          "path": "scripts/discover-ai3d-engines.js",
+          "exists": true
+        }
+      ]
+    },
+    "Depth Anything": {
+      "declaredPercent": 50,
+      "status": "adapter",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "services/ai3d-worker",
+          "exists": true
+        }
+      ]
+    },
+    "Blender pipeline": {
+      "declaredPercent": 70,
+      "status": "adapter + LOD/mesh optimizer prepared",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "services/ai3d-worker/tools/run_building_blender.py",
+          "exists": true
+        },
+        {
+          "path": "scripts/technology-orchestrator.js",
+          "exists": true
+        }
+      ]
+    },
+    "TRELLIS.2": {
+      "declaredPercent": 60,
+      "status": "real adapter + GPU router + mesh postprocess prepared; runtime not verified",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "services/ai3d-worker/ai3d/plugins/trellis2.py",
+          "exists": true
+        },
+        {
+          "path": "scripts/technology-orchestrator.js",
+          "exists": true
+        },
+        {
+          "path": "services/ai3d-worker/ai3d/plugins/gpu_router.py",
+          "exists": true
+        }
+      ]
+    },
+    "Godot 4.7.1": {
+      "declaredPercent": 78,
+      "status": "bridge + runtime smoke + quality orchestration prepared",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "services/ai3d-worker/ai3d/plugins/godot_voxel.py",
+          "exists": true
+        },
+        {
+          "path": "scripts/godot-runtime-smoke.js",
+          "exists": true
+        }
+      ]
+    },
+    "Hunyuan3D": {
+      "declaredPercent": 75,
+      "status": "remote routing + quality postprocess prepared",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "services/ai3d-worker/ai3d/plugins/gpu_router.py",
+          "exists": true
+        }
+      ]
+    },
+    "InstantMesh": {
+      "declaredPercent": 80,
+      "status": "real adapter + GPU router + mesh postprocess prepared; runtime not verified",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "services/ai3d-worker/ai3d/plugins/instantmesh.py",
+          "exists": true
+        },
+        {
+          "path": "services/ai3d-worker/ai3d/plugins/gpu_router.py",
+          "exists": true
+        }
+      ]
+    },
+    "MPFB": {
+      "declaredPercent": 30,
+      "status": "orchestrator-visible; runtime not verified",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "data/technology-orchestrator.json",
+          "exists": true
+        },
+        {
+          "path": "scripts/technology-orchestrator.js",
+          "exists": true
+        }
+      ]
+    },
+    "UniRig": {
+      "declaredPercent": 30,
+      "status": "orchestrator-visible; runtime not verified",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "data/technology-orchestrator.json",
+          "exists": true
+        },
+        {
+          "path": "scripts/technology-orchestrator.js",
+          "exists": true
+        }
+      ]
+    },
+    "Rigify": {
+      "declaredPercent": 30,
+      "status": "orchestrator-visible; runtime not verified",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "data/technology-orchestrator.json",
+          "exists": true
+        },
+        {
+          "path": "scripts/technology-orchestrator.js",
+          "exists": true
+        }
+      ]
+    },
+    "Goo Engine": {
+      "declaredPercent": 30,
+      "status": "orchestrator-visible; runtime not verified",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "data/technology-orchestrator.json",
+          "exists": true
+        },
+        {
+          "path": "scripts/technology-orchestrator.js",
+          "exists": true
+        }
+      ]
+    },
+    "UPBGE": {
+      "declaredPercent": 30,
+      "status": "orchestrator-visible; runtime not verified",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "data/technology-orchestrator.json",
+          "exists": true
+        },
+        {
+          "path": "scripts/technology-orchestrator.js",
+          "exists": true
+        }
+      ]
+    },
+    "Blender MCP": {
+      "declaredPercent": 0,
+      "status": "not-server-runtime",
+      "runnableByRepoEvidence": false,
+      "evidence": []
+    },
+    "Unity MCP": {
+      "declaredPercent": 0,
+      "status": "not-server-runtime",
+      "runnableByRepoEvidence": false,
+      "evidence": []
+    },
+    "OpenGameEval/OpenGame": {
+      "declaredPercent": 10,
+      "status": "concept-partial",
+      "runnableByRepoEvidence": false,
+      "evidence": []
+    }
+  }
+}

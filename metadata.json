@@ -1,0 +1,8 @@
+{
+  "name": "World Server",
+  "description": "WebGL World Hub with Voxel World, 3D catalog, procedural generation, and Supabase integration.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,68 @@
+.env
+.env.*
+!.env.example
+.vercel
+.playwright-cli/
+supabase/.temp/
+node_modules
+npm-debug.log*
+
+# AI3D runtime / secrets / model cache / python cache
+services/ai3d-worker/.env
+services/ai3d-worker/runtime/
+services/ai3d-worker/.venv/
+__pycache__/
+*.pyc
+services/ai3d-worker/__pycache__/
+services/ai3d-worker/**/__pycache__/
+
+
+runtime/
+test-results/
+playwright-report/
+.golden-backup/
+WORLD_SERVER_GOLDEN_STANDARD*.zip
+GOLDEN_STANDARD_WORLD_SERVER_V10/
+
+# secrets index — never commit
+WORLD_SERVER_SECRETS/
+
+# local toolchain cache / disaster-recovery snapshots / backups — large, regenerable, not source
+.cache/
+.world-server-state/
+.blocker-repair-backups/
+*.tmp-*
+
+# stray nested worktree copies living inside the main tree — real worktrees live as siblings
+World_server_claude/
+World_server_quality_autopilot_v7_test/
+
+# scratch verification dumps
+_V11_3_TMP/
+_V13_TMP/
+_WORLD_V41_TMP_VERIFY/
+tools/game-motion/.venv/
+tools/game-motion/vendor/
+tools/game-motion/node/node_modules/
+
+# Ink Glyph World local tool cache
+.ink-glyph-tools/
+
+# OPENHUMAN_COLLECTIVE_BRAIN_PATCH_V2 runtime
+data/collective-brain/runtime/
+COLLECTIVE_BRAIN_CONTEXT.md
+COLLECTIVE_BRAIN_REPORT.json
+COLLECTIVE_BRAIN_CHECK.json
+COLLECTIVE_BRAIN_SECURITY.json
+COLLECTIVE_BRAIN_DOCTOR.json
+COLLECTIVE_BRAIN_ROUTE.json
+COLLECTIVE_BRAIN_REPLAY.json
+COLLECTIVE_BRAIN_BENCHMARK.json
+.patch-backups/
+
+# Godot editor cache / import artifacts - regenerated on first open/import,
+# never source. GODOT_BUILD/ is the real headless-export output directory
+# (scripts/godot-native-build.js), also generated, never source.
+godot/**/.godot/
+GODOT_BUILD/
+GODOT_NATIVE_BUILD_REPORT.json

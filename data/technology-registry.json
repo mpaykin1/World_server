@@ -1,0 +1,250 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "TECHNOLOGY_USAGE_REGISTRY",
+  "rule": "Never call an adapter/discovered tool production-integrated without executable evidence.",
+  "technologies": {
+    "Vercel": {
+      "percent": 90,
+      "status": "production",
+      "evidence": [
+        "vercel.json",
+        "api/apps.js"
+      ]
+    },
+    "Supabase Postgres/Auth/Realtime": {
+      "percent": 90,
+      "status": "production",
+      "evidence": [
+        "package.json"
+      ]
+    },
+    "Three.js/WebGL2": {
+      "percent": 90,
+      "status": "production",
+      "evidence": [
+        "apps/voxel-world/index.html"
+      ]
+    },
+    "Playwright": {
+      "percent": 65,
+      "status": "integrated",
+      "evidence": [
+        "playwright.config.js",
+        "e2e/golden-release.spec.js"
+      ]
+    },
+    "Python/FastAPI AI3D worker": {
+      "percent": 65,
+      "status": "integrated",
+      "evidence": [
+        "services/ai3d-worker"
+      ]
+    },
+    "AI3D auto-discovery": {
+      "percent": 70,
+      "status": "integrated",
+      "evidence": [
+        "scripts/discover-ai3d-engines.js"
+      ]
+    },
+    "Depth Anything": {
+      "percent": 50,
+      "status": "adapter",
+      "evidence": [
+        "services/ai3d-worker"
+      ]
+    },
+    "Blender pipeline": {
+      "percent": 70,
+      "status": "adapter + LOD/mesh optimizer prepared",
+      "evidence": [
+        "services/ai3d-worker/tools/run_building_blender.py",
+        "scripts/technology-orchestrator.js"
+      ]
+    },
+    "TRELLIS.2": {
+      "percent": 60,
+      "status": "real adapter + GPU router + mesh postprocess prepared; runtime not verified",
+      "evidence": [
+        "services/ai3d-worker/ai3d/plugins/trellis2.py",
+        "scripts/technology-orchestrator.js",
+        "services/ai3d-worker/ai3d/plugins/gpu_router.py"
+      ]
+    },
+    "Godot 4.7.1": {
+      "percent": 78,
+      "status": "bridge + runtime smoke + quality orchestration prepared",
+      "evidence": [
+        "services/ai3d-worker/ai3d/plugins/godot_voxel.py",
+        "scripts/godot-runtime-smoke.js"
+      ],
+      "externalEvidence": "PR #6"
+    },
+    "Hunyuan3D": {
+      "percent": 75,
+      "status": "remote routing + quality postprocess prepared",
+      "externalEvidence": "PR #6",
+      "evidence": [
+        "services/ai3d-worker/ai3d/plugins/gpu_router.py"
+      ]
+    },
+    "InstantMesh": {
+      "percent": 80,
+      "status": "real adapter + GPU router + mesh postprocess prepared; runtime not verified",
+      "evidence": [
+        "services/ai3d-worker/ai3d/plugins/instantmesh.py",
+        "services/ai3d-worker/ai3d/plugins/gpu_router.py"
+      ],
+      "note": "V8 invokes official run.py when CUDA/source are available; placeholder-success path is forbidden."
+    },
+    "MPFB": {
+      "percent": 30,
+      "status": "orchestrator-visible; runtime not verified",
+      "evidence": [
+        "data/technology-orchestrator.json",
+        "scripts/technology-orchestrator.js"
+      ]
+    },
+    "UniRig": {
+      "percent": 30,
+      "status": "orchestrator-visible; runtime not verified",
+      "evidence": [
+        "data/technology-orchestrator.json",
+        "scripts/technology-orchestrator.js"
+      ]
+    },
+    "Rigify": {
+      "percent": 30,
+      "status": "orchestrator-visible; runtime not verified",
+      "evidence": [
+        "data/technology-orchestrator.json",
+        "scripts/technology-orchestrator.js"
+      ]
+    },
+    "Goo Engine": {
+      "percent": 30,
+      "status": "orchestrator-visible; runtime not verified",
+      "evidence": [
+        "data/technology-orchestrator.json",
+        "scripts/technology-orchestrator.js"
+      ]
+    },
+    "UPBGE": {
+      "percent": 30,
+      "status": "orchestrator-visible; runtime not verified",
+      "evidence": [
+        "data/technology-orchestrator.json",
+        "scripts/technology-orchestrator.js"
+      ]
+    },
+    "Blender MCP": {
+      "percent": 0,
+      "status": "not-server-runtime"
+    },
+    "Unity MCP": {
+      "percent": 0,
+      "status": "not-server-runtime"
+    },
+    "OpenGameEval/OpenGame": {
+      "percent": 10,
+      "status": "concept-partial"
+    },
+    "World Server Collective Brain V2": {
+      "percent": 98,
+      "status": "repository integration + tests + audit journal + router + lease/security policy prepared; real desktop external-runtime verification remains",
+      "evidence": [
+        "lib/collective-brain/index.js",
+        "test/collective-brain.test.js",
+        "data/collective-brain/collective-brain-policy.json",
+        "scripts/collective-brain-full.js"
+      ]
+    },
+    "OpenHuman external orchestrator": {
+      "percent": 88,
+      "status": "external optional orchestrator install/config/verification automation prepared; real desktop runtime evidence required",
+      "evidence": [
+        "lib/collective-brain/index.js",
+        "data/collective-brain/technology-plan.json"
+      ],
+      "note": "GPL-3.0 upstream; keep as external process and use tinyagents/tinyflows through its packaged path first."
+    },
+    "agentmemory shared agent memory": {
+      "percent": 95,
+      "status": "REST/MCP shared-memory bridge + durable outbox + dedup + hash-chain + restart verification tooling prepared",
+      "evidence": [
+        "lib/collective-brain/index.js",
+        "test/collective-brain.test.js"
+      ],
+      "note": "Apache-2.0 upstream; real daemon and agent wiring still require desktop evidence."
+    },
+    "iii engine for agentmemory": {
+      "percent": 90,
+      "status": "pinned native-Windows install/start/verify automation prepared",
+      "evidence": [
+        "data/collective-brain/technology-plan.json"
+      ],
+      "note": "Use the version required by the installed agentmemory runbook; current checked upstream requires v0.11.2 for native Windows."
+    },
+    "tinyagents/tinyflows via OpenHuman": {
+      "percent": 75,
+      "status": "integration path and verification policy prepared through OpenHuman; direct vendoring intentionally avoided",
+      "evidence": [
+        "data/collective-brain/technology-plan.json"
+      ]
+    },
+    "Ollama local inference adapter": {
+      "percent": 82,
+      "status": "optional install/config/health/model-selection automation prepared; runtime model pull/benchmark remains",
+      "evidence": [
+        "data/collective-brain/collective-brain-policy.json",
+        "data/collective-brain/technology-plan.json"
+      ],
+      "note": "Use through OpenHuman local_ai; prefer bge-m3 for 1024-dim Memory Tree embeddings."
+    },
+    "Collective Brain memory security firewall": {
+      "percent": 100,
+      "status": "secret scan/redaction + untrusted recall boundary + release gate installed",
+      "evidence": [
+        "lib/collective-brain/index.js",
+        "test/collective-brain.test.js"
+      ]
+    },
+    "Collective Brain coordination leases/audit replay": {
+      "percent": 100,
+      "status": "atomic stale-reclaiming leases + hash-chained runtime event journal installed",
+      "evidence": [
+        "lib/collective-brain/index.js",
+        "test/collective-brain.test.js"
+      ]
+    },
+    "OPA policy adapter": {
+      "percent": 65,
+      "status": "Rego policy + optional parity smoke installed; native JSON policy remains fallback when OPA binary is absent",
+      "evidence": [
+        "policy/collective-brain.rego",
+        "scripts/collective-brain-opa-check.js",
+        "data/collective-brain/technology-plan.json"
+      ]
+    },
+    "Gitleaks/Trivy security adapters": {
+      "percent": 45,
+      "status": "optional installer/runbook prepared; native memory scanner already active",
+      "evidence": [
+        "data/collective-brain/technology-plan.json"
+      ]
+    },
+    "World Server Collective Brain V2.1": {
+      "percent": 99,
+      "status": "repository integration + tests + audit journal + router + lease/security policy + safe system-bootstrap handoff prepared; real desktop external-runtime verification remains",
+      "evidence": [
+        "lib/collective-brain/index.js",
+        "test/collective-brain.test.js",
+        "data/collective-brain/collective-brain-policy.json",
+        "scripts/collective-brain-full.js"
+      ]
+    }
+  },
+  "governanceCoveragePercent": 100,
+  "runtimeIntegrationCoveragePercent": 75,
+  "note": "V9 adds remote GPU routing and generic orchestration. Tools without a successful executable smoke remain below production-integrated status."
+}

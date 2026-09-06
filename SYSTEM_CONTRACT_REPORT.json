@@ -1,0 +1,45 @@
+{
+  "generatedAt": "2026-08-24T05:16:06.157Z",
+  "blockers": 0,
+  "adoption": {
+    "input": {
+      "canonical": [
+        "shared/ai3d-playable-runtime.js",
+        "shared/golden-physics.js"
+      ],
+      "apps": {
+        "voxel-world": true,
+        "ai3d-voxel-city": true,
+        "catalog": true
+      }
+    },
+    "ui": {
+      "canonical": [
+        "shared/golden-ui-shell.js",
+        "shared/golden-ui-shell.css"
+      ],
+      "apps": {
+        "voxel-world": true,
+        "ai3d-voxel-city": true,
+        "catalog": true
+      }
+    },
+    "collision": {
+      "canonical": [
+        "shared/golden-physics.js"
+      ],
+      "apps": {
+        "voxel-world": true,
+        "ai3d-voxel-city": true
+      }
+    },
+    "release": {
+      "canonical": [
+        "data/app-release-registry.json",
+        "scripts/quality-regression-gate.js"
+      ],
+      "apps": {}
+    }
+  },
+  "findings": []
+}

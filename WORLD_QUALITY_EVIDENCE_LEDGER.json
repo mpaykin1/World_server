@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "4.0.0",
+  "system": "WORLD_QUALITY_EVIDENCE_LEDGER",
+  "generatedAt": "2026-08-24T05:16:12.135Z",
+  "entries": [
+    {
+      "file": "WORLD_QUALITY_AUTOPILOT_REPORT.json",
+      "bytes": 6050,
+      "sha256": "2a6afd332dc77ef6abf3d28971e30e00059f57448ed64ec38b8a9d7e926c1e5d"
+    },
+    {
+      "file": "WORLD_QUALITY_AUTOPILOT_PLAN.json",
+      "bytes": 1627,
+      "sha256": "c20cdde5fba73b5bf161074672a73e3000f4977be5ea20f4a7ca86ac72325324"
+    },
+    {
+      "file": "WORLD_ANIMATION_SEMANTIC_REPORT.json",
+      "bytes": 565,
+      "sha256": "8a2803fc9dff8dd9520c9a04983cb4a0b1be6d3cbc691e6f664ba9fa1310b87c"
+    },
+    {
+      "file": "WORLD_RUNTIME_QUALITY_REPORT.json",
+      "bytes": 599,
+      "sha256": "eb3e50b3cc9131aa701974363ecf9a803f8e7f994b915dabc6d7def8df96f0e4"
+    },
+    {
+      "file": "WORLD_VISUAL_BASELINE_CANDIDATES.json",
+      "bytes": 2379,
+      "sha256": "ed3cfc077449e8ef12dfda8f1161193d3c66ac4915bc17451147df02f37bc0e9"
+    },
+    {
+      "file": "WORLD_SEMANTIC_DETAIL_REPORT.json",
+      "bytes": 396,
+      "sha256": "a5cd2b8dabfa08d5fc377a30170cbaf9460d4c6a4a33a812889d16807b5995e0"
+    },
+    {
+      "file": "WORLD_DEVICE_PROFILE_MATRIX.json",
+      "bytes": 1040,
+      "sha256": "4b997c3d490d3f0205d6dcffc0e1609593210ad05778ca534d65c12f49d5662d"
+    },
+    {
+      "file": "WORLD_MATERIAL_SYNTHESIS_REPORT.json",
+      "bytes": 5503,
+      "sha256": "9f2a24c73fcf2f5c545a744b0d32b9a4026c0bee59e47de77260dfdebfda1921"
+    },
+    {
+      "file": "WORLD_VISIBILITY_OPTIMIZER_REPORT.json",
+      "bytes": 981,
+      "sha256": "4983e92e90738601fba55082c1661dcdaef169c521bf66ffe650b9483dfd82a1"
+    },
+    {
+      "file": "WORLD_RETARGET_CONTRACT_REPORT.json",
+      "bytes": 1055,
+      "sha256": "46578cdda3c4bcbdf73284803071885d586aea60517ca52507a9bec2b38c8fde"
+    },
+    {
+      "file": "WORLD_QUALITY_SCHEDULER_REPORT.json",
+      "bytes": 1306,
+      "sha256": "e41c55b889d26fe4104a9974318a5a7c336ec1b6a266264383781673192ccfe1"
+    },
+    {
+      "file": "WORLD_FEEDBACK_LEARNER_REPORT.json",
+      "bytes": 525,
+      "sha256": "25afd37d374ef5bb21bfb9e61af863261404b15e73668926699804934886f16f"
+    },
+    {
+      "file": "WORLD_CANDIDATE_LAB_REPORT.json",
+      "bytes": 2975,
+      "sha256": "8d185e32b23f87e7662cd716f2a4c721bebaf5d6d8510ad29743732d1aa49697"
+    }
+  ],
+  "ledgerSha256": "83a63dc74282b76425e1191aa366cd642555f5f333d6de6cc3628847b4729987",
+  "tamperEvident": true
+}

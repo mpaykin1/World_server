@@ -1,0 +1,36 @@
+name: Sentry Production Verify
+
+on:
+  workflow_dispatch:
+    inputs:
+      prod_url:
+        description: 'Production URL to verify (default https://world-server.vercel.app)'
+        required: false
+        default: 'https://world-server.vercel.app'
+  deployment_status:
+  schedule:
+    - cron: '23 */6 * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    if: ${{ github.event_name != 'deployment_status' || github.event.deployment_status.state == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --ignore-scripts || npm install
+      - run: npx playwright install --with-deps chromium
+      - name: Sentry production runtime verify (fetch + browser ingest)
+        env:
+          SENTRY_PROD_URL: ${{ inputs.prod_url || 'https://world-server.vercel.app' }}
+        run: node scripts/verify-sentry-production.js
+      - name: Post-deploy smoke (includes Sentry static)
+        env:
+          QUALITY_BASE_URL: ${{ inputs.prod_url || 'https://world-server.vercel.app' }}
+        run: node scripts/post-deploy-smoke.js

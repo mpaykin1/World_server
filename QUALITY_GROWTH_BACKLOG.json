@@ -1,0 +1,167 @@
+{
+  "generatedAt": "2026-08-23T03:43:24.199Z",
+  "backlogCount": 7,
+  "top10": [
+    {
+      "type": "quality-control-gap",
+      "metric": "goldenSolutionPropagation",
+      "controlId": "adoption-lock",
+      "impactPoints": 15,
+      "effort": 2,
+      "confidence": 0.95,
+      "reuse": 1.5,
+      "priority": 10.69,
+      "recommendedAction": "Add required canonical file data/golden-adoptions.json"
+    },
+    {
+      "type": "technology-growth",
+      "technology": "OpenGameEval/OpenGame",
+      "impactPoints": 90,
+      "effort": 9,
+      "confidence": 0.55,
+      "reuse": 1.1,
+      "priority": 6.05,
+      "recommendedAction": "Move OpenGameEval/OpenGame from concept-partial to verified runnable integration with health check + smoke test"
+    },
+    {
+      "type": "technology-growth",
+      "technology": "Depth Anything",
+      "impactPoints": 50,
+      "effort": 7,
+      "confidence": 0.55,
+      "reuse": 1.1,
+      "priority": 4.32,
+      "recommendedAction": "Move Depth Anything from adapter to verified runnable integration with health check + smoke test"
+    },
+    {
+      "type": "quality-control-gap",
+      "metric": "qualityGrowthAutomation",
+      "controlId": "rollback",
+      "impactPoints": 10,
+      "effort": 3,
+      "confidence": 0.95,
+      "reuse": 1,
+      "priority": 3.17,
+      "recommendedAction": "Implement canonical source behavior containing vercel rollback"
+    },
+    {
+      "type": "quality-control-gap",
+      "metric": "uploadedTechnologyUse",
+      "controlId": "production-adapters",
+      "impactPoints": 45,
+      "effort": 8,
+      "confidence": 0.55,
+      "reuse": 1,
+      "priority": 3.09,
+      "recommendedAction": "Obtain verified external/runtime evidence for production-adapters"
+    },
+    {
+      "type": "golden-promotion-gap",
+      "component": "stained-glass",
+      "impactPoints": 10,
+      "effort": 4,
+      "confidence": 0.7,
+      "reuse": 1.6,
+      "priority": 2.8,
+      "recommendedAction": "Obtain exact approved source/asset for stained-glass, freeze it, then propagate to all compatible apps"
+    },
+    {
+      "type": "quality-control-gap",
+      "metric": "graphics",
+      "controlId": "approved-screenshot-baselines",
+      "impactPoints": 15,
+      "effort": 8,
+      "confidence": 0.55,
+      "reuse": 1,
+      "priority": 1.03,
+      "recommendedAction": "Obtain verified external/runtime evidence for approved-screenshot-baselines"
+    }
+  ],
+  "backlog": [
+    {
+      "type": "quality-control-gap",
+      "metric": "goldenSolutionPropagation",
+      "controlId": "adoption-lock",
+      "impactPoints": 15,
+      "effort": 2,
+      "confidence": 0.95,
+      "reuse": 1.5,
+      "priority": 10.69,
+      "recommendedAction": "Add required canonical file data/golden-adoptions.json"
+    },
+    {
+      "type": "technology-growth",
+      "technology": "OpenGameEval/OpenGame",
+      "impactPoints": 90,
+      "effort": 9,
+      "confidence": 0.55,
+      "reuse": 1.1,
+      "priority": 6.05,
+      "recommendedAction": "Move OpenGameEval/OpenGame from concept-partial to verified runnable integration with health check + smoke test"
+    },
+    {
+      "type": "technology-growth",
+      "technology": "Depth Anything",
+      "impactPoints": 50,
+      "effort": 7,
+      "confidence": 0.55,
+      "reuse": 1.1,
+      "priority": 4.32,
+      "recommendedAction": "Move Depth Anything from adapter to verified runnable integration with health check + smoke test"
+    },
+    {
+      "type": "quality-control-gap",
+      "metric": "qualityGrowthAutomation",
+      "controlId": "rollback",
+      "impactPoints": 10,
+      "effort": 3,
+      "confidence": 0.95,
+      "reuse": 1,
+      "priority": 3.17,
+      "recommendedAction": "Implement canonical source behavior containing vercel rollback"
+    },
+    {
+      "type": "quality-control-gap",
+      "metric": "uploadedTechnologyUse",
+      "controlId": "production-adapters",
+      "impactPoints": 45,
+      "effort": 8,
+      "confidence": 0.55,
+      "reuse": 1,
+      "priority": 3.09,
+      "recommendedAction": "Obtain verified external/runtime evidence for production-adapters"
+    },
+    {
+      "type": "golden-promotion-gap",
+      "component": "stained-glass",
+      "impactPoints": 10,
+      "effort": 4,
+      "confidence": 0.7,
+      "reuse": 1.6,
+      "priority": 2.8,
+      "recommendedAction": "Obtain exact approved source/asset for stained-glass, freeze it, then propagate to all compatible apps"
+    },
+    {
+      "type": "quality-control-gap",
+      "metric": "graphics",
+      "controlId": "approved-screenshot-baselines",
+      "impactPoints": 15,
+      "effort": 8,
+      "confidence": 0.55,
+      "reuse": 1,
+      "priority": 1.03,
+      "recommendedAction": "Obtain verified external/runtime evidence for approved-screenshot-baselines"
+    }
+  ],
+  "nextBestAction": {
+    "type": "quality-control-gap",
+    "metric": "goldenSolutionPropagation",
+    "controlId": "adoption-lock",
+    "impactPoints": 15,
+    "effort": 2,
+    "confidence": 0.95,
+    "reuse": 1.5,
+    "priority": 10.69,
+    "recommendedAction": "Add required canonical file data/golden-adoptions.json"
+  }
+}

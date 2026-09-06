@@ -1,0 +1,117 @@
+{
+  "generatedAt": "2026-08-24T05:16:02.048Z",
+  "changed": [
+    ".github/workflows/ci.yml",
+    ".github/workflows/quality-regression.yml",
+    ".github/workflows/world-quality-autopilot.yml",
+    "AI_VISUAL_CRITIC_REPORT.json",
+    "DESKTOP_AI_PROTOCOL_REPORT.json",
+    "DUPLICATE_SYSTEM_REPORT.json",
+    "EVIDENCE_QUALITY_REPORT.json",
+    "PROJECT_QUALITY_REVIEW.json",
+    "QUALITY_CHANGE_IMPACT.json",
+    "QUALITY_COST_DECISION.json",
+    "QUALITY_IMPACT_GRAPH.json",
+    "QUALITY_ISSUE_CANDIDATES.json",
+    "QUALITY_REGRESSION_REPORT.json",
+    "QUALITY_REPORT.json",
+    "QUALITY_RISK_PREDICTION.json",
+    "QUALITY_ROOT_CAUSE_GRAPH.json",
+    "SYSTEM_CONTRACT_REPORT.json",
+    "TECHNOLOGY_AUDIT.json",
+    "TECHNOLOGY_ORCHESTRATOR_REPORT.json",
+    "TECHNOLOGY_RUNTIME_HEALTH.json",
+    "TEST_GAP_MANIFEST.json",
+    "VISUAL_PERCEPTUAL_REPORT.json",
+    "WORK_IN_PROGRESS.md",
+    "WORLD_ANIMATION_SEMANTIC_REPORT.json",
+    "WORLD_CANDIDATE_LAB_REPORT.json",
+    "WORLD_DEVICE_PROFILE_MATRIX.json",
+    "WORLD_FEEDBACK_LEARNER_REPORT.json",
+    "WORLD_MATERIAL_SYNTHESIS_REPORT.json",
+    "WORLD_QUALITY_AUTOPILOT_PLAN.json",
+    "WORLD_QUALITY_AUTOPILOT_REPORT.json",
+    "WORLD_QUALITY_AUTOPILOT_STATUS.json",
+    "WORLD_QUALITY_EVIDENCE_LEDGER.json",
+    "WORLD_QUALITY_SCHEDULER_REPORT.json",
+    "WORLD_RETARGET_CONTRACT_REPORT.json",
+    "WORLD_RUNTIME_QUALITY_REPORT.json",
+    "WORLD_SEMANTIC_DETAIL_REPORT.json",
+    "WORLD_VISIBILITY_OPTIMIZER_REPORT.json",
+    "WORLD_VISUAL_BASELINE_CANDIDATES.json",
+    "api/ai3d-voxel-generate.js",
+    "apps/ai3d-voxel-city/client.js",
+    "apps/ai3d-voxel-city/index.html",
+    "apps/voxel-world/client.js",
+    "apps/voxel-world/index.html",
+    "data/visual-baselines.json",
+    "data/world-animation-runtime-evidence.json",
+    "data/world-quality-autopilot.json",
+    "docs/DESKTOP_AI_WORLD_QUALITY_AUTOPILOT_V4.md",
+    "docs/WORLD_QUALITY_AUTOPILOT.md",
+    "docs/wip-history/WORLD_SERVER_PRE_WORLD_QUALITY_AUTOPILOT_V4.md",
+    "lib/world-quality-material-profiler.js",
+    "lib/world-quality-pbr-synthesizer.js",
+    "lib/world-quality-semantic-detail.js",
+    "lib/world-quality-voxel-enhancer.js",
+    "package.json",
+    "scripts/world-animation-semantic-validator.js",
+    "scripts/world-candidate-lab.js",
+    "scripts/world-detail-planner.js",
+    "scripts/world-device-profile-matrix.js",
+    "scripts/world-feedback-learner.js",
+    "scripts/world-material-synthesis.js",
+    "scripts/world-quality-analyzer.js",
+    "scripts/world-quality-autopilot.js",
+    "scripts/world-quality-evidence-ledger.js",
+    "scripts/world-quality-scheduler.js",
+    "scripts/world-retarget-contract.js",
+    "scripts/world-runtime-quality-profiler.js",
+    "scripts/world-semantic-detail-indexer.js",
+    "scripts/world-visibility-optimizer.js",
+    "scripts/world-visual-baseline-candidates.js",
+    "scripts/world-visual-baseline-promote.js",
+    "services/ai3d-worker/ai3d/plugins/world_quality.py",
+    "services/ai3d-worker/ai3d/runner.py",
+    "shared/world-quality-autopilot.js",
+    "test/world-quality-autopilot.test.js"
+  ],
+  "affectedApps": [
+    "ai3d-voxel-city",
+    "voxel-world"
+  ],
+  "why": [
+    {
+      "from": "apps/ai3d-voxel-city/client.js",
+      "to": "app:ai3d-voxel-city"
+    },
+    {
+      "from": "apps/ai3d-voxel-city/index.html",
+      "to": "app:ai3d-voxel-city"
+    },
+    {
+      "from": "apps/voxel-world/client.js",
+      "to": "app:voxel-world"
+    },
+    {
+      "from": "apps/voxel-world/index.html",
+      "to": "app:voxel-world"
+    },
+    {
+      "from": "shared/world-quality-autopilot.js",
+      "to": "apps/ai3d-voxel-city/index.html"
+    },
+    {
+      "from": "apps/ai3d-voxel-city/index.html",
+      "to": "app:ai3d-voxel-city"
+    },
+    {
+      "from": "shared/world-quality-autopilot.js",
+      "to": "apps/voxel-world/index.html"
+    },
+    {
+      "from": "apps/voxel-world/index.html",
+      "to": "app:voxel-world"
+    }
+  ]
+}

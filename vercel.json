@@ -1,0 +1,38 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "regions": [
+    "sin1"
+  ],
+  "functions": {
+    "api/apps.js": {
+      "includeFiles": "apps/**"
+    }
+  },
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/apps/catalog/",
+      "permanent": false
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/apps/:app/",
+      "destination": "/apps/:app/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    }
+  ],
+  "outputDirectory": ".",
+  "buildCommand": "node scripts/inject-sentry-runtime.js"
+}
