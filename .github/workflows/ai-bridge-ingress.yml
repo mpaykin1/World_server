@@ -1,0 +1,75 @@
+name: AI Bridge Zero-Secret GitHub Ingress
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  process-comment-ingress:
+    if: |
+      contains(github.event.comment.body, '[AI-BRIDGE TASK]') &&
+      (github.event.issue.title == 'AI Bridge — ChatGPT ↔ Jules' || contains(github.event.issue.labels.*.name, 'ai-bridge'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Parse Comment and Create Child Issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { parseCommentTask } = require('./lib/ai-bridge.js');
+            const comment = context.payload.comment;
+            const issue = context.payload.issue;
+
+            const parsed = parseCommentTask(comment.body, comment.id);
+            if (!parsed) {
+              console.log('No valid [AI-BRIDGE TASK] block found in comment.');
+              return;
+            }
+
+            const childTitle = `[AI-BRIDGE TASK] ${parsed.taskId}: ${parsed.task.split('\n')[0].slice(0, 60)}`;
+            const childBody = `### AI Bridge Task Payload
+
+**Task ID:** ${parsed.taskId}
+**Priority:** ${parsed.priority}
+**Sender:** ${parsed.sender}
+**Recipient:** ${parsed.recipient}
+**Origin Comment ID:** ${comment.id}
+**Origin Issue:** #${issue.number}
+
+#### Task Description
+${parsed.task}
+
+#### Acceptance Criteria
+${parsed.acceptanceCriteria || 'None specified'}
+
+---
+*Created automatically by GitHub Actions AI Bridge Ingress.*
+`;
+
+            const created = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: childTitle,
+              body: childBody,
+              labels: ['jules', 'ai-bridge', `priority:${parsed.priority}`]
+            });
+
+            console.log(`Created child issue #${created.data.number} for task ${parsed.taskId}`);
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              body: `🤖 **AI Bridge Ingress**: Enqueued task \`${parsed.taskId}\` into child issue #${created.data.number} with labels \`jules\`, \`ai-bridge\`.`
+            });
