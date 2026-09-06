@@ -146,3 +146,24 @@ For every task, patch, repair, upgrade, deployment or quality-improvement run:
 - Do not merge/deploy if any accepted quality metric regresses.
 - Confirmed fixes must become regression protection.
 - Approved reusable successes must become exact Golden Components and be propagated to compatible projects.
+
+
+## 12. CLOUD-FIRST / LOW-IMPACT AI EXECUTION — mandatory
+
+This rule applies to every current and future AI agent working on `World_server`.
+
+- **Browser/cloud first.** If a task can be done in GitHub, CI, Vercel, Google AI Studio, browser ChatGPT, cloud Codex, Claude/cloud agents, or another existing remote system, do it there instead of on the user's PC.
+- Local/Desktop execution is allowed only for steps that cannot reasonably be completed in browser/cloud, or for the smallest safe bridge needed to publish work to the cloud.
+- Desktop Codex/Claude/OpenCode should act primarily as **coordinator/orchestrator**: commit/push minimal bridge changes, assign work to available cloud/browser agents, collect results, review, and integrate.
+- Reuse `scripts/master-coordinator.cjs`, the existing collective-brain/lease/reporting systems, GitHub and existing cloud infrastructure. Do not create a second orchestration stack.
+- Do not launch local models, large builds, full test suites, load/soak tests, multiple heavy agents or repeated recovery loops when a cloud equivalent is available.
+- Before any heavy local action, ask: `Can this run in browser/cloud?` If YES, delegate it.
+- Computer health is part of correctness: avoid duplicate workers, runaway Node/Python/PowerShell processes, local-model RAM pressure, unnecessary watchers, large caches/logs, and disk churn.
+- During long sessions, periodically verify free RAM/disk, active AI processes, worktrees and Desktop hygiene. If the machine slows down, stop adding local load, identify the cause, offload work, and clean only proven session-owned temporary artifacts.
+- Never delete unknown/user files or kill processes that are not proven to belong to the current AI task.
+- Do not create AI worktrees, clones, archives, logs, caches, `node_modules`, builds or scratch data on Desktop. Temporary AI data belongs under `%LOCALAPPDATA%\WorldServerAI\` or another existing off-Desktop ignored location.
+- Do not let temporary artifacts accumulate until session end: remove proven disposable session-owned data as soon as it is no longer needed.
+- The preferred handoff is: `minimal local change -> commit -> push -> CLOUD_AI_HANDOFF.md -> cloud/browser continuation`.
+- A local agent must not continue heavy implementation after the work is safely available to cloud agents unless the remaining step is impossible remotely.
+- Any confirmed clutter/performance regression must get a root-cause fix plus regression protection, not just one-time cleanup.
+- Cloud/browser agents must preserve existing architecture, use `World_server` as the single source of truth, and avoid duplicate repositories/projects/services.
