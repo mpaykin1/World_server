@@ -64,36 +64,54 @@ jobs:
           npm install --global "opencode-ai@${OPENCODE_VERSION}"
           opencode --version
 
-      - name: Configure deterministic OpenRouter provider
+      - name: Resolve live free open-weight model
         shell: bash
         run: |
           set -euo pipefail
+          CATALOG="${RUNNER_TEMP}/openrouter-models.json"
           CONFIG="${RUNNER_TEMP}/world-opencode.json"
-          cat > "${CONFIG}" <<'JSON'
-          {
-            "$schema": "https://opencode.ai/config.json",
-            "provider": {
-              "worldrouter": {
-                "npm": "@ai-sdk/openai-compatible",
-                "name": "World OpenRouter",
-                "options": {
-                  "baseURL": "https://openrouter.ai/api/v1",
-                  "apiKey": "{env:OPENROUTER_API_KEY}"
-                },
-                "models": {
-                  "qwen/qwen3-coder:free": {
-                    "name": "Qwen3 Coder Free",
-                    "limit": { "context": 262144, "output": 32768 }
+          curl --fail --silent --show-error https://openrouter.ai/api/v1/models > "${CATALOG}"
+
+          MODEL_ID=""
+          for CANDIDATE in \
+            "qwen/qwen3-coder:free" \
+            "z-ai/glm-5.2:free"; do
+            if jq -e --arg id "${CANDIDATE}" '.data[] | select(.id == $id and .pricing.prompt == "0" and .pricing.completion == "0")' "${CATALOG}" >/dev/null; then
+              MODEL_ID="${CANDIDATE}"
+              break
+            fi
+          done
+
+          if [[ -z "${MODEL_ID}" ]]; then
+            echo "::error::No approved zero-cost open-weight coding model is currently live on OpenRouter. Refusing paid fallback."
+            exit 3
+          fi
+
+          jq -n --arg model "${MODEL_ID}" '
+            {
+              "$schema": "https://opencode.ai/config.json",
+              "provider": {
+                "worldrouter": {
+                  "npm": "@ai-sdk/openai-compatible",
+                  "name": "World OpenRouter",
+                  "options": {
+                    "baseURL": "https://openrouter.ai/api/v1",
+                    "apiKey": "{env:OPENROUTER_API_KEY}"
+                  },
+                  "models": {
+                    ($model): {
+                      "name": $model,
+                      "limit": { "context": 200000, "output": 32768 }
+                    }
                   }
                 }
               }
             }
-          }
-          JSON
-          echo "OPENCODE_CONFIG=${CONFIG}" >> "${GITHUB_ENV}"
-          curl --fail --silent --show-error https://openrouter.ai/api/v1/models \
-            | jq -e '.data[] | select(.id == "qwen/qwen3-coder:free") | .id' >/dev/null
+          ' > "${CONFIG}"
 
+          echo "OPENCODE_CONFIG=${CONFIG}" >> "${GITHUB_ENV}"
+          echo "MODEL=worldrouter/${MODEL_ID}" >> "${GITHUB_ENV}"
+          echo "Selected zero-cost open-weight model: ${MODEL_ID}"
       - name: Resolve task
         id: task
         shell: bash

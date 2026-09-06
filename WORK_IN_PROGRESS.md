@@ -318,3 +318,23 @@ YAML parse, `check:fast`, `golden:check`, `desktop-ai:check`, then real workflow
 
 ### Final evidence
 Pending real cloud-agent E2E.
+
+## Cloud AI live free-model fallback — 2026-09-06
+
+### Goal
+Remove the hard dependency on one disappearing free OpenRouter model while guaranteeing zero paid inference.
+
+### Root cause
+The live OpenRouter `/api/v1/models` catalog no longer advertised `qwen/qwen3-coder:free`; the workflow correctly failed before inference even though the old public model page still existed.
+
+### Change
+At every run, resolve an approved zero-cost open-weight model from the live catalog: prefer Qwen3 Coder Free, otherwise use GLM-5.2 Free. Generate a temporary OpenCode provider config for the selected model. Never fall back to a paid endpoint.
+
+### Regression protection
+Model selection requires both prompt and completion prices to equal zero and fails closed when no approved free model is live.
+
+### Tests to run
+YAML parse, local project guards, then real cloud E2E through model selection → OpenCode → repository edit → verification → pull request.
+
+### Final evidence
+Pending real workflow run.
