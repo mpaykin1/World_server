@@ -7,7 +7,7 @@ const cp = require('node:child_process');
 const ROOT = path.resolve(__dirname, '..');
 
 function runGate(){
-  const r = cp.spawnSync(process.execPath, [path.join(ROOT,'scripts/multi-ai-peer-review.cjs')], { encoding:'utf8', cwd:ROOT, timeout:15000, maxBuffer: 10*1024*1024 });
+  const r = cp.spawnSync(process.execPath, [path.join(ROOT,'scripts/multi-ai-peer-review.cjs')], { encoding:'utf8', cwd:ROOT, timeout:15000, maxBuffer: 32*1024*1024 });
   return { code:r.status, out:r.stdout||'', err:r.stderr||'' };
 }
 

@@ -1,0 +1,29 @@
+{
+  "note": "Declares WHICH models are candidates for which capability classes - the actual choice among candidates is data-driven via lib/model-suitability.js's ledger (success rate, latency, tokens, tool-call reliability), not hardcoded here. Update this file when a new model is pulled or a model's role changes; do not hardcode a single winner into the router.",
+  "models": {
+    "qwen3:1.7b": {
+      "sizeGb": 1.4,
+      "hybridThinking": true,
+      "candidateFor": ["unknown"],
+      "note": "Fast for plain non-agentic text (think:false, 18x speedup proven). Marked unsuitable for filesystem-read by the live suitability ledger (100% fail rate, 5 real attempts) - kept only as the fast non-agentic default, not for tool-calling classes."
+    },
+    "qwen2.5:3b-instruct": {
+      "sizeGb": 1.9,
+      "hybridThinking": false,
+      "candidateFor": ["filesystem-read", "filesystem-write", "filesystem-search", "unknown"],
+      "note": "No hybrid thinking-mode complexity (the root cause of qwen3:1.7b's tool-calling reliability problem). Established Ollama tool-calling support in the Qwen2.5 line. Primary candidate for agentic/tool-calling tasks pending live suitability data."
+    },
+    "qwen3:4b": {
+      "sizeGb": 2.5,
+      "hybridThinking": true,
+      "candidateFor": ["filesystem-write"],
+      "note": "Larger/slower on CPU but potentially more capable for harder reasoning within agentic tasks. Not yet live-tested for tool-calling reliability - candidate only, not a declared winner."
+    },
+    "gemma3:1b-it-qat": {
+      "sizeGb": 1.0,
+      "hybridThinking": false,
+      "candidateFor": ["unknown"],
+      "note": "Smallest available model - candidate for the fastest non-agentic path if benchmark shows it beats qwen3:1.7b(think:false) on latency without a quality regression for simple queries."
+    }
+  }
+}
