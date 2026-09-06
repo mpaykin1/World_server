@@ -150,3 +150,13 @@ Whoever has shell access: clear the two stale locks (after confirming no live gi
 - The prior "~148 registered worktrees" figure in this file's earlier entry was stale/overstated — the real count going in was 43.
 - Did **not** touch: the ~167 modified generated-report JSON files (other agents' ongoing work), `World_server_openhuman/`, `World_server_procedural/`, `artifacts/`, `pr_view_*`, `config/cas-gc.config.json`, `test/cas-gc.test.js`, or any CAS-GC verification (all out of this task's scope / other agents' in-flight work).
 <!-- WORLD_SERVER_DESKTOP_CLEANUP_20260905_END -->
+
+## RUN_072 — current task
+
+- What/why: install and verify the authoritative repeated-damage/regrowth science patch.
+- State: patch copied; RUN_072 experiment passes; focused science tests pass.
+- Target: existing World_server branch `ai/science/run072-repeated-damage-regrowth`, then one commit and push.
+- Scope: RUN_072 harness, test, evidence registry, and handoff only; no graphics/runtime changes.
+- Evidence: `SCIENCE_RUN_072_H2.json` has `pass:true`; full `npm run check` has an unrelated missing `@neondatabase/serverless` blocker.
+- Next action: final diff review, commit with provenance trailers, push isolated branch.
+- Completion: valid evidence, registry protection, `CLOUD_AI_HANDOFF.md`, commit, push, and honest blocker report.
