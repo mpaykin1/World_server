@@ -24,7 +24,7 @@ function sh(cwd, cmd, args) {
 
 function mkDesktop() {
   const desktopRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'wsh-desktop-'));
-  const canonicalRoot = path.join(desktopRoot, 'SESSION_SAFE_TO_DELETE');
+  const canonicalRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'wsh-quarantine-'));
   return { desktopRoot, canonicalRoot };
 }
 
@@ -127,8 +127,8 @@ test('calling register twice reuses the same canonical folder, never creates a s
   registry.registerManualCandidate(canonicalRoot, 'C:/thing1', { reason: 'r1', agent: 'CLAUDE', safeToDeleteManually: 'UNKNOWN' });
   registry.registerManualCandidate(canonicalRoot, 'C:/thing2', { reason: 'r2', agent: 'CHATGPT', safeToDeleteManually: 'UNKNOWN' });
   const dirs = fs.readdirSync(desktopRoot, { withFileTypes: true }).filter((e) => e.isDirectory());
-  assert.equal(dirs.length, 1, 'only the one canonical folder should exist');
-  assert.equal(dirs[0].name, 'SESSION_SAFE_TO_DELETE');
+  assert.equal(dirs.length, 0, 'registering cleanup data must never create a Desktop folder');
+  assert.ok(fs.existsSync(path.join(canonicalRoot, 'README.txt')));
   const report = registry.gate({ desktopRoot, root: canonicalRoot });
   assert.notEqual(report.verdict, 'FAIL');
 });
@@ -212,11 +212,10 @@ test('a corrupt README (missing markers) is refused rather than silently overwri
 // ---------------------------------------------------------------------------
 
 // 1. PASS baseline: only the 3 permanently allowed items on Desktop.
-test('desktopZeroChaosGate: PASS when Desktop has only World_server, SESSION_SAFE_TO_DELETE, and WORLD_SERVER_KEEP.zip', () => {
+test('desktopZeroChaosGate: PASS when Desktop has only the canonical World_server checkout', () => {
   const { desktopRoot, canonicalRoot } = mkDesktop();
   fs.mkdirSync(path.join(desktopRoot, 'World_server'), { recursive: true });
   fs.mkdirSync(canonicalRoot, { recursive: true });
-  fs.writeFileSync(path.join(desktopRoot, 'WORLD_SERVER_KEEP.zip'), 'zip');
   const report = registry.desktopZeroChaosGate({ desktopRoot, root: canonicalRoot });
   assert.equal(report.verdict, 'PASS');
   assert.deepEqual(report.clutter, []);
@@ -277,12 +276,10 @@ test('desktopZeroChaosGate: FAIL on a documented launcher folder like "World_ser
 // 6. PASS: the 3 canonical names still match case-insensitively / with an
 // underscore separator instead of a space, so normal OS casing never
 // false-positives.
-test('desktopZeroChaosGate: PASS with case/separator variants of the 3 canonical names', () => {
+test('desktopZeroChaosGate: PASS with case variant of canonical World_server only', () => {
   const { desktopRoot } = mkDesktop();
-  const canonicalRoot = path.join(desktopRoot, 'session_safe_to_delete');
+  const canonicalRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'wsh-quarantine-'));
   fs.mkdirSync(path.join(desktopRoot, 'world_server'), { recursive: true });
-  fs.mkdirSync(canonicalRoot, { recursive: true });
-  fs.writeFileSync(path.join(desktopRoot, 'World_Server_Keep.zip'), 'zip');
   const report = registry.desktopZeroChaosGate({ desktopRoot, root: canonicalRoot });
   assert.equal(report.verdict, 'PASS');
 });
@@ -338,11 +335,9 @@ test('desktopZeroChaosGate: FAIL reasons include both clutter and duplicate-regi
   assert.equal(report.reasons.length, 2);
 });
 
-test('scanForbiddenDesktopClutter: exact allowed names (any case) never appear in the clutter list', () => {
+test('scanForbiddenDesktopClutter: canonical World_server is the only allowed project item', () => {
   const { desktopRoot } = mkDesktop();
   fs.mkdirSync(path.join(desktopRoot, 'World_server'), { recursive: true });
-  fs.mkdirSync(path.join(desktopRoot, 'SESSION_SAFE_TO_DELETE'), { recursive: true });
-  fs.writeFileSync(path.join(desktopRoot, 'WORLD_SERVER_KEEP.zip'), 'zip');
   const clutter = registry.scanForbiddenDesktopClutter(desktopRoot);
   assert.deepEqual(clutter, []);
 });

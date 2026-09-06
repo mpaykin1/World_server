@@ -44,9 +44,5 @@ try {
 } catch { Log "PLUGIN check failed $_" }
 
 Log "=== AUTOLOOP TICK END ==="
-# WORLD_SERVER_BLOCKER_REPAIR_V1_BEGIN
-$WorldServerRepairRoot = (& git -C $PSScriptRoot rev-parse --show-toplevel 2>$null)
-if ($LASTEXITCODE -eq 0 -and $WorldServerRepairRoot) {
-  & node (Join-Path $WorldServerRepairRoot 'scripts\autonomous-blocker-repair.cjs') tick
-}
-# WORLD_SERVER_BLOCKER_REPAIR_V1_END
+# Blocker repair is intentionally NOT invoked here. The unified scheduler owns
+# that step exactly once per cycle; calling it here caused duplicate heavy work.

@@ -34,7 +34,7 @@
     }
   },
   "timers": {
-    "schedulerMinutes": 15,
+    "schedulerMinutes": 30,
     "networkRetryMinutes": 15,
     "deviceRetryMinutes": 15,
     "remoteRetryMinutes": 15,
@@ -50,16 +50,13 @@
   },
   "gates": {
     "npmScripts": [
-      "integration:cas:gc",
       "desktop-ai:worktree-audit",
-      "integration:full",
-      "integration:functions:audit",
-      "integration:functions:coverage",
-      "desktop-ai:check",
-      "release:gate"
+      "desktop-ai:zero-chaos-gate",
+      "desktop-ai:check"
     ],
     "stopOnFirstFailure": false,
-    "tailLines": 140
+    "tailLines": 140,
+    "note": "Recurring local scheduler runs only lightweight hygiene/protocol gates. Full integration/release gates run on-demand/CI, not every scheduler tick."
   },
   "longSoak": {
     "productionSeconds": 28800,

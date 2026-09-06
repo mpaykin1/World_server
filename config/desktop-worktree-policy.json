@@ -6,7 +6,14 @@
     "maxActiveWorktrees": 12,
     "warnActiveWorktrees": 8,
     "worktreeTtlDays": 7,
-    "requireMetadataFields": ["owner", "purpose", "branch", "createdAt", "lastUsedAt", "ttlDays"]
+    "requireMetadataFields": [
+      "owner",
+      "purpose",
+      "branch",
+      "createdAt",
+      "lastUsedAt",
+      "ttlDays"
+    ]
   },
   "temp": {
     "tempTtlDays": 2,
@@ -26,7 +33,7 @@
     "namingPattern": "WORLD_SERVER_ARCHIVE_YYYYMMDD_<purpose>.zip"
   },
   "sessionCleanup": {
-    "root": "SESSION_SAFE_TO_DELETE",
+    "root": "WorldServerAI\\Quarantine",
     "sessionCleanupRetentionDays": 30,
     "collapseAfterUserDeletionDays": 3
   },
@@ -48,7 +55,15 @@
     "emergencyGB": 20
   },
   "audit": {
-    "trackFields": ["lastCleanupAt", "reclaimedBytes", "cleanupReason", "agent", "sessionId", "dryRun", "verificationStatus"],
+    "trackFields": [
+      "lastCleanupAt",
+      "reclaimedBytes",
+      "cleanupReason",
+      "agent",
+      "sessionId",
+      "dryRun",
+      "verificationStatus"
+    ],
     "auditLogPath": "state/session-recovery/worktree-audit-log.jsonl"
   }
 }

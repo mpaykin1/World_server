@@ -48,7 +48,7 @@
     "Automatic OpenCode recovery must read repository recovery state first, never duplicate live work, never fake PASS, never work directly on master, and never auto-merge master.",
     "Automatic agent retries are bounded for an unchanged blocker fingerprint; repeated no-progress becomes ESCALATION_REQUIRED instead of an infinite token-consuming loop."
   ],
-  "watchdogIntervalMinutes": 2,
+  "watchdogIntervalMinutes": 5,
   "liveActivityMinutes": 2,
   "stalledMinutes": 12,
   "watchdogLockMinutes": 3,

@@ -48,9 +48,8 @@ const DUPLICATE_NAME_PATTERNS = [
 
 // DESKTOP ZERO-CHAOS (STRICT, no exceptions): the ONLY World_server-related
 // items ever permanently allowed on Desktop are the single main checkout
-// (World_server), the shared registry folder (SESSION_SAFE_TO_DELETE), and
-// the one archive for otherwise-unpreservable unique work
-// (WORLD_SERVER_KEEP.zip). There is deliberately no "but it's a real
+// (World_server). Quarantine, keep archives, worktrees, logs and caches must
+// live outside Desktop under LOCALAPPDATA. There is deliberately no "but it's a real
 // registered git worktree" / "but it's clean and pushed" / "but it's a
 // named launcher, not AI clutter" exception -- a worktree or copy that still
 // holds useful work must be committed+pushed to origin, or archived into
@@ -59,8 +58,6 @@ const DUPLICATE_NAME_PATTERNS = [
 // separator, any case) is FAIL.
 const ALLOWED_DESKTOP_WORLD_SERVER_NAMES = new Set([
   'world_server',
-  'session_safe_to_delete',
-  'world_server_keep.zip',
 ]);
 
 function isAllowedDesktopWorldServerName(name) {
@@ -72,7 +69,8 @@ function defaultDesktopRoot() {
 }
 
 function defaultRoot() {
-  return process.env.SESSION_SAFE_TO_DELETE_ROOT || path.join(defaultDesktopRoot(), 'SESSION_SAFE_TO_DELETE');
+  const local = process.env.LOCALAPPDATA || path.join(os.homedir(), 'AppData', 'Local');
+  return process.env.SESSION_SAFE_TO_DELETE_ROOT || path.join(local, 'WorldServerAI', 'Quarantine');
 }
 
 function git(cwd, args, timeoutMs = 15000) {
@@ -271,11 +269,10 @@ function scanForbiddenDesktopClutter(desktopRoot = defaultDesktopRoot()) {
  * gate must separately confirm useful work is committed/pushed, per
  * AGENTS.md sec 19.2). Returns { verdict: PASS|FAIL, reasons }.
  * FAIL: a duplicate SAFE_TO_DELETE-style folder exists, or ANY World_server-
- *       named Desktop item exists beyond the 3 permanently allowed ones --
+ *       named Desktop item exists beyond the single permanently allowed main checkout --
  *       with no exception for a registered/clean/pushed worktree or a
  *       named launcher folder.
- * PASS: neither condition holds (Desktop has at most World_server,
- *       SESSION_SAFE_TO_DELETE, and WORLD_SERVER_KEEP.zip).
+ * PASS: neither condition holds (Desktop has at most the canonical World_server checkout).
  */
 function desktopZeroChaosGate({ desktopRoot = defaultDesktopRoot(), root = defaultRoot() } = {}) {
   const reasons = [];
@@ -288,7 +285,7 @@ function desktopZeroChaosGate({ desktopRoot = defaultDesktopRoot(), root = defau
   const clutter = scanForbiddenDesktopClutter(desktopRoot);
   if (clutter.length) {
     verdict = 'FAIL';
-    reasons.push(`World_server-related Desktop item(s) beyond the 3 permanently allowed (World_server, SESSION_SAFE_TO_DELETE, WORLD_SERVER_KEEP.zip): ${clutter.join(', ')}`);
+    reasons.push(`World_server-related Desktop item(s) beyond the single allowed canonical World_server checkout: ${clutter.join(', ')}`);
   }
   return { checkedAt: new Date().toISOString(), desktopRoot, duplicateSafeFolders, clutter, verdict, reasons };
 }

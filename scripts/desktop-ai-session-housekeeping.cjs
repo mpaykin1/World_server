@@ -213,15 +213,12 @@ function sessionIdentity(agentArg) {
 
 function desktopSessionRoot(cliRoot, policy) {
   if (cliRoot) return cliRoot;
-  // DESKTOP ZERO-CHAOS: this used to default to a dedicated
-  // WORLD_SERVER_SESSION_CLEANUP folder - retired in favor of the one
-  // canonical SESSION_SAFE_TO_DELETE folder shared by every agent (see
-  // scripts/lib/session-safe-to-delete-registry.cjs and AGENTS.md sec 19.2).
-  // SESSION_SAFE_TO_DELETE_ROOT is the same override var that module uses,
-  // so both tools always agree on where "the one folder" is.
+  // Desktop is a protected user area. All AI cleanup/quarantine output
+  // belongs under LOCALAPPDATA, never on Desktop.
   if (process.env.SESSION_SAFE_TO_DELETE_ROOT) return process.env.SESSION_SAFE_TO_DELETE_ROOT;
-  if (process.env.WORLD_SERVER_SESSION_CLEANUP_ROOT) return process.env.WORLD_SERVER_SESSION_CLEANUP_ROOT; // legacy test/override compat
-  return path.join(os.homedir(), 'Desktop', policy.sessionCleanup.root || 'SESSION_SAFE_TO_DELETE');
+  if (process.env.WORLD_SERVER_SESSION_CLEANUP_ROOT) return process.env.WORLD_SERVER_SESSION_CLEANUP_ROOT; // legacy override compat
+  const local = process.env.LOCALAPPDATA || path.join(os.homedir(), 'AppData', 'Local');
+  return path.join(local, policy.sessionCleanup.root || path.join('WorldServerAI', 'Quarantine'));
 }
 
 // ---------------------------------------------------------------------------
