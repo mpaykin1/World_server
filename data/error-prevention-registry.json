@@ -169,13 +169,20 @@
       "id": "false-green-assertion",
       "category": "tests",
       "severity": "release-blocker",
-      "status": "known",
+      "status": "protected",
       "symptom": "test passes without evaluating matcher",
       "rootCause": "matcher referenced without invocation",
       "protection": [
         "static matcher invocation scan",
-        "CI hard failure"
-      ]
+        "CI hard failure",
+        "test/generated/false-green-assertion.test.js"
+      ],
+      "previousStatus": "known",
+      "verification": {
+        "at": "2026-09-06T10:40:17.125Z",
+        "result": "PASS",
+        "scope": "Full static scan of 118 JS/CJS/MJS/TS files under test/ and e2e/ found zero uninvoked toBeTruthy/toBeFalsy matchers; generated regression test PASS"
+      }
     },
     {
       "id": "menu-obstructs-game",
