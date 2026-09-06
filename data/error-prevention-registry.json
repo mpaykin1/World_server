@@ -643,6 +643,20 @@
         "do not raise capability-coverage or claim local-first is reliable on this hardware based on the one isolated live-test success alone - report the real combined rate (1 success out of 5 total real local attempts this cycle) honestly, as this entry does",
         "before increasing OLLAMA_PATCH_MODELS or lowering the 120s/150s timeouts, gather more real per-task-type samples first - 4 attempts is not enough to distinguish 'this task type is genuinely harder for a 1.7B model' from 'this was noise/contention'"
       ]
+    },
+    {
+      "id": "dark-void-live-publish-false-green",
+      "category": "release",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "Dark Void publication healthcheck passes while critical V5 modules are missing or public H4 is exposed",
+      "rootCause": "live publication gate validated only the top-level HTML response and did not verify critical module reachability or the public no-H4 invariant",
+      "protection": [
+        "dark-void-publish-healthcheck validates live English H1/H2/H3 HTML",
+        "critical V5 JS modules must return executable non-HTML responses",
+        "public H4 exposure fails closed",
+        "live publication must report final URL after redirects"
+      ]
     }
   ],
   "confirmationProtocol": {
