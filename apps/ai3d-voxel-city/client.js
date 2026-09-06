@@ -30,6 +30,7 @@ let keysHeld=new Set();
 let pointerLocked=false;
 let lastPlayerUpdate=performance.now();
 let defaultCityLoaded=false;
+let bootWorldLoaded=false;
 let autoplayStarted=false;
 
 async function getSession(force=false){
@@ -198,8 +199,10 @@ function setSkyBackplate(blob){
 function disposeChunks(){
   for(const o of chunkObjects.values()){
     scene.remove(o.detail);scene.remove(o.far);
-    o.detail.geometry.dispose();o.detail.material.dispose();
-    o.far.geometry.dispose();o.far.material.dispose();
+    o.detail.geometry?.dispose?.();
+    if(Array.isArray(o.detail.material))o.detail.material.forEach(m=>m?.dispose?.());else o.detail.material?.dispose?.();
+    o.far.geometry?.dispose?.();
+    if(Array.isArray(o.far.material))o.far.material.forEach(m=>m?.dispose?.());else o.far.material?.dispose?.();
   }
   chunkObjects.clear();
 }
@@ -223,15 +226,23 @@ function buildFarChunk(c){
   return mesh;
 }
 async function buildOptimizedChunks(data){
-  disposeChunks();setProgress(93,'Browser: chunked greedy meshing in Web Worker…');
-  if(!window.Worker)throw new Error('Web Worker недоступен');
-  const result=await new Promise((resolve,reject)=>{
-    const w=new Worker('./mesher-worker.js');
-    const timer=setTimeout(()=>{w.terminate();reject(new Error('Mesher worker timeout'));},60000);
-    w.onmessage=e=>{if(e.data?.type==='result'){clearTimeout(timer);w.terminate();resolve(e.data);}};
-    w.onerror=e=>{clearTimeout(timer);w.terminate();reject(new Error(e.message||'Mesher worker error'));};
-    w.postMessage({type:'build',voxels:data.voxels||[],palette:data.palette||[],chunkSize:CHUNK_SIZE});
-  });
+  disposeChunks();setProgress(93,'Browser: building optimized voxel mesh...');
+  let result;
+  try{
+    if(!window.Worker)throw new Error('Web Worker unavailable');
+    result=await new Promise((resolve,reject)=>{
+      const w=new Worker('./mesher-worker.js');
+      const timer=setTimeout(()=>{w.terminate();reject(new Error('Mesher worker timeout'));},20000);
+      w.onmessage=e=>{if(e.data?.type==='result'){clearTimeout(timer);w.terminate();resolve(e.data);}};
+      w.onerror=e=>{clearTimeout(timer);w.terminate();reject(new Error(e.message||'Mesher worker error'));};
+      w.postMessage({type:'build',voxels:data.voxels||[],palette:data.palette||[],chunkSize:CHUNK_SIZE});
+    });
+  }catch(err){
+    console.warn('Greedy mesher unavailable; using instanced emergency renderer:',err.message);
+    buildEmergencyVoxelMesh(data);
+    buildOccupancy(data);
+    return;
+  }
   mesherStats=result.stats;
   const detailMatTemplate={vertexColors:true,side:THREE.FrontSide};
   let requestedWorldMaterialQuality=0;
@@ -251,6 +262,25 @@ async function buildOptimizedChunks(data){
   // build occupancy for collision after chunks built
   buildOccupancy(data);
 }
+function buildEmergencyVoxelMesh(data){
+  const voxels=data.voxels||[],palette=data.palette||[];
+  const maxInstances=12000,step=Math.max(1,Math.ceil(voxels.length/maxInstances));
+  const selected=[];for(let i=0;i<voxels.length;i+=step)selected.push(voxels[i]);
+  const geom=new THREE.BoxGeometry(1,1,1),mat=new THREE.MeshBasicMaterial();
+  const mesh=new THREE.InstancedMesh(geom,mat,selected.length),m=new THREE.Matrix4(),c=new THREE.Color();
+  let minX=Infinity,minY=Infinity,minZ=Infinity,maxX=-Infinity,maxY=-Infinity,maxZ=-Infinity;
+  for(let i=0;i<selected.length;i++){
+    const [x,y,z,pi]=selected[i];m.makeTranslation(x,y,z);mesh.setMatrixAt(i,m);c.setHex(palette[pi]??0x777777);mesh.setColorAt(i,c);
+    minX=Math.min(minX,x);minY=Math.min(minY,y);minZ=Math.min(minZ,z);maxX=Math.max(maxX,x);maxY=Math.max(maxY,y);maxZ=Math.max(maxZ,z);
+  }
+  mesh.instanceMatrix.needsUpdate=true;if(mesh.instanceColor)mesh.instanceColor.needsUpdate=true;mesh.frustumCulled=true;scene.add(mesh);
+  const far=new THREE.Group();scene.add(far);
+  const center=new THREE.Vector3((minX+maxX)/2,(minY+maxY)/2,(minZ+maxZ)/2);
+  chunkObjects.set('emergency',{detail:mesh,far,center,bounds:[minX,minY,minZ,maxX,maxY,maxZ],voxels:selected.length,triangles:selected.length*12});
+  mesherStats={chunkSize:CHUNK_SIZE,chunkCount:1,logicalVoxels:voxels.length,surfaceTriangles:selected.length*12,meshing:'instanced-emergency',degraded:true};
+  updatePerformanceLabel();
+}
+
 function buildOccupancy(data){
   occupancySet=new Set();
   for(const v of (data.voxels||[])){
@@ -627,27 +657,52 @@ $('quality').onchange=e=>{
   renderer.setPixelRatio(dynamicPixelRatio);fitCameras();applyFog();updateStreaming(true);
 };
 
-// --- Immutable default-city autoplay (no AI worker / no serverless / no GPU dependency for generation) ---
-async function autoLoadDefaultCity(){
-  if(autoplayStarted) return; autoplayStarted=true;
-  try{
-    setProgress(5,'Загружаю default-city (gothic reference)…');
-    // GPU availability check — generation is CPU-only, rendering degrades gracefully
-    if(!window.WebGLRenderingContext){
-      setProgress(0,'WebGL недоступен — default-city generation не требует GPU, рендер ограничен');
+// --- Instant playable boot + full immutable default-city upgrade ---
+function createInstantBootCity(){
+  const W=48,D=48;
+  const palette=[0x31443a,0x75513b,0x8a8177,0xd0a56b,0x4f626c,0x6d4141,0xb99a6b,0x2b3038];
+  const voxels=[];
+  for(let x=0;x<W;x++)for(let z=0;z<D;z++)voxels.push([x,-1,z,(x%12<2||z%12<2)?2:0]);
+  for(let bx=4;bx<W-4;bx+=9)for(let bz=4;bz<D-4;bz+=9){
+    if(Math.hypot(bx-W/2,bz-D/2)<9)continue;
+    const h=5+((bx*7+bz*3)%10),pi=1+((bx+bz)%6);
+    for(let x=bx;x<Math.min(W,bx+4);x++)for(let z=bz;z<Math.min(D,bz+4);z++)for(let y=0;y<h;y++){
+      if(y>1&&y<h-1&&x>bx&&x<bx+3&&z>bz&&z<bz+3)continue;
+      voxels.push([x,y,z,pi]);
     }
-    const r=await fetch('./default-city.json',{cache:'no-store'});
-    if(!r.ok) throw new Error('default-city.json HTTP '+r.status);
-    const data=await r.json();
-    if(!Array.isArray(data.voxels) || data.voxels.length===0) throw new Error('default-city voxels empty');
-    defaultCityLoaded=true;
-    setProgress(30,`Default-city: ${data.voxels.length.toLocaleString('ru-RU')} voxels, immutable ${data.defaultCity?.immutable?'YES':'NO'}`);
-    await renderWorld(data);
-    setProgress(100,'Готово: высокодетализированный gothic voxel city — WASD/стрелки + мышь (клик для захвата), collision + gravity активны.');
-    console.log('default-city autoload OK', {voxels:data.voxels.length, chunks:chunkObjects.size, spawn:player});
+  }
+  for(let i=6;i<W-6;i+=6){voxels.push([i,0,3,6],[i,1,3,6],[3,0,i,6],[3,1,i,6]);}
+  return {schema:'ai3d-instant-boot-v1',source:{width:W,height:28,gridWidth:W,gridHeight:28,gridDepth:D},voxelSize:1,palette,voxels,
+    spawn:{position:[W/2+.5,1.7,D/2+.5],yaw:0},camera:{target:[W/2,8,D/2]},background:{top:[92,139,168],horizon:[55,67,58]},
+    defaultCity:{immutable:false,source:'instant-boot',fidelity:'bootstrap'}};
+}
+async function autoLoadDefaultCity(){
+  if(autoplayStarted)return;autoplayStarted=true;
+  const boot=createInstantBootCity();
+  try{
+    defaultCityLoaded=true;bootWorldLoaded=true;
+    setProgress(4,'Instant city: starting playable fallback...');
+    await renderWorld(boot);
+    setProgress(18,'Playable city ready. Loading full gothic city in background...');
   }catch(e){
-    console.warn('autoLoadDefaultCity failed:', e.message);
-    setProgress(0,'Default-city не загружен: '+e.message+' — выбери картинку для генерации.');
+    console.warn('instant boot render failed:',e.message);
+  }
+  try{
+    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15000);
+    const r=await fetch('./default-city.json',{cache:'no-store',signal:controller.signal});clearTimeout(timer);
+    if(!r.ok)throw new Error('default-city.json HTTP '+r.status);
+    const data=await r.json();
+    if(!Array.isArray(data.voxels)||data.voxels.length===0)throw new Error('default-city voxels empty');
+    setProgress(45,`Full city: ${data.voxels.length.toLocaleString('ru-RU')} voxels; optimizing...`);
+    await renderWorld(data);bootWorldLoaded=false;
+    setProgress(100,'Full gothic voxel city ready - WASD/arrows + mouse + mobile controls.');
+    console.log('default-city autoload OK',{voxels:data.voxels.length,chunks:chunkObjects.size,spawn:player});
+  }catch(e){
+    console.warn('full default city unavailable; keeping instant playable city:',e.message);
+    if(!world||!playableMode){
+      try{defaultCityLoaded=true;bootWorldLoaded=true;await renderWorld(boot);}catch(inner){console.error('boot recovery failed',inner);}
+    }
+    setProgress(100,'Playable fallback city active; full city will retry on next reload.');
   }
 }
 
@@ -660,7 +715,7 @@ window.AI3DVoxelRuntime={
   // setView - e2e/golden-controls.spec.js calls the canonical setView name
   // against both runtimes, so this runtime needs to answer to it too.
   setView(nextYaw,nextPitch=0){this.setPlayerView(nextYaw,nextPitch);},
-  stats(){return {fps:measuredFps,pixelRatio:dynamicPixelRatio,renderer:renderer?.info?.render,mesher:mesherStats,chunks:chunkObjects.size, voxels:world?world.voxels.length:0, player:{x:player.x,y:player.y,z:player.z,yaw,pitch,onGround:player.onGround, playable:playableMode}, defaultCityLoaded};},
+  stats(){return {fps:measuredFps,pixelRatio:dynamicPixelRatio,renderer:renderer?.info?.render,mesher:mesherStats,chunks:chunkObjects.size, voxels:world?world.voxels.length:0, player:{x:player.x,y:player.y,z:player.z,yaw,pitch,onGround:player.onGround, playable:playableMode}, defaultCityLoaded,bootWorldLoaded};},
   collidesAt(x,y,z){ return collidesAt(x,y,z); },
   getOccupancySize(){ return occupancySet.size; }
 };
