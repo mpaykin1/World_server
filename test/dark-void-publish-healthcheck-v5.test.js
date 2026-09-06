@@ -80,3 +80,13 @@ test('publish healthcheck fails closed on public H4 exposure', async () => {
     assert.match(result.stdout, /FAIL live-no-H4/);
   });
 });
+
+const fs = require('node:fs');
+
+test('fixed Dark Void live-publish false-green stays protected in error prevention registry', () => {
+  const registry = JSON.parse(fs.readFileSync(path.join(repo, 'data', 'error-prevention-registry.json'), 'utf8'));
+  const entry = registry.knownErrors.find((item) => item.id === 'dark-void-live-publish-false-green');
+  assert.ok(entry);
+  assert.equal(entry.status, 'protected');
+  assert.ok(Array.isArray(entry.protection) && entry.protection.length >= 3);
+});

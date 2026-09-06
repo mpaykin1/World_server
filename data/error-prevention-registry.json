@@ -648,7 +648,7 @@
       "id": "dark-void-live-publish-false-green",
       "category": "release",
       "severity": "release-blocker",
-      "status": "known",
+      "status": "protected",
       "symptom": "Dark Void publication healthcheck passes while critical V5 modules are missing or public H4 is exposed",
       "rootCause": "live publication gate validated only the top-level HTML response and did not verify critical module reachability or the public no-H4 invariant",
       "protection": [
