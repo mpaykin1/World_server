@@ -257,3 +257,27 @@ result reported exactly as observed, not adjusted to look more favorable.
   `data/error-prevention-registry.json`'s
   `opencode-free-tier-reliability-degrades-with-sustained-session-usage`
   entry.
+
+
+---
+
+# Addendum — World Cloud AI / OpenCode + Qwen
+
+## Goal
+Add an isolated cloud coding-agent path for `World_server` using GitHub Actions, pinned OpenCode, and Qwen3-Coder through OpenRouter, without changing the existing desktop-agent pipeline.
+
+## Safety / integration
+- Runs only on owner-triggered `/worldai` comments or manual workflow dispatch.
+- Uses a per-run branch and opens a PR; it never writes directly to `master`.
+- Keeps default GitHub Actions permissions read-only; this workflow requests only the write scopes it needs.
+- Validates changes with existing `check`, `desktop-ai:check`, and `golden:check` gates.
+- On verification failure, performs up to two repair passes without weakening tests.
+
+## Current progress
+Workflow added on isolated branch `ai/cloud-opencode-qwen`. YAML parsing, `git diff --check`, `desktop-ai:check`, `check:fast`, and `golden:check` pass. GitHub Actions PR permission is enabled while repository default workflow permission remains read-only.
+
+## Next action
+Push this isolated branch and open a PR. Live model E2E remains blocked until repository secret `OPENROUTER_API_KEY` is added.
+
+## Final evidence
+Local structural/protocol gates PASS. No claim of live Qwen/OpenRouter execution is made until the secret is configured and a real GitHub Actions run passes.
