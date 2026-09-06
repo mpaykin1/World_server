@@ -25,6 +25,7 @@ const requiredLocal = [
 ];
 
 const sha256 = (value) => crypto.createHash('sha256').update(value).digest('hex');
+const releaseFingerprint = (entries) => sha256(entries.map(([asset, body]) => asset + '\0' + sha256(body)).join('\n'));
 
 const liveAssets = [
   '/apps/dark-void-scene/client.js',
@@ -108,6 +109,11 @@ function request(url, redirects = 0) {
     }
 
     const origin = new URL(live.url).origin;
+    const candidateEntries = liveAssets.map((asset) => {
+      const localPath = path.join(root, asset.replace(/^\//, ''));
+      return [asset, fs.existsSync(localPath) ? fs.readFileSync(localPath, 'utf8') : ''];
+    });
+    const liveEntries = [];
     for (const asset of liveAssets) {
       const result = await request(new URL(asset, origin).href);
       const localPath = path.join(root, asset.replace(/^\//, ''));
@@ -116,11 +122,19 @@ function request(url, redirects = 0) {
         /(?:javascript|ecmascript|text\/plain|application\/octet-stream)/i.test(result.type) &&
         !/<html[\s>]/i.test(result.body);
       const revisionMatch = executable && localBody.length > 0 && sha256(result.body) === sha256(localBody);
+      liveEntries.push([asset, executable ? result.body : '']);
       console.log(executable ? 'PASS' : 'FAIL', 'live-asset', asset, result.status, result.type || '-');
       console.log(revisionMatch ? 'PASS' : 'FAIL', 'live-revision', asset);
       ok &&= executable && revisionMatch;
     }
 
+    const candidateFingerprint = releaseFingerprint(candidateEntries);
+    const liveFingerprint = releaseFingerprint(liveEntries);
+    const fingerprintMatch = candidateFingerprint === liveFingerprint;
+    console.log('CANDIDATE_RELEASE_FINGERPRINT', candidateFingerprint);
+    console.log('LIVE_RELEASE_FINGERPRINT', liveFingerprint);
+    console.log(fingerprintMatch ? 'PASS' : 'FAIL', 'release-fingerprint-match');
+    ok &&= fingerprintMatch;
     console.log('FINAL_URL', live.url);
     process.exit(ok ? 0 : 1);
   } catch (error) {
