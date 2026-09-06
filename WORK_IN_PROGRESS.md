@@ -271,3 +271,11 @@ result reported exactly as observed, not adjusted to look more favorable.
 - Regression: `test/ai3d-voxel-city-performance-evidence-v46.test.js`. Focused regression 7/7 PASS; autoplay 8/8 PASS across desktop-chromium/mobile-chromium/mobile-webkit/tablet-chromium.
 - Measured run: desktop 52 FPS p95=16.8ms long=1.47%; mobile Chromium 40 FPS p95=33.4ms long=3.67%; mobile WebKit 11 FPS p95=244ms long=53.33%; tablet Chromium 31 FPS p95=50ms long=4.29%. Mobile WebKit is now the measured worst target.
 - No thresholds weakened; no master/dirty-worktree edits.
+
+## AI3D V47 mobile-WebKit catastrophic-DPR convergence
+- Root cause: AUTO DPR reduced only 10%% per 1500ms interval even below 50%% target FPS, so the existing .55 floor converged too slowly.
+- Fix: catastrophic misses jump directly to the existing .55 DPR floor; ordinary misses remain 0.90 and recovery 1.06. Floor unchanged.
+- Regression: test/ai3d-voxel-city-mobile-webkit-dpr-v47.test.js.
+- Before V46: mobile-WebKit 11 FPS, p95 244ms, long-frame 53.33%%.
+- After V47 full 8/8: mobile-WebKit 14 FPS, p95 150ms, long-frame 33.33%%, DPR .55; desktop 55 FPS; mobile Chromium 48 FPS; tablet Chromium 35 FPS.
+- Gates: focused 9/9 PASS; autoplay 8/8 PASS; npm run check x3 PASS; release:gate PASS; Quality Regression violations=0; Evidence Score 95.5%%; World Quality 100%%; Collective Brain PASS.

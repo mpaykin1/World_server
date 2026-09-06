@@ -380,7 +380,10 @@ function adaptResolution(){
   if(!adaptive||frontMode||!renderer)return;
   const p=profile(),dpr=devicePixelRatio||1;
   let next=dynamicPixelRatio;
-  if(measuredFps>0&&measuredFps<p.targetFps-6)next*=.90;
+  // Catastrophic misses need a fast convergence to the existing SAFE DPR floor.
+  // This changes adaptation speed only; the .55 quality floor is unchanged.
+  if(measuredFps>0&&measuredFps<p.targetFps*.5)next=.55;
+  else if(measuredFps>0&&measuredFps<p.targetFps-6)next*=.90;
   else if(measuredFps>p.targetFps+7)next*=1.06;
   next=Math.max(.55,Math.min(dpr,p.pixelRatio,next));
   if(Math.abs(next-dynamicPixelRatio)>.04){
