@@ -31,16 +31,23 @@ Source of truth: existing GitHub repository `mpaykin1/World_server`.
 - Keep machine-readable task state in the repository/shared coordination state so another agent can continue without rereading the whole project.
 
 ## Patch handoff contract
-For every new patch committed for cloud continuation, record:
-- commit SHA and branch;
-- exact changed files;
-- what is already done;
-- what remains for cloud agents;
-- required checks and acceptance criteria;
-- known blockers;
-- production URL(s) affected.
+For every new patch committed for cloud continuation, record commit/branch, changed files, completed work, remaining work, checks, blockers, and affected production URLs.
+
+## RUN_072 production port
+Source patch commit: `f30efebe6021b9dd5fd231840934c4764bfbc8eb`.
+Base: current `origin/master`; never merge the old divergent RUN_072 history.
+Included: minimal RUN_062/066/071 dependencies, RUN_072 script/test, immutable `SCIENCE_RUN_072_H2.json`, and exact registry protection.
+Production read endpoint: `GET /api/science-run072`.
+Existing remote-task bridge access:
+- read evidence: `inspect_logs` with `SCIENCE_RUN_072_H2.json`;
+- verify RUN_072: `run_existing_script` with scriptId `science-run-072`.
+
+## Cloud continuation
+Run full CI/release checks in GitHub/cloud, not on the user's PC.
+After merge, sync/publish the existing production project; do not create another repo/project.
+Verify `GET https://world-server.ai.studio/api/science-run072` returns HTTP 200 and `evidence.pass=true`.
+If deployment is quota-blocked, record it and retry in cloud; do not compensate with heavy local work.
 
 ## Completion rule
-Local work is complete when the minimal safe patch is committed/pushed and cloud agents have enough context to continue. Do not spend the remaining local token/context budget trying to finish work that can now run remotely.
-
-Cloud agents must keep graphics/gameplay quality intact, fix root causes, add regression protection, and never weaken working visuals merely to make tests pass.
+Local work is complete when the minimal safe patch is committed/pushed and cloud agents have enough context to continue.
+Cloud agents must preserve graphics/gameplay quality, fix root causes, add regression protection, and never weaken working visuals merely to make tests pass.

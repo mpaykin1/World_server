@@ -386,3 +386,23 @@ PR #38 exposed nine Linux-only failures because the reused AI queue stack embedd
 - Fix: evaluate a fresh 1h window separately from the 24h history and emit PASS / BLOCK / INCONCLUSIVE. Zero fresh sessions is INCONCLUSIVE; fresh FPS/load/error violations remain BLOCK.
 - Regression: production-quality fresh-evidence + Node 24 tests 4/4 PASS; check:fast PASS.
 - Live probe: freshSessions=0 => INCONCLUSIVE, proving the false-PASS path is closed.
+
+
+---
+
+# RUN_072 production port — 2026-09-06
+
+## What / why
+Port the already-verified RUN_072 science patch onto the current production master without importing its divergent history, and expose evidence through the existing production/API + remote-task infrastructure.
+
+## Current state
+Fresh branch from current `origin/master`; minimal RUN_062/066/071 dependencies + RUN_072 restored; current registry preserved and extended only with the RUN_072 protection entry.
+
+## Target state
+`/api/science-run072` returns immutable evidence in production; remote-task bridge can read the evidence and rerun RUN_072 by allowlisted scriptId; full verification runs in cloud CI.
+
+## Tests
+Focused RUN_072 tests, syntax checks, one deterministic experiment replay, and API smoke locally. Full CI/release in GitHub/cloud.
+
+## Completion
+Clean commit/push/PR, cloud checks, merge, existing production sync, then external HTTP 200 verification at `https://world-server.ai.studio/api/science-run072`.
