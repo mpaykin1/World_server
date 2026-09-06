@@ -57,13 +57,13 @@ Per `DESKTOP_AI_INSTRUCTIONS.md`: real agentmemory save→recall→restart persi
 <!-- WORLD_SERVER_SESSION_RECOVERY_V1_START -->
 ## Desktop AI Session Recovery V1 — managed checkpoint
 
-- sessionId: `session-1787632622221-75896e`
-- status: `interrupted`
-- checkpoint: `2026-08-28T04:57:45.608Z`
-- checkpoint message: checkpoint before scheduler_kick fix - dirty 662, health DEAD overdue 625m, soak dead, honest 68/68
+- sessionId: `session-1788670513402-10f86c`
+- status: `in_progress`
+- checkpoint: `2026-09-06T04:55:13.403Z`
+- checkpoint message: Session recovery initialized
 - last successful command: none
-- last error: operation — Watchdog detected dead session/process: unfinished work exists but no responsible process is alive after 14.5 minute(s)
-- next action: fix scheduler_kick npm.cmd quoting
+- last error: none
+- next action: Run `tools/post-bootstrap-verify-windows.ps1 -TaskWorktree C:\Users\user\Desktop\World_server_openhuman` (now PASS with OpenHuman config), then `npm run release:gate` in worktree, classify any failures, create `COLLECTIVE_BRAIN_RUNTIME_EVIDENCE.json` + `REPORT.md`, commit → push → draft PR update (no auto-merge, no dirty main).
 
 ### Recovery queue
 - no explicit recovery steps registered yet
@@ -150,3 +150,28 @@ Whoever has shell access: clear the two stale locks (after confirming no live gi
 - The prior "~148 registered worktrees" figure in this file's earlier entry was stale/overstated — the real count going in was 43.
 - Did **not** touch: the ~167 modified generated-report JSON files (other agents' ongoing work), `World_server_openhuman/`, `World_server_procedural/`, `artifacts/`, `pr_view_*`, `config/cas-gc.config.json`, `test/cas-gc.test.js`, or any CAS-GC verification (all out of this task's scope / other agents' in-flight work).
 <!-- WORLD_SERVER_DESKTOP_CLEANUP_20260905_END -->
+
+## Codex coordinator lossless cleanup — 2026-09-06
+- Task / Why: extend completed peer commit 469abbe8; prevent loss of self-committed, failed, untracked or ignored agent work.
+- Current state: ai/codex/coordinator-lossless, isolated sparse off-Desktop worktree, base 469abbe8. Peer worktree remains untouched.
+- Target state: fail closed on Git/recovery errors; no force removal; retained branch for every worker-created commit; honest PASS; final OpenCode text retained.
+- Files / systems involved: existing scripts/master-coordinator.cjs and tests only; existing coordinator/leases/report schema.
+- Known risks: disk errors, failed git status, own worker commits, cleanup races, paid provider configuration. No deployment, push or extra agent systems.
+- Golden systems that must be preserved: existing resource and concurrency gates, direct OpenHuman transport, offline assignment.
+- Errors that must not return: cleanup in finally after persistence failure; false PASS after failed commit; losing final text by truncating stream prefix.
+- Exact patch / change plan: preserve checkout by default; validate cleanup target and state; remove only verified clean checkout without force; keep changed HEAD ref; check Git exit codes; bounded final-text extraction; synchronous lease failure releases lock.
+- Tests to run: real tiny Git fixtures with stubbed OpenCode process, including self commit, dirty failure, ignored/untracked data, failed add/commit/status/recovery, idempotency; existing coordinator tests.
+- Deployment / PR plan: local commit, no push/deploy; reuse peer base without modifying peer branch.
+- Current progress / Next action: reproduce failure cases and patch existing coordinator.
+- Completion criteria: all focused tests PASS, review and durable report; retain unique work and clean own temporary checkout.
+- Final evidence: IN PROGRESS.
+- Ownership: Codex; TTL 24h; created 2026-09-06; purpose coordinator lossless cleanup.
+- Scope update: Zero-Chaos CLI previously checked Desktop layout only. Added aggregate Git inspection (all worktrees, dirty/untracked, unpublished commit reachability, fail closed on Git error) through existing housekeeping command; no new cleanup architecture.
+- Reproduction: 7/7 newly added lossless fixtures FAIL against immutable 469abbe8. After fixes initial 25/25 PASS; expanded disk-full/add/push/ignored/idempotency/final-text checks then 65/65 PASS, final Git-state case under verification.
+
+### Final focused evidence — Codex 2026-09-06
+- 35/35 coordinator/lossless regressions PASS; existing housekeeping + safe-to-delete 35/35 PASS in combined predecessor run. New tests cover worker commits, dirty/untracked/ignored files, Git status/add/commit/push errors, disk-full recovery, idempotency, foreign path refusal, lease exception and second-attempt exclusivity, missing final text, permission refusal and large stream extraction.
+- Real Zero-Chaos aggregate returns FAIL for active foreign work and unpublished local commits; no files moved/deleted by the gate.
+- New live root cause: OpenCode external_directory auto-rejection with exit0 and blank final answer previously returned PASS. Fixed and regression protected; denied task is not retried automatically. Committed Git object review is the permitted alternative.
+- COORDINATOR_LOSSLESS_REPORT.json is the local evidence artifact. No full release gate run in this sparse coordinator checkout; Google full release gate passed separately. No merge-safe/full-project completion claim.
+- Next action: review committed patch through existing coordinator, integrate only in isolated checkout, preserve active primary work, no general push/deploy. Own temporary checkout must be removed after source/evidence preserved.

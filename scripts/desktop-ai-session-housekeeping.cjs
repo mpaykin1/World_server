@@ -86,8 +86,8 @@ function dirSizeBytes(p, maxEntries = 20000) {
 // Worktree discovery + classification
 // ---------------------------------------------------------------------------
 
-function listWorktrees() {
-  const r = git(ROOT, ['worktree', 'list', '--porcelain']);
+function listWorktrees(repoRoot = ROOT) {
+  const r = git(repoRoot, ['worktree', 'list', '--porcelain']);
   if (r.status !== 0) throw new Error(`git worktree list failed: ${r.stderr || r.stdout}`);
   const out = [];
   let cur = null;
@@ -407,9 +407,35 @@ function commandZeroChaosGate(args) {
   const desktopRoot = args['desktop-root'] || safeRegistry.defaultDesktopRoot();
   const root = args.root || safeRegistry.defaultRoot();
   const report = safeRegistry.desktopZeroChaosGate({ desktopRoot, root });
+  report.git = gitZeroChaosReadiness(args['repo-root'] || ROOT);
+  if (report.git.verdict !== 'PASS') {
+    report.verdict = 'FAIL';
+    report.reasons.push(...report.git.reasons);
+  }
   console.log(JSON.stringify(report, null, 2));
   process.exitCode = report.verdict === 'FAIL' ? 2 : 0;
   return report;
+}
+
+function gitZeroChaosReadiness(repoRoot = ROOT) {
+  const reasons = [], worktrees = [];
+  let entries;
+  try { entries = listWorktrees(repoRoot); }
+  catch (error) { return { verdict: 'FAIL', worktrees, reasons: [error.message] }; }
+  for (const entry of entries.filter(x => !x.bare)) {
+    const status = git(entry.worktree, ['status', '--porcelain', '--untracked-files=all']);
+    // Count unique local commits even without an upstream. A local master/main
+    // reference is not proof that anything has been pushed.
+    const pending = git(entry.worktree, ['rev-list', '--count', 'HEAD', '--not', '--remotes']);
+    const validCount = pending.status === 0 && /^\d+$/.test(pending.stdout.trim());
+    const item = { path: entry.worktree, dirty: status.status === 0 ? Boolean(status.stdout.trim()) : null,
+      unpublishedCommits: validCount ? Number(pending.stdout.trim()) : null };
+    worktrees.push(item);
+    if (item.dirty === null || item.unpublishedCommits === null) reasons.push(`Git state unavailable: ${entry.worktree}`);
+    if (item.dirty) reasons.push(`Dirty/untracked work: ${entry.worktree}`);
+    if (item.unpublishedCommits > 0) reasons.push(`Unpublished commits (${item.unpublishedCommits}): ${entry.worktree}`);
+  }
+  return { verdict: reasons.length ? 'FAIL' : 'PASS', worktrees, reasons };
 }
 
 function parseArgs(argv) {
@@ -440,4 +466,4 @@ function main() {
 
 if (require.main === module) main();
 
-module.exports = { listWorktrees, classifyWorktree, scanDisposableJunk, loadPolicy, commandAudit, commandRun, commandSafeRegister, commandSafeGate, commandZeroChaosGate, safeRegistry };
+module.exports = { listWorktrees, classifyWorktree, scanDisposableJunk, loadPolicy, commandAudit, commandRun, commandSafeRegister, commandSafeGate, commandZeroChaosGate, gitZeroChaosReadiness, safeRegistry };

@@ -178,7 +178,7 @@ test('preserveFailedDirtyWorktree writes a binary-capable recovery patch for tra
   fs.writeFileSync(path.join(dir, 'tracked.txt'), 'changed\n');
   const r = mc.preserveFailedDirtyWorktree(dir, 'ai/test/recovery', 'tracked-recovery-test');
   assert.equal(r.preserved, true);
-  assert.equal(r.keepWorktree, false);
+  assert.equal(r.keepWorktree, true);
   assert.equal(r.untrackedCount, 0);
   assert.ok(r.recoveryPatch && fs.existsSync(r.recoveryPatch));
   assert.match(fs.readFileSync(r.recoveryPatch, 'utf8'), /changed/);

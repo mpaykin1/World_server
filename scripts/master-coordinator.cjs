@@ -118,61 +118,110 @@ function git(cwd, args) {
 // carries a real commit; deleted otherwise).
 // ---------------------------------------------------------------------------
 function createIsolatedWorktree(taskId) {
+  if (!/^[A-Za-z0-9][A-Za-z0-9._-]{0,119}$/.test(String(taskId))) throw new Error('Invalid task id');
   fs.mkdirSync(WORKTREES_ROOT, { recursive: true });
   const branch = `ai/master-coordinator/${taskId}`;
   const dir = path.join(WORKTREES_ROOT, taskId);
-  const head = git(MAIN_TREE_ROOT, ['rev-parse', 'HEAD']).stdout;
+  const base = git(MAIN_TREE_ROOT, ['rev-parse', 'HEAD']);
+  if (base.status !== 0) throw new Error(`Cannot inspect base: ${base.stderr}`);
+  const head = base.stdout;
   const add = git(MAIN_TREE_ROOT, ['worktree', 'add', '-b', branch, dir, head]);
   if (add.status !== 0) throw new Error(`git worktree add failed: ${add.stderr || add.stdout}`);
-  return { dir, branch };
+  return { dir, branch, baseHead: head };
 }
 
 function removeIsolatedWorktree(dir, branch, { deleteBranch = false } = {}) {
-  git(MAIN_TREE_ROOT, ['worktree', 'remove', '--force', dir]);
-  git(MAIN_TREE_ROOT, ['worktree', 'prune']);
-  if (deleteBranch) git(MAIN_TREE_ROOT, ['branch', '-D', branch]);
+  const relative = path.relative(path.resolve(WORKTREES_ROOT), path.resolve(dir));
+  if (!relative || relative.startsWith('..') || path.isAbsolute(relative)) return { ok: false, reason: 'outside-owned-worktrees' };
+  if (!fs.existsSync(dir)) return { ok: true, alreadyRemoved: true };
+  const current = git(dir, ['branch', '--show-current']);
+  const status = git(dir, ['status', '--porcelain', '--untracked-files=all', '--ignored=matching']);
+  if (current.status !== 0 || current.stdout !== branch || status.status !== 0 || status.stdout) return { ok: false, reason: 'unverified-or-dirty-worktree' };
+  // Git's normal removal performs its own final cleanliness/lock check.
+  // Never force-remove: another writer may have appeared since inspection.
+  const removed = git(MAIN_TREE_ROOT, ['worktree', 'remove', dir]);
+  if (removed.status !== 0) return { ok: false, reason: removed.stderr || 'remove-failed' };
+  if (deleteBranch) git(MAIN_TREE_ROOT, ['branch', '-d', branch]);
+  return { ok: true };
 }
 
 
 function preserveFailedDirtyWorktree(dir, branch, taskId) {
-  const status = git(dir, ['status', '--porcelain']).stdout;
+  const inspected = git(dir, ['status', '--porcelain', '--untracked-files=all', '--ignored=matching']);
+  if (inspected.status !== 0) throw new Error(`Cannot inspect recovery state: ${inspected.stderr}`);
+  const status = inspected.stdout;
   if (!status) return { preserved: false, keepWorktree: false };
   fs.mkdirSync(RECOVERY_ROOT, { recursive: true });
   const safeId = String(taskId || 'unknown').replace(/[^A-Za-z0-9._-]/g, '_');
   const recoveryDir = path.join(RECOVERY_ROOT, safeId);
   fs.mkdirSync(recoveryDir, { recursive: true });
-  const trackedPatch = git(dir, ['diff', '--binary', 'HEAD']).stdout;
-  const untracked = git(dir, ['ls-files', '--others', '--exclude-standard']).stdout.split(/\r?\n/).filter(Boolean);
+  const diff = git(dir, ['diff', '--binary', 'HEAD']);
+  const files = git(dir, ['ls-files', '--others', '--exclude-standard']);
+  if (diff.status !== 0 || files.status !== 0) throw new Error('Cannot read recovery content');
+  const trackedPatch = diff.stdout;
+  const untracked = files.stdout.split(/\r?\n/).filter(Boolean);
   if (trackedPatch) fs.writeFileSync(path.join(recoveryDir, 'WORK_IN_PROGRESS.patch'), trackedPatch + '\n');
   fs.writeFileSync(path.join(recoveryDir, 'STATUS.txt'), status + '\n');
   fs.writeFileSync(path.join(recoveryDir, 'RECOVERY.json'), JSON.stringify({ taskId, branch, worktree: dir, untrackedCount: untracked.length, createdAt: nowIso() }, null, 2) + '\n');
-  return { preserved: true, recoveryDir, recoveryPatch: trackedPatch ? path.join(recoveryDir, 'WORK_IN_PROGRESS.patch') : null, untrackedCount: untracked.length, keepWorktree: untracked.length > 0 };
+  // Patch is supplemental evidence, never a replacement for the only checkout.
+  return { preserved: true, recoveryDir, recoveryPatch: trackedPatch ? path.join(recoveryDir, 'WORK_IN_PROGRESS.patch') : null, untrackedCount: untracked.length, keepWorktree: true };
+}
+
+function finalOpencodeText(stdout) {
+  const parts = [];
+  let structured = false;
+  for (const line of String(stdout || '').split(/\r?\n/)) {
+    try { const entry = JSON.parse(line); structured = true; if (entry.type === 'text' && entry.part?.text?.trim()) parts.push(entry.part.text); } catch {}
+  }
+  return (structured ? parts.join('\n') : String(stdout || '')).slice(-8000);
+}
+
+function opencodePermissionRefused(stdout, stderr) {
+  const denied = /auto-rejecting|rejected permission|permission denied/i;
+  if (denied.test(String(stderr || ''))) return true;
+  return String(stdout || '').split(/\r?\n/).some(line => {
+    try {
+      const entry = JSON.parse(line);
+      return entry.type === 'tool_use' && entry.part?.state?.status === 'error' && denied.test(String(entry.part.state.error || ''));
+    } catch { return false; }
+  });
 }
 
 async function invokeOpencode(taskText, opts = {}) {
   if (!OPENCODE_CLI_PATH) return { ok: false, result: 'NOT_AVAILABLE', reason: 'opencode CLI not found on PATH' };
   const taskId = opts.taskId || `opencode-${Date.now()}`;
-  const { dir, branch } = createIsolatedWorktree(taskId);
+  const { dir, branch, baseHead } = createIsolatedWorktree(taskId);
   const start = Date.now();
   let committed = null;
   let pushed = false;
   let recovery = null;
-  let keepWorktree = false;
+  // Failure must retain work by default, including persistence exceptions.
+  let keepWorktree = true;
+  let outcome;
   try {
     const r = cp.spawnSync(OPENCODE_CLI_PATH, ['run', taskText, '--format', 'json', '--dir', dir], {
       encoding: 'utf8', timeout: opts.timeoutMs || 600000, windowsHide: true, maxBuffer: 32 * 1024 * 1024,
     });
     const durationMs = Date.now() - start;
-    const ranCleanly = r.status === 0 && !r.error;
-    const dirtyStatus = git(dir, ['status', '--porcelain']).stdout;
+    const finalText = finalOpencodeText(r.stdout);
+    const refused = opencodePermissionRefused(r.stdout, r.stderr);
+    const ranCleanly = r.status === 0 && !r.error && !refused && Boolean(finalText.trim());
+    const inspected = git(dir, ['status', '--porcelain', '--untracked-files=all', '--ignored=matching']);
+    const head = git(dir, ['rev-parse', 'HEAD']);
+    if (inspected.status !== 0 || head.status !== 0) throw new Error('Cannot verify worker Git state');
+    if (head.stdout !== baseHead) committed = head.stdout;
+    const dirtyStatus = inspected.stdout;
+    let persisted = true;
     if (ranCleanly && dirtyStatus) {
-      git(dir, ['add', '-A']);
+      const added = git(dir, ['add', '-A']);
       const msg = [`opencode(auto-dispatch): ${String(taskText).slice(0, 72)}`, '', 'AI-Agent: OpenCode', `AI-Session: master-coordinator:${taskId}`, `Worktree: ${dir}`, `Branch: ${branch}`, 'Ownership: master-coordinator-subtask'].join('\n');
-      const c = git(dir, ['commit', '-qm', msg]);
+      const c = added.status === 0 ? git(dir, ['commit', '-qm', msg]) : added;
       if (c.status === 0) {
-        committed = git(dir, ['rev-parse', 'HEAD']).stdout;
-        if (opts.push !== false) pushed = git(dir, ['push', 'origin', `HEAD:refs/heads/${branch}`]).status === 0;
+        const saved = git(dir, ['rev-parse', 'HEAD']);
+        if (saved.status !== 0) throw new Error('Cannot verify saved commit');
+        committed = saved.stdout;
       } else {
+        persisted = false;
         recovery = preserveFailedDirtyWorktree(dir, branch, taskId);
         keepWorktree = recovery.keepWorktree;
       }
@@ -180,10 +229,20 @@ async function invokeOpencode(taskText, opts = {}) {
       recovery = preserveFailedDirtyWorktree(dir, branch, taskId);
       keepWorktree = recovery.keepWorktree;
     }
-    return { ok: ranCleanly, result: ranCleanly ? 'PASS' : 'FAIL', stdout: (r.stdout || '').slice(0, 8000), stderr: (r.stderr || '').slice(0, 4000), durationMs, branch, committed, pushed, worktree: dir, recovery };
-  } finally {
-    if (!keepWorktree) removeIsolatedWorktree(dir, branch, { deleteBranch: !committed });
+    const finalState = git(dir, ['status', '--porcelain', '--untracked-files=all', '--ignored=matching']);
+    if (finalState.status !== 0) throw new Error('Cannot verify final worktree status');
+    keepWorktree = Boolean(finalState.stdout);
+    if (ranCleanly && persisted && !keepWorktree && committed && opts.push !== false) pushed = git(dir, ['push', 'origin', `HEAD:refs/heads/${branch}`]).status === 0;
+    const ok = ranCleanly && persisted && !keepWorktree && (!committed || opts.push === false || pushed);
+    outcome = { ok, result: refused ? 'REFUSED' : ok ? 'PASS' : 'FAIL', stdout: finalText, stderr: (r.stderr || '').slice(-4000), durationMs, branch, committed, pushed, worktree: dir, recovery };
+  } catch (error) {
+    outcome = { ok: false, result: 'FAIL', reason: error.message, branch, committed, pushed, worktree: dir, recovery };
   }
+  if (!keepWorktree) {
+    const cleanup = removeIsolatedWorktree(dir, branch, { deleteBranch: !committed });
+    if (!cleanup.ok) outcome = { ...outcome, ok: false, result: 'FAIL', cleanup };
+  }
+  return outcome;
 }
 
 // ---------------------------------------------------------------------------
@@ -272,9 +331,11 @@ function reportSelfExecuted(taskText, result, opts = {}) {
 // ---------------------------------------------------------------------------
 function withSubtaskLease(root, taskId, fn) {
   const scope = `master-coordinator-subtask-${taskId}`;
-  const lease = collectiveBrain.acquireLease(root, scope, { ttlMs: 15 * 60 * 1000, owner: `master-coordinator:${process.pid}` });
+  // Cover both bounded 10-minute attempts plus cleanup; the old 15-minute
+  // lease could expire during the second attempt and admit another owner.
+  const lease = collectiveBrain.acquireLease(root, scope, { ttlMs: Math.max(15, MAX_SUBTASK_ATTEMPTS * 10 + 5) * 60 * 1000, owner: `master-coordinator:${process.pid}` });
   if (!lease.ok) return Promise.resolve({ ok: false, result: 'SKIPPED_ACTIVE', reason: 'another dispatch already owns this subtask', existing: lease.existing });
-  return Promise.resolve(fn()).finally(() => collectiveBrain.releaseLease(root, scope, lease.lease.owner));
+  return Promise.resolve().then(fn).finally(() => collectiveBrain.releaseLease(root, scope, lease.lease.owner));
 }
 
 // ---------------------------------------------------------------------------
@@ -346,7 +407,7 @@ async function dispatchSubtask(root, subtask, opts = {}) {
       } else {
         return { taskId, agentId, routePlan, attempts: attempt, ok: false, result: 'UNKNOWN_AGENT', reason: `no adapter for agent id '${agentId}'` };
       }
-      if (lastResult.ok) break;
+      if (lastResult.ok || lastResult.result === 'REFUSED') break;
     }
     return { taskId, agentId, routePlan, ...lastResult };
   });
@@ -403,6 +464,7 @@ module.exports = {
   resourceGateOk,
   appendReport,
   preserveFailedDirtyWorktree,
+  finalOpencodeText,
   buildDefaultSubtasks,
   summarizeMasterResults,
   resolveOpencodeExe,

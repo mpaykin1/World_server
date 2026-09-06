@@ -861,6 +861,32 @@
         "test/science-h4-specialist-promotion-integrity.test.js",
         "scientific holdouts must fail closed on per-call timeout"
       ]
+    },
+    {
+      "category": "coordination",
+      "severity": "release-blocker",
+      "status": "protected",
+      "id": "coordinator-lossy-cleanup",
+      "rootCause": "Force cleanup in finally discarded worker-owned commits or dirty content; Git/recovery failures and stdout truncation were treated as successful completion.",
+      "solution": "Default to retaining work; verify status/HEAD/commit/push; refuse dirty/ignored/foreign cleanup; preserve commit refs; release leases on synchronous errors; extract final model text.",
+      "protection": [
+        "test/master-coordinator-lossless.test.js",
+        "test/master-coordinator.test.js",
+        "nonempty final completion and permission-refusal regression",
+        "second-attempt ownership exclusivity regression"
+      ]
+    },
+    {
+      "category": "coordination",
+      "severity": "release-blocker",
+      "status": "protected",
+      "id": "zero-chaos-git-blind-pass",
+      "rootCause": "Desktop clutter allowlist alone could PASS despite dirty/untracked/unpublished work in canonical or off-Desktop checkouts.",
+      "solution": "Existing Zero-Chaos CLI now aggregates read-only Git state of every registered checkout and fails closed on unreadable Git status or unpublished commits.",
+      "protection": [
+        "test/master-coordinator-lossless.test.js",
+        "test/session-safe-to-delete-policy.test.js"
+      ]
     }
   ],
   "confirmationProtocol": {

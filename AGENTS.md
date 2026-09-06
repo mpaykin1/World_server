@@ -382,3 +382,11 @@ Ownership: <краткая зона ответственности, напр. "h
 **Зафиксированное несоответствие (историю не переписывать):** коммиты `ba85e730` (ветка `ai/opencode/multi-ai-peer-improvement`, worktree `World_server`) и `dc402529` (ветка `ai/opencode/browser-local-control`, worktree `World_server_browser_local`) — два независимых, параллельно активных изменения — оба содержат идентичный `Claude-Session: https://claude.ai/code/session_01MJjnYYUZ8cAMDG8LD8T4r7`, несмотря на разные worktree/branch/задачи. Это провенанс-несоответствие, обнаруженное координационным мониторингом 2026-09-05. Сами коммиты не изменяются — правило и проверка ниже существуют, чтобы это не повторилось.
 
 **Автоматическая проверка (WARN, не блокирует CI):** `node scripts/check-agent-rules.js` (реализация: `scripts/lib/ai-commit-provenance.cjs`) сканирует tip-коммиты локальных веток, изменённых за последние `activeWindowMs` (по умолчанию 24 часа — прокси для «активная сессия»), и выводит `WARN`, если один и тот же `AI-Session`/`Claude-Session` id одновременно встречается на tip двух и более разных веток. Это не `FAIL` — обнаруженная коллизия требует расследования (совпадение легитимно или это ошибка копирования шаблона), а не автоматической блокировки merge. Регрессионные тесты: `test/ai-commit-provenance.test.js`.
+
+### Zero-Chaos Git evidence (Codex recovery, 2026-09-06)
+`desktop-ai:zero-chaos-gate` combines Desktop layout checks with read-only Git
+checks for every registered worktree (including canonical and off-Desktop
+copies). Dirty/untracked files, commits unreachable from all known remote
+tracking refs, or failed Git inspection prevent PASS. A local master/main
+branch alone is never evidence of push. The gate does not commit, push,
+move or delete files; active foreign work remains preserved.
