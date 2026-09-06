@@ -77,8 +77,16 @@ fetch('/api/apps').then(r=>r.json()).then(json=>{
   for(const a of apps){ const d=document.createElement('div'); d.textContent=`● ${a.title} — /apps/${a.id}/`; mini.appendChild(d); }
 });
 
-const keys = new Set(); let yaw=0, pitch=.38; let mouseDown=false;
-addEventListener('keydown',e=>keys.add(e.code)); addEventListener('keyup',e=>keys.delete(e.code));
+const keys = new Set(); let yaw=0, pitch=.38; let mouseDown=false; let lastDt=.016;
+addEventListener('keydown',e=>{
+  if(document.activeElement?.tagName==='INPUT'||document.activeElement?.tagName==='TEXTAREA') return;
+  keys.add(e.code);
+  if(e.code.startsWith('Arrow')) e.preventDefault();
+},{passive:false});
+addEventListener('keyup',e=>{
+  keys.delete(e.code);
+  if(e.code.startsWith('Arrow')) e.preventDefault();
+},{passive:false});
 addEventListener('mousedown',()=>mouseDown=true); addEventListener('mouseup',()=>mouseDown=false);
 addEventListener('mousemove',e=>{ if(mouseDown || document.pointerLockElement){ yaw -= e.movementX*.003; pitch = Math.max(.15, Math.min(.9, pitch - e.movementY*.002)); }});
 addEventListener('goldenlook',e=>{const d=e.detail||{};yaw-=(Number(d.dx)||0)*.005;pitch=Math.max(.15,Math.min(.9,pitch-(Number(d.dy)||0)*.003));});
@@ -561,13 +569,21 @@ function spawnLightning() {
 }
 
 function animate(now){
-  requestAnimationFrame(animate); const dt=Math.min(.05,(now-last)/1000); last=now;
-  const speed = keys.has('ShiftLeft') ? 20 : 10;
+  requestAnimationFrame(animate); const dt=Math.min(.05,(now-last)/1000); last=now; lastDt=dt;
+  const gi = window.GameGoldenStandard?.input?.();
+  const speed = (keys.has('ShiftLeft') || keys.has('ShiftRight') || gi?.run) ? 20 : 10;
   const forward = new THREE.Vector3(Math.sin(yaw),0,Math.cos(yaw));
   const basis=window.GameGoldenStandard?.basisFromForward(forward.x,forward.z);
   const right = basis ? new THREE.Vector3(basis.right.x,0,basis.right.z) : new THREE.Vector3(-Math.cos(yaw),0,Math.sin(yaw));
   const move = new THREE.Vector3();
-  if(keys.has('KeyW')) move.add(forward); if(keys.has('KeyS')) move.sub(forward); if(keys.has('KeyD')) move.add(right); if(keys.has('KeyA')) move.sub(right);
+  const isForward = keys.has('KeyW') || keys.has('ArrowUp') || !!gi?.forward;
+  const isBack = keys.has('KeyS') || keys.has('ArrowDown') || !!gi?.back;
+  const isRight = keys.has('KeyD') || keys.has('ArrowRight') || !!gi?.right;
+  const isLeft = keys.has('KeyA') || keys.has('ArrowLeft') || !!gi?.left;
+  if(isForward) move.add(forward);
+  if(isBack) move.sub(forward);
+  if(isRight) move.add(right);
+  if(isLeft) move.sub(right);
   if(move.lengthSq()>0){ move.normalize().multiplyScalar(speed*dt); player.position.add(move); player.rotation.y=yaw; }
   const camOffset = new THREE.Vector3(Math.sin(yaw)*-12, 8 + pitch*4, Math.cos(yaw)*-12);
   camera.position.lerp(player.position.clone().add(camOffset), .12);
@@ -607,3 +623,20 @@ function animate(now){
   renderer.render(scene,camera);
 }
 requestAnimationFrame(animate);
+
+window.CatalogRuntime = {
+  stats() {
+    return {
+      fps: Math.round(1 / Math.max(lastDt, 0.001)),
+      player: { x: player.position.x, y: player.position.y, z: player.position.z, yaw, pitch, onGround: true, playable: true },
+      renderer: renderer?.info?.render,
+      portalsCount: portals.length
+    };
+  },
+  setView(nextYaw, nextPitch = 0.38) {
+    yaw = Number(nextYaw) || 0;
+    pitch = Math.max(0.15, Math.min(0.9, Number(nextPitch) || 0.38));
+    player.rotation.y = yaw;
+  }
+};
+window.GamePlayableRuntime = window.CatalogRuntime;

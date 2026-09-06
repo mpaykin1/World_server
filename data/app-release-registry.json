@@ -85,6 +85,98 @@
       "status": "quarantine",
       "kind": "navigator",
       "reason": "Not a Golden voxel-collision app by design - a dialog+look-based navigator experience with no wall-collision movement, so it does not (and should not) implement the Golden UI shell/physics contract project-quality-reviewer.js requires of a 'certified' entry. Already live and verified in production at dark-void-navigator.vercel.app and re-verified end-to-end locally this session (real scene renders, zero console errors, desktop mouse-look and mobile dual-joystick controls confirmed) - registered here only so the deny-by-default release registry recognizes the directory; kept out of the internal 3D-games catalog listing (visible:false) rather than mislabeled as Golden-certified."
+    },
+    "dreamfog-world": {
+      "title": "Dreamfog World",
+      "visible": false,
+      "status": "development",
+      "kind": "game",
+      "reason": "Present in development history; awaiting release certification."
+    },
+    "ink-glyph-world": {
+      "title": "Ink Glyph World",
+      "visible": false,
+      "status": "development",
+      "kind": "game",
+      "reason": "Present in development history; awaiting release certification."
+    },
+    "pixel-panorama-360": {
+      "title": "Pixel Panorama 360",
+      "visible": false,
+      "status": "development",
+      "kind": "experience",
+      "reason": "Present in development history; awaiting release certification."
+    },
+    "procedural-quality-certification": {
+      "title": "Procedural Quality Certification",
+      "visible": false,
+      "status": "diagnostic",
+      "kind": "diagnostic"
+    },
+    "procedural-quality-lab": {
+      "title": "Procedural Quality Lab",
+      "visible": false,
+      "status": "diagnostic",
+      "kind": "diagnostic"
     }
-  }
+  },
+  "externalWorlds": [
+    {
+      "id": "dark-void-navigator-live",
+      "title": "Dark Void Navigator",
+      "url": "https://dark-void-navigator.vercel.app/",
+      "status": "legacy-deployment",
+      "kind": "navigator"
+    },
+    {
+      "id": "improve-world-home-live",
+      "title": "Improve World Home",
+      "url": "https://improve-world-home-improve-world.vercel.app/",
+      "status": "legacy-deployment",
+      "kind": "hub"
+    },
+    {
+      "id": "improve-world-experiment-100",
+      "title": "Improve World Experiment 100",
+      "url": "https://improve-world-experiment-100-improve-world.vercel.app/",
+      "status": "legacy-deployment",
+      "kind": "experiment"
+    },
+    {
+      "id": "voxel-gothic-steampunk-world",
+      "title": "Voxel Gothic Steampunk World",
+      "url": "https://voxel-gothic-steampunk-world-improve-world.vercel.app/",
+      "status": "legacy-deployment",
+      "kind": "game"
+    },
+    {
+      "id": "gothic-voxel-city-atlas-v3-mobile-final",
+      "title": "Gothic Voxel City Atlas V3 Mobile Final",
+      "url": "https://gothic-voxel-city-atlas-v3-mobile-final-improve-world.vercel.app/",
+      "status": "legacy-deployment",
+      "kind": "game"
+    },
+    {
+      "id": "voxel-gothic-steampunk-mobile-repaired",
+      "title": "Voxel Gothic Steampunk Mobile Repaired",
+      "url": "https://voxel-gothic-steampunk-mobile-repaired-improve-world.vercel.app/",
+      "status": "legacy-deployment",
+      "kind": "game"
+    },
+    {
+      "id": "world-server-codex-voxel-v3",
+      "title": "World Server Codex Voxel V3",
+      "url": "https://world-server-git-codex-voxel-v3-improve-world.vercel.app/apps/voxel-world/",
+      "status": "legacy-deployment",
+      "kind": "game"
+    },
+    {
+      "id": "world-server-catalog-live",
+      "title": "World Server Catalog",
+      "url": "https://world-server.vercel.app/apps/catalog/",
+      "status": "legacy-deployment",
+      "kind": "hub"
+    }
+  ],
+  "inventoryRule": "Every known local app and legacy deployment must stay discoverable in the unified catalog even when not certified."
 }

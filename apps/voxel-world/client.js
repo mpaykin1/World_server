@@ -202,7 +202,13 @@ function goldenHorizontal(axis,amount,allowStep){
 }
 function physics(dt){
   const wasGrounded=player.onGround;
-  const f=(keys.has('KeyW')?1:0)-(keys.has('KeyS')?1:0)-mobileMove.y; const s=(keys.has('KeyD')?1:0)-(keys.has('KeyA')?1:0)+mobileMove.x; const len=Math.hypot(f,s)||1, speed=(keys.has('ShiftLeft')||keys.has('ShiftRight'))?RUN:WALK;
+  const isF = (keys.has('KeyW') || keys.has('ArrowUp')) ? 1 : 0;
+  const isB = (keys.has('KeyS') || keys.has('ArrowDown')) ? 1 : 0;
+  const isR = (keys.has('KeyD') || keys.has('ArrowRight')) ? 1 : 0;
+  const isL = (keys.has('KeyA') || keys.has('ArrowLeft')) ? 1 : 0;
+  const f = isF - isB - mobileMove.y;
+  const s = isR - isL + mobileMove.x;
+  const len=Math.hypot(f,s)||1, speed=(keys.has('ShiftLeft')||keys.has('ShiftRight'))?RUN:WALK;
   const move=window.GameGoldenPhysics.canonicalXZ(player.yaw,f/len,s/len,speed); const vx=move.x, vz=move.z; player.vel.x+=(vx-player.vel.x)*Math.min(1,dt*12); player.vel.z+=(vz-player.vel.z)*Math.min(1,dt*12); player.vel.y-=GRAVITY*dt; player.onGround=false;
   goldenHorizontal('x',player.vel.x*dt,wasGrounded); goldenHorizontal('z',player.vel.z*dt,wasGrounded); moveAxis('y',player.vel.y*dt); if(player.pos.y<-8){player.pos.set(0,heightAt(0,0)+4,0);player.vel.set(0,0,0);} camera.position.set(player.pos.x,player.pos.y+1.62,player.pos.z); camera.rotation.order='YXZ'; camera.rotation.y=player.yaw; camera.rotation.x=player.pitch;
 }
@@ -249,7 +255,22 @@ function setupDesktop(){
   renderer.domElement.addEventListener('click',()=>{if(!matchMedia('(pointer:coarse)').matches&&document.pointerLockElement!==renderer.domElement)renderer.domElement.requestPointerLock?.();});
   document.addEventListener('pointerlockchange',()=>{targetEl.textContent=document.pointerLockElement===renderer.domElement?'ЛКМ ломать · ПКМ ставить':'Нажми на экран, чтобы играть';});
   document.addEventListener('mousemove',e=>{if(document.pointerLockElement!==renderer.domElement)return;player.yaw-=e.movementX*.0022;player.pitch=clamp(player.pitch-e.movementY*.0022,-1.48,1.48);});
-  document.addEventListener('keydown',e=>{if(document.activeElement?.tagName==='INPUT')return;keys.add(e.code);if(e.code==='Space'){e.preventDefault();jump();}if(/^Digit[1-9]$/.test(e.code)){player.selected=Number(e.code.slice(5))-1;buildHotbar();}});document.addEventListener('keyup',e=>keys.delete(e.code));
+  window.addEventListener('keydown',e=>{
+    if(document.activeElement?.tagName==='INPUT'||document.activeElement?.tagName==='TEXTAREA')return;
+    keys.add(e.code);
+    if(e.code.startsWith('Arrow')) e.preventDefault();
+    if(e.code==='Space'){e.preventDefault();jump();}
+    if(/^Digit[1-9]$/.test(e.code)){player.selected=Number(e.code.slice(5))-1;buildHotbar();}
+  },{passive:false});
+  window.addEventListener('keyup',e=>{
+    keys.delete(e.code);
+    if(e.code.startsWith('Arrow')) e.preventDefault();
+  },{passive:false});
+  addEventListener('goldenlook',e=>{
+    const d=e.detail||{};
+    player.yaw-=(Number(d.dx)||0)*.005;
+    player.pitch=clamp(player.pitch-(Number(d.dy)||0)*.005,-1.45,1.45);
+  });
   renderer.domElement.addEventListener('mousedown',e=>{if(document.pointerLockElement!==renderer.domElement)return;if(e.button===0)editBlock(false);if(e.button===2)editBlock(true);});renderer.domElement.addEventListener('contextmenu',e=>e.preventDefault());
 }
 function setupMobile(){
@@ -276,8 +297,9 @@ try{
 }catch(e){console.error(e);statusEl.textContent=e.message;statusEl.className='vwWarn';loading.textContent=`Voxel World: ${e.message}`;setTimeout(()=>loading.classList.add('hidden'),3500);started=true;player.pos.set(0,heightAt(0,0)+4,0);}
 
 window.VoxelWorldRuntime={
-    stats(){return {player:{x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw,onGround:player.onGround},renderer:renderer?.info?.render,pixelRatio:renderer?.getPixelRatio?.()||1};},
+    stats(){return {player:{x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw,pitch:player.pitch,onGround:player.onGround,playable:true},renderer:renderer?.info?.render,pixelRatio:renderer?.getPixelRatio?.()||1};},
     setView(nextYaw,nextPitch=0){player.yaw=Number(nextYaw)||0;player.pitch=Number(nextPitch)||0;}
   };
+window.GamePlayableRuntime=window.VoxelWorldRuntime;
 
 try{if(typeof renderer!=='undefined')window.GoldenPerformanceAutoTune?.registerRenderer(renderer,{targetFps:matchMedia('(pointer:coarse)').matches?45:55,minDpr:.75,maxDpr:Math.min(devicePixelRatio||1,2)});}catch{}

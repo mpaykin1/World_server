@@ -30,23 +30,41 @@
   };
 
   function emitKey(code, down) {
-    window.dispatchEvent(new KeyboardEvent(down ? 'keydown' : 'keyup', {
+    const evt = new KeyboardEvent(down ? 'keydown' : 'keyup', {
       code, key: code, bubbles:true, cancelable:true
-    }));
+    });
+    try {
+      if (document.activeElement && document.activeElement !== document.body) {
+        document.activeElement.dispatchEvent(evt);
+      } else if (document.body) {
+        document.body.dispatchEvent(evt);
+      } else {
+        document.dispatchEvent(evt);
+      }
+    } catch {}
+    try { window.dispatchEvent(evt); } catch {}
   }
 
   addEventListener('keydown', e => {
     const action = map[e.code];
+    if (e.code.startsWith('Arrow')) {
+      if (document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+      }
+    }
     if (!action) return;
     keys.add(action);
-    if (e.code.startsWith('Arrow')) e.preventDefault();
   }, { passive:false });
 
   addEventListener('keyup', e => {
     const action = map[e.code];
+    if (e.code.startsWith('Arrow')) {
+      if (document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+      }
+    }
     if (!action) return;
     keys.delete(action);
-    if (e.code.startsWith('Arrow')) e.preventDefault();
   }, { passive:false });
 
   document.addEventListener('pointerlockchange', () => {
@@ -62,6 +80,16 @@
       run:keys.has('run'),
       jump:keys.has('jump')
     };
+  }
+
+  function has(codeOrAction) {
+    if (codeOrAction === 'KeyW' || codeOrAction === 'ArrowUp' || codeOrAction === 'forward') return keys.has('forward');
+    if (codeOrAction === 'KeyS' || codeOrAction === 'ArrowDown' || codeOrAction === 'back') return keys.has('back');
+    if (codeOrAction === 'KeyA' || codeOrAction === 'ArrowLeft' || codeOrAction === 'left') return keys.has('left');
+    if (codeOrAction === 'KeyD' || codeOrAction === 'ArrowRight' || codeOrAction === 'right') return keys.has('right');
+    if (codeOrAction === 'ShiftLeft' || codeOrAction === 'ShiftRight' || codeOrAction === 'run') return keys.has('run');
+    if (codeOrAction === 'Space' || codeOrAction === 'jump') return keys.has('jump');
+    return false;
   }
 
   // Universal basis from the ACTUAL camera-forward vector projected on XZ.
@@ -200,7 +228,7 @@
   }
 
   const api = {
-    state, input, reportReady, frame, basisFromForward,
+    state, input, has, reportReady, frame, basisFromForward,
     requestMouseLook(element=document.body) {
       if (element.requestPointerLock) return element.requestPointerLock();
     },

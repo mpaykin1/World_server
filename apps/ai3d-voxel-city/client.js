@@ -104,6 +104,7 @@ function init3D(){
     }
   });
   addEventListener('keydown',e=>{
+    if(document.activeElement?.tagName==='INPUT'||document.activeElement?.tagName==='TEXTAREA') return;
     if(playableMode && ['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code)){
       keysHeld.add(e.code);
       if(e.code.startsWith('Arrow')) e.preventDefault();
@@ -112,10 +113,11 @@ function init3D(){
         if(player.onGround){ player.vy=JUMP_SPEED; player.onGround=false; }
       }
     }
-  });
+  },{passive:false});
   addEventListener('keyup',e=>{
     keysHeld.delete(e.code);
-  });
+    if(e.code.startsWith('Arrow')) e.preventDefault();
+  },{passive:false});
   addEventListener('goldenlook',e=>{if(!playableMode)return;const d=e.detail||{};yaw-=(Number(d.dx)||0)*.005;pitch=Math.max(-1.45,Math.min(1.45,pitch-(Number(d.dy)||0)*.005));player.yaw=yaw;player.pitch=pitch;});
   addEventListener('resize',fitCameras);
   animate();
@@ -658,10 +660,11 @@ window.AI3DVoxelRuntime={
   // setView - e2e/golden-controls.spec.js calls the canonical setView name
   // against both runtimes, so this runtime needs to answer to it too.
   setView(nextYaw,nextPitch=0){this.setPlayerView(nextYaw,nextPitch);},
-  stats(){return {fps:measuredFps,pixelRatio:dynamicPixelRatio,renderer:renderer?.info?.render,mesher:mesherStats,chunks:chunkObjects.size, voxels:world?world.voxels.length:0, player:{x:player.x,y:player.y,z:player.z,yaw,onGround:player.onGround, playable:playableMode}, defaultCityLoaded};},
+  stats(){return {fps:measuredFps,pixelRatio:dynamicPixelRatio,renderer:renderer?.info?.render,mesher:mesherStats,chunks:chunkObjects.size, voxels:world?world.voxels.length:0, player:{x:player.x,y:player.y,z:player.z,yaw,pitch,onGround:player.onGround, playable:playableMode}, defaultCityLoaded};},
   collidesAt(x,y,z){ return collidesAt(x,y,z); },
   getOccupancySize(){ return occupancySet.size; }
 };
+window.GamePlayableRuntime = window.AI3DVoxelRuntime;
 // expose for Playwright and delivery gate — do NOT count HTTP 200 as ready
 window.__AI3D_DEFAULT_CITY_AUTOPLAY__ = { autoLoad: autoLoadDefaultCity, get state(){ return {loaded:defaultCityLoaded, playable:playableMode, spawned: !!(player && player.x), onGround:player.onGround}; } };
 

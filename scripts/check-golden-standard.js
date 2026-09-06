@@ -49,6 +49,27 @@ if(catalog.includes('const right = new THREE.Vector3(Math.cos(yaw),0,-Math.sin(y
 if(!catalog.includes("addEventListener('goldenlook'")) fail('catalog touch-look bridge missing');
 else ok('catalog directions + touch-look');
 
+const playableAppIds = ['ai3d-voxel-city', 'voxel-world', 'catalog'];
+for (const id of playableAppIds) {
+  const code = read(`apps/${id}/client.js`);
+  for (const key of ['KeyW', 'KeyA', 'KeyS', 'KeyD']) {
+    if (!code.includes(key)) fail(`${id} missing WASD control: ${key}`);
+  }
+  for (const arrow of ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']) {
+    if (!code.includes(arrow)) fail(`${id} missing Arrow key control: ${arrow}`);
+  }
+  if (!code.includes("startsWith('Arrow')") || !code.includes("preventDefault")) {
+    fail(`${id} missing arrow key scroll prevention`);
+  }
+  if (!code.includes("addEventListener('goldenlook'")) {
+    fail(`${id} missing mobile touch-look bridge (goldenlook)`);
+  }
+  if (!code.includes('GamePlayableRuntime')) {
+    fail(`${id} missing standard GamePlayableRuntime export`);
+  }
+}
+ok('all playable apps enforce WASD + Arrow keys + scroll prevention + touch-look + GamePlayableRuntime');
+
 const catHtml=read('apps/catalog/index.html');
 if(!catHtml.includes('/shared/golden-catalog-menu.js')) fail('catalog direct world menu missing');
 if(!catHtml.includes('/shared/ai3d-playable-runtime.js')) fail('catalog golden runtime missing');
