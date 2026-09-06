@@ -257,3 +257,31 @@ result reported exactly as observed, not adjusted to look more favorable.
   `data/error-prevention-registry.json`'s
   `opencode-free-tier-reliability-degrades-with-sustained-session-usage`
   entry.
+
+## 2026-09-06 — PR31 AI3D runtime FPS V45
+- Root cause: ai3d-voxel-city repeatedly scanned every chunk on the 180ms streaming cadence even when origin/profile were unchanged; collision/input paths also allocated avoidable temporary values.
+- Fix: unchanged-origin/profile streaming short-circuit with force-refresh bypass; squared-distance streaming; player-origin reuse; numeric occupancy lookup; hoisted collision bounds; sqrt-free digital normalization; rAF timestamp reuse; lifecycle held-key reset.
+- Regression: test/ai3d-voxel-city-runtime-fps-v45.test.js; npm run check PASS x3 before release gate.
+- Safety: no HLOD/render-distance/material/shadow threshold reduction; PR31 worker-token auth and agent-invoke branch cleanup untouched.
+
+## AI3D V46 performance evidence repair
+- Root cause: autoplay captured runtime stats immediately after default-city load, before the 1500ms FPS accumulator emitted its first sample, so `fps: 0` was instrumentation timing, not measured performance.
+- Fix: rolling 240-frame evidence window exposes measured FPS, p95 frame time, long-frame (>50ms) ratio, sample count and window duration; autoplay waits for >=30 real samples and non-zero FPS/p95.
+- Render-proof repair: browser-dependent `canvas.toDataURL().length > 1000` produced a false mobile-WebKit failure (934 bytes); replaced with Playwright canvas screenshot bytes using the same >1000 threshold.
+- Regression: `test/ai3d-voxel-city-performance-evidence-v46.test.js`. Focused regression 7/7 PASS; autoplay 8/8 PASS across desktop-chromium/mobile-chromium/mobile-webkit/tablet-chromium.
+- Measured run: desktop 52 FPS p95=16.8ms long=1.47%; mobile Chromium 40 FPS p95=33.4ms long=3.67%; mobile WebKit 11 FPS p95=244ms long=53.33%; tablet Chromium 31 FPS p95=50ms long=4.29%. Mobile WebKit is now the measured worst target.
+- No thresholds weakened; no master/dirty-worktree edits.
+
+## AI3D V47 mobile-WebKit catastrophic-DPR convergence
+- Root cause: AUTO DPR reduced only 10%% per 1500ms interval even below 50%% target FPS, so the existing .55 floor converged too slowly.
+- Fix: catastrophic misses jump directly to the existing .55 DPR floor; ordinary misses remain 0.90 and recovery 1.06. Floor unchanged.
+- Regression: test/ai3d-voxel-city-mobile-webkit-dpr-v47.test.js.
+- Before V46: mobile-WebKit 11 FPS, p95 244ms, long-frame 53.33%%.
+- After V47 full 8/8: mobile-WebKit 14 FPS, p95 150ms, long-frame 33.33%%, DPR .55; desktop 55 FPS; mobile Chromium 48 FPS; tablet Chromium 35 FPS.
+- Gates: focused 9/9 PASS; autoplay 8/8 PASS; npm run check x3 PASS; release:gate PASS; Quality Regression violations=0; Evidence Score 95.5%%; World Quality 100%%; Collective Brain PASS.
+
+### V48 AI3D single-owner adaptive DPR + stable performance evidence
+- Root cause: AI3D had competing DPR writers (local `adaptResolution`, `WorldQualityAutopilot.apply`, and legacy `GoldenPerformanceAutoTune`). Probe proved telemetry/render divergence: requested DPR `.55` while renderer DPR rose to `.87/.75`; early FPS evidence measured adaptation transients.
+- Fix: existing `WorldQualityAutopilot.registerRenderer` now supports opt-in `manageDpr:false` (default unchanged); AI3D uses one local DPR owner, shared quality only caps downward, legacy Golden DPR registration is removed for AI3D, catastrophic pressure immediately selects existing SAFE tier + existing `.55` floor.
+- Evidence protection: runtime exposes requested/actual DPR + quality stability; autoplay waits for convergence before accepting FPS/p95/long-frame evidence; V48 regression protects single ownership and no threshold weakening.
+- Measured stable matrix after fix: desktop Chromium 60 FPS / p95 16.7ms / long 0%; mobile Chromium 49 / 33.4ms / 1.33%; mobile WebKit 35 / 30ms / 1.92%; tablet Chromium 35 / 33.4ms / 0%. Autoplay 8/8 PASS; focused 13/13 PASS; npm check x3 PASS; release:gate PASS. Playwright emulation is repo E2E evidence, not physical-device proof.

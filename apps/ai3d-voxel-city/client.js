@@ -13,6 +13,8 @@ let yaw=0,pitch=0,radius=180,target=new THREE.Vector3(),frontMode=true,skyVisibl
 let chunkObjects=new Map(),mesherStats=null,profileName='HIGH',adaptive=true;
 let streamingCenter=null;
 let frameCount=0,lastFpsTime=performance.now(),measuredFps=0,lastStreamUpdate=0;
+let perfLastFrameNow=0,frameTimeSamples=[],lastPerfResetAt=performance.now();
+let lastStreamOriginX=NaN,lastStreamOriginZ=NaN,lastStreamProfile='';
 let dynamicPixelRatio=1;
 
 // --- Playable controller state (independent of AI worker) ---
@@ -57,6 +59,7 @@ async function health(){
 }
 function setProgress(p,msg){$('bar').style.width=`${Math.max(0,Math.min(100,p))}%`;if(msg)$('log').textContent=msg;}
 function profile(){return PROFILES[profileName]||PROFILES.HIGH;}
+function resetPerformanceWindow(){frameTimeSamples=[];perfLastFrameNow=performance.now();lastPerfResetAt=perfLastFrameNow;}
 function cssRgb(a){return `rgb(${a[0]},${a[1]},${a[2]})`;}
 
 function init3D(){
@@ -75,8 +78,8 @@ function init3D(){
   renderer.setSize(host.clientWidth,host.clientHeight);
   host.replaceChildren(renderer.domElement);
   window.WorldQualityAutopilot?.registerRenderer('ai3d-voxel-city',renderer,{
-    initialTier:matchMedia('(pointer:coarse)').matches?'BALANCED':'HIGH',targetFps:matchMedia('(pointer:coarse)').matches?43:55,
-    onQualityChange(q){if(!adaptive)return;profileName=q.tier==='SAFE'?'SAFE':q.tier==='ULTRA'?'ULTRA':'HIGH';dynamicPixelRatio=Math.min(devicePixelRatio||1,Number(q.dpr)||profile().pixelRatio);renderer.setPixelRatio(dynamicPixelRatio);renderer.setSize(host.clientWidth,host.clientHeight,false);if(typeof setWorldMaterialQuality==='function')setWorldMaterialQuality(q.pbrQuality||0);if(world){applyFog();updateStreaming(true)}},
+    initialTier:matchMedia('(pointer:coarse)').matches?'BALANCED':'HIGH',targetFps:matchMedia('(pointer:coarse)').matches?43:55,manageDpr:false,
+    onQualityChange(q){if(!adaptive)return;const oldProfile=profileName;profileName=q.tier==='SAFE'?'SAFE':q.tier==='ULTRA'?'ULTRA':'HIGH';const cap=Math.min(devicePixelRatio||1,Number(q.dpr)||profile().pixelRatio);let changed=profileName!==oldProfile;if(dynamicPixelRatio>cap+.001){dynamicPixelRatio=cap;renderer.setPixelRatio(dynamicPixelRatio);renderer.setSize(host.clientWidth,host.clientHeight,false);changed=true}if(typeof setWorldMaterialQuality==='function')setWorldMaterialQuality(q.pbrQuality||0);if(world){applyFog();updateStreaming(true)}if(changed)resetPerformanceWindow()},
     getStats(){return{fps:measuredFps,calls:renderer.info.render.calls,triangles:renderer.info.render.triangles}}
   });
 
@@ -116,6 +119,18 @@ function init3D(){
   addEventListener('keyup',e=>{
     keysHeld.delete(e.code);
   });
+  function releasePlayableInputs(reason='unknown'){
+    if(!keysHeld.size)return;
+    keysHeld.clear();
+    if(window.__AI3D_PLAYABLE_SCENE__){
+      const st=window.__AI3D_PLAYABLE_SCENE__.state||(window.__AI3D_PLAYABLE_SCENE__.state={});
+      st.inputResetCount=(Number(st.inputResetCount)||0)+1;
+      st.lastInputResetReason=reason;
+    }
+  }
+  addEventListener('blur',()=>releasePlayableInputs('window-blur'));
+  addEventListener('pagehide',()=>releasePlayableInputs('pagehide'));
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState!=='visible')releasePlayableInputs('visibility-hidden');});
   addEventListener('goldenlook',e=>{if(!playableMode)return;const d=e.detail||{};yaw-=(Number(d.dx)||0)*.005;pitch=Math.max(-1.45,Math.min(1.45,pitch-(Number(d.dy)||0)*.005));player.yaw=yaw;player.pitch=pitch;});
   addEventListener('resize',fitCameras);
   animate();
@@ -250,28 +265,30 @@ async function buildOptimizedChunks(data){
   buildOccupancy(data);
 }
 function buildOccupancy(data){
-  occupancySet=new Set();
+  occupancySet=new Map();
   for(const v of (data.voxels||[])){
     const x=v[0], y=v[1], z=v[2];
-    occupancySet.add(`${x},${y},${z}`);
+    let byY=occupancySet.get(x);
+    if(!byY){byY=new Map();occupancySet.set(x,byY);}
+    let zs=byY.get(y);
+    if(!zs){zs=new Set();byY.set(y,zs);}
+    zs.add(z);
   }
 }
 function isOccupied(ix,iy,iz){
-  return occupancySet.has(`${ix},${iy},${iz}`);
+  return occupancySet.get(ix)?.get(iy)?.has(iz)===true;
 }
 function collidesAt(x,y,z){
   // check player cylinder collision: check voxels around player's feet/head
   const r=player.radius;
-  const h=player.height;
   const minY=Math.floor(y - player.eyeHeight + 0.1);
   const maxY=Math.floor(y + 0.2);
   const minX=Math.floor(x - r), maxX=Math.floor(x + r);
   const minZ=Math.floor(z - r), maxZ=Math.floor(z + r);
+  const px0=x-r,px1=x+r,pz0=z-r,pz1=z+r,py0=y-player.eyeHeight,py1=y+0.2;
   for(let ix=minX;ix<=maxX;ix++) for(let iy=minY;iy<=maxY;iy++) for(let iz=minZ;iz<=maxZ;iz++){
     if(isOccupied(ix,iy,iz)){
-      // precise AABB vs cylinder check simplified to box
       const bx0=ix-0.5,bx1=ix+0.5,by0=iy-0.5,by1=iy+0.5,bz0=iz-0.5,bz1=iz+0.5;
-      const px0=x - r, px1=x + r, pz0=z - r, pz1=z + r, py0=y - player.eyeHeight, py1=y + 0.2;
       if(px1>bx0 && px0<bx1 && py1>by0 && py0<by1 && pz1>bz0 && pz0<bz1) return true;
     }
   }
@@ -330,21 +347,28 @@ async function renderWorld(data){
 }
 
 function streamingOrigin(){
-  if(playableMode) return new THREE.Vector3(player.x, player.y, player.z);
+  if(playableMode) return player;
   if(streamingCenter)return streamingCenter;
   return activeCamera?.position||target;
 }
-function updateStreaming(force=false){
+function updateStreaming(force=false,now=performance.now()){
   if(frontMode)return;
-  const now=performance.now();if(!force&&now-lastStreamUpdate<180)return;lastStreamUpdate=now;
+  if(!force&&now-lastStreamUpdate<180)return;
   const p=profile(),origin=streamingOrigin();
+  if(!force&&origin.x===lastStreamOriginX&&origin.z===lastStreamOriginZ&&profileName===lastStreamProfile){
+    lastStreamUpdate=now;
+    return;
+  }
+  lastStreamUpdate=now;
+  lastStreamOriginX=origin.x;lastStreamOriginZ=origin.z;lastStreamProfile=profileName;
   const maxDist=p.renderChunks*CHUNK_SIZE,detailDist=p.detailChunks*CHUNK_SIZE;
+  const maxDistSq=maxDist*maxDist,detailDistSq=detailDist*detailDist;
   for(const o of chunkObjects.values()){
     const dx=o.center.x-origin.x,dz=o.center.z-origin.z;
-    const d=Math.hypot(dx,dz);
-    const show=d<=maxDist;
-    o.detail.visible=show&&d<=detailDist;
-    o.far.visible=show&&d>detailDist;
+    const dSq=dx*dx+dz*dz;
+    const show=dSq<=maxDistSq;
+    o.detail.visible=show&&dSq<=detailDistSq;
+    o.far.visible=show&&dSq>detailDistSq;
   }
 }
 function updatePerformanceLabel(){
@@ -357,12 +381,15 @@ function adaptResolution(){
   if(!adaptive||frontMode||!renderer)return;
   const p=profile(),dpr=devicePixelRatio||1;
   let next=dynamicPixelRatio;
-  if(measuredFps>0&&measuredFps<p.targetFps-6)next*=.90;
+  // Catastrophic misses need a fast convergence to the existing SAFE DPR floor.
+  // This changes adaptation speed only; the .55 quality floor is unchanged.
+  let qualityChanged=false;
+  if(measuredFps>0&&measuredFps<p.targetFps*.5){next=.55;if(profileName!=='SAFE'){profileName='SAFE';applyFog();updateStreaming(true);qualityChanged=true;}}
+  else if(measuredFps>0&&measuredFps<p.targetFps-6)next*=.90;
   else if(measuredFps>p.targetFps+7)next*=1.06;
   next=Math.max(.55,Math.min(dpr,p.pixelRatio,next));
-  if(Math.abs(next-dynamicPixelRatio)>.04){
-    dynamicPixelRatio=next;renderer.setPixelRatio(dynamicPixelRatio);fitCameras();
-  }
+  if(Math.abs(next-dynamicPixelRatio)>.04){dynamicPixelRatio=next;renderer.setPixelRatio(dynamicPixelRatio);fitCameras();qualityChanged=true;}
+  if(qualityChanged)resetPerformanceWindow();
 }
 const GOLDEN_STEP_HEIGHTS=[.25,.5,.75,1.0,1.05];
 function goldenPlayableHorizontal(axis,delta,allowStep){
@@ -396,8 +423,7 @@ function updatePlayer(dt){
     if(keysHeld.has('KeyD')||keysHeld.has('ArrowRight')) s+=1;
     if(keysHeld.has('KeyA')||keysHeld.has('ArrowLeft')) s-=1;
   }
-  const len=Math.hypot(f,s);
-  if(len>0){ f/=len; s/=len; }
+  if(f!==0 && s!==0){ f*=Math.SQRT1_2; s*=Math.SQRT1_2; }
   const speed=player.speed * ((sceneInput && sceneInput.run)|| keysHeld.has('ShiftLeft') ? 1.8 : 1);
   const move=window.GameGoldenPhysics.canonicalXZ(yaw,f,s,speed);
   const wishX=move.x;
@@ -454,10 +480,15 @@ function updatePlayer(dt){
 }
 function animate(now=performance.now()){
   requestAnimationFrame(animate);
+  if(perfLastFrameNow>0){
+    frameTimeSamples.push(now-perfLastFrameNow);
+    if(frameTimeSamples.length>240)frameTimeSamples.splice(0,frameTimeSamples.length-240);
+  }
+  perfLastFrameNow=now;
   const dt=Math.min(0.05,(now - lastPlayerUpdate)/1000); lastPlayerUpdate=now;
   frameCount++;
   if(playableMode) updatePlayer(dt);
-  if(!frontMode)updateStreaming();
+  if(!frontMode)updateStreaming(false,now);
   if(now-lastFpsTime>=1500){
     measuredFps=Math.round(frameCount*1000/(now-lastFpsTime));frameCount=0;lastFpsTime=now;
     adaptResolution();updatePerformanceLabel();
@@ -649,6 +680,15 @@ async function autoLoadDefaultCity(){
   }
 }
 
+function performanceSnapshot(){
+  const samples=frameTimeSamples.filter(Number.isFinite);
+  if(!samples.length)return {fps:measuredFps,samples:0,p95FrameMs:0,longFrameRatio:0,windowMs:0};
+  const sorted=[...samples].sort((a,b)=>a-b);
+  const p95=sorted[Math.min(sorted.length-1,Math.floor((sorted.length-1)*.95))];
+  const longFrames=samples.filter(ms=>ms>50).length;
+  return {fps:measuredFps,samples:samples.length,p95FrameMs:Number(p95.toFixed(2)),longFrameRatio:Number((longFrames/samples.length).toFixed(4)),windowMs:Number(samples.reduce((a,b)=>a+b,0).toFixed(1))};
+}
+
 window.AI3DVoxelRuntime={
   setStreamingCenter(x,y,z){streamingCenter=new THREE.Vector3(Number(x)||0,Number(y)||0,Number(z)||0);updateStreaming(true);},
   clearStreamingCenter(){streamingCenter=null;updateStreaming(true);},
@@ -658,7 +698,7 @@ window.AI3DVoxelRuntime={
   // setView - e2e/golden-controls.spec.js calls the canonical setView name
   // against both runtimes, so this runtime needs to answer to it too.
   setView(nextYaw,nextPitch=0){this.setPlayerView(nextYaw,nextPitch);},
-  stats(){return {fps:measuredFps,pixelRatio:dynamicPixelRatio,renderer:renderer?.info?.render,mesher:mesherStats,chunks:chunkObjects.size, voxels:world?world.voxels.length:0, player:{x:player.x,y:player.y,z:player.z,yaw,onGround:player.onGround, playable:playableMode}, defaultCityLoaded};},
+  stats(){return {fps:measuredFps,performance:performanceSnapshot(),pixelRatio:dynamicPixelRatio,actualPixelRatio:renderer?.getPixelRatio?.()||dynamicPixelRatio,quality:{profile:profileName,adaptive,stableForMs:Math.max(0,performance.now()-lastPerfResetAt)},renderer:renderer?.info?.render,mesher:mesherStats,chunks:chunkObjects.size, voxels:world?world.voxels.length:0, player:{x:player.x,y:player.y,z:player.z,yaw,onGround:player.onGround, playable:playableMode}, defaultCityLoaded};},
   collidesAt(x,y,z){ return collidesAt(x,y,z); },
   getOccupancySize(){ return occupancySet.size; }
 };
@@ -668,4 +708,5 @@ window.__AI3D_DEFAULT_CITY_AUTOPLAY__ = { autoLoad: autoLoadDefaultCity, get sta
 init3D();health();
 autoLoadDefaultCity();
 
-try{if(typeof renderer!=='undefined')window.GoldenPerformanceAutoTune?.registerRenderer(renderer,{targetFps:matchMedia('(pointer:coarse)').matches?45:55,minDpr:.75,maxDpr:Math.min(devicePixelRatio||1,2)});}catch{}
+// DPR has one owner in this runtime: local adaptive control, capped downward by WorldQualityAutopilot.
+

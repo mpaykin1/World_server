@@ -96,14 +96,21 @@ test('implementGoal: refuses to run against the main tree even with a valid mode
   assert.match(r.error, /main tree/);
 });
 
+function branchExists(branch) {
+  const r = spawnSync('git', ['branch', '--list', '--', branch], { cwd: ROOT, encoding: 'utf8', timeout: 15000 });
+  return String(r.stdout || '').trim().length > 0;
+}
+
 test('createIsolatedWorktree + isWorktreeHealthy + removeIsolatedWorktree: real lifecycle', () => {
   const created = adapters.createIsolatedWorktree(ROOT, 'lifecycle-test');
   assert.equal(created.ok, true);
   assert.ok(fs.existsSync(created.worktreePath));
   assert.equal(adapters.isWorktreeHealthy(created.worktreePath), true);
+  assert.ok(branchExists(created.branch), 'the throwaway branch must exist right after creation');
   const removed = adapters.removeIsolatedWorktree(ROOT, created.worktreePath);
   assert.equal(removed.ok, true);
   assert.equal(fs.existsSync(created.worktreePath), false);
+  assert.ok(!branchExists(created.branch), 'removeIsolatedWorktree must delete the throwaway ai/agent-invoke/* branch it created, not just the worktree checkout (root cause of a 131-branch leak found via a real audit)');
 });
 
 test('createIsolatedWorktree: sanitizes an unsafe name instead of failing or path-escaping', () => {
@@ -114,7 +121,10 @@ test('createIsolatedWorktree: sanitizes an unsafe name instead of failing or pat
     assert.ok(!created.worktreePath.includes('..'));
     assert.ok(!/[;&|]/.test(path.basename(created.worktreePath)));
   } finally {
-    if (created.ok) adapters.removeIsolatedWorktree(ROOT, created.worktreePath);
+    if (created.ok) {
+      adapters.removeIsolatedWorktree(ROOT, created.worktreePath);
+      assert.ok(!branchExists(created.branch), 'the sanitized-but-still-disposable branch must not leak either');
+    }
   }
 });
 
@@ -127,6 +137,27 @@ test('repairWorktreeIfCorrupted: detects a corrupted worktree (missing .git) and
   const repair = adapters.repairWorktreeIfCorrupted(ROOT, created.worktreePath);
   assert.equal(repair.repaired, true);
   assert.equal(fs.existsSync(created.worktreePath), false, 'a corrupted worktree must be removed, not left broken');
+  assert.ok(!branchExists(created.branch), 'repairWorktreeIfCorrupted must also clean up the throwaway branch (looked up via worktree admin metadata, since the worktree\'s own .git is gone)');
+});
+
+test('deleteThrowawayBranchIfOwned safety fence: removeIsolatedWorktree never deletes a branch outside ai/agent-invoke/*', () => {
+  // a worktree checked out on an ordinary (non-throwaway) branch must survive
+  // worktree removal with its branch intact - the deletion helper is fenced
+  // to AGENT_INVOKE_BRANCH_PREFIX specifically so this function can never be
+  // used to nuke an unrelated branch even if ever called on the wrong path.
+  const branch = `test/agent-adapters-fence-${Date.now()}`;
+  const dir = path.join(os.tmpdir(), `agent-adapters-fence-${Date.now()}`);
+  spawnSync('git', ['fetch', 'origin', 'master'], { cwd: ROOT, encoding: 'utf8', timeout: 30000 });
+  const add = spawnSync('git', ['worktree', 'add', dir, '-b', branch, 'origin/master'], { cwd: ROOT, encoding: 'utf8', timeout: 30000 });
+  assert.equal(add.status, 0, add.stderr);
+  try {
+    const removed = adapters.removeIsolatedWorktree(ROOT, dir);
+    assert.equal(removed.ok, true);
+    assert.equal(fs.existsSync(dir), false);
+    assert.ok(branchExists(branch), 'a non-ai/agent-invoke/* branch must never be deleted by removeIsolatedWorktree');
+  } finally {
+    spawnSync('git', ['branch', '-D', branch], { cwd: ROOT, encoding: 'utf8', timeout: 15000 });
+  }
 });
 
 test('repairWorktreeIfCorrupted: a healthy worktree is left alone', () => {
