@@ -1,6 +1,6 @@
 'use strict';
 const fs=require('fs'),path=require('path'),crypto=require('crypto');
-const R=process.cwd(),SEED='46046';
+const R=process.cwd(),SEED='51051';
 const reg=JSON.parse(fs.readFileSync(path.join(R,'data/error-prevention-registry.json'),'utf8'));
 const EXCLUDE=new Set(['release-gate-skipped-as-heavy','collective-brain-dirty-main-bootstrap','agentmemory-port-conflict']);
 const MODELS=['qwen2.5:3b-instruct','qwen3-fast:1.7b'];
@@ -22,11 +22,11 @@ async function ask(model,e,seed){
 
 }
 (async()=>{
- const rows=[];for(let i=0;i<TASKS.length;i++)for(const m of MODELS){const row={id:TASKS[i].id,...await ask(m,TASKS[i],46046+i)};rows.push(row);console.log(`[RUN_046] ${i+1}/8 ${m} ms=${row.ms} q=${row.q.toFixed(3)} n=${row.n.toFixed(3)} er=${row.er} timeout=${row.timeout}`)}
+ const rows=[];for(let i=0;i<TASKS.length;i++)for(const m of MODELS){const row={id:TASKS[i].id,...await ask(m,TASKS[i],46046+i)};rows.push(row);console.log(`[RUN_051] ${i+1}/8 ${m} ms=${row.ms} q=${row.q.toFixed(3)} n=${row.n.toFixed(3)} er=${row.er} timeout=${row.timeout}`)}
  const maxMs=Math.max(...rows.map(x=>x.ms));const util=x=>.52*x.q+.20*x.n-.18*x.er-.10*x.ms/maxMs;
  const pairs=TASKS.map(e=>{const a=rows.find(x=>x.id===e.id&&x.model===MODELS[0]),b=rows.find(x=>x.id===e.id&&x.model===MODELS[1]);return{id:e.id,candidate:util(a),baseline:util(b),delta:util(a)-util(b),candidateError:a.er,baselineError:b.er,candidateTimeout:a.timeout,baselineTimeout:b.timeout,candidateMs:a.ms,baselineMs:b.ms}});
  const wins=pairs.filter(x=>x.delta>=.03).length,deltas=pairs.map(x=>x.delta).sort((a,b)=>a-b),med=deltas[Math.floor(deltas.length/2)],candidateErrors=pairs.reduce((s,x)=>s+x.candidateError,0),baselineErrors=pairs.reduce((s,x)=>s+x.baselineError,0);
  const promote=wins/TASKS.length>=.75&&med>=.03&&candidateErrors<=baselineErrors;
- const report={experiment:'RUN_046_H4_SPECIALIST_HOLDOUT_V2',seed:SEED,blindPrompt:true,taskIds:TASKS.map(x=>x.id),criterion:'8 unseen deterministic tasks; >=75% paired wins by >=0.03; median delta >=0.03; candidate errors <= baseline errors',rows,pairs,wins,winRate:wins/TASKS.length,medianDelta:med,candidateErrors,baselineErrors,promoteQwen25:promote,executionPass:rows.every(x=>x.output&&!x.error),hypothesisPass:promote,pass:rows.every(x=>x.output&&!x.error)&&promote};
- fs.writeFileSync(path.join(R,'RUN_046_H4_SPECIALIST_HOLDOUT_V2.json'),JSON.stringify(report,null,2));console.log(JSON.stringify({taskIds:report.taskIds,wins,winRate:report.winRate,medianDelta:med,candidateErrors,baselineErrors,promoteQwen25:promote},null,2));
+ const report={experiment:'RUN_051_H4_BLIND_SPECIALIST_HOLDOUT',seed:SEED,blindPrompt:true,taskIds:TASKS.map(x=>x.id),criterion:'8 unseen deterministic tasks; >=75% paired wins by >=0.03; median delta >=0.03; candidate errors <= baseline errors',rows,pairs,wins,winRate:wins/TASKS.length,medianDelta:med,candidateErrors,baselineErrors,promoteQwen25:promote,executionPass:rows.every(x=>x.output&&!x.error),hypothesisPass:promote,pass:rows.every(x=>x.output&&!x.error)&&promote};
+ fs.writeFileSync(path.join(R,'RUN_051_H4_SPECIALIST_HOLDOUT_V2.json'),JSON.stringify(report,null,2));console.log(JSON.stringify({taskIds:report.taskIds,wins,winRate:report.winRate,medianDelta:med,candidateErrors,baselineErrors,promoteQwen25:promote},null,2));
 })().catch(e=>{console.error(e);process.exit(1)});

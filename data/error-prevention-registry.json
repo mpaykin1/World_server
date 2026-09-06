@@ -486,6 +486,24 @@
         "full release:gate mandatory before merge/production claim",
         "record exact failing step instead of skipping"
       ]
+    },
+    {
+      "id": "h4-science-harness-ground-truth-leak",
+      "category": "science-infrastructure",
+      "severity": "high",
+      "status": "protected",
+      "symptom": "H4 specialist holdout supplied scorer-only root cause, protections and solution inside the model prompt and also hard-coded pass:true.",
+      "rootCause": "The experiment mixed hidden evaluation labels with model-visible task context, so measured quality was not blind; client AbortController additionally contaminated sequential Ollama timing.",
+      "solution": "Model prompts contain symptom only; rootCause/solution/protection remain scorer-only. No client AbortController in paired local benchmarks. executionPass is distinct from hypothesisPass and pass requires both.",
+      "protection": [
+        "test/science-h4-blind-integrity.test.cjs",
+        "scripts/science-h4-specialist-holdout-v2.cjs",
+        "scripts/science-h4-blind-specialist-holdout.cjs"
+      ],
+      "evidence": [
+        "RUN_051_H4_SPECIALIST_HOLDOUT_V2.json"
+      ],
+      "confirmedAt": "2026-09-06T01:03:25.123726+00:00"
     }
   ],
   "confirmationProtocol": {

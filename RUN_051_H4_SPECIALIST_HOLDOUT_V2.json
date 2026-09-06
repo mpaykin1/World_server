@@ -1,0 +1,285 @@
+{
+  "experiment": "RUN_051_H4_BLIND_SPECIALIST_HOLDOUT",
+  "seed": "51051",
+  "blindPrompt": true,
+  "taskIds": [
+    "godot-gdscript-undefined-class-is-check",
+    "wall-collision-broken",
+    "premature-done-claim-below-reference-gate",
+    "godot-editor-play-hides-standalone-parse-errors",
+    "collective-brain-event-corruption",
+    "voxel-hero-silhouette-invisible-against-void",
+    "openhuman-embedding-dimension-mismatch",
+    "powershell-utf8-mojibake-on-install"
+  ],
+  "criterion": "8 unseen deterministic tasks; >=75% paired wins by >=0.03; median delta >=0.03; candidate errors <= baseline errors",
+  "rows": [
+    {
+      "id": "godot-gdscript-undefined-class-is-check",
+      "model": "qwen2.5:3b-instruct",
+      "ms": 18034,
+      "q": 0,
+      "n": 0.05263157894736842,
+      "er": 0,
+      "timeout": false,
+      "output": "ROOT_CAUSE: The EditorPlugin or gate script contains syntax errors or is malformed, preventing it from being parsed correctly by the system.\n\nFIX: Carefully review the EditorPlugin or gate script for syntax errors, missing or misplaced characters, or incorrect formatting. Correct any issues found and ensure the script is syntactically correct."
+    },
+    {
+      "id": "godot-gdscript-undefined-class-is-check",
+      "model": "qwen3-fast:1.7b",
+      "ms": 15314,
+      "q": 0,
+      "n": 0.21052631578947367,
+      "er": 0,
+      "timeout": false,
+      "output": "ROOT_CAUSE: The editor plugin or gate script is encountering a parse error during loading, which causes it to fail silently and disable all contained checks.\n\nFIX: Validate the syntax of the editor plugin or gate script before loading it. Use a parser or linter to detect and fix syntax errors. Ensure the script is properly formatted and compatible with the expected syntax version."
+    },
+    {
+      "id": "wall-collision-broken",
+      "model": "qwen2.5:3b-instruct",
+      "ms": 8556,
+      "q": 0.25,
+      "n": 0.14285714285714285,
+      "er": 0,
+      "timeout": false,
+      "output": "ROOT_CAUSE: The player's movement logic is not correctly implemented to account for the boundaries of the game world, allowing the player to move outside the defined area.\n\nFIX: Implement collision detection and boundary checking in the player's movement logic to ensure the player cannot move outside the game world boundaries."
+    },
+    {
+      "id": "wall-collision-broken",
+      "model": "qwen3-fast:1.7b",
+      "ms": 5919,
+      "q": 0.25,
+      "n": 0.14285714285714285,
+      "er": 0,
+      "timeout": false,
+      "output": "ROOT_CAUSE: The player entity is not properly constrained in the 3D space, allowing it to pass through walls due to missing collision detection or incorrect spatial boundaries.\n\nFIX: Implement proper collision detection for the player entity, ensure spatial boundaries are correctly defined, and verify that the player's movement logic respects the game world's spatial constraints."
+    },
+    {
+      "id": "premature-done-claim-below-reference-gate",
+      "model": "qwen2.5:3b-instruct",
+      "ms": 13490,
+      "q": 0,
+      "n": 0.05263157894736842,
+      "er": 0,
+      "timeout": false,
+      "output": "ROOT_CAUSE: The AI model may not be fully optimized for the specific project's requirements, or it might not have been trained on the most relevant data. Additionally, the model's performance might be affected by the quality of the input data or the complexity of the task.\n\nFIX: To address this issue, the following steps can be taken:\n1. Fine-tune the AI model with more relevant"
+    },
+    {
+      "id": "premature-done-claim-below-reference-gate",
+      "model": "qwen3-fast:1.7b",
+      "ms": 6545,
+      "q": 0.125,
+      "n": 0.05263157894736842,
+      "er": 0,
+      "timeout": false,
+      "output": "ROOT_CAUSE: The AI model is not properly validating the visual output against the project's quality standards, leading to a false sense of completion.\n\nFIX: Implement a quality validation step in the AI pipeline that checks the visual output against the project's approved quality criteria before marking it as \"done.\""
+    },
+    {
+      "id": "godot-editor-play-hides-standalone-parse-errors",
+      "model": "qwen2.5:3b-instruct",
+      "ms": 14338,
+      "q": 0,
+      "n": 0.03125,
+      "er": 0,
+      "timeout": false,
+      "output": "ROOT_CAUSE: The issue might be related to the environment or dependencies not being properly set up when running the standalone .exe. This could be due to missing or incorrectly configured libraries, environment variables, or configuration files that are available in the development environment but not in the standalone execution.\n\nFIX: \n1. Ensure all required libraries and dependencies are included in the standalone .exe. This might involve using"
+    },
+    {
+      "id": "godot-editor-play-hides-standalone-parse-errors",
+      "model": "qwen3-fast:1.7b",
+      "ms": 8591,
+      "q": 0.07894736842105263,
+      "n": 0.1875,
+      "er": 0,
+      "timeout": false,
+      "output": "ROOT_CAUSE: The scene renders correctly in the MCP/editor Play button but fails to display any visual content when run as a standalone .exe/window. This suggests a rendering pipeline issue or resource loading problem that is not detected by the editor.\n\nFIX: Check the following:\n1. Ensure that all necessary assets (textures, models, shaders) are properly loaded and available in the build.\n2. Verify"
+    },
+    {
+      "id": "collective-brain-event-corruption",
+      "model": "qwen2.5:3b-instruct",
+      "ms": 8935,
+      "q": 0,
+      "n": 0,
+      "er": 0,
+      "timeout": false,
+      "output": "ROOT_CAUSE: The repository lacks proper version control and audit mechanisms, leading to potential unauthorized modifications or reordering of history.\n\nFIX: Implement comprehensive version control and audit features, such as Git hooks, access controls, and logging, to ensure that all changes are properly tracked and authorized."
+    },
+    {
+      "id": "collective-brain-event-corruption",
+      "model": "qwen3-fast:1.7b",
+      "ms": 5826,
+      "q": 0.4,
+      "n": 0,
+      "er": 0,
+      "timeout": false,
+      "output": "ROOT_CAUSE: The repository's audit/replay history is not properly protected against unauthorized modifications, allowing malicious or accidental changes to be made without detection.\n\nFIX: Implement proper version control and audit logging mechanisms to ensure that the audit/replay history remains immutable and can be verified for integrity."
+    },
+    {
+      "id": "voxel-hero-silhouette-invisible-against-void",
+      "model": "qwen2.5:3b-instruct",
+      "ms": 20483,
+      "q": 0.15,
+      "n": 0.09302325581395349,
+      "er": 0,
+      "timeout": false,
+      "output": "ROOT_CAUSE: The blending of the silhouette of the terrain/mountain with the near-black background is due to insufficient contrast or insufficient lighting, causing the silhouette to not be clearly visible.\n\nFIX: Increase the lighting intensity around the focal object (eye, character, etc.) to create a more distinct contrast between the silhouette and the background. Consider using a light source that can highlight the silhouette more effectively."
+    },
+    {
+      "id": "voxel-hero-silhouette-invisible-against-void",
+      "model": "qwen3-fast:1.7b",
+      "ms": 10634,
+      "q": 0.075,
+      "n": 0.06976744186046512,
+      "er": 0,
+      "timeout": false,
+      "output": "ROOT_CAUSE: The camera movement does not cause the terrain/mountain silhouette to visually respond, because the silhouette blends into the near-black background instead of having a readable edge.\n\nFIX: Ensure that the terrain/mountain silhouette has a distinct edge against the near-black background, even when the camera is moved. This can be achieved by adjusting the blending mode or adding a subtle contrast to the silhouette to maintain"
+    },
+    {
+      "id": "openhuman-embedding-dimension-mismatch",
+      "model": "qwen2.5:3b-instruct",
+      "ms": 13108,
+      "q": 0.2,
+      "n": 0.3333333333333333,
+      "er": 0,
+      "timeout": false,
+      "output": "ROOT_CAUSE: The failure of the OpenHuman Memory Tree embedding could be due to a mismatch between the embeddings used in the model and the updated local AI preset/model. This mismatch could be caused by changes in the embeddings or the structure of the embeddings, which are crucial for the model to understand and process the data correctly.\n\nFIX: Ensure that the embeddings used in the OpenHuman Memory Tree model are"
+    },
+    {
+      "id": "openhuman-embedding-dimension-mismatch",
+      "model": "qwen3-fast:1.7b",
+      "ms": 5153,
+      "q": 0.1,
+      "n": 0.2222222222222222,
+      "er": 0,
+      "timeout": false,
+      "output": "ROOT_CAUSE: Change in local AI preset or model leads to inconsistency in memory tree embedding.\n\nFIX: Validate and update memory tree embedding configuration after model or preset change. Ensure consistency between model/preset and embedding parameters."
+    },
+    {
+      "id": "powershell-utf8-mojibake-on-install",
+      "model": "qwen2.5:3b-instruct",
+      "ms": 18607,
+      "q": 0.125,
+      "n": 0.17391304347826086,
+      "er": 0,
+      "timeout": false,
+      "output": "ROOT_CAUSE: The PowerShell script that was executed might have introduced a BOM (Byte Order Mark) at the beginning of the file, which is not compatible with the encoding used by the file. Additionally, the script might have inadvertently altered Cyrillic text, curly quotes, or em-dashes, leading to mojibake (incorrect character encoding).\n\nFIX: \n1. Ensure that the PowerShell"
+    },
+    {
+      "id": "powershell-utf8-mojibake-on-install",
+      "model": "qwen3-fast:1.7b",
+      "ms": 10611,
+      "q": 0.125,
+      "n": 0.17391304347826086,
+      "er": 0,
+      "timeout": false,
+      "output": "ROOT_CAUSE: PowerShell installation/patch script introduced a BOM (Byte Order Mark) and improperly handled Cyrillic text, causing it to be converted into mojibake (garbage) and introducing the BOM.\n\nFIX: Remove the BOM from the file, ensure proper encoding (e.g., UTF-8 without BOM), and verify that Cyrillic text is not being converted by"
+    }
+  ],
+  "pairs": [
+    {
+      "id": "godot-gdscript-undefined-class-is-check",
+      "candidate": -0.07751742780277354,
+      "baseline": -0.032659175645015005,
+      "delta": -0.04485825215775854,
+      "candidateError": 0,
+      "baselineError": 0,
+      "candidateTimeout": false,
+      "baselineTimeout": false,
+      "candidateMs": 18034,
+      "baselineMs": 15314
+    },
+    {
+      "id": "wall-collision-broken",
+      "candidate": 0.1168002036532037,
+      "baseline": 0.12967429436257247,
+      "delta": -0.012874090709368763,
+      "candidateError": 0,
+      "baselineError": 0,
+      "candidateTimeout": false,
+      "baselineTimeout": false,
+      "candidateMs": 8556,
+      "baselineMs": 5919
+    },
+    {
+      "id": "premature-done-claim-below-reference-gate",
+      "candidate": -0.055333177448821484,
+      "baseline": 0.04357298864013033,
+      "delta": -0.09890616608895181,
+      "candidateError": 0,
+      "baselineError": 0,
+      "candidateTimeout": false,
+      "baselineTimeout": false,
+      "candidateMs": 13490,
+      "baselineMs": 6545
+    },
+    {
+      "id": "godot-editor-play-hides-standalone-parse-errors",
+      "candidate": -0.0637495117902651,
+      "baseline": 0.036610533253506765,
+      "delta": -0.10036004504377186,
+      "candidateError": 0,
+      "baselineError": 0,
+      "candidateTimeout": false,
+      "baselineTimeout": false,
+      "candidateMs": 14338,
+      "baselineMs": 8591
+    },
+    {
+      "id": "collective-brain-event-corruption",
+      "candidate": -0.04362153981350388,
+      "baseline": 0.17955690084460285,
+      "delta": -0.22317844065810674,
+      "candidateError": 0,
+      "baselineError": 0,
+      "candidateTimeout": false,
+      "baselineTimeout": false,
+      "candidateMs": 8935,
+      "baselineMs": 5826
+    },
+    {
+      "id": "voxel-hero-silhouette-invisible-against-void",
+      "candidate": -0.0033953488372093082,
+      "baseline": 0.001037265162602219,
+      "delta": -0.004432613999811527,
+      "candidateError": 0,
+      "baselineError": 0,
+      "candidateTimeout": false,
+      "baselineTimeout": false,
+      "candidateMs": 20483,
+      "baselineMs": 10634
+    },
+    {
+      "id": "openhuman-embedding-dimension-mismatch",
+      "candidate": 0.10667213461569758,
+      "baseline": 0.07128699680493851,
+      "delta": 0.03538513781075907,
+      "candidateError": 0,
+      "baselineError": 0,
+      "candidateTimeout": false,
+      "baselineTimeout": false,
+      "candidateMs": 13108,
+      "baselineMs": 5153
+    },
+    {
+      "id": "powershell-utf8-mojibake-on-install",
+      "candidate": 0.00894142332241582,
+      "baseline": 0.04797867372518885,
+      "delta": -0.03903725040277303,
+      "candidateError": 0,
+      "baselineError": 0,
+      "candidateTimeout": false,
+      "baselineTimeout": false,
+      "candidateMs": 18607,
+      "baselineMs": 10611
+    }
+  ],
+  "wins": 1,
+  "winRate": 0.125,
+  "medianDelta": -0.03903725040277303,
+  "candidateErrors": 0,
+  "baselineErrors": 0,
+  "promoteQwen25": false,
+  "executionPass": true,
+  "hypothesisPass": false,
+  "pass": false
+}
