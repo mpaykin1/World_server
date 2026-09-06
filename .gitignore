@@ -1,4 +1,4 @@
-.env
+﻿.env
 .env.*
 !.env.example
 .vercel
@@ -24,16 +24,16 @@ playwright-report/
 WORLD_SERVER_GOLDEN_STANDARD*.zip
 GOLDEN_STANDARD_WORLD_SERVER_V10/
 
-# secrets index — never commit
+# secrets index вЂ” never commit
 WORLD_SERVER_SECRETS/
 
-# local toolchain cache / disaster-recovery snapshots / backups — large, regenerable, not source
+# local toolchain cache / disaster-recovery snapshots / backups вЂ” large, regenerable, not source
 .cache/
 .world-server-state/
 .blocker-repair-backups/
 *.tmp-*
 
-# stray nested worktree copies living inside the main tree — real worktrees live as siblings
+# stray nested worktree copies living inside the main tree вЂ” real worktrees live as siblings
 World_server_claude/
 World_server_quality_autopilot_v7_test/
 
@@ -61,8 +61,22 @@ COLLECTIVE_BRAIN_BENCHMARK.json
 .patch-backups/
 
 # Godot editor cache / import artifacts - regenerated on first open/import,
-# never source. GODOT_BUILD/ is the real headless-export output directory
-# (scripts/godot-native-build.js), also generated, never source.
+# never source. GODOT_BUILD/ is the real headless-export output directory.
 godot/**/.godot/
 GODOT_BUILD/
 GODOT_NATIVE_BUILD_REPORT.json
+
+# local verified toolchain cache (regenerable; never commit binaries)
+.world-server/tools/
+
+# Desktop consolidation backups / local tool-call cache
+/World_server_openhuman/
+/World_server_procedural/
+/artifacts/
+
+# Master coordinator / local AI runtime learning state
+/data/model-suitability-ledger.json
+/data/tool-cost-ledger.json
+/data/mcp-router-profile.json
+/state/ai-agent-reports.jsonl
+

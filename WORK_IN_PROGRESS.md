@@ -338,3 +338,28 @@ YAML parse, local project guards, then real cloud E2E through model selection â†
 
 ### Final evidence
 Pending real workflow run.
+
+## AI mutual reinforcement + cloud failover â€” 2026-09-06
+
+### Goal
+Increase whole-system readiness by connecting existing local/free agents, the GitHub cloud agent, shared Collective Brain evidence, and an explicit paid-only Codex fallback without duplicating infrastructure.
+
+### Reused systems
+Ported the already-tested OpenHuman/AnythingLLM subtask dispatcher and hardened master-coordinator onto current master. Kept current master registry/evidence/lock files and did not resurrect the removed legacy multi-ai-peer-review implementation.
+
+### Changes
+Master Coordinator can now dispatch OpenCode, OpenHuman, AnythingLLM and World Cloud AI, while Codex is an explicit opt-in fallback only. Automated cloud/OpenCode/Codex outcomes share the common ai-agent report log. New `--full-free` mode enables all free cooperating workers.
+### Cloud root cause + protection
+The prior E2E reached GLM-5.2 and then died on a transient `Provider returned error`. The workflow now resolves several live zero-cost tool-capable open-weight candidates and `world-cloud-opencode-failover.cjs` retries only provider/rate-limit/timeout failures on the next free model. Non-provider code/test failures fail closed and are never hidden.
+
+### Safety / cost invariants
+No paid cloud fallback is allowed inside World Cloud AI. Codex dispatch requires explicit `allowPaid=true` / `--allow-paid`. External task text is secret-scanned before OpenCode/cloud/Codex dispatch. Dirty failed local work is preserved off Desktop through the existing recovery path.
+
+### Tests / evidence
+Run master-coordinator + OpenHuman/AnythingLLM/MCP/resource tests, cloud failover unit tests, YAML parse, check:fast, desktop-ai:check, golden:check, then a real zero-cost cloud E2E. Final evidence pending the real cloud run.
+
+### Linux CI portability defect found and fixed
+PR #38 exposed nine Linux-only failures because the reused AI queue stack embedded `C:\Users\user\Desktop\World_server` as an executable path. Windows local tests hid this. Added `lib/world-server-paths.js` to discover the canonical git main worktree cross-platform, while executable source paths always resolve from the current checkout. Scheduler, router, OpenHuman, coordinator and health checks now reuse this resolver.
+
+### Portability regression protection
+`test/world-server-paths.test.js` verifies that source root is the active checkout, `durable-job-queue.cjs` exists inside it, and the canonical main worktree is discoverable. Machine-specific World_server path literals were removed from runtime/test code so Linux CI cannot regress to a Windows path again.
