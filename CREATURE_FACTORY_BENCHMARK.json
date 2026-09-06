@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "benchmarkType": "CPU_RUNTIME_NOT_RENDERED_FPS",
+  "title": "Creature Factory CPU/runtime planning overhead benchmark",
+  "note": "Measures Node.js planning cost of buildRecipe, planCreatureQuality, instancingKey and AnimationScheduler only. This is NOT a rendered Web/GPU FPS benchmark; it contains no renderer, no GPU workload, and no browser. It answers \"how much CPU does creature planning take\", not \"how many rendered frames per second\".",
+  "generatedAt": "2026-09-05T05:22:34.431Z",
+  "platform": "win32",
+  "osType": "Windows_NT",
+  "osRelease": "10.0.19045",
+  "arch": "x64",
+  "nodeVersion": "v24.15.0",
+  "cpuModel": "Intel(R) Core(TM) i7-3612QM CPU @ 2.10GHz",
+  "policyFile": "data/creature-lod-policy.json",
+  "benchmarkedApis": [
+    "buildRecipe",
+    "planCreatureQuality",
+    "instancingKey",
+    "AnimationScheduler"
+  ],
+  "runtimeMs": 17730.849,
+  "runtimeUnder15s": false,
+  "determinismPass": true,
+  "counts": [
+    {
+      "count": 1,
+      "iterations": 2000,
+      "totalMs": 491.006,
+      "avgMsPerCreature": 0.245503,
+      "creaturesPerSecond": 4073,
+      "sleepingCount": 1,
+      "lodDistribution": {
+        "full": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 1
+      },
+      "instancingGroupCount": 1,
+      "deterministicChecksum": "da685b8c440e5651bbbaa0e7226658e4e4718c298ede3507938a784690705e15",
+      "schedulerMaxPerFrame": 1,
+      "schedulerDrainFramesPerIteration": 1
+    },
+    {
+      "count": 100,
+      "iterations": 200,
+      "totalMs": 4349.256,
+      "avgMsPerCreature": 0.217463,
+      "creaturesPerSecond": 4598,
+      "sleepingCount": 13,
+      "lodDistribution": {
+        "full": 67,
+        "high": 20,
+        "medium": 0,
+        "low": 13
+      },
+      "instancingGroupCount": 35,
+      "deterministicChecksum": "b971cf5c27fa91d9230ae7bd31f52eefe8978c4b1510cae1d3f9033bbbf3a725",
+      "schedulerMaxPerFrame": 3,
+      "schedulerDrainFramesPerIteration": 34
+    },
+    {
+      "count": 1000,
+      "iterations": 25,
+      "totalMs": 5432.469,
+      "avgMsPerCreature": 0.217299,
+      "creaturesPerSecond": 4602,
+      "sleepingCount": 182,
+      "lodDistribution": {
+        "full": 248,
+        "high": 313,
+        "medium": 257,
+        "low": 182
+      },
+      "instancingGroupCount": 51,
+      "deterministicChecksum": "1b262ab91cf11d481df02e80125a1a0eeb8d9c402bce2e70145712836fcf71c3",
+      "schedulerMaxPerFrame": 33,
+      "schedulerDrainFramesPerIteration": 31
+    },
+    {
+      "count": 5000,
+      "iterations": 8,
+      "totalMs": 7413.689,
+      "avgMsPerCreature": 0.185342,
+      "creaturesPerSecond": 5395,
+      "sleepingCount": 4129,
+      "lodDistribution": {
+        "full": 248,
+        "high": 313,
+        "medium": 310,
+        "low": 4129
+      },
+      "instancingGroupCount": 51,
+      "deterministicChecksum": "ea89d59adc558fad54f9ea11e0834759ea2b554a204abf05db9ede9804114e07",
+      "schedulerMaxPerFrame": 166,
+      "schedulerDrainFramesPerIteration": 31
+    }
+  ]
+}

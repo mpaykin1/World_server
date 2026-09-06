@@ -1,4 +1,62 @@
-# WORK IN PROGRESS — OPENHUMAN COLLECTIVE BRAIN PATCH V2.1
+# WORK IN PROGRESS
+
+## Task — Creature Factory CPU/runtime benchmark + readiness (2026-09-05)
+
+### Task
+Isolated worktree `browser-task/task_ff5da5eba66af0b337d4d284dd3aefc7` based on VERIFIED Creature Factory commit `32d345b0e71fd99bd764b6a0ef4de3e0d4a10baa`. Deterministically benchmark CPU/runtime planning overhead (buildRecipe, planCreatureQuality, instancingKey, AnimationScheduler) at creature counts 1/100/1000/5000; write `CREATURE_FACTORY_BENCHMARK.json` (benchmarkType `CPU_RUNTIME_NOT_RENDERED_FPS`) and `CREATURE_FACTORY_READINESS.json`; add only a minimal hook into existing readiness/telemetry; commit; do NOT touch master/deploy.
+
+### Why
+Focused benchmark/observability task for Creature Factory (no cherry-pick, no redesign).
+
+### Current state
+- `node --test test/creature-factory.test.js` = 15/15 PASS on base commit (required unchanged).
+- Working tree clean on base commit.
+
+### Target state
+- `scripts/creature-factory-benchmark.cjs` (deterministic, runtime <15s) + `CREATURE_FACTORY_BENCHMARK.json` + `CREATURE_FACTORY_READINESS.json`.
+- Minimal hook: npm script `creature-factory:bench` + existing `integration-telemetry-lib.cjs` span. No duplicate telemetry architecture.
+
+### Files / systems involved
+`scripts/creature-factory-benchmark.cjs` (new), `CREATURE_FACTORY_BENCHMARK.json` (new), `CREATURE_FACTORY_READINESS.json` (new), `package.json` (npm script hook), `WORK_IN_PROGRESS.md`. No runtime/library code touched.
+
+### Known risks
+- Benchmark must stay under 15s total; deterministic inputs; no network/GPU dependency.
+- Must not touch `lib/creature-factory/*` or tests (no redesign).
+
+### Golden systems that must be preserved
+`lib/creature-factory/*`, `data/creature-lod-policy.json`, `test/creature-factory.test.js` (15/15).
+
+### Errors that must not return
+N/A (additive benchmark/observability only).
+
+### Exact patch / change plan
+1. `scripts/creature-factory-benchmark.cjs` — deterministic creature asset pool (13 categories x 2 formats), per-count iterations, timed loop over the four APIs, deterministic checksum sha256 over `recipeHash:tier`, sleepingCount, lodDistribution, instancingGroupCount; write JSON to repo root; emit existing integration-telemetry span.
+2. Run `node scripts/creature-factory-benchmark.cjs` -> `CREATURE_FACTORY_BENCHMARK.json`.
+3. `CREATURE_FACTORY_READINESS.json` with accepted formats, 13 categories, verified test count, benchmark evidence, remaining gaps.
+4. `package.json`: `creature-factory:bench` (and `creature-factory:check`) npm scripts.
+5. `npm run check` + `node --test test/creature-factory.test.js` before commit.
+
+### Tests to run
+`node --test test/creature-factory.test.js` (15/15), `node scripts/creature-factory-benchmark.cjs` (<15s), `npm run check` (syntax + tests).
+
+### Deployment / PR plan
+Commit + push to task branch only. No master commit, no deploy.
+
+### Current progress
+Base test verified 15/15. Script/reports in progress.
+
+### Next action
+Write benchmark script, run it, generate reports, hook npm script, run `npm run check`, commit.
+
+### Completion criteria
+Benchmark JSON printed with all required per-count fields, benchmarkType `CPU_RUNTIME_NOT_RENDERED_FPS`, runtime <15s, readiness JSON with all 13 categories + gaps, 15/15 tests still PASS, commit created.
+
+### Final evidence
+`CREATURE_FACTORY_BENCHMARK.json`, `CREATURE_FACTORY_READINESS.json`, test output, commit hash.
+
+---
+
+## OLD — OPENHUMAN COLLECTIVE BRAIN PATCH V2.1 (superseded prior session context, preserved for history)
 
 ## Task
 Install `OPENHUMAN_COLLECTIVE_BRAIN_PATCH_V2` then `V2.1` (repository-side pieces only) into World_server: shared-memory bridge library, coordination leases, hash-chained audit journal, capability/risk router, memory security firewall (secret redaction + prompt-injection flagging), and the `collective-brain:*` npm scripts. V2.1 additionally splits repo mutation from machine-level installation and adds a permanent "desktop-agent system-install boundary" rule to `DESKTOP_AI_INSTALL_AND_VERIFY.md` (satisfies the user's explicit ask for a standing server rule — it's now the patch's own content, not something written by hand).
