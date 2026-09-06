@@ -259,10 +259,11 @@ function collidesAt(x,y,z){
   // check player cylinder collision: check voxels around player's feet/head
   const r=player.radius;
   const h=player.height;
-  const minY=Math.floor(y - player.eyeHeight + 0.1);
-  const maxY=Math.floor(y + 0.2);
-  const minX=Math.floor(x - r), maxX=Math.floor(x + r);
-  const minZ=Math.floor(z - r), maxZ=Math.floor(z + r);
+  // The mesher places each voxel at its integer center, with faces at +/- .5.
+  const minY=Math.ceil(y - player.eyeHeight - 0.5);
+  const maxY=Math.floor(y + 0.2 + 0.5);
+  const minX=Math.ceil(x - r - 0.5), maxX=Math.floor(x + r + 0.5);
+  const minZ=Math.ceil(z - r - 0.5), maxZ=Math.floor(z + r + 0.5);
   for(let ix=minX;ix<=maxX;ix++) for(let iy=minY;iy<=maxY;iy++) for(let iz=minZ;iz<=maxZ;iz++){
     if(isOccupied(ix,iy,iz)){
       // precise AABB vs cylinder check simplified to box
@@ -406,42 +407,27 @@ function updatePlayer(dt){
   // Golden Standard: collision is axis-separated and can climb <= 1 voxel stairs.
   goldenPlayableHorizontal('x',wishX*dt,wasGrounded);
   goldenPlayableHorizontal('z',wishZ*dt,wasGrounded);
-  // vertical
-  let ny = player.y + player.vy * dt;
-  const groundProbeY = findGroundY(player.x, player.z);
-  // collision check vertical against voxels
-  if(collidesAt(player.x, ny, player.z)){
-    if(player.vy>0) ny = Math.floor(ny) - 0.2;
-    else ny = Math.floor(ny + player.eyeHeight) + 0.5 - 0.01 + player.eyeHeight;
-    player.vy=0;
-  }
-  player.y = ny;
-  // ground detection: if we are just above ground, snap and mark onGround
-  const feetY = player.y - player.eyeHeight;
-  // search for ground within 0.3 below feet
-  let groundY=null;
-  for(let dy=0; dy<=1; dy++){
-    const checkY=Math.floor(feetY - dy*0.5);
-    if(isOccupied(Math.floor(player.x), checkY, Math.floor(player.z)) ||
-       isOccupied(Math.floor(player.x+player.radius*0.5), checkY, Math.floor(player.z)) ||
-       isOccupied(Math.floor(player.x-player.radius*0.5), checkY, Math.floor(player.z)) ||
-       isOccupied(Math.floor(player.x), checkY, Math.floor(player.z+player.radius*0.5)) ||
-       isOccupied(Math.floor(player.x), checkY, Math.floor(player.z-player.radius*0.5))){
-      groundY=checkY+1+0.05;
+  // Sweep against the same centered voxel geometry used for walls and rendering.
+  // Small steps prevent floor/ceiling tunneling without snapping to a different grid.
+  const verticalDelta=player.vy*dt;
+  const verticalSteps=Math.max(1,Math.ceil(Math.abs(verticalDelta)/.05));
+  player.onGround=false;
+  for(let i=0;i<verticalSteps;i++){
+    const nextY=player.y+verticalDelta/verticalSteps;
+    if(collidesAt(player.x,nextY,player.z)){
+      player.onGround=player.vy<0;
+      player.vy=0;
       break;
     }
+    player.y=nextY;
   }
-  if(groundY!==null && player.y - player.eyeHeight <= groundY + 0.15 && player.vy <= 0){
-    player.y = groundY + player.eyeHeight;
-    player.vy = 0;
-    player.onGround = true;
-    if(window.__AI3D_PLAYABLE_SCENE__) window.__AI3D_PLAYABLE_SCENE__.state.grounding=true;
-  } else {
-    player.onGround = false;
-    if(player.y < -10){ // fell off, respawn
-      const sp=resolveSpawn(world);
-      player.x=sp[0]; player.y=sp[1]; player.z=sp[2]; player.vy=0;
-    }
+  if(player.vy<=0 && collidesAt(player.x,player.y-.05,player.z)){
+    player.onGround=true;player.vy=0;
+  }
+  if(window.__AI3D_PLAYABLE_SCENE__) window.__AI3D_PLAYABLE_SCENE__.state.grounding=player.onGround;
+  if(player.y < -10){
+    const sp=resolveSpawn(world);
+    player.x=sp[0];player.y=sp[1];player.z=sp[2];player.vy=0;
   }
   // apply camera
   persp.position.set(player.x, player.y, player.z);

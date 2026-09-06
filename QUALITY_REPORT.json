@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-06T10:30:12.050Z",
+  "generatedAt": "2026-09-06T10:49:45.033Z",
   "overallPercent": 98,
   "releaseEligible": false,
   "metrics": {
@@ -152,7 +152,7 @@
     "Unity MCP": 0,
     "OpenGameEval/OpenGame": 10
   },
-  "blockerCount": 21,
+  "blockerCount": 11,
   "blockers": [
     {
       "type": "metric",
@@ -198,66 +198,6 @@
         "GPU fleet endpoints not runtime-verified",
         "Vercel project credentials not exposed"
       ]
-    },
-    {
-      "type": "known-error",
-      "id": "controls-inverted-camera-relative",
-      "status": "known",
-      "category": "controls"
-    },
-    {
-      "type": "known-error",
-      "id": "mobile-entry-not-clickable",
-      "status": "known",
-      "category": "mobile"
-    },
-    {
-      "type": "known-error",
-      "id": "mobile-controls-missing",
-      "status": "known",
-      "category": "mobile"
-    },
-    {
-      "type": "known-error",
-      "id": "stairs-collision-broken",
-      "status": "known",
-      "category": "collision"
-    },
-    {
-      "type": "known-error",
-      "id": "wall-collision-broken",
-      "status": "known",
-      "category": "collision"
-    },
-    {
-      "type": "known-error",
-      "id": "spawn-not-grounded",
-      "status": "known",
-      "category": "collision"
-    },
-    {
-      "type": "known-error",
-      "id": "jump-moves-forward",
-      "status": "known",
-      "category": "controls"
-    },
-    {
-      "type": "known-error",
-      "id": "camera-roll-on-look",
-      "status": "known",
-      "category": "camera"
-    },
-    {
-      "type": "known-error",
-      "id": "false-green-assertion",
-      "status": "known",
-      "category": "tests"
-    },
-    {
-      "type": "known-error",
-      "id": "menu-obstructs-game",
-      "status": "known",
-      "category": "ui"
     },
     {
       "type": "known-error",

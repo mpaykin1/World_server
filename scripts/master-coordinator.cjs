@@ -239,7 +239,9 @@ async function invokeOpencode(taskText, opts = {}) {
     keepWorktree = Boolean(finalState.stdout);
     if (ranCleanly && persisted && !keepWorktree && committed && opts.push !== false) pushed = git(dir, ['push', 'origin', `HEAD:refs/heads/${branch}`]).status === 0;
     const ok = ranCleanly && persisted && !keepWorktree && (!committed || opts.push === false || pushed);
-    outcome = { ok, result: refused ? 'REFUSED' : ok ? 'PENDING_REVIEW' : 'FAIL', verified: false, stdout: finalText, stderr: (r.stderr || '').slice(-4000), durationMs, branch, committed, pushed, worktree: dir, recovery };
+    outcome = { ok, result: refused ? 'REFUSED' : ok ? 'PENDING_REVIEW' : 'FAIL', verified: false, stdout: finalText, stderr: (r.stderr || '').slice(-4000), durationMs, branch, committed, pushed, worktree: dir, recovery,
+      execution: { exitCode: r.status ?? null, signal: r.signal || null, errorCode: r.error?.code || null, timedOut: r.error?.code === 'ETIMEDOUT' },
+      ...(r.error ? { reason: `OpenCode execution failed: ${r.error.code || 'SPAWN_ERROR'}: ${r.error.message}` } : {}) };
     // Exit zero is transport evidence, not proof that the requested task was
     // completed. A trusted caller may verify the artifacts before cleanup.
     if (ok && typeof opts.validateResult === 'function') {

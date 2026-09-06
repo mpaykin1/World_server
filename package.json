@@ -12,7 +12,7 @@
     "e2e": "node scripts/ai3d-e2e-smoke.js",
     "e2e:python": "python services/ai3d-worker/scripts/e2e-smoke.py",
     "golden:check": "node scripts/check-golden-standard.js",
-    "golden:e2e": "playwright test e2e/golden-release.spec.js",
+    "golden:e2e": "playwright test e2e/golden-release.spec.js e2e/golden-controls.spec.js e2e/golden-mobile-behavior.spec.js e2e/golden-ui-quality.spec.js e2e/hud-visual-audit.spec.js e2e/voxel-readiness.spec.js e2e/touch-world-controls.spec.js e2e/ai3d-grounding.spec.js",
     "quality:sync": "node scripts/quality-governance.js",
     "quality:check": "node scripts/check-quality-governance.js",
     "quality:regression": "node scripts/quality-regression-gate.js",

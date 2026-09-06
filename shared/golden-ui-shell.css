@@ -1,4 +1,4 @@
-#goldenUiShell{position:fixed;inset:0;z-index:2147482500;pointer-events:none;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#fff}
+#goldenUiShell{position:fixed;inset:0;z-index:2147483500;pointer-events:none;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#fff}
 #goldenUiShell svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 #goldenToolbar{position:absolute;left:max(10px,env(safe-area-inset-left));top:max(10px,env(safe-area-inset-top));display:flex;gap:7px;pointer-events:auto}
 #goldenToolbar button,#goldenDrawerClose{width:44px;height:44px;border-radius:13px;border:1px solid rgba(255,255,255,.2);background:rgba(12,16,22,.72);color:#fff;display:grid;place-items:center;backdrop-filter:blur(12px);box-shadow:0 5px 20px rgba(0,0,0,.22);cursor:pointer}

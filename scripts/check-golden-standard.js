@@ -58,8 +58,14 @@ if(!pw.includes("Mobile Chrome") && !pw.includes("Pixel 7")) fail('Playwright mo
 else ok('desktop + mobile browser matrix');
 
 const e2eDir=path.join(root,'e2e');
-for(const f of fs.readdirSync(e2eDir).filter(x=>x.endsWith('.spec.js'))){
-  const s=fs.readFileSync(path.join(e2eDir,f),'utf8');
+function testFiles(dir){
+  return fs.readdirSync(dir,{withFileTypes:true}).flatMap(entry=>{
+    const file=path.join(dir,entry.name);
+    return entry.isDirectory()?testFiles(file):entry.name.endsWith('.js')?[file]:[];
+  });
+}
+for(const f of testFiles(e2eDir)){
+  const s=fs.readFileSync(f,'utf8');
   if(/\.toBeTruthy\s*;/.test(s)) fail(`false-green assertion in ${f}: toBeTruthy missing ()`);
   if(/\.toBeFalsy\s*;/.test(s)) fail(`false-green assertion in ${f}: toBeFalsy missing ()`);
 }

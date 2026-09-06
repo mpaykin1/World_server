@@ -1,25 +1,24 @@
 const {test,expect}=require('@playwright/test');
-const apps=['catalog','voxel-world','ai3d-voxel-city'];
-for(const app of apps){
-  test(`hud-audit ${app}`,async({page})=>{
-    await page.goto(`/apps/${app}/`,{waitUntil:'domcontentloaded'});
-    const report=await page.evaluate(()=>{
-      const vp=innerWidth*innerHeight,issues=[],persistent=[];
-      for(const el of document.querySelectorAll('body *')){
-        const cs=getComputedStyle(el);if(cs.display==='none'||cs.visibility==='hidden'||Number(cs.opacity)===0)continue;
-        if(cs.position!=='fixed'&&cs.position!=='sticky')continue;
-        if(el.closest('#goldenDrawer'))continue;
-        const r=el.getBoundingClientRect();if(r.width<=0||r.height<=0)continue;
-        const area=r.width*r.height;const ratio=area/Math.max(1,vp);
-        if(r.left<-.5||r.top<-.5||r.right>innerWidth+.5||r.bottom>innerHeight+.5)issues.push({type:'out-of-bounds',id:el.id||el.className});
-        if(ratio>.08&&!el.matches('#mobileControls,#goldenUiShell'))issues.push({type:'large-persistent-overlay',id:el.id||el.className,ratio});
-        persistent.push({id:el.id||el.className,ratio});
-      }
-      const toolbar=document.querySelector('#goldenToolbar');
-      const ratio=toolbar?(()=>{const r=toolbar.getBoundingClientRect();return r.width*r.height/Math.max(1,vp)})():0;
-      return {issues,persistent,toolbarRatio:ratio};
-    });
-    expect(report.issues).toEqual([]);
-    expect(report.toolbarRatio).toBeLessThan(.08);
-  });
+const {auditHud}=require('./helpers/hud-audit');
+for(const app of ['catalog','voxel-world','ai3d-voxel-city']){
+ test(`hud-audit ${app}`,async({page})=>{
+  await page.goto(`/apps/${app}/`,{waitUntil:'domcontentloaded'});
+  await expect(page.locator('#goldenToolbar')).toBeVisible();
+  await expect(page.locator('#loading')).toBeHidden({timeout:10000});
+  const report=await page.evaluate(auditHud);
+  expect(report.issues).toEqual([]);
+  expect(report.toolbarRatio).toBeLessThan(.08);
+ });
 }
+test('HUD audit detects painted obstruction inside a transparent touch container',async({page})=>{
+ await page.setContent('<div style="position:fixed;inset:0;pointer-events:none"><div id="obstruction" style="position:absolute;inset:0;background:black"></div></div>');
+ expect((await page.evaluate(auditHud)).issues).toContainEqual(expect.objectContaining({id:'obstruction',type:'large-persistent-overlay'}));
+ await page.locator('#obstruction').evaluate(el=>el.style.background='transparent');
+ expect((await page.evaluate(auditHud)).issues).toEqual([]);
+});
+test('HUD audit respects scroll clipping but catches unclipped offscreen UI',async({page})=>{
+ await page.setContent('<div id="clip" style="position:fixed;left:10px;top:10px;width:100px;height:30px;overflow:auto"><div id="wide" style="width:2000px;height:20px;background:black"></div></div>');
+ expect((await page.evaluate(auditHud)).issues).toEqual([]);
+ await page.locator('#clip').evaluate(el=>el.style.overflow='visible');
+ expect((await page.evaluate(auditHud)).issues).toContainEqual(expect.objectContaining({id:'wide',type:'out-of-bounds'}));
+});

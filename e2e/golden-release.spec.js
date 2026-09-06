@@ -21,10 +21,14 @@ test.describe('World Server Golden Standard', () => {
     await expect(menu).toBeVisible();
     const links = menu.locator('a[data-app-id]');
     expect(await links.count()).toBeGreaterThan(0);
-    const href = await links.first().getAttribute('href');
-    expect(href).toMatch(/^\/apps\/[^/]+\/$/);
-    if(isMobile) await links.first().tap(); else await links.first().click();
-    await expect(page).toHaveURL(new RegExp(href.replaceAll('/', '\\/')+'$'));
+    const hrefs=await links.evaluateAll(nodes=>nodes.map(node=>node.getAttribute('href')));
+    for(const href of hrefs){
+      expect(href).toMatch(/^\/apps\/[^/]+\/$/);
+      const link=page.locator(`#goldenWorldMenu a[href="${href}"]`);
+      if(isMobile) await link.tap(); else await link.click();
+      await expect(page).toHaveURL(new RegExp(href.replaceAll('/', '\\/')+'$'));
+      await page.goto('/apps/catalog/',{waitUntil:'domcontentloaded'});
+    }
   });
 
   test('canonical basis always maps right to screen-right', async ({ page }) => {

@@ -315,12 +315,29 @@ function shutdown(signal) {
   if (shuttingDown) return;
   shuttingDown = true;
   console.log(`Shutting down on ${signal}`);
-  server.close(() => {
-    if (!child.killed) child.kill('SIGTERM');
+  let httpClosed = false;
+  let childStopped = child.exitCode !== null || child.signalCode !== null;
+  let finished = false;
+  const deadline = setTimeout(() => {
+    if (finished) return;
+    finished = true;
+    // child.killed means a signal was sent, not that the child has exited.
+    if (!childStopped) child.kill('SIGKILL');
+    server.closeAllConnections();
+    process.exit(1);
+  }, 8000);
+  function finish() {
+    if (finished || !httpClosed || !childStopped) return;
+    finished = true;
+    clearTimeout(deadline);
     process.exit(0);
+  }
+  child.once('exit', () => { childStopped = true; finish(); });
+  server.close(() => {
+    httpClosed = true;
+    finish();
   });
-  if (!child.killed) child.kill('SIGTERM');
-  setTimeout(() => process.exit(1), 10000).unref();
+  if (!childStopped) child.kill('SIGTERM');
 }
 process.on('SIGTERM', () => shutdown('SIGTERM'));
 process.on('SIGINT', () => shutdown('SIGINT'));

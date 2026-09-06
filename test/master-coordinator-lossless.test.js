@@ -51,6 +51,13 @@ test('worker-created commit survives successful clean dispatch', async t=>{
   assert.equal(git(['rev-parse',r.branch]),head);
   assert.equal(fs.existsSync(r.worktree),false);
 });
+
+test('OpenCode timeout with empty output retains actionable execution diagnostics',async t=>{
+  worker(t,()=>({status:null,signal:'SIGTERM',stdout:'',stderr:'',error:Object.assign(new Error('spawn timed out'),{code:'ETIMEDOUT'})}));
+  const r=await mc.invokeOpencode('fixture',{taskId:'empty-timeout',push:false});
+  assert.equal(r.result,'FAIL');assert.equal(r.execution.timedOut,true);
+  assert.equal(r.execution.errorCode,'ETIMEDOUT');assert.match(r.reason,/ETIMEDOUT/);
+});
 test('failed dirty work remains in its original checkout', async t=>{
   worker(t,dir=>{fs.writeFileSync(path.join(dir,'tracked.txt'),'unique failed work\n');return {status:1,stdout:'fixture completed',stderr:'failed'};});
   const r=await mc.invokeOpencode('fixture',{taskId:'dirty-failure',push:false});

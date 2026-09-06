@@ -46,6 +46,102 @@
       "id": "voxel-arrow-input-ignored",
       "at": "2026-09-06T10:28:53.539Z",
       "evidence": "ArrowUp failed with zero movement before patch, passed on desktop/mobile after patch."
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "controls-inverted-camera-relative",
+      "at": "2026-09-06T10:49:44.785Z",
+      "evidence": "Full unit616PASS/1SKIP; combined browser62PASS/6SKIP; assertion mutation and HUD obstruction negative controls PASS."
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "mobile-entry-not-clickable",
+      "at": "2026-09-06T10:49:44.785Z",
+      "evidence": "Full unit616PASS/1SKIP; combined browser62PASS/6SKIP; assertion mutation and HUD obstruction negative controls PASS."
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "mobile-controls-missing",
+      "at": "2026-09-06T10:49:44.785Z",
+      "evidence": "Full unit616PASS/1SKIP; combined browser62PASS/6SKIP; assertion mutation and HUD obstruction negative controls PASS."
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "stairs-collision-broken",
+      "at": "2026-09-06T10:49:44.785Z",
+      "evidence": "Full unit616PASS/1SKIP; combined browser62PASS/6SKIP; assertion mutation and HUD obstruction negative controls PASS."
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "wall-collision-broken",
+      "at": "2026-09-06T10:49:44.785Z",
+      "evidence": "Full unit616PASS/1SKIP; combined browser62PASS/6SKIP; assertion mutation and HUD obstruction negative controls PASS."
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "spawn-not-grounded",
+      "at": "2026-09-06T10:49:44.785Z",
+      "evidence": "Full unit616PASS/1SKIP; combined browser62PASS/6SKIP; assertion mutation and HUD obstruction negative controls PASS."
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "jump-moves-forward",
+      "at": "2026-09-06T10:49:44.785Z",
+      "evidence": "Full unit616PASS/1SKIP; combined browser62PASS/6SKIP; assertion mutation and HUD obstruction negative controls PASS."
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "camera-roll-on-look",
+      "at": "2026-09-06T10:49:44.785Z",
+      "evidence": "Full unit616PASS/1SKIP; combined browser62PASS/6SKIP; assertion mutation and HUD obstruction negative controls PASS."
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "false-green-assertion",
+      "at": "2026-09-06T10:49:44.785Z",
+      "evidence": "Full unit616PASS/1SKIP; combined browser62PASS/6SKIP; assertion mutation and HUD obstruction negative controls PASS."
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "menu-obstructs-game",
+      "at": "2026-09-06T10:49:44.785Z",
+      "evidence": "Full unit616PASS/1SKIP; combined browser62PASS/6SKIP; assertion mutation and HUD obstruction negative controls PASS."
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "world-selection-walk-only",
+      "at": "2026-09-06T10:49:44.785Z",
+      "evidence": "Full unit616PASS/1SKIP; combined browser62PASS/6SKIP; assertion mutation and HUD obstruction negative controls PASS."
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "cloudrun-parent-exits-before-child",
+      "at": "2026-09-06T10:49:44.785Z"
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "opencode-empty-timeout-loses-diagnostics",
+      "at": "2026-09-06T10:49:44.785Z"
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "hud-audit-transparent-container-and-loading",
+      "at": "2026-09-06T10:49:44.785Z"
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "catalog-look-zone-intercepts-second-world",
+      "at": "2026-09-06T10:49:44.785Z"
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "ai3d-centered-mesh-collision-and-ground-grid",
+      "at": "2026-09-06T10:49:44.785Z"
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "golden-gate-skips-nested-assertions",
+      "at": "2026-09-06T10:49:44.785Z"
     }
   ],
   "knownErrors": [
@@ -53,98 +149,208 @@
       "id": "controls-inverted-camera-relative",
       "category": "controls",
       "severity": "release-blocker",
-      "status": "known",
+      "status": "protected",
       "symptom": "W/S or A/D reverse after camera yaw or feel inverted",
       "rootCause": "inconsistent camera-forward/screen-right basis math",
       "protection": [
         "canonical movement basis",
-        "behavioral yaw regression test"
+        "behavioral yaw regression test",
+        "e2e/golden-controls.spec.js",
+        "e2e/voxel-readiness.spec.js"
+      ],
+      "previousStatus": "known",
+      "verification": {
+        "at": "2026-09-06T10:49:44.785Z",
+        "result": "PASS",
+        "scope": "Current two certified worlds and catalog; desktop/mobile Chromium. Backend persistence and physical-device certification excluded.",
+        "tests": [
+          "e2e/golden-controls.spec.js",
+          "e2e/voxel-readiness.spec.js"
+        ]
+      },
+      "evidence": [
+        "Full unit616PASS/1SKIP; combined browser62PASS/6SKIP; assertion mutation and HUD obstruction negative controls PASS."
       ]
     },
     {
       "id": "mobile-entry-not-clickable",
       "category": "mobile",
       "severity": "release-blocker",
-      "status": "known",
+      "status": "protected",
       "symptom": "primary enter/play control cannot be activated on phone",
       "rootCause": "desktop-only pointer/input path or overlay interception",
       "protection": [
         "real mobile emulation",
         "tap target test",
-        "pointer/touch event coverage"
+        "pointer/touch event coverage",
+        "e2e/golden-release.spec.js"
+      ],
+      "previousStatus": "known",
+      "verification": {
+        "at": "2026-09-06T10:49:44.785Z",
+        "result": "PASS",
+        "scope": "Current two certified worlds and catalog; desktop/mobile Chromium. Backend persistence and physical-device certification excluded.",
+        "tests": [
+          "e2e/golden-release.spec.js"
+        ]
+      },
+      "evidence": [
+        "Full unit616PASS/1SKIP; combined browser62PASS/6SKIP; assertion mutation and HUD obstruction negative controls PASS."
       ]
     },
     {
       "id": "mobile-controls-missing",
       "category": "mobile",
       "severity": "release-blocker",
-      "status": "known",
+      "status": "protected",
       "symptom": "world loads on phone but cannot be played",
       "rootCause": "no shared touch movement/look contract",
       "protection": [
         "mobile Playwright project",
-        "touch joystick/look/jump gate"
+        "touch joystick/look/jump gate",
+        "e2e/touch-world-controls.spec.js"
+      ],
+      "previousStatus": "known",
+      "verification": {
+        "at": "2026-09-06T10:49:44.785Z",
+        "result": "PASS",
+        "scope": "Current two certified worlds and catalog; desktop/mobile Chromium. Backend persistence and physical-device certification excluded.",
+        "tests": [
+          "e2e/touch-world-controls.spec.js"
+        ]
+      },
+      "evidence": [
+        "Full unit616PASS/1SKIP; combined browser62PASS/6SKIP; assertion mutation and HUD obstruction negative controls PASS."
       ]
     },
     {
       "id": "stairs-collision-broken",
       "category": "collision",
       "severity": "release-blocker",
-      "status": "known",
+      "status": "protected",
       "symptom": "player is blocked by stairs or cannot step onto valid steps",
       "rootCause": "collision without standardized step-up behavior",
       "protection": [
         "step-up<=1.05 behavioral test",
-        "canonical collision helper"
+        "canonical collision helper",
+        "test/world-horizontal-collision.test.js"
+      ],
+      "previousStatus": "known",
+      "verification": {
+        "at": "2026-09-06T10:49:44.785Z",
+        "result": "PASS",
+        "scope": "Actual controller functions for both certified worlds against controlled wall/step fixtures; AI3D collider checked against centered mesh coordinates.",
+        "tests": [
+          "test/world-horizontal-collision.test.js"
+        ]
+      },
+      "evidence": [
+        "Full unit616PASS/1SKIP; combined browser62PASS/6SKIP; assertion mutation and HUD obstruction negative controls PASS."
       ]
     },
     {
       "id": "wall-collision-broken",
       "category": "collision",
       "severity": "release-blocker",
-      "status": "known",
+      "status": "protected",
       "symptom": "player passes through walls",
       "rootCause": "missing/incorrect horizontal collision behavior",
       "protection": [
         "wall traversal negative test",
-        "spawn/ground/wall collision contract"
+        "spawn/ground/wall collision contract",
+        "test/world-horizontal-collision.test.js",
+        "test/ai3d-collision-bounds.test.js"
+      ],
+      "previousStatus": "known",
+      "verification": {
+        "at": "2026-09-06T10:49:44.785Z",
+        "result": "PASS",
+        "scope": "Actual controller functions for both certified worlds against controlled wall/step fixtures; AI3D collider checked against centered mesh coordinates.",
+        "tests": [
+          "test/world-horizontal-collision.test.js",
+          "test/ai3d-collision-bounds.test.js"
+        ]
+      },
+      "evidence": [
+        "Full unit616PASS/1SKIP; combined browser62PASS/6SKIP; assertion mutation and HUD obstruction negative controls PASS."
       ]
     },
     {
       "id": "spawn-not-grounded",
       "category": "collision",
       "severity": "release-blocker",
-      "status": "known",
+      "status": "protected",
       "symptom": "player appears in air/inside geometry/wrong orientation",
       "rootCause": "spawn not derived from valid walkable surface",
       "protection": [
         "grounded spawn behavioral test",
-        "orientation invariant"
+        "orientation invariant",
+        "e2e/ai3d-grounding.spec.js"
+      ],
+      "previousStatus": "known",
+      "verification": {
+        "at": "2026-09-06T10:49:44.785Z",
+        "result": "PASS",
+        "scope": "Current two certified worlds and catalog; desktop/mobile Chromium. Backend persistence and physical-device certification excluded.",
+        "tests": [
+          "e2e/ai3d-grounding.spec.js"
+        ]
+      },
+      "evidence": [
+        "Full unit616PASS/1SKIP; combined browser62PASS/6SKIP; assertion mutation and HUD obstruction negative controls PASS."
       ]
     },
     {
       "id": "jump-moves-forward",
       "category": "controls",
       "severity": "release-blocker",
-      "status": "known",
+      "status": "protected",
       "symptom": "Space moves forward/depth instead of jumping vertically",
       "rootCause": "jump coupled to camera/world transform",
       "protection": [
         "Space-only-Y invariant",
-        "world transform lock"
+        "world transform lock",
+        "e2e/golden-controls.spec.js",
+        "e2e/touch-world-controls.spec.js"
+      ],
+      "previousStatus": "known",
+      "verification": {
+        "at": "2026-09-06T10:49:44.785Z",
+        "result": "PASS",
+        "scope": "Current two certified worlds and catalog; desktop/mobile Chromium. Backend persistence and physical-device certification excluded.",
+        "tests": [
+          "e2e/golden-controls.spec.js",
+          "e2e/touch-world-controls.spec.js"
+        ]
+      },
+      "evidence": [
+        "Full unit616PASS/1SKIP; combined browser62PASS/6SKIP; assertion mutation and HUD obstruction negative controls PASS."
       ]
     },
     {
       "id": "camera-roll-on-look",
       "category": "camera",
       "severity": "release-blocker",
-      "status": "known",
+      "status": "protected",
       "symptom": "horizontal look rolls/flips image",
       "rootCause": "yaw/pitch/roll axes mixed",
       "protection": [
         "yaw body Y only",
         "pitch camera X only",
-        "roll==0 invariant"
+        "roll==0 invariant",
+        "e2e/touch-world-controls.spec.js"
+      ],
+      "previousStatus": "known",
+      "verification": {
+        "at": "2026-09-06T10:49:44.785Z",
+        "result": "PASS",
+        "scope": "Current two certified worlds and catalog; desktop/mobile Chromium. Backend persistence and physical-device certification excluded.",
+        "tests": [
+          "e2e/touch-world-controls.spec.js"
+        ]
+      },
+      "evidence": [
+        "Full unit616PASS/1SKIP; combined browser62PASS/6SKIP; assertion mutation and HUD obstruction negative controls PASS."
       ]
     },
     {
@@ -169,36 +375,79 @@
       "id": "false-green-assertion",
       "category": "tests",
       "severity": "release-blocker",
-      "status": "known",
+      "status": "protected",
       "symptom": "test passes without evaluating matcher",
       "rootCause": "matcher referenced without invocation",
       "protection": [
         "static matcher invocation scan",
-        "CI hard failure"
+        "CI hard failure",
+        "test/golden-assertion-guard.test.js",
+        "test/generated/false-green-assertion.test.js"
+      ],
+      "previousStatus": "known",
+      "verification": {
+        "at": "2026-09-06T10:49:44.785Z",
+        "result": "PASS",
+        "scope": "Current two certified worlds and catalog; desktop/mobile Chromium. Backend persistence and physical-device certification excluded.",
+        "tests": [
+          "test/golden-assertion-guard.test.js",
+          "test/generated/false-green-assertion.test.js"
+        ]
+      },
+      "evidence": [
+        "Full unit616PASS/1SKIP; combined browser62PASS/6SKIP; assertion mutation and HUD obstruction negative controls PASS."
       ]
     },
     {
       "id": "menu-obstructs-game",
       "category": "ui",
       "severity": "release-blocker",
-      "status": "known",
+      "status": "protected",
       "symptom": "technical/status text or large panels obstruct gameplay",
       "rootCause": "system information rendered persistently",
       "protection": [
         "compact icon menu contract",
         "HUD obstruction audit",
-        "mobile safe-area test"
+        "mobile safe-area test",
+        "e2e/hud-visual-audit.spec.js",
+        "e2e/golden-ui-quality.spec.js"
+      ],
+      "previousStatus": "known",
+      "verification": {
+        "at": "2026-09-06T10:49:44.785Z",
+        "result": "PASS",
+        "scope": "Current two certified worlds and catalog; desktop/mobile Chromium. Backend persistence and physical-device certification excluded.",
+        "tests": [
+          "e2e/hud-visual-audit.spec.js",
+          "e2e/golden-ui-quality.spec.js"
+        ]
+      },
+      "evidence": [
+        "Full unit616PASS/1SKIP; combined browser62PASS/6SKIP; assertion mutation and HUD obstruction negative controls PASS."
       ]
     },
     {
       "id": "world-selection-walk-only",
       "category": "ui",
       "severity": "major",
-      "status": "known",
+      "status": "protected",
       "symptom": "user must walk to portal to choose a world",
       "rootCause": "no direct tappable/clickable world picker",
       "protection": [
-        "direct world-selection menu gate"
+        "direct world-selection menu gate",
+        "e2e/golden-release.spec.js"
+      ],
+      "previousStatus": "known",
+      "verification": {
+        "at": "2026-09-06T10:49:44.785Z",
+        "result": "PASS",
+        "scope": "Current two certified worlds and catalog; desktop/mobile Chromium. Backend persistence and physical-device certification excluded.",
+        "tests": [
+          "e2e/golden-release.spec.js"
+        ]
+      },
+      "evidence": [
+        "Full unit616PASS/1SKIP; combined browser62PASS/6SKIP; assertion mutation and HUD obstruction negative controls PASS."
       ]
     },
     {
@@ -1238,6 +1487,92 @@
       ],
       "evidence": [
         "ArrowUp failed with zero movement before patch, passed on desktop/mobile after patch."
+      ]
+    },
+    {
+      "id": "cloudrun-parent-exits-before-child",
+      "category": "readiness",
+      "severity": "release-blocker",
+      "status": "protected",
+      "rootCause": "HTTP close callback exited the adapter without waiting for child termination; child.killed was mistaken for exited.",
+      "solution": "Wait for both child exit and HTTP close; force termination at an 8s deadline.",
+      "protection": [
+        "test/cloudrun-shutdown.test.js"
+      ],
+      "evidence": [
+        "Verified in unit616PASS/1SKIP and browser62PASS/6SKIP; before/after logs retained."
+      ]
+    },
+    {
+      "id": "opencode-empty-timeout-loses-diagnostics",
+      "category": "readiness",
+      "severity": "release-blocker",
+      "status": "protected",
+      "rootCause": "A live OpenCode run timed out after180083ms with empty stdout/stderr; spawn error metadata was discarded.",
+      "solution": "Persist exitCode, signal, errorCode, timedOut and reason.",
+      "protection": [
+        "test/master-coordinator-lossless.test.js"
+      ],
+      "evidence": [
+        "Verified in unit616PASS/1SKIP and browser62PASS/6SKIP; before/after logs retained."
+      ]
+    },
+    {
+      "id": "hud-audit-transparent-container-and-loading",
+      "category": "readiness",
+      "severity": "release-blocker",
+      "status": "protected",
+      "rootCause": "Audit treated transparent touch containers as full-screen obstruction and sampled transient loading; it missed painted absolute children.",
+      "solution": "Measure painted visible descendants and scroll clipping; require loading to disappear; negative-control tests detect opaque and offscreen elements.",
+      "protection": [
+        "e2e/hud-visual-audit.spec.js"
+      ],
+      "evidence": [
+        "Verified in unit616PASS/1SKIP and browser62PASS/6SKIP; before/after logs retained."
+      ]
+    },
+    {
+      "id": "catalog-look-zone-intercepts-second-world",
+      "category": "readiness",
+      "severity": "release-blocker",
+      "status": "protected",
+      "rootCause": "Touch look layer sat above catalog links and system drawer; first-link-only test missed the second link.",
+      "solution": "Place menu/drawer above touch look and test actual navigation to every certified world.",
+      "protection": [
+        "e2e/golden-release.spec.js"
+      ],
+      "evidence": [
+        "Verified in unit616PASS/1SKIP and browser62PASS/6SKIP; before/after logs retained."
+      ]
+    },
+    {
+      "id": "ai3d-centered-mesh-collision-and-ground-grid",
+      "category": "readiness",
+      "severity": "release-blocker",
+      "status": "protected",
+      "rootCause": "Collision candidate cells and floor snap disagreed with rendered voxel centers; side overlaps were missed and onGround could be true above empty space.",
+      "solution": "Align collider bounds with centered cubes; use vertical substeps against the same geometry with a5cm ground probe.",
+      "protection": [
+        "test/ai3d-collision-bounds.test.js",
+        "e2e/ai3d-grounding.spec.js",
+        "e2e/golden-controls.spec.js"
+      ],
+      "evidence": [
+        "Verified in unit616PASS/1SKIP and browser62PASS/6SKIP; before/after logs retained."
+      ]
+    },
+    {
+      "id": "golden-gate-skips-nested-assertions",
+      "category": "readiness",
+      "severity": "release-blocker",
+      "status": "protected",
+      "rootCause": "Only top-level spec files were checked, so a missing matcher invocation in nested e2e tests returned PASS.",
+      "solution": "Scan browser test JavaScript recursively; mutation test requires gate failure.",
+      "protection": [
+        "test/golden-assertion-guard.test.js"
+      ],
+      "evidence": [
+        "Verified in unit616PASS/1SKIP and browser62PASS/6SKIP; before/after logs retained."
       ]
     }
   ],
