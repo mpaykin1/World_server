@@ -23,6 +23,13 @@
       "at": "2026-09-06T15:44:53.279Z",
       "lessonHash": "d50bc27d7c61501fcb75e400aac6e58d87ad155e41a938954a64dad9a214682a",
       "supersedes": null
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "vercel-unnecessary-quota-burn-suppression",
+      "at": "2026-09-06T20:25:00.000Z",
+      "lessonHash": "f8a9e710b34d28e75122b1029c381c62938f9218274536291902837261a8109d",
+      "supersedes": null
     }
   ],
   "knownErrors": [
@@ -133,6 +140,19 @@
       "rootCause": "allow-by-existence catalog discovery",
       "protection": [
         "deny-by-default certified registry"
+      ]
+    },
+    {
+      "id": "vercel-quota-exhausted-by-non-runtime-deploys",
+      "category": "deployment",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "Vercel free deployment quota exhausted by automated AI bridge, documentation, test, or workflow commits",
+      "rootCause": "Vercel GitHub integration triggered full project builds for every commit regardless of whether runtime code or API changed",
+      "protection": [
+        "scripts/check-vercel-ignore.js path-gated build suppression",
+        "vercel.json ignoreCommand",
+        "test/vercel-ignore.test.js regression test suite"
       ]
     },
     {

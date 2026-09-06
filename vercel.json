@@ -34,5 +34,6 @@
     }
   ],
   "outputDirectory": ".",
-  "buildCommand": "node scripts/inject-sentry-runtime.js"
+  "buildCommand": "node scripts/inject-sentry-runtime.js",
+  "ignoreCommand": "node scripts/check-vercel-ignore.js"
 }
