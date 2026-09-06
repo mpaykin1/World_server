@@ -9,6 +9,20 @@
       "at": "2026-09-06T15:22:23.166Z",
       "lessonHash": "2dea383c561e51c754b614c465fc16d59a1a6ef15c754336618c979261e35aa8",
       "supersedes": null
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "remote-bridge-worker-token-auth",
+      "at": "2026-09-06T15:44:52.785Z",
+      "lessonHash": "b8eeadaa549c7d479cfd5a8a652295f4e26ed6023f0cdd155c00aafa16289f46",
+      "supersedes": null
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "agent-invoke-throwaway-branch-leak",
+      "at": "2026-09-06T15:44:53.279Z",
+      "lessonHash": "d50bc27d7c61501fcb75e400aac6e58d87ad155e41a938954a64dad9a214682a",
+      "supersedes": null
     }
   ],
   "knownErrors": [
@@ -671,6 +685,47 @@
       ],
       "confirmedAt": "2026-09-06T15:22:23.161Z",
       "lessonHash": "2dea383c561e51c754b614c465fc16d59a1a6ef15c754336618c979261e35aa8",
+      "supersedes": null
+    },
+    {
+      "id": "remote-bridge-worker-token-auth",
+      "category": "collective-brain-learned",
+      "severity": "major",
+      "status": "protected",
+      "history": [],
+      "rootCause": "Remote bridge required broad service-role credentials even though the worker only needs scoped task queue access.",
+      "solution": "Use existing publishable Supabase client with worker identity headers enforced by existing RLS; fail closed before lease acquisition when worker identity is missing.",
+      "protection": [
+        "test/env.test.js",
+        "test/collective-brain-remote-bridge.test.js"
+      ],
+      "evidence": [
+        "45 targeted tests",
+        "check:fast",
+        "Golden Standard",
+        "Desktop AI protocol"
+      ],
+      "confirmedAt": "2026-09-06T15:44:52.782Z",
+      "lessonHash": "b8eeadaa549c7d479cfd5a8a652295f4e26ed6023f0cdd155c00aafa16289f46",
+      "supersedes": null
+    },
+    {
+      "id": "agent-invoke-throwaway-branch-leak",
+      "category": "collective-brain-learned",
+      "severity": "major",
+      "status": "protected",
+      "history": [],
+      "rootCause": "Isolated agent worktrees were removed without deleting their owned ai/agent-invoke temporary branches.",
+      "solution": "Resolve the worktree branch before cleanup and delete it only when it is under the owned ai/agent-invoke prefix; preserve all unrelated branches.",
+      "protection": [
+        "test/agent-adapters.test.js"
+      ],
+      "evidence": [
+        "45 targeted tests",
+        "branch ownership safety fence"
+      ],
+      "confirmedAt": "2026-09-06T15:44:53.276Z",
+      "lessonHash": "d50bc27d7c61501fcb75e400aac6e58d87ad155e41a938954a64dad9a214682a",
       "supersedes": null
     }
   ],
