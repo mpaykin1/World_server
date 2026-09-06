@@ -6,6 +6,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const { spawnSync } = require('node:child_process');
 const adapters = require('../lib/agent-adapters');
+const sessionGuard = require('../lib/agent-session-guard');
 
 const ROOT = path.resolve(__dirname, '..');
 
@@ -100,6 +101,19 @@ function branchExists(branch) {
   const r = spawnSync('git', ['branch', '--list', '--', branch], { cwd: ROOT, encoding: 'utf8', timeout: 15000 });
   return String(r.stdout || '').trim().length > 0;
 }
+
+test('createIsolatedWorktree uses the canonical LOCALAPPDATA worktree root, never generic temp/Desktop', () => {
+  const created = adapters.createIsolatedWorktree(ROOT, 'root-policy-test');
+  assert.equal(created.ok, true);
+  try {
+    const expected = path.resolve(sessionGuard.loadPolicy().worktreesRoot).toLowerCase();
+    const actual = path.resolve(created.worktreePath).toLowerCase();
+    assert.ok(actual.startsWith(expected + path.sep.toLowerCase()) || actual === expected, `${actual} must be below ${expected}`);
+    assert.ok(!/[\\/]Desktop[\\/]/i.test(actual));
+  } finally {
+    adapters.removeIsolatedWorktree(ROOT, created.worktreePath);
+  }
+});
 
 test('createIsolatedWorktree + isWorktreeHealthy + removeIsolatedWorktree: real lifecycle', () => {
   const created = adapters.createIsolatedWorktree(ROOT, 'lifecycle-test');

@@ -64,6 +64,7 @@ const { spawnSync } = require('child_process');
 const collectiveBrain = require('../lib/collective-brain');
 const { createWorkerAuthedClient } = require('../lib/env');
 const agentAdapters = require('../lib/agent-adapters');
+const sessionGuard = require('../lib/agent-session-guard');
 
 const ROOT = path.resolve(__dirname, '..');
 const REPORT_LOG_PATH = process.env.AI_AGENT_REPORTS_PATH || path.join(ROOT, 'state', 'ai-agent-reports.jsonl');
@@ -163,7 +164,7 @@ function applyGuardedPatch(args, def) {
       return { ok: false, retriable: false, error: `diff touches a forbidden path prefix: ${bad}` };
     }
   }
-  const patchFile = path.join(os.tmpdir(), `remote-task-patch-${Date.now()}.diff`);
+  const patchFile = path.join(sessionGuard.ensureRoots().scratchRoot, `remote-task-patch-${Date.now()}.diff`);
   fs.writeFileSync(patchFile, diff);
   try {
     const check = spawnSync('git', ['apply', '--check', patchFile], { cwd: targetWorktree, encoding: 'utf8' });
@@ -298,7 +299,7 @@ function preparePr(args) {
   const branch = spawnSync('git', ['branch', '--show-current'], { cwd: target, encoding: 'utf8', timeout: 10000 }).stdout.trim();
   const push = spawnSync('git', ['push', '-u', 'origin', branch], { cwd: target, encoding: 'utf8', timeout: 60000 });
   if (push.status !== 0) return { ok: false, retriable: true, error: `git push failed: ${String(push.stderr || '').slice(-1500)}` };
-  const goalFile = path.join(os.tmpdir(), `pr-body-${Date.now()}.md`);
+  const goalFile = path.join(sessionGuard.ensureRoots().scratchRoot, `pr-body-${Date.now()}.md`);
   fs.writeFileSync(goalFile, body);
   const pr = spawnSync('gh', ['pr', 'create', '--base', 'master', '--head', branch, '--title', title, '--body-file', goalFile], { cwd: target, encoding: 'utf8', timeout: 30000, shell: true });
   try { fs.unlinkSync(goalFile); } catch { /* best effort */ }

@@ -111,6 +111,26 @@ test('withSubtaskLease: releases its lease on completion so a later call for the
   assert.equal(r2.result, 'PASS', 'lease must be released after the first call completes, not held forever');
 });
 
+test('offline agents receive the inherited start/end hygiene contract', async () => {
+  const root = mkTmpRoot();
+  const r = await mc.dispatchSubtask(root, { text: 'review only', agent: 'chatgpt', taskId: 'offline-hygiene-contract' });
+  assert.equal(r.result, 'ASSIGNED');
+  assert.equal(r.sessionPolicy.inherited, true);
+  assert.match(r.sessionPolicy.preflight, /agent-session:preflight/);
+  assert.match(r.sessionPolicy.postflight, /agent-session:postflight/);
+});
+
+test('self-executed agents get runtime preflight and require postflight through reportSelfExecuted', async () => {
+  const root = mkTmpRoot();
+  const r = await mc.dispatchSubtask(root, { text: 'local review', agent: 'desktop-ai', taskId: 'self-hygiene-contract' });
+  assert.equal(r.result, 'SELF_EXECUTE');
+  assert.equal(r.sessionGuard.pre.ok, true);
+  assert.equal(r.sessionGuard.post, 'required-via-reportSelfExecuted');
+  const entry = mc.reportSelfExecuted('local review', { ok: true }, { taskId: 'self-hygiene-report', agentId: 'desktop-ai' });
+  assert.equal(entry.agent, 'desktop-ai');
+  assert.ok(entry.findings.sessionHygiene);
+});
+
 test('dispatchSubtask: an explicit chatgpt/claude-desktop agent hint is assigned offline, never invoked', async () => {
   const root = mkTmpRoot();
   const r = await mc.dispatchSubtask(root, { text: 'cross-review the deploy branch', agent: 'chatgpt', taskId: 'dispatch-offline-test' });

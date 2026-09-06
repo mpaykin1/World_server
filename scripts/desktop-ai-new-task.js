@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 'use strict';
 const fs=require('fs'),path=require('path');
+const sessionGuard=require('../lib/agent-session-guard');
 const ROOT=process.cwd();
+const hygiene=sessionGuard.preflight('desktop-ai',{localHeavy:false});
+if(!hygiene.ok)throw new Error('Desktop AI zero-chaos preflight failed; fix hygiene/disk violations before starting a task.');
 const task=process.env.DESKTOP_AI_TASK||process.argv.slice(2).join(' ').trim();
 if(!task)throw new Error('usage: npm run desktop-ai:new-task -- "<task>" or DESKTOP_AI_TASK=...');
 const now=new Date().toISOString();

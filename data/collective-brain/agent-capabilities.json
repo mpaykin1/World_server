@@ -50,5 +50,13 @@
       "costTier": "free-local",
       "costPenalty": 0
     }
+  },
+  "sessionPolicy": {
+    "source": "data/desktop-ai-policy.json#sessionHygiene",
+    "inheritByDefault": true,
+    "runtimeEnforced": ["opencode", "openhuman", "anythingllm", "world-cloud-ai", "codex", "claude-code", "desktop-ai"],
+    "contractEnforced": ["chatgpt", "claude-desktop"],
+    "internalEntrypoints": ["scripts/master-coordinator.cjs", "lib/agent-adapters.js", "scripts/desktop-ai-new-task.js"],
+    "rule": "All executable agent adapters are guarded by shared pre/post hygiene. Unknown/new adapters fail closed until integrated; external desktop/browser sessions use the same required commands."
   }
 }

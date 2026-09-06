@@ -108,7 +108,10 @@
     "master-coordinator": "node scripts/master-coordinator.cjs",
     "master-coordinator:test": "node --test test/master-coordinator.test.js",
     "master-coordinator:full-free": "node scripts/master-coordinator.cjs --full-free",
-    "master-coordinator:paid-review": "node scripts/master-coordinator.cjs --full-free --allow-paid"
+    "master-coordinator:paid-review": "node scripts/master-coordinator.cjs --full-free --allow-paid",
+    "agent-session:preflight": "node lib/agent-session-guard.js preflight direct-desktop-ai",
+    "agent-session:postflight": "node lib/agent-session-guard.js postflight direct-desktop-ai",
+    "agent-session:check": "node lib/agent-session-guard.js preflight policy-check"
   },
   "engines": {
     "node": "24.x"

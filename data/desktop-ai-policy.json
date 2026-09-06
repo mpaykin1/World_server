@@ -29,5 +29,26 @@
   ],
   "patchRule": "No patch is valid without an updated WORK_IN_PROGRESS.md.",
   "completionRule": "Desktop AI may not declare completion until work instruction and final evidence are current.",
-  "directionRule": "Every task instruction must state what we are working on, why, where the project is going, what the patch changes, how to verify it, and what to do with the patch."
+  "directionRule": "Every task instruction must state what we are working on, why, where the project is going, what the patch changes, how to verify it, and what to do with the patch.",
+  "sessionHygiene": {
+    "requiredForEveryAgent": true,
+    "inheritForFutureAgents": true,
+    "worktreesRoot": "%LOCALAPPDATA%\\World_server_worktrees",
+    "aiRoot": "%LOCALAPPDATA%\\WorldServerAI",
+    "scratchRoot": "%LOCALAPPDATA%\\WorldServerAI\\Scratch",
+    "scratchTtlHours": 24,
+    "minFreeRamPercent": 15,
+    "warnFreeRamPercent": 25,
+    "minFreeDiskGB": 5,
+    "desktopAllowedProjectItems": [
+      "World_server"
+    ],
+    "ownedScratchPrefixes": [
+      "agent-",
+      "health-probe-",
+      "session-guard-"
+    ],
+    "processRule": "Never terminate user or unrelated processes. Only the process tree explicitly spawned and owned by the current AI launcher may be stopped on timeout/duplication.",
+    "completionRule": "Every local-capable AI session must pass preflight before execution and postflight before completion."
+  }
 }
