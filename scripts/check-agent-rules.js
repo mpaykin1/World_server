@@ -95,6 +95,34 @@ try {
   failed = true;
 }
 
+
+// 6. Consequential manual-action / deployment confidence gate.
+try {
+  const policy = JSON.parse(fs.readFileSync(path.join(root, 'data', 'deployment-safety-policy.json'), 'utf8'));
+  const evidence = policy.evidenceRequirements || {};
+  const deployment = policy.deploymentRules || {};
+  const agentsMd = fs.readFileSync(path.join(root, 'AGENTS.md'), 'utf8');
+
+  check(Number(policy.manualActionConfidenceThreshold) >= 0.95, 'Manual-action confidence threshold is at least 95%');
+  check(Number(evidence.minimumIndependentSources) >= 2, 'Consequential user instructions require at least two independent evidence sources');
+  check(evidence.requireAuthoritativeSourceForExternalPlatform === true, 'External-platform actions require authoritative current evidence');
+  check(evidence.requireTargetIdentityProof === true && evidence.requireCurrentStateProbe === true, 'Exact target identity and current state must be proven before user action');
+  check(evidence.distinguishRepositoryIntegratedFromLiveDeployed === true, 'Repository integration and live deployment are separate states');
+  check(deployment.neverClaimInstalledWithoutLiveEvidence === true, 'Production install claims require live runtime evidence');
+  check(deployment.preferExistingPublishedAppUpdateInPlace === true, 'Existing published production defaults to update-in-place');
+  check(deployment.neverDeleteOrUnpublishExistingProductionToUpdate === true, 'Existing production cannot be deleted/unpublished merely to update it');
+  check(deployment.neverCreateDuplicateProjectAppOrServiceWhenTargetExists === true, 'Duplicate deployment targets are forbidden when the target exists');
+  check(deployment.neverForcePushStaleAiStudioWorkspaceIntoCanonicalMaster === true, 'Stale/uncertain AI Studio workspaces cannot force-push canonical master');
+  check(deployment.aiStudioStarterTierOverwriteExistingSlot === true, 'AI Studio Starter Tier updates overwrite the existing app slot');
+  check(policy.belowThresholdAction === 'continue_investigation_do_not_instruct_user', 'Below 95% confidence means investigate, not instruct the user');
+  check(Array.isArray(policy.destructiveExceptionRequires) && policy.destructiveExceptionRequires.length >= 3, 'Destructive deployment exceptions require evidence, rollback/URL preservation, and explicit approval');
+  check(agentsMd.includes('MANUAL-ACTION & DEPLOYMENT CONFIDENCE GATE'), 'AGENTS.md contains the hard 95% deployment/manual-action gate');
+  check(agentsMd.includes('https://world-server.ai.studio'), 'AGENTS.md preserves the canonical production target');
+} catch (e) {
+  console.error('FAIL: deployment/manual-action confidence policy is unreadable or incomplete', e.message);
+  failed = true;
+}
+
 if (failed) {
   console.error('\nAgent rules check FAILED');
   process.exit(1);
