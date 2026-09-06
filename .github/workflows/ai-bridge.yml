@@ -1,0 +1,44 @@
+name: AI Bridge Synchronization & Validation
+
+on:
+  push:
+    paths:
+      - '.ai/bridge/**'
+      - 'lib/ai-bridge.js'
+      - 'scripts/ai-bridge.js'
+      - 'test/ai-bridge.test.js'
+      - '.github/workflows/ai-bridge.yml'
+  pull_request:
+    paths:
+      - '.ai/bridge/**'
+      - 'lib/ai-bridge.js'
+      - 'scripts/ai-bridge.js'
+      - 'test/ai-bridge.test.js'
+      - '.github/workflows/ai-bridge.yml'
+  schedule:
+    - cron: '0 * * * *' # Run hourly to perform stale task recovery and validation
+
+permissions:
+  contents: read
+
+jobs:
+  validate-ai-bridge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Validate Bridge State & Run Recovery
+        run: node scripts/ai-bridge.js validate
+
+      - name: Run AI Bridge Unit & Regression Tests
+        run: node --test test/ai-bridge.test.js
