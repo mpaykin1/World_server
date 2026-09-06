@@ -279,3 +279,9 @@ result reported exactly as observed, not adjusted to look more favorable.
 - Before V46: mobile-WebKit 11 FPS, p95 244ms, long-frame 53.33%%.
 - After V47 full 8/8: mobile-WebKit 14 FPS, p95 150ms, long-frame 33.33%%, DPR .55; desktop 55 FPS; mobile Chromium 48 FPS; tablet Chromium 35 FPS.
 - Gates: focused 9/9 PASS; autoplay 8/8 PASS; npm run check x3 PASS; release:gate PASS; Quality Regression violations=0; Evidence Score 95.5%%; World Quality 100%%; Collective Brain PASS.
+
+### V48 AI3D single-owner adaptive DPR + stable performance evidence
+- Root cause: AI3D had competing DPR writers (local `adaptResolution`, `WorldQualityAutopilot.apply`, and legacy `GoldenPerformanceAutoTune`). Probe proved telemetry/render divergence: requested DPR `.55` while renderer DPR rose to `.87/.75`; early FPS evidence measured adaptation transients.
+- Fix: existing `WorldQualityAutopilot.registerRenderer` now supports opt-in `manageDpr:false` (default unchanged); AI3D uses one local DPR owner, shared quality only caps downward, legacy Golden DPR registration is removed for AI3D, catastrophic pressure immediately selects existing SAFE tier + existing `.55` floor.
+- Evidence protection: runtime exposes requested/actual DPR + quality stability; autoplay waits for convergence before accepting FPS/p95/long-frame evidence; V48 regression protects single ownership and no threshold weakening.
+- Measured stable matrix after fix: desktop Chromium 60 FPS / p95 16.7ms / long 0%; mobile Chromium 49 / 33.4ms / 1.33%; mobile WebKit 35 / 30ms / 1.92%; tablet Chromium 35 / 33.4ms / 0%. Autoplay 8/8 PASS; focused 13/13 PASS; npm check x3 PASS; release:gate PASS. Playwright emulation is repo E2E evidence, not physical-device proof.

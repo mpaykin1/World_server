@@ -16,8 +16,9 @@ test.describe('AI3D Voxel City - default-city autoplay (no user actions)', () =>
     // Do not accept startup fps=0 as performance evidence. Runtime publishes measuredFps only after its first 1500ms window.
     await page.waitForFunction(() => {
       const s = window.AI3DVoxelRuntime?.stats();
-      return s?.fps > 0 && s?.performance?.samples >= 30 && s?.performance?.p95FrameMs > 0;
-    }, { timeout: 10000 });
+      const dprStable=Math.abs((s?.actualPixelRatio||0)-(s?.pixelRatio||0))<=.01;
+      return s?.fps > 0 && s?.performance?.samples >= 30 && s?.performance?.p95FrameMs > 0 && dprStable && s?.quality?.stableForMs >= 1500;
+    }, { timeout: 15000 });
 
     const stats = await page.evaluate(() => window.AI3DVoxelRuntime.stats());
     console.log('autoplay stats', stats);
@@ -25,6 +26,8 @@ test.describe('AI3D Voxel City - default-city autoplay (no user actions)', () =>
     expect(stats.fps).toBeGreaterThan(0);
     expect(stats.performance.samples).toBeGreaterThanOrEqual(30);
     expect(stats.performance.p95FrameMs).toBeGreaterThan(0);
+    expect(Math.abs(stats.actualPixelRatio-stats.pixelRatio)).toBeLessThanOrEqual(.01);
+    expect(stats.quality.stableForMs).toBeGreaterThanOrEqual(1500);
     expect(stats.performance.longFrameRatio).toBeGreaterThanOrEqual(0);
     expect(stats.performance.longFrameRatio).toBeLessThanOrEqual(1);
     expect(stats.voxels).toBeGreaterThan(0);

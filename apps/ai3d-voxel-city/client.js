@@ -13,7 +13,7 @@ let yaw=0,pitch=0,radius=180,target=new THREE.Vector3(),frontMode=true,skyVisibl
 let chunkObjects=new Map(),mesherStats=null,profileName='HIGH',adaptive=true;
 let streamingCenter=null;
 let frameCount=0,lastFpsTime=performance.now(),measuredFps=0,lastStreamUpdate=0;
-let perfLastFrameNow=0,frameTimeSamples=[];
+let perfLastFrameNow=0,frameTimeSamples=[],lastPerfResetAt=performance.now();
 let lastStreamOriginX=NaN,lastStreamOriginZ=NaN,lastStreamProfile='';
 let dynamicPixelRatio=1;
 
@@ -59,6 +59,7 @@ async function health(){
 }
 function setProgress(p,msg){$('bar').style.width=`${Math.max(0,Math.min(100,p))}%`;if(msg)$('log').textContent=msg;}
 function profile(){return PROFILES[profileName]||PROFILES.HIGH;}
+function resetPerformanceWindow(){frameTimeSamples=[];perfLastFrameNow=performance.now();lastPerfResetAt=perfLastFrameNow;}
 function cssRgb(a){return `rgb(${a[0]},${a[1]},${a[2]})`;}
 
 function init3D(){
@@ -77,8 +78,8 @@ function init3D(){
   renderer.setSize(host.clientWidth,host.clientHeight);
   host.replaceChildren(renderer.domElement);
   window.WorldQualityAutopilot?.registerRenderer('ai3d-voxel-city',renderer,{
-    initialTier:matchMedia('(pointer:coarse)').matches?'BALANCED':'HIGH',targetFps:matchMedia('(pointer:coarse)').matches?43:55,
-    onQualityChange(q){if(!adaptive)return;profileName=q.tier==='SAFE'?'SAFE':q.tier==='ULTRA'?'ULTRA':'HIGH';dynamicPixelRatio=Math.min(devicePixelRatio||1,Number(q.dpr)||profile().pixelRatio);renderer.setPixelRatio(dynamicPixelRatio);renderer.setSize(host.clientWidth,host.clientHeight,false);if(typeof setWorldMaterialQuality==='function')setWorldMaterialQuality(q.pbrQuality||0);if(world){applyFog();updateStreaming(true)}},
+    initialTier:matchMedia('(pointer:coarse)').matches?'BALANCED':'HIGH',targetFps:matchMedia('(pointer:coarse)').matches?43:55,manageDpr:false,
+    onQualityChange(q){if(!adaptive)return;const oldProfile=profileName;profileName=q.tier==='SAFE'?'SAFE':q.tier==='ULTRA'?'ULTRA':'HIGH';const cap=Math.min(devicePixelRatio||1,Number(q.dpr)||profile().pixelRatio);let changed=profileName!==oldProfile;if(dynamicPixelRatio>cap+.001){dynamicPixelRatio=cap;renderer.setPixelRatio(dynamicPixelRatio);renderer.setSize(host.clientWidth,host.clientHeight,false);changed=true}if(typeof setWorldMaterialQuality==='function')setWorldMaterialQuality(q.pbrQuality||0);if(world){applyFog();updateStreaming(true)}if(changed)resetPerformanceWindow()},
     getStats(){return{fps:measuredFps,calls:renderer.info.render.calls,triangles:renderer.info.render.triangles}}
   });
 
@@ -382,13 +383,13 @@ function adaptResolution(){
   let next=dynamicPixelRatio;
   // Catastrophic misses need a fast convergence to the existing SAFE DPR floor.
   // This changes adaptation speed only; the .55 quality floor is unchanged.
-  if(measuredFps>0&&measuredFps<p.targetFps*.5)next=.55;
+  let qualityChanged=false;
+  if(measuredFps>0&&measuredFps<p.targetFps*.5){next=.55;if(profileName!=='SAFE'){profileName='SAFE';applyFog();updateStreaming(true);qualityChanged=true;}}
   else if(measuredFps>0&&measuredFps<p.targetFps-6)next*=.90;
   else if(measuredFps>p.targetFps+7)next*=1.06;
   next=Math.max(.55,Math.min(dpr,p.pixelRatio,next));
-  if(Math.abs(next-dynamicPixelRatio)>.04){
-    dynamicPixelRatio=next;renderer.setPixelRatio(dynamicPixelRatio);fitCameras();
-  }
+  if(Math.abs(next-dynamicPixelRatio)>.04){dynamicPixelRatio=next;renderer.setPixelRatio(dynamicPixelRatio);fitCameras();qualityChanged=true;}
+  if(qualityChanged)resetPerformanceWindow();
 }
 const GOLDEN_STEP_HEIGHTS=[.25,.5,.75,1.0,1.05];
 function goldenPlayableHorizontal(axis,delta,allowStep){
@@ -697,7 +698,7 @@ window.AI3DVoxelRuntime={
   // setView - e2e/golden-controls.spec.js calls the canonical setView name
   // against both runtimes, so this runtime needs to answer to it too.
   setView(nextYaw,nextPitch=0){this.setPlayerView(nextYaw,nextPitch);},
-  stats(){return {fps:measuredFps,performance:performanceSnapshot(),pixelRatio:dynamicPixelRatio,renderer:renderer?.info?.render,mesher:mesherStats,chunks:chunkObjects.size, voxels:world?world.voxels.length:0, player:{x:player.x,y:player.y,z:player.z,yaw,onGround:player.onGround, playable:playableMode}, defaultCityLoaded};},
+  stats(){return {fps:measuredFps,performance:performanceSnapshot(),pixelRatio:dynamicPixelRatio,actualPixelRatio:renderer?.getPixelRatio?.()||dynamicPixelRatio,quality:{profile:profileName,adaptive,stableForMs:Math.max(0,performance.now()-lastPerfResetAt)},renderer:renderer?.info?.render,mesher:mesherStats,chunks:chunkObjects.size, voxels:world?world.voxels.length:0, player:{x:player.x,y:player.y,z:player.z,yaw,onGround:player.onGround, playable:playableMode}, defaultCityLoaded};},
   collidesAt(x,y,z){ return collidesAt(x,y,z); },
   getOccupancySize(){ return occupancySet.size; }
 };
@@ -707,5 +708,5 @@ window.__AI3D_DEFAULT_CITY_AUTOPLAY__ = { autoLoad: autoLoadDefaultCity, get sta
 init3D();health();
 autoLoadDefaultCity();
 
-try{if(typeof renderer!=='undefined')window.GoldenPerformanceAutoTune?.registerRenderer(renderer,{targetFps:matchMedia('(pointer:coarse)').matches?45:55,minDpr:.75,maxDpr:Math.min(devicePixelRatio||1,2)});}catch{}
+// DPR has one owner in this runtime: local adaptive control, capped downward by WorldQualityAutopilot.
 

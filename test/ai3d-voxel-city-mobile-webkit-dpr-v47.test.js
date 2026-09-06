@@ -10,7 +10,7 @@ test('catastrophic FPS accelerates DPR convergence without lowering floor',()=>{
   const a=src.indexOf('function adaptResolution');
   const b=src.indexOf('const GOLDEN_STEP_HEIGHTS',a);
   const hot=src.slice(a,b);
-  assert.match(hot,/measuredFps<p\.targetFps\*\.5\)next=\.55/);
+  assert.match(hot,/measuredFps<p\.targetFps\*\.5\)[^{;]*\{?[^}]*next=\.55/);
   assert.match(hot,/Math\.max\(\.55,/);
   assert.match(hot,/measuredFps<p\.targetFps-6\)next\*=\.90/);
 });
