@@ -218,19 +218,19 @@ test('scanForbiddenDesktopClutter flags an unregistered World_server_copy-style 
   assert.deepEqual(clutter, ['World_server_copy']);
 });
 
-test('scanForbiddenDesktopClutter never flags a registered worktree, even with a suspicious-looking name', () => {
+test('scanForbiddenDesktopClutter flags registered secondary worktrees on Desktop', () => {
   const { desktopRoot } = mkDesktop();
   const wt = path.join(desktopRoot, 'World_server_backup_task_runner');
   fs.mkdirSync(wt, { recursive: true });
   const clutter = registry.scanForbiddenDesktopClutter(desktopRoot, [wt]);
-  assert.deepEqual(clutter, [], 'a real registered worktree must never be flagged as clutter regardless of its name');
+  assert.deepEqual(clutter, ['World_server_backup_task_runner'], 'registered worktrees must live outside Desktop');
 });
 
-test('scanForbiddenDesktopClutter ignores ordinary World_server folders that match no forbidden pattern', () => {
+test('scanForbiddenDesktopClutter flags every secondary World_server task folder', () => {
   const { desktopRoot } = mkDesktop();
   fs.mkdirSync(path.join(desktopRoot, 'World_server_chatgpt_hourly'), { recursive: true });
   const clutter = registry.scanForbiddenDesktopClutter(desktopRoot, []);
-  assert.deepEqual(clutter, [], 'an ordinary task-named worktree folder must not be flagged just for being unregistered in this test');
+  assert.deepEqual(clutter, ['World_server_chatgpt_hourly']);
 });
 
 test('scanForbiddenDesktopClutter catches backup/tmp/sandbox-copy/integration_tmp variants', () => {
@@ -241,11 +241,12 @@ test('scanForbiddenDesktopClutter catches backup/tmp/sandbox-copy/integration_tm
   assert.deepEqual(clutter, names.sort());
 });
 
-test('desktopZeroChaosGate: PASS when Desktop has only registered worktrees and the canonical folder', () => {
+test('desktopZeroChaosGate: PASS only with the main World_server folder and canonical cleanup folder', () => {
   const { desktopRoot, canonicalRoot } = mkDesktop();
   const wt = path.join(desktopRoot, 'World_server');
   fs.mkdirSync(wt, { recursive: true });
   fs.mkdirSync(canonicalRoot, { recursive: true });
+  fs.writeFileSync(path.join(desktopRoot, 'WORLD_SERVER_KEEP.zip'), 'fixture');
   const report = registry.desktopZeroChaosGate({ desktopRoot, root: canonicalRoot, registeredWorktreePaths: [wt] });
   assert.equal(report.verdict, 'PASS');
 });

@@ -342,18 +342,18 @@ CLI, npm/Python, Playwright, linters, scanners, profilers, DB/Vercel/Git/FFmpeg/
 
 **Запрещено** создавать: `World_server_copy`, `World_server_test`, `World_server_tmp`, `World_server_AI_2`, `*_backup`, `*_backup-final`, `*_old`, `*sandbox-copy*`, `*integration_tmp*` и любые аналогичные — как для целого проекта, так и для temp/integration worktree, оставленных после `git worktree add --detach` (те обязаны быть удалены через `git worktree remove` + `git worktree prune` до конца сессии, см. §18).
 
-**Проверка:** `npm run desktop-ai:zero-chaos-gate` (реализация: `scripts/desktop-ai-session-housekeeping.cjs zero-chaos-gate`, использует `scanForbiddenDesktopClutter`/`desktopZeroChaosGate` из `scripts/lib/session-safe-to-delete-registry.cjs`). Сверяет Desktop-папки, начинающиеся на `World_server`/`world_server`, против `git worktree list` (легитимный зарегистрированный worktree никогда не считается мусором, вне зависимости от имени) и против списка запрещённых суффиксов/паттернов выше.
+**Проверка:** `npm run desktop-ai:zero-chaos-gate` (реализация: `scripts/desktop-ai-session-housekeeping.cjs zero-chaos-gate`, использует `scanForbiddenDesktopClutter`/`desktopZeroChaosGate` из `scripts/lib/session-safe-to-delete-registry.cjs`). Контракт строгий: среди каталогов `World_server*`/`WORLD_SERVER*` на Desktop разрешён только основной `%USERPROFILE%\Desktop\World_server`. Зарегистрированный Git worktree НЕ является исключением: временные/параллельные worktree создаются вне Desktop, например `%LOCALAPPDATA%\World_server_worktrees\`, и удаляются через `git worktree remove` + `git worktree prune` после сохранения полезной работы.
 
 **PASS** только если:
-- нет новых временных AI-папок на Desktop (gate: `verdict !== 'FAIL'`);
+- на Desktop нет ни одного дополнительного каталога `World_server*` кроме основного `World_server`;
 - полезное закоммичено/запушено (агент проверяет сам — gate не имеет видимости во все worktree сразу);
 - уникальное нужное — в `WORLD_SERVER_KEEP.zip`;
 - ненужное удалено или лежит только в `SESSION_SAFE_TO_DELETE`;
 - нет второй `SAFE_TO_DELETE`-подобной папки.
 
-**FAIL**, если после сессии на Desktop остался незарегистрированный `World_server*` объект, подходящий под запрещённый паттерн, или существует дубликат `SAFE_TO_DELETE`-папки.
+**FAIL**, если после сессии на Desktop остался любой дополнительный каталог `World_server*`/`WORLD_SERVER*`, даже если он зарегистрирован как Git worktree, или существует дубликат `SAFE_TO_DELETE`-папки.
 
-Регрессионные тесты: `test/session-safe-to-delete-policy.test.js` — `scanForbiddenDesktopClutter` (флагует незарегистрированный `World_server_copy`; никогда не флагует зарегистрированный worktree даже с «подозрительным» именем; игнорирует обычные task-именованные папки; ловит backup/tmp/sandbox-copy/integration_tmp варианты) и `desktopZeroChaosGate` (PASS на чистом Desktop; FAIL на незарегистрированной backup/copy-папке; FAIL на дубликате `SAFE_TO_DELETE`).
+Регрессионные тесты: `test/session-safe-to-delete-policy.test.js` — `scanForbiddenDesktopClutter` флагует любой дополнительный `World_server*` каталог на Desktop, включая зарегистрированный worktree и обычный task-named каталог; `desktopZeroChaosGate` PASS только при основном `World_server` + каноническом cleanup-каталоге (+ допустимом `WORLD_SERVER_KEEP.zip`) и FAIL при любом дополнительном World_server-каталоге или дубликате `SAFE_TO_DELETE`.
 
 ## 20. AI COMMIT PROVENANCE — обязательные trailer-поля для коммитов AI
 

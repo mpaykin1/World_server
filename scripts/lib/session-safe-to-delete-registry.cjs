@@ -247,22 +247,23 @@ function detectDuplicateSafeFolders(desktopRoot = defaultDesktopRoot(), canonica
 }
 
 /**
- * DESKTOP ZERO-CHAOS: scan Desktop for World_server-named folders that look
- * like disposable ad-hoc physical copies (backup/tmp/copy/sandbox-copy/
- * integration_tmp/_2 etc.) and are NOT a currently-registered git worktree.
- * `registeredWorktreePaths` should come from the caller's own
- * `git worktree list` (this module has no repo context of its own) - a
- * legitimate worktree is never flagged just because its name matches one of
- * these patterns.
+ * DESKTOP ZERO-CHAOS: enforce the strict top-level Desktop contract.
+ * The only allowed World_server directory is the main `World_server` repo.
+ * Secondary task/worktree directories are forbidden on Desktop even when
+ * registered in git; they belong under a non-Desktop worktree root.
+ * `registeredWorktreePaths` remains accepted for caller compatibility.
  */
 function scanForbiddenDesktopClutter(desktopRoot = defaultDesktopRoot(), registeredWorktreePaths = []) {
   let entries = [];
   try { entries = fs.readdirSync(desktopRoot, { withFileTypes: true }); } catch { return []; }
-  const registered = new Set(registeredWorktreePaths.map((p) => path.resolve(p).toLowerCase()));
+  // Strict user contract: Desktop may contain exactly one World_server directory.
+  // Registered worktrees are NOT exempt; temporary/parallel worktrees belong
+  // outside Desktop (for example under %LOCALAPPDATA%\World_server_worktrees).
+  // Keep the parameter for backwards-compatible callers/reporting.
+  void registeredWorktreePaths;
   return entries
-    .filter((e) => e.isDirectory() && /world[-_]?server/i.test(e.name))
-    .filter((e) => !registered.has(path.resolve(desktopRoot, e.name).toLowerCase()))
-    .filter((e) => FORBIDDEN_WORLD_SERVER_CLUTTER_PATTERNS.some((re) => re.test(e.name)))
+    .filter((e) => e.isDirectory() && /world[-_ ]?server/i.test(e.name))
+    .filter((e) => e.name.toLowerCase() !== 'world_server')
     .map((e) => e.name);
 }
 
