@@ -270,3 +270,9 @@ result reported exactly as observed, not adjusted to look more favorable.
 - Fix: strengthen the same RecipeJournal with async IndexedDB hydration/migration (`darkVoidV5/recipeJournal`) while retaining synchronous localStorage startup/offline fallback and the exact existing append/verify/replay API. No duplicate journal/storage runtime.
 - Regression: production invariant test requires IndexedDB open/put, ready hydration and localStorage fallback semantics.
 - Browser reload regression exposed an async persistence race: concurrent fire-and-forget IndexedDB puts could restore an older snapshot. Fix serializes journal writes through `_persistTail` and exposes `flushPersistence()` for deterministic crash/reload verification.
+
+## Dark Void V5 journal integrity — 2026-09-06
+- Root cause: IndexedDB hydration preferred a longer snapshot before validating its RecipeJournal hash-chain, so a corrupted crash snapshot could displace a valid localStorage chain.
+- Fix: `verifyJournalRows()` validates every persistence candidate before selection; corrupt localStorage is rejected at load; invalid IndexedDB is never promoted and is repaired from valid local state.
+- Regression: focused Dark Void suite proves a longer corrupted snapshot is rejected; full Dark Void suite 20/20 PASS; full `npm run check` 370 PASS / 0 FAIL / 2 opt-in skipped.
+- Architecture: strengthens the existing RecipeJournal/IndexedDB path only; no duplicate journal, storage runtime, telemetry, science framework, memory, or scheduler.
