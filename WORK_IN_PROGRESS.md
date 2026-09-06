@@ -408,3 +408,10 @@ Make Desktop hygiene and low-impact computer-health enforcement mandatory for ev
 
 ### Completion
 Commit and push this branch after final `git diff --check` / fast syntax gate.
+
+
+## 2026-09-06 production evidence freshness hardening
+- Root cause: production-quality-pull used only a 24h aggregate, so stale pre-deploy sessions could mask post-deploy reality; zero fresh sessions could be interpreted as a clean pass.
+- Fix: evaluate a fresh 1h window separately from the 24h history and emit PASS / BLOCK / INCONCLUSIVE. Zero fresh sessions is INCONCLUSIVE; fresh FPS/load/error violations remain BLOCK.
+- Regression: production-quality fresh-evidence + Node 24 tests 4/4 PASS; check:fast PASS.
+- Live probe: freshSessions=0 => INCONCLUSIVE, proving the false-PASS path is closed.
