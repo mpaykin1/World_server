@@ -1,0 +1,136 @@
+{
+  "experiment": "RUN_070_H2_DELAYED_LOCAL_REWARD",
+  "source": "RUN_062 + RUN_066 + RUN_068; production snapBuilding/validateBuild on every accepted placement",
+  "subhypothesis": "Delayed radius-3 local reward after four later repair actions generalizes better than fixed ray2 without pristine blueprint or global LCC during decisions.",
+  "preregistration": {
+    "holdoutSeeds": [
+      70111,
+      70117,
+      70141,
+      70157,
+      70181,
+      70207
+    ],
+    "damageFraction": 0.2,
+    "horizon": 4,
+    "fixedBaseline": "ray2 from RUN_068",
+    "control": "matched-density RUN_062 random control receives identical damage and policy",
+    "confirm": ">=5/6 LCC>=0.70; >=4/6 lift>=0.03; mean lift>=0.05; >=5/6 control<=0.22; >=5/6 ratio>=4; multi-rule 6/6",
+    "refute": "any criterion fails; preserve result; never retune on holdout"
+  },
+  "rows": [
+    {
+      "seed": 70111,
+      "control": false,
+      "damagedLcc": 0.22439024390243903,
+      "fixedLcc": 0.57421875,
+      "delayedLcc": 0.46484375,
+      "gain": 0.24045350609756097,
+      "lift": -0.109375,
+      "ruleUse": {
+        "n2": 26,
+        "opposite": 18,
+        "ray2": 4,
+        "ray3": 3
+      },
+      "controlDelayedLcc": 0.1328125,
+      "ratio": 3.5
+    },
+    {
+      "seed": 70117,
+      "control": false,
+      "damagedLcc": 0.18536585365853658,
+      "fixedLcc": 0.62890625,
+      "delayedLcc": 0.63671875,
+      "gain": 0.4513528963414634,
+      "lift": 0.0078125,
+      "ruleUse": {
+        "n2": 42,
+        "opposite": 5,
+        "ray2": 2,
+        "ray3": 2
+      },
+      "controlDelayedLcc": 0.0703125,
+      "ratio": 9.055555555555555
+    },
+    {
+      "seed": 70141,
+      "control": false,
+      "damagedLcc": 0.35121951219512193,
+      "fixedLcc": 0.7578125,
+      "delayedLcc": 0.75390625,
+      "gain": 0.40268673780487807,
+      "lift": -0.00390625,
+      "ruleUse": {
+        "n2": 37,
+        "opposite": 10,
+        "ray2": 1,
+        "ray3": 3
+      },
+      "controlDelayedLcc": 0.18359375,
+      "ratio": 4.1063829787234045
+    },
+    {
+      "seed": 70157,
+      "control": false,
+      "damagedLcc": 0.23902439024390243,
+      "fixedLcc": 0.98828125,
+      "delayedLcc": 0.5546875,
+      "gain": 0.31566310975609757,
+      "lift": -0.43359375,
+      "ruleUse": {
+        "n2": 1,
+        "opposite": 36,
+        "ray2": 4,
+        "ray3": 10
+      },
+      "controlDelayedLcc": 0.08203125,
+      "ratio": 6.761904761904762
+    },
+    {
+      "seed": 70181,
+      "control": false,
+      "damagedLcc": 0.3170731707317073,
+      "fixedLcc": 0.5234375,
+      "delayedLcc": 0.55078125,
+      "gain": 0.23370807926829268,
+      "lift": 0.02734375,
+      "ruleUse": {
+        "n2": 43,
+        "opposite": 3,
+        "ray2": 2,
+        "ray3": 3
+      },
+      "controlDelayedLcc": 0.08203125,
+      "ratio": 6.714285714285714
+    },
+    {
+      "seed": 70207,
+      "control": false,
+      "damagedLcc": 0.34146341463414637,
+      "fixedLcc": 0.75390625,
+      "delayedLcc": 0.9140625,
+      "gain": 0.5725990853658536,
+      "lift": 0.16015625,
+      "ruleUse": {
+        "n2": 26,
+        "opposite": 3,
+        "ray2": 17,
+        "ray3": 5
+      },
+      "controlDelayedLcc": 0.12109375,
+      "ratio": 7.548387096774194
+    }
+  ],
+  "summary": {
+    "meanDelayed": 0.6458333333333334,
+    "meanFixed": 0.7044270833333334,
+    "meanLift": -0.05859375,
+    "recovered": 2,
+    "beatsFixed": 1,
+    "controlLow": 6,
+    "separated": 5,
+    "multiRule": 6
+  },
+  "pass": false
+}
