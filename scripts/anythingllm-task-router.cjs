@@ -22,6 +22,7 @@ const { decide: decideResources, enqueueTask } = require('../lib/ai-resource-sch
 const { pickBestBackend, recordOutcome } = require('../lib/model-suitability');
 const { rankToolsByCost } = require('../lib/tool-cost-model');
 const collectiveBrain = require('../lib/collective-brain');
+const { resolveMainTreeRoot } = require('../lib/world-server-paths');
 const { runAgenticTurn } = require('../lib/direct-ollama-mcp-transport');
 
 const ANYTHINGLLM_URL = process.env.ANYTHINGLLM_URL || 'http://127.0.0.1:3001';
@@ -36,7 +37,7 @@ const PROFILE_PATH = path.join(__dirname, '..', 'data', 'mcp-router-profile.json
 // this project for exactly this kind of exclusive-section problem) scoped to
 // the main tree so it is the same lock regardless of which worktree a caller
 // runs from - not a new, parallel locking mechanism.
-const LEASE_ROOT = process.env.WORLD_SERVER_MAIN_TREE || 'C:\\Users\\user\\Desktop\\World_server';
+const LEASE_ROOT = resolveMainTreeRoot();
 const LEASE_TTL_MS = 650000; // covers the 600s default timeout plus margin
 // 150s was tuned during the empty-response-defect investigation, when EVERY
 // turn looked broken regardless of budget. Now that the real defect (router

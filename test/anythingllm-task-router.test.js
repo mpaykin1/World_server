@@ -32,8 +32,9 @@ if (!process.env.WORLD_SERVER_QUEUE_DB) {
 
 const { looksLikeMismatch, prefixedToolName, MCP_SERVER_NAME, runTask } = require('../scripts/anythingllm-task-router.cjs');
 const collectiveBrain = require('../lib/collective-brain');
+const { resolveMainTreeRoot } = require('../lib/world-server-paths');
 const TEST_WORKSPACE_SLUG = `test-concurrency-${process.pid}-${Date.now()}`;
-const LEASE_ROOT = 'C:\\Users\\user\\Desktop\\World_server';
+const LEASE_ROOT = resolveMainTreeRoot();
 const LEASE_SCOPE = `anythingllm-workspace-${TEST_WORKSPACE_SLUG}`;
 
 test('an empty final response is treated as a mismatch, not a silent pass', () => {

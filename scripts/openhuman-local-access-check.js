@@ -14,20 +14,23 @@
 //     session did not have) — never inferred from CONFIGURED alone.
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
+const { resolveMainTreeRoot } = require('../lib/world-server-paths');
 
-const WORLD_SERVER_ROOT = 'C:\\Users\\user\\Desktop\\World_server';
+const WORLD_SERVER_ROOT = resolveMainTreeRoot();
+const DESKTOP_ROOT = path.join(process.env.USERPROFILE || os.homedir(), 'Desktop');
 // Desktop hygiene policy: all AI-created support tools live under "World_server AI",
 // with a single canonical Desktop shortcut/launcher — see World_server AI\README_RU.txt.
 // Older single-purpose launcher paths are kept as a fallback for one release cycle in case
 // this check runs before a given machine's cleanup has happened.
 const LAUNCHER_CMD_CANDIDATES = [
-  'C:\\Users\\user\\Desktop\\World_server AI\\Launchers\\WORLD_SERVER_AI.cmd',
-  'C:\\Users\\user\\Desktop\\World_server AI\\Launchers\\OPENHUMAN_WORLD_SERVER.cmd',
-  'C:\\Users\\user\\Desktop\\OPENHUMAN_WORLD_SERVER.cmd',
+  path.join(DESKTOP_ROOT, 'World_server AI', 'Launchers', 'WORLD_SERVER_AI.cmd'),
+  path.join(DESKTOP_ROOT, 'World_server AI', 'Launchers', 'OPENHUMAN_WORLD_SERVER.cmd'),
+  path.join(DESKTOP_ROOT, 'OPENHUMAN_WORLD_SERVER.cmd'),
 ];
 const LAUNCHER_LNK_CANDIDATES = [
-  'C:\\Users\\user\\Desktop\\World_server AI.lnk',
-  'C:\\Users\\user\\Desktop\\OpenHuman World_server.lnk',
+  path.join(DESKTOP_ROOT, 'World_server AI.lnk'),
+  path.join(DESKTOP_ROOT, 'OpenHuman World_server.lnk'),
 ];
 const PROBE_FILE = path.join(WORLD_SERVER_ROOT, 'OPENHUMAN_LOCAL_ACCESS_PROBE.txt');
 const MANUAL_EVIDENCE_FILE = path.join(WORLD_SERVER_ROOT, 'OPENHUMAN_LOCAL_ACCESS_MANUAL_EVIDENCE.json');

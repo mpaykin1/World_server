@@ -13,8 +13,9 @@
 // (%USERPROFILE%\.openhuman\logs\openhuman.<date>.log), never assumed.
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
-const LAUNCH_LOG = 'C:\\Users\\user\\Desktop\\World_server AI\\Logs\\OpenHuman-launch-latest.log';
+const LAUNCH_LOG = process.env.OPENHUMAN_LAUNCH_LOG || path.join(process.env.USERPROFILE || os.homedir(), 'Desktop', 'World_server AI', 'Logs', 'OpenHuman-launch-latest.log');
 const OPENHUMAN_EXE = 'C:\\Program Files\\OpenHuman\\OpenHuman.exe';
 const CONFIG_CANDIDATES_ROOT = path.join(process.env.USERPROFILE || '', '.openhuman', 'users');
 const RUNTIME_LOG_DIR = path.join(process.env.USERPROFILE || '', '.openhuman', 'logs');

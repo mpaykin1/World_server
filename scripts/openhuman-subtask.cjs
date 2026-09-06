@@ -21,8 +21,9 @@ const fs = require('fs');
 const path = require('path');
 const { runTask } = require('./anythingllm-task-router.cjs');
 const { route } = require('../lib/mcp-intent-router');
+const { resolveMainTreeRoot } = require('../lib/world-server-paths');
 
-const MAIN_TREE_ROOT = process.env.WORLD_SERVER_MAIN_TREE || 'C:\\Users\\user\\Desktop\\World_server';
+const MAIN_TREE_ROOT = resolveMainTreeRoot();
 const REPORT_LOG_PATH = process.env.AI_AGENT_REPORTS_PATH || path.join(MAIN_TREE_ROOT, 'state', 'ai-agent-reports.jsonl');
 const ANYTHINGLLM_URL = process.env.ANYTHINGLLM_URL || 'http://127.0.0.1:3001';
 const ANYTHINGLLM_API_KEY = process.env.ANYTHINGLLM_API_KEY;

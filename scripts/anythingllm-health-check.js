@@ -10,6 +10,7 @@
 // check (openhuman-local-chat-e2e-check.js's sibling for AnythingLLM, not this file).
 const fs = require('fs');
 const path = require('path');
+const { resolveMainTreeRoot } = require('../lib/world-server-paths');
 
 const ANYTHINGLLM_URL = process.env.ANYTHINGLLM_URL || 'http://127.0.0.1:3001';
 const OLLAMA_URL = process.env.OLLAMA_URL || 'http://127.0.0.1:11434';
@@ -26,7 +27,7 @@ const OPENHUMAN_EXE = 'C:\\Program Files\\OpenHuman\\OpenHuman.exe';
 // Any path under a directory named exactly "World_server" (not "World_server AI",
 // "World_server_openhuman2", etc.) is the real working tree — never the target for a
 // filesystem MCP grant. The sandbox worktree lives outside that tree entirely.
-const MAIN_WORLD_SERVER_ROOT = 'C:\\Users\\user\\Desktop\\World_server';
+const MAIN_WORLD_SERVER_ROOT = resolveMainTreeRoot();
 const SECRET_MARKERS = ['.env.local', 'WORLD_SERVER_SECRETS'];
 
 async function fetchJson(url, opts = {}, timeoutMs = 3000) {

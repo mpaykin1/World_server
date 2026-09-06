@@ -36,6 +36,7 @@ const collectiveBrain = require('../lib/collective-brain');
 const { runSubtask } = require('./openhuman-subtask.cjs');
 const resourceScheduler = require('../lib/ai-resource-scheduler');
 const { classifyIntent } = require('../lib/mcp-intent-router');
+const { resolveMainTreeRoot } = require('../lib/world-server-paths');
 
 // Read-only capability classes get sandboxRoot pointed at the REAL repo (the
 // local model's tool allowlist for these classes is read_file/read_text_file/
@@ -97,7 +98,7 @@ const CODEX_CLI_PATH = resolveCliBinary('codex');
 const GITHUB_REPO = process.env.WORLD_SERVER_GITHUB_REPO || 'mpaykin1/World_server';
 const CLOUD_WORKFLOW = process.env.WORLD_CLOUD_WORKFLOW || 'world-cloud-ai.yml';
 
-const MAIN_TREE_ROOT = process.env.WORLD_SERVER_MAIN_TREE || 'C:\\Users\\user\\Desktop\\World_server';
+const MAIN_TREE_ROOT = resolveMainTreeRoot();
 const REPORT_LOG_PATH = process.env.AI_AGENT_REPORTS_PATH || path.join(MAIN_TREE_ROOT, 'state', 'ai-agent-reports.jsonl');
 const WORKTREES_ROOT = process.env.WORLD_SERVER_WORKTREES_ROOT || path.join(os.homedir(), 'AppData', 'Local', 'World_server_worktrees');
 const RECOVERY_ROOT = process.env.WORLD_SERVER_RECOVERY_ROOT || path.join(os.homedir(), 'AppData', 'Local', 'World_server_recovery');

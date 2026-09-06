@@ -357,3 +357,9 @@ No paid cloud fallback is allowed inside World Cloud AI. Codex dispatch requires
 
 ### Tests / evidence
 Run master-coordinator + OpenHuman/AnythingLLM/MCP/resource tests, cloud failover unit tests, YAML parse, check:fast, desktop-ai:check, golden:check, then a real zero-cost cloud E2E. Final evidence pending the real cloud run.
+
+### Linux CI portability defect found and fixed
+PR #38 exposed nine Linux-only failures because the reused AI queue stack embedded `C:\Users\user\Desktop\World_server` as an executable path. Windows local tests hid this. Added `lib/world-server-paths.js` to discover the canonical git main worktree cross-platform, while executable source paths always resolve from the current checkout. Scheduler, router, OpenHuman, coordinator and health checks now reuse this resolver.
+
+### Portability regression protection
+`test/world-server-paths.test.js` verifies that source root is the active checkout, `durable-job-queue.cjs` exists inside it, and the canonical main worktree is discoverable. Machine-specific World_server path literals were removed from runtime/test code so Linux CI cannot regress to a Windows path again.

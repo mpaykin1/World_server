@@ -35,6 +35,7 @@ process.env.ANYTHINGLLM_API_KEY = 'test-dummy-key';
 
 const { runSubtask, buildReportEntry, appendReport, createThread } = require('../scripts/openhuman-subtask.cjs');
 const collectiveBrain = require('../lib/collective-brain');
+const { resolveMainTreeRoot } = require('../lib/world-server-paths');
 
 test.after(() => { fakeServer.close(); });
 
@@ -121,7 +122,7 @@ test('runSubtask does not attempt AnythingLLM thread creation for a filesystem t
   const savedKey = process.env.ANYTHINGLLM_API_KEY;
   delete process.env.ANYTHINGLLM_API_KEY;
   const workspaceSlug = `subtask-test-direct-${process.pid}`;
-  const leaseRoot = 'C:\\Users\\user\\Desktop\\World_server';
+  const leaseRoot = resolveMainTreeRoot();
   const leaseScope = `anythingllm-workspace-${workspaceSlug}`;
   const owner = `test-holder:${process.pid}`;
   const acquired = collectiveBrain.acquireLease(leaseRoot, leaseScope, { ttlMs: 30000, owner });

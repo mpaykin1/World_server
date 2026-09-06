@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 'use strict';
+const { resolveMainTreeRoot } = require('../lib/world-server-paths');
 const {doctor}=require('../lib/collective-brain');
 const {run: ordinaryChatCheck}=require('./openhuman-ordinary-chat-check');
 const {run: localAccessCheck}=require('./openhuman-local-access-check');
@@ -18,7 +19,7 @@ doctor(process.cwd()).then(async r=>{
   }
   try {
     const la = localAccessCheck();
-    console.log(`[COLLECTIVE_BRAIN_DOCTOR] OpenHuman action directory: C:\\Users\\user\\Desktop\\World_server`);
+    console.log(`[COLLECTIVE_BRAIN_DOCTOR] OpenHuman action directory: ${resolveMainTreeRoot()}`);
     console.log(`[COLLECTIVE_BRAIN_DOCTOR] Local World_server access: ${la.configured} (UI verified: ${la.uiVerified})`);
   } catch (e) {
     console.log(`[COLLECTIVE_BRAIN_DOCTOR] Local World_server access: NOT_CONFIGURED (check failed: ${e.message})`);
