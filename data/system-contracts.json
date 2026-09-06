@@ -46,18 +46,6 @@
       "requiredBy": [
         "all-public-apps"
       ]
-    },
-    "ai_bridge": {
-      "canonical": [
-        ".ai/bridge/README.md",
-        "lib/ai-bridge.js",
-        "scripts/ai-bridge-cli.js",
-        ".github/workflows/ai-bridge-sync.yml"
-      ],
-      "requiredBy": [
-        "cloud-coordination",
-        "chatgpt-jules-bridge"
-      ]
     }
   }
 }
