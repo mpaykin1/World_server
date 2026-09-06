@@ -589,6 +589,55 @@ function fsGuard() {
   if (!result.ok) process.exitCode = 1;
   return result;
 }
+function buildGuard() {
+  const dockerfilePath = path.join(ROOT, 'google-ai-studio', 'Dockerfile');
+  const dockerignorePath = path.join(ROOT, '.dockerignore');
+  const findings = [];
+
+  const dockerfile = fs.existsSync(dockerfilePath) ? fs.readFileSync(dockerfilePath, 'utf8') : '';
+  if (!dockerfile) {
+    findings.push({ id: 'dockerfile-missing', detail: path.relative(ROOT, dockerfilePath) });
+  } else {
+    if (!/^\s*RUN\s+npm\s+ci\b/m.test(dockerfile)) {
+      findings.push({ id: 'dockerfile-missing-npm-ci', detail: 'No `RUN npm ci` before COPY . . — node_modules is gitignored, container would crash on first require()' });
+    }
+
+    const fromMatch = dockerfile.match(/^FROM\s+node:(\d+)/mi);
+    const pkg = readJson(path.join(ROOT, 'package.json'), {});
+    const enginesMajor = (String(pkg.engines?.node || '').match(/(\d+)/) || [])[1];
+    if (fromMatch && enginesMajor && fromMatch[1] !== enginesMajor) {
+      findings.push({
+        id: 'node-version-mismatch',
+        detail: `Dockerfile FROM node:${fromMatch[1]}-alpine but package.json engines.node is "${pkg.engines.node}"`
+      });
+    }
+  }
+
+  const REQUIRED_RUNTIME_PATHS = [
+    'server.js',
+    'package.json',
+    'package-lock.json',
+    'shared/common.js',
+    'google-ai-studio/cloudrun-entry.cjs',
+    'google-ai-studio/Dockerfile'
+  ];
+  if (!fs.existsSync(dockerignorePath)) {
+    findings.push({ id: 'dockerignore-missing', detail: 'Build context is repo root and Dockerfile does `COPY . .` — without .dockerignore every file on disk (including .env, .git) is sent to the builder' });
+  } else {
+    const { findIgnoredRequiredPaths } = require('./lib/dockerignore-guard.cjs');
+    const content = fs.readFileSync(dockerignorePath, 'utf8');
+    const existingRequired = REQUIRED_RUNTIME_PATHS.filter((p) => fs.existsSync(path.join(ROOT, p)));
+    const shadowed = findIgnoredRequiredPaths(content, existingRequired);
+    if (shadowed.length) findings.push({ id: 'dockerignore-shadows-runtime-path', detail: shadowed.join(', ') });
+  }
+
+  const result = { ok: findings.length === 0, findings, checkedAt: new Date().toISOString() };
+  writeJson(path.join(REPORT_DIR, 'build-guard-latest.json'), result);
+  recordEvidence('build-guard', result);
+  console.log(JSON.stringify(result, null, 2));
+  if (!result.ok) process.exitCode = 1;
+  return result;
+}
 function classifyFailure(check) {
   const id = check.id || 'unknown';
   if (/public-access|https/.test(id)) return 'ACCESS_OR_TLS';
@@ -708,6 +757,7 @@ async function fullGate({ allowUnconfigured = false } = {}) {
   outputs.guard = guard();
   outputs.env = envContract();
   outputs.fs = fsGuard();
+  outputs.build = buildGuard();
   outputs.quota = quotaGuard();
   outputs.verify = await verify({ allowUnconfigured });
   outputs.compare = await compare();
@@ -764,6 +814,7 @@ async function main() {
   if (cmd === 'compare') return compare();
   if (cmd === 'env-contract') return envContract();
   if (cmd === 'fs-guard') return fsGuard();
+  if (cmd === 'build-guard') return buildGuard();
   if (cmd === 'set-env-keys') {
     if (pos.length !== 2) throw new Error('Usage: set-env-keys <google-navigator|google-sandbox|vercel-reference> <KEY1,KEY2,...>');
     return setEnvKeys(pos[0], pos[1]);
@@ -781,7 +832,7 @@ async function main() {
   if (cmd === 'full-gate') return fullGate({ allowUnconfigured: flags.has('--allow-unconfigured') });
   if (cmd === 'tools-plan') return toolsPlan();
 
-  console.log(`World_server Google AI Studio 2-slot controller V3\n\nCommands:\n  init\n  discover\n  guard\n  configure <navigator|sandbox> <https://...run.app>\n  set-entrypoint <navigator|sandbox> </local/path/>\n  set-reference <navigator|sandbox> <https://reference/>\n  verify [--allow-unconfigured]\n  compare\n  env-contract\n  fs-guard\n  set-env-keys <google-navigator|google-sandbox|vercel-reference> <KEY1,KEY2,...>\n  env-parity\n  quota-guard\n  diagnose\n  learn <CODE> <CAUSE> <FIX> [REGRESSION_TEST]\n  promotion-gate\n  rollback-plan\n  readiness\n  full-gate [--allow-unconfigured]\n  tools-plan\n`);
+  console.log(`World_server Google AI Studio 2-slot controller V3\n\nCommands:\n  init\n  discover\n  guard\n  configure <navigator|sandbox> <https://...run.app>\n  set-entrypoint <navigator|sandbox> </local/path/>\n  set-reference <navigator|sandbox> <https://reference/>\n  verify [--allow-unconfigured]\n  compare\n  env-contract\n  fs-guard\n  build-guard\n  set-env-keys <google-navigator|google-sandbox|vercel-reference> <KEY1,KEY2,...>\n  env-parity\n  quota-guard\n  diagnose\n  learn <CODE> <CAUSE> <FIX> [REGRESSION_TEST]\n  promotion-gate\n  rollback-plan\n  readiness\n  full-gate [--allow-unconfigured]\n  tools-plan\n`);
 }
 
 if (require.main === module) {
@@ -798,5 +849,6 @@ module.exports = {
   authWall,
   normalizeHtmlSignature,
   classifyFailure,
-  compactSummary
+  compactSummary,
+  buildGuard
 };
