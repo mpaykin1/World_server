@@ -240,7 +240,7 @@ async function runTask(taskText, opts = {}) {
     const attemptStart = Date.now();
     let attempt;
     try {
-      const r = await runAgenticTurn(taskText, { model: selectedModel, allowedTools, timeoutMs });
+      const r = await runAgenticTurn(taskText, { model: selectedModel, allowedTools, timeoutMs, mcpOpts: { sandboxRoot: opts.sandboxRoot } });
       const mismatch = !r.toolCallsMade.length || !r.textResponse || !r.textResponse.trim() || !!r.iterationLimitExceeded;
       attempt = {
         attemptNum: 1,

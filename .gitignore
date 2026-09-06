@@ -72,3 +72,9 @@ COLLECTIVE_BRAIN_BENCHMARK.json
 /World_server_openhuman/
 /World_server_procedural/
 /artifacts/
+
+# Master coordinator / AnythingLLM task router - local, machine-specific
+# runtime learning state (regenerates on first real dispatch, not source)
+/data/model-suitability-ledger.json
+/data/tool-cost-ledger.json
+/data/mcp-router-profile.json
