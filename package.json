@@ -105,6 +105,7 @@
     "collective-brain:opa": "node scripts/collective-brain-opa-check.js",
     "collective-brain:knowledge-pack": "node scripts/collective-brain-knowledge-pack.js",
     "collective-brain:ordinary-chat-check": "node scripts/openhuman-ordinary-chat-check.js",
+    "ai-bridge": "node scripts/ai-bridge-cli.js",
     "master-coordinator": "node scripts/master-coordinator.cjs",
     "master-coordinator:test": "node --test test/master-coordinator.test.js",
     "master-coordinator:full-free": "node scripts/master-coordinator.cjs --full-free",

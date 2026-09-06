@@ -1,0 +1,42 @@
+name: AI Bridge Sync & Validation
+
+on:
+  push:
+    paths:
+      - '.ai/bridge/**'
+  workflow_dispatch:
+  schedule:
+    - cron: '*/15 * * * *'
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: read
+
+jobs:
+  validate-and-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Validate & Sync AI Bridge
+        run: |
+          npm run ai-bridge -- --sync
+          npm run ai-bridge -- --recover-stale
+
+      - name: Verify JSON / JSONL Formatting
+        run: |
+          node -e "
+          const bridge = require('./lib/ai-bridge');
+          const tasks = bridge.readTasks();
+          const results = bridge.readResults();
+          console.log('Successfully validated ' + tasks.length + ' tasks and ' + results.length + ' results.');
+          "

@@ -38,6 +38,7 @@ const resourceScheduler = require('../lib/ai-resource-scheduler');
 const { classifyIntent } = require('../lib/mcp-intent-router');
 const { resolveMainTreeRoot } = require('../lib/world-server-paths');
 const sessionGuard = require('../lib/agent-session-guard');
+const aiBridge = require('../lib/ai-bridge');
 
 // Read-only capability classes get sandboxRoot pointed at the REAL repo (the
 // local model's tool allowlist for these classes is read_file/read_text_file/
@@ -534,6 +535,16 @@ function summarizeMasterResults(results) {
 
 async function runMasterGoal(goal, subtasks, opts = {}) {
   const root = opts.root || MAIN_TREE_ROOT;
+  // Inspect pending bridge tasks from ChatGPT before starting
+  try {
+    const bridgeStatus = aiBridge.syncBridge(root);
+    if (bridgeStatus.pending_tasks > 0) {
+      collectiveBrain.appendEvent(root, 'AI_BRIDGE_PENDING_TASKS_FOUND', { count: bridgeStatus.pending_tasks });
+    }
+  } catch (err) {
+    // Non-fatal bridge check
+  }
+
   const recall = await collectiveBrain.recall(root, goal, { skipNetwork: opts.skipNetwork });
   const route = collectiveBrain.routeTask(root, goal);
   const plan = subtasks && subtasks.length ? subtasks : buildDefaultSubtasks(goal, opts);
