@@ -38,7 +38,7 @@ const LOD_POLICY_PATH = path.join(__dirname, '..', 'data', 'creature-lod-policy.
 test('accepts zero-signal-procedural-asset-v1 format', () => {
   const asset = {
     format: 'zero-signal-procedural-asset-v1',
-    category: 'beast',
+    category: 'humanoid',
     params: { variant: 'forest_wolf', seed: 'abc' },
   };
   const result = validateFormat(asset);
@@ -48,7 +48,7 @@ test('accepts zero-signal-procedural-asset-v1 format', () => {
 test('accepts zero-signal-godot-procedural-asset-v1 format', () => {
   const asset = {
     format: 'zero-signal-godot-procedural-asset-v1',
-    category: 'beast',
+    category: 'humanoid',
     params: { variant: 'forest_wolf', seed: 'abc' },
   };
   const result = validateFormat(asset);
@@ -56,7 +56,7 @@ test('accepts zero-signal-godot-procedural-asset-v1 format', () => {
 });
 
 test('rejects unknown format', () => {
-  const asset = { format: 'unknown-format-v2', category: 'beast', params: {} };
+  const asset = { format: 'unknown-format-v2', category: 'humanoid', params: {} };
   const result = validateFormat(asset);
   assert.equal(result.ok, false);
   assert.match(result.error, /format/i);
@@ -84,7 +84,7 @@ test('all 13 creature categories are accepted', () => {
 // 3. Malformed format/category rejected
 // ---------------------------------------------------------------------------
 test('missing format is rejected', () => {
-  const asset = { category: 'beast', params: {} };
+  const asset = { category: 'humanoid', params: {} };
   const result = validateFormat(asset);
   assert.equal(result.ok, false);
 });
@@ -118,7 +118,7 @@ test('null asset is rejected', () => {
 test('identical inputs produce identical recipe hash and seed', () => {
   const asset = {
     format: 'zero-signal-procedural-asset-v1',
-    category: 'beast',
+    category: 'humanoid',
     params: { variant: 'wolf', seed: 'farm1', hp: 45 },
   };
   const r1 = buildRecipe(asset);
@@ -130,12 +130,12 @@ test('identical inputs produce identical recipe hash and seed', () => {
 test('different inputs produce different hashes', () => {
   const a = buildRecipe({
     format: 'zero-signal-procedural-asset-v1',
-    category: 'beast',
+    category: 'humanoid',
     params: { variant: 'wolf', seed: 'farm1' },
   });
   const b = buildRecipe({
     format: 'zero-signal-procedural-asset-v1',
-    category: 'beast',
+    category: 'humanoid',
     params: { variant: 'wolf', seed: 'farm2' },
   });
   assert.notEqual(a.hash, b.hash);
@@ -153,7 +153,7 @@ test('source payload is not copied into canonical recipe beyond hash+metadata', 
   };
   const asset = {
     format: 'zero-signal-procedural-asset-v1',
-    category: 'beast',
+    category: 'humanoid',
     params: { seed: 'test' },
     source: sourcePayload,
   };
@@ -249,16 +249,23 @@ test('AnimationScheduler spreads updates across frames for different IDs', () =>
 
   const first = scheduler.schedule(ids);
   const second = scheduler.schedule(ids);
+  const third = scheduler.schedule(ids);
 
-  const setA = new Set(first);
-  const setB = new Set(second);
+  const all = [...first, ...second, ...third];
+  const unique = new Set(all);
 
   assert.ok(first.length <= 3, 'first batch ≤ maxPerFrame');
   assert.ok(second.length <= 3, 'second batch ≤ maxPerFrame');
+  assert.ok(third.length <= 3, 'third batch ≤ maxPerFrame');
 
-  const overlap = first.filter((id) => setB.has(id));
-  assert.equal(overlap.length, 0, 'batches must not overlap');
-  assert.equal(first.length + second.length, ids.length, 'all IDs covered in two passes');
+  const pairWiseNoOverlap = (a, b) => {
+    const s = new Set(a);
+    return b.every((id) => !s.has(id));
+  };
+  assert.ok(pairWiseNoOverlap(first, second), 'first and second must not overlap');
+  assert.ok(pairWiseNoOverlap(second, third), 'second and third must not overlap');
+  assert.ok(pairWiseNoOverlap(first, third), 'first and third must not overlap');
+  assert.equal(unique.size, ids.length, 'all 7 IDs covered across three passes');
 });
 
 test('AnimationScheduler handles more IDs than maxPerFrame gracefully', () => {
@@ -285,7 +292,7 @@ test('AnimationScheduler returns empty for empty IDs', () => {
 test('instancingKey is stable for identical recipe+lod', () => {
   const recipe = buildRecipe({
     format: 'zero-signal-procedural-asset-v1',
-    category: 'beast',
+    category: 'humanoid',
     params: { variant: 'skeleton', seed: 'crypt1' },
   });
   const ik1 = instancingKey(recipe, 'full');
@@ -296,7 +303,7 @@ test('instancingKey is stable for identical recipe+lod', () => {
 test('instancingKey differs for different LOD tier', () => {
   const recipe = buildRecipe({
     format: 'zero-signal-procedural-asset-v1',
-    category: 'beast',
+    category: 'humanoid',
     params: { variant: 'skeleton', seed: 'crypt1' },
   });
   const ikFull = instancingKey(recipe, 'full');
@@ -307,12 +314,12 @@ test('instancingKey differs for different LOD tier', () => {
 test('instancingKey differs for different recipes', () => {
   const r1 = buildRecipe({
     format: 'zero-signal-procedural-asset-v1',
-    category: 'beast',
+    category: 'humanoid',
     params: { variant: 'wolf', seed: 'a' },
   });
   const r2 = buildRecipe({
     format: 'zero-signal-procedural-asset-v1',
-    category: 'beast',
+    category: 'humanoid',
     params: { variant: 'wolf', seed: 'b' },
   });
   assert.notEqual(instancingKey(r1, 'full'), instancingKey(r2, 'full'));
