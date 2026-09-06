@@ -17,7 +17,7 @@ Communication happens directly through GitHub repo commits, pull requests, and t
 ---
 
 ## Shared Record Schema
-Every task and result entry stored in `tasks.jsonl` or `results.jsonl` MUST contain the following **13 mandatory fields**:
+Every task and result entry stored in `tasks.jsonl` or `results.jsonl` MUST contain the following **14 mandatory fields**:
 
 | Field | Type | Description |
 |---|---|---|
@@ -40,9 +40,12 @@ Every task and result entry stored in `tasks.jsonl` or `results.jsonl` MUST cont
 
 ## Communication Protocol & Formats
 
-### 1. Requesting Work (ChatGPT -> Jules)
+### 1. GitHub Comment Ingress (ChatGPT -> Jules)
+Posting a comment in the canonical issue **`AI Bridge — ChatGPT ↔ Jules`** with the block `[AI-BRIDGE TASK]` triggers GitHub Actions (`.github/workflows/ai-bridge-ingress.yml`), which parses the comment and automatically creates a structured child GitHub issue labeled `jules` and `ai-bridge` without needing local machine access or API keys.
+
+**Exact ChatGPT Comment Format:**
 ```text
-CHATGPT -> JULES
+[AI-BRIDGE TASK]
 task_id: task_1710000000000_a1b2
 priority: high
 task: Implement feature X with regression tests.
@@ -69,9 +72,7 @@ next_action: Review PR and merge to master.
 1. **Idempotency**: Every task ID is executed at most once. Once completed or marked non-retriable, subsequent processing skips the task.
 2. **File Leasing / Single Execution**: Claiming tasks acquires a scoped lease in `state.json`. Concurrent agents check leases to avoid duplicate execution.
 3. **Automatic Stale-Task Recovery**:
-   - Tasks claimed longer than `STALE_THRESHOLD_MS` (default 15 minutes) without completion are automatically reclaimed and transitioned back to `queued` (or `stale_reclaimed` if max retries exceeded).
+   - Tasks claimed longer than `STALE_THRESHOLD_MS` (default 15 minutes) without completion are automatically reclaimed during `node scripts/ai-bridge.js validate` (and hourly CI runs) and transitioned back to `queued` (or `stale_reclaimed`).
    - Partial failures preserve error logs and retry metadata so subsequent runs can safely resume.
-4. **Cloud-First Execution**:
-   - Processing is executed via GitHub Actions or cloud-based agents.
-   - Local machines act purely as lightweight commit/push bridges or remote pollers.
-   - No secret keys are stored in git.
+4. **Zero Secrets / Least Privilege**:
+   - Ingress workflow runs on standard GitHub `GITHUB_TOKEN` with `issues: write` and `contents: read` permissions. No user secrets are stored or required.

@@ -16,6 +16,7 @@ const {
   readState,
   writeState,
   getBridgeStatusSummary,
+  parseCommentTask,
   enqueueTask,
   appendResult,
   recoverStaleTasks,
@@ -35,7 +36,7 @@ function cleanupTmpDir(dir) {
   }
 }
 
-test('validateRecord checks all 13 mandatory fields', () => {
+test('validateRecord checks all 14 mandatory fields', () => {
   const invalidRecord = {
     id: 'task_1',
     timestamp: new Date().toISOString(),
@@ -54,7 +55,7 @@ test('validateRecord checks all 13 mandatory fields', () => {
 
   const check2 = validateRecord(validRecord);
   assert.equal(check2.ok, true);
-  assert.equal(REQUIRED_FIELDS.length, 14); // 14 items in list
+  assert.equal(REQUIRED_FIELDS.length, 14); // Exactly 14 mandatory fields
 });
 
 test('enqueueTask and idempotency', () => {
@@ -168,6 +169,20 @@ test('recoverStaleTasks automatically reclaims abandoned claimed tasks', () => {
   } finally {
     cleanupTmpDir(tmpDir);
   }
+});
+
+test('parseCommentTask extracts structured task from comment body', () => {
+  const commentText = `[AI-BRIDGE TASK]
+task_id: task_comment_777
+priority: high
+task: Implement feature X with tests.
+acceptance_criteria: All unit tests pass.`;
+
+  const parsed = parseCommentTask(commentText, 12345);
+  assert.equal(parsed.taskId, 'task_comment_777');
+  assert.equal(parsed.priority, 'high');
+  assert.equal(parsed.task, 'Implement feature X with tests.');
+  assert.equal(parsed.acceptanceCriteria, 'All unit tests pass.');
 });
 
 test('getBridgeStatusSummary returns valid structure', () => {
