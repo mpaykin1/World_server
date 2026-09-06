@@ -1,0 +1,97 @@
+{
+  "experiment": "RUN_067_H2_LOCAL_SELF_REPAIR_AFTER_DAMAGE",
+  "source": "RUN_062 production growth + lib/game-rules.js::snapBuilding/validateBuild for every repair placement",
+  "subhypothesis": "A single local repair rule—fill an empty grid site only when it has at least two occupied cardinal neighbors—can restore organized connectivity after 20% random damage without a global blueprint.",
+  "preregistration": {
+    "seeds": [
+      67067,
+      99991,
+      131071,
+      2147483,
+      49979687,
+      67867967
+    ],
+    "damageFraction": 0.2,
+    "repairBudget": "equal to number of removed foundations",
+    "localRule": "candidate empty site must have >=2 occupied cardinal neighbors; choose highest neighbor count, deterministic seed hash tie-break; place via production snapBuilding/validateBuild",
+    "control": "same damaged matched-density RUN_062 random control receives identical repair rule and budget",
+    "confirm": ">=5/6 structured repaired LCC>=0.75; >=5/6 LCC gain>=0.35; >=5/6 repaired controls LCC<=0.15; >=5/6 structured/control LCC ratio>=5; repair adds at least one site in all seeds",
+    "refute": "any confirmation count fails; preserve result and do not retune thresholds"
+  },
+  "rows": [
+    {
+      "seed": 67067,
+      "damagedStructuredLcc": 0.23902439024390243,
+      "repairedStructuredLcc": 0.53125,
+      "structuredAdded": 51,
+      "damagedControlLcc": 0.02926829268292683,
+      "repairedControlLcc": 0.1171875,
+      "controlAdded": 51,
+      "repairGain": 0.29222560975609757,
+      "ratio": 4.533333333333333
+    },
+    {
+      "seed": 99991,
+      "damagedStructuredLcc": 0.32195121951219513,
+      "repairedStructuredLcc": 0.46484375,
+      "structuredAdded": 51,
+      "damagedControlLcc": 0.03414634146341464,
+      "repairedControlLcc": 0.12109375,
+      "controlAdded": 51,
+      "repairGain": 0.14289253048780487,
+      "ratio": 3.838709677419355
+    },
+    {
+      "seed": 131071,
+      "damagedStructuredLcc": 0.2975609756097561,
+      "repairedStructuredLcc": 0.5703125,
+      "structuredAdded": 51,
+      "damagedControlLcc": 0.03414634146341464,
+      "repairedControlLcc": 0.0859375,
+      "controlAdded": 51,
+      "repairGain": 0.2727515243902439,
+      "ratio": 6.636363636363637
+    },
+    {
+      "seed": 2147483,
+      "damagedStructuredLcc": 0.28780487804878047,
+      "repairedStructuredLcc": 0.47265625,
+      "structuredAdded": 51,
+      "damagedControlLcc": 0.04878048780487805,
+      "repairedControlLcc": 0.14453125,
+      "controlAdded": 51,
+      "repairGain": 0.18485137195121953,
+      "ratio": 3.27027027027027
+    },
+    {
+      "seed": 49979687,
+      "damagedStructuredLcc": 0.24878048780487805,
+      "repairedStructuredLcc": 0.5,
+      "structuredAdded": 51,
+      "damagedControlLcc": 0.03902439024390244,
+      "repairedControlLcc": 0.11328125,
+      "controlAdded": 51,
+      "repairGain": 0.25121951219512195,
+      "ratio": 4.413793103448276
+    },
+    {
+      "seed": 67867967,
+      "damagedStructuredLcc": 0.25853658536585367,
+      "repairedStructuredLcc": 0.3515625,
+      "structuredAdded": 51,
+      "damagedControlLcc": 0.02926829268292683,
+      "repairedControlLcc": 0.1015625,
+      "controlAdded": 51,
+      "repairGain": 0.09302591463414633,
+      "ratio": 3.4615384615384617
+    }
+  ],
+  "successes": {
+    "recovered": 0,
+    "gain": 0,
+    "controlLow": 6,
+    "separated": 1,
+    "repairUsed": 6
+  },
+  "pass": false
+}

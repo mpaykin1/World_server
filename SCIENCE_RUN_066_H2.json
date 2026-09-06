@@ -1,0 +1,214 @@
+{
+  "experiment": "RUN_066_H2_ORGANIZED_GROWTH_DAMAGE_ROBUSTNESS",
+  "source": "RUN_062 production growth via lib/game-rules.js::snapBuilding + validateBuild",
+  "subhypothesis": "Organized structure emerging from minimal local frontier-growth rules remains substantially connected under random local damage, unlike matched-density random controls.",
+  "preregistration": {
+    "seeds": [
+      66066,
+      65537,
+      524287,
+      1048583,
+      15485863,
+      32452843
+    ],
+    "damageFractions": [
+      0.1,
+      0.2,
+      0.3
+    ],
+    "control": "For each seed use RUN_062 matched-density/matched-piece control, then remove the same fraction of foundations with deterministic independent shuffle.",
+    "confirm": "At 10% damage structured LCC>=0.75 in >=5/6 seeds; at 20% >=0.55 in >=5/6; at 30% >=0.35 in >=5/6; at every damage level structured LCC >=10x control in >=5/6 seeds.",
+    "refute": "Any confirmation count fails; preserve result and do not retune thresholds."
+  },
+  "rows": [
+    {
+      "seed": 66066,
+      "frac": 0.1,
+      "structuredLcc": 0.5108225108225108,
+      "controlLcc": 0.021645021645021644,
+      "ratio": 23.6,
+      "structuredRemaining": 231,
+      "controlRemaining": 231
+    },
+    {
+      "seed": 66066,
+      "frac": 0.2,
+      "structuredLcc": 0.2,
+      "controlLcc": 0.01951219512195122,
+      "ratio": 10.25,
+      "structuredRemaining": 205,
+      "controlRemaining": 205
+    },
+    {
+      "seed": 66066,
+      "frac": 0.3,
+      "structuredLcc": 0.16111111111111112,
+      "controlLcc": 0.027777777777777776,
+      "ratio": 5.800000000000001,
+      "structuredRemaining": 180,
+      "controlRemaining": 180
+    },
+    {
+      "seed": 65537,
+      "frac": 0.1,
+      "structuredLcc": 0.3939393939393939,
+      "controlLcc": 0.030303030303030304,
+      "ratio": 12.999999999999998,
+      "structuredRemaining": 231,
+      "controlRemaining": 231
+    },
+    {
+      "seed": 65537,
+      "frac": 0.2,
+      "structuredLcc": 0.22439024390243903,
+      "controlLcc": 0.024390243902439025,
+      "ratio": 9.2,
+      "structuredRemaining": 205,
+      "controlRemaining": 205
+    },
+    {
+      "seed": 65537,
+      "frac": 0.3,
+      "structuredLcc": 0.15555555555555556,
+      "controlLcc": 0.027777777777777776,
+      "ratio": 5.6000000000000005,
+      "structuredRemaining": 180,
+      "controlRemaining": 180
+    },
+    {
+      "seed": 524287,
+      "frac": 0.1,
+      "structuredLcc": 0.23376623376623376,
+      "controlLcc": 0.025974025974025976,
+      "ratio": 9,
+      "structuredRemaining": 231,
+      "controlRemaining": 231
+    },
+    {
+      "seed": 524287,
+      "frac": 0.2,
+      "structuredLcc": 0.33170731707317075,
+      "controlLcc": 0.03414634146341464,
+      "ratio": 9.714285714285714,
+      "structuredRemaining": 205,
+      "controlRemaining": 205
+    },
+    {
+      "seed": 524287,
+      "frac": 0.3,
+      "structuredLcc": 0.10555555555555556,
+      "controlLcc": 0.03333333333333333,
+      "ratio": 3.1666666666666665,
+      "structuredRemaining": 180,
+      "controlRemaining": 180
+    },
+    {
+      "seed": 1048583,
+      "frac": 0.1,
+      "structuredLcc": 0.5541125541125541,
+      "controlLcc": 0.017316017316017316,
+      "ratio": 32,
+      "structuredRemaining": 231,
+      "controlRemaining": 231
+    },
+    {
+      "seed": 1048583,
+      "frac": 0.2,
+      "structuredLcc": 0.14146341463414633,
+      "controlLcc": 0.014634146341463415,
+      "ratio": 9.666666666666666,
+      "structuredRemaining": 205,
+      "controlRemaining": 205
+    },
+    {
+      "seed": 1048583,
+      "frac": 0.3,
+      "structuredLcc": 0.16111111111111112,
+      "controlLcc": 0.022222222222222223,
+      "ratio": 7.25,
+      "structuredRemaining": 180,
+      "controlRemaining": 180
+    },
+    {
+      "seed": 15485863,
+      "frac": 0.1,
+      "structuredLcc": 0.26406926406926406,
+      "controlLcc": 0.021645021645021644,
+      "ratio": 12.200000000000001,
+      "structuredRemaining": 231,
+      "controlRemaining": 231
+    },
+    {
+      "seed": 15485863,
+      "frac": 0.2,
+      "structuredLcc": 0.23414634146341465,
+      "controlLcc": 0.024390243902439025,
+      "ratio": 9.6,
+      "structuredRemaining": 205,
+      "controlRemaining": 205
+    },
+    {
+      "seed": 15485863,
+      "frac": 0.3,
+      "structuredLcc": 0.17777777777777778,
+      "controlLcc": 0.027777777777777776,
+      "ratio": 6.4,
+      "structuredRemaining": 180,
+      "controlRemaining": 180
+    },
+    {
+      "seed": 32452843,
+      "frac": 0.1,
+      "structuredLcc": 0.41125541125541126,
+      "controlLcc": 0.017316017316017316,
+      "ratio": 23.75,
+      "structuredRemaining": 231,
+      "controlRemaining": 231
+    },
+    {
+      "seed": 32452843,
+      "frac": 0.2,
+      "structuredLcc": 0.2731707317073171,
+      "controlLcc": 0.014634146341463415,
+      "ratio": 18.666666666666668,
+      "structuredRemaining": 205,
+      "controlRemaining": 205
+    },
+    {
+      "seed": 32452843,
+      "frac": 0.3,
+      "structuredLcc": 0.2,
+      "controlLcc": 0.016666666666666666,
+      "ratio": 12,
+      "structuredRemaining": 180,
+      "controlRemaining": 180
+    }
+  ],
+  "byDamage": [
+    {
+      "frac": 0.1,
+      "structuredPass": 0,
+      "controlSeparated": 5,
+      "minStructuredLcc": 0.23376623376623376,
+      "maxControlLcc": 0.030303030303030304,
+      "minRatio": 9
+    },
+    {
+      "frac": 0.2,
+      "structuredPass": 0,
+      "controlSeparated": 2,
+      "minStructuredLcc": 0.14146341463414633,
+      "maxControlLcc": 0.03414634146341464,
+      "minRatio": 9.2
+    },
+    {
+      "frac": 0.3,
+      "structuredPass": 0,
+      "controlSeparated": 1,
+      "minStructuredLcc": 0.10555555555555556,
+      "maxControlLcc": 0.03333333333333333,
+      "minRatio": 3.1666666666666665
+    }
+  ],
+  "pass": false
+}

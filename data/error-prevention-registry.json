@@ -881,6 +881,43 @@
       "confirmedAt": "2026-09-06T07:06:32.905Z",
       "lessonHash": "005dddcae501bc66dc01e7e554032f99d192617139a3946aa756e45ae251b58b",
       "supersedes": null
+    },
+    {
+      "id": "SCIENCE-H4-HOLDOUT-EXHAUSTION",
+      "category": "science-infrastructure",
+      "severity": "major",
+      "status": "protected",
+      "history": [],
+      "symptom": "new H4 run cannot form the preregistered 8-task blind holdout because only one eligible unseen registry task remains",
+      "rootCause": "successive H4 experiments consumed nearly all independent error-registry tasks; reusing old tasks would contaminate the holdout and inflate apparent generalization",
+      "solution": "fail closed before model calls when fewer than the preregistered unseen tasks remain; wait for genuinely new protected root-cause cases instead of recycling prior tasks",
+      "protection": [
+        "future H4 holdout runners must exclude prior RUN_*_H4 taskIds and fail closed when preregistered unseen-task count is unavailable"
+      ],
+      "evidence": [
+        "RUN_063_H4_BLIND_HIGH_CAPABILITY_SELECTIVE_ESCALATION.json",
+        "RUN_064_H4_BLIND_BUDGETED_JSON_ESCALATION.json"
+      ],
+      "confirmedAt": "2026-09-06T09:06:00.290117Z"
+    },
+    {
+      "id": "SCIENCE-NEGATIVE-EVIDENCE-MUST-NOT-BREAK-CI",
+      "category": "science-infrastructure",
+      "severity": "major",
+      "status": "protected",
+      "history": [],
+      "symptom": "a scientifically valid preregistered refutation made regression tests fail because the test asserted the hypothesis must pass",
+      "rootCause": "experiment outcome and harness correctness were conflated; a FAIL hypothesis was treated as a software failure",
+      "solution": "tests must assert deterministic execution, preregistered thresholds, and preservation of the observed PASS/FAIL result",
+      "protection": [
+        "test/science-h2-organized-growth-damage-robustness.test.cjs",
+        "test/science-h2-local-self-repair-after-damage.test.cjs"
+      ],
+      "evidence": [
+        "SCIENCE_RUN_066_H2.json",
+        "SCIENCE_RUN_067_H2.json"
+      ],
+      "confirmedAt": "2026-09-06T09:06:00.290117Z"
     }
   ],
   "confirmationProtocol": {
