@@ -276,3 +276,10 @@ result reported exactly as observed, not adjusted to look more favorable.
 - Fix: `verifyJournalRows()` validates every persistence candidate before selection; corrupt localStorage is rejected at load; invalid IndexedDB is never promoted and is repaired from valid local state.
 - Regression: focused Dark Void suite proves a longer corrupted snapshot is rejected; full Dark Void suite 20/20 PASS; full `npm run check` 370 PASS / 0 FAIL / 2 opt-in skipped.
 - Architecture: strengthens the existing RecipeJournal/IndexedDB path only; no duplicate journal, storage runtime, telemetry, science framework, memory, or scheduler.
+
+## Dark Void Navigator accessibility V13
+- Root cause: the English Navigator exposed visible captions/status text but lacked OS-level reduced-motion/high-contrast handling and a no-network read-aloud control for users who cannot comfortably read the dialog.
+- Fix: strengthen the existing NavigatorDialog only: semantic region/live text/busy state, system reduced-motion + contrast media queries, and browser-native English SpeechSynthesis read-aloud with cancellation on hide.
+- No new Navigator runtime, telemetry SDK, audio framework, scheduler, world generator, science framework or persistence system.
+- Regression: focused Dark Void suite 23/23 PASS; full npm run check 373 PASS / 0 FAIL / 2 opt-in skips after restoring shared node_modules; real desktop Chromium + mobile WebKit smoke both PASS with canvas present, English accessibility controls, aria-live, and no public H4.
+- Initial full-check dependency failures were reproduced as isolated-worktree missing node_modules, not product regressions; linking the existing repo dependency tree made the same 38 affected tests PASS before the full green run.
