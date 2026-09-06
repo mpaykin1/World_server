@@ -1,5 +1,5 @@
 import test from'node:test';import assert from'node:assert/strict';
-import{principleForStep,tierForStep,planMetrics,childExplain,PUBLIC_PRINCIPLES}from'../shared/dark-void-science-journey.mjs';
+import{principleForStep,tierForStep,planMetrics,childExplain,PUBLIC_PRINCIPLES,H3_CAUSAL_FAMILIES,selectH3CausalFamily}from'../shared/dark-void-science-journey.mjs';
 import{hash32,SurpriseEngine,AdaptiveTeacher}from'../shared/dark-void-infinite-runtime.mjs';
 import{ScienceEvidenceRecorder}from'../shared/dark-void-science-evidence.mjs';
 test('public journey exposes only H1-H3 for 10k steps',()=>{assert.deepEqual(PUBLIC_PRINCIPLES.map(x=>x.id),['H1','H2','H3']);for(let i=0;i<10000;i++)assert.ok(['H1','H2','H3'].includes(principleForStep(i).id))});
@@ -12,3 +12,5 @@ test('AdaptiveTeacher changes depth',()=>{const t=new AdaptiveTeacher();for(let 
 test('science evidence summary aggregates H1-H3',()=>{const r=new ScienceEvidenceRecorder();r.rows=[];r.add({h:'H1',compactness:10});r.add({h:'H2',blocks:30,types:3});r.add({h:'H3',match:true,delta:0});const s=r.summary();assert.equal(s.H1.n,1);assert.equal(s.H2.n,1);assert.equal(s.H3.matchRate,1)});
 
 test('H2 production metrics preserve organized-vs-shuffled negative/positive evidence',()=>{const blocks=Array.from({length:120},(_,i)=>({x:i,y:0,z:0,blockType:i<60?1:2})),m=planMetrics({intent:{type:'wall',seed:77},origin:{x:0,y:0,z:0},blocks});assert.equal(m.topologyComponents,1);assert.ok(m.meanDegree>1.9);assert.ok(m.runCompressibility>=60);assert.ok(m.mutualInformation>m.shuffledMutualInformation);assert.ok(m.organizedLift>0);assert.ok(Number.isFinite(m.entropyRate));const r=new ScienceEvidenceRecorder();r.rows=[];r.recordH2(1,m);const s=r.summary().H2;assert.equal(s.n,1);assert.equal(s.meanTopologyComponents,1);assert.ok(s.meanOrganizedLift>0)});
+
+test('H3 causal-family selection is blind, deterministic, and bounded',()=>{assert.deepEqual(H3_CAUSAL_FAMILIES.map(x=>x.id),['scale-up','scale-down','seed-shift']);const a=selectH3CausalFamily(5),b=selectH3CausalFamily(5);assert.equal(a.id,b.id);const intent={type:'tower',seed:7,scale:1};const out=a.apply(intent);assert.notDeepEqual(out,intent);assert.ok(out.scale!==1||out.seed!==7)});

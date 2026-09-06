@@ -290,3 +290,9 @@ result reported exactly as observed, not adjusted to look more favorable.
 - Negative results are preserved: organizedLift is signed and never clamped upward. No threshold/evidence percentage is changed by this patch.
 - Regression: structured contiguous two-type production plan must beat its deterministic shuffled control while topology remains one connected component.
 - Architecture: reuses existing H2 journey/evidence recorder; no duplicate science runtime, telemetry, storage, world generator, or scheduler.
+
+## Dark Void V5 H3 blind causal-family selection
+- Root cause: H3 always predicted a scale-up counterfactual but then executed the original user text, so prediction and intervention were not the same treatment.
+- Fix: reuse the existing manifestation preview/execute path with deterministic pre-build causal families (scale-up, scale-down, seed-shift); select family from step only, record modelFamily, and execute the exact predicted intervention.
+- Regression: deterministic bounded family selection plus existing prediction-before-build/delta tests.
+- Negative outcomes remain recorded; no thresholds changed and no duplicate science/runtime system added.
