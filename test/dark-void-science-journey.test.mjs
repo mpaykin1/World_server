@@ -1,0 +1,12 @@
+import test from'node:test';import assert from'node:assert/strict';
+import{principleForStep,tierForStep,planMetrics,childExplain,PUBLIC_PRINCIPLES}from'../shared/dark-void-science-journey.mjs';
+import{hash32,SurpriseEngine,AdaptiveTeacher}from'../shared/dark-void-infinite-runtime.mjs';
+import{ScienceEvidenceRecorder}from'../shared/dark-void-science-evidence.mjs';
+test('public journey exposes only H1-H3 for 10k steps',()=>{assert.deepEqual(PUBLIC_PRINCIPLES.map(x=>x.id),['H1','H2','H3']);for(let i=0;i<10000;i++)assert.ok(['H1','H2','H3'].includes(principleForStep(i).id))});
+test('unbounded tier growth remains finite and slow',()=>{assert.ok(tierForStep(1e6)>tierForStep(100));assert.ok(tierForStep(1e6)<30);assert.ok(Number.isFinite(tierForStep(Number.MAX_SAFE_INTEGER)))});
+test('H1 compactness metric beats recipe bytes',()=>{const blocks=Array.from({length:500},(_,i)=>({x:i%10,y:i%5,z:i%17,blockType:3})),m=planMetrics({intent:{type:'tower',seed:7},origin:{x:0,y:0,z:0},blocks});assert.ok(m.compactness>10);assert.ok(m.recipeBytes<m.explicitBytes)});
+test('child-facing science is English and excludes H4',()=>{for(const id of['H1','H2','H3']){const s=childExplain({id},{blocks:20,compactness:5,types:3,density:.2},{predictedBlocks:20});assert.equal(/[А-Яа-яЁё]/.test(s),false);assert.equal(/multi.?ai|specialized ai|H4/i.test(s),false)}});
+test('hash stable and sensitive',()=>{assert.equal(hash32('abc'),hash32('abc'));assert.notEqual(hash32('abc'),hash32('abd'))});
+test('SurpriseEngine avoids immediate repeats',()=>{const e=new SurpriseEngine(),seen=new Set();for(let i=0;i<6;i++){const x=e.choose(i,0),k=x.principle+'|'+x.prompt;assert.equal(seen.has(k),false);seen.add(k)}});
+test('AdaptiveTeacher changes depth',()=>{const t=new AdaptiveTeacher();for(let i=0;i<6;i++)t.observe('why confused what does this mean?');assert.equal(t.style(),'very-simple')});
+test('science evidence summary aggregates H1-H3',()=>{const r=new ScienceEvidenceRecorder();r.rows=[];r.add({h:'H1',compactness:10});r.add({h:'H2',blocks:30,types:3});r.add({h:'H3',match:true,delta:0});const s=r.summary();assert.equal(s.H1.n,1);assert.equal(s.H2.n,1);assert.equal(s.H3.matchRate,1)});
