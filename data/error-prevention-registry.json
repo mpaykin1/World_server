@@ -927,14 +927,16 @@
       "history": [],
       "symptom": "RUN_068 regression suite recomputed the full multi-seed experiment once per assertion, causing multi-minute tests and apparent hangs",
       "rootCause": "test assertions called run() independently instead of sharing one immutable experiment result inside the test process",
-      "solution": "compute the expensive preregistered experiment once per test process and assert all invariants against that cached result",
+      "solution": "Run expensive preregistered experiments once to produce immutable evidence JSON; regression tests validate the recorded outcome plus small deterministic samples instead of recomputing the full experiment per assertion.",
       "protection": [
-        "test/science-h2-local-repair-rule-selection.test.cjs"
+        "test/science-h2-local-repair-rule-selection.test.cjs",
+        "test/science-h2-adaptive-local-repair-grammar.test.cjs"
       ],
       "evidence": [
-        "SCIENCE_RUN_068_H2.json"
+        "SCIENCE_RUN_068_H2.json",
+        "SCIENCE_RUN_069_H2.json"
       ],
-      "confirmedAt": "2026-09-06T10:07:37.779Z"
+      "confirmedAt": "2026-09-06T11:10:14.206Z"
     }
   ],
   "confirmationProtocol": {

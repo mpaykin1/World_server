@@ -1,0 +1,260 @@
+{
+  "experiment": "RUN_069_H2_ADAPTIVE_LOCAL_REPAIR_GRAMMAR",
+  "source": "RUN_062 production growth + RUN_068 local rules + lib/game-rules.js snapBuilding/validateBuild on every accepted repair",
+  "subhypothesis": "A local online grammar that changes among minimal repair rules using only realized neighborhood-level repair reward can generalize better than the best fixed RUN_068 rule, without access to the original blueprint or global connectivity during decisions.",
+  "preregistration": {
+    "trainingSeeds": [
+      69001,
+      69017,
+      69031,
+      69061,
+      69073,
+      69109
+    ],
+    "holdoutSeeds": [
+      69191,
+      69221,
+      69239,
+      69257,
+      69271,
+      69313
+    ],
+    "damageFraction": 0.2,
+    "fixedBaseline": "ray2 from RUN_068",
+    "adaptiveSignal": "radius-3 local connected-component merge + local cardinal/opposite/ray-gap features only; no global LCC and no pristine blueprint",
+    "control": "matched-density RUN_062 random control receives the identical adaptive algorithm and damage budget",
+    "confirm": "blind HOLD: >=5/6 adaptive LCC>=0.70; >=4/6 adaptive-fixed lift>=0.03; mean lift>=0.05; >=5/6 control LCC<=0.22; >=5/6 structured/control ratio>=4; >=2 rules used in 6/6",
+    "refute": "any confirmation criterion fails; preserve result and do not retune on HOLD"
+  },
+  "train": [
+    {
+      "seed": 69001,
+      "control": false,
+      "damagedLcc": 0.45365853658536587,
+      "fixedLcc": 0.9765625,
+      "adaptiveLcc": 0.9609375,
+      "fixedGain": 0.5229039634146342,
+      "adaptiveGain": 0.5072789634146342,
+      "adaptiveVsFixed": -0.015625,
+      "added": 51,
+      "ruleUse": {
+        "n2": 21,
+        "opposite": 2,
+        "ray2": 17,
+        "ray3": 11
+      }
+    },
+    {
+      "seed": 69017,
+      "control": false,
+      "damagedLcc": 0.14634146341463414,
+      "fixedLcc": 0.47265625,
+      "adaptiveLcc": 0.38671875,
+      "fixedGain": 0.32631478658536583,
+      "adaptiveGain": 0.24037728658536586,
+      "adaptiveVsFixed": -0.0859375,
+      "added": 51,
+      "ruleUse": {
+        "n2": 27,
+        "opposite": 2,
+        "ray2": 7,
+        "ray3": 15
+      }
+    },
+    {
+      "seed": 69031,
+      "control": false,
+      "damagedLcc": 0.5804878048780487,
+      "fixedLcc": 0.8671875,
+      "adaptiveLcc": 0.76953125,
+      "fixedGain": 0.28669969512195126,
+      "adaptiveGain": 0.18904344512195126,
+      "adaptiveVsFixed": -0.09765625,
+      "added": 51,
+      "ruleUse": {
+        "n2": 8,
+        "opposite": 41,
+        "ray2": 1,
+        "ray3": 1
+      }
+    },
+    {
+      "seed": 69061,
+      "control": false,
+      "damagedLcc": 0.23414634146341465,
+      "fixedLcc": 0.43359375,
+      "adaptiveLcc": 0.39453125,
+      "fixedGain": 0.19944740853658535,
+      "adaptiveGain": 0.16038490853658535,
+      "adaptiveVsFixed": -0.0390625,
+      "added": 51,
+      "ruleUse": {
+        "n2": 4,
+        "opposite": 30,
+        "ray2": 1,
+        "ray3": 16
+      }
+    },
+    {
+      "seed": 69073,
+      "control": false,
+      "damagedLcc": 0.424390243902439,
+      "fixedLcc": 0.703125,
+      "adaptiveLcc": 0.703125,
+      "fixedGain": 0.278734756097561,
+      "adaptiveGain": 0.278734756097561,
+      "adaptiveVsFixed": 0,
+      "added": 51,
+      "ruleUse": {
+        "n2": 12,
+        "opposite": 26,
+        "ray2": 12,
+        "ray3": 1
+      }
+    },
+    {
+      "seed": 69109,
+      "control": false,
+      "damagedLcc": 0.23902439024390243,
+      "fixedLcc": 0.53125,
+      "adaptiveLcc": 0.86328125,
+      "fixedGain": 0.29222560975609757,
+      "adaptiveGain": 0.6242568597560976,
+      "adaptiveVsFixed": 0.33203125,
+      "added": 51,
+      "ruleUse": {
+        "n2": 6,
+        "opposite": 29,
+        "ray2": 1,
+        "ray3": 15
+      }
+    }
+  ],
+  "rows": [
+    {
+      "seed": 69191,
+      "control": false,
+      "damagedLcc": 0.21951219512195122,
+      "fixedLcc": 0.9921875,
+      "adaptiveLcc": 0.73828125,
+      "fixedGain": 0.7726753048780488,
+      "adaptiveGain": 0.5187690548780488,
+      "adaptiveVsFixed": -0.25390625,
+      "added": 51,
+      "ruleUse": {
+        "n2": 5,
+        "opposite": 17,
+        "ray2": 7,
+        "ray3": 22
+      },
+      "controlAdaptiveLcc": 0.046875,
+      "ratio": 15.75
+    },
+    {
+      "seed": 69221,
+      "control": false,
+      "damagedLcc": 0.15121951219512195,
+      "fixedLcc": 0.421875,
+      "adaptiveLcc": 0.43359375,
+      "fixedGain": 0.270655487804878,
+      "adaptiveGain": 0.282374237804878,
+      "adaptiveVsFixed": 0.01171875,
+      "added": 51,
+      "ruleUse": {
+        "n2": 13,
+        "opposite": 2,
+        "ray2": 33,
+        "ray3": 3
+      },
+      "controlAdaptiveLcc": 0.078125,
+      "ratio": 5.55
+    },
+    {
+      "seed": 69239,
+      "control": false,
+      "damagedLcc": 0.24390243902439024,
+      "fixedLcc": 0.96484375,
+      "adaptiveLcc": 0.9765625,
+      "fixedGain": 0.7209413109756098,
+      "adaptiveGain": 0.7326600609756098,
+      "adaptiveVsFixed": 0.01171875,
+      "added": 51,
+      "ruleUse": {
+        "n2": 5,
+        "opposite": 4,
+        "ray2": 25,
+        "ray3": 17
+      },
+      "controlAdaptiveLcc": 0.109375,
+      "ratio": 8.928571428571429
+    },
+    {
+      "seed": 69257,
+      "control": false,
+      "damagedLcc": 0.36585365853658536,
+      "fixedLcc": 0.6640625,
+      "adaptiveLcc": 0.96484375,
+      "fixedGain": 0.29820884146341464,
+      "adaptiveGain": 0.5989900914634146,
+      "adaptiveVsFixed": 0.30078125,
+      "added": 51,
+      "ruleUse": {
+        "n2": 9,
+        "opposite": 21,
+        "ray2": 20,
+        "ray3": 1
+      },
+      "controlAdaptiveLcc": 0.09375,
+      "ratio": 10.291666666666666
+    },
+    {
+      "seed": 69271,
+      "control": false,
+      "damagedLcc": 0.3951219512195122,
+      "fixedLcc": 0.86328125,
+      "adaptiveLcc": 0.86328125,
+      "fixedGain": 0.4681592987804878,
+      "adaptiveGain": 0.4681592987804878,
+      "adaptiveVsFixed": 0,
+      "added": 51,
+      "ruleUse": {
+        "n2": 6,
+        "opposite": 10,
+        "ray2": 10,
+        "ray3": 25
+      },
+      "controlAdaptiveLcc": 0.078125,
+      "ratio": 11.05
+    },
+    {
+      "seed": 69313,
+      "control": false,
+      "damagedLcc": 0.24390243902439024,
+      "fixedLcc": 0.5546875,
+      "adaptiveLcc": 0.55078125,
+      "fixedGain": 0.31078506097560976,
+      "adaptiveGain": 0.30687881097560976,
+      "adaptiveVsFixed": -0.00390625,
+      "added": 51,
+      "ruleUse": {
+        "n2": 20,
+        "opposite": 8,
+        "ray2": 8,
+        "ray3": 15
+      },
+      "controlAdaptiveLcc": 0.05859375,
+      "ratio": 9.4
+    }
+  ],
+  "summary": {
+    "meanAdaptive": 0.7545572916666666,
+    "meanFixed": 0.7434895833333334,
+    "meanLift": 0.011067708333333334,
+    "recovered": 4,
+    "beatsFixed": 1,
+    "controlLow": 6,
+    "separated": 6,
+    "multiRule": 6
+  },
+  "pass": false
+}
