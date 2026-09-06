@@ -31,7 +31,7 @@ jobs:
     env:
       OPENCODE_VERSION: 1.18.29
       MODEL: openrouter/qwen/qwen3-coder:free
-      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY || secrets.WORLD }}
       GH_TOKEN: ${{ github.token }}
       DISPATCH_TASK: ${{ inputs.task }}
 
@@ -53,7 +53,7 @@ jobs:
         run: |
           set -euo pipefail
           if [[ -z "${OPENROUTER_API_KEY:-}" ]]; then
-            echo "::error::Missing repository secret OPENROUTER_API_KEY."
+            echo "::error::Missing repository secret OPENROUTER_API_KEY (or compatibility alias WORLD)."
             exit 2
           fi
 

@@ -281,3 +281,23 @@ Push this isolated branch and open a PR. Live model E2E remains blocked until re
 
 ## Final evidence
 Local structural/protocol gates PASS. No claim of live Qwen/OpenRouter execution is made until the secret is configured and a real GitHub Actions run passes.
+
+## Cloud AI secret compatibility fix — 2026-09-06
+
+### Goal
+Prevent cloud-agent startup failures when the existing OpenRouter repository secret uses the compatibility name `WORLD` instead of `OPENROUTER_API_KEY`.
+
+### Root cause
+The first real GitHub Actions E2E run proved the workflow only read `secrets.OPENROUTER_API_KEY`, while the repository currently exposes the user-created secret as `WORLD`.
+
+### Change
+`.github/workflows/world-cloud-ai.yml` now resolves `OPENROUTER_API_KEY` from `secrets.OPENROUTER_API_KEY || secrets.WORLD`. No secret value is logged, copied, or stored in the repository.
+
+### Regression protection
+Keep the preferred descriptive name first, retain `WORLD` only as a backwards-compatible alias, and fail closed if both are absent.
+
+### Tests to run
+YAML parse, `npm run desktop-ai:check`, `npm run check:fast`, `npm run golden:check`, then a real `workflow_dispatch` E2E on `master` after merge.
+
+### Final evidence
+Pending commit/CI/real cloud-agent E2E.
