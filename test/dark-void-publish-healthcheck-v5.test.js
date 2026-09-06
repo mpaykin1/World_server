@@ -64,6 +64,9 @@ test('publish healthcheck verifies the live V5 page and all critical modules', a
     assert.equal(result.code, 0, result.stdout + result.stderr);
     assert.match(result.stdout, /PASS live-no-H4/);
     assert.match(result.stdout, /PASS live-asset \/shared\/world-shape-library\.mjs/);
+    assert.match(result.stdout, /CANDIDATE_RELEASE_FINGERPRINT [a-f0-9]{64}/);
+    assert.match(result.stdout, /LIVE_RELEASE_FINGERPRINT [a-f0-9]{64}/);
+    assert.match(result.stdout, /PASS release-fingerprint-match/);
     assert.match(result.stdout, /FINAL_URL/);
   });
 });
@@ -90,6 +93,11 @@ test('publish healthcheck fails closed on stale critical module revision', async
     const result = await run(url);
     assert.notEqual(result.code, 0);
     assert.match(result.stdout, /FAIL live-revision \/shared\/world-shape-library\.mjs/);
+    assert.match(result.stdout, /FAIL release-fingerprint-match/);
+    const candidate = result.stdout.match(/CANDIDATE_RELEASE_FINGERPRINT ([a-f0-9]{64})/);
+    const live = result.stdout.match(/LIVE_RELEASE_FINGERPRINT ([a-f0-9]{64})/);
+    assert.ok(candidate && live);
+    assert.notEqual(candidate[1], live[1]);
   });
 });
 
