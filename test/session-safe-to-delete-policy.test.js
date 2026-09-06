@@ -211,57 +211,138 @@ test('a corrupt README (missing markers) is refused rather than silently overwri
 // DESKTOP ZERO-CHAOS HARD GATE
 // ---------------------------------------------------------------------------
 
-test('scanForbiddenDesktopClutter flags an unregistered World_server_copy-style folder', () => {
-  const { desktopRoot } = mkDesktop();
-  fs.mkdirSync(path.join(desktopRoot, 'World_server_copy'), { recursive: true });
-  const clutter = registry.scanForbiddenDesktopClutter(desktopRoot, []);
-  assert.deepEqual(clutter, ['World_server_copy']);
-});
-
-test('scanForbiddenDesktopClutter never flags a registered worktree, even with a suspicious-looking name', () => {
-  const { desktopRoot } = mkDesktop();
-  const wt = path.join(desktopRoot, 'World_server_backup_task_runner');
-  fs.mkdirSync(wt, { recursive: true });
-  const clutter = registry.scanForbiddenDesktopClutter(desktopRoot, [wt]);
-  assert.deepEqual(clutter, [], 'a real registered worktree must never be flagged as clutter regardless of its name');
-});
-
-test('scanForbiddenDesktopClutter ignores ordinary World_server folders that match no forbidden pattern', () => {
-  const { desktopRoot } = mkDesktop();
-  fs.mkdirSync(path.join(desktopRoot, 'World_server_chatgpt_hourly'), { recursive: true });
-  const clutter = registry.scanForbiddenDesktopClutter(desktopRoot, []);
-  assert.deepEqual(clutter, [], 'an ordinary task-named worktree folder must not be flagged just for being unregistered in this test');
-});
-
-test('scanForbiddenDesktopClutter catches backup/tmp/sandbox-copy/integration_tmp variants', () => {
-  const { desktopRoot } = mkDesktop();
-  const names = ['World_server_backup', 'World_server_tmp', 'World_server_sandbox_copy', 'World_server_integration_tmp', 'World_server_AI_2'];
-  for (const n of names) fs.mkdirSync(path.join(desktopRoot, n), { recursive: true });
-  const clutter = registry.scanForbiddenDesktopClutter(desktopRoot, []).sort();
-  assert.deepEqual(clutter, names.sort());
-});
-
-test('desktopZeroChaosGate: PASS when Desktop has only registered worktrees and the canonical folder', () => {
+// 1. PASS baseline: only the 3 permanently allowed items on Desktop.
+test('desktopZeroChaosGate: PASS when Desktop has only World_server, SESSION_SAFE_TO_DELETE, and WORLD_SERVER_KEEP.zip', () => {
   const { desktopRoot, canonicalRoot } = mkDesktop();
-  const wt = path.join(desktopRoot, 'World_server');
-  fs.mkdirSync(wt, { recursive: true });
+  fs.mkdirSync(path.join(desktopRoot, 'World_server'), { recursive: true });
   fs.mkdirSync(canonicalRoot, { recursive: true });
+  fs.writeFileSync(path.join(desktopRoot, 'WORLD_SERVER_KEEP.zip'), 'zip');
+  const report = registry.desktopZeroChaosGate({ desktopRoot, root: canonicalRoot });
+  assert.equal(report.verdict, 'PASS');
+  assert.deepEqual(report.clutter, []);
+});
+
+// 2. FAIL: a clean, already-pushed extra worktree folder is NOT exempt just
+// because it's "safe" in git terms -- the dirty/unpushed exception is gone
+// entirely, so even a perfectly clean+pushed copy must be flagged.
+test('desktopZeroChaosGate: FAIL on a clean+pushed extra worktree folder (no "safe worktree" exception)', () => {
+  const { desktopRoot, canonicalRoot } = mkDesktop();
+  fs.mkdirSync(path.join(desktopRoot, 'World_server'), { recursive: true });
+  fs.mkdirSync(canonicalRoot, { recursive: true });
+  fs.mkdirSync(path.join(desktopRoot, 'World_server_chatgpt_hourly'), { recursive: true });
+  const report = registry.desktopZeroChaosGate({ desktopRoot, root: canonicalRoot });
+  assert.equal(report.verdict, 'FAIL');
+  assert.match(report.reasons.join(' | '), /World_server_chatgpt_hourly/);
+});
+
+// 3. FAIL: a dirty/unpushed worktree -- the exact scenario the old lenient
+// gate would have let through if merely "registered".
+test('desktopZeroChaosGate: FAIL on a dirty/unpushed worktree folder', () => {
+  const { desktopRoot, canonicalRoot } = mkDesktop();
+  fs.mkdirSync(path.join(desktopRoot, 'World_server'), { recursive: true });
+  fs.mkdirSync(canonicalRoot, { recursive: true });
+  const wt = mkGitRepo(path.join(desktopRoot, 'World_server_experiment'));
+  fs.writeFileSync(path.join(wt, 'uncommitted.txt'), 'dirty');
+  const report = registry.desktopZeroChaosGate({ desktopRoot, root: canonicalRoot });
+  assert.equal(report.verdict, 'FAIL');
+  assert.match(report.reasons.join(' | '), /World_server_experiment/);
+});
+
+// 4. FAIL: passing a matching path as a would-be "registeredWorktreePaths"
+// style argument has no effect -- the parameter/exemption mechanism itself
+// is gone, not just tightened.
+test('desktopZeroChaosGate: extra registration-style argument does not resurrect the old exemption', () => {
+  const { desktopRoot, canonicalRoot } = mkDesktop();
+  fs.mkdirSync(path.join(desktopRoot, 'World_server'), { recursive: true });
+  fs.mkdirSync(canonicalRoot, { recursive: true });
+  const wt = path.join(desktopRoot, 'World_server_registered_but_extra');
+  fs.mkdirSync(wt, { recursive: true });
   const report = registry.desktopZeroChaosGate({ desktopRoot, root: canonicalRoot, registeredWorktreePaths: [wt] });
+  assert.equal(report.verdict, 'FAIL');
+  assert.match(report.reasons.join(' | '), /World_server_registered_but_extra/);
+});
+
+// 5. FAIL: a legitimately-documented, user-facing launcher folder ("World_server AI")
+// is flagged too -- no name-based / purpose-based launcher exception exists.
+test('desktopZeroChaosGate: FAIL on a documented launcher folder like "World_server AI"', () => {
+  const { desktopRoot, canonicalRoot } = mkDesktop();
+  fs.mkdirSync(path.join(desktopRoot, 'World_server'), { recursive: true });
+  fs.mkdirSync(canonicalRoot, { recursive: true });
+  fs.mkdirSync(path.join(desktopRoot, 'World_server AI'), { recursive: true });
+  const report = registry.desktopZeroChaosGate({ desktopRoot, root: canonicalRoot });
+  assert.equal(report.verdict, 'FAIL');
+  assert.match(report.reasons.join(' | '), /World_server AI/);
+});
+
+// 6. PASS: the 3 canonical names still match case-insensitively / with an
+// underscore separator instead of a space, so normal OS casing never
+// false-positives.
+test('desktopZeroChaosGate: PASS with case/separator variants of the 3 canonical names', () => {
+  const { desktopRoot } = mkDesktop();
+  const canonicalRoot = path.join(desktopRoot, 'session_safe_to_delete');
+  fs.mkdirSync(path.join(desktopRoot, 'world_server'), { recursive: true });
+  fs.mkdirSync(canonicalRoot, { recursive: true });
+  fs.writeFileSync(path.join(desktopRoot, 'World_Server_Keep.zip'), 'zip');
+  const report = registry.desktopZeroChaosGate({ desktopRoot, root: canonicalRoot });
   assert.equal(report.verdict, 'PASS');
 });
 
-test('desktopZeroChaosGate: FAIL when an unregistered backup/copy-style folder exists on Desktop', () => {
+// 7. FAIL: an extra/duplicate KEEP-zip variant is flagged (exact-name match
+// only -- "close enough" names are not silently accepted).
+test('desktopZeroChaosGate: FAIL on a duplicate/renamed WORLD_SERVER_KEEP zip variant', () => {
   const { desktopRoot, canonicalRoot } = mkDesktop();
-  fs.mkdirSync(path.join(desktopRoot, 'World_server_backup_final'), { recursive: true });
-  const report = registry.desktopZeroChaosGate({ desktopRoot, root: canonicalRoot, registeredWorktreePaths: [] });
+  fs.mkdirSync(path.join(desktopRoot, 'World_server'), { recursive: true });
+  fs.mkdirSync(canonicalRoot, { recursive: true });
+  fs.writeFileSync(path.join(desktopRoot, 'WORLD_SERVER_KEEP.zip'), 'zip');
+  fs.writeFileSync(path.join(desktopRoot, 'WORLD_SERVER_KEEP_OLD.zip'), 'zip');
+  const report = registry.desktopZeroChaosGate({ desktopRoot, root: canonicalRoot });
   assert.equal(report.verdict, 'FAIL');
-  assert.match(report.reasons.join(' | '), /World_server_backup_final/);
+  assert.match(report.reasons.join(' | '), /WORLD_SERVER_KEEP_OLD\.zip/);
 });
 
-test('desktopZeroChaosGate: FAIL when a duplicate SAFE_TO_DELETE-style folder exists, even with zero clutter', () => {
+// 8. Multiple simultaneous extras are all reported, not just the first one.
+test('desktopZeroChaosGate: reports every extra World_server item at once, not just the first', () => {
   const { desktopRoot, canonicalRoot } = mkDesktop();
+  fs.mkdirSync(path.join(desktopRoot, 'World_server'), { recursive: true });
   fs.mkdirSync(canonicalRoot, { recursive: true });
-  fs.mkdirSync(path.join(desktopRoot, 'SAFE_TO_DELETE_2'), { recursive: true });
-  const report = registry.desktopZeroChaosGate({ desktopRoot, root: canonicalRoot, registeredWorktreePaths: [] });
+  const extras = ['World_server_pr31', 'World_server_navigator', 'World_server AI'];
+  for (const n of extras) fs.mkdirSync(path.join(desktopRoot, n), { recursive: true });
+  const report = registry.desktopZeroChaosGate({ desktopRoot, root: canonicalRoot });
   assert.equal(report.verdict, 'FAIL');
+  for (const n of extras) assert.ok(report.clutter.includes(n), `expected ${n} in clutter list`);
+});
+
+// 9. Unrelated user files/folders that don't mention World_server are never
+// touched or flagged, regardless of how "suspicious" their name looks.
+test('desktopZeroChaosGate: never flags unrelated user files/folders', () => {
+  const { desktopRoot, canonicalRoot } = mkDesktop();
+  fs.mkdirSync(path.join(desktopRoot, 'World_server'), { recursive: true });
+  fs.mkdirSync(canonicalRoot, { recursive: true });
+  fs.mkdirSync(path.join(desktopRoot, 'backup_old_photos'), { recursive: true });
+  fs.writeFileSync(path.join(desktopRoot, 'майн.zip'), 'zip');
+  const report = registry.desktopZeroChaosGate({ desktopRoot, root: canonicalRoot });
+  assert.equal(report.verdict, 'PASS');
+  assert.deepEqual(report.clutter, []);
+});
+
+// 10. FAIL combines with the pre-existing duplicate-SAFE_TO_DELETE check --
+// both conditions are independently detected and both reasons surface.
+test('desktopZeroChaosGate: FAIL reasons include both clutter and duplicate-registry findings together', () => {
+  const { desktopRoot, canonicalRoot } = mkDesktop();
+  fs.mkdirSync(path.join(desktopRoot, 'World_server'), { recursive: true });
+  fs.mkdirSync(canonicalRoot, { recursive: true });
+  fs.mkdirSync(path.join(desktopRoot, 'World_server_leftover'), { recursive: true });
+  fs.mkdirSync(path.join(desktopRoot, 'SAFE_TO_DELETE_2'), { recursive: true });
+  const report = registry.desktopZeroChaosGate({ desktopRoot, root: canonicalRoot });
+  assert.equal(report.verdict, 'FAIL');
+  assert.equal(report.reasons.length, 2);
+});
+
+test('scanForbiddenDesktopClutter: exact allowed names (any case) never appear in the clutter list', () => {
+  const { desktopRoot } = mkDesktop();
+  fs.mkdirSync(path.join(desktopRoot, 'World_server'), { recursive: true });
+  fs.mkdirSync(path.join(desktopRoot, 'SESSION_SAFE_TO_DELETE'), { recursive: true });
+  fs.writeFileSync(path.join(desktopRoot, 'WORLD_SERVER_KEEP.zip'), 'zip');
+  const clutter = registry.scanForbiddenDesktopClutter(desktopRoot);
+  assert.deepEqual(clutter, []);
 });

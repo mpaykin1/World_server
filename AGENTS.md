@@ -333,27 +333,32 @@ CLI, npm/Python, Playwright, linters, scanners, profilers, DB/Vercel/Git/FFmpeg/
 - Только объекты с доказанно нулевым риском (например строго `\.tmp-<pid>-<ts>` файлы-сироты, не директории) могут быть удалены сразу (`autoDeleteIfProvenSafe`) — всё остальное только перемещается в `SESSION_SAFE_TO_DELETE` с записью в README, либо, если небезопасно и переместить, регистрируется в разделе `MANUAL_DELETE_CANDIDATES` с `SAFE TO DELETE MANUALLY: YES/NO/UNKNOWN` и остаётся на месте нетронутым.
 - Регрессионные тесты: `test/session-safe-to-delete-policy.test.js` (13/13 PASS), покрывают: мусор вне папки → FAIL; зарегистрированный кандидат → не проваливает gate; dirty worktree → отказ; уникальный unpushed коммит → отказ; активный процесс/lock → отказ; дубликат `SAFE_TO_DELETE_2` → FAIL; повторный вызов переиспользует единую папку; README не теряет чужие записи; доказанно безопасный temp-файл удаляется сразу; неизвестный по риску объект → `MANUAL_DELETE_CANDIDATES`, не удаляется.
 
-### 19.2 DESKTOP ZERO-CHAOS HARD GATE
+### 19.2 DESKTOP ZERO-CHAOS HARD GATE (STRICT, без исключений — v2, 2026-09-06)
 
-После **каждой** рабочей сессии на Desktop любого AI (Claude, Claude Code, ChatGPT, Codex, OpenCode, OpenHuman, AnythingLLM, локальных моделей, browser-агентов, будущих агентов) разрешены ровно два новых объекта верхнего уровня на Desktop, связанных с `World_server`:
+**Обновлено 2026-09-06 (Final Desktop Consolidation):** предыдущая версия этого правила разрешала «зарегистрированный git worktree» как постоянное исключение из проверки, независимо от того, чистый он или грязный, запушен или нет. Это было ОШИБКОЙ и отменено полностью. Новое правило не имеет исключений вида «но это настоящий worktree» / «но он чистый и запушен» / «но это именованный launcher, а не AI-мусор».
 
-1. `%USERPROFILE%\Desktop\SESSION_SAFE_TO_DELETE` (см. §19.1).
-2. `%USERPROFILE%\Desktop\WORLD_SERVER_KEEP.zip` (см. §19 п.3).
+После **каждой** рабочей сессии на Desktop любого AI (Claude, Claude Code, ChatGPT, Codex, OpenCode, OpenHuman, AnythingLLM, локальных моделей, browser-агентов, будущих агентов) на Desktop разрешены **ровно три** объекта верхнего уровня, связанных с `World_server` — и никогда больше:
 
-**Запрещено** создавать: `World_server_copy`, `World_server_test`, `World_server_tmp`, `World_server_AI_2`, `*_backup`, `*_backup-final`, `*_old`, `*sandbox-copy*`, `*integration_tmp*` и любые аналогичные — как для целого проекта, так и для temp/integration worktree, оставленных после `git worktree add --detach` (те обязаны быть удалены через `git worktree remove` + `git worktree prune` до конца сессии, см. §18).
+1. `%USERPROFILE%\Desktop\World_server` (единственный основной checkout).
+2. `%USERPROFILE%\Desktop\SESSION_SAFE_TO_DELETE` (см. §19.1).
+3. `%USERPROFILE%\Desktop\WORLD_SERVER_KEEP.zip` (см. §19 п.3).
 
-**Проверка:** `npm run desktop-ai:zero-chaos-gate` (реализация: `scripts/desktop-ai-session-housekeeping.cjs zero-chaos-gate`, использует `scanForbiddenDesktopClutter`/`desktopZeroChaosGate` из `scripts/lib/session-safe-to-delete-registry.cjs`). Сверяет Desktop-папки, начинающиеся на `World_server`/`world_server`, против `git worktree list` (легитимный зарегистрированный worktree никогда не считается мусором, вне зависимости от имени) и против списка запрещённых суффиксов/паттернов выше.
+Любой другой файл или папка на Desktop, чьё имя содержит «world»+«server» (в любом регистре, с любым разделителем — `_`, ` `, `-` или без него) — это **FAIL**, без исключений. Это касается: `World_server_copy`, `World_server_test`, `World_server_tmp`, `World_server_AI_2`, `*_backup`, `*_backup-final`, `*_old`, `*sandbox-copy*`, `*integration_tmp*`, любого temp/integration/task worktree независимо от того, зарегистрирован ли он в `git worktree list`, чистый он или грязный, запушен или нет — а также именованных launcher-папок (напр. `World_server AI`), даже если они представляют собой настоящую, документированную пользовательскую инфраструктуру, а не AI-мусор. Единственно правильное действие для такой папки — закоммитить/запушить полезное в origin, заархивировать уникальное-неопубликуемое в `WORLD_SERVER_KEEP.zip` (см. §19 п.3), и либо удалить папку, либо перенести её ЗА ПРЕДЕЛЫ Desktop (temp worktree на будущее создавать не на Desktop, см. ниже).
+
+**Проверка:** `npm run desktop-ai:zero-chaos-gate` (реализация: `scripts/desktop-ai-session-housekeeping.cjs zero-chaos-gate`, использует `scanForbiddenDesktopClutter`/`desktopZeroChaosGate` из `scripts/lib/session-safe-to-delete-registry.cjs`). Функция больше не принимает и не использует `registeredWorktreePaths` как список исключений — параметр удалён из сигнатуры `desktopZeroChaosGate`, а не просто перестал на что-то влиять, чтобы исключить случайное возвращение старого поведения. Сверяет ВСЕ Desktop-элементы (файлы и папки), чьё имя матчит `/world[-_ ]?server/i`, против фиксированного allowlist из трёх точных имён (`world_server`, `session_safe_to_delete`, `world_server_keep.zip`, сравнение без учёта регистра) — никакого сопоставления по паттернам «похоже на мусор» больше нет, только allowlist.
 
 **PASS** только если:
-- нет новых временных AI-папок на Desktop (gate: `verdict !== 'FAIL'`);
+- на Desktop нет ни одного `World_server`-подобного объекта, кроме указанных выше трёх (gate: `verdict !== 'FAIL'`, `clutter.length === 0`);
 - полезное закоммичено/запушено (агент проверяет сам — gate не имеет видимости во все worktree сразу);
-- уникальное нужное — в `WORLD_SERVER_KEEP.zip`;
+- уникальное неопубликуемое — в `WORLD_SERVER_KEEP.zip`;
 - ненужное удалено или лежит только в `SESSION_SAFE_TO_DELETE`;
 - нет второй `SAFE_TO_DELETE`-подобной папки.
 
-**FAIL**, если после сессии на Desktop остался незарегистрированный `World_server*` объект, подходящий под запрещённый паттерн, или существует дубликат `SAFE_TO_DELETE`-папки.
+**FAIL**, если после сессии на Desktop остался хотя бы один `World_server`-подобный объект сверх разрешённых трёх (по любой причине: worktree, backup, launcher, дубликат zip и т.д.), или существует дубликат `SAFE_TO_DELETE`-папки. Агент обязан честно вернуть `FAIL`, если это условие не выполнено — недопустимо завершать сессию отчётом `PASS`, когда на Desktop остались лишние `World_server`-папки/файлы.
 
-Регрессионные тесты: `test/session-safe-to-delete-policy.test.js` — `scanForbiddenDesktopClutter` (флагует незарегистрированный `World_server_copy`; никогда не флагует зарегистрированный worktree даже с «подозрительным» именем; игнорирует обычные task-именованные папки; ловит backup/tmp/sandbox-copy/integration_tmp варианты) и `desktopZeroChaosGate` (PASS на чистом Desktop; FAIL на незарегистрированной backup/copy-папке; FAIL на дубликате `SAFE_TO_DELETE`).
+**Будущие temp/integration worktree:** любой временный/изолированный worktree, создаваемый в течение сессии (`git worktree add --detach` и т.п.), должен создаваться ВНЕ Desktop (например, под системным temp-каталогом или отдельным рабочим каталогом вне `%USERPROFILE%\Desktop`) — не как временное исключение "разрешено, пока сессия идёт", а как обязательное место создания с самого начала, чтобы этот gate был честным PASS в любой момент, а не только в конце сессии.
+
+Регрессионные тесты (`test/session-safe-to-delete-policy.test.js`, 10 новых сценариев для этой версии + существующие): PASS на Desktop ровно с тремя разрешёнными объектами; FAIL на чистом+запушенном лишнем worktree (никакого исключения "safe worktree"); FAIL на грязном/неопубликованном worktree; FAIL даже если лишняя папка передана как `registeredWorktreePaths`-подобный аргумент (сам механизм исключения удалён, а не просто перестал быть используемым); FAIL на документированной launcher-папке `World_server AI`; PASS на вариантах регистра/разделителя канонических имён; FAIL на дубликате/переименованном `WORLD_SERVER_KEEP*.zip`; репорт перечисляет ВСЕ лишние объекты одновременно, а не только первый; PASS — посторонние пользовательские файлы/папки без «world»+«server» в имени никогда не флагуются; FAIL комбинирует находки clutter и duplicate-registry одновременно, обе причины присутствуют в отчёте.
 
 ## 20. AI COMMIT PROVENANCE — обязательные trailer-поля для коммитов AI
 

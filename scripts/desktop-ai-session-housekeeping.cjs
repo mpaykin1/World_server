@@ -406,8 +406,7 @@ function commandSafeGate(args) {
 function commandZeroChaosGate(args) {
   const desktopRoot = args['desktop-root'] || safeRegistry.defaultDesktopRoot();
   const root = args.root || safeRegistry.defaultRoot();
-  const registeredWorktreePaths = listWorktrees().map((w) => w.worktree);
-  const report = safeRegistry.desktopZeroChaosGate({ desktopRoot, root, registeredWorktreePaths });
+  const report = safeRegistry.desktopZeroChaosGate({ desktopRoot, root });
   console.log(JSON.stringify(report, null, 2));
   process.exitCode = report.verdict === 'FAIL' ? 2 : 0;
   return report;
