@@ -310,3 +310,9 @@ result reported exactly as observed, not adjusted to look more favorable.
 ## Parallel-safe server entrypoint regression
 - Root cause: test/server-entrypoint.test.js hard-coded TCP 34719, so concurrent AI/full-check sessions could fail with EADDRINUSE even when production code was healthy.
 - Fix: bind to port 0 and query server.address().port for real HTTP assertions. No production server behavior or threshold changed.
+
+## Dark Void V5 live revision parity guard
+- Root cause: publish-healthcheck could green an older healthy deployment because module reachability did not prove current release bytes were live.
+- Fix: the existing healthcheck SHA-256 compares every critical live V5 module with the exact local release candidate; stale critical assets fail closed.
+- Regression: local HTTP fixture serves exact production files, then mutates world-shape-library and proves live-revision failure.
+- No duplicate deploy controller, telemetry SDK, runtime, science framework, memory, or scheduler.

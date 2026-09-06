@@ -3,6 +3,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const http = require('node:http');
+const fs = require('node:fs');
 const path = require('node:path');
 const { execFile } = require('node:child_process');
 
@@ -17,8 +18,7 @@ function run(url) {
   });
 }
 
-function serverFor({ h4 = false, missingAsset = false } = {}) {
-  const js = 'export const ok = true;';
+function serverFor({ h4 = false, missingAsset = false, staleAsset = false } = {}) {
   return http.createServer((req, res) => {
     if (req.url === '/apps/dark-void-scene/') {
       res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
@@ -36,8 +36,11 @@ function serverFor({ h4 = false, missingAsset = false } = {}) {
       req.url === '/shared/world-shape-library.mjs' ||
       req.url === '/shared/dark-void-science-evidence.mjs'
     ) {
+      const local = fs.readFileSync(path.join(repo, req.url.replace(/^\//, '')), 'utf8');
+      const body = staleAsset && req.url === '/shared/world-shape-library.mjs' ? `${local}
+// stale-live-copy` : local;
       res.writeHead(200, { 'content-type': 'text/javascript; charset=utf-8' });
-      return res.end(js);
+      return res.end(body);
     }
     res.writeHead(404, { 'content-type': 'text/plain' });
     res.end('not found');
@@ -81,7 +84,14 @@ test('publish healthcheck fails closed on public H4 exposure', async () => {
   });
 });
 
-const fs = require('node:fs');
+
+test('publish healthcheck fails closed on stale critical module revision', async () => {
+  await withServer({ staleAsset: true }, async (url) => {
+    const result = await run(url);
+    assert.notEqual(result.code, 0);
+    assert.match(result.stdout, /FAIL live-revision \/shared\/world-shape-library\.mjs/);
+  });
+});
 
 test('fixed Dark Void live-publish false-green stays protected in error prevention registry', () => {
   const registry = JSON.parse(fs.readFileSync(path.join(repo, 'data', 'error-prevention-registry.json'), 'utf8'));

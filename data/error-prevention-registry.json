@@ -649,13 +649,14 @@
       "category": "release",
       "severity": "release-blocker",
       "status": "protected",
-      "symptom": "Dark Void publication healthcheck passes while critical V5 modules are missing or public H4 is exposed",
-      "rootCause": "live publication gate validated only the top-level HTML response and did not verify critical module reachability or the public no-H4 invariant",
+      "symptom": "Dark Void publication healthcheck passes while critical V5 modules are missing, stale, or public H4 is exposed",
+      "rootCause": "live publication gate validated reachability/invariants but did not prove critical module bytes matched the current release candidate",
       "protection": [
         "dark-void-publish-healthcheck validates live English H1/H2/H3 HTML",
         "critical V5 JS modules must return executable non-HTML responses",
         "public H4 exposure fails closed",
-        "live publication must report final URL after redirects"
+        "live publication must report final URL after redirects",
+        "critical live V5 module SHA-256 must match the local release candidate bytes"
       ]
     }
   ],

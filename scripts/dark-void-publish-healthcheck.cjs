@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const http = require('http');
 const https = require('https');
+const crypto = require('crypto');
 
 const root = path.resolve(process.argv[2] || process.cwd());
 const suppliedUrl = process.argv.find((x) => /^https?:\/\//.test(x));
@@ -22,6 +23,8 @@ const requiredLocal = [
   'shared/dark-void-counterfactual-ghost.mjs',
   'shared/dark-void-science-evidence.mjs',
 ];
+
+const sha256 = (value) => crypto.createHash('sha256').update(value).digest('hex');
 
 const liveAssets = [
   '/apps/dark-void-scene/client.js',
@@ -107,11 +110,15 @@ function request(url, redirects = 0) {
     const origin = new URL(live.url).origin;
     for (const asset of liveAssets) {
       const result = await request(new URL(asset, origin).href);
-      const pass = result.status === 200 &&
+      const localPath = path.join(root, asset.replace(/^\//, ''));
+      const localBody = fs.existsSync(localPath) ? fs.readFileSync(localPath, 'utf8') : '';
+      const executable = result.status === 200 &&
         /(?:javascript|ecmascript|text\/plain|application\/octet-stream)/i.test(result.type) &&
         !/<html[\s>]/i.test(result.body);
-      console.log(pass ? 'PASS' : 'FAIL', 'live-asset', asset, result.status, result.type || '-');
-      ok &&= pass;
+      const revisionMatch = executable && localBody.length > 0 && sha256(result.body) === sha256(localBody);
+      console.log(executable ? 'PASS' : 'FAIL', 'live-asset', asset, result.status, result.type || '-');
+      console.log(revisionMatch ? 'PASS' : 'FAIL', 'live-revision', asset);
+      ok &&= executable && revisionMatch;
     }
 
     console.log('FINAL_URL', live.url);
