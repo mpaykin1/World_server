@@ -1,0 +1,10 @@
+{
+  "_comment": "CAS garbage-collection limits used by scripts/cas-merkle-store.cjs. Every value here can be overridden per-deployment via env vars without editing this file: CAS_GC_ENABLED, CAS_GC_KEEP_SNAPSHOTS, CAS_GC_EMERGENCY_KEEP_SNAPSHOTS, CAS_GC_WARN_GB (or CAS_GC_WARN_BYTES), CAS_GC_AUTO_GB (or CAS_GC_AUTO_BYTES), CAS_GC_EMERGENCY_GB (or CAS_GC_EMERGENCY_BYTES), CAS_GC_BLOCK_ON_EMERGENCY. See .env.example.",
+  "enabled": true,
+  "keepSnapshots": 20,
+  "emergencyKeepSnapshots": 5,
+  "warnGB": 5,
+  "autoGcGB": 10,
+  "emergencyGB": 20,
+  "blockOnEmergency": true
+}
