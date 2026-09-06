@@ -27,18 +27,24 @@ test.describe('AI3D Voxel City - default-city autoplay (no user actions)', () =>
       const canvas = document.querySelector('#viewer canvas');
       if (!canvas) return { exists: false };
       const rect = canvas.getBoundingClientRect();
-      // toDataURL length is a lightweight check that canvas was painted
-      let dataLen = 0;
-      try { dataLen = canvas.toDataURL().length; } catch {}
+      // WebGL canvases commonly use preserveDrawingBuffer=false. In WebKit a
+      // post-present toDataURL() may encode an empty buffer even after a
+      // successful frame. Verify the live drawing buffer instead; rendered
+      // geometry is asserted above via the runtime triangle count.
       const gl = canvas.getContext('webgl') || canvas.getContext('webgl2');
       const hasGL = !!gl;
-      return { exists: true, width: rect.width, height: rect.height, dataLen, hasGL };
+      return {
+        exists: true, width: rect.width, height: rect.height, hasGL,
+        drawingBufferWidth: gl?.drawingBufferWidth || 0,
+        drawingBufferHeight: gl?.drawingBufferHeight || 0,
+      };
     });
     expect(canvasInfo.exists).toBe(true);
     expect(canvasInfo.width).toBeGreaterThan(50);
     expect(canvasInfo.height).toBeGreaterThan(50);
-    expect(canvasInfo.dataLen).toBeGreaterThan(1000);
     expect(canvasInfo.hasGL).toBe(true);
+    expect(canvasInfo.drawingBufferWidth).toBeGreaterThan(50);
+    expect(canvasInfo.drawingBufferHeight).toBeGreaterThan(50);
 
     // Character spawned inside city
     const spawnState = await page.evaluate(() => {
@@ -75,21 +81,30 @@ test.describe('AI3D Voxel City - default-city autoplay (no user actions)', () =>
       const p = window.AI3DVoxelRuntime.stats().player;
       return { x: p.x, y: p.y, z: p.z };
     });
-    // Ensure focus is on body for key events
-    await page.keyboard.down('KeyW');
-    await page.waitForTimeout(800);
-    await page.keyboard.up('KeyW');
-    // also try arrow up as alternative (delivery requires both)
-    await page.keyboard.down('ArrowUp');
-    await page.waitForTimeout(300);
-    await page.keyboard.up('ArrowUp');
-    const after = await page.evaluate(() => {
-      const p = window.AI3DVoxelRuntime.stats().player;
-      return { x: p.x, y: p.y, z: p.z };
-    });
+    // Keep each key held until a simulation frame consumes it. Under loaded CI,
+    // mobile WebKit can briefly throttle requestAnimationFrame; a fixed sleep can
+    // release the key before updatePlayer() sees it and create a false failure.
+    const waitForMovement = async (code, start) => {
+      await page.keyboard.down(code);
+      try {
+        await expect.poll(async () => {
+          const p = await page.evaluate(() => window.AI3DVoxelRuntime.stats().player);
+          return Math.hypot(p.x - start.x, p.z - start.z);
+        }, { timeout: 5000, intervals: [50, 100, 200] }).toBeGreaterThan(0.05);
+      } finally {
+        await page.keyboard.up(code);
+      }
+      return page.evaluate(() => {
+        const p = window.AI3DVoxelRuntime.stats().player;
+        return { x: p.x, y: p.y, z: p.z };
+      });
+    };
+
+    const afterW = await waitForMovement('KeyW', before);
+    const after = await waitForMovement('ArrowUp', afterW);
     const moved = Math.hypot(after.x - before.x, after.z - before.z);
-    console.log('move delta', { before, after, moved });
-    expect(moved).toBeGreaterThan(0.05);
+    console.log('move delta', { before, afterW, after, moved });
+    expect(moved).toBeGreaterThan(0.1);
 
     // Collision works — try to walk continuously into wall for 1.5s, ensure we don't end up inside voxel
     // Do multiple W presses near a building edge; check occupancy
