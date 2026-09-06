@@ -301,3 +301,20 @@ YAML parse, `npm run desktop-ai:check`, `npm run check:fast`, `npm run golden:ch
 
 ### Final evidence
 Pending commit/CI/real cloud-agent E2E.
+
+## Cloud AI provider hardening — 2026-09-06
+
+### Goal
+Make OpenCode + OpenRouter reliable in non-interactive GitHub Actions after the first authenticated run failed inside OpenCode with `UnknownError` before any repository edit.
+
+### Root cause / mitigation
+The built-in OpenRouter path did not provide an actionable provider error in CI. The workflow now uses an explicit OpenAI-compatible `worldrouter` provider through a temporary `OPENCODE_CONFIG`, with the key referenced only as `{env:OPENROUTER_API_KEY}`.
+
+### Safety
+The config lives only in the runner temp directory, contains no secret value, checks that `qwen/qwen3-coder:free` is currently advertised by OpenRouter, and keeps all Git changes isolated to `world-ai/run-*` branches.
+
+### Tests to run
+YAML parse, `check:fast`, `golden:check`, `desktop-ai:check`, then real workflow_dispatch E2E through Qwen → edit → verify → PR.
+
+### Final evidence
+Pending real cloud-agent E2E.

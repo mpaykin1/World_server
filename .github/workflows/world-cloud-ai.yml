@@ -30,7 +30,7 @@ jobs:
     timeout-minutes: 45
     env:
       OPENCODE_VERSION: 1.18.29
-      MODEL: openrouter/qwen/qwen3-coder:free
+      MODEL: worldrouter/qwen/qwen3-coder:free
       OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY || secrets.WORLD }}
       GH_TOKEN: ${{ github.token }}
       DISPATCH_TASK: ${{ inputs.task }}
@@ -63,6 +63,36 @@ jobs:
           set -euo pipefail
           npm install --global "opencode-ai@${OPENCODE_VERSION}"
           opencode --version
+
+      - name: Configure deterministic OpenRouter provider
+        shell: bash
+        run: |
+          set -euo pipefail
+          CONFIG="${RUNNER_TEMP}/world-opencode.json"
+          cat > "${CONFIG}" <<'JSON'
+          {
+            "$schema": "https://opencode.ai/config.json",
+            "provider": {
+              "worldrouter": {
+                "npm": "@ai-sdk/openai-compatible",
+                "name": "World OpenRouter",
+                "options": {
+                  "baseURL": "https://openrouter.ai/api/v1",
+                  "apiKey": "{env:OPENROUTER_API_KEY}"
+                },
+                "models": {
+                  "qwen/qwen3-coder:free": {
+                    "name": "Qwen3 Coder Free",
+                    "limit": { "context": 262144, "output": 32768 }
+                  }
+                }
+              }
+            }
+          }
+          JSON
+          echo "OPENCODE_CONFIG=${CONFIG}" >> "${GITHUB_ENV}"
+          curl --fail --silent --show-error https://openrouter.ai/api/v1/models \
+            | jq -e '.data[] | select(.id == "qwen/qwen3-coder:free") | .id' >/dev/null
 
       - name: Resolve task
         id: task
