@@ -103,8 +103,9 @@ const server = http.createServer(async (req, res) => {
   return sendFile(res, file);
 });
 
-const port = Number(process.env.PORT) || 3000;
-server.listen(port, () => console.log(`World Server local development: http://localhost:${port}`));
+const requestedPort = Number(process.env.PORT);
+const port = Number.isFinite(requestedPort) && requestedPort >= 0 ? requestedPort : 3000;
+server.listen(port, () => console.log(`World Server local development: http://localhost:${server.address().port}`));
 
 // Opt-in autostart of the remote-task-bridge watchdog (off by default -
 // unset/anything other than "1" changes nothing). Safe to wire here because

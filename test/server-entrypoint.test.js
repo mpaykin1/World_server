@@ -17,7 +17,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const http = require('http');
 
-const TEST_PORT = 34719;
+const TEST_PORT = 0; // OS-assigned ephemeral port prevents parallel-AI collisions
 process.env.PORT = String(TEST_PORT);
 delete process.env.WORLD_ENTRYPOINT;
 
@@ -27,7 +27,7 @@ test.after(() => { server.close(); });
 
 function getRedirect() {
   return new Promise((resolve, reject) => {
-    const req = http.get({ hostname: '127.0.0.1', port: TEST_PORT, path: '/' }, (res) => {
+    const req = http.get({ hostname: '127.0.0.1', port: server.address().port, path: '/' }, (res) => {
       res.resume();
       resolve({ statusCode: res.statusCode, location: res.headers.location });
     });

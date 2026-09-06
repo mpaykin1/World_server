@@ -40,3 +40,15 @@ export function parseWorldCommand(input){
   const wantsLiteralText=/(надпись|слово|текст|напиши|\bwrite\b|\btext\b|\bword\b)/i.test(lower);
   return {action:'create',type,size,scale,color,text,seed:hashText32(text),literalText:true,wantsLiteralText};
 }
+export function parseSuggestedWorldCommand(payload){
+  if(!payload||typeof payload!=='object'||Array.isArray(payload))throw new Error('Invalid suggested world command payload.');
+  const keys=Object.keys(payload);
+  if(!keys.includes('command')||keys.some(k=>!['command','confidence'].includes(k)))throw new Error('Invalid suggested world command schema.');
+  if(typeof payload.command!=='string')throw new Error('Suggested world command must be text.');
+  if('confidence' in payload&&(!Number.isFinite(payload.confidence)||payload.confidence<0||payload.confidence>1))throw new Error('Suggested world command confidence must be 0..1.');
+  const command=sanitizeWorldCommand(payload.command);
+  if(!command)throw new Error('Suggested world command is empty.');
+  const intent=parseWorldCommand(command);
+  return {command,intent,confidence:'confidence' in payload?payload.confidence:null};
+}
+

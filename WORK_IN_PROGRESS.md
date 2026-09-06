@@ -301,3 +301,12 @@ result reported exactly as observed, not adjusted to look more favorable.
 - Root cause: causal family choice was step modulo only; it was pre-build but not conditioned on pre-intervention state.
 - Fix: deterministic selection hashes only whitelisted pre-intervention intent fields plus step; outcome/geometry fields cannot affect the current family choice.
 - Evidence records selectionBlind + selectionHash before manifestation.
+
+## Dark Void V5 Gemini suggestion schema guard
+- Root cause: the existing world-command parser had no explicit fail-closed adapter for structured AI/Gemini suggestions, so a future server-side Gemini response could bypass a strict schema boundary before manifestation.
+- Fix: parseSuggestedWorldCommand() accepts only {command, confidence?}, validates types/ranges, sanitizes the command, then routes it through the existing parseWorldCommand(). No duplicate parser/generator/runtime.
+- Regression: test/world-command-parser-gemini-guard-v5.test.mjs rejects extra keys, invalid confidence/non-text/empty commands and proves control-character sanitization.
+
+## Parallel-safe server entrypoint regression
+- Root cause: test/server-entrypoint.test.js hard-coded TCP 34719, so concurrent AI/full-check sessions could fail with EADDRINUSE even when production code was healthy.
+- Fix: bind to port 0 and query server.address().port for real HTTP assertions. No production server behavior or threshold changed.
