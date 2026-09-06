@@ -21,6 +21,26 @@ jobs:
         with:
           cosign-release: v3.1.3
       - run: npm ci
+      - name: Linux container proof
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker build -f google-ai-studio/Dockerfile -t world-server:proof .
+          cid="$(docker run -d -e WORLD_SLOT=sandbox -e PORT=8080 -p 18080:8080 world-server:proof)"
+          trap 'docker logs "$cid" || true; docker rm -f "$cid" >/dev/null 2>&1 || true' EXIT
+          ready=0
+          for _ in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:18080/readyz > /tmp/readyz.json; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" -eq 1
+          curl --fail --silent http://127.0.0.1:18080/apps/catalog/ -o /tmp/catalog.html
+          test -s /tmp/catalog.html
+          test "$(curl --silent --output /dev/null --write-out '%{http_code}' http://127.0.0.1:18080/)" = "302"
+          docker stop -t 12 "$cid" >/dev/null
+          test "$(docker inspect --format='{{.State.ExitCode}}' "$cid")" = "0"
+          test "$(docker inspect --format='{{.State.OOMKilled}}' "$cid")" = "false"
+          echo "Linux/container proof PASS"
       - name: Install pinned free local analysis/model tools
         run: node scripts/toolchain-bootstrap.cjs apply
       - name: Reject vulnerable Cosign
