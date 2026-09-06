@@ -124,18 +124,42 @@ async function execGitApplyPatch(root, args, task){
   const diffSummary = git(worktreeRoot, ['diff','HEAD~1','--stat']).stdout.slice(0,4000) || `created ${filePath}`;
   return { worktree: worktreeRoot, file: filePath, commitSha: sha, diffSummary, branch: git(worktreeRoot,['branch','--show-current']).stdout.trim() };
 }
-async function execTestRun(root, args, task){
+const SAFE_RUN_PREFIXES = ['node --test','npm run','node scripts/'];
+// Shared safe command executor reused by test.run / benchmark.run (and lint/build where wired).
+// Only allowlisted prefixes may run. benchmark.run additionally requires the target script / npm
+// script to EXIST in the repo (requireExisting), so it can never execute arbitrary shell commands.
+async function execAllowedCommand(root, args, task, opts){
+  const capName = (opts && opts.capName) || task.capability || 'run';
   const worktreeRoot = task.worktree_mode === 'isolated' ? await ensureTaskWorktree(task, false) : root;
-  const target = String(args.target || args.test || 'test/collective-brain.test.js').replace(/\\/g,'/');
-  const cmd = args.command || `node --test ${target}`;
-  const timeoutMs = Math.min(Number(args.timeoutMs||120000), 180000);
-  // safety: only allow node --test and npm run scripts
-  const allowedPrefix = ['node --test','npm run','node scripts/'];
-  if (!allowedPrefix.some(p=> cmd.startsWith(p))) throw new Error(`command not allowlisted: ${cmd}`);
+  const defaultTarget = (opts && opts.defaultTarget) || 'test/collective-brain.test.js';
+  const target = String(args.target || args.test || args.script || defaultTarget).replace(/\\/g,'/');
+  const cmd = String(args.command || (capName==='benchmark.run' ? (args.script ? `node scripts/${String(args.script).replace(/\\/g,'/').replace(/^\//,'')}` : '') : `node --test ${target}`)).trim();
+  if (!cmd) throw new Error(`command required for ${capName}`);
+  const allowedPrefix = (opts && opts.allowedPrefixes) || SAFE_RUN_PREFIXES;
+  if (!allowedPrefix.some(p=> cmd.startsWith(p))) throw new Error(`command not allowlisted for ${capName}: ${cmd}`);
+  if (opts && opts.requireExisting){
+    if (cmd.startsWith('node scripts/')){
+      const rel = cmd.slice('node scripts/'.length).trim().split(/\s+/)[0];
+      if (!rel || rel.includes('..')) throw new Error(`invalid script path for ${capName}: ${rel}`);
+      if (!fs.existsSync(path.join(worktreeRoot, 'scripts', rel))) throw new Error(`script does not exist for ${capName}: scripts/${rel}`);
+    } else if (cmd.startsWith('npm run')){
+      const name = cmd.slice('npm run'.length).trim().split(/\s+/)[0];
+      if (!name) throw new Error(`npm script name required for ${capName}`);
+      let pkg = null; try{ pkg = JSON.parse(fs.readFileSync(path.join(worktreeRoot,'package.json'),'utf8')); }catch{}
+      if (!pkg || !pkg.scripts || !Object.prototype.hasOwnProperty.call(pkg.scripts, name)) throw new Error(`npm script does not exist for ${capName}: ${name}`);
+    }
+  }
+  const timeoutMs = Math.min(Number(args.timeoutMs||120000), (opts && opts.maxTimeoutMs) || 180000);
   const started = Date.now();
   const r = cp.spawnSync(cmd, { cwd: worktreeRoot, encoding: 'utf8', timeout: timeoutMs, shell: true, windowsHide: true });
   const durationMs = Date.now() - started;
   return { command: cmd, target, exitCode: r.status, durationMs, stdout: String(r.stdout||'').slice(0,8000), stderr: String(r.stderr||'').slice(0,8000), success: r.status===0 };
+}
+async function execTestRun(root, args, task){
+  return execAllowedCommand(root, args, task, { capName:'test.run' });
+}
+async function execBenchmarkRun(root, args, task){
+  return execAllowedCommand(root, args, task, { capName:'benchmark.run', requireExisting:true, maxTimeoutMs:120000 });
 }
 async function execAgentDispatch(root, args, task){
   // REAL dispatch (same as live worker) — prefer opencode
