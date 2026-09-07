@@ -192,3 +192,12 @@ This rule applies to every current and future AI agent working on `World_server`
 - Science gameplay expands gradually across exactly 12 canonical domains: visual destruction, recovery animation, player destruction, weapons, NPC behavior, new buildings, new textures/material state, roads, destruction physics, controls, world generation and multiplayer.
 - Every domain has an independent stage and evidence gates. `planned`/`disabled` means zero gameplay effect; `experimental` is preview-only; production activation requires explicit production evidence and no-regression proof.
 - Navigator explanation must be triggered by the domain's actual cause→effect transition. Do not add science text that is disconnected from what the player just did or observed.
+
+## 14. VERCEL DEPLOYMENT QUOTA — hard release rule
+
+- Canonical Vercel project is `world-server`. Do not reconnect stale duplicate projects to the GitHub repository merely to obtain extra previews.
+- Automatic Git deployments are disabled in root `vercel.json`. Vercel releases are deliberate: green CI -> one manual preview -> browser verification -> explicit production promotion/deploy.
+- Feature-branch pushes must not automatically spend Vercel deployment quota. Batch related commits before the release candidate.
+- If Vercel returns `api-deployments-free-per-day`, `Resource is limited`, or another quota/rate-limit response, **do not retry deploy/redeploy in a loop**. Stop new deployment calls, inspect existing READY deployments, preserve the current release candidate, and resume with one deployment only after capacity is available.
+- `ignoreCommand` remains a second line of defense for non-deployable changes; it is not a substitute for the manual-release policy because canceled/ignored attempts may still consume quota.
+- Existing production sites/domains must not be deleted as a quota workaround. Disconnecting a stale Git integration is allowed when its configured Root Directory no longer exists and the existing deployment must remain available.

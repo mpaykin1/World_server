@@ -491,3 +491,23 @@ Player destruction is confirmed by the existing authoritative Voxel API before s
 - Quality no-regression: PASS, 0 violations.
 - Production domains remain fail-closed until explicit production evidence and promotion.
 - No Desktop checkout or user files were used for scratch work.
+
+## Vercel deployment quota recovery — 2026-09-07
+
+### Goal
+Restore the fastest verifiable Vercel release path without burning the Hobby deployment quota again.
+
+### Root cause
+Vercel CLI returned `api-deployments-free-per-day`: the IMPROVE WORLD Hobby scope exceeded 100 deployments in a rolling 24-hour window. Two stale projects (`improve-world-home`, `improve-world-home-git`) were also connected to the same GitHub repo while pointing at the missing `apps/improve-world-home` root, multiplying failed deployments per push.
+
+### Recovery plan
+- disconnect the two stale Vercel projects from GitHub without deleting their existing deployments/domains;
+- disable automatic Git deployments for canonical `world-server` and use one deliberate manual deployment per verified release candidate;
+- forbid blind retries after the quota error;
+- keep all existing live sites intact;
+- merge only after GitHub CI remains green; perform one preview/production deployment when Vercel quota allows it.
+
+### Evidence so far
+- PR #59 head `84354de3` has CI, Quality Regression Lock, Visual Baseline Candidates and World Quality Autopilot V4 all SUCCESS.
+- Vercel build itself succeeds; the platform rejects deployment creation/output due to `api-deployments-free-per-day`.
+- `improve-world-home` and `improve-world-home-git` Git connections were explicitly disconnected via authenticated Vercel CLI.
