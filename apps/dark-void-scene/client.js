@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { VoxelBallEye, MountainWall, BeaconTower, OrbitCameraRig, WORLD_VOX } from '/shared/dark-void-scene-runtime.mjs';
 import { NavigatorDialog } from '/shared/navigator-dialog.mjs';
 import { DarkVoidManifestation } from '/shared/dark-void-manifestation.mjs';
+import { CreatureWorld } from '/shared/creature-visual-runtime.mjs';
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
@@ -88,6 +89,11 @@ const manifestation = new DarkVoidManifestation({
   origin: eye.group.position,
 });
 
+// Creature Factory: visible runtime bound to the production LOD policy and 13-category contract.
+const creatureWorld = new CreatureWorld({ scene, viewer: eye.group, camera, renderer });
+creatureWorld.spawn(26);
+window.CreatureFactoryLive = creatureWorld;
+
 // ---- Navigator intro panel (reuse the existing, working component) ----
 const navigator = new NavigatorDialog({
   intro: 'Привет. Я твой навигатор по этому миру.\nТут может появиться всё, что ты захочешь.\nИ всё, что в этом мире появится… это тоже будешь ты…',
@@ -106,6 +112,7 @@ function frame(now) {
   last = now;
   updateMovement(dt);
   eye.update(now, dt);
+  creatureWorld.update(now, dt);
   const pulse = 0.86 + 0.14 * Math.sin(now * 0.0021);
   if (beacon.flameLight) beacon.flameLight.intensity = 8 * pulse;
   renderer.render(scene, camera);
@@ -127,6 +134,7 @@ window.DarkVoidSceneRuntime = {
       beaconPos: beacon.group.position.toArray(),
       worldVox: WORLD_VOX,
       manifestation: manifestation.stats(),
+      creatureFactory: creatureWorld.stats(),
     };
   },
   // Exposed for headless/automated verification (requestAnimationFrame
@@ -138,5 +146,5 @@ window.DarkVoidSceneRuntime = {
   stepMovement(dt = 0.1) { updateMovement(dt); },
   activeKeys() { return [...keys]; },
   createInWorld(text) { return manifestation.execute(text); },
-  renderer, scene, camera, eye, mountain, beacon, rig, manifestation,
+  renderer, scene, camera, eye, mountain, beacon, rig, manifestation, creatureWorld,
 };
