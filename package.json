@@ -10,6 +10,8 @@
     "check": "node scripts/check-js.js && node --test",
     "world:ingest": "node scripts/ingest-world-patches.js",
     "check:fast": "node scripts/check-js.js",
+    "check:cloudflare": "node scripts/validate-cloudflare-deploy.js",
+    "predeploy:cloudflare": "node scripts/validate-cloudflare-deploy.js",
     "discover": "node scripts/discover-ai3d-engines.js",
     "e2e": "node scripts/ai3d-e2e-smoke.js",
     "e2e:python": "python services/ai3d-worker/scripts/e2e-smoke.py",
