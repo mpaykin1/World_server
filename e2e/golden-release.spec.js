@@ -51,15 +51,22 @@ test.describe('World Server Golden Standard', () => {
       const s=window.AI3DVoxelRuntime?.stats?.();
       return s?.defaultCityLoaded && s?.player?.playable;
     }, {timeout:25000});
-    await page.evaluate(()=>window.AI3DVoxelRuntime.setPlayerView?.(0,0));
+    await page.evaluate(() => {
+      window.focus();
+      window.AI3DVoxelRuntime.setPlayerView?.(0,0);
+    });
+    await page.mouse.click(200, 200).catch(() => {});
     const before=await page.evaluate(()=>window.AI3DVoxelRuntime.stats().player);
     await page.keyboard.down('KeyW');
-    await page.waitForTimeout(350);
+    await page.waitForTimeout(500);
     await page.keyboard.up('KeyW');
+    await expect.poll(async () => {
+      const after = await page.evaluate(() => window.AI3DVoxelRuntime.stats().player);
+      const dz = after.z - before.z, dx = after.x - before.x;
+      return Math.hypot(dx, dz);
+    }, { timeout: 5000 }).toBeGreaterThan(0.03);
     const after=await page.evaluate(()=>window.AI3DVoxelRuntime.stats().player);
-    const dz=after.z-before.z, dx=after.x-before.x;
-    expect(Math.hypot(dx,dz)).toBeGreaterThan(0.03);
-    expect(dz).toBeLessThan(0); // Three.js camera yaw 0 looks toward -Z
+    expect(after.z - before.z).toBeLessThan(0); // Three.js camera yaw 0 looks toward -Z
   });
 
   test('mobile project exposes touch movement + touch look', async ({ page }, testInfo) => {

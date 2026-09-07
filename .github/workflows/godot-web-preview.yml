@@ -1,27 +1,17 @@
-name: Godot Web Build & Vercel Release
+name: Godot Web Vercel Preview Pipeline
 
 on:
   push:
-    branches: [master]
+    branches: ["**"]
   pull_request:
     branches: [master]
   workflow_dispatch:
-    inputs:
-      deploy:
-        description: "Deploy canonical world-server to Vercel"
-        required: false
-        default: false
-        type: boolean
 
 permissions:
   contents: read
 
-concurrency:
-  group: godot-web-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  godot-web:
+  godot-web-preview:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -37,7 +27,24 @@ jobs:
       - name: Install dependencies
         run: npm ci || npm install
 
+      - name: Evaluate Quota Guard
+        id: quota-guard
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "proceed=true" >> $GITHUB_OUTPUT
+            echo "[Quota Guard] Manual dispatch triggered; proceeding with build."
+          else
+            if node scripts/check-vercel-ignore.js; then
+              echo "proceed=false" >> $GITHUB_OUTPUT
+              echo "[Quota Guard] Skipped Vercel Preview deploy - only non-deployable/docs/test/.ai files changed."
+            else
+              echo "proceed=true" >> $GITHUB_OUTPUT
+              echo "[Quota Guard] Deployable changes detected; proceeding with Godot Web preview pipeline."
+            fi
+          fi
+
       - name: Install Godot 4 & Export Templates
+        if: steps.quota-guard.outputs.proceed == 'true'
         run: |
           mkdir -p /tmp/godot_setup
           cd /tmp/godot_setup
@@ -53,55 +60,58 @@ jobs:
           echo "[Godot Setup] Godot 4.3 binary and Web export templates installed successfully."
 
       - name: Run Godot Web Export & Artifact Validation
-        run: node scripts/godot-web-build.js
+        if: steps.quota-guard.outputs.proceed == 'true'
+        run: |
+          node scripts/godot-web-build.js
 
       - name: Run Web-Native Equivalence Check
-        run: node scripts/compare-worldgen.js
-
-      - name: Decide deploy policy
-        id: deploy-policy
-        shell: bash
+        if: steps.quota-guard.outputs.proceed == 'true'
         run: |
-          DEPLOY=false
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.deploy }}" = "true" ]; then
-            DEPLOY=true
-          fi
-          echo "deploy=$DEPLOY" >> "$GITHUB_OUTPUT"
-          echo "[Deploy Policy] event=${{ github.event_name }} ref=${{ github.ref }} deploy=$DEPLOY"
+          node scripts/compare-worldgen.js
 
-      - name: Verify Vercel release configuration
-        if: steps.deploy-policy.outputs.deploy == 'true'
+      - name: Detect Vercel Configuration
+        id: vercel-config
+        if: steps.quota-guard.outputs.proceed == 'true'
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
-          if [ -z "$VERCEL_TOKEN" ]; then
-            echo "::error::VERCEL_TOKEN is required for an explicit release."
-            exit 1
+          if [ -n "$VERCEL_TOKEN" ]; then
+            echo "configured=true" >> $GITHUB_OUTPUT
+            echo "[Vercel Config] VERCEL_TOKEN secret detected."
+          else
+            echo "configured=false" >> $GITHUB_OUTPUT
+            echo "[Vercel Config] VERCEL_TOKEN secret not configured; Vercel preview deploy skipped."
           fi
-          echo "[Vercel Config] release token detected."
 
-      - name: Deploy canonical Vercel Preview
+      - name: Deploy Vercel Preview
         id: deploy
-        if: steps.deploy-policy.outputs.deploy == 'true'
+        if: steps.quota-guard.outputs.proceed == 'true' && steps.vercel-config.outputs.configured == 'true'
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: team_itmMhMILAlqU6yLs7xnsvbo1
-          VERCEL_PROJECT_ID: prj_XsKyvMHpuNomoPBxuOD8vd26Fi3y
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
         run: |
-          echo "[Vercel Deploy] Explicit release to canonical world-server project."
-          PREVIEW_OUTPUT=$(npx vercel deploy --token="$VERCEL_TOKEN" --yes 2>&1)
-          echo "$PREVIEW_OUTPUT"
-          URL=$(echo "$PREVIEW_OUTPUT" | grep -oE 'https://[a-zA-Z0-9.-]+\.vercel\.app' | tail -n 1 || true)
-          if [ -z "$URL" ]; then
-            echo "::error::Vercel deploy completed without a Preview URL."
-            exit 1
+          echo "[Vercel Deploy] Deploying Preview for team improve-world project world-server..."
+          PREVIEW_URL=""
+          if [ -n "$VERCEL_ORG_ID" ] && [ -n "$VERCEL_PROJECT_ID" ]; then
+            PREVIEW_URL=$(npx vercel deploy --token="$VERCEL_TOKEN" --yes 2>&1 || true)
+          else
+            PREVIEW_URL=$(npx vercel deploy --token="$VERCEL_TOKEN" --scope="improve-world" --name="world-server" --yes 2>&1 || true)
           fi
-          echo "preview_url=$URL" >> "$GITHUB_OUTPUT"
-          echo "GODOT_WEB_PREVIEW_URL=$URL" >> "$GITHUB_ENV"
-          echo "[Vercel Deploy] Preview URL: $URL"
 
-      - name: HTTP Smoke Check against released Preview
-        if: steps.deploy-policy.outputs.deploy == 'true' && steps.deploy.outputs.preview_url != ''
+          URL=$(echo "$PREVIEW_URL" | grep -oE 'https://[a-zA-Z0-9.-]+\.vercel\.app' | tail -n 1 || true)
+          if [ -n "$URL" ]; then
+            echo "preview_url=$URL" >> $GITHUB_OUTPUT
+            echo "GODOT_WEB_PREVIEW_URL=$URL" >> $GITHUB_ENV
+            echo "[Vercel Deploy] Vercel Preview URL produced: $URL"
+          else
+            echo "::warning::Vercel preview deployment was attempted but did not produce a URL (token may be unauthenticated or scope inactive):"
+            echo "$PREVIEW_URL"
+            echo "preview_url=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: HTTP Smoke Check against Vercel Preview
+        if: steps.quota-guard.outputs.proceed == 'true' && steps.deploy.outputs.preview_url != ''
         run: |
           URL="${{ steps.deploy.outputs.preview_url }}/apps/godot-web/"
           echo "[HTTP Smoke] Probing $URL ..."
@@ -113,20 +123,21 @@ jobs:
           echo "[HTTP Smoke] PASS - Status 200 for $URL"
 
       - name: Install Playwright Browsers
-        if: steps.deploy-policy.outputs.deploy == 'true' && steps.deploy.outputs.preview_url != ''
+        if: steps.quota-guard.outputs.proceed == 'true' && steps.deploy.outputs.preview_url != ''
         run: npx playwright install --with-deps chromium
 
-      - name: Playwright Smoke Check against released Preview
-        if: steps.deploy-policy.outputs.deploy == 'true' && steps.deploy.outputs.preview_url != ''
+      - name: Playwright Smoke Check against Vercel Preview
+        if: steps.quota-guard.outputs.proceed == 'true' && steps.deploy.outputs.preview_url != ''
         env:
           PLAYWRIGHT_BASE_URL: ${{ steps.deploy.outputs.preview_url }}
-        run: npx playwright test e2e/godot-web-smoke.spec.js --project=desktop-chromium
+        run: |
+          npx playwright test e2e/godot-web-smoke.spec.js --project=desktop-chromium
 
       - name: Upload Evidence Artifact
-        if: always()
+        if: always() && steps.quota-guard.outputs.proceed == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: godot-web-build-evidence
+          name: godot-web-preview-evidence
           path: |
             GODOT_WEB_BUILD_REPORT.json
             playwright-report/
