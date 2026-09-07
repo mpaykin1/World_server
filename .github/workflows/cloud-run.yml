@@ -1,0 +1,93 @@
+name: Cloud Run — World Server
+
+on:
+  workflow_dispatch:
+    inputs:
+      service:
+        description: Cloud Run service name
+        required: false
+        default: world-server
+      region:
+        description: Google Cloud region (falls back to repository variable GCP_REGION, then us-central1)
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: cloud-run-world-server
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: cloud-run
+    env:
+      GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+      GCP_WORKLOAD_IDENTITY_PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+      GCP_SERVICE_ACCOUNT: ${{ vars.GCP_SERVICE_ACCOUNT }}
+      GCP_REGION: ${{ inputs.region || vars.GCP_REGION }}
+      CLOUD_RUN_SERVICE: ${{ inputs.service }}
+    steps:
+      - name: Validate deployment variables
+        shell: bash
+        run: |
+          set -euo pipefail
+          : "${GCP_PROJECT_ID:?Set GCP_PROJECT_ID}"
+          : "${GCP_WORKLOAD_IDENTITY_PROVIDER:?Set GCP_WORKLOAD_IDENTITY_PROVIDER}"
+          : "${GCP_SERVICE_ACCOUNT:?Set GCP_SERVICE_ACCOUNT}"
+          echo "GCP_REGION=${GCP_REGION:-us-central1}" >> "$GITHUB_ENV"
+          echo "CLOUD_RUN_SERVICE=${CLOUD_RUN_SERVICE:-world-server}" >> "$GITHUB_ENV"
+
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Authenticate to Google Cloud without a static key
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ env.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.GCP_SERVICE_ACCOUNT }}
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v3
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+
+      - name: Deploy source to Cloud Run
+        shell: bash
+        run: |
+          set -euo pipefail
+          gcloud run deploy "$CLOUD_RUN_SERVICE" \
+            --project "$GCP_PROJECT_ID" \
+            --region "$GCP_REGION" \
+            --source . \
+            --allow-unauthenticated \
+            --port 8080 \
+            --set-env-vars NODE_ENV=production \
+            --quiet
+
+      - name: Verify public health and Roblox handshake
+        shell: bash
+        run: |
+          set -euo pipefail
+          SERVICE_URL="$(gcloud run services describe "$CLOUD_RUN_SERVICE" \
+            --project "$GCP_PROJECT_ID" \
+            --region "$GCP_REGION" \
+            --format='value(status.url)')"
+          test -n "$SERVICE_URL"
+          curl --fail --silent --show-error --retry 5 --retry-delay 2 "$SERVICE_URL/healthz"
+          curl --fail --silent --show-error --retry 5 --retry-delay 2 \
+            -H 'Content-Type: application/json' \
+            -d '{"protocol":3,"worldId":"starter"}' \
+            "$SERVICE_URL/api/roblox/handshake"
+          {
+            echo "### Cloud Run deployment"
+            echo "- Service: $CLOUD_RUN_SERVICE"
+            echo "- Region: $GCP_REGION"
+            echo "- URL: $SERVICE_URL"
+            echo "- healthz: PASS"
+            echo "- Roblox handshake: PASS"
+          } >> "$GITHUB_STEP_SUMMARY"
