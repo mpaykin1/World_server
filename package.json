@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "build:sentry": "node scripts/build-sentry.js",
-    "build": "npm run build:sentry && node scripts/inject-sentry-runtime.js",
+    "build:dist": "node scripts/build-dist.js",
+    "build": "npm run build:sentry && node scripts/inject-sentry-runtime.js && npm run build:dist",
     "check": "node scripts/check-js.js && node --test",
     "world:ingest": "node scripts/ingest-world-patches.js",
     "check:fast": "node scripts/check-js.js",
