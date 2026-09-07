@@ -19,7 +19,13 @@ const apiHandlers = new Map([
   ['/api/game', require('./api/game')],
   ['/api/voxel', require('./api/voxel')],
   ['/api/ai3d', require('./api/ai3d')],
-  ['/api/ai3d-voxel-generate', require('./api/ai3d-voxel-generate')]
+  ['/api/ai3d-voxel-generate', require('./api/ai3d-voxel-generate')],
+  ['/api/roblox/handshake', require('./api/worlds')],
+  ['/api/roblox/world', require('./api/worlds')],
+  ['/api/roblox/chunk', require('./api/worlds')],
+  ['/api/roblox/events', require('./api/worlds')],
+  ['/api/roblox/telemetry', require('./api/worlds')],
+  ['/api/roblox', require('./api/worlds')]
 ]);
 
 const mime = {

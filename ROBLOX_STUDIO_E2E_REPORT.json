@@ -1,0 +1,8 @@
+{
+  "timestamp": "2026-09-07T11:46:33.977Z",
+  "gate": "roblox_studio_engine_e2e",
+  "status": "BLOCKED",
+  "runtimeAvailable": false,
+  "runtimePath": null,
+  "details": "Roblox Studio engine runtime is not installed or available in this headless/CI environment. Gate marked BLOCKED fail-closed."
+}

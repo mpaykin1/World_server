@@ -4,12 +4,20 @@ const fs = require('fs');
 const path = require('path');
 const { sendJson, methodNotAllowed, withErrors } = require('../lib/http');
 const { publicWorlds } = require('../lib/world-graph');
+const { router: robloxRouter } = require('../lib/roblox-adapter');
 const { URL } = require('url');
 
 const indexPath = path.join(process.cwd(), 'data', 'world-graph-index.json');
 const registryPath = path.join(process.cwd(), 'data', 'app-release-registry.json');
 
 module.exports = withErrors(async (req, res) => {
+  const requestUrl = new URL(req.url || '/api/worlds', `http://${req.headers.host || 'localhost'}`);
+  const route = requestUrl.searchParams.get('__route') || '';
+
+  if (route.startsWith('roblox') || requestUrl.pathname.startsWith('/api/roblox')) {
+    return robloxRouter(req, res);
+  }
+
   if (req.method !== 'GET') return methodNotAllowed(res, ['GET']);
   const index = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
   const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
@@ -25,7 +33,7 @@ module.exports = withErrors(async (req, res) => {
     releaseAppId: world.releaseAppId,
     status: world.status
   }));
-  const requested = new URL(req.url || '/api/worlds', 'http://localhost').searchParams.get('id');
+  const requested = requestUrl.searchParams.get('id');
   const selected = requested ? worlds.filter((world) => world.id === requested || world.releaseAppId === requested) : worlds;
   if (requested && selected.length === 0) return sendJson(res, 404, { error: 'World not found' });
   sendJson(res, 200, { worlds: selected, graph: { nodes: selected.map(({ id }) => id), edges: selected.flatMap((world) => world.portals.map((portal) => ({ from: world.id, to: portal.targetWorldId, id: portal.id, label: portal.label }))) } });

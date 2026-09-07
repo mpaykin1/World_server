@@ -5,8 +5,10 @@ const ROOT=path.resolve(__dirname,'..');
 test('Vercel Hobby function count stays within hard limit',()=>{
   const files=fs.readdirSync(path.join(ROOT,'api')).filter(f=>f.endsWith('.js'));
   assert.ok(files.length<=12,`api/*.js=${files.length}, Hobby max=12`);
-  for(const name of ['register.js','login.js','me.js','logout.js']) assert.ok(!files.includes(name));
+  assert.equal(files.length, 11, 'api/*.js stays consolidated at 11 files');
+  for(const name of ['register.js','login.js','me.js','logout.js','roblox.js']) assert.ok(!files.includes(name));
   assert.ok(files.includes('auth.js'));
+  assert.ok(files.includes('worlds.js'));
 });
 
 test('auth public URLs are preserved through one router',()=>{
@@ -15,6 +17,14 @@ test('auth public URLs are preserved through one router',()=>{
   for(const name of ['register','login','me','logout']) assert.equal(map.get(`/api/${name}`),`/api/auth?__route=${name}`);
   const server=fs.readFileSync(path.join(ROOT,'server.js'),'utf8');
   for(const name of ['register','login','me','logout']) assert.ok(server.includes(`require('./lib/api-handlers/${name}')`));
+});
+
+test('roblox public URLs are consolidated through worlds router',()=>{
+  const cfg=JSON.parse(fs.readFileSync(path.join(ROOT,'vercel.json'),'utf8'));
+  const map=new Map((cfg.rewrites||[]).map(r=>[r.source,r.destination]));
+  for(const name of ['handshake','world','chunk','events','telemetry']) {
+    assert.equal(map.get(`/api/roblox/${name}`),`/api/worlds?__route=roblox_${name}`);
+  }
 });
 
 test('auth router fails closed on unknown route',async()=>{
