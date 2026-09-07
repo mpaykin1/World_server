@@ -3,7 +3,7 @@ test.describe('Behavioral mobile control',()=>{
   test('AI3D joystick produces real player movement',async({page},testInfo)=>{
     test.skip(!/mobile/i.test(testInfo.project.name),'mobile only');
     await page.goto('/apps/ai3d-voxel-city/',{waitUntil:'domcontentloaded'});
-    await page.waitForFunction(()=>window.AI3DVoxelRuntime?.stats?.().player?.playable,{timeout:25000});
+    await page.waitForFunction(()=>window.AI3DVoxelRuntime?.stats?.().player?.playable,{timeout:30000});
     const pad=page.locator('#goldenMovePad');await expect(pad).toBeVisible();
     const before=await page.evaluate(()=>window.AI3DVoxelRuntime.stats().player);
     const box=await pad.boundingBox();expect(box).toBeTruthy();

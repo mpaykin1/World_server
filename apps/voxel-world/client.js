@@ -107,6 +107,211 @@ const overrides=new Map();
 const requested=new Set();
 let streamBusy=false;
 
+const trustedScienceRuns = new Map();
+let scienceNavigatorTimeout = null;
+const SCIENCE_FX_CAP = matchMedia('(pointer:coarse)').matches ? 12 : 28;
+const activeScienceFx = [];
+const SCIENCE_PRODUCTION_HOSTS = ['survival-hub.vercel.app', 'webgl-survival-hub.vercel.app'];
+
+function isProductionEnvironment() {
+  return SCIENCE_PRODUCTION_HOSTS.includes(location.hostname);
+}
+
+function scienceDomainRuntimeEnabled(runId, domain) {
+  const run = trustedScienceRuns.get(runId);
+  if (!run || !run.active) return false;
+  const cfg = run.domains?.[domain];
+  if (!cfg) return false;
+  if (isProductionEnvironment()) {
+    return cfg.stage === 'production-enabled' && cfg.runtime?.production === true;
+  }
+  return (cfg.stage === 'experimental' || cfg.stage === 'verified-runtime' || cfg.stage === 'production-enabled') && cfg.runtime?.preview === true;
+}
+
+function scienceRunForDestroyedBlock(blockType, scienceEvents = []) {
+  for (const science of Array.isArray(scienceEvents) ? scienceEvents : []) {
+    const run = trustedScienceRuns.get(String(science?.runId || ''));
+    if (run?.active && (run.eligibleBlockTypes || []).includes(blockType)) return run;
+  }
+  return null;
+}
+
+function emitScienceDomainTelemetry(runId, domain, phase) {
+  if (!runId || !domain) return;
+  window.dispatchEvent(new CustomEvent('world:science-domain', {
+    detail: { runId, domain, phase }
+  }));
+}
+
+function spawnDestructionFx(runId, pos, blockType) {
+  if (!scienceDomainRuntimeEnabled(runId, 'visualDestruction')) return;
+  const color = BLOCKS[blockType]?.color || 0xa44c3d;
+  const geom = new THREE.BoxGeometry(0.16, 0.16, 0.16);
+  const mat = new THREE.MeshStandardMaterial({ color, roughness: 0.8, metalness: 0.1 });
+  const count = matchMedia('(pointer:coarse)').matches ? 4 : 8;
+  for (let i = 0; i < count; i++) {
+    if (activeScienceFx.length >= SCIENCE_FX_CAP) {
+      const old = activeScienceFx.shift();
+      if (old?.mesh) { scene.remove(old.mesh); old.mesh.geometry.dispose(); old.mesh.material.dispose(); }
+    }
+    const mesh = new THREE.Mesh(geom, mat);
+    mesh.position.set(
+      pos.x + 0.5 + (Math.random() - 0.5) * 0.5,
+      pos.y + 0.5 + (Math.random() - 0.5) * 0.5,
+      pos.z + 0.5 + (Math.random() - 0.5) * 0.5
+    );
+    const vel = new THREE.Vector3(
+      (Math.random() - 0.5) * 3.2,
+      1.8 + Math.random() * 2.5,
+      (Math.random() - 0.5) * 3.2
+    );
+    scene.add(mesh);
+    activeScienceFx.push({ mesh, vel, life: 0, maxLife: 0.6 + Math.random() * 0.4, type: 'debris' });
+  }
+}
+
+function spawnRecoveryFx(runId, effect) {
+  if (!scienceDomainRuntimeEnabled(runId, 'recoveryAnimation')) return;
+  const color = BLOCKS[effect.blockType]?.color || 0x5f9f43;
+  const geom = new THREE.BoxGeometry(0.08, 0.08, 0.08);
+  const mat = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.9 });
+  const count = matchMedia('(pointer:coarse)').matches ? 3 : 6;
+  for (let i = 0; i < count; i++) {
+    if (activeScienceFx.length >= SCIENCE_FX_CAP) {
+      const old = activeScienceFx.shift();
+      if (old?.mesh) { scene.remove(old.mesh); old.mesh.geometry.dispose(); old.mesh.material.dispose(); }
+    }
+    const mesh = new THREE.Mesh(geom, mat);
+    const target = new THREE.Vector3(effect.x + 0.5, effect.y + 0.5, effect.z + 0.5);
+    mesh.position.copy(target).add(new THREE.Vector3(
+      (Math.random() - 0.5) * 1.8,
+      (Math.random() - 0.5) * 1.8,
+      (Math.random() - 0.5) * 1.8
+    ));
+    scene.add(mesh);
+    activeScienceFx.push({ mesh, target, speed: 2.2 + Math.random() * 1.5, life: 0, maxLife: 0.7, type: 'mote' });
+  }
+}
+
+function updateScienceFx(now, dt) {
+  for (let i = activeScienceFx.length - 1; i >= 0; i--) {
+    const fx = activeScienceFx[i];
+    fx.life += dt;
+    if (fx.life >= fx.maxLife) {
+      scene.remove(fx.mesh);
+      fx.mesh.geometry.dispose();
+      fx.mesh.material.dispose();
+      activeScienceFx.splice(i, 1);
+      continue;
+    }
+    if (fx.type === 'debris') {
+      fx.vel.y -= 12 * dt;
+      fx.mesh.position.addScaledVector(fx.vel, dt);
+      fx.mesh.rotation.x += 4 * dt;
+      fx.mesh.rotation.y += 6 * dt;
+    } else if (fx.type === 'mote') {
+      fx.mesh.position.lerp(fx.target, Math.min(1, dt * fx.speed * 3));
+      if (fx.mesh.material) fx.mesh.material.opacity = Math.max(0, 1 - fx.life / fx.maxLife);
+    }
+  }
+}
+
+function ensureScienceNavigatorHud() {
+  let el = document.getElementById('vwScienceHud');
+  if (el) return el;
+  el = document.createElement('div');
+  el.id = 'vwScienceHud';
+  el.style.cssText = 'position:fixed;bottom:78px;left:50%;transform:translateX(-50%);z-index:40;max-width:min(90vw,620px);padding:10px 14px;background:rgba(8,12,18,0.88);border:1px solid rgba(212,162,94,0.45);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,0.45);color:#f3d7ab;font-family:Inter,system-ui,sans-serif;display:none;pointer-events:none;backdrop-filter:blur(8px);';
+  el.innerHTML = '<div style="font-size:11px;letter-spacing:0.08em;color:#d4a25e;margin-bottom:3px;font-weight:700;">НАВИГАТОР (5 ЛЕТ)</div><div id="vwScienceBody" style="font-size:14px;line-height:1.35;white-space:pre-line;"></div><div id="vwScienceNote" style="font-size:11px;line-height:1.3;color:#a38b68;margin-top:4px;border-top:1px solid rgba(212,162,94,0.2);padding-top:4px;display:none;"></div>';
+  document.body.appendChild(el);
+  return el;
+}
+
+function showScienceNavigator(text, note = '') {
+  if (!text) return;
+  const hud = ensureScienceNavigatorHud();
+  const body = document.getElementById('vwScienceBody');
+  const noteEl = document.getElementById('vwScienceNote');
+  if (body) body.textContent = text;
+  if (noteEl) {
+    noteEl.textContent = note;
+    noteEl.style.display = note ? 'block' : 'none';
+  }
+  hud.style.display = 'block';
+  if (scienceNavigatorTimeout) clearTimeout(scienceNavigatorTimeout);
+  scienceNavigatorTimeout = setTimeout(() => { hud.style.display = 'none'; }, 9000);
+}
+
+function bounded(v, min = 0, max = 1) {
+  const n = Number(v);
+  return Number.isFinite(n) ? Math.max(min, Math.min(max, n)) : min;
+}
+
+function emitScienceTelemetry(science) {
+  const telemetry = science?.telemetry || {};
+  const safe = {
+    runId: String(science.runId || telemetry.runId || 'RUN_000').slice(0, 16),
+    phase: String(science.phase || telemetry.phase || 'unknown').slice(0, 24),
+    effectCount: bounded(telemetry.effectCount, 0, 16),
+    localNodes: bounded(telemetry.localNodes, 0, 512),
+    beforeLcc: bounded(telemetry.beforeLcc, 0, 1),
+    afterLcc: bounded(telemetry.afterLcc, 0, 1),
+    cycleClosures: bounded(telemetry.cycleClosures, 0, 4)
+  };
+  try { window.Sentry?.addBreadcrumb?.({ category: 'science-gameplay', message: safe.runId, data: safe, level: 'info' }); } catch {}
+  window.dispatchEvent(new CustomEvent('world:science-gameplay', { detail: safe }));
+}
+
+function announceScience(science) {
+  if (!science) return;
+  showScienceNavigator(science.navigator?.text, science.navigator?.scienceNote);
+  emitScienceTelemetry(science);
+}
+
+function cacheScienceRuns(runs) {
+  trustedScienceRuns.clear();
+  for (const run of Array.isArray(runs) ? runs : []) {
+    if (run?.active && /^RUN_\d{3}$/.test(String(run.runId || ''))) trustedScienceRuns.set(run.runId, run);
+  }
+}
+
+function announceTrustedScienceSignal(signal) {
+  const run = trustedScienceRuns.get(String(signal?.runId || ''));
+  if (!run) return;
+  const text = signal?.phase === 'damage' ? run.navigator?.damage : run.navigator?.regrow;
+  showScienceNavigator(text, run.navigator?.scienceNote);
+}
+
+function applyScienceResult(science) {
+  if (!science) return;
+  let recoveryAnimated = false;
+  for (const effect of science.effects || []) {
+    const b = validBlockType(effect?.blockType);
+    const x = finiteCoord(effect?.x), y = finiteCoord(effect?.y, 320), z = finiteCoord(effect?.z);
+    if (b === null || x === null || y === null || z === null || !Number.isInteger(x) || !Number.isInteger(y) || !Number.isInteger(z)) continue;
+    setBlockLocal(x, y, z, b);
+    if (Array.isArray(science.domainSignals) && science.domainSignals.includes('recoveryAnimation') && scienceDomainRuntimeEnabled(science.runId, 'recoveryAnimation')) {
+      spawnRecoveryFx(science.runId, effect);
+      recoveryAnimated = true;
+    }
+    if (channel) void channel.send({ type: 'broadcast', event: 'block_set', payload: { x, y, z, block: b } });
+  }
+  if (recoveryAnimated) emitScienceDomainTelemetry(science.runId, 'recoveryAnimation', science.phase || 'regrow');
+  announceScience(science);
+  if (channel) void channel.send({
+    type: 'broadcast', event: 'science_event',
+    payload: { runId: science.runId, phase: science.phase, telemetry: science.telemetry }
+  });
+}
+
+function showScienceIntro(run) {
+  if (!run?.active || !run?.navigator?.intro) return;
+  const introKey = `science_intro_${run.runId}`;
+  if (sessionStorage.getItem(introKey)) return;
+  sessionStorage.setItem(introKey, '1');
+  showScienceNavigator(run.navigator.intro, run.navigator.scienceNote || '');
+}
+
 function generateChunkData(c,rows=[]){
   const bx=c.cx*CHUNK,bz=c.cz*CHUNK;
   for(let lx=0;lx<CHUNK;lx++) for(let lz=0;lz<CHUNK;lz++){
@@ -217,8 +422,11 @@ async function editBlock(place){
   if(place&&collidesWithCell(c.x,c.y,c.z)){targetEl.textContent='Нельзя поставить блок в игрока';return;}
   const old=blockAt(c.x,c.y,c.z); setBlockLocal(c.x,c.y,c.z,b);
   try{
-    await api('set_block',{worldId:'main',x:c.x,y:c.y,z:c.z,blockType:b,playerPosition:{x:player.pos.x,y:player.pos.y,z:player.pos.z}});
+    const result=await api('set_block',{worldId:'main',x:c.x,y:c.y,z:c.z,blockType:b,playerPosition:{x:player.pos.x,y:player.pos.y,z:player.pos.z}});
     if(channel) void channel.send({type:'broadcast',event:'block_set',payload:{x:c.x,y:c.y,z:c.z,block:b}});
+    const scienceEvents=Array.isArray(result.scienceEvents)?result.scienceEvents:(result.science?[result.science]:[]);
+    if(!place){const run=scienceRunForDestroyedBlock(old,scienceEvents);if(run){spawnDestructionFx(run.runId,c,old);emitScienceDomainTelemetry(run.runId,'playerDestruction','player_break');emitScienceDomainTelemetry(run.runId,'visualDestruction','player_break');}}
+    for(const scienceEvent of scienceEvents)applyScienceResult(scienceEvent);
     statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';
   }catch(e){setBlockLocal(c.x,c.y,c.z,old);statusEl.textContent=e.message;statusEl.className='vwWarn';}
 }
@@ -241,7 +449,7 @@ function updateRemote(payload){
 function syncPresence(){ if(!channel)return;const state=channel.presenceState(),active=new Set();for(const entries of Object.values(state))for(const p of entries){if(typeof p.id==='string'&&p.id.length<=80)active.add(p.id);}for(const [id,g] of remote)if(!active.has(id)){remoteGroup.remove(g);disposeAvatar(g);remote.delete(id);}playersEl.textContent=`игроков: ${Math.max(1,active.size)}`; }
 async function connectRealtime(appState){
   const sb=appState.supabase; channel=sb.channel('voxel:main',{config:{presence:{key:player.id},broadcast:{self:false,ack:false}}});
-  channel.on('broadcast',{event:'player_state'},({payload})=>updateRemote(payload)); channel.on('broadcast',{event:'block_set'},({payload})=>{const b=validBlockType(payload?.block),x=finiteCoord(payload?.x),y=finiteCoord(payload?.y,320),z=finiteCoord(payload?.z);if(b===null||x===null||y===null||z===null||!Number.isInteger(x)||!Number.isInteger(y)||!Number.isInteger(z)||y<0||y>=WORLD_Y)return;if(Math.hypot(x-player.pos.x,z-player.pos.z)>(VIEW+3)*CHUNK)return;setBlockLocal(x,y,z,b);}); channel.on('presence',{event:'sync'},syncPresence);
+  channel.on('broadcast',{event:'player_state'},({payload})=>updateRemote(payload)); channel.on('broadcast',{event:'block_set'},({payload})=>{const b=validBlockType(payload?.block),x=finiteCoord(payload?.x),y=finiteCoord(payload?.y,320),z=finiteCoord(payload?.z);if(b===null||x===null||y===null||z===null||!Number.isInteger(x)||!Number.isInteger(y)||!Number.isInteger(z)||y<0||y>=WORLD_Y)return;if(Math.hypot(x-player.pos.x,z-player.pos.z)>(VIEW+3)*CHUNK)return;setBlockLocal(x,y,z,b);}); channel.on('broadcast',{event:'science_event'},({payload})=>announceTrustedScienceSignal(payload)); channel.on('presence',{event:'sync'},syncPresence);
   await new Promise((resolve,reject)=>channel.subscribe(async st=>{if(st==='SUBSCRIBED'){await channel.track({id:player.id,name:player.name,online_at:new Date().toISOString()});resolve();}else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT')reject(new Error('Realtime недоступен'));}));
 }
 
@@ -265,14 +473,14 @@ function updateTarget(){const h=rayVoxel();if(!h)return;targetEl.textContent=`${
 
 async function savePlayer(){try{await api('player_save',{worldId:'main',position:{x:player.pos.x,y:player.pos.y,z:player.pos.z},yaw:player.yaw,pitch:player.pitch,selectedBlock:HOTBAR[player.selected]});}catch{} }
 function broadcastPlayer(now){if(!channel||now-lastNet<NET_INTERVAL)return;lastNet=now;channel.send({type:'broadcast',event:'player_state',payload:{id:player.id,name:player.name,x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw}});}
-let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(started){physics(dt);loadNeededChunks();broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);renderer.render(scene,camera);}requestAnimationFrame(loop);
+let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(started){physics(dt);updateScienceFx(now,dt);loadNeededChunks();broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);renderer.render(scene,camera);}requestAnimationFrame(loop);
 
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});addEventListener('beforeunload',()=>savePlayer());
 setupDesktop();setupMobile();buildHotbar();
 
 try{
   const appState=await window.AppCore.init('voxel-world');
-  const init=await api('init',{worldId:'main'}); worldSeed=Number(init.world?.seed)||worldSeed; player.id=init.selfId;player.name=init.player?.name||appState.user?.username||'Player'; const p=init.player?.position||{x:0,y:heightAt(0,0)+4,z:0};player.pos.set(Number(p.x)||0,Number(p.y)||heightAt(0,0)+4,Number(p.z)||0);player.yaw=Number(init.player?.yaw)||0;player.pitch=Number(init.player?.pitch)||0;const sel=HOTBAR.indexOf(Number(init.player?.selectedBlock));if(sel>=0)player.selected=sel;buildHotbar(); await connectRealtime(appState); started=true; statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';loading.classList.add('hidden');
+  const init=await api('init',{worldId:'main'}); worldSeed=Number(init.world?.seed)||worldSeed; player.id=init.selfId;player.name=init.player?.name||appState.user?.username||'Player'; const p=init.player?.position||{x:0,y:heightAt(0,0)+4,z:0};player.pos.set(Number(p.x)||0,Number(p.y)||heightAt(0,0)+4,Number(p.z)||0);player.yaw=Number(init.player?.yaw)||0;player.pitch=Number(init.player?.pitch)||0;const sel=HOTBAR.indexOf(Number(init.player?.selectedBlock));if(sel>=0)player.selected=sel;buildHotbar(); cacheScienceRuns(init.scienceGameplay); await connectRealtime(appState); started=true; showScienceIntro((init.scienceGameplay||[]).filter(run=>run.active).at(-1)); statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';loading.classList.add('hidden');
 }catch(e){console.error(e);statusEl.textContent=e.message;statusEl.className='vwWarn';loading.textContent=`Voxel World: ${e.message}`;setTimeout(()=>loading.classList.add('hidden'),3500);started=true;player.pos.set(0,heightAt(0,0)+4,0);}
 
 window.VoxelWorldRuntime={
