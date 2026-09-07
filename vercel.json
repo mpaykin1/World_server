@@ -43,6 +43,10 @@
       "destination": "/api/auth?__route=logout"
     },
     {
+      "source": "/api/roblox/:route",
+      "destination": "/api/roblox?__route=:route"
+    },
+    {
       "source": "/apps/:app/",
       "destination": "/apps/:app/index.html"
     }
