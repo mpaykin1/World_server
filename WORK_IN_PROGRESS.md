@@ -435,3 +435,59 @@ Focused RUN_072 tests, syntax checks, one deterministic experiment replay, and A
 
 ## Completion
 Clean commit/push/PR, cloud checks, merge, existing production sync, then external HTTP 200 verification at `https://world-server.ai.studio/api/science-run072`.
+
+
+---
+
+## Addendum — ScienceGameplayAdapter / RUN_072 end-to-end
+
+### Goal
+Turn verified science into real player-facing gameplay through one reusable Science→Gameplay pipeline, starting with RUN_072, while making Navigator explain complex science in age-5 language without distorting it.
+
+### Current state
+RUN_072 evidence is already on production master and passes. This task adds the missing gameplay runtime, visible/shared effects, Navigator explanation, telemetry and regression gates.
+
+### Plan
+- add `lib/science-gameplay-adapter.js` and declarative `science/gameplay/RUN_072.gameplay.json`;
+- integrate the adapter into existing `api/voxel.js` without a second world service;
+- apply/broadcast returned effects in existing `apps/voxel-world/client.js`;
+- add compact no-button-clutter Navigator speech UI;
+- add telemetry and automatic RUN_073+ contract gating;
+- preserve all existing graphics/physics/performance.
+
+### Completion criteria
+Verified evidence gates activation; natural terrain and tiny structures do not trigger; player-built network damage can produce bounded deterministic cycle-closing regrowth; nearby clients see it immediately; Navigator age-5 explanation is shown; telemetry contains no PII; relevant checks pass.
+
+### Final evidence
+Local implementation and verification complete in branch `ai/chatgpt/science-gameplay-adapter-run072`; external GitHub CI/review, merge and live production verification remain.
+
+### Verification update
+- Targeted ScienceGameplayAdapter suite: 14/14 PASS.
+- Full `npm run check`: 517 PASS, 0 FAIL, 2 opt-in tests skipped by design.
+- `npm run golden:check`: PASS.
+- `npm run quality:check`: PASS; global governance remains 98% with 15 pre-existing blockers, so release eligibility is not overclaimed.
+- `npm run quality:regression`: PASS with 0 violations.
+- Voxel runtime now discovers all active `player_break` science contracts; no RUN_072 hardcode remains in the event router.
+- Science telemetry uses existing `/api/quality-telemetry` without user identifiers; observer clients do not duplicate events.
+- Task-owned scratch files were deleted and the canonical Desktop checkout was never modified.
+- Remaining external evidence: GitHub CI/review, merge, deployment, and live production verification.
+
+
+## Addendum — RUN_072 progressive 12-domain gameplay expansion
+
+### Goal
+Make the verified hypothesis manifest through world systems themselves, not as an overlay lecture. Domains are introduced gradually and independently.
+
+### Implemented vertical slice
+The contract now declares all 12 canonical domains. `visualDestruction`, `recoveryAnimation`, and `playerDestruction` are `experimental` + preview-only; weapons, NPCs, buildings, textures, roads, destruction physics, controls, world generation and multiplayer remain planned/inert.
+
+Player destruction is confirmed by the existing authoritative Voxel API before science FX are emitted. Confirmed destruction can show bounded debris. Server-persisted cycle-closing regrowth can show a bounded growth shell without changing authoritative state. Damage-only events remain scientifically honest and never fabricate regrowth.
+
+### Final evidence
+- Targeted ScienceGameplay suite: 20/20 PASS.
+- Full `npm run check`: 524 PASS, 0 FAIL, 2 opt-in skipped.
+- Golden Standard: PASS.
+- Quality check: PASS; existing governance blockers unchanged.
+- Quality no-regression: PASS, 0 violations.
+- Production domains remain fail-closed until explicit production evidence and promotion.
+- No Desktop checkout or user files were used for scratch work.
