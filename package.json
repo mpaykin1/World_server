@@ -8,6 +8,7 @@
     "build:sentry": "node scripts/build-sentry.js",
     "build": "npm run build:sentry && node scripts/inject-sentry-runtime.js",
     "check": "node scripts/check-js.js && node --test",
+    "world:ingest": "node scripts/ingest-world-patches.js",
     "check:fast": "node scripts/check-js.js",
     "discover": "node scripts/discover-ai3d-engines.js",
     "e2e": "node scripts/ai3d-e2e-smoke.js",
