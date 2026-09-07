@@ -70,12 +70,20 @@ function safeJoin(urlPath) {
   return full;
 }
 
+function cacheControlFor(file) {
+  const ext = path.extname(file).toLowerCase();
+  if (ext === '.html' || ext === '.json' || ext === '.webmanifest') return 'no-cache';
+  return 'public, max-age=300, stale-while-revalidate=86400';
+}
+
 function sendFile(res, file) {
   fs.stat(file, (error, stats) => {
     if (error || !stats.isFile()) return notFound(res);
     res.writeHead(200, {
       'Content-Type': mime[path.extname(file).toLowerCase()] || 'application/octet-stream',
       'Content-Length': stats.size,
+      'Cache-Control': cacheControlFor(file),
+      'Last-Modified': stats.mtime.toUTCString(),
       'X-Content-Type-Options': 'nosniff'
     });
     fs.createReadStream(file).pipe(res);
@@ -123,4 +131,3 @@ if (process.env.REMOTE_BRIDGE_AUTOSTART === '1') {
 }
 
 module.exports = { server, safeJoin, resolveEntrypoint, DEFAULT_ENTRYPOINT, ENTRYPOINT_WHITELIST };
-
