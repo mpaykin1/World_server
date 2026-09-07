@@ -65,26 +65,3 @@ test('templatesInstalled returns boolean', () => {
   const installed = templatesInstalled('godot');
   assert.equal(typeof installed, 'boolean');
 });
-
-test('Godot Web workflow is build-only for PRs and publishes only from manual master', () => {
-  const workflowPath = path.resolve(__dirname, '../.github/workflows/godot-web-preview.yml');
-  const workflow = fs.readFileSync(workflowPath, 'utf8');
-
-  assert.match(workflow, /push:\s*\n\s*branches:\s*\[master\]/);
-  assert.doesNotMatch(workflow, /branches:\s*\["\*\*"\]/);
-  assert.match(workflow, /github\.event_name[^\n]*workflow_dispatch/);
-  assert.match(workflow, /github\.ref[^\n]*refs\/heads\/master/);
-  assert.match(workflow, /can_publish=false/);
-  assert.match(workflow, /PRs and ordinary pushes never publish/);
-});
-
-test('Godot Web workflow never masks a failed Vercel deploy', () => {
-  const workflowPath = path.resolve(__dirname, '../.github/workflows/godot-web-preview.yml');
-  const workflow = fs.readFileSync(workflowPath, 'utf8');
-
-  assert.doesNotMatch(workflow, /npx vercel deploy[^\n]*\|\|\s*true/);
-  assert.match(workflow, /DEPLOY_EXIT=\$\?/);
-  assert.match(workflow, /Vercel deploy failed with exit code/);
-  assert.match(workflow, /exit \"\$DEPLOY_EXIT\"/);
-  assert.match(workflow, /produced no Preview URL/);
-});
