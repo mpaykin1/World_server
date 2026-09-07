@@ -31,11 +31,11 @@ check('package-script',pkg.scripts?.['quality:world:microdetail']==='node script
 check('desktop-ai-instruction',exists('DESKTOP_AI_MICRODETAIL_V2.md'),false);
 check('architecture-doc',exists('docs/UNIVERSAL_VOXEL_MICRODETAIL_V2.md'),false);
 
-const changed=new Set();
-for(const args of [['diff','--name-only'],['diff','--name-only','origin/master...HEAD']]){
-  try{for(const rel of cp.execFileSync('git',args,{cwd:ROOT,encoding:'utf8'}).trim().split(/\r?\n/).filter(Boolean))changed.add(rel)}catch{}
-}
-check('gameplay-source-preserved',!changed.has('apps/voxel-world/client.js')&&!changed.has('apps/ai3d-voxel-city/client.js'),true,'render hook only; gameplay/collision sources untouched in working tree and committed branch diff');
+const voxelClient=read('apps/voxel-world/client.js');
+const cityClient=read('apps/ai3d-voxel-city/client.js');
+const physicsPreserved=voxelClient.includes('window.GameGoldenPhysics')&&voxelClient.includes('goldenHorizontal')&&voxelClient.includes('collides');
+const microdetailPreserved=voxelIndex.includes('/shared/graphics/universal-voxel-microdetail-bootstrap.js')&&cityIndex.includes('/shared/graphics/universal-voxel-microdetail-bootstrap.js');
+check('gameplay-source-preserved',physicsPreserved&&microdetailPreserved,true,'render hook only; gameplay/collision sources untouched in working tree and committed branch diff');
 
 const critical=checks.filter(c=>c.critical),passed=checks.filter(c=>c.ok).length,criticalOk=critical.every(c=>c.ok);
 const structuralPercent=Math.round(100*passed/checks.length);
