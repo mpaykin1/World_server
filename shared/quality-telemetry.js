@@ -16,6 +16,7 @@
   }
   addEventListener('error',e=>{errors++;send('client_error',{message:String(e.message||'error').slice(0,240)})});
   addEventListener('unhandledrejection',e=>{errors++;send('unhandled_rejection',{message:String(e.reason?.message||e.reason||'rejection').slice(0,240)})});
+  addEventListener('world:science-domain',e=>{const d=e.detail||{};const runId=String(d.runId||'').slice(0,16),domain=String(d.domain||'').replace(/[^a-zA-Z0-9_-]/g,'').slice(0,32),phase=String(d.phase||'').replace(/[^a-zA-Z0-9_-]/g,'').slice(0,24);if(runId&&domain)send('science_domain',{message:`${runId}:${domain}:${phase}`})});
   addEventListener('world:science-gameplay',e=>{
     const d=e?.detail||{};
     const science={runId:String(d.runId||'').slice(0,16),phase:String(d.phase||'').slice(0,24),effectCount:Number(d.effectCount)||0,localNodes:Number(d.localNodes)||0,beforeLcc:Number(d.beforeLcc)||0,afterLcc:Number(d.afterLcc)||0,cycleClosures:Number(d.cycleClosures)||0};

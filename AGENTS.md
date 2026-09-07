@@ -188,3 +188,7 @@ This rule applies to every current and future AI agent working on `World_server`
 - Always distinguish a small playable demonstration from the full experiment and never present unmeasured live gameplay metrics as scientific proof.
 - Preserve existing graphics, physics, controls, persistence, multiplayer and performance. Science integration must add quality, not weaken the game.
 - Canonical details: `docs/SCIENCE_GAMEPLAY_STANDARD.md`.
+
+- Science gameplay expands gradually across exactly 12 canonical domains: visual destruction, recovery animation, player destruction, weapons, NPC behavior, new buildings, new textures/material state, roads, destruction physics, controls, world generation and multiplayer.
+- Every domain has an independent stage and evidence gates. `planned`/`disabled` means zero gameplay effect; `experimental` is preview-only; production activation requires explicit production evidence and no-regression proof.
+- Navigator explanation must be triggered by the domain's actual cause→effect transition. Do not add science text that is disconnected from what the player just did or observed.

@@ -42,6 +42,8 @@ const hotbarEl = document.getElementById('hotbar');
 const scienceNavigatorEl = document.getElementById('scienceNavigator');
 const scienceNavigatorTextEl = document.getElementById('scienceNavigatorText');
 const trustedScienceRuns = new Map();
+const SCIENCE_PRODUCTION_HOSTS = new Set(['world-server.ai.studio']);
+const SCIENCE_ACTIVE_STAGES = new Set(['experimental','verified-runtime','production-enabled']);
 
 function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
 function floorDiv(v,d){ return Math.floor(v/d); }
@@ -85,6 +87,11 @@ const hemi=new THREE.HemisphereLight(0xbfe1ff,0x31412c,1.15); scene.add(hemi);
 window.WorldQualityAutopilot?.registerRenderer('voxel-world',renderer,{initialTier:matchMedia('(pointer:coarse)').matches?'BALANCED':'HIGH',targetFps:matchMedia('(pointer:coarse)').matches?40:55,onQualityChange(q){renderer.shadowMap.enabled=q.shadowQuality>0;const shadowSize=q.shadowQuality>1?1024:512;if(sun?.shadow?.mapSize){sun.shadow.mapSize.set(shadowSize,shadowSize);sun.shadow.needsUpdate=true}},getStats(){return{calls:renderer.info.render.calls,triangles:renderer.info.render.triangles}}});
 const worldGroup=new THREE.Group(); scene.add(worldGroup);
 const remoteGroup=new THREE.Group(); scene.add(remoteGroup);
+const scienceFxGroup=new THREE.Group(); scene.add(scienceFxGroup);
+const SCIENCE_FX_CAP=matchMedia('(pointer:coarse)').matches?12:28;
+const scienceFx=[];
+const scienceDebrisGeometry=new THREE.BoxGeometry(.18,.18,.18);
+const scienceDebrisMaterials=new Map();
 
 const solidMaterial=new THREE.MeshStandardMaterial({vertexColors:true,roughness:.94,metalness:0,side:THREE.FrontSide});
 const transparentMaterial=new THREE.MeshStandardMaterial({vertexColors:true,roughness:.65,transparent:true,opacity:.62,depthWrite:false,side:THREE.DoubleSide});
@@ -169,6 +176,74 @@ function setBlockLocal(x,y,z,b){
   overrides.set(key3(x,y,z),safe); const cx=floorDiv(x,CHUNK),cz=floorDiv(z,CHUNK),c=chunks.get(key2(cx,cz)); if(c){c.set(mod(x,CHUNK),y,mod(z,CHUNK),safe);rebuildChunk(c);} const lx=mod(x,CHUNK),lz=mod(z,CHUNK); if(lx===0)chunks.get(key2(cx-1,cz))&&rebuildChunk(chunks.get(key2(cx-1,cz))); if(lx===15)chunks.get(key2(cx+1,cz))&&rebuildChunk(chunks.get(key2(cx+1,cz))); if(lz===0)chunks.get(key2(cx,cz-1))&&rebuildChunk(chunks.get(key2(cx,cz-1))); if(lz===15)chunks.get(key2(cx,cz+1))&&rebuildChunk(chunks.get(key2(cx,cz+1))); return true;
 }
 
+
+function scienceDomainRuntimeEnabled(runId, domain) {
+  const run = trustedScienceRuns.get(String(runId || ''));
+  const cfg = run?.domains?.[domain];
+  if (!cfg) return false;
+  if (SCIENCE_PRODUCTION_HOSTS.has(location.hostname)) return cfg.stage === 'production-enabled' && cfg.runtime?.production === true;
+  return SCIENCE_ACTIVE_STAGES.has(cfg.stage) && cfg.runtime?.preview === true;
+}
+function debrisMaterial(blockType) {
+  if (!scienceDebrisMaterials.has(blockType)) scienceDebrisMaterials.set(blockType,new THREE.MeshStandardMaterial({color:BLOCKS[blockType]?.color||0x888888,roughness:.9}));
+  return scienceDebrisMaterials.get(blockType);
+}
+function removeScienceFx(index) {
+  const fx=scienceFx[index]; if(!fx)return;
+  scienceFxGroup.remove(fx.mesh); if(fx.disposeMaterial)fx.mesh.material.dispose?.();
+  scienceFx.splice(index,1);
+}
+function pushScienceFx(fx) {
+  while(scienceFx.length>=SCIENCE_FX_CAP)removeScienceFx(0);
+  scienceFxGroup.add(fx.mesh);scienceFx.push(fx);
+}
+function spawnDestructionFx(runId,cell,blockType) {
+  if(!scienceDomainRuntimeEnabled(runId,'visualDestruction')||blockType===BLOCK.AIR)return;
+  const count=matchMedia('(pointer:coarse)').matches?3:5, born=performance.now();
+  for(let i=0;i<count;i++){
+    const r=hash32(cell.x+i*13,cell.z-i*7,worldSeed+cell.y*31+i*101),a=r*Math.PI*2;
+    const mesh=new THREE.Mesh(scienceDebrisGeometry,debrisMaterial(blockType));
+    mesh.position.set(cell.x+.5+(r-.5)*.35,cell.y+.5,cell.z+.5+((r*7)%1-.5)*.35);
+    mesh.scale.setScalar(.65+.35*((r*11)%1));
+    pushScienceFx({kind:'debris',mesh,born,life:620,velocity:new THREE.Vector3(Math.cos(a)*(1.2+r),1.8+r*1.7,Math.sin(a)*(1.2+r)),spin:(r-.5)*8,disposeMaterial:false});
+  }
+}
+
+
+function spawnRecoveryFx(runId,effect) {
+  if(!scienceDomainRuntimeEnabled(runId,'recoveryAnimation'))return;
+  const b=validBlockType(effect?.blockType),x=finiteCoord(effect?.x),y=finiteCoord(effect?.y,320),z=finiteCoord(effect?.z);
+  if(b===null||x===null||y===null||z===null)return;
+  const material=new THREE.MeshStandardMaterial({color:BLOCKS[b]?.color||0x88ffaa,roughness:.55,transparent:true,opacity:.5,depthWrite:false});
+  const mesh=new THREE.Mesh(new THREE.BoxGeometry(1.04,1.04,1.04),material); mesh.position.set(x+.5,y+.5,z+.5);mesh.scale.setScalar(.12);
+  pushScienceFx({kind:'recovery',mesh,born:performance.now(),life:760,disposeMaterial:true,disposeGeometry:true});
+}
+function updateScienceFx(now,dt) {
+  for(let i=scienceFx.length-1;i>=0;i--){
+    const fx=scienceFx[i],p=clamp((now-fx.born)/fx.life,0,1);
+    if(fx.kind==='debris'){
+      fx.velocity.y-=10*dt;fx.mesh.position.addScaledVector(fx.velocity,dt);fx.mesh.rotation.x+=fx.spin*dt;fx.mesh.rotation.z-=fx.spin*.7*dt;fx.mesh.scale.setScalar(Math.max(.04,(1-p)*.8));
+    }else{
+      const grow=.12+.88*(1-Math.pow(1-p,3));fx.mesh.scale.setScalar(grow);fx.mesh.material.opacity=.5*(1-p);
+    }
+    if(p>=1){if(fx.disposeGeometry)fx.mesh.geometry.dispose?.();removeScienceFx(i);}
+  }
+}
+function emitScienceDomainTelemetry(runId,domain,phase) {
+  const safe={runId:String(runId||'').slice(0,16),domain:String(domain||'').slice(0,32),phase:String(phase||'').slice(0,24)};
+  try{window.Sentry?.addBreadcrumb?.({category:'science-domain',message:`${safe.runId}:${safe.domain}`,data:safe,level:'info'});}catch{}
+  window.dispatchEvent(new CustomEvent('world:science-domain',{detail:safe}));
+}
+function scienceRunForDestroyedBlock(blockType,events) {
+  for(const event of events){
+    const run=trustedScienceRuns.get(String(event?.runId||''));
+    if(!run||!Array.isArray(run.eligibleBlockTypes)||!run.eligibleBlockTypes.includes(Number(blockType)))continue;
+    if(!Array.isArray(event.domainSignals)||!event.domainSignals.includes('playerDestruction'))continue;
+    if(scienceDomainRuntimeEnabled(run.runId,'playerDestruction'))return run;
+  }
+  return null;
+}
+
 let scienceNavigatorTimer = 0;
 function showScienceNavigator(text, note = '') {
   if (!scienceNavigatorEl || !scienceNavigatorTextEl || !text) return;
@@ -206,21 +281,25 @@ function cacheScienceRuns(runs) {
 function announceTrustedScienceSignal(signal) {
   const run = trustedScienceRuns.get(String(signal?.runId || ''));
   if (!run) return;
-  showScienceNavigator(run.navigator?.regrow, run.navigator?.scienceNote);
+  const text=signal?.phase==='damage'?run.navigator?.damage:run.navigator?.regrow;
+  showScienceNavigator(text, run.navigator?.scienceNote);
 }
 function applyScienceResult(science) {
   if (!science) return;
+  let recoveryAnimated=false;
   for (const effect of science.effects || []) {
     const b = validBlockType(effect?.blockType);
     const x = finiteCoord(effect?.x), y = finiteCoord(effect?.y, 320), z = finiteCoord(effect?.z);
     if (b === null || x === null || y === null || z === null || !Number.isInteger(x) || !Number.isInteger(y) || !Number.isInteger(z)) continue;
     setBlockLocal(x, y, z, b);
+    if(Array.isArray(science.domainSignals)&&science.domainSignals.includes('recoveryAnimation')&&scienceDomainRuntimeEnabled(science.runId,'recoveryAnimation')){spawnRecoveryFx(science.runId,effect);recoveryAnimated=true;}
     if (channel) void channel.send({ type: 'broadcast', event: 'block_set', payload: { x, y, z, block: b } });
   }
+  if(recoveryAnimated)emitScienceDomainTelemetry(science.runId,'recoveryAnimation',science.phase||'regrow');
   announceScience(science);
   if (channel) void channel.send({
     type: 'broadcast', event: 'science_event',
-    payload: { runId: science.runId, telemetry: science.telemetry }
+    payload: { runId: science.runId, phase: science.phase, telemetry: science.telemetry }
   });
 }
 function showScienceIntro(run) {
@@ -285,6 +364,7 @@ async function editBlock(place){
     const result=await api('set_block',{worldId:'main',x:c.x,y:c.y,z:c.z,blockType:b,playerPosition:{x:player.pos.x,y:player.pos.y,z:player.pos.z}});
     if(channel) void channel.send({type:'broadcast',event:'block_set',payload:{x:c.x,y:c.y,z:c.z,block:b}});
     const scienceEvents=Array.isArray(result.scienceEvents)?result.scienceEvents:(result.science?[result.science]:[]);
+    if(!place){const run=scienceRunForDestroyedBlock(old,scienceEvents);if(run){spawnDestructionFx(run.runId,c,old);emitScienceDomainTelemetry(run.runId,'playerDestruction','player_break');emitScienceDomainTelemetry(run.runId,'visualDestruction','player_break');}}
     for(const scienceEvent of scienceEvents)applyScienceResult(scienceEvent);
     statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';
   }catch(e){setBlockLocal(c.x,c.y,c.z,old);statusEl.textContent=e.message;statusEl.className='vwWarn';}
@@ -332,7 +412,7 @@ function updateTarget(){const h=rayVoxel();if(!h)return;targetEl.textContent=`${
 
 async function savePlayer(){try{await api('player_save',{worldId:'main',position:{x:player.pos.x,y:player.pos.y,z:player.pos.z},yaw:player.yaw,pitch:player.pitch,selectedBlock:HOTBAR[player.selected]});}catch{} }
 function broadcastPlayer(now){if(!channel||now-lastNet<NET_INTERVAL)return;lastNet=now;channel.send({type:'broadcast',event:'player_state',payload:{id:player.id,name:player.name,x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw}});}
-let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(started){physics(dt);loadNeededChunks();broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);renderer.render(scene,camera);}requestAnimationFrame(loop);
+let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(started){physics(dt);updateScienceFx(now,dt);loadNeededChunks();broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);renderer.render(scene,camera);}requestAnimationFrame(loop);
 
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});addEventListener('beforeunload',()=>savePlayer());
 setupDesktop();setupMobile();buildHotbar();

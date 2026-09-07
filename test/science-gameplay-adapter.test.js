@@ -55,14 +55,16 @@ test('RUN_072 ignores natural terrain and tiny player structures', () => {  asse
   }), null);
 });
 
-test('RUN_072 only grows into explicit prior damage, never unknown terrain', () => {
-  assert.equal(adapter.handleEvent('RUN_072', {
+test('RUN_072 never invents regrowth without explicit prior damage cells', () => {
+  const result=adapter.handleEvent('RUN_072', {
     event: 'player_break', previousBlockType: 10,
     removed: { x: 3, y: 40, z: 1 },
     playerPosition: { x: 9, y: 40, z: 9 },
-    nodes: ring(),
-    emptyCells: []
-  }), null);
+    nodes: ring(), emptyCells: []
+  });
+  assert.equal(result.phase,'damage');
+  assert.deepEqual(result.effects,[]);
+  assert.equal(result.telemetry.cycleClosures,0);
 });
 test('every SCIENCE_RUN_072+ evidence file has a gameplay contract', () => {
   const files = fs.readdirSync(ROOT).filter(name => /^SCIENCE_RUN_(\d{3}).*\.json$/.test(name));
@@ -112,7 +114,7 @@ test('science growth failure never rolls back the already-persisted player edit'
 test('realtime peers cannot inject arbitrary Navigator copy', () => {
   const source = fs.readFileSync(path.join(ROOT, 'apps', 'voxel-world', 'client.js'), 'utf8');
   assert.match(source, /announceTrustedScienceSignal\(payload\)/);
-  assert.match(source, /payload: \{ runId: science\.runId, telemetry: science\.telemetry \}/);
+  assert.match(source, /payload: \{ runId: science\.runId, phase: science\.phase, telemetry: science\.telemetry \}/);
   assert.doesNotMatch(source, /event: 'science_event', payload: science/);
   assert.doesNotMatch(source, /science_event'\},\(\{payload\}\)=>announceScience\(payload\)/);
 });
@@ -171,4 +173,54 @@ test('gameplay uses the same RUN_071 candidate score rule', () => {
   const source = fs.readFileSync(path.join(__dirname,'../lib/science-gameplay-adapter.js'),'utf8');
   assert.match(source, /redundantCandidateScore/);
   assert.doesNotMatch(source, /distancePenalty \|\| 0\.08/);
+});
+
+
+test('RUN_072 declares all 12 science gameplay domains with gradual fail-closed stages', () => {
+  const contract=adapter.loadContract('RUN_072');
+  assert.equal(adapter.SCIENCE_DOMAINS.length,12);
+  const active=new Set(['visualDestruction','recoveryAnimation','playerDestruction']);
+  for(const domain of adapter.SCIENCE_DOMAINS){
+    const cfg=contract.domains[domain]; assert.ok(cfg);
+    if(active.has(domain)){
+      assert.equal(cfg.stage,'experimental');assert.equal(cfg.runtime.preview,true);assert.equal(cfg.runtime.production,false);
+      assert.equal(adapter.domainRuntimeEnabled(contract,domain,'preview'),true);
+      assert.equal(adapter.domainRuntimeEnabled(contract,domain,'production'),false);
+    }else{
+      assert.equal(cfg.stage,'planned');assert.equal(cfg.runtime.preview,false);assert.equal(cfg.runtime.production,false);
+      assert.equal(adapter.domainRuntimeEnabled(contract,domain,'preview'),false);
+    }
+  }
+});
+
+test('production-enabled science domain requires every gate and explicit production runtime', () => {
+  const future=JSON.parse(JSON.stringify(adapter.loadContract('RUN_072')));
+  future.domains.visualDestruction.stage='production-enabled';
+  future.domains.visualDestruction.runtime.production=true;
+  assert.throws(()=>adapter.validateContract(future),/Production domain is not fully verified/);
+  for(const gate of adapter.DOMAIN_GATES)future.domains.visualDestruction.gates[gate]=true;
+  assert.equal(adapter.validateContract(future).domains.visualDestruction.stage,'production-enabled');
+});
+
+test('first science vertical slice is visual, bounded and preview-only until promotion', () => {
+  const source=fs.readFileSync(path.join(ROOT,'apps','voxel-world','client.js'),'utf8');
+  assert.match(source,/SCIENCE_FX_CAP=matchMedia/);
+  assert.match(source,/spawnDestructionFx/);
+  assert.match(source,/spawnRecoveryFx/);
+  assert.match(source,/SCIENCE_PRODUCTION_HOSTS/);
+  assert.match(source,/cfg\.stage === 'production-enabled'/);
+  assert.match(source,/scienceRunForDestroyedBlock/);
+  assert.match(source,/updateScienceFx\(now,dt\)/);
+});
+
+test('science domain telemetry is persistent, bounded and contains no identity fields', () => {
+  const shared=fs.readFileSync(path.join(ROOT,'shared','quality-telemetry.js'),'utf8');
+  assert.match(shared,/world:science-domain/);
+  assert.match(shared,/send\('science_domain'/);
+  assert.doesNotMatch(shared,/userId|guestId|email|username/);
+});
+
+test('damage-only science events survive API routing without fabricating growth rows', () => {
+  const source=fs.readFileSync(path.join(ROOT,'api','voxel.js'),'utf8');
+  assert.match(source,/if \(!effects\.length\) \{ scienceEvents\.push\(\{ \.\.\.proposal, effects: \[\] \}\); continue; \}/);
 });

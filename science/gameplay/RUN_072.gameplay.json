@@ -1,6 +1,6 @@
 {
   "runId": "RUN_072",
-  "version": 1,
+  "version": 2,
   "enabled": true,
   "sourceEvidence": "SCIENCE_RUN_072_H2.json",
   "science": {
@@ -43,9 +43,24 @@
       "no_unexplained_jargon",
       "never_distort_science"
     ],
-    "intro": "Посмотри на эту сеть. У неё много связей. Сейчас проверим, сможет ли она расти после повреждения.",
-    "regrow": "Часть сети исчезла. Новые блоки смотрят только на соседей и стараются снова связать сеть.",
-    "scienceNote": "Это маленький игровой пример. В полном опыте мы убирали 20% опор и проверяли рост снова и снова."
+    "intro": "Представь город из кубиков. Если одна дорожка сломается, хорошо иметь другую. Этот мир учится делать запасные дорожки.",
+    "regrow": "Смотри, новая связь растёт. Мир делает запасной путь там, где рядом уже есть части сети.",
+    "scienceNote": "Это маленькая игровая версия опыта. Большой опыт много раз повреждал сеть и давал ей расти снова.",
+    "damage": "Ты сломал кусочек сети. Теперь мы смотрим, останется ли у мира другой путь.",
+    "domains": {
+      "visualDestruction": "Кусочек действительно сломался. Мы видим повреждение, а не просто считаем его.",
+      "recoveryAnimation": "Смотри, связь растёт прямо перед тобой. Так видно, как сеть отвечает на повреждение.",
+      "playerDestruction": "Это повреждение сделал ты. Теперь мир отвечает на твоё действие.",
+      "weapons": "Разное оружие ломает сеть по-разному. Мы будем смотреть, какие запасные пути помогают.",
+      "npcBehavior": "Жители заметили разрыв. Они ищут другой путь и помогают сети.",
+      "newBuildings": "Новый дом может стать частью запасного пути. Мир строит не только красивее, но и устойчивее.",
+      "newTextures": "Следы на стене показывают, что здесь было повреждение. Мир помнит свою историю.",
+      "roads": "Эта дорога порвалась. Мир ищет обход, чтобы путь не исчез совсем.",
+      "destructionPhysics": "Опора пропала, поэтому части могут упасть. Запасные связи иногда удерживают конструкцию.",
+      "controls": "Поверхность изменилась, поэтому двигаться здесь можно иначе. Управление следует за состоянием мира.",
+      "worldGeneration": "Новые места рождаются с несколькими путями. Так миру легче переживать разрывы.",
+      "multiplayer": "Другие игроки тоже меняют эту сеть. Вы вместе проверяете, выдержит ли она повреждения."
+    }
   },
   "visual": {
     "immediate": true,
@@ -78,5 +93,199 @@
     "navigatorAge5": true,
     "telemetry": true,
     "regressionTests": true
+  },
+  "domains": {
+    "visualDestruction": {
+      "stage": "experimental",
+      "runtime": {
+        "preview": true,
+        "production": false
+      },
+      "gates": {
+        "implementation": true,
+        "causeEffect": true,
+        "navigator": true,
+        "telemetry": true,
+        "regression": true,
+        "performance": true,
+        "productionEvidence": false
+      }
+    },
+    "recoveryAnimation": {
+      "stage": "experimental",
+      "runtime": {
+        "preview": true,
+        "production": false
+      },
+      "gates": {
+        "implementation": true,
+        "causeEffect": true,
+        "navigator": true,
+        "telemetry": true,
+        "regression": true,
+        "performance": true,
+        "productionEvidence": false
+      }
+    },
+    "playerDestruction": {
+      "stage": "experimental",
+      "runtime": {
+        "preview": true,
+        "production": false
+      },
+      "gates": {
+        "implementation": true,
+        "causeEffect": true,
+        "navigator": true,
+        "telemetry": true,
+        "regression": true,
+        "performance": true,
+        "productionEvidence": false
+      }
+    },
+    "weapons": {
+      "stage": "planned",
+      "runtime": {
+        "preview": false,
+        "production": false
+      },
+      "gates": {
+        "implementation": false,
+        "causeEffect": false,
+        "navigator": false,
+        "telemetry": false,
+        "regression": false,
+        "performance": false,
+        "productionEvidence": false
+      }
+    },
+    "npcBehavior": {
+      "stage": "planned",
+      "runtime": {
+        "preview": false,
+        "production": false
+      },
+      "gates": {
+        "implementation": false,
+        "causeEffect": false,
+        "navigator": false,
+        "telemetry": false,
+        "regression": false,
+        "performance": false,
+        "productionEvidence": false
+      }
+    },
+    "newBuildings": {
+      "stage": "planned",
+      "runtime": {
+        "preview": false,
+        "production": false
+      },
+      "gates": {
+        "implementation": false,
+        "causeEffect": false,
+        "navigator": false,
+        "telemetry": false,
+        "regression": false,
+        "performance": false,
+        "productionEvidence": false
+      }
+    },
+    "newTextures": {
+      "stage": "planned",
+      "runtime": {
+        "preview": false,
+        "production": false
+      },
+      "gates": {
+        "implementation": false,
+        "causeEffect": false,
+        "navigator": false,
+        "telemetry": false,
+        "regression": false,
+        "performance": false,
+        "productionEvidence": false
+      }
+    },
+    "roads": {
+      "stage": "planned",
+      "runtime": {
+        "preview": false,
+        "production": false
+      },
+      "gates": {
+        "implementation": false,
+        "causeEffect": false,
+        "navigator": false,
+        "telemetry": false,
+        "regression": false,
+        "performance": false,
+        "productionEvidence": false
+      }
+    },
+    "destructionPhysics": {
+      "stage": "planned",
+      "runtime": {
+        "preview": false,
+        "production": false
+      },
+      "gates": {
+        "implementation": false,
+        "causeEffect": false,
+        "navigator": false,
+        "telemetry": false,
+        "regression": false,
+        "performance": false,
+        "productionEvidence": false
+      }
+    },
+    "controls": {
+      "stage": "planned",
+      "runtime": {
+        "preview": false,
+        "production": false
+      },
+      "gates": {
+        "implementation": false,
+        "causeEffect": false,
+        "navigator": false,
+        "telemetry": false,
+        "regression": false,
+        "performance": false,
+        "productionEvidence": false
+      }
+    },
+    "worldGeneration": {
+      "stage": "planned",
+      "runtime": {
+        "preview": false,
+        "production": false
+      },
+      "gates": {
+        "implementation": false,
+        "causeEffect": false,
+        "navigator": false,
+        "telemetry": false,
+        "regression": false,
+        "performance": false,
+        "productionEvidence": false
+      }
+    },
+    "multiplayer": {
+      "stage": "planned",
+      "runtime": {
+        "preview": false,
+        "production": false
+      },
+      "gates": {
+        "implementation": false,
+        "causeEffect": false,
+        "navigator": false,
+        "telemetry": false,
+        "regression": false,
+        "performance": false,
+        "productionEvidence": false
+      }
+    }
   }
 }

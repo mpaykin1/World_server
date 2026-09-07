@@ -471,3 +471,23 @@ Local implementation and verification complete in branch `ai/chatgpt/science-gam
 - Science telemetry uses existing `/api/quality-telemetry` without user identifiers; observer clients do not duplicate events.
 - Task-owned scratch files were deleted and the canonical Desktop checkout was never modified.
 - Remaining external evidence: GitHub CI/review, merge, deployment, and live production verification.
+
+
+## Addendum — RUN_072 progressive 12-domain gameplay expansion
+
+### Goal
+Make the verified hypothesis manifest through world systems themselves, not as an overlay lecture. Domains are introduced gradually and independently.
+
+### Implemented vertical slice
+The contract now declares all 12 canonical domains. `visualDestruction`, `recoveryAnimation`, and `playerDestruction` are `experimental` + preview-only; weapons, NPCs, buildings, textures, roads, destruction physics, controls, world generation and multiplayer remain planned/inert.
+
+Player destruction is confirmed by the existing authoritative Voxel API before science FX are emitted. Confirmed destruction can show bounded debris. Server-persisted cycle-closing regrowth can show a bounded growth shell without changing authoritative state. Damage-only events remain scientifically honest and never fabricate regrowth.
+
+### Final evidence
+- Targeted ScienceGameplay suite: 20/20 PASS.
+- Full `npm run check`: 524 PASS, 0 FAIL, 2 opt-in skipped.
+- Golden Standard: PASS.
+- Quality check: PASS; existing governance blockers unchanged.
+- Quality no-regression: PASS, 0 violations.
+- Production domains remain fail-closed until explicit production evidence and promotion.
+- No Desktop checkout or user files were used for scratch work.

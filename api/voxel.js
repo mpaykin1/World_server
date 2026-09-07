@@ -166,12 +166,13 @@ async function actionSetBlock(admin, identity, body) {
       nodes: scienceContext.nearby.filter(n => Number(n.block_type) !== 0 && !(n.x === x && n.y === y && n.z === z)),
       emptyCells: scienceContext.nearby.filter(n => Number(n.block_type) === 0 && !(n.x === x && n.y === y && n.z === z))
     });
-    const effects = (proposal?.effects || []).filter(effect => {
+    if (!proposal) continue;
+    const effects = (proposal.effects || []).filter(effect => {
       const cell = `${effect.x},${effect.y},${effect.z}`;
       if (claimedScienceCells.has(cell)) return false;
       claimedScienceCells.add(cell); return true;
     });
-    if (!effects.length) continue;
+    if (!effects.length) { scienceEvents.push({ ...proposal, effects: [] }); continue; }
     const growthRows = effects.map(effect => ({
       world_id: worldId, cx: chunkCoord(effect.x), cz: chunkCoord(effect.z),
       x: effect.x, y: effect.y, z: effect.z, block_type: effect.blockType,
