@@ -82,3 +82,21 @@ run browser/Playwright visual + performance evidence on desktop/mobile, compare 
 - Focused suite is now **13/13 PASS** after adding UTF-8 and shader-injection regression guards.
 - The UTF-8 defect was caught before commit and is not present in the branch diff.
 - Cloud/browser agents should treat the local implementation baseline as 92% and spend remaining effort on real visual/FPS evidence, not rebuilding the architecture.
+
+
+## Vercel Repair Bridge — 2026-09-07
+Goal: connect Vercel failures to the existing zero-cost World Cloud AI without creating another agent stack.
+
+Implementation branch: `ai/chatgpt/vercel-repair-agent` from fresh `master` `b7202e84`.
+
+Behavior:
+- GitHub `status` event watches `Vercel – world-server` failures.
+- Rate-limit/quota/capacity/cancelled statuses are classified as external/non-code blockers and do **not** wake a coding agent.
+- Real build failures resolve the live branch, collect GitHub evidence, optionally collect private Vercel logs when `VERCEL_TOKEN` exists, and dispatch the existing `world-cloud-ai.yml` workflow.
+- Automatic repair is production/master-only to prevent duplicate preview repair PRs; manual dispatch can target a preview branch.
+- Existing World Cloud AI remains responsible for implementation, self-repair, verification, branch push and PR creation; no direct master push or auto-merge.
+- Bridge files live under `.github/`, `test/` and Markdown so the existing Vercel quota guard skips deployment of the bridge itself.
+
+Current external blocker: Vercel reports `Deployment rate limited — retry in 24 hours.` on the latest master, so current correct action is **no code change** and no deployment spam.
+
+Optional completion enhancement: configure repository Actions secret `VERCEL_TOKEN` once. The bridge already consumes it safely and then attaches authenticated Vercel build-log evidence to future repair tasks. Never print or commit the token.

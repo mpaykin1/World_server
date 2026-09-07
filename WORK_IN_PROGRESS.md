@@ -577,3 +577,88 @@ Pending current-run verification. `WORLD_MICRODETAIL_REPORT.json` is generated e
 - Full repository test run before these two narrowly-scoped guards: 514 PASS / 0 FAIL / 2 opt-in skips.
 - After final fixes: `check:fast` PASS, `golden:check` PASS, `git diff --check` PASS.
 - Remaining evidence for 100% is browser visual/performance measurement in cloud/CI, not missing core architecture.
+
+
+---
+
+# Vercel Repair Agent bridge — 2026-09-07
+
+## Task
+Connect the existing zero-cost World Cloud AI (OpenCode + free-model failover) to Vercel commit failures so `world-server` build failures automatically become bounded repair tasks.
+
+## Why
+Vercel already posts commit statuses, but repair is manual. We need event-driven triage that distinguishes code/build failures from quota/rate-limit outages and only wakes the coding agent when code repair is justified.
+
+## Current state
+- Source of truth: `master` at `b7202e84` when this worktree was created.
+- Existing `.github/workflows/world-cloud-ai.yml` already performs free-model implementation, verification, self-repair, branch push and PR creation.
+- Vercel status on current master is `Deployment rate limited — retry in 24 hours` for `world-server` and two homepage projects.
+- No local `VERCEL_TOKEN` or persisted Vercel CLI auth is present; the bridge must degrade safely without it.
+
+## Target state
+A failed `Vercel – world-server` commit status immediately triggers cloud triage. Quota/rate-limit/cancelled conditions produce a clean no-code result. Real build failures dispatch one focused task to the existing World Cloud AI. If repository secret `VERCEL_TOKEN` exists, private Vercel build logs are included automatically.
+
+## Affected systems
+- `.github/workflows/` — Vercel status bridge only.
+- existing `world-cloud-ai.yml` — reused, not duplicated.
+- `.github/scripts/` — pure status classifier used by workflow and tests.
+- `test/` — regression coverage for quota-vs-code classification.
+
+## Risks / invariants
+- Never launch an AI repair for Vercel quota/rate-limit/external capacity failures.
+- Never auto-merge a repair PR or push directly to `master`.
+- Never expose `VERCEL_TOKEN`; it is optional and read only from GitHub Actions secrets.
+- Avoid duplicate repair agents for the same Vercel status.
+- Automatic scope is `Vercel – world-server`; other Vercel projects remain manual-dispatch capable to prevent three agents reacting to one commit.
+- Bridge-only changes must remain non-deployable under the existing Vercel quota guard.
+
+## Exact patch plan
+1. Add a pure Vercel status classifier with external-limit/cancelled/build-failure classes.
+2. Add an event-driven `status` + manual `workflow_dispatch` workflow.
+3. Resolve the failed branch safely; stale deleted preview branches are skipped.
+4. Optionally collect Vercel private logs when `VERCEL_TOKEN` exists.
+5. Dispatch the existing `world-cloud-ai.yml` with bounded evidence and repair rules.
+6. Add tests for rate limit, quota, generic build failure, unrelated status and cancellation.
+7. Run focused tests + `npm run check` + agent/golden checks; then commit/push/PR for review.
+
+## Tests to run
+- `node --test test/vercel-failure-classifier.test.js`
+- `npm run check`
+- `npm run desktop-ai:check`
+- `npm run golden:check`
+- `git diff --check`
+
+## Deployment / PR plan
+This patch changes only `.github/`, `test/` and Markdown, so existing `scripts/check-vercel-ignore.js` should skip Vercel deployment for the bridge itself. Push branch `ai/chatgpt/vercel-repair-agent`, open PR to `master`, require normal review/CI, no automatic merge.
+
+## Current progress
+Isolated off-Desktop worktree created. Existing World Cloud AI and current Vercel status behavior inspected. Implementation is in progress.
+
+## Next action
+Write classifier + bridge workflow + tests, verify locally, then push to GitHub for cloud CI.
+
+## Completion criteria
+- Current rate-limit status classifies as external blocker and does not dispatch coding AI.
+- Generic Vercel world-server build failure dispatches exactly one existing World Cloud AI run.
+- Missing Vercel token is safe and non-fatal.
+- Optional token path gathers logs without printing the token.
+- Repository gates pass; PR is open for review.
+
+## Final evidence
+Pending verification and GitHub workflow test.
+
+
+### Final evidence update — 2026-09-07
+- Vercel classifier focused suite: **9/9 PASS**.
+- Current real `Vercel – world-server` status `Deployment rate limited — retry in 24 hours.` classifies as `external-limit` with `shouldRepair=false`.
+- Generic `Deployment has failed` classifies as `build-failure` with `shouldRepair=true`.
+- Workflow YAML parses successfully.
+- Existing Vercel quota guard confirms this bridge-only patch is non-deployable and will not consume a Vercel build.
+- Full repository check: **552 PASS / 0 FAIL / 2 opt-in skips**.
+- `desktop-ai:check`: PASS.
+- `golden:check`: PASS.
+- `git diff --check`: PASS.
+- No local `VERCEL_TOKEN`/Vercel CLI auth exists; bridge safely degrades to GitHub evidence until repository secret `VERCEL_TOKEN` is configured.
+
+## Final evidence
+Implementation and local verification complete. Remaining proof is GitHub Actions parsing/execution after push plus a manual current-rate-limit workflow dispatch; no code repair should be launched for that external blocker.
