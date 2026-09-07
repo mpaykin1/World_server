@@ -662,3 +662,12 @@ Pending verification and GitHub workflow test.
 
 ## Final evidence
 Implementation and local verification complete. Remaining proof is GitHub Actions parsing/execution after push plus a manual current-rate-limit workflow dispatch; no code repair should be launched for that external blocker.
+
+## Vercel Hobby 12-function blocker — 2026-09-07
+- Goal: make current master deployable on Vercel Hobby for immediate real testing.
+- Root cause: current api/ has 14 serverless JS functions; Hobby hard limit is 12.
+- Minimal fix: move register/login/me/logout handlers under lib/api-handlers and route their unchanged public URLs through one api/auth.js function.
+- Invariants: preserve auth behavior and URLs; keep local server routes; add regression guard api/*.js <= 12; no Desktop scratch.
+- Completion: focused/full checks -> PR -> required green checks -> merge -> exactly one Vercel preview -> browser smoke.
+- Evidence: api/*.js reduced 14 -> 11; focused Vercel limit tests 3/3 PASS; JS syntax, agent rules and Golden Standard PASS.
+- Remaining: cloud CI, merge, one Vercel preview and browser smoke.
