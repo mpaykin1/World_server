@@ -25,7 +25,7 @@ test('validateArtifacts throws error when file is too small', () => {
   try {
     fs.writeFileSync(path.join(tempDir, 'index.html'), Buffer.alloc(2000));
     fs.writeFileSync(path.join(tempDir, 'index.js'), 'console.log("short");');
-    fs.writeFileSync(path.join(tempDir, 'index.wasm'), Buffer.alloc(100)); // too small, min 1MB
+    fs.writeFileSync(path.join(tempDir, 'index.wasm'), Buffer.alloc(100));
     fs.writeFileSync(path.join(tempDir, 'index.pck'), Buffer.alloc(2000));
     assert.throws(
       () => validateArtifacts(tempDir),
@@ -64,4 +64,30 @@ test('resolveGodotBin returns string', () => {
 test('templatesInstalled returns boolean', () => {
   const installed = templatesInstalled('godot');
   assert.equal(typeof installed, 'boolean');
+});
+
+test('Vercel Git auto-deploy is disabled to protect the shared Hobby quota', () => {
+  const config = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'vercel.json'), 'utf8'));
+  assert.equal(config.git?.deploymentEnabled, false);
+});
+
+test('Godot Web workflow builds PRs but deploys only on explicit release', () => {
+  const workflow = fs.readFileSync(
+    path.join(__dirname, '..', '.github', 'workflows', 'godot-web-preview.yml'),
+    'utf8'
+  );
+
+  assert.match(workflow, /push:\s*\n\s*branches: \[master\]/);
+  assert.match(workflow, /pull_request:\s*\n\s*branches: \[master\]/);
+  assert.doesNotMatch(workflow, /branches: \["\*\*"\]/);
+  assert.match(workflow, /github\.event_name.*workflow_dispatch/);
+  assert.match(workflow, /inputs\.deploy.*true/);
+  assert.match(workflow, /if: steps\.deploy-policy\.outputs\.deploy == 'true'/);
+  assert.doesNotMatch(workflow, /--scope=/);
+
+  const deployLine = workflow
+    .split(/\r?\n/)
+    .find((line) => line.includes('PREVIEW_OUTPUT=$(npx vercel deploy'));
+  assert.ok(deployLine, 'expected canonical Vercel deploy command');
+  assert.equal(deployLine.includes('|| true'), false, 'deploy failure must not be masked');
 });
