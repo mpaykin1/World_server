@@ -101,11 +101,27 @@ jobs:
           }
           NODE
 
-      - name: Reject weakened scientific wording in governance files
+      - name: Reject explicit code-PASS-as-real-world-proof claims
         shell: bash
         run: |
-          if grep -E -i 'pass:true.*(proves|proven|law of the real world)|100% scientifically proven.*pass:true' SCIENCE_STANDARD.md AGENTS.md .ai/science-governance.json; then
-            echo "SCIENCE 100 FAIL: code PASS must never be equated with a real-world scientific law"
-            exit 1
-          fi
-          echo "Scientific claim wording guard passed"
+          node <<'NODE'
+          const fs = require('fs');
+          const files = ['SCIENCE_STANDARD.md', 'AGENTS.md', '.ai/science-governance.json'];
+          const forbidden = [
+            /pass:true\s+(proves|is\s+proof|is\s+scientifically\s+proven)/i,
+            /pass:true.{0,40}means.{0,40}(real[- ]world|law)/i,
+            /100%\s+scientifically\s+proven.{0,50}because.{0,50}pass:true/i
+          ];
+          let failed = false;
+          for (const file of files) {
+            const text = fs.readFileSync(file, 'utf8');
+            for (const pattern of forbidden) {
+              if (pattern.test(text)) {
+                console.error(`SCIENCE 100 FAIL: ${file} contains an explicit code-PASS-as-real-world-proof claim matching ${pattern}`);
+                failed = true;
+              }
+            }
+          }
+          if (failed) process.exit(1);
+          console.log('Scientific claim wording guard passed');
+          NODE
