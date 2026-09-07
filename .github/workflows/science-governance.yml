@@ -1,0 +1,111 @@
+name: Science 100 Governance
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [master]
+
+jobs:
+  science-governance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Validate Science 100 policy integrity
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+
+          function fail(message) {
+            console.error(`SCIENCE 100 FAIL: ${message}`);
+            process.exitCode = 1;
+          }
+
+          for (const file of ['SCIENCE_STANDARD.md', '.ai/science-governance.json', 'AGENTS.md']) {
+            if (!fs.existsSync(file)) fail(`${file} is required`);
+          }
+          if (process.exitCode) process.exit(process.exitCode);
+
+          const policy = JSON.parse(fs.readFileSync('.ai/science-governance.json', 'utf8'));
+          const standard = fs.readFileSync('SCIENCE_STANDARD.md', 'utf8');
+          const agents = fs.readFileSync('AGENTS.md', 'utf8');
+
+          if (policy.target !== 100) fail('global target must remain 100');
+          if (policy.scoreAggregation !== 'minimum') fail('readiness must use non-compensating minimum aggregation');
+          if (!String(policy.formula || '').includes('min(REPRODUCIBILITY, INDEPENDENCE, FALSIFICATION)')) {
+            fail('canonical readiness formula is missing or changed');
+          }
+
+          for (const pillar of ['reproducibility', 'independence', 'falsification']) {
+            if (!policy.pillars?.[pillar]) fail(`missing pillar: ${pillar}`);
+            if (policy.pillars?.[pillar]?.target !== 100) fail(`${pillar} target must remain 100`);
+            if (!Array.isArray(policy.pillars?.[pillar]?.requirements) || policy.pillars[pillar].requirements.length < 5) {
+              fail(`${pillar} requirements are unexpectedly weak`);
+            }
+          }
+
+          const hard = policy.hardRules || {};
+          if (hard.preserveNegativeResults !== true) fail('negative results must be preserved');
+          if (hard.allowThresholdChangesAfterHoldout !== false) fail('post-holdout threshold changes must remain forbidden');
+          if (hard.allowSelfCertificationAsFinalEvidence !== false) fail('self-certification cannot become final evidence');
+          if (hard.allowCodePassToMeanRealWorldLaw !== false) fail('code PASS cannot equal a real-world law');
+          if (hard.requireExplicitPercentMeaning !== true) fail('scientific percentages must keep explicit meanings');
+          if (hard.preferTestMostLikelyToDisproveStrongestClaim !== true) fail('falsification-first next-step rule must remain enabled');
+          if (hard.nextTaskOptimizesWeakestPillar !== true) fail('weakest-pillar optimization must remain enabled');
+
+          const levels = Object.keys(policy.evidenceLevels || {});
+          if (levels.join(',') !== 'D0,D1,D2,D3,D4,D5,D6,D7') fail('D0-D7 evidence ladder must remain complete');
+
+          const lifecycle = policy.lifecycle || [];
+          for (const required of ['DISCOVERY', 'PREREGISTRATION', 'FREEZE', 'BLIND_HOLDOUT', 'RED_TEAM', 'INDEPENDENT_REIMPLEMENTATION', 'REPLICATION', 'CONFIRMATION']) {
+            if (!lifecycle.includes(required)) fail(`lifecycle stage missing: ${required}`);
+          }
+
+          const percentFields = new Set(policy.requiredScientificPercentFields || []);
+          for (const field of ['CODE_EXPERIMENT_CONFIRMATION', 'REPRODUCIBILITY', 'INDEPENDENCE', 'FALSIFICATION', 'SCIENCE_READINESS', 'EVIDENCE_LEVEL']) {
+            if (!percentFields.has(field)) fail(`required reporting field missing: ${field}`);
+          }
+
+          for (const token of [
+            'SCIENCE_READINESS = min(REPRODUCIBILITY, INDEPENDENCE, FALSIFICATION)',
+            'Independent implementation',
+            'True blind protocol',
+            'Red Team Scientist',
+            'Adversarial tests',
+            'Negative results are evidence',
+            'D0 — Idea',
+            'D7 — External scientific evidence'
+          ]) {
+            if (!standard.includes(token)) fail(`canonical standard lost required rule: ${token}`);
+          }
+
+          for (const token of [
+            'SCIENCE_STANDARD.md',
+            '.ai/science-governance.json',
+            '100% reproducibility + 100% independence + 100% falsification',
+            'BLIND_HOLDOUT',
+            'RED_TEAM',
+            'INDEPENDENT_REIMPLEMENTATION'
+          ]) {
+            if (!agents.includes(token)) fail(`AGENTS.md no longer mandates Science 100 token: ${token}`);
+          }
+
+          if (!process.exitCode) {
+            console.log('SCIENCE 100 PASS: reproducibility, independence and falsification governance is intact.');
+          }
+          NODE
+
+      - name: Reject weakened scientific wording in governance files
+        shell: bash
+        run: |
+          if grep -E -i 'pass:true.*(proves|proven|law of the real world)|100% scientifically proven.*pass:true' SCIENCE_STANDARD.md AGENTS.md .ai/science-governance.json; then
+            echo "SCIENCE 100 FAIL: code PASS must never be equated with a real-world scientific law"
+            exit 1
+          fi
+          echo "Scientific claim wording guard passed"
