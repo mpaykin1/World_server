@@ -1,0 +1,184 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedBy": "scripts/ingest-world-patches.js",
+  "worlds": [
+    {
+      "id": "ai3d-voxel-city",
+      "patchFamily": "ai3d-voxel-city",
+      "revisions": [
+        {
+          "id": "ai3d-voxel-city-v1",
+          "patchFamily": "ai3d-voxel-city",
+          "version": "1.0.0",
+          "releaseAppId": "ai3d-voxel-city",
+          "title": "AI3D Voxel City",
+          "description": "A certified procedural city world with shared movement and collision contracts.",
+          "lore": "A city assembled from deterministic geometry, where structure and exploration remain reproducible.",
+          "capabilities": [
+            "deterministic-generation",
+            "golden-physics",
+            "mobile-controls",
+            "visual-quality"
+          ],
+          "history": [
+            {
+              "version": "1.0.0",
+              "summary": "Initial certified city world."
+            }
+          ],
+          "portals": [
+            {
+              "id": "city-to-voxel",
+              "targetWorldId": "voxel-world",
+              "label": "Voxel World"
+            }
+          ],
+          "source": {
+            "commit": "5db24cb",
+            "path": "apps/ai3d-voxel-city/"
+          },
+          "revisionId": "ai3d-voxel-city@1.0.0",
+          "manifestHash": "20d71e7eea144f80ffe3e1b9f4d79f2e50b565d8c45b9378b635ff928c8f63d3"
+        }
+      ],
+      "latestRevisionId": "ai3d-voxel-city@1.0.0",
+      "title": "AI3D Voxel City",
+      "description": "A certified procedural city world with shared movement and collision contracts.",
+      "lore": "A city assembled from deterministic geometry, where structure and exploration remain reproducible.",
+      "capabilities": [
+        "deterministic-generation",
+        "golden-physics",
+        "mobile-controls",
+        "visual-quality"
+      ],
+      "portals": [
+        {
+          "id": "city-to-voxel",
+          "targetWorldId": "voxel-world",
+          "label": "Voxel World"
+        }
+      ],
+      "releaseAppId": "ai3d-voxel-city",
+      "public": true,
+      "status": "certified"
+    },
+    {
+      "id": "dark-void-scene",
+      "patchFamily": "dark-void-scene",
+      "revisions": [
+        {
+          "id": "dark-void-scene-v1",
+          "patchFamily": "dark-void-scene",
+          "version": "1.0.0",
+          "releaseAppId": "dark-void-scene",
+          "title": "Dark Void Navigator",
+          "description": "A navigator world for guided exploration and world-to-world portals.",
+          "lore": "A dark frontier where the Navigator turns discoveries into the next route.",
+          "capabilities": [
+            "navigator",
+            "touch-look",
+            "world-portals"
+          ],
+          "history": [
+            {
+              "version": "1.0.0",
+              "summary": "Initial navigator world."
+            }
+          ],
+          "portals": [
+            {
+              "id": "navigator-to-voxel",
+              "targetWorldId": "voxel-world",
+              "label": "Voxel World"
+            }
+          ],
+          "source": {
+            "commit": "5db24cb",
+            "path": "apps/dark-void-scene/"
+          },
+          "revisionId": "dark-void-scene@1.0.0",
+          "manifestHash": "13369c41fa8d4bf61e829f60d926b93b1f0092b33966fa180340f0e8a3acc355"
+        }
+      ],
+      "latestRevisionId": "dark-void-scene@1.0.0",
+      "title": "Dark Void Navigator",
+      "description": "A navigator world for guided exploration and world-to-world portals.",
+      "lore": "A dark frontier where the Navigator turns discoveries into the next route.",
+      "capabilities": [
+        "navigator",
+        "touch-look",
+        "world-portals"
+      ],
+      "portals": [
+        {
+          "id": "navigator-to-voxel",
+          "targetWorldId": "voxel-world",
+          "label": "Voxel World"
+        }
+      ],
+      "releaseAppId": "dark-void-scene",
+      "public": false,
+      "status": "quarantine"
+    },
+    {
+      "id": "voxel-world",
+      "patchFamily": "voxel-world",
+      "revisions": [
+        {
+          "id": "voxel-world-v1",
+          "patchFamily": "voxel-world",
+          "version": "1.0.0",
+          "releaseAppId": "voxel-world",
+          "title": "Voxel World",
+          "description": "The certified voxel survival world and its persistent building rules.",
+          "lore": "A living construction frontier where every block becomes part of a shared history.",
+          "capabilities": [
+            "golden-physics",
+            "mobile-controls",
+            "multiplayer",
+            "persistent-voxel-state"
+          ],
+          "history": [
+            {
+              "version": "1.0.0",
+              "summary": "Initial certified voxel world."
+            }
+          ],
+          "portals": [
+            {
+              "id": "voxel-to-city",
+              "targetWorldId": "ai3d-voxel-city",
+              "label": "AI3D Voxel City"
+            }
+          ],
+          "source": {
+            "commit": "5db24cb",
+            "path": "apps/voxel-world/"
+          },
+          "revisionId": "voxel-world@1.0.0",
+          "manifestHash": "52d0753f02d6c874e9f06aad9371fffd82b07fca0e64515b4ae23ba8d2093c5b"
+        }
+      ],
+      "latestRevisionId": "voxel-world@1.0.0",
+      "title": "Voxel World",
+      "description": "The certified voxel survival world and its persistent building rules.",
+      "lore": "A living construction frontier where every block becomes part of a shared history.",
+      "capabilities": [
+        "golden-physics",
+        "mobile-controls",
+        "multiplayer",
+        "persistent-voxel-state"
+      ],
+      "portals": [
+        {
+          "id": "voxel-to-city",
+          "targetWorldId": "ai3d-voxel-city",
+          "label": "AI3D Voxel City"
+        }
+      ],
+      "releaseAppId": "voxel-world",
+      "public": true,
+      "status": "certified"
+    }
+  ]
+}

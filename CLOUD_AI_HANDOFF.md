@@ -51,3 +51,34 @@ If deployment is quota-blocked, record it and retry in cloud; do not compensate 
 ## Completion rule
 Local work is complete when the minimal safe patch is committed/pushed and cloud agents have enough context to continue.
 Cloud agents must preserve graphics/gameplay quality, fix root causes, add regression protection, and never weaken working visuals merely to make tests pass.
+
+
+## Universal Voxel Microdetail V2 — 2026-09-07
+Branch: `ai/chatgpt/universal-microdetail-v2` from `origin/master` `db9e240c98e7d2d5595925c020089bd0bec6f427`.
+
+Goal: production-integrate semantic cubic microdetail for terrain, architecture, animals, faces/muzzles, scales, fur, armor, weapons and fabric without duplicating the existing renderer/LOD/quality/collision stacks.
+
+Implemented:
+- single source policy: `shared/microdetail-policy.json`;
+- deterministic near-field stepped cubic protrusions/dents for eligible voxel quad meshes;
+- mid-field shader normal/roughness detail for Standard/Physical materials including animated meshes without topology changes;
+- dynamic nearest-mesh render-time geometry swap, then restore original geometry immediately;
+- global `WorldQualityAutopilot` tier is the ceiling; local FPS hysteresis may only downshift microdetail;
+- orthographic AI3D FRONT EXACT disables microdetail;
+- water/glass stay smooth; gameplay/collision client sources are not changed;
+- structural audit + regression tests + Desktop AI repair instructions.
+
+Local evidence before push:
+- `quality:world:microdetail`: PASS, structural 100%, implementation 92%;
+- focused tests: 11/11 PASS;
+- `npm run check`: 514 PASS / 0 FAIL / 2 opt-in skips;
+- `desktop-ai:check`: PASS;
+- `golden:check`: PASS.
+
+Cloud continuation to reach 100%:
+run browser/Playwright visual + performance evidence on desktop/mobile, compare FPS/triangles/draw calls before/after, verify cubic bumps/dents near camera and exact-front preservation, then add explicit semantic tags in any asset pipeline whose mesh names/materials are ambiguous. Do not weaken graphics or install optional libraries without profiler evidence.
+
+### Final pre-push correction
+- Focused suite is now **13/13 PASS** after adding UTF-8 and shader-injection regression guards.
+- The UTF-8 defect was caught before commit and is not present in the branch diff.
+- Cloud/browser agents should treat the local implementation baseline as 92% and spend remaining effort on real visual/FPS evidence, not rebuilding the architecture.

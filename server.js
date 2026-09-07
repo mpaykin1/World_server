@@ -10,6 +10,7 @@ const { URL } = require('url');
 const root = __dirname;
 const apiHandlers = new Map([
   ['/api/apps', require('./api/apps')],
+  ['/api/worlds', require('./api/worlds')],
   ['/api/config', require('./api/config')],
   ['/api/register', require('./api/register')],
   ['/api/login', require('./api/login')],

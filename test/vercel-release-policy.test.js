@@ -7,9 +7,10 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 
-test('canonical Vercel project uses deliberate manual releases', () => {
+test('canonical Vercel project blocks feature-branch auto deploys', () => {
   const config = JSON.parse(fs.readFileSync(path.join(ROOT, 'vercel.json'), 'utf8'));
-  assert.equal(config.git?.deploymentEnabled, false);
+  assert.equal(config.git?.deploymentEnabled?.['**'], false);
+  assert.equal(config.git?.deploymentEnabled?.master, true);
   assert.equal(typeof config.ignoreCommand, 'string');
   assert.match(config.ignoreCommand, /check-vercel-ignore/);
 });

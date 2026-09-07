@@ -74,11 +74,12 @@ function createPortal(app, index){
   const label = makeTextSprite(app.title); label.position.set(0,8.2,0); g.add(label);
   portalGroup.add(g); portals.push(g);
 }
-fetch('/api/apps').then(r=>r.json()).then(json=>{
-  apps = json.apps.filter(a=>a.id!=='catalog');
+Promise.all([fetch('/api/apps').then(r=>r.json()), fetch('/api/worlds').then(r=>r.json())]).then(([json, worldJson])=>{
+  const worldsByApp = new Map((worldJson.worlds || []).map(world => [world.releaseAppId, world]));
+  apps = json.apps.filter(a=>a.id!=='catalog').map(app => ({...app, world: worldsByApp.get(app.id) || null}));
   apps.forEach(createPortal);
   const mini = document.getElementById('miniMap');
-  for(const a of apps){ const d=document.createElement('div'); d.textContent=`● ${a.title} — /apps/${a.id}/`; mini.appendChild(d); }
+  for(const a of apps){ const d=document.createElement('div'); const revision=a.world?.latestRevisionId ? ` · ${a.world.latestRevisionId}` : ''; d.textContent=`● ${a.title}${revision} — /apps/${a.id}/`; mini.appendChild(d); }
 });
 
 const keys = new Set(); let yaw=0, pitch=.38; let mouseDown=false;

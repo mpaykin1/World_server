@@ -1,5 +1,65 @@
 # WORK IN PROGRESS — Scoped Task Compiler, resource scheduler, real native Godot pipeline
 
+---
+
+# Patch-to-World ingestion and World Graph — 2026-09-07
+
+## Task
+Implement a reusable, idempotent Patch-to-World ingestion layer and interconnected World Graph on an isolated feature branch. Add manifests, revision history, portals, safe world APIs, manifest-driven metadata access, catalog integration, tests, and existing release-gate coverage.
+
+## Why
+Distinct patch families need stable world identities while later versions remain revisions/history. Public discovery must continue to respect the existing deny-by-default app-release registry.
+
+## Current state
+Branch `ai/chatgpt/patch-to-world-graph` is isolated from `origin/master`; baseline worktree was clean. Baseline `npm ci`, `npm run release:gate`, and `npm run quality:diff` were run before edits.
+
+## Target state
+One reusable graph/manifest library supports deterministic ingestion, deduplication, revision history and portal edges. `/api/worlds` exposes only registry-certified public worlds; `/api/apps` remains backward compatible. Catalog consumes world metadata without creating a second runtime.
+
+## Files / systems involved
+`lib/world-graph.js`, `scripts/ingest-world-patches.js`, `data/world-manifests/`, `data/world-graph-index.json`, `api/worlds.js`, `server.js`, catalog client, tests, and WIP evidence.
+
+## Known risks
+Do not auto-publish manifests; do not bypass `data/app-release-registry.json`; do not add a second persistence, telemetry, or rendering runtime. Existing apps and legacy APIs must remain unchanged.
+
+## Golden systems that must be preserved
+Existing app-release deny-by-default, catalog portals, shared controls/physics, persistence, telemetry, and all release gates.
+
+## Errors that must not return
+Catalog discovery by file existence, duplicate world identities, non-idempotent ingestion, dangling portals, and publication of uncertified/quarantine apps.
+
+## Exact patch / change plan
+1. Add strict manifest normalization and deterministic graph ingestion.
+2. Add source patch-family/revision manifests for existing certified worlds.
+3. Generate a checked-in graph index through the ingestion CLI.
+4. Add read-only world APIs and local server routing.
+5. Add catalog metadata integration without replacing the existing runtime.
+6. Add focused tests and run the required release gates.
+
+## Tests to run
+Focused world-graph/ingestion/API tests, `npm run check`, `npm run release:gate`, `npm run quality:fuzz`, `npm run quality:stability`, `npm run quality:impact`, and relevant browser checks where feasible.
+
+## Deployment / PR plan
+Commit on this branch, push, open a PR to `master`; no direct deployment. Apply the 95% deployment/manual-action gate to any later promotion request.
+
+## Current progress
+Implementation complete on the isolated branch. `npm run world:ingest` reports `worlds=3 revisions=3 public=2`. The generated graph includes certified `ai3d-voxel-city` and `voxel-world`; quarantined `dark-void-scene` remains excluded by the release registry.
+
+## Next action
+Commit, push, and open the review PR. No deployment or publication action is included in this patch.
+
+## Completion criteria
+Idempotent ingestion and revision tests pass; world APIs and catalog preserve deny-by-default; all required release gates pass; PR contains evidence and known limitations.
+
+## Final evidence
+- `npm ci`: PASS; 353 audited packages, 0 vulnerabilities.
+- `npm run check`: PASS; 501 tests, 499 pass, 0 fail, 2 skipped.
+- Focused `test/world-graph.test.js`: 4 pass, 0 fail.
+- `npm run release:gate`: PASS through protocol, tests, fuzz, impact, perceptual, tech, duplicate, contract, project, stability, evidence, world-quality, and collective-brain checks.
+- `npm run quality:diff`: PASS before edits; post-change release gate remains PASS.
+- Local HTTP smoke: `/api/worlds` 200 with 2 public worlds and graph edges; `/api/worlds?id=voxel-world` 200; `/api/apps` unchanged and deny-by-default.
+- No production deployment performed; the 95% deployment/manual-action gate remains applicable to any later promotion.
+
 ## Task
 Per the user's explicit follow-up cycle (target 90-95% capability coverage):
 fix the confirmed agent_implement full-repo-timeout bottleneck with a real
@@ -511,3 +571,81 @@ Vercel CLI returned `api-deployments-free-per-day`: the IMPROVE WORLD Hobby scop
 - PR #59 head `84354de3` has CI, Quality Regression Lock, Visual Baseline Candidates and World Quality Autopilot V4 all SUCCESS.
 - Vercel build itself succeeds; the platform rejects deployment creation/output due to `api-deployments-free-per-day`.
 - `improve-world-home` and `improve-world-home-git` Git connections were explicitly disconnected via authenticated Vercel CLI.
+# Universal Voxel Microdetail V2 — 2026-09-07
+
+## Task
+Advance the existing microdetail patch from standalone V1 into a production-integrated World_server V2 and commit it through an isolated AI branch/PR.
+
+## Why
+V1 had the right semantic profiles and hybrid geometry/shader idea, but it was still a ZIP installer rather than repository source, had no real browser integration evidence, and its physical detail decision was effectively tied to mesh build time rather than dynamic render proximity.
+
+## Current state
+Implemented in isolated off-Desktop worktree from `origin/master` db9e240. The current solution reuses the existing THREE renderers, WorldQualityAutopilot, world material/semantic/visibility systems and gameplay collision sources.
+
+## Target state
+Near surfaces show real cubic protrusions/dents; mid-distance surfaces use cheap shader microdetail; far/exact modes preserve base geometry. Animals, faces, scales, armor, weapons and fabric share semantic profiles, with explicit tagging available for ambiguous assets. Quality adapts without overriding the global tier ceiling.
+
+## Files / systems involved
+- `shared/microdetail-policy.json` — one policy source.
+- `shared/graphics/universal-voxel-microdetail.js` — detail geometry + shader + local FPS hysteresis.
+- `shared/graphics/universal-voxel-microdetail-bootstrap.js` — existing renderer hook and dynamic nearest-mesh selection.
+- `lib/world-quality-microdetail-policy.js` — Node policy helpers.
+- `scripts/world-microdetail-audit.js`, `test/world-microdetail.test.js`.
+- bootstrap entries in `apps/voxel-world/index.html` and `apps/ai3d-voxel-city/index.html`.
+- existing `scripts/world-quality-autopilot.js` + `package.json`.
+
+## Risks / invariants
+- Never change collision/occupancy because microdetail is visual only.
+- Never runtime-retopologize SkinnedMesh; arbitrary animated assets use shader path.
+- Water/glass stay smooth by policy.
+- AI3D orthographic FRONT EXACT disables detail to preserve verifier fidelity.
+- Do not create a second renderer, world, LOD stack or quality controller.
+- Do not install optional dependencies without measured benefit.
+
+## Exact patch plan
+1. Centralize profiles/budgets/guards in shared policy JSON.
+2. Build deterministic stepped-cube geometry from eligible exposed quad meshes.
+3. Dynamically select only nearest eligible meshes and swap detail geometry only during render.
+4. Apply semantic shader microdetail to Standard/Physical meshes, including animated assets without topology changes.
+5. Wrap existing WorldQualityAutopilot registration so its tier is the detail ceiling and its stats include microdetail.
+6. Add structural audit, tests, documentation and Desktop AI repair instructions.
+7. Run focused + repository gates; fix root causes and add regressions before commit.
+
+## Tests to run
+- `npm run quality:world:microdetail`
+- `node --test test/world-microdetail.test.js`
+- `npm run check:fast`
+- `npm run check`
+- `npm run desktop-ai:check`
+- `npm run golden:check`
+- browser visual/performance verification if available without production deploy.
+
+## Deployment / PR plan
+Branch `ai/chatgpt/universal-microdetail-v2` -> PR to `master`. No direct master push, auto-merge or production deploy. GitHub CI/cloud verification is authoritative for heavy checks.
+
+## Current progress
+Core V2 runtime, policy, bootstrap integration, audit, tests and instructions are written. Focused verification is next; no production-ready/100% claim until browser evidence exists.
+
+## Next action
+Run syntax/policy/focused tests, inspect failures, fix until PASS, then run repository fast/full gates as resources permit. Commit/push only the validated source/docs/tests, not generated reports or `work/` scratch.
+
+## Completion criteria
+- source branch clean after commit;
+- all microdetail structural/tests PASS;
+- no gameplay client source changes required for this integration;
+- PR opened with explicit known limitation that browser visual/FPS evidence is still required if not completed in this run;
+- no accepted quality metric knowingly regresses.
+
+## Final evidence
+Pending current-run verification. `WORLD_MICRODETAIL_REPORT.json` is generated evidence and must not be committed unless repository policy explicitly tracks it.
+
+
+### Final local evidence update — 2026-09-07
+- UTF-8 mojibake regression found before commit, root cause was PowerShell text rewrite; file restored and reinserted byte-safely through Node UTF-8 I/O.
+- Added regression that requires the original Russian `Картинка → город из кубиков` and forbids the observed mojibake marker.
+- Shader injection hardened: world micro-position derives from `modelMatrix * vec4(transformed,1.0)` after Three.js transforms, not conditionally-declared `worldPosition`.
+- Focused microdetail tests: 13/13 PASS.
+- `quality:world:microdetail`: PASS, structural 100%, implementation 92%.
+- Full repository test run before these two narrowly-scoped guards: 514 PASS / 0 FAIL / 2 opt-in skips.
+- After final fixes: `check:fast` PASS, `golden:check` PASS, `git diff --check` PASS.
+- Remaining evidence for 100% is browser visual/performance measurement in cloud/CI, not missing core architecture.

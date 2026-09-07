@@ -1,0 +1,13 @@
+{
+  "id": "voxel-world-v1",
+  "patchFamily": "voxel-world",
+  "version": "1.0.0",
+  "releaseAppId": "voxel-world",
+  "title": "Voxel World",
+  "description": "The certified voxel survival world and its persistent building rules.",
+  "lore": "A living construction frontier where every block becomes part of a shared history.",
+  "capabilities": ["persistent-voxel-state", "multiplayer", "golden-physics", "mobile-controls"],
+  "history": [{ "version": "1.0.0", "summary": "Initial certified voxel world." }],
+  "portals": [{ "id": "voxel-to-city", "targetWorldId": "ai3d-voxel-city", "label": "AI3D Voxel City" }],
+  "source": { "commit": "5db24cb", "path": "apps/voxel-world/" }
+}

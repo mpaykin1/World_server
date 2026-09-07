@@ -196,7 +196,7 @@ This rule applies to every current and future AI agent working on `World_server`
 ## 14. VERCEL DEPLOYMENT QUOTA — hard release rule
 
 - Canonical Vercel project is `world-server`. Do not reconnect stale duplicate projects to the GitHub repository merely to obtain extra previews.
-- Automatic Git deployments are disabled in root `vercel.json`. Vercel releases are deliberate: green CI -> one manual preview -> browser verification -> explicit production promotion/deploy.
+- Feature-branch Git deployments are disabled in root `vercel.json`; only `master` may auto-deploy. Release candidates are deliberate: green CI -> one manual preview when needed -> browser verification -> production release.
 - Feature-branch pushes must not automatically spend Vercel deployment quota. Batch related commits before the release candidate.
 - If Vercel returns `api-deployments-free-per-day`, `Resource is limited`, or another quota/rate-limit response, **do not retry deploy/redeploy in a loop**. Stop new deployment calls, inspect existing READY deployments, preserve the current release candidate, and resume with one deployment only after capacity is available.
 - `ignoreCommand` remains a second line of defense for non-deployable changes; it is not a substitute for the manual-release policy because canceled/ignored attempts may still consume quota.
