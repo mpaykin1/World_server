@@ -23,8 +23,12 @@ const apiHandlers = new Map([
   ['/api/roblox/handshake', require('./api/worlds')],
   ['/api/roblox/world', require('./api/worlds')],
   ['/api/roblox/chunk', require('./api/worlds')],
+  ['/api/roblox/delta', require('./api/worlds')],
+  ['/api/roblox/action', require('./api/worlds')],
   ['/api/roblox/events', require('./api/worlds')],
   ['/api/roblox/telemetry', require('./api/worlds')],
+  ['/api/roblox/replay', require('./api/worlds')],
+  ['/api/roblox/npc', require('./api/worlds')],
   ['/api/roblox', require('./api/worlds')]
 ]);
 
@@ -43,15 +47,6 @@ const mime = {
   '.webmanifest': 'application/manifest+json; charset=utf-8'
 };
 
-// WORLD_ENTRYPOINT: lets a deployment (e.g. a Google AI Studio / Cloud Run
-// app pointed at this same server.js) redirect "/" to a specific app instead
-// of the default catalog, without a second parallel entrypoint system and
-// without touching any existing behavior when it's unset. A single shared
-// variable (not one per slot) - WORLD_SLOT, if set, is purely an identifier
-// callers may use for their own logging/labeling; it does not affect this
-// redirect at all. Whitelist-only: an unset or unrecognized value falls back
-// to the exact previous behavior ("/apps/catalog/") rather than trusting an
-// arbitrary path from the environment.
 const DEFAULT_ENTRYPOINT = '/apps/catalog/';
 const ENTRYPOINT_WHITELIST = new Set([DEFAULT_ENTRYPOINT, '/apps/dark-void-scene/']);
 function resolveEntrypoint() {
@@ -113,13 +108,6 @@ const server = http.createServer(async (req, res) => {
 const port = Number(process.env.PORT) || 3000;
 server.listen(port, () => console.log(`World Server local development: http://localhost:${port}`));
 
-// Opt-in autostart of the remote-task-bridge watchdog (off by default -
-// unset/anything other than "1" changes nothing). Safe to wire here because
-// this file is never invoked in production: Vercel serves this repo via the
-// api/*.js serverless functions declared in vercel.json, not via
-// `node server.js` - so this only ever runs for a long-lived local/self-
-// hosted process (local dev, or a Cloud Run-style deployment using this same
-// server.js), exactly where a background poller can meaningfully live.
 if (process.env.REMOTE_BRIDGE_AUTOSTART === '1') {
   try {
     require('./scripts/collective-brain-remote-bridge-watchdog.js').ensureRunning('server-autostart');
@@ -129,4 +117,3 @@ if (process.env.REMOTE_BRIDGE_AUTOSTART === '1') {
 }
 
 module.exports = { server, safeJoin, resolveEntrypoint, DEFAULT_ENTRYPOINT, ENTRYPOINT_WHITELIST };
-
