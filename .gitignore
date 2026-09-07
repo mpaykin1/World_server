@@ -82,3 +82,4 @@ GODOT_WEB_BUILD_REPORT.json
 /state/ai-agent-reports.jsonl
 
 ROBLOX_STUDIO_E2E_REPORT.json
+dist/
