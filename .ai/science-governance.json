@@ -1,0 +1,124 @@
+{
+  "version": 1,
+  "name": "World Server Science 100 Governance",
+  "northStar": "100% reproducibility + 100% independence + 100% falsification",
+  "canonicalDocument": "SCIENCE_STANDARD.md",
+  "target": 100,
+  "scoreAggregation": "minimum",
+  "formula": "SCIENCE_READINESS = min(REPRODUCIBILITY, INDEPENDENCE, FALSIFICATION)",
+  "pillars": {
+    "reproducibility": {
+      "target": 100,
+      "requirements": [
+        "one-command reproduction",
+        "frozen code/config/dependencies before confirmation",
+        "larger unseen seed sets",
+        "multiple system/world sizes",
+        "repeat-run variance where relevant",
+        "effect size and uncertainty statistics",
+        "immutable evidence and negative-result preservation",
+        "clean-environment replay"
+      ]
+    },
+    "independence": {
+      "target": 100,
+      "requirements": [
+        "independent reimplementation from specification",
+        "independent verifier",
+        "true blind holdout",
+        "train-freeze-hidden-test-result lifecycle",
+        "no threshold tuning after holdout",
+        "separate discovery criticism replication confirmation roles",
+        "separate harness or codebase replication",
+        "cross-domain or topology transfer for general claims",
+        "claim provenance",
+        "no self-certification"
+      ]
+    },
+    "falsification": {
+      "target": 100,
+      "requirements": [
+        "preregistration before confirmation",
+        "independent red-team scientist",
+        "adversarial tests",
+        "multiple relevant failure modes",
+        "strong baselines",
+        "ablations",
+        "counterexample search",
+        "leakage checks",
+        "metric/methodology attacks",
+        "negative-result preservation"
+      ]
+    }
+  },
+  "lifecycle": [
+    "DISCOVERY",
+    "CRITIQUE",
+    "PREREGISTRATION",
+    "FREEZE",
+    "BLIND_HOLDOUT",
+    "RED_TEAM",
+    "INDEPENDENT_REIMPLEMENTATION",
+    "REPLICATION",
+    "GENERALIZATION",
+    "CONFIRMATION"
+  ],
+  "evidenceLevels": {
+    "D0": "idea",
+    "D1": "observed",
+    "D2": "code-confirmed",
+    "D3": "blind holdout",
+    "D4": "independent implementation",
+    "D5": "adversarial and scale",
+    "D6": "independent replication",
+    "D7": "external scientific evidence"
+  },
+  "hardRules": {
+    "preserveNegativeResults": true,
+    "allowThresholdChangesAfterHoldout": false,
+    "allowSelfCertificationAsFinalEvidence": false,
+    "allowCodePassToMeanRealWorldLaw": false,
+    "requireExplicitPercentMeaning": true,
+    "preferTestMostLikelyToDisproveStrongestClaim": true,
+    "nextTaskOptimizesWeakestPillar": true
+  },
+  "seedProgressionGuideline": [6, 30, 100, 1000],
+  "requiredScientificPercentFields": [
+    "CODE_EXPERIMENT_CONFIRMATION",
+    "REPRODUCIBILITY",
+    "INDEPENDENCE",
+    "FALSIFICATION",
+    "SCIENCE_READINESS",
+    "EVIDENCE_LEVEL"
+  ],
+  "mandatoryExperimentRecord": [
+    "experimentId",
+    "hypothesis",
+    "phase",
+    "commitSha",
+    "branch",
+    "preregisteredMetrics",
+    "preregisteredThresholds",
+    "discoverySeeds",
+    "holdoutSeedPolicy",
+    "systemSizes",
+    "controls",
+    "ablations",
+    "adversarialPlan",
+    "environment",
+    "reproductionCommand",
+    "rawEvidence",
+    "summaryEvidence",
+    "statistics",
+    "negativeResults",
+    "redTeamFindings",
+    "independentImplementationStatus",
+    "independentReplicationStatus",
+    "evidenceLevel",
+    "reproducibilityScore",
+    "independenceScore",
+    "falsificationScore",
+    "scienceReadiness",
+    "nextLevelBlockers"
+  ]
+}
