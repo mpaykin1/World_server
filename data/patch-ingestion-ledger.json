@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-09-07T08:04:00+04:00",
+  "source": "existing-user-download-backlog",
+  "classification": [
+    "ALREADY_INTEGRATED",
+    "SUPERSEDED",
+    "PARTIAL",
+    "MISSING",
+    "CONFLICT",
+    "WORLD_ONLY"
+  ],
+  "entries": [
+    {
+      "file": "WORLD_SERVER_SCIENCE_RUN072_PATCH_LATEST (1).zip",
+      "sha256": "6c7352eac502939bf1c37702d7956e28e3f38a798303e36c0e76c4e0645c6eed",
+      "patchFamily": "science-run072",
+      "revision": "FIXED_EXACT_REUSE_PLUS_GAMEPLAY_BRIDGE",
+      "classification": "PARTIAL",
+      "integratedCommit": "7da54475f053463b590c25fd5f1f722f7a3d52a1",
+      "reason": "RUN_072 science files are already integrated; the ZIP-only gameplay bridge and transition evidence are not yet integrated.",
+      "sourcePaths": ["patch/scripts/science-h2-repeated-damage-regrowth.cjs", "patch/lib/science-gameplay-bridge.cjs", "patch/test/science-gameplay-bridge.test.cjs"]
+    },
+    {
+      "file": "WORLD_SERVER_SCIENCE_RUN072_PATCH_LATEST.zip",
+      "sha256": "f3fed809a0ce15a6081bfa116f969e8f027bfb7f4ac9554fab779f32dd44ac29",
+      "patchFamily": "science-run072",
+      "revision": "RUN_072_BASE_PATCH",
+      "classification": "ALREADY_INTEGRATED",
+      "integratedCommit": "7da54475f053463b590c25fd5f1f722f7a3d52a1",
+      "reason": "The science script and focused test are present in the canonical tree; no ZIP extraction or folder move is required."
+    }
+  ]
+}
