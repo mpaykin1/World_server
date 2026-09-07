@@ -164,3 +164,11 @@ test('voxel client applies every scienceEvents result and introduces only the ne
   assert.match(source, /for\(const scienceEvent of scienceEvents\)applyScienceResult\(scienceEvent\)/);
   assert.match(source, /filter\(run=>run\.active\)\.at\(-1\)/);
 });
+
+test('gameplay uses the same RUN_071 candidate score rule', () => {
+  const { redundantCandidateScore } = require('../lib/science-h2-redundant-rule');
+  assert.equal(redundantCandidateScore({ neighborCount: 3, radiusGrid: 2, random01: 0.5 }), 3*4-2*0.15+0.5*0.75);
+  const source = fs.readFileSync(path.join(__dirname,'../lib/science-gameplay-adapter.js'),'utf8');
+  assert.match(source, /redundantCandidateScore/);
+  assert.doesNotMatch(source, /distancePenalty \|\| 0\.08/);
+});
