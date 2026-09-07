@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
-const fs=require('fs'),path=require('path'),cp=require('child_process');
-const {POLICY,validatePolicy}=require('../lib/world-quality-microdetail-policy');
+const fs=require('fs'),path=require('path');
+const {POLICY,validatePolicy,hasDirectMicrodetailIntegration}=require('../lib/world-quality-microdetail-policy');
 const ROOT=process.cwd();
 const read=rel=>{try{return fs.readFileSync(path.join(ROOT,rel),'utf8')}catch{return''}};
 const exists=rel=>fs.existsSync(path.join(ROOT,rel));
@@ -31,11 +31,9 @@ check('package-script',pkg.scripts?.['quality:world:microdetail']==='node script
 check('desktop-ai-instruction',exists('DESKTOP_AI_MICRODETAIL_V2.md'),false);
 check('architecture-doc',exists('docs/UNIVERSAL_VOXEL_MICRODETAIL_V2.md'),false);
 
-const changed=new Set();
-for(const args of [['diff','--name-only'],['diff','--name-only','origin/master...HEAD']]){
-  try{for(const rel of cp.execFileSync('git',args,{cwd:ROOT,encoding:'utf8'}).trim().split(/\r?\n/).filter(Boolean))changed.add(rel)}catch{}
-}
-check('gameplay-source-preserved',!changed.has('apps/voxel-world/client.js')&&!changed.has('apps/ai3d-voxel-city/client.js'),true,'render hook only; gameplay/collision sources untouched in working tree and committed branch diff');
+const gameplaySources=['apps/voxel-world/client.js','apps/ai3d-voxel-city/client.js'];
+const directGameplayRefs=gameplaySources.filter(rel=>hasDirectMicrodetailIntegration(read(rel)));
+check('gameplay-source-preserved',directGameplayRefs.length===0,true,directGameplayRefs.length?`microdetail must stay out of gameplay/collision sources: ${directGameplayRefs.join(',')}`:'microdetail integration is index/bootstrap-only; unrelated gameplay changes are allowed');
 
 const critical=checks.filter(c=>c.critical),passed=checks.filter(c=>c.ok).length,criticalOk=critical.every(c=>c.ok);
 const structuralPercent=Math.round(100*passed/checks.length);

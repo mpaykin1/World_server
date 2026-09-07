@@ -649,3 +649,11 @@ Pending current-run verification. `WORLD_MICRODETAIL_REPORT.json` is generated e
 - Full repository test run before these two narrowly-scoped guards: 514 PASS / 0 FAIL / 2 opt-in skips.
 - After final fixes: `check:fast` PASS, `golden:check` PASS, `git diff --check` PASS.
 - Remaining evidence for 100% is browser visual/performance measurement in cloud/CI, not missing core architecture.
+
+## Mixed-PR Microdetail false-regression fix — 2026-09-07
+
+Quality Regression Lock failed only because the new Microdetail V2 audit treated any `apps/voxel-world/client.js` change in the whole PR as a microdetail collision violation. ScienceGameplay intentionally changes that file, while microdetail remains isolated in the shared bootstrap.
+
+Root-cause fix: `gameplay-source-preserved` now detects direct microdetail coupling inside gameplay/collision source instead of inspecting the entire PR diff. This allows unrelated gameplay changes while still failing closed if microdetail is imported/embedded directly in protected gameplay sources.
+
+Evidence: `test/world-microdetail.test.js` 15/15 PASS, including mixed-PR false-positive and direct-coupling negative cases; `node scripts/world-microdetail-audit.js` PASS (structural 100%, implementation 92%); `npm run quality:world` PASS with World Quality Autopilot readiness 100%.

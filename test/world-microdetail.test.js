@@ -2,7 +2,7 @@
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('fs'),path=require('path');
 const {
   POLICY,profileFor,tierFor,clampTierToCeiling,semanticFromBlock,
-  inferSemanticFromName,colorSemantic,selectRepresentation,validatePolicy
+  inferSemanticFromName,colorSemantic,selectRepresentation,validatePolicy,hasDirectMicrodetailIntegration
 }=require('../lib/world-quality-microdetail-policy');
 const ROOT=path.resolve(__dirname,'..'),read=rel=>fs.readFileSync(path.join(ROOT,rel),'utf8');
 
@@ -69,4 +69,16 @@ test('UTF-8 Russian UI is preserved after microdetail bootstrap insertion',()=>{
   const source=read('apps/ai3d-voxel-city/index.html');
   assert.ok(source.includes('Картинка → город из кубиков'));
   assert.ok(!source.includes('РљР°СЂС‚РёРЅРєР°'));
+});
+
+test('mixed PR gameplay edits do not falsely fail microdetail isolation',()=>{
+  const audit=read('scripts/world-microdetail-audit.js');
+  assert.ok(!audit.includes("origin/master...HEAD"));
+  assert.equal(hasDirectMicrodetailIntegration("function scienceGameplay(){ return 'damage'; }"),false);
+  assert.equal(hasDirectMicrodetailIntegration(read('apps/voxel-world/client.js')),false);
+});
+
+test('direct microdetail coupling inside gameplay source remains blocked',()=>{
+  assert.equal(hasDirectMicrodetailIntegration("const microdetailRuntime = attachMicrodetail(playerCollisionWorld);"),true);
+  assert.equal(hasDirectMicrodetailIntegration("import '/shared/graphics/universal-voxel-microdetail.js';"),true);
 });
