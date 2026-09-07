@@ -1,0 +1,161 @@
+name: Godot Web Vercel Preview Pipeline
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  godot-web-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Evaluate Quota Guard
+        id: quota-guard
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "proceed=true" >> "$GITHUB_OUTPUT"
+            echo "[Quota Guard] Manual dispatch triggered; proceeding with build."
+          else
+            if node scripts/check-vercel-ignore.js; then
+              echo "proceed=false" >> "$GITHUB_OUTPUT"
+              echo "[Quota Guard] Build skipped - only non-deployable/docs/test/.ai files changed."
+            else
+              echo "proceed=true" >> "$GITHUB_OUTPUT"
+              echo "[Quota Guard] Deployable changes detected; proceeding with Godot Web build/test pipeline."
+            fi
+          fi
+
+      - name: Determine Canonical Publish Eligibility
+        id: publish-gate
+        if: steps.quota-guard.outputs.proceed == 'true'
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.ref }}" = "refs/heads/master" ]; then
+            echo "can_publish=true" >> "$GITHUB_OUTPUT"
+            echo "[Publish Gate] Canonical manual release from master is eligible to publish."
+          else
+            echo "can_publish=false" >> "$GITHUB_OUTPUT"
+            echo "[Publish Gate] Build/test only. PRs and ordinary pushes never publish from this workflow."
+          fi
+
+      - name: Install Godot 4 & Export Templates
+        if: steps.quota-guard.outputs.proceed == 'true'
+        run: |
+          mkdir -p /tmp/godot_setup
+          cd /tmp/godot_setup
+          curl -L -s -o godot.zip https://github.com/godotengine/godot-builds/releases/download/4.3-stable/Godot_v4.3-stable_linux.x86_64.zip
+          unzip -q godot.zip
+          chmod +x Godot_v4.3-stable_linux.x86_64
+          echo "GODOT_BIN=/tmp/godot_setup/Godot_v4.3-stable_linux.x86_64" >> "$GITHUB_ENV"
+
+          curl -L -s -o templates.tpz https://github.com/godotengine/godot-builds/releases/download/4.3-stable/Godot_v4.3-stable_export_templates.tpz
+          mkdir -p ~/.local/share/godot/export_templates/4.3.stable
+          unzip -q templates.tpz
+          cp -r templates/* ~/.local/share/godot/export_templates/4.3.stable/
+          echo "[Godot Setup] Godot 4.3 binary and Web export templates installed successfully."
+
+      - name: Run Godot Web Export & Artifact Validation
+        if: steps.quota-guard.outputs.proceed == 'true'
+        run: node scripts/godot-web-build.js
+
+      - name: Run Web-Native Equivalence Check
+        if: steps.quota-guard.outputs.proceed == 'true'
+        run: node scripts/compare-worldgen.js
+
+      - name: Verify Vercel Configuration for Canonical Publish
+        id: vercel-config
+        if: steps.quota-guard.outputs.proceed == 'true' && steps.publish-gate.outputs.can_publish == 'true'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::error::Canonical publish was requested, but VERCEL_TOKEN is not configured."
+            exit 1
+          fi
+          echo "configured=true" >> "$GITHUB_OUTPUT"
+          echo "[Vercel Config] VERCEL_TOKEN detected for canonical manual publish."
+
+      - name: Deploy Canonical Vercel Preview
+        id: deploy
+        if: steps.quota-guard.outputs.proceed == 'true' && steps.publish-gate.outputs.can_publish == 'true' && steps.vercel-config.outputs.configured == 'true'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          echo "[Vercel Deploy] Publishing canonical Preview for team improve-world project world-server..."
+          set +e
+          if [ -n "$VERCEL_ORG_ID" ] && [ -n "$VERCEL_PROJECT_ID" ]; then
+            PREVIEW_OUTPUT=$(npx vercel deploy --token="$VERCEL_TOKEN" --yes 2>&1)
+            DEPLOY_EXIT=$?
+          else
+            PREVIEW_OUTPUT=$(npx vercel deploy --token="$VERCEL_TOKEN" --scope="improve-world" --name="world-server" --yes 2>&1)
+            DEPLOY_EXIT=$?
+          fi
+          set -e
+
+          echo "$PREVIEW_OUTPUT"
+          if [ "$DEPLOY_EXIT" -ne 0 ]; then
+            echo "::error::Vercel deploy failed with exit code $DEPLOY_EXIT."
+            exit "$DEPLOY_EXIT"
+          fi
+
+          URL=$(echo "$PREVIEW_OUTPUT" | grep -oE 'https://[a-zA-Z0-9.-]+\.vercel\.app' | tail -n 1 || true)
+          if [ -z "$URL" ]; then
+            echo "::error::Vercel deploy exited successfully but produced no Preview URL."
+            exit 1
+          fi
+
+          echo "preview_url=$URL" >> "$GITHUB_OUTPUT"
+          echo "GODOT_WEB_PREVIEW_URL=$URL" >> "$GITHUB_ENV"
+          echo "[Vercel Deploy] Canonical Preview URL produced: $URL"
+
+      - name: HTTP Smoke Check against Vercel Preview
+        if: steps.deploy.outputs.preview_url != ''
+        run: |
+          URL="${{ steps.deploy.outputs.preview_url }}/apps/godot-web/"
+          echo "[HTTP Smoke] Probing $URL ..."
+          STATUS=$(curl -o /dev/null -s -w "%{http_code}" "$URL")
+          if [ "$STATUS" -ne 200 ]; then
+            echo "::error::HTTP probe failed with status $STATUS for $URL"
+            exit 1
+          fi
+          echo "[HTTP Smoke] PASS - Status 200 for $URL"
+
+      - name: Install Playwright Browsers
+        if: steps.deploy.outputs.preview_url != ''
+        run: npx playwright install --with-deps chromium
+
+      - name: Playwright Smoke Check against Vercel Preview
+        if: steps.deploy.outputs.preview_url != ''
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ steps.deploy.outputs.preview_url }}
+        run: npx playwright test e2e/godot-web-smoke.spec.js --project=desktop-chromium
+
+      - name: Upload Evidence Artifact
+        if: always() && steps.quota-guard.outputs.proceed == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: godot-web-preview-evidence
+          path: |
+            GODOT_WEB_BUILD_REPORT.json
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore

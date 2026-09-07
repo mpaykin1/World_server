@@ -65,6 +65,7 @@ COLLECTIVE_BRAIN_BENCHMARK.json
 godot/**/.godot/
 GODOT_BUILD/
 GODOT_NATIVE_BUILD_REPORT.json
+GODOT_WEB_BUILD_REPORT.json
 
 # local verified toolchain cache (regenerable; never commit binaries)
 .world-server/tools/
