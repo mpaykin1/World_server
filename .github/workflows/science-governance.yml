@@ -16,18 +16,18 @@ jobs:
         with:
           node-version: "24"
 
-      - name: Validate Science 100 policy integrity
+      - name: Validate Science 100 / VNO policy integrity
         shell: bash
         run: |
           node <<'NODE'
           const fs = require('fs');
 
           function fail(message) {
-            console.error(`SCIENCE 100 FAIL: ${message}`);
+            console.error(`SCIENCE VNO FAIL: ${message}`);
             process.exitCode = 1;
           }
 
-          for (const file of ['SCIENCE_STANDARD.md', '.ai/science-governance.json', 'AGENTS.md']) {
+          for (const file of ['SCIENCE_STANDARD.md', '.ai/science-governance.json', '.ai/vno-cycle.json', 'data/vno-gameplay-systems.json', 'scripts/check-vno-cycle.js', 'AGENTS.md']) {
             if (!fs.existsSync(file)) fail(`${file} is required`);
           }
           if (process.exitCode) process.exit(process.exitCode);
@@ -35,8 +35,10 @@ jobs:
           const policy = JSON.parse(fs.readFileSync('.ai/science-governance.json', 'utf8'));
           const standard = fs.readFileSync('SCIENCE_STANDARD.md', 'utf8');
           const agents = fs.readFileSync('AGENTS.md', 'utf8');
+          const vno = JSON.parse(fs.readFileSync('.ai/vno-cycle.json', 'utf8'));
 
           if (policy.target !== 100) fail('global target must remain 100');
+          if (policy.acronym !== 'ВНО' || vno.acronym !== 'ВНО') fail('canonical principle name must remain ВНО');
           if (policy.scoreAggregation !== 'minimum') fail('readiness must use non-compensating minimum aggregation');
           if (!String(policy.formula || '').includes('min(REPRODUCIBILITY, INDEPENDENCE, FALSIFICATION)')) {
             fail('canonical readiness formula is missing or changed');
@@ -58,6 +60,13 @@ jobs:
           if (hard.requireExplicitPercentMeaning !== true) fail('scientific percentages must keep explicit meanings');
           if (hard.preferTestMostLikelyToDisproveStrongestClaim !== true) fail('falsification-first next-step rule must remain enabled');
           if (hard.nextTaskOptimizesWeakestPillar !== true) fail('weakest-pillar optimization must remain enabled');
+          if (hard.evaluateEveryCanonicalGameplaySystem !== true) fail('every canonical gameplay system must be evaluated');
+          if (hard.allowHonestNotApplicable !== true) fail('honest NOT_APPLICABLE must remain allowed');
+          if (hard.allowOneSystemToCertifyAnother !== false) fail('one gameplay system cannot certify another');
+          if (hard.requireAge5UserExplanation !== true) fail('age-5 user communication must remain mandatory');
+          if (hard.requireMethodImprovementBeforeNextLoop !== true || hard.requireLoopBackToDiscovery !== true) fail('VNO must improve method and loop back to discovery');
+          if (hard.cloudFirst !== true || hard.reuseExistingOrchestration !== true) fail('VNO must stay cloud-first and reuse existing orchestration');
+          if (hard.desktopClutterAllowed !== false || hard.computerSlowdownAllowed !== false) fail('desktop clutter/slowdown must remain forbidden');
 
           const levels = Object.keys(policy.evidenceLevels || {});
           if (levels.join(',') !== 'D0,D1,D2,D3,D4,D5,D6,D7') fail('D0-D7 evidence ladder must remain complete');
@@ -65,6 +74,11 @@ jobs:
           const lifecycle = policy.lifecycle || [];
           for (const required of ['DISCOVERY', 'PREREGISTRATION', 'FREEZE', 'BLIND_HOLDOUT', 'RED_TEAM', 'INDEPENDENT_REIMPLEMENTATION', 'REPLICATION', 'CONFIRMATION']) {
             if (!lifecycle.includes(required)) fail(`lifecycle stage missing: ${required}`);
+          }
+
+          const vnoLoop = policy.vnoGameplayLoop || [];
+          for (const required of ['TAKE_DISCOVERY', 'DEVELOP_NEXT_HYPOTHESIS', 'TRANSLATE_TO_GAMEPLAY', 'PROVE_IN_CODE', 'MAXIMIZE_VNO', 'IMPROVE_THE_METHOD', 'LOOP_AGAIN']) {
+            if (!vnoLoop.includes(required)) fail(`VNO gameplay loop stage missing: ${required}`);
           }
 
           const percentFields = new Set(policy.requiredScientificPercentFields || []);
@@ -93,20 +107,23 @@ jobs:
             'RED_TEAM',
             'INDEPENDENT_REIMPLEMENTATION'
           ]) {
-            if (!agents.includes(token)) fail(`AGENTS.md no longer mandates Science 100 token: ${token}`);
+            if (!agents.includes(token)) fail(`AGENTS.md no longer mandates scientific integrity token: ${token}`);
           }
 
           if (!process.exitCode) {
-            console.log('SCIENCE 100 PASS: reproducibility, independence and falsification governance is intact.');
+            console.log('SCIENCE VNO PASS: reproducibility, independence, falsification and the gameplay loop are intact.');
           }
           NODE
+
+      - name: Validate seven-step VNO gameplay loop
+        run: node scripts/check-vno-cycle.js
 
       - name: Reject explicit code-PASS-as-real-world-proof claims
         shell: bash
         run: |
           node <<'NODE'
           const fs = require('fs');
-          const files = ['SCIENCE_STANDARD.md', 'AGENTS.md', '.ai/science-governance.json'];
+          const files = ['SCIENCE_STANDARD.md', 'AGENTS.md', '.ai/science-governance.json', '.ai/vno-cycle.json'];
           const forbidden = [
             /pass:true\s+(proves|is\s+proof|is\s+scientifically\s+proven)/i,
             /pass:true.{0,40}means.{0,40}(real[- ]world|law)/i,
@@ -117,7 +134,7 @@ jobs:
             const text = fs.readFileSync(file, 'utf8');
             for (const pattern of forbidden) {
               if (pattern.test(text)) {
-                console.error(`SCIENCE 100 FAIL: ${file} contains an explicit code-PASS-as-real-world-proof claim matching ${pattern}`);
+                console.error(`SCIENCE VNO FAIL: ${file} contains an explicit code-PASS-as-real-world-proof claim matching ${pattern}`);
                 failed = true;
               }
             }
