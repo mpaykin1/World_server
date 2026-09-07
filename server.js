@@ -23,8 +23,12 @@ const apiHandlers = new Map([
   ['/api/roblox/handshake', require('./api/worlds')],
   ['/api/roblox/world', require('./api/worlds')],
   ['/api/roblox/chunk', require('./api/worlds')],
+  ['/api/roblox/delta', require('./api/worlds')],
+  ['/api/roblox/action', require('./api/worlds')],
   ['/api/roblox/events', require('./api/worlds')],
   ['/api/roblox/telemetry', require('./api/worlds')],
+  ['/api/roblox/replay', require('./api/worlds')],
+  ['/api/roblox/npc', require('./api/worlds')],
   ['/api/roblox', require('./api/worlds')]
 ]);
 
