@@ -55,28 +55,12 @@
       "destination": "/api/worlds?__route=roblox_chunk"
     },
     {
-      "source": "/api/roblox/delta",
-      "destination": "/api/worlds?__route=roblox_delta"
-    },
-    {
-      "source": "/api/roblox/action",
-      "destination": "/api/worlds?__route=roblox_action"
-    },
-    {
       "source": "/api/roblox/events",
       "destination": "/api/worlds?__route=roblox_events"
     },
     {
       "source": "/api/roblox/telemetry",
       "destination": "/api/worlds?__route=roblox_telemetry"
-    },
-    {
-      "source": "/api/roblox/replay",
-      "destination": "/api/worlds?__route=roblox_replay"
-    },
-    {
-      "source": "/api/roblox/npc",
-      "destination": "/api/worlds?__route=roblox_npc"
     },
     {
       "source": "/apps/:app/",
