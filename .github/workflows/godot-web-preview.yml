@@ -1,0 +1,124 @@
+name: Godot Web Vercel Preview Pipeline
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  godot-web-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Evaluate Quota Guard
+        id: quota-guard
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "proceed=true" >> $GITHUB_OUTPUT
+            echo "[Quota Guard] Manual dispatch triggered; proceeding with build."
+          else
+            if node scripts/check-vercel-ignore.js; then
+              echo "proceed=false" >> $GITHUB_OUTPUT
+              echo "[Quota Guard] Skipped Vercel Preview deploy - only non-deployable/docs/test/.ai files changed."
+            else
+              echo "proceed=true" >> $GITHUB_OUTPUT
+              echo "[Quota Guard] Deployable changes detected; proceeding with Godot Web preview pipeline."
+            fi
+          fi
+
+      - name: Install Godot 4 & Export Templates
+        if: steps.quota-guard.outputs.proceed == 'true'
+        run: |
+          mkdir -p /tmp/godot_setup
+          cd /tmp/godot_setup
+          curl -L -s -o godot.zip https://github.com/godotengine/godot-builds/releases/download/4.3-stable/Godot_v4.3-stable_linux.x86_64.zip
+          unzip -q godot.zip
+          chmod +x Godot_v4.3-stable_linux.x86_64
+          echo "GODOT_BIN=/tmp/godot_setup/Godot_v4.3-stable_linux.x86_64" >> $GITHUB_ENV
+
+          curl -L -s -o templates.tpz https://github.com/godotengine/godot-builds/releases/download/4.3-stable/Godot_v4.3-stable_export_templates.tpz
+          mkdir -p ~/.local/share/godot/export_templates/4.3.stable
+          unzip -q templates.tpz
+          cp -r templates/* ~/.local/share/godot/export_templates/4.3.stable/
+          echo "[Godot Setup] Godot 4.3 binary and Web export templates installed successfully."
+
+      - name: Run Godot Web Export & Artifact Validation
+        if: steps.quota-guard.outputs.proceed == 'true'
+        run: |
+          node scripts/godot-web-build.js
+
+      - name: Run Web-Native Equivalence Check
+        if: steps.quota-guard.outputs.proceed == 'true'
+        run: |
+          node scripts/compare-worldgen.js
+
+      - name: Deploy Vercel Preview
+        id: deploy
+        if: steps.quota-guard.outputs.proceed == 'true'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::error::VERCEL_TOKEN secret is missing or not configured."
+            exit 1
+          fi
+          echo "[Vercel Deploy] Deploying Preview for team improve-world project world-server..."
+          PREVIEW_URL=$(npx vercel deploy --token="$VERCEL_TOKEN" --scope="improve-world" --name="world-server" --yes)
+          if [ -z "$PREVIEW_URL" ]; then
+            echo "::error::Failed to capture Vercel Preview URL."
+            exit 1
+          fi
+          echo "preview_url=$PREVIEW_URL" >> $GITHUB_OUTPUT
+          echo "GODOT_WEB_PREVIEW_URL=$PREVIEW_URL" >> $GITHUB_ENV
+          echo "[Vercel Deploy] Vercel Preview URL produced: $PREVIEW_URL"
+
+      - name: HTTP Smoke Check against Vercel Preview
+        if: steps.quota-guard.outputs.proceed == 'true'
+        run: |
+          URL="${{ steps.deploy.outputs.preview_url }}/apps/godot-web/"
+          echo "[HTTP Smoke] Probing $URL ..."
+          STATUS=$(curl -o /dev/null -s -w "%{http_code}" "$URL")
+          if [ "$STATUS" -ne 200 ]; then
+            echo "::error::HTTP probe failed with status $STATUS for $URL"
+            exit 1
+          fi
+          echo "[HTTP Smoke] PASS - Status 200 for $URL"
+
+      - name: Install Playwright Browsers
+        if: steps.quota-guard.outputs.proceed == 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: Playwright Smoke Check against Vercel Preview
+        if: steps.quota-guard.outputs.proceed == 'true'
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ steps.deploy.outputs.preview_url }}
+        run: |
+          npx playwright test e2e/godot-web-smoke.spec.js --project=desktop-chromium
+
+      - name: Upload Evidence Artifact
+        if: always() && steps.quota-guard.outputs.proceed == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: godot-web-preview-evidence
+          path: |
+            GODOT_WEB_BUILD_REPORT.json
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore

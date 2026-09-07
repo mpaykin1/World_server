@@ -1,15 +1,15 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-09-06T18:36:49.673Z",
+  "updatedAt": "2026-09-07T04:20:00.000Z",
   "canonicalIssue": "AI Bridge — ChatGPT ↔ Jules",
   "activeWorker": null,
   "activeLeases": {},
-  "lastProcessedTaskId": "task_e2e_001",
-  "lastProcessedResultId": "res_task_e2e_001",
+  "lastProcessedTaskId": "task_20260907_godot_web_preview_v1",
+  "lastProcessedResultId": "res_task_20260907_godot_web_preview_v1",
   "staleThresholdMs": 900000,
   "stats": {
-    "totalTasks": 1,
-    "completedTasks": 1,
+    "totalTasks": 2,
+    "completedTasks": 2,
     "failedTasks": 0,
     "reclaimedTasks": 0
   }
