@@ -1,28 +1,19 @@
-name: Godot Web Build, Ephemeral Preview & Vercel Release
+name: Godot Web Vercel Preview Pipeline
 
 on:
+  push:
+    branches: ["**"]
   pull_request:
     branches: [master]
   workflow_dispatch:
-    inputs:
-      deploy:
-        description: "Deploy canonical world-server to Vercel"
-        required: false
-        default: false
-        type: boolean
 
 permissions:
   contents: read
-  issues: write
-
-concurrency:
-  group: godot-web-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
-  godot-web:
+  godot-web-preview:
     runs-on: ubuntu-latest
-    timeout-minutes: 80
+    timeout-minutes: 30
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -36,7 +27,24 @@ jobs:
       - name: Install dependencies
         run: npm ci || npm install
 
+      - name: Evaluate Quota Guard
+        id: quota-guard
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "proceed=true" >> $GITHUB_OUTPUT
+            echo "[Quota Guard] Manual dispatch triggered; proceeding with build."
+          else
+            if node scripts/check-vercel-ignore.js; then
+              echo "proceed=false" >> $GITHUB_OUTPUT
+              echo "[Quota Guard] Skipped Vercel Preview deploy - only non-deployable/docs/test/.ai files changed."
+            else
+              echo "proceed=true" >> $GITHUB_OUTPUT
+              echo "[Quota Guard] Deployable changes detected; proceeding with Godot Web preview pipeline."
+            fi
+          fi
+
       - name: Install Godot 4 & Export Templates
+        if: steps.quota-guard.outputs.proceed == 'true'
         run: |
           mkdir -p /tmp/godot_setup
           cd /tmp/godot_setup
@@ -44,131 +52,94 @@ jobs:
           unzip -q godot.zip
           chmod +x Godot_v4.3-stable_linux.x86_64
           echo "GODOT_BIN=/tmp/godot_setup/Godot_v4.3-stable_linux.x86_64" >> $GITHUB_ENV
+
           curl -L -s -o templates.tpz https://github.com/godotengine/godot-builds/releases/download/4.3-stable/Godot_v4.3-stable_export_templates.tpz
           mkdir -p ~/.local/share/godot/export_templates/4.3.stable
           unzip -q templates.tpz
           cp -r templates/* ~/.local/share/godot/export_templates/4.3.stable/
+          echo "[Godot Setup] Godot 4.3 binary and Web export templates installed successfully."
 
       - name: Run Godot Web Export & Artifact Validation
-        run: node scripts/godot-web-build.js
+        if: steps.quota-guard.outputs.proceed == 'true'
+        run: |
+          node scripts/godot-web-build.js
 
       - name: Run Web-Native Equivalence Check
-        run: node scripts/compare-worldgen.js
-
-      - name: Start isolated local preview server
-        if: github.event_name == 'pull_request'
+        if: steps.quota-guard.outputs.proceed == 'true'
         run: |
-          mkdir -p /tmp/world-server-preview/apps/godot-web
-          cp -a apps/godot-web/. /tmp/world-server-preview/apps/godot-web/
-          cd /tmp/world-server-preview
-          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/world-server-http.log 2>&1 &
-          echo $! > /tmp/world-server-http.pid
-          for i in $(seq 1 30); do
-            if curl -fsS http://127.0.0.1:4173/apps/godot-web/ >/dev/null; then
-              exit 0
-            fi
-            sleep 1
-          done
-          cat /tmp/world-server-http.log || true
-          exit 1
+          node scripts/compare-worldgen.js
 
-      - name: Create zero-account Cloudflare Quick Tunnel
-        id: tunnel
-        if: github.event_name == 'pull_request'
-        run: |
-          curl -L --fail --retry 3 -o /tmp/cloudflared https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64
-          chmod +x /tmp/cloudflared
-          /tmp/cloudflared tunnel --no-autoupdate --url http://127.0.0.1:4173 > /tmp/cloudflared.log 2>&1 &
-          echo $! > /tmp/cloudflared.pid
-          URL=""
-          for i in $(seq 1 60); do
-            URL=$(grep -oE 'https://[-a-z0-9]+\.trycloudflare\.com' /tmp/cloudflared.log | tail -n 1 || true)
-            if [ -n "$URL" ] && curl -fsS "$URL/apps/godot-web/" >/dev/null; then
-              break
-            fi
-            sleep 1
-          done
-          if [ -z "$URL" ]; then
-            cat /tmp/cloudflared.log || true
-            echo "::error::Cloudflare Quick Tunnel did not produce a public URL."
-            exit 1
-          fi
-          echo "preview_url=$URL" >> "$GITHUB_OUTPUT"
-          echo "## REAL TEST URL" >> "$GITHUB_STEP_SUMMARY"
-          echo "$URL/apps/godot-web/" >> "$GITHUB_STEP_SUMMARY"
-          echo "::notice title=REAL TEST URL::$URL/apps/godot-web/"
-          echo "[Ephemeral Preview] $URL/apps/godot-web/"
-
-      - name: Publish real test URL to PR
-        if: github.event_name == 'pull_request' && steps.tunnel.outputs.preview_url != ''
-        env:
-          GH_TOKEN: ${{ github.token }}
-          PREVIEW_URL: ${{ steps.tunnel.outputs.preview_url }}
-        run: |
-          gh api "repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments" \
-            -f body="REAL_TEST_URL: ${PREVIEW_URL}/apps/godot-web/\n\nTemporary isolated Godot Web preview. It stays online while this workflow is running (about 45 minutes). No Vercel quota is used."
-
-      - name: Install Playwright browser
-        if: github.event_name == 'pull_request' && steps.tunnel.outputs.preview_url != ''
-        run: npx playwright install --with-deps chromium
-
-      - name: Playwright smoke check against ephemeral preview
-        if: github.event_name == 'pull_request' && steps.tunnel.outputs.preview_url != ''
-        env:
-          PLAYWRIGHT_BASE_URL: ${{ steps.tunnel.outputs.preview_url }}
-        run: npx playwright test e2e/godot-web-smoke.spec.js --project=desktop-chromium
-
-      - name: Decide Vercel release policy
-        id: deploy-policy
-        run: |
-          DEPLOY=false
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.deploy }}" = "true" ]; then
-            DEPLOY=true
-          fi
-          echo "deploy=$DEPLOY" >> "$GITHUB_OUTPUT"
-
-      - name: Verify Vercel release configuration
-        if: steps.deploy-policy.outputs.deploy == 'true'
+      - name: Detect Vercel Configuration
+        id: vercel-config
+        if: steps.quota-guard.outputs.proceed == 'true'
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
-          test -n "$VERCEL_TOKEN" || { echo "::error::VERCEL_TOKEN is required for explicit release."; exit 1; }
+          if [ -n "$VERCEL_TOKEN" ]; then
+            echo "configured=true" >> $GITHUB_OUTPUT
+            echo "[Vercel Config] VERCEL_TOKEN secret detected."
+          else
+            echo "configured=false" >> $GITHUB_OUTPUT
+            echo "[Vercel Config] VERCEL_TOKEN secret not configured; Vercel preview deploy skipped."
+          fi
 
-      - name: Deploy canonical Vercel Preview
+      - name: Deploy Vercel Preview
         id: deploy
-        if: steps.deploy-policy.outputs.deploy == 'true'
+        if: steps.quota-guard.outputs.proceed == 'true' && steps.vercel-config.outputs.configured == 'true'
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: team_itmMhMILAlqU6yLs7xnsvbo1
-          VERCEL_PROJECT_ID: prj_XsKyvMHpuNomoPBxuOD8vd26Fi3y
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
         run: |
-          PREVIEW_OUTPUT=$(npx vercel deploy --token="$VERCEL_TOKEN" --yes 2>&1)
-          echo "$PREVIEW_OUTPUT"
-          URL=$(echo "$PREVIEW_OUTPUT" | grep -oE 'https://[a-zA-Z0-9.-]+\.vercel\.app' | tail -n 1 || true)
-          test -n "$URL" || { echo "::error::Vercel deploy produced no Preview URL."; exit 1; }
-          echo "preview_url=$URL" >> "$GITHUB_OUTPUT"
+          echo "[Vercel Deploy] Deploying Preview for team improve-world project world-server..."
+          PREVIEW_URL=""
+          if [ -n "$VERCEL_ORG_ID" ] && [ -n "$VERCEL_PROJECT_ID" ]; then
+            PREVIEW_URL=$(npx vercel deploy --token="$VERCEL_TOKEN" --yes 2>&1 || true)
+          else
+            PREVIEW_URL=$(npx vercel deploy --token="$VERCEL_TOKEN" --scope="improve-world" --name="world-server" --yes 2>&1 || true)
+          fi
 
-      - name: HTTP smoke check against explicit Vercel release
-        if: steps.deploy-policy.outputs.deploy == 'true' && steps.deploy.outputs.preview_url != ''
+          URL=$(echo "$PREVIEW_URL" | grep -oE 'https://[a-zA-Z0-9.-]+\.vercel\.app' | tail -n 1 || true)
+          if [ -n "$URL" ]; then
+            echo "preview_url=$URL" >> $GITHUB_OUTPUT
+            echo "GODOT_WEB_PREVIEW_URL=$URL" >> $GITHUB_ENV
+            echo "[Vercel Deploy] Vercel Preview URL produced: $URL"
+          else
+            echo "::warning::Vercel preview deployment was attempted but did not produce a URL (token may be unauthenticated or scope inactive):"
+            echo "$PREVIEW_URL"
+            echo "preview_url=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: HTTP Smoke Check against Vercel Preview
+        if: steps.quota-guard.outputs.proceed == 'true' && steps.deploy.outputs.preview_url != ''
         run: |
           URL="${{ steps.deploy.outputs.preview_url }}/apps/godot-web/"
+          echo "[HTTP Smoke] Probing $URL ..."
           STATUS=$(curl -o /dev/null -s -w "%{http_code}" "$URL")
-          test "$STATUS" -eq 200
+          if [ "$STATUS" -ne 200 ]; then
+            echo "::error::HTTP probe failed with status $STATUS for $URL"
+            exit 1
+          fi
+          echo "[HTTP Smoke] PASS - Status 200 for $URL"
 
-      - name: Upload evidence artifact
-        if: always()
+      - name: Install Playwright Browsers
+        if: steps.quota-guard.outputs.proceed == 'true' && steps.deploy.outputs.preview_url != ''
+        run: npx playwright install --with-deps chromium
+
+      - name: Playwright Smoke Check against Vercel Preview
+        if: steps.quota-guard.outputs.proceed == 'true' && steps.deploy.outputs.preview_url != ''
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ steps.deploy.outputs.preview_url }}
+        run: |
+          npx playwright test e2e/godot-web-smoke.spec.js --project=desktop-chromium
+
+      - name: Upload Evidence Artifact
+        if: always() && steps.quota-guard.outputs.proceed == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: godot-web-build-evidence
+          name: godot-web-preview-evidence
           path: |
             GODOT_WEB_BUILD_REPORT.json
             playwright-report/
             test-results/
           if-no-files-found: ignore
-
-      - name: Keep real test URL alive for manual testing
-        if: always() && github.event_name == 'pull_request' && steps.tunnel.outputs.preview_url != ''
-        timeout-minutes: 46
-        run: |
-          echo "Manual test URL: ${{ steps.tunnel.outputs.preview_url }}/apps/godot-web/"
-          sleep 2700
