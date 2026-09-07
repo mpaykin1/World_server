@@ -7,6 +7,9 @@
   "functions": {
     "api/apps.js": {
       "includeFiles": "apps/**"
+    },
+    "api/worlds.js": {
+      "includeFiles": "data/world-graph-index.json"
     }
   },
   "redirects": [

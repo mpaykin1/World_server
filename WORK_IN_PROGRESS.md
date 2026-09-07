@@ -1,5 +1,65 @@
 # WORK IN PROGRESS — Scoped Task Compiler, resource scheduler, real native Godot pipeline
 
+---
+
+# Patch-to-World ingestion and World Graph — 2026-09-07
+
+## Task
+Implement a reusable, idempotent Patch-to-World ingestion layer and interconnected World Graph on an isolated feature branch. Add manifests, revision history, portals, safe world APIs, manifest-driven metadata access, catalog integration, tests, and existing release-gate coverage.
+
+## Why
+Distinct patch families need stable world identities while later versions remain revisions/history. Public discovery must continue to respect the existing deny-by-default app-release registry.
+
+## Current state
+Branch `ai/chatgpt/patch-to-world-graph` is isolated from `origin/master`; baseline worktree was clean. Baseline `npm ci`, `npm run release:gate`, and `npm run quality:diff` were run before edits.
+
+## Target state
+One reusable graph/manifest library supports deterministic ingestion, deduplication, revision history and portal edges. `/api/worlds` exposes only registry-certified public worlds; `/api/apps` remains backward compatible. Catalog consumes world metadata without creating a second runtime.
+
+## Files / systems involved
+`lib/world-graph.js`, `scripts/ingest-world-patches.js`, `data/world-manifests/`, `data/world-graph-index.json`, `api/worlds.js`, `server.js`, catalog client, tests, and WIP evidence.
+
+## Known risks
+Do not auto-publish manifests; do not bypass `data/app-release-registry.json`; do not add a second persistence, telemetry, or rendering runtime. Existing apps and legacy APIs must remain unchanged.
+
+## Golden systems that must be preserved
+Existing app-release deny-by-default, catalog portals, shared controls/physics, persistence, telemetry, and all release gates.
+
+## Errors that must not return
+Catalog discovery by file existence, duplicate world identities, non-idempotent ingestion, dangling portals, and publication of uncertified/quarantine apps.
+
+## Exact patch / change plan
+1. Add strict manifest normalization and deterministic graph ingestion.
+2. Add source patch-family/revision manifests for existing certified worlds.
+3. Generate a checked-in graph index through the ingestion CLI.
+4. Add read-only world APIs and local server routing.
+5. Add catalog metadata integration without replacing the existing runtime.
+6. Add focused tests and run the required release gates.
+
+## Tests to run
+Focused world-graph/ingestion/API tests, `npm run check`, `npm run release:gate`, `npm run quality:fuzz`, `npm run quality:stability`, `npm run quality:impact`, and relevant browser checks where feasible.
+
+## Deployment / PR plan
+Commit on this branch, push, open a PR to `master`; no direct deployment. Apply the 95% deployment/manual-action gate to any later promotion request.
+
+## Current progress
+Implementation complete on the isolated branch. `npm run world:ingest` reports `worlds=3 revisions=3 public=2`. The generated graph includes certified `ai3d-voxel-city` and `voxel-world`; quarantined `dark-void-scene` remains excluded by the release registry.
+
+## Next action
+Commit, push, and open the review PR. No deployment or publication action is included in this patch.
+
+## Completion criteria
+Idempotent ingestion and revision tests pass; world APIs and catalog preserve deny-by-default; all required release gates pass; PR contains evidence and known limitations.
+
+## Final evidence
+- `npm ci`: PASS; 353 audited packages, 0 vulnerabilities.
+- `npm run check`: PASS; 501 tests, 499 pass, 0 fail, 2 skipped.
+- Focused `test/world-graph.test.js`: 4 pass, 0 fail.
+- `npm run release:gate`: PASS through protocol, tests, fuzz, impact, perceptual, tech, duplicate, contract, project, stability, evidence, world-quality, and collective-brain checks.
+- `npm run quality:diff`: PASS before edits; post-change release gate remains PASS.
+- Local HTTP smoke: `/api/worlds` 200 with 2 public worlds and graph edges; `/api/worlds?id=voxel-world` 200; `/api/apps` unchanged and deny-by-default.
+- No production deployment performed; the 95% deployment/manual-action gate remains applicable to any later promotion.
+
 ## Task
 Per the user's explicit follow-up cycle (target 90-95% capability coverage):
 fix the confirmed agent_implement full-repo-timeout bottleneck with a real
