@@ -1,8 +1,13 @@
 {
-  "version": 1,
-  "name": "World Server Science 100 Governance",
+  "version": 2,
+  "name": "World Server Science Governance — Принцип ВНО",
+  "principleName": "Воспроизводимость, Независимость, Опровержение",
+  "acronym": "ВНО",
   "northStar": "100% reproducibility + 100% independence + 100% falsification",
   "canonicalDocument": "SCIENCE_STANDARD.md",
+  "cyclePolicy": ".ai/vno-cycle.json",
+  "gameplaySystemRegistry": "data/vno-gameplay-systems.json",
+  "gameplayStandard": "docs/SCIENCE_GAMEPLAY_STANDARD.md",
   "target": 100,
   "scoreAggregation": "minimum",
   "formula": "SCIENCE_READINESS = min(REPRODUCIBILITY, INDEPENDENCE, FALSIFICATION)",
@@ -63,6 +68,15 @@
     "GENERALIZATION",
     "CONFIRMATION"
   ],
+  "vnoGameplayLoop": [
+    "TAKE_DISCOVERY",
+    "DEVELOP_NEXT_HYPOTHESIS",
+    "TRANSLATE_TO_GAMEPLAY",
+    "PROVE_IN_CODE",
+    "MAXIMIZE_VNO",
+    "IMPROVE_THE_METHOD",
+    "LOOP_AGAIN"
+  ],
   "evidenceLevels": {
     "D0": "idea",
     "D1": "observed",
@@ -80,7 +94,18 @@
     "allowCodePassToMeanRealWorldLaw": false,
     "requireExplicitPercentMeaning": true,
     "preferTestMostLikelyToDisproveStrongestClaim": true,
-    "nextTaskOptimizesWeakestPillar": true
+    "nextTaskOptimizesWeakestPillar": true,
+    "evaluateEveryCanonicalGameplaySystem": true,
+    "allowHonestNotApplicable": true,
+    "allowOneSystemToCertifyAnother": false,
+    "requireAge5UserExplanation": true,
+    "requireSeparateGameplayAndScienceClaims": true,
+    "requireMethodImprovementBeforeNextLoop": true,
+    "requireLoopBackToDiscovery": true,
+    "cloudFirst": true,
+    "reuseExistingOrchestration": true,
+    "desktopClutterAllowed": false,
+    "computerSlowdownAllowed": false
   },
   "seedProgressionGuideline": [6, 30, 100, 1000],
   "requiredScientificPercentFields": [
@@ -120,5 +145,18 @@
     "falsificationScore",
     "scienceReadiness",
     "nextLevelBlockers"
+  ],
+  "mandatoryGameplayTransferRecord": [
+    "systemId",
+    "applicability",
+    "reason",
+    "kidExplanation",
+    "feature",
+    "predictedEffect",
+    "baseline",
+    "implementationPaths",
+    "testPlan",
+    "falsificationAttack",
+    "stage"
   ]
 }
