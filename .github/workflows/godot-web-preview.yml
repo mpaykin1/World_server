@@ -13,6 +13,7 @@ on:
 
 permissions:
   contents: read
+  issues: write
 
 concurrency:
   group: godot-web-${{ github.workflow }}-${{ github.ref }}
@@ -93,6 +94,15 @@ jobs:
           echo "$URL/apps/godot-web/" >> "$GITHUB_STEP_SUMMARY"
           echo "::notice title=REAL TEST URL::$URL/apps/godot-web/"
           echo "REAL_TEST_URL=$URL/apps/godot-web/"
+
+      - name: Publish real test URL to PR
+        if: github.event_name == 'pull_request' && steps.tunnel.outputs.preview_url != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PREVIEW_URL: ${{ steps.tunnel.outputs.preview_url }}
+        run: |
+          gh api "repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments" \
+            -f body="REAL_TEST_URL: ${PREVIEW_URL}/apps/godot-web/\n\nTemporary isolated Godot Web preview. It stays online while this workflow is running (about 40 minutes). No Vercel quota is used."
 
       - name: Install Playwright browser
         if: github.event_name == 'pull_request' && steps.tunnel.outputs.preview_url != ''
