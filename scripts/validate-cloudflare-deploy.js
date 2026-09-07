@@ -4,10 +4,12 @@
  * Predeploy validation script for Cloudflare deployment.
  * Ensures wrangler.json / wrangler.toml exists with an explicit static asset directory,
  * and verifies that the directory exists on disk with the expected entry HTML file.
+ * Auto-builds the dist directory if needed.
  */
 
 const fs = require('fs');
 const path = require('path');
+const { buildDist } = require('./build-dist');
 
 const ROOT_DIR = path.resolve(__dirname, '..');
 
@@ -52,12 +54,20 @@ function validateCloudflareDeployment(rootDir = ROOT_DIR) {
     throw new Error('No wrangler.json or wrangler.toml found in project root.');
   }
 
-  const resolvedStaticDir = path.resolve(rootDir, staticDir);
+  let resolvedStaticDir = path.resolve(rootDir, staticDir);
+  let indexHtmlPath = path.join(resolvedStaticDir, 'index.html');
+
+  // Auto-build dist if configured staticDir is dist and dist/index.html is missing
+  if (staticDir === 'dist') {
+    if (!fs.existsSync(resolvedStaticDir) || !fs.existsSync(indexHtmlPath)) {
+      buildDist(rootDir);
+    }
+  }
+
   if (!fs.existsSync(resolvedStaticDir)) {
     throw new Error(`Configured Cloudflare static assets directory does not exist: ${resolvedStaticDir}`);
   }
 
-  const indexHtmlPath = path.join(resolvedStaticDir, 'index.html');
   if (!fs.existsSync(indexHtmlPath)) {
     throw new Error(`Configured Cloudflare static assets directory missing entry index.html: ${indexHtmlPath}`);
   }

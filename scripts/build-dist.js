@@ -7,9 +7,6 @@
 const fs = require('fs');
 const path = require('path');
 
-const ROOT_DIR = path.resolve(__dirname, '..');
-const DIST_DIR = path.join(ROOT_DIR, 'dist');
-
 function copyDirSync(src, dest) {
   if (!fs.existsSync(src)) return;
   fs.mkdirSync(dest, { recursive: true });
@@ -25,17 +22,20 @@ function copyDirSync(src, dest) {
   }
 }
 
-function buildDist() {
-  console.log('[Build Dist] Preparing static dist folder...');
-  if (fs.existsSync(DIST_DIR)) {
-    fs.rmSync(DIST_DIR, { recursive: true, force: true });
+function buildDist(targetRootDir) {
+  const rootDir = path.resolve(targetRootDir || path.resolve(__dirname, '..'));
+  const distDir = path.join(rootDir, 'dist');
+
+  console.log('[Build Dist] Preparing static dist folder at:', distDir);
+  if (fs.existsSync(distDir)) {
+    fs.rmSync(distDir, { recursive: true, force: true });
   }
-  fs.mkdirSync(DIST_DIR, { recursive: true });
+  fs.mkdirSync(distDir, { recursive: true });
 
   const dirsToCopy = ['apps', 'shared', 'data', 'api', 'templates'];
   for (const dir of dirsToCopy) {
-    const srcDir = path.join(ROOT_DIR, dir);
-    const destDir = path.join(DIST_DIR, dir);
+    const srcDir = path.join(rootDir, dir);
+    const destDir = path.join(distDir, dir);
     if (fs.existsSync(srcDir)) {
       copyDirSync(srcDir, destDir);
     }
@@ -43,14 +43,14 @@ function buildDist() {
 
   const filesToCopy = ['index.html', 'favicon.ico'];
   for (const file of filesToCopy) {
-    const srcFile = path.join(ROOT_DIR, file);
-    const destFile = path.join(DIST_DIR, file);
+    const srcFile = path.join(rootDir, file);
+    const destFile = path.join(distDir, file);
     if (fs.existsSync(srcFile)) {
       fs.copyFileSync(srcFile, destFile);
     }
   }
 
-  console.log('[Build Dist] Static dist directory successfully built at:', DIST_DIR);
+  console.log('[Build Dist] Static dist directory successfully built at:', distDir);
 }
 
 if (require.main === module) {
