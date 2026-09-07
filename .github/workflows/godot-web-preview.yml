@@ -1,4 +1,4 @@
-name: Godot Web Ephemeral Preview & Vercel Release
+name: Godot Web Build Artifact & Vercel Release
 
 on:
   pull_request:
@@ -13,7 +13,6 @@ on:
 
 permissions:
   contents: read
-  issues: write
 
 concurrency:
   group: godot-web-${{ github.workflow }}-${{ github.ref }}
@@ -22,7 +21,7 @@ concurrency:
 jobs:
   godot-web:
     runs-on: ubuntu-latest
-    timeout-minutes: 55
+    timeout-minutes: 30
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -55,64 +54,26 @@ jobs:
       - name: Run Web-Native Equivalence Check
         run: node scripts/compare-worldgen.js
 
-      - name: Start isolated preview server
-        if: github.event_name == 'pull_request'
+      - name: Local HTTP smoke check
         run: |
-          mkdir -p /tmp/world-server-preview/apps/godot-web
-          cp -a apps/godot-web/. /tmp/world-server-preview/apps/godot-web/
-          cd /tmp/world-server-preview
-          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/world-server-http.log 2>&1 &
+          python3 -m http.server 4173 --directory . > /tmp/world-server-http.log 2>&1 &
+          PID=$!
+          trap 'kill $PID || true' EXIT
           for i in $(seq 1 30); do
-            curl -fsS http://127.0.0.1:4173/apps/godot-web/ >/dev/null && exit 0
+            STATUS=$(curl -o /dev/null -s -w "%{http_code}" http://127.0.0.1:4173/apps/godot-web/ || true)
+            [ "$STATUS" = "200" ] && exit 0
             sleep 1
           done
           cat /tmp/world-server-http.log || true
           exit 1
 
-      - name: Create quota-free Cloudflare test URL
-        id: tunnel
-        if: github.event_name == 'pull_request'
-        run: |
-          curl -L --fail --retry 3 -o /tmp/cloudflared https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64
-          chmod +x /tmp/cloudflared
-          /tmp/cloudflared tunnel --no-autoupdate --url http://127.0.0.1:4173 > /tmp/cloudflared.log 2>&1 &
-          URL=""
-          for i in $(seq 1 75); do
-            URL=$(grep -oE 'https://[-a-z0-9]+\.trycloudflare\.com' /tmp/cloudflared.log | tail -n 1 || true)
-            if [ -n "$URL" ] && curl -fsS "$URL/apps/godot-web/" >/dev/null; then
-              break
-            fi
-            sleep 1
-          done
-          if [ -z "$URL" ]; then
-            cat /tmp/cloudflared.log || true
-            echo "::error::Cloudflare Quick Tunnel did not produce a public URL."
-            exit 1
-          fi
-          echo "preview_url=$URL" >> "$GITHUB_OUTPUT"
-          echo "## REAL TEST URL" >> "$GITHUB_STEP_SUMMARY"
-          echo "$URL/apps/godot-web/" >> "$GITHUB_STEP_SUMMARY"
-          echo "::notice title=REAL TEST URL::$URL/apps/godot-web/"
-          echo "REAL_TEST_URL=$URL/apps/godot-web/"
-
-      - name: Publish real test URL to PR
-        if: github.event_name == 'pull_request' && steps.tunnel.outputs.preview_url != ''
-        env:
-          GH_TOKEN: ${{ github.token }}
-          PREVIEW_URL: ${{ steps.tunnel.outputs.preview_url }}
-        run: |
-          gh api "repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments" \
-            -f body="REAL_TEST_URL: ${PREVIEW_URL}/apps/godot-web/\n\nTemporary isolated Godot Web preview. It stays online while this workflow is running (about 40 minutes). No Vercel quota is used."
-
-      - name: Install Playwright browser
-        if: github.event_name == 'pull_request' && steps.tunnel.outputs.preview_url != ''
-        run: npx playwright install --with-deps chromium
-
-      - name: Playwright smoke check against real preview
-        if: github.event_name == 'pull_request' && steps.tunnel.outputs.preview_url != ''
-        env:
-          PLAYWRIGHT_BASE_URL: ${{ steps.tunnel.outputs.preview_url }}
-        run: npx playwright test e2e/godot-web-smoke.spec.js --project=desktop-chromium
+      - name: Upload reusable Godot Web build
+        uses: actions/upload-artifact@v4
+        with:
+          name: godot-web-static-build
+          path: apps/godot-web/
+          if-no-files-found: error
+          retention-days: 7
 
       - name: Decide Vercel release policy
         id: deploy-policy
@@ -152,15 +113,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: godot-web-build-evidence
-          path: |
-            GODOT_WEB_BUILD_REPORT.json
-            playwright-report/
-            test-results/
+          path: GODOT_WEB_BUILD_REPORT.json
           if-no-files-found: ignore
-
-      - name: Keep real test URL alive for manual testing
-        if: always() && github.event_name == 'pull_request' && steps.tunnel.outputs.preview_url != ''
-        timeout-minutes: 41
-        run: |
-          echo "REAL_TEST_URL=${{ steps.tunnel.outputs.preview_url }}/apps/godot-web/"
-          sleep 2400
