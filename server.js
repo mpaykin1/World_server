@@ -1,11 +1,12 @@
 'use strict';
 
-// Local development server. Production uses Vercel static hosting and the
-// request handlers in /api; all persistent state lives in Supabase.
+// Local/self-hosted server. Vercel production uses static hosting and the
+// request handlers in /api; Cloud Run can use this same entrypoint.
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const { URL } = require('url');
+const robloxHandler = require('./api/roblox');
 
 const root = __dirname;
 const apiHandlers = new Map([
@@ -37,15 +38,8 @@ const mime = {
   '.webmanifest': 'application/manifest+json; charset=utf-8'
 };
 
-// WORLD_ENTRYPOINT: lets a deployment (e.g. a Google AI Studio / Cloud Run
-// app pointed at this same server.js) redirect "/" to a specific app instead
-// of the default catalog, without a second parallel entrypoint system and
-// without touching any existing behavior when it's unset. A single shared
-// variable (not one per slot) - WORLD_SLOT, if set, is purely an identifier
-// callers may use for their own logging/labeling; it does not affect this
-// redirect at all. Whitelist-only: an unset or unrecognized value falls back
-// to the exact previous behavior ("/apps/catalog/") rather than trusting an
-// arbitrary path from the environment.
+// WORLD_ENTRYPOINT lets a long-lived deployment (including Cloud Run) redirect
+// "/" to a specific approved app without creating a second entrypoint system.
 const DEFAULT_ENTRYPOINT = '/apps/catalog/';
 const ENTRYPOINT_WHITELIST = new Set([DEFAULT_ENTRYPOINT, '/apps/dark-void-scene/']);
 function resolveEntrypoint() {
@@ -57,6 +51,23 @@ function resolveEntrypoint() {
 function notFound(res) {
   res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
   res.end('Not found');
+}
+
+function health(res, ready = true) {
+  const body = JSON.stringify({
+    ok: true,
+    ready,
+    service: 'world-server',
+    runtime: process.env.K_SERVICE ? 'cloud-run' : 'node',
+    revision: process.env.K_REVISION || null
+  });
+  res.writeHead(200, {
+    'Content-Type': 'application/json; charset=utf-8',
+    'Content-Length': Buffer.byteLength(body),
+    'Cache-Control': 'no-store',
+    'X-Content-Type-Options': 'nosniff'
+  });
+  res.end(body);
 }
 
 function safeJoin(urlPath) {
@@ -84,6 +95,16 @@ function sendFile(res, file) {
 
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+
+  if (url.pathname === '/healthz') return health(res, true);
+  if (url.pathname === '/readyz') return health(res, true);
+
+  // Local/Cloud Run supports native subpaths. Vercel rewrites the same public
+  // paths into the single api/roblox.js function via __route.
+  if (url.pathname === '/api/roblox' || url.pathname.startsWith('/api/roblox/')) {
+    return robloxHandler(req, res);
+  }
+
   const handler = apiHandlers.get(url.pathname);
   if (handler) return handler(req, res);
   if (url.pathname.startsWith('/api/')) return notFound(res);
@@ -105,15 +126,11 @@ const server = http.createServer(async (req, res) => {
 });
 
 const port = Number(process.env.PORT) || 3000;
-server.listen(port, () => console.log(`World Server local development: http://localhost:${port}`));
+const host = '0.0.0.0';
+server.listen(port, host, () => console.log(`World Server listening on http://${host}:${port}`));
 
-// Opt-in autostart of the remote-task-bridge watchdog (off by default -
-// unset/anything other than "1" changes nothing). Safe to wire here because
-// this file is never invoked in production: Vercel serves this repo via the
-// api/*.js serverless functions declared in vercel.json, not via
-// `node server.js` - so this only ever runs for a long-lived local/self-
-// hosted process (local dev, or a Cloud Run-style deployment using this same
-// server.js), exactly where a background poller can meaningfully live.
+// Opt-in autostart of the remote-task-bridge watchdog. It remains disabled by
+// default, and is appropriate only for long-lived self-hosted runtimes.
 if (process.env.REMOTE_BRIDGE_AUTOSTART === '1') {
   try {
     require('./scripts/collective-brain-remote-bridge-watchdog.js').ensureRunning('server-autostart');
@@ -122,5 +139,10 @@ if (process.env.REMOTE_BRIDGE_AUTOSTART === '1') {
   }
 }
 
-module.exports = { server, safeJoin, resolveEntrypoint, DEFAULT_ENTRYPOINT, ENTRYPOINT_WHITELIST };
-
+module.exports = {
+  server,
+  safeJoin,
+  resolveEntrypoint,
+  DEFAULT_ENTRYPOINT,
+  ENTRYPOINT_WHITELIST
+};
