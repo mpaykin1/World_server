@@ -319,21 +319,26 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
   ];
   const unique=[];const seen=new Set();
   for(const c of candidates){const key=Math.round(c.yaw*100000);if(!seen.has(key)){seen.add(key);unique.push(c);}}
-  const maxDistance=Math.max(24,profile().detailChunks*CHUNK_SIZE);
-  const cosHalf=Math.cos(35*Math.PI/180);
-  let best={...unique[0],score:-1,maxDistance};
+  const maxDistance=Math.min(Math.max(24,profile().detailChunks*CHUNK_SIZE),PROFILES.SAFE.renderChunks*CHUNK_SIZE);
+  const cosHalf=Math.cos(35*Math.PI/180),nearDistance=10;
+  const measured=[];
   for(const c of unique){
-    const fx=-Math.sin(c.yaw),fz=-Math.cos(c.yaw);
-    let score=0;
+    const fx=-Math.sin(c.yaw),fz=-Math.cos(c.yaw);let score=0,nearOccluders=0;
     for(const v of voxels){
       if(!Array.isArray(v)||v.length<3)continue;
       const dx=Number(v[0])-spawnPos[0],dz=Number(v[2])-spawnPos[2],d=Math.hypot(dx,dz);
-      if(d<2||d>maxDistance)continue;
-      if((dx*fx+dz*fz)/d>=cosHalf)score++;
+      if(d<2||d>maxDistance||(dx*fx+dz*fz)/d<cosHalf)continue;
+      score++;
+      if(d<nearDistance&&Number(v[1])>=spawnPos[1]-.5)nearOccluders++;
     }
-    if(score>best.score)best={...c,score,maxDistance};
+    measured.push({...c,score,nearOccluders,maxDistance});
   }
-  return best;
+  const richestCandidate=measured.reduce((best,c)=>!best||c.score>best.score?c:best,null);
+  const richest=richestCandidate?.score||0;
+  const readableFloor=Math.max(250,richest*.6);
+  const readable=measured.filter(c=>c.score>=readableFloor);
+  readable.sort((a,b)=>a.nearOccluders-b.nearOccluders||b.score-a.score);
+  return {...(readable[0]||measured.sort((a,b)=>b.score-a.score)[0]||{yaw:0,label:'fallback',score:0,nearOccluders:0,maxDistance}),readableFloor,richestScore:richest,richestNearOccluders:richestCandidate?.nearOccluders||0};
 }
 async function renderWorld(data){
   world=data;
