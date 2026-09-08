@@ -12,6 +12,7 @@ const requiredFiles = [
   '.ai/project-context-index.json',
   '.ai/connection-manifest.json',
   '.ai/bridge/README.md',
+  '.github/workflows/ai-bridge-ingress.yml',
   'docs/AI_ONBOARDING_AND_CONNECTIONS.md',
   'NEW_AI_BOOTSTRAP_PROMPT.md'
 ];
@@ -60,4 +61,17 @@ test('human bootstrap docs require capability verification and zero-secret onboa
   assert.match(onboarding, /AI-BRIDGE HELLO/);
   assert.match(bootstrap, /Never claim that you inherited connections from another ChatGPT\/account/);
   assert.match(bridge, /single canonical, cloud-first AI coordination bridge/i);
+});
+
+test('AI Bridge issue ingress keeps its YAML-safe child issue body construction', () => {
+  const workflow = read('.github/workflows/ai-bridge-ingress.yml');
+  assert.match(workflow, /issue_comment:\s*\n\s*types:\s*\[created\]/);
+  assert.match(workflow, /github\.event\.issue\.number == 55/);
+  assert.match(workflow, /const childBody = \[/);
+  assert.match(workflow, /\]\.join\('\\n'\);/);
+  assert.doesNotMatch(
+    workflow,
+    /const childBody = `/, 
+    'raw multiline JS template literals can break YAML indentation before the workflow starts'
+  );
 });
