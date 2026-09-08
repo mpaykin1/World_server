@@ -36,24 +36,25 @@ jobs:
             }
 
             const childTitle = `[AI-BRIDGE TASK] ${parsed.taskId}: ${parsed.task.split('\n')[0].slice(0, 60)}`;
-            const childBody = `### AI Bridge Task Payload
-
-**Task ID:** ${parsed.taskId}
-**Priority:** ${parsed.priority}
-**Sender:** ${parsed.sender}
-**Recipient:** ${parsed.recipient}
-**Origin Comment ID:** ${comment.id}
-**Origin Issue:** #${issue.number}
-
-#### Task Description
-${parsed.task}
-
-#### Acceptance Criteria
-${parsed.acceptanceCriteria || 'None specified'}
-
----
-*Created automatically by GitHub Actions AI Bridge Ingress.*
-`;
+            const childBody = [
+              '### AI Bridge Task Payload',
+              '',
+              `**Task ID:** ${parsed.taskId}`,
+              `**Priority:** ${parsed.priority}`,
+              `**Sender:** ${parsed.sender}`,
+              `**Recipient:** ${parsed.recipient}`,
+              `**Origin Comment ID:** ${comment.id}`,
+              `**Origin Issue:** #${issue.number}`,
+              '',
+              '#### Task Description',
+              parsed.task,
+              '',
+              '#### Acceptance Criteria',
+              parsed.acceptanceCriteria || 'None specified',
+              '',
+              '---',
+              '*Created automatically by GitHub Actions AI Bridge Ingress.*'
+            ].join('\n');
 
             let created;
             try {
