@@ -45,15 +45,19 @@ jobs:
       - name: Sentry runtime smoke (Playwright) - window.WorldServerSentry + ingest (hard)
         run: npx playwright test e2e/sentry-smoke.spec.js --project=desktop-chromium
       - name: AI3D Voxel City autoplay (Playwright) ai3d-voxel-city-autoplay (hard)
-        run: npx playwright test
+        id: hard_playwright
+        env:
+          PLAYWRIGHT_JSON_OUTPUT_FILE: test-results/playwright-results.json
+        run: npx playwright test --reporter=line,json
       - name: Build machine-readable Playwright failure summary
-        if: failure()
+        if: ${{ failure() && steps.hard_playwright.outcome == 'failure' }}
         env:
           CANONICAL_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
           CURRENT_DEFAULT_SHA: ${{ github.event.pull_request.base.sha || github.sha }}
+          PLAYWRIGHT_JSON_REPORT: test-results/playwright-results.json
         run: node scripts/summarize-playwright-failure.js
       - name: Publish Playwright failure summary to job output
-        if: failure()
+        if: ${{ always() && steps.hard_playwright.outcome == 'failure' }}
         run: |
           SUMMARY="test-results/playwright-failure-summary.json"
           if [ -f "$SUMMARY" ]; then
@@ -66,16 +70,17 @@ jobs:
               echo '```'
             } >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "No Playwright failure summary found at $SUMMARY"
+            echo "OBSERVABILITY_INCOMPLETE: no Playwright failure summary found at $SUMMARY"
+            exit 2
           fi
       - name: Upload Playwright failure evidence
-        if: failure()
+        if: ${{ always() && steps.hard_playwright.outcome == 'failure' }}
         uses: actions/upload-artifact@v4
         with:
           name: playwright-failure-${{ github.event.pull_request.head.sha || github.sha }}-${{ github.run_attempt }}
           path: test-results
           include-hidden-files: true
-          if-no-files-found: warn
+          if-no-files-found: error
 
   lighthouse:
     runs-on: ubuntu-latest
