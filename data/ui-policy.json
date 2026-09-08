@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "2.0.0",
   "system": "GOLDEN_UI_POLICY",
   "mode": "release-blocking",
   "rules": {
@@ -15,7 +15,22 @@
       "health",
       "objective",
       "context-action"
-    ]
+    ],
+    "goldenTopToolbar": [
+      "menu",
+      "worlds",
+      "settings",
+      "info"
+    ],
+    "drawerCloseTargetPxMobile": 52,
+    "drawerDisablesGameplayTouch": true,
+    "worldMenuStyle": "newspaper",
+    "worldMenuShowsAllKnownWorlds": true,
+    "worldPreviewFormat": "ultra-low-webm",
+    "worldPreviewMaxBytes": 100000,
+    "worldPreviewLazyLoad": true,
+    "worldLoreReadingLevel": "age-5-simple",
+    "worldConnectionsMenu": true
   },
   "knownSystemPanels": {
     "catalog": [

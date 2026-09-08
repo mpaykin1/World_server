@@ -65,6 +65,27 @@ for(const f of fs.readdirSync(e2eDir).filter(x=>x.endsWith('.spec.js'))){
 }
 ok('no known false-green assertions');
 
+
+const uiPolicy=JSON.parse(read('data/ui-policy.json'));
+const controlPolicy=JSON.parse(read('data/control-policy.json'));
+const shellJs=read('shared/golden-ui-shell.js'),shellCss=read('shared/golden-ui-shell.css'),voxelHtml=read('apps/voxel-world/index.html');
+const topTabs=[...shellJs.matchAll(/data-golden-tab=\"([^\"]+)\"/g)].map(m=>m[1]);
+if(JSON.stringify(topTabs)!==JSON.stringify(['menu','worlds','settings','info'])) fail('Golden top toolbar must contain exactly menu/worlds/settings/info');
+if(JSON.stringify(uiPolicy.rules.goldenTopToolbar)!==JSON.stringify(['menu','worlds','settings','info'])) fail('UI policy lost four-button top toolbar');
+if(!shellCss.includes('#goldenDrawerClose{width:46px')||!shellCss.includes('width:52px;height:52px')) fail('mobile drawer close target is below Golden size');
+if(!shellCss.includes('.golden-drawer-open #mobileControls')) fail('modal does not disable gameplay touch controls');
+if(!voxelHtml.includes('id=\"movePad\"')||!voxelHtml.includes('id=\"lookPad\"')) fail('Voxel World must expose two visible mobile joysticks');
+if(!voxel.includes('mobileLook')||!voxel.includes("addEventListener('goldendrawerchange'")) fail('Voxel World visible look joystick / modal reset missing');
+if(JSON.stringify(controlPolicy.mobile)!==JSON.stringify(['VISIBLE_LEFT_MOVE_JOYSTICK','VISIBLE_RIGHT_LOOK_JOYSTICK','TOUCH_JUMP'])) fail('control policy no longer requires visible dual joysticks');
+const requiredWorldUrls=['https://dark-void-navigator.vercel.app/','https://improve-world-home-improve-world.vercel.app/','https://improve-world-experiment-100-improve-world.vercel.app/','https://voxel-gothic-steampunk-world-improve-world.vercel.app/','https://gothic-voxel-city-atlas-v3-mobile-final-improve-world.vercel.app/','https://voxel-gothic-steampunk-mobile-repaired-improve-world.vercel.app/','https://world-server-git-codex-voxel-v3-improve-world.vercel.app/apps/voxel-world/','https://world-server.vercel.app/apps/catalog/'];
+const externalUrls=new Set((registry.externalWorlds||[]).map(x=>x.url));
+for(const url of requiredWorldUrls) if(!externalUrls.has(url)) fail('World newspaper lost required URL: '+url);
+for(const item of registry.externalWorlds||[]){const m=item.worldMenu;if(!m?.headline||!m?.lore||!m?.history)fail('world lore missing: '+item.id);const f=path.join(root,m?.previewVideo?.replace(/^\//,'')||'');if(!fs.existsSync(f)||fs.statSync(f).size<=0||fs.statSync(f).size>uiPolicy.rules.worldPreviewMaxBytes)fail('ultra-light preview invalid: '+item.id);}
+if(!shellJs.includes('data-world-view=\"newspaper\"')||!shellJs.includes('data-world-view=\"connections\"')) fail('newspaper/connections menu missing');
+if(!shellJs.includes('id=\"goldenLore\"')||!shellJs.includes('goldenLoreHistory')) fail('simple world lore panel missing');
+if(JSON.stringify(registry).includes('???')) fail('world registry contains encoding corruption');
+else ok('Golden top bar + dual joysticks + newspaper/lore/connections contract');
+
 if(process.exitCode) process.exit(process.exitCode);
 console.log('GOLDEN STANDARD: PASS');
 

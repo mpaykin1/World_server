@@ -1,26 +1,15 @@
 {
-  "version": "3.0.0",
-  "policy": "deny-by-default",
-  "rule": "Only certified apps may be returned by /api/apps and shown in the public catalog.",
-  "apps": {
-    "voxel-world": {
+  "schemaVersion": "1.0.0",
+  "generatedFrom": "data/app-release-registry.json",
+  "inventory": [
+    {
+      "id": "voxel-world",
       "title": "Voxel World",
-      "visible": true,
+      "url": "/apps/voxel-world/",
       "status": "certified",
       "kind": "game",
-      "goldenStandard": "v2",
-      "required": [
-        "desktop-controls",
-        "camera-relative-directions",
-        "mobile-controls",
-        "mouse-look",
-        "touch-look",
-        "grounding",
-        "wall-collision",
-        "step-up",
-        "spawn",
-        "render"
-      ],
+      "external": false,
+      "available": true,
       "worldMenu": {
         "show": true,
         "headline": "МИР ИЗ КУБИКОВ, КОТОРЫЙ НИКОГДА НЕ КОНЧАЕТСЯ!",
@@ -40,24 +29,14 @@
         "previewVideo": "/shared/world-previews/voxel-world.webm"
       }
     },
-    "ai3d-voxel-city": {
+    {
+      "id": "ai3d-voxel-city",
       "title": "AI3D Voxel City",
-      "visible": true,
+      "url": "/apps/ai3d-voxel-city/",
       "status": "certified",
       "kind": "game",
-      "goldenStandard": "v2",
-      "required": [
-        "desktop-controls",
-        "camera-relative-directions",
-        "mobile-controls",
-        "mouse-look",
-        "touch-look",
-        "grounding",
-        "wall-collision",
-        "step-up",
-        "spawn",
-        "render"
-      ],
+      "external": false,
+      "available": true,
       "worldMenu": {
         "show": true,
         "headline": "ГОРОД, КОТОРЫЙ СОБИРАЕТ СЕБЯ САМ!",
@@ -73,12 +52,14 @@
         "previewVideo": "/shared/world-previews/ai3d-voxel-city.webm"
       }
     },
-    "survival": {
+    {
+      "id": "survival",
       "title": "Survival",
-      "visible": false,
+      "url": "/apps/survival/",
       "status": "quarantine",
       "kind": "game",
-      "reason": "No certified collision/mobile behavioral gate yet.",
+      "external": false,
+      "available": true,
       "worldMenu": {
         "show": true,
         "headline": "МИР, ГДЕ НУЖНО ВЫЖИТЬ И НЕ ПОТЕРЯТЬСЯ!",
@@ -89,12 +70,14 @@
         "previewVideo": "/shared/world-previews/survival.webm"
       }
     },
-    "world-sharabass": {
+    {
+      "id": "world-sharabass",
       "title": "Мир Шарабас",
-      "visible": false,
+      "url": "/apps/world-sharabass/",
       "status": "quarantine",
       "kind": "game",
-      "reason": "Touch exists, but world collision is not certified.",
+      "external": false,
+      "available": true,
       "worldMenu": {
         "show": true,
         "headline": "ТАЙНЫЙ МИР ШАРАБАСА ОТКРЫВАЕТ ДВЕРЬ!",
@@ -105,54 +88,6 @@
         "previewVideo": "/shared/world-previews/world-sharabass.webm"
       }
     },
-    "ai3d-reference-test": {
-      "title": "AI3D Reference Test",
-      "visible": false,
-      "status": "diagnostic",
-      "kind": "diagnostic"
-    },
-    "ai-3d": {
-      "title": "AI 3D",
-      "visible": false,
-      "status": "tool",
-      "kind": "tool"
-    },
-    "chat": {
-      "title": "Chat",
-      "visible": false,
-      "status": "tool",
-      "kind": "tool"
-    },
-    "catalog": {
-      "title": "3D Каталог",
-      "visible": false,
-      "status": "system",
-      "kind": "hub"
-    },
-    "dark-void-scene": {
-      "title": "Dark Void Navigator",
-      "visible": false,
-      "status": "quarantine",
-      "kind": "navigator",
-      "reason": "Not a Golden voxel-collision app by design - a dialog+look-based navigator experience with no wall-collision movement, so it does not (and should not) implement the Golden UI shell/physics contract project-quality-reviewer.js requires of a 'certified' entry. Already live and verified in production at dark-void-navigator.vercel.app and re-verified end-to-end locally this session (real scene renders, zero console errors, desktop mouse-look and mobile dual-joystick controls confirmed) - registered here only so the deny-by-default release registry recognizes the directory; kept out of the internal 3D-games catalog listing (visible:false) rather than mislabeled as Golden-certified.",
-      "worldMenu": {
-        "show": false,
-        "headline": "В ТЕМНОТЕ ЗАЖЁГСЯ ОДИН ОГОНЁК — И НАЧАЛСЯ МИР!",
-        "lore": "Сначала вокруг почти ничего не было видно. Потом появился маленький огонёк и Навигатор. Каждый разговор помогает понять, куда идти дальше и что должно появиться в мире.",
-        "history": "Dark Void стал местом, где история начинается с темноты, разговора и первого открытия.",
-        "familyId": "dark-void-navigator-live",
-        "connections": [
-          {
-            "targetId": "improve-world-home-live",
-            "story": "Огонёк из темноты находит Дом историй. Там его открытие превращается в новую часть большого мира."
-          }
-        ],
-        "previewVideo": "/shared/world-previews/dark-void-navigator-live.webm"
-      }
-    }
-  },
-  "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",
-  "externalWorlds": [
     {
       "id": "dark-void-navigator-live",
       "title": "Dark Void Navigator",
@@ -172,7 +107,11 @@
             "story": "Огонёк приходит в Дом историй и приносит туда найденную тайну."
           }
         ]
-      }
+      },
+      "external": true,
+      "available": true,
+      "certified": false,
+      "source": "static-fallback"
     },
     {
       "id": "improve-world-home-live",
@@ -197,7 +136,11 @@
             "story": "Когда история готова, Каталог помогает найти её среди других миров."
           }
         ]
-      }
+      },
+      "external": true,
+      "available": true,
+      "certified": false,
+      "source": "static-fallback"
     },
     {
       "id": "improve-world-experiment-100",
@@ -218,7 +161,11 @@
             "story": "Удачная идея из лаборатории возвращается домой и становится частью общей истории."
           }
         ]
-      }
+      },
+      "external": true,
+      "available": true,
+      "certified": false,
+      "source": "static-fallback"
     },
     {
       "id": "voxel-gothic-steampunk-world",
@@ -243,7 +190,11 @@
             "story": "Мастера починили дороги и управление, чтобы в город было удобно заходить с телефона."
           }
         ]
-      }
+      },
+      "external": true,
+      "available": true,
+      "certified": false,
+      "source": "static-fallback"
     },
     {
       "id": "gothic-voxel-city-atlas-v3-mobile-final",
@@ -264,7 +215,11 @@
             "story": "Карта рассказывает, где находятся старые башни большого парового города."
           }
         ]
-      }
+      },
+      "external": true,
+      "available": true,
+      "certified": false,
+      "source": "static-fallback"
     },
     {
       "id": "voxel-gothic-steampunk-mobile-repaired",
@@ -285,7 +240,11 @@
             "story": "Это тот же большой паровой город, только его ворота и управление починили для телефона."
           }
         ]
-      }
+      },
+      "external": true,
+      "available": true,
+      "certified": false,
+      "source": "static-fallback"
     },
     {
       "id": "world-server-codex-voxel-v3",
@@ -306,7 +265,11 @@
             "story": "Из этой старой версии вырос сегодняшний Voxel World. Старые идеи стали новыми правилами."
           }
         ]
-      }
+      },
+      "external": true,
+      "available": true,
+      "certified": false,
+      "source": "static-fallback"
     },
     {
       "id": "world-server-catalog-live",
@@ -327,7 +290,11 @@
             "story": "Дом создаёт истории, а Каталог показывает двери, через которые в них можно войти."
           }
         ]
-      }
+      },
+      "external": true,
+      "available": true,
+      "certified": false,
+      "source": "static-fallback"
     }
   ]
 }

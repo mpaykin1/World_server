@@ -395,7 +395,7 @@ async function loadNeededChunks(){
 }
 
 const player={pos:new THREE.Vector3(0,35,0),vel:new THREE.Vector3(),yaw:0,pitch:0,onGround:false,selected:0,id:'',name:'Player'};
-const keys=new Set(); let mobileMove={x:0,y:0}; let channel=null; let lastSave=0,lastNet=0; let started=false; let backendMode='online';
+const keys=new Set(); let mobileMove={x:0,y:0},mobileLook={x:0,y:0}; let channel=null; let lastSave=0,lastNet=0; let started=false; let backendMode='online';
 function setOfflineMode(reason=''){
   backendMode='offline';
   statusEl.textContent='офлайн · локальный процедурный мир';statusEl.className='vwWarn';
@@ -480,10 +480,19 @@ function setupDesktop(){
   renderer.domElement.addEventListener('mousedown',e=>{if(document.pointerLockElement!==renderer.domElement)return;if(e.button===0)editBlock(false);if(e.button===2)editBlock(true);});renderer.domElement.addEventListener('contextmenu',e=>e.preventDefault());
 }
 function setupMobile(){
-  const pad=document.getElementById('movePad'),knob=document.getElementById('moveKnob'),look=document.getElementById('lookZone');let moveId=null,lookId=null,lastLook=null;
-  const upd=e=>{const r=pad.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,dx=e.clientX-cx,dy=e.clientY-cy,m=Math.min(46,Math.hypot(dx,dy)),a=Math.atan2(dy,dx);mobileMove={x:Math.cos(a)*(m/46),y:Math.sin(a)*(m/46)};knob.style.transform=`translate(${mobileMove.x*42}px,${mobileMove.y*42}px)`;};
-  pad.addEventListener('pointerdown',e=>{moveId=e.pointerId;pad.setPointerCapture(e.pointerId);upd(e);});pad.addEventListener('pointermove',e=>{if(e.pointerId===moveId)upd(e);});const end=e=>{if(e.pointerId===moveId){moveId=null;mobileMove={x:0,y:0};knob.style.transform='';}};pad.addEventListener('pointerup',end);pad.addEventListener('pointercancel',end);
-  look.addEventListener('pointerdown',e=>{lookId=e.pointerId;lastLook={x:e.clientX,y:e.clientY};look.setPointerCapture(e.pointerId);});look.addEventListener('pointermove',e=>{if(e.pointerId!==lookId||!lastLook)return;player.yaw-=(e.clientX-lastLook.x)*.005;player.pitch=clamp(player.pitch-(e.clientY-lastLook.y)*.005,-1.45,1.45);lastLook={x:e.clientX,y:e.clientY};});look.addEventListener('pointerup',e=>{if(e.pointerId===lookId){lookId=null;lastLook=null;}});
+  const movePad=document.getElementById('movePad'),moveKnob=document.getElementById('moveKnob'),lookPad=document.getElementById('lookPad'),lookKnob=document.getElementById('lookKnob');
+  function bindPad(pad,knob,onValue){
+    let pointerId=null;
+    const update=e=>{const r=pad.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,dx=e.clientX-cx,dy=e.clientY-cy,m=Math.min(46,Math.hypot(dx,dy)),a=Math.atan2(dy,dx),value={x:Math.cos(a)*(m/46),y:Math.sin(a)*(m/46)};onValue(value);knob.style.transform=`translate(${value.x*42}px,${value.y*42}px)`;};
+    const reset=e=>{if(e&&pointerId!==null&&e.pointerId!==pointerId)return;pointerId=null;onValue({x:0,y:0});knob.style.transform='';};
+    pad.addEventListener('pointerdown',e=>{if(document.documentElement.classList.contains('golden-drawer-open'))return;pointerId=e.pointerId;pad.setPointerCapture?.(e.pointerId);update(e);});
+    pad.addEventListener('pointermove',e=>{if(e.pointerId===pointerId)update(e);});
+    for(const type of ['pointerup','pointercancel','lostpointercapture'])pad.addEventListener(type,reset);
+    return reset;
+  }
+  const resetMove=bindPad(movePad,moveKnob,v=>{mobileMove=v;});
+  const resetLook=bindPad(lookPad,lookKnob,v=>{mobileLook=v;});
+  addEventListener('goldendrawerchange',e=>{if(e.detail?.open){resetMove();resetLook();}});
   document.getElementById('jumpBtn').onclick=jump;document.getElementById('breakBtn').onclick=()=>editBlock(false);document.getElementById('placeBtn').onclick=()=>editBlock(true);
 }
 
@@ -492,7 +501,7 @@ function updateTarget(){const h=rayVoxel();if(!h)return;targetEl.textContent=`${
 
 async function savePlayer(){if(backendMode!=='online')return;try{await api('player_save',{worldId:'main',position:{x:player.pos.x,y:player.pos.y,z:player.pos.z},yaw:player.yaw,pitch:player.pitch,selectedBlock:HOTBAR[player.selected]});}catch{} }
 function broadcastPlayer(now){if(!channel||now-lastNet<NET_INTERVAL)return;lastNet=now;channel.send({type:'broadcast',event:'player_state',payload:{id:player.id,name:player.name,x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw}});}
-let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(started){physics(dt);updateScienceFx(now,dt);loadNeededChunks();broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);renderer.render(scene,camera);}requestAnimationFrame(loop);
+let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(started){if(Math.abs(mobileLook.x)>.02||Math.abs(mobileLook.y)>.02){player.yaw-=mobileLook.x*2.05*dt;player.pitch=clamp(player.pitch-mobileLook.y*1.65*dt,-1.45,1.45);}physics(dt);updateScienceFx(now,dt);loadNeededChunks();broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);renderer.render(scene,camera);}requestAnimationFrame(loop);
 
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});addEventListener('beforeunload',()=>savePlayer());
 setupDesktop();setupMobile();buildHotbar();
@@ -503,7 +512,7 @@ try{
 }catch(e){console.error(e);setOfflineMode(e.message);player.id=guestId();player.name=`Guest_${player.id.replaceAll('-','').slice(0,4)}`;player.pos.set(0,heightAt(0,0)+4,0);started=true;loading.classList.add('hidden');}
 
 window.VoxelWorldRuntime={
-    stats(){return {player:{x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw,onGround:player.onGround},renderer:renderer?.info?.render,pixelRatio:renderer?.getPixelRatio?.()||1,backendMode,chunks:chunks.size,playable:started&&chunks.size>0};},
+    stats(){return {player:{x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw,pitch:player.pitch,onGround:player.onGround},renderer:renderer?.info?.render,pixelRatio:renderer?.getPixelRatio?.()||1,backendMode,chunks:chunks.size,playable:started&&chunks.size>0};},
     setView(nextYaw,nextPitch=0){player.yaw=Number(nextYaw)||0;player.pitch=Number(nextPitch)||0;}
   };
 
