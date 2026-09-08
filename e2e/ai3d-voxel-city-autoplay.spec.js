@@ -39,6 +39,20 @@ test.describe('AI3D Voxel City - default-city autoplay (no user actions)', () =>
     const renderedPng = await page.locator('#viewer canvas').screenshot({ animations: 'disabled' });
     expect(renderedPng.length).toBeGreaterThan(256);
 
+    // Visible-game-content guard: a loaded scene with a background-only frame is not playable.
+    // Three.js render statistics are world-specific evidence that the active camera/frustum is
+    // actually drawing meaningful default-city geometry (the latent blank-view regression drew ~60).
+    await page.waitForFunction(() => {
+      const s = window.AI3DVoxelRuntime?.stats();
+      return (s?.initialVisibleFacing?.score || 0) > 250 && (s?.renderer?.triangles || 0) > 250;
+    }, { timeout: 5000 });
+    const visibleContent = await page.evaluate(() => {
+      const s = window.AI3DVoxelRuntime.stats();
+      return { facing: s.initialVisibleFacing, triangles: s.renderer?.triangles || 0, calls: s.renderer?.calls || 0 };
+    });
+    expect(visibleContent.facing.score).toBeGreaterThan(250);
+    expect(visibleContent.triangles).toBeGreaterThan(250);
+
     // Character spawned inside city
     const spawnState = await page.evaluate(() => {
       const rt = window.AI3DVoxelRuntime?.stats();

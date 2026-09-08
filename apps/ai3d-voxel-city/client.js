@@ -31,6 +31,7 @@ let pointerLocked=false;
 let lastPlayerUpdate=performance.now();
 let defaultCityLoaded=false;
 let autoplayStarted=false;
+let initialVisibleFacing={yaw:0,label:'metadata',score:0,maxDistance:0};
 
 async function getSession(force=false){
   if(!force&&session&&((session.enabled===false)||session.expiresAt>Date.now()+30000))return session;
@@ -306,6 +307,34 @@ function resolveSpawn(worldData){
   }
   return [sx,1.65,sz];
 }
+function chooseInitialPlayableFacing(worldData,spawnPos){
+  const voxels=Array.isArray(worldData?.voxels)?worldData.voxels:[];
+  const metadataYaw=Number(worldData?.spawn?.yaw);
+  const candidates=[
+    {yaw:Number.isFinite(metadataYaw)?metadataYaw:0,label:'metadata'},
+    {yaw:-Math.PI/2,label:'+X'},
+    {yaw:Math.PI/2,label:'-X'},
+    {yaw:0,label:'-Z'},
+    {yaw:Math.PI,label:'+Z'}
+  ];
+  const unique=[];const seen=new Set();
+  for(const c of candidates){const key=Math.round(c.yaw*100000);if(!seen.has(key)){seen.add(key);unique.push(c);}}
+  const maxDistance=Math.max(24,profile().detailChunks*CHUNK_SIZE);
+  const cosHalf=Math.cos(35*Math.PI/180);
+  let best={...unique[0],score:-1,maxDistance};
+  for(const c of unique){
+    const fx=-Math.sin(c.yaw),fz=-Math.cos(c.yaw);
+    let score=0;
+    for(const v of voxels){
+      if(!Array.isArray(v)||v.length<3)continue;
+      const dx=Number(v[0])-spawnPos[0],dz=Number(v[2])-spawnPos[2],d=Math.hypot(dx,dz);
+      if(d<2||d>maxDistance)continue;
+      if((dx*fx+dz*fz)/d>=cosHalf)score++;
+    }
+    if(score>best.score)best={...c,score,maxDistance};
+  }
+  return best;
+}
 async function renderWorld(data){
   world=data;
   await buildOptimizedChunks(data);
@@ -317,8 +346,10 @@ async function renderWorld(data){
   if(defaultCityLoaded){
     const spawnPos=resolveSpawn(data);
     player.x=spawnPos[0]; player.y=spawnPos[1]; player.z=spawnPos[2]; player.vy=0; player.onGround=true;
-    yaw=player.yaw||0; pitch=player.pitch||0;
+    initialVisibleFacing=chooseInitialPlayableFacing(data,spawnPos);
+    yaw=initialVisibleFacing.yaw; player.yaw=yaw; pitch=Number(data?.spawn?.pitch)||player.pitch||0; player.pitch=pitch;
     switchPlayable();
+    console.log('default-city visible facing',initialVisibleFacing);
     // notify playable runtime
     if(window.__AI3D_PLAYABLE_SCENE__){
       window.__AI3D_PLAYABLE_SCENE__.reportReady({walkable:true,collisions:true,grounding:true,playerSpawn:true});
@@ -658,7 +689,7 @@ window.AI3DVoxelRuntime={
   // setView - e2e/golden-controls.spec.js calls the canonical setView name
   // against both runtimes, so this runtime needs to answer to it too.
   setView(nextYaw,nextPitch=0){this.setPlayerView(nextYaw,nextPitch);},
-  stats(){return {fps:measuredFps,pixelRatio:dynamicPixelRatio,renderer:renderer?.info?.render,mesher:mesherStats,chunks:chunkObjects.size, voxels:world?world.voxels.length:0, player:{x:player.x,y:player.y,z:player.z,yaw,onGround:player.onGround, playable:playableMode}, defaultCityLoaded};},
+  stats(){return {fps:measuredFps,pixelRatio:dynamicPixelRatio,renderer:renderer?.info?.render,mesher:mesherStats,chunks:chunkObjects.size, voxels:world?world.voxels.length:0, player:{x:player.x,y:player.y,z:player.z,yaw,onGround:player.onGround, playable:playableMode}, defaultCityLoaded,initialVisibleFacing};},
   collidesAt(x,y,z){ return collidesAt(x,y,z); },
   getOccupancySize(){ return occupancySet.size; }
 };
