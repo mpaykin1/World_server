@@ -29,3 +29,21 @@ test('atomicWrite retries transient Windows rename failures', () => {
     fs.rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test('atomicWrite falls back to durable write when rename stays locked', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'ws-atomic-'));
+  const file = path.join(dir, 'report.json');
+  fs.writeFileSync(file, '{"old":true}\n');
+  const originalRename = fs.renameSync;
+  const originalWait = Atomics.wait;
+  fs.renameSync = () => { const e = new Error('persistent lock'); e.code = 'EPERM'; throw e; };
+  Atomics.wait = () => 'timed-out';
+  try {
+    atomicWrite(file, '{"pass":true}\n');
+    assert.equal(fs.readFileSync(file, 'utf8'), '{"pass":true}\n');
+  } finally {
+    fs.renameSync = originalRename;
+    Atomics.wait = originalWait;
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
