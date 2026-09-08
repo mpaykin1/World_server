@@ -27,7 +27,7 @@ jobs:
             process.exitCode = 1;
           }
 
-          for (const file of ['SCIENCE_STANDARD.md', '.ai/science-governance.json', '.ai/vno-cycle.json', 'data/vno-gameplay-systems.json', 'scripts/check-vno-cycle.js', 'AGENTS.md']) {
+          for (const file of ['SCIENCE_STANDARD.md', '.ai/science-governance.json', '.ai/vno-cycle.json', '.ai/vno-scoring.json', 'data/vno-gameplay-systems.json', 'scripts/check-vno-cycle.js', 'scripts/check-vno-scoring.js', 'AGENTS.md']) {
             if (!fs.existsSync(file)) fail(`${file} is required`);
           }
           if (process.exitCode) process.exit(process.exitCode);
@@ -118,12 +118,15 @@ jobs:
       - name: Validate seven-step VNO gameplay loop
         run: node scripts/check-vno-cycle.js
 
+      - name: Validate anti-gaming VNO scoring
+        run: node scripts/check-vno-scoring.js
+
       - name: Reject explicit code-PASS-as-real-world-proof claims
         shell: bash
         run: |
           node <<'NODE'
           const fs = require('fs');
-          const files = ['SCIENCE_STANDARD.md', 'AGENTS.md', '.ai/science-governance.json', '.ai/vno-cycle.json'];
+          const files = ['SCIENCE_STANDARD.md', 'AGENTS.md', '.ai/science-governance.json', '.ai/vno-cycle.json', '.ai/vno-scoring.json'];
           const forbidden = [
             /pass:true\s+(proves|is\s+proof|is\s+scientifically\s+proven)/i,
             /pass:true.{0,40}means.{0,40}(real[- ]world|law)/i,
