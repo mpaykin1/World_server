@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "name": "VNO evidence scoring rubric",
+  "principle": "Воспроизводимость, Независимость, Опровержение",
+  "purpose": "Prevent agents from raising VNO percentages by opinion, wording or changing the formula. Scores must be earned by evidence milestones.",
+  "aggregation": "SCIENCE_READINESS = min(REPRODUCIBILITY, INDEPENDENCE, FALSIFICATION)",
+  "rules": {
+    "selfReportedEvidenceCounts": false,
+    "documentationOnlyCountsAsScientificEvidence": false,
+    "failedAttemptCountsAsPassedMilestone": false,
+    "sameAgentSelfReviewCountsAsIndependence": false,
+    "sameImplementationSecondRunCountsAsIndependentImplementation": false,
+    "thresholdRetuningAfterHoldoutAllowed": false,
+    "negativeResultsMayBeDeleted": false,
+    "onePillarMayCompensateAnother": false,
+    "scoreMayIncreaseWithoutNewEvidence": false,
+    "scoreMayDecreaseWhenEvidenceIsInvalidated": true,
+    "evidenceMustReferenceArtifactOrRun": true,
+    "bootstrapCycles": [1, 2],
+    "bootstrapNote": "RUN_072 and RUN_059 VNO files are initial conservative audits created before this rubric. Their scores remain explicitly provisional until converted to milestone evidence records; they cannot be used to claim D4+ or 100% readiness."
+  },
+  "reproducibility": [
+    {"id":"R1","points":10,"requirement":"immutable source provenance + preserved raw result"},
+    {"id":"R2","points":10,"requirement":"documented deterministic reproduction command or harness"},
+    {"id":"R3","points":10,"requirement":"fixed preregistered criteria and preserved negative result policy"},
+    {"id":"R4","points":10,"requirement":"successful clean-environment CI/fresh-machine reproduction artifact"},
+    {"id":"R5","points":10,"requirement":"at least 30 previously unseen confirmation cases/seeds"},
+    {"id":"R6","points":10,"requirement":"at least 100 previously unseen confirmation cases/seeds or justified equivalent power"},
+    {"id":"R7","points":10,"requirement":"multiple materially different system/world sizes and stress scales"},
+    {"id":"R8","points":10,"requirement":"effect size + uncertainty/repeat-variance analysis"},
+    {"id":"R9","points":10,"requirement":"cross-platform or independently provisioned environment replay"},
+    {"id":"R10","points":10,"requirement":"public one-command reproduction package independently replayed without private setup"}
+  ],
+  "independence": [
+    {"id":"I1","points":10,"requirement":"discovery/confirmation roles or frozen criteria prevent same-run self-retuning"},
+    {"id":"I2","points":10,"requirement":"hidden confirmation cases generated/held by a separate process or role"},
+    {"id":"I3","points":10,"requirement":"independent verifier does not reuse implementation decision logic"},
+    {"id":"I4","points":10,"requirement":"clean-room reimplementation from specification without source-logic copying"},
+    {"id":"I5","points":10,"requirement":"separate harness/codebase reproduces the main result"},
+    {"id":"I6","points":10,"requirement":"different agent/model/provider reproduces result from frozen inputs"},
+    {"id":"I7","points":10,"requirement":"independent implementations agree across a larger hidden suite"},
+    {"id":"I8","points":10,"requirement":"result transfers to at least one genuinely different applicable system with its own proof"},
+    {"id":"I9","points":10,"requirement":"external reviewer/replicator not controlled by the original implementation loop reproduces result"},
+    {"id":"I10","points":10,"requirement":"external/public replication package yields reproducible confirmation by independent parties"}
+  ],
+  "falsification": [
+    {"id":"F1","points":10,"requirement":"explicit refutation condition fixed before confirmation"},
+    {"id":"F2","points":10,"requirement":"matched meaningful baseline/control"},
+    {"id":"F3","points":10,"requirement":"negative control expected to fail for the claimed causal reason"},
+    {"id":"F4","points":10,"requirement":"relevant negative predecessor/counterevidence preserved and incorporated"},
+    {"id":"F5","points":10,"requirement":"ablation removes the proposed causal mechanism"},
+    {"id":"F6","points":10,"requirement":"preregistered adversarial/targeted attacks"},
+    {"id":"F7","points":10,"requirement":"automated counterexample search across hidden cases"},
+    {"id":"F8","points":10,"requirement":"leakage, metric-gaming and privileged-information attacks"},
+    {"id":"F9","points":10,"requirement":"independent Red Team Scientist attempts to disprove strongest claim"},
+    {"id":"F10","points":10,"requirement":"multiple materially different failure modes/damage classes tested without post-hoc threshold changes"}
+  ],
+  "promotion": {
+    "D4Requires": ["I3", "I4"],
+    "D5Requires": ["R7", "F5", "F6"],
+    "D6Requires": ["I5", "I6", "I7"],
+    "D7CannotBeSelfAssigned": true,
+    "D7RequiresExternalScientificEvidence": true,
+    "hundredPercentRequiresEveryMilestone": true
+  }
+}
