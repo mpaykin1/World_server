@@ -24,7 +24,8 @@ test.describe('Canonical control behavior',()=>{
     await page.goto('/apps/ai3d-voxel-city/',{waitUntil:'domcontentloaded'});
     await page.waitForFunction(()=>window.AI3DVoxelRuntime?.stats?.().player?.playable,{timeout:30000});
     const before=await page.evaluate(()=>window.AI3DVoxelRuntime.stats().player);
-    await page.keyboard.press('Space');await page.waitForTimeout(120);
+    await page.keyboard.press('Space');
+    await page.waitForFunction(y0 => Math.abs((window.AI3DVoxelRuntime?.stats?.().player?.y || y0) - y0) > 0.001, before.y, { timeout: 5000 });
     const after=await page.evaluate(()=>window.AI3DVoxelRuntime.stats().player);
     expect(after.y).not.toBe(before.y);
   });

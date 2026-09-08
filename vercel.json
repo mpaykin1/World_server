@@ -15,7 +15,7 @@
       "includeFiles": "apps/**"
     },
     "api/worlds.js": {
-      "includeFiles": "data/world-graph-index.json"
+      "includeFiles": "data/**"
     }
   },
   "redirects": [
@@ -41,6 +41,26 @@
     {
       "source": "/api/logout",
       "destination": "/api/auth?__route=logout"
+    },
+    {
+      "source": "/api/roblox/handshake",
+      "destination": "/api/worlds?__route=roblox_handshake"
+    },
+    {
+      "source": "/api/roblox/world",
+      "destination": "/api/worlds?__route=roblox_world"
+    },
+    {
+      "source": "/api/roblox/chunk",
+      "destination": "/api/worlds?__route=roblox_chunk"
+    },
+    {
+      "source": "/api/roblox/events",
+      "destination": "/api/worlds?__route=roblox_events"
+    },
+    {
+      "source": "/api/roblox/telemetry",
+      "destination": "/api/worlds?__route=roblox_telemetry"
     },
     {
       "source": "/apps/:app/",

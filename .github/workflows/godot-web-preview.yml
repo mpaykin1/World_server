@@ -60,12 +60,12 @@ jobs:
         run: |
           mkdir -p /tmp/godot_setup
           cd /tmp/godot_setup
-          curl -L -s -o godot.zip https://github.com/godotengine/godot-builds/releases/download/4.3-stable/Godot_v4.3-stable_linux.x86_64.zip
+          curl -f -S -L --retry 5 --retry-connrefused -o godot.zip https://github.com/godotengine/godot-builds/releases/download/4.3-stable/Godot_v4.3-stable_linux.x86_64.zip
           unzip -q godot.zip
           chmod +x Godot_v4.3-stable_linux.x86_64
           echo "GODOT_BIN=/tmp/godot_setup/Godot_v4.3-stable_linux.x86_64" >> "$GITHUB_ENV"
 
-          curl -L -s -o templates.tpz https://github.com/godotengine/godot-builds/releases/download/4.3-stable/Godot_v4.3-stable_export_templates.tpz
+          curl -f -S -L --retry 5 --retry-connrefused -o templates.tpz https://github.com/godotengine/godot-builds/releases/download/4.3-stable/Godot_v4.3-stable_export_templates.tpz
           mkdir -p ~/.local/share/godot/export_templates/4.3.stable
           unzip -q templates.tpz
           cp -r templates/* ~/.local/share/godot/export_templates/4.3.stable/
