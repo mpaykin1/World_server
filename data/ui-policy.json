@@ -30,7 +30,12 @@
     "worldPreviewMaxBytes": 100000,
     "worldPreviewLazyLoad": true,
     "worldLoreReadingLevel": "age-5-simple",
-    "worldConnectionsMenu": true
+    "worldConnectionsMenu": true,
+    "graphicsFirstWorlds": true,
+    "primaryRendererMinViewportWidthRatio": 0.9,
+    "primaryRendererMinViewportHeightRatio": 0.82,
+    "maxClosedAuxiliaryOcclusionRatio": 0.12,
+    "gameplayPageScrollAllowed": false
   },
   "knownSystemPanels": {
     "catalog": [
@@ -46,7 +51,17 @@
     "ai3d-voxel-city": [
       "header",
       ".controls",
-      ".metrics"
+      ".metrics",
+      ".compare > .pane:not(.viewerPane)",
+      ".viewerHead",
+      "#stats"
+    ],
+    "survival": [
+      "#survivalHelp",
+      "#stats",
+      "#backLink",
+      "#buildPanel",
+      "#inventory"
     ]
   }
 }

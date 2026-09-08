@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 (function(){
   if(window.__GOLDEN_UI_SHELL_V2__) return;
   window.__GOLDEN_UI_SHELL_V2__=true;
@@ -6,8 +6,8 @@
   const configs=[
     {match:'/apps/catalog/',title:'Миры',worldId:'world-server-catalog-live',selectors:['.app-title','.topHint','#miniMap']},
     {match:'/apps/voxel-world/',title:'Voxel World',worldId:'voxel-world',selectors:['#vwHud','#vwHelp','#vwBack']},
-    {match:'/apps/ai3d-voxel-city/',title:'Voxel City',worldId:'ai3d-voxel-city',selectors:['header','.controls','.metrics']},
-    {match:'/apps/survival/',title:'Survival',worldId:'survival',selectors:['.app-title','.topHint']},
+    {match:'/apps/ai3d-voxel-city/',title:'Voxel City',worldId:'ai3d-voxel-city',selectors:['header','.controls','.metrics','.compare > .pane:not(.viewerPane)','.viewerHead','#stats'],graphicsFirst:{host:'.viewerPane',surface:'#viewer'}},
+    {match:'/apps/survival/',title:'Survival',worldId:'survival',selectors:['#survivalHelp','#stats','#backLink','#buildPanel','#inventory']},
     {match:'/apps/world-sharabass/',title:'Мир Шарабас',worldId:'world-sharabass',selectors:['.app-title','.topHint']},
     {match:'/apps/dark-void-scene/',title:'Dark Void Navigator',worldId:'dark-void-scene',selectors:[]}
   ];
@@ -48,6 +48,7 @@
   addEventListener('keydown',e=>{if(e.code==='Escape')close()});
   for(const selector of cfg.selectors){for(const node of [...document.querySelectorAll(selector)]){if(root.contains(node))continue;node.dataset.goldenPacked='true';packed.appendChild(node);}}
   if(!packed.children.length){const p=document.createElement('p');p.textContent='Дополнительных системных панелей нет.';packed.appendChild(p);}
+  if(cfg.graphicsFirst){const host=document.querySelector(cfg.graphicsFirst.host),surface=document.querySelector(cfg.graphicsFirst.surface);if(host&&surface){document.documentElement.classList.add('golden-graphics-first');host.dataset.goldenViewport='primary';surface.dataset.goldenPrimaryRenderer='true';}else console.error('[GOLDEN GRAPHICS] primary renderer missing',cfg.graphicsFirst);}
 
   function fallbackInventory(registry){
     const local=Object.entries(registry.apps||{}).filter(([,m])=>m?.worldMenu?.show).map(([id,m])=>({id,title:m.title||id,url:`/apps/${id}/`,status:m.status||'unknown',kind:m.kind||'game',external:false,available:true,worldMenu:m.worldMenu}));

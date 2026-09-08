@@ -77,6 +77,9 @@ if(!shellCss.includes('.golden-drawer-open #mobileControls')) fail('modal does n
 if(!voxelHtml.includes('id=\"movePad\"')||!voxelHtml.includes('id=\"lookPad\"')) fail('Voxel World must expose two visible mobile joysticks');
 if(!voxel.includes('mobileLook')||!voxel.includes("addEventListener('goldendrawerchange'")) fail('Voxel World visible look joystick / modal reset missing');
 if(JSON.stringify(controlPolicy.mobile)!==JSON.stringify(['VISIBLE_LEFT_MOVE_JOYSTICK','VISIBLE_RIGHT_LOOK_JOYSTICK','TOUCH_JUMP'])) fail('control policy no longer requires visible dual joysticks');
+if(uiPolicy.rules.graphicsFirstWorlds!==true||uiPolicy.rules.gameplayPageScrollAllowed!==false) fail('Graphics-First viewport policy missing');
+if(!shellJs.includes('graphicsFirst:{host:')||!shellJs.includes('goldenPrimaryRenderer')) fail('Graphics-First renderer binding missing');
+if(!shellCss.includes('html.golden-graphics-first')||!shellCss.includes('[data-golden-primary-renderer="true"]')) fail('Graphics-First fullscreen CSS missing');
 const requiredWorldUrls=['https://dark-void-navigator.vercel.app/','https://improve-world-home-improve-world.vercel.app/','https://improve-world-experiment-100-improve-world.vercel.app/','https://voxel-gothic-steampunk-world-improve-world.vercel.app/','https://gothic-voxel-city-atlas-v3-mobile-final-improve-world.vercel.app/','https://voxel-gothic-steampunk-mobile-repaired-improve-world.vercel.app/','https://world-server-git-codex-voxel-v3-improve-world.vercel.app/apps/voxel-world/','https://world-server.vercel.app/apps/catalog/'];
 const externalUrls=new Set((registry.externalWorlds||[]).map(x=>x.url));
 for(const url of requiredWorldUrls) if(!externalUrls.has(url)) fail('World newspaper lost required URL: '+url);

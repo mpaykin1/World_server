@@ -1,4 +1,4 @@
-﻿#goldenUiShell{position:fixed;inset:0;z-index:2147482500;pointer-events:none;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#fff}
+#goldenUiShell{position:fixed;inset:0;z-index:2147482500;pointer-events:none;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#fff}
 #goldenUiShell *{box-sizing:border-box}#goldenUiShell svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 #goldenToolbar{position:absolute;left:max(10px,env(safe-area-inset-left));top:max(10px,env(safe-area-inset-top));display:flex;gap:7px;pointer-events:auto}
 #goldenToolbar button,#goldenDrawerClose{width:44px;height:44px;border-radius:13px;border:1px solid rgba(255,255,255,.2);background:rgba(12,16,22,.78);color:#fff;display:grid;place-items:center;backdrop-filter:blur(12px);box-shadow:0 5px 20px rgba(0,0,0,.22);cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
@@ -13,3 +13,11 @@
 #goldenLore h3{margin:2px 0 8px;font:900 20px/1.05 Georgia,serif}#goldenLore p{font:15px/1.48 system-ui;margin:7px 0}#goldenLore .goldenLoreHistory{padding:10px;border-left:3px solid #e6c772;background:rgba(255,255,255,.06);border-radius:0 9px 9px 0}#goldenTechnicalInfo{margin-top:14px;color:#c9d2db;font:12px/1.4 system-ui}
 .golden-minimal-ui #targetInfo{display:none!important}.golden-drawer-open #mobileControls,.golden-drawer-open #mobileControls *{pointer-events:none!important}
 @media(max-width:800px),(pointer:coarse){#goldenToolbar{gap:5px}#goldenToolbar button{width:46px;height:46px}#goldenDrawer{top:calc(max(10px,env(safe-area-inset-top)) + 54px);width:calc(100vw - max(20px,env(safe-area-inset-left) + env(safe-area-inset-right)));max-height:70vh}#goldenDrawerClose{width:52px;height:52px;border-radius:15px}#goldenDrawer>header{min-height:62px}.goldenWorldMode{top:62px}.goldenBridgePicker{grid-template-columns:1fr}.goldenHeadline{font-size:21px}}
+
+/* Golden Graphics-First viewport contract: gameplay owns the screen; auxiliary UI lives in the drawer. */
+html.golden-graphics-first,html.golden-graphics-first body{width:100%!important;height:100%!important;min-height:100%!important;overflow:hidden!important;background:#05070a!important}
+html.golden-graphics-first body>main{max-width:none!important;width:100vw!important;height:100dvh!important;margin:0!important;padding:0!important;overflow:hidden!important}
+html.golden-graphics-first .compare{display:block!important;width:100vw!important;height:100dvh!important;margin:0!important;padding:0!important}
+html.golden-graphics-first [data-golden-viewport="primary"]{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;overflow:hidden!important;background:#05070a!important}
+html.golden-graphics-first [data-golden-primary-renderer="true"]{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:100%!important;margin:0!important;padding:0!important}
+html.golden-graphics-first [data-golden-primary-renderer="true"] canvas{width:100%!important;height:100%!important;display:block!important}

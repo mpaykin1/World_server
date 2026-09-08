@@ -28,10 +28,15 @@ test.describe('Golden UI + render contract',()=>{
       expect(await n.evaluate(el=>!!el.closest('#goldenDrawer'))).toBe(true);
     }
   });
-  test('AI3D system/editor panels are packed while viewer remains available',async({page})=>{
+  test('AI3D auxiliary/reference/editor panels are packed while viewer owns gameplay',async({page})=>{
     await page.goto('/apps/ai3d-voxel-city/',{waitUntil:'domcontentloaded'});
-    for(const sel of ['header','.controls','.metrics']) expect(await page.locator(sel).first().evaluate(el=>!!el.closest('#goldenDrawer'))).toBe(true);
-    await expect(page.locator('#viewer')).toBeVisible();
+    for(const sel of ['header','.controls','.metrics','.imgWrap','.viewerHead','#stats']) expect(await page.locator(sel).first().evaluate(el=>!!el.closest('#goldenDrawer'))).toBe(true);
+    await expect(page.locator('#viewer')).toHaveAttribute('data-golden-primary-renderer','true');
+  });
+  test('AI3D graphics-first renderer owns viewport with drawer closed',async({page})=>{
+    await page.goto('/apps/ai3d-voxel-city/',{waitUntil:'domcontentloaded'});await page.waitForSelector('#viewer canvas',{state:'visible',timeout:25000});
+    const x=await page.evaluate(()=>{const r=document.querySelector('#viewer').getBoundingClientRect();return {w:r.width/innerWidth,h:r.height/innerHeight,scroll:document.documentElement.scrollHeight/innerHeight,drawer:document.querySelector('#goldenDrawer').getAttribute('aria-hidden')};});
+    expect(x.w).toBeGreaterThanOrEqual(.9);expect(x.h).toBeGreaterThanOrEqual(.82);expect(x.scroll).toBeLessThanOrEqual(1.02);expect(x.drawer).toBe('true');
   });
   test('certified render surfaces are visible and not CSS blurred',async({page})=>{
     for(const app of ['voxel-world','ai3d-voxel-city']){
