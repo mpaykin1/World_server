@@ -10,7 +10,7 @@ module.exports = defineConfig({
   workers: 1,
   use: {
     baseURL: 'http://localhost:3000',
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure',
   },
   webServer: {
     command: 'node server.js',
