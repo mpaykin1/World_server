@@ -1,13 +1,15 @@
 {
-  "version": 1,
+  "version": 2,
   "purpose": "Universal discovery index for new chats and AI agents working on World_server",
   "startHere": "AI_START_HERE.md",
+  "currentState": ".ai/vno-current-state.json",
   "canonicalContextFiles": [
     "AI_START_HERE.md",
     "README.md",
     "AGENTS.md",
     "VNO.md",
     "SCIENCE_STANDARD.md",
+    ".ai/vno-current-state.json",
     ".ai/vno-cycle.json",
     ".ai/vno-scoring.json",
     ".ai/science-governance.json",
@@ -20,6 +22,7 @@
       "expansionRu": "Воспроизводимость, Независимость, Опровержение",
       "expansionEn": "Reproducibility, Independence, Falsification",
       "canonicalFile": "VNO.md",
+      "currentStateFile": ".ai/vno-current-state.json",
       "aliases": [
         "ВНО",
         "VNO",
@@ -31,9 +34,13 @@
         "Science 100",
         "scientific readiness",
         "discovery to gameplay",
-        "Science to Gameplay"
+        "Science to Gameplay",
+        "текущий шаг ВНО",
+        "current VNO step",
+        "next VNO step"
       ],
       "machineFiles": [
+        ".ai/vno-current-state.json",
         ".ai/vno-cycle.json",
         ".ai/vno-scoring.json",
         ".ai/science-governance.json",
@@ -41,6 +48,6 @@
       ]
     }
   },
-  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it.",
+  "agentBootstrapRule": "When a project-specific term or current project state is unknown in the current chat, read AI_START_HERE.md, .ai/vno-current-state.json and this index from master before asking the user to define it or guessing the current step.",
   "sourceOfTruthBranch": "master"
 }
