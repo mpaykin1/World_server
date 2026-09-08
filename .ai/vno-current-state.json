@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "sourceOfTruthBranch": "master",
+  "updatedBy": "VNO cycle state sync",
+  "currentCycle": 2,
+  "sourceDiscovery": "RUN_059",
+  "sourceCycleRecord": "science/vno/RUN_059.vno.json",
+  "candidateHypothesis": "RUN_074_CANDIDATE_DETERMINISTIC_BASE_PLUS_CAUSAL_DELTAS",
+  "candidateStatus": "PREREGISTRATION_REQUIRED_BEFORE_CONFIRMATION",
+  "productionEnabled": false,
+  "completedSteps": [
+    1,
+    2,
+    3
+  ],
+  "activeStep": {
+    "number": 4,
+    "id": "PROVE_IN_CODE",
+    "titleRu": "Доказать гипотезу кодом",
+    "kidMeaningRu": "Теперь надо проверить новую идею по-настоящему и посмотреть, сломается ли она.",
+    "whyNow": "RUN_059 has already produced a concrete next hypothesis and gameplay transfer map, but RUN_074 is still a candidate and has not passed preregistered hidden confirmation tests."
+  },
+  "vnoPriority": {
+    "weakestPillar": "INDEPENDENCE",
+    "knownBootstrapScores": {
+      "reproducibility": 35,
+      "independence": 10,
+      "falsification": 40,
+      "scienceReadiness": 10
+    },
+    "meaning": "These scores measure progress through the VNO evidence process, not percentage truth of a real-world law."
+  },
+  "nextAction": {
+    "id": "RUN_074_PREREGISTER_AND_INDEPENDENTLY_TEST",
+    "kidMeaningRu": "Сначала заранее запиши правила проверки. Потом дай другой независимой программе те же правила и спрячь от неё ответы. После этого специально ломай порядок изменений, теряй их, дублируй и порть — и смотри, сможет ли мир всё равно восстановиться правильно.",
+    "technical": [
+      "Freeze RUN_074 per-system identity, ordering, exactness, storage/network benefit and failure thresholds before holdout.",
+      "Build a clean-room reconstruction implementation from the written specification without copying the source algorithm.",
+      "Generate hidden change histories independently from the implementation under test.",
+      "Run delta reorder, duplicate, drop, corruption, stable-ID collision, generator-version and dense-edit attacks.",
+      "Require exact authoritative reconstruction for every applicable gameplay system before promotion.",
+      "Record negative results and do not lower thresholds after holdout."
+    ]
+  },
+  "loopRule": "When step 4-6 evidence is complete, select the strongest surviving result or most useful refutation and return to step 1. Do not mark RUN_074 confirmed merely because it is the current candidate.",
+  "readOrderForAgents": [
+    "AI_START_HERE.md",
+    ".ai/vno-current-state.json",
+    "VNO.md",
+    ".ai/vno-cycle.json",
+    ".ai/vno-scoring.json",
+    "science/vno/RUN_059.vno.json"
+  ]
+}
