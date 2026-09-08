@@ -12,6 +12,7 @@ const apiHandlers = new Map([
   ['/api/apps', require('./api/apps')],
   ['/api/worlds', require('./api/worlds')],
   ['/api/config', require('./api/config')],
+  ['/api/project-context', require('./api/project-context')],
   ['/api/register', require('./lib/api-handlers/register')],
   ['/api/login', require('./lib/api-handlers/login')],
   ['/api/me', require('./lib/api-handlers/me')],
@@ -123,4 +124,3 @@ if (process.env.REMOTE_BRIDGE_AUTOSTART === '1') {
 }
 
 module.exports = { server, safeJoin, resolveEntrypoint, DEFAULT_ENTRYPOINT, ENTRYPOINT_WHITELIST };
-

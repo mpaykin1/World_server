@@ -27,7 +27,7 @@ jobs:
             process.exitCode = 1;
           }
 
-          for (const file of ['SCIENCE_STANDARD.md', '.ai/science-governance.json', '.ai/vno-cycle.json', '.ai/vno-scoring.json', 'data/vno-gameplay-systems.json', 'scripts/check-vno-cycle.js', 'scripts/check-vno-scoring.js', 'AGENTS.md']) {
+          for (const file of ['AI_START_HERE.md', '.ai/project-context-index.json', 'SCIENCE_STANDARD.md', '.ai/science-governance.json', '.ai/vno-cycle.json', '.ai/vno-scoring.json', 'data/vno-gameplay-systems.json', 'scripts/check-vno-cycle.js', 'scripts/check-vno-scoring.js', 'scripts/check-ai-context-discovery.js', 'AGENTS.md']) {
             if (!fs.existsSync(file)) fail(`${file} is required`);
           }
           if (process.exitCode) process.exit(process.exitCode);
@@ -120,6 +120,9 @@ jobs:
 
       - name: Validate anti-gaming VNO scoring
         run: node scripts/check-vno-scoring.js
+
+      - name: Validate universal AI context discovery
+        run: node scripts/check-ai-context-discovery.js
 
       - name: Reject explicit code-PASS-as-real-world-proof claims
         shell: bash
