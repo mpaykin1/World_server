@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "purpose": "Machine-readable connection and capability manifest for onboarding any browser/cloud/desktop AI into World_server without copying secrets.",
+  "sourceOfTruthBranch": "master",
+  "bootstrap": {
+    "startHere": "AI_START_HERE.md",
+    "humanGuide": "docs/AI_ONBOARDING_AND_CONNECTIONS.md",
+    "bootstrapPrompt": "NEW_AI_BOOTSTRAP_PROMPT.md",
+    "coordinationBridge": ".ai/bridge/README.md",
+    "canonicalBridgeIssue": 55
+  },
+  "rules": {
+    "neverCopySessionTokens": true,
+    "neverCommitSecrets": true,
+    "preferOAuthOrProviderConnect": true,
+    "preferExistingWorldServerGateway": true,
+    "minimumHumanAction": true,
+    "missingRequiredConnectionMustBeReported": true,
+    "doNotClaimInheritedAccess": true,
+    "cloudFirst": true
+  },
+  "connections": [
+    {
+      "id": "github",
+      "purpose": "Canonical source control, PRs, issues, AI Bridge and CI evidence",
+      "priority": "required",
+      "auth": "provider_connect_or_oauth",
+      "bootstrapBehavior": "auto_use_if_already_connected_else_ask_owner_to_connect_once",
+      "verification": ["can_read_repo:mpaykin1/World_server", "can_read_issue:55"],
+      "minimumUsefulPermission": "read",
+      "preferredPermissionForImplementation": "write_branch_pr_issue",
+      "secretTransfer": "forbidden"
+    },
+    {
+      "id": "world_server_ai_bridge",
+      "purpose": "Agent-to-agent tasks, results, checkpoints and peer communication",
+      "priority": "required",
+      "auth": "inherits_github_repo_access",
+      "bootstrapBehavior": "automatic_after_github_access",
+      "verification": ["read:.ai/bridge/README.md", "read:.ai/bridge/state.json", "read_issue:55"],
+      "secretTransfer": "none"
+    },
+    {
+      "id": "vercel",
+      "purpose": "Web previews, production deployment diagnostics and logs when the task uses Vercel",
+      "priority": "conditional",
+      "auth": "provider_connect_or_oauth",
+      "bootstrapBehavior": "connect_only_if_task_requires_it",
+      "secretTransfer": "forbidden"
+    },
+    {
+      "id": "supabase",
+      "purpose": "Database, Auth, migrations, RPC and backend diagnostics when the task uses Supabase",
+      "priority": "conditional",
+      "auth": "provider_connect_or_oauth_or_server_side_secret",
+      "bootstrapBehavior": "prefer_connected_provider_or_server_gateway",
+      "secretTransfer": "forbidden"
+    },
+    {
+      "id": "netlify",
+      "purpose": "Preview/deployment work for Netlify-hosted surfaces",
+      "priority": "conditional",
+      "auth": "provider_connect_or_oauth",
+      "bootstrapBehavior": "connect_only_if_task_requires_it",
+      "secretTransfer": "forbidden"
+    },
+    {
+      "id": "google_drive",
+      "purpose": "Shared project documents, artifacts and source material when explicitly needed",
+      "priority": "optional",
+      "auth": "provider_connect_or_oauth",
+      "bootstrapBehavior": "connect_on_demand",
+      "secretTransfer": "forbidden"
+    },
+    {
+      "id": "posthog",
+      "purpose": "Product analytics and telemetry diagnostics",
+      "priority": "optional",
+      "auth": "provider_connect_or_oauth",
+      "bootstrapBehavior": "connect_on_demand",
+      "secretTransfer": "forbidden"
+    },
+    {
+      "id": "neon",
+      "purpose": "Postgres infrastructure if a World_server task explicitly targets Neon",
+      "priority": "optional",
+      "auth": "provider_connect_or_oauth",
+      "bootstrapBehavior": "connect_on_demand",
+      "secretTransfer": "forbidden"
+    },
+    {
+      "id": "remote_desktop_commander",
+      "purpose": "Last-resort bridge to the authorized user computer for steps impossible in browser/cloud",
+      "priority": "optional_last_resort",
+      "auth": "device_authorization",
+      "bootstrapBehavior": "never_require_for_normal_onboarding",
+      "constraints": ["cloud_first", "zero_chaos", "no_desktop_clutter", "low_impact"],
+      "secretTransfer": "forbidden"
+    }
+  ],
+  "agentHandshake": {
+    "requiredFields": ["agent_name", "provider", "model_or_product", "github_access", "write_capabilities", "available_connections", "missing_required_connections", "limitations"],
+    "postTo": "GitHub issue #55",
+    "format": "AI-BRIDGE HELLO"
+  }
+}
