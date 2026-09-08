@@ -27,6 +27,9 @@ GOLDEN_STANDARD_WORLD_SERVER_V10/
 # secrets index вЂ” never commit
 WORLD_SERVER_SECRETS/
 
+# build output directory
+/dist/
+
 # local toolchain cache / disaster-recovery snapshots / backups вЂ” large, regenerable, not source
 .cache/
 .world-server-state/
