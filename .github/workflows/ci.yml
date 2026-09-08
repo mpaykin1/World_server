@@ -52,6 +52,22 @@ jobs:
           CANONICAL_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
           CURRENT_DEFAULT_SHA: ${{ github.event.pull_request.base.sha || github.sha }}
         run: node scripts/summarize-playwright-failure.js
+      - name: Publish Playwright failure summary to job output
+        if: failure()
+        run: |
+          SUMMARY="test-results/playwright-failure-summary.json"
+          if [ -f "$SUMMARY" ]; then
+            echo "Playwright machine-readable failure summary:"
+            cat "$SUMMARY"
+            {
+              echo "## Playwright failure summary"
+              echo '```json'
+              cat "$SUMMARY"
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No Playwright failure summary found at $SUMMARY"
+          fi
       - name: Upload Playwright failure evidence
         if: failure()
         uses: actions/upload-artifact@v4
