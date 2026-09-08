@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "purpose": "Universal discovery index for new chats and AI agents working on World_server",
+  "startHere": "AI_START_HERE.md",
+  "canonicalContextFiles": [
+    "AI_START_HERE.md",
+    "README.md",
+    "AGENTS.md",
+    "VNO.md",
+    "SCIENCE_STANDARD.md",
+    ".ai/vno-cycle.json",
+    ".ai/vno-scoring.json",
+    ".ai/science-governance.json",
+    "data/vno-gameplay-systems.json",
+    "docs/SCIENCE_GAMEPLAY_STANDARD.md"
+  ],
+  "concepts": {
+    "vno": {
+      "displayName": "Принцип ВНО",
+      "expansionRu": "Воспроизводимость, Независимость, Опровержение",
+      "expansionEn": "Reproducibility, Independence, Falsification",
+      "canonicalFile": "VNO.md",
+      "aliases": [
+        "ВНО",
+        "VNO",
+        "Принцип ВНО",
+        "цикл ВНО",
+        "VNO cycle",
+        "Воспроизводимость Независимость Опровержение",
+        "Reproducibility Independence Falsification",
+        "Science 100",
+        "scientific readiness",
+        "discovery to gameplay",
+        "Science to Gameplay"
+      ],
+      "machineFiles": [
+        ".ai/vno-cycle.json",
+        ".ai/vno-scoring.json",
+        ".ai/science-governance.json",
+        "data/vno-gameplay-systems.json"
+      ]
+    }
+  },
+  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it.",
+  "sourceOfTruthBranch": "master"
+}
