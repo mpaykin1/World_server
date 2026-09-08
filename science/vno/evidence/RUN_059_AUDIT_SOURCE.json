@@ -1,0 +1,57 @@
+{
+  "kind": "VNO_AUDIT_SOURCE_COPY",
+  "sourceRepository": "mpaykin1/World_server",
+  "sourceBranch": "ai/science/run059-dynamic-delta-reconstruction",
+  "sourceCommit": "f2f72cdc58038da5717ee6f1d75a82acefddf4f4",
+  "sourceFile": "SCIENCE_RUN_059_H1.json",
+  "experiment": "RUN_059_H1_DYNAMIC_DELTA_RECONSTRUCTION",
+  "productionPath": "lib/game-rules.js::generateChunk",
+  "subhypothesis": "A large modified survival world can be represented exactly by deterministic procedural chunk rules plus a sparse history of resource deltas, with description size tracking edits rather than full world state.",
+  "preregistration": {
+    "editSeed": 59059,
+    "independentChunkWindowOrigins": 4,
+    "radii": [2, 4, 8, 16],
+    "targetSparseDepletionHistory": "approximately 2%",
+    "exactReconstructionRequired": true,
+    "negativeControl": "same remaining delta values attached to wrong resource IDs",
+    "baseline": "Brotli-compressed full resource state",
+    "confirmation": [
+      "all reconstructions exact",
+      "wrong-ID control mismatches when at least two edits exist",
+      "every radius-16 compressed explicit state is at least 8x the sparse descriptor",
+      "edit rate is at most 3%",
+      "median descriptor growth radius 8 to 16 is at most 4.8x",
+      "median compressed explicit-state growth radius 8 to 16 is at least 3.2x"
+    ],
+    "refutation": "Any fixed confirmation criterion fails; thresholds may not be lowered after execution."
+  },
+  "criterion": {
+    "exactAll": true,
+    "controlMismatchAll": true,
+    "minLargestRatio": 38.36369626091253,
+    "maxLargestEditRate": 0.022109203927385745,
+    "medianDescriptorGrowth": 4.04594180704441,
+    "medianExplicitGrowth": 3.816066718005014,
+    "pass": true
+  },
+  "scaleExample": {
+    "window": "w0",
+    "radius": 16,
+    "chunks": 1089,
+    "resources": 14157,
+    "edits": 306,
+    "descriptorBytes": 5284,
+    "compressedExplicitBytes": 222305,
+    "compressedToDescriptor": 42.07134746404239,
+    "editRate": 0.02161474888747616,
+    "exact": true,
+    "controlMismatch": true
+  },
+  "reproductionCommandsFromSourceReadme": [
+    "node scripts/science-h1-dynamic-delta-reconstruction.cjs > SCIENCE_RUN_059_H1.json",
+    "node --test test/science-h1-dynamic-delta-reconstruction.test.cjs",
+    "node --test test/game-rules.test.js",
+    "npm run check"
+  ],
+  "boundary": "This file preserves an audit copy of the source run for VNO governance. The original branch/commit/file remain the provenance authority. RUN_059 confirms this effect inside the tested generator/resource-delta model; it does not by itself prove that every gameplay system can be represented this way."
+}
