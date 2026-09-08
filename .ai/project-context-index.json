@@ -1,11 +1,15 @@
 {
-  "version": 1,
+  "version": 2,
   "purpose": "Universal discovery index for new chats and AI agents working on World_server",
   "startHere": "AI_START_HERE.md",
   "canonicalContextFiles": [
     "AI_START_HERE.md",
     "README.md",
     "AGENTS.md",
+    ".ai/connection-manifest.json",
+    "docs/AI_ONBOARDING_AND_CONNECTIONS.md",
+    ".ai/bridge/README.md",
+    "NEW_AI_BOOTSTRAP_PROMPT.md",
     "VNO.md",
     "SCIENCE_STANDARD.md",
     ".ai/vno-cycle.json",
@@ -15,6 +19,16 @@
     "docs/SCIENCE_GAMEPLAY_STANDARD.md"
   ],
   "concepts": {
+    "aiOnboarding": {
+      "displayName": "Universal AI Onboarding",
+      "canonicalFile": "docs/AI_ONBOARDING_AND_CONNECTIONS.md",
+      "machineFiles": [
+        ".ai/connection-manifest.json",
+        ".ai/bridge/README.md"
+      ],
+      "bootstrapPrompt": "NEW_AI_BOOTSTRAP_PROMPT.md",
+      "rule": "Verify actual connections in the new AI environment; never copy or assume another account's credentials. Reuse the canonical AI Bridge instead of creating a second orchestration stack."
+    },
     "vno": {
       "displayName": "Принцип ВНО",
       "expansionRu": "Воспроизводимость, Независимость, Опровержение",
@@ -41,6 +55,6 @@
       ]
     }
   },
-  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it.",
+  "agentBootstrapRule": "Every new project AI must read AI_START_HERE.md and this index from master, verify its actual connection set through .ai/connection-manifest.json, and join the existing AI Bridge before asking the user to redefine known project concepts or building duplicate coordination infrastructure.",
   "sourceOfTruthBranch": "master"
 }
