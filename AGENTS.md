@@ -177,3 +177,28 @@ This rule applies to every current and future AI agent working on `World_server`
 - A local agent must not continue heavy implementation after the work is safely available to cloud agents unless the remaining step is impossible remotely.
 - Any confirmed clutter/performance regression must get a root-cause fix plus regression protection, not just one-time cleanup.
 - Cloud/browser agents must preserve existing architecture, use `World_server` as the single source of truth, and avoid duplicate repositories/projects/services.
+
+## 13. SCIENCE 100 — REPRODUCIBILITY / INDEPENDENCE / FALSIFICATION — mandatory
+
+This rule applies to **every current and future AI agent** and to every task that can affect experiments, simulations, scientific claims, world-generation rules, resilience/repair logic, quality measurements, agent reasoning, evidence, or scientific infrastructure.
+
+- Canonical standard: **`SCIENCE_STANDARD.md`**. Machine-readable policy: **`.ai/science-governance.json`**. Read them before changing scientific logic or evidence.
+- Permanent North Star: **100% reproducibility + 100% independence + 100% falsification**.
+- Scientific readiness is non-compensating: `SCIENCE_READINESS = min(REPRODUCIBILITY, INDEPENDENCE, FALSIFICATION)`. A strong pillar may never hide a weak one.
+- A code result such as `pass:true` may confirm an effect inside the computational model; it must **never** be reported as a proven law of the real world by itself.
+- Every scientific change must preserve the three pillars and, where possible, increase the weakest one.
+- Required progression for serious claims: `DISCOVERY -> CRITIQUE -> PREREGISTRATION -> FREEZE -> BLIND_HOLDOUT -> RED_TEAM -> INDEPENDENT_REIMPLEMENTATION -> REPLICATION -> GENERALIZATION -> CONFIRMATION`.
+- Confirmation requires a true blind protocol: train/discover first, freeze implementation and thresholds, then expose hidden confirmation cases. Thresholds must not be loosened after holdout results are visible.
+- Important discoveries must move toward independent reimplementation by another agent/code path and ultimately a separate harness/codebase. The implementing agent cannot be the only certifier.
+- Expand evidence beyond small friendly seed sets: progressively use larger unseen seed sets, materially different world/system sizes, repeated runs where relevant, and uncertainty/effect-size statistics rather than only PASS/FAIL.
+- For resilience/repair claims, random damage is not enough. Add targeted/adversarial damage, concentrated failures, bridge/weak-point attacks, high-connectivity removal and other relevant counterexample searches.
+- Maintain strong controls and ablations. Remove proposed causal mechanisms one at a time and compare against random, simple, alternative and best-available baselines where feasible.
+- Maintain an independent **Red Team Scientist** role whose job is to disprove the strongest current claim by finding leakage, overfitting, weak metrics, hidden global information, methodology errors or counterexamples.
+- Preserve all valid negative results. `pass:false` is scientific evidence and must not be hidden, deleted, relabeled, or turned into success by post-hoc threshold changes.
+- Preserve immutable provenance: hypothesis, preregistered criteria, commit SHA, branch, seeds, parameters, environment, raw evidence, summary, failures, red-team findings and reproduction command.
+- Use evidence levels **D0-D7** from `SCIENCE_STANDARD.md`; report only the lowest level actually completed.
+- Scientific percentages must be explicit and separate: `CODE_EXPERIMENT_CONFIRMATION`, `REPRODUCIBILITY`, `INDEPENDENCE`, `FALSIFICATION`, `SCIENCE_READINESS`, `EVIDENCE_LEVEL`.
+- When choosing the next scientific task, prefer the experiment **most likely to disprove the strongest current claim** or to improve the weakest of the three pillars.
+- Non-scientific work must not damage provenance, reproducibility, independent verification, logging, isolation, or future falsification capability.
+
+**Permanent rule:** do not optimize for making our discoveries look correct. Optimize for making them difficult to reproduce incorrectly, impossible to self-certify, and easy to falsify if they are wrong.

@@ -1,0 +1,141 @@
+{
+  "version": 1,
+  "name": "Принцип ВНО",
+  "latinName": "VNO Principle",
+  "acronym": "ВНО",
+  "pillars": [
+    "ВОСПРОИЗВОДИМОСТЬ",
+    "НЕЗАВИСИМОСТЬ",
+    "ОПРОВЕРЖЕНИЕ"
+  ],
+  "northStar": "Каждый научный и игровой цикл должен приближать самый слабый столп ВНО к 100%, не ослабляя два других.",
+  "scienceReadinessFormula": "min(REPRODUCIBILITY, INDEPENDENCE, FALSIFICATION)",
+  "loop": [
+    {
+      "step": 1,
+      "id": "TAKE_DISCOVERY",
+      "name": "Возьми открытие",
+      "kidMeaning": "Найди новое правило, которое мир только что узнал.",
+      "requirements": [
+        "select a real preserved result, including valid negative results",
+        "record source evidence, branch/commit provenance and evidence level",
+        "state exactly what the code established and what it did not establish",
+        "prefer the newest strong result unless an older result has a larger unresolved VNO gap"
+      ]
+    },
+    {
+      "step": 2,
+      "id": "DEVELOP_NEXT_HYPOTHESIS",
+      "name": "Придумай следующий вопрос",
+      "kidMeaning": "Спроси: а что будет, если сделать ещё один шаг?",
+      "requirements": [
+        "derive one falsifiable next-step hypothesis from the preserved result",
+        "write predicted effect, baseline, failure condition and thresholds before confirmation",
+        "target the weakest VNO pillar where possible",
+        "include an age-5 sentence that preserves scientific boundaries"
+      ]
+    },
+    {
+      "step": 3,
+      "id": "TRANSLATE_TO_GAMEPLAY",
+      "name": "Преврати в игру",
+      "kidMeaning": "Подумай, что из этого станет новой интересной штукой в игре.",
+      "requirements": [
+        "evaluate every canonical game system in data/vno-gameplay-systems.json",
+        "for each system declare APPLICABLE or NOT_APPLICABLE with a reason",
+        "for each applicable system define a concrete player-visible feature",
+        "for each applicable system define simple age-5 player copy, code paths, test plan and falsification attack",
+        "never activate a runtime domain merely because another domain passed"
+      ]
+    },
+    {
+      "step": 4,
+      "id": "PROVE_IN_CODE",
+      "name": "Проверь кодом",
+      "kidMeaning": "Пусть игра покажет, что новая штука правда работает, а не только красиво звучит.",
+      "requirements": [
+        "use real cause-to-effect tests for every applicable system",
+        "compare against a baseline or control",
+        "include at least one expected-failure or counterexample test",
+        "require regression, performance and production evidence before production activation",
+        "reuse docs/SCIENCE_GAMEPLAY_STANDARD.md and lib/science-gameplay-adapter.js rather than creating a parallel runtime"
+      ]
+    },
+    {
+      "step": 5,
+      "id": "MAXIMIZE_VNO",
+      "name": "Усиль ВНО",
+      "kidMeaning": "Попроси других проверить, повторить и попробовать всё сломать.",
+      "requirements": [
+        "reproduce from a clean frozen environment",
+        "expand unseen seeds and system sizes",
+        "use an independent verifier and clean-room reimplementation",
+        "run Red Team and adversarial/counterexample tests",
+        "compute VNO readiness from the weakest pillar, never an average"
+      ]
+    },
+    {
+      "step": 6,
+      "id": "IMPROVE_THE_METHOD",
+      "name": "Улучши саму лабораторию",
+      "kidMeaning": "Если проверка нашла дырку, сделай так, чтобы следующая проверка была умнее.",
+      "requirements": [
+        "turn every confirmed methodology weakness into a permanent guard or regression test",
+        "add new useful failure modes, controls, ablations or independence checks discovered during the cycle",
+        "preserve valid failures and counterexamples",
+        "do not change scoring rules merely to increase the displayed percentage"
+      ]
+    },
+    {
+      "step": 7,
+      "id": "LOOP_AGAIN",
+      "name": "Начни снова",
+      "kidMeaning": "Возьми то, что мы узнали, и задай следующий хороший вопрос.",
+      "requirements": [
+        "create the next discovery candidate from the strongest surviving result or most informative failure",
+        "carry unresolved blockers forward",
+        "increment the cycle record",
+        "return to step 1 without weakening production safety or VNO rules"
+      ]
+    }
+  ],
+  "roles": {
+    "discovery": "find or select the scientific result",
+    "development": "derive the next falsifiable hypothesis",
+    "gameplayTranslator": "map the hypothesis to canonical game systems",
+    "implementer": "build only bounded fail-closed gameplay slices",
+    "independentVerifier": "verify without relying on implementation internals",
+    "redTeamScientist": "try to disprove the strongest claim",
+    "cleanRoomReplicator": "reimplement from specification without copying source logic",
+    "navigator": "explain player-visible effects in Russian using age-5 language"
+  },
+  "promotion": {
+    "failClosed": true,
+    "productionRequiresExistingScienceGameplayGates": true,
+    "crossSystemPassDoesNotAutoPromoteOtherSystems": true,
+    "notApplicableIsAllowedWithEvidence": true,
+    "codePassDoesNotMeanRealWorldLaw": true
+  },
+  "execution": {
+    "cloudFirst": true,
+    "reuseMasterCoordinator": true,
+    "reuseCollectiveBrain": true,
+    "reuseAgentSessionGuard": true,
+    "localHeavyWorkDefault": false,
+    "localWorkMustBeMinimalAndNecessary": true,
+    "desktopClutterForbidden": true,
+    "temporaryArtifactsMustBeCleaned": true,
+    "computerSlowdownIsARegression": true,
+    "unknownUserFilesMayNeverBeDeleted": true,
+    "doNotCreateSecondOrchestrationStack": true
+  },
+  "userCommunication": {
+    "primaryLanguage": "ru",
+    "targetUnderstandingAge": 5,
+    "shortSentences": true,
+    "oneIdeaAtATime": true,
+    "noUnexplainedScientificJargon": true,
+    "mustDistinguishGameDemoFromScientificEvidence": true,
+    "mustSayWhenSomethingIsOnlyAPlanOrHypothesis": true
+  }
+}
