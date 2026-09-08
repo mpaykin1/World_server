@@ -25,3 +25,15 @@ test('Sentry Replay is disabled only on Netlify deploy previews', () => {
   assert.match(entry, /replaysSessionSampleRate: isNetlifyDeployPreview \? 0 : 0\.05/);
   assert.match(entry, /replaysOnErrorSampleRate: isNetlifyDeployPreview \? 0 : 1\.0/);
 });
+
+test('legacy adapter emits no body for HTTP 204 responses', async () => {
+  const { pathToFileURL } = require('node:url');
+  const adapterUrl = pathToFileURL(path.join(root, 'netlify/functions/_legacy-adapter.mts')).href;
+  const { runLegacy } = await import(adapterUrl);
+  const response = await runLegacy(new Request('http://localhost/api/test', { method: 'POST' }), async (_req, res) => {
+    res.statusCode = 204;
+    res.end();
+  });
+  assert.equal(response.status, 204);
+  assert.equal(await response.text(), '');
+});

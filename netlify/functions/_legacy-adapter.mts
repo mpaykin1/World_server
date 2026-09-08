@@ -26,5 +26,6 @@ export async function runLegacy(request, handler) {
     }
   };
   await handler(req, res);
-  return new Response(responseBody, { status: statusCode, headers: responseHeaders });
+  const bodyless = statusCode === 204 || statusCode === 205 || statusCode === 304;
+  return new Response(bodyless ? null : responseBody, { status: statusCode, headers: responseHeaders });
 }
