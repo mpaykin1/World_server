@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "principle": "ВНО",
+  "purpose": "Preserve failed independence attempts as evidence instead of silently substituting self-review.",
+  "events": [
+    {
+      "at": "2026-09-07T23:59:23Z",
+      "pillar": "INDEPENDENCE",
+      "attempt": "Independent skeptical cloud review of ai/chatgpt/science-100-governance through the existing world-cloud-ai workflow",
+      "workflowRunId": 34171618335,
+      "result": "BLOCKED_EXTERNAL_RATE_LIMIT",
+      "modelsAttempted": [
+        "nvidia/nemotron-3.5-lightning:free",
+        "nvidia/nemotron-3-super-120b-a12b:free",
+        "google/gemma-4-31b-it:free"
+      ],
+      "observedFailure": "All approved zero-cost models returned the provider daily free-model rate-limit error before performing the requested review.",
+      "whatThisDoesNotMean": "The VNO design was not independently reviewed by this run. A failed provider attempt cannot count as independence evidence.",
+      "safeFallbackRule": "Do not inflate INDEPENDENCE by replacing an unavailable independent reviewer with the same author or with unnecessary heavy local models. Keep the gap visible and use another genuinely independent provider/agent when available.",
+      "localComputerPolicy": "No heavy local-model fallback was launched. The computer-side action was limited to a lightweight GitHub workflow dispatch bridge; no Desktop worktree, build cache or model workload was created by this attempt.",
+      "nextRequiredEvidence": [
+        "independent clean-room implementation from specification",
+        "independent verifier with hidden cases",
+        "successful independent Red Team review",
+        "separate-codebase replication"
+      ]
+    }
+  ]
+}
