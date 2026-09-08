@@ -46,6 +46,14 @@ jobs:
         run: npx playwright test e2e/sentry-smoke.spec.js --project=desktop-chromium
       - name: AI3D Voxel City autoplay (Playwright) ai3d-voxel-city-autoplay (hard)
         run: npx playwright test
+      - name: Upload Playwright failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-failure-${{ github.sha }}-${{ github.run_attempt }}
+          path: test-results
+          include-hidden-files: true
+          if-no-files-found: warn
 
   lighthouse:
     runs-on: ubuntu-latest
