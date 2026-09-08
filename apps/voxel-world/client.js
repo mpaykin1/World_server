@@ -371,18 +371,37 @@ function setBlockLocal(x,y,z,b){
   overrides.set(key3(x,y,z),safe); const cx=floorDiv(x,CHUNK),cz=floorDiv(z,CHUNK),c=chunks.get(key2(cx,cz)); if(c){c.set(mod(x,CHUNK),y,mod(z,CHUNK),safe);rebuildChunk(c);} const lx=mod(x,CHUNK),lz=mod(z,CHUNK); if(lx===0)chunks.get(key2(cx-1,cz))&&rebuildChunk(chunks.get(key2(cx-1,cz))); if(lx===15)chunks.get(key2(cx+1,cz))&&rebuildChunk(chunks.get(key2(cx+1,cz))); if(lz===0)chunks.get(key2(cx,cz-1))&&rebuildChunk(chunks.get(key2(cx,cz-1))); if(lz===15)chunks.get(key2(cx,cz+1))&&rebuildChunk(chunks.get(key2(cx,cz+1))); return true;
 }
 
+function materializeChunkBatch(need, by=new Map()){
+  for(const q of need){
+    const k=key2(q.x,q.z),c=generateChunkData(new ChunkData(q.x,q.z),by.get(k)||[]);
+    chunks.set(k,c);rebuildChunk(c);
+  }
+}
 async function loadNeededChunks(){
   if(streamBusy) return; const pcx=floorDiv(player.pos.x,CHUNK),pcz=floorDiv(player.pos.z,CHUNK),need=[];
   outer: for(let r=0;r<=VIEW;r++) for(let dx=-r;dx<=r;dx++) for(let dz=-r;dz<=r;dz++){ if(Math.max(Math.abs(dx),Math.abs(dz))!==r)continue;const cx=pcx+dx,cz=pcz+dz,k=key2(cx,cz);if(!chunks.has(k)&&!requested.has(k)){requested.add(k);need.push({x:cx,z:cz});if(need.length>=8)break outer;} }
   if(!need.length)return; streamBusy=true;
-  try{ const res=await api('chunks',{chunks:need,worldId:'main'}); const by=new Map(); for(const row of res.blocks||[]){const k=key2(row.cx,row.cz);if(!by.has(k))by.set(k,[]);by.get(k).push(row);} for(const q of need){const k=key2(q.x,q.z),c=generateChunkData(new ChunkData(q.x,q.z),by.get(k)||[]);chunks.set(k,c);rebuildChunk(c);} }
-  catch(e){statusEl.textContent=e.message;statusEl.className='vwWarn'; for(const q of need)requested.delete(key2(q.x,q.z));}
+  try{
+    if(backendMode==='offline') materializeChunkBatch(need);
+    else {
+      const res=await api('chunks',{chunks:need,worldId:'main'}); const by=new Map();
+      for(const row of res.blocks||[]){const k=key2(row.cx,row.cz);if(!by.has(k))by.set(k,[]);by.get(k).push(row);}
+      materializeChunkBatch(need,by);
+    }
+  }
+  catch(e){setOfflineMode(e.message);materializeChunkBatch(need);}
   finally{streamBusy=false;}
   for(const [k,c] of [...chunks]) if(Math.max(Math.abs(c.cx-pcx),Math.abs(c.cz-pcz))>VIEW+1){ for(const m of c.meshes){worldGroup.remove(m);m.geometry.dispose();} chunks.delete(k); requested.delete(k); }
 }
 
 const player={pos:new THREE.Vector3(0,35,0),vel:new THREE.Vector3(),yaw:0,pitch:0,onGround:false,selected:0,id:'',name:'Player'};
-const keys=new Set(); let mobileMove={x:0,y:0}; let channel=null; let lastSave=0,lastNet=0; let started=false;
+const keys=new Set(); let mobileMove={x:0,y:0}; let channel=null; let lastSave=0,lastNet=0; let started=false; let backendMode='online';
+function setOfflineMode(reason=''){
+  backendMode='offline';
+  statusEl.textContent='офлайн · локальный процедурный мир';statusEl.className='vwWarn';
+  playersEl.textContent='игроков: 1 · offline';
+  window.dispatchEvent(new CustomEvent('voxel-world:offline',{detail:{reason:String(reason||'backend unavailable').slice(0,240)}}));
+}
 function collides(px,py,pz){
   const minX=Math.floor(px-PLAYER_R),maxX=Math.floor(px+PLAYER_R),minY=Math.floor(py),maxY=Math.floor(py+PLAYER_H-.02),minZ=Math.floor(pz-PLAYER_R),maxZ=Math.floor(pz+PLAYER_R);
   for(let x=minX;x<=maxX;x++)for(let y=minY;y<=maxY;y++)for(let z=minZ;z<=maxZ;z++){const b=blockAt(x,y,z);if(BLOCKS[b]?.solid)return true;} return false;
@@ -428,7 +447,7 @@ async function editBlock(place){
     if(!place){const run=scienceRunForDestroyedBlock(old,scienceEvents);if(run){spawnDestructionFx(run.runId,c,old);emitScienceDomainTelemetry(run.runId,'playerDestruction','player_break');emitScienceDomainTelemetry(run.runId,'visualDestruction','player_break');}}
     for(const scienceEvent of scienceEvents)applyScienceResult(scienceEvent);
     statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';
-  }catch(e){setBlockLocal(c.x,c.y,c.z,old);statusEl.textContent=e.message;statusEl.className='vwWarn';}
+  }catch(e){setOfflineMode(e.message);statusEl.textContent='офлайн · изменение сохранено локально';statusEl.className='vwWarn';}
 }
 function collidesWithCell(x,y,z){ return x+1>player.pos.x-PLAYER_R&&x<player.pos.x+PLAYER_R&&z+1>player.pos.z-PLAYER_R&&z<player.pos.z+PLAYER_R&&y+1>player.pos.y&&y<player.pos.y+PLAYER_H; }
 
@@ -471,7 +490,7 @@ function setupMobile(){
 function daylight(now){const day=(now*.000015)%1,a=day*Math.PI*2;sun.position.set(Math.cos(a)*65,Math.sin(a)*72+12,30);const k=clamp((sun.position.y+12)/55,.12,1);sun.intensity=.25+2.0*k;hemi.intensity=.28+1.0*k;const sky=new THREE.Color().setHSL(.57,.55,.18+.48*k);scene.background.copy(sky);scene.fog.color.copy(sky);}
 function updateTarget(){const h=rayVoxel();if(!h)return;targetEl.textContent=`${BLOCKS[h.block]?.name||'Блок'} · ${h.hit.x}, ${h.hit.y}, ${h.hit.z}`;}
 
-async function savePlayer(){try{await api('player_save',{worldId:'main',position:{x:player.pos.x,y:player.pos.y,z:player.pos.z},yaw:player.yaw,pitch:player.pitch,selectedBlock:HOTBAR[player.selected]});}catch{} }
+async function savePlayer(){if(backendMode!=='online')return;try{await api('player_save',{worldId:'main',position:{x:player.pos.x,y:player.pos.y,z:player.pos.z},yaw:player.yaw,pitch:player.pitch,selectedBlock:HOTBAR[player.selected]});}catch{} }
 function broadcastPlayer(now){if(!channel||now-lastNet<NET_INTERVAL)return;lastNet=now;channel.send({type:'broadcast',event:'player_state',payload:{id:player.id,name:player.name,x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw}});}
 let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(started){physics(dt);updateScienceFx(now,dt);loadNeededChunks();broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);renderer.render(scene,camera);}requestAnimationFrame(loop);
 
@@ -481,10 +500,10 @@ setupDesktop();setupMobile();buildHotbar();
 try{
   const appState=await window.AppCore.init('voxel-world');
   const init=await api('init',{worldId:'main'}); worldSeed=Number(init.world?.seed)||worldSeed; player.id=init.selfId;player.name=init.player?.name||appState.user?.username||'Player'; const p=init.player?.position||{x:0,y:heightAt(0,0)+4,z:0};player.pos.set(Number(p.x)||0,Number(p.y)||heightAt(0,0)+4,Number(p.z)||0);player.yaw=Number(init.player?.yaw)||0;player.pitch=Number(init.player?.pitch)||0;const sel=HOTBAR.indexOf(Number(init.player?.selectedBlock));if(sel>=0)player.selected=sel;buildHotbar(); cacheScienceRuns(init.scienceGameplay); await connectRealtime(appState); started=true; showScienceIntro((init.scienceGameplay||[]).filter(run=>run.active).at(-1)); statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';loading.classList.add('hidden');
-}catch(e){console.error(e);statusEl.textContent=e.message;statusEl.className='vwWarn';loading.textContent=`Voxel World: ${e.message}`;setTimeout(()=>loading.classList.add('hidden'),3500);started=true;player.pos.set(0,heightAt(0,0)+4,0);}
+}catch(e){console.error(e);setOfflineMode(e.message);player.id=guestId();player.name=`Guest_${player.id.replaceAll('-','').slice(0,4)}`;player.pos.set(0,heightAt(0,0)+4,0);started=true;loading.classList.add('hidden');}
 
 window.VoxelWorldRuntime={
-    stats(){return {player:{x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw,onGround:player.onGround},renderer:renderer?.info?.render,pixelRatio:renderer?.getPixelRatio?.()||1};},
+    stats(){return {player:{x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw,onGround:player.onGround},renderer:renderer?.info?.render,pixelRatio:renderer?.getPixelRatio?.()||1,backendMode,chunks:chunks.size,playable:started&&chunks.size>0};},
     setView(nextYaw,nextPitch=0){player.yaw=Number(nextYaw)||0;player.pitch=Number(nextPitch)||0;}
   };
 
