@@ -24,13 +24,13 @@ for(const app of apps){
         const cs=getComputedStyle(el);if(cs.display==='none'||cs.visibility==='hidden'||Number(cs.opacity)===0)continue;
         if(cs.position!=='fixed'&&cs.position!=='sticky')continue;
         if(el.closest('#goldenDrawer'))continue;
-        // Full-viewport gameplay renderers are the product surface, not
-        // HUD overlays. Graphics-First deliberately promotes the primary
-        // renderer to fixed/full-viewport ownership. Auditing that renderer
-        // as a >8% persistent overlay makes the new Golden invariant
-        // self-contradictory. Exclude only the canonical primary renderer
-        // marker; any auxiliary fixed panel is still audited normally.
-        if(el.matches('[data-golden-primary-renderer="true"]')||el.closest('[data-golden-primary-renderer="true"]'))continue;
+        // Full-viewport gameplay renderers and their canonical viewport host
+        // are the product surface, not HUD overlays. Graphics-First marks the
+        // host with data-golden-viewport="primary" and the render surface with
+        // data-golden-primary-renderer="true". Exclude only those canonical
+        // ownership markers (and descendants); all auxiliary fixed/sticky UI
+        // remains subject to the same >8% overlay guard below.
+        if(el.matches('[data-golden-viewport="primary"],[data-golden-primary-renderer="true"]')||el.closest('[data-golden-viewport="primary"],[data-golden-primary-renderer="true"]'))continue;
         // #mobileControls was renamed to #goldenMobileControls at some
         // point in shared/ai3d-playable-runtime.js; this exclusion list
         // was never updated to match, so the audit was flagging the
