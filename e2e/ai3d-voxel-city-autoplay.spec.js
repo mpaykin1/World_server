@@ -56,6 +56,7 @@ test.describe('AI3D Voxel City - default-city autoplay (no user actions)', () =>
     expect(visibleContent.facing.centerOccluders).toBeLessThan(visibleContent.facing.richestCenterOccluders);
     expect(visibleContent.facing.nearOccluders).toBeLessThan(visibleContent.facing.richestNearOccluders);
     expect(visibleContent.facing.centerNearestDistance).toBeGreaterThan(6);
+    expect(visibleContent.facing.finalViewEligible).toBe(true);
     expect(visibleContent.triangles).toBeGreaterThan(250);
 
     // Character spawned inside city

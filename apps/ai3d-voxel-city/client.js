@@ -420,9 +420,15 @@ function chooseInitialPlayableView(worldData,spawnPos){
     if(collidesAt(candidate[0],candidate[1],candidate[2]))continue;
     views.push({spawnPos:candidate,facing:chooseInitialPlayableFacing(worldData,candidate),spawnOffset:[dx,dz],offsetDistance:Math.hypot(dx,dz)});
   }
-  views.sort((a,b)=>Number(a.facing.yawSpaceExhausted)-Number(b.facing.yawSpaceExhausted)||a.facing.centerNearSurfaceCoverage-b.facing.centerNearSurfaceCoverage||a.facing.nearSurfaceCoverage-b.facing.nearSurfaceCoverage||b.facing.centerDepthBands-a.facing.centerDepthBands||b.facing.centerMidFar-a.facing.centerMidFar||b.facing.screenCoverage-a.facing.screenCoverage||b.facing.centerNearestDistance-a.facing.centerNearestDistance||a.offsetDistance-b.offsetDistance);
-  const selected=views[0]||base;
-  selected.facing={...selected.facing,spawnFallbackUsed:selected.offsetDistance>0,spawnOffset:selected.spawnOffset,spawnCandidateCount:views.length,baseYawSpaceExhausted:baseFacing.yawSpaceExhausted};
+  // Cross-position ranking must not bypass the same hard eligibility contract used
+  // by the per-yaw scorer. Only alternate views that preserve forward clearance,
+  // readable richness and centered mid/far content may compete with the canonical base.
+  const isFinalViewEligible=view=>view.facing.centerNearestDistance>6&&view.facing.score>=view.facing.readableFloor&&view.facing.centerMidFar>=view.facing.centerContentFloor;
+  const eligibleAlternates=views.slice(1).filter(isFinalViewEligible);
+  const rankingPool=isFinalViewEligible(base)?[base,...eligibleAlternates]:eligibleAlternates;
+  rankingPool.sort((a,b)=>Number(a.facing.yawSpaceExhausted)-Number(b.facing.yawSpaceExhausted)||a.facing.centerNearSurfaceCoverage-b.facing.centerNearSurfaceCoverage||a.facing.nearSurfaceCoverage-b.facing.nearSurfaceCoverage||b.facing.centerDepthBands-a.facing.centerDepthBands||b.facing.centerMidFar-a.facing.centerMidFar||b.facing.screenCoverage-a.facing.screenCoverage||b.facing.centerNearestDistance-a.facing.centerNearestDistance||a.offsetDistance-b.offsetDistance);
+  const selected=rankingPool[0]||base;
+  selected.facing={...selected.facing,spawnFallbackUsed:selected.offsetDistance>0,spawnOffset:selected.spawnOffset,spawnCandidateCount:views.length,spawnEligibleCandidateCount:rankingPool.length,spawnRejectedCandidateCount:views.length-rankingPool.length,finalViewEligible:isFinalViewEligible(selected),baseYawSpaceExhausted:baseFacing.yawSpaceExhausted};
   return selected;
 }
 async function renderWorld(data){
