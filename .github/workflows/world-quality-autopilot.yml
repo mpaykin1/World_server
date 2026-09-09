@@ -1,7 +1,22 @@
 name: World Quality Autopilot V4
 on:
   pull_request:
-    paths: ['apps/**','api/**','lib/**','shared/**','services/ai3d-worker/**','data/**','scripts/**','test/**']
+    paths:
+      - 'apps/**'
+      - 'api/**'
+      - 'lib/**'
+      - 'shared/**'
+      - 'services/ai3d-worker/**'
+      - 'data/**'
+      - 'scripts/**'
+      - 'test/**'
+      - '.ai/**'
+      - '.github/workflows/world-quality-autopilot.yml'
+      - 'AI_START_HERE.md'
+      - 'AGENTS.md'
+      - 'CHATGPT_GAME_CONTROL.md'
+      - 'VNO.md'
+      - 'SCIENCE_STANDARD.md'
   workflow_dispatch:
   schedule:
     - cron: '23 3 * * *'
