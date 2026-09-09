@@ -181,6 +181,91 @@ function buildMirror(summary) {
   ].join('\n');
 }
 
+function compactTextList(values, limit = 2) {
+  if (!Array.isArray(values)) return [];
+  return values.slice(0, limit).map(value => String(value).slice(0, 300));
+}
+
+function compactFileRefs(values) {
+  if (!Array.isArray(values)) return [];
+  return values.map(value => String(value).replace(/\\/g, '/').split('/').pop()).filter(Boolean);
+}
+
+function compactLeanFacing(facing) {
+  if (!facing || typeof facing !== 'object') return known(facing);
+  return {
+    label: known(facing.label), yaw: facing.yaw ?? 'UNKNOWN', score: facing.score ?? 'UNKNOWN',
+    richestScore: facing.richestScore ?? 'UNKNOWN', nearSurfaceCoverage: facing.nearSurfaceCoverage ?? 'UNKNOWN',
+    centerNearSurfaceCoverage: facing.centerNearSurfaceCoverage ?? 'UNKNOWN', centerMidFar: facing.centerMidFar ?? 'UNKNOWN',
+    centerDepthBands: facing.centerDepthBands ?? 'UNKNOWN', centerNearestDistance: facing.centerNearestDistance ?? 'UNKNOWN',
+    readableFloor: facing.readableFloor ?? 'UNKNOWN', centerContentFloor: facing.centerContentFloor ?? 'UNKNOWN',
+    candidateCount: facing.candidateCount ?? 'UNKNOWN', yawSpaceExhausted: facing.yawSpaceExhausted ?? 'UNKNOWN',
+    spawnFallbackUsed: facing.spawnFallbackUsed ?? 'UNKNOWN', spawnOffset: facing.spawnOffset || 'UNKNOWN',
+    spawnCandidateCount: facing.spawnCandidateCount ?? 'UNKNOWN', finalViewEligible: facing.finalViewEligible ?? 'UNKNOWN',
+  };
+}
+
+function compactLeanSnapshot(evidence = {}, failure = {}) {
+  const controls = evidence.controls || {};
+  const actions = controls.essentialActions || {};
+  return {
+    defaultCityLoaded: evidence.defaultCityLoaded ?? 'UNKNOWN', voxels: evidence.voxels ?? 'UNKNOWN', chunks: evidence.chunks ?? 'UNKNOWN',
+    renderedTriangles: evidence.renderedTriangles ?? evidence.triangles ?? 'UNKNOWN', drawCalls: evidence.drawCalls ?? 'UNKNOWN',
+    webglReady: evidence.webglReady ?? failure.webglRendererReadiness ?? 'UNKNOWN', viewport: evidence.viewport || failure.viewport || 'UNKNOWN',
+    primaryRendererBounds: evidence.primaryRendererBounds || failure.primaryRendererBounds || 'UNKNOWN',
+    rendererWidthRatio: evidence.rendererWidthRatio ?? evidence.primaryRendererWidthRatio ?? 'UNKNOWN',
+    rendererHeightRatio: evidence.rendererHeightRatio ?? evidence.primaryRendererHeightRatio ?? 'UNKNOWN',
+    gameplayScrollRatio: evidence.gameplayScrollRatio ?? 'UNKNOWN', closedAuxiliaryOcclusionRatio: evidence.closedAuxiliaryOcclusionRatio ?? 'UNKNOWN',
+    camera: evidence.camera || 'UNKNOWN', selectedFacing: compactLeanFacing(evidence.selectedFacing || evidence.facing), framing: evidence.framing || 'UNKNOWN',
+    controls: { move: controls.move ?? evidence.moveAvailable ?? 'UNKNOWN', look: controls.look ?? evidence.lookAvailable ?? 'UNKNOWN',
+      toolbarUsable: controls.toolbarUsable ?? evidence.toolbarUsable ?? 'UNKNOWN', visibleActionCount: actions.visibleActionCount ?? 'UNKNOWN',
+      jumpVisible: actions.jumpVisible ?? 'UNKNOWN', menuVisible: actions.menuVisible ?? 'UNKNOWN' },
+  };
+}
+
+function compactLeanFailure(failure) {
+  const evidence = failure.loadedStateEvidence || {};
+  const postResize = evidence.postResizeOrientation || evidence.postResize || {};
+  return {
+    project: known(failure.project), browser: known(failure.browser), specFile: known(failure.specFile), fullTitle: known(failure.specTestTitle),
+    status: known(failure.status), retry: failure.retry ?? 'UNKNOWN', firstAssertion: known(failure.firstFailingAssertion), sourceLocation: known(failure.sourceLocation),
+    pageUrl: known(failure.pageUrl || evidence.pageUrl), pageErrors: compactTextList(failure.pageErrors || evidence.pageErrors),
+    consoleErrors: compactTextList(failure.consoleErrors || evidence.consoleErrors), webglReady: failure.webglRendererReadiness ?? evidence.webglReady ?? 'UNKNOWN',
+    viewport: failure.viewport || evidence.viewport || 'UNKNOWN', primaryRendererBounds: failure.primaryRendererBounds || evidence.primaryRendererBounds || 'UNKNOWN',
+    screenshotFiles: compactFileRefs(failure.screenshotFiles), traceFiles: compactFileRefs(failure.traceFiles),
+    loadedState: { ...compactLeanSnapshot(evidence, failure), objects: evidence.objects ?? evidence.objectCount ?? 'UNKNOWN',
+      screenshotIdentity: evidence.screenshotIdentity || 'UNKNOWN', pageErrors: compactTextList(evidence.pageErrors || failure.pageErrors),
+      consoleErrors: compactTextList(evidence.consoleErrors || failure.consoleErrors), postResizeOrientation: {
+        supported: postResize.supported ?? 'UNKNOWN', original: postResize.original || 'UNKNOWN', probe: postResize.probe || 'UNKNOWN',
+        afterOrientationChange: postResize.afterOrientationChange ? compactLeanSnapshot(postResize.afterOrientationChange, failure) : 'UNKNOWN',
+        afterRestore: postResize.afterRestore ? compactLeanSnapshot(postResize.afterRestore, failure) : 'UNKNOWN',
+      } },
+  };
+}
+
+function buildLeanMirror(summary) {
+  const compact = {
+    schemaVersion: summary.schemaVersion, classification: summary.classification, EXACT_HEAD: known(summary.canonicalPrHeadSha),
+    GITHUB_MERGE_REF_SHA: known(summary.githubMergeRefSha), CURRENT_DEFAULT_SHA: known(summary.exactCurrentMaster?.sha),
+    MASTER_A_B: known(summary.exactCurrentMaster?.sameFixtureResult), runId: known(summary.workflow?.runId),
+    runAttempt: known(summary.workflow?.runAttempt), job: known(summary.workflow?.job), artifactName: known(summary.artifactName),
+    machineReadableFailureIdentity: Boolean(summary.diagnosticCompleteness?.machineReadableFailureIdentity),
+    loadedStateEvidencePresent: Boolean(summary.diagnosticCompleteness?.loadedStateEvidence), mirrorMode: 'BOUNDED_FALLBACK',
+    failures: (summary.failures || []).map(compactLeanFailure),
+  };
+  return ['[BUILDER][MANUAL_FAST_LANE][REQUIRED_BROWSER_FAILURE_MIRROR]','','```json',JSON.stringify(compact),'```','',
+    `HANDOFF_READABLE=PENDING_CONNECTOR_REREAD; OBSERVABILITY_INCOMPLETE=${compact.machineReadableFailureIdentity ? 'NO' : 'YES'}.`,
+    'Binary screenshot/trace/video evidence remains canonical deep evidence; this bounded UTF-8 fallback preserves every failure identity.'].join('\n');
+}
+
+function buildBoundedMirror(summary) {
+  const full = buildMirror(summary);
+  if (Buffer.byteLength(full, 'utf8') <= 60000) return { body: full, mode: 'FULL', bytes: Buffer.byteLength(full, 'utf8') };
+  const body = buildLeanMirror(summary);
+  const bytes = Buffer.byteLength(body, 'utf8');
+  if (bytes > 60000) throw new Error(`OBSERVABILITY_INCOMPLETE: bounded connector-readable mirror still exceeds safe GitHub comment size (${bytes} bytes)`);
+  return { body, mode: 'BOUNDED_FALLBACK', bytes };
+}
 async function request(url, options = {}) {
   const response = await fetch(url, {
     ...options,
@@ -220,8 +305,9 @@ async function main() {
   if (!summary.diagnosticCompleteness?.machineReadableFailureIdentity) {
     throw new Error('OBSERVABILITY_INCOMPLETE: machineReadableFailureIdentity must be true before handoff');
   }
-  const body = buildMirror(summary);
-  if (Buffer.byteLength(body, 'utf8') > 60000) throw new Error('OBSERVABILITY_INCOMPLETE: connector-readable mirror exceeds safe GitHub comment size');
+  const bounded = buildBoundedMirror(summary);
+  const body = bounded.body;
+  console.log(`MIRROR_PAYLOAD_MODE=${bounded.mode} BYTES=${bounded.bytes}`);
   const prCommentId = await postAndVerify(prNumber, body);
   const ledgerCommentId = await postAndVerify(ledgerIssue, body);
   console.log(`HANDOFF_READABLE=YES PR_COMMENT=${prCommentId} LEDGER_COMMENT=${ledgerCommentId} EXACT_HEAD=${summary.canonicalPrHeadSha}`);
@@ -234,4 +320,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { buildMirror, compactFailure, compactLoadedState, compactPostResizeOrientation, compactPostResizeState, compactSelectedFacing };
+module.exports = { buildMirror, buildLeanMirror, buildBoundedMirror, compactFailure, compactLoadedState, compactPostResizeOrientation, compactPostResizeState, compactSelectedFacing };
