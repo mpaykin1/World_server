@@ -1,9 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "purpose": "Universal discovery index for new chats and AI agents working on World_server",
   "startHere": "AI_START_HERE.md",
   "canonicalContextFiles": [
     "AI_START_HERE.md",
+    "CHATGPT_GAME_CONTROL.md",
     "README.md",
     "AGENTS.md",
     "VNO.md",
@@ -39,8 +40,60 @@
         ".ai/science-governance.json",
         "data/vno-gameplay-systems.json"
       ]
+    },
+    "chatgptGameControl": {
+      "displayName": "ChatGPT -> Game Control / Manual Fast Lane",
+      "canonicalFile": "CHATGPT_GAME_CONTROL.md",
+      "aliases": [
+        "ChatGPT Game Control",
+        "MANUAL_FAST_LANE",
+        "Manual Fast Lane",
+        "LINK_COMPLETION_LOOP",
+        "VERIFIED_LINK_ONLY",
+        "пришли ссылку",
+        "дай ссылку",
+        "покажи изменения",
+        "доведи до рабочей ссылки"
+      ],
+      "terminalContract": {
+        "normal": "LIVE_VERIFIED_LINK_READY",
+        "exception": "TRUE_USER_ACTION_REQUIRED",
+        "nonTerminalExamples": [
+          "CI_FAILED",
+          "CI_PENDING",
+          "PR_CREATED",
+          "MERGE_CONFLICT",
+          "DEPLOY_FAILED",
+          "PREVIEW_READY",
+          "PREVIEW_EXPIRED",
+          "HTTP_404",
+          "HTTP_500",
+          "BROWSER_FAILURE",
+          "SHA_MISMATCH",
+          "ROOT_CAUSE_FOUND",
+          "PROGRESS_REPORT"
+        ]
+      }
     }
   },
-  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it.",
+  "freshChatMandatoryReads": {
+    "projectQuestion": [
+      "AI_START_HERE.md",
+      ".ai/project-context-index.json"
+    ],
+    "manualProjectChange": [
+      "AI_START_HERE.md",
+      ".ai/project-context-index.json",
+      "CHATGPT_GAME_CONTROL.md",
+      "issue #80 latest nonterminal checkpoint"
+    ],
+    "changeAndLinkRequest": [
+      "AI_START_HERE.md",
+      ".ai/project-context-index.json",
+      "CHATGPT_GAME_CONTROL.md",
+      "issue #80 latest nonterminal checkpoint"
+    ]
+  },
+  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains.",
   "sourceOfTruthBranch": "master"
 }
