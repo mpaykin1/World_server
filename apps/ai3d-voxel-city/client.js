@@ -311,7 +311,7 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
   const voxels=Array.isArray(worldData?.voxels)?worldData.voxels:[];
   const metadataYaw=Number(worldData?.spawn?.yaw);
   // Sample a bounded full ring and score what the active perspective camera can
-  // actually place on screen. The previous horizontal-only cone over-counted
+  // actually place on screen. The previous horizontal-only richness cone over-counted
   // off-screen geometry (especially in portrait WebKit/Chromium), so a direction
   // could look "rich" while the visible frame was mostly sky/ground with the city
   // pushed to an edge.
@@ -322,6 +322,7 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
   for(const c of candidates){const key=Math.round(c.yaw*100000);if(!seen.has(key)){seen.add(key);unique.push(c);}}
   const maxDistance=Math.min(Math.max(24,profile().detailChunks*CHUNK_SIZE),PROFILES.SAFE.renderChunks*CHUNK_SIZE);
   const nearDistance=10;
+  const legacyCosHalf=Math.cos(35*Math.PI/180),legacyCenterCos=Math.cos(12*Math.PI/180);
   const verticalTan=Math.tan(THREE.MathUtils.degToRad((Number(persp?.fov)||70)/2));
   const frustumAspect=Math.max(.35,Number(persp?.aspect)||1);
   const horizontalTan=Math.max(.15,verticalTan*frustumAspect);
@@ -329,12 +330,20 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
   for(const c of unique){
     const fx=-Math.sin(c.yaw),fz=-Math.cos(c.yaw);
     const screenBins=new Set();
-    let score=0,nearOccluders=0,centerOccluders=0,centerMidFar=0;
+    let score=0,nearOccluders=0,centerOccluders=0,visibleNearOccluders=0,visibleCenterOccluders=0,centerMidFar=0;
     for(const v of voxels){
       if(!Array.isArray(v)||v.length<3)continue;
       const dx=Number(v[0])-spawnPos[0],dy=Number(v[1])-spawnPos[1],dz=Number(v[2])-spawnPos[2],d=Math.hypot(dx,dz);
       if(d<2||d>maxDistance)continue;
       const forward=dx*fx+dz*fz;
+      const alignment=forward/d;
+      const eyeLevel=Number(v[1])>=spawnPos[1]-.5;
+      // Preserve the established geometric blocker contract used by the hard autoplay
+      // guard, while the new visible* metrics describe what is actually on screen.
+      if(alignment>=legacyCosHalf&&d<nearDistance&&eyeLevel){
+        nearOccluders++;
+        if(alignment>=legacyCenterCos)centerOccluders++;
+      }
       if(forward<=1)continue;
       const side=dx*(-fz)+dz*fx;
       const screenX=side/(forward*horizontalTan);
@@ -344,14 +353,13 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
       const bx=Math.max(0,Math.min(3,Math.floor((screenX+1)*2)));
       const by=Math.max(0,Math.min(2,Math.floor((screenY+1)*1.5)));
       screenBins.add(`${bx}:${by}`);
-      const eyeLevel=Number(v[1])>=spawnPos[1]-.5;
-      if(d<nearDistance&&eyeLevel)nearOccluders++;
+      if(d<nearDistance&&eyeLevel)visibleNearOccluders++;
       if(Math.abs(screenX)<=.42&&Math.abs(screenY)<=.68){
-        if(d<nearDistance&&eyeLevel)centerOccluders++;
+        if(d<nearDistance&&eyeLevel)visibleCenterOccluders++;
         else if(d>=nearDistance)centerMidFar++;
       }
     }
-    measured.push({...c,score,nearOccluders,centerOccluders,centerMidFar,screenCoverage:screenBins.size,maxDistance,frustumAspect});
+    measured.push({...c,score,nearOccluders,centerOccluders,visibleNearOccluders,visibleCenterOccluders,centerMidFar,screenCoverage:screenBins.size,maxDistance,frustumAspect});
   }
   const richestCandidate=measured.reduce((best,c)=>!best||c.score>best.score?c:best,null);
   const richest=richestCandidate?.score||0;
@@ -362,11 +370,11 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
   const centered=readable.filter(c=>(c.centerMidFar||0)>=centerContentFloor);
   const improved=centered.filter(c=>c.centerOccluders<(richestCandidate?.centerOccluders??Infinity)&&c.nearOccluders<(richestCandidate?.nearOccluders??Infinity));
   const pool=improved.length?improved:(centered.length?centered:readable);
-  // First preserve a clear center, then require useful mid/far content in that
-  // center, then prefer broader on-screen coverage. Broad near occlusion and raw
-  // richness are tie-breakers, not the primary composition objective.
-  pool.sort((a,b)=>a.centerOccluders-b.centerOccluders||b.centerMidFar-a.centerMidFar||b.screenCoverage-a.screenCoverage||a.nearOccluders-b.nearOccluders||b.score-a.score);
-  const fallback=measured.slice().sort((a,b)=>b.score-a.score)[0]||{yaw:0,label:'fallback',score:0,nearOccluders:0,centerOccluders:0,centerMidFar:0,screenCoverage:0,maxDistance,frustumAspect};
+  // A clear screen center is useful only when it also contains mid/far world content.
+  // Keep established blocker improvements, then prefer central depth and broad screen
+  // coverage before raw richness.
+  pool.sort((a,b)=>a.visibleCenterOccluders-b.visibleCenterOccluders||b.centerMidFar-a.centerMidFar||b.screenCoverage-a.screenCoverage||a.visibleNearOccluders-b.visibleNearOccluders||a.nearOccluders-b.nearOccluders||b.score-a.score);
+  const fallback=measured.slice().sort((a,b)=>b.score-a.score)[0]||{yaw:0,label:'fallback',score:0,nearOccluders:0,centerOccluders:0,visibleNearOccluders:0,visibleCenterOccluders:0,centerMidFar:0,screenCoverage:0,maxDistance,frustumAspect};
   return {...(pool[0]||fallback),readableFloor,centerContentFloor,richestScore:richest,richestNearOccluders:richestCandidate?.nearOccluders||0,richestCenterOccluders:richestCandidate?.centerOccluders||0,richestCenterMidFar:richestCandidate?.centerMidFar||0,candidateCount:measured.length};
 }
 async function renderWorld(data){
