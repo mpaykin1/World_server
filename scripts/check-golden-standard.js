@@ -74,6 +74,8 @@ if(JSON.stringify(uiPolicy.rules.goldenTopToolbar)!==JSON.stringify(['menu','wor
 if(!shellCss.includes('#goldenDrawerClose{width:46px')||!shellCss.includes('width:52px;height:52px')) fail('mobile drawer close target is below Golden size');
 if(!shellCss.includes('.golden-drawer-open #mobileControls')) fail('modal does not disable gameplay touch controls');
 if(!voxelHtml.includes('id=\"movePad\"')||!voxelHtml.includes('id=\"lookPad\"')) fail('Voxel World must expose two visible mobile joysticks');
+if(!runtime.includes('id=\"goldenLookPad\"')||!runtime.includes('id=\"goldenLookKnob\"')||runtime.includes('id=\"goldenLookZone\"')) fail('AI3D must expose a visible right LOOK joystick, not an invisible look zone');
+if(uiPolicy.rules.mobileVisibleMoveJoystick!==true||uiPolicy.rules.mobileVisibleLookJoystick!==true) fail('UI policy must require both visible mobile joysticks');
 if(!voxel.includes('mobileLook')||!voxel.includes("addEventListener('goldendrawerchange'")) fail('Voxel World visible look joystick / modal reset missing');
 if(JSON.stringify(controlPolicy.mobile)!==JSON.stringify(['VISIBLE_LEFT_MOVE_JOYSTICK','VISIBLE_RIGHT_LOOK_JOYSTICK','TOUCH_JUMP'])) fail('control policy no longer requires visible dual joysticks');
 if(uiPolicy.rules.graphicsFirstWorlds!==true||uiPolicy.rules.gameplayPageScrollAllowed!==false) fail('Graphics-First viewport policy missing');

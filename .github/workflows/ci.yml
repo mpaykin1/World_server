@@ -40,6 +40,8 @@ jobs:
         run: node scripts/check-ai3d-v4-combined.js
       - name: WORLD SERVER Golden Standard source/release gate (hard)
         run: npm run release:gate
+      - name: User-facing verified-link policy (hard)
+        run: node scripts/check-user-link-delivery-policy.js
       - name: Install Playwright browsers (chromium + webkit for iPhone emulation)
         run: npx playwright install --with-deps chromium webkit
       - name: Sentry runtime smoke (Playwright) - window.WorldServerSentry + ingest (hard)

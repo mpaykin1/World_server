@@ -671,3 +671,11 @@ Implementation and local verification complete. Remaining proof is GitHub Action
 - Completion: focused/full checks -> PR -> required green checks -> merge -> exactly one Vercel preview -> browser smoke.
 - Evidence: api/*.js reduced 14 -> 11; focused Vercel limit tests 3/3 PASS; JS syntax, agent rules and Golden Standard PASS.
 - Remaining: cloud CI, merge, one Vercel preview and browser smoke.
+
+## 2026-09-09 Manual Fast Lane — PR #91 verified-link recovery
+- Goal: finish Graphics-First repair and deliver only a freshly verified stable production URL.
+- Incident: previously sent Netlify Deploy Preview later returned `Site not found`; ephemeral/stale preview delivery is now a hard regression.
+- Current fix: visible right LOOK joystick for AI3D + `VERIFIED LINK DELIVERY / NO-BROKEN-LINK` hard policy, CI guard and tests.
+- Validation plan: Golden/static + Node tests -> exact-head CI -> inspect intended visual deltas -> migrate only approved snapshots -> merge -> stable Netlify production -> fresh mobile/desktop browser verification <=120s before user delivery.
+- Rollback/LKG: current `master`; no direct production push.
+- Completion: exact merged revision works on stable URL with fullscreen graphics, 4-button toolbar, visible MOVE+LOOK, jump, no host error page; final link is freshly revalidated.

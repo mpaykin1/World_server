@@ -43,7 +43,9 @@
     "primaryRendererMinViewportWidthRatio": 0.9,
     "primaryRendererMinViewportHeightRatio": 0.82,
     "maxClosedAuxiliaryOcclusionRatio": 0.12,
-    "gameplayPageScrollAllowed": false
+    "gameplayPageScrollAllowed": false,
+    "mobileVisibleMoveJoystick": true,
+    "mobileVisibleLookJoystick": true
   },
   "knownSystemPanels": {
     "catalog": [

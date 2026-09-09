@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "USER_FACING_LINK_DELIVERY",
+  "mode": "hard-block",
+  "rules": {
+    "unverifiedLink": "HARD_BLOCK",
+    "freshVerificationRequired": true,
+    "maxEvidenceAgeSeconds": 120,
+    "preferStableProductionUrl": true,
+    "ephemeralPreviewMayBeFinal": false,
+    "requireHttp2xx": true,
+    "requireApplicationReadyPredicate": true,
+    "requireBrowserVerificationForPlayableWorld": true,
+    "forbiddenHostPageMarkers": [
+      "Site not found",
+      "Page not found",
+      "Vercel Login",
+      "404: NOT_FOUND",
+      "DEPLOYMENT_NOT_FOUND"
+    ]
+  }
+}
