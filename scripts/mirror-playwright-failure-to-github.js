@@ -41,17 +41,61 @@ function compactSelectedFacing(facing) {
   };
 }
 
-function compactEssentialActions(actions) {
+function compactEssentialActions(actions, includeLabels = true) {
   if (!actions || typeof actions !== 'object') return known(actions);
   return {
     visibleActionCount: actions.visibleActionCount ?? 'UNKNOWN',
-    visibleActionLabels: Array.isArray(actions.visibleActionLabels) ? actions.visibleActionLabels : [],
+    ...(includeLabels ? { visibleActionLabels: Array.isArray(actions.visibleActionLabels) ? actions.visibleActionLabels : [] } : {}),
     jumpVisible: actions.jumpVisible ?? 'UNKNOWN',
     menuVisible: actions.menuVisible ?? 'UNKNOWN',
   };
 }
 
-function compactLoadedState(evidence = {}, failure = {}, includePostResize = true) {
+function compactPostResizeState(evidence = {}, failure = {}) {
+  const controls = evidence.controls || {};
+  return {
+    defaultCityLoaded: evidence.defaultCityLoaded ?? 'UNKNOWN',
+    voxels: evidence.voxels ?? 'UNKNOWN',
+    chunks: evidence.chunks ?? 'UNKNOWN',
+    renderedTriangles: evidence.renderedTriangles ?? evidence.triangles ?? 'UNKNOWN',
+    drawCalls: evidence.drawCalls ?? 'UNKNOWN',
+    webglReady: evidence.webglReady ?? failure.webglRendererReadiness ?? 'UNKNOWN',
+    viewport: evidence.viewport || failure.viewport || 'UNKNOWN',
+    primaryRendererBounds: evidence.primaryRendererBounds || failure.primaryRendererBounds || 'UNKNOWN',
+    rendererWidthRatio: evidence.rendererWidthRatio ?? evidence.primaryRendererWidthRatio ?? 'UNKNOWN',
+    rendererHeightRatio: evidence.rendererHeightRatio ?? evidence.primaryRendererHeightRatio ?? 'UNKNOWN',
+    gameplayScrollRatio: evidence.gameplayScrollRatio ?? 'UNKNOWN',
+    closedAuxiliaryOcclusionRatio: evidence.closedAuxiliaryOcclusionRatio ?? 'UNKNOWN',
+    camera: evidence.camera || 'UNKNOWN',
+    selectedFacing: compactSelectedFacing(evidence.selectedFacing || evidence.facing),
+    framing: evidence.framing || 'UNKNOWN',
+    controls: {
+      move: controls.move ?? evidence.moveAvailable ?? 'UNKNOWN',
+      look: controls.look ?? evidence.lookAvailable ?? 'UNKNOWN',
+      toolbarUsable: controls.toolbarUsable ?? evidence.toolbarUsable ?? 'UNKNOWN',
+      essentialActions: compactEssentialActions(controls.essentialActions, false),
+    },
+    pageErrors: evidence.pageErrors || failure.pageErrors || [],
+    consoleErrors: evidence.consoleErrors || failure.consoleErrors || [],
+  };
+}
+
+function compactPostResizeOrientation(postResize, failure = {}) {
+  if (!postResize || typeof postResize !== 'object') return known(postResize);
+  return {
+    supported: postResize.supported ?? 'UNKNOWN',
+    original: postResize.original || 'UNKNOWN',
+    probe: postResize.probe || 'UNKNOWN',
+    afterOrientationChange: postResize.afterOrientationChange
+      ? compactPostResizeState(postResize.afterOrientationChange, failure)
+      : 'UNKNOWN',
+    afterRestore: postResize.afterRestore
+      ? compactPostResizeState(postResize.afterRestore, failure)
+      : 'UNKNOWN',
+  };
+}
+
+function compactLoadedState(evidence = {}, failure = {}) {
   const controls = evidence.controls || {};
   return {
     defaultCityLoaded: evidence.defaultCityLoaded ?? 'UNKNOWN',
@@ -81,22 +125,7 @@ function compactLoadedState(evidence = {}, failure = {}, includePostResize = tru
     pageErrors: evidence.pageErrors || failure.pageErrors || [],
     consoleErrors: evidence.consoleErrors || failure.consoleErrors || [],
     screenshotIdentity: evidence.screenshotIdentity || 'UNKNOWN',
-    postResizeOrientation: includePostResize ? compactPostResizeOrientation(evidence.postResizeOrientation || evidence.postResize, failure) : undefined,
-  };
-}
-
-function compactPostResizeOrientation(postResize, failure = {}) {
-  if (!postResize || typeof postResize !== 'object') return known(postResize);
-  return {
-    supported: postResize.supported ?? 'UNKNOWN',
-    original: postResize.original || 'UNKNOWN',
-    probe: postResize.probe || 'UNKNOWN',
-    afterOrientationChange: postResize.afterOrientationChange
-      ? compactLoadedState(postResize.afterOrientationChange, failure, false)
-      : 'UNKNOWN',
-    afterRestore: postResize.afterRestore
-      ? compactLoadedState(postResize.afterRestore, failure, false)
-      : 'UNKNOWN',
+    postResizeOrientation: compactPostResizeOrientation(evidence.postResizeOrientation || evidence.postResize, failure),
   };
 }
 
@@ -205,4 +234,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { buildMirror, compactFailure, compactLoadedState, compactPostResizeOrientation, compactSelectedFacing };
+module.exports = { buildMirror, compactFailure, compactLoadedState, compactPostResizeOrientation, compactPostResizeState, compactSelectedFacing };
