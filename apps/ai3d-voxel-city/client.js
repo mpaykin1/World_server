@@ -329,7 +329,7 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
   const measured=[];
   for(const c of unique){
     const fx=-Math.sin(c.yaw),fz=-Math.cos(c.yaw);
-    const screenBins=new Set();
+    const screenBins=new Set(),nearSurfaceBins=new Set(),centerNearSurfaceBins=new Set();
     let score=0,nearOccluders=0,centerOccluders=0,visibleNearOccluders=0,visibleCenterOccluders=0,centerMidFar=0,centerNearestDistance=Infinity;const centerDepthBands=new Set();
     for(const v of voxels){
       if(!Array.isArray(v)||v.length<3)continue;
@@ -348,6 +348,20 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
       const side=dx*(-fz)+dz*fx;
       const screenX=side/(forward*horizontalTan);
       const screenY=dy/(forward*verticalTan);
+      // Estimate the actual screen footprint of nearby voxel faces, not just voxel centers.
+      // A close wall can dominate the frame while center-point blocker counters remain zero.
+      if(d<14){
+        const halfX=Math.min(1,.75/(forward*horizontalTan)),halfY=Math.min(1,.75/(forward*verticalTan));
+        const minX=Math.max(-1,screenX-halfX),maxX=Math.min(1,screenX+halfX),minY=Math.max(-1,screenY-halfY),maxY=Math.min(1,screenY+halfY);
+        if(minX<=maxX&&minY<=maxY){
+          const x0=Math.max(0,Math.min(11,Math.floor((minX+1)*6))),x1=Math.max(0,Math.min(11,Math.floor((maxX+1)*6)));
+          const y0=Math.max(0,Math.min(7,Math.floor((minY+1)*4))),y1=Math.max(0,Math.min(7,Math.floor((maxY+1)*4)));
+          for(let bx=x0;bx<=x1;bx++)for(let by=y0;by<=y1;by++){
+            const key=`${bx}:${by}`;nearSurfaceBins.add(key);
+            const cx=-1+(bx+.5)/6,cy=-1+(by+.5)/4;if(Math.abs(cx)<=.42&&Math.abs(cy)<=.68)centerNearSurfaceBins.add(key);
+          }
+        }
+      }
       if(Math.abs(screenX)>1||Math.abs(screenY)>1)continue;
       score++;
       const bx=Math.max(0,Math.min(3,Math.floor((screenX+1)*2)));
@@ -364,7 +378,7 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
         }
       }
     }
-    measured.push({...c,score,nearOccluders,centerOccluders,visibleNearOccluders,visibleCenterOccluders,centerMidFar,centerDepthBands:centerDepthBands.size,centerNearestDistance:Number.isFinite(centerNearestDistance)?centerNearestDistance:maxDistance,screenCoverage:screenBins.size,maxDistance,frustumAspect});
+    measured.push({...c,score,nearOccluders,centerOccluders,visibleNearOccluders,visibleCenterOccluders,nearSurfaceCoverage:nearSurfaceBins.size,centerNearSurfaceCoverage:centerNearSurfaceBins.size,centerMidFar,centerDepthBands:centerDepthBands.size,centerNearestDistance:Number.isFinite(centerNearestDistance)?centerNearestDistance:maxDistance,screenCoverage:screenBins.size,maxDistance,frustumAspect});
   }
   const richestCandidate=measured.reduce((best,c)=>!best||c.score>best.score?c:best,null);
   const richest=richestCandidate?.score||0;
@@ -382,8 +396,8 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
   // A clear screen center is useful only when it also contains mid/far world content.
   // Keep established blocker improvements, then prefer central depth and broad screen
   // coverage before raw richness.
-  rankedPool.sort((a,b)=>a.visibleCenterOccluders-b.visibleCenterOccluders||b.centerDepthBands-a.centerDepthBands||b.centerMidFar-a.centerMidFar||b.screenCoverage-a.screenCoverage||a.visibleNearOccluders-b.visibleNearOccluders||b.centerNearestDistance-a.centerNearestDistance||a.nearOccluders-b.nearOccluders||a.centerOccluders-b.centerOccluders||b.score-a.score);
-  const fallback=measured.slice().sort((a,b)=>b.score-a.score)[0]||{yaw:0,label:'fallback',score:0,nearOccluders:0,centerOccluders:0,visibleNearOccluders:0,visibleCenterOccluders:0,centerMidFar:0,centerDepthBands:0,centerNearestDistance:maxDistance,screenCoverage:0,maxDistance,frustumAspect};
+  rankedPool.sort((a,b)=>a.centerNearSurfaceCoverage-b.centerNearSurfaceCoverage||a.nearSurfaceCoverage-b.nearSurfaceCoverage||a.visibleCenterOccluders-b.visibleCenterOccluders||b.centerDepthBands-a.centerDepthBands||b.centerMidFar-a.centerMidFar||b.screenCoverage-a.screenCoverage||a.visibleNearOccluders-b.visibleNearOccluders||b.centerNearestDistance-a.centerNearestDistance||a.nearOccluders-b.nearOccluders||a.centerOccluders-b.centerOccluders||b.score-a.score);
+  const fallback=measured.slice().sort((a,b)=>b.score-a.score)[0]||{yaw:0,label:'fallback',score:0,nearOccluders:0,centerOccluders:0,visibleNearOccluders:0,visibleCenterOccluders:0,nearSurfaceCoverage:0,centerNearSurfaceCoverage:0,centerMidFar:0,centerDepthBands:0,centerNearestDistance:maxDistance,screenCoverage:0,maxDistance,frustumAspect};
   return {...(rankedPool[0]||fallback),readableFloor,centerContentFloor,richestScore:richest,richestNearOccluders:richestCandidate?.nearOccluders||0,richestCenterOccluders:richestCandidate?.centerOccluders||0,richestCenterMidFar:richestCandidate?.centerMidFar||0,candidateCount:measured.length};
 }
 async function renderWorld(data){
