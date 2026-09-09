@@ -24,6 +24,26 @@ async function captureLoadedGraphicsEvidence(page){
     const facing=stats.initialVisibleFacing||{};
     const rendererStats=stats.renderer||{};
     const body=document.body;
+    const isVisible=el=>{
+      if(!el)return false;
+      const r=el.getBoundingClientRect();
+      const s=getComputedStyle(el);
+      return r.width>0&&r.height>0&&s.display!=='none'&&s.visibility!=='hidden'&&Number(s.opacity||1)>0;
+    };
+    const visibleActionLabels=[...document.querySelectorAll('button,[role="button"]')]
+      .filter(isVisible)
+      .map(el=>(el.getAttribute('aria-label')||el.textContent||el.id||'').trim())
+      .filter(Boolean)
+      .slice(0,24);
+    const nearSurfaceCoverage=Number(facing.nearSurfaceCoverage);
+    const centerNearSurfaceCoverage=Number(facing.centerNearSurfaceCoverage);
+    const nearSurfaceCoverageRatio=Number.isFinite(nearSurfaceCoverage)?nearSurfaceCoverage/96:null;
+    const centerNearSurfaceCoverageRatio=Number.isFinite(centerNearSurfaceCoverage)?centerNearSurfaceCoverage/36:null;
+    let visibleFrameClassification='INCONCLUSIVE';
+    if(stats.defaultCityLoaded===true&&(Number(rendererStats.triangles)||0)>0){
+      if((centerNearSurfaceCoverageRatio??0)>=0.5||(nearSurfaceCoverageRatio??0)>=0.5)visibleFrameClassification='VISIBLE_BUT_BAD_FRAMING';
+      else visibleFrameClassification='VISIBLE_GAME_CONTENT';
+    }
     return {
       pageUrl:location.href,
       defaultCityLoaded:stats.defaultCityLoaded===true,
@@ -43,16 +63,36 @@ async function captureLoadedGraphicsEvidence(page){
       closedAuxiliaryOcclusionRatio:drawerOpen?drawerArea/viewportArea:0,
       camera:{x:Number(player.x)||0,y:Number(player.y)||0,z:Number(player.z)||0,yaw:Number(player.yaw)||0,pitch:Number(player.pitch)||0,playable:player.playable===true},
       selectedFacing:facing,
+      framing:{nearSurfaceCoverage,centerNearSurfaceCoverage,nearSurfaceCoverageRatio,centerNearSurfaceCoverageRatio,visibleFrameClassification},
       controls:{
         move:player.playable===true,
         look:typeof runtime?.setView==='function'||typeof runtime?.setPlayerView==='function',
         toolbarUsable:!!document.querySelector('#goldenToolbar button'),
-        canvasPresent:!!canvas
+        canvasPresent:!!canvas,
+        essentialActions:{
+          visibleActionCount:visibleActionLabels.length,
+          visibleActionLabels,
+          jumpVisible:visibleActionLabels.some(label=>/jump|прыж/i.test(label)),
+          menuVisible:visibleActionLabels.some(label=>/menu|меню|world|мир/i.test(label))
+        }
       },
       pageErrors:[],
       consoleErrors:[]
     };
   });
+}
+
+async function captureResizeOrientationEvidence(page){
+  const original=page.viewportSize();
+  if(!original||original.width===original.height)return {supported:false,reason:'square-or-unknown-viewport'};
+  const probe={width:original.height,height:original.width};
+  await page.setViewportSize(probe);
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  const afterOrientationChange=await captureLoadedGraphicsEvidence(page);
+  await page.setViewportSize(original);
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  const afterRestore=await captureLoadedGraphicsEvidence(page);
+  return {supported:true,original,probe,afterOrientationChange,afterRestore};
 }
 
 for(const b of approved){
@@ -79,11 +119,13 @@ for(const b of approved){
       return s.defaultCityLoaded === true && s.voxels > 0 && s.chunks > 0;
     }, { timeout: 20000 }).catch(() => {});
     if(app==='ai3d-voxel-city'){
+      const resizeOrientation=await captureResizeOrientationEvidence(page);
       const evidence=await captureLoadedGraphicsEvidence(page);
       evidence.pageErrors=pageErrors.slice();
       evidence.consoleErrors=consoleErrors.slice();
       evidence.screenshotIdentity=path.basename(b.path);
       evidence.project=testInfo.project.name;
+      evidence.postResizeOrientation=resizeOrientation;
       testInfo.annotations.push({type:'loaded-state-graphics-evidence',description:JSON.stringify(evidence)});
       await testInfo.attach('loaded-state-graphics-evidence.json',{body:Buffer.from(`${JSON.stringify(evidence,null,2)}\n`),contentType:'application/json'});
     }
