@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "2.0.0",
+  "schemaVersion": "2.1.0",
   "system": "GOLDEN_UI_POLICY",
   "mode": "release-blocking",
   "rules": {
@@ -31,6 +31,14 @@
     "worldPreviewLazyLoad": true,
     "worldLoreReadingLevel": "age-5-simple",
     "worldConnectionsMenu": true,
+    "worldConnectionCardsClickable": true,
+    "worldFusionEnabled": true,
+    "worldFusionAnyPair": true,
+    "worldFusionUrlPattern": "/shared/world-fusion.html?a={WORLD_A}&b={WORLD_B}",
+    "worldFusionPreservesSources": true,
+    "worldDisplayNameMaxWords": 3,
+    "worldDisplayNameForbidsSystemTokens": true,
+    "worldDisplayNameRegistry": "data/world-display-names.json",
     "graphicsFirstWorlds": true,
     "primaryRendererMinViewportWidthRatio": 0.9,
     "primaryRendererMinViewportHeightRatio": 0.82,
