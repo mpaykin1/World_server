@@ -13,8 +13,91 @@ function known(value) {
   return value === null || value === undefined || value === '' ? 'UNKNOWN' : value;
 }
 
-function json(value) {
-  return JSON.stringify(value ?? null);
+function compactSelectedFacing(facing) {
+  if (!facing || typeof facing !== 'object') return known(facing);
+  return {
+    yaw: facing.yaw ?? 'UNKNOWN',
+    label: known(facing.label),
+    score: facing.score ?? 'UNKNOWN',
+    nearSurfaceCoverage: facing.nearSurfaceCoverage ?? 'UNKNOWN',
+    centerNearSurfaceCoverage: facing.centerNearSurfaceCoverage ?? 'UNKNOWN',
+    centerMidFar: facing.centerMidFar ?? 'UNKNOWN',
+    centerDepthBands: facing.centerDepthBands ?? 'UNKNOWN',
+    centerNearestDistance: facing.centerNearestDistance ?? 'UNKNOWN',
+    screenCoverage: facing.screenCoverage ?? 'UNKNOWN',
+    readableFloor: facing.readableFloor ?? 'UNKNOWN',
+    centerContentFloor: facing.centerContentFloor ?? 'UNKNOWN',
+    candidateCount: facing.candidateCount ?? 'UNKNOWN',
+    yawSpaceExhausted: facing.yawSpaceExhausted ?? 'UNKNOWN',
+    nearSurfaceCoverageRange: facing.nearSurfaceCoverageRange || 'UNKNOWN',
+    centerNearSurfaceCoverageRange: facing.centerNearSurfaceCoverageRange || 'UNKNOWN',
+    spawnFallbackUsed: facing.spawnFallbackUsed ?? 'UNKNOWN',
+    spawnOffset: facing.spawnOffset || 'UNKNOWN',
+    spawnCandidateCount: facing.spawnCandidateCount ?? 'UNKNOWN',
+    spawnEligibleCandidateCount: facing.spawnEligibleCandidateCount ?? 'UNKNOWN',
+    spawnRejectedCandidateCount: facing.spawnRejectedCandidateCount ?? 'UNKNOWN',
+    finalViewEligible: facing.finalViewEligible ?? 'UNKNOWN',
+    baseYawSpaceExhausted: facing.baseYawSpaceExhausted ?? 'UNKNOWN',
+  };
+}
+
+function compactEssentialActions(actions) {
+  if (!actions || typeof actions !== 'object') return known(actions);
+  return {
+    visibleActionCount: actions.visibleActionCount ?? 'UNKNOWN',
+    visibleActionLabels: Array.isArray(actions.visibleActionLabels) ? actions.visibleActionLabels : [],
+    jumpVisible: actions.jumpVisible ?? 'UNKNOWN',
+    menuVisible: actions.menuVisible ?? 'UNKNOWN',
+  };
+}
+
+function compactLoadedState(evidence = {}, failure = {}, includePostResize = true) {
+  const controls = evidence.controls || {};
+  return {
+    defaultCityLoaded: evidence.defaultCityLoaded ?? 'UNKNOWN',
+    voxels: evidence.voxels ?? 'UNKNOWN',
+    chunks: evidence.chunks ?? 'UNKNOWN',
+    objects: evidence.objects ?? evidence.objectCount ?? 'UNKNOWN',
+    renderedTriangles: evidence.renderedTriangles ?? evidence.triangles ?? 'UNKNOWN',
+    drawCalls: evidence.drawCalls ?? 'UNKNOWN',
+    webglReady: evidence.webglReady ?? failure.webglRendererReadiness ?? 'UNKNOWN',
+    viewport: evidence.viewport || failure.viewport || 'UNKNOWN',
+    primaryRendererBounds: evidence.primaryRendererBounds || failure.primaryRendererBounds || 'UNKNOWN',
+    rendererWidthRatio: evidence.rendererWidthRatio ?? evidence.primaryRendererWidthRatio ?? 'UNKNOWN',
+    rendererHeightRatio: evidence.rendererHeightRatio ?? evidence.primaryRendererHeightRatio ?? 'UNKNOWN',
+    gameplayScrollRatio: evidence.gameplayScrollRatio ?? 'UNKNOWN',
+    closedAuxiliaryOcclusionRatio: evidence.closedAuxiliaryOcclusionRatio ?? 'UNKNOWN',
+    camera: evidence.camera || {
+      position: evidence.cameraPosition ?? 'UNKNOWN',
+      yaw: evidence.cameraYaw ?? 'UNKNOWN',
+      pitch: evidence.cameraPitch ?? 'UNKNOWN',
+    },
+    selectedFacing: compactSelectedFacing(evidence.selectedFacing || evidence.facing),
+    framing: evidence.framing || 'UNKNOWN',
+    moveAvailable: evidence.moveAvailable ?? controls.move ?? 'UNKNOWN',
+    lookAvailable: evidence.lookAvailable ?? controls.look ?? 'UNKNOWN',
+    toolbarUsable: evidence.toolbarUsable ?? controls.toolbarUsable ?? 'UNKNOWN',
+    essentialActionsAvailable: evidence.essentialActionsAvailable ?? compactEssentialActions(controls.essentialActions),
+    pageErrors: evidence.pageErrors || failure.pageErrors || [],
+    consoleErrors: evidence.consoleErrors || failure.consoleErrors || [],
+    screenshotIdentity: evidence.screenshotIdentity || 'UNKNOWN',
+    postResizeOrientation: includePostResize ? compactPostResizeOrientation(evidence.postResizeOrientation || evidence.postResize, failure) : undefined,
+  };
+}
+
+function compactPostResizeOrientation(postResize, failure = {}) {
+  if (!postResize || typeof postResize !== 'object') return known(postResize);
+  return {
+    supported: postResize.supported ?? 'UNKNOWN',
+    original: postResize.original || 'UNKNOWN',
+    probe: postResize.probe || 'UNKNOWN',
+    afterOrientationChange: postResize.afterOrientationChange
+      ? compactLoadedState(postResize.afterOrientationChange, failure, false)
+      : 'UNKNOWN',
+    afterRestore: postResize.afterRestore
+      ? compactLoadedState(postResize.afterRestore, failure, false)
+      : 'UNKNOWN',
+  };
 }
 
 function compactFailure(failure) {
@@ -29,38 +112,15 @@ function compactFailure(failure) {
     durationMs: failure.durationMs ?? 'UNKNOWN',
     firstAssertion: known(failure.firstFailingAssertion),
     sourceLocation: known(failure.sourceLocation),
-    pageUrl: known(failure.pageUrl),
-    pageErrors: failure.pageErrors || [],
-    consoleErrors: failure.consoleErrors || [],
-    webglReady: failure.webglRendererReadiness ?? 'UNKNOWN',
-    viewport: failure.viewport || 'UNKNOWN',
-    primaryRendererBounds: failure.primaryRendererBounds || 'UNKNOWN',
+    pageUrl: known(failure.pageUrl || evidence.pageUrl),
+    pageErrors: failure.pageErrors || evidence.pageErrors || [],
+    consoleErrors: failure.consoleErrors || evidence.consoleErrors || [],
+    webglReady: failure.webglRendererReadiness ?? evidence.webglReady ?? 'UNKNOWN',
+    viewport: failure.viewport || evidence.viewport || 'UNKNOWN',
+    primaryRendererBounds: failure.primaryRendererBounds || evidence.primaryRendererBounds || 'UNKNOWN',
     screenshotFiles: failure.screenshotFiles || [],
     traceFiles: failure.traceFiles || [],
-    loadedState: {
-      defaultCityLoaded: evidence.defaultCityLoaded ?? 'UNKNOWN',
-      voxels: evidence.voxels ?? 'UNKNOWN',
-      chunks: evidence.chunks ?? 'UNKNOWN',
-      objects: evidence.objects ?? evidence.objectCount ?? 'UNKNOWN',
-      renderedTriangles: evidence.renderedTriangles ?? evidence.triangles ?? 'UNKNOWN',
-      drawCalls: evidence.drawCalls ?? 'UNKNOWN',
-      webglReady: evidence.webglReady ?? failure.webglRendererReadiness ?? 'UNKNOWN',
-      primaryRendererBounds: evidence.primaryRendererBounds || failure.primaryRendererBounds || 'UNKNOWN',
-      rendererWidthRatio: evidence.rendererWidthRatio ?? evidence.primaryRendererWidthRatio ?? 'UNKNOWN',
-      rendererHeightRatio: evidence.rendererHeightRatio ?? evidence.primaryRendererHeightRatio ?? 'UNKNOWN',
-      gameplayScrollRatio: evidence.gameplayScrollRatio ?? 'UNKNOWN',
-      closedAuxiliaryOcclusionRatio: evidence.closedAuxiliaryOcclusionRatio ?? 'UNKNOWN',
-      camera: evidence.camera || {
-        position: evidence.cameraPosition ?? 'UNKNOWN',
-        yaw: evidence.cameraYaw ?? 'UNKNOWN',
-        pitch: evidence.cameraPitch ?? 'UNKNOWN',
-      },
-      selectedFacing: evidence.selectedFacing || evidence.facing || 'UNKNOWN',
-      moveAvailable: evidence.moveAvailable ?? evidence.controls?.move ?? 'UNKNOWN',
-      lookAvailable: evidence.lookAvailable ?? evidence.controls?.look ?? 'UNKNOWN',
-      essentialActionsAvailable: evidence.essentialActionsAvailable ?? evidence.controls?.essentialActions ?? 'UNKNOWN',
-      postResizeOrientation: evidence.postResizeOrientation || evidence.postResize || 'UNKNOWN',
-    },
+    loadedState: compactLoadedState(evidence, failure),
   };
 }
 
@@ -145,4 +205,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { buildMirror, compactFailure };
+module.exports = { buildMirror, compactFailure, compactLoadedState, compactPostResizeOrientation, compactSelectedFacing };
