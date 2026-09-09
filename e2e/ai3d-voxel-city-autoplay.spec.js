@@ -57,6 +57,12 @@ test.describe('AI3D Voxel City - default-city autoplay (no user actions)', () =>
     expect(visibleContent.facing.nearOccluders).toBeLessThan(visibleContent.facing.richestNearOccluders);
     expect(visibleContent.facing.centerNearestDistance).toBeGreaterThan(6);
     expect(visibleContent.facing.finalViewEligible).toBe(true);
+    // Graphics-First framing is a hard eligibility condition, not merely telemetry.
+    // These are the runtime's existing YAW_SPACE_EXHAUSTED bounds: >38/96 full-frame
+    // or >14/36 center near-surface bins is already classified as an unreadable view.
+    expect(visibleContent.facing.nearSurfaceCoverage).toBeLessThanOrEqual(38);
+    expect(visibleContent.facing.centerNearSurfaceCoverage).toBeLessThanOrEqual(14);
+    expect(visibleContent.facing.yawSpaceExhausted).toBe(false);
     expect(visibleContent.triangles).toBeGreaterThan(250);
 
     // Character spawned inside city
