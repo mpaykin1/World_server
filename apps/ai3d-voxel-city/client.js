@@ -350,7 +350,7 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
       const screenY=dy/(forward*verticalTan);
       // Estimate the actual screen footprint of nearby voxel faces, not just voxel centers.
       // A close wall can dominate the frame while center-point blocker counters remain zero.
-      if(d<14){
+      if(d<14&&eyeLevel){
         const halfX=Math.min(1,.75/(forward*horizontalTan)),halfY=Math.min(1,.75/(forward*verticalTan));
         const minX=Math.max(-1,screenX-halfX),maxX=Math.min(1,screenX+halfX),minY=Math.max(-1,screenY-halfY),maxY=Math.min(1,screenY+halfY);
         if(minX<=maxX&&minY<=maxY){
