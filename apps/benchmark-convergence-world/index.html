@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <title>Мир Схождения — Нулевая Погода</title>
+  <link rel="stylesheet" href="/shared/style.css">
+  <style>
+    html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#040713;color:#fff;font-family:system-ui,-apple-system,sans-serif;touch-action:none}#world{position:fixed;inset:0;width:100%;height:100%;display:block}.hud{position:fixed;z-index:30;left:max(10px,env(safe-area-inset-left));top:max(10px,env(safe-area-inset-top));max-width:min(520px,72vw);padding:9px 11px;border:1px solid #ffffff24;border-radius:12px;background:#07101bbb;backdrop-filter:blur(9px);font-size:12px;line-height:1.35}.hud b{font-size:14px}.muted{opacity:.68}.signals{margin-top:5px;letter-spacing:2px}.goal{color:#b8f7ff}.status{position:fixed;z-index:30;right:10px;top:10px;padding:7px 10px;border-radius:999px;background:#050914b8;border:1px solid #ffffff20;font-size:11px}.lore{position:fixed;z-index:55;inset:0;display:grid;place-items:center;background:radial-gradient(circle at 50% 40%,#183458cc,#03050bf2 65%);padding:22px}.card{width:min(650px,92vw);max-height:82vh;overflow:auto;background:#07101edb;border:1px solid #8edcff42;border-radius:20px;padding:20px;box-shadow:0 30px 90px #000b}.card h1{font-size:clamp(25px,5vw,48px);line-height:.98;margin:0 0 12px;text-transform:uppercase}.card p{line-height:1.55;color:#d7e8f6}.card button,.choice button{border:1px solid #9fe8ff66;background:#87ddff20;color:#fff;border-radius:999px;padding:11px 16px;font-weight:800}.choice{position:fixed;z-index:50;left:50%;bottom:24px;transform:translateX(-50%);display:none;gap:8px;padding:8px;border-radius:999px;background:#050914c9;border:1px solid #ffffff22}.joystick{display:none;position:fixed;z-index:40;left:22px;bottom:max(24px,env(safe-area-inset-bottom));width:126px;height:126px;border-radius:50%;background:#ffffff12;border:1px solid #ffffff28}.knob{position:absolute;left:40px;top:40px;width:46px;height:46px;border-radius:50%;background:#b8e9ff70;border:1px solid #fff9}.pulse{position:fixed;z-index:40;right:22px;bottom:max(34px,env(safe-area-inset-bottom));width:74px;height:74px;border-radius:50%;border:1px solid #bdf2ff66;background:#0d273ab8;color:#fff;font-weight:800}.back{position:fixed;z-index:32;right:10px;top:48px;color:#c9eeff;text-decoration:none;font-size:11px}@media(max-width:800px),(pointer:coarse){.joystick{display:block}.hud{max-width:64vw;font-size:10px}.status{display:none}.pulse{display:block}}@media(min-width:801px) and (pointer:fine){.pulse{display:none}}
+  </style>
+  <script src="/shared/sentry-runtime.js"></script>
+</head>
+<body>
+  <canvas id="world"></canvas>
+  <div class="hud"><b>НУЛЕВАЯ ПОГОДА</b><div class="muted">WASD / стрелки · найди 7 сигналов · клик = импульс</div><div id="goal" class="goal">Сигналы: 0 / 7</div><div id="signals" class="signals">○ ○ ○ ○ ○ ○ ○</div></div>
+  <div id="eventStatus" class="status">Схождение стабильно</div>
+  <a class="back" href="/apps/catalog/">← Миры</a>
+  <div id="choice" class="choice"><button data-choice="stabilize">Стабилизировать</button><button data-choice="open">Открыть Схождение</button></div>
+  <div id="stick" class="joystick" aria-label="Джойстик движения"><div id="knob" class="knob"></div></div>
+  <button id="pulse" class="pulse" aria-label="Импульс">ИМПУЛЬС</button>
+  <div id="lore" class="lore"><div class="card"><h1>Почему здесь дождь иногда падает вверх?</h1><p>На стыке миров существует Нулевая Погода — место, куда просачиваются чужие законы: кубы помнят форму, вода становится стеной, ветер поднимает здания, свет гнётся вокруг пустоты, а звёзды отвечают на музыку.</p><p>Смотритель Штормов оставил <b>семь сигналов</b>. Каждый запускает опасное правило соседнего мира. Собери их все и реши: стабилизировать границы или открыть Схождение. Но есть странность — последовательность сигналов совпадает одновременно с Песней Шарабаса и семью огнями Dark Void. Катастрофы пытаются уничтожить миры… или сервер учится соединять их?</p><button id="enter">Войти в Схождение</button></div></div>
+  <script src="/shared/benchmark-capability-runtime.js"></script>
+  <script src="./game.js"></script>
+  <script src="/shared/quality-telemetry.js"></script>
+  <script src="/shared/golden-performance-autotuner.js"></script>
+</body>
+</html>
