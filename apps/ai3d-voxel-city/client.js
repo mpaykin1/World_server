@@ -338,6 +338,7 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
       const forward=dx*fx+dz*fz;
       const alignment=forward/d;
       const eyeLevel=Number(v[1])>=spawnPos[1]-.5;
+      const footprintLevel=Number(v[1])>=spawnPos[1]-1;
       // Preserve the established geometric blocker contract used by the hard autoplay
       // guard, while the new visible* metrics describe what is actually on screen.
       if(alignment>=legacyCosHalf&&d<nearDistance&&eyeLevel){
@@ -350,7 +351,7 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
       const screenY=dy/(forward*verticalTan);
       // Estimate the actual screen footprint of nearby voxel faces, not just voxel centers.
       // A close wall can dominate the frame while center-point blocker counters remain zero.
-      if(d<14&&eyeLevel){
+      if(d<14&&footprintLevel){
         const halfX=Math.min(1,.75/(forward*horizontalTan)),halfY=Math.min(1,.75/(forward*verticalTan));
         const minX=Math.max(-1,screenX-halfX),maxX=Math.min(1,screenX+halfX),minY=Math.max(-1,screenY-halfY),maxY=Math.min(1,screenY+halfY);
         if(minX<=maxX&&minY<=maxY){
@@ -410,7 +411,12 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
 function chooseInitialPlayableView(worldData,spawnPos){
   const baseFacing=chooseInitialPlayableFacing(worldData,spawnPos);
   const base={spawnPos:[...spawnPos],facing:baseFacing,spawnOffset:[0,0],offsetDistance:0};
-  if(!baseFacing.yawSpaceExhausted)return base;
+  const isFinalViewEligible=view=>view.facing.centerNearestDistance>6&&view.facing.score>=view.facing.readableFloor&&view.facing.centerMidFar>=view.facing.centerContentFloor;
+  if(!baseFacing.yawSpaceExhausted){
+    const eligible=isFinalViewEligible(base);
+    base.facing={...baseFacing,spawnFallbackUsed:false,spawnOffset:[0,0],spawnCandidateCount:1,spawnEligibleCandidateCount:eligible?1:0,spawnRejectedCandidateCount:eligible?0:1,finalViewEligible:eligible,baseYawSpaceExhausted:false};
+    return base;
+  }
   // Yaw-only search is exhausted: sample the complete deterministic 2-unit lattice
   // inside the existing six-world-unit safety radius. The previous sparse axes/diagonals
   // skipped collision-clear intermediate positions that can escape a near wall without
@@ -426,7 +432,6 @@ function chooseInitialPlayableView(worldData,spawnPos){
   // Cross-position ranking must not bypass the same hard eligibility contract used
   // by the per-yaw scorer. Only alternate views that preserve forward clearance,
   // readable richness and centered mid/far content may compete with the canonical base.
-  const isFinalViewEligible=view=>view.facing.centerNearestDistance>6&&view.facing.score>=view.facing.readableFloor&&view.facing.centerMidFar>=view.facing.centerContentFloor;
   const eligibleAlternates=views.slice(1).filter(isFinalViewEligible);
   const rankingPool=isFinalViewEligible(base)?[base,...eligibleAlternates]:eligibleAlternates;
   rankingPool.sort((a,b)=>Number(a.facing.yawSpaceExhausted)-Number(b.facing.yawSpaceExhausted)||a.facing.centerNearSurfaceCoverage-b.facing.centerNearSurfaceCoverage||a.facing.nearSurfaceCoverage-b.facing.nearSurfaceCoverage||b.facing.centerDepthBands-a.facing.centerDepthBands||b.facing.centerMidFar-a.facing.centerMidFar||b.facing.screenCoverage-a.facing.screenCoverage||b.facing.centerNearestDistance-a.facing.centerNearestDistance||a.offsetDistance-b.offsetDistance);
