@@ -36,7 +36,7 @@ let initialVisibleFacing={yaw:0,label:'metadata',score:0,maxDistance:0};
 async function getSession(force=false){
   if(!force&&session&&((session.enabled===false)||session.expiresAt>Date.now()+30000))return session;
   const r=await fetch('/api/ai3d',{cache:'no-store'}),j=await r.json();
-  if(!r.ok)throw new Error(j.error||j.reason||'AI3D API ╨╜╨╡╨┤╨╛╤Б╤В╤Г╨┐╨╡╨╜');
+  if(!r.ok)throw new Error(j.error||j.reason||'AI3D API недоступен');
   session=j;return session;
 }
 async function authFetch(path,options={}){
@@ -51,9 +51,9 @@ async function health(){
       fetch('/api/ai3d?action=health',{cache:'no-store'}).then(r=>r.json()).catch(()=>({ok:false})),
       getSession(true).catch(()=>({enabled:false}))
     ]);
-    if(hr.ok)$('health').textContent='Worker online ┬╖ Voxel City ready';
-    else if(s.enabled===false)$('health').textContent='Vercel fallback ready ┬╖ external worker offline';
-    else $('health').textContent='Voxel service checkingтАж';
+    if(hr.ok)$('health').textContent='Worker online · Voxel City ready';
+    else if(s.enabled===false)$('health').textContent='Vercel fallback ready · external worker offline';
+    else $('health').textContent='Voxel service checking…';
   }catch{$('health').textContent='Vercel fallback ready';}
 }
 function setProgress(p,msg){$('bar').style.width=`${Math.max(0,Math.min(100,p))}%`;if(msg)$('log').textContent=msg;}
@@ -154,20 +154,20 @@ function switchFront(){
   playableMode=false;
   frontMode=true;activeCamera=ortho;scene.fog=null;
   ortho.zoom=1;ortho.position.set(target.x,target.y,target.z+Math.max(world.source.gridWidth,world.source.gridHeight)*2);ortho.lookAt(target);
-  fitCameras();setAllDetailVisible(true);$('viewMode').textContent='FRONT EXACT ┬╖ FULL DETAIL';
+  fitCameras();setAllDetailVisible(true);$('viewMode').textContent='FRONT EXACT · FULL DETAIL';
   if(document.pointerLockElement) document.exitPointerLock();
 }
 function switchOrbit(){
   if(!world)return;
   playableMode=false;
-  frontMode=false;activeCamera=persp;$('viewMode').textContent='3D ORBIT ┬╖ STREAMED LOD';
+  frontMode=false;activeCamera=persp;$('viewMode').textContent='3D ORBIT · STREAMED LOD';
   applyFog();updatePerspective();updateStreaming(true);
   if(document.pointerLockElement) document.exitPointerLock();
 }
 function switchPlayable(){
   if(!world) return;
   frontMode=false; playableMode=true; activeCamera=persp;
-  $('viewMode').textContent='PLAYABLE ┬╖ WASD + MOUSE';
+  $('viewMode').textContent='PLAYABLE · WASD + MOUSE';
   applyFog(); updateStreaming(true);
   // camera will be controlled by player
 }
@@ -222,8 +222,8 @@ function buildFarChunk(c){
   return mesh;
 }
 async function buildOptimizedChunks(data){
-  disposeChunks();setProgress(93,'Browser: chunked greedy meshing in Web WorkerтАж');
-  if(!window.Worker)throw new Error('Web Worker ╨╜╨╡╨┤╨╛╤Б╤В╤Г╨┐╨╡╨╜');
+  disposeChunks();setProgress(93,'Browser: chunked greedy meshing in Web Worker…');
+  if(!window.Worker)throw new Error('Web Worker недоступен');
   const result=await new Promise((resolve,reject)=>{
     const w=new Worker('./mesher-worker.js');
     const timer=setTimeout(()=>{w.terminate();reject(new Error('Mesher worker timeout'));},60000);
@@ -384,7 +384,7 @@ async function renderWorld(data){
   const t=data.camera?.target||[(data.source?.gridWidth||100)/2,(data.source?.gridHeight||70)/2,10];
   target.set(t[0],t[1],t[2]);radius=Math.max(data.source.gridWidth,data.source.gridHeight)*1.35;yaw=0;pitch=.12;updatePerspective();
   const bg=data.background||{};if(bg.top&&bg.horizon)$('viewer').style.background=`linear-gradient(${cssRgb(bg.top)},${cssRgb(bg.horizon)} 58%,#120d0c)`;
-  $('stats').textContent=`${(data.voxels||[]).length.toLocaleString('ru-RU')} logical cubes ┬╖ ${chunkObjects.size} chunks ┬╖ greedy surface mesh`;
+  $('stats').textContent=`${(data.voxels||[]).length.toLocaleString('ru-RU')} logical cubes · ${chunkObjects.size} chunks · greedy surface mesh`;
   // always keep front as fallback, but if default city autoplay, switch to playable
   if(defaultCityLoaded){
     const spawnPos=resolveSpawn(data);
@@ -397,7 +397,7 @@ async function renderWorld(data){
     if(window.__AI3D_PLAYABLE_SCENE__){
       window.__AI3D_PLAYABLE_SCENE__.reportReady({walkable:true,collisions:true,grounding:true,playerSpawn:true});
     }
-    setProgress(100,'╨У╨╛╤В╨╛╨▓╨╛: default-city ╨╖╨░╨│╤А╤Г╨╢╨╡╨╜ тАФ WASD/╤Б╤В╤А╨╡╨╗╨║╨╕ + ╨╝╤Л╤И╤М, ╨║╨╗╨╕╨║ ╨┤╨╗╤П ╨╖╨░╤Е╨▓╨░╤В╨░.');
+    setProgress(100,'Готово: default-city загружен — WASD/стрелки + мышь, клик для захвата.');
   } else {
     switchFront();
   }
@@ -425,7 +425,7 @@ function updatePerformanceLabel(){
   if(!$('perfMetric')||!renderer)return;
   const calls=renderer.info.render.calls,tri=renderer.info.render.triangles;
   const red=mesherStats?.triangleReductionPercent;
-  $('perfMetric').textContent=`FPS ${measuredFps||'тАж'} ┬╖ calls ${calls} ┬╖ tris ${tri.toLocaleString()}${red!==undefined?` ┬╖ greedy -${red}% naive tris`:''}`;
+  $('perfMetric').textContent=`FPS ${measuredFps||'…'} · calls ${calls} · tris ${tri.toLocaleString()}${red!==undefined?` · greedy -${red}% naive tris`:''}`;
 }
 function adaptResolution(){
   if(!adaptive||frontMode||!renderer)return;
@@ -555,7 +555,7 @@ async function preprocessForServerless(file){
   return {width,height,rgbBase64:btoa(binary)};
 }
 async function generateServerlessFallback(file){
-  setProgress(8,'External AI3D worker ╨╜╨╡ ╨╜╨░╤Б╤В╤А╨╛╨╡╨╜. ╨Ш╤Б╨┐╨╛╨╗╤М╨╖╤Г╤О Vercel serverless voxel fallbackтАж');
+  setProgress(8,'External AI3D worker не настроен. Использую Vercel serverless voxel fallback…');
   const pixels=await preprocessForServerless(file);
   const payload={
     ...pixels,
@@ -564,7 +564,7 @@ async function generateServerlessFallback(file){
     structureCell:Number($('structureCell').value),
     depthLayers:10
   };
-  setProgress(28,'╨Ю╤В╨┐╤А╨░╨▓╨╗╤П╤О reference pixels ╨╜╨░ World_serverтАж');
+  setProgress(28,'Отправляю reference pixels на World_server…');
   const r=await fetch('/api/ai3d-voxel-generate',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
@@ -572,15 +572,15 @@ async function generateServerlessFallback(file){
   });
   const j=await r.json();
   if(!r.ok||!j.ok)throw new Error(j.error||'Serverless voxel generation failed');
-  setProgress(78,`World_server ╨┐╨╛╤Б╤В╤А╨╛╨╕╨╗ ${j.world?.voxels?.length?.toLocaleString('ru-RU')||0} ╨║╤Г╨▒╨╕╨║╨╛╨▓. ╨б╤В╤А╨╛╤О render chunksтАж`);
+  setProgress(78,`World_server построил ${j.world?.voxels?.length?.toLocaleString('ru-RU')||0} кубиков. Строю render chunks…`);
   await renderWorld(j.world);
   $('corrMetric').textContent='UNTESTED';
   $('frontMetric').textContent='SERVERLESS FALLBACK';
-  setProgress(100,'╨У╨╛╤В╨╛╨▓╨╛: ╨│╨╛╤А╨╛╨┤ ╨┐╨╛╤Б╤В╤А╨╛╨╡╨╜ ╨╜╨░ Vercel ╨▒╨╡╨╖ AI3D_WORKER_URL.');
+  setProgress(100,'Готово: город построен на Vercel без AI3D_WORKER_URL.');
 }
 async function loadJsonFile(job,predicate){
   const f=(job.files||[]).find(predicate);if(!f)return null;
-  const r=await authFetch(f.url);if(!r.ok)throw new Error(`╨Э╨╡ ╤Г╨┤╨░╨╗╨╛╤Б╤М ╨╖╨░╨│╤А╤Г╨╖╨╕╤В╤М ${f.name}`);return r.json();
+  const r=await authFetch(f.url);if(!r.ok)throw new Error(`Не удалось загрузить ${f.name}`);return r.json();
 }
 async function poll(id){
   const r=await authFetch(`/v1/jobs/${id}`),j=await r.json();
@@ -589,22 +589,22 @@ async function poll(id){
   if(j.status==='failed')throw new Error(j.error||'Generation failed');
   if(j.status!=='completed'){setTimeout(()=>poll(id).catch(e=>setProgress(0,e.message)),1100);return;}
   const data=await loadJsonFile(j,f=>f.role==='voxel_world'||f.name==='voxel-city.json');
-  if(!data)throw new Error('voxel-city.json ╨╜╨╡ ╨╜╨░╨╣╨┤╨╡╨╜');
+  if(!data)throw new Error('voxel-city.json не найден');
   await renderWorld(data);
   const skyFile=(j.files||[]).find(f=>f.role==='voxel_sky_backplate'||f.name==='voxel-sky-backplate.png');
   if(skyFile){const sr=await authFetch(skyFile.url);if(sr.ok)setSkyBackplate(await sr.blob());}
   const vr=await loadJsonFile(j,f=>f.role==='voxel_verification'||f.name==='voxel-verification-report.json');
   if(vr){
     const m=vr.frontProjection2D||{};
-    $('frontMetric').textContent=`COLOR ${m.cityColorSimilarityPercent ?? '?'}% ┬╖ EDGE ${m.maskedEdgeSimilarityPercent ?? '?'}%`;
+    $('frontMetric').textContent=`COLOR ${m.cityColorSimilarityPercent ?? '?'}% · EDGE ${m.maskedEdgeSimilarityPercent ?? '?'}%`;
     $('corrMetric').textContent=vr.image3dCorrespondence?.status||'UNTESTED';
   }
-  setProgress(100,'╨У╨╛╤В╨╛╨▓╨╛: server voxel world + greedy chunks + LOD/streaming.');
+  setProgress(100,'Готово: server voxel world + greedy chunks + LOD/streaming.');
 }
 
 $('generate').onclick=async()=>{
   try{
-    const file=$('file').files?.[0];if(!file)throw new Error('╨Т╤Л╨▒╨╡╤А╨╕ ╨║╨░╤А╤В╨╕╨╜╨║╤Г.');
+    const file=$('file').files?.[0];if(!file)throw new Error('Выбери картинку.');
     $('reference').src=URL.createObjectURL(file);
     const s=await getSession(true).catch(()=>({enabled:false}));
     if(!s.enabled){
@@ -619,7 +619,7 @@ $('generate').onclick=async()=>{
         await renderWorld(localData);
         const skyBlob=await createSkyBackplate(file);
         if(skyBlob) setSkyBackplate(skyBlob);
-        setProgress(100,'╨У╨╛╤В╨╛╨▓╨╛: ╨╗╨╛╨║╨░╨╗╤М╨╜╤Л╨╣ voxel world (╨▒╨╡╨╖ ╤Б╨╡╤А╨▓╨╡╤А╨░) тАФ fallback ╨┐╨╛╤Б╨╗╨╡ ╨╛╤И╨╕╨▒╨║╨╕ Vercel');
+        setProgress(100,'Готово: локальный voxel world (без сервера) — fallback после ошибки Vercel');
       }
       return;
     }
@@ -628,7 +628,7 @@ $('generate').onclick=async()=>{
       voxelGridWidth:Number($('grid').value),maxDepth:Number($('depth').value),maxThickness:Number($('thickness').value),
       structureCell:Number($('structureCell').value),paletteColors:64,depthLayers:10,foundation:true,useDepthAnything:true,depthInputSize:518
     }));
-    form.set('file',file,file.name);setProgress(3,'╨б╨╛╨╖╨┤╨░╤О external worker jobтАж');
+    form.set('file',file,file.name);setProgress(3,'Создаю external worker job…');
     const r=await authFetch('/v1/jobs',{method:'POST',body:form}),j=await r.json();
     if(!r.ok)throw new Error(j.detail||j.error||'Worker rejected job');
     poll(j.id).catch(e=>setProgress(0,e.message));
@@ -703,10 +703,10 @@ $('quality').onchange=e=>{
 async function autoLoadDefaultCity(){
   if(autoplayStarted) return; autoplayStarted=true;
   try{
-    setProgress(5,'╨Ч╨░╨│╤А╤Г╨╢╨░╤О default-city (gothic reference)тАж');
-    // GPU availability check тАФ generation is CPU-only, rendering degrades gracefully
+    setProgress(5,'Загружаю default-city (gothic reference)…');
+    // GPU availability check — generation is CPU-only, rendering degrades gracefully
     if(!window.WebGLRenderingContext){
-      setProgress(0,'WebGL ╨╜╨╡╨┤╨╛╤Б╤В╤Г╨┐╨╡╨╜ тАФ default-city generation ╨╜╨╡ ╤В╤А╨╡╨▒╤Г╨╡╤В GPU, ╤А╨╡╨╜╨┤╨╡╤А ╨╛╨│╤А╨░╨╜╨╕╤З╨╡╨╜');
+      setProgress(0,'WebGL недоступен — default-city generation не требует GPU, рендер ограничен');
     }
     const r=await fetch('./default-city.json',{cache:'no-store'});
     if(!r.ok) throw new Error('default-city.json HTTP '+r.status);
@@ -715,11 +715,11 @@ async function autoLoadDefaultCity(){
     defaultCityLoaded=true;
     setProgress(30,`Default-city: ${data.voxels.length.toLocaleString('ru-RU')} voxels, immutable ${data.defaultCity?.immutable?'YES':'NO'}`);
     await renderWorld(data);
-    setProgress(100,'╨У╨╛╤В╨╛╨▓╨╛: ╨▓╤Л╤Б╨╛╨║╨╛╨┤╨╡╤В╨░╨╗╨╕╨╖╨╕╤А╨╛╨▓╨░╨╜╨╜╤Л╨╣ gothic voxel city тАФ WASD/╤Б╤В╤А╨╡╨╗╨║╨╕ + ╨╝╤Л╤И╤М (╨║╨╗╨╕╨║ ╨┤╨╗╤П ╨╖╨░╤Е╨▓╨░╤В╨░), collision + gravity ╨░╨║╤В╨╕╨▓╨╜╤Л.');
+    setProgress(100,'Готово: высокодетализированный gothic voxel city — WASD/стрелки + мышь (клик для захвата), collision + gravity активны.');
     console.log('default-city autoload OK', {voxels:data.voxels.length, chunks:chunkObjects.size, spawn:player});
   }catch(e){
     console.warn('autoLoadDefaultCity failed:', e.message);
-    setProgress(0,'Default-city ╨╜╨╡ ╨╖╨░╨│╤А╤Г╨╢╨╡╨╜: '+e.message+' тАФ ╨▓╤Л╨▒╨╡╤А╨╕ ╨║╨░╤А╤В╨╕╨╜╨║╤Г ╨┤╨╗╤П ╨│╨╡╨╜╨╡╤А╨░╤Ж╨╕╨╕.');
+    setProgress(0,'Default-city не загружен: '+e.message+' — выбери картинку для генерации.');
   }
 }
 
@@ -736,7 +736,7 @@ window.AI3DVoxelRuntime={
   collidesAt(x,y,z){ return collidesAt(x,y,z); },
   getOccupancySize(){ return occupancySet.size; }
 };
-// expose for Playwright and delivery gate тАФ do NOT count HTTP 200 as ready
+// expose for Playwright and delivery gate — do NOT count HTTP 200 as ready
 window.__AI3D_DEFAULT_CITY_AUTOPLAY__ = { autoLoad: autoLoadDefaultCity, get state(){ return {loaded:defaultCityLoaded, playable:playableMode, spawned: !!(player && player.x), onGround:player.onGround}; } };
 
 init3D();health();
