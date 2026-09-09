@@ -51,6 +51,64 @@ test('structured Playwright JSON is primary and yields complete failure identity
   assert.equal(summary.failures[0].sourceLocation, 'e2e/hud-visual-audit.spec.js:42:3');
 }));
 
+test('inline loaded-state evidence is decoded and promoted into connector-readable failure fields', () => withTempDir((dir) => {
+  const loadedState = {
+    pageUrl: 'http://localhost:3000/apps/ai3d-voxel-city/',
+    defaultCityLoaded: true,
+    voxels: 37678,
+    chunks: 101,
+    renderedTriangles: 2390,
+    drawCalls: 36,
+    webglReady: true,
+    viewport: { width: 390, height: 664, orientation: 'portrait' },
+    primaryRendererBounds: { x: 0, y: 0, width: 390, height: 664 },
+    rendererWidthRatio: 1,
+    rendererHeightRatio: 1,
+    gameplayScrollRatio: { width: 1, height: 1 },
+    closedAuxiliaryOcclusionRatio: 0,
+    selectedFacing: { centerNearestDistance: 6.5, centerDepthBands: 4 },
+    controls: { move: true, look: true, toolbarUsable: true },
+    pageErrors: [],
+    consoleErrors: ['HTTP 503 resource'],
+  };
+  const reportFile = writeReport(dir, {
+    suites: [{
+      title: 'perceptual-visual.spec.js', file: 'e2e/perceptual-visual.spec.js',
+      specs: [{
+        title: 'perceptual-baseline ai3d-voxel-city:desktop-1280x720',
+        file: 'e2e/perceptual-visual.spec.js', line: 91, column: 24,
+        tests: [{
+          projectName: 'mobile-webkit', status: 'unexpected',
+          results: [{
+            status: 'failed', retry: 0, duration: 2534,
+            errors: [{ message: 'Error: expect(page).toHaveScreenshot(expected) failed', location: { file: 'e2e/perceptual-visual.spec.js', line: 91, column: 24 } }],
+            attachments: [
+              { name: 'loaded-state-graphics-evidence.json', contentType: 'application/json', body: Buffer.from(JSON.stringify(loadedState)).toString('base64') },
+              { name: 'trace', contentType: 'application/zip', path: 'test-results/x/trace.zip' },
+            ],
+          }],
+        }],
+      }],
+    }],
+  });
+  const summary = buildSummary({ root: dir, reportFile });
+  const failure = summary.failures[0];
+  assert.equal(summary.schemaVersion, 3);
+  assert.equal(summary.classification, 'HARD_BROWSER_FAILURE');
+  assert.equal(summary.diagnosticCompleteness.loadedStateEvidence, true);
+  assert.equal(summary.diagnosticCompleteness.pageUrl, true);
+  assert.equal(summary.diagnosticCompleteness.webglRendererReadiness, true);
+  assert.equal(summary.diagnosticCompleteness.primaryRendererBounds, true);
+  assert.equal(failure.pageUrl, loadedState.pageUrl);
+  assert.equal(failure.webglRendererReadiness, true);
+  assert.deepEqual(failure.viewport, loadedState.viewport);
+  assert.deepEqual(failure.primaryRendererBounds, loadedState.primaryRendererBounds);
+  assert.deepEqual(failure.consoleErrors, loadedState.consoleErrors);
+  assert.equal(failure.loadedStateEvidence.voxels, 37678);
+  assert.equal(failure.loadedStateEvidence.selectedFacing.centerNearestDistance, 6.5);
+  assert.equal(failure.attachments[0].inlineBodyPresent, true);
+}));
+
 test('missing structured reporter fails closed even when error-context fallback exists', () => withTempDir((dir) => {
   const contextDir = path.join(dir, 'hud-mobile-webkit');
   fs.mkdirSync(contextDir, { recursive: true });
