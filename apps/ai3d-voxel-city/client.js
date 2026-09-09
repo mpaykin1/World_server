@@ -398,7 +398,32 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
   // coverage before raw richness.
   rankedPool.sort((a,b)=>a.centerNearSurfaceCoverage-b.centerNearSurfaceCoverage||a.nearSurfaceCoverage-b.nearSurfaceCoverage||a.visibleCenterOccluders-b.visibleCenterOccluders||b.centerDepthBands-a.centerDepthBands||b.centerMidFar-a.centerMidFar||b.screenCoverage-a.screenCoverage||a.visibleNearOccluders-b.visibleNearOccluders||b.centerNearestDistance-a.centerNearestDistance||a.nearOccluders-b.nearOccluders||a.centerOccluders-b.centerOccluders||b.score-a.score);
   const fallback=measured.slice().sort((a,b)=>b.score-a.score)[0]||{yaw:0,label:'fallback',score:0,nearOccluders:0,centerOccluders:0,visibleNearOccluders:0,visibleCenterOccluders:0,nearSurfaceCoverage:0,centerNearSurfaceCoverage:0,centerMidFar:0,centerDepthBands:0,centerNearestDistance:maxDistance,screenCoverage:0,maxDistance,frustumAspect};
-  return {...(rankedPool[0]||fallback),readableFloor,centerContentFloor,richestScore:richest,richestNearOccluders:richestCandidate?.nearOccluders||0,richestCenterOccluders:richestCandidate?.centerOccluders||0,richestCenterMidFar:richestCandidate?.centerMidFar||0,candidateCount:measured.length};
+  const selected=rankedPool[0]||fallback;
+  const nearCoverage=measured.map(c=>c.nearSurfaceCoverage||0).sort((a,b)=>a-b);
+  const centerCoverage=measured.map(c=>c.centerNearSurfaceCoverage||0).sort((a,b)=>a-b);
+  const percentile=(values,p)=>values.length?values[Math.max(0,Math.min(values.length-1,Math.floor((values.length-1)*p)))]:0;
+  // 12x8 full-frame bins and a 6x6 central region make prolonged >40% near-surface
+  // occupancy a strong signal that rotating in place cannot produce a readable view.
+  const yawSpaceExhausted=(selected.centerNearSurfaceCoverage||0)>14||(selected.nearSurfaceCoverage||0)>38;
+  return {...selected,readableFloor,centerContentFloor,richestScore:richest,richestNearOccluders:richestCandidate?.nearOccluders||0,richestCenterOccluders:richestCandidate?.centerOccluders||0,richestCenterMidFar:richestCandidate?.centerMidFar||0,candidateCount:measured.length,yawSpaceExhausted,nearSurfaceCoverageRange:{min:nearCoverage[0]||0,median:percentile(nearCoverage,.5),max:nearCoverage.at(-1)||0},centerNearSurfaceCoverageRange:{min:centerCoverage[0]||0,median:percentile(centerCoverage,.5),max:centerCoverage.at(-1)||0}};
+}
+function chooseInitialPlayableView(worldData,spawnPos){
+  const baseFacing=chooseInitialPlayableFacing(worldData,spawnPos);
+  const base={spawnPos:[...spawnPos],facing:baseFacing,spawnOffset:[0,0],offsetDistance:0};
+  if(!baseFacing.yawSpaceExhausted)return base;
+  // Yaw-only search is exhausted: sample a tiny deterministic ring around the canonical
+  // spawn, never more than four world units away, and only use collision-clear positions.
+  const offsets=[[2,0],[-2,0],[0,2],[0,-2],[4,0],[-4,0],[0,4],[0,-4]];
+  const views=[base];
+  for(const [dx,dz] of offsets){
+    const candidate=[spawnPos[0]+dx,spawnPos[1],spawnPos[2]+dz];
+    if(collidesAt(candidate[0],candidate[1],candidate[2]))continue;
+    views.push({spawnPos:candidate,facing:chooseInitialPlayableFacing(worldData,candidate),spawnOffset:[dx,dz],offsetDistance:Math.hypot(dx,dz)});
+  }
+  views.sort((a,b)=>Number(a.facing.yawSpaceExhausted)-Number(b.facing.yawSpaceExhausted)||a.facing.centerNearSurfaceCoverage-b.facing.centerNearSurfaceCoverage||a.facing.nearSurfaceCoverage-b.facing.nearSurfaceCoverage||b.facing.centerDepthBands-a.facing.centerDepthBands||b.facing.centerMidFar-a.facing.centerMidFar||b.facing.screenCoverage-a.facing.screenCoverage||b.facing.centerNearestDistance-a.facing.centerNearestDistance||a.offsetDistance-b.offsetDistance);
+  const selected=views[0]||base;
+  selected.facing={...selected.facing,spawnFallbackUsed:selected.offsetDistance>0,spawnOffset:selected.spawnOffset,spawnCandidateCount:views.length,baseYawSpaceExhausted:baseFacing.yawSpaceExhausted};
+  return selected;
 }
 async function renderWorld(data){
   world=data;
@@ -410,8 +435,9 @@ async function renderWorld(data){
   // always keep front as fallback, but if default city autoplay, switch to playable
   if(defaultCityLoaded){
     const spawnPos=resolveSpawn(data);
-    player.x=spawnPos[0]; player.y=spawnPos[1]; player.z=spawnPos[2]; player.vy=0; player.onGround=true;
-    initialVisibleFacing=chooseInitialPlayableFacing(data,spawnPos);
+    const initialView=chooseInitialPlayableView(data,spawnPos);
+    player.x=initialView.spawnPos[0]; player.y=initialView.spawnPos[1]; player.z=initialView.spawnPos[2]; player.vy=0; player.onGround=true;
+    initialVisibleFacing=initialView.facing;
     yaw=initialVisibleFacing.yaw; player.yaw=yaw; pitch=Number(data?.spawn?.pitch)||player.pitch||0; player.pitch=pitch;
     switchPlayable();
     console.log('default-city visible facing',initialVisibleFacing);
