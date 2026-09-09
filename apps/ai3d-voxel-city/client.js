@@ -330,7 +330,7 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
   for(const c of unique){
     const fx=-Math.sin(c.yaw),fz=-Math.cos(c.yaw);
     const screenBins=new Set();
-    let score=0,nearOccluders=0,centerOccluders=0,visibleNearOccluders=0,visibleCenterOccluders=0,centerMidFar=0,centerNearestDistance=Infinity;
+    let score=0,nearOccluders=0,centerOccluders=0,visibleNearOccluders=0,visibleCenterOccluders=0,centerMidFar=0,centerNearestDistance=Infinity;const centerDepthBands=new Set();
     for(const v of voxels){
       if(!Array.isArray(v)||v.length<3)continue;
       const dx=Number(v[0])-spawnPos[0],dy=Number(v[1])-spawnPos[1],dz=Number(v[2])-spawnPos[2],d=Math.hypot(dx,dz);
@@ -357,10 +357,14 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
       if(Math.abs(screenX)<=.42&&Math.abs(screenY)<=.68){
         centerNearestDistance=Math.min(centerNearestDistance,forward);
         if(d<nearDistance&&eyeLevel)visibleCenterOccluders++;
-        else if(d>=nearDistance)centerMidFar++;
+        else if(d>=nearDistance){
+          centerMidFar++;
+          const depthRatio=(Math.max(nearDistance,Math.min(maxDistance,forward))-nearDistance)/Math.max(1,maxDistance-nearDistance);
+          centerDepthBands.add(Math.max(0,Math.min(3,Math.floor(depthRatio*4))));
+        }
       }
     }
-    measured.push({...c,score,nearOccluders,centerOccluders,visibleNearOccluders,visibleCenterOccluders,centerMidFar,centerNearestDistance:Number.isFinite(centerNearestDistance)?centerNearestDistance:maxDistance,screenCoverage:screenBins.size,maxDistance,frustumAspect});
+    measured.push({...c,score,nearOccluders,centerOccluders,visibleNearOccluders,visibleCenterOccluders,centerMidFar,centerDepthBands:centerDepthBands.size,centerNearestDistance:Number.isFinite(centerNearestDistance)?centerNearestDistance:maxDistance,screenCoverage:screenBins.size,maxDistance,frustumAspect});
   }
   const richestCandidate=measured.reduce((best,c)=>!best||c.score>best.score?c:best,null);
   const richest=richestCandidate?.score||0;
@@ -374,8 +378,8 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
   // A clear screen center is useful only when it also contains mid/far world content.
   // Keep established blocker improvements, then prefer central depth and broad screen
   // coverage before raw richness.
-  pool.sort((a,b)=>a.visibleCenterOccluders-b.visibleCenterOccluders||b.centerNearestDistance-a.centerNearestDistance||a.nearOccluders-b.nearOccluders||a.centerOccluders-b.centerOccluders||b.screenCoverage-a.screenCoverage||b.centerMidFar-a.centerMidFar||a.visibleNearOccluders-b.visibleNearOccluders||b.score-a.score);
-  const fallback=measured.slice().sort((a,b)=>b.score-a.score)[0]||{yaw:0,label:'fallback',score:0,nearOccluders:0,centerOccluders:0,visibleNearOccluders:0,visibleCenterOccluders:0,centerMidFar:0,centerNearestDistance:maxDistance,screenCoverage:0,maxDistance,frustumAspect};
+  pool.sort((a,b)=>a.visibleCenterOccluders-b.visibleCenterOccluders||b.centerDepthBands-a.centerDepthBands||b.centerMidFar-a.centerMidFar||b.screenCoverage-a.screenCoverage||a.visibleNearOccluders-b.visibleNearOccluders||b.centerNearestDistance-a.centerNearestDistance||a.nearOccluders-b.nearOccluders||a.centerOccluders-b.centerOccluders||b.score-a.score);
+  const fallback=measured.slice().sort((a,b)=>b.score-a.score)[0]||{yaw:0,label:'fallback',score:0,nearOccluders:0,centerOccluders:0,visibleNearOccluders:0,visibleCenterOccluders:0,centerMidFar:0,centerDepthBands:0,centerNearestDistance:maxDistance,screenCoverage:0,maxDistance,frustumAspect};
   return {...(pool[0]||fallback),readableFloor,centerContentFloor,richestScore:richest,richestNearOccluders:richestCandidate?.nearOccluders||0,richestCenterOccluders:richestCandidate?.centerOccluders||0,richestCenterMidFar:richestCandidate?.centerMidFar||0,candidateCount:measured.length};
 }
 async function renderWorld(data){
