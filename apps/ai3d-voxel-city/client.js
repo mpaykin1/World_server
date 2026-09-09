@@ -307,6 +307,29 @@ function resolveSpawn(worldData){
   }
   return [sx,1.65,sz];
 }
+function measureInitialViewDepthGrid(spawnPos,yaw,maxDistance){
+  const verticalTan=Math.tan(THREE.MathUtils.degToRad((Number(persp?.fov)||70)/2));
+  const horizontalTan=Math.max(.15,verticalTan*Math.max(.35,Number(persp?.aspect)||1));
+  const fx=-Math.sin(yaw),fz=-Math.cos(yaw),rx=-fz,rz=fx;
+  let nearSurfaceCoverage=0,centerNearSurfaceCoverage=0,centerMidFar=0;const centerDepthBands=new Set();
+  for(let by=0;by<8;by++)for(let bx=0;bx<12;bx++){
+    const sx=-1+(bx+.5)/6,sy=1-(by+.5)/4;
+    let dx=fx+rx*sx*horizontalTan,dy=sy*verticalTan,dz=fz+rz*sx*horizontalTan;
+    const inv=1/Math.max(.0001,Math.hypot(dx,dy,dz));dx*=inv;dy*=inv;dz*=inv;
+    let hit=Infinity;
+    for(let t=.75;t<=maxDistance;t+=.5){
+      if(isOccupied(Math.floor(spawnPos[0]+dx*t),Math.floor(spawnPos[1]+dy*t),Math.floor(spawnPos[2]+dz*t))){hit=t;break;}
+    }
+    const center=Math.abs(sx)<=.42&&Math.abs(sy)<=.68;
+    if(hit<14){nearSurfaceCoverage++;if(center)centerNearSurfaceCoverage++;}
+    else if(center&&Number.isFinite(hit)){
+      centerMidFar++;
+      const r=(Math.min(maxDistance,hit)-14)/Math.max(1,maxDistance-14);
+      centerDepthBands.add(Math.max(0,Math.min(3,Math.floor(r*4))));
+    }
+  }
+  return{nearSurfaceCoverage,centerNearSurfaceCoverage,centerMidFar,centerDepthBands:centerDepthBands.size,sampleCount:96,source:'occupancy-ray-depth-grid'};
+}
 function chooseInitialPlayableFacing(worldData,spawnPos){
   const voxels=Array.isArray(worldData?.voxels)?worldData.voxels:[];
   const metadataYaw=Number(worldData?.spawn?.yaw);
@@ -379,7 +402,8 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
         }
       }
     }
-    measured.push({...c,score,nearOccluders,centerOccluders,visibleNearOccluders,visibleCenterOccluders,nearSurfaceCoverage:nearSurfaceBins.size,centerNearSurfaceCoverage:centerNearSurfaceBins.size,centerMidFar,centerDepthBands:centerDepthBands.size,centerNearestDistance:Number.isFinite(centerNearestDistance)?centerNearestDistance:maxDistance,screenCoverage:screenBins.size,maxDistance,frustumAspect});
+    const depthGrid=measureInitialViewDepthGrid(spawnPos,c.yaw,maxDistance);
+    measured.push({...c,score,nearOccluders,centerOccluders,visibleNearOccluders,visibleCenterOccluders,nearSurfaceCoverage:depthGrid.nearSurfaceCoverage,centerNearSurfaceCoverage:depthGrid.centerNearSurfaceCoverage,voxelProxyNearSurfaceCoverage:nearSurfaceBins.size,voxelProxyCenterNearSurfaceCoverage:centerNearSurfaceBins.size,renderDepthCenterMidFar:depthGrid.centerMidFar,renderDepthCenterBands:depthGrid.centerDepthBands,renderDepthSampleCount:depthGrid.sampleCount,framingEvidenceSource:depthGrid.source,centerMidFar,centerDepthBands:centerDepthBands.size,centerNearestDistance:Number.isFinite(centerNearestDistance)?centerNearestDistance:maxDistance,screenCoverage:screenBins.size,maxDistance,frustumAspect});
   }
   const richestCandidate=measured.reduce((best,c)=>!best||c.score>best.score?c:best,null);
   const richest=richestCandidate?.score||0;
