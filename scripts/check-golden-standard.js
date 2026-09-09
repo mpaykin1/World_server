@@ -65,7 +65,6 @@ for(const f of fs.readdirSync(e2eDir).filter(x=>x.endsWith('.spec.js'))){
 }
 ok('no known false-green assertions');
 
-
 const uiPolicy=JSON.parse(read('data/ui-policy.json'));
 const controlPolicy=JSON.parse(read('data/control-policy.json'));
 const shellJs=read('shared/golden-ui-shell.js'),shellCss=read('shared/golden-ui-shell.css'),voxelHtml=read('apps/voxel-world/index.html');
@@ -89,10 +88,29 @@ if(!shellJs.includes('id=\"goldenLore\"')||!shellJs.includes('goldenLoreHistory'
 if(JSON.stringify(registry).includes('???')) fail('world registry contains encoding corruption');
 else ok('Golden top bar + dual joysticks + newspaper/lore/connections contract');
 
+const displayNames=JSON.parse(read('data/world-display-names.json'));
+const loreBible=JSON.parse(read('data/world-lore-v2.json'));
+if(uiPolicy.rules.worldDisplayNameMaxWords!==3||uiPolicy.rules.worldDisplayNameForbidsSystemTokens!==true) fail('Golden short world-name policy missing');
+if(uiPolicy.rules.worldFusionEnabled!==true||uiPolicy.rules.worldFusionAnyPair!==true||uiPolicy.rules.worldConnectionCardsClickable!==true) fail('Golden world-fusion policy missing');
+if(displayNames.maxWords!==3||typeof displayNames.names!=='object'||!Array.isArray(displayNames.forbiddenTokens)) fail('world display-name registry invalid');
+const forbiddenNames=new Set((displayNames.forbiddenTokens||[]).map(x=>String(x).toLowerCase()));
+for(const id of Object.keys(loreBible.worlds||{})){
+  const name=displayNames.names[id];
+  if(!name){fail('canonical short world name missing: '+id);continue;}
+  const words=String(name).trim().split(/\s+/).filter(Boolean);
+  if(words.length<1||words.length>3) fail(`world name must be 1-3 words: ${id} = ${name}`);
+  for(const word of words) if(forbiddenNames.has(word.toLowerCase())) fail(`system token leaked into world name: ${id} = ${name}`);
+}
+if(!apiApps.includes('world-display-names.json')||!apiApps.includes('displayName')) fail('/api/apps does not enforce canonical short names');
+if(!shellJs.includes('/shared/world-fusion.html?a=')||!shellJs.includes('Открыть комбинацию')) fail('connection cards do not open world combinations');
+const fusionHtml=read('shared/world-fusion.html');
+for(const needle of ['/api/apps?all=1','id="aSel"','id="bSel"','id="blend"','Случайная комбинация']) if(!fusionHtml.includes(needle)) fail('world fusion viewer missing '+needle);
+ok('short world names + any-pair clickable fusion contract');
+
 if(process.exitCode) process.exit(process.exitCode);
 console.log('GOLDEN STANDARD: PASS');
 
-for(const required of ['shared/golden-ui-shell.js','shared/golden-ui-shell.css','shared/golden-physics.js','data/ui-policy.json','data/visual-quality-policy.json','data/control-policy.json','data/collision-policy.json']){
+for(const required of ['shared/golden-ui-shell.js','shared/golden-ui-shell.css','shared/golden-physics.js','shared/world-fusion.html','data/ui-policy.json','data/world-display-names.json','data/visual-quality-policy.json','data/control-policy.json','data/collision-policy.json']){
   if(!fs.existsSync(path.join(root,required))) fail(`missing shared standard: ${required}`);
 }
 for(const id of ['voxel-world','ai3d-voxel-city']){
