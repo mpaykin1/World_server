@@ -375,12 +375,16 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
   const centered=readable.filter(c=>(c.centerMidFar||0)>=centerContentFloor);
   const improved=centered.filter(c=>c.centerOccluders<(richestCandidate?.centerOccluders??Infinity)&&c.nearOccluders<(richestCandidate?.nearOccluders??Infinity));
   const pool=improved.length?improved:(centered.length?centered:readable);
+  // The hard autoplay contract requires useful forward clearance, so prefer candidates
+  // that actually satisfy it whenever one exists; never trade playability for denser pixels.
+  const clearanceQualified=pool.filter(c=>c.centerNearestDistance>6);
+  const rankedPool=clearanceQualified.length?clearanceQualified:pool;
   // A clear screen center is useful only when it also contains mid/far world content.
   // Keep established blocker improvements, then prefer central depth and broad screen
   // coverage before raw richness.
-  pool.sort((a,b)=>a.visibleCenterOccluders-b.visibleCenterOccluders||b.centerDepthBands-a.centerDepthBands||b.centerMidFar-a.centerMidFar||b.screenCoverage-a.screenCoverage||a.visibleNearOccluders-b.visibleNearOccluders||b.centerNearestDistance-a.centerNearestDistance||a.nearOccluders-b.nearOccluders||a.centerOccluders-b.centerOccluders||b.score-a.score);
+  rankedPool.sort((a,b)=>a.visibleCenterOccluders-b.visibleCenterOccluders||b.centerDepthBands-a.centerDepthBands||b.centerMidFar-a.centerMidFar||b.screenCoverage-a.screenCoverage||a.visibleNearOccluders-b.visibleNearOccluders||b.centerNearestDistance-a.centerNearestDistance||a.nearOccluders-b.nearOccluders||a.centerOccluders-b.centerOccluders||b.score-a.score);
   const fallback=measured.slice().sort((a,b)=>b.score-a.score)[0]||{yaw:0,label:'fallback',score:0,nearOccluders:0,centerOccluders:0,visibleNearOccluders:0,visibleCenterOccluders:0,centerMidFar:0,centerDepthBands:0,centerNearestDistance:maxDistance,screenCoverage:0,maxDistance,frustumAspect};
-  return {...(pool[0]||fallback),readableFloor,centerContentFloor,richestScore:richest,richestNearOccluders:richestCandidate?.nearOccluders||0,richestCenterOccluders:richestCandidate?.centerOccluders||0,richestCenterMidFar:richestCandidate?.centerMidFar||0,candidateCount:measured.length};
+  return {...(rankedPool[0]||fallback),readableFloor,centerContentFloor,richestScore:richest,richestNearOccluders:richestCandidate?.nearOccluders||0,richestCenterOccluders:richestCandidate?.centerOccluders||0,richestCenterMidFar:richestCandidate?.centerMidFar||0,candidateCount:measured.length};
 }
 async function renderWorld(data){
   world=data;
