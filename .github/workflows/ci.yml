@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [master]
 
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -75,6 +80,13 @@ jobs:
             echo "OBSERVABILITY_INCOMPLETE: no Playwright failure summary found at $SUMMARY"
             exit 2
           fi
+      - name: Mirror required browser failure to PR and canonical ledger
+        if: ${{ always() && steps.hard_playwright.outcome == 'failure' && github.event_name == 'pull_request' }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          CANONICAL_LEDGER_ISSUE: "80"
+        run: node scripts/mirror-playwright-failure-to-github.js
       - name: Upload Playwright failure evidence
         if: ${{ always() && steps.hard_playwright.outcome == 'failure' }}
         uses: actions/upload-artifact@v4
