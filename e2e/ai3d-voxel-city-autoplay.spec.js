@@ -52,6 +52,8 @@ test.describe('AI3D Voxel City - default-city autoplay (no user actions)', () =>
     });
     expect(visibleContent.facing.score).toBeGreaterThan(250);
     expect(visibleContent.facing.score).toBeGreaterThanOrEqual(visibleContent.facing.readableFloor);
+    expect(visibleContent.facing.candidateCount).toBeGreaterThanOrEqual(24);
+    expect(visibleContent.facing.centerOccluders).toBeLessThan(visibleContent.facing.richestCenterOccluders);
     expect(visibleContent.facing.nearOccluders).toBeLessThan(visibleContent.facing.richestNearOccluders);
     expect(visibleContent.triangles).toBeGreaterThan(250);
 

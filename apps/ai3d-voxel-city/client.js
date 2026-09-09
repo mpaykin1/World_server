@@ -310,35 +310,41 @@ function resolveSpawn(worldData){
 function chooseInitialPlayableFacing(worldData,spawnPos){
   const voxels=Array.isArray(worldData?.voxels)?worldData.voxels:[];
   const metadataYaw=Number(worldData?.spawn?.yaw);
-  const candidates=[
-    {yaw:Number.isFinite(metadataYaw)?metadataYaw:0,label:'metadata'},
-    {yaw:-Math.PI/2,label:'+X'},
-    {yaw:Math.PI/2,label:'-X'},
-    {yaw:0,label:'-Z'},
-    {yaw:Math.PI,label:'+Z'}
-  ];
+  // Sample a bounded full ring instead of only the four cardinal axes. Fifteen-degree
+  // steps are still cheap at initial load, but let the camera escape a facade that
+  // dominates one coarse direction while retaining the same SAFE-radius world content.
+  const candidates=[{yaw:Number.isFinite(metadataYaw)?metadataYaw:0,label:'metadata'}];
+  const directionSteps=24;
+  for(let i=0;i<directionSteps;i++)candidates.push({yaw:-Math.PI+i*(Math.PI*2/directionSteps),label:`scan-${i}`});
   const unique=[];const seen=new Set();
   for(const c of candidates){const key=Math.round(c.yaw*100000);if(!seen.has(key)){seen.add(key);unique.push(c);}}
   const maxDistance=Math.min(Math.max(24,profile().detailChunks*CHUNK_SIZE),PROFILES.SAFE.renderChunks*CHUNK_SIZE);
-  const cosHalf=Math.cos(35*Math.PI/180),nearDistance=10;
+  const cosHalf=Math.cos(35*Math.PI/180),centerCos=Math.cos(12*Math.PI/180),nearDistance=10;
   const measured=[];
   for(const c of unique){
-    const fx=-Math.sin(c.yaw),fz=-Math.cos(c.yaw);let score=0,nearOccluders=0;
+    const fx=-Math.sin(c.yaw),fz=-Math.cos(c.yaw);let score=0,nearOccluders=0,centerOccluders=0;
     for(const v of voxels){
       if(!Array.isArray(v)||v.length<3)continue;
       const dx=Number(v[0])-spawnPos[0],dz=Number(v[2])-spawnPos[2],d=Math.hypot(dx,dz);
-      if(d<2||d>maxDistance||(dx*fx+dz*fz)/d<cosHalf)continue;
+      if(d<2||d>maxDistance)continue;
+      const alignment=(dx*fx+dz*fz)/d;
+      if(alignment<cosHalf)continue;
       score++;
-      if(d<nearDistance&&Number(v[1])>=spawnPos[1]-.5)nearOccluders++;
+      if(d<nearDistance&&Number(v[1])>=spawnPos[1]-.5){
+        nearOccluders++;
+        if(alignment>=centerCos)centerOccluders++;
+      }
     }
-    measured.push({...c,score,nearOccluders,maxDistance});
+    measured.push({...c,score,nearOccluders,centerOccluders,maxDistance});
   }
   const richestCandidate=measured.reduce((best,c)=>!best||c.score>best.score?c:best,null);
   const richest=richestCandidate?.score||0;
   const readableFloor=Math.max(250,richest*.6);
   const readable=measured.filter(c=>c.score>=readableFloor);
-  readable.sort((a,b)=>a.nearOccluders-b.nearOccluders||b.score-a.score);
-  return {...(readable[0]||measured.sort((a,b)=>b.score-a.score)[0]||{yaw:0,label:'fallback',score:0,nearOccluders:0,maxDistance}),readableFloor,richestScore:richest,richestNearOccluders:richestCandidate?.nearOccluders||0};
+  // Center clearance is player-visible framing quality: first avoid a wall directly
+  // in front of the crosshair, then minimize broad near occlusion, then keep richness.
+  readable.sort((a,b)=>a.centerOccluders-b.centerOccluders||a.nearOccluders-b.nearOccluders||b.score-a.score);
+  return {...(readable[0]||measured.sort((a,b)=>b.score-a.score)[0]||{yaw:0,label:'fallback',score:0,nearOccluders:0,centerOccluders:0,maxDistance}),readableFloor,richestScore:richest,richestNearOccluders:richestCandidate?.nearOccluders||0,richestCenterOccluders:richestCandidate?.centerOccluders||0,candidateCount:measured.length};
 }
 async function renderWorld(data){
   world=data;
