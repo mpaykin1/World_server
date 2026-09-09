@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('AI3D Voxel City - default-city autoplay (no user actions)', () => {
-  test('чистое открытие URL без действий → canvas не пуст → voxels/chunks/triangles>0 → spawn → WASD → collision', async ({ page }) => {
+  test('╤З╨╕╤Б╤В╨╛╨╡ ╨╛╤В╨║╤А╤Л╤В╨╕╨╡ URL ╨▒╨╡╨╖ ╨┤╨╡╨╣╤Б╤В╨▓╨╕╨╣ тЖТ canvas ╨╜╨╡ ╨┐╤Г╤Б╤В тЖТ voxels/chunks/triangles>0 тЖТ spawn тЖТ WASD тЖТ collision', async ({ page }) => {
     // Clean open, no clicks, no file selection
     await page.goto('/apps/ai3d-voxel-city/', { waitUntil: 'domcontentloaded' });
 
@@ -22,7 +22,7 @@ test.describe('AI3D Voxel City - default-city autoplay (no user actions)', () =>
     expect(triangles).toBeGreaterThan(0);
     expect(stats.defaultCityLoaded).toBe(true);
 
-    // Canvas not empty — check that <canvas> exists and has rendered content
+    // Canvas not empty тАФ check that <canvas> exists and has rendered content
     const canvasInfo = await page.evaluate(() => {
       const canvas = document.querySelector('#viewer canvas');
       if (!canvas) return { exists: false };
@@ -55,6 +55,7 @@ test.describe('AI3D Voxel City - default-city autoplay (no user actions)', () =>
     expect(visibleContent.facing.candidateCount).toBeGreaterThanOrEqual(24);
     expect(visibleContent.facing.centerOccluders).toBeLessThan(visibleContent.facing.richestCenterOccluders);
     expect(visibleContent.facing.nearOccluders).toBeLessThan(visibleContent.facing.richestNearOccluders);
+    expect(visibleContent.facing.centerNearestDistance).toBeGreaterThan(6);
     expect(visibleContent.triangles).toBeGreaterThan(250);
 
     // Character spawned inside city
@@ -87,7 +88,7 @@ test.describe('AI3D Voxel City - default-city autoplay (no user actions)', () =>
     expect(playableReady?.collisions).toBe(true);
     expect(playableReady?.grounding).toBe(true);
 
-    // WASD changes position — press W for 800ms
+    // WASD changes position тАФ press W for 800ms
     const before = await page.evaluate(() => {
       const p = window.AI3DVoxelRuntime.stats().player;
       return { x: p.x, y: p.y, z: p.z };
@@ -108,7 +109,7 @@ test.describe('AI3D Voxel City - default-city autoplay (no user actions)', () =>
     console.log('move delta', { before, after, moved });
     expect(moved).toBeGreaterThan(0.05);
 
-    // Collision works — try to walk continuously into wall for 1.5s, ensure we don't end up inside voxel
+    // Collision works тАФ try to walk continuously into wall for 1.5s, ensure we don't end up inside voxel
     // Do multiple W presses near a building edge; check occupancy
     const collisionCheck = await page.evaluate(async () => {
       const rt = window.AI3DVoxelRuntime;
@@ -136,7 +137,7 @@ test.describe('AI3D Voxel City - default-city autoplay (no user actions)', () =>
         }, 100);
         // simulate holding W during this interval via keyboard events already? we already did earlier
         // instead, programmatically move player via direct call if needed for test reliability
-        // For collision, we rely on continuous W held by page.keyboard — but we already released.
+        // For collision, we rely on continuous W held by page.keyboard тАФ but we already released.
         // So we do manual attempt: hold W again
       });
     });
@@ -151,19 +152,19 @@ test.describe('AI3D Voxel City - default-city autoplay (no user actions)', () =>
     });
     expect(notInsideWall).toBe(true);
 
-    // Gravity + ground detection — player should be onGround after settling
+    // Gravity + ground detection тАФ player should be onGround after settling
     await page.waitForTimeout(500);
     const grounded = await page.evaluate(() => window.AI3DVoxelRuntime.stats().player.onGround);
     expect(grounded).toBe(true);
   });
 
-  test('HTTP 200 alone is not proof — delivery requires full autoplay', async ({ page }) => {
+  test('HTTP 200 alone is not proof тАФ delivery requires full autoplay', async ({ page }) => {
     // Verify that server returns 200 but that alone is not counted as ready; the above test must pass
     const resp = await page.request.get('/apps/ai3d-voxel-city/default-city.json');
     expect(resp.status()).toBe(200);
     const json = await resp.json();
     expect(json.voxels.length).toBeGreaterThan(0);
-    // but without canvas/chunks/spawn verification this is insufficient — the previous test is required
+    // but without canvas/chunks/spawn verification this is insufficient тАФ the previous test is required
     expect(json.defaultCity?.immutable).toBe(true);
   });
 });
