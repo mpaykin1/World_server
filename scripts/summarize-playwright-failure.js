@@ -71,6 +71,7 @@ function parseContext(file, root) {
     webglRendererReadiness: null,
     viewport: project ? VIEWPORTS[project] || null : null,
     primaryRendererBounds: null,
+    loadedStateEvidence: null,
     attachments: files,
     screenshotFiles: files.filter((f) => /\.(png|jpe?g|webp)$/i.test(f)),
     traceFiles: files.filter((f) => f === 'trace.zip'),
@@ -81,6 +82,17 @@ function parseContext(file, root) {
 function failedResult(test) {
   const results = Array.isArray(test?.results) ? test.results : [];
   return results.find((result) => ['failed', 'timedOut', 'interrupted'].includes(result?.status)) || null;
+}
+
+function decodeJsonAttachment(attachment) {
+  if (!attachment || attachment.name !== 'loaded-state-graphics-evidence.json') return null;
+  if (!/application\/json/i.test(attachment.contentType || '')) return null;
+  if (typeof attachment.body !== 'string' || attachment.body.length === 0) return null;
+  try {
+    return JSON.parse(Buffer.from(attachment.body, 'base64').toString('utf8'));
+  } catch {
+    return null;
+  }
 }
 
 function collectJsonFailures(report) {
@@ -94,10 +106,13 @@ function collectJsonFailures(report) {
         if (!result) continue;
         const project = test.projectName || null;
         const error = result.errors?.[0] || result.error || null;
-        const attachments = (result.attachments || []).map((attachment) => ({
+        const rawAttachments = result.attachments || [];
+        const loadedStateEvidence = rawAttachments.map(decodeJsonAttachment).find(Boolean) || null;
+        const attachments = rawAttachments.map((attachment) => ({
           name: attachment.name || null,
           contentType: attachment.contentType || null,
           path: attachment.path || null,
+          inlineBodyPresent: typeof attachment.body === 'string' && attachment.body.length > 0,
         }));
         const fullTitle = [...nextTitles, spec.title].filter(Boolean).join(' › ');
         failures.push({
@@ -118,12 +133,13 @@ function collectJsonFailures(report) {
             line: spec.line,
             column: spec.column,
           }),
-          pageUrl: null,
-          pageErrors: [],
-          consoleErrors: [],
-          webglRendererReadiness: null,
-          viewport: project ? VIEWPORTS[project] || null : null,
-          primaryRendererBounds: null,
+          pageUrl: loadedStateEvidence?.pageUrl || null,
+          pageErrors: Array.isArray(loadedStateEvidence?.pageErrors) ? loadedStateEvidence.pageErrors : [],
+          consoleErrors: Array.isArray(loadedStateEvidence?.consoleErrors) ? loadedStateEvidence.consoleErrors : [],
+          webglRendererReadiness: loadedStateEvidence?.webglReady ?? null,
+          viewport: loadedStateEvidence?.viewport || (project ? VIEWPORTS[project] || null : null),
+          primaryRendererBounds: loadedStateEvidence?.primaryRendererBounds || null,
+          loadedStateEvidence,
           attachments,
           screenshotFiles: attachments.filter((a) => /image\//i.test(a.contentType || '') || /\.(png|jpe?g|webp)$/i.test(a.path || '')).map((a) => a.path || a.name),
           traceFiles: attachments.filter((a) => a.name === 'trace' || /trace\.zip$/i.test(a.path || '')).map((a) => a.path || a.name),
@@ -169,7 +185,7 @@ function buildSummary(options = {}) {
   );
 
   return {
-    schemaVersion: 2,
+    schemaVersion: 3,
     classification: machineReadableFailureIdentity ? 'HARD_BROWSER_FAILURE' : 'OBSERVABILITY_INCOMPLETE',
     canonicalPrHeadSha: headSha,
     githubMergeRefSha: isDifferentSha ? mergeSha : null,
@@ -194,6 +210,7 @@ function buildSummary(options = {}) {
     diagnosticCompleteness: {
       binaryEvidencePreserved: failures.some((f) => f.traceFiles.length > 0 || f.screenshotFiles.length > 0),
       machineReadableFailureIdentity,
+      loadedStateEvidence: failures.some((f) => Boolean(f.loadedStateEvidence)),
       pageUrl: failures.some((f) => Boolean(f.pageUrl)),
       pageError: failures.some((f) => f.pageErrors.length > 0),
       consoleErrors: failures.some((f) => f.consoleErrors.length > 0),
@@ -213,7 +230,9 @@ function main() {
   console.log(`canonical head: ${summary.canonicalPrHeadSha || 'unknown'}; merge-ref: ${summary.githubMergeRefSha || 'same/none'}; failures: ${summary.failures.length}`);
   console.log(`structured reporter: ${summary.structuredReporter.state}; machine-readable identity: ${summary.diagnosticCompleteness.machineReadableFailureIdentity}`);
   for (const failure of summary.failures) {
-    console.log(`- ${failure.project || 'unknown'} | ${failure.specFile || 'unknown'} | ${failure.specTestTitle || 'unknown'} | ${failure.sourceLocation || 'unknown'}`);
+    const evidence = failure.loadedStateEvidence;
+    const loaded = evidence ? ` loaded=${evidence.defaultCityLoaded ?? 'unknown'} voxels=${evidence.voxels ?? 'unknown'} webgl=${evidence.webglReady ?? 'unknown'}` : '';
+    console.log(`- ${failure.project || 'unknown'} | ${failure.specFile || 'unknown'} | ${failure.specTestTitle || 'unknown'} | ${failure.sourceLocation || 'unknown'}${loaded}`);
   }
   if (!summary.diagnosticCompleteness.machineReadableFailureIdentity) {
     console.error('OBSERVABILITY_INCOMPLETE: hard browser failure lacks a complete structured Playwright failure identity.');
@@ -226,5 +245,6 @@ if (require.main === module) main();
 module.exports = {
   buildSummary,
   collectJsonFailures,
+  decodeJsonAttachment,
   readStructuredReport,
 };
