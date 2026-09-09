@@ -5,15 +5,17 @@
   "mode": "free-first",
   "purpose": "Turn verified World_server lessons into small specialist model candidates without adding a second orchestration stack.",
   "trainingRuntime": {
-    "preferred": "google-colab-free-gpu",
+    "preferred": "kaggle-free-gpu-t4",
     "fallback": [
-      "kaggle-free-gpu",
+      "google-colab-free-gpu",
       "user-provided-compatible-gpu"
     ],
+    "prepareOnlyFallback": "cpu-prepare-only",
     "productionGpuRequired": false,
     "localHeavyTrainingAllowed": false,
     "paidGpuAllowedByDefault": false,
-    "autoInstallTrainingDependenciesOnServer": false
+    "autoInstallTrainingDependenciesOnServer": false,
+    "gpuUnavailabilityBlocksServer": false
   },
   "dataset": {
     "format": "chat-messages-jsonl",
@@ -77,5 +79,31 @@
     "requiresRealTaskBenchmark": true,
     "requiresHumanReviewedPR": true,
     "rule": "A trained candidate is evidence, not production. Never replace an existing model solely because training completed."
+  },
+  "freeGpuRouter": {
+    "kaggle": {
+      "priority": 1,
+      "accelerator": "NvidiaTeslaT4",
+      "kernelPrivate": true,
+      "enableInternet": true,
+      "autoInstallCliOnDesktop": false,
+      "requiresUserOwnedAccount": true,
+      "quotaIsExternal": true,
+      "quotaNote": "Kaggle free GPU quota and hardware availability are controlled by Kaggle and can change."
+    },
+    "colab": {
+      "priority": 2,
+      "mode": "browser-handoff",
+      "requiresUserClickToStart": true
+    },
+    "externalGpu": {
+      "priority": 3,
+      "mode": "optional-compatible-gpu"
+    },
+    "cpuPrepareOnly": {
+      "priority": 4,
+      "trainingAllowed": false,
+      "datasetAndVerificationAllowed": true
+    }
   }
 }
