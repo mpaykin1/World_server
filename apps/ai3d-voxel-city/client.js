@@ -411,9 +411,10 @@ function chooseInitialPlayableView(worldData,spawnPos){
   const baseFacing=chooseInitialPlayableFacing(worldData,spawnPos);
   const base={spawnPos:[...spawnPos],facing:baseFacing,spawnOffset:[0,0],offsetDistance:0};
   if(!baseFacing.yawSpaceExhausted)return base;
-  // Yaw-only search is exhausted: sample a tiny deterministic ring around the canonical
-  // spawn, never more than four world units away, and only use collision-clear positions.
-  const offsets=[[2,0],[-2,0],[0,2],[0,-2],[4,0],[-4,0],[0,4],[0,-4]];
+  // Yaw-only search is exhausted: sample two tiny deterministic rings around the canonical
+  // spawn, bounded to six world units, and only use collision-clear positions. The wider ring
+  // gives the framing scorer room to escape a near wall without changing gameplay thresholds.
+  const offsets=[[2,0],[-2,0],[0,2],[0,-2],[4,0],[-4,0],[0,4],[0,-4],[4,4],[4,-4],[-4,4],[-4,-4],[6,0],[-6,0],[0,6],[0,-6]];
   const views=[base];
   for(const [dx,dz] of offsets){
     const candidate=[spawnPos[0]+dx,spawnPos[1],spawnPos[2]+dz];
