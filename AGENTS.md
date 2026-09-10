@@ -49,6 +49,10 @@
 3. `git push -u origin ai/<agent>/<task>` (или `opencode/<task>`)
 4. **Всегда создавать Pull Request в `master`** (через `gh pr create` или GitHub UI). Никогда не `merge` автоматически без ревью.
 
+### MANUAL_FAST_LANE exception after review
+
+If the user explicitly asks for an end-to-end working link and authorizes completion, the agent may merge **after** the PR exists, required CI/gates pass, an independent review has completed, and no accepted quality metric regresses. This is not permission to bypass review; it removes the extra stop-and-ask step after review. The agent must then deploy/refresh the canonical Netlify target and continue until the exact production URL passes `data/manual-delivery-policy.json` via `npm run delivery:verify`. A progress report or unverified/dead URL is not a valid terminal result while repair remains possible.
+
 ### Шаблон описания PR
 
 В каждом PR указывать:

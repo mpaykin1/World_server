@@ -1,4 +1,58 @@
-# WORK IN PROGRESS — Cinematic Encounter World — 2026-09-10`r`n`r`n## Task`r`nBuild, verify, publish, and expose a reusable browser cinematic encounter world inspired by the user-supplied dusty silhouette and flash-lighting scene.`r`n`r`n## Why`r`nTurn simple events into suggestive cinematic micro-scenes without expensive hand-authored animation.`r`n`r`n## Current state`r`nIsolated off-Desktop branch ai/manual/cinematic-encounter-v1 at ca9d13eb. Baseline npm ci, release:gate, and quality:diff PASS before edits.`r`n`r`n## Target state`r`nNew certified playable /apps/cinematic-encounter/ with procedural silhouette animation, fog/dust, muzzle-flash light, bloom, light cone, sparks, camera shake, replay timeline, adaptive DPR, keyboard/touch movement and look.`r`n`r`n## Files / systems involved`r`napps/cinematic-encounter/*, release registry/world metadata, focused regression test, WIP evidence.`r`n`r`n## Known risks`r`nCDN availability, mobile fill-rate, deny-by-default certification, excessive effects obscuring gameplay.`r`n`r`n## Golden systems that must be preserved`r`nCertified-only public catalog, canonical controls/mobile input, compact HUD, non-regression gates, existing apps and production.`r`n`r`n## Errors that must not return`r`nEmpty render, desktop-only controls, giant debug HUD, unbounded DPR/particles, uncertified public app, unverified final link.`r`n`r`n## Exact patch / change plan`r`nAdd isolated app; bounded cinematic effects; canonical controls; focused regression; certify only after desktop/mobile verification; PR-preview-merge-production verify.`r`n`r`n## Tests to run`r`nFocused contract, check, golden:check, quality:diff, desktop/mobile render smoke, final release:gate, post-deploy verification.`r`n`r`n## Deployment / PR plan`r`nTask branch -> PR -> preview -> verification -> merge master -> production verification.`r`n`r`n## Current progress`r`nBaseline gates PASS. Implementation starting.`r`n`r`n## Next action`r`nImplement world and regression protection.`r`n`r`n## Completion criteria`r`nAll gates pass; desktop/mobile non-empty render; no metric regression; PR merged; production URL verified.`r`n`r`n## Final evidence`r`nPending.`r`n`r`n---`r`n`r`n# WORK IN PROGRESS — Scoped Task Compiler, resource scheduler, real native Godot pipeline
+# WORK IN PROGRESS — Cinematic Encounter World — 2026-09-10
+
+## Task
+Build, verify, publish, and expose a reusable browser cinematic encounter world inspired by the user-supplied dusty silhouette and flash-lighting scene.
+
+## Why
+Turn simple events into suggestive cinematic micro-scenes without expensive hand-authored animation.
+
+## Current state
+Isolated off-Desktop branch `ai/manual/cinematic-encounter-v1` from `origin/master` at `ca9d13eb`. Baseline `npm ci`, `npm run release:gate`, and `npm run quality:diff` PASS before edits.
+
+## Target state
+New certified playable `/apps/cinematic-encounter/` with procedural silhouette animation, fog/dust, muzzle-flash light, bloom, light cone, sparks, camera shake, replay timeline, adaptive DPR, keyboard/touch movement and look.
+
+## Files / systems involved
+`apps/cinematic-encounter/*`, release registry/world metadata, focused regression test, WIP evidence.
+
+## Known risks
+CDN availability, mobile fill-rate, deny-by-default certification, excessive effects obscuring gameplay.
+
+## Golden systems that must be preserved
+Certified-only public catalog, canonical controls/mobile input, compact HUD, non-regression gates, existing apps and production.
+
+## Errors that must not return
+Empty render, desktop-only controls, giant debug HUD, unbounded DPR/particles, uncertified public app, unverified final link.
+
+## Exact patch / change plan
+1. Add an isolated cinematic encounter app and reusable event timeline.
+2. Add bounded cinematic post effects and particle/light effects.
+3. Add canonical desktop/mobile movement and look plus safe collision/grounding.
+4. Add focused regression/browser coverage.
+5. Certify/register the world only after checks pass.
+6. Push branch, open PR, verify preview, merge, then verify production.
+
+## Tests to run
+Focused contract tests, `npm run check`, `npm run golden:check`, `npm run quality:diff`, desktop/mobile browser render smoke with pixel evidence, final `npm run release:gate`, and post-deploy HTTP/render verification.
+
+## Deployment / PR plan
+Task branch -> PR -> preview -> desktop/mobile verification -> merge to `master` -> production verification. Never direct-edit `master`.
+
+## Current progress
+Baseline gates PASS. Cinematic Encounter implementation is present; Golden UI/physics integration, jump, certified registry entry, world manifest, executable verified-link delivery gate, canonical Netlify hard rule, and focused/browser regression coverage have been added. Validation and production deployment are in progress.
+
+## Next action
+Run focused/static/browser gates, independent AI review, commit/push/PR, merge after green review, deploy canonical Netlify production, then run the live verified-link gate against both the new world and the Voxel World inventory.
+
+## Completion criteria
+All required gates pass; desktop/mobile render is non-empty; no accepted quality metric regresses; PR merged; production URL verified.
+
+## Final evidence
+Pending.
+
+---
+
+# WORK IN PROGRESS — Scoped Task Compiler, resource scheduler, real native Godot pipeline
 
 ---
 

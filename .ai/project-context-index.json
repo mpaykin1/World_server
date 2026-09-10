@@ -5,6 +5,7 @@
   "canonicalContextFiles": [
     "AI_START_HERE.md",
     "CHATGPT_GAME_CONTROL.md",
+    "data/manual-delivery-policy.json",
     "README.md",
     "AGENTS.md",
     "VNO.md",
@@ -74,6 +75,19 @@
           "PROGRESS_REPORT"
         ]
       }
+    },
+    "verifiedLinkDelivery": {
+      "displayName": "Verified Link Delivery / Netlify hard gate",
+      "canonicalFile": "data/manual-delivery-policy.json",
+      "aliases": [
+        "working link",
+        "рабочая ссылка",
+        "VERIFIED_LINK_ONLY",
+        "delivery:verify",
+        "world-server.netlify.app"
+      ],
+      "canonicalProductionOrigin": "https://world-server.netlify.app",
+      "canonicalWorldHub": "https://world-server.netlify.app/apps/voxel-world/"
     }
   },
   "freshChatMandatoryReads": {
@@ -85,15 +99,17 @@
       "AI_START_HERE.md",
       ".ai/project-context-index.json",
       "CHATGPT_GAME_CONTROL.md",
+      "data/manual-delivery-policy.json",
       "issue #80 latest nonterminal checkpoint"
     ],
     "changeAndLinkRequest": [
       "AI_START_HERE.md",
       ".ai/project-context-index.json",
       "CHATGPT_GAME_CONTROL.md",
+      "data/manual-delivery-policy.json",
       "issue #80 latest nonterminal checkpoint"
     ]
   },
-  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains.",
+  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md and data/manual-delivery-policy.json. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains; final URLs must pass delivery:verify on the canonical Netlify origin.",
   "sourceOfTruthBranch": "master"
 }

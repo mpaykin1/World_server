@@ -4,11 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <title>Сцена в пыли · Cinematic Encounter</title>
+<link rel="stylesheet" href="/shared/golden-ui-shell.css">
 <style>
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#0e1011;touch-action:none;font-family:Inter,system-ui,sans-serif}
 canvas{display:block;width:100%;height:100%}
 #ui{position:fixed;inset:0;z-index:20;pointer-events:none;color:#fff}
-#top{position:absolute;left:max(12px,env(safe-area-inset-left));right:max(12px,env(safe-area-inset-right));top:max(12px,env(safe-area-inset-top));display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+#top{position:absolute;left:max(72px,calc(env(safe-area-inset-left) + 62px));right:max(12px,env(safe-area-inset-right));top:max(12px,env(safe-area-inset-top));display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .pill{pointer-events:auto;border:1px solid rgba(255,255,255,.18);background:rgba(9,11,12,.42);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:999px;color:#fff;text-decoration:none;padding:9px 13px;font-size:12px;box-shadow:0 7px 26px rgba(0,0,0,.16)}
 #title{font-weight:800;letter-spacing:.03em}#title small{font-weight:500;opacity:.64;margin-left:7px}
 #replay{cursor:pointer;font:700 12px system-ui}
@@ -19,6 +20,7 @@ canvas{display:block;width:100%;height:100%}
 .pad{pointer-events:auto;position:absolute;bottom:max(28px,env(safe-area-inset-bottom));width:126px;height:126px;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.12);backdrop-filter:blur(3px)}
 #movePad{left:max(20px,env(safe-area-inset-left))}
 #lookPad{right:max(20px,env(safe-area-inset-right))}
+#jumpBtn{pointer-events:auto;position:absolute;right:max(164px,calc(env(safe-area-inset-right) + 164px));bottom:max(56px,calc(env(safe-area-inset-bottom) + 56px));width:54px;height:54px;border-radius:50%;border:1px solid rgba(255,255,255,.22);background:rgba(0,0,0,.28);color:#fff;font:800 20px system-ui;backdrop-filter:blur(4px)}
 .knob{position:absolute;left:39px;top:39px;width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.32);box-shadow:0 3px 14px rgba(0,0,0,.25)}
 @media(pointer:coarse),(max-width:800px){#mobile{display:block}#hint{display:none}#title small{display:none}}
 </style>
@@ -31,17 +33,19 @@ canvas{display:block;width:100%;height:100%}
 <div id="flash"></div><div id="vignette"></div>
 <div id="ui">
   <div id="top">
-    <a class="pill" href="/apps/catalog/">← Миры</a>
     <div class="pill" id="title">СЦЕНА В ПЫЛИ <small>процедурное событие</small></div>
     <button class="pill" id="replay" type="button">↻ Повторить</button>
   </div>
-  <div id="hint">WASD / стрелки · мышь — взгляд · Space — повтор сцены</div>
+  <div id="hint">WASD / стрелки · мышь — взгляд · Space — прыжок · R — повтор сцены</div>
   <div id="mobile">
     <div class="pad" id="movePad"><div class="knob" id="moveKnob"></div></div>
     <div class="pad" id="lookPad"><div class="knob" id="lookKnob"></div></div>
+    <button id="jumpBtn" type="button" aria-label="Прыжок">↑</button>
   </div>
 </div>
 <script type="module" src="./client.js"></script>
+<script src="/shared/golden-physics.js"></script>
+<script src="/shared/golden-ui-shell.js"></script>
 <script src="/shared/quality-telemetry.js"></script>
 </body>
 </html>

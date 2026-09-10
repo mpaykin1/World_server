@@ -115,6 +115,24 @@ test('createIsolatedWorktree uses the canonical LOCALAPPDATA worktree root, neve
   }
 });
 
+test('createIsolatedWorktree remains collision-safe even when Date.now repeats', () => {
+  const originalNow = Date.now;
+  Date.now = () => 1789045675967;
+  let first, second;
+  try {
+    first = adapters.createIsolatedWorktree(ROOT, 'same-millisecond');
+    second = adapters.createIsolatedWorktree(ROOT, 'same-millisecond');
+    assert.equal(first.ok, true, JSON.stringify(first));
+    assert.equal(second.ok, true, JSON.stringify(second));
+    assert.notEqual(first.branch, second.branch);
+    assert.notEqual(first.worktreePath, second.worktreePath);
+  } finally {
+    Date.now = originalNow;
+    if (first?.ok) adapters.removeIsolatedWorktree(ROOT, first.worktreePath);
+    if (second?.ok) adapters.removeIsolatedWorktree(ROOT, second.worktreePath);
+  }
+});
+
 test('createIsolatedWorktree + isWorktreeHealthy + removeIsolatedWorktree: real lifecycle', () => {
   const created = adapters.createIsolatedWorktree(ROOT, 'lifecycle-test');
   assert.equal(created.ok, true);
