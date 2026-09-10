@@ -475,6 +475,19 @@ function chooseInitialPlayableView(worldData,spawnPos,pitchAngle=0){
   selected.facing={...selected.facing,spawnFallbackUsed:selected.offsetDistance>0,spawnOffset:selected.spawnOffset,spawnCandidateCount:views.length,spawnEligibleCandidateCount:rankingPool.length,spawnRejectedCandidateCount:views.length-rankingPool.length,finalViewEligible:isFinalViewEligible(selected),baseYawSpaceExhausted:baseFacing.yawSpaceExhausted};
   return selected;
 }
+function chooseInitialPlayablePitch(spawnPos,facing,basePitch){
+  const offsets=[0,.12,.24,-.12];
+  const seen=new Set(),candidates=[];
+  for(const offset of offsets){
+    const candidate=Math.max(-.35,Math.min(.45,basePitch+offset));
+    const key=Math.round(candidate*10000);if(seen.has(key))continue;seen.add(key);
+    const depth=measureInitialViewDepthGrid(spawnPos,facing.yaw,facing.maxDistance,candidate);
+    candidates.push({pitch:candidate,...depth});
+  }
+  candidates.sort((a,b)=>a.centerNearSurfaceCoverage-b.centerNearSurfaceCoverage||a.nearSurfaceCoverage-b.nearSurfaceCoverage||b.centerDepthBands-a.centerDepthBands||b.centerMidFar-a.centerMidFar||Math.abs(a.pitch-basePitch)-Math.abs(b.pitch-basePitch));
+  const selected=candidates[0]||{pitch:basePitch};
+  return {...selected,candidateCount:candidates.length,basePitch};
+}
 async function renderWorld(data){
   world=data;
   await buildOptimizedChunks(data);
@@ -488,9 +501,10 @@ async function renderWorld(data){
     const spawnPitch=Number(data?.spawn?.pitch);
     const initialPitch=Number.isFinite(spawnPitch)?spawnPitch:.12;
     const initialView=chooseInitialPlayableView(data,spawnPos,initialPitch);
+    const initialPitchChoice=chooseInitialPlayablePitch(initialView.spawnPos,initialView.facing,initialPitch);
     player.x=initialView.spawnPos[0]; player.y=initialView.spawnPos[1]; player.z=initialView.spawnPos[2]; player.vy=0; player.onGround=true;
-    initialVisibleFacing=initialView.facing;
-    yaw=initialVisibleFacing.yaw; player.yaw=yaw; pitch=initialPitch; player.pitch=pitch;
+    initialVisibleFacing={...initialView.facing,selectedPitch:initialPitchChoice.pitch,pitchSelection:initialPitchChoice};
+    yaw=initialVisibleFacing.yaw; player.yaw=yaw; pitch=initialPitchChoice.pitch; player.pitch=pitch;
     switchPlayable();
     console.log('default-city visible facing',initialVisibleFacing);
     // notify playable runtime
@@ -832,7 +846,7 @@ window.AI3DVoxelRuntime={
   // setView - e2e/golden-controls.spec.js calls the canonical setView name
   // against both runtimes, so this runtime needs to answer to it too.
   setView(nextYaw,nextPitch=0){this.setPlayerView(nextYaw,nextPitch);},
-  stats(){return {fps:measuredFps,pixelRatio:dynamicPixelRatio,renderer:renderer?.info?.render,mesher:mesherStats,chunks:chunkObjects.size, voxels:world?world.voxels.length:0, player:{x:player.x,y:player.y,z:player.z,yaw,onGround:player.onGround, playable:playableMode}, defaultCityLoaded,initialVisibleFacing};},
+  stats(){return {fps:measuredFps,pixelRatio:dynamicPixelRatio,renderer:renderer?.info?.render,mesher:mesherStats,chunks:chunkObjects.size, voxels:world?world.voxels.length:0, player:{x:player.x,y:player.y,z:player.z,yaw,pitch,onGround:player.onGround, playable:playableMode}, defaultCityLoaded,initialVisibleFacing};},
   collidesAt(x,y,z){ return collidesAt(x,y,z); },
   getOccupancySize(){ return occupancySet.size; }
 };
