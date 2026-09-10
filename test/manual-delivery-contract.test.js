@@ -6,6 +6,7 @@ const path=require('node:path');
 const root=path.resolve(__dirname,'..');
 const read=p=>fs.readFileSync(path.join(root,p),'utf8').replace(/^\uFEFF/,'');
 
+// Merge-resilience regression: preserve master completion rules while adding the executable delivery gate.
 test('manual delivery policy makes verified Netlify link the only normal terminal result',()=>{
   const p=JSON.parse(read('data/manual-delivery-policy.json'));
   assert.equal(p.mode,'VERIFIED_LINK_ONLY');
