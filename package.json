@@ -113,7 +113,8 @@
     "agent-session:preflight": "node lib/agent-session-guard.js preflight direct-desktop-ai",
     "agent-session:postflight": "node lib/agent-session-guard.js postflight direct-desktop-ai",
     "agent-session:check": "node lib/agent-session-guard.js preflight policy-check",
-    "quality:world:microdetail": "node scripts/world-microdetail-audit.js"
+    "quality:world:microdetail": "node scripts/world-microdetail-audit.js",
+    "live:world-links": "node scripts/verify-user-facing-link.js --worlds https://world-server.netlify.app"
   },
   "engines": {
     "node": "24.x"

@@ -149,6 +149,46 @@
         ],
         "previewVideo": "/shared/world-previews/dark-void-navigator-live.webm"
       }
+    },
+    "benchmark-convergence-world": {
+      "title": "Мир Схождения — Нулевая Погода",
+      "visible": true,
+      "status": "certified",
+      "kind": "experience",
+      "goldenStandard": "v2",
+      "required": [
+        "desktop-controls",
+        "mobile-controls",
+        "render"
+      ],
+      "worldMenu": {
+        "show": true,
+        "headline": "ПОЧЕМУ ЗДЕСЬ ДОЖДЬ ИНОГДА ПАДАЕТ ВВЕРХ?",
+        "lore": "На стыке миров чужие законы физики начинают смешиваться. Игрок ищет семь сигналов и решает — стабилизировать границы или открыть Схождение.",
+        "history": "Мир возник как место, где сервер впервые научился не просто хранить разные технологии, а соединять их в одной игровой реальности.",
+        "familyId": "benchmark-convergence-world",
+        "connections": [
+          {
+            "targetId": "voxel-world",
+            "story": "Первый Куб появляется здесь как один из семи сигналов."
+          },
+          {
+            "targetId": "world-sharabass",
+            "story": "Последовательность сигналов совпадает с Песней Шарабаса."
+          },
+          {
+            "targetId": "dark-void-navigator-live",
+            "story": "Семь сигналов вспыхивают теми же огнями, что ведут через Dark Void."
+          }
+        ]
+      }
+    },
+    "world-gateway": {
+      "title": "World Capability Gateway",
+      "visible": false,
+      "status": "system",
+      "kind": "bridge",
+      "reason": "Canonical wrapper for external worlds so shared Golden capabilities and live-link guards stay player-visible."
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",

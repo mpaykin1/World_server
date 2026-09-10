@@ -86,6 +86,22 @@ if(!shellJs.includes('id=\"goldenLore\"')||!shellJs.includes('goldenLoreHistory'
 if(JSON.stringify(registry).includes('???')) fail('world registry contains encoding corruption');
 else ok('Golden top bar + dual joysticks + newspaper/lore/connections contract');
 
+if(uiPolicy.rules.newTechnologyVisibleInAllWorlds!==true) fail('Golden Standard must require new technology in every world');
+if(uiPolicy.rules.newTechnologyVisibleWithinSeconds!==60) fail('new technology must become player-visible within 60 seconds');
+if(uiPolicy.rules.stableCanonicalUserLinksOnly!==true||uiPolicy.rules.verifyUserLinkImmediatelyBeforeDelivery!==true||uiPolicy.rules.ephemeralPreviewLinksCanBeFinal!==false) fail('stable verified user-link contract missing');
+const worldKinds=new Set(['game','navigator','experience']);
+for(const [id,m] of Object.entries(registry.apps)){
+  const file=path.join(root,'apps',id,'index.html');
+  if(!fs.existsSync(file)||!(m?.worldMenu?.show||worldKinds.has(m.kind)))continue;
+  if(!read(`apps/${id}/index.html`).includes('/shared/benchmark-capability-runtime.js')) fail(`all-world technology coverage missing: ${id}`);
+}
+const gateway=read('apps/world-gateway/index.html'),gatewayJs=read('apps/world-gateway/client.js');
+if(!gateway.includes('/shared/benchmark-capability-runtime.js')||!gatewayJs.includes('WorldCapabilities?.trigger')) fail('external-world capability gateway missing');
+if(!shellJs.includes('/apps/world-gateway/?world=')) fail('external worlds bypass canonical capability gateway');
+const linkVerifier=read('scripts/verify-user-facing-link.js');
+if(!linkVerifier.includes('Ephemeral Netlify deploy cannot be a final user link')||!linkVerifier.toLowerCase().includes('site not found')) fail('verified-link fail-closed guard missing');
+else ok('all-world technology visibility + stable verified link delivery contract');
+
 if(process.exitCode) process.exit(process.exitCode);
 console.log('GOLDEN STANDARD: PASS');
 

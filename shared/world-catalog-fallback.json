@@ -89,6 +89,36 @@
       }
     },
     {
+      "id": "benchmark-convergence-world",
+      "title": "Мир Схождения — Нулевая Погода",
+      "url": "/apps/benchmark-convergence-world/",
+      "status": "certified",
+      "kind": "experience",
+      "external": false,
+      "available": true,
+      "worldMenu": {
+        "show": true,
+        "headline": "ПОЧЕМУ ЗДЕСЬ ДОЖДЬ ИНОГДА ПАДАЕТ ВВЕРХ?",
+        "lore": "На стыке миров чужие законы физики начинают смешиваться. Игрок ищет семь сигналов и решает — стабилизировать границы или открыть Схождение.",
+        "history": "Мир возник как место, где сервер впервые научился не просто хранить разные технологии, а соединять их в одной игровой реальности.",
+        "familyId": "benchmark-convergence-world",
+        "connections": [
+          {
+            "targetId": "voxel-world",
+            "story": "Первый Куб появляется здесь как один из семи сигналов."
+          },
+          {
+            "targetId": "world-sharabass",
+            "story": "Последовательность сигналов совпадает с Песней Шарабаса."
+          },
+          {
+            "targetId": "dark-void-navigator-live",
+            "story": "Семь сигналов вспыхивают теми же огнями, что ведут через Dark Void."
+          }
+        ]
+      }
+    },
+    {
       "id": "dark-void-navigator-live",
       "title": "Dark Void Navigator",
       "url": "https://dark-void-navigator.vercel.app/",
