@@ -2,7 +2,10 @@ const { test, expect } = require('@playwright/test');
 const path = require('node:path');
 
 test.describe('Material Forge adaptive runtime', () => {
-  for (const app of ['voxel-world', 'survival']) {
+  for (const { app, autoStartsRenderer } of [
+    { app: 'voxel-world', autoStartsRenderer: true },
+    { app: 'survival', autoStartsRenderer: false }
+  ]) {
     test(`${app} reuses Material Forge without mandatory authored downloads`, async ({ page }, testInfo) => {
       const hardErrors = [];
       page.on('console', message => {
@@ -32,7 +35,11 @@ test.describe('Material Forge adaptive runtime', () => {
       expect(evidence.forge.proceduralFallbacks).toBeGreaterThan(0);
       expect(evidence.probe.authoredMaps).toBe(false);
       expect(evidence.authoredRequests).toEqual([]);
-      expect(evidence.canvas.some(canvas => canvas.width > 0 && canvas.height > 0 && canvas.clientWidth > 0 && canvas.clientHeight > 0)).toBe(true);
+      if (autoStartsRenderer) {
+        expect(evidence.canvas.some(canvas => canvas.width > 0 && canvas.height > 0 && canvas.clientWidth > 0 && canvas.clientHeight > 0)).toBe(true);
+      } else {
+        await expect(page.locator('#survivalHelp')).toBeVisible();
+      }
       expect(hardErrors, `${testInfo.project.name} ${app}`).toEqual([]);
     });
   }
