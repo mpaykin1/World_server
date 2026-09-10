@@ -513,7 +513,7 @@ async function dispatchSubtask(root, subtask, opts = {}) {
 function buildDefaultSubtasks(goal, opts = {}) {
   const base = collectiveBrain.redactText(String(goal || '')).slice(0, 3000);
   const finishMode = opts.manualTask && manualCompletion.isFinishMode(opts.progress || 0);
-  const deliveryRule = opts.manualTask ? (finishMode ? ' FINISH MODE: scope is frozen; only blocker/regression fixes, tests, commit, push, preview deploy, browser verify and handoff are allowed until a verified link exists.' : ' DELIVERY BEFORE EXPANSION: create a verified preview as soon as minimum acceptance passes; reserve final 30% for delivery.') : '';
+  const deliveryRule = opts.manualTask ? (finishMode ? ' FINISH MODE: scope is frozen; only blocker/regression fixes, tests, commit, push, preview verification, merge, production deploy, exact stable-URL verification and handoff are allowed. Preview aliases never satisfy final user-link delivery.' : ' DELIVERY BEFORE EXPANSION: create a verified preview as soon as minimum acceptance passes; reserve final 30% for delivery.') : '';
   const subtasks = [
     { taskId: `opencode-${Date.now()}`, agent: 'opencode', text: `Implementation/test slice for master goal: ${base}. Inspect relevant existing code, reuse architecture, fix only safe root causes, add focused regression tests, and report evidence. Do not perform production deployment.${deliveryRule}` },
     { taskId: `openhuman-${Date.now()}`, agent: 'openhuman', text: `Independent read-only verification slice for master goal: ${base}. Read relevant World_server files and report existing systems, blockers, regression risks, and evidence. Do not modify files.` },

@@ -43,7 +43,7 @@
     if(!global.location)return null;const q=new URLSearchParams(global.location.search||''),phase=q.get('goldenPhase');if(!ORDER.includes(phase))return null;
     const progress=clamp(Number(q.get('goldenProgress')||.5));let offset=0;for(const p of ORDER){if(p===phase)break;offset+=STANDARD.cycle[p];}return getState(offset+STANDARD.cycle[phase]*progress);
   }
-  function currentState(nowMs){return forcedState()||getState((Number(nowMs)||(global.performance?.now?.()||0))/1000);}
+  function currentState(nowMs){const now=Number(nowMs)||(global.performance?.now?.()||0);return forcedState()||getState(Math.max(0,now-cycleStartedAt)/1000);}
   function ensureLayer(){
     if(!global.document||layer)return layer;
     const style=document.createElement('style');style.id='golden-painting-atmosphere-style';

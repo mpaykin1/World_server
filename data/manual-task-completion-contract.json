@@ -1,16 +1,20 @@
 {
-  "version": "1.0.0",
+  "version": "2.0.0",
   "name": "Manual Task Completion Contract",
   "deliveryBeforeExpansion": true,
   "previewFirst": true,
+  "previewNeverCountsAsFinalUserLink": true,
+  "finalUserLinkPolicy": "stable-production-only",
   "finishModeThreshold": 0.7,
   "deliveryReserveFraction": 0.3,
-  "linkRequiredEvidence": ["commit", "pushed", "previewUrl", "browserVerified"],
-  "finishModeAllowedWork": ["blocker-fix", "regression-fix", "test", "commit", "push", "deploy-preview", "browser-verify", "handoff"],
+  "finalRecheckMaxAgeSeconds": 120,
+  "linkRequiredEvidence": [
+    "commit", "pushed", "mergedToDefault", "productionDeployed",
+    "productionUrl", "exactUrlHttp200x3", "featureMarkerVerified",
+    "mobileBrowserVerified", "finalRecheckVerified"
+  ],
+  "forbiddenFinalUrlPatterns": ["deploy-preview-", "--world-server.netlify.app"],
+  "finishModeAllowedWork": ["blocker-fix", "regression-fix", "test", "commit", "push", "deploy-preview", "browser-verify", "merge", "deploy-production", "production-verify", "handoff"],
   "finishModeForbiddenWork": ["scope-expansion", "optional-refactor", "new-unrequested-feature", "cosmetic-polish-before-preview"],
-  "defectSeverity": {
-    "BLOCKER": "must-fix-before-preview",
-    "COSMETIC": "may-preview-and-fix-next-revision"
-  },
-  "terminalStates": ["LIVE_VERIFIED", "PREVIEW_VERIFIED", "USER_ACTION_REQUIRED", "OBJECTIVE_BLOCKED"]
+  "terminalStates": ["LIVE_VERIFIED", "USER_ACTION_REQUIRED", "OBJECTIVE_BLOCKED"]
 }
