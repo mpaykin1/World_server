@@ -47,7 +47,8 @@ test('public IndieWorld index follows the canonical deny-by-default release boun
   const ids = new Set(index.worlds.map((world) => world.id));
   assert.equal(index.releasePolicy, 'deny-by-default');
   assert.equal(index.scope, 'public');
-  assert.deepEqual(index.worlds.filter((world) => !world.external).map((world) => world.id).sort(), ['ai3d-voxel-city', 'voxel-world']);
+  const expectedInternal = Object.entries(registry.apps).filter(([, meta]) => meta?.visible === true && meta?.status === 'certified').map(([id]) => id).sort();
+  assert.deepEqual(index.worlds.filter((world) => !world.external).map((world) => world.id).sort(), expectedInternal);
   assert.equal(index.worlds.filter((world) => world.external).length, registry.externalWorlds.length);
   assert.equal(ids.has('survival'), false);
   assert.equal(ids.has('world-sharabass'), false);

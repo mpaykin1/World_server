@@ -799,3 +799,17 @@ Implementation and local verification complete. Remaining proof is GitHub Action
 - Completion: focused/full checks -> PR -> required green checks -> merge -> exactly one Vercel preview -> browser smoke.
 - Evidence: api/*.js reduced 14 -> 11; focused Vercel limit tests 3/3 PASS; JS syntax, agent rules and Golden Standard PASS.
 - Remaining: cloud CI, merge, one Vercel preview and browser smoke.
+
+## 2026-09-10 cloud CI repair for Cinematic Encounter
+
+Cloud verification exposed three real publication blockers on PR #99 after latest master was merged: IndieWorld static export drift, a hard-coded two-world public-index assertion, and an undeclared `pngjs` dependency used by the executable verified-link gate. The Godot preview workflow also performed a 1+ GB Godot template download for unrelated app-only changes and received an invalid/partial archive.
+
+Repairs on the same Manual Fast Lane branch:
+- regenerated IndieWorld static artifacts from canonical registry/graph data;
+- changed IndieWorld public-world expectation to derive from visible+certified registry entries, preserving deny-by-default while allowing legitimate new certified worlds;
+- declared `pngjs@7.0.0` explicitly so the verified-link screenshot gate is reproducible under clean `npm ci`;
+- made the Godot workflow use a Godot/Web-native-specific change guard rather than general deployability, so unrelated app PRs finish that workflow successfully without downloading 1+ GB templates;
+- hardened actual Godot downloads with fail-fast HTTP handling, retries and archive validation;
+- added regression coverage for the Godot guard.
+
+Latest local `npm run check`: PASS, 617 tests total, 615 pass, 0 fail, 2 opt-in skips. Next action: commit/push these CI repairs, wait for exact-head cloud checks, merge PR #99, deploy canonical Netlify production, then run `delivery:verify` against the new world and confirm it appears in the Voxel World inventory.
