@@ -1,57 +1,3 @@
-# WORK IN PROGRESS — Cinematic Encounter World — 2026-09-10
-
-## Task
-Build, verify, publish, and expose a reusable browser cinematic encounter world inspired by the user-supplied dusty silhouette and flash-lighting scene.
-
-## Why
-Turn simple events into suggestive cinematic micro-scenes without expensive hand-authored animation.
-
-## Current state
-Isolated off-Desktop branch `ai/manual/cinematic-encounter-v1` from `origin/master` at `ca9d13eb`. Baseline `npm ci`, `npm run release:gate`, and `npm run quality:diff` PASS before edits.
-
-## Target state
-New certified playable `/apps/cinematic-encounter/` with procedural silhouette animation, fog/dust, muzzle-flash light, bloom, light cone, sparks, camera shake, replay timeline, adaptive DPR, keyboard/touch movement and look.
-
-## Files / systems involved
-`apps/cinematic-encounter/*`, release registry/world metadata, focused regression test, WIP evidence.
-
-## Known risks
-CDN availability, mobile fill-rate, deny-by-default certification, excessive effects obscuring gameplay.
-
-## Golden systems that must be preserved
-Certified-only public catalog, canonical controls/mobile input, compact HUD, non-regression gates, existing apps and production.
-
-## Errors that must not return
-Empty render, desktop-only controls, giant debug HUD, unbounded DPR/particles, uncertified public app, unverified final link.
-
-## Exact patch / change plan
-1. Add an isolated cinematic encounter app and reusable event timeline.
-2. Add bounded cinematic post effects and particle/light effects.
-3. Add canonical desktop/mobile movement and look plus safe collision/grounding.
-4. Add focused regression/browser coverage.
-5. Certify/register the world only after checks pass.
-6. Push branch, open PR, verify preview, merge, then verify production.
-
-## Tests to run
-Focused contract tests, `npm run check`, `npm run golden:check`, `npm run quality:diff`, desktop/mobile browser render smoke with pixel evidence, final `npm run release:gate`, and post-deploy HTTP/render verification.
-
-## Deployment / PR plan
-Task branch -> PR -> preview -> desktop/mobile verification -> merge to `master` -> production verification. Never direct-edit `master`.
-
-## Current progress
-Baseline gates PASS. Cinematic Encounter implementation is present; Golden UI/physics integration, jump, certified registry entry, world manifest, executable verified-link delivery gate, canonical Netlify hard rule, and focused/browser regression coverage have been added. Validation and production deployment are in progress.
-
-## Next action
-Run focused/static/browser gates, independent AI review, commit/push/PR, merge after green review, deploy canonical Netlify production, then run the live verified-link gate against both the new world and the Voxel World inventory.
-
-## Completion criteria
-All required gates pass; desktop/mobile render is non-empty; no accepted quality metric regresses; PR merged; production URL verified.
-
-## Final evidence
-Pending.
-
----
-
 # WORK IN PROGRESS — Scoped Task Compiler, resource scheduler, real native Godot pipeline
 
 ---
@@ -800,16 +746,11 @@ Implementation and local verification complete. Remaining proof is GitHub Action
 - Evidence: api/*.js reduced 14 -> 11; focused Vercel limit tests 3/3 PASS; JS syntax, agent rules and Golden Standard PASS.
 - Remaining: cloud CI, merge, one Vercel preview and browser smoke.
 
-## 2026-09-10 cloud CI repair for Cinematic Encounter
 
-Cloud verification exposed three real publication blockers on PR #99 after latest master was merged: IndieWorld static export drift, a hard-coded two-world public-index assertion, and an undeclared `pngjs` dependency used by the executable verified-link gate. The Godot preview workflow also performed a 1+ GB Godot template download for unrelated app-only changes and received an invalid/partial archive.
-
-Repairs on the same Manual Fast Lane branch:
-- regenerated IndieWorld static artifacts from canonical registry/graph data;
-- changed IndieWorld public-world expectation to derive from visible+certified registry entries, preserving deny-by-default while allowing legitimate new certified worlds;
-- declared `pngjs@7.0.0` explicitly so the verified-link screenshot gate is reproducible under clean `npm ci`;
-- made the Godot workflow use a Godot/Web-native-specific change guard rather than general deployability, so unrelated app PRs finish that workflow successfully without downloading 1+ GB templates;
-- hardened actual Godot downloads with fail-fast HTTP handling, retries and archive validation;
-- added regression coverage for the Godot guard.
-
-Latest local `npm run check`: PASS, 617 tests total, 615 pass, 0 fail, 2 opt-in skips. Next action: commit/push these CI repairs, wait for exact-head cloud checks, merge PR #99, deploy canonical Netlify production, then run `delivery:verify` against the new world and confirm it appears in the Voxel World inventory.
+## Manual task — Golden Painting + delivery contract (2026-09-09)
+- Owner: ChatGPT manual fast lane.
+- Branch: `ai/golden-painting-day-night-20260909` in system Temp; canonical dirty Desktop checkout untouched.
+- Scope: Golden Painting atmospheric perspective + 60s day / 60s sunset / 10s night / 60s sunrise across compatible worlds; add Manual Task Completion Contract.
+- Delivery requirement: exact commit + pushed branch + test Preview URL + real-browser verification before PASS.
+- Current mode: FINISH MODE. No optional scope expansion before verified Preview.
+- Remaining gate: focused/full checks -> commit -> push -> Preview deploy -> browser verify exact URL -> handoff URL.

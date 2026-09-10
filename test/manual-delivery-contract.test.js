@@ -19,9 +19,14 @@ test('manual delivery policy makes verified Netlify link the only normal termina
   assert.deepEqual(p.terminalStates,['LIVE_VERIFIED','USER_ACTION_REQUIRED']);
 });
 
-test('fresh-chat contracts point to the executable verified-link gate',()=>{
-  const control=read('CHATGPT_GAME_CONTROL.md'); const start=read('AI_START_HERE.md'); const agents=read('AGENTS.md');
-  for(const text of [control,start,agents]) assert.ok(text.includes('data/manual-delivery-policy.json'));
+test('fresh-chat contracts point to executable verified-link completion without weakening master rules',()=>{
+  const control=read('CHATGPT_GAME_CONTROL.md');
+  const start=read('AI_START_HERE.md');
+  const agents=read('AGENTS.md');
+  for(const text of [control,start]) assert.ok(text.includes('data/manual-delivery-policy.json'));
   assert.ok(control.includes('npm run delivery:verify'));
   assert.ok(control.includes('world-server.netlify.app'));
+  assert.ok(agents.includes('MANUAL TASK COMPLETION CONTRACT'));
+  assert.ok(agents.includes('data/manual-task-completion-contract.json'));
+  assert.ok(agents.includes('stable production URL'));
 });

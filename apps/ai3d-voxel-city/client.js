@@ -74,6 +74,7 @@ function init3D(){
   renderer.setPixelRatio(dynamicPixelRatio);
   renderer.setSize(host.clientWidth,host.clientHeight);
   host.replaceChildren(renderer.domElement);
+  window.GoldenPaintingAtmosphere?.registerThree({THREE,scene,renderer,getCamera:()=>activeCamera||persp,worldId:'ai3d-voxel-city'});
   window.WorldQualityAutopilot?.registerRenderer('ai3d-voxel-city',renderer,{
     initialTier:matchMedia('(pointer:coarse)').matches?'BALANCED':'HIGH',targetFps:matchMedia('(pointer:coarse)').matches?43:55,
     onQualityChange(q){if(!adaptive)return;profileName=q.tier==='SAFE'?'SAFE':q.tier==='ULTRA'?'ULTRA':'HIGH';dynamicPixelRatio=Math.min(devicePixelRatio||1,Number(q.dpr)||profile().pixelRatio);renderer.setPixelRatio(dynamicPixelRatio);renderer.setSize(host.clientWidth,host.clientHeight,false);if(typeof setWorldMaterialQuality==='function')setWorldMaterialQuality(q.pbrQuality||0);if(world){applyFog();updateStreaming(true)}},
