@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "4.0.0",
-  "generatedAt": "2026-08-24T05:16:12.155Z",
+  "schemaVersion": "4.1.0",
+  "generatedAt": "2026-09-10T08:02:03.724Z",
   "readinessPercent": 100,
   "domainPercent": {
     "detail": 100,
@@ -12,9 +12,21 @@
   "hardGateReady": true,
   "runtimeQualityPercent": 97,
   "deviceEvidencePercent": 87,
-  "evidenceLedgerSha256": "83a63dc74282b76425e1191aa366cd642555f5f333d6de6cc3628847b4729987",
+  "evidenceLedgerSha256": "af34207d644464cdbd4eecac3e17c21578721c0a9806d5f654c8b199860f8b71",
   "materialProfiles": 64,
+  "materialForge": {
+    "schemaVersion": "1.0.0",
+    "sourceHash": "6a9bcdc0e67d70b9eeaca6c51ad98b429efdd7767bd2136725d47356a396c681",
+    "registeredMaterials": 6,
+    "armorPaintMaterials": 0,
+    "verifiedAuthoredMapVariants": 0,
+    "adaptiveRuntimeBinder": true,
+    "proceduralFallback": true,
+    "runtime16kForbidden": true
+  },
   "visibilityPercent": 100,
+  "microdetailPercent": 92,
+  "microdetailSchemaVersion": "2.0.0",
   "retargetContractReady": true,
   "schedulerRoutes": 5,
   "candidateCount": 12,

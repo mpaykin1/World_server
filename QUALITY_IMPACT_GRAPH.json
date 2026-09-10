@@ -1,11 +1,12 @@
 {
-  "generatedAt": "2026-08-24T05:16:01.854Z",
+  "generatedAt": "2026-09-10T08:03:27.035Z",
   "nodes": [
     "app:ai-3d",
     "app:ai3d-reference-test",
     "app:ai3d-voxel-city",
     "app:catalog",
     "app:chat",
+    "app:dark-void-scene",
     "app:survival",
     "app:voxel-world",
     "app:world-sharabass",
@@ -23,6 +24,12 @@
     "apps/catalog/client.js",
     "apps/catalog/index.html",
     "apps/chat/index.html",
+    "apps/dark-void-scene/client.js",
+    "apps/dark-void-scene/golden-ai3d-playable-runtime.js",
+    "apps/dark-void-scene/index.html",
+    "apps/dark-void-scene/mobile-game-shell.css",
+    "apps/dark-void-scene/mobile-game-shell.js",
+    "apps/dark-void-scene/mobile-shell-config.js",
     "apps/survival/client.js",
     "apps/survival/index.html",
     "apps/voxel-world/client.js",
@@ -42,6 +49,9 @@
     "shared/golden-physics.js",
     "shared/golden-ui-shell.css",
     "shared/golden-ui-shell.js",
+    "shared/graphics/material-forge-runtime.js",
+    "shared/graphics/universal-voxel-microdetail-bootstrap.js",
+    "shared/material-forge-registry.json",
     "shared/quality-telemetry.js",
     "shared/sentry-runtime.js",
     "shared/style.css",
@@ -110,6 +120,11 @@
     },
     {
       "from": "shared/sentry-runtime.js",
+      "to": "apps/ai3d-voxel-city/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/graphics/universal-voxel-microdetail-bootstrap.js",
       "to": "apps/ai3d-voxel-city/index.html",
       "kind": "html-dependency"
     },
@@ -189,6 +204,11 @@
       "kind": "html-dependency"
     },
     {
+      "from": "shared/graphics/universal-voxel-microdetail-bootstrap.js",
+      "to": "apps/catalog/index.html",
+      "kind": "html-dependency"
+    },
+    {
       "from": "shared/golden-ui-shell.css",
       "to": "apps/catalog/index.html",
       "kind": "html-dependency"
@@ -229,6 +249,36 @@
       "kind": "html-dependency"
     },
     {
+      "from": "apps/dark-void-scene/client.js",
+      "to": "app:dark-void-scene",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/dark-void-scene/golden-ai3d-playable-runtime.js",
+      "to": "app:dark-void-scene",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/dark-void-scene/index.html",
+      "to": "app:dark-void-scene",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/dark-void-scene/mobile-game-shell.css",
+      "to": "app:dark-void-scene",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/dark-void-scene/mobile-game-shell.js",
+      "to": "app:dark-void-scene",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/dark-void-scene/mobile-shell-config.js",
+      "to": "app:dark-void-scene",
+      "kind": "belongs-to"
+    },
+    {
       "from": "apps/survival/client.js",
       "to": "app:survival",
       "kind": "belongs-to"
@@ -255,6 +305,11 @@
     },
     {
       "from": "shared/ai3d-playable-runtime.js",
+      "to": "apps/survival/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/graphics/universal-voxel-microdetail-bootstrap.js",
       "to": "apps/survival/index.html",
       "kind": "html-dependency"
     },
@@ -300,6 +355,11 @@
     },
     {
       "from": "shared/common.js",
+      "to": "apps/voxel-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/graphics/universal-voxel-microdetail-bootstrap.js",
       "to": "apps/voxel-world/index.html",
       "kind": "html-dependency"
     },
@@ -354,6 +414,11 @@
       "kind": "html-dependency"
     },
     {
+      "from": "shared/graphics/universal-voxel-microdetail-bootstrap.js",
+      "to": "apps/world-sharabass/index.html",
+      "kind": "html-dependency"
+    },
+    {
       "from": "shared/golden-ui-shell.css",
       "to": "apps/world-sharabass/index.html",
       "kind": "html-dependency"
@@ -442,6 +507,81 @@
       "from": "shared/golden-physics.js",
       "to": "app:ai3d-voxel-city",
       "kind": "contract:collision"
+    },
+    {
+      "from": "shared/graphics/material-forge-runtime.js",
+      "to": "app:voxel-world",
+      "kind": "contract:materials"
+    },
+    {
+      "from": "shared/graphics/material-forge-runtime.js",
+      "to": "app:ai3d-voxel-city",
+      "kind": "contract:materials"
+    },
+    {
+      "from": "shared/graphics/material-forge-runtime.js",
+      "to": "app:survival",
+      "kind": "contract:materials"
+    },
+    {
+      "from": "shared/graphics/material-forge-runtime.js",
+      "to": "app:catalog",
+      "kind": "contract:materials"
+    },
+    {
+      "from": "shared/graphics/material-forge-runtime.js",
+      "to": "app:world-sharabass",
+      "kind": "contract:materials"
+    },
+    {
+      "from": "shared/material-forge-registry.json",
+      "to": "app:voxel-world",
+      "kind": "contract:materials"
+    },
+    {
+      "from": "shared/material-forge-registry.json",
+      "to": "app:ai3d-voxel-city",
+      "kind": "contract:materials"
+    },
+    {
+      "from": "shared/material-forge-registry.json",
+      "to": "app:survival",
+      "kind": "contract:materials"
+    },
+    {
+      "from": "shared/material-forge-registry.json",
+      "to": "app:catalog",
+      "kind": "contract:materials"
+    },
+    {
+      "from": "shared/material-forge-registry.json",
+      "to": "app:world-sharabass",
+      "kind": "contract:materials"
+    },
+    {
+      "from": "shared/graphics/universal-voxel-microdetail-bootstrap.js",
+      "to": "app:voxel-world",
+      "kind": "contract:materials"
+    },
+    {
+      "from": "shared/graphics/universal-voxel-microdetail-bootstrap.js",
+      "to": "app:ai3d-voxel-city",
+      "kind": "contract:materials"
+    },
+    {
+      "from": "shared/graphics/universal-voxel-microdetail-bootstrap.js",
+      "to": "app:survival",
+      "kind": "contract:materials"
+    },
+    {
+      "from": "shared/graphics/universal-voxel-microdetail-bootstrap.js",
+      "to": "app:catalog",
+      "kind": "contract:materials"
+    },
+    {
+      "from": "shared/graphics/universal-voxel-microdetail-bootstrap.js",
+      "to": "app:world-sharabass",
+      "kind": "contract:materials"
     },
     {
       "from": "capability:playable",
@@ -507,6 +647,11 @@
       "from": "release:system",
       "to": "app:catalog",
       "kind": "release-status"
+    },
+    {
+      "from": "release:quarantine",
+      "to": "app:dark-void-scene",
+      "kind": "release-status"
     }
   ],
   "reverse": {
@@ -554,6 +699,18 @@
       "app:voxel-world",
       "app:ai3d-voxel-city",
       "app:catalog"
+    ],
+    "shared/graphics/universal-voxel-microdetail-bootstrap.js": [
+      "apps/ai3d-voxel-city/index.html",
+      "apps/catalog/index.html",
+      "apps/survival/index.html",
+      "apps/voxel-world/index.html",
+      "apps/world-sharabass/index.html",
+      "app:voxel-world",
+      "app:ai3d-voxel-city",
+      "app:survival",
+      "app:catalog",
+      "app:world-sharabass"
     ],
     "shared/golden-ui-shell.css": [
       "apps/ai3d-voxel-city/index.html",
@@ -634,6 +791,24 @@
     "apps/chat/index.html": [
       "app:chat"
     ],
+    "apps/dark-void-scene/client.js": [
+      "app:dark-void-scene"
+    ],
+    "apps/dark-void-scene/golden-ai3d-playable-runtime.js": [
+      "app:dark-void-scene"
+    ],
+    "apps/dark-void-scene/index.html": [
+      "app:dark-void-scene"
+    ],
+    "apps/dark-void-scene/mobile-game-shell.css": [
+      "app:dark-void-scene"
+    ],
+    "apps/dark-void-scene/mobile-game-shell.js": [
+      "app:dark-void-scene"
+    ],
+    "apps/dark-void-scene/mobile-shell-config.js": [
+      "app:dark-void-scene"
+    ],
     "apps/survival/client.js": [
       "app:survival"
     ],
@@ -647,6 +822,20 @@
       "app:voxel-world"
     ],
     "apps/world-sharabass/index.html": [
+      "app:world-sharabass"
+    ],
+    "shared/graphics/material-forge-runtime.js": [
+      "app:voxel-world",
+      "app:ai3d-voxel-city",
+      "app:survival",
+      "app:catalog",
+      "app:world-sharabass"
+    ],
+    "shared/material-forge-registry.json": [
+      "app:voxel-world",
+      "app:ai3d-voxel-city",
+      "app:survival",
+      "app:catalog",
       "app:world-sharabass"
     ],
     "capability:playable": [
@@ -664,7 +853,8 @@
     ],
     "release:quarantine": [
       "app:survival",
-      "app:world-sharabass"
+      "app:world-sharabass",
+      "app:dark-void-scene"
     ],
     "release:diagnostic": [
       "app:ai3d-reference-test"

@@ -38,6 +38,21 @@
         "ai3d-voxel-city"
       ]
     },
+    "materials": {
+      "canonical": [
+        "shared/graphics/material-forge-runtime.js",
+        "shared/material-forge-registry.json",
+        "shared/graphics/universal-voxel-microdetail-bootstrap.js"
+      ],
+      "requiredBy": [
+        "voxel-world",
+        "ai3d-voxel-city",
+        "survival",
+        "catalog",
+        "world-sharabass"
+      ],
+      "forbiddenBehavior": "remote, unhashed, oversized or non-adaptive authored PBR assets"
+    },
     "release": {
       "canonical": [
         "data/app-release-registry.json",

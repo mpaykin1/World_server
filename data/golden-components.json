@@ -45,6 +45,24 @@
         "mobile safe area",
         "non-obstructive HUD"
       ]
+    },
+    "material-forge": {
+      "canonical": "shared/graphics/material-forge-runtime.js",
+      "manifest": "shared/material-forge-registry.json",
+      "status": "integrated-guarded",
+      "scope": {
+        "requiresCapability": "Three.js MeshStandardMaterial or MeshPhysicalMaterial"
+      },
+      "rules": [
+        "ArmorPaint is authoring-only and never required by players",
+        "same-origin hashed assets only",
+        "maximum runtime dimension 4096; 16K forbidden",
+        "SAFE/BALANCED/HIGH/ULTRA channel degradation",
+        "procedural fallback always preserved",
+        "UV-less voxel surfaces use triplanar binding",
+        "height needs explicit per-material opt-in",
+        "new authored visuals require Fleet evidence and cannot self-approve baselines"
+      ]
     }
   },
   "schemaVersion": "2.0.0",

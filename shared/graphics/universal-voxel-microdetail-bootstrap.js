@@ -2,8 +2,10 @@
 // Hooks the existing THREE renderer; does not create a second renderer or collision world.
 import * as THREE from 'https://unpkg.com/three@0.165.0/build/three.module.js';
 import {createUniversalVoxelMicrodetail} from './universal-voxel-microdetail.js';
+import {createMaterialForgeRuntime} from './material-forge-runtime.js';
 
 const POLICY_URL='/shared/microdetail-policy.json';
+const MATERIAL_FORGE_URL='/shared/material-forge-registry.json';
 let policy=null;
 try{
   const response=await fetch(POLICY_URL,{cache:'force-cache'});
@@ -13,9 +15,23 @@ try{
   console.warn('[UVM_V2] disabled safely: policy unavailable',error);
 }
 
+let materialForgeRegistry=null;
+try{
+  const response=await fetch(MATERIAL_FORGE_URL,{cache:'force-cache'});
+  if(!response.ok)throw new Error(`registry HTTP ${response.status}`);
+  materialForgeRegistry=await response.json();
+}catch(error){
+  console.warn('[MATERIAL_FORGE] authored materials disabled safely: registry unavailable',error);
+}
+
 if(policy){
   const initialTier=matchMedia('(pointer:coarse)').matches?'BALANCED':'HIGH';
   const runtime=createUniversalVoxelMicrodetail({THREE,policy,initialTier});
+  const worldId=location.pathname.match(/\/apps\/([^/]+)/)?.[1]||'world';
+  let materialForge=null;
+  try{
+    if(materialForgeRegistry)materialForge=createMaterialForgeRuntime({THREE,registry:materialForgeRegistry,initialTier,worldId});
+  }catch(error){console.warn('[MATERIAL_FORGE] disabled safely: invalid compiled registry',error);}
   const states=new WeakMap();
   const recordByMesh=new WeakMap();
   const clamp=(v,a,b)=>Math.max(a,Math.min(b,Number(v)||0));
@@ -29,8 +45,10 @@ if(policy){
       }
       return object;
     },
-    stats:()=>runtime.stats()
+    stats:()=>runtime.stats(),
+    materialForge
   };
+  if(materialForge)window.WorldMaterialForge=materialForge;
 
   function opaqueVertexColorMaterial(material){
     const mats=Array.isArray(material)?material:[material];
@@ -41,7 +59,10 @@ if(policy){
     mesh.userData=mesh.userData||{};
     if(!mesh.userData.microdetailSemantic)mesh.userData.microdetailSemantic=semantic;
     const mats=Array.isArray(mesh.material)?mesh.material:[mesh.material];
-    for(const material of mats)runtime.patchMaterial(material,semantic);
+    for(const material of mats){
+      materialForge?.enhanceMaterial(material,semantic,mesh);
+      runtime.patchMaterial(material,semantic);
+    }
   }
   function registerGeometryRecord(state,mesh,now){
     if(!opaqueVertexColorMaterial(mesh.material)||!runtime.isQuadSurfaceGeometry(mesh.geometry))return null;
@@ -112,9 +133,13 @@ if(policy){
     for(const record of records)if(record.swapped){record.mesh.geometry=record.baseGeometry;record.swapped=false;}
   }
 
+  let forgeAdapterRegistered=false;
   function wrapWorldQualityAutopilot(){
     const api=window.WorldQualityAutopilot;
     if(!api||api.__uvmV2Wrapped||typeof api.registerRenderer!=='function')return false;
+    if(materialForge&&!forgeAdapterRegistered&&typeof api.registerMaterialAdapter==='function'){
+      api.registerMaterialAdapter(materialForge.adapter);forgeAdapterRegistered=true;
+    }
     const original=api.registerRenderer.bind(api);
     api.registerRenderer=(name,renderer,options={})=>{
       const initial=policy.tiers[options.initialTier]?options.initialTier:initialTier;
@@ -139,6 +164,7 @@ if(policy){
     Object.defineProperty(proto,'__uvmV2Patched',{value:true,configurable:false});
     proto.render=function(scene,camera){
       const now=performance.now();runtime.tick(now);
+      materialForge?.setTier(runtime.getTier());
       const exact=Boolean(policy.guards.orthographicExactMode&&camera?.isOrthographicCamera);
       runtime.setPresentationMode(exact);
       let state=states.get(this);
@@ -152,4 +178,5 @@ if(policy){
     };
   }
   console.info('[UVM_V2] universal voxel microdetail enabled',runtime.stats());
+  if(materialForge)console.info('[MATERIAL_FORGE] adaptive PBR registry enabled',materialForge.stats());
 }

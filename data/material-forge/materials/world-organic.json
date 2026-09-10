@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "world-organic",
+  "displayName": "World Organic",
+  "source": {
+    "tool": "WorldServerProcedural",
+    "author": "World_server",
+    "license": "project-owned"
+  },
+  "materialClass": "skin",
+  "mapping": "triplanar",
+  "match": {
+    "semantics": ["skin", "face", "scales", "fur", "bone"],
+    "worlds": ["*"]
+  },
+  "parameters": {
+    "roughness": 0.72,
+    "metalness": 0,
+    "normalStrength": 0.24,
+    "aoStrength": 0.55,
+    "emissiveIntensity": 0,
+    "tilingScale": 5.2,
+    "blend": 0.14
+  },
+  "maps": {},
+  "priority": 70
+}

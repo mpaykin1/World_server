@@ -1,0 +1,311 @@
+{
+  "materials": {
+    "world-default": {
+      "displayName": "World Default",
+      "id": "world-default",
+      "mapping": "triplanar",
+      "maps": {},
+      "match": {
+        "semantics": [
+          "default",
+          "smooth"
+        ],
+        "worlds": [
+          "*"
+        ]
+      },
+      "materialClass": "default",
+      "parameters": {
+        "aoStrength": 0.6,
+        "blend": 0.12,
+        "emissiveIntensity": 0,
+        "metalness": 0.03,
+        "normalStrength": 0.28,
+        "roughness": 0.8,
+        "tilingScale": 4
+      },
+      "priority": 0,
+      "schemaVersion": "1.0.0",
+      "source": {
+        "author": "World_server",
+        "license": "project-owned",
+        "tool": "WorldServerProcedural"
+      }
+    },
+    "world-emissive": {
+      "displayName": "World Emissive",
+      "id": "world-emissive",
+      "mapping": "triplanar",
+      "maps": {},
+      "match": {
+        "semantics": [
+          "emissive"
+        ],
+        "worlds": [
+          "*"
+        ]
+      },
+      "materialClass": "emissive",
+      "parameters": {
+        "aoStrength": 0.4,
+        "blend": 0.18,
+        "emissiveIntensity": 1,
+        "metalness": 0.04,
+        "normalStrength": 0.2,
+        "roughness": 0.46,
+        "tilingScale": 2.8
+      },
+      "priority": 80,
+      "schemaVersion": "1.0.0",
+      "source": {
+        "author": "World_server",
+        "license": "project-owned",
+        "tool": "WorldServerProcedural"
+      }
+    },
+    "world-metal": {
+      "displayName": "World Metal",
+      "id": "world-metal",
+      "mapping": "triplanar",
+      "maps": {},
+      "match": {
+        "semantics": [
+          "armor",
+          "metal",
+          "weapon"
+        ],
+        "worlds": [
+          "*"
+        ]
+      },
+      "materialClass": "metal",
+      "parameters": {
+        "aoStrength": 0.68,
+        "blend": 0.24,
+        "emissiveIntensity": 0,
+        "metalness": 0.76,
+        "normalStrength": 0.42,
+        "roughness": 0.43,
+        "tilingScale": 3.2
+      },
+      "priority": 60,
+      "schemaVersion": "1.0.0",
+      "source": {
+        "author": "World_server",
+        "license": "project-owned",
+        "tool": "WorldServerProcedural"
+      }
+    },
+    "world-natural": {
+      "displayName": "World Natural",
+      "id": "world-natural",
+      "mapping": "triplanar",
+      "maps": {},
+      "match": {
+        "semantics": [
+          "fabric",
+          "vegetation",
+          "wood"
+        ],
+        "worlds": [
+          "*"
+        ]
+      },
+      "materialClass": "wood",
+      "parameters": {
+        "aoStrength": 0.7,
+        "blend": 0.2,
+        "emissiveIntensity": 0,
+        "metalness": 0.01,
+        "normalStrength": 0.5,
+        "roughness": 0.84,
+        "tilingScale": 4.2
+      },
+      "priority": 50,
+      "schemaVersion": "1.0.0",
+      "source": {
+        "author": "World_server",
+        "license": "project-owned",
+        "tool": "WorldServerProcedural"
+      }
+    },
+    "world-organic": {
+      "displayName": "World Organic",
+      "id": "world-organic",
+      "mapping": "triplanar",
+      "maps": {},
+      "match": {
+        "semantics": [
+          "bone",
+          "face",
+          "fur",
+          "scales",
+          "skin"
+        ],
+        "worlds": [
+          "*"
+        ]
+      },
+      "materialClass": "skin",
+      "parameters": {
+        "aoStrength": 0.55,
+        "blend": 0.14,
+        "emissiveIntensity": 0,
+        "metalness": 0,
+        "normalStrength": 0.24,
+        "roughness": 0.72,
+        "tilingScale": 5.2
+      },
+      "priority": 70,
+      "schemaVersion": "1.0.0",
+      "source": {
+        "author": "World_server",
+        "license": "project-owned",
+        "tool": "WorldServerProcedural"
+      }
+    },
+    "world-stone": {
+      "displayName": "World Stone",
+      "id": "world-stone",
+      "mapping": "triplanar",
+      "maps": {},
+      "match": {
+        "semantics": [
+          "brick",
+          "earth",
+          "sand",
+          "snow",
+          "stone"
+        ],
+        "worlds": [
+          "*"
+        ]
+      },
+      "materialClass": "stone",
+      "parameters": {
+        "aoStrength": 0.76,
+        "blend": 0.22,
+        "emissiveIntensity": 0,
+        "metalness": 0.02,
+        "normalStrength": 0.62,
+        "roughness": 0.86,
+        "tilingScale": 4.5
+      },
+      "priority": 40,
+      "schemaVersion": "1.0.0",
+      "source": {
+        "author": "World_server",
+        "license": "project-owned",
+        "tool": "WorldServerProcedural"
+      }
+    }
+  },
+  "policy": {
+    "channels": {
+      "baseColor": {
+        "aliases": [
+          "basecolor",
+          "base_color",
+          "albedo",
+          "diffuse"
+        ],
+        "colorSpace": "srgb"
+      },
+      "emissive": {
+        "aliases": [
+          "emissive",
+          "emission"
+        ],
+        "colorSpace": "srgb"
+      },
+      "height": {
+        "aliases": [
+          "height",
+          "displacement"
+        ],
+        "colorSpace": "linear"
+      },
+      "normal": {
+        "aliases": [
+          "normal",
+          "normalgl",
+          "normal_gl"
+        ],
+        "colorSpace": "linear"
+      },
+      "orm": {
+        "aliases": [
+          "orm",
+          "occlusionroughnessmetallic",
+          "occlusion_roughness_metallic"
+        ],
+        "colorSpace": "linear",
+        "packing": {
+          "b": "metallic",
+          "g": "roughness",
+          "r": "occlusion"
+        }
+      }
+    },
+    "guards": {
+      "armorPaintProjectProvenanceRequired": true,
+      "hashRequiredForFiles": true,
+      "heightNeedsExplicitRuntimeOptIn": true,
+      "pathTraversalForbidden": true,
+      "remoteUrlsForbidden": true,
+      "runtime16kForbidden": true,
+      "visualBaselineSelfApprovalForbidden": true
+    },
+    "maxRuntimeDimension": 4096,
+    "runtimeUriRoot": "/shared/materials/",
+    "tiers": {
+      "BALANCED": {
+        "anisotropy": 2,
+        "channels": [
+          "baseColor",
+          "orm"
+        ],
+        "maxDimension": 1024,
+        "maxMaterialBytes": 4194304,
+        "scalarBlendScale": 0.72
+      },
+      "HIGH": {
+        "anisotropy": 4,
+        "channels": [
+          "baseColor",
+          "normal",
+          "orm",
+          "emissive"
+        ],
+        "maxDimension": 2048,
+        "maxMaterialBytes": 8388608,
+        "scalarBlendScale": 0.88
+      },
+      "SAFE": {
+        "anisotropy": 1,
+        "channels": [
+          "baseColor"
+        ],
+        "maxDimension": 512,
+        "maxMaterialBytes": 1572864,
+        "scalarBlendScale": 0.55
+      },
+      "ULTRA": {
+        "anisotropy": 8,
+        "channels": [
+          "baseColor",
+          "normal",
+          "orm",
+          "emissive",
+          "height"
+        ],
+        "maxDimension": 4096,
+        "maxMaterialBytes": 16777216,
+        "scalarBlendScale": 1
+      }
+    }
+  },
+  "schemaVersion": "1.0.0",
+  "sourceHash": "6a9bcdc0e67d70b9eeaca6c51ad98b429efdd7767bd2136725d47356a396c681",
+  "system": "WORLD_MATERIAL_FORGE"
+}

@@ -7,7 +7,7 @@
     "start": "node server.js",
     "build:sentry": "node scripts/build-sentry.js",
     "build": "npm run build:sentry && node scripts/inject-sentry-runtime.js",
-    "check": "node scripts/check-js.js && node --test",
+    "check": "node scripts/check-js.js && npm run material-forge:check && node --test",
     "world:ingest": "node scripts/ingest-world-patches.js",
     "check:fast": "node scripts/check-js.js",
     "discover": "node scripts/discover-ai3d-engines.js",
@@ -81,7 +81,7 @@
     "quality:world:baselines": "node scripts/world-visual-baseline-candidates.js",
     "quality:world:baseline:promote": "node scripts/world-visual-baseline-promote.js",
     "quality:world:semantic": "node scripts/world-semantic-detail-indexer.js",
-    "quality:world:materials": "node scripts/world-material-synthesis.js",
+    "quality:world:materials": "node scripts/material-forge.js --check && node scripts/world-material-synthesis.js",
     "quality:world:visibility": "node scripts/world-visibility-optimizer.js",
     "quality:world:devices": "node scripts/world-device-profile-matrix.js",
     "quality:world:scheduler": "node scripts/world-quality-scheduler.js",
@@ -113,7 +113,10 @@
     "agent-session:preflight": "node lib/agent-session-guard.js preflight direct-desktop-ai",
     "agent-session:postflight": "node lib/agent-session-guard.js postflight direct-desktop-ai",
     "agent-session:check": "node lib/agent-session-guard.js preflight policy-check",
-    "quality:world:microdetail": "node scripts/world-microdetail-audit.js"
+    "quality:world:microdetail": "node scripts/world-microdetail-audit.js",
+    "material-forge:compile": "node scripts/material-forge.js --write",
+    "material-forge:check": "node scripts/material-forge.js --check",
+    "material-forge:import": "node scripts/material-forge.js --import"
   },
   "engines": {
     "node": "24.x"

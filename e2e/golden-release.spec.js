@@ -50,14 +50,24 @@ test.describe('World Server Golden Standard', () => {
     await page.waitForFunction(() => {
       const s=window.AI3DVoxelRuntime?.stats?.();
       return s?.defaultCityLoaded && s?.player?.playable;
-    }, {timeout:25000});
+    }, null, {timeout:25000});
     await page.evaluate(()=>window.AI3DVoxelRuntime.setPlayerView?.(0,0));
-    const before=await page.evaluate(()=>window.AI3DVoxelRuntime.stats().player);
+    await page.locator('#viewer canvas').focus();
+    await expect(page.locator('#viewer canvas')).toBeFocused();
+    await page.waitForFunction(()=>window.__AI3D_PLAYABLE_SCENE__?.state?.frames>=2, null, {timeout:10000});
+    const before=await page.evaluate(()=>({
+      player:window.AI3DVoxelRuntime.stats().player,
+      frames:window.__AI3D_PLAYABLE_SCENE__.state.frames
+    }));
     await page.keyboard.down('KeyW');
     await page.waitForTimeout(350);
     await page.keyboard.up('KeyW');
-    const after=await page.evaluate(()=>window.AI3DVoxelRuntime.stats().player);
-    const dz=after.z-before.z, dx=after.x-before.x;
+    const after=await page.evaluate(()=>({
+      player:window.AI3DVoxelRuntime.stats().player,
+      frames:window.__AI3D_PLAYABLE_SCENE__.state.frames
+    }));
+    expect(after.frames).toBeGreaterThan(before.frames);
+    const dz=after.player.z-before.player.z, dx=after.player.x-before.player.x;
     expect(Math.hypot(dx,dz)).toBeGreaterThan(0.03);
     expect(dz).toBeLessThan(0); // Three.js camera yaw 0 looks toward -Z
   });

@@ -98,3 +98,13 @@ for(const id of ['voxel-world','ai3d-voxel-city']){
   if(!html.includes('/shared/golden-physics.js')) fail(`${id}: shared physics missing`);
 }
 ok('shared UI + physics propagation');
+
+const materialForgePolicy=JSON.parse(read('data/material-forge/policy.json'));
+const materialForgeRegistry=JSON.parse(read('shared/material-forge-registry.json'));
+if(materialForgePolicy.maxRuntimeDimension>4096||materialForgePolicy.guards?.runtime16kForbidden!==true) fail('Material Forge lost the 4K runtime ceiling / 16K guard');
+if(materialForgeRegistry.sourceHash?.length!==64||materialForgeRegistry.system!=='WORLD_MATERIAL_FORGE') fail('Material Forge compiled registry identity invalid');
+for(const id of ['voxel-world','ai3d-voxel-city','survival','catalog','world-sharabass']){
+  if(!read(`apps/${id}/index.html`).includes('/shared/graphics/universal-voxel-microdetail-bootstrap.js')) fail(`${id}: shared Material Forge bootstrap missing`);
+}
+if(!read('shared/graphics/material-forge-runtime.js').includes('proceduralFallbacks')) fail('Material Forge procedural fallback missing');
+else ok('adaptive hashed Material Forge propagated to compatible worlds');

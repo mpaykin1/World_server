@@ -74,6 +74,8 @@ function init3D(){
   renderer.setPixelRatio(dynamicPixelRatio);
   renderer.setSize(host.clientWidth,host.clientHeight);
   host.replaceChildren(renderer.domElement);
+  renderer.domElement.tabIndex=0;
+  renderer.domElement.setAttribute('aria-label','Playable voxel city viewport');
   window.WorldQualityAutopilot?.registerRenderer('ai3d-voxel-city',renderer,{
     initialTier:matchMedia('(pointer:coarse)').matches?'BALANCED':'HIGH',targetFps:matchMedia('(pointer:coarse)').matches?43:55,
     onQualityChange(q){if(!adaptive)return;profileName=q.tier==='SAFE'?'SAFE':q.tier==='ULTRA'?'ULTRA':'HIGH';dynamicPixelRatio=Math.min(devicePixelRatio||1,Number(q.dpr)||profile().pixelRatio);renderer.setPixelRatio(dynamicPixelRatio);renderer.setSize(host.clientWidth,host.clientHeight,false);if(typeof setWorldMaterialQuality==='function')setWorldMaterialQuality(q.pbrQuality||0);if(world){applyFog();updateStreaming(true)}},
@@ -104,17 +106,19 @@ function init3D(){
     }
   });
   addEventListener('keydown',e=>{
-    if(playableMode && ['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code)){
-      keysHeld.add(e.code);
-      if(e.code.startsWith('Arrow')) e.preventDefault();
-      if(e.code==='Space'){
+    const code=window.GameGoldenStandard?.normalizeCode?.(e)||e.code;
+    if(playableMode && ['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(code)){
+      keysHeld.add(code);
+      if(code.startsWith('Arrow')) e.preventDefault();
+      if(code==='Space'){
         e.preventDefault();
         if(player.onGround){ player.vy=JUMP_SPEED; player.onGround=false; }
       }
     }
   });
   addEventListener('keyup',e=>{
-    keysHeld.delete(e.code);
+    const code=window.GameGoldenStandard?.normalizeCode?.(e)||e.code;
+    keysHeld.delete(code);
   });
   addEventListener('goldenlook',e=>{if(!playableMode)return;const d=e.detail||{};yaw-=(Number(d.dx)||0)*.005;pitch=Math.max(-1.45,Math.min(1.45,pitch-(Number(d.dy)||0)*.005));player.yaw=yaw;player.pitch=pitch;});
   addEventListener('resize',fitCameras);
@@ -168,6 +172,9 @@ function switchPlayable(){
   frontMode=false; playableMode=true; activeCamera=persp;
   $('viewMode').textContent='PLAYABLE · WASD + MOUSE';
   applyFog(); updateStreaming(true);
+  if(!document.activeElement||document.activeElement===document.body){
+    try{renderer.domElement.focus({preventScroll:true});}catch{renderer.domElement.focus();}
+  }
   // camera will be controlled by player
 }
 function applyFog(){
@@ -387,18 +394,15 @@ function updatePlayer(dt){
   // gather input from both custom keysHeld and __AI3D_PLAYABLE_SCENE__ input (WASD/arrows)
   let f=0,s=0;
   const sceneInput = window.__AI3D_PLAYABLE_SCENE__ ? window.__AI3D_PLAYABLE_SCENE__.input() : null;
-  if(sceneInput){
-    f=(sceneInput.forward?1:0)-(sceneInput.back?1:0);
-    s=(sceneInput.right?1:0)-(sceneInput.left?1:0);
-  } else {
-    if(keysHeld.has('KeyW')||keysHeld.has('ArrowUp')) f+=1;
-    if(keysHeld.has('KeyS')||keysHeld.has('ArrowDown')) f-=1;
-    if(keysHeld.has('KeyD')||keysHeld.has('ArrowRight')) s+=1;
-    if(keysHeld.has('KeyA')||keysHeld.has('ArrowLeft')) s-=1;
-  }
+  const forward=Boolean(sceneInput?.forward||keysHeld.has('KeyW')||keysHeld.has('ArrowUp'));
+  const back=Boolean(sceneInput?.back||keysHeld.has('KeyS')||keysHeld.has('ArrowDown'));
+  const right=Boolean(sceneInput?.right||keysHeld.has('KeyD')||keysHeld.has('ArrowRight'));
+  const left=Boolean(sceneInput?.left||keysHeld.has('KeyA')||keysHeld.has('ArrowLeft'));
+  f=(forward?1:0)-(back?1:0);
+  s=(right?1:0)-(left?1:0);
   const len=Math.hypot(f,s);
   if(len>0){ f/=len; s/=len; }
-  const speed=player.speed * ((sceneInput && sceneInput.run)|| keysHeld.has('ShiftLeft') ? 1.8 : 1);
+  const speed=player.speed * (sceneInput?.run||keysHeld.has('ShiftLeft')||keysHeld.has('ShiftRight') ? 1.8 : 1);
   const move=window.GameGoldenPhysics.canonicalXZ(yaw,f,s,speed);
   const wishX=move.x;
   const wishZ=move.z;

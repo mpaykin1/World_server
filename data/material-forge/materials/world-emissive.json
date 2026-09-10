@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "world-emissive",
+  "displayName": "World Emissive",
+  "source": {
+    "tool": "WorldServerProcedural",
+    "author": "World_server",
+    "license": "project-owned"
+  },
+  "materialClass": "emissive",
+  "mapping": "triplanar",
+  "match": {
+    "semantics": ["emissive"],
+    "worlds": ["*"]
+  },
+  "parameters": {
+    "roughness": 0.46,
+    "metalness": 0.04,
+    "normalStrength": 0.2,
+    "aoStrength": 0.4,
+    "emissiveIntensity": 1,
+    "tilingScale": 2.8,
+    "blend": 0.18
+  },
+  "maps": {},
+  "priority": 80
+}

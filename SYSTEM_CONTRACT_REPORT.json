@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-24T05:16:06.157Z",
+  "generatedAt": "2026-09-10T08:02:01.211Z",
   "blockers": 0,
   "adoption": {
     "input": {
@@ -31,6 +31,20 @@
       "apps": {
         "voxel-world": true,
         "ai3d-voxel-city": true
+      }
+    },
+    "materials": {
+      "canonical": [
+        "shared/graphics/material-forge-runtime.js",
+        "shared/material-forge-registry.json",
+        "shared/graphics/universal-voxel-microdetail-bootstrap.js"
+      ],
+      "apps": {
+        "voxel-world": true,
+        "ai3d-voxel-city": true,
+        "survival": true,
+        "catalog": true,
+        "world-sharabass": true
       }
     },
     "release": {
