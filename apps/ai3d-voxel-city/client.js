@@ -307,14 +307,15 @@ function resolveSpawn(worldData){
   }
   return [sx,1.65,sz];
 }
-function measureInitialViewDepthGrid(spawnPos,yaw,maxDistance){
+function measureInitialViewDepthGrid(spawnPos,yaw,maxDistance,pitchAngle=0){
   const verticalTan=Math.tan(THREE.MathUtils.degToRad((Number(persp?.fov)||70)/2));
   const horizontalTan=Math.max(.15,verticalTan*Math.max(.35,Number(persp?.aspect)||1));
-  const fx=-Math.sin(yaw),fz=-Math.cos(yaw),rx=-fz,rz=fx;
+  const fx=-Math.sin(yaw),fz=-Math.cos(yaw),rx=-fz,rz=fx,cp=Math.cos(pitchAngle),sp=Math.sin(pitchAngle);
+  const forwardX=fx*cp,forwardY=sp,forwardZ=fz*cp,upX=-fx*sp,upY=cp,upZ=-fz*sp;
   let nearSurfaceCoverage=0,centerNearSurfaceCoverage=0,centerMidFar=0;const centerDepthBands=new Set();
   for(let by=0;by<8;by++)for(let bx=0;bx<12;bx++){
     const sx=-1+(bx+.5)/6,sy=1-(by+.5)/4;
-    let dx=fx+rx*sx*horizontalTan,dy=sy*verticalTan,dz=fz+rz*sx*horizontalTan;
+    let dx=forwardX+rx*sx*horizontalTan+upX*sy*verticalTan,dy=forwardY+upY*sy*verticalTan,dz=forwardZ+rz*sx*horizontalTan+upZ*sy*verticalTan;
     const inv=1/Math.max(.0001,Math.hypot(dx,dy,dz));dx*=inv;dy*=inv;dz*=inv;
     let hit=Infinity;
     for(let t=.75;t<=maxDistance;t+=.5){
@@ -337,7 +338,7 @@ function measureInitialViewDepthGrid(spawnPos,yaw,maxDistance){
   }
   return{nearSurfaceCoverage,centerNearSurfaceCoverage,centerMidFar,centerDepthBands:centerDepthBands.size,sampleCount:96,source:'occupancy-ray-depth-grid'};
 }
-function chooseInitialPlayableFacing(worldData,spawnPos){
+function chooseInitialPlayableFacing(worldData,spawnPos,pitchAngle=0){
   const voxels=Array.isArray(worldData?.voxels)?worldData.voxels:[];
   const metadataYaw=Number(worldData?.spawn?.yaw);
   // Sample a bounded full ring and score what the active perspective camera can
@@ -356,6 +357,7 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
   const verticalTan=Math.tan(THREE.MathUtils.degToRad((Number(persp?.fov)||70)/2));
   const frustumAspect=Math.max(.35,Number(persp?.aspect)||1);
   const horizontalTan=Math.max(.15,verticalTan*frustumAspect);
+  const cp=Math.cos(pitchAngle),sp=Math.sin(pitchAngle);
   const measured=[];
   for(const c of unique){
     const fx=-Math.sin(c.yaw),fz=-Math.cos(c.yaw);
@@ -365,8 +367,8 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
       if(!Array.isArray(v)||v.length<3)continue;
       const dx=Number(v[0])-spawnPos[0],dy=Number(v[1])-spawnPos[1],dz=Number(v[2])-spawnPos[2],d=Math.hypot(dx,dz);
       if(d<2||d>maxDistance)continue;
-      const forward=dx*fx+dz*fz;
-      const alignment=forward/d;
+      const horizontalForward=dx*fx+dz*fz;
+      const alignment=horizontalForward/d;
       const eyeLevel=Number(v[1])>=spawnPos[1]-.5;
       const footprintLevel=Number(v[1])>=spawnPos[1]-1;
       // Preserve the established geometric blocker contract used by the hard autoplay
@@ -375,10 +377,12 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
         nearOccluders++;
         if(alignment>=legacyCenterCos)centerOccluders++;
       }
+      const forward=horizontalForward*cp+dy*sp;
       if(forward<=1)continue;
       const side=dx*(-fz)+dz*fx;
+      const vertical=dy*cp-horizontalForward*sp;
       const screenX=side/(forward*horizontalTan);
-      const screenY=dy/(forward*verticalTan);
+      const screenY=vertical/(forward*verticalTan);
       // Estimate the actual screen footprint of nearby voxel faces, not just voxel centers.
       // A close wall can dominate the frame while center-point blocker counters remain zero.
       if(d<14&&footprintLevel){
@@ -409,7 +413,7 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
         }
       }
     }
-    const depthGrid=measureInitialViewDepthGrid(spawnPos,c.yaw,maxDistance);
+    const depthGrid=measureInitialViewDepthGrid(spawnPos,c.yaw,maxDistance,pitchAngle);
     measured.push({...c,score,nearOccluders,centerOccluders,visibleNearOccluders,visibleCenterOccluders,nearSurfaceCoverage:depthGrid.nearSurfaceCoverage,centerNearSurfaceCoverage:depthGrid.centerNearSurfaceCoverage,voxelProxyNearSurfaceCoverage:nearSurfaceBins.size,voxelProxyCenterNearSurfaceCoverage:centerNearSurfaceBins.size,renderDepthCenterMidFar:depthGrid.centerMidFar,renderDepthCenterBands:depthGrid.centerDepthBands,renderDepthSampleCount:depthGrid.sampleCount,framingEvidenceSource:depthGrid.source,centerMidFar,centerDepthBands:centerDepthBands.size,centerNearestDistance:Number.isFinite(centerNearestDistance)?centerNearestDistance:maxDistance,screenCoverage:screenBins.size,maxDistance,frustumAspect});
   }
   const richestCandidate=measured.reduce((best,c)=>!best||c.score>best.score?c:best,null);
@@ -440,8 +444,8 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
   const yawSpaceExhausted=(selected.centerNearSurfaceCoverage||0)>=12||(selected.nearSurfaceCoverage||0)>=36;
   return {...selected,readableFloor,centerContentFloor,richestScore:richest,richestNearOccluders:richestCandidate?.nearOccluders||0,richestCenterOccluders:richestCandidate?.centerOccluders||0,richestCenterMidFar:richestCandidate?.centerMidFar||0,candidateCount:measured.length,yawSpaceExhausted,nearSurfaceCoverageRange:{min:nearCoverage[0]||0,median:percentile(nearCoverage,.5),max:nearCoverage.at(-1)||0},centerNearSurfaceCoverageRange:{min:centerCoverage[0]||0,median:percentile(centerCoverage,.5),max:centerCoverage.at(-1)||0}};
 }
-function chooseInitialPlayableView(worldData,spawnPos){
-  const baseFacing=chooseInitialPlayableFacing(worldData,spawnPos);
+function chooseInitialPlayableView(worldData,spawnPos,pitchAngle=0){
+  const baseFacing=chooseInitialPlayableFacing(worldData,spawnPos,pitchAngle);
   const base={spawnPos:[...spawnPos],facing:baseFacing,spawnOffset:[0,0],offsetDistance:0};
   const isFinalViewEligible=view=>view.facing.centerNearestDistance>6&&view.facing.score>=view.facing.readableFloor&&view.facing.centerMidFar>=view.facing.centerContentFloor;
   if(!baseFacing.yawSpaceExhausted){
@@ -459,7 +463,7 @@ function chooseInitialPlayableView(worldData,spawnPos){
   for(const [dx,dz] of offsets){
     const candidate=[spawnPos[0]+dx,spawnPos[1],spawnPos[2]+dz];
     if(collidesAt(candidate[0],candidate[1],candidate[2]))continue;
-    views.push({spawnPos:candidate,facing:chooseInitialPlayableFacing(worldData,candidate),spawnOffset:[dx,dz],offsetDistance:Math.hypot(dx,dz)});
+    views.push({spawnPos:candidate,facing:chooseInitialPlayableFacing(worldData,candidate,pitchAngle),spawnOffset:[dx,dz],offsetDistance:Math.hypot(dx,dz)});
   }
   // Cross-position ranking must not bypass the same hard eligibility contract used
   // by the per-yaw scorer. Only alternate views that preserve forward clearance,
@@ -481,10 +485,12 @@ async function renderWorld(data){
   // always keep front as fallback, but if default city autoplay, switch to playable
   if(defaultCityLoaded){
     const spawnPos=resolveSpawn(data);
-    const initialView=chooseInitialPlayableView(data,spawnPos);
+    const spawnPitch=Number(data?.spawn?.pitch);
+    const initialPitch=Number.isFinite(spawnPitch)?spawnPitch:.12;
+    const initialView=chooseInitialPlayableView(data,spawnPos,initialPitch);
     player.x=initialView.spawnPos[0]; player.y=initialView.spawnPos[1]; player.z=initialView.spawnPos[2]; player.vy=0; player.onGround=true;
     initialVisibleFacing=initialView.facing;
-    yaw=initialVisibleFacing.yaw; player.yaw=yaw; const spawnPitch=Number(data?.spawn?.pitch); pitch=Number.isFinite(spawnPitch)?spawnPitch:.12; player.pitch=pitch;
+    yaw=initialVisibleFacing.yaw; player.yaw=yaw; pitch=initialPitch; player.pitch=pitch;
     switchPlayable();
     console.log('default-city visible facing',initialVisibleFacing);
     // notify playable runtime
