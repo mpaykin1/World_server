@@ -242,6 +242,19 @@
         "data/collective-brain/collective-brain-policy.json",
         "scripts/collective-brain-full.js"
       ]
+    },
+    "ArmorPaint Material Forge": {
+      "percent": 75,
+      "status": "integrated",
+      "evidence": [
+        "data/material-forge/armorpaint-world-server.json",
+        "lib/material-forge.js",
+        "scripts/material-forge.js",
+        "shared/graphics/material-forge-runtime.js",
+        "shared/material-forge-registry.json",
+        "test/material-forge.test.js"
+      ],
+      "note": "Authoring preset, strict provenance/hash/dimension importer, deterministic registry, adaptive UV/triplanar runtime binding and procedural fallback are integrated. No specific ArmorPaint-authored map set is credited until real exports pass exact-SHA browser/mobile Fleet evidence. ArmorPaint itself remains external and optional."
     }
   },
   "governanceCoveragePercent": 100,

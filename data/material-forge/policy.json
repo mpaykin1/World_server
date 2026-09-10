@@ -1,0 +1,113 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "WORLD_MATERIAL_FORGE",
+  "policy": "authored-pbr-with-provenance-budget-and-procedural-fallback",
+  "allowedSources": [
+    "ArmorPaint",
+    "WorldServerProcedural"
+  ],
+  "allowedMaterialClasses": [
+    "default",
+    "smooth",
+    "stone",
+    "earth",
+    "sand",
+    "snow",
+    "wood",
+    "vegetation",
+    "metal",
+    "brick",
+    "skin",
+    "face",
+    "scales",
+    "fur",
+    "bone",
+    "armor",
+    "weapon",
+    "fabric",
+    "emissive"
+  ],
+  "allowedMappings": [
+    "uv",
+    "triplanar"
+  ],
+  "runtimeRoot": "shared/materials",
+  "runtimeUriRoot": "/shared/materials/",
+  "allowedExtensions": [
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".ktx2"
+  ],
+  "maxRuntimeDimension": 4096,
+  "maxFileBytes": 8388608,
+  "maxMaterialBytes": 16777216,
+  "maxMapsPerMaterial": 20,
+  "requirePowerOfTwo": true,
+  "channels": {
+    "baseColor": {
+      "aliases": ["basecolor", "base_color", "albedo", "diffuse"],
+      "colorSpace": "srgb"
+    },
+    "normal": {
+      "aliases": ["normal", "normalgl", "normal_gl"],
+      "colorSpace": "linear"
+    },
+    "orm": {
+      "aliases": ["orm", "occlusionroughnessmetallic", "occlusion_roughness_metallic"],
+      "colorSpace": "linear",
+      "packing": {
+        "r": "occlusion",
+        "g": "roughness",
+        "b": "metallic"
+      }
+    },
+    "emissive": {
+      "aliases": ["emissive", "emission"],
+      "colorSpace": "srgb"
+    },
+    "height": {
+      "aliases": ["height", "displacement"],
+      "colorSpace": "linear"
+    }
+  },
+  "tiers": {
+    "SAFE": {
+      "maxDimension": 512,
+      "maxMaterialBytes": 1572864,
+      "channels": ["baseColor"],
+      "anisotropy": 1,
+      "scalarBlendScale": 0.55
+    },
+    "BALANCED": {
+      "maxDimension": 1024,
+      "maxMaterialBytes": 4194304,
+      "channels": ["baseColor", "orm"],
+      "anisotropy": 2,
+      "scalarBlendScale": 0.72
+    },
+    "HIGH": {
+      "maxDimension": 2048,
+      "maxMaterialBytes": 8388608,
+      "channels": ["baseColor", "normal", "orm", "emissive"],
+      "anisotropy": 4,
+      "scalarBlendScale": 0.88
+    },
+    "ULTRA": {
+      "maxDimension": 4096,
+      "maxMaterialBytes": 16777216,
+      "channels": ["baseColor", "normal", "orm", "emissive", "height"],
+      "anisotropy": 8,
+      "scalarBlendScale": 1.0
+    }
+  },
+  "guards": {
+    "remoteUrlsForbidden": true,
+    "pathTraversalForbidden": true,
+    "runtime16kForbidden": true,
+    "hashRequiredForFiles": true,
+    "armorPaintProjectProvenanceRequired": true,
+    "heightNeedsExplicitRuntimeOptIn": true,
+    "visualBaselineSelfApprovalForbidden": true
+  }
+}

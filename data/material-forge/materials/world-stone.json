@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "world-stone",
+  "displayName": "World Stone",
+  "source": {
+    "tool": "WorldServerProcedural",
+    "author": "World_server",
+    "license": "project-owned"
+  },
+  "materialClass": "stone",
+  "mapping": "triplanar",
+  "match": {
+    "semantics": ["stone", "brick", "earth", "sand", "snow"],
+    "worlds": ["*"]
+  },
+  "parameters": {
+    "roughness": 0.86,
+    "metalness": 0.02,
+    "normalStrength": 0.62,
+    "aoStrength": 0.76,
+    "emissiveIntensity": 0,
+    "tilingScale": 4.5,
+    "blend": 0.22
+  },
+  "maps": {},
+  "priority": 40
+}

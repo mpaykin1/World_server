@@ -1,7 +1,7 @@
 {
-  "schemaVersion": "4.0.0",
+  "schemaVersion": "4.1.0",
   "system": "WORLD_MATERIAL_SYNTHESIS",
-  "generatedAt": "2026-08-24T05:16:11.405Z",
+  "generatedAt": "2026-09-10T07:29:58.687Z",
   "source": "apps/ai3d-voxel-city/default-city.json",
   "profiles": 64,
   "proceduralOnly": true,
@@ -31,6 +31,16 @@
       "atlasScale": 1,
       "maxAnisotropy": 8
     }
+  },
+  "materialForge": {
+    "schemaVersion": "1.0.0",
+    "sourceHash": "6a9bcdc0e67d70b9eeaca6c51ad98b429efdd7767bd2136725d47356a396c681",
+    "registeredMaterials": 6,
+    "armorPaintMaterials": 0,
+    "verifiedAuthoredMapVariants": 0,
+    "adaptiveRuntimeBinder": true,
+    "proceduralFallback": true,
+    "runtime16kForbidden": true
   },
   "sample": [
     {

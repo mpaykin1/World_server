@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "world-natural",
+  "displayName": "World Natural",
+  "source": {
+    "tool": "WorldServerProcedural",
+    "author": "World_server",
+    "license": "project-owned"
+  },
+  "materialClass": "wood",
+  "mapping": "triplanar",
+  "match": {
+    "semantics": ["wood", "fabric", "vegetation"],
+    "worlds": ["*"]
+  },
+  "parameters": {
+    "roughness": 0.84,
+    "metalness": 0.01,
+    "normalStrength": 0.5,
+    "aoStrength": 0.7,
+    "emissiveIntensity": 0,
+    "tilingScale": 4.2,
+    "blend": 0.2
+  },
+  "maps": {},
+  "priority": 50
+}

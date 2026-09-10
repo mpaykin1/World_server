@@ -80,6 +80,7 @@
 - `README.md` — общий проект;
 - `AGENTS.md` — обязательные правила всех AI;
 - `WORK_IN_PROGRESS.md` — текущая работа/координация, если актуально;
+- `docs/ARMORPAINT_MATERIAL_FORGE.md` — канонический контур ArmorPaint → проверенный PBR-реестр → адаптивный runtime без зависимости сервера от редактора;
 - `docs/` — профильные стандарты;
 - `.github/workflows/` — реальные CI-гейты;
 - `apps/`, `shared/`, `lib/`, `api/` — production/runtime код.

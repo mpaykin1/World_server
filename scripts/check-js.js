@@ -17,6 +17,9 @@ for (const entry of fs.readdirSync(path.join(root, 'apps'), { withFileTypes: tru
   const client = `apps/${entry.name}/client.js`;
   if (fs.existsSync(path.join(root, client))) modules.push(client);
 }
+for (const entry of fs.readdirSync(path.join(root, 'shared', 'graphics'), { withFileTypes: true })) {
+  if (entry.isFile() && entry.name.endsWith('.js')) modules.push(`shared/graphics/${entry.name}`);
+}
 
 for (const file of files) {
   const result = spawnSync(process.execPath, ['--check', path.join(root, file)], { encoding: 'utf8' });

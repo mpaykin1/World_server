@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "world-metal",
+  "displayName": "World Metal",
+  "source": {
+    "tool": "WorldServerProcedural",
+    "author": "World_server",
+    "license": "project-owned"
+  },
+  "materialClass": "metal",
+  "mapping": "triplanar",
+  "match": {
+    "semantics": ["metal", "armor", "weapon"],
+    "worlds": ["*"]
+  },
+  "parameters": {
+    "roughness": 0.43,
+    "metalness": 0.76,
+    "normalStrength": 0.42,
+    "aoStrength": 0.68,
+    "emissiveIntensity": 0,
+    "tilingScale": 3.2,
+    "blend": 0.24
+  },
+  "maps": {},
+  "priority": 60
+}

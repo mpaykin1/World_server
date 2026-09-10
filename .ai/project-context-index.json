@@ -13,7 +13,10 @@
     ".ai/vno-scoring.json",
     ".ai/science-governance.json",
     "data/vno-gameplay-systems.json",
-    "docs/SCIENCE_GAMEPLAY_STANDARD.md"
+    "docs/SCIENCE_GAMEPLAY_STANDARD.md",
+    "docs/ARMORPAINT_MATERIAL_FORGE.md",
+    "data/material-forge/policy.json",
+    "shared/material-forge-registry.json"
   ],
   "concepts": {
     "vno": {
@@ -39,6 +42,24 @@
         ".ai/vno-scoring.json",
         ".ai/science-governance.json",
         "data/vno-gameplay-systems.json"
+      ]
+    },
+    "materialForge": {
+      "displayName": "ArmorPaint Material Forge",
+      "canonicalFile": "docs/ARMORPAINT_MATERIAL_FORGE.md",
+      "aliases": [
+        "ArmorPaint",
+        "Material Forge",
+        "PBR materials",
+        "PBR textures",
+        "материалы",
+        "текстуры",
+        "microdetail"
+      ],
+      "machineFiles": [
+        "data/material-forge/policy.json",
+        "data/material-forge/armorpaint-world-server.json",
+        "shared/material-forge-registry.json"
       ]
     },
     "chatgptGameControl": {

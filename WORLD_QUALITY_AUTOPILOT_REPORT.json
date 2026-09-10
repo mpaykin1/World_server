@@ -1,7 +1,7 @@
 {
   "schemaVersion": "4.0.0",
   "system": "WORLD_QUALITY_AUTOPILOT",
-  "generatedAt": "2026-08-24T05:16:11.824Z",
+  "generatedAt": "2026-09-10T07:29:59.058Z",
   "readinessPercent": 100,
   "domainPercent": {
     "detail": 100,
@@ -96,6 +96,16 @@
         "id": "procedural-pbr-synthesizer",
         "ok": true,
         "weight": 14
+      },
+      {
+        "id": "authored-pbr-material-forge",
+        "ok": true,
+        "weight": 10
+      },
+      {
+        "id": "armorpaint-provenance-budget-guards",
+        "ok": true,
+        "weight": 8
       },
       {
         "id": "texture-budgeting",
@@ -207,6 +217,11 @@
         "weight": 8
       },
       {
+        "id": "adaptive-authored-material-budget",
+        "ok": true,
+        "weight": 8
+      },
+      {
         "id": "greedy-meshing",
         "ok": true,
         "weight": 8
@@ -247,6 +262,11 @@
         "id": "material-synthesis-automation",
         "ok": true,
         "weight": 8
+      },
+      {
+        "id": "material-forge-drift-check",
+        "ok": true,
+        "weight": 7
       },
       {
         "id": "visibility-automation",

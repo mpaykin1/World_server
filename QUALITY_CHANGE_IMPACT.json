@@ -1,22 +1,17 @@
 {
-  "generatedAt": "2026-08-24T05:16:02.048Z",
+  "generatedAt": "2026-09-10T07:31:26.025Z",
   "changed": [
-    ".github/workflows/ci.yml",
-    ".github/workflows/quality-regression.yml",
-    ".github/workflows/world-quality-autopilot.yml",
-    "AI_VISUAL_CRITIC_REPORT.json",
+    ".ai/project-context-index.json",
+    "AI_START_HERE.md",
     "DESKTOP_AI_PROTOCOL_REPORT.json",
     "DUPLICATE_SYSTEM_REPORT.json",
     "EVIDENCE_QUALITY_REPORT.json",
     "PROJECT_QUALITY_REVIEW.json",
     "QUALITY_CHANGE_IMPACT.json",
-    "QUALITY_COST_DECISION.json",
     "QUALITY_IMPACT_GRAPH.json",
     "QUALITY_ISSUE_CANDIDATES.json",
     "QUALITY_REGRESSION_REPORT.json",
     "QUALITY_REPORT.json",
-    "QUALITY_RISK_PREDICTION.json",
-    "QUALITY_ROOT_CAUSE_GRAPH.json",
     "SYSTEM_CONTRACT_REPORT.json",
     "TECHNOLOGY_AUDIT.json",
     "TECHNOLOGY_ORCHESTRATOR_REPORT.json",
@@ -29,6 +24,7 @@
     "WORLD_DEVICE_PROFILE_MATRIX.json",
     "WORLD_FEEDBACK_LEARNER_REPORT.json",
     "WORLD_MATERIAL_SYNTHESIS_REPORT.json",
+    "WORLD_MICRODETAIL_REPORT.json",
     "WORLD_QUALITY_AUTOPILOT_PLAN.json",
     "WORLD_QUALITY_AUTOPILOT_REPORT.json",
     "WORLD_QUALITY_AUTOPILOT_STATUS.json",
@@ -39,66 +35,79 @@
     "WORLD_SEMANTIC_DETAIL_REPORT.json",
     "WORLD_VISIBILITY_OPTIMIZER_REPORT.json",
     "WORLD_VISUAL_BASELINE_CANDIDATES.json",
-    "api/ai3d-voxel-generate.js",
-    "apps/ai3d-voxel-city/client.js",
-    "apps/ai3d-voxel-city/index.html",
-    "apps/voxel-world/client.js",
-    "apps/voxel-world/index.html",
-    "data/visual-baselines.json",
-    "data/world-animation-runtime-evidence.json",
+    "apps/catalog/index.html",
+    "apps/survival/index.html",
+    "apps/world-sharabass/index.html",
+    "data/golden-components.json",
+    "data/material-forge/armorpaint-world-server.json",
+    "data/material-forge/materials/world-default.json",
+    "data/material-forge/materials/world-emissive.json",
+    "data/material-forge/materials/world-metal.json",
+    "data/material-forge/materials/world-natural.json",
+    "data/material-forge/materials/world-organic.json",
+    "data/material-forge/materials/world-stone.json",
+    "data/material-forge/policy.json",
+    "data/system-contracts.json",
+    "data/technology-registry.json",
     "data/world-quality-autopilot.json",
-    "docs/DESKTOP_AI_WORLD_QUALITY_AUTOPILOT_V4.md",
-    "docs/WORLD_QUALITY_AUTOPILOT.md",
-    "docs/wip-history/WORLD_SERVER_PRE_WORLD_QUALITY_AUTOPILOT_V4.md",
-    "lib/world-quality-material-profiler.js",
-    "lib/world-quality-pbr-synthesizer.js",
-    "lib/world-quality-semantic-detail.js",
-    "lib/world-quality-voxel-enhancer.js",
+    "docs/ARMORPAINT_MATERIAL_FORGE.md",
+    "e2e/material-forge.spec.js",
+    "lib/material-forge.js",
     "package.json",
-    "scripts/world-animation-semantic-validator.js",
-    "scripts/world-candidate-lab.js",
-    "scripts/world-detail-planner.js",
-    "scripts/world-device-profile-matrix.js",
-    "scripts/world-feedback-learner.js",
+    "scripts/check-golden-standard.js",
+    "scripts/check-js.js",
+    "scripts/material-forge.js",
+    "scripts/system-contract-review.js",
     "scripts/world-material-synthesis.js",
     "scripts/world-quality-analyzer.js",
     "scripts/world-quality-autopilot.js",
-    "scripts/world-quality-evidence-ledger.js",
-    "scripts/world-quality-scheduler.js",
-    "scripts/world-retarget-contract.js",
-    "scripts/world-runtime-quality-profiler.js",
-    "scripts/world-semantic-detail-indexer.js",
-    "scripts/world-visibility-optimizer.js",
-    "scripts/world-visual-baseline-candidates.js",
-    "scripts/world-visual-baseline-promote.js",
-    "services/ai3d-worker/ai3d/plugins/world_quality.py",
-    "services/ai3d-worker/ai3d/runner.py",
-    "shared/world-quality-autopilot.js",
-    "test/world-quality-autopilot.test.js"
+    "shared/graphics/material-forge-runtime.js",
+    "shared/graphics/universal-voxel-microdetail-bootstrap.js",
+    "shared/material-forge-registry.json",
+    "test/material-forge.test.js"
   ],
   "affectedApps": [
     "ai3d-voxel-city",
-    "voxel-world"
+    "catalog",
+    "survival",
+    "voxel-world",
+    "world-sharabass"
   ],
   "why": [
     {
-      "from": "apps/ai3d-voxel-city/client.js",
-      "to": "app:ai3d-voxel-city"
+      "from": "apps/catalog/index.html",
+      "to": "app:catalog"
     },
     {
-      "from": "apps/ai3d-voxel-city/index.html",
-      "to": "app:ai3d-voxel-city"
+      "from": "apps/survival/index.html",
+      "to": "app:survival"
     },
     {
-      "from": "apps/voxel-world/client.js",
+      "from": "apps/world-sharabass/index.html",
+      "to": "app:world-sharabass"
+    },
+    {
+      "from": "shared/graphics/material-forge-runtime.js",
       "to": "app:voxel-world"
     },
     {
-      "from": "apps/voxel-world/index.html",
-      "to": "app:voxel-world"
+      "from": "shared/graphics/material-forge-runtime.js",
+      "to": "app:ai3d-voxel-city"
     },
     {
-      "from": "shared/world-quality-autopilot.js",
+      "from": "shared/graphics/material-forge-runtime.js",
+      "to": "app:survival"
+    },
+    {
+      "from": "shared/graphics/material-forge-runtime.js",
+      "to": "app:catalog"
+    },
+    {
+      "from": "shared/graphics/material-forge-runtime.js",
+      "to": "app:world-sharabass"
+    },
+    {
+      "from": "shared/graphics/universal-voxel-microdetail-bootstrap.js",
       "to": "apps/ai3d-voxel-city/index.html"
     },
     {
@@ -106,12 +115,76 @@
       "to": "app:ai3d-voxel-city"
     },
     {
-      "from": "shared/world-quality-autopilot.js",
+      "from": "shared/graphics/universal-voxel-microdetail-bootstrap.js",
+      "to": "apps/catalog/index.html"
+    },
+    {
+      "from": "apps/catalog/index.html",
+      "to": "app:catalog"
+    },
+    {
+      "from": "shared/graphics/universal-voxel-microdetail-bootstrap.js",
+      "to": "apps/survival/index.html"
+    },
+    {
+      "from": "apps/survival/index.html",
+      "to": "app:survival"
+    },
+    {
+      "from": "shared/graphics/universal-voxel-microdetail-bootstrap.js",
       "to": "apps/voxel-world/index.html"
     },
     {
       "from": "apps/voxel-world/index.html",
       "to": "app:voxel-world"
+    },
+    {
+      "from": "shared/graphics/universal-voxel-microdetail-bootstrap.js",
+      "to": "apps/world-sharabass/index.html"
+    },
+    {
+      "from": "apps/world-sharabass/index.html",
+      "to": "app:world-sharabass"
+    },
+    {
+      "from": "shared/graphics/universal-voxel-microdetail-bootstrap.js",
+      "to": "app:voxel-world"
+    },
+    {
+      "from": "shared/graphics/universal-voxel-microdetail-bootstrap.js",
+      "to": "app:ai3d-voxel-city"
+    },
+    {
+      "from": "shared/graphics/universal-voxel-microdetail-bootstrap.js",
+      "to": "app:survival"
+    },
+    {
+      "from": "shared/graphics/universal-voxel-microdetail-bootstrap.js",
+      "to": "app:catalog"
+    },
+    {
+      "from": "shared/graphics/universal-voxel-microdetail-bootstrap.js",
+      "to": "app:world-sharabass"
+    },
+    {
+      "from": "shared/material-forge-registry.json",
+      "to": "app:voxel-world"
+    },
+    {
+      "from": "shared/material-forge-registry.json",
+      "to": "app:ai3d-voxel-city"
+    },
+    {
+      "from": "shared/material-forge-registry.json",
+      "to": "app:survival"
+    },
+    {
+      "from": "shared/material-forge-registry.json",
+      "to": "app:catalog"
+    },
+    {
+      "from": "shared/material-forge-registry.json",
+      "to": "app:world-sharabass"
     }
   ]
 }

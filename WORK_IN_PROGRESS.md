@@ -1,4 +1,70 @@
-# WORK IN PROGRESS — Scoped Task Compiler, resource scheduler, real native Godot pipeline
+# WORK IN PROGRESS — ArmorPaint Material Forge
+
+## Task
+Integrate ArmorPaint as an optional, production-safe PBR authoring source for World_server without embedding a second renderer or forcing heavy texture downloads on players. Extend the existing World Quality V4 material and universal microdetail systems with one canonical manifest/registry, deterministic import validation, adaptive runtime binding, and automation-ready checks.
+
+## Why
+ArmorPaint can supply authored base-color, normal, ORM and emissive maps for terrain, architecture, creatures, armor and weapons. The useful integration boundary is exported material data, not the full editor in the gameplay client. The server needs strict budgets, provenance, mobile degradation and shared-world reuse before these assets are safe.
+
+## Current state
+Branch `ai/codex/armorpaint-material-forge` was created from clean `origin/master` at `ca9d13eb987dcfd0afb8f9dcab66abdb89ef3b63`. World Quality V4 already synthesizes procedural PBR profiles and Universal Voxel Microdetail already patches the two certified voxel renderers. There is no canonical authored-material manifest, ArmorPaint importer, checked registry, texture path/dimension/hash validation or shared runtime map binder yet. Manual Fast Lane PR #91 remains separately owned and nonterminal; this branch must not touch its camera/framing scope.
+
+## Target state
+One additive Material Forge accepts ArmorPaint-style exports, rejects traversal/remote/unbounded/16K runtime assets, verifies provenance and hashes, compiles a deterministic browser registry, selects SAFE/BALANCED/HIGH/ULTRA material variants, binds PBR channels to existing Three.js materials, preserves procedural fallback, and becomes discoverable to the existing hourly Architect/Builder/Fleet/Ocean pipeline without creating a new automation.
+
+## Files / systems involved
+`lib/material-forge.js`, `scripts/material-forge.js`, `shared/graphics/material-forge-runtime.js`, `shared/graphics/universal-voxel-microdetail-bootstrap.js`, `data/material-forge/`, generated shared registry, package scripts, World Quality policy, Golden/technology registries, focused tests, documentation and this WIP evidence.
+
+## Known risks
+- Authored textures can increase download size, GPU memory and draw cost, especially on phones.
+- Untrusted paths or remote URLs could bypass repository provenance or leak requests.
+- Applying maps to UV-less voxel geometry can render incorrectly; triplanar/procedural fallback must remain.
+- ORM channel packing and color-space errors can silently produce wrong materials.
+- Material tuning must not change PR #91 camera/framing behavior or self-approve visual baselines.
+
+## Golden systems that must be preserved
+Existing renderer, procedural PBR synthesis, Universal Voxel Microdetail, adaptive World Quality tiers, deny-by-default releases, compact UI, controls/physics, exact orthographic presentation, accepted visual baselines and all release gates.
+
+## Errors that must not return
+16K runtime maps, path traversal, arbitrary remote texture URLs, missing provenance, unverified hashes, unsafe auto-publication, texture use above device budgets, visual-baseline self-approval, duplicate renderers/material systems and mandatory GPU/ArmorPaint dependencies at runtime.
+
+## Exact patch / change plan
+1. Define and validate a versioned ArmorPaint-compatible material manifest and canonical registry.
+2. Add a deterministic import/check/compile CLI with file hashing, PNG dimension checks, channel conventions and strict web budgets.
+3. Add an adaptive Three.js runtime binder with procedural fallback and same-origin map loading.
+4. Connect the binder to Universal Voxel Microdetail and existing World Quality tier changes.
+5. Register the reusable capability and add focused regression, drift and safety tests.
+6. Run focused checks, full repository gates, diff review, commit, push and open a protected PR.
+7. Extend the existing Architect/Builder/Fleet/Ocean hourly prompts after implementation evidence exists; never create a fifth worker.
+
+## Tests to run
+Focused Material Forge tests; deterministic registry drift check; `npm run check:fast`; `npm run check`; `npm run golden:check`; `npm run desktop-ai:check`; `npm run quality:diff`; affected browser smoke where feasible; full `npm run release:gate`; `git diff --check`.
+
+## Deployment / PR plan
+Commit and push `ai/codex/armorpaint-material-forge`, then open a PR into protected `master`. Do not direct-push master, merge, deploy or claim live integration from this implementation branch. The existing pipeline can integrate only after Fleet PRE verifies the exact head and the nonterminal Manual Fast Lane no longer blocks it.
+
+## Current progress
+Implementation is complete on the isolated branch. Material Forge now has a strict ArmorPaint export preset/importer, deterministic six-recipe registry, SAFE/BALANCED/HIGH/ULTRA budgets, same-origin/path/hash/dimension guards, adaptive UV/triplanar Three.js binding and procedural fallback. The shared bootstrap is adopted by `voxel-world`, `ai3d-voxel-city`, `survival`, `catalog` and `world-sharabass`. Runtime hardening also cancels stale texture loads and restores the original shader hook when a tier loses its authored-map plan.
+
+## Next action
+Repeat the final gate after runtime hardening, review the exact diff, commit/push the branch, open the protected PR and extend the existing four hourly automation prompts. Fleet browser/mobile evidence remains mandatory before any authored visual baseline can be promoted.
+
+## Completion criteria
+Focused and repository gates pass; registry compilation is deterministic; unsafe/oversized inputs fail closed; browser runtime preserves procedural fallback and device ceilings; exact evidence is recorded; PR is open; existing hourly prompts are updated with bounded Material Forge responsibilities.
+
+## Final evidence
+- Focused Material Forge/runtime/import/security/discovery suite: 9 pass, 0 fail.
+- Combined Material Forge + World Quality + microdetail suite before the final hardening tests: 33 pass, 0 fail.
+- `npm run material-forge:check`: PASS; 6 deterministic recipes; source hash prefix `6a9bcdc0e67d`; 0 credited ArmorPaint map sets until real exports exist.
+- Final `npm run check` inside the post-hardening gate: PASS; 606 tests, 602 pass, 0 fail, 4 intentional skips.
+- `npm run golden:check`, `npm run contracts:check`, `npm run tech:audit`, `npm run quality:world:materials`, `npm run quality:diff`: PASS.
+- Final post-hardening `npm run release:gate`: PASS through protocol, full tests, Golden, no-regression, fuzz, impact, perceptual, technology, duplicate, contracts, project, stability, evidence, World Quality and Collective Brain gates.
+- Local static HTTP smoke returned 200 for the registry, runtime and five adopted worlds. Local Playwright browser evidence is unavailable because the Playwright CDN returned 502/timeouts; `e2e/material-forge.spec.js` carries desktop/mobile procedural and real WebGL authored-triplanar shader checks for CI/Fleet.
+- PR, exact head SHA and hourly automation updates: pending.
+
+---
+
+# Previous work — Scoped Task Compiler, resource scheduler, real native Godot pipeline
 
 ---
 

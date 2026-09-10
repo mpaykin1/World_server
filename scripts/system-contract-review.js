@@ -15,6 +15,7 @@ for(const [system,contract] of Object.entries(c.contracts||{})){
   if(system==='ui') ok=h.includes('/shared/golden-ui-shell.js');
   if(system==='collision') ok=h.includes('/shared/golden-physics.js');
   if(system==='input') ok=h.includes('/shared/golden-physics.js')||h.includes('/shared/ai3d-playable-runtime.js');
+  if(system==='materials') ok=h.includes('/shared/graphics/universal-voxel-microdetail-bootstrap.js');
   adoption[system].apps[id]=ok;
   if(!ok)findings.push({severity:'blocker',system,app:id,reason:'canonical system not adopted'});
  }
