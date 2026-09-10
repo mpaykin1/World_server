@@ -47,7 +47,7 @@ async function captureRenderedPixelEvidence(page){
         if(y+1<sample.height){neighborPairs++;if(colorDistance(i,i+sample.width*4)>=32)strongEdgePairs++;}
       }
       const strongEdgeRatio=strongEdgePairs/Math.max(1,neighborPairs);
-      const compositionPass=unique.size>=8&&opaque/(sample.width*sample.height)>=.9&&strongEdgeRatio>=.13;
+      const compositionPass=unique.size>=8&&opaque/(sample.width*sample.height)>=.9&&strongEdgeRatio>=.14;
       return {
         source:'playwright-rendered-canvas-screenshot',
         correlation:'same-loaded-state-immediately-before-screenshot-assertion',
@@ -60,7 +60,7 @@ async function captureRenderedPixelEvidence(page){
           strongEdgePairs,
           neighborPairs,
           strongEdgeRatio:Number(strongEdgeRatio.toFixed(4)),
-          minimumStrongEdgeRatio:.13,
+          minimumStrongEdgeRatio:.14,
           pass:compositionPass,
           classification:compositionPass?'PIXEL_COMPOSITION_ARTICULATED':'VISIBLE_BUT_LOW_DEPTH_ARTICULATION'
         }
