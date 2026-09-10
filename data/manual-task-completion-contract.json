@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0",
+  "name": "Manual Task Completion Contract",
+  "deliveryBeforeExpansion": true,
+  "previewFirst": true,
+  "finishModeThreshold": 0.7,
+  "deliveryReserveFraction": 0.3,
+  "linkRequiredEvidence": ["commit", "pushed", "previewUrl", "browserVerified"],
+  "finishModeAllowedWork": ["blocker-fix", "regression-fix", "test", "commit", "push", "deploy-preview", "browser-verify", "handoff"],
+  "finishModeForbiddenWork": ["scope-expansion", "optional-refactor", "new-unrequested-feature", "cosmetic-polish-before-preview"],
+  "defectSeverity": {
+    "BLOCKER": "must-fix-before-preview",
+    "COSMETIC": "may-preview-and-fix-next-revision"
+  },
+  "terminalStates": ["LIVE_VERIFIED", "PREVIEW_VERIFIED", "USER_ACTION_REQUIRED", "OBJECTIVE_BLOCKED"]
+}

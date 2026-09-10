@@ -14,6 +14,7 @@ document.body.prepend(renderer.domElement);
 
 scene.add(new THREE.HemisphereLight(0xd7edff,0x46532e,1.2));
 const sun = new THREE.DirectionalLight(0xffffff,2.1); sun.position.set(40,90,30); sun.castShadow=true; scene.add(sun);
+window.GoldenPaintingAtmosphere?.registerThree({THREE,scene,renderer,getCamera:()=>camera,worldId:'survival'});
 
 const groundMat = new THREE.MeshStandardMaterial({color:0x49633a, roughness:.95});
 const ground = new THREE.Mesh(new THREE.PlaneGeometry(3000,3000,80,80), groundMat); ground.rotation.x=-Math.PI/2; ground.receiveShadow=true; scene.add(ground);

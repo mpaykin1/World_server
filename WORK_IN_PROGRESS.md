@@ -745,3 +745,12 @@ Implementation and local verification complete. Remaining proof is GitHub Action
 - Completion: focused/full checks -> PR -> required green checks -> merge -> exactly one Vercel preview -> browser smoke.
 - Evidence: api/*.js reduced 14 -> 11; focused Vercel limit tests 3/3 PASS; JS syntax, agent rules and Golden Standard PASS.
 - Remaining: cloud CI, merge, one Vercel preview and browser smoke.
+
+
+## Manual task — Golden Painting + delivery contract (2026-09-09)
+- Owner: ChatGPT manual fast lane.
+- Branch: `ai/golden-painting-day-night-20260909` in system Temp; canonical dirty Desktop checkout untouched.
+- Scope: Golden Painting atmospheric perspective + 60s day / 60s sunset / 10s night / 60s sunrise across compatible worlds; add Manual Task Completion Contract.
+- Delivery requirement: exact commit + pushed branch + test Preview URL + real-browser verification before PASS.
+- Current mode: FINISH MODE. No optional scope expansion before verified Preview.
+- Remaining gate: focused/full checks -> commit -> push -> Preview deploy -> browser verify exact URL -> handoff URL.

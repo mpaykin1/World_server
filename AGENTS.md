@@ -202,3 +202,18 @@ This rule applies to **every current and future AI agent** and to every task tha
 - Non-scientific work must not damage provenance, reproducibility, independent verification, logging, isolation, or future falsification capability.
 
 **Permanent rule:** do not optimize for making our discoveries look correct. Optimize for making them difficult to reproduce incorrectly, impossible to self-certify, and easy to falsify if they are wrong.
+
+
+## 20. MANUAL TASK COMPLETION CONTRACT — DELIVERY BEFORE EXPANSION
+
+For any manual ChatGPT/AI task where the user asks for a testable artifact or link, implementation is not completion. The task remains nonterminal until delivery evidence exists.
+
+- **Preview-first:** after minimum acceptance passes, commit + push + create a Preview before optional polishing.
+- **Finish Mode at 70%:** freeze scope. The final 30% of work budget is reserved for blocker/regression fixes, tests, commit, push, preview deployment, browser verification and handoff.
+- In Finish Mode, do not start optional refactors, new unrequested features, scope expansion or cosmetic polish before a verified Preview exists.
+- `BLOCKER` defects must be fixed before Preview acceptance. `COSMETIC` defects may remain on a test Preview and be fixed in a later revision.
+- A task that requires a link cannot report PASS without exact commit, confirmed push, Preview URL and real-browser verification of that URL.
+- If interrupted before those checkpoints, persist the exact nonterminal next action and resume it before selecting new work.
+- Treat `implemented/tested but no usable URL` as a pipeline regression, not as task completion.
+
+Canonical machine-readable policy: `data/manual-task-completion-contract.json`; runtime gate: `lib/manual-task-completion-contract.js`.
