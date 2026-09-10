@@ -52,7 +52,7 @@ Implementation and security hardening are complete. The canonical projection now
 Initial peer review found three medium issues: unauthenticated inventory scope, allow-by-default future external entries and reflected proxy Host values. It also found three low issues: local XML MIME, 40 px passport links without the shared focus rule and environment-dependent exports. All six were corrected. Follow-up read-only review confirmed zero remaining high/medium findings and 11/11 focused tests plus an environment-override drift check passed.
 
 ## Next action
-Commit the verified feature branch, push it and open a review PR without merging or deploying.
+Wait for protected PR checks and human review. Do not merge or deploy automatically; inbound Webmention/IndieAuth remain a separately gated follow-up.
 
 ## Completion criteria
 All focused tests pass; default API behavior remains byte-shape compatible; only certified internal worlds and already-live external worlds appear in public IndieWorlds discovery; static exports cannot drift; Golden UI remains compact; peer review has no unresolved high-severity finding; PR is open with honest baseline blockers and evidence.
@@ -71,7 +71,8 @@ All focused tests pass; default API behavior remains byte-shape compatible; only
 - Final `npm run release:gate`: PASS. Full Node suite: 608 tests, 604 pass, 0 fail, 4 intentionally skipped; fuzz, Golden, governance, regression, perceptual, technology, duplicate, contract, project-review, stability, evidence, world-quality and Collective Brain security gates all passed. Non-blocking Collective Brain checkpoint sync reported `DEGRADED sync=queued`, as designed for unavailable external memory.
 - `npm run quality:diff`: PASS; no accepted metric regressed. Current overall governance is 98%, evidence score 95.5%, world-quality readiness 100%.
 - `npm run collective-brain:doctor`: PASS with expected optional local services unavailable in this managed Linux environment; benchmark PASS (26 ms); replay PASS (88 events).
-- PR evidence: pending branch push and PR creation.
+- Remote implementation commit: `390a2f46a619d6dbdcb1aa20771403deaf71c936`.
+- Review PR: https://github.com/mpaykin1/World_server/pull/96 (open against `master`; no merge or deployment performed).
 
 ---
 
