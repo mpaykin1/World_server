@@ -149,6 +149,18 @@
         ],
         "previewVideo": "/shared/world-previews/dark-void-navigator-live.webm"
       }
+    },
+    "creature-editor-world": {
+      "title": "Лаборатория существ",
+      "visible": false,
+      "status": "experimental",
+      "kind": "world-tool",
+      "reason": "Standalone procedural creature editor world; direct public route is release-tested independently of movement-game certification.",
+      "worldMenu": {
+        "show": true,
+        "familyId": "creature-editor-world",
+        "connections": []
+      }
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",

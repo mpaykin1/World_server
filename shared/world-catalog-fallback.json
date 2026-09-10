@@ -89,6 +89,20 @@
       }
     },
     {
+      "id": "creature-editor-world",
+      "title": "Лаборатория существ",
+      "url": "/apps/creature-editor-world/",
+      "status": "experimental",
+      "kind": "world-tool",
+      "external": false,
+      "available": true,
+      "worldMenu": {
+        "show": true,
+        "familyId": "creature-editor-world",
+        "connections": []
+      }
+    },
+    {
       "id": "dark-void-navigator-live",
       "title": "Dark Void Navigator",
       "url": "https://dark-void-navigator.vercel.app/",
