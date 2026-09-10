@@ -4,6 +4,7 @@
   if (window.WorldCapabilities?.version) return;
 
   const pathname = location.pathname.toLowerCase();
+  const forcedWorldId = (document.documentElement.dataset.capabilityWorld || new URLSearchParams(location.search).get('world') || '').toLowerCase();
   const profiles = [
     { match: '/apps/voxel-world/', id: 'voxel-world', fog: 0.08, precip: 'rain', motes: 'voxel', wind: 0.34, events: ['gust', 'rain', 'lightning', 'impact'] },
     { match: '/apps/ai3d-voxel-city/', id: 'ai3d-voxel-city', fog: 0.11, precip: 'dust', motes: 'debris', wind: 0.48, events: ['gust', 'tornado', 'impact', 'rain'] },
@@ -13,7 +14,18 @@
     { match: '/apps/benchmark-convergence-world/', id: 'benchmark-convergence-world', fog: 0.07, precip: 'motes', motes: 'spark', wind: 0.30, space: true, events: ['tornado', 'wave', 'impact', 'lens', 'orbit', 'rain', 'gust', 'lightning'] }
   ];
 
-  let profile = profiles.find(item => pathname.includes(item.match));
+  const gatewayProfiles = {
+    'dark-void-navigator-live': { id:'dark-void-navigator-live', fog:.03, precip:'stars', motes:'star', wind:.04, space:true, events:['lens','orbit','pulse'], signature:'lens' },
+    'improve-world-home-live': { id:'improve-world-home-live', fog:.06, precip:'motes', motes:'spark', wind:.22, events:['gust','rain','pulse'], signature:'rain' },
+    'improve-world-experiment-100': { id:'improve-world-experiment-100', fog:.08, precip:'motes', motes:'spark', wind:.30, events:['lightning','wave','impact'], signature:'lightning' },
+    'voxel-gothic-steampunk-world': { id:'voxel-gothic-steampunk-world', fog:.13, precip:'dust', motes:'ember', wind:.44, events:['gust','rain','lightning'], signature:'gust' },
+    'gothic-voxel-city-atlas-v3-mobile-final': { id:'gothic-voxel-city-atlas-v3-mobile-final', fog:.12, precip:'rain', motes:'debris', wind:.34, events:['rain','gust','impact'], signature:'rain' },
+    'voxel-gothic-steampunk-mobile-repaired': { id:'voxel-gothic-steampunk-mobile-repaired', fog:.10, precip:'dust', motes:'ember', wind:.40, events:['gust','rain','impact'], signature:'gust' },
+    'world-server-codex-voxel-v3': { id:'world-server-codex-voxel-v3', fog:.08, precip:'rain', motes:'voxel', wind:.30, events:['rain','gust','impact'], signature:'rain' },
+    'world-server-catalog-live': { id:'world-server-catalog-live', fog:.05, precip:'motes', motes:'spark', wind:.18, events:['orbit','pulse','gust'], signature:'orbit' }
+  };
+  let profile = profiles.find(item => pathname.includes(item.match)) || gatewayProfiles[forcedWorldId];
+  if (!profile && forcedWorldId) profile = { id:forcedWorldId, fog:.07, precip:'motes', motes:'spark', wind:.24, events:['rain','gust','pulse'], signature:'rain' };
   if (!profile) return;
 
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -293,6 +305,12 @@
     setProfile(next) { if (next && typeof next === 'object') profile = { ...profile, ...next }; },
     getStats() { return { fps: Math.round(state.fps), particles: state.particles.length, budget, tier, event: state.event?.type || null, world: profile.id }; }
   };
+
+  if (!reducedMotion) {
+    setTimeout(() => {
+      if (!state.event) trigger(profile.signature || profile.events?.[0] || 'rain', { duration: 4200, power: .72 });
+    }, 1400);
+  }
 
   window.addEventListener('world-impact', event => {
     const detail = event.detail || {};

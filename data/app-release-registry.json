@@ -182,6 +182,13 @@
           }
         ]
       }
+    },
+    "world-gateway": {
+      "title": "World Capability Gateway",
+      "visible": false,
+      "status": "system",
+      "kind": "bridge",
+      "reason": "Canonical wrapper for external worlds so shared Golden capabilities and live-link guards stay player-visible."
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",

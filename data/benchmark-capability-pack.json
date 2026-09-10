@@ -2,6 +2,7 @@
   "schemaVersion": "1.0.0",
   "source": "AI Benchmark Pack.zip",
   "strategy": "Extract reusable mechanics and algorithms; do not vendor benchmark dist/node_modules artifacts.",
+  "goldenCoverage": "Every reusable technology must produce a player-visible effect in every world through a direct adapter or the canonical world gateway within 60 seconds.",
   "capabilities": [
     {"id":"procedural-chunks","reference":"DeepSeek V4 Flash 0731 / 02_minecraft_clone","ideas":["seeded terrain","chunk rebuild queue","mesh batching"],"targets":["voxel-world","ai3d-voxel-city","benchmark-convergence-world"]},
     {"id":"wind-tornado-damage","reference":"DeepSeek V4 Flash 0731 / 04_tornado_simulator","ideas":["wind field","particle pooling","distance-weighted force","damage events"],"targets":["ai3d-voxel-city","survival","benchmark-convergence-world"]},
@@ -12,6 +13,6 @@
     {"id":"solar-orbits","reference":"Claude Opus 5 / solar-system-3d Medium","ideas":["multi-speed orbital motion","star field","scale-aware celestial markers"],"targets":["dark-void-scene","benchmark-convergence-world"]},
     {"id":"forest-instancing-atmosphere","reference":"Claude Opus 5 / forest-fps Default","ideas":["instanced vegetation","fog depth","impact particles","ambient audio hooks"],"targets":["survival","benchmark-convergence-world"]},
     {"id":"weather-day-night","reference":"Claude Fable 5.1 + Qwen 3.8 Flash / Terraria tasks","ideas":["rain/snow modes","day-night state","terrain/weather coupling"],"targets":["voxel-world","survival","world-sharabass","benchmark-convergence-world"]},
-    {"id":"adaptive-runtime-budget","reference":"synthesis across benchmark implementations","ideas":["device-tier particle budget","frame-time adaptation","reduced-motion support","no vendored runtime dependencies"],"targets":["all-internal-worlds"]}
+    {"id":"adaptive-runtime-budget","reference":"synthesis across benchmark implementations","ideas":["device-tier particle budget","frame-time adaptation","reduced-motion support","no vendored runtime dependencies"],"targets":["all-worlds-direct-or-gateway"]}
   ]
 }

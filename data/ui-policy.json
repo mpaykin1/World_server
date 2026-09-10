@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "2.0.0",
+  "schemaVersion": "3.0.0",
   "system": "GOLDEN_UI_POLICY",
   "mode": "release-blocking",
   "rules": {
@@ -30,7 +30,13 @@
     "worldPreviewMaxBytes": 100000,
     "worldPreviewLazyLoad": true,
     "worldLoreReadingLevel": "age-5-simple",
-    "worldConnectionsMenu": true
+    "worldConnectionsMenu": true,
+    "newTechnologyVisibleInAllWorlds": true,
+    "newTechnologyVisibleWithinSeconds": 60,
+    "worldTechnologyCoverageMode": "every-world-direct-or-canonical-gateway",
+    "stableCanonicalUserLinksOnly": true,
+    "verifyUserLinkImmediatelyBeforeDelivery": true,
+    "ephemeralPreviewLinksCanBeFinal": false
   },
   "knownSystemPanels": {
     "catalog": [
