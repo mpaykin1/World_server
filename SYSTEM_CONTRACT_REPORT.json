@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-24T05:16:06.157Z",
+  "generatedAt": "2026-09-10T03:26:14.742Z",
   "blockers": 0,
   "adoption": {
     "input": {
@@ -37,6 +37,14 @@
       "canonical": [
         "data/app-release-registry.json",
         "scripts/quality-regression-gate.js"
+      ],
+      "apps": {}
+    },
+    "discovery": {
+      "canonical": [
+        "lib/indieworlds.js",
+        "scripts/export-indieworlds.js",
+        "shared/golden-ui-shell.js"
       ],
       "apps": {}
     }

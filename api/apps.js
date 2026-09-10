@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const { sendJson, methodNotAllowed, withErrors } = require('../lib/http');
+const { worldMenuWithLore } = require('../lib/world-lore');
 
 const root = process.cwd();
 const registryPath = path.join(root, 'data', 'app-release-registry.json');
@@ -29,21 +30,6 @@ function loadLoreBible() {
     throw new Error('World lore bible invalid');
   }
   return parsed;
-}
-
-function worldMenuWithLore(id, baseWorldMenu, loreBible) {
-  const base = baseWorldMenu || null;
-  const key = loreBible.worlds[id] ? id : base?.familyId;
-  const story = key ? loreBible.worlds[key] : null;
-  if (!story) return base;
-
-  const present = new Set(Array.isArray(story.elements) ? story.elements : []);
-  const missing = loreBible.requiredElements.filter(element => !present.has(element));
-  if (missing.length) {
-    throw new Error(`World lore ${key} missing required elements: ${missing.join(', ')}`);
-  }
-
-  return { ...(base || {}), ...story };
 }
 
 function internalInventory(appsDir, registry, loreBible) {

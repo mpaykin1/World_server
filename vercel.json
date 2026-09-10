@@ -15,7 +15,11 @@
       "includeFiles": "apps/**"
     },
     "api/worlds.js": {
-      "includeFiles": "data/world-graph-index.json"
+      "includeFiles": [
+        "data/world-graph-index.json",
+        "data/app-release-registry.json",
+        "data/world-lore-v2.json"
+      ]
     }
   },
   "redirects": [

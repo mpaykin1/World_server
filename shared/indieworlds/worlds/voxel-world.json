@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0.0",
+  "type": "IndieWorld",
+  "id": "voxel-world",
+  "name": "Voxel World",
+  "headline": "КТО ПОЛОЖИЛ ПЕРВЫЙ КУБ — И ПОЧЕМУ ОН ДО СИХ ПОР ПОЁТ?",
+  "description": "Говорят, бесконечный Voxel World вырос из Первого Куба. По ночам блоки сами складываются в координаты, а из глубины звучат семь нот. За картой движется Белая Граница, стирающая чанки и память. Игроку нужно расшифровать узоры и найти Куб, решив — запечатать его или открыть. Но его мелодия совпадает с Песней Шарабаса. Если Куб — дверь, кто положил его сюда первым и что проснётся после правильного ответа?",
+  "history": "Старые строители считали мир своим творением, пока не нашли постройки, существовавшие до первого известного игрока.",
+  "url": "https://world-server.ai.studio/apps/voxel-world/",
+  "status": "certified",
+  "kind": "game",
+  "certified": true,
+  "external": false,
+  "latestRevisionId": "voxel-world@1.0.0",
+  "capabilities": [
+    "golden-physics",
+    "mobile-controls",
+    "multiplayer",
+    "persistent-voxel-state"
+  ],
+  "connections": [
+    {
+      "relation": "portal",
+      "targetId": "world-sharabass",
+      "targetTitle": "Мир Шарабас",
+      "targetUrl": null,
+      "story": "Семь древних блоков отвечают той же последовательностью нот, которой когда-то говорил Шарабас.",
+      "webmention": null
+    }
+  ],
+  "discovery": {
+    "network": "IMPROVE WORLD — IndieWorlds",
+    "index": "https://world-server.ai.studio/api/worlds?format=indieweb",
+    "feed": "https://world-server.ai.studio/api/worlds?format=rss",
+    "passport": "https://world-server.ai.studio/api/worlds?format=indieweb&id=voxel-world",
+    "webmention": {
+      "compatibleLinks": false,
+      "receiverAdvertised": false,
+      "state": "receiver-pending-persistence-and-moderation-gate"
+    }
+  },
+  "portability": {
+    "exportable": true,
+    "format": "application/vnd.world-server.indieworld+json",
+    "ownsAddress": true,
+    "humanFirst": true
+  }
+}
