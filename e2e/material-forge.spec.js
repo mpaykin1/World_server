@@ -14,17 +14,23 @@ test.describe('Material Forge adaptive runtime', () => {
       });
       const response = await page.goto(`/apps/${app}/`, { waitUntil: 'domcontentloaded' });
       expect(response?.status()).toBe(200);
-      await page.waitForFunction(() => window.WorldMaterialForge?.stats?.().materials > 0, { timeout: 20000 });
-      const evidence = await page.evaluate(() => ({
-        forge: window.WorldMaterialForge.stats(),
-        microdetail: window.UniversalVoxelMicrodetail?.stats?.() || null,
-        canvas: [...document.querySelectorAll('canvas')].map(item => ({ width: item.width, height: item.height, clientWidth: item.clientWidth, clientHeight: item.clientHeight })),
-        authoredRequests: performance.getEntriesByType('resource').map(item => item.name).filter(name => name.includes('/shared/materials/'))
-      }));
+      await page.waitForFunction(() => Boolean(window.WorldMaterialForge?.stats), null, { timeout: 20000 });
+      const evidence = await page.evaluate(() => {
+        const probe={isMeshStandardMaterial:true,transparent:false,opacity:1,roughness:.95,metalness:0,emissiveIntensity:1,userData:{},needsUpdate:false};
+        window.WorldMaterialForge.enhanceMaterial(probe,'stone',{geometry:{getAttribute(){return null;}},userData:{}},{id:'world-stone'});
+        return {
+          forge: window.WorldMaterialForge.stats(),
+          probe: probe.userData.materialForge,
+          microdetail: window.UniversalVoxelMicrodetail?.stats?.() || null,
+          canvas: [...document.querySelectorAll('canvas')].map(item => ({ width: item.width, height: item.height, clientWidth: item.clientWidth, clientHeight: item.clientHeight })),
+          authoredRequests: performance.getEntriesByType('resource').map(item => item.name).filter(name => name.includes('/shared/materials/'))
+        };
+      });
       expect(evidence.forge.schemaVersion).toBe('1.0.0');
       expect(evidence.forge.sourceHash).toMatch(/^[a-f0-9]{64}$/);
       expect(['SAFE', 'BALANCED', 'HIGH', 'ULTRA']).toContain(evidence.forge.activeTier);
       expect(evidence.forge.proceduralFallbacks).toBeGreaterThan(0);
+      expect(evidence.probe.authoredMaps).toBe(false);
       expect(evidence.authoredRequests).toEqual([]);
       expect(evidence.canvas.some(canvas => canvas.width > 0 && canvas.height > 0 && canvas.clientWidth > 0 && canvas.clientHeight > 0)).toBe(true);
       expect(hardErrors, `${testInfo.project.name} ${app}`).toEqual([]);

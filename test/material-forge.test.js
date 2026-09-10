@@ -136,6 +136,7 @@ test('browser runtime selects tier-bounded maps and applies procedural fallback 
   await new Promise(resolve => setImmediate(resolve));
   assert.equal(material.userData.materialForge.recipeId, 'world-stone');
   assert.equal(material.userData.materialForge.authoredMaps, false);
+  assert.doesNotThrow(() => JSON.stringify(material.userData), 'runtime state must stay out of serializable Three.js userData');
   assert.ok(material.roughness < .95 && material.roughness > .86);
   assert.equal(runtime.stats().proceduralFallbacks, 1);
   runtime.enhanceMaterial(material, 'stone');
@@ -147,6 +148,7 @@ test('browser runtime selects tier-bounded maps and applies procedural fallback 
   assert.equal(implicitMaterial.userData.materialForge.recipeId, 'world-stone');
   assert.equal(implicitMaterial.roughness, .95, 'implicit procedural fallback must not change approved visuals');
   assert.equal(implicitMaterial.metalness, 0, 'implicit procedural fallback must preserve scalar PBR values');
+  assert.equal(implicitMaterial.needsUpdate, false, 'zero-download fallback must not trigger shader recompilation');
 });
 
 test('browser runtime rejects tampered paths and fully removes triplanar binding after tier downgrade', async () => {

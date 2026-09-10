@@ -52,7 +52,7 @@ function profileFromScale(registry,scale){
 export function createMaterialForgeRuntime({THREE,registry,initialTier='BALANCED',worldId='world',ktx2Loader=null}={}){
   if(!THREE||registry?.system!=='WORLD_MATERIAL_FORGE'||!registry?.policy?.tiers)throw new Error('MaterialForge: THREE + compiled registry required');
   let activeTier=registry.policy.tiers[initialTier]?initialTier:'BALANCED';
-  const states=new Set(),textureCache=new Map();
+  const states=new Set(),stateByMaterial=new WeakMap(),textureCache=new Map();
   const counters={materials:0,recipes:0,texturePlans:0,texturesLoaded:0,texturesRejected:0,loadFailures:0,proceduralFallbacks:0};
 
   function tier(){return registry.policy.tiers[activeTier]||registry.policy.tiers.BALANCED;}
@@ -87,14 +87,18 @@ export function createMaterialForgeRuntime({THREE,registry,initialTier='BALANCED
     state.material.metalness=mix(state.original.metalness,Number(p.metalness),factor);
     if(Number.isFinite(state.material.emissiveIntensity))state.material.emissiveIntensity=mix(state.original.emissiveIntensity,Number(p.emissiveIntensity),factor);
     state.material.userData.materialForge={recipeId:state.recipe.id,tier:activeTier,sourceTool:state.recipe.source?.tool||'unknown',authoredMaps:false};
-    state.material.needsUpdate=true;
   }
 
   function resetDirectMaps(state){
+    let changed=false;
     for(const property of ['map','normalMap','aoMap','roughnessMap','metalnessMap','emissiveMap','displacementMap']){
-      if(state.boundProperties.has(property))state.material[property]=state.original[property];
+      if(state.boundProperties.has(property)){
+        if(state.material[property]!==state.original[property])changed=true;
+        state.material[property]=state.original[property];
+      }
     }
     state.boundProperties.clear();
+    if(changed)state.material.needsUpdate=true;
   }
 
   function resetTriplanar(state){
@@ -188,7 +192,7 @@ export function createMaterialForgeRuntime({THREE,registry,initialTier='BALANCED
     const requestedId=options.id||object?.userData?.materialForgeId||material.userData?.materialForgeId||null;
     const recipe=selectMaterialRecipe(registry,{id:requestedId,semantic,worldId});
     if(!recipe)return material;
-    let state=material.userData?.__materialForgeState;
+    let state=stateByMaterial.get(material);
     if(!state){
       material.userData=material.userData||{};
       state={material,object,recipe,explicit:Boolean(requestedId),requestId:0,planKey:'',boundProperties:new Set(),preForgeCaptured:false,preForgeOnBeforeCompile:null,preForgeProgramKey:null,triplanarBound:false,original:{
@@ -196,7 +200,14 @@ export function createMaterialForgeRuntime({THREE,registry,initialTier='BALANCED
         map:material.map||null,normalMap:material.normalMap||null,aoMap:material.aoMap||null,roughnessMap:material.roughnessMap||null,
         metalnessMap:material.metalnessMap||null,emissiveMap:material.emissiveMap||null,displacementMap:material.displacementMap||null
       }};
-      material.userData.__materialForgeState=state;states.add(state);counters.materials++;counters.recipes++;
+      stateByMaterial.set(material,state);states.add(state);counters.materials++;counters.recipes++;
+      if(typeof material.addEventListener==='function'){
+        state.disposeHandler=()=>{
+          state.requestId++;states.delete(state);stateByMaterial.delete(material);
+          material.removeEventListener?.('dispose',state.disposeHandler);
+        };
+        material.addEventListener('dispose',state.disposeHandler);
+      }
     }else{state.object=object||state.object;state.recipe=recipe;state.explicit=state.explicit||Boolean(requestedId);}
     applyScalars(state);void applyMaps(state);return material;
   }
@@ -221,6 +232,6 @@ export function createMaterialForgeRuntime({THREE,registry,initialTier='BALANCED
     setTextureBudgetScale(value){setTier(profileFromScale(registry,Number(value)||0));},
     setMaterialDetailScale(value){setTier(profileFromScale(registry,Number(value)||0));}
   };
-  function stats(){return{schemaVersion:registry.schemaVersion,sourceHash:registry.sourceHash,activeTier,worldId,...counters,textureCacheEntries:textureCache.size};}
+  function stats(){return{schemaVersion:registry.schemaVersion,sourceHash:registry.sourceHash,activeTier,worldId,...counters,activeMaterials:states.size,textureCacheEntries:textureCache.size};}
   return{registry,adapter,enhanceMaterial,enhanceObject,selectRecipe:(options={})=>selectMaterialRecipe(registry,{worldId,...options}),setTier,getTier:()=>activeTier,stats};
 }

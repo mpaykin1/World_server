@@ -11,6 +11,19 @@
     ShiftLeft:'run', ShiftRight:'run',
     Space:'jump'
   });
+  const keyCodes = Object.freeze({
+    w:'KeyW', s:'KeyS', a:'KeyA', d:'KeyD',
+    arrowup:'ArrowUp', arrowdown:'ArrowDown', arrowleft:'ArrowLeft', arrowright:'ArrowRight',
+    shift:'ShiftLeft', space:'Space', spacebar:'Space', ' ':'Space'
+  });
+
+  function normalizeCode(event) {
+    const code = String(event?.code || '');
+    if (map[code]) return code;
+    const key = String(event?.key || '');
+    if (map[key]) return key;
+    return keyCodes[key.toLowerCase()] || '';
+  }
 
   const state = {
     contract:'WORLD_SERVER_GOLDEN_STANDARD_V2',
@@ -36,17 +49,19 @@
   }
 
   addEventListener('keydown', e => {
-    const action = map[e.code];
+    const code = normalizeCode(e);
+    const action = map[code];
     if (!action) return;
     keys.add(action);
-    if (e.code.startsWith('Arrow')) e.preventDefault();
+    if (code.startsWith('Arrow')) e.preventDefault();
   }, { passive:false });
 
   addEventListener('keyup', e => {
-    const action = map[e.code];
+    const code = normalizeCode(e);
+    const action = map[code];
     if (!action) return;
     keys.delete(action);
-    if (e.code.startsWith('Arrow')) e.preventDefault();
+    if (code.startsWith('Arrow')) e.preventDefault();
   }, { passive:false });
 
   document.addEventListener('pointerlockchange', () => {
@@ -200,7 +215,7 @@
   }
 
   const api = {
-    state, input, reportReady, frame, basisFromForward,
+    state, input, reportReady, frame, basisFromForward, normalizeCode,
     requestMouseLook(element=document.body) {
       if (element.requestPointerLock) return element.requestPointerLock();
     },

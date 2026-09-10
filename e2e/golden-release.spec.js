@@ -50,8 +50,10 @@ test.describe('World Server Golden Standard', () => {
     await page.waitForFunction(() => {
       const s=window.AI3DVoxelRuntime?.stats?.();
       return s?.defaultCityLoaded && s?.player?.playable;
-    }, {timeout:25000});
+    }, null, {timeout:25000});
     await page.evaluate(()=>window.AI3DVoxelRuntime.setPlayerView?.(0,0));
+    await page.locator('#viewer canvas').focus();
+    await expect(page.locator('#viewer canvas')).toBeFocused();
     const before=await page.evaluate(()=>window.AI3DVoxelRuntime.stats().player);
     await page.keyboard.down('KeyW');
     await page.waitForTimeout(350);
