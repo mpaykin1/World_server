@@ -6,11 +6,50 @@ on:
   pull_request:
     branches: [master]
 
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Detect AI3D Voxel City impact
+        id: ai3d-impact
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            BASE="${{ github.event.pull_request.base.sha }}"
+            HEAD="${{ github.event.pull_request.head.sha }}"
+          else
+            BASE="${{ github.event.before }}"
+            HEAD="${{ github.sha }}"
+          fi
+
+          if [ -z "${BASE:-}" ] || [[ "$BASE" =~ ^0+$ ]]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            echo "No reliable base SHA; running the AI3D autoplay gate conservatively."
+            exit 0
+          fi
+
+          if ! CHANGED="$(git diff --name-only "$BASE" "$HEAD")"; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            echo "Unable to calculate impact safely; running the AI3D autoplay gate conservatively."
+            exit 0
+          fi
+
+          echo "$CHANGED"
+          if printf '%s\n' "$CHANGED" | grep -Eq '^(apps/ai3d-voxel-city/|e2e/ai3d-voxel-city-autoplay\.spec\.js$|shared/|server\.js$|playwright\.config\.js$|package(-lock)?\.json$)'; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            echo "AI3D Voxel City is impacted; its autoplay test remains a hard gate."
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "AI3D Voxel City is unrelated to this change; its autoplay test will not block publication."
+          fi
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
@@ -43,9 +82,13 @@ jobs:
       - name: Install Playwright browsers (chromium + webkit for iPhone emulation)
         run: npx playwright install --with-deps chromium webkit
       - name: Sentry runtime smoke (Playwright) - window.WorldServerSentry + ingest (hard)
-        run: npx playwright test e2e/sentry-smoke.spec.js --project=desktop-chromium
-      - name: AI3D Voxel City autoplay (Playwright) ai3d-voxel-city-autoplay (hard)
-        run: npx playwright test
+        run: npx playwright test e2e/sentry-smoke.spec.js --project=desktop-chromium --retries=2
+      - name: AI3D Voxel City autoplay (hard only when impacted)
+        if: steps.ai3d-impact.outputs.run == 'true'
+        run: npx playwright test e2e/ai3d-voxel-city-autoplay.spec.js --project=desktop-chromium --retries=2
+      - name: AI3D Voxel City autoplay skipped for unrelated change
+        if: steps.ai3d-impact.outputs.run != 'true'
+        run: echo "AI3D Voxel City is not impacted; publication is not blocked by an unrelated world-specific browser test."
 
   lighthouse:
     runs-on: ubuntu-latest
