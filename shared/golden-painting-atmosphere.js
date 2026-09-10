@@ -18,7 +18,7 @@
     night:{sky:0x030817,fog:0x0b1730,sun:0x91bfff,exposure:.78,saturation:.90,contrast:.96,brightness:.72,warmth:.08,lightLevel:.28,keyScale:.13,hemiScale:.30,night:1},
     sunrise:{sky:0xf4a06f,fog:0xdab18a,sun:0xffb05e,exposure:.93,saturation:1.08,contrast:1,brightness:.92,warmth:.82,lightLevel:.68,keyScale:.66,hemiScale:.58,night:.12}
   };
-  const adapters=new Set(); let layer=null,started=false,lastAudit=0;
+  const adapters=new Set(); let layer=null,started=false,lastAudit=0,lastTick=-Infinity;
   const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
   const lerp=(a,b,t)=>a+(b-a)*t; const smooth=t=>{t=clamp(t);return t*t*(3-2*t);};
   const rgb=h=>[(h>>16)&255,(h>>8)&255,h&255];
@@ -164,9 +164,12 @@
     }
   }
   function tick(now){
-    const s=currentState(now);
-    updateDom(s);
-    adapters.forEach(a=>applyThree(a,s,now));
+    if((now-lastTick)>=100){
+      lastTick=now;
+      const s=currentState(now);
+      updateDom(s);
+      adapters.forEach(a=>applyThree(a,s,now));
+    }
     global.requestAnimationFrame?.(tick);
   }
   function start(){
