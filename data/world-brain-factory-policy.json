@@ -1,0 +1,109 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "WORLD_BRAIN_FACTORY",
+  "provider": "unsloth",
+  "mode": "free-first",
+  "purpose": "Turn verified World_server lessons into small specialist model candidates without adding a second orchestration stack.",
+  "trainingRuntime": {
+    "preferred": "kaggle-free-gpu-t4",
+    "fallback": [
+      "google-colab-free-gpu",
+      "user-provided-compatible-gpu"
+    ],
+    "prepareOnlyFallback": "cpu-prepare-only",
+    "productionGpuRequired": false,
+    "localHeavyTrainingAllowed": false,
+    "paidGpuAllowedByDefault": false,
+    "autoInstallTrainingDependenciesOnServer": false,
+    "gpuUnavailabilityBlocksServer": false
+  },
+  "dataset": {
+    "format": "chat-messages-jsonl",
+    "deterministicSplit": true,
+    "validationPercent": 15,
+    "minimumTrainExamplesForPromotion": 8,
+    "sources": [
+      {
+        "path": "data/error-prevention-registry.json",
+        "kind": "protected_errors",
+        "acceptedStatuses": [
+          "protected"
+        ]
+      },
+      {
+        "path": "data/golden-components.json",
+        "kind": "golden_components",
+        "acceptedStatuses": [
+          "golden"
+        ]
+      },
+      {
+        "path": "data/collective-brain/knowledge-ledger.json",
+        "kind": "promoted_knowledge",
+        "acceptedStatuses": [
+          "verified",
+          "promoted",
+          "approved"
+        ]
+      },
+      {
+        "path": "data/autofix-learning.json",
+        "kind": "promoted_autofix",
+        "acceptedStatuses": [
+          "promoted"
+        ]
+      }
+    ]
+  },
+  "privacy": {
+    "denyEnvFiles": true,
+    "denySecretLikeText": true,
+    "denyPrivateKeys": true,
+    "denyBearerTokens": true,
+    "denyPasswords": true,
+    "maxExampleChars": 12000
+  },
+  "training": {
+    "defaultModel": "unsloth/Qwen3-4B-unsloth-bnb-4bit",
+    "loadIn4bit": true,
+    "loraRank": 16,
+    "loraAlpha": 16,
+    "maxSequenceLength": 2048,
+    "defaultMaxSteps": 60,
+    "ggufQuantization": "q4_k_m"
+  },
+  "promotion": {
+    "automaticRegistryPromotion": false,
+    "requiresValidationImprovement": true,
+    "requiresNoSecretFindings": true,
+    "requiresRealTaskBenchmark": true,
+    "requiresHumanReviewedPR": true,
+    "rule": "A trained candidate is evidence, not production. Never replace an existing model solely because training completed."
+  },
+  "freeGpuRouter": {
+    "kaggle": {
+      "priority": 1,
+      "accelerator": "NvidiaTeslaT4",
+      "kernelPrivate": true,
+      "enableInternet": true,
+      "autoInstallCliOnDesktop": false,
+      "requiresUserOwnedAccount": true,
+      "quotaIsExternal": true,
+      "quotaNote": "Kaggle free GPU quota and hardware availability are controlled by Kaggle and can change."
+    },
+    "colab": {
+      "priority": 2,
+      "mode": "browser-handoff",
+      "requiresUserClickToStart": true
+    },
+    "externalGpu": {
+      "priority": 3,
+      "mode": "optional-compatible-gpu"
+    },
+    "cpuPrepareOnly": {
+      "priority": 4,
+      "trainingAllowed": false,
+      "datasetAndVerificationAllowed": true
+    }
+  }
+}

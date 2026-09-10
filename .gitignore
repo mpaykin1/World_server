@@ -1,4 +1,4 @@
-﻿.env
+.env
 .env.*
 !.env.example
 .vercel
@@ -80,4 +80,6 @@ GODOT_WEB_BUILD_REPORT.json
 /data/tool-cost-ledger.json
 /data/mcp-router-profile.json
 /state/ai-agent-reports.jsonl
+# World Brain Factory generated datasets/models (session-owned, reproducible)
+/work/
 

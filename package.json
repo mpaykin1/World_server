@@ -115,7 +115,15 @@
     "agent-session:preflight": "node lib/agent-session-guard.js preflight direct-desktop-ai",
     "agent-session:postflight": "node lib/agent-session-guard.js postflight direct-desktop-ai",
     "agent-session:check": "node lib/agent-session-guard.js preflight policy-check",
-    "quality:world:microdetail": "node scripts/world-microdetail-audit.js"
+    "quality:world:microdetail": "node scripts/world-microdetail-audit.js",
+    "world-brain:status": "node scripts/world-brain-factory.cjs status",
+    "world-brain:prepare": "node scripts/world-brain-factory.cjs prepare",
+    "world-brain:verify": "node scripts/world-brain-factory.cjs verify",
+    "world-brain:test": "node --test test/world-brain-factory.test.js",
+    "world-brain:gpu:plan": "node scripts/world-brain-free-gpu.cjs plan",
+    "world-brain:kaggle:prepare": "node scripts/world-brain-free-gpu.cjs prepare-kaggle",
+    "world-brain:kaggle:submit": "node scripts/world-brain-free-gpu.cjs submit-kaggle",
+    "world-brain:gpu:test": "node --test test/world-brain-free-gpu.test.js"
   },
   "engines": {
     "node": "24.x"

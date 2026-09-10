@@ -1,0 +1,66 @@
+\
+name: World Brain Free GPU
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: world-brain-free-gpu
+  cancel-in-progress: false
+
+jobs:
+  submit-kaggle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      KAGGLE_USERNAME: ${{ vars.KAGGLE_USERNAME }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Validate one-time Kaggle configuration
+        shell: bash
+        run: |
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo "KAGGLE_API_TOKEN secret is not configured."
+            exit 2
+          fi
+          if [ -z "$KAGGLE_USERNAME" ]; then
+            echo "KAGGLE_USERNAME repository variable is not configured."
+            exit 2
+          fi
+
+      - name: Install project dependencies
+        run: npm ci
+
+      - name: Verify World Brain dataset
+        run: |
+          npm run world-brain:prepare
+          npm run world-brain:verify
+
+      - name: Build private Kaggle T4 bundle
+        run: npm run world-brain:kaggle:prepare -- --owner "$KAGGLE_USERNAME" --out work/world-brain-kaggle
+
+      - name: Install current Kaggle CLI
+        run: python -m pip install --upgrade kaggle
+
+      - name: Submit private Kaggle T4 run
+        run: kaggle kernels push -p work/world-brain-kaggle --accelerator NvidiaTeslaT4
+
+      - name: Print private run location
+        run: echo "Kaggle run submitted: https://www.kaggle.com/code/$KAGGLE_USERNAME/world-brain-unsloth"

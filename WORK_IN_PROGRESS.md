@@ -1,3 +1,149 @@
+# World Brain Factory вЂ” Free GPU Router / Kaggle primary вЂ” 2026-09-09
+
+## Task
+Extend the existing Unsloth World Brain Factory with a free-first GPU router: Kaggle T4 as the preferred automated backend, Google Colab as browser fallback, and CPU-only prepare/verify mode when no GPU is available.
+
+## Why
+The user wants to start using the infrastructure immediately without paying for GPU compute and without slowing the local PC. Kaggle currently documents a free weekly GPU quota and its current CLI supports explicit accelerator selection.
+
+## Current state
+Branch `ai/chatgpt/unsloth-world-brain-factory` at commit `63d4bf29`; prior World Brain Factory tests and the full release gate passed. The local PC has no Kaggle CLI or Kaggle credentials configured, so real Kaggle submission cannot be performed from this machine yet.
+
+## Target state
+- `Kaggle T4 -> Colab GPU -> external compatible GPU -> CPU prepare-only` routing.
+- A self-contained private Kaggle kernel bundle can be generated from the verified dataset without publishing training examples as a public dataset.
+- A manual GitHub Actions workflow can submit the Kaggle kernel once `KAGGLE_API_TOKEN` and `KAGGLE_USERNAME` are configured.
+- Missing GPU/auth becomes `READY_FOR_GPU` / `NEEDS_AUTH`, never a server blocker.
+- P100 is not selected by default because current Kaggle CLI docs warn that the default image's PyTorch build may not run Pascal kernels; T4 is the safe default.
+
+## Files / systems involved
+`data/world-brain-factory-policy.json`, `lib/world-brain-free-gpu.js`, `scripts/world-brain-free-gpu.cjs`, `.github/workflows/world-brain-free-gpu.yml`, `test/world-brain-free-gpu.test.js`, `docs/WORLD_BRAIN_FACTORY_UNSLOTH.md`, `package.json`, `WORK_IN_PROGRESS.md`.
+
+## Known risks
+Free GPU availability/quota is external and not guaranteed; Kaggle authentication requires a one-time user-owned account/token; training remains candidate-only and cannot self-promote.
+
+## Golden systems that must be preserved
+Collective Brain, existing Model Registry, secret filtering, no-regression gates, cloud-first execution, Desktop hygiene, no paid GPU by default, no automatic production promotion.
+
+## Errors that must not return
+Duplicate orchestration stacks, secret publication, P100 default-image incompatibility, local CPU/GPU overload, false-green model promotion, and GPU unavailability blocking the server.
+
+## Exact patch / change plan
+1. Make Kaggle T4 the preferred free GPU runtime in policy.
+2. Add deterministic backend planning and readiness states.
+3. Generate a self-contained Kaggle script with embedded verified dataset + canonical trainer.
+4. Add Kaggle metadata with private kernel, internet enabled, T4 accelerator.
+5. Add a GitHub workflow for one-click cloud submission after one-time Kaggle auth setup.
+6. Add focused tests, run prepare/verify, full check, release gate, then commit/push/update PR.
+
+## Tests to run
+`npm run world-brain:gpu:test`, `npm run world-brain:gpu:plan`, `npm run world-brain:kaggle:prepare`, Python compile of generated Kaggle script, `npm run world-brain:test`, `npm run check`, `npm run release:gate`.
+
+## Deployment / PR plan
+Commit to the existing feature branch, push, create/update PR to `master`; no direct production deploy.
+
+## Current progress
+Implementation complete and fully verified. Kaggle T4 is the preferred free backend; Colab is the browser fallback; CPU remains prepare-only. The real local plan is `READY_FOR_GPU` because this PC has no Kaggle CLI/credentials, while the server remains unblocked.
+
+## Next action
+Commit and push this verified extension, then create the PR. Real Kaggle execution requires the one-time user-owned `KAGGLE_API_TOKEN` + `KAGGLE_USERNAME` setup; until then the Colab fallback is usable.
+
+## Completion criteria
+Focused and full gates pass; bundle is deterministic and private; T4 is selected; missing credentials are reported honestly; branch is pushed and PR exists.
+
+## Final evidence
+- `npm run world-brain:gpu:test`: PASS, 8/8.
+- `npm run world-brain:gpu:plan`: PASS; state=`READY_FOR_GPU`, Kaggle=`NEEDS_AUTH`, Colab=`READY_FOR_BROWSER`, CPU=`READY_PREPARE_ONLY`, `serverBlocked=false`.
+- `npm run world-brain:kaggle:prepare -- --owner test_user`: PASS; private kernel, `NvidiaTeslaT4`, 40 total examples = 29 train + 11 validation, credential material=false.
+- Generated `world-brain-kaggle.py`: `python -m py_compile` PASS.
+- `npm run world-brain:test`: PASS, 9/9.
+- `npm run check`: PASS, 614 total / 612 pass / 0 fail / 2 skipped.
+- `npm run release:gate`: PASS, exit 0.
+- Golden Standard PASS; No Regression PASS with 0 violations; Collective Brain security PASS; World Quality Autopilot complete 100%.
+- Current local machine: Kaggle CLI=false, Kaggle auth=false; no heavy local training or Kaggle package installation was performed.
+- External dependency: Kaggle user-owned authentication is still required for the first real Kaggle GPU submission.
+
+---
+
+# World Brain Factory / Unsloth вЂ” 2026-09-09
+
+## Task
+Integrate Unsloth as a free-first fine-tuning layer on top of the existing Collective Brain and Model Registry without adding a second orchestration stack or requiring GPU resources on the production server.
+
+## Why
+World_server already records protected errors, Golden Components and promoted knowledge. Those verified lessons can be converted into a deterministic supervised fine-tuning dataset so small specialist models can learn project-specific rules. Heavy training must stay off the user's PC and off paid production GPU infrastructure.
+
+## Current state
+Isolated branch `ai/chatgpt/unsloth-world-brain-factory` created from current `origin/master` at `ca9d13eb`. Baseline worktree was clean. Baseline `npm ci` and `npm run release:gate` completed before edits.
+
+Baseline evidence:
+- `npm ci`: PASS; 352 packages installed, 353 audited. Existing dependency audit reports 1 high-severity vulnerability unrelated to this patch.
+- `npm run check`: PASS; 597 tests total, 595 pass, 0 fail, 2 skipped.
+- Golden Standard: PASS.
+- No-regression gate: PASS; baseline=44.17 current=97.58, violations=0.
+- Release gate: PASS.
+
+## Target state
+1. Verified World_server lessons are converted into a deterministic, secret-filtered chat dataset.
+2. A free-first Unsloth training script can fine-tune a small Qwen model on an external GPU runtime such as free Google Colab.
+3. Training is never run automatically on production or the user's CPU-only machine.
+4. Candidate model output includes objective pre/post validation metrics and cannot be marked promotable when it regresses.
+5. A Colab notebook provides the browser handoff.
+6. Focused tests and full project gates prove the integration does not regress existing runtime behavior.
+
+## Files / systems involved
+`data/world-brain-factory-policy.json`, `lib/world-brain-factory.js`, `scripts/world-brain-factory.cjs`, `scripts/train-world-brain-unsloth.py`, `notebooks/world-brain-unsloth.ipynb`, `docs/WORLD_BRAIN_FACTORY_UNSLOTH.md`, `test/world-brain-factory.test.js`, `package.json`, `.gitignore`.
+
+## Known risks
+- Free Colab GPU availability is not guaranteed.
+- Fine-tuning can overfit a small dataset; promotion therefore requires validation improvement and later real task benchmarks.
+- Raw secrets or unverified lessons must never enter training data.
+- Training dependencies must not be installed into the production Node runtime.
+
+## Golden systems that must be preserved
+Collective Brain, Model Registry, Golden Components, error recurrence protection, cloud-first execution, free-first routing, desktop hygiene and all existing release gates.
+
+## Errors that must not return
+Secret-memory ingestion, duplicate orchestration stacks, local heavy AI workloads that slow the PC, unverified model self-promotion, and false-green readiness claims.
+
+## Exact patch / change plan
+1. Add a machine-readable World Brain Factory policy.
+2. Build deterministic dataset extraction from protected errors, Golden Components, promoted Collective Brain knowledge and promoted AutoFix lessons.
+3. Add strong secret/sensitive-string filtering and source provenance hashes.
+4. Add a prepare/status/verify CLI with outputs under ignored `work/`.
+5. Add a current Unsloth QLoRA training script using a configurable model and objective validation loss comparison.
+6. Add a free Colab notebook handoff and documentation.
+7. Add focused regression tests.
+8. Run focused tests, `npm run check`, release gate and quality diff; then commit, push and open a PR.
+
+## Tests to run
+`npm run world-brain:test`, `npm run world-brain:prepare`, `npm run world-brain:verify`, Python syntax compile, `npm run check`, `npm run release:gate`, `npm run quality:diff`.
+
+## Deployment / PR plan
+Commit and push the feature branch, open a PR to `master`. Do not directly push or auto-merge master. This patch is backend/tooling only, so Vercel runtime deployment should be suppressed by the existing path gate unless a runtime file is intentionally changed.
+
+## Current progress
+Implementation and local verification complete. The deterministic dataset currently contains 40 verified examples: 38 protected error lessons + 2 Golden Components, split into 29 train / 11 validation. Generated dataset hashes verify and secret scan finds zero secret-like payloads. No production model has been auto-promoted.
+
+## Next action
+Commit/push this verified branch and open the required reviewed PR. Actual GPU fine-tuning remains an external free-GPU execution step and must not be falsely reported as completed until a compatible Colab/Kaggle GPU run produces metrics.
+
+## Completion criteria
+All focused and full gates pass, training pack is deterministic and secret-filtered, notebook is valid JSON, Python trainer compiles, branch is pushed and PR opened with evidence.
+
+## Final evidence
+- Focused `npm run world-brain:test`: PASS, 9/9.
+- `npm run world-brain:prepare`: PASS; 40 total examples, 29 train, 11 validation.
+- `npm run world-brain:verify`: PASS; both JSONL hashes match and `secretFinding=false`.
+- Python trainer syntax: PASS via `python -m py_compile scripts/train-world-brain-unsloth.py`.
+- Post-change `npm run check`: PASS; 606 tests total, 604 pass, 0 fail, 2 skipped.
+- Post-change `npm run quality:diff`: PASS; accepted metrics unchanged or improved.
+- Post-change `npm run release:gate`: PASS, exit 0. Golden Standard PASS; no-regression violations=0; Collective Brain security findings=0; World Quality Autopilot complete=100%.
+- The release gate reported Collective Brain runtime sync as `DEGRADED sync=queued`; this is an accepted queued synchronization state and did not fail the gate.
+- Actual Unsloth GPU fine-tuning was not run on this CPU-only workstation by design. The external GPU notebook is prepared, but trained-model metrics must come from a real compatible GPU session before model promotion.
+
+---
+
 # WORK IN PROGRESS — Scoped Task Compiler, resource scheduler, real native Godot pipeline
 
 ---
