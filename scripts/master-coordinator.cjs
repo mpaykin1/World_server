@@ -38,6 +38,7 @@ const resourceScheduler = require('../lib/ai-resource-scheduler');
 const { classifyIntent } = require('../lib/mcp-intent-router');
 const { resolveMainTreeRoot } = require('../lib/world-server-paths');
 const sessionGuard = require('../lib/agent-session-guard');
+const manualCompletion = require('../lib/manual-task-completion-contract');
 
 // Read-only capability classes get sandboxRoot pointed at the REAL repo (the
 // local model's tool allowlist for these classes is read_file/read_text_file/
@@ -511,8 +512,10 @@ async function dispatchSubtask(root, subtask, opts = {}) {
 // ---------------------------------------------------------------------------
 function buildDefaultSubtasks(goal, opts = {}) {
   const base = collectiveBrain.redactText(String(goal || '')).slice(0, 3000);
+  const finishMode = opts.manualTask && manualCompletion.isFinishMode(opts.progress || 0);
+  const deliveryRule = opts.manualTask ? (finishMode ? ' FINISH MODE: scope is frozen; only blocker/regression fixes, tests, commit, push, preview verification, merge, production deploy, exact stable-URL verification and handoff are allowed. Preview aliases never satisfy final user-link delivery.' : ' DELIVERY BEFORE EXPANSION: create a verified preview as soon as minimum acceptance passes; reserve final 30% for delivery.') : '';
   const subtasks = [
-    { taskId: `opencode-${Date.now()}`, agent: 'opencode', text: `Implementation/test slice for master goal: ${base}. Inspect relevant existing code, reuse architecture, fix only safe root causes, add focused regression tests, and report evidence. Do not perform production deployment.` },
+    { taskId: `opencode-${Date.now()}`, agent: 'opencode', text: `Implementation/test slice for master goal: ${base}. Inspect relevant existing code, reuse architecture, fix only safe root causes, add focused regression tests, and report evidence. Do not perform production deployment.${deliveryRule}` },
     { taskId: `openhuman-${Date.now()}`, agent: 'openhuman', text: `Independent read-only verification slice for master goal: ${base}. Read relevant World_server files and report existing systems, blockers, regression risks, and evidence. Do not modify files.` },
   ];
   const includeCloud = opts.includeCloud === true || process.env.MASTER_COORDINATOR_INCLUDE_CLOUD === '1';
@@ -543,9 +546,11 @@ async function runMasterGoal(goal, subtasks, opts = {}) {
     // eslint-disable-next-line no-await-in-loop
     results.push(await dispatchFn(root, subtask, opts));
   }
-  const overallStatus = summarizeMasterResults(results);
+  const baseStatus = summarizeMasterResults(results);
+  const gated = manualCompletion.gateOverallStatus(baseStatus, opts.deliveryEvidence || {}, { manualTask: opts.manualTask === true, requireLink: opts.requireLink !== false });
+  const overallStatus = gated.overallStatus;
   collectiveBrain.appendEvent(root, 'MASTER_GOAL_DISPATCHED', { goalHash: collectiveBrain.sha256(goal), subtaskCount: plan.length, agents: results.map((r) => r.agentId), results: results.map((r) => r.result), overallStatus });
-  return { goal, recall, route, plan, results, overallStatus, generatedAt: nowIso() };
+  return { goal, recall, route, plan, results, overallStatus, deliveryGate: gated.deliveryGate, generatedAt: nowIso() };
 }
 
 module.exports = {

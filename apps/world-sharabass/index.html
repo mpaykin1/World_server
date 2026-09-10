@@ -92,6 +92,7 @@
         #ui { position:relative; }
     </style>
   <script src="/shared/sentry-runtime.js"></script>
+  <script src="/shared/golden-painting-atmosphere.js"></script>
 </head>
 <body>
     <div id="info"></div>
@@ -141,6 +142,7 @@ const threeRenderer = new THREE.WebGLRenderer({ canvas: threeCanvas, alpha: true
 threeRenderer.setClearColor(0x000000, 0);
 threeRenderer.setPixelRatio(Math.min(devicePixelRatio, 1.4));
 const threeScene = new THREE.Scene();
+window.GoldenPaintingAtmosphere?.registerThree({THREE,scene:threeScene,renderer:threeRenderer,getCamera:()=>threeCamera,worldId:'world-sharabass'});
 threeScene.add(new THREE.AmbientLight(0xffffff, 0.7));
 threeScene.add(new THREE.DirectionalLight(0xffffff, 1.4));
 // Grid at SDF ground level so movement is visible
@@ -1088,7 +1090,7 @@ vec3 render(vec2 uv) {
     }
     vec3 col;
     if(!hit) col = renderSky(rd);
-    else { vec3 p = ro + rd * t; vec3 n = getNormal(p); col = calcLighting(p, n, rd, matId, t); }
+    else { vec3 p = ro + rd * t; vec3 n = getNormal(p); col = calcLighting(p, n, rd, matId, t); float aerial = smoothstep(MAX_DIST * 0.32, MAX_DIST, t); vec3 atmosphereCol = mix(vec3(0.10,0.19,0.34), vec3(0.38,0.20,0.10), uWarmth); col = mix(col, atmosphereCol, aerial * 0.58); }
     if (uSmoke > 0.01) {
         float smokeAccum = 0.0; vec3 smokeColAccum = vec3(0.0);
         for(int i = 0; i < SMOKE_STEPS; i++) {
@@ -1227,8 +1229,9 @@ function render(now = performance.now()) {
     if (keys.has('KeyD') || keys.has('ArrowRight')) { charPos.x += Math.cos(charYaw) * speed; charPos.z -= Math.sin(charYaw) * speed; }
     
     const distToCenter = Math.hypot(charPos.x, charPos.z);
-    const lightLevel = Math.min(1.2, 0.4 + 0.3 * (1 - weatherState.clouds * 0.4) + 0.08 * Math.sin(time * 0.2));
-    const warmth = 0.5 + Math.sin(time * 0.1) * 0.2;
+    const goldenAtmosphereState = window.GoldenPaintingAtmosphere?.currentState(performance.now());
+    const lightLevel = goldenAtmosphereState?.lightLevel ?? Math.min(1.2, 0.4 + 0.3 * (1 - weatherState.clouds * 0.4) + 0.08 * Math.sin(time * 0.2));
+    const warmth = goldenAtmosphereState?.warmth ?? (0.5 + Math.sin(time * 0.1) * 0.2);
     
     // Weather from server, lightning flash locally
     updateWeather(-0.3 + weatherState.rain * 0.6, dt);

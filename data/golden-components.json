@@ -47,21 +47,17 @@
       ]
     },
     "indieworld-discovery": {
-      "canonical": [
-        "lib/indieworlds.js",
-        "shared/golden-ui-shell.js"
-      ],
+      "canonical": ["lib/indieworlds.js", "shared/golden-ui-shell.js"],
       "status": "golden",
-      "scope": {
-        "allPublishedWorlds": true
-      },
-      "rules": [
-        "deny-by-default public feed",
-        "portable JSON passport",
-        "RSS autodiscovery",
-        "validated absolute URLs",
-        "no Webmention receiver before persistence and moderation gate"
-      ]
+      "scope": {"allPublishedWorlds": true},
+      "rules": ["deny-by-default public feed", "portable JSON passport", "RSS autodiscovery", "validated absolute URLs", "no Webmention receiver before persistence and moderation gate"]
+    },
+    "painting-atmosphere": {
+      "canonical": "shared/golden-painting-atmosphere.js",
+      "status": "golden",
+      "scope": {"allPlayableWorlds": true},
+      "cycleSeconds": {"day":60,"sunset":60,"night":10,"sunrise":60,"total":190},
+      "rules": ["foreground warmer and higher contrast", "midground moderated", "background atmosphere-tinted, usually cooler, lower saturation/contrast/detail", "atmospheric exceptions override a simple warm/cool rule", "night remains readable via moon, stars, meteors, aurora, bioluminescence and world emitters"]
     }
   },
   "schemaVersion": "2.0.0",
