@@ -44,7 +44,7 @@ Focused Material Forge tests; deterministic registry drift check; `npm run check
 Commit and push `ai/codex/armorpaint-material-forge`, then open a PR into protected `master`. Do not direct-push master, merge, deploy or claim live integration from this implementation branch. The existing pipeline can integrate only after Fleet PRE verifies the exact head and the nonterminal Manual Fast Lane no longer blocks it.
 
 ## Current progress
-Implementation is complete on the isolated branch. Material Forge now has a strict ArmorPaint export preset/importer, deterministic six-recipe registry, SAFE/BALANCED/HIGH/ULTRA budgets, same-origin/path/hash/dimension guards, adaptive UV/triplanar Three.js binding and procedural fallback. The shared bootstrap is adopted by `voxel-world`, `ai3d-voxel-city`, `survival`, `catalog` and `world-sharabass`. Runtime hardening also cancels stale texture loads and restores the original shader hook when a tier loses its authored-map plan.
+Implementation is complete on the isolated branch. Material Forge now has a strict ArmorPaint export preset/importer, deterministic six-recipe registry, SAFE/BALANCED/HIGH/ULTRA budgets, same-origin/path/hash/dimension guards, adaptive UV/triplanar Three.js binding and procedural fallback. The shared bootstrap is adopted by `voxel-world`, `ai3d-voxel-city`, `survival`, `catalog` and `world-sharabass`. Runtime hardening also cancels stale texture loads, restores the original shader hook when a tier loses its authored-map plan, keeps private runtime state out of serializable Three.js `userData`, releases disposed material state and avoids shader recompilation for a zero-download fallback. Browser-gate hardening explicitly probes that fallback and normalizes key-only mobile WebKit events without reducing the existing movement threshold.
 
 ## Next action
 Fleet must independently validate the current exact head of PR #97 on desktop/mobile and return `READY_FOR_OCEAN` or a concrete same-PR blocker. Ocean may integrate only that certified head after the higher-priority Manual Fast Lane clears. No authored visual baseline or production-readiness credit is allowed before Fleet PRE and later Fleet POST evidence.
@@ -53,10 +53,10 @@ Fleet must independently validate the current exact head of PR #97 on desktop/mo
 Focused and repository gates pass; registry compilation is deterministic; unsafe/oversized inputs fail closed; browser runtime preserves procedural fallback and device ceilings; exact evidence is recorded; PR is open; existing hourly prompts are updated with bounded Material Forge responsibilities.
 
 ## Final evidence
-- Focused Material Forge/runtime/import/security/discovery suite: 9 pass, 0 fail.
+- Focused Material Forge/runtime/import/security/discovery plus mobile input suite: 10 pass, 0 fail.
 - Combined Material Forge + World Quality + microdetail suite before the final hardening tests: 33 pass, 0 fail.
 - `npm run material-forge:check`: PASS; 6 deterministic recipes; source hash prefix `6a9bcdc0e67d`; 0 credited ArmorPaint map sets until real exports exist.
-- Final `npm run check` inside the post-hardening gate: PASS; 606 tests, 602 pass, 0 fail, 4 intentional skips.
+- Final `npm run check` inside the post-hardening gate: PASS; 607 tests, 603 pass, 0 fail, 4 intentional skips.
 - `npm run golden:check`, `npm run contracts:check`, `npm run tech:audit`, `npm run quality:world:materials`, `npm run quality:diff`: PASS.
 - Final post-hardening `npm run release:gate`: PASS through protocol, full tests, Golden, no-regression, fuzz, impact, perceptual, technology, duplicate, contracts, project, stability, evidence, World Quality and Collective Brain gates.
 - Local static HTTP smoke returned 200 for the registry, runtime and five adopted worlds. Local Playwright browser evidence is unavailable because the Playwright CDN returned 502/timeouts; `e2e/material-forge.spec.js` carries desktop/mobile procedural and real WebGL authored-triplanar shader checks for CI/Fleet.
