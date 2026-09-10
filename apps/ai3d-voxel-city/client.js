@@ -484,7 +484,7 @@ async function renderWorld(data){
     const initialView=chooseInitialPlayableView(data,spawnPos);
     player.x=initialView.spawnPos[0]; player.y=initialView.spawnPos[1]; player.z=initialView.spawnPos[2]; player.vy=0; player.onGround=true;
     initialVisibleFacing=initialView.facing;
-    yaw=initialVisibleFacing.yaw; player.yaw=yaw; pitch=Number(data?.spawn?.pitch)||player.pitch||0; player.pitch=pitch;
+    yaw=initialVisibleFacing.yaw; player.yaw=yaw; const spawnPitch=Number(data?.spawn?.pitch); pitch=Number.isFinite(spawnPitch)?spawnPitch:.12; player.pitch=pitch;
     switchPlayable();
     console.log('default-city visible facing',initialVisibleFacing);
     // notify playable runtime
