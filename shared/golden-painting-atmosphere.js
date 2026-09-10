@@ -113,9 +113,9 @@
     for(const old of adapters)if(old.scene===options.scene)return old;
     const f=options.scene.fog;
     const baseFog=f?(f.isFogExp2?{type:'exp2',density:f.density}:{type:'linear',near:f.near,far:f.far}):null;
-    const a={...options,baseFog,lightBases:new WeakMap(),nightGroup:null};
+    const a={...options,baseFog,lightBases:new WeakMap(),lights:[],nightGroup:null};
     options.renderer.domElement?.setAttribute('data-golden-three','1');if(global.document&&options.worldId!=='world-sharabass')document.body.dataset.goldenThreeWorld='1';adapters.add(a);ensureThreeNight(a);
-    options.scene.traverse(o=>{if((o.parent?.name==='GoldenNightSky'||o.parent?.parent?.name==='GoldenNightSky'))return;if(o.material){const ms=Array.isArray(o.material)?o.material:[o.material];ms.forEach(m=>{if('fog'in m)m.fog=true;});}});
+    options.scene.traverse(o=>{if(o.isLight)a.lights.push(o);if((o.parent?.name==='GoldenNightSky'||o.parent?.parent?.name==='GoldenNightSky'))return;if(o.material){const ms=Array.isArray(o.material)?o.material:[o.material];ms.forEach(m=>{if('fog'in m)m.fog=true;});}});
     return a;
   }
   function applyThree(a,s,now){
@@ -126,14 +126,13 @@
     else if(camera?.far){const far=Math.max(80,Math.min(camera.far*.52,520));scene.fog=new T.Fog(s.fog,far*.16,far);}
     if('toneMapping'in renderer&&T.ACESFilmicToneMapping!==undefined)renderer.toneMapping=T.ACESFilmicToneMapping;
     if('toneMappingExposure'in renderer)renderer.toneMappingExposure=s.exposure;
-    scene.traverse(o=>{
-      if(!o.isLight)return;
+    for(const o of a.lights){
       if(!a.lightBases.has(o))a.lightBases.set(o,{intensity:o.intensity,color:o.color?.getHex?.(),ground:o.groundColor?.getHex?.()});
       const b=a.lightBases.get(o);
       if(o.isDirectionalLight&&o!==a.moonLight){o.intensity=b.intensity*s.keyScale;o.color?.setHex(mixHex(b.color||0xffffff,s.sun,.62));}
       else if(o.isHemisphereLight){o.intensity=b.intensity*s.hemiScale;o.color?.setHex(mixHex(b.color||0xffffff,s.sky,.45));if(o.groundColor&&b.ground)o.groundColor.setHex(mixHex(b.ground,0x293343,.38));}
       else if(o.isAmbientLight)o.intensity=b.intensity*(s.phase==='night'?.48:s.hemiScale);
-    });    ensureThreeNight(a);
+    }    ensureThreeNight(a);
     const v=clamp(s.nightVisibility),g=a.nightGroup;
     if(g){
       g.visible=v>.015;
