@@ -427,9 +427,10 @@ function chooseInitialPlayableFacing(worldData,spawnPos){
   const nearCoverage=measured.map(c=>c.nearSurfaceCoverage||0).sort((a,b)=>a-b);
   const centerCoverage=measured.map(c=>c.centerNearSurfaceCoverage||0).sort((a,b)=>a-b);
   const percentile=(values,p)=>values.length?values[Math.max(0,Math.min(values.length-1,Math.floor((values.length-1)*p)))]:0;
-  // 12x8 full-frame bins and a 6x6 central region make prolonged >40% near-surface
-  // occupancy a strong signal that rotating in place cannot produce a readable view.
-  const yawSpaceExhausted=(selected.centerNearSurfaceCoverage||0)>14||(selected.nearSurfaceCoverage||0)>38;
+  // Trigger the existing bounded position fallback before the hard acceptance ceiling.
+  // Exact-head pixels proved 36/96 full-frame + 12/36 center can still be wall-dominated,
+  // so treat that composition as yaw-space exhaustion without weakening the <=38/<=14 gates.
+  const yawSpaceExhausted=(selected.centerNearSurfaceCoverage||0)>=12||(selected.nearSurfaceCoverage||0)>=36;
   return {...selected,readableFloor,centerContentFloor,richestScore:richest,richestNearOccluders:richestCandidate?.nearOccluders||0,richestCenterOccluders:richestCandidate?.centerOccluders||0,richestCenterMidFar:richestCandidate?.centerMidFar||0,candidateCount:measured.length,yawSpaceExhausted,nearSurfaceCoverageRange:{min:nearCoverage[0]||0,median:percentile(nearCoverage,.5),max:nearCoverage.at(-1)||0},centerNearSurfaceCoverageRange:{min:centerCoverage[0]||0,median:percentile(centerCoverage,.5),max:centerCoverage.at(-1)||0}};
 }
 function chooseInitialPlayableView(worldData,spawnPos){
