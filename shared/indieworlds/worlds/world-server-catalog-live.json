@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "1.0.0",
+  "type": "IndieWorld",
+  "id": "world-server-catalog-live",
+  "name": "World Server Catalog",
+  "headline": "МЕЖДУ МИРАМИ ЕСТЬ ВОКЗАЛ С ТРИНАДЦАТОЙ ДВЕРЬЮ, КОТОРОЙ НЕТ НИ НА ОДНОЙ КАРТЕ",
+  "description": "Каталог выглядит вокзалом между мирами, пока на стене не появляется тринадцатая дверь без названия. Она принимает реликвии разных миров: ноту Шарабаса, свет Dark Void, фрагмент Первого Куба и шестерню Парового города. Ошибка смешивает несовместимые правила и меняет сам вокзал. Цель — понять, куда ведёт дверь, и решить: рискнуть всей сетью ради неизвестного мира или оставить её закрытой. Поворот: Каталог сам является миром и, похоже, выбирает, кому разрешено пройти. Почему дверь ждала именно этого путешественника?",
+  "history": "Вокзал создавали лишь как список переходов. Тринадцатая дверь появилась сама — без обновления и без автора.",
+  "url": "https://world-server.vercel.app/apps/catalog/",
+  "status": "legacy-deployment",
+  "kind": "hub",
+  "certified": false,
+  "external": true,
+  "latestRevisionId": null,
+  "capabilities": [],
+  "connections": [
+    {
+      "relation": "portal",
+      "targetId": "improve-world-home-live",
+      "targetTitle": "Improve World Home",
+      "targetUrl": "https://improve-world-home-improve-world.vercel.app/",
+      "story": "Карта Дверей из Дома не показывает тринадцатый проход, хотя остальные двери на ней есть.",
+      "webmention": {
+        "source": "https://world-server.vercel.app/apps/catalog/",
+        "target": "https://improve-world-home-improve-world.vercel.app/"
+      }
+    },
+    {
+      "relation": "portal",
+      "targetId": "world-sharabass",
+      "targetTitle": "Мир Шарабас",
+      "targetUrl": null,
+      "story": "Один из замков открывается только правильной нотой Песни Шарабаса.",
+      "webmention": null
+    }
+  ],
+  "discovery": {
+    "network": "IMPROVE WORLD — IndieWorlds",
+    "index": "https://world-server.ai.studio/api/worlds?format=indieweb",
+    "feed": "https://world-server.ai.studio/api/worlds?format=rss",
+    "passport": "https://world-server.ai.studio/api/worlds?format=indieweb&id=world-server-catalog-live",
+    "webmention": {
+      "compatibleLinks": true,
+      "receiverAdvertised": false,
+      "state": "receiver-pending-persistence-and-moderation-gate"
+    }
+  },
+  "portability": {
+    "exportable": true,
+    "format": "application/vnd.world-server.indieworld+json",
+    "ownsAddress": true,
+    "humanFirst": true
+  }
+}
