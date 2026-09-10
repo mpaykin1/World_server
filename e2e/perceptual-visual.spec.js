@@ -32,13 +32,38 @@ async function captureRenderedPixelEvidence(page){
         }
         rows.push(row);
       }
+      // A loaded renderer can still be visually unusable when one smooth facade,
+      // overhang or ground plane owns almost the whole frame. Measure real composed
+      // pixels, not geometry telemetry, so finalViewEligible cannot certify a
+      // low-articulation frame by itself.
+      let neighborPairs=0,strongEdgePairs=0;
+      const colorDistance=(a,b)=>{
+        const dr=pixels[a]-pixels[b],dg=pixels[a+1]-pixels[b+1],db=pixels[a+2]-pixels[b+2];
+        return Math.hypot(dr,dg,db);
+      };
+      for(let y=0;y<sample.height;y++)for(let x=0;x<sample.width;x++){
+        const i=(y*sample.width+x)*4;
+        if(x+1<sample.width){neighborPairs++;if(colorDistance(i,i+4)>=32)strongEdgePairs++;}
+        if(y+1<sample.height){neighborPairs++;if(colorDistance(i,i+sample.width*4)>=32)strongEdgePairs++;}
+      }
+      const strongEdgeRatio=strongEdgePairs/Math.max(1,neighborPairs);
+      const compositionPass=unique.size>=8&&opaque/(sample.width*sample.height)>=.9&&strongEdgeRatio>=.13;
       return {
         source:'playwright-rendered-canvas-screenshot',
         correlation:'same-loaded-state-immediately-before-screenshot-assertion',
         width:sample.width,height:sample.height,encoding:'rgb444-row-major-hex',rows,
         uniqueQuantizedColors:unique.size,
         meanLuma:Number((luma/Math.max(1,sample.width*sample.height)).toFixed(2)),
-        opaqueRatio:Number((opaque/Math.max(1,sample.width*sample.height)).toFixed(4))
+        opaqueRatio:Number((opaque/Math.max(1,sample.width*sample.height)).toFixed(4)),
+        composition:{
+          source:'same-composited-rgb-grid',
+          strongEdgePairs,
+          neighborPairs,
+          strongEdgeRatio:Number(strongEdgeRatio.toFixed(4)),
+          minimumStrongEdgeRatio:.13,
+          pass:compositionPass,
+          classification:compositionPass?'PIXEL_COMPOSITION_ARTICULATED':'VISIBLE_BUT_LOW_DEPTH_ARTICULATION'
+        }
       };
     },png.toString('base64'));
   }catch(error){
@@ -181,6 +206,10 @@ for(const b of approved){
       evidence.postResizeOrientation=resizeOrientation;
       testInfo.annotations.push({type:'loaded-state-graphics-evidence',description:JSON.stringify(evidence)});
       await testInfo.attach('loaded-state-graphics-evidence.json',{body:Buffer.from(`${JSON.stringify(evidence,null,2)}\n`),contentType:'application/json'});
+      // Fail closed before baseline comparison when actual loaded-state pixels are
+      // dominated by low-articulation surfaces. This is additive: the protected
+      // screenshot assertion and all existing thresholds remain unchanged.
+      expect(evidence.framing.rendererPixelEvidence?.composition?.pass).toBe(true);
     }
     // Playwright's screenshot matcher checks rendered pixels after browser rendering.
     await expect(page).toHaveScreenshot(path.basename(b.path),{
