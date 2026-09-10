@@ -47,7 +47,7 @@ Commit and push `ai/codex/armorpaint-material-forge`, then open a PR into protec
 Implementation is complete on the isolated branch. Material Forge now has a strict ArmorPaint export preset/importer, deterministic six-recipe registry, SAFE/BALANCED/HIGH/ULTRA budgets, same-origin/path/hash/dimension guards, adaptive UV/triplanar Three.js binding and procedural fallback. The shared bootstrap is adopted by `voxel-world`, `ai3d-voxel-city`, `survival`, `catalog` and `world-sharabass`. Runtime hardening also cancels stale texture loads and restores the original shader hook when a tier loses its authored-map plan.
 
 ## Next action
-Repeat the final gate after runtime hardening, review the exact diff, commit/push the branch, open the protected PR and extend the existing four hourly automation prompts. Fleet browser/mobile evidence remains mandatory before any authored visual baseline can be promoted.
+Fleet must independently validate the current exact head of PR #97 on desktop/mobile and return `READY_FOR_OCEAN` or a concrete same-PR blocker. Ocean may integrate only that certified head after the higher-priority Manual Fast Lane clears. No authored visual baseline or production-readiness credit is allowed before Fleet PRE and later Fleet POST evidence.
 
 ## Completion criteria
 Focused and repository gates pass; registry compilation is deterministic; unsafe/oversized inputs fail closed; browser runtime preserves procedural fallback and device ceilings; exact evidence is recorded; PR is open; existing hourly prompts are updated with bounded Material Forge responsibilities.
@@ -60,7 +60,8 @@ Focused and repository gates pass; registry compilation is deterministic; unsafe
 - `npm run golden:check`, `npm run contracts:check`, `npm run tech:audit`, `npm run quality:world:materials`, `npm run quality:diff`: PASS.
 - Final post-hardening `npm run release:gate`: PASS through protocol, full tests, Golden, no-regression, fuzz, impact, perceptual, technology, duplicate, contracts, project, stability, evidence, World Quality and Collective Brain gates.
 - Local static HTTP smoke returned 200 for the registry, runtime and five adopted worlds. Local Playwright browser evidence is unavailable because the Playwright CDN returned 502/timeouts; `e2e/material-forge.spec.js` carries desktop/mobile procedural and real WebGL authored-triplanar shader checks for CI/Fleet.
-- PR, exact head SHA and hourly automation updates: pending.
+- Protected review PR #97 is open from `ai/codex/armorpaint-material-forge`; its remote head and exact base are recorded in PR metadata. No merge or deployment was performed.
+- Existing hourly tasks were extended without a fifth worker or schedule changes: Architect `6a9f5b02fffc81918542f8cd6d1a70c8` (:00), Builder `6a9d497e64508191990f7f113089a95f` (:05), Fleet PRE/POST `6a9cede19eb88191b776ea7a9b64b217` (:25), Ocean `6a9e4318a7008191bfcf86e5ad352426` (:45). Post-update verification found one Material Forge contract in each prompt; all four remain enabled in `Asia/Tbilisi`.
 
 ---
 
