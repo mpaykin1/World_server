@@ -2,6 +2,80 @@
 
 ---
 
+# IndieWorlds foundation — 2026-09-10
+
+## Task
+Implement the first production-safe IndieWeb layer for World Server: portable self-describing world passports, RSS discovery, independent canonical world URLs, visible passport access inside the existing Golden UI, and machine-readable world-to-world connections.
+
+## Why
+World Server already has a deny-by-default release registry, a World Graph, a newspaper catalog and interconnected lore. IndieWorlds should extend those exact systems so every world can be discovered, linked and exported without creating a second catalog, renderer, release policy or backend.
+
+## Current state
+Branch `ai/codex/indieworlds-foundation` was created from clean `origin/master`. `npm ci` passed. Baseline `npm run quality:diff` passed. Baseline `npm run release:gate` reached 597 tests and failed in 3 pre-existing environment-dependent tests before any product edit: 2 CPU reconstruction tests because the host Python lacks `requests`, and 1 MCP filesystem proxy test timed out after 30 seconds. The other 590 tests passed and 4 were skipped. Collective Brain routing selected architecture review + repository verification, with peer review required and parallel work disabled; recall returned zero prior matches.
+
+## Target state
+One reusable IndieWorlds module derives portable world passports and RSS from the existing release registry and World Graph. Existing `/api/worlds` remains GET-only and certified-by-default while adding explicit `indieweb` and `rss` representations. The Golden UI exposes the current world's passport and injects discovery metadata. Deterministic static exports provide a hosting-neutral fallback suitable for mirrors such as Neocities.
+
+## Files / systems involved
+`lib/indieworlds.js`, `api/worlds.js`, `shared/golden-ui-shell.js`, `shared/golden-ui-shell.css`, `scripts/export-indieworlds.js`, generated `shared/indieworlds/` artifacts, `package.json`, `data/golden-components.json`, `data/technology-registry.json`, focused tests, and this WIP evidence.
+
+## Known risks
+- Never make quarantine/diagnostic/tool apps appear in the certified public API.
+- Never advertise a Webmention receiver until a persistent, spam-resistant and SSRF-safe receiver exists.
+- Never trust request host/protocol headers without validation when producing absolute URLs.
+- Preserve the existing `/api/worlds` JSON shape for callers that do not request a new format.
+- Keep static exports deterministic so CI can prove they match canonical registry/graph data.
+
+## Golden systems that must be preserved
+Deny-by-default app release registry, World Graph identity/revisions/portals, Golden compact UI, catalog newspaper and videos, desktop/mobile controls, physics, telemetry, static fallback behavior, API compatibility and the Vercel function-count limit.
+
+## Errors that must not return
+Allow-by-file-existence publication, dangling world connections, duplicate catalog sources of truth, obstructive permanent panels, broken mobile safe areas, invented Webmention support, unsafe host-header reflection, non-deterministic generated artifacts and RSS/XML injection.
+
+## Exact patch / change plan
+1. Add pure IndieWorlds projection helpers with strict URL and XML escaping.
+2. Extend the existing worlds handler with opt-in passport/index/RSS formats while preserving its default payload and GET-only contract.
+3. Generate deterministic portable JSON passports, an index and RSS fallback from the canonical registry + graph.
+4. Add discovery links, JSON-LD and a compact passport section to the existing Golden information drawer.
+5. Register the reusable layer in the Golden Component Registry and add focused regression tests for release filtering, escaping, determinism, API compatibility and UI wiring.
+6. Run focused checks, peer review, full repository gates, commit, push and open a PR; do not merge or deploy automatically.
+
+## Tests to run
+Focused IndieWorlds tests; `npm run check:fast`; `npm run check`; `npm run golden:check`; `npm run desktop-ai:check`; `npm run quality:impact`; `npm run quality:diff`; full `npm run release:gate`; `git diff --check`; local HTTP/API smoke for default JSON, passport JSON and RSS.
+
+## Deployment / PR plan
+Commit and push `ai/codex/indieworlds-foundation`, then open a PR into `master`. No direct master push, merge or production deployment. A production/preview link is only reported after a separately authorized promotion and verified browser/runtime checks.
+
+## Current progress
+Implementation and security hardening are complete. The canonical projection now produces 10 public passports (2 certified local worlds plus all 8 explicitly live external worlds), one network index and one RSS feed. `/api/worlds` keeps its previous default response and adds opt-in public `indieweb`/`rss` representations. Golden UI exposes the current published passport and clearly labels quarantine worlds as drafts. Static discovery links are present on the catalog and both certified local worlds. Netlify reuses the canonical handler; Vercel remains within its 12-function limit.
+
+Initial peer review found three medium issues: unauthenticated inventory scope, allow-by-default future external entries and reflected proxy Host values. It also found three low issues: local XML MIME, 40 px passport links without the shared focus rule and environment-dependent exports. All six were corrected. Follow-up read-only review confirmed zero remaining high/medium findings and 11/11 focused tests plus an environment-override drift check passed.
+
+## Next action
+Wait for protected PR checks and human review. Do not merge or deploy automatically; inbound Webmention/IndieAuth remain a separately gated follow-up.
+
+## Completion criteria
+All focused tests pass; default API behavior remains byte-shape compatible; only certified internal worlds and already-live external worlds appear in public IndieWorlds discovery; static exports cannot drift; Golden UI remains compact; peer review has no unresolved high-severity finding; PR is open with honest baseline blockers and evidence.
+
+## Final evidence
+- Focused IndieWorlds/catalog/graph suite: PASS, 22 tests, 0 failures.
+- IndieWorlds focused suite after peer-review fixes: PASS, 11 tests, 0 failures.
+- `npm run indieworlds:check`: PASS; 12 deterministic artifacts match canonical data and remain stable when deployment URL environment variables change.
+- `npm run check:fast`: PASS; 56 JavaScript files.
+- `npm run golden:check`: PASS.
+- `npm run contracts:check`: PASS; 0 blockers.
+- Local HTTP smoke: legacy `/api/worlds` retained the `{worlds, graph}` shape; public passport returned its vendor MIME type; RSS returned `application/rss+xml`; static catalog discovery links resolved.
+- First full `npm run check` after implementation: 600 pass, 2 fail, 4 skip; both failures exactly matched the baseline host dependency gap (`requests` missing for CPU reconstruction). After installing the already-declared Python requirement, targeted CPU reconstruction tests passed 2/2.
+- Mandatory peer review: follow-up verdict has no unresolved high/medium finding.
+- Technology registry: `IndieWeb-compatible world discovery` recorded at 70% integrated with executable source/export/test evidence; inbound Webmention and IndieAuth are explicitly not claimed.
+- Final `npm run release:gate`: PASS. Full Node suite: 608 tests, 604 pass, 0 fail, 4 intentionally skipped; fuzz, Golden, governance, regression, perceptual, technology, duplicate, contract, project-review, stability, evidence, world-quality and Collective Brain security gates all passed. Non-blocking Collective Brain checkpoint sync reported `DEGRADED sync=queued`, as designed for unavailable external memory.
+- `npm run quality:diff`: PASS; no accepted metric regressed. Current overall governance is 98%, evidence score 95.5%, world-quality readiness 100%.
+- `npm run collective-brain:doctor`: PASS with expected optional local services unavailable in this managed Linux environment; benchmark PASS (26 ms); replay PASS (88 events).
+- Remote implementation commit: `390a2f46a619d6dbdcb1aa20771403deaf71c936`.
+- Review PR: https://github.com/mpaykin1/World_server/pull/96 (open against `master`; no merge or deployment performed).
+
+---
+
 # Patch-to-World ingestion and World Graph — 2026-09-07
 
 ## Task

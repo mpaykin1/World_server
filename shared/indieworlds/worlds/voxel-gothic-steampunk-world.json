@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "1.0.0",
+  "type": "IndieWorld",
+  "id": "voxel-gothic-steampunk-world",
+  "name": "Voxel Gothic Steampunk World",
+  "headline": "ТРИДЦАТЬ ЛЕТ ЧАСЫ БИЛИ ДВЕНАДЦАТЬ РАЗ. ПРОШЛОЙ НОЧЬЮ РАЗДАЛСЯ ТРИНАДЦАТЫЙ УДАР",
+  "description": "Паровой город — гигантский механизм: мосты движутся с шестернями, башни дышат паром, а под собором работает Сердечный Двигатель. После тринадцатого удара один район повторяет десять минут снова и снова. Исчезнувший Часовщик оставляет схемы недостающей шестерни. Нужно восстановить механизм и решить — перезапустить Сердце или остановить его навсегда; каждая починка меняет другой район. Внутри Двигателя найден цилиндр с частью Песни Шарабаса. Город был машиной — или машиной сделали живое существо?",
+  "history": "Старые мастера говорили, что городские часы не измеряют время, а удерживают его на месте.",
+  "url": "https://voxel-gothic-steampunk-world-improve-world.vercel.app/",
+  "status": "legacy-deployment",
+  "kind": "game",
+  "certified": false,
+  "external": true,
+  "latestRevisionId": null,
+  "capabilities": [],
+  "connections": [
+    {
+      "relation": "portal",
+      "targetId": "world-sharabass",
+      "targetTitle": "Мир Шарабас",
+      "targetUrl": null,
+      "story": "В Сердечном Двигателе хранится металлический цилиндр с утраченной частью Песни Шарабаса.",
+      "webmention": null
+    },
+    {
+      "relation": "portal",
+      "targetId": "gothic-voxel-city-atlas-v3-mobile-final",
+      "targetTitle": "Gothic Voxel City Atlas V3 Mobile Final",
+      "targetUrl": "https://gothic-voxel-city-atlas-v3-mobile-final-improve-world.vercel.app/",
+      "story": "Атлас показывает район за несколько минут до тринадцатого удара.",
+      "webmention": {
+        "source": "https://voxel-gothic-steampunk-world-improve-world.vercel.app/",
+        "target": "https://gothic-voxel-city-atlas-v3-mobile-final-improve-world.vercel.app/"
+      }
+    }
+  ],
+  "discovery": {
+    "network": "IMPROVE WORLD — IndieWorlds",
+    "index": "https://world-server.ai.studio/api/worlds?format=indieweb",
+    "feed": "https://world-server.ai.studio/api/worlds?format=rss",
+    "passport": "https://world-server.ai.studio/api/worlds?format=indieweb&id=voxel-gothic-steampunk-world",
+    "webmention": {
+      "compatibleLinks": true,
+      "receiverAdvertised": false,
+      "state": "receiver-pending-persistence-and-moderation-gate"
+    }
+  },
+  "portability": {
+    "exportable": true,
+    "format": "application/vnd.world-server.indieworld+json",
+    "ownsAddress": true,
+    "humanFirst": true
+  }
+}

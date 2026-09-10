@@ -45,6 +45,23 @@
         "mobile safe area",
         "non-obstructive HUD"
       ]
+    },
+    "indieworld-discovery": {
+      "canonical": [
+        "lib/indieworlds.js",
+        "shared/golden-ui-shell.js"
+      ],
+      "status": "golden",
+      "scope": {
+        "allPublishedWorlds": true
+      },
+      "rules": [
+        "deny-by-default public feed",
+        "portable JSON passport",
+        "RSS autodiscovery",
+        "validated absolute URLs",
+        "no Webmention receiver before persistence and moderation gate"
+      ]
     }
   },
   "schemaVersion": "2.0.0",

@@ -1,0 +1,520 @@
+{
+  "schemaVersion": "1.0.0",
+  "type": "IndieWorldNetwork",
+  "name": "IMPROVE WORLD — IndieWorlds",
+  "url": "https://world-server.ai.studio/apps/catalog/",
+  "feed": "https://world-server.ai.studio/api/worlds?format=rss",
+  "releasePolicy": "deny-by-default",
+  "scope": "public",
+  "principles": [
+    "own-address",
+    "portable-metadata",
+    "human-first",
+    "linked-worlds",
+    "open-discovery"
+  ],
+  "worlds": [
+    {
+      "schemaVersion": "1.0.0",
+      "type": "IndieWorld",
+      "id": "ai3d-voxel-city",
+      "name": "AI3D Voxel City",
+      "headline": "КАЖДУЮ НОЧЬ ЭТОТ ГОРОД ПЕРЕСТРАИВАЕТ СЕБЯ — НО ДЛЯ КОГО?",
+      "description": "Voxel City каждую ночь сдвигает улицы и достраивает башни. С высоты закрытые кварталы складываются в неизвестный знак, а на Нулевой Улице можно потерять выход навсегда. Безликий Архитектор появляется там, где игрок что-то изменил. Цель — добраться до Башни без часов и понять, кто командует городом. Но Архитектор повторяет решения самих жителей. Остановить самостроящийся город или позволить ему закончить чертёж, смысла которого никто не знает?",
+      "history": "Город вырос у границы Voxel World и однажды начал строить новые здания раньше, чем их успевали проектировать.",
+      "url": "https://world-server.ai.studio/apps/ai3d-voxel-city/",
+      "status": "certified",
+      "kind": "game",
+      "certified": true,
+      "external": false,
+      "latestRevisionId": "ai3d-voxel-city@1.0.0",
+      "capabilities": [
+        "deterministic-generation",
+        "golden-physics",
+        "mobile-controls",
+        "visual-quality"
+      ],
+      "connections": [
+        {
+          "relation": "portal",
+          "targetId": "voxel-world",
+          "targetTitle": "Voxel World",
+          "targetUrl": "https://world-server.ai.studio/apps/voxel-world/",
+          "story": "План улиц продолжает координатный узор, начатый возле Первого Куба.",
+          "webmention": {
+            "source": "https://world-server.ai.studio/apps/ai3d-voxel-city/",
+            "target": "https://world-server.ai.studio/apps/voxel-world/"
+          }
+        }
+      ],
+      "discovery": {
+        "network": "IMPROVE WORLD — IndieWorlds",
+        "index": "https://world-server.ai.studio/api/worlds?format=indieweb",
+        "feed": "https://world-server.ai.studio/api/worlds?format=rss",
+        "passport": "https://world-server.ai.studio/api/worlds?format=indieweb&id=ai3d-voxel-city",
+        "webmention": {
+          "compatibleLinks": true,
+          "receiverAdvertised": false,
+          "state": "receiver-pending-persistence-and-moderation-gate"
+        }
+      },
+      "portability": {
+        "exportable": true,
+        "format": "application/vnd.world-server.indieworld+json",
+        "ownsAddress": true,
+        "humanFirst": true
+      }
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "type": "IndieWorld",
+      "id": "dark-void-navigator-live",
+      "name": "Dark Void Navigator",
+      "headline": "В ТЕМНОТЕ ЕСТЬ ДВЕРЬ БЕЗ СТЕН — И ОНА ОТВЕЧАЕТ НА ВОПРОСЫ",
+      "description": "Dark Void начинается с одного огонька и голоса Навигатора. Здесь сказанное слово может зажечь мост, а неверный вопрос — погасить найденный путь. Чёрная Волна стирает маяки один за другим. Чтобы выбраться, нужно зажечь семь огней и открыть Дверь без стен, но последний маяк требует отдать одно воспоминание. Поворот: рисунок огней оказывается нотной записью Песни Шарабаса. Кто посылает свет из глубины — другой мир, будущий игрок или сама тьма?",
+      "history": "Первый путь возник не из дороги, а из разговора: каждый ответ добавлял в пустоту новую точку света.",
+      "url": "https://dark-void-navigator.vercel.app/",
+      "status": "legacy-deployment",
+      "kind": "navigator",
+      "certified": false,
+      "external": true,
+      "latestRevisionId": null,
+      "capabilities": [],
+      "connections": [
+        {
+          "relation": "portal",
+          "targetId": "world-sharabass",
+          "targetTitle": "Мир Шарабас",
+          "targetUrl": null,
+          "story": "Семь огней складываются в Начальную Фразу музыкального языка Шарабаса.",
+          "webmention": null
+        },
+        {
+          "relation": "portal",
+          "targetId": "improve-world-home-live",
+          "targetTitle": "Improve World Home",
+          "targetUrl": "https://improve-world-home-improve-world.vercel.app/",
+          "story": "Дверь без стен иногда открывается прямо в коридор Дома историй.",
+          "webmention": {
+            "source": "https://dark-void-navigator.vercel.app/",
+            "target": "https://improve-world-home-improve-world.vercel.app/"
+          }
+        }
+      ],
+      "discovery": {
+        "network": "IMPROVE WORLD — IndieWorlds",
+        "index": "https://world-server.ai.studio/api/worlds?format=indieweb",
+        "feed": "https://world-server.ai.studio/api/worlds?format=rss",
+        "passport": "https://world-server.ai.studio/api/worlds?format=indieweb&id=dark-void-navigator-live",
+        "webmention": {
+          "compatibleLinks": true,
+          "receiverAdvertised": false,
+          "state": "receiver-pending-persistence-and-moderation-gate"
+        }
+      },
+      "portability": {
+        "exportable": true,
+        "format": "application/vnd.world-server.indieworld+json",
+        "ownsAddress": true,
+        "humanFirst": true
+      }
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "type": "IndieWorld",
+      "id": "gothic-voxel-city-atlas-v3-mobile-final",
+      "name": "Gothic Voxel City Atlas V3 Mobile Final",
+      "headline": "ЭТА КАРТА РИСУЕТ УЛИЦЫ ЗА ДЕНЬ ДО ТОГО, КАК ИХ ПОСТРОЯТ",
+      "description": "На Атласе появляются красные улицы, которых ещё нет; через сутки они возникают вместе с людьми, уверенными, что жили там всегда. Безликий Картограф предупреждает о Стертом Районе, но его название исчезает. Нужно сравнивать прошлые и будущие карты, найти район и решить — изменить предсказанный маршрут или позволить ему случиться. Ошибочная улица может закрыться позади навсегда. Поворот: почерк Картографа совпадает с заметками, которые игрок ещё только напишет. Кто рисует будущее?",
+      "history": "Атлас создали для навигации по Паровому городу, но вскоре он начал знать о новых улицах раньше строителей.",
+      "url": "https://gothic-voxel-city-atlas-v3-mobile-final-improve-world.vercel.app/",
+      "status": "legacy-deployment",
+      "kind": "game",
+      "certified": false,
+      "external": true,
+      "latestRevisionId": null,
+      "capabilities": [],
+      "connections": [
+        {
+          "relation": "portal",
+          "targetId": "voxel-gothic-steampunk-world",
+          "targetTitle": "Voxel Gothic Steampunk World",
+          "targetUrl": "https://voxel-gothic-steampunk-world-improve-world.vercel.app/",
+          "story": "Все красные линии сходятся к Сердечному Двигателю перед тринадцатым ударом.",
+          "webmention": {
+            "source": "https://gothic-voxel-city-atlas-v3-mobile-final-improve-world.vercel.app/",
+            "target": "https://voxel-gothic-steampunk-world-improve-world.vercel.app/"
+          }
+        }
+      ],
+      "discovery": {
+        "network": "IMPROVE WORLD — IndieWorlds",
+        "index": "https://world-server.ai.studio/api/worlds?format=indieweb",
+        "feed": "https://world-server.ai.studio/api/worlds?format=rss",
+        "passport": "https://world-server.ai.studio/api/worlds?format=indieweb&id=gothic-voxel-city-atlas-v3-mobile-final",
+        "webmention": {
+          "compatibleLinks": true,
+          "receiverAdvertised": false,
+          "state": "receiver-pending-persistence-and-moderation-gate"
+        }
+      },
+      "portability": {
+        "exportable": true,
+        "format": "application/vnd.world-server.indieworld+json",
+        "ownsAddress": true,
+        "humanFirst": true
+      }
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "type": "IndieWorld",
+      "id": "improve-world-experiment-100",
+      "name": "Improve World Experiment 100",
+      "headline": "ЛАБОРАТОРИЯ №100 СКРЫВАЕТ ЭКСПЕРИМЕНТ №101 — И В НЁМ УЖЕ ЕСТЬ УЧАСТНИК",
+      "description": "Здесь любую гипотезу можно ненадолго сделать законом физики. На стене записаны сто опытов, но журналы описывают ещё один — №101, которого официально нет. Нестабильное правило способно вырваться наружу и переписать соседние миры. Игрок должен восстановить цепочку опытов и решить, выпустить мощное открытие или уничтожить его. Поворот: объект эксперимента №101 — не мир, а сам игрок, за решениями которого всё время наблюдали. Кто запустил опыт до его появления?",
+      "history": "После сотого опыта журналы начали описывать события раньше, чем исследователи успевали их проводить.",
+      "url": "https://improve-world-experiment-100-improve-world.vercel.app/",
+      "status": "legacy-deployment",
+      "kind": "experiment",
+      "certified": false,
+      "external": true,
+      "latestRevisionId": null,
+      "capabilities": [],
+      "connections": [
+        {
+          "relation": "portal",
+          "targetId": "improve-world-home-live",
+          "targetTitle": "Improve World Home",
+          "targetUrl": "https://improve-world-home-improve-world.vercel.app/",
+          "story": "Истории из Дома приходят сюда как гипотезы и иногда возвращаются способными менять реальность.",
+          "webmention": {
+            "source": "https://improve-world-experiment-100-improve-world.vercel.app/",
+            "target": "https://improve-world-home-improve-world.vercel.app/"
+          }
+        }
+      ],
+      "discovery": {
+        "network": "IMPROVE WORLD — IndieWorlds",
+        "index": "https://world-server.ai.studio/api/worlds?format=indieweb",
+        "feed": "https://world-server.ai.studio/api/worlds?format=rss",
+        "passport": "https://world-server.ai.studio/api/worlds?format=indieweb&id=improve-world-experiment-100",
+        "webmention": {
+          "compatibleLinks": true,
+          "receiverAdvertised": false,
+          "state": "receiver-pending-persistence-and-moderation-gate"
+        }
+      },
+      "portability": {
+        "exportable": true,
+        "format": "application/vnd.world-server.indieworld+json",
+        "ownsAddress": true,
+        "humanFirst": true
+      }
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "type": "IndieWorld",
+      "id": "improve-world-home-live",
+      "name": "Improve World Home",
+      "headline": "ЭТОТ ДОМ ДОСТРАИВАЕТ КОМНАТУ КАЖДЫЙ РАЗ, КОГДА ЕМУ РАССКАЗЫВАЮТ ИСТОРИЮ",
+      "description": "Дом бесконечен внутри: искренняя история создаёт комнату, ложь — пустой коридор, забытая история — запертую дверь. По комнатам ходят Незавершённые, существа из сюжетов без конца. Игроку нужно собрать семь фрагментов Карты Дверей, но один фрагмент можно получить только удалив комнату вместе с чьей-то памятью. Выбор — пожертвовать историей или оставить карту неполной. Поворот: Дом не построили люди; он вырос вокруг первой рассказанной истории и, возможно, сам решает, какие миры должны существовать.",
+      "history": "Сначала это было место для идей. Потом двери начали вести в реальные миры, а истории разных людей — неожиданно продолжать друг друга.",
+      "url": "https://improve-world-home-improve-world.vercel.app/",
+      "status": "legacy-deployment",
+      "kind": "hub",
+      "certified": false,
+      "external": true,
+      "latestRevisionId": null,
+      "capabilities": [],
+      "connections": [
+        {
+          "relation": "portal",
+          "targetId": "world-server-catalog-live",
+          "targetTitle": "World Server Catalog",
+          "targetUrl": "https://world-server.vercel.app/apps/catalog/",
+          "story": "Карта Дверей стала первым планом Каталога, но на ней есть проход, которого нет ни в одном списке.",
+          "webmention": {
+            "source": "https://improve-world-home-improve-world.vercel.app/",
+            "target": "https://world-server.vercel.app/apps/catalog/"
+          }
+        },
+        {
+          "relation": "portal",
+          "targetId": "improve-world-experiment-100",
+          "targetTitle": "Improve World Experiment 100",
+          "targetUrl": "https://improve-world-experiment-100-improve-world.vercel.app/",
+          "story": "Одна дверь ведёт в Лабораторию 100, где истории временно превращают в законы физики.",
+          "webmention": {
+            "source": "https://improve-world-home-improve-world.vercel.app/",
+            "target": "https://improve-world-experiment-100-improve-world.vercel.app/"
+          }
+        }
+      ],
+      "discovery": {
+        "network": "IMPROVE WORLD — IndieWorlds",
+        "index": "https://world-server.ai.studio/api/worlds?format=indieweb",
+        "feed": "https://world-server.ai.studio/api/worlds?format=rss",
+        "passport": "https://world-server.ai.studio/api/worlds?format=indieweb&id=improve-world-home-live",
+        "webmention": {
+          "compatibleLinks": true,
+          "receiverAdvertised": false,
+          "state": "receiver-pending-persistence-and-moderation-gate"
+        }
+      },
+      "portability": {
+        "exportable": true,
+        "format": "application/vnd.world-server.indieworld+json",
+        "ownsAddress": true,
+        "humanFirst": true
+      }
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "type": "IndieWorld",
+      "id": "voxel-gothic-steampunk-mobile-repaired",
+      "name": "Voxel Gothic Steampunk Mobile Repaired",
+      "headline": "КОГДА ГОРОД НАЧАЛ СКЛАДЫВАТЬСЯ, ИНЖЕНЕРЫ СПРЯТАЛИ ЕГО В МИРЕ РАЗМЕРОМ С ЛАДОНЬ",
+      "description": "Этот слой города создавали как аварийное убежище: районы можно двигать и складывать прикосновениями. Но копия начала сама забирать улицы и жителей из большого Парового города. Медная Ладонь требует восстановить пять жестов; ошибка складывает один район внутрь другого. Цель — остановить сжатие и вернуть кварталы. Финальный выбор: развернуть копию обратно или оставить её самостоятельным миром. Поворот: она уже не копия — она помнит события, которых никогда не было в оригинале. Когда именно новый мир стал живым?",
+      "history": "Переносной слой появился после первых сбоев Сердечного Двигателя и постепенно начал развиваться отдельно.",
+      "url": "https://voxel-gothic-steampunk-mobile-repaired-improve-world.vercel.app/",
+      "status": "legacy-deployment",
+      "kind": "game",
+      "certified": false,
+      "external": true,
+      "latestRevisionId": null,
+      "capabilities": [],
+      "connections": [
+        {
+          "relation": "portal",
+          "targetId": "voxel-gothic-steampunk-world",
+          "targetTitle": "Voxel Gothic Steampunk World",
+          "targetUrl": "https://voxel-gothic-steampunk-world-improve-world.vercel.app/",
+          "story": "Исчезнувшие кварталы большого города появляются здесь в уменьшенном виде после тринадцатого удара.",
+          "webmention": {
+            "source": "https://voxel-gothic-steampunk-mobile-repaired-improve-world.vercel.app/",
+            "target": "https://voxel-gothic-steampunk-world-improve-world.vercel.app/"
+          }
+        }
+      ],
+      "discovery": {
+        "network": "IMPROVE WORLD — IndieWorlds",
+        "index": "https://world-server.ai.studio/api/worlds?format=indieweb",
+        "feed": "https://world-server.ai.studio/api/worlds?format=rss",
+        "passport": "https://world-server.ai.studio/api/worlds?format=indieweb&id=voxel-gothic-steampunk-mobile-repaired",
+        "webmention": {
+          "compatibleLinks": true,
+          "receiverAdvertised": false,
+          "state": "receiver-pending-persistence-and-moderation-gate"
+        }
+      },
+      "portability": {
+        "exportable": true,
+        "format": "application/vnd.world-server.indieworld+json",
+        "ownsAddress": true,
+        "humanFirst": true
+      }
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "type": "IndieWorld",
+      "id": "voxel-gothic-steampunk-world",
+      "name": "Voxel Gothic Steampunk World",
+      "headline": "ТРИДЦАТЬ ЛЕТ ЧАСЫ БИЛИ ДВЕНАДЦАТЬ РАЗ. ПРОШЛОЙ НОЧЬЮ РАЗДАЛСЯ ТРИНАДЦАТЫЙ УДАР",
+      "description": "Паровой город — гигантский механизм: мосты движутся с шестернями, башни дышат паром, а под собором работает Сердечный Двигатель. После тринадцатого удара один район повторяет десять минут снова и снова. Исчезнувший Часовщик оставляет схемы недостающей шестерни. Нужно восстановить механизм и решить — перезапустить Сердце или остановить его навсегда; каждая починка меняет другой район. Внутри Двигателя найден цилиндр с частью Песни Шарабаса. Город был машиной — или машиной сделали живое существо?",
+      "history": "Старые мастера говорили, что городские часы не измеряют время, а удерживают его на месте.",
+      "url": "https://voxel-gothic-steampunk-world-improve-world.vercel.app/",
+      "status": "legacy-deployment",
+      "kind": "game",
+      "certified": false,
+      "external": true,
+      "latestRevisionId": null,
+      "capabilities": [],
+      "connections": [
+        {
+          "relation": "portal",
+          "targetId": "world-sharabass",
+          "targetTitle": "Мир Шарабас",
+          "targetUrl": null,
+          "story": "В Сердечном Двигателе хранится металлический цилиндр с утраченной частью Песни Шарабаса.",
+          "webmention": null
+        },
+        {
+          "relation": "portal",
+          "targetId": "gothic-voxel-city-atlas-v3-mobile-final",
+          "targetTitle": "Gothic Voxel City Atlas V3 Mobile Final",
+          "targetUrl": "https://gothic-voxel-city-atlas-v3-mobile-final-improve-world.vercel.app/",
+          "story": "Атлас показывает район за несколько минут до тринадцатого удара.",
+          "webmention": {
+            "source": "https://voxel-gothic-steampunk-world-improve-world.vercel.app/",
+            "target": "https://gothic-voxel-city-atlas-v3-mobile-final-improve-world.vercel.app/"
+          }
+        }
+      ],
+      "discovery": {
+        "network": "IMPROVE WORLD — IndieWorlds",
+        "index": "https://world-server.ai.studio/api/worlds?format=indieweb",
+        "feed": "https://world-server.ai.studio/api/worlds?format=rss",
+        "passport": "https://world-server.ai.studio/api/worlds?format=indieweb&id=voxel-gothic-steampunk-world",
+        "webmention": {
+          "compatibleLinks": true,
+          "receiverAdvertised": false,
+          "state": "receiver-pending-persistence-and-moderation-gate"
+        }
+      },
+      "portability": {
+        "exportable": true,
+        "format": "application/vnd.world-server.indieworld+json",
+        "ownsAddress": true,
+        "humanFirst": true
+      }
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "type": "IndieWorld",
+      "id": "voxel-world",
+      "name": "Voxel World",
+      "headline": "КТО ПОЛОЖИЛ ПЕРВЫЙ КУБ — И ПОЧЕМУ ОН ДО СИХ ПОР ПОЁТ?",
+      "description": "Говорят, бесконечный Voxel World вырос из Первого Куба. По ночам блоки сами складываются в координаты, а из глубины звучат семь нот. За картой движется Белая Граница, стирающая чанки и память. Игроку нужно расшифровать узоры и найти Куб, решив — запечатать его или открыть. Но его мелодия совпадает с Песней Шарабаса. Если Куб — дверь, кто положил его сюда первым и что проснётся после правильного ответа?",
+      "history": "Старые строители считали мир своим творением, пока не нашли постройки, существовавшие до первого известного игрока.",
+      "url": "https://world-server.ai.studio/apps/voxel-world/",
+      "status": "certified",
+      "kind": "game",
+      "certified": true,
+      "external": false,
+      "latestRevisionId": "voxel-world@1.0.0",
+      "capabilities": [
+        "golden-physics",
+        "mobile-controls",
+        "multiplayer",
+        "persistent-voxel-state"
+      ],
+      "connections": [
+        {
+          "relation": "portal",
+          "targetId": "world-sharabass",
+          "targetTitle": "Мир Шарабас",
+          "targetUrl": null,
+          "story": "Семь древних блоков отвечают той же последовательностью нот, которой когда-то говорил Шарабас.",
+          "webmention": null
+        }
+      ],
+      "discovery": {
+        "network": "IMPROVE WORLD — IndieWorlds",
+        "index": "https://world-server.ai.studio/api/worlds?format=indieweb",
+        "feed": "https://world-server.ai.studio/api/worlds?format=rss",
+        "passport": "https://world-server.ai.studio/api/worlds?format=indieweb&id=voxel-world",
+        "webmention": {
+          "compatibleLinks": false,
+          "receiverAdvertised": false,
+          "state": "receiver-pending-persistence-and-moderation-gate"
+        }
+      },
+      "portability": {
+        "exportable": true,
+        "format": "application/vnd.world-server.indieworld+json",
+        "ownsAddress": true,
+        "humanFirst": true
+      }
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "type": "IndieWorld",
+      "id": "world-server-catalog-live",
+      "name": "World Server Catalog",
+      "headline": "МЕЖДУ МИРАМИ ЕСТЬ ВОКЗАЛ С ТРИНАДЦАТОЙ ДВЕРЬЮ, КОТОРОЙ НЕТ НИ НА ОДНОЙ КАРТЕ",
+      "description": "Каталог выглядит вокзалом между мирами, пока на стене не появляется тринадцатая дверь без названия. Она принимает реликвии разных миров: ноту Шарабаса, свет Dark Void, фрагмент Первого Куба и шестерню Парового города. Ошибка смешивает несовместимые правила и меняет сам вокзал. Цель — понять, куда ведёт дверь, и решить: рискнуть всей сетью ради неизвестного мира или оставить её закрытой. Поворот: Каталог сам является миром и, похоже, выбирает, кому разрешено пройти. Почему дверь ждала именно этого путешественника?",
+      "history": "Вокзал создавали лишь как список переходов. Тринадцатая дверь появилась сама — без обновления и без автора.",
+      "url": "https://world-server.vercel.app/apps/catalog/",
+      "status": "legacy-deployment",
+      "kind": "hub",
+      "certified": false,
+      "external": true,
+      "latestRevisionId": null,
+      "capabilities": [],
+      "connections": [
+        {
+          "relation": "portal",
+          "targetId": "improve-world-home-live",
+          "targetTitle": "Improve World Home",
+          "targetUrl": "https://improve-world-home-improve-world.vercel.app/",
+          "story": "Карта Дверей из Дома не показывает тринадцатый проход, хотя остальные двери на ней есть.",
+          "webmention": {
+            "source": "https://world-server.vercel.app/apps/catalog/",
+            "target": "https://improve-world-home-improve-world.vercel.app/"
+          }
+        },
+        {
+          "relation": "portal",
+          "targetId": "world-sharabass",
+          "targetTitle": "Мир Шарабас",
+          "targetUrl": null,
+          "story": "Один из замков открывается только правильной нотой Песни Шарабаса.",
+          "webmention": null
+        }
+      ],
+      "discovery": {
+        "network": "IMPROVE WORLD — IndieWorlds",
+        "index": "https://world-server.ai.studio/api/worlds?format=indieweb",
+        "feed": "https://world-server.ai.studio/api/worlds?format=rss",
+        "passport": "https://world-server.ai.studio/api/worlds?format=indieweb&id=world-server-catalog-live",
+        "webmention": {
+          "compatibleLinks": true,
+          "receiverAdvertised": false,
+          "state": "receiver-pending-persistence-and-moderation-gate"
+        }
+      },
+      "portability": {
+        "exportable": true,
+        "format": "application/vnd.world-server.indieworld+json",
+        "ownsAddress": true,
+        "humanFirst": true
+      }
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "type": "IndieWorld",
+      "id": "world-server-codex-voxel-v3",
+      "name": "World Server Codex Voxel V3",
+      "headline": "СТАРЫЙ МИР НЕ УДАЛИЛСЯ — ОН ПРОДОЛЖАЕТ ЖИТЬ ПОД НОВЫМ",
+      "description": "Voxel V3 считали прошлой версией, пока не появились Фантомные Кубы со старыми законами движения и генерации. Архивариус предлагает восстановить три Утраченных Правила, но каждое заражает соседние чанки старой физикой. Игроку нужно выбрать, что спасти из прошлого, не откатив нынешний мир. Поворот: V3 — не архив, а параллельный мир, который помнит момент собственной замены и считает себя настоящим. Какой из двух Voxel-миров был первым?",
+      "history": "После появления нового Voxel World часть старых чанков продолжила генерироваться там, где их уже не должно было быть.",
+      "url": "https://world-server-git-codex-voxel-v3-improve-world.vercel.app/apps/voxel-world/",
+      "status": "legacy-deployment",
+      "kind": "game",
+      "certified": false,
+      "external": true,
+      "latestRevisionId": null,
+      "capabilities": [],
+      "connections": [
+        {
+          "relation": "portal",
+          "targetId": "voxel-world",
+          "targetTitle": "Voxel World",
+          "targetUrl": "https://world-server.ai.studio/apps/voxel-world/",
+          "story": "Фантомные Кубы указывают координаты Первого Куба, но точка отсутствует на нынешней карте.",
+          "webmention": {
+            "source": "https://world-server-git-codex-voxel-v3-improve-world.vercel.app/apps/voxel-world/",
+            "target": "https://world-server.ai.studio/apps/voxel-world/"
+          }
+        }
+      ],
+      "discovery": {
+        "network": "IMPROVE WORLD — IndieWorlds",
+        "index": "https://world-server.ai.studio/api/worlds?format=indieweb",
+        "feed": "https://world-server.ai.studio/api/worlds?format=rss",
+        "passport": "https://world-server.ai.studio/api/worlds?format=indieweb&id=world-server-codex-voxel-v3",
+        "webmention": {
+          "compatibleLinks": true,
+          "receiverAdvertised": false,
+          "state": "receiver-pending-persistence-and-moderation-gate"
+        }
+      },
+      "portability": {
+        "exportable": true,
+        "format": "application/vnd.world-server.indieworld+json",
+        "ownsAddress": true,
+        "humanFirst": true
+      }
+    }
+  ]
+}
