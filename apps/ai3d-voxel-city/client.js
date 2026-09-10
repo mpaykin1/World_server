@@ -318,7 +318,14 @@ function measureInitialViewDepthGrid(spawnPos,yaw,maxDistance){
     const inv=1/Math.max(.0001,Math.hypot(dx,dy,dz));dx*=inv;dy*=inv;dz*=inv;
     let hit=Infinity;
     for(let t=.75;t<=maxDistance;t+=.5){
-      if(isOccupied(Math.floor(spawnPos[0]+dx*t),Math.floor(spawnPos[1]+dy*t),Math.floor(spawnPos[2]+dz*t))){hit=t;break;}
+      const sampleY=Math.floor(spawnPos[1]+dy*t);
+      if(isOccupied(Math.floor(spawnPos[0]+dx*t),sampleY,Math.floor(spawnPos[2]+dz*t))){
+        // Traversable support floor is expected in the lower viewport and must not
+        // consume the near-occluder budget. Only geometry reaching into the player's
+        // body/eye volume can classify a ray as a framing blocker.
+        if(sampleY>=spawnPos[1]-1)hit=t;
+        break;
+      }
     }
     const center=Math.abs(sx)<=.42&&Math.abs(sy)<=.68;
     if(hit<14){nearSurfaceCoverage++;if(center)centerNearSurfaceCoverage++;}
