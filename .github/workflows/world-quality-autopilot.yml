@@ -1,41 +1,68 @@
 name: World Quality Autopilot V4
 on:
   pull_request:
-    paths:
-      - 'apps/**'
-      - 'api/**'
-      - 'lib/**'
-      - 'shared/**'
-      - 'services/ai3d-worker/**'
-      - 'data/**'
-      - 'scripts/**'
-      - 'test/**'
-      - '.ai/**'
-      - '.github/workflows/world-quality-autopilot.yml'
-      - 'AI_START_HERE.md'
-      - 'AGENTS.md'
-      - 'CHATGPT_GAME_CONTROL.md'
-      - 'VNO.md'
-      - 'SCIENCE_STANDARD.md'
   workflow_dispatch:
   schedule:
     - cron: '23 3 * * *'
+
+concurrency:
+  group: world-quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
+
 jobs:
   world-quality:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Detect world-quality impact
+        id: impact
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "$GITHUB_EVENT_NAME" != "pull_request" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            echo "Scheduled/manual run: executing full World Quality Autopilot."
+            exit 0
+          fi
+
+          BASE="${{ github.event.pull_request.base.sha }}"
+          HEAD="${{ github.event.pull_request.head.sha }}"
+          if ! CHANGED="$(git diff --name-only "$BASE" "$HEAD")"; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            echo "Unable to calculate impact safely; running full World Quality Autopilot conservatively."
+            exit 0
+          fi
+
+          echo "$CHANGED"
+          if printf '%s\n' "$CHANGED" | grep -Eq '^(apps/|api/|lib/|shared/|services/ai3d-worker/|data/|scripts/|test/|\.ai/|\.github/workflows/world-quality-autopilot\.yml$|AI_START_HERE\.md$|AGENTS\.md$|CHATGPT_GAME_CONTROL\.md$|VNO\.md$|SCIENCE_STANDARD\.md$)'; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            echo "World/runtime quality is impacted; running the hard world-quality checks."
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "No world/runtime impact detected; required world-quality context will succeed without unrelated heavy checks."
+          fi
       - uses: actions/setup-node@v4
+        if: steps.impact.outputs.run == 'true'
         with: {node-version: 24, cache: npm}
       - run: npm ci
+        if: steps.impact.outputs.run == 'true'
       - run: npm run quality:world:full
+        if: steps.impact.outputs.run == 'true'
       - run: node --test test/world-quality-autopilot.test.js
+        if: steps.impact.outputs.run == 'true'
       - run: npm run quality:regression
+        if: steps.impact.outputs.run == 'true'
+      - name: No world-quality impact
+        if: steps.impact.outputs.run != 'true'
+        run: echo "PASS - this change cannot affect world/runtime quality; no publication blocker is required here."
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: always() && steps.impact.outputs.run == 'true'
         with:
           name: world-quality-autopilot-v4-reports
           path: |
