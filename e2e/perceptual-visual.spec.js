@@ -4,8 +4,8 @@ const manifest=require('../data/visual-baselines.json');
 
 const approved=manifest.approvedBaselines||[];
 
-async function captureLoadedGraphicsEvidence(page){
-  return page.evaluate(() => {
+async function captureLoadedGraphicsEvidence(page,{includePixelEvidence=false}={}){
+  return page.evaluate(includePixelEvidence => {
     const runtime=window.AI3DVoxelRuntime;
     const stats=runtime?.stats?.()||{};
     const canvas=document.querySelector('[data-golden-primary-renderer] canvas')||document.querySelector('#viewer canvas')||document.querySelector('canvas');
@@ -44,6 +44,37 @@ async function captureLoadedGraphicsEvidence(page){
       if((centerNearSurfaceCoverageRatio??0)>=0.5||(nearSurfaceCoverageRatio??0)>=0.5)visibleFrameClassification='VISIBLE_BUT_BAD_FRAMING';
       else visibleFrameClassification='VISIBLE_GAME_CONTENT';
     }
+    let rendererPixelEvidence=null;
+    if(includePixelEvidence&&canvas){
+      try{
+        const sample=document.createElement('canvas');
+        sample.width=24;sample.height=14;
+        const ctx=sample.getContext('2d',{willReadFrequently:true});
+        ctx.drawImage(canvas,0,0,sample.width,sample.height);
+        const pixels=ctx.getImageData(0,0,sample.width,sample.height).data;
+        const rows=[];const unique=new Set();let opaque=0,luma=0;
+        for(let y=0;y<sample.height;y++){
+          let row='';
+          for(let x=0;x<sample.width;x++){
+            const i=(y*sample.width+x)*4;
+            const r=pixels[i],g=pixels[i+1],b=pixels[i+2],a=pixels[i+3];
+            const q=`${(r>>4).toString(16)}${(g>>4).toString(16)}${(b>>4).toString(16)}`;
+            row+=q;unique.add(q);if(a>0)opaque++;luma+=(.2126*r+.7152*g+.0722*b);
+          }
+          rows.push(row);
+        }
+        rendererPixelEvidence={
+          source:'primary-renderer-canvas',
+          correlation:'same-loaded-state-immediately-before-screenshot-assertion',
+          width:sample.width,height:sample.height,encoding:'rgb444-row-major-hex',rows,
+          uniqueQuantizedColors:unique.size,
+          meanLuma:Number((luma/Math.max(1,sample.width*sample.height)).toFixed(2)),
+          opaqueRatio:Number((opaque/Math.max(1,sample.width*sample.height)).toFixed(4))
+        };
+      }catch(error){
+        rendererPixelEvidence={source:'primary-renderer-canvas',correlation:'same-loaded-state-immediately-before-screenshot-assertion',error:String(error?.message||error)};
+      }
+    }
     return {
       pageUrl:location.href,
       defaultCityLoaded:stats.defaultCityLoaded===true,
@@ -63,7 +94,7 @@ async function captureLoadedGraphicsEvidence(page){
       closedAuxiliaryOcclusionRatio:drawerOpen?drawerArea/viewportArea:0,
       camera:{x:Number(player.x)||0,y:Number(player.y)||0,z:Number(player.z)||0,yaw:Number(player.yaw)||0,pitch:Number(player.pitch)||0,playable:player.playable===true},
       selectedFacing:facing,
-      framing:{nearSurfaceCoverage,centerNearSurfaceCoverage,nearSurfaceCoverageRatio,centerNearSurfaceCoverageRatio,visibleFrameClassification},
+      framing:{nearSurfaceCoverage,centerNearSurfaceCoverage,nearSurfaceCoverageRatio,centerNearSurfaceCoverageRatio,visibleFrameClassification,rendererPixelEvidence},
       controls:{
         move:player.playable===true,
         look:typeof runtime?.setView==='function'||typeof runtime?.setPlayerView==='function',
@@ -79,7 +110,7 @@ async function captureLoadedGraphicsEvidence(page){
       pageErrors:[],
       consoleErrors:[]
     };
-  });
+  },includePixelEvidence);
 }
 
 async function captureResizeOrientationEvidence(page){
@@ -98,9 +129,16 @@ async function captureResizeOrientationEvidence(page){
 for(const b of approved){
   test(`perceptual-baseline ${b.id}`,async({page},testInfo)=>{
     const app=b.app||String(b.id).split(':')[0]||'catalog';
-    const pageErrors=[];const consoleErrors=[];
+    const pageErrors=[];const consoleErrors=[];const failedHttpResponses=[];
     page.on('pageerror',e=>pageErrors.push(String(e?.message||e)));
     page.on('console',msg=>{if(msg.type()==='error')consoleErrors.push(msg.text());});
+    page.on('response',response=>{
+      const status=response.status();
+      if(status>=400){
+        const request=response.request();
+        failedHttpResponses.push({status,url:response.url(),method:request.method(),resourceType:request.resourceType()});
+      }
+    });
     await page.goto(`/apps/${app}/`,{waitUntil:'domcontentloaded'});
     if(app!=='catalog')await page.waitForSelector('canvas',{state:'visible',timeout:20000});
     // Real bug found while generating this spec's own baselines: a visible
@@ -120,9 +158,11 @@ for(const b of approved){
     }, { timeout: 20000 }).catch(() => {});
     if(app==='ai3d-voxel-city'){
       const resizeOrientation=await captureResizeOrientationEvidence(page);
-      const evidence=await captureLoadedGraphicsEvidence(page);
+      const evidence=await captureLoadedGraphicsEvidence(page,{includePixelEvidence:true});
       evidence.pageErrors=pageErrors.slice();
       evidence.consoleErrors=consoleErrors.slice();
+      evidence.failedHttpResponses=failedHttpResponses.slice();
+      evidence.framing.failedHttpResponses=failedHttpResponses.slice();
       evidence.screenshotIdentity=path.basename(b.path);
       evidence.project=testInfo.project.name;
       evidence.postResizeOrientation=resizeOrientation;
