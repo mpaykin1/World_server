@@ -18,7 +18,7 @@
     night:{sky:0x030817,fog:0x0b1730,sun:0x91bfff,exposure:.78,saturation:.90,contrast:.96,brightness:.72,warmth:.08,lightLevel:.28,keyScale:.13,hemiScale:.30,night:1},
     sunrise:{sky:0xf4a06f,fog:0xdab18a,sun:0xffb05e,exposure:.93,saturation:1.08,contrast:1,brightness:.92,warmth:.82,lightLevel:.68,keyScale:.66,hemiScale:.58,night:.12}
   };
-  const adapters=new Set(); let layer=null,started=false,lastAudit=0,lastTick=-Infinity;
+  const adapters=new Set(); let layer=null,started=false,lastTick=-Infinity;
   const cycleStartedAt=(global.performance?.now?.()||0)-(Date.now()%(STANDARD.cycle.total*1000));
   const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
   const lerp=(a,b,t)=>a+(b-a)*t; const smooth=t=>{t=clamp(t);return t*t*(3-2*t);};
@@ -174,7 +174,7 @@ ${marker}`);
     for(const old of adapters)if(old.scene===options.scene)return old;
     const f=options.scene.fog;
     const baseFog=f?(f.isFogExp2?{type:'exp2',density:f.density}:{type:'linear',near:f.near,far:f.far}):null;
-    const a={...options,baseFog,lightBases:new WeakMap(),lights:[],nightGroup:null,patchedMaterials:0,paintingUniforms:createPaintingUniforms(options.THREE)};
+    const a={...options,baseFog,lightBases:new WeakMap(),lights:[],nightGroup:null,patchedMaterials:0,registeredAt:global.performance?.now?.()||0,lastMaterialAudit:-Infinity,paintingUniforms:createPaintingUniforms(options.THREE)};
     options.renderer.domElement?.setAttribute('data-golden-three','1');if(global.document&&options.worldId!=='world-sharabass')document.body.dataset.goldenThreeWorld='1';adapters.add(a);ensureThreeNight(a);
     options.scene.traverse(o=>{if(o.isLight)a.lights.push(o);});patchSceneMaterials(a);
     return a;
@@ -214,16 +214,8 @@ ${marker}`);
       });
       g.rotation.y=Math.sin((now||0)*.00004)*.035;
     }
-    if((now||0)-lastAudit>2000){
-      lastAudit=now||0;
-      scene.traverse(o=>{
-        if(!o.material)return;
-        let p=o,insideNight=false;
-        while(p){if(p===a.nightGroup){insideNight=true;break;}p=p.parent;}
-        const ms=Array.isArray(o.material)?o.material:[o.material];
-        ms.forEach(m=>{if('fog' in m)m.fog=!insideNight;if(insideNight&&'toneMapped' in m)m.toneMapped=false;else patchPaintingMaterial(a,m);});
-      });
-    }
+    const auditEvery=((now||0)-a.registeredAt)<12000?400:2500;
+    if((now||0)-a.lastMaterialAudit>auditEvery){a.lastMaterialAudit=now||0;patchSceneMaterials(a);}
   }
   function tick(now){
     if((now-lastTick)>=100){
