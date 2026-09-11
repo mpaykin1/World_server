@@ -105,5 +105,6 @@ test('world creation UI requires an account and guest play can continue without 
   const shell=fs.readFileSync(path.join(root,'shared','golden-ui-shell.js'),'utf8');
   const client=fs.readFileSync(path.join(root,'apps','voxel-world','client.js'),'utf8');
   assert.match(shell,/Войдите в аккаунт, чтобы создавать новые миры/);
-  assert.match(client,/if\(!t\)return null/);
+  assert.match(client,/async function api[\s\S]*const t=token\(\); if\(t\) headers\.Authorization/);
+  assert.match(client,/async function canonApi[\s\S]*const t=token\(\); if\(!t\)return null; headers\.Authorization/);
 });
