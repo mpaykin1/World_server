@@ -1,6 +1,8 @@
 const DEFAULT_API_ORIGIN = 'https://world-server-ai-studio-bridge-514578099152.europe-west2.run.app';
 const DEFAULT_STACK_READ_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/world-stack-read';
 const DEFAULT_STACK_WRITE_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/world-stack-write';
+const DEFAULT_SUPABASE_URL = 'https://iphfwxjuhsucvdyluink.supabase.co';
+const DEFAULT_SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_dwZ33fr4F1475dHOXKE7Dw_JxWaxbIQ';
 
 function jsonResponse(body, status = 200, headers = {}) {
   return new Response(JSON.stringify(body), {
@@ -12,6 +14,20 @@ function jsonResponse(body, status = 200, headers = {}) {
       ...headers
     }
   });
+}
+
+function configApi(request, env) {
+  if (request.method !== 'GET' && request.method !== 'HEAD') {
+    return jsonResponse({ error: 'Method not allowed' }, 405, { allow: 'GET, HEAD' });
+  }
+  const supabaseUrl = String(env?.SUPABASE_URL || DEFAULT_SUPABASE_URL).trim().replace(/\/$/, '');
+  const supabasePublishableKey = String(env?.SUPABASE_PUBLISHABLE_KEY || DEFAULT_SUPABASE_PUBLISHABLE_KEY).trim();
+  const configured = /^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(supabaseUrl) && /^(?:sb_publishable_|eyJ)/.test(supabasePublishableKey);
+  const body = configured
+    ? { supabaseUrl, supabasePublishableKey, configured: true }
+    : { supabaseUrl: '', supabasePublishableKey: '', configured: false };
+  const headers = { 'cache-control': 'no-store', 'x-world-server-config-runtime': 'cloudflare-native' };
+  return request.method === 'HEAD' ? new Response(null, { status: 200, headers }) : jsonResponse(body, 200, headers);
 }
 
 async function asset(env, requestUrl, pathname) {
@@ -183,6 +199,7 @@ export default {
     const url = new URL(request.url);
     if (url.pathname === '/') return Response.redirect(new URL('/apps/catalog/', url), 302);
 
+    if (url.pathname === '/api/config') return configApi(request, env);
     if (url.pathname === '/api/apps') return appsApi(request, env, url);
     if (url.pathname === '/api/worlds') return worldsApi(request, env, url);
     if (url.pathname === '/api/world-factory') return proxyWorldStack(request, env, url, 'world-factory');
