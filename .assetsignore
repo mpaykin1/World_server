@@ -1,0 +1,7 @@
+*
+!apps/
+!apps/**
+!shared/
+!shared/**
+!assets/
+!assets/**
