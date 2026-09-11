@@ -1,4 +1,6 @@
 const DEFAULT_API_ORIGIN = 'https://world-server-ai-studio-bridge-514578099152.europe-west2.run.app';
+const DEFAULT_STACK_READ_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/world-stack-read';
+const DEFAULT_STACK_WRITE_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/world-stack-write';
 
 function jsonResponse(body, status = 200, headers = {}) {
   return new Response(JSON.stringify(body), {
@@ -147,6 +149,25 @@ function canonicalApiOrigin(env, requestUrl) {
   return origin;
 }
 
+function stackOrigin(env, write) {
+  const configured = String(write ? (env.WORLD_SERVER_STACK_WRITE_ORIGIN || DEFAULT_STACK_WRITE_ORIGIN) : (env.WORLD_SERVER_STACK_READ_ORIGIN || DEFAULT_STACK_READ_ORIGIN)).trim();
+  const target = new URL(configured);
+  if (target.protocol !== 'https:' || target.username || target.password) throw new Error('World stack origin must be credential-free HTTPS');
+  return target;
+}
+
+async function proxyWorldStack(request, env, url, route) {
+  const write = request.method !== 'GET' && request.method !== 'HEAD';
+  if (write && !request.headers.get('authorization')) return jsonResponse({ error: 'Sign in to create worlds or change canon.' }, 401);
+  const target = stackOrigin(env, write);
+  target.search = url.search;
+  target.searchParams.set('route', route);
+  const response = await fetch(new Request(target, request));
+  const headers = new Headers(response.headers);
+  headers.set('x-world-server-stack-runtime', write ? 'supabase-edge-write' : 'supabase-edge-read');
+  return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+}
+
 async function proxyDynamicApi(request, env, url) {
   const origin = canonicalApiOrigin(env, url);
   const upstream = new URL(url.pathname + url.search, origin);
@@ -164,6 +185,8 @@ export default {
 
     if (url.pathname === '/api/apps') return appsApi(request, env, url);
     if (url.pathname === '/api/worlds') return worldsApi(request, env, url);
+    if (url.pathname === '/api/world-factory') return proxyWorldStack(request, env, url, 'world-factory');
+    if (url.pathname === '/api/canon') return proxyWorldStack(request, env, url, 'canon');
     if (url.pathname.startsWith('/api/')) return proxyDynamicApi(request, env, url);
 
     return env.ASSETS.fetch(request);
