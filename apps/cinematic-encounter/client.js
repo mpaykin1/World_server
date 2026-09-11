@@ -38,6 +38,7 @@ key.shadow.camera.left = -20; key.shadow.camera.right = 20;
 key.shadow.camera.top = 18; key.shadow.camera.bottom = -18;
 scene.add(key);
 const rim = new THREE.DirectionalLight(0x91a8aa, 0.75); rim.position.set(9, 5, -10); scene.add(rim);
+window.GoldenPaintingAtmosphere?.registerThree({THREE,scene,renderer,camera,worldId:'cinematic-encounter'});
 
 function mat(color, roughness=.72, metalness=.08, emissive=0x000000, emissiveIntensity=0) {
   return new THREE.MeshStandardMaterial({ color, roughness, metalness, emissive, emissiveIntensity });
