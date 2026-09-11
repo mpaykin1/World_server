@@ -1,7 +1,7 @@
 (function (global) {
   'use strict';
   const STANDARD=Object.freeze({
-    id:'golden-painting-atmosphere-v1',version:'1.0.0',
+    id:'golden-painting-atmosphere-v2',version:'2.0.0',
     cycle:Object.freeze({day:60,sunset:60,night:10,sunrise:60,total:190}),
     painting:Object.freeze({
       foreground:'warmer, strongest local colour, highest contrast and sharpest useful detail',
@@ -19,6 +19,7 @@
     sunrise:{sky:0xf4a06f,fog:0xdab18a,sun:0xffb05e,exposure:.93,saturation:1.08,contrast:1,brightness:.92,warmth:.82,lightLevel:.68,keyScale:.66,hemiScale:.58,night:.12}
   };
   const adapters=new Set(); let layer=null,started=false,lastAudit=0,lastTick=-Infinity;
+  const cycleStartedAt=(global.performance?.now?.()||0)-(Date.now()%(STANDARD.cycle.total*1000));
   const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
   const lerp=(a,b,t)=>a+(b-a)*t; const smooth=t=>{t=clamp(t);return t*t*(3-2*t);};
   const rgb=h=>[(h>>16)&255,(h>>8)&255,h&255];
@@ -108,14 +109,74 @@
     const wispB=new T.PointLight(0xffd27a,1.05,18,2);wispB.position.set(-8,2,6);wispB.castShadow=false;g.add(wispB);
     a.scene.add(g);a.nightGroup=g;a.stars=stars;a.meteors=meteors;a.fireflies=fireflies;a.moonLight=moonLight;a.wisps=[wispA,wispB];
   }
+  function createPaintingUniforms(T){
+    return{
+      nearTint:{value:new T.Color(0xffddb2)},
+      farTint:{value:new T.Color(0x9fd0e9)},
+      ranges:{value:new T.Vector4(4,20,52,130)},
+      grade:{value:new T.Vector4(1.26,.64,1.18,.70)},
+      strength:{value:1}
+    };
+  }
+  function patchPaintingMaterial(a,m){
+    if(!m||m.userData?.goldenPaintingDepthV2||m.isShaderMaterial||m.isRawShaderMaterial||!('fog' in m))return;
+    m.userData=m.userData||{};m.userData.goldenPaintingDepthV2=true;m.fog=true;a.patchedMaterials=(a.patchedMaterials||0)+1;
+    const previous=m.onBeforeCompile;
+    m.onBeforeCompile=function(shader,renderer){
+      previous?.call(this,shader,renderer);
+      const marker='#include <fog_fragment>';
+      if(!shader.fragmentShader.includes(marker))return;
+      shader.uniforms.goldenNearTint=a.paintingUniforms.nearTint;
+      shader.uniforms.goldenFarTint=a.paintingUniforms.farTint;
+      shader.uniforms.goldenRanges=a.paintingUniforms.ranges;
+      shader.uniforms.goldenGrade=a.paintingUniforms.grade;
+      shader.uniforms.goldenStrength=a.paintingUniforms.strength;
+      shader.fragmentShader=`uniform vec3 goldenNearTint;\nuniform vec3 goldenFarTint;\nuniform vec4 goldenRanges;\nuniform vec4 goldenGrade;\nuniform float goldenStrength;\n${shader.fragmentShader}`;
+      shader.fragmentShader=shader.fragmentShader.replace(marker,`
+#ifdef USE_FOG
+  float gpNear=1.0-smoothstep(goldenRanges.x,goldenRanges.y,vFogDepth);
+  float gpFar=smoothstep(goldenRanges.z,goldenRanges.w,vFogDepth);
+  float gpMid=clamp(1.0-gpNear-gpFar,0.0,1.0);
+  float gpLum=dot(gl_FragColor.rgb,vec3(0.2126,0.7152,0.0722));
+  float gpSat=gpNear*goldenGrade.x+gpMid*0.94+gpFar*goldenGrade.y;
+  vec3 gpCol=mix(vec3(gpLum),gl_FragColor.rgb,gpSat);
+  float gpContrast=gpNear*goldenGrade.z+gpMid*0.96+gpFar*goldenGrade.w;
+  gpCol=(gpCol-vec3(0.5))*gpContrast+vec3(0.5);
+  gpCol=mix(gpCol,goldenNearTint,gpNear*0.085*goldenStrength);
+  gpCol=mix(gpCol,goldenFarTint,gpFar*0.34*goldenStrength);
+  gl_FragColor.rgb=max(gpCol,vec3(0.0));
+#endif
+${marker}`);
+    };
+    m.needsUpdate=true;
+  }
+  function patchSceneMaterials(a){
+    a.scene.traverse(o=>{
+      if(!o.material)return;
+      let p=o,insideNight=false;while(p){if(p===a.nightGroup){insideNight=true;break;}p=p.parent;}
+      if(insideNight)return;
+      const ms=Array.isArray(o.material)?o.material:[o.material];ms.forEach(m=>patchPaintingMaterial(a,m));
+    });
+  }
+  function updatePaintingUniforms(a,s,camera){
+    const u=a.paintingUniforms;if(!u||!camera)return;
+    u.nearTint.value.setHex(mixHex(0xffdfb4,s.sun,.46));u.farTint.value.setHex(s.fog);
+    let effectiveFar=Math.min(Number(camera.far)||360,520);
+    if(a.baseFog?.type==='linear')effectiveFar=Math.min(effectiveFar,Math.max(70,a.baseFog.far));
+    else if(a.baseFog?.type==='exp2')effectiveFar=Math.min(effectiveFar,Math.max(70,3.2/Math.max(.001,a.baseFog.density)));
+    const nearEnd=Math.max(14,effectiveFar*.16),farStart=Math.max(nearEnd+10,effectiveFar*.34),farEnd=Math.max(farStart+18,effectiveFar*.78);
+    u.ranges.value.set(Math.max(2,nearEnd*.22),nearEnd,farStart,farEnd);
+    const phaseStrength=s.phase==='night'?.90:1;
+    u.grade.value.set(1.26,.64,1.18,.70);u.strength.value=phaseStrength;
+  }
   function registerThree(options){
     if(!options?.THREE||!options?.scene||!options?.renderer)return null;
     for(const old of adapters)if(old.scene===options.scene)return old;
     const f=options.scene.fog;
     const baseFog=f?(f.isFogExp2?{type:'exp2',density:f.density}:{type:'linear',near:f.near,far:f.far}):null;
-    const a={...options,baseFog,lightBases:new WeakMap(),lights:[],nightGroup:null};
+    const a={...options,baseFog,lightBases:new WeakMap(),lights:[],nightGroup:null,patchedMaterials:0,paintingUniforms:createPaintingUniforms(options.THREE)};
     options.renderer.domElement?.setAttribute('data-golden-three','1');if(global.document&&options.worldId!=='world-sharabass')document.body.dataset.goldenThreeWorld='1';adapters.add(a);ensureThreeNight(a);
-    options.scene.traverse(o=>{if(o.isLight)a.lights.push(o);if((o.parent?.name==='GoldenNightSky'||o.parent?.parent?.name==='GoldenNightSky'))return;if(o.material){const ms=Array.isArray(o.material)?o.material:[o.material];ms.forEach(m=>{if('fog'in m)m.fog=true;});}});
+    options.scene.traverse(o=>{if(o.isLight)a.lights.push(o);});patchSceneMaterials(a);
     return a;
   }
   function applyThree(a,s,now){
@@ -126,6 +187,7 @@
     else if(camera?.far){const far=Math.max(80,Math.min(camera.far*.52,520));scene.fog=new T.Fog(s.fog,far*.16,far);}
     if('toneMapping'in renderer&&T.ACESFilmicToneMapping!==undefined)renderer.toneMapping=T.ACESFilmicToneMapping;
     if('toneMappingExposure'in renderer)renderer.toneMappingExposure=s.exposure;
+    updatePaintingUniforms(a,s,camera);
     for(const o of a.lights){
       if(!a.lightBases.has(o))a.lightBases.set(o,{intensity:o.intensity,color:o.color?.getHex?.(),ground:o.groundColor?.getHex?.()});
       const b=a.lightBases.get(o);
@@ -159,7 +221,7 @@
         let p=o,insideNight=false;
         while(p){if(p===a.nightGroup){insideNight=true;break;}p=p.parent;}
         const ms=Array.isArray(o.material)?o.material:[o.material];
-        ms.forEach(m=>{if('fog' in m)m.fog=!insideNight;if(insideNight&&'toneMapped' in m)m.toneMapped=false;});
+        ms.forEach(m=>{if('fog' in m)m.fog=!insideNight;if(insideNight&&'toneMapped' in m)m.toneMapped=false;else patchPaintingMaterial(a,m);});
       });
     }
   }
@@ -176,7 +238,8 @@
     if(started||!global.document)return;
     started=true;ensureLayer();global.requestAnimationFrame?.(tick);
   }
-  const api={STANDARD,PHASE_ORDER:ORDER,PALETTES:P,phaseAt,getState,currentState,registerThree,start};
+  function diagnostics(){return{phase:currentState().phase,cycleAlive:true,adapters:[...adapters].map(a=>({worldId:a.worldId||'unknown',patchedMaterials:a.patchedMaterials||0,depthGrading:true,foreground:{saturation:1.26,contrast:1.18},background:{saturation:.64,contrast:.70,atmosphereTint:true}}))};}
+  const api={STANDARD,PHASE_ORDER:ORDER,PALETTES:P,phaseAt,getState,currentState,registerThree,start,diagnostics};
   global.GoldenPaintingAtmosphere=api;
   if(typeof module!=='undefined'&&module.exports)module.exports=api;
   if(global.document){
