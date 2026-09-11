@@ -13,6 +13,9 @@ const WALK = 5.2;
 const RUN = 8.0;
 const SAVE_INTERVAL = 1800;
 const NET_INTERVAL = 90;
+const WORLD_ID_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const requestedWorldId = new URLSearchParams(location.search).get('world') || 'main';
+const ACTIVE_WORLD_ID = WORLD_ID_RE.test(requestedWorldId) ? requestedWorldId : 'main';
 
 const BLOCK = Object.freeze({ AIR:0, GRASS:1, DIRT:2, STONE:3, SAND:4, WOOD:5, LEAVES:6, SNOW:7, WATER:8, GLASS:9, BRICK:10, PLANK:11, COAL:12, IRON:13 });
 const BLOCKS = {
@@ -38,6 +41,8 @@ const statusEl = document.getElementById('vwStatus');
 const biomeEl = document.getElementById('vwBiome');
 const playersEl = document.getElementById('vwPlayers');
 const targetEl = document.getElementById('targetInfo');
+const titleEl = document.getElementById('vwTitle');
+const loreEl = document.getElementById('vwLore');
 const hotbarEl = document.getElementById('hotbar');
 
 function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
@@ -56,6 +61,12 @@ async function api(action,payload={}){
   const j=await r.json().catch(()=>({})); if(!r.ok) throw new Error(j.error||'Ошибка Voxel API'); return j;
 }
 
+async function canonApi(eventType,summary,payload,idempotencyKey){
+  const headers={'Content-Type':'application/json','Accept':'application/json'}; const t=token(); if(t) headers.Authorization=`Bearer ${t}`;
+  const r=await fetch('/api/canon',{method:'POST',headers,body:JSON.stringify({action:'record',guestId:guestId(),worldId:ACTIVE_WORLD_ID,eventType,summary,payload,idempotencyKey})});
+  const j=await r.json().catch(()=>({})); if(!r.ok) throw new Error(j.error||'Canon API error'); return j;
+}
+
 function hash32(x,z,seed){ let h=(Math.imul(x,374761393)^Math.imul(z,668265263)^seed)|0; h=Math.imul(h^(h>>>13),1274126177); return ((h^(h>>>16))>>>0)/4294967295; }
 function smooth(t){ return t*t*(3-2*t); }
 function valueNoise(x,z,scale,seed){
@@ -65,10 +76,11 @@ function valueNoise(x,z,scale,seed){
 }
 function fbm(x,z,seed){ return valueNoise(x,z,72,seed)*.52+valueNoise(x,z,31,seed+97)*.28+valueNoise(x,z,13,seed+197)*.14+valueNoise(x,z,6,seed+313)*.06; }
 let worldSeed=73194217;
-function biomeAt(x,z){ const t=valueNoise(x,z,180,worldSeed+900), m=valueNoise(x,z,150,worldSeed+1400); if(t>.72) return 'desert'; if(t<.22) return 'snow'; if(m>.62) return 'forest'; return 'plains'; }
+let worldTheme='mixed';
+function biomeAt(x,z){ const t=valueNoise(x,z,180,worldSeed+900), m=valueNoise(x,z,150,worldSeed+1400); if(worldTheme==='desert')return t>.14?'desert':'plains'; if(worldTheme==='snow')return t<.86?'snow':'plains'; if(worldTheme==='forest')return m>.18?'forest':'plains'; if(worldTheme==='mountains')return t<.72?'snow':'plains'; if(worldTheme==='islands')return m>.72?'forest':'plains'; if(t>.72)return 'desert'; if(t<.22)return 'snow'; if(m>.62)return 'forest'; return 'plains'; }
 function heightAt(x,z){
   const b=biomeAt(x,z), n=fbm(x,z,worldSeed), ridge=Math.abs(valueNoise(x,z,105,worldSeed+77)-.5)*2;
-  let h=16+n*21; if(b==='snow') h+=ridge*15; if(b==='desert') h=17+n*11; if(b==='forest') h+=4;
+  let h=16+n*21; if(worldTheme==='mountains')h=20+n*25+ridge*20; else if(worldTheme==='islands')h=9+n*17-ridge*4; else if(b==='snow')h+=ridge*15; else if(b==='desert')h=17+n*11; else if(b==='forest')h+=4;
   return clamp(Math.floor(h),5,WORLD_Y-12);
 }
 function caveAt(x,y,z){ if(y<4||y>55) return false; const a=valueNoise(x+y*7,z-y*5,22,worldSeed+2600); const b=valueNoise(x-y*3,z+y*9,11,worldSeed+2800); return a>.72&&b>.58; }
@@ -398,7 +410,7 @@ async function loadNeededChunks(){
   try{
     if(backendMode==='offline') materializeChunkBatch(need);
     else {
-      const res=await api('chunks',{chunks:need,worldId:'main'}); const by=new Map();
+      const res=await api('chunks',{chunks:need,worldId:ACTIVE_WORLD_ID}); const by=new Map();
       for(const row of res.blocks||[]){const k=key2(row.cx,row.cz);if(!by.has(k))by.set(k,[]);by.get(k).push(row);}
       materializeChunkBatch(need,by);
     }
@@ -455,17 +467,27 @@ async function editBlock(place){
   if(place&&collidesWithCell(c.x,c.y,c.z)){targetEl.textContent='Нельзя поставить блок в игрока';return;}
   const old=blockAt(c.x,c.y,c.z); setBlockLocal(c.x,c.y,c.z,b);
   try{
-    const result=await api('set_block',{worldId:'main',x:c.x,y:c.y,z:c.z,blockType:b,playerPosition:{x:player.pos.x,y:player.pos.y,z:player.pos.z}});
+    const result=await api('set_block',{worldId:ACTIVE_WORLD_ID,x:c.x,y:c.y,z:c.z,blockType:b,playerPosition:{x:player.pos.x,y:player.pos.y,z:player.pos.z}});
     if(channel) void channel.send({type:'broadcast',event:'block_set',payload:{x:c.x,y:c.y,z:c.z,block:b}});
     const scienceEvents=Array.isArray(result.scienceEvents)?result.scienceEvents:(result.science?[result.science]:[]);
     if(!place){const run=scienceRunForDestroyedBlock(old,scienceEvents);if(run){spawnDestructionFx(run.runId,c,old);emitScienceDomainTelemetry(run.runId,'playerDestruction','player_break');emitScienceDomainTelemetry(run.runId,'visualDestruction','player_break');}}
     for(const scienceEvent of scienceEvents)applyScienceResult(scienceEvent);
+    canonEditCount+=1;
+    if(scienceEvents.length||canonEditCount%20===0){
+      const canonId=uuid();
+      const summary=scienceEvents.length?'Player action created a durable world consequence.':'Player materially changed this world.';
+      void canonApi('player_world_change',summary,{x:c.x,y:c.y,z:c.z,blockType:b,scienceRuns:scienceEvents.map(x=>x.runId).filter(Boolean).slice(0,4)},canonId).then(result=>{showCanonEvent(result?.event);for(const effect of result?.consequences||[])if(effect.target_world_id===ACTIVE_WORLD_ID)showCanonEvent(effect);}).catch(error=>console.warn('[CANON]',error?.message||error));
+    }
     statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';
   }catch(e){setOfflineMode(e.message);statusEl.textContent='офлайн · изменение сохранено локально';statusEl.className='vwWarn';}
 }
 function collidesWithCell(x,y,z){ return x+1>player.pos.x-PLAYER_R&&x<player.pos.x+PLAYER_R&&z+1>player.pos.z-PLAYER_R&&z<player.pos.z+PLAYER_R&&y+1>player.pos.y&&y<player.pos.y+PLAYER_H; }
 
 function buildHotbar(){hotbarEl.innerHTML='';HOTBAR.forEach((b,i)=>{const d=document.createElement('div');d.className='slot'+(i===player.selected?' sel':'');d.innerHTML=`<span class="slotNum">${i+1}</span><span class="swatch" style="background:#${BLOCKS[b].color.toString(16).padStart(6,'0')}"></span><span>${BLOCKS[b].name}</span>`;d.onclick=()=>{player.selected=i;buildHotbar();};hotbarEl.appendChild(d);});}
+
+let canonEditCount=0;
+let canonChannel=null;
+function showCanonEvent(event){if(!event)return;const text=String(event.summary||event.story||'').trim();if(text)window.AppCore?.toast?.('Canon: '+text.slice(0,160));}
 
 const remote=new Map();
 function avatarFor(p){
@@ -481,9 +503,11 @@ function updateRemote(payload){
 }
 function syncPresence(){ if(!channel)return;const state=channel.presenceState(),active=new Set();for(const entries of Object.values(state))for(const p of entries){if(typeof p.id==='string'&&p.id.length<=80)active.add(p.id);}for(const [id,g] of remote)if(!active.has(id)){remoteGroup.remove(g);disposeAvatar(g);remote.delete(id);}playersEl.textContent=`игроков: ${Math.max(1,active.size)}`; }
 async function connectRealtime(appState){
-  const sb=appState.supabase; channel=sb.channel('voxel:main',{config:{presence:{key:player.id},broadcast:{self:false,ack:false}}});
+  const sb=appState.supabase; channel=sb.channel('voxel:'+ACTIVE_WORLD_ID,{config:{presence:{key:player.id},broadcast:{self:false,ack:false}}});
   channel.on('broadcast',{event:'player_state'},({payload})=>updateRemote(payload)); channel.on('broadcast',{event:'block_set'},({payload})=>{const b=validBlockType(payload?.block),x=finiteCoord(payload?.x),y=finiteCoord(payload?.y,320),z=finiteCoord(payload?.z);if(b===null||x===null||y===null||z===null||!Number.isInteger(x)||!Number.isInteger(y)||!Number.isInteger(z)||y<0||y>=WORLD_Y)return;if(Math.hypot(x-player.pos.x,z-player.pos.z)>(VIEW+3)*CHUNK)return;setBlockLocal(x,y,z,b);}); channel.on('broadcast',{event:'science_event'},({payload})=>announceTrustedScienceSignal(payload)); channel.on('presence',{event:'sync'},syncPresence);
   await new Promise((resolve,reject)=>channel.subscribe(async st=>{if(st==='SUBSCRIBED'){await channel.track({id:player.id,name:player.name,online_at:new Date().toISOString()});resolve();}else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT')reject(new Error('Realtime недоступен'));}));
+  canonChannel=sb.channel('canon:'+ACTIVE_WORLD_ID).on('postgres_changes',{event:'INSERT',schema:'public',table:'world_canon_events',filter:'world_id=eq.'+ACTIVE_WORLD_ID},change=>showCanonEvent(change.new));
+  void canonChannel.subscribe();
 }
 
 function setupDesktop(){
@@ -513,7 +537,7 @@ function setupMobile(){
 function daylight(now){if(window.GoldenPaintingAtmosphere)return;const day=(now*.000015)%1,a=day*Math.PI*2;sun.position.set(Math.cos(a)*65,Math.sin(a)*72+12,30);const k=clamp((sun.position.y+12)/55,.12,1);sun.intensity=.25+2.0*k;hemi.intensity=.28+1.0*k;const sky=new THREE.Color().setHSL(.57,.55,.18+.48*k);scene.background.copy(sky);scene.fog.color.copy(sky);}
 function updateTarget(){const h=rayVoxel();if(!h)return;targetEl.textContent=`${BLOCKS[h.block]?.name||'Блок'} · ${h.hit.x}, ${h.hit.y}, ${h.hit.z}`;}
 
-async function savePlayer(){if(backendMode!=='online')return;try{await api('player_save',{worldId:'main',position:{x:player.pos.x,y:player.pos.y,z:player.pos.z},yaw:player.yaw,pitch:player.pitch,selectedBlock:HOTBAR[player.selected]});}catch{} }
+async function savePlayer(){if(backendMode!=='online')return;try{await api('player_save',{worldId:ACTIVE_WORLD_ID,position:{x:player.pos.x,y:player.pos.y,z:player.pos.z},yaw:player.yaw,pitch:player.pitch,selectedBlock:HOTBAR[player.selected]});}catch{} }
 function broadcastPlayer(now){if(!channel||now-lastNet<NET_INTERVAL)return;lastNet=now;channel.send({type:'broadcast',event:'player_state',payload:{id:player.id,name:player.name,x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw}});}
 let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(goldenWaterUniforms?.goldenWaterTime)goldenWaterUniforms.goldenWaterTime.value=now/1000;if(started){if(Math.abs(mobileLook.x)>.02||Math.abs(mobileLook.y)>.02){player.yaw-=mobileLook.x*2.05*dt;player.pitch=clamp(player.pitch-mobileLook.y*1.65*dt,-1.45,1.45);}physics(dt);updateScienceFx(now,dt);loadNeededChunks();broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);renderer.render(scene,camera);}requestAnimationFrame(loop);
 
@@ -522,7 +546,7 @@ setupDesktop();setupMobile();buildHotbar();
 
 try{
   const appState=await window.AppCore.init('voxel-world');
-  const init=await api('init',{worldId:'main'}); worldSeed=Number(init.world?.seed)||worldSeed; player.id=init.selfId;player.name=init.player?.name||appState.user?.username||'Player'; const p=init.player?.position||{x:0,y:heightAt(0,0)+4,z:0};player.pos.set(Number(p.x)||0,Number(p.y)||heightAt(0,0)+4,Number(p.z)||0);player.yaw=Number(init.player?.yaw)||0;player.pitch=Number(init.player?.pitch)||0;const sel=HOTBAR.indexOf(Number(init.player?.selectedBlock));if(sel>=0)player.selected=sel;buildHotbar(); cacheScienceRuns(init.scienceGameplay); await connectRealtime(appState); started=true; showScienceIntro((init.scienceGameplay||[]).filter(run=>run.active).at(-1)); statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';loading.classList.add('hidden');
+  const init=await api('init',{worldId:ACTIVE_WORLD_ID}); worldSeed=Number(init.world?.seed)||worldSeed; const worldSettings=init.world?.settings||{}; worldTheme=worldSettings.theme||worldSettings.worldDNA?.theme||'mixed'; if(titleEl)titleEl.textContent=worldSettings.name||'Voxel World'; if(loreEl){const lore=worldSettings.lore||worldSettings.worldDNA?.lore; loreEl.textContent=lore?.headline||((ACTIVE_WORLD_ID==='main')?'Living world':'World Factory creation'); loreEl.title=lore?.lore||'';} document.title=(worldSettings.name||'Voxel World')+' ? World_server'; player.id=init.selfId;player.name=init.player?.name||appState.user?.username||'Player'; const p=init.player?.position||{x:0,y:heightAt(0,0)+4,z:0};player.pos.set(Number(p.x)||0,Number(p.y)||heightAt(0,0)+4,Number(p.z)||0);player.yaw=Number(init.player?.yaw)||0;player.pitch=Number(init.player?.pitch)||0;const sel=HOTBAR.indexOf(Number(init.player?.selectedBlock));if(sel>=0)player.selected=sel;buildHotbar(); cacheScienceRuns(init.scienceGameplay); await connectRealtime(appState); started=true; showScienceIntro((init.scienceGameplay||[]).filter(run=>run.active).at(-1)); statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';loading.classList.add('hidden');
 }catch(e){console.error(e);setOfflineMode(e.message);player.id=guestId();player.name=`Guest_${player.id.replaceAll('-','').slice(0,4)}`;player.pos.set(0,heightAt(0,0)+4,0);started=true;loading.classList.add('hidden');}
 
 window.VoxelWorldRuntime={
