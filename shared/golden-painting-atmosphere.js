@@ -114,7 +114,7 @@
       nearTint:{value:new T.Color(0xffddb2)},
       farTint:{value:new T.Color(0x9fd0e9)},
       ranges:{value:new T.Vector4(4,20,52,130)},
-      grade:{value:new T.Vector4(1.26,.64,1.18,.70)},
+      grade:{value:new T.Vector4(1.34,.56,1.22,.62)},
       strength:{value:1}
     };
   }
@@ -138,12 +138,12 @@
   float gpFar=smoothstep(goldenRanges.z,goldenRanges.w,vFogDepth);
   float gpMid=clamp(1.0-gpNear-gpFar,0.0,1.0);
   float gpLum=dot(gl_FragColor.rgb,vec3(0.2126,0.7152,0.0722));
-  float gpSat=gpNear*goldenGrade.x+gpMid*0.94+gpFar*goldenGrade.y;
+  float gpSat=gpNear*goldenGrade.x+gpMid*0.92+gpFar*goldenGrade.y;
   vec3 gpCol=mix(vec3(gpLum),gl_FragColor.rgb,gpSat);
-  float gpContrast=gpNear*goldenGrade.z+gpMid*0.96+gpFar*goldenGrade.w;
+  float gpContrast=gpNear*goldenGrade.z+gpMid*0.94+gpFar*goldenGrade.w;
   gpCol=(gpCol-vec3(0.5))*gpContrast+vec3(0.5);
-  gpCol=mix(gpCol,goldenNearTint,gpNear*0.085*goldenStrength);
-  gpCol=mix(gpCol,goldenFarTint,gpFar*0.34*goldenStrength);
+  gpCol=mix(gpCol,goldenNearTint,gpNear*0.13*goldenStrength);
+  gpCol=mix(gpCol,goldenFarTint,gpFar*0.46*goldenStrength);
   gl_FragColor.rgb=max(gpCol,vec3(0.0));
 #endif
 ${marker}`);
@@ -167,7 +167,7 @@ ${marker}`);
     const nearEnd=Math.max(14,effectiveFar*.16),farStart=Math.max(nearEnd+10,effectiveFar*.34),farEnd=Math.max(farStart+18,effectiveFar*.78);
     u.ranges.value.set(Math.max(2,nearEnd*.22),nearEnd,farStart,farEnd);
     const phaseStrength=s.phase==='night'?.90:1;
-    u.grade.value.set(1.26,.64,1.18,.70);u.strength.value=phaseStrength;
+    u.grade.value.set(1.34,.56,1.22,.62);u.strength.value=phaseStrength;
   }
   function registerThree(options){
     if(!options?.THREE||!options?.scene||!options?.renderer)return null;
@@ -182,8 +182,8 @@ ${marker}`);
   function applyThree(a,s,now){
     const T=a.THREE,scene=a.scene,renderer=a.renderer,camera=a.getCamera?.()||a.camera;if(!scene||!renderer)return;
     if(scene.background?.isColor)scene.background.setHex(s.sky);else if(!scene.background)scene.background=new T.Color(s.sky);
-    if(scene.fog?.isFogExp2){scene.fog.color.setHex(s.fog);if(a.baseFog?.type==='exp2')scene.fog.density=a.baseFog.density*(s.phase==='night'?1.18:1);}
-    else if(scene.fog?.isFog){scene.fog.color.setHex(s.fog);if(a.baseFog?.type==='linear'){scene.fog.near=a.baseFog.near;scene.fog.far=a.baseFog.far*(s.phase==='night'?.84:1);}}
+    if(scene.fog?.isFogExp2){scene.fog.color.setHex(s.fog);if(a.baseFog?.type==='exp2')scene.fog.density=a.baseFog.density*(s.phase==='night'?1.32:1.12);}
+    else if(scene.fog?.isFog){scene.fog.color.setHex(s.fog);if(a.baseFog?.type==='linear'){scene.fog.near=a.baseFog.near*.88;scene.fog.far=a.baseFog.far*(s.phase==='night'?.76:.90);}}
     else if(camera?.far){const far=Math.max(80,Math.min(camera.far*.52,520));scene.fog=new T.Fog(s.fog,far*.16,far);}
     if('toneMapping'in renderer&&T.ACESFilmicToneMapping!==undefined)renderer.toneMapping=T.ACESFilmicToneMapping;
     if('toneMappingExposure'in renderer)renderer.toneMappingExposure=s.exposure;
@@ -238,7 +238,7 @@ ${marker}`);
     if(started||!global.document)return;
     started=true;ensureLayer();global.requestAnimationFrame?.(tick);
   }
-  function diagnostics(){return{phase:currentState().phase,cycleAlive:true,adapters:[...adapters].map(a=>({worldId:a.worldId||'unknown',patchedMaterials:a.patchedMaterials||0,depthGrading:true,foreground:{saturation:1.26,contrast:1.18},background:{saturation:.64,contrast:.70,atmosphereTint:true}}))};}
+  function diagnostics(){return{phase:currentState().phase,cycleAlive:true,adapters:[...adapters].map(a=>({worldId:a.worldId||'unknown',patchedMaterials:a.patchedMaterials||0,depthGrading:true,foreground:{saturation:1.34,contrast:1.22},background:{saturation:.56,contrast:.62,atmosphereTint:true}}))};}
   const api={STANDARD,PHASE_ORDER:ORDER,PALETTES:P,phaseAt,getState,currentState,registerThree,start,diagnostics};
   global.GoldenPaintingAtmosphere=api;
   if(typeof module!=='undefined'&&module.exports)module.exports=api;

@@ -54,7 +54,7 @@ test('depth grading encodes the painting foreground/background rules',()=>{
   assert.match(src,/goldenPaintingDepthV2/);
   assert.match(src,/gpNear/);
   assert.match(src,/gpFar/);
-  assert.match(src,/1\.26,\.64,1\.18,\.70/);
+  assert.match(src,/1\.34,\.56,1\.22,\.62/);
   assert.match(src,/goldenFarTint/);
 });
 
