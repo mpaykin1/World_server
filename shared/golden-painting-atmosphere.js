@@ -364,8 +364,9 @@ ${marker}`);
     const baseFog=f?(f.isFogExp2?{type:'exp2',density:f.density}:{type:'linear',near:f.near,far:f.far}):null;
     const mobile=Boolean(global.matchMedia?.('(pointer:coarse)').matches||(global.innerWidth||9999)<760);
     const maxAnisotropy=Number(options.renderer.capabilities?.getMaxAnisotropy?.()||1);
-    const forceHigh=new URLSearchParams(global.location?.search||'').get('goldenGraphics')==='high';
-    const lowPower=!forceHigh&&(mobile||Number(global.navigator?.hardwareConcurrency||8)<=4);
+    const graphicsMode=new URLSearchParams(global.location?.search||'').get('goldenGraphics')||'auto';
+    const forceHigh=graphicsMode==='high',cores=Number(global.navigator?.hardwareConcurrency||8),memory=Number(global.navigator?.deviceMemory||0);
+    const lowPower=!forceHigh&&(graphicsMode==='low'||(memory>0&&memory<=2)||(cores<=2&&!mobile));
     const a={...options,baseFog,mobile,lowPower,maxAnisotropy,currentExposure:Number(options.renderer.toneMappingExposure||1),proceduralMaps:new Map(),lightBases:new WeakMap(),shadowBases:new WeakMap(),lights:[],windUniforms:new Set(),nightGroup:null,patchedMaterials:0,pbrMaterials:0,textureTunes:0,normalMaps:0,roughnessMaps:0,surfaceDetailMaterials:0,importanceShadowLights:0,registeredAt:global.performance?.now?.()||0,lastMaterialAudit:-Infinity,paintingUniforms:createPaintingUniforms(options.THREE),lutTexture:null,lutBuilds:0,lightProbe:null,environmentTexture:null,environmentPhase:null,environmentBuilds:0,offscreenCanvasUsed:0,canvasTexturesBuilt:0,assetCodec:null};
     if('outputColorSpace'in options.renderer&&options.THREE.SRGBColorSpace!==undefined)options.renderer.outputColorSpace=options.THREE.SRGBColorSpace;
     if('toneMapping'in options.renderer&&options.THREE.ACESFilmicToneMapping!==undefined)options.renderer.toneMapping=options.THREE.ACESFilmicToneMapping;
@@ -375,7 +376,7 @@ ${marker}`);
     if(!a.lowPower){
       a.lutTexture=buildProceduralLut(a);
       ensureLightProbe(a);
-      if(global.GoldenAssetCodec?.prewarm){
+      if(!a.mobile&&global.GoldenAssetCodec?.prewarm){
         a.assetCodec=global.GoldenAssetCodec;
         try{global.GoldenAssetCodec.prewarm({renderer:options.renderer,worldId:options.worldId,threeRevision:options.THREE?.REVISION});}catch(e){/* offline-safe */}
       }

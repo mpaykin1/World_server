@@ -189,3 +189,12 @@ test('procedural environment IBL rebuilds only on phase changes and is low-power
   assert.match(src,/EquirectangularReflectionMapping/);
   assert.match(src,/a\.scene\.environment=tex/);
 });
+
+test('auto mobile keeps cinematic-lite graphics while low mode remains available',()=>{
+  const src=fs.readFileSync(path.join(__dirname,'..','shared','golden-painting-atmosphere.js'),'utf8');
+  assert.match(src,/const graphicsMode=/);
+  assert.match(src,/graphicsMode==='low'/);
+  assert.match(src,/memory>0&&memory<=2/);
+  assert.match(src,/cores<=2&&!mobile/);
+  assert.match(src,/!a\.mobile&&global\.GoldenAssetCodec/);
+});
