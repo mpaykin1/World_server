@@ -86,3 +86,10 @@ test('voxel water uses one-pass animated Fresnel shading',()=>{
   assert.match(src,/goldenWaterStrength/);
   assert.match(src,/goldenWaterTime\.value=now\/1000/);
 });
+
+test('adaptive profile does not misclassify 720p desktop as mobile',()=>{
+  const src=fs.readFileSync(path.join(__dirname,'..','shared','golden-painting-atmosphere.js'),'utf8');
+  assert.match(src,/\(global\.innerWidth\|\|9999\)<760/);
+  assert.doesNotMatch(src,/Math\.min\(global\.innerWidth/);
+});
+
