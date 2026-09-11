@@ -10,6 +10,7 @@
     {match:'/apps/survival/',title:'Survival',worldId:'survival',selectors:['.app-title','.topHint']},
     {match:'/apps/world-sharabass/',title:'Мир Шарабас',worldId:'world-sharabass',selectors:['.app-title','.topHint']},
     {match:'/apps/dark-void-scene/',title:'Dark Void Navigator',worldId:'dark-void-scene',selectors:[]}
+    ,{match:'/apps/cinematic-encounter/',title:'Сцена в пыли',worldId:'cinematic-encounter',selectors:['#title','#replay']}
   ];
   const cfg=configs.find(c=>path.startsWith(c.match))||{title:'World',worldId:'',selectors:[]};
   const svg=paths=>`<svg viewBox="0 0 24 24" aria-hidden="true">${paths}</svg>`;

@@ -77,6 +77,20 @@ If `LINK_COMPLETION_LOOP=ON` and `TERMINAL_STATE=NO`, do not end the turn with a
 
 If a prior chat violated this, record/recognize `LINK_COMPLETION_REGRESSION`, restore the latest checkpoint, and resume `NEXT_ACTION` on the SAME task/PR.
 
+## Server hard delivery law — canonical Netlify link
+
+Machine-readable policy: `data/manual-delivery-policy.json`.
+
+For any World_server request whose requested result includes a link, the canonical production origin is `https://world-server.netlify.app`; the canonical world hub is `https://world-server.netlify.app/apps/voxel-world/`. New local worlds must be discoverable from that hub's Golden Worlds inventory.
+
+While a blocker is resolvable by any already-authorized local/cloud/browser path, **a progress report, blocker report, root-cause report, PR URL, deployment URL that has not passed the live gate, or dead/stale URL is forbidden as the final user-facing result.** Continue the same task instead.
+
+Before sending the final URL, run the executable gate against the exact canonical URL, for games using desktop + mobile browser verification and the app-specific ready global/inventory id where available, for example:
+
+`npm run delivery:verify -- https://world-server.netlify.app/apps/<world>/ --game --ready-global=<READY_GLOBAL> --inventory-id=<world>`
+
+The final evidence must be fresh (<=120 seconds), HTTP 2xx, free of known host/error markers, browser-rendered, visually non-empty for games, and present in the Golden inventory. If the user has explicitly authorized end-to-end completion, a Manual Fast Lane may merge after required CI plus independent review and then deploy to the canonical Netlify site without asking again.
+
 ## Same-task ownership
 
 One logical implementation task -> one active owned implementation PR.

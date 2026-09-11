@@ -88,3 +88,12 @@ test('Godot Web workflow never masks a failed Vercel deploy', () => {
   assert.match(workflow, /exit \"\$DEPLOY_EXIT\"/);
   assert.match(workflow, /produced no Preview URL/);
 });
+
+test('Godot Web workflow skips expensive Godot downloads for unrelated app-only PRs', () => {
+  const workflowPath = path.resolve(__dirname, '../.github/workflows/godot-web-preview.yml');
+  const workflow = fs.readFileSync(workflowPath, 'utf8');
+  assert.match(workflow, /No Godot\/Web-native files changed; expensive Godot build skipped successfully/);
+  assert.match(workflow, /scripts\/godot-web-build/);
+  assert.doesNotMatch(workflow, /node scripts\/check-vercel-ignore\.js/);
+  assert.match(workflow, /--retry-all-errors/);
+});

@@ -7,6 +7,14 @@
     <language>ru</language>
     <atom:link href="https://world-server.ai.studio/api/worlds?format=rss" rel="self" type="application/rss+xml" />
     <item>
+      <guid isPermaLink="true">https://world-server.ai.studio/apps/cinematic-encounter/</guid>
+      <title>ЧТО МЕЛЬКНУЛО В ПЫЛИ В МОМЕНТ ВСПЫШКИ — И ПОЧЕМУ ОНО ИДЁТ ПО СЛЕДУ ИГРОКА?</title>
+      <link>https://world-server.ai.studio/apps/cinematic-encounter/</link>
+      <description>На старой промышленной дороге в пыльной буре появляется Существо Между Кадрами: увидеть его целиком нельзя — каждая вспышка показывает только часть движения. На земле остаются четыре светящихся следа; если собрать их в правильном порядке, открывается безопасный путь, а ошибка вызывает новую засаду. Игроку нужно пережить три встречи, восстановить маршрут существа и решить — преследовать его в Voxel World или погасить маяк, который его приманивает. Поворот: следы повторяют будущий маршрут самого игрока. Существо охотится на него — или пытается предупредить о событии, которое ещё не произошло?</description>
+      <category>game</category>
+      <category>certified</category>
+    </item>
+    <item>
       <guid isPermaLink="true">https://world-server.ai.studio/apps/ai3d-voxel-city/</guid>
       <title>КАЖДУЮ НОЧЬ ЭТОТ ГОРОД ПЕРЕСТРАИВАЕТ СЕБЯ — НО ДЛЯ КОГО?</title>
       <link>https://world-server.ai.studio/apps/ai3d-voxel-city/</link>

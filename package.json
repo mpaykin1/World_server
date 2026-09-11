@@ -115,7 +115,8 @@
     "agent-session:preflight": "node lib/agent-session-guard.js preflight direct-desktop-ai",
     "agent-session:postflight": "node lib/agent-session-guard.js postflight direct-desktop-ai",
     "agent-session:check": "node lib/agent-session-guard.js preflight policy-check",
-    "quality:world:microdetail": "node scripts/world-microdetail-audit.js"
+    "quality:world:microdetail": "node scripts/world-microdetail-audit.js",
+    "delivery:verify": "node scripts/verify-working-link.cjs"
   },
   "engines": {
     "node": "24.x"
@@ -129,7 +130,8 @@
   "devDependencies": {
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.62.1",
-    "esbuild": "^0.28.2"
+    "esbuild": "^0.28.2",
+    "pngjs": "^7.0.0"
   },
   "overrides": {
     "lighthouse": "13.4.1",
