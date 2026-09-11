@@ -62,3 +62,19 @@ test('voxel client periodically promotes player edits into canon and listens for
   assert.match(migration, /supabase_realtime add table public\.world_canon_events/);
   assert.match(migration, /grant select on table public\.world_canon_events to anon, authenticated/);
 });
+
+
+test('cross-world canon consequences carry deterministic gameplay effects that rehydrate after reconnect', () => {
+  const plan = planCanonMutation({ worldId: 'main', eventType: 'player_world_change', summary: 'A gate changed.', payload: {}, idempotencyKey: 'effect-1', loreBible });
+  assert.ok(plan.consequences.length > 0);
+  for (const event of plan.consequences) {
+    assert.equal(event.payload.effect.kind, 'canon_beacon');
+    assert.match(event.payload.effect.effectId, /^canon-[0-9a-f]{16}$/);
+    assert.equal(event.payload.effect.lifetimeMs, 86400000);
+  }
+  const client = fs.readFileSync(path.join(root, 'apps', 'voxel-world', 'client.js'), 'utf8');
+  assert.match(client, /function applyCanonEffect/);
+  assert.match(client, /async function hydrateCanon/);
+  assert.match(client, /updateCanonEffects\(now\)/);
+  assert.match(client, /void hydrateCanon\(\)/);
+});

@@ -56,7 +56,7 @@ function uuid(){ return crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx
 function guestId(){ let id=localStorage.getItem('webgl_hub_guest_id'); if(!id){id=uuid();localStorage.setItem('webgl_hub_guest_id',id);} return id; }
 function token(){ return localStorage.getItem('webgl_hub_token') || ''; }
 async function api(action,payload={}){
-  const headers={'Content-Type':'application/json','Accept':'application/json'}; const t=token(); if(t) headers.Authorization=`Bearer ${t}`;
+  const headers={'Content-Type':'application/json','Accept':'application/json'}; const t=token(); if(!t)return null; headers.Authorization=`Bearer ${t}`;
   const r=await fetch('/api/voxel',{method:'POST',headers,body:JSON.stringify({action,guestId:guestId(),...payload})});
   const j=await r.json().catch(()=>({})); if(!r.ok) throw new Error(j.error||'Ошибка Voxel API'); return j;
 }
@@ -487,7 +487,23 @@ function buildHotbar(){hotbarEl.innerHTML='';HOTBAR.forEach((b,i)=>{const d=docu
 
 let canonEditCount=0;
 let canonChannel=null;
-function showCanonEvent(event){if(!event)return;const text=String(event.summary||event.story||'').trim();if(text)window.AppCore?.toast?.('Canon: '+text.slice(0,160));}
+const canonEffects=new Map();
+const canonSeen=new Set();
+function canonStringHash(value){let h=2166136261;for(const ch of String(value||'')){h^=ch.codePointAt(0);h=Math.imul(h,16777619);}return h>>>0;}
+function disposeCanonEffect(entry){if(!entry?.group)return;scene.remove(entry.group);entry.group.traverse(o=>{o.geometry?.dispose?.();if(o.material){for(const m of (Array.isArray(o.material)?o.material:[o.material]))m.dispose?.();}});canonEffects.delete(entry.id);}
+function applyCanonEffect(event){
+  const effect=event?.payload?.effect;if(event?.event_type!=='cross_world_consequence'||effect?.kind!=='canon_beacon')return;
+  const id=String(effect.effectId||event.event_key||'');if(!id||canonEffects.has(id))return;
+  const created=Date.parse(event.created_at||'')||Date.now(),lifetime=clamp(Number(effect.lifetimeMs)||86400000,60000,86400000);if(Date.now()-created>lifetime)return;
+  const seed=canonStringHash(event.event_key||id),angle=(seed%6283)/1000,distance=7+((seed>>>8)%12),x=Math.round(Math.cos(angle)*distance),z=Math.round(Math.sin(angle)*distance),y=heightAt(x,z)+2.5;
+  const hue=clamp(Number(effect.hue)||0,0,359)/360,color=new THREE.Color().setHSL(hue,.82,.62),group=new THREE.Group();
+  const beam=new THREE.Mesh(new THREE.CylinderGeometry(.16,.3,4.4,8),new THREE.MeshBasicMaterial({color,transparent:true,opacity:.42,depthWrite:false}));beam.position.y=2.2;group.add(beam);
+  const ring=new THREE.Mesh(new THREE.TorusGeometry(clamp(Number(effect.radius)||5,3,9)*.22,.07,6,28),new THREE.MeshBasicMaterial({color,transparent:true,opacity:.82,depthWrite:false}));ring.rotation.x=Math.PI/2;ring.position.y=.35;group.add(ring);
+  group.position.set(x,y,z);scene.add(group);canonEffects.set(id,{id,group,ring,created,expiresAt:created+lifetime,intensity:clamp(Number(effect.intensity)||1,.5,1.5)});
+}
+function updateCanonEffects(now){for(const entry of [...canonEffects.values()]){if(Date.now()>entry.expiresAt){disposeCanonEffect(entry);continue;}entry.ring.rotation.z=now*.00035*entry.intensity;const p=.72+Math.sin(now*.002+entry.created*.0001)*.18;entry.group.scale.setScalar(p);}}
+function showCanonEvent(event){if(!event)return;const key=String(event.event_key||'');if(key&&canonSeen.has(key))return;if(key)canonSeen.add(key);applyCanonEffect(event);const text=String(event.summary||event.story||'').trim();if(text)window.AppCore?.toast?.('Canon: '+text.slice(0,160));}
+async function hydrateCanon(){try{const r=await fetch('/api/canon?worldId='+encodeURIComponent(ACTIVE_WORLD_ID)+'&limit=8',{headers:{Accept:'application/json'},cache:'no-store'});if(!r.ok)return;const j=await r.json();for(const event of [...(j.events||[])].reverse())showCanonEvent(event);}catch(error){console.warn('[CANON HYDRATE]',error?.message||error);}}
 
 const remote=new Map();
 function avatarFor(p){
@@ -508,6 +524,7 @@ async function connectRealtime(appState){
   await new Promise((resolve,reject)=>channel.subscribe(async st=>{if(st==='SUBSCRIBED'){await channel.track({id:player.id,name:player.name,online_at:new Date().toISOString()});resolve();}else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT')reject(new Error('Realtime недоступен'));}));
   canonChannel=sb.channel('canon:'+ACTIVE_WORLD_ID).on('postgres_changes',{event:'INSERT',schema:'public',table:'world_canon_events',filter:'world_id=eq.'+ACTIVE_WORLD_ID},change=>showCanonEvent(change.new));
   void canonChannel.subscribe();
+  void hydrateCanon();
 }
 
 function setupDesktop(){
@@ -539,7 +556,7 @@ function updateTarget(){const h=rayVoxel();if(!h)return;targetEl.textContent=`${
 
 async function savePlayer(){if(backendMode!=='online')return;try{await api('player_save',{worldId:ACTIVE_WORLD_ID,position:{x:player.pos.x,y:player.pos.y,z:player.pos.z},yaw:player.yaw,pitch:player.pitch,selectedBlock:HOTBAR[player.selected]});}catch{} }
 function broadcastPlayer(now){if(!channel||now-lastNet<NET_INTERVAL)return;lastNet=now;channel.send({type:'broadcast',event:'player_state',payload:{id:player.id,name:player.name,x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw}});}
-let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(goldenWaterUniforms?.goldenWaterTime)goldenWaterUniforms.goldenWaterTime.value=now/1000;if(started){if(Math.abs(mobileLook.x)>.02||Math.abs(mobileLook.y)>.02){player.yaw-=mobileLook.x*2.05*dt;player.pitch=clamp(player.pitch-mobileLook.y*1.65*dt,-1.45,1.45);}physics(dt);updateScienceFx(now,dt);loadNeededChunks();broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);renderer.render(scene,camera);}requestAnimationFrame(loop);
+let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(goldenWaterUniforms?.goldenWaterTime)goldenWaterUniforms.goldenWaterTime.value=now/1000;if(started){if(Math.abs(mobileLook.x)>.02||Math.abs(mobileLook.y)>.02){player.yaw-=mobileLook.x*2.05*dt;player.pitch=clamp(player.pitch-mobileLook.y*1.65*dt,-1.45,1.45);}physics(dt);updateScienceFx(now,dt);updateCanonEffects(now);loadNeededChunks();broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);renderer.render(scene,camera);}requestAnimationFrame(loop);
 
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});addEventListener('beforeunload',()=>savePlayer());
 setupDesktop();setupMobile();buildHotbar();

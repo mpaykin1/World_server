@@ -79,3 +79,27 @@ test('dynamic Cloudflare APIs use Cloud Run by default and allow a safe HTTPS ov
     global.fetch = originalFetch;
   }
 });
+
+test('World Factory and canon use dedicated Supabase Edge lanes with authenticated writes', async () => {
+  const calls=[];
+  const worker=await loadWorker();
+  const originalFetch=global.fetch;
+  global.fetch=async req=>{calls.push(req);return new Response(JSON.stringify({runtime:'edge'}),{status:200,headers:{'content-type':'application/json'}});};
+  try {
+    const env={ASSETS:assetsBinding()};
+    const read=await worker.fetch(new Request('https://world.example/api/world-factory?limit=3'),env);
+    assert.equal(read.status,200); assert.equal(read.headers.get('x-world-server-stack-runtime'),'supabase-edge-read');
+    assert.match(calls.at(-1).url,/world-stack-read/); assert.match(calls.at(-1).url,/route=world-factory/);
+    const denied=await worker.fetch(new Request('https://world.example/api/world-factory',{method:'POST',headers:{'content-type':'application/json'},body:'{}'}),env);
+    assert.equal(denied.status,401);
+    const write=await worker.fetch(new Request('https://world.example/api/canon',{method:'POST',headers:{'content-type':'application/json','authorization':'Bearer test'},body:'{}'}),env);
+    assert.equal(write.status,200); assert.equal(write.headers.get('x-world-server-stack-runtime'),'supabase-edge-write'); assert.match(calls.at(-1).url,/world-stack-write/); assert.match(calls.at(-1).url,/route=canon/);
+  } finally { global.fetch=originalFetch; }
+});
+
+test('world creation UI requires an account and guest play can continue without canon writes',()=>{
+  const shell=fs.readFileSync(path.join(root,'shared','golden-ui-shell.js'),'utf8');
+  const client=fs.readFileSync(path.join(root,'apps','voxel-world','client.js'),'utf8');
+  assert.match(shell,/Войдите в аккаунт, чтобы создавать новые миры/);
+  assert.match(client,/if\(!t\)return null/);
+});
