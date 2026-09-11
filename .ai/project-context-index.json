@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "purpose": "Universal discovery index for new chats and AI agents working on World_server",
   "startHere": "AI_START_HERE.md",
   "canonicalContextFiles": [
@@ -14,7 +14,10 @@
     ".ai/vno-scoring.json",
     ".ai/science-governance.json",
     "data/vno-gameplay-systems.json",
-    "docs/SCIENCE_GAMEPLAY_STANDARD.md"
+    "docs/SCIENCE_GAMEPLAY_STANDARD.md",
+    ".ai/aka-serial-growth-engine.json",
+    "data/serial-growth-state.json",
+    "docs/SERIAL_GROWTH_ENGINE.md"
   ],
   "concepts": {
     "vno": {
@@ -41,6 +44,26 @@
         ".ai/science-governance.json",
         "data/vno-gameplay-systems.json"
       ]
+    },
+    "serialGrowthEngine": {
+      "displayName": "AKA Serial Growth Engine",
+      "canonicalFile": "docs/SERIAL_GROWTH_ENGINE.md",
+      "aliases": [
+        "Serial Growth Engine",
+        "сериал",
+        "сериал про сервер",
+        "серии для привлечения игроков",
+        "контент сериал",
+        "AKA сериал",
+        "hourly serial growth"
+      ],
+      "machineFiles": [
+        ".ai/aka-serial-growth-engine.json",
+        "data/serial-growth-state.json",
+        "scripts/validate-serial-growth.mjs"
+      ],
+      "northStar": "Every episode should make the viewer want to enter the same real playable world now.",
+      "hourly": true
     },
     "chatgptGameControl": {
       "displayName": "ChatGPT -> Game Control / Manual Fast Lane",
@@ -108,8 +131,15 @@
       "CHATGPT_GAME_CONTROL.md",
       "data/manual-delivery-policy.json",
       "issue #80 latest nonterminal checkpoint"
+    ],
+    "serialGrowthWork": [
+      "AI_START_HERE.md",
+      ".ai/project-context-index.json",
+      ".ai/aka-serial-growth-engine.json",
+      "data/serial-growth-state.json",
+      "docs/SERIAL_GROWTH_ENGINE.md"
     ]
   },
-  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md and data/manual-delivery-policy.json. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains; final URLs must pass delivery:verify on the canonical Netlify origin.",
+  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md and data/manual-delivery-policy.json. For serial or player-acquisition content work read the Serial Growth Engine contract and continuity state. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains; final URLs must pass delivery:verify on the canonical Netlify origin.",
   "sourceOfTruthBranch": "master"
 }
