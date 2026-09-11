@@ -28,6 +28,7 @@
     skin:{roughness:.62,metalness:0,variation:.045,normal:.025,roughJitter:.025},
     default:{roughness:.80,metalness:.02,variation:.075,normal:.045,roughJitter:.045}
   });
+  const LUT_SIZE=8; const SH_C0=0.886227,SH_C1=1.023328;
   const adapters=new Set(); let layer=null,started=false,lastTick=-Infinity;
   const cycleStartedAt=(global.performance?.now?.()||0)-(Date.now()%(STANDARD.cycle.total*1000));
   const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
@@ -158,10 +159,18 @@
   }
   function surfaceSeed(label='default'){let h=2166136261;for(const ch of String(label)){h^=ch.charCodeAt(0);h=Math.imul(h,16777619);}return h>>>0;}
   function surfaceNoise(x,y,seed){let h=(Math.imul(x+17,374761393)^Math.imul(y+31,668265263)^seed)>>>0;h=Math.imul(h^(h>>>13),1274126177)>>>0;return((h^(h>>>16))>>>0)/4294967295;}
+  function makeSurfaceCanvas(size){
+    if(typeof OffscreenCanvas!=='undefined'){
+      try{return{canvas:new OffscreenCanvas(size,size),offscreen:true};}catch(e){/* fall through to document canvas */}
+    }
+    if(!global.document)return null;
+    const canvas=document.createElement('canvas');canvas.width=canvas.height=size;return{canvas,offscreen:false};
+  }
   function proceduralSurfaceTexture(a,semantic,kind){
-    if(a.lowPower||!global.document)return null;
+    if(a.lowPower)return null;
     const key=`${semantic}:${kind}`;if(a.proceduralMaps.has(key))return a.proceduralMaps.get(key);
-    const size=32,canvas=document.createElement('canvas');canvas.width=canvas.height=size;const ctx=canvas.getContext('2d');if(!ctx)return null;
+    const size=32,made=makeSurfaceCanvas(size);if(!made)return null;
+    const{canvas,offscreen}=made,ctx=canvas.getContext('2d');if(!ctx)return null;
     const image=ctx.createImageData(size,size),seed=surfaceSeed(semantic),profile=SURFACE_PBR[semantic]||SURFACE_PBR.default;
     for(let y=0;y<size;y++)for(let x=0;x<size;x++){
       const i=(y*size+x)*4,n=surfaceNoise(x,y,seed);
@@ -173,8 +182,8 @@
       }
       image.data[i+3]=255;
     }
-    ctx.putImageData(image,0,0);const tex=new a.THREE.CanvasTexture(canvas);tex.wrapS=tex.wrapT=a.THREE.RepeatWrapping;tex.repeat?.set?.(2,2);tex.userData={...(tex.userData||{}),goldenProceduralSurface:true,semantic,kind};
-    tuneTexture(a,tex);a.proceduralMaps.set(key,tex);return tex;
+    ctx.putImageData(image,0,0);const tex=new a.THREE.CanvasTexture(canvas);tex.wrapS=tex.wrapT=a.THREE.RepeatWrapping;tex.repeat?.set?.(2,2);tex.userData={...(tex.userData||{}),goldenProceduralSurface:true,semantic,kind,offscreenCanvas:offscreen};
+    tuneTexture(a,tex);a.proceduralMaps.set(key,tex);a.canvasTexturesBuilt=(a.canvasTexturesBuilt||0)+1;if(offscreen)a.offscreenCanvasUsed=(a.offscreenCanvasUsed||0)+1;return tex;
   }
   function attachProceduralMaps(a,o,m,semantic){
     if(a.lowPower||!o?.geometry?.getAttribute?.('uv'))return;
@@ -211,6 +220,14 @@
       shader.uniforms.goldenGrade=a.paintingUniforms.grade;
       shader.uniforms.goldenStrength=a.paintingUniforms.strength;
       shader.fragmentShader=`uniform vec3 goldenNearTint;\nuniform vec3 goldenFarTint;\nuniform vec4 goldenRanges;\nuniform vec4 goldenGrade;\nuniform float goldenStrength;\n${shader.fragmentShader}`;
+      const useLut=Boolean(a.lutTexture)&&!a.lowPower;
+      if(useLut){
+        shader.uniforms.goldenLutMap={value:a.lutTexture};
+        shader.uniforms.goldenLutSize={value:LUT_SIZE};
+        shader.uniforms.goldenLutStrength={value:.5};
+        shader.fragmentShader=`uniform sampler2D goldenLutMap;\nuniform float goldenLutSize;\nuniform float goldenLutStrength;\nvec3 goldenLutSample(sampler2D lut,vec3 c,float size){float bz=clamp(c.b,0.0,1.0)*(size-1.0);float z0=floor(bz);float z1=min(z0+1.0,size-1.0);float zf=bz-z0;float px=clamp(c.r,0.0,1.0)*(size-1.0)+0.5;float py=(clamp(c.g,0.0,1.0)*(size-1.0)+0.5)/size;vec2 uv0=vec2((px+z0*size)/(size*size),py);vec2 uv1=vec2((px+z1*size)/(size*size),py);vec3 c0=texture2D(lut,uv0).rgb;vec3 c1=texture2D(lut,uv1).rgb;return mix(c0,c1,zf);}\n${shader.fragmentShader}`;
+        a.lutMaterials=(a.lutMaterials||0)+1;
+      }
       if(pbrCapable&&!a.lowPower&&shader.vertexShader.includes('#include <worldpos_vertex>')){
         const normalScale=m.userData?.__uvmState?surface.normal*.34:surface.normal;
         shader.uniforms.goldenSurfaceVariation={value:a.mobile?surface.variation*.72:surface.variation};
@@ -239,7 +256,7 @@
   gpCol=(gpCol-vec3(0.5))*gpContrast+vec3(0.5);
   gpCol=mix(gpCol,goldenNearTint,gpNear*0.13*goldenStrength);
   gpCol=mix(gpCol,goldenFarTint,gpFar*0.46*goldenStrength);
-  gl_FragColor.rgb=max(gpCol,vec3(0.0));
+${useLut?'  gpCol=mix(gpCol,goldenLutSample(goldenLutMap,clamp(gpCol,0.0,1.0),goldenLutSize),goldenLutStrength*goldenStrength);\n':''}  gl_FragColor.rgb=max(gpCol,vec3(0.0));
 #endif
 ${marker}`);
     };
@@ -265,6 +282,44 @@ ${marker}`);
     const phaseStrength=s.phase==='night'?.90:1;
     u.grade.value.set(1.34,.56,1.22,.62);u.strength.value=phaseStrength;
   }
+  function buildProceduralLut(a){
+    const T=a.THREE;if(!T?.DataTexture)return null;
+    const size=LUT_SIZE,data=new Uint8Array(size*size*size*4);
+    for(let gy=0;gy<size;gy++){
+      const g=gy/(size-1);
+      for(let bz=0;bz<size;bz++){
+        const b=bz/(size-1);
+        for(let rx=0;rx<size;rx++){
+          const r=rx/(size-1),lum=r*.2126+g*.7152+b*.0722;
+          let rr=lerp(lum,r,1.06),gg=lerp(lum,g,1.03),bb=lerp(lum,b,.97);
+          rr=clamp((rr-.5)*1.05+.5+.015,0,1);gg=clamp((gg-.5)*1.05+.5,0,1);bb=clamp((bb-.5)*1.05+.5-.01,0,1);
+          const idx=gy*size*size+bz*size+rx,p=idx*4;
+          data[p]=Math.round(rr*255);data[p+1]=Math.round(gg*255);data[p+2]=Math.round(bb*255);data[p+3]=255;
+        }
+      }
+    }
+    const tex=new T.DataTexture(data,size*size,size,T.RGBAFormat);
+    tex.needsUpdate=true;tex.generateMipmaps=false;
+    if(T.LinearFilter!==undefined){tex.minFilter=T.LinearFilter;tex.magFilter=T.LinearFilter;}
+    if(T.ClampToEdgeWrapping!==undefined){tex.wrapS=tex.wrapT=T.ClampToEdgeWrapping;}
+    a.lutBuilds=(a.lutBuilds||0)+1;
+    return tex;
+  }
+  function ensureLightProbe(a){
+    const T=a.THREE;if(a.lightProbe||!T?.LightProbe||!T?.SphericalHarmonics3)return;
+    const probe=new T.LightProbe(new T.SphericalHarmonics3(),1);
+    probe.name='GoldenLightProbe';a.scene.add(probe);a.lightProbe=probe;
+  }
+  function updateLightProbe(a,s){
+    const probe=a.lightProbe;if(!probe?.sh?.coefficients)return;
+    const strength=(a.mobile ? .35 : .5)*clamp(s.lightLevel,0,1),sky=rgb(s.sky),fog=rgb(s.fog);
+    const up=[sky[0]/255*strength,sky[1]/255*strength,sky[2]/255*strength];
+    const down=[fog[0]/255*strength*.55,fog[1]/255*strength*.55,fog[2]/255*strength*.55];
+    const c=probe.sh.coefficients;
+    c[0].set((up[0]+down[0])/(2*SH_C0),(up[1]+down[1])/(2*SH_C0),(up[2]+down[2])/(2*SH_C0));
+    c[1].set((up[0]-down[0])/(2*SH_C1),(up[1]-down[1])/(2*SH_C1),(up[2]-down[2])/(2*SH_C1));
+    probe.intensity=1;
+  }
   function registerThree(options){
     if(!options?.THREE||!options?.scene||!options?.renderer)return null;
     for(const old of adapters)if(old.scene===options.scene)return old;
@@ -274,12 +329,20 @@ ${marker}`);
     const maxAnisotropy=Number(options.renderer.capabilities?.getMaxAnisotropy?.()||1);
     const forceHigh=new URLSearchParams(global.location?.search||'').get('goldenGraphics')==='high';
     const lowPower=!forceHigh&&(mobile||Number(global.navigator?.hardwareConcurrency||8)<=4);
-    const a={...options,baseFog,mobile,lowPower,maxAnisotropy,currentExposure:Number(options.renderer.toneMappingExposure||1),proceduralMaps:new Map(),lightBases:new WeakMap(),lights:[],nightGroup:null,patchedMaterials:0,pbrMaterials:0,textureTunes:0,normalMaps:0,roughnessMaps:0,surfaceDetailMaterials:0,registeredAt:global.performance?.now?.()||0,lastMaterialAudit:-Infinity,paintingUniforms:createPaintingUniforms(options.THREE)};
+    const a={...options,baseFog,mobile,lowPower,maxAnisotropy,currentExposure:Number(options.renderer.toneMappingExposure||1),proceduralMaps:new Map(),lightBases:new WeakMap(),lights:[],nightGroup:null,patchedMaterials:0,pbrMaterials:0,textureTunes:0,normalMaps:0,roughnessMaps:0,surfaceDetailMaterials:0,registeredAt:global.performance?.now?.()||0,lastMaterialAudit:-Infinity,paintingUniforms:createPaintingUniforms(options.THREE),lutTexture:null,lutBuilds:0,lightProbe:null,offscreenCanvasUsed:0,canvasTexturesBuilt:0,assetCodec:null};
     if('outputColorSpace'in options.renderer&&options.THREE.SRGBColorSpace!==undefined)options.renderer.outputColorSpace=options.THREE.SRGBColorSpace;
     if('toneMapping'in options.renderer&&options.THREE.ACESFilmicToneMapping!==undefined)options.renderer.toneMapping=options.THREE.ACESFilmicToneMapping;
     if(options.renderer.shadowMap?.enabled&&options.THREE.PCFSoftShadowMap!==undefined)options.renderer.shadowMap.type=options.THREE.PCFSoftShadowMap;
     options.renderer.domElement?.setAttribute('data-golden-three','1');if(global.document&&options.worldId!=='world-sharabass')document.body.dataset.goldenThreeWorld='1';adapters.add(a);ensureThreeNight(a);
     options.scene.traverse(o=>{if(o.isLight)a.lights.push(o);});patchSceneMaterials(a);
+    if(!a.lowPower){
+      a.lutTexture=buildProceduralLut(a);
+      ensureLightProbe(a);
+      if(global.GoldenAssetCodec?.prewarm){
+        a.assetCodec=global.GoldenAssetCodec;
+        try{global.GoldenAssetCodec.prewarm({renderer:options.renderer,worldId:options.worldId});}catch(e){/* offline-safe */}
+      }
+    }
     return a;
   }
   function applyThree(a,s,now){
@@ -291,6 +354,7 @@ ${marker}`);
     if('toneMapping'in renderer&&T.ACESFilmicToneMapping!==undefined)renderer.toneMapping=T.ACESFilmicToneMapping;
     if('toneMappingExposure'in renderer){a.currentExposure=lerp(a.currentExposure,s.exposure,s.phase==='night'?.16:.10);renderer.toneMappingExposure=a.currentExposure;}
     updatePaintingUniforms(a,s,camera);
+    updateLightProbe(a,s);
     for(const o of a.lights){
       if(!a.lightBases.has(o))a.lightBases.set(o,{intensity:o.intensity,color:o.color?.getHex?.(),ground:o.groundColor?.getHex?.()});
       const b=a.lightBases.get(o);
@@ -333,7 +397,7 @@ ${marker}`);
     if(started||!global.document)return;
     started=true;ensureLayer();global.requestAnimationFrame?.(tick);
   }
-  function diagnostics(){return{phase:currentState().phase,cycleAlive:true,adapters:[...adapters].map(a=>({worldId:a.worldId||'unknown',patchedMaterials:a.patchedMaterials||0,pbrMaterials:a.pbrMaterials||0,surfaceDetailMaterials:a.surfaceDetailMaterials||0,normalMaps:a.normalMaps||0,roughnessMaps:a.roughnessMaps||0,textureTunes:a.textureTunes||0,maxAnisotropy:a.maxAnisotropy||1,surfaceDetailEnabled:!a.lowPower,aces:true,exposureAdaptation:true,softShadows:Boolean(a.renderer?.shadowMap?.enabled),depthGrading:true,foreground:{saturation:1.34,contrast:1.22},background:{saturation:.56,contrast:.62,atmosphereTint:true}}))};}
+  function diagnostics(){return{phase:currentState().phase,cycleAlive:true,adapters:[...adapters].map(a=>({worldId:a.worldId||'unknown',patchedMaterials:a.patchedMaterials||0,pbrMaterials:a.pbrMaterials||0,surfaceDetailMaterials:a.surfaceDetailMaterials||0,normalMaps:a.normalMaps||0,roughnessMaps:a.roughnessMaps||0,textureTunes:a.textureTunes||0,maxAnisotropy:a.maxAnisotropy||1,surfaceDetailEnabled:!a.lowPower,aces:true,exposureAdaptation:true,softShadows:Boolean(a.renderer?.shadowMap?.enabled),depthGrading:true,foreground:{saturation:1.34,contrast:1.22},background:{saturation:.56,contrast:.62,atmosphereTint:true},lut:{enabled:Boolean(a.lutTexture),size:a.lutTexture?LUT_SIZE:0,materials:a.lutMaterials||0,builds:a.lutBuilds||0},lightProbe:{enabled:Boolean(a.lightProbe),approxBands:a.lightProbe?2:0},offscreenCanvas:{supported:typeof OffscreenCanvas!=='undefined',used:a.offscreenCanvasUsed||0,textures:a.canvasTexturesBuilt||0},assetCodec:(a.assetCodec&&typeof a.assetCodec.diagnostics==='function')?a.assetCodec.diagnostics():null}))};}
   const api={STANDARD,PHASE_ORDER:ORDER,PALETTES:P,phaseAt,getState,currentState,registerThree,start,diagnostics};
   global.GoldenPaintingAtmosphere=api;
   if(typeof module!=='undefined'&&module.exports)module.exports=api;
