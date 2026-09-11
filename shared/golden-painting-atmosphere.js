@@ -270,7 +270,7 @@ ${marker}`);
     for(const old of adapters)if(old.scene===options.scene)return old;
     const f=options.scene.fog;
     const baseFog=f?(f.isFogExp2?{type:'exp2',density:f.density}:{type:'linear',near:f.near,far:f.far}):null;
-    const mobile=Boolean(global.matchMedia?.('(pointer:coarse)').matches||Math.min(global.innerWidth||9999,global.innerHeight||9999)<760);
+    const mobile=Boolean(global.matchMedia?.('(pointer:coarse)').matches||(global.innerWidth||9999)<760);
     const maxAnisotropy=Number(options.renderer.capabilities?.getMaxAnisotropy?.()||1);
     const forceHigh=new URLSearchParams(global.location?.search||'').get('goldenGraphics')==='high';
     const lowPower=!forceHigh&&(mobile||Number(global.navigator?.hardwareConcurrency||8)<=4);
