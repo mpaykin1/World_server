@@ -11,6 +11,8 @@ const root = __dirname;
 const apiHandlers = new Map([
   ['/api/apps', require('./api/apps')],
   ['/api/worlds', require('./api/worlds')],
+  ['/api/world-factory', require('./lib/api-handlers/world-factory')],
+  ['/api/canon', require('./lib/api-handlers/canon')],
   ['/api/config', require('./api/config')],
   ['/api/project-context', require('./api/project-context')],
   ['/api/register', require('./lib/api-handlers/register')],

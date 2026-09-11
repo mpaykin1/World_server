@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const { sendJson, methodNotAllowed, withErrors } = require('../lib/http');
-const { worldMenuWithLore } = require('../lib/world-lore');
+const { worldMenuWithLore, buildUniversalLoreGraph } = require('../lib/world-lore');
 
 const root = process.cwd();
 const registryPath = path.join(root, 'data', 'app-release-registry.json');
@@ -66,7 +66,8 @@ function internalInventory(appsDir, registry, loreBible) {
       reason: 'Auto-discovered local app; add it to app-release-registry.json for an explicit lifecycle status.',
       certified: false,
       available: true,
-      source: 'auto-discovered'
+      source: 'auto-discovered',
+      worldMenu: worldMenuWithLore(x.name, { show: false }, loreBible)
     })) : [];
 
   return [...registered, ...discovered];
@@ -98,7 +99,12 @@ module.exports = withErrors(async (req, res) => {
     })
     .sort((a, b) => a.title.localeCompare(b.title, 'ru'));
 
-  const payload = { apps, releasePolicy: registry.policy, goldenStandard: registry.version };
+  const payload = {
+    apps,
+    releasePolicy: registry.policy,
+    goldenStandard: registry.version,
+    loreGraph: buildUniversalLoreGraph(apps, loreBible)
+  };
   if (includeAll) {
     const external = (registry.externalWorlds || []).map(x => ({
       ...x,
@@ -110,6 +116,7 @@ module.exports = withErrors(async (req, res) => {
     }));
     payload.inventory = [...internalInventory(appsDir, registry, loreBible), ...external]
       .sort((a, b) => Number(b.certified) - Number(a.certified) || a.title.localeCompare(b.title, 'ru'));
+    payload.inventoryLoreGraph = buildUniversalLoreGraph(payload.inventory, loreBible);
     payload.inventoryRule = registry.inventoryRule || '';
   }
 

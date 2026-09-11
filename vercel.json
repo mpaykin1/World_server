@@ -31,6 +31,14 @@
   ],
   "rewrites": [
     {
+      "source": "/api/canon",
+      "destination": "/api/worlds?__route=canon"
+    },
+    {
+      "source": "/api/world-factory",
+      "destination": "/api/worlds?__route=world-factory"
+    },
+    {
       "source": "/api/register",
       "destination": "/api/auth?__route=register"
     },

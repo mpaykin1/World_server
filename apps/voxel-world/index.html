@@ -10,7 +10,7 @@
 <style>
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#79b8ef;touch-action:none}canvas{display:block}
 #vwHud{position:fixed;left:10px;top:10px;z-index:40;min-width:190px;padding:8px 10px;border-radius:10px;background:rgba(8,13,18,.55);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(7px);font:12px/1.4 system-ui;color:#fff}
-#vwTitle{font-weight:800;font-size:14px}.vwMuted{color:#b7c8d6}.vwGood{color:#81f7ad}.vwWarn{color:#ffd27b}
+#vwTitle{font-weight:800;font-size:14px}#vwLore{max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.vwMuted{color:#b7c8d6}.vwGood{color:#81f7ad}.vwWarn{color:#ffd27b}
 #vwHelp{position:fixed;left:50%;top:10px;transform:translateX(-50%);z-index:40;max-width:min(760px,72vw);padding:6px 11px;border-radius:999px;background:rgba(0,0,0,.40);border:1px solid rgba(255,255,255,.12);font:11px system-ui;color:#fff;text-align:center}
 #vwBack{position:fixed;left:10px;top:112px;z-index:45;color:#d8f1ff;text-decoration:none;font:12px system-ui;text-shadow:0 1px 3px #000}
 #crosshair{position:fixed;left:50%;top:50%;width:18px;height:18px;transform:translate(-50%,-50%);z-index:35;pointer-events:none}#crosshair:before,#crosshair:after{content:"";position:absolute;background:#fff;box-shadow:0 0 3px #000}#crosshair:before{left:8px;top:2px;width:2px;height:14px}#crosshair:after{top:8px;left:2px;height:2px;width:14px}
@@ -27,7 +27,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#79b8ef;tou
 </head>
 <body>
 <div id="loading">Загрузка Voxel World…</div>
-<div id="vwHud"><div id="vwTitle">Voxel World</div><div id="vwStatus" class="vwMuted">инициализация…</div><div id="vwBiome" class="vwMuted">биом: —</div><div id="vwPlayers" class="vwMuted">игроков: 1</div></div>
+<div id="vwHud"><div id="vwTitle">Voxel World</div><div id="vwStatus" class="vwMuted">инициализация…</div><div id="vwBiome" class="vwMuted">биом: —</div><div id="vwPlayers" class="vwMuted">игроков: 1</div><div id="vwLore" class="vwMuted" title=""></div></div>
 <div id="vwHelp">WASD · мышь — обзор · Space — прыжок · ЛКМ — сломать · ПКМ — поставить · 1–9 — блок · Shift — бег · Enter — чат</div>
 <a id="vwBack" href="/apps/catalog/">← 3D каталог</a>
 <div id="crosshair"></div><div id="targetInfo">Нажми на экран, чтобы играть</div><div id="hotbar"></div>

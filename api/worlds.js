@@ -28,7 +28,12 @@ function sendPassport(res, world) {
   res.end(JSON.stringify(world));
 }
 
-module.exports = withErrors(async (req, res) => {
+const routedHandlers = Object.freeze({
+  'world-factory': require('../lib/api-handlers/world-factory'),
+  canon: require('../lib/api-handlers/canon')
+});
+
+const worldsHandler = withErrors(async (req, res) => {
   if (req.method !== 'GET') return methodNotAllowed(res, ['GET']);
   const index = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
   const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
@@ -75,3 +80,14 @@ module.exports = withErrors(async (req, res) => {
   if (requested && selected.length === 0) return sendJson(res, 404, { error: 'World not found' });
   sendJson(res, 200, { worlds: selected, graph: { nodes: selected.map(({ id }) => id), edges: selected.flatMap((world) => world.portals.map((portal) => ({ from: world.id, to: portal.targetWorldId, id: portal.id, label: portal.label }))) } });
 });
+
+module.exports = async (req, res) => {
+  const requestUrl = new URL(req.url || '/api/worlds', `http://${req.headers?.host || 'localhost'}`);
+  const route = requestUrl.searchParams.get('__route') || '';
+  if (route) {
+    const handler = routedHandlers[route];
+    if (!handler) return sendJson(res, 404, { error: 'Unknown world API route' });
+    return handler(req, res);
+  }
+  return worldsHandler(req, res);
+};

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "type": "IndieWorldNetwork",
   "name": "IMPROVE WORLD — IndieWorlds",
   "url": "https://world-server.ai.studio/apps/catalog/",
@@ -13,6 +13,174 @@
     "linked-worlds",
     "open-discovery"
   ],
+  "loreGraph": {
+    "schemaVersion": "1.0.0",
+    "type": "UniversalLoreGraph",
+    "connected": true,
+    "nodeCount": 11,
+    "edgeCount": 13,
+    "nodes": [
+      {
+        "id": "ai3d-voxel-city",
+        "title": "AI3D Voxel City",
+        "headline": "КАЖДУЮ НОЧЬ ЭТОТ ГОРОД ПЕРЕСТРАИВАЕТ СЕБЯ — НО ДЛЯ КОГО?",
+        "generatedLore": false
+      },
+      {
+        "id": "cinematic-encounter",
+        "title": "Сцена в пыли",
+        "headline": "ЧТО МЕЛЬКНУЛО В ПЫЛИ В МОМЕНТ ВСПЫШКИ — И ПОЧЕМУ ОНО ИДЁТ ПО СЛЕДУ ИГРОКА?",
+        "generatedLore": false
+      },
+      {
+        "id": "dark-void-navigator-live",
+        "title": "Dark Void Navigator",
+        "headline": "В ТЕМНОТЕ ЕСТЬ ДВЕРЬ БЕЗ СТЕН — И ОНА ОТВЕЧАЕТ НА ВОПРОСЫ",
+        "generatedLore": false
+      },
+      {
+        "id": "gothic-voxel-city-atlas-v3-mobile-final",
+        "title": "Gothic Voxel City Atlas V3 Mobile Final",
+        "headline": "ЭТА КАРТА РИСУЕТ УЛИЦЫ ЗА ДЕНЬ ДО ТОГО, КАК ИХ ПОСТРОЯТ",
+        "generatedLore": false
+      },
+      {
+        "id": "improve-world-experiment-100",
+        "title": "Improve World Experiment 100",
+        "headline": "ЛАБОРАТОРИЯ №100 СКРЫВАЕТ ЭКСПЕРИМЕНТ №101 — И В НЁМ УЖЕ ЕСТЬ УЧАСТНИК",
+        "generatedLore": false
+      },
+      {
+        "id": "improve-world-home-live",
+        "title": "Improve World Home",
+        "headline": "ЭТОТ ДОМ ДОСТРАИВАЕТ КОМНАТУ КАЖДЫЙ РАЗ, КОГДА ЕМУ РАССКАЗЫВАЮТ ИСТОРИЮ",
+        "generatedLore": false
+      },
+      {
+        "id": "voxel-gothic-steampunk-mobile-repaired",
+        "title": "Voxel Gothic Steampunk Mobile Repaired",
+        "headline": "КОГДА ГОРОД НАЧАЛ СКЛАДЫВАТЬСЯ, ИНЖЕНЕРЫ СПРЯТАЛИ ЕГО В МИРЕ РАЗМЕРОМ С ЛАДОНЬ",
+        "generatedLore": false
+      },
+      {
+        "id": "voxel-gothic-steampunk-world",
+        "title": "Voxel Gothic Steampunk World",
+        "headline": "ТРИДЦАТЬ ЛЕТ ЧАСЫ БИЛИ ДВЕНАДЦАТЬ РАЗ. ПРОШЛОЙ НОЧЬЮ РАЗДАЛСЯ ТРИНАДЦАТЫЙ УДАР",
+        "generatedLore": false
+      },
+      {
+        "id": "voxel-world",
+        "title": "Voxel World",
+        "headline": "КТО ПОЛОЖИЛ ПЕРВЫЙ КУБ — И ПОЧЕМУ ОН ДО СИХ ПОР ПОЁТ?",
+        "generatedLore": false
+      },
+      {
+        "id": "world-server-catalog-live",
+        "title": "World Server Catalog",
+        "headline": "МЕЖДУ МИРАМИ ЕСТЬ ВОКЗАЛ С ТРИНАДЦАТОЙ ДВЕРЬЮ, КОТОРОЙ НЕТ НИ НА ОДНОЙ КАРТЕ",
+        "generatedLore": false
+      },
+      {
+        "id": "world-server-codex-voxel-v3",
+        "title": "World Server Codex Voxel V3",
+        "headline": "СТАРЫЙ МИР НЕ УДАЛИЛСЯ — ОН ПРОДОЛЖАЕТ ЖИТЬ ПОД НОВЫМ",
+        "generatedLore": false
+      }
+    ],
+    "edges": [
+      {
+        "from": "ai3d-voxel-city",
+        "to": "voxel-world",
+        "relation": "canon",
+        "story": "План улиц продолжает координатный узор, начатый возле Первого Куба.",
+        "generated": false
+      },
+      {
+        "from": "cinematic-encounter",
+        "to": "voxel-world",
+        "relation": "canon",
+        "story": "Последняя цепочка следов уходит за промышленную дорогу в бесконечный Voxel World, где те же четыре отметины появляются на древних блоках.",
+        "generated": false
+      },
+      {
+        "from": "dark-void-navigator-live",
+        "to": "improve-world-home-live",
+        "relation": "canon",
+        "story": "Дверь без стен иногда открывается прямо в коридор Дома историй.",
+        "generated": false
+      },
+      {
+        "from": "gothic-voxel-city-atlas-v3-mobile-final",
+        "to": "voxel-gothic-steampunk-world",
+        "relation": "canon",
+        "story": "Все красные линии сходятся к Сердечному Двигателю перед тринадцатым ударом.",
+        "generated": false
+      },
+      {
+        "from": "improve-world-experiment-100",
+        "to": "improve-world-home-live",
+        "relation": "canon",
+        "story": "Истории из Дома приходят сюда как гипотезы и иногда возвращаются способными менять реальность.",
+        "generated": false
+      },
+      {
+        "from": "improve-world-home-live",
+        "to": "world-server-catalog-live",
+        "relation": "canon",
+        "story": "Карта Дверей стала первым планом Каталога, но на ней есть проход, которого нет ни в одном списке.",
+        "generated": false
+      },
+      {
+        "from": "improve-world-home-live",
+        "to": "improve-world-experiment-100",
+        "relation": "canon",
+        "story": "Одна дверь ведёт в Лабораторию 100, где истории временно превращают в законы физики.",
+        "generated": false
+      },
+      {
+        "from": "voxel-gothic-steampunk-mobile-repaired",
+        "to": "voxel-gothic-steampunk-world",
+        "relation": "canon",
+        "story": "Исчезнувшие кварталы большого города появляются здесь в уменьшенном виде после тринадцатого удара.",
+        "generated": false
+      },
+      {
+        "from": "voxel-gothic-steampunk-world",
+        "to": "gothic-voxel-city-atlas-v3-mobile-final",
+        "relation": "canon",
+        "story": "Атлас показывает район за несколько минут до тринадцатого удара.",
+        "generated": false
+      },
+      {
+        "from": "world-server-catalog-live",
+        "to": "improve-world-home-live",
+        "relation": "canon",
+        "story": "Карта Дверей из Дома не показывает тринадцатый проход, хотя остальные двери на ней есть.",
+        "generated": false
+      },
+      {
+        "from": "world-server-codex-voxel-v3",
+        "to": "voxel-world",
+        "relation": "canon",
+        "story": "Фантомные Кубы указывают координаты Первого Куба, но точка отсутствует на нынешней карте.",
+        "generated": false
+      },
+      {
+        "from": "ai3d-voxel-city",
+        "to": "dark-void-navigator-live",
+        "relation": "canon-bridge",
+        "story": "Ai3d Voxel City and Dark Void Navigator Live share an automatically discovered canon bridge.",
+        "generated": true
+      },
+      {
+        "from": "dark-void-navigator-live",
+        "to": "gothic-voxel-city-atlas-v3-mobile-final",
+        "relation": "canon-bridge",
+        "story": "Dark Void Navigator Live and Gothic Voxel City Atlas V3 Mobile Final share an automatically discovered canon bridge.",
+        "generated": true
+      }
+    ]
+  },
   "worlds": [
     {
       "schemaVersion": "1.0.0",
