@@ -1,14 +1,16 @@
-(function (global) {
+﻿(function (global) {
   'use strict';
   // Shared lazy KTX2/BasisU + Meshopt bridge. PARTIAL capability: optional,
-  // cached, fail-soft. Never auto-invoked on mobile/lowPower — callers decide.
-  const THREE_VERSION = '0.165.0';
-  const BASE = `https://unpkg.com/three@${THREE_VERSION}/examples/jsm/`;
-  const KTX2_URL = `${BASE}loaders/KTX2Loader.js`;
-  const MESHOPT_URL = `${BASE}libs/meshopt_decoder.module.js`;
-  const TRANSCODER_PATH = `${BASE}libs/basis/`;
+  // cached, fail-soft. Never auto-invoked on mobile/lowPower вЂ” callers decide.
+  const DEFAULT_THREE_VERSION = '0.165.0';
+  const versionFromRevision = (revision) => /^\d+$/.test(String(revision || '')) ? `0.${revision}.0` : null;
+  const urlsFor = (version) => {
+    const base = `https://unpkg.com/three@${version}/examples/jsm/`;
+    return { ktx2:`https://esm.sh/three@${version}/examples/jsm/loaders/KTX2Loader.js?bundle`, meshopt:`${base}libs/meshopt_decoder.module.js`, basis:`${base}libs/basis/` };
+  };
 
   const state = {
+    version: DEFAULT_THREE_VERSION,
     ktx2: { promise: null, loader: null, supported: null, attempted: false, error: null },
     meshopt: { promise: null, decoder: null, attempted: false, error: null },
     prewarmed: false
@@ -21,11 +23,13 @@
   function createKTX2Loader(renderer, options) {
     if (state.ktx2.promise) return state.ktx2.promise;
     state.ktx2.attempted = true;
-    state.ktx2.promise = importModule(KTX2_URL).then((mod) => {
+    const version=(options&&options.threeVersion)||versionFromRevision(options&&options.threeRevision)||state.version||DEFAULT_THREE_VERSION;
+    state.version=version;const urls=urlsFor(version);
+    state.ktx2.promise = importModule(urls.ktx2).then((mod) => {
       const KTX2Loader = mod && mod.KTX2Loader;
       if (!KTX2Loader) throw new Error('KTX2Loader export missing');
       const loader = new KTX2Loader();
-      loader.setTranscoderPath((options && options.transcoderPath) || TRANSCODER_PATH);
+      loader.setTranscoderPath((options && options.transcoderPath) || urls.basis);
       if (renderer) {
         try {
           loader.detectSupport(renderer);
@@ -44,10 +48,12 @@
     return state.ktx2.promise;
   }
 
-  function getMeshoptDecoder() {
+  function getMeshoptDecoder(options) {
     if (state.meshopt.promise) return state.meshopt.promise;
     state.meshopt.attempted = true;
-    state.meshopt.promise = importModule(MESHOPT_URL).then((mod) => {
+    const version=(options&&options.threeVersion)||versionFromRevision(options&&options.threeRevision)||state.version||DEFAULT_THREE_VERSION;
+    state.version=version;const urls=urlsFor(version);
+    state.meshopt.promise = importModule(urls.meshopt).then((mod) => {
       const decoder = mod && mod.MeshoptDecoder;
       if (!decoder) throw new Error('MeshoptDecoder export missing');
       state.meshopt.decoder = decoder;
@@ -64,12 +70,12 @@
     if (state.prewarmed) return;
     state.prewarmed = true;
     try { createKTX2Loader(options && options.renderer, options).catch(() => {}); } catch (error) { /* offline-safe */ }
-    try { getMeshoptDecoder().catch(() => {}); } catch (error) { /* offline-safe */ }
+    try { getMeshoptDecoder(options).catch(() => {}); } catch (error) { /* offline-safe */ }
   }
 
   function diagnostics() {
     return {
-      threeVersion: THREE_VERSION,
+      threeVersion: state.version,
       ktx2: {
         attempted: state.ktx2.attempted,
         ready: Boolean(state.ktx2.loader),
@@ -85,7 +91,8 @@
     };
   }
 
-  const api = { createKTX2Loader, getMeshoptDecoder, prewarm, diagnostics, THREE_VERSION };
+  const api = { createKTX2Loader, getMeshoptDecoder, prewarm, diagnostics, DEFAULT_THREE_VERSION };
   global.GoldenAssetCodec = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window !== 'undefined' ? window : globalThis);
+

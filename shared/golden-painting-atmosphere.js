@@ -320,6 +320,28 @@ ${marker}`);
     c[1].set((up[0]-down[0])/(2*SH_C1),(up[1]-down[1])/(2*SH_C1),(up[2]-down[2])/(2*SH_C1));
     probe.intensity=1;
   }
+  function updateImportanceShadows(a,camera){
+    if(!camera?.position)return;
+    const T=a.THREE,forward=new T.Vector3();camera.getWorldDirection?.(forward);forward.y=0;
+    if(forward.lengthSq()<1e-5)forward.set(0,0,-1);else forward.normalize();
+    const focus=new T.Vector3().copy(camera.position).addScaledVector(forward,a.mobile?8:16);
+    const extent=a.mobile?26:36;
+    for(const light of a.lights){
+      if(!light?.isDirectionalLight||!light.castShadow||!light.shadow?.camera)continue;
+      if(!a.shadowBases.has(light)){
+        const targetPos=light.target?.position?.clone?.()||new T.Vector3();
+        a.shadowBases.set(light,{offset:light.position.clone().sub(targetPos)});
+        if(light.target&&!light.target.parent)a.scene.add(light.target);
+      }
+      const base=a.shadowBases.get(light);
+      light.target.position.copy(focus);
+      light.position.copy(focus).add(base.offset);
+      const sc=light.shadow.camera;sc.left=-extent;sc.right=extent;sc.top=extent;sc.bottom=-extent;
+      sc.near=Math.max(.5,Math.min(Number(sc.near)||.5,4));sc.far=Math.max(Number(sc.far)||140,extent*4);
+      sc.updateProjectionMatrix?.();light.target.updateMatrixWorld?.();
+      a.importanceShadowLights=(a.importanceShadowLights||0)+1;
+    }
+  }
   function registerThree(options){
     if(!options?.THREE||!options?.scene||!options?.renderer)return null;
     for(const old of adapters)if(old.scene===options.scene)return old;
@@ -329,7 +351,7 @@ ${marker}`);
     const maxAnisotropy=Number(options.renderer.capabilities?.getMaxAnisotropy?.()||1);
     const forceHigh=new URLSearchParams(global.location?.search||'').get('goldenGraphics')==='high';
     const lowPower=!forceHigh&&(mobile||Number(global.navigator?.hardwareConcurrency||8)<=4);
-    const a={...options,baseFog,mobile,lowPower,maxAnisotropy,currentExposure:Number(options.renderer.toneMappingExposure||1),proceduralMaps:new Map(),lightBases:new WeakMap(),lights:[],nightGroup:null,patchedMaterials:0,pbrMaterials:0,textureTunes:0,normalMaps:0,roughnessMaps:0,surfaceDetailMaterials:0,registeredAt:global.performance?.now?.()||0,lastMaterialAudit:-Infinity,paintingUniforms:createPaintingUniforms(options.THREE),lutTexture:null,lutBuilds:0,lightProbe:null,offscreenCanvasUsed:0,canvasTexturesBuilt:0,assetCodec:null};
+    const a={...options,baseFog,mobile,lowPower,maxAnisotropy,currentExposure:Number(options.renderer.toneMappingExposure||1),proceduralMaps:new Map(),lightBases:new WeakMap(),shadowBases:new WeakMap(),lights:[],nightGroup:null,patchedMaterials:0,pbrMaterials:0,textureTunes:0,normalMaps:0,roughnessMaps:0,surfaceDetailMaterials:0,importanceShadowLights:0,registeredAt:global.performance?.now?.()||0,lastMaterialAudit:-Infinity,paintingUniforms:createPaintingUniforms(options.THREE),lutTexture:null,lutBuilds:0,lightProbe:null,offscreenCanvasUsed:0,canvasTexturesBuilt:0,assetCodec:null};
     if('outputColorSpace'in options.renderer&&options.THREE.SRGBColorSpace!==undefined)options.renderer.outputColorSpace=options.THREE.SRGBColorSpace;
     if('toneMapping'in options.renderer&&options.THREE.ACESFilmicToneMapping!==undefined)options.renderer.toneMapping=options.THREE.ACESFilmicToneMapping;
     if(options.renderer.shadowMap?.enabled&&options.THREE.PCFSoftShadowMap!==undefined)options.renderer.shadowMap.type=options.THREE.PCFSoftShadowMap;
@@ -340,7 +362,7 @@ ${marker}`);
       ensureLightProbe(a);
       if(global.GoldenAssetCodec?.prewarm){
         a.assetCodec=global.GoldenAssetCodec;
-        try{global.GoldenAssetCodec.prewarm({renderer:options.renderer,worldId:options.worldId});}catch(e){/* offline-safe */}
+        try{global.GoldenAssetCodec.prewarm({renderer:options.renderer,worldId:options.worldId,threeRevision:options.THREE?.REVISION});}catch(e){/* offline-safe */}
       }
     }
     return a;
@@ -355,6 +377,7 @@ ${marker}`);
     if('toneMappingExposure'in renderer){a.currentExposure=lerp(a.currentExposure,s.exposure,s.phase==='night'?.16:.10);renderer.toneMappingExposure=a.currentExposure;}
     updatePaintingUniforms(a,s,camera);
     updateLightProbe(a,s);
+    updateImportanceShadows(a,camera);
     for(const o of a.lights){
       if(!a.lightBases.has(o))a.lightBases.set(o,{intensity:o.intensity,color:o.color?.getHex?.(),ground:o.groundColor?.getHex?.()});
       const b=a.lightBases.get(o);
@@ -397,7 +420,7 @@ ${marker}`);
     if(started||!global.document)return;
     started=true;ensureLayer();global.requestAnimationFrame?.(tick);
   }
-  function diagnostics(){return{phase:currentState().phase,cycleAlive:true,adapters:[...adapters].map(a=>({worldId:a.worldId||'unknown',patchedMaterials:a.patchedMaterials||0,pbrMaterials:a.pbrMaterials||0,surfaceDetailMaterials:a.surfaceDetailMaterials||0,normalMaps:a.normalMaps||0,roughnessMaps:a.roughnessMaps||0,textureTunes:a.textureTunes||0,maxAnisotropy:a.maxAnisotropy||1,surfaceDetailEnabled:!a.lowPower,aces:true,exposureAdaptation:true,softShadows:Boolean(a.renderer?.shadowMap?.enabled),depthGrading:true,foreground:{saturation:1.34,contrast:1.22},background:{saturation:.56,contrast:.62,atmosphereTint:true},lut:{enabled:Boolean(a.lutTexture),size:a.lutTexture?LUT_SIZE:0,materials:a.lutMaterials||0,builds:a.lutBuilds||0},lightProbe:{enabled:Boolean(a.lightProbe),approxBands:a.lightProbe?2:0},offscreenCanvas:{supported:typeof OffscreenCanvas!=='undefined',used:a.offscreenCanvasUsed||0,textures:a.canvasTexturesBuilt||0},assetCodec:(a.assetCodec&&typeof a.assetCodec.diagnostics==='function')?a.assetCodec.diagnostics():null}))};}
+  function diagnostics(){return{phase:currentState().phase,cycleAlive:true,adapters:[...adapters].map(a=>({worldId:a.worldId||'unknown',patchedMaterials:a.patchedMaterials||0,pbrMaterials:a.pbrMaterials||0,surfaceDetailMaterials:a.surfaceDetailMaterials||0,normalMaps:a.normalMaps||0,roughnessMaps:a.roughnessMaps||0,textureTunes:a.textureTunes||0,maxAnisotropy:a.maxAnisotropy||1,surfaceDetailEnabled:!a.lowPower,aces:true,exposureAdaptation:true,softShadows:Boolean(a.renderer?.shadowMap?.enabled),importanceShadows:Boolean(a.importanceShadowLights),importanceShadowUpdates:a.importanceShadowLights||0,depthGrading:true,foreground:{saturation:1.34,contrast:1.22},background:{saturation:.56,contrast:.62,atmosphereTint:true},lut:{enabled:Boolean(a.lutTexture),size:a.lutTexture?LUT_SIZE:0,materials:a.lutMaterials||0,builds:a.lutBuilds||0},lightProbe:{enabled:Boolean(a.lightProbe),approxBands:a.lightProbe?2:0},offscreenCanvas:{supported:typeof OffscreenCanvas!=='undefined',used:a.offscreenCanvasUsed||0,textures:a.canvasTexturesBuilt||0},assetCodec:(a.assetCodec&&typeof a.assetCodec.diagnostics==='function')?a.assetCodec.diagnostics():null}))};}
   const api={STANDARD,PHASE_ORDER:ORDER,PALETTES:P,phaseAt,getState,currentState,registerThree,start,diagnostics};
   global.GoldenPaintingAtmosphere=api;
   if(typeof module!=='undefined'&&module.exports)module.exports=api;
