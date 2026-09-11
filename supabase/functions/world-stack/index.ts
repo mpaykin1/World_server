@@ -78,6 +78,13 @@ async function optionalIdentity(admin: any, req: Request, body: any) {
   if (!validUuid(guestId)) fail(400, "Не удалось определить игровую сессию гостя.");
   return { kind: "guest", id: guestId };
 }
+async function requireUser(admin: any, req: Request) {
+  const token = bearer(req);
+  if (!token) fail(401, "Требуется вход в аккаунт.");
+  const { data, error } = await admin.auth.getUser(token);
+  if (error || !data?.user) fail(401, "Сессия истекла. Войдите снова.");
+  return { kind: "user", id: data.user.id };
+}
 async function worldDNA(ideaRaw: unknown, requestIdRaw: unknown) {
   const idea = cleanIdea(ideaRaw);
   const requestId = String(requestIdRaw || "");
@@ -129,7 +136,7 @@ async function worldFactory(admin: any, req: Request, url: URL) {
   }
   if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
   const body = await bodyJson(req);
-  await optionalIdentity(admin, req, body);
+  await requireUser(admin, req);
   if (String(body.action || "create") !== "create") fail(400, "Неизвестное действие World Factory.");
   const dna = await worldDNA(body.idea, body.requestId);
   const { data: existing, error: readError } = await admin.from("voxel_worlds").select("id,seed,settings,created_at,updated_at").eq("id", dna.id).maybeSingle();
@@ -161,7 +168,7 @@ async function canonEffect(eventKey: string, sourceWorldId: string, targetWorldI
   return { schemaVersion: 1, kind: "canon_beacon", effectId: `canon-${key.slice(0, 16)}`, hue: Math.round(unit(0) * 359), radius: Number((4 + unit(8) * 5).toFixed(2)), intensity: Number((0.7 + unit(16) * .55).toFixed(2)), lifetimeMs: 86400000 };
 }
 async function canonRecord(admin: any, req: Request, body: any) {
-  await optionalIdentity(admin, req, body);
+  await requireUser(admin, req);
   const worldId = cleanWorldId(body.worldId);
   const eventType = cleanEventType(body.eventType);
   const summary = cleanSummary(body.summary);
