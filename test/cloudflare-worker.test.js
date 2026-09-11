@@ -57,7 +57,7 @@ test('Cloudflare serves IndieWorld passports without an upstream request', async
   assert.equal(body.id, 'voxel-world');
 });
 
-test('dynamic Cloudflare APIs use Cloud Run by default and allow a safe HTTPS override', async () => {
+test('Cloudflare serves browser Supabase config natively and dynamic APIs keep the Cloud Run fallback', async () => {
   const worker = await loadWorker();
   const originalFetch = global.fetch;
   const seen = [];
@@ -67,14 +67,18 @@ test('dynamic Cloudflare APIs use Cloud Run by default and allow a safe HTTPS ov
   };
   try {
     const env = { ASSETS: assetsBinding() };
-    const first = await worker.fetch(new Request('https://world.example/api/config'), env);
-    assert.equal(first.status, 200);
-    assert.equal(seen[0].origin, 'https://world-server-ai-studio-bridge-514578099152.europe-west2.run.app');
-    assert.equal(first.headers.get('x-world-server-api-upstream'), 'world-server-ai-studio-bridge-514578099152.europe-west2.run.app');
+    const config = await worker.fetch(new Request('https://world.example/api/config'), env);
+    assert.equal(config.status, 200);
+    assert.equal(config.headers.get('x-world-server-config-runtime'), 'cloudflare-native');
+    const configBody = await config.json();
+    assert.equal(configBody.configured, true);
+    assert.equal(configBody.supabaseUrl, 'https://iphfwxjuhsucvdyluink.supabase.co');
+    assert.match(configBody.supabasePublishableKey, /^sb_publishable_/);
+    assert.equal(seen.length, 0);
 
-    const second = await worker.fetch(new Request('https://world.example/api/game'), { ...env, WORLD_SERVER_API_ORIGIN: 'https://api.example/' });
-    assert.equal(second.status, 200);
-    assert.equal(seen[1].origin, 'https://api.example');
+    const game = await worker.fetch(new Request('https://world.example/api/game'), { ...env, WORLD_SERVER_API_ORIGIN: 'https://api.example/' });
+    assert.equal(game.status, 200);
+    assert.equal(seen[0].origin, 'https://api.example');
   } finally {
     global.fetch = originalFetch;
   }
@@ -101,5 +105,6 @@ test('world creation UI requires an account and guest play can continue without 
   const shell=fs.readFileSync(path.join(root,'shared','golden-ui-shell.js'),'utf8');
   const client=fs.readFileSync(path.join(root,'apps','voxel-world','client.js'),'utf8');
   assert.match(shell,/Войдите в аккаунт, чтобы создавать новые миры/);
-  assert.match(client,/if\(!t\)return null/);
+  assert.match(client,/async function api[\s\S]*const t=token\(\); if\(t\) headers\.Authorization/);
+  assert.match(client,/async function canonApi[\s\S]*const t=token\(\); if\(!t\)return null; headers\.Authorization/);
 });
