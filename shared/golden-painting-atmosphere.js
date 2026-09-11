@@ -209,9 +209,14 @@
   function patchPaintingMaterial(a,m,surface=SURFACE_PBR.default){
     if(!m||m.userData?.goldenPaintingDepthV2||m.isShaderMaterial||m.isRawShaderMaterial||!('fog' in m))return;
     m.userData=m.userData||{};m.userData.goldenPaintingDepthV2=true;m.fog=true;a.patchedMaterials=(a.patchedMaterials||0)+1;
-    const previous=m.onBeforeCompile,pbrCapable=Boolean(m.isMeshStandardMaterial||m.isMeshPhysicalMaterial);
+    const previous=m.onBeforeCompile,pbrCapable=Boolean(m.isMeshStandardMaterial||m.isMeshPhysicalMaterial),vegetation=surface===SURFACE_PBR.vegetation;
     m.onBeforeCompile=function(shader,renderer){
       previous?.call(this,shader,renderer);
+      if(vegetation&&!a.lowPower&&shader.vertexShader.includes('#include <begin_vertex>')){
+        const wind=shader.uniforms.goldenWindTime={value:0};a.windUniforms.add(wind);
+        shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nuniform float goldenWindTime;');
+        shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>\nfloat goldenWindMask=clamp(position.y*2.0+0.5,0.0,1.0);\nfloat goldenWindPhase=goldenWindTime*1.55+position.x*1.35+position.z*.91;\ntransformed.x+=sin(goldenWindPhase)*.035*goldenWindMask;\ntransformed.z+=cos(goldenWindPhase*.83)*.018*goldenWindMask;`);
+      }
       const marker='#include <fog_fragment>';
       if(!shader.fragmentShader.includes(marker))return;
       shader.uniforms.goldenNearTint=a.paintingUniforms.nearTint;
@@ -322,6 +327,13 @@ ${marker}`);
     if(key?.position){const tx=key.target?.position?.x||0,tz=key.target?.position?.z||0,dx=key.position.x-tx,dz=key.position.z-tz,hm=Math.hypot(dx,dz)||1,hx=dx/hm,hz=dz/hm,hs=strength*.22;c[2].set(sunRgb[0]/255*hs*hz/SH_C1,sunRgb[1]/255*hs*hz/SH_C1,sunRgb[2]/255*hs*hz/SH_C1);c[3].set(sunRgb[0]/255*hs*hx/SH_C1,sunRgb[1]/255*hs*hx/SH_C1,sunRgb[2]/255*hs*hx/SH_C1);}else{c[2].set(0,0,0);c[3].set(0,0,0);}
     probe.intensity=1;
   }
+  function updateEnvironment(a,s){
+    if(a.lowPower||!a.THREE?.DataTexture||!a.scene||a.environmentPhase===s.phase)return;
+    const T=a.THREE,w=24,h=12,data=new Uint8Array(w*h*4),sky=rgb(s.sky),fog=rgb(s.fog),sun=rgb(s.sun);
+    for(let y=0;y<h;y++)for(let x=0;x<w;x++){const v=y/(h-1),u=x/(w-1),horizon=Math.max(0,1-Math.abs(v-.48)*3.1),ground=Math.max(0,(v-.5)*2),sunLobe=Math.pow(Math.max(0,Math.cos((u-.72)*Math.PI*2)),18)*Math.pow(Math.max(0,1-Math.abs(v-.38)*4),2),i=(y*w+x)*4;for(let c=0;c<3;c++){let col=lerp(sky[c],fog[c],horizon*.62);col=lerp(col,fog[c]*.48,ground*.72);col=lerp(col,sun[c],sunLobe*.30);data[i+c]=Math.round(clamp(col,0,255));}data[i+3]=255;}
+    const tex=new T.DataTexture(data,w,h,T.RGBAFormat);tex.needsUpdate=true;tex.generateMipmaps=false;if(T.LinearFilter!==undefined){tex.minFilter=T.LinearFilter;tex.magFilter=T.LinearFilter;}if(T.EquirectangularReflectionMapping!==undefined)tex.mapping=T.EquirectangularReflectionMapping;if(T.SRGBColorSpace!==undefined)tex.colorSpace=T.SRGBColorSpace;
+    a.environmentTexture?.dispose?.();a.scene.environment=tex;a.environmentTexture=tex;a.environmentPhase=s.phase;a.environmentBuilds=(a.environmentBuilds||0)+1;
+  }
   function updateImportanceShadows(a,camera){
     if(!camera?.position)return;
     const T=a.THREE,forward=new T.Vector3();camera.getWorldDirection?.(forward);forward.y=0;
@@ -333,6 +345,7 @@ ${marker}`);
       if(!a.shadowBases.has(light)){
         const targetPos=light.target?.position?.clone?.()||new T.Vector3();
         a.shadowBases.set(light,{offset:light.position.clone().sub(targetPos)});
+        light.shadow.bias=-0.0006;if('normalBias' in light.shadow)light.shadow.normalBias=a.mobile?.025:.035;
         if(light.target&&!light.target.parent)a.scene.add(light.target);
       }
       const base=a.shadowBases.get(light);
@@ -353,7 +366,7 @@ ${marker}`);
     const maxAnisotropy=Number(options.renderer.capabilities?.getMaxAnisotropy?.()||1);
     const forceHigh=new URLSearchParams(global.location?.search||'').get('goldenGraphics')==='high';
     const lowPower=!forceHigh&&(mobile||Number(global.navigator?.hardwareConcurrency||8)<=4);
-    const a={...options,baseFog,mobile,lowPower,maxAnisotropy,currentExposure:Number(options.renderer.toneMappingExposure||1),proceduralMaps:new Map(),lightBases:new WeakMap(),shadowBases:new WeakMap(),lights:[],nightGroup:null,patchedMaterials:0,pbrMaterials:0,textureTunes:0,normalMaps:0,roughnessMaps:0,surfaceDetailMaterials:0,importanceShadowLights:0,registeredAt:global.performance?.now?.()||0,lastMaterialAudit:-Infinity,paintingUniforms:createPaintingUniforms(options.THREE),lutTexture:null,lutBuilds:0,lightProbe:null,offscreenCanvasUsed:0,canvasTexturesBuilt:0,assetCodec:null};
+    const a={...options,baseFog,mobile,lowPower,maxAnisotropy,currentExposure:Number(options.renderer.toneMappingExposure||1),proceduralMaps:new Map(),lightBases:new WeakMap(),shadowBases:new WeakMap(),lights:[],windUniforms:new Set(),nightGroup:null,patchedMaterials:0,pbrMaterials:0,textureTunes:0,normalMaps:0,roughnessMaps:0,surfaceDetailMaterials:0,importanceShadowLights:0,registeredAt:global.performance?.now?.()||0,lastMaterialAudit:-Infinity,paintingUniforms:createPaintingUniforms(options.THREE),lutTexture:null,lutBuilds:0,lightProbe:null,environmentTexture:null,environmentPhase:null,environmentBuilds:0,offscreenCanvasUsed:0,canvasTexturesBuilt:0,assetCodec:null};
     if('outputColorSpace'in options.renderer&&options.THREE.SRGBColorSpace!==undefined)options.renderer.outputColorSpace=options.THREE.SRGBColorSpace;
     if('toneMapping'in options.renderer&&options.THREE.ACESFilmicToneMapping!==undefined)options.renderer.toneMapping=options.THREE.ACESFilmicToneMapping;
     if(options.renderer.shadowMap?.enabled&&options.THREE.PCFSoftShadowMap!==undefined)options.renderer.shadowMap.type=options.THREE.PCFSoftShadowMap;
@@ -379,6 +392,8 @@ ${marker}`);
     if('toneMappingExposure'in renderer){a.currentExposure=lerp(a.currentExposure,s.exposure,s.phase==='night'?.16:.10);renderer.toneMappingExposure=a.currentExposure;}
     updatePaintingUniforms(a,s,camera);
     updateLightProbe(a,s);
+    updateEnvironment(a,s);
+    for(const u of a.windUniforms)u.value=(now||0)/1000;
     updateImportanceShadows(a,camera);
     for(const o of a.lights){
       if(!a.lightBases.has(o))a.lightBases.set(o,{intensity:o.intensity,color:o.color?.getHex?.(),ground:o.groundColor?.getHex?.()});
@@ -422,7 +437,7 @@ ${marker}`);
     if(started||!global.document)return;
     started=true;ensureLayer();global.requestAnimationFrame?.(tick);
   }
-  function diagnostics(){return{phase:currentState().phase,cycleAlive:true,adapters:[...adapters].map(a=>({worldId:a.worldId||'unknown',patchedMaterials:a.patchedMaterials||0,pbrMaterials:a.pbrMaterials||0,surfaceDetailMaterials:a.surfaceDetailMaterials||0,normalMaps:a.normalMaps||0,roughnessMaps:a.roughnessMaps||0,textureTunes:a.textureTunes||0,maxAnisotropy:a.maxAnisotropy||1,surfaceDetailEnabled:!a.lowPower,aces:true,exposureAdaptation:true,softShadows:Boolean(a.renderer?.shadowMap?.enabled),importanceShadows:Boolean(a.importanceShadowLights),importanceShadowUpdates:a.importanceShadowLights||0,depthGrading:true,foreground:{saturation:1.34,contrast:1.22},background:{saturation:.56,contrast:.62,atmosphereTint:true},lut:{enabled:Boolean(a.lutTexture),size:a.lutTexture?LUT_SIZE:0,materials:a.lutMaterials||0,builds:a.lutBuilds||0},lightProbe:{enabled:Boolean(a.lightProbe),approxBands:a.lightProbe?2:0},offscreenCanvas:{supported:typeof OffscreenCanvas!=='undefined',used:a.offscreenCanvasUsed||0,textures:a.canvasTexturesBuilt||0},assetCodec:(a.assetCodec&&typeof a.assetCodec.diagnostics==='function')?a.assetCodec.diagnostics():null}))};}
+  function diagnostics(){return{phase:currentState().phase,cycleAlive:true,adapters:[...adapters].map(a=>({worldId:a.worldId||'unknown',patchedMaterials:a.patchedMaterials||0,pbrMaterials:a.pbrMaterials||0,surfaceDetailMaterials:a.surfaceDetailMaterials||0,normalMaps:a.normalMaps||0,roughnessMaps:a.roughnessMaps||0,textureTunes:a.textureTunes||0,maxAnisotropy:a.maxAnisotropy||1,surfaceDetailEnabled:!a.lowPower,aces:true,exposureAdaptation:true,softShadows:Boolean(a.renderer?.shadowMap?.enabled),importanceShadows:Boolean(a.importanceShadowLights),importanceShadowUpdates:a.importanceShadowLights||0,depthGrading:true,foreground:{saturation:1.34,contrast:1.22},background:{saturation:.56,contrast:.62,atmosphereTint:true},lut:{enabled:Boolean(a.lutTexture),size:a.lutTexture?LUT_SIZE:0,materials:a.lutMaterials||0,builds:a.lutBuilds||0},lightProbe:{enabled:Boolean(a.lightProbe),approxBands:a.lightProbe?2:0},environment:{enabled:Boolean(a.environmentTexture),phase:a.environmentPhase,builds:a.environmentBuilds||0},vegetationWind:{enabled:a.windUniforms.size>0,uniforms:a.windUniforms.size},shadowBias:{enabled:[...a.lights].some(o=>o?.isDirectionalLight&&o.castShadow&&Number.isFinite(o.shadow?.bias))},offscreenCanvas:{supported:typeof OffscreenCanvas!=='undefined',used:a.offscreenCanvasUsed||0,textures:a.canvasTexturesBuilt||0},assetCodec:(a.assetCodec&&typeof a.assetCodec.diagnostics==='function')?a.assetCodec.diagnostics():null}))};}
   const api={STANDARD,PHASE_ORDER:ORDER,PALETTES:P,phaseAt,getState,currentState,registerThree,start,diagnostics};
   global.GoldenPaintingAtmosphere=api;
   if(typeof module!=='undefined'&&module.exports)module.exports=api;
