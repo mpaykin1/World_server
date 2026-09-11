@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "series": {
+    "workingTitle": "World Server Chronicles",
+    "season": 1,
+    "nextEpisodeNumber": 1,
+    "premise": "A continuing adventure through connected World_server worlds where discoveries and player actions can change what happens next.",
+    "status": "READY_FOR_FIRST_CYCLE"
+  },
+  "continuity": {
+    "lastEpisode": null,
+    "lastCliffhanger": null,
+    "unresolvedMysteries": [],
+    "playerConsequences": [],
+    "usedHooks": [],
+    "visitedWorlds": [],
+    "recurringCharacters": []
+  },
+  "currentEpisode": null,
+  "episodeHistory": [],
+  "backlog": [],
+  "metrics": {
+    "episodesProduced": 0,
+    "shortIdeasProduced": 0,
+    "verifiedWorldEntryCTAs": 0,
+    "unsupportedClaimsRejected": 0
+  },
+  "rules": {
+    "keepOneContinuousStory": true,
+    "realServerEvidenceRequired": true,
+    "viewerParticipationPreferred": true,
+    "newFeatureShouldBecomeStoryEventWhenAppropriate": true,
+    "playerCanInfluenceFutureEpisodesWhenSafe": true,
+    "neverResetContinuityWithoutExplicitReason": true
+  }
+}
