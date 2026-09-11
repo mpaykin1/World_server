@@ -1,4 +1,4 @@
-﻿const test=require('node:test');
+const test=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
@@ -58,3 +58,31 @@ test('depth grading encodes the painting foreground/background rules',()=>{
   assert.match(src,/goldenFarTint/);
 });
 
+test('golden graphics surface stack is cheap, semantic and texture-aware',()=>{
+  const src=fs.readFileSync(path.join(__dirname,'..','shared','golden-painting-atmosphere.js'),'utf8');
+  assert.match(src,/SURFACE_PBR/);
+  assert.match(src,/goldenPbrTuned/);
+  assert.match(src,/goldenSurfaceVariation/);
+  assert.match(src,/goldenSurfaceNormal/);
+  assert.match(src,/goldenSurfaceRough/);
+  assert.match(src,/LinearMipmapLinearFilter/);
+  assert.match(src,/getMaxAnisotropy/);
+  assert.match(src,/PCFSoftShadowMap/);
+  assert.match(src,/ACESFilmicToneMapping/);
+});
+
+test('adaptive graphics keeps expensive surface detail off low-power devices and adapts exposure',()=>{
+  const src=fs.readFileSync(path.join(__dirname,'..','shared','golden-painting-atmosphere.js'),'utf8');
+  assert.match(src,/const lowPower=!forceHigh/);
+  assert.match(src,/pbrCapable&&!a\.lowPower/);
+  assert.match(src,/currentExposure/);
+  assert.match(src,/exposureAdaptation:true/);
+});
+
+test('voxel water uses one-pass animated Fresnel shading',()=>{
+  const src=fs.readFileSync(path.join(__dirname,'..','apps','voxel-world','client.js'),'utf8');
+  assert.match(src,/goldenWaterShader/);
+  assert.match(src,/gwFresnel/);
+  assert.match(src,/goldenWaterStrength/);
+  assert.match(src,/goldenWaterTime\.value=now\/1000/);
+});
