@@ -44,3 +44,14 @@ test('fresh-chat discovery contains no stale canonical Netlify topology',()=>{
     assert.equal(text.includes('world-server.netlify.app'),false,`${file} still names Netlify as canonical`);
   }
 });
+
+test('Cloudflare exact-head preview is fail-closed and exercises the target stack',()=>{
+  const workflow=read('.github/workflows/cloudflare-preview.yml');
+  const smoke=read('scripts/verify-cloudflare-stack.cjs');
+  assert.ok(workflow.includes('CLOUDFLARE_API_TOKEN'));
+  assert.ok(workflow.includes('WORLD_SERVER_DEPLOYED_SHA:${GITHUB_SHA}'));
+  assert.ok(workflow.includes('verify-cloudflare-stack.cjs'));
+  assert.ok(workflow.includes('--expected-sha="$GITHUB_SHA"'));
+  for(const path of ['/api/config','/api/apps?all=1','/api/worlds','/api/world-factory','/api/canon','/api/voxel']) assert.ok(smoke.includes(path));
+  assert.ok(smoke.includes('status !== 401'));
+});
