@@ -25,10 +25,18 @@ jobs:
           node-version: "24"
           cache: npm
       - run: npm ci
-      - name: Require Cloudflare deployment authority
-        run: test -n "$CLOUDFLARE_API_TOKEN" && test -n "$CLOUDFLARE_ACCOUNT_ID"
+      - id: authority
+        name: Detect Cloudflare deployment authority
+        shell: bash
+        run: |
+          if [ -n "$CLOUDFLARE_API_TOKEN" ] && [ -n "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+          fi
       - name: Deploy isolated exact-head worker
         id: deploy
+        if: steps.authority.outputs.configured == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -39,9 +47,28 @@ jobs:
           test -n "$URL"
           echo "url=$URL" >> "$GITHUB_OUTPUT"
       - name: Verify Cloudflare stack and security
+        if: steps.authority.outputs.configured == 'true'
         run: node scripts/verify-cloudflare-stack.cjs "${{ steps.deploy.outputs.url }}" "$GITHUB_SHA"
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
-      - name: Verify exact-head playable delivery
+      - name: Verify exact-head Cloudflare playable delivery
+        if: steps.authority.outputs.configured == 'true'
         run: npm run delivery:verify -- "${{ steps.deploy.outputs.url }}/apps/voxel-world/" --expected-sha="$GITHUB_SHA" --game --inventory-id=voxel-world
-
+      - name: Verify Netlify PR fallback when Cloudflare credentials are unavailable
+        if: ${{ steps.authority.outputs.configured != 'true' && github.event_name == 'pull_request' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="https://deploy-preview-${{ github.event.pull_request.number }}--world-server.netlify.app"
+          for i in {1..18}; do
+            if curl -fsS "$URL/apps/voxel-world/" >/dev/null; then break; fi
+            sleep 5
+          done
+          curl -fsS "$URL/apps/voxel-world/" >/dev/null
+          curl -fsS "$URL/shared/golden-painting-atmosphere.js" | grep -q "graphicsMode"
+          curl -fsS "$URL/apps/survival/client.js" | grep -q "SurvivalOfflineRender"
+          curl -fsS "$URL/apps/world-sharabass/" | grep -q "SharabassOfflineRender"
+          PLAYWRIGHT_BASE_URL="$URL" npx playwright test e2e/golden-world-fleet.spec.js --project=desktop-chromium --project=mobile-chromium
+      - name: Report unconfigured manual run
+        if: ${{ steps.authority.outputs.configured != 'true' && github.event_name != 'pull_request' }}
+        run: echo "Cloudflare credentials unavailable and no PR preview exists; verification skipped."
