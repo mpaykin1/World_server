@@ -1,11 +1,12 @@
 {
-  "version": 3,
+  "version": 4,
   "purpose": "Universal discovery index for new chats and AI agents working on World_server",
   "startHere": "AI_START_HERE.md",
   "canonicalContextFiles": [
     "AI_START_HERE.md",
     "CHATGPT_GAME_CONTROL.md",
     "data/manual-delivery-policy.json",
+    "data/cloudflare-deployment-identity.json",
     "README.md",
     "AGENTS.md",
     "VNO.md",
@@ -100,17 +101,21 @@
       }
     },
     "verifiedLinkDelivery": {
-      "displayName": "Verified Link Delivery / Netlify hard gate",
+      "displayName": "Verified Link Delivery / Cloudflare exact-revision gate",
       "canonicalFile": "data/manual-delivery-policy.json",
       "aliases": [
         "working link",
         "рабочая ссылка",
         "VERIFIED_LINK_ONLY",
         "delivery:verify",
-        "world-server.netlify.app"
+        "Cloudflare deployment identity",
+        "Fleet POST"
       ],
-      "canonicalProductionOrigin": "https://world-server.netlify.app",
-      "canonicalWorldHub": "https://world-server.netlify.app/apps/voxel-world/"
+      "deploymentIdentity": "data/cloudflare-deployment-identity.json",
+      "canonicalProvider": "cloudflare",
+      "canonicalProductionOriginSource": "WORLD_SERVER_CANONICAL_ORIGIN",
+      "canonicalWorldHubPath": "/apps/voxel-world/",
+      "topology": "Builder -> Fleet PRE -> Ocean -> Fleet POST"
     }
   },
   "freshChatMandatoryReads": {
@@ -123,6 +128,7 @@
       ".ai/project-context-index.json",
       "CHATGPT_GAME_CONTROL.md",
       "data/manual-delivery-policy.json",
+      "data/cloudflare-deployment-identity.json",
       "issue #80 latest nonterminal checkpoint"
     ],
     "changeAndLinkRequest": [
@@ -130,6 +136,7 @@
       ".ai/project-context-index.json",
       "CHATGPT_GAME_CONTROL.md",
       "data/manual-delivery-policy.json",
+      "data/cloudflare-deployment-identity.json",
       "issue #80 latest nonterminal checkpoint"
     ],
     "serialGrowthWork": [
@@ -140,6 +147,6 @@
       "docs/SERIAL_GROWTH_ENGINE.md"
     ]
   },
-  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md and data/manual-delivery-policy.json. For serial or player-acquisition content work read the Serial Growth Engine contract and continuity state. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains; final URLs must pass delivery:verify on the canonical Netlify origin.",
+  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md, data/manual-delivery-policy.json, and data/cloudflare-deployment-identity.json. For serial or player-acquisition content work read the Serial Growth Engine contract and continuity state. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains; final URLs must pass delivery:verify against the repo-derived Cloudflare identity and exact deployed SHA.",
   "sourceOfTruthBranch": "master"
 }

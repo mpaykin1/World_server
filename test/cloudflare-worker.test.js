@@ -67,11 +67,15 @@ test('Cloudflare serves browser Supabase config natively and dynamic APIs keep t
   };
   try {
     const env = { ASSETS: assetsBinding() };
-    const config = await worker.fetch(new Request('https://world.example/api/config'), env);
+    const config = await worker.fetch(new Request('https://world.example/api/config'), { ...env, WORLD_SERVER_DEPLOYED_SHA: 'abc123' });
     assert.equal(config.status, 200);
     assert.equal(config.headers.get('x-world-server-config-runtime'), 'cloudflare-native');
     const configBody = await config.json();
     assert.equal(configBody.configured, true);
+    assert.equal(configBody.deploymentProvider, 'cloudflare');
+    assert.equal(configBody.deploymentService, 'world-server');
+    assert.equal(configBody.deployedRevision, 'abc123');
+    assert.equal(config.headers.get('x-world-server-deployed-revision'), 'abc123');
     assert.equal(configBody.supabaseUrl, 'https://iphfwxjuhsucvdyluink.supabase.co');
     assert.match(configBody.supabasePublishableKey, /^sb_publishable_/);
     assert.equal(seen.length, 0);

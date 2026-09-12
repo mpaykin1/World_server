@@ -12,4 +12,17 @@ test.describe('Behavioral mobile control',()=>{
     const after=await page.evaluate(()=>window.AI3DVoxelRuntime.stats().player);
     expect(Math.hypot(after.x-before.x,after.z-before.z)).toBeGreaterThan(.03);
   });
+  test('AI3D visible LOOK joystick changes camera yaw',async({page},testInfo)=>{
+    test.skip(!/mobile/i.test(testInfo.project.name),'mobile only');
+    await page.goto('/apps/ai3d-voxel-city/',{waitUntil:'domcontentloaded'});
+    await page.waitForFunction(()=>window.AI3DVoxelRuntime?.stats?.().player?.playable,{timeout:30000});
+    const pad=page.locator('#goldenLookPad'); await expect(pad).toBeVisible();
+    const before=await page.evaluate(()=>window.AI3DVoxelRuntime.stats().player.yaw);
+    const box=await pad.boundingBox(); expect(box).toBeTruthy();
+    const cx=box.x+box.width/2,cy=box.y+box.height/2;
+    await page.mouse.move(cx,cy); await page.mouse.down();
+    await page.mouse.move(cx+box.width*.34,cy,{steps:4}); await page.waitForTimeout(300); await page.mouse.up();
+    const after=await page.evaluate(()=>window.AI3DVoxelRuntime.stats().player.yaw);
+    expect(Math.abs(after-before)).toBeGreaterThan(.02);
+  });
 });

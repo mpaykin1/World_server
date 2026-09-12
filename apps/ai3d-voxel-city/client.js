@@ -31,6 +31,7 @@ let pointerLocked=false;
 let lastPlayerUpdate=performance.now();
 let defaultCityLoaded=false;
 let autoplayStarted=false;
+let initialVisibleFacing={yaw:0,label:'metadata',score:0,maxDistance:0};
 
 async function getSession(force=false){
   if(!force&&session&&((session.enabled===false)||session.expiresAt>Date.now()+30000))return session;
@@ -307,6 +308,187 @@ function resolveSpawn(worldData){
   }
   return [sx,1.65,sz];
 }
+function measureInitialViewDepthGrid(spawnPos,yaw,maxDistance,pitchAngle=0){
+  const verticalTan=Math.tan(THREE.MathUtils.degToRad((Number(persp?.fov)||70)/2));
+  const horizontalTan=Math.max(.15,verticalTan*Math.max(.35,Number(persp?.aspect)||1));
+  const fx=-Math.sin(yaw),fz=-Math.cos(yaw),rx=-fz,rz=fx,cp=Math.cos(pitchAngle),sp=Math.sin(pitchAngle);
+  const forwardX=fx*cp,forwardY=sp,forwardZ=fz*cp,upX=-fx*sp,upY=cp,upZ=-fz*sp;
+  let nearSurfaceCoverage=0,centerNearSurfaceCoverage=0,centerMidFar=0;const centerDepthBands=new Set();
+  for(let by=0;by<8;by++)for(let bx=0;bx<12;bx++){
+    const sx=-1+(bx+.5)/6,sy=1-(by+.5)/4;
+    let dx=forwardX+rx*sx*horizontalTan+upX*sy*verticalTan,dy=forwardY+upY*sy*verticalTan,dz=forwardZ+rz*sx*horizontalTan+upZ*sy*verticalTan;
+    const inv=1/Math.max(.0001,Math.hypot(dx,dy,dz));dx*=inv;dy*=inv;dz*=inv;
+    let hit=Infinity;
+    for(let t=.75;t<=maxDistance;t+=.5){
+      const sampleY=Math.floor(spawnPos[1]+dy*t);
+      if(isOccupied(Math.floor(spawnPos[0]+dx*t),sampleY,Math.floor(spawnPos[2]+dz*t))){
+        // Traversable support floor is expected in the lower viewport and must not
+        // consume the near-occluder budget. Only geometry reaching into the player's
+        // body/eye volume can classify a ray as a framing blocker.
+        if(sampleY>=spawnPos[1]-1)hit=t;
+        break;
+      }
+    }
+    const center=Math.abs(sx)<=.42&&Math.abs(sy)<=.68;
+    if(hit<14){nearSurfaceCoverage++;if(center)centerNearSurfaceCoverage++;}
+    else if(center&&Number.isFinite(hit)){
+      centerMidFar++;
+      const r=(Math.min(maxDistance,hit)-14)/Math.max(1,maxDistance-14);
+      centerDepthBands.add(Math.max(0,Math.min(3,Math.floor(r*4))));
+    }
+  }
+  return{nearSurfaceCoverage,centerNearSurfaceCoverage,centerMidFar,centerDepthBands:centerDepthBands.size,sampleCount:96,source:'occupancy-ray-depth-grid'};
+}
+function chooseInitialPlayableFacing(worldData,spawnPos,pitchAngle=0){
+  const voxels=Array.isArray(worldData?.voxels)?worldData.voxels:[];
+  const metadataYaw=Number(worldData?.spawn?.yaw);
+  // Sample a bounded full ring and score what the active perspective camera can
+  // actually place on screen. The previous horizontal-only richness cone over-counted
+  // off-screen geometry (especially in portrait WebKit/Chromium), so a direction
+  // could look "rich" while the visible frame was mostly sky/ground with the city
+  // pushed to an edge.
+  const candidates=[{yaw:Number.isFinite(metadataYaw)?metadataYaw:0,label:'metadata'}];
+  const directionSteps=24;
+  for(let i=0;i<directionSteps;i++)candidates.push({yaw:-Math.PI+i*(Math.PI*2/directionSteps),label:`scan-${i}`});
+  const unique=[];const seen=new Set();
+  for(const c of candidates){const key=Math.round(c.yaw*100000);if(!seen.has(key)){seen.add(key);unique.push(c);}}
+  const maxDistance=Math.min(Math.max(24,profile().detailChunks*CHUNK_SIZE),PROFILES.SAFE.renderChunks*CHUNK_SIZE);
+  const nearDistance=10;
+  const legacyCosHalf=Math.cos(35*Math.PI/180),legacyCenterCos=Math.cos(12*Math.PI/180);
+  const verticalTan=Math.tan(THREE.MathUtils.degToRad((Number(persp?.fov)||70)/2));
+  const frustumAspect=Math.max(.35,Number(persp?.aspect)||1);
+  const horizontalTan=Math.max(.15,verticalTan*frustumAspect);
+  const cp=Math.cos(pitchAngle),sp=Math.sin(pitchAngle);
+  const measured=[];
+  for(const c of unique){
+    const fx=-Math.sin(c.yaw),fz=-Math.cos(c.yaw);
+    const screenBins=new Set(),nearSurfaceBins=new Set(),centerNearSurfaceBins=new Set();
+    let score=0,nearOccluders=0,centerOccluders=0,visibleNearOccluders=0,visibleCenterOccluders=0,centerMidFar=0,centerNearestDistance=Infinity;const centerDepthBands=new Set();
+    for(const v of voxels){
+      if(!Array.isArray(v)||v.length<3)continue;
+      const dx=Number(v[0])-spawnPos[0],dy=Number(v[1])-spawnPos[1],dz=Number(v[2])-spawnPos[2],d=Math.hypot(dx,dz);
+      if(d<2||d>maxDistance)continue;
+      const horizontalForward=dx*fx+dz*fz;
+      const alignment=horizontalForward/d;
+      const eyeLevel=Number(v[1])>=spawnPos[1]-.5;
+      const footprintLevel=Number(v[1])>=spawnPos[1]-1;
+      // Preserve the established geometric blocker contract used by the hard autoplay
+      // guard, while the new visible* metrics describe what is actually on screen.
+      if(alignment>=legacyCosHalf&&d<nearDistance&&eyeLevel){
+        nearOccluders++;
+        if(alignment>=legacyCenterCos)centerOccluders++;
+      }
+      const forward=horizontalForward*cp+dy*sp;
+      if(forward<=1)continue;
+      const side=dx*(-fz)+dz*fx;
+      const vertical=dy*cp-horizontalForward*sp;
+      const screenX=side/(forward*horizontalTan);
+      const screenY=vertical/(forward*verticalTan);
+      // Estimate the actual screen footprint of nearby voxel faces, not just voxel centers.
+      // A close wall can dominate the frame while center-point blocker counters remain zero.
+      if(d<14&&footprintLevel){
+        const halfX=Math.min(1,.75/(forward*horizontalTan)),halfY=Math.min(1,.75/(forward*verticalTan));
+        const minX=Math.max(-1,screenX-halfX),maxX=Math.min(1,screenX+halfX),minY=Math.max(-1,screenY-halfY),maxY=Math.min(1,screenY+halfY);
+        if(minX<=maxX&&minY<=maxY){
+          const x0=Math.max(0,Math.min(11,Math.floor((minX+1)*6))),x1=Math.max(0,Math.min(11,Math.floor((maxX+1)*6)));
+          const y0=Math.max(0,Math.min(7,Math.floor((minY+1)*4))),y1=Math.max(0,Math.min(7,Math.floor((maxY+1)*4)));
+          for(let bx=x0;bx<=x1;bx++)for(let by=y0;by<=y1;by++){
+            const key=`${bx}:${by}`;nearSurfaceBins.add(key);
+            const cx=-1+(bx+.5)/6,cy=-1+(by+.5)/4;if(Math.abs(cx)<=.42&&Math.abs(cy)<=.68)centerNearSurfaceBins.add(key);
+          }
+        }
+      }
+      if(Math.abs(screenX)>1||Math.abs(screenY)>1)continue;
+      score++;
+      const bx=Math.max(0,Math.min(3,Math.floor((screenX+1)*2)));
+      const by=Math.max(0,Math.min(2,Math.floor((screenY+1)*1.5)));
+      screenBins.add(`${bx}:${by}`);
+      if(d<nearDistance&&eyeLevel)visibleNearOccluders++;
+      if(Math.abs(screenX)<=.42&&Math.abs(screenY)<=.68){
+        centerNearestDistance=Math.min(centerNearestDistance,forward);
+        if(d<nearDistance&&eyeLevel)visibleCenterOccluders++;
+        else if(d>=nearDistance){
+          centerMidFar++;
+          const depthRatio=(Math.max(nearDistance,Math.min(maxDistance,forward))-nearDistance)/Math.max(1,maxDistance-nearDistance);
+          centerDepthBands.add(Math.max(0,Math.min(3,Math.floor(depthRatio*4))));
+        }
+      }
+    }
+    const depthGrid=measureInitialViewDepthGrid(spawnPos,c.yaw,maxDistance,pitchAngle);
+    measured.push({...c,score,nearOccluders,centerOccluders,visibleNearOccluders,visibleCenterOccluders,nearSurfaceCoverage:depthGrid.nearSurfaceCoverage,centerNearSurfaceCoverage:depthGrid.centerNearSurfaceCoverage,voxelProxyNearSurfaceCoverage:nearSurfaceBins.size,voxelProxyCenterNearSurfaceCoverage:centerNearSurfaceBins.size,renderDepthCenterMidFar:depthGrid.centerMidFar,renderDepthCenterBands:depthGrid.centerDepthBands,renderDepthSampleCount:depthGrid.sampleCount,framingEvidenceSource:depthGrid.source,centerMidFar,centerDepthBands:centerDepthBands.size,centerNearestDistance:Number.isFinite(centerNearestDistance)?centerNearestDistance:maxDistance,screenCoverage:screenBins.size,maxDistance,frustumAspect});
+  }
+  const richestCandidate=measured.reduce((best,c)=>!best||c.score>best.score?c:best,null);
+  const richest=richestCandidate?.score||0;
+  const readableFloor=Math.max(250,richest*.6);
+  const readable=measured.filter(c=>c.score>=readableFloor);
+  const bestCenterMidFar=readable.reduce((best,c)=>Math.max(best,c.centerMidFar||0),0);
+  const centerContentFloor=Math.max(20,bestCenterMidFar*.35);
+  const centered=readable.filter(c=>(c.centerMidFar||0)>=centerContentFloor);
+  const improved=centered.filter(c=>c.centerOccluders<(richestCandidate?.centerOccluders??Infinity)&&c.nearOccluders<(richestCandidate?.nearOccluders??Infinity));
+  const pool=improved.length?improved:(centered.length?centered:readable);
+  // The hard autoplay contract requires useful forward clearance, so prefer candidates
+  // that actually satisfy it whenever one exists; never trade playability for denser pixels.
+  const clearanceQualified=pool.filter(c=>c.centerNearestDistance>6);
+  const rankedPool=clearanceQualified.length?clearanceQualified:pool;
+  // A clear screen center is useful only when it also contains mid/far world content.
+  // Keep established blocker improvements, then prefer central depth and broad screen
+  // coverage before raw richness.
+  rankedPool.sort((a,b)=>a.centerNearSurfaceCoverage-b.centerNearSurfaceCoverage||a.nearSurfaceCoverage-b.nearSurfaceCoverage||a.visibleCenterOccluders-b.visibleCenterOccluders||b.renderDepthCenterBands-a.renderDepthCenterBands||b.renderDepthCenterMidFar-a.renderDepthCenterMidFar||b.centerDepthBands-a.centerDepthBands||b.centerMidFar-a.centerMidFar||b.screenCoverage-a.screenCoverage||a.visibleNearOccluders-b.visibleNearOccluders||b.centerNearestDistance-a.centerNearestDistance||a.nearOccluders-b.nearOccluders||a.centerOccluders-b.centerOccluders||b.score-a.score);
+  const fallback=measured.slice().sort((a,b)=>b.score-a.score)[0]||{yaw:0,label:'fallback',score:0,nearOccluders:0,centerOccluders:0,visibleNearOccluders:0,visibleCenterOccluders:0,nearSurfaceCoverage:0,centerNearSurfaceCoverage:0,centerMidFar:0,centerDepthBands:0,centerNearestDistance:maxDistance,screenCoverage:0,maxDistance,frustumAspect};
+  const selected=rankedPool[0]||fallback;
+  const nearCoverage=measured.map(c=>c.nearSurfaceCoverage||0).sort((a,b)=>a-b);
+  const centerCoverage=measured.map(c=>c.centerNearSurfaceCoverage||0).sort((a,b)=>a-b);
+  const percentile=(values,p)=>values.length?values[Math.max(0,Math.min(values.length-1,Math.floor((values.length-1)*p)))]:0;
+  // Trigger the existing bounded position fallback before the hard acceptance ceiling.
+  // Exact-head pixels proved 36/96 full-frame + 12/36 center can still be wall-dominated,
+  // so treat that composition as yaw-space exhaustion without weakening the <=38/<=14 gates.
+  const yawSpaceExhausted=(selected.centerNearSurfaceCoverage||0)>=12||(selected.nearSurfaceCoverage||0)>=36;
+  return {...selected,readableFloor,centerContentFloor,richestScore:richest,richestNearOccluders:richestCandidate?.nearOccluders||0,richestCenterOccluders:richestCandidate?.centerOccluders||0,richestCenterMidFar:richestCandidate?.centerMidFar||0,candidateCount:measured.length,yawSpaceExhausted,nearSurfaceCoverageRange:{min:nearCoverage[0]||0,median:percentile(nearCoverage,.5),max:nearCoverage.at(-1)||0},centerNearSurfaceCoverageRange:{min:centerCoverage[0]||0,median:percentile(centerCoverage,.5),max:centerCoverage.at(-1)||0}};
+}
+function chooseInitialPlayableView(worldData,spawnPos,pitchAngle=0){
+  const baseFacing=chooseInitialPlayableFacing(worldData,spawnPos,pitchAngle);
+  const base={spawnPos:[...spawnPos],facing:baseFacing,spawnOffset:[0,0],offsetDistance:0};
+  const isFinalViewEligible=view=>view.facing.centerNearestDistance>6&&view.facing.score>=view.facing.readableFloor&&view.facing.centerMidFar>=view.facing.centerContentFloor;
+  if(!baseFacing.yawSpaceExhausted){
+    const eligible=isFinalViewEligible(base);
+    base.facing={...baseFacing,spawnFallbackUsed:false,spawnOffset:[0,0],spawnCandidateCount:1,spawnEligibleCandidateCount:eligible?1:0,spawnRejectedCandidateCount:eligible?0:1,finalViewEligible:eligible,baseYawSpaceExhausted:false};
+    return base;
+  }
+  // Yaw-only search is exhausted: sample the complete deterministic 2-unit lattice
+  // inside the existing six-world-unit safety radius. The previous sparse axes/diagonals
+  // skipped collision-clear intermediate positions that can escape a near wall without
+  // widening the search radius or changing gameplay/framing thresholds.
+  const offsets=[];
+  for(let dx=-6;dx<=6;dx+=2)for(let dz=-6;dz<=6;dz+=2)if((dx||dz)&&Math.hypot(dx,dz)<=6)offsets.push([dx,dz]);
+  const views=[base];
+  for(const [dx,dz] of offsets){
+    const candidate=[spawnPos[0]+dx,spawnPos[1],spawnPos[2]+dz];
+    if(collidesAt(candidate[0],candidate[1],candidate[2]))continue;
+    views.push({spawnPos:candidate,facing:chooseInitialPlayableFacing(worldData,candidate,pitchAngle),spawnOffset:[dx,dz],offsetDistance:Math.hypot(dx,dz)});
+  }
+  // Cross-position ranking must not bypass the same hard eligibility contract used
+  // by the per-yaw scorer. Only alternate views that preserve forward clearance,
+  // readable richness and centered mid/far content may compete with the canonical base.
+  const eligibleAlternates=views.slice(1).filter(isFinalViewEligible);
+  const rankingPool=isFinalViewEligible(base)?[base,...eligibleAlternates]:eligibleAlternates;
+  rankingPool.sort((a,b)=>Number(a.facing.yawSpaceExhausted)-Number(b.facing.yawSpaceExhausted)||a.facing.centerNearSurfaceCoverage-b.facing.centerNearSurfaceCoverage||a.facing.nearSurfaceCoverage-b.facing.nearSurfaceCoverage||b.facing.renderDepthCenterBands-a.facing.renderDepthCenterBands||b.facing.renderDepthCenterMidFar-a.facing.renderDepthCenterMidFar||b.facing.centerDepthBands-a.facing.centerDepthBands||b.facing.centerMidFar-a.facing.centerMidFar||b.facing.screenCoverage-a.facing.screenCoverage||b.facing.centerNearestDistance-a.facing.centerNearestDistance||a.offsetDistance-b.offsetDistance);
+  const selected=rankingPool[0]||base;
+  selected.facing={...selected.facing,spawnFallbackUsed:selected.offsetDistance>0,spawnOffset:selected.spawnOffset,spawnCandidateCount:views.length,spawnEligibleCandidateCount:rankingPool.length,spawnRejectedCandidateCount:views.length-rankingPool.length,finalViewEligible:isFinalViewEligible(selected),baseYawSpaceExhausted:baseFacing.yawSpaceExhausted};
+  return selected;
+}
+function chooseInitialPlayablePitch(spawnPos,facing,basePitch){
+  const offsets=[0,.12,.24,-.12];
+  const seen=new Set(),candidates=[];
+  for(const offset of offsets){
+    const candidate=Math.max(-.35,Math.min(.45,basePitch+offset));
+    const key=Math.round(candidate*10000);if(seen.has(key))continue;seen.add(key);
+    const depth=measureInitialViewDepthGrid(spawnPos,facing.yaw,facing.maxDistance,candidate);
+    candidates.push({pitch:candidate,...depth});
+  }
+  candidates.sort((a,b)=>a.centerNearSurfaceCoverage-b.centerNearSurfaceCoverage||a.nearSurfaceCoverage-b.nearSurfaceCoverage||b.centerDepthBands-a.centerDepthBands||b.centerMidFar-a.centerMidFar||Math.abs(a.pitch-basePitch)-Math.abs(b.pitch-basePitch));
+  const selected=candidates[0]||{pitch:basePitch};
+  return {...selected,candidateCount:candidates.length,basePitch};
+}
 async function renderWorld(data){
   world=data;
   await buildOptimizedChunks(data);
@@ -317,9 +499,15 @@ async function renderWorld(data){
   // always keep front as fallback, but if default city autoplay, switch to playable
   if(defaultCityLoaded){
     const spawnPos=resolveSpawn(data);
-    player.x=spawnPos[0]; player.y=spawnPos[1]; player.z=spawnPos[2]; player.vy=0; player.onGround=true;
-    yaw=player.yaw||0; pitch=player.pitch||0;
+    const spawnPitch=Number(data?.spawn?.pitch);
+    const initialPitch=Number.isFinite(spawnPitch)?spawnPitch:.12;
+    const initialView=chooseInitialPlayableView(data,spawnPos,initialPitch);
+    const initialPitchChoice=chooseInitialPlayablePitch(initialView.spawnPos,initialView.facing,initialPitch);
+    player.x=initialView.spawnPos[0]; player.y=initialView.spawnPos[1]; player.z=initialView.spawnPos[2]; player.vy=0; player.onGround=true;
+    initialVisibleFacing={...initialView.facing,selectedPitch:initialPitchChoice.pitch,pitchSelection:initialPitchChoice};
+    yaw=initialVisibleFacing.yaw; player.yaw=yaw; pitch=initialPitchChoice.pitch; player.pitch=pitch;
     switchPlayable();
+    console.log('default-city visible facing',initialVisibleFacing);
     // notify playable runtime
     if(window.__AI3D_PLAYABLE_SCENE__){
       window.__AI3D_PLAYABLE_SCENE__.reportReady({walkable:true,collisions:true,grounding:true,playerSpawn:true});
@@ -659,7 +847,7 @@ window.AI3DVoxelRuntime={
   // setView - e2e/golden-controls.spec.js calls the canonical setView name
   // against both runtimes, so this runtime needs to answer to it too.
   setView(nextYaw,nextPitch=0){this.setPlayerView(nextYaw,nextPitch);},
-  stats(){return {fps:measuredFps,pixelRatio:dynamicPixelRatio,renderer:renderer?.info?.render,mesher:mesherStats,chunks:chunkObjects.size, voxels:world?world.voxels.length:0, player:{x:player.x,y:player.y,z:player.z,yaw,onGround:player.onGround, playable:playableMode}, defaultCityLoaded};},
+  stats(){return {fps:measuredFps,pixelRatio:dynamicPixelRatio,renderer:renderer?.info?.render,mesher:mesherStats,chunks:chunkObjects.size, voxels:world?world.voxels.length:0, player:{x:player.x,y:player.y,z:player.z,yaw,pitch,onGround:player.onGround, playable:playableMode}, defaultCityLoaded,initialVisibleFacing};},
   collidesAt(x,y,z){ return collidesAt(x,y,z); },
   getOccupancySize(){ return occupancySet.size; }
 };

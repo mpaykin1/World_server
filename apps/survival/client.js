@@ -21,7 +21,7 @@ const ground = new THREE.Mesh(new THREE.PlaneGeometry(3000,3000,80,80), groundMa
 const grid = new THREE.GridHelper(3000,750,0x526547,0x526547); grid.material.opacity=.16; grid.material.transparent=true; scene.add(grid);
 
 const self = { id:null, position:new THREE.Vector3(0,0,0), rotationY:0, running:false, action:'idle', inventory:[], selected:0, hp:100,hunger:100,thirst:100 };
-const keys = new Set(); let yaw=0, pitch=.34; let buildMode=false; let selectedPiece='foundation'; let buildRotation=0; let inventoryVisible=true; let lastSend=0; let lastChunkReq=0;
+const keys = new Set(); let yaw=0, pitch=.34; let buildMode=false; let selectedPiece='foundation'; let buildRotation=0; let inventoryVisible=false; let lastSend=0; let lastChunkReq=0;
 const chunks = new Map(); const resources = new Map(); const resourceMeshes = new Map(); const buildings = new Map(); const remotePlayers = new Map();
 const raycaster = new THREE.Raycaster(); const pointer = new THREE.Vector2(0,0);
 const interactables = [];
@@ -218,7 +218,7 @@ addEventListener('keydown',e=>{
   keys.add(e.code);
   if(e.code==='KeyB'){ buildMode=!buildMode; document.getElementById('buildState').textContent='B: '+(buildMode?'вкл':'выкл'); }
   if(e.code==='KeyR'){ buildRotation=(buildRotation+Math.PI/2)%(Math.PI*2); }
-  if(e.code==='KeyI'||e.code==='KeyE'){ inventoryVisible=!inventoryVisible; document.getElementById('inventory').classList.toggle('hidden',!inventoryVisible); }
+  if(e.code==='KeyI'||e.code==='KeyE'){ inventoryVisible=!inventoryVisible; document.getElementById('inventory').classList.toggle('hidden',!inventoryVisible); if(inventoryVisible) window.GoldenUIShell?.open('menu'); else window.GoldenUIShell?.close(); }
   if(/^Digit[1-9]$/.test(e.code)){ self.selected=Number(e.code.slice(5))-1; renderInventory(); }
 });
 addEventListener('keyup',e=>keys.delete(e.code));
