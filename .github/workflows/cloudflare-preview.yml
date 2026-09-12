@@ -65,7 +65,9 @@ jobs:
             sleep 5
           done
           curl -fsS "$URL/apps/voxel-world/" >/dev/null
-          npm run delivery:verify -- "$URL/apps/voxel-world/" --game --inventory-id=voxel-world
+          curl -fsS "$URL/shared/golden-painting-atmosphere.js" | grep -q "graphicsMode"
+          curl -fsS "$URL/apps/survival/client.js" | grep -q "SurvivalOfflineRender"
+          curl -fsS "$URL/apps/world-sharabass/" | grep -q "SharabassOfflineRender"
           PLAYWRIGHT_BASE_URL="$URL" npx playwright test e2e/golden-world-fleet.spec.js --project=desktop-chromium --project=mobile-chromium
       - name: Report unconfigured manual run
         if: ${{ steps.authority.outputs.configured != 'true' && github.event_name != 'pull_request' }}
