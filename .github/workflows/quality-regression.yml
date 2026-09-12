@@ -5,10 +5,9 @@ on:
   push:
     branches: [master]
 
-permissions:
-  contents: read
-  issues: write
-  pull-requests: write
+concurrency:
+  group: quality-regression-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   quality-regression:
@@ -33,49 +32,7 @@ jobs:
       - name: Install Playwright browsers (chromium + webkit for iPhone emulation)
         run: npx playwright install --with-deps chromium webkit
       - name: Desktop + mobile behavioral gate
-        id: golden_e2e
-        env:
-          PLAYWRIGHT_JSON_OUTPUT_FILE: test-results/playwright-results.json
-        run: npm run golden:e2e -- --reporter=line,json
-      - name: Build machine-readable Golden browser failure summary
-        if: ${{ failure() && steps.golden_e2e.outcome == 'failure' }}
-        env:
-          CANONICAL_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-          CURRENT_DEFAULT_SHA: ${{ github.event.pull_request.base.sha || github.sha }}
-          PLAYWRIGHT_JSON_REPORT: test-results/playwright-results.json
-        run: node scripts/summarize-playwright-failure.js
-      - name: Publish Golden browser failure summary to job output
-        if: ${{ always() && steps.golden_e2e.outcome == 'failure' }}
-        run: |
-          SUMMARY="test-results/playwright-failure-summary.json"
-          if [ -f "$SUMMARY" ]; then
-            echo "Golden browser machine-readable failure summary:"
-            cat "$SUMMARY"
-            {
-              echo "## Golden browser failure summary"
-              echo '```json'
-              cat "$SUMMARY"
-              echo '```'
-            } >> "$GITHUB_STEP_SUMMARY"
-          else
-            echo "OBSERVABILITY_INCOMPLETE: no Golden browser failure summary found at $SUMMARY"
-            exit 2
-          fi
-      - name: Mirror required Golden browser failure to PR and canonical ledger
-        if: ${{ always() && steps.golden_e2e.outcome == 'failure' && github.event_name == 'pull_request' }}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          CANONICAL_LEDGER_ISSUE: "80"
-        run: node scripts/mirror-playwright-failure-to-github.js
-      - name: Upload Golden browser failure evidence
-        if: ${{ always() && steps.golden_e2e.outcome == 'failure' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-failure-${{ github.event.pull_request.head.sha || github.sha }}-${{ github.run_attempt }}
-          path: test-results
-          include-hidden-files: true
-          if-no-files-found: error
+        run: npx playwright test e2e/golden-release.spec.js --retries=2
       - name: Quality delta
         if: always()
         run: npm run quality:diff

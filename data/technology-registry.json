@@ -47,6 +47,17 @@
         "scripts/discover-ai3d-engines.js"
       ]
     },
+    "IndieWeb-compatible world discovery": {
+      "percent": 70,
+      "status": "integrated",
+      "evidence": [
+        "lib/indieworlds.js",
+        "api/worlds.js",
+        "shared/indieworlds/index.json",
+        "test/indieworlds.test.js"
+      ],
+      "note": "Portable JSON passports, RSS and safe linked-world metadata are verified; inbound Webmention and IndieAuth remain intentionally outside this phase."
+    },
     "Depth Anything": {
       "percent": 50,
       "status": "adapter",

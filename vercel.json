@@ -15,7 +15,11 @@
       "includeFiles": "apps/**"
     },
     "api/worlds.js": {
-      "includeFiles": "data/world-graph-index.json"
+      "includeFiles": [
+        "data/world-graph-index.json",
+        "data/app-release-registry.json",
+        "data/world-lore-v2.json"
+      ]
     }
   },
   "redirects": [
@@ -26,6 +30,14 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/api/canon",
+      "destination": "/api/worlds?__route=canon"
+    },
+    {
+      "source": "/api/world-factory",
+      "destination": "/api/worlds?__route=world-factory"
+    },
     {
       "source": "/api/register",
       "destination": "/api/auth?__route=register"

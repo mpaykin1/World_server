@@ -35,6 +35,10 @@
           {
             "targetId": "world-server-codex-voxel-v3",
             "story": "Это две главы одной кубической истории. Старая версия показывает, как сегодняшний мир учился работать лучше."
+          },
+          {
+            "targetId": "cinematic-encounter",
+            "story": "На границе бесконечного Voxel World начинается пыльная промышленная дорога, где свет показывает опасность лишь на долю секунды."
           }
         ],
         "previewVideo": "/shared/world-previews/voxel-world.webm"
@@ -149,6 +153,38 @@
         ],
         "previewVideo": "/shared/world-previews/dark-void-navigator-live.webm"
       }
+    },
+    "cinematic-encounter": {
+      "title": "Сцена в пыли",
+      "visible": true,
+      "status": "certified",
+      "kind": "game",
+      "worldMenu": {
+        "show": true,
+        "headline": "ЧТО МЕЛЬКНУЛО В ПЫЛИ В МОМЕНТ ВСПЫШКИ — И ПОЧЕМУ ОНО ИДЁТ ПО СЛЕДУ ИГРОКА?",
+        "lore": "На старой промышленной дороге в пыльной буре появляется Существо Между Кадрами: увидеть его целиком нельзя — каждая вспышка показывает только часть движения. На земле остаются четыре светящихся следа; если собрать их в правильном порядке, открывается безопасный путь, а ошибка вызывает новую засаду. Игроку нужно пережить три встречи, восстановить маршрут существа и решить — преследовать его в Voxel World или погасить маяк, который его приманивает. Поворот: следы повторяют будущий маршрут самого игрока. Существо охотится на него — или пытается предупредить о событии, которое ещё не произошло?",
+        "history": "Первые путешественники считали вспышки случайными, пока записи разных камер не показали один и тот же силуэт в местах, где его не могло быть одновременно.",
+        "familyId": "cinematic-encounter",
+        "connections": [
+          {
+            "targetId": "voxel-world",
+            "story": "Последняя цепочка следов уходит за промышленную дорогу в бесконечный Voxel World, где те же четыре отметины появляются на древних блоках."
+          }
+        ]
+      },
+      "goldenStandard": "v2",
+      "required": [
+        "desktop-controls",
+        "camera-relative-directions",
+        "mobile-controls",
+        "mouse-look",
+        "touch-look",
+        "grounding",
+        "wall-collision",
+        "step-up",
+        "spawn",
+        "render"
+      ]
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",

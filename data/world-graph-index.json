@@ -63,6 +63,72 @@
       "status": "certified"
     },
     {
+      "id": "cinematic-encounter",
+      "patchFamily": "cinematic-encounter",
+      "revisions": [
+        {
+          "id": "cinematic-encounter-v1",
+          "patchFamily": "cinematic-encounter",
+          "version": "1.0.0",
+          "releaseAppId": "cinematic-encounter",
+          "title": "Сцена в пыли",
+          "description": "Procedural cinematic encounter with silhouette animation, dust, flash lighting and mobile-safe post effects.",
+          "lore": "A dusty industrial road where a creature is visible only in fragments of motion and light.",
+          "capabilities": [
+            "bloom",
+            "camera-shake",
+            "collision",
+            "dust-fog",
+            "mobile-controls",
+            "muzzle-flash",
+            "procedural-silhouette"
+          ],
+          "history": [
+            {
+              "version": "1.0.0",
+              "summary": "Initial cinematic encounter vertical slice."
+            }
+          ],
+          "portals": [
+            {
+              "id": "encounter-to-voxel",
+              "targetWorldId": "voxel-world",
+              "label": "Voxel World"
+            }
+          ],
+          "source": {
+            "commit": "ai/manual/cinematic-encounter-v1",
+            "path": "apps/cinematic-encounter/"
+          },
+          "revisionId": "cinematic-encounter@1.0.0",
+          "manifestHash": "dc80e033b06dc44c615bdc098139b4d8cb881aee2056231c2e5a21b48df90328"
+        }
+      ],
+      "latestRevisionId": "cinematic-encounter@1.0.0",
+      "title": "Сцена в пыли",
+      "description": "Procedural cinematic encounter with silhouette animation, dust, flash lighting and mobile-safe post effects.",
+      "lore": "A dusty industrial road where a creature is visible only in fragments of motion and light.",
+      "capabilities": [
+        "bloom",
+        "camera-shake",
+        "collision",
+        "dust-fog",
+        "mobile-controls",
+        "muzzle-flash",
+        "procedural-silhouette"
+      ],
+      "portals": [
+        {
+          "id": "encounter-to-voxel",
+          "targetWorldId": "voxel-world",
+          "label": "Voxel World"
+        }
+      ],
+      "releaseAppId": "cinematic-encounter",
+      "public": true,
+      "status": "certified"
+    },
+    {
       "id": "dark-void-scene",
       "patchFamily": "dark-void-scene",
       "revisions": [

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>IMPROVE WORLD — IndieWorlds</title>
+    <link>https://world-server.ai.studio/apps/catalog/</link>
+    <description>Независимые миры, истории и порталы World Server.</description>
+    <language>ru</language>
+    <atom:link href="https://world-server.ai.studio/api/worlds?format=rss" rel="self" type="application/rss+xml" />
+    <item>
+      <guid isPermaLink="true">https://world-server.ai.studio/apps/cinematic-encounter/</guid>
+      <title>ЧТО МЕЛЬКНУЛО В ПЫЛИ В МОМЕНТ ВСПЫШКИ — И ПОЧЕМУ ОНО ИДЁТ ПО СЛЕДУ ИГРОКА?</title>
+      <link>https://world-server.ai.studio/apps/cinematic-encounter/</link>
+      <description>На старой промышленной дороге в пыльной буре появляется Существо Между Кадрами: увидеть его целиком нельзя — каждая вспышка показывает только часть движения. На земле остаются четыре светящихся следа; если собрать их в правильном порядке, открывается безопасный путь, а ошибка вызывает новую засаду. Игроку нужно пережить три встречи, восстановить маршрут существа и решить — преследовать его в Voxel World или погасить маяк, который его приманивает. Поворот: следы повторяют будущий маршрут самого игрока. Существо охотится на него — или пытается предупредить о событии, которое ещё не произошло?</description>
+      <category>game</category>
+      <category>certified</category>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://world-server.ai.studio/apps/ai3d-voxel-city/</guid>
+      <title>КАЖДУЮ НОЧЬ ЭТОТ ГОРОД ПЕРЕСТРАИВАЕТ СЕБЯ — НО ДЛЯ КОГО?</title>
+      <link>https://world-server.ai.studio/apps/ai3d-voxel-city/</link>
+      <description>Voxel City каждую ночь сдвигает улицы и достраивает башни. С высоты закрытые кварталы складываются в неизвестный знак, а на Нулевой Улице можно потерять выход навсегда. Безликий Архитектор появляется там, где игрок что-то изменил. Цель — добраться до Башни без часов и понять, кто командует городом. Но Архитектор повторяет решения самих жителей. Остановить самостроящийся город или позволить ему закончить чертёж, смысла которого никто не знает?</description>
+      <category>game</category>
+      <category>certified</category>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://dark-void-navigator.vercel.app/</guid>
+      <title>В ТЕМНОТЕ ЕСТЬ ДВЕРЬ БЕЗ СТЕН — И ОНА ОТВЕЧАЕТ НА ВОПРОСЫ</title>
+      <link>https://dark-void-navigator.vercel.app/</link>
+      <description>Dark Void начинается с одного огонька и голоса Навигатора. Здесь сказанное слово может зажечь мост, а неверный вопрос — погасить найденный путь. Чёрная Волна стирает маяки один за другим. Чтобы выбраться, нужно зажечь семь огней и открыть Дверь без стен, но последний маяк требует отдать одно воспоминание. Поворот: рисунок огней оказывается нотной записью Песни Шарабаса. Кто посылает свет из глубины — другой мир, будущий игрок или сама тьма?</description>
+      <category>navigator</category>
+      <category>legacy-deployment</category>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://gothic-voxel-city-atlas-v3-mobile-final-improve-world.vercel.app/</guid>
+      <title>ЭТА КАРТА РИСУЕТ УЛИЦЫ ЗА ДЕНЬ ДО ТОГО, КАК ИХ ПОСТРОЯТ</title>
+      <link>https://gothic-voxel-city-atlas-v3-mobile-final-improve-world.vercel.app/</link>
+      <description>На Атласе появляются красные улицы, которых ещё нет; через сутки они возникают вместе с людьми, уверенными, что жили там всегда. Безликий Картограф предупреждает о Стертом Районе, но его название исчезает. Нужно сравнивать прошлые и будущие карты, найти район и решить — изменить предсказанный маршрут или позволить ему случиться. Ошибочная улица может закрыться позади навсегда. Поворот: почерк Картографа совпадает с заметками, которые игрок ещё только напишет. Кто рисует будущее?</description>
+      <category>game</category>
+      <category>legacy-deployment</category>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://improve-world-experiment-100-improve-world.vercel.app/</guid>
+      <title>ЛАБОРАТОРИЯ №100 СКРЫВАЕТ ЭКСПЕРИМЕНТ №101 — И В НЁМ УЖЕ ЕСТЬ УЧАСТНИК</title>
+      <link>https://improve-world-experiment-100-improve-world.vercel.app/</link>
+      <description>Здесь любую гипотезу можно ненадолго сделать законом физики. На стене записаны сто опытов, но журналы описывают ещё один — №101, которого официально нет. Нестабильное правило способно вырваться наружу и переписать соседние миры. Игрок должен восстановить цепочку опытов и решить, выпустить мощное открытие или уничтожить его. Поворот: объект эксперимента №101 — не мир, а сам игрок, за решениями которого всё время наблюдали. Кто запустил опыт до его появления?</description>
+      <category>experiment</category>
+      <category>legacy-deployment</category>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://improve-world-home-improve-world.vercel.app/</guid>
+      <title>ЭТОТ ДОМ ДОСТРАИВАЕТ КОМНАТУ КАЖДЫЙ РАЗ, КОГДА ЕМУ РАССКАЗЫВАЮТ ИСТОРИЮ</title>
+      <link>https://improve-world-home-improve-world.vercel.app/</link>
+      <description>Дом бесконечен внутри: искренняя история создаёт комнату, ложь — пустой коридор, забытая история — запертую дверь. По комнатам ходят Незавершённые, существа из сюжетов без конца. Игроку нужно собрать семь фрагментов Карты Дверей, но один фрагмент можно получить только удалив комнату вместе с чьей-то памятью. Выбор — пожертвовать историей или оставить карту неполной. Поворот: Дом не построили люди; он вырос вокруг первой рассказанной истории и, возможно, сам решает, какие миры должны существовать.</description>
+      <category>hub</category>
+      <category>legacy-deployment</category>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://voxel-gothic-steampunk-mobile-repaired-improve-world.vercel.app/</guid>
+      <title>КОГДА ГОРОД НАЧАЛ СКЛАДЫВАТЬСЯ, ИНЖЕНЕРЫ СПРЯТАЛИ ЕГО В МИРЕ РАЗМЕРОМ С ЛАДОНЬ</title>
+      <link>https://voxel-gothic-steampunk-mobile-repaired-improve-world.vercel.app/</link>
+      <description>Этот слой города создавали как аварийное убежище: районы можно двигать и складывать прикосновениями. Но копия начала сама забирать улицы и жителей из большого Парового города. Медная Ладонь требует восстановить пять жестов; ошибка складывает один район внутрь другого. Цель — остановить сжатие и вернуть кварталы. Финальный выбор: развернуть копию обратно или оставить её самостоятельным миром. Поворот: она уже не копия — она помнит события, которых никогда не было в оригинале. Когда именно новый мир стал живым?</description>
+      <category>game</category>
+      <category>legacy-deployment</category>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://voxel-gothic-steampunk-world-improve-world.vercel.app/</guid>
+      <title>ТРИДЦАТЬ ЛЕТ ЧАСЫ БИЛИ ДВЕНАДЦАТЬ РАЗ. ПРОШЛОЙ НОЧЬЮ РАЗДАЛСЯ ТРИНАДЦАТЫЙ УДАР</title>
+      <link>https://voxel-gothic-steampunk-world-improve-world.vercel.app/</link>
+      <description>Паровой город — гигантский механизм: мосты движутся с шестернями, башни дышат паром, а под собором работает Сердечный Двигатель. После тринадцатого удара один район повторяет десять минут снова и снова. Исчезнувший Часовщик оставляет схемы недостающей шестерни. Нужно восстановить механизм и решить — перезапустить Сердце или остановить его навсегда; каждая починка меняет другой район. Внутри Двигателя найден цилиндр с частью Песни Шарабаса. Город был машиной — или машиной сделали живое существо?</description>
+      <category>game</category>
+      <category>legacy-deployment</category>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://world-server.ai.studio/apps/voxel-world/</guid>
+      <title>КТО ПОЛОЖИЛ ПЕРВЫЙ КУБ — И ПОЧЕМУ ОН ДО СИХ ПОР ПОЁТ?</title>
+      <link>https://world-server.ai.studio/apps/voxel-world/</link>
+      <description>Говорят, бесконечный Voxel World вырос из Первого Куба. По ночам блоки сами складываются в координаты, а из глубины звучат семь нот. За картой движется Белая Граница, стирающая чанки и память. Игроку нужно расшифровать узоры и найти Куб, решив — запечатать его или открыть. Но его мелодия совпадает с Песней Шарабаса. Если Куб — дверь, кто положил его сюда первым и что проснётся после правильного ответа?</description>
+      <category>game</category>
+      <category>certified</category>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://world-server.vercel.app/apps/catalog/</guid>
+      <title>МЕЖДУ МИРАМИ ЕСТЬ ВОКЗАЛ С ТРИНАДЦАТОЙ ДВЕРЬЮ, КОТОРОЙ НЕТ НИ НА ОДНОЙ КАРТЕ</title>
+      <link>https://world-server.vercel.app/apps/catalog/</link>
+      <description>Каталог выглядит вокзалом между мирами, пока на стене не появляется тринадцатая дверь без названия. Она принимает реликвии разных миров: ноту Шарабаса, свет Dark Void, фрагмент Первого Куба и шестерню Парового города. Ошибка смешивает несовместимые правила и меняет сам вокзал. Цель — понять, куда ведёт дверь, и решить: рискнуть всей сетью ради неизвестного мира или оставить её закрытой. Поворот: Каталог сам является миром и, похоже, выбирает, кому разрешено пройти. Почему дверь ждала именно этого путешественника?</description>
+      <category>hub</category>
+      <category>legacy-deployment</category>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://world-server-git-codex-voxel-v3-improve-world.vercel.app/apps/voxel-world/</guid>
+      <title>СТАРЫЙ МИР НЕ УДАЛИЛСЯ — ОН ПРОДОЛЖАЕТ ЖИТЬ ПОД НОВЫМ</title>
+      <link>https://world-server-git-codex-voxel-v3-improve-world.vercel.app/apps/voxel-world/</link>
+      <description>Voxel V3 считали прошлой версией, пока не появились Фантомные Кубы со старыми законами движения и генерации. Архивариус предлагает восстановить три Утраченных Правила, но каждое заражает соседние чанки старой физикой. Игроку нужно выбрать, что спасти из прошлого, не откатив нынешний мир. Поворот: V3 — не архив, а параллельный мир, который помнит момент собственной замены и считает себя настоящим. Какой из двух Voxel-миров был первым?</description>
+      <category>game</category>
+      <category>legacy-deployment</category>
+    </item>
+  </channel>
+</rss>

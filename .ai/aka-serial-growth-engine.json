@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "name": "AKA Serial Growth Engine",
+  "enabled": true,
+  "cadence": "hourly",
+  "mission": "Turn real World_server capabilities and worlds into a continuous adventure series that maximizes qualified player acquisition.",
+  "northStar": "After every episode the viewer should want to enter the same world now and have a meaningful action to perform there.",
+  "truthPolicy": {
+    "realCapabilityOnly": true,
+    "realWorldOnly": true,
+    "noFabricatedAvailability": true,
+    "claimRequiresEvidence": true,
+    "plannedFeaturesMustBeLabeledPlanned": true
+  },
+  "episodeContract": {
+    "requiredBeats": [
+      "hook",
+      "hero_goal",
+      "obstacle",
+      "world_or_capability_reveal",
+      "player_relevant_choice",
+      "cliffhanger",
+      "enter_world_cta"
+    ],
+    "hookTargetSeconds": 3,
+    "onePrimaryWorldPerEpisode": true,
+    "onePrimaryPlayerAction": true,
+    "mustAdvanceContinuity": true,
+    "mustAvoidRepeatingRecentHook": true,
+    "shortsExtractionRequired": true,
+    "shortsTargetPerEpisode": {
+      "min": 5,
+      "max": 15
+    }
+  },
+  "akaCycle": [
+    {
+      "step": 1,
+      "role": "Capability Architect",
+      "action": "Inspect the current repository, worlds, recent changes, unresolved blockers and prior episode state. Pick the single highest-leverage real capability or world for player acquisition."
+    },
+    {
+      "step": 2,
+      "role": "Story Architect",
+      "action": "Convert the selected capability into one episode premise that advances the existing arc instead of creating an unrelated clip."
+    },
+    {
+      "step": 3,
+      "role": "Builder",
+      "action": "Implement the smallest server/world/content change needed so the promised episode action can actually be experienced by a player when implementation is appropriate."
+    },
+    {
+      "step": 4,
+      "role": "Fleet QA + Live Verification",
+      "action": "Verify the exact capability/world used by the episode, test the player action, reject unsupported claims and record evidence."
+    },
+    {
+      "step": 5,
+      "role": "Growth Editor",
+      "action": "Produce the episode brief, cliffhanger, CTA and 5-15 short-form cut ideas. Prefer curiosity and participation over feature-list advertising."
+    },
+    {
+      "step": 6,
+      "role": "Continuity Keeper",
+      "action": "Persist consequences, unresolved mysteries, used hooks, player choices and the next-story seed so the following hourly cycle continues the same series."
+    }
+  ],
+  "playerAcquisitionLoop": [
+    "episode_hook",
+    "story_curiosity",
+    "real_world_reveal",
+    "viewer_wants_to_enter",
+    "direct_enter_world_cta",
+    "player_action_inside_world",
+    "player_can_affect_future_episode",
+    "next_episode_uses_consequence"
+  ],
+  "qualityGates": {
+    "truthVerified": true,
+    "continuityVerified": true,
+    "worldEntryActionable": true,
+    "cliffhangerPresent": true,
+    "shortsExtractionPresent": true,
+    "duplicateHookBlocked": true,
+    "userNoticeabilityPercentForTestingLink": 85
+  },
+  "priorityScoring": {
+    "playerDesireToEnter": 0.35,
+    "storyCuriosity": 0.2,
+    "capabilityNovelty": 0.15,
+    "multiplayerParticipation": 0.15,
+    "shareability": 0.1,
+    "implementationCostInverse": 0.05
+  },
+  "stateFile": "data/serial-growth-state.json",
+  "validator": "scripts/validate-serial-growth.mjs",
+  "documentation": "docs/SERIAL_GROWTH_ENGINE.md",
+  "execution": {
+    "reuseExistingAKA": true,
+    "noSecondOrchestrationStack": true,
+    "cloudFirst": true,
+    "localHeavyWorkDefault": false,
+    "desktopClutterForbidden": true,
+    "temporaryArtifactsMustBeCleaned": true
+  }
+}

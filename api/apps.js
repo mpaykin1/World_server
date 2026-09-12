@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const { sendJson, methodNotAllowed, withErrors } = require('../lib/http');
+const { worldMenuWithLore: baseWorldMenuWithLore, buildUniversalLoreGraph } = require('../lib/world-lore');
 
 const root = process.cwd();
 const registryPath = path.join(root, 'data', 'app-release-registry.json');
@@ -38,35 +39,22 @@ function loadDisplayNames() {
     throw new Error('World display names invalid');
   }
   const maxWords = Number(parsed.maxWords) || 3;
-  const forbidden = new Set(parsed.forbiddenTokens.map(x => String(x).toLowerCase()));
+  const forbidden = new Set(parsed.forbiddenTokens.map(value => String(value).toLowerCase()));
   for (const [id, name] of Object.entries(parsed.names)) {
     const words = String(name || '').trim().split(/\s+/).filter(Boolean);
     if (!words.length || words.length > maxWords) throw new Error(`World display name ${id} must be 1-${maxWords} words`);
-    for (const word of words) {
-      if (forbidden.has(word.toLowerCase())) throw new Error(`World display name ${id} contains system token: ${word}`);
-    }
+    if (words.some(word => forbidden.has(word.toLowerCase()))) throw new Error(`World display name ${id} contains a system token`);
   }
   return parsed;
 }
 
 function worldMenuWithLore(id, baseWorldMenu, loreBible, displayNames) {
-  const base = baseWorldMenu || null;
-  const key = loreBible.worlds[id] ? id : base?.familyId;
-  const story = key ? loreBible.worlds[key] : null;
-  if (story) {
-    const present = new Set(Array.isArray(story.elements) ? story.elements : []);
-    const missing = loreBible.requiredElements.filter(element => !present.has(element));
-    if (missing.length) {
-      throw new Error(`World lore ${key} missing required elements: ${missing.join(', ')}`);
-    }
-  }
-
-  const merged = story ? { ...(base || {}), ...story } : base;
-  if (!merged) return null;
-  const nameKey = displayNames.names[id] ? id : merged.familyId;
+  const worldMenu = baseWorldMenuWithLore(id, baseWorldMenu, loreBible);
+  if (!worldMenu) return null;
+  const nameKey = displayNames.names[id] ? id : worldMenu.familyId;
   const displayName = nameKey ? displayNames.names[nameKey] : null;
-  if (merged.show && !displayName) throw new Error(`Golden world display name missing: ${id}`);
-  return displayName ? { ...merged, displayName } : merged;
+  if (worldMenu.show && !displayName) throw new Error(`Golden world display name missing: ${id}`);
+  return displayName ? { ...worldMenu, displayName } : worldMenu;
 }
 
 function internalInventory(appsDir, registry, loreBible, displayNames) {
@@ -74,10 +62,9 @@ function internalInventory(appsDir, registry, loreBible, displayNames) {
     const dir = path.join(appsDir, id);
     const hasIndex = fs.existsSync(path.join(dir, 'index.html'));
     const worldMenu = worldMenuWithLore(id, meta.worldMenu, loreBible, displayNames);
-    const sourceTitle = meta.title || titleFromIndex(dir, id.replace(/[-_]+/g, ' '));
     return {
       id,
-      title: worldMenu?.displayName || sourceTitle,
+      title: worldMenu?.displayName || meta.title || titleFromIndex(dir, id.replace(/[-_]+/g, ' ')),
       description: meta.description || '',
       url: hasIndex ? `/apps/${id}/` : '',
       localUrl: hasIndex ? `/apps/${id}/` : '',
@@ -105,7 +92,8 @@ function internalInventory(appsDir, registry, loreBible, displayNames) {
       reason: 'Auto-discovered local app; add it to app-release-registry.json for an explicit lifecycle status.',
       certified: false,
       available: true,
-      source: 'auto-discovered'
+      source: 'auto-discovered',
+      worldMenu: worldMenuWithLore(x.name, { show: false }, loreBible, displayNames)
     })) : [];
 
   return [...registered, ...discovered];
@@ -126,10 +114,9 @@ module.exports = withErrors(async (req, res) => {
       const dir = path.join(appsDir, id);
       if (!fs.existsSync(path.join(dir, 'index.html'))) throw new Error(`Certified app missing index.html: ${id}`);
       const worldMenu = worldMenuWithLore(id, meta.worldMenu, loreBible, displayNames);
-      const sourceTitle = meta.title || titleFromIndex(dir, id.replace(/[-_]+/g, ' '));
       return {
         id,
-        title: worldMenu?.displayName || sourceTitle,
+        title: worldMenu?.displayName || meta.title || titleFromIndex(dir, id.replace(/[-_]+/g, ' ')),
         description: meta.description || '',
         url: `/apps/${id}/`,
         icon: fs.existsSync(path.join(dir, 'ico.png')) ? `/apps/${id}/ico.png` : '',
@@ -140,7 +127,12 @@ module.exports = withErrors(async (req, res) => {
     })
     .sort((a, b) => a.title.localeCompare(b.title, 'ru'));
 
-  const payload = { apps, releasePolicy: registry.policy, goldenStandard: registry.version };
+  const payload = {
+    apps,
+    releasePolicy: registry.policy,
+    goldenStandard: registry.version,
+    loreGraph: buildUniversalLoreGraph(apps, loreBible)
+  };
   if (includeAll) {
     const external = (registry.externalWorlds || []).map(x => {
       const worldMenu = worldMenuWithLore(x.id, x.worldMenu, loreBible, displayNames);
@@ -156,6 +148,7 @@ module.exports = withErrors(async (req, res) => {
     });
     payload.inventory = [...internalInventory(appsDir, registry, loreBible, displayNames), ...external]
       .sort((a, b) => Number(b.certified) - Number(a.certified) || a.title.localeCompare(b.title, 'ru'));
+    payload.inventoryLoreGraph = buildUniversalLoreGraph(payload.inventory, loreBible);
     payload.inventoryRule = registry.inventoryRule || '';
   }
 

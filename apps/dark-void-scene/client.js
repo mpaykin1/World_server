@@ -16,6 +16,7 @@ scene.background = new THREE.Color(0x020201);
 scene.fog = new THREE.FogExp2(0x0a0603, 0.05);
 
 const camera = new THREE.PerspectiveCamera(58, innerWidth / innerHeight, 0.05, 300);
+window.GoldenPaintingAtmosphere?.registerThree({THREE,scene,renderer,getCamera:()=>camera,worldId:'dark-void-scene'});
 
 // ---- World (static) - siblings, never parented under the hero ----
 const mountain = new MountainWall();

@@ -10,6 +10,8 @@
 
 Особенно важно: если запрос означает «измени/почини/добавь и пришли/покажи ссылку, чтобы я мог проверить», активируется `LINK_COMPLETION_LOOP=ON` и `OUTPUT_REQUIRED=VERIFIED_LINK_ONLY`.
 
+Жёсткая машинная политика этой выдачи хранится в `data/manual-delivery-policy.json`, а repo-derived deployment identity — в `data/cloudflare-deployment-identity.json`. Канонический production работает через Cloudflare; его адрес берётся только из результата деплоя или `WORLD_SERVER_CANONICAL_ORIGIN`, а не угадывается. Новые миры должны появляться в Golden Worlds inventory по `/apps/voxel-world/`, а финальная ссылка обязана пройти `npm run delivery:verify -- <cloudflare-url> --expected-sha=<HEAD_SHA>` непосредственно перед ответом.
+
 В таком режиме технический блокер — это следующая подзадача, а не повод закончить отчётом. CI fail, конфликт, deploy fail, 404/500, протухший preview, неправильный SHA, browser failure и отсутствие видимого изменения — всё это `NOT_DONE`, пока доступные авторизованные инструменты могут продолжать исправление.
 
 Допустимый нормальный финал — только свежепроверенная рабочая ссылка с видимым запрошенным изменением. Исключение — настоящий `USER_ACTION_REQUIRED`, когда нужен owner-only шаг, который AI физически не может выполнить доступными инструментами.
