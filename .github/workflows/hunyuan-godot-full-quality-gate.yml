@@ -1,0 +1,109 @@
+name: Hunyuan Godot Full Quality Gate
+
+on:
+  push:
+    branches: ['ai/**','opencode/**','codex/**']
+    paths:
+      - 'apps/hunyuan-godot/**'
+      - 'scripts/hunyuan-browser-control-smoke.cjs'
+      - 'scripts/verify-hunyuan-full-quality.py'
+      - '.github/workflows/hunyuan-godot-full-quality-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  validate-export-promote:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install AI3D worker Python deps (for npm check)
+        run: pip install pillow numpy requests
+
+      - name: FULL QUALITY GATE - exact visual geometry
+        run: python scripts/verify-hunyuan-full-quality.py
+
+      - name: Cache Godot 4.7.1 and Web templates
+        uses: actions/cache@v4
+        with:
+          path: .godot-ci-cache
+          key: godot-4.7.1-web-full-quality-v3
+
+      - name: Install Godot 4.7.1 and Web templates
+        shell: bash
+        run: |
+          set -euo pipefail
+          CACHE="$GITHUB_WORKSPACE/.godot-ci-cache"; mkdir -p "$CACHE/engine" "$CACHE/templates"
+          if [ ! -x "$CACHE/engine/Godot_v4.7.1-stable_linux.x86_64" ]; then
+            curl -L --fail --retry 5 --retry-delay 3 "https://github.com/godotengine/godot-builds/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip" -o "$CACHE/godot.zip"
+            unzip -q -o "$CACHE/godot.zip" -d "$CACHE/engine"; chmod +x "$CACHE/engine/Godot_v4.7.1-stable_linux.x86_64"
+          fi
+          if [ ! -f "$CACHE/templates/version.txt" ]; then
+            curl -L --fail --retry 5 --retry-delay 3 "https://github.com/godotengine/godot-builds/releases/download/4.7.1-stable/Godot_v4.7.1-stable_export_templates.tpz" -o "$CACHE/templates.tpz"
+            rm -rf "$CACHE/templates-full"; mkdir -p "$CACHE/templates-full"; unzip -q -o "$CACHE/templates.tpz" -d "$CACHE/templates-full"
+            find "$CACHE/templates-full" -type f -name 'web_*.zip' -exec cp {} "$CACHE/templates/" \;
+            V="$(find "$CACHE/templates-full" -type f -name version.txt | head -n1 || true)"; if [ -n "$V" ]; then cp "$V" "$CACHE/templates/version.txt"; else printf '4.7.1.stable' > "$CACHE/templates/version.txt"; fi
+          fi
+          DEST="$HOME/.local/share/godot/export_templates/4.7.1.stable"; mkdir -p "$DEST"; cp "$CACHE/templates"/web_*.zip "$DEST/"; cp "$CACHE/templates/version.txt" "$DEST/version.txt"
+
+      - name: Import full-quality Godot project
+        run: |
+          GODOT="$GITHUB_WORKSPACE/.godot-ci-cache/engine/Godot_v4.7.1-stable_linux.x86_64"
+          "$GODOT" --headless --path apps/hunyuan-godot --import
+
+      - name: CONTROL GATE 1 - physics/camera regression
+        run: |
+          GODOT="$GITHUB_WORKSPACE/.godot-ci-cache/engine/Godot_v4.7.1-stable_linux.x86_64"
+          "$GODOT" --headless --path apps/hunyuan-godot --script res://tests/controller_regression_test.gd
+
+      - name: Export isolated Web candidate
+        run: |
+          set -euo pipefail
+          GODOT="$GITHUB_WORKSPACE/.godot-ci-cache/engine/Godot_v4.7.1-stable_linux.x86_64"
+          rm -rf .hunyuan-web-candidate; mkdir .hunyuan-web-candidate
+          "$GODOT" --headless --path apps/hunyuan-godot --export-release Web "$GITHUB_WORKSPACE/.hunyuan-web-candidate/index.html"
+          test -s .hunyuan-web-candidate/index.html
+          test -n "$(find .hunyuan-web-candidate -maxdepth 1 -name '*.wasm' -print -quit)"
+          test -n "$(find .hunyuan-web-candidate -maxdepth 1 -name '*.pck' -print -quit)"
+          PCK="$(find .hunyuan-web-candidate -maxdepth 1 -name '*.pck' -print -quit)"
+          test "$(stat -c%s "$PCK")" -gt 30000000
+
+      - name: Start candidate HTTP server
+        run: |
+          mkdir -p .gate-root/apps/hunyuan-world; cp -a .hunyuan-web-candidate/. .gate-root/apps/hunyuan-world/
+          nohup python3 -m http.server 8060 --directory .gate-root >/tmp/hunyuan-http.log 2>&1 &
+          for i in $(seq 1 40); do curl -fsS http://127.0.0.1:8060/apps/hunyuan-world/ >/dev/null && exit 0; sleep 1; done; cat /tmp/hunyuan-http.log; exit 1
+
+      - name: CONTROL GATE 2 - real Chromium input smoke
+        run: node scripts/hunyuan-browser-control-smoke.cjs http://127.0.0.1:8060/apps/hunyuan-world/
+
+      - name: Repository regression tests
+        run: npm run check
+
+      - name: Promote ONLY tested candidate
+        run: |
+          set -euo pipefail
+          rm -rf apps/hunyuan-world; mkdir -p apps/hunyuan-world; cp -a .hunyuan-web-candidate/. apps/hunyuan-world/
+          cat > apps/hunyuan-world/control-gate-report.json <<JSON
+          {"status":"PASS","quality":"FULL_1313748_TRIANGLES","spawn_grounded":true,"upright":true,"jump_vertical_only":true,"pitch_89_5":true,"yaw_only":true,"roll_zero":true,"world_locked":true,"source_commit":"${GITHUB_SHA}"}
+          JSON
+
+      - name: Commit tested Web build to same AI branch
+        run: |
+          git config user.name "hunyuan-full-quality-gate"; git config user.email "actions@users.noreply.github.com"
+          git add apps/hunyuan-world
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "build: promote full-quality control-gated Hunyuan Web [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
