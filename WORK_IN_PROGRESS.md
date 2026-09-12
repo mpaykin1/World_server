@@ -2,6 +2,22 @@
 
 ---
 
+# PR #91 Stack Completion refresh — 2026-09-12
+
+## Task
+Refresh the existing Manual Fast Lane PR #91 onto current protected master `867d99de0ac38dec02f3f8c64a3a1d7a1c2785dd`, remove features already delivered by merged stack PRs, retain its unique Graphics-First viewport/world-identity/fusion work, and make delivery identity Cloudflare-native with the canonical `Builder -> Fleet PRE -> Ocean -> Fleet POST` topology.
+
+## Scope and rollback
+One task, one existing PR and branch: `ai/chatgpt/graphics-first-golden-viewport`. Production/master are not edited directly. The pre-refresh head `aee8584c178a13dcae22968503e2d3b9657b2e56` and protected master `867d99de0ac38dec02f3f8c64a3a1d7a1c2785dd` are rollback anchors.
+
+## Acceptance
+Preserve the merged World Factory, automatic lore, Universal Lore Graph, durable canon, Supabase authenticated writes, IndieWorlds and Cloudflare worker. Required CI and focused tests must pass without baseline weakening. Fleet must independently validate representative desktop Chromium, mobile Chromium, mobile WebKit and tablet visibility at >=85%, controls, world identity/fusion, and exact Cloudflare deployed revision before any readiness promotion.
+
+## Current action
+Resolve the historical branch conflicts in favor of current master, reapply only the missing integration layer, run focused/full gates, push the refreshed exact head to the same PR, then hand it to Fleet PRE with Cloudflare endpoint/security scenarios.
+
+---
+
 # IndieWorlds foundation — 2026-09-10
 
 ## Task

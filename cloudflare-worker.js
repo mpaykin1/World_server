@@ -23,10 +23,16 @@ function configApi(request, env) {
   const supabaseUrl = String(env?.SUPABASE_URL || DEFAULT_SUPABASE_URL).trim().replace(/\/$/, '');
   const supabasePublishableKey = String(env?.SUPABASE_PUBLISHABLE_KEY || DEFAULT_SUPABASE_PUBLISHABLE_KEY).trim();
   const configured = /^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(supabaseUrl) && /^(?:sb_publishable_|eyJ)/.test(supabasePublishableKey);
+  const deployedRevision = String(env?.WORLD_SERVER_DEPLOYED_SHA || env?.CF_VERSION_METADATA?.id || '').trim();
+  const identity = { deploymentProvider: 'cloudflare', deploymentService: 'world-server', deployedRevision };
   const body = configured
-    ? { supabaseUrl, supabasePublishableKey, configured: true }
-    : { supabaseUrl: '', supabasePublishableKey: '', configured: false };
-  const headers = { 'cache-control': 'no-store', 'x-world-server-config-runtime': 'cloudflare-native' };
+    ? { supabaseUrl, supabasePublishableKey, configured: true, ...identity }
+    : { supabaseUrl: '', supabasePublishableKey: '', configured: false, ...identity };
+  const headers = {
+    'cache-control': 'no-store',
+    'x-world-server-config-runtime': 'cloudflare-native',
+    'x-world-server-deployed-revision': deployedRevision || 'unknown'
+  };
   return request.method === 'HEAD' ? new Response(null, { status: 200, headers }) : jsonResponse(body, 200, headers);
 }
 

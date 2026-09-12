@@ -3,6 +3,9 @@
   "name": "world-server",
   "compatibility_date": "2026-09-11",
   "main": "cloudflare-worker.js",
+  "version_metadata": {
+    "binding": "CF_VERSION_METADATA"
+  },
   "assets": {
     "directory": ".",
     "binding": "ASSETS",

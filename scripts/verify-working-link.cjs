@@ -1,16 +1,37 @@
 ﻿'use strict';
 const { chromium, devices } = require('@playwright/test');
 const { PNG } = require('pngjs');
+const fs = require('node:fs');
+const path = require('node:path');
+
+const deploymentIdentity = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'cloudflare-deployment-identity.json'), 'utf8').replace(/^\uFEFF/, ''));
 
 const ERROR_MARKERS = ['site not found','page not found','404: not_found','deployment_not_found','vercel login','not found - request id'];
 function parseArgs(argv){
-  const out={url:argv[2]||'',game:false,readyGlobal:'',inventoryId:''};
+  const out={url:argv[2]||process.env[deploymentIdentity.previewOriginEnvironmentVariable]||process.env[deploymentIdentity.canonicalOriginEnvironmentVariable]||'',game:false,readyGlobal:'',inventoryId:'',expectedSha:''};
   for(const a of argv.slice(3)){
     if(a==='--game') out.game=true;
     else if(a.startsWith('--ready-global=')) out.readyGlobal=a.slice(15);
     else if(a.startsWith('--inventory-id=')) out.inventoryId=a.slice(15);
+    else if(a.startsWith('--expected-sha=')) out.expectedSha=a.slice(15);
   }
   return out;
+}
+async function cloudflareIdentityGate(url, expectedSha) {
+  const proofUrl = new URL(deploymentIdentity.proofEndpoint, url);
+  const response = await fetch(proofUrl, { redirect: 'follow', signal: AbortSignal.timeout(20000) });
+  if (!response.ok) throw new Error(`Cloudflare identity HTTP ${response.status}`);
+  if (response.headers.get(deploymentIdentity.runtimeHeader.name) !== deploymentIdentity.runtimeHeader.value) {
+    throw new Error('Canonical Cloudflare runtime header missing');
+  }
+  const body = await response.json();
+  if (body.deploymentProvider !== deploymentIdentity.provider || body.deploymentService !== deploymentIdentity.service) {
+    throw new Error('Cloudflare deployment identity mismatch');
+  }
+  if (expectedSha && body.deployedRevision !== expectedSha) {
+    throw new Error(`Deployed revision mismatch: expected ${expectedSha}, received ${body.deployedRevision || 'missing'}`);
+  }
+  return { proofUrl: proofUrl.href, deployedRevision: body.deployedRevision || null };
 }
 function assertPublicUrl(raw){
   const u=new URL(raw);
@@ -72,8 +93,9 @@ async function browserGate(url,{game,readyGlobal,inventoryId}){
 }
 async function main(){
   const args=parseArgs(process.argv); assertPublicUrl(args.url);
-  const http=await httpGate(args.url); const browser=await browserGate(args.url,args);
-  console.log(JSON.stringify({ok:true,verifiedAt:new Date().toISOString(),url:args.url,http,browser},null,2));
+  if(!args.url) throw new Error(`Pass a Cloudflare URL or set ${deploymentIdentity.previewOriginEnvironmentVariable}/${deploymentIdentity.canonicalOriginEnvironmentVariable}`);
+  const http=await httpGate(args.url); const identity=await cloudflareIdentityGate(args.url,args.expectedSha); const browser=await browserGate(args.url,args);
+  console.log(JSON.stringify({ok:true,verifiedAt:new Date().toISOString(),url:args.url,http,identity,browser},null,2));
 }
 if(require.main===module) main().catch(e=>{console.error(`[VERIFIED_LINK_GATE] FAIL ${e.message}`);process.exit(1);});
-module.exports={ERROR_MARKERS,parseArgs,assertPublicUrl,bodyLooksHealthy,screenshotHasVisualSignal,httpGate,browserGate};
+module.exports={ERROR_MARKERS,parseArgs,assertPublicUrl,bodyLooksHealthy,screenshotHasVisualSignal,httpGate,cloudflareIdentityGate,browserGate};

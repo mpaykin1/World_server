@@ -1,0 +1,47 @@
+name: Cloudflare Exact-Head Preview
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: cloudflare-preview-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-and-verify:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
+      - name: Require Cloudflare deployment authority
+        run: test -n "$CLOUDFLARE_API_TOKEN" && test -n "$CLOUDFLARE_ACCOUNT_ID"
+      - name: Deploy isolated exact-head worker
+        id: deploy
+        shell: bash
+        run: |
+          set -euo pipefail
+          PR_NUMBER="${{ github.event.pull_request.number || 'manual' }}"
+          OUTPUT="$(npx wrangler@4.45.0 deploy --name "world-server-pr-${PR_NUMBER}" --var "WORLD_SERVER_DEPLOYED_SHA:${GITHUB_SHA}")"
+          printf '%s\n' "$OUTPUT"
+          URL="$(printf '%s\n' "$OUTPUT" | grep -Eo 'https://[^[:space:]]+\.(workers|pages)\.dev' | tail -n 1)"
+          test -n "$URL"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+      - name: Verify Cloudflare stack and security
+        run: node scripts/verify-cloudflare-stack.cjs "${{ steps.deploy.outputs.url }}" "$GITHUB_SHA"
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Verify exact-head playable delivery
+        run: npm run delivery:verify -- "${{ steps.deploy.outputs.url }}/apps/voxel-world/" --expected-sha="$GITHUB_SHA" --game --inventory-id=voxel-world
+

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0.0",
+  "provider": "cloudflare",
+  "service": "world-server",
+  "configuration": "wrangler.jsonc",
+  "canonicalOriginEnvironmentVariable": "WORLD_SERVER_CANONICAL_ORIGIN",
+  "previewOriginEnvironmentVariable": "CLOUDFLARE_DEPLOYMENT_URL",
+  "deployedRevisionEnvironmentVariable": "WORLD_SERVER_DEPLOYED_SHA",
+  "proofEndpoint": "/api/config",
+  "runtimeHeader": {
+    "name": "x-world-server-config-runtime",
+    "value": "cloudflare-native"
+  },
+  "revisionHeader": "x-world-server-deployed-revision",
+  "rule": "Resolve the URL from Cloudflare deployment output or the configured stable origin; never guess an account hostname or use a Netlify URL as canonical evidence."
+}
