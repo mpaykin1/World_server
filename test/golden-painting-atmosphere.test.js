@@ -167,3 +167,34 @@ test('directional shadows use a camera-relative importance window without extra 
   assert.match(src,/importanceShadows:Boolean/);
 });
 
+
+test('directional shadow stabilization sets bias without extra passes',()=>{
+  const src=fs.readFileSync(path.join(__dirname,'..','shared','golden-painting-atmosphere.js'),'utf8');
+  assert.match(src,/light\.shadow\.bias=-0\.0006/);
+  assert.match(src,/light\.shadow\.normalBias=a\.mobile\?\.025:\.035/);
+});
+
+test('vegetation wind is vertex-only and disabled for low-power adapters',()=>{
+  const src=fs.readFileSync(path.join(__dirname,'..','shared','golden-painting-atmosphere.js'),'utf8');
+  assert.match(src,/vegetation&&!a\.lowPower/);
+  assert.match(src,/goldenWindTime/);
+  assert.match(src,/goldenWindMask/);
+  assert.match(src,/for\(const u of a\.windUniforms\)u\.value=/);
+});
+
+test('procedural environment IBL rebuilds only on phase changes and is low-power gated',()=>{
+  const src=fs.readFileSync(path.join(__dirname,'..','shared','golden-painting-atmosphere.js'),'utf8');
+  assert.match(src,/function updateEnvironment\(a,s\)/);
+  assert.match(src,/a\.lowPower\|\|.*a\.environmentPhase===s\.phase/);
+  assert.match(src,/EquirectangularReflectionMapping/);
+  assert.match(src,/a\.scene\.environment=tex/);
+});
+
+test('auto mobile keeps cinematic-lite graphics while low mode remains available',()=>{
+  const src=fs.readFileSync(path.join(__dirname,'..','shared','golden-painting-atmosphere.js'),'utf8');
+  assert.match(src,/const graphicsMode=/);
+  assert.match(src,/graphicsMode==='low'/);
+  assert.match(src,/memory>0&&memory<=2/);
+  assert.match(src,/cores<=2&&!mobile/);
+  assert.match(src,/!a\.mobile&&global\.GoldenAssetCodec/);
+});
