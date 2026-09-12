@@ -1,8 +1,11 @@
 import * as THREE from 'https://unpkg.com/three@0.165.0/build/three.module.js';
 
-await window.AppCore.init('survival');
-const socket = window.AppCore.socket();
-socket.emit('survival:join');
+function survivalOfflineSocket(){return{connected:false,emit(){return false;},on(){return this;},off(){return this;}};}
+let survivalBackendReady=false;
+try{await window.AppCore.init('survival');survivalBackendReady=true;}catch(error){console.warn('[survival] backend unavailable; using local render fallback',error?.message||error);}
+const socket=survivalBackendReady?window.AppCore.socket():survivalOfflineSocket();
+if(survivalBackendReady)socket.emit('survival:join');
+window.SurvivalOfflineRender={get backendReady(){return survivalBackendReady;},socketFallback:!survivalBackendReady};
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x8fc5f1);
