@@ -1,4 +1,4 @@
-import {createWorldStackAutodemo,AUTODEMO_VERSION} from '/shared/world-stack-autodemo.mjs';
+﻿import {createWorldStackAutodemo,AUTODEMO_VERSION} from '/shared/world-stack-autodemo.mjs';
 
 export function installVoxelAutodemo(ctx){
   if(new URLSearchParams(location.search).get('autodemo')==='0') return null;
@@ -9,6 +9,8 @@ export function installVoxelAutodemo(ctx){
   const getPlayer=()=>({x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw});
   const groundY=(x,z)=>heightAt(Math.floor(x),Math.floor(z))+1;
   const toast=message=>window.AppCore?.toast?.(message);
+  function chooseDirection(kind){const yaw={forest:0,mountains:Math.PI/2,coast:Math.PI,desert:-Math.PI/2}[kind];if(Number.isFinite(yaw))player.yaw=yaw;toast(`Direction: ${kind}`);}
+  function playThunder(){try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;const ac=new AC(),osc=ac.createOscillator(),gain=ac.createGain();osc.type='sawtooth';osc.frequency.setValueAtTime(52,ac.currentTime);osc.frequency.exponentialRampToValueAtTime(27,ac.currentTime+.9);gain.gain.setValueAtTime(.0001,ac.currentTime);gain.gain.exponentialRampToValueAtTime(.16,ac.currentTime+.03);gain.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+1.15);osc.connect(gain).connect(ac.destination);osc.start();osc.stop(ac.currentTime+1.2);setTimeout(()=>ac.close(),1500)}catch{}}
 
   function applyEnvironment(now=performance.now()){
     const mode=env.mode;
@@ -23,7 +25,7 @@ export function installVoxelAutodemo(ctx){
     }
   }
   function resetEnvironment(){env.mode='normal';scene.background?.copy?.(normal.sky);scene.fog?.color?.copy?.(normal.fog);sun.color.copy(normal.sunColor);sun.intensity=normal.sunIntensity;hemi.intensity=normal.hemiIntensity;}
-  function setEnvironment({mode}){env.mode=mode||'normal';if(env.mode==='normal')resetEnvironment();else applyEnvironment();}
+  function setEnvironment({mode}){env.mode=mode||'normal';if(env.mode==='normal')resetEnvironment();else{applyEnvironment();if(env.mode==='storm')playThunder();}}
 
   async function commitBlocks(edits){
     const unique=new Map();
@@ -62,6 +64,9 @@ export function installVoxelAutodemo(ctx){
   }
   function spawnPortal(kind,pos){const g=new THREE.Group();g.position.copy(pos);g.position.y=groundY(pos.x,pos.z)+2.8;const ring=new THREE.Mesh(new THREE.TorusGeometry(2.2,.22,12,48),material(0x54d7ff,0x1988ff));g.add(ring);const core=new THREE.Mesh(new THREE.CircleGeometry(1.95,36),new THREE.MeshBasicMaterial({color:0x5c46ff,transparent:true,opacity:.34,side:THREE.DoubleSide}));core.position.z=.05;g.add(core);g.userData.kind=kind;persistent.add(g);return g;}
 
+  function spawnTreasure(kind,pos){const p=pos?.isVector3?pos:originAhead(7),g=new THREE.Group();g.position.set(p.x,groundY(p.x,p.z),p.z);const chest=new THREE.Mesh(new THREE.BoxGeometry(1.4,.8,1),material(0x8a5a2e));chest.position.y=.45;g.add(chest);const colors={gold:0xffd34d,diamonds:0x8fefff,crystals:0xd877ff,ancientArtifact:0xff8d52,combatLoot:0xa8ff72};for(let i=0;i<5;i++){const c=colors[kind]||0xffd34d,gem=new THREE.Mesh(new THREE.OctahedronGeometry(.22+i*.02),material(c,c));gem.position.set((i-2)*.28,.95+(i%2)*.2,(i%2-.5)*.35);g.add(gem)}persistent.add(g);toast(`Treasure: ${kind}`);return g;}
+  function materializeCanon(kind){const p=originAhead(9),v=new THREE.Vector3(p.x,p.y,p.z);if(kind==='giants')return spawnStoryObject('tracks',v);if(kind==='portalPast'||kind==='openPortal'||kind==='closePortal')return spawnPortal(kind,v);if(kind==='lostTown')return buildStructure('ancientCity');if(kind==='unknownCreature'||kind==='wake'||kind==='tame')return spawnStoryObject('mystery',v);if(kind==='fortress')return buildStructure('fortress');if(kind==='expedition')return buildStructure('road');if(kind==='openChest')return spawnTreasure('ancientArtifact',v);if(kind==='free')return spawnStoryObject('artifact',v);return spawnStoryObject('mystery',v);}
+
   async function neighborUrl(){
     if(env.createdWorldUrl)return env.createdWorldUrl;
     try{const r=await fetch('/api/world-factory?limit=24',{headers:{Accept:'application/json'},cache:'no-store'});if(!r.ok)return null;const j=await r.json();const w=(j.worlds||[]).find(x=>x.id!==worldId&&x.playUrl);return w?.playUrl||null}catch{return null}
@@ -73,13 +78,14 @@ export function installVoxelAutodemo(ctx){
   }
   function recordCanon(eventType,summary,payload){return canonApi(eventType,summary,payload,uuid()).catch(e=>console.warn('[AUTODEMO CANON]',e));}
 
-  const director=createWorldStackAutodemo({THREE,scene,getPlayer,groundY,setEnvironment,buildStructure,spawnStoryObject,spawnPortal,neighborUrl,createWorldPreview,recordCanon,toast});
+  const director=createWorldStackAutodemo({THREE,scene,getPlayer,groundY,setEnvironment,chooseDirection,buildStructure,spawnStoryObject,spawnPortal,spawnTreasure,materializeCanon,neighborUrl,createWorldPreview,recordCanon,toast});
   const apiObject={
     version:AUTODEMO_VERSION,
     update(now,dt){applyEnvironment(now);director.update(now,dt);},
-    stats(){return{...director.stats(),environment:env.mode,createdWorldUrl:env.createdWorldUrl};},
+    stats(){return{...director.stats(),environment:env.mode,createdWorldUrl:env.createdWorldUrl,persistentChanges:persistent.children.length};},
     show:i=>director.show(i),choose:key=>director.choose(key),advance:()=>director.advance(),stop(){director.stop();resetEnvironment();}
   };
   window.WorldStackAutodemo=apiObject;
   return apiObject;
 }
+
