@@ -1,0 +1,39 @@
+name: Golden World Fleet Gate
+
+on:
+  pull_request:
+    paths:
+      - 'apps/**'
+      - 'shared/**'
+      - 'e2e/golden-world-fleet.spec.js'
+      - '.github/workflows/golden-world-fleet.yml'
+  push:
+    branches: [master]
+    paths:
+      - 'apps/**'
+      - 'shared/**'
+      - 'e2e/golden-world-fleet.spec.js'
+      - '.github/workflows/golden-world-fleet.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  all-world-render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Install render browsers
+        run: npx playwright install --with-deps chromium webkit
+      - name: Verify every playable world on desktop and mobile engines
+        run: >-
+          npx playwright test e2e/golden-world-fleet.spec.js
+          --project=desktop-chromium
+          --project=mobile-chromium
+          --project=mobile-webkit

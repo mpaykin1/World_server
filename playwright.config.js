@@ -1,5 +1,6 @@
-// @ts-check
 const { defineConfig, devices } = require('@playwright/test');
+
+const externalBaseURL = process.env.PLAYWRIGHT_BASE_URL || '';
 
 module.exports = defineConfig({
   testDir: 'e2e',
@@ -10,10 +11,10 @@ module.exports = defineConfig({
   workers: 1,
   retries: process.env.CI ? 2 : 0,
   use: {
-    baseURL: 'http://localhost:3000',
-    trace: 'retain-on-failure',
+    baseURL: externalBaseURL || 'http://localhost:3000',
+    trace: 'on-first-retry',
   },
-  webServer: {
+  webServer: externalBaseURL ? undefined : {
     command: 'node server.js',
     url: 'http://localhost:3000/apps/ai3d-voxel-city/',
     reuseExistingServer: !process.env.CI,
