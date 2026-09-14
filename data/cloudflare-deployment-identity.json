@@ -12,5 +12,5 @@
     "value": "cloudflare-native"
   },
   "revisionHeader": "x-world-server-deployed-revision",
-  "rule": "Resolve the URL from Cloudflare deployment output or the configured stable origin; never guess an account hostname or use a Netlify URL as canonical evidence."
+  "rule": "Resolve the exact-revision deploy URL from Cloudflare deployment output or the configured stable origin; never guess an account hostname. The canonical PUBLIC user-facing host is data/manual-delivery-policy.json (https://world-server.netlify.app); a Netlify deploy-preview alias is not canonical evidence, but a fresh-verified stable production Netlify URL may satisfy final user-facing link delivery."
 }

@@ -77,11 +77,13 @@ If `LINK_COMPLETION_LOOP=ON` and `TERMINAL_STATE=NO`, do not end the turn with a
 
 If a prior chat violated this, record/recognize `LINK_COMPLETION_REGRESSION`, restore the latest checkpoint, and resume `NEXT_ACTION` on the SAME task/PR.
 
-## Server hard delivery law — canonical Cloudflare identity
+## Server hard delivery law — canonical Cloudflare deploy identity + canonical public host
 
 Machine-readable policy: `data/manual-delivery-policy.json`.
 
-The deployment identity is machine-readable in `data/cloudflare-deployment-identity.json`. The canonical provider is Cloudflare. Resolve the origin from Cloudflare deployment output or `WORLD_SERVER_CANONICAL_ORIGIN`; never guess an account hostname. The canonical world hub is `/apps/voxel-world/` on that resolved origin, and new local worlds must be discoverable from its Golden Worlds inventory.
+The deployment identity is machine-readable in `data/cloudflare-deployment-identity.json`. The deploy/stack provider is Cloudflare: resolve the exact-revision deploy origin from Cloudflare deployment output or `WORLD_SERVER_CANONICAL_ORIGIN`; never guess an account hostname. The canonical world hub is `/apps/voxel-world/` on that resolved origin, and new local worlds must be discoverable from its Golden Worlds inventory.
+
+The canonical PUBLIC host for user-facing final links is `https://world-server.netlify.app`, verified at `/apps/voxel-world/` and the fusion route `/shared/world-fusion.html`. A Netlify deploy-preview alias (`deploy-preview-*`) is never canonical evidence; only a freshly verified stable production URL counts.
 
 While a blocker is resolvable by any already-authorized local/cloud/browser path, **a progress report, blocker report, root-cause report, PR URL, deployment URL that has not passed the live gate, or dead/stale URL is forbidden as the final user-facing result.** Continue the same task instead.
 
@@ -89,7 +91,11 @@ Before sending the final URL, run the executable gate against the exact canonica
 
 `npm run delivery:verify -- <resolved-cloudflare-origin>/apps/<world>/ --expected-sha=<HEAD_SHA> --game --ready-global=<READY_GLOBAL> --inventory-id=<world>`
 
-The final evidence must be fresh (<=120 seconds), HTTP 2xx, Cloudflare-native, exact-revision matched, free of known host/error markers, browser-rendered, visually non-empty for games, and present in the Golden inventory. If the user has explicitly authorized end-to-end completion, a Manual Fast Lane may merge after required CI plus independent review and then deploy to the canonical Cloudflare target without asking again.
+and confirm the canonical public link is reachable, for example:
+
+`node scripts/verify-user-link.cjs https://world-server.netlify.app/apps/voxel-world/ <feature-marker>`
+
+The final evidence must be fresh (<=120 seconds), HTTP 2xx, Cloudflare exact-revision matched for the deploy identity, free of known host/error markers, browser-rendered, visually non-empty for games, present in the Golden inventory, and `world-server.netlify.app` must serve the requested world hub and the world-fusion route. If the user has explicitly authorized end-to-end completion, a Manual Fast Lane may merge after required CI plus independent review and then deploy to the canonical target without asking again.
 
 ## Same-task ownership
 

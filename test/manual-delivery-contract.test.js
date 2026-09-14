@@ -7,13 +7,17 @@ const root=path.resolve(__dirname,'..');
 const read=p=>fs.readFileSync(path.join(root,p),'utf8').replace(/^\uFEFF/,'');
 
 // Merge-resilience regression: preserve master completion rules while adding the executable delivery gate.
-test('manual delivery policy makes a repo-derived verified Cloudflare link the only normal terminal result',()=>{
+test('manual delivery policy makes a verified canonical link the only normal terminal result',()=>{
   const p=JSON.parse(read('data/manual-delivery-policy.json'));
   assert.equal(p.mode,'VERIFIED_LINK_ONLY');
   assert.equal(p.canonicalProvider,'cloudflare');
   assert.equal(p.deploymentIdentity,'data/cloudflare-deployment-identity.json');
   assert.equal(p.canonicalProductionOriginSource,'WORLD_SERVER_CANONICAL_ORIGIN');
   assert.equal(p.canonicalWorldHubPath,'/apps/voxel-world/');
+  assert.equal(p.canonicalPublicHost,'https://world-server.netlify.app');
+  assert.ok(Array.isArray(p.canonicalPublicVerifiedPaths));
+  assert.ok(p.canonicalPublicVerifiedPaths.includes('/apps/voxel-world/'));
+  assert.ok(p.canonicalPublicVerifiedPaths.includes('/shared/world-fusion.html'));
   assert.equal(p.manualFastLane.blockerMeansContinue,true);
   assert.equal(p.manualFastLane.autoMergeAfterRequiredChecksAndIndependentReview,true);
   assert.equal(p.manualFastLane.autoDeployToCanonicalCloudflareAfterMerge,true);
@@ -29,7 +33,8 @@ test('fresh-chat contracts point to executable verified-link completion without 
   for(const text of [control,start]) assert.ok(text.includes('data/manual-delivery-policy.json'));
   assert.ok(control.includes('npm run delivery:verify'));
   assert.ok(control.includes('data/cloudflare-deployment-identity.json'));
-  assert.equal(control.includes('canonical Netlify'),false);
+  assert.ok(control.includes('world-server.netlify.app'));
+  assert.ok(control.includes('world-fusion.html'));
   assert.ok(control.includes('Builder -> Fleet PRE -> Ocean -> Fleet POST'));
   assert.equal(control.includes('Release independently'),false);
   assert.ok(agents.includes('MANUAL TASK COMPLETION CONTRACT'));
@@ -37,11 +42,16 @@ test('fresh-chat contracts point to executable verified-link completion without 
   assert.ok(agents.includes('stable production URL'));
 });
 
-test('fresh-chat discovery contains no stale canonical Netlify topology',()=>{
-  const files=['AI_START_HERE.md','.ai/project-context-index.json','CHATGPT_GAME_CONTROL.md','data/manual-delivery-policy.json'];
-  for(const file of files){
+test('canonical public host and Netlify deploy-preview aliases are clearly separated',()=>{
+  const policy=read('data/manual-delivery-policy.json');
+  const audit=read('data/manual-task-completion-contract.json');
+  assert.ok(policy.includes('"canonicalPublicHost": "https://world-server.netlify.app"'));
+  assert.ok(policy.includes('/shared/world-fusion.html'));
+  assert.ok(JSON.parse(audit).forbiddenFinalUrlPatterns.includes('--world-server.netlify.app'));
+  assert.ok(JSON.parse(audit).forbiddenFinalUrlPatterns.includes('deploy-preview-'));
+  for(const file of ['AI_START_HERE.md','.ai/project-context-index.json','CHATGPT_GAME_CONTROL.md']){
     const text=read(file);
-    assert.equal(text.includes('world-server.netlify.app'),false,`${file} still names Netlify as canonical`);
+    assert.ok(text.includes('world-server.netlify.app'),`${file} must name the canonical public host`);
   }
 });
 

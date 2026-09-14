@@ -2,6 +2,29 @@
 
 ---
 
+# PR #91 master merge + verified canonical link invariant — 2026-09-14
+
+## Task
+Merge `origin/master` into `ai/chatgpt/graphics-first-golden-viewport` on top of the refreshed exact head `d2c462ff` (Cloudflare-native delivery identity), preserving current master behavior AND PR #91 Graphics-First Golden World Identity + universal world fusion. Add a HARD repo-backed invariant: AI/server completion for user-facing changes may NEVER end with a dead/unverified URL or a progress report instead of a live verified canonical link.
+
+## Current state
+Local branch head was a stale merge of an old IndieWorlds master. `origin/ai/chatgpt/graphics-first-golden-viewport` was 38 commits ahead; local stale merge would have reverted Cloudflare stack + delivery contracts + serial-growth files. Aborted stale merge, fast-forwarded branch to origin head `d2c462ff`, then performed a FRESH `git merge origin/master` on top. Two conflicts resolved: `cloudflare-preview.yml` (keep master's Cloudflare-authority detection + Netlify PR fallback + branch's verification steps) and `playwright.config.js` (keep master's `externalBaseURL` + branch's `retain-on-failure` traces). Merge committed as `ea094a07`.
+
+## Forbidden progress-only / dead-link invariant (this PR)
+- Canonical cloudflare deployment identity retained; canonical PUBLIC host added = `https://world-server.netlify.app` (user's explicit requirement), verified at `/apps/voxel-world/` and `/shared/world-fusion.html`; Netlify `deploy-preview-*` aliases remain forbidden as final.
+- Enforced in `scripts/check-golden-standard.js` (source gate, runs via `release:gate`) + `scripts/verify-cloudflare-stack.cjs` (production asset check adds `/shared/world-fusion.html`).
+- Reused existing contracts: manual-delivery-policy.json, cloudflare-deployment-identity.json, manual-task-completion-contract.json, verify-working-link.cjs, verify-user-link.cjs — no duplicate architecture. Stashed local-only ai3d WIP (`pr91-local-wip-ai3d`) was NOT applied (changes 503 health contract; out of scope).
+
+## Tests
+- `npm run check`: Syntax OK 60 files, IndieWorlds exports drift-free (CRLF-only local artifact; committed blobs already match), 673 passed / 2 skipped / 0 failed.
+- `node scripts/check-golden-standard.js`: PASS incl. new verified-canonical-link invariant.
+- Targeted: manual-delivery-contract.test.js, manual-task-completion-contract.test.js, verified-link-gate.test.js — 10/10 pass.
+
+## Next action
+Commit policy/docs/checker changes on SAME branch, push, report exact SHA + tests + blockers. Do NOT merge/deploy automatically.
+
+---
+
 # PR #91 Stack Completion refresh — 2026-09-12
 
 ## Task

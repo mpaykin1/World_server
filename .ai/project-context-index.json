@@ -115,6 +115,11 @@
       "canonicalProvider": "cloudflare",
       "canonicalProductionOriginSource": "WORLD_SERVER_CANONICAL_ORIGIN",
       "canonicalWorldHubPath": "/apps/voxel-world/",
+      "canonicalPublicHost": "https://world-server.netlify.app",
+      "canonicalPublicVerifiedPaths": [
+        "/apps/voxel-world/",
+        "/shared/world-fusion.html"
+      ],
       "topology": "Builder -> Fleet PRE -> Ocean -> Fleet POST"
     }
   },
@@ -147,6 +152,6 @@
       "docs/SERIAL_GROWTH_ENGINE.md"
     ]
   },
-  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md, data/manual-delivery-policy.json, and data/cloudflare-deployment-identity.json. For serial or player-acquisition content work read the Serial Growth Engine contract and continuity state. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains; final URLs must pass delivery:verify against the repo-derived Cloudflare identity and exact deployed SHA.",
+  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md, data/manual-delivery-policy.json, and data/cloudflare-deployment-identity.json. For serial or player-acquisition content work read the Serial Growth Engine contract and continuity state. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains; final URLs must pass delivery:verify against the repo-derived Cloudflare identity and exact deployed SHA and must be reachable at the canonical public host https://world-server.netlify.app (verified at /apps/voxel-world/ and /shared/world-fusion.html).",
   "sourceOfTruthBranch": "master"
 }

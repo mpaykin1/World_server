@@ -12,9 +12,10 @@ async function request(origin, pathname, options = {}) {
 
 async function verifyCloudflareStack(origin, expectedSha) {
   const results = [];
-  for (const pathname of ['/', '/apps/catalog/', '/apps/voxel-world/']) {
+  for (const pathname of ['/', '/apps/catalog/', '/apps/voxel-world/', '/shared/world-fusion.html']) {
     const { response, text } = await request(origin, pathname);
     if (!response.ok || text.length < 120) throw new Error(`${pathname} failed: HTTP ${response.status}`);
+    if (pathname === '/shared/world-fusion.html' && !text.includes('aSel')) throw new Error(`${pathname} is not the world fusion viewer`);
     results.push({ pathname, status: response.status });
   }
   for (const pathname of ['/api/apps?all=1', '/api/worlds', '/api/world-factory?limit=1', '/api/canon?limit=1']) {

@@ -5,7 +5,12 @@
   "canonicalProvider": "cloudflare",
   "canonicalProductionOriginSource": "WORLD_SERVER_CANONICAL_ORIGIN",
   "canonicalWorldHubPath": "/apps/voxel-world/",
-  "rule": "When the user requests a changed World_server plus a link, a progress/status/root-cause report is not a valid final output. Continue through repair, merge, deploy and fresh browser verification until a working canonical link exists, unless an owner-only action is truly required.",
+  "canonicalPublicHost": "https://world-server.netlify.app",
+  "canonicalPublicVerifiedPaths": [
+    "/apps/voxel-world/",
+    "/shared/world-fusion.html"
+  ],
+  "rule": "When the user requests a changed World_server plus a link, a progress/status/root-cause report is not a valid final output. Continue through repair, merge, deploy and fresh browser verification until a working canonical link exists, unless an owner-only action is truly required. Canonical deployment/stack identity is Cloudflare (data/cloudflare-deployment-identity.json, delivery:verify exact-SHA gate); the canonical PUBLIC host for user-facing final links is https://world-server.netlify.app, verified at /apps/voxel-world/ and /shared/world-fusion.html. A Netlify deploy-preview alias is never canonical evidence.",
   "forbiddenFinalOutputsWhileResolvable": ["progress-report", "status-report", "root-cause-report", "unverified-url", "404-url", "preview-only-url-when-production-is-authorized"],
   "terminalStates": ["LIVE_VERIFIED", "USER_ACTION_REQUIRED"],
   "verification": {

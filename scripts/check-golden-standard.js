@@ -109,6 +109,24 @@ const fusionHtml=read('shared/world-fusion.html');
 for(const needle of ['/api/apps?all=1','id="aSel"','id="bSel"','id="blend"','Случайная комбинация']) if(!fusionHtml.includes(needle)) fail('world fusion viewer missing '+needle);
 ok('short world names + any-pair clickable fusion contract');
 
+const readJson=p=>JSON.parse(read(p).replace(/^\uFEFF/,''));
+const deliveryPolicy=readJson('data/manual-delivery-policy.json');
+if(deliveryPolicy.mode!=='VERIFIED_LINK_ONLY') fail('delivery policy must require a verified link for user-facing completion');
+if(deliveryPolicy.canonicalPublicHost!=='https://world-server.netlify.app') fail('canonical public host must be world-server.netlify.app');
+const verifiedPaths=deliveryPolicy.canonicalPublicVerifiedPaths||[];
+if(!verifiedPaths.includes('/apps/voxel-world/')) fail('canonical public verification must include /apps/voxel-world/');
+if(!verifiedPaths.includes('/shared/world-fusion.html')) fail('canonical public verification must include the world fusion route');
+for(const forbidden of ['progress-report','unverified-url','404-url','preview-only-url-when-production-is-authorized']){
+  if(!(deliveryPolicy.forbiddenFinalOutputsWhileResolvable||[]).includes(forbidden)) fail(`delivery policy must forbid ${forbidden} as a final output`);
+}
+if(JSON.stringify(deliveryPolicy.terminalStates)!==JSON.stringify(['LIVE_VERIFIED','USER_ACTION_REQUIRED'])) fail('delivery policy must end only in LIVE_VERIFIED or USER_ACTION_REQUIRED');
+if(!fs.existsSync(path.join(root,'scripts/verify-user-link.cjs'))) fail('missing executable user-link verification gate scripts/verify-user-link.cjs');
+const userLinkGate=read('scripts/verify-user-link.cjs');
+if(!userLinkGate.includes('isStableProductionUrl')) fail('user-link gate must reject deploy-preview/stale final URLs');
+const tasksContract=readJson('data/manual-task-completion-contract.json');
+if(!(tasksContract.forbiddenFinalUrlPatterns||[]).includes('deploy-preview-')) fail('manual task contract must forbid deploy-preview URLs as final');
+ok('verified canonical link delivery invariant (no dead/unverified/progress-only output)');
+
 if(process.exitCode) process.exit(process.exitCode);
 console.log('GOLDEN STANDARD: PASS');
 
