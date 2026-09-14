@@ -116,7 +116,9 @@
     "agent-session:postflight": "node lib/agent-session-guard.js postflight direct-desktop-ai",
     "agent-session:check": "node lib/agent-session-guard.js preflight policy-check",
     "quality:world:microdetail": "node scripts/world-microdetail-audit.js",
-    "delivery:verify": "node scripts/verify-working-link.cjs"
+    "delivery:verify": "node scripts/verify-working-link.cjs",
+    "quality:world:detail-efficiency": "node scripts/world-detail-efficiency-loop.js",
+    "quality:world:detail-efficiency:test": "node --test test/world-detail-efficiency-gate.test.js"
   },
   "engines": {
     "node": "24.x"
