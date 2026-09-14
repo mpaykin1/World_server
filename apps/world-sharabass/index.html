@@ -111,10 +111,13 @@
 <script type="module">
 import * as THREE from 'https://unpkg.com/three@0.165.0/build/three.module.js';
 
-await window.AppCore.init('world-sharabass');
-const socket = window.AppCore.socket();
-socket.on('connect', () => socket.emit('sharabass:join'));
-if (socket.connected) socket.emit('sharabass:join');
+function sharabassOfflineSocket(){return{connected:false,emit(){return false;},on(){return this;},off(){return this;}};}
+let sharabassBackendReady=false;
+try{await window.AppCore.init('world-sharabass');sharabassBackendReady=true;}catch(error){console.warn('[sharabass] backend unavailable; using local render fallback',error?.message||error);}
+const socket=sharabassBackendReady?window.AppCore.socket():sharabassOfflineSocket();
+socket.on('connect',()=>socket.emit('sharabass:join'));
+if(socket.connected)socket.emit('sharabass:join');
+window.SharabassOfflineRender={get backendReady(){return sharabassBackendReady;},socketFallback:!sharabassBackendReady};
 
 // Compact UI: 40% smaller, more transparent, closable
 function makeCompact(el,scale,origin){
