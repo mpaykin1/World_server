@@ -100,7 +100,7 @@ const goldenVegetationGeometry=new THREE.BoxGeometry(.075,.48,.075);
 const goldenVegetationMaterial=new THREE.MeshStandardMaterial({color:0x6f9a43,roughness:.96,metalness:0});
 const goldenVegetationMesh=new THREE.InstancedMesh(goldenVegetationGeometry,goldenVegetationMaterial,GOLDEN_VEGETATION_MAX);goldenVegetationMesh.name='GoldenVoxelVegetation';goldenVegetationMesh.castShadow=false;goldenVegetationMesh.receiveShadow=true;goldenVegetationMesh.count=0;goldenVegetationMesh.frustumCulled=true;worldGroup.add(goldenVegetationMesh);
 
-const solidMaterial=new THREE.MeshStandardMaterial({vertexColors:true,roughness:.94,metalness:0,side:THREE.FrontSide});
+const solidMaterial=new THREE.MeshLambertMaterial({vertexColors:true,side:THREE.FrontSide});
 const transparentMaterial=new THREE.MeshStandardMaterial({vertexColors:true,roughness:.65,transparent:true,opacity:.62,depthWrite:false,side:THREE.DoubleSide});
 const waterMaterial=new THREE.MeshStandardMaterial({color:0x3f9fe0,roughness:.20,metalness:.03,emissive:0x04131c,emissiveIntensity:.08,transparent:true,opacity:.62,depthWrite:false,side:THREE.DoubleSide});
 let goldenWaterUniforms=null;
@@ -383,7 +383,8 @@ function faceCornerAO(lx,y,lz,face,getBlock){
   return face.v.map(v=>{const a=[...n],b=[...n],c=[...n],s1=v[axes[0]]?1:-1,s2=v[axes[1]]?1:-1;a[axes[0]]+=s1;b[axes[1]]+=s2;c[axes[0]]+=s1;c[axes[1]]+=s2;const o1=isOccluding(getBlock(lx+a[0],y+a[1],lz+a[2]))?1:0,o2=isOccluding(getBlock(lx+b[0],y+b[1],lz+b[2]))?1:0,oc=isOccluding(getBlock(lx+c[0],y+c[1],lz+c[2]))?1:0;return[1,.86,.72,.58][o1&&o2?3:o1+o2+oc];});
 }
 function waterShoreAt(lx,y,lz,getBlock){let diagonal=false;for(const [dx,dz] of [[1,0],[-1,0],[0,1],[0,-1]])if(isOccluding(getBlock(lx+dx,y,lz+dz)))return 1;for(const [dx,dz] of [[1,1],[1,-1],[-1,1],[-1,-1]])if(isOccluding(getBlock(lx+dx,y,lz+dz)))diagonal=true;return diagonal?.55:0;}
-function pushFace(arr,x,y,z,face,color,vertexShade=null,shore=0){const base=arr.pos.length/3,col=new THREE.Color(color);face.v.forEach((v,i)=>{const c=col.clone().multiplyScalar(face.shade*(vertexShade?.[i]??1));arr.pos.push(x+v[0],y+v[1],z+v[2]);arr.col.push(c.r,c.g,c.b);if(arr.shore)arr.shore.push(shore);});arr.idx.push(base,base+1,base+2,base,base+2,base+3);}
+function surfaceMicroShade(x,y,z,i){const h=(Math.imul((x+1)|0,73856093)^Math.imul((y+1)|0,19349663)^Math.imul((z+1)|0,83492791)^Math.imul(i+1,2654435761))>>>0;return .965+(h&255)/255*.07;}
+function pushFace(arr,x,y,z,face,color,vertexShade=null,shore=0){const base=arr.pos.length/3,col=new THREE.Color(color);face.v.forEach((v,i)=>{const c=col.clone().multiplyScalar(face.shade*(vertexShade?.[i]??1)*surfaceMicroShade(x+v[0],y+v[1],z+v[2],i));arr.pos.push(x+v[0],y+v[1],z+v[2]);arr.col.push(c.r,c.g,c.b);if(arr.shore)arr.shore.push(shore);});arr.idx.push(base,base+1,base+2,base,base+2,base+3);}
 function makeGeometry(data){ const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(data.pos,3)); g.setAttribute('color',new THREE.Float32BufferAttribute(data.col,3)); if(data.shore?.length)g.setAttribute('goldenShore',new THREE.Float32BufferAttribute(data.shore,1)); g.setIndex(data.idx); g.computeVertexNormals(); g.computeBoundingSphere(); return g; }
 function rebuildChunk(c){
   for(const m of c.meshes){ worldGroup.remove(m); m.geometry.dispose(); } c.meshes=[];

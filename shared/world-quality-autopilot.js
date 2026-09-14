@@ -4,7 +4,7 @@
   const coarse=matchMedia('(pointer:coarse)').matches;
   const deviceMemory=Number(navigator.deviceMemory||0),cores=Number(navigator.hardwareConcurrency||0);
   const TIERS={
-    SAFE:{maxDpr:.82,lodBias:1.8,detailRadius:.52,shadowQuality:0,particleScale:.22,animationHz:24,dynamicLightBudget:1,visibilityHz:10,occlusionHz:8,pbrQuality:0,geometryBudgetScale:.55,effectBudgetScale:.35,textureBudgetScale:.42,materialDetailScale:.55,targetDesktop:40,targetMobile:28},
+    SAFE:{maxDpr:.83,lodBias:1.8,detailRadius:.52,shadowQuality:0,particleScale:.22,animationHz:24,dynamicLightBudget:1,visibilityHz:10,occlusionHz:8,pbrQuality:0,geometryBudgetScale:.55,effectBudgetScale:.35,textureBudgetScale:.42,materialDetailScale:.55,targetDesktop:40,targetMobile:28},
     BALANCED:{maxDpr:1.02,lodBias:1.35,detailRadius:.76,shadowQuality:1,particleScale:.50,animationHz:36,dynamicLightBudget:3,visibilityHz:18,occlusionHz:14,pbrQuality:0,geometryBudgetScale:.78,effectBudgetScale:.62,textureBudgetScale:.62,materialDetailScale:.72,targetDesktop:48,targetMobile:36},
     HIGH:{maxDpr:1.32,lodBias:1.0,detailRadius:1,shadowQuality:1,particleScale:.80,animationHz:50,dynamicLightBudget:6,visibilityHz:28,occlusionHz:24,pbrQuality:1,geometryBudgetScale:1,effectBudgetScale:.84,textureBudgetScale:.82,materialDetailScale:.88,targetDesktop:55,targetMobile:43},
     ULTRA:{maxDpr:1.70,lodBias:.78,detailRadius:1.28,shadowQuality:2,particleScale:1,animationHz:60,dynamicLightBudget:8,visibilityHz:60,occlusionHz:40,pbrQuality:2,geometryBudgetScale:1.18,effectBudgetScale:1,textureBudgetScale:1,materialDetailScale:1,targetDesktop:58,targetMobile:48}

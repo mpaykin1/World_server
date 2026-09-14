@@ -81,7 +81,7 @@
       "SAFE": {
         "targetFpsDesktop": 40,
         "targetFpsMobile": 28,
-        "maxDpr": 0.82,
+        "maxDpr": 0.83,
         "lodBias": 1.8,
         "detailRadius": 0.52,
         "shadowQuality": 0,
