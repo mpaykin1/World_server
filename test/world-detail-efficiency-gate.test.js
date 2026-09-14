@@ -1,0 +1,13 @@
+﻿'use strict';
+const test=require('node:test'),assert=require('node:assert/strict');
+const {environmentFingerprint,evaluateCandidate,makeBaseline}=require('../lib/world-detail-efficiency-gate');
+const policy=require('../data/world-detail-efficiency-policy.json');
+const sample=(project,fps,p95,detail,visible=20)=>({project,fps,frameP95Ms:p95,detailBudgetScore:detail,visibleDetailScore:visible,userAgent:'ua',deviceMemory:8,cores:8,viewport:{width:100,height:100},devicePixelRatio:1,thermalProxy:false,longTaskRatio:0.01});
+
+test('initial run initializes an environment-scoped baseline',()=>{const metrics=[sample('desktop-chromium',55,16,78),sample('mobile-chromium',42,22,74)];const r=evaluateCandidate(policy,null,metrics);assert.equal(r.initializeBaseline,true);assert.equal(r.accepted,false);});
+test('detail gain with non-regressing fps promotes',()=>{const baseMetrics=[sample('desktop-chromium',55,16,78),sample('mobile-chromium',42,22,74)],base=makeBaseline(baseMetrics,environmentFingerprint(baseMetrics));const metrics=[sample('desktop-chromium',55,16.1,78.4,20.2),sample('mobile-chromium',42,22.1,74.4,20.2)];const r=evaluateCandidate(policy,base,metrics);assert.equal(r.accepted,true);assert.ok(r.detailGain>=0.1);});
+test('fps regression rejects even when detail improves',()=>{const baseMetrics=[sample('desktop-chromium',55,16,78),sample('mobile-chromium',42,22,74)],base=makeBaseline(baseMetrics,environmentFingerprint(baseMetrics));const metrics=[sample('desktop-chromium',52,16,82,20.3),sample('mobile-chromium',42,22,78,20.3)];const r=evaluateCandidate(policy,base,metrics);assert.equal(r.accepted,false);assert.ok(r.reasons.some(x=>x.startsWith('fps-regression:desktop-chromium')));});
+test('same detail without gain does not promote',()=>{const baseMetrics=[sample('desktop-chromium',55,16,78),sample('mobile-chromium',42,22,74)],base=makeBaseline(baseMetrics,environmentFingerprint(baseMetrics));const r=evaluateCandidate(policy,base,baseMetrics);assert.equal(r.accepted,false);assert.ok(r.reasons.some(x=>x.startsWith('insufficient-detail-gain')));});
+
+test('initial baseline may record pressure but promotion cannot',()=>{const metrics=[{...sample('desktop-chromium',12,67,40),longTaskRatio:.25},sample('mobile-chromium',10,80,35)];const first=evaluateCandidate(policy,null,metrics);assert.equal(first.initializeBaseline,true);assert.ok(first.healthWarnings.some(x=>x.startsWith('long-task-pressure')));const base=makeBaseline(metrics,first.environmentFingerprint);const next=[{...sample('desktop-chromium',12,67,41,20.2),longTaskRatio:.25},sample('mobile-chromium',10,80,36,20.2)];const r=evaluateCandidate(policy,base,next);assert.equal(r.accepted,false);assert.ok(r.reasons.some(x=>x.startsWith('long-task-pressure')));});
+
