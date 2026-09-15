@@ -424,7 +424,7 @@ function rebuildChunk(c){
   for(const m of c.meshes){ worldGroup.remove(m); m.geometry.dispose(); } c.meshes=[];
   const solid={pos:[],col:[],idx:[],mat:[],uv:[]}, translucent={pos:[],col:[],idx:[]}, water={pos:[],col:[],idx:[],shore:[]}; const bx=c.cx*CHUNK,bz=c.cz*CHUNK;
   const localBlock=(lx,y,lz)=>(lx>=0&&lz>=0&&lx<CHUNK&&lz<CHUNK&&y>=0&&y<WORLD_Y)?c.get(lx,y,lz):blockAt(bx+lx,y,bz+lz);
-  for(let lx=0;lx<CHUNK;lx++)for(let lz=0;lz<CHUNK;lz++)for(let y=0;y<WORLD_Y;y++){
+  for(let lx=0;lx<CHUNK;lx++)for(let lz=0;lz<CHUNK;lz++){let top=WORLD_Y-1;while(top>0&&c.get(lx,top,lz)===BLOCK.AIR)top--;for(let y=0;y<=top;y++){
     const b=c.get(lx,y,lz); if(b===BLOCK.AIR) continue; const gx=bx+lx,gz=bz+lz;
     for(const f of FACE){ const nb=localBlock(lx+f.d[0],y+f.d[1],lz+f.d[2]); let visible=false;
       if(b===BLOCK.WATER) visible=nb!==BLOCK.WATER&&nb===BLOCK.AIR;
@@ -432,7 +432,7 @@ function rebuildChunk(c){
       else visible=!isOccluding(nb)||BLOCKS[nb]?.alpha!==undefined;
       if(!visible) continue; const dst=b===BLOCK.WATER?water:(BLOCKS[b]?.alpha!==undefined?translucent:solid); const ao=b===BLOCK.WATER?null:faceCornerAO(lx,y,lz,f,localBlock); const shore=(b===BLOCK.WATER&&f.d[1]===1)?waterShoreAt(lx,y,lz,localBlock):0; pushFace(dst,lx,y,lz,f,BLOCKS[b].color,ao,shore,b);
     }
-  }
+  }}
   for(const [data,mat] of [[solid,solidMaterial],[translucent,transparentMaterial],[water,waterMaterial]]) if(data.idx.length){ const m=new THREE.Mesh(makeGeometry(data),mat);m.position.set(bx,0,bz);m.receiveShadow=true;m.castShadow=mat===solidMaterial;c.meshes.push(m);worldGroup.add(m); }
 }
 function setBlockLocal(x,y,z,b){
@@ -440,6 +440,7 @@ function setBlockLocal(x,y,z,b){
   overrides.set(key3(x,y,z),safe); const cx=floorDiv(x,CHUNK),cz=floorDiv(z,CHUNK),c=chunks.get(key2(cx,cz)); if(c){c.set(mod(x,CHUNK),y,mod(z,CHUNK),safe);rebuildChunk(c);} const lx=mod(x,CHUNK),lz=mod(z,CHUNK); if(lx===0)chunks.get(key2(cx-1,cz))&&rebuildChunk(chunks.get(key2(cx-1,cz))); if(lx===15)chunks.get(key2(cx+1,cz))&&rebuildChunk(chunks.get(key2(cx+1,cz))); if(lz===0)chunks.get(key2(cx,cz-1))&&rebuildChunk(chunks.get(key2(cx,cz-1))); if(lz===15)chunks.get(key2(cx,cz+1))&&rebuildChunk(chunks.get(key2(cx,cz+1))); refreshGoldenVegetation(); return true;
 }
 
+let goldenVegetationPopulation=0;
 function refreshGoldenVegetation(){
   const director=window.GoldenQualityDirector?.forRenderer?.(renderer);
   const vegetationLimit=Math.min(GOLDEN_VEGETATION_MAX,Math.max(160,Number(director?.getBudget?.('vegetation')||GOLDEN_VEGETATION_MAX)));
@@ -449,9 +450,9 @@ function refreshGoldenVegetation(){
     if(h<=SEA||![BLOCK.GRASS,BLOCK.SAND,BLOCK.SNOW].includes(top)||(top===BLOCK.GRASS?(seed*4294967295>>>0&3)===0:((seed*4294967295>>>0)&7)!==0))continue;
     const bits=(seed*4294967295)>>>0,ox=((bits>>>4)&15)/15-.5,oz=((bits>>>9)&15)/15-.5,scale=.72+((bits>>>14)&15)/28;
     dummy.position.set(gx+.5+ox*.65,h+1.24,gz+.5+oz*.65);dummy.rotation.set(0,(bits%628)/100,0);dummy.scale.set(1,scale,1);dummy.updateMatrix();goldenVegetationMesh.setMatrixAt(count,dummy.matrix);
-    color.setHSL(biome==='desert'?.12:biome==='snow'?.31:.25+((bits>>>19)&7)*.004,biome==='desert'?.34:biome==='snow'?.18:.42,biome==='snow'?.62:.34+((bits>>>23)&7)*.012);goldenVegetationMesh.setColorAt(count,color);if(++count>=vegetationLimit)break outer;
+    color.setHSL(biome==='desert'?.12:biome==='snow'?.31:.25+((bits>>>19)&7)*.004,biome==='desert'?.34:biome==='snow'?.18:.42,biome==='snow'?.62:.34+((bits>>>23)&7)*.012);goldenVegetationMesh.setColorAt(count,color);if(++count>=GOLDEN_VEGETATION_MAX)break outer;
   }
-  goldenVegetationMesh.count=count;goldenVegetationMesh.instanceMatrix.needsUpdate=true;if(goldenVegetationMesh.instanceColor)goldenVegetationMesh.instanceColor.needsUpdate=true;
+  goldenVegetationPopulation=count;goldenVegetationMesh.count=Math.min(count,vegetationLimit);goldenVegetationMesh.instanceMatrix.needsUpdate=true;if(goldenVegetationMesh.instanceColor)goldenVegetationMesh.instanceColor.needsUpdate=true;
 }
 
 function yieldChunkBuild(){return new Promise(resolve=>{if(typeof requestIdleCallback==='function')requestIdleCallback(()=>resolve(),{timeout:12});else requestAnimationFrame(()=>resolve());});}
@@ -463,10 +464,11 @@ async function materializeChunkBatch(need, by=new Map()){
     if((i+1)%slice===0&&i+1<need.length)await yieldChunkBuild();
   }
 }
-function goldenViewRadius(){const d=window.GoldenQualityDirector?.forRenderer?.(renderer);if(!d)return VIEW;const t=d.telemetry?.()||{},budget=Math.max(1,Math.round(Number(d.getBudget?.('viewChunks')||VIEW)));const pressured=Number(t.pressure||0)>1.05||Number(t.p95Ms||0)>Math.max(24,1000/Math.max(1,Number(t.targetFps||45))*1.5);return Math.max(1,Math.min(VIEW,budget-(pressured?1:0)));}
+const goldenStreamingStartedAt=performance.now();
+function goldenViewRadius(){const age=performance.now()-goldenStreamingStartedAt,bootstrap=age<12000?1:(age<30000?2:VIEW),d=window.GoldenQualityDirector?.forRenderer?.(renderer);if(!d)return Math.min(VIEW,bootstrap);const t=d.telemetry?.()||{},budget=Math.max(1,Math.round(Number(d.getBudget?.('viewChunks')||VIEW)));const pressured=Number(t.pressure||0)>1.05||Number(t.p95Ms||0)>Math.max(24,1000/Math.max(1,Number(t.targetFps||45))*1.5);return Math.max(1,Math.min(VIEW,bootstrap,budget-(pressured?1:0)));}
 async function loadNeededChunks(){
   if(streamBusy) return; const pcx=floorDiv(player.pos.x,CHUNK),pcz=floorDiv(player.pos.z,CHUNK),need=[],viewRadius=goldenViewRadius();
-  outer: for(let r=0;r<=viewRadius;r++) for(let dx=-r;dx<=r;dx++) for(let dz=-r;dz<=r;dz++){ if(Math.max(Math.abs(dx),Math.abs(dz))!==r)continue;const cx=pcx+dx,cz=pcz+dz,k=key2(cx,cz);if(!chunks.has(k)&&!requested.has(k)){requested.add(k);need.push({x:cx,z:cz});if(need.length>=8)break outer;} }
+  outer: for(let r=0;r<=viewRadius;r++) for(let dx=-r;dx<=r;dx++) for(let dz=-r;dz<=r;dz++){ if(Math.max(Math.abs(dx),Math.abs(dz))!==r)continue;const cx=pcx+dx,cz=pcz+dz,k=key2(cx,cz);if(!chunks.has(k)&&!requested.has(k)){requested.add(k);need.push({x:cx,z:cz});if(need.length>=2)break outer;} }
   if(!need.length)return; streamBusy=true;
   try{
     if(backendMode==='offline') await materializeChunkBatch(need);
@@ -482,6 +484,8 @@ async function loadNeededChunks(){
   refreshGoldenVegetation();
 }
 
+let lastGoldenLodPolicy=0;
+function updateGoldenLodPolicy(now){if(now-lastGoldenLodPolicy<700)return;lastGoldenLodPolicy=now;const director=window.GoldenQualityDirector?.forRenderer?.(renderer),t=director?.telemetry?.()||{},quality=Number(t.quality||1),pcx=floorDiv(player.pos.x,CHUNK),pcz=floorDiv(player.pos.z,CHUNK),shadowRadius=quality>.78?1:0;for(const c of chunks.values()){const distance=Math.max(Math.abs(c.cx-pcx),Math.abs(c.cz-pcz));for(const m of c.meshes)if(m.material===solidMaterial)m.castShadow=distance<=shadowRadius;}const vegetationBudget=Math.min(GOLDEN_VEGETATION_MAX,Math.max(120,Number(director?.getBudget?.('vegetation')||GOLDEN_VEGETATION_MAX)));goldenVegetationMesh.count=Math.min(goldenVegetationPopulation,vegetationBudget);if(goldenWaterUniforms?.goldenWaterStrength)goldenWaterUniforms.goldenWaterStrength.value=(matchMedia('(pointer:coarse)').matches?.48:.68)+quality*(matchMedia('(pointer:coarse)').matches?.22:.32);}
 const player={pos:new THREE.Vector3(0,35,0),vel:new THREE.Vector3(),yaw:0,pitch:0,onGround:false,selected:0,id:'',name:'Player'};
 const keys=new Set(); let mobileMove={x:0,y:0},mobileLook={x:0,y:0}; let channel=null; let lastSave=0,lastNet=0; let started=false; let backendMode='online';
 function setOfflineMode(reason=''){
@@ -618,7 +622,7 @@ function updateTarget(){const h=rayVoxel();if(!h)return;targetEl.textContent=`${
 
 async function savePlayer(){if(backendMode!=='online')return;try{await api('player_save',{worldId:ACTIVE_WORLD_ID,position:{x:player.pos.x,y:player.pos.y,z:player.pos.z},yaw:player.yaw,pitch:player.pitch,selectedBlock:HOTBAR[player.selected]});}catch{} }
 function broadcastPlayer(now){if(!channel||now-lastNet<NET_INTERVAL)return;lastNet=now;channel.send({type:'broadcast',event:'player_state',payload:{id:player.id,name:player.name,x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw}});}
-let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(goldenWaterUniforms?.goldenWaterTime){goldenWaterUniforms.goldenWaterTime.value=now/1000;if(goldenWaterUniforms.goldenWaterSky&&scene.background?.isColor)goldenWaterUniforms.goldenWaterSky.value.copy(scene.background);}if(goldenVegetationUniforms?.goldenVegetationTime){goldenVegetationUniforms.goldenVegetationTime.value=now/1000;const q=window.GoldenQualityDirector?.forRenderer?.(renderer)?.state?.quality;goldenVegetationUniforms.goldenVegetationStrength.value=Math.max(.35,Math.min(1,Number(q)||1));}if(started){if(Math.abs(mobileLook.x)>.02||Math.abs(mobileLook.y)>.02){player.yaw-=mobileLook.x*2.05*dt;player.pitch=clamp(player.pitch-mobileLook.y*1.65*dt,-1.45,1.45);}physics(dt);updateScienceFx(now,dt);updateCanonEffects(now);loadNeededChunks();broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);renderer.render(scene,camera);}requestAnimationFrame(loop);
+let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(goldenWaterUniforms?.goldenWaterTime){goldenWaterUniforms.goldenWaterTime.value=now/1000;if(goldenWaterUniforms.goldenWaterSky&&scene.background?.isColor)goldenWaterUniforms.goldenWaterSky.value.copy(scene.background);}if(goldenVegetationUniforms?.goldenVegetationTime){goldenVegetationUniforms.goldenVegetationTime.value=now/1000;const q=window.GoldenQualityDirector?.forRenderer?.(renderer)?.state?.quality;goldenVegetationUniforms.goldenVegetationStrength.value=Math.max(.35,Math.min(1,Number(q)||1));}if(started){if(Math.abs(mobileLook.x)>.02||Math.abs(mobileLook.y)>.02){player.yaw-=mobileLook.x*2.05*dt;player.pitch=clamp(player.pitch-mobileLook.y*1.65*dt,-1.45,1.45);}physics(dt);updateScienceFx(now,dt);updateCanonEffects(now);loadNeededChunks();updateGoldenLodPolicy(now);broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);renderer.render(scene,camera);}requestAnimationFrame(loop);
 
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});addEventListener('beforeunload',()=>savePlayer());
 setupDesktop();setupMobile();buildHotbar();

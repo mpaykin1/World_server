@@ -60,3 +60,16 @@ test('voxel material atlas V2 supplies one shared texture and per-face UV tiles'
   assert.match(src,/arr\.uv\.push/);
   assert.match(src,/g\.setAttribute\('uv'/);
 });
+test('runtime LOD policy cuts distant shadow work and adapts vegetation/water',()=>{
+  assert.match(src,/function updateGoldenLodPolicy\(/);
+  assert.match(src,/shadowRadius=quality>\.78\?1:0/);
+  assert.match(src,/goldenVegetationPopulation/);
+  assert.match(src,/goldenWaterStrength\.value=/);
+});
+
+test('startup streaming ramps detail without blocking first playable seconds',()=>{
+  assert.match(src,/goldenStreamingStartedAt=performance\.now\(\)/);
+  assert.match(src,/age<12000\?1:\(age<30000\?2:VIEW\)/);
+  assert.match(src,/need\.length>=2/);
+  assert.match(src,/while\(top>0&&c\.get\(lx,top,lz\)===BLOCK\.AIR\)top--/);
+});

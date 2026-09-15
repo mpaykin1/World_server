@@ -276,3 +276,12 @@ test('adaptive weather VFX exposes rain, storm and wind without shadowed flash l
   assert.match(src,/flash\.castShadow=false/);
   assert.match(src,/weather:\{mode:a\.weather\?\.mode/);
 });
+test('cinematic post grade and particle draw ranges stay quality-budgeted',()=>{
+  const src=fs.readFileSync(path.join(__dirname,'..','shared','golden-painting-atmosphere.js'),'utf8');
+  assert.match(src,/function ensureCinematicPost\(/);
+  assert.match(src,/goldenCinematicPost/);
+  assert.match(src,/cinematicPost:\{enabled:Boolean\(a\.cinematicPost\)\}/);
+  assert.match(src,/particleCap=Math\.max\(32,Number\(a\.qualityDirector\?\.getBudget\?\.\('particles'\)/);
+  assert.match(src,/cinematicParticles\.geometry\.setDrawRange/);
+  assert.match(src,/weatherFx\.geometry\.setDrawRange/);
+});

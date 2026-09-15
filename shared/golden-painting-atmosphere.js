@@ -457,6 +457,12 @@ ${marker}`);
       a.importanceShadowLights=(a.importanceShadowLights||0)+1;
     }
   }
+  function ensureCinematicPost(a){
+    if(a.cinematicPost||a.lowPower||!global.document)return;
+    let el=document.getElementById('goldenCinematicPost');
+    if(!el){el=document.createElement('div');el.id='goldenCinematicPost';el.setAttribute('aria-hidden','true');el.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:2;background:radial-gradient(circle at 50% 42%,transparent 46%,rgba(4,8,18,.42) 100%),linear-gradient(180deg,rgba(255,190,120,.08),transparent 36%,rgba(7,14,30,.08));opacity:.24;transition:opacity .35s linear';document.body.appendChild(el);}
+    a.cinematicPost=el;
+  }
   function registerThree(options){
     if(!options?.THREE||!options?.scene||!options?.renderer)return null;
     for(const old of adapters)if(old.scene===options.scene)return old;
@@ -473,7 +479,7 @@ ${marker}`);
     if('toneMapping'in options.renderer&&options.THREE.ACESFilmicToneMapping!==undefined)options.renderer.toneMapping=options.THREE.ACESFilmicToneMapping;
     if(options.renderer.shadowMap?.enabled&&options.THREE.PCFSoftShadowMap!==undefined)options.renderer.shadowMap.type=options.THREE.PCFSoftShadowMap;
     options.renderer.domElement?.setAttribute('data-golden-three','1');if(global.document&&options.worldId!=='world-sharabass')document.body.dataset.goldenThreeWorld='1';adapters.add(a);ensureThreeNight(a);
-    options.scene.traverse(o=>{if(o.isLight)a.lights.push(o);});patchSceneMaterials(a);ensureCinematicSky(a);ensureCinematicParticles(a);ensureWeather(a);
+    options.scene.traverse(o=>{if(o.isLight)a.lights.push(o);});patchSceneMaterials(a);ensureCinematicSky(a);ensureCinematicParticles(a);ensureWeather(a);ensureCinematicPost(a);
     if(!a.lowPower){
       a.lutTexture=buildProceduralLut(a);
       ensureLightProbe(a);
@@ -498,6 +504,10 @@ ${marker}`);
     for(const u of a.windUniforms)u.value=((now||0)/1000)*(a.weatherWindScale||1);
     updateImportanceShadows(a,camera);
     updateWeather(a,now,camera);
+    if(a.cinematicPost){const q=Number(a.qualityDirector?.telemetry?.().quality||1);a.cinematicPost.style.opacity=String(clamp((.17+s.warmth*.10+(s.phase==='night'?.05:0))*q,0,.34));}
+    const particleCap=Math.max(32,Number(a.qualityDirector?.getBudget?.('particles')||1400));
+    if(a.cinematicParticles?.geometry?.setDrawRange)a.cinematicParticles.geometry.setDrawRange(0,Math.min(a.cinematicParticleCount||0,Math.max(24,Math.round(particleCap*.12))));
+    if(a.weatherFx?.geometry?.setDrawRange)a.weatherFx.geometry.setDrawRange(0,Math.min(a.weatherParticleCount||0,Math.max(48,Math.round(particleCap*.22))));
     if(a.cinematicSky&&camera){
       a.cinematicSky.position.copy(camera.position);const t=(now||0)/1000;
       const cloudOpacity=s.phase==='night'?.045:(s.phase==='sunset'||s.phase==='sunrise'?.22:.13);
@@ -548,7 +558,7 @@ ${marker}`);
     if(started||!global.document)return;
     started=true;ensureLayer();global.requestAnimationFrame?.(tick);
   }
-  function diagnostics(){return{phase:currentState().phase,cycleAlive:true,adapters:[...adapters].map(a=>({worldId:a.worldId||'unknown',patchedMaterials:a.patchedMaterials||0,pbrMaterials:a.pbrMaterials||0,surfaceDetailMaterials:a.surfaceDetailMaterials||0,normalMaps:a.normalMaps||0,roughnessMaps:a.roughnessMaps||0,textureTunes:a.textureTunes||0,maxAnisotropy:a.maxAnisotropy||1,surfaceDetailEnabled:!a.lowPower,aces:true,exposureAdaptation:true,softShadows:Boolean(a.renderer?.shadowMap?.enabled),importanceShadows:Boolean(a.importanceShadowLights),importanceShadowUpdates:a.importanceShadowLights||0,depthGrading:true,foreground:{saturation:1.34,contrast:1.22},background:{saturation:.56,contrast:.62,atmosphereTint:true},lut:{enabled:Boolean(a.lutTexture),size:a.lutTexture?LUT_SIZE:0,materials:a.lutMaterials||0,builds:a.lutBuilds||0},lightProbe:{enabled:Boolean(a.lightProbe),approxBands:a.lightProbe?2:0},environment:{enabled:Boolean(a.environmentTexture),phase:a.environmentPhase,builds:a.environmentBuilds||0},cinematicSky:{enabled:Boolean(a.cinematicSky),clouds:a.cinematicClouds?.length||0,godRays:a.godRays?.length||0},ambientParticles:{enabled:Boolean(a.cinematicParticles),count:a.cinematicParticleCount||0},weather:{mode:a.weather?.mode||'clear',intensity:a.weather?.intensity||0,particles:a.weatherParticleCount||0},vegetationWind:{enabled:a.windUniforms.size>0,uniforms:a.windUniforms.size},shadowBias:{enabled:[...a.lights].some(o=>o?.isDirectionalLight&&o.castShadow&&Number.isFinite(o.shadow?.bias))},offscreenCanvas:{supported:typeof OffscreenCanvas!=='undefined',used:a.offscreenCanvasUsed||0,textures:a.canvasTexturesBuilt||0},surfaceWorker:{supported:typeof global.Worker!=='undefined'&&typeof OffscreenCanvas!=='undefined',active:Boolean(a.surfaceWorker),requests:a.surfaceWorkerRequestsCount||0,completed:a.surfaceWorkerCompleted||0,fallbacks:a.surfaceWorkerFallbacks||0},qualityDirector:a.qualityDirector?.telemetry?.()||null,assetCodec:(a.assetCodec&&typeof a.assetCodec.diagnostics==='function')?a.assetCodec.diagnostics():null}))};}
+  function diagnostics(){return{phase:currentState().phase,cycleAlive:true,adapters:[...adapters].map(a=>({worldId:a.worldId||'unknown',patchedMaterials:a.patchedMaterials||0,pbrMaterials:a.pbrMaterials||0,surfaceDetailMaterials:a.surfaceDetailMaterials||0,normalMaps:a.normalMaps||0,roughnessMaps:a.roughnessMaps||0,textureTunes:a.textureTunes||0,maxAnisotropy:a.maxAnisotropy||1,surfaceDetailEnabled:!a.lowPower,aces:true,exposureAdaptation:true,softShadows:Boolean(a.renderer?.shadowMap?.enabled),importanceShadows:Boolean(a.importanceShadowLights),importanceShadowUpdates:a.importanceShadowLights||0,depthGrading:true,foreground:{saturation:1.34,contrast:1.22},background:{saturation:.56,contrast:.62,atmosphereTint:true},lut:{enabled:Boolean(a.lutTexture),size:a.lutTexture?LUT_SIZE:0,materials:a.lutMaterials||0,builds:a.lutBuilds||0},lightProbe:{enabled:Boolean(a.lightProbe),approxBands:a.lightProbe?2:0},environment:{enabled:Boolean(a.environmentTexture),phase:a.environmentPhase,builds:a.environmentBuilds||0},cinematicSky:{enabled:Boolean(a.cinematicSky),clouds:a.cinematicClouds?.length||0,godRays:a.godRays?.length||0},cinematicPost:{enabled:Boolean(a.cinematicPost)},ambientParticles:{enabled:Boolean(a.cinematicParticles),count:a.cinematicParticleCount||0},weather:{mode:a.weather?.mode||'clear',intensity:a.weather?.intensity||0,particles:a.weatherParticleCount||0},vegetationWind:{enabled:a.windUniforms.size>0,uniforms:a.windUniforms.size},shadowBias:{enabled:[...a.lights].some(o=>o?.isDirectionalLight&&o.castShadow&&Number.isFinite(o.shadow?.bias))},offscreenCanvas:{supported:typeof OffscreenCanvas!=='undefined',used:a.offscreenCanvasUsed||0,textures:a.canvasTexturesBuilt||0},surfaceWorker:{supported:typeof global.Worker!=='undefined'&&typeof OffscreenCanvas!=='undefined',active:Boolean(a.surfaceWorker),requests:a.surfaceWorkerRequestsCount||0,completed:a.surfaceWorkerCompleted||0,fallbacks:a.surfaceWorkerFallbacks||0},qualityDirector:a.qualityDirector?.telemetry?.()||null,assetCodec:(a.assetCodec&&typeof a.assetCodec.diagnostics==='function')?a.assetCodec.diagnostics():null}))};}
   const api={STANDARD,PHASE_ORDER:ORDER,PALETTES:P,phaseAt,getState,currentState,registerThree,setWeather,start,diagnostics};
   global.GoldenPaintingAtmosphere=api;
   if(typeof module!=='undefined'&&module.exports)module.exports=api;
