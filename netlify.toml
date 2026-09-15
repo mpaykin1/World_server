@@ -1,0 +1,8 @@
+# Netlify compatibility for the canonical World_server static entrypoint.
+# Vercel uses vercel.json for the same root redirect; keep both hosts aligned.
+
+[[redirects]]
+  from = "/"
+  to = "/apps/catalog/"
+  status = 302
+  force = true
