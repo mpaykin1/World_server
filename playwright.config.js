@@ -1,6 +1,7 @@
 const { defineConfig, devices } = require('@playwright/test');
 
 const externalBaseURL = process.env.PLAYWRIGHT_BASE_URL || '';
+const systemChromiumChannel = process.env.PLAYWRIGHT_SYSTEM_CHANNEL || undefined;
 
 module.exports = defineConfig({
   testDir: 'e2e',
@@ -21,9 +22,9 @@ module.exports = defineConfig({
     timeout: 20000,
   },
   projects: [
-    { name:'desktop-chromium', use:{...devices['Desktop Chrome']} },
-    { name:'mobile-chromium', use:{...devices['Pixel 7']} },
+    { name:'desktop-chromium', use:{...devices['Desktop Chrome'], ...(systemChromiumChannel?{channel:systemChromiumChannel}:{})} },
+    { name:'mobile-chromium', use:{...devices['Pixel 7'], ...(systemChromiumChannel?{channel:systemChromiumChannel}:{})} },
     { name:'mobile-webkit', use:{...devices['iPhone 13']} },
-    { name:'tablet-chromium', use:{...devices['iPad (gen 7)'], browserName:'chromium'} }
+    { name:'tablet-chromium', use:{...devices['iPad (gen 7)'], browserName:'chromium', ...(systemChromiumChannel?{channel:systemChromiumChannel}:{})} }
   ]
 });
