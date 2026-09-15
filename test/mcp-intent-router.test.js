@@ -8,6 +8,14 @@ test('the exact failing E2E prompt classifies as filesystem-read', () => {
   assert.equal(c, 'filesystem-read');
 });
 
+test('coordinator read-only verifier is not stolen by incidental git/PR wording', () => {
+  const task = 'Independent read-only verification slice for master goal: inspect exact PR branch ownership and merge evidence. Read relevant World_server files and report blockers. Do not modify files.';
+  const r = route(task);
+  assert.equal(r.capabilityClass, 'filesystem-read');
+  assert.ok(r.allowedTools.includes('read_text_file'));
+  assert.ok(r.allowedTools.includes('search_files'));
+});
+
 test('filesystem-read allowlist never contains document-summarizer', () => {
   assert.ok(!PROFILES['filesystem-read'].includes('document-summarizer'));
 });
