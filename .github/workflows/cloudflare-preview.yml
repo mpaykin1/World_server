@@ -54,24 +54,9 @@ jobs:
       - name: Verify exact-head Cloudflare playable delivery
         if: steps.authority.outputs.configured == 'true'
         run: npm run delivery:verify -- "${{ steps.deploy.outputs.url }}/apps/voxel-world/" --expected-sha="$GITHUB_SHA" --game --inventory-id=voxel-world
-      - name: Verify Netlify PR fallback when Cloudflare credentials are unavailable
-        if: ${{ steps.authority.outputs.configured != 'true' && github.event_name == 'pull_request' }}
+      - name: Fail closed when Cloudflare credentials are unavailable
+        if: steps.authority.outputs.configured != 'true'
         shell: bash
         run: |
-          set -euo pipefail
-          URL="https://deploy-preview-${{ github.event.pull_request.number }}--world-server.netlify.app"
-          for i in {1..18}; do
-            if curl -fsS "$URL/apps/voxel-world/" >/dev/null; then break; fi
-            sleep 5
-          done
-          curl -fsS "$URL/apps/voxel-world/" >/dev/null
-          curl -fsS -o /tmp/golden-atmosphere.js "$URL/shared/golden-painting-atmosphere.js"
-          grep -q "graphicsMode" /tmp/golden-atmosphere.js
-          curl -fsS -o /tmp/survival-client.js "$URL/apps/survival/client.js"
-          grep -q "SurvivalOfflineRender" /tmp/survival-client.js
-          curl -fsS -o /tmp/sharabass.html "$URL/apps/world-sharabass/"
-          grep -q "SharabassOfflineRender" /tmp/sharabass.html
-          PLAYWRIGHT_BASE_URL="$URL" npx playwright test e2e/golden-world-fleet.spec.js --project=desktop-chromium --project=mobile-chromium
-      - name: Report unconfigured manual run
-        if: ${{ steps.authority.outputs.configured != 'true' && github.event_name != 'pull_request' }}
-        run: echo "Cloudflare credentials unavailable and no PR preview exists; verification skipped."
+          echo "BLOCKED: Cloudflare credentials are required for Cloudflare-critical exact-head verification." >&2
+          exit 1

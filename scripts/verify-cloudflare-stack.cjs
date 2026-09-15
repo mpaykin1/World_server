@@ -17,7 +17,7 @@ async function verifyCloudflareStack(origin, expectedSha) {
     if (!response.ok || text.length < 120) throw new Error(`${pathname} failed: HTTP ${response.status}`);
     results.push({ pathname, status: response.status });
   }
-  for (const pathname of ['/api/apps?all=1', '/api/worlds', '/api/world-factory?limit=1', '/api/canon?limit=1']) {
+  for (const pathname of ['/api/apps?all=1', '/api/worlds', '/api/world-factory?limit=1', '/api/canon?worldId=voxel-world&limit=1']) {
     const { response, body } = await request(origin, pathname);
     if (!response.ok || !body) throw new Error(`${pathname} failed: HTTP ${response.status}`);
     results.push({ pathname, status: response.status });
