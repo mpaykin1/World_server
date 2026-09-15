@@ -20,4 +20,43 @@ test('near-field voxel vegetation is one capped InstancedMesh',()=>{
   assert.match(src,/refreshGoldenVegetation\(\)/);
   assert.match(src,/vegetationInstances:goldenVegetationMesh\.count/);
   assert.match(src,/GOLDEN_VEGETATION_MAX=matchMedia\('\(pointer:coarse\)'\)\.matches\?420:1250/);
+});test('voxel material V2 adds block-aware procedural detail without extra draw calls',()=>{
+  assert.match(src,/goldenVoxelMaterialV2=true/);
+  assert.match(src,/attribute float goldenMaterial/);
+  assert.match(src,/gvmacro=goldenVoxelHash/);
+  assert.match(src,/metalnessFactor=max\(metalnessFactor,.42\)/);
+  assert.match(src,/setAttribute\('goldenMaterial'/);
+});
+
+test('chunk streaming can contract under graphics pressure',()=>{
+  assert.match(src,/function goldenViewRadius\(\)/);
+  assert.match(src,/getBudget\?\.\('viewChunks'\)/);
+  assert.match(src,/pressure\|\|0\)>1\.05/);
+  assert.match(src,/viewRadius=goldenViewRadius\(\)/);
+});
+
+
+test('vegetation V2 uses crossed blades and vertex-only wind in one instanced draw',()=>{
+  assert.match(src,/goldenVegetationGeometry=new THREE\.BufferGeometry\(\)/);
+  assert.match(src,/goldenVegetationV2=true/);
+  assert.match(src,/goldenVegetationTime/);
+  assert.match(src,/instanceMatrix\[3\]\.x/);
+  assert.match(src,/side:THREE\.DoubleSide,vertexColors:true/);
+});
+
+test('chunk streaming yields between rebuild slices to avoid long main-thread stalls',()=>{
+  assert.match(src,/function yieldChunkBuild\(\)/);
+  assert.match(src,/requestIdleCallback/);
+  assert.match(src,/async function materializeChunkBatch/);
+  assert.match(src,/await yieldChunkBuild\(\)/);
+  assert.match(src,/await materializeChunkBatch\(need/);
+});
+
+test('voxel material atlas V2 supplies one shared texture and per-face UV tiles',()=>{
+  assert.match(src,/VOXEL_ATLAS_COLS=4/);
+  assert.match(src,/createVoxelMaterialAtlas\(\)/);
+  assert.match(src,/goldenVoxelAtlasV2=true/);
+  assert.match(src,/map:voxelMaterialAtlas/);
+  assert.match(src,/arr\.uv\.push/);
+  assert.match(src,/g\.setAttribute\('uv'/);
 });

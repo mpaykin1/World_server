@@ -93,7 +93,8 @@
   function ensureThreeNight(a){
     if(a.nightGroup||!a.THREE)return;
     const T=a.THREE,r=seeded(0x51a7c0de),g=new T.Group();g.name='GoldenNightSky';g.frustumCulled=false;
-    const n=global.matchMedia?.('(pointer:coarse)').matches?320:620;
+    const particleBudget=Number(a.qualityDirector?.getBudget?.('particles')||(a.mobile?650:1400));
+    const n=Math.min(a.mobile?420:900,Math.max(180,Math.round(particleBudget*.45)));
     const p=new Float32Array(n*3),co=new Float32Array(n*3);
     for(let i=0;i<n;i++){
       const rr=130+r()*150,ang=r()*Math.PI*2,y=38+r()*155;
@@ -112,13 +113,72 @@
       const m=new T.Line(geom,mat);m.position.set(-110+r()*220,65+r()*85,-120+r()*180);m.rotation.z=-.45;m.userData.speed=18+r()*23;meteors.add(m);
     }
     g.add(meteors);
-    const fn=global.matchMedia?.('(pointer:coarse)').matches?18:36,fp=new Float32Array(fn*3);
+    const fn=Math.min(a.mobile?28:56,Math.max(12,Math.round(particleBudget*.035))),fp=new Float32Array(fn*3);
     for(let i=0;i<fn;i++){fp[i*3]=(r()-.5)*34;fp[i*3+1]=1+r()*5;fp[i*3+2]=(r()-.5)*34;}
     const fg=new T.BufferGeometry();fg.setAttribute('position',new T.BufferAttribute(fp,3));
     const fireflies=new T.Points(fg,new T.PointsMaterial({size:.18,color:0xffef75,transparent:true,opacity:.78,depthWrite:false,blending:T.AdditiveBlending,fog:false,toneMapped:false}));g.add(fireflies);    const moonLight=new T.DirectionalLight(0xaad5ff,.9);moonLight.position.set(55,80,-45);moonLight.castShadow=false;g.add(moonLight);
     const wispA=new T.PointLight(0x82eaff,1.3,22,2);wispA.position.set(7,3,-5);wispA.castShadow=false;g.add(wispA);
     const wispB=new T.PointLight(0xffd27a,1.05,18,2);wispB.position.set(-8,2,6);wispB.castShadow=false;g.add(wispB);
     a.scene.add(g);a.nightGroup=g;a.stars=stars;a.meteors=meteors;a.fireflies=fireflies;a.moonLight=moonLight;a.wisps=[wispA,wispB];
+  }
+  function skyTexture(a,kind){
+    const key=`sky:${kind}`;if(a.proceduralMaps.has(key))return a.proceduralMaps.get(key);
+    const size=kind==='cloud'?128:64,made=makeSurfaceCanvas(size);if(!made)return null;
+    const ctx=made.canvas.getContext('2d');if(!ctx)return null;ctx.clearRect(0,0,size,size);
+    if(kind==='cloud'){
+      for(const [x,y,r,o] of [[.28,.56,.30,.58],[.48,.43,.38,.72],[.68,.57,.28,.52],[.52,.67,.34,.46]]){
+        const g=ctx.createRadialGradient(x*size,y*size,0,x*size,y*size,r*size);g.addColorStop(0,`rgba(255,255,255,${o})`);g.addColorStop(.55,`rgba(238,247,255,${o*.7})`);g.addColorStop(1,'rgba(220,236,255,0)');ctx.fillStyle=g;ctx.fillRect(0,0,size,size);
+      }
+    }else{
+      const g=ctx.createRadialGradient(size*.5,size*.5,0,size*.5,size*.5,size*.5);g.addColorStop(0,'rgba(255,252,220,1)');g.addColorStop(.18,'rgba(255,222,150,.95)');g.addColorStop(.55,'rgba(255,184,96,.32)');g.addColorStop(1,'rgba(255,160,80,0)');ctx.fillStyle=g;ctx.fillRect(0,0,size,size);
+    }
+    const tex=new a.THREE.CanvasTexture(made.canvas);tex.needsUpdate=true;a.proceduralMaps.set(key,tex);return tex;
+  }
+  function ensureCinematicSky(a){
+    if(a.cinematicSky||a.lowPower||!a.THREE?.Sprite)return;
+    const T=a.THREE,g=new T.Group();g.name='GoldenCinematicSky';g.frustumCulled=false;
+    const cloudTex=skyTexture(a,'cloud'),sunTex=skyTexture(a,'sun');if(!cloudTex||!sunTex)return;
+    const clouds=[],count=a.mobile?3:6;
+    for(let i=0;i<count;i++){const m=new T.SpriteMaterial({map:cloudTex,color:0xffffff,transparent:true,opacity:.13,depthWrite:false,fog:false});const sp=new T.Sprite(m);sp.position.set(-95+i*38,44+(i%3)*11,-105-(i%2)*35);sp.scale.set(58+(i%2)*20,20+(i%3)*4,1);sp.userData.baseX=sp.position.x;g.add(sp);clouds.push(sp);}
+    const sun=new T.Sprite(new T.SpriteMaterial({map:sunTex,color:0xffd899,transparent:true,opacity:.9,depthWrite:false,fog:false,blending:T.AdditiveBlending}));sun.position.set(82,62,-135);sun.scale.set(34,34,1);g.add(sun);
+    const rays=[];for(let i=0;i<3;i++){const r=new T.Sprite(new T.SpriteMaterial({map:sunTex,color:0xffd5a0,transparent:true,opacity:.09,depthWrite:false,fog:false,blending:T.AdditiveBlending}));r.position.set(70+i*9,36-i*6,-118-i*4);r.scale.set(24+i*10,92-i*12,1);g.add(r);rays.push(r);}
+    a.scene.add(g);a.cinematicSky=g;a.cinematicClouds=clouds;a.sunSprite=sun;a.godRays=rays;
+  }
+  function ensureCinematicParticles(a){
+    if(a.cinematicParticles||a.lowPower||!a.THREE?.Points)return;
+    const T=a.THREE,r=seeded(0xc1a0f17),budget=Number(a.qualityDirector?.getBudget?.('particles')||(a.mobile?650:1400));
+    const count=Math.min(a.mobile?120:260,Math.max(48,Math.round(budget*.12))),p=new Float32Array(count*3),c=new Float32Array(count*3);
+    for(let i=0;i<count;i++){p[i*3]=(r()-.5)*52;p[i*3+1]=(r()-.18)*14;p[i*3+2]=(r()-.5)*52;const warm=r()>.58;c[i*3]=warm?1:.72;c[i*3+1]=warm?.82:.9;c[i*3+2]=warm?.42:1;}
+    const g=new T.BufferGeometry();g.setAttribute('position',new T.BufferAttribute(p,3));g.setAttribute('color',new T.BufferAttribute(c,3));
+    const m=new T.PointsMaterial({size:a.mobile?.055:.075,vertexColors:true,transparent:true,opacity:.22,depthWrite:false,blending:T.AdditiveBlending,fog:true});
+    const pts=new T.Points(g,m);pts.name='GoldenAmbientParticles';pts.frustumCulled=false;a.scene.add(pts);a.cinematicParticles=pts;a.cinematicParticleCount=count;
+  }
+  function ensureWeather(a){
+    if(a.weatherFx||a.lowPower||!a.THREE?.Points)return;
+    const T=a.THREE,r=seeded(0x9e3779b9),budget=Number(a.qualityDirector?.getBudget?.('particles')||(a.mobile?650:1400));
+    const count=Math.min(a.mobile?180:420,Math.max(80,Math.round(budget*.22))),pos=new Float32Array(count*3);
+    for(let i=0;i<count;i++){pos[i*3]=(r()-.5)*38;pos[i*3+1]=r()*26;pos[i*3+2]=(r()-.5)*38;}
+    const g=new T.BufferGeometry();g.setAttribute('position',new T.BufferAttribute(pos,3));
+    const m=new T.PointsMaterial({size:a.mobile?.055:.07,color:0xb9dcff,transparent:true,opacity:.0,depthWrite:false,fog:true});
+    m.onBeforeCompile=(shader)=>{shader.uniforms.goldenWeatherTime={value:0};shader.uniforms.goldenWeatherIntensity={value:0};a.weatherUniforms=shader.uniforms;shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nuniform float goldenWeatherTime;\nuniform float goldenWeatherIntensity;');shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ntransformed.y=mod(position.y-goldenWeatherTime*15.0*goldenWeatherIntensity+30.0,26.0)-3.0;\ntransformed.x+=sin(position.y*.7+goldenWeatherTime*2.0)*.14*goldenWeatherIntensity;');};
+    const pts=new T.Points(g,m);pts.name='GoldenWeatherRain';pts.frustumCulled=false;pts.visible=false;a.scene.add(pts);
+    const flash=new T.PointLight(0xdcecff,0,95,2);flash.castShadow=false;a.scene.add(flash);
+    a.weatherFx=pts;a.weatherFlash=flash;a.weather={mode:'clear',intensity:0};a.weatherParticleCount=count;
+  }
+  function updateWeather(a,now,camera){
+    if(!a.weatherFx||!a.weather)return;
+    const mode=a.weather.mode,intensity=clamp(a.weather.intensity),storm=mode==='storm'||mode==='rain',wind=mode==='wind'||storm,t=(now||0)/1000;
+    a.weatherFx.visible=storm&&intensity>.02;a.weatherFx.material.opacity=storm?.34*intensity:0;
+    if(camera){a.weatherFx.position.copy(camera.position);a.weatherFx.position.y+=3;if(a.weatherFlash)a.weatherFlash.position.copy(camera.position).add(new a.THREE.Vector3(0,14,-8));}
+    if(a.weatherUniforms){a.weatherUniforms.goldenWeatherTime.value=t;a.weatherUniforms.goldenWeatherIntensity.value=storm?intensity:0;}
+    if(a.weatherFlash){const pulse=storm?Math.pow(clamp((Math.sin(t*.73)+Math.sin(t*1.91)*.35-.91)/.38),3):0;a.weatherFlash.intensity=pulse*5.5*intensity;}
+    if(storm&&a.scene.fog){if(a.scene.fog.isFog&&a.baseFog?.type==='linear'){a.scene.fog.near=a.baseFog.near*.62;a.scene.fog.far=a.baseFog.far*.66;}else if(a.scene.fog.isFogExp2&&a.baseFog?.type==='exp2')a.scene.fog.density=a.baseFog.density*1.55;}
+    a.weatherWindScale=wind?1+1.7*intensity:1;
+  }
+  function setWeather(worldId,mode='clear',intensity=1){
+    const allowed=new Set(['clear','rain','storm','wind']);if(!allowed.has(mode))mode='clear';let changed=0;
+    for(const a of adapters){if(worldId&&worldId!=='*'&&a.worldId!==worldId)continue;ensureWeather(a);a.weather={mode,intensity:mode==='clear'?0:clamp(Number(intensity)||1)};changed++;}
+    return changed;
   }
   function createPaintingUniforms(T){
     return{
@@ -145,6 +205,12 @@
     }
     return'default';
   }
+  function textureBytes(tex){
+    const image=tex?.image||tex?.source?.data,w=Number(image?.width||image?.videoWidth||0),h=Number(image?.height||image?.videoHeight||0);
+    if(!(w>0&&h>0))return 0;
+    const depth=Math.max(1,Number(image?.depth||1)),mips=tex.generateMipmaps===false?1:1.3333,compression=tex.isCompressedTexture?.36:1;
+    return Math.round(w*h*depth*4*mips*compression);
+  }
   function tuneTexture(a,tex){
     if(!tex?.isTexture||tex.isVideoTexture||tex.userData?.goldenTextureQuality)return;
     tex.userData=tex.userData||{};tex.userData.goldenTextureQuality=true;
@@ -154,6 +220,11 @@
       tex.generateMipmaps=true;
       if(T.LinearMipmapLinearFilter!==undefined)tex.minFilter=T.LinearMipmapLinearFilter;
       if(T.LinearFilter!==undefined)tex.magFilter=T.LinearFilter;
+    }
+    const bytes=textureBytes(tex);if(bytes&&a.qualityDirector&&!tex.userData.goldenMemoryTracked){
+      tex.userData.goldenMemoryTracked=true;const release=a.qualityDirector.registerResource?.(`texture:${tex.uuid||a.textureTunes}`,bytes);
+      if(typeof release==='function'){const dispose=tex.dispose?.bind(tex);tex.dispose=()=>{release();dispose?.();};}
+      a.trackedTextureBytes=(a.trackedTextureBytes||0)+bytes;a.trackedTextures=(a.trackedTextures||0)+1;
     }
     tex.needsUpdate=true;a.textureTunes=(a.textureTunes||0)+1;
   }
@@ -166,7 +237,7 @@
     if(!global.document)return null;
     const canvas=document.createElement('canvas');canvas.width=canvas.height=size;return{canvas,offscreen:false};
   }
-  function proceduralSurfaceTexture(a,semantic,kind){
+  function proceduralSurfaceTextureSync(a,semantic,kind){
     if(a.lowPower)return null;
     const key=`${semantic}:${kind}`;if(a.proceduralMaps.has(key))return a.proceduralMaps.get(key);
     const size=32,made=makeSurfaceCanvas(size);if(!made)return null;
@@ -185,11 +256,40 @@
     ctx.putImageData(image,0,0);const tex=new a.THREE.CanvasTexture(canvas);tex.wrapS=tex.wrapT=a.THREE.RepeatWrapping;tex.repeat?.set?.(2,2);tex.userData={...(tex.userData||{}),goldenProceduralSurface:true,semantic,kind,offscreenCanvas:offscreen};
     tuneTexture(a,tex);a.proceduralMaps.set(key,tex);a.canvasTexturesBuilt=(a.canvasTexturesBuilt||0)+1;if(offscreen)a.offscreenCanvasUsed=(a.offscreenCanvasUsed||0)+1;return tex;
   }
+  function ensureSurfaceWorker(a){
+    if(a.lowPower||a.surfaceWorkerFailed||typeof global.Worker==='undefined'||typeof OffscreenCanvas==='undefined')return null;
+    if(a.surfaceWorker)return a.surfaceWorker;
+    try{
+      const worker=new global.Worker('/shared/graphics/golden-surface-worker.js');
+      worker.onmessage=(event)=>{
+        const msg=event.data||{},req=a.surfaceWorkerRequests.get(msg.id);if(!req)return;
+        a.surfaceWorkerRequests.delete(msg.id);let tex=null;
+        if(!msg.error&&msg.buffer){
+          const data=new Uint8Array(msg.buffer);tex=new a.THREE.DataTexture(data,msg.size,msg.size,a.THREE.RGBAFormat);
+          tex.wrapS=tex.wrapT=a.THREE.RepeatWrapping;tex.repeat?.set?.(2,2);if(a.THREE.LinearFilter!==undefined){tex.minFilter=a.THREE.LinearFilter;tex.magFilter=a.THREE.LinearFilter;}
+          tex.userData={...(tex.userData||{}),goldenProceduralSurface:true,semantic:req.semantic,kind:req.kind,workerOffscreen:true};tex.needsUpdate=true;tuneTexture(a,tex);a.proceduralMaps.set(req.key,tex);a.surfaceWorkerCompleted++;
+        }
+        req.finish(tex);
+      };
+      worker.onerror=()=>{a.surfaceWorkerFailed=true;try{worker.terminate();}catch{}a.surfaceWorker=null;for(const req of a.surfaceWorkerRequests.values())req.finish(null);a.surfaceWorkerRequests.clear();};
+      a.surfaceWorker=worker;return worker;
+    }catch(e){a.surfaceWorkerFailed=true;return null;}
+  }
+  function requestProceduralSurfaceTexture(a,semantic,kind,callback){
+    if(a.lowPower)return callback(null);
+    const key=`${semantic}:${kind}`,cached=a.proceduralMaps.get(key);if(cached)return callback(cached);
+    const waiting=a.pendingSurfaceMaps.get(key);if(waiting){waiting.push(callback);return;}
+    const callbacks=[callback];a.pendingSurfaceMaps.set(key,callbacks);
+    const finish=(tex)=>{if(!tex){a.surfaceWorkerFallbacks++;tex=proceduralSurfaceTextureSync(a,semantic,kind);}a.pendingSurfaceMaps.delete(key);for(const cb of callbacks)try{cb(tex);}catch{}};
+    const worker=ensureSurfaceWorker(a);if(!worker)return finish(null);
+    const id=++a.surfaceWorkerRequestId,profile=SURFACE_PBR[semantic]||SURFACE_PBR.default;
+    a.surfaceWorkerRequests.set(id,{key,semantic,kind,finish});a.surfaceWorkerRequestsCount++;
+    try{worker.postMessage({id,size:32,semantic,kind,roughJitter:profile.roughJitter});}catch(e){a.surfaceWorkerRequests.delete(id);finish(null);}
+  }
   function attachProceduralMaps(a,o,m,semantic){
     if(a.lowPower||!o?.geometry?.getAttribute?.('uv'))return;
-    if(!m.normalMap){const tex=proceduralSurfaceTexture(a,semantic,'normal');if(tex){m.normalMap=tex;m.normalScale?.setScalar?.(.22);a.normalMaps=(a.normalMaps||0)+1;}}
-    if(!m.roughnessMap){const tex=proceduralSurfaceTexture(a,semantic,'roughness');if(tex){m.roughnessMap=tex;a.roughnessMaps=(a.roughnessMaps||0)+1;}}
-    m.needsUpdate=true;
+    if(!m.normalMap)requestProceduralSurfaceTexture(a,semantic,'normal',(tex)=>{if(tex&&!m.normalMap){m.normalMap=tex;m.normalScale?.setScalar?.(.22);a.normalMaps++;m.needsUpdate=true;}});
+    if(!m.roughnessMap)requestProceduralSurfaceTexture(a,semantic,'roughness',(tex)=>{if(tex&&!m.roughnessMap){m.roughnessMap=tex;a.roughnessMaps++;m.needsUpdate=true;}});
   }
   function tunePbrMaterial(a,o,m){
     if(!m||(!m.isMeshStandardMaterial&&!m.isMeshPhysicalMaterial)||m.transparent||Number(m.opacity??1)<.995)return null;
@@ -242,7 +342,7 @@
         shader.vertexShader=shader.vertexShader.replace('#include <worldpos_vertex>','#include <worldpos_vertex>\nvGoldenSurfacePos=(modelMatrix*vec4(transformed,1.0)).xyz;');
         shader.fragmentShader=shader.fragmentShader.replace('#include <common>',`#include <common>\nvarying vec3 vGoldenSurfacePos;\nuniform float goldenSurfaceVariation;\nuniform float goldenSurfaceNormal;\nuniform float goldenSurfaceRough;\nfloat goldenSurfaceHash(vec3 p){p=fract(p*.1031);p+=dot(p,p.yzx+33.33);return fract((p.x+p.y)*p.z);}`);
         const colorNeedle='#include <color_fragment>';
-        if(shader.fragmentShader.includes(colorNeedle))shader.fragmentShader=shader.fragmentShader.replace(colorNeedle,`${colorNeedle}\nfloat goldenSurfaceN=goldenSurfaceHash(floor(vGoldenSurfacePos*3.7));\ndiffuseColor.rgb*=1.0+(goldenSurfaceN-.5)*goldenSurfaceVariation;`);
+        if(shader.fragmentShader.includes(colorNeedle))shader.fragmentShader=shader.fragmentShader.replace(colorNeedle,`${colorNeedle}\nfloat goldenMacroN=goldenSurfaceHash(floor(vGoldenSurfacePos*.23));\nfloat goldenSurfaceN=goldenSurfaceHash(floor(vGoldenSurfacePos*3.7));\nfloat goldenMaterialVariation=(goldenSurfaceN-.5)*.72+(goldenMacroN-.5)*.28;\ndiffuseColor.rgb*=1.0+goldenMaterialVariation*goldenSurfaceVariation;`);
         const normalNeedle='#include <normal_fragment_maps>';
         if(shader.fragmentShader.includes(normalNeedle))shader.fragmentShader=shader.fragmentShader.replace(normalNeedle,`${normalNeedle}\nfloat goldenN0=goldenSurfaceHash(floor(vGoldenSurfacePos*5.3));\nfloat goldenNx=goldenSurfaceHash(floor(vGoldenSurfacePos*5.3)+vec3(1.,0.,0.));\nfloat goldenNy=goldenSurfaceHash(floor(vGoldenSurfacePos*5.3)+vec3(0.,1.,0.));\nnormal=normalize(normal+vec3(goldenNx-goldenN0,goldenNy-goldenN0,0.)*goldenSurfaceNormal);`);
         const roughNeedle='#include <roughnessmap_fragment>';
@@ -339,7 +439,7 @@ ${marker}`);
     const T=a.THREE,forward=new T.Vector3();camera.getWorldDirection?.(forward);forward.y=0;
     if(forward.lengthSq()<1e-5)forward.set(0,0,-1);else forward.normalize();
     const focus=new T.Vector3().copy(camera.position).addScaledVector(forward,a.mobile?8:16);
-    const extent=a.mobile?26:36;
+    const extent=Math.max(16,Number(a.qualityDirector?.getBudget?.('shadowDistance')||(a.mobile?26:36)));
     for(const light of a.lights){
       if(!light?.isDirectionalLight||!light.castShadow||!light.shadow?.camera)continue;
       if(!a.shadowBases.has(light)){
@@ -367,12 +467,13 @@ ${marker}`);
     const graphicsMode=new URLSearchParams(global.location?.search||'').get('goldenGraphics')||'auto';
     const forceHigh=graphicsMode==='high',cores=Number(global.navigator?.hardwareConcurrency||8),memory=Number(global.navigator?.deviceMemory||0);
     const lowPower=!forceHigh&&(graphicsMode==='low'||(memory>0&&memory<=2)||(cores<=2&&!mobile));
-    const a={...options,baseFog,mobile,lowPower,maxAnisotropy,currentExposure:Number(options.renderer.toneMappingExposure||1),proceduralMaps:new Map(),lightBases:new WeakMap(),shadowBases:new WeakMap(),lights:[],windUniforms:new Set(),nightGroup:null,patchedMaterials:0,pbrMaterials:0,textureTunes:0,normalMaps:0,roughnessMaps:0,surfaceDetailMaterials:0,importanceShadowLights:0,registeredAt:global.performance?.now?.()||0,lastMaterialAudit:-Infinity,paintingUniforms:createPaintingUniforms(options.THREE),lutTexture:null,lutBuilds:0,lightProbe:null,environmentTexture:null,environmentPhase:null,environmentBuilds:0,offscreenCanvasUsed:0,canvasTexturesBuilt:0,assetCodec:null};
+    const a={...options,baseFog,mobile,lowPower,maxAnisotropy,currentExposure:Number(options.renderer.toneMappingExposure||1),proceduralMaps:new Map(),lightBases:new WeakMap(),shadowBases:new WeakMap(),lights:[],windUniforms:new Set(),nightGroup:null,patchedMaterials:0,pbrMaterials:0,textureTunes:0,normalMaps:0,roughnessMaps:0,surfaceDetailMaterials:0,importanceShadowLights:0,registeredAt:global.performance?.now?.()||0,lastMaterialAudit:-Infinity,paintingUniforms:createPaintingUniforms(options.THREE),lutTexture:null,lutBuilds:0,lightProbe:null,environmentTexture:null,environmentPhase:null,environmentBuilds:0,offscreenCanvasUsed:0,canvasTexturesBuilt:0,surfaceWorkerRequests:new Map(),pendingSurfaceMaps:new Map(),surfaceWorkerRequestId:0,surfaceWorkerRequestsCount:0,surfaceWorkerCompleted:0,surfaceWorkerFallbacks:0,surfaceWorkerFailed:false,assetCodec:null};
+    a.qualityDirector=global.GoldenQualityDirector?.create?.({renderer:options.renderer,worldId:options.worldId})||null;
     if('outputColorSpace'in options.renderer&&options.THREE.SRGBColorSpace!==undefined)options.renderer.outputColorSpace=options.THREE.SRGBColorSpace;
     if('toneMapping'in options.renderer&&options.THREE.ACESFilmicToneMapping!==undefined)options.renderer.toneMapping=options.THREE.ACESFilmicToneMapping;
     if(options.renderer.shadowMap?.enabled&&options.THREE.PCFSoftShadowMap!==undefined)options.renderer.shadowMap.type=options.THREE.PCFSoftShadowMap;
     options.renderer.domElement?.setAttribute('data-golden-three','1');if(global.document&&options.worldId!=='world-sharabass')document.body.dataset.goldenThreeWorld='1';adapters.add(a);ensureThreeNight(a);
-    options.scene.traverse(o=>{if(o.isLight)a.lights.push(o);});patchSceneMaterials(a);
+    options.scene.traverse(o=>{if(o.isLight)a.lights.push(o);});patchSceneMaterials(a);ensureCinematicSky(a);ensureCinematicParticles(a);ensureWeather(a);
     if(!a.lowPower){
       a.lutTexture=buildProceduralLut(a);
       ensureLightProbe(a);
@@ -394,8 +495,17 @@ ${marker}`);
     updatePaintingUniforms(a,s,camera);
     updateLightProbe(a,s);
     updateEnvironment(a,s);
-    for(const u of a.windUniforms)u.value=(now||0)/1000;
+    for(const u of a.windUniforms)u.value=((now||0)/1000)*(a.weatherWindScale||1);
     updateImportanceShadows(a,camera);
+    updateWeather(a,now,camera);
+    if(a.cinematicSky&&camera){
+      a.cinematicSky.position.copy(camera.position);const t=(now||0)/1000;
+      const cloudOpacity=s.phase==='night'?.045:(s.phase==='sunset'||s.phase==='sunrise'?.22:.13);
+      a.cinematicClouds?.forEach((c,i)=>{c.material.opacity=cloudOpacity;c.position.x=c.userData.baseX+Math.sin(t*.018+i)*12;});
+      if(a.sunSprite){a.sunSprite.material.opacity=clamp(s.keyScale*.92);a.sunSprite.material.color.setHex(s.sun);}
+      a.godRays?.forEach((r,i)=>{r.material.opacity=clamp((s.warmth*.18+s.keyScale*.045)*(1-i*.16));r.material.color.setHex(s.sun);});
+    }
+    if(a.cinematicParticles&&camera){a.cinematicParticles.position.copy(camera.position);a.cinematicParticles.position.y-=2;a.cinematicParticles.rotation.y=(now||0)*.000018;a.cinematicParticles.material.opacity=s.phase==='night'?.34:(s.phase==='sunset'||s.phase==='sunrise'?.28:.20);}
     for(const o of a.lights){
       if(!a.lightBases.has(o))a.lightBases.set(o,{intensity:o.intensity,color:o.color?.getHex?.(),ground:o.groundColor?.getHex?.()});
       const b=a.lightBases.get(o);
@@ -438,8 +548,8 @@ ${marker}`);
     if(started||!global.document)return;
     started=true;ensureLayer();global.requestAnimationFrame?.(tick);
   }
-  function diagnostics(){return{phase:currentState().phase,cycleAlive:true,adapters:[...adapters].map(a=>({worldId:a.worldId||'unknown',patchedMaterials:a.patchedMaterials||0,pbrMaterials:a.pbrMaterials||0,surfaceDetailMaterials:a.surfaceDetailMaterials||0,normalMaps:a.normalMaps||0,roughnessMaps:a.roughnessMaps||0,textureTunes:a.textureTunes||0,maxAnisotropy:a.maxAnisotropy||1,surfaceDetailEnabled:!a.lowPower,aces:true,exposureAdaptation:true,softShadows:Boolean(a.renderer?.shadowMap?.enabled),importanceShadows:Boolean(a.importanceShadowLights),importanceShadowUpdates:a.importanceShadowLights||0,depthGrading:true,foreground:{saturation:1.34,contrast:1.22},background:{saturation:.56,contrast:.62,atmosphereTint:true},lut:{enabled:Boolean(a.lutTexture),size:a.lutTexture?LUT_SIZE:0,materials:a.lutMaterials||0,builds:a.lutBuilds||0},lightProbe:{enabled:Boolean(a.lightProbe),approxBands:a.lightProbe?2:0},environment:{enabled:Boolean(a.environmentTexture),phase:a.environmentPhase,builds:a.environmentBuilds||0},vegetationWind:{enabled:a.windUniforms.size>0,uniforms:a.windUniforms.size},shadowBias:{enabled:[...a.lights].some(o=>o?.isDirectionalLight&&o.castShadow&&Number.isFinite(o.shadow?.bias))},offscreenCanvas:{supported:typeof OffscreenCanvas!=='undefined',used:a.offscreenCanvasUsed||0,textures:a.canvasTexturesBuilt||0},assetCodec:(a.assetCodec&&typeof a.assetCodec.diagnostics==='function')?a.assetCodec.diagnostics():null}))};}
-  const api={STANDARD,PHASE_ORDER:ORDER,PALETTES:P,phaseAt,getState,currentState,registerThree,start,diagnostics};
+  function diagnostics(){return{phase:currentState().phase,cycleAlive:true,adapters:[...adapters].map(a=>({worldId:a.worldId||'unknown',patchedMaterials:a.patchedMaterials||0,pbrMaterials:a.pbrMaterials||0,surfaceDetailMaterials:a.surfaceDetailMaterials||0,normalMaps:a.normalMaps||0,roughnessMaps:a.roughnessMaps||0,textureTunes:a.textureTunes||0,maxAnisotropy:a.maxAnisotropy||1,surfaceDetailEnabled:!a.lowPower,aces:true,exposureAdaptation:true,softShadows:Boolean(a.renderer?.shadowMap?.enabled),importanceShadows:Boolean(a.importanceShadowLights),importanceShadowUpdates:a.importanceShadowLights||0,depthGrading:true,foreground:{saturation:1.34,contrast:1.22},background:{saturation:.56,contrast:.62,atmosphereTint:true},lut:{enabled:Boolean(a.lutTexture),size:a.lutTexture?LUT_SIZE:0,materials:a.lutMaterials||0,builds:a.lutBuilds||0},lightProbe:{enabled:Boolean(a.lightProbe),approxBands:a.lightProbe?2:0},environment:{enabled:Boolean(a.environmentTexture),phase:a.environmentPhase,builds:a.environmentBuilds||0},cinematicSky:{enabled:Boolean(a.cinematicSky),clouds:a.cinematicClouds?.length||0,godRays:a.godRays?.length||0},ambientParticles:{enabled:Boolean(a.cinematicParticles),count:a.cinematicParticleCount||0},weather:{mode:a.weather?.mode||'clear',intensity:a.weather?.intensity||0,particles:a.weatherParticleCount||0},vegetationWind:{enabled:a.windUniforms.size>0,uniforms:a.windUniforms.size},shadowBias:{enabled:[...a.lights].some(o=>o?.isDirectionalLight&&o.castShadow&&Number.isFinite(o.shadow?.bias))},offscreenCanvas:{supported:typeof OffscreenCanvas!=='undefined',used:a.offscreenCanvasUsed||0,textures:a.canvasTexturesBuilt||0},surfaceWorker:{supported:typeof global.Worker!=='undefined'&&typeof OffscreenCanvas!=='undefined',active:Boolean(a.surfaceWorker),requests:a.surfaceWorkerRequestsCount||0,completed:a.surfaceWorkerCompleted||0,fallbacks:a.surfaceWorkerFallbacks||0},qualityDirector:a.qualityDirector?.telemetry?.()||null,assetCodec:(a.assetCodec&&typeof a.assetCodec.diagnostics==='function')?a.assetCodec.diagnostics():null}))};}
+  const api={STANDARD,PHASE_ORDER:ORDER,PALETTES:P,phaseAt,getState,currentState,registerThree,setWeather,start,diagnostics};
   global.GoldenPaintingAtmosphere=api;
   if(typeof module!=='undefined'&&module.exports)module.exports=api;
   if(global.document){
