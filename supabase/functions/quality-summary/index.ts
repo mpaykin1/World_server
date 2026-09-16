@@ -8,6 +8,7 @@ function percentile(values: number[], p: number) {
   const sorted = [...values].sort((a, b) => a - b);
   return sorted[Math.min(sorted.length - 1, Math.max(0, Math.ceil(sorted.length * p) - 1))];
 }
+function cleanOrigin(value: unknown) { try { const u = new URL(String(value || "")); return u.protocol === "https:" && !u.username && !u.password ? u.origin.slice(0, 240) : null; } catch { return null; } }
 
 Deno.serve(async (req) => {
   if (req.method !== "GET" && req.method !== "HEAD") return json({ error: "Method not allowed" }, 405);
@@ -19,9 +20,14 @@ Deno.serve(async (req) => {
     const key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
     if (!url || !key) return json({ error: "Quality backend unavailable" }, 503);
     const admin = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
-    const { data, error } = await admin.from("quality_telemetry")
-      .select("created_at,app,event_type,load_ms,dom_ms,fps,error_count,coarse")
-      .gte("created_at", since).order("created_at", { ascending: false }).limit(5000);
+    const deploymentUrl = cleanOrigin(requestUrl.searchParams.get("deploymentUrl"));
+    const releaseSha = String(requestUrl.searchParams.get("releaseSha") || "").trim().slice(0, 80);
+    let query = admin.from("quality_telemetry")
+      .select("created_at,app,event_type,load_ms,dom_ms,fps,error_count,coarse,deployment_url,release_sha")
+      .gte("created_at", since);
+    if (deploymentUrl) query = query.eq("deployment_url", deploymentUrl);
+    if (releaseSha) query = query.eq("release_sha", releaseSha);
+    const { data, error } = await query.order("created_at", { ascending: false }).limit(5000);
     if (error) throw error;
     const groups: Record<string, {sessions:number;fps:number[];load:number[];dom:number[];errors:number;mobileSessions:number}> = {};
     for (const row of data || []) {
@@ -44,7 +50,7 @@ Deno.serve(async (req) => {
       avgLoadMs: g.load.length ? Math.round(g.load.reduce((a,b)=>a+b,0)/g.load.length) : null,
       p95LoadMs: percentile(g.load, .95), p95DomMs: percentile(g.dom, .95), errors: g.errors, mobileSessions: g.mobileSessions
     };
-    const body = { ok: true, hours, since, apps };
+    const body = { ok: true, hours, since, deploymentUrl, releaseSha: releaseSha || null, apps };
     if (req.method === "HEAD") return new Response(null, { status: 200, headers: { "cache-control": "no-store", "x-world-server-quality-runtime": "supabase-edge" } });
     return json(body);
   } catch (error) {
