@@ -2,6 +2,7 @@
 (function(){
   if(window.__WORLD_SERVER_QUALITY_TELEMETRY__)return;
   window.__WORLD_SERVER_QUALITY_TELEMETRY__=true;
+  if(navigator.webdriver===true)return;
   const endpoint='/api/quality-telemetry';
   const app=(location.pathname.match(/\/apps\/([^/]+)/)||[])[1]||'unknown';
   const started=performance.now();
