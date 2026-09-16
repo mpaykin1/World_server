@@ -5,3 +5,5 @@
 !shared/**
 !assets/
 !assets/**
+!data/
+!data/world-graph-index.json

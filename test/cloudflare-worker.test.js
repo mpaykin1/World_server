@@ -112,3 +112,16 @@ test('world creation UI requires an account and guest play can continue without 
   assert.match(client,/async function api[\s\S]*const t=token\(\); if\(t\) headers\.Authorization/);
   assert.match(client,/async function canonApi[\s\S]*const t=token\(\); if\(!t\)return null; headers\.Authorization/);
 });
+
+
+test('Cloudflare asset allowlist publishes the World Graph required by /api/worlds', async () => {
+  const ignore = fs.readFileSync(path.join(root, '.assetsignore'), 'utf8');
+  assert.match(ignore, /^!data\/$/m);
+  assert.match(ignore, /^!data\/world-graph-index\.json$/m);
+  const worker = await loadWorker();
+  const response = await worker.fetch(new Request('https://world.example/api/worlds'), { ASSETS: assetsBinding() });
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  assert.ok(body.worlds.some((world) => world.id === 'voxel-world'));
+  assert.ok(body.graph.nodes.includes('voxel-world'));
+});

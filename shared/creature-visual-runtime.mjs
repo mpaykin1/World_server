@@ -72,7 +72,7 @@ function addHuman(group, color, record, tool) {
   }
 }
 
-function buildCreature(category, record) {
+export function buildCreature(category, record) {
   const group = new THREE.Group();
   const color = PALETTE[category] || 0x777777;
   const detail = new THREE.Group();
