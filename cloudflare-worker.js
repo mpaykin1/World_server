@@ -1,6 +1,8 @@
 const DEFAULT_API_ORIGIN = 'https://world-server-ai-studio-bridge-514578099152.europe-west2.run.app';
 const DEFAULT_STACK_READ_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/world-stack-read';
 const DEFAULT_STACK_WRITE_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/world-stack-write';
+const DEFAULT_QUALITY_SUMMARY_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/quality-summary';
+const DEFAULT_QUALITY_TELEMETRY_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/quality-telemetry';
 const DEFAULT_SUPABASE_URL = 'https://iphfwxjuhsucvdyluink.supabase.co';
 const DEFAULT_SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_dwZ33fr4F1475dHOXKE7Dw_JxWaxbIQ';
 
@@ -190,6 +192,24 @@ async function proxyWorldStack(request, env, url, route) {
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
 }
 
+function qualityOrigin(env, telemetry) {
+  const configured = String(telemetry ? (env.WORLD_SERVER_QUALITY_TELEMETRY_ORIGIN || DEFAULT_QUALITY_TELEMETRY_ORIGIN) : (env.WORLD_SERVER_QUALITY_SUMMARY_ORIGIN || DEFAULT_QUALITY_SUMMARY_ORIGIN)).trim();
+  const target = new URL(configured);
+  if (target.protocol !== 'https:' || target.username || target.password) throw new Error('Quality origin must be credential-free HTTPS');
+  return target;
+}
+
+async function proxyQuality(request, env, url, telemetry) {
+  if (telemetry && request.method !== 'POST') return jsonResponse({ error: 'Method not allowed' }, 405, { allow: 'POST' });
+  if (!telemetry && request.method !== 'GET' && request.method !== 'HEAD') return jsonResponse({ error: 'Method not allowed' }, 405, { allow: 'GET, HEAD' });
+  const target = qualityOrigin(env, telemetry);
+  target.search = telemetry ? '' : url.search;
+  const response = await fetch(new Request(target, request));
+  const headers = new Headers(response.headers);
+  headers.set('x-world-server-quality-proxy', 'cloudflare');
+  return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+}
+
 async function proxyDynamicApi(request, env, url) {
   const origin = canonicalApiOrigin(env, url);
   const upstream = new URL(url.pathname + url.search, origin);
@@ -210,6 +230,8 @@ export default {
     if (url.pathname === '/api/worlds') return worldsApi(request, env, url);
     if (url.pathname === '/api/world-factory') return proxyWorldStack(request, env, url, 'world-factory');
     if (url.pathname === '/api/canon') return proxyWorldStack(request, env, url, 'canon');
+    if (url.pathname === '/api/quality-summary') return proxyQuality(request, env, url, false);
+    if (url.pathname === '/api/quality-telemetry') return proxyQuality(request, env, url, true);
     if (url.pathname.startsWith('/api/')) return proxyDynamicApi(request, env, url);
 
     return env.ASSETS.fetch(request);
