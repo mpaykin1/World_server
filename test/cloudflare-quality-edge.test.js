@@ -11,11 +11,12 @@ test('Cloudflare quality endpoints use dedicated Supabase Edge lanes',async()=>{
   const worker=await loadWorker(); const original=global.fetch; const calls=[];
   global.fetch=async req=>{calls.push(req);return new Response(JSON.stringify({ok:true,apps:{}}),{status:200,headers:{'content-type':'application/json'}});};
   try{
-    const summary=await worker.fetch(new Request('https://world.example/api/quality-summary?hours=1'),{});
+    const env={WORLD_SERVER_DEPLOYED_SHA:'rev123'};
+    const summary=await worker.fetch(new Request('https://world.example/api/quality-summary?hours=1'),env);
     assert.equal(summary.status,200); assert.equal(summary.headers.get('x-world-server-quality-proxy'),'cloudflare');
-    assert.match(calls[0].url,/supabase\.co\/functions\/v1\/quality-summary\?hours=1$/);
-    const telemetry=await worker.fetch(new Request('https://world.example/api/quality-telemetry',{method:'POST',headers:{'content-type':'application/json'},body:'{"app":"voxel-world","type":"quality_session"}'}),{});
-    assert.equal(telemetry.status,200); assert.match(calls[1].url,/supabase\.co\/functions\/v1\/quality-telemetry$/); assert.equal(calls[1].method,'POST');
+    const summaryUrl=new URL(calls[0].url); assert.match(summaryUrl.pathname,/quality-summary$/); assert.equal(summaryUrl.searchParams.get('hours'),'1'); assert.equal(summaryUrl.searchParams.get('deploymentUrl'),'https://world.example'); assert.equal(summaryUrl.searchParams.get('releaseSha'),'rev123');
+    const telemetry=await worker.fetch(new Request('https://world.example/api/quality-telemetry',{method:'POST',headers:{'content-type':'application/json'},body:'{"app":"voxel-world","type":"quality_session"}'}),env);
+    assert.equal(telemetry.status,200); assert.match(calls[1].url,/supabase\.co\/functions\/v1\/quality-telemetry$/); assert.equal(calls[1].method,'POST'); assert.equal(calls[1].headers.get('x-world-server-deployment-url'),'https://world.example'); assert.equal(calls[1].headers.get('x-world-server-release-sha'),'rev123');
   } finally { global.fetch=original; }
 });
 
@@ -32,5 +33,5 @@ test('Supabase quality Edge functions are source-controlled and local server exp
   const ingest=fs.readFileSync(path.join(root,'supabase','functions','quality-telemetry','index.ts'),'utf8');
   const summary=fs.readFileSync(path.join(root,'supabase','functions','quality-summary','index.ts'),'utf8');
   assert.match(server,/\/api\/quality-summary/); assert.match(server,/\/api\/quality-telemetry/);
-  assert.match(ingest,/quality_telemetry/); assert.match(ingest,/SUPABASE_SERVICE_ROLE_KEY/); assert.match(summary,/quality_telemetry/); assert.match(summary,/SUPABASE_SERVICE_ROLE_KEY/);
+  assert.match(ingest,/quality_telemetry/); assert.match(ingest,/SUPABASE_SERVICE_ROLE_KEY/); assert.match(ingest,/deployment_url/); assert.match(ingest,/release_sha/); assert.match(summary,/quality_telemetry/); assert.match(summary,/SUPABASE_SERVICE_ROLE_KEY/); assert.match(summary,/deployment_url/); assert.match(summary,/release_sha/);
 });
