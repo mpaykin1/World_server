@@ -51,3 +51,11 @@ test('streaming slices both chunk generation and meshing while edits stay synchr
   assert.match(source, /await rebuildChunkIncremental\(c\)/);
   assert.match(source, /if\(c\)\{c\.set[\s\S]*?rebuildChunk\(c\)/);
 });
+
+
+test('voxel faces provide exact flat normals without recomputing streamed geometry normals', () => {
+  assert.match(source, /if\(arr\.nor\)arr\.nor\.push\(face\.d\[0\],face\.d\[1\],face\.d\[2\]\)/);
+  assert.match(source, /if\(data\.nor\?\.length\)g\.setAttribute\('normal'/);
+  assert.match(source, /if\(!data\.nor\?\.length\)g\.computeVertexNormals\(\)/);
+  assert.match(source, /solid=\{pos:\[\],col:\[\],nor:\[\]/);
+});
