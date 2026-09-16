@@ -1,4 +1,5 @@
 import * as THREE from 'https://unpkg.com/three@0.165.0/build/three.module.js';
+import {installVoxelAutodemo} from './autodemo-bridge.mjs';
 
 const CHUNK = 16;
 const WORLD_Y = 96;
@@ -172,7 +173,6 @@ const chunks=new Map();
 const overrides=new Map();
 const requested=new Set();
 let streamBusy=false;
-
 const trustedScienceRuns = new Map();
 let scienceNavigatorTimeout = null;
 const SCIENCE_FX_CAP = matchMedia('(pointer:coarse)').matches ? 12 : 28;
@@ -622,7 +622,8 @@ function updateTarget(){const h=rayVoxel();if(!h)return;targetEl.textContent=`${
 
 async function savePlayer(){if(backendMode!=='online')return;try{await api('player_save',{worldId:ACTIVE_WORLD_ID,position:{x:player.pos.x,y:player.pos.y,z:player.pos.z},yaw:player.yaw,pitch:player.pitch,selectedBlock:HOTBAR[player.selected]});}catch{} }
 function broadcastPlayer(now){if(!channel||now-lastNet<NET_INTERVAL)return;lastNet=now;channel.send({type:'broadcast',event:'player_state',payload:{id:player.id,name:player.name,x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw}});}
-let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(goldenWaterUniforms?.goldenWaterTime){goldenWaterUniforms.goldenWaterTime.value=now/1000;if(goldenWaterUniforms.goldenWaterSky&&scene.background?.isColor)goldenWaterUniforms.goldenWaterSky.value.copy(scene.background);}if(goldenVegetationUniforms?.goldenVegetationTime){goldenVegetationUniforms.goldenVegetationTime.value=now/1000;const q=window.GoldenQualityDirector?.forRenderer?.(renderer)?.state?.quality;goldenVegetationUniforms.goldenVegetationStrength.value=Math.max(.35,Math.min(1,Number(q)||1));}if(started){if(Math.abs(mobileLook.x)>.02||Math.abs(mobileLook.y)>.02){player.yaw-=mobileLook.x*2.05*dt;player.pitch=clamp(player.pitch-mobileLook.y*1.65*dt,-1.45,1.45);}physics(dt);updateScienceFx(now,dt);updateCanonEffects(now);loadNeededChunks();updateGoldenLodPolicy(now);broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);renderer.render(scene,camera);}requestAnimationFrame(loop);
+let autodemo=null;
+let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(goldenWaterUniforms?.goldenWaterTime){goldenWaterUniforms.goldenWaterTime.value=now/1000;if(goldenWaterUniforms.goldenWaterSky&&scene.background?.isColor)goldenWaterUniforms.goldenWaterSky.value.copy(scene.background);}if(goldenVegetationUniforms?.goldenVegetationTime){goldenVegetationUniforms.goldenVegetationTime.value=now/1000;const q=window.GoldenQualityDirector?.forRenderer?.(renderer)?.state?.quality;goldenVegetationUniforms.goldenVegetationStrength.value=Math.max(.35,Math.min(1,Number(q)||1));}if(started){if(Math.abs(mobileLook.x)>.02||Math.abs(mobileLook.y)>.02){player.yaw-=mobileLook.x*2.05*dt;player.pitch=clamp(player.pitch-mobileLook.y*1.65*dt,-1.45,1.45);}physics(dt);updateScienceFx(now,dt);updateCanonEffects(now);loadNeededChunks();updateGoldenLodPolicy(now);broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();autodemo?.update(now,dt);biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);renderer.render(scene,camera);}requestAnimationFrame(loop);
 
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});addEventListener('beforeunload',()=>savePlayer());
 setupDesktop();setupMobile();buildHotbar();
@@ -632,8 +633,11 @@ try{
   const init=await api('init',{worldId:ACTIVE_WORLD_ID}); worldSeed=Number(init.world?.seed)||worldSeed; const worldSettings=init.world?.settings||{}; worldTheme=worldSettings.theme||worldSettings.worldDNA?.theme||'mixed'; if(titleEl)titleEl.textContent=worldSettings.name||'Voxel World'; if(loreEl){const lore=worldSettings.lore||worldSettings.worldDNA?.lore; loreEl.textContent=lore?.headline||((ACTIVE_WORLD_ID==='main')?'Living world':'World Factory creation'); loreEl.title=lore?.lore||'';} document.title=(worldSettings.name||'Voxel World')+' ? World_server'; player.id=init.selfId;player.name=init.player?.name||appState.user?.username||'Player'; const p=init.player?.position||{x:0,y:heightAt(0,0)+4,z:0};player.pos.set(Number(p.x)||0,Number(p.y)||heightAt(0,0)+4,Number(p.z)||0);player.yaw=Number(init.player?.yaw)||0;player.pitch=Number(init.player?.pitch)||0;const sel=HOTBAR.indexOf(Number(init.player?.selectedBlock));if(sel>=0)player.selected=sel;buildHotbar(); cacheScienceRuns(init.scienceGameplay); await connectRealtime(appState); started=true; showScienceIntro((init.scienceGameplay||[]).filter(run=>run.active).at(-1)); statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';loading.classList.add('hidden');
 }catch(e){console.error(e);setOfflineMode(e.message);player.id=guestId();player.name=`Guest_${player.id.replaceAll('-','').slice(0,4)}`;player.pos.set(0,heightAt(0,0)+4,0);started=true;loading.classList.add('hidden');}
 
+function startAutodemo(){if(autodemo)return autodemo;try{autodemo=installVoxelAutodemo({THREE,scene,sun,hemi,player,heightAt,setBlockLocal,api,canonApi,worldId:ACTIVE_WORLD_ID,token,uuid,BLOCK,toast:message=>window.AppCore?.toast?.(message)});}catch(error){console.warn('[AUTODEMO]',error?.message||error);}return autodemo;}
+startAutodemo();
+
 window.VoxelWorldRuntime={
-    stats(){return {player:{x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw,pitch:player.pitch,onGround:player.onGround},renderer:renderer?.info?.render,pixelRatio:renderer?.getPixelRatio?.()||1,backendMode,chunks:chunks.size,playable:started&&chunks.size>0,goldenGraphics:{vertexAO:true,waterV2:true,waterV3:true,vegetationInstances:goldenVegetationMesh.count,vegetationInstanced:true}};},
+    stats(){return {player:{x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw,pitch:player.pitch,onGround:player.onGround},renderer:renderer?.info?.render,pixelRatio:renderer?.getPixelRatio?.()||1,backendMode,chunks:chunks.size,playable:started&&chunks.size>0,goldenGraphics:{vertexAO:true,waterV2:true,waterV3:true,vegetationInstances:goldenVegetationMesh.count,vegetationInstanced:true},autodemo:autodemo?.stats?.()||null};},
     setView(nextYaw,nextPitch=0){player.yaw=Number(nextYaw)||0;player.pitch=Number(nextPitch)||0;}
   };
 

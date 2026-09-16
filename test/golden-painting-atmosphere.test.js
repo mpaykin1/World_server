@@ -285,3 +285,11 @@ test('cinematic post grade and particle draw ranges stay quality-budgeted',()=>{
   assert.match(src,/cinematicParticles\.geometry\.setDrawRange/);
   assert.match(src,/weatherFx\.geometry\.setDrawRange/);
 });
+test('production skips synchronous shader diagnostics while the fleet gate explicitly reenables them',()=>{
+  const src=fs.readFileSync(path.join(__dirname,'..','shared','golden-painting-atmosphere.js'),'utf8');
+  const fleet=fs.readFileSync(path.join(__dirname,'..','e2e','golden-world-fleet.spec.js'),'utf8');
+  assert.match(src,/goldenShaderChecks/);
+  assert.match(src,/renderer\.debug&&'checkShaderErrors'in options\.renderer\.debug/);
+  assert.match(src,/options\.renderer\.debug\.checkShaderErrors=shaderChecks/);
+  assert.match(fleet,/goldenShaderChecks=1/);
+});
