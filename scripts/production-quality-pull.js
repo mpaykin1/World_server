@@ -19,7 +19,7 @@ async function pull(base,hours){
   return j;
 }
 async function main(){
-  const ROOT=process.cwd(),base=(process.env.QUALITY_BASE_URL||'https://world-server.vercel.app').replace(/\/$/,'');
+  const ROOT=process.cwd(),base=(process.env.QUALITY_BASE_URL||'https://world-server.mmmpaykin.workers.dev').replace(/\/$/,'');
   const budgets=JSON.parse(fs.readFileSync(path.join(ROOT,'data/performance-budgets.json'),'utf8')).budgets;
   const freshHours=Math.max(1,Number(process.env.QUALITY_FRESH_HOURS||1));
   const [fresh,history]=await Promise.all([pull(base,freshHours),pull(base,24)]);
