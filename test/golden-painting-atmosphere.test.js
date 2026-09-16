@@ -1,4 +1,4 @@
-﻿const test=require('node:test');
+const test=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
@@ -163,10 +163,41 @@ test('directional shadows use a camera-relative importance window without extra 
   assert.match(src,/updateImportanceShadows/);
   assert.match(src,/shadowBases:new WeakMap/);
   assert.match(src,/light\.target\.position\.copy\(focus\)/);
-  assert.match(src,/const extent=a\.mobile\?26:36/);
+  assert.match(src,/qualityDirector\?\.getBudget\?\.\('shadowDistance'\)/);
   assert.match(src,/importanceShadows:Boolean/);
 });
 
+
+test('quality director is loaded before atmosphere in every playable web world',()=>{
+  const worlds=['ai3d-voxel-city','cinematic-encounter','dark-void-scene','survival','voxel-world','world-sharabass'];
+  for(const world of worlds){
+    const html=fs.readFileSync(path.join(__dirname,'..','apps',world,'index.html'),'utf8');
+    const quality=html.indexOf('/shared/graphics/golden-quality-director.js');
+    const atmosphereIndex=html.indexOf('/shared/golden-painting-atmosphere.js');
+    assert.ok(quality!==-1,`${world} missing golden-quality-director.js`);
+    assert.ok(quality<atmosphereIndex,`${world} must load quality director before atmosphere`);
+  }
+});
+
+test('quality director has adaptive DPR, frame p95 and GPU budget telemetry',()=>{
+  const src=fs.readFileSync(path.join(__dirname,'..','shared','graphics','golden-quality-director.js'),'utf8');
+  assert.match(src,/p95Ms/);
+  assert.match(src,/setPixelRatio/);
+  assert.match(src,/textureMB/);
+  assert.match(src,/shadowDistance/);
+  assert.match(src,/viewChunks/);
+  assert.match(src,/goldenqualitychange/);
+});
+
+test('surface microdetail can be generated in a real worker OffscreenCanvas with fail-soft fallback',()=>{
+  const src=fs.readFileSync(path.join(__dirname,'..','shared','golden-painting-atmosphere.js'),'utf8');
+  const worker=fs.readFileSync(path.join(__dirname,'..','shared','graphics','golden-surface-worker.js'),'utf8');
+  assert.match(src,/new global\.Worker\('\/shared\/graphics\/golden-surface-worker\.js'\)/);
+  assert.match(src,/surfaceWorkerCompleted/);
+  assert.match(src,/proceduralSurfaceTextureSync/);
+  assert.match(worker,/new OffscreenCanvas/);
+  assert.match(worker,/postMessage\(\{id,size,buffer:out\.buffer\},\[out\.buffer\]\)/);
+});
 
 test('directional shadow stabilization sets bias without extra passes',()=>{
   const src=fs.readFileSync(path.join(__dirname,'..','shared','golden-painting-atmosphere.js'),'utf8');
@@ -197,4 +228,68 @@ test('auto mobile keeps cinematic-lite graphics while low mode remains available
   assert.match(src,/memory>0&&memory<=2/);
   assert.match(src,/cores<=2&&!mobile/);
   assert.match(src,/!a\.mobile&&global\.GoldenAssetCodec/);
+});
+
+
+test('cinematic sky adds low-cost clouds and god rays above the real 3D scene',()=>{
+  const src=fs.readFileSync(path.join(__dirname,'..','shared','golden-painting-atmosphere.js'),'utf8');
+  assert.match(src,/function ensureCinematicSky\(a\)/);
+  assert.match(src,/GoldenCinematicSky/);
+  assert.match(src,/a\.mobile\?3:6/);
+  assert.match(src,/blending:T\.AdditiveBlending/);
+  assert.match(src,/cinematicSky:\{enabled:Boolean\(a\.cinematicSky\)/);
+});
+
+test('quality director rejects background stalls and exposes renderer lookup',()=>{
+  const src=fs.readFileSync(path.join(__dirname,'..','shared','graphics','golden-quality-director.js'),'utf8');
+  assert.match(src,/raw>250/);
+  assert.match(src,/state\.samples\.length=0/);
+  assert.match(src,/clamp\(raw,4,100\)/);
+  assert.match(src,/function forRenderer\(renderer\)/);
+});
+
+
+test('quality governors cooperate instead of fighting over DPR',()=>{
+  const director=fs.readFileSync(path.join(__dirname,'..','shared','graphics','golden-quality-director.js'),'utf8');
+  const autopilot=fs.readFileSync(path.join(__dirname,'..','shared','world-quality-autopilot.js'),'utf8');
+  assert.match(director,/setExternalMaxDpr/);
+  assert.match(director,/externalMaxDpr/);
+  assert.match(autopilot,/GoldenQualityDirector\?\.forRenderer/);
+});
+
+
+test('voxel vegetation and night particles honor adaptive quality budgets',()=>{
+  const voxel=fs.readFileSync(path.join(__dirname,'..','apps','voxel-world','client.js'),'utf8');
+  const atmosphereSrc=fs.readFileSync(path.join(__dirname,'..','shared','golden-painting-atmosphere.js'),'utf8');
+  assert.match(voxel,/getBudget\?\.\('vegetation'\)/);
+  assert.match(voxel,/GOLDEN_VEGETATION_MAX/);
+  assert.match(atmosphereSrc,/getBudget\?\.\('particles'\)/);
+  assert.match(atmosphereSrc,/particleBudget\*\.45/);
+});
+
+test('adaptive weather VFX exposes rain, storm and wind without shadowed flash lights',()=>{
+  const src=fs.readFileSync(path.join(__dirname,'..','shared','golden-painting-atmosphere.js'),'utf8');
+  assert.match(src,/function ensureWeather\(a\)/);
+  assert.match(src,/goldenWeatherTime/);
+  assert.match(src,/function setWeather\(worldId,mode='clear',intensity=1\)/);
+  assert.match(src,/weatherFlash/);
+  assert.match(src,/flash\.castShadow=false/);
+  assert.match(src,/weather:\{mode:a\.weather\?\.mode/);
+});
+test('cinematic post grade and particle draw ranges stay quality-budgeted',()=>{
+  const src=fs.readFileSync(path.join(__dirname,'..','shared','golden-painting-atmosphere.js'),'utf8');
+  assert.match(src,/function ensureCinematicPost\(/);
+  assert.match(src,/goldenCinematicPost/);
+  assert.match(src,/cinematicPost:\{enabled:Boolean\(a\.cinematicPost\)\}/);
+  assert.match(src,/particleCap=Math\.max\(32,Number\(a\.qualityDirector\?\.getBudget\?\.\('particles'\)/);
+  assert.match(src,/cinematicParticles\.geometry\.setDrawRange/);
+  assert.match(src,/weatherFx\.geometry\.setDrawRange/);
+});
+test('production skips synchronous shader diagnostics while the fleet gate explicitly reenables them',()=>{
+  const src=fs.readFileSync(path.join(__dirname,'..','shared','golden-painting-atmosphere.js'),'utf8');
+  const fleet=fs.readFileSync(path.join(__dirname,'..','e2e','golden-world-fleet.spec.js'),'utf8');
+  assert.match(src,/goldenShaderChecks/);
+  assert.match(src,/renderer\.debug&&'checkShaderErrors'in options\.renderer\.debug/);
+  assert.match(src,/options\.renderer\.debug\.checkShaderErrors=shaderChecks/);
+  assert.match(fleet,/goldenShaderChecks=1/);
 });

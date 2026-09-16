@@ -7,8 +7,8 @@ const source = fs.readFileSync(path.join(__dirname, '..', 'apps', 'voxel-world',
 
 test('Voxel World degrades to a playable local world when backend/bootstrap fails', () => {
   assert.match(source, /let backendMode='online'/);
-  assert.match(source, /setOfflineMode\(e\.message\);materializeChunkBatch\(need\)/);
-  assert.match(source, /backendMode==='offline'\) materializeChunkBatch\(need\)/);
+  assert.match(source, /setOfflineMode\(e\.message\);(?:await )?materializeChunkBatch\(need\)/);
+  assert.match(source, /backendMode==='offline'\) (?:await )?materializeChunkBatch\(need\)/);
   assert.match(source, /loading\.classList\.add\('hidden'\)/);
   assert.match(source, /playable:started&&chunks\.size>0/);
 });

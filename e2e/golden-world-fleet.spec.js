@@ -20,7 +20,7 @@ test.describe('Golden world fleet render gate', () => {
         if (message.type() === 'error' && criticalConsole.test(message.text())) critical.push(`console:${message.text()}`);
       });
 
-      const response = await page.goto(`/apps/${world}/?goldenPhase=sunset`, { waitUntil: 'domcontentloaded' });
+      const response = await page.goto(`/apps/${world}/?goldenPhase=sunset&goldenShaderChecks=1`, { waitUntil: 'domcontentloaded' });
       expect(response?.status(), world).toBe(200);
       await expect(page.locator('canvas').first(), world).toBeVisible({ timeout: 15000 });
       if (world === 'ai3d-voxel-city') await page.waitForFunction(() => window.AI3DVoxelRuntime?.stats?.()?.defaultCityLoaded && window.AI3DVoxelRuntime?.stats?.()?.player?.playable, null, { timeout: 25000 });
