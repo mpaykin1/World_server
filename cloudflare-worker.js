@@ -204,7 +204,15 @@ async function proxyQuality(request, env, url, telemetry) {
   if (!telemetry && request.method !== 'GET' && request.method !== 'HEAD') return jsonResponse({ error: 'Method not allowed' }, 405, { allow: 'GET, HEAD' });
   const target = qualityOrigin(env, telemetry);
   target.search = telemetry ? '' : url.search;
-  const response = await fetch(new Request(target, request));
+  const revision = String(env?.WORLD_SERVER_DEPLOYED_SHA || env?.CF_VERSION_METADATA?.id || '').trim();
+  if (!telemetry) {
+    target.searchParams.set('deploymentUrl', url.origin);
+    if (revision) target.searchParams.set('releaseSha', revision);
+  }
+  const proxied = new Request(target, request);
+  proxied.headers.set('x-world-server-deployment-url', url.origin);
+  if (revision) proxied.headers.set('x-world-server-release-sha', revision);
+  const response = await fetch(proxied);
   const headers = new Headers(response.headers);
   headers.set('x-world-server-quality-proxy', 'cloudflare');
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers });

@@ -8,6 +8,7 @@ function clamp(value: unknown, min: number, max: number) {
   return Number.isFinite(n) ? Math.max(min, Math.min(max, n)) : null;
 }
 function text(value: unknown, max: number) { return String(value ?? "").replace(/[\u0000-\u001f\u007f]/g, " ").trim().slice(0, max); }
+function cleanOrigin(value: unknown) { try { const u = new URL(String(value || "")); return u.protocol === "https:" && !u.username && !u.password ? u.origin.slice(0, 240) : null; } catch { return null; } }
 
 Deno.serve(async (req) => {
   if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
@@ -28,6 +29,8 @@ Deno.serve(async (req) => {
     viewport_h: Array.isArray(body.viewport) ? clamp(body.viewport[1], 1, 10000) : null,
     dpr: clamp(body.dpr, .25, 8),
     message: body.message ? text(body.message, 240) : null,
+    release_sha: text(req.headers.get("x-world-server-release-sha"), 80) || null,
+    deployment_url: cleanOrigin(req.headers.get("x-world-server-deployment-url")),
   };
   try {
     const url = Deno.env.get("SUPABASE_URL");
