@@ -405,6 +405,18 @@ function generateChunkData(c,rows=[]){
   c.ready=true; return c;
 }
 
+async function generateChunkDataIncremental(c,rows=[]){
+  const bx=c.cx*CHUNK,bz=c.cz*CHUNK,director=window.GoldenQualityDirector?.forRenderer?.(renderer),quality=Number(director?.state?.quality||1),columnsPerSlice=quality<.68?2:4;
+  for(let lx=0;lx<CHUNK;lx++){for(let lz=0;lz<CHUNK;lz++){
+    const x=bx+lx,z=bz+lz,h=heightAt(x,z),biome=biomeAt(x,z);
+    for(let y=0;y<=Math.max(h,SEA);y++){let b=BLOCK.AIR;if(y>h){if(y<=SEA)b=BLOCK.WATER;}else if(caveAt(x,y,z))b=BLOCK.AIR;else if(y===h)b=biome==='desert'?BLOCK.SAND:biome==='snow'?BLOCK.SNOW:BLOCK.GRASS;else if(y>h-4)b=biome==='desert'?BLOCK.SAND:BLOCK.DIRT;else b=oreAt(x,y,z);c.set(lx,y,lz,b);}
+    const treeChance=hash32(x,z,worldSeed+5100),canTree=(biome==='forest'&&treeChance>.89)||(biome==='plains'&&treeChance>.975);
+    if(canTree&&h>SEA+1&&lx>2&&lz>2&&lx<CHUNK-3&&lz<CHUNK-3){const th=4+(hash32(x,z,worldSeed+5200)*3|0);for(let y=h+1;y<=h+th&&y<WORLD_Y;y++)c.set(lx,y,lz,BLOCK.WOOD);for(let dx=-2;dx<=2;dx++)for(let dz=-2;dz<=2;dz++)for(let dy=-2;dy<=1;dy++){if(Math.abs(dx)+Math.abs(dz)+(dy===1?1:0)>4)continue;const yy=h+th+dy;if(yy>0&&yy<WORLD_Y&&c.get(lx+dx,yy,lz+dz)===BLOCK.AIR)c.set(lx+dx,yy,lz+dz,BLOCK.LEAVES);}}
+  }if((lx+1)%columnsPerSlice===0&&lx+1<CHUNK)await yieldChunkBuild();}
+  for(const r of rows){const b=validBlockType(r.block_type);if(b===null||!Number.isInteger(r.x)||!Number.isInteger(r.y)||!Number.isInteger(r.z)||r.y<0||r.y>=WORLD_Y)continue;const lx=mod(r.x,CHUNK),lz=mod(r.z,CHUNK);c.set(lx,r.y,lz,b);overrides.set(key3(r.x,r.y,r.z),b);}
+  c.ready=true;return c;
+}
+
 function blockAt(x,y,z){
   if(y<0||y>=WORLD_Y) return y<0?BLOCK.STONE:BLOCK.AIR;
   const ov=overrides.get(key3(x,y,z)); if(ov!==undefined) return ov;
@@ -470,7 +482,7 @@ function yieldChunkBuild(){return new Promise(resolve=>{if(typeof requestIdleCal
 async function materializeChunkBatch(need, by=new Map()){
   const director=window.GoldenQualityDirector?.forRenderer?.(renderer),quality=Number(director?.state?.quality||1),slice=quality<.68?1:2;
   for(let i=0;i<need.length;i++){
-    const q=need[i],k=key2(q.x,q.z),c=generateChunkData(new ChunkData(q.x,q.z),by.get(k)||[]);
+    const q=need[i],k=key2(q.x,q.z),c=await generateChunkDataIncremental(new ChunkData(q.x,q.z),by.get(k)||[]);
     chunks.set(k,c);await rebuildChunkIncremental(c);
     if((i+1)%slice===0&&i+1<need.length)await yieldChunkBuild();
   }

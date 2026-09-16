@@ -44,3 +44,10 @@ test('Netlify API uses canonical upstream before procedural offline fallback whe
   assert.match(voxelFn, /hasAdminSupabase\(\)/);
   assert.match(voxelFn, /proxyCanonical\(request, '\/api\/voxel'\)/);
 });
+
+test('streaming slices both chunk generation and meshing while edits stay synchronous', () => {
+  assert.match(source, /async function generateChunkDataIncremental/);
+  assert.match(source, /await generateChunkDataIncremental\(new ChunkData/);
+  assert.match(source, /await rebuildChunkIncremental\(c\)/);
+  assert.match(source, /if\(c\)\{c\.set[\s\S]*?rebuildChunk\(c\)/);
+});
