@@ -435,6 +435,17 @@ function rebuildChunk(c){
   }}
   for(const [data,mat] of [[solid,solidMaterial],[translucent,transparentMaterial],[water,waterMaterial]]) if(data.idx.length){ const m=new THREE.Mesh(makeGeometry(data),mat);m.position.set(bx,0,bz);m.receiveShadow=true;m.castShadow=mat===solidMaterial;c.meshes.push(m);worldGroup.add(m); }
 }
+async function rebuildChunkIncremental(c){
+  for(const m of c.meshes){worldGroup.remove(m);m.geometry.dispose();}c.meshes=[];
+  const solid={pos:[],col:[],idx:[],mat:[],uv:[]},translucent={pos:[],col:[],idx:[]},water={pos:[],col:[],idx:[],shore:[]},bx=c.cx*CHUNK,bz=c.cz*CHUNK;
+  const localBlock=(lx,y,lz)=>(lx>=0&&lz>=0&&lx<CHUNK&&lz<CHUNK&&y>=0&&y<WORLD_Y)?c.get(lx,y,lz):blockAt(bx+lx,y,bz+lz);
+  const director=window.GoldenQualityDirector?.forRenderer?.(renderer),quality=Number(director?.state?.quality||1),columnsPerSlice=quality<.68?2:4;
+  for(let lx=0;lx<CHUNK;lx++){for(let lz=0;lz<CHUNK;lz++){let top=WORLD_Y-1;while(top>0&&c.get(lx,top,lz)===BLOCK.AIR)top--;for(let y=0;y<=top;y++){
+    const b=c.get(lx,y,lz);if(b===BLOCK.AIR)continue;
+    for(const f of FACE){const nb=localBlock(lx+f.d[0],y+f.d[1],lz+f.d[2]);let visible=false;if(b===BLOCK.WATER)visible=nb!==BLOCK.WATER&&nb===BLOCK.AIR;else if(BLOCKS[b]?.alpha!==undefined)visible=nb===BLOCK.AIR||nb===BLOCK.WATER;else visible=!isOccluding(nb)||BLOCKS[nb]?.alpha!==undefined;if(!visible)continue;const dst=b===BLOCK.WATER?water:(BLOCKS[b]?.alpha!==undefined?translucent:solid),ao=b===BLOCK.WATER?null:faceCornerAO(lx,y,lz,f,localBlock),shore=(b===BLOCK.WATER&&f.d[1]===1)?waterShoreAt(lx,y,lz,localBlock):0;pushFace(dst,lx,y,lz,f,BLOCKS[b].color,ao,shore,b);}
+  }}if((lx+1)%columnsPerSlice===0&&lx+1<CHUNK)await yieldChunkBuild();}
+  for(const [data,mat] of [[solid,solidMaterial],[translucent,transparentMaterial],[water,waterMaterial]])if(data.idx.length){const m=new THREE.Mesh(makeGeometry(data),mat);m.position.set(bx,0,bz);m.receiveShadow=true;m.castShadow=mat===solidMaterial;c.meshes.push(m);worldGroup.add(m);}
+}
 function setBlockLocal(x,y,z,b){
   const safe=validBlockType(b); if(safe===null||!Number.isInteger(x)||!Number.isInteger(y)||!Number.isInteger(z)||y<0||y>=WORLD_Y)return false;
   overrides.set(key3(x,y,z),safe); const cx=floorDiv(x,CHUNK),cz=floorDiv(z,CHUNK),c=chunks.get(key2(cx,cz)); if(c){c.set(mod(x,CHUNK),y,mod(z,CHUNK),safe);rebuildChunk(c);} const lx=mod(x,CHUNK),lz=mod(z,CHUNK); if(lx===0)chunks.get(key2(cx-1,cz))&&rebuildChunk(chunks.get(key2(cx-1,cz))); if(lx===15)chunks.get(key2(cx+1,cz))&&rebuildChunk(chunks.get(key2(cx+1,cz))); if(lz===0)chunks.get(key2(cx,cz-1))&&rebuildChunk(chunks.get(key2(cx,cz-1))); if(lz===15)chunks.get(key2(cx,cz+1))&&rebuildChunk(chunks.get(key2(cx,cz+1))); refreshGoldenVegetation(); return true;
@@ -460,7 +471,7 @@ async function materializeChunkBatch(need, by=new Map()){
   const director=window.GoldenQualityDirector?.forRenderer?.(renderer),quality=Number(director?.state?.quality||1),slice=quality<.68?1:2;
   for(let i=0;i<need.length;i++){
     const q=need[i],k=key2(q.x,q.z),c=generateChunkData(new ChunkData(q.x,q.z),by.get(k)||[]);
-    chunks.set(k,c);rebuildChunk(c);
+    chunks.set(k,c);await rebuildChunkIncremental(c);
     if((i+1)%slice===0&&i+1<need.length)await yieldChunkBuild();
   }
 }
