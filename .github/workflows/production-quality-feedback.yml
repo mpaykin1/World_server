@@ -24,9 +24,17 @@ jobs:
         continue-on-error: true
         env:
           QUALITY_BASE_URL: https://world-server.mmmpaykin.workers.dev
+          QUALITY_FRESH_HOURS: 6
         run: node scripts/production-quality-pull.js
+      - name: Classify production quality verdict
+        id: verdict
+        if: always()
+        run: node -e "const fs=require('fs');let v='FATAL';try{v=JSON.parse(fs.readFileSync('PRODUCTION_QUALITY_REPORT.json','utf8')).verdict||v}catch{};fs.appendFileSync(process.env.GITHUB_OUTPUT,`verdict=${v}\n`);console.log(`[PRODUCTION_QUALITY] workflow verdict=${v}`)"
+      - name: Warn when fresh production evidence is unavailable
+        if: steps.verdict.outputs.verdict == 'INCONCLUSIVE'
+        run: echo "::warning::No fresh production sessions in the current evidence window; this is not classified as a regression."
       - name: Open/update production quality blocker
-        if: steps.prod.outcome == 'failure'
+        if: steps.verdict.outputs.verdict == 'BLOCK' || steps.verdict.outputs.verdict == 'FATAL'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -39,3 +47,14 @@ jobs:
             gh issue create --title "$TITLE" --body "$BODY"
           fi
           exit 1
+      - name: Close recovered production quality blocker
+        if: steps.verdict.outputs.verdict == 'PASS'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TITLE="Production quality regression detected"
+          EXISTING="$(gh issue list --state open --search "$TITLE in:title" --json number --jq '.[0].number // empty')"
+          if [ -n "$EXISTING" ]; then
+            gh issue comment "$EXISTING" --body "Production quality feedback recovered on Cloudflare production; the latest evidence window is PASS."
+            gh issue close "$EXISTING" --reason completed
+          fi

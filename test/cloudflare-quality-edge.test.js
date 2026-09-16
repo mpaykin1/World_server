@@ -24,6 +24,7 @@ test('production quality monitoring points at Cloudflare authority',()=>{
   const sentry=fs.readFileSync(path.join(root,'.github','workflows','sentry-production-verify.yml'),'utf8');
   const pull=fs.readFileSync(path.join(root,'scripts','production-quality-pull.js'),'utf8');
   for(const text of [feedback,sentry,pull]){assert.match(text,/https:\/\/world-server\.mmmpaykin\.workers\.dev/);assert.doesNotMatch(text,/world-server\.vercel\.app/);}
+  assert.match(feedback,/QUALITY_FRESH_HOURS: 6/); assert.match(feedback,/INCONCLUSIVE/); assert.match(feedback,/Close recovered production quality blocker/); assert.doesNotMatch(feedback,/steps\.prod\.outcome == 'failure'/);
 });
 
 test('Supabase quality Edge functions are source-controlled and local server exposes compatibility routes',()=>{
