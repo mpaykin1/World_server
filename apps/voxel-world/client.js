@@ -425,9 +425,9 @@ function blockAt(x,y,z){
 }
 function isOccluding(b){ return b!==BLOCK.AIR&&b!==BLOCK.WATER&&BLOCKS[b]?.alpha===undefined; }
 
-const FACE_AO_SHADE=[1,.86,.72,.58];
+const FACE_AO_SHADE=[1,.86,.72,.58],FACE_AO_SCRATCH=[1,1,1,1];
 function faceCornerAO(lx,y,lz,face,getBlock){
-  const n=face.d,a0=n[0]?1:0,a1=n[0]?2:(n[1]?2:1),out=new Array(4);
+  const n=face.d,a0=n[0]?1:0,a1=n[0]?2:(n[1]?2:1),out=FACE_AO_SCRATCH;
   for(let i=0;i<4;i++){const v=face.v[i],s1=v[a0]?1:-1,s2=v[a1]?1:-1;let ax=n[0],ay=n[1],az=n[2],bx=ax,by=ay,bz=az,cx=ax,cy=ay,cz=az;if(a0===0){ax+=s1;cx+=s1;}else if(a0===1){ay+=s1;cy+=s1;}else{az+=s1;cz+=s1;}if(a1===0){bx+=s2;cx+=s2;}else if(a1===1){by+=s2;cy+=s2;}else{bz+=s2;cz+=s2;}const o1=isOccluding(getBlock(lx+ax,y+ay,lz+az))?1:0,o2=isOccluding(getBlock(lx+bx,y+by,lz+bz))?1:0,oc=isOccluding(getBlock(lx+cx,y+cy,lz+cz))?1:0;out[i]=FACE_AO_SHADE[o1&&o2?3:o1+o2+oc];}
   return out;
 }
