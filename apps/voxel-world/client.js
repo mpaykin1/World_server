@@ -425,9 +425,11 @@ function blockAt(x,y,z){
 }
 function isOccluding(b){ return b!==BLOCK.AIR&&b!==BLOCK.WATER&&BLOCKS[b]?.alpha===undefined; }
 
+const FACE_AO_SHADE=[1,.86,.72,.58];
 function faceCornerAO(lx,y,lz,face,getBlock){
-  const n=face.d,axes=n[0]?[1,2]:(n[1]?[0,2]:[0,1]);
-  return face.v.map(v=>{const a=[...n],b=[...n],c=[...n],s1=v[axes[0]]?1:-1,s2=v[axes[1]]?1:-1;a[axes[0]]+=s1;b[axes[1]]+=s2;c[axes[0]]+=s1;c[axes[1]]+=s2;const o1=isOccluding(getBlock(lx+a[0],y+a[1],lz+a[2]))?1:0,o2=isOccluding(getBlock(lx+b[0],y+b[1],lz+b[2]))?1:0,oc=isOccluding(getBlock(lx+c[0],y+c[1],lz+c[2]))?1:0;return[1,.86,.72,.58][o1&&o2?3:o1+o2+oc];});
+  const n=face.d,a0=n[0]?1:0,a1=n[0]?2:(n[1]?2:1),out=new Array(4);
+  for(let i=0;i<4;i++){const v=face.v[i],s1=v[a0]?1:-1,s2=v[a1]?1:-1;let ax=n[0],ay=n[1],az=n[2],bx=ax,by=ay,bz=az,cx=ax,cy=ay,cz=az;if(a0===0){ax+=s1;cx+=s1;}else if(a0===1){ay+=s1;cy+=s1;}else{az+=s1;cz+=s1;}if(a1===0){bx+=s2;cx+=s2;}else if(a1===1){by+=s2;cy+=s2;}else{bz+=s2;cz+=s2;}const o1=isOccluding(getBlock(lx+ax,y+ay,lz+az))?1:0,o2=isOccluding(getBlock(lx+bx,y+by,lz+bz))?1:0,oc=isOccluding(getBlock(lx+cx,y+cy,lz+cz))?1:0;out[i]=FACE_AO_SHADE[o1&&o2?3:o1+o2+oc];}
+  return out;
 }
 function waterShoreAt(lx,y,lz,getBlock){let diagonal=false;for(const [dx,dz] of [[1,0],[-1,0],[0,1],[0,-1]])if(isOccluding(getBlock(lx+dx,y,lz+dz)))return 1;for(const [dx,dz] of [[1,1],[1,-1],[-1,1],[-1,-1]])if(isOccluding(getBlock(lx+dx,y,lz+dz)))diagonal=true;return diagonal?.55:0;}
 function pushFace(arr,x,y,z,face,color,vertexShade=null,shore=0,materialId=0){const base=arr.pos.length/3,col=new THREE.Color(color),tile=Math.max(0,materialId-1),tx=tile%VOXEL_ATLAS_COLS,ty=Math.floor(tile/VOXEL_ATLAS_COLS),uv=[[.03,.03],[.97,.03],[.97,.97],[.03,.97]];face.v.forEach((v,i)=>{const shade=face.shade*(vertexShade?.[i]??1);arr.pos.push(x+v[0],y+v[1],z+v[2]);if(arr.nor)arr.nor.push(face.d[0],face.d[1],face.d[2]);arr.col.push(col.r*shade,col.g*shade,col.b*shade);if(arr.shore)arr.shore.push(shore);if(arr.mat)arr.mat.push(materialId);if(arr.uv){const q=uv[i];arr.uv.push((tx+q[0])/VOXEL_ATLAS_COLS,1-(ty+q[1])/VOXEL_ATLAS_COLS);}});arr.idx.push(base,base+1,base+2,base,base+2,base+3);}
