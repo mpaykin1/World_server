@@ -2,6 +2,27 @@
 
 ---
 
+# PR #133 flush — perf(voxel) eliminate per-vertex color clones — 2026-09-17 (Builder slice)
+
+## Task
+Per Architect dispatch on issue #80 (2026-09-17): flush PR #133 (`perf(voxel): eliminate per-vertex color clones`) by rebasing its single 1-line delta onto current master `BASE_SHA=31dc7a47` and adding exactly one focused regression test that proves `pushFace` color attribute output stays byte-identical to the previous `clone().multiplyScalar` baseline (allocations removed, rendered pixels unchanged). No gameplay/client behavior change; no production deployment.
+
+## Evidence
+- Rebase: new exact head H2 = `17c31352` (parent `31dc7a47`), diff vs master = exactly `apps/voxel-world/client.js | 2 +-` (+1/-1).
+- Regression test added: `test/pushface-color-neutral.test.js` (3 focused tests):
+  - source-level guard: `pushFace` computes `shade=face.shade*(vertexShade?.[i]??1)` once and pushes `col.r*shade,col.g*shade,col.b*shade`; must NOT contain any `.clone()`/`col.clone().multiplyScalar` per vertex.
+  - numeric equivalence: scalar-shade output is byte-identical (Float32 buffer) to a faithful `clone().multiplyScalar` THREE.Color baseline across 15 hex colors x 9 shades x 4 vertex-shade patches x 4 corners (2160 samples).
+  - deterministic sweep reproducibility.
+- `node --test test/pushface-color-neutral.test.js`: 3 pass / 0 fail.
+- `node scripts/check-js.js`: Syntax OK, 61 JS files.
+- `node scripts/check-agent-rules.js`: PASSED.
+- `node scripts/check-golden-standard.js`: PASS.
+
+## Next action
+Fleet PRE independently falsifies exact H2 (`17c31352`), then Ocean integrates only if READY_FOR_OCEAN; no merge/deploy by this slice.
+
+---
+
 # PR #91 Stack Completion refresh — 2026-09-12
 
 ## Task
