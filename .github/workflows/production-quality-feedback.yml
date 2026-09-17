@@ -29,7 +29,16 @@ jobs:
       - name: Classify production quality verdict
         id: verdict
         if: always()
-        run: node -e "const fs=require('fs');let v='FATAL';try{v=JSON.parse(fs.readFileSync('PRODUCTION_QUALITY_REPORT.json','utf8')).verdict||v}catch{};fs.appendFileSync(process.env.GITHUB_OUTPUT,`verdict=${v}\n`);console.log(`[PRODUCTION_QUALITY] workflow verdict=${v}`)"
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          let verdict = 'FATAL';
+          try {
+            verdict = JSON.parse(fs.readFileSync('PRODUCTION_QUALITY_REPORT.json', 'utf8')).verdict || verdict;
+          } catch {}
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, 'verdict=' + verdict + '\n');
+          console.log('[PRODUCTION_QUALITY] workflow verdict=' + verdict);
+          NODE
       - name: Warn when fresh production evidence is unavailable
         if: steps.verdict.outputs.verdict == 'INCONCLUSIVE'
         run: echo "::warning::No fresh production sessions in the current evidence window; this is not classified as a regression."
