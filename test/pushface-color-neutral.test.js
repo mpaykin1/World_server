@@ -61,7 +61,7 @@ const VERTEX_PATCHES = [null, [1, 1, 1, 1], [0.5, 0.8, 1, 0.6], [0, 1, 0.25, 0.9
 test('pushFace source removes per-vertex THREE.Color clones', () => {
   const pushFaceLine = client.split('\n').find((line) => line.includes('function pushFace'));
   assert.ok(pushFaceLine, 'pushFace must exist in apps/voxel-world/client.js');
-  assert.ok(pushFaceLine.includes('const shade=face.shade*(vertexShade?.[i]??1)'),
+  assert.ok(pushFaceLine.includes('shade=face.shade*(vertexShade?.[i]??1)'),
     'pushFace must compute the shade scalar once per vertex');
   assert.ok(pushFaceLine.includes('arr.col.push(col.r*shade,col.g*shade,col.b*shade)'),
     'pushFace must push the scalar-multiplied color components');
