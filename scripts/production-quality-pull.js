@@ -12,11 +12,20 @@ function evaluate(summary,budgets){
   }
   return {sessions,violations};
 }
-async function pull(base,hours){
-  const r=await fetch(`${base}/api/quality-summary?hours=${hours}`,{signal:AbortSignal.timeout(20000)});
-  const j=await r.json().catch(()=>({ok:false,error:'invalid json'}));
-  if(!r.ok||j.ok!==true)return {ok:false,error:j.error||`HTTP ${r.status}`,status:r.status,apps:j.apps||{}};
-  return j;
+async function pull(base,hours,{attempts=3,delayMs=250}={}){
+  let last={ok:false,error:'unavailable',apps:{}},lastError=null;
+  for(let attempt=1;attempt<=attempts;attempt++){
+    try{
+      const r=await fetch(`${base}/api/quality-summary?hours=${hours}`,{signal:AbortSignal.timeout(20000)});
+      const j=await r.json().catch(()=>({ok:false,error:'invalid json'}));
+      if(r.ok&&j.ok===true)return j;
+      last={ok:false,error:j.error||`HTTP ${r.status}`,status:r.status,apps:j.apps||{}};lastError=null;
+      if(r.status<500&&r.status!==429)break;
+    }catch(error){lastError=error;}
+    if(attempt<attempts&&delayMs>0)await new Promise(resolve=>setTimeout(resolve,delayMs*attempt));
+  }
+  if(lastError)throw lastError;
+  return last;
 }
 async function main(){
   const ROOT=process.cwd(),base=(process.env.QUALITY_BASE_URL||'https://world-server.mmmpaykin.workers.dev').replace(/\/$/,'');
@@ -33,4 +42,4 @@ async function main(){
   if(verdict==='BLOCK')process.exitCode=23;else if(verdict==='INCONCLUSIVE')process.exitCode=24;
 }
 if(require.main===module)main().catch((error)=>{console.error('[PRODUCTION_QUALITY] fatal:',error);process.exitCode=1;});
-module.exports={evaluate};
+module.exports={evaluate,pull};
