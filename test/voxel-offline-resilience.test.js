@@ -54,7 +54,7 @@ test('streaming slices both chunk generation and meshing while edits stay synchr
 
 
 test('voxel faces provide exact flat normals without recomputing streamed geometry normals', () => {
-  assert.match(source, /if\(arr\.nor\)arr\.nor\.push\(face\.d\[0\],face\.d\[1\],face\.d\[2\]\)/);
+  assert.match(source, /arr\.nor\.push\(face\.d\[0\],face\.d\[1\],face\.d\[2\]\)/);
   assert.match(source, /if\(data\.nor\?\.length\)g\.setAttribute\('normal'/);
   assert.match(source, /if\(!data\.nor\?\.length\)g\.computeVertexNormals\(\)/);
   assert.match(source, /solid=\{pos:\[\],col:\[\],nor:\[\]/);
