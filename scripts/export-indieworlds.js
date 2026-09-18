@@ -40,7 +40,7 @@ function drift(artifacts = expectedArtifacts()) {
   const mismatches = [];
   for (const [relativePath, expected] of artifacts) {
     const destination = path.join(outputRoot, relativePath);
-    const actual = fs.existsSync(destination) ? fs.readFileSync(destination, 'utf8') : null;
+    const actual = fs.existsSync(destination) ? fs.readFileSync(destination, 'utf8').replace(/\r\n/g, '\n') : null;
     if (actual !== expected) mismatches.push(relativePath);
   }
   const worldsDir = path.join(outputRoot, 'worlds');
