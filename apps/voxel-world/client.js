@@ -425,10 +425,11 @@ function blockAt(x,y,z){
 }
 function isOccluding(b){ return b!==BLOCK.AIR&&b!==BLOCK.WATER&&BLOCKS[b]?.alpha===undefined; }
 
-const FACE_AO_SHADE=[1,.86,.72,.58],FACE_AO_SCRATCH=[1,1,1,1];
+const FACE_AO_SHADE=[1,.86,.72,.58],FACE_AO_SCRATCH=[1,1,1,1],FACE_AO_SIDE_A=[0,0],FACE_AO_SIDE_B=[0,0];
 function faceCornerAO(lx,y,lz,face,getBlock){
-  const n=face.d,a0=n[0]?1:0,a1=n[0]?2:(n[1]?2:1),out=FACE_AO_SCRATCH;
-  for(let i=0;i<4;i++){const v=face.v[i],s1=v[a0]?1:-1,s2=v[a1]?1:-1;let ax=n[0],ay=n[1],az=n[2],bx=ax,by=ay,bz=az,cx=ax,cy=ay,cz=az;if(a0===0){ax+=s1;cx+=s1;}else if(a0===1){ay+=s1;cy+=s1;}else{az+=s1;cz+=s1;}if(a1===0){bx+=s2;cx+=s2;}else if(a1===1){by+=s2;cy+=s2;}else{bz+=s2;cz+=s2;}const o1=isOccluding(getBlock(lx+ax,y+ay,lz+az))?1:0,o2=isOccluding(getBlock(lx+bx,y+by,lz+bz))?1:0,oc=isOccluding(getBlock(lx+cx,y+cy,lz+cz))?1:0;out[i]=FACE_AO_SHADE[o1&&o2?3:o1+o2+oc];}
+  const n=face.d,a0=n[0]?1:0,a1=n[0]?2:(n[1]?2:1),out=FACE_AO_SCRATCH,sideA=FACE_AO_SIDE_A,sideB=FACE_AO_SIDE_B;
+  for(let si=0;si<2;si++){const step=si?1:-1;let ax=n[0],ay=n[1],az=n[2],bx=ax,by=ay,bz=az;if(a0===0)ax+=step;else if(a0===1)ay+=step;else az+=step;if(a1===0)bx+=step;else if(a1===1)by+=step;else bz+=step;sideA[si]=isOccluding(getBlock(lx+ax,y+ay,lz+az))?1:0;sideB[si]=isOccluding(getBlock(lx+bx,y+by,lz+bz))?1:0;}
+  for(let i=0;i<4;i++){const v=face.v[i],s1=v[a0]?1:-1,s2=v[a1]?1:-1,o1=sideA[s1>0?1:0],o2=sideB[s2>0?1:0];let cx=n[0],cy=n[1],cz=n[2];if(a0===0)cx+=s1;else if(a0===1)cy+=s1;else cz+=s1;if(a1===0)cx+=s2;else if(a1===1)cy+=s2;else cz+=s2;const oc=isOccluding(getBlock(lx+cx,y+cy,lz+cz))?1:0;out[i]=FACE_AO_SHADE[o1&&o2?3:o1+o2+oc];}
   return out;
 }
 function waterShoreAt(lx,y,lz,getBlock){if(isOccluding(getBlock(lx+1,y,lz))||isOccluding(getBlock(lx-1,y,lz))||isOccluding(getBlock(lx,y,lz+1))||isOccluding(getBlock(lx,y,lz-1)))return 1;return (isOccluding(getBlock(lx+1,y,lz+1))||isOccluding(getBlock(lx+1,y,lz-1))||isOccluding(getBlock(lx-1,y,lz+1))||isOccluding(getBlock(lx-1,y,lz-1)))?.55:0;}
