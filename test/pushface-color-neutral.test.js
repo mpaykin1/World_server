@@ -42,7 +42,8 @@ test('pushFace source removes per-vertex THREE.Color clones', () => {
   const pushFaceLine = client.split('\n').find((line) => line.includes('function pushFace'));
   assert.ok(pushFaceLine, 'pushFace must exist in apps/voxel-world/client.js');
   const usesScalarShade = pushFaceLine.includes('shade=face.shade*(vertexShade?.[i]??1)');
-  const usesPackedAoLut = pushFaceLine.includes('packedColor=faceColors?.[vertexShade?.[i]??0]');
+  const usesPackedAoLut = pushFaceLine.includes('packedColor=faceColors?.[vertexShade?.[i]??0]') ||
+    pushFaceLine.includes('packedColor=faceColors[vertexShade?.[i]??0]');
   assert.ok(usesScalarShade || usesPackedAoLut,
     'pushFace must use scalar shading or the precomputed material/face/AO color LUT');
   assert.ok(
