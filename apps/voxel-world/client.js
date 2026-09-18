@@ -563,7 +563,7 @@ async function editBlock(place){
   const hit=rayVoxel(); if(!hit){targetEl.textContent='Нет блока в радиусе';return;} const c=place?hit.prev:hit.hit;if(!c)return; const b=place?HOTBAR[player.selected]:BLOCK.AIR;
   if(place&&collidesWithCell(c.x,c.y,c.z)){targetEl.textContent='Нельзя поставить блок в игрока';return;}
   const old=blockAt(c.x,c.y,c.z); setBlockLocal(c.x,c.y,c.z,b);
-  window.WorldPhaserFx?.emit(place?'place':'break',{color:BLOCKS[place?b:old]?.color,intensity:place?.9:1.1});
+  window.WorldPhaserFx?.emit(place?'place':'break',{color:BLOCKS[place?b:old]?.color,intensity:(place?0.9:1.1)});
   try{
     const result=await api('set_block',{worldId:ACTIVE_WORLD_ID,x:c.x,y:c.y,z:c.z,blockType:b,playerPosition:{x:player.pos.x,y:player.pos.y,z:player.pos.z}});
     if(channel) void channel.send({type:'broadcast',event:'block_set',payload:{x:c.x,y:c.y,z:c.z,block:b}});
