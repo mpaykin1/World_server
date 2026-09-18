@@ -20,7 +20,8 @@
     disabledUntil: 0,
     idleTimer: null,
     wokeAt: 0,
-    lastEffectAt: 0
+    lastEffectAt: 0,
+    qualityCap: 1
   };
 
   const queue = [];
@@ -32,6 +33,7 @@
     return Math.max(0.32, Math.min(1, q));
   })();
   state.quality = baseQuality;
+  state.qualityCap = baseQuality;
 
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
@@ -206,7 +208,7 @@
       return false;
     }
     if (fps < 43) state.quality = Math.max(0.34, state.quality * 0.9);
-    else if (fps > 54) state.quality = Math.min(baseQuality, state.quality + 0.02);
+    else if (fps > 54) state.quality = Math.min(state.qualityCap, state.quality + 0.02);
     return true;
   }
 
@@ -297,7 +299,7 @@
     emit,
     ensureReady: loadPhaser,
     setQuality(value) {
-      state.quality = clamp(Number(value) || baseQuality, 0.25, 1);
+      state.quality = clamp(Number(value) || state.qualityCap, 0.25, state.qualityCap);
     },
     stats() {
       return {
@@ -308,11 +310,22 @@
         rendered: state.rendered,
         dropped: state.dropped,
         quality: Number(state.quality.toFixed(2)),
+        qualityCap: Number(state.qualityCap.toFixed(2)),
         fps: Number(state.lastFps.toFixed(1)),
         reducedMotion,
         renderer: state.game?.renderer?.type ?? null
       };
     }
+  });
+
+  addEventListener('worldqualitychange', event => {
+    const detail = event.detail || {};
+    if (detail.app && detail.app !== 'voxel-world') return;
+    const effectScale = Number.isFinite(Number(detail.effectBudgetScale)) ? Number(detail.effectBudgetScale) : 1;
+    const particleScale = Number.isFinite(Number(detail.particleScale)) ? Number(detail.particleScale) : 1;
+    const externalScale = clamp(Math.min(effectScale, particleScale), 0.25, 1);
+    state.qualityCap = clamp(baseQuality * externalScale, 0.25, baseQuality);
+    state.quality = Math.min(state.quality, state.qualityCap);
   });
 
   addEventListener('world:science-domain', event => {
