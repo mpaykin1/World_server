@@ -466,9 +466,12 @@ async function rebuildChunkIncremental(c){
   }}if((lx+1)%columnsPerSlice===0&&lx+1<CHUNK)await yieldChunkBuild();}
   for(const [data,mat] of [[solid,solidMaterial],[translucent,transparentMaterial],[water,waterMaterial]])if(data.idx.length){const m=new THREE.Mesh(makeGeometry(data),mat);m.position.set(bx,0,bz);m.receiveShadow=true;m.castShadow=mat===solidMaterial;c.meshes.push(m);worldGroup.add(m);}
 }
+function goldenVegetationEditCanChangeSample(x,y,z){
+  return (mod(x,CHUNK)&1)===1&&(mod(z,CHUNK)&1)===1&&y===heightAt(x,z);
+}
 function setBlockLocal(x,y,z,b){
   const safe=validBlockType(b); if(safe===null||!Number.isInteger(x)||!Number.isInteger(y)||!Number.isInteger(z)||y<0||y>=WORLD_Y)return false;
-  overrides.set(key3(x,y,z),safe); const cx=floorDiv(x,CHUNK),cz=floorDiv(z,CHUNK),c=chunks.get(key2(cx,cz)); if(c){c.set(mod(x,CHUNK),y,mod(z,CHUNK),safe);rebuildChunk(c);} const lx=mod(x,CHUNK),lz=mod(z,CHUNK); if(lx===0)chunks.get(key2(cx-1,cz))&&rebuildChunk(chunks.get(key2(cx-1,cz))); if(lx===15)chunks.get(key2(cx+1,cz))&&rebuildChunk(chunks.get(key2(cx+1,cz))); if(lz===0)chunks.get(key2(cx,cz-1))&&rebuildChunk(chunks.get(key2(cx,cz-1))); if(lz===15)chunks.get(key2(cx,cz+1))&&rebuildChunk(chunks.get(key2(cx,cz+1))); refreshGoldenVegetation(); return true;
+  overrides.set(key3(x,y,z),safe); const cx=floorDiv(x,CHUNK),cz=floorDiv(z,CHUNK),c=chunks.get(key2(cx,cz)); if(c){c.set(mod(x,CHUNK),y,mod(z,CHUNK),safe);rebuildChunk(c);} const lx=mod(x,CHUNK),lz=mod(z,CHUNK); if(lx===0)chunks.get(key2(cx-1,cz))&&rebuildChunk(chunks.get(key2(cx-1,cz))); if(lx===15)chunks.get(key2(cx+1,cz))&&rebuildChunk(chunks.get(key2(cx+1,cz))); if(lz===0)chunks.get(key2(cx,cz-1))&&rebuildChunk(chunks.get(key2(cx,cz-1))); if(lz===15)chunks.get(key2(cx,cz+1))&&rebuildChunk(chunks.get(key2(cx,cz+1))); if(goldenVegetationEditCanChangeSample(x,y,z))refreshGoldenVegetation(); return true;
 }
 
 let goldenVegetationPopulation=0;
