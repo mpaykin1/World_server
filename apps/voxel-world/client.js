@@ -164,10 +164,10 @@ const FACE=[
 ];
 
 class ChunkData{
-  constructor(cx,cz){ this.cx=cx;this.cz=cz;this.blocks=new Uint8Array(CHUNK*WORLD_Y*CHUNK);this.meshes=[];this.ready=false; }
+  constructor(cx,cz){ this.cx=cx;this.cz=cz;this.blocks=new Uint8Array(CHUNK*WORLD_Y*CHUNK);this.columnTop=new Uint8Array(CHUNK*CHUNK);this.meshes=[];this.ready=false; }
   idx(lx,y,lz){ return (y*CHUNK+lz)*CHUNK+lx; }
   get(lx,y,lz){ if(lx<0||lz<0||lx>=CHUNK||lz>=CHUNK||y<0||y>=WORLD_Y) return BLOCK.AIR; return this.blocks[this.idx(lx,y,lz)]; }
-  set(lx,y,lz,b){ if(lx<0||lz<0||lx>=CHUNK||lz>=CHUNK||y<0||y>=WORLD_Y) return; this.blocks[this.idx(lx,y,lz)]=b; }
+  set(lx,y,lz,b){ if(lx<0||lz<0||lx>=CHUNK||lz>=CHUNK||y<0||y>=WORLD_Y) return; const i=this.idx(lx,y,lz),ci=lz*CHUNK+lx,prev=this.blocks[i];this.blocks[i]=b;if(b!==BLOCK.AIR){if(y>this.columnTop[ci])this.columnTop[ci]=y;}else if(prev!==BLOCK.AIR&&y===this.columnTop[ci]){let top=y-1;while(top>0&&this.blocks[this.idx(lx,top,lz)]===BLOCK.AIR)top--;this.columnTop[ci]=top;} }
 }
 const chunks=new Map();
 const overrides=new Map();
@@ -443,7 +443,7 @@ function rebuildChunk(c){
   for(const m of c.meshes){ worldGroup.remove(m); m.geometry.dispose(); } c.meshes=[];
   const solid={pos:[],col:[],nor:[],idx:[],mat:[],uv:[]}, translucent={pos:[],col:[],nor:[],idx:[]}, water={pos:[],col:[],nor:[],idx:[],shore:[]}; const bx=c.cx*CHUNK,bz=c.cz*CHUNK;
   const localBlock=(lx,y,lz)=>(lx>=0&&lz>=0&&lx<CHUNK&&lz<CHUNK&&y>=0&&y<WORLD_Y)?c.get(lx,y,lz):blockAt(bx+lx,y,bz+lz);
-  for(let lx=0;lx<CHUNK;lx++)for(let lz=0;lz<CHUNK;lz++){let top=WORLD_Y-1;while(top>0&&c.get(lx,top,lz)===BLOCK.AIR)top--;for(let y=0;y<=top;y++){
+  for(let lx=0;lx<CHUNK;lx++)for(let lz=0;lz<CHUNK;lz++){const top=c.columnTop[lz*CHUNK+lx];for(let y=0;y<=top;y++){
     const b=c.get(lx,y,lz); if(b===BLOCK.AIR) continue; const gx=bx+lx,gz=bz+lz;
     for(const f of FACE){ const nb=localBlock(lx+f.d[0],y+f.d[1],lz+f.d[2]); let visible=false;
       if(b===BLOCK.WATER) visible=nb!==BLOCK.WATER&&nb===BLOCK.AIR;
@@ -459,7 +459,7 @@ async function rebuildChunkIncremental(c){
   const solid={pos:[],col:[],nor:[],idx:[],mat:[],uv:[]},translucent={pos:[],col:[],nor:[],idx:[]},water={pos:[],col:[],nor:[],idx:[],shore:[]},bx=c.cx*CHUNK,bz=c.cz*CHUNK;
   const localBlock=(lx,y,lz)=>(lx>=0&&lz>=0&&lx<CHUNK&&lz<CHUNK&&y>=0&&y<WORLD_Y)?c.get(lx,y,lz):blockAt(bx+lx,y,bz+lz);
   const director=window.GoldenQualityDirector?.forRenderer?.(renderer),quality=Number(director?.state?.quality||1),columnsPerSlice=quality<.68?2:4;
-  for(let lx=0;lx<CHUNK;lx++){for(let lz=0;lz<CHUNK;lz++){let top=WORLD_Y-1;while(top>0&&c.get(lx,top,lz)===BLOCK.AIR)top--;for(let y=0;y<=top;y++){
+  for(let lx=0;lx<CHUNK;lx++){for(let lz=0;lz<CHUNK;lz++){const top=c.columnTop[lz*CHUNK+lx];for(let y=0;y<=top;y++){
     const b=c.get(lx,y,lz);if(b===BLOCK.AIR)continue;
     for(const f of FACE){const nb=localBlock(lx+f.d[0],y+f.d[1],lz+f.d[2]);let visible=false;if(b===BLOCK.WATER)visible=nb!==BLOCK.WATER&&nb===BLOCK.AIR;else if(BLOCKS[b]?.alpha!==undefined)visible=nb===BLOCK.AIR||nb===BLOCK.WATER;else visible=!isOccluding(nb)||BLOCKS[nb]?.alpha!==undefined;if(!visible)continue;const dst=b===BLOCK.WATER?water:(BLOCKS[b]?.alpha!==undefined?translucent:solid),ao=b===BLOCK.WATER?null:faceCornerAO(lx,y,lz,f,localBlock),shore=(b===BLOCK.WATER&&f.d[1]===1)?waterShoreAt(lx,y,lz,localBlock):0;pushFace(dst,lx,y,lz,f,BLOCKS[b].color,ao,shore,b);}
   }}if((lx+1)%columnsPerSlice===0&&lx+1<CHUNK)await yieldChunkBuild();}
