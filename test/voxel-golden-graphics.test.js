@@ -71,5 +71,10 @@ test('startup streaming ramps detail without blocking first playable seconds',()
   assert.match(src,/goldenStreamingStartedAt=performance\.now\(\)/);
   assert.match(src,/age<12000\?1:\(age<30000\?2:VIEW\)/);
   assert.match(src,/need\.length>=2/);
-  assert.ok(/while\(top>0&&c\.get\(lx,top,lz\)===BLOCK\.AIR\)top--/.test(src) || /const top=c\.columnTop\[lz\*CHUNK\+lx\]/.test(src), 'meshing must bound each column by its highest non-air voxel');`r`n  if(/columnTop/.test(src)){`r`n    assert.match(src,/columnTop=new Uint8Array\(CHUNK\*CHUNK\)/);`r`n    assert.match(src,/if\(b!==BLOCK\.AIR\).*if\(y>this\.columnTop\[ci\]\)this\.columnTop\[ci\]=y/);`r`n    assert.match(src,/else if\(prev!==BLOCK\.AIR&&y===this\.columnTop\[ci\]\).*while\(top>0&&this\.blocks\[this\.idx\(lx,top,lz\)\]===BLOCK\.AIR\)top--/);`r`n  }
+  assert.ok(/while\(top>0&&c\.get\(lx,top,lz\)===BLOCK\.AIR\)top--/.test(src) || /const top=c\.columnTop\[lz\*CHUNK\+lx\]/.test(src), 'meshing must bound each column by its highest non-air voxel');
+  if(/columnTop/.test(src)){
+    assert.match(src,/columnTop=new Uint8Array\(CHUNK\*CHUNK\)/);
+    assert.match(src,/if\(b!==BLOCK\.AIR\).*if\(y>this\.columnTop\[ci\]\)this\.columnTop\[ci\]=y/);
+    assert.match(src,/else if\(prev!==BLOCK\.AIR&&y===this\.columnTop\[ci\]\).*while\(top>0&&this\.blocks\[this\.idx\(lx,top,lz\)\]===BLOCK\.AIR\)top--/);
+  }
 });
