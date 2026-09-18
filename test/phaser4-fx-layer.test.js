@@ -21,4 +21,6 @@ test('Phaser FX layer has performance safeguards', () => {
   assert.match(fx, /actualFps/);
   assert.match(fx, /disabledUntil/);
   assert.match(fx, /requestIdleCallback/);
+  assert.match(fx, /loop\?\.sleep/);
+  assert.match(fx, /Phaser\.CANVAS/);
 });
