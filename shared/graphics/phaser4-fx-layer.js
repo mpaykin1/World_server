@@ -17,7 +17,10 @@
     dropped: 0,
     lastFps: 60,
     quality: 1,
-    disabledUntil: 0
+    disabledUntil: 0,
+    idleTimer: null,
+    wokeAt: 0,
+    lastEffectAt: 0
   };
 
   const queue = [];
@@ -74,7 +77,7 @@
     state.phase = 'initializing';
 
     state.game = new Phaser.Game({
-      type: Phaser.AUTO,
+      type: coarsePointer ? Phaser.CANVAS : Phaser.AUTO,
       parent: root,
       width: Math.max(1, innerWidth),
       height: Math.max(1, innerHeight),
@@ -92,6 +95,7 @@
         create() {
           state.scene = this;
           state.phase = 'ready';
+          state.wokeAt = performance.now();
           const canvas = state.game?.canvas;
           if (canvas) {
             canvas.style.position = 'absolute';
@@ -104,6 +108,12 @@
             detail: { id: 'phaser4-fx', version: PHASER_VERSION }
           }));
           flushQueue();
+          setTimeout(() => {
+            if (performance.now() - state.lastEffectAt > 900) {
+              state.game?.loop?.sleep?.();
+              state.phase = 'ready-idle';
+            }
+          }, 1200);
         }
       }
     });
@@ -167,7 +177,26 @@
     return state.loadPromise;
   }
 
+  function wakeFxLoop() {
+    const now = performance.now();
+    const wasSleeping = state.game?.loop?.running === false;
+    state.lastEffectAt = now;
+    if (wasSleeping) {
+      state.game?.loop?.wake?.(true);
+      state.wokeAt = now;
+    }
+    state.phase = 'active';
+    clearTimeout(state.idleTimer);
+    state.idleTimer = setTimeout(() => {
+      if (performance.now() - state.lastEffectAt >= 720) {
+        state.game?.loop?.sleep?.();
+        state.phase = 'ready-idle';
+      }
+    }, 760);
+  }
+
   function adaptQuality() {
+    if (performance.now() - state.wokeAt < 650) return true;
     const fps = Number(state.game?.loop?.actualFps || 60);
     if (Number.isFinite(fps) && fps > 0) state.lastFps = fps;
 
@@ -194,6 +223,7 @@
       state.dropped += 1;
       return;
     }
+    wakeFxLoop();
     if (!adaptQuality()) {
       state.dropped += 1;
       return;
