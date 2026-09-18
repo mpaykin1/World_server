@@ -563,6 +563,7 @@ async function editBlock(place){
   const hit=rayVoxel(); if(!hit){targetEl.textContent='Нет блока в радиусе';return;} const c=place?hit.prev:hit.hit;if(!c)return; const b=place?HOTBAR[player.selected]:BLOCK.AIR;
   if(place&&collidesWithCell(c.x,c.y,c.z)){targetEl.textContent='Нельзя поставить блок в игрока';return;}
   const old=blockAt(c.x,c.y,c.z); setBlockLocal(c.x,c.y,c.z,b);
+  window.WorldPhaserFx?.emit(place?'place':'break',{color:BLOCKS[place?b:old]?.color,intensity:place?.9:1.1});
   try{
     const result=await api('set_block',{worldId:ACTIVE_WORLD_ID,x:c.x,y:c.y,z:c.z,blockType:b,playerPosition:{x:player.pos.x,y:player.pos.y,z:player.pos.z}});
     if(channel) void channel.send({type:'broadcast',event:'block_set',payload:{x:c.x,y:c.y,z:c.z,block:b}});
@@ -668,7 +669,7 @@ function startAutodemo(){if(autodemo)return autodemo;try{autodemo=installVoxelAu
 startAutodemo();
 
 window.VoxelWorldRuntime={
-    stats(){return {player:{x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw,pitch:player.pitch,onGround:player.onGround},renderer:renderer?.info?.render,pixelRatio:renderer?.getPixelRatio?.()||1,backendMode,chunks:chunks.size,playable:started&&chunks.size>0,goldenGraphics:{vertexAO:true,waterV2:true,waterV3:true,vegetationInstances:goldenVegetationMesh.count,vegetationInstanced:true},autodemo:autodemo?.stats?.()||null};},
+    stats(){return {player:{x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw,pitch:player.pitch,onGround:player.onGround},renderer:renderer?.info?.render,pixelRatio:renderer?.getPixelRatio?.()||1,backendMode,chunks:chunks.size,playable:started&&chunks.size>0,goldenGraphics:{vertexAO:true,waterV2:true,waterV3:true,vegetationInstances:goldenVegetationMesh.count,vegetationInstanced:true},phaserFx:window.WorldPhaserFx?.stats?.()||null,autodemo:autodemo?.stats?.()||null};},
     setView(nextYaw,nextPitch=0){player.yaw=Number(nextYaw)||0;player.pitch=Number(nextPitch)||0;}
   };
 
