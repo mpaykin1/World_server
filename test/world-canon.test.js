@@ -78,6 +78,7 @@ test('cross-world canon consequences carry deterministic gameplay effects that r
   assert.match(client, /updateCanonEffects\(now\)/);
   assert.match(client, /void hydrateCanon\(\)/);
   assert.match(client, /for\(let attempt=0;attempt<2;attempt\+\+\)/);
+  assert.match(client, /error\.retryable=r\.status>=500/);
   assert.match(client, /const body=JSON\.stringify\([\s\S]*?idempotencyKey/);
   assert.match(client, /canonEl\.textContent='канон: '/);
   assert.match(client, /canon:\{seen:canonSeen\.size,visibleEffects:canonEffects\.size/);

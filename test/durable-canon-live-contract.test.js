@@ -18,7 +18,11 @@ test('durable canon live verifier uses real write, retry, fresh reads, and recon
 
 test('durable canon live verifier fails closed and cleans all bounded test state', () => {
   assert.match(verifier, /authorization: `Bearer \$\{registration\.token\}`/);
+  assert.match(verifier, /worldId: '\.\.\/escape'/);
+  assert.match(verifier, /hostile\.status === 400/);
   assert.match(verifier, /testNamespace: 'fleet-durable-canon'/);
-  assert.match(verifier, /finally \{[\s\S]*world_canon_events'[\s\S]*\.delete\(\)\.in\('event_key', eventKeys\)/);
+  assert.match(verifier, /\.delete\(\)\.eq\('cause_event_key', sourceEventKey\)/);
+  assert.match(verifier, /\.delete\(\)\.eq\('event_key', sourceEventKey\)/);
+  assert.match(verifier, /profiles'[\s\S]*username\.toLowerCase\(\)/);
   assert.match(verifier, /admin\.auth\.admin\.deleteUser\(userId\)/);
 });

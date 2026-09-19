@@ -68,8 +68,8 @@ async function canonApi(eventType,summary,payload,idempotencyKey){
   const body=JSON.stringify({action:'record',guestId:guestId(),worldId:ACTIVE_WORLD_ID,eventType,summary,payload,idempotencyKey});
   let lastError=null;
   for(let attempt=0;attempt<2;attempt++){
-    try{const r=await fetch('/api/canon',{method:'POST',headers,body});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Canon API error');return j;}
-    catch(error){lastError=error;if(attempt===0)await new Promise(resolve=>setTimeout(resolve,250));}
+    try{const r=await fetch('/api/canon',{method:'POST',headers,body});const j=await r.json().catch(()=>({}));if(!r.ok){const error=new Error(j.error||'Canon API error');error.retryable=r.status>=500;throw error;}return j;}
+    catch(error){lastError=error;if(attempt===0&&error.retryable!==false)await new Promise(resolve=>setTimeout(resolve,250));else break;}
   }
   throw lastError||new Error('Canon API error');
 }

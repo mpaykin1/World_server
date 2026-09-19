@@ -3,6 +3,7 @@
 const crypto = require('node:crypto');
 const { chromium, devices } = require('@playwright/test');
 const { createAdminClient } = require('../lib/env');
+const { eventKeyFor } = require('../lib/world-canon');
 
 async function json(origin, pathname, options = {}) {
   const response = await fetch(new URL(pathname, origin), {
@@ -40,6 +41,8 @@ async function run(origin, expectedSha) {
   const username = `fleetcanon_${suffix}`;
   const password = `Ws!${crypto.randomBytes(12).toString('base64url')}`;
   const marker = `Fleet durable canon ${suffix}`;
+  const idempotencyKey = `fleet-durable-canon-${suffix}`;
+  const sourceEventKey = eventKeyFor({ worldId: 'main', eventType: 'player_world_change', idempotencyKey });
   let userId = '';
   let eventKeys = [];
   try {
@@ -51,9 +54,14 @@ async function run(origin, expectedSha) {
     });
     assert(registration.token && registration.user?.id, 'registration did not return a session');
     userId = registration.user.id;
+    const hostile = await fetch(new URL('/api/canon', origin), { method: 'POST',
+      headers: { authorization: `Bearer ${registration.token}`, 'content-type': 'application/json' },
+      body: JSON.stringify({ action: 'record', worldId: '../escape', eventType: 'player_world_change',
+        summary: marker, payload: {}, idempotencyKey }) });
+    assert(hostile.status === 400, `hostile canon payload returned ${hostile.status}, expected 400`);
     const payload = { action: 'record', worldId: 'main', eventType: 'player_world_change',
       summary: marker, payload: { testNamespace: 'fleet-durable-canon', marker },
-      idempotencyKey: `fleet-durable-canon-${suffix}` };
+      idempotencyKey };
     const post = () => json(origin, '/api/canon', {
       method: 'POST',
       headers: { authorization: `Bearer ${registration.token}`, 'content-type': 'application/json' },
@@ -86,9 +94,14 @@ async function run(origin, expectedSha) {
       consequenceEventKey: target.event_key, targetWorldId: target.target_world_id, idempotentRetry: true,
       freshSourceRead: true, freshConnectedRead: true, desktop, mobile, cleanupKeys: eventKeys };
   } finally {
-    if (eventKeys.length) {
-      const { error } = await admin.from('world_canon_events').delete().in('event_key', eventKeys);
-      if (error) throw new Error(`canon cleanup failed: ${error.message}`);
+    const consequenceCleanup = await admin.from('world_canon_events').delete().eq('cause_event_key', sourceEventKey);
+    if (consequenceCleanup.error) throw new Error(`consequence cleanup failed: ${consequenceCleanup.error.message}`);
+    const sourceCleanup = await admin.from('world_canon_events').delete().eq('event_key', sourceEventKey);
+    if (sourceCleanup.error) throw new Error(`source cleanup failed: ${sourceCleanup.error.message}`);
+    if (!userId) {
+      const lookup = await admin.from('profiles').select('id').eq('username', username.toLowerCase()).maybeSingle();
+      if (lookup.error) throw new Error(`test user lookup failed: ${lookup.error.message}`);
+      userId = lookup.data?.id || '';
     }
     if (userId) {
       const { error } = await admin.auth.admin.deleteUser(userId);
