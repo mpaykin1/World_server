@@ -7,3 +7,4 @@
 !assets/**
 !data/
 !data/world-graph-index.json
+!data/creature-lod-policy.json
