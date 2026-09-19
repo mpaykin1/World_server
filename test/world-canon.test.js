@@ -77,4 +77,11 @@ test('cross-world canon consequences carry deterministic gameplay effects that r
   assert.match(client, /async function hydrateCanon/);
   assert.match(client, /updateCanonEffects\(now\)/);
   assert.match(client, /void hydrateCanon\(\)/);
+  assert.match(client, /for\(let attempt=0;attempt<2;attempt\+\+\)/);
+  assert.match(client, /error\.retryable=r\.status>=500/);
+  assert.match(client, /const body=JSON\.stringify\([\s\S]*?idempotencyKey/);
+  assert.match(client, /canonEl\.textContent='канон: '/);
+  assert.match(client, /canon:\{seen:canonSeen\.size,visibleEffects:canonEffects\.size/);
+  const html = fs.readFileSync(path.join(root, 'apps', 'voxel-world', 'index.html'), 'utf8');
+  assert.match(html, /id="vwCanon" role="status" aria-live="polite"/);
 });

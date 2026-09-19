@@ -44,6 +44,7 @@ const playersEl = document.getElementById('vwPlayers');
 const targetEl = document.getElementById('targetInfo');
 const titleEl = document.getElementById('vwTitle');
 const loreEl = document.getElementById('vwLore');
+const canonEl = document.getElementById('vwCanon');
 const hotbarEl = document.getElementById('hotbar');
 
 function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
@@ -64,8 +65,13 @@ async function api(action,payload={}){
 
 async function canonApi(eventType,summary,payload,idempotencyKey){
   const headers={'Content-Type':'application/json','Accept':'application/json'}; const t=token(); if(!t)return null; headers.Authorization=`Bearer ${t}`;
-  const r=await fetch('/api/canon',{method:'POST',headers,body:JSON.stringify({action:'record',guestId:guestId(),worldId:ACTIVE_WORLD_ID,eventType,summary,payload,idempotencyKey})});
-  const j=await r.json().catch(()=>({})); if(!r.ok) throw new Error(j.error||'Canon API error'); return j;
+  const body=JSON.stringify({action:'record',guestId:guestId(),worldId:ACTIVE_WORLD_ID,eventType,summary,payload,idempotencyKey});
+  let lastError=null;
+  for(let attempt=0;attempt<2;attempt++){
+    try{const r=await fetch('/api/canon',{method:'POST',headers,body});const j=await r.json().catch(()=>({}));if(!r.ok){const error=new Error(j.error||'Canon API error');error.retryable=r.status>=500;throw error;}return j;}
+    catch(error){lastError=error;if(attempt===0&&error.retryable!==false)await new Promise(resolve=>setTimeout(resolve,250));else break;}
+  }
+  throw lastError||new Error('Canon API error');
 }
 
 function hash32(x,z,seed){ let h=(Math.imul(x,374761393)^Math.imul(z,668265263)^seed)|0; h=Math.imul(h^(h>>>13),1274126177); return ((h^(h>>>16))>>>0)/4294967295; }
@@ -603,8 +609,8 @@ function applyCanonEffect(event){
   group.position.set(x,y,z);scene.add(group);canonEffects.set(id,{id,group,ring,created,expiresAt:created+lifetime,intensity:clamp(Number(effect.intensity)||1,.5,1.5)});
 }
 function updateCanonEffects(now){for(const entry of [...canonEffects.values()]){if(Date.now()>entry.expiresAt){disposeCanonEffect(entry);continue;}entry.ring.rotation.z=now*.00035*entry.intensity;const p=.72+Math.sin(now*.002+entry.created*.0001)*.18;entry.group.scale.setScalar(p);}}
-function showCanonEvent(event){if(!event)return;const key=String(event.event_key||'');if(key&&canonSeen.has(key))return;if(key)canonSeen.add(key);applyCanonEffect(event);const text=String(event.summary||event.story||'').trim();if(text)window.AppCore?.toast?.('Canon: '+text.slice(0,160));}
-async function hydrateCanon(){try{const r=await fetch('/api/canon?worldId='+encodeURIComponent(ACTIVE_WORLD_ID)+'&limit=8',{headers:{Accept:'application/json'},cache:'no-store'});if(!r.ok)return;const j=await r.json();for(const event of [...(j.events||[])].reverse())showCanonEvent(event);}catch(error){console.warn('[CANON HYDRATE]',error?.message||error);}}
+function showCanonEvent(event){if(!event)return;const key=String(event.event_key||'');if(key&&canonSeen.has(key))return;if(key)canonSeen.add(key);applyCanonEffect(event);const text=String(event.summary||event.story||'').trim();if(text){if(canonEl){canonEl.textContent='канон: '+text.slice(0,120);canonEl.title=text;}window.AppCore?.toast?.('Canon: '+text.slice(0,160));}}
+async function hydrateCanon(){try{const r=await fetch('/api/canon?worldId='+encodeURIComponent(ACTIVE_WORLD_ID)+'&limit=8',{headers:{Accept:'application/json'},cache:'no-store'});if(!r.ok)return;const j=await r.json();const events=[...(j.events||[])].reverse();for(const event of events)showCanonEvent(event);if(!events.length&&canonEl)canonEl.textContent='канон: событий пока нет';}catch(error){if(canonEl)canonEl.textContent='канон: синхронизация недоступна';console.warn('[CANON HYDRATE]',error?.message||error);}}
 
 const remote=new Map();
 function avatarFor(p){
@@ -672,7 +678,7 @@ function startAutodemo(){if(autodemo)return autodemo;try{autodemo=installVoxelAu
 startAutodemo();
 
 window.VoxelWorldRuntime={
-    stats(){return {player:{x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw,pitch:player.pitch,onGround:player.onGround},renderer:renderer?.info?.render,pixelRatio:renderer?.getPixelRatio?.()||1,backendMode,chunks:chunks.size,playable:started&&chunks.size>0,goldenGraphics:{vertexAO:true,waterV2:true,waterV3:true,vegetationInstances:goldenVegetationMesh.count,vegetationInstanced:true},phaserFx:window.WorldPhaserFx?.stats?.()||null,autodemo:autodemo?.stats?.()||null};},
+    stats(){return {player:{x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw,pitch:player.pitch,onGround:player.onGround},renderer:renderer?.info?.render,pixelRatio:renderer?.getPixelRatio?.()||1,backendMode,chunks:chunks.size,playable:started&&chunks.size>0,goldenGraphics:{vertexAO:true,waterV2:true,waterV3:true,vegetationInstances:goldenVegetationMesh.count,vegetationInstanced:true},canon:{seen:canonSeen.size,visibleEffects:canonEffects.size,status:canonEl?.textContent||''},phaserFx:window.WorldPhaserFx?.stats?.()||null,autodemo:autodemo?.stats?.()||null};},
     setView(nextYaw,nextPitch=0){player.yaw=Number(nextYaw)||0;player.pitch=Number(nextPitch)||0;}
   };
 
