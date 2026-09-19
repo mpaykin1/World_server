@@ -13,6 +13,7 @@ test('durable canon live verifier uses real write, retry, fresh reads, and recon
   assert.match(verifier, /fresh source read missed the durable event/);
   assert.match(verifier, /fresh connected-world read missed the consequence/);
   assert.match(verifier, /visibleAfterReconnect[\s\S]*devices\['Desktop Chrome'\]/);
+  assert.match(verifier, /locator\('#loading'\)\.waitFor\(\{ state: 'hidden'/);
   assert.match(verifier, /target\.target_world_id, target\.summary, devices\['Pixel 7'\], true/);
   assert.match(verifier, /requireEffect[\s\S]*visibleEffects > 0/);
 });
@@ -29,4 +30,9 @@ test('durable canon live verifier fails closed and cleans all bounded test state
   assert.match(verifier, /DURABLE_CANON_EXTERNAL_CLEANUP === '1'/);
   assert.match(verifier, /\^\[0-9a-f\]\{10\}\$/);
   assert.match(verifier, /externalCleanup \? null : createAdminClient\(\)/);
+  assert.match(verifier, /DURABLE_CANON_TOKEN/);
+  assert.match(verifier, /pre-provisioned auth requires external cleanup mode/);
+  assert.match(verifier, /DURABLE_CANON_USER_ID is required/);
+  assert.match(verifier, /DURABLE_CANON_BROWSER_PATH/);
+  assert.match(verifier, /executablePath \? \{ executablePath \} : \{\}/);
 });

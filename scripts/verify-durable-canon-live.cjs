@@ -26,7 +26,7 @@ async function visibleAfterReconnect(browser, origin, token, worldId, expectedTe
   const page = await context.newPage();
   const response = await page.goto(new URL(`/apps/voxel-world/?world=${encodeURIComponent(worldId)}`, origin).href, { waitUntil: 'domcontentloaded' });
   assert(response?.ok(), `world ${worldId} returned HTTP ${response?.status()}`);
-  await page.locator('#loading.hidden').waitFor({ timeout: 30000 });
+  await page.locator('#loading').waitFor({ state: 'hidden', timeout: 30000 });
   await page.locator('#vwCanon').filter({ hasText: expectedText }).waitFor({ timeout: 20000 });
   const runtime = await page.evaluate(() => window.VoxelWorldRuntime?.stats?.());
   assert(runtime?.playable, `world ${worldId} did not become playable`);
@@ -51,11 +51,20 @@ async function run(origin, expectedSha) {
   try {
     const config = await json(origin, '/api/config');
     if (expectedSha) assert(config.deployedRevision === expectedSha, `revision mismatch: ${config.deployedRevision}`);
-    const registration = await json(origin, '/api/register', {
-      method: 'POST', headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ username, password })
-    });
-    assert(registration.token && registration.user?.id, 'registration did not return a session');
+    const providedToken = String(process.env.DURABLE_CANON_TOKEN || '').trim();
+    const providedUserId = String(process.env.DURABLE_CANON_USER_ID || '').trim();
+    let registration;
+    if (providedToken) {
+      assert(externalCleanup, 'pre-provisioned auth requires external cleanup mode');
+      assert(providedUserId, 'DURABLE_CANON_USER_ID is required with DURABLE_CANON_TOKEN');
+      registration = { token: providedToken, user: { id: providedUserId } };
+    } else {
+      registration = await json(origin, '/api/register', {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      assert(registration.token && registration.user?.id, 'registration did not return a session');
+    }
     userId = registration.user.id;
     const hostile = await fetch(new URL('/api/canon', origin), { method: 'POST',
       headers: { authorization: `Bearer ${registration.token}`, 'content-type': 'application/json' },
@@ -84,7 +93,8 @@ async function run(origin, expectedSha) {
     assert(connected.events.some(event => event.event_key === target.event_key), 'fresh connected-world read missed the consequence');
     assert(target.payload?.effect?.kind === 'canon_beacon', 'connected consequence has no visible canon beacon');
 
-    const browser = await chromium.launch({ headless: true });
+    const executablePath = String(process.env.DURABLE_CANON_BROWSER_PATH || '').trim();
+    const browser = await chromium.launch({ headless: true, ...(executablePath ? { executablePath } : {}) });
     let desktop;
     let mobile;
     try {
