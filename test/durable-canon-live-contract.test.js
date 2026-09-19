@@ -1,0 +1,24 @@
+'use strict';
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+
+const root = path.resolve(__dirname, '..');
+const verifier = fs.readFileSync(path.join(root, 'scripts', 'verify-durable-canon-live.cjs'), 'utf8');
+
+test('durable canon live verifier uses real write, retry, fresh reads, and reconnect browsers', () => {
+  assert.match(verifier, /method: 'POST'/);
+  assert.match(verifier, /const first = await post\(\);[\s\S]*const retry = await post\(\)/);
+  assert.match(verifier, /fresh source read missed the durable event/);
+  assert.match(verifier, /fresh connected-world read missed the consequence/);
+  assert.match(verifier, /visibleAfterReconnect[\s\S]*devices\['Desktop Chrome'\]/);
+  assert.match(verifier, /visibleAfterReconnect[\s\S]*devices\['Pixel 7'\]/);
+});
+
+test('durable canon live verifier fails closed and cleans all bounded test state', () => {
+  assert.match(verifier, /authorization: `Bearer \$\{registration\.token\}`/);
+  assert.match(verifier, /testNamespace: 'fleet-durable-canon'/);
+  assert.match(verifier, /finally \{[\s\S]*world_canon_events'[\s\S]*\.delete\(\)\.in\('event_key', eventKeys\)/);
+  assert.match(verifier, /admin\.auth\.admin\.deleteUser\(userId\)/);
+});
