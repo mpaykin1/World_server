@@ -425,6 +425,7 @@ function blockAt(x,y,z){
 }
 const TRANSLUCENT_BY_BLOCK=Array.from({length:14},(_,b)=>b!==BLOCK.WATER&&BLOCKS[b]?.alpha!==undefined);
 const OCCLUDING_BY_BLOCK=Array.from({length:14},(_,b)=>b!==BLOCK.AIR&&b!==BLOCK.WATER&&!TRANSLUCENT_BY_BLOCK[b]);
+const FACE_VISIBLE_BY_BLOCK=Array.from({length:14},(_,b)=>Array.from({length:14},(_,nb)=>b===BLOCK.WATER?nb===BLOCK.AIR:TRANSLUCENT_BY_BLOCK[b]?(nb===BLOCK.AIR||nb===BLOCK.WATER):(nb===BLOCK.AIR||nb===BLOCK.WATER||TRANSLUCENT_BY_BLOCK[nb]===true)));
 function isOccluding(b){ return OCCLUDING_BY_BLOCK[b]===true; }
 
 const FACE_AO_SHADE=[1,.86,.72,.58],FACE_AO_SCRATCH=[0,0,0,0],FACE_AO_SIDE_A=[0,0],FACE_AO_SIDE_B=[0,0];
@@ -448,10 +449,7 @@ function rebuildChunk(c){
   const localBlocks=c.blocks,localBlock=(lx,y,lz)=>(lx>=0&&lz>=0&&lx<CHUNK&&lz<CHUNK&&y>=0&&y<WORLD_Y)?localBlocks[(y*CHUNK+lz)*CHUNK+lx]:blockAt(bx+lx,y,bz+lz);
   for(let lx=0;lx<CHUNK;lx++)for(let lz=0;lz<CHUNK;lz++){const top=c.columnTop[lz*CHUNK+lx];for(let y=0;y<=top;y++){
     const b=localBlocks[(y*CHUNK+lz)*CHUNK+lx]; if(b===BLOCK.AIR) continue; const isWater=b===BLOCK.WATER,isTranslucent=TRANSLUCENT_BY_BLOCK[b]===true,dst=isWater?water:(isTranslucent?translucent:solid);
-    for(const f of FACE){ const nb=localBlock(lx+f.d[0],y+f.d[1],lz+f.d[2]); let visible=false;
-      if(isWater) visible=nb===BLOCK.AIR;
-      else if(isTranslucent) visible=nb===BLOCK.AIR||nb===BLOCK.WATER;
-      else visible=nb===BLOCK.AIR||nb===BLOCK.WATER||TRANSLUCENT_BY_BLOCK[nb]===true;
+    for(const f of FACE){ const nb=localBlock(lx+f.d[0],y+f.d[1],lz+f.d[2]); const visible=FACE_VISIBLE_BY_BLOCK[b][nb];
       if(!visible) continue; const ao=isWater?null:faceCornerAO(lx,y,lz,f,localBlock); const shore=(isWater&&f.d[1]===1)?waterShoreAt(lx,y,lz,localBlock):0; pushFace(dst,lx,y,lz,f,ao,shore,b);
     }
   }}
@@ -464,7 +462,7 @@ async function rebuildChunkIncremental(c){
   const director=window.GoldenQualityDirector?.forRenderer?.(renderer),quality=Number(director?.state?.quality||1),columnsPerSlice=quality<.68?2:4;
   for(let lx=0;lx<CHUNK;lx++){for(let lz=0;lz<CHUNK;lz++){const top=c.columnTop[lz*CHUNK+lx];for(let y=0;y<=top;y++){
     const b=localBlocks[(y*CHUNK+lz)*CHUNK+lx];if(b===BLOCK.AIR)continue;const isWater=b===BLOCK.WATER,isTranslucent=TRANSLUCENT_BY_BLOCK[b]===true,dst=isWater?water:(isTranslucent?translucent:solid);
-    for(const f of FACE){const nb=localBlock(lx+f.d[0],y+f.d[1],lz+f.d[2]);let visible=false;if(isWater)visible=nb===BLOCK.AIR;else if(isTranslucent)visible=nb===BLOCK.AIR||nb===BLOCK.WATER;else visible=nb===BLOCK.AIR||nb===BLOCK.WATER||TRANSLUCENT_BY_BLOCK[nb]===true;if(!visible)continue;const ao=isWater?null:faceCornerAO(lx,y,lz,f,localBlock),shore=(isWater&&f.d[1]===1)?waterShoreAt(lx,y,lz,localBlock):0;pushFace(dst,lx,y,lz,f,ao,shore,b);}
+    for(const f of FACE){const nb=localBlock(lx+f.d[0],y+f.d[1],lz+f.d[2]);const visible=FACE_VISIBLE_BY_BLOCK[b][nb];if(!visible)continue;const ao=isWater?null:faceCornerAO(lx,y,lz,f,localBlock),shore=(isWater&&f.d[1]===1)?waterShoreAt(lx,y,lz,localBlock):0;pushFace(dst,lx,y,lz,f,ao,shore,b);}
   }}if((lx+1)%columnsPerSlice===0&&lx+1<CHUNK)await yieldChunkBuild();}
   for(const [data,mat] of [[solid,solidMaterial],[translucent,transparentMaterial],[water,waterMaterial]])if(data.idx.length){const m=new THREE.Mesh(makeGeometry(data),mat);m.position.set(bx,0,bz);m.receiveShadow=true;m.castShadow=mat===solidMaterial;c.meshes.push(m);worldGroup.add(m);}
 }
