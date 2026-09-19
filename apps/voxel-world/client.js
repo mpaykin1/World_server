@@ -446,7 +446,7 @@ function makeGeometry(data){ const g=new THREE.BufferGeometry(); g.setAttribute(
 function rebuildChunk(c){
   for(const m of c.meshes){ worldGroup.remove(m); m.geometry.dispose(); } c.meshes=[];
   const solid={pos:[],col:[],nor:[],mat:[],uv:[]}, translucent={pos:[],col:[],nor:[]}, water={pos:[],col:[],nor:[],shore:[]}; const bx=c.cx*CHUNK,bz=c.cz*CHUNK;
-  const localBlocks=c.blocks,localBlock=(lx,y,lz)=>(lx>=0&&lz>=0&&lx<CHUNK&&lz<CHUNK&&y>=0&&y<WORLD_Y)?localBlocks[(y*CHUNK+lz)*CHUNK+lx]:blockAt(bx+lx,y,bz+lz);
+  const localBlocks=c.blocks,localBlock=(lx,y,lz)=>(((lx|lz)&~(CHUNK-1))===0&&y>=0&&y<WORLD_Y)?localBlocks[(y*CHUNK+lz)*CHUNK+lx]:blockAt(bx+lx,y,bz+lz);
   for(let lx=0;lx<CHUNK;lx++)for(let lz=0;lz<CHUNK;lz++){const top=c.columnTop[lz*CHUNK+lx];for(let y=0;y<=top;y++){
     const b=localBlocks[(y*CHUNK+lz)*CHUNK+lx]; if(b===BLOCK.AIR) continue; const isWater=b===BLOCK.WATER,isTranslucent=TRANSLUCENT_BY_BLOCK[b]===true,dst=isWater?water:(isTranslucent?translucent:solid);
     for(const f of FACE){ const nb=localBlock(lx+f.d[0],y+f.d[1],lz+f.d[2]); const visible=FACE_VISIBLE_BY_BLOCK[b][nb];
@@ -458,7 +458,7 @@ function rebuildChunk(c){
 async function rebuildChunkIncremental(c){
   for(const m of c.meshes){worldGroup.remove(m);m.geometry.dispose();}c.meshes=[];
   const solid={pos:[],col:[],nor:[],mat:[],uv:[]},translucent={pos:[],col:[],nor:[]},water={pos:[],col:[],nor:[],shore:[]},bx=c.cx*CHUNK,bz=c.cz*CHUNK;
-  const localBlocks=c.blocks,localBlock=(lx,y,lz)=>(lx>=0&&lz>=0&&lx<CHUNK&&lz<CHUNK&&y>=0&&y<WORLD_Y)?localBlocks[(y*CHUNK+lz)*CHUNK+lx]:blockAt(bx+lx,y,bz+lz);
+  const localBlocks=c.blocks,localBlock=(lx,y,lz)=>(((lx|lz)&~(CHUNK-1))===0&&y>=0&&y<WORLD_Y)?localBlocks[(y*CHUNK+lz)*CHUNK+lx]:blockAt(bx+lx,y,bz+lz);
   const director=window.GoldenQualityDirector?.forRenderer?.(renderer),quality=Number(director?.state?.quality||1),columnsPerSlice=quality<.68?2:4;
   for(let lx=0;lx<CHUNK;lx++){for(let lz=0;lz<CHUNK;lz++){const top=c.columnTop[lz*CHUNK+lx];for(let y=0;y<=top;y++){
     const b=localBlocks[(y*CHUNK+lz)*CHUNK+lx];if(b===BLOCK.AIR)continue;const isWater=b===BLOCK.WATER,isTranslucent=TRANSLUCENT_BY_BLOCK[b]===true,dst=isWater?water:(isTranslucent?translucent:solid);
