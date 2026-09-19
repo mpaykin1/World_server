@@ -10,7 +10,9 @@ function read(rel) { return fs.readFileSync(path.join(root, rel), 'utf8'); }
 test('dark void scene exposes the live Creature Factory runtime', () => {
   const client = read('apps/dark-void-scene/client.js');
   assert.match(client, /CreatureWorld/);
-  assert.match(client, /creatureWorld\.spawn\(26\)/);
+  assert.match(client, /coarsePointer\s*=\s*matchMedia\('\(pointer:coarse\)'\)\.matches/);
+  assert.match(client, /setPixelRatio\(Math\.min\(coarsePointer \? 1\.5 : 2,/);
+  assert.match(client, /creatureWorld\.spawn\(coarsePointer \? 13 : 26\)/);
   assert.match(client, /creatureWorld\.update\(now, dt\)/);
   assert.match(client, /window\.CreatureFactoryLive/);
 });
