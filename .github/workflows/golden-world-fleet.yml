@@ -31,9 +31,35 @@ jobs:
       - run: npm ci
       - name: Install render browsers
         run: npx playwright install --with-deps chromium webkit
-      - name: Verify every playable world on desktop and mobile engines
+      - name: Verify every playable world on four representative profiles
         run: >-
           npx playwright test e2e/golden-world-fleet.spec.js
           --project=desktop-chromium
           --project=mobile-chromium
           --project=mobile-webkit
+          --project=tablet-chromium
+      - name: Measure visible Golden technology
+        continue-on-error: true
+        env:
+          GOLDEN_EXACT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          PLAYWRIGHT_JSON_OUTPUT_NAME: golden-world-fleet-evidence.json
+        run: >-
+          npx playwright test e2e/golden-painting-visibility.spec.js
+          --project=desktop-chromium
+          --project=mobile-chromium
+          --project=mobile-webkit
+          --project=tablet-chromium
+          --reporter=line,json
+      - name: Enforce machine-readable visibility floor
+        env:
+          GOLDEN_EXACT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: node scripts/summarize-golden-visibility.cjs
+      - name: Retain exact-SHA visibility evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-visibility-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            golden-world-fleet-evidence.json
+            golden-world-fleet-evidence-summary.json
+          if-no-files-found: error

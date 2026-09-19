@@ -11,7 +11,7 @@ test.describe('Golden Painting user-visible contract',()=>{
       const d=await page.evaluate(()=>window.GoldenPaintingAtmosphere?.diagnostics?.());
       expect(d?.cycleAlive).toBe(true);
       expect(d?.phase).toMatch(/day|sunset|night|sunrise/);
-      const adapter=d?.adapters?.find(x=>x.worldId===location.pathname.split('/').filter(Boolean).pop());
+      const adapter=d?.adapters?.find(x=>x.worldId===world);
       expect(adapter?.depthGrading).toBe(true);
       expect(adapter?.patchedMaterials||0).toBeGreaterThan(0);
       expect(errors.filter(e=>/cycleStartedAt|GoldenPainting/i.test(e))).toEqual([]);
