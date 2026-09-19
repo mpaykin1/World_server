@@ -20,7 +20,7 @@ function assert(value, message) {
   if (!value) throw new Error(message);
 }
 
-async function visibleAfterReconnect(browser, origin, token, worldId, expectedText, device) {
+async function visibleAfterReconnect(browser, origin, token, worldId, expectedText, device, requireEffect = false) {
   const context = await browser.newContext(device);
   await context.addInitScript(value => localStorage.setItem('webgl_hub_token', value), token);
   const page = await context.newPage();
@@ -31,13 +31,16 @@ async function visibleAfterReconnect(browser, origin, token, worldId, expectedTe
   const runtime = await page.evaluate(() => window.VoxelWorldRuntime?.stats?.());
   assert(runtime?.playable, `world ${worldId} did not become playable`);
   assert(runtime?.canon?.seen > 0, `world ${worldId} did not hydrate canon`);
+  if (requireEffect) assert(runtime.canon.visibleEffects > 0, `world ${worldId} did not render the canon consequence`);
   await context.close();
   return { worldId, status: runtime.canon.status, visibleEffects: runtime.canon.visibleEffects };
 }
 
 async function run(origin, expectedSha) {
-  const admin = createAdminClient();
-  const suffix = crypto.randomBytes(5).toString('hex');
+  const externalCleanup = process.env.DURABLE_CANON_EXTERNAL_CLEANUP === '1';
+  const admin = externalCleanup ? null : createAdminClient();
+  const requestedRunId = String(process.env.DURABLE_CANON_RUN_ID || '').trim();
+  const suffix = /^[0-9a-f]{10}$/.test(requestedRunId) ? requestedRunId : crypto.randomBytes(5).toString('hex');
   const username = `fleetcanon_${suffix}`;
   const password = `Ws!${crypto.randomBytes(12).toString('base64url')}`;
   const marker = `Fleet durable canon ${suffix}`;
@@ -86,26 +89,29 @@ async function run(origin, expectedSha) {
     let mobile;
     try {
       desktop = await visibleAfterReconnect(browser, origin, registration.token, 'main', marker, devices['Desktop Chrome']);
-      mobile = await visibleAfterReconnect(browser, origin, registration.token, target.target_world_id, 'Последствие', devices['Pixel 7']);
+      mobile = await visibleAfterReconnect(browser, origin, registration.token, target.target_world_id, target.summary, devices['Pixel 7'], true);
     } finally {
       await browser.close();
     }
     return { ok: true, origin, expectedSha: expectedSha || null, sourceEventKey: first.event.event_key,
       consequenceEventKey: target.event_key, targetWorldId: target.target_world_id, idempotentRetry: true,
-      freshSourceRead: true, freshConnectedRead: true, desktop, mobile, cleanupKeys: eventKeys };
+      freshSourceRead: true, freshConnectedRead: true, desktop, mobile, cleanupKeys: eventKeys,
+      testUserId: userId, testUsername: username, externalCleanupRequired: externalCleanup };
   } finally {
-    const consequenceCleanup = await admin.from('world_canon_events').delete().eq('cause_event_key', sourceEventKey);
-    if (consequenceCleanup.error) throw new Error(`consequence cleanup failed: ${consequenceCleanup.error.message}`);
-    const sourceCleanup = await admin.from('world_canon_events').delete().eq('event_key', sourceEventKey);
-    if (sourceCleanup.error) throw new Error(`source cleanup failed: ${sourceCleanup.error.message}`);
-    if (!userId) {
-      const lookup = await admin.from('profiles').select('id').eq('username', username.toLowerCase()).maybeSingle();
-      if (lookup.error) throw new Error(`test user lookup failed: ${lookup.error.message}`);
-      userId = lookup.data?.id || '';
-    }
-    if (userId) {
-      const { error } = await admin.auth.admin.deleteUser(userId);
-      if (error) throw new Error(`test user cleanup failed: ${error.message}`);
+    if (!externalCleanup) {
+      const consequenceCleanup = await admin.from('world_canon_events').delete().eq('cause_event_key', sourceEventKey);
+      if (consequenceCleanup.error) throw new Error(`consequence cleanup failed: ${consequenceCleanup.error.message}`);
+      const sourceCleanup = await admin.from('world_canon_events').delete().eq('event_key', sourceEventKey);
+      if (sourceCleanup.error) throw new Error(`source cleanup failed: ${sourceCleanup.error.message}`);
+      if (!userId) {
+        const lookup = await admin.from('profiles').select('id').eq('username', username.toLowerCase()).maybeSingle();
+        if (lookup.error) throw new Error(`test user lookup failed: ${lookup.error.message}`);
+        userId = lookup.data?.id || '';
+      }
+      if (userId) {
+        const { error } = await admin.auth.admin.deleteUser(userId);
+        if (error) throw new Error(`test user cleanup failed: ${error.message}`);
+      }
     }
   }
 }
