@@ -50,6 +50,10 @@ test('Cloudflare exact-head preview is fail-closed and exercises the target stac
   const smoke=read('scripts/verify-cloudflare-stack.cjs');
   assert.ok(workflow.includes('CLOUDFLARE_API_TOKEN'));
   assert.ok(workflow.includes('npm run deploy:cloudflare:production'));
+  assert.ok(workflow.includes('github.event.pull_request.head.sha || github.sha'));
+  assert.ok(workflow.includes('WORKERS_CI_COMMIT_SHA="$SOURCE_SHA"'));
+  assert.ok(workflow.includes('--expected-sha="$SOURCE_SHA"'));
+  assert.equal(workflow.includes('--expected-sha="$GITHUB_SHA"'),false);
   const packageJson=JSON.parse(read('package.json'));
   const identity=JSON.parse(read('data/cloudflare-deployment-identity.json'));
   assert.equal(packageJson.scripts['deploy:cloudflare:production'],'node scripts/deploy-cloudflare-exact-sha.cjs');
