@@ -6,6 +6,7 @@ on:
       - 'apps/**'
       - 'shared/**'
       - 'e2e/golden-world-fleet.spec.js'
+      - 'e2e/autodemo-capabilities.spec.js'
       - '.github/workflows/golden-world-fleet.yml'
   push:
     branches: [master]
@@ -13,6 +14,7 @@ on:
       - 'apps/**'
       - 'shared/**'
       - 'e2e/golden-world-fleet.spec.js'
+      - 'e2e/autodemo-capabilities.spec.js'
       - '.github/workflows/golden-world-fleet.yml'
 
 permissions:
@@ -40,6 +42,11 @@ jobs:
           --project=mobile-chromium
           --project=mobile-webkit
           --project=tablet-chromium
+      - name: Verify canonical AutoDemo capabilities on desktop and mobile
+        run: >-
+          npx playwright test e2e/autodemo-capabilities.spec.js
+          --project=desktop-chromium
+          --project=mobile-chromium
       - name: Measure visible Golden technology
         continue-on-error: true
         env:
