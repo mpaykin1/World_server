@@ -7,7 +7,7 @@ const src=fs.readFileSync(path.join(__dirname,'..','apps','voxel-world','client.
 
 test('voxel world has baked vertex AO in chunk meshing',()=>{
   assert.match(src,/function faceCornerAO\(/);
-  assert.match(src,/vertexShade\?\.\[i\]/);
+  assert.ok(/vertexShade\?\.\[i\]/.test(src) || [0,1,2,3].every(i=>src.includes(`faceColors[vertexShade?.[${i}]??0]`)), 'AO shade lookup must cover all four face vertices');
   assert.match(src,/faceCornerAO\(lx,y,lz,f,localBlock\)/);
 });
 

@@ -42,14 +42,21 @@ test('pushFace source removes per-vertex THREE.Color clones', () => {
   const pushFaceLine = client.split('\n').find((line) => line.includes('function pushFace'));
   assert.ok(pushFaceLine, 'pushFace must exist in apps/voxel-world/client.js');
   const usesScalarShade = pushFaceLine.includes('shade=face.shade*(vertexShade?.[i]??1)');
-  const usesPackedAoLut = pushFaceLine.includes('packedColor=faceColors?.[vertexShade?.[i]??0]') ||
+  const usesPackedAoLoop = pushFaceLine.includes('packedColor=faceColors?.[vertexShade?.[i]??0]') ||
     pushFaceLine.includes('packedColor=faceColors[vertexShade?.[i]??0]');
+  const usesUnrolledPackedAoLut = [0, 1, 2, 3].every((i) =>
+    pushFaceLine.includes(`c${i}=faceColors[vertexShade?.[${i}]??0]`)
+  ) && pushFaceLine.includes(
+    'arr.col.push(c0[0],c0[1],c0[2],c1[0],c1[1],c1[2],c2[0],c2[1],c2[2],c3[0],c3[1],c3[2])'
+  );
+  const usesPackedAoLut = usesPackedAoLoop || usesUnrolledPackedAoLut;
   assert.ok(usesScalarShade || usesPackedAoLut,
     'pushFace must use scalar shading or the precomputed material/face/AO color LUT');
   assert.ok(
     pushFaceLine.includes('arr.col.push(col.r*shade,col.g*shade,col.b*shade)') ||
       (pushFaceLine.includes('arr.col.push(') && pushFaceLine.includes('col.r*shade') && pushFaceLine.includes('col.g*shade') && pushFaceLine.includes('col.b*shade') && pushFaceLine.includes('*255')) ||
-      (usesPackedAoLut && pushFaceLine.includes('arr.col.push(packedColor[0],packedColor[1],packedColor[2])')),
+      (usesPackedAoLoop && pushFaceLine.includes('arr.col.push(packedColor[0],packedColor[1],packedColor[2])')) ||
+      usesUnrolledPackedAoLut,
     'pushFace must push byte-equivalent scalar-shaded components or precomputed packed LUT components');
   assert.ok(!pushFaceLine.includes('col.clone().multiplyScalar'),
     'pushFace must not allocate a THREE.Color clone per vertex');
