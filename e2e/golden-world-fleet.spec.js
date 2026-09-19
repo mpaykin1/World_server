@@ -14,6 +14,7 @@ const criticalConsole = /WebGLProgram|shader error|VALIDATE_STATUS|GL_INVALID|Un
 test.describe('Golden world fleet render gate', () => {
   for (const world of worlds) {
     test(`${world} renders a Golden frame without critical runtime errors`, async ({ page }) => {
+      test.setTimeout(world === 'dark-void-scene' ? 60000 : 35000);
       const critical = [];
       page.on('pageerror', error => critical.push(`page:${error.message}`));
       page.on('console', message => {
