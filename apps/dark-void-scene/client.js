@@ -4,8 +4,9 @@ import { NavigatorDialog } from '/shared/navigator-dialog.mjs';
 import { DarkVoidManifestation } from '/shared/dark-void-manifestation.mjs';
 import { CreatureWorld } from '/shared/creature-visual-runtime.mjs';
 
+const coarsePointer = matchMedia('(pointer:coarse)').matches;
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
+renderer.setPixelRatio(Math.min(coarsePointer ? 1.5 : 2, devicePixelRatio || 1));
 renderer.setSize(innerWidth, innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.0;
@@ -92,7 +93,7 @@ const manifestation = new DarkVoidManifestation({
 
 // Creature Factory: visible runtime bound to the production LOD policy and 13-category contract.
 const creatureWorld = new CreatureWorld({ scene, viewer: eye.group, camera, renderer });
-creatureWorld.spawn(26);
+creatureWorld.spawn(coarsePointer ? 13 : 26);
 window.CreatureFactoryLive = creatureWorld;
 
 // ---- Navigator intro panel (reuse the existing, working component) ----
