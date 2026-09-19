@@ -429,14 +429,14 @@ function isOccluding(b){ return OCCLUDING_BY_BLOCK[b]===true; }
 
 const FACE_AO_SHADE=[1,.86,.72,.58],FACE_AO_SCRATCH=[0,0,0,0],FACE_AO_SIDE_A=[0,0],FACE_AO_SIDE_B=[0,0];
 function faceCornerAO(lx,y,lz,face,getBlock){
-  const n=face.d,a0=n[0]?1:0,a1=n[0]?2:(n[1]?2:1),out=FACE_AO_SCRATCH,sideA=FACE_AO_SIDE_A,sideB=FACE_AO_SIDE_B;
-  for(let si=0;si<2;si++){const step=si?1:-1;let ax=n[0],ay=n[1],az=n[2],bx=ax,by=ay,bz=az;if(a0===0)ax+=step;else if(a0===1)ay+=step;else az+=step;if(a1===0)bx+=step;else if(a1===1)by+=step;else bz+=step;sideA[si]=isOccluding(getBlock(lx+ax,y+ay,lz+az))?1:0;sideB[si]=isOccluding(getBlock(lx+bx,y+by,lz+bz))?1:0;}
-  for(let i=0;i<4;i++){const v=face.v[i],s1=v[a0]?1:-1,s2=v[a1]?1:-1,o1=sideA[s1>0?1:0],o2=sideB[s2>0?1:0];let cx=n[0],cy=n[1],cz=n[2];if(a0===0)cx+=s1;else if(a0===1)cy+=s1;else cz+=s1;if(a1===0)cx+=s2;else if(a1===1)cy+=s2;else cz+=s2;const oc=o1&&o2?0:(isOccluding(getBlock(lx+cx,y+cy,lz+cz))?1:0);out[i]=o1&&o2?3:o1+o2+oc;}
+  const [a0,a1]=face.aoAxes,out=FACE_AO_SCRATCH,sideA=FACE_AO_SIDE_A,sideB=FACE_AO_SIDE_B;
+  for(let si=0;si<2;si++){const a=face.aoSideA[si],b=face.aoSideB[si];sideA[si]=isOccluding(getBlock(lx+a[0],y+a[1],lz+a[2]))?1:0;sideB[si]=isOccluding(getBlock(lx+b[0],y+b[1],lz+b[2]))?1:0;}
+  for(let i=0;i<4;i++){const v=face.v[i],o1=sideA[v[a0]?1:0],o2=sideB[v[a1]?1:0],corner=face.aoCorner[i];const oc=o1&&o2?0:(isOccluding(getBlock(lx+corner[0],y+corner[1],lz+corner[2]))?1:0);out[i]=o1&&o2?3:o1+o2+oc;}
   return out;
 }
 function waterShoreAt(lx,y,lz,getBlock){if(isOccluding(getBlock(lx+1,y,lz))||isOccluding(getBlock(lx-1,y,lz))||isOccluding(getBlock(lx,y,lz+1))||isOccluding(getBlock(lx,y,lz-1)))return 1;return (isOccluding(getBlock(lx+1,y,lz+1))||isOccluding(getBlock(lx+1,y,lz-1))||isOccluding(getBlock(lx-1,y,lz+1))||isOccluding(getBlock(lx-1,y,lz-1)))?.55:0;}
 const BLOCK_RGB=Array.from({length:14},(_,id)=>new THREE.Color(BLOCKS[id]?.color??0));
-FACE.forEach((face,index)=>{face.colorIndex=index;});
+FACE.forEach((face,index)=>{face.colorIndex=index;const n=face.d,a0=n[0]?1:0,a1=n[0]?2:(n[1]?2:1);face.aoAxes=[a0,a1];face.aoSideA=[-1,1].map(step=>{const o=[...n];o[a0]+=step;return o;});face.aoSideB=[-1,1].map(step=>{const o=[...n];o[a1]+=step;return o;});face.aoCorner=face.v.map(v=>{const o=[...n];o[a0]+=v[a0]?1:-1;o[a1]+=v[a1]?1:-1;return o;});});
 const FACE_COLOR_BY_MATERIAL=BLOCK_RGB.map(col=>FACE.map(face=>FACE_AO_SHADE.map(ao=>[Math.round(Math.max(0,Math.min(1,col.r*face.shade*ao))*255),Math.round(Math.max(0,Math.min(1,col.g*face.shade*ao))*255),Math.round(Math.max(0,Math.min(1,col.b*face.shade*ao))*255)])));
 const FACE_UV=[[.03,.03],[.97,.03],[.97,.97],[.03,.97]];
 const FACE_UV_BY_MATERIAL=Array.from({length:14},(_,materialId)=>{const tile=Math.max(0,materialId-1),tx=tile%VOXEL_ATLAS_COLS,ty=Math.floor(tile/VOXEL_ATLAS_COLS);return FACE_UV.map(q=>[Math.round(((tx+q[0])/VOXEL_ATLAS_COLS)*65535),Math.round((1-(ty+q[1])/VOXEL_ATLAS_COLS)*65535)]);});
