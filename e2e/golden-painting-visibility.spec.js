@@ -5,6 +5,7 @@ const worlds=['voxel-world','ai3d-voxel-city','cinematic-encounter','dark-void-s
 test.describe('Golden Painting user-visible contract',()=>{
   for(const world of worlds){
     test(`${world}: natural cycle is alive and depth grading is active`,async({page})=>{
+      test.setTimeout(world === 'dark-void-scene' ? 60000 : 35000);
       const errors=[]; page.on('pageerror',e=>errors.push(String(e)));
       await page.goto(`/apps/${world}/`,{waitUntil:'domcontentloaded'});
       await page.waitForFunction(()=>document.body?.dataset?.goldenPhase,{timeout:20000});

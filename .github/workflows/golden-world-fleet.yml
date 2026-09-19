@@ -32,6 +32,8 @@ jobs:
       - name: Install render browsers
         run: npx playwright install --with-deps chromium webkit
       - name: Verify every playable world on four representative profiles
+        id: render
+        continue-on-error: true
         run: >-
           npx playwright test e2e/golden-world-fleet.spec.js
           --project=desktop-chromium
@@ -51,6 +53,8 @@ jobs:
           --project=tablet-chromium
           --reporter=line,json
       - name: Enforce machine-readable visibility floor
+        id: visibility_floor
+        continue-on-error: true
         env:
           GOLDEN_EXACT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: node scripts/summarize-golden-visibility.cjs
@@ -63,3 +67,9 @@ jobs:
             golden-world-fleet-evidence.json
             golden-world-fleet-evidence-summary.json
           if-no-files-found: error
+      - name: Enforce render and visibility gates
+        if: always()
+        shell: bash
+        run: |
+          test "${{ steps.render.outcome }}" = success
+          test "${{ steps.visibility_floor.outcome }}" = success
