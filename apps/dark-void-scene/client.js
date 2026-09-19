@@ -93,7 +93,7 @@ const manifestation = new DarkVoidManifestation({
 
 // Creature Factory: visible runtime bound to the production LOD policy and 13-category contract.
 const creatureWorld = new CreatureWorld({ scene, viewer: eye.group, camera, renderer });
-creatureWorld.spawn(coarsePointer ? 13 : 26);
+creatureWorld.spawn(13);
 window.CreatureFactoryLive = creatureWorld;
 
 // ---- Navigator intro panel (reuse the existing, working component) ----
