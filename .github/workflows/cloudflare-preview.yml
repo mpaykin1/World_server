@@ -18,6 +18,7 @@ jobs:
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -41,19 +42,20 @@ jobs:
         run: |
           set -euo pipefail
           PR_NUMBER="${{ github.event.pull_request.number || 'manual' }}"
-          OUTPUT="$(npx wrangler@4.45.0 deploy --name "world-server-pr-${PR_NUMBER}" --var "WORLD_SERVER_DEPLOYED_SHA:${GITHUB_SHA}")"
+          export WORKERS_CI_COMMIT_SHA="$SOURCE_SHA"
+          OUTPUT="$(npm run deploy:cloudflare:production -- --name "world-server-pr-${PR_NUMBER}")"
           printf '%s\n' "$OUTPUT"
           URL="$(printf '%s\n' "$OUTPUT" | grep -Eo 'https://[^[:space:]]+\.(workers|pages)\.dev' | tail -n 1)"
           test -n "$URL"
           echo "url=$URL" >> "$GITHUB_OUTPUT"
       - name: Verify Cloudflare stack and security
         if: steps.authority.outputs.configured == 'true'
-        run: node scripts/verify-cloudflare-stack.cjs "${{ steps.deploy.outputs.url }}" "$GITHUB_SHA"
+        run: node scripts/verify-cloudflare-stack.cjs "${{ steps.deploy.outputs.url }}" "$SOURCE_SHA"
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
       - name: Verify exact-head Cloudflare playable delivery
         if: steps.authority.outputs.configured == 'true'
-        run: npm run delivery:verify -- "${{ steps.deploy.outputs.url }}/apps/voxel-world/" --expected-sha="$GITHUB_SHA" --game --inventory-id=voxel-world
+        run: npm run delivery:verify -- "${{ steps.deploy.outputs.url }}/apps/voxel-world/" --expected-sha="$SOURCE_SHA" --game --inventory-id=voxel-world
       - name: Fail closed when Cloudflare credentials are unavailable
         if: steps.authority.outputs.configured != 'true'
         shell: bash

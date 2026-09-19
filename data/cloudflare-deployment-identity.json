@@ -12,5 +12,7 @@
     "value": "cloudflare-native"
   },
   "revisionHeader": "x-world-server-deployed-revision",
-  "rule": "Resolve the URL from Cloudflare deployment output or the configured stable origin; never guess an account hostname or use a Netlify URL as canonical evidence."
+  "rule": "All production and preview deploy triggers must invoke productionDeployCommand so every runtime exposes the exact source Git SHA; resolve the URL from Cloudflare deployment output or the configured stable origin, never guess a hostname or use Netlify as canonical evidence.",
+  "productionDeployCommand": "npm run deploy:cloudflare:production",
+  "buildRevisionSource": "WORKERS_CI_COMMIT_SHA"
 }
