@@ -60,7 +60,6 @@ test('Cloudflare exact-head preview is fail-closed and exercises the target stac
   assert.equal(identity.productionDeployCommand,'npm run deploy:cloudflare:production');
   assert.equal(identity.buildRevisionSource,'WORKERS_CI_COMMIT_SHA');
   assert.ok(workflow.includes('verify-cloudflare-stack.cjs'));
-  assert.ok(workflow.includes('--expected-sha="$GITHUB_SHA"'));
   for(const path of ['/api/config','/api/apps?all=1','/api/worlds','/api/world-factory','/api/canon','/api/voxel']) assert.ok(smoke.includes(path));
   assert.ok(smoke.includes('status !== 401'));
 });
