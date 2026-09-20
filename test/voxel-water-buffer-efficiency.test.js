@@ -10,6 +10,7 @@ test('water chunk buffers omit unused vertex colors in both builders',()=>{
   for(const line of builders) assert.ok(!line.includes('water={pos:[],col:'),'water material does not consume vertex colors');
   const push=client.split('\n').find(line=>line.includes('function pushFace'));
   assert.ok(/if\(arr\.col\)\{[\s\S]*arr\.col\.push/.test(push),'pushFace must skip dead color writes');
+  assert.ok(push.includes('if(isSolid){const faceUv=FACE_UV_BY_MATERIAL[materialId]'),'solid faces must resolve atlas UVs inside the solid-only path');
   const geometry=client.split('\n').find(line=>line.includes('function makeGeometry'));
   assert.ok(geometry.includes("if(data.col)g.setAttribute('color'"),'geometry must not upload an absent color attribute');
 });
