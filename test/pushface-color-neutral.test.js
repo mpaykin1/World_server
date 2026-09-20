@@ -45,7 +45,7 @@ test('pushFace source removes per-vertex THREE.Color clones', () => {
   const usesPackedAoLoop = pushFaceLine.includes('packedColor=faceColors?.[vertexShade?.[i]??0]') ||
     pushFaceLine.includes('packedColor=faceColors[vertexShade?.[i]??0]');
   const usesUnrolledPackedAoLut = [0, 1, 2, 3].every((i) =>
-    pushFaceLine.includes(`c${i}=faceColors[vertexShade?.[${i}]??0]`)
+    (pushFaceLine.includes(`c${i}=faceColors[vertexShade?.[${i}]??0]`) || pushFaceLine.includes(`c${i}=faceColors[vertexShade[${i}]]`))
   ) && pushFaceLine.includes(
     'arr.col.push(c0[0],c0[1],c0[2],c1[0],c1[1],c1[2],c2[0],c2[1],c2[2],c3[0],c3[1],c3[2])'
   );
