@@ -24,7 +24,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Install Python test dependencies
-        run: python -m pip install --disable-pip-version-check Pillow
+        run: python -m pip install --disable-pip-version-check Pillow numpy
       - name: Apply deterministic safe fixes
         run: node scripts/quality-autofix.js --apply
       - name: Verify candidate
