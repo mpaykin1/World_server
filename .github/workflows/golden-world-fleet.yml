@@ -47,6 +47,8 @@ jobs:
           npx playwright test e2e/autodemo-capabilities.spec.js
           --project=desktop-chromium
           --project=mobile-chromium
+          --project=mobile-webkit
+          --project=tablet-chromium
       - name: Measure visible Golden technology
         continue-on-error: true
         env:
