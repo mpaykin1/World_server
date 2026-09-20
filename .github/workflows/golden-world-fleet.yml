@@ -42,8 +42,6 @@ jobs:
           --project=mobile-chromium
           --project=mobile-webkit
           --project=tablet-chromium
-          --project=mobile-webkit
-          --project=tablet-chromium
       - name: Verify canonical AutoDemo capabilities on desktop and mobile
         run: >-
           npx playwright test e2e/autodemo-capabilities.spec.js
