@@ -793,3 +793,9 @@ Implementation and local verification complete. Remaining proof is GitHub Action
 - Delivery requirement: exact commit + pushed branch + test Preview URL + real-browser verification before PASS.
 - Current mode: FINISH MODE. No optional scope expansion before verified Preview.
 - Remaining gate: focused/full checks -> commit -> push -> Preview deploy -> browser verify exact URL -> handoff URL.
+
+## Cloudflare fail-closed quality canary — 2026-09-21
+- Goal: replace false-green Vercel-only canary with exact-SHA Cloudflare deployment verification.
+- Scope: quality-canary workflow only; no auth/security weakening and no production promotion.
+- Gates: release:gate, exact-SHA stack verification, Chromium/WebKit, playable delivery, HTTP smoke.
+- Status: protocol ledger updated after CI correctly rejected the workflow-only patch; rerun full gates before merge.
