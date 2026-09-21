@@ -6,14 +6,19 @@ const path = require('path');
 
 const workflow = fs.readFileSync(path.join(__dirname, '..', '.github', 'workflows', 'quality-canary.yml'), 'utf8');
 
-test('missing Vercel credentials do not create a false-red source CI failure', () => {
-  assert.match(workflow, /id: config[\s\S]*configured=false/);
-  assert.doesNotMatch(workflow, /name: Require Vercel configuration/);
-  assert.match(workflow, /configured: \$\{\{ steps\.config\.outputs\.configured \}\}/);
+test('Cloudflare canary fails closed when deployment authority is unavailable', () => {
+  assert.match(workflow, /id: authority[\s\S]*configured=false/);
+  assert.match(workflow, /Fail closed when Cloudflare credentials are unavailable/);
+  assert.match(workflow, /if: steps\.authority\.outputs\.configured != 'true'/);
+  assert.match(workflow, /exit 1/);
 });
 
-test('all deploy and promotion gates remain conditional on verified configuration', () => {
-  const gatedSteps = (workflow.match(/if: steps\.config\.outputs\.configured == 'true'/g) || []).length;
-  assert.equal(gatedSteps, 6);
-  assert.match(workflow, /if: needs\.canary\.outputs\.configured == 'true'/);
+test('Cloudflare canary exercises exact-SHA deploy, browser, playable and HTTP gates', () => {
+  assert.match(workflow, /WORKERS_CI_COMMIT_SHA="\$SOURCE_SHA"/);
+  assert.match(workflow, /verify-cloudflare-stack\.cjs[\s\S]*\$SOURCE_SHA/);
+  assert.match(workflow, /playwright install --with-deps chromium webkit/);
+  assert.match(workflow, /PLAYWRIGHT_BASE_URL: \$\{\{ steps\.deploy\.outputs\.url \}\}/);
+  assert.match(workflow, /delivery:verify[\s\S]*--expected-sha="\$SOURCE_SHA"[\s\S]*--game/);
+  assert.match(workflow, /QUALITY_BASE_URL: \$\{\{ steps\.deploy\.outputs\.url \}\}/);
+  assert.match(workflow, /post-deploy-smoke\.js/);
 });
