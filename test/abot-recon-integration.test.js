@@ -64,3 +64,23 @@ test('Python bridge files do not contain escaped newline corruption', () => {
     assert.doesNotMatch(read(p), /\\\\n(?=from |MAX_|\s{4,}["']|\s{4,}self\.)/);
   }
 });
+
+test('free ZeroGPU path is deployable, secret-protected, and preferred when configured', () => {
+  const plugin = read('services/ai3d-worker/ai3d/plugins/abot_recon.py');
+  const remote = read('services/ai3d-worker/ai3d/plugins/abot_zerogpu.py');
+  const space = read('deploy/huggingface/abot-recon-zero-gpu/app.py');
+  const deploy = read('scripts/deploy-abot-zerogpu.py');
+
+  assert.match(plugin, /ABotZeroGpuClient/);
+  assert.match(plugin, /self\.zerogpu\.configured\(\)/);
+  assert.match(remote, /ABOT_RECON_ZEROGPU_URL/);
+  assert.match(remote, /ABOT_RECON_ZEROGPU_SECRET/);
+  assert.match(remote, /reconstruct_api/);
+  assert.match(space, /@spaces\.GPU\(duration=120\)/);
+  assert.match(space, /hmac\.compare_digest/);
+  assert.match(space, /api_visibility="public"/);
+  assert.match(space, /ABOT_WORKER_SECRET/);
+  assert.match(deploy, /space_hardware="zero-a10g"/);
+  assert.match(deploy, /add_space_secret/);
+  assert.doesNotMatch(space, /hf_[A-Za-z0-9]{20,}/);
+});
