@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { createWorldDNA, settingsFromDNA, publicWorld } = require('../lib/world-factory');
+const { createWorldDNA, analyzeReference, settingsFromDNA, publicWorld } = require('../lib/world-factory');
 const factoryApi = require('../lib/api-handlers/world-factory')._private;
 
 const root = path.resolve(__dirname, '..');
@@ -56,6 +56,19 @@ test('reference reconstruction has resumable evidence-gated stages and records h
   assert.equal(pipeline.acceptance.minVisibilityPercent, 85);
   assert.equal(pipeline.acceptance.referenceEvidenceRequired, true);
   assert.equal(pipeline.acceptance.runtimeEvidenceRequired, true);
+});
+
+
+test('reference analysis executes evidence gate and only unlocks depth after identity evidence', () => {
+  const dna = createWorldDNA({ idea: 'reference panorama gothic city', requestId, loreBible });
+  analyzeReference(dna.referencePipeline, { kind: 'panorama360', width: 4096, height: 2048, landmarks: [{ label: 'cathedral silhouette', x: 0.25, y: 0.42, prominence: 0.92 }, { label: 'bridge arch', x: 0.68, y: 0.61, prominence: 0.73 }] });
+  const p = dna.referencePipeline; assert.equal(p.stages[0].status, 'complete'); assert.equal(p.stages[1].status, 'ready'); assert.equal(p.identityFeatures.length, 2); assert.equal(p.hiddenGeometry[0].status, 'unknown'); assert.equal(p.stages[0].evidence[0].panoramaValid, true);
+});
+
+test('reference analysis rejects malformed 360 evidence without unlocking reconstruction', () => {
+  const dna = createWorldDNA({ idea: 'reference panorama gothic city', requestId, loreBible });
+  analyzeReference(dna.referencePipeline, { kind: 'panorama360', width: 1200, height: 1000, landmarks: [{ label: 'tower', prominence: 1 }] });
+  assert.equal(dna.referencePipeline.stages[0].status, 'needs-correction'); assert.equal(dna.referencePipeline.stages[1].status, 'blocked'); assert.deepEqual(dna.referencePipeline.stages[0].blockers, ['invalid-panorama-aspect']);
 });
 
 test('World Factory settings are directly playable by the existing voxel runtime', () => {
