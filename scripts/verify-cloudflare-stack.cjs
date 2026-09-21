@@ -2,27 +2,37 @@
 
 const crypto = require('node:crypto');
 
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 async function request(origin, pathname, options = {}) {
-  const response = await fetch(new URL(pathname, origin), { redirect: 'follow', signal: AbortSignal.timeout(30000), ...options });
-  const text = await response.text();
-  let body = null;
-  try { body = JSON.parse(text); } catch {}
-  return { response, text, body };
+  const { retries = 0, retryDelayMs = 1500, ...fetchOptions } = options;
+  let result;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    const response = await fetch(new URL(pathname, origin), { redirect: 'follow', signal: AbortSignal.timeout(30000), ...fetchOptions });
+    const text = await response.text();
+    let body = null;
+    try { body = JSON.parse(text); } catch {}
+    result = { response, text, body };
+    if (response.ok || attempt === retries || ![404, 429, 500, 502, 503, 504].includes(response.status)) return result;
+    await sleep(retryDelayMs * (attempt + 1));
+  }
+  return result;
 }
 
 async function verifyCloudflareStack(origin, expectedSha) {
   const results = [];
+  const propagation = { retries: 4, retryDelayMs: 1500 };
   for (const pathname of ['/', '/apps/catalog/', '/apps/voxel-world/']) {
-    const { response, text } = await request(origin, pathname);
+    const { response, text } = await request(origin, pathname, propagation);
     if (!response.ok || text.length < 120) throw new Error(`${pathname} failed: HTTP ${response.status}`);
     results.push({ pathname, status: response.status });
   }
   for (const pathname of ['/api/apps?all=1', '/api/worlds', '/api/world-factory?limit=1', '/api/canon?worldId=voxel-world&limit=1']) {
-    const { response, body } = await request(origin, pathname);
+    const { response, body } = await request(origin, pathname, propagation);
     if (!response.ok || !body) throw new Error(`${pathname} failed: HTTP ${response.status}`);
     results.push({ pathname, status: response.status });
   }
-  const config = await request(origin, '/api/config');
+  const config = await request(origin, '/api/config', propagation);
   if (!config.response.ok || config.body?.configured !== true) throw new Error('/api/config is not configured');
   if (config.body?.deploymentProvider !== 'cloudflare' || config.body?.deployedRevision !== expectedSha) {
     throw new Error(`/api/config revision mismatch: ${config.body?.deployedRevision || 'missing'}`);
