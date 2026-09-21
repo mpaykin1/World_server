@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { createWorldDNA, analyzeReference, analyzeDepthSegmentation, settingsFromDNA, publicWorld } = require('../lib/world-factory');
+const { createWorldDNA, analyzeReference, analyzeDepthSegmentation, evaluateQualityContract, settingsFromDNA, publicWorld } = require('../lib/world-factory');
 const factoryApi = require('../lib/api-handlers/world-factory')._private;
 
 const root = path.resolve(__dirname, '..');
@@ -86,6 +86,21 @@ test('weak depth evidence cannot unlock quality contract', () => {
   assert.equal(dna.referencePipeline.stages[1].status, 'needs-correction'); assert.equal(dna.referencePipeline.stages[2].status, 'blocked'); assert.deepEqual(dna.referencePipeline.stages[1].blockers, ['insufficient-depth-evidence']);
 });
 
+test('quality contract gates geometry on identity, hero detail and visibility', () => {
+  const dna=createWorldDNA({idea:'reference city',requestId,loreBible}); const p=dna.referencePipeline;
+  analyzeReference(p,{kind:'image',width:1920,height:1080,landmarks:[{label:'tower',prominence:1},{label:'arch',prominence:.9}]});
+  analyzeDepthSegmentation(p,{depth:{coverage:.9,confidence:.8},segmentation:{regions:[{label:'building',coverage:.6,confidence:.9},{label:'sky',coverage:.4,confidence:.9}]}});
+  evaluateQualityContract(p,{matchedIdentityFeatures:['tower','arch'],detailInventory:[{label:'spire',priority:.9}],visibilityPercent:88});
+  assert.equal(p.stages[2].status,'complete'); assert.equal(p.stages[3].status,'ready'); assert.equal(p.qualityContract.identityCoverage,1); assert.equal(p.stages[2].evidence[2].pass,true);
+});
+
+test('quality contract blocks geometry below identity threshold', () => {
+  const dna=createWorldDNA({idea:'reference city',requestId,loreBible}); const p=dna.referencePipeline;
+  analyzeReference(p,{kind:'image',width:1920,height:1080,landmarks:[{label:'tower',prominence:1},{label:'arch',prominence:.9}]});
+  analyzeDepthSegmentation(p,{depth:{coverage:.9,confidence:.8},segmentation:{regions:[{label:'building',coverage:.6,confidence:.9},{label:'sky',coverage:.4,confidence:.9}]}});
+  evaluateQualityContract(p,{matchedIdentityFeatures:['tower'],detailInventory:[{label:'spire',priority:.9}],visibilityPercent:95});
+  assert.equal(p.stages[2].status,'needs-correction'); assert.equal(p.stages[3].status,'blocked'); assert.deepEqual(p.stages[2].blockers,['identity-fidelity-below-contract']);
+});
 test('World Factory settings are directly playable by the existing voxel runtime', () => {
   const dna = createWorldDNA({ idea: 'острова и маяк', requestId, loreBible });
   const row = { id: dna.id, seed: dna.seed, settings: settingsFromDNA(dna) };
