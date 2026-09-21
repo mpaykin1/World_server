@@ -19,8 +19,11 @@ test('ABot-Recon video mode is wired through the existing AI3D stack', () => {
     assert.match(source, /video_to_3d/, 'video_to_3d must be present end-to-end');
   }
   assert.match(runner, /ABotReconEngine/);
+  assert.match(runner, /self\.abot_recon\s*=\s*ABotReconEngine\(\)/);
   assert.match(server, /verify_video/);
   assert.match(server, /ALLOWED_VIDEO_TYPES/);
+  assert.match(server, /needs_video\s*=\s*mode\s*==\s*"video_to_3d"/);
+  assert.match(server, /file\.content_type\s+not\s+in\s+ALLOWED_VIDEO_TYPES/);
 });
 
 test('ABot-Recon adapter is fail-closed and bounded for free GPU use', () => {
@@ -50,4 +53,14 @@ test('ABot-Recon bootstrap is pinned and isolated from the TRELLIS environment',
   assert.match(bootstrap, /7a10be152d0478265270f46c637f9de963e7a60e/);
   assert.match(bootstrap, /abot-recon/);
   assert.match(bootstrap, /ABOT_RECON_PYTHON/);
+});
+
+test('Python bridge files do not contain escaped newline corruption', () => {
+  for (const p of [
+    'services/ai3d-worker/server.py',
+    'services/ai3d-worker/ai3d/runner.py',
+    'services/ai3d-worker/ai3d/validation.py',
+  ]) {
+    assert.doesNotMatch(read(p), /\\\\n(?=from |MAX_|\s{4,}["']|\s{4,}self\.)/);
+  }
 });
