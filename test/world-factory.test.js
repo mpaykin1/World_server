@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { createWorldDNA, analyzeReference, analyzeDepthSegmentation, evaluateQualityContract, settingsFromDNA, publicWorld } = require('../lib/world-factory');
+const { createWorldDNA, analyzeReference, analyzeDepthSegmentation, evaluateQualityContract, evaluateGeometryReconstruction, settingsFromDNA, publicWorld } = require('../lib/world-factory');
 const factoryApi = require('../lib/api-handlers/world-factory')._private;
 
 const root = path.resolve(__dirname, '..');
@@ -101,6 +101,21 @@ test('quality contract blocks geometry below identity threshold', () => {
   evaluateQualityContract(p,{matchedIdentityFeatures:['tower'],detailInventory:[{label:'spire',priority:.9}],visibilityPercent:95});
   assert.equal(p.stages[2].status,'needs-correction'); assert.equal(p.stages[3].status,'blocked'); assert.deepEqual(p.stages[2].blockers,['identity-fidelity-below-contract']);
 });
+test('geometry reconstruction emits bounded hero-preserving runtime plan and unlocks PBR', () => {
+  const dna=createWorldDNA({idea:'reference city',requestId,loreBible}); const p=dna.referencePipeline;
+  analyzeReference(p,{kind:'image',width:1920,height:1080,landmarks:[{label:'tower',prominence:1},{label:'arch',prominence:.9}]});
+  analyzeDepthSegmentation(p,{depth:{coverage:.9,confidence:.8},segmentation:{regions:[{label:'building',coverage:.6,confidence:.9},{label:'sky',coverage:.4,confidence:.9}]}});
+  evaluateQualityContract(p,{matchedIdentityFeatures:['tower','arch'],detailInventory:[{label:'spire',priority:.9}],visibilityPercent:90});
+  evaluateGeometryReconstruction(p,{faceBudget:10000,parts:[{label:'tower',identity:true,hero:true,faces:2800},{label:'arch',identity:true,faces:1400},{label:'terrain',faces:2200}]});
+  assert.equal(p.stages[3].status,'complete'); assert.equal(p.stages[4].status,'ready'); assert.equal(p.geometryReconstruction.faces,6400); assert.equal(p.stages[3].evidence[2].pass,true); assert.equal(p.geometryReconstruction.hiddenGeometryPolicy,'unknown-regions-not-invented');
+});
+
+test('geometry reconstruction refuses an over-budget candidate', () => {
+  const dna=createWorldDNA({idea:'reference city',requestId,loreBible}); const p=dna.referencePipeline;
+  analyzeReference(p,{kind:'image',width:1920,height:1080,landmarks:[{label:'tower',prominence:1}]}); analyzeDepthSegmentation(p,{depth:{coverage:.9,confidence:.8},segmentation:{regions:[{label:'building',coverage:.6,confidence:.9},{label:'sky',coverage:.4,confidence:.9}]}}); evaluateQualityContract(p,{matchedIdentityFeatures:['tower'],detailInventory:[{label:'spire',priority:.9}],visibilityPercent:90});
+  evaluateGeometryReconstruction(p,{faceBudget:1000,parts:[{label:'tower',identity:true,hero:true,faces:5000}]}); assert.equal(p.stages[3].status,'needs-correction'); assert.deepEqual(p.stages[3].blockers,['runtime-face-budget-failed']); assert.equal(p.stages[4].status,'blocked');
+});
+
 test('World Factory settings are directly playable by the existing voxel runtime', () => {
   const dna = createWorldDNA({ idea: 'острова и маяк', requestId, loreBible });
   const row = { id: dna.id, seed: dna.seed, settings: settingsFromDNA(dna) };
