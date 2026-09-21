@@ -9,6 +9,8 @@ import time
 from pathlib import Path
 from typing import Callable
 
+from .abot_zerogpu import ABotZeroGpuClient
+
 
 class ABotReconEngine:
     """ABot-Recon video -> streaming 3D reconstruction bridge.
@@ -23,8 +25,9 @@ class ABotReconEngine:
         python_bin = os.environ.get("ABOT_RECON_PYTHON", "").strip()
         self.python = python_bin or sys.executable
         self.ffmpeg = os.environ.get("FFMPEG_BIN", "").strip() or shutil.which("ffmpeg")
+        self.zerogpu = ABotZeroGpuClient()
 
-    def available(self) -> bool:
+    def local_available(self) -> bool:
         return bool(
             self.source
             and self.source.is_dir()
@@ -33,9 +36,14 @@ class ABotReconEngine:
             and self.python
         )
 
+    def available(self) -> bool:
+        return self.zerogpu.configured() or self.local_available()
+
     def status(self) -> dict:
         return {
             "available": self.available(),
+            "remoteZeroGpu": self.zerogpu.status(),
+            "localAvailable": self.local_available(),
             "sourceConfigured": bool(self.source and self.source.is_dir()),
             "ffmpegAvailable": bool(self.ffmpeg),
             "python": self.python,
@@ -123,9 +131,12 @@ class ABotReconEngine:
         params: dict,
         progress: Callable[[int, str], None] | None = None,
     ) -> list[Path]:
-        if not self.available():
+        if self.zerogpu.configured() and not bool(params.get("forceLocalGpu", False)):
+            return self.zerogpu.run(video_path, job_dir, params, progress=progress)
+        if not self.local_available():
             raise RuntimeError(
-                "ABot-Recon runtime is not configured. Set ABOT_RECON_HOME and "
+                "ABot-Recon runtime is not configured. Configure ABOT_RECON_ZEROGPU_URL + "
+                "ABOT_RECON_ZEROGPU_SECRET for the free remote worker, or set ABOT_RECON_HOME + "
                 "ABOT_RECON_PYTHON on a Linux NVIDIA GPU worker and ensure ffmpeg is available."
             )
         fps, max_frames, confidence, max_ply_points = self._bounded_params(params)
