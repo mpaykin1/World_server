@@ -73,6 +73,20 @@
         "trellis2",
         "hunyuan3d"
       ]
+    },
+    "abot-recon": {
+      "kind": "python-repo",
+      "homeEnv": "ABOT_RECON_HOME",
+      "entry": "demo.py",
+      "requires": [
+        "linux",
+        "cuda",
+        "ffmpeg"
+      ],
+      "serverAdapter": "services/ai3d-worker/ai3d/plugins/abot_recon.py",
+      "supports": [
+        "video_to_3d"
+      ]
     }
   }
 }
