@@ -124,10 +124,15 @@ async def create_job(
         raise HTTPException(status_code=400, detail="params object is invalid or too large.")
 
     needs_image = mode in {"auto", "image_to_3d", "depth", "voxel_city"}
-    if needs_image and file is None:
-        raise HTTPException(status_code=400, detail="This mode requires an image.")
-    if file is not None and file.content_type not in ALLOWED_IMAGE_TYPES:
-        raise HTTPException(status_code=415, detail="Only PNG, JPEG and WebP images are accepted.")
+    needs_video = mode == "video_to_3d"
+    if (needs_image or needs_video) and file is None:
+        raise HTTPException(status_code=400, detail="This mode requires an input file.")
+    if file is not None and needs_image and file.content_type not in ALLOWED_IMAGE_TYPES:
+        raise HTTPException(status_code=415, detail="Only PNG, JPEG and WebP images are accepted for this mode.")
+    if file is not None and needs_video and file.content_type not in ALLOWED_VIDEO_TYPES:
+        raise HTTPException(status_code=415, detail="ABot-Recon accepts MP4, WebM, MOV or AVI video.")
+    if file is not None and not (needs_image or needs_video):
+        raise HTTPException(status_code=400, detail="This mode does not accept an uploaded file.")
 
     job_id = uuid.uuid4().hex
     job_dir = RUNTIME / "jobs" / job_id
