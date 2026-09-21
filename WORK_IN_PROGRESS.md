@@ -754,3 +754,25 @@ Implementation and local verification complete. Remaining proof is GitHub Action
 - Delivery requirement: exact commit + pushed branch + test Preview URL + real-browser verification before PASS.
 - Current mode: FINISH MODE. No optional scope expansion before verified Preview.
 - Remaining gate: focused/full checks -> commit -> push -> Preview deploy -> browser verify exact URL -> handoff URL.
+
+# [ARCHITECT] GAP B 9th dispatch — merge-chain Fleet-PRE exact-SHA gate (2026-09-21)
+
+## Role / session
+Architect control-plane session (read-only). No code/edit/merge/publish/deploy performed by Architect.
+
+## Fresh bootstrap facts (repo/live truth overrides memory)
+- origin/master BASE/HEAD = f3e1fdde2cc245692996e1caa0814fb13013f765 ("ci: make quality canary verify Cloudflare fail-closed (#212)").
+- Last independent FLEET POST certificate = 648e0296 (2026-09-19). 23 commits merged since, all without exact-SHA Fleet PRE certs. Governance gap persists.
+- GAP B re-confirmed open: only WORK_IN_PROGRESS.md mentions the gate markers; no workflow, no checker script, no PR, origin lacks the owned branches.
+
+## Delta handed to Builder (handoff: issue #80 comment https://github.com/mpaykin1/World_server/issues/80#issuecomment-5756116963)
+- Owned lane: ai/opencode/merge-chain-fleet-pre-gate (reset to fresh BASE), one task/one PR.
+- Build: permanent merge-chain Fleet-PRE exact-SHA gate (workflow + fail-closed cert checker + regression tests).
+- Quota-safe correction: Vercel guard marks .github/ and test/ NON_DEPLOYABLE, but scripts/ and data/ are deployable-class — so the checker lives under test/, and no data/ cert files.
+- Routing: Builder (free Claude/OpenCode) -> Fleet PRE (exact HEAD) -> Ocean (exact SHA) -> Fleet POST (exact live).
+- Regression guard: cert gate in required check + workflow check + bypass scan.
+- No production deploy; paid APIs/GPU not used.
+
+## Evidence
+- npm run check FAILED on the local STALE worktree (indieworlds export drift on a diverged local branch) — NOT a canonical-master regression; origin/master selected as source of truth.
+- Canonical master gates not re-run locally beyond read-only inspection (CPU 94%, cloud-first; full Build/Fleet stages belong to Builder/cloud CI).
