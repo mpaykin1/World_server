@@ -100,3 +100,27 @@ Behavior:
 Current external blocker: Vercel reports `Deployment rate limited — retry in 24 hours.` on the latest master, so current correct action is **no code change** and no deployment spam.
 
 Optional completion enhancement: configure repository Actions secret `VERCEL_TOKEN` once. The bridge already consumes it safely and then attaches authenticated Vercel build-log evidence to future repair tasks. Never print or commit the token.
+
+
+## GAP B — permanent merge-chain Fleet-PRE exact-SHA gate (Architect dispatch 2026-09-21, 6th)
+
+Correct target now: `master`/canonical live `aeae507049bca897a0f6eb09042b5bebab20cc65` (Cloudflare `/api/config` matches exactly).
+
+### Problem (freshly confirmed, repo truth overrides memory)
+- No script/workflow/test enforces an exact-SHA Fleet PRE certificate on merge. `git grep READY_FOR_OCEAN|PRE_INTEGRATION_QA|FLEET_PRE|check-fleet-pre-certificate` over `scripts/ lib/ test/ .github/ data/` on `master` = 0 hits.
+- No `.github/workflows/fleet-pre-merge-chain.yml`; `scripts/check-fleet-pre-certificate.cjs` absent; branch `ai/opencode/merge-chain-fleet-pre-gate` not on origin; no gate PR.
+- Governed class #113/#116/#117/#183/#185/#187 continues: #189–#208 (16 merges) since the last independent Fleet POST certificate `648e0296`.
+
+### Builder contract (exact, do not weaken)
+- ONE PR on branch `ai/opencode/merge-chain-fleet-pre-gate`, BASE `aeae507049bca897a0f6eb09042b5bebab20cc65`.
+- `scripts/check-fleet-pre-certificate.cjs`: pure Node, module.exports, logic/I-O split; exact fresh cert (`[FLEET][PRE_INTEGRATION_QA][PR_*][EXACT_HEAD_<fullsha>]` + `READY_FOR_OCEAN=YES` from issue #80 `gh` API scan, fallback `data/fleet-pre-certificates/`) = PASS; missing/skipped/stale(>24h)/mismatched/ambiguous = BLOCK (exit 1).
+- `.github/workflows/fleet-pre-merge-chain.yml`: `pull_request`(master) + `workflow_dispatch`, `contents: read`, reports `fleet-pre-merge-chain` on PR head SHA; green only on exact cert PASS.
+- `test/fleet-pre-certificate.test.js` inside `npm run check` (7 fail-closed rules + happy path + bypass-class scan). No `|| true`, no skip, no fallback green.
+- Repo gates on new head: `npm run check`, `check-agent-rules`, `golden:check`, `world-quality`, `quality:regression`, `science-governance`.
+- Diff limited to `.github/ scripts/ test/ data/(docs)`; never app/game/runtime; never a production deploy; no automatic merge.
+
+### Chain
+Builder (via Collective Brain / master-coordinator; free Claude/OpenCode cloud preferred, Codex <=30% fallback, no paid/GPU) -> Fleet PRE exact-head falsification (`READY_FOR_OCEAN=YES`/`RETURN_TO_BUILDER`) -> Ocean exact-SHA integration -> Fleet POST exact-live verification. No self-certification.
+
+### Owner-only (non-blocking, later)
+Add `fleet-pre-merge-chain` to master required status checks once green on the new PR. Coordinate through issue #80.

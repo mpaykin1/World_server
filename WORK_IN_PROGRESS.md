@@ -2,6 +2,44 @@
 
 ---
 
+# Architect Control-Plane — 2026-09-21 | ONE_BUILDER_DELTA: GAP B merge-chain Fleet-PRE exact-SHA gate
+
+## What / why
+Close GAP B: no machine-enforced exact-SHA Fleet PRE certificate is required before any PR merges into protected `master`, so merges keep landing without independent exact-head authorization. Same governance-violation class as #113/#116/#117/#183/#185/#187, now continued by #189–#208 (16 merges since the last independent Fleet POST certificate `648e0296`). Weakest CLAIM_TRUTH control-plane pillar; this is the 6th Architect dispatch of the same agreed contract and it was never delivered. Control-plane integrity beats new features this cycle.
+
+## Fresh evidence (2026-09-21; repo/live truth overrides stale memory)
+- Protected `master` HEAD = `aeae507049bca897a0f6eb09042b5bebab20cc65` (#208 "perf-voxel-flatten-atlas-uv-hot-path").
+- Canonical Cloudflare production freshly probed: `/api/config` `deployedRevision` EXACTLY `aeae5070`; `/api/worlds` 200. **LIVE_VERIFIED_LKG=aeae5070.**
+- Gate still absent on master: grep `READY_FOR_OCEAN|PRE_INTEGRATION_QA|FLEET_PRE|check-fleet-pre-certificate` over `scripts/ lib/ test/ .github/ data/` = 0 hits; no `.github/workflows/fleet-pre-merge-chain.yml` (19 workflows, none is it); `scripts/check-fleet-pre-certificate.cjs` 404 on master; branch `ai/opencode/merge-chain-fleet-pre-gate` absent on origin; no gate PR among 22 open PRs (none of them is a gate).
+- 6 local marker branches (`ai/chatgpt/merge-chain-fleet-pre-gate`, `ai/opencode/merge-chain-fleet-pre-gate`, `ai/opencode/fleet-pre-merge-chain-gate`, `fleet-pre-gate-impl`, `opencode/fleet-pre-cert-gate-20260916`, `opencode/merge-chain-fleet-preview-gate`) are all 0 commits ahead of `origin/master` — empty markers, no implementation.
+
+## Handoff contract (one task, one PR)
+- OWNED_LANE: branch `ai/opencode/merge-chain-fleet-pre-gate` (reuse the marker name; do NOT create a second gate branch). BASE_SHA/current HEAD = `aeae507049bca897a0f6eb09042b5bebab20cc65`; CERTIFY_HEAD = final pushed head SHA of the PR.
+- Do NOT touch in-flight lanes (opencode/voxel-vertex-color-uint8, ai-chatgpt-cloudflare-repair-20260914, ai-chatgpt-interior-ao-fastpath-20260920, ai/chatgpt/graphics-cycle22-20260921) or PRs #118/#95/#97/#93/#92 etc.
+- BEFORE (`<60s` visible): open any open PR targeting master (e.g. #118) => no check enforcing an exact-SHA PRE cert; `node scripts/check-fleet-pre-certificate.cjs <sha>` absent (exit 1); merge possible with zero independent authorization.
+- AFTER (`<60s` visible): on the new PR a `fleet-pre-merge-chain` check appears — no cert => RED BLOCK; fresh exact-head `READY_FOR_OCEAN=YES` cert => green. Local script exit 1 for missing/skipped/different-SHA/stale/mismatched-verdict, 0 for an exact fresh cert.
+- ACCEPTANCE (fail-closed; do not weaken):
+  - A1. `scripts/check-fleet-pre-certificate.cjs` — pure Node, zero runtime deps, `module.exports`, logic separated from I/O. BLOCK on: no source / skipped / empty / `exactHeadSha != PR head` / verdict != `READY_FOR_OCEAN` / stale > max-age (default 24h) / unambiguous source. PASS only on exact fresh cert.
+  - A2. Authoritative cert source = issue #80 comment scan for marker `[FLEET][PRE_INTEGRATION_QA][PR_*][EXACT_HEAD_<fullsha>]` containing `READY_FOR_OCEAN=YES`, fetched via `gh` API and deterministically parsed; checked-in `data/fleet-pre-certificates/` optional secondary source; both unavailable/ambiguous => BLOCK.
+  - A3. `.github/workflows/fleet-pre-merge-chain.yml` (`pull_request` on `master` + `workflow_dispatch`; `contents: read`) reports `fleet-pre-merge-chain` against the PR head SHA; green only on exact-SHA cert PASS. No `|| true`, no skip, no fallback green.
+  - A4. `test/fleet-pre-certificate.test.js` inside `npm run check`: 7 fail-closed rules + happy path + bypass-class scan proving the workflow cannot be green without the cert check.
+  - A5. Repository gates on the new head PASS: `npm run check`, `check-agent-rules`, `golden:check`, `world-quality`, `quality:regression`, `science-governance`. No weakened tests, no fabricated PASS.
+  - A6. Diff limited to `.github/ scripts/ test/ data/(docs)`; never touches app/game/runtime code; never a production deploy; no merge without independent review + required checks.
+- REGRESSION_GUARD (permanent): (a) cert-gate tests inside required `check`; (b) new `fleet-pre-merge-chain` workflow check; (c) CI scan rejecting cert-skip / `|| true` / fallback-green bypass (#91/#113 class).
+- ROLLBACK/RISK: revert only the new PR commits (~6 files); base `aeae5070` untouched; no master rewrite; LIVE_VERIFIED_LKG=aeae5070. Risk bounded to scripts/workflow/tests; fail-closed default proven by offline tests. Owner-only (TRUE_USER_ACTION_REQUIRED, non-blocking): add `fleet-pre-merge-chain` to master required status checks once green on the new PR.
+- ROUTING: Builder first via Collective Brain / `scripts/master-coordinator.cjs` (free Claude/OpenCode cloud preferred; NO ChatGPT Work / Computer Use; Codex <=30% fallback only; no paid APIs/GPU; local bounded low-load only for the smallest git bridge). After Builder pushes the final head: Fleet PRE independently re-fetches the exact HEAD_SHA, falsifies cert-absent => BLOCK / cert-present-exact => PASS + repo gates => `READY_FOR_OCEAN=YES` or `RETURN_TO_BUILDER`. Ocean integrates only that SHA. Fleet POST verifies the exact integrated master SHA. No self-certification; no stage skipping.
+
+## PC_HEALTH / ZERO_CHAOS (this Architect session)
+- BEFORE: free RAM 4.7GB (29.5% >25%), CPU 90% (high => no heavy local jobs started; cloud-first), disk C 188GB free, Desktop no new AI clutter. Owned session process only opencode(12888).
+- No worktrees/files created on Desktop; canonical checkout reused; no process started/killed that was not session-owned.
+- AFTER: re-check at session end; record cleanup in final update.
+- NOTE: 56 local-only branches `ai/agent-invoke/------evil--rm--rf---*` (0 commits ahead, all objects reachable) are agent-invoke branch-sanitization test debris — zero-risk prune candidate; flagged for Branch/PR GC, not deleted this cycle.
+
+## Next action (Builder)
+Implement the gate on the owned lane, run focused + repository gates, push the exact head, loop through Fleet PRE -> Ocean -> Fleet POST. See issue #80 for the canonical [ARCHITECT] dispatch of 2026-09-21 and this file's sibling entry in `CLOUD_AI_HANDOFF.md`.
+
+---
+
 # IndieWorlds foundation — 2026-09-10
 
 ## Task
