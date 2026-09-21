@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -42,6 +42,20 @@ test('World Factory creates deterministic playable World DNA with lore and quali
   assert.equal(a.visualProfile.microdetail, true);
   assert.equal(a.lore.connections.length, 1);
   assert.ok(loreBible.worlds[a.lore.connections[0].targetId]);
+});
+
+test('reference reconstruction has resumable evidence-gated stages and records hidden geometry', () => {
+  const dna = createWorldDNA({ idea: 'reference panorama gothic city', requestId, loreBible });
+  const pipeline = dna.referencePipeline;
+  assert.equal(pipeline.route, 'img2threejs-staged-to-golden-voxel');
+  assert.equal(pipeline.maxCorrectionPasses, 3);
+  assert.equal(pipeline.stages.length, 8);
+  assert.equal(pipeline.stages[0].status, 'ready');
+  assert.ok(pipeline.stages.slice(1).every((stage) => stage.status === 'blocked' && stage.evidence.length === 0));
+  assert.equal(pipeline.hiddenGeometry[0].status, 'unknown');
+  assert.equal(pipeline.acceptance.minVisibilityPercent, 85);
+  assert.equal(pipeline.acceptance.referenceEvidenceRequired, true);
+  assert.equal(pipeline.acceptance.runtimeEvidenceRequired, true);
 });
 
 test('World Factory settings are directly playable by the existing voxel runtime', () => {
