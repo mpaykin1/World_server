@@ -20,7 +20,8 @@ from ai3d.validation import ALLOWED_IMAGE_TYPES, ALLOWED_VIDEO_TYPES, verify_ima
 SERVICE_ROOT = Path(__file__).resolve().parent
 RUNTIME = Path(os.environ.get("AI3D_RUNTIME_DIR", SERVICE_ROOT / "runtime")).resolve()
 RUNTIME.mkdir(parents=True, exist_ok=True)
-MAX_UPLOAD = max(1, min(int(os.environ.get("AI3D_MAX_UPLOAD_MB", "25")), 100)) * 1024 * 1024\nMAX_VIDEO_UPLOAD = max(1, min(int(os.environ.get("AI3D_MAX_VIDEO_UPLOAD_MB", "100")), 500)) * 1024 * 1024
+MAX_UPLOAD = max(1, min(int(os.environ.get("AI3D_MAX_UPLOAD_MB", "25")), 100)) * 1024 * 1024
+MAX_VIDEO_UPLOAD = max(1, min(int(os.environ.get("AI3D_MAX_VIDEO_UPLOAD_MB", "100")), 500)) * 1024 * 1024
 MAX_WORKERS = max(1, min(int(os.environ.get("AI3D_MAX_WORKERS", "1")), 8))
 JOB_TTL_HOURS = max(1, int(os.environ.get("AI3D_JOB_TTL_HOURS", "72")))
 SECRET = os.environ.get("AI3D_SHARED_SECRET", "")
