@@ -18,6 +18,7 @@ clone_pinned "Depth-Anything-V2" "https://github.com/DepthAnything/Depth-Anythin
 clone_pinned "BuildingGeneratorThreeJS" "https://github.com/achrefelouafi/BuildingGeneratorThreeJS.git" "74cb71b0db1efa894a9763fba3ae67ca8ea54547"
 clone_pinned "bene-proggen-maps" "https://github.com/Beneking102/bene-proggen-maps.git" "ed622c5ce10f33092c7b651628d7c0d2015dcd61"
 clone_pinned "TRELLIS.2" "https://github.com/microsoft/TRELLIS.2.git" "75fbf0183001ed9876c8dbb35de6b68552ee08bd" "1"
+clone_pinned "ABot-Recon" "https://github.com/amap-cvlab/ABot-Recon.git" "7a10be152d0478265270f46c637f9de963e7a60e"
 
 if command -v conda >/dev/null 2>&1; then
   if ! conda env list | awk '{print $1}' | grep -qx trellis2; then
@@ -26,6 +27,13 @@ if command -v conda >/dev/null 2>&1; then
   fi
   conda run -n trellis2 python -m pip install -r "$WORKER/requirements.txt"
   conda run -n trellis2 python -m pip install -r "$EXTERNAL/Depth-Anything-V2/requirements.txt"
+
+  # Keep ABot-Recon's pinned Torch/CUDA stack isolated from TRELLIS.
+  if ! conda env list | awk '{print $1}' | grep -qx abot-recon; then
+    conda create -n abot-recon python=3.11 -y
+  fi
+  conda run -n abot-recon python -m pip install torch==2.5.1 torchvision==0.20.1 --index-url https://download.pytorch.org/whl/cu121
+  conda run -n abot-recon python -m pip install -e "$EXTERNAL/ABot-Recon"
 else
   echo "ERROR: conda is required for the automated TRELLIS.2 environment setup." >&2
   exit 2
@@ -48,9 +56,14 @@ TRELLIS2_HOME=$EXTERNAL/TRELLIS.2
 DEPTH_ANYTHING_HOME=$EXTERNAL/Depth-Anything-V2
 BUILDING_GENERATOR_HOME=$EXTERNAL/BuildingGeneratorThreeJS
 PROCGEN_MAPS_HOME=$EXTERNAL/bene-proggen-maps
+ABOT_RECON_HOME=$EXTERNAL/ABot-Recon
+ABOT_RECON_PYTHON=$(conda run -n abot-recon python -c 'import sys; print(sys.executable)' | tail -n 1)
+FFMPEG_BIN=${FFMPEG_BIN:-$(command -v ffmpeg || true)}
+AI3D_MAX_VIDEO_UPLOAD_MB=${AI3D_MAX_VIDEO_UPLOAD_MB:-100}
 BLENDER_BIN=${BLENDER:-blender}
 ENV
 
 echo "AI3D Linux worker bootstrap complete."
 echo "Start with: cd '$WORKER' && set -a && source .env && set +a && conda run -n trellis2 python -m uvicorn server:app --host 0.0.0.0 --port 8787 --workers 1"
 if [[ -z "$BLENDER" ]]; then echo "WARNING: Blender 4.2+ was not detected; building/map modes remain unavailable until BLENDER_BIN is configured."; fi
+if ! command -v ffmpeg >/dev/null 2>&1; then echo "WARNING: ffmpeg was not detected; video_to_3d remains unavailable until FFMPEG_BIN is configured."; fi
