@@ -16,7 +16,8 @@ from .plugins.blender_building import BuildingEngine
 from .plugins.procgen_maps import ProcgenMapsEngine
 from .plugins.godot_voxel import GodotVoxelBridge
 from .plugins.voxel_city import VoxelCityEngine
-from .plugins.gpu_router import RemoteGPU3DRouter\nfrom .plugins.abot_recon import ABotReconEngine
+from .plugins.gpu_router import RemoteGPU3DRouter
+from .plugins.abot_recon import ABotReconEngine
 from .plugins.mesh_quality_optimizer import MeshQualityOptimizer
 from .plugins.world_quality import WorldQualityEnhancer
 from ai3d_voxel_verifier.verifier import verify_voxel_city
@@ -43,6 +44,7 @@ class PipelineRunner:
         self.godot = GodotVoxelBridge()
         self.voxel_city = VoxelCityEngine()
         self.gpu_router = RemoteGPU3DRouter()
+        self.abot_recon = ABotReconEngine()
         self.mesh_optimizer = MeshQualityOptimizer()
         self.world_quality = WorldQualityEnhancer()
 
@@ -59,7 +61,8 @@ class PipelineRunner:
             "procgen_maps": {"available": self.procgen.available(), "engine": "Blender headless (auto-found)", "licenseMode": "external GPL-3.0 plugin"},
             "voxel_city": {"available": self.voxel_city.available(), "engine": "skyline_dp_reference_shell_piecewise_voxel_depth_cpu", "output": "voxel-city.json"},
             "godot_voxel_factory": self.godot.plugin_status(),
-            "remote_gpu_router": self.gpu_router.status(),\n            "abot_recon": self.abot_recon.status(),
+            "remote_gpu_router": self.gpu_router.status(),
+            "abot_recon": self.abot_recon.status(),
             "blender": {"available": self.building.available() or self.procgen.available(), "autoFound": self.building.blender if hasattr(self.building, 'blender') else "blender"},
             "voxel_tools": {"voxelsrv": (Path("C:/Users/user/Desktop/майн/voxelsrv/src").is_dir()), "littlecubes": (Path("C:/Users/user/Desktop/майн/LittleCubes/src").is_dir())},
         }
@@ -106,6 +109,8 @@ class PipelineRunner:
 
         if mode in {"auto", "image_to_3d", "depth", "voxel_city"} and not input_path:
             raise RuntimeError("This mode requires an input image.")
+        if mode == "video_to_3d" and not input_path:
+            raise RuntimeError("ABot-Recon video_to_3d requires an input video.")
 
         depthEngine = None
         depthInferenceVerified = False
