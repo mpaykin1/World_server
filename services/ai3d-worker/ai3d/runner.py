@@ -16,7 +16,7 @@ from .plugins.blender_building import BuildingEngine
 from .plugins.procgen_maps import ProcgenMapsEngine
 from .plugins.godot_voxel import GodotVoxelBridge
 from .plugins.voxel_city import VoxelCityEngine
-from .plugins.gpu_router import RemoteGPU3DRouter
+from .plugins.gpu_router import RemoteGPU3DRouter\nfrom .plugins.abot_recon import ABotReconEngine
 from .plugins.mesh_quality_optimizer import MeshQualityOptimizer
 from .plugins.world_quality import WorldQualityEnhancer
 from ai3d_voxel_verifier.verifier import verify_voxel_city
@@ -59,7 +59,7 @@ class PipelineRunner:
             "procgen_maps": {"available": self.procgen.available(), "engine": "Blender headless (auto-found)", "licenseMode": "external GPL-3.0 plugin"},
             "voxel_city": {"available": self.voxel_city.available(), "engine": "skyline_dp_reference_shell_piecewise_voxel_depth_cpu", "output": "voxel-city.json"},
             "godot_voxel_factory": self.godot.plugin_status(),
-            "remote_gpu_router": self.gpu_router.status(),
+            "remote_gpu_router": self.gpu_router.status(),\n            "abot_recon": self.abot_recon.status(),
             "blender": {"available": self.building.available() or self.procgen.available(), "autoFound": self.building.blender if hasattr(self.building, 'blender') else "blender"},
             "voxel_tools": {"voxelsrv": (Path("C:/Users/user/Desktop/майн/voxelsrv/src").is_dir()), "littlecubes": (Path("C:/Users/user/Desktop/майн/LittleCubes/src").is_dir())},
         }
@@ -133,6 +133,31 @@ class PipelineRunner:
         t0 = started
         # input_validation
         _add_stage("input_validation", t0, t0+0.05, input_path if input_path and input_path.is_file() else job_dir / "input.png", input_sha)
+
+        # Streaming RGB-video reconstruction. This is intentionally a separate
+        # evidence stage: ABot-Recon returns observed geometry + camera poses,
+        # not a fabricated walkable/gameplay-ready world.
+        if mode == "video_to_3d":
+            progress(4, "ABot-Recon: validating video reconstruction job")
+            artifacts = self.abot_recon.run(input_path, job_dir, params, progress=progress)
+            for artifact in artifacts:
+                role = "abot_recon_artifact"
+                lower = artifact.name.lower()
+                if lower.endswith(".ply"):
+                    role = "point_cloud"
+                elif "pose" in lower and lower.endswith(".npy"):
+                    role = "camera_pose"
+                elif lower.endswith("manifest.json"):
+                    role = "manifest"
+                elif lower.endswith("metadata.json"):
+                    role = "metadata"
+                elif lower.endswith(".log"):
+                    role = "log"
+                files.append(file_meta(artifact, role))
+            manifest_path = job_dir / "abot-recon-manifest.json"
+            _add_stage("abot_video_reconstruction", started, time.time(), manifest_path, input_sha)
+            progress(99, "ABot-Recon reconstruction ready")
+            return {"files": files, "durationSeconds": round(time.time() - started, 3)}
 
         # Separate CPU voxel method: image -> logical cube world (NO GLB heightfield).
         if mode == "voxel_city":
