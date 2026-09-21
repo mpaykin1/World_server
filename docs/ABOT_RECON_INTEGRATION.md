@@ -55,3 +55,26 @@ relevant rights holders. World_server therefore exposes the adapter but must not
 silently treat the official weights as commercial-safe.
 
 Upstream: `amap-cvlab/ABot-Recon`, pinned revision above.
+
+
+## Free Hugging Face ZeroGPU path
+
+World_server also contains a self-owned ZeroGPU worker at
+`deploy/huggingface/abot-recon-zero-gpu/`. It exposes a public Gradio API but
+requires a long shared secret on every reconstruction call, so anonymous callers
+cannot consume the worker quota.
+
+Deployment is automated by `scripts/deploy-abot-zerogpu.py`. It creates a
+public Gradio Space on the `zero-a10g` flavor, uploads the worker, and stores
+`ABOT_WORKER_SECRET` as a Space secret. The AI3D worker then needs only:
+
+- `ABOT_RECON_ZEROGPU_URL`
+- `ABOT_RECON_ZEROGPU_SECRET`
+
+When both are configured, the ABot adapter prefers ZeroGPU and falls back to a
+local Linux/CUDA runtime only when explicitly requested with `forceLocalGpu`.
+The remote job is still evidence-gated: it must return a valid non-empty
+`reconstruction.ply` archive or the job fails.
+
+The deploy command requires one owner credential, `HF_TOKEN` with write access.
+No Hugging Face token or worker secret is stored in Git.
