@@ -1,5 +1,14 @@
 # CLOUD AI HANDOFF
 
+## GAP B — merge-chain Fleet-PRE exact-SHA gate (Architect dispatch 7, 2026-09-21)
+`[ARCHITECT]` fresh dispatch posted: issue #80 comment 5754079839.
+
+- Base/HEAD: `da41cb1d186ca3585256af51ce809edbe4f7254c`. Last FLEET POST cert = `648e0296`; 20 merges since without exact-SHA PRE certs.
+- GAP verified open on base: zero `FLEET_PRE/PRE_INTEGRATION_QA/READY_FOR_OCEAN` in scripts/lib/test/.github/data; no `fleet-pre-merge-chain.yml` (19 workflows); no `scripts/check-fleet-pre-certificate.cjs`; origin gate branch absent; no gate PR among 22 open PRs.
+- Builder lane: `ai/opencode/merge-chain-fleet-pre-gate` (reuse marker name), one PR, one task. A1-A6 fail-closed acceptance + regression guard + rollback in the issue comment. Non-deployable CI/scripts/test delta.
+- Routing: Builder via `scripts/master-coordinator.cjs` (free Claude/OpenCode cloud preferred; Codex <=30% fallback; no paid APIs/GPU) -> Fleet PRE exact-HEAD falsification -> Ocean -> Fleet POST. Do not self-certify, do not skip stages.
+- Coordination state lives in issue #80; this file is the resumable bridge.
+
 ## Purpose
 `World_server` is cloud-first. Desktop AI should do only the minimum work required to make a task available to browser/cloud agents, then coordinate rather than continue heavy local execution.
 

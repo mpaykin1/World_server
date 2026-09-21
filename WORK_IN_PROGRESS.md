@@ -2,6 +2,29 @@
 
 ---
 
+# GAP B Architect dispatch 7 — merge-chain Fleet-PRE exact-SHA gate — 2026-09-21
+
+## What / why
+`[ARCHITECT]` control-plane session. Do not implement/edit/merge/publish. Select exactly one highest-value safe delta and hand to Builder.
+
+## Current state (fresh evidence)
+- Protected master/BASE/HEAD = `da41cb1d186ca3585256af51ce809edbe4f7254c` (perf-voxel hot-path #209 series).
+- Last independent FLEET POST certificate = `648e0296`; 20 merges since, all without exact-SHA Fleet PRE certs (governance-violation class #113/#116/#117/#183/#185/#187).
+- GAP B verified OPEN on base: zero `FLEET_PRE/PRE_INTEGRATION_QA/READY_FOR_OCEAN/check-fleet-pre-certificate` in scripts/lib/test/.github/data; no `fleet-pre-merge-chain.yml` (19 workflows); `scripts/check-fleet-pre-certificate.cjs` absent; origin gate branch absent; no gate PR among 22 open PRs.
+- 7th dispatch of same contract (prior 2026-09-13..09-21), never delivered.
+
+## Decision
+Single Builder delta: implement permanent merge-chain Fleet-PRE exact-SHA gate on lane `ai/opencode/merge-chain-fleet-pre-gate`. Full contract (BEFORE/AFTER, A1-A6 acceptance, regression guard, rollback, routing) posted to issue #80 comment 5754079839.
+
+## Next action
+Builder (via scripts/master-coordinator.cjs, free Claude/OpenCode cloud preferred) pushes PR head; Fleet PRE independently falsifies exact HEAD_SHA; then Ocean; then Fleet POST.
+
+## Tests / verification
+Per contract A1-A6: npm run check, check-agent-rules, golden:check, world-quality, quality:regression, science-governance on new head. No weakened tests.
+
+## Known risks / rollback
+Revert only new PR commits (~6 files); base da41cb1d untouched; no master rewrite; LIVE_VERIFIED_LKG(last cert)=648e0296, BASE=da41cb1d. Risk bounded to scripts/workflow/tests.
+
 # IndieWorlds foundation — 2026-09-10
 
 ## Task
