@@ -430,21 +430,21 @@ function blockAt(x,y,z){
   const h=heightAt(x,z),biome=biomeAt(x,z); if(y>h) return y<=SEA?BLOCK.WATER:BLOCK.AIR; if(caveAt(x,y,z)) return BLOCK.AIR; if(y===h) return biome==='desert'?BLOCK.SAND:biome==='snow'?BLOCK.SNOW:BLOCK.GRASS; if(y>h-4)return biome==='desert'?BLOCK.SAND:BLOCK.DIRT; return oreAt(x,y,z);
 }
 const TRANSLUCENT_BY_BLOCK=Array.from({length:14},(_,b)=>b!==BLOCK.WATER&&BLOCKS[b]?.alpha!==undefined);
-const OCCLUDING_BY_BLOCK=Array.from({length:14},(_,b)=>b!==BLOCK.AIR&&b!==BLOCK.WATER&&!TRANSLUCENT_BY_BLOCK[b]);
+const OCCLUDING_BY_BLOCK=Uint8Array.from({length:14},(_,b)=>b!==BLOCK.AIR&&b!==BLOCK.WATER&&!TRANSLUCENT_BY_BLOCK[b]);
 const FACE_VISIBLE_BY_BLOCK=Uint8Array.from({length:14*14},(_,i)=>{const b=Math.floor(i/14),nb=i%14;return b===BLOCK.WATER?nb===BLOCK.AIR:TRANSLUCENT_BY_BLOCK[b]?(nb===BLOCK.AIR||nb===BLOCK.WATER):(nb===BLOCK.AIR||nb===BLOCK.WATER||TRANSLUCENT_BY_BLOCK[nb]===true);});
-function isOccluding(b){ return OCCLUDING_BY_BLOCK[b]===true; }
+function isOccluding(b){ return OCCLUDING_BY_BLOCK[b]!==0; }
 
 const FACE_AO_SHADE=[1,.86,.72,.58],FACE_AO_SCRATCH=[0,0,0,0],FACE_AO_SIDE_A=[0,0],FACE_AO_SIDE_B=[0,0];
 function faceCornerAOInterior(blockIndex,face,blocks){
   const out=FACE_AO_SCRATCH,sideA=FACE_AO_SIDE_A,sideB=FACE_AO_SIDE_B,a=face.aoSideOffsetA,b=face.aoSideOffsetB;
-  sideA[0]=OCCLUDING_BY_BLOCK[blocks[blockIndex+a[0]]]===true?1:0;sideA[1]=OCCLUDING_BY_BLOCK[blocks[blockIndex+a[1]]]===true?1:0;sideB[0]=OCCLUDING_BY_BLOCK[blocks[blockIndex+b[0]]]===true?1:0;sideB[1]=OCCLUDING_BY_BLOCK[blocks[blockIndex+b[1]]]===true?1:0;
-  for(let i=0;i<4;i++){const sel=face.aoSelect[i],o1=sideA[sel[0]],o2=sideB[sel[1]],both=o1&o2;const oc=both?0:(OCCLUDING_BY_BLOCK[blocks[blockIndex+face.aoCornerOffset[i]]]===true?1:0);out[i]=both?3:o1+o2+oc;}
+  sideA[0]=OCCLUDING_BY_BLOCK[blocks[blockIndex+a[0]]];sideA[1]=OCCLUDING_BY_BLOCK[blocks[blockIndex+a[1]]];sideB[0]=OCCLUDING_BY_BLOCK[blocks[blockIndex+b[0]]];sideB[1]=OCCLUDING_BY_BLOCK[blocks[blockIndex+b[1]]];
+  for(let i=0;i<4;i++){const sel=face.aoSelect[i],o1=sideA[sel[0]],o2=sideB[sel[1]],both=o1&o2;const oc=both?0:(OCCLUDING_BY_BLOCK[blocks[blockIndex+face.aoCornerOffset[i]]]);out[i]=both?3:o1+o2+oc;}
   return out;
 }
 function faceCornerAO(lx,y,lz,face,getBlock){
   const out=FACE_AO_SCRATCH,sideA=FACE_AO_SIDE_A,sideB=FACE_AO_SIDE_B;
-  const a0=face.aoSideA[0],a1=face.aoSideA[1],b0=face.aoSideB[0],b1=face.aoSideB[1];sideA[0]=OCCLUDING_BY_BLOCK[getBlock(lx+a0[0],y+a0[1],lz+a0[2])]===true?1:0;sideA[1]=OCCLUDING_BY_BLOCK[getBlock(lx+a1[0],y+a1[1],lz+a1[2])]===true?1:0;sideB[0]=OCCLUDING_BY_BLOCK[getBlock(lx+b0[0],y+b0[1],lz+b0[2])]===true?1:0;sideB[1]=OCCLUDING_BY_BLOCK[getBlock(lx+b1[0],y+b1[1],lz+b1[2])]===true?1:0;
-  for(let i=0;i<4;i++){const sel=face.aoSelect[i],o1=sideA[sel[0]],o2=sideB[sel[1]],both=o1&o2,corner=face.aoCorner[i];const oc=both?0:(OCCLUDING_BY_BLOCK[getBlock(lx+corner[0],y+corner[1],lz+corner[2])]===true?1:0);out[i]=both?3:o1+o2+oc;}
+  const a0=face.aoSideA[0],a1=face.aoSideA[1],b0=face.aoSideB[0],b1=face.aoSideB[1];sideA[0]=OCCLUDING_BY_BLOCK[getBlock(lx+a0[0],y+a0[1],lz+a0[2])];sideA[1]=OCCLUDING_BY_BLOCK[getBlock(lx+a1[0],y+a1[1],lz+a1[2])];sideB[0]=OCCLUDING_BY_BLOCK[getBlock(lx+b0[0],y+b0[1],lz+b0[2])];sideB[1]=OCCLUDING_BY_BLOCK[getBlock(lx+b1[0],y+b1[1],lz+b1[2])];
+  for(let i=0;i<4;i++){const sel=face.aoSelect[i],o1=sideA[sel[0]],o2=sideB[sel[1]],both=o1&o2,corner=face.aoCorner[i];const oc=both?0:(OCCLUDING_BY_BLOCK[getBlock(lx+corner[0],y+corner[1],lz+corner[2])]);out[i]=both?3:o1+o2+oc;}
   return out;
 }
 function waterShoreAt(lx,y,lz,getBlock){if(isOccluding(getBlock(lx+1,y,lz))||isOccluding(getBlock(lx-1,y,lz))||isOccluding(getBlock(lx,y,lz+1))||isOccluding(getBlock(lx,y,lz-1)))return 65535;return (isOccluding(getBlock(lx+1,y,lz+1))||isOccluding(getBlock(lx+1,y,lz-1))||isOccluding(getBlock(lx-1,y,lz+1))||isOccluding(getBlock(lx-1,y,lz-1)))?36044:0;}
