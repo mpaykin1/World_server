@@ -15,12 +15,12 @@ from fastapi.responses import FileResponse
 from ai3d.auth import verify_token
 from ai3d.runner import PipelineRunner
 from ai3d.store import JobStore
-from ai3d.validation import ALLOWED_IMAGE_TYPES, verify_image
+from ai3d.validation import ALLOWED_IMAGE_TYPES, ALLOWED_VIDEO_TYPES, verify_image, verify_video
 
 SERVICE_ROOT = Path(__file__).resolve().parent
 RUNTIME = Path(os.environ.get("AI3D_RUNTIME_DIR", SERVICE_ROOT / "runtime")).resolve()
 RUNTIME.mkdir(parents=True, exist_ok=True)
-MAX_UPLOAD = max(1, min(int(os.environ.get("AI3D_MAX_UPLOAD_MB", "25")), 100)) * 1024 * 1024
+MAX_UPLOAD = max(1, min(int(os.environ.get("AI3D_MAX_UPLOAD_MB", "25")), 100)) * 1024 * 1024\nMAX_VIDEO_UPLOAD = max(1, min(int(os.environ.get("AI3D_MAX_VIDEO_UPLOAD_MB", "100")), 500)) * 1024 * 1024
 MAX_WORKERS = max(1, min(int(os.environ.get("AI3D_MAX_WORKERS", "1")), 8))
 JOB_TTL_HOURS = max(1, int(os.environ.get("AI3D_JOB_TTL_HOURS", "72")))
 SECRET = os.environ.get("AI3D_SHARED_SECRET", "")
@@ -113,7 +113,7 @@ async def create_job(
     _token=Depends(require_token),
 ):
     mode = mode.strip().lower()
-    if mode not in {"auto", "image_to_3d", "depth", "building", "map", "voxel_city"}:
+    if mode not in {"auto", "image_to_3d", "depth", "building", "map", "voxel_city", "video_to_3d"}:
         raise HTTPException(status_code=400, detail="Unsupported mode.")
     try:
         options = json.loads(params or "{}")
@@ -134,22 +134,32 @@ async def create_job(
     input_path = None
     try:
         if file is not None:
-            suffix = {"image/png": ".png", "image/jpeg": ".jpg", "image/webp": ".webp"}[file.content_type]
+            suffixes = {
+                "image/png": ".png", "image/jpeg": ".jpg", "image/webp": ".webp",
+                "video/mp4": ".mp4", "video/webm": ".webm", "video/quicktime": ".mov", "video/x-msvideo": ".avi",
+            }
+            suffix = suffixes[file.content_type]
             input_path = job_dir / f"input{suffix}"
             size = 0
+            upload_limit = MAX_VIDEO_UPLOAD if needs_video else MAX_UPLOAD
             with input_path.open("wb") as handle:
                 while True:
                     chunk = await file.read(1024 * 1024)
                     if not chunk:
                         break
                     size += len(chunk)
-                    if size > MAX_UPLOAD:
-                        raise HTTPException(status_code=413, detail=f"Image exceeds {MAX_UPLOAD // (1024 * 1024)} MB limit.")
+                    if size > upload_limit:
+                        kind = "Video" if needs_video else "Image"
+                        raise HTTPException(status_code=413, detail=f"{kind} exceeds {upload_limit // (1024 * 1024)} MB limit.")
                     handle.write(chunk)
             try:
-                verify_image(input_path)
+                if needs_video:
+                    verify_video(input_path)
+                else:
+                    verify_image(input_path)
             except Exception as exc:
-                raise HTTPException(status_code=400, detail=f"Invalid image: {exc}")
+                kind = "video" if needs_video else "image"
+                raise HTTPException(status_code=400, detail=f"Invalid {kind}: {exc}")
         store.create(job_id, mode, options, str(input_path) if input_path else None)
     except Exception:
         shutil.rmtree(job_dir, ignore_errors=True)
