@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { createWorldDNA, analyzeReference, settingsFromDNA, publicWorld } = require('../lib/world-factory');
+const { createWorldDNA, analyzeReference, analyzeDepthSegmentation, settingsFromDNA, publicWorld } = require('../lib/world-factory');
 const factoryApi = require('../lib/api-handlers/world-factory')._private;
 
 const root = path.resolve(__dirname, '..');
@@ -69,6 +69,21 @@ test('reference analysis rejects malformed 360 evidence without unlocking recons
   const dna = createWorldDNA({ idea: 'reference panorama gothic city', requestId, loreBible });
   analyzeReference(dna.referencePipeline, { kind: 'panorama360', width: 1200, height: 1000, landmarks: [{ label: 'tower', prominence: 1 }] });
   assert.equal(dna.referencePipeline.stages[0].status, 'needs-correction'); assert.equal(dna.referencePipeline.stages[1].status, 'blocked'); assert.deepEqual(dna.referencePipeline.stages[0].blockers, ['invalid-panorama-aspect']);
+});
+
+
+test('depth and segmentation evidence gate unlocks quality contract only with useful CPU-safe evidence', () => {
+  const dna = createWorldDNA({ idea: 'reference panorama gothic city', requestId, loreBible });
+  analyzeReference(dna.referencePipeline, { kind: 'panorama360', width: 4096, height: 2048, landmarks: [{ label: 'cathedral', prominence: 0.9 }] });
+  analyzeDepthSegmentation(dna.referencePipeline, { depth: { source: 'cpu-depth', coverage: 0.91, confidence: 0.78 }, segmentation: { source: 'browser-segmentation', regions: [{ label: 'architecture', coverage: 0.5, confidence: 0.9 }, { label: 'terrain', coverage: 0.3, confidence: 0.8 }] } });
+  const p = dna.referencePipeline; assert.equal(p.stages[1].status, 'complete'); assert.equal(p.stages[2].status, 'ready'); assert.equal(p.stages[1].evidence[0].useful, true); assert.equal(p.stages[1].evidence[1].regionCount, 2);
+});
+
+test('weak depth evidence cannot unlock quality contract', () => {
+  const dna = createWorldDNA({ idea: 'reference image', requestId, loreBible });
+  analyzeReference(dna.referencePipeline, { kind: 'image', width: 1920, height: 1080, landmarks: [{ label: 'tower', prominence: 1 }] });
+  analyzeDepthSegmentation(dna.referencePipeline, { depth: { coverage: 0.2, confidence: 0.3 }, segmentation: { regions: [{ label: 'building', coverage: 1, confidence: 0.9 }] } });
+  assert.equal(dna.referencePipeline.stages[1].status, 'needs-correction'); assert.equal(dna.referencePipeline.stages[2].status, 'blocked'); assert.deepEqual(dna.referencePipeline.stages[1].blockers, ['insufficient-depth-evidence']);
 });
 
 test('World Factory settings are directly playable by the existing voxel runtime', () => {
