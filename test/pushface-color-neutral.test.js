@@ -49,14 +49,17 @@ test('pushFace source removes per-vertex THREE.Color clones', () => {
   ) && pushFaceLine.includes(
     'arr.col.push(c0[0],c0[1],c0[2],c1[0],c1[1],c1[2],c2[0],c2[1],c2[2],c3[0],c3[1],c3[2])'
   );
-  const usesPackedAoLut = usesPackedAoLoop || usesUnrolledPackedAoLut;
+  const usesFlatPackedAoLut = [0, 1, 2, 3].every((i) => pushFaceLine.includes(`o${i}=base+vertexShade[${i}]*3`)) &&
+    pushFaceLine.includes('base=face.colorIndex*12') &&
+    pushFaceLine.includes('arr.col.push(faceColors[o0],faceColors[o0+1],faceColors[o0+2],faceColors[o1],faceColors[o1+1],faceColors[o1+2],faceColors[o2],faceColors[o2+1],faceColors[o2+2],faceColors[o3],faceColors[o3+1],faceColors[o3+2])');
+  const usesPackedAoLut = usesPackedAoLoop || usesUnrolledPackedAoLut || usesFlatPackedAoLut;
   assert.ok(usesScalarShade || usesPackedAoLut,
     'pushFace must use scalar shading or the precomputed material/face/AO color LUT');
   assert.ok(
     pushFaceLine.includes('arr.col.push(col.r*shade,col.g*shade,col.b*shade)') ||
       (pushFaceLine.includes('arr.col.push(') && pushFaceLine.includes('col.r*shade') && pushFaceLine.includes('col.g*shade') && pushFaceLine.includes('col.b*shade') && pushFaceLine.includes('*255')) ||
       (usesPackedAoLoop && pushFaceLine.includes('arr.col.push(packedColor[0],packedColor[1],packedColor[2])')) ||
-      usesUnrolledPackedAoLut,
+      usesUnrolledPackedAoLut || usesFlatPackedAoLut,
     'pushFace must push byte-equivalent scalar-shaded components or precomputed packed LUT components');
   assert.ok(!pushFaceLine.includes('col.clone().multiplyScalar'),
     'pushFace must not allocate a THREE.Color clone per vertex');
