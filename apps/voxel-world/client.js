@@ -431,7 +431,7 @@ function blockAt(x,y,z){
 }
 const TRANSLUCENT_BY_BLOCK=Array.from({length:14},(_,b)=>b!==BLOCK.WATER&&BLOCKS[b]?.alpha!==undefined);
 const OCCLUDING_BY_BLOCK=Array.from({length:14},(_,b)=>b!==BLOCK.AIR&&b!==BLOCK.WATER&&!TRANSLUCENT_BY_BLOCK[b]);
-const FACE_VISIBLE_BY_BLOCK=Array.from({length:14},(_,b)=>Array.from({length:14},(_,nb)=>b===BLOCK.WATER?nb===BLOCK.AIR:TRANSLUCENT_BY_BLOCK[b]?(nb===BLOCK.AIR||nb===BLOCK.WATER):(nb===BLOCK.AIR||nb===BLOCK.WATER||TRANSLUCENT_BY_BLOCK[nb]===true)));
+const FACE_VISIBLE_BY_BLOCK=Array.from({length:14},(_,b)=>Uint8Array.from({length:14},(_,nb)=>b===BLOCK.WATER?nb===BLOCK.AIR:TRANSLUCENT_BY_BLOCK[b]?(nb===BLOCK.AIR||nb===BLOCK.WATER):(nb===BLOCK.AIR||nb===BLOCK.WATER||TRANSLUCENT_BY_BLOCK[nb]===true)));
 function isOccluding(b){ return OCCLUDING_BY_BLOCK[b]===true; }
 
 const FACE_AO_SHADE=[1,.86,.72,.58],FACE_AO_SCRATCH=[0,0,0,0],FACE_AO_SIDE_A=[0,0],FACE_AO_SIDE_B=[0,0];
