@@ -49,3 +49,24 @@ test('unknown scenario inventory stays explicitly unknown instead of fabricating
   assert.equal(graph.scenarioContract.canonicalNodeInventory, 'UNKNOWN');
   assert.equal(graph.metrics.scenarioNodeCoverage, 'UNKNOWN');
 });
+
+const scenario = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'living-world-scenario.json'), 'utf8'));
+
+test('62-step scenario inventory is structurally canonical without invented wording', () => {
+  assert.equal(scenario.expectedNodeCount, 62);
+  assert.equal(scenario.steps.length, 62);
+  assert.deepEqual(scenario.steps.map(item => item.id), Array.from({ length: 62 }, (_, index) => index + 1));
+  const recovered = scenario.steps.filter(item => item.status === 'RECOVERED_FROM_USER_SCENARIO');
+  const unknown = scenario.steps.filter(item => item.status === 'UNKNOWN_PENDING_EXACT_RECOVERY');
+  assert.equal(recovered.length, 23);
+  assert.equal(unknown.length, 39);
+  assert.equal(scenario.steps[0].text, 'Добро пожаловать! Этот мир живой.');
+  assert.equal(scenario.steps[61].text, 'Теперь решаешь ты.');
+  assert.ok(unknown.every(item => item.text === null));
+});
+
+test('scenario recovery coverage is count-derived and honest', () => {
+  const recovered = scenario.steps.filter(item => item.text !== null).length;
+  assert.equal(recovered, 23);
+  assert.equal(Number((recovered / scenario.expectedNodeCount * 100).toFixed(1)), 37.1);
+});
