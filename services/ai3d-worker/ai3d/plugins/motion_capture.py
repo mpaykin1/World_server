@@ -83,6 +83,7 @@ class MotionCaptureEngine:
         )
         raw = []
         target_count = min(MAX_SAMPLED_FRAMES, math.ceil(requested_fps * max_seconds))
+        sample_interval = max_seconds / target_count if requested_fps * max_seconds > MAX_SAMPLED_FRAMES else 1.0 / requested_fps
         processed = 0
         next_second = 0.0
         last_timestamp = -1
@@ -113,10 +114,12 @@ class MotionCaptureEngine:
                         # Convert MediaPipe camera axes (y-down/z-camera) to glTF y-up.
                         coords = [[float(p.x), -float(p.y), -float(p.z)] for p in world]
                         confidence = [float(getattr(p, "visibility", 1)) for p in screen]
-                        if len(coords) == 33 and sum(confidence[i] for i in (11, 12, 23, 24, 25, 26)) / 6 >= 0.48:
+                        if (len(coords) == 33 and all(math.isfinite(c) for point in coords for c in point)
+                                and all(math.isfinite(c) for c in confidence)
+                                and sum(confidence[i] for i in (11, 12, 23, 24, 25, 26)) / 6 >= 0.48):
                             raw.append({"t": round(timestamp, 4), "joints": coords, "visibility": confidence})
                     processed += 1
-                    next_second += 1.0 / requested_fps
+                    next_second += sample_interval
                     progress(10 + round(70 * processed / target_count), f"Video pose extraction: {processed}/{target_count} sampled frames")
         finally:
             cap.release()
