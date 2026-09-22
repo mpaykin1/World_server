@@ -1,5 +1,12 @@
 # CLOUD AI HANDOFF
 
+## Active cloud continuation — GAP B merge-chain Fleet-PRE exact-SHA gate (2026-09-22)
+Architect dispatch (10th): https://github.com/mpaykin1/World_server/issues/80#issuecomment-5769338453
+- Branch: `ai/opencode/merge-chain-fleet-pre-gate`, BASE `2c4ab6e2ea4a28ef7ad68ac986edca3b7732ee14` (fresh master #229). Reset empty local markers; do NOT create a second gate branch.
+- Deliver: `test/fleet-pre-certificate.test.js` (pure Node, CLI entry, fail-closed: no-source/skipped/empty/different-SHA/verdict!=READY_FOR_OCEAN/stale>24h/ambiguous -> exit 1; exact fresh cert -> exit 0) + `.github/workflows/fleet-pre-merge-chain.yml` (reports `fleet-pre-merge-chain` at exact PR head; green only on cert PASS; no `|| true`/`continue-on-error`/fallback). Cert source = issue #80 comment marker `[FLEET][PRE_INTEGRATION_QA][PR_<n>][EXACT_HEAD_<fullsha>] READY_FOR_OCEAN=YES`. Quota-safe: everything under `test/`, `.github/`, optional `docs/` (scripts/ and data/ are deployable-class per check-vercel-ignore.js).
+- Gates: `npm run check`, `check-agent-rules`, `golden:check`, `world-quality`, `quality:regression`, `science-governance`. No weakened tests. One task, one PR. No production deploy.
+- Pipeline: Builder -> Fleet PRE (exact head SHA re-fetch + falsify cert) -> Ocean (integrates only that SHA) -> Fleet POST (verify exact integrated master SHA). Do not self-certify.
+
 ## Purpose
 `World_server` is cloud-first. Desktop AI should do only the minimum work required to make a task available to browser/cloud agents, then coordinate rather than continue heavy local execution.
 

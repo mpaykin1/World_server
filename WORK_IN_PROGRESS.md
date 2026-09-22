@@ -1,3 +1,34 @@
+# GAP B — permanent merge-chain Fleet-PRE exact-SHA gate (10th Architect dispatch, 2026-09-22)
+
+## Task
+Close the repeated control-plane governance gap: make every PR into `master` fail-closed on an independent exact-SHA Fleet-PRE certificate before it can be merged. Pure CI/test/docs delta; zero Vercel build quota; no app/game/runtime change.
+
+## Why
+37 merges since the last independent FLEET POST certificate (`648e0296`, 2026-09-19) landed without any exact-SHA Fleet PRE requirement (same class as #113/#116/#117/#183/#185/#187). Dispatched 9 times since 2026-09-13, never delivered. Weakest CLAIM_TRUTH control-plane pillar, still open on fresh master `2c4ab6e2ea4a28ef7ad68ac986edca3b7732ee14` (#229).
+
+## Current state
+Freshly verified this session (read-only): no `test/fleet-pre-certificate.test.js`, no `.github/workflows/fleet-pre-merge-chain.yml`, no cert checker anywhere on master; no gate PR; origin gate branches absent; local marker branches are 0-commit-ahead empty markers. Master required checks: check, quality-regression, agent-rules, world-quality, godot-web-preview.
+
+## Target state / exact patch plan
+Architect dispatch posted: https://github.com/mpaykin1/World_server/issues/80#issuecomment-5769338453
+- Branch `ai/opencode/merge-chain-fleet-pre-gate`, reset to BASE `2c4ab6e2`.
+- `test/fleet-pre-certificate.test.js` (pure Node, module.exports, CLI entry via `require.main===module`, fail-closed rules: no-source/skipped/empty/different-SHA/verdict/stale>24h/ambiguous -> exit 1; exact fresh cert -> exit 0), auto-collected by `npm run check`.
+- `test/` cert-source = issue #80 comment scan for `[FLEET][PRE_INTEGRATION_QA][PR_<n>][EXACT_HEAD_<fullsha>] READY_FOR_OCEAN=YES` via gh API; no checked-in cert data.
+- `.github/workflows/fleet-pre-merge-chain.yml` reports `fleet-pre-merge-chain` at exact PR head SHA; green only on cert PASS; no `|| true`/`continue-on-error`/fallback green.
+- Tests: fail-closed rules + happy path + bypass-class scan; repo gates PASS (check, check-agent-rules, golden:check, world-quality, quality:regression, science-governance).
+- Do not touch: PRs #224/#221/#216, MR-MAK local lanes, #118/#97/#95 (legacy open), etc.
+
+## Next action
+Builder (free Claude/OpenCode cloud via Collective Brain / master-coordinator) resets the marker branch to fresh BASE `2c4ab6e2`, implements the gate, runs gates, pushes, opens the PR. Then Fleet PRE independently re-fetches EXACT head SHA and cert -> READY_FOR_OCEAN / RETURN_TO_BUILDER; Ocean integrates; Fleet POST verifies exact integrated master SHA.
+
+## Completion criteria
+`fleet-pre-merge-chain` check visible on the new PR; no-cert = RED BLOCK; exact fresh cert = GREEN; `npm run check` includes the cert-gate tests; diff limited to `.github/` `test/` `docs(/)`; no production deploy.
+
+## Final evidence
+Dispatch comment: https://github.com/mpaykin1/World_server/issues/80#issuecomment-5769338453
+
+---
+
 # WORK IN PROGRESS — Scoped Task Compiler, resource scheduler, real native Godot pipeline
 
 ---
