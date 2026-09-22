@@ -49,10 +49,13 @@ Upstream references:
 - Lightweight animated diagnostic-mannequin GLB (segment transforms baked
   into glTF 2 animation). In-app canvas playback for quick visual inspection.
 - SHA256 provenance and explicit limitations in motion-license-and-qa.json.
-- Worker jobs are queued, persisted in SQLite and purged by job TTL; original
-  private uploaded video is stored until worker TTL cleanup (default 72h).
-  Deploy operators must disclose retention, obtain subject consent and avoid
-  sharing unconsented third-party recordings.
+- Worker jobs are queued and persisted in SQLite. Raw private videos are
+  deleted immediately after completed/failed jobs. If the process crashes,
+  queued/recoverable source video persists until recovery or the restart-time
+  TTL cleanup. Output landmarks/GLB are purged by the startup retention job
+  after the configurable TTL (default 72 hours); there is no continuous
+  background purger. Operators must disclose this, obtain subject consent,
+  and avoid uploading unconsented third-party recordings.
 
 ## Deliberate limitations / next integration
 
