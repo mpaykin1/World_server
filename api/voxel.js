@@ -9,6 +9,7 @@ const {
   safeBlockCoordinate: ruleSafeBlockCoordinate, safeBlockType: ruleSafeBlockType, chunkCoord, distance
 } = require('../lib/voxel-rules');
 const scienceGameplay = require('../lib/science-gameplay-adapter');
+const { normalizeMacroType, placeMacroEntity, advanceEmergence, buildEmergenceState } = require('../lib/world-emergence');
 
 function dbFailure(error, fallback = 'Ошибка базы данных Voxel World.') {
   if (!error) return;
@@ -80,6 +81,56 @@ async function actionInit(admin, identity, body) {
   ]);
   dbFailure(worldError, 'Мир Voxel World не найден.');
   return { selfId: identity.userId || identity.guestId, world, player: clientPlayer(player, identity), scienceGameplay: scienceGameplay.listPublicRuns() };
+}
+
+async function readEmergenceWorld(admin, worldId) {
+  const { data: world, error } = await admin.from('voxel_worlds').select('id,seed,settings').eq('id', worldId).single();
+  dbFailure(error, 'Мир Voxel World не найден.');
+  const settings = world?.settings && typeof world.settings === 'object' ? JSON.parse(JSON.stringify(world.settings)) : {};
+  const dna = settings.worldDNA && typeof settings.worldDNA === 'object' ? settings.worldDNA : {};
+  const seed = Number(world?.seed) || 1;
+  const emergence = buildEmergenceState({
+    entities: dna.emergence?.entities || [],
+    seed,
+    growthStage: dna.emergence?.growthStage || 1,
+    revision: dna.emergence?.revision || 1
+  });
+  return { world, settings, dna, seed, emergence };
+}
+
+async function writeEmergenceWorld(admin, current, emergence) {
+  current.settings.worldDNA = { ...current.dna, emergence };
+  const { data, error } = await admin.from('voxel_worlds')
+    .update({ settings: current.settings })
+    .eq('id', current.world.id)
+    .select('id,seed,settings')
+    .single();
+  dbFailure(error, 'Не удалось сохранить развитие мира.');
+  return data;
+}
+
+async function actionMacroPlace(admin, identity, body) {
+  const worldId = safeWorldId(body.worldId);
+  const type = normalizeMacroType(body.type);
+  const position = safePosition(body.position);
+  const current = await readEmergenceWorld(admin, worldId);
+  const emergence = placeMacroEntity(current.emergence, {
+    type, x: position.x, z: position.z,
+    ownerId: identity.userId || identity.guestId
+  }, current.seed);
+  await writeEmergenceWorld(admin, current, emergence);
+  return { emergence, placedType: type, worldId };
+}
+
+async function actionMacroTick(admin, body) {
+  const worldId = safeWorldId(body.worldId);
+  const current = await readEmergenceWorld(admin, worldId);
+  if (current.emergence.growthStage >= current.emergence.maxGrowthStage) {
+    return { emergence: current.emergence, complete: true, worldId };
+  }
+  const emergence = advanceEmergence(current.emergence, current.seed);
+  await writeEmergenceWorld(admin, current, emergence);
+  return { emergence, complete: emergence.growthStage >= emergence.maxGrowthStage, worldId };
 }
 
 async function actionChunks(admin, body) {
@@ -217,6 +268,8 @@ async function handle(admin, identity, action, body) {
   if (action === 'chunks') return actionChunks(admin, body);
   if (action === 'set_block') return actionSetBlock(admin, identity, body);
   if (action === 'player_save') return actionSavePlayer(admin, identity, body);
+  if (action === 'macro_place') return actionMacroPlace(admin, identity, body);
+  if (action === 'macro_tick') return actionMacroTick(admin, body);
   throw httpError(400, 'Неизвестное действие Voxel World.');
 }
 
@@ -231,4 +284,4 @@ module.exports = withErrors(async (req, res) => {
   sendJson(res, 200, result);
 });
 
-module.exports._private = { safeWorldId, safePosition, safeBlockCoordinate, safeBlockType, chunkCoord, clientPlayer };
+module.exports._private = { safeWorldId, safePosition, safeBlockCoordinate, safeBlockType, chunkCoord, clientPlayer, actionMacroPlace, actionMacroTick, readEmergenceWorld };

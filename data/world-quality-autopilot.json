@@ -118,15 +118,15 @@
         "targetFpsDesktop": 55,
         "targetFpsMobile": 43,
         "maxDpr": 1.32,
-        "lodBias": 1.0,
-        "detailRadius": 1.0,
+        "lodBias": 1,
+        "detailRadius": 1,
         "shadowQuality": 1,
         "particleScale": 0.8,
         "animationHz": 50,
         "dynamicLightBudget": 6,
         "visibilityHz": 28,
         "pbrQuality": 1,
-        "geometryBudgetScale": 1.0,
+        "geometryBudgetScale": 1,
         "effectBudgetScale": 0.84,
         "textureBudgetScale": 0.82,
         "occlusionHz": 24,
@@ -139,16 +139,16 @@
         "lodBias": 0.78,
         "detailRadius": 1.28,
         "shadowQuality": 2,
-        "particleScale": 1.0,
+        "particleScale": 1,
         "animationHz": 60,
         "dynamicLightBudget": 8,
         "visibilityHz": 60,
         "pbrQuality": 2,
         "geometryBudgetScale": 1.18,
-        "effectBudgetScale": 1.0,
-        "textureBudgetScale": 1.0,
+        "effectBudgetScale": 1,
+        "textureBudgetScale": 1,
         "occlusionHz": 40,
-        "materialDetailScale": 1.0
+        "materialDetailScale": 1
       }
     },
     "sustainedPressureDetection": true,
@@ -214,5 +214,17 @@
     "costQualityScheduler": true,
     "predictionOnlyBeforeMutation": true,
     "telemetryMutationRequiresTournament": true
+  },
+  "emergence": {
+    "enabled": true,
+    "scenario": "place-two-large-things-and-watch-the-world-emerge",
+    "deterministicRelations": true,
+    "progressiveGrowthStages": 5,
+    "persistence": "worldDNA",
+    "realtimeSync": true,
+    "minimumInterestScore": 0.7,
+    "maximumMacroEntities": 24,
+    "materializeIntoVoxelGeometry": true,
+    "includedInExistingAutopilot": true
   }
 }
