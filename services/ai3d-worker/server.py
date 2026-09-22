@@ -83,6 +83,13 @@ def execute_job(job_id: str) -> None:
     except Exception as exc:
         store.update(job_id, status="failed", message="Failed", error=f"{type(exc).__name__}: {exc}")
     finally:
+        # Do not retain private source video after a completed/failed motion job.
+        # Interrupted jobs keep their input for safe restart recovery.
+        final_job = store.get(job_id)
+        if (final_job and final_job.get("mode") == "motion_capture" and final_job.get("status") in {"completed", "failed"}:
+            original = final_job.get("input_path")
+            if original:
+                Path(original).unlink(missing_ok=True)
         with _inflight_lock:
             _inflight.discard(job_id)
 
