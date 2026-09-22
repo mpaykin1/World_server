@@ -20,6 +20,7 @@ test('selects two distinct zero-cost model families, excludes builder', () => {
 });
 test('rejects malformed model response and empty falsification evidence', () => {
   assert.throws(() => parseVerdict('I approve'), /valid JSON/);
+  assert.equal(parseVerdict('I checked invariants.\\n```json\\n' + JSON.stringify(good) + '\\n```').verdict, 'PASS');
   assert.throws(() => parseVerdict(JSON.stringify({ verdict: 'PASS' })), /Missing/);
   assert.equal(aggregate([{ family: 'z-ai', ...good }, { family: 'nvidia', verdict: 'PASS',
     findings: [], falsification_attempts: [] }]), 'INCONCLUSIVE');
@@ -64,9 +65,39 @@ test('reviewer outage and partial availability fail closed; no paid fallback', a
     getCatalog: async () => ({ data: [candidates.data[1]] }) });
   assert.match(partial.blockers.join(' '), /Two independent/);
   const rejected = await reviewPatch({ patch, base: 'a'.repeat(40), head: 'b'.repeat(40), key: 'dummy',
+    builderModel: 'qwen/qwen3-coder:free',
     getCatalog: async () => candidates,
     review: async model => ({ model: model.id, family: model.family,
       verdict: model.family === 'z-ai' ? 'INCONCLUSIVE' : 'PASS',
       findings: [], falsification_attempts: ['timeout check'] }) });
   assert.equal(rejected.verdict, 'INCONCLUSIVE');
+});
+
+test('prefers structured-output free model families when advertised', () => {
+  const live = { data: [
+    { id: 'google/gemma-4-31b-it:free', pricing: { prompt: '0', completion: '0' },
+      supported_parameters: ['response_format'] },
+    { id: 'nvidia/nemotron-3-super-120b-a12b:free', pricing: { prompt: '0', completion: '0' },
+      supported_parameters: ['response_format'] }
+  ] };
+  const selected = selectedModels(live, 'qwen/qwen3-coder:free');
+  assert.deepEqual(selected.map(x => x.family), ['google', 'nvidia']);
+  assert.ok(selected.every(x => x.supportsJson));
+});
+test('unavailable first reviewer can be replaced by another independent free family', async () => {
+  const live = { data: [...candidates.data,
+    { id: 'nvidia/nemotron-3-super-120b-a12b:free', pricing: { prompt: '0', completion: '0' },
+      supported_parameters: ['response_format'] },
+    { id: 'cohere/north-mini-code:free', pricing: { prompt: '0', completion: '0' } }] };
+  const report = await reviewPatch({
+    patch, base: 'a'.repeat(40), head: 'b'.repeat(40), key: 'dummy',
+    builderModel: 'qwen/qwen3-coder:free',
+    getCatalog: async () => live,
+    review: async model => ({ model: model.id, family: model.family,
+      verdict: model.family === 'nvidia' ? 'INCONCLUSIVE' : 'PASS',
+      findings: [], falsification_attempts: model.family === 'nvidia' ? [] : ['Counterexample search'] })
+  });
+  assert.equal(report.verdict, 'PASS');
+  assert.equal(report.reviewers.length, 3);
+  assert.equal(report.requiresMaintainerDecision, true);
 });
