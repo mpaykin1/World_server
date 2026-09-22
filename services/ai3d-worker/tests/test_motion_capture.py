@@ -42,9 +42,9 @@ class TestCommercialSafeMocap(unittest.TestCase):
             env["WORLD_MOCAP_MODEL_SHA256"] = h
             with patch.dict(os.environ, env), patch("importlib.util.find_spec", return_value=object()):
                 self.assertTrue(MotionCaptureEngine().status()["available"])
+            env["WORLD_MOCAP_MODEL_COMMERCIAL_USE_APPROVED"] = "false"
             with patch.dict(os.environ, env), patch("importlib.util.find_spec", return_value=object()):
                 with self.assertRaises(RuntimeError):
-                    # No actual MediaPipe inferencing exercised; model rights still belong to operator.
                     MotionCaptureEngine().run(Path(tmp) / "never_uploaded.mp4", Path(tmp), {}, lambda *_: None)
 
     def test_real_gltf_binary_animation_from_synthetic_keypoints(self):
