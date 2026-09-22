@@ -663,8 +663,8 @@ async function refreshEmergenceChunks(){
       streamBusy=true;
       try{
         const existing=[...chunks.values()].sort((a,b)=>
-          (a.cx*CHUNK-player.pos.x/CHUNK)**2+(a.cz*CHUNK-player.pos.z/CHUNK)**2-
-          ((b.cx*CHUNK-player.pos.x/CHUNK)**2+(b.cz*CHUNK-player.pos.z/CHUNK)**2));
+          (a.cx-player.pos.x/CHUNK)**2+(a.cz-player.pos.z/CHUNK)**2-
+          ((b.cx-player.pos.x/CHUNK)**2+(b.cz-player.pos.z/CHUNK)**2));
         const savedByChunk=new Map();
         for(const [key,block] of overrides){
           const [x,y,z]=key.split(',').map(Number),chunkKey=key2(floorDiv(x,CHUNK),floorDiv(z,CHUNK));
@@ -706,7 +706,7 @@ async function growEmergence({single=false}={}){
   try{
     while(Number(emergenceState.growthStage||1)<Number(emergenceState.maxGrowthStage||5)){
       await new Promise(resolve=>setTimeout(resolve,1200));
-      const result=await api('macro_tick',{worldId:ACTIVE_WORLD_ID});
+      const result=await api('macro_tick',{worldId:ACTIVE_WORLD_ID,expectedRevision:emergenceState.revision});
       applyEmergenceState(result.emergence);
       if(channel)void channel.send({type:'broadcast',event:'macro_state',payload:emergenceState});
       const recent=emergenceState?.features?.at(-1);
