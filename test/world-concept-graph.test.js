@@ -44,10 +44,9 @@ test('river counterfactual does not produce volcanic disturbance succession', ()
   assert.equal(kinds.has('young_forest'), false);
 });
 
-test('unknown scenario inventory stays explicitly unknown instead of fabricating coverage', () => {
+test('scenario semantic coverage stays unknown until capability mapping exists', () => {
   assert.equal(graph.scenarioContract.expectedNodeCount, 62);
-  assert.equal(graph.scenarioContract.canonicalNodeInventory, 'UNKNOWN');
-  assert.equal(graph.metrics.scenarioNodeCoverage, 'UNKNOWN');
+  assert.equal(graph.metrics.scenarioNodeCoverage, 'UNKNOWN_PENDING_SEMANTIC_MAPPING');
 });
 
 const scenario = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'living-world-scenario.json'), 'utf8'));
@@ -69,4 +68,21 @@ test('scenario recovery coverage is count-derived and honest', () => {
   const recovered = scenario.steps.filter(item => item.text !== null).length;
   assert.equal(recovered, 23);
   assert.equal(Number((recovered / scenario.expectedNodeCount * 100).toFixed(1)), 37.1);
+});
+
+test('canonical scenario inventory supersedes stale UNKNOWN state', () => {
+  assert.equal(graph.scenarioContract.canonicalNodeInventory, 'data/living-world-scenario.json');
+  assert.equal(graph.scenarioContract.recoveredExactNodes, 23);
+  assert.equal(graph.scenarioContract.unknownExactNodes, 39);
+  assert.equal(graph.metrics.scenarioInventoryRecoveryPercent, 37.1);
+  assert.equal(graph.metrics.scenarioNodeCoverage, 'UNKNOWN_PENDING_SEMANTIC_MAPPING');
+});
+
+test('choice consequence relation refuses text-only semantic closure', () => {
+  const item = relation('choice-requires-observable-consequence');
+  assert.equal(item.status, 'PROJECT_CONTRACT_TESTED');
+  assert.equal(item.runtimeConsumer, 'UNKNOWN_PENDING_CAPABILITY_MAPPING');
+  assert.ok(item.observableManifestations.length >= 7);
+  assert.ok(graph.evidence.some(e => e.supports === item.id));
+  assert.equal(graph.metrics.ideaCodeTestEvidenceClosed, 1);
 });

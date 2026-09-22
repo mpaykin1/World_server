@@ -3,12 +3,33 @@
   "updatedFromMaster": "edb1a5b42fb08f5e7bf598d37d640e775876e63c",
   "scenarioContract": {
     "expectedNodeCount": 62,
-    "canonicalNodeInventory": "UNKNOWN",
-    "reason": "The repository contract names a 62-step scenario but does not expose a machine-readable 62-node inventory on this master. Coverage must remain UNKNOWN until that inventory is canonicalized."
+    "canonicalNodeInventory": "data/living-world-scenario.json",
+    "recoveredExactNodes": 23,
+    "unknownExactNodes": 39,
+    "recoveryCoveragePercent": 37.1,
+    "semanticCapabilityCoverage": "UNKNOWN_PENDING_MAPPING"
   },
   "concepts": [
-    {"id":"forest","kind":"ecosystem","owner":"lib/world-emergence.js"},
-    {"id":"volcano","kind":"geophysical_system","owner":"lib/world-emergence.js"}
+    {
+      "id": "forest",
+      "kind": "ecosystem",
+      "owner": "lib/world-emergence.js"
+    },
+    {
+      "id": "volcano",
+      "kind": "geophysical_system",
+      "owner": "lib/world-emergence.js"
+    },
+    {
+      "id": "player_choice",
+      "kind": "interaction_contract",
+      "owner": "CHATGPT_GAME_CONTROL.md"
+    },
+    {
+      "id": "observable_world_change",
+      "kind": "user_visible_effect",
+      "owner": "MANUAL_TASK_COMPLETION_GATE.md"
+    }
   ],
   "relations": [
     {
@@ -19,40 +40,77 @@
       "status": "VERIFIED_EXTERNAL_AND_PROJECT_TESTED",
       "confidence": 0.95,
       "mechanism": "Eruptive heat, blast, tephra and ash can kill or bury vegetation; surviving biological legacies and later colonization drive context-dependent ecological succession.",
-      "observableManifestations": ["ash_field","burnt_grove","young_forest","wildlife_corridor"],
+      "observableManifestations": [
+        "ash_field",
+        "burnt_grove",
+        "young_forest",
+        "wildlife_corridor"
+      ],
       "capability": "burn_and_regrow",
       "owner": "lib/world-emergence.js",
       "runtimeConsumer": "shared/world-emergence-runtime.js",
       "test": "test/world-concept-graph.test.js"
-    }
-  ],  "evidence": [
-    {
-      "id":"usgs-msh-ecology",
-      "authority":"USGS",
-      "url":"https://www.usgs.gov/geology-and-ecology-of-national-parks/ecology-mount-st-helens-national-monument",
-      "supports":"forest-volcano-disturbance-succession"
     },
     {
-      "id":"usgs-forestry-ash",
-      "authority":"USGS Volcano Hazards Program",
-      "url":"https://volcanoes.usgs.gov/volcanic_ash/effects_on_forestry.html",
-      "supports":"forest-volcano-disturbance-succession"
+      "id": "choice-requires-observable-consequence",
+      "from": "player_choice",
+      "to": "observable_world_change",
+      "type": "must_produce_observable_consequence",
+      "status": "PROJECT_CONTRACT_TESTED",
+      "confidence": 1,
+      "mechanism": "A scenario choice is incomplete when it terminates in text only; it must map to a visible physical change within seconds.",
+      "observableManifestations": [
+        "world_change",
+        "creature_change",
+        "ai_action",
+        "item_change",
+        "weather_change",
+        "combat_change",
+        "other_world_change"
+      ],
+      "capability": "observable_consequence_contract",
+      "owner": "data/living-world-scenario.json",
+      "runtimeConsumer": "UNKNOWN_PENDING_CAPABILITY_MAPPING",
+      "test": "test/world-concept-graph.test.js"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "usgs-msh-ecology",
+      "authority": "USGS",
+      "url": "https://www.usgs.gov/geology-and-ecology-of-national-parks/ecology-mount-st-helens-national-monument",
+      "supports": "forest-volcano-disturbance-succession"
+    },
+    {
+      "id": "usgs-forestry-ash",
+      "authority": "USGS Volcano Hazards Program",
+      "url": "https://volcanoes.usgs.gov/volcanic_ash/effects_on_forestry.html",
+      "supports": "forest-volcano-disturbance-succession"
+    },
+    {
+      "id": "living-world-scenario-core-invariant",
+      "authority": "USER_SCENARIO_CONTRACT",
+      "path": "data/living-world-scenario.json",
+      "supports": "choice-requires-observable-consequence"
     }
   ],
   "learning": {
-    "previousState": "ABSENT_ON_MASTER",
-    "delta": "Added first provenance-backed causal relation mapped to the existing emergence owner; no parallel engine.",
-    "prediction": "For colocated forest+volcano entities, advancing emergence to stage 5 exposes disturbance followed by regrowth features, including ash/burn damage and young forest/wildlife recovery.",
-    "counterfactual": "Replacing volcano with river must not produce the burn_and_regrow relation or volcanic disturbance features.",
-    "observed": "PASS: exact-head Node tests verified predicted forest-volcano succession and river ablation",
-    "verdict": "STRENGTHENED"
+    "previousState": "8a89e03b430f490d7e84c7a37ced7bf5f16b1aa2",
+    "delta": "Canonicalized the 62-slot inventory reference and added choice -> observable consequence without inventing missing wording.",
+    "prediction": "A recovered choice-oriented node cannot count as semantically closed until it maps to an observable consequence.",
+    "counterfactual": "A recovered choice node with no observable consequence mapping must remain open.",
+    "observed": "PENDING_EXACT_HEAD_TEST",
+    "verdict": "PENDING"
   },
   "metrics": {
-    "scenarioNodeCoverage": "UNKNOWN",
-    "materialRelations": 1,
-    "relationsWithProvenance": 1,
-    "relationsWithExecutableTests": 1,
-    "unresolvedUnknowns": 1,
+    "scenarioInventoryRecovered": 23,
+    "scenarioInventoryUnknown": 39,
+    "scenarioInventoryRecoveryPercent": 37.1,
+    "scenarioNodeCoverage": "UNKNOWN_PENDING_SEMANTIC_MAPPING",
+    "materialRelations": 2,
+    "relationsWithProvenance": 2,
+    "relationsWithExecutableTests": 2,
+    "unresolvedUnknowns": 40,
     "conflicts": 0,
     "duplicateOwners": 0,
     "ideaCodeTestEvidenceClosed": 1
