@@ -37,6 +37,13 @@ async function checkHealth() {
     const plugins = data.plugins || {};
     const ready = Object.entries(plugins).filter(([,v]) => v?.available).map(([k]) => k);
     ui.health.textContent = data.ok ? `Worker online · ${ready.length} engines` : 'Worker offline';
+    const mocap = plugins.motion_capture;
+    const option = ui.mode.querySelector('option[value="motion_capture"]');
+    option.disabled = !mocap?.available;
+    $('mocapAvailability').textContent = mocap?.available
+      ? 'Видео-анимация: CPU-обработка доступна. Результат — диагностический 3D-манекен, не игровой персонаж.'
+      : 'Видео-анимация пока закрыта: нет подтверждённых прав на модель или не установлен CPU-модуль.';
+    if (option.disabled && ui.mode.value === 'motion_capture') { ui.mode.value = 'auto'; modeChanged(); }
     ui.health.className = `health ${data.ok ? 'ok' : 'error'}`;
   } catch {
     ui.health.textContent = 'Worker offline';
