@@ -8,6 +8,21 @@ from typing import Any
 from PIL import Image
 
 ALLOWED_IMAGE_TYPES = {"image/png", "image/jpeg", "image/webp"}
+ALLOWED_VIDEO_TYPES = {"video/mp4": ".mp4", "video/webm": ".webm", "video/quicktime": ".mov"}
+
+
+def verify_video(path: Path, mime: str) -> None:
+    """Reject non-video payloads before opening them with FFmpeg/OpenCV."""
+    header = path.open("rb").read(32)
+    if mime in ("video/mp4", "video/quicktime"):
+        if len(header) < 16 or header[4:8] != b"ftyp":
+            raise ValueError("MP4/MOV ftyp header missing")
+    elif mime == "video/webm":
+        if not header.startswith(bytes.fromhex("1a45dfa3")):
+            raise ValueError("WebM EBML header missing")
+    else:
+        raise ValueError("Unsupported video MIME type")
+
 
 
 def verify_image(path: Path, max_pixels: int = 40_000_000) -> tuple[int, int]:
