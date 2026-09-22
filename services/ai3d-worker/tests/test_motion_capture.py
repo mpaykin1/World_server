@@ -63,7 +63,7 @@ class TestCommercialSafeMocap(unittest.TestCase):
             self.assertIn("NOT rig retarget", doc["asset"]["generator"])
             binary_offset = 20 + json_len
             bin_size, bin_tag = struct.unpack_from("<I4s", blob, binary_offset)
-            self.assertEqual(bin_tag, b"BIN\\x00")
+            self.assertEqual(bin_tag, bytes.fromhex("42494e00"))
             self.assertEqual(binary_offset+8+bin_size, len(blob))
             self.assertGreater(dst.stat().st_size, 1000)
 
@@ -85,7 +85,7 @@ class TestCommercialSafeMocap(unittest.TestCase):
             sample.write_bytes(b"not a video, fake extension")
             with self.assertRaises(ValueError):
                 verify_video(sample, "video/mp4")
-            sample.write_bytes(bytes.fromhex("1a45dfa3")+"webm")
+            sample.write_bytes(bytes.fromhex("1a45dfa3")+b"webm")
             verify_video(sample, "video/webm")
             with self.assertRaises(ValueError):
                 verify_video(sample, "video/mp4")
