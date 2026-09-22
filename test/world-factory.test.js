@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { createWorldDNA, analyzeReference, analyzeDepthSegmentation, evaluateQualityContract, evaluateGeometryReconstruction, evaluateProjectionPBR, settingsFromDNA, publicWorld } = require('../lib/world-factory');
+const { createWorldDNA, analyzeReference, analyzeDepthSegmentation, evaluateQualityContract, evaluateGeometryReconstruction, evaluateProjectionPBR, evaluateWorldCompletion, settingsFromDNA, publicWorld } = require('../lib/world-factory');
 const factoryApi = require('../lib/api-handlers/world-factory')._private;
 
 const root = path.resolve(__dirname, '..');
@@ -127,6 +127,18 @@ test('projection PBR rejects atlas over budget without unlocking completion', ()
   const dna=createWorldDNA({idea:'reference city',requestId,loreBible}); const p=dna.referencePipeline;
   p.stages[3].status='complete'; p.stages[4].status='ready'; evaluateProjectionPBR(p,{atlasSize:8192,atlasMax:4096,texels:67108864,texelBudget:16777216,materials:[{label:'hero',hero:true,channels:['baseColor','normal']}]});
   assert.equal(p.stages[4].status,'needs-correction'); assert.deepEqual(p.stages[4].blockers,['atlas-bake-budget-failed']); assert.equal(p.stages[5].status,'blocked');
+});
+
+
+test('world completion requires gameplay-ready hero chunks and infinite continuation', () => {
+  const dna=createWorldDNA({idea:'reference city',requestId,loreBible}); const p=dna.referencePipeline; p.stages[4].status='complete'; p.stages[5].status='ready';
+  evaluateWorldCompletion(p,{chunkBudget:8,chunks:[{id:'hero',hero:true,collision:true,navigable:true},{id:'edge',collision:true,navigable:true,continuation:true}]});
+  assert.equal(p.stages[5].status,'complete'); assert.equal(p.stages[6].status,'ready'); assert.equal(p.worldCompletion.gameplayCoverage,1); assert.equal(p.stages[5].evidence[3].pass,true);
+});
+test('world completion blocks missing collision navigation evidence', () => {
+  const dna=createWorldDNA({idea:'reference city',requestId,loreBible}); const p=dna.referencePipeline; p.stages[4].status='complete'; p.stages[5].status='ready';
+  evaluateWorldCompletion(p,{chunks:[{id:'hero',hero:true,collision:false,navigable:true},{id:'edge',collision:true,navigable:true,continuation:true}]});
+  assert.equal(p.stages[5].status,'needs-correction'); assert.equal(p.stages[6].status,'blocked'); assert.deepEqual(p.stages[5].blockers,['collision-navigation-coverage-below-contract']);
 });
 
 test('World Factory settings are directly playable by the existing voxel runtime', () => {
