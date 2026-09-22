@@ -1,0 +1,76 @@
+name: Fleet PRE Exact-SHA Gate
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fleet-pre:
+    name: Fleet PRE exact-head verification
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    outputs:
+      certified_sha: ${{ steps.identity.outputs.sha }}
+    steps:
+      - name: Checkout exact PR head, never synthetic merge
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - id: identity
+        name: Assert exact head identity
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          ACTUAL_SHA="$(git rev-parse HEAD)"
+          test "$ACTUAL_SHA" = "$EXPECTED_SHA"
+          echo "sha=$ACTUAL_SHA" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Independent syntax and causal regression verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/check-js.js
+          node --test test/world-emergence.test.js
+          if test -f test/world-concept-graph.test.js; then
+            node --test test/world-concept-graph.test.js
+          fi
+          if test -f scripts/check-architecture-limits.cjs; then
+            npm run architecture:check
+          fi
+      - name: Publish exact-head Fleet evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '{"schemaVersion":1,"kind":"FLEET_PRE","sha":"%s","runId":"%s","verdict":"PASS"}\n' \
+            "$(git rev-parse HEAD)" "$GITHUB_RUN_ID" > fleet-pre-evidence.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fleet-pre-${{ steps.identity.outputs.sha }}
+          path: fleet-pre-evidence.json
+          if-no-files-found: error
+
+  ocean-ready:
+    name: Ocean merge eligibility
+    needs: fleet-pre
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Reject stale or missing Fleet certificate
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          CERTIFIED_SHA: ${{ needs.fleet-pre.outputs.certified_sha }}
+        run: |
+          set -euo pipefail
+          test -n "$CERTIFIED_SHA"
+          test "$CERTIFIED_SHA" = "$EXPECTED_SHA"
+          echo "Fleet PRE certified exact head $CERTIFIED_SHA"
