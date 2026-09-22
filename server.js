@@ -23,6 +23,7 @@ const apiHandlers = new Map([
   ['/api/logout', require('./lib/api-handlers/logout')],
   ['/api/game', require('./api/game')],
   ['/api/voxel', require('./api/voxel')],
+  ['/api/emergence', require('./api/emergence')],
   ['/api/ai3d', require('./api/ai3d')],
   ['/api/ai3d-voxel-generate', require('./api/ai3d-voxel-generate')]
 ]);
