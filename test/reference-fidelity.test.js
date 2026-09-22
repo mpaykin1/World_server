@@ -16,5 +16,5 @@ assert(worse.identityFidelity < 1);
 assert(worse.heroDetailFidelity < worse.identityFidelity);
 assert(worse.structuralFidelity < 1);
 assert(worse.score < 1);
-assert.throws(() => compareReferenceRuntime(reference, { width: 1, height: 1, pixels: new Uint8Array(4) }), /dimensions must match/);
+assert.strictEqual(compareReferenceRuntime(reference, { width: 1, height: 1, pixels: new Uint8Array([100,100,100,255]) }).resampled, true);
 console.log('reference-fidelity: PASS', JSON.stringify({ perfect, degraded: worse }));
