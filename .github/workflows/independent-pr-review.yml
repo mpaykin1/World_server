@@ -1,0 +1,118 @@
+name: Independent PR Review
+on:
+  pull_request_target:
+    branches: [master]
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Existing PR to independently review
+        type: number
+        required: true
+
+permissions:
+  contents: read
+  pull-requests: read
+  checks: write
+
+concurrency:
+  group: independent-review-${{ github.event.pull_request.number || inputs.pr_number }}
+  cancel-in-progress: true
+
+jobs:
+  independent-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Resolve exact candidate SHAs from GitHub
+        id: refs
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number || inputs.pr_number }}
+          EVENT_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          META="$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}" \
+            --jq '[.base.sha, .head.sha] | @tsv')"
+          read -r BASE HEAD <<< "$META"
+          [[ "$BASE" =~ ^[a-f0-9]{40}$ && "$HEAD" =~ ^[a-f0-9]{40}$ ]]
+          if [[ -n "${EVENT_HEAD}" && "$EVENT_HEAD" != "$HEAD" ]]; then
+            echo "::error::PR changed while review was queued; require fresh run"
+            exit 2
+          fi
+          echo "base=${BASE}" >> "$GITHUB_OUTPUT"
+          echo "head=${HEAD}" >> "$GITHUB_OUTPUT"
+          echo "pr=${PR_NUMBER}" >> "$GITHUB_OUTPUT"
+
+      # Only trusted base code is executed with AI credentials.
+      - name: Checkout trusted base (not PR code)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.refs.outputs.base }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Fetch PR change as inert Git data
+        shell: bash
+        env:
+          PR_NUMBER: ${{ steps.refs.outputs.pr }}
+          EXPECTED_SHA: ${{ steps.refs.outputs.head }}
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin "refs/pull/${PR_NUMBER}/head"
+          test "$(git rev-parse FETCH_HEAD)" = "$EXPECTED_SHA"
+
+      - name: Two independent free-model adversarial reviews
+        shell: bash
+        env:
+          WORLD_REVIEW_KEY: ${{ secrets.WORLD }}
+          WORLD_BUILDER_MODEL: qwen/qwen3-coder:free
+          BASE_SHA: ${{ steps.refs.outputs.base }}
+          HEAD_SHA: ${{ steps.refs.outputs.head }}
+        run: |
+          set -euo pipefail
+          node scripts/independent-review-gate.cjs \
+            --base "$BASE_SHA" --head "$HEAD_SHA" \
+            --output "$RUNNER_TEMP/INDEPENDENT_REVIEW_REPORT.json"
+
+      - name: Upload exact-SHA reviewer evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: independent-review-${{ steps.refs.outputs.head }}
+          path: ${{ runner.temp }}/INDEPENDENT_REVIEW_REPORT.json
+          if-no-files-found: warn
+          retention-days: 30
+
+      # pull_request_target checks attach to base; publish the verdict as a
+      # separate check on the exact PR head SHA for enforceable protection.
+      - name: Publish exact-head independent review check
+        if: always() && steps.refs.outputs.head != ''
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ steps.refs.outputs.head }}
+        run: |
+          set -euo pipefail
+          REPORT="$RUNNER_TEMP/INDEPENDENT_REVIEW_REPORT.json"
+          VERDICT="INCONCLUSIVE"
+          if [[ -f "$REPORT" ]]; then
+            VERDICT="$(jq -r '.verdict // "INCONCLUSIVE"' "$REPORT")"
+          fi
+          case "$VERDICT" in
+            PASS) CONCLUSION=success ;;
+            BLOCK) CONCLUSION=failure ;;
+            *) CONCLUSION=action_required ;;
+          esac
+          gh api -X POST "repos/${GITHUB_REPOSITORY}/check-runs" \
+            -f name='World Independent Adversarial Review' \
+            -f head_sha="$HEAD_SHA" -f status=completed \
+            -f conclusion="$CONCLUSION" \
+            -f "output[title]=Independent review: $VERDICT" \
+            -f "output[summary]=Exact SHA: $HEAD_SHA. Evidence: Independent PR Review workflow artifact. This result alone never authorizes merge." \
+            --jq '.name + ": " + .conclusion'

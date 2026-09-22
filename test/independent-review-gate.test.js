@@ -1,0 +1,72 @@
+'use strict';
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const { selectedModels, parseVerdict, aggregate, preflightPatch, reviewPatch } =
+  require('../scripts/independent-review-gate.cjs');
+
+const candidates = { data: [
+  { id: 'qwen/qwen3-coder:free', pricing: { prompt: '0', completion: '0' } },
+  { id: 'z-ai/glm-5.2:free', pricing: { prompt: '0', completion: '0' } },
+  { id: 'nvidia/nemotron-3.5-lightning:free', pricing: { prompt: '0', completion: '0' } },
+  { id: 'google/gemma-4-31b-it:free', pricing: { prompt: '0.1', completion: '0' } }
+]};
+const patch = 'diff --git a/lib/example.js b/lib/example.js\n@@ -1 +1 @@\n-return false;\n+return true;\n';
+const good = { verdict: 'PASS', findings: [], falsification_attempts: ['Checked negative inputs'] };
+
+test('selects two distinct zero-cost model families, excludes builder', () => {
+  assert.deepEqual(selectedModels(candidates, 'qwen/qwen3-coder:free').map(x => x.family), ['z-ai', 'nvidia']);
+  assert.equal(selectedModels({ data: [candidates.data[0], candidates.data[3]] }).length, 1);
+  assert.equal(selectedModels({ data: [{ id: 'z-ai/glm-5.2:free', pricing: { prompt: '0', completion: '0.00001' } }] }).length, 0);
+});
+test('rejects malformed model response and empty falsification evidence', () => {
+  assert.throws(() => parseVerdict('I approve'), /valid JSON/);
+  assert.throws(() => parseVerdict(JSON.stringify({ verdict: 'PASS' })), /Missing/);
+  assert.equal(aggregate([{ family: 'z-ai', ...good }, { family: 'nvidia', verdict: 'PASS',
+    findings: [], falsification_attempts: [] }]), 'INCONCLUSIVE');
+});
+test('a blocker finding overrides contradictory PASS verdict', () => {
+  const review = parseVerdict(JSON.stringify({ verdict: 'PASS', findings: [
+    { file: 'lib/example.js', line: 3, severity: 'critical', evidence: 'race', reproduction: 'concurrent writes' }
+  ], falsification_attempts: ['race'] }));
+  assert.equal(review.verdict, 'BLOCK');
+});
+test('one BLOCK vetoes, family duplication is inconclusive', () => {
+  assert.equal(aggregate([{ family: 'z-ai', ...good }, { family: 'nvidia', ...good, verdict: 'BLOCK' }]), 'BLOCK');
+  assert.equal(aggregate([{ family: 'z-ai', ...good }, { family: 'z-ai', ...good }]), 'INCONCLUSIVE');
+});
+test('never sends a binary, oversized, empty or apparent secret-bearing patch', () => {
+  assert.match(preflightPatch(''), /No changes/);
+  assert.match(preflightPatch('Binary files a and b differ'), /Binary/);
+  assert.match(preflightPatch('x'.repeat(96001)), /exceeds/);
+  assert.match(preflightPatch('+const token = "ghp_' + 'a'.repeat(36) + '";'), /secret/);
+  assert.equal(preflightPatch(patch), null);
+});
+test('no reviewer credential fails closed, with content-addressed evidence', async () => {
+  const report = await reviewPatch({ patch, base: 'a'.repeat(40), head: 'b'.repeat(40), key: '' });
+  assert.equal(report.verdict, 'INCONCLUSIVE');
+  assert.equal(report.reviewers.length, 0);
+  assert.match(report.diffSha256, /^[a-f0-9]{64}$/);
+});
+test('two independent PASS results may pass but still require maintainer', async () => {
+  const report = await reviewPatch({ patch, base: 'a'.repeat(40), head: 'b'.repeat(40), key: 'dummy',
+    getCatalog: async () => candidates,
+    review: async model => ({ model: model.id, family: model.family, ...good })
+  });
+  assert.equal(report.verdict, 'PASS');
+  assert.equal(report.requiresMaintainerDecision, true);
+  assert.equal(report.reviewers.length, 2);
+});
+test('reviewer outage and partial availability fail closed; no paid fallback', async () => {
+  const outage = await reviewPatch({ patch, base: 'a'.repeat(40), head: 'b'.repeat(40), key: 'dummy',
+    getCatalog: async () => { throw new Error('429'); } });
+  assert.equal(outage.verdict, 'INCONCLUSIVE');
+  const partial = await reviewPatch({ patch, base: 'a'.repeat(40), head: 'b'.repeat(40), key: 'dummy',
+    getCatalog: async () => ({ data: [candidates.data[1]] }) });
+  assert.match(partial.blockers.join(' '), /Two independent/);
+  const rejected = await reviewPatch({ patch, base: 'a'.repeat(40), head: 'b'.repeat(40), key: 'dummy',
+    getCatalog: async () => candidates,
+    review: async model => ({ model: model.id, family: model.family,
+      verdict: model.family === 'z-ai' ? 'INCONCLUSIVE' : 'PASS',
+      findings: [], falsification_attempts: ['timeout check'] }) });
+  assert.equal(rejected.verdict, 'INCONCLUSIVE');
+});

@@ -2,6 +2,19 @@
 
 ---
 
+# 2026-09-22: Independent Torvalds/Knuth maintainer gate
+
+## Task
+Install two independent zero-cost AI reviews for every PR, safely execute the reviewer from trusted master, bind decisions to exact SHA, and make experiments hypothesis-first without adding another scheduled job.
+
+## Safety and implementation
+Branch ai/chatgpt/independent-maintainer-gate-20260922 from fresh origin/master. Main Desktop worktree has unrelated dirty files and MUST stay untouched. Dedicated reviewer is read-only, fail-closed, and publishes an exact-head check; no automatic merge, baseline changes, or production deployment. Daily World Quality Autopilot now includes a prediction-only next-experiment planner with a fixed counterfactual and device/FPS/visibility requirements.
+
+## Verification
+Run focused offline tests for reviewer, security workflow, and experiment planner, full existing CI, and a live reviewer dispatch on an existing PR only after trusted bootstrap is merged. Enforce the review context in branch protection only after an actual live successful run. Preserve 5 pre-existing user automations.
+
+---
+
 # PR #133 flush — perf(voxel) eliminate per-vertex color clones — 2026-09-17 (Builder slice)
 
 ## Task
@@ -794,7 +807,7 @@ Implementation and local verification complete. Remaining proof is GitHub Action
 - Current mode: FINISH MODE. No optional scope expansion before verified Preview.
 - Remaining gate: focused/full checks -> commit -> push -> Preview deploy -> browser verify exact URL -> handoff URL.
 
-## Cloudflare fail-closed quality canary � 2026-09-21
+## Cloudflare fail-closed quality canary � 2026-09-21
 - Goal: replace false-green Vercel-only canary with exact-SHA Cloudflare deployment verification.
 - Scope: quality-canary workflow only; no auth/security weakening and no production promotion.
 - Gates: release:gate, exact-SHA stack verification, Chromium/WebKit, playable delivery, HTTP smoke.
