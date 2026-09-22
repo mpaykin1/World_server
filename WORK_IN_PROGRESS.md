@@ -10,8 +10,8 @@ Install two independent zero-cost AI reviews for every PR, safely execute the re
 ## Safety and implementation
 Branch ai/chatgpt/independent-maintainer-gate-20260922 from fresh origin/master. Main Desktop worktree has unrelated dirty files and MUST stay untouched. Dedicated reviewer is read-only, fail-closed, and publishes an exact-head check; no automatic merge, baseline changes, or production deployment. Daily World Quality Autopilot now includes a prediction-only next-experiment planner with a fixed counterfactual and device/FPS/visibility requirements.
 
-## Verification
-Run focused offline tests for reviewer, security workflow, and experiment planner, full existing CI, and a live reviewer dispatch on an existing PR only after trusted bootstrap is merged. Enforce the review context in branch protection only after an actual live successful run. Preserve 5 pre-existing user automations.
+## Verification and live blocker repair
+PR #244 merged as 51c2ef63 after all 5 protected checks and focused 14/14 tests. First live dispatch on historic PR #240 showed reviewer script absent at PR's stale base SHA (fail-closed). This fix checks out latest trusted master while preserving the original base SHA for the exact PR diff. Re-run offline tests, YAML, existing CI and the live dispatch. Set required review context only after a real PASS. Preserve 5 pre-existing user automations.
 
 ---
 

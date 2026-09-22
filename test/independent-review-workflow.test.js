@@ -7,7 +7,8 @@ const yaml = fs.readFileSync(path.join(__dirname, '../.github/workflows/independ
 
 test('credentials are only passed to a trusted base checkout', () => {
   assert.match(yaml, /^\s+pull_request_target:/m);
-  assert.match(yaml, /ref: \$\{\{ steps\.refs\.outputs\.base \}\}/);
+  assert.match(yaml, /ref: master/);
+  assert.match(yaml, /test "\$BASE_BRANCH" = master/);
   assert.match(yaml, /persist-credentials: false/);
   assert.match(yaml, /WORLD_REVIEW_KEY: \$\{\{ secrets\.WORLD \}\}/);
   assert.doesNotMatch(yaml, /ref: \$\{\{ steps\.refs\.outputs\.head \}\}/);

@@ -3,8 +3,9 @@
 This gate implements **Builder != Reviewer != Maintainer**. It adds no scheduled
 task; it runs on PRs and can be dispatched manually against an existing PR.
 
-- Reviewer executes trusted **base commit** code. PR code is fetched as *inert*
-  Git diff; no untrusted scripts run with credentials.
+- Reviewer executes the latest trusted **master** code. Historic PR base SHAs
+  are used **only for the diff**, never as a reviewer executable checkout.
+  PR code is fetched as *inert* Git diff; no untrusted script runs with credentials.
 - At runtime, the OpenRouter catalog is inspected. Two **distinct model
   families** with verified zero prompt/completion price are selected; the
   default Builder family (Qwen) is excluded. `WORLD` repository secret is read
