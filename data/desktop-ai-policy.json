@@ -40,6 +40,10 @@
     "minFreeRamPercent": 15,
     "warnFreeRamPercent": 25,
     "minFreeDiskGB": 5,
+    "cpuLoadPercentMax": 80,
+    "resourceProbeTtlMs": 2000,
+    "processCensusEnabled": true,
+    "maxConcurrentAgentProcesses": 6,
     "desktopAllowedProjectItems": [
       "World_server"
     ],
@@ -48,7 +52,7 @@
       "health-probe-",
       "session-guard-"
     ],
-    "processRule": "Never terminate user or unrelated processes. Only the process tree explicitly spawned and owned by the current AI launcher may be stopped on timeout/duplication.",
+    "processRule": "Never terminate user or unrelated processes. Only the process tree explicitly spawned and owned by the current AI launcher may be stopped on timeout/duplication. Process census (CPU, RAM, disk, orphan/duplicate detection) is mandatory before and after every delegated local session and is read-only report evidence; nothing is ever killed from the census. Heavy local AI work is deferred when CPU load is at or above cpuLoadPercentMax, free RAM is below warnFreeRamPercent, or disk is critically low.",
     "completionRule": "Every local-capable AI session must pass preflight before execution and postflight before completion."
   }
 }

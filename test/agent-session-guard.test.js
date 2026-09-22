@@ -52,3 +52,59 @@ test('coverage is inherited automatically by an arbitrary future agent id', () =
   const future = matrix.find((x) => x.agentId === 'future-agent-v99');
   assert.deepEqual(future, { agentId: 'future-agent-v99', preflight: true, postflight: true, inherited: true });
 });
+
+test('snapshotResources reports live CPU load and flags high CPU against the policy ceiling', () => {
+  const p = guard.loadPolicy();
+  const low = guard.snapshotResources(p, { resources: { cpuLoadPercent: 30 } });
+  assert.equal(low.cpuLoadPercent, 30);
+  assert.equal(low.cpuHigh, false);
+  const high = guard.snapshotResources(p, { resources: { cpuLoadPercent: 95 } });
+  assert.equal(high.cpuHigh, true);
+  assert.equal(high.cpuLimit, p.cpuLoadPercentMax);
+});
+
+test('preflight defers heavy local work on CPU high or RAM warning without hard-blocking ok', () => {
+  const idle = { cpuLoadPercent: 20, freeRamPercent: 60 };
+  assert.equal(guard.preflight('local-agent', { localHeavy: true, processCensus: false, resources: idle }).throttle, false);
+  const ramWarn = guard.preflight('local-agent', { localHeavy: true, processCensus: false, resources: { cpuLoadPercent: 20, freeRamPercent: 20 } });
+  assert.equal(ramWarn.throttle, true, 'RAM below warnFreeRamPercent must defer heavy local AI work');
+  assert.equal(ramWarn.ok, true, 'RAM pressure defers; it must not hard-block non-heavy work');
+  const cpuHigh = guard.preflight('local-agent', { localHeavy: true, processCensus: false, resources: { cpuLoadPercent: 95, freeRamPercent: 60 } });
+  assert.equal(cpuHigh.throttle, true, 'CPU at/above cpuLoadPercentMax must defer heavy local AI work');
+  assert.equal(cpuHigh.ok, true);
+  const light = guard.preflight('local-agent', { localHeavy: false, processCensus: false, resources: { cpuLoadPercent: 95, freeRamPercent: 20 } });
+  assert.equal(light.throttle, false, 'non-heavy work is never throttled by CPU/RAM pressure');
+  assert.equal(light.ok, true);
+});
+
+test('classifyProcessCensus marks self/owned/agent-like/unknown and flags duplicates read-only', () => {
+  const summary = guard.classifyProcessCensus([
+    { pid: 100, name: 'node.exe' },
+    { pid: 200, name: 'node.exe' },
+    { pid: 300, name: 'python.exe' },
+    { pid: 400, name: 'python.exe' },
+    { pid: 600, name: 'python.exe' },
+    { pid: 700, name: 'node.exe' },
+    { pid: 500, name: 'explorer.exe' },
+  ], { currentPid: 100, ownedPids: [200], maxConcurrentAgentProcesses: 2 });
+  assert.equal(summary.total, 7);
+  assert.equal(summary.self, 1);
+  assert.equal(summary.owned, 1);
+  assert.equal(summary.agentLike, 4);
+  assert.equal(summary.unknown, 1);
+  assert.deepEqual(summary.concurrentCandidates.map((c) => c.pid).sort((a, b) => a - b), [600, 700], 'agent-like processes beyond the concurrency floor are reported as duplicate candidates');
+  assert.equal(summary.concurrentCandidates.some((c) => c.pid === 100 || c.pid === 200), false, 'self/owned processes are never duplicate candidates');
+});
+
+test('process census appears in preflight/postflight when enabled and is absent when disabled', () => {
+  const idle = { cpuLoadPercent: 10, freeRamPercent: 60 };
+  const disabled = guard.preflight('probe', { processCensus: false, resources: idle });
+  assert.deepEqual(disabled.processes, { enabled: false, summary: null, rawCount: 0 });
+  const pre = guard.preflight('probe', { resources: idle });
+  assert.equal(pre.processes.enabled, true);
+  assert.equal(typeof pre.processes.summary.total, 'number');
+  assert.equal(typeof pre.processes.summary.agentLike, 'number');
+  const post = guard.postflight('probe', { resources: idle });
+  assert.equal(post.processes.enabled, true);
+  assert.equal(typeof post.processes.summary.total, 'number');
+});

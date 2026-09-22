@@ -794,8 +794,78 @@ Implementation and local verification complete. Remaining proof is GitHub Action
 - Current mode: FINISH MODE. No optional scope expansion before verified Preview.
 - Remaining gate: focused/full checks -> commit -> push -> Preview deploy -> browser verify exact URL -> handoff URL.
 
-## Cloudflare fail-closed quality canary � 2026-09-21
+## Cloudflare fail-closed quality canary � 2026-09-21
 - Goal: replace false-green Vercel-only canary with exact-SHA Cloudflare deployment verification.
 - Scope: quality-canary workflow only; no auth/security weakening and no production promotion.
 - Gates: release:gate, exact-SHA stack verification, Chromium/WebKit, playable delivery, HTTP smoke.
 - Status: protocol ledger updated after CI correctly rejected the workflow-only patch; rerun full gates before merge.
+
+---
+
+# Master Goal slice — PC Health & Zero-Chaos Guard: CPU load + process census — 2026-09-22
+
+## Task
+Implementation/test slice for the master goal: make the existing agent-session-guard enforce the PC HEALTH AND ZERO-CHAOS GUARD contract before and after every delegated local session. This slice adds live CPU-load measurement and read-only orphan/duplicate AI-process census to the mandatory preflight/postflight, and widens the deferral gate so heavy local AI work is queued (not hard-blocked) when CPU load reaches the policy ceiling, free RAM is below the warning tier, or disk is critically low. The guard never kills anything from the census.
+
+## Why
+The master goal mandates: before and after every delegated local session, measure CPU load, available RAM and free disk; detect duplicate or orphan AI/node/python processes; terminate only processes proven owned by the completed session and never kill unknown/user processes; and defer heavy local AI work while CPU load is high, free RAM is below 25 percent, or disk is critically low. The existing guard (`lib/agent-session-guard.js`) already measures RAM and disk and scrubs owned scratch, but it did not measure CPU load, had no process census, and only throttled on the critical RAM tier (15%) — the warning tier (25%) and CPU ceiling were computed but unused.
+
+## Current state
+Branch `opencode/master-goal-agent-governance` created from fresh `origin/master` at `dd190cbf`. Baseline focused gates before edits: `test/agent-session-guard.test.js` + `test/master-coordinator.test.js` 30/30 PASS. PC health sampled before local work: CPU ~79-100% (user processes: Roblox, OpenHuman, Chrome, ChatGPT — none owned by this session), free RAM 26%, free disk ~187 GB on C:. Desktop clutter audit: only the canonical user `Desktop\World_server` checkout (allowed); off-Desktop worktrees root present. Per policy, local load is kept bounded and heavy verification is delegated to cloud CI.
+
+## Target state
+`preflight`/`postflight` return `resources.cpuLoadPercent`, `resources.cpuLimit`, `resources.cpuHigh` and a read-only `processes` census (`self`/`owned`/`agent-like`/`unknown` + `concurrentCandidates` duplicates). `preflight({localHeavy:true})` sets `throttle=true` (QUEUED, not blocked) on CPU >= `cpuLoadPercentMax`, RAM < `warnFreeRamPercent`, or disk critical. No code anywhere terminates processes on the basis of the census.
+
+## Files / systems involved
+- `lib/agent-session-guard.js` — CPU probe (reuses `lib/ai-resource-scheduler.js` `getResourceState()`, no duplication), `findAgentProcesses()`, `classifyProcessCensus()`, `collectProcessCensus()`, widened throttle.
+- `data/desktop-ai-policy.json` — `cpuLoadPercentMax: 80`, `resourceProbeTtlMs: 2000`, `processCensusEnabled: true`, `maxConcurrentAgentProcesses: 6`, updated `processRule`.
+- `test/agent-session-guard.test.js` — 5 new focused regression tests.
+- `WORK_IN_PROGRESS.md` — this section (mandatory work instruction).
+- Consumers that inherit the change unchanged: `scripts/master-coordinator.cjs`, `scripts/desktop-ai-new-task.js`, `lib/agent-adapters.js`, `npm run agent-session:*`.
+
+## Known risks
+- `getResourceState()` spawns PowerShell (~150-300 ms) on Windows on the first probe; mitigated by the 2 s `resourceProbeTtlMs` cache so a session's pre/post pair is one probe, and tests bypass probes via injected `resources`.
+- Live process census totals are non-deterministic across machines/time; every test that touches the census is either hermetic (pure classifier) or asserts only shape, never a fixed count.
+- Widening the throttle is intentional behavior change for local-heavy agents only; `ok` semantics (hygiene/disk) are unchanged so `desktop-ai:new-task` and non-heavy dispatch still run.
+
+## Golden systems that must be preserved
+Shared session-guard lifecycle, Zero-Chaos off-Desktop roots, mandatory pre/postflight for every agent, denied-by-default release registry, cloud-first/low-impact AI execution, and the "never kill unknown/user processes" boundary.
+
+## Errors that must not return
+- The guard blocks/serializes legitimate non-heavy dispatch because a CPU/RAM warning appears (throttle applies only to opt-in `localHeavy`).
+- Any code path terminates a process flagged only by the census (census stays strictly read-only evidence).
+- CPU measurement regresses to a duplicate of `ai-resource-scheduler` instead of reusing `getResourceState()`.
+- The powerlist/`tasklist` probe throws through preflight and breaks a session.
+
+## Exact patch / change plan
+1. Add `cp`/`child_process` import, cached `liveCpuLoad()` reusing `lib/ai-resource-scheduler#getResourceState()`, `findAgentProcesses()` (tasklist CSV on win32, `ps` on POSIX), pure `classifyProcessCensus()`, and `collectProcessCensus()`.
+2. Extend `snapshotResources(policy, opts)` with optional injected `resources` (CPU + RAM for hermetic tests) and `cpuLoadPercent`/`cpuLimit`/`cpuHigh`.
+3. Wire `preflight`/`postflight` to populate `processes` census and set `throttle` on `ramCritical || ramWarning || cpuHigh || diskCritical` for `localHeavy`.
+4. Extend `data/desktop-ai-policy.json` (thresholds + census flags) and the `processRule` text.
+5. Add 5 focused regression tests and update WORK_IN_PROGRESS.md.
+6. Run focused + fast gates locally, then push for full cloud CI and the PR.
+
+## Tests to run
+- `node --test test/agent-session-guard.test.js test/master-coordinator.test.js` (local)
+- `npm run check:fast` (syntax) — local
+- `npm run desktop-ai:check` and `node scripts/check-agent-rules.js` — local
+- `npm run check`, `npm run release:gate` — cloud CI after push (machine CPU high; keep local load bounded)
+
+## Deployment / PR plan
+Single owned branch `opencode/master-goal-agent-governance` -> one PR into `master`. No direct master push, no auto-merge, no production deployment. Cloud CI is authoritative for the full suite.
+
+## Current progress
+Policy, guard, and tests implemented. Focused verification after the final edit; then `nitpick`-style diff review, commit, push, open the PR, and record cloud CI evidence.
+
+## Next action
+Run focused tests + `check:fast` + `desktop-ai:check` + `check-agent-rules`; inspect any failures; fix root causes; rerun; then git diff review -> commit -> push -> `gh pr create`.
+
+## Completion criteria
+- Focused guard/coordinator suites PASS.
+- `snapshotResources` reports CPU load/ceiling/high; `preflight` throttles `localHeavy` on CPU-high/RAM-warning/disk-critical without setting `ok=false`.
+- Census is read-only; `concurrentCandidates` excludes self/owned; nothing terminates processes.
+- `check:fast`, `desktop-ai:check`, `check-agent-rules` PASS.
+- WORK_IN_PROGRESS.md updated; PR open with honest evidence; no production deployment performed.
+
+## Final evidence
+Not completed — pending focused/CI verification in this run.
