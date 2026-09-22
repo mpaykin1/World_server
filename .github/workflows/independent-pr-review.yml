@@ -38,10 +38,13 @@ jobs:
           read -r BASE HEAD BASE_BRANCH <<< "$META"
           [[ "$BASE" =~ ^[a-f0-9]{40}$ && "$HEAD" =~ ^[a-f0-9]{40}$ ]]
           test "$BASE_BRANCH" = master
+          TRUSTED="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/master" --jq '.object.sha')"
+          [[ "$TRUSTED" =~ ^[a-f0-9]{40}$ ]]
           if [[ -n "${EVENT_HEAD}" && "$EVENT_HEAD" != "$HEAD" ]]; then
             echo "::error::PR changed while review was queued; require fresh run"
             exit 2
           fi
+          echo "trusted=${TRUSTED}" >> "$GITHUB_OUTPUT"
           echo "base=${BASE}" >> "$GITHUB_OUTPUT"
           echo "head=${HEAD}" >> "$GITHUB_OUTPUT"
           echo "pr=${PR_NUMBER}" >> "$GITHUB_OUTPUT"
@@ -51,7 +54,7 @@ jobs:
       - name: Checkout current trusted master (not PR code)
         uses: actions/checkout@v4
         with:
-          ref: master
+          ref: ${{ steps.refs.outputs.trusted }}
           fetch-depth: 0
           persist-credentials: false
 

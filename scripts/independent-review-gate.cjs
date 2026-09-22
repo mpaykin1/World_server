@@ -10,11 +10,15 @@ const { performance } = require('node:perf_hooks');
 const CANDIDATES = [
   ['google', 'google/gemma-4-31b-it:free'],
   ['nvidia', 'nvidia/nemotron-3-super-120b-a12b:free'],
+  ['nex-agi', 'nex-agi/nex-n2.5-pro:free'],
+  ['poolside', 'poolside/laguna-s-2.1:free'],
   ['z-ai', 'z-ai/glm-5.2:free'],
   ['cohere', 'cohere/north-mini-code:free'],
   ['inclusionai', 'inclusionai/ling-3.0-flash-sante:free'],
   ['nvidia', 'nvidia/nemotron-3.5-lightning:free'],
   ['google', 'google/gemma-4-26b-a4b-it:free'],
+  ['nex-agi', 'nex-agi/nex-n2.5-mini:free'],
+  ['dots-studio', 'dots-studio/dots-3-note-preview:free'],
   ['qwen', 'qwen/qwen3-coder:free']
 ];
 const SHA = /^[a-f0-9]{40}$/i;
@@ -118,39 +122,62 @@ async function getJson(url, options, timeoutMs) {
   if (!response.ok) throw new Error('Provider HTTP ' + response.status);
   return response.json();
 }
-async function requestReview(model, patch, metadata, key) {
+async function requestReview(model, patch, metadata, key, {
+  requestJson = getJson, sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+} = {}) {
   const started = performance.now();
-  try {
-    const payload = {
-      model: model.id, temperature: 0, max_tokens: 3600, stream: false,
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: JSON.stringify({ context: metadata, untrusted_patch: patch }) }
-      ]
-    };
-    if (model.supportsJson) payload.response_format = { type: 'json_object' };
-    const response = await getJson('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        Authorization: 'Bearer ' + key, 'Content-Type': 'application/json',
-        'HTTP-Referer': 'https://github.com/mpaykin1/World_server',
-        'X-Title': 'World Server independent code review'
-      },
-      body: JSON.stringify(payload)
-    }, 90000);
-    const choice = response?.choices?.[0] || {};
-    let review;
-    try { review = parseVerdict(choice.message?.content); }
-    catch (err) { throw new Error(err.message +
-      ' contentChars=' + String(choice.message?.content || '').length +
-      ' finish=' + String(choice.finish_reason || 'unknown')); }
-    return { model: model.id, family: model.family, ...review,
-      durationMs: Math.round(performance.now() - started) };
-  } catch (err) {
-    return { model: model.id, family: model.family, verdict: 'INCONCLUSIVE',
-      findings: [], falsification_attempts: [], reason: String(err.message).slice(0, 180),
-      durationMs: Math.round(performance.now() - started) };
+  const payload = {
+    model: model.id, temperature: 0, max_tokens: 3000, stream: false,
+    messages: [
+      { role: 'system', content: SYSTEM_PROMPT },
+      { role: 'user', content: JSON.stringify({ context: metadata, untrusted_patch: patch }) }
+    ]
+  };
+  if (model.supportsJson) payload.response_format = { type: 'json_object' };
+  const url = 'https://openrouter.ai/api/v1/chat/completions';
+  const headers = {
+    Authorization: 'Bearer ' + key, 'Content-Type': 'application/json',
+    'HTTP-Referer': 'https://github.com/mpaykin1/World_server',
+    'X-Title': 'World Server independent code review'
+  };
+  let attempts = 0;
+  for (; attempts < 3; attempts++) {
+    try {
+      const response = await requestJson(url, {
+        method: 'POST', headers, body: JSON.stringify(payload)
+      }, 65000);
+      const choice = response?.choices?.[0] || {};
+      let result;
+      try { result = parseVerdict(choice.message?.content); }
+      catch (err) { throw new Error(err.message +
+        ' contentChars=' + String(choice.message?.content || '').length +
+        ' finish=' + String(choice.finish_reason || 'unknown')); }
+      // A truncated review cannot provide enough evidence to approve a patch.
+      if (choice.finish_reason === 'length' && result.verdict === 'PASS') {
+        throw new Error('Truncated model output; PASS cannot be trusted');
+      }
+      return { model: model.id, family: model.family, ...result,
+        attempts: attempts + 1, durationMs: Math.round(performance.now() - started) };
+    } catch (err) {
+      const message = String(err.message);
+      // Some free providers advertise JSON mode but reject it at inference time.
+      // Retrying without JSON mode does not relax strict local JSON validation.
+      if (payload.response_format && /Provider HTTP (400|422)\b/.test(message)) {
+        delete payload.response_format;
+        continue;
+      }
+      if (/Provider HTTP (429|502|503|504)\b/.test(message) && attempts < 1) {
+        await sleep(2200);
+        continue;
+      }
+      return { model: model.id, family: model.family, verdict: 'INCONCLUSIVE',
+        findings: [], falsification_attempts: [], reason: message.slice(0, 180),
+        attempts: attempts + 1, durationMs: Math.round(performance.now() - started) };
+    }
   }
+  return { model: model.id, family: model.family, verdict: 'INCONCLUSIVE',
+    findings: [], falsification_attempts: [], reason: 'Provider retry budget exhausted',
+    attempts, durationMs: Math.round(performance.now() - started) };
 }
 function readPatch(base, head) {
   if (!SHA.test(base) || !SHA.test(head)) throw new Error('Expected exact 40-character commit SHAs');
@@ -219,4 +246,4 @@ async function main() {
   process.exitCode = report.verdict === 'PASS' ? 0 : 2;
 }
 if (require.main === module) main().catch(err => { console.error('[INDEPENDENT_REVIEW] ' + err.message); process.exitCode = 2; });
-module.exports = { selectedModels, parseVerdict, aggregate, preflightPatch, reviewPatch, readPatch };
+module.exports = { selectedModels, parseVerdict, aggregate, preflightPatch, reviewPatch, requestReview, readPatch };

@@ -1,7 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { selectedModels, parseVerdict, aggregate, preflightPatch, reviewPatch } =
+const { selectedModels, parseVerdict, aggregate, preflightPatch, reviewPatch, requestReview } =
   require('../scripts/independent-review-gate.cjs');
 
 const candidates = { data: [
@@ -100,4 +100,32 @@ test('unavailable first reviewer can be replaced by another independent free fam
   assert.equal(report.verdict, 'PASS');
   assert.equal(report.reviewers.length, 3);
   assert.equal(report.requiresMaintainerDecision, true);
+});
+
+test('a transient 429 retries without inventing a PASS', async () => {
+  let calls = 0, slept = 0;
+  const result = await requestReview({ id: 'google/gemma-4-31b-it:free', family: 'google', supportsJson: true },
+    patch, { base: 'a'.repeat(40), head: 'b'.repeat(40) }, 'mock', {
+      requestJson: async () => {
+        calls++;
+        if (calls === 1) throw new Error('Provider HTTP 429');
+        return { choices: [{ finish_reason: 'stop', message: { content: JSON.stringify(good) } }] };
+      },
+      sleep: async () => { slept++; }
+    });
+  assert.equal(result.verdict, 'PASS');
+  assert.equal(result.attempts, 2);
+  assert.equal(calls, 2);
+  assert.equal(slept, 1);
+});
+test('provider timeout or truncated answer cannot approve a patch', async () => {
+  const model = { id: 'nvidia/nemotron-3-super-120b-a12b:free', family: 'nvidia' };
+  const timeout = await requestReview(model, patch, {}, 'mock', {
+    requestJson: async () => { throw new Error('The operation was aborted due to timeout'); }
+  });
+  const truncated = await requestReview(model, patch, {}, 'mock', {
+    requestJson: async () => ({ choices: [{ finish_reason: 'length', message: { content: JSON.stringify(good) } }] })
+  });
+  assert.equal(timeout.verdict, 'INCONCLUSIVE');
+  assert.equal(truncated.verdict, 'INCONCLUSIVE');
 });
