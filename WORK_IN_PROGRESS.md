@@ -31,9 +31,20 @@ Branch committed and pushed; focused mocap Python tests PASS; Node/JS syntax and
 regressions PASS or blockers documented; draft PR in master; model path/license
 remains intentionally unconfigured until legally reviewed; no regressions introduced.
 
+## Verified scoped evidence (2026-09-22)
+- Isolated off-Desktop temporary worktree `Temp/ws-mocap-20260922` confirmed clean before and after targeted checks.
+- `python -m py_compile services/ai3d-worker/server.py services/ai3d-worker/ai3d/plugins/motion_capture.py`: PASS.
+- `python -m unittest discover -s services/ai3d-worker/tests -p test_motion_capture.py -v`: 4 PASS / 0 FAIL (synthetic keypoints and GLB, bad timestamps/NaN, header sniff, model SHA/license gates).
+- `node scripts/check-js.js`: PASS, 63 JS files.
+- `node --test test/ai3d-auth.test.js test/ai3d-delivery-policy.test.js`: 26 PASS / 0 FAIL.
+- `git diff --check`: PASS.
+- Continuous CI adds the standalone Python gate, but full PR CI status and real-world hardware/browser verification are still pending.
+- No licensed model weights installed or approved; real video inference and avatar rig retarget are deliberately unverified.
+
 ## Next action
-Run isolated worktree tests; repair any failures; request Fleet PRE independent license,
-security, and real-device behavior verification; only then merge/redeploy.
+Open draft PR, check cloud CI and Fleet PRE; acquire an approved SHA-pinned model,
+then run real video + real-asset retarget and desktop/mobile visibility >=85%
+before considering merge, deploy or test-link delivery.
 
 ---
 
