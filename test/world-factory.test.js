@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { createWorldDNA, analyzeReference, analyzeDepthSegmentation, evaluateQualityContract, evaluateGeometryReconstruction, settingsFromDNA, publicWorld } = require('../lib/world-factory');
+const { createWorldDNA, analyzeReference, analyzeDepthSegmentation, evaluateQualityContract, evaluateGeometryReconstruction, evaluateProjectionPBR, settingsFromDNA, publicWorld } = require('../lib/world-factory');
 const factoryApi = require('../lib/api-handlers/world-factory')._private;
 
 const root = path.resolve(__dirname, '..');
@@ -114,6 +114,19 @@ test('geometry reconstruction refuses an over-budget candidate', () => {
   const dna=createWorldDNA({idea:'reference city',requestId,loreBible}); const p=dna.referencePipeline;
   analyzeReference(p,{kind:'image',width:1920,height:1080,landmarks:[{label:'tower',prominence:1}]}); analyzeDepthSegmentation(p,{depth:{coverage:.9,confidence:.8},segmentation:{regions:[{label:'building',coverage:.6,confidence:.9},{label:'sky',coverage:.4,confidence:.9}]}}); evaluateQualityContract(p,{matchedIdentityFeatures:['tower'],detailInventory:[{label:'spire',priority:.9}],visibilityPercent:90});
   evaluateGeometryReconstruction(p,{faceBudget:1000,parts:[{label:'tower',identity:true,hero:true,faces:5000}]}); assert.equal(p.stages[3].status,'needs-correction'); assert.deepEqual(p.stages[3].blockers,['runtime-face-budget-failed']); assert.equal(p.stages[4].status,'blocked');
+});
+
+test('projection PBR preserves hero material within atlas bake budget and unlocks completion', () => {
+  const dna=createWorldDNA({idea:'reference city',requestId,loreBible}); const p=dna.referencePipeline;
+  analyzeReference(p,{kind:'image',width:1920,height:1080,landmarks:[{label:'tower',prominence:1}]}); analyzeDepthSegmentation(p,{depth:{coverage:.9,confidence:.8},segmentation:{regions:[{label:'building',coverage:.6,confidence:.9},{label:'sky',coverage:.4,confidence:.9}]}}); evaluateQualityContract(p,{matchedIdentityFeatures:['tower'],detailInventory:[{label:'spire',priority:.9}],visibilityPercent:90}); evaluateGeometryReconstruction(p,{faceBudget:10000,parts:[{label:'tower',identity:true,hero:true,faces:4000}]});
+  evaluateProjectionPBR(p,{atlasSize:2048,atlasMax:4096,texels:4194304,texelBudget:8388608,materials:[{label:'tower stone',hero:true,channels:['baseColor','normal','roughness']},{label:'roof',channels:['baseColor','roughness']}]});
+  assert.equal(p.stages[4].status,'complete'); assert.equal(p.stages[5].status,'ready'); assert.equal(p.projectionPBR.materialCoverage,1); assert.equal(p.stages[4].evidence[2].pass,true);
+});
+
+test('projection PBR rejects atlas over budget without unlocking completion', () => {
+  const dna=createWorldDNA({idea:'reference city',requestId,loreBible}); const p=dna.referencePipeline;
+  p.stages[3].status='complete'; p.stages[4].status='ready'; evaluateProjectionPBR(p,{atlasSize:8192,atlasMax:4096,texels:67108864,texelBudget:16777216,materials:[{label:'hero',hero:true,channels:['baseColor','normal']}]});
+  assert.equal(p.stages[4].status,'needs-correction'); assert.deepEqual(p.stages[4].blockers,['atlas-bake-budget-failed']); assert.equal(p.stages[5].status,'blocked');
 });
 
 test('World Factory settings are directly playable by the existing voxel runtime', () => {
