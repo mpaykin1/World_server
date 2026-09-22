@@ -116,7 +116,7 @@ async function withMacroRetry(admin, worldId, mutate) {
   for (let attempt = 0; attempt < 4; attempt++) {
     const current = await readEmergenceWorld(admin, worldId);
     const result = mutate(current);
-    if (result.skip) return { emergence: current.emergence, worldId, complete: true, skipped: true };
+    if (result.skip) return { emergence: current.emergence, worldId, complete: current.emergence.growthStage >= current.emergence.maxGrowthStage, skipped: true };
     try {
       await writeEmergenceWorld(admin, current, result.emergence);
       return { emergence: result.emergence, worldId, ...result.metadata };
