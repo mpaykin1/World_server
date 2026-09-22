@@ -46,7 +46,7 @@ Upstream references:
 - Local video inference; browser uploads directly to authenticated worker,
   Vercel is *only* the token gateway. No GPU or inference inside Vercel.
 - Per-frame 33 camera-relative 3D keypoints (JSON), with landmark confidence.
-- Lightweight animated diagnostic-man­nequin GLB (segment transforms baked
+- Lightweight animated diagnostic-mannequin GLB (segment transforms baked
   into glTF 2 animation). In-app canvas playback for quick visual inspection.
 - SHA256 provenance and explicit limitations in motion-license-and-qa.json.
 - Worker jobs are queued, persisted in SQLite and purged by job TTL; original
