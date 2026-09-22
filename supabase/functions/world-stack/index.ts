@@ -40,6 +40,60 @@ function safePayload(value: unknown) {
   if (encoder.encode(JSON.stringify(payload)).length > 7000) fail(413, "Canon payload is too large.");
   return payload as Record<string, unknown>;
 }
+function edgeMacroTypes(idea: string) {
+  const text = idea.toLocaleLowerCase("ru-RU"), out: string[] = [];
+  const rules: Array<[RegExp,string]> = [
+    [/город|city|мегаполис/u,"city"], [/природ|лес|forest|jungle|джунг/u,"forest"], [/река|river/u,"river"],
+    [/гор(?:а|ы|ный)|mountain/u,"mountains"], [/вулкан|volcano/u,"volcano"], [/деревн|пос[её]лок|village/u,"village"],
+    [/руин|ruins/u,"ruins"], [/пустын|desert/u,"desert"], [/океан|море|ocean|sea/u,"ocean"],
+    [/снег|л[её]д|snow|ice/u,"snow"], [/дракон|dragon/u,"dragon"]
+  ];
+  for (const [re,type] of rules) if (re.test(text) && !out.includes(type)) out.push(type);
+  return out.slice(0,8);
+}
+const EDGE_MACRO_RADIUS: Record<string,number> = { city:34, forest:44, river:28, mountains:42, volcano:34, village:24, ruins:22, desert:46, ocean:52, snow:44, dragon:30 };
+const EDGE_MACRO_LABEL: Record<string,string> = { city:"Город", forest:"Природа", river:"Река", mountains:"Горы", volcano:"Вулкан", village:"Поселение", ruins:"Руины", desert:"Пустыня", ocean:"Море", snow:"Снег", dragon:"Дракон" };
+const EDGE_MACRO_RULES: Record<string,{kind:string,interest:number,summary:string,details:string[]}> = {
+  "city|forest": {kind:"living_frontier",interest:.96,summary:"Город встречается с природой: возникает живая окраина, обмен ресурсами и конфликт роста.",details:["road","edge_houses","lumberyard","park","wildlife_corridor"]},
+  "city|river": {kind:"riverfront",interest:.94,summary:"Город тянется к воде: появляются переправа, набережная и рынок.",details:["road","bridge","docks","market","floodwall"]},
+  "city|mountains": {kind:"foothill_city",interest:.91,summary:"Город упирается в горы и отвечает террасами, дорогами и добычей камня.",details:["road","terraces","quarry","watchtower","tunnel"]},
+  "city|volcano": {kind:"danger_industry",interest:.99,summary:"Опасность вулкана перестраивает город вокруг защиты и новых материалов.",details:["evacuation_road","watchtower","lava_wall","obsidian_workshop","refuge"]},
+  "forest|river": {kind:"wetland_ecology",interest:.9,summary:"Лес и река создают влажную экосистему и новые переходы.",details:["wetland","wildlife_corridor","ford","fallen_logs","grove"]},
+  "forest|volcano": {kind:"burn_and_regrow",interest:.98,summary:"Вулкан разрушает лес, но пепел запускает новое плодородие.",details:["ash_field","burnt_grove","hot_springs","young_forest","wildlife_corridor"]},
+  "city|dragon": {kind:"siege_ecology",interest:1,summary:"Дракон заставляет город перестраивать безопасность, дороги и экономику.",details:["watchtower","refuge","market","wall","dragon_road"]},
+  "dragon|forest": {kind:"wild_lair",interest:1,summary:"Дракон превращает лес в территорию риска и меняет поведение людей и животных.",details:["lair","burnt_grove","watchtower","hidden_trail","refuge"]}
+};
+function edgeMacroEffect(kind: string) {
+  if (/road|trail/i.test(kind)) return { biome:"plains", clearTrees:true, surface:"road" };
+  if (/park|forest|grove|wildlife|oasis|wetland/i.test(kind)) return { biome:"forest", clearTrees:false, surface:null };
+  if (/ash|burnt/i.test(kind)) return { biome:"desert", clearTrees:true, surface:"ash" };
+  return { biome:null, clearTrees:/house|market|wall|tower|bridge|site|docks|lair/i.test(kind), surface:null };
+}
+function edgeEmergence(idea: string, seed: number, hex: string) {
+  const types=edgeMacroTypes(idea);
+  if (!types.length) return {schemaVersion:"1.0.0",revision:1,growthStage:0,maxGrowthStage:5,entities:[],relations:[],features:[],interestScore:0};
+  const rot=(parseInt(hex.slice(8,16),16)/0xffffffff)*Math.PI*2;
+  const entities=types.map((type,i)=>{
+    const angle=types.length===2?(i?rot:rot+Math.PI):rot+i/types.length*Math.PI*2, radius=types.length===1?0:types.length===2?30:50;
+    return {id:`macro-${type}-${hex.slice((i*4)%48,(i*4)%48+10)}`,type,label:EDGE_MACRO_LABEL[type]||type,x:Number((Math.cos(angle)*radius).toFixed(2)),z:Number((Math.sin(angle)*radius).toFixed(2)),radius:EDGE_MACRO_RADIUS[type]||30,strength:1,ownerId:null};
+  });
+  const relations:any[]=[],features:any[]=[];
+  for(let i=0;i<entities.length;i++) for(let j=i+1;j<entities.length;j++){
+    const a=entities[i],b=entities[j],d=Math.hypot(a.x-b.x,a.z-b.z),reach=(a.radius+b.radius)*1.75;
+    if(d>reach)continue;
+    const key=[a.type,b.type].sort().join("|"),rule=EDGE_MACRO_RULES[key]||{kind:"contact_zone",interest:.76,summary:`${a.label} и ${b.label} начинают менять пространство между собой.`,details:["trail","landmark","camp","exchange_zone","story_site"]};
+    const contact=1-Math.min(1,d/reach),id=`relation-${hex.slice((i+j+3)*3%48,(i+j+3)*3%48+12)}`;
+    const relation={id,a:a.id,b:b.id,kind:rule.kind,summary:rule.summary,distance:Number(d.toFixed(2)),contact:Number(contact.toFixed(3)),interestScore:Number(Math.min(1,rule.interest*(.75+contact*.35)).toFixed(3)),detailKinds:rule.details};
+    relations.push(relation);
+    for(let k=0;k<Math.min(2,rule.details.length);k++){
+      const kind=rule.details[k],t=(k+1)/(rule.details.length+1),x=a.x+(b.x-a.x)*t,z=a.z+(b.z-a.z)*t,linear=/road|trail|corridor/i.test(kind);
+      features.push({id:`feature-${id.slice(-8)}-${k}`,relationId:id,kind,label:kind.replaceAll("_"," "),stage:k+1,x:Number(x.toFixed(2)),z:Number(z.toFixed(2)),radius:linear?3.2:6,geometry:linear?{kind:"line",x1:a.x,z1:a.z,x2:b.x,z2:b.z,width:3}:{kind:"point"},effect:edgeMacroEffect(kind)});
+    }
+  }
+  const avg=relations.length?relations.reduce((sum,item)=>sum+item.interestScore,0)/relations.length:0;
+  return {schemaVersion:"1.0.0",revision:1,growthStage:entities.length>=2?2:1,maxGrowthStage:5,entities,relations,features,interestScore:Number(Math.min(1,avg*.82+Math.min(1,new Set(types).size/4)*.18).toFixed(3))};
+}
+
 function pickTheme(idea: string, hex: string) {
   const text = idea.toLocaleLowerCase("ru-RU");
   const rules: Array<[RegExp, string]> = [
@@ -112,6 +166,7 @@ async function worldDNA(ideaRaw: unknown, requestIdRaw: unknown) {
     schemaVersion: "1.0.0", id, requestId, title, idea, seed, theme,
     generator: { kind: "procedural-voxel", version: 1, chunkSize: 16, minY: -16, maxY: 96 },
     visualProfile: { qualityFloor: 85, atmosphere: true, pbr: true, microdetail: true, water: true, adaptivePerformance: true },
+    emergence: edgeEmergence(idea, seed, hex),
     lore,
     createdAt: new Date().toISOString()
   };
