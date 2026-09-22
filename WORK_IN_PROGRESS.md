@@ -48,11 +48,11 @@ before considering merge, deploy or test-link delivery.
 
 ---
 
-# WORK IN PROGRESS â€” Scoped Task Compiler, resource scheduler, real native Godot pipeline
+# WORK IN PROGRESS — Scoped Task Compiler, resource scheduler, real native Godot pipeline
 
 ---
 
-# PR #133 flush â€” perf(voxel) eliminate per-vertex color clones â€” 2026-09-17 (Builder slice)
+# PR #133 flush — perf(voxel) eliminate per-vertex color clones — 2026-09-17 (Builder slice)
 
 ## Task
 Per Architect dispatch on issue #80 (2026-09-17): flush PR #133 (`perf(voxel): eliminate per-vertex color clones`) by rebasing its single 1-line delta onto current master `BASE_SHA=31dc7a47` and adding exactly one focused regression test that proves `pushFace` color attribute output stays byte-identical to the previous `clone().multiplyScalar` baseline (allocations removed, rendered pixels unchanged). No gameplay/client behavior change; no production deployment.
@@ -68,14 +68,14 @@ Per Architect dispatch on issue #80 (2026-09-17): flush PR #133 (`perf(voxel): e
 - `node scripts/check-js.js`: Syntax OK, 61 JS files.
 - `node scripts/check-agent-rules.js`: PASSED.
 - `node scripts/check-golden-standard.js`: PASS.
-- CI on H2: pending (all-world-render, science-governance, screenshots, deploy-and-verify, etc.) â€” fleet/cloud confirm.
+- CI on H2: pending (all-world-render, science-governance, screenshots, deploy-and-verify, etc.) — fleet/cloud confirm.
 
 ## Next action
 Fleet PRE independently falsifies exact H2 (`fb7a5a49`), then Ocean integrates only if READY_FOR_OCEAN; no merge/deploy by this slice.
 
 ---
 
-# PR #91 Stack Completion refresh â€” 2026-09-12
+# PR #91 Stack Completion refresh — 2026-09-12
 
 ## Task
 Refresh the existing Manual Fast Lane PR #91 onto current protected master `867d99de0ac38dec02f3f8c64a3a1d7a1c2785dd`, remove features already delivered by merged stack PRs, retain its unique Graphics-First viewport/world-identity/fusion work, and make delivery identity Cloudflare-native with the canonical `Builder -> Fleet PRE -> Ocean -> Fleet POST` topology.
@@ -91,7 +91,7 @@ Resolve the historical branch conflicts in favor of current master, reapply only
 
 ---
 
-# IndieWorlds foundation â€” 2026-09-10
+# IndieWorlds foundation — 2026-09-10
 
 ## Task
 Implement the first production-safe IndieWeb layer for World Server: portable self-describing world passports, RSS discovery, independent canonical world URLs, visible passport access inside the existing Golden UI, and machine-readable world-to-world connections.
@@ -165,7 +165,7 @@ All focused tests pass; default API behavior remains byte-shape compatible; only
 
 ---
 
-# Patch-to-World ingestion and World Graph â€” 2026-09-07
+# Patch-to-World ingestion and World Graph — 2026-09-07
 
 ## Task
 Implement a reusable, idempotent Patch-to-World ingestion layer and interconnected World Graph on an isolated feature branch. Add manifests, revision history, portals, safe world APIs, manifest-driven metadata access, catalog integration, tests, and existing release-gate coverage.
@@ -484,7 +484,7 @@ result reported exactly as observed, not adjusted to look more favorable.
 
 ---
 
-# Addendum â€” World Cloud AI / OpenCode + Qwen
+# Addendum — World Cloud AI / OpenCode + Qwen
 
 ## Goal
 Add an isolated cloud coding-agent path for `World_server` using GitHub Actions, pinned OpenCode, and Qwen3-Coder through OpenRouter, without changing the existing desktop-agent pipeline.
@@ -505,7 +505,7 @@ Push this isolated branch and open a PR. Live model E2E remains blocked until re
 ## Final evidence
 Local structural/protocol gates PASS. No claim of live Qwen/OpenRouter execution is made until the secret is configured and a real GitHub Actions run passes.
 
-## Cloud AI secret compatibility fix â€” 2026-09-06
+## Cloud AI secret compatibility fix — 2026-09-06
 
 ### Goal
 Prevent cloud-agent startup failures when the existing OpenRouter repository secret uses the compatibility name `WORLD` instead of `OPENROUTER_API_KEY`.
@@ -525,7 +525,7 @@ YAML parse, `npm run desktop-ai:check`, `npm run check:fast`, `npm run golden:ch
 ### Final evidence
 Pending commit/CI/real cloud-agent E2E.
 
-## Cloud AI provider hardening â€” 2026-09-06
+## Cloud AI provider hardening — 2026-09-06
 
 ### Goal
 Make OpenCode + OpenRouter reliable in non-interactive GitHub Actions after the first authenticated run failed inside OpenCode with `UnknownError` before any repository edit.
@@ -537,12 +537,12 @@ The built-in OpenRouter path did not provide an actionable provider error in CI.
 The config lives only in the runner temp directory, contains no secret value, checks that `qwen/qwen3-coder:free` is currently advertised by OpenRouter, and keeps all Git changes isolated to `world-ai/run-*` branches.
 
 ### Tests to run
-YAML parse, `check:fast`, `golden:check`, `desktop-ai:check`, then real workflow_dispatch E2E through Qwen â†’ edit â†’ verify â†’ PR.
+YAML parse, `check:fast`, `golden:check`, `desktop-ai:check`, then real workflow_dispatch E2E through Qwen → edit → verify → PR.
 
 ### Final evidence
 Pending real cloud-agent E2E.
 
-## Cloud AI live free-model fallback â€” 2026-09-06
+## Cloud AI live free-model fallback — 2026-09-06
 
 ### Goal
 Remove the hard dependency on one disappearing free OpenRouter model while guaranteeing zero paid inference.
@@ -557,12 +557,12 @@ At every run, resolve an approved zero-cost open-weight model from the live cata
 Model selection requires both prompt and completion prices to equal zero and fails closed when no approved free model is live.
 
 ### Tests to run
-YAML parse, local project guards, then real cloud E2E through model selection â†’ OpenCode â†’ repository edit â†’ verification â†’ pull request.
+YAML parse, local project guards, then real cloud E2E through model selection → OpenCode → repository edit → verification → pull request.
 
 ### Final evidence
 Pending real workflow run.
 
-## AI mutual reinforcement + cloud failover â€” 2026-09-06
+## AI mutual reinforcement + cloud failover — 2026-09-06
 
 ### Goal
 Increase whole-system readiness by connecting existing local/free agents, the GitHub cloud agent, shared Collective Brain evidence, and an explicit paid-only Codex fallback without duplicating infrastructure.
@@ -605,7 +605,7 @@ PR #38 exposed nine Linux-only failures because the reused AI queue stack embedd
 
 
 
-## 2026-09-06 â€” Zero-Chaos / Computer-Health for all AI entrypoints
+## 2026-09-06 — Zero-Chaos / Computer-Health for all AI entrypoints
 
 ### Task
 Make Desktop hygiene and low-impact computer-health enforcement mandatory for every controllable World_server AI session without creating a parallel subsystem.
@@ -642,7 +642,7 @@ Commit and push this branch after final `git diff --check` / fast syntax gate.
 
 ---
 
-# RUN_072 production port â€” 2026-09-06
+# RUN_072 production port — 2026-09-06
 
 ## What / why
 Port the already-verified RUN_072 science patch onto the current production master without importing its divergent history, and expose evidence through the existing production/API + remote-task infrastructure.
@@ -662,7 +662,7 @@ Clean commit/push/PR, cloud checks, merge, existing production sync, then extern
 
 ---
 
-# Universal Voxel Microdetail V2 â€” 2026-09-07
+# Universal Voxel Microdetail V2 — 2026-09-07
 
 ## Task
 Advance the existing microdetail patch from standalone V1 into a production-integrated World_server V2 and commit it through an isolated AI branch/PR.
@@ -677,10 +677,10 @@ Implemented in isolated off-Desktop worktree from `origin/master` db9e240. The c
 Near surfaces show real cubic protrusions/dents; mid-distance surfaces use cheap shader microdetail; far/exact modes preserve base geometry. Animals, faces, scales, armor, weapons and fabric share semantic profiles, with explicit tagging available for ambiguous assets. Quality adapts without overriding the global tier ceiling.
 
 ## Files / systems involved
-- `shared/microdetail-policy.json` â€” one policy source.
-- `shared/graphics/universal-voxel-microdetail.js` â€” detail geometry + shader + local FPS hysteresis.
-- `shared/graphics/universal-voxel-microdetail-bootstrap.js` â€” existing renderer hook and dynamic nearest-mesh selection.
-- `lib/world-quality-microdetail-policy.js` â€” Node policy helpers.
+- `shared/microdetail-policy.json` — one policy source.
+- `shared/graphics/universal-voxel-microdetail.js` — detail geometry + shader + local FPS hysteresis.
+- `shared/graphics/universal-voxel-microdetail-bootstrap.js` — existing renderer hook and dynamic nearest-mesh selection.
+- `lib/world-quality-microdetail-policy.js` — Node policy helpers.
 - `scripts/world-microdetail-audit.js`, `test/world-microdetail.test.js`.
 - bootstrap entries in `apps/voxel-world/index.html` and `apps/ai3d-voxel-city/index.html`.
 - existing `scripts/world-quality-autopilot.js` + `package.json`.
@@ -731,9 +731,9 @@ Run syntax/policy/focused tests, inspect failures, fix until PASS, then run repo
 Pending current-run verification. `WORLD_MICRODETAIL_REPORT.json` is generated evidence and must not be committed unless repository policy explicitly tracks it.
 
 
-### Final local evidence update â€” 2026-09-07
+### Final local evidence update — 2026-09-07
 - UTF-8 mojibake regression found before commit, root cause was PowerShell text rewrite; file restored and reinserted byte-safely through Node UTF-8 I/O.
-- Added regression that requires the original Russian `ÐšÐ°Ñ€Ñ‚Ð¸Ð½ÐºÐ° â†’ Ð³Ð¾Ñ€Ð¾Ð´ Ð¸Ð· ÐºÑƒÐ±Ð¸ÐºÐ¾Ð²` and forbids the observed mojibake marker.
+- Added regression that requires the original Russian `Картинка → город из кубиков` and forbids the observed mojibake marker.
 - Shader injection hardened: world micro-position derives from `modelMatrix * vec4(transformed,1.0)` after Three.js transforms, not conditionally-declared `worldPosition`.
 - Focused microdetail tests: 13/13 PASS.
 - `quality:world:microdetail`: PASS, structural 100%, implementation 92%.
@@ -744,7 +744,7 @@ Pending current-run verification. `WORLD_MICRODETAIL_REPORT.json` is generated e
 
 ---
 
-# Vercel Repair Agent bridge â€” 2026-09-07
+# Vercel Repair Agent bridge — 2026-09-07
 
 ## Task
 Connect the existing zero-cost World Cloud AI (OpenCode + free-model failover) to Vercel commit failures so `world-server` build failures automatically become bounded repair tasks.
@@ -755,24 +755,24 @@ Vercel already posts commit statuses, but repair is manual. We need event-driven
 ## Current state
 - Source of truth: `master` at `b7202e84` when this worktree was created.
 - Existing `.github/workflows/world-cloud-ai.yml` already performs free-model implementation, verification, self-repair, branch push and PR creation.
-- Vercel status on current master is `Deployment rate limited â€” retry in 24 hours` for `world-server` and two homepage projects.
+- Vercel status on current master is `Deployment rate limited — retry in 24 hours` for `world-server` and two homepage projects.
 - No local `VERCEL_TOKEN` or persisted Vercel CLI auth is present; the bridge must degrade safely without it.
 
 ## Target state
-A failed `Vercel â€“ world-server` commit status immediately triggers cloud triage. Quota/rate-limit/cancelled conditions produce a clean no-code result. Real build failures dispatch one focused task to the existing World Cloud AI. If repository secret `VERCEL_TOKEN` exists, private Vercel build logs are included automatically.
+A failed `Vercel – world-server` commit status immediately triggers cloud triage. Quota/rate-limit/cancelled conditions produce a clean no-code result. Real build failures dispatch one focused task to the existing World Cloud AI. If repository secret `VERCEL_TOKEN` exists, private Vercel build logs are included automatically.
 
 ## Affected systems
-- `.github/workflows/` â€” Vercel status bridge only.
-- existing `world-cloud-ai.yml` â€” reused, not duplicated.
-- `.github/scripts/` â€” pure status classifier used by workflow and tests.
-- `test/` â€” regression coverage for quota-vs-code classification.
+- `.github/workflows/` — Vercel status bridge only.
+- existing `world-cloud-ai.yml` — reused, not duplicated.
+- `.github/scripts/` — pure status classifier used by workflow and tests.
+- `test/` — regression coverage for quota-vs-code classification.
 
 ## Risks / invariants
 - Never launch an AI repair for Vercel quota/rate-limit/external capacity failures.
 - Never auto-merge a repair PR or push directly to `master`.
 - Never expose `VERCEL_TOKEN`; it is optional and read only from GitHub Actions secrets.
 - Avoid duplicate repair agents for the same Vercel status.
-- Automatic scope is `Vercel â€“ world-server`; other Vercel projects remain manual-dispatch capable to prevent three agents reacting to one commit.
+- Automatic scope is `Vercel – world-server`; other Vercel projects remain manual-dispatch capable to prevent three agents reacting to one commit.
 - Bridge-only changes must remain non-deployable under the existing Vercel quota guard.
 
 ## Exact patch plan
@@ -811,9 +811,9 @@ Write classifier + bridge workflow + tests, verify locally, then push to GitHub 
 Pending verification and GitHub workflow test.
 
 
-### Final evidence update â€” 2026-09-07
+### Final evidence update — 2026-09-07
 - Vercel classifier focused suite: **9/9 PASS**.
-- Current real `Vercel â€“ world-server` status `Deployment rate limited â€” retry in 24 hours.` classifies as `external-limit` with `shouldRepair=false`.
+- Current real `Vercel – world-server` status `Deployment rate limited — retry in 24 hours.` classifies as `external-limit` with `shouldRepair=false`.
 - Generic `Deployment has failed` classifies as `build-failure` with `shouldRepair=true`.
 - Workflow YAML parses successfully.
 - Existing Vercel quota guard confirms this bridge-only patch is non-deployable and will not consume a Vercel build.
@@ -826,7 +826,7 @@ Pending verification and GitHub workflow test.
 ## Final evidence
 Implementation and local verification complete. Remaining proof is GitHub Actions parsing/execution after push plus a manual current-rate-limit workflow dispatch; no code repair should be launched for that external blocker.
 
-## Vercel Hobby 12-function blocker â€” 2026-09-07
+## Vercel Hobby 12-function blocker — 2026-09-07
 - Goal: make current master deployable on Vercel Hobby for immediate real testing.
 - Root cause: current api/ has 14 serverless JS functions; Hobby hard limit is 12.
 - Minimal fix: move register/login/me/logout handlers under lib/api-handlers and route their unchanged public URLs through one api/auth.js function.
@@ -836,7 +836,7 @@ Implementation and local verification complete. Remaining proof is GitHub Action
 - Remaining: cloud CI, merge, one Vercel preview and browser smoke.
 
 
-## Manual task â€” Golden Painting + delivery contract (2026-09-09)
+## Manual task — Golden Painting + delivery contract (2026-09-09)
 - Owner: ChatGPT manual fast lane.
 - Branch: `ai/golden-painting-day-night-20260909` in system Temp; canonical dirty Desktop checkout untouched.
 - Scope: Golden Painting atmospheric perspective + 60s day / 60s sunset / 10s night / 60s sunrise across compatible worlds; add Manual Task Completion Contract.
@@ -844,7 +844,7 @@ Implementation and local verification complete. Remaining proof is GitHub Action
 - Current mode: FINISH MODE. No optional scope expansion before verified Preview.
 - Remaining gate: focused/full checks -> commit -> push -> Preview deploy -> browser verify exact URL -> handoff URL.
 
-## Cloudflare fail-closed quality canary — 2026-09-21
+## Cloudflare fail-closed quality canary � 2026-09-21
 - Goal: replace false-green Vercel-only canary with exact-SHA Cloudflare deployment verification.
 - Scope: quality-canary workflow only; no auth/security weakening and no production promotion.
 - Gates: release:gate, exact-SHA stack verification, Chromium/WebKit, playable delivery, HTTP smoke.
