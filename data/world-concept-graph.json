@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "1.0.0",
+  "updatedFromMaster": "edb1a5b42fb08f5e7bf598d37d640e775876e63c",
+  "scenarioContract": {
+    "expectedNodeCount": 62,
+    "canonicalNodeInventory": "UNKNOWN",
+    "reason": "The repository contract names a 62-step scenario but does not expose a machine-readable 62-node inventory on this master. Coverage must remain UNKNOWN until that inventory is canonicalized."
+  },
+  "concepts": [
+    {"id":"forest","kind":"ecosystem","owner":"lib/world-emergence.js"},
+    {"id":"volcano","kind":"geophysical_system","owner":"lib/world-emergence.js"}
+  ],
+  "relations": [
+    {
+      "id": "forest-volcano-disturbance-succession",
+      "from": "volcano",
+      "to": "forest",
+      "type": "disturbance_then_succession",
+      "status": "VERIFIED_EXTERNAL_AND_PROJECT_TESTED",
+      "confidence": 0.95,
+      "mechanism": "Eruptive heat, blast, tephra and ash can kill or bury vegetation; surviving biological legacies and later colonization drive context-dependent ecological succession.",
+      "observableManifestations": ["ash_field","burnt_grove","young_forest","wildlife_corridor"],
+      "capability": "burn_and_regrow",
+      "owner": "lib/world-emergence.js",
+      "runtimeConsumer": "shared/world-emergence-runtime.js",
+      "test": "test/world-concept-graph.test.js"
+    }
+  ],  "evidence": [
+    {
+      "id":"usgs-msh-ecology",
+      "authority":"USGS",
+      "url":"https://www.usgs.gov/geology-and-ecology-of-national-parks/ecology-mount-st-helens-national-monument",
+      "supports":"forest-volcano-disturbance-succession"
+    },
+    {
+      "id":"usgs-forestry-ash",
+      "authority":"USGS Volcano Hazards Program",
+      "url":"https://volcanoes.usgs.gov/volcanic_ash/effects_on_forestry.html",
+      "supports":"forest-volcano-disturbance-succession"
+    }
+  ],
+  "learning": {
+    "previousState": "ABSENT_ON_MASTER",
+    "delta": "Added first provenance-backed causal relation mapped to the existing emergence owner; no parallel engine.",
+    "prediction": "For colocated forest+volcano entities, advancing emergence to stage 5 exposes disturbance followed by regrowth features, including ash/burn damage and young forest/wildlife recovery.",
+    "counterfactual": "Replacing volcano with river must not produce the burn_and_regrow relation or volcanic disturbance features.",
+    "observed": "PASS: exact-head Node tests verified predicted forest-volcano succession and river ablation",
+    "verdict": "STRENGTHENED"
+  },
+  "metrics": {
+    "scenarioNodeCoverage": "UNKNOWN",
+    "materialRelations": 1,
+    "relationsWithProvenance": 1,
+    "relationsWithExecutableTests": 1,
+    "unresolvedUnknowns": 1,
+    "conflicts": 0,
+    "duplicateOwners": 0,
+    "ideaCodeTestEvidenceClosed": 1
+  }
+}
