@@ -18,8 +18,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 # Copy worker code first for layer cache
-COPY requirements.txt ./
-RUN pip3 install --upgrade pip && pip3 install -r requirements.txt
+COPY requirements.txt requirements-motion.txt ./
+ARG INSTALL_MOCAP=false
+RUN pip3 install --upgrade pip && pip3 install -r requirements.txt \
+    && if [ "$INSTALL_MOCAP" = "true" ]; then pip3 install -r requirements-motion.txt; fi
 
 # Copy rest of worker
 COPY . .
