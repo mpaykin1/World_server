@@ -139,7 +139,7 @@ class MotionCaptureEngine:
         write_mannequin_glb(raw, glb_file)
         manifest_file = output_dir / "motion-license-and-qa.json"
         manifest_file.write_text(json.dumps({
-            "pipeline": "mediapipe-pose-landmarker", "stage": "diagnostic_man­nequin",
+            "pipeline": "mediapipe-pose-landmarker", "stage": "diagnostic_mannequin",
             "sourceSha256": _sha(video), "modelSha256": model_hash,
             "operatorConfirmedCommercialModelRights": True, "modelLicenseNotIndependentlyCertifiedBySoftware": True,
             "frameCount": len(raw), "durationSeconds": round(raw[-1]["t"], 3),
@@ -199,6 +199,9 @@ def write_mannequin_glb(frames: list[dict], destination: Path) -> None:
         if width == 1 and component != 5123:
             accessor["min"] = [min(flat)]
             accessor["max"] = [max(flat)]
+        if target == 34962 and width == 3:
+            accessor["min"] = [min(p[i] for p in values) for i in range(3)]
+            accessor["max"] = [max(p[i] for p in values) for i in range(3)]
         accessors.append(accessor)
         return len(accessors)-1
     positions = add(corners, 3, "VEC3", target=34962)
