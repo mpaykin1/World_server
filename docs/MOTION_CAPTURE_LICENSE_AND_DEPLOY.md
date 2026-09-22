@@ -20,6 +20,11 @@ Upstream references:
 - https://github.com/squall01337/mixamo-llm-mocap/blob/main/LICENSE
 - https://developers.google.com/edge/mediapipe/legal/tos
 
+MediaPipe API use may send operational metrics to Google. Operators must
+review the current API privacy terms and obtain any required consent. Video
+codec patents/FFmpeg build licenses and subject likeness rights are separate
+from the library's Apache-2.0 code license.
+
 ## Setup (after model-rights review)
 
 1. Install optional requirements on the AI3D worker:
