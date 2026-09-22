@@ -13,7 +13,8 @@ ALLOWED_VIDEO_TYPES = {"video/mp4": ".mp4", "video/webm": ".webm", "video/quickt
 
 def verify_video(path: Path, mime: str) -> None:
     """Reject non-video payloads before opening them with FFmpeg/OpenCV."""
-    header = path.open("rb").read(32)
+    with path.open("rb") as handle:
+        header = handle.read(32)
     if mime in ("video/mp4", "video/quicktime"):
         if len(header) < 16 or header[4:8] != b"ftyp":
             raise ValueError("MP4/MOV ftyp header missing")
