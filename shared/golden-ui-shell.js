@@ -4,7 +4,7 @@
   window.__GOLDEN_UI_SHELL_V2__=true;
   const path=location.pathname;
   const configs=[
-    {match:'/apps/catalog/',title:'Миры',worldId:'world-server-catalog-live',selectors:['.app-title','.topHint','#miniMap']},
+    {match:'/apps/catalog/',title:'Миры',worldId:'world-server-catalog-live',selectors:['.app-title','.topHint','#miniMap','#authBox','.mc-chat']},
     {match:'/apps/voxel-world/',title:'Voxel World',worldId:'voxel-world',selectors:['#vwHud','#vwHelp','#vwBack']},
     {match:'/apps/ai3d-voxel-city/',title:'Voxel City',worldId:'ai3d-voxel-city',selectors:['header','.controls','.metrics','.compare > .pane:not(.viewerPane)','.viewerHead','#stats'],graphicsFirst:{host:'.viewerPane',surface:'#viewer'}},
     {match:'/apps/survival/',title:'Survival',worldId:'survival',selectors:['#survivalHelp','#stats','#backLink','#buildPanel','#inventory']},
@@ -50,7 +50,13 @@
   closeButton.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();close();});
   drawer.addEventListener('pointerdown',e=>e.stopPropagation());
   addEventListener('keydown',e=>{if(e.code==='Escape')close()});
-  for(const selector of cfg.selectors){for(const node of [...document.querySelectorAll(selector)]){if(root.contains(node))continue;node.dataset.goldenPacked='true';packed.appendChild(node);}}
+  function packPanels(){for(const selector of cfg.selectors){for(const node of [...document.querySelectorAll(selector)]){if(root.contains(node))continue;node.dataset.goldenPacked='true';packed.appendChild(node);}}}
+  packPanels();
+  // AppCore creates catalog login/chat after async initialization. Move, never clone.
+  if(cfg.worldId==='world-server-catalog-live'){
+    const panelObserver=new MutationObserver(records=>{if(records.some(r=>r.addedNodes.length))packPanels();});
+    panelObserver.observe(document.body,{childList:true});
+  }
   if(!packed.children.length){const p=document.createElement('p');p.textContent='Дополнительных системных панелей нет.';packed.appendChild(p);}
   if(cfg.graphicsFirst){const host=document.querySelector(cfg.graphicsFirst.host),surface=document.querySelector(cfg.graphicsFirst.surface);if(host&&surface){document.documentElement.classList.add('golden-graphics-first');host.dataset.goldenViewport='primary';surface.dataset.goldenPrimaryRenderer='true';}else console.error('[GOLDEN GRAPHICS] primary renderer missing',cfg.graphicsFirst);}
 
