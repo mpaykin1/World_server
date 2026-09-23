@@ -20,7 +20,10 @@ jobs:
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
     steps:
+      # Do not deploy the synthetic pull_request merge ref while stamping the PR head SHA.
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
@@ -48,6 +51,9 @@ jobs:
           URL="$(printf '%s\n' "$OUTPUT" | grep -Eo 'https://[^[:space:]]+\.(workers|pages)\.dev' | tail -n 1)"
           test -n "$URL"
           echo "url=$URL" >> "$GITHUB_OUTPUT"
+      - name: Wait for exact-head Cloudflare activation
+        if: steps.authority.outputs.configured == 'true'
+        run: node scripts/wait-for-cloudflare-deploy.cjs "${{ steps.deploy.outputs.url }}" "$SOURCE_SHA"
       - name: Verify Cloudflare stack and security
         if: steps.authority.outputs.configured == 'true'
         run: node scripts/verify-cloudflare-stack.cjs "${{ steps.deploy.outputs.url }}" "$SOURCE_SHA"
