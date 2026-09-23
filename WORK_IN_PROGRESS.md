@@ -754,3 +754,33 @@ Implementation and local verification complete. Remaining proof is GitHub Action
 - Delivery requirement: exact commit + pushed branch + test Preview URL + real-browser verification before PASS.
 - Current mode: FINISH MODE. No optional scope expansion before verified Preview.
 - Remaining gate: focused/full checks -> commit -> push -> Preview deploy -> browser verify exact URL -> handoff URL.
+
+---
+
+# [ARCHITECT] Control Plane — single-delta selection 2026-09-23 (issue #80 comment 5792072038)
+
+Role: Capability Architect Control Plane. No implementation/edit/merge/publish/deploy done.
+
+## Bootstrapped repo truth
+- origin/master = `ef797b50ae41627c7083671d9c5cb0cc3d65af70` (protected checks: check, quality-regression, agent-rules, world-quality, godot-web-preview). LKG/rollback = same SHA.
+- Local coordinator worktree branch `ai/master-coordinator/opencode-1790154004272-a1` at `d06cb3ed` = 147 behind / 0 ahead (stale, no unique work).
+- No collective-brain lock files present -> no ownership conflict.
+- Open PRs = 35. Active candidate: PR #251 (Sprite Intelligence), head `ef4a3be79031cfbeb019f6c346b2dbb799c2551a`, base = current master, MERGEABLE, 10 files +280/-0.
+- PR #251 checks: 17 green incl. `check`, `agent-rules`, `quality-regression`, `world-quality`, `godot-web-preview`, `science-governance`, `fleet-pre-exact-sha`, `ocean-merge-eligibility`, `lighthouse`, `all-world-render`, `deploy-and-verify`, Netlify preview. 2 red = external independent-review reliability (429/truncate; owned by merged #250/#255 + pending #256; INCONCLUSIVE = non-PASS).
+
+## Selected single next delta
+Complete the Sprite Intelligence PLAYER_VISIBLE slice on the same owned container (#251 / World Graphics + Sprite Intelligence): consume `planWorldSprites()` candidates + committed atlases in the existing Voxel World renderer as relation-zone animated billboards (visual-only, no terrain/physics/collision change), proving browser-visible behavior + desktop/mobile FPS within <=60s of fresh spawn.
+
+- BEFORE: `automaticPlacement=false` (lib/world-sprite-needs.js), static committed atlases under shared/sprite-assets/, PLAYER_VISIBLE=0, no >=85% claim.
+- AFTER: sprite instances visible in their zones in live Voxel World (river-ripple at water's edge, frontier-smoke near living frontier, volcanic-ash in volcanic zone), animation + FPS measured desktop+mobile; PLAYER_VISIBLE >=85% only with real browser evidence.
+- Acceptance: focused sprite tests + new placement/animation + mobile-FPS regression guard; protected 5 checks + Fleet PRE exact-head -> Ocean -> Fleet POST exact-live; canonical Netlify URL only after POST-live.
+- Regression guard: never weaken tests/false-green; Golden + check + quality-regression green on exact new head.
+- Rollback/risk: single owned PR, revert-only on any regression; no quota on duplicate previews; keep visuals off gameplay collision/occupancy.
+- Routing: Cloud Builder Autopilot (free cloud agents/OpenCode/Claude preferred), Codex fallback <=30% (never paid/GPU), heavy checks in GitHub CI.
+- Packaging: if diff exceeds independent-review byte budget, split into chained small coherent patches on same container (per #247 lesson); no competing PR.
+- Handoff posted: issue #80 comment 5792072038.
+
+## Debt / signals logged
+- 35 open PRs; ~500 stale remote `ai/agent-invoke/*` branches; stale coordinator branch 147 behind; `.ai/project-context-index.json` referenced by AI_START_HERE.md but absent from repo.
+- BOTTLENECK = external free independent reviewer cost/429 reliability. AUTOMATION_CANDIDATE = stale-branch/PR GC.
+- No MANUAL_WORK newly required; no production deployment performed.
