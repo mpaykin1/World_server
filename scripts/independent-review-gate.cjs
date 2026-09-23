@@ -51,7 +51,10 @@ function availableModels(catalog, builderModel = '') {
     const item = models.get(id);
     if (!item || id === builderModel || builderModel.startsWith(family + '/')) return [];
     if (String(item.pricing?.prompt) !== '0' || String(item.pricing?.completion) !== '0') return [];
-    return [{ family, id, supportsJson: (item.supported_parameters || []).includes('response_format') }];
+    return [{ family, id,
+      supportsJson: (item.supported_parameters || []).includes('response_format'),
+      supportsReasoning: (item.supported_parameters || []).includes('reasoning'),
+      reasoning: item.reasoning || null }];
   });
 }
 function selectedModels(catalog, builderModel = '') {
@@ -122,18 +125,29 @@ async function getJson(url, options, timeoutMs) {
   if (!response.ok) throw new Error('Provider HTTP ' + response.status);
   return response.json();
 }
+// Reserve visible output tokens: free reasoning models may otherwise spend
+// the entire completion budget thinking and return content='' / finish=length.
+function reasoningBudget(model) {
+  if (!model.supportsReasoning || model.reasoning?.mandatory ||
+      model.reasoning?.default_enabled === false) return null;
+  if (model.reasoning?.supports_max_tokens) return { max_tokens: 1024 };
+  if (model.reasoning?.supported_efforts?.includes('low')) return { effort: 'low' };
+  return { enabled: false };
+}
 async function requestReview(model, patch, metadata, key, {
   requestJson = getJson, sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 } = {}) {
   const started = performance.now();
   const payload = {
-    model: model.id, temperature: 0, max_tokens: 3000, stream: false,
+    model: model.id, temperature: 0, max_tokens: 4200, stream: false,
     messages: [
       { role: 'system', content: SYSTEM_PROMPT },
       { role: 'user', content: JSON.stringify({ context: metadata, untrusted_patch: patch }) }
     ]
   };
   if (model.supportsJson) payload.response_format = { type: 'json_object' };
+  const reasoning = reasoningBudget(model);
+  if (reasoning) payload.reasoning = reasoning;
   const url = 'https://openrouter.ai/api/v1/chat/completions';
   const headers = {
     Authorization: 'Bearer ' + key, 'Content-Type': 'application/json',
@@ -146,12 +160,30 @@ async function requestReview(model, patch, metadata, key, {
       const response = await requestJson(url, {
         method: 'POST', headers, body: JSON.stringify(payload)
       }, 65000);
+      if (response?.error) throw new Error('Provider in-band error ' +
+        String(response.error.code || response.error.message || 'unknown').slice(0, 100));
       const choice = response?.choices?.[0] || {};
+      if (choice.error) throw new Error('Provider choice error ' +
+        String(choice.error.code || choice.error.message || 'unknown').slice(0, 100));
+      const content = Array.isArray(choice.message?.content)
+        ? choice.message.content.filter(x => x?.type === 'text').map(x => x.text).join('')
+        : choice.message?.content;
+      if (!String(content || '').trim() && attempts === 0) {
+        // Retry once without an optional format/reasoning constraint; do not
+        // accept empty or truncated output as approval under any circumstance.
+        delete payload.response_format;
+        if (model.supportsReasoning && !model.reasoning?.mandatory) {
+          payload.reasoning = { enabled: false };
+        }
+        payload.max_tokens = 6000;
+        continue;
+      }
       let result;
-      try { result = parseVerdict(choice.message?.content); }
+      try { result = parseVerdict(content); }
       catch (err) { throw new Error(err.message +
-        ' contentChars=' + String(choice.message?.content || '').length +
-        ' finish=' + String(choice.finish_reason || 'unknown')); }
+        ' contentChars=' + String(content || '').length +
+        ' finish=' + String(choice.finish_reason || 'unknown') +
+        ' reasoningTokens=' + Number(response?.usage?.completion_tokens_details?.reasoning_tokens || 0)); }
       // A truncated review cannot provide enough evidence to approve a patch.
       if (choice.finish_reason === 'length' && result.verdict === 'PASS') {
         throw new Error('Truncated model output; PASS cannot be trusted');
