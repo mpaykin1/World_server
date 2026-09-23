@@ -6,7 +6,7 @@
 
 A real Workers AI probe exposed a malformed GitHub credential: the user pasted a complete REST curl command rather than only the new API token. A native HTTP header exception reflected a partial credential into a GitHub artifact. Mitigation completed: the affected artifact was deleted (API now denies access); malformed WORLD_CF_AI_API_TOKEN was deleted; WORLD_CF_WORKERS_FREE_CONFIRMED disabled. The user must revoke the old Cloudflare token and create a fresh token, placing ONLY the token value into the dedicated GitHub secret. Do not print any old or new token or diagnostics derived from native header exceptions.
 
-This branch fail-closes on invalid token format before HTTP, whitelists provider errors rather than logging arbitrary exception text (both Cloudflare and OpenRouter), and adds regression tests for secret-bearing header failures. Offline tests pass; real Cloudflare API tests remain blocked until token rotation. Do not merge this hotfix into master by bypassing governance without separate maintainer permission. Keep the five existing scheduled jobs unchanged.
+This branch fail-closes on invalid token format before HTTP, whitelists provider errors rather than logging arbitrary exception text (both Cloudflare and OpenRouter), rejects literal sk_, sk-, cfut_ and ghp_ secrets in added diff lines, and adds regression tests for secret-bearing header failures. Offline tests pass; real Cloudflare API tests remain blocked until token rotation. Do not merge this hotfix into master by bypassing governance without separate maintainer permission. Keep the five existing scheduled jobs unchanged.
 
 ---
 

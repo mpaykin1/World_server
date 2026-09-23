@@ -123,7 +123,7 @@ function preflightPatch(patch) {
   if (bytes === 0) return 'No changes to independently review';
   if (bytes > MAX_PATCH_BYTES) return 'Patch exceeds review budget; full human review required';
   if (/^GIT binary patch|^Binary files /m.test(patch)) return 'Binary change requires separate human review';
-  if (/^\+(?!\+\+).*(?:sk-[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{30,})/m.test(patch)) return 'Possible secret in diff; do not send to external model';
+  if (/^\+(?!\+\+).*(?:sk[-_][A-Za-z0-9]{20,}|cfut_[A-Za-z0-9_-]{30,}|ghp_[A-Za-z0-9]{30,})/m.test(patch)) return 'Possible secret in diff; do not send to external model';
   return null;
 }
 // Provider errors are untrusted. Native HTTP header exceptions can echo a

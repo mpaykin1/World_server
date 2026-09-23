@@ -217,3 +217,24 @@ test('OpenRouter model-controlled error suffixes are never reported', async () =
     assert.ok(!JSON.stringify(result).includes(credential));
   }
 });
+
+test('preflight refuses OpenRouter and Workers AI secret-bearing added diff lines', () => {
+  for (const credential of [
+    'sk_' + 'A'.repeat(42),
+    'sk-' + 'B'.repeat(42),
+    'cfut_' + 'C'.repeat(42),
+    'ghp_' + 'D'.repeat(42)
+  ]) {
+    const reason = preflightPatch('diff --git a/foo b/foo\n@@ -0,0 +1 @@\n+' + credential + '\n');
+    assert.equal(reason, 'Possible secret in diff; do not send to external model');
+    assert.ok(!reason.includes(credential));
+  }
+});
+test('review diagnostics do not echo provider-controlled secret-bearing errors', async () => {
+  const secret = 'cfut_' + 'S'.repeat(40);
+  for (const msg of ['Provider HTTP 403: ' + secret, 'Missing structured review fields ' + secret]) {
+    const result = await requestReview({id: 'google/gemma-4-31b-it:free',family:'google'},
+      patch, {}, 'mock', {requestJson:async () => {throw new Error(msg)}});
+    assert.equal(result.reason,'Reviewer request failed (details redacted)');
+  }
+});
