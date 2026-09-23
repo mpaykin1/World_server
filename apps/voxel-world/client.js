@@ -640,8 +640,64 @@ async function hydrateCanon(){try{const r=await fetch('/api/canon?worldId='+enco
 const emergenceGroup=new THREE.Group();scene.add(emergenceGroup);
 let emergencePanel=null;
 function disposeEmergenceVisuals(){while(emergenceGroup.children.length){const o=emergenceGroup.children.pop();o.traverse?.(n=>{n.geometry?.dispose?.();if(n.material){for(const m of (Array.isArray(n.material)?n.material:[n.material]))m.dispose?.();}});}}
+// CPU-only, event-driven four-frame sprite sheets. Visuals follow persisted macro state;
+// lava-wall construction dust is NOT evidence of physical lava simulation.
+const macroSpriteGroup=new THREE.Group();scene.add(macroSpriteGroup);
+const macroSpriteTextures=new Map();const macroSpriteInstances=[];
+const MACRO_SPRITE_CAP=matchMedia('(pointer:coarse)').matches?14:32;
+function macroSpriteTexture(kind){
+  if(macroSpriteTextures.has(kind))return macroSpriteTextures.get(kind);
+  const canvas=document.createElement('canvas');canvas.width=128;canvas.height=32;
+  const ctx=canvas.getContext('2d');const palettes={
+    volcano:['#a7a0a0','#625b5d'],ash_field:['#bcb1a4','#77716d'],
+    lava_wall:['#d8b18b','#ad8067'],burnt_grove:['#a9a29b','#6b6664'],
+    wetland:['#a4e6ee','#3c9bba'],hot_springs:['#e4eff1','#a1c8cf']
+  };const colors=palettes[kind]||['#ddd6c4','#a8a197'];
+  for(let frame=0;frame<4;frame++){
+    const x0=frame*32;ctx.clearRect(x0,0,32,32);
+    for(let i=0;i<6;i++){
+      const x=x0+16+Math.sin(i*2.4+frame*.52)*((i+1)*1.8);
+      const y=26-i*3.4-frame*.55;
+      ctx.globalAlpha=Math.max(.08,.48-i*.052);
+      ctx.fillStyle=colors[(i+frame)%2];ctx.beginPath();
+      ctx.ellipse(x,y,2.2+i*.85,1.7+i*.58,0,0,Math.PI*2);ctx.fill();
+    }
+  }ctx.globalAlpha=1;
+  const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;
+  texture.wrapS=THREE.RepeatWrapping;texture.repeat.set(.25,1);texture.magFilter=THREE.LinearFilter;
+  macroSpriteTextures.set(kind,texture);return texture;
+}
+function clearMacroSprites(){
+  for(const item of macroSpriteInstances){macroSpriteGroup.remove(item.sprite);item.sprite.material.dispose();}
+  macroSpriteInstances.length=0;
+}
+function addMacroSprite(kind,x,z,id){
+  if(macroSpriteInstances.length>=MACRO_SPRITE_CAP||!Number.isFinite(x)||!Number.isFinite(z))return;
+  const base=macroSpriteTexture(kind),texture=base.clone();texture.needsUpdate=true;
+  const material=new THREE.SpriteMaterial({map:texture,transparent:true,opacity:.76,
+    depthTest:true,depthWrite:false,sizeAttenuation:true});
+  const sprite=new THREE.Sprite(material);sprite.position.set(x,heightAt(Math.round(x),Math.round(z))+2.2,z);
+  sprite.scale.set(kind==='volcano'?5:2.6,kind==='volcano'?5:2.6,1);
+  sprite.userData.causalFeature=id;macroSpriteGroup.add(sprite);
+  macroSpriteInstances.push({sprite,texture,phase:macroSpriteInstances.length%4});
+}
+function refreshMacroSprites(){
+  clearMacroSprites();if(!emergenceState)return;
+  for(const e of emergenceState.entities||[]){
+    if(e.type==='volcano')addMacroSprite('volcano',Number(e.x),Number(e.z),e.id);
+  }
+  for(const f of emergenceState.features||[]){
+    if(Number(f.stage||1)>Number(emergenceState.growthStage||1))continue;
+    if(['ash_field','lava_wall','burnt_grove','wetland','hot_springs'].includes(f.kind))
+      addMacroSprite(f.kind,Number(f.x),Number(f.z),f.id);
+  }
+}
+function animateMacroSprites(now){
+  for(const item of macroSpriteInstances)item.texture.offset.x=(Math.floor(now*.006+item.phase)%4)*.25;
+}
+
 function renderEmergenceVisuals(){
-  disposeEmergenceVisuals();if(!emergenceState)return;
+  disposeEmergenceVisuals();refreshMacroSprites();if(!emergenceState)return;
   const typeColor={city:0xc58d5c,forest:0x4d8b43,river:0x4a86cf,mountains:0x8b8f94,volcano:0x9b4637,village:0xb79968,ruins:0x7d7163,desert:0xc8ae68,ocean:0x3979b8,snow:0xd8edf5,dragon:0x8a3f55};
   for(const e of emergenceState.entities||[]){const y=heightAt(Math.round(e.x),Math.round(e.z))+.18,g=new THREE.Mesh(new THREE.TorusGeometry(Math.max(2,Math.min(8,Number(e.radius||20)*.14)),.12,5,28),new THREE.MeshBasicMaterial({color:typeColor[e.type]||0xffffff,transparent:true,opacity:.8,depthWrite:false}));g.rotation.x=Math.PI/2;g.position.set(e.x,y,e.z);emergenceGroup.add(g);}
   for(const f of emergenceState.features||[]){if(Number(f.stage||1)>Number(emergenceState.growthStage||1))continue;const g=f.geometry||{};if(g.kind==='line'){const x1=Number(g.x1),z1=Number(g.z1),x2=Number(g.x2),z2=Number(g.z2),len=Math.hypot(x2-x1,z2-z1),m=new THREE.Mesh(new THREE.BoxGeometry(Math.max(.5,len),.09,Math.max(1,Number(g.width)||2)),new THREE.MeshBasicMaterial({color:0xc7ae7a,transparent:true,opacity:.7,depthWrite:false}));m.position.set((x1+x2)/2,heightAt(Math.round((x1+x2)/2),Math.round((z1+z2)/2))+.2,(z1+z2)/2);m.rotation.y=-Math.atan2(z2-z1,x2-x1);emergenceGroup.add(m);}else{const x=Number(f.x),z=Number(f.z),m=new THREE.Mesh(new THREE.CylinderGeometry(.8,1.2,2.2,6),new THREE.MeshStandardMaterial({color:0xb8895a,roughness:.8}));m.position.set(x,heightAt(Math.round(x),Math.round(z))+1.1,z);emergenceGroup.add(m);}}
@@ -726,7 +782,7 @@ function updateTarget(){const h=rayVoxel();if(!h)return;targetEl.textContent=`${
 async function savePlayer(){if(backendMode!=='online')return;try{await api('player_save',{worldId:ACTIVE_WORLD_ID,position:{x:player.pos.x,y:player.pos.y,z:player.pos.z},yaw:player.yaw,pitch:player.pitch,selectedBlock:HOTBAR[player.selected]});}catch{} }
 function broadcastPlayer(now){if(!channel||now-lastNet<NET_INTERVAL)return;lastNet=now;channel.send({type:'broadcast',event:'player_state',payload:{id:player.id,name:player.name,x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw}});}
 let autodemo=null;
-let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(goldenWaterUniforms?.goldenWaterTime){goldenWaterUniforms.goldenWaterTime.value=now/1000;if(goldenWaterUniforms.goldenWaterSky&&scene.background?.isColor)goldenWaterUniforms.goldenWaterSky.value.copy(scene.background);}if(goldenVegetationUniforms?.goldenVegetationTime){goldenVegetationUniforms.goldenVegetationTime.value=now/1000;const q=window.GoldenQualityDirector?.forRenderer?.(renderer)?.state?.quality;goldenVegetationUniforms.goldenVegetationStrength.value=Math.max(.35,Math.min(1,Number(q)||1));}if(started){if(Math.abs(mobileLook.x)>.02||Math.abs(mobileLook.y)>.02){player.yaw-=mobileLook.x*2.05*dt;player.pitch=clamp(player.pitch-mobileLook.y*1.65*dt,-1.45,1.45);}physics(dt);updateScienceFx(now,dt);updateCanonEffects(now);loadNeededChunks();updateGoldenLodPolicy(now);broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();autodemo?.update(now,dt);biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);renderer.render(scene,camera);}requestAnimationFrame(loop);
+let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(goldenWaterUniforms?.goldenWaterTime){goldenWaterUniforms.goldenWaterTime.value=now/1000;if(goldenWaterUniforms.goldenWaterSky&&scene.background?.isColor)goldenWaterUniforms.goldenWaterSky.value.copy(scene.background);}if(goldenVegetationUniforms?.goldenVegetationTime){goldenVegetationUniforms.goldenVegetationTime.value=now/1000;const q=window.GoldenQualityDirector?.forRenderer?.(renderer)?.state?.quality;goldenVegetationUniforms.goldenVegetationStrength.value=Math.max(.35,Math.min(1,Number(q)||1));}if(started){if(Math.abs(mobileLook.x)>.02||Math.abs(mobileLook.y)>.02){player.yaw-=mobileLook.x*2.05*dt;player.pitch=clamp(player.pitch-mobileLook.y*1.65*dt,-1.45,1.45);}physics(dt);updateScienceFx(now,dt);updateCanonEffects(now);loadNeededChunks();updateGoldenLodPolicy(now);broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();autodemo?.update(now,dt);biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);animateMacroSprites(now);renderer.render(scene,camera);}requestAnimationFrame(loop);
 
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});addEventListener('beforeunload',()=>savePlayer());
 setupDesktop();setupMobile();buildHotbar();
