@@ -84,53 +84,78 @@ async function actionInit(admin, identity, body) {
 }
 
 async function readEmergenceWorld(admin, worldId) {
-  const { data: world, error } = await admin.from('voxel_worlds').select('id,seed,settings').eq('id', worldId).single();
+  const { data: world, error } = await admin.from('voxel_worlds')
+    .select('id,seed,settings,updated_at').eq('id', worldId).single();
   dbFailure(error, 'Мир Voxel World не найден.');
   const settings = world?.settings && typeof world.settings === 'object' ? JSON.parse(JSON.stringify(world.settings)) : {};
   const dna = settings.worldDNA && typeof settings.worldDNA === 'object' ? settings.worldDNA : {};
   const seed = Number(world?.seed) || 1;
   const emergence = buildEmergenceState({
-    entities: dna.emergence?.entities || [],
-    seed,
-    growthStage: dna.emergence?.growthStage || 1,
-    revision: dna.emergence?.revision || 1
+    entities: dna.emergence?.entities || [], seed,
+    growthStage: dna.emergence?.growthStage || 1, revision: dna.emergence?.revision || 1
   });
   return { world, settings, dna, seed, emergence };
 }
 
 async function writeEmergenceWorld(admin, current, emergence) {
   current.settings.worldDNA = { ...current.dna, emergence };
+  const now = new Date(Math.max(Date.now(), Date.parse(current.world.updated_at || '') + 1 || 0)).toISOString();
   const { data, error } = await admin.from('voxel_worlds')
-    .update({ settings: current.settings })
+    .update({ settings: current.settings, updated_at: now })
     .eq('id', current.world.id)
-    .select('id,seed,settings')
-    .single();
+    .eq('updated_at', current.world.updated_at)
+    .select('id,seed,settings,updated_at')
+    .maybeSingle();
   dbFailure(error, 'Не удалось сохранить развитие мира.');
+  // Optimistic concurrency: one player's edit cannot silently overwrite another's.
+  if (!data) throw httpError(409, 'Мир изменился у другого игрока. Повторите действие.');
   return data;
+}
+
+async function withMacroRetry(admin, worldId, mutate) {
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const current = await readEmergenceWorld(admin, worldId);
+    const result = mutate(current);
+    if (result.skip) return { emergence: current.emergence, worldId, complete: current.emergence.growthStage >= current.emergence.maxGrowthStage, skipped: true };
+    try {
+      await writeEmergenceWorld(admin, current, result.emergence);
+      return { emergence: result.emergence, worldId, ...result.metadata };
+    } catch (error) {
+      if (error.status !== 409 || attempt === 3) throw error;
+    }
+  }
+  throw httpError(409, 'Параллельные изменения мира. Повторите действие.');
+}
+
+async function actionMacroRead(admin, body) {
+  const worldId = safeWorldId(body.worldId);
+  const current = await readEmergenceWorld(admin, worldId);
+  return { worldId, emergence: current.emergence };
 }
 
 async function actionMacroPlace(admin, identity, body) {
   const worldId = safeWorldId(body.worldId);
   const type = normalizeMacroType(body.type);
   const position = safePosition(body.position);
-  const current = await readEmergenceWorld(admin, worldId);
-  const emergence = placeMacroEntity(current.emergence, {
-    type, x: position.x, z: position.z,
-    ownerId: identity.userId || identity.guestId
-  }, current.seed);
-  await writeEmergenceWorld(admin, current, emergence);
-  return { emergence, placedType: type, worldId };
+  const id = typeof body.id === 'string' && /^macro-[a-z0-9-]{4,80}$/.test(body.id) ? body.id : null;
+  return withMacroRetry(admin, worldId, current => ({
+    emergence: placeMacroEntity(current.emergence, {
+      id, type, x: position.x, z: position.z, ownerId: identity.userId || identity.guestId
+    }, current.seed),
+    metadata: { placedType: type }
+  }));
 }
 
 async function actionMacroTick(admin, body) {
   const worldId = safeWorldId(body.worldId);
-  const current = await readEmergenceWorld(admin, worldId);
-  if (current.emergence.growthStage >= current.emergence.maxGrowthStage) {
-    return { emergence: current.emergence, complete: true, worldId };
-  }
-  const emergence = advanceEmergence(current.emergence, current.seed);
-  await writeEmergenceWorld(admin, current, emergence);
-  return { emergence, complete: emergence.growthStage >= emergence.maxGrowthStage, worldId };
+  const expected = Number(body.expectedRevision);
+  if (!Number.isInteger(expected) || expected < 1) throw httpError(400, 'Не указана версия развития мира.');
+  return withMacroRetry(admin, worldId, current => {
+    if (current.emergence.revision !== expected) return { skip: true };
+    if (current.emergence.growthStage >= current.emergence.maxGrowthStage) return { skip: true };
+    const emergence = advanceEmergence(current.emergence, current.seed);
+    return { emergence, metadata: { complete: emergence.growthStage >= emergence.maxGrowthStage } };
+  });
 }
 
 async function actionChunks(admin, body) {
@@ -268,6 +293,7 @@ async function handle(admin, identity, action, body) {
   if (action === 'chunks') return actionChunks(admin, body);
   if (action === 'set_block') return actionSetBlock(admin, identity, body);
   if (action === 'player_save') return actionSavePlayer(admin, identity, body);
+  if (action === 'macro_read') return actionMacroRead(admin, body);
   if (action === 'macro_place') return actionMacroPlace(admin, identity, body);
   if (action === 'macro_tick') return actionMacroTick(admin, body);
   throw httpError(400, 'Неизвестное действие Voxel World.');
@@ -284,4 +310,4 @@ module.exports = withErrors(async (req, res) => {
   sendJson(res, 200, result);
 });
 
-module.exports._private = { safeWorldId, safePosition, safeBlockCoordinate, safeBlockType, chunkCoord, clientPlayer, actionMacroPlace, actionMacroTick, readEmergenceWorld };
+module.exports._private = { safeWorldId, safePosition, safeBlockCoordinate, safeBlockType, chunkCoord, clientPlayer, actionMacroRead, actionMacroPlace, actionMacroTick, readEmergenceWorld };
