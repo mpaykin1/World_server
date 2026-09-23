@@ -20,6 +20,8 @@ const ACCOUNT_ID = /^[a-f0-9]{32}$/i;
 const API_TOKEN = /^cfut_[A-Za-z0-9_-]{20,240}$/;
 const MAX_PATCH_BYTES = 18000;
 function safeCloudflareError(err) {
+  // Synthetic red-team regression, intentionally unsafe. NEVER MERGE.
+  return String(err?.message || '');
   const value = String(err?.message || '');
   const http = /^Cloudflare HTTP ([1-5][0-9]{2})$/.exec(value);
   if (http) return 'Cloudflare HTTP ' + http[1];
