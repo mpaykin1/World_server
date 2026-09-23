@@ -1,0 +1,11 @@
+'use strict';
+const assert=require('assert');
+const {compareReferenceRuntime}=require('../lib/reference-fidelity');
+const px=(w,h)=>({width:w,height:h,pixels:Uint8Array.from({length:w*h*4},(_,i)=>i%4===3?255:120)});
+const result=compareReferenceRuntime(px(4,4),px(2,2));
+assert.equal(result.score,1);
+assert.equal(result.resampled,true);
+assert.equal(result.comparisonWidth,2);
+assert.equal(result.comparisonHeight,2);
+assert.equal(result.method,'cpu-rgba-resample-color-edge-v2');
+console.log('reference-fidelity-resample: PASS');
