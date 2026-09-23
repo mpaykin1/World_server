@@ -20,11 +20,19 @@ test.describe('World Server Golden Standard', () => {
       await expect(page.locator(`#goldenPackedPanels ${selector}`)).toHaveCount(1);
       await expect(page.locator(`#goldenPackedPanels ${selector}`)).toHaveCSS('position','static');
     }
+    const drawer=page.locator('#goldenDrawer');
+    await expect(drawer).toHaveJSProperty('inert',true);
+    expect(await page.evaluate(()=>{const b=document.querySelector('[data-panel-probe]');b.focus();return document.activeElement===b;})).toBe(false);
     await page.locator('[data-golden-tab="menu"]').click();
+    await expect(drawer).toHaveJSProperty('inert',false);
     for(const button of await page.locator('[data-panel-probe]').all())await button.click();
     expect(await page.evaluate(()=>window.panelProbeClicks)).toBe(2);
     await page.locator('#goldenDrawerClose').click();
-    await expect(page.locator('#goldenDrawer')).toHaveAttribute('aria-hidden','true');
+    await expect(drawer).toHaveAttribute('aria-hidden','true');
+    await expect(drawer).toHaveJSProperty('inert',true);
+    await expect(page.locator('[data-golden-tab="menu"]')).toBeFocused();
+    await page.keyboard.press('Tab');
+    expect(await page.evaluate(()=>!!document.activeElement.closest('#goldenDrawer'))).toBe(false);
   });
 
   test('public app API is deny-by-default and returns certified apps only', async ({ request }) => {

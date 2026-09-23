@@ -27,7 +27,7 @@
     <button data-golden-tab="worlds" aria-label="Миры">${icons.worlds}</button>
     <button data-golden-tab="settings" aria-label="Настройки">${icons.settings}</button>
     <button data-golden-tab="info" aria-label="Информация">${icons.info}</button>
-  </nav><section id="goldenDrawer" aria-hidden="true">
+  </nav><section id="goldenDrawer" aria-hidden="true" inert>
     <header><strong id="goldenDrawerTitle">${cfg.title}</strong><button id="goldenDrawerClose" aria-label="Закрыть">${icons.close}</button></header>
     <div class="goldenTab" data-tab="menu"><div id="goldenPackedPanels"></div></div>
     <div class="goldenTab" data-tab="worlds"><button id="goldenCreateWorld" class="goldenAction">Создать мир</button><div class="goldenWorldMode"><button class="active" data-world-view="newspaper">Газета миров</button><button data-world-view="connections">Связи миров</button></div><div id="goldenWorldList">Загрузка миров…</div><div id="goldenConnections"></div></div>
@@ -41,8 +41,8 @@
   function displayName(item){const explicit=item?.worldMenu?.displayName;if(explicit)return explicit;const raw=String(item?.title||item?.id||'Новый Мир').replace(/Improve\s+World/gi,' ').replace(systemTitleTokens,' ').replace(/[-_]+/g,' ').replace(/\s+/g,' ').trim();return raw.split(/\s+/).filter(Boolean).slice(0,3).join(' ')||'Новый Мир';}
   function fusionUrl(a,b){if(!a||!b||a.id===b.id)return '#';return `/shared/world-fusion.html?a=${encodeURIComponent(a.id)}&b=${encodeURIComponent(b.id)}`;}
   function emitDrawer(open){document.documentElement.classList.toggle('golden-drawer-open',open);dispatchEvent(new CustomEvent('goldendrawerchange',{detail:{open,tab:active}}));}
-  function select(tab){if(drawer.classList.contains('open')&&active===tab){close();return;} active=tab; title.textContent=tab==='worlds'?'Миры':tab==='settings'?'Настройки':tab==='info'?'Информация':cfg.title; for(const el of root.querySelectorAll('.goldenTab'))el.hidden=el.dataset.tab!==tab; drawer.classList.add('open');drawer.setAttribute('aria-hidden','false');emitDrawer(true);}
-  function close(){drawer.classList.remove('open');drawer.setAttribute('aria-hidden','true');emitDrawer(false);}
+  function select(tab){if(drawer.classList.contains('open')&&active===tab){close();return;} active=tab; title.textContent=tab==='worlds'?'Миры':tab==='settings'?'Настройки':tab==='info'?'Информация':cfg.title; for(const el of root.querySelectorAll('.goldenTab'))el.hidden=el.dataset.tab!==tab; drawer.inert=false;drawer.classList.add('open');drawer.setAttribute('aria-hidden','false');emitDrawer(true);}
+  function close(){const wasOpen=drawer.classList.contains('open');drawer.inert=true;drawer.classList.remove('open');drawer.setAttribute('aria-hidden','true');if(wasOpen)root.querySelector(`[data-golden-tab="${active}"]`)?.focus();emitDrawer(false);}
   for(const b of root.querySelectorAll('[data-golden-tab]')){b.addEventListener('pointerdown',e=>e.stopPropagation());b.addEventListener('click',e=>{e.stopPropagation();select(b.dataset.goldenTab);});}
   const closeButton=root.querySelector('#goldenDrawerClose');
   closeButton.addEventListener('pointerdown',e=>e.stopPropagation());
