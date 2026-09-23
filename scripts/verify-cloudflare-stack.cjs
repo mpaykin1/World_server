@@ -10,33 +10,7 @@ async function request(origin, pathname, options = {}) {
   return { response, text, body };
 }
 
-// Workers routes and global assets can lag a successful Wrangler deployment.
-// Retry ONLY transient, initial readiness failures; never mask a broken app
-// route or access-control failure as a propagation delay.
-async function awaitDeploymentReadiness(origin, expectedSha, {
-  requestFn = request, sleep = ms => new Promise(resolve => setTimeout(resolve, ms)),
-  attempts = 20, delayMs = 4000
-} = {}) {
-  for (let index = 0; index < attempts; index++) {
-    const home = await requestFn(origin, '/');
-    if (home.response.ok && home.text.length >= 120) {
-      const config = await requestFn(origin, '/api/config');
-      if (config.response.ok && config.body?.deployedRevision === expectedSha) return index + 1;
-      if (config.response.ok && config.body?.deployedRevision !== expectedSha) {
-        // A previously deployed revision is still propagating globally.
-      } else if (![404, 502, 503, 504].includes(config.response.status)) {
-        throw new Error('/api/config readiness failed: HTTP ' + config.response.status);
-      }
-    } else if (![404, 502, 503, 504].includes(home.response.status)) {
-      throw new Error('/ readiness failed: HTTP ' + home.response.status);
-    }
-    if (index < attempts - 1) await sleep(delayMs);
-  }
-  throw new Error('Cloudflare deployment did not propagate expected SHA within readiness deadline');
-}
-
-async function verifyCloudflareStack(origin, expectedSha, options = {}) {
-  await awaitDeploymentReadiness(origin, expectedSha, options);
+async function verifyCloudflareStack(origin, expectedSha) {
   const results = [];
   for (const pathname of ['/', '/apps/catalog/', '/apps/voxel-world/']) {
     const { response, text } = await request(origin, pathname);
@@ -56,10 +30,50 @@ async function verifyCloudflareStack(origin, expectedSha, options = {}) {
   const guestId = crypto.randomUUID();
   const init = await request(origin, '/api/voxel', {
     method: 'POST', headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ action: 'init', guestId, name: 'Fleet Guest', worldId: 'voxel-world' })
+    body: JSON.stringify({ action: 'init', guestId, name: 'Fleet Guest', worldId: 'main' })
   });
-  if (!init.response.ok || !init.body?.world || !init.body?.player) throw new Error(`/api/voxel guest init failed: HTTP ${init.response.status}`);
+  if (!init.response.ok || init.response.headers.get('x-world-server-voxel-runtime') !== 'supabase-edge' ||
+      init.body?.world?.id !== 'main' || !Number.isSafeInteger(Number(init.body?.world?.seed)) ||
+      !init.body?.world?.settings || init.body?.player?.id !== guestId) {
+    throw new Error(`/api/voxel authoritative init failed: HTTP ${init.response.status}`);
+  }
   results.push({ pathname: '/api/voxel action=init', status: init.response.status });
+  const saved = await request(origin, '/api/voxel', {
+    method:'POST', headers:{'content-type':'application/json'},
+    body:JSON.stringify({action:'player_save',guestId,worldId:'main',
+      position:{x:1,y:43,z:1},yaw:0.2,pitch:0.1,selectedBlock:1})
+  });
+  if(!saved.response.ok || saved.body?.ok !== true)throw new Error('/api/voxel player save did not persist');
+  const reloaded = await request(origin, '/api/voxel', {
+    method:'POST',headers:{'content-type':'application/json'},
+    body:JSON.stringify({action:'init',guestId,worldId:'main'})
+  });
+  if(!reloaded.response.ok || Math.abs(Number(reloaded.body?.player?.position?.x)-1)>0.01 ||
+      Math.abs(Number(reloaded.body?.player?.position?.z)-1)>0.01) {
+    throw new Error('/api/voxel player position was not durably restored');
+  }
+  results.push({ pathname:'/api/voxel player_save+reconnect',status:200 });
+  const chunkResult=await request(origin,'/api/voxel',{
+    method:'POST',headers:{'content-type':'application/json'},
+    body:JSON.stringify({action:'chunks',guestId,worldId:'main',chunks:[{x:0,z:0}]})
+  });
+  if(!chunkResult.response.ok || !Array.isArray(chunkResult.body?.blocks) ||
+      chunkResult.response.headers.get('x-world-server-voxel-runtime')!=='supabase-edge') {
+    throw new Error(`/api/voxel authoritative chunk read failed: HTTP ${chunkResult.response.status}`);
+  }
+  results.push({pathname:'/api/voxel action=chunks',status:200});
+  const snapshot = await request(origin, '/api/emergence', {
+    method: 'POST', headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ action: 'macro_read', guestId, worldId: 'main' })
+  });
+  const emergence = snapshot.body?.emergence;
+  if (!snapshot.response.ok || snapshot.response.headers.get('x-world-server-emergence-runtime') !== 'supabase-edge' ||
+      snapshot.body?.worldId !== 'main' ||
+      emergence?.schemaVersion !== '1.0.0' ||
+      !Number.isSafeInteger(emergence.revision) || emergence.revision < 1) {
+    throw new Error(`/api/emergence authoritative macro_read failed: HTTP ${snapshot.response.status}`);
+  }
+  results.push({ pathname: '/api/emergence action=macro_read', status: snapshot.response.status });
   for (const pathname of ['/api/world-factory', '/api/canon']) {
     const denied = await request(origin, pathname, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' });
     if (denied.response.status !== 401) throw new Error(`${pathname} unauthenticated write returned ${denied.response.status}, expected 401`);
@@ -77,4 +91,4 @@ async function main() {
 }
 
 if (require.main === module) main().catch(error => { console.error(`[CLOUDFLARE_STACK] FAIL ${error.message}`); process.exit(1); });
-module.exports = { request, awaitDeploymentReadiness, verifyCloudflareStack };
+module.exports = { request, verifyCloudflareStack };
