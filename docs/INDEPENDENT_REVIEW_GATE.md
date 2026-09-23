@@ -101,3 +101,17 @@ only explicitly allowlisted, credential-free error messages. The same
 sanitization applies to OpenRouter transport failures. Re-enable Workers
 AI only after the replacement token is safely stored, the Workers Free
 plan is reconfirmed, and the redaction patch has passed all CI checks.
+
+## Existing Cloudflare deployment-token fallback (2026-09-23)
+
+When `WORLD_CF_AI_API_TOKEN` is absent, the review workflow can use the
+existing `CLOUDFLARE_API_TOKEN` **only** when the repository variable
+`WORLD_CF_ALLOW_DEPLOY_TOKEN_AI` is exactly `true` and the separately
+verified Workers Free guard `WORLD_CF_WORKERS_FREE_CONFIRMED` is `true`.
+This is an opt-in compatibility path, not permission evidence. The old
+deployment token may lack Workers AI permissions or use a different
+format, in which case the reviewer must fail closed and fall back to
+available OpenRouter Free capacity; it must not claim an AI approval.
+An actual Cloudflare inference and two evidence-bearing different-family
+reviews are needed before calling the integration operational. Prefer a
+fresh dedicated token as soon as it is available.
