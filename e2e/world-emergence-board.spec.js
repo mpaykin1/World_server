@@ -85,3 +85,20 @@ test('keyboard-only placement and Escape close the world board', async ({page}) 
   await page.keyboard.press('Escape');
   await expect(page.locator('#vwWorldBoardBackdrop')).toBeHidden();
 });
+
+test('constructor remains clickable when the interactive AutoDemo welcome covers the game', async ({page}) => {
+  // Real integration caught the welcome panel intercepting the board click.
+  // Reproduce a worst-case overlay so stacking fixes work on desktop and mobile.
+  await page.evaluate(() => {
+    const demo=document.createElement('div');
+    demo.id='testDemoWelcome';
+    demo.textContent='Добро пожаловать! Этот мир живой.';
+    demo.style.cssText='position:fixed;inset:0;z-index:95;pointer-events:auto;background:transparent';
+    document.body.append(demo);
+  });
+  const launch=page.locator('#vwWorldBoardOpen');
+  await launch.click({timeout:5000});
+  await expect(page.locator('.we-map')).toBeVisible();
+  await page.locator('.we-close').click({timeout:5000});
+  await expect(page.locator('#vwWorldBoardBackdrop')).toBeHidden();
+});
