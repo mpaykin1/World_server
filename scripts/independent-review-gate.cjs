@@ -311,11 +311,11 @@ async function reviewPatch({ patch, base, head, key, builderModel = '',
     models = availableModels(await getCatalog('https://openrouter.ai/api/v1/models', {}, 15000), builderModel);
   } catch (err) {
     report.blockers.push('Free-model catalog unavailable: ' + String(err.message).slice(0, 140));
-    return report;
+    return recordDisagreement(report);
   }
   const possibleFamilies = new Set(models.map(x => x.family));
   for (const x of report.reviewers) {
-    if (x.verdict === 'PASS') possibleFamilies.add(x.family);
+    if (x.verdict === 'PASS' || x.verdict === 'BLOCK') possibleFamilies.add(x.family);
   }
   if (possibleFamilies.size < 2) {
     report.blockers.push('Two independent zero-cost model families unavailable; no paid fallback');
