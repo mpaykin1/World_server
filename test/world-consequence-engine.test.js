@@ -41,3 +41,21 @@ test('deterministic risk event still preserves adaptation path',()=>{
  a=E.commit(a,E.interpretIntent('','coal'));b=E.commit(b,E.interpretIntent('','coal'));
  a=E.simulateTicks(a,30);b=E.simulateTicks(b,30);assert.deepEqual(a,b);assert(a.history.some(e=>e.kind==='accident'));assert(a.history.some(e=>e.kind==='adaptation'));assert(a.population>0);
 });
+
+test('three temples unlock fictional spokesperson only after all are commissioned',()=>{
+ let w=E.createWorld('three-temples');w.resources.budget=300;w.resources.workers=20;
+ for(let n=0;n<3;n++)w=E.commit(w,E.interpretIntent('','temple'),w.revision);
+ assert.equal(w.culture.temples,0);assert.equal(w.culture.spokesperson,null);
+ w=E.tick(w);assert.equal(w.culture.temples,0);assert.equal(w.culture.spokesperson,null);
+ w=E.tick(w);assert.equal(w.culture.temples,3);
+ assert.equal(w.culture.spokesperson?.fictional,true);
+ const restored=JSON.parse(JSON.stringify(w));
+ assert.deepEqual(E.tick(w),E.tick(restored));
+});
+test('two commissioned temples plus one under construction cannot unlock spokesperson',()=>{
+ let w=E.createWorld('two-temples');w.resources.budget=300;w.resources.workers=20;
+ for(let n=0;n<2;n++)w=E.commit(w,E.interpretIntent('','temple'),w.revision);
+ w=E.simulateTicks(w,2);assert.equal(w.culture.temples,2);
+ w=E.commit(w,E.interpretIntent('','temple'),w.revision);
+ w=E.tick(w);assert.equal(w.culture.temples,2);assert.equal(w.culture.spokesperson,null);
+});
