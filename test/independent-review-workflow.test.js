@@ -26,7 +26,7 @@ test('review binds a PR head SHA and publishes a real required-check candidate',
 
 test('Cloudflare fallback stays opt-in and only executes trusted master code', () => {
   assert.match(yaml, /WORLD_CF_WORKERS_FREE_CONFIRMED: \$\{\{ vars\.WORLD_CF_WORKERS_FREE_CONFIRMED \}\}/);
-  assert.match(yaml, /CLOUDFLARE_API_TOKEN: \$\{\{ secrets\.CLOUDFLARE_API_TOKEN \}\}/);
+  assert.match(yaml, /CLOUDFLARE_API_TOKEN: \$\{\{ secrets\.WORLD_CF_AI_API_TOKEN \}\}/);
   assert.match(yaml, /ref: \$\{\{ steps\.refs\.outputs\.trusted \}\}/);
   assert.doesNotMatch(yaml, /ref: \$\{\{ steps\.refs\.outputs\.head \}\}/);
 });
