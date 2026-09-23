@@ -135,9 +135,22 @@ function proposeGenieCards(world){
  const missingCategories=Object.entries(need).flatMap(([category,n])=>Array(Math.max(0,n-(counts[category]||0))).fill(category));
  return {target,cards:order(selected),degraded:missingCategories.length>0,missingCategories,evaluated:evaluated.map(({type,category,delta,severe,plan})=>({type,category,delta,severe,feasible:plan.feasible}))};
 }
+function genieOptions(world){
+ const proposal=proposeGenieCards(world);
+ const cards=proposal.cards.map((card,index)=>({
+  id:'genie-'+world.revision+'-'+index+'-'+hash([world.seed,world.revision,world.tick,card.type].join(':')),
+  structure:card.type,
+  plan:{cost:card.plan.cost,buildTicks:card.plan.buildTicks,risk:card.plan.risk,output:copy(card.plan.output),drain:copy(card.plan.drain)},
+  forecast:{target:proposal.target,targetDelta:card.delta,resourceDeltas:copy(card.other),severe:copy(card.severe),afterRevision:card.afterRevision,
+   consequenceKinds:[...new Set(card.history.map(event=>event.kind))]}
+ }));
+ return {target:proposal.target,cards,degraded:proposal.degraded,offeredCount:cards.length,
+  fifth:{id:'free-design',kind:'free_intent',acceptsFreeText:true,maxTextLength:600,
+   supportedStructures:Object.keys(PROJECTS).sort()}};
+}
 function propose(world){return proposeGenieCards(world).cards}
 function address(world,houseId,floor,flat){const h=world.houses.find(h=>h.id===houseId);if(!h||!Number.isInteger(floor)||!Number.isInteger(flat)||floor<1||floor>h.floors||flat<1||flat>8)return null;return resident(world.seed,houseId,floor,flat)}
-const worldConsequenceEngine={PROJECTS,createWorld,interpretIntent,preview,commit,tick,propose,proposeGenieCards,evaluateProposal,simulateTicks,address,resident};
+const worldConsequenceEngine={PROJECTS,createWorld,interpretIntent,preview,commit,tick,propose,proposeGenieCards,genieOptions,evaluateProposal,simulateTicks,address,resident};
 // One arithmetic implementation serves Node and the Supabase Edge adapter.
 // The global export keeps the file executable as a Deno side-effect import;
 // CommonJS remains the canonical Node/test interface.

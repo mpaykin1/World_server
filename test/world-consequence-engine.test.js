@@ -44,6 +44,24 @@ test('Genie cards honestly degrade when no category can be funded',()=>{
  const w=E.createWorld('no-free-cards');w.resources.budget=0;
  const result=E.proposeGenieCards(w);assert.equal(result.degraded,true);assert.equal(result.cards.length,0);assert.deepEqual(result.missingCategories.sort(),['balanced','shifts_crisis','worsens','worsens'].sort());
 });
+test('public Genie options hide classifications and include a bounded fifth lane',()=>{
+ const w=E.createWorld('public-genie');Object.assign(w.resources,{power:35,water:80,food:80,budget:500,workers:50});
+ const options=E.genieOptions(w),again=E.genieOptions(JSON.parse(JSON.stringify(w)));
+ assert.deepEqual(options,again);assert.equal(options.cards.length,4);assert.equal(options.offeredCount,4);
+ assert.equal(options.degraded,false);assert.equal(options.fifth.kind,'free_intent');assert.equal(options.fifth.maxTextLength,600);
+ assert(options.fifth.supportedStructures.includes('geothermal'));
+ for(const card of options.cards){
+  assert.equal(Object.hasOwn(card,'category'),false);assert.equal(JSON.stringify(card).includes('worsens'),false);
+  assert.equal(typeof card.forecast.targetDelta,'number');assert.equal(card.plan.buildTicks>0,true);
+ }
+});
+test('public Genie options honestly expose a degraded short set',()=>{
+ const w=E.createWorld('public-genie-degraded');w.resources.budget=0;
+ const options=E.genieOptions(w);
+ assert.equal(options.degraded,true);assert.equal(options.cards.length,options.offeredCount);
+ assert.equal(options.offeredCount<4,true);assert.equal(options.fifth.kind,'free_intent');
+ assert.doesNotMatch(JSON.stringify(options),/worsens|shifts_crisis|balanced/);
+});
 test('deterministic risk event still preserves adaptation path',()=>{
  let a=E.createWorld('risk'),b=E.createWorld('risk');for(const w of [a,b]){w.resources.budget=500;w.resources.workers=50}
  a=E.commit(a,E.interpretIntent('','coal'));b=E.commit(b,E.interpretIntent('','coal'));
