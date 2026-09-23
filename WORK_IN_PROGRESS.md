@@ -2,6 +2,31 @@
 
 ---
 
+# 2026-09-23: Chain Reaction creator authorization without shared JWT grant races
+
+## Task and reason
+Repair the exact PR #270 source-review blocker where concurrent World Factory creations for one user can lose an `app_metadata.chain_reaction_worlds` update. Preserve the canonical Chain Reaction API and do not compete with the separate temple-domain PR #273.
+
+## Current and target state
+Current creator onboarding performs a non-atomic Auth Admin read/modify/write on one shared metadata array. Target: a dedicated RLS-closed membership row is the authoritative creator grant; the API accepts that membership directly, while the bounded trusted JWT list remains backward-compatible for separately provisioned invited users. Creator creation must not rewrite shared auth metadata, expose raw user IDs in public world settings, or require a token refresh.
+
+## Affected systems, risks, and patch plan
+- `lib/api-handlers/world-factory.js`: stop creator grant read/modify/write and provision one idempotent private membership row.
+- `lib/chain-reaction-api.js`: load the canonical world, then authorize either its private membership or a trusted legacy/invited JWT grant.
+- `supabase/migrations/20260923190000_chain_reaction_world_members.sql`: composite-keyed, RLS-closed membership storage with service-role-only access.
+- focused tests: simultaneous distinct creator worlds, no metadata loss, direct owner access, stranger denial, and legacy grant compatibility.
+- Risk: do not expose the private owner marker through `publicWorld`; do not weaken authenticated access; invitation/revoke and real Supabase CAS remain #271.
+
+## Required tests and delivery
+Run focused World Factory + Chain Reaction tests, syntax, then the repository check if resources permit. Commit and push only to `ai/codex/chain-reaction-api-20260923`; refresh PR #270 evidence and require a new exact-head Fleet PRE before Ocean. No merge or production claim from Builder.
+
+## Progress / next action / completion
+Progress: implementation and focused falsification are complete locally. The creator path now writes one composite-keyed membership row, never rewrites shared Auth metadata, and stores no user ID in public world settings. Next: commit/push and obtain fresh exact-head CI/Fleet/Cloudflare evidence. Completion requires those gates plus an updated Ocean handoff.
+
+Final evidence so far: 28/28 focused World Factory + Chain Reaction tests PASS; syntax and agent-rules PASS. Full `npm run check` exercised 857 tests: 850 PASS, 3 host-environment failures, 4 SKIP. The three failures are the already documented baseline gaps on this Linux host: two CPU reconstruction tests lack Python `requests`, and the MCP filesystem proxy fixture timed out at 30 seconds. No changed Chain Reaction/World Factory test failed.
+
+---
+
 # 2026-09-23: Independent reviewer credential-safe error handling
 
 A real Workers AI probe exposed a malformed GitHub credential: the user pasted a complete REST curl command rather than only the new API token. A native HTTP header exception reflected a partial credential into a GitHub artifact. Mitigation completed: the affected artifact was deleted (API now denies access); malformed WORLD_CF_AI_API_TOKEN was deleted; WORLD_CF_WORKERS_FREE_CONFIRMED disabled. The user must revoke the old Cloudflare token and create a fresh token, placing ONLY the token value into the dedicated GitHub secret. Do not print any old or new token or diagnostics derived from native header exceptions.

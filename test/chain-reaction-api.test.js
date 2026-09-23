@@ -6,6 +6,7 @@ const engine = require('../lib/world-consequence-engine');
 const clone = x => JSON.parse(JSON.stringify(x));
 function fixture(options = {}) {
   let row = { id: 'city', seed: 42, updated_at: '2026-09-23T00:00:00.000Z', settings: { worldDNA: { preserved: true } } };
+  const memberships = new Map(options.member ? [['city:user-1', { role: options.member }]] : []);
   let writes = 0;
   const admin = {
     auth: { getUser: async token => ({ data: { user: token === 'valid' ? {
@@ -21,6 +22,10 @@ function fixture(options = {}) {
           if (table === 'profiles') return { data: { username: 'Tester' } };
           if (options.dbError) return { error: { code: 'database_error' } };
           if (options.missing) return { data: null };
+          if (table === 'chain_reaction_world_members') {
+            const values = Object.fromEntries(filters);
+            return { data: memberships.get(`${values.world_id}:${values.user_id}`) || null };
+          }
           if (!patch) return { data: clone(row) };
           assert.deepEqual(filters.map(x => x[0]), ['id', 'updated_at']);
           if (options.conflict || !filters.every(([k, v]) => row[k] === v)) return { data: null };
@@ -66,6 +71,13 @@ test('missing/invalid tokens never fall back to guest; user_metadata is not a gr
   await rejects(handle(fixture({ denied: true }).admin, req, body('history')), 403);
   await rejects(handle(f.admin, req, body('history', { worldId: 'other' })), 403);
   assert.equal(f.writes, 0);
+});
+
+test('canonical private membership authorizes without a shared JWT grant', async () => {
+  const f = fixture({ denied: true, member: 'owner' });
+  const result = await handle(f.admin, req, body('history'));
+  assert.equal(result.worldId, 'city');
+  await rejects(handle(fixture({ denied: true }).admin, req, body('history')), 403);
 });
 test('CAS conflict fails without replay; simultaneous commits have exactly one winner', async () => {
   await rejects(handle(fixture({ conflict: true }).admin, req, body('tick', { expectedRevision: 0 })), 409);

@@ -13,8 +13,9 @@ const requestId = '123e4567-e89b-42d3-a456-426614174000';
 function fakeAdmin() {
   const rows = new Map();
   const users = new Map();
+  const memberships = new Map();
   return {
-    rows, users,
+    rows, users, memberships,
     auth: { admin: {
       async getUserById(id) { return { data: { user: users.get(id) || null }, error: null }; },
       async updateUserById(id, attributes) {
@@ -25,14 +26,19 @@ function fakeAdmin() {
       }
     } },
     from(table) {
-      assert.equal(table, 'voxel_worlds');
+      assert.ok(['voxel_worlds', 'chain_reaction_world_members'].includes(table));
       let id = null;
+      let userId = null;
       let inserted = null;
       return {
         select() { return this; },
-        eq(_key, value) { id = value; return this; },
-        async maybeSingle() { return { data: rows.get(id) || null, error: null }; },
+        eq(key, value) { if (key === 'id' || key === 'world_id') id = value; if (key === 'user_id') userId = value; return this; },
+        async maybeSingle() {
+          if (table === 'chain_reaction_world_members') return { data: memberships.get(`${id}:${userId}`) || null, error: null };
+          return { data: rows.get(id) || null, error: null };
+        },
         insert(payload) { inserted = { ...payload, created_at: new Date().toISOString(), updated_at: new Date().toISOString() }; rows.set(payload.id, inserted); return this; },
+        async upsert(payload) { memberships.set(`${payload.world_id}:${payload.user_id}`, { ...payload }); return { data: payload, error: null }; },
         async single() { return { data: inserted, error: null }; },
         order() { return this; },
         async limit(n) { return { data: [...rows.values()].slice(0, n), error: null }; }
@@ -173,7 +179,7 @@ test('create is idempotent: retry returns the same persisted world instead of du
   assert.equal(admin.rows.size, 1);
 });
 
-test('authenticated creator receives a bounded trusted Chain Reaction grant', async () => {
+test('authenticated creator receives race-free private membership access', async () => {
   const admin = fakeAdmin();
   admin.users.set('creator-1', { id: 'creator-1', app_metadata: { plan: 'free' } });
   admin.users.set('stranger-1', { id: 'stranger-1', app_metadata: {} });
@@ -181,15 +187,41 @@ test('authenticated creator receives a bounded trusted Chain Reaction grant', as
   const first = await factoryApi.createWorld(admin, body, { userId: 'creator-1' });
   assert.equal(first.created, true);
   assert.equal(first.chainReaction.granted, true);
-  assert.equal(first.chainReaction.authRefreshRequired, true);
-  assert.deepEqual(admin.users.get('creator-1').app_metadata.chain_reaction_worlds, [first.world.id]);
-  assert.equal(admin.rows.get(first.world.id).settings.chainReactionAccess.ownerUserId, 'creator-1');
+  assert.equal(first.chainReaction.authRefreshRequired, false);
+  assert.equal(first.chainReaction.mechanism, 'membership');
+  assert.equal(admin.users.get('creator-1').app_metadata.chain_reaction_worlds, undefined);
+  assert.equal(admin.memberships.get(`${first.world.id}:creator-1`).role, 'owner');
   assert.equal(first.world.chainReactionAccess, undefined);
   const retry = await factoryApi.createWorld(admin, body, { userId: 'creator-1' });
-  assert.equal(retry.chainReaction.granted, false);
+  assert.equal(retry.chainReaction.granted, true);
   const stranger = await factoryApi.createWorld(admin, body, { userId: 'stranger-1' });
   assert.equal(stranger.chainReaction.available, false);
   assert.equal(admin.users.get('stranger-1').app_metadata.chain_reaction_worlds, undefined);
+});
+
+test('simultaneous creator worlds do not rewrite or lose shared auth metadata', async () => {
+  const admin = fakeAdmin();
+  admin.users.set('creator-1', { id: 'creator-1', app_metadata: { plan: 'free', unrelated: ['kept'] } });
+  const [first, second] = await Promise.all([
+    factoryApi.createWorld(admin, { idea: 'вулканический город', requestId: '123e4567-e89b-42d3-a456-426614174001' }, { userId: 'creator-1' }),
+    factoryApi.createWorld(admin, { idea: 'город на реке', requestId: '123e4567-e89b-42d3-a456-426614174002' }, { userId: 'creator-1' })
+  ]);
+  assert.notEqual(first.world.id, second.world.id);
+  assert.equal(admin.memberships.get(`${first.world.id}:creator-1`).role, 'owner');
+  assert.equal(admin.memberships.get(`${second.world.id}:creator-1`).role, 'owner');
+  assert.deepEqual(admin.users.get('creator-1').app_metadata, { plan: 'free', unrelated: ['kept'] });
+  assert.equal(admin.rows.get(first.world.id).settings.chainReactionAccess, undefined);
+  assert.equal(admin.rows.get(second.world.id).settings.chainReactionAccess, undefined);
+});
+
+test('Chain Reaction membership migration is private, unique and service-role owned', () => {
+  const sql = fs.readFileSync(path.join(root, 'supabase', 'migrations', '20260923190000_chain_reaction_world_members.sql'), 'utf8');
+  assert.match(sql, /primary key \(world_id, user_id\)/);
+  assert.match(sql, /enable row level security/);
+  assert.match(sql, /revoke all on table public\.chain_reaction_world_members from anon, authenticated/);
+  assert.match(sql, /grant all on table public\.chain_reaction_world_members to service_role/);
+  assert.match(sql, /using \(false\) with check \(false\)/);
+  assert.doesNotMatch(sql, /grant select .* anon|grant select .* authenticated/);
 });
 
 test('user-facing create flow routes every generated world through its own id and realtime channel', () => {
