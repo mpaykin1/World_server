@@ -20,3 +20,11 @@ test('Cloudflare deploy waits for verified activation before full stack and brow
   assert.ok(wait > 0 && stack > wait && browser > stack);
   assert.ok(workflow.includes('Fail closed when Cloudflare credentials are unavailable'));
 });
+
+test('Cloudflare preview requires concurrent desktop/mobile online presence after playable delivery', () => {
+  const playable = workflow.indexOf('npm run delivery:verify');
+  const multiplayer = workflow.indexOf('npm run delivery:two-player');
+  assert.ok(playable > 0 && multiplayer > playable);
+  assert.match(workflow, /name: Verify two independent realtime browser sessions/);
+  assert.match(workflow, /if: steps\.authority\.outputs\.configured == 'true'/);
+});

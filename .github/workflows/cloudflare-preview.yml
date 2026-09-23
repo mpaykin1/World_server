@@ -62,6 +62,9 @@ jobs:
       - name: Verify exact-head Cloudflare playable delivery
         if: steps.authority.outputs.configured == 'true'
         run: npm run delivery:verify -- "${{ steps.deploy.outputs.url }}/apps/voxel-world/" --expected-sha="$SOURCE_SHA" --game --inventory-id=voxel-world
+      - name: Verify two independent realtime browser sessions
+        if: steps.authority.outputs.configured == 'true'
+        run: npm run delivery:two-player -- "${{ steps.deploy.outputs.url }}" "$SOURCE_SHA"
       - name: Fail closed when Cloudflare credentials are unavailable
         if: steps.authority.outputs.configured != 'true'
         shell: bash
