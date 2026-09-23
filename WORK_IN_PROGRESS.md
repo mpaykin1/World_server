@@ -2,6 +2,14 @@
 
 ---
 
+# 2026-09-23: Independent reviewer credential-safe error handling
+
+A real Workers AI probe exposed a malformed GitHub credential: the user pasted a complete REST curl command rather than only the new API token. A native HTTP header exception reflected a partial credential into a GitHub artifact. Mitigation completed: the affected artifact was deleted (API now denies access); malformed WORLD_CF_AI_API_TOKEN was deleted; WORLD_CF_WORKERS_FREE_CONFIRMED disabled. The user must revoke the old Cloudflare token and create a fresh token, placing ONLY the token value into the dedicated GitHub secret. Do not print any old or new token or diagnostics derived from native header exceptions.
+
+This branch fail-closes on invalid token format before HTTP, whitelists provider errors rather than logging arbitrary exception text (both Cloudflare and OpenRouter), and adds regression tests for secret-bearing header failures. Offline tests pass; real Cloudflare API tests remain blocked until token rotation. Do not merge this hotfix into master by bypassing governance without separate maintainer permission. Keep the five existing scheduled jobs unchanged.
+
+---
+
 # 2026-09-23: Free reviewer output-budget reliability
 
 Latest independently inspected evidence: run 35808400443 produced six genuine INCONCLUSIVE responses: Google and Z-AI HTTP 429; NVIDIA Super no JSON; Nex timeout; Poolside and Cohere consumed output with empty content / length. Never treat these as PASS. A fresh branch from master a4777d63 adds catalog-aware reasoning budgets, one fail-closed retry on empty responses, in-band provider error detection, and mock regression coverage (17/17 focused tests plus Golden Standard PASS locally). No paid provider fallback, new schedule, branch-protection bypass, or PR code execution with credentials. Validate actual independent PASS on the exact submitted head before requiring the new status or merging this reliability patch. If all free providers are rate-limited, preserve INCONCLUSIVE and document quota/credential constraints rather than issuing fake green checks. Production/browser/user-visibility still unverified.

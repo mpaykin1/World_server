@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const { parseVerdict, reviewPatch } = require('../scripts/independent-review-gate.cjs');
 const { availableCloudflareModels, requestCloudflareReview } =
   require('../scripts/independent-review-cloudflare.cjs');
-const cfg = { accountId: 'a'.repeat(32), token: 'dummy', freePlanConfirmed: true };
+const cfg = { accountId: 'a'.repeat(32), token: 'cfut_' + 'x'.repeat(40), freePlanConfirmed: true };
 const patch = 'diff --git a/a.js b/a.js\n@@ -1 +1 @@\n-old\n+new\n';
 const pass = { verdict: 'PASS', findings: [],
   falsification_attempts: ['Reviewed input validation and negative case'] };
@@ -30,7 +30,7 @@ test('Cloudflare envelope yields real structured model evidence', async () => {
   assert.equal(result.family, 'google');
   assert.equal(result.verdict, 'PASS');
   assert.ok(request.url.includes('ai/run/@cf/google/gemma-4-26b-a4b-it'));
-  assert.ok(!request.opts.body.includes('dummy'));
+  assert.ok(!request.opts.body.includes(cfg.token));
 });
 test('Cloudflare 403/paid-only, empty or truncated response cannot approve', async () => {
   const model = availableCloudflareModels(cfg)[0];
@@ -100,4 +100,53 @@ test('Cloudflare account quota failure switches to OpenRouter without fake PASS'
   assert.equal(report.verdict, 'PASS');
   assert.equal(report.reviewers.length, 3);
   assert.equal(report.providerIssues.length, 1);
+});
+
+test('copied REST curl command is refused locally before any network request', async () => {
+  const secret = 'cfut_' + 'S'.repeat(40);
+  const pastedCommand = 'curl "https://api.cloudflare.com" -H "Authorization: Bearer ' + secret + '"';
+  const model = { provider: 'cloudflare', family: 'google',
+    id: '@cf/google/gemma-4-26b-a4b-it' };
+  assert.deepEqual(availableCloudflareModels({ ...cfg, token: pastedCommand }), []);
+  let calls = 0;
+  const result = await requestCloudflareReview(model, patch, {}, {
+    ...cfg, token: pastedCommand, parseVerdict, systemPrompt: 'review',
+    getJson: async () => { calls++; throw new Error('must not call provider'); }
+  });
+  assert.equal(calls, 0);
+  assert.equal(result.verdict, 'INCONCLUSIVE');
+  assert.equal(result.reason, 'Invalid Workers AI token format');
+  assert.ok(!JSON.stringify(result).includes(secret));
+});
+
+test('unexpected fetch and upstream errors never echo an API key to artifacts', async () => {
+  const model = availableCloudflareModels(cfg)[0];
+  const probe = 'SENSITIVE_HEADER_MUST_NOT_APPEAR';
+  for (const exception of [
+    new TypeError('Headers.append: Bearer ' + cfg.token + ' ' + probe),
+    new Error('Cloudflare HTTP 403: Authorization ' + cfg.token + ' ' + probe),
+    new Error('provider reply ' + probe)
+  ]) {
+    const result = await requestCloudflareReview(model, patch, {}, {
+      ...cfg, systemPrompt: 'review', parseVerdict,
+      getJson: async () => { throw exception; }
+    });
+    assert.equal(result.verdict, 'INCONCLUSIVE');
+    assert.equal(result.reason, 'Cloudflare request failed (details redacted)');
+    assert.ok(!JSON.stringify(result).includes(cfg.token));
+    assert.ok(!JSON.stringify(result).includes(probe));
+  }
+});
+
+test('review report flags malformed Cloudflare token without exposing content', async () => {
+  const pasted = 'curl -H "Authorization: Bearer cfut_' + 'Q'.repeat(40) + '"';
+  const report = await reviewPatch({
+    patch, base: 'a'.repeat(40), head: 'b'.repeat(40), key: '',
+    cloudflare: { ...cfg, token: pasted },
+    getCatalog: async () => { throw new Error('should not fetch catalog'); }
+  });
+  assert.equal(report.verdict, 'INCONCLUSIVE');
+  assert.match(report.providerIssues.join(' '), /token malformed/);
+  assert.ok(!JSON.stringify(report).includes(pasted));
+  assert.equal(report.reviewers.length, 0);
 });

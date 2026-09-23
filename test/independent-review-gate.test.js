@@ -169,7 +169,7 @@ test('HTTP 200 provider error is inconclusive, not approval', async () => {
   const result = await requestReview({ id: 'nvidia/test:free', family: 'nvidia' },
     patch, {}, 'mock', { requestJson: async () => ({ error: { code: 'quota_exceeded' } }) });
   assert.equal(result.verdict, 'INCONCLUSIVE');
-  assert.match(result.reason, /quota_exceeded/);
+  assert.equal(result.reason, 'Reviewer request failed (details redacted)');
 });
 
 test('two independent 429s stop exhausting a shared free account allowance', async () => {
@@ -190,4 +190,17 @@ test('two independent 429s stop exhausting a shared free account allowance', asy
   assert.equal(calls, 2);
   assert.equal(report.verdict, 'INCONCLUSIVE');
   assert.match(report.providerIssues.join(' '), /shared-key retries/);
+});
+
+test('OpenRouter header errors cannot leak credentials into CI evidence', async () => {
+  const credential = 'sk_' + 'S'.repeat(38);
+  const model = { id: 'google/gemma-4-31b-it:free', family: 'google' };
+  const result = await requestReview(model, patch, {}, credential, {
+    requestJson: async () => {
+      throw new TypeError('Headers.append: invalid value Bearer ' + credential);
+    }
+  });
+  assert.equal(result.verdict, 'INCONCLUSIVE');
+  assert.equal(result.reason, 'Reviewer request failed (details redacted)');
+  assert.ok(!JSON.stringify(result).includes(credential));
 });
