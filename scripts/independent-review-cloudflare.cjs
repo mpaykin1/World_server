@@ -20,8 +20,6 @@ const ACCOUNT_ID = /^[a-f0-9]{32}$/i;
 const API_TOKEN = /^cfut_[A-Za-z0-9_-]{20,240}$/;
 const MAX_PATCH_BYTES = 18000;
 function safeCloudflareError(err) {
-  // Synthetic red-team regression, intentionally unsafe. NEVER MERGE.
-  return String(err?.message || '');
   const value = String(err?.message || '');
   const http = /^Cloudflare HTTP ([1-5][0-9]{2})$/.exec(value);
   if (http) return 'Cloudflare HTTP ' + http[1];
@@ -31,7 +29,12 @@ function safeCloudflareError(err) {
     'Cloudflare review patch too large', 'Unapproved Cloudflare model',
     'Cloudflare response truncated', 'Model did not return valid JSON',
     'Invalid model verdict', 'Missing structured review fields'].includes(value)) return value;
-  if (/timeout|aborted|AbortError/i.test(value)) return 'Cloudflare request timed out';
+  // Only native aborts and exact expected runtime errors count as timeouts.
+  // Upstream provider text must not spoof diagnostics or enter artifacts.
+  if (err?.name === 'TimeoutError' || err?.name === 'AbortError' ||
+      /^(?:The operation was aborted due to timeout|This operation was aborted|Cloudflare request timed out)$/i.test(value)) {
+    return 'Cloudflare request timed out';
+  }
   return 'Cloudflare request failed (details redacted)';
 }
 function availableCloudflareModels({ accountId = '', token = '', freePlanConfirmed = false,
