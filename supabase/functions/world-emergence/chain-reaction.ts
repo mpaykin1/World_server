@@ -2,7 +2,7 @@ import "../_shared/world-consequence-engine.js";
 
 type Runtime = { json:(body:unknown,status?:number)=>Response };
 const engine=(globalThis as any).WorldConsequenceEngine;
-const ACTIONS=new Set(["interpret-intent","preview-plan","commit-plan","tick","history","invite-member","revoke-member"]);
+const ACTIONS=new Set(["interpret-intent","preview-plan","commit-plan","tick","history","genie-options","invite-member","revoke-member"]);
 const WORLD=/^[a-zA-Z0-9_-]{1,80}$/;
 const USER_ID=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const MAX_STATE_BYTES=1024*1024;
@@ -90,6 +90,7 @@ export async function handleChainReaction(admin:any,req:Request,body:any,runtime
     const history=world.history.slice(offset,offset+limit);
     return runtime.json({...base,history,nextOffset:offset+history.length,total:world.history.length});
   }
+  if(body.action==="genie-options")return runtime.json({...base,...engine.genieOptions(world)});
   const intent=body.action==="tick"?null:intentFrom(body);
   if(body.action==="interpret-intent")return runtime.json({...base,intent});
   if(body.action==="preview-plan")return runtime.json({...base,plan:engine.preview(world,intent),world});

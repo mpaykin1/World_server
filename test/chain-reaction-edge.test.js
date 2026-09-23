@@ -28,6 +28,8 @@ test('Supabase Edge dispatches authenticated Chain Reaction before guest Voxel i
   assert.match(adapter, /commit_chain_reaction_action/);
   assert.match(adapter, /publicState\(next\)/);
   assert.match(adapter, /"invite-member","revoke-member"/);
+  assert.match(adapter, /"genie-options"/);
+  assert.match(adapter, /engine\.genieOptions\(world\)/);
   assert.doesNotMatch(adapter, /app_metadata\?\.chain_reaction_worlds/);
   assert.doesNotMatch(adapter, /user_metadata/);
 });

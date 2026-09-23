@@ -86,6 +86,18 @@ test('intent and preview are read-only; forged compiled intent is ignored', asyn
   assert.equal(preview.plan.cost, 40); assert.equal(preview.plan.buildTicks, 2);
   assert.equal(f.writes, 0);
 });
+test('Genie options are authorized, deterministic, read-only and keep categories hidden', async () => {
+  const f = fixture();
+  f.row.settings.chainReaction = engine.createWorld('genie-api');
+  Object.assign(f.row.settings.chainReaction.resources, { power: 35, water: 80, food: 80, budget: 500, workers: 50 });
+  const first = await handle(f.admin, req, body('genie-options'));
+  const second = await handle(f.admin, req, body('genie-options'));
+  assert.deepEqual(first, second); assert.equal(first.cards.length, 4); assert.equal(first.fifth.kind, 'free_intent');
+  assert.equal(first.cards.some(card => Object.hasOwn(card, 'category')), false);
+  assert.doesNotMatch(JSON.stringify(first.cards), /worsens|shifts_crisis|balanced/);
+  assert.equal(f.writes, 0);
+  await rejects(handle(fixture({ denied: true }).admin, req, body('genie-options')), 403);
+});
 test('commit and ticks persist public simulation plus private provenance; history paginates', async () => {
   const f = fixture();
   const secret = 'My private geothermal plan';
