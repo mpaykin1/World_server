@@ -1,3 +1,9 @@
+# 2026-09-23: Genie authoritative API vertical slice
+
+Task: connect existing lib/world-consequence-engine.js to authenticated Supabase-backed gameplay without duplicate engine or UI changes. Fresh branch from master; existing emergence and voxel APIs remain unchanged. Implemented api/world-genie.js with intent, preview, commit, tick and history actions; signed-in membership check; canonical settings.worldDNA.consequenceWorld persistence; updated_at CAS and revision checks; request limits and no AI arithmetic. Added test/world-genie-api.test.js for read-only preview, delayed construction, replay, membership and CAS. Risks: membership is existing voxel_player_states world association, not an ownership ACL; verify desired multiplayer edit permissions before public release. Next: independent Fleet PRE, CI, Ocean merge, Fleet POST, browser/mobile verification. Final evidence: pending CI and external review; do not claim production or >85% visibility.
+
+---
+
 # WORK IN PROGRESS — Scoped Task Compiler, resource scheduler, real native Godot pipeline
 
 ---
