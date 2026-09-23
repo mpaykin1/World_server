@@ -29,6 +29,7 @@ test('Cloudflare envelope yields real structured model evidence', async () => {
   assert.equal(result.provider, 'cloudflare');
   assert.equal(result.family, 'google');
   assert.equal(result.verdict, 'PASS');
+  assert.equal(JSON.parse(request.opts.body).max_completion_tokens, 4096);
   assert.ok(request.url.includes('ai/run/@cf/google/gemma-4-26b-a4b-it'));
   assert.ok(!request.opts.body.includes(cfg.token));
 });
