@@ -36,11 +36,11 @@ async function verifyCloudflareStack(origin, expectedSha) {
   results.push({ pathname: '/api/voxel action=init', status: init.response.status });
   const snapshot = await request(origin, '/api/emergence', {
     method: 'POST', headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ action: 'macro_read', guestId, worldId: 'voxel-world' })
+    body: JSON.stringify({ action: 'macro_read', guestId, worldId: 'main' })
   });
   const emergence = snapshot.body?.emergence;
   if (!snapshot.response.ok || snapshot.response.headers.get('x-world-server-emergence-runtime') !== 'supabase-edge' ||
-      snapshot.body?.worldId !== 'voxel-world' ||
+      snapshot.body?.worldId !== 'main' ||
       emergence?.schemaVersion !== '1.0.0' ||
       !Number.isSafeInteger(emergence.revision) || emergence.revision < 1) {
     throw new Error(`/api/emergence authoritative macro_read failed: HTTP ${snapshot.response.status}`);

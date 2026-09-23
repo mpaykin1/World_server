@@ -134,3 +134,12 @@ test('dedicated edge handler preserves macro IDs, revision CAS and read-only sna
   const server=fs.readFileSync(path.join(root,'server.js'),'utf8');
   assert.match(server,/\['\/api\/emergence', require\('\.\/api\/voxel'\)\]/);
 });
+
+test('Cloudflare runtime smoke reads the canonical shared world from Supabase Edge',()=>{
+  const root=path.resolve(__dirname,'..');
+  const client=fs.readFileSync(path.join(root,'apps/voxel-world/client.js'),'utf8');
+  const smoke=fs.readFileSync(path.join(root,'scripts/verify-cloudflare-stack.cjs'),'utf8');
+  assert.match(client,/requestedWorldId = new URLSearchParams\(location.search\).get\('world'\) \|\| 'main'/);
+  assert.match(smoke,/action: 'macro_read', guestId, worldId: 'main'/);
+  assert.match(smoke,/x-world-server-emergence-runtime/);
+});
