@@ -39,7 +39,10 @@ const SYSTEM_PROMPT = [
   'Return ONLY valid JSON with fields verdict (PASS, BLOCK or INCONCLUSIVE),',
   'findings (array of objects: file, line, severity, evidence, reproduction),',
   'and falsification_attempts (array of short strings).',
-  'Use BLOCK for demonstrable bugs, INCONCLUSIVE when evidence is insufficient.',
+  'Use BLOCK only for a demonstrable bug: name the changed file/line,',
+  'show a concrete failing input and reproducible path through the code.',
+  'Evaluate complete expressions, guards, fallbacks and retry loops before',
+  'claiming an error. Use INCONCLUSIVE for unproven suspected failures.',
   'Do not claim to execute code or inspect files outside the given diff.'
 ].join(' ');
 
@@ -110,13 +113,33 @@ function parseVerdict(text) {
     reproduction: String(x.reproduction || '').slice(0, 1200)
   }));
   const attempts = raw.falsification_attempts.slice(0, 12).map(x => String(x).slice(0, 400));
-  const explicitBlock = findings.some(x => /^(block|critical|high)$/i.test(x.severity));
-  return { verdict: explicitBlock ? 'BLOCK' : raw.verdict, findings, falsification_attempts: attempts };
+  const severe = findings.filter(x => /^(block|critical|high)$/i.test(x.severity));
+  const supportedBlock = severe.some(x => x.file && x.line && x.evidence && x.reproduction);
+  // An ungrounded BLOCK is not a PASS; require a concrete finding before vetoing.
+  const unsupportedBlock = raw.verdict === 'BLOCK' && !supportedBlock;
+  const incompleteSevere = severe.length > 0 && !supportedBlock;
+  return { verdict: unsupportedBlock || incompleteSevere ? 'INCONCLUSIVE' :
+    supportedBlock ? 'BLOCK' : raw.verdict, findings, falsification_attempts: attempts };
 }
 function aggregate(reviews) {
   if (reviews.some(x => x.verdict === 'BLOCK')) return 'BLOCK';
   const valid = reviews.filter(x => x.verdict === 'PASS' && x.falsification_attempts?.length);
   return new Set(valid.map(x => x.family)).size >= 2 ? 'PASS' : 'INCONCLUSIVE';
+}
+function decisiveFamilies(reviews) {
+  return new Set(reviews.filter(x => x.verdict === 'PASS' || x.verdict === 'BLOCK')
+    .map(x => x.family)).size;
+}
+function recordDisagreement(report) {
+  report.decisiveFamilies = decisiveFamilies(report.reviewers);
+  const blocks = report.reviewers.filter(x => x.verdict === 'BLOCK');
+  const passes = report.reviewers.filter(x => x.verdict === 'PASS');
+  report.disputed = blocks.some(a => passes.some(b => a.family !== b.family));
+  if (report.disputed) report.blockers.push(
+    'Independent models disagree: BLOCK retained; reproduce findings before maintainer decision');
+  else if (blocks.length && report.decisiveFamilies < 2) report.blockers.push(
+    'Single-family BLOCK has no corroboration; reproduce findings before maintainer decision');
+  return report;
 }
 function preflightPatch(patch) {
   const bytes = Buffer.byteLength(patch);
@@ -260,12 +283,12 @@ async function reviewPatch({ patch, base, head, key, builderModel = '',
   const cfModels = availableCloudflareModels({ ...cloudflare, builderModel });
   if (cfModels.length && report.diffBytes <= MAX_CLOUDFLARE_PATCH_BYTES) {
     for (const model of cfModels) {
-      if (aggregate(report.reviewers) !== 'INCONCLUSIVE') break;
-      if (report.reviewers.some(x => x.family === model.family && x.verdict === 'PASS')) continue;
+      if (aggregate(report.reviewers) === 'PASS' || decisiveFamilies(report.reviewers) >= 2) break;
+      if (report.reviewers.some(x => x.family === model.family &&
+        (x.verdict === 'PASS' || x.verdict === 'BLOCK'))) continue;
       const result = await reviewCloudflare(model, patch, metadata, {
         ...cloudflare, systemPrompt: SYSTEM_PROMPT, parseVerdict });
       report.reviewers.push(result);
-      if (result.verdict === 'BLOCK') break;
       if (/Cloudflare (HTTP (401|403|429)|API error code=3036)/.test(result.reason || '')) {
         report.providerIssues.push('Cloudflare account permission or quota blocked');
         break; // Avoid another request against the same exhausted account/token.
@@ -275,10 +298,13 @@ async function reviewPatch({ patch, base, head, key, builderModel = '',
     report.providerIssues.push('Cloudflare patch exceeds conservative free inference budget');
   }
   report.verdict = aggregate(report.reviewers);
-  if (report.verdict !== 'INCONCLUSIVE') return report;
+  if (report.verdict === 'PASS' || decisiveFamilies(report.reviewers) >= 2) {
+    return recordDisagreement(report);
+  }
   if (!key) {
-    report.blockers.push('Independent reviewer credential unavailable; no sufficient alternate reviews');
-    return report;
+    if (report.verdict !== 'BLOCK') report.blockers.push(
+      'Independent reviewer credential unavailable; no sufficient alternate reviews');
+    return recordDisagreement(report);
   }
   let models;
   try {
@@ -293,14 +319,16 @@ async function reviewPatch({ patch, base, head, key, builderModel = '',
   }
   if (possibleFamilies.size < 2) {
     report.blockers.push('Two independent zero-cost model families unavailable; no paid fallback');
-    return report;
+    return recordDisagreement(report);
   }
   const attempted = new Set(), rateLimitedFamilies = new Set();
   // Sequential calls avoid consuming an entire shared free API allowance in parallel.
   for (const model of models) {
-    if (aggregate(report.reviewers) !== 'INCONCLUSIVE' || report.reviewers.length >= 6) break;
+    if (aggregate(report.reviewers) === 'PASS' || decisiveFamilies(report.reviewers) >= 2 ||
+      report.reviewers.length >= 6) break;
     if (attempted.has(model.id)) continue;
-    if (report.reviewers.some(x => x.family === model.family && x.verdict === 'PASS')) continue;
+    if (report.reviewers.some(x => x.family === model.family &&
+      (x.verdict === 'PASS' || x.verdict === 'BLOCK'))) continue;
     attempted.add(model.id);
     const result = await review(model, patch, metadata, key);
     report.reviewers.push(result);
@@ -316,7 +344,7 @@ async function reviewPatch({ patch, base, head, key, builderModel = '',
   if (report.verdict !== 'PASS') {
     report.blockers.push('Independent reviews identified defects or lack sufficient evidence');
   }
-  return report;
+  return recordDisagreement(report);
 }
 async function main() {
   const args = parseArgs(process.argv.slice(2));
