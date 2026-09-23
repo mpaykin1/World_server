@@ -2,8 +2,9 @@ import "../_shared/world-consequence-engine.js";
 
 type Runtime = { json:(body:unknown,status?:number)=>Response };
 const engine=(globalThis as any).WorldConsequenceEngine;
-const ACTIONS=new Set(["interpret-intent","preview-plan","commit-plan","tick","history"]);
+const ACTIONS=new Set(["interpret-intent","preview-plan","commit-plan","tick","history","invite-member","revoke-member"]);
 const WORLD=/^[a-zA-Z0-9_-]{1,80}$/;
+const USER_ID=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const MAX_STATE_BYTES=1024*1024;
 
 function fail(status:number,message:string):never {
@@ -43,9 +44,35 @@ export async function handleChainReaction(admin:any,req:Request,body:any,runtime
   const membership=await admin.from("chain_reaction_world_members")
     .select("role").eq("world_id",body.worldId).eq("user_id",actor.id).maybeSingle();
   db(membership.error);
-  const grants=actor.app_metadata?.chain_reaction_worlds;
-  const trusted=Array.isArray(grants)&&grants.includes(body.worldId);
-  if(!trusted&&!['owner','player'].includes(membership.data?.role))fail(403,"World access denied");
+  const role=membership.data?.role;
+  if(!['owner','player'].includes(role))fail(403,"World access denied");
+  if(body.action==="invite-member"||body.action==="revoke-member") {
+    if(role!=="owner")fail(403,"Only the world owner can manage members");
+    if(typeof body.targetUserId!=="string"||!USER_ID.test(body.targetUserId))fail(400,"Invalid targetUserId");
+    if(body.targetUserId===actor.id)fail(409,"Owner membership cannot be changed");
+    const current=await admin.from("chain_reaction_world_members")
+      .select("role").eq("world_id",body.worldId).eq("user_id",body.targetUserId).maybeSingle();
+    db(current.error);if(current.data?.role==="owner")fail(409,"Owner membership cannot be changed");
+    if(body.action==="invite-member") {
+      if(current.data?.role==="player")return runtime.json({worldId:body.worldId,member:{userId:body.targetUserId,role:"player"},granted:true});
+      const granted=await admin.from("chain_reaction_world_members")
+        .insert({world_id:body.worldId,user_id:body.targetUserId,role:"player"})
+        .select("role").maybeSingle();
+      if(granted.error?.code==="23503")fail(400,"Invited account does not exist");
+      if(granted.error?.code==="23505") {
+        const raced=await admin.from("chain_reaction_world_members")
+          .select("role").eq("world_id",body.worldId).eq("user_id",body.targetUserId).maybeSingle();
+        db(raced.error);if(raced.data?.role!=="player")fail(409,"Owner membership cannot be changed");
+        return runtime.json({worldId:body.worldId,member:{userId:body.targetUserId,role:"player"},granted:true});
+      }
+      db(granted.error);
+      return runtime.json({worldId:body.worldId,member:{userId:body.targetUserId,role:"player"},granted:true});
+    }
+    const revoked=await admin.from("chain_reaction_world_members").delete()
+      .eq("world_id",body.worldId).eq("user_id",body.targetUserId).eq("role","player").select("role").maybeSingle();
+    db(revoked.error);
+    return runtime.json({worldId:body.worldId,member:{userId:body.targetUserId,role:"player"},revoked:true});
+  }
   const settings=row.settings&&typeof row.settings==="object"?structuredClone(row.settings):{};
   const stored=settings.chainReaction;
   if(stored&&(stored.schema!==1||!Number.isSafeInteger(stored.revision)))fail(409,"Unsupported scenario version");

@@ -4,27 +4,52 @@ const assert = require('node:assert/strict');
 const { handle } = require('../lib/chain-reaction-api');
 const engine = require('../lib/world-consequence-engine');
 const clone = x => JSON.parse(JSON.stringify(x));
+const OWNER_ID = '11111111-1111-4111-8111-111111111111';
+const PLAYER_ID = '22222222-2222-4222-8222-222222222222';
+const STRANGER_ID = '33333333-3333-4333-8333-333333333333';
 function fixture(options = {}) {
   let row = { id: 'city', seed: 42, updated_at: '2026-09-23T00:00:00.000Z', settings: { worldDNA: { preserved: true } } };
-  const memberships = new Map(options.member ? [['city:user-1', { role: options.member }]] : []);
+  const memberships = new Map(options.member
+    ? [[`city:${OWNER_ID}`, { role: options.member }]]
+    : (options.denied ? [] : [[`city:${OWNER_ID}`, { role: 'owner' }]]));
   let writes = 0;
+  const users = {
+    valid: { id: OWNER_ID, app_metadata: { chain_reaction_worlds: ['city'] }, user_metadata: { chain_reaction_worlds: ['city'] } },
+    player: { id: PLAYER_ID, app_metadata: { chain_reaction_worlds: ['city'] }, user_metadata: {} },
+    stranger: { id: STRANGER_ID, app_metadata: {}, user_metadata: {} }
+  };
   const admin = {
-    auth: { getUser: async token => ({ data: { user: token === 'valid' ? {
-      id: 'user-1', app_metadata: { chain_reaction_worlds: options.denied ? [] : ['city'] },
-      user_metadata: { chain_reaction_worlds: ['city'] }
-    } : null }, error: null }) },
+    auth: { getUser: async token => ({ data: { user: users[token] || null }, error: null }) },
     from(table) {
-      const filters = []; let patch;
+      const filters = []; let patch; let operation = 'select'; let inserted;
       return {
         select() { return this; }, eq(k, v) { filters.push([k, v]); return this; },
-        update(value) { patch = value; return this; },
+        update(value) { patch = value; operation = 'update'; return this; },
+        insert(value) { inserted = value; operation = 'insert'; return this; },
+        delete() { operation = 'delete'; return this; },
         async maybeSingle() {
           if (table === 'profiles') return { data: { username: 'Tester' } };
           if (options.dbError) return { error: { code: 'database_error' } };
           if (options.missing) return { data: null };
           if (table === 'chain_reaction_world_members') {
             const values = Object.fromEntries(filters);
-            return { data: memberships.get(`${values.world_id}:${values.user_id}`) || null };
+            const key = `${values.world_id || inserted?.world_id}:${values.user_id || inserted?.user_id}`;
+            if (operation === 'insert') {
+              if (options.missingTarget && inserted.user_id === PLAYER_ID) return { data: null, error: { code: '23503' } };
+              if (options.inviteRaceOwner && inserted.user_id === PLAYER_ID) {
+                memberships.set(key, { role: 'owner' });
+                return { data: null, error: { code: '23505' } };
+              }
+              if (memberships.has(key)) return { data: null, error: { code: '23505' } };
+              memberships.set(key, { role: inserted.role });
+              return { data: { role: inserted.role }, error: null };
+            }
+            if (operation === 'delete') {
+              const existing = memberships.get(key);
+              if (existing?.role === values.role) memberships.delete(key);
+              return { data: existing || null, error: null };
+            }
+            return { data: memberships.get(key) || null, error: null };
           }
           if (!patch) return { data: clone(row) };
           assert.deepEqual(filters.map(x => x[0]), ['id', 'updated_at']);
@@ -34,9 +59,10 @@ function fixture(options = {}) {
       };
     }
   };
-  return { admin, get row() { return row; }, get writes() { return writes; } };
+  return { admin, memberships, get row() { return row; }, get writes() { return writes; } };
 }
 const req = { headers: { authorization: 'Bearer valid' } };
+const playerReq = { headers: { authorization: 'Bearer player' } };
 const body = (action, extra = {}) => ({ action, worldId: 'city', structure: 'solar', text: '', ...extra });
 const rejects = (promise, status) => assert.rejects(promise, e => e.status === status);
 
@@ -59,7 +85,7 @@ test('commit and ticks persist engine output, provenance and unrelated settings;
   assert.deepEqual(result.world.resources, expected.resources);
   assert.equal(result.revision, 4); assert.equal(f.writes, 2);
   const history = await handle(f.admin, req, body('history', { offset: 1, limit: 1 }));
-  assert.equal(history.history[0].actorId, 'user-1'); assert.equal(history.nextOffset, 2);
+  assert.equal(history.history[0].actorId, OWNER_ID); assert.equal(history.nextOffset, 2);
   await rejects(handle(f.admin, req, body('commit-plan', { expectedRevision: 0 })), 409);
   assert.equal(f.writes, 2);
 });
@@ -78,6 +104,27 @@ test('canonical private membership authorizes without a shared JWT grant', async
   const result = await handle(f.admin, req, body('history'));
   assert.equal(result.worldId, 'city');
   await rejects(handle(fixture({ denied: true }).admin, req, body('history')), 403);
+});
+test('owner invitation grants a player and revoke denies the same stale JWT immediately', async () => {
+  const f = fixture();
+  const invited = await handle(f.admin, req, body('invite-member', { targetUserId: PLAYER_ID }));
+  assert.equal(invited.granted, true);
+  assert.equal((await handle(f.admin, playerReq, body('history'))).worldId, 'city');
+  await rejects(handle(f.admin, playerReq, body('invite-member', { targetUserId: STRANGER_ID })), 403);
+  const revoked = await handle(f.admin, req, body('revoke-member', { targetUserId: PLAYER_ID }));
+  assert.equal(revoked.revoked, true);
+  // The test player's token deliberately still carries the old trusted claim.
+  await rejects(handle(f.admin, playerReq, body('history')), 403);
+});
+test('membership management validates accounts and cannot alter an owner', async () => {
+  const f = fixture({ missingTarget: true });
+  await rejects(handle(f.admin, req, body('invite-member', { targetUserId: 'not-a-uuid' })), 400);
+  await rejects(handle(f.admin, req, body('invite-member', { targetUserId: PLAYER_ID })), 400);
+  await rejects(handle(f.admin, req, body('revoke-member', { targetUserId: OWNER_ID })), 409);
+  assert.equal(f.memberships.get(`city:${OWNER_ID}`).role, 'owner');
+  const raced = fixture({ inviteRaceOwner: true });
+  await rejects(handle(raced.admin, req, body('invite-member', { targetUserId: PLAYER_ID })), 409);
+  assert.equal(raced.memberships.get(`city:${PLAYER_ID}`).role, 'owner');
 });
 test('CAS conflict fails without replay; simultaneous commits have exactly one winner', async () => {
   await rejects(handle(fixture({ conflict: true }).admin, req, body('tick', { expectedRevision: 0 })), 409);
