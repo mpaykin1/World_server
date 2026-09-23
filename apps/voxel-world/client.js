@@ -1,5 +1,6 @@
 import * as THREE from 'https://unpkg.com/three@0.165.0/build/three.module.js';
 import {installVoxelAutodemo} from './autodemo-bridge.mjs';
+import {createEmergenceAuthoritySync} from '../../shared/emergence-authority-sync.mjs';
 
 const CHUNK = 16;
 const WORLD_Y = 96;
@@ -61,6 +62,15 @@ async function api(action,payload={}){
   const headers={'Content-Type':'application/json','Accept':'application/json'}; const t=token(); if(t) headers.Authorization=`Bearer ${t}`;
   const r=await fetch('/api/voxel',{method:'POST',headers,body:JSON.stringify({action,guestId:guestId(),...payload})});
   const j=await r.json().catch(()=>({})); if(!r.ok) throw new Error(j.error||'Ошибка Voxel API'); return j;
+}
+
+async function emergenceApi(action,payload={}){
+  const headers={'Content-Type':'application/json','Accept':'application/json'};
+  const t=token(); if(t) headers.Authorization=`Bearer ${t}`;
+  const r=await fetch('/api/emergence',{method:'POST',headers,body:JSON.stringify({action,guestId:guestId(),...payload})});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(j.error||'Emergence API unavailable');
+  return j;
 }
 
 async function canonApi(eventType,summary,payload,idempotencyKey){
@@ -639,39 +649,177 @@ async function hydrateCanon(){try{const r=await fetch('/api/canon?worldId='+enco
 
 const emergenceGroup=new THREE.Group();scene.add(emergenceGroup);
 let emergencePanel=null;
-function disposeEmergenceVisuals(){while(emergenceGroup.children.length){const o=emergenceGroup.children.pop();o.traverse?.(n=>{n.geometry?.dispose?.();if(n.material){for(const m of (Array.isArray(n.material)?n.material:[n.material]))m.dispose?.();}});}}
+let emergenceBoard=null;
+let emergenceRefreshVersion=0,emergenceRefreshing=false;
+let emergenceGrowthInFlight=false;
+const emergenceSync=createEmergenceAuthoritySync({
+  read:()=>emergenceApi('macro_read',{worldId:ACTIVE_WORLD_ID}),
+  apply:next=>applyEmergenceState(next),
+  revision:()=>Number(emergenceState?.revision)||0
+});
+function emergenceStory(){const relation=emergenceState?.relations?.at(-1);return relation?.summary||'Поставь две большие вещи рядом и наблюдай за последствиями.';}
+function showEmergenceStory(message){if(emergencePanel){const node=emergencePanel.querySelector('[data-emergence-story]');if(node)node.textContent=message||emergenceStory();}emergenceBoard?.showMessage?.(message||emergenceStory());}
+function disposeEmergenceVisuals(){while(emergenceGroup.children.length){const o=emergenceGroup.children[0];emergenceGroup.remove(o);o.traverse?.(n=>{n.geometry?.dispose?.();if(n.material){for(const m of (Array.isArray(n.material)?n.material:[n.material]))m.dispose?.();}});}}
+// CPU-only, event-driven four-frame sprite sheets. Visuals follow persisted macro state;
+// lava-wall construction dust is NOT evidence of physical lava simulation.
+const macroSpriteGroup=new THREE.Group();scene.add(macroSpriteGroup);
+const macroSpriteTextures=new Map();const macroSpriteInstances=[];
+const MACRO_SPRITE_CAP=matchMedia('(pointer:coarse)').matches?14:32;
+function macroSpriteTexture(kind){
+  if(macroSpriteTextures.has(kind))return macroSpriteTextures.get(kind);
+  const canvas=document.createElement('canvas');canvas.width=128;canvas.height=32;
+  const ctx=canvas.getContext('2d');const palettes={
+    volcano:['#a7a0a0','#625b5d'],ash_field:['#bcb1a4','#77716d'],
+    lava_wall:['#d8b18b','#ad8067'],burnt_grove:['#a9a29b','#6b6664'],
+    wetland:['#a4e6ee','#3c9bba'],hot_springs:['#e4eff1','#a1c8cf']
+  };const colors=palettes[kind]||['#ddd6c4','#a8a197'];
+  for(let frame=0;frame<4;frame++){
+    const x0=frame*32;ctx.clearRect(x0,0,32,32);
+    for(let i=0;i<6;i++){
+      const x=x0+16+Math.sin(i*2.4+frame*.52)*((i+1)*1.8);
+      const y=26-i*3.4-frame*.55;
+      ctx.globalAlpha=Math.max(.08,.48-i*.052);
+      ctx.fillStyle=colors[(i+frame)%2];ctx.beginPath();
+      ctx.ellipse(x,y,2.2+i*.85,1.7+i*.58,0,0,Math.PI*2);ctx.fill();
+    }
+  }ctx.globalAlpha=1;
+  const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;
+  texture.wrapS=THREE.RepeatWrapping;texture.repeat.set(.25,1);texture.magFilter=THREE.LinearFilter;
+  macroSpriteTextures.set(kind,texture);return texture;
+}
+function clearMacroSprites(){
+  for(const item of macroSpriteInstances){macroSpriteGroup.remove(item.sprite);item.sprite.material.dispose();}
+  macroSpriteInstances.length=0;
+}
+function addMacroSprite(kind,x,z,id){
+  if(macroSpriteInstances.length>=MACRO_SPRITE_CAP||!Number.isFinite(x)||!Number.isFinite(z))return;
+  const base=macroSpriteTexture(kind),texture=base.clone();texture.needsUpdate=true;
+  const material=new THREE.SpriteMaterial({map:texture,transparent:true,opacity:.76,
+    depthTest:true,depthWrite:false,sizeAttenuation:true});
+  const sprite=new THREE.Sprite(material);sprite.position.set(x,heightAt(Math.round(x),Math.round(z))+2.2,z);
+  sprite.scale.set(kind==='volcano'?5:2.6,kind==='volcano'?5:2.6,1);
+  sprite.userData.causalFeature=id;macroSpriteGroup.add(sprite);
+  macroSpriteInstances.push({sprite,texture,phase:macroSpriteInstances.length%4});
+}
+function refreshMacroSprites(){
+  clearMacroSprites();if(!emergenceState)return;
+  for(const e of emergenceState.entities||[]){
+    if(e.type==='volcano')addMacroSprite('volcano',Number(e.x),Number(e.z),e.id);
+  }
+  for(const f of emergenceState.features||[]){
+    if(Number(f.stage||1)>Number(emergenceState.growthStage||1))continue;
+    if(['ash_field','lava_wall','burnt_grove','wetland','hot_springs'].includes(f.kind))
+      addMacroSprite(f.kind,Number(f.x),Number(f.z),f.id);
+  }
+}
+function animateMacroSprites(now){
+  for(const item of macroSpriteInstances)item.texture.offset.x=(Math.floor(now*.006+item.phase)%4)*.25;
+}
+
+
 function renderEmergenceVisuals(){
-  disposeEmergenceVisuals();if(!emergenceState)return;
+  disposeEmergenceVisuals();refreshMacroSprites();if(!emergenceState)return;
   const typeColor={city:0xc58d5c,forest:0x4d8b43,river:0x4a86cf,mountains:0x8b8f94,volcano:0x9b4637,village:0xb79968,ruins:0x7d7163,desert:0xc8ae68,ocean:0x3979b8,snow:0xd8edf5,dragon:0x8a3f55};
   for(const e of emergenceState.entities||[]){const y=heightAt(Math.round(e.x),Math.round(e.z))+.18,g=new THREE.Mesh(new THREE.TorusGeometry(Math.max(2,Math.min(8,Number(e.radius||20)*.14)),.12,5,28),new THREE.MeshBasicMaterial({color:typeColor[e.type]||0xffffff,transparent:true,opacity:.8,depthWrite:false}));g.rotation.x=Math.PI/2;g.position.set(e.x,y,e.z);emergenceGroup.add(g);}
   for(const f of emergenceState.features||[]){if(Number(f.stage||1)>Number(emergenceState.growthStage||1))continue;const g=f.geometry||{};if(g.kind==='line'){const x1=Number(g.x1),z1=Number(g.z1),x2=Number(g.x2),z2=Number(g.z2),len=Math.hypot(x2-x1,z2-z1),m=new THREE.Mesh(new THREE.BoxGeometry(Math.max(.5,len),.09,Math.max(1,Number(g.width)||2)),new THREE.MeshBasicMaterial({color:0xc7ae7a,transparent:true,opacity:.7,depthWrite:false}));m.position.set((x1+x2)/2,heightAt(Math.round((x1+x2)/2),Math.round((z1+z2)/2))+.2,(z1+z2)/2);m.rotation.y=-Math.atan2(z2-z1,x2-x1);emergenceGroup.add(m);}else{const x=Number(f.x),z=Number(f.z),m=new THREE.Mesh(new THREE.CylinderGeometry(.8,1.2,2.2,6),new THREE.MeshStandardMaterial({color:0xb8895a,roughness:.8}));m.position.set(x,heightAt(Math.round(x),Math.round(z))+1.1,z);emergenceGroup.add(m);}}
   if(emergencePanel){const rel=emergenceState.relations?.length||0;emergencePanel.querySelector('[data-emergence-status]').textContent=rel?`связей: ${rel} · развитие ${emergenceState.growthStage}/${emergenceState.maxGrowthStage} · интерес ${Math.round((emergenceState.interestScore||0)*100)}%`:`крупных объектов: ${emergenceState.entities?.length||0} · поставь второй рядом`;}
 }
-async function growEmergence(){
-  if(!(emergenceState?.relations?.length))return;
-  while(Number(emergenceState.growthStage||1)<Number(emergenceState.maxGrowthStage||5)){
-    await new Promise(resolve=>setTimeout(resolve,850));
-    const result=await api('macro_tick',{worldId:ACTIVE_WORLD_ID});emergenceState=result.emergence;renderEmergenceVisuals();
-    if(channel)void channel.send({type:'broadcast',event:'macro_state',payload:emergenceState});
-  }
-  window.AppCore?.toast?.('Мир связал крупные сущности и дорисовал детали.');
-  setTimeout(()=>location.reload(),550);
-}
-async function placeMacro(type,button){
-  if(button)button.disabled=true;
+// Regenerate only loaded chunks; never reload the page or lose the player's position.
+async function refreshEmergenceChunks(){
+  if(emergenceRefreshing)return;
+  emergenceRefreshing=true;
   try{
-    const distance=10,x=player.pos.x+Math.sin(player.yaw)*distance,z=player.pos.z-Math.cos(player.yaw)*distance;
-    const result=await api('macro_place',{worldId:ACTIVE_WORLD_ID,type,position:{x,y:player.pos.y,z}});
-    emergenceState=result.emergence;renderEmergenceVisuals();window.AppCore?.toast?.(`Поставлено: ${type}. Сервер ищет отношения.`);
-    if(channel)void channel.send({type:'broadcast',event:'macro_state',payload:emergenceState});
-    await growEmergence();
-  }catch(error){window.AppCore?.toast?.(error.message||'Не удалось развить мир.');}
-  finally{if(button)button.disabled=false;}
+    do{
+      const targetVersion=emergenceRefreshVersion;
+      while(streamBusy)await yieldChunkBuild();
+      streamBusy=true;
+      try{
+        const existing=[...chunks.values()].sort((a,b)=>
+          (a.cx-player.pos.x/CHUNK)**2+(a.cz-player.pos.z/CHUNK)**2-
+          ((b.cx-player.pos.x/CHUNK)**2+(b.cz-player.pos.z/CHUNK)**2));
+        const savedByChunk=new Map();
+        for(const [key,block] of overrides){
+          const [x,y,z]=key.split(',').map(Number),chunkKey=key2(floorDiv(x,CHUNK),floorDiv(z,CHUNK));
+          if(!chunks.has(chunkKey))continue;
+          if(!savedByChunk.has(chunkKey))savedByChunk.set(chunkKey,[]);
+          savedByChunk.get(chunkKey).push({x,y,z,block_type:block});
+        }
+        for(const old of existing){
+          if(targetVersion!==emergenceRefreshVersion)break;
+          const key=key2(old.cx,old.cz);
+          if(chunks.get(key)!==old)continue;
+          const next=await generateChunkDataIncremental(new ChunkData(old.cx,old.cz),savedByChunk.get(key)||[]);
+          if(targetVersion!==emergenceRefreshVersion)break;
+          for(const mesh of old.meshes){worldGroup.remove(mesh);mesh.geometry.dispose();}
+          chunks.set(key,next);
+          await rebuildChunkIncremental(next);
+          await yieldChunkBuild();
+        }
+      }finally{streamBusy=false;}
+      refreshGoldenVegetation();
+      if(targetVersion===emergenceRefreshVersion)break;
+    }while(true);
+  }catch(error){console.warn('[EMERGENCE REMESH]',error?.message||error);emergenceBoard?.showMessage?.('Часть деталей обновится после следующей загрузки чанков.');}
+  finally{emergenceRefreshing=false;}
+}
+function applyEmergenceState(next){
+  if(!next?.schemaVersion)return;
+  const oldRevision=Number(emergenceState?.revision)||0,newRevision=Number(next.revision)||0;
+  if(newRevision<oldRevision)return;
+  const changed=newRevision!==oldRevision||JSON.stringify(next.features||[])!==JSON.stringify(emergenceState?.features||[]);
+  emergenceState=next;
+  renderEmergenceVisuals();
+  emergenceBoard?.setState(next);
+  if(changed){emergenceRefreshVersion++;void refreshEmergenceChunks();}
+}
+async function growEmergence({single=false}={}){
+  if(emergenceGrowthInFlight||!(emergenceState?.relations?.length))return;
+  emergenceGrowthInFlight=true;
+  try{
+    while(Number(emergenceState.growthStage||1)<Number(emergenceState.maxGrowthStage||5)){
+      await new Promise(resolve=>setTimeout(resolve,1200));
+      const result=await emergenceApi('macro_tick',{worldId:ACTIVE_WORLD_ID,expectedRevision:emergenceState.revision});
+      applyEmergenceState(result.emergence);
+      if(channel)void channel.send({type:'broadcast',event:'macro_state',payload:{schemaVersion:'1.0.0',revision:emergenceState.revision,worldId:ACTIVE_WORLD_ID}});
+      const recent=emergenceState?.features?.at(-1);
+      showEmergenceStory(recent?'✨ Появилось: '+recent.label.replaceAll('_',' ')+'. '+emergenceStory():emergenceStory());
+      if(single||result.complete)break;
+    }
+    if(Number(emergenceState.growthStage)>=Number(emergenceState.maxGrowthStage)){
+      showEmergenceStory('Мир вырос! Добавь третью вещь, чтобы снова изменить его.');
+    }
+  }finally{emergenceGrowthInFlight=false;}
+}
+async function placeMacroAt(type,x,z,id){
+  const position={x:Number(x),y:player.pos.y,z:Number(z)};
+  if(!Number.isFinite(position.x)||!Number.isFinite(position.z))throw new Error('Не удалось определить точку на карте.');
+  const result=await emergenceApi('macro_place',{worldId:ACTIVE_WORLD_ID,type,position,id});
+  applyEmergenceState(result.emergence);
+  if(channel)void channel.send({type:'broadcast',event:'macro_state',payload:{schemaVersion:'1.0.0',revision:emergenceState.revision,worldId:ACTIVE_WORLD_ID}});
+  window.AppCore?.toast?.('Поставлено: '+type+'. '+emergenceStory());
+  if(emergenceState?.relations?.length)void growEmergence();
+  return result;
 }
 function mountEmergenceUI(){
-  if(emergencePanel)return;const panel=document.createElement('div');panel.id='vwEmergenceTools';panel.style.cssText='position:fixed;right:10px;top:88px;z-index:28;max-width:min(230px,62vw);padding:8px;border-radius:10px;background:rgba(8,13,18,.76);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(8px);font:12px/1.25 system-ui;color:#fff';
-  panel.innerHTML='<div style="font-weight:700;margin-bottom:5px">Большие вещи</div><div data-emergence-status style="opacity:.78;margin-bottom:6px">поставь две рядом</div><div style="display:flex;gap:5px;flex-wrap:wrap"><select aria-label="Большая сущность" style="min-height:34px;max-width:128px;background:#111b24;color:#fff;border:1px solid #66717b;border-radius:7px"><option value="city">🏙️ Город</option><option value="forest">🌲 Природа</option><option value="river">🌊 Река</option><option value="mountains">⛰️ Горы</option><option value="volcano">🌋 Вулкан</option><option value="village">🏡 Поселение</option><option value="dragon">🐉 Дракон</option></select><button type="button" style="min-height:34px;border-radius:7px;border:1px solid #88939d;background:#243443;color:#fff;padding:0 9px">Поставить</button></div><div style="opacity:.62;margin-top:5px">Объект появится примерно в 10 м перед тобой.</div>';
-  document.body.appendChild(panel);emergencePanel=panel;const select=panel.querySelector('select'),button=panel.querySelector('button');button.addEventListener('click',()=>placeMacro(select.value,button));renderEmergenceVisuals();
+  if(emergencePanel)return;
+  if(window.WorldEmergenceBoard?.mount){
+    emergenceBoard=window.WorldEmergenceBoard.mount({
+      getState:()=>emergenceState,
+      getPlayer:()=>({x:player.pos.x,z:player.pos.z}),
+      onPlace:placeMacroAt,
+      onGrow:()=>growEmergence({single:true}),
+      onOpen:()=>{if(backendMode==='online')void emergenceSync.refresh();}
+    });
+    emergenceBoard.setState(emergenceState);
+    return;
+  }
+  // If the board script cannot load, keep a minimal accessible fallback.
+  const panel=document.createElement('div');panel.id='vwEmergenceTools';
+  panel.style.cssText='position:fixed;right:10px;top:88px;z-index:58;padding:9px;border-radius:12px;background:#132d39;color:white;font:13px system-ui';
+  panel.innerHTML='<label>Большие вещи <select><option value="city">🏙️ Город</option><option value="forest">🌲 Природа</option><option value="river">🌊 Река</option><option value="volcano">🌋 Вулкан</option></select></label><button type="button">Поставить</button><p data-emergence-story></p>';
+  document.body.appendChild(panel);emergencePanel=panel;
+  panel.querySelector('button').addEventListener('click',async e=>{e.currentTarget.disabled=true;try{await placeMacroAt(panel.querySelector('select').value,player.pos.x+Math.sin(player.yaw)*22,player.pos.z-Math.cos(player.yaw)*22);}catch(error){showEmergenceStory(error.message);}finally{e.currentTarget.disabled=false;}});
+  renderEmergenceVisuals();
 }
 
 const remote=new Map();
@@ -689,8 +837,8 @@ function updateRemote(payload){
 function syncPresence(){ if(!channel)return;const state=channel.presenceState(),active=new Set();for(const entries of Object.values(state))for(const p of entries){if(typeof p.id==='string'&&p.id.length<=80)active.add(p.id);}for(const [id,g] of remote)if(!active.has(id)){remoteGroup.remove(g);disposeAvatar(g);remote.delete(id);}playersEl.textContent=`игроков: ${Math.max(1,active.size)}`; }
 async function connectRealtime(appState){
   const sb=appState.supabase; channel=sb.channel('voxel:'+ACTIVE_WORLD_ID,{config:{presence:{key:player.id},broadcast:{self:false,ack:false}}});
-  channel.on('broadcast',{event:'player_state'},({payload})=>updateRemote(payload)); channel.on('broadcast',{event:'block_set'},({payload})=>{const b=validBlockType(payload?.block),x=finiteCoord(payload?.x),y=finiteCoord(payload?.y,320),z=finiteCoord(payload?.z);if(b===null||x===null||y===null||z===null||!Number.isInteger(x)||!Number.isInteger(y)||!Number.isInteger(z)||y<0||y>=WORLD_Y)return;if(Math.hypot(x-player.pos.x,z-player.pos.z)>(VIEW+3)*CHUNK)return;setBlockLocal(x,y,z,b);}); channel.on('broadcast',{event:'science_event'},({payload})=>announceTrustedScienceSignal(payload)); channel.on('broadcast',{event:'macro_state'},({payload})=>{if(!payload?.schemaVersion)return;emergenceState=payload;renderEmergenceVisuals();if(Number(payload.growthStage)>=Number(payload.maxGrowthStage))setTimeout(()=>location.reload(),700);}); channel.on('presence',{event:'sync'},syncPresence);
-  await new Promise((resolve,reject)=>channel.subscribe(async st=>{if(st==='SUBSCRIBED'){await channel.track({id:player.id,name:player.name,online_at:new Date().toISOString()});resolve();}else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT')reject(new Error('Realtime недоступен'));}));
+  channel.on('broadcast',{event:'player_state'},({payload})=>updateRemote(payload)); channel.on('broadcast',{event:'block_set'},({payload})=>{const b=validBlockType(payload?.block),x=finiteCoord(payload?.x),y=finiteCoord(payload?.y,320),z=finiteCoord(payload?.z);if(b===null||x===null||y===null||z===null||!Number.isInteger(x)||!Number.isInteger(y)||!Number.isInteger(z)||y<0||y>=WORLD_Y)return;if(Math.hypot(x-player.pos.x,z-player.pos.z)>(VIEW+3)*CHUNK)return;setBlockLocal(x,y,z,b);}); channel.on('broadcast',{event:'science_event'},({payload})=>announceTrustedScienceSignal(payload)); channel.on('broadcast',{event:'macro_state'},({payload})=>{if(!payload?.worldId||payload.worldId===ACTIVE_WORLD_ID)emergenceSync.signal(payload);}); channel.on('presence',{event:'sync'},syncPresence);
+  await new Promise((resolve,reject)=>channel.subscribe(async st=>{if(st==='SUBSCRIBED'){await channel.track({id:player.id,name:player.name,online_at:new Date().toISOString()});void emergenceSync.refresh();resolve();}else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT')reject(new Error('Realtime недоступен'));}));
   canonChannel=sb.channel('canon:'+ACTIVE_WORLD_ID).on('postgres_changes',{event:'INSERT',schema:'public',table:'world_canon_events',filter:'world_id=eq.'+ACTIVE_WORLD_ID},change=>showCanonEvent(change.new));
   void canonChannel.subscribe();
   void hydrateCanon();
@@ -700,7 +848,7 @@ function setupDesktop(){
   renderer.domElement.addEventListener('click',()=>{if(!matchMedia('(pointer:coarse)').matches&&document.pointerLockElement!==renderer.domElement)renderer.domElement.requestPointerLock?.();});
   document.addEventListener('pointerlockchange',()=>{targetEl.textContent=document.pointerLockElement===renderer.domElement?'ЛКМ ломать · ПКМ ставить':'Нажми на экран, чтобы играть';});
   document.addEventListener('mousemove',e=>{if(document.pointerLockElement!==renderer.domElement)return;player.yaw-=e.movementX*.0022;player.pitch=clamp(player.pitch-e.movementY*.0022,-1.48,1.48);});
-  document.addEventListener('keydown',e=>{if(document.activeElement?.tagName==='INPUT')return;keys.add(e.code);if(e.code==='Space'){e.preventDefault();jump();}if(/^Digit[1-9]$/.test(e.code)){player.selected=Number(e.code.slice(5))-1;buildHotbar();}});document.addEventListener('keyup',e=>keys.delete(e.code));
+  document.addEventListener('keydown',e=>{if(['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName)||emergenceBoard?.isOpen?.())return;keys.add(e.code);if(e.code==='Space'){e.preventDefault();jump();}if(/^Digit[1-9]$/.test(e.code)){player.selected=Number(e.code.slice(5))-1;buildHotbar();}});document.addEventListener('keyup',e=>keys.delete(e.code));
   renderer.domElement.addEventListener('mousedown',e=>{if(document.pointerLockElement!==renderer.domElement)return;if(e.button===0)editBlock(false);if(e.button===2)editBlock(true);});renderer.domElement.addEventListener('contextmenu',e=>e.preventDefault());
 }
 function setupMobile(){
@@ -726,7 +874,7 @@ function updateTarget(){const h=rayVoxel();if(!h)return;targetEl.textContent=`${
 async function savePlayer(){if(backendMode!=='online')return;try{await api('player_save',{worldId:ACTIVE_WORLD_ID,position:{x:player.pos.x,y:player.pos.y,z:player.pos.z},yaw:player.yaw,pitch:player.pitch,selectedBlock:HOTBAR[player.selected]});}catch{} }
 function broadcastPlayer(now){if(!channel||now-lastNet<NET_INTERVAL)return;lastNet=now;channel.send({type:'broadcast',event:'player_state',payload:{id:player.id,name:player.name,x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw}});}
 let autodemo=null;
-let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(goldenWaterUniforms?.goldenWaterTime){goldenWaterUniforms.goldenWaterTime.value=now/1000;if(goldenWaterUniforms.goldenWaterSky&&scene.background?.isColor)goldenWaterUniforms.goldenWaterSky.value.copy(scene.background);}if(goldenVegetationUniforms?.goldenVegetationTime){goldenVegetationUniforms.goldenVegetationTime.value=now/1000;const q=window.GoldenQualityDirector?.forRenderer?.(renderer)?.state?.quality;goldenVegetationUniforms.goldenVegetationStrength.value=Math.max(.35,Math.min(1,Number(q)||1));}if(started){if(Math.abs(mobileLook.x)>.02||Math.abs(mobileLook.y)>.02){player.yaw-=mobileLook.x*2.05*dt;player.pitch=clamp(player.pitch-mobileLook.y*1.65*dt,-1.45,1.45);}physics(dt);updateScienceFx(now,dt);updateCanonEffects(now);loadNeededChunks();updateGoldenLodPolicy(now);broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();autodemo?.update(now,dt);biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);renderer.render(scene,camera);}requestAnimationFrame(loop);
+let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(goldenWaterUniforms?.goldenWaterTime){goldenWaterUniforms.goldenWaterTime.value=now/1000;if(goldenWaterUniforms.goldenWaterSky&&scene.background?.isColor)goldenWaterUniforms.goldenWaterSky.value.copy(scene.background);}if(goldenVegetationUniforms?.goldenVegetationTime){goldenVegetationUniforms.goldenVegetationTime.value=now/1000;const q=window.GoldenQualityDirector?.forRenderer?.(renderer)?.state?.quality;goldenVegetationUniforms.goldenVegetationStrength.value=Math.max(.35,Math.min(1,Number(q)||1));}if(started){if(Math.abs(mobileLook.x)>.02||Math.abs(mobileLook.y)>.02){player.yaw-=mobileLook.x*2.05*dt;player.pitch=clamp(player.pitch-mobileLook.y*1.65*dt,-1.45,1.45);}physics(dt);updateScienceFx(now,dt);updateCanonEffects(now);loadNeededChunks();updateGoldenLodPolicy(now);broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();autodemo?.update(now,dt);biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);animateMacroSprites(now);renderer.render(scene,camera);}requestAnimationFrame(loop);
 
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});addEventListener('beforeunload',()=>savePlayer());
 setupDesktop();setupMobile();buildHotbar();
