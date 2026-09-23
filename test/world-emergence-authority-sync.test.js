@@ -115,6 +115,22 @@ test('Voxel client receives broadcasts as revision hints and uses the new read e
   const server = fs.readFileSync(path.resolve(__dirname,'../api/voxel.js'),'utf8');
   assert.match(client,/event:'macro_state'.*emergenceSync\.signal\(payload\)/);
   assert.doesNotMatch(client,/event:'macro_state'.*applyEmergenceState\(payload\)/);
-  assert.match(client,/api\('macro_read'/);
+  assert.match(client,/emergenceApi\('macro_read'/);
+  assert.match(client,/emergenceApi\('macro_place'/);
+  assert.match(client,/emergenceApi\('macro_tick'/);
   assert.match(server,/action === 'macro_read'/);
+});
+
+test('dedicated edge handler preserves macro IDs, revision CAS and read-only snapshots', () => {
+  const root=path.resolve(__dirname,'..');
+  const edge=fs.readFileSync(path.join(root,'supabase/functions/world-emergence/index.ts'),'utf8');
+  assert.match(edge,/if\(action==="macro_read"\)return await read\(admin,b\)/);
+  assert.match(edge,/if\(hasExpected&&current\.revision!==expected\)return null/);
+  assert.match(edge,/\.eq\("updated_at",row\.updated_at\)/);
+  assert.match(edge,/if\(!next\)return\{row,emergence:current,skipped:true\}/);
+  assert.match(edge,/normalizeEntity\(\{id,type,x,z,ownerId:who\.id\}/);
+  const vercel=JSON.parse(fs.readFileSync(path.join(root,'vercel.json'),'utf8'));
+  assert.ok(vercel.rewrites.some(r=>r.source==='/api/emergence'&&r.destination==='/api/voxel'));
+  const server=fs.readFileSync(path.join(root,'server.js'),'utf8');
+  assert.match(server,/\['\/api\/emergence', require\('\.\/api\/voxel'\)\]/);
 });

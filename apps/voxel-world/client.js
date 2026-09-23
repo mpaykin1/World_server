@@ -64,6 +64,15 @@ async function api(action,payload={}){
   const j=await r.json().catch(()=>({})); if(!r.ok) throw new Error(j.error||'Ошибка Voxel API'); return j;
 }
 
+async function emergenceApi(action,payload={}){
+  const headers={'Content-Type':'application/json','Accept':'application/json'};
+  const t=token(); if(t) headers.Authorization=`Bearer ${t}`;
+  const r=await fetch('/api/emergence',{method:'POST',headers,body:JSON.stringify({action,guestId:guestId(),...payload})});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(j.error||'Emergence API unavailable');
+  return j;
+}
+
 async function canonApi(eventType,summary,payload,idempotencyKey){
   const headers={'Content-Type':'application/json','Accept':'application/json'}; const t=token(); if(!t)return null; headers.Authorization=`Bearer ${t}`;
   const body=JSON.stringify({action:'record',guestId:guestId(),worldId:ACTIVE_WORLD_ID,eventType,summary,payload,idempotencyKey});
@@ -644,7 +653,7 @@ let emergenceBoard=null;
 let emergenceRefreshVersion=0,emergenceRefreshing=false;
 let emergenceGrowthInFlight=false;
 const emergenceSync=createEmergenceAuthoritySync({
-  read:()=>api('macro_read',{worldId:ACTIVE_WORLD_ID}),
+  read:()=>emergenceApi('macro_read',{worldId:ACTIVE_WORLD_ID}),
   apply:next=>applyEmergenceState(next),
   revision:()=>Number(emergenceState?.revision)||0
 });
@@ -712,7 +721,7 @@ async function growEmergence({single=false}={}){
   try{
     while(Number(emergenceState.growthStage||1)<Number(emergenceState.maxGrowthStage||5)){
       await new Promise(resolve=>setTimeout(resolve,1200));
-      const result=await api('macro_tick',{worldId:ACTIVE_WORLD_ID,expectedRevision:emergenceState.revision});
+      const result=await emergenceApi('macro_tick',{worldId:ACTIVE_WORLD_ID,expectedRevision:emergenceState.revision});
       applyEmergenceState(result.emergence);
       if(channel)void channel.send({type:'broadcast',event:'macro_state',payload:{schemaVersion:'1.0.0',revision:emergenceState.revision,worldId:ACTIVE_WORLD_ID}});
       const recent=emergenceState?.features?.at(-1);
@@ -727,7 +736,7 @@ async function growEmergence({single=false}={}){
 async function placeMacroAt(type,x,z,id){
   const position={x:Number(x),y:player.pos.y,z:Number(z)};
   if(!Number.isFinite(position.x)||!Number.isFinite(position.z))throw new Error('Не удалось определить точку на карте.');
-  const result=await api('macro_place',{worldId:ACTIVE_WORLD_ID,type,position,id});
+  const result=await emergenceApi('macro_place',{worldId:ACTIVE_WORLD_ID,type,position,id});
   applyEmergenceState(result.emergence);
   if(channel)void channel.send({type:'broadcast',event:'macro_state',payload:{schemaVersion:'1.0.0',revision:emergenceState.revision,worldId:ACTIVE_WORLD_ID}});
   window.AppCore?.toast?.('Поставлено: '+type+'. '+emergenceStory());
