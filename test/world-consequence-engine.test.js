@@ -59,3 +59,16 @@ test('two commissioned temples plus one under construction cannot unlock spokesp
  w=E.commit(w,E.interpretIntent('','temple'),w.revision);
  w=E.tick(w);assert.equal(w.culture.temples,2);assert.equal(w.culture.spokesperson,null);
 });
+
+test('inherited project keys cannot become executable intents',()=>{
+ for(const key of ['constructor','toString','__proto__']){
+  const intent=E.interpretIntent('',key);
+  assert.equal(intent.goal,'workshop');assert.equal(E.preview(E.createWorld('keys'),intent).feasible,true);
+ }
+});
+test('fictional addresses require integral existing floor and flat',()=>{
+ const w=E.createWorld('address-validation');
+ for(const [floor,flat] of [[1.5,1],[1,2.5],[NaN,1],[1,Infinity],['2',1],[1,'2']])
+  assert.equal(E.address(w,'house-1',floor,flat),null);
+ assert.equal(E.address(w,'house-1',1,1)?.fictional,true);
+});
