@@ -1,5 +1,36 @@
 # WORK IN PROGRESS — Scoped Task Compiler, resource scheduler, real native Godot pipeline
 
+## Task
+Repair Canary evidence retention and the offline primary-renderer assertion (2026-09-23, Codex).
+## Why
+Canary 35845450510 lost its browser artifacts; offline checks matched both the Three renderer and the Phaser FX canvas.
+## Current state
+Base 1ed5d8f8; previous master Canary: 17 failed, 199 passed. Reviewer/backend/graphics remain owned by existing PRs.
+## Target state
+Cloud browser failures retain exact-SHA JSON, screenshots and traces; offline assertions target the real game renderer.
+## Files / systems involved
+quality-canary workflow, offline browser spec, existing Canary workflow tests; no simulation or graphics changes.
+## Known risks
+HUD, perceptual and mobile failures remain unresolved until cloud evidence is inspected. Diagnostics must not mask failure.
+## Golden systems that must be preserved
+Full browser matrix, visual baselines, release gate, exact deployment identity, controls and rendered effects.
+## Errors that must not return
+Lost browser evidence after failure; auxiliary canvases mistaken for the primary renderer.
+## Exact patch / change plan
+Use existing failure summarizer with Playwright JSON reporter; always upload evidence and target identity. Assert one canonical Three canvas.
+## Tests to run
+Focused Node Canary/summarizer tests; full npm check and release gate in cloud; branch Canary full desktop/mobile matrix.
+## Deployment / PR plan
+Isolated off-Desktop branch ai/codex/canary-evidence-repair-20260923; protected PR and cloud verification, no direct master writes.
+## Current progress
+Read project policy; route chose desktop-ai with peer review; recall returned zero matches. Historical cloud baseline inspected.
+## Next action
+Implement bounded patch, publish PR and run exact branch Canary; inspect preserved failures before further repairs.
+## Completion criteria
+Evidence retention verified on real cloud run, primary-renderer assertion passes, remaining failures explicitly diagnosed.
+## Final evidence
+Pending candidate tests and cloud run; no production readiness claim.
+
 ---
 
 # 2026-09-23: Independent reviewer credential-safe error handling

@@ -19,3 +19,16 @@ test('canary still requires Cloudflare authority and verifies deployed exact SHA
   assert.match(workflow, /Browser gate against Cloudflare canary/);
   assert.match(workflow, /Verify playable delivery/);
 });
+
+test('failed browser gates retain structured evidence without turning failures green', () => {
+  assert.match(workflow, /PLAYWRIGHT_JSON_OUTPUT_NAME: test-results\/playwright-results.json/);
+  assert.match(workflow, /playwright test --reporter=line,json,html/);
+  assert.match(workflow, /failure\(\) && steps.browser.outcome == 'failure'/);
+  assert.match(workflow, /node scripts\/summarize-playwright-failure.js/);
+  const upload = workflow.slice(workflow.indexOf('- name: Preserve canary evidence'));
+  assert.match(upload, /if: always\(\)/);
+  assert.match(upload, /actions\/upload-artifact@v4/);
+  assert.match(upload, /test-results\/[\s\S]*playwright-report\//);
+  assert.match(upload, /github.sha[\s\S]*github.run_attempt/);
+  assert.doesNotMatch(workflow, /continue-on-error|\|\| true/);
+});
