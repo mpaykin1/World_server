@@ -1,3 +1,19 @@
+# 2026-09-23: Coordinator worktrees from current remote master
+
+CI follow-up: run 35857058547 kept Lighthouse running after check was cancelled, holding successor 35857181475 pending. Gate Lighthouse with !cancelled(), retaining diagnostic execution after ordinary failures and always-upload inside a started job. No required checks removed.
+
+- Task / why: prevent new local agent tasks inheriting the dirty Desktop checkout's stale feature-branch HEAD.
+- Current state: Desktop HEAD d06cb3ed; recorded origin/master 1ed5d8f8 is 149 commits ahead. Coordinator-created branch reflog confirms the stale base.
+- Target / direction: reuse the existing coordinator with fresh exact-SHA provenance and cloud-first execution; no new workers or orchestration systems.
+- Systems / preserved contracts: local OpenCode/Codex worktree setup and result reporting only; cloud dispatch, Desktop files/index/branch, leases and cleanup remain intact.
+- Risks: unavailable origin now blocks local task creation instead of silently using stale code; bounded fetch limits wait.
+- Exact plan: fetch only remote master, resolve its commit, fail closed before worktree creation on any failure, create from the captured SHA and propagate baseSha.
+- Tests: isolated mocked-git regression tests for stale HEAD, invalid/failing fetch and revision, exact creation SHA and no checkout/pull/reset; syntax and diff checks. Full required gates run in cloud.
+- PR plan: focused branch ai/codex/coordinator-current-base-20260923; push PR for independent review and CI, no direct master write or automatic deployment.
+- Progress: helper implemented; both local adapters and automated reports retain baseSha. Next action: independent review, commit/push PR and cloud gates.
+- Completion criteria: focused tests and cloud gates pass, independent review accepted, exact base provenance retained.
+- Final evidence: node --test test/coordinator-worktree.test.js passed 10/10; helper/coordinator syntax checks and git diff --check passed. Git operations mocked; no workers, models or network calls launched. Cloud validation and independent review pending; no completion claim.
+
 # WORK IN PROGRESS — Scoped Task Compiler, resource scheduler, real native Godot pipeline
 
 ---

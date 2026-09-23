@@ -39,6 +39,7 @@ const { classifyIntent } = require('../lib/mcp-intent-router');
 const { resolveMainTreeRoot } = require('../lib/world-server-paths');
 const sessionGuard = require('../lib/agent-session-guard');
 const manualCompletion = require('../lib/manual-task-completion-contract');
+const { createCurrentWorktree } = require('../lib/coordinator-worktree');
 
 // Read-only capability classes get sandboxRoot pointed at the REAL repo (the
 // local model's tool allowlist for these classes is read_file/read_text_file/
@@ -147,13 +148,7 @@ function sleepMs(ms) {
 // carries a real commit; deleted otherwise).
 // ---------------------------------------------------------------------------
 function createIsolatedWorktree(taskId) {
-  fs.mkdirSync(WORKTREES_ROOT, { recursive: true });
-  const branch = `ai/master-coordinator/${taskId}`;
-  const dir = path.join(WORKTREES_ROOT, taskId);
-  const head = git(MAIN_TREE_ROOT, ['rev-parse', 'HEAD']).stdout;
-  const add = git(MAIN_TREE_ROOT, ['worktree', 'add', '-b', branch, dir, head]);
-  if (add.status !== 0) throw new Error(`git worktree add failed: ${add.stderr || add.stdout}`);
-  return { dir, branch };
+  return createCurrentWorktree(taskId, { mainRoot: MAIN_TREE_ROOT, worktreesRoot: WORKTREES_ROOT });
 }
 
 function removeIsolatedWorktree(dir, branch, { deleteBranch = false } = {}) {
@@ -183,7 +178,7 @@ async function invokeOpencode(taskText, opts = {}) {
   if (refused) return refused;
   if (!OPENCODE_CLI_PATH) return { ok: false, result: 'NOT_AVAILABLE', reason: 'opencode CLI not found on PATH' };
   const taskId = opts.taskId || `opencode-${Date.now()}`;
-  const { dir, branch } = createIsolatedWorktree(taskId);
+  const { dir, branch, baseSha } = createIsolatedWorktree(taskId);
   const start = Date.now();
   let committed = null;
   let pushed = false;
@@ -211,7 +206,7 @@ async function invokeOpencode(taskText, opts = {}) {
       recovery = preserveFailedDirtyWorktree(dir, branch, taskId);
       keepWorktree = recovery.keepWorktree;
     }
-    return { ok: ranCleanly, result: ranCleanly ? 'PASS' : 'FAIL', stdout: (r.stdout || '').slice(0, 8000), stderr: (r.stderr || '').slice(0, 4000), durationMs, branch, committed, pushed, worktree: dir, recovery };
+    return { ok: ranCleanly, result: ranCleanly ? 'PASS' : 'FAIL', stdout: (r.stdout || '').slice(0, 8000), stderr: (r.stderr || '').slice(0, 4000), durationMs, branch, baseSha, committed, pushed, worktree: dir, recovery };
   } finally {
     if (!keepWorktree) removeIsolatedWorktree(dir, branch, { deleteBranch: !committed });
   }
@@ -296,7 +291,7 @@ async function invokeCodex(taskText, opts = {}) {
   if (refused) return refused;
   if (!CODEX_CLI_PATH) return { ok: false, result: 'NOT_AVAILABLE', reason: 'codex CLI not found on PATH' };
   const taskId = opts.taskId || `codex-${Date.now()}`;
-  const { dir, branch } = createIsolatedWorktree(taskId);
+  const { dir, branch, baseSha } = createIsolatedWorktree(taskId);
   const start = Date.now();
   let committed = null;
   let pushed = false;
@@ -324,7 +319,7 @@ async function invokeCodex(taskText, opts = {}) {
       recovery = preserveFailedDirtyWorktree(dir, branch, taskId);
       keepWorktree = recovery.keepWorktree;
     }
-    return { ok: ranCleanly, result: ranCleanly ? 'PASS' : 'FAIL', stdout: (r.stdout || '').slice(0, 8000), stderr: (r.stderr || '').slice(0, 4000), durationMs, branch, committed, pushed, worktree: dir, recovery };
+    return { ok: ranCleanly, result: ranCleanly ? 'PASS' : 'FAIL', stdout: (r.stdout || '').slice(0, 8000), stderr: (r.stderr || '').slice(0, 4000), durationMs, branch, baseSha, committed, pushed, worktree: dir, recovery };
   } finally {
     if (!keepWorktree) removeIsolatedWorktree(dir, branch, { deleteBranch: !committed });
   }
@@ -337,6 +332,7 @@ function reportAutomatedAgentResult(agentId, taskText, result, opts = {}) {
     at: nowIso(), agent: agentId, task_id: opts.taskId || `${agentId}-${Date.now()}`,
     status, progress: result.result === 'PASS' ? 100 : (pending.has(result.result) ? 10 : 50),
     branch: result.branch || null, worktree: result.worktree || null, commit: result.committed || result.commit || null,
+    baseSha: result.baseSha || null,
     pr: result.pr || result.runUrl || null, tests: result.tests || {},
     blockers: status === 'failed' ? [{ id: `${agentId}-dispatch-fail`, status: 'needs_review', reason: result.reason || result.stderr || result.result }] : [],
     merge_safe: result.result === 'PASS' && Boolean(result.committed),
