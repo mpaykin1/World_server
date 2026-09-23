@@ -25,6 +25,12 @@ function intentFrom(body:any) {
 function db(error:any) {
   if(error)fail(500,"Chain Reaction persistence failed");
 }
+function publicState(value:any) {
+  const safe=structuredClone(value);
+  for(const project of safe.projects||[])if(project.intent)delete project.intent.comment;
+  for(const event of safe.history||[]){delete event.comment;delete event.actorId;}
+  return safe;
+}
 export function isChainReactionAction(value:unknown) {
   return ACTIONS.has(String(value||""));
 }
@@ -105,9 +111,11 @@ export async function handleChainReaction(admin:any,req:Request,body:any,runtime
   const previous=Date.parse(row.updated_at||"");
   if(!Number.isFinite(previous))fail(409,"Missing concurrency token");
   const updatedAt=new Date(Math.max(Date.now(),previous+1)).toISOString();
-  const saved=await admin.from("voxel_worlds")
-    .update({settings:{...settings,chainReaction:next},updated_at:updatedAt})
-    .eq("id",row.id).eq("updated_at",row.updated_at).select("id").maybeSingle();
-  db(saved.error);if(!saved.data)fail(409,"STALE_REVISION");
+  const saved=await admin.rpc("commit_chain_reaction_action",{
+    p_world_id:row.id,p_expected_updated_at:row.updated_at,p_next_updated_at:updatedAt,
+    p_public_settings:{...settings,chainReaction:publicState(next)},p_actor_id:actor.id,
+    p_action:body.action,p_revision:next.revision,p_comment:body.action==="commit-plan"?(body.text||""):null
+  });
+  db(saved.error);if(saved.data!==true)fail(409,"STALE_REVISION");
   return runtime.json({...base,revision:next.revision,world:next});
 }

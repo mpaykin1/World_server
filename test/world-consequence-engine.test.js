@@ -3,6 +3,14 @@ const test=require('node:test'),assert=require('node:assert/strict');
 const E=require('../lib/world-consequence-engine');
 test('seed and command replay identical',()=>{const a=E.createWorld('abc'),b=E.createWorld('abc');assert.deepEqual(a,b);assert.deepEqual(E.tick(a),E.tick(b))});
 test('one volcano has distinct intention projects',()=>{const types=['геотермальная электроэнергия','туризм и экскурсии','теплицы на вулканических почвах'].map(s=>E.interpretIntent(s).goal);assert.deepEqual(types,['geothermal','tourism','volcanic_farm'])});
+test('public project identity never fingerprints private free text',()=>{
+ const first=E.createWorld('private-id'),second=E.createWorld('private-id');
+ const a=E.interpretIntent('семейная история, которую нельзя публиковать','solar');
+ const b=E.interpretIntent('другой личный комментарий ребёнка','solar');
+ assert.notEqual(a.comment,b.comment);
+ assert.deepEqual({...a,comment:undefined},{...b,comment:undefined});
+ assert.equal(E.commit(first,a).projects[0].id,E.commit(second,b).projects[0].id);
+});
 test('geothermal pays first and electricity arrives only after construction',()=>{let w=E.createWorld('test');w.land.volcano=true;w.resources.budget=200;const i=E.interpretIntent('электричество после исследования');const p=E.preview(w,i);assert(p.feasible);w=E.commit(w,i);assert.equal(w.resources.budget,200-p.cost);const original=w.resources.power;for(let j=0;j<p.buildTicks;j++)w=E.tick(w);assert(w.resources.power<=original);w=E.tick(w);assert(w.resources.power>0);assert(w.history.some(e=>e.kind==='commissioned'))});
 test('no free construction, stale revisions fail',()=>{let w=E.createWorld('low');w.resources.budget=0;assert.equal(E.preview(w,E.interpretIntent('энергия')).feasible,false);assert.throws(()=>E.commit(w,E.interpretIntent('энергия')));w.resources.budget=200;w.land.volcano=true;assert.throws(()=>E.commit(w,E.interpretIntent('энергия'),-1),/STALE/)});
 test('catastrophe does not end the simulation',()=>{let w=E.createWorld('crisis');w.resources.power=0;w.resources.food=0;for(let i=0;i<15;i++)w=E.tick(w);assert(w.crisis);assert(w.population>0);assert.equal(w.tick,15);assert(w.history.some(x=>x.kind==='adaptation'))});
