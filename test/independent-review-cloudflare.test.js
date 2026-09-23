@@ -150,3 +150,28 @@ test('review report flags malformed Cloudflare token without exposing content', 
   assert.ok(!JSON.stringify(report).includes(pasted));
   assert.equal(report.reviewers.length, 0);
 });
+
+test('compact curl command and provider-text prefixes are not Workers AI tokens', async () => {
+  const disguised = [
+    'curl-HAuthorizationBearer-cfut_' + 'a'.repeat(40),
+    'curl-HAuthorizationBearer' + 'a'.repeat(40),
+    'Bearer' + 'b'.repeat(48), 'sk_' + 'c'.repeat(42)
+  ];
+  for (const token of disguised) {
+    assert.equal(availableCloudflareModels({ ...cfg, token }).length, 0);
+    const review = await requestCloudflareReview(
+      { provider: 'cloudflare', family: 'google', id: '@cf/google/gemma-4-26b-a4b-it' },
+      patch, {}, { ...cfg, token, systemPrompt: 'review', parseVerdict,
+        getJson: async () => { throw new Error('NETWORK MUST NOT BE CALLED'); }
+      });
+    assert.equal(review.reason, 'Invalid Workers AI token format');
+  }
+});
+test('allowlisted diagnostic text is strictly exact and cannot contain a key', () => {
+  const { safeCloudflareError } = require('../scripts/independent-review-cloudflare.cjs');
+  const secret = cfg.token;
+  assert.equal(safeCloudflareError(new Error('Model did not return valid JSON '+ secret)),
+    'Cloudflare request failed (details redacted)');
+  assert.equal(safeCloudflareError(new Error('Missing structured review fields '+ secret)),
+    'Cloudflare request failed (details redacted)');
+});

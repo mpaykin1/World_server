@@ -204,3 +204,16 @@ test('OpenRouter header errors cannot leak credentials into CI evidence', async 
   assert.equal(result.reason, 'Reviewer request failed (details redacted)');
   assert.ok(!JSON.stringify(result).includes(credential));
 });
+
+test('OpenRouter model-controlled error suffixes are never reported', async () => {
+  const credential = 'sk_' + 'R'.repeat(40);
+  for (const prefix of ['Model did not return valid JSON',
+    'Missing structured review fields']) {
+    const result = await requestReview(
+      { id: 'google/gemma-4-31b-it:free', family: 'google' }, patch, {}, credential,
+      { requestJson: async () => { throw new Error(prefix + ' ' + credential); } });
+    assert.equal(result.verdict, 'INCONCLUSIVE');
+    assert.equal(result.reason, 'Reviewer request failed (details redacted)');
+    assert.ok(!JSON.stringify(result).includes(credential));
+  }
+});

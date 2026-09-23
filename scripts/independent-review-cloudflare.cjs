@@ -12,7 +12,10 @@ const ACCOUNT_ID = /^[a-f0-9]{32}$/i;
 // Never accept a copied curl command, quotes, whitespace, or a pasted example.
 // Validate before constructing Authorization headers: Node can include invalid
 // header contents in TypeError messages, which must never reach CI artifacts.
-const API_TOKEN = /^[A-Za-z0-9._~-]{20,512}$/;
+// Dedicated Workers AI tokens observed from the Cloudflare REST API start
+// with cfut_. A generic header-safe character class is insufficient:
+// compacted examples such as curl-HAuthorizationBearer... can match it.
+const API_TOKEN = /^cfut_[A-Za-z0-9_-]{20,240}$/;
 const MAX_PATCH_BYTES = 18000;
 function safeCloudflareError(err) {
   const value = String(err?.message || '');
