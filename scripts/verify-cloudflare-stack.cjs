@@ -30,10 +30,38 @@ async function verifyCloudflareStack(origin, expectedSha) {
   const guestId = crypto.randomUUID();
   const init = await request(origin, '/api/voxel', {
     method: 'POST', headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ action: 'init', guestId, name: 'Fleet Guest', worldId: 'voxel-world' })
+    body: JSON.stringify({ action: 'init', guestId, name: 'Fleet Guest', worldId: 'main' })
   });
-  if (!init.response.ok || !init.body?.world || !init.body?.player) throw new Error(`/api/voxel guest init failed: HTTP ${init.response.status}`);
+  if (!init.response.ok || init.response.headers.get('x-world-server-voxel-runtime') !== 'supabase-edge' ||
+      init.body?.world?.id !== 'main' || !Number.isSafeInteger(Number(init.body?.world?.seed)) ||
+      !init.body?.world?.settings || init.body?.player?.id !== guestId) {
+    throw new Error(`/api/voxel authoritative init failed: HTTP ${init.response.status}`);
+  }
   results.push({ pathname: '/api/voxel action=init', status: init.response.status });
+  const saved = await request(origin, '/api/voxel', {
+    method:'POST', headers:{'content-type':'application/json'},
+    body:JSON.stringify({action:'player_save',guestId,worldId:'main',
+      position:{x:1,y:43,z:1},yaw:0.2,pitch:0.1,selectedBlock:1})
+  });
+  if(!saved.response.ok || saved.body?.ok !== true)throw new Error('/api/voxel player save did not persist');
+  const reloaded = await request(origin, '/api/voxel', {
+    method:'POST',headers:{'content-type':'application/json'},
+    body:JSON.stringify({action:'init',guestId,worldId:'main'})
+  });
+  if(!reloaded.response.ok || Math.abs(Number(reloaded.body?.player?.position?.x)-1)>0.01 ||
+      Math.abs(Number(reloaded.body?.player?.position?.z)-1)>0.01) {
+    throw new Error('/api/voxel player position was not durably restored');
+  }
+  results.push({ pathname:'/api/voxel player_save+reconnect',status:200 });
+  const chunkResult=await request(origin,'/api/voxel',{
+    method:'POST',headers:{'content-type':'application/json'},
+    body:JSON.stringify({action:'chunks',guestId,worldId:'main',chunks:[{x:0,z:0}]})
+  });
+  if(!chunkResult.response.ok || !Array.isArray(chunkResult.body?.blocks) ||
+      chunkResult.response.headers.get('x-world-server-voxel-runtime')!=='supabase-edge') {
+    throw new Error(`/api/voxel authoritative chunk read failed: HTTP ${chunkResult.response.status}`);
+  }
+  results.push({pathname:'/api/voxel action=chunks',status:200});
   const snapshot = await request(origin, '/api/emergence', {
     method: 'POST', headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ action: 'macro_read', guestId, worldId: 'main' })

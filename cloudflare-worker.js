@@ -212,6 +212,14 @@ async function proxyEmergence(request, env) {
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
 }
 
+async function proxyVoxel(request, env) {
+  const result = await proxyEmergence(request, env);
+  if (result.headers.get('x-world-server-emergence-runtime') !== 'supabase-edge') return result;
+  const headers = new Headers(result.headers);
+  headers.set('x-world-server-voxel-runtime', 'supabase-edge');
+  return new Response(result.body, { status: result.status, statusText: result.statusText, headers });
+}
+
 function qualityOrigin(env, telemetry) {
   const configured = String(telemetry ? (env.WORLD_SERVER_QUALITY_TELEMETRY_ORIGIN || DEFAULT_QUALITY_TELEMETRY_ORIGIN) : (env.WORLD_SERVER_QUALITY_SUMMARY_ORIGIN || DEFAULT_QUALITY_SUMMARY_ORIGIN)).trim();
   const target = new URL(configured);
@@ -259,6 +267,7 @@ export default {
     if (url.pathname === '/api/world-factory') return proxyWorldStack(request, env, url, 'world-factory');
     if (url.pathname === '/api/canon') return proxyWorldStack(request, env, url, 'canon');
     if (url.pathname === '/api/emergence') return proxyEmergence(request, env);
+    if (url.pathname === '/api/voxel') return proxyVoxel(request, env);
     if (url.pathname === '/api/quality-summary') return proxyQuality(request, env, url, false);
     if (url.pathname === '/api/quality-telemetry') return proxyQuality(request, env, url, true);
     if (url.pathname.startsWith('/api/')) return proxyDynamicApi(request, env, url);

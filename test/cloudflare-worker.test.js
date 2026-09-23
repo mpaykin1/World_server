@@ -167,3 +167,25 @@ test('Cloudflare rejects oversized emergence requests before upstream fetch',asy
     assert.equal(res.status,413);
   }finally{global.fetch=originalFetch;}
 });
+
+test('Cloudflare Voxel init and writes use durable Supabase Edge, not the synthetic Cloud Run bridge',async()=>{
+  const worker=await loadWorker(),old=global.fetch,calls=[];
+  global.fetch=async req=>{
+    calls.push(req);
+    return new Response(JSON.stringify({selfId:'guest',world:{id:'main',seed:73194217,settings:{}},
+      player:{id:'guest',position:{x:0,y:42,z:0}}}),{
+        status:200,headers:{'content-type':'application/json'}
+      });
+  };
+  try{
+    const body=JSON.stringify({action:'init',guestId:'22222222-2222-4222-8222-222222222222',worldId:'main'});
+    const res=await worker.fetch(new Request('https://world.example/api/voxel',{
+      method:'POST',headers:{'content-type':'application/json'},body
+    }),{ASSETS:assetsBinding()});
+    assert.equal(res.status,200);
+    assert.equal(res.headers.get('x-world-server-voxel-runtime'),'supabase-edge');
+    assert.equal((await res.json()).world.seed,73194217);
+    assert.equal(calls.length,1);
+    assert.match(calls[0].url,/supabase\.co\/functions\/v1\/world-emergence/);
+  }finally{global.fetch=old;}
+});
