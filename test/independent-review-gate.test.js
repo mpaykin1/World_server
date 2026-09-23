@@ -238,3 +238,22 @@ test('review diagnostics do not echo provider-controlled secret-bearing errors',
     assert.equal(result.reason,'Reviewer request failed (details redacted)');
   }
 });
+
+test('unsupported BLOCK is inconclusive rather than an ungrounded veto or PASS', () => {
+  for (const payload of [
+    { verdict: 'BLOCK', findings: [], falsification_attempts: ['guess'] },
+    { verdict: 'BLOCK', findings: [{ file: 'lib/a.js', line: '2',
+      severity: 'high', evidence: 'something might fail', reproduction: '' }],
+      falsification_attempts: ['not reproduced'] },
+    { verdict: 'PASS', findings: [{ file: 'lib/a.js', line: '2',
+      severity: 'high', evidence: 'possibly wrong', reproduction: '' }],
+      falsification_attempts: ['not reproduced'] }
+  ]) {
+    assert.equal(parseVerdict(JSON.stringify(payload)).verdict, 'INCONCLUSIVE');
+  }
+  const documented = { verdict: 'BLOCK', findings: [{ file: 'lib/a.js', line: '2',
+    severity: 'high', evidence: 'This exact input reaches an unsafe branch',
+    reproduction: 'Run node test/repro.js and observe failure' }],
+    falsification_attempts: ['Negative input reproduced'] };
+  assert.equal(parseVerdict(JSON.stringify(documented)).verdict, 'BLOCK');
+});
