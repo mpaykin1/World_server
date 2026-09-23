@@ -1,35 +1,35 @@
 # WORK IN PROGRESS — Scoped Task Compiler, resource scheduler, real native Godot pipeline
 
 ## Task
-Repair Canary evidence retention and the offline primary-renderer assertion (2026-09-23, Codex).
+Canary repair, 2026-09-23, Codex.
 ## Why
-Canary 35845450510 lost its browser artifacts; offline checks matched both the Three renderer and the Phaser FX canvas.
+Run 35845450510 lost artifacts and misidentified FX as HUD/game canvas.
 ## Current state
-Base 1ed5d8f8; previous master Canary: 17 failed, 199 passed. Reviewer/backend/graphics remain owned by existing PRs.
+Base 1ed5d8f8; Canary 17 failed/199 passed.
 ## Target state
-Cloud browser failures retain exact-SHA JSON, screenshots and traces; offline assertions target the real game renderer.
+Preserved SHA-bound evidence and accurate browser contracts.
 ## Files / systems involved
-quality-canary workflow, offline browser spec, existing Canary workflow tests; no simulation or graphics changes.
+Canary workflow/tests, HUD/offline/mobile specs, FX helper.
 ## Known risks
-HUD, perceptual and mobile failures remain unresolved until cloud evidence is inspected. Diagnostics must not mask failure.
+Perceptual/catalog failures remain; diagnostics must not mask them.
 ## Golden systems that must be preserved
-Full browser matrix, visual baselines, release gate, exact deployment identity, controls and rendered effects.
+Full matrix, baselines, release gate, graphics and controls.
 ## Errors that must not return
-Lost browser evidence after failure; auxiliary canvases mistaken for the primary renderer.
+Lost artifacts; ambiguous canvas; FX as HUD; stale catalog counts.
 ## Exact patch / change plan
-Use existing failure summarizer with Playwright JSON reporter; always upload evidence and target identity. Assert one canonical Three canvas.
+Reuse summarizer; always upload; assert primary canvas and strict FX contract; test canonical fallback inventory.
 ## Tests to run
-Focused Node Canary/summarizer tests; full npm check and release gate in cloud; branch Canary full desktop/mobile matrix.
+Node focused tests; cloud check/release gate and full Canary.
 ## Deployment / PR plan
-Isolated off-Desktop branch ai/codex/canary-evidence-repair-20260923; protected PR and cloud verification, no direct master writes.
+PR #264, isolated branch; protected integration after review.
 ## Current progress
-Read project policy; route chose desktop-ai with peer review; recall returned zero matches. Historical cloud baseline inspected.
+Route/recall read; first patch 9/9 tests and peer review passed. Cloud run 35856568390 pending. Other owners untouched.
 ## Next action
-Implement bounded patch, publish PR and run exact branch Canary; inspect preserved failures before further repairs.
+Verify current patch in cloud and inspect retained failures.
 ## Completion criteria
-Evidence retention verified on real cloud run, primary-renderer assertion passes, remaining failures explicitly diagnosed.
+Real retained evidence; repaired contracts pass; residual failures identified.
 ## Final evidence
-Pending candidate tests and cloud run; no production readiness claim.
+Pending cloud; no production readiness claim.
 
 ---
 
