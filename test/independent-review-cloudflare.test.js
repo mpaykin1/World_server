@@ -57,7 +57,7 @@ test('two Cloudflare Free families can review without OpenRouter key', async () 
   assert.deepEqual(report.reviewers.map(x => x.family), ['z-ai', 'nvidia']);
   assert.equal(report.requiresMaintainerDecision, true);
 });
-test('a Cloudflare BLOCK stops all remaining reviewers', async () => {
+test('two distinct-family Cloudflare BLOCKs stop remaining calls', async () => {
   let requests = 0;
   const report = await reviewPatch({
     patch, base: 'a'.repeat(40), head: 'b'.repeat(40), key: 'mock', cloudflare: cfg,
@@ -69,7 +69,9 @@ test('a Cloudflare BLOCK stops all remaining reviewers', async () => {
     getCatalog: async () => { throw new Error('Must not call catalog after BLOCK'); }
   });
   assert.equal(report.verdict, 'BLOCK');
-  assert.equal(requests, 1);
+  assert.equal(report.decisiveFamilies, 2);
+  assert.equal(report.disputed, false);
+  assert.equal(requests, 2);
 });
 test('same model family on two providers cannot create fake independence', async () => {
   const candidates = { data: [{
@@ -175,4 +177,69 @@ test('allowlisted diagnostic text is strictly exact and cannot contain a key', (
     'Cloudflare request failed (details redacted)');
   assert.equal(safeCloudflareError(new Error('Missing structured review fields '+ secret)),
     'Cloudflare request failed (details redacted)');
+});
+
+test('one BLOCK and a distinct-family PASS stay blocked with recorded dissent', async () => {
+  let calls = 0;
+  const report = await reviewPatch({
+    patch, base: 'a'.repeat(40), head: 'b'.repeat(40), key: '', cloudflare: cfg,
+    reviewCloudflare: async model => {
+      calls++;
+      return model.family === 'z-ai'
+        ? { ...model, verdict: 'BLOCK', findings: [{
+          file: 'lib/a.js', line: '9', severity: 'high',
+          evidence: 'Claimed failing expression', reproduction: 'Run input x'
+        }], falsification_attempts: ['Claimed test'] }
+        : { ...model, ...pass };
+    }
+  });
+  assert.equal(calls, 2);
+  assert.equal(report.verdict, 'BLOCK');
+  assert.equal(report.decisiveFamilies, 2);
+  assert.equal(report.disputed, true);
+  assert.equal(report.requiresMaintainerDecision, true);
+  assert.match(report.blockers.join(' '), /reproduce findings/);
+});
+test('one BLOCK plus provider outages is never independent approval', async () => {
+  let calls = 0;
+  const report = await reviewPatch({
+    patch, base: 'a'.repeat(40), head: 'b'.repeat(40), key: '', cloudflare: cfg,
+    reviewCloudflare: async model => {
+      calls++;
+      return model.family === 'z-ai'
+        ? { ...model, verdict: 'BLOCK', findings: [{severity: 'high'}],
+          falsification_attempts: ['Suspected failure'] }
+        : { ...model, verdict: 'INCONCLUSIVE', findings: [],
+          falsification_attempts: [], reason: 'Cloudflare request timed out' };
+    }
+  });
+  assert.equal(calls, 3);
+  assert.equal(report.verdict, 'BLOCK');
+  assert.equal(report.decisiveFamilies, 1);
+  assert.match(report.blockers.join(' '), /Single-family BLOCK/);
+});
+test('Cloudflare BLOCK seeks OpenRouter second family when Cloudflare second fails', async () => {
+  let cfCalls = 0, orCalls = 0;
+  const catalog = { data: [
+    { id: 'google/gemma-4-31b-it:free', pricing: { prompt: '0', completion: '0' } },
+    { id: 'nvidia/nemotron-3-super-120b-a12b:free', pricing: { prompt: '0', completion: '0' } }
+  ] };
+  const report = await reviewPatch({
+    patch, base: 'a'.repeat(40), head: 'b'.repeat(40), key: 'mock', cloudflare: cfg,
+    reviewCloudflare: async model => {
+      cfCalls++;
+      return model.family === 'z-ai'
+        ? { ...model, verdict: 'BLOCK', findings: [{ severity: 'high' }],
+          falsification_attempts: ['Reproduction attempted'] }
+        : { ...model, verdict: 'INCONCLUSIVE', findings: [],
+          falsification_attempts: [], reason: 'Cloudflare request timed out' };
+    },
+    getCatalog: async () => catalog,
+    review: async model => { orCalls++; return { ...model, ...pass }; }
+  });
+  assert.equal(cfCalls, 3);
+  assert.equal(orCalls, 1);
+  assert.equal(report.decisiveFamilies, 2);
+  assert.equal(report.disputed, true);
+  assert.equal(report.verdict, 'BLOCK');
 });
