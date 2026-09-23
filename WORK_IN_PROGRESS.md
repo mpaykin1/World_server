@@ -10,6 +10,12 @@ This branch fail-closes on invalid token format before HTTP, whitelists provider
 
 ---
 
+# 2026-09-23: Cloudflare fresh-deploy propagation verification
+
+Real PR #252 deploy-and-verify failed because Wrangler reported successful upload and publication, but the new preview `/` returned 404 within a fraction of a second. A separate read-only probe later returned 200 on the same URL. The exact-SHA verifier now retries only initial root/config 404/502/503/504 and stale expected SHA with a bounded ~76s readiness budget before running all existing hard checks. 401/403, non-readiness route failures, and a different SHA after the deadline still fail closed. Test four deterministic scenarios. No changes to the production app, scheduled jobs, or permanent URL policy.
+
+---
+
 # 2026-09-23: Free reviewer output-budget reliability
 
 Latest independently inspected evidence: run 35808400443 produced six genuine INCONCLUSIVE responses: Google and Z-AI HTTP 429; NVIDIA Super no JSON; Nex timeout; Poolside and Cohere consumed output with empty content / length. Never treat these as PASS. A fresh branch from master a4777d63 adds catalog-aware reasoning budgets, one fail-closed retry on empty responses, in-band provider error detection, and mock regression coverage (17/17 focused tests plus Golden Standard PASS locally). No paid provider fallback, new schedule, branch-protection bypass, or PR code execution with credentials. Validate actual independent PASS on the exact submitted head before requiring the new status or merging this reliability patch. If all free providers are rate-limited, preserve INCONCLUSIVE and document quota/credential constraints rather than issuing fake green checks. Production/browser/user-visibility still unverified.
