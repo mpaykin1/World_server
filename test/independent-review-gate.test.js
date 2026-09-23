@@ -129,3 +129,65 @@ test('provider timeout or truncated answer cannot approve a patch', async () => 
   assert.equal(timeout.verdict, 'INCONCLUSIVE');
   assert.equal(truncated.verdict, 'INCONCLUSIVE');
 });
+test('supported reasoning model reserves room for visible review JSON', async () => {
+  const model = { id: 'nvidia/nemotron-3-super-120b-a12b:free',
+    family: 'nvidia', supportsJson: true, supportsReasoning: true,
+    reasoning: { mandatory: false, default_enabled: true, supports_max_tokens: true } };
+  let sent;
+  const result = await requestReview(model, patch, {}, 'mock', {
+    requestJson: async (_url, options) => {
+      sent = JSON.parse(options.body);
+      return { choices: [{ finish_reason: 'stop', message: { content: JSON.stringify(good) } }] };
+    }
+  });
+  assert.equal(result.verdict, 'PASS');
+  assert.equal(sent.max_tokens, 4200);
+  assert.deepEqual(sent.reasoning, { max_tokens: 1024 });
+  assert.deepEqual(sent.response_format, { type: 'json_object' });
+});
+
+test('empty reasoning answer retries without format constraint, never fake PASS', async () => {
+  const model = { id: 'cohere/north-mini-code:free', family: 'cohere',
+    supportsReasoning: true, supportsJson: true, reasoning: { mandatory: false } };
+  const requests = [];
+  const result = await requestReview(model, patch, {}, 'mock', {
+    requestJson: async (_url, options) => {
+      requests.push(JSON.parse(options.body));
+      return requests.length === 1
+        ? { choices: [{ finish_reason: 'length', message: { content: '' } }] }
+        : { choices: [{ finish_reason: 'stop', message: { content: JSON.stringify(good) } }] };
+    }
+  });
+  assert.equal(result.verdict, 'PASS');
+  assert.equal(result.attempts, 2);
+  assert.deepEqual(requests[0].reasoning, { enabled: false });
+  assert.equal(requests[0].response_format.type, 'json_object');
+  assert.equal(requests[1].response_format, undefined);
+  assert.equal(requests[1].max_tokens, 6000);
+});
+test('HTTP 200 provider error is inconclusive, not approval', async () => {
+  const result = await requestReview({ id: 'nvidia/test:free', family: 'nvidia' },
+    patch, {}, 'mock', { requestJson: async () => ({ error: { code: 'quota_exceeded' } }) });
+  assert.equal(result.verdict, 'INCONCLUSIVE');
+  assert.match(result.reason, /quota_exceeded/);
+});
+
+test('two independent 429s stop exhausting a shared free account allowance', async () => {
+  const catalog = { data: [
+    { id: 'google/gemma-4-31b-it:free', pricing: { prompt: '0', completion: '0' } },
+    { id: 'nvidia/nemotron-3-super-120b-a12b:free', pricing: { prompt: '0', completion: '0' } },
+    { id: 'z-ai/glm-5.2:free', pricing: { prompt: '0', completion: '0' } }
+  ] };
+  let calls = 0;
+  const report = await reviewPatch({ patch, base: 'a'.repeat(40), head: 'b'.repeat(40),
+    key: 'mock', getCatalog: async () => catalog,
+    review: async model => {
+      calls++;
+      return { ...model, verdict: 'INCONCLUSIVE',
+        reason: 'Provider HTTP 429', findings: [], falsification_attempts: [] };
+    }
+  });
+  assert.equal(calls, 2);
+  assert.equal(report.verdict, 'INCONCLUSIVE');
+  assert.match(report.providerIssues.join(' '), /shared-key retries/);
+});

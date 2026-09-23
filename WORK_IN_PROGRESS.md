@@ -2,6 +2,14 @@
 
 ---
 
+# 2026-09-23: Free reviewer output-budget reliability
+
+Latest independently inspected evidence: run 35808400443 produced six genuine INCONCLUSIVE responses: Google and Z-AI HTTP 429; NVIDIA Super no JSON; Nex timeout; Poolside and Cohere consumed output with empty content / length. Never treat these as PASS. A fresh branch from master a4777d63 adds catalog-aware reasoning budgets, one fail-closed retry on empty responses, in-band provider error detection, and mock regression coverage (17/17 focused tests plus Golden Standard PASS locally). No paid provider fallback, new schedule, branch-protection bypass, or PR code execution with credentials. Validate actual independent PASS on the exact submitted head before requiring the new status or merging this reliability patch. If all free providers are rate-limited, preserve INCONCLUSIVE and document quota/credential constraints rather than issuing fake green checks. Production/browser/user-visibility still unverified.
+
+Next reliability slice: OpenRouter free quota is shared per account (50/day), so adding 4 more approved free model IDs is only a resilience measure; two distinct-family 429 responses now trip a circuit breaker. Added a separate Cloudflare Workers AI path with three independently trained free-plan families (Google, Z-AI, NVIDIA), only when WORLD_CF_WORKERS_FREE_CONFIRMED=true after actual Free-plan verification. Existing CLOUDFLARE_* secrets require Workers AI permission; if unavailable or paid plan unverified, skip Cloudflare. Added strict Cloudflare JSON validation, 18KB diff budget, quota/permission fallback and independent-family tests. Nothing auto-merges, no sixth automation or unverified PASS. The current PR remains draft until live exact-SHA review genuinely succeeds.
+
+---
+
 # 2026-09-22: Independent Torvalds/Knuth maintainer gate
 
 ## Task
