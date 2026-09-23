@@ -4,9 +4,11 @@ const { performance } = require('node:perf_hooks');
 // These three different model families are listed for Workers Free in
 // Cloudflare's 2026-07-28 announcement. Never select a paid-only model.
 const MODELS = Object.freeze([
-  ['google', '@cf/google/gemma-4-26b-a4b-it'],
+  // Real runs showed Gemma hit a 45s timeout while GLM and Nemotron
+  // exhausted 2,500 output tokens on reasoning. Try the fast pair first.
   ['z-ai', '@cf/zai-org/glm-4.7-flash'],
-  ['nvidia', '@cf/nvidia/nemotron-3-120b-a12b']
+  ['nvidia', '@cf/nvidia/nemotron-3-120b-a12b'],
+  ['google', '@cf/google/gemma-4-26b-a4b-it']
 ]);
 const ACCOUNT_ID = /^[a-f0-9]{32}$/i;
 // Never accept a copied curl command, quotes, whitespace, or a pasted example.
@@ -57,7 +59,11 @@ async function requestCloudflareReview(model, patch, metadata, {
     const payload = { messages: [
       { role: 'system', content: systemPrompt },
       { role: 'user', content: JSON.stringify({ context: metadata, untrusted_patch: patch }) }
-    ], max_tokens: 2500, temperature: 0, stream: false };
+    ], max_completion_tokens: 4096, temperature: 0, stream: false,
+    // Cloudflare documents both controls on REST inputs. Null expressly
+    // disables reasoning; do not burn the entire token budget on thinking.
+    reasoning_effort: null,
+    chat_template_kwargs: { enable_thinking: false, clear_thinking: true } };
     const answer = await getJson(url, {
       method: 'POST',
       headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
