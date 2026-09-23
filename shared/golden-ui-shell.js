@@ -50,11 +50,11 @@
   closeButton.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();close();});
   drawer.addEventListener('pointerdown',e=>e.stopPropagation());
   addEventListener('keydown',e=>{if(e.code==='Escape')close()});
-  function packPanels(){for(const selector of cfg.selectors){for(const node of [...document.querySelectorAll(selector)]){if(root.contains(node))continue;node.dataset.goldenPacked='true';packed.appendChild(node);}}}
+  function packPanels(container=document){for(const selector of cfg.selectors){const nodes=[...container.querySelectorAll(selector)];if(container.matches?.(selector))nodes.unshift(container);for(const node of nodes){if(root.contains(node))continue;node.dataset.goldenPacked='true';packed.appendChild(node);}}}
   packPanels();
   // AppCore creates catalog login/chat after async initialization. Move, never clone.
   if(cfg.worldId==='world-server-catalog-live'){
-    const panelObserver=new MutationObserver(records=>{if(records.some(r=>r.addedNodes.length))packPanels();});
+    const panelObserver=new MutationObserver(records=>{for(const record of records)for(const node of record.addedNodes)if(node.nodeType===1&&!root.contains(node))packPanels(node);});
     panelObserver.observe(document.body,{childList:true});
   }
   if(!packed.children.length){const p=document.createElement('p');p.textContent='Дополнительных системных панелей нет.';packed.appendChild(p);}

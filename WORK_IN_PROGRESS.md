@@ -17,7 +17,7 @@ Login/chat handlers, renderer, other worlds, existing menu and HUD limits.
 ## Errors that must not return
 Large permanent mobile login/chat overlays outside the menu.
 ## Exact patch / change plan
-Add catalog selectors; reuse idempotent packing for direct body additions. Test late insertion, handlers, closed-drawer inertness and focus return.
+Add catalog selectors; pack only newly added body subtrees, avoiding full-document rescans. Test late insertion, handlers, closed-drawer inertness and focus return.
 ## Tests to run
 Syntax; cloud release gate, Golden desktop/mobile tests and Fleet.
 ## Deployment / PR plan
