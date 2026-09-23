@@ -62,7 +62,11 @@ function commit(world,intent,expectedRevision=world.revision){
  const plan=preview(world,intent);if(!plan.feasible)throw Error('INSUFFICIENT_RESOURCES');
  const next=copy(world);next.resources.budget-=plan.cost;
  for(const [k,v] of Object.entries(PROJECTS[intent.goal].needs))next.resources[k]-=v;
- const id='project-'+next.revision+'-'+hash(intent.comment+next.seed);
+ // A public ID must not fingerprint private player text: seed is public and a
+ // short text hash would permit dictionary guessing.
+ const publicIdentity=[next.seed,next.revision,intent.goal,intent.mechanism,
+  intent.assumptions.cautious?'cautious':'standard',intent.assumptions.reckless?'reckless':'bounded'].join(':');
+ const id='project-'+next.revision+'-'+hash(publicIdentity);
  next.projects.push({id,type:intent.goal,intent,remaining:plan.buildTicks,active:false,risk:plan.risk});
  next.revision++;next.history.push({tick:next.tick,kind:'project_started',id,type:intent.goal,comment:intent.comment});
  return next;

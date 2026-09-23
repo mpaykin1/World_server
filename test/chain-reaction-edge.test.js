@@ -25,10 +25,28 @@ test('Supabase Edge dispatches authenticated Chain Reaction before guest Voxel i
   assert.ok(entry.indexOf('isChainReactionAction(action)') < entry.indexOf('const who=await identity'));
   assert.match(adapter, /import "\.\.\/_shared\/world-consequence-engine\.js"/);
   assert.match(adapter, /chain_reaction_world_members/);
-  assert.match(adapter, /\.eq\("updated_at",row\.updated_at\)/);
+  assert.match(adapter, /commit_chain_reaction_action/);
+  assert.match(adapter, /publicState\(next\)/);
   assert.match(adapter, /"invite-member","revoke-member"/);
   assert.doesNotMatch(adapter, /app_metadata\?\.chain_reaction_worlds/);
   assert.doesNotMatch(adapter, /user_metadata/);
+});
+
+test('private Chain Reaction migration makes CAS and provenance one closed transaction', () => {
+  const migration = fs.readFileSync(path.join(root, 'supabase', 'migrations', '20260923220423_chain_reaction_private_history.sql'), 'utf8');
+  assert.match(migration, /chain_reaction_private_events enable row level security/i);
+  assert.match(migration, /revoke all on table[\s\S]+from public, anon, authenticated/i);
+  assert.match(migration, /security invoker/i);
+  assert.match(migration, /where id = p_world_id[\s\S]+updated_at = p_expected_updated_at/i);
+  assert.match(migration, /chain_reaction_world_members[\s\S]+for key share/i);
+  assert.match(migration, /insert into public\.chain_reaction_private_events/i);
+  assert.match(migration, /revoke all on function[\s\S]+from public, anon, authenticated/i);
+  assert.match(migration, /project->'intent'\) - 'comment'[\s\S]+jsonb_array_elements/i);
+  assert.match(migration, /event - 'comment'\) - 'actorId'/i);
+  assert.match(migration, /updated_at = greatest\(clock_timestamp\(\), updated_at \+ interval '1 microsecond'\)/i);
+  assert.match(migration, /add constraint voxel_worlds_chain_reaction_public_privacy[\s\S]+not valid/i);
+  assert.match(migration, /validate constraint voxel_worlds_chain_reaction_public_privacy/i);
+  assert.match(migration, /public privacy backfill was incomplete/i);
 });
 
 test('legacy trusted grants are backfilled once and stale JWT claims cannot bypass revoke', () => {

@@ -13,6 +13,7 @@ function fixture(options = {}) {
     ? [[`city:${OWNER_ID}`, { role: options.member }]]
     : (options.denied ? [] : [[`city:${OWNER_ID}`, { role: 'owner' }]]));
   let writes = 0;
+  const privateEvents = [];
   const users = {
     valid: { id: OWNER_ID, app_metadata: { chain_reaction_worlds: ['city'] }, user_metadata: { chain_reaction_worlds: ['city'] } },
     player: { id: PLAYER_ID, app_metadata: { chain_reaction_worlds: ['city'] }, user_metadata: {} },
@@ -20,6 +21,17 @@ function fixture(options = {}) {
   };
   const admin = {
     auth: { getUser: async token => ({ data: { user: users[token] || null }, error: null }) },
+    async rpc(name, params) {
+      assert.equal(name, 'commit_chain_reaction_action');
+      if (options.dbError) return { data: null, error: { code: 'database_error' } };
+      if (options.conflict || row.updated_at !== params.p_expected_updated_at) return { data: false, error: null };
+      const serialized = JSON.stringify(params.p_public_settings);
+      assert.doesNotMatch(serialized, /actorId|"comment"/);
+      row = { ...row, settings: clone(params.p_public_settings), updated_at: params.p_next_updated_at };
+      privateEvents.push({ actorId: params.p_actor_id, action: params.p_action, revision: params.p_revision, comment: params.p_comment });
+      writes++;
+      return { data: true, error: null };
+    },
     from(table) {
       const filters = []; let patch; let operation = 'select'; let inserted;
       return {
@@ -59,7 +71,7 @@ function fixture(options = {}) {
       };
     }
   };
-  return { admin, memberships, get row() { return row; }, get writes() { return writes; } };
+  return { admin, memberships, privateEvents, get row() { return row; }, get writes() { return writes; } };
 }
 const req = { headers: { authorization: 'Bearer valid' } };
 const playerReq = { headers: { authorization: 'Bearer player' } };
@@ -74,18 +86,23 @@ test('intent and preview are read-only; forged compiled intent is ignored', asyn
   assert.equal(preview.plan.cost, 40); assert.equal(preview.plan.buildTicks, 2);
   assert.equal(f.writes, 0);
 });
-test('commit and ticks persist engine output, provenance and unrelated settings; history paginates', async () => {
+test('commit and ticks persist public simulation plus private provenance; history paginates', async () => {
   const f = fixture();
-  const committed = await handle(f.admin, req, body('commit-plan', { expectedRevision: 0 }));
+  const secret = 'My private geothermal plan';
+  const committed = await handle(f.admin, req, body('commit-plan', { expectedRevision: 0, text: secret }));
   assert.equal(committed.world.resources.budget, 110);
   assert.equal(committed.world.projects[0].intent.schemaVersion, 1);
   assert.deepEqual(f.row.settings.worldDNA, { preserved: true });
+  assert.doesNotMatch(JSON.stringify(f.row.settings), new RegExp(secret));
+  assert.doesNotMatch(JSON.stringify(f.row.settings), /actorId|"comment"/);
+  assert.deepEqual(f.privateEvents[0], { actorId: OWNER_ID, action: 'commit-plan', revision: 1, comment: secret });
   const expected = engine.simulateTicks(committed.world, 3);
   const result = await handle(f.admin, req, body('tick', { expectedRevision: 1, count: 3 }));
   assert.deepEqual(result.world.resources, expected.resources);
   assert.equal(result.revision, 4); assert.equal(f.writes, 2);
   const history = await handle(f.admin, req, body('history', { offset: 1, limit: 1 }));
-  assert.equal(history.history[0].actorId, OWNER_ID); assert.equal(history.nextOffset, 2);
+  assert.equal(history.history[0].actorId, undefined); assert.equal(history.nextOffset, 2);
+  assert.deepEqual(f.privateEvents[1], { actorId: OWNER_ID, action: 'tick', revision: 4, comment: null });
   await rejects(handle(f.admin, req, body('commit-plan', { expectedRevision: 0 })), 409);
   assert.equal(f.writes, 2);
 });
