@@ -8,7 +8,7 @@ const vm = require('node:vm');
 const root = path.resolve(__dirname, '..');
 
 test('the canonical consequence engine exposes the same implementation to Node and Edge', () => {
-  const source = fs.readFileSync(path.join(root, 'lib/world-consequence-engine.js'), 'utf8');
+  const source = fs.readFileSync(path.join(root, 'supabase/functions/_shared/world-consequence-engine.js'), 'utf8');
   const context = { globalThis: {} };
   vm.runInNewContext(source, context);
   const edge = context.globalThis.WorldConsequenceEngine;
@@ -23,7 +23,7 @@ test('Supabase Edge dispatches authenticated Chain Reaction before guest Voxel i
   const adapter = fs.readFileSync(path.join(root, 'supabase/functions/world-emergence/chain-reaction.ts'), 'utf8');
   assert.match(entry, /if\(isChainReactionAction\(action\)\)return await handleChainReaction\(admin,req,b,\{json\}\)/);
   assert.ok(entry.indexOf('isChainReactionAction(action)') < entry.indexOf('const who=await identity'));
-  assert.match(adapter, /import "\.\.\/\.\.\/\.\.\/lib\/world-consequence-engine\.js"/);
+  assert.match(adapter, /import "\.\.\/_shared\/world-consequence-engine\.js"/);
   assert.match(adapter, /chain_reaction_world_members/);
   assert.match(adapter, /\.eq\("updated_at",row\.updated_at\)/);
   assert.match(adapter, /actor\.app_metadata\?\.chain_reaction_worlds/);

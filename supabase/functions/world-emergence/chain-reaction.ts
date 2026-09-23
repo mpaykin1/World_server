@@ -1,4 +1,4 @@
-import "../../../lib/world-consequence-engine.js";
+import "../_shared/world-consequence-engine.js";
 
 type Runtime = { json:(body:unknown,status?:number)=>Response };
 const engine=(globalThis as any).WorldConsequenceEngine;
