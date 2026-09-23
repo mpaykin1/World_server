@@ -65,8 +65,10 @@ Cloudflare Workers AI is a separately metered optional provider. Its
 documented Workers Free allocation is 10,000 Neurons/day, and the
 independently trained Google Gemma 4, Z-AI GLM 4.7 Flash and NVIDIA
 Nemotron 3 families are listed for Workers Free access. The workflow
-already has deployment secrets named CLOUDFLARE_ACCOUNT_ID and
-CLOUDFLARE_API_TOKEN, but they might lack Workers AI permissions.
+uses repository secrets named CLOUDFLARE_ACCOUNT_ID and
+WORLD_CF_AI_API_TOKEN, created with Workers AI Read/Edit permissions.
+The separate CLOUDFLARE_API_TOKEN is reserved for deployment. The
+new review secret exists, but live API permission is not yet verified.
 Do not print or export token values. The existing review job executes
 ONLY the trusted master checkout and passes the inert PR diff as data.
 
