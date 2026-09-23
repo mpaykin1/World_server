@@ -834,3 +834,19 @@ Implementation and local verification complete. Remaining proof is GitHub Action
 - Scope: quality-canary workflow only; no auth/security weakening and no production promotion.
 - Gates: release:gate, exact-SHA stack verification, Chromium/WebKit, playable delivery, HTTP smoke.
 - Status: protocol ledger updated after CI correctly rejected the workflow-only patch; rerun full gates before merge.
+# Chain Reaction backend API — 2026-09-23
+
+- Task / why: connect the deterministic engine to authenticated, persisted API actions.
+- Current state: engine exists; no backend intent/preview/commit/tick/history contract.
+- Target / direction: server-authoritative simulation in existing voxel world settings.
+- Systems / files: api/voxel.js, lib/chain-reaction-api.js, targeted backend tests only.
+- Risks: forged intent, guest impersonation, lost updates, unbounded simulation/history.
+- Preserve: engine arithmetic, browser client, legacy voxel actions, other agents' work.
+- Exact plan: dispatch chain actions before guest auth; require verified user and trusted app_metadata world grants; validate bounded input; recompute intents; persist settings using updated_at CAS; test failures and races.
+- Tests: focused API/engine tests and syntax locally; full npm check/release gates in cloud per cloud-first policy.
+- Deployment / PR: commit current branch as explicitly requested; push/PR if available; no merge/deploy.
+- Current progress: five API actions implemented with trusted per-world grants, server-side intent compilation, atomic state/history CAS, bounded requests and scenario capacity. Backend contract documented in docs/CHAIN_REACTION_API.md.
+- Next action: from an authorized Git context, stage these five files, commit this branch, push and open a draft PR; run cloud npm run check/release:gate and live Supabase integration verification. Provision trusted app_metadata.chain_reaction_worlds grants before client integration.
+- Completion criteria: scoped commit and honest test evidence; integration release remains subject to cloud gates and live Supabase verification.
+- Final evidence: node --test --test-isolation=none test/chain-reaction-api.test.js test/world-consequence-engine.test.js: 19/19 passed. node --check api/voxel.js and lib/chain-reaction-api.js passed; git diff --check passed. Agent rules check passed with git subprocess EPERM warnings (branch/file checks not verified by that script). Ordinary node --test failed to spawn subprocesses (EPERM); same tests passed with isolation disabled. Full release suite remains unrun, cloud-first. No live database or browser claim. Simulation arithmetic and accepted quality metrics unchanged; no scientific readiness claim.
+- Commit blocker: git add failed creating C:/Users/user/Desktop/World_server/.git/worktrees/worldserver-codex-chain-20260923/index.lock: Permission denied. The linked worktree Git directory is outside this session's writable root; approvals are unavailable. No commit/SHA, push, PR or deployment produced. No new worktree or Desktop copy created; existing user worktrees left untouched.
