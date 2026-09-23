@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "generator": "sprite-intelligence-cpu-v1",
+  "assets": [
+    {
+      "id": "river-ripple",
+      "kind": "effect",
+      "zone": "wetland",
+      "style": "sprite",
+      "frames": 4,
+      "stage": "any",
+      "relation": "wetland_ecology",
+      "relationKey": "forest|river",
+      "action": "generate",
+      "reason": "causal relation wetland_ecology in zone wetland",
+      "expectedObservable": "river-ripple visible in wetland",
+      "verification": "sprite manifest + relation-zone placement + desktop/mobile render and FPS",
+      "file": "river-ripple.png",
+      "sha256": "8f14b1647719e48e136429531aeb6a4eeedc672d35cc17a07f78cbeaef42c336",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "atlasWidth": 64,
+      "atlasHeight": 16,
+      "states": [
+        "ambient"
+      ],
+      "fps": 4,
+      "license": "CC0-1.0 original procedural CPU",
+      "alpha": true
+    }
+  ]
+}
