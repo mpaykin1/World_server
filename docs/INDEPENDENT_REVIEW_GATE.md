@@ -85,3 +85,19 @@ provider endpoints differ. One BLOCK vetoes every PASS. Missing
 credentials, quota exhaustion, malformed output and empty reasoning
 responses cannot approve a patch. Model results never replace the
 maintainer decision or production user-visibility verification.
+
+## Token-value-only rule (2026-09-23)
+
+For `WORLD_CF_AI_API_TOKEN`, paste ONLY the raw token value, not a
+Cloudflare REST API example, curl command, JSON response, or HTTP header.
+A pasted command previously caused a native header-validation error with
+credential text in an artifact. The affected artifact was deleted and
+the malformed GitHub secret removed; Workers AI remains disabled pending
+Cloudflare token revocation and replacement. Never store the token in
+this repository, issue text, PR comments, test logs, or screenshots.
+
+The reviewer validates token syntax before building headers and emits
+only explicitly allowlisted, credential-free error messages. The same
+sanitization applies to OpenRouter transport failures. Re-enable Workers
+AI only after the replacement token is safely stored, the Workers Free
+plan is reconfirmed, and the redaction patch has passed all CI checks.

@@ -6,7 +6,7 @@ const fs = require('node:fs');
 const crypto = require('node:crypto');
 const cp = require('node:child_process');
 const { performance } = require('node:perf_hooks');
-const { MAX_PATCH_BYTES: MAX_CLOUDFLARE_PATCH_BYTES,
+const { MAX_PATCH_BYTES: MAX_CLOUDFLARE_PATCH_BYTES, API_TOKEN,
   availableCloudflareModels, requestCloudflareReview } = require('./independent-review-cloudflare.cjs');
 
 const CANDIDATES = [
@@ -123,8 +123,23 @@ function preflightPatch(patch) {
   if (bytes === 0) return 'No changes to independently review';
   if (bytes > MAX_PATCH_BYTES) return 'Patch exceeds review budget; full human review required';
   if (/^GIT binary patch|^Binary files /m.test(patch)) return 'Binary change requires separate human review';
-  if (/^\+(?!\+\+).*(?:sk-[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{30,})/m.test(patch)) return 'Possible secret in diff; do not send to external model';
+  if (/^\+(?!\+\+).*(?:sk[-_][A-Za-z0-9]{20,}|cfut_[A-Za-z0-9_-]{30,}|ghp_[A-Za-z0-9]{30,})/m.test(patch)) return 'Possible secret in diff; do not send to external model';
   return null;
+}
+// Provider errors are untrusted. Native HTTP header exceptions can echo a
+// malformed Authorization value, including a copied token or curl command.
+// Only fixed errors and numeric HTTP codes may enter public CI artifacts.
+function safeProviderError(err) {
+  const value = String(err?.message || '');
+  const http = /^Provider HTTP ([1-5][0-9]{2})$/.exec(value);
+  if (http) return 'Provider HTTP ' + http[1];
+  if (/^Model did not return valid JSON contentChars=[0-9]+ finish=[A-Za-z0-9_-]+(?: reasoningTokens=[0-9]+)?$/.test(value)) {
+    return value.slice(0, 160);
+  }
+  if (['Model did not return valid JSON', 'Missing structured review fields',
+    'Invalid model verdict', 'Truncated model output; PASS cannot be trusted'].includes(value)) return value;
+  if (/timeout|aborted|AbortError/i.test(value)) return 'Reviewer request timed out';
+  return 'Reviewer request failed (details redacted)';
 }
 async function getJson(url, options, timeoutMs) {
   const response = await fetch(url, { ...options, signal: AbortSignal.timeout(timeoutMs) });
@@ -197,7 +212,7 @@ async function requestReview(model, patch, metadata, key, {
       return { model: model.id, family: model.family, ...result,
         attempts: attempts + 1, durationMs: Math.round(performance.now() - started) };
     } catch (err) {
-      const message = String(err.message);
+      const message = safeProviderError(err);
       // Some free providers advertise JSON mode but reject it at inference time.
       // Retrying without JSON mode does not relax strict local JSON validation.
       if (payload.response_format && /Provider HTTP (400|422)\b/.test(message)) {
@@ -209,7 +224,7 @@ async function requestReview(model, patch, metadata, key, {
         continue;
       }
       return { model: model.id, family: model.family, verdict: 'INCONCLUSIVE',
-        findings: [], falsification_attempts: [], reason: message.slice(0, 180),
+        findings: [], falsification_attempts: [], reason: message,
         attempts: attempts + 1, durationMs: Math.round(performance.now() - started) };
     }
   }
@@ -236,6 +251,12 @@ async function reviewPatch({ patch, base, head, key, builderModel = '',
   if (problem) { report.blockers.push(problem); return report; }
   const metadata = { repo: 'mpaykin1/World_server', base, head,
     diffSha256: report.diffSha256 };
+  if (cloudflare?.freePlanConfirmed && cloudflare?.token && !API_TOKEN.test(cloudflare.token)) {
+    report.providerIssues.push('Workers AI token malformed; paste only the token value and rotate any exposed token');
+  }
+  if (cloudflare?.freePlanConfirmed && !/^[a-f0-9]{32}$/i.test(cloudflare.accountId || '')) {
+    report.providerIssues.push('Workers AI account ID missing or invalid');
+  }
   const cfModels = availableCloudflareModels({ ...cloudflare, builderModel });
   if (cfModels.length && report.diffBytes <= MAX_CLOUDFLARE_PATCH_BYTES) {
     for (const model of cfModels) {

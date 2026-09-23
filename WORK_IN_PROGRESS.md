@@ -2,6 +2,14 @@
 
 ---
 
+# 2026-09-23: Independent reviewer credential-safe error handling
+
+A real Workers AI probe exposed a malformed GitHub credential: the user pasted a complete REST curl command rather than only the new API token. A native HTTP header exception reflected a partial credential into a GitHub artifact. Mitigation completed: the affected artifact was deleted (API now denies access); malformed WORLD_CF_AI_API_TOKEN was deleted; WORLD_CF_WORKERS_FREE_CONFIRMED disabled. The user must revoke the old Cloudflare token and create a fresh token, placing ONLY the token value into the dedicated GitHub secret. Do not print any old or new token or diagnostics derived from native header exceptions.
+
+This branch fail-closes on invalid token format before HTTP, whitelists provider errors rather than logging arbitrary exception text (both Cloudflare and OpenRouter), rejects literal sk_, sk-, cfut_ and ghp_ secrets in added diff lines, and adds regression tests for secret-bearing header failures. Offline tests pass; real Cloudflare API tests remain blocked until token rotation. Do not merge this hotfix into master by bypassing governance without separate maintainer permission. Keep the five existing scheduled jobs unchanged.
+
+---
+
 # 2026-09-23: Cloudflare fresh-deploy propagation verification
 
 Real PR #252 deploy-and-verify failed because Wrangler reported successful upload and publication, but the new preview `/` returned 404 within a fraction of a second. A separate read-only probe later returned 200 on the same URL. The exact-SHA verifier now retries only initial root/config 404/502/503/504 and stale expected SHA with a bounded ~76s readiness budget before running all existing hard checks. 401/403, non-readiness route failures, and a different SHA after the deadline still fail closed. Test four deterministic scenarios. No changes to the production app, scheduled jobs, or permanent URL policy.

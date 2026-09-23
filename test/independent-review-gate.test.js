@@ -169,7 +169,7 @@ test('HTTP 200 provider error is inconclusive, not approval', async () => {
   const result = await requestReview({ id: 'nvidia/test:free', family: 'nvidia' },
     patch, {}, 'mock', { requestJson: async () => ({ error: { code: 'quota_exceeded' } }) });
   assert.equal(result.verdict, 'INCONCLUSIVE');
-  assert.match(result.reason, /quota_exceeded/);
+  assert.equal(result.reason, 'Reviewer request failed (details redacted)');
 });
 
 test('two independent 429s stop exhausting a shared free account allowance', async () => {
@@ -190,4 +190,51 @@ test('two independent 429s stop exhausting a shared free account allowance', asy
   assert.equal(calls, 2);
   assert.equal(report.verdict, 'INCONCLUSIVE');
   assert.match(report.providerIssues.join(' '), /shared-key retries/);
+});
+
+test('OpenRouter header errors cannot leak credentials into CI evidence', async () => {
+  const credential = 'sk_' + 'S'.repeat(38);
+  const model = { id: 'google/gemma-4-31b-it:free', family: 'google' };
+  const result = await requestReview(model, patch, {}, credential, {
+    requestJson: async () => {
+      throw new TypeError('Headers.append: invalid value Bearer ' + credential);
+    }
+  });
+  assert.equal(result.verdict, 'INCONCLUSIVE');
+  assert.equal(result.reason, 'Reviewer request failed (details redacted)');
+  assert.ok(!JSON.stringify(result).includes(credential));
+});
+
+test('OpenRouter model-controlled error suffixes are never reported', async () => {
+  const credential = 'sk_' + 'R'.repeat(40);
+  for (const prefix of ['Model did not return valid JSON',
+    'Missing structured review fields']) {
+    const result = await requestReview(
+      { id: 'google/gemma-4-31b-it:free', family: 'google' }, patch, {}, credential,
+      { requestJson: async () => { throw new Error(prefix + ' ' + credential); } });
+    assert.equal(result.verdict, 'INCONCLUSIVE');
+    assert.equal(result.reason, 'Reviewer request failed (details redacted)');
+    assert.ok(!JSON.stringify(result).includes(credential));
+  }
+});
+
+test('preflight refuses OpenRouter and Workers AI secret-bearing added diff lines', () => {
+  for (const credential of [
+    'sk_' + 'A'.repeat(42),
+    'sk-' + 'B'.repeat(42),
+    'cfut_' + 'C'.repeat(42),
+    'ghp_' + 'D'.repeat(42)
+  ]) {
+    const reason = preflightPatch('diff --git a/foo b/foo\n@@ -0,0 +1 @@\n+' + credential + '\n');
+    assert.equal(reason, 'Possible secret in diff; do not send to external model');
+    assert.ok(!reason.includes(credential));
+  }
+});
+test('review diagnostics do not echo provider-controlled secret-bearing errors', async () => {
+  const secret = 'cfut_' + 'S'.repeat(40);
+  for (const msg of ['Provider HTTP 403: ' + secret, 'Missing structured review fields ' + secret]) {
+    const result = await requestReview({id: 'google/gemma-4-31b-it:free',family:'google'},
+      patch, {}, 'mock', {requestJson:async () => {throw new Error(msg)}});
+    assert.equal(result.reason,'Reviewer request failed (details redacted)');
+  }
 });
