@@ -6,6 +6,8 @@ const fs = require('node:fs');
 const crypto = require('node:crypto');
 const cp = require('node:child_process');
 const { performance } = require('node:perf_hooks');
+const { MAX_PATCH_BYTES: MAX_CLOUDFLARE_PATCH_BYTES,
+  availableCloudflareModels, requestCloudflareReview } = require('./independent-review-cloudflare.cjs');
 
 const CANDIDATES = [
   ['google', 'google/gemma-4-31b-it:free'],
@@ -19,6 +21,10 @@ const CANDIDATES = [
   ['google', 'google/gemma-4-26b-a4b-it:free'],
   ['nex-agi', 'nex-agi/nex-n2.5-mini:free'],
   ['dots-studio', 'dots-studio/dots-3-note-preview:free'],
+  ['thinkingmachines', 'thinkingmachines/inkling-small:free'],
+  ['thinkingmachines', 'thinkingmachines/inkling:free'],
+  ['liquid', 'liquid/lfm-2.5-2.6b:free'],
+  ['nvidia', 'nvidia/nemotron-3-ultra-550b-a55b:free'],
   ['qwen', 'qwen/qwen3-coder:free']
 ];
 const SHA = /^[a-f0-9]{40}$/i;
@@ -51,7 +57,10 @@ function availableModels(catalog, builderModel = '') {
     const item = models.get(id);
     if (!item || id === builderModel || builderModel.startsWith(family + '/')) return [];
     if (String(item.pricing?.prompt) !== '0' || String(item.pricing?.completion) !== '0') return [];
-    return [{ family, id, supportsJson: (item.supported_parameters || []).includes('response_format') }];
+    return [{ family, id,
+      supportsJson: (item.supported_parameters || []).includes('response_format'),
+      supportsReasoning: (item.supported_parameters || []).includes('reasoning'),
+      reasoning: item.reasoning || null }];
   });
 }
 function selectedModels(catalog, builderModel = '') {
@@ -122,18 +131,29 @@ async function getJson(url, options, timeoutMs) {
   if (!response.ok) throw new Error('Provider HTTP ' + response.status);
   return response.json();
 }
+// Reserve visible output tokens: free reasoning models may otherwise spend
+// the entire completion budget thinking and return content='' / finish=length.
+function reasoningBudget(model) {
+  if (!model.supportsReasoning || model.reasoning?.mandatory ||
+      model.reasoning?.default_enabled === false) return null;
+  if (model.reasoning?.supports_max_tokens) return { max_tokens: 1024 };
+  if (model.reasoning?.supported_efforts?.includes('low')) return { effort: 'low' };
+  return { enabled: false };
+}
 async function requestReview(model, patch, metadata, key, {
   requestJson = getJson, sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 } = {}) {
   const started = performance.now();
   const payload = {
-    model: model.id, temperature: 0, max_tokens: 3000, stream: false,
+    model: model.id, temperature: 0, max_tokens: 4200, stream: false,
     messages: [
       { role: 'system', content: SYSTEM_PROMPT },
       { role: 'user', content: JSON.stringify({ context: metadata, untrusted_patch: patch }) }
     ]
   };
   if (model.supportsJson) payload.response_format = { type: 'json_object' };
+  const reasoning = reasoningBudget(model);
+  if (reasoning) payload.reasoning = reasoning;
   const url = 'https://openrouter.ai/api/v1/chat/completions';
   const headers = {
     Authorization: 'Bearer ' + key, 'Content-Type': 'application/json',
@@ -146,12 +166,30 @@ async function requestReview(model, patch, metadata, key, {
       const response = await requestJson(url, {
         method: 'POST', headers, body: JSON.stringify(payload)
       }, 65000);
+      if (response?.error) throw new Error('Provider in-band error ' +
+        String(response.error.code || response.error.message || 'unknown').slice(0, 100));
       const choice = response?.choices?.[0] || {};
+      if (choice.error) throw new Error('Provider choice error ' +
+        String(choice.error.code || choice.error.message || 'unknown').slice(0, 100));
+      const content = Array.isArray(choice.message?.content)
+        ? choice.message.content.filter(x => x?.type === 'text').map(x => x.text).join('')
+        : choice.message?.content;
+      if (!String(content || '').trim() && attempts === 0) {
+        // Retry once without an optional format/reasoning constraint; do not
+        // accept empty or truncated output as approval under any circumstance.
+        delete payload.response_format;
+        if (model.supportsReasoning && !model.reasoning?.mandatory) {
+          payload.reasoning = { enabled: false };
+        }
+        payload.max_tokens = 6000;
+        continue;
+      }
       let result;
-      try { result = parseVerdict(choice.message?.content); }
+      try { result = parseVerdict(content); }
       catch (err) { throw new Error(err.message +
-        ' contentChars=' + String(choice.message?.content || '').length +
-        ' finish=' + String(choice.finish_reason || 'unknown')); }
+        ' contentChars=' + String(content || '').length +
+        ' finish=' + String(choice.finish_reason || 'unknown') +
+        ' reasoningTokens=' + Number(response?.usage?.completion_tokens_details?.reasoning_tokens || 0)); }
       // A truncated review cannot provide enough evidence to approve a patch.
       if (choice.finish_reason === 'length' && result.verdict === 'PASS') {
         throw new Error('Truncated model output; PASS cannot be trusted');
@@ -185,16 +223,42 @@ function readPatch(base, head) {
     '--unified=8', base + '...' + head, '--'], { encoding: 'utf8',
       maxBuffer: MAX_PATCH_BYTES * 3 });
 }
-async function reviewPatch({ patch, base, head, key, builderModel = '', getCatalog = getJson, review = requestReview }) {
+async function reviewPatch({ patch, base, head, key, builderModel = '',
+  getCatalog = getJson, review = requestReview, cloudflare = null,
+  reviewCloudflare = requestCloudflareReview }) {
   const report = {
     schemaVersion: 1, generatedAt: new Date().toISOString(), base, head,
     diffSha256: crypto.createHash('sha256').update(patch).digest('hex'),
     diffBytes: Buffer.byteLength(patch), verdict: 'INCONCLUSIVE',
-    reviewers: [], blockers: [], requiresMaintainerDecision: true
+    reviewers: [], blockers: [], providerIssues: [], requiresMaintainerDecision: true
   };
   const problem = preflightPatch(patch);
   if (problem) { report.blockers.push(problem); return report; }
-  if (!key) { report.blockers.push('Independent reviewer credential unavailable'); return report; }
+  const metadata = { repo: 'mpaykin1/World_server', base, head,
+    diffSha256: report.diffSha256 };
+  const cfModels = availableCloudflareModels({ ...cloudflare, builderModel });
+  if (cfModels.length && report.diffBytes <= MAX_CLOUDFLARE_PATCH_BYTES) {
+    for (const model of cfModels) {
+      if (aggregate(report.reviewers) !== 'INCONCLUSIVE') break;
+      if (report.reviewers.some(x => x.family === model.family && x.verdict === 'PASS')) continue;
+      const result = await reviewCloudflare(model, patch, metadata, {
+        ...cloudflare, systemPrompt: SYSTEM_PROMPT, parseVerdict });
+      report.reviewers.push(result);
+      if (result.verdict === 'BLOCK') break;
+      if (/Cloudflare (HTTP (401|403|429)|API error code=3036)/.test(result.reason || '')) {
+        report.providerIssues.push('Cloudflare account permission or quota blocked');
+        break; // Avoid another request against the same exhausted account/token.
+      }
+    }
+  } else if (cfModels.length) {
+    report.providerIssues.push('Cloudflare patch exceeds conservative free inference budget');
+  }
+  report.verdict = aggregate(report.reviewers);
+  if (report.verdict !== 'INCONCLUSIVE') return report;
+  if (!key) {
+    report.blockers.push('Independent reviewer credential unavailable; no sufficient alternate reviews');
+    return report;
+  }
   let models;
   try {
     models = availableModels(await getCatalog('https://openrouter.ai/api/v1/models', {}, 15000), builderModel);
@@ -202,26 +266,30 @@ async function reviewPatch({ patch, base, head, key, builderModel = '', getCatal
     report.blockers.push('Free-model catalog unavailable: ' + String(err.message).slice(0, 140));
     return report;
   }
-  const primary = [], primaryFamilies = new Set();
-  for (const model of models) {
-    if (primaryFamilies.has(model.family)) continue;
-    primary.push(model);
-    primaryFamilies.add(model.family);
-    if (primary.length === 2) break;
+  const possibleFamilies = new Set(models.map(x => x.family));
+  for (const x of report.reviewers) {
+    if (x.verdict === 'PASS') possibleFamilies.add(x.family);
   }
-  if (primary.length !== 2) {
+  if (possibleFamilies.size < 2) {
     report.blockers.push('Two independent zero-cost model families unavailable; no paid fallback');
     return report;
   }
-  const metadata = { repo: 'mpaykin1/World_server', base, head, diffSha256: report.diffSha256 };
-  report.reviewers = await Promise.all(primary.map(model => review(model, patch, metadata, key)));
-  const attempted = new Set(primary.map(x => x.id));
+  const attempted = new Set(), rateLimitedFamilies = new Set();
+  // Sequential calls avoid consuming an entire shared free API allowance in parallel.
   for (const model of models) {
     if (aggregate(report.reviewers) !== 'INCONCLUSIVE' || report.reviewers.length >= 6) break;
     if (attempted.has(model.id)) continue;
     if (report.reviewers.some(x => x.family === model.family && x.verdict === 'PASS')) continue;
     attempted.add(model.id);
-    report.reviewers.push(await review(model, patch, metadata, key));
+    const result = await review(model, patch, metadata, key);
+    report.reviewers.push(result);
+    if (/Provider HTTP 429/.test(result.reason || '')) {
+      rateLimitedFamilies.add(model.family);
+      if (rateLimitedFamilies.size >= 2) {
+        report.providerIssues.push('Two OpenRouter model families rate-limited; stop shared-key retries');
+        break;
+      }
+    }
   }
   report.verdict = aggregate(report.reviewers);
   if (report.verdict !== 'PASS') {
@@ -237,7 +305,12 @@ async function main() {
   const patch = args['diff-file'] ? fs.readFileSync(args['diff-file'], 'utf8') : readPatch(base, head);
   const report = await reviewPatch({
     patch, base, head, key: process.env.WORLD_REVIEW_KEY || '',
-    builderModel: process.env.WORLD_BUILDER_MODEL || 'qwen/qwen3-coder:free'
+    builderModel: process.env.WORLD_BUILDER_MODEL || 'qwen/qwen3-coder:free',
+    cloudflare: {
+      accountId: process.env.CLOUDFLARE_ACCOUNT_ID || '',
+      token: process.env.CLOUDFLARE_API_TOKEN || '',
+      freePlanConfirmed: process.env.WORLD_CF_WORKERS_FREE_CONFIRMED === 'true'
+    }
   });
   fs.writeFileSync(output, JSON.stringify(report, null, 2) + '\n');
   console.log('[INDEPENDENT_REVIEW] verdict=' + report.verdict +

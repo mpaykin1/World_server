@@ -52,3 +52,36 @@ rules. It never changes world configuration or calls a prediction measured.
 A candidate must survive the separate independent PR review plus existing
 Golden Standard, CI, real-device comparisons and >=85% user visibility before
 any testing link is delivered.
+
+## 2026-09-23: Independent free-provider diversification
+
+OpenRouter's Free account has a shared quota (currently 50 requests/day).
+Adding more model IDs alone cannot solve account-wide 429 responses.
+The reviewer now attempts zero-priced, live-catalog-verified OpenRouter
+model families sequentially and stops after 429s from two different
+families rather than burning more of the same account quota.
+
+Cloudflare Workers AI is a separately metered optional provider. Its
+documented Workers Free allocation is 10,000 Neurons/day, and the
+independently trained Google Gemma 4, Z-AI GLM 4.7 Flash and NVIDIA
+Nemotron 3 families are listed for Workers Free access. The workflow
+uses repository secrets named CLOUDFLARE_ACCOUNT_ID and
+WORLD_CF_AI_API_TOKEN, created with Workers AI Read/Edit permissions.
+The separate CLOUDFLARE_API_TOKEN is reserved for deployment. The
+new review secret exists, but live API permission is not yet verified.
+Do not print or export token values. The existing review job executes
+ONLY the trusted master checkout and passes the inert PR diff as data.
+
+**Non-negotiable free-only activation:** the GitHub repository variable
+WORLD_CF_WORKERS_FREE_CONFIRMED must be set to the literal `true` only
+after the account's *Workers Free plan* is verified. Workers Paid can
+charge for usage above the free daily allocation, so unknown or paid
+accounts remain disabled. A Cloudflare 401/403/429 fails closed and
+falls back to available OpenRouter families. No unapproved paid fallback.
+Cloudflare only receives patches at or below 18 KB, conserving budget.
+
+Two PASS results must come from distinct MODEL FAMILIES even when
+provider endpoints differ. One BLOCK vetoes every PASS. Missing
+credentials, quota exhaustion, malformed output and empty reasoning
+responses cannot approve a patch. Model results never replace the
+maintainer decision or production user-visibility verification.
