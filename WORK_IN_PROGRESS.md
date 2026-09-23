@@ -3,7 +3,7 @@
 ## Task
 Canary repair, 2026-09-23, Codex.
 ## Why
-Run 35845450510 lost artifacts and misidentified FX as HUD/game canvas.
+Run 35845450510: lost artifacts, FX misidentified.
 ## Current state
 Base 1ed5d8f8; Canary 17 failed/199 passed.
 ## Target state
@@ -17,17 +17,17 @@ Full matrix, baselines, release gate, graphics and controls.
 ## Errors that must not return
 Lost artifacts; ambiguous canvas; FX as HUD; stale catalog counts.
 ## Exact patch / change plan
-Reuse summarizer; always upload; assert primary canvas and strict FX contract; test canonical fallback inventory.
+Retain evidence; fix canvas/FX/catalog assertions.
 ## Tests to run
 Node focused tests; cloud check/release gate and full Canary.
 ## Deployment / PR plan
 PR #264, isolated branch; protected integration after review.
 ## Current progress
-Route/recall read; first patch 9/9 tests and peer review passed. Cloud run 35856568390 pending. Other owners untouched.
+9/9 tests, peer review PASS. Cloud 35856568390 pending.
 ## Next action
 Verify current patch in cloud and inspect retained failures.
 ## Completion criteria
-Real retained evidence; repaired contracts pass; residual failures identified.
+Cloud evidence and passing repaired contracts.
 ## Final evidence
 Pending cloud; no production readiness claim.
 
