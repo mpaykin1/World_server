@@ -176,3 +176,19 @@ test('allowlisted diagnostic text is strictly exact and cannot contain a key', (
   assert.equal(safeCloudflareError(new Error('Missing structured review fields '+ secret)),
     'Cloudflare request failed (details redacted)');
 });
+
+test('only real aborts or exact runtime timeout messages are timeout-classified', () => {
+  const { safeCloudflareError } = require('../scripts/independent-review-cloudflare.cjs');
+  const secret = cfg.token;
+  const spoofed = new Error('Provider timeout while posting Authorization Bearer ' + secret);
+  assert.equal(safeCloudflareError(spoofed), 'Cloudflare request failed (details redacted)');
+  const genuine = new Error('The operation was aborted due to timeout');
+  genuine.name = 'TimeoutError';
+  assert.equal(safeCloudflareError(genuine), 'Cloudflare request timed out');
+  const tagged = new Error('Bearer ' + secret);
+  tagged.name = 'AbortError';
+  assert.equal(safeCloudflareError(tagged), 'Cloudflare request timed out');
+  assert.equal(safeCloudflareError(new Error('Cloudflare HTTP 429')), 'Cloudflare HTTP 429');
+  assert.equal(safeCloudflareError(new Error('Cloudflare HTTP 429: Bearer ' + secret)),
+    'Cloudflare request failed (details redacted)');
+});
