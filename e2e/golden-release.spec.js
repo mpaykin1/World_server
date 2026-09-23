@@ -2,6 +2,8 @@ const { test, expect } = require('@playwright/test');
 
 test.describe('World Server Golden Standard', () => {
   test('catalog packs late account/chat panels without losing their handlers', async ({ page }) => {
+    // Isolate late-panel insertion from any live authentication initialization.
+    await page.route('**/api/config',r=>r.fulfill({status:503,contentType:'application/json',body:'{"error":"fixture offline"}'}));
     await page.goto('/apps/catalog/', {waitUntil:'domcontentloaded'});
     await page.waitForFunction(()=>window.GoldenUIShell);
     await page.evaluate(()=>{
