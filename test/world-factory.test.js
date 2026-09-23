@@ -12,8 +12,18 @@ const requestId = '123e4567-e89b-42d3-a456-426614174000';
 
 function fakeAdmin() {
   const rows = new Map();
+  const users = new Map();
   return {
-    rows,
+    rows, users,
+    auth: { admin: {
+      async getUserById(id) { return { data: { user: users.get(id) || null }, error: null }; },
+      async updateUserById(id, attributes) {
+        const user = users.get(id);
+        if (!user) return { data: null, error: { message: 'missing user' } };
+        Object.assign(user, attributes);
+        return { data: { user }, error: null };
+      }
+    } },
     from(table) {
       assert.equal(table, 'voxel_worlds');
       let id = null;
@@ -161,6 +171,25 @@ test('create is idempotent: retry returns the same persisted world instead of du
   assert.equal(second.idempotent, true);
   assert.equal(first.world.id, second.world.id);
   assert.equal(admin.rows.size, 1);
+});
+
+test('authenticated creator receives a bounded trusted Chain Reaction grant', async () => {
+  const admin = fakeAdmin();
+  admin.users.set('creator-1', { id: 'creator-1', app_metadata: { plan: 'free' } });
+  admin.users.set('stranger-1', { id: 'stranger-1', app_metadata: {} });
+  const body = { idea: 'город с вулканом', requestId };
+  const first = await factoryApi.createWorld(admin, body, { userId: 'creator-1' });
+  assert.equal(first.created, true);
+  assert.equal(first.chainReaction.granted, true);
+  assert.equal(first.chainReaction.authRefreshRequired, true);
+  assert.deepEqual(admin.users.get('creator-1').app_metadata.chain_reaction_worlds, [first.world.id]);
+  assert.equal(admin.rows.get(first.world.id).settings.chainReactionAccess.ownerUserId, 'creator-1');
+  assert.equal(first.world.chainReactionAccess, undefined);
+  const retry = await factoryApi.createWorld(admin, body, { userId: 'creator-1' });
+  assert.equal(retry.chainReaction.granted, false);
+  const stranger = await factoryApi.createWorld(admin, body, { userId: 'stranger-1' });
+  assert.equal(stranger.chainReaction.available, false);
+  assert.equal(admin.users.get('stranger-1').app_metadata.chain_reaction_worlds, undefined);
 });
 
 test('user-facing create flow routes every generated world through its own id and realtime channel', () => {
