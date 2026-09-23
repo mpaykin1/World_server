@@ -77,6 +77,11 @@ jobs:
         env:
           WORLD_REVIEW_KEY: ${{ secrets.WORLD }}
           WORLD_BUILDER_MODEL: qwen/qwen3-coder:free
+          # Only enable when a Workers Free plan is positively verified.
+          # On Workers Paid, exceeding free neurons would incur charges.
+          WORLD_CF_WORKERS_FREE_CONFIRMED: ${{ vars.WORLD_CF_WORKERS_FREE_CONFIRMED }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           BASE_SHA: ${{ steps.refs.outputs.base }}
           HEAD_SHA: ${{ steps.refs.outputs.head }}
         run: |

@@ -171,3 +171,23 @@ test('HTTP 200 provider error is inconclusive, not approval', async () => {
   assert.equal(result.verdict, 'INCONCLUSIVE');
   assert.match(result.reason, /quota_exceeded/);
 });
+
+test('two independent 429s stop exhausting a shared free account allowance', async () => {
+  const catalog = { data: [
+    { id: 'google/gemma-4-31b-it:free', pricing: { prompt: '0', completion: '0' } },
+    { id: 'nvidia/nemotron-3-super-120b-a12b:free', pricing: { prompt: '0', completion: '0' } },
+    { id: 'z-ai/glm-5.2:free', pricing: { prompt: '0', completion: '0' } }
+  ] };
+  let calls = 0;
+  const report = await reviewPatch({ patch, base: 'a'.repeat(40), head: 'b'.repeat(40),
+    key: 'mock', getCatalog: async () => catalog,
+    review: async model => {
+      calls++;
+      return { ...model, verdict: 'INCONCLUSIVE',
+        reason: 'Provider HTTP 429', findings: [], falsification_attempts: [] };
+    }
+  });
+  assert.equal(calls, 2);
+  assert.equal(report.verdict, 'INCONCLUSIVE');
+  assert.match(report.providerIssues.join(' '), /shared-key retries/);
+});
