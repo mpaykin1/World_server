@@ -63,6 +63,12 @@ async function api(action,payload={}){
   const j=await r.json().catch(()=>({})); if(!r.ok) throw new Error(j.error||'Ошибка Voxel API'); return j;
 }
 
+async function emergenceApi(action,payload={}){
+  const headers={'Content-Type':'application/json','Accept':'application/json'}; const t=token(); if(t) headers.Authorization=`Bearer ${t}`;
+  const r=await fetch('/api/emergence',{method:'POST',headers,body:JSON.stringify({action,guestId:guestId(),...payload})});
+  const j=await r.json().catch(()=>({})); if(!r.ok) throw new Error(j.error||'Ошибка Emergence API'); return j;
+}
+
 async function canonApi(eventType,summary,payload,idempotencyKey){
   const headers={'Content-Type':'application/json','Accept':'application/json'}; const t=token(); if(!t)return null; headers.Authorization=`Bearer ${t}`;
   const body=JSON.stringify({action:'record',guestId:guestId(),worldId:ACTIVE_WORLD_ID,eventType,summary,payload,idempotencyKey});
@@ -651,7 +657,7 @@ async function growEmergence(){
   if(!(emergenceState?.relations?.length))return;
   while(Number(emergenceState.growthStage||1)<Number(emergenceState.maxGrowthStage||5)){
     await new Promise(resolve=>setTimeout(resolve,850));
-    const result=await api('macro_tick',{worldId:ACTIVE_WORLD_ID});emergenceState=result.emergence;renderEmergenceVisuals();
+    const result=await emergenceApi('macro_tick',{worldId:ACTIVE_WORLD_ID});emergenceState=result.emergence;renderEmergenceVisuals();
     if(channel)void channel.send({type:'broadcast',event:'macro_state',payload:emergenceState});
   }
   window.AppCore?.toast?.('Мир связал крупные сущности и дорисовал детали.');
@@ -661,7 +667,7 @@ async function placeMacro(type,button){
   if(button)button.disabled=true;
   try{
     const distance=10,x=player.pos.x+Math.sin(player.yaw)*distance,z=player.pos.z-Math.cos(player.yaw)*distance;
-    const result=await api('macro_place',{worldId:ACTIVE_WORLD_ID,type,position:{x,y:player.pos.y,z}});
+    const result=await emergenceApi('macro_place',{worldId:ACTIVE_WORLD_ID,type,position:{x,y:player.pos.y,z}});
     emergenceState=result.emergence;renderEmergenceVisuals();window.AppCore?.toast?.(`Поставлено: ${type}. Сервер ищет отношения.`);
     if(channel)void channel.send({type:'broadcast',event:'macro_state',payload:emergenceState});
     await growEmergence();

@@ -53,6 +53,7 @@ test('voxel client is wired to emergence runtime and server macro actions', () =
   assert.match(html,/world-emergence-runtime\.js/);
   assert.match(client,/macro_place/);
   assert.match(client,/macro_tick/);
+  assert.match(client,/fetch\('\/api\/emergence'/);
   assert.match(client,/WorldEmergenceRuntime/);
   assert.match(api,/actionMacroPlace/);
   assert.match(api,/actionMacroTick/);

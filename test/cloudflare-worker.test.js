@@ -88,6 +88,26 @@ test('Cloudflare serves browser Supabase config natively and dynamic APIs keep t
   }
 });
 
+
+test('Guest emergence bypasses the stale Cloud Run lane and uses dedicated Supabase Edge', async () => {
+  const calls=[];
+  const worker=await loadWorker();
+  const originalFetch=global.fetch;
+  global.fetch=async req=>{calls.push(req);return new Response(JSON.stringify({runtime:'supabase-edge-emergence'}),{status:200,headers:{'content-type':'application/json'}});};
+  try {
+    const request=new Request('https://world.example/api/emergence',{
+      method:'POST',
+      headers:{'content-type':'application/json'},
+      body:JSON.stringify({action:'macro_place',guestId:'22222222-2222-4222-8222-222222222222',worldId:'main',type:'city',position:{x:1,y:20,z:2}})
+    });
+    const response=await worker.fetch(request,{ASSETS:assetsBinding(),WORLD_SERVER_API_ORIGIN:'https://stale-cloud-run.example/'});
+    assert.equal(response.status,200);
+    assert.equal(response.headers.get('x-world-server-emergence-runtime'),'supabase-edge');
+    assert.match(calls.at(-1).url,/supabase\.co\/functions\/v1\/world-emergence/);
+    assert.doesNotMatch(calls.at(-1).url,/stale-cloud-run/);
+  } finally { global.fetch=originalFetch; }
+});
+
 test('World Factory and canon use dedicated Supabase Edge lanes with authenticated writes', async () => {
   const calls=[];
   const worker=await loadWorker();

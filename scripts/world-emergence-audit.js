@@ -6,7 +6,7 @@ const ROOT=process.cwd();
 const { createEmergenceStateFromIdea, advanceEmergence }=require('../lib/world-emergence');
 
 function read(p){try{return fs.readFileSync(path.join(ROOT,p),'utf8')}catch{return''}}
-const api=read('api/voxel.js'),client=read('apps/voxel-world/client.js'),runtime=read('shared/world-emergence-runtime.js'),factory=read('lib/world-factory.js'),html=read('apps/voxel-world/index.html');
+const api=read('api/voxel.js'),client=read('apps/voxel-world/client.js'),runtime=read('shared/world-emergence-runtime.js'),factory=read('lib/world-factory.js'),html=read('apps/voxel-world/index.html'),worker=read('cloudflare-worker.js'),edge=read('supabase/functions/world-emergence/index.ts');
 let state=createEmergenceStateFromIdea({idea:'город рядом с природой',seed:4242});
 while(state.growthStage<state.maxGrowthStage)state=advanceEmergence(state,4242);
 
@@ -17,6 +17,8 @@ const checks=[
   ['worldFactorySeed',/createEmergenceStateFromIdea/.test(factory)&&/emergence,/.test(factory)],
   ['serverPersistence',/actionMacroPlace/.test(api)&&/settings:\s*current\.settings/.test(api)],
   ['serverGrowth',/actionMacroTick/.test(api)&&/advanceEmergence/.test(api)],
+  ['dedicatedEdgeLane',/fetch\('\/api\/emergence'/.test(client)&&/proxyEmergence/.test(worker)&&/world-emergence/.test(worker)],
+  ['guestEdgeIdentity',/guestId/.test(edge)&&/UUID\.test\(guestId\)/.test(edge)&&/macro_place/.test(edge)&&/macro_tick/.test(edge)],
   ['realtimeSync',/event:'macro_state'/.test(client)&&/channel\.send\(\{type:'broadcast',event:'macro_state'/.test(client)],
   ['kidPlacementUI',/Большие вещи/.test(client)&&/Поставить/.test(client)&&/macro_place/.test(client)],
   ['voxelMaterialization',/applyEmergenceColumn/.test(client)&&/WorldEmergenceRuntime\?\.column/.test(client)],

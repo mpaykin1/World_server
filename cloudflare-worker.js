@@ -1,6 +1,7 @@
 const DEFAULT_API_ORIGIN = 'https://world-server-ai-studio-bridge-514578099152.europe-west2.run.app';
 const DEFAULT_STACK_READ_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/world-stack-read';
 const DEFAULT_STACK_WRITE_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/world-stack-write';
+const DEFAULT_EMERGENCE_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/world-emergence';
 const DEFAULT_QUALITY_SUMMARY_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/quality-summary';
 const DEFAULT_QUALITY_TELEMETRY_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/quality-telemetry';
 const DEFAULT_SUPABASE_URL = 'https://iphfwxjuhsucvdyluink.supabase.co';
@@ -192,6 +193,22 @@ async function proxyWorldStack(request, env, url, route) {
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
 }
 
+function emergenceOrigin(env) {
+  const configured = String(env.WORLD_SERVER_EMERGENCE_ORIGIN || DEFAULT_EMERGENCE_ORIGIN).trim();
+  const target = new URL(configured);
+  if (target.protocol !== 'https:' || target.username || target.password) throw new Error('Emergence origin must be credential-free HTTPS');
+  return target;
+}
+
+async function proxyEmergence(request, env) {
+  if (request.method !== 'POST') return jsonResponse({ error: 'Method not allowed' }, 405, { allow: 'POST' });
+  const target = emergenceOrigin(env);
+  const response = await fetch(new Request(target, request));
+  const headers = new Headers(response.headers);
+  headers.set('x-world-server-emergence-runtime', 'supabase-edge');
+  return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+}
+
 function qualityOrigin(env, telemetry) {
   const configured = String(telemetry ? (env.WORLD_SERVER_QUALITY_TELEMETRY_ORIGIN || DEFAULT_QUALITY_TELEMETRY_ORIGIN) : (env.WORLD_SERVER_QUALITY_SUMMARY_ORIGIN || DEFAULT_QUALITY_SUMMARY_ORIGIN)).trim();
   const target = new URL(configured);
@@ -238,6 +255,7 @@ export default {
     if (url.pathname === '/api/worlds') return worldsApi(request, env, url);
     if (url.pathname === '/api/world-factory') return proxyWorldStack(request, env, url, 'world-factory');
     if (url.pathname === '/api/canon') return proxyWorldStack(request, env, url, 'canon');
+    if (url.pathname === '/api/emergence') return proxyEmergence(request, env);
     if (url.pathname === '/api/quality-summary') return proxyQuality(request, env, url, false);
     if (url.pathname === '/api/quality-telemetry') return proxyQuality(request, env, url, true);
     if (url.pathname.startsWith('/api/')) return proxyDynamicApi(request, env, url);
