@@ -3,8 +3,11 @@
 POST `/api/voxel` (also existing `/api/emergence` alias), JSON body and
 `Authorization: Bearer <Supabase access token>`.
 
-All five actions require a verified user. A trusted administrator/backend must
-provision `app_metadata.chain_reaction_worlds: ["world-id"]` for that user.
+All seven actions require a verified user. World Factory creates the owner's
+private membership. An owner can then use the bounded membership actions; the
+backend must never accept a client-authored role. Runtime
+authorization deliberately ignores JWT metadata so an owner revoke takes
+effect immediately even when the removed player still has an older token.
 There is no automatic claim of shared worlds; guest IDs, `user_metadata`, and
 body actor IDs never authorize access. The world must already exist.
 
@@ -18,6 +21,11 @@ Common body: `action`, `worldId`. Actions:
 - `tick`: integer `expectedRevision`, optional `count` (1–24, default 1).
 - `history`: optional integer `offset` (default 0), `limit` (1–100, default 50).
   Returns `history`, `total`, `nextOffset` and current revision.
+- `invite-member`: owner-only `targetUserId` (Supabase Auth UUID). Creates or
+  repairs a `player` membership; it cannot change an owner.
+- `revoke-member`: owner-only `targetUserId`. Removes only a `player`
+  membership. The next request is denied even if that player presents a stale
+  JWT containing the retired legacy grant.
 
 Mutation responses include `world` and its new `revision`. Obtain initial
 revision from preview/history (0 for an uninitialized scenario). Client-supplied
@@ -42,7 +50,7 @@ Existing voxel world settings are publicly readable under the existing Supabase
 policy: comments/history are game-world content, **not private messages**. This
 patch changes neither RLS nor guest behavior for legacy voxel actions.
 
-Verification: `node --test --test-isolation=none test/chain-reaction-api.test.js test/world-consequence-engine.test.js`.
-Persistence tests use a Supabase-shaped CAS fake; live Supabase verification and
-full cloud release gates remain required before release. No browser client,
-simulation arithmetic, migrations, master branch or deployment is modified.
+Verification: `node --test test/chain-reaction-api.test.js test/chain-reaction-edge.test.js test/world-consequence-engine.test.js test/world-factory.test.js`.
+Persistence tests use a Supabase-shaped CAS fake; live two-client Supabase
+verification and full cloud release gates remain required before release. No
+browser client or simulation arithmetic is modified.

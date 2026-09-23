@@ -26,8 +26,17 @@ test('Supabase Edge dispatches authenticated Chain Reaction before guest Voxel i
   assert.match(adapter, /import "\.\.\/_shared\/world-consequence-engine\.js"/);
   assert.match(adapter, /chain_reaction_world_members/);
   assert.match(adapter, /\.eq\("updated_at",row\.updated_at\)/);
-  assert.match(adapter, /actor\.app_metadata\?\.chain_reaction_worlds/);
+  assert.match(adapter, /"invite-member","revoke-member"/);
+  assert.doesNotMatch(adapter, /app_metadata\?\.chain_reaction_worlds/);
   assert.doesNotMatch(adapter, /user_metadata/);
+});
+
+test('legacy trusted grants are backfilled once and stale JWT claims cannot bypass revoke', () => {
+  const migration = fs.readFileSync(path.join(root, 'supabase', 'migrations', '20260923210643_chain_reaction_membership_control.sql'), 'utf8');
+  const nodeAdapter = fs.readFileSync(path.join(root, 'lib', 'chain-reaction-api.js'), 'utf8');
+  assert.match(migration, /raw_app_meta_data\s*->\s*'chain_reaction_worlds'/);
+  assert.match(migration, /on conflict \(world_id, user_id\) do nothing/i);
+  assert.doesNotMatch(nodeAdapter, /app_metadata\?\.chain_reaction_worlds/);
 });
 
 test('canonical Edge World Factory grants idempotent private creator membership', () => {
