@@ -1,5 +1,6 @@
 import * as THREE from 'https://unpkg.com/three@0.165.0/build/three.module.js';
 import {installVoxelAutodemo} from './autodemo-bridge.mjs';
+import {createEmergenceAuthoritySync} from '../../shared/emergence-authority-sync.mjs';
 
 const CHUNK = 16;
 const WORLD_Y = 96;
@@ -642,6 +643,11 @@ let emergencePanel=null;
 let emergenceBoard=null;
 let emergenceRefreshVersion=0,emergenceRefreshing=false;
 let emergenceGrowthInFlight=false;
+const emergenceSync=createEmergenceAuthoritySync({
+  read:()=>api('macro_read',{worldId:ACTIVE_WORLD_ID}),
+  apply:next=>applyEmergenceState(next),
+  revision:()=>Number(emergenceState?.revision)||0
+});
 function emergenceStory(){const relation=emergenceState?.relations?.at(-1);return relation?.summary||'Поставь две большие вещи рядом и наблюдай за последствиями.';}
 function showEmergenceStory(message){if(emergencePanel){const node=emergencePanel.querySelector('[data-emergence-story]');if(node)node.textContent=message||emergenceStory();}emergenceBoard?.showMessage?.(message||emergenceStory());}
 function disposeEmergenceVisuals(){while(emergenceGroup.children.length){const o=emergenceGroup.children[0];emergenceGroup.remove(o);o.traverse?.(n=>{n.geometry?.dispose?.();if(n.material){for(const m of (Array.isArray(n.material)?n.material:[n.material]))m.dispose?.();}});}}
@@ -708,7 +714,7 @@ async function growEmergence({single=false}={}){
       await new Promise(resolve=>setTimeout(resolve,1200));
       const result=await api('macro_tick',{worldId:ACTIVE_WORLD_ID,expectedRevision:emergenceState.revision});
       applyEmergenceState(result.emergence);
-      if(channel)void channel.send({type:'broadcast',event:'macro_state',payload:emergenceState});
+      if(channel)void channel.send({type:'broadcast',event:'macro_state',payload:{schemaVersion:'1.0.0',revision:emergenceState.revision,worldId:ACTIVE_WORLD_ID}});
       const recent=emergenceState?.features?.at(-1);
       showEmergenceStory(recent?'✨ Появилось: '+recent.label.replaceAll('_',' ')+'. '+emergenceStory():emergenceStory());
       if(single||result.complete)break;
@@ -723,7 +729,7 @@ async function placeMacroAt(type,x,z,id){
   if(!Number.isFinite(position.x)||!Number.isFinite(position.z))throw new Error('Не удалось определить точку на карте.');
   const result=await api('macro_place',{worldId:ACTIVE_WORLD_ID,type,position,id});
   applyEmergenceState(result.emergence);
-  if(channel)void channel.send({type:'broadcast',event:'macro_state',payload:emergenceState});
+  if(channel)void channel.send({type:'broadcast',event:'macro_state',payload:{schemaVersion:'1.0.0',revision:emergenceState.revision,worldId:ACTIVE_WORLD_ID}});
   window.AppCore?.toast?.('Поставлено: '+type+'. '+emergenceStory());
   if(emergenceState?.relations?.length)void growEmergence();
   return result;
@@ -735,7 +741,8 @@ function mountEmergenceUI(){
       getState:()=>emergenceState,
       getPlayer:()=>({x:player.pos.x,z:player.pos.z}),
       onPlace:placeMacroAt,
-      onGrow:()=>growEmergence({single:true})
+      onGrow:()=>growEmergence({single:true}),
+      onOpen:()=>{if(backendMode==='online')void emergenceSync.refresh();}
     });
     emergenceBoard.setState(emergenceState);
     return;
@@ -764,8 +771,8 @@ function updateRemote(payload){
 function syncPresence(){ if(!channel)return;const state=channel.presenceState(),active=new Set();for(const entries of Object.values(state))for(const p of entries){if(typeof p.id==='string'&&p.id.length<=80)active.add(p.id);}for(const [id,g] of remote)if(!active.has(id)){remoteGroup.remove(g);disposeAvatar(g);remote.delete(id);}playersEl.textContent=`игроков: ${Math.max(1,active.size)}`; }
 async function connectRealtime(appState){
   const sb=appState.supabase; channel=sb.channel('voxel:'+ACTIVE_WORLD_ID,{config:{presence:{key:player.id},broadcast:{self:false,ack:false}}});
-  channel.on('broadcast',{event:'player_state'},({payload})=>updateRemote(payload)); channel.on('broadcast',{event:'block_set'},({payload})=>{const b=validBlockType(payload?.block),x=finiteCoord(payload?.x),y=finiteCoord(payload?.y,320),z=finiteCoord(payload?.z);if(b===null||x===null||y===null||z===null||!Number.isInteger(x)||!Number.isInteger(y)||!Number.isInteger(z)||y<0||y>=WORLD_Y)return;if(Math.hypot(x-player.pos.x,z-player.pos.z)>(VIEW+3)*CHUNK)return;setBlockLocal(x,y,z,b);}); channel.on('broadcast',{event:'science_event'},({payload})=>announceTrustedScienceSignal(payload)); channel.on('broadcast',{event:'macro_state'},({payload})=>{if(payload?.schemaVersion)applyEmergenceState(payload);}); channel.on('presence',{event:'sync'},syncPresence);
-  await new Promise((resolve,reject)=>channel.subscribe(async st=>{if(st==='SUBSCRIBED'){await channel.track({id:player.id,name:player.name,online_at:new Date().toISOString()});resolve();}else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT')reject(new Error('Realtime недоступен'));}));
+  channel.on('broadcast',{event:'player_state'},({payload})=>updateRemote(payload)); channel.on('broadcast',{event:'block_set'},({payload})=>{const b=validBlockType(payload?.block),x=finiteCoord(payload?.x),y=finiteCoord(payload?.y,320),z=finiteCoord(payload?.z);if(b===null||x===null||y===null||z===null||!Number.isInteger(x)||!Number.isInteger(y)||!Number.isInteger(z)||y<0||y>=WORLD_Y)return;if(Math.hypot(x-player.pos.x,z-player.pos.z)>(VIEW+3)*CHUNK)return;setBlockLocal(x,y,z,b);}); channel.on('broadcast',{event:'science_event'},({payload})=>announceTrustedScienceSignal(payload)); channel.on('broadcast',{event:'macro_state'},({payload})=>{if(!payload?.worldId||payload.worldId===ACTIVE_WORLD_ID)emergenceSync.signal(payload);}); channel.on('presence',{event:'sync'},syncPresence);
+  await new Promise((resolve,reject)=>channel.subscribe(async st=>{if(st==='SUBSCRIBED'){await channel.track({id:player.id,name:player.name,online_at:new Date().toISOString()});void emergenceSync.refresh();resolve();}else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT')reject(new Error('Realtime недоступен'));}));
   canonChannel=sb.channel('canon:'+ACTIVE_WORLD_ID).on('postgres_changes',{event:'INSERT',schema:'public',table:'world_canon_events',filter:'world_id=eq.'+ACTIVE_WORLD_ID},change=>showCanonEvent(change.new));
   void canonChannel.subscribe();
   void hydrateCanon();

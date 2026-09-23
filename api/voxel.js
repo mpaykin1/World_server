@@ -127,6 +127,12 @@ async function withMacroRetry(admin, worldId, mutate) {
   throw httpError(409, 'Параллельные изменения мира. Повторите действие.');
 }
 
+async function actionMacroRead(admin, body) {
+  const worldId = safeWorldId(body.worldId);
+  const current = await readEmergenceWorld(admin, worldId);
+  return { worldId, emergence: current.emergence };
+}
+
 async function actionMacroPlace(admin, identity, body) {
   const worldId = safeWorldId(body.worldId);
   const type = normalizeMacroType(body.type);
@@ -287,6 +293,7 @@ async function handle(admin, identity, action, body) {
   if (action === 'chunks') return actionChunks(admin, body);
   if (action === 'set_block') return actionSetBlock(admin, identity, body);
   if (action === 'player_save') return actionSavePlayer(admin, identity, body);
+  if (action === 'macro_read') return actionMacroRead(admin, body);
   if (action === 'macro_place') return actionMacroPlace(admin, identity, body);
   if (action === 'macro_tick') return actionMacroTick(admin, body);
   throw httpError(400, 'Неизвестное действие Voxel World.');
@@ -303,4 +310,4 @@ module.exports = withErrors(async (req, res) => {
   sendJson(res, 200, result);
 });
 
-module.exports._private = { safeWorldId, safePosition, safeBlockCoordinate, safeBlockType, chunkCoord, clientPlayer, actionMacroPlace, actionMacroTick, readEmergenceWorld };
+module.exports._private = { safeWorldId, safePosition, safeBlockCoordinate, safeBlockType, chunkCoord, clientPlayer, actionMacroRead, actionMacroPlace, actionMacroTick, readEmergenceWorld };

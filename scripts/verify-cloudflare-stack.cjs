@@ -34,6 +34,17 @@ async function verifyCloudflareStack(origin, expectedSha) {
   });
   if (!init.response.ok || !init.body?.world || !init.body?.player) throw new Error(`/api/voxel guest init failed: HTTP ${init.response.status}`);
   results.push({ pathname: '/api/voxel action=init', status: init.response.status });
+  const snapshot = await request(origin, '/api/voxel', {
+    method: 'POST', headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ action: 'macro_read', guestId, worldId: 'voxel-world' })
+  });
+  const emergence = snapshot.body?.emergence;
+  if (!snapshot.response.ok || snapshot.body?.worldId !== 'voxel-world' ||
+      emergence?.schemaVersion !== '1.0.0' ||
+      !Number.isSafeInteger(emergence.revision) || emergence.revision < 1) {
+    throw new Error(`/api/voxel authoritative macro_read failed: HTTP ${snapshot.response.status}`);
+  }
+  results.push({ pathname: '/api/voxel action=macro_read', status: snapshot.response.status });
   for (const pathname of ['/api/world-factory', '/api/canon']) {
     const denied = await request(origin, pathname, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' });
     if (denied.response.status !== 401) throw new Error(`${pathname} unauthenticated write returned ${denied.response.status}, expected 401`);
