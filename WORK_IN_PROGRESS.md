@@ -10,8 +10,8 @@ Install two independent zero-cost AI reviews for every PR, safely execute the re
 ## Safety and implementation
 Branch ai/chatgpt/independent-maintainer-gate-20260922 from fresh origin/master. Main Desktop worktree has unrelated dirty files and MUST stay untouched. Dedicated reviewer is read-only, fail-closed, and publishes an exact-head check; no automatic merge, baseline changes, or production deployment. Daily World Quality Autopilot now includes a prediction-only next-experiment planner with a fixed counterfactual and device/FPS/visibility requirements.
 
-## Verification
-Run focused offline tests for reviewer, security workflow, and experiment planner, full existing CI, and a live reviewer dispatch on an existing PR only after trusted bootstrap is merged. Enforce the review context in branch protection only after an actual live successful run. Preserve 5 pre-existing user automations.
+## Verification and live blocker repair
+PR #244 merged as 51c2ef63 after all 5 protected checks and focused 14/14 tests. First live dispatch on historic PR #240 found the script missing at PR's stale base SHA (fail-closed). Current trusted master is now used for executable review while the original base SHA remains exact diff input. PR #245 run 35722199501 produced artifact independent-review-b649f00c: Z-AI GLM-5.2 HTTP 429 (234ms) and NVIDIA Nemotron 3.5 Lightning timeout (90,002ms); both INCONCLUSIVE, never PASS. Artifact verified 2026-09-22. Added bounded 429 retry, 65-second provider timeout, JSON-mode compatibility fallback with strict local parsing, truncated-output rejection, additional zero-cost model families, and pinned trusted master checkout SHA. Free catalog checked live; two initial JSON-capable candidates are Google Gemma and Nvidia Super, with NEX-AGI and Poolside as alternatives. Focused tests now 14/14 PASS; run live review only from trusted master after bootstrap merge, then require check only after a real external two-family PASS. Preserve five pre-existing scheduled tasks. Preserve 5 pre-existing user automations.
 
 ---
 

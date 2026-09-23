@@ -3,12 +3,19 @@
 This gate implements **Builder != Reviewer != Maintainer**. It adds no scheduled
 task; it runs on PRs and can be dispatched manually against an existing PR.
 
-- Reviewer executes trusted **base commit** code. PR code is fetched as *inert*
-  Git diff; no untrusted scripts run with credentials.
+- Reviewer pins the exact SHA of trusted **master** before checkout. Historic
+  PR base SHAs are used **only for the diff**, never as executable checkout.
+  PR code is fetched as *inert* Git diff; no untrusted script runs with credentials.
 - At runtime, the OpenRouter catalog is inspected. Two **distinct model
-  families** with verified zero prompt/completion price are selected; the
+  families** with verified zero prompt/completion price are selected; where
+  supported, JSON-only output is requested. An unavailable or malformed free
+  model is recorded as INCONCLUSIVE, and a different verified free model may
+  provide another independent review; a BLOCK always vetoes. The
   default Builder family (Qwen) is excluded. `WORLD` repository secret is read
-  only by the trusted reviewer step. No fallback to a paid model.
+  only by the trusted reviewer step. No fallback to a paid model. Transient
+  HTTP 429/502/503/504 gets one bounded retry, unsupported advertised JSON mode
+  gets one strict-parser retry without response_format, and a 65-second timeout
+  moves to a distinct free alternative; truncated output can never yield PASS.
 - Both models independently try to falsify the change: real defects, security,
   backwards compatibility, concurrency, performance and missing negative tests.
 - A single BLOCK vetoes. Unavailable key, model, invalid response, oversized or

@@ -34,22 +34,27 @@ jobs:
         run: |
           set -euo pipefail
           META="$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}" \
-            --jq '[.base.sha, .head.sha] | @tsv')"
-          read -r BASE HEAD <<< "$META"
+            --jq '[.base.sha, .head.sha, .base.ref] | @tsv')"
+          read -r BASE HEAD BASE_BRANCH <<< "$META"
           [[ "$BASE" =~ ^[a-f0-9]{40}$ && "$HEAD" =~ ^[a-f0-9]{40}$ ]]
+          test "$BASE_BRANCH" = master
+          TRUSTED="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/master" --jq '.object.sha')"
+          [[ "$TRUSTED" =~ ^[a-f0-9]{40}$ ]]
           if [[ -n "${EVENT_HEAD}" && "$EVENT_HEAD" != "$HEAD" ]]; then
             echo "::error::PR changed while review was queued; require fresh run"
             exit 2
           fi
+          echo "trusted=${TRUSTED}" >> "$GITHUB_OUTPUT"
           echo "base=${BASE}" >> "$GITHUB_OUTPUT"
           echo "head=${HEAD}" >> "$GITHUB_OUTPUT"
           echo "pr=${PR_NUMBER}" >> "$GITHUB_OUTPUT"
 
-      # Only trusted base code is executed with AI credentials.
-      - name: Checkout trusted base (not PR code)
+      # Execute current trusted master code. Older PRs can have a historic
+      # base.sha that predates installation; that SHA is for diff ONLY.
+      - name: Checkout current trusted master (not PR code)
         uses: actions/checkout@v4
         with:
-          ref: ${{ steps.refs.outputs.base }}
+          ref: ${{ steps.refs.outputs.trusted }}
           fetch-depth: 0
           persist-credentials: false
 

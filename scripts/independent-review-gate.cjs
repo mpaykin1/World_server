@@ -8,10 +8,17 @@ const cp = require('node:child_process');
 const { performance } = require('node:perf_hooks');
 
 const CANDIDATES = [
-  ['z-ai', 'z-ai/glm-5.2:free'],
-  ['nvidia', 'nvidia/nemotron-3.5-lightning:free'],
-  ['nvidia', 'nvidia/nemotron-3-super-120b-a12b:free'],
   ['google', 'google/gemma-4-31b-it:free'],
+  ['nvidia', 'nvidia/nemotron-3-super-120b-a12b:free'],
+  ['nex-agi', 'nex-agi/nex-n2.5-pro:free'],
+  ['poolside', 'poolside/laguna-s-2.1:free'],
+  ['z-ai', 'z-ai/glm-5.2:free'],
+  ['cohere', 'cohere/north-mini-code:free'],
+  ['inclusionai', 'inclusionai/ling-3.0-flash-sante:free'],
+  ['nvidia', 'nvidia/nemotron-3.5-lightning:free'],
+  ['google', 'google/gemma-4-26b-a4b-it:free'],
+  ['nex-agi', 'nex-agi/nex-n2.5-mini:free'],
+  ['dots-studio', 'dots-studio/dots-3-note-preview:free'],
   ['qwen', 'qwen/qwen3-coder:free']
 ];
 const SHA = /^[a-f0-9]{40}$/i;
@@ -38,25 +45,52 @@ function parseArgs(args) {
   }
   return out;
 }
-function selectedModels(catalog, builderModel = '') {
+function availableModels(catalog, builderModel = '') {
   const models = new Map((catalog.data || []).map(x => [x.id, x]));
-  const chosen = [];
-  const families = new Set();
-  for (const [family, id] of CANDIDATES) {
+  return CANDIDATES.flatMap(([family, id]) => {
     const item = models.get(id);
-    if (!item || families.has(family) || id === builderModel) continue;
-    if (String(item.pricing?.prompt) !== '0' || String(item.pricing?.completion) !== '0') continue;
-    chosen.push({ family, id });
-    families.add(family);
+    if (!item || id === builderModel || builderModel.startsWith(family + '/')) return [];
+    if (String(item.pricing?.prompt) !== '0' || String(item.pricing?.completion) !== '0') return [];
+    return [{ family, id, supportsJson: (item.supported_parameters || []).includes('response_format') }];
+  });
+}
+function selectedModels(catalog, builderModel = '') {
+  const chosen = [], families = new Set();
+  for (const model of availableModels(catalog, builderModel)) {
+    if (families.has(model.family)) continue;
+    chosen.push(model);
+    families.add(model.family);
     if (chosen.length === 2) break;
   }
   return chosen;
 }
 function parseVerdict(text) {
-  const stripped = String(text || '').trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
+  const source = String(text || '').trim();
+  const stripped = source.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
   let raw;
-  try { raw = JSON.parse(stripped); }
-  catch { throw new Error('Model did not return valid JSON'); }
+  try { raw = JSON.parse(stripped); } catch { /* A model may wrap JSON in prose or reasoning. */ }
+  if (!raw) {
+    for (let start = source.indexOf('{'); start !== -1; start = source.indexOf('{', start + 1)) {
+      let depth = 0, quoted = false, escaped = false;
+      for (let i = start; i < Math.min(source.length, start + 30000); i++) {
+        const char = source[i];
+        if (quoted) {
+          if (escaped) escaped = false;
+          else if (char === '\\') escaped = true;
+          else if (char === '"') quoted = false;
+        } else if (char === '"') quoted = true;
+        else if (char === '{') depth++;
+        else if (char === '}' && --depth === 0) {
+          try { const candidate = JSON.parse(source.slice(start, i + 1));
+            if (candidate && typeof candidate.verdict === 'string') raw = candidate;
+          } catch { /* Keep looking for a valid object. */ }
+          break;
+        }
+      }
+      if (raw) break;
+    }
+  }
+  if (!raw) throw new Error('Model did not return valid JSON');
   if (!['PASS', 'BLOCK', 'INCONCLUSIVE'].includes(raw.verdict)) throw new Error('Invalid model verdict');
   if (!Array.isArray(raw.findings) || !Array.isArray(raw.falsification_attempts)) throw new Error('Missing structured review fields');
   const findings = raw.findings.slice(0, 12).map(x => ({
@@ -72,10 +106,8 @@ function parseVerdict(text) {
 }
 function aggregate(reviews) {
   if (reviews.some(x => x.verdict === 'BLOCK')) return 'BLOCK';
-  if (reviews.length !== 2 || reviews.some(x => x.verdict !== 'PASS')) return 'INCONCLUSIVE';
-  if (new Set(reviews.map(x => x.family)).size !== 2) return 'INCONCLUSIVE';
-  if (reviews.some(x => !x.falsification_attempts?.length)) return 'INCONCLUSIVE';
-  return 'PASS';
+  const valid = reviews.filter(x => x.verdict === 'PASS' && x.falsification_attempts?.length);
+  return new Set(valid.map(x => x.family)).size >= 2 ? 'PASS' : 'INCONCLUSIVE';
 }
 function preflightPatch(patch) {
   const bytes = Buffer.byteLength(patch);
@@ -90,33 +122,62 @@ async function getJson(url, options, timeoutMs) {
   if (!response.ok) throw new Error('Provider HTTP ' + response.status);
   return response.json();
 }
-async function requestReview(model, patch, metadata, key) {
+async function requestReview(model, patch, metadata, key, {
+  requestJson = getJson, sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+} = {}) {
   const started = performance.now();
-  try {
-    const payload = {
-      model: model.id, temperature: 0, max_tokens: 1600, stream: false,
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: JSON.stringify({ context: metadata, untrusted_patch: patch }) }
-      ]
-    };
-    const response = await getJson('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        Authorization: 'Bearer ' + key, 'Content-Type': 'application/json',
-        'HTTP-Referer': 'https://github.com/mpaykin1/World_server',
-        'X-Title': 'World Server independent code review'
-      },
-      body: JSON.stringify(payload)
-    }, 90000);
-    const review = parseVerdict(response?.choices?.[0]?.message?.content);
-    return { model: model.id, family: model.family, ...review,
-      durationMs: Math.round(performance.now() - started) };
-  } catch (err) {
-    return { model: model.id, family: model.family, verdict: 'INCONCLUSIVE',
-      findings: [], falsification_attempts: [], reason: String(err.message).slice(0, 180),
-      durationMs: Math.round(performance.now() - started) };
+  const payload = {
+    model: model.id, temperature: 0, max_tokens: 3000, stream: false,
+    messages: [
+      { role: 'system', content: SYSTEM_PROMPT },
+      { role: 'user', content: JSON.stringify({ context: metadata, untrusted_patch: patch }) }
+    ]
+  };
+  if (model.supportsJson) payload.response_format = { type: 'json_object' };
+  const url = 'https://openrouter.ai/api/v1/chat/completions';
+  const headers = {
+    Authorization: 'Bearer ' + key, 'Content-Type': 'application/json',
+    'HTTP-Referer': 'https://github.com/mpaykin1/World_server',
+    'X-Title': 'World Server independent code review'
+  };
+  let attempts = 0;
+  for (; attempts < 3; attempts++) {
+    try {
+      const response = await requestJson(url, {
+        method: 'POST', headers, body: JSON.stringify(payload)
+      }, 65000);
+      const choice = response?.choices?.[0] || {};
+      let result;
+      try { result = parseVerdict(choice.message?.content); }
+      catch (err) { throw new Error(err.message +
+        ' contentChars=' + String(choice.message?.content || '').length +
+        ' finish=' + String(choice.finish_reason || 'unknown')); }
+      // A truncated review cannot provide enough evidence to approve a patch.
+      if (choice.finish_reason === 'length' && result.verdict === 'PASS') {
+        throw new Error('Truncated model output; PASS cannot be trusted');
+      }
+      return { model: model.id, family: model.family, ...result,
+        attempts: attempts + 1, durationMs: Math.round(performance.now() - started) };
+    } catch (err) {
+      const message = String(err.message);
+      // Some free providers advertise JSON mode but reject it at inference time.
+      // Retrying without JSON mode does not relax strict local JSON validation.
+      if (payload.response_format && /Provider HTTP (400|422)\b/.test(message)) {
+        delete payload.response_format;
+        continue;
+      }
+      if (/Provider HTTP (429|502|503|504)\b/.test(message) && attempts < 1) {
+        await sleep(2200);
+        continue;
+      }
+      return { model: model.id, family: model.family, verdict: 'INCONCLUSIVE',
+        findings: [], falsification_attempts: [], reason: message.slice(0, 180),
+        attempts: attempts + 1, durationMs: Math.round(performance.now() - started) };
+    }
   }
+  return { model: model.id, family: model.family, verdict: 'INCONCLUSIVE',
+    findings: [], falsification_attempts: [], reason: 'Provider retry budget exhausted',
+    attempts, durationMs: Math.round(performance.now() - started) };
 }
 function readPatch(base, head) {
   if (!SHA.test(base) || !SHA.test(head)) throw new Error('Expected exact 40-character commit SHAs');
@@ -136,17 +197,32 @@ async function reviewPatch({ patch, base, head, key, builderModel = '', getCatal
   if (!key) { report.blockers.push('Independent reviewer credential unavailable'); return report; }
   let models;
   try {
-    models = selectedModels(await getCatalog('https://openrouter.ai/api/v1/models', {}, 15000), builderModel);
+    models = availableModels(await getCatalog('https://openrouter.ai/api/v1/models', {}, 15000), builderModel);
   } catch (err) {
     report.blockers.push('Free-model catalog unavailable: ' + String(err.message).slice(0, 140));
     return report;
   }
-  if (models.length !== 2) {
+  const primary = [], primaryFamilies = new Set();
+  for (const model of models) {
+    if (primaryFamilies.has(model.family)) continue;
+    primary.push(model);
+    primaryFamilies.add(model.family);
+    if (primary.length === 2) break;
+  }
+  if (primary.length !== 2) {
     report.blockers.push('Two independent zero-cost model families unavailable; no paid fallback');
     return report;
   }
   const metadata = { repo: 'mpaykin1/World_server', base, head, diffSha256: report.diffSha256 };
-  report.reviewers = await Promise.all(models.map(model => review(model, patch, metadata, key)));
+  report.reviewers = await Promise.all(primary.map(model => review(model, patch, metadata, key)));
+  const attempted = new Set(primary.map(x => x.id));
+  for (const model of models) {
+    if (aggregate(report.reviewers) !== 'INCONCLUSIVE' || report.reviewers.length >= 6) break;
+    if (attempted.has(model.id)) continue;
+    if (report.reviewers.some(x => x.family === model.family && x.verdict === 'PASS')) continue;
+    attempted.add(model.id);
+    report.reviewers.push(await review(model, patch, metadata, key));
+  }
   report.verdict = aggregate(report.reviewers);
   if (report.verdict !== 'PASS') {
     report.blockers.push('Independent reviews identified defects or lack sufficient evidence');
@@ -170,4 +246,4 @@ async function main() {
   process.exitCode = report.verdict === 'PASS' ? 0 : 2;
 }
 if (require.main === module) main().catch(err => { console.error('[INDEPENDENT_REVIEW] ' + err.message); process.exitCode = 2; });
-module.exports = { selectedModels, parseVerdict, aggregate, preflightPatch, reviewPatch, readPatch };
+module.exports = { selectedModels, parseVerdict, aggregate, preflightPatch, reviewPatch, requestReview, readPatch };
