@@ -42,7 +42,7 @@
   function fusionUrl(a,b){if(!a||!b||a.id===b.id)return '#';return `/shared/world-fusion.html?a=${encodeURIComponent(a.id)}&b=${encodeURIComponent(b.id)}`;}
   function emitDrawer(open){document.documentElement.classList.toggle('golden-drawer-open',open);dispatchEvent(new CustomEvent('goldendrawerchange',{detail:{open,tab:active}}));}
   function select(tab){if(drawer.classList.contains('open')&&active===tab){close();return;} active=tab; title.textContent=tab==='worlds'?'Миры':tab==='settings'?'Настройки':tab==='info'?'Информация':cfg.title; for(const el of root.querySelectorAll('.goldenTab'))el.hidden=el.dataset.tab!==tab; drawer.inert=false;drawer.classList.add('open');drawer.setAttribute('aria-hidden','false');emitDrawer(true);}
-  function close(){const wasOpen=drawer.classList.contains('open');drawer.inert=true;drawer.classList.remove('open');drawer.setAttribute('aria-hidden','true');if(wasOpen)root.querySelector(`[data-golden-tab="${active}"]`)?.focus();emitDrawer(false);}
+  function close(){const wasOpen=drawer.classList.contains('open');drawer.inert=true;drawer.classList.remove('open');drawer.setAttribute('aria-hidden','true');if(wasOpen)[...root.querySelectorAll('[data-golden-tab]')].find(b=>b.dataset.goldenTab===active)?.focus();emitDrawer(false);}
   for(const b of root.querySelectorAll('[data-golden-tab]')){b.addEventListener('pointerdown',e=>e.stopPropagation());b.addEventListener('click',e=>{e.stopPropagation();select(b.dataset.goldenTab);});}
   const closeButton=root.querySelector('#goldenDrawerClose');
   closeButton.addEventListener('pointerdown',e=>e.stopPropagation());
