@@ -10,7 +10,33 @@ async function request(origin, pathname, options = {}) {
   return { response, text, body };
 }
 
-async function verifyCloudflareStack(origin, expectedSha) {
+// Workers routes and global assets can lag a successful Wrangler deployment.
+// Retry ONLY transient, initial readiness failures; never mask a broken app
+// route or access-control failure as a propagation delay.
+async function awaitDeploymentReadiness(origin, expectedSha, {
+  requestFn = request, sleep = ms => new Promise(resolve => setTimeout(resolve, ms)),
+  attempts = 20, delayMs = 4000
+} = {}) {
+  for (let index = 0; index < attempts; index++) {
+    const home = await requestFn(origin, '/');
+    if (home.response.ok && home.text.length >= 120) {
+      const config = await requestFn(origin, '/api/config');
+      if (config.response.ok && config.body?.deployedRevision === expectedSha) return index + 1;
+      if (config.response.ok && config.body?.deployedRevision !== expectedSha) {
+        // A previously deployed revision is still propagating globally.
+      } else if (![404, 502, 503, 504].includes(config.response.status)) {
+        throw new Error('/api/config readiness failed: HTTP ' + config.response.status);
+      }
+    } else if (![404, 502, 503, 504].includes(home.response.status)) {
+      throw new Error('/ readiness failed: HTTP ' + home.response.status);
+    }
+    if (index < attempts - 1) await sleep(delayMs);
+  }
+  throw new Error('Cloudflare deployment did not propagate expected SHA within readiness deadline');
+}
+
+async function verifyCloudflareStack(origin, expectedSha, options = {}) {
+  await awaitDeploymentReadiness(origin, expectedSha, options);
   const results = [];
   for (const pathname of ['/', '/apps/catalog/', '/apps/voxel-world/']) {
     const { response, text } = await request(origin, pathname);
@@ -91,4 +117,4 @@ async function main() {
 }
 
 if (require.main === module) main().catch(error => { console.error(`[CLOUDFLARE_STACK] FAIL ${error.message}`); process.exit(1); });
-module.exports = { request, verifyCloudflareStack };
+module.exports = { request, awaitDeploymentReadiness, verifyCloudflareStack };
