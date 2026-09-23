@@ -9,6 +9,7 @@ const {
   safeBlockCoordinate: ruleSafeBlockCoordinate, safeBlockType: ruleSafeBlockType, chunkCoord, distance
 } = require('../lib/voxel-rules');
 const scienceGameplay = require('../lib/science-gameplay-adapter');
+const worldGenie = require('../lib/world-genie-api');
 const { normalizeMacroType, placeMacroEntity, advanceEmergence, buildEmergenceState } = require('../lib/world-emergence');
 
 function dbFailure(error, fallback = 'Ошибка базы данных Voxel World.') {
@@ -289,6 +290,10 @@ async function actionSavePlayer(admin, identity, body) {
 }
 
 async function handle(admin, identity, action, body) {
+  if (worldGenie.ACTIONS.has(action)) {
+    if (!identity.userId) throw httpError(401, 'Authentication required for Genie actions.');
+    return worldGenie.dispatch(admin, identity.userId, body);
+  }
   if (action === 'init') return actionInit(admin, identity, body);
   if (action === 'chunks') return actionChunks(admin, body);
   if (action === 'set_block') return actionSetBlock(admin, identity, body);
@@ -310,4 +315,4 @@ module.exports = withErrors(async (req, res) => {
   sendJson(res, 200, result);
 });
 
-module.exports._private = { safeWorldId, safePosition, safeBlockCoordinate, safeBlockType, chunkCoord, clientPlayer, actionMacroRead, actionMacroPlace, actionMacroTick, readEmergenceWorld };
+module.exports._private = { safeWorldId, safePosition, safeBlockCoordinate, safeBlockType, chunkCoord, clientPlayer, actionMacroRead, actionMacroPlace, actionMacroTick, readEmergenceWorld, handle };

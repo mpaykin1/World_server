@@ -1,7 +1,8 @@
 'use strict';
 const test=require('node:test');
 const assert=require('node:assert/strict');
-const {dispatch}=require('../api/world-genie')._private;
+const {dispatch}=require('../lib/world-genie-api');
+const {handle}=require('../api/voxel')._private;
 const engine=require('../lib/world-consequence-engine');
 function mockDb(seed='volcano'){
  const record={id:'world-test',seed,settings:{worldDNA:{}},updated_at:'2026-09-23T00:00:00.000Z'};
@@ -16,6 +17,14 @@ function mockDb(seed='volcano'){
  }};
  return {admin,record,get writes(){return writes},deny(){deny=true},conflict(){conflict=true}};
 }
+test('voxel router exposes Genie actions only to authenticated users',async()=>{
+ const db=mockDb();
+ await assert.rejects(()=>handle(db.admin,{userId:null},'history',{action:'history',worldId:'world-test'}),{status:401});
+ const result=await handle(db.admin,{userId:'user'},'history',{action:'history',worldId:'world-test'});
+ assert.equal(result.worldId,'world-test');
+ assert.equal(db.writes,0);
+});
+
 test('intent and preview are read-only, with no free power',async()=>{
  const db=mockDb();
  const args={action:'preview',worldId:'world-test',structure:'solar',comment:'поэтапно'};

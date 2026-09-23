@@ -35,6 +35,10 @@
       "destination": "/api/voxel"
     },
     {
+      "source": "/api/world-genie",
+      "destination": "/api/voxel"
+    },
+    {
       "source": "/api/canon",
       "destination": "/api/worlds?__route=canon"
     },
