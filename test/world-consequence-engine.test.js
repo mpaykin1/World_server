@@ -41,3 +41,34 @@ test('deterministic risk event still preserves adaptation path',()=>{
  a=E.commit(a,E.interpretIntent('','coal'));b=E.commit(b,E.interpretIntent('','coal'));
  a=E.simulateTicks(a,30);b=E.simulateTicks(b,30);assert.deepEqual(a,b);assert(a.history.some(e=>e.kind==='accident'));assert(a.history.some(e=>e.kind==='adaptation'));assert(a.population>0);
 });
+
+test('three temples unlock fictional spokesperson only after all are commissioned',()=>{
+ let w=E.createWorld('three-temples');w.resources.budget=300;w.resources.workers=20;
+ for(let n=0;n<3;n++)w=E.commit(w,E.interpretIntent('','temple'),w.revision);
+ assert.equal(w.culture.temples,0);assert.equal(w.culture.spokesperson,null);
+ w=E.tick(w);assert.equal(w.culture.temples,0);assert.equal(w.culture.spokesperson,null);
+ w=E.tick(w);assert.equal(w.culture.temples,3);
+ assert.equal(w.culture.spokesperson?.fictional,true);
+ const restored=JSON.parse(JSON.stringify(w));
+ assert.deepEqual(E.tick(w),E.tick(restored));
+});
+test('two commissioned temples plus one under construction cannot unlock spokesperson',()=>{
+ let w=E.createWorld('two-temples');w.resources.budget=300;w.resources.workers=20;
+ for(let n=0;n<2;n++)w=E.commit(w,E.interpretIntent('','temple'),w.revision);
+ w=E.simulateTicks(w,2);assert.equal(w.culture.temples,2);
+ w=E.commit(w,E.interpretIntent('','temple'),w.revision);
+ w=E.tick(w);assert.equal(w.culture.temples,2);assert.equal(w.culture.spokesperson,null);
+});
+
+test('inherited project keys cannot become executable intents',()=>{
+ for(const key of ['constructor','toString','__proto__']){
+  const intent=E.interpretIntent('',key);
+  assert.equal(intent.goal,'workshop');assert.equal(E.preview(E.createWorld('keys'),intent).feasible,true);
+ }
+});
+test('fictional addresses require integral existing floor and flat',()=>{
+ const w=E.createWorld('address-validation');
+ for(const [floor,flat] of [[1.5,1],[1,2.5],[NaN,1],[1,Infinity],['2',1],[1,'2']])
+  assert.equal(E.address(w,'house-1',floor,flat),null);
+ assert.equal(E.address(w,'house-1',1,1)?.fictional,true);
+});
