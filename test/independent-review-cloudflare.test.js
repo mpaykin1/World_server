@@ -13,11 +13,11 @@ test('Cloudflare models need verified Free plan and a separate model family', ()
   assert.deepEqual(availableCloudflareModels({ ...cfg, accountId: 'not-an-id' }), []);
   assert.deepEqual(availableCloudflareModels({ ...cfg, token: '' }), []);
   const names = availableCloudflareModels(cfg);
-  assert.deepEqual(names.map(x => x.family), ['google', 'z-ai', 'nvidia']);
+  assert.deepEqual(names.map(x => x.family), ['z-ai', 'nvidia', 'google']);
   assert.equal(availableCloudflareModels({ ...cfg, builderModel: 'google/builder' }).length, 2);
 });
 test('Cloudflare envelope yields real structured model evidence', async () => {
-  const model = availableCloudflareModels(cfg)[0];
+  const model = availableCloudflareModels(cfg).find(x => x.family === 'google');
   let request;
   const result = await requestCloudflareReview(model, patch, {}, {
     ...cfg, systemPrompt: 'Independent adversarial review', parseVerdict,
@@ -29,6 +29,7 @@ test('Cloudflare envelope yields real structured model evidence', async () => {
   assert.equal(result.provider, 'cloudflare');
   assert.equal(result.family, 'google');
   assert.equal(result.verdict, 'PASS');
+  assert.equal(JSON.parse(request.opts.body).max_completion_tokens, 4096);
   assert.ok(request.url.includes('ai/run/@cf/google/gemma-4-26b-a4b-it'));
   assert.ok(!request.opts.body.includes(cfg.token));
 });
@@ -53,7 +54,7 @@ test('two Cloudflare Free families can review without OpenRouter key', async () 
     reviewCloudflare: async model => ({ ...model, ...pass })
   });
   assert.equal(report.verdict, 'PASS');
-  assert.deepEqual(report.reviewers.map(x => x.family), ['google', 'z-ai']);
+  assert.deepEqual(report.reviewers.map(x => x.family), ['z-ai', 'nvidia']);
   assert.equal(report.requiresMaintainerDecision, true);
 });
 test('a Cloudflare BLOCK stops all remaining reviewers', async () => {

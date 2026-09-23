@@ -23,6 +23,13 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      # Mirror the CPU test dependencies required by the protected CI workflow.
+      # A clean canary runner must not depend on preinstalled Python packages.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Voxel City verifier dependencies
+        run: python -m pip install 'pillow>=11,<13' 'numpy>=2,<3' 'requests>=2.32,<3'
       - id: authority
         name: Detect Cloudflare deployment authority
         shell: bash
