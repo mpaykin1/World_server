@@ -144,7 +144,9 @@ function recordDisagreement(report) {
 // Keep free Workers inference bounded without silently omitting changed files.
 // Concatenating all chunks MUST reproduce the exact full patch, byte for byte.
 // A single oversized file is indivisible here and still fails closed.
-function splitCloudflarePatch(patch, limit = MAX_CLOUDFLARE_PATCH_BYTES) {
+function splitCloudflarePatch(patch) {
+  // Explicit local budget prevents ambiguity for independent reviewers.
+  const limit = MAX_CLOUDFLARE_PATCH_BYTES;
   if (Buffer.byteLength(patch) <= limit) return [patch];
   const starts = [...patch.matchAll(/^diff --git /gm)].map(match => match.index);
   if (starts.length < 2 || starts[0] !== 0) return null;
@@ -166,11 +168,14 @@ function splitCloudflarePatch(patch, limit = MAX_CLOUDFLARE_PATCH_BYTES) {
 function combineChunkReviews(model, reviews, totalChunks) {
   const blocked = reviews.some(review => review.verdict === 'BLOCK');
   const complete = reviews.length === totalChunks && reviews.every(review => review.verdict === 'PASS');
+  // A real BLOCK must remain visible even if preceding PASS chunks emitted many findings.
+  const prioritized = reviews.map((review, index) => ({ review, index }))
+    .sort((a, b) => Number(b.review.verdict === 'BLOCK') - Number(a.review.verdict === 'BLOCK'));
   return {
     provider: 'cloudflare', model: model.id, family: model.family,
     verdict: blocked ? 'BLOCK' : complete ? 'PASS' : 'INCONCLUSIVE',
-    findings: reviews.flatMap(review => review.findings || []).slice(0, 12),
-    falsification_attempts: reviews.flatMap((review, index) =>
+    findings: prioritized.flatMap(item => item.review.findings || []).slice(0, 12),
+    falsification_attempts: prioritized.flatMap(({review, index}) =>
       (review.falsification_attempts || []).map(attempt => 'chunk ' + (index + 1) + ': ' + attempt)).slice(0, 12),
     reviewedChunks: reviews.length, totalChunks,
     durationMs: reviews.reduce((sum, review) => sum + (review.durationMs || 0), 0),

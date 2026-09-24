@@ -291,3 +291,20 @@ test('chunked independent review remains BLOCK on any chunk and INCONCLUSIVE if 
   assert.equal(incomplete.verdict,'INCONCLUSIVE');
   assert.equal(incomplete.reviewers.filter(r=>r.verdict==='PASS').length,1);
 });
+
+test('chunked BLOCK evidence survives long warnings in preceding PASS chunks',async()=>{
+ const file=name=>'diff --git a/'+name+' b/'+name+'\n@@ -1 +1 @@\n-old\n+'+'u'.repeat(9500)+'\n';
+ const long=file('a.js')+file('b.js');
+ const report=await reviewPatch({patch:long,base:'a'.repeat(40),head:'b'.repeat(40),key:'',cloudflare:cfg,
+  reviewCloudflare:async(model,_chunk,meta)=>{
+   if(model.family==='z-ai'&&meta.chunkIndex===1)return {...model,...pass,
+     findings:Array.from({length:12},()=>({file:'a.js',line:'1',severity:'low',evidence:'non-blocking warning'}))};
+   if(model.family==='z-ai')return {...model,verdict:'BLOCK',findings:[{file:'b.js',line:'2',
+     severity:'critical',evidence:'bad branch',reproduction:'bad input'}],falsification_attempts:['reproduced']};
+   return {...model,...pass};
+  }
+ });
+ assert.equal(report.verdict,'BLOCK');
+ assert.ok(report.reviewers[0].findings.some(x=>x.file==='b.js'&&x.severity==='critical'));
+ assert.ok(report.reviewers[0].falsification_attempts[0].startsWith('chunk 2:'));
+});
