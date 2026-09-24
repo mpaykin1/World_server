@@ -1,3 +1,7 @@
+# 2026-09-24: Full-coverage bounded independent reviewer
+Problem: genuine Graphics/API reviewer runs skipped >18KB patches and OpenRouter free providers exhausted quotas. Implementation: group complete changed-file diff sections into <=18KB chunks; byte-identical reconstruction, SHA-256 per chunk. Each independent free model family must PASS every chunk; BLOCK vetoes and incomplete/oversized single-file review remains fail-closed INCONCLUSIVE. Preserve full SHA, secret preflight and maintainer decision. A first review claimed the explicitly scoped size variable was undefined; clarified the declaration and tested it. A second review misclassified intentional fail-closed refusal as a CRITICAL vulnerability; clarified reviewer prompt that INCONCLUSIVE blocks release and added direct refusal regression. Added preservation of later-chunk BLOCK evidence. Tests: cloud full CI, exact-head Fleet PRE and fresh genuine independent review; release on green evidence only.
+---
+
 # WORK IN PROGRESS — Scoped Task Compiler, resource scheduler, real native Godot pipeline
 
 ---
