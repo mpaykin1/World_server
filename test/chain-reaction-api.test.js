@@ -267,7 +267,8 @@ test('atomic and legacy world projections allowlist resident fields', async () =
   const f = fixture(), w = engine.createWorld('resident-privacy');
   const resident = w.residents.find(r => r.building === 'house-0' && r.floor === 1 && r.flat === 1);
   Object.assign(resident, { comment: 'RESIDENT PRIVATE COMMENT', actorId: STRANGER_ID,
-    category: 'hidden_genie_category', role: 'untrusted' });
+    category: 'hidden_genie_category', role: 'untrusted',
+    id: { actorId: STRANGER_ID }, name: { comment: 'NESTED RESIDENT SECRET' } });
   f.row.settings.chainReaction = w;
   const first = await handle(f.admin, req, body('game-state'));
   const preview = await handle(f.admin, req, body('preview-plan'));
@@ -276,7 +277,7 @@ test('atomic and legacy world projections allowlist resident fields', async () =
   for (const result of [first, preview, committed, ticked]) {
     const projected = result.world.residents.find(r => r.building === 'house-0' && r.floor === 1 && r.flat === 1);
     assert.deepEqual(Object.keys(projected).sort(), ['building', 'fictional', 'flat', 'floor', 'id', 'name']);
-    assert.doesNotMatch(JSON.stringify(result), /RESIDENT PRIVATE COMMENT|actorId|hidden_genie_category|untrusted/);
+    assert.doesNotMatch(JSON.stringify(result), /RESIDENT PRIVATE COMMENT|NESTED RESIDENT SECRET|actorId|hidden_genie_category|untrusted/);
     assert.equal(projected.fictional, true);
   }
   assert.equal(first.revision, first.world.revision);
