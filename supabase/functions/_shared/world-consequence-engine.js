@@ -28,6 +28,8 @@ const PROJECTS={
 const FIRST=['Арина','Борис','Вера','Глеб','Дина','Егор','Жанна','Илья','Кира','Лев'];
 const LAST=['Тихая','Речной','Зорина','Каменев','Лесная','Ветров','Соколова','Горин'];
 const INSIGHT_STREAK_REQUIRED=8;
+const RETURN_MIGRATION_STREAK=4;
+const MAX_DISPLACED_RESIDENTS=100000;
 function resident(seed,building,floor,flat){
  const n=hash(seed+':'+building+':'+floor+':'+flat);
  return {id:'npc-'+hash(seed)+'-'+building+'-'+floor+'-'+flat,name:FIRST[n%FIRST.length]+' '+LAST[(n>>>7)%LAST.length],building,floor,flat,fictional:true};
@@ -54,7 +56,19 @@ function createWorld(seed='city'){
  const n=hash(seed);const resources={power:40+n%15,water:65,food:62,budget:150,ecology:75,health:75,jobs:36,workers:18,culture:25};
  const houses=Array.from({length:5},(_,i)=>({id:'house-'+i,x:(n+i*17)%70,z:(n>>>3+i*23)%70,floors:2+i%3}));
  const residents=residentDirectory(String(seed),houses);
- return {schema:1,seed:String(seed),revision:0,tick:0,resources,population:80+n%41,projects:[],history:[],houses,residents,land:{volcano:!!(n%2),coast:!!(n%3),forest:true},insight:{knowledge:10,leisure:12,cooperation:15,sustainability:12,harmonyTicks:0,illumination:false,illuminationAtTick:null},culture:{temples:0,spokesperson:null},crisis:false};
+ return {schema:1,seed:String(seed),revision:0,tick:0,resources,population:80+n%41,projects:[],history:[],houses,residents,land:{volcano:!!(n%2),coast:!!(n%3),forest:true},insight:{knowledge:10,leisure:12,cooperation:15,sustainability:12,harmonyTicks:0,illumination:false,illuminationAtTick:null},culture:{temples:0,spokesperson:null},crisis:false,demography:{displaced:0,stableTicks:0,returned:0}};
+}
+function ensureDemography(world){
+ const current=world.demography&&typeof world.demography==='object'&&!Array.isArray(world.demography)?world.demography:{};
+ world.demography={
+  displaced:Number.isSafeInteger(current.displaced)&&current.displaced>=0?
+   Math.min(MAX_DISPLACED_RESIDENTS,current.displaced):0,
+  stableTicks:Number.isSafeInteger(current.stableTicks)&&current.stableTicks>=0?
+   Math.min(RETURN_MIGRATION_STREAK,current.stableTicks):0,
+  returned:Number.isSafeInteger(current.returned)&&current.returned>=0?
+   Math.min(MAX_DISPLACED_RESIDENTS,current.returned):0
+ };
+ return world.demography;
 }
 function interpretIntent(text='',structure='geothermal'){
  const t=String(text).slice(0,600).toLowerCase();
@@ -93,7 +107,7 @@ function commit(world,intent,expectedRevision=world.revision){
  return next;
 }
 function tick(world){
- const w=copy(world);ensureResidents(w);w.tick++;w.revision++;
+ const w=copy(world);ensureResidents(w);const demography=ensureDemography(w);w.tick++;w.revision++;
  const flow={power:-Math.ceil(w.population/14),water:-Math.ceil(w.population/18),food:-Math.ceil(w.population/16),budget:1,ecology:0,health:0,jobs:0,culture:0};
  for(const p of w.projects){
   const spec=PROJECTS[p.type];
@@ -118,8 +132,24 @@ function tick(world){
  for(const [k,v] of Object.entries(flow))w.resources[k]=clamp((w.resources[k]||0)+v, k==='budget'?-10000:0,k==='budget'?100000:100);
  const deficit=['power','water','food'].filter(k=>w.resources[k]<15);
  w.crisis=deficit.length>0;
- if(w.crisis){w.population=Math.max(1,w.population-1);w.resources.health=clamp(w.resources.health-2);w.history.push({tick:w.tick,kind:'adaptation',deficit,story:'Жители организуют взаимопомощь и ищут альтернативные источники.'})}
- else{w.resources.health=clamp(w.resources.health+1);if(w.resources.food>45&&w.resources.water>45)w.population++}
+ if(w.crisis){
+  const before=w.population;w.population=Math.max(1,w.population-1);const departed=before-w.population;
+  demography.displaced=Math.min(MAX_DISPLACED_RESIDENTS,demography.displaced+departed);demography.stableTicks=0;
+  w.resources.health=clamp(w.resources.health-2);
+  w.history.push({tick:w.tick,kind:'adaptation',deficit,story:'Жители организуют взаимопомощь и ищут альтернативные источники.'});
+  if(departed)w.history.push({tick:w.tick,kind:'crisis_migration',count:departed,displaced:demography.displaced});
+ }else{
+  w.resources.health=clamp(w.resources.health+1);
+  const returnReady=['power','water','food'].every(k=>w.resources[k]>=35)&&w.resources.health>=55&&w.resources.jobs>=25;
+  demography.stableTicks=returnReady&&demography.displaced>0?
+   Math.min(RETURN_MIGRATION_STREAK,demography.stableTicks+1):0;
+  if(demography.displaced>0&&demography.stableTicks>=RETURN_MIGRATION_STREAK){
+   const count=Math.min(2,demography.displaced);demography.displaced-=count;
+   demography.returned=Math.min(MAX_DISPLACED_RESIDENTS,demography.returned+count);
+   demography.stableTicks=0;w.population+=count;
+   w.history.push({tick:w.tick,kind:'return_migration',count,remaining:demography.displaced});
+  }else if(demography.displaced===0&&w.resources.food>45&&w.resources.water>45)w.population++;
+ }
  if(w.culture.temples>=3){
   const current=w.culture.spokesperson;
   const currentResident=current&&w.residents.find(npc=>npc.id===current.id&&npc.name===current.name&&
