@@ -30,6 +30,8 @@ const LAST=['Тихая','Речной','Зорина','Каменев','Лес�
 const INSIGHT_STREAK_REQUIRED=8;
 const CRISIS_RECOVERY_THRESHOLD=6;
 const RECOVERY_STABILITY_REQUIRED=6;
+const MAX_RECOVERY_ACTIVE_TICKS=24;
+const MAX_RECOVERY_INTERVENTIONS=3;
 const RECOVERY_FLOW={power:9,water:8,food:9,budget:-4,ecology:-1};
 function resident(seed,building,floor,flat){
  const n=hash(seed+':'+building+':'+floor+':'+flat);
@@ -61,11 +63,16 @@ function createWorld(seed='city'){
 }
 function ensureRecovery(world){
  const current=world.recovery&&typeof world.recovery==='object'&&!Array.isArray(world.recovery)?world.recovery:{};
+ const active=current.cooperativeActive===true;
+ const interventions=Number.isSafeInteger(current.interventions)&&current.interventions>=0?
+  Math.min(MAX_RECOVERY_INTERVENTIONS,current.interventions):0;
  world.recovery={
   crisisTicks:Number.isSafeInteger(current.crisisTicks)&&current.crisisTicks>=0?current.crisisTicks:0,
   stableTicks:Number.isSafeInteger(current.stableTicks)&&current.stableTicks>=0?current.stableTicks:0,
-  cooperativeActive:current.cooperativeActive===true,
-  interventions:Number.isSafeInteger(current.interventions)&&current.interventions>=0?current.interventions:0,
+  activeTicks:active&&Number.isSafeInteger(current.activeTicks)&&current.activeTicks>=0?
+   Math.min(MAX_RECOVERY_ACTIVE_TICKS,current.activeTicks):0,
+  cooperativeActive:active,
+  interventions:active?Math.max(1,interventions):interventions,
   lastAtTick:Number.isSafeInteger(current.lastAtTick)&&current.lastAtTick>=0?current.lastAtTick:null
  };
  return world.recovery;
@@ -109,7 +116,10 @@ function commit(world,intent,expectedRevision=world.revision){
 function tick(world){
  const w=copy(world);ensureResidents(w);const recovery=ensureRecovery(w);w.tick++;w.revision++;
  const flow={power:-Math.ceil(w.population/14),water:-Math.ceil(w.population/18),food:-Math.ceil(w.population/16),budget:1,ecology:0,health:0,jobs:0,culture:0};
- if(recovery.cooperativeActive)for(const [key,value] of Object.entries(RECOVERY_FLOW))flow[key]=(flow[key]||0)+value;
+ if(recovery.cooperativeActive){
+  recovery.activeTicks++;
+  for(const [key,value] of Object.entries(RECOVERY_FLOW))flow[key]=(flow[key]||0)+value;
+ }
  for(const p of w.projects){
   const spec=PROJECTS[p.type];
   if(p.active&&p.workersReleased===undefined){
@@ -137,8 +147,8 @@ function tick(world){
   recovery.crisisTicks++;recovery.stableTicks=0;
   w.population=Math.max(1,w.population-1);w.resources.health=clamp(w.resources.health-2);
   w.history.push({tick:w.tick,kind:'adaptation',deficit,story:'Жители организуют взаимопомощь и ищут альтернативные источники.'});
-  if(!recovery.cooperativeActive&&recovery.crisisTicks>=CRISIS_RECOVERY_THRESHOLD){
-   recovery.cooperativeActive=true;recovery.interventions++;recovery.lastAtTick=w.tick;recovery.crisisTicks=0;
+  if(!recovery.cooperativeActive&&recovery.interventions<MAX_RECOVERY_INTERVENTIONS&&recovery.crisisTicks>=CRISIS_RECOVERY_THRESHOLD){
+   recovery.cooperativeActive=true;recovery.activeTicks=0;recovery.interventions++;recovery.lastAtTick=w.tick;recovery.crisisTicks=0;
    const support=Object.fromEntries(deficit.map(key=>[key,18]));
    for(const key of deficit)w.resources[key]=clamp((w.resources[key]||0)+support[key]);
    w.resources.budget=clamp(w.resources.budget-12,-10000,100000);
@@ -154,11 +164,12 @@ function tick(world){
   recovery.crisisTicks=0;
   const stable=recovery.cooperativeActive&&['power','water','food'].every(k=>w.resources[k]>=35)&&w.resources.health>=45;
   recovery.stableTicks=stable?recovery.stableTicks+1:0;
-  if(recovery.cooperativeActive&&recovery.stableTicks>=RECOVERY_STABILITY_REQUIRED){
-   recovery.cooperativeActive=false;recovery.stableTicks=0;
-   w.history.push({tick:w.tick,kind:'crisis_recovery_completed',intervention:recovery.interventions});
-  }
   w.resources.health=clamp(w.resources.health+1);if(w.resources.food>45&&w.resources.water>45)w.population++;
+ }
+ if(recovery.cooperativeActive&&(recovery.stableTicks>=RECOVERY_STABILITY_REQUIRED||recovery.activeTicks>=MAX_RECOVERY_ACTIVE_TICKS)){
+  const outcome=recovery.stableTicks>=RECOVERY_STABILITY_REQUIRED?'stable':'exhausted';
+  recovery.cooperativeActive=false;recovery.activeTicks=0;recovery.stableTicks=0;recovery.crisisTicks=0;
+  w.history.push({tick:w.tick,kind:'crisis_recovery_completed',intervention:recovery.interventions,outcome});
  }
  if(w.culture.temples>=3){
   const current=w.culture.spokesperson;

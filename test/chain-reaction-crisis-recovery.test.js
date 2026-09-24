@@ -21,6 +21,7 @@ test('severe crisis activates one costly cooperative at the exact sixth tick',()
  assert.equal(world.tick,6);assert.equal(world.revision,6);
  assert.equal(world.recovery.cooperativeActive,true);
  assert.equal(world.recovery.interventions,1);assert.equal(world.recovery.lastAtTick,6);
+ assert.equal(world.recovery.activeTicks,0);
  assert.equal(world.crisis,false);
  for(const key of ['power','water','food'])assert.equal(world.resources[key],18);
  assert.equal(world.resources.budget,94);assert.equal(world.resources.ecology,72);
@@ -65,4 +66,31 @@ test('recovery support records and restores only resources that are actually in 
  assert.equal(Object.hasOwn(event.support,'water'),false);
  assert.equal(Object.hasOwn(event.support,'food'),false);
  assert.equal(world.recovery.interventions,1);
+});
+
+test('an active workshop cannot turn recovery into a permanent subsidy',()=>{
+ let world=engine.createWorld('workshop-counterexample');
+ world.resources.budget=200;world.resources.power=80;world.resources.water=80;world.resources.food=80;world.resources.workers=20;
+ world=engine.commit(world,engine.interpretIntent('', 'workshop'));
+ world=engine.simulateTicks(world,2);assert.equal(world.projects[0].active,true);
+ Object.assign(world.resources,{power:0,water:0,food:0,budget:0,ecology:75,health:75,jobs:0,workers:0,culture:25});
+ world=engine.simulateTicks(world,2000);
+ const started=world.history.filter(event=>event.kind==='crisis_recovery_started');
+ const completed=world.history.filter(event=>event.kind==='crisis_recovery_completed');
+ assert.equal(world.recovery.cooperativeActive,false);
+ assert.equal(world.recovery.interventions,3);
+ assert.equal(started.length,3);assert.equal(completed.length,3);
+ assert(completed.every(event=>event.outcome==='exhausted'));
+ assert.equal(world.resources.power,0);
+});
+
+test('unsafe legacy intervention counters clamp without overflow or phantom history',()=>{
+ let world=collapsed('unsafe-counter');
+ world.recovery={crisisTicks:5,stableTicks:0,activeTicks:0,cooperativeActive:false,
+  interventions:Number.MAX_SAFE_INTEGER,lastAtTick:null};
+ world=engine.tick(world);
+ assert.equal(world.recovery.interventions,3);
+ assert.equal(world.recovery.cooperativeActive,false);
+ assert.equal(world.history.some(event=>event.kind==='crisis_recovery_started'),false);
+ world=engine.tick(world);assert.equal(world.recovery.interventions,3);
 });
