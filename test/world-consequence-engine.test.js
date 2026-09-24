@@ -86,6 +86,31 @@ test('deterministic risk event still preserves adaptation path',()=>{
  a=E.commit(a,E.interpretIntent('','coal'));b=E.commit(b,E.interpretIntent('','coal'));
  a=E.simulateTicks(a,30);b=E.simulateTicks(b,30);assert.deepEqual(a,b);assert(a.history.some(e=>e.kind==='accident'));assert(a.history.some(e=>e.kind==='adaptation'));assert(a.population>0);
 });
+test('illumination requires eight consecutive viable ticks and records one milestone',()=>{
+ let w=E.createWorld('sustained-insight');Object.assign(w.resources,{power:90,water:90,food:90,ecology:90,health:90});
+ assert.equal(w.insight.harmonyTicks,0);assert.equal(w.insight.illumination,false);assert.equal(w.insight.illuminationAtTick,null);
+ Object.assign(w.insight,{knowledge:69,leisure:69,cooperation:69,sustainability:69});
+ w=E.tick(w);assert.equal(w.insight.harmonyTicks,1);assert.equal(w.insight.illumination,false);
+ w=E.simulateTicks(w,6);assert.equal(w.insight.harmonyTicks,7);assert.equal(w.insight.illumination,false);
+ w=E.tick(w);assert.equal(w.insight.harmonyTicks,8);assert.equal(w.insight.illumination,true);
+ assert.equal(w.insight.illuminationAtTick,w.tick);assert.equal(w.history.filter(e=>e.kind==='sustained_insight').length,1);
+ const replay=E.simulateTicks(structuredClone(w),3);assert.equal(replay.history.filter(e=>e.kind==='sustained_insight').length,1);
+});
+test('insight streak resets on lost viability without erasing first attainment',()=>{
+ let w=E.createWorld('insight-disruption');Object.assign(w.resources,{power:90,water:90,food:90,ecology:90,health:90});
+ Object.assign(w.insight,{knowledge:90,leisure:90,cooperation:90,sustainability:90});
+ w=E.simulateTicks(w,8);const achievedAt=w.insight.illuminationAtTick;assert.equal(w.insight.illumination,true);
+ w.resources.food=0;w=E.tick(w);assert.equal(w.insight.harmonyTicks,0);assert.equal(w.insight.illumination,false);
+ assert.equal(w.insight.illuminationAtTick,achievedAt);assert.equal(w.history.filter(e=>e.kind==='sustained_insight').length,1);
+});
+test('legacy one-tick illumination is not grandfathered',()=>{
+ let w=E.createWorld('legacy-insight');Object.assign(w.resources,{power:90,water:90,food:90,ecology:90,health:90});
+ Object.assign(w.insight,{knowledge:90,leisure:90,cooperation:90,sustainability:90,illumination:true});
+ delete w.insight.harmonyTicks;delete w.insight.illuminationAtTick;
+ const a=E.tick(w),b=E.tick(JSON.parse(JSON.stringify(w)));
+ assert.deepEqual(a,b);assert.equal(a.insight.harmonyTicks,1);assert.equal(a.insight.illumination,false);
+ assert.equal(a.history.some(e=>e.kind==='sustained_insight'),false);
+});
 
 test('three temples unlock fictional spokesperson only after all are commissioned',()=>{
  let w=E.createWorld('three-temples');w.resources.budget=300;w.resources.workers=20;

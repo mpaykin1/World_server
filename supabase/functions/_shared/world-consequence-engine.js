@@ -27,6 +27,7 @@ const PROJECTS={
 };
 const FIRST=['Арина','Борис','Вера','Глеб','Дина','Егор','Жанна','Илья','Кира','Лев'];
 const LAST=['Тихая','Речной','Зорина','Каменев','Лесная','Ветров','Соколова','Горин'];
+const INSIGHT_STREAK_REQUIRED=8;
 function resident(seed,building,floor,flat){
  const n=hash(seed+':'+building+':'+floor+':'+flat);
  return {id:'npc-'+n,name:FIRST[n%FIRST.length]+' '+LAST[(n>>>7)%LAST.length],building,floor,flat,fictional:true};
@@ -34,7 +35,7 @@ function resident(seed,building,floor,flat){
 function createWorld(seed='city'){
  const n=hash(seed);const resources={power:40+n%15,water:65,food:62,budget:150,ecology:75,health:75,jobs:36,workers:18,culture:25};
  const houses=Array.from({length:5},(_,i)=>({id:'house-'+i,x:(n+i*17)%70,z:(n>>>3+i*23)%70,floors:2+i%3}));
- return {schema:1,seed:String(seed),revision:0,tick:0,resources,population:80+n%41,projects:[],history:[],houses,land:{volcano:!!(n%2),coast:!!(n%3),forest:true},insight:{knowledge:10,leisure:12,cooperation:15,sustainability:12},culture:{temples:0,spokesperson:null},crisis:false};
+ return {schema:1,seed:String(seed),revision:0,tick:0,resources,population:80+n%41,projects:[],history:[],houses,land:{volcano:!!(n%2),coast:!!(n%3),forest:true},insight:{knowledge:10,leisure:12,cooperation:15,sustainability:12,harmonyTicks:0,illumination:false,illuminationAtTick:null},culture:{temples:0,spokesperson:null},crisis:false};
 }
 function interpretIntent(text='',structure='geothermal'){
  const t=String(text).slice(0,600).toLowerCase();
@@ -105,7 +106,15 @@ function tick(world){
  w.insight.cooperation=clamp(w.insight.cooperation+(w.crisis?2:1));
  w.insight.leisure=clamp(w.insight.leisure+(w.resources.power>45&&w.resources.food>45?1:0));
  w.insight.sustainability=clamp(w.insight.sustainability+(w.resources.ecology>65?1:0));
- w.insight.illumination=Object.values(w.insight).slice(0,4).every(x=>x>=70)&&w.resources.health>=55&&w.resources.water>=20&&w.resources.food>=20;
+ const insightReady=['knowledge','leisure','cooperation','sustainability'].every(k=>w.insight[k]>=70)&&
+  w.resources.health>=55&&w.resources.water>=20&&w.resources.food>=20;
+ const priorStreak=Number.isSafeInteger(w.insight.harmonyTicks)&&w.insight.harmonyTicks>=0?w.insight.harmonyTicks:0;
+ w.insight.harmonyTicks=insightReady?Math.min(INSIGHT_STREAK_REQUIRED,priorStreak+1):0;
+ w.insight.illumination=w.insight.harmonyTicks>=INSIGHT_STREAK_REQUIRED;
+ if(w.insight.illumination&&!Number.isSafeInteger(w.insight.illuminationAtTick)){
+  w.insight.illuminationAtTick=w.tick;
+  w.history.push({tick:w.tick,kind:'sustained_insight',streak:INSIGHT_STREAK_REQUIRED});
+ }
  return w;
 }
 const GENIE_CANDIDATES={
