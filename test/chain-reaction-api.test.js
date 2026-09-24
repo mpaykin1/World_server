@@ -98,6 +98,39 @@ test('Genie options are authorized, deterministic, read-only and keep categories
   assert.equal(f.writes, 0);
   await rejects(handle(fixture({ denied: true }).admin, req, body('genie-options')), 403);
 });
+test('resident lookup returns canonical fictional identity without writing', async () => {
+  const f = fixture();
+  f.row.settings.chainReaction = engine.createWorld('resident-api');
+  const expected = engine.address(f.row.settings.chainReaction, 'house-1', 2, 3);
+  const first = await handle(f.admin, req, body('resident-at-address', { building: 'house-1', floor: 2, flat: 3 }));
+  const reconnected = await handle(f.admin, req, body('resident-at-address', { building: 'house-1', floor: 2, flat: 3 }));
+  assert.deepEqual(first.resident, expected); assert.deepEqual(reconnected, first);
+  assert.equal(first.resident.fictional, true); assert.equal(f.writes, 0);
+  const invited = fixture({ denied: true, member: 'player' });
+  invited.row.settings.chainReaction = engine.createWorld('resident-api-player');
+  assert.equal((await handle(invited.admin, req, body('resident-at-address', { building: 'house-0', floor: 1, flat: 1 }))).resident.fictional, true);
+  await rejects(handle(fixture({ denied: true }).admin, req, body('resident-at-address', { building: 'house-0', floor: 1, flat: 1 })), 403);
+});
+test('resident lookup allowlists its public DTO even when stored data has extra fields', async () => {
+  const f = fixture();
+  f.row.settings.chainReaction = engine.createWorld('resident-api-tainted');
+  const resident = f.row.settings.chainReaction.residents.find(candidate => candidate.building === 'house-0' && candidate.floor === 1 && candidate.flat === 1);
+  Object.assign(resident, { comment: 'private child text', actorId: STRANGER_ID, category: 'hidden_genie_category', role: 'untrusted' });
+  const result = await handle(f.admin, req, body('resident-at-address', { building: 'house-0', floor: 1, flat: 1 }));
+  assert.deepEqual(Object.keys(result.resident).sort(), ['building', 'fictional', 'flat', 'floor', 'id', 'name']);
+  assert.doesNotMatch(JSON.stringify(result), /private child text|actorId|hidden_genie_category|untrusted/);
+  assert.equal(f.writes, 0);
+});
+test('resident lookup rejects coerced or nonexistent addresses', async () => {
+  const f = fixture();
+  for (const address of [
+    { building: '', floor: 1, flat: 1 }, { building: 'house-0', floor: '1', flat: 1 },
+    { building: 'house-0', floor: 1.5, flat: 1 }, { building: 'house-0', floor: 1, flat: '1' },
+    { building: 'house-0', floor: 0, flat: 1 }, { building: 'house-0', floor: 1, flat: 1001 }
+  ]) await rejects(handle(f.admin, req, body('resident-at-address', address)), 400);
+  await rejects(handle(f.admin, req, body('resident-at-address', { building: 'house-99', floor: 1, flat: 1 })), 404);
+  assert.equal(f.writes, 0);
+});
 test('commit and ticks persist public simulation plus private provenance; history paginates', async () => {
   const f = fixture();
   const secret = 'My private geothermal plan';

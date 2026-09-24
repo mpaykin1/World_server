@@ -2,7 +2,7 @@ import "../_shared/world-consequence-engine.js";
 
 type Runtime = { json:(body:unknown,status?:number)=>Response };
 const engine=(globalThis as any).WorldConsequenceEngine;
-const ACTIONS=new Set(["interpret-intent","preview-plan","commit-plan","tick","history","genie-options","invite-member","revoke-member"]);
+const ACTIONS=new Set(["interpret-intent","preview-plan","commit-plan","tick","history","genie-options","resident-at-address","invite-member","revoke-member"]);
 const WORLD=/^[a-zA-Z0-9_-]{1,80}$/;
 const USER_ID=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const MAX_STATE_BYTES=1024*1024;
@@ -21,6 +21,15 @@ function intentFrom(body:any) {
   if(typeof body.structure!=="string"||!Object.hasOwn(engine.PROJECTS,body.structure))fail(400,"Invalid structure");
   if(body.text!==undefined&&(typeof body.text!=="string"||body.text.length>600))fail(400,"Invalid text");
   return {...engine.interpretIntent(body.text||"",body.structure),schemaVersion:1};
+}
+function residentAddress(body:any) {
+  if(typeof body.building!=="string"||!WORLD.test(body.building))fail(400,"Invalid building");
+  if(!Number.isInteger(body.floor)||body.floor<1||body.floor>100)fail(400,"Invalid floor");
+  if(!Number.isInteger(body.flat)||body.flat<1||body.flat>1000)fail(400,"Invalid flat");
+  return {building:body.building,floor:body.floor,flat:body.flat};
+}
+function publicResident(resident:any) {
+  return {id:resident.id,name:resident.name,fictional:resident.fictional===true,building:resident.building,floor:resident.floor,flat:resident.flat};
 }
 function db(error:any) {
   if(error)fail(500,"Chain Reaction persistence failed");
@@ -89,6 +98,12 @@ export async function handleChainReaction(admin:any,req:Request,body:any,runtime
     if(!Number.isSafeInteger(offset)||offset<0||!Number.isInteger(limit)||limit<1||limit>100)fail(400,"Invalid history page");
     const history=world.history.slice(offset,offset+limit);
     return runtime.json({...base,history,nextOffset:offset+history.length,total:world.history.length});
+  }
+  if(body.action==="resident-at-address") {
+    const requested=residentAddress(body);
+    const resident=engine.address(world,requested.building,requested.floor,requested.flat);
+    if(!resident)fail(404,"Resident address not found");
+    return runtime.json({...base,resident:publicResident(resident)});
   }
   if(body.action==="genie-options")return runtime.json({...base,...engine.genieOptions(world)});
   const intent=body.action==="tick"?null:intentFrom(body);
