@@ -15,7 +15,7 @@ from fastapi.responses import FileResponse
 from ai3d.auth import verify_token
 from ai3d.runner import PipelineRunner
 from ai3d.store import JobStore
-from ai3d.validation import ALLOWED_IMAGE_TYPES, verify_image
+from ai3d.validation import ALLOWED_IMAGE_TYPES, ALLOWED_VIDEO_TYPES, verify_image, verify_video
 
 SERVICE_ROOT = Path(__file__).resolve().parent
 RUNTIME = Path(os.environ.get("AI3D_RUNTIME_DIR", SERVICE_ROOT / "runtime")).resolve()
@@ -83,6 +83,17 @@ def execute_job(job_id: str) -> None:
     except Exception as exc:
         store.update(job_id, status="failed", message="Failed", error=f"{type(exc).__name__}: {exc}")
     finally:
+        # Do not retain private source video after a completed/failed motion job.
+        # Interrupted jobs keep their input for safe restart recovery.
+        final_job = store.get(job_id)
+        if final_job and final_job.get("mode") == "motion_capture" and final_job.get("status") in {"completed", "failed"}:
+            original = final_job.get("input_path")
+            if original:
+                try:
+                    Path(original).unlink(missing_ok=True)
+                except OSError:
+                    # Preserve terminal job state; surface privacy cleanup issue to operators.
+                    store.update(job_id, message="Source video deletion pending: check worker file permissions")
         with _inflight_lock:
             _inflight.discard(job_id)
 
@@ -113,7 +124,7 @@ async def create_job(
     _token=Depends(require_token),
 ):
     mode = mode.strip().lower()
-    if mode not in {"auto", "image_to_3d", "depth", "building", "map", "voxel_city"}:
+    if mode not in {"auto", "image_to_3d", "depth", "building", "map", "voxel_city", "motion_capture"}:
         raise HTTPException(status_code=400, detail="Unsupported mode.")
     try:
         options = json.loads(params or "{}")
@@ -122,11 +133,15 @@ async def create_job(
     if not isinstance(options, dict) or len(params) > 64_000:
         raise HTTPException(status_code=400, detail="params object is invalid or too large.")
 
+    if mode == "motion_capture" and not runner.motion.status()["available"]:
+        raise HTTPException(status_code=503, detail="Motion capture not licensed/configured: install optional deps and approve SHA-pinned model.")
+
     needs_image = mode in {"auto", "image_to_3d", "depth", "voxel_city"}
-    if needs_image and file is None:
+    if (needs_image or mode == "motion_capture") and file is None:
         raise HTTPException(status_code=400, detail="This mode requires an image.")
-    if file is not None and file.content_type not in ALLOWED_IMAGE_TYPES:
-        raise HTTPException(status_code=415, detail="Only PNG, JPEG and WebP images are accepted.")
+    permitted_types = ALLOWED_VIDEO_TYPES if mode == "motion_capture" else ALLOWED_IMAGE_TYPES
+    if file is not None and file.content_type not in permitted_types:
+        raise HTTPException(status_code=415, detail="This mode does not accept the supplied MIME type.")
 
     job_id = uuid.uuid4().hex
     job_dir = RUNTIME / "jobs" / job_id
@@ -134,7 +149,7 @@ async def create_job(
     input_path = None
     try:
         if file is not None:
-            suffix = {"image/png": ".png", "image/jpeg": ".jpg", "image/webp": ".webp"}[file.content_type]
+            suffix = ALLOWED_VIDEO_TYPES[file.content_type] if mode == "motion_capture" else {"image/png": ".png", "image/jpeg": ".jpg", "image/webp": ".webp"}[file.content_type]
             input_path = job_dir / f"input{suffix}"
             size = 0
             with input_path.open("wb") as handle:
@@ -144,10 +159,10 @@ async def create_job(
                         break
                     size += len(chunk)
                     if size > MAX_UPLOAD:
-                        raise HTTPException(status_code=413, detail=f"Image exceeds {MAX_UPLOAD // (1024 * 1024)} MB limit.")
+                        raise HTTPException(status_code=413, detail=f"Upload exceeds {MAX_UPLOAD // (1024 * 1024)} MB limit.")
                     handle.write(chunk)
             try:
-                verify_image(input_path)
+                (verify_video(input_path, file.content_type) if mode == "motion_capture" else verify_image(input_path))
             except Exception as exc:
                 raise HTTPException(status_code=400, detail=f"Invalid image: {exc}")
         store.create(job_id, mode, options, str(input_path) if input_path else None)

@@ -1,0 +1,4 @@
+# Optional CPU video -> pose support. Do NOT package GVHMR or noncommercial SMPL-X.
+# Verify the model bundle's own commercial terms BEFORE enabling the worker.
+mediapipe>=0.10.20,<0.11
+opencv-python-headless>=4.9,<5

@@ -7,6 +7,8 @@ const ui = {
 };
 let session = null;
 let pollTimer = null;
+let mocapPreviewRaf = null;
+const MOCAP_LINKS = [[11,12],[11,13],[13,15],[12,14],[14,16],[11,23],[12,24],[23,24],[23,25],[25,27],[27,31],[24,26],[26,28],[28,32]];
 
 function setProgress(value, label) {
   const p = Math.max(0, Math.min(100, Math.round(Number(value) || 0)));
@@ -35,6 +37,13 @@ async function checkHealth() {
     const plugins = data.plugins || {};
     const ready = Object.entries(plugins).filter(([,v]) => v?.available).map(([k]) => k);
     ui.health.textContent = data.ok ? `Worker online · ${ready.length} engines` : 'Worker offline';
+    const mocap = plugins.motion_capture;
+    const option = ui.mode.querySelector('option[value="motion_capture"]');
+    option.disabled = !mocap?.available;
+    $('mocapAvailability').textContent = mocap?.available
+      ? 'Видео-анимация: CPU-обработка доступна. Результат — диагностический 3D-манекен, не игровой персонаж.'
+      : 'Видео-анимация пока закрыта: нет подтверждённых прав на модель или не установлен CPU-модуль.';
+    if (option.disabled && ui.mode.value === 'motion_capture') { ui.mode.value = 'auto'; modeChanged(); }
     ui.health.className = `health ${data.ok ? 'ok' : 'error'}`;
   } catch {
     ui.health.textContent = 'Worker offline';
@@ -44,7 +53,11 @@ async function checkHealth() {
 
 function modeChanged() {
   const m = ui.mode.value;
-  ui.fileWrap.classList.toggle('hidden', !['auto', 'image_to_3d', 'depth', 'voxel_city'].includes(m));
+  ui.fileWrap.classList.toggle('hidden', !['auto', 'image_to_3d', 'depth', 'voxel_city', 'motion_capture'].includes(m));
+  ui.file.accept = m === 'motion_capture' ? 'video/mp4,video/webm,video/quicktime,.mov' : 'image/png,image/jpeg,image/webp';
+  $('fileLabel').textContent = m === 'motion_capture' ? 'Видео человека, до 30 секунд, неподвижная камера' : 'Исходная картинка';
+  ui.file.value = '';
+  if (m !== 'motion_capture') { $('mocapPreviewWrap').classList.add('hidden'); cancelAnimationFrame(mocapPreviewRaf); }
   ui.buildingParams.classList.toggle('hidden', m !== 'building');
   ui.mapParams.classList.toggle('hidden', m !== 'map');
 }
@@ -93,6 +106,7 @@ async function pollJob(id) {
       setProgress(100, 'Готово');
       ui.generate.disabled = false;
       renderFiles(job);
+      if (job.mode === 'motion_capture') showMotionPreview(job).catch(error => appendLog('Предпросмотр недоступен: ' + error.message));
       return;
     }
     if (job.status === 'failed') {
@@ -143,6 +157,8 @@ function renderFiles(job) {
 }
 
 async function generate() {
+  cancelAnimationFrame(mocapPreviewRaf);
+  $('mocapPreviewWrap').classList.add('hidden');
   ui.generate.disabled = true;
   ui.files.replaceChildren();
   ui.state.className = '';
@@ -154,9 +170,9 @@ async function generate() {
     const form = new FormData();
     form.set('mode', mode);
     form.set('params', JSON.stringify(paramsForMode()));
-    if (['auto', 'image_to_3d', 'depth', 'voxel_city'].includes(mode)) {
+    if (['auto', 'image_to_3d', 'depth', 'voxel_city', 'motion_capture'].includes(mode)) {
       const file = ui.file.files?.[0];
-      if (!file) throw new Error('Выбери картинку.');
+      if (!file) throw new Error(mode === 'motion_capture' ? 'Выбери видео.' : 'Выбери картинку.');
       if (file.size > s.maxUploadMb * 1024 * 1024) throw new Error(`Файл больше ${s.maxUploadMb} MB.`);
       form.set('file', file, file.name);
     }
@@ -171,6 +187,42 @@ async function generate() {
     ui.state.className = 'error';
     appendLog(error.message);
   }
+}
+
+async function showMotionPreview(job) {
+  const result = (job.files || []).find(f => f.name === 'motion-landmarks.json');
+  if (!result) return;
+  let response = await authFetch(result.url);
+  if (response.status === 401) { await getSession(true); response = await authFetch(result.url); }
+  if (!response.ok) throw new Error('Не удалось получить траектории.');
+  const data = await response.json();
+  if (!Array.isArray(data.frames) || data.frames.length < 2) return;
+  const wrap = $('mocapPreviewWrap');
+  wrap.classList.remove('hidden');
+  const canvas = $('mocapPreview'), ctx = canvas.getContext('2d');
+  const origin = performance.now(), duration = data.frames[data.frames.length - 1].t;
+  const all = data.frames.flatMap(f => f.joints.filter((_, i) => i >= 11 && i <= 32));
+  const xs = all.map(p => p[0]), ys = all.map(p => p[1]);
+  const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
+  const scale = Math.min(canvas.width * .8 / Math.max(.05, maxX-minX), canvas.height * .8 / Math.max(.05, maxY-minY));
+  const project = p => [(p[0]-(minX+maxX)/2)*scale+canvas.width/2, canvas.height/2-(p[1]-(minY+maxY)/2)*scale];
+  function draw(now) {
+    if (wrap.classList.contains('hidden')) return;
+    const t = ((now-origin)/1000) % Math.max(.001, duration);
+    const frame = data.frames.find(f => f.t >= t) || data.frames[data.frames.length-1];
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.strokeStyle = '#82dfff'; ctx.lineWidth = 5; ctx.lineCap = 'round';
+    ctx.beginPath();
+    for (const [a,b] of MOCAP_LINKS) {
+      const pa = project(frame.joints[a]), pb = project(frame.joints[b]);
+      ctx.moveTo(pa[0],pa[1]); ctx.lineTo(pb[0],pb[1]);
+    }
+    ctx.stroke();
+    ctx.fillStyle = '#c9eefa'; ctx.font = '15px system-ui';
+    ctx.fillText('Diagnostic skeleton · ' + t.toFixed(1) + 's / ' + duration.toFixed(1) + 's', 18, 28);
+    mocapPreviewRaf = requestAnimationFrame(draw);
+  }
+  mocapPreviewRaf = requestAnimationFrame(draw);
 }
 
 ui.mode.addEventListener('change', modeChanged);

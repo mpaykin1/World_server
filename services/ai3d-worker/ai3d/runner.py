@@ -19,6 +19,7 @@ from .plugins.voxel_city import VoxelCityEngine
 from .plugins.gpu_router import RemoteGPU3DRouter
 from .plugins.mesh_quality_optimizer import MeshQualityOptimizer
 from .plugins.world_quality import WorldQualityEnhancer
+from .plugins.motion_capture import MotionCaptureEngine
 from ai3d_voxel_verifier.verifier import verify_voxel_city
 
 
@@ -45,6 +46,7 @@ class PipelineRunner:
         self.gpu_router = RemoteGPU3DRouter()
         self.mesh_optimizer = MeshQualityOptimizer()
         self.world_quality = WorldQualityEnhancer()
+        self.motion = MotionCaptureEngine()
 
     def plugin_status(self) -> dict:
         # Honest engine name based on actually used stages, not claimed Depth+Blender
@@ -60,6 +62,7 @@ class PipelineRunner:
             "voxel_city": {"available": self.voxel_city.available(), "engine": "skyline_dp_reference_shell_piecewise_voxel_depth_cpu", "output": "voxel-city.json"},
             "godot_voxel_factory": self.godot.plugin_status(),
             "remote_gpu_router": self.gpu_router.status(),
+            "motion_capture": self.motion.status(),
             "blender": {"available": self.building.available() or self.procgen.available(), "autoFound": self.building.blender if hasattr(self.building, 'blender') else "blender"},
             "voxel_tools": {"voxelsrv": (Path("C:/Users/user/Desktop/майн/voxelsrv/src").is_dir()), "littlecubes": (Path("C:/Users/user/Desktop/майн/LittleCubes/src").is_dir())},
         }
@@ -103,6 +106,13 @@ class PipelineRunner:
         files: list[dict] = []
         started = time.time()
         input_path = Path(job["input_path"]) if job.get("input_path") else None
+
+        if mode == "motion_capture":
+            if not input_path:
+                raise RuntimeError("Video source is required for motion capture")
+            progress(5, "Starting license-gated CPU video motion pipeline")
+            outputs = self.motion.run(input_path, job_dir, params, progress)
+            return {"files": [file_meta(p, p.stem) for p in outputs], "durationSeconds": round(time.time() - started, 3), "outputClass": "diagnostic_mannequin_not_game_rig"}
 
         if mode in {"auto", "image_to_3d", "depth", "voxel_city"} and not input_path:
             raise RuntimeError("This mode requires an input image.")

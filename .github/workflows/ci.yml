@@ -67,6 +67,10 @@ jobs:
           node scripts/check-sentry-runtime.js
       - run: npm run check
       - run: python -m py_compile services/ai3d-worker/server.py services/ai3d-worker/ai3d/*.py services/ai3d-worker/ai3d/plugins/*.py services/ai3d-worker/tools/*.py services/ai3d-worker/scripts/e2e-smoke.py
+      - name: Commercial-safe video mocap (synthetic GLB + license fail-closed)
+        env:
+          PYTHONPATH: services/ai3d-worker
+        run: python -m unittest discover -s services/ai3d-worker/tests -p test_motion_capture.py -v
       - name: AI3D discovery smoke
         run: node scripts/discover-ai3d-engines.js && test -f services/ai3d-worker/third_party/local-inventory.json
       - name: AI3D E2E smoke (image->job->engine->artifact->validation, 100% via CPU volumetric)

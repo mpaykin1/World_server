@@ -1,3 +1,53 @@
+# 2026-09-22 — License-gated CPU video motion capture (ChatGPT scoped branch)
+
+## Task / why / target
+Introduce an independently implemented video-to-motion diagnostic pipeline for World Server without shipping
+noncommercial GVHMR/SMPL-X code or weights. Integrate with the existing AI3D authenticated job worker
+and AI3D Factory UI, preserve all certified worlds, and fail closed until specific model-weight
+commercial rights are confirmed.
+
+## Current state / affected systems
+Prior mainline had synthetic skeleton retargeting contracts and an image-to-3D worker, but no real
+video inference. This feature branch adds optional MediaPipe CPU PoseLandmarker input, license
+gates, per-video capped sampling, raw 33-keypoint JSON, baked diagnostic animated GLB,
+AI3D frontend video upload/preview, Docker opt-in deps and focused regressions.
+Changes scoped to `services/ai3d-worker`, `apps/ai-3d`, `api/ai3d.js`, docs and tests.
+
+## Exact patch / risk controls
+- Isolate changes on `ai/chatgpt/commercial-safe-video-mocap-20260922`; NO master push.
+- Never auto-fetch any third-party model or embed Mixamo/GVHMR/SMPL-X.
+- Require local supplied model + 64-hex SHA256 match + explicit operator legal approval.
+- Keep CPU and GPU image engines untouched. New mode shares AI3D auth/SQLite job isolation.
+- Validate upload MIME/signature and caps; no arbitrary filenames or model code from upload.
+- Rig retargeting, multi-person motion, global root position, full scene playback and commercial
+  clearance of model weights are OUT OF SCOPE for this slice; never claim those complete.
+- Test pure-Python synthetic GLB/metadata/security contracts without proprietary weights,
+  worker client JavaScript syntax, and wider existing gates when possible.
+- Do not merge/deploy or issue a production testing URL without Fleet PRE review and
+  documented >=85% real-user visibility on desktop and mobile.
+
+## Completion criteria / final evidence
+Branch committed and pushed; focused mocap Python tests PASS; Node/JS syntax and relevant
+regressions PASS or blockers documented; draft PR in master; model path/license
+remains intentionally unconfigured until legally reviewed; no regressions introduced.
+
+## Verified scoped evidence (2026-09-22)
+- Isolated off-Desktop temporary worktree `Temp/ws-mocap-20260922` confirmed clean before and after targeted checks.
+- `python -m py_compile services/ai3d-worker/server.py services/ai3d-worker/ai3d/plugins/motion_capture.py`: PASS.
+- `python -m unittest discover -s services/ai3d-worker/tests -p test_motion_capture.py -v`: 4 PASS / 0 FAIL (synthetic keypoints and GLB, bad timestamps/NaN, header sniff, model SHA/license gates).
+- `node scripts/check-js.js`: PASS, 63 JS files.
+- `node --test test/ai3d-auth.test.js test/ai3d-delivery-policy.test.js`: 26 PASS / 0 FAIL.
+- `git diff --check`: PASS.
+- Continuous CI adds the standalone Python gate, but full PR CI status and real-world hardware/browser verification are still pending.
+- No licensed model weights installed or approved; real video inference and avatar rig retarget are deliberately unverified.
+
+## Next action
+Open draft PR, check cloud CI and Fleet PRE; acquire an approved SHA-pinned model,
+then run real video + real-asset retarget and desktop/mobile visibility >=85%
+before considering merge, deploy or test-link delivery.
+
+---
+
 # WORK IN PROGRESS — Scoped Task Compiler, resource scheduler, real native Godot pipeline
 
 ---
