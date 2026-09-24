@@ -4,7 +4,7 @@ import "../_shared/genie-ai.js";
 type Runtime = { json:(body:unknown,status?:number)=>Response };
 const engine=(globalThis as any).WorldConsequenceEngine;
 const genieAI=(globalThis as any).WorldGenieAI;
-const ACTIONS=new Set(["interpret-intent","preview-plan","commit-plan","tick","history","genie-options","genie-ai-status","genie-narrate","invite-member","revoke-member"]);
+const ACTIONS=new Set(["game-state","interpret-intent","preview-plan","commit-plan","tick","history","genie-options","genie-ai-status","genie-narrate","resident-at-address","invite-member","revoke-member"]);
 const WORLD=/^[a-zA-Z0-9_-]{1,80}$/;
 const USER_ID=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const MAX_STATE_BYTES=1024*1024;
@@ -24,6 +24,27 @@ function intentFrom(body:any) {
   if(body.text!==undefined&&(typeof body.text!=="string"||body.text.length>600))fail(400,"Invalid text");
   return {...engine.interpretIntent(body.text||"",body.structure),schemaVersion:1};
 }
+function residentAddress(body:any) {
+  if(typeof body.building!=="string"||!WORLD.test(body.building))fail(400,"Invalid building");
+  if(!Number.isInteger(body.floor)||body.floor<1||body.floor>100)fail(400,"Invalid floor");
+  if(!Number.isInteger(body.flat)||body.flat<1||body.flat>1000)fail(400,"Invalid flat");
+  return {building:body.building,floor:body.floor,flat:body.flat};
+}
+function publicResident(resident:any) {
+  if(!resident||typeof resident.id!=="string"||typeof resident.name!=="string"||
+    typeof resident.building!=="string"||resident.fictional!==true||
+    !Number.isInteger(resident.floor)||!Number.isInteger(resident.flat))fail(409,"Invalid resident data");
+  return {id:resident.id,name:resident.name,fictional:resident.fictional===true,building:resident.building,floor:resident.floor,flat:resident.flat};
+}
+function publicResidents(world:any) {
+  if(typeof world.seed!=="string"||!Array.isArray(world.houses))fail(409,"Invalid resident directory");
+  const houses=world.houses.map((house:any)=>{
+    if(!house||typeof house.id!=="string"||!WORLD.test(house.id)||
+      !Number.isInteger(house.floors)||house.floors<1||house.floors>100)fail(409,"Invalid resident directory");
+    return {id:house.id,floors:house.floors};
+  });
+  return engine.residentDirectory(world.seed,houses).map(publicResident);
+}
 function db(error:any) {
   if(error)fail(500,"Chain Reaction persistence failed");
 }
@@ -31,6 +52,11 @@ function publicState(value:any) {
   const safe=structuredClone(value);
   for(const project of safe.projects||[])if(project.intent)delete project.intent.comment;
   for(const event of safe.history||[]){delete event.comment;delete event.actorId;}
+  // Rebuild canonical values: key allowlisting alone would permit nested secrets
+  // inside an allowed field such as id or name.
+  if(Array.isArray(safe.residents)){
+    safe.residents=publicResidents(safe);
+  }
   return safe;
 }
 export function isChainReactionAction(value:unknown) {
@@ -89,21 +115,33 @@ export async function handleChainReaction(admin:any,req:Request,body:any,runtime
   if(body.action==="history") {
     const offset=body.offset===undefined?0:body.offset,limit=body.limit===undefined?50:body.limit;
     if(!Number.isSafeInteger(offset)||offset<0||!Number.isInteger(limit)||limit<1||limit>100)fail(400,"Invalid history page");
-    const history=world.history.slice(offset,offset+limit);
+    const history=publicState({history:world.history.slice(offset,offset+limit)}).history;
     return runtime.json({...base,history,nextOffset:offset+history.length,total:world.history.length});
+  }
+  if(body.action==="resident-at-address") {
+    const requested=residentAddress(body);
+    const resident=engine.address(world,requested.building,requested.floor,requested.flat);
+    if(!resident)fail(404,"Resident address not found");
+    return runtime.json({...base,resident:publicResident(resident)});
+  }
+  if(body.action==="game-state"){
+    // Optional read fence; omit it for a deliberate latest-state refresh after a 409.
+    if(body.expectedRevision!==undefined){
+      if(!Number.isSafeInteger(body.expectedRevision)||body.expectedRevision<0)fail(400,"Invalid expectedRevision");
+      if(world.revision!==body.expectedRevision)fail(409,"STALE_REVISION");
+    }
+    return runtime.json({...base,world:publicState(world),...engine.genieOptions(world)});
   }
   if(body.action==="genie-options")return runtime.json({...base,...engine.genieOptions(world)});
   if(body.action==="genie-ai-status")return runtime.json({...base,...genieAI.status(Deno.env.get("OPENAI_API_KEY"))});
   if(body.action==="genie-narrate")return runtime.json({
     ...base,
-    ...(await genieAI.narrate({
-      engine,world,structure:body.structure,text:body.text,actorId:actor.id,
-      apiKey:Deno.env.get("OPENAI_API_KEY")
-    }))
+    ...(await genieAI.narrate({engine,world,structure:body.structure,text:body.text,
+      actorId:actor.id,apiKey:Deno.env.get("OPENAI_API_KEY")}))
   });
   const intent=body.action==="tick"?null:intentFrom(body);
   if(body.action==="interpret-intent")return runtime.json({...base,intent});
-  if(body.action==="preview-plan")return runtime.json({...base,plan:engine.preview(world,intent),world});
+  if(body.action==="preview-plan")return runtime.json({...base,plan:engine.preview(world,intent),world:publicState(world)});
   if(!Number.isSafeInteger(body.expectedRevision)||body.expectedRevision<0)fail(400,"expectedRevision required");
   if(world.revision!==body.expectedRevision)fail(409,"STALE_REVISION");
   let next:any;
@@ -128,5 +166,5 @@ export async function handleChainReaction(admin:any,req:Request,body:any,runtime
     p_action:body.action,p_revision:next.revision,p_comment:body.action==="commit-plan"?(body.text||""):null
   });
   db(saved.error);if(saved.data!==true)fail(409,"STALE_REVISION");
-  return runtime.json({...base,revision:next.revision,world:next});
+  return runtime.json({...base,revision:next.revision,world:publicState(next)});
 }

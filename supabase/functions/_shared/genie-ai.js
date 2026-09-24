@@ -34,10 +34,16 @@ async function narrate({ engine, world, structure, text = '', actorId, apiKey, f
   rateLimit(actorId, now);
   const model = 'gpt-4.1-mini';
   // Send only gameplay data. Never send resident identities, memberships, auth or private history.
+  const resourceKeys = ['power', 'water', 'food', 'budget', 'ecology', 'health', 'jobs', 'workers', 'culture'];
+  const resources = Object.fromEntries(resourceKeys.filter(key =>
+    typeof world.resources?.[key] === 'number' && Number.isFinite(world.resources[key])
+  ).map(key => [key, world.resources[key]]));
+  const geography = Object.fromEntries(['volcano', 'coast', 'forest'].map(key =>
+    [key, world.land?.[key] === true]));
   const scenario = {
     tick: world.tick,
-    resources: world.resources,
-    geography: world.land,
+    resources,
+    geography,
     selectedProject: intent.goal,
     playerIdea: text,
     exactSimulation: {

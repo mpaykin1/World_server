@@ -22,7 +22,10 @@ test('no key, unknown project and oversized comments never reach provider', asyn
   assert.equal(calls, 0);
 });
 test('explicit read-only AI narration sends only allowlisted world data and preserves simulation', async () => {
-  const w = world(), before = structuredClone(w);
+  const w = world();
+  w.resources.privateNote = { comment: 'PRIVATE RESOURCE FIELD' };
+  w.land.privateNote = { comment: 'PRIVATE GEOGRAPHY FIELD' };
+  const before = structuredClone(w);
   let calls = 0;
   const fetcher = async (url, init) => {
     calls++;
@@ -57,4 +60,21 @@ test('30-second user cooldown and provider failure use bounded errors', async ()
   await AI.narrate(input({ actorId: 'cooldown', fetcher }));
   await assert.rejects(AI.narrate(input({ actorId: 'cooldown', fetcher, now: 1000001 })), { status: 429 });
   await assert.rejects(AI.narrate(input({ actorId: 'failure', fetcher: async () => ({ ok: false }) })), { status: 503 });
+});
+
+
+test('provider receives primitive allowlisted resources and geography only', async () => {
+  const w = world();
+  w.resources.extension = { notes: 'RESOURCE_CANARY' };
+  w.land.extension = { notes: 'GEOGRAPHY_CANARY' };
+  await AI.narrate(input({ actorId: 'allowlist', world: w, fetcher: async (_url, init) => {
+    const request = JSON.parse(init.body);
+    const scenario = JSON.parse(request.input[1].content);
+    assert.equal('extension' in scenario.resources, false);
+    assert.equal('extension' in scenario.geography, false);
+    assert.equal(typeof scenario.resources.power, 'number');
+    assert.equal(typeof scenario.geography.forest, 'boolean');
+    assert.doesNotMatch(init.body, /RESOURCE_CANARY|GEOGRAPHY_CANARY/);
+    return { ok: true, json: async () => ({ output: [{ content: [{ type: 'output_text', text: 'Развитие города.' }] }] }) };
+  } }));
 });

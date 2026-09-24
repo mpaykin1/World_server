@@ -98,6 +98,39 @@ test('Genie options are authorized, deterministic, read-only and keep categories
   assert.equal(f.writes, 0);
   await rejects(handle(fixture({ denied: true }).admin, req, body('genie-options')), 403);
 });
+test('resident lookup returns canonical fictional identity without writing', async () => {
+  const f = fixture();
+  f.row.settings.chainReaction = engine.createWorld('resident-api');
+  const expected = engine.address(f.row.settings.chainReaction, 'house-1', 2, 3);
+  const first = await handle(f.admin, req, body('resident-at-address', { building: 'house-1', floor: 2, flat: 3 }));
+  const reconnected = await handle(f.admin, req, body('resident-at-address', { building: 'house-1', floor: 2, flat: 3 }));
+  assert.deepEqual(first.resident, expected); assert.deepEqual(reconnected, first);
+  assert.equal(first.resident.fictional, true); assert.equal(f.writes, 0);
+  const invited = fixture({ denied: true, member: 'player' });
+  invited.row.settings.chainReaction = engine.createWorld('resident-api-player');
+  assert.equal((await handle(invited.admin, req, body('resident-at-address', { building: 'house-0', floor: 1, flat: 1 }))).resident.fictional, true);
+  await rejects(handle(fixture({ denied: true }).admin, req, body('resident-at-address', { building: 'house-0', floor: 1, flat: 1 })), 403);
+});
+test('resident lookup allowlists its public DTO even when stored data has extra fields', async () => {
+  const f = fixture();
+  f.row.settings.chainReaction = engine.createWorld('resident-api-tainted');
+  const resident = f.row.settings.chainReaction.residents.find(candidate => candidate.building === 'house-0' && candidate.floor === 1 && candidate.flat === 1);
+  Object.assign(resident, { comment: 'private child text', actorId: STRANGER_ID, category: 'hidden_genie_category', role: 'untrusted' });
+  const result = await handle(f.admin, req, body('resident-at-address', { building: 'house-0', floor: 1, flat: 1 }));
+  assert.deepEqual(Object.keys(result.resident).sort(), ['building', 'fictional', 'flat', 'floor', 'id', 'name']);
+  assert.doesNotMatch(JSON.stringify(result), /private child text|actorId|hidden_genie_category|untrusted/);
+  assert.equal(f.writes, 0);
+});
+test('resident lookup rejects coerced or nonexistent addresses', async () => {
+  const f = fixture();
+  for (const address of [
+    { building: '', floor: 1, flat: 1 }, { building: 'house-0', floor: '1', flat: 1 },
+    { building: 'house-0', floor: 1.5, flat: 1 }, { building: 'house-0', floor: 1, flat: '1' },
+    { building: 'house-0', floor: 0, flat: 1 }, { building: 'house-0', floor: 1, flat: 1001 }
+  ]) await rejects(handle(f.admin, req, body('resident-at-address', address)), 400);
+  await rejects(handle(f.admin, req, body('resident-at-address', { building: 'house-99', floor: 1, flat: 1 })), 404);
+  assert.equal(f.writes, 0);
+});
 test('commit and ticks persist public simulation plus private provenance; history paginates', async () => {
   const f = fixture();
   const secret = 'My private geothermal plan';
@@ -183,4 +216,101 @@ test('infeasible commits leave persistent state untouched', async () => {
   f.row.settings.chainReaction.resources.budget = 0;
   await rejects(handle(f.admin, req, body('commit-plan', { expectedRevision: 0 })), 409);
   assert.equal(f.writes, 0);
+});
+
+// Atomic first load: one world revision for the saved world and certified cards.
+test('atomic game-state is same-revision, privacy-safe and read-only',async()=>{
+ const f=fixture(),w=engine.createWorld('entry');Object.assign(w.resources,{power:35,water:80,food:80,budget:500,workers:50});
+ f.row.settings.chainReaction=engine.commit(w,engine.interpretIntent('PRIVATE CHILD TEXT','solar'));
+ const first=await handle(f.admin,req,body('game-state')),again=await handle(f.admin,req,body('game-state'));
+ assert.deepEqual(first,again);assert.equal(first.revision,first.world.revision);
+ assert.deepEqual(first.cards,engine.genieOptions(f.row.settings.chainReaction).cards);
+ assert.equal(first.fifth.kind,'free_intent');assert.equal(first.world.projects.length,1);
+ assert.doesNotMatch(JSON.stringify(first),/PRIVATE CHILD TEXT|actorId/);assert.equal(f.writes,0);
+});
+test('game-state honestly degrades, checks membership and supports an optional read fence',async()=>{
+ const f=fixture(),w=engine.createWorld('budget-zero');w.resources.budget=0;f.row.settings.chainReaction=w;
+ const empty=await handle(f.admin,req,body('game-state',{expectedRevision:0}));
+ assert.equal(empty.cards.length,0);assert.equal(empty.degraded,true);assert.equal(empty.fifth.acceptsFreeText,true);
+ await rejects(handle(f.admin,playerReq,body('game-state')),403);
+ for(const invalid of [-1,1.5,'0',null])await rejects(handle(f.admin,req,body('game-state',{expectedRevision:invalid})),400);
+ w.revision=1;await rejects(handle(f.admin,req,body('game-state',{expectedRevision:0})),409);
+ assert.equal((await handle(f.admin,req,body('game-state'))).revision,1);assert.equal(f.writes,0);
+});
+test('two simultaneous commits have one winner; reload and construction replay are durable',async()=>{
+ const f=fixture(),first=await handle(f.admin,req,body('game-state'));
+ const outcomes=await Promise.allSettled([1,2].map(()=>handle(f.admin,req,body('commit-plan',{structure:'solar',expectedRevision:first.revision}))));
+ assert.equal(outcomes.filter(x=>x.status==='fulfilled').length,1);
+ assert.equal(outcomes.find(x=>x.status==='rejected').reason.status,409);
+ await rejects(handle(f.admin,req,body('game-state',{expectedRevision:0})),409);
+ const restored=await handle(f.admin,req,body('game-state'));
+ assert.equal(restored.revision,1);assert.equal(restored.world.projects.length,1);
+ const ticked=await handle(f.admin,req,body('tick',{expectedRevision:1,count:2}));
+ assert.equal(ticked.world.projects[0].active,true);
+ assert.equal((await handle(f.admin,req,body('game-state'))).world.projects[0].active,true);
+ assert.equal(f.writes,2);
+});
+test('legacy and new private comments never leak via history, preview, commit or tick',async()=>{
+ const f=fixture();let w=engine.createWorld('legacy-privacy');w=engine.commit(w,engine.interpretIntent('LEGACY SECRET','solar'));
+ w.history.push({kind:'api_action',actorId:OWNER_ID,comment:'LEGACY PRIVATE EVENT'});f.row.settings.chainReaction=w;
+ const h=await handle(f.admin,req,body('history'));
+ const p=await handle(f.admin,req,body('preview-plan'));
+ const c=await handle(f.admin,req,body('commit-plan',{expectedRevision:1,text:'NEW SECRET'}));
+ const t=await handle(f.admin,req,body('tick',{expectedRevision:2}));
+ for(const response of [h,p,c,t])assert.doesNotMatch(JSON.stringify(response),/LEGACY SECRET|LEGACY PRIVATE EVENT|NEW SECRET|actorId/);
+ assert.equal(f.privateEvents[0].comment,'NEW SECRET');assert.equal(f.writes,2);
+});
+
+// Adversarial integration regression: a tainted stored resident must never escape
+// via the atomic loader or any of the other public world projections.
+test('atomic and legacy world projections allowlist resident fields', async () => {
+  const f = fixture(), w = engine.createWorld('resident-privacy');
+  const resident = w.residents.find(r => r.building === 'house-0' && r.floor === 1 && r.flat === 1);
+  Object.assign(resident, { comment: 'RESIDENT PRIVATE COMMENT', actorId: STRANGER_ID,
+    category: 'hidden_genie_category', role: 'untrusted',
+    id: { actorId: STRANGER_ID }, name: { comment: 'NESTED RESIDENT SECRET' } });
+  f.row.settings.chainReaction = w;
+  const first = await handle(f.admin, req, body('game-state'));
+  const preview = await handle(f.admin, req, body('preview-plan'));
+  const committed = await handle(f.admin, req, body('commit-plan', { expectedRevision: 0 }));
+  const ticked = await handle(f.admin, req, body('tick', { expectedRevision: 1 }));
+  for (const result of [first, preview, committed, ticked]) {
+    const projected = result.world.residents.find(r => r.building === 'house-0' && r.floor === 1 && r.flat === 1);
+    assert.deepEqual(Object.keys(projected).sort(), ['building', 'fictional', 'flat', 'floor', 'id', 'name']);
+    assert.doesNotMatch(JSON.stringify(result), /RESIDENT PRIVATE COMMENT|NESTED RESIDENT SECRET|actorId|hidden_genie_category|untrusted/);
+    assert.equal(projected.fictional, true);
+  }
+  assert.equal(first.revision, first.world.revision);
+  assert.equal(f.writes, 2);
+});
+
+
+test('authenticated AI endpoints never write game state or disclose private world data', async () => {
+  const f = fixture(), oldKey = process.env.OPENAI_API_KEY, oldFetch = globalThis.fetch;
+  let calls = 0;
+  try {
+    process.env.OPENAI_API_KEY = '';
+    assert.equal((await handle(f.admin, req, body('genie-ai-status'))).configured, false);
+    await rejects(handle(f.admin, req, body('genie-narrate')), 503);
+    process.env.OPENAI_API_KEY = 'test-placeholder';
+    globalThis.fetch = async (_url, init) => {
+      calls++;
+      const request = JSON.parse(init.body), scenario = JSON.parse(request.input[1].content);
+      assert.equal(request.store, false);
+      assert.equal('residents' in scenario, false);
+      assert.equal('history' in scenario, false);
+      return { ok: true, json: async () => ({ output: [{ content: [{ type: 'output_text', text: 'Строительство займёт два хода.' }] }] }) };
+    };
+    assert.equal((await handle(f.admin, req, body('genie-ai-status'))).configured, true);
+    const result = await handle(f.admin, req, body('genie-narrate', { text: 'Солнечные панели' }));
+    assert.equal(result.simulation.cost, 40);
+    assert.equal(result.revision, 0);
+    assert.equal(f.writes, 0);
+    await rejects(handle(fixture({ denied: true }).admin, req, body('genie-narrate')), 403);
+    assert.equal(calls, 1);
+  } finally {
+    if (oldKey === undefined) delete process.env.OPENAI_API_KEY;
+    else process.env.OPENAI_API_KEY = oldKey;
+    globalThis.fetch = oldFetch;
+  }
 });

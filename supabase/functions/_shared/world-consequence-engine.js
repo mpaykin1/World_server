@@ -134,7 +134,7 @@ function tick(world){
  w.insight.leisure=clamp(w.insight.leisure+(w.resources.power>45&&w.resources.food>45?1:0));
  w.insight.sustainability=clamp(w.insight.sustainability+(w.resources.ecology>65?1:0));
  const insightReady=['knowledge','leisure','cooperation','sustainability'].every(k=>w.insight[k]>=70)&&
-  w.resources.health>=55&&w.resources.water>=20&&w.resources.food>=20;
+  w.resources.health>=55&&w.resources.water>=20&&w.resources.food>=20&&w.resources.ecology>=55;
  const priorStreak=Number.isSafeInteger(w.insight.harmonyTicks)&&w.insight.harmonyTicks>=0?w.insight.harmonyTicks:0;
  w.insight.harmonyTicks=insightReady?Math.min(INSIGHT_STREAK_REQUIRED,priorStreak+1):0;
  w.insight.illumination=w.insight.harmonyTicks>=INSIGHT_STREAK_REQUIRED;
