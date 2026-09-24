@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-24T01:11:58.522Z",
+  "base": "38dbb6239acb03c67395ccd539db183be82a9333",
+  "head": "3e3d36a2c341a16a3c19d05deae61387b60d4c53",
+  "diffSha256": "9b3538cb4bf357618671241ff87a326e9b2fc256cefcdff72122a1ecaa23b34c",
+  "diffBytes": 11357,
+  "verdict": "BLOCK",
+  "reviewers": [
+    {
+      "provider": "cloudflare",
+      "family": "z-ai",
+      "model": "@cf/zai-org/glm-4.7-flash",
+      "verdict": "BLOCK",
+      "findings": [
+        {
+          "file": "supabase/functions/_shared/world-consequence-engine.js",
+          "line": "108",
+          "severity": "CRITICAL",
+          "evidence": "The logic for resetting the streak on lost viability is inverted. The code checks `w.resources.food=0` (a deficit) and then asserts the streak resets. However, the condition `w.insight.harmonyTicks=insightReady?Math.min(INSIGHT_STREAK_REQUIRED,priorStreak+1):0` only resets to 0 if `insightReady` is false. Since `w.resources.food=0` causes a deficit, `insightReady` becomes false, and the reset logic is correct. The test expects the streak to reset, and the code does reset it. This is not a bug.",
+          "reproduction": "N/A (False positive)"
+        },
+        {
+          "file": "supabase/functions/_shared/world-consequence-engine.js",
+          "line": "108",
+          "severity": "CRITICAL",
+          "evidence": "The logic for resetting the streak on lost viability is inverted. The code checks `w.resources.food=0` (a deficit) and then asserts the streak resets. However, the condition `w.insight.harmonyTicks=insightReady?Math.min(INSIGHT_STREAK_REQUIRED,priorStreak+1):0` only resets to 0 if `insightReady` is false. Since `w.resources.food=0` causes a deficit, `insightReady` becomes false, and the reset logic is correct. The test expects the streak to reset, and the code does reset it. This is not a bug.",
+          "reproduction": "N/A (False positive)"
+        }
+      ],
+      "falsification_attempts": [
+        "The test 'illumination requires eight consecutive viable ticks' passes because the logic correctly increments the streak and sets illumination to true after 8 ticks.",
+        "The test 'insight streak resets on lost viability' passes because setting food to 0 makes insightReady false, causing the streak to be set to 0.",
+        "The test 'legacy one-tick illumination is not grandfathered' passes because the legacy state (illumination=true) is ignored, and the new logic starts the streak from 0."
+      ],
+      "durationMs": 8627
+    },
+    {
+      "provider": "cloudflare",
+      "family": "nvidia",
+      "model": "@cf/nvidia/nemotron-3-120b-a12b",
+      "verdict": "INCONCLUSIVE",
+      "findings": [],
+      "falsification_attempts": [
+        "Attempted to verify that the streak resets correctly when any insight dimension falls below 70, but the test only checks food=0. Could not confirm reset behavior for other dimensions without additional test cases.",
+        "Tried to confirm that illuminationAtTick is not overwritten on re-attainment after reset, but the provided tests do not cover this scenario. No evidence of failure found, but not fully verified.",
+        "Checked whether the streak counter is properly bounded by INSIGHT_STREAK_REQUIRED (8) — the code uses Math.min, so it is safe. No overflow or underflow detected in logic.",
+        "Verified that legacy worlds without harmonyTicks or illuminationAtTick are handled: the code uses Number.isSafeInteger checks and defaults to 0 for priorStreak, and only sets illuminationAtTick if not already a safe integer. This appears correct, but cannot be fully validated without execution.",
+        "Confirmed that the test for legacy one-tick illumination expects insight.illumination to become false after one tick, which relies on the streak resetting to 1 (since insightReady is true but priorStreak is 0). This is consistent with the code, but again, not executed."
+      ],
+      "durationMs": 2429
+    },
+    {
+      "provider": "cloudflare",
+      "family": "google",
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "verdict": "PASS",
+      "findings": [],
+      "falsification_attempts": [
+        "Attempted to find a way to trigger multiple 'sustained_insight' events by resetting harmonyTicks while illumination is true.",
+        "Checked if 'illuminationAtTick' could be overwritten if illumination is lost and regained.",
+        "Verified if the legacy check (missing harmonyTicks) correctly resets the state without causing a crash.",
+        "Tested if the streak counter could overflow or behave unexpectedly with non-integer values."
+      ],
+      "durationMs": 2370
+    }
+  ],
+  "blockers": [
+    "Independent models disagree: BLOCK retained; reproduce findings before maintainer decision"
+  ],
+  "providerIssues": [],
+  "requiresMaintainerDecision": true,
+  "decisiveFamilies": 2,
+  "disputed": true
+}
