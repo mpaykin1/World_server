@@ -1,3 +1,7 @@
+# 2026-09-24: Independent reviewer full-patch chunking within free limits
+Task: large Graphics/API pull-request patches exceeded the 18 KB free Cloudflare reviewer budget, while OpenRouter free families repeatedly 429 or timed out. Do not weaken gate or invent reviewer PASS. Split only at complete changed-file boundaries into <=18 KB exact chunks, verify concatenation equals complete patch and require every chunk PASS independently from two model families; any BLOCK remains veto and quota/errors remain inconclusive. Oversized single-file patches still fail closed. Scope: scripts/independent-review-gate.cjs + focused negative tests, no production game runtime touched. Tests: CI full suite, Fleet PRE, actual independent review of this exact PR. Outcome: pending; no game launch authority until reviewed merge.
+---
+
 # WORK IN PROGRESS — Scoped Task Compiler, resource scheduler, real native Godot pipeline
 
 ---
