@@ -191,21 +191,34 @@ async function worldFactory(admin: any, req: Request, url: URL) {
   }
   if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
   const body = await bodyJson(req);
-  await requireUser(admin, req);
+  const creator = await requireUser(admin, req);
   if (String(body.action || "create") !== "create") fail(400, "Неизвестное действие World Factory.");
   const dna = await worldDNA(body.idea, body.requestId);
   const { data: existing, error: readError } = await admin.from("voxel_worlds").select("id,seed,settings,created_at,updated_at").eq("id", dna.id).maybeSingle();
   if (readError) throw readError;
-  if (existing) return json({ world: publicWorld(existing), created: false, idempotent: true, runtime: "supabase-edge" });
+  if (existing) {
+    const { error: membershipError } = await admin.from("chain_reaction_world_members")
+      .upsert({ world_id: dna.id, user_id: creator.id, role: "owner", updated_at: new Date().toISOString() }, { onConflict: "world_id,user_id" });
+    if (membershipError) throw membershipError;
+    return json({ world: publicWorld(existing), created: false, idempotent: true, chainReaction: { role: "owner" }, runtime: "supabase-edge" });
+  }
   const { data, error } = await admin.from("voxel_worlds").insert({ id: dna.id, seed: dna.seed, settings: settingsFromDNA(dna) }).select("id,seed,settings,created_at,updated_at").single();
   if (error) {
     if ((error as any).code === "23505") {
       const { data: raced } = await admin.from("voxel_worlds").select("id,seed,settings,created_at,updated_at").eq("id", dna.id).maybeSingle();
-      if (raced) return json({ world: publicWorld(raced), created: false, idempotent: true, runtime: "supabase-edge" });
+      if (raced) {
+        const { error: membershipError } = await admin.from("chain_reaction_world_members")
+          .upsert({ world_id: dna.id, user_id: creator.id, role: "owner", updated_at: new Date().toISOString() }, { onConflict: "world_id,user_id" });
+        if (membershipError) throw membershipError;
+        return json({ world: publicWorld(raced), created: false, idempotent: true, chainReaction: { role: "owner" }, runtime: "supabase-edge" });
+      }
     }
     throw error;
   }
-  return json({ world: publicWorld(data), created: true, idempotent: false, runtime: "supabase-edge" }, 201);
+  const { error: membershipError } = await admin.from("chain_reaction_world_members")
+    .upsert({ world_id: dna.id, user_id: creator.id, role: "owner", updated_at: new Date().toISOString() }, { onConflict: "world_id,user_id" });
+  if (membershipError) throw membershipError;
+  return json({ world: publicWorld(data), created: true, idempotent: false, chainReaction: { role: "owner" }, runtime: "supabase-edge" }, 201);
 }
 function cleanWorldId(value: unknown) {
   const id = String(value || "").trim();
