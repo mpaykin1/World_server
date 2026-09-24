@@ -2,7 +2,7 @@ import "../_shared/world-consequence-engine.js";
 
 type Runtime = { json:(body:unknown,status?:number)=>Response };
 const engine=(globalThis as any).WorldConsequenceEngine;
-const ACTIONS=new Set(["interpret-intent","preview-plan","commit-plan","tick","history","genie-options","resident-at-address","invite-member","revoke-member"]);
+const ACTIONS=new Set(["game-state","interpret-intent","preview-plan","commit-plan","tick","history","genie-options","resident-at-address","invite-member","revoke-member"]);
 const WORLD=/^[a-zA-Z0-9_-]{1,80}$/;
 const USER_ID=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const MAX_STATE_BYTES=1024*1024;
@@ -38,6 +38,13 @@ function publicState(value:any) {
   const safe=structuredClone(value);
   for(const project of safe.projects||[])if(project.intent)delete project.intent.comment;
   for(const event of safe.history||[]){delete event.comment;delete event.actorId;}
+  // Preserve exactly the canonical public resident DTO, including for legacy rows.
+  if(Array.isArray(safe.residents)){
+    safe.residents=safe.residents.map((resident:any)=>({
+      id:resident.id,name:resident.name,fictional:resident.fictional===true,
+      building:resident.building,floor:resident.floor,flat:resident.flat
+    }));
+  }
   return safe;
 }
 export function isChainReactionAction(value:unknown) {
@@ -96,7 +103,7 @@ export async function handleChainReaction(admin:any,req:Request,body:any,runtime
   if(body.action==="history") {
     const offset=body.offset===undefined?0:body.offset,limit=body.limit===undefined?50:body.limit;
     if(!Number.isSafeInteger(offset)||offset<0||!Number.isInteger(limit)||limit<1||limit>100)fail(400,"Invalid history page");
-    const history=world.history.slice(offset,offset+limit);
+    const history=publicState({history:world.history.slice(offset,offset+limit)}).history;
     return runtime.json({...base,history,nextOffset:offset+history.length,total:world.history.length});
   }
   if(body.action==="resident-at-address") {
@@ -105,10 +112,18 @@ export async function handleChainReaction(admin:any,req:Request,body:any,runtime
     if(!resident)fail(404,"Resident address not found");
     return runtime.json({...base,resident:publicResident(resident)});
   }
+  if(body.action==="game-state"){
+    // Optional read fence; omit it for a deliberate latest-state refresh after a 409.
+    if(body.expectedRevision!==undefined){
+      if(!Number.isSafeInteger(body.expectedRevision)||body.expectedRevision<0)fail(400,"Invalid expectedRevision");
+      if(world.revision!==body.expectedRevision)fail(409,"STALE_REVISION");
+    }
+    return runtime.json({...base,world:publicState(world),...engine.genieOptions(world)});
+  }
   if(body.action==="genie-options")return runtime.json({...base,...engine.genieOptions(world)});
   const intent=body.action==="tick"?null:intentFrom(body);
   if(body.action==="interpret-intent")return runtime.json({...base,intent});
-  if(body.action==="preview-plan")return runtime.json({...base,plan:engine.preview(world,intent),world});
+  if(body.action==="preview-plan")return runtime.json({...base,plan:engine.preview(world,intent),world:publicState(world)});
   if(!Number.isSafeInteger(body.expectedRevision)||body.expectedRevision<0)fail(400,"expectedRevision required");
   if(world.revision!==body.expectedRevision)fail(409,"STALE_REVISION");
   let next:any;
@@ -133,5 +148,5 @@ export async function handleChainReaction(admin:any,req:Request,body:any,runtime
     p_action:body.action,p_revision:next.revision,p_comment:body.action==="commit-plan"?(body.text||""):null
   });
   db(saved.error);if(saved.data!==true)fail(409,"STALE_REVISION");
-  return runtime.json({...base,revision:next.revision,world:next});
+  return runtime.json({...base,revision:next.revision,world:publicState(next)});
 }
