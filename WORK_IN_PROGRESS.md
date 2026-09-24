@@ -2,6 +2,12 @@
 
 ---
 
+# 2026-09-24: Chain Reaction construction workforce lifecycle
+
+Task: repair the canonical simulator's builder lifecycle without changing the public API or Graphics-owned files. Current state: project `needs.workers` is subtracted at commit like a consumed material and is never returned, so every completed build permanently destroys workforce capacity. Target: reserve builders during construction, release them exactly once when the project is commissioned, keep simultaneous construction bounded by actually available workers, and preserve deterministic replay/legacy project compatibility. Files: the one shared consequence engine plus focused regression tests. Risks: double release, free parallel construction, worker creation above population, changing commissioning delay, or Node/Edge arithmetic drift. Plan: persist the reserved count on new projects; release and mark it atomically at commissioning; cap available workers by population; add exact-delay, contention and replay guards. Required evidence: focused tests, full cloud CI, independent Fleet PRE exact head; Ocean only after READY_FOR_OCEAN and separate Fleet POST after deployment.
+
+---
+
 # 2026-09-24: Authoritative hidden Genie options API
 
 Task: expose the already simulator-verified four-card Genie selection and fifth free-intent lane through the existing authenticated Chain Reaction API, without touching Graphics-owned UI. Current state: `proposeGenieCards` proves the 2 worseners + 1 shifted crisis + 1 balanced distribution, but clients cannot request it and must not learn the hidden category labels. Target: one deterministic read-only `genie-options` action returning simulator forecasts with hidden classifications, honest degraded count, stable choice IDs and a bounded fifth free-design descriptor that reuses `preview-plan`/`commit-plan`. Files: canonical shared consequence engine, Node and Supabase Edge adapters, focused API/engine/Edge tests. Risks: leaking categories, trusting client arithmetic, non-deterministic ordering, pretending an infeasible quartet exists, or conflicting with Graphics PR #278. Preserve: all current auth/membership/CAS/private-history behavior, one engine, resource limits, renderer ownership and multiplayer. Completion: focused/full cloud tests and independent Fleet PRE exact head before Ocean; separate Fleet POST after live deployment. PR #277 Fleet POST is independently PASS for server/privacy; desktop/mobile/FPS/3D visibility remains UNKNOWN.

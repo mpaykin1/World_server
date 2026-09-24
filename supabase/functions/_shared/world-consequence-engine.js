@@ -67,7 +67,8 @@ function commit(world,intent,expectedRevision=world.revision){
  const publicIdentity=[next.seed,next.revision,intent.goal,intent.mechanism,
   intent.assumptions.cautious?'cautious':'standard',intent.assumptions.reckless?'reckless':'bounded'].join(':');
  const id='project-'+next.revision+'-'+hash(publicIdentity);
- next.projects.push({id,type:intent.goal,intent,remaining:plan.buildTicks,active:false,risk:plan.risk});
+ next.projects.push({id,type:intent.goal,intent,remaining:plan.buildTicks,active:false,risk:plan.risk,
+  workersReserved:PROJECTS[intent.goal].needs.workers||0,workersReleased:false});
  next.revision++;next.history.push({tick:next.tick,kind:'project_started',id,type:intent.goal,comment:intent.comment});
  return next;
 }
@@ -75,8 +76,20 @@ function tick(world){
  const w=copy(world);w.tick++;w.revision++;
  const flow={power:-Math.ceil(w.population/14),water:-Math.ceil(w.population/18),food:-Math.ceil(w.population/16),budget:1,ecology:0,health:0,jobs:0,culture:0};
  for(const p of w.projects){
-  if(!p.active){p.remaining--;if(p.remaining<=0){p.active=true;if(p.type==='temple')w.culture.temples++;w.history.push({tick:w.tick,kind:'commissioned',id:p.id,type:p.type})}continue}
-  const spec=PROJECTS[p.type];const available=Object.entries(spec.drain).every(([k,v])=>k==='ecology'||w.resources[k]+(flow[k]||0)>=v);
+  const spec=PROJECTS[p.type];
+  if(p.active&&p.workersReleased===undefined){
+   const legacyReserved=spec.needs.workers||0;p.workersReserved=legacyReserved;p.workersReleased=true;
+   if(legacyReserved>0){w.resources.workers=Math.min(w.population,(w.resources.workers||0)+legacyReserved);
+    w.history.push({tick:w.tick,kind:'builders_released',id:p.id,count:legacyReserved,legacy:true})}
+  }
+  if(!p.active){p.remaining--;if(p.remaining<=0){
+   p.active=true;
+   const reserved=Number.isSafeInteger(p.workersReserved)?p.workersReserved:(spec.needs.workers||0);
+   if(!p.workersReleased&&reserved>0){w.resources.workers=Math.min(w.population,(w.resources.workers||0)+reserved);p.workersReleased=true;
+    w.history.push({tick:w.tick,kind:'builders_released',id:p.id,count:reserved})}
+   if(p.type==='temple')w.culture.temples++;w.history.push({tick:w.tick,kind:'commissioned',id:p.id,type:p.type})
+  }continue}
+  const available=Object.entries(spec.drain).every(([k,v])=>k==='ecology'||w.resources[k]+(flow[k]||0)>=v);
   if(!available){w.history.push({tick:w.tick,kind:'resource_shortage',id:p.id});continue}
   for(const [k,v] of Object.entries(spec.output))flow[k]=(flow[k]||0)+v;
   for(const [k,v] of Object.entries(spec.drain))flow[k]=(flow[k]||0)-v;
