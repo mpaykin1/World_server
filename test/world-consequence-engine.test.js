@@ -26,6 +26,25 @@ test('construction conserves inputs and output starts after exact delay',()=>{
  assert.equal(projectRun.resources.power,control.resources.power);assert(projectRun.history.some(e=>e.kind==='commissioned'));
  projectRun=E.tick(projectRun);control=E.tick(control);assert.equal(projectRun.resources.power-control.resources.power,36);
 });
+test('builders are reserved during construction and released exactly once',()=>{
+ let w=E.createWorld('builder-lifecycle');Object.assign(w.resources,{budget:300,workers:4,power:80,water:80,food:80});
+ const solar=E.interpretIntent('','solar'),second=E.interpretIntent('','temple');
+ w=E.commit(w,solar);assert.equal(w.resources.workers,1);assert.equal(E.preview(w,second).feasible,false);
+ w=E.tick(w);assert.equal(w.resources.workers,1);
+ w=E.tick(w);assert.equal(w.resources.workers,4);assert.equal(E.preview(w,second).feasible,true);
+ const released=w.history.filter(e=>e.kind==='builders_released');assert.equal(released.length,1);assert.equal(released[0].count,3);
+ const replay=E.tick(structuredClone(w));assert.equal(replay.resources.workers,4);
+ assert.equal(replay.history.filter(e=>e.kind==='builders_released').length,1);
+});
+test('already commissioned legacy projects restore deducted builders once',()=>{
+ let w=E.createWorld('legacy-builders');Object.assign(w.resources,{budget:300,workers:10,power:80,water:80,food:80});
+ w=E.commit(w,E.interpretIntent('','solar'));w=E.simulateTicks(w,2);
+ w.resources.workers=7;delete w.projects[0].workersReserved;delete w.projects[0].workersReleased;
+ w.history=w.history.filter(e=>e.kind!=='builders_released');
+ w=E.tick(w);assert.equal(w.resources.workers,10);assert.equal(w.projects[0].workersReleased,true);
+ assert.equal(w.history.filter(e=>e.kind==='builders_released').length,1);
+ w=E.tick(w);assert.equal(w.resources.workers,10);assert.equal(w.history.filter(e=>e.kind==='builders_released').length,1);
+});
 test('serialized state replays exact resources and history',()=>{
  let w=E.createWorld('serialized-replay');w.land.volcano=true;w.resources.budget=300;
  w=E.commit(w,E.interpretIntent('геотермальная энергия после исследования','geothermal'));
