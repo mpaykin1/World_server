@@ -15,6 +15,65 @@
 
 ---
 
+# 2026-09-24: Canonical fictional resident directory
+
+Task: persist deterministic fictional residents as canonical Chain Reaction world data, without adding a second engine or touching Graphics-owned UI. Why: address lookup previously synthesized an NPC on demand, so the resident was not part of the saved/CAS-protected world and the temple spokesperson was not tied to a real game address. Target: every valid apartment has one stable fictional resident stored in `world.residents`; address lookup reads that canonical record; old worlds deterministically hydrate the same bounded directory on the next authoritative mutation; the three-temple spokesperson is selected from those stored residents and keeps a real building/floor/flat. Files/systems: the single shared Node/Supabase consequence engine, its existing CommonJS facade, and focused regression tests. Risks: world-state bloat, replay drift, exposing real-person claims, changing arithmetic/revisions/history, non-idempotent legacy migration, or Node/Edge divergence. Preserve: auth/membership/CAS/private-history, resource arithmetic, hidden Genie cards, insight streak, 3D/mobile/multiplayer behavior, and PR #278 ownership. Exact patch: derive exactly one record for each existing apartment from seed+house+floor+flat; mark every record `fictional:true`; store on create; validate and repair absent/empty/partial/tampered directories during commit/tick; resolve read-only legacy addresses through the same derivation; migrate old temple-square spokespersons to a deterministic stored resident; add create/serialization/legacy/corruption/invalid-address/spokesperson tests plus bounded multi-seed falsification. Tests: focused Node suite, syntax/agent rules, full cloud CI and independent Fleet PRE exact head. Deployment/PR: branch PR to protected master; Ocean only after gates; separate Fleet POST after exact deployment. Current progress: implementation and regression protection complete; independent review found empty/corrupt-directory and legacy-spokesperson gaps, both repaired and covered. Focused API/engine/Edge suite is 39/39 PASS; 1,000 independent seed worlds had 112 unique canonical addresses each, no arithmetic drift, and maximum serialized state below 16 KiB versus the 1 MiB API cap; syntax, agent rules, diff check and quality diff pass. Full local release gate ran 880 tests: 874 PASS, 4 intentional SKIP, and only 2 unchanged host-environment failures because Python `requests` is absent from the local CPU reconstruction environment; no Chain Reaction test failed. Next action: commit/publish PR, obtain full cloud CI and independent Fleet PRE exact head. Completion: exact-head tests and Fleet PRE pass, Ocean deploys, Fleet POST verifies canonical persistence on Live. Final evidence: pending cloud gates and final independent reviewer verdict.
+
+---
+
+# 2026-09-24: Sustained insight instead of one-tick illumination
+
+Task: make the optional Chain Reaction insight path require a deterministic sustained interval, without adding an API or touching Graphics-owned files. Current state: `illumination` becomes true after a single qualifying tick, so a transient resource spike can claim social harmony. Target: require eight consecutive viable ticks with knowledge, leisure, cooperation and sustainability at threshold; reset the live streak when basic health/water/food or an insight dimension falls; persist the first attainment tick and emit one causal event; migrate legacy worlds deterministically. Files: the one canonical shared consequence engine and focused regression tests. Risks: accidental permanent victory, event spam, brittle object-order checks, replay drift, or legacy one-tick illumination remaining grandfathered. Plan: explicit named criteria, bounded integer streak, durable first-attainment marker, current-status boolean and replay/disruption/legacy tests. Required evidence: focused tests, full cloud CI, independent Fleet PRE exact head; Ocean and separate live POST remain mandatory.
+
+---
+
+# 2026-09-24: Chain Reaction construction workforce lifecycle
+
+Task: repair the canonical simulator's builder lifecycle without changing the public API or Graphics-owned files. Current state: project `needs.workers` is subtracted at commit like a consumed material and is never returned, so every completed build permanently destroys workforce capacity. Target: reserve builders during construction, release them exactly once when the project is commissioned, keep simultaneous construction bounded by actually available workers, and preserve deterministic replay/legacy project compatibility. Files: the one shared consequence engine plus focused regression tests. Risks: double release, free parallel construction, worker creation above population, changing commissioning delay, or Node/Edge arithmetic drift. Plan: persist the reserved count on new projects; release and mark it atomically at commissioning; cap available workers by population; add exact-delay, contention and replay guards. Required evidence: focused tests, full cloud CI, independent Fleet PRE exact head; Ocean only after READY_FOR_OCEAN and separate Fleet POST after deployment.
+
+---
+
+# 2026-09-24: Authoritative hidden Genie options API
+
+Task: expose the already simulator-verified four-card Genie selection and fifth free-intent lane through the existing authenticated Chain Reaction API, without touching Graphics-owned UI. Current state: `proposeGenieCards` proves the 2 worseners + 1 shifted crisis + 1 balanced distribution, but clients cannot request it and must not learn the hidden category labels. Target: one deterministic read-only `genie-options` action returning simulator forecasts with hidden classifications, honest degraded count, stable choice IDs and a bounded fifth free-design descriptor that reuses `preview-plan`/`commit-plan`. Files: canonical shared consequence engine, Node and Supabase Edge adapters, focused API/engine/Edge tests. Risks: leaking categories, trusting client arithmetic, non-deterministic ordering, pretending an infeasible quartet exists, or conflicting with Graphics PR #278. Preserve: all current auth/membership/CAS/private-history behavior, one engine, resource limits, renderer ownership and multiplayer. Completion: focused/full cloud tests and independent Fleet PRE exact head before Ocean; separate Fleet POST after live deployment. PR #277 Fleet POST is independently PASS for server/privacy; desktop/mobile/FPS/3D visibility remains UNKNOWN.
+
+---
+
+# 2026-09-24: Chain Reaction private player history
+
+Task: prevent a child's free-form fifth-card explanation and raw actor UUID from entering publicly readable `voxel_worlds.settings`, while retaining durable authoritative provenance. Current state: the live API is authenticated, but commit/tick provenance is embedded in the public simulation JSON. Target: store a redacted causal projection publicly and atomically commit private text/actor provenance to an RLS-closed service-role journal with the same CAS transaction. Files: canonical shared consequence engine, Node and Supabase Edge adapters, one generated migration, focused tests. Risks: privacy leakage (including dictionary-guessable text hashes), membership revoke race, partial public/private writes, stale legacy rows, and loss of deterministic replay. Preserve: one canonical consequence engine, existing five gameplay actions plus membership management, revision arithmetic, unrelated world settings, multiplayer and renderer ownership. Plan: derive public IDs only from typed non-sensitive state; sanitize only persisted public state; backfill any pre-existing rows; lock canonical membership inside the RPC; update public CAS and private journal atomically; deny anon/authenticated table and function access; add regression guards. Production preflight found zero stored Chain Reaction worlds/comments/actor IDs. Completion requires focused/full tests, independent review, exact-head CI and Fleet PRE before Ocean; production migration must precede the Edge deployment, followed by Fleet POST. Progress: implementation complete locally; focused tests PASS. Full repository check initially reached 776 PASS before failing only because local npm/Python dependencies were absent; locked npm dependencies are now installed for the repeat run. No production schema or function change has been made.
+
+---
+
+# 2026-09-23: Chain Reaction owner-managed membership and stale-token revoke
+
+Task: add authoritative invite/revoke server actions for a second player. Why: the live simulation has creator membership, but old JWT grants can outlive a revoke and there is no bounded owner API for multiplayer access. Current state: `master` requires membership but still accepts legacy `app_metadata`; no invite/revoke actions. Target: one-time legacy grant reconciliation, then private membership-only authorization checked on every request, with owner-only idempotent invite/revoke. Files: Node and Supabase Edge Chain Reaction adapters, one generated migration, focused tests and API documentation. Risks: BOLA, owner removal, stale-token access, user enumeration and breaking legacy invited users. Preserve: deterministic simulation, CAS, existing five actions, public 3D/UI ownership boundaries and all Golden systems. Plan: backfill trusted legacy grants; remove runtime JWT fallback; validate UUID targets; restrict management to canonical owners; preserve owner row; add regression tests. Tests: focused Chain Reaction/Edge/World Factory suites, JS checks, diff check, then cloud CI/Fleet PRE. Deployment: isolated branch and one PR; no direct production mutation. Progress: implementation complete locally; owner-only invite/revoke is idempotent, ignores stale JWT grants, and cannot downgrade an owner even under an insert race. Next: commit, push, open one PR and hand exact SHA to independent Fleet PRE. Completion: exact-head tests plus independent PRE before Ocean; separate POST after integration. Final evidence: 50/50 focused tests PASS; syntax, diff, Desktop protocol and quality diff PASS. The full release gate reached 868 tests with 861 PASS, 3 host-environment failures and 4 SKIP; the failures are unchanged baseline gaps (Python `requests` absent for two CPU reconstruction tests and MCP filesystem proxy timeout). Production schema read shows zero legacy grants/missing reconciliations; migration SQL EXPLAIN succeeds without executing it. No production schema/function deployment performed.
+
+# 2026-09-23: Chain Reaction creator authorization without shared JWT grant races
+
+## Task and reason
+Repair the exact PR #270 source-review blocker where concurrent World Factory creations for one user can lose an `app_metadata.chain_reaction_worlds` update. Preserve the canonical Chain Reaction API and do not compete with the separate temple-domain PR #273.
+
+## Current and target state
+Current creator onboarding performs a non-atomic Auth Admin read/modify/write on one shared metadata array. Target: a dedicated RLS-closed membership row is the authoritative creator grant; the API accepts that membership directly, while the bounded trusted JWT list remains backward-compatible for separately provisioned invited users. Creator creation must not rewrite shared auth metadata, expose raw user IDs in public world settings, or require a token refresh.
+
+## Affected systems, risks, and patch plan
+- `lib/api-handlers/world-factory.js`: stop creator grant read/modify/write and provision one idempotent private membership row.
+- `lib/chain-reaction-api.js`: load the canonical world, then authorize either its private membership or a trusted legacy/invited JWT grant.
+- `supabase/migrations/20260923190000_chain_reaction_world_members.sql`: composite-keyed, RLS-closed membership storage with service-role-only access.
+- focused tests: simultaneous distinct creator worlds, no metadata loss, direct owner access, stranger denial, and legacy grant compatibility.
+- Risk: do not expose the private owner marker through `publicWorld`; do not weaken authenticated access; invitation/revoke and real Supabase CAS remain #271.
+
+## Required tests and delivery
+Run focused World Factory + Chain Reaction tests, syntax, then the repository check if resources permit. Commit and push only to `ai/codex/chain-reaction-api-20260923`; refresh PR #270 evidence and require a new exact-head Fleet PRE before Ocean. No merge or production claim from Builder.
+
+## Progress / next action / completion
+Progress: implementation and focused falsification are complete locally. The creator path now writes one composite-keyed membership row, never rewrites shared Auth metadata, and stores no user ID in public world settings. Next: commit/push and obtain fresh exact-head CI/Fleet/Cloudflare evidence. Completion requires those gates plus an updated Ocean handoff.
+
+Final evidence so far: 28/28 focused World Factory + Chain Reaction tests PASS; syntax and agent-rules PASS. Full `npm run check` exercised 857 tests: 850 PASS, 3 host-environment failures, 4 SKIP. The three failures are the already documented baseline gaps on this Linux host: two CPU reconstruction tests lack Python `requests`, and the MCP filesystem proxy fixture timed out at 30 seconds. No changed Chain Reaction/World Factory test failed.
+
+---
+
 # 2026-09-23: Independent reviewer credential-safe error handling
 
 A real Workers AI probe exposed a malformed GitHub credential: the user pasted a complete REST curl command rather than only the new API token. A native HTTP header exception reflected a partial credential into a GitHub artifact. Mitigation completed: the affected artifact was deleted (API now denies access); malformed WORLD_CF_AI_API_TOKEN was deleted; WORLD_CF_WORKERS_FREE_CONFIRMED disabled. The user must revoke the old Cloudflare token and create a fresh token, placing ONLY the token value into the dedicated GitHub secret. Do not print any old or new token or diagnostics derived from native header exceptions.
@@ -847,3 +906,19 @@ Implementation and local verification complete. Remaining proof is GitHub Action
 - Scope: quality-canary workflow only; no auth/security weakening and no production promotion.
 - Gates: release:gate, exact-SHA stack verification, Chromium/WebKit, playable delivery, HTTP smoke.
 - Status: protocol ledger updated after CI correctly rejected the workflow-only patch; rerun full gates before merge.
+# Chain Reaction backend API — 2026-09-23
+
+- Task / why: connect the deterministic engine to authenticated, persisted API actions.
+- Current state: engine exists; no backend intent/preview/commit/tick/history contract.
+- Target / direction: server-authoritative simulation in existing voxel world settings.
+- Systems / files: api/voxel.js, lib/chain-reaction-api.js, targeted backend tests only.
+- Risks: forged intent, guest impersonation, lost updates, unbounded simulation/history.
+- Preserve: engine arithmetic, browser client, legacy voxel actions, other agents' work.
+- Exact plan: dispatch chain actions before guest auth; require verified user and trusted app_metadata world grants; validate bounded input; recompute intents; persist settings using updated_at CAS; test failures and races.
+- Tests: focused API/engine tests and syntax locally; full npm check/release gates in cloud per cloud-first policy.
+- Deployment / PR: commit current branch as explicitly requested; push/PR if available; no merge/deploy.
+- Current progress: five API actions implemented with trusted per-world grants, server-side intent compilation, atomic state/history CAS, bounded requests and scenario capacity. Backend contract documented in docs/CHAIN_REACTION_API.md.
+- Next action: from an authorized Git context, stage these five files, commit this branch, push and open a draft PR; run cloud npm run check/release:gate and live Supabase integration verification. Provision trusted app_metadata.chain_reaction_worlds grants before client integration.
+- Completion criteria: scoped commit and honest test evidence; integration release remains subject to cloud gates and live Supabase verification.
+- Final evidence: node --test --test-isolation=none test/chain-reaction-api.test.js test/world-consequence-engine.test.js: 19/19 passed. node --check api/voxel.js and lib/chain-reaction-api.js passed; git diff --check passed. Agent rules check passed with git subprocess EPERM warnings (branch/file checks not verified by that script). Ordinary node --test failed to spawn subprocesses (EPERM); same tests passed with isolation disabled. Full release suite remains unrun, cloud-first. No live database or browser claim. Simulation arithmetic and accepted quality metrics unchanged; no scientific readiness claim.
+- Commit blocker: git add failed creating C:/Users/user/Desktop/World_server/.git/worktrees/worldserver-codex-chain-20260923/index.lock: Permission denied. The linked worktree Git directory is outside this session's writable root; approvals are unavailable. No commit/SHA, push, PR or deployment produced. No new worktree or Desktop copy created; existing user worktrees left untouched.
