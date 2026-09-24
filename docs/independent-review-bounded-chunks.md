@@ -1,4 +1,0 @@
-# Bounded free independent review with full patch coverage
-
-The reviewer retains the same full-patch preflight, SHA-256 hash, hard block on secrets/binary diffs, and requirement for PASS from two different free model families. If a patch is too large for a single Cloudflare Workers AI request, it groups complete changed-file diffs into byte-bounded chunks and verifies that concatenation exactly reproduces the original full diff. Every model family must return PASS on every chunk to count as one independent full-patch PASS. A single BLOCK still blocks; timeouts/429, incomplete coverage, and any one file larger than the budget remain INCONCLUSIVE rather than auto-approved. Reports record per-chunk SHA-256, byte lengths and reviewed chunk counts. This does not change the full patch hash, production merge gates or maintainer decision.
-

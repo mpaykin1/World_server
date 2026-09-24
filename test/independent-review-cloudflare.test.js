@@ -308,3 +308,16 @@ test('chunked BLOCK evidence survives long warnings in preceding PASS chunks',as
  assert.ok(report.reviewers[0].findings.some(x=>x.file==='b.js'&&x.severity==='critical'));
  assert.ok(report.reviewers[0].falsification_attempts[0].startsWith('chunk 2:'));
 });
+
+test('oversized indivisible file never gets fake independent approval',async()=>{
+ const long='diff --git a/large.js b/large.js\n@@ -1 +1 @@\n-old\n+'+'a'.repeat(20000)+'\n';
+ let calls=0;
+ const report=await reviewPatch({patch:long,base:'a'.repeat(40),head:'b'.repeat(40),key:'',cloudflare:cfg,
+   reviewCloudflare:async()=>{calls++;return {...pass,family:'z-ai'};}
+ });
+ assert.equal(calls,0);
+ assert.equal(report.verdict,'INCONCLUSIVE');
+ assert.equal(report.reviewers.length,0);
+ assert.ok(report.blockers.length>0);
+ assert.match(report.providerIssues.join(' '),/safely partition/);
+});

@@ -43,6 +43,11 @@ const SYSTEM_PROMPT = [
   'show a concrete failing input and reproducible path through the code.',
   'Evaluate complete expressions, guards, fallbacks and retry loops before',
   'claiming an error. Use INCONCLUSIVE for unproven suspected failures.',
+  'INCONCLUSIVE is fail-closed and blocks release just as BLOCK does;',
+  'refusing an oversized or otherwise unreviewable patch is NOT a code defect unless a bypass accepts it.',
+  'Assess explicit safety contracts and complete guards before claiming a reproducible defect.',
+  'Use PASS only after inspecting provided hunks, making falsification attempts and finding no reproducible defect;',
+  'reserve INCONCLUSIVE for insufficient context, incomplete inspection, uncertainty or unavailable providers.',
   'Do not claim to execute code or inspect files outside the given diff.'
 ].join(' ');
 
@@ -352,7 +357,7 @@ async function reviewPatch({ patch, base, head, key, builderModel = '',
       }
     }
   } else if (cfModels.length) {
-    report.providerIssues.push('Cloudflare patch has an individual file above the conservative free inference budget');
+    report.providerIssues.push('Cloudflare cannot safely partition the patch into complete file diffs under the free inference budget');
   }
   report.verdict = aggregate(report.reviewers);
   if (report.verdict === 'PASS' || decisiveFamilies(report.reviewers) >= 2) {
@@ -360,7 +365,7 @@ async function reviewPatch({ patch, base, head, key, builderModel = '',
   }
   if (!key) {
     if (report.verdict !== 'BLOCK') report.blockers.push(
-      'Independent reviewer credential unavailable; no sufficient alternate reviews');
+      'Independent reviewers cannot certify full-patch coverage: no eligible complete free-model path');
     return recordDisagreement(report);
   }
   let models;
