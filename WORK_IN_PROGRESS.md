@@ -1,3 +1,6 @@
+# 2026-09-24: Loaded-state visual candidate evidence (PR264)
+
+Task/why: candidate workflow35978007608 returned success for an almost uniform AI3D frame; canvas visibility alone is insufficient. Current: master14220081 merged into existing264 without conflicts; prior canary8 failures retained. Target/direction: honest desktop/mobile candidate evidence for existing golden visual gates. Systems: visual-candidates spec/workflow and unchanged shared extraction of perceptual capture helpers. Preserve gameplay, UI, baselines and all thresholds. Risks: genuine bad framing now fails candidate generation; moving helpers must not change perceptual semantics. Plan: reuse existing pixel composition guard; wait actual city readiness; retain screenshots, runtime and checked-out SHA on failure; use four existing browser profiles. Tests: syntax, focused evidence source contracts and cloud candidate matrix; no heavy local execution. PR/deploy: commit/push existing264; reuse auto-triggered cloud run, no master merge. Progress: analysis complete; implementation next. Completion: independent review and cloud evidence inspected, no baseline approval implied. Final evidence: syntax passed for all3 JS files; shared helper extraction byte-equivalent after line-ending normalization;7 focused summary/workflow tests passed; cloud visual matrix pending. Every retry keeps separate candidate evidence. Original owned worktree branch was ai/codex/coordinator-current-base-20260923.
 # 2026-09-24: Atomic first-load game state and privacy-safe API projections
 
 Integration update (fresh master `31029a07c0e80470bbc5d500e25f5c2202f2947f`): reconcile PR #286 with merged resident lookup #285 without changing the shared consequence engine or Graphics-owned UI. Exact patch: union both Node/Edge allowlists and read-only branches, preserve the six-field resident DTO in direct lookup and every full-world projection, retain current membership checks, optional read revision fence and zero-write `game-state`. Risks: silently dropping either action, re-exposing legacy resident/history fields, Node/Edge drift, changing CAS arithmetic, or treating an inconclusive model review as approval. Required proof: executed Node and Edge adapters, privacy injection, two-writer CAS/reconnect, 0-card degradation, resident lookup regressions, full cloud exact-head gates and genuine independent Fleet PRE. Ocean only after `READY_FOR_OCEAN=YES`; deployed Deno remains separate Fleet POST scope. Progress: two adapter conflicts resolved by explicit union; validation pending.
@@ -11,6 +14,37 @@ Task: make Genie cards and persisted world one authenticated read-only `game-sta
 ---
 
 # WORK IN PROGRESS — Scoped Task Compiler, resource scheduler, real native Godot pipeline
+
+## Task
+Canary repair, 2026-09-23, Codex.
+## Why
+Run 35845450510: lost artifacts, FX misidentified.
+## Current state
+Base 1ed5d8f8; Canary 17 failed/199 passed.
+## Target state
+Preserved SHA-bound evidence and accurate browser contracts.
+## Files / systems involved
+Canary workflow/tests, HUD/offline/mobile specs, FX helper.
+## Known risks
+Perceptual/catalog failures remain; diagnostics must not mask them.
+## Golden systems that must be preserved
+Full matrix, baselines, release gate, graphics and controls.
+## Errors that must not return
+Lost artifacts; ambiguous canvas; FX as HUD; stale catalog counts.
+## Exact patch / change plan
+Retain evidence; fix canvas/FX/catalog assertions.
+## Tests to run
+Node focused tests; cloud check/release gate and full Canary.
+## Deployment / PR plan
+PR #264, isolated branch; protected integration after review.
+## Current progress
+9/9 tests, peer review PASS. Cloud 35856568390 pending.
+## Next action
+Verify current patch in cloud and inspect retained failures.
+## Completion criteria
+Cloud evidence and passing repaired contracts.
+## Final evidence
+Pending cloud; no production readiness claim.
 
 ---
 

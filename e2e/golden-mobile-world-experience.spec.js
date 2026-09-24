@@ -1,10 +1,20 @@
 ﻿'use strict';
 const {test,expect}=require('@playwright/test');
+const fallback=require('../shared/world-catalog-fallback.json').inventory.filter(x=>
+  x.worldMenu?.show&&x.url&&['game','navigator','hub','experiment','experience'].includes(x.kind||'game'));
+
+async function expectFallback(page){
+  const cards=page.locator('.goldenPaperCard');
+  await expect(cards).toHaveCount(fallback.length);
+  expect(await cards.evaluateAll(nodes=>nodes.map(el=>({
+    id:el.dataset.worldId,headline:el.querySelector('.goldenHeadline').textContent,
+    lore:el.querySelector('.goldenPaperStory').textContent,href:el.querySelector('.goldenWorldLink').getAttribute('href')
+  })))).toEqual(fallback.map(x=>({id:x.id,headline:x.worldMenu.headline||x.title,lore:x.worldMenu.lore,href:x.url})));
+}
 
 async function boot(page){
   await page.goto('/apps/voxel-world/',{waitUntil:'domcontentloaded'});
-  await page.waitForFunction(()=>window.GoldenUIShell&&window.VoxelWorldRuntime,{timeout:20000});
-  await page.waitForTimeout(500);
+  await page.waitForFunction(()=>window.GoldenUIShell&&window.VoxelWorldRuntime?.stats?.().playable===true,null,{timeout:20000});
 }
 
 test.describe('Golden mobile world experience',()=>{
@@ -37,10 +47,11 @@ test.describe('Golden mobile world experience',()=>{
   test('world newspaper survives /api/apps failure and exposes lore + connections in portrait and landscape',async({page},testInfo)=>{
     test.skip(testInfo.project.name!=='mobile-webkit');
     await page.route('**/api/apps?all=1',r=>r.fulfill({status:503,contentType:'application/json',body:'{"error":"forced regression"}'}));
+    await page.route('**/api/world-factory?limit=24',r=>r.fulfill({status:200,contentType:'application/json',body:'{"worlds":[]}'}));
     await boot(page); await page.locator('[data-golden-tab="worlds"]').click();
-    await expect(page.locator('.goldenPaperCard')).toHaveCount(12);
+    await expectFallback(page);
     await expect(page.locator('a[href="https://dark-void-navigator.vercel.app/"]')).toHaveCount(1);
-    await expect(page.locator('.goldenPaperCard video')).toHaveCount(12);
+    await expect(page.locator('.goldenPaperCard video')).toHaveCount(fallback.filter(x=>x.worldMenu.previewVideo).length);
     await page.locator('[data-world-view="connections"]').click();
     await expect(page.locator('#goldenConnections select')).toHaveCount(2);
     await expect(page.locator('.goldenBridgeStory')).not.toBeEmpty();
@@ -49,7 +60,7 @@ test.describe('Golden mobile world experience',()=>{
     expect((await page.locator('#goldenLore').innerText()).length).toBeGreaterThan(100);
     await page.setViewportSize({width:844,height:390});
     await page.locator('[data-golden-tab="worlds"]').click();
-    await expect(page.locator('.goldenPaperCard')).toHaveCount(12);
+    await expectFallback(page);
     const close=page.locator('#goldenDrawerClose'),box=await close.boundingBox(); await page.touchscreen.tap(box.x+box.width/2,box.y+box.height/2);
     await expect(page.locator('#goldenDrawer')).not.toHaveClass(/open/);
   });

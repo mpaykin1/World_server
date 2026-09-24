@@ -11,6 +11,9 @@ test('Voxel World stays playable when backend config is unavailable', async ({ p
   const stats = await page.evaluate(() => window.VoxelWorldRuntime.stats());
   expect(stats.backendMode).toBe('offline');
   expect(stats.chunks).toBeGreaterThan(0);
-  await expect(page.locator('canvas')).toBeVisible();
+  // The transparent Phaser FX layer owns another canvas; test the game surface.
+  const renderer = page.locator('canvas[data-golden-three="1"]');
+  await expect(renderer).toHaveCount(1);
+  await expect(renderer).toBeVisible();
   await expect(page.locator('#loading')).toHaveClass(/hidden/);
 });

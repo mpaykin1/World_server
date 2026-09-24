@@ -21,9 +21,14 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
-      - run: npm run visual:candidates
+      - run: npx playwright install --with-deps chromium webkit
+      - run: npx playwright test e2e/visual-candidates.spec.js --project=desktop-chromium --project=mobile-chromium --project=mobile-webkit --project=tablet-chromium
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: visual-baseline-candidates
-          path: visual-candidates/**
+          path: |
+            visual-candidates/**
+            test-results/**
+          if-no-files-found: error
+          retention-days: 7

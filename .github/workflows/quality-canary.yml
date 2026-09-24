@@ -62,13 +62,45 @@ jobs:
         run: node scripts/verify-cloudflare-stack.cjs "${{ steps.deploy.outputs.url }}" "$SOURCE_SHA"
       - name: Install browser engines
         run: npx playwright install --with-deps chromium webkit
-      - name: Browser gate against Cloudflare canary
+      - id: browser
+        name: Browser gate against Cloudflare canary
         env:
           PLAYWRIGHT_BASE_URL: ${{ steps.deploy.outputs.url }}
-        run: npx playwright test
+          PLAYWRIGHT_JSON_OUTPUT_NAME: test-results/playwright-results.json
+          PLAYWRIGHT_HTML_OPEN: never
+        run: npx playwright test --reporter=line,json,html
       - name: Verify playable delivery
         run: npm run delivery:verify -- "${{ steps.deploy.outputs.url }}/apps/voxel-world/" --expected-sha="$SOURCE_SHA" --game --inventory-id=voxel-world
       - name: Canary HTTP smoke
         env:
           QUALITY_BASE_URL: ${{ steps.deploy.outputs.url }}
         run: node scripts/post-deploy-smoke.js
+      - name: Summarize browser failure
+        if: ${{ failure() && steps.browser.outcome == 'failure' }}
+        run: node scripts/summarize-playwright-failure.js
+      - name: Record canary evidence identity
+        if: always()
+        env:
+          CANARY_URL: ${{ steps.deploy.outputs.url }}
+          BROWSER_OUTCOME: ${{ steps.browser.outcome }}
+        run: |
+          node - <<'NODE'
+          const fs = require('node:fs');
+          fs.mkdirSync('test-results', { recursive: true });
+          const identity = {
+            sha: process.env.SOURCE_SHA, url: process.env.CANARY_URL,
+            runId: process.env.GITHUB_RUN_ID, attempt: process.env.GITHUB_RUN_ATTEMPT,
+            browserOutcome: process.env.BROWSER_OUTCOME
+          };
+          fs.writeFileSync('test-results/canary-identity.json', JSON.stringify(identity, null, 2));
+          NODE
+      - name: Preserve canary evidence on success or failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-failure-${{ github.sha }}-${{ github.run_attempt }}
+          path: |
+            test-results/
+            playwright-report/
+          if-no-files-found: error
+          retention-days: 7
