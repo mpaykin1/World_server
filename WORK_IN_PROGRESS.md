@@ -1,5 +1,37 @@
 # WORK IN PROGRESS — Scoped Task Compiler, resource scheduler, real native Godot pipeline
 
+## Task
+2026-09-24: Chain Reaction browser contract, paired with Graphics owner #278/#284.
+## Why
+Server unit tests do not verify real player controls, certified-card rendering or conflict recovery.
+## Current state
+#284 b0d3c291 repairs Tick409; pointer-lock strategy conflict remains under owner review.
+## Target state
+Desktop/mobile fixture verifies saved world, 0/2/4 cards and manual conflict recovery without fabricated success.
+## Files / systems involved
+e2e/chain-reaction-ui.spec.js and existing quality-regression workflow; UI/API owners retain source files.
+## Known risks
+Route mocks are not live backend certification; browser engine pointer-lock differences.
+## Golden systems that must be preserved
+Renderer, FPS input outside strategy, deterministic authoritative state, no baseline relaxation.
+## Errors that must not return
+Invented certified cards, stale-revision tick lockup, FPS block edits while in strategy.
+## Exact patch / change plan
+Add bounded browser tests; submit exact test commit to Graphics for the same UI PR.
+## Tests to run
+Local syntax only; cloud desktop/mobile Playwright and repository gates.
+## Deployment / PR plan
+Test handoff branch, adoption in existing #278/#284; no duplicate UI implementation or direct deployment.
+## Current progress
+Independent read-only audit completed; test implementation in progress.
+## Next action
+Run cloud browser tests against integrated candidate and repair only test/implementation defects.
+## Completion criteria
+Meaningful tests pass on actual UI candidate and owner adopts regression protection.
+## Final evidence
+Pending exact-head browser run; no release-ready claim.
+
+
 ---
 
 # 2026-09-24: Chain Reaction private player history
