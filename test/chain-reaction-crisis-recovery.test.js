@@ -94,3 +94,15 @@ test('unsafe legacy intervention counters clamp without overflow or phantom hist
  assert.equal(world.history.some(event=>event.kind==='crisis_recovery_started'),false);
  world=engine.tick(world);assert.equal(world.recovery.interventions,3);
 });
+
+test('unsafe legacy streak counters stay bounded after tick arithmetic',()=>{
+ let world=collapsed('unsafe-streaks');
+ world.recovery={crisisTicks:Number.MAX_SAFE_INTEGER,stableTicks:Number.MAX_SAFE_INTEGER,activeTicks:0,
+  cooperativeActive:false,interventions:3,lastAtTick:0};
+ world=engine.tick(world);
+ assert.equal(world.recovery.crisisTicks,7);
+ assert.equal(world.recovery.stableTicks,0);
+ assert.equal(Number.isSafeInteger(world.recovery.crisisTicks),true);
+ assert.equal(world.recovery.cooperativeActive,false);
+ assert.equal(world.history.some(event=>event.kind==='crisis_recovery_started'),false);
+});

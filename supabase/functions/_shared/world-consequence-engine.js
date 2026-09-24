@@ -67,8 +67,10 @@ function ensureRecovery(world){
  const interventions=Number.isSafeInteger(current.interventions)&&current.interventions>=0?
   Math.min(MAX_RECOVERY_INTERVENTIONS,current.interventions):0;
  world.recovery={
-  crisisTicks:Number.isSafeInteger(current.crisisTicks)&&current.crisisTicks>=0?current.crisisTicks:0,
-  stableTicks:Number.isSafeInteger(current.stableTicks)&&current.stableTicks>=0?current.stableTicks:0,
+  crisisTicks:Number.isSafeInteger(current.crisisTicks)&&current.crisisTicks>=0?
+   Math.min(CRISIS_RECOVERY_THRESHOLD,current.crisisTicks):0,
+  stableTicks:Number.isSafeInteger(current.stableTicks)&&current.stableTicks>=0?
+   Math.min(RECOVERY_STABILITY_REQUIRED,current.stableTicks):0,
   activeTicks:active&&Number.isSafeInteger(current.activeTicks)&&current.activeTicks>=0?
    Math.min(MAX_RECOVERY_ACTIVE_TICKS,current.activeTicks):0,
   cooperativeActive:active,
