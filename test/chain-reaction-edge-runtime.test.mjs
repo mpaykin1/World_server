@@ -12,7 +12,8 @@ const body = (action, extra = {}) => ({action, worldId:'city', structure:'solar'
 function fixture({zeroBudget = false} = {}) {
   const world = engine.createWorld('edge-runtime-review');
   world.resources.budget = zeroBudget ? 0 : 500;
-  Object.assign(world.residents[0], { comment:'LEGACY RESIDENT SECRET', actorId:owner, category:'hidden-class', role:'tampered' });
+  Object.assign(world.residents[0], { comment:'LEGACY RESIDENT SECRET', actorId:owner, category:'hidden-class', role:'tampered',
+    id:{actorId:owner}, name:{comment:'NESTED RESIDENT SECRET'} });
   world.history.push({kind:'legacy', tick:0, comment:'LEGACY HISTORY SECRET', actorId:owner});
   let row = {id:'city', seed:'edge-runtime-review', updated_at:'2026-09-23T00:00:00.000Z', settings:{chainReaction:world}};
   const members = new Map([[owner,'owner'], [player,'player']]);
@@ -31,7 +32,7 @@ function fixture({zeroBudget = false} = {}) {
     async rpc(name,params){
       assert.equal(name,'commit_chain_reaction_action');
       if(row.updated_at!==params.p_expected_updated_at)return {data:false,error:null};
-      assert.doesNotMatch(JSON.stringify(params.p_public_settings),/LEGACY RESIDENT SECRET|LEGACY HISTORY SECRET|actorId|hidden-class|tampered/);
+      assert.doesNotMatch(JSON.stringify(params.p_public_settings),/LEGACY RESIDENT SECRET|NESTED RESIDENT SECRET|LEGACY HISTORY SECRET|actorId|hidden-class|tampered/);
       row={...row,settings:copy(params.p_public_settings),updated_at:params.p_next_updated_at};
       writes++;return {data:true,error:null};
     }
@@ -45,7 +46,7 @@ test('actual Edge TS adapter matches Node same-revision bootstrap; legacy privac
   const edge=await runEdge(f,b),node=await runNode(f,b);
   assert.deepEqual({...edge,runtime:undefined},{...node,runtime:undefined});
   assert.equal(edge.revision,edge.world.revision);
-  assert.doesNotMatch(JSON.stringify(edge),/LEGACY RESIDENT SECRET|LEGACY HISTORY SECRET|actorId|hidden-class|tampered/);
+  assert.doesNotMatch(JSON.stringify(edge),/LEGACY RESIDENT SECRET|NESTED RESIDENT SECRET|LEGACY HISTORY SECRET|actorId|hidden-class|tampered/);
   assert.deepEqual(Object.keys(edge.world.residents[0]).sort(),['building','fictional','flat','floor','id','name']);
   assert.equal(f.writes,0);
 });
@@ -54,7 +55,7 @@ test('actual Edge historical privacy holds in preview, history, commit, tick',as
   const responses=[await runEdge(f,body('preview-plan')),await runEdge(f,body('history'))];
   responses.push(await runEdge(f,body('commit-plan',{expectedRevision:0})));
   responses.push(await runEdge(f,body('tick',{expectedRevision:1})));
-  for(const value of responses)assert.doesNotMatch(JSON.stringify(value),/LEGACY RESIDENT SECRET|LEGACY HISTORY SECRET|actorId|hidden-class|tampered/);
+  for(const value of responses)assert.doesNotMatch(JSON.stringify(value),/LEGACY RESIDENT SECRET|NESTED RESIDENT SECRET|LEGACY HISTORY SECRET|actorId|hidden-class|tampered/);
   assert.equal(f.writes,2);
 });
 test('actual Edge uses current membership, strict revision fence and honest 0 offers',async()=>{
