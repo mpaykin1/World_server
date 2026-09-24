@@ -283,3 +283,25 @@ test('atomic and legacy world projections allowlist resident fields', async () =
   assert.equal(first.revision, first.world.revision);
   assert.equal(f.writes, 2);
 });
+
+test('server-certified card identity locks its structure while commentary changes build risk and delay',async()=>{
+ const f=fixture(),w=engine.createWorld('choice-solar');Object.assign(w.resources,{power:35,water:80,food:80,budget:500,workers:50});f.row.settings.chainReaction=w;
+ const state=await handle(f.admin,req,body('game-state'));const solar=state.cards.find(card=>card.structure==='solar');assert.ok(solar);
+ const text='Нужна электроэнергия, поэтапно исследуем стройку';
+ const plan=await handle(f.admin,req,body('preview-plan',{structure:'solar',choiceId:solar.id,text}));
+ assert.equal(plan.plan.intent.goal,'solar');assert.equal(plan.plan.buildTicks,3);assert.equal(plan.plan.cost,52);assert.equal(plan.plan.risk,0);
+ const legacy=await handle(f.admin,req,body('preview-plan',{structure:'solar',text}));assert.equal(legacy.plan.intent.goal,'geothermal');
+ const made=await handle(f.admin,req,body('commit-plan',{expectedRevision:0,structure:'solar',choiceId:solar.id,text}));
+ assert.equal(made.world.projects[0].type,'solar');assert.equal(made.world.projects[0].remaining,3);
+ assert.equal(f.privateEvents[0].comment,text);assert.equal(made.world.projects[0].intent.comment,undefined);
+ await rejects(handle(f.admin,req,body('preview-plan',{choiceId:solar.id,structure:'solar'})),409);
+});
+test('forged or mismatched cards fail; fifth free design still interprets user text',async()=>{
+ const f=fixture(),w=engine.createWorld('forged');Object.assign(w.resources,{power:35,water:80,food:80,budget:500,workers:50});f.row.settings.chainReaction=w;
+ const offer=(await handle(f.admin,req,body('genie-options'))).cards[0];assert.ok(offer);
+ await rejects(handle(f.admin,req,body('preview-plan',{structure:offer.structure,choiceId:'forged'})),409);
+ await rejects(handle(f.admin,req,body('preview-plan',{structure:'workshop',choiceId:offer.id})),409);
+ for(const id of [null,2,'x'.repeat(129)])await rejects(handle(f.admin,req,body('preview-plan',{choiceId:id})),400);
+  const free=await handle(f.admin,req,body('interpret-intent',{choiceId:'free-design',structure:'workshop',text:'солнечная электростанция'}));
+  assert.equal(free.intent.goal,'solar');assert.equal(f.writes,0);
+});
