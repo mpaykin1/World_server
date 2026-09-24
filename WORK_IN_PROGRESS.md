@@ -2,6 +2,12 @@
 
 ---
 
+# 2026-09-24: Sustained insight instead of one-tick illumination
+
+Task: make the optional Chain Reaction insight path require a deterministic sustained interval, without adding an API or touching Graphics-owned files. Current state: `illumination` becomes true after a single qualifying tick, so a transient resource spike can claim social harmony. Target: require eight consecutive viable ticks with knowledge, leisure, cooperation and sustainability at threshold; reset the live streak when basic health/water/food or an insight dimension falls; persist the first attainment tick and emit one causal event; migrate legacy worlds deterministically. Files: the one canonical shared consequence engine and focused regression tests. Risks: accidental permanent victory, event spam, brittle object-order checks, replay drift, or legacy one-tick illumination remaining grandfathered. Plan: explicit named criteria, bounded integer streak, durable first-attainment marker, current-status boolean and replay/disruption/legacy tests. Required evidence: focused tests, full cloud CI, independent Fleet PRE exact head; Ocean and separate live POST remain mandatory.
+
+---
+
 # 2026-09-24: Chain Reaction construction workforce lifecycle
 
 Task: repair the canonical simulator's builder lifecycle without changing the public API or Graphics-owned files. Current state: project `needs.workers` is subtracted at commit like a consumed material and is never returned, so every completed build permanently destroys workforce capacity. Target: reserve builders during construction, release them exactly once when the project is commissioned, keep simultaneous construction bounded by actually available workers, and preserve deterministic replay/legacy project compatibility. Files: the one shared consequence engine plus focused regression tests. Risks: double release, free parallel construction, worker creation above population, changing commissioning delay, or Node/Edge arithmetic drift. Plan: persist the reserved count on new projects; release and mark it atomically at commissioning; cap available workers by population; add exact-delay, contention and replay guards. Required evidence: focused tests, full cloud CI, independent Fleet PRE exact head; Ocean only after READY_FOR_OCEAN and separate Fleet POST after deployment.
