@@ -162,6 +162,7 @@ test('CAS conflict fails without replay; simultaneous commits have exactly one w
   assert.equal(results.filter(x => x.status === 'fulfilled').length, 1);
   assert.equal(results.find(x => x.status === 'rejected').reason.status, 409);
   assert.equal(f.writes, 1); assert.equal(f.row.settings.chainReaction.projects.length, 1);
+  assert.equal(f.row.settings.chainReaction.residents.length, 112);
 });
 test('bounded requests, own project names and strict numeric revisions', async () => {
   const f = fixture();

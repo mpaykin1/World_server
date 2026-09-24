@@ -14,7 +14,46 @@ test('public project identity never fingerprints private free text',()=>{
 test('geothermal pays first and electricity arrives only after construction',()=>{let w=E.createWorld('test');w.land.volcano=true;w.resources.budget=200;const i=E.interpretIntent('электричество после исследования');const p=E.preview(w,i);assert(p.feasible);w=E.commit(w,i);assert.equal(w.resources.budget,200-p.cost);const original=w.resources.power;for(let j=0;j<p.buildTicks;j++)w=E.tick(w);assert(w.resources.power<=original);w=E.tick(w);assert(w.resources.power>0);assert(w.history.some(e=>e.kind==='commissioned'))});
 test('no free construction, stale revisions fail',()=>{let w=E.createWorld('low');w.resources.budget=0;assert.equal(E.preview(w,E.interpretIntent('энергия')).feasible,false);assert.throws(()=>E.commit(w,E.interpretIntent('энергия')));w.resources.budget=200;w.land.volcano=true;assert.throws(()=>E.commit(w,E.interpretIntent('энергия'),-1),/STALE/)});
 test('catastrophe does not end the simulation',()=>{let w=E.createWorld('crisis');w.resources.power=0;w.resources.food=0;for(let i=0;i<15;i++)w=E.tick(w);assert(w.crisis);assert(w.population>0);assert.equal(w.tick,15);assert(w.history.some(x=>x.kind==='adaptation'))});
-test('fictional stable address and cultural spokesperson',()=>{let w=E.createWorld('residents');assert.deepEqual(E.address(w,'house-1',2,3),E.address(w,'house-1',2,3));assert.equal(E.address(w,'house-1',99,1),null);w.culture.temples=3;w=E.tick(w);assert(w.culture.spokesperson?.fictional)});
+test('fictional residents are canonical stable world data',()=>{
+ const w=E.createWorld('residents'),restored=JSON.parse(JSON.stringify(w));
+ assert.equal(w.residents.length,112);assert.equal(new Set(w.residents.map(npc=>npc.id)).size,112);
+ assert.equal(new Set(w.residents.map(npc=>npc.building+':'+npc.floor+':'+npc.flat)).size,112);
+ assert(w.residents.every(npc=>npc.fictional===true));
+ const stored=w.residents.find(npc=>npc.building==='house-1'&&npc.floor===2&&npc.flat===3);
+ assert.deepEqual(E.address(w,'house-1',2,3),stored);
+ assert.deepEqual(E.address(restored,'house-1',2,3),stored);
+ assert.equal(E.address(w,'house-1',99,1),null);
+});
+test('legacy worlds hydrate the same resident directory on authoritative mutation',()=>{
+ const original=E.createWorld('legacy-residents'),legacy=JSON.parse(JSON.stringify(original));delete legacy.residents;
+ const fallback=E.address(legacy,'house-3',2,8);assert.deepEqual(fallback,E.address(original,'house-3',2,8));
+ const ticked=E.tick(legacy);assert.equal(ticked.residents.length,112);assert.deepEqual(E.address(ticked,'house-3',2,8),fallback);
+ assert.deepEqual(ticked,E.tick(JSON.parse(JSON.stringify(legacy))));
+ const committedLegacy=JSON.parse(JSON.stringify(original));delete committedLegacy.residents;committedLegacy.resources.budget=300;
+ assert.equal(E.commit(committedLegacy,E.interpretIntent('','solar')).residents.length,112);
+});
+test('empty partial or tampered resident directories fail closed to canonical data',()=>{
+ const canonical=E.createWorld('corrupt-residents');
+ for(const residents of [[],canonical.residents.slice(1),canonical.residents.map((npc,index)=>index?npc:{...npc,name:'Real Person',fictional:false})]){
+  const corrupt=JSON.parse(JSON.stringify(canonical));corrupt.residents=residents;corrupt.culture.temples=3;corrupt.culture.spokesperson=null;
+  assert.deepEqual(E.address(corrupt,'house-0',1,1),canonical.residents[0]);
+  const repaired=E.tick(corrupt);assert.deepEqual(repaired.residents,canonical.residents);
+  assert.equal(repaired.culture.spokesperson.fictional,true);assert.equal(typeof repaired.culture.spokesperson.name,'string');
+  assert.equal(E.address(repaired,repaired.culture.spokesperson.building,repaired.culture.spokesperson.floor,repaired.culture.spokesperson.flat)?.id,
+   repaired.culture.spokesperson.id);
+ }
+});
+test('resident directory stays unique and bounded across many seeds',()=>{
+ let maxBytes=0;
+ for(let seed=0;seed<250;seed++){
+  const w=E.createWorld('resident-falsification-'+seed);
+  assert.equal(new Set(w.residents.map(npc=>npc.id)).size,w.residents.length);
+  assert.equal(new Set(w.residents.map(npc=>npc.building+':'+npc.floor+':'+npc.flat)).size,w.residents.length);
+  for(const npc of w.residents)assert.equal(E.address(w,npc.building,npc.floor,npc.flat)?.id,npc.id);
+  maxBytes=Math.max(maxBytes,Buffer.byteLength(JSON.stringify(w)));
+ }
+ assert(maxBytes<16*1024);
+});
 test('intent cannot conjure resources, cautious intent changes risk and time',()=>{const w=E.createWorld('intent');w.land.volcano=true;const a=E.preview(w,E.interpretIntent('электричество','geothermal'));const b=E.preview(w,E.interpretIntent('электричество поэтапно после исследования','geothermal'));assert(b.buildTicks>a.buildTicks);assert(b.risk<a.risk);assert(b.cost>a.cost)});
 test('construction conserves inputs and output starts after exact delay',()=>{
  let w=E.createWorld('exact-delay');w.land.volcano=true;w.population=84;w.resources.power=50;w.resources.water=80;w.resources.workers=30;w.resources.budget=300;
@@ -119,8 +158,19 @@ test('three temples unlock fictional spokesperson only after all are commissione
  w=E.tick(w);assert.equal(w.culture.temples,0);assert.equal(w.culture.spokesperson,null);
  w=E.tick(w);assert.equal(w.culture.temples,3);
  assert.equal(w.culture.spokesperson?.fictional,true);
+ assert.equal(w.culture.spokesperson?.role,'temple_spokesperson');
+ assert.equal(E.address(w,w.culture.spokesperson.building,w.culture.spokesperson.floor,w.culture.spokesperson.flat)?.id,
+  w.culture.spokesperson.id);
  const restored=JSON.parse(JSON.stringify(w));
  assert.deepEqual(E.tick(w),E.tick(restored));
+});
+test('legacy temple-square spokesperson migrates to a canonical resident address',()=>{
+ let w=E.createWorld('legacy-spokesperson');w.culture.temples=3;
+ w.culture.spokesperson=E.resident(w.seed,'temple-square',1,1);
+ assert.equal(E.address(w,w.culture.spokesperson.building,w.culture.spokesperson.floor,w.culture.spokesperson.flat),null);
+ w=E.tick(w);assert.equal(w.culture.spokesperson.role,'temple_spokesperson');
+ assert.equal(E.address(w,w.culture.spokesperson.building,w.culture.spokesperson.floor,w.culture.spokesperson.flat)?.id,
+  w.culture.spokesperson.id);
 });
 test('two commissioned temples plus one under construction cannot unlock spokesperson',()=>{
  let w=E.createWorld('two-temples');w.resources.budget=300;w.resources.workers=20;
