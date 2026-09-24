@@ -30,12 +30,31 @@ const LAST=['Тихая','Речной','Зорина','Каменев','Лес�
 const INSIGHT_STREAK_REQUIRED=8;
 function resident(seed,building,floor,flat){
  const n=hash(seed+':'+building+':'+floor+':'+flat);
- return {id:'npc-'+n,name:FIRST[n%FIRST.length]+' '+LAST[(n>>>7)%LAST.length],building,floor,flat,fictional:true};
+ return {id:'npc-'+hash(seed)+'-'+building+'-'+floor+'-'+flat,name:FIRST[n%FIRST.length]+' '+LAST[(n>>>7)%LAST.length],building,floor,flat,fictional:true};
+}
+function residentDirectory(seed,houses){
+ return houses.flatMap(house=>Array.from({length:house.floors},(_,floorIndex)=>
+  Array.from({length:8},(_,flatIndex)=>resident(seed,house.id,floorIndex+1,flatIndex+1))).flat());
+}
+function canonicalResidents(world){
+ const expected=residentDirectory(world.seed,world.houses);
+ if(!Array.isArray(world.residents)||world.residents.length!==expected.length)return expected;
+ const valid=expected.every((canonical,index)=>{
+  const stored=world.residents[index];
+  return stored&&stored.id===canonical.id&&stored.name===canonical.name&&stored.building===canonical.building&&
+   stored.floor===canonical.floor&&stored.flat===canonical.flat&&stored.fictional===true;
+ });
+ return valid?world.residents:expected;
+}
+function ensureResidents(world){
+ world.residents=canonicalResidents(world);
+ return world.residents;
 }
 function createWorld(seed='city'){
  const n=hash(seed);const resources={power:40+n%15,water:65,food:62,budget:150,ecology:75,health:75,jobs:36,workers:18,culture:25};
  const houses=Array.from({length:5},(_,i)=>({id:'house-'+i,x:(n+i*17)%70,z:(n>>>3+i*23)%70,floors:2+i%3}));
- return {schema:1,seed:String(seed),revision:0,tick:0,resources,population:80+n%41,projects:[],history:[],houses,land:{volcano:!!(n%2),coast:!!(n%3),forest:true},insight:{knowledge:10,leisure:12,cooperation:15,sustainability:12,harmonyTicks:0,illumination:false,illuminationAtTick:null},culture:{temples:0,spokesperson:null},crisis:false};
+ const residents=residentDirectory(String(seed),houses);
+ return {schema:1,seed:String(seed),revision:0,tick:0,resources,population:80+n%41,projects:[],history:[],houses,residents,land:{volcano:!!(n%2),coast:!!(n%3),forest:true},insight:{knowledge:10,leisure:12,cooperation:15,sustainability:12,harmonyTicks:0,illumination:false,illuminationAtTick:null},culture:{temples:0,spokesperson:null},crisis:false};
 }
 function interpretIntent(text='',structure='geothermal'){
  const t=String(text).slice(0,600).toLowerCase();
@@ -61,7 +80,7 @@ function preview(world,intent){
 function commit(world,intent,expectedRevision=world.revision){
  if(expectedRevision!==world.revision)throw Error('STALE_REVISION');
  const plan=preview(world,intent);if(!plan.feasible)throw Error('INSUFFICIENT_RESOURCES');
- const next=copy(world);next.resources.budget-=plan.cost;
+ const next=copy(world);ensureResidents(next);next.resources.budget-=plan.cost;
  for(const [k,v] of Object.entries(PROJECTS[intent.goal].needs))next.resources[k]-=v;
  // A public ID must not fingerprint private player text: seed is public and a
  // short text hash would permit dictionary guessing.
@@ -74,7 +93,7 @@ function commit(world,intent,expectedRevision=world.revision){
  return next;
 }
 function tick(world){
- const w=copy(world);w.tick++;w.revision++;
+ const w=copy(world);ensureResidents(w);w.tick++;w.revision++;
  const flow={power:-Math.ceil(w.population/14),water:-Math.ceil(w.population/18),food:-Math.ceil(w.population/16),budget:1,ecology:0,health:0,jobs:0,culture:0};
  for(const p of w.projects){
   const spec=PROJECTS[p.type];
@@ -101,7 +120,15 @@ function tick(world){
  w.crisis=deficit.length>0;
  if(w.crisis){w.population=Math.max(1,w.population-1);w.resources.health=clamp(w.resources.health-2);w.history.push({tick:w.tick,kind:'adaptation',deficit,story:'Жители организуют взаимопомощь и ищут альтернативные источники.'})}
  else{w.resources.health=clamp(w.resources.health+1);if(w.resources.food>45&&w.resources.water>45)w.population++}
- if(w.culture.temples>=3&&!w.culture.spokesperson)w.culture.spokesperson=resident(w.seed,'temple-square',1,1);
+ if(w.culture.temples>=3){
+  const current=w.culture.spokesperson;
+  const currentResident=current&&w.residents.find(npc=>npc.id===current.id&&npc.name===current.name&&
+   npc.building===current.building&&npc.floor===current.floor&&npc.flat===current.flat&&current.role==='temple_spokesperson');
+  if(!currentResident){
+   const spokesperson=w.residents[hash(w.seed+':temple-spokesperson')%w.residents.length];
+   w.culture.spokesperson={...spokesperson,role:'temple_spokesperson'};
+  }
+ }
  w.insight.knowledge=clamp(w.insight.knowledge+(w.resources.health>55?1:0));
  w.insight.cooperation=clamp(w.insight.cooperation+(w.crisis?2:1));
  w.insight.leisure=clamp(w.insight.leisure+(w.resources.power>45&&w.resources.food>45?1:0));
@@ -171,8 +198,13 @@ function genieOptions(world){
    supportedStructures:Object.keys(PROJECTS).sort()}};
 }
 function propose(world){return proposeGenieCards(world).cards}
-function address(world,houseId,floor,flat){const h=world.houses.find(h=>h.id===houseId);if(!h||!Number.isInteger(floor)||!Number.isInteger(flat)||floor<1||floor>h.floors||flat<1||flat>8)return null;return resident(world.seed,houseId,floor,flat)}
-const worldConsequenceEngine={PROJECTS,createWorld,interpretIntent,preview,commit,tick,propose,proposeGenieCards,genieOptions,evaluateProposal,simulateTicks,address,resident};
+function address(world,houseId,floor,flat){
+ const h=world.houses.find(house=>house.id===houseId);
+ if(!h||!Number.isInteger(floor)||!Number.isInteger(flat)||floor<1||floor>h.floors||flat<1||flat>8)return null;
+ const residents=canonicalResidents(world);
+ return residents.find(npc=>npc.building===houseId&&npc.floor===floor&&npc.flat===flat)||null;
+}
+const worldConsequenceEngine={PROJECTS,createWorld,interpretIntent,preview,commit,tick,propose,proposeGenieCards,genieOptions,evaluateProposal,simulateTicks,address,resident,residentDirectory};
 // One arithmetic implementation serves Node and the Supabase Edge adapter.
 // The global export keeps the file executable as a Deno side-effect import;
 // CommonJS remains the canonical Node/test interface.
