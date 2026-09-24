@@ -29,7 +29,19 @@ function residentAddress(body:any) {
   return {building:body.building,floor:body.floor,flat:body.flat};
 }
 function publicResident(resident:any) {
+  if(!resident||typeof resident.id!=="string"||typeof resident.name!=="string"||
+    typeof resident.building!=="string"||resident.fictional!==true||
+    !Number.isInteger(resident.floor)||!Number.isInteger(resident.flat))fail(409,"Invalid resident data");
   return {id:resident.id,name:resident.name,fictional:resident.fictional===true,building:resident.building,floor:resident.floor,flat:resident.flat};
+}
+function publicResidents(world:any) {
+  if(typeof world.seed!=="string"||!Array.isArray(world.houses))fail(409,"Invalid resident directory");
+  const houses=world.houses.map((house:any)=>{
+    if(!house||typeof house.id!=="string"||!WORLD.test(house.id)||
+      !Number.isInteger(house.floors)||house.floors<1||house.floors>100)fail(409,"Invalid resident directory");
+    return {id:house.id,floors:house.floors};
+  });
+  return engine.residentDirectory(world.seed,houses).map(publicResident);
 }
 function db(error:any) {
   if(error)fail(500,"Chain Reaction persistence failed");
@@ -38,12 +50,10 @@ function publicState(value:any) {
   const safe=structuredClone(value);
   for(const project of safe.projects||[])if(project.intent)delete project.intent.comment;
   for(const event of safe.history||[]){delete event.comment;delete event.actorId;}
-  // Preserve exactly the canonical public resident DTO, including for legacy rows.
+  // Rebuild canonical values: key allowlisting alone would permit nested secrets
+  // inside an allowed field such as id or name.
   if(Array.isArray(safe.residents)){
-    safe.residents=safe.residents.map((resident:any)=>({
-      id:resident.id,name:resident.name,fictional:resident.fictional===true,
-      building:resident.building,floor:resident.floor,flat:resident.flat
-    }));
+    safe.residents=publicResidents(safe);
   }
   return safe;
 }
