@@ -88,7 +88,8 @@ test('Node and Edge both allowlist residents in every public world projection', 
   const node = fs.readFileSync(path.join(root, 'lib/chain-reaction-api.js'), 'utf8');
   const edge = fs.readFileSync(path.join(root, 'supabase/functions/world-emergence/chain-reaction.ts'), 'utf8');
   for (const source of [node, edge]) {
-    assert.match(source, /safe\.residents\s*=\s*safe\.residents\.map/);
+    assert.match(source, /safe\.residents\s*=\s*publicResidents\(safe\)/);
+    assert.match(source, /engine\.residentDirectory\(/);
     for (const field of ['id','name','fictional','building','floor','flat'])
       assert.match(source, new RegExp('(?:\\b'+field+'\\s*:)'));
     assert.match(source, /world:\s*publicState\(world\)/);
