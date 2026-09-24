@@ -70,3 +70,29 @@ test('canonical Edge World Factory grants idempotent private creator membership'
   assert.match(source, /chainReaction: \{ role: "owner" \}/);
   assert.doesNotMatch(source, /app_metadata.*chain_reaction_worlds\s*=/);
 });
+
+test('Node and Edge expose equivalent privacy-redacted, revision-fenced game-state',()=>{
+ const node=fs.readFileSync(path.join(root,'lib/chain-reaction-api.js'),'utf8');
+ const edge=fs.readFileSync(path.join(root,'supabase/functions/world-emergence/chain-reaction.ts'),'utf8');
+ for(const source of [node,edge]){
+  assert.match(source,/game-state/);assert.match(source,/world:\s*publicState\(world\)/);
+  assert.match(source,/body\.expectedRevision !== undefined|body\.expectedRevision!==undefined/);
+  assert.match(source,/STALE_REVISION/);assert.match(source,/engine\.genieOptions\(world\)/);
+  assert.match(source,/publicState\(\{\s*history:\s*world\.history\.slice/);
+  assert.match(source,/world:\s*publicState\(next\)/);
+ }
+});
+
+// Source parity for the explicit resident DTO, not merely a superficial game-state action.
+test('Node and Edge both allowlist residents in every public world projection', () => {
+  const node = fs.readFileSync(path.join(root, 'lib/chain-reaction-api.js'), 'utf8');
+  const edge = fs.readFileSync(path.join(root, 'supabase/functions/world-emergence/chain-reaction.ts'), 'utf8');
+  for (const source of [node, edge]) {
+    assert.match(source, /safe\.residents\s*=\s*publicResidents\(safe\)/);
+    assert.match(source, /engine\.residentDirectory\(/);
+    for (const field of ['id','name','fictional','building','floor','flat'])
+      assert.match(source, new RegExp('(?:\\b'+field+'\\s*:)'));
+    assert.match(source, /world:\s*publicState\(world\)/);
+    assert.match(source, /world:\s*publicState\(next\)/);
+  }
+});

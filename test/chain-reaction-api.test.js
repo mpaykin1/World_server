@@ -217,3 +217,69 @@ test('infeasible commits leave persistent state untouched', async () => {
   await rejects(handle(f.admin, req, body('commit-plan', { expectedRevision: 0 })), 409);
   assert.equal(f.writes, 0);
 });
+
+// Atomic first load: one world revision for the saved world and certified cards.
+test('atomic game-state is same-revision, privacy-safe and read-only',async()=>{
+ const f=fixture(),w=engine.createWorld('entry');Object.assign(w.resources,{power:35,water:80,food:80,budget:500,workers:50});
+ f.row.settings.chainReaction=engine.commit(w,engine.interpretIntent('PRIVATE CHILD TEXT','solar'));
+ const first=await handle(f.admin,req,body('game-state')),again=await handle(f.admin,req,body('game-state'));
+ assert.deepEqual(first,again);assert.equal(first.revision,first.world.revision);
+ assert.deepEqual(first.cards,engine.genieOptions(f.row.settings.chainReaction).cards);
+ assert.equal(first.fifth.kind,'free_intent');assert.equal(first.world.projects.length,1);
+ assert.doesNotMatch(JSON.stringify(first),/PRIVATE CHILD TEXT|actorId/);assert.equal(f.writes,0);
+});
+test('game-state honestly degrades, checks membership and supports an optional read fence',async()=>{
+ const f=fixture(),w=engine.createWorld('budget-zero');w.resources.budget=0;f.row.settings.chainReaction=w;
+ const empty=await handle(f.admin,req,body('game-state',{expectedRevision:0}));
+ assert.equal(empty.cards.length,0);assert.equal(empty.degraded,true);assert.equal(empty.fifth.acceptsFreeText,true);
+ await rejects(handle(f.admin,playerReq,body('game-state')),403);
+ for(const invalid of [-1,1.5,'0',null])await rejects(handle(f.admin,req,body('game-state',{expectedRevision:invalid})),400);
+ w.revision=1;await rejects(handle(f.admin,req,body('game-state',{expectedRevision:0})),409);
+ assert.equal((await handle(f.admin,req,body('game-state'))).revision,1);assert.equal(f.writes,0);
+});
+test('two simultaneous commits have one winner; reload and construction replay are durable',async()=>{
+ const f=fixture(),first=await handle(f.admin,req,body('game-state'));
+ const outcomes=await Promise.allSettled([1,2].map(()=>handle(f.admin,req,body('commit-plan',{structure:'solar',expectedRevision:first.revision}))));
+ assert.equal(outcomes.filter(x=>x.status==='fulfilled').length,1);
+ assert.equal(outcomes.find(x=>x.status==='rejected').reason.status,409);
+ await rejects(handle(f.admin,req,body('game-state',{expectedRevision:0})),409);
+ const restored=await handle(f.admin,req,body('game-state'));
+ assert.equal(restored.revision,1);assert.equal(restored.world.projects.length,1);
+ const ticked=await handle(f.admin,req,body('tick',{expectedRevision:1,count:2}));
+ assert.equal(ticked.world.projects[0].active,true);
+ assert.equal((await handle(f.admin,req,body('game-state'))).world.projects[0].active,true);
+ assert.equal(f.writes,2);
+});
+test('legacy and new private comments never leak via history, preview, commit or tick',async()=>{
+ const f=fixture();let w=engine.createWorld('legacy-privacy');w=engine.commit(w,engine.interpretIntent('LEGACY SECRET','solar'));
+ w.history.push({kind:'api_action',actorId:OWNER_ID,comment:'LEGACY PRIVATE EVENT'});f.row.settings.chainReaction=w;
+ const h=await handle(f.admin,req,body('history'));
+ const p=await handle(f.admin,req,body('preview-plan'));
+ const c=await handle(f.admin,req,body('commit-plan',{expectedRevision:1,text:'NEW SECRET'}));
+ const t=await handle(f.admin,req,body('tick',{expectedRevision:2}));
+ for(const response of [h,p,c,t])assert.doesNotMatch(JSON.stringify(response),/LEGACY SECRET|LEGACY PRIVATE EVENT|NEW SECRET|actorId/);
+ assert.equal(f.privateEvents[0].comment,'NEW SECRET');assert.equal(f.writes,2);
+});
+
+// Adversarial integration regression: a tainted stored resident must never escape
+// via the atomic loader or any of the other public world projections.
+test('atomic and legacy world projections allowlist resident fields', async () => {
+  const f = fixture(), w = engine.createWorld('resident-privacy');
+  const resident = w.residents.find(r => r.building === 'house-0' && r.floor === 1 && r.flat === 1);
+  Object.assign(resident, { comment: 'RESIDENT PRIVATE COMMENT', actorId: STRANGER_ID,
+    category: 'hidden_genie_category', role: 'untrusted',
+    id: { actorId: STRANGER_ID }, name: { comment: 'NESTED RESIDENT SECRET' } });
+  f.row.settings.chainReaction = w;
+  const first = await handle(f.admin, req, body('game-state'));
+  const preview = await handle(f.admin, req, body('preview-plan'));
+  const committed = await handle(f.admin, req, body('commit-plan', { expectedRevision: 0 }));
+  const ticked = await handle(f.admin, req, body('tick', { expectedRevision: 1 }));
+  for (const result of [first, preview, committed, ticked]) {
+    const projected = result.world.residents.find(r => r.building === 'house-0' && r.floor === 1 && r.flat === 1);
+    assert.deepEqual(Object.keys(projected).sort(), ['building', 'fictional', 'flat', 'floor', 'id', 'name']);
+    assert.doesNotMatch(JSON.stringify(result), /RESIDENT PRIVATE COMMENT|NESTED RESIDENT SECRET|actorId|hidden_genie_category|untrusted/);
+    assert.equal(projected.fictional, true);
+  }
+  assert.equal(first.revision, first.world.revision);
+  assert.equal(f.writes, 2);
+});
