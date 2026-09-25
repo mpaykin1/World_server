@@ -176,6 +176,8 @@ function applyFog(){
   if(frontMode||!fogVisible||!world){scene.fog=null;return;}
   const bg=world.background||{},h=bg.horizon||[70,55,55];
   const c=new THREE.Color(h[0]/255,h[1]/255,h[2]/255);
+  const cinematic=window.AI3DCinematicPack;
+  if(cinematic){scene.fog=new THREE.FogExp2(0x1b2632,cinematic.quality==='low'?.0047:.0033);return;}
   scene.fog=new THREE.FogExp2(c,profile().fogDensity/Math.max(1,CHUNK_SIZE/16));
 }
 function setAllDetailVisible(on){
@@ -520,15 +522,25 @@ async function renderWorld(data){
   // Models add scenery only; existing voxel collision remains authoritative.
   if(new URLSearchParams(location.search).get('cinematicCpu')==='1' && !window.__AI3D_CINEMATIC_CPU_PROMISE__){
     window.__AI3D_CINEMATIC_CPU_PROMISE__=import('./cinematic-cpu-runtime.mjs')
-      .then(m=>m.mountCpuPack({THREE,scene,getCamera:()=>activeCamera}))
+      .then(m=>m.mountCpuPack({THREE,scene,renderer,getCamera:()=>activeCamera}))
       .then(pack=>{
         window.AI3DCinematicPack=pack;
         // Deterministic outside-city vantage point for QA; do NOT change default spawn.
-        target.set(-86,15,-61);radius=112;yaw=.43;pitch=.28;
-        switchOrbit();updatePerspective();
-        scene.fog=new THREE.FogExp2(0x17212b,.005);
-        scene.background=new THREE.Color(0x080f17);
-        $('viewer').style.background='linear-gradient(#080f17,#17212b 70%,#2b1b14)';
+        // Dedicated QA composition; no change to the canonical player spawn.
+        target.set(-79,16,-55);
+        radius=matchMedia('(orientation: portrait)').matches?93:67;
+        yaw=.45;pitch=.21;switchOrbit();updatePerspective();
+        scene.fog=new THREE.FogExp2(0x1b2632,pack.quality==='low'?.0047:.0033);
+        $('viewer').style.background='linear-gradient(#09121d,#35465a 70%,#473026)';
+        // Exact screenshot has a durable repository target ID and SHA in docs/graphics/targets.
+        // Show its opt-in compressed proxy beside actual THREE geometry for human review.
+        const visualReference=$('reference');
+        if(visualReference){
+          visualReference.src='./cinematic-assets/fog-frontier-visual-reference.avif';
+          visualReference.alt='WORLD-GFX-FOG-FRONTIER-20260925 · user concept target (280px proxy)';
+          visualReference.title='Concept reference, not an in-game render';
+          visualReference.dataset.referenceId='WORLD-GFX-FOG-FRONTIER-20260925';
+        }
         $('stats').textContent+=' · CPU cinematic visual preview (no asset collisions)';
       })
       .catch(e=>{window.__AI3D_CINEMATIC_CPU_ERROR__=String(e?.message||e);console.warn('cinematic CPU pack:',e);});

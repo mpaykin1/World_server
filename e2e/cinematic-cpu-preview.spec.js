@@ -29,6 +29,17 @@ test.describe('Optional CPU-generated cinematic pack (real browser)',()=>{
     expect(state.pack.playerVisibilityCertified).toBe(false);
     expect(state.meshes).toBeGreaterThan(3);
     expect(state.pack.geometryDrawCallUpperBound).toBeLessThanOrEqual(6);
+    const artTarget=page.locator('#reference');
+    await artTarget.evaluate(img=>img.decode());
+    expect(await artTarget.getAttribute('data-reference-id')).toBe('WORLD-GFX-FOG-FRONTIER-20260925');
+    expect(await artTarget.evaluate(img=>img.naturalWidth)).toBe(280);
+    await page.waitForFunction(()=>window.AI3DCinematicPack?.stats?.().frameSampleCount>=10,
+      null,{timeout:10000});
+    const telemetry=await page.evaluate(()=>window.AI3DCinematicPack.stats());
+    expect(telemetry.frameIntervalP95Ms).toBeGreaterThan(0);
+    expect(telemetry.fullSceneDrawCalls).toBeGreaterThan(0);
+    expect(telemetry.fullSceneTriangles).toBeGreaterThan(0);
+    expect(telemetry.gpuFrameTimeMeasured).toBe(false);
     expect(errors).toEqual([]);
     await info.attach('cpu-cinematic-loaded-preview',{
       body:await page.screenshot({fullPage:false}),contentType:'image/png'

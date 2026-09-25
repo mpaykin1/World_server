@@ -8,12 +8,12 @@
     {
       "kind": "geothermal-plant",
       "lod": 0,
-      "vertices": 3368,
-      "triangles": 6124,
+      "vertices": 7692,
+      "triangles": 13524,
       "objects": 4,
       "file": "geothermal-plant-lod0.glb",
-      "bytes": 526308,
-      "sha256": "58ff1dec72d3f6e04c238131482e8f2e3a8b3bfbcb2e2f9a1a7a16b14434ba69"
+      "bytes": 1010052,
+      "sha256": "6d90a94e5c83e9ff128f69cc4d77d191653e62c11b6c1e5a63d90d720e452171"
     },
     {
       "kind": "geothermal-plant",
@@ -23,7 +23,7 @@
       "objects": 4,
       "file": "geothermal-plant-lod1.glb",
       "bytes": 272832,
-      "sha256": "37a03eb310e884d18bae9d4c349a8e8fd30fcec1ded98cdf9a158c02a13ed533"
+      "sha256": "c70d839c650817128074c98a63d8356f7bf3afe5da2c7c690068b1771efd2635"
     },
     {
       "kind": "geothermal-plant",
@@ -33,7 +33,7 @@
       "objects": 4,
       "file": "geothermal-plant-lod2.glb",
       "bytes": 177372,
-      "sha256": "bcde8ad01f3364bb4e1bcb58610aa5303c549b2acc276d702af5e8c7cc57f15f"
+      "sha256": "25e5c2ea5bcccc555c4949101024c4797cb4ae67e846d68930f69972c46686ea"
     },
     {
       "kind": "volcano",
@@ -43,7 +43,7 @@
       "objects": 2,
       "file": "volcano-lod0.glb",
       "bytes": 458780,
-      "sha256": "daf047e98a662fb381c0a1577523288d512a8fc0f6eadbac6da27383af496cef"
+      "sha256": "d3e9f9c94198c63431f4a009912c4fdd8398ea635afe9d964872a24f35193ad5"
     },
     {
       "kind": "volcano",
@@ -53,7 +53,7 @@
       "objects": 2,
       "file": "volcano-lod1.glb",
       "bytes": 168356,
-      "sha256": "18369f673f5f55947b1929434a6c419e65c680d0aa93066cfaa4dea4b84a9942"
+      "sha256": "976e1d2b118afc6b9e977e28ab1044d59fb48009293c83a9453cd06977266ee6"
     },
     {
       "kind": "volcano",
@@ -63,7 +63,7 @@
       "objects": 2,
       "file": "volcano-lod2.glb",
       "bytes": 81024,
-      "sha256": "ff2983ca00ec44645d4dc0c497df2aa4f58ba3e6d04cd26c8e7d4d4a0cb33908"
+      "sha256": "44ba4e0af0243abcd55e8a90a9dfe25c7728ea5176c1edcf2c3afdf51bc94231"
     }
   ],
   "textures": [

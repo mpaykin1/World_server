@@ -14,7 +14,9 @@ From the repo root, with Blender 4.2+:
 
 The generator makes real 3D geometry: hyperboloid cooling tower, turbine hall,
 control block, tall stacks, pipes, vents, lit windows and industrial railings,
-plus a stratovolcano with glowing lava fissures. Six GLB files are exported,
+plus a stratovolcano with glowing lava fissures. Its HERO LOD0 now includes
+32 individual tower ribs, pipe flanges/valves, close-up catwalks, guardrails,
+window lintels, rooftop cabinets and bundled heat-exchanger tubes. Six GLB files are exported,
 three geometric LODs for each object, alongside small deterministic PBR-style
 base-color textures and a checked manifest. Static meshes are batched by
 material: two to four draw calls per asset. No proprietary dataset, external
@@ -31,8 +33,9 @@ cinematic-cpu-runtime.mjs module AFTER default world loading. The unmodified
 default route does not download the 3D pack. Existing Three.js renderer,
 atmosphere, cameras, controls and default-city remain authoritative.
 The new runtime loads only the LODs allowed by device tier, optionally verifies
-SHA-256 in browser, creates a small bounded cheap steam-sprite group and
-uses native Three.js LOD. Browser metrics are exposed through
+SHA-256 in browser, creates a small bounded cheap steam-sprite group, a one-time CPU-painted
+atmospheric cloud sky, distance-culling hysteresis and low-cost accent lights;
+uses native Three.js LOD. The original default route does NOT load any of this. Browser metrics are exposed through
 window.AI3DVoxelRuntime.stats().cinematicCpu.
 
 **Important:** new geometry is VISUAL ONLY; existing voxel collisions do not
@@ -40,6 +43,17 @@ yet include these models. It is an isolated QA preview, not live gameplay.
 Only the existing Gameplay/Graphics owner should connect authoritative
 geothermal project coordinates, real physical collision, eruption effects and
 the current atmosphere director. Do not create another rendering system.
+
+## Stable image reference
+
+Concept ID `WORLD-GFX-FOG-FRONTIER-20260925` has a durable small visual proxy
+and the original 864x1536 source SHA in
+`docs/graphics/targets/README.md`. Opt-in browser scene shows the visual
+reference alongside the rendered, real interactive 3D geometry. The original
+full-resolution artwork is **not** inside this branch; do not falsely claim so.
+
+New verified CPU pack is about 2.35 MB including PNG source maps and six GLBs.
+Ten Node tests and four desktop/mobile-emulated Playwright tests must pass.
 
 ## Required release evidence (NOT YET DONE)
 

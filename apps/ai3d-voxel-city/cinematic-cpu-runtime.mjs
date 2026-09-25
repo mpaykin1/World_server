@@ -3,6 +3,7 @@
  * No new renderer, no fake world state, no collisions. Enable only ?cinematicCpu=1.
  * In production, the Genie/graphics owner can place this same pack at a real geothermal project.
  */
+import {budgetFor,createPaintedSky,shouldCullWithHysteresis} from './cinematic-cpu-atmosphere.mjs';
 const BASE='/apps/ai3d-voxel-city/cinematic-assets/';
 const LIMITS=Object.freeze({low:[1,2],balanced:[0,1,2],high:[0,1,2],ultra:[0,1,2]});
 const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
@@ -38,7 +39,7 @@ function makeSteam(THREE,root,tier){
   g.addColorStop(1,'rgba(140,166,184,0)');
   ctx.fillStyle=g;ctx.fillRect(0,0,64,64);
   const tex=new THREE.CanvasTexture(canvas);
-  const list=[],n=tier==='low'?4:tier==='balanced'?8:12;
+  const list=[],n=budgetFor(tier).steamCount;
   for(let i=0;i<n;i++){
     const mat=new THREE.SpriteMaterial({map:tex,color:0xd7e5ec,opacity:.15,
       depthWrite:false,transparent:true, fog:true});
@@ -53,7 +54,7 @@ function makeSteam(THREE,root,tier){
   }
   return {list,tex};
 }
-export async function mountCpuPack({THREE,scene,getCamera,anchor={x:-72,y:0,z:-42},tier}){
+export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72,y:0,z:-42},tier}){
   if(!THREE?.LOD||!scene?.add||typeof getCamera!=='function')throw Error('invalid existing renderer adapter');
   const coarse=matchMedia('(pointer:coarse)').matches;
   const quality=tier||((coarse||navigator.hardwareConcurrency<=4)?'low':'balanced');
@@ -64,6 +65,9 @@ export async function mountCpuPack({THREE,scene,getCamera,anchor={x:-72,y:0,z:-4
     manifest.status!=='CANDIDATE_NOT_VISUALLY_VERIFIED')throw Error('CPU pack provenance mismatch');
   const {GLTFLoader}=await import('https://unpkg.com/three@0.165.0/examples/jsm/loaders/GLTFLoader.js');
   const loader=new GLTFLoader();
+  const priorBackground=scene.background;
+  const paintedSky=createPaintedSky(THREE,null,quality);
+  scene.background=paintedSky.texture;
   const root=new THREE.Group();root.name='CinematicCPUVisualOnly';
   root.userData.visualOnly=true;root.position.set(anchor.x,anchor.y,anchor.z);
   scene.add(root);
@@ -108,7 +112,13 @@ export async function mountCpuPack({THREE,scene,getCamera,anchor={x:-72,y:0,z:-4
       parent.add(lod);loaded[name]=lod;
     }
     const steam=makeSteam(THREE,group,quality);
-    let lastUpdate=-Infinity,visibility=true,farCount=0;
+    let lastUpdate=-Infinity,visibility=true,farCount=0,previousFrame=null;
+    const frameSamples=[];
+    const samplePercentile=q=>{
+      if(!frameSamples.length)return null;
+      const ordered=frameSamples.slice().sort((a,b)=>a-b);
+      return Number(ordered[Math.floor((ordered.length-1)*q)].toFixed(2));
+    };
     ready=true;
     const api={
       status:'READY_VISUAL_ONLY_NOT_LIVE_VERIFIED',root,quality,manifest,loaded,
@@ -119,10 +129,23 @@ export async function mountCpuPack({THREE,scene,getCamera,anchor={x:-72,y:0,z:-4
           geometryDrawCallUpperBound:Object.entries(loaded).reduce((total,[kind,lod])=>{
             const n=level(kind),entry=manifest.assets.find(a=>a.kind===kind&&a.lod===n);
             return total+(entry?.objects||0);
-          },0),visualOnly:true,collisionIntegrated:false,playerVisibilityCertified:false};
+          },0),
+          frameIntervalP50Ms:samplePercentile(.5),frameIntervalP95Ms:samplePercentile(.95),
+          frameSampleCount:frameSamples.length,
+          fullSceneDrawCalls:renderer?.info?.render?.calls??null,
+          fullSceneTriangles:renderer?.info?.render?.triangles??null,
+          geometryActuallyCulled:!group.visible,
+          gpuFrameTimeMeasured:false,visualOnly:true,collisionIntegrated:false,
+          playerVisibilityCertified:false};
       },
       update(now,camera=getCamera()){
-        if(!ready||!camera||now-lastUpdate<100)return;
+        if(!ready||!camera)return;
+        if(previousFrame!==null){
+          const delta=now-previousFrame;
+          if(delta>0&&delta<1000){frameSamples.push(delta);if(frameSamples.length>240)frameSamples.shift();}
+        }
+        previousFrame=now;
+        if(now-lastUpdate<100)return;
         lastUpdate=now;
         // Renderer owns LOD switching; preserve native THREE.LOD distance logic.
         for(const lod of Object.values(loaded))lod.update(camera);
@@ -135,17 +158,21 @@ export async function mountCpuPack({THREE,scene,getCamera,anchor={x:-72,y:0,z:-4
         }
         // Do not fake culling: group visibility is actually turned off past fog distance.
         const d=group.getWorldPosition(new THREE.Vector3()).distanceTo(camera.position);
-        const shouldShow=d<(quality==='low'?145:210);
+        const shouldShow=shouldCullWithHysteresis(d,visibility,quality);
         if(shouldShow!==visibility){visibility=shouldShow;group.visible=visibility;}
         farCount++;
       },
       dispose(){ready=false;root.parent?.remove(root);
+        if(scene.background===paintedSky.texture)scene.background=priorBackground;
+        paintedSky.dispose();
         for(const lod of Object.values(loaded)){lod.traverse(o=>{if(o.isMesh){o.geometry?.dispose();const mats=Array.isArray(o.material)?o.material:[o.material];for(const m of mats)m?.dispose();}})}
         for(const e of steam.list)e.sprite.material.dispose();steam.tex.dispose();}
     };
     return api;
   }catch(error){
     root.parent?.remove(root);
+    if(scene.background===paintedSky.texture)scene.background=priorBackground;
+    paintedSky.dispose();
     throw error;
   }
 }

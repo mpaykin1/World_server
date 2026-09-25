@@ -129,6 +129,103 @@ def batch_materials():
     bpy.ops.object.select_all(action="DESELECT")
 
 
+def hero_industrial_detail():
+    """Focal-zone geometry: all procedural and batched, not viewport sprites."""
+    # Catch real grazing light on a cooling-tower facade: concrete vertical ribs.
+    for k in range(32):
+        a=k*math.tau/32
+        points=[]
+        for j in range(8):
+            t=j/7
+            r=10.5-3.3*math.sin(math.pi*t)+t*1.8+.11
+            points.append((r*math.cos(a),r*math.sin(a),34*t))
+        for i in range(7):
+            pipe("ConcreteSeam",points[i],points[i+1],.085,"concrete",6)
+    # Exterior service catwalk and handrail, readable from mid-distance.
+    for i in range(14):
+        x=5+i*1.84
+        box("ServiceCatwalk",(x,12.8,10.1),(1.75,2.8,.23),"steel")
+        if i%2==0:
+            pipe("CatwalkPost",(x,14.15,10.2),(x,14.15,11.4),.07,"steel",6)
+    pipe("CatwalkGuard",(5,14.15,11.4),(29.5,14.15,11.4),.07,"steel",6)
+    for i in range(12):
+        x=7+i*2
+        # Roof fixtures and maintenance equipment give the silhouette scale.
+        box("RoofCabinet",(x,-4.0,12.9),(.7,1.4,1.15),"steel")
+    # Pipe flanges and welded collars, low-segment toroidal geometry.
+    for i in range(12):
+        x=3.5+i*2.05
+        bpy.ops.mesh.primitive_torus_add(major_segments=12,minor_segments=4,
+            location=(x,9,10),major_radius=.81,minor_radius=.085)
+        o=finish(bpy.context.object,"SteamFlange","steel")
+        o.rotation_euler[1]=math.pi/2
+    # Heat exchanger: parallel bundled tubes and repeated retaining braces.
+    for i in range(18):
+        z=1.3+(i%6)*.44;y=17+(i//6)*.75
+        pipe("HeatExchangerTube",(28,y,z),(34,y,z),.09,"steel",6)
+    for i in range(9):
+        x=9+i*2.15
+        box("WindowLintel",(x,-9.64,8.0),(1.3,.18,.16),"steel")
+        box("WindowSill",(x,-9.64,5.85),(1.3,.18,.13),"steel")
+    for i in range(6):
+        x=7+i*4.25
+        cyl("PipeValveStem",(x,6,5.2),.12,.55,"steel",8)
+        bpy.ops.mesh.primitive_torus_add(major_segments=10,minor_segments=3,
+            major_radius=.47,minor_radius=.055,location=(x,6,5.52))
+        finish(bpy.context.object,"PipeValveHandwheel","amber")
+    # Upper roof antennas / industrial warning-light poles.
+    for i in range(6):
+        x=-27+i*2.4
+        pipe("Antenna",(x,-2,18.3),(x,-2,22+i%3),.065,"steel",6)
+        box("SafetyBeacon",(x,-2,22+i%3),(.26,.26,.29),"amber")
+
+
+def hero_industrial_detail():
+    """Real focal-zone geometry, joined by existing per-material batching."""
+    # Thirty-two concrete ribs make the cooling-tower shell read at close range.
+    for k in range(32):
+        a=k*math.tau/32
+        pts=[]
+        for j in range(8):
+            t=j/7;r=10.5-3.3*math.sin(math.pi*t)+t*1.8+.11
+            pts.append((r*math.cos(a),r*math.sin(a),34*t))
+        for j in range(7):
+            pipe("ConcreteTowerRib",pts[j],pts[j+1],.085,"concrete",6)
+    # Structural catwalk with genuine guardrail and maintenance cabinets.
+    for i in range(14):
+        x=5+i*1.84
+        box("ServiceCatwalk",(x,12.8,10.1),(1.75,2.8,.23),"steel")
+        if i%2==0:
+            pipe("CatwalkGuardPost",(x,14.15,10.2),(x,14.15,11.4),.07,"steel",6)
+    pipe("CatwalkGuard",(5,14.15,11.4),(29.5,14.15,11.4),.07,"steel",6)
+    for i in range(12):
+        x=7+i*2
+        box("RoofCabinet",(x,-4,12.9),(.7,1.4,1.15),"steel")
+    # Flanges and retaining rings reveal recognizable engineering detail.
+    for i in range(12):
+        x=3.5+i*2.05
+        bpy.ops.mesh.primitive_torus_add(major_segments=12,minor_segments=4,
+            location=(x,9,10),major_radius=.81,minor_radius=.085)
+        o=finish(bpy.context.object,"SteamFlange","steel")
+        o.rotation_euler[1]=math.pi/2
+    for i in range(18):
+        z=1.3+(i%6)*.44;y=17+(i//6)*.75
+        pipe("HeatExchangerTube",(28,y,z),(34,y,z),.09,"steel",6)
+    for i in range(9):
+        x=9+i*2.15
+        box("WindowLintel",(x,-9.64,8),(1.3,.18,.16),"steel")
+        box("WindowSill",(x,-9.64,5.85),(1.3,.18,.13),"steel")
+    for i in range(6):
+        x=7+i*4.25
+        cyl("PipeValveStem",(x,6,5.2),.12,.55,"steel",8)
+        bpy.ops.mesh.primitive_torus_add(major_segments=10,minor_segments=3,
+            major_radius=.47,minor_radius=.055,location=(x,6,5.52))
+        finish(bpy.context.object,"PipeValveHandwheel","amber")
+        x=-27+i*2.4
+        pipe("RoofAntenna",(x,-2,18.3),(x,-2,22+i%3),.065,"steel",6)
+        box("AviationBeacon",(x,-2,22+i%3),(.26,.26,.29),"amber")
+
+
 def plant(lod):
     clear();n=[24,14,8][lod];cooling_tower(lod)
     box("TurbineHall",(18,0,5.8),(25,19,11.6),"concrete")
@@ -157,6 +254,7 @@ def plant(lod):
     if lod==0:
         for i in range(14):
             pipe("SafetyRail",(8+i*1.6,-10.5,12.3),(8+i*1.6,-10.5,13.6),.055,"steel",6)
+    if lod==0:hero_industrial_detail()
     batch_materials()
     return stats("geothermal-plant",lod)
 
