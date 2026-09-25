@@ -6,6 +6,8 @@
  */
 import {mountRtsSurfaceMaterials} from './cinematic-rts-materials.mjs';
 import {mountIndustrialDetails} from './cinematic-rts-details.mjs';
+import {mountRtsHeroBuildings} from './cinematic-rts-hero.mjs';
+import {mountSculptedBasalt} from './cinematic-rts-terrain.mjs';
 const BUDGET=Object.freeze({
   low:{radius:9,step:12,crystals:18,units:9,cliffs:85,details:24},
   balanced:{radius:13,step:9,crystals:42,units:20,cliffs:170,details:58},
@@ -101,9 +103,10 @@ export function paintLavaPixels(size=256,seed=20260925){
     const hot=Math.max(0,Math.min(1,(flow*.6+veins*.17+wave*.25-.31)*1.7));
     const crust=flow<.38&&veins<.54,glow=crust?.20:hot;
     const i=(y*size+x)*4;
-    data[i]=110+glow*145;
-    data[i+1]=13+glow*201;
-    data[i+2]=2+Math.pow(glow,2)*52;
+    // Orange-red magma rather than the old pale mustard-yellow liquid.
+    data[i]=79+glow*176;
+    data[i+1]=8+Math.pow(glow,1.65)*125;
+    data[i+2]=2+Math.pow(glow,2)*24;
     data[i+3]=255;
   }
   return {pixels:data,size,seed};
@@ -157,11 +160,9 @@ export function mountVolcanicRtsMap(THREE,parent,{tier='balanced',seed=20260925}
   const tileTransform=(o,t)=>{o.position.set(t.x,t.height,t.z);
     o.scale.set(layout.step*.985,.9,layout.step*.985);o.rotation.set(0,0,0);};
   const industry=layout.tiles.filter(t=>t.style==='industrial');
-  const basalt=layout.tiles.filter(t=>t.style==='basalt');
   const metalTiles=instance(THREE,group,box[0],surfaces.industrial,industry,tileTransform);
-  const basaltTiles=instance(THREE,group,box[0],surfaces.basalt,basalt,tileTransform);
   if(metalTiles)metalTiles.name='InstancedIndustrialPbrTiles';
-  if(basaltTiles)basaltTiles.name='InstancedCrackedBasaltPbrTiles';
+  const sculpt=mountSculptedBasalt(THREE,group,layout,surfaces.basalt,tier);
   const hot=new THREE.Mesh(lavaGeo,lavaMat);
   hot.rotation.x=-Math.PI/2;
   hot.position.y=-5.9;
@@ -258,6 +259,11 @@ export function mountVolcanicRtsMap(THREE,parent,{tier='balanced',seed=20260925}
       o.rotation.set(0,0,Math.PI/2);o.scale.set(1,2.9,1);});
   conduits.name='InstancedRTSIndustrialConduitPipes';
   const details=mountIndustrialDetails(THREE,group,layout,tier);
+  const hero=mountRtsHeroBuildings(THREE,group,layout,tier);
+  // Replace earlier primitive blockouts only after the actual geometry exists.
+  buildingMain.visible=false;
+  roofs.visible=false;
+  guns.visible=false;
   let lastUpdate=-Infinity;
   const dummy=new THREE.Object3D();
   return {
@@ -282,13 +288,15 @@ export function mountVolcanicRtsMap(THREE,parent,{tier='balanced',seed=20260925}
       cliffInstances:layout.cliffs.length,resourceCrystals:layout.resources.length,
       structures:layout.structures.length,animatedScoutDrones:layout.units.length,
       hazardDecals:layout.stripes.length,detailWindows:windows.length,
-      terrainMaterialBytes:surfaces.textureBytes,details:details.stats(),
+      terrainMaterialBytes:surfaces.textureBytes,terrainSculpt:sculpt.stats(),
+      details:details.stats(),
+      hero:hero.stats(),
       roofFixtures:roofFixtures.length,industrialPipes:conduitPositions.length,
-      instanceDrawCallsUpperBound:14+details.stats().batches,
+      instanceDrawCallsUpperBound:15+details.stats().batches+hero.stats().drawBatches,
       actualDrawCallsNeedBrowserMeasurement:true,visualOnly:true,
       authoritativeGameState:false,collisionIntegrated:false};},
     dispose(){group.parent?.remove(group);
       geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());
-      lavaTexture.dispose();surfaces.dispose();details.dispose();}
+      lavaTexture.dispose();hero.dispose();details.dispose();sculpt.dispose();surfaces.dispose();}
   };
 }

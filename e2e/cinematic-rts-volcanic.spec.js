@@ -13,7 +13,7 @@ test.describe('RTS volcano / existing cinematic renderer integration',()=>{
       const pack=window.AI3DCinematicPack,world=window.AI3DVoxelRuntime?.stats?.();
       const meshes=[],meshNames=[],pbr=[];
       pack?.root?.traverse(o=>{
-        if(o.name==='InstancedIndustrialPbrTiles'||o.name==='InstancedCrackedBasaltPbrTiles')
+        if(o.name==='InstancedIndustrialPbrTiles'||o.name==='SculptedCrackedBasaltPbrTerrain')
           pbr.push({name:o.name,hasNormal:!!o.material.normalMap,
             hasRoughness:!!o.material.roughnessMap,hasMetalness:!!o.material.metalnessMap,
             hasAo:!!o.material.aoMap,uv2:!!o.geometry.attributes.uv2});
@@ -26,6 +26,7 @@ test.describe('RTS volcano / existing cinematic renderer integration',()=>{
         error:window.__AI3D_CINEMATIC_CPU_ERROR__||null,
         worldLoaded:world?.defaultCityLoaded,voxels:world?.voxels,
         rts:pack?.stats?.().rts,
+        oldBlockoutVisible:pack?.root?.getObjectByName('InstancedModularRTSIndustrialModules')?.visible,
         rtsVisible:pack?.root?.getObjectByName('RTSVolcanicTacticalStageVisualOnly')?.visible,
         fogDensity:pack?.root?.parent?.fog?.density,
         drawCalls:world?.renderer?.calls,triangles:world?.renderer?.triangles,
@@ -54,7 +55,17 @@ test.describe('RTS volcano / existing cinematic renderer integration',()=>{
     expect(capture.rts.resourceCrystals).toBeGreaterThanOrEqual(12);
     expect(capture.rts.structures).toBe(6);
     expect(capture.rts.animatedScoutDrones).toBeGreaterThanOrEqual(9);
-    expect(capture.rts.instanceDrawCallsUpperBound).toBeLessThanOrEqual(32);
+    expect(capture.rts.instanceDrawCallsUpperBound).toBeLessThanOrEqual(62);
+    expect(capture.rts.hero.instanceCount).toBeGreaterThan(90);
+    expect(capture.rts.terrainSculpt.realGeometricRelief).toBe(true);
+    expect(capture.rts.terrainSculpt.cliffSegments).toBeGreaterThan(15);
+    expect(capture.rts.terrainSculpt.sculptedTiles).toBeGreaterThan(100);
+    expect(capture.rts.terrainSculpt.separateDrawCalls).toBe(1);
+    expect(capture.rts.hero.drawBatches).toBeGreaterThanOrEqual(13);
+    expect(capture.rts.hero.drawBatches).toBeLessThanOrEqual(27);
+    expect(capture.rts.hero.buildingKinds).toEqual(expect.arrayContaining([
+      'command','factory','refinery','relay','turret']));
+    expect(capture.oldBlockoutVisible).toBe(false);
     expect(capture.rts.details.instances).toBeGreaterThan(170);
     expect(capture.rts.details.batches).toBeGreaterThanOrEqual(12);
     expect(capture.rts.terrainMaterialBytes).toBeLessThanOrEqual(1600000);
@@ -71,7 +82,13 @@ test.describe('RTS volcano / existing cinematic renderer integration',()=>{
     expect(capture.cameraMinPitch).toBeGreaterThan(.62);
     expect(capture.meshes.some(x=>x.name==='InstancedBlueResourceCrystals'&&x.count>=12)).toBe(true);
     expect(capture.meshNames.includes('ProceduralCpuPaintedLavaRivers')).toBe(true);
+    expect(capture.meshNames.includes('SculptedCrackedBasaltPbrTerrain')).toBe(true);
     expect(capture.meshNames.includes('InstancedWarmIndustrialWindows')).toBe(true);
+    expect(capture.meshNames.some(name=>name.startsWith('RtsHero_hull'))).toBe(true);
+    expect(capture.meshNames.includes('RtsHero_reactorCore')).toBe(true);
+    expect(capture.meshNames.some(name=>name.startsWith('RtsHero_distiller'))).toBe(true);
+    expect(capture.meshNames.includes('RtsHero_exhaustStack')).toBe(true);
+    expect(capture.meshNames.some(name=>name.includes('turretBody'))).toBe(true);
     expect(capture.canvas).toBe(true);
     expect(errors).toEqual([]);
     await info.attach('real-volcanic-rts-map',{
