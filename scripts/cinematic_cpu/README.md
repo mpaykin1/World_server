@@ -116,3 +116,21 @@ RTS screenshot: industrial sci-fi bases, dark basalt, luminous orange lava,
 blue crystals, tiny vehicles/infantry, mountain chasms and control of horizon.
 Current procedural models are much simpler than that concept. This is a new
 playable-engine graphics slice, NOT visual-equivalence evidence.
+
+## Verified CPU PBR + hero industrial detailing (2026-09-25)
+
+- Project-generated, deterministic `cinematic-rts-materials.mjs`: basalt and weathered
+  industrial albedo, tangent-space normals and ORM (AO, roughness, metallic),
+  baked once per quality tier on CPU (128/192/256 pixels). No external GPU.
+- `cinematic-rts-details.mjs`: instanced real 3D facade panels, roof ribs, vents,
+  catwalk rails, ladders, tanks, antennas, industrial conduit, fans, debris,
+  basalt outcrops, molten bank fissures, scorch marks and crystal fragments.
+- Balanced map: 603 additional detailing instances in 16 shared draw batches;
+  low/mobile: 290 instances; both budgets are deterministic and unit-tested.
+- Explicit RTS route suppresses irrelevant first-person mobile controls and
+  legacy fullscreen post layers; default voxel city and its controls unchanged.
+- Dedicated low-density cool RTS fog restores tactile scene contrast on mobile.
+- Locally verified: Node suite 23/23, Playwright desktop + mobile-emulated 8/8,
+  source GLB integrity PASS and syntax checks PASS. Actual phone FPS, art fidelity
+  above 85%, independent AI review, protected-master merge and live deployment
+  remain NOT_VERIFIED. Slow headless-browser FPS is not a release benchmark.

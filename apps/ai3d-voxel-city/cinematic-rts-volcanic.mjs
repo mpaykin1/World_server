@@ -4,6 +4,8 @@
  * demo overlay: no fake game-state, movement, harvesting or collision claims.
  * Procedural geometry has bounded instance counts and no network dependencies.
  */
+import {mountRtsSurfaceMaterials} from './cinematic-rts-materials.mjs';
+import {mountIndustrialDetails} from './cinematic-rts-details.mjs';
 const BUDGET=Object.freeze({
   low:{radius:9,step:12,crystals:18,units:9,cliffs:85,details:24},
   balanced:{radius:13,step:9,crystals:42,units:20,cliffs:170,details:58},
@@ -148,13 +150,18 @@ export function mountVolcanicRtsMap(THREE,parent,{tier='balanced',seed=20260925}
   const lavaMat=new THREE.MeshBasicMaterial({map:lavaTexture,color:0xffffff,
     side:THREE.DoubleSide,toneMapped:false,fog:true});
   register(lavaGeo,lavaMat);
-  const tileMesh=instance(THREE,group,box[0],box[1],layout.tiles,
-    (o,t)=>{o.position.set(t.x,t.height,t.z);o.scale.set(layout.step*.985,.9,layout.step*.985);
-      o.rotation.set(0,0,0);},
-    t=>t.style==='industrial'
-      ?(t.variation>.5?0x48505a:0x39434c)
-      :(t.variation>.5?0x26252a:0x353036));
-  tileMesh.name='InstancedNavigableBasaltAndMetalTiles';
+  // Offline-style PBR maps are painted on CPU once. Two shared draw calls
+  // keep metal tile normals/ORM independent from the cracked basalt surface.
+  const surfaces=mountRtsSurfaceMaterials(THREE,tier,seed);
+  box[0].setAttribute('uv2',box[0].attributes.uv);
+  const tileTransform=(o,t)=>{o.position.set(t.x,t.height,t.z);
+    o.scale.set(layout.step*.985,.9,layout.step*.985);o.rotation.set(0,0,0);};
+  const industry=layout.tiles.filter(t=>t.style==='industrial');
+  const basalt=layout.tiles.filter(t=>t.style==='basalt');
+  const metalTiles=instance(THREE,group,box[0],surfaces.industrial,industry,tileTransform);
+  const basaltTiles=instance(THREE,group,box[0],surfaces.basalt,basalt,tileTransform);
+  if(metalTiles)metalTiles.name='InstancedIndustrialPbrTiles';
+  if(basaltTiles)basaltTiles.name='InstancedCrackedBasaltPbrTiles';
   const hot=new THREE.Mesh(lavaGeo,lavaMat);
   hot.rotation.x=-Math.PI/2;
   hot.position.y=-5.9;
@@ -250,6 +257,7 @@ export function mountVolcanicRtsMap(THREE,parent,{tier='balanced',seed=20260925}
     (o,p)=>{o.position.set(p.x,p.y,p.z);
       o.rotation.set(0,0,Math.PI/2);o.scale.set(1,2.9,1);});
   conduits.name='InstancedRTSIndustrialConduitPipes';
+  const details=mountIndustrialDetails(THREE,group,layout,tier);
   let lastUpdate=-Infinity;
   const dummy=new THREE.Object3D();
   return {
@@ -274,12 +282,13 @@ export function mountVolcanicRtsMap(THREE,parent,{tier='balanced',seed=20260925}
       cliffInstances:layout.cliffs.length,resourceCrystals:layout.resources.length,
       structures:layout.structures.length,animatedScoutDrones:layout.units.length,
       hazardDecals:layout.stripes.length,detailWindows:windows.length,
+      terrainMaterialBytes:surfaces.textureBytes,details:details.stats(),
       roofFixtures:roofFixtures.length,industrialPipes:conduitPositions.length,
-      instanceDrawCallsUpperBound:13,
+      instanceDrawCallsUpperBound:14+details.stats().batches,
       actualDrawCallsNeedBrowserMeasurement:true,visualOnly:true,
       authoritativeGameState:false,collisionIntegrated:false};},
     dispose(){group.parent?.remove(group);
       geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());
-      lavaTexture.dispose();}
+      lavaTexture.dispose();surfaces.dispose();details.dispose();}
   };
 }

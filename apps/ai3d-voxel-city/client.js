@@ -530,6 +530,7 @@ async function renderWorld(data){
         // Deterministic outside-city vantage point for QA; do NOT change default spawn.
         // Dedicated QA composition; no change to the canonical player spawn.
         if(new URLSearchParams(location.search).get('rtsVolcanic')==='1'){
+          document.body.classList.add('cinematic-rts-qa');
           // QA-only top-down RTS composition. The real player spawn is unchanged.
           target.set(-72,-1,-42);
           radius=matchMedia('(orientation: portrait)').matches?270:204;

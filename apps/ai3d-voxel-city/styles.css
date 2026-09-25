@@ -2,6 +2,10 @@
 
 .metrics{margin-top:12px;padding:9px 12px;display:flex;flex-wrap:wrap;gap:8px}.metrics span{border:1px solid #2f3a4c;border-radius:999px;padding:4px 8px;background:#0b1018;color:#c6d1df}.metrics b{font-weight:700}.viewerHead div{flex-wrap:wrap}
 
+/* Remove irrelevant first-person controls from RTS art preview only. */
+.cinematic-rts-qa #goldenMobileControls{display:none!important}
+.cinematic-rts-qa #goldenAtmosphereLayer{display:none!important}
+.cinematic-rts-qa #goldenCinematicPost{display:none!important}
 /* Opt-in CPU graphics QA controls must remain click/touch accessible above WebGL. */
 .cinematic-cpu-qa .viewerHead{position:relative;z-index:1000;isolation:isolate;background:#121b27}
 .cinematic-cpu-qa .viewerHead>div{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:6px}

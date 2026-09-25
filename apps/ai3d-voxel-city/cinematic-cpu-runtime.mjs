@@ -84,7 +84,11 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
   const existingLights=scene.children.filter(o=>o.isLight).map(o=>[o,o.intensity]);
   if(renderer){renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.08;}
   for(const [light,intensity] of existingLights)light.intensity=intensity*.73;
-  const priorBackground=scene.background;
+  const priorBackground=scene.background,priorFog=scene.fog;
+  // Dedicated low-density cool RTS fog: explicitly restore immediately before
+  // rendering. The existing city atmosphere may otherwise replace it with its
+  // bright daylight fog and wash the whole tactical map out on mobile.
+  const rtsFog=rtsEnabled?new THREE.FogExp2(0x18212b,quality==='low'?.00135:.00115):null;
   const paintedSky=createPaintedSky(THREE,renderer,quality);
   scene.background=paintedSky.texture;
   const root=new THREE.Group();root.name='CinematicCPUVisualOnly';
@@ -187,7 +191,11 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
     // Tactical volcanic battlefield is an optional independent visual layer.
     // Leave the canonical loaded voxel city and gameplay state unchanged.
     const rts=rtsEnabled?mountVolcanicRtsMap(THREE,root,{tier:quality}):null;
-    if(rts){ground.visible=false;rockField.visible=false;}
+    if(rts){
+      ground.visible=false;rockField.visible=false;
+      group.position.set(-22,0,-6);group.scale.setScalar(.51);
+      volcanoAnchor.visible=false; // RTS map already carries the volcanic terrain.
+    }
     let lastUpdate=-Infinity,visibility=true,farCount=0,previousFrame=null;
     const frameSamples=[];
     const samplePercentile=q=>{
@@ -230,6 +238,7 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
         }
         previousFrame=now;
         if(now-lastUpdate<100)return;
+        if(rtsFog&&scene.fog!==rtsFog)scene.fog=rtsFog;
         lastUpdate=now;effects.update(now);rts?.update(now);
         // Renderer owns LOD switching; preserve native THREE.LOD distance logic.
         for(const lod of Object.values(loaded))lod.update(camera);
@@ -244,11 +253,15 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
         const d=group.getWorldPosition(new THREE.Vector3()).distanceTo(camera.position);
         const shouldShow=shouldCullWithHysteresis(d,visibility,quality);
         if(shouldShow!==visibility){visibility=shouldShow;group.visible=visibility;}
-        if(rts)rts.group.visible=visibility;
+        // RTS extends over a much wider footprint than a single plant.
+        // Never cull the entire tactical map using the smaller plant fog limit;
+        // Three.js performs per-mesh frustum culling instead.
+        if(rts)rts.group.visible=true;
         farCount++;
       },
       dispose(){ready=false;root.parent?.remove(root);
         if(scene.background===paintedSky.texture)scene.background=priorBackground;
+        if(rtsFog&&scene.fog===rtsFog)scene.fog=priorFog;
         if(renderer){renderer.toneMapping=previousToneMapping;renderer.toneMappingExposure=previousExposure;}
         for(const [light,intensity] of existingLights)light.intensity=intensity;
         paintedSky.dispose();
@@ -261,6 +274,7 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
   }catch(error){
     root.parent?.remove(root);
     if(scene.background===paintedSky.texture)scene.background=priorBackground;
+    if(rtsFog&&scene.fog===rtsFog)scene.fog=priorFog;
     if(renderer){renderer.toneMapping=previousToneMapping;renderer.toneMappingExposure=previousExposure;}
     for(const [light,intensity] of existingLights)light.intensity=intensity;
     paintedSky.dispose();
