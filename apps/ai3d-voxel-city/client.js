@@ -130,7 +130,8 @@ function pointerDown(e){
   dragging=true;lx=e.clientX;ly=e.clientY;
   try{ renderer.domElement.setPointerCapture(e.pointerId);}catch{}
 }
-addEventListener('pointermove',e=>{if(!dragging||frontMode||playableMode)return;const dx=e.clientX-lx,dy=e.clientY-ly;lx=e.clientX;ly=e.clientY;yaw-=dx*.006;
+addEventListener('pointermove',e=>{if(!dragging||frontMode||playableMode||
+  window.__AI3D_RTS_PINCH_ACTIVE__)return;const dx=e.clientX-lx,dy=e.clientY-ly;lx=e.clientX;ly=e.clientY;yaw-=dx*.006;
 const minPitch=window.AI3D_RTS_CAMERA_MIN_PITCH??-1.35;
 pitch=Math.max(minPitch,Math.min(1.26,pitch+dy*.006));updatePerspective();});
 addEventListener('pointerup',()=>dragging=false);
@@ -525,22 +526,38 @@ async function renderWorld(data){
   if(new URLSearchParams(location.search).get('cinematicCpu')==='1' && !window.__AI3D_CINEMATIC_CPU_PROMISE__){
     window.__AI3D_CINEMATIC_CPU_PROMISE__=import('./cinematic-cpu-runtime.mjs')
       .then(m=>m.mountCpuPack({THREE,scene,renderer,getCamera:()=>activeCamera}))
-      .then(pack=>{
+      .then(async pack=>{
         window.AI3DCinematicPack=pack;
         // Deterministic outside-city vantage point for QA; do NOT change default spawn.
         // Dedicated QA composition; no change to the canonical player spawn.
         if(new URLSearchParams(location.search).get('rtsVolcanic')==='1'){
           document.body.classList.add('cinematic-rts-qa');
-          // QA-only top-down RTS composition. The real player spawn is unchanged.
-          target.set(-72,-1,-42);
-          radius=matchMedia('(orientation: portrait)').matches?270:204;
-          yaw=.77;pitch=1.02;
-          persp.fov=matchMedia('(orientation: portrait)').matches?53:48;
-          persp.updateProjectionMatrix();
-          window.AI3D_RTS_CAMERA_MIN_PITCH=(persp.fov/2+14)*Math.PI/180;
+          // Share the reviewed sibling #300 mathematical horizon guard, not a
+          // second camera/renderer. Adapt its framing to THIS volcanic RTS map.
+          const director=await import('./cinematic-strategy-camera.mjs');
+          const rect=$('viewer').getBoundingClientRect();
+          const frame=director.strategyFraming({width:Math.max(240,rect.width),
+            height:Math.max(240,rect.height),tier:pack.quality});
+          const rtsFrame={...frame,target:[-72,-1,-42],yaw:.77,
+            pitch:frame.portrait?1.055:1.0,
+            distance:frame.portrait?350:215};
+          target.set(...rtsFrame.target);
+          radius=rtsFrame.distance;yaw=rtsFrame.yaw;pitch=rtsFrame.pitch;
+          persp.fov=rtsFrame.fov;persp.updateProjectionMatrix();
+          window.AI3D_RTS_CAMERA_MIN_PITCH=director.minimumPitch(rtsFrame.fov);
+          window.AI3DCinematicCamera={...rtsFrame,
+            minimumPitch:window.AI3D_RTS_CAMERA_MIN_PITCH,
+            horizonClearanceDeg:director.horizonMarginDegrees(pitch,rtsFrame.fov)};
           // Hide only the loaded-city DRAW meshes in the explicit RTS visual preview.
           // Keep 37k+ authoritative test voxels, collision and their state intact.
           window.__AI3D_RTS_MAP_VIEW__=true;
+          // Genuine two-finger zoom; the one-finger orbit handler remains live.
+          const touch=await import('./cinematic-rts-touch.mjs');
+          window.AI3D_RTSPinch=touch.bindRtsPinch(renderer.domElement,{
+            getRadius:()=>radius,
+            setRadius:next=>{radius=next;updatePerspective();},
+            isEnabled:()=>window.__AI3D_RTS_MAP_VIEW__===true
+          });
           for(const chunk of chunkObjects.values()){
             chunk.detail.visible=false;chunk.far.visible=false;
           }
@@ -551,8 +568,14 @@ async function renderWorld(data){
           yaw=.45;pitch=.21;
         }
         switchOrbit();updatePerspective();
-        scene.fog=new THREE.FogExp2(0x1b2632,
-          new URLSearchParams(location.search).get('rtsVolcanic')==='1'?.0016:
+        // A verified first frame: no horizon leaks into the top-down map.
+        // Subsequent drag handlers reuse the same minimumPitch bound.
+        // Initial RTS frame uses the same cool fog budget as the runtime.
+        // Setting the older .0016 fog here caused a brief washed-out flash
+        // before the cinematic runtime's first scheduled update.
+        const isRts=new URLSearchParams(location.search).get('rtsVolcanic')==='1';
+        scene.fog=new THREE.FogExp2(isRts?0x18212b:0x1b2632,
+          isRts?(pack.quality==='low'?.00135:.00115):
           (pack.quality==='low'?.0047:.0033));
         $('viewer').style.background='linear-gradient(#09121d,#35465a 70%,#473026)';
         // Exact screenshot has a durable repository target ID and SHA in docs/graphics/targets.

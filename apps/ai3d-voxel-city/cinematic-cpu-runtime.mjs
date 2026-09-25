@@ -191,6 +191,11 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
     // Tactical volcanic battlefield is an optional independent visual layer.
     // Leave the canonical loaded voxel city and gameplay state unchanged.
     const rts=rtsEnabled?mountVolcanicRtsMap(THREE,root,{tier:quality}):null;
+    // 2D backdrops occlude a top-down tactical map. Leave them opt-in for
+    // separate cinematics/visual comparison, never on the normal RTS route.
+    const rtsBackdrop=rts&&new URLSearchParams(location.search).get('rtsBackdrop')==='1'
+      ?(await import('./cinematic-industrial-parallax.mjs'))
+        .mountIndustrialParallax(THREE,root,quality):null;
     if(rts){
       ground.visible=false;rockField.visible=false;
       group.position.set(-22,0,-6);group.scale.setScalar(.51);
@@ -217,7 +222,7 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
           frameIntervalP50Ms:samplePercentile(.5),frameIntervalP95Ms:samplePercentile(.95),
           frameSampleCount:frameSamples.length,
           effects:effects.stats(),instancedRockCount:rockCount,
-          rts:rts?.stats()||null,
+          rts:rts?.stats()||null,rtsBackdrop:rtsBackdrop?.stats()||null,
           distantIndustrialClusters:districtCount,
           optimizedReady,optimizedLoaded,downloadBytes,
           optimizedFallbacks:optimizedFallbacks.slice(0,8),
@@ -240,6 +245,7 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
         if(now-lastUpdate<100)return;
         if(rtsFog&&scene.fog!==rtsFog)scene.fog=rtsFog;
         lastUpdate=now;effects.update(now);rts?.update(now);
+        rtsBackdrop?.update(camera);
         // Renderer owns LOD switching; preserve native THREE.LOD distance logic.
         for(const lod of Object.values(loaded))lod.update(camera);
         for(const e of steam.list){
@@ -267,7 +273,8 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
         paintedSky.dispose();
         for(const lod of Object.values(loaded)){lod.traverse(o=>{if(o.isMesh){o.geometry?.dispose();const mats=Array.isArray(o.material)?o.material:[o.material];for(const m of mats)m?.dispose();}})}
         for(const e of steam.list)e.sprite.material.dispose();steam.tex.dispose();
-        effects.dispose();rts?.dispose();ground.geometry.dispose();groundMaterial.dispose();
+        effects.dispose();rtsBackdrop?.dispose();rts?.dispose();
+        ground.geometry.dispose();groundMaterial.dispose();
         rockField.geometry.dispose();rockField.material.dispose();}
     };
     return api;
