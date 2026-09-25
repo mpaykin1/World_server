@@ -50,3 +50,14 @@ test('commit refreshes persisted service allocation after resource reservation',
  assert.notDeepEqual(committed.cityServices,world.cityServices);
  assert.equal(world.resources.power,45);
 });
+
+test('partial metadata gives explicit canonical tick and seed fallback',()=>{
+ const world=E.createWorld('missing-metadata');
+ delete world.tick;
+ delete world.seed;
+ const a=E.cityServices(world);
+ const b=E.cityServices({...world,houses:[...world.houses].reverse()});
+ assert.equal(a.tick,0);
+ assert.deepEqual(a,b);
+ assert.equal(a.summary.roadAccessHomes,world.houses.length);
+});
