@@ -4,7 +4,7 @@
 // trusted base, never from a pull-request checkout with credentials.
 const fs = require('node:fs');
 const crypto = require('node:crypto');
-const cp = require('node:child_process');
+const {readPatch,PatchReadError}=require('./independent-review-patch-reader.cjs');
 const { performance } = require('node:perf_hooks');
 const { MAX_PATCH_BYTES: MAX_CLOUDFLARE_PATCH_BYTES, API_TOKEN,
   availableCloudflareModels, requestCloudflareReview } = require('./independent-review-cloudflare.cjs');
@@ -27,7 +27,6 @@ const CANDIDATES = [
   ['nvidia', 'nvidia/nemotron-3-ultra-550b-a55b:free'],
   ['qwen', 'qwen/qwen3-coder:free']
 ];
-const SHA = /^[a-f0-9]{40}$/i;
 const MAX_PATCH_BYTES = 96000;
 const SYSTEM_PROMPT = [
   'You are an independent, adversarial code reviewer. Your task is to',
@@ -302,12 +301,6 @@ async function requestReview(model, patch, metadata, key, {
     findings: [], falsification_attempts: [], reason: 'Provider retry budget exhausted',
     attempts, durationMs: Math.round(performance.now() - started) };
 }
-function readPatch(base, head) {
-  if (!SHA.test(base) || !SHA.test(head)) throw new Error('Expected exact 40-character commit SHAs');
-  return cp.execFileSync('git', ['diff', '--no-ext-diff', '--no-color', '--binary',
-    '--unified=8', base + '...' + head, '--'], { encoding: 'utf8',
-      maxBuffer: MAX_PATCH_BYTES * 3 });
-}
 async function reviewPatch({ patch, base, head, key, builderModel = '',
   getCatalog = getJson, review = requestReview, cloudflare = null,
   reviewCloudflare = requestCloudflareReview }) {
@@ -413,7 +406,17 @@ async function main() {
   const base = args.base || '';
   const head = args.head || '';
   const output = args.output || 'INDEPENDENT_REVIEW_REPORT.json';
-  const patch = args['diff-file'] ? fs.readFileSync(args['diff-file'], 'utf8') : readPatch(base, head);
+  let patch;
+  try { patch = args['diff-file'] ? fs.readFileSync(args['diff-file'], 'utf8') : readPatch(base, head); }
+  catch(err) {
+    const reason=err instanceof PatchReadError?err.message:'Cannot safely read complete patch';
+    const report={schemaVersion:1,generatedAt:new Date().toISOString(),base,head,
+      diffSha256:null,diffBytes:null,verdict:'INCONCLUSIVE',reviewers:[],
+      blockers:[reason],providerIssues:[],requiresMaintainerDecision:true};
+    fs.writeFileSync(output,JSON.stringify(report,null,2)+'\n');
+    console.error('[INDEPENDENT_REVIEW] verdict=INCONCLUSIVE '+reason);
+    process.exitCode=2;return;
+  }
   const report = await reviewPatch({
     patch, base, head, key: process.env.WORLD_REVIEW_KEY || '',
     builderModel: process.env.WORLD_BUILDER_MODEL || 'qwen/qwen3-coder:free',
