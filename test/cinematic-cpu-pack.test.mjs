@@ -16,9 +16,15 @@ test('generated CPU pack passes strict actual GLB + SHA + LOD verification',()=>
   const r=validate();
   assert.equal(r.ok,true);
   assert.equal(Object.keys(r.shaByAsset).length,6);
-  assert.ok(r.totalBytes<4*1024*1024);
+  assert.ok(r.totalBytes<6*1024*1024);
+  assert.ok(r.mobileAssetBytes<3*1024*1024);
+  assert.ok(r.totalOptimizedBytes<1024*1024);
+  assert.ok(r.mobileOptimizedBytes<240000);
+  assert.ok(r.mobileOptimizedBytes<r.mobileAssetBytes*.15);
   assert.ok(r.tiers['geothermal-plant'][0].drawCallUpperBound<=6);
   assert.ok(r.tiers.volcano[0].triangles>r.tiers.volcano[2].triangles*10);
+  const plant0=checkGlb(fs.readFileSync(path.join(DIR,'geothermal-plant-lod0.glb')));
+  assert.ok(plant0.textures>=4,'hero PBR must embed base+normal maps');
 });
 test('GLB validator rejects empty files and malformed headers',()=>{
   assert.throws(()=>checkGlb(Buffer.alloc(256)),/magic/);
@@ -26,6 +32,15 @@ test('GLB validator rejects empty files and malformed headers',()=>{
   const corrupt=Buffer.from(bytes);corrupt.writeUInt32LE(400,8);
   assert.throws(()=>checkGlb(corrupt),/version\/length/);
 });
+test('optimized Meshopt/WebP checksums are checked independently from source GLB',()=>{
+  const altered=structuredClone(manifest);
+  altered.optimized[0].sha256='f'.repeat(64);
+  assert.throws(()=>validate(DIR,altered),/optimized checksum mismatch/);
+  const stale=structuredClone(manifest);
+  stale.optimized[2].sourceSha256='0'.repeat(64);
+  assert.throws(()=>validate(DIR,stale),/stale optimized asset/);
+});
+
 test('manifest checksum tampering is rejected',()=>{
   const fake=structuredClone(manifest);
   fake.assets[0].sha256='0'.repeat(64);

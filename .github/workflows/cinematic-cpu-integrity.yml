@@ -1,0 +1,48 @@
+name: Cinematic CPU Pack Integrity
+
+on:
+  pull_request:
+    paths:
+      - 'apps/ai3d-voxel-city/cinematic-assets/**'
+      - 'apps/ai3d-voxel-city/cinematic-cpu-*.mjs'
+      - 'apps/ai3d-voxel-city/styles.css'
+      - 'e2e/cinematic-cpu-preview.spec.js'
+      - 'apps/ai3d-voxel-city/vendor/**'
+      - 'scripts/cinematic_cpu/**'
+      - 'test/cinematic-cpu-*.test.mjs'
+      - 'test/test_cinematic_cpu_texture.py'
+      - '.github/workflows/cinematic-cpu-integrity.yml'
+  push:
+    branches: [master]
+    paths:
+      - 'apps/ai3d-voxel-city/cinematic-assets/**'
+      - 'scripts/cinematic_cpu/**'
+      - '.github/workflows/cinematic-cpu-integrity.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify original GLBs, optimized Meshopt/WebP payloads, SHA256 and budgets
+        run: node scripts/cinematic_cpu/verify_pack.cjs
+      - name: Node tests (including malicious manifest and decoder regression cases)
+        run: |
+          node --test test/cinematic-cpu-pack.test.mjs test/cinematic-cpu-atmosphere.test.mjs test/cinematic-cpu-effects.test.mjs test/cinematic-cpu-lava.test.mjs
+      - name: Python CPU material determinism
+        run: python3 test/test_cinematic_cpu_texture.py
+      - name: Syntax and whitespace
+        run: |
+          node scripts/check-js.js
+          node --check apps/ai3d-voxel-city/vendor/meshopt_decoder.mjs
+          node --check scripts/cinematic_cpu/optimize_pack.cjs
+          git diff --check HEAD^ HEAD

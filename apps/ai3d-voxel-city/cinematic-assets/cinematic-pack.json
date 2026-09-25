@@ -12,8 +12,8 @@
       "triangles": 13524,
       "objects": 4,
       "file": "geothermal-plant-lod0.glb",
-      "bytes": 1010052,
-      "sha256": "6d90a94e5c83e9ff128f69cc4d77d191653e62c11b6c1e5a63d90d720e452171"
+      "bytes": 1407508,
+      "sha256": "cb6b7fb611a8c1b7a784638b2c59c64a83161e7ecf68dca34f657c4a8565048a"
     },
     {
       "kind": "geothermal-plant",
@@ -22,8 +22,8 @@
       "triangles": 2220,
       "objects": 4,
       "file": "geothermal-plant-lod1.glb",
-      "bytes": 272832,
-      "sha256": "c70d839c650817128074c98a63d8356f7bf3afe5da2c7c690068b1771efd2635"
+      "bytes": 670280,
+      "sha256": "b7e59b7aac1b7a66c3b8d4294e3afc55413d0014d94bfa35d2b52f2fe152e255"
     },
     {
       "kind": "geothermal-plant",
@@ -32,8 +32,8 @@
       "triangles": 744,
       "objects": 4,
       "file": "geothermal-plant-lod2.glb",
-      "bytes": 177372,
-      "sha256": "25e5c2ea5bcccc555c4949101024c4797cb4ae67e846d68930f69972c46686ea"
+      "bytes": 574828,
+      "sha256": "d912d4d3db7c2b6571ca6c4f2c86e4fddffd5057f84b9237d1255c5612786f2d"
     },
     {
       "kind": "volcano",
@@ -42,8 +42,8 @@
       "triangles": 5916,
       "objects": 2,
       "file": "volcano-lod0.glb",
-      "bytes": 458780,
-      "sha256": "d3e9f9c94198c63431f4a009912c4fdd8398ea635afe9d964872a24f35193ad5"
+      "bytes": 695884,
+      "sha256": "cd09201c7a4c6f49bd72084cb3fd5ca14a4024a0b1849eb62db81f3b802fb589"
     },
     {
       "kind": "volcano",
@@ -52,8 +52,8 @@
       "triangles": 1608,
       "objects": 2,
       "file": "volcano-lod1.glb",
-      "bytes": 168356,
-      "sha256": "976e1d2b118afc6b9e977e28ab1044d59fb48009293c83a9453cd06977266ee6"
+      "bytes": 405460,
+      "sha256": "cf4a5bfd1dd94d64cb1a13c43d929d5a90da87f643b1c44e21cd62dad652ed77"
     },
     {
       "kind": "volcano",
@@ -62,40 +62,128 @@
       "triangles": 308,
       "objects": 2,
       "file": "volcano-lod2.glb",
-      "bytes": 81024,
-      "sha256": "44ba4e0af0243abcd55e8a90a9dfe25c7728ea5176c1edcf2c3afdf51bc94231"
+      "bytes": 318136,
+      "sha256": "82cbb4935fe9346f081db689d15076342464df7f9f12fbf0575a6a8129eae56c"
     }
   ],
   "textures": [
     {
       "file": "concrete.png",
-      "sha256": "9457df5589dec342e626a92fa04480021967b94726592f55708e56330ffa4a14",
-      "bytes": 25696
+      "sha256": "a68c59bd5eb65048131bd5ebe1e8bddc55a885fa7efb157dab933aed4573374b",
+      "bytes": 335506
     },
     {
       "file": "concrete-normal.png",
-      "sha256": "786ae3f41996e1b0e4a0bbdc6213daa150a4b62b88bab6eb8914ccd202324a46",
-      "bytes": 35814
+      "sha256": "f3e97b56fcdc4167501af51cb2ecd1afaf7e6f94c0a767fb6d0af9c75b4a6390",
+      "bytes": 1854
     },
     {
       "file": "steel.png",
-      "sha256": "49ee87816b97bec408a4ccb37cfad860f1f53d2e143202e8385dd80a647ed8a0",
-      "bytes": 25118
+      "sha256": "bfd91f4ab484b38137fc1eaea08c8f827862d565df47d48039ab0bf846959ae7",
+      "bytes": 180641
     },
     {
       "file": "steel-normal.png",
-      "sha256": "c3a509d27df1a4491fdab2efc7454d7519408212bb0ab4dade50edeac2aad07e",
-      "bytes": 35781
+      "sha256": "f3e97b56fcdc4167501af51cb2ecd1afaf7e6f94c0a767fb6d0af9c75b4a6390",
+      "bytes": 1854
     },
     {
       "file": "basalt.png",
-      "sha256": "0acc5534e18a2bbe37e0d13ba7b840bfcc2ccfee7fe92c02119fd5a1aa482bfa",
-      "bytes": 22136
+      "sha256": "bddbb21644c5d057c198041f5339cdc0c30f836be55b1f9826b158d9ac0d36fe",
+      "bytes": 293221
     },
     {
       "file": "basalt-normal.png",
-      "sha256": "bdf52378e5a275f0ee82b23104b040a2f57cd0646cf5ba201351788049ebe993",
-      "bytes": 35838
+      "sha256": "f3e97b56fcdc4167501af51cb2ecd1afaf7e6f94c0a767fb6d0af9c75b4a6390",
+      "bytes": 1854
     }
-  ]
+  ],
+  "optimized": [
+    {
+      "kind": "geothermal-plant",
+      "lod": 0,
+      "file": "geothermal-plant-lod0.meshopt.glb",
+      "sourceSha256": "cb6b7fb611a8c1b7a784638b2c59c64a83161e7ecf68dca34f657c4a8565048a",
+      "sha256": "bc7baad2098aca34367d43f903a6531a7eb4a164b1127a10a35b7e15a4cb843f",
+      "bytes": 263244,
+      "extensionsUsed": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp"
+      ],
+      "meshCount": 4
+    },
+    {
+      "kind": "geothermal-plant",
+      "lod": 1,
+      "file": "geothermal-plant-lod1.meshopt.glb",
+      "sourceSha256": "b7e59b7aac1b7a66c3b8d4294e3afc55413d0014d94bfa35d2b52f2fe152e255",
+      "sha256": "5fb0d2b199af5cd41ea1b53784f124933f8f9fd092e0ddd5b203c25536ffac3a",
+      "bytes": 62076,
+      "extensionsUsed": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp"
+      ],
+      "meshCount": 4
+    },
+    {
+      "kind": "geothermal-plant",
+      "lod": 2,
+      "file": "geothermal-plant-lod2.meshopt.glb",
+      "sourceSha256": "d912d4d3db7c2b6571ca6c4f2c86e4fddffd5057f84b9237d1255c5612786f2d",
+      "sha256": "6e2f0616739d06d17c2327c4de275a8c45c875c35aabde1c63c925e2e9883755",
+      "bytes": 36980,
+      "extensionsUsed": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp"
+      ],
+      "meshCount": 4
+    },
+    {
+      "kind": "volcano",
+      "lod": 0,
+      "file": "volcano-lod0.meshopt.glb",
+      "sourceSha256": "cd09201c7a4c6f49bd72084cb3fd5ca14a4024a0b1849eb62db81f3b802fb589",
+      "sha256": "3ee71eee3fb4e0debcf3610a726bc45876201f74b7802d25cc9c75e20c22402a",
+      "bytes": 103036,
+      "extensionsUsed": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp"
+      ],
+      "meshCount": 2
+    },
+    {
+      "kind": "volcano",
+      "lod": 1,
+      "file": "volcano-lod1.meshopt.glb",
+      "sourceSha256": "cf4a5bfd1dd94d64cb1a13c43d929d5a90da87f643b1c44e21cd62dad652ed77",
+      "sha256": "2eb0238370263be57c6b0ced4ce3397dcfd602400be5f585f3fa4198f6e8f78b",
+      "bytes": 36500,
+      "extensionsUsed": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp"
+      ],
+      "meshCount": 2
+    },
+    {
+      "kind": "volcano",
+      "lod": 2,
+      "file": "volcano-lod2.meshopt.glb",
+      "sourceSha256": "82cbb4935fe9346f081db689d15076342464df7f9f12fbf0575a6a8129eae56c",
+      "sha256": "07a7f9c8161bec57cc631a61d79e8d3b058dda340a05cbe213aa84545993601f",
+      "bytes": 14800,
+      "extensionsUsed": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp"
+      ],
+      "meshCount": 2
+    }
+  ],
+  "optimization": {
+    "tool": "@gltf-transform/cli",
+    "version": "4.4.0",
+    "format": "EXT_meshopt_compression+EXT_texture_webp",
+    "sourceType": "embedded-PNG-fallback",
+    "sourceAssetsRemainUnchanged": true,
+    "gpuServerRequired": false
+  }
 }

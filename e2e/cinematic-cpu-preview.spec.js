@@ -29,6 +29,10 @@ test.describe('Optional CPU-generated cinematic pack (real browser)',()=>{
     expect(state.pack.playerVisibilityCertified).toBe(false);
     expect(state.meshes).toBeGreaterThan(3);
     expect(state.pack.geometryDrawCallUpperBound).toBeLessThanOrEqual(6);
+    expect(state.pack.optimizedReady).toBe(true);
+    expect(state.pack.optimizedFallbacks).toEqual([]);
+    expect(state.pack.optimizedLoaded).toBe(state.pack.quality==='low'?4:6);
+    expect(state.pack.downloadBytes).toBeLessThan(state.pack.quality==='low'?240000:1048576);
     const artTarget=page.locator('#reference');
     await artTarget.evaluate(img=>img.decode());
     expect(await artTarget.getAttribute('data-reference-id')).toBe('WORLD-GFX-FOG-FRONTIER-20260925');
@@ -40,6 +44,18 @@ test.describe('Optional CPU-generated cinematic pack (real browser)',()=>{
     expect(telemetry.fullSceneDrawCalls).toBeGreaterThan(0);
     expect(telemetry.fullSceneTriangles).toBeGreaterThan(0);
     expect(telemetry.gpuFrameTimeMeasured).toBe(false);
+    expect(telemetry.instancedRockCount).toBeGreaterThanOrEqual(12);
+    expect(telemetry.effects.spriteCount).toBeGreaterThanOrEqual(10);
+    expect(telemetry.effects.lavaRibbonVertices).toBeGreaterThanOrEqual(300);
+    expect(telemetry.effects.lavaPaths).toBeGreaterThanOrEqual(5);
+    expect(telemetry.effects.spriteCount).toBeLessThanOrEqual(55);
+    expect(telemetry.targetId).toBe('WORLD-GFX-FOG-FRONTIER-20260925');
+    const button=page.locator('#cinematicEruption');
+    await expect(button).toHaveCount(1);
+    await button.click();
+    const eruption=await page.evaluate(()=>window.AI3DCinematicPack.triggerEruption(performance.now()));
+    expect(eruption.authoritativeGameEvent).toBe(false);
+    expect((await page.evaluate(()=>window.AI3DCinematicPack.stats())).effects.eruptionActive).toBe(true);
     expect(errors).toEqual([]);
     await info.attach('cpu-cinematic-loaded-preview',{
       body:await page.screenshot({fullPage:false}),contentType:'image/png'
@@ -55,6 +71,7 @@ test.describe('Optional CPU-generated cinematic pack (real browser)',()=>{
     await page.waitForFunction(()=>window.AI3DVoxelRuntime?.stats?.().defaultCityLoaded===true,
       null,{timeout:30000});
     expect(assetRequests).toEqual([]);
+    await expect(page.locator('#cinematicEruption')).toHaveCount(0);
     expect(await page.evaluate(()=>window.AI3DCinematicPack||null)).toBeNull();
   });
 });

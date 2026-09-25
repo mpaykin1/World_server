@@ -2,10 +2,11 @@
 Run Blender 4.2+: blender -b -t 2 --python scripts/cinematic_cpu/build_pack.py
 Outputs optimized visual assets, NOT a new engine or claim of reference-level photorealism.
 """
-import bpy, math, json, hashlib, random
+import bpy, math, json, hashlib, random, sys
 from pathlib import Path
-from array import array
 from mathutils import Vector
+sys.path.insert(0,str(Path(__file__).resolve().parent))
+from texture_cpu import bake_material
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "apps/ai3d-voxel-city/cinematic-assets"
@@ -13,33 +14,6 @@ OUT.mkdir(parents=True, exist_ok=True)
 M = {}
 manifest = {"schema":1,"generator":"cinematic-cpu-v1","license":"project-generated",
             "device":"CPU_ONLY","status":"CANDIDATE_NOT_VISUALLY_VERIFIED","assets":[],"textures":[]}
-
-def make_texture(name, color, seed, kind="base"):
-    n=128
-    image=bpy.data.images.new(name,width=n,height=n,alpha=True)
-    rng=random.Random(seed)
-    heights=[(rng.random()-.5)*.19+
-             math.sin(x*.27+seed)*math.cos(y*.31+seed)*.065
-             for y in range(n) for x in range(n)]
-    pixels=array("f")
-    for y in range(n):
-        for x in range(n):
-            i=y*n+x
-            if kind=="normal":
-                dx=heights[y*n+(x+1)%n]-heights[y*n+(x-1)%n]
-                dy=heights[((y+1)%n)*n+x]-heights[((y-1)%n)*n+x]
-                v=Vector((-dx*.65,-dy*.65,1)).normalized()
-                pixels.extend(((v.x+1)*.5,(v.y+1)*.5,(v.z+1)*.5,1))
-            else:
-                v=1+heights[i]
-                pixels.extend((min(1,color[0]*v),min(1,color[1]*v),min(1,color[2]*v),1))
-    image.pixels.foreach_set(pixels)
-    image.filepath_raw=str(OUT/(name+".png"));image.file_format="PNG";image.save()
-    if kind=="normal":image.colorspace_settings.name="Non-Color"
-    f=Path(image.filepath_raw)
-    manifest["textures"].append({"file":f.name,"sha256":hashlib.sha256(f.read_bytes()).hexdigest(),
-                                  "bytes":f.stat().st_size})
-    return image
 
 def mat(name, rgb, rough=.75, metal=0., emit=0., seed=1):
     m=bpy.data.materials.new(name);m.diffuse_color=(*rgb,1);m.use_nodes=True
@@ -50,12 +24,18 @@ def mat(name, rgb, rough=.75, metal=0., emit=0., seed=1):
         b.inputs["Emission Color"].default_value=(*rgb,1)
         b.inputs["Emission Strength"].default_value=emit
     else:
-        tex=nt.nodes.new("ShaderNodeTexImage");tex.image=make_texture(name,rgb,seed)
+        maps=bake_material(name,rgb,seed,base_size=512 if name in ("concrete","basalt") else 384,normal_size=256)
+        for channel,img in maps.items():
+            img.filepath_raw=str(OUT/(name+("-normal" if channel=="normal" else "")+".png"))
+            img.file_format="PNG";img.save()
+            f=Path(img.filepath_raw)
+            manifest["textures"].append({"file":f.name,"sha256":hashlib.sha256(f.read_bytes()).hexdigest(),
+                                        "bytes":f.stat().st_size})
+        tex=nt.nodes.new("ShaderNodeTexImage");tex.image=maps["base"]
         nt.links.new(tex.outputs["Color"],b.inputs["Base Color"])
-        norm=nt.nodes.new("ShaderNodeTexImage")
-        norm.image=make_texture(name+"-normal",rgb,seed,"normal")
+        norm=nt.nodes.new("ShaderNodeTexImage");norm.image=maps["normal"]
         converter=nt.nodes.new("ShaderNodeNormalMap")
-        converter.inputs["Strength"].default_value=.55
+        converter.inputs["Strength"].default_value=.83
         nt.links.new(norm.outputs["Color"],converter.inputs["Color"])
         nt.links.new(converter.outputs["Normal"],b.inputs["Normal"])
     M[name]=m
@@ -127,57 +107,6 @@ def batch_materials():
         bpy.ops.object.join()
         objects[0].name=f"CinematicBatch_{name}"
     bpy.ops.object.select_all(action="DESELECT")
-
-
-def hero_industrial_detail():
-    """Focal-zone geometry: all procedural and batched, not viewport sprites."""
-    # Catch real grazing light on a cooling-tower facade: concrete vertical ribs.
-    for k in range(32):
-        a=k*math.tau/32
-        points=[]
-        for j in range(8):
-            t=j/7
-            r=10.5-3.3*math.sin(math.pi*t)+t*1.8+.11
-            points.append((r*math.cos(a),r*math.sin(a),34*t))
-        for i in range(7):
-            pipe("ConcreteSeam",points[i],points[i+1],.085,"concrete",6)
-    # Exterior service catwalk and handrail, readable from mid-distance.
-    for i in range(14):
-        x=5+i*1.84
-        box("ServiceCatwalk",(x,12.8,10.1),(1.75,2.8,.23),"steel")
-        if i%2==0:
-            pipe("CatwalkPost",(x,14.15,10.2),(x,14.15,11.4),.07,"steel",6)
-    pipe("CatwalkGuard",(5,14.15,11.4),(29.5,14.15,11.4),.07,"steel",6)
-    for i in range(12):
-        x=7+i*2
-        # Roof fixtures and maintenance equipment give the silhouette scale.
-        box("RoofCabinet",(x,-4.0,12.9),(.7,1.4,1.15),"steel")
-    # Pipe flanges and welded collars, low-segment toroidal geometry.
-    for i in range(12):
-        x=3.5+i*2.05
-        bpy.ops.mesh.primitive_torus_add(major_segments=12,minor_segments=4,
-            location=(x,9,10),major_radius=.81,minor_radius=.085)
-        o=finish(bpy.context.object,"SteamFlange","steel")
-        o.rotation_euler[1]=math.pi/2
-    # Heat exchanger: parallel bundled tubes and repeated retaining braces.
-    for i in range(18):
-        z=1.3+(i%6)*.44;y=17+(i//6)*.75
-        pipe("HeatExchangerTube",(28,y,z),(34,y,z),.09,"steel",6)
-    for i in range(9):
-        x=9+i*2.15
-        box("WindowLintel",(x,-9.64,8.0),(1.3,.18,.16),"steel")
-        box("WindowSill",(x,-9.64,5.85),(1.3,.18,.13),"steel")
-    for i in range(6):
-        x=7+i*4.25
-        cyl("PipeValveStem",(x,6,5.2),.12,.55,"steel",8)
-        bpy.ops.mesh.primitive_torus_add(major_segments=10,minor_segments=3,
-            major_radius=.47,minor_radius=.055,location=(x,6,5.52))
-        finish(bpy.context.object,"PipeValveHandwheel","amber")
-    # Upper roof antennas / industrial warning-light poles.
-    for i in range(6):
-        x=-27+i*2.4
-        pipe("Antenna",(x,-2,18.3),(x,-2,22+i%3),.065,"steel",6)
-        box("SafetyBeacon",(x,-2,22+i%3),(.26,.26,.29),"amber")
 
 
 def hero_industrial_detail():

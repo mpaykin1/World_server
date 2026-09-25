@@ -4,6 +4,7 @@
  * In production, the Genie/graphics owner can place this same pack at a real geothermal project.
  */
 import {budgetFor,createPaintedSky,shouldCullWithHysteresis} from './cinematic-cpu-atmosphere.mjs';
+import {createCinematicEffects} from './cinematic-cpu-effects.mjs';
 const BASE='/apps/ai3d-voxel-city/cinematic-assets/';
 const LIMITS=Object.freeze({low:[1,2],balanced:[0,1,2],high:[0,1,2],ultra:[0,1,2]});
 const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
@@ -65,26 +66,42 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
     manifest.status!=='CANDIDATE_NOT_VISUALLY_VERIFIED')throw Error('CPU pack provenance mismatch');
   const {GLTFLoader}=await import('https://unpkg.com/three@0.165.0/examples/jsm/loaders/GLTFLoader.js');
   const loader=new GLTFLoader();
+  let optimizedReady=false,optimizedLoaded=0,downloadBytes=0;
+  const optimizedFallbacks=[];
+  if(Array.isArray(manifest.optimized)&&manifest.optimized.length===6){
+    try{
+      const {MeshoptDecoder}=await import('./vendor/meshopt_decoder.mjs');
+      await MeshoptDecoder.ready;
+      loader.setMeshoptDecoder(MeshoptDecoder);
+      optimizedReady=true;
+    }catch(error){optimizedFallbacks.push('DECODER_UNAVAILABLE: '+String(error?.message||error).slice(0,90));}
+  }
+  // Isolated cinematic grade; restore every original renderer/light value on dispose.
+  const previousToneMapping=renderer?.toneMapping;
+  const previousExposure=renderer?.toneMappingExposure;
+  const existingLights=scene.children.filter(o=>o.isLight).map(o=>[o,o.intensity]);
+  if(renderer){renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.08;}
+  for(const [light,intensity] of existingLights)light.intensity=intensity*.73;
   const priorBackground=scene.background;
-  const paintedSky=createPaintedSky(THREE,null,quality);
+  const paintedSky=createPaintedSky(THREE,renderer,quality);
   scene.background=paintedSky.texture;
   const root=new THREE.Group();root.name='CinematicCPUVisualOnly';
   root.userData.visualOnly=true;root.position.set(anchor.x,anchor.y,anchor.z);
   scene.add(root);
   const group=new THREE.Group();root.add(group);
   const volcanoAnchor=new THREE.Group();
-  volcanoAnchor.position.set(-75,-9,-90);root.add(volcanoAnchor);
+  volcanoAnchor.position.set(-35,-13,-125);root.add(volcanoAnchor);
   // Baked-look accent lights: one cheap key light, ambient fill and one
   // desktop-only lava light; no shadow maps, no volumetric ray marching.
-  const fill=new THREE.HemisphereLight(0x9db8d7,0x1c2329,quality==='low'?.82:1.1);
-  const key=new THREE.DirectionalLight(0xffca96,quality==='low'?1.2:1.7);
+  const fill=new THREE.HemisphereLight(0xaebfd5,0x2f2925,quality==='low'?.57:.74);
+  const key=new THREE.DirectionalLight(0xffb568,quality==='low'?1.48:1.98);
   key.position.set(55,70,90);key.castShadow=false;
   root.add(fill,key);
   if(quality!=='low'){
-    const lavaGlow=new THREE.PointLight(0xff6b28,8,145,2);
-    lavaGlow.position.set(-75,41,-90);lavaGlow.castShadow=false;root.add(lavaGlow);
+    const lavaGlow=new THREE.PointLight(0xff6b28,12,170,2);
+    lavaGlow.position.set(-35,50,-125);lavaGlow.castShadow=false;root.add(lavaGlow);
   }
-  const nodes=[['geothermal-plant',group,1],['volcano',volcanoAnchor,1.1]];
+  const nodes=[['geothermal-plant',group,1],['volcano',volcanoAnchor,1.55]];
   const loaded={};
   let ready=false;
   try{
@@ -93,15 +110,29 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
       for(const level of allowedLods(quality)){
         const record=manifest.assets.find(x=>x.kind===name&&x.lod===level);
         if(!record)throw Error('LOD missing: '+name+'/'+level);
-        const data=await checkedAsset(BASE+record.file,record);
-        const gltf=await new Promise((resolve,reject)=>loader.parse(data,BASE,resolve,reject));
+        // Offline Meshopt/WebP is network-fast; source PNG GLB remains verified fallback.
+        const optimized=optimizedReady?manifest.optimized.find(o=>o.kind===name&&o.lod===level):null;
+        let gltf=null;
+        if(optimized){
+          try{
+            const data=await checkedAsset(BASE+optimized.file,optimized);
+            downloadBytes+=data.byteLength;
+            gltf=await new Promise((resolve,reject)=>loader.parse(data,BASE,resolve,reject));
+            optimizedLoaded++;
+          }catch(error){optimizedFallbacks.push(optimized.file+': '+String(error?.message||error).slice(0,95));}
+        }
+        if(!gltf){
+          const source=await checkedAsset(BASE+record.file,record);
+          downloadBytes+=source.byteLength;
+          gltf=await new Promise((resolve,reject)=>loader.parse(source,BASE,resolve,reject));
+        }
         const mesh=gltf.scene;
         mesh.name=name+'-LOD'+level;
         mesh.scale.setScalar(scale);
         mesh.traverse(o=>{if(o.isMesh){
           o.castShadow=false;o.receiveShadow=false;
-          const m=o.material,ambient=m?.name==='concrete'?[0x7891a2,.55]:
-            m?.name==='steel'?[0x58758e,.45]:m?.name==='basalt'?[0x3a4b60,.25]:null;
+          const m=o.material,ambient=m?.name==='concrete'?[0x596a76,.22]:
+            m?.name==='steel'?[0x53606c,.15]:m?.name==='basalt'?[0x393939,.07]:null;
           // Low-energy cool bounce light baked as emissive floor; a tiny bounded
           // substitute for full real-time GI when the existing day/night system dims lights.
           if(ambient&&m?.emissive){m.emissive.setHex(ambient[0]);m.emissiveIntensity=ambient[1];}
@@ -111,7 +142,41 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
       }
       parent.add(lod);loaded[name]=lod;
     }
+    // Reuse the SAME lightweight plant geometry and textures; no duplicated GLB fetch.
+    // Far industrial silhouette districts make the world spatially deep behind fog.
+    const districts=new THREE.Group();districts.name='ReusedIndustrialDistricts';root.add(districts);
+    const districtPositions=[[-77,-1,-100],[71,-1,-91],[-105,-2,-158],
+      [82,-2,-152],[-4,-2,-204],[112,-2,-190]];
+    const districtCount=quality==='low'?2:quality==='balanced'?4:6;
+    const source=loaded['geothermal-plant'].levels.at(-1).object;
+    for(let i=0;i<districtCount;i++){
+      const duplicate=source.clone(true);duplicate.name='DistantIndustrialSilhouette_'+i;
+      const [x,y,z]=districtPositions[i];duplicate.position.set(x,y,z);
+      duplicate.rotation.y=i*1.13;duplicate.scale.setScalar(.27+(i%3)*.095);
+      duplicate.traverse(o=>{if(o.isMesh){o.castShadow=false;o.receiveShadow=false;}});
+      districts.add(duplicate);
+    }
     const steam=makeSteam(THREE,group,quality);
+    const effects=createCinematicEffects(THREE,root,{tier:quality,
+      volcano:{x:-35,y:-13,z:-125}});
+    const groundMaterial=new THREE.MeshStandardMaterial({color:0x1a2128,roughness:.93});
+    const ground=new THREE.Mesh(new THREE.CircleGeometry(92,48),groundMaterial);
+    ground.rotation.x=-Math.PI/2;ground.position.set(0,-1.2,3);
+    ground.receiveShadow=false;ground.name='ProceduralBasaltForecourt';group.add(ground);
+    const rockGeo=new THREE.IcosahedronGeometry(1,0),rockMat=new THREE.MeshStandardMaterial({
+      color:0x24272a,roughness:.99,flatShading:true});
+    const rockCount=quality==='low'?12:30;
+    const rockField=new THREE.InstancedMesh(rockGeo,rockMat,rockCount);
+    const transform=new THREE.Object3D();
+    for(let i=0;i<rockCount;i++){
+      const angle=i*2.399963,r=36+(i%6)*3.6;
+      transform.position.set(Math.cos(angle)*r,-.4,Math.sin(angle)*r);
+      transform.rotation.set(i*.43,i*.71,i*.19);
+      transform.scale.set(2.4+(i%4)*.48,1.2+(i%5)*.43,2.0+(i%6)*.33);
+      transform.updateMatrix();rockField.setMatrixAt(i,transform.matrix);
+    }
+    rockField.instanceMatrix.needsUpdate=true;
+    rockField.name='InstancedBasaltRockfield';group.add(rockField);
     let lastUpdate=-Infinity,visibility=true,farCount=0,previousFrame=null;
     const frameSamples=[];
     const samplePercentile=q=>{
@@ -132,12 +197,19 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
           },0),
           frameIntervalP50Ms:samplePercentile(.5),frameIntervalP95Ms:samplePercentile(.95),
           frameSampleCount:frameSamples.length,
+          effects:effects.stats(),instancedRockCount:rockCount,
+          distantIndustrialClusters:districtCount,
+          optimizedReady,optimizedLoaded,downloadBytes,
+          optimizedFallbacks:optimizedFallbacks.slice(0,8),
+          targetId:'WORLD-GFX-FOG-FRONTIER-20260925',
           fullSceneDrawCalls:renderer?.info?.render?.calls??null,
           fullSceneTriangles:renderer?.info?.render?.triangles??null,
           geometryActuallyCulled:!group.visible,
           gpuFrameTimeMeasured:false,visualOnly:true,collisionIntegrated:false,
           playerVisibilityCertified:false};
       },
+      triggerEruption(now){effects.triggerEruption(now);return{event:'ERUPTION_VISUAL_PREVIEW',
+        authoritativeGameEvent:false,expiresAfterSeconds:14};},
       update(now,camera=getCamera()){
         if(!ready||!camera)return;
         if(previousFrame!==null){
@@ -146,7 +218,7 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
         }
         previousFrame=now;
         if(now-lastUpdate<100)return;
-        lastUpdate=now;
+        lastUpdate=now;effects.update(now);
         // Renderer owns LOD switching; preserve native THREE.LOD distance logic.
         for(const lod of Object.values(loaded))lod.update(camera);
         for(const e of steam.list){
@@ -164,14 +236,20 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
       },
       dispose(){ready=false;root.parent?.remove(root);
         if(scene.background===paintedSky.texture)scene.background=priorBackground;
+        if(renderer){renderer.toneMapping=previousToneMapping;renderer.toneMappingExposure=previousExposure;}
+        for(const [light,intensity] of existingLights)light.intensity=intensity;
         paintedSky.dispose();
         for(const lod of Object.values(loaded)){lod.traverse(o=>{if(o.isMesh){o.geometry?.dispose();const mats=Array.isArray(o.material)?o.material:[o.material];for(const m of mats)m?.dispose();}})}
-        for(const e of steam.list)e.sprite.material.dispose();steam.tex.dispose();}
+        for(const e of steam.list)e.sprite.material.dispose();steam.tex.dispose();
+        effects.dispose();ground.geometry.dispose();groundMaterial.dispose();
+        rockField.geometry.dispose();rockField.material.dispose();}
     };
     return api;
   }catch(error){
     root.parent?.remove(root);
     if(scene.background===paintedSky.texture)scene.background=priorBackground;
+    if(renderer){renderer.toneMapping=previousToneMapping;renderer.toneMappingExposure=previousExposure;}
+    for(const [light,intensity] of existingLights)light.intensity=intensity;
     paintedSky.dispose();
     throw error;
   }

@@ -541,6 +541,17 @@ async function renderWorld(data){
           visualReference.title='Concept reference, not an in-game render';
           visualReference.dataset.referenceId='WORLD-GFX-FOG-FRONTIER-20260925';
         }
+        // QA-only real interaction: preview an eruption without fabricating game state.
+        const controls=document.querySelector('.viewerHead > div');
+        if(controls&&!document.getElementById('cinematicEruption')){
+          const button=document.createElement('button');
+          button.id='cinematicEruption';
+          button.type='button';
+          button.textContent='Извержение · визуальный предпросмотр';
+          button.addEventListener('click',()=>pack.triggerEruption(performance.now()));
+          controls.append(button);
+        }
+        document.body.classList.add('cinematic-cpu-qa');
         $('stats').textContent+=' · CPU cinematic visual preview (no asset collisions)';
       })
       .catch(e=>{window.__AI3D_CINEMATIC_CPU_ERROR__=String(e?.message||e);console.warn('cinematic CPU pack:',e);});
