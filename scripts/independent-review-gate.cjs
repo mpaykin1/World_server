@@ -141,6 +141,48 @@ function recordDisagreement(report) {
     'Single-family BLOCK has no corroboration; reproduce findings before maintainer decision');
   return report;
 }
+// Keep free Workers inference bounded without silently omitting changed files.
+// Concatenating all chunks MUST reproduce the exact full patch, byte for byte.
+// A single oversized file is indivisible here and still fails closed.
+function splitCloudflarePatch(patch) {
+  // Explicit local budget prevents ambiguity for independent reviewers.
+  const limit = MAX_CLOUDFLARE_PATCH_BYTES;
+  if (Buffer.byteLength(patch) <= limit) return [patch];
+  const starts = [...patch.matchAll(/^diff --git /gm)].map(match => match.index);
+  if (starts.length < 2 || starts[0] !== 0) return null;
+  const files = starts.map((start, index) => patch.slice(start, starts[index + 1] ?? patch.length));
+  if (files.some(file => Buffer.byteLength(file) > limit)) return null;
+  const chunks = [];
+  let current = '';
+  for (const file of files) {
+    if (current && Buffer.byteLength(current + file) > limit) {
+      chunks.push(current);
+      current = '';
+    }
+    current += file;
+  }
+  if (current) chunks.push(current);
+  return chunks.join('') === patch ? chunks : null;
+}
+
+function combineChunkReviews(model, reviews, totalChunks) {
+  const blocked = reviews.some(review => review.verdict === 'BLOCK');
+  const complete = reviews.length === totalChunks && reviews.every(review => review.verdict === 'PASS');
+  // A real BLOCK must remain visible even if preceding PASS chunks emitted many findings.
+  const prioritized = reviews.map((review, index) => ({ review, index }))
+    .sort((a, b) => Number(b.review.verdict === 'BLOCK') - Number(a.review.verdict === 'BLOCK'));
+  return {
+    provider: 'cloudflare', model: model.id, family: model.family,
+    verdict: blocked ? 'BLOCK' : complete ? 'PASS' : 'INCONCLUSIVE',
+    findings: prioritized.flatMap(item => item.review.findings || []).slice(0, 12),
+    falsification_attempts: prioritized.flatMap(({review, index}) =>
+      (review.falsification_attempts || []).map(attempt => 'chunk ' + (index + 1) + ': ' + attempt)).slice(0, 12),
+    reviewedChunks: reviews.length, totalChunks,
+    durationMs: reviews.reduce((sum, review) => sum + (review.durationMs || 0), 0),
+    reason: reviews.find(review => review.verdict === 'INCONCLUSIVE')?.reason
+  };
+}
+
 function preflightPatch(patch) {
   const bytes = Buffer.byteLength(patch);
   if (bytes === 0) return 'No changes to independently review';
@@ -281,21 +323,36 @@ async function reviewPatch({ patch, base, head, key, builderModel = '',
     report.providerIssues.push('Workers AI account ID missing or invalid');
   }
   const cfModels = availableCloudflareModels({ ...cloudflare, builderModel });
-  if (cfModels.length && report.diffBytes <= MAX_CLOUDFLARE_PATCH_BYTES) {
+  const cfChunks = cfModels.length ? splitCloudflarePatch(patch) : null;
+  if (cfModels.length && cfChunks) {
+    report.reviewChunks = cfChunks.map((chunk, index) => ({
+      index: index + 1, bytes: Buffer.byteLength(chunk),
+      sha256: crypto.createHash('sha256').update(chunk).digest('hex')
+    }));
     for (const model of cfModels) {
       if (aggregate(report.reviewers) === 'PASS' || decisiveFamilies(report.reviewers) >= 2) break;
-      if (report.reviewers.some(x => x.family === model.family &&
-        (x.verdict === 'PASS' || x.verdict === 'BLOCK'))) continue;
-      const result = await reviewCloudflare(model, patch, metadata, {
-        ...cloudflare, systemPrompt: SYSTEM_PROMPT, parseVerdict });
+      if (report.reviewers.some(review => review.family === model.family &&
+        (review.verdict === 'PASS' || review.verdict === 'BLOCK'))) continue;
+      const parts = [];
+      for (let index = 0; index < cfChunks.length; index++) {
+        const segment = await reviewCloudflare(model, cfChunks[index], {
+          ...metadata, chunkIndex: index + 1, chunkCount: cfChunks.length,
+          chunkSha256: report.reviewChunks[index].sha256
+        }, { ...cloudflare, systemPrompt: SYSTEM_PROMPT, parseVerdict });
+        parts.push(segment);
+        // On any inconclusive response the family has not certified the full patch.
+        // On a concrete BLOCK no further chunks can turn this family into PASS.
+        if (segment.verdict !== 'PASS') break;
+      }
+      const result = combineChunkReviews(model, parts, cfChunks.length);
       report.reviewers.push(result);
       if (/Cloudflare (HTTP (401|403|429)|API error code=3036)/.test(result.reason || '')) {
         report.providerIssues.push('Cloudflare account permission or quota blocked');
-        break; // Avoid another request against the same exhausted account/token.
+        break;
       }
     }
   } else if (cfModels.length) {
-    report.providerIssues.push('Cloudflare patch exceeds conservative free inference budget');
+    report.providerIssues.push('Cloudflare cannot safely partition the patch into complete file diffs under the free inference budget');
   }
   report.verdict = aggregate(report.reviewers);
   if (report.verdict === 'PASS' || decisiveFamilies(report.reviewers) >= 2) {
@@ -368,4 +425,4 @@ async function main() {
   process.exitCode = report.verdict === 'PASS' ? 0 : 2;
 }
 if (require.main === module) main().catch(err => { console.error('[INDEPENDENT_REVIEW] ' + err.message); process.exitCode = 2; });
-module.exports = { selectedModels, parseVerdict, aggregate, preflightPatch, reviewPatch, requestReview, readPatch };
+module.exports = { selectedModels, parseVerdict, aggregate, preflightPatch, splitCloudflarePatch, reviewPatch, requestReview, readPatch };

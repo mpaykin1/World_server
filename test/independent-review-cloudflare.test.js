@@ -243,3 +243,81 @@ test('Cloudflare BLOCK seeks OpenRouter second family when Cloudflare second fai
   assert.equal(report.disputed, true);
   assert.equal(report.verdict, 'BLOCK');
 });
+
+test('oversized multi-file patch is split without dropping any changed byte',()=>{
+  const {splitCloudflarePatch}=require('../scripts/independent-review-gate.cjs');
+  const {MAX_PATCH_BYTES}=require('../scripts/independent-review-cloudflare.cjs');
+  const file=name=>'diff --git a/'+name+' b/'+name+'\n@@ -1 +1 @@\n-old\n+'+'a'.repeat(9500)+'\n';
+  const long=file('a.js')+file('b.js');
+  const chunks=splitCloudflarePatch(long);
+  assert.equal(chunks.length,2);
+  assert.equal(chunks.join(''),long);
+  assert.ok(chunks.every(chunk=>Buffer.byteLength(chunk)<=MAX_PATCH_BYTES));
+  assert.equal(splitCloudflarePatch(file('one.js')+'z'.repeat(10000)),null);
+});
+test('two independent Cloudflare families must each PASS every exact patch chunk',async()=>{
+  const file=name=>'diff --git a/'+name+' b/'+name+'\n@@ -1 +1 @@\n-old\n+'+'z'.repeat(9500)+'\n';
+  const long=file('a.js')+file('b.js');
+  const calls=[];
+  const report=await reviewPatch({patch:long,base:'a'.repeat(40),head:'b'.repeat(40),key:'',cloudflare:cfg,
+    reviewCloudflare:async(model,chunk,metadata)=>{
+      calls.push({family:model.family,chunk,metadata});
+      return {...model,...pass};
+    },
+    getCatalog:async()=>{throw Error('No paid or third-party fallback needed')}
+  });
+  assert.equal(report.verdict,'PASS');assert.equal(report.reviewers.length,2);
+  assert.equal(calls.length,4);
+  assert.deepEqual(report.reviewers.map(r=>r.reviewedChunks),[2,2]);
+  assert.deepEqual(report.reviewers.map(r=>r.family),['z-ai','nvidia']);
+  assert.equal(calls[0].metadata.chunkCount,2);
+  assert.equal(calls[0].metadata.chunkSha256,report.reviewChunks[0].sha256);
+  assert.equal(report.reviewChunks.reduce((sum,x)=>sum+x.bytes,0),Buffer.byteLength(long));
+});
+test('chunked independent review remains BLOCK on any chunk and INCONCLUSIVE if an entire family has not passed all',async()=>{
+  const file=name=>'diff --git a/'+name+' b/'+name+'\n@@ -1 +1 @@\n-old\n+'+'v'.repeat(9500)+'\n';
+  const long=file('a.js')+file('b.js');
+  const block=await reviewPatch({patch:long,base:'a'.repeat(40),head:'b'.repeat(40),key:'',cloudflare:cfg,
+    reviewCloudflare:async(model,_chunk,metadata)=>model.family==='z-ai'&&metadata.chunkIndex===2
+      ? {...model,verdict:'BLOCK',findings:[{file:'b.js',line:'1',severity:'high',evidence:'bad branch',reproduction:'bad input'}],falsification_attempts:['reproduced']}
+      : {...model,...pass}
+  });
+  assert.equal(block.verdict,'BLOCK');assert.equal(block.disputed,true);
+  const incomplete=await reviewPatch({patch:long,base:'a'.repeat(40),head:'b'.repeat(40),key:'',cloudflare:cfg,
+    reviewCloudflare:async(model,_chunk,metadata)=>metadata.chunkIndex===2&&model.family!=='nvidia'
+      ? {...model,verdict:'INCONCLUSIVE',reason:'Cloudflare request timed out',findings:[],falsification_attempts:[]}
+      : {...model,...pass}
+  });
+  assert.equal(incomplete.verdict,'INCONCLUSIVE');
+  assert.equal(incomplete.reviewers.filter(r=>r.verdict==='PASS').length,1);
+});
+
+test('chunked BLOCK evidence survives long warnings in preceding PASS chunks',async()=>{
+ const file=name=>'diff --git a/'+name+' b/'+name+'\n@@ -1 +1 @@\n-old\n+'+'u'.repeat(9500)+'\n';
+ const long=file('a.js')+file('b.js');
+ const report=await reviewPatch({patch:long,base:'a'.repeat(40),head:'b'.repeat(40),key:'',cloudflare:cfg,
+  reviewCloudflare:async(model,_chunk,meta)=>{
+   if(model.family==='z-ai'&&meta.chunkIndex===1)return {...model,...pass,
+     findings:Array.from({length:12},()=>({file:'a.js',line:'1',severity:'low',evidence:'non-blocking warning'}))};
+   if(model.family==='z-ai')return {...model,verdict:'BLOCK',findings:[{file:'b.js',line:'2',
+     severity:'critical',evidence:'bad branch',reproduction:'bad input'}],falsification_attempts:['reproduced']};
+   return {...model,...pass};
+  }
+ });
+ assert.equal(report.verdict,'BLOCK');
+ assert.ok(report.reviewers[0].findings.some(x=>x.file==='b.js'&&x.severity==='critical'));
+ assert.ok(report.reviewers[0].falsification_attempts[0].startsWith('chunk 2:'));
+});
+
+test('oversized indivisible file never gets fake independent approval',async()=>{
+ const long='diff --git a/large.js b/large.js\n@@ -1 +1 @@\n-old\n+'+'a'.repeat(20000)+'\n';
+ let calls=0;
+ const report=await reviewPatch({patch:long,base:'a'.repeat(40),head:'b'.repeat(40),key:'',cloudflare:cfg,
+   reviewCloudflare:async()=>{calls++;return {...pass,family:'z-ai'};}
+ });
+ assert.equal(calls,0);
+ assert.equal(report.verdict,'INCONCLUSIVE');
+ assert.equal(report.reviewers.length,0);
+ assert.ok(report.blockers.length>0);
+ assert.match(report.providerIssues.join(' '),/safely partition/);
+});
