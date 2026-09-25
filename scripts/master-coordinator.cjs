@@ -39,6 +39,7 @@ const { classifyIntent } = require('../lib/mcp-intent-router');
 const { resolveMainTreeRoot } = require('../lib/world-server-paths');
 const sessionGuard = require('../lib/agent-session-guard');
 const manualCompletion = require('../lib/manual-task-completion-contract');
+const codexQuota = require('../lib/codex-work-quota');
 
 // Read-only capability classes get sandboxRoot pointed at the REAL repo (the
 // local model's tool allowlist for these classes is read_file/read_text_file/
@@ -292,6 +293,10 @@ async function invokeCloudWorldAi(taskText, opts = {}) {
 async function invokeCodex(taskText, opts = {}) {
   const allowed = opts.allowPaid === true || process.env.MASTER_COORDINATOR_ALLOW_PAID === '1';
   if (!allowed) return { ok: false, result: 'PAID_FALLBACK_DISABLED', reason: 'Codex requires explicit allowPaid=true' };
+  const quota = codexQuota.evaluateCodexDispatch({ logPath: opts.quotaLogPath || REPORT_LOG_PATH, policy: opts.quotaPolicy, now: opts.quotaNow || new Date() });
+  if (!quota.ok) {
+    return { ok: false, result: 'CODEX_QUOTA_EXCEEDED', reason: quota.reason, quota };
+  }
   const refused = scanExternalTask(taskText);
   if (refused) return refused;
   if (!CODEX_CLI_PATH) return { ok: false, result: 'NOT_AVAILABLE', reason: 'codex CLI not found on PATH' };
@@ -494,6 +499,7 @@ async function dispatchSubtask(root, subtask, opts = {}) {
         if (gate !== true) { lastResult = { ok: false, result: 'QUEUED', resourceGate: gate }; break; }
         lastResult = await invokeCodex(taskText, { taskId: `${taskId}-a${attempt}`, push: opts.push, allowPaid: opts.allowPaid });
         if (lastResult.result === 'PAID_FALLBACK_DISABLED') break;
+        if (lastResult.result === 'CODEX_QUOTA_EXCEEDED') break;
       } else if (LOCAL_MODEL_AGENTS.has(agentId)) {
         lastResult = await invokeLocalModelAgent(agentId, taskText, { taskId: `${taskId}-a${attempt}`, respectResourceGate: opts.respectResourceGate, respectConcurrencyLock: opts.respectConcurrencyLock });
         if (lastResult.result === 'QUEUED') break;

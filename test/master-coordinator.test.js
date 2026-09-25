@@ -285,3 +285,34 @@ test('Codex adapter fails closed without explicit paid permission', async () => 
   assert.equal(r.ok, false);
   assert.equal(r.result, 'PAID_FALLBACK_DISABLED');
 });
+
+test('Codex adapter refuses dispatch when the daily Codex work share exceeds the 30% cap', async () => {
+  const logPath = path.join(mkTmpRoot(), 'ai-agent-reports.jsonl');
+  const lines = [];
+  for (let i = 0; i < 30; i++) lines.push({ at: '2026-09-24T10:00:00.000Z', agent: 'codex', status: 'done' });
+  for (let i = 0; i < 30; i++) lines.push({ at: '2026-09-24T10:05:00.000Z', agent: 'opencode', status: 'done' });
+  fs.writeFileSync(logPath, lines.map((l) => JSON.stringify(l)).join('\n') + '\n');
+  const r = await mc.invokeCodex('hard debug task', {
+    allowPaid: true,
+    quotaLogPath: logPath,
+    quotaNow: new Date('2026-09-24T12:00:00.000Z'),
+    quotaPolicy: { windowHours: 24, maxSharePct: 30, measuredAgentId: 'codex' },
+  });
+  assert.equal(r.ok, false);
+  assert.equal(r.result, 'CODEX_QUOTA_EXCEEDED');
+  assert.equal(r.quota.sharePct, 50);
+});
+
+test('Codex paid-permission check runs before the daily quota gate', async () => {
+  const logPath = path.join(mkTmpRoot(), 'ai-agent-reports.jsonl');
+  const lines = [];
+  for (let i = 0; i < 40; i++) lines.push({ at: '2026-09-24T10:00:00.000Z', agent: 'codex', status: 'done' });
+  fs.writeFileSync(logPath, lines.map((l) => JSON.stringify(l)).join('\n') + '\n');
+  const r = await mc.invokeCodex('review a tiny safe change', {
+    allowPaid: false,
+    quotaLogPath: logPath,
+    quotaNow: new Date('2026-09-24T12:00:00.000Z'),
+    quotaPolicy: { windowHours: 24, maxSharePct: 30, measuredAgentId: 'codex' },
+  });
+  assert.equal(r.result, 'PAID_FALLBACK_DISABLED');
+});

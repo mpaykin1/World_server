@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "AGENT_WORK_QUOTA_PROTOCOL",
+  "controller": "scripts/master-coordinator.cjs#invokeCodex",
+  "source": "master goal: Codex is fallback only and must stay at or below 30 percent of daily AI-agent work.",
+  "measuredAgentId": "codex",
+  "windowHours": 24,
+  "maxSharePct": 30,
+  "basis": "coordinator-logged daily agent work (state/ai-agent-reports.jsonl). Every status-agnostic entry inside windowHours counts as one unit of daily AI-agent work, regardless of how that entry was recorded.",
+  "computation": "sharePct = round(100 * measuredAgentCount / totalCount, 1). Dispatch allowed only when sharePct <= maxSharePct. totalCount == 0 => the basis is unverified/UNKNOWN and is reported as such, never certified as a verified zero.",
+  "enforcementPoints": [
+    "scripts/master-coordinator.cjs#invokeCodex"
+  ],
+  "failClosed": "Codex dispatch above the cap is refused with CODEX_QUOTA_EXCEEDED even when allowPaid is true; the measurement reuses the existing shared coordination log and does not create a second quota registry or worker.",
+  "rollback": "Revert the enforcement call in scripts/master-coordinator.cjs#invokeCodex and restore this file from the previous commit; the merge-base is the rollback reference."
+}
