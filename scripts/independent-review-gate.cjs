@@ -6,8 +6,9 @@ const fs = require('node:fs');
 const crypto = require('node:crypto');
 const cp = require('node:child_process');
 const { performance } = require('node:perf_hooks');
-const { MAX_PATCH_BYTES: MAX_CLOUDFLARE_PATCH_BYTES, API_TOKEN,
-  availableCloudflareModels, requestCloudflareReview } = require('./independent-review-cloudflare.cjs');
+const cloudflareReview=require('./independent-review-cloudflare.cjs');
+const {API_TOKEN,availableCloudflareModels,requestCloudflareReview}=cloudflareReview;
+const MAX_CLOUDFLARE_PATCH_BYTES=cloudflareReview.MAX_PATCH_BYTES;
 
 const CANDIDATES = [
   ['google', 'google/gemma-4-31b-it:free'],
@@ -145,9 +146,10 @@ function recordDisagreement(report) {
 // Concatenating all chunks MUST reproduce the exact full patch, byte for byte.
 // A single oversized file is indivisible here and still fails closed.
 function splitCloudflarePatch(patch) {
-  // Explicit local budget prevents ambiguity for independent reviewers.
+  if(typeof patch!=='string')return null; // readPatch returns text.
+  // ASCII file boundaries and UTF-8 byte budget.
   const limit = MAX_CLOUDFLARE_PATCH_BYTES;
-  // Includes one-file patches: never require a second diff header below the limit.
+  // Under budget, even one file is complete.
   if (Buffer.byteLength(patch) <= limit) return [patch];
   const starts = [...patch.matchAll(/^diff --git /gm)].map(match => match.index);
   if (starts.length < 2 || starts[0] !== 0) return null;
@@ -354,7 +356,7 @@ async function reviewPatch({ patch, base, head, key, builderModel = '',
       if (/Cloudflare HTTP 429/.test(result.reason || '') &&
           !report.providerIssues.includes('Cloudflare model rate-limited')) {
         report.providerIssues.push('Cloudflare model rate-limited');
-        // Per-model throttling does not imply another independent family is unavailable.
+        // Other model families may work.
       }
     }
   } else if (cfModels.length) {
