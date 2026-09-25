@@ -324,19 +324,20 @@ test('oversized indivisible file never gets fake independent approval',async()=>
 });
 
 
-test('one-file under-budget and UTF-8 multi-file boundaries preserve exact bytes',()=>{
+test('UTF-8 chunk boundaries',()=>{
  const {splitCloudflarePatch}=require('../scripts/independent-review-gate.cjs');
  const {MAX_PATCH_BYTES}=require('../scripts/independent-review-cloudflare.cjs');
  const file=name=>'diff --git a/'+name+' b/'+name+'\n@@ -1 +1 @@\n-old\n+'+'🚀'.repeat(3000)+'\n';
  const small='diff --git a/one.js b/one.js\n@@ -1 +1 @@\n-old\n+new\n';
  assert.deepEqual(splitCloudflarePatch(small),[small]);
+ assert.equal(splitCloudflarePatch(Buffer.from(small)),null);
  const patch=file('one.js')+file('two.js');
  const chunks=splitCloudflarePatch(patch);
  assert.equal(chunks.length,2);
  assert.equal(chunks.join(''),patch);
  assert.ok(chunks.every(chunk=>Buffer.byteLength(chunk)<=MAX_PATCH_BYTES));
 });
-test('model-specific 429 after a PASS chunk does not prevent other full families',async()=>{
+test('429 retries other complete families',async()=>{
  const file=name=>'diff --git a/'+name+' b/'+name+'\n@@ -1 +1 @@\n-old\n+'+'z'.repeat(9500)+'\n';
  const patch=file('a.js')+file('b.js');
  const calls=[];
