@@ -49,7 +49,9 @@ test('streaming slices both chunk generation and meshing while edits stay synchr
   assert.match(source, /async function generateChunkDataIncremental/);
   assert.match(source, /await generateChunkDataIncremental\(new ChunkData/);
   assert.match(source, /await rebuildChunkIncremental\(c\)/);
-  assert.match(source, /if\(c\)\{c\.set[\s\S]*?rebuildChunk\(c\)/);
+  assert.match(source, /if\(own\)own\.set\(mod\(x,CHUNK\),y,mod\(z,CHUNK\),safe\)/);
+  assert.match(source, /for\(const q of affectedChunkCoords\(x,z,CHUNK\)\)/);
+  assert.match(source, /if\(c\?\.ready\)rebuildChunk\(c\)/);
 });
 
 
