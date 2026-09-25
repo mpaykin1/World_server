@@ -60,3 +60,11 @@ test('CPU magma has bright veins, dark crust, fixed budget and repeatable pixels
   assert.ok(Math.max(...greens)-Math.min(...greens)>75);
   assert.throws(()=>paintLavaPixels(1024),/budget/);
 });
+
+test('volcanic terrain keeps cliff and lava complexity',()=>{
+ const map=buildVolcanicRtsLayout({tier:'balanced',seed:20260926});
+ assert.ok(map.cliffs.length>=20);
+ assert.ok(map.lava.length>=65);
+ assert.ok(map.tiles.filter(t=>t.style==='basalt').length>150);
+ assert.ok(map.stripes.length>20);
+});
