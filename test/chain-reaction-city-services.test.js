@@ -91,3 +91,11 @@ test('Genie forecasts include free deterministic plain-language narration withou
  assert.deepEqual(response,E.genieOptions(JSON.parse(JSON.stringify(world))));
  assert.equal(E.genieOptions({...world,resources:{...world.resources,budget:0}}).cards.length,0);
 });
+
+test('public Node adapter recomputes untrusted saved service projection',()=>{
+ const w=E.createWorld('public-city-services');
+ w.cityServices={version:1,houses:[{id:'injected',powered:{nested:'not canonical'}}]};
+ const projection=require('../lib/chain-reaction-api').publicState(w);
+ assert.deepEqual(projection.cityServices,E.cityServices(w));
+ assert.equal(JSON.stringify(projection.cityServices).includes('not canonical'),false);
+});
