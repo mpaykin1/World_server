@@ -22,22 +22,34 @@ const SAMPLE_POINTS := [
 	[250, 0], [0, 250], [-250, 0], [0, -250], [500, 500], [-500, -500], [777, -333],
 ]
 
+const NativeChunkPlanner = preload("res://ChunkPlanner.gd")
+const NativeStreamedTerrain = preload("res://StreamedTerrain.gd")
+
 func _ready() -> void:
 	var args := OS.get_cmdline_user_args()
-	var smoke_test := args.has("--smoke-test")
 	var world_seed := WORLD_SEED_DEFAULT
 	for a in args:
 		if a.is_valid_int():
 			world_seed = a.to_int()
-
-	var stats := _generate_and_render(world_seed)
-
-	if smoke_test:
-		print(JSON.stringify(stats))
+	if args.has("--chunk-plan-test"):
+		var blocked := {Vector2i.ZERO: true}
+		var planned: Array = []
+		for pos in NativeChunkPlanner.plan_missing(Vector2i.ZERO, 1, 4, blocked):
+			planned.append([pos.x, pos.y])
+		var dirty: Array = []
+		for pos in NativeChunkPlanner.affected_chunks(0, -1):
+			dirty.append([pos.x, pos.y])
+		print(JSON.stringify({"plan": planned, "dirty": dirty}))
 		get_tree().quit(0)
 		return
-
-	_setup_camera_and_light()
+	if args.has("--smoke-test"):
+		print(JSON.stringify(_generate_and_render(world_seed)))
+		get_tree().quit(0)
+		return
+	var camera := _setup_camera_and_light()
+	var stream := NativeStreamedTerrain.new()
+	add_child(stream)
+	stream.configure(world_seed, camera)
 
 func _generate_and_render(world_seed: int) -> Dictionary:
 	var multimesh := MultiMesh.new()
@@ -82,10 +94,11 @@ func _generate_and_render(world_seed: int) -> Dictionary:
 		"sampleBiomes": biomes,
 	}
 
-func _setup_camera_and_light() -> void:
+func _setup_camera_and_light() -> Camera3D:
 	var cam := Camera3D.new()
 	cam.position = Vector3(0, 40, 40)
 	cam.look_at(Vector3(0, 16, 0), Vector3.UP)
+	cam.current = true
 	add_child(cam)
 
 	var sun := DirectionalLight3D.new()
@@ -101,3 +114,4 @@ func _setup_camera_and_light() -> void:
 	environment.fog_light_color = Color(0.498, 0.737, 0.929)
 	env.environment = environment
 	add_child(env)
+	return cam
