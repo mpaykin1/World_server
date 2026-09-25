@@ -15,7 +15,7 @@ export function createProceduralAtlas({tileSize=16,seed=1,materials=['basalt','s
    materials.some(name=>!Object.hasOwn(PALETTES,name))) throw new TypeError('materials');
  const columns=Math.ceil(Math.sqrt(materials.length)),rows=Math.ceil(materials.length/columns);
  const width=columns*tileSize,height=rows*tileSize,pixels=new Uint8ClampedArray(width*height*4);
- const tiles={};
+ // Unused cells remain opaque black; never sample transparent atlas padding.\n for(let i=3;i<pixels.length;i+=4)pixels[i]=255;\n const tiles={};
  for(let i=0;i<materials.length;i++){
    const name=materials[i],tx=i%columns,ty=Math.floor(i/columns);
    if(tiles[name]) throw new TypeError('duplicate material');
