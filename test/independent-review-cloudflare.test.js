@@ -88,7 +88,7 @@ test('same model family on two providers cannot create fake independence', async
   });
   assert.equal(report.verdict, 'INCONCLUSIVE');
 });
-test('Cloudflare account quota failure switches to OpenRouter without fake PASS', async () => {
+test('Cloudflare model-specific 429 tries remaining families then OpenRouter without fake PASS', async () => {
   const catalog = { data: ['google/gemma-4-31b-it:free',
     'nvidia/nemotron-3-super-120b-a12b:free'].map(id => ({
       id, pricing: { prompt: '0', completion: '0' }
@@ -101,7 +101,8 @@ test('Cloudflare account quota failure switches to OpenRouter without fake PASS'
     review: async model => ({ ...model, ...pass })
   });
   assert.equal(report.verdict, 'PASS');
-  assert.equal(report.reviewers.length, 3);
+  assert.equal(report.reviewers.length, 5);
+  assert.equal(report.reviewers.filter(x=>x.provider==='cloudflare').length,3);
   assert.equal(report.providerIssues.length, 1);
 });
 
@@ -320,4 +321,34 @@ test('oversized indivisible file never gets fake independent approval',async()=>
  assert.equal(report.reviewers.length,0);
  assert.ok(report.blockers.length>0);
  assert.match(report.providerIssues.join(' '),/safely partition/);
+});
+
+
+test('one-file under-budget and UTF-8 multi-file boundaries preserve exact bytes',()=>{
+ const {splitCloudflarePatch}=require('../scripts/independent-review-gate.cjs');
+ const {MAX_PATCH_BYTES}=require('../scripts/independent-review-cloudflare.cjs');
+ const file=name=>'diff --git a/'+name+' b/'+name+'\n@@ -1 +1 @@\n-old\n+'+'🚀'.repeat(3000)+'\n';
+ const small='diff --git a/one.js b/one.js\n@@ -1 +1 @@\n-old\n+new\n';
+ assert.deepEqual(splitCloudflarePatch(small),[small]);
+ const patch=file('one.js')+file('two.js');
+ const chunks=splitCloudflarePatch(patch);
+ assert.equal(chunks.length,2);
+ assert.equal(chunks.join(''),patch);
+ assert.ok(chunks.every(chunk=>Buffer.byteLength(chunk)<=MAX_PATCH_BYTES));
+});
+test('model-specific 429 after a PASS chunk does not prevent other full families',async()=>{
+ const file=name=>'diff --git a/'+name+' b/'+name+'\n@@ -1 +1 @@\n-old\n+'+'z'.repeat(9500)+'\n';
+ const patch=file('a.js')+file('b.js');
+ const calls=[];
+ const report=await reviewPatch({patch,base:'a'.repeat(40),head:'b'.repeat(40),key:'',cloudflare:cfg,
+  reviewCloudflare:async(model,chunk,metadata)=>{
+   calls.push([model.family,metadata.chunkIndex]);
+   return model.family==='z-ai'&&metadata.chunkIndex===2
+    ? {...model,verdict:'INCONCLUSIVE',reason:'Cloudflare HTTP 429',findings:[],falsification_attempts:[]}
+    : {...model,...pass};
+  }});
+ assert.equal(report.verdict,'PASS');
+ assert.equal(report.decisiveFamilies,2);
+ assert.deepEqual(report.reviewers.map(r=>r.verdict),['INCONCLUSIVE','PASS','PASS']);
+ assert.equal(calls.length,6);
 });

@@ -147,6 +147,7 @@ function recordDisagreement(report) {
 function splitCloudflarePatch(patch) {
   // Explicit local budget prevents ambiguity for independent reviewers.
   const limit = MAX_CLOUDFLARE_PATCH_BYTES;
+  // Includes one-file patches: never require a second diff header below the limit.
   if (Buffer.byteLength(patch) <= limit) return [patch];
   const starts = [...patch.matchAll(/^diff --git /gm)].map(match => match.index);
   if (starts.length < 2 || starts[0] !== 0) return null;
@@ -324,7 +325,7 @@ async function reviewPatch({ patch, base, head, key, builderModel = '',
   }
   const cfModels = availableCloudflareModels({ ...cloudflare, builderModel });
   const cfChunks = cfModels.length ? splitCloudflarePatch(patch) : null;
-  if (cfModels.length && cfChunks) {
+  if (cfModels.length && Array.isArray(cfChunks)) {
     report.reviewChunks = cfChunks.map((chunk, index) => ({
       index: index + 1, bytes: Buffer.byteLength(chunk),
       sha256: crypto.createHash('sha256').update(chunk).digest('hex')
@@ -346,9 +347,14 @@ async function reviewPatch({ patch, base, head, key, builderModel = '',
       }
       const result = combineChunkReviews(model, parts, cfChunks.length);
       report.reviewers.push(result);
-      if (/Cloudflare (HTTP (401|403|429)|API error code=3036)/.test(result.reason || '')) {
+      if (/Cloudflare (HTTP (401|403)|API error code=3036)/.test(result.reason || '')) {
         report.providerIssues.push('Cloudflare account permission or quota blocked');
-        break;
+        break; // Account-wide auth/quota failure: switching model cannot help.
+      }
+      if (/Cloudflare HTTP 429/.test(result.reason || '') &&
+          !report.providerIssues.includes('Cloudflare model rate-limited')) {
+        report.providerIssues.push('Cloudflare model rate-limited');
+        // Per-model throttling does not imply another independent family is unavailable.
       }
     }
   } else if (cfModels.length) {
