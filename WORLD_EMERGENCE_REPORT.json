@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-09-25T09:00:49.362Z",
+  "percent": 100,
+  "hardGateReady": true,
+  "scenario": "place-two-large-things-and-watch-the-world-emerge",
+  "checks": {
+    "cityNatureRelation": true,
+    "interestLoop": true,
+    "progressiveFiveStages": true,
+    "worldFactorySeed": true,
+    "serverPersistence": true,
+    "serverGrowth": true,
+    "realtimeSync": true,
+    "kidPlacementUI": true,
+    "voxelMaterialization": true,
+    "runtimeLoaded": true
+  },
+  "evidence": {
+    "entities": [
+      "city",
+      "forest"
+    ],
+    "relationKinds": [
+      "living_frontier"
+    ],
+    "features": [
+      "road",
+      "edge_houses",
+      "lumberyard",
+      "park",
+      "wildlife_corridor"
+    ],
+    "interestScore": 0.835,
+    "growthStage": 5
+  }
+}
