@@ -1,0 +1,101 @@
+{
+  "schema": 1,
+  "generator": "cinematic-cpu-v1",
+  "license": "project-generated",
+  "device": "CPU_ONLY",
+  "status": "CANDIDATE_NOT_VISUALLY_VERIFIED",
+  "assets": [
+    {
+      "kind": "geothermal-plant",
+      "lod": 0,
+      "vertices": 3368,
+      "triangles": 6124,
+      "objects": 4,
+      "file": "geothermal-plant-lod0.glb",
+      "bytes": 526308,
+      "sha256": "58ff1dec72d3f6e04c238131482e8f2e3a8b3bfbcb2e2f9a1a7a16b14434ba69"
+    },
+    {
+      "kind": "geothermal-plant",
+      "lod": 1,
+      "vertices": 1252,
+      "triangles": 2220,
+      "objects": 4,
+      "file": "geothermal-plant-lod1.glb",
+      "bytes": 272832,
+      "sha256": "37a03eb310e884d18bae9d4c349a8e8fd30fcec1ded98cdf9a158c02a13ed533"
+    },
+    {
+      "kind": "geothermal-plant",
+      "lod": 2,
+      "vertices": 432,
+      "triangles": 744,
+      "objects": 4,
+      "file": "geothermal-plant-lod2.glb",
+      "bytes": 177372,
+      "sha256": "bcde8ad01f3364bb4e1bcb58610aa5303c549b2acc276d702af5e8c7cc57f15f"
+    },
+    {
+      "kind": "volcano",
+      "lod": 0,
+      "vertices": 3296,
+      "triangles": 5916,
+      "objects": 2,
+      "file": "volcano-lod0.glb",
+      "bytes": 458780,
+      "sha256": "daf047e98a662fb381c0a1577523288d512a8fc0f6eadbac6da27383af496cef"
+    },
+    {
+      "kind": "volcano",
+      "lod": 1,
+      "vertices": 924,
+      "triangles": 1608,
+      "objects": 2,
+      "file": "volcano-lod1.glb",
+      "bytes": 168356,
+      "sha256": "18369f673f5f55947b1929434a6c419e65c680d0aa93066cfaa4dea4b84a9942"
+    },
+    {
+      "kind": "volcano",
+      "lod": 2,
+      "vertices": 186,
+      "triangles": 308,
+      "objects": 2,
+      "file": "volcano-lod2.glb",
+      "bytes": 81024,
+      "sha256": "ff2983ca00ec44645d4dc0c497df2aa4f58ba3e6d04cd26c8e7d4d4a0cb33908"
+    }
+  ],
+  "textures": [
+    {
+      "file": "concrete.png",
+      "sha256": "9457df5589dec342e626a92fa04480021967b94726592f55708e56330ffa4a14",
+      "bytes": 25696
+    },
+    {
+      "file": "concrete-normal.png",
+      "sha256": "786ae3f41996e1b0e4a0bbdc6213daa150a4b62b88bab6eb8914ccd202324a46",
+      "bytes": 35814
+    },
+    {
+      "file": "steel.png",
+      "sha256": "49ee87816b97bec408a4ccb37cfad860f1f53d2e143202e8385dd80a647ed8a0",
+      "bytes": 25118
+    },
+    {
+      "file": "steel-normal.png",
+      "sha256": "c3a509d27df1a4491fdab2efc7454d7519408212bb0ab4dade50edeac2aad07e",
+      "bytes": 35781
+    },
+    {
+      "file": "basalt.png",
+      "sha256": "0acc5534e18a2bbe37e0d13ba7b840bfcc2ccfee7fe92c02119fd5a1aa482bfa",
+      "bytes": 22136
+    },
+    {
+      "file": "basalt-normal.png",
+      "sha256": "bdf52378e5a275f0ee82b23104b040a2f57cd0646cf5ba201351788049ebe993",
+      "bytes": 35838
+    }
+  ]
+}

@@ -516,6 +516,23 @@ async function renderWorld(data){
   } else {
     switchFront();
   }
+  // Explicit opt-in for the separate CPU-generated visual pack. Default-city is untouched.
+  // Models add scenery only; existing voxel collision remains authoritative.
+  if(new URLSearchParams(location.search).get('cinematicCpu')==='1' && !window.__AI3D_CINEMATIC_CPU_PROMISE__){
+    window.__AI3D_CINEMATIC_CPU_PROMISE__=import('./cinematic-cpu-runtime.mjs')
+      .then(m=>m.mountCpuPack({THREE,scene,getCamera:()=>activeCamera}))
+      .then(pack=>{
+        window.AI3DCinematicPack=pack;
+        // Deterministic outside-city vantage point for QA; do NOT change default spawn.
+        target.set(-86,15,-61);radius=112;yaw=.43;pitch=.28;
+        switchOrbit();updatePerspective();
+        scene.fog=new THREE.FogExp2(0x17212b,.005);
+        scene.background=new THREE.Color(0x080f17);
+        $('viewer').style.background='linear-gradient(#080f17,#17212b 70%,#2b1b14)';
+        $('stats').textContent+=' · CPU cinematic visual preview (no asset collisions)';
+      })
+      .catch(e=>{window.__AI3D_CINEMATIC_CPU_ERROR__=String(e?.message||e);console.warn('cinematic CPU pack:',e);});
+  }
 }
 
 function streamingOrigin(){
@@ -651,6 +668,7 @@ function animate(now=performance.now()){
     measuredFps=Math.round(frameCount*1000/(now-lastFpsTime));frameCount=0;lastFpsTime=now;
     adaptResolution();updatePerformanceLabel();
   }
+  window.AI3DCinematicPack?.update?.(now,activeCamera);
   renderer?.render(scene,activeCamera);
 }
 
@@ -847,7 +865,7 @@ window.AI3DVoxelRuntime={
   // setView - e2e/golden-controls.spec.js calls the canonical setView name
   // against both runtimes, so this runtime needs to answer to it too.
   setView(nextYaw,nextPitch=0){this.setPlayerView(nextYaw,nextPitch);},
-  stats(){return {fps:measuredFps,pixelRatio:dynamicPixelRatio,renderer:renderer?.info?.render,mesher:mesherStats,chunks:chunkObjects.size, voxels:world?world.voxels.length:0, player:{x:player.x,y:player.y,z:player.z,yaw,pitch,onGround:player.onGround, playable:playableMode}, defaultCityLoaded,initialVisibleFacing};},
+  stats(){return {fps:measuredFps,pixelRatio:dynamicPixelRatio,renderer:renderer?.info?.render,mesher:mesherStats,chunks:chunkObjects.size, voxels:world?world.voxels.length:0, player:{x:player.x,y:player.y,z:player.z,yaw,pitch,onGround:player.onGround, playable:playableMode}, defaultCityLoaded,initialVisibleFacing,cinematicCpu:window.AI3DCinematicPack?.stats?.()||null};},
   collidesAt(x,y,z){ return collidesAt(x,y,z); },
   getOccupancySize(){ return occupancySet.size; }
 };
