@@ -8,6 +8,9 @@ import {mountRtsSurfaceMaterials} from './cinematic-rts-materials.mjs';
 import {mountIndustrialDetails} from './cinematic-rts-details.mjs';
 import {mountRtsHeroBuildings} from './cinematic-rts-hero.mjs';
 import {mountSculptedBasalt} from './cinematic-rts-terrain.mjs';
+import {mountRtsBakedLighting} from './cinematic-rts-baked-light.mjs';
+import {makeLavaChannelMesh,mountOuterAshSubstrate}
+  from './cinematic-rts-rivers.mjs';
 const BUDGET=Object.freeze({
   low:{radius:9,step:12,crystals:18,units:9,cliffs:85,details:24},
   balanced:{radius:13,step:9,crystals:42,units:20,cliffs:170,details:58},
@@ -148,11 +151,9 @@ export function mountVolcanicRtsMap(THREE,parent,{tier='balanced',seed=20260925}
   const lavaTexture=new THREE.CanvasTexture(canvas);
   lavaTexture.colorSpace=THREE.SRGBColorSpace;
   lavaTexture.magFilter=THREE.LinearFilter;
-  const lavaGeo=new THREE.PlaneGeometry(layout.span*2+layout.step,
-    layout.span*2+layout.step);
   const lavaMat=new THREE.MeshBasicMaterial({map:lavaTexture,color:0xffffff,
     side:THREE.DoubleSide,toneMapped:false,fog:true});
-  register(lavaGeo,lavaMat);
+  register(null,lavaMat);
   // Offline-style PBR maps are painted on CPU once. Two shared draw calls
   // keep metal tile normals/ORM independent from the cracked basalt surface.
   const surfaces=mountRtsSurfaceMaterials(THREE,tier,seed);
@@ -162,12 +163,9 @@ export function mountVolcanicRtsMap(THREE,parent,{tier='balanced',seed=20260925}
   const industry=layout.tiles.filter(t=>t.style==='industrial');
   const metalTiles=instance(THREE,group,box[0],surfaces.industrial,industry,tileTransform);
   if(metalTiles)metalTiles.name='InstancedIndustrialPbrTiles';
+  const ash=mountOuterAshSubstrate(THREE,group,layout,tier);
   const sculpt=mountSculptedBasalt(THREE,group,layout,surfaces.basalt,tier);
-  const hot=new THREE.Mesh(lavaGeo,lavaMat);
-  hot.rotation.x=-Math.PI/2;
-  hot.position.y=-5.9;
-  hot.name='ProceduralCpuPaintedLavaRivers';
-  group.add(hot);
+  const hot=makeLavaChannelMesh(THREE,group,layout,lavaMat);
   const rockMaterial=new THREE.MeshStandardMaterial({color:0x262125,roughness:1,
     metalness:0,flatShading:true});
   const rockGeo=new THREE.IcosahedronGeometry(1,0);
@@ -260,6 +258,7 @@ export function mountVolcanicRtsMap(THREE,parent,{tier='balanced',seed=20260925}
   conduits.name='InstancedRTSIndustrialConduitPipes';
   const details=mountIndustrialDetails(THREE,group,layout,tier);
   const hero=mountRtsHeroBuildings(THREE,group,layout,tier);
+  const bakedLight=mountRtsBakedLighting(THREE,group,layout,tier);
   // Replace earlier primitive blockouts only after the actual geometry exists.
   buildingMain.visible=false;
   roofs.visible=false;
@@ -289,14 +288,17 @@ export function mountVolcanicRtsMap(THREE,parent,{tier='balanced',seed=20260925}
       structures:layout.structures.length,animatedScoutDrones:layout.units.length,
       hazardDecals:layout.stripes.length,detailWindows:windows.length,
       terrainMaterialBytes:surfaces.textureBytes,terrainSculpt:sculpt.stats(),
+      lavaChannels:hot.stats(),outerAsh:ash.stats(),
       details:details.stats(),
-      hero:hero.stats(),
+      hero:hero.stats(),bakedLighting:bakedLight.stats(),
       roofFixtures:roofFixtures.length,industrialPipes:conduitPositions.length,
-      instanceDrawCallsUpperBound:15+details.stats().batches+hero.stats().drawBatches,
+      instanceDrawCallsUpperBound:16+details.stats().batches+
+        hero.stats().drawBatches+bakedLight.stats().drawBatches,
       actualDrawCallsNeedBrowserMeasurement:true,visualOnly:true,
       authoritativeGameState:false,collisionIntegrated:false};},
     dispose(){group.parent?.remove(group);
       geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());
-      lavaTexture.dispose();hero.dispose();details.dispose();sculpt.dispose();surfaces.dispose();}
+      bakedLight.dispose();lavaTexture.dispose();hero.dispose();
+      details.dispose();hot.dispose();ash.dispose();sculpt.dispose();surfaces.dispose();}
   };
 }
