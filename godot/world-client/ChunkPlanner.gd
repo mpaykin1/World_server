@@ -19,6 +19,8 @@ static func plan_missing(center: Vector2i, radius: int, budget: int,
 		return a.x < b.x
 	)
 	var result: Array[Vector2i] = []
+	if budget == 0:
+		return result
 	for pos in candidates:
 		if loaded.has(pos) or pending.has(pos):
 			continue

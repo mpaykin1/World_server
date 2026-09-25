@@ -47,4 +47,5 @@ test('Godot planner outputs match browser for negative border and priority',
     assert.deepEqual(data.plan,pairs(planMissingChunks({centerX:0,centerZ:0,
       radius:1,budget:4,isLoaded:(x,z)=>x===0&&z===0})));
     assert.deepEqual(data.dirty,pairs(affectedChunkCoords(0,-1)));
+    assert.equal(data.zero,0);
   });

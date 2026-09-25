@@ -39,7 +39,7 @@ func _ready() -> void:
 		var dirty: Array = []
 		for pos in NativeChunkPlanner.affected_chunks(0, -1):
 			dirty.append([pos.x, pos.y])
-		print(JSON.stringify({"plan": planned, "dirty": dirty}))
+		print(JSON.stringify({"plan": planned, "dirty": dirty, "zero": NativeChunkPlanner.plan_missing(Vector2i.ZERO, 1, 0, blocked).size()}))
 		get_tree().quit(0)
 		return
 	if args.has("--smoke-test"):
