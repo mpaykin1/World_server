@@ -944,3 +944,5 @@ Task: implement original worker-safe face culling and compact typed-array mesh o
 
 
 2026-09-26 extension: add deterministic original procedural texture atlas data generation (RGBA pixels) for stone/basalt/wood/grass/lava; no upstream assets. Keep browser/Node compatible and capped memory. Tests: deterministic seeds, palette differences, alpha, dimensions. Existing PBR profile system remains canonical; atlas is optional input only. No deployment before independent review and visual gates. Progress: pending implementation.
+
+2026-09-26 extension: add optional Three.js atlas adapter to make original generated pixels directly consumable by existing browser renderer, preserving existing PBR material synthesis. Pure dependency injection, no global renderer mutation; tests use mock THREE. Review and actual browser capture pending.
