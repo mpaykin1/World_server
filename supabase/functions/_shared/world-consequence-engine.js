@@ -53,9 +53,11 @@ function ensureResidents(world){
 // Free, CPU-only household services. Bounded geography; no copied third-party code.
 function cityServices(world){
  const houses=(Array.isArray(world.houses)?world.houses:[]).filter(h=>h&&typeof h.id==='string'&&
-  Number.isFinite(h.x)&&Number.isFinite(h.z)&&Number.isInteger(h.floors)&&h.floors>=1&&h.floors<=8)
-  .slice(0,32).map(h=>({id:h.id,x:h.x,z:h.z,floors:h.floors}))
-  .sort((a,b)=>a.id.localeCompare(b.id,'en'));
+  Number.isFinite(h.x)&&Number.isFinite(h.z)&&Number.isInteger(h.floors)&&h.floors>=1&&h.floors<=100)
+  .map(h=>({id:h.id,x:h.x,z:h.z,floors:h.floors}))
+  .sort((a,b)=>a.id.localeCompare(b.id,'en')||a.x-b.x||a.z-b.z||a.floors-b.floors)
+  .filter((h,i,arr)=>i===0||arr[i-1].id!==h.id).slice(0,32);
+ const resources=world.resources&&typeof world.resources==='object'?world.resources:{};
  const empty={version:1,tick:world.tick,links:[],houses:[],summary:{poweredHomes:0,wateredHomes:0,roadAccessHomes:0,commutersAbleToTravel:0}};
  if(!houses.length)return empty;
  // A deterministic minimum spanning tree gives roads, water and power a real path.
@@ -72,7 +74,7 @@ function cityServices(world){
  }
  const active=(Array.isArray(world.projects)?world.projects:[]).filter(p=>p&&p.active===true).slice(0,256);
  const incidents=Array.isArray(world.history)&&world.history.slice(-24).some(e=>e.tick===world.tick&&e.kind==='accident');
- const hazard=incidents||Boolean(world.land&&world.land.volcano&&world.resources.ecology<45);
+ const hazard=incidents||Boolean(world.land&&world.land.volcano&&Number.isFinite(resources.ecology)&&resources.ecology<45);
  const backupTypes={
   power:new Set(['solar','geothermal','coal','biofuel_refinery']),
   water:new Set(['desalination','water_recycling','deep_wells']),
@@ -100,7 +102,7 @@ function cityServices(world){
  }
  const road=reachable('road',[houses[0].id,...backups('road')]);
  function dispatch(type,resource){
-  const available=Math.max(0,Math.floor((Number(world.resources[resource])||0)/4));
+  const available=Math.max(0,Math.floor((Number(resources[resource])||0)/4));
   const connected=available>0?reachable(type,[houses[0].id,...backups(type)]):new Set();
   const allocations=new Map();let remaining=available;
   const priority=houses.map((h,index)=>({h,index})).sort((a,b)=>
@@ -120,7 +122,7 @@ function cityServices(world){
  const roadAccessHomes=households.filter(h=>h.roadAccess).length;
  const roadPopulation=households.filter(h=>h.roadAccess).reduce((sum,h)=>sum+h.floors*8,0);
  const commutersAbleToTravel=Math.min(Math.max(0,world.population||0),
-  Math.max(0,world.resources.jobs||0),roadPopulation);
+  Math.max(0,resources.jobs||0),roadPopulation);
  return {version:1,tick:world.tick,links:intact,houses:households,
   summary:{poweredHomes:households.filter(h=>h.powered).length,
    wateredHomes:households.filter(h=>h.watered).length,roadAccessHomes,commutersAbleToTravel}};
@@ -194,6 +196,7 @@ function commit(world,intent,expectedRevision=world.revision){
  next.projects.push({id,type:intent.goal,intent,remaining:plan.buildTicks,active:false,risk:plan.risk,
   workersReserved:PROJECTS[intent.goal].needs.workers||0,workersReleased:false});
  next.revision++;next.history.push({tick:next.tick,kind:'project_started',id,type:intent.goal,comment:intent.comment});
+ refreshCityServices(next);
  return next;
 }
 function tick(world){
