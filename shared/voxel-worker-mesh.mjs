@@ -48,8 +48,6 @@ export function buildVoxelChunkMesh({size,origin=[0,0,0],getBlock,isOpaque=id=>i
   return {
     positions:new Float32Array(pos),normals:new Float32Array(normals),
     uvs:new Float32Array(uvs),indices:new Uint32Array(indices),
-    materialIds:new Uint16Array(materialIds),faceCount,
-    // Transfer these buffers from a worker; never upload GPU objects off-thread.
-    transferables:[] // caller may use Object.values(result).filter(ArrayBuffer.isView).map(v=>v.buffer)
+    materialIds:new Uint16Array(materialIds),faceCount
   };
 }
