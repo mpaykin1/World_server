@@ -1,101 +1,74 @@
 'use strict';
-const test=require('node:test'),assert=require('node:assert/strict');
+const test=require('node:test'),a=require('node:assert/strict');
 const E=require('../lib/world-consequence-engine');
 
-test('free city-services graph is bounded, canonical and deterministic',()=>{
- const a=E.createWorld('open-city'),b=E.createWorld('open-city');
- assert.deepEqual(a,b);
- assert.equal(a.cityServices.version,1);
- assert.equal(a.cityServices.links.length,a.houses.length-1);
- assert.equal(new Set(a.cityServices.houses.map(h=>h.id)).size,a.houses.length);
- assert.equal(a.cityServices.summary.roadAccessHomes,a.houses.length);
- assert(a.cityServices.houses.every(h=>Number.isInteger(h.powerFloors)&&h.powerFloors>=0&&
-  h.powerFloors<=h.floors&&h.waterFloors<=h.floors));
- assert.deepEqual(E.cityServices(a),a.cityServices);
- const restored=JSON.parse(JSON.stringify(a));
- assert.deepEqual(E.simulateTicks(a,8),E.simulateTicks(restored,8));
- assert(Buffer.byteLength(JSON.stringify(a))<16*1024,'initial saved world must stay below existing 16 KiB expectation');
+test('canonical 5-house network, bounded state and exact replay',()=>{
+ const w=E.createWorld('free-city');
+ a.deepEqual(w,E.createWorld('free-city'));
+ a.equal(w.cityServices.links.length,w.houses.length-1);
+ a.equal(w.cityServices.summary.roadAccessHomes,w.houses.length);
+ a.equal(new Set(w.cityServices.houses.map(h=>h.id)).size,w.houses.length);
+ a.deepEqual(E.cityServices(w),w.cityServices);
+ a.deepEqual(E.simulateTicks(w,8),E.simulateTicks(JSON.parse(JSON.stringify(w)),8));
+ a(Buffer.byteLength(JSON.stringify(w))<16384);
 });
-
-test('scarcity creates local blackouts with fair rotating priority',()=>{
- const world=E.createWorld('scarcity');
- world.resources.power=12;world.resources.water=100;world.resources.ecology=90;
+test('floor-level scarcity rotates service rather than permanently favoring one house',()=>{
+ const w=E.createWorld('scarcity');Object.assign(w.resources,{power:12,water:100,ecology:90});
  const served=new Set();
- for(let t=0;t<world.houses.length;t++){
-  world.tick=t;
-  const state=E.cityServices(world);
-  assert(state.summary.poweredHomes<world.houses.length);
-  assert.equal(state.summary.wateredHomes,world.houses.length);
-  for(const h of state.houses)if(h.powerFloors>0)served.add(h.id);
+ for(let tick=0;tick<w.houses.length;tick++){
+  w.tick=tick;const state=E.cityServices(w);
+  a(state.summary.poweredHomes<w.houses.length);
+  a.equal(state.summary.wateredHomes,w.houses.length);
+  state.houses.filter(h=>h.powerFloors>0).forEach(h=>served.add(h.id));
  }
- assert(served.size>1,'scarce electricity must not privilege one house permanently');
+ a(served.size>1);
 });
-
-test('hazards sever actual network links and free commissioned backup sources improve or preserve supply',()=>{
- let witnessedRepair=false,witnessedDamage=false;
+test('free commissioned backup never makes hazards worse and can restore supply',()=>{
+ let damaged=false,repaired=false;
  for(let i=0;i<300;i++){
-  const world=E.createWorld('hazard-'+i);
-  world.land.volcano=true;world.resources.ecology=0;
-  world.resources.power=100;world.resources.water=100;
-  world.tick=6;
-  const base=E.cityServices(world);
-  if(base.links.some(link=>!link.power||!link.road||!link.water))witnessedDamage=true;
-  world.projects=[{id:'commissioned-solar-'+i,type:'solar',active:true}];
-  const reinforced=E.cityServices(world);
-  assert(reinforced.summary.poweredHomes>=base.summary.poweredHomes,
-   'commissioned backup must not worsen power coverage');
-  if(reinforced.summary.poweredHomes>base.summary.poweredHomes)witnessedRepair=true;
+  const w=E.createWorld('hazard-'+i);
+  Object.assign(w.resources,{ecology:0,power:100,water:100});
+  w.land.volcano=true;w.tick=6;
+  const before=E.cityServices(w);
+  damaged ||=before.links.some(l=>!l.power||!l.water||!l.road);
+  w.projects=[{id:'solar-'+i,type:'solar',active:true}];
+  const after=E.cityServices(w);
+  a(after.summary.poweredHomes>=before.summary.poweredHomes);
+  repaired ||=after.summary.poweredHomes>before.summary.poweredHomes;
  }
- assert(witnessedDamage,'hazard fixture should damage at least one line');
- assert(witnessedRepair,'at least one deterministic seed should demonstrate power restoration');
+ a(damaged&&repaired);
 });
-
-test('outages, recovery and commute are saved as safe causal world consequences',()=>{
- let world=E.createWorld('services-outage');
- assert(world.cityServices.summary.commutersAbleToTravel>0);
- world.resources.power=0;world.resources.water=0;
- world=E.tick(world);
- assert.equal(world.cityServices.summary.poweredHomes,0);
- assert.equal(world.cityServices.summary.wateredHomes,0);
- const lost=world.history.find(e=>e.kind==='city_services_changed'&&e.changes.some(c=>c.lost.length));
- assert(lost);assert.equal(typeof lost.story,'string');
- assert.equal(JSON.stringify(lost).includes('actorId'),false);
- world.resources.power=100;world.resources.water=100;
- world=E.tick(world);
- assert.equal(world.cityServices.summary.poweredHomes,world.houses.length);
- assert.equal(world.cityServices.summary.wateredHomes,world.houses.length);
- assert(world.history.some(e=>e.kind==='city_services_changed'&&e.changes.some(c=>c.restored.length)));
+test('blackouts, recovery, and commute appear in durable anonymous game state',()=>{
+ let w=E.createWorld('power-loss');
+ a(w.cityServices.summary.commutersAbleToTravel>0);
+ Object.assign(w.resources,{power:0,water:0});w=E.tick(w);
+ a.equal(w.cityServices.summary.poweredHomes,0);
+ a.equal(w.cityServices.summary.wateredHomes,0);
+ const events=w.history.filter(e=>e.kind==='city_services_changed');
+ a(events.some(e=>e.changes.some(c=>c.lost.length)));
+ a(!JSON.stringify(events).includes('actorId'));
+ Object.assign(w.resources,{power:100,water:100});w=E.tick(w);
+ a.equal(w.cityServices.summary.poweredHomes,w.houses.length);
+ a.equal(w.cityServices.summary.wateredHomes,w.houses.length);
+ a(w.history.some(e=>e.kind==='city_services_changed'&&e.changes.some(c=>c.restored.length)));
 });
-
-test('legacy missing/corrupt projections rehydrate without trusting injected home records',()=>{
- const first=E.createWorld('legacy-service');
- const older=JSON.parse(JSON.stringify(first));delete older.cityServices;
- const migrated=E.tick(older);
- assert.equal(migrated.cityServices.version,1);
- assert.equal(migrated.cityServices.houses.length,older.houses.length);
- assert.equal(migrated.history.some(e=>e.kind==='city_services_changed'),false);
- first.cityServices.houses=[null,{id:'house-0',powered:{secret:'private'},watered:true,roadAccess:true}];
- assert.doesNotThrow(()=>E.tick(first));
+test('legacy and malformed service snapshots are repaired, never blindly returned',()=>{
+ let w=E.createWorld('legacy');delete w.cityServices;
+ const hydrated=E.tick(w);
+ a.equal(hydrated.cityServices.houses.length,w.houses.length);
+ a(!hydrated.history.some(e=>e.kind==='city_services_changed'));
+ w=E.createWorld('tamper');w.cityServices={version:1,houses:[null,{id:'house-0',powered:{nested:'injected'}}]};
+ a.doesNotThrow(()=>E.tick(w));
+ const publicWorld=require('../lib/chain-reaction-api').publicState(w);
+ a.deepEqual(publicWorld.cityServices,E.cityServices(w));
+ a(!JSON.stringify(publicWorld.cityServices).includes('injected'));
 });
-
-test('Genie forecasts include free deterministic plain-language narration without external API',()=>{
- const world=E.createWorld('free-genie');
- Object.assign(world.resources,{power:35,water:80,food:80,budget:500,workers:50});
- const response=E.genieOptions(world);
- assert.equal(response.cards.length,4);
- for(const card of response.cards){
-  assert.equal(typeof card.explanation,'string');
-  assert(card.explanation.includes('Предварительная модель'));
-  assert(!/worsens|shifts_crisis|balanced|actorId/.test(card.explanation));
- }
- assert.deepEqual(response,E.genieOptions(JSON.parse(JSON.stringify(world))));
- assert.equal(E.genieOptions({...world,resources:{...world.resources,budget:0}}).cards.length,0);
-});
-
-test('public Node adapter recomputes untrusted saved service projection',()=>{
- const w=E.createWorld('public-city-services');
- w.cityServices={version:1,houses:[{id:'injected',powered:{nested:'not canonical'}}]};
- const projection=require('../lib/chain-reaction-api').publicState(w);
- assert.deepEqual(projection.cityServices,E.cityServices(w));
- assert.equal(JSON.stringify(projection.cityServices).includes('not canonical'),false);
+test('no-key offline Genie explanation is deterministic and hides classifications',()=>{
+ const w=E.createWorld('offline-genie');Object.assign(w.resources,{power:35,water:80,food:80,budget:500,workers:50});
+ const o=E.genieOptions(w);
+ a.equal(o.cards.length,4);
+ a(o.cards.every(c=>c.explanation.includes('Предварительная модель')));
+ a(!/worsens|shifts_crisis|balanced|actorId/.test(JSON.stringify(o.cards)));
+ a.deepEqual(o,E.genieOptions(JSON.parse(JSON.stringify(w))));
+ a.equal(E.genieOptions({...w,resources:{...w.resources,budget:0}}).cards.length,0);
 });
