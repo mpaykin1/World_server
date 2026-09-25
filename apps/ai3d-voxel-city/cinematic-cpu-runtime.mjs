@@ -5,6 +5,7 @@
  */
 import {budgetFor,createPaintedSky,shouldCullWithHysteresis} from './cinematic-cpu-atmosphere.mjs';
 import {createCinematicEffects} from './cinematic-cpu-effects.mjs';
+import {mountVolcanicRtsMap} from './cinematic-rts-volcanic.mjs';
 const BASE='/apps/ai3d-voxel-city/cinematic-assets/';
 const LIMITS=Object.freeze({low:[1,2],balanced:[0,1,2],high:[0,1,2],ultra:[0,1,2]});
 const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
@@ -59,6 +60,7 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
   if(!THREE?.LOD||!scene?.add||typeof getCamera!=='function')throw Error('invalid existing renderer adapter');
   const coarse=matchMedia('(pointer:coarse)').matches;
   const quality=tier||((coarse||navigator.hardwareConcurrency<=4)?'low':'balanced');
+  const rtsEnabled=new URLSearchParams(location.search).get('rtsVolcanic')==='1';
   const manifestResponse=await fetch(BASE+'cinematic-pack.json',{cache:'no-store'});
   if(!manifestResponse.ok)throw Error('CPU pack manifest HTTP '+manifestResponse.status);
   const manifest=await manifestResponse.json();
@@ -90,16 +92,21 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
   scene.add(root);
   const group=new THREE.Group();root.add(group);
   const volcanoAnchor=new THREE.Group();
-  volcanoAnchor.position.set(-35,-13,-125);root.add(volcanoAnchor);
+  volcanoAnchor.position.set(-35,rtsEnabled?-18:-13,rtsEnabled?-177:-125);
+  if(rtsEnabled)volcanoAnchor.scale.setScalar(.58);
+  root.add(volcanoAnchor);
   // Baked-look accent lights: one cheap key light, ambient fill and one
   // desktop-only lava light; no shadow maps, no volumetric ray marching.
-  const fill=new THREE.HemisphereLight(0xaebfd5,0x2f2925,quality==='low'?.57:.74);
-  const key=new THREE.DirectionalLight(0xffb568,quality==='low'?1.48:1.98);
+  const fill=new THREE.HemisphereLight(0xaebfd5,0x202a33,
+    rtsEnabled?1.04:(quality==='low'?.57:.74));
+  const key=new THREE.DirectionalLight(rtsEnabled?0xc6d2de:0xffb568,
+    rtsEnabled?1.28:(quality==='low'?1.48:1.98));
   key.position.set(55,70,90);key.castShadow=false;
   root.add(fill,key);
   if(quality!=='low'){
     const lavaGlow=new THREE.PointLight(0xff6b28,12,170,2);
-    lavaGlow.position.set(-35,50,-125);lavaGlow.castShadow=false;root.add(lavaGlow);
+    lavaGlow.position.set(-35,50,rtsEnabled?-177:-125);
+    lavaGlow.castShadow=false;root.add(lavaGlow);
   }
   const nodes=[['geothermal-plant',group,1],['volcano',volcanoAnchor,1.55]];
   const loaded={};
@@ -158,7 +165,7 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
     }
     const steam=makeSteam(THREE,group,quality);
     const effects=createCinematicEffects(THREE,root,{tier:quality,
-      volcano:{x:-35,y:-13,z:-125}});
+      volcano:{x:-35,y:rtsEnabled?-18:-13,z:rtsEnabled?-177:-125}});
     const groundMaterial=new THREE.MeshStandardMaterial({color:0x1a2128,roughness:.93});
     const ground=new THREE.Mesh(new THREE.CircleGeometry(92,48),groundMaterial);
     ground.rotation.x=-Math.PI/2;ground.position.set(0,-1.2,3);
@@ -177,6 +184,10 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
     }
     rockField.instanceMatrix.needsUpdate=true;
     rockField.name='InstancedBasaltRockfield';group.add(rockField);
+    // Tactical volcanic battlefield is an optional independent visual layer.
+    // Leave the canonical loaded voxel city and gameplay state unchanged.
+    const rts=rtsEnabled?mountVolcanicRtsMap(THREE,root,{tier:quality}):null;
+    if(rts){ground.visible=false;rockField.visible=false;}
     let lastUpdate=-Infinity,visibility=true,farCount=0,previousFrame=null;
     const frameSamples=[];
     const samplePercentile=q=>{
@@ -198,6 +209,7 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
           frameIntervalP50Ms:samplePercentile(.5),frameIntervalP95Ms:samplePercentile(.95),
           frameSampleCount:frameSamples.length,
           effects:effects.stats(),instancedRockCount:rockCount,
+          rts:rts?.stats()||null,
           distantIndustrialClusters:districtCount,
           optimizedReady,optimizedLoaded,downloadBytes,
           optimizedFallbacks:optimizedFallbacks.slice(0,8),
@@ -218,7 +230,7 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
         }
         previousFrame=now;
         if(now-lastUpdate<100)return;
-        lastUpdate=now;effects.update(now);
+        lastUpdate=now;effects.update(now);rts?.update(now);
         // Renderer owns LOD switching; preserve native THREE.LOD distance logic.
         for(const lod of Object.values(loaded))lod.update(camera);
         for(const e of steam.list){
@@ -232,6 +244,7 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
         const d=group.getWorldPosition(new THREE.Vector3()).distanceTo(camera.position);
         const shouldShow=shouldCullWithHysteresis(d,visibility,quality);
         if(shouldShow!==visibility){visibility=shouldShow;group.visible=visibility;}
+        if(rts)rts.group.visible=visibility;
         farCount++;
       },
       dispose(){ready=false;root.parent?.remove(root);
@@ -241,7 +254,7 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
         paintedSky.dispose();
         for(const lod of Object.values(loaded)){lod.traverse(o=>{if(o.isMesh){o.geometry?.dispose();const mats=Array.isArray(o.material)?o.material:[o.material];for(const m of mats)m?.dispose();}})}
         for(const e of steam.list)e.sprite.material.dispose();steam.tex.dispose();
-        effects.dispose();ground.geometry.dispose();groundMaterial.dispose();
+        effects.dispose();rts?.dispose();ground.geometry.dispose();groundMaterial.dispose();
         rockField.geometry.dispose();rockField.material.dispose();}
     };
     return api;

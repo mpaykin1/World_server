@@ -89,3 +89,30 @@ Third-party MeshoptDecoder is vendored with its MIT license under the app's
 - Poly Haven CC0 source textures, authentic industrial wear, physically correct
   Blender Cycles CPU light baking and cinematic art direction remain future
   content quality work; do not claim this procedural kit equals the reference.
+
+## Actual RTS volcanic slice (the player's newer isometric reference)
+
+Opt-in existing AI3D viewport: `?cinematicCpu=1&rtsVolcanic=1`.
+This is a **real procedural Three.js scene**, not a second engine, a screenshot
+as a fake game frame or an assertion that Chain Reaction already has RTS rules.
+
+The module `cinematic-rts-volcanic.mjs` makes two deterministic lava rivers,
+navigable metal/basalt tile plateau, instanced cliffs, 42 blue resource crystals,
+six distinct industrial structures, 80 emissive factory windows, 12 roof cabinets,
+12 maintenance pipes, hazard markings and 20 tiny moving drones in balanced mode.
+The 256x256 CPU-painted lava texture is created once, not every frame. Mobile
+gets fewer, larger terrain tiles and fewer resource/particle instances.
+A strategy camera presents the plateau without revealing the horizon. In this
+explicit QA route, preexisting city render chunks are hidden but remain loaded;
+normal gameplay, world data and controls are untouched on default URLs.
+
+Source tests: `node --test test/cinematic-rts-volcanic.test.mjs`.
+Browser checks: `e2e/cinematic-rts-volcanic.spec.js` for desktop/mobile-emulated
+real WebGL, screenshot capture, actual instance counts, original-world-loaded
+and default-route-no-extra-asset regression. **Do not call emulator FPS phone FPS.**
+
+The user's newer visual goal is a readable StarCraft-like volcanic isometric
+RTS screenshot: industrial sci-fi bases, dark basalt, luminous orange lava,
+blue crystals, tiny vehicles/infantry, mountain chasms and control of horizon.
+Current procedural models are much simpler than that concept. This is a new
+playable-engine graphics slice, NOT visual-equivalence evidence.
