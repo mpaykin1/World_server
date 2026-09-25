@@ -55,6 +55,8 @@ function publicState(value:any) {
   if(Array.isArray(safe.residents)){
     safe.residents=publicResidents(safe);
   }
+  // Rebuild derived utilities from canonical inputs; never echo an injected saved projection.
+  if(Array.isArray(safe.houses))safe.cityServices=engine.cityServices(safe);
   return safe;
 }
 export function isChainReactionAction(value:unknown) {
