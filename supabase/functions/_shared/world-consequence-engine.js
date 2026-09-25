@@ -84,8 +84,8 @@ function cityServices(world){
   const ok={from:link.from,to:link.to};
   for(const service of ['power','water','road']){
    const reinforced=backups(service).length>0;
-   ok[service]=!hazard||hash(world.seed+':'+world.tick+':'+link.from+':'+link.to+':'+service)%
-    (reinforced?11:4)!==0;
+   const sample=hash(world.seed+':'+world.tick+':'+link.from+':'+link.to+':'+service);
+   ok[service]=!hazard||sample%4!==0||(reinforced&&sample%11!==0);
   }
   return ok;
  });
@@ -128,7 +128,7 @@ function cityServices(world){
 function refreshCityServices(world){
  const previous=world.cityServices,next=cityServices(world);
  if(previous&&previous.version===1&&Array.isArray(previous.houses)&&world.tick>0){
-  const old=new Map(previous.houses.map(h=>[h.id,h]));
+  const old=new Map(previous.houses.filter(h=>h&&typeof h.id==='string').map(h=>[h.id,h]));
   const changes=[];
   for(const [service,field] of [['electricity','powered'],['water','watered'],['roads','roadAccess']]){
    const lost=[],restored=[];
