@@ -130,7 +130,7 @@ function pointerDown(e){
   dragging=true;lx=e.clientX;ly=e.clientY;
   try{ renderer.domElement.setPointerCapture(e.pointerId);}catch{}
 }
-addEventListener('pointermove',e=>{if(!dragging||frontMode||playableMode)return;const dx=e.clientX-lx,dy=e.clientY-ly;lx=e.clientX;ly=e.clientY;yaw-=dx*.006;pitch=Math.max(-1.35,Math.min(1.35,pitch+dy*.006));updatePerspective();});
+addEventListener('pointermove',e=>{if(!dragging||frontMode||playableMode)return;const dx=e.clientX-lx,dy=e.clientY-ly;lx=e.clientX;ly=e.clientY;yaw-=dx*.006;const floor=window.AI3DCinematicCamera?.minimumPitch??-1.35;const ceiling=window.AI3DCinematicCamera?1.26:1.35;pitch=Math.max(floor,Math.min(ceiling,pitch+dy*.006));updatePerspective();});
 addEventListener('pointerup',()=>dragging=false);
 
 function updatePerspective(){
@@ -177,7 +177,7 @@ function applyFog(){
   const bg=world.background||{},h=bg.horizon||[70,55,55];
   const c=new THREE.Color(h[0]/255,h[1]/255,h[2]/255);
   const cinematic=window.AI3DCinematicPack;
-  if(cinematic){scene.fog=new THREE.FogExp2(0x1b2632,cinematic.quality==='low'?.0047:.0033);return;}
+  if(cinematic){scene.fog=new THREE.FogExp2(0x1b2632,cinematic.quality==='low'?.0035:.0030);return;}
   scene.fog=new THREE.FogExp2(c,profile().fogDensity/Math.max(1,CHUNK_SIZE/16));
 }
 function setAllDetailVisible(on){
@@ -523,14 +523,18 @@ async function renderWorld(data){
   if(new URLSearchParams(location.search).get('cinematicCpu')==='1' && !window.__AI3D_CINEMATIC_CPU_PROMISE__){
     window.__AI3D_CINEMATIC_CPU_PROMISE__=import('./cinematic-cpu-runtime.mjs')
       .then(m=>m.mountCpuPack({THREE,scene,renderer,getCamera:()=>activeCamera}))
-      .then(pack=>{
+      .then(async pack=>{
         window.AI3DCinematicPack=pack;
-        // Deterministic outside-city vantage point for QA; do NOT change default spawn.
-        // Dedicated QA composition; no change to the canonical player spawn.
-        target.set(-79,16,-55);
-        radius=matchMedia('(orientation: portrait)').matches?93:67;
-        yaw=.45;pitch=.21;switchOrbit();updatePerspective();
-        scene.fog=new THREE.FogExp2(0x1b2632,pack.quality==='low'?.0047:.0033);
+        // Top-down RTS camera: the horizon is mathematically outside the viewport.
+        // The opt-in-only camera can orbit but never pitch above the horizon clearance.
+        const director=await import('./cinematic-strategy-camera.mjs');
+        const host=$('viewer');
+        const frame=director.strategyFraming({width:host.clientWidth,height:host.clientHeight,tier:pack.quality});
+        target.set(...frame.target);radius=frame.distance;yaw=frame.yaw;pitch=frame.pitch;
+        window.AI3DCinematicCamera={...frame,minimumPitch:director.minimumPitch(frame.fov)};
+        switchOrbit();
+        director.applyStrategyFraming(persp,frame,THREE);
+        scene.fog=new THREE.FogExp2(0x1b2632,pack.quality==='low'?.0035:.0030);
         $('viewer').style.background='linear-gradient(#09121d,#35465a 70%,#473026)';
         // Exact screenshot has a durable repository target ID and SHA in docs/graphics/targets.
         // Show its opt-in compressed proxy beside actual THREE geometry for human review.

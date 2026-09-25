@@ -89,3 +89,23 @@ Third-party MeshoptDecoder is vendored with its MIT license under the app's
 - Poly Haven CC0 source textures, authentic industrial wear, physically correct
   Blender Cycles CPU light baking and cinematic art direction remain future
   content quality work; do not claim this procedural kit equals the reference.
+
+## CPU parallax and horizon-free strategy camera (separate stacked slice)
+
+The existing AI3D opt-in viewer now has a real strategy-style camera: the
+vertical pitch is clamped so the geometrical horizon remains at least 14°
+outside the camera frustum on desktop and portrait mobile, even while orbiting.
+The opt-in camera frames the foreground geothermal plant and the volcanic ridge;
+the canonical city spawn, playable controls and default viewer are unchanged.
+
+The new `cinematic-industrial-parallax.mjs` paints 2–3 detailed industrial
+silhouette/fog cards once on CPU (factory buildings, lit windows, stacks,
+catwalks and pipes). Existing Three.js displays them with native scene fog
+and billboard transforms. Bounded memory: <500 KB on low, <4 MB on ultra.
+The art target is `WORLD-GFX-FOG-FRONTIER-20260925`; these cards are distant
+impostors, NOT true 3D and NOT evidence of reference-level photorealism.
+
+Checks: `node --test test/cinematic-strategy-camera.test.mjs` (5 tests),
+full cinematic Node suite (19 tests), exact asset integrity validation and
+existing Playwright desktop/mobile-emulation suite (4 tests). A physical phone,
+independent review and >=85% player-visible art-direction approval remain gates.

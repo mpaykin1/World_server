@@ -30,6 +30,13 @@ test.describe('Optional CPU-generated cinematic pack (real browser)',()=>{
     expect(state.meshes).toBeGreaterThan(3);
     expect(state.pack.geometryDrawCallUpperBound).toBeLessThanOrEqual(6);
     expect(state.pack.optimizedReady).toBe(true);
+    expect(state.pack.parallax.layerCount).toBeGreaterThanOrEqual(2);
+    expect(state.pack.parallax.paintedWindows).toBeGreaterThan(35);
+    expect(state.pack.parallax.pixelBytes).toBeLessThan(4_000_000);
+    const camera=await page.evaluate(()=>window.AI3DCinematicCamera);
+    expect(camera.mode).toBe('fixed-horizon-free-rts');
+    expect(camera.horizonClearanceDeg).toBeGreaterThanOrEqual(14);
+    expect(camera.pitch).toBeGreaterThan(camera.minimumPitch);
     expect(state.pack.optimizedFallbacks).toEqual([]);
     expect(state.pack.optimizedLoaded).toBe(state.pack.quality==='low'?4:6);
     expect(state.pack.downloadBytes).toBeLessThan(state.pack.quality==='low'?240000:1048576);

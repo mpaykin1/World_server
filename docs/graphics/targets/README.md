@@ -1,8 +1,11 @@
 # Fog Frontier — official geothermal cinematic visual target
 
-**Reference ID:** `WORLD-GFX-FOG-FRONTIER-20260925`  
-**Project:** World Server / «Цепная реакция» / «Туманный рубеж»  
-**Artist-provided source:** user-attached 864×1536 JPEG, SHA-256 `748039272d09a5294c461be9cae83db205db4c58fc8272445f337c820020777a`  
+**Reference ID:** `WORLD-GFX-FOG-FRONTIER-20260925`
+
+**Project:** World Server / «Цепная реакция» / «Туманный рубеж»
+
+**Artist-provided source:** user-attached 864×1536 JPEG, SHA-256 `748039272d09a5294c461be9cae83db205db4c58fc8272445f337c820020777a`
+
 **Repository visual proxy:** [compressed 280px AVIF](./fog-frontier-geothermal-2026-09-25.avif), derived from the exact user-supplied source; the smaller proxy is for durable code-review lookup, **not the original-resolution file**. Target image can be cited by this stable ID and SHA.
 
 ![Official cinematic geothermal target](./fog-frontier-geothermal-2026-09-25.avif)

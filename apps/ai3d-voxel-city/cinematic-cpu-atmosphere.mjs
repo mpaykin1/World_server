@@ -6,10 +6,10 @@
 const clamp=(n,lo,hi)=>Math.min(hi,Math.max(lo,n));
 const lerp=(a,b,t)=>a+(b-a)*t;
 export const PROFILE=Object.freeze({
-  low:{width:384,height:256,cloudOctaves:2,steamCount:4, fog:.0047,far:165,glow:false},
-  balanced:{width:768,height:512,cloudOctaves:4,steamCount:8,fog:.0035,far:245,glow:true},
-  high:{width:1024,height:640,cloudOctaves:5,steamCount:12,fog:.0028,far:320,glow:true},
-  ultra:{width:1280,height:768,cloudOctaves:5,steamCount:16,fog:.0025,far:360,glow:true},
+  low:{width:384,height:256,cloudOctaves:2,steamCount:4, fog:.0035,far:295,glow:false},
+  balanced:{width:768,height:512,cloudOctaves:4,steamCount:8,fog:.0030,far:360,glow:true},
+  high:{width:1024,height:640,cloudOctaves:5,steamCount:12,fog:.0027,far:415,glow:true},
+  ultra:{width:1280,height:768,cloudOctaves:5,steamCount:16,fog:.0025,far:450,glow:true},
 });
 export function budgetFor(tier){return PROFILE[tier]||PROFILE.balanced;}
 function hash(x,y,s){

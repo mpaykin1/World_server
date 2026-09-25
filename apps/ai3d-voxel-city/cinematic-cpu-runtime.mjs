@@ -5,6 +5,7 @@
  */
 import {budgetFor,createPaintedSky,shouldCullWithHysteresis} from './cinematic-cpu-atmosphere.mjs';
 import {createCinematicEffects} from './cinematic-cpu-effects.mjs';
+import {mountIndustrialParallax} from './cinematic-industrial-parallax.mjs';
 const BASE='/apps/ai3d-voxel-city/cinematic-assets/';
 const LIMITS=Object.freeze({low:[1,2],balanced:[0,1,2],high:[0,1,2],ultra:[0,1,2]});
 const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
@@ -81,7 +82,7 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
   const previousExposure=renderer?.toneMappingExposure;
   const existingLights=scene.children.filter(o=>o.isLight).map(o=>[o,o.intensity]);
   if(renderer){renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.08;}
-  for(const [light,intensity] of existingLights)light.intensity=intensity*.73;
+  for(const [light,intensity] of existingLights)light.intensity=intensity*.78;
   const priorBackground=scene.background;
   const paintedSky=createPaintedSky(THREE,renderer,quality);
   scene.background=paintedSky.texture;
@@ -93,8 +94,8 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
   volcanoAnchor.position.set(-35,-13,-125);root.add(volcanoAnchor);
   // Baked-look accent lights: one cheap key light, ambient fill and one
   // desktop-only lava light; no shadow maps, no volumetric ray marching.
-  const fill=new THREE.HemisphereLight(0xaebfd5,0x2f2925,quality==='low'?.57:.74);
-  const key=new THREE.DirectionalLight(0xffb568,quality==='low'?1.48:1.98);
+  const fill=new THREE.HemisphereLight(0xaebfd5,0x2f2925,quality==='low'?.72:.96);
+  const key=new THREE.DirectionalLight(0xffb568,quality==='low'?1.9:2.6);
   key.position.set(55,70,90);key.castShadow=false;
   root.add(fill,key);
   if(quality!=='low'){
@@ -131,14 +132,14 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
         mesh.scale.setScalar(scale);
         mesh.traverse(o=>{if(o.isMesh){
           o.castShadow=false;o.receiveShadow=false;
-          const m=o.material,ambient=m?.name==='concrete'?[0x596a76,.22]:
-            m?.name==='steel'?[0x53606c,.15]:m?.name==='basalt'?[0x393939,.07]:null;
+          const m=o.material,ambient=m?.name==='concrete'?[0x75818c,.39]:
+            m?.name==='steel'?[0x65737c,.29]:m?.name==='basalt'?[0x4c403b,.12]:null;
           // Low-energy cool bounce light baked as emissive floor; a tiny bounded
           // substitute for full real-time GI when the existing day/night system dims lights.
           if(ambient&&m?.emissive){m.emissive.setHex(ambient[0]);m.emissiveIntensity=ambient[1];}
           if(m?.name==='lava'||m?.name==='window')m.emissiveIntensity=4;
         }});
-        lod.addLevel(mesh,level===0?0:level===1?110:240);
+        lod.addLevel(mesh,level===0?0:level===1?225:380);
       }
       parent.add(lod);loaded[name]=lod;
     }
@@ -159,6 +160,7 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
     const steam=makeSteam(THREE,group,quality);
     const effects=createCinematicEffects(THREE,root,{tier:quality,
       volcano:{x:-35,y:-13,z:-125}});
+    const parallax=mountIndustrialParallax(THREE,root,quality);
     const groundMaterial=new THREE.MeshStandardMaterial({color:0x1a2128,roughness:.93});
     const ground=new THREE.Mesh(new THREE.CircleGeometry(92,48),groundMaterial);
     ground.rotation.x=-Math.PI/2;ground.position.set(0,-1.2,3);
@@ -197,7 +199,7 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
           },0),
           frameIntervalP50Ms:samplePercentile(.5),frameIntervalP95Ms:samplePercentile(.95),
           frameSampleCount:frameSamples.length,
-          effects:effects.stats(),instancedRockCount:rockCount,
+          effects:effects.stats(),parallax:parallax.stats(),instancedRockCount:rockCount,
           distantIndustrialClusters:districtCount,
           optimizedReady,optimizedLoaded,downloadBytes,
           optimizedFallbacks:optimizedFallbacks.slice(0,8),
@@ -218,7 +220,7 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
         }
         previousFrame=now;
         if(now-lastUpdate<100)return;
-        lastUpdate=now;effects.update(now);
+        lastUpdate=now;effects.update(now);parallax.update(camera);
         // Renderer owns LOD switching; preserve native THREE.LOD distance logic.
         for(const lod of Object.values(loaded))lod.update(camera);
         for(const e of steam.list){
@@ -241,7 +243,7 @@ export async function mountCpuPack({THREE,scene,renderer,getCamera,anchor={x:-72
         paintedSky.dispose();
         for(const lod of Object.values(loaded)){lod.traverse(o=>{if(o.isMesh){o.geometry?.dispose();const mats=Array.isArray(o.material)?o.material:[o.material];for(const m of mats)m?.dispose();}})}
         for(const e of steam.list)e.sprite.material.dispose();steam.tex.dispose();
-        effects.dispose();ground.geometry.dispose();groundMaterial.dispose();
+        effects.dispose();parallax.dispose();ground.geometry.dispose();groundMaterial.dispose();
         rockField.geometry.dispose();rockField.material.dispose();}
     };
     return api;
