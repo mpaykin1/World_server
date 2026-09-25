@@ -50,11 +50,115 @@ function ensureResidents(world){
  world.residents=canonicalResidents(world);
  return world.residents;
 }
+// Free, CPU-only household services. Bounded geography; no copied third-party code.
+function cityServices(world){
+ const houses=(Array.isArray(world.houses)?world.houses:[]).filter(h=>h&&typeof h.id==='string'&&
+  Number.isFinite(h.x)&&Number.isFinite(h.z)&&Number.isInteger(h.floors)&&h.floors>=1&&h.floors<=8)
+  .slice(0,32).map(h=>({id:h.id,x:h.x,z:h.z,floors:h.floors}))
+  .sort((a,b)=>a.id.localeCompare(b.id,'en'));
+ const empty={version:1,tick:world.tick,links:[],houses:[],summary:{poweredHomes:0,wateredHomes:0,roadAccessHomes:0,commutersAbleToTravel:0}};
+ if(!houses.length)return empty;
+ // A deterministic minimum spanning tree gives roads, water and power a real path.
+ const links=[],wired=new Set([houses[0].id]);
+ while(wired.size<houses.length){
+  let best=null;
+  for(const a of houses)if(wired.has(a.id))for(const b of houses)if(!wired.has(b.id)){
+   const distance=(a.x-b.x)**2+(a.z-b.z)**2;
+   const key=a.id+':'+b.id;
+   if(!best||distance<best.distance||(distance===best.distance&&key<best.key))best={from:a.id,to:b.id,distance,key};
+  }
+  if(!best)break;
+  links.push({from:best.from,to:best.to});wired.add(best.to);
+ }
+ const active=(Array.isArray(world.projects)?world.projects:[]).filter(p=>p&&p.active===true).slice(0,256);
+ const incidents=Array.isArray(world.history)&&world.history.slice(-24).some(e=>e.tick===world.tick&&e.kind==='accident');
+ const hazard=incidents||Boolean(world.land&&world.land.volcano&&world.resources.ecology<45);
+ const backupTypes={
+  power:new Set(['solar','geothermal','coal','biofuel_refinery']),
+  water:new Set(['desalination','water_recycling','deep_wells']),
+  road:new Set(['workshop','export_market','tourism'])
+ };
+ const backups=type=>active.filter(p=>backupTypes[type].has(p.type))
+  .map(p=>houses[hash(world.seed+':'+type+':'+p.id)%houses.length].id);
+ const intact=links.map(link=>{
+  const ok={from:link.from,to:link.to};
+  for(const service of ['power','water','road']){
+   const reinforced=backups(service).length>0;
+   ok[service]=!hazard||hash(world.seed+':'+world.tick+':'+link.from+':'+link.to+':'+service)%
+    (reinforced?11:4)!==0;
+  }
+  return ok;
+ });
+ function reachable(type,sources){
+  const seen=new Set(sources),queue=[...seen];
+  for(let i=0;i<queue.length;i++)for(const link of intact){
+   if(!link[type])continue;
+   const neighbor=link.from===queue[i]?link.to:link.to===queue[i]?link.from:null;
+   if(neighbor&&!seen.has(neighbor)){seen.add(neighbor);queue.push(neighbor)}
+  }
+  return seen;
+ }
+ const road=reachable('road',[houses[0].id,...backups('road')]);
+ function dispatch(type,resource){
+  const available=Math.max(0,Math.floor((Number(world.resources[resource])||0)/4));
+  const connected=available>0?reachable(type,[houses[0].id,...backups(type)]):new Set();
+  const allocations=new Map();let remaining=available;
+  const priority=houses.map((h,index)=>({h,index})).sort((a,b)=>
+   (a.index+world.tick)%houses.length-(b.index+world.tick)%houses.length);
+  for(const {h} of priority){
+   const assigned=connected.has(h.id)?Math.min(remaining,h.floors):0;
+   allocations.set(h.id,assigned);remaining-=assigned;
+  }
+  return allocations;
+ }
+ const electricity=dispatch('power','power'),water=dispatch('water','water');
+ const households=houses.map(h=>({
+  id:h.id,floors:h.floors,powerFloors:electricity.get(h.id)||0,waterFloors:water.get(h.id)||0,
+  powered:electricity.get(h.id)===h.floors,watered:water.get(h.id)===h.floors,
+  roadAccess:road.has(h.id),healthRisk:water.get(h.id)===0?'high':'normal'
+ }));
+ const roadAccessHomes=households.filter(h=>h.roadAccess).length;
+ const roadPopulation=households.filter(h=>h.roadAccess).reduce((sum,h)=>sum+h.floors*8,0);
+ const commutersAbleToTravel=Math.min(Math.max(0,world.population||0),
+  Math.max(0,world.resources.jobs||0),roadPopulation);
+ return {version:1,tick:world.tick,links:intact,houses:households,
+  summary:{poweredHomes:households.filter(h=>h.powered).length,
+   wateredHomes:households.filter(h=>h.watered).length,roadAccessHomes,commutersAbleToTravel}};
+}
+function refreshCityServices(world){
+ const previous=world.cityServices,next=cityServices(world);
+ if(previous&&previous.version===1&&Array.isArray(previous.houses)&&world.tick>0){
+  const old=new Map(previous.houses.map(h=>[h.id,h]));
+  const changes=[];
+  for(const [service,field] of [['electricity','powered'],['water','watered'],['roads','roadAccess']]){
+   const lost=[],restored=[];
+   for(const house of next.houses){
+    const before=old.get(house.id);
+    if(!before||typeof before[field]!=='boolean')continue;
+    if(before[field]&&!house[field])lost.push(house.id);
+    if(!before[field]&&house[field])restored.push(house.id);
+   }
+   if(lost.length||restored.length)changes.push({service,lost,restored});
+  }
+  if(changes.length)world.history.push({tick:world.tick,kind:'city_services_changed',changes,
+   story:changes.some(c=>c.lost.length)?'В некоторых домах прервалось снабжение. Жители перераспределяют ресурсы.':
+    'Городские службы восстановили подключение жилых домов.'});
+ }
+ world.cityServices=next;
+}
+function offlineGenieExplanation(target,card){
+ const names={power:'электроэнергии',water:'воды',food:'продовольствия',budget:'бюджета',
+  ecology:'экологии',health:'здоровья'};
+ const direction=card.delta>0?'увеличить запас':card.delta<0?'снизить запас':'сохранить уровень';
+ const risks=card.severe.length?' Но возникнет серьёзная нагрузка: '+card.severe.map(k=>names[k]||k).join(', ')+'.':
+  ' Сильного побочного дефицита в расчётном горизонте не выявлено.';
+ return 'Предварительная модель: может '+direction+' '+(names[target]||target)+'.'+risks;
+}
 function createWorld(seed='city'){
  const n=hash(seed);const resources={power:40+n%15,water:65,food:62,budget:150,ecology:75,health:75,jobs:36,workers:18,culture:25};
  const houses=Array.from({length:5},(_,i)=>({id:'house-'+i,x:(n+i*17)%70,z:(n>>>3+i*23)%70,floors:2+i%3}));
  const residents=residentDirectory(String(seed),houses);
- return {schema:1,seed:String(seed),revision:0,tick:0,resources,population:80+n%41,projects:[],history:[],houses,residents,land:{volcano:!!(n%2),coast:!!(n%3),forest:true},insight:{knowledge:10,leisure:12,cooperation:15,sustainability:12,harmonyTicks:0,illumination:false,illuminationAtTick:null},culture:{temples:0,spokesperson:null},crisis:false};
+ const world={schema:1,seed:String(seed),revision:0,tick:0,resources,population:80+n%41,projects:[],history:[],houses,residents,land:{volcano:!!(n%2),coast:!!(n%3),forest:true},insight:{knowledge:10,leisure:12,cooperation:15,sustainability:12,harmonyTicks:0,illumination:false,illuminationAtTick:null},culture:{temples:0,spokesperson:null},crisis:false};world.cityServices=cityServices(world);return world;
 }
 function interpretIntent(text='',structure='geothermal'){
  const t=String(text).slice(0,600).toLowerCase();
@@ -142,6 +246,7 @@ function tick(world){
   w.insight.illuminationAtTick=w.tick;
   w.history.push({tick:w.tick,kind:'sustained_insight',streak:INSIGHT_STREAK_REQUIRED});
  }
+ refreshCityServices(w);
  return w;
 }
 const GENIE_CANDIDATES={
@@ -189,6 +294,7 @@ function genieOptions(world){
  const cards=proposal.cards.map((card,index)=>({
   id:'genie-'+world.revision+'-'+index+'-'+hash([world.seed,world.revision,world.tick,card.type].join(':')),
   structure:card.type,
+  explanation:offlineGenieExplanation(proposal.target,card),
   plan:{cost:card.plan.cost,buildTicks:card.plan.buildTicks,risk:card.plan.risk,output:copy(card.plan.output),drain:copy(card.plan.drain)},
   forecast:{target:proposal.target,targetDelta:card.delta,resourceDeltas:copy(card.other),severe:copy(card.severe),afterRevision:card.afterRevision,
    consequenceKinds:[...new Set(card.history.map(event=>event.kind))]}
@@ -204,7 +310,7 @@ function address(world,houseId,floor,flat){
  const residents=canonicalResidents(world);
  return residents.find(npc=>npc.building===houseId&&npc.floor===floor&&npc.flat===flat)||null;
 }
-const worldConsequenceEngine={PROJECTS,createWorld,interpretIntent,preview,commit,tick,propose,proposeGenieCards,genieOptions,evaluateProposal,simulateTicks,address,resident,residentDirectory};
+const worldConsequenceEngine={PROJECTS,cityServices,offlineGenieExplanation,createWorld,interpretIntent,preview,commit,tick,propose,proposeGenieCards,genieOptions,evaluateProposal,simulateTicks,address,resident,residentDirectory};
 // One arithmetic implementation serves Node and the Supabase Edge adapter.
 // The global export keeps the file executable as a Deno side-effect import;
 // CommonJS remains the canonical Node/test interface.
