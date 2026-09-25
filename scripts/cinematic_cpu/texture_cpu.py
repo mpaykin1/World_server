@@ -78,7 +78,7 @@ def bake_material(kind,base_rgb,seed,base_size=384,normal_size=256):
         return field(kind,((x+.5)%normal_size)/normal_size,
                      ((y+.5)%normal_size)/normal_size,seed)[1]
     outputs={}
-    for channel,size in (("base",base_size),("normal",normal_size)):
+    for channel,size in (("base",base_size),("normal",normal_size),("orm",normal_size)):
         pixels=array("f")
         cache=[]
         if channel=="normal":
@@ -90,6 +90,11 @@ def bake_material(kind,base_rgb,seed,base_size=384,normal_size=256):
                 if channel=="base":
                     rgb,_,_=sample(kind,u,v,seed,base_rgb)
                     pixels.extend((*rgb,1.))
+                elif channel=="orm":
+                    _,height,rough,rust=field(kind,u,v,seed)
+                    ao=clamp(.72+height*.28)
+                    metallic=clamp((.82*(1-rust)) if kind=="steel" else 0.)
+                    pixels.extend((ao,rough,metallic,1.))
                 else:
                     left=cache[y][(x-1)%size];right=cache[y][(x+1)%size]
                     down=cache[(y-1)%size][x];up=cache[(y+1)%size][x]
@@ -98,6 +103,6 @@ def bake_material(kind,base_rgb,seed,base_size=384,normal_size=256):
                     pixels.extend(((nx*norm+1)*.5,(ny*norm+1)*.5,(norm+1)*.5,1.))
         image=bpy.data.images.new(kind+"-"+channel,width=size,height=size,alpha=True)
         image.pixels.foreach_set(pixels)
-        if channel=="normal":image.colorspace_settings.name="Non-Color"
+        if channel in ("normal","orm"):image.colorspace_settings.name="Non-Color"
         outputs[channel]=image
     return outputs
