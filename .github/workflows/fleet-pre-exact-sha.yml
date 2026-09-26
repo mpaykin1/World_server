@@ -3,9 +3,16 @@ on:
   pull_request:
     branches: [master]
   workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Existing PR to certify Ocean merge eligibility for
+        type: number
+        required: false
 
 permissions:
   contents: read
+  checks: read
+  pull-requests: read
 
 jobs:
   fleet-pre:
@@ -69,4 +76,70 @@ jobs:
           set -euo pipefail
           test -n "$CERTIFIED"
           test "$CERTIFIED" = "$EXPECTED"
-          echo "READY_FOR_OCEAN=YES SHA=$CERTIFIED"
+
+      # Certificate-SHA == head-SHA is necessary but not sufficient. Collect the
+      # remaining exact-head facts the protected integration actually needs so
+      # the decision below can fail closed instead of assuming approval.
+      - name: Collect exact-head pull request and independent review facts
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
+          CERTIFIED_SHA: ${{ needs.fleet-pre.outputs.sha }}
+          PR_NUMBER: ${{ github.event.pull_request.number || inputs.pr_number }}
+          CHECK_NAME: World Independent Adversarial Review
+        run: |
+          set -euo pipefail
+          FACTS_DIR="$RUNNER_TEMP/ocean"
+          mkdir -p "$FACTS_DIR"
+          FACTS="$FACTS_DIR/facts.json"
+          if test -z "${PR_NUMBER:-}"; then
+            printf '%s\n' "{\"expectedHeadSha\":\"$EXPECTED\",\"prNumber\":null}" > "$FACTS"
+            echo "::warning::no pull request number resolved; the gate will fail closed"
+            exit 0
+          fi
+          gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}" > "$FACTS_DIR/pr.json"
+          gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/master" > "$FACTS_DIR/master.json"
+          gh api "repos/${GITHUB_REPOSITORY}/commits/${EXPECTED}/check-runs" \
+            --paginate > "$FACTS_DIR/checks.json"
+          jq -n \
+            --slurpfile pr "$FACTS_DIR/pr.json" \
+            --slurpfile master "$FACTS_DIR/master.json" \
+            --slurpfile checks "$FACTS_DIR/checks.json" \
+            --arg expected "$EXPECTED" \
+            --arg checkName "$CHECK_NAME" \
+            '($checks[0].check_runs // []) as $runs
+             | ([$runs[] | select(.name == $checkName)] | last) as $review
+             | {
+                 expectedHeadSha: $expected,
+                 certifiedSha: $env.CERTIFIED_SHA,
+                 prNumber: ($pr[0].number // null),
+                 baseRef: ($pr[0].base.ref // null),
+                 baseSha: ($pr[0].base.sha // null),
+                 headSha: ($pr[0].head.sha // null),
+                 draft: ($pr[0].draft // false),
+                 mergeable: ($pr[0].mergeable // null),
+                 mergeableState: ($pr[0].mergeable_state // null),
+                 trustedMasterSha: ($master[0].object.sha // null),
+                 review: (if $review == null then {found: false}
+                           else {
+                             found: true,
+                             head_sha: ($review.head_sha // null),
+                             status: ($review.status // null),
+                             conclusion: ($review.conclusion // null),
+                             verdict: (try (($review.output.title // "") | capture("verdict: (?<v>[A-Z]+)") | .v) catch null)
+                           } end)
+               }' > "$FACTS"
+          cat "$FACTS"
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Fail closed unless the exact head is Ocean eligible
+        run: |
+          set -euo pipefail
+          node scripts/ocean-merge-eligibility-gate.js "$RUNNER_TEMP/ocean/facts.json"
