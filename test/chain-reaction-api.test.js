@@ -293,7 +293,7 @@ test('geothermal player journey: same-revision offers, preview, commit, delayed 
   assert.equal(first.revision, 0);
   assert.equal(first.world.revision, first.revision);
   assert(first.cards.length >= 0 && first.cards.length <= 4);
-  const input = { structure: 'geothermal', text: 'Р“РµРѕС‚РµСЂРјР°Р»СЊРЅР°СЏ СЌРЅРµСЂРіРёСЏ РїРѕСЃР»Рµ РёСЃСЃР»РµРґРѕРІР°РЅРёСЏ' };
+  const input = { structure: 'geothermal', text: 'geothermal energy after research' };
   const preview = await handle(f.admin, req, body('preview-plan', input));
   assert.equal(preview.plan.feasible, true);
   assert(preview.plan.buildTicks > 0);
@@ -301,6 +301,8 @@ test('geothermal player journey: same-revision offers, preview, commit, delayed 
   const committed = await handle(f.admin, req, body('commit-plan', { ...input, expectedRevision: first.revision }));
   assert.equal(committed.revision, 1);
   assert.equal(committed.world.resources.power, initialPower);
+  assert.equal(committed.world.resources.budget, first.world.resources.budget - preview.plan.cost);
+  assert.equal(f.writes, 1);
   await rejects(handle(f.admin, req, body('commit-plan', { ...input, expectedRevision: first.revision })), 409);
   const reloaded = await handle(f.admin, req, body('game-state'));
   assert.equal(reloaded.revision, committed.revision);
@@ -310,5 +312,6 @@ test('geothermal player journey: same-revision offers, preview, commit, delayed 
   assert(advanced.world.history.some(e => e.kind === 'commissioned'));
   const afterReload = await handle(f.admin, req, body('game-state'));
   assert.deepEqual(afterReload.world, advanced.world);
-  assert.equal(f.privateEvents.length, 2);
+  assert.deepEqual(f.privateEvents.map(e => e.action), ['commit-plan', 'tick']);
+  assert.equal(f.writes, 2);
 });
