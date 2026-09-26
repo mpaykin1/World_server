@@ -541,6 +541,420 @@
       "variant": 2,
       "photo": "done_city-2.png",
       "animation": "done_city-2.mp4"
+    },
+    {
+      "id": "story_dragon_fire",
+      "variant": 0,
+      "photo": "story_dragon_fire-0.png",
+      "animation": "story_dragon_fire-0.mp4"
+    },
+    {
+      "id": "story_dragon_fire",
+      "variant": 1,
+      "photo": "story_dragon_fire-1.png",
+      "animation": "story_dragon_fire-1.mp4"
+    },
+    {
+      "id": "story_dragon_fire",
+      "variant": 2,
+      "photo": "story_dragon_fire-2.png",
+      "animation": "story_dragon_fire-2.mp4"
+    },
+    {
+      "id": "story_dragon_arrival",
+      "variant": 0,
+      "photo": "story_dragon_arrival-0.png",
+      "animation": "story_dragon_arrival-0.mp4"
+    },
+    {
+      "id": "story_dragon_arrival",
+      "variant": 1,
+      "photo": "story_dragon_arrival-1.png",
+      "animation": "story_dragon_arrival-1.mp4"
+    },
+    {
+      "id": "story_dragon_arrival",
+      "variant": 2,
+      "photo": "story_dragon_arrival-2.png",
+      "animation": "story_dragon_arrival-2.mp4"
+    },
+    {
+      "id": "story_dragon_help",
+      "variant": 0,
+      "photo": "story_dragon_help-0.png",
+      "animation": "story_dragon_help-0.mp4"
+    },
+    {
+      "id": "story_dragon_help",
+      "variant": 1,
+      "photo": "story_dragon_help-1.png",
+      "animation": "story_dragon_help-1.mp4"
+    },
+    {
+      "id": "story_dragon_help",
+      "variant": 2,
+      "photo": "story_dragon_help-2.png",
+      "animation": "story_dragon_help-2.mp4"
+    },
+    {
+      "id": "story_dragon_aftermath",
+      "variant": 0,
+      "photo": "story_dragon_aftermath-0.png",
+      "animation": "story_dragon_aftermath-0.mp4"
+    },
+    {
+      "id": "story_dragon_aftermath",
+      "variant": 1,
+      "photo": "story_dragon_aftermath-1.png",
+      "animation": "story_dragon_aftermath-1.mp4"
+    },
+    {
+      "id": "story_dragon_aftermath",
+      "variant": 2,
+      "photo": "story_dragon_aftermath-2.png",
+      "animation": "story_dragon_aftermath-2.mp4"
+    },
+    {
+      "id": "story_fire",
+      "variant": 0,
+      "photo": "story_fire-0.png",
+      "animation": "story_fire-0.mp4"
+    },
+    {
+      "id": "story_fire",
+      "variant": 1,
+      "photo": "story_fire-1.png",
+      "animation": "story_fire-1.mp4"
+    },
+    {
+      "id": "story_fire",
+      "variant": 2,
+      "photo": "story_fire-2.png",
+      "animation": "story_fire-2.mp4"
+    },
+    {
+      "id": "story_flood",
+      "variant": 0,
+      "photo": "story_flood-0.png",
+      "animation": "story_flood-0.mp4"
+    },
+    {
+      "id": "story_flood",
+      "variant": 1,
+      "photo": "story_flood-1.png",
+      "animation": "story_flood-1.mp4"
+    },
+    {
+      "id": "story_flood",
+      "variant": 2,
+      "photo": "story_flood-2.png",
+      "animation": "story_flood-2.mp4"
+    },
+    {
+      "id": "story_storm",
+      "variant": 0,
+      "photo": "story_storm-0.png",
+      "animation": "story_storm-0.mp4"
+    },
+    {
+      "id": "story_storm",
+      "variant": 1,
+      "photo": "story_storm-1.png",
+      "animation": "story_storm-1.mp4"
+    },
+    {
+      "id": "story_storm",
+      "variant": 2,
+      "photo": "story_storm-2.png",
+      "animation": "story_storm-2.mp4"
+    },
+    {
+      "id": "story_earthquake",
+      "variant": 0,
+      "photo": "story_earthquake-0.png",
+      "animation": "story_earthquake-0.mp4"
+    },
+    {
+      "id": "story_earthquake",
+      "variant": 1,
+      "photo": "story_earthquake-1.png",
+      "animation": "story_earthquake-1.mp4"
+    },
+    {
+      "id": "story_earthquake",
+      "variant": 2,
+      "photo": "story_earthquake-2.png",
+      "animation": "story_earthquake-2.mp4"
+    },
+    {
+      "id": "story_meteor",
+      "variant": 0,
+      "photo": "story_meteor-0.png",
+      "animation": "story_meteor-0.mp4"
+    },
+    {
+      "id": "story_meteor",
+      "variant": 1,
+      "photo": "story_meteor-1.png",
+      "animation": "story_meteor-1.mp4"
+    },
+    {
+      "id": "story_meteor",
+      "variant": 2,
+      "photo": "story_meteor-2.png",
+      "animation": "story_meteor-2.mp4"
+    },
+    {
+      "id": "story_epidemic",
+      "variant": 0,
+      "photo": "story_epidemic-0.png",
+      "animation": "story_epidemic-0.mp4"
+    },
+    {
+      "id": "story_epidemic",
+      "variant": 1,
+      "photo": "story_epidemic-1.png",
+      "animation": "story_epidemic-1.mp4"
+    },
+    {
+      "id": "story_epidemic",
+      "variant": 2,
+      "photo": "story_epidemic-2.png",
+      "animation": "story_epidemic-2.mp4"
+    },
+    {
+      "id": "story_attack",
+      "variant": 0,
+      "photo": "story_attack-0.png",
+      "animation": "story_attack-0.mp4"
+    },
+    {
+      "id": "story_attack",
+      "variant": 1,
+      "photo": "story_attack-1.png",
+      "animation": "story_attack-1.mp4"
+    },
+    {
+      "id": "story_attack",
+      "variant": 2,
+      "photo": "story_attack-2.png",
+      "animation": "story_attack-2.mp4"
+    },
+    {
+      "id": "story_rain",
+      "variant": 0,
+      "photo": "story_rain-0.png",
+      "animation": "story_rain-0.mp4"
+    },
+    {
+      "id": "story_rain",
+      "variant": 1,
+      "photo": "story_rain-1.png",
+      "animation": "story_rain-1.mp4"
+    },
+    {
+      "id": "story_rain",
+      "variant": 2,
+      "photo": "story_rain-2.png",
+      "animation": "story_rain-2.mp4"
+    },
+    {
+      "id": "story_drought",
+      "variant": 0,
+      "photo": "story_drought-0.png",
+      "animation": "story_drought-0.mp4"
+    },
+    {
+      "id": "story_drought",
+      "variant": 1,
+      "photo": "story_drought-1.png",
+      "animation": "story_drought-1.mp4"
+    },
+    {
+      "id": "story_drought",
+      "variant": 2,
+      "photo": "story_drought-2.png",
+      "animation": "story_drought-2.mp4"
+    },
+    {
+      "id": "story_forest",
+      "variant": 0,
+      "photo": "story_forest-0.png",
+      "animation": "story_forest-0.mp4"
+    },
+    {
+      "id": "story_forest",
+      "variant": 1,
+      "photo": "story_forest-1.png",
+      "animation": "story_forest-1.mp4"
+    },
+    {
+      "id": "story_forest",
+      "variant": 2,
+      "photo": "story_forest-2.png",
+      "animation": "story_forest-2.mp4"
+    },
+    {
+      "id": "story_festival",
+      "variant": 0,
+      "photo": "story_festival-0.png",
+      "animation": "story_festival-0.mp4"
+    },
+    {
+      "id": "story_festival",
+      "variant": 1,
+      "photo": "story_festival-1.png",
+      "animation": "story_festival-1.mp4"
+    },
+    {
+      "id": "story_festival",
+      "variant": 2,
+      "photo": "story_festival-2.png",
+      "animation": "story_festival-2.mp4"
+    },
+    {
+      "id": "story_trade",
+      "variant": 0,
+      "photo": "story_trade-0.png",
+      "animation": "story_trade-0.mp4"
+    },
+    {
+      "id": "story_trade",
+      "variant": 1,
+      "photo": "story_trade-1.png",
+      "animation": "story_trade-1.mp4"
+    },
+    {
+      "id": "story_trade",
+      "variant": 2,
+      "photo": "story_trade-2.png",
+      "animation": "story_trade-2.mp4"
+    },
+    {
+      "id": "story_rescue",
+      "variant": 0,
+      "photo": "story_rescue-0.png",
+      "animation": "story_rescue-0.mp4"
+    },
+    {
+      "id": "story_rescue",
+      "variant": 1,
+      "photo": "story_rescue-1.png",
+      "animation": "story_rescue-1.mp4"
+    },
+    {
+      "id": "story_rescue",
+      "variant": 2,
+      "photo": "story_rescue-2.png",
+      "animation": "story_rescue-2.mp4"
+    },
+    {
+      "id": "story_extinguish",
+      "variant": 0,
+      "photo": "story_extinguish-0.png",
+      "animation": "story_extinguish-0.mp4"
+    },
+    {
+      "id": "story_extinguish",
+      "variant": 1,
+      "photo": "story_extinguish-1.png",
+      "animation": "story_extinguish-1.mp4"
+    },
+    {
+      "id": "story_extinguish",
+      "variant": 2,
+      "photo": "story_extinguish-2.png",
+      "animation": "story_extinguish-2.mp4"
+    },
+    {
+      "id": "story_evacuation",
+      "variant": 0,
+      "photo": "story_evacuation-0.png",
+      "animation": "story_evacuation-0.mp4"
+    },
+    {
+      "id": "story_evacuation",
+      "variant": 1,
+      "photo": "story_evacuation-1.png",
+      "animation": "story_evacuation-1.mp4"
+    },
+    {
+      "id": "story_evacuation",
+      "variant": 2,
+      "photo": "story_evacuation-2.png",
+      "animation": "story_evacuation-2.mp4"
+    },
+    {
+      "id": "story_rebuild",
+      "variant": 0,
+      "photo": "story_rebuild-0.png",
+      "animation": "story_rebuild-0.mp4"
+    },
+    {
+      "id": "story_rebuild",
+      "variant": 1,
+      "photo": "story_rebuild-1.png",
+      "animation": "story_rebuild-1.mp4"
+    },
+    {
+      "id": "story_rebuild",
+      "variant": 2,
+      "photo": "story_rebuild-2.png",
+      "animation": "story_rebuild-2.mp4"
+    },
+    {
+      "id": "story_defense",
+      "variant": 0,
+      "photo": "story_defense-0.png",
+      "animation": "story_defense-0.mp4"
+    },
+    {
+      "id": "story_defense",
+      "variant": 1,
+      "photo": "story_defense-1.png",
+      "animation": "story_defense-1.mp4"
+    },
+    {
+      "id": "story_defense",
+      "variant": 2,
+      "photo": "story_defense-2.png",
+      "animation": "story_defense-2.mp4"
+    },
+    {
+      "id": "story_recovery",
+      "variant": 0,
+      "photo": "story_recovery-0.png",
+      "animation": "story_recovery-0.mp4"
+    },
+    {
+      "id": "story_recovery",
+      "variant": 1,
+      "photo": "story_recovery-1.png",
+      "animation": "story_recovery-1.mp4"
+    },
+    {
+      "id": "story_recovery",
+      "variant": 2,
+      "photo": "story_recovery-2.png",
+      "animation": "story_recovery-2.mp4"
+    },
+    {
+      "id": "story_unknown",
+      "variant": 0,
+      "photo": "story_unknown-0.png",
+      "animation": "story_unknown-0.mp4"
+    },
+    {
+      "id": "story_unknown",
+      "variant": 1,
+      "photo": "story_unknown-1.png",
+      "animation": "story_unknown-1.mp4"
+    },
+    {
+      "id": "story_unknown",
+      "variant": 2,
+      "photo": "story_unknown-2.png",
+      "animation": "story_unknown-2.mp4"
     }
   ]
 }
