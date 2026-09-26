@@ -5,6 +5,8 @@ import {
   loadSession, saveSession, view
 } from './telegram-state.mjs';
 import {makeVisualTurn} from './telegram-scenes.mjs';
+import {applyStoryText,applyStoryAction,advanceStoryDay} from './telegram-story.mjs';
+import {STORY_ACTIONS} from './telegram-story-parse.mjs';
 
 const WEBHOOK_URL='https://world-server.mmmpaykin.workers.dev/api/telegram/webhook';
 const TOKEN_PATTERN=/^\d+:[A-Za-z0-9_-]{20,}$/;
@@ -97,8 +99,13 @@ async function onCallback(callback,updateId,env,fetcher){
     action='plan';
     notice='Напиши идею (до 600 символов), например: солнечные панели, чтобы пережить кризис.';
   }else if(data.action==='next'){
-    world=engine.tick(world);
+    world=advanceStoryDay(session.world,engine.tick(world));
     action='day';
+  }else if(STORY_ACTIONS.has(data.action)){
+    const result=applyStoryAction(world,data.action);
+    world=result.world;
+    action='story';
+    notice=result.accepted?'':result.world.story.last.description;
   }else{
     const candidate=options(world).find(x=>x.type===data.action);
     if(!candidate){
@@ -130,12 +137,6 @@ async function onText(message,updateId,env,fetcher){
   const session=await loadSession(env.TELEGRAM_DB,message.chat.id);
   if(updateId<=session.lastUpdate)return;
   const token=env.TELEGRAM_BOT_TOKEN;
-  if(session.pending!==session.revision){
-    await sendGame(token,message.chat.id,
-      makeVisualTurn(session.world,session.world,'resume','',updateId,
-        view(session.world,'Чтобы продолжить игру, используй кнопки ниже.')),fetcher);
-    return;
-  }
   const text=String(message.text||'').trim();
   if(!text||text.length>MAX_INTENT){
     await sendGame(token,message.chat.id,
@@ -143,16 +144,17 @@ async function onText(message,updateId,env,fetcher){
         view(session.world,'Напиши идею длиной от 1 до 600 символов.')),fetcher);
     return;
   }
-  const outcome=applyPlan(session.world,'workshop',text);
-  const notice=outcome.accepted?'':('⛔ Не хватает ресурсов: '+outcome.plan.missing
-      .map(x=>x.resource+' '+x.available+'/'+x.required).join(', ')+'.');
+  // Every free-form message is a possible story turn, even if the player did
+  // not press "My variant" first. Never silently reinterpret dragons as
+  // a generic workshop construction order.
+  const result=applyStoryText(session.world,text);
   const saved=await saveSession(env.TELEGRAM_DB,session,{
-    world:outcome.world,pending:null,updateId
+    world:result.world,pending:null,updateId
   });
-  if(saved)await sendGame(token,message.chat.id,
-    makeVisualTurn(session.world,outcome.world,
-      outcome.accepted?'start':'blocked',
-      outcome.plan.intent.goal,updateId,view(outcome.world,notice)),fetcher);
+  if(!saved)return;
+  await sendGame(token,message.chat.id,
+    makeVisualTurn(session.world,result.world,
+      result.action,result.kind,updateId,view(result.world)),fetcher);
 }
 export async function handleTelegramWebhook(request,env,fetcher=fetch){
   if(request.method!=='POST')return new Response('Method Not Allowed',{status:405});
