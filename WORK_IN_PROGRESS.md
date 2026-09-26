@@ -1004,3 +1004,5 @@ Task: implement original worker-safe face culling and compact typed-array mesh o
 2026-09-26 standalone: reread Godot pathfinder.gd goal snap-down (up to four), bounded A* and open-set deduplication. Correct independently authored walking A* and add goal-snap tests. No runtime integration.
 
 2026-09-26 standalone: read actual Unreal Render/MCTextureSynth.cpp procedural VNoise/Fbm/FbmAniso/Worley; independently implement tileable deterministic noise primitives and tests. No assets copied and no runtime integration.
+
+2026-09-26 standalone: studied actual Unreal Render/MCTextureRecipes.cpp Mottle and StoneLike (fBm two-color mottle, dark vein threshold, height reduction). Independently compose original tileable noise into original stone albedo/height maps; deterministic standalone tests. No upstream assets/code copied or live integration.
