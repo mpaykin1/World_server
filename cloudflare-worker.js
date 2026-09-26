@@ -261,6 +261,14 @@ export default {
     const url = new URL(request.url);
     if (url.pathname === '/') return Response.redirect(new URL('/apps/catalog/', url), 302);
 
+    if (url.pathname === '/api/telegram/webhook') {
+      const { handleTelegramWebhook } = await import('./telegram-game.mjs');
+      return handleTelegramWebhook(request, env);
+    }
+    if (url.pathname === '/api/telegram/status' && request.method === 'GET') {
+      const { telegramStatus } = await import('./telegram-game.mjs');
+      return telegramStatus(env);
+    }
     if (url.pathname === '/api/config') return configApi(request, env);
     if (url.pathname === '/api/apps') return appsApi(request, env, url);
     if (url.pathname === '/api/worlds') return worldsApi(request, env, url);
@@ -273,5 +281,9 @@ export default {
     if (url.pathname.startsWith('/api/')) return proxyDynamicApi(request, env, url);
 
     return env.ASSETS.fetch(request);
+  },
+  async scheduled(_event, env) {
+    const { registerTelegramWebhook } = await import('./telegram-game.mjs');
+    await registerTelegramWebhook(env);
   }
 };
