@@ -1,7 +1,7 @@
 /** Original engine-independent voxel face corner shading, inspired by padded Godot meshing. */
 export function sampleOriginalFaceCorners({position,normal,sample,faceShade=1}){
  if(!Array.isArray(position)||position.length!==3||!position.every(Number.isInteger)||!Array.isArray(normal)||normal.length!==3||normal.filter(v=>v!==0).length!==1||normal.some(v=>![-1,0,1].includes(v))||typeof sample!=='function'||!Number.isFinite(faceShade)||faceShade<0)throw new TypeError('face');
- const axis=normal.findIndex(v=>v!==0),tangent=[0,1,2].filter(v=>v!==0&&[0,1,2].indexOf(v)!==axis);
+ const axis=normal.findIndex(v=>v!==0),tangent=[0,1,2].filter(v=>v!==axis);
  const [a,b]=tangent,corners=[[-1,-1],[1,-1],[1,1],[-1,1]];
  const get=offset=>{const p=position.map((v,i)=>v+normal[i]+offset[i]);const v=sample(...p)??{};return {solid:!!v.solid,sky:Math.max(0,Math.min(15,v.sky??0)),block:Math.max(0,Math.min(15,v.block??0))};};
  const light=v=>Math.max(v.sky,v.block),base=get([0,0,0]);
