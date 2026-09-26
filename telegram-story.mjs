@@ -20,7 +20,13 @@ const TITLE={
   rescue:'🚑 Жителям оказали помощь.',
   unknown:'📜 Новый поворот сюжета.'
 };
-const storyState=world=>world.story||{active:null,ruins:[],last:null,evacuated:0};
+const evacuatedCount=story=>Number.isSafeInteger(story?.evacuated)&&story.evacuated>0
+  ?story.evacuated:0;
+function storyState(world){
+  const state=world.story||{active:null,ruins:[],last:null,evacuated:0};
+  state.evacuated=evacuatedCount(state);
+  return state;
+}
 function damagedTarget(world,text){
   const projects=world.projects;
   let p=null;
@@ -134,8 +140,9 @@ export function applyStoryAction(world,action,text=''){
     detail='Пожар потушен. Разрушенные здания сами не восстановятся.';
   }else if(action==='evacuate'){
     const moved=Math.min(4,Math.max(0,next.population-1));
-    next.population-=moved;next.story.evacuated+=moved;
-    next=engine.applyResourceDelta(next,{health:5});detail='Эвакуировано '+moved+' жителей. Они временно покинули город.';
+    next=engine.applyResourceDelta(next,{population:-moved,health:5});
+    next.story.evacuated=Math.min(Number.MAX_SAFE_INTEGER,next.story.evacuated+moved);
+    detail='Эвакуировано '+moved+' жителей. Они временно покинули город.';
   }else if(action==='defend'){
     if(incident)incident.severity=Math.max(0,incident.severity-2);
     if(incident?.severity===0)next.story.active=null;
@@ -172,8 +179,10 @@ export function applyStoryText(world,text){
 export function advanceStoryDay(previous,world){
   const active=previous.story?.active;
   const rebuilding=previous.story?.ruins?.some(x=>x.rebuilding);
-  if(!active&&!rebuilding)return world;
-  let next=structuredClone(world);next.story=structuredClone(previous.story);
+  const evacuated=evacuatedCount(previous.story);
+  if(!active&&!rebuilding&&!evacuated)return world;
+  let next=structuredClone(world);
+  next.story=storyState({story:structuredClone(previous.story)});
   if(active){
   const incident=next.story.active;incident.age++;
   if(incident.age>=3){
@@ -202,6 +211,15 @@ export function advanceStoryDay(previous,world){
       title:'🏘 Объект снова построен: '+restored+'.',
       description:'Новый объект готов после строительства. Его вклад в ресурсы начнётся со следующего игрового дня.',
       text:'',target:restored};
+  }
+  if(!next.story.active&&next.story.evacuated>0){
+    const returned=Math.min(2,next.story.evacuated);
+    next=engine.applyResourceDelta(next,{population:returned});
+    next.story.evacuated-=returned;
+    next.history.push({tick:next.tick,kind:'telegram_story_return',count:returned});
+    if(!restored)next.story.last={kind:'recovery',scene:'story_recovery',
+      title:'🏠 Жители возвращаются.',description:'После окончания угрозы вернулось '+returned+' жителей.',
+      text:'',target:''};
   }
   closeCrisis(next);
   return next;
