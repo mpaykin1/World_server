@@ -1,6 +1,9 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.112.3";
 import { handleVoxelAction } from "./voxel-actions.ts";
 import { handleChainReaction, isChainReactionAction } from "./chain-reaction.ts";
+import "../_shared/chain-reaction-geography.js";
+const syncGeography = (globalThis as any).WorldConsequenceGeography.syncGeography;
+const createConsequences = (globalThis as any).WorldConsequenceEngine.createWorld;
 
 const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const WORLD_ID=/^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -105,7 +108,8 @@ async function mutateWorld(admin:any,worldId:string,fn:(state:any,seed:number)=>
     const previous=Date.parse(row.updated_at||"");
     const now=new Date(Math.max(Date.now(),Number.isFinite(previous)?previous+1:0)).toISOString();
     settings.worldDNA={...dna,schemaVersion:dna.schemaVersion||"1.0.0",id:dna.id||worldId,seed:dna.seed||seed,generator:dna.generator||{kind:"procedural-voxel",version:1,chunkSize:16,minY:-16,maxY:96},emergence:{...next,updatedAt:now}};
-    const {data,error}=await admin.from("voxel_worlds").update({settings,updated_at:now}).eq("id",worldId).eq("updated_at",row.updated_at).select("id,seed,settings,updated_at").maybeSingle();
+    const synchronized=syncGeography(settings,seed,next.entities,createConsequences);
+    const {data,error}=await admin.from("voxel_worlds").update({settings:synchronized,updated_at:now}).eq("id",worldId).eq("updated_at",row.updated_at).select("id,seed,settings,updated_at").maybeSingle();
     if(error)throw error;if(data)return{row:data,emergence:next};
   }
   fail(409,"Мир изменился одновременно у другого игрока. Повтори действие.");
