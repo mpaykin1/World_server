@@ -112,6 +112,8 @@ export async function handleChainReaction(admin:any,req:Request,body:any,runtime
   const stored=settings.chainReaction;
   if(stored&&(stored.schema!==1||!Number.isSafeInteger(stored.revision)))fail(409,"Unsupported scenario version");
   const world=stored||engine.createWorld(String(row.seed));
+  if(!Array.isArray(world.houses)||!Array.isArray(world.history))fail(409,'Invalid saved world shape');
+  world.history=world.history.filter((e:any)=>e&&typeof e==='object'&&!Array.isArray(e));
   const base={worldId:row.id,scenarioVersion:1,revision:world.revision,runtime:"supabase-edge-chain-reaction"};
   if(body.action==="history") {
     const offset=body.offset===undefined?0:body.offset,limit=body.limit===undefined?50:body.limit;

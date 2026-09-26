@@ -278,7 +278,7 @@ function evaluateProposal(world,type,target,horizon){
  if(delta<=-2)category='worsens';
  else if(delta>=4&&severe.length)category='shifts_crisis';
  else if(delta>=4&&severe.length===0)category='balanced';
- return {type,plan,category,target,delta,other,severe,afterRevision:after.revision,history:after.history.slice(-12)};
+ return {type,plan,category,target,delta,other,severe,afterRevision:after.revision,history:after.history.slice(-12).filter(e=>e&&typeof e==='object'&&!Array.isArray(e))};
 }
 function proposeGenieCards(world){
  const target=['power','water','food'].sort((a,b)=>world.resources[a]-world.resources[b])[0];
