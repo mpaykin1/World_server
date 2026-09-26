@@ -988,3 +988,5 @@ Task: implement original worker-safe face culling and compact typed-array mesh o
 2026-09-26 copy-only: reread full upstream Godot game/ai/pathfinder.gd; independently implement bounded 4-direction walking A* with step-up/drop, clearance, hazards/water costs and partial-path fallback; standalone tests only, no gameplay integration.
 
 2026-09-26 copy-only: studied Unity ChunkManager.cs result apply 6ms/64 and version/identity checks on mesh upload; independently implement bounded, stale-safe staged result applicator and standalone tests; no active runtime integration.
+
+2026-09-26 copy-only: studied Unity ChunkManager unload radius/busy guards, save-before-removal, readiness and four-stage load progress; independently implement standalone chunk residency and readiness planner with tests; no live runtime integration.
