@@ -83,12 +83,8 @@ async function onCallback(callback,updateId,env,fetcher){
     notice='✍️ Пришли сообщением свой проект (до 600 символов).\n'+
       'Например: Построить солнечные панели, чтобы пережить кризис.';
   }else if(data.action==='next'){
-    if(options(world).length){
-      notice='Сначала выбери проект или предложи свой.';
-    }else{
-      world=engine.tick(world);
-      notice=describeChange(session.world,world,'Город прожил ещё один день');
-    }
+    world=engine.tick(world);
+    notice=describeChange(session.world,world,'Город прожил ещё один день');
   }else{
     const candidate=options(world).find(x=>x.type===data.action);
     if(!candidate){
