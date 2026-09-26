@@ -976,3 +976,5 @@ Task: implement original worker-safe face culling and compact typed-array mesh o
 2026-09-26 copy-only: source-study Godot mesher corner AO/light weighting; independently implement standalone corner shade sampling and diagonal selection, with tests; no active renderer integration.
 
 2026-09-26 copy-only: study Godot mesher quad diagonal and separate sky/block light channels; implement original standalone triangulation/light packing and tests; no active renderer integration.
+
+2026-09-26 copy-only: studied complete Godot incremental light removal BFS; independently prototype bounded two-phase removal and reseeding for block light, differential tests against full flood lighting; no runtime integration.
