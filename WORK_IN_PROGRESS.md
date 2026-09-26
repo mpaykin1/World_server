@@ -1000,3 +1000,5 @@ Task: implement original worker-safe face culling and compact typed-array mesh o
 2026-09-26 copy-only: studied Unity Lighting.cs vertical sky initialization, expose-depth and six-neighbor sky flood (15 downward exception); independently implement bounded skylight volume and standalone tests, no runtime integration.
 
 2026-09-26 standalone: studied Unity Lighting.cs UpdateChannel/PropagateWorld two-phase incremental sky updates. Implement correctness-first independent edit relight with changed-cell and affected-section metadata; no game integration.
+
+2026-09-26 standalone: reread Godot pathfinder.gd goal snap-down (up to four), bounded A* and open-set deduplication. Correct independently authored walking A* and add goal-snap tests. No runtime integration.
