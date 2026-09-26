@@ -158,3 +158,36 @@ test('active threats still authorize evacuation and defense',()=>{
       threatened.resources.budget-(action==='evacuate'?6:15),action+' budget');
   }
 });
+
+
+test('malformed saved incidents fail closed before cost or mutation',()=>{
+  const malformed=[{},'fire',[],{kind:'fire'},
+    {kind:'invented',severity:2,age:0},{kind:'fire',severity:NaN,age:0},
+    {kind:'fire',severity:Infinity,age:0},{kind:'fire',severity:0,age:0},
+    {kind:'fire',severity:4,age:0},{kind:'fire',severity:2,age:-1},
+    {kind:'fire',severity:2,age:3}];
+  for(const active of malformed){
+    for(const action of ['evacuate','defend']){
+      const world=engine.createWorld('malformed:'+action);
+      world.story={active,ruins:[],last:null,evacuated:0};
+      const original=structuredClone(world);
+      const result=applyStoryAction(world,action);
+      assert.equal(result.accepted,false,JSON.stringify(active)+':'+action);
+      assert.equal(result.world.story.active,null,JSON.stringify(active)+':'+action);
+      assert.equal(result.world.population,original.population,action+' population');
+      assert.deepEqual(result.world.resources,original.resources,action+' resources');
+      assert(Object.values(result.world.resources).every(Number.isFinite));
+      assert.deepEqual(world,original,'input mutation '+action);
+    }
+  }
+});
+
+test('daily advance repairs malformed active incidents without aftermath',()=>{
+  const previous=engine.createWorld('malformed-day');
+  previous.story={active:{},ruins:[],last:null,evacuated:0};
+  const ticked=engine.tick(previous);
+  const advanced=advanceStoryDay(previous,ticked);
+  assert.equal(advanced.story.active,null);
+  assert.deepEqual(advanced.resources,ticked.resources);
+  assert.equal(advanced.population,ticked.population);
+});
