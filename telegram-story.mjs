@@ -109,6 +109,8 @@ export function applyStoryAction(world,action,text=''){
   if(!STORY_ACTIONS.has(action))return reject(world,'Неизвестное действие.');
   if(!rescueTarget(world)&&action!=='relief')
     return reject(world,'Сейчас нет активной угрозы или разрушений.');
+  if((action==='evacuate'||action==='defend')&&!world.story?.active)
+    return reject(world,'Сейчас нет активной угрозы для этого действия.');
   let next=structuredClone(world);next.story=storyState(next);
   const initialIncident=next.story.active,initialResources=next.resources;
   const cost={extinguish:12,evacuate:6,defend:15,rebuild:25,relief:8}[action];
