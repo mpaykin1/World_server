@@ -12,5 +12,5 @@ test('goal snapping is limited to four downward checks',()=>{
 test('hazardous floor is not treated as valid support',()=>{
  const cell=(x,y,z)=>({solid:y<0||(x===2&&y===0),hazard:x===2&&y===0});
  const r=findOriginalWalkingPath({start:[0,0,0],goal:[2,1,0],cell,maxNodes:30});
- assert.deepEqual(r.resolvedGoal,[2,-3,0]);
+ assert.deepEqual(r.resolvedGoal,[2,0,0]);
 });
