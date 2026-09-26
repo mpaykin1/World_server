@@ -59,20 +59,20 @@ function damagedTarget(world,text){
     p=[...projects].reverse().find(x=>['workshop','bottling_plant'].includes(x.type));
   return p||[...projects].reverse().find(x=>x.active)||projects.at(-1)||null;
 }
-function destroyStructure(next,text){
+function destroyStructure(next,text,source){
   const p=damagedTarget(next,text),ruins=next.story.ruins;
   if(p){
     next.projects=next.projects.filter(x=>x.id!==p.id);
     if(!p.active&&!p.workersReleased)
       next.resources.workers=clamp(next.resources.workers+(p.workersReserved||0),
         0,next.population);
-    ruins.push({id:p.id,type:p.type,name:LABELS[p.type]||p.type,rebuilding:null});
+    ruins.push({id:p.id,type:p.type,name:LABELS[p.type]||p.type,source,rebuilding:null});
     return LABELS[p.type]||p.type;
   }
   const house=next.houses.pop();
   if(house){
     next.residents=next.residents.filter(x=>x.building!==house.id);
-    ruins.push({id:house.id,type:'luxury_arcology',name:'Жилой комплекс',rebuilding:null});
+    ruins.push({id:house.id,type:'luxury_arcology',name:'Жилой комплекс',source,rebuilding:null});
     return 'Жилой комплекс';
   }
   return 'Городские постройки';
@@ -91,7 +91,7 @@ function enactWorldEvent(world,input){
   let target='';
   if(BURNING.has(kind)||['earthquake','meteor','attack'].includes(kind)||
      (['flood','storm'].includes(kind)&&/смы|разруш|снес|разбил|уничтож/i.test(input.text)))
-    target=destroyStructure(next,input.text);
+    target=destroyStructure(next,input.text,kind);
   if(THREATS.has(kind))
     next.story.active={kind,severity:kind==='dragon_fire'?3:2,age:0,target};
   const lost=target?' Повреждён объект: '+target+'.':'';
