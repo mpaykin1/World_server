@@ -17,6 +17,6 @@ test('below world bedrock, missing neighbors sky, above world air',()=>{
 });
 test('all solid center row marked full',()=>{
  const c={blocks:new Uint16Array(4096).fill(1)};
- const r=sampleOriginalPaddedSection({chunks:new Map([['0,0',c]]),worldHeight:16});
+ const r=sampleOriginalPaddedSection({chunks:new Map([['0,0',c],['-1,0',c],['1,0',c]]),worldHeight:16});
  assert.equal(r.rowFull[1*18+1],1);assert.equal(r.rowFull[1*18+0],0);
 });
