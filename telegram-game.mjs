@@ -4,10 +4,9 @@ import {
   engine, MAX_INTENT, LABELS, initialWorld, options, applyPlan,
   loadSession, saveSession, view, describeChange
 } from './telegram-state.mjs';
+import {animatedWorldGif} from './telegram-animated-gif.mjs';
 
 const WEBHOOK_URL='https://world-server.mmmpaykin.workers.dev/api/telegram/webhook';
-const INTRO_IMAGE='https://world-server.mmmpaykin.workers.dev/apps/ai3d-reference-test/assets/renders/front_textured.png';
-const EVENT_IMAGE='https://world-server.mmmpaykin.workers.dev/apps/ai3d-reference-test/assets/renders/left15_textured.png';
 const TOKEN_PATTERN=/^\d+:[A-Za-z0-9_-]{20,}$/;
 const responseJson=(value,status=200)=>new Response(JSON.stringify(value),{
   status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store'}
@@ -27,13 +26,20 @@ async function botApi(token,method,payload,fetcher=fetch){
   if(result.ok!==true)throw Error('Telegram '+method+' rejected');
   return result.result;
 }
-async function sendGame(token,chatId,game,fetcher,{image=null}={}){
-  if(image){
+async function sendGame(token,chatId,game,fetcher,{world=null}={}){
+  if(world){
     try{
-      await botApi(token,'sendPhoto',{chat_id:chatId,photo:image,caption:game.text,
-        reply_markup:game.reply_markup},fetcher);
+      const form=new FormData();
+      form.set('chat_id',String(chatId));
+      form.set('animation',new Blob([animatedWorldGif(world)],{type:'image/gif'}),'world.gif');
+      form.set('caption',game.text.slice(0,1024));
+      form.set('reply_markup',JSON.stringify(game.reply_markup));
+      const response=await fetcher('https://api.telegram.org/bot'+token+'/sendAnimation',{
+        method:'POST',body:form
+      });
+      if(!response.ok||(await response.json()).ok!==true)throw Error('Animation rejected');
       return;
-    }catch{ /* Photo isn't essential to playing. */ }
+    }catch{ /* A playable text response must survive animation failures. */ }
   }
   await botApi(token,'sendMessage',{chat_id:chatId,...game},fetcher);
 }
@@ -50,7 +56,7 @@ async function onCommand(message,updateId,env,fetcher){
   });
   if(!updated)return;
   await sendGame(env.TELEGRAM_BOT_TOKEN,chatId,
-    view(world,reset?'🌱 Новый мир создан.':'Добро пожаловать!'),fetcher,{image:INTRO_IMAGE});
+    view(world,reset?'🌱 Новый мир создан.':'Добро пожаловать!'),fetcher,{world});
 }
 function parseCallback(data){
   const match=/^tg2:(\d{1,10}):([a-z_]{1,35})$/.exec(data||'');
@@ -69,15 +75,14 @@ async function onCallback(callback,updateId,env,fetcher){
   if(!data||data.revision!==session.revision||updateId<=session.lastUpdate){
     await botApi(token,'answerCallbackQuery',{callback_query_id:callback.id,
       text:'Эта кнопка устарела. Продолжим текущую игру.'},fetcher);
-    if(updateId>session.lastUpdate)await sendGame(token,chat.id,view(session.world),fetcher);
+    if(updateId>session.lastUpdate)await sendGame(token,chat.id,view(session.world),fetcher,{world:session.world});
     return;
   }
-  let world=session.world,restart=session.restart,pending=null,notice='',image=null;
+  let world=session.world,restart=session.restart,pending=null,notice='';
   if(data.action==='reset'){
     restart++;
     world=initialWorld(chat.id,restart);
     notice='🌱 Новый мир создан.';
-    image=INTRO_IMAGE;
   }else if(data.action==='free'){
     pending=session.revision;
     notice='✍️ Пришли сообщением свой проект (до 600 символов).\n'+
@@ -97,7 +102,6 @@ async function onCallback(callback,updateId,env,fetcher){
     if(outcome.accepted){
       world=outcome.world;
       notice=describeChange(session.world,world,candidate.label);
-      image=EVENT_IMAGE;
     }else notice='Недостаточно ресурсов для этого проекта.';
   }
   const saved=await saveSession(env.TELEGRAM_DB,session,{world,restart,pending,updateId});
@@ -106,7 +110,7 @@ async function onCallback(callback,updateId,env,fetcher){
   if(!saved)return;
   if(pending!==null){
     await botApi(token,'sendMessage',{chat_id:chat.id,text:notice},fetcher);
-  }else await sendGame(token,chat.id,view(world,notice),fetcher,{image});
+  }else await sendGame(token,chat.id,view(world,notice),fetcher,{world});
 }
 async function onText(message,updateId,env,fetcher){
   if(message.chat?.type!=='private')return;
@@ -133,7 +137,7 @@ async function onText(message,updateId,env,fetcher){
     world:outcome.world,pending:null,updateId
   });
   if(saved)await sendGame(token,message.chat.id,view(outcome.world,notice),fetcher,{
-    image:outcome.accepted?EVENT_IMAGE:null
+    world:outcome.accepted?outcome.world:null
   });
 }
 export async function handleTelegramWebhook(request,env,fetcher=fetch){
