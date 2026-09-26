@@ -170,7 +170,19 @@ export async function registerTelegramWebhook(env,fetcher=fetch){
   },fetcher);
   return true;
 }
-export async function telegramStatus(env,fetcher=fetch){
+function adminAllowed(request,env){
+  const key=String(env.TELEGRAM_HEALTH_KEY||'');
+  return key.length>=32&&request.headers.get('x-world-server-admin-token')===key;
+}
+export async function activateTelegramWebhook(request,env,fetcher=fetch){
+  if(!adminAllowed(request,env))return new Response('Forbidden',{status:403});
+  try{
+    const activated=await registerTelegramWebhook(env,fetcher);
+    return responseJson({activated},activated?200:503);
+  }catch{return responseJson({activated:false,error:'Registration failed'},503);}
+}
+export async function telegramStatus(request,env,fetcher=fetch){
+  if(!adminAllowed(request,env))return new Response('Forbidden',{status:403});
   const token=String(env.TELEGRAM_BOT_TOKEN||'').trim();
   const configured=TOKEN_PATTERN.test(token)&&!!env.TELEGRAM_DB;
   if(!configured)return responseJson({ready:false,configured:false},503);
