@@ -63,7 +63,7 @@ async function onCommand(message,updateId,env,fetcher){
   });
   if(!updated)return;
   await sendGame(env.TELEGRAM_BOT_TOKEN,chatId,
-    makeVisualTurn(session.world,world,reset?'new':'resume','',updateId,view(world)),fetcher);
+    makeVisualTurn(session.world,world,reset||session.lastUpdate<0?'new':'resume','',updateId,view(world)),fetcher);
 }
 function parseCallback(data){
   const match=/^tg2:(\d{1,10}):([a-z_]{1,35})$/.exec(data||'');
