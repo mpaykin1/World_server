@@ -78,7 +78,8 @@ test('canonical world uses repeatable seed and feasible choices',()=>{
   const built=applyPlan(world,offered[0].type);
   assert.equal(built.accepted,true);
   assert(built.world.revision>world.revision);
-  assert(built.world.tick>=2);
+  assert.equal(built.world.tick,0);
+  assert.equal(built.world.projects[0].active,false);
 });
 test('D1 session initializes and compare-and-set prevents duplicates',async()=>{
   const db=new MockD1();
@@ -118,7 +119,11 @@ test('choice updates D1 once and stale buttons cannot replay mutations',async()=
   assert.match(choice.callback_data,/^tg2:0:/);
   assert.equal((await post(e,a,callback(2,choice.callback_data))).status,200);
   const stored=await loadSession(e.TELEGRAM_DB,42);
-  assert(stored.world.tick>=2);
+  assert.equal(stored.world.tick,0);
+  assert.equal(stored.world.projects.length,1);
+  const next='tg2:'+stored.world.revision+':next';
+  await post(e,a,callback(4,next));
+  assert.equal((await loadSession(e.TELEGRAM_DB,42)).world.tick,1);
   assert(stored.revision>0);
   await post(e,a,callback(2,choice.callback_data));
   assert.deepEqual((await loadSession(e.TELEGRAM_DB,42)).world,stored.world);
