@@ -937,3 +937,26 @@ Implementation and local verification complete. Remaining proof is GitHub Action
 - Completion criteria: scoped commit and honest test evidence; integration release remains subject to cloud gates and live Supabase verification.
 - Final evidence: node --test --test-isolation=none test/chain-reaction-api.test.js test/world-consequence-engine.test.js: 19/19 passed. node --check api/voxel.js and lib/chain-reaction-api.js passed; git diff --check passed. Agent rules check passed with git subprocess EPERM warnings (branch/file checks not verified by that script). Ordinary node --test failed to spawn subprocesses (EPERM); same tests passed with isolation disabled. Full release suite remains unrun, cloud-first. No live database or browser claim. Simulation arithmetic and accepted quality metrics unchanged; no scientific readiness claim.
 - Commit blocker: git add failed creating C:/Users/user/Desktop/World_server/.git/worktrees/worldserver-codex-chain-20260923/index.lock: Permission denied. The linked worktree Git directory is outside this session's writable root; approvals are unavailable. No commit/SHA, push, PR or deployment produced. No new worktree or Desktop copy created; existing user worktrees left untouched.
+# 2026-09-26: Canonical Telegram narrative consequence arithmetic
+
+## Task and why
+Move the deterministic resource/population arithmetic introduced by merged PR #317 out of the Telegram transport and into the existing shared World Consequence Engine. This repairs the single-engine invariant: Telegram may classify and present a story, but it must not own a second table or clamp implementation for simulation arithmetic.
+
+## Current and target state
+Current protected base is `7b4564df00895842058762226587c44cf03a69a0`. `telegram-story.mjs` currently owns `IMPACT`, resource clamps and multi-day aftermath deltas. Target: the existing `supabase/functions/_shared/world-consequence-engine.js` is the only arithmetic source for immediate narrative impacts and aftermath; its Node wrapper and Edge global export remain identical. Telegram retains private D1 session persistence, incident/ruin presentation and action routing only.
+
+## Scope, risks and patch plan
+- Files: shared consequence engine, Telegram story adapter, focused Node/ESM regression tests, this ledger.
+- Preserve all #317 visible behavior, media, signed webhook, D1 CAS, construction and existing Supabase APIs.
+- Do not touch UI/Graphics, migrations, production, schedules or another PR branch.
+- Add immutable canonical impact tables plus pure copy-on-write helpers; route Telegram immediate and delayed effects through them; test determinism, bounds, immutability, exact deltas and Telegram parity.
+
+## Required tests and delivery
+Run focused engine/Telegram suites, syntax, agent rules and repository check if resources permit. Commit/push only the owned branch and open a draft PR. Require exact-head CI and independent Fleet PRE before Ocean; no merge/deploy/live claim by Builder.
+
+## Progress / next action / completion
+Progress: base, active PR ownership and #267 canonical engine lineage inspected; implementation started. Next: patch canonical arithmetic and regression tests. Completion requires focused tests plus exact-head cloud evidence and an honest handoff.
+
+Final evidence: focused Node/Edge/Telegram suites 64/64 PASS; JavaScript syntax 67 files PASS; agent-rules and `git diff --check` PASS. Full `npm run check`: 931 tests, 925 PASS, 2 FAIL, 4 SKIP. Both failures are unchanged CPU reconstruction tests whose Python subprocess cannot import host package `requests`; no changed Chain Reaction, Telegram or shared-engine test failed. Exact-head cloud CI and independent Fleet PRE remain mandatory and pending until the branch is published.
+
+---
