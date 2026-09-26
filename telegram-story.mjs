@@ -180,7 +180,8 @@ export function advanceStoryDay(previous,world){
   const active=previous.story?.active;
   const rebuilding=previous.story?.ruins?.some(x=>x.rebuilding);
   const evacuated=evacuatedCount(previous.story);
-  if(!active&&!rebuilding&&!evacuated)return world;
+  const evacuationNeedsRepair=previous.story&&previous.story.evacuated!==evacuated;
+  if(!active&&!rebuilding&&!evacuated&&!evacuationNeedsRepair)return world;
   let next=structuredClone(world);
   next.story=storyState({story:structuredClone(previous.story)});
   if(active){
