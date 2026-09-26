@@ -1018,3 +1018,8 @@ Local final evidence:
 - no UI, media, migrations, Supabase schema, schedules or production state changed.
 
 ---
+
+
+### Fleet BLOCK repair — malformed active incidents
+
+Superseding independent PRE comment `5850438921` returned exact head `9f66bd6e09e5e50e212a95b940949f64cdacc757`: any truthy malformed `story.active` could authorize incident actions, spend resources, create non-finite severity, or throw on primitive state. Repair in the existing PR only: validate the incident object, supported threat kind, severity 1..3 and age 0..2 before eligibility or mutation; normalize corrupt saved state to `null`; cover both direct Node action calls and the D1-backed Edge/Telegram callback path. Previous READY handoff is withdrawn until fresh exact-head checks and an independent PRE pass.
