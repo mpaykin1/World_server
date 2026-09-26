@@ -1,7 +1,7 @@
 // Narrative consequences live only in this Telegram world; canonical engine
 // remains authoritative for project construction, day ticks and residents.
 import {engine,applyPlan,LABELS} from './telegram-state.mjs';
-import {classifyStoryText,STORY_ACTIONS} from './telegram-story-parse.mjs';
+import {classifyStoryText,STORY_ACTIONS,supportedBuildType} from './telegram-story-parse.mjs';
 
 const THREATS=new Set(['dragon_fire','fire','flood','storm','earthquake',
   'meteor','epidemic','attack','drought']);
@@ -99,7 +99,8 @@ function enactWorldEvent(world,input){
     ?' Теперь кризис будет развиваться каждый игровой день, пока не принять меры.'
     :'';
   const detail=kind==='unknown'
-    ?'Не удалось надёжно определить физические последствия. Мир не изменён: уточни, что пострадало или что построить.'
+    ?(input.requestedBuild?'В нашей модели пока нет такой постройки. Уточни её назначение или выбери доступный тип. Я не стал подменять её мастерскими.':
+      'Не удалось надёжно определить физические последствия. Мир не изменён: уточни, что пострадало или что построить.')
     :kind==='dragon_arrival'
       ?'Пока дракон только появился. Реши, защищаться, договориться или наблюдать.'
       :kind==='dragon_help'
@@ -183,9 +184,14 @@ export function applyStoryAction(world,action,text=''){
 export function applyStoryText(world,text){
   const intent=classifyStoryText(text);
   if(intent.kind==='build'){
-    const result=applyPlan(world,'workshop',intent.text);
+    const type=supportedBuildType(intent.text);
+    if(!type)return enactWorldEvent(world,{kind:'unknown',text:intent.text,requestedBuild:true});
+    // Explicit noun routing prevents the canonical keyword "electricity"
+    // from silently changing a coal/solar request to a geothermal plant.
+    const result=applyPlan(world,type,'');
     if(!result.accepted)return reject(world,'Недостаточно ресурсов для строительства.');
-    return{world:result.world,accepted:true,action:'start',kind:result.plan.intent.goal};
+    result.world.projects.at(-1).intent.comment=intent.text;
+    return{world:result.world,accepted:true,action:'start',kind:type};
   }
   if(intent.kind==='action')return applyStoryAction(world,intent.action,intent.text);
   return enactWorldEvent(world,intent);
