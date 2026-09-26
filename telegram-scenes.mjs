@@ -1,6 +1,7 @@
 // Deterministic, zero-token storyboards for the Telegram transport.
 // Every visible turn gets an event-specific media scene and causal explanation.
 import {LABELS, delta} from './telegram-state.mjs';
+import {STORY_SCENES} from './telegram-story-parse.mjs';
 
 export const SCENE_ROOT='https://world-server.mmmpaykin.workers.dev/apps/telegram-scenes/media/';
 const CATEGORIES=Object.freeze({
@@ -15,11 +16,13 @@ export const MEDIA_CATEGORIES=[...new Set(Object.values(CATEGORIES))];
 export const MEDIA_SCENES=[
   'origin','planning','blocked','refresh','day','accident','recovery',
   'growth','crisis_power','crisis_water','crisis_food',
-  ...MEDIA_CATEGORIES.flatMap(type=>['start','progress','done'].map(stage=>stage+'_'+type))
+  ...MEDIA_CATEGORIES.flatMap(type=>['start','progress','done'].map(stage=>stage+'_'+type)),
+  ...STORY_SCENES
 ];
 const ANIMATED=new Set([
   'origin','accident','recovery','crisis_power','crisis_water','crisis_food',
-  ...MEDIA_CATEGORIES.flatMap(type=>['start_'+type,'done_'+type])
+  ...MEDIA_CATEGORIES.flatMap(type=>['start_'+type,'done_'+type]),
+  ...STORY_SCENES
 ]);
 const ICONS={power:'⚡',water:'💧',food:'🌾',budget:'💰',ecology:'🌳',health:'❤️'};
 const WORDS={power:'электроэнергии',water:'воды',food:'продовольствия',
@@ -32,6 +35,22 @@ const textProject=p=>LABELS[p?.type]||'новый проект';
 const attr=(items)=>Object.entries(items||{}).filter(([,v])=>v>0)
   .map(([k,v])=>(ICONS[k]||'•')+' '+(OUTPUTS[k]||WORDS[k]||k)+' '+v).join(', ');
 export function classifyTurn(before,after,action='day',projectType=''){
+  if(action==='story'){
+    const last=after.story?.last;
+    return{id:last?.scene||'story_unknown',headline:last?.title||'📜 Новый поворот сюжета.',
+      story:true};
+  }
+  if(action==='resume'&&after.story?.active){
+    const active=after.story.active;
+    return{id:active.kind==='dragon_fire'?'story_dragon_aftermath':
+      'story_'+active.kind,headline:'⚠️ Последствия предыдущего события ещё продолжаются.',
+      story:true};
+  }
+  if(action==='day'&&before.story?.active){
+    const last=after.story?.last;
+    return{id:last?.scene||'story_unknown',
+      headline:last?.title||'⚠️ Мир переживает последствия.',story:true};
+  }
   if(action==='new')return {id:'origin',headline:'🌱 Новый мир создан.'};
   if(action==='plan')return {id:'planning',headline:'📝 Совет города изучает твою идею.'};
   if(action==='blocked')return {id:'blocked',headline:'🚧 План пока невозможно осуществить.'};
@@ -69,7 +88,13 @@ function crisisScene(world){
 }
 export function turnDescription(before,after,scene){
   const lines=[scene.headline],d=delta(before,after);
-  if(scene.id.startsWith('start_')){
+  if(scene.story){
+    const record=after.story?.last;
+    if(record?.text)lines.push('Твой сюжет: «'+record.text+'».');
+    if(record?.description)lines.push(record.description);
+    if(after.story?.active)lines.push('🚨 Угроза продолжается. Действия ниже помогут ограничить последствия.');
+    if(after.story?.ruins?.length)lines.push('🏚 Разрушено объектов: '+after.story.ruins.length+'.');
+  }else if(scene.id.startsWith('start_')){
     const p=scene.project;
     lines.push('Город вложил ресурсы и выделил работников. Стройка займёт '+(p?.remaining||'?')+
       ' игровых дн.; до её окончания новый объект ещё не производит ресурсы.');
