@@ -76,3 +76,17 @@ test('actual Edge CAS two writers, stale 409 then latest refresh',async()=>{
   assert.equal((await runEdge(f,body('game-state'))).revision,1);
   assert.equal(f.writes,1);
 });
+
+test('real Edge and Node discard injected services when houses missing, skip null history',async()=>{
+ const f=fixture();const w=f.row.settings.chainReaction;
+ delete w.houses;delete w.residents;
+ w.cityServices={version:1,houses:[{id:'bad',secret:'EDGE_SECRET_SENTINEL'}]};
+ w.history.push(null);
+ const edge=await runEdge(f,body('preview-plan'));
+ const node=await runNode(f,body('preview-plan'));
+ assert.deepEqual({...edge,runtime:undefined},{...node,runtime:undefined});
+ assert.deepEqual(edge.world.cityServices,engine.cityServices(w));
+ assert.doesNotMatch(JSON.stringify(edge),/EDGE_SECRET_SENTINEL/);
+ assert.equal(edge.world.history.some(e=>e===null),false);
+ assert.equal(f.writes,0);
+});

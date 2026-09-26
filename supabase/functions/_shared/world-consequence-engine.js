@@ -75,7 +75,7 @@ function cityServices(world){
   links.push({from:best.from,to:best.to});wired.add(best.to);
  }
  const active=(Array.isArray(world.projects)?world.projects:[]).filter(p=>p&&p.active===true).slice(0,256);
- const incidents=Array.isArray(world.history)&&world.history.slice(-24).some(e=>e.tick===tick&&e.kind==='accident');
+ const incidents=Array.isArray(world.history)&&world.history.slice(-24).some(e=>e&&typeof e==='object'&&e.tick===tick&&e.kind==='accident');
  const hazard=incidents||Boolean(world.land&&world.land.volcano&&Number.isFinite(resources.ecology)&&resources.ecology<45);
  const backupTypes={
   power:new Set(['solar','geothermal','coal','biofuel_refinery']),

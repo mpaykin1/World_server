@@ -61,3 +61,18 @@ test('partial metadata gives explicit canonical tick and seed fallback',()=>{
  assert.deepEqual(a,b);
  assert.equal(a.summary.roadAccessHomes,world.houses.length);
 });
+
+test('partial world never echoes injected cityServices without house directory',()=>{
+ const w=E.createWorld('privacy-missing-houses');delete w.houses;delete w.residents;
+ w.cityServices={version:1,houses:[{id:'injected',privateToken:'DO_NOT_ECHO'}]};
+ const publicWorld=require('../lib/chain-reaction-api').publicState(w);
+ assert.deepEqual(publicWorld.cityServices,E.cityServices(w));
+ assert.equal(JSON.stringify(publicWorld.cityServices).includes('DO_NOT_ECHO'),false);
+});
+test('malformed null history does not crash city services or public DTO',()=>{
+ const w=E.createWorld('corrupt-history');w.tick=1;w.history=[null,{kind:'accident',tick:1}];
+ assert.doesNotThrow(()=>E.cityServices(w));
+ const publicWorld=require('../lib/chain-reaction-api').publicState(w);
+ assert.deepEqual(publicWorld.history,[{kind:'accident',tick:1}]);
+ assert.equal(E.cityServices(w).tick,1);
+});

@@ -49,6 +49,7 @@ function db(error:any) {
 function publicState(value:any) {
   const safe=structuredClone(value);
   for(const project of safe.projects||[])if(project.intent)delete project.intent.comment;
+  if(Array.isArray(safe.history))safe.history=safe.history.filter(e=>e&&typeof e==='object'&&!Array.isArray(e));
   for(const event of safe.history||[]){delete event.comment;delete event.actorId;}
   // Rebuild canonical values: key allowlisting alone would permit nested secrets
   // inside an allowed field such as id or name.
@@ -56,7 +57,7 @@ function publicState(value:any) {
     safe.residents=publicResidents(safe);
   }
   // Rebuild derived utilities from canonical inputs; never echo an injected saved projection.
-  if(Array.isArray(safe.houses))safe.cityServices=engine.cityServices(safe);
+  safe.cityServices=engine.cityServices(safe);
   return safe;
 }
 export function isChainReactionAction(value:unknown) {
