@@ -1012,3 +1012,5 @@ Task: implement original worker-safe face culling and compact typed-array mesh o
 2026-09-26 standalone: read Unreal MCTextureRecipes.cpp Bark anisotropic ridges and birch lenticels; independently implement original bark material and tests, no copied source/assets or game integration.
 
 2026-09-26 standalone: studied Unreal MCTextureRecipes.cpp WaterTex/LavaTex (Worley caustics, anisotropic flow, fBm heat, emissive lava); implement independently authored procedural water/lava material channels and deterministic tests. No upstream code/assets copied; no live integration.
+
+2026-09-26 standalone: read actual Unreal MCTextureSynth.cpp Finalize (5x5 height cavity AO, 3-pass transparent RGB dilation, Sobel tangent normals, ORME channels). Independently implement original standalone finalization for our fluid/stone/wood recipes and tests; no live integration.
