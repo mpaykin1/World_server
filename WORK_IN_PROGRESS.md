@@ -982,3 +982,5 @@ Task: implement original worker-safe face culling and compact typed-array mesh o
 2026-09-26 copy-only: differential-test original two-phase block-light removal against independent full flood solver over deterministic random scenes; correct discrepancies; no runtime integration.
 
 2026-09-26 copy-only: study Unreal DEVELOPMENT.md procedural PBR texture pipeline; independently implement deterministic height-to-normal and ORME packing for engine-neutral standalone use, with tests; Unreal texture synthesis source not yet located; no runtime integration.
+
+2026-09-26 copy-only: studied Godot chunk.gd compressed block snapshot and derived-state rebuild; independently implement portable palette+run-length section snapshot codec with strict decoding, standalone tests, no runtime integration. Not a port of Godot ZSTD.
