@@ -214,3 +214,43 @@ test('health is a cached D1 read; Cron verifies the actual Telegram webhook',asy
     'A rejected registration must not mark health ready');
   assert.deepEqual(missing.calls.map(x=>x.method),['getWebhookInfo','setWebhook','getWebhookInfo']);
 });
+
+test('dragon story sent through My Variant burns structures and shows rescue choices',async()=>{
+  const e=env(),a=mockApi();
+  await post(e,a,start(10));
+  await post(e,a,callback(11,'tg2:0:free'));
+  await post(e,a,text(12,'Прилетел дракон и сжег комплекс'));
+  const saved=await loadSession(e.TELEGRAM_DB,42);
+  assert.equal(saved.pending,null);
+  assert.equal(saved.revision,1);
+  assert.equal(saved.world.story.last.kind,'dragon_fire');
+  assert.equal(saved.world.story.ruins.length,1);
+  assert.equal(saved.world.projects.length,0,'No automatic workshop');
+  assert(saved.world.resources.budget<150);
+  const scene=a.calls.filter(x=>x.method==='sendAnimation').at(-1).payload;
+  assert.match(scene.animation,/story_dragon_fire-\d\.mp4$/);
+  assert.match(scene.caption,/дракон|Дракон/i);
+  assert.match(scene.caption,/сжег комплекс/);
+  const fireButton=scene.reply_markup.inline_keyboard.flat()
+    .find(button=>button.callback_data.endsWith(':extinguish'));
+  assert(fireButton,'Contextual firefighting button missing');
+  await post(e,a,callback(13,fireButton.callback_data));
+  const extinguished=await loadSession(e.TELEGRAM_DB,42);
+  assert.equal(extinguished.world.story.active,null);
+  assert(extinguished.world.resources.water<saved.world.resources.water);
+  assert.match(a.calls.filter(x=>x.method==='sendAnimation').at(-1)
+    .payload.animation,/story_extinguish-\d\.mp4$/);
+});
+test('unsolicited free-form story, unrelated to menu state, is still executed',async()=>{
+  const e=env(),a=mockApi();
+  await post(e,a,start(1));
+  await post(e,a,text(2,'Наводнение затопило город'));
+  const saved=await loadSession(e.TELEGRAM_DB,42);
+  assert.equal(saved.revision,1);
+  assert.equal(saved.world.story.last.kind,'flood');
+  assert.match(a.calls.filter(x=>x.method==='sendAnimation').at(-1)
+    .payload.animation,/story_flood-[0-2]\.mp4$/);
+  const count=a.calls.length;
+  await post(e,a,text(2,'Наводнение затопило город'));
+  assert.equal(a.calls.length,count,'Duplicate delivery must not create another story');
+});
