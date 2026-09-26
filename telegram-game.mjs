@@ -162,40 +162,35 @@ export async function handleTelegramWebhook(request,env,fetcher=fetch){
 export async function registerTelegramWebhook(env,fetcher=fetch){
   const token=String(env.TELEGRAM_BOT_TOKEN||'').trim();
   if(!TOKEN_PATTERN.test(token)||!env.TELEGRAM_DB)return false;
-  const info=await botApi(token,'getWebhookInfo',{},fetcher);
-  if(info.url===WEBHOOK_URL)return true;
-  await botApi(token,'setWebhook',{
-    url:WEBHOOK_URL,secret_token:await webhookSecret(token),
-    allowed_updates:['message','callback_query'],drop_pending_updates:false
-  },fetcher);
+  let info=await botApi(token,'getWebhookInfo',{},fetcher);
+  if(info.url!==WEBHOOK_URL){
+    await botApi(token,'setWebhook',{
+      url:WEBHOOK_URL,secret_token:await webhookSecret(token),
+      allowed_updates:['message','callback_query'],drop_pending_updates:false
+    },fetcher);
+    info=await botApi(token,'getWebhookInfo',{},fetcher);
+  }
+  if(info.url!==WEBHOOK_URL)return false;
+  const me=await botApi(token,'getMe',{},fetcher);
+  // A durable, rate-safe readiness marker. Public status never calls Telegram.
+  await env.TELEGRAM_DB.prepare(
+    'INSERT INTO telegram_bot_health (id,last_ok_at,bot_username,webhook_url) VALUES(1,CURRENT_TIMESTAMP,?,?) ON CONFLICT(id) DO UPDATE SET last_ok_at=CURRENT_TIMESTAMP,bot_username=excluded.bot_username,webhook_url=excluded.webhook_url'
+  ).bind(me.username,WEBHOOK_URL).run();
   return true;
 }
-function adminAllowed(request,env){
-  const key=String(env.TELEGRAM_HEALTH_KEY||'');
-  return key.length>=32&&request.headers.get('x-world-server-admin-token')===key;
-}
-export async function activateTelegramWebhook(request,env,fetcher=fetch){
-  if(!adminAllowed(request,env))return new Response('Forbidden',{status:403});
-  try{
-    const activated=await registerTelegramWebhook(env,fetcher);
-    return responseJson({activated},activated?200:503);
-  }catch{return responseJson({activated:false,error:'Registration failed'},503);}
-}
-export async function telegramStatus(request,env,fetcher=fetch){
-  if(!adminAllowed(request,env))return new Response('Forbidden',{status:403});
+export async function telegramStatus(env){
   const token=String(env.TELEGRAM_BOT_TOKEN||'').trim();
   const configured=TOKEN_PATTERN.test(token)&&!!env.TELEGRAM_DB;
   if(!configured)return responseJson({ready:false,configured:false},503);
   try{
-    const [me,hook,db]=await Promise.all([
-      botApi(token,'getMe',{},fetcher),
-      botApi(token,'getWebhookInfo',{},fetcher),
-      env.TELEGRAM_DB.prepare('SELECT 1 AS ok').first()
-    ]);
-    const webhookMatches=hook.url===WEBHOOK_URL,dbReady=db?.ok===1;
-    return responseJson({ready:webhookMatches&&dbReady,
-      configured:true,botUsername:me.username,dbReady,webhookMatches,
-      pendingUpdates:hook.pending_update_count||0
-    },webhookMatches&&dbReady?200:503);
-  }catch{return responseJson({ready:false,configured:true,error:'Dependency unavailable'},503);}
+    const state=await env.TELEGRAM_DB.prepare(
+      'SELECT bot_username,last_ok_at,webhook_url FROM telegram_bot_health WHERE id=1'
+    ).first();
+    const freshness=state?Date.now()-Date.parse(state.last_ok_at.replace(' ','T')+'Z'):Infinity;
+    const webhookMatches=state?.webhook_url===WEBHOOK_URL;
+    const ready=webhookMatches&&freshness>=0&&freshness<1800000;
+    return responseJson({ready,configured:true,webhookMatches,
+      botUsername:state?.bot_username||null,lastValidatedAt:state?.last_ok_at||null
+    },ready?200:503);
+  }catch{return responseJson({ready:false,configured:true,error:'State unavailable'},503);}
 }
