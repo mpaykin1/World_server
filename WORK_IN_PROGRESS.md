@@ -1,3 +1,23 @@
+# 2026-09-27: Creature Factory canonical LOD contract
+
+Task: make the main-game Creature Factory consume the canonical tierOrder/despawn contract instead of hard-coded LOD behavior.
+Why: data/creature-lod-policy.json is canonical but runtime currently hard-codes tier order and hides low tier regardless of despawn.
+Current state: master 75bb69eab3d94f260ee8140075f48a4d1e2ed32e; PR #309/#310 open draft and not integrated.
+Target state: validated tier order, deterministic distance selection, policy-driven despawn/culling, safe fallback, focused regression tests.
+Files / systems involved: shared/creature-visual-runtime.mjs; test/creature-lod-policy.test.mjs; this WIP only.
+Known risks: malformed remote policy, changing existing visibility unexpectedly, update-loop cost.
+Golden systems that must be preserved: existing Three.js renderer, Creature Factory silhouettes, no duplicate engine, current gameplay renderer.
+Errors that must not return: hard-coded tier order; treating low tier as synonymous with despawn; malformed policy breaking runtime.
+Exact patch / change plan: normalize fetched policy; retain tierOrder; expose pure tier selection helper; skip update work when selected tier despawns; preserve fallback.
+Tests to run: focused Node regression; agent rules; full CI after push; Fleet PRE exact SHA before integration.
+Deployment / PR plan: isolated branch; PR only after focused evidence; no direct master merge/deploy.
+Current progress: branch reserved from exact master; patch in progress.
+Next action: implement runtime + regression test.
+Completion criteria: exact-head CI + Fleet PRE, Ocean merge, deployed exact SHA, Fleet POST live verification.
+Final evidence: NOT_VERIFIED.
+
+---
+
 # 2026-09-24: Chain Reaction backend release evidence checklist
 
 Task: publish a compact, auditable release checklist for the already implemented Chain Reaction backend without changing simulation, API, Supabase state, or Graphics-owned UI. Why: merged, deployed, and independently live-verified are different gates; PR #285/#286 must not be counted as release-ready from PRE evidence alone. Current state: master `142200812d3d57a1b79aaaba2af628168acc648e` contains both `resident-at-address` and atomic `game-state`; Ocean records the same master on canonical Cloudflare and Supabase `world-emergence` ACTIVE v14, bundle `345677bf2b2b8d6e3adc98956a6bd045a68768d26a49f0986abb8e3935e2fe3d`; no Fleet POST certificate for #285/#286 exists yet. Target: one source-controlled checklist that separates MERGED, DEPLOYED, and LIVE_VERIFIED and marks every missing proof `NOT_VERIFIED`. Files/systems: documentation only. Risks: treating preview/CI/PRE or unauthenticated 401 smoke as authenticated production proof, inheriting an older POST to a newer endpoint, or obscuring Graphics blockers. Preserve: one consequence engine, all server arithmetic/auth/CAS/privacy behavior, UI ownership, and existing automation count. Exact plan: record immutable candidate/integrated SHAs, cloud runs, Edge identity, prior live certificates, and explicit owner/TODO for the combined endpoint POST. Tests: Markdown evidence/link scan, `git diff --check`, agent rules, and documentation-only deployment-ignore check. PR plan: isolated branch and PR; no deploy, merge, Fleet POST, or UI edit by this task. Progress: evidence collected from PR #285/#286, ledger #80, and read-only Supabase function inventory; checklist is complete. Next action: publish the documentation-only PR and let CI validate the exact head. Completion: checklist committed and cloud handoff created. Final evidence: read-only Supabase inventory independently reports `world-emergence` ACTIVE v14 with the Ocean-recorded bundle; `git diff --check`, agent rules, exact evidence scan, scope check, and documentation-only Vercel quota guard PASS. No source/UI/deployment mutation and no duplicate Fleet POST.
