@@ -973,3 +973,48 @@ Regression tests must cover canonical population arithmetic, worker bound, exact
 Registered on protected base `75bb69eab3d94f260ee8140075f48a4d1e2ed32e`. Implementation and tests in progress.
 
 ---
+
+
+# 2026-09-27: Threat-scoped Telegram emergency actions
+
+## Task / why
+Prevent Telegram `evacuate` and `defend` actions from spending budget or moving residents when the world has ruins but no active threat. PR #319 repaired the arithmetic, but the shared `rescueTarget` gate still treated old ruins as sufficient authority for incident-only actions.
+
+## Current state / target state
+Protected base is `bca976629b0662e70b6d6e3d1092994fdef054a9` (merged PR #319). Today, `evacuate` and `defend` are accepted whenever either an incident or any ruin exists. Target: these two actions require a current active incident; rebuild remains ruin-scoped, extinguish remains burning-incident-scoped, and the canonical consequence engine continues to own all arithmetic.
+
+## Files / systems involved
+- `telegram-story.mjs` — server-side story action eligibility only.
+- `test/chain-reaction-narrative-arithmetic.test.mjs` — regression coverage.
+- `WORK_IN_PROGRESS.md` — task/evidence ledger.
+
+## Known risks / preserved systems
+- Preserve PR #319 evacuation/return arithmetic, D1 session persistence, Supabase/Node/Edge contracts, signed webhooks, history, media and all Graphics/UI work.
+- Do not change action prices, resource deltas, simulation tables, schema, schedules or production.
+- Rejections retain the existing revision/blocked-story contract.
+
+## Exact patch plan
+1. Add a narrow active-incident precondition for `evacuate` and `defend` before any cost or state mutation.
+2. Add regression tests proving old ruins cannot authorize either action and that a real threat still can.
+3. Run focused tests, syntax, agent rules and diff checks; publish a dedicated PR for exact-head cloud CI and independent Fleet PRE.
+
+## Baseline evidence
+- `npm ci`: PASS, 353 packages.
+- `npm run quality:diff`: PASS.
+- `npm run release:gate`: stopped inside the baseline `npm run check` with 927 PASS, 3 FAIL, 4 SKIP. Two unchanged CPU reconstruction failures lack Python `requests`; the unchanged filesystem-proxy test timed out after 30 seconds. No task file had been edited.
+
+## Current progress / next action
+The active-incident precondition and regression tests are implemented. Next: exact-head cloud CI plus independent Fleet PRE before Ocean handoff.
+
+## Completion criteria / final evidence
+Focused action/engine tests and static gates pass; exact-head cloud CI and independent Fleet PRE decide Ocean handoff. MERGED, DEPLOYED and LIVE_VERIFIED remain separate and are not claimed here.
+
+Local final evidence:
+- focused Node/actual Edge/Telegram suites: **44/44 PASS**;
+- new action-eligibility regression: **2/2 PASS**;
+- `node --check telegram-story.mjs`: PASS;
+- `node scripts/check-agent-rules.js`: PASS;
+- `git diff --check`: PASS;
+- no UI, media, migrations, Supabase schema, schedules or production state changed.
+
+---
