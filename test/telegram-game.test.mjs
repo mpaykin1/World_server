@@ -47,12 +47,15 @@ class MockD1{
     };
   }
 }
-function mockApi({photoOk=true,webhookUrl=URL}={}){
+function mockApi({animationOk=true,webhookUrl=URL}={}){
   const calls=[];
   const fetcher=async(url,init)=>{
-    const method=url.split('/').at(-1),payload=JSON.parse(init.body);
+    const method=url.split('/').at(-1);
+    const payload=init.body instanceof FormData
+      ?Object.fromEntries([...init.body].map(([k,v])=>[k,k==='reply_markup'?JSON.parse(v):v]))
+      :JSON.parse(init.body);
     calls.push({method,payload});
-    if(method==='sendPhoto'&&!photoOk)return new Response(JSON.stringify({ok:false}),{status:404});
+    if(method==='sendAnimation'&&!animationOk)return new Response(JSON.stringify({ok:false}),{status:404});
     let result=true;
     if(method==='getMe')result={username:'World_serverbot'};
     if(method==='getWebhookInfo')result={url:webhookUrl,pending_update_count:0};
@@ -106,23 +109,25 @@ test('webhook requires production secret and D1',async()=>{
   assert.equal(a.calls.length,0);
   assert.equal((await post({...e,TELEGRAM_DB:null},a,start())).status,503);
 });
-test('start sends existing image and seven controls, without AI calls',async()=>{
+test('start sends world-specific animation and seven controls, without AI calls',async()=>{
   const e=env(),a=mockApi();
   assert.equal((await post(e,a,start(10))).status,200);
-  assert.deepEqual(a.calls.map(x=>x.method),['sendPhoto']);
+  assert.deepEqual(a.calls.map(x=>x.method),['sendAnimation']);
   assert.equal(a.calls[0].payload.reply_markup.inline_keyboard.length,7);
+  assert.equal(a.calls[0].payload.animation.type,'image/gif');
+  assert(a.calls[0].payload.animation.size>1000);
   assert.equal((await loadSession(e.TELEGRAM_DB,42)).lastUpdate,10);
   await post(e,a,start(10));
   assert.equal(a.calls.length,1,'Telegram retry must not double-send');
 });
-test('failed photo falls back to a playable text message',async()=>{
-  const e=env(),a=mockApi({photoOk:false});
+test('failed animation falls back to a playable text message',async()=>{
+  const e=env(),a=mockApi({animationOk:false});
   assert.equal((await post(e,a,start(10))).status,200);
-  assert.deepEqual(a.calls.map(x=>x.method),['sendPhoto','sendMessage']);
+  assert.deepEqual(a.calls.map(x=>x.method),['sendAnimation','sendMessage']);
   assert.equal(a.calls[1].payload.reply_markup.inline_keyboard.length,7);
 });
 test('choice updates D1 once and stale buttons cannot replay mutations',async()=>{
-  const e=env(),a=mockApi({photoOk:false});
+  const e=env(),a=mockApi({animationOk:false});
   await post(e,a,start(1));
   const choice=a.calls.find(x=>x.method==='sendMessage').payload.reply_markup.inline_keyboard[0][0];
   assert.match(choice.callback_data,/^tg2:0:/);

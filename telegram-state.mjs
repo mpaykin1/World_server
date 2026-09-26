@@ -43,7 +43,7 @@ export function applyPlan(world,type,text=''){
   return {world:committed,plan,accepted:true};
 }
 export function delta(previous,next){
-  return Object.fromEntries(['power','water','food','budget','ecology','health']
+  return Object.fromEntries(['power','water','food','budget','ecology','health','workers','jobs','culture']
     .map(k=>[k,Math.round((next.resources[k]-previous.resources[k])*10)/10]));
 }
 export function signedDelta(n){return(n>0?'+':'')+n;}
@@ -77,7 +77,8 @@ export async function saveSession(db,session,{world=session.world,restart=sessio
 export function summary(world){
   const r=world.resources;
   return '⚡'+r.power+'  💧'+r.water+'  🌾'+r.food+
-    '\n💰'+r.budget+'  🌳'+r.ecology+'  ❤️'+r.health;
+    '\n💰'+r.budget+'  🌳'+r.ecology+'  ❤️'+r.health+
+    '\n👷'+r.workers+'  🏭'+r.jobs;
 }
 export function view(world,notice=''){
   const offered=options(world);
@@ -85,7 +86,8 @@ export function view(world,notice=''){
   const intro='🌍 ЦЕПНАЯ РЕАКЦИЯ — ЗЛОЙ ДЖИНН\nДень '+world.tick+
     ' · Жителей: '+world.population+'\n'+summary(world)+
     (building.length?'\n🏗 Строится: '+building.slice(-2).map(p=>
-      (LABELS[p.type]||p.type)+' ('+p.remaining+' дн.)').join(', '):'');
+      (LABELS[p.type]||p.type)+' ('+p.remaining+' дн.)').join(', '):'')+
+    '\n🏙 Готовых объектов: '+world.projects.filter(p=>p.active).length;
   const choices=offered.map(o=>[{
     text:o.label+'  💰'+o.plan.cost+'  ⏳'+o.plan.buildTicks,
     callback_data:'tg2:'+world.revision+':'+o.type
@@ -98,20 +100,48 @@ export function view(world,notice=''){
     '\n\n'+(offered.length?'Выбери решение:':'Нет доступных построек. Проживи день или начни заново.'),
     reply_markup:{inline_keyboard:choices}};
 }
+const RESOURCE_EMOJI={power:'⚡',water:'💧',food:'🌾',budget:'💰',ecology:'🌳',health:'❤️',workers:'👷',jobs:'🏭',culture:'🎭'};
+function projectEffects(p){
+  const spec=engine.PROJECTS[p.type];
+  if(!spec)return '';
+  const production=Object.entries(spec.output).map(([k,v])=>(RESOURCE_EMOJI[k]||k)+'+'+v).join(' ');
+  const expenses=Object.entries(spec.drain).map(([k,v])=>(RESOURCE_EMOJI[k]||k)+'−'+v).join(' ');
+  return 'План после запуска, при наличии ресурсов: '+production+
+    (expenses?' · Расходы: '+expenses:'')+'.';
+}
+function recentEvents(before,next){
+  return next.history.slice(before.history.length).filter(e=>
+    ['accident','resource_shortage','adaptation','sustained_insight'].includes(e.kind)).slice(-2).map(e=>{
+      const name=LABELS[next.projects.find(p=>p.id===e.id)?.type]||'Объект';
+      if(e.kind==='accident')return '🔥 Авария: '+name+'. Пострадала экология.';
+      if(e.kind==='resource_shortage')return '⚠️ '+name+' не хватает ресурсов, производство остановлено.';
+      if(e.kind==='adaptation')return '🤝 Кризис: жители ищут альтернативные источники.';
+      return '🌟 Жители достигли устойчивого развития.';
+    });
+}
 export function describeChange(before,next,label){
-  const d=delta(before,next);
-  const parts=Object.entries(d).filter(([,value])=>value!==0).map(([k,v])=>
-    ({power:'⚡',water:'💧',food:'🌾',budget:'💰',ecology:'🌳',health:'❤️'})[k]+signedDelta(v));
-  const disasters=next.history.filter(x=>x.tick>before.tick&&
-    /crisis|disaster|adaptation|commissioned|eruption|shortage/i.test(x.kind)).slice(-3)
-    .map(x=>x.kind==='commissioned'?'🏭 Строительство завершено.':
-      x.kind==='adaptation'?'🛠 Жители приспосабливаются.':
-      '⚠️ '+x.kind.replaceAll('_',' ')+'.');
   const elapsed=next.tick-before.tick;
-  const underway=next.projects.filter(p=>!p.active).slice(-1)[0];
-  return '✅ '+label+'. '+(elapsed?
-    'Прошло '+elapsed+' дн.':('Строительство началось'+
-      (underway?' — '+underway.remaining+' дн. до запуска.':'.')))+'\n'+
-    'Изменения: '+(parts.join('  ')||'без резких перемен')+
-    (disasters.length?'\n'+disasters.join('\n'):'');
+  const changes=Object.entries(delta(before,next)).filter(([,v])=>v!==0).map(([k,v])=>
+    RESOURCE_EMOJI[k]+signedDelta(v));
+  const ids=new Set(before.projects.map(p=>p.id));
+  const started=next.projects.filter(p=>!ids.has(p.id));
+  const completed=next.projects.filter(p=>p.active&&before.projects.some(old=>old.id===p.id&&!old.active));
+  const lines=[];
+  for(const p of started.slice(-2)){
+    lines.push('🏗 На карте появилась стройплощадка: '+(LABELS[p.type]||p.type)+
+      '. Строится ещё '+p.remaining+' дн.');
+    lines.push('📈 '+projectEffects(p));
+  }
+  for(const p of completed.slice(-2))lines.push('🏭 '+(LABELS[p.type]||p.type)+
+    ' построены! Производство начнётся со следующего дня.');
+  if(elapsed){
+    const operating=before.projects.filter(p=>p.active).slice(-2).map(p=>LABELS[p.type]||p.type);
+    lines.push('📅 Прошёл '+elapsed+' день. Город расходует энергию, воду и пищу'+
+      (operating.length?'; работают: '+operating.join(', '):'')+'.');
+  }
+  const people=next.population-before.population;
+  if(people)lines.push('👥 Население: '+signedDelta(people)+'.');
+  const events=recentEvents(before,next);
+  const heading=started.length?'✅ '+label+'.':elapsed?'⏩ '+label+'.':'✅ '+label+'.';
+  return [heading,...lines,'Изменения ресурсов: '+(changes.join('  ')||'пока нет'),...events].join('\n');
 }
