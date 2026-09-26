@@ -1,6 +1,7 @@
 import * as THREE from 'https://unpkg.com/three@0.165.0/build/three.module.js';
 import {installVoxelAutodemo} from './autodemo-bridge.mjs';
 import {createEmergenceAuthoritySync} from '../../shared/emergence-authority-sync.mjs';
+import {planMissingChunks, affectedChunkCoords} from '../../shared/voxel-chunk-planner.mjs';
 
 const CHUNK = 16;
 const WORLD_Y = 96;
@@ -511,8 +512,17 @@ function goldenVegetationEditCanChangeSample(x,y,z){
   return (mod(x,CHUNK)&1)===1&&(mod(z,CHUNK)&1)===1&&y===heightAt(x,z);
 }
 function setBlockLocal(x,y,z,b){
-  const safe=validBlockType(b); if(safe===null||!Number.isInteger(x)||!Number.isInteger(y)||!Number.isInteger(z)||y<0||y>=WORLD_Y)return false;
-  overrides.set(key3(x,y,z),safe); const cx=floorDiv(x,CHUNK),cz=floorDiv(z,CHUNK),c=chunks.get(key2(cx,cz)); if(c){c.set(mod(x,CHUNK),y,mod(z,CHUNK),safe);rebuildChunk(c);} const lx=mod(x,CHUNK),lz=mod(z,CHUNK); if(lx===0)chunks.get(key2(cx-1,cz))&&rebuildChunk(chunks.get(key2(cx-1,cz))); if(lx===15)chunks.get(key2(cx+1,cz))&&rebuildChunk(chunks.get(key2(cx+1,cz))); if(lz===0)chunks.get(key2(cx,cz-1))&&rebuildChunk(chunks.get(key2(cx,cz-1))); if(lz===15)chunks.get(key2(cx,cz+1))&&rebuildChunk(chunks.get(key2(cx,cz+1))); if(goldenVegetationEditCanChangeSample(x,y,z))refreshGoldenVegetation(); return true;
+  const safe=validBlockType(b);
+  if(safe===null||!Number.isInteger(x)||!Number.isInteger(y)||!Number.isInteger(z)||y<0||y>=WORLD_Y)return false;
+  overrides.set(key3(x,y,z),safe);
+  const own=chunks.get(key2(floorDiv(x,CHUNK),floorDiv(z,CHUNK)));
+  if(own)own.set(mod(x,CHUNK),y,mod(z,CHUNK),safe);
+  for(const q of affectedChunkCoords(x,z,CHUNK)){
+    const c=chunks.get(key2(q.x,q.z));
+    if(c?.ready)rebuildChunk(c);
+  }
+  if(goldenVegetationEditCanChangeSample(x,y,z))refreshGoldenVegetation();
+  return true;
 }
 
 let goldenVegetationPopulation=0;
@@ -542,8 +552,13 @@ async function materializeChunkBatch(need, by=new Map()){
 const goldenStreamingStartedAt=performance.now();
 function goldenViewRadius(){const age=performance.now()-goldenStreamingStartedAt,bootstrap=age<12000?1:(age<30000?2:VIEW),d=window.GoldenQualityDirector?.forRenderer?.(renderer);if(!d)return Math.min(VIEW,bootstrap);const t=d.telemetry?.()||{},budget=Math.max(1,Math.round(Number(d.getBudget?.('viewChunks')||VIEW)));const pressured=Number(t.pressure||0)>1.05||Number(t.p95Ms||0)>Math.max(24,1000/Math.max(1,Number(t.targetFps||45))*1.5);return Math.max(1,Math.min(VIEW,bootstrap,budget-(pressured?1:0)));}
 async function loadNeededChunks(){
-  if(streamBusy) return; const pcx=floorDiv(player.pos.x,CHUNK),pcz=floorDiv(player.pos.z,CHUNK),need=[],viewRadius=goldenViewRadius();
-  outer: for(let r=0;r<=viewRadius;r++) for(let dx=-r;dx<=r;dx++) for(let dz=-r;dz<=r;dz++){ if(Math.max(Math.abs(dx),Math.abs(dz))!==r)continue;const cx=pcx+dx,cz=pcz+dz,k=key2(cx,cz);if(!chunks.has(k)&&!requested.has(k)){requested.add(k);need.push({x:cx,z:cz});if(need.length>=2)break outer;} }
+  if(streamBusy)return;
+  const pcx=floorDiv(player.pos.x,CHUNK),pcz=floorDiv(player.pos.z,CHUNK),viewRadius=goldenViewRadius();
+  const need=planMissingChunks({
+    centerX:pcx,centerZ:pcz,radius:viewRadius,budget:2,
+    isLoaded:(x,z)=>{const k=key2(x,z);return chunks.has(k)||requested.has(k);}
+  });
+  for(const q of need)requested.add(key2(q.x,q.z));
   if(!need.length)return; streamBusy=true;
   try{
     if(backendMode==='offline') await materializeChunkBatch(need);
