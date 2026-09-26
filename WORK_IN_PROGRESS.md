@@ -970,3 +970,5 @@ Task: implement original worker-safe face culling and compact typed-array mesh o
 2026-09-26 copy-only: standalone original incremental block-light removal via bounded two-phase propagation; compare against full recomputation, no active game integration.
 
 2026-09-26 copy-only: studied Godot game/ai/pathfinder.gd and independently implement footprint-aware voxel waypoint smoothing; standalone tests, no runtime integration.
+
+2026-09-26 copy-only: studied full Godot chunk.gd and mesher.gd; independently implement bounded derived heightmap/emitter index and per-column update with standalone tests, no integration.
