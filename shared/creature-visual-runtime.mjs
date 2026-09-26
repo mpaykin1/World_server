@@ -5,6 +5,8 @@ export const CREATURE_CATEGORIES = [
   'human_torch','human_gun','ship','steampunk_vehicle','creature','monster'
 ];
 
+export const DEFAULT_TIER_ORDER = ['full', 'high', 'medium', 'low'];
+
 const DEFAULT_POLICY = {
   full: { maxDistance: 30, tickRate: 1, aiEnabled: true, despawn: false },
   high: { maxDistance: 60, tickRate: 0.5, aiEnabled: true, despawn: false },
@@ -141,10 +143,44 @@ function seeded(seed) {
   };
 }
 
+export function normalizeCreatureLodPolicy(input = {}) {
+  const tiers = input?.tiers && typeof input.tiers === 'object' ? input.tiers : input;
+  const policy = { ...DEFAULT_POLICY };
+  for (const [name, fallback] of Object.entries(DEFAULT_POLICY)) {
+    const candidate = tiers?.[name];
+    if (!candidate || typeof candidate !== 'object') continue;
+    const maxDistance = Number(candidate.maxDistance);
+    const tickRate = Number(candidate.tickRate);
+    policy[name] = {
+      ...fallback,
+      ...candidate,
+      maxDistance: Number.isFinite(maxDistance) && maxDistance >= 0 ? maxDistance : fallback.maxDistance,
+      tickRate: Number.isFinite(tickRate) && tickRate >= 0 ? tickRate : fallback.tickRate,
+      aiEnabled: candidate.aiEnabled === undefined ? fallback.aiEnabled : !!candidate.aiEnabled,
+      despawn: candidate.despawn === undefined ? fallback.despawn : !!candidate.despawn
+    };
+  }
+  const requestedOrder = Array.isArray(input?.tierOrder) ? input.tierOrder : DEFAULT_TIER_ORDER;
+  const tierOrder = requestedOrder.filter((name, index) => policy[name] && requestedOrder.indexOf(name) === index);
+  for (const name of DEFAULT_TIER_ORDER) if (!tierOrder.includes(name)) tierOrder.push(name);
+  return { tiers: policy, tierOrder };
+}
+
+export function creatureTierForDistance(distance, policy, tierOrder = DEFAULT_TIER_ORDER) {
+  const d = Math.max(0, Number(distance) || 0);
+  for (const name of tierOrder) {
+    const tier = policy?.[name];
+    if (tier && d <= Number(tier.maxDistance ?? Infinity)) return name;
+  }
+  return tierOrder[tierOrder.length - 1] || DEFAULT_TIER_ORDER[DEFAULT_TIER_ORDER.length - 1];
+}
+
 export class CreatureWorld {
   constructor({ scene, viewer, camera, renderer }) {
     this.scene = scene; this.viewer = viewer; this.camera = camera; this.renderer = renderer;
-    this.policy = { ...DEFAULT_POLICY };
+    const initialPolicy = normalizeCreatureLodPolicy();
+    this.policy = initialPolicy.tiers;
+    this.tierOrder = initialPolicy.tierOrder;
     this.creatures = [];
     this.raycaster = new THREE.Raycaster();
     this.pointer = new THREE.Vector2();
@@ -159,7 +195,9 @@ export class CreatureWorld {
       const r = await fetch('/data/creature-lod-policy.json', { cache: 'no-store' });
       if (!r.ok) return;
       const json = await r.json();
-      if (json?.tiers) this.policy = json.tiers;
+      const normalized = normalizeCreatureLodPolicy(json);
+      this.policy = normalized.tiers;
+      this.tierOrder = normalized.tierOrder;
     } catch (_) {}
   }
 
@@ -196,11 +234,7 @@ export class CreatureWorld {
   }
 
   tierFor(distance) {
-    for (const name of ['full','high','medium','low']) {
-      const tier = this.policy[name];
-      if (tier && distance <= Number(tier.maxDistance || Infinity)) return name;
-    }
-    return 'low';
+    return creatureTierForDistance(distance, this.policy, this.tierOrder);
   }
 
   tickRateFor(tier) {
@@ -220,8 +254,14 @@ export class CreatureWorld {
       const dist = c.group.position.distanceTo(viewer);
       const tier = this.tierFor(dist);
       c.lodTier = tier;
-      c.group.visible = tier !== 'low';
-      if (!c.group.visible) continue;
+      const despawn = !!this.policy[tier]?.despawn;
+      if (despawn) {
+        if (!c.despawned) { this.scene.remove(c.group); c.despawned = true; }
+        c.group.visible = false;
+        continue;
+      }
+      if (c.despawned) { this.scene.add(c.group); c.despawned = false; }
+      c.group.visible = true;
       if (c.group.userData.detailGroup) c.group.userData.detailGroup.visible = tier === 'full';
       const tickRate = this.tickRateFor(tier);
       c.accum += dt;
