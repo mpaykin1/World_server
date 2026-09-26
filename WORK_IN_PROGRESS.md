@@ -996,3 +996,5 @@ Task: implement original worker-safe face culling and compact typed-array mesh o
 2026-09-26 copy-only: studied Godot mesher.gd _fill_padded 18^3 halo sampling from 3x3 chunks, out-of-world bedrock/sky defaults and rowfull; implement independently as standalone section sampling utility and tests, no runtime integration.
 
 2026-09-26 standalone: original enclosed-voxel visibility masks inspired by Godot mesher.gd. No runtime integration.
+
+2026-09-26 copy-only: studied Unity Lighting.cs vertical sky initialization, expose-depth and six-neighbor sky flood (15 downward exception); independently implement bounded skylight volume and standalone tests, no runtime integration.
