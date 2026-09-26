@@ -956,3 +956,5 @@ Task: implement original worker-safe face culling and compact typed-array mesh o
 2026-09-26 copy-only: original standalone 0..15 voxel block/sky flood lighting inspired by independently studied Godot light_engine.gd and Unity Lighting.cs, with unit tests; no existing renderer edits.
 
 2026-09-26 copy-only: independently reproduce boundary-aware dirty section invalidation from source study, standalone module/tests, no game integration.
+
+2026-09-26 copy-only: independently implement staged chunk pipeline readiness and stale result rejection, based on Unity ChunkManager.cs and Godot chunk_manager.gd study; standalone and tests, no integration.
