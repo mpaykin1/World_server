@@ -94,6 +94,24 @@ test('existing building intents still use canonical project engine',()=>{
   assert.equal(out.world.projects.at(-1).type,'solar');
   assert.equal(classifyTurn(w,out.world,'start').id,'start_solar');
 });
+test('unsupported custom construction does not turn into workshop or invent effects',()=>{
+  const w=initialWorld(30);
+  const out=applyStoryText(w,'Построить больницу для жителей');
+  assert.equal(out.kind,'unknown');
+  assert.equal(out.world.projects.length,0);
+  assert.deepEqual(out.world.resources,w.resources);
+  const reply=makeVisualTurn(w,out.world,'story','unknown',1,view(out.world));
+  assert.match(reply.text,/больниц/);
+  assert.match(reply.text,/не стал подменять/);
+  assert.match(reply.media.animation,/story_unknown/);
+});
+test('coal power station text builds coal, not geothermal despite electricity keyword',()=>{
+  const w=initialWorld(50);
+  const out=applyStoryText(w,'Построить угольную электростанцию');
+  assert.equal(out.kind,'coal');
+  assert.equal(out.world.projects[0].type,'coal');
+  assert.match(out.world.projects[0].intent.comment,/угольную/);
+});
 test('story renderer covers every supported scene with consistent assets',()=>{
   const w=initialWorld(14);
   for(const scene of STORY_SCENES){
