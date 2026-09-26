@@ -960,3 +960,16 @@ Progress: base, active PR ownership and #267 canonical engine lineage inspected;
 Final evidence: focused Node/Edge/Telegram suites 64/64 PASS; JavaScript syntax 67 files PASS; agent-rules and `git diff --check` PASS. Full `npm run check`: 931 tests, 925 PASS, 2 FAIL, 4 SKIP. Both failures are unchanged CPU reconstruction tests whose Python subprocess cannot import host package `requests`; no changed Chain Reaction, Telegram or shared-engine test failed. Exact-head cloud CI and independent Fleet PRE remain mandatory and pending until the branch is published.
 
 ---
+
+# 2026-09-27: Canonical evacuation and resident return
+
+## Task and scope
+Repair the Telegram crisis path left after PR #318: evacuation directly mutated population outside the shared consequence engine, could leave workers above population, and residents described as temporarily absent never returned. Keep Telegram responsible only for story state/presentation; route population/resource arithmetic through the existing shared engine. Add bounded deterministic return after danger clears. No UI, media, schema, schedule, new engine or production mutation.
+
+## Required evidence
+Regression tests must cover canonical population arithmetic, worker bound, exact revision behavior, bounded evacuation, two-per-day return, replay completion and legacy malformed evacuation counters. Exact-head CI and independent Fleet PRE are mandatory before Ocean; merge/deploy/live remain separate.
+
+## Progress
+Registered on protected base `75bb69eab3d94f260ee8140075f48a4d1e2ed32e`. Implementation and tests in progress.
+
+---

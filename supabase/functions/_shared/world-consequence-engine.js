@@ -83,6 +83,8 @@ function applyResourceDelta(world,delta){
    next.resources[key]=clamp((next.resources[key]||0)+amount,lower,upper);
   }
  }
+ if(Object.hasOwn(next.resources,'workers'))
+  next.resources.workers=clamp(next.resources.workers||0,0,next.population);
  return next;
 }
 function applyNarrativeEvent(world,kind){
