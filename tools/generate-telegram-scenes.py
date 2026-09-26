@@ -8,6 +8,7 @@ from PIL import Image, ImageDraw, ImageFont
 from pathlib import Path
 import hashlib, json, math, random
 import imageio_ffmpeg
+from telegram_story_render import STORY, HEAD as STORY_HEAD, draw_story
 
 ROOT = Path(__file__).resolve().parents[1] / "apps/telegram-scenes/media"
 ROOT.mkdir(parents=True, exist_ok=True)
@@ -17,9 +18,9 @@ GENERIC = ("origin", "planning", "blocked", "refresh", "day", "accident",
            "recovery", "growth", "crisis_power", "crisis_water", "crisis_food")
 SCENES = GENERIC + tuple(
     stage + "_" + cat for cat in CATS for stage in ("start", "progress", "done")
-)
+) + STORY
 ANIMATED = {"origin", "accident", "recovery", "crisis_power", "crisis_water",
-            "crisis_food"} | {"start_" + c for c in CATS} | {"done_" + c for c in CATS}
+            "crisis_food"} | {"start_" + c for c in CATS} | {"done_" + c for c in CATS} | set(STORY)
 NAMES = {"solar": "СОЛНЕЧНАЯ ЭНЕРГИЯ", "coal": "УГОЛЬНАЯ СТАНЦИЯ",
          "geothermal": "ГЕОТЕРМАЛЬНАЯ ЭНЕРГИЯ", "water": "ВОДНАЯ ИНФРАСТРУКТУРА",
          "food": "ФЕРМЕРСКОЕ ХОЗЯЙСТВО", "workshop": "ПРОМЫШЛЕННОСТЬ",
@@ -29,6 +30,7 @@ HEAD = {"origin": "НОВЫЙ МИР", "planning": "ТВОЙ ПРОЕКТ",
         "day": "ЕЩЁ ОДИН ДЕНЬ", "accident": "АВАРИЯ", "recovery": "ВОССТАНОВЛЕНИЕ",
         "growth": "ГОРОД РАСТЁТ", "crisis_power": "ЭНЕРГЕТИЧЕСКИЙ КРИЗИС",
         "crisis_water": "НЕХВАТКА ВОДЫ", "crisis_food": "ПРОДОВОЛЬСТВЕННЫЙ КРИЗИС"}
+HEAD.update(STORY_HEAD)
 STAGES = {"start": "НАЧАЛО СТРОИТЕЛЬСТВА", "progress": "СТРОИТЕЛЬСТВО ИДЁТ",
           "done": "ОБЪЕКТ ЗАРАБОТАЛ"}
 FONT = Path("C:/Windows/Fonts/seguisb.ttf")
@@ -85,7 +87,10 @@ def city_background(d, seed, variant, smoke=False):
 
 def scene_frame(scene, variant, fraction):
     rng = random.Random(int.from_bytes(hashlib.sha256(f"{scene}:{variant}".encode()).digest()[:8], "big"))
-    danger = scene.startswith("crisis_") or scene in ("blocked", "accident")
+    danger = scene.startswith("crisis_") or scene in ("blocked", "accident") or (
+        scene.startswith("story_") and scene not in
+        ("story_dragon_help","story_rain","story_forest","story_festival",
+         "story_trade","story_rebuild","story_rescue","story_recovery"))
     night = variant == 2
     sky1 = (29, 50, 79) if night else ((45, 53, 77) if danger else (55, 112, 154))
     sky2 = (90, 75, 87) if danger else ((106, 128, 152) if night else (187, 209, 199))
@@ -194,6 +199,8 @@ def scene_frame(scene, variant, fraction):
         car=65+int(fraction*210)
         d.polygon([(car,285),(car+19,282),(car+35,291),(car+11,295)],
                   fill=(237,190,102),outline=(252,226,185))
+    if scene.startswith("story_"):
+        draw_story(d,scene,variant,fraction,plant)
     # Rich, high-contrast title strips readable at Telegram mobile widths.
     d.rounded_rectangle((15,12,437,64),radius=12,fill=(19,39,52),outline=(92,155,164),width=2)
     if "_" in scene and scene.split("_")[0] in STAGES:
@@ -215,17 +222,19 @@ def main():
         for variant in range(3):
             prefix=f"{scene}-{variant}"
             png=ROOT/(prefix+".png")
-            scene_frame(scene,variant,.63).save(png,format="PNG",optimize=True)
+            if not png.exists():
+                scene_frame(scene,variant,.63).save(png,format="PNG",optimize=True)
             item={"id":scene,"variant":variant,"photo":png.name}
             if scene in ANIMATED:
                 mp4=ROOT/(prefix+".mp4")
-                writer=imageio_ffmpeg.write_frames(str(mp4),(W,H),fps=9,codec="libx264",
-                    quality=5,pix_fmt_in="rgb24",output_params=[
-                    "-pix_fmt","yuv420p","-movflags","+faststart","-preset","veryfast","-crf","31"])
-                writer.send(None)
-                for f in range(18):
-                    writer.send(scene_frame(scene,variant,f/17).tobytes())
-                writer.close()
+                if not mp4.exists():
+                    writer=imageio_ffmpeg.write_frames(str(mp4),(W,H),fps=9,codec="libx264",
+                        quality=5,pix_fmt_in="rgb24",output_params=[
+                        "-pix_fmt","yuv420p","-movflags","+faststart","-preset","veryfast","-crf","31"])
+                    writer.send(None)
+                    for f in range(18):
+                        writer.send(scene_frame(scene,variant,f/17).tobytes())
+                    writer.close()
                 item["animation"]=mp4.name
             entries.append(item)
         print(f"{i+1}/{len(SCENES)} {scene}",flush=True)
