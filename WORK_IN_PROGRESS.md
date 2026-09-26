@@ -962,3 +962,5 @@ Task: implement original worker-safe face culling and compact typed-array mesh o
 2026-09-26 copy-only: original portable sparse chunk modification codec and ID remapping, standalone tests, inspired by independently studied chunk persistence structures; no integration.
 
 2026-09-26 copy-only: independently implement safe block edit relighting by bounded full-volume recomputation (not upstream incremental BFS), compare dirty light sections; standalone tests, no integration.
+
+2026-09-26 copy-only: independently implement a bounded incremental block-light update with source-level comparison to Godot and Unity lighting; standalone tests only, no renderer integration.
