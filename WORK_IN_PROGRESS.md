@@ -937,3 +937,80 @@ Implementation and local verification complete. Remaining proof is GitHub Action
 - Completion criteria: scoped commit and honest test evidence; integration release remains subject to cloud gates and live Supabase verification.
 - Final evidence: node --test --test-isolation=none test/chain-reaction-api.test.js test/world-consequence-engine.test.js: 19/19 passed. node --check api/voxel.js and lib/chain-reaction-api.js passed; git diff --check passed. Agent rules check passed with git subprocess EPERM warnings (branch/file checks not verified by that script). Ordinary node --test failed to spawn subprocesses (EPERM); same tests passed with isolation disabled. Full release suite remains unrun, cloud-first. No live database or browser claim. Simulation arithmetic and accepted quality metrics unchanged; no scientific readiness claim.
 - Commit blocker: git add failed creating C:/Users/user/Desktop/World_server/.git/worktrees/worldserver-codex-chain-20260923/index.lock: Permission denied. The linked worktree Git directory is outside this session's writable root; approvals are unavailable. No commit/SHA, push, PR or deployment produced. No new worktree or Desktop copy created; existing user worktrees left untouched.
+
+
+## 2026-09-26: Worker-safe chunk mesh data builder
+Task: implement original worker-safe face culling and compact typed-array mesh output, informed by upstream chunk generation/meshing concepts without copying unlicensed code. Why: portable CPU-only chunk meshing for existing Three.js/Godot pipeline. Current state: PR #306 queue and PR #308 AO/greedy helpers are isolated and unmerged. Target: standalone deterministic pure module, no new renderer or game engine. Files: shared/voxel-worker-mesh.mjs, test/voxel-worker-mesh.test.mjs. Risks: coordinate convention, material indices, winding, chunk-edge neighbor sampling, geometry size. Preserve Golden controls/collisions/API; avoid duplicate existing world meshing integration. Plan: standalone typed arrays and tests; draft PR to master; integration after review with #306/#308. Baseline gates not executable from GitHub connector; NOT_VERIFIED. Next: implement and run independent CI. Completion: code, test, exact SHA, review and verified Three.js import; FPS not claimed.
+
+
+2026-09-26 extension: add deterministic original procedural texture atlas data generation (RGBA pixels) for stone/basalt/wood/grass/lava; no upstream assets. Keep browser/Node compatible and capped memory. Tests: deterministic seeds, palette differences, alpha, dimensions. Existing PBR profile system remains canonical; atlas is optional input only. No deployment before independent review and visual gates. Progress: pending implementation.
+
+2026-09-26 extension: add optional Three.js atlas adapter to make original generated pixels directly consumable by existing browser renderer, preserving existing PBR material synthesis. Pure dependency injection, no global renderer mutation; tests use mock THREE. Review and actual browser capture pending.
+
+2026-09-26 integration bridge: current apps/voxel-world/client.js already has Golden CanvasTexture atlas and per-chunk Uint8Array indexed (y*CHUNK+z)*CHUNK+x. Do not replace Golden materials or duplicate atlas in production. Add opt-in chunk snapshot conversion to the existing worker protocol, preserving world-coordinate edge neighbors. Tests and live renderer integration remain pending.
+
+2026-09-26 copy-only scope: independent standalone versioned voxel chunk save codec with strict bounds and round-trip tests; no game integration, no upstream copyrighted files.
+
+2026-09-26 copy-only scope extension: standalone seeded visual tour manifest and cross-engine asset provenance schema, independently written after studying Godot/Unity/Unreal DEVELOPMENT.md. No renderer/game integration and no upstream file copying.
+
+2026-09-26 copy-only: original standalone 0..15 voxel block/sky flood lighting inspired by independently studied Godot light_engine.gd and Unity Lighting.cs, with unit tests; no existing renderer edits.
+
+2026-09-26 copy-only: independently reproduce boundary-aware dirty section invalidation from source study, standalone module/tests, no game integration.
+
+2026-09-26 copy-only: independently implement staged chunk pipeline readiness and stale result rejection, based on Unity ChunkManager.cs and Godot chunk_manager.gd study; standalone and tests, no integration.
+
+2026-09-26 copy-only: original portable sparse chunk modification codec and ID remapping, standalone tests, inspired by independently studied chunk persistence structures; no integration.
+
+2026-09-26 copy-only: independently implement safe block edit relighting by bounded full-volume recomputation (not upstream incremental BFS), compare dirty light sections; standalone tests, no integration.
+
+2026-09-26 copy-only: independently implement a bounded incremental block-light update with source-level comparison to Godot and Unity lighting; standalone tests only, no renderer integration.
+
+2026-09-26 copy-only: implement independently authored incremental block-light updates with bounded fallback, standalone test verification; no active runtime integration.
+
+2026-09-26 copy-only: standalone original incremental block-light removal via bounded two-phase propagation; compare against full recomputation, no active game integration.
+
+2026-09-26 copy-only: studied Godot game/ai/pathfinder.gd and independently implement footprint-aware voxel waypoint smoothing; standalone tests, no runtime integration.
+
+2026-09-26 copy-only: studied full Godot chunk.gd and mesher.gd; independently implement bounded derived heightmap/emitter index and per-column update with standalone tests, no integration.
+
+2026-09-26 copy-only: source-study Godot mesher corner AO/light weighting; independently implement standalone corner shade sampling and diagonal selection, with tests; no active renderer integration.
+
+2026-09-26 copy-only: study Godot mesher quad diagonal and separate sky/block light channels; implement original standalone triangulation/light packing and tests; no active renderer integration.
+
+2026-09-26 copy-only: studied complete Godot incremental light removal BFS; independently prototype bounded two-phase removal and reseeding for block light, differential tests against full flood lighting; no runtime integration.
+
+2026-09-26 copy-only: differential-test original two-phase block-light removal against independent full flood solver over deterministic random scenes; correct discrepancies; no runtime integration.
+
+2026-09-26 copy-only: study Unreal DEVELOPMENT.md procedural PBR texture pipeline; independently implement deterministic height-to-normal and ORME packing for engine-neutral standalone use, with tests; Unreal texture synthesis source not yet located; no runtime integration.
+
+2026-09-26 copy-only: studied Godot chunk.gd compressed block snapshot and derived-state rebuild; independently implement portable palette+run-length section snapshot codec with strict decoding, standalone tests, no runtime integration. Not a port of Godot ZSTD.
+
+2026-09-26 copy-only: reread full upstream Godot game/ai/pathfinder.gd; independently implement bounded 4-direction walking A* with step-up/drop, clearance, hazards/water costs and partial-path fallback; standalone tests only, no gameplay integration.
+
+2026-09-26 copy-only: studied Unity ChunkManager.cs result apply 6ms/64 and version/identity checks on mesh upload; independently implement bounded, stale-safe staged result applicator and standalone tests; no active runtime integration.
+
+2026-09-26 copy-only: studied Unity ChunkManager unload radius/busy guards, save-before-removal, readiness and four-stage load progress; independently implement standalone chunk residency and readiness planner with tests; no live runtime integration.
+
+2026-09-26 copy-only: read Godot light_engine.gd worker scheduling and edit-streak fairness (one chunk task after 32 edits); independently implement pure bounded fair queue with edit coalescing and tests; no live integration.
+
+2026-09-26 copy-only: studied Godot mesher.gd _fill_padded 18^3 halo sampling from 3x3 chunks, out-of-world bedrock/sky defaults and rowfull; implement independently as standalone section sampling utility and tests, no runtime integration.
+
+2026-09-26 standalone: original enclosed-voxel visibility masks inspired by Godot mesher.gd. No runtime integration.
+
+2026-09-26 copy-only: studied Unity Lighting.cs vertical sky initialization, expose-depth and six-neighbor sky flood (15 downward exception); independently implement bounded skylight volume and standalone tests, no runtime integration.
+
+2026-09-26 standalone: studied Unity Lighting.cs UpdateChannel/PropagateWorld two-phase incremental sky updates. Implement correctness-first independent edit relight with changed-cell and affected-section metadata; no game integration.
+
+2026-09-26 standalone: reread Godot pathfinder.gd goal snap-down (up to four), bounded A* and open-set deduplication. Correct independently authored walking A* and add goal-snap tests. No runtime integration.
+
+2026-09-26 standalone: read actual Unreal Render/MCTextureSynth.cpp procedural VNoise/Fbm/FbmAniso/Worley; independently implement tileable deterministic noise primitives and tests. No assets copied and no runtime integration.
+
+2026-09-26 standalone: studied actual Unreal Render/MCTextureRecipes.cpp Mottle and StoneLike (fBm two-color mottle, dark vein threshold, height reduction). Independently compose original tileable noise into original stone albedo/height maps; deterministic standalone tests. No upstream assets/code copied or live integration.
+
+2026-09-26 standalone: studied actual Unreal MCTextureRecipes.cpp Rings/Bark: rounded-square growth rings with fBm wobble and anisotropic rim grain; independently implement wood-end material with original colors and tests. No upstream assets/code or live integration.
+
+2026-09-26 standalone: read Unreal MCTextureRecipes.cpp Bark anisotropic ridges and birch lenticels; independently implement original bark material and tests, no copied source/assets or game integration.
+
+2026-09-26 standalone: studied Unreal MCTextureRecipes.cpp WaterTex/LavaTex (Worley caustics, anisotropic flow, fBm heat, emissive lava); implement independently authored procedural water/lava material channels and deterministic tests. No upstream code/assets copied; no live integration.
+
+2026-09-26 standalone: read actual Unreal MCTextureSynth.cpp Finalize (5x5 height cavity AO, 3-pass transparent RGB dilation, Sobel tangent normals, ORME channels). Independently implement original standalone finalization for our fluid/stone/wood recipes and tests; no live integration.
