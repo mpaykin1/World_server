@@ -312,4 +312,3 @@ test('geothermal player journey: same-revision offers, preview, commit, delayed 
   assert.deepEqual(afterReload.world, advanced.world);
   assert.equal(f.privateEvents.length, 2);
 });
-
