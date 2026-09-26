@@ -51,6 +51,11 @@ export function classifyTurn(before,after,action='day',projectType=''){
     return{id:last?.scene||'story_unknown',
       headline:last?.title||'⚠️ Мир переживает последствия.',story:true};
   }
+  if((action==='day'||action==='resume')&&after.story?.ruins?.length){
+    const dragon=after.story.ruins.some(ruin=>ruin.source==='dragon_fire');
+    return{id:dragon?'story_dragon_aftermath':'story_fire',
+      headline:'🏚 Разрушенные объекты остаются в городе.',story:true};
+  }
   if(action==='new')return {id:'origin',headline:'🌱 Новый мир создан.'};
   if(action==='plan')return {id:'planning',headline:'📝 Совет города изучает твою идею.'};
   if(action==='blocked')return {id:'blocked',headline:'🚧 План пока невозможно осуществить.'};
