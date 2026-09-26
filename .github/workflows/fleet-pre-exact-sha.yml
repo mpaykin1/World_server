@@ -14,21 +14,27 @@ jobs:
     timeout-minutes: 25
     outputs:
       sha: ${{ steps.identity.outputs.sha }}
+      base: ${{ steps.identity.outputs.base }}
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
-      - name: Verify checked-out commit is candidate head
+      - name: Verify checked-out commit is candidate head and resolve canonical base
         id: identity
         env:
           EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
         shell: bash
         run: |
           set -euo pipefail
           ACTUAL="$(git rev-parse HEAD)"
           test "$ACTUAL" = "$EXPECTED"
+          git fetch --no-tags --depth=1 origin master
+          BASE="$(git rev-parse FETCH_HEAD)"
           echo "sha=$ACTUAL" >> "$GITHUB_OUTPUT"
+          echo "base=$BASE" >> "$GITHUB_OUTPUT"
+          echo "PR_BASE=$PR_BASE"
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -47,9 +53,17 @@ jobs:
       - name: Write exact-head evidence
         env:
           CERTIFIED_SHA: ${{ steps.identity.outputs.sha }}
+          CERTIFIED_BASE: ${{ steps.identity.outputs.base }}
+          CERTIFIED_PR_BASE: ${{ github.event.pull_request.base.sha }}
         shell: bash
         run: |
-          printf '{"kind":"FLEET_PRE","sha":"%s","runId":"%s","verdict":"PASS","scope":"syntax-and-causal-tests"}\n' "$CERTIFIED_SHA" "$GITHUB_RUN_ID" > fleet-pre-evidence.json
+          set -euo pipefail
+          node scripts/ocean-integration-gate.cjs certify \
+            --head "$CERTIFIED_SHA" \
+            --canonical-base "$CERTIFIED_BASE" \
+            --pr-base "$CERTIFIED_PR_BASE" \
+            --run "$GITHUB_RUN_ID" \
+            --out fleet-pre-evidence.json
       - uses: actions/upload-artifact@v4
         with:
           name: fleet-pre-${{ steps.identity.outputs.sha }}
@@ -61,12 +75,25 @@ jobs:
     needs: fleet-pre
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: fleet-pre-${{ needs.fleet-pre.outputs.sha }}
+          path: fleet-pre
+      # Fail closed: READY_FOR_OCEAN requires the certificate artifact itself to
+      # certify the exact candidate head AND the exact current canonical base.
+      # A canonical-base advance invalidates the certificate even when the
+      # candidate head is unchanged; re-dispatch this workflow to re-certify.
       - name: Reject missing or stale certificate
         env:
           EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
-          CERTIFIED: ${{ needs.fleet-pre.outputs.sha }}
+        shell: bash
         run: |
           set -euo pipefail
-          test -n "$CERTIFIED"
-          test "$CERTIFIED" = "$EXPECTED"
-          echo "READY_FOR_OCEAN=YES SHA=$CERTIFIED"
+          node scripts/ocean-integration-gate.cjs eligibility \
+            --certificate fleet-pre/fleet-pre-evidence.json \
+            --expected-head "$EXPECTED" \
+            --resolve-canonical-base

@@ -1,3 +1,37 @@
+# 2026-09-26: Fail-closed exact (head, canonical base) Ocean integration eligibility
+
+## What we are doing and why
+
+Make the protected `Ocean merge eligibility` gate a real fail-closed gate. Today eligibility is decided by an inline shell comparison of one job output inside `.github/workflows/fleet-pre-exact-sha.yml`, so the gate can report `READY_FOR_OCEAN=YES` for a certificate that was produced against a since-advanced canonical base, and it never parses the Fleet PRE certificate artifact at all. Issue #80 already records the governing relation — "`exact-head all-green + independent Fleet PRE` is valid evidence only for the exact `(head_sha, canonical_base_sha)` pair; a later canonical-base advance invalidates integration eligibility even when the feature head is unchanged" — but nothing in the repository enforces it. As Ocean this slice removes the fail-open path I am required to reject (stale certificate) without touching gameplay, API, simulation, Supabase, Graphics or deployment.
+
+## Current state and target state
+
+Current state: `ocean-eligibility` runs `test -n "$CERTIFIED"; test "$CERTIFIED" = "$EXPECTED"; echo READY_FOR_OCEAN=YES`. Reproduced 2026-09-26 with the exact current snippet on this machine: with the canonical base advanced and the head unchanged, and with a certificate file whose `sha` and `verdict` are both wrong, the gate still exits 0 and prints `READY_FOR_OCEAN=YES`. Target state: one pure, tested decision in `lib/ocean-integration-gate.js`, one CLI (`scripts/ocean-integration-gate.cjs`), the workflow re-resolving the canonical base and validating the actual certificate artifact, and `READY_FOR_OCEAN=YES` reachable only for the exact `(head_sha, canonical_base_sha)` pair that Fleet certified.
+
+## Where the project is going
+
+`Builder -> Fleet PRE -> Ocean -> Fleet POST` must keep working on free cloud CI. Integration authority must never be inferable from a green check that was not bound to the revision being integrated; every rejection must name its reason so Builder can refresh the same PR instead of opening a competing one.
+
+## Affected systems, risks and exact patch plan
+
+Systems: `.github/workflows/fleet-pre-exact-sha.yml` only, plus new `lib/ocean-integration-gate.js`, `scripts/ocean-integration-gate.cjs`, `test/ocean-integration-gate.test.js`, one `package.json` script and this record. Risks: failing closed on a legitimately fresh candidate (mitigated — the message names the re-dispatch action, and `workflow_dispatch` re-certifies), breaking a required branch-protection check (mitigated — `AGENTS.md` requires `check`, not `Ocean merge eligibility`), creating a second orchestration stack (mitigated — no new workflow, no new agent, no new schedule; the decision is extracted from the existing YAML). Plan: certificate gains `baseSha` and `prBaseSha`; eligibility re-fetches the canonical base and delegates to the CLI; `git diff --check` semantics are left unchanged and are reported as a known remaining weakness.
+
+## Required tests
+
+Focused `node --test test/ocean-integration-gate.test.js` (executes the real CLI as a child process on real certificate files: fresh pair accepted; advanced canonical base rejected; head mismatch rejected; missing/malformed/non-PASS/wrong-kind certificates rejected), a wiring test asserting the fail-open inline comparison is gone and the artifact is downloaded and parsed, plus `node scripts/check-js.js`, `node scripts/check-agent-rules.js`, `git diff --check`, and cloud CI on the exact head.
+
+## What to do with the patch
+
+One branch, one PR, no merge and no production deployment by this slice. Ocean integrates only after an independent Fleet PRE certificate names this exact head and the exact canonical base; Fleet POST stays a separate stage.
+
+## Current progress, next action, completion criteria
+
+Progress: fail-open reproduced twice against the real current logic; root cause identified; fix implemented on `ai/opencode/ocean-exact-pair-gate-20260926` from exact default head `809b0292b26edb1ea320e61144f1b1dfed772922`. Next action: focused tests, commit, push, PR, hand the exact head to Fleet. Completion: focused tests pass locally, CI green at the exact head, Fleet PRE certificate required before any integration. Final evidence: recorded below and in the PR body.
+
+Final evidence: pending this session's focused run; no independent certificate, no integration and no live claim is asserted by this record.
+
+---
+
 # 2026-09-24: Chain Reaction backend release evidence checklist
 
 Task: publish a compact, auditable release checklist for the already implemented Chain Reaction backend without changing simulation, API, Supabase state, or Graphics-owned UI. Why: merged, deployed, and independently live-verified are different gates; PR #285/#286 must not be counted as release-ready from PRE evidence alone. Current state: master `142200812d3d57a1b79aaaba2af628168acc648e` contains both `resident-at-address` and atomic `game-state`; Ocean records the same master on canonical Cloudflare and Supabase `world-emergence` ACTIVE v14, bundle `345677bf2b2b8d6e3adc98956a6bd045a68768d26a49f0986abb8e3935e2fe3d`; no Fleet POST certificate for #285/#286 exists yet. Target: one source-controlled checklist that separates MERGED, DEPLOYED, and LIVE_VERIFIED and marks every missing proof `NOT_VERIFIED`. Files/systems: documentation only. Risks: treating preview/CI/PRE or unauthenticated 401 smoke as authenticated production proof, inheriting an older POST to a newer endpoint, or obscuring Graphics blockers. Preserve: one consequence engine, all server arithmetic/auth/CAS/privacy behavior, UI ownership, and existing automation count. Exact plan: record immutable candidate/integrated SHAs, cloud runs, Edge identity, prior live certificates, and explicit owner/TODO for the combined endpoint POST. Tests: Markdown evidence/link scan, `git diff --check`, agent rules, and documentation-only deployment-ignore check. PR plan: isolated branch and PR; no deploy, merge, Fleet POST, or UI edit by this task. Progress: evidence collected from PR #285/#286, ledger #80, and read-only Supabase function inventory; checklist is complete. Next action: publish the documentation-only PR and let CI validate the exact head. Completion: checklist committed and cloud handoff created. Final evidence: read-only Supabase inventory independently reports `world-emergence` ACTIVE v14 with the Ocean-recorded bundle; `git diff --check`, agent rules, exact evidence scan, scope check, and documentation-only Vercel quota guard PASS. No source/UI/deployment mutation and no duplicate Fleet POST.
