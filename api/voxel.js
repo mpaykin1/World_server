@@ -4,6 +4,8 @@ const { createAdminClient } = require('../lib/env');
 const { optionalIdentity } = require('../lib/auth');
 const { sendJson, methodNotAllowed, readJsonBody, withErrors, httpError } = require('../lib/http');
 const chainReaction = require('../lib/chain-reaction-api');
+const consequenceEngine = require('../lib/world-consequence-engine');
+const { syncGeography } = require('../supabase/functions/_shared/chain-reaction-geography.js');
 
 const {
   CHUNK, WORLD_ID, finite, safeWorldId: ruleSafeWorldId, safePosition: ruleSafePosition,
@@ -100,6 +102,7 @@ async function readEmergenceWorld(admin, worldId) {
 
 async function writeEmergenceWorld(admin, current, emergence) {
   current.settings.worldDNA = { ...current.dna, emergence };
+  current.settings = syncGeography(current.settings, current.seed, emergence.entities, consequenceEngine.createWorld);
   const now = new Date(Math.max(Date.now(), Date.parse(current.world.updated_at || '') + 1 || 0)).toISOString();
   const { data, error } = await admin.from('voxel_worlds')
     .update({ settings: current.settings, updated_at: now })
@@ -122,7 +125,7 @@ async function withMacroRetry(admin, worldId, mutate) {
       await writeEmergenceWorld(admin, current, result.emergence);
       return { emergence: result.emergence, worldId, ...result.metadata };
     } catch (error) {
-      if (error.status !== 409 || attempt === 3) throw error;
+      if (error.status !== 409 || error.code === 'INVALID_CHAIN_REACTION_STATE' || attempt === 3) throw error;
     }
   }
   throw httpError(409, 'Параллельные изменения мира. Повторите действие.');
