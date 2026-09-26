@@ -49,12 +49,15 @@ function db(error:any) {
 function publicState(value:any) {
   const safe=structuredClone(value);
   for(const project of safe.projects||[])if(project.intent)delete project.intent.comment;
+  if(Array.isArray(safe.history))safe.history=safe.history.filter(e=>e&&typeof e==='object'&&!Array.isArray(e));
   for(const event of safe.history||[]){delete event.comment;delete event.actorId;}
   // Rebuild canonical values: key allowlisting alone would permit nested secrets
   // inside an allowed field such as id or name.
   if(Array.isArray(safe.residents)){
     safe.residents=publicResidents(safe);
   }
+  // Rebuild derived utilities from canonical inputs; never echo an injected saved projection.
+  safe.cityServices=engine.cityServices(safe);
   return safe;
 }
 export function isChainReactionAction(value:unknown) {
@@ -109,6 +112,8 @@ export async function handleChainReaction(admin:any,req:Request,body:any,runtime
   const stored=settings.chainReaction;
   if(stored&&(stored.schema!==1||!Number.isSafeInteger(stored.revision)))fail(409,"Unsupported scenario version");
   const world=stored||engine.createWorld(String(row.seed));
+  if(!Array.isArray(world.houses)||!Array.isArray(world.history))fail(409,'Invalid saved world shape');
+  world.history=world.history.filter((e:any)=>e&&typeof e==='object'&&!Array.isArray(e));
   const base={worldId:row.id,scenarioVersion:1,revision:world.revision,runtime:"supabase-edge-chain-reaction"};
   if(body.action==="history") {
     const offset=body.offset===undefined?0:body.offset,limit=body.limit===undefined?50:body.limit;

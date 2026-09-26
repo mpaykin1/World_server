@@ -76,3 +76,24 @@ test('actual Edge CAS two writers, stale 409 then latest refresh',async()=>{
   assert.equal((await runEdge(f,body('game-state'))).revision,1);
   assert.equal(f.writes,1);
 });
+
+test('real Edge and Node discard injected services when houses missing, skip null history',async()=>{
+ const f=fixture();const w=f.row.settings.chainReaction;
+ delete w.houses;delete w.residents;
+ w.cityServices={version:1,houses:[{id:'bad',secret:'EDGE_SECRET_SENTINEL'}]};
+ w.history.push(null);
+ await assert.rejects(runEdge(f,body('preview-plan')),e=>e.status===409);
+ await assert.rejects(runNode(f,body('preview-plan')),e=>e.status===409);
+ assert.equal(f.writes,0);
+});
+
+test('malformed historical null event does not crash Node or Edge game-state',async()=>{
+ const f=fixture();f.row.settings.chainReaction.history.push(null);
+ f.row.settings.chainReaction.cityServices={version:1,houses:[{id:'bad',secret:'EDGE_SECRET_SENTINEL'}]};
+ const edge=await runEdge(f,body('game-state'));
+ const node=await runNode(f,body('game-state'));
+ assert.deepEqual({...edge,runtime:undefined},{...node,runtime:undefined});
+ assert(edge.world.history.every(e=>e&&typeof e==='object'));
+ assert.deepEqual(edge.world.cityServices,engine.cityServices(f.row.settings.chainReaction));
+ assert.doesNotMatch(JSON.stringify(edge),/EDGE_SECRET_SENTINEL/);
+});

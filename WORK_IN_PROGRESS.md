@@ -937,3 +937,13 @@ Implementation and local verification complete. Remaining proof is GitHub Action
 - Completion criteria: scoped commit and honest test evidence; integration release remains subject to cloud gates and live Supabase verification.
 - Final evidence: node --test --test-isolation=none test/chain-reaction-api.test.js test/world-consequence-engine.test.js: 19/19 passed. node --check api/voxel.js and lib/chain-reaction-api.js passed; git diff --check passed. Agent rules check passed with git subprocess EPERM warnings (branch/file checks not verified by that script). Ordinary node --test failed to spawn subprocesses (EPERM); same tests passed with isolation disabled. Full release suite remains unrun, cloud-first. No live database or browser claim. Simulation arithmetic and accepted quality metrics unchanged; no scientific readiness claim.
 - Commit blocker: git add failed creating C:/Users/user/Desktop/World_server/.git/worktrees/worldserver-codex-chain-20260923/index.lock: Permission denied. The linked worktree Git directory is outside this session's writable root; approvals are unavailable. No commit/SHA, push, PR or deployment produced. No new worktree or Desktop copy created; existing user worktrees left untouched.
+
+---
+
+# 2026-09-25: Free CPU city services (MANUAL_FAST_LANE)
+
+Task/why: bring SimCity-inspired household electricity, water and roads into EXISTING Chain Reaction engine, using original deterministic algorithms rather than GPL/AGPL code or paid services. Master baseline 809b0292: aggregate resources only. Target: bounded 32-house MST, floor-level shortages, hazard outages, commissioned utility redundancy, commute access and free offline Genie explanations.
+
+Scope/patch: shared Node+Edge consequence engine, Node+Edge public DTO sanitization and dedicated tests; no new engine, GPU, API billing, hosting, DB migration, UI overlap with #278 or sixth automation. Risks: replay drift, 16KiB baseline world size, Genie category changes, tainted persisted projection and overlap with engine PRs #295/#296.
+
+Tests: replay/seed, fairness, hazards/backup, outages/recovery, legacy/tamper, Node/real Edge parity and full cloud CI. Branch: ai/chat/free-city-services-20260925; draft PR #299. Progress: code and tests pushed; cloud and independent review pending. Next: fix exact-head CI, genuine reviewer PRE, rebase against merged engine changes, then Ocean deployment and independent Fleet POST desktop/mobile. Completion/evidence: NOT_VERIFIED until reviewed, deployed and measured player visibility >85%; do not issue game link early.
