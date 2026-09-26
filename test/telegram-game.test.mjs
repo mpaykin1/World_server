@@ -97,11 +97,11 @@ test('webhook requires production secret and D1',async()=>{
   assert.equal(a.calls.length,0);
   assert.equal((await post({...e,TELEGRAM_DB:null},a,start())).status,503);
 });
-test('start sends existing image and six choices, without AI calls',async()=>{
+test('start sends existing image and seven controls, without AI calls',async()=>{
   const e=env(),a=mockApi();
   assert.equal((await post(e,a,start(10))).status,200);
   assert.deepEqual(a.calls.map(x=>x.method),['sendPhoto']);
-  assert.equal(a.calls[0].payload.reply_markup.inline_keyboard.length,6);
+  assert.equal(a.calls[0].payload.reply_markup.inline_keyboard.length,7);
   assert.equal((await loadSession(e.TELEGRAM_DB,42)).lastUpdate,10);
   await post(e,a,start(10));
   assert.equal(a.calls.length,1,'Telegram retry must not double-send');
@@ -110,7 +110,7 @@ test('failed photo falls back to a playable text message',async()=>{
   const e=env(),a=mockApi({photoOk:false});
   assert.equal((await post(e,a,start(10))).status,200);
   assert.deepEqual(a.calls.map(x=>x.method),['sendPhoto','sendMessage']);
-  assert.equal(a.calls[1].payload.reply_markup.inline_keyboard.length,6);
+  assert.equal(a.calls[1].payload.reply_markup.inline_keyboard.length,7);
 });
 test('choice updates D1 once and stale buttons cannot replay mutations',async()=>{
   const e=env(),a=mockApi({photoOk:false});
@@ -121,14 +121,14 @@ test('choice updates D1 once and stale buttons cannot replay mutations',async()=
   const stored=await loadSession(e.TELEGRAM_DB,42);
   assert.equal(stored.world.tick,0);
   assert.equal(stored.world.projects.length,1);
-  const next='tg2:'+stored.world.revision+':next';
-  await post(e,a,callback(4,next));
-  assert.equal((await loadSession(e.TELEGRAM_DB,42)).world.tick,1);
   assert(stored.revision>0);
   await post(e,a,callback(2,choice.callback_data));
   assert.deepEqual((await loadSession(e.TELEGRAM_DB,42)).world,stored.world);
   await post(e,a,callback(3,choice.callback_data));
   assert.deepEqual((await loadSession(e.TELEGRAM_DB,42)).world,stored.world);
+  const next='tg2:'+stored.world.revision+':next';
+  await post(e,a,callback(4,next));
+  assert.equal((await loadSession(e.TELEGRAM_DB,42)).world.tick,1);
   assert(a.calls.every(x=>!x.method.includes('openai')));
 });
 test('free-text idea is compiled by canonical engine, saved and resumed',async()=>{
