@@ -1002,3 +1002,5 @@ Task: implement original worker-safe face culling and compact typed-array mesh o
 2026-09-26 standalone: studied Unity Lighting.cs UpdateChannel/PropagateWorld two-phase incremental sky updates. Implement correctness-first independent edit relight with changed-cell and affected-section metadata; no game integration.
 
 2026-09-26 standalone: reread Godot pathfinder.gd goal snap-down (up to four), bounded A* and open-set deduplication. Correct independently authored walking A* and add goal-snap tests. No runtime integration.
+
+2026-09-26 standalone: read actual Unreal Render/MCTextureSynth.cpp procedural VNoise/Fbm/FbmAniso/Worley; independently implement tileable deterministic noise primitives and tests. No assets copied and no runtime integration.
