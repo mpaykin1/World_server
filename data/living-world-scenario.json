@@ -1,0 +1,319 @@
+{
+  "schemaVersion": "1.0.0",
+  "expectedNodeCount": 62,
+  "source": "user-defined living-world scenario",
+  "recoveryPolicy": "Never invent missing wording. UNKNOWN slots remain until exact prior wording is recovered.",
+  "coreInvariant": "No choice may end only in text; after selection the player must see within seconds a physical change to world, creature, AI, item, weather, combat, or another world.",
+  "steps": [
+    {
+      "id": 1,
+      "text": "Добро пожаловать! Этот мир живой.",
+      "status": "RECOVERED_FROM_USER_SCENARIO"
+    },
+    {
+      "id": 2,
+      "text": "Куда пойдём?",
+      "status": "RECOVERED_FROM_USER_SCENARIO"
+    },
+    {
+      "id": 3,
+      "text": "Смотри! Мир растёт вокруг тебя.",
+      "status": "RECOVERED_FROM_USER_SCENARIO"
+    },
+    {
+      "id": 4,
+      "text": "Что изменить в мире?",
+      "status": "RECOVERED_FROM_USER_SCENARIO"
+    },
+    {
+      "id": 5,
+      "text": "Мир услышал тебя.",
+      "status": "RECOVERED_FROM_USER_SCENARIO"
+    },
+    {
+      "id": 6,
+      "text": "Кто здесь появится?",
+      "status": "RECOVERED_FROM_USER_SCENARIO"
+    },
+    {
+      "id": 7,
+      "text": "Смотри! Родилось новое существо.",
+      "status": "RECOVERED_FROM_USER_SCENARIO"
+    },
+    {
+      "id": 8,
+      "text": "Как его изменить?",
+      "status": "RECOVERED_FROM_USER_SCENARIO"
+    },
+    {
+      "id": 9,
+      "text": "Существо меняется!",
+      "status": "RECOVERED_FROM_USER_SCENARIO"
+    },
+    {
+      "id": 10,
+      "text": "Как оно будет себя вести?",
+      "status": "RECOVERED_FROM_USER_SCENARIO"
+    },
+    {
+      "id": 11,
+      "text": "Кто будет врагом?",
+      "status": "RECOVERED_FROM_USER_SCENARIO"
+    },
+    {
+      "id": 12,
+      "text": "Как наше существо будет сражаться?",
+      "status": "RECOVERED_FROM_USER_SCENARIO"
+    },
+    {
+      "id": 13,
+      "text": "Смотри! Начался бой.",
+      "status": "RECOVERED_FROM_USER_SCENARIO"
+    },
+    {
+      "id": 14,
+      "text": "Что взять после победы?",
+      "status": "RECOVERED_FROM_USER_SCENARIO"
+    },
+    {
+      "id": 15,
+      "text": "Существо научилось новому.",
+      "status": "RECOVERED_FROM_USER_SCENARIO"
+    },
+    {
+      "id": 16,
+      "text": "Ты можешь менять этот мир.",
+      "status": "RECOVERED_FROM_USER_SCENARIO"
+    },
+    {
+      "id": 17,
+      "text": "Что построим?",
+      "status": "RECOVERED_FROM_USER_SCENARIO"
+    },
+    {
+      "id": 18,
+      "text": "Мир запомнил твоё действие.",
+      "status": "RECOVERED_FROM_USER_SCENARIO"
+    },
+    {
+      "id": 19,
+      "text": "К нам пришёл другой игрок.",
+      "status": "RECOVERED_FROM_USER_SCENARIO"
+    },
+    {
+      "id": 20,
+      "text": "Что попросить его сделать?",
+      "status": "RECOVERED_FROM_USER_SCENARIO"
+    },
+    {
+      "id": 21,
+      "text": "ИИ начал действовать.",
+      "status": "RECOVERED_FROM_USER_SCENARIO"
+    },
+    {
+      "id": 22,
+      "text": "Что будем искать?",
+      "status": "RECOVERED_FROM_USER_SCENARIO"
+    },
+    {
+      "id": 23,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 24,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 25,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 26,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 27,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 28,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 29,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 30,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 31,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 32,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 33,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 34,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 35,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 36,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 37,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 38,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 39,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 40,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 41,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 42,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 43,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 44,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 45,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 46,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 47,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 48,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 49,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 50,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 51,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 52,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 53,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 54,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 55,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 56,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 57,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 58,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 59,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 60,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 61,
+      "text": null,
+      "status": "UNKNOWN_PENDING_EXACT_RECOVERY"
+    },
+    {
+      "id": 62,
+      "text": "Теперь решаешь ты.",
+      "status": "RECOVERED_FROM_USER_SCENARIO"
+    }
+  ]
+}
