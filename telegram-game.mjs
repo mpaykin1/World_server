@@ -1,13 +1,12 @@
 // Stateless HTTP transport; game state is persisted in Cloudflare D1.
 // Canonical project math is imported, never duplicated or replaced by an LLM.
 import {
-  engine, MAX_INTENT, LABELS, initialWorld, options, applyPlan,
-  loadSession, saveSession, view, describeChange
+  engine, MAX_INTENT, initialWorld, options, applyPlan,
+  loadSession, saveSession, view
 } from './telegram-state.mjs';
+import {makeVisualTurn} from './telegram-scenes.mjs';
 
 const WEBHOOK_URL='https://world-server.mmmpaykin.workers.dev/api/telegram/webhook';
-const INTRO_IMAGE='https://world-server.mmmpaykin.workers.dev/apps/ai3d-reference-test/assets/renders/front_textured.png';
-const EVENT_IMAGE='https://world-server.mmmpaykin.workers.dev/apps/ai3d-reference-test/assets/renders/left15_textured.png';
 const TOKEN_PATTERN=/^\d+:[A-Za-z0-9_-]{20,}$/;
 const responseJson=(value,status=200)=>new Response(JSON.stringify(value),{
   status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store'}
@@ -27,15 +26,29 @@ async function botApi(token,method,payload,fetcher=fetch){
   if(result.ok!==true)throw Error('Telegram '+method+' rejected');
   return result.result;
 }
-async function sendGame(token,chatId,game,fetcher,{image=null}={}){
-  if(image){
+async function sendGame(token,chatId,game,fetcher){
+  // A different scene is selected for every game turn. Video -> illustrated
+  // photo -> text is an explicit fault-tolerant fallback, not the normal path.
+  if(game.media?.kind==='animation'){
     try{
-      await botApi(token,'sendPhoto',{chat_id:chatId,photo:image,caption:game.text,
-        reply_markup:game.reply_markup},fetcher);
+      await botApi(token,'sendAnimation',{
+        chat_id:chatId,animation:game.media.animation,duration:2,
+        caption:game.text,reply_markup:game.reply_markup
+      },fetcher);
       return;
-    }catch{ /* Photo isn't essential to playing. */ }
+    }catch{ /* Use the matching still of the SAME event. */ }
   }
-  await botApi(token,'sendMessage',{chat_id:chatId,...game},fetcher);
+  if(game.media?.photo){
+    try{
+      await botApi(token,'sendPhoto',{
+        chat_id:chatId,photo:game.media.photo,caption:game.text,
+        reply_markup:game.reply_markup
+      },fetcher);
+      return;
+    }catch{ /* Preserve buttons and consequences even if Telegram media fails. */ }
+  }
+  await botApi(token,'sendMessage',{chat_id:chatId,
+    text:game.text,reply_markup:game.reply_markup},fetcher);
 }
 async function onCommand(message,updateId,env,fetcher){
   if(message.chat?.type!=='private')return;
@@ -50,7 +63,7 @@ async function onCommand(message,updateId,env,fetcher){
   });
   if(!updated)return;
   await sendGame(env.TELEGRAM_BOT_TOKEN,chatId,
-    view(world,reset?'🌱 Новый мир создан.':'Добро пожаловать!'),fetcher,{image:INTRO_IMAGE});
+    makeVisualTurn(session.world,world,reset||session.lastUpdate<0?'new':'resume','',updateId,view(world)),fetcher);
 }
 function parseCallback(data){
   const match=/^tg2:(\d{1,10}):([a-z_]{1,35})$/.exec(data||'');
@@ -69,44 +82,48 @@ async function onCallback(callback,updateId,env,fetcher){
   if(!data||data.revision!==session.revision||updateId<=session.lastUpdate){
     await botApi(token,'answerCallbackQuery',{callback_query_id:callback.id,
       text:'Эта кнопка устарела. Продолжим текущую игру.'},fetcher);
-    if(updateId>session.lastUpdate)await sendGame(token,chat.id,view(session.world),fetcher);
+    if(updateId>session.lastUpdate)await sendGame(token,chat.id,
+      makeVisualTurn(session.world,session.world,'stale','',updateId,view(session.world)),fetcher);
     return;
   }
-  let world=session.world,restart=session.restart,pending=null,notice='',image=null;
+  let world=session.world,restart=session.restart,pending=null,notice='',action='day',projectType='';
   if(data.action==='reset'){
     restart++;
     world=initialWorld(chat.id,restart);
     notice='🌱 Новый мир создан.';
-    image=INTRO_IMAGE;
+    action='new';
   }else if(data.action==='free'){
     pending=session.revision;
-    notice='✍️ Пришли сообщением свой проект (до 600 символов).\n'+
-      'Например: Построить солнечные панели, чтобы пережить кризис.';
+    action='plan';
+    notice='Напиши идею (до 600 символов), например: солнечные панели, чтобы пережить кризис.';
   }else if(data.action==='next'){
     world=engine.tick(world);
-    notice=describeChange(session.world,world,'Город прожил ещё один день');
+    action='day';
   }else{
     const candidate=options(world).find(x=>x.type===data.action);
     if(!candidate){
       await botApi(token,'answerCallbackQuery',{callback_query_id:callback.id,
         text:'Этот проект больше недоступен.'},fetcher);
-      await sendGame(token,chat.id,view(world),fetcher);
+      await sendGame(token,chat.id,
+        makeVisualTurn(world,world,'blocked','',updateId,view(world)),fetcher);
       return;
     }
     const outcome=applyPlan(world,candidate.type);
     if(outcome.accepted){
       world=outcome.world;
-      notice=describeChange(session.world,world,candidate.label);
-      image=EVENT_IMAGE;
-    }else notice='Недостаточно ресурсов для этого проекта.';
+      action='start';
+      projectType=candidate.type;
+    }else{
+      action='blocked';
+      notice='Недостаточно ресурсов для этого проекта.';
+    }
   }
   const saved=await saveSession(env.TELEGRAM_DB,session,{world,restart,pending,updateId});
   await botApi(token,'answerCallbackQuery',{callback_query_id:callback.id,
     text:saved?'Решение принято.':'Ход уже изменился.'},fetcher);
   if(!saved)return;
-  if(pending!==null){
-    await botApi(token,'sendMessage',{chat_id:chat.id,text:notice},fetcher);
-  }else await sendGame(token,chat.id,view(world,notice),fetcher,{image});
+  await sendGame(token,chat.id,
+    makeVisualTurn(session.world,world,action,projectType,updateId,view(world,notice)),fetcher);
 }
 async function onText(message,updateId,env,fetcher){
   if(message.chat?.type!=='private')return;
@@ -114,27 +131,28 @@ async function onText(message,updateId,env,fetcher){
   if(updateId<=session.lastUpdate)return;
   const token=env.TELEGRAM_BOT_TOKEN;
   if(session.pending!==session.revision){
-    await botApi(token,'sendMessage',{chat_id:message.chat.id,
-      text:'Чтобы продолжить игру, отправь /start.'},fetcher);
+    await sendGame(token,message.chat.id,
+      makeVisualTurn(session.world,session.world,'resume','',updateId,
+        view(session.world,'Чтобы продолжить игру, используй кнопки ниже.')),fetcher);
     return;
   }
   const text=String(message.text||'').trim();
   if(!text||text.length>MAX_INTENT){
-    await botApi(token,'sendMessage',{chat_id:message.chat.id,
-      text:'Напиши идею длиной от 1 до 600 символов.'},fetcher);
+    await sendGame(token,message.chat.id,
+      makeVisualTurn(session.world,session.world,'plan','',updateId,
+        view(session.world,'Напиши идею длиной от 1 до 600 символов.')),fetcher);
     return;
   }
   const outcome=applyPlan(session.world,'workshop',text);
-  const notice=outcome.accepted
-    ?describeChange(session.world,outcome.world,LABELS[outcome.plan.intent.goal]||outcome.plan.intent.goal)
-    :'⛔ Сейчас этот проект невозможно осуществить: '+outcome.plan.missing
-      .map(x=>x.resource+' '+x.available+'/'+x.required).join(', ')+'.';
+  const notice=outcome.accepted?'':('⛔ Не хватает ресурсов: '+outcome.plan.missing
+      .map(x=>x.resource+' '+x.available+'/'+x.required).join(', ')+'.');
   const saved=await saveSession(env.TELEGRAM_DB,session,{
     world:outcome.world,pending:null,updateId
   });
-  if(saved)await sendGame(token,message.chat.id,view(outcome.world,notice),fetcher,{
-    image:outcome.accepted?EVENT_IMAGE:null
-  });
+  if(saved)await sendGame(token,message.chat.id,
+    makeVisualTurn(session.world,outcome.world,
+      outcome.accepted?'start':'blocked',
+      outcome.plan.intent.goal,updateId,view(outcome.world,notice)),fetcher);
 }
 export async function handleTelegramWebhook(request,env,fetcher=fetch){
   if(request.method!=='POST')return new Response('Method Not Allowed',{status:405});

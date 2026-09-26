@@ -47,12 +47,13 @@ class MockD1{
     };
   }
 }
-function mockApi({photoOk=true,webhookUrl=URL}={}){
+function mockApi({photoOk=true,animationOk=true,webhookUrl=URL}={}){
   const calls=[];
   const fetcher=async(url,init)=>{
     const method=url.split('/').at(-1),payload=JSON.parse(init.body);
     calls.push({method,payload});
-    if(method==='sendPhoto'&&!photoOk)return new Response(JSON.stringify({ok:false}),{status:404});
+    if((method==='sendPhoto'&&!photoOk)||(method==='sendAnimation'&&!animationOk))
+      return new Response(JSON.stringify({ok:false}),{status:404});
     let result=true;
     if(method==='getMe')result={username:'World_serverbot'};
     if(method==='getWebhookInfo')result={url:webhookUrl,pending_update_count:0};
@@ -106,23 +107,25 @@ test('webhook requires production secret and D1',async()=>{
   assert.equal(a.calls.length,0);
   assert.equal((await post({...e,TELEGRAM_DB:null},a,start())).status,503);
 });
-test('start sends existing image and seven controls, without AI calls',async()=>{
+test('start sends new-world animation and seven controls, without AI calls',async()=>{
   const e=env(),a=mockApi();
   assert.equal((await post(e,a,start(10))).status,200);
-  assert.deepEqual(a.calls.map(x=>x.method),['sendPhoto']);
+  assert.deepEqual(a.calls.map(x=>x.method),['sendAnimation']);
+  assert.match(a.calls[0].payload.animation,/origin-\d\.mp4$/);
+  assert.match(a.calls[0].payload.caption,/Новый мир создан/);
   assert.equal(a.calls[0].payload.reply_markup.inline_keyboard.length,7);
   assert.equal((await loadSession(e.TELEGRAM_DB,42)).lastUpdate,10);
   await post(e,a,start(10));
   assert.equal(a.calls.length,1,'Telegram retry must not double-send');
 });
-test('failed photo falls back to a playable text message',async()=>{
-  const e=env(),a=mockApi({photoOk:false});
+test('failed animation and image fall back to a playable text message',async()=>{
+  const e=env(),a=mockApi({photoOk:false,animationOk:false});
   assert.equal((await post(e,a,start(10))).status,200);
-  assert.deepEqual(a.calls.map(x=>x.method),['sendPhoto','sendMessage']);
-  assert.equal(a.calls[1].payload.reply_markup.inline_keyboard.length,7);
+  assert.deepEqual(a.calls.map(x=>x.method),['sendAnimation','sendPhoto','sendMessage']);
+  assert.equal(a.calls[2].payload.reply_markup.inline_keyboard.length,7);
 });
 test('choice updates D1 once and stale buttons cannot replay mutations',async()=>{
-  const e=env(),a=mockApi({photoOk:false});
+  const e=env(),a=mockApi({photoOk:false,animationOk:false});
   await post(e,a,start(1));
   const choice=a.calls.find(x=>x.method==='sendMessage').payload.reply_markup.inline_keyboard[0][0];
   assert.match(choice.callback_data,/^tg2:0:/);
@@ -130,6 +133,7 @@ test('choice updates D1 once and stale buttons cannot replay mutations',async()=
   const stored=await loadSession(e.TELEGRAM_DB,42);
   assert.equal(stored.world.tick,0);
   assert.equal(stored.world.projects.length,1);
+  assert(a.calls.some(x=>x.method==='sendMessage'&&/Строительство началось|Началось строительство/i.test(x.payload.text)));
   assert(stored.revision>0);
   await post(e,a,callback(2,choice.callback_data));
   assert.deepEqual((await loadSession(e.TELEGRAM_DB,42)).world,stored.world);
@@ -139,6 +143,26 @@ test('choice updates D1 once and stale buttons cannot replay mutations',async()=
   await post(e,a,callback(4,next));
   assert.equal((await loadSession(e.TELEGRAM_DB,42)).world.tick,1);
   assert(a.calls.every(x=>!x.method.includes('openai')));
+});
+test('animated media uses the same event still if Telegram rejects MP4',async()=>{
+  const e=env(),a=mockApi({animationOk:false,photoOk:true});
+  assert.equal((await post(e,a,start(11))).status,200);
+  assert.deepEqual(a.calls.map(x=>x.method),['sendAnimation','sendPhoto']);
+  const video=a.calls[0].payload.animation,photo=a.calls[1].payload.photo;
+  assert.equal(video.replace('.mp4',''),photo.replace('.png',''));
+  assert.match(a.calls[1].payload.caption,/Новый мир создан/);
+});
+test('every ordinary day is illustrated and offers fresh choices',async()=>{
+  const e=env(),a=mockApi();
+  await post(e,a,start(1));
+  const data='tg2:0:next';
+  await post(e,a,callback(2,data));
+  assert.equal((await loadSession(e.TELEGRAM_DB,42)).world.tick,1);
+  const illustrated=a.calls.filter(x=>x.method==='sendPhoto');
+  assert(illustrated.length>=1);
+  assert.match(illustrated.at(-1).payload.photo,/day-[0-2]\.png$/);
+  assert.match(illustrated.at(-1).payload.caption,/За этот ход:.*⚡/s);
+  assert(illustrated.at(-1).payload.reply_markup.inline_keyboard.length>=3);
 });
 test('free-text idea is compiled by canonical engine, saved and resumed',async()=>{
   const e=env(),a=mockApi();
