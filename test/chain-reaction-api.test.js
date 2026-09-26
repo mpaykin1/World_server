@@ -283,3 +283,35 @@ test('atomic and legacy world projections allowlist resident fields', async () =
   assert.equal(first.revision, first.world.revision);
   assert.equal(f.writes, 2);
 });
+
+test('geothermal player journey: same-revision offers, preview, commit, delayed power and reload', async () => {
+  const f = fixture();
+  f.row.settings.chainReaction = engine.createWorld('geothermal-journey');
+  f.row.settings.chainReaction.land.volcano = true;
+  Object.assign(f.row.settings.chainReaction.resources, { budget: 600, power: 5, workers: 60, water: 80, food: 80 });
+  const first = await handle(f.admin, req, body('game-state', { structure: 'geothermal' }));
+  assert.equal(first.revision, 0);
+  assert.equal(first.world.revision, first.revision);
+  assert(first.cards.length >= 0 && first.cards.length <= 4);
+  const input = { structure: 'geothermal', text: 'geothermal energy after research' };
+  const preview = await handle(f.admin, req, body('preview-plan', input));
+  assert.equal(preview.plan.feasible, true);
+  assert(preview.plan.buildTicks > 0);
+  const initialPower = first.world.resources.power;
+  const committed = await handle(f.admin, req, body('commit-plan', { ...input, expectedRevision: first.revision }));
+  assert.equal(committed.revision, 1);
+  assert.equal(committed.world.resources.power, initialPower);
+  assert.equal(committed.world.resources.budget, first.world.resources.budget - preview.plan.cost);
+  assert.equal(f.writes, 1);
+  await rejects(handle(f.admin, req, body('commit-plan', { ...input, expectedRevision: first.revision })), 409);
+  const reloaded = await handle(f.admin, req, body('game-state'));
+  assert.equal(reloaded.revision, committed.revision);
+  assert.deepEqual(reloaded.world, committed.world);
+  const advanced = await handle(f.admin, req, body('tick', { expectedRevision: reloaded.revision, count: preview.plan.buildTicks + 2 }));
+  assert(advanced.world.resources.power > initialPower);
+  assert(advanced.world.history.some(e => e.kind === 'commissioned'));
+  const afterReload = await handle(f.admin, req, body('game-state'));
+  assert.deepEqual(afterReload.world, advanced.world);
+  assert.deepEqual(f.privateEvents.map(e => e.action), ['commit-plan', 'tick']);
+  assert.equal(f.writes, 2);
+});
