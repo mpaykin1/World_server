@@ -952,3 +952,5 @@ Task: implement original worker-safe face culling and compact typed-array mesh o
 2026-09-26 copy-only scope: independent standalone versioned voxel chunk save codec with strict bounds and round-trip tests; no game integration, no upstream copyrighted files.
 
 2026-09-26 copy-only scope extension: standalone seeded visual tour manifest and cross-engine asset provenance schema, independently written after studying Godot/Unity/Unreal DEVELOPMENT.md. No renderer/game integration and no upstream file copying.
+
+2026-09-26 copy-only: original standalone 0..15 voxel block/sky flood lighting inspired by independently studied Godot light_engine.gd and Unity Lighting.cs, with unit tests; no existing renderer edits.
