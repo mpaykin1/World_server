@@ -35,14 +35,25 @@ async function telegram(token, method, payload, fetcher = fetch) {
   return result.result;
 }
 
+// Pick four affordable alternatives using canonical simulator previews.
+// The full Genie category validator runs in the main game; it is deliberately
+// not replayed on every Telegram callback (Workers free-tier CPU budget).
 export function choices(world) {
-  const cards = engine.genieOptions(world).cards || [];
-  const proposals = [...new Set([...cards.map(c => c.structure), ...FALLBACK])];
-  return proposals.filter(type => engine.preview(world, engine.interpretIntent('', type)).feasible)
-    .slice(0, 4).map(type => {
-      const plan = engine.preview(world, engine.interpretIntent('', type));
-      return { type, label: NAMES[type] || type, plan };
-    });
+  const r = world.resources;
+  const target = ['power', 'water', 'food'].sort((a, b) => r[a] - r[b])[0];
+  const targeted = {
+    power: ['coal', 'solar', 'geothermal', 'workshop'],
+    water: ['deep_wells', 'desalination', 'water_recycling', 'workshop'],
+    food: ['intensive_farm', 'greenhouse', 'volcanic_farm', 'export_market']
+  }[target];
+  const proposals = [...new Set([...targeted, ...FALLBACK])];
+  const offered = [];
+  for (const type of proposals) {
+    const plan = engine.preview(world, engine.interpretIntent('', type));
+    if (plan.feasible) offered.push({ type, label: NAMES[type] || type, plan });
+    if (offered.length === 4) break;
+  }
+  return offered;
 }
 
 export function replay(chatId, path = '') {
@@ -76,12 +87,12 @@ function gameView(chatId, path) {
   const text = intro + '\nДень ' + world.tick + ' · Жителей: ' + world.population
     + '\n' + resourceSummary(world)
     + (world.crisis ? '\n🚨 Кризис: город продолжает бороться.' : '')
-    + (next.length ? '\n\nВыбери следующий проект:' : '\n\nРаунд завершён. Начни новый мир.');
+    + (next.length ? '\n\nВыбери следующий проект:' : '\n\nРаунд завершён. Начни заново.');
   const buttons = next.map((choice, index) => [{
     text: choice.label + ' · 💰' + choice.plan.cost + ' · ⏳' + choice.plan.buildTicks,
     callback_data: 'tg1:' + path + String(index)
   }]);
-  buttons.push([{ text: '🔄 Новый мир', callback_data: 'tg1:reset' }]);
+  buttons.push([{ text: '🔄 Начать заново', callback_data: 'tg1:reset' }]);
   return { text, reply_markup: { inline_keyboard: buttons } };
 }
 
