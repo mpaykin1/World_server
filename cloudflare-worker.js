@@ -1,3 +1,5 @@
+import { handleTelegramWebhook, registerTelegramWebhook } from './telegram-game.mjs';
+
 const DEFAULT_API_ORIGIN = 'https://world-server-ai-studio-bridge-514578099152.europe-west2.run.app';
 const DEFAULT_STACK_READ_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/world-stack-read';
 const DEFAULT_STACK_WRITE_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/world-stack-write';
@@ -261,6 +263,7 @@ export default {
     const url = new URL(request.url);
     if (url.pathname === '/') return Response.redirect(new URL('/apps/catalog/', url), 302);
 
+    if (url.pathname === '/api/telegram/webhook') return handleTelegramWebhook(request, env);
     if (url.pathname === '/api/config') return configApi(request, env);
     if (url.pathname === '/api/apps') return appsApi(request, env, url);
     if (url.pathname === '/api/worlds') return worldsApi(request, env, url);
@@ -273,5 +276,8 @@ export default {
     if (url.pathname.startsWith('/api/')) return proxyDynamicApi(request, env, url);
 
     return env.ASSETS.fetch(request);
+  },
+  async scheduled(_event, env) {
+    await registerTelegramWebhook(env);
   }
 };
