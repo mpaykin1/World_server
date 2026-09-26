@@ -26,10 +26,6 @@ const WORDS={power:'электроэнергии',water:'воды',food:'про�
   budget:'бюджета',ecology:'экологии',health:'здоровья'};
 const OUTPUTS={power:'электроэнергию',water:'воду',food:'продовольствие',
   budget:'доход',jobs:'рабочие места',culture:'культуру'};
-const hash=value=>{
-  let h=2166136261;for(const x of String(value))h=Math.imul(h^x.charCodeAt(0),16777619);
-  return h>>>0;
-};
 const category=type=>CATEGORIES[type]||'city';
 const changed=(before,after)=>after.history.slice(before.history.length);
 const textProject=p=>LABELS[p?.type]||'новый проект';
@@ -110,9 +106,12 @@ export function turnDescription(before,after,scene){
   return lines.join('\n');
 }
 export function sceneMedia(scene,world,updateId=0){
+  const nonmutating=new Set(['origin','planning','blocked','refresh']);
+  // Consecutive mutations get different variants; repeated /start and
+  // correction prompts use Telegram's increasing update ID instead.
   const variant=scene.id.startsWith('progress_')&&scene.project
     ? Math.max(0,Math.min(2,3-scene.project.remaining))
-    :hash([scene.id,world.seed,world.tick,world.revision,updateId].join(':'))%3;
+    :nonmutating.has(scene.id)?updateId%3:world.revision%3;
   const name=scene.id+'-'+variant;
   return {
     kind:ANIMATED.has(scene.id)?'animation':'photo',
