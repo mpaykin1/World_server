@@ -978,3 +978,5 @@ Task: implement original worker-safe face culling and compact typed-array mesh o
 2026-09-26 copy-only: study Godot mesher quad diagonal and separate sky/block light channels; implement original standalone triangulation/light packing and tests; no active renderer integration.
 
 2026-09-26 copy-only: studied complete Godot incremental light removal BFS; independently prototype bounded two-phase removal and reseeding for block light, differential tests against full flood lighting; no runtime integration.
+
+2026-09-26 copy-only: differential-test original two-phase block-light removal against independent full flood solver over deterministic random scenes; correct discrepancies; no runtime integration.
