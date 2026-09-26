@@ -8,7 +8,7 @@
     "build:sentry": "node scripts/build-sentry.js",
     "build": "npm run build:sentry && node scripts/inject-sentry-runtime.js",
     "deploy:cloudflare:production": "node scripts/deploy-cloudflare-exact-sha.cjs",
-    "check": "node scripts/check-js.js && npm run indieworlds:check && node --test",
+    "check": "node scripts/check-js.js && npm run architecture:check && npm run indieworlds:check && node --test",
     "world:ingest": "node scripts/ingest-world-patches.js",
     "indieworlds:export": "node scripts/export-indieworlds.js",
     "indieworlds:check": "node scripts/export-indieworlds.js --check",
@@ -121,7 +121,8 @@
     "delivery:verify": "node scripts/verify-working-link.cjs",
     "delivery:two-player": "node scripts/live-two-player-qa.cjs",
     "quality:world:detail-efficiency": "node scripts/world-detail-efficiency-loop.js",
-    "quality:world:detail-efficiency:test": "node --test test/world-detail-efficiency-gate.test.js"
+    "quality:world:detail-efficiency:test": "node --test test/world-detail-efficiency-gate.test.js",
+    "architecture:check": "node scripts/check-architecture-limits.cjs"
   },
   "engines": {
     "node": "24.x"
