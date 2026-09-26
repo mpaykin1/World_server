@@ -127,3 +127,34 @@ test('population-only deltas cap workers and malformed evacuation state repairs 
   assert.equal(advanced.story.evacuated,0);
   assert(!advanced.history.some(event=>event.kind==='telegram_story_return'));
 });
+
+
+test('ruins alone cannot authorize evacuation or defense',()=>{
+  const world=engine.createWorld('ruins-are-not-a-threat');
+  world.story={active:null,ruins:[{id:'old-ruin',type:'workshop',name:'Мастерская',
+    source:'fire',rebuilding:null}],last:null,evacuated:0};
+  const original=structuredClone(world);
+
+  for(const action of ['evacuate','defend']){
+    const result=applyStoryAction(world,action);
+    assert.equal(result.accepted,false,action);
+    assert.equal(result.kind,'blocked',action);
+    assert.equal(result.world.population,original.population,action+' population');
+    assert.deepEqual(result.world.resources,original.resources,action+' resources');
+    assert.equal(result.world.story.evacuated,0,action+' evacuated');
+    assert.equal(result.world.revision,original.revision+1,action+' rejection revision');
+  }
+  assert.deepEqual(world,original,'rejected actions must not mutate their input');
+});
+
+test('active threats still authorize evacuation and defense',()=>{
+  for(const action of ['evacuate','defend']){
+    const initial=engine.createWorld('active-threat:'+action);
+    const threatened=applyStoryText(initial,'На город напала армия').world;
+    const result=applyStoryAction(threatened,action);
+    assert.equal(result.accepted,true,action);
+    assert.notEqual(result.kind,'blocked',action);
+    assert.equal(result.world.resources.budget,
+      threatened.resources.budget-(action==='evacuate'?6:15),action+' budget');
+  }
+});
