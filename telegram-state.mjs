@@ -86,7 +86,30 @@ export function view(world,notice=''){
     ' · Жителей: '+world.population+'\n'+summary(world)+
     (building.length?'\n🏗 Строится: '+building.slice(-2).map(p=>
       (LABELS[p.type]||p.type)+' ('+p.remaining+' дн.)').join(', '):'');
-  const choices=offered.map(o=>[{
+  const story=world.story;
+  const incident=story?.active;
+  const emergency=[];
+  if(incident){
+    if(['dragon_fire','fire'].includes(incident.kind)&&
+       world.resources.water>=8&&world.resources.budget>=12)
+      emergency.push({text:'🧯 Потушить пожар 💰12 💧8',
+        callback_data:'tg2:'+world.revision+':extinguish'});
+    if(world.resources.budget>=6)
+      emergency.push({text:'🚑 Эвакуировать жителей 💰6',
+        callback_data:'tg2:'+world.revision+':evacuate'});
+    if(world.resources.budget>=15)
+      emergency.push({text:'🛡 Укрепить оборону 💰15',
+        callback_data:'tg2:'+world.revision+':defend'});
+  }
+  const ruin=story?.ruins?.find(x=>!x.rebuilding);
+  if(ruin&&engine.preview(world,engine.interpretIntent('',ruin.type)).feasible)
+    emergency.push({text:'🏗 Восстановить '+ruin.name,
+      callback_data:'tg2:'+world.revision+':rebuild'});
+  if((incident||ruin)&&world.resources.budget>=8)
+    emergency.push({text:'🚑 Доставить помощь 💰8',
+      callback_data:'tg2:'+world.revision+':relief'});
+  const choices=emergency.map(button=>[button]);
+  for(const o of offered)choices.push([{
     text:o.label+'  💰'+o.plan.cost+'  ⏳'+o.plan.buildTicks,
     callback_data:'tg2:'+world.revision+':'+o.type
   }]);
@@ -94,7 +117,10 @@ export function view(world,notice=''){
   choices.push([{text:'✍️ Свой вариант',callback_data:'tg2:'+world.revision+':free'}]);
   choices.push([{text:'🔄 Новый мир',callback_data:'tg2:'+world.revision+':reset'}]);
   return {text:(notice?notice+'\n\n':'')+intro+
-    (world.crisis?'\n🚨 Кризис: город продолжает бороться.':'')+
+    (story?.last?'\n📜 '+story.last.title:'')+
+    (incident?'\n🚨 Активная угроза!':'')+
+    (story?.ruins?.length?'\n🏚 Разрушено объектов: '+story.ruins.length:'')+
+    (world.crisis?'\n🚨 Дефицит жизненно важных ресурсов.':'')+
     '\n\n'+(offered.length?'Выбери решение:':'Нет доступных построек. Проживи день или начни заново.'),
     reply_markup:{inline_keyboard:choices}};
 }
