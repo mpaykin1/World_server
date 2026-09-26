@@ -8,7 +8,7 @@ function syncGeography(settings, seed, entities, createWorld) {
   if (types.size === 0 && !settings.chainReaction) return settings;
   const saved = settings.chainReaction;
   if (saved && (saved.schema !== 1 || !Number.isSafeInteger(saved.revision))) {
-    throw Object.assign(new Error('Unsupported scenario version'), { status: 409 });
+    throw Object.assign(new Error('Unsupported scenario version'), { status: 409, code: 'INVALID_CHAIN_REACTION_STATE' });
   }
   const world = saved || createWorld(String(seed));
   const land = {
@@ -21,7 +21,7 @@ function syncGeography(settings, seed, entities, createWorld) {
     .some(key => world.land?.[key] !== land[key]);
   const nextRevision = world.revision + (changed ? 1 : 0);
   if (!Number.isSafeInteger(nextRevision)) {
-    throw Object.assign(new Error('Scenario revision exhausted'), { status: 409 });
+    throw Object.assign(new Error('Scenario revision exhausted'), { status: 409, code: 'INVALID_CHAIN_REACTION_STATE' });
   }
   const event = { kind: 'geography_changed', tick: world.tick,
     revision: nextRevision, land: { ...land } };

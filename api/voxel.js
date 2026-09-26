@@ -125,7 +125,7 @@ async function withMacroRetry(admin, worldId, mutate) {
       await writeEmergenceWorld(admin, current, result.emergence);
       return { emergence: result.emergence, worldId, ...result.metadata };
     } catch (error) {
-      if (error.status !== 409 || attempt === 3) throw error;
+      if (error.status !== 409 || error.code === 'INVALID_CHAIN_REACTION_STATE' || attempt === 3) throw error;
     }
   }
   throw httpError(409, 'Параллельные изменения мира. Повторите действие.');

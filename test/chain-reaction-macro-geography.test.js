@@ -43,7 +43,8 @@ function fixture() {
     }
   };
   return { admin, get row() { return row; }, get writes() { return writes; },
-    injectConflict() { conflictOnce = true; } };
+    injectConflict() { conflictOnce = true; },
+    replaceRow(next) { row = clone(next); } };
 }
 const place = (f, type, x) => voxel.actionMacroPlace(f.admin, { guestId: 'guest-no-private-access' },
   { worldId: 'city', type, position: { x, y: 42, z: 0 } });
@@ -60,6 +61,8 @@ test('map is authoritative: a placed volcano enables real delayed geothermal con
   assert.equal(fresh.world.land.volcano, true);
   assert.equal(fresh.world.revision, fresh.revision);
   assert(fresh.revision > oldRevision);
+  assert.equal(fresh.world.history.at(-1).kind, 'geography_changed');
+  assert.equal(fresh.world.history.at(-1).revision, fresh.revision);
   assert.equal(fresh.world.resources.power, cityOnly.world.resources.power);
   assert.deepEqual(f.row.settings.worldDNA.emergence.entities.map(e => e.type), ['city', 'volcano']);
   const preview = await action(f, 'preview-plan');
@@ -90,7 +93,9 @@ test('Node and real Edge share identical pure geography; repeat macro placements
   const context = { globalThis: {} };
   vm.runInNewContext(source, context);
   const edgeSync = context.globalThis.WorldConsequenceGeography.syncGeography;
-  const settings = { chainReaction: engine.createWorld('same-seed'), otherSetting: { keep: true } };
+  const baseline = engine.createWorld('same-seed');
+  const settings = { chainReaction: { ...baseline, land: { ...baseline.land, volcano: false, coast: false, forest: false } },
+    otherSetting: { keep: true } };
   const macros = [{ type: 'city' }, { type: 'ocean' }, { type: 'forest' }, { type: 'volcano' }];
   const node = syncGeography(settings, 'same-seed', macros, engine.createWorld);
   const edge = edgeSync(settings, 'same-seed', macros, engine.createWorld);
@@ -99,7 +104,11 @@ test('Node and real Edge share identical pure geography; repeat macro placements
   assert.equal(node.chainReaction.land.coast, true);
   assert.equal(node.chainReaction.land.forest, true);
   assert.equal(node.chainReaction.land.volcano, true);
-  assert.deepEqual(settings.chainReaction, engine.createWorld('same-seed'));
+  assert(node.chainReaction.revision > settings.chainReaction.revision);
+  assert.equal(node.chainReaction.history.at(-1).kind, 'geography_changed');
+  assert.deepEqual(settings.chainReaction.land,
+    { ...baseline.land, volcano: false, coast: false, forest: false });
+  assert.equal(settings.chainReaction.revision, baseline.revision);
   const repeat = syncGeography(node, 'same-seed', macros, engine.createWorld);
   assert.equal(repeat.chainReaction.revision, node.chainReaction.revision);
   assert.equal(repeat.chainReaction.history.length, node.chainReaction.history.length);
@@ -160,4 +169,23 @@ test('actual Edge macro CAS writer persists the same canonical land and revision
   assert.deepEqual(row.settings.chainReaction, expected);
   assert.equal(row.settings.chainReaction.land.volcano, true);
   assert.equal(row.settings.worldDNA.emergence.revision, 2);
+  const snapshot = clone(row);
+  row.settings.chainReaction = { schema: 2, revision: 1 };
+  await assert.rejects(env.mutateWorld(admin, 'city', state => ({ ...state, revision: state.revision + 1 })),
+    e => e.status === 409 && e.code === 'INVALID_CHAIN_REACTION_STATE');
+  assert.deepEqual(row.settings.chainReaction, { schema: 2, revision: 1 });
+  assert.deepEqual(row.settings.worldDNA, snapshot.settings.worldDNA);
+});
+
+test('unsupported saved scenario returns HTTP 409 through actual Node error middleware without losing settings', async () => {
+  const f = fixture();
+  const invalid = { ...f.row, settings: { chainReaction: { schema: 2, revision: 1 }, privateFlag: 'preserved' } };
+  f.replaceRow(invalid);
+  const res = { statusCode: 0, headers: {}, setHeader(key, value) { this.headers[key] = value; },
+    end(value) { this.body = JSON.parse(value); } };
+  await require('../lib/http').withErrors(async () => place(f, 'volcano', 10))({}, res);
+  assert.equal(res.statusCode, 409);
+  assert.match(res.body.error, /Unsupported scenario version/);
+  assert.deepEqual(f.row, invalid);
+  assert.equal(f.writes, 0);
 });
