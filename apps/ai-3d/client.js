@@ -44,7 +44,10 @@ async function checkHealth() {
 
 function modeChanged() {
   const m = ui.mode.value;
-  ui.fileWrap.classList.toggle('hidden', !['auto', 'image_to_3d', 'depth', 'voxel_city'].includes(m));
+  ui.fileWrap.classList.toggle('hidden', !['auto', 'image_to_3d', 'depth', 'voxel_city', 'video_to_3d'].includes(m));
+  ui.file.accept = m === 'video_to_3d'
+    ? 'video/mp4,video/webm,video/quicktime,video/x-msvideo'
+    : 'image/png,image/jpeg,image/webp';
   ui.buildingParams.classList.toggle('hidden', m !== 'building');
   ui.mapParams.classList.toggle('hidden', m !== 'map');
 }
@@ -154,10 +157,11 @@ async function generate() {
     const form = new FormData();
     form.set('mode', mode);
     form.set('params', JSON.stringify(paramsForMode()));
-    if (['auto', 'image_to_3d', 'depth', 'voxel_city'].includes(mode)) {
+    if (['auto', 'image_to_3d', 'depth', 'voxel_city', 'video_to_3d'].includes(mode)) {
       const file = ui.file.files?.[0];
-      if (!file) throw new Error('Выбери картинку.');
-      if (file.size > s.maxUploadMb * 1024 * 1024) throw new Error(`Файл больше ${s.maxUploadMb} MB.`);
+      if (!file) throw new Error(mode === 'video_to_3d' ? 'Выбери видео.' : 'Выбери картинку.');
+      const maxMb = mode === 'video_to_3d' ? (s.maxVideoUploadMb || 100) : s.maxUploadMb;
+      if (file.size > maxMb * 1024 * 1024) throw new Error(`Файл больше ${maxMb} MB.`);
       form.set('file', file, file.name);
     }
     const res = await authFetch('/v1/jobs', { method: 'POST', body: form });
