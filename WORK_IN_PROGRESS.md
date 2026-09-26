@@ -990,3 +990,5 @@ Task: implement original worker-safe face culling and compact typed-array mesh o
 2026-09-26 copy-only: studied Unity ChunkManager.cs result apply 6ms/64 and version/identity checks on mesh upload; independently implement bounded, stale-safe staged result applicator and standalone tests; no active runtime integration.
 
 2026-09-26 copy-only: studied Unity ChunkManager unload radius/busy guards, save-before-removal, readiness and four-stage load progress; independently implement standalone chunk residency and readiness planner with tests; no live runtime integration.
+
+2026-09-26 copy-only: read Godot light_engine.gd worker scheduling and edit-streak fairness (one chunk task after 32 edits); independently implement pure bounded fair queue with edit coalescing and tests; no live integration.
