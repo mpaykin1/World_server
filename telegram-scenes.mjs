@@ -101,6 +101,7 @@ export function turnDescription(before,after,scene){
     if(after.story?.ruins?.length)lines.push('🏚 Разрушено объектов: '+after.story.ruins.length+'.');
   }else if(scene.id.startsWith('start_')){
     const p=scene.project;
+    if(p?.intent?.comment)lines.push('Твой замысел: «'+p.intent.comment.slice(0,150)+'».');
     lines.push('Город вложил ресурсы и выделил работников. Стройка займёт '+(p?.remaining||'?')+
       ' игровых дн.; до её окончания новый объект ещё не производит ресурсы.');
   }else if(scene.id.startsWith('done_')){
