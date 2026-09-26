@@ -37,10 +37,10 @@ export function applyPlan(world,type,text=''){
   const intent=engine.interpretIntent(text,type);
   const plan=engine.preview(world,intent);
   if(!plan.feasible)return {world,plan,accepted:false};
+  // Commit starts construction; time advances only when the player chooses
+  // "Next day". One canonical tick per HTTP request fits Workers Free CPU.
   const committed=engine.commit(world,intent,world.revision);
-  // An operating plant changes the economy only after its build delay.
-  const next=engine.simulateTicks(committed,Math.min(plan.buildTicks+1,8));
-  return {world:next,plan,accepted:true};
+  return {world:committed,plan,accepted:true};
 }
 export function delta(previous,next){
   return Object.fromEntries(['power','water','food','budget','ecology','health']
@@ -81,13 +81,16 @@ export function summary(world){
 }
 export function view(world,notice=''){
   const offered=options(world);
+  const building=world.projects.filter(p=>!p.active);
   const intro='🌍 ЦЕПНАЯ РЕАКЦИЯ — ЗЛОЙ ДЖИНН\nДень '+world.tick+
-    ' · Жителей: '+world.population+'\n'+summary(world);
+    ' · Жителей: '+world.population+'\n'+summary(world)+
+    (building.length?'\n🏗 Строится: '+building.slice(-2).map(p=>
+      (LABELS[p.type]||p.type)+' ('+p.remaining+' дн.)').join(', '):'');
   const choices=offered.map(o=>[{
     text:o.label+'  💰'+o.plan.cost+'  ⏳'+o.plan.buildTicks,
     callback_data:'tg2:'+world.revision+':'+o.type
   }]);
-  if(!offered.length)choices.push([{text:'⏩ Прожить день',callback_data:'tg2:'+world.revision+':next'}]);
+  choices.push([{text:'⏩ Следующий день',callback_data:'tg2:'+world.revision+':next'}]);
   choices.push([{text:'✍️ Свой вариант',callback_data:'tg2:'+world.revision+':free'}]);
   choices.push([{text:'🔄 Новый мир',callback_data:'tg2:'+world.revision+':reset'}]);
   return {text:(notice?notice+'\n\n':'')+intro+
@@ -104,7 +107,11 @@ export function describeChange(before,next,label){
     .map(x=>x.kind==='commissioned'?'🏭 Строительство завершено.':
       x.kind==='adaptation'?'🛠 Жители приспосабливаются.':
       '⚠️ '+x.kind.replaceAll('_',' ')+'.');
-  return '✅ '+label+'. Прошло '+(next.tick-before.tick)+' дн.\n'+
+  const elapsed=next.tick-before.tick;
+  const underway=next.projects.filter(p=>!p.active).slice(-1)[0];
+  return '✅ '+label+'. '+(elapsed?
+    'Прошло '+elapsed+' дн.':('Строительство началось'+
+      (underway?' — '+underway.remaining+' дн. до запуска.':'.')))+'\n'+
     'Изменения: '+(parts.join('  ')||'без резких перемен')+
     (disasters.length?'\n'+disasters.join('\n'):'');
 }
