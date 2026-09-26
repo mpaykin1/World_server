@@ -937,3 +937,35 @@ Implementation and local verification complete. Remaining proof is GitHub Action
 - Completion criteria: scoped commit and honest test evidence; integration release remains subject to cloud gates and live Supabase verification.
 - Final evidence: node --test --test-isolation=none test/chain-reaction-api.test.js test/world-consequence-engine.test.js: 19/19 passed. node --check api/voxel.js and lib/chain-reaction-api.js passed; git diff --check passed. Agent rules check passed with git subprocess EPERM warnings (branch/file checks not verified by that script). Ordinary node --test failed to spawn subprocesses (EPERM); same tests passed with isolation disabled. Full release suite remains unrun, cloud-first. No live database or browser claim. Simulation arithmetic and accepted quality metrics unchanged; no scientific readiness claim.
 - Commit blocker: git add failed creating C:/Users/user/Desktop/World_server/.git/worktrees/worldserver-codex-chain-20260923/index.lock: Permission denied. The linked worktree Git directory is outside this session's writable root; approvals are unavailable. No commit/SHA, push, PR or deployment produced. No new worktree or Desktop copy created; existing user worktrees left untouched.
+
+
+## Task
+2026-09-24: coordinator fresh-master worktrees and CI cancellation.
+## Why
+Local agents inherited dirty checkout HEAD; cancelled Lighthouse held newer CI.
+## Current state
+Patch #265 refreshed to master4690765; previous review exceeded18KB due WIP context.
+## Target state
+Verified remote base, fail-closed fetch, useful cancellation.
+## Files / systems involved
+coordinator helper/caller; CI; two focused tests.
+## Known risks
+Network failure; Git contention. Refuse stale fallback.
+## Golden systems that must be preserved
+User checkout, existing worktrees, cloud dispatch, failure diagnostics.
+## Errors that must not return
+Task creation from stale feature HEAD; cancelled work continuing.
+## Exact patch / change plan
+Fetch and verify origin/master; create from SHA; report baseSha. Lighthouse uses !cancelled().
+## Tests to run
+Focused Node tests; cloud repository and browser gates.
+## Deployment / PR plan
+Existing #265 only; independent review before protected integration.
+## Current progress
+11 focused tests PASS;443d9d44 cloud check/quality/preview PASS. WIP moved to end to avoid large unchanged context in reviewer diff.
+## Next action
+Review current exact head; Ocean integration then verify deployed/current coordinator version.
+## Completion criteria
+Independent review and protected gates; no stale-base dispatch.
+## Final evidence
+11/11 tests; live coordinator update remains pending integration. No production-ready claim.
