@@ -1,0 +1,26 @@
+﻿[
+    {
+        "pack":  "KayKit-Character-Pack-Adventures-1.0",
+        "source":  "https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0",
+        "license":  "CC0-1.0",
+        "localLicense":  "assets/cc0/kaykit/KayKit-Character-Pack-Adventures-1.0/LICENSE.txt"
+    },
+    {
+        "pack":  "KayKit-Character-Pack-Skeletons-1.0",
+        "source":  "https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Skeletons-1.0",
+        "license":  "CC0-1.0",
+        "localLicense":  "assets/cc0/kaykit/KayKit-Character-Pack-Skeletons-1.0/LICENSE.txt"
+    },
+    {
+        "pack":  "KayKit-Halloween-Bits-1.0",
+        "source":  "https://github.com/KayKit-Game-Assets/KayKit-Halloween-Bits-1.0",
+        "license":  "CC0-1.0",
+        "localLicense":  "assets/cc0/kaykit/KayKit-Halloween-Bits-1.0/LICENSE.txt"
+    },
+    {
+        "pack":  "KayKit-Medieval-Hexagon-Pack-1.0",
+        "source":  "https://github.com/KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0",
+        "license":  "CC0-1.0",
+        "localLicense":  "assets/cc0/kaykit/KayKit-Medieval-Hexagon-Pack-1.0/LICENSE.txt"
+    }
+]
