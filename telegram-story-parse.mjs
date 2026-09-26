@@ -27,6 +27,24 @@ const rules=[
   ['trade',/торговл|торговат|торговц|экспорт|рынок|караван|trade/i],
   ['rescue',/спас[лт]|помо[гщ]|вылеч|помощ|rescue/i]
 ];
+// No default workshop: an unknown building must never impersonate another one.
+const BUILDINGS=[
+  ['solar',/солнеч|панел/],['coal',/угольн|теплоэлектр/],
+  ['geothermal',/геотерм|гейзер|вулкан.*электро/],
+  ['water_recycling',/переработ.*вод|очистн.*сооружен/],
+  ['desalination',/опресн/],['deep_wells',/скважин|колодц/],
+  ['greenhouse',/теплиц/],['intensive_farm',/ферм|агрокомплекс/],
+  ['tourism',/турист|гостиниц|отел|курорт/],['workshop',/мастерск|цех/],
+  ['temple',/храм|культурн.*центр/],['festival',/фестивал/],
+  ['export_market',/торгов.*рынок|рынок/],['luxury_arcology',/жилой.*район|жилой.*комплекс/],
+  ['automated_mine',/шахт|рудник/],['water_park',/аквапарк/],
+  ['bottling_plant',/завод.*вод/],['biofuel_refinery',/биотоплив/],
+  ['livestock_export',/животновод/],['volcanic_farm',/вулканич.*ферм/]
+];
+export function supportedBuildType(text){
+  return BUILDINGS.find(([,pattern])=>pattern.test(text))?.[0]||null;
+}
+
 const isBuilding=/постро|возв[её]л|возвест|строить|созда[тл].*(?:станци|ферм|завод|комплекс|город)|build/i;
 const actionPatterns=[
   ['extinguish',/потуш|затуш|туш[ие]|огнетуш|extinguish/i],
@@ -41,6 +59,8 @@ export function classifyStoryText(value){
   const destructive=rules[0][1].test(text)||
     /разруш|уничтож|снес|разн[её]с|пепел|атаковал|сж[её]г|burn|destroy/i.test(text);
   const benevolent=/подар|помо[гщ]|спас|добр|золото|друж|gift|help/i.test(text);
+  if(/^\s*(?:я |мы )?(?:постро|возв[её]л|возвест|созда[тл])/i.test(text))
+    return{kind:'build',text,recognized:true};
   if(dragon){
     const kind=destructive?'dragon_fire':benevolent?'dragon_help':'dragon_arrival';
     return{kind,text,recognized:true,medium:dragon};
