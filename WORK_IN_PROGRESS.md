@@ -974,3 +974,5 @@ Task: implement original worker-safe face culling and compact typed-array mesh o
 2026-09-26 copy-only: studied full Godot chunk.gd and mesher.gd; independently implement bounded derived heightmap/emitter index and per-column update with standalone tests, no integration.
 
 2026-09-26 copy-only: source-study Godot mesher corner AO/light weighting; independently implement standalone corner shade sampling and diagonal selection, with tests; no active renderer integration.
+
+2026-09-26 copy-only: study Godot mesher quad diagonal and separate sky/block light channels; implement original standalone triangulation/light packing and tests; no active renderer integration.
