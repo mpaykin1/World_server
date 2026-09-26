@@ -937,3 +937,20 @@ Implementation and local verification complete. Remaining proof is GitHub Action
 - Completion criteria: scoped commit and honest test evidence; integration release remains subject to cloud gates and live Supabase verification.
 - Final evidence: node --test --test-isolation=none test/chain-reaction-api.test.js test/world-consequence-engine.test.js: 19/19 passed. node --check api/voxel.js and lib/chain-reaction-api.js passed; git diff --check passed. Agent rules check passed with git subprocess EPERM warnings (branch/file checks not verified by that script). Ordinary node --test failed to spawn subprocesses (EPERM); same tests passed with isolation disabled. Full release suite remains unrun, cloud-first. No live database or browser claim. Simulation arithmetic and accepted quality metrics unchanged; no scientific readiness claim.
 - Commit blocker: git add failed creating C:/Users/user/Desktop/World_server/.git/worktrees/worldserver-codex-chain-20260923/index.lock: Permission denied. The linked worktree Git directory is outside this session's writable root; approvals are unavailable. No commit/SHA, push, PR or deployment produced. No new worktree or Desktop copy created; existing user worktrees left untouched.
+
+# 2026-09-24: Deterministic displacement and return migration
+
+- Task / why: make crisis population loss an observable, reversible migration chain instead of silently deleting residents forever; the game design explicitly requires migration and returning settlers after recovery.
+- Current state: every crisis tick permanently subtracts one resident, while stable ticks can add unrelated population without preserving the displaced cohort.
+- Target / direction: store a bounded canonical displaced cohort, require four consecutive safe/resource/job-stable ticks, then return at most two residents per recovery wave with exact history evidence.
+- Systems / files: the existing shared consequence engine and focused simulator tests only.
+- Known risks: free population creation, unsafe legacy counters, returns during resource or employment instability, replay drift, and conflict with active crisis-recovery PR #295.
+- Golden systems preserved: one deterministic engine, Node/Edge parity, CAS/API behavior, Genie arithmetic, resident privacy, 3D/UI/multiplayer/mobile.
+- Errors that must not return: permanent untracked crisis losses; malformed persisted counters; duplicate or early return events.
+- Exact patch plan: add normalized demography state; record actual crisis departures; suppress unrelated organic growth while residents remain displaced; return a bounded cohort only after four stable ticks; record departure/return history; add boundary, conservation, replay and legacy-state regressions.
+- Tests to run: all Chain Reaction engine/API/actual Edge suites, deterministic fuzz/counterexample search, syntax, agent rules and diff check; then exact-head cloud CI and independent Fleet PRE.
+- Deployment / PR plan: branch and draft PR to master; no merge/deploy; Ocean only after all gates and independent review PASS; separate Fleet POST after deployment.
+- Current progress: implementation and local falsification complete; useful source is ready to commit and publish for exact-head cloud review.
+- Next action: commit/push, open a draft PR, then require cloud CI and independent Fleet PRE before any Ocean handoff.
+- Completion criteria: exact replay, no early return, displaced population conservation, bounded legacy normalization, no API/UI/schema changes.
+- Final evidence: 66/66 focused engine/API/actual Edge tests PASS; 500 seeds × 100 ticks replay byte-identically with safe bounded counters, population floor and no invented returners; JS syntax, agent rules and diff check PASS. This is computational model evidence only; cloud gates, independent review, merge, deployment and live verification remain pending.
