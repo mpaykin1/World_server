@@ -61,10 +61,12 @@ function interpretIntent(text='',structure='geothermal'){
  let type=Object.hasOwn(PROJECTS,structure)?structure:'workshop';
  if(/туризм|турист|экскурс/.test(t))type='tourism';
  else if(/теплиц|ферм|почв|урожа/.test(t))type='volcanic_farm';
- else if(/геотерм|электр|энерг|тепло/.test(t))type='geothermal';
- else if(/храм|святилищ|озарен/.test(t))type='temple';
- else if(/опресн/.test(t))type='desalination';
  else if(/солнечн/.test(t))type='solar';
+ else if(/опресн/.test(t))type='desalination';
+ else if(/храм|святилищ|озарен/.test(t))type='temple';
+ // A specific solar plant must not be reinterpreted as geothermal merely because
+ // the natural-language description also contains the generic word 'electricity'.
+ else if(/геотерм|электр|энерг|тепло/.test(t))type='geothermal';
  const cautious=/поэтап|исследован|эксперт|страхов|эвакуац|осторож/.test(t);
  const reckless=/взорв|без провер|немедлен|любой ценой/.test(t);
  return {goal:type,mechanism:type,resources:copy(PROJECTS[type].needs),assumptions:{cautious,reckless},timeline:PROJECTS[type].build+(cautious?1:0),expected:copy(PROJECTS[type].output),uncertainty:reckless?'high':cautious?'lower':'medium',comment:String(text).slice(0,600)};
