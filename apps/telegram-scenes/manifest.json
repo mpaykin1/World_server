@@ -1,0 +1,546 @@
+{
+  "schema": 1,
+  "generator": "Pillow and imageio-ffmpeg; deterministic, offline",
+  "scenes": [
+    {
+      "id": "origin",
+      "variant": 0,
+      "photo": "origin-0.png",
+      "animation": "origin-0.mp4"
+    },
+    {
+      "id": "origin",
+      "variant": 1,
+      "photo": "origin-1.png",
+      "animation": "origin-1.mp4"
+    },
+    {
+      "id": "origin",
+      "variant": 2,
+      "photo": "origin-2.png",
+      "animation": "origin-2.mp4"
+    },
+    {
+      "id": "planning",
+      "variant": 0,
+      "photo": "planning-0.png"
+    },
+    {
+      "id": "planning",
+      "variant": 1,
+      "photo": "planning-1.png"
+    },
+    {
+      "id": "planning",
+      "variant": 2,
+      "photo": "planning-2.png"
+    },
+    {
+      "id": "blocked",
+      "variant": 0,
+      "photo": "blocked-0.png"
+    },
+    {
+      "id": "blocked",
+      "variant": 1,
+      "photo": "blocked-1.png"
+    },
+    {
+      "id": "blocked",
+      "variant": 2,
+      "photo": "blocked-2.png"
+    },
+    {
+      "id": "refresh",
+      "variant": 0,
+      "photo": "refresh-0.png"
+    },
+    {
+      "id": "refresh",
+      "variant": 1,
+      "photo": "refresh-1.png"
+    },
+    {
+      "id": "refresh",
+      "variant": 2,
+      "photo": "refresh-2.png"
+    },
+    {
+      "id": "day",
+      "variant": 0,
+      "photo": "day-0.png"
+    },
+    {
+      "id": "day",
+      "variant": 1,
+      "photo": "day-1.png"
+    },
+    {
+      "id": "day",
+      "variant": 2,
+      "photo": "day-2.png"
+    },
+    {
+      "id": "accident",
+      "variant": 0,
+      "photo": "accident-0.png",
+      "animation": "accident-0.mp4"
+    },
+    {
+      "id": "accident",
+      "variant": 1,
+      "photo": "accident-1.png",
+      "animation": "accident-1.mp4"
+    },
+    {
+      "id": "accident",
+      "variant": 2,
+      "photo": "accident-2.png",
+      "animation": "accident-2.mp4"
+    },
+    {
+      "id": "recovery",
+      "variant": 0,
+      "photo": "recovery-0.png",
+      "animation": "recovery-0.mp4"
+    },
+    {
+      "id": "recovery",
+      "variant": 1,
+      "photo": "recovery-1.png",
+      "animation": "recovery-1.mp4"
+    },
+    {
+      "id": "recovery",
+      "variant": 2,
+      "photo": "recovery-2.png",
+      "animation": "recovery-2.mp4"
+    },
+    {
+      "id": "growth",
+      "variant": 0,
+      "photo": "growth-0.png"
+    },
+    {
+      "id": "growth",
+      "variant": 1,
+      "photo": "growth-1.png"
+    },
+    {
+      "id": "growth",
+      "variant": 2,
+      "photo": "growth-2.png"
+    },
+    {
+      "id": "crisis_power",
+      "variant": 0,
+      "photo": "crisis_power-0.png",
+      "animation": "crisis_power-0.mp4"
+    },
+    {
+      "id": "crisis_power",
+      "variant": 1,
+      "photo": "crisis_power-1.png",
+      "animation": "crisis_power-1.mp4"
+    },
+    {
+      "id": "crisis_power",
+      "variant": 2,
+      "photo": "crisis_power-2.png",
+      "animation": "crisis_power-2.mp4"
+    },
+    {
+      "id": "crisis_water",
+      "variant": 0,
+      "photo": "crisis_water-0.png",
+      "animation": "crisis_water-0.mp4"
+    },
+    {
+      "id": "crisis_water",
+      "variant": 1,
+      "photo": "crisis_water-1.png",
+      "animation": "crisis_water-1.mp4"
+    },
+    {
+      "id": "crisis_water",
+      "variant": 2,
+      "photo": "crisis_water-2.png",
+      "animation": "crisis_water-2.mp4"
+    },
+    {
+      "id": "crisis_food",
+      "variant": 0,
+      "photo": "crisis_food-0.png",
+      "animation": "crisis_food-0.mp4"
+    },
+    {
+      "id": "crisis_food",
+      "variant": 1,
+      "photo": "crisis_food-1.png",
+      "animation": "crisis_food-1.mp4"
+    },
+    {
+      "id": "crisis_food",
+      "variant": 2,
+      "photo": "crisis_food-2.png",
+      "animation": "crisis_food-2.mp4"
+    },
+    {
+      "id": "start_solar",
+      "variant": 0,
+      "photo": "start_solar-0.png",
+      "animation": "start_solar-0.mp4"
+    },
+    {
+      "id": "start_solar",
+      "variant": 1,
+      "photo": "start_solar-1.png",
+      "animation": "start_solar-1.mp4"
+    },
+    {
+      "id": "start_solar",
+      "variant": 2,
+      "photo": "start_solar-2.png",
+      "animation": "start_solar-2.mp4"
+    },
+    {
+      "id": "progress_solar",
+      "variant": 0,
+      "photo": "progress_solar-0.png"
+    },
+    {
+      "id": "progress_solar",
+      "variant": 1,
+      "photo": "progress_solar-1.png"
+    },
+    {
+      "id": "progress_solar",
+      "variant": 2,
+      "photo": "progress_solar-2.png"
+    },
+    {
+      "id": "done_solar",
+      "variant": 0,
+      "photo": "done_solar-0.png",
+      "animation": "done_solar-0.mp4"
+    },
+    {
+      "id": "done_solar",
+      "variant": 1,
+      "photo": "done_solar-1.png",
+      "animation": "done_solar-1.mp4"
+    },
+    {
+      "id": "done_solar",
+      "variant": 2,
+      "photo": "done_solar-2.png",
+      "animation": "done_solar-2.mp4"
+    },
+    {
+      "id": "start_coal",
+      "variant": 0,
+      "photo": "start_coal-0.png",
+      "animation": "start_coal-0.mp4"
+    },
+    {
+      "id": "start_coal",
+      "variant": 1,
+      "photo": "start_coal-1.png",
+      "animation": "start_coal-1.mp4"
+    },
+    {
+      "id": "start_coal",
+      "variant": 2,
+      "photo": "start_coal-2.png",
+      "animation": "start_coal-2.mp4"
+    },
+    {
+      "id": "progress_coal",
+      "variant": 0,
+      "photo": "progress_coal-0.png"
+    },
+    {
+      "id": "progress_coal",
+      "variant": 1,
+      "photo": "progress_coal-1.png"
+    },
+    {
+      "id": "progress_coal",
+      "variant": 2,
+      "photo": "progress_coal-2.png"
+    },
+    {
+      "id": "done_coal",
+      "variant": 0,
+      "photo": "done_coal-0.png",
+      "animation": "done_coal-0.mp4"
+    },
+    {
+      "id": "done_coal",
+      "variant": 1,
+      "photo": "done_coal-1.png",
+      "animation": "done_coal-1.mp4"
+    },
+    {
+      "id": "done_coal",
+      "variant": 2,
+      "photo": "done_coal-2.png",
+      "animation": "done_coal-2.mp4"
+    },
+    {
+      "id": "start_geothermal",
+      "variant": 0,
+      "photo": "start_geothermal-0.png",
+      "animation": "start_geothermal-0.mp4"
+    },
+    {
+      "id": "start_geothermal",
+      "variant": 1,
+      "photo": "start_geothermal-1.png",
+      "animation": "start_geothermal-1.mp4"
+    },
+    {
+      "id": "start_geothermal",
+      "variant": 2,
+      "photo": "start_geothermal-2.png",
+      "animation": "start_geothermal-2.mp4"
+    },
+    {
+      "id": "progress_geothermal",
+      "variant": 0,
+      "photo": "progress_geothermal-0.png"
+    },
+    {
+      "id": "progress_geothermal",
+      "variant": 1,
+      "photo": "progress_geothermal-1.png"
+    },
+    {
+      "id": "progress_geothermal",
+      "variant": 2,
+      "photo": "progress_geothermal-2.png"
+    },
+    {
+      "id": "done_geothermal",
+      "variant": 0,
+      "photo": "done_geothermal-0.png",
+      "animation": "done_geothermal-0.mp4"
+    },
+    {
+      "id": "done_geothermal",
+      "variant": 1,
+      "photo": "done_geothermal-1.png",
+      "animation": "done_geothermal-1.mp4"
+    },
+    {
+      "id": "done_geothermal",
+      "variant": 2,
+      "photo": "done_geothermal-2.png",
+      "animation": "done_geothermal-2.mp4"
+    },
+    {
+      "id": "start_water",
+      "variant": 0,
+      "photo": "start_water-0.png",
+      "animation": "start_water-0.mp4"
+    },
+    {
+      "id": "start_water",
+      "variant": 1,
+      "photo": "start_water-1.png",
+      "animation": "start_water-1.mp4"
+    },
+    {
+      "id": "start_water",
+      "variant": 2,
+      "photo": "start_water-2.png",
+      "animation": "start_water-2.mp4"
+    },
+    {
+      "id": "progress_water",
+      "variant": 0,
+      "photo": "progress_water-0.png"
+    },
+    {
+      "id": "progress_water",
+      "variant": 1,
+      "photo": "progress_water-1.png"
+    },
+    {
+      "id": "progress_water",
+      "variant": 2,
+      "photo": "progress_water-2.png"
+    },
+    {
+      "id": "done_water",
+      "variant": 0,
+      "photo": "done_water-0.png",
+      "animation": "done_water-0.mp4"
+    },
+    {
+      "id": "done_water",
+      "variant": 1,
+      "photo": "done_water-1.png",
+      "animation": "done_water-1.mp4"
+    },
+    {
+      "id": "done_water",
+      "variant": 2,
+      "photo": "done_water-2.png",
+      "animation": "done_water-2.mp4"
+    },
+    {
+      "id": "start_food",
+      "variant": 0,
+      "photo": "start_food-0.png",
+      "animation": "start_food-0.mp4"
+    },
+    {
+      "id": "start_food",
+      "variant": 1,
+      "photo": "start_food-1.png",
+      "animation": "start_food-1.mp4"
+    },
+    {
+      "id": "start_food",
+      "variant": 2,
+      "photo": "start_food-2.png",
+      "animation": "start_food-2.mp4"
+    },
+    {
+      "id": "progress_food",
+      "variant": 0,
+      "photo": "progress_food-0.png"
+    },
+    {
+      "id": "progress_food",
+      "variant": 1,
+      "photo": "progress_food-1.png"
+    },
+    {
+      "id": "progress_food",
+      "variant": 2,
+      "photo": "progress_food-2.png"
+    },
+    {
+      "id": "done_food",
+      "variant": 0,
+      "photo": "done_food-0.png",
+      "animation": "done_food-0.mp4"
+    },
+    {
+      "id": "done_food",
+      "variant": 1,
+      "photo": "done_food-1.png",
+      "animation": "done_food-1.mp4"
+    },
+    {
+      "id": "done_food",
+      "variant": 2,
+      "photo": "done_food-2.png",
+      "animation": "done_food-2.mp4"
+    },
+    {
+      "id": "start_workshop",
+      "variant": 0,
+      "photo": "start_workshop-0.png",
+      "animation": "start_workshop-0.mp4"
+    },
+    {
+      "id": "start_workshop",
+      "variant": 1,
+      "photo": "start_workshop-1.png",
+      "animation": "start_workshop-1.mp4"
+    },
+    {
+      "id": "start_workshop",
+      "variant": 2,
+      "photo": "start_workshop-2.png",
+      "animation": "start_workshop-2.mp4"
+    },
+    {
+      "id": "progress_workshop",
+      "variant": 0,
+      "photo": "progress_workshop-0.png"
+    },
+    {
+      "id": "progress_workshop",
+      "variant": 1,
+      "photo": "progress_workshop-1.png"
+    },
+    {
+      "id": "progress_workshop",
+      "variant": 2,
+      "photo": "progress_workshop-2.png"
+    },
+    {
+      "id": "done_workshop",
+      "variant": 0,
+      "photo": "done_workshop-0.png",
+      "animation": "done_workshop-0.mp4"
+    },
+    {
+      "id": "done_workshop",
+      "variant": 1,
+      "photo": "done_workshop-1.png",
+      "animation": "done_workshop-1.mp4"
+    },
+    {
+      "id": "done_workshop",
+      "variant": 2,
+      "photo": "done_workshop-2.png",
+      "animation": "done_workshop-2.mp4"
+    },
+    {
+      "id": "start_city",
+      "variant": 0,
+      "photo": "start_city-0.png",
+      "animation": "start_city-0.mp4"
+    },
+    {
+      "id": "start_city",
+      "variant": 1,
+      "photo": "start_city-1.png",
+      "animation": "start_city-1.mp4"
+    },
+    {
+      "id": "start_city",
+      "variant": 2,
+      "photo": "start_city-2.png",
+      "animation": "start_city-2.mp4"
+    },
+    {
+      "id": "progress_city",
+      "variant": 0,
+      "photo": "progress_city-0.png"
+    },
+    {
+      "id": "progress_city",
+      "variant": 1,
+      "photo": "progress_city-1.png"
+    },
+    {
+      "id": "progress_city",
+      "variant": 2,
+      "photo": "progress_city-2.png"
+    },
+    {
+      "id": "done_city",
+      "variant": 0,
+      "photo": "done_city-0.png",
+      "animation": "done_city-0.mp4"
+    },
+    {
+      "id": "done_city",
+      "variant": 1,
+      "photo": "done_city-1.png",
+      "animation": "done_city-1.mp4"
+    },
+    {
+      "id": "done_city",
+      "variant": 2,
+      "photo": "done_city-2.png",
+      "animation": "done_city-2.mp4"
+    }
+  ]
+}
