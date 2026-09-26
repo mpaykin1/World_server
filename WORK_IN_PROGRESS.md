@@ -948,3 +948,5 @@ Task: implement original worker-safe face culling and compact typed-array mesh o
 2026-09-26 extension: add optional Three.js atlas adapter to make original generated pixels directly consumable by existing browser renderer, preserving existing PBR material synthesis. Pure dependency injection, no global renderer mutation; tests use mock THREE. Review and actual browser capture pending.
 
 2026-09-26 integration bridge: current apps/voxel-world/client.js already has Golden CanvasTexture atlas and per-chunk Uint8Array indexed (y*CHUNK+z)*CHUNK+x. Do not replace Golden materials or duplicate atlas in production. Add opt-in chunk snapshot conversion to the existing worker protocol, preserving world-coordinate edge neighbors. Tests and live renderer integration remain pending.
+
+2026-09-26 copy-only scope: independent standalone versioned voxel chunk save codec with strict bounds and round-trip tests; no game integration, no upstream copyrighted files.
