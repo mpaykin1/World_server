@@ -984,3 +984,5 @@ Task: implement original worker-safe face culling and compact typed-array mesh o
 2026-09-26 copy-only: study Unreal DEVELOPMENT.md procedural PBR texture pipeline; independently implement deterministic height-to-normal and ORME packing for engine-neutral standalone use, with tests; Unreal texture synthesis source not yet located; no runtime integration.
 
 2026-09-26 copy-only: studied Godot chunk.gd compressed block snapshot and derived-state rebuild; independently implement portable palette+run-length section snapshot codec with strict decoding, standalone tests, no runtime integration. Not a port of Godot ZSTD.
+
+2026-09-26 copy-only: reread full upstream Godot game/ai/pathfinder.gd; independently implement bounded 4-direction walking A* with step-up/drop, clearance, hazards/water costs and partial-path fallback; standalone tests only, no gameplay integration.
