@@ -1,178 +1,193 @@
-// Telegram transport for the existing deterministic World Consequence Engine.
-// No paid language-model or image-generation calls are made at runtime.
-import './supabase/functions/_shared/world-consequence-engine.js';
+// Stateless HTTP transport; game state is persisted in Cloudflare D1.
+// Canonical project math is imported, never duplicated or replaced by an LLM.
+import {
+  engine, MAX_INTENT, LABELS, initialWorld, options, applyPlan,
+  loadSession, saveSession, view, describeChange
+} from './telegram-state.mjs';
 
-const engine = globalThis.WorldConsequenceEngine;
-const WEBHOOK_URL = 'https://world-server.mmmpaykin.workers.dev/api/telegram/webhook';
-const INTRO_IMAGE = 'https://world-server.mmmpaykin.workers.dev/apps/ai3d-reference-test/assets/renders/front_textured.png';
-const MAX_TURNS = 8;
-const NAMES = {
-  geothermal: 'Геотермальная станция', tourism: 'Туристический комплекс',
-  volcanic_farm: 'Вулканические фермы', solar: 'Солнечная станция',
-  temple: 'Культурный центр', workshop: 'Мастерские',
-  desalination: 'Опреснение', coal: 'Угольная станция',
-  festival: 'Городской фестиваль', water_recycling: 'Очистка воды',
-  deep_wells: 'Глубокие скважины', greenhouse: 'Теплицы',
-  intensive_farm: 'Интенсивные фермы', export_market: 'Экспортный рынок',
-  luxury_arcology: 'Новый жилой район', automated_mine: 'Автоматическая шахта',
-  water_park: 'Аквапарк', bottling_plant: 'Завод воды',
-  biofuel_refinery: 'Биотопливный завод', livestock_export: 'Животноводство'
-};
-const FALLBACK = Object.keys(engine.PROJECTS);
-
-export async function webhookSecret(token) {
-  const digest = await crypto.subtle.digest('SHA-256',
-    new TextEncoder().encode('world-server-telegram-webhook-v1:' + token));
-  return [...new Uint8Array(digest)].map(x => x.toString(16).padStart(2, '0')).join('');
+const WEBHOOK_URL='https://world-server.mmmpaykin.workers.dev/api/telegram/webhook';
+const INTRO_IMAGE='https://world-server.mmmpaykin.workers.dev/apps/ai3d-reference-test/assets/renders/front_textured.png';
+const EVENT_IMAGE='https://world-server.mmmpaykin.workers.dev/apps/ai3d-reference-test/assets/renders/left15_textured.png';
+const TOKEN_PATTERN=/^\d+:[A-Za-z0-9_-]{20,}$/;
+const responseJson=(value,status=200)=>new Response(JSON.stringify(value),{
+  status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store'}
+});
+export async function webhookSecret(token){
+  const digest=await crypto.subtle.digest('SHA-256',
+    new TextEncoder().encode('world-server-telegram-webhook-v1:'+token));
+  return [...new Uint8Array(digest)].map(n=>n.toString(16).padStart(2,'0')).join('');
 }
-
-async function telegram(token, method, payload, fetcher = fetch) {
-  const response = await fetcher('https://api.telegram.org/bot' + token + '/' + method, {
-    method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload)
-  });
-  const result = await response.json();
-  if (!response.ok || result.ok !== true) throw new Error('Telegram ' + method + ' failed');
+async function botApi(token,method,payload,fetcher=fetch){
+  // Never put the bot token into an error or public response.
+  const request={method:'POST',headers:{'content-type':'application/json'},
+    body:JSON.stringify(payload)};
+  const response=await fetcher('https://api.telegram.org/bot'+token+'/'+method,request);
+  if(!response.ok)throw Error('Telegram '+method+' HTTP '+response.status);
+  const result=await response.json();
+  if(result.ok!==true)throw Error('Telegram '+method+' rejected');
   return result.result;
 }
-
-// Pick four affordable alternatives using canonical simulator previews.
-// The full Genie category validator runs in the main game; it is deliberately
-// not replayed on every Telegram callback (Workers free-tier CPU budget).
-export function choices(world) {
-  const r = world.resources;
-  const target = ['power', 'water', 'food'].sort((a, b) => r[a] - r[b])[0];
-  const targeted = {
-    power: ['coal', 'solar', 'geothermal', 'workshop'],
-    water: ['deep_wells', 'desalination', 'water_recycling', 'workshop'],
-    food: ['intensive_farm', 'greenhouse', 'volcanic_farm', 'export_market']
-  }[target];
-  const proposals = [...new Set([...targeted, ...FALLBACK])];
-  const offered = [];
-  for (const type of proposals) {
-    const plan = engine.preview(world, engine.interpretIntent('', type));
-    if (plan.feasible) offered.push({ type, label: NAMES[type] || type, plan });
-    if (offered.length === 4) break;
+async function sendGame(token,chatId,game,fetcher,{image=null}={}){
+  if(image){
+    try{
+      await botApi(token,'sendPhoto',{chat_id:chatId,photo:image,caption:game.text,
+        reply_markup:game.reply_markup},fetcher);
+      return;
+    }catch{ /* Photo isn't essential to playing. */ }
   }
-  return offered;
+  await botApi(token,'sendMessage',{chat_id:chatId,...game},fetcher);
 }
-
-export function replay(chatId, path = '') {
-  if (!/^[0-3]{0,8}$/.test(path)) throw new Error('Invalid game path');
-  let world = engine.createWorld('telegram:' + String(chatId));
-  let latest = null;
-  for (const step of path) {
-    const selected = choices(world)[Number(step)];
-    if (!selected) throw new Error('Unavailable project');
-    const before = world.resources;
-    const intent = engine.interpretIntent('', selected.type);
-    world = engine.commit(world, intent, world.revision);
-    world = engine.simulateTicks(world, Math.min(selected.plan.buildTicks + 1, 8));
-    latest = { label: selected.label, before };
-  }
-  return { world, latest };
+async function onCommand(message,updateId,env,fetcher){
+  if(message.chat?.type!=='private')return;
+  const db=env.TELEGRAM_DB,chatId=message.chat.id;
+  const session=await loadSession(db,chatId);
+  if(updateId<=session.lastUpdate)return;
+  const reset=/^\/new(?:@\w+)?(?:\s|$)/i.test(message.text||'');
+  const world=reset?initialWorld(chatId,session.restart+1):session.world;
+  const updated=await saveSession(db,session,{
+    world,restart:reset?session.restart+1:session.restart,
+    pending:null,updateId
+  });
+  if(!updated)return;
+  await sendGame(env.TELEGRAM_BOT_TOKEN,chatId,
+    view(world,reset?'🌱 Новый мир создан.':'Добро пожаловать!'),fetcher,{image:INTRO_IMAGE});
 }
-
-function resourceSummary(world) {
-  const r = world.resources;
-  return '⚡ ' + r.power + '   💧 ' + r.water + '   🌾 ' + r.food
-    + '\n💰 ' + r.budget + '   🌳 ' + r.ecology + '   ❤️ ' + r.health;
+function parseCallback(data){
+  const match=/^tg2:(\d{1,10}):([a-z_]{1,35})$/.exec(data||'');
+  if(!match)return null;
+  return{revision:Number(match[1]),action:match[2]};
 }
-
-function gameView(chatId, path) {
-  const { world, latest } = replay(chatId, path);
-  const next = path.length < MAX_TURNS ? choices(world) : [];
-  const intro = latest
-    ? '✅ ' + latest.label + '. Прошло несколько игровых дней.\n'
-    : '🌍 ЦЕПНАЯ РЕАКЦИЯ · ЗЛОЙ ДЖИНН\nГород зависит от твоих решений.\n';
-  const text = intro + '\nДень ' + world.tick + ' · Жителей: ' + world.population
-    + '\n' + resourceSummary(world)
-    + (world.crisis ? '\n🚨 Кризис: город продолжает бороться.' : '')
-    + (next.length ? '\n\nВыбери следующий проект:' : '\n\nРаунд завершён. Начни заново.');
-  const buttons = next.map((choice, index) => [{
-    text: choice.label + ' · 💰' + choice.plan.cost + ' · ⏳' + choice.plan.buildTicks,
-    callback_data: 'tg1:' + path + String(index)
-  }]);
-  buttons.push([{ text: '🔄 Начать заново', callback_data: 'tg1:reset' }]);
-  return { text, reply_markup: { inline_keyboard: buttons } };
-}
-
-async function respondMessage(chat, token, fetcher) {
-  if (chat.type !== 'private') return;
-  const view = gameView(chat.id, '');
-  try {
-    await telegram(token, 'sendPhoto', {
-      chat_id: chat.id, photo: INTRO_IMAGE, caption: view.text,
-      reply_markup: view.reply_markup
-    }, fetcher);
-  } catch {
-    // The existing static image may be temporarily unavailable after deployment.
-    await telegram(token, 'sendMessage', { chat_id: chat.id, ...view }, fetcher);
-  }
-}
-
-async function respondCallback(callback, token, fetcher) {
-  const chat = callback.message?.chat;
-  const data = callback.data || '';
-  if (!chat || chat.type !== 'private') {
-    await telegram(token, 'answerCallbackQuery', {
-      callback_query_id: callback.id, text: 'Открой бота в личных сообщениях.'
-    }, fetcher);
+async function onCallback(callback,updateId,env,fetcher){
+  const chat=callback.message?.chat,token=env.TELEGRAM_BOT_TOKEN;
+  if(!chat||chat.type!=='private'){
+    await botApi(token,'answerCallbackQuery',{callback_query_id:callback.id,
+      text:'Открой бота в личном чате.'},fetcher);
     return;
   }
-  const path = data === 'tg1:reset' ? '' : data.startsWith('tg1:') ? data.slice(4) : null;
-  if (path === null || !/^[0-3]{0,8}$/.test(path)) {
-    await telegram(token, 'answerCallbackQuery', {
-      callback_query_id: callback.id, text: 'Эта кнопка устарела. Отправь /start.'
-    }, fetcher);
+  const session=await loadSession(env.TELEGRAM_DB,chat.id);
+  const data=parseCallback(callback.data);
+  if(!data||data.revision!==session.revision||updateId<=session.lastUpdate){
+    await botApi(token,'answerCallbackQuery',{callback_query_id:callback.id,
+      text:'Эта кнопка устарела. Продолжим текущую игру.'},fetcher);
+    if(updateId>session.lastUpdate)await sendGame(token,chat.id,view(session.world),fetcher);
     return;
   }
-  let view;
-  try { view = gameView(chat.id, path); }
-  catch {
-    await telegram(token, 'answerCallbackQuery', {
-      callback_query_id: callback.id, text: 'Мир изменился. Отправь /start.'
-    }, fetcher);
-    return;
+  let world=session.world,restart=session.restart,pending=null,notice='',image=null;
+  if(data.action==='reset'){
+    restart++;
+    world=initialWorld(chat.id,restart);
+    notice='🌱 Новый мир создан.';
+    image=INTRO_IMAGE;
+  }else if(data.action==='free'){
+    pending=session.revision;
+    notice='✍️ Пришли сообщением свой проект (до 600 символов).\n'+
+      'Например: Построить солнечные панели, чтобы пережить кризис.';
+  }else if(data.action==='next'){
+    if(options(world).length){
+      notice='Сначала выбери проект или предложи свой.';
+    }else{
+      world=engine.tick(world);
+      notice=describeChange(session.world,world,'Город прожил ещё один день');
+    }
+  }else{
+    const candidate=options(world).find(x=>x.type===data.action);
+    if(!candidate){
+      await botApi(token,'answerCallbackQuery',{callback_query_id:callback.id,
+        text:'Этот проект больше недоступен.'},fetcher);
+      await sendGame(token,chat.id,view(world),fetcher);
+      return;
+    }
+    const outcome=applyPlan(world,candidate.type);
+    if(outcome.accepted){
+      world=outcome.world;
+      notice=describeChange(session.world,world,candidate.label);
+      image=EVENT_IMAGE;
+    }else notice='Недостаточно ресурсов для этого проекта.';
   }
-  await telegram(token, 'answerCallbackQuery', { callback_query_id: callback.id }, fetcher);
-  await telegram(token, 'sendMessage', { chat_id: chat.id, ...view }, fetcher);
+  const saved=await saveSession(env.TELEGRAM_DB,session,{world,restart,pending,updateId});
+  await botApi(token,'answerCallbackQuery',{callback_query_id:callback.id,
+    text:saved?'Решение принято.':'Ход уже изменился.'},fetcher);
+  if(!saved)return;
+  if(pending!==null){
+    await botApi(token,'sendMessage',{chat_id:chat.id,text:notice},fetcher);
+  }else await sendGame(token,chat.id,view(world,notice),fetcher,{image});
 }
-
-export async function handleTelegramWebhook(request, env, fetcher = fetch) {
-  if (request.method !== 'POST') return new Response('Method Not Allowed', { status: 405 });
-  const token = String(env.TELEGRAM_BOT_TOKEN || '').trim();
-  if (!token) return new Response('Not configured', { status: 503 });
-  const expected = await webhookSecret(token);
-  if (request.headers.get('x-telegram-bot-api-secret-token') !== expected) {
-    return new Response('Forbidden', { status: 403 });
+async function onText(message,updateId,env,fetcher){
+  if(message.chat?.type!=='private')return;
+  const session=await loadSession(env.TELEGRAM_DB,message.chat.id);
+  if(updateId<=session.lastUpdate)return;
+  const token=env.TELEGRAM_BOT_TOKEN;
+  if(session.pending!==session.revision){
+    await botApi(token,'sendMessage',{chat_id:message.chat.id,
+      text:'Чтобы продолжить игру, отправь /start.'},fetcher);
+    return;
   }
-  if (Number(request.headers.get('content-length') || 0) > 16384) {
-    return new Response('Too large', { status: 413 });
+  const text=String(message.text||'').trim();
+  if(!text||text.length>MAX_INTENT){
+    await botApi(token,'sendMessage',{chat_id:message.chat.id,
+      text:'Напиши идею длиной от 1 до 600 символов.'},fetcher);
+    return;
   }
-  const raw = await request.text();
-  if (raw.length > 16384) return new Response('Too large', { status: 413 });
+  const outcome=applyPlan(session.world,'workshop',text);
+  const notice=outcome.accepted
+    ?describeChange(session.world,outcome.world,LABELS[outcome.plan.intent.goal]||outcome.plan.intent.goal)
+    :'⛔ Сейчас этот проект невозможно осуществить: '+outcome.plan.missing
+      .map(x=>x.resource+' '+x.available+'/'+x.required).join(', ')+'.';
+  const saved=await saveSession(env.TELEGRAM_DB,session,{
+    world:outcome.world,pending:null,updateId
+  });
+  if(saved)await sendGame(token,message.chat.id,view(outcome.world,notice),fetcher,{
+    image:outcome.accepted?EVENT_IMAGE:null
+  });
+}
+export async function handleTelegramWebhook(request,env,fetcher=fetch){
+  if(request.method!=='POST')return new Response('Method Not Allowed',{status:405});
+  const token=String(env.TELEGRAM_BOT_TOKEN||'').trim();
+  if(!TOKEN_PATTERN.test(token)||!env.TELEGRAM_DB)
+    return new Response('Not configured',{status:503});
+  if(request.headers.get('x-telegram-bot-api-secret-token')!==await webhookSecret(token))
+    return new Response('Forbidden',{status:403});
+  if(Number(request.headers.get('content-length')||0)>16384)
+    return new Response('Too large',{status:413});
+  const body=await request.text();
+  if(new TextEncoder().encode(body).length>16384)
+    return new Response('Too large',{status:413});
   let update;
-  try { update = JSON.parse(raw); }
-  catch { return new Response('Invalid JSON', { status: 400 }); }
-  if (update.message?.text && /^\/(start|help)(?:@\w+)?(?:\s|$)/i.test(update.message.text)) {
-    await respondMessage(update.message.chat, token, fetcher);
-  } else if (update.callback_query) {
-    await respondCallback(update.callback_query, token, fetcher);
-  } else if (update.message?.chat?.type === 'private') {
-    await telegram(token, 'sendMessage', {
-      chat_id: update.message.chat.id, text: 'Начни игру командой /start.'
-    }, fetcher);
-  }
-  return new Response('OK', { status: 200, headers: { 'cache-control': 'no-store' } });
+  try{update=JSON.parse(body);}catch{return new Response('Invalid JSON',{status:400});}
+  const id=update?.update_id;
+  if(!Number.isSafeInteger(id)||id<0)return new Response('Invalid update',{status:400});
+  if(update.message?.text){
+    if(/^\/(start|help|new)(?:@\w+)?(?:\s|$)/i.test(update.message.text))
+      await onCommand(update.message,id,env,fetcher);
+    else await onText(update.message,id,env,fetcher);
+  }else if(update.callback_query)await onCallback(update.callback_query,id,env,fetcher);
+  return new Response('OK',{status:200,headers:{'cache-control':'no-store'}});
 }
-
-export async function registerTelegramWebhook(env, fetcher = fetch) {
-  const token = String(env.TELEGRAM_BOT_TOKEN || '').trim();
-  if (!token) return false;
-  await telegram(token, 'setWebhook', {
-    url: WEBHOOK_URL, secret_token: await webhookSecret(token),
-    allowed_updates: ['message', 'callback_query'],
-    drop_pending_updates: false
-  }, fetcher);
+export async function registerTelegramWebhook(env,fetcher=fetch){
+  const token=String(env.TELEGRAM_BOT_TOKEN||'').trim();
+  if(!TOKEN_PATTERN.test(token)||!env.TELEGRAM_DB)return false;
+  const info=await botApi(token,'getWebhookInfo',{},fetcher);
+  if(info.url===WEBHOOK_URL)return true;
+  await botApi(token,'setWebhook',{
+    url:WEBHOOK_URL,secret_token:await webhookSecret(token),
+    allowed_updates:['message','callback_query'],drop_pending_updates:false
+  },fetcher);
   return true;
+}
+export async function telegramStatus(env,fetcher=fetch){
+  const token=String(env.TELEGRAM_BOT_TOKEN||'').trim();
+  const configured=TOKEN_PATTERN.test(token)&&!!env.TELEGRAM_DB;
+  if(!configured)return responseJson({ready:false,configured:false},503);
+  try{
+    const [me,hook,db]=await Promise.all([
+      botApi(token,'getMe',{},fetcher),
+      botApi(token,'getWebhookInfo',{},fetcher),
+      env.TELEGRAM_DB.prepare('SELECT 1 AS ok').first()
+    ]);
+    const webhookMatches=hook.url===WEBHOOK_URL,dbReady=db?.ok===1;
+    return responseJson({ready:webhookMatches&&dbReady,
+      configured:true,botUsername:me.username,dbReady,webhookMatches,
+      pendingUpdates:hook.pending_update_count||0
+    },webhookMatches&&dbReady?200:503);
+  }catch{return responseJson({ready:false,configured:true,error:'Dependency unavailable'},503);}
 }
