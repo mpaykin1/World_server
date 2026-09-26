@@ -1,6 +1,40 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('World Server Golden Standard', () => {
+  test('catalog packs late account/chat panels without losing their handlers', async ({ page }) => {
+    // Isolate late-panel insertion from any live authentication initialization.
+    await page.route('**/api/config',r=>r.fulfill({status:503,contentType:'application/json',body:'{"error":"fixture offline"}'}));
+    await page.goto('/apps/catalog/', {waitUntil:'domcontentloaded'});
+    await page.waitForFunction(()=>window.GoldenUIShell);
+    await page.evaluate(()=>{
+      window.panelProbeClicks=0;
+      for(const selector of ['#authBox','.mc-chat']){
+        const panel=document.querySelector(selector)||document.createElement('div');
+        if(selector[0]==='#')panel.id=selector.slice(1);else panel.className=selector.slice(1);
+        const probe=document.createElement('button');probe.type='button';probe.dataset.panelProbe=selector;
+        probe.textContent='Panel handler probe';probe.onclick=()=>window.panelProbeClicks++;
+        panel.appendChild(probe);document.body.appendChild(panel);
+      }
+    });
+    for(const selector of ['#authBox','.mc-chat']){
+      await expect(page.locator(`#goldenPackedPanels ${selector}`)).toHaveCount(1);
+      await expect(page.locator(`#goldenPackedPanels ${selector}`)).toHaveCSS('position','static');
+    }
+    const drawer=page.locator('#goldenDrawer');
+    await expect(drawer).toHaveJSProperty('inert',true);
+    expect(await page.evaluate(()=>{const b=document.querySelector('[data-panel-probe]');b.focus();return document.activeElement===b;})).toBe(false);
+    await page.locator('[data-golden-tab="menu"]').click();
+    await expect(drawer).toHaveJSProperty('inert',false);
+    for(const button of await page.locator('[data-panel-probe]').all())await button.click();
+    expect(await page.evaluate(()=>window.panelProbeClicks)).toBe(2);
+    await page.locator('#goldenDrawerClose').click();
+    await expect(drawer).toHaveAttribute('aria-hidden','true');
+    await expect(drawer).toHaveJSProperty('inert',true);
+    await expect(page.locator('[data-golden-tab="menu"]')).toBeFocused();
+    await page.keyboard.press('Tab');
+    expect(await page.evaluate(()=>!!document.activeElement.closest('#goldenDrawer'))).toBe(false);
+  });
+
   test('public app API is deny-by-default and returns certified apps only', async ({ request }) => {
     const r = await request.get('/api/apps?certified=1');
     expect(r.ok()).toBeTruthy();

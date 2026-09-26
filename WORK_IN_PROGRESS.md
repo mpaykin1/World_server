@@ -18,6 +18,37 @@ Task: make Genie cards and persisted world one authenticated read-only `game-sta
 
 # WORK IN PROGRESS — Scoped Task Compiler, resource scheduler, real native Godot pipeline
 
+## Task
+Catalog mobile panels, 2026-09-23.
+## Why
+Canary 35845450510 reports authBox=12.5% and chat=17.5% persistent mobile overlays.
+## Current state
+Catalog shell packs panels once, before async AppCore creates login/chat.
+## Target state
+Late login/chat panels live in the existing menu and keep handlers.
+## Files / systems involved
+golden-ui-shell catalog configuration and packing; golden-release browser tests.
+## Known risks
+Late DOM insertion; avoid observer loops or copying forms.
+## Golden systems that must be preserved
+Login/chat handlers, renderer, other worlds, existing menu and HUD limits.
+## Errors that must not return
+Large permanent mobile login/chat overlays outside the menu.
+## Exact patch / change plan
+Add catalog selectors; pack only newly added body subtrees, avoiding full-document rescans. Test late insertion, handlers, closed-drawer inertness and focus return.
+## Tests to run
+Syntax; cloud release gate, Golden desktop/mobile tests and Fleet.
+## Deployment / PR plan
+Isolated ai/codex/catalog-panels-20260923 branch; reviewed protected PR.
+## Current progress
+Root cause verified in common.js init and one-shot shell packing.
+## Next action
+Implement bounded fix and verify cloud browser behavior.
+## Completion criteria
+Late panels are packed once, accessible via menu, handlers preserved.
+## Final evidence
+Pending cloud verification; no production claim.
+
 ---
 
 # 2026-09-24: Authoritative resident-at-address lookup
