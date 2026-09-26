@@ -86,6 +86,12 @@ test('repeated turns get different visual variants; captions fit Telegram media'
   const variants=new Set(Array.from({length:30},(_,i)=>
     sceneMedia(scene,{...w,revision:i},1000+i).variant));
   assert.equal(variants.size,3);
+  const dayScene={id:'day'};
+  const dayVariants=[1,2,3].map(revision=>sceneMedia(dayScene,{...w,revision},1000).variant);
+  assert.deepEqual(dayVariants,[1,2,0]);
+  const resumeScene={id:'refresh'};
+  const resumed=[200,201,202].map(update=>sceneMedia(resumeScene,w,update).variant);
+  assert.deepEqual(resumed,[2,0,1]);
   const actions=['new','plan','blocked','resume','stale','day'];
   for(const action of actions){
     const turn=makeVisualTurn(w,w,action,'',345,view(w));
