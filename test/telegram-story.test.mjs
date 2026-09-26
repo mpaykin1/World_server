@@ -44,6 +44,9 @@ test('fire continues during the next day, then can be extinguished and rebuilt',
   assert.equal(extinguished.story.active,null);
   assert.equal(extinguished.story.ruins.length,1);
   assert.equal(classifyTurn(nextDay,extinguished,'story').id,'story_extinguish');
+  const afterFire=advanceStoryDay(extinguished,engine.tick(extinguished));
+  assert.equal(classifyTurn(extinguished,afterFire,'day').id,'story_dragon_aftermath');
+  assert.equal(classifyTurn(afterFire,afterFire,'resume').id,'story_dragon_aftermath');
   const rebuilt=applyStoryAction(extinguished,'rebuild');
   assert.equal(rebuilt.accepted,true);
   assert(rebuilt.world.story.ruins[0].rebuilding);
