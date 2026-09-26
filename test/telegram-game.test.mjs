@@ -9,6 +9,7 @@ class MockD1{
   constructor(){this.rows=new Map();}
   prepare(sql){
     return {
+      first:async()=>{if(sql.startsWith('SELECT 1'))return {ok:1};throw Error('Unexpected unbound query');},
       bind:(...args)=>({
         first:async()=>{
           if(sql.startsWith('SELECT 1'))return {ok:1};
