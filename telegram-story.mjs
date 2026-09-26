@@ -1,30 +1,11 @@
-// Narrative consequences live only in this Telegram world; canonical engine
-// remains authoritative for project construction, day ticks and residents.
+// Telegram owns story presentation/state; the canonical shared engine owns
+// every resource and population calculation for events and day aftermath.
 import {engine,applyPlan,LABELS} from './telegram-state.mjs';
 import {classifyStoryText,STORY_ACTIONS,supportedBuildType} from './telegram-story-parse.mjs';
 
 const THREATS=new Set(['dragon_fire','fire','flood','storm','earthquake',
   'meteor','epidemic','attack','drought']);
 const BURNING=new Set(['dragon_fire','fire']);
-const IMPACT={
-  dragon_fire:{power:-12,water:-7,food:-5,budget:-30,ecology:-12,health:-9,population:-3},
-  fire:{power:-7,water:-5,budget:-16,ecology:-8,health:-5,population:-1},
-  flood:{power:-7,food:-8,budget:-15,health:-5,population:-2},
-  storm:{power:-10,budget:-11,health:-3,ecology:-3},
-  earthquake:{power:-9,water:-6,budget:-20,health:-6,population:-2},
-  meteor:{power:-12,food:-9,budget:-24,ecology:-9,health:-7,population:-2},
-  epidemic:{health:-12,budget:-7,population:-2},
-  attack:{power:-10,budget:-19,health:-7,population:-2},
-  drought:{water:-18,food:-8,ecology:-5,health:-4},
-  dragon_help:{budget:24,ecology:3,health:2},
-  dragon_arrival:{budget:-3},
-  rain:{water:16,food:3,ecology:3},
-  forest:{ecology:12,health:2,budget:-6},
-  festival:{budget:-9,health:4},
-  trade:{budget:17,food:-3},
-  rescue:{health:8,budget:-7},
-  unknown:{}
-};
 const TITLE={
   dragon_fire:'🐉 Дракон сжёг часть города!',
   dragon_help:'🐉 Дракон принёс неожиданный подарок.',
@@ -39,15 +20,7 @@ const TITLE={
   rescue:'🚑 Жителям оказали помощь.',
   unknown:'📜 Новый поворот сюжета.'
 };
-const clamp=(n,lower=0,upper=100)=>Math.min(upper,Math.max(lower,n));
 const storyState=world=>world.story||{active:null,ruins:[],last:null,evacuated:0};
-function change(next,impact){
-  for(const [key,amount] of Object.entries(impact)){
-    if(key==='population')next.population=Math.max(1,next.population+amount);
-    else next.resources[key]=clamp(next.resources[key]+amount,
-      key==='budget'?-10000:0,key==='budget'?100000:100);
-  }
-}
 function damagedTarget(world,text){
   const projects=world.projects;
   let p=null;
@@ -63,9 +36,10 @@ function destroyStructure(next,text,source){
   const p=damagedTarget(next,text),ruins=next.story.ruins;
   if(p){
     next.projects=next.projects.filter(x=>x.id!==p.id);
-    if(!p.active&&!p.workersReleased)
-      next.resources.workers=clamp(next.resources.workers+(p.workersReserved||0),
-        0,next.population);
+    if(!p.active&&!p.workersReleased){
+      const released=engine.applyResourceDelta(next,{workers:p.workersReserved||0});
+      next.resources.workers=released.resources.workers;
+    }
     ruins.push({id:p.id,type:p.type,name:LABELS[p.type]||p.type,source,rebuilding:null});
     return LABELS[p.type]||p.type;
   }
@@ -85,9 +59,8 @@ function closeCrisis(world){
   world.crisis=['power','water','food'].some(k=>world.resources[k]<15);
 }
 function enactWorldEvent(world,input){
-  const next=structuredClone(world),kind=input.kind;
-  next.story=storyState(next);next.revision++;
-  change(next,IMPACT[kind]||{});
+  const kind=input.kind,next=engine.applyNarrativeEvent(world,kind);
+  next.story=storyState(next);
   let target='';
   if(BURNING.has(kind)||['earthquake','meteor','attack'].includes(kind)||
      (['flood','storm'].includes(kind)&&/смы|разруш|снес|разбил|уничтож/i.test(input.text)))
@@ -130,13 +103,13 @@ export function applyStoryAction(world,action,text=''){
   if(!STORY_ACTIONS.has(action))return reject(world,'Неизвестное действие.');
   if(!rescueTarget(world)&&action!=='relief')
     return reject(world,'Сейчас нет активной угрозы или разрушений.');
-  const next=structuredClone(world);next.story=storyState(next);
-  const incident=next.story.active,r=next.resources;
+  let next=structuredClone(world);next.story=storyState(next);
+  const initialIncident=next.story.active,initialResources=next.resources;
   const cost={extinguish:12,evacuate:6,defend:15,rebuild:25,relief:8}[action];
-  if(r.budget<cost)return reject(world,'Не хватает денег: нужно '+cost+'.');
-  if(action==='extinguish'&&(!incident||!BURNING.has(incident.kind)))
+  if(initialResources.budget<cost)return reject(world,'Не хватает денег: нужно '+cost+'.');
+  if(action==='extinguish'&&(!initialIncident||!BURNING.has(initialIncident.kind)))
     return reject(world,'Нечего тушить — выбери другое действие.');
-  if(action==='extinguish'&&r.water<8)return reject(world,'Нужно минимум 8 единиц воды.');
+  if(action==='extinguish'&&initialResources.water<8)return reject(world,'Нужно минимум 8 единиц воды.');
   if(action==='rebuild'){
     const ruin=next.story.ruins.find(x=>!x.rebuilding);
     if(!ruin)return reject(world,'Нет разрушенных объектов для восстановления.');
@@ -153,22 +126,22 @@ export function applyStoryAction(world,action,text=''){
     };
     return{world:result.world,accepted:true,action:'story',kind:'rebuild'};
   }
-  r.budget-=cost;next.revision++;
+  next=engine.applyResourceDelta(next,{budget:-cost});next.revision++;
+  const incident=next.story.active;
   let detail='';
   if(action==='extinguish'){
-    r.water-=8;next.story.active=null;r.health=clamp(r.health+3);
+    next=engine.applyResourceDelta(next,{water:-8,health:3});next.story.active=null;
     detail='Пожар потушен. Разрушенные здания сами не восстановятся.';
   }else if(action==='evacuate'){
     const moved=Math.min(4,Math.max(0,next.population-1));
     next.population-=moved;next.story.evacuated+=moved;
-    r.health=clamp(r.health+5);detail='Эвакуировано '+moved+' жителей. Они временно покинули город.';
+    next=engine.applyResourceDelta(next,{health:5});detail='Эвакуировано '+moved+' жителей. Они временно покинули город.';
   }else if(action==='defend'){
     if(incident)incident.severity=Math.max(0,incident.severity-2);
     if(incident?.severity===0)next.story.active=null;
     detail='Защитники ослабили угрозу. Последствия разрушений остались.';
   }else{
-    r.water=clamp(r.water+8);r.food=clamp(r.food+7);
-    r.health=clamp(r.health+3);
+    next=engine.applyResourceDelta(next,{water:8,food:7,health:3});
     detail='Спасатели доставили воду и еду, здоровью жителей стало лучше.';
   }
   const name={extinguish:'extinguish',evacuate:'evacuation',defend:'defense',
@@ -200,7 +173,7 @@ export function advanceStoryDay(previous,world){
   const active=previous.story?.active;
   const rebuilding=previous.story?.ruins?.some(x=>x.rebuilding);
   if(!active&&!rebuilding)return world;
-  const next=structuredClone(world);next.story=structuredClone(previous.story);
+  let next=structuredClone(world);next.story=structuredClone(previous.story);
   if(active){
   const incident=next.story.active;incident.age++;
   if(incident.age>=3){
@@ -210,9 +183,7 @@ export function advanceStoryDay(previous,world){
         'Непосредственная угроза закончилась, но разрушенные объекты всё ещё требуют восстановления.',
       text:'',target:''};
   }else{
-    if(BURNING.has(incident.kind))change(next,{power:-4,ecology:-3,health:-2,budget:-2});
-    else if(incident.kind==='flood')change(next,{food:-3,health:-1,budget:-2});
-    else change(next,{budget:-2,health:-1});
+    next=engine.applyNarrativeAftermath(next,incident.kind);
     const kind=incident.kind==='dragon_fire'?'dragon_aftermath':incident.kind;
     next.story.last={kind,scene:'story_'+kind,title:'⏳ Последствия продолжаются.',
       description:'Прошёл ещё один день. Проводите спасательные работы и восстанавливайте город.',

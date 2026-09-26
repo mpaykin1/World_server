@@ -28,6 +28,23 @@ const PROJECTS={
 const FIRST=['Арина','Борис','Вера','Глеб','Дина','Егор','Жанна','Илья','Кира','Лев'];
 const LAST=['Тихая','Речной','Зорина','Каменев','Лесная','Ветров','Соколова','Горин'];
 const INSIGHT_STREAK_REQUIRED=8;
+const NARRATIVE_IMPACTS=Object.freeze(Object.fromEntries(Object.entries({
+ dragon_fire:{power:-12,water:-7,food:-5,budget:-30,ecology:-12,health:-9,population:-3},
+ fire:{power:-7,water:-5,budget:-16,ecology:-8,health:-5,population:-1},
+ flood:{power:-7,food:-8,budget:-15,health:-5,population:-2},
+ storm:{power:-10,budget:-11,health:-3,ecology:-3},
+ earthquake:{power:-9,water:-6,budget:-20,health:-6,population:-2},
+ meteor:{power:-12,food:-9,budget:-24,ecology:-9,health:-7,population:-2},
+ epidemic:{health:-12,budget:-7,population:-2},attack:{power:-10,budget:-19,health:-7,population:-2},
+ drought:{water:-18,food:-8,ecology:-5,health:-4},dragon_help:{budget:24,ecology:3,health:2},
+ dragon_arrival:{budget:-3},rain:{water:16,food:3,ecology:3},forest:{ecology:12,health:2,budget:-6},
+ festival:{budget:-9,health:4},trade:{budget:17,food:-3},rescue:{health:8,budget:-7},unknown:{}
+}).map(([kind,impact])=>[kind,Object.freeze(impact)])));
+const NARRATIVE_AFTERMATH=Object.freeze({
+ burning:Object.freeze({power:-4,ecology:-3,health:-2,budget:-2}),
+ flood:Object.freeze({food:-3,health:-1,budget:-2}),
+ default:Object.freeze({budget:-2,health:-1})
+});
 function resident(seed,building,floor,flat){
  const n=hash(seed+':'+building+':'+floor+':'+flat);
  return {id:'npc-'+hash(seed)+'-'+building+'-'+floor+'-'+flat,name:FIRST[n%FIRST.length]+' '+LAST[(n>>>7)%LAST.length],building,floor,flat,fictional:true};
@@ -49,6 +66,34 @@ function canonicalResidents(world){
 function ensureResidents(world){
  world.residents=canonicalResidents(world);
  return world.residents;
+}
+function applyResourceDelta(world,delta){
+ const next=copy(world);
+ const entries=Object.entries(delta||{});
+ for(const [key,amount] of entries){
+  if(!Number.isFinite(amount))throw Error('INVALID_RESOURCE_DELTA');
+  if(key!=='population'&&!Object.hasOwn(next.resources,key))throw Error('UNKNOWN_RESOURCE');
+ }
+ const populationDelta=Object.hasOwn(delta||{},'population')?delta.population:0;
+ next.population=clamp((next.population||0)+populationDelta,1,Number.MAX_SAFE_INTEGER);
+ for(const [key,amount] of entries){
+  if(key!=='population'){
+   const lower=key==='budget'?-10000:0;
+   const upper=key==='budget'?100000:key==='workers'?next.population:100;
+   next.resources[key]=clamp((next.resources[key]||0)+amount,lower,upper);
+  }
+ }
+ return next;
+}
+function applyNarrativeEvent(world,kind){
+ if(!Object.hasOwn(NARRATIVE_IMPACTS,kind))throw Error('UNKNOWN_NARRATIVE_EVENT');
+ const next=applyResourceDelta(world,NARRATIVE_IMPACTS[kind]);
+ next.revision++;
+ return next;
+}
+function applyNarrativeAftermath(world,kind){
+ const group=kind==='dragon_fire'||kind==='fire'?'burning':kind==='flood'?'flood':'default';
+ return applyResourceDelta(world,NARRATIVE_AFTERMATH[group]);
 }
 function createWorld(seed='city'){
  const n=hash(seed);const resources={power:40+n%15,water:65,food:62,budget:150,ecology:75,health:75,jobs:36,workers:18,culture:25};
@@ -204,7 +249,7 @@ function address(world,houseId,floor,flat){
  const residents=canonicalResidents(world);
  return residents.find(npc=>npc.building===houseId&&npc.floor===floor&&npc.flat===flat)||null;
 }
-const worldConsequenceEngine={PROJECTS,createWorld,interpretIntent,preview,commit,tick,propose,proposeGenieCards,genieOptions,evaluateProposal,simulateTicks,address,resident,residentDirectory};
+const worldConsequenceEngine={PROJECTS,NARRATIVE_IMPACTS,NARRATIVE_AFTERMATH,createWorld,interpretIntent,preview,commit,tick,propose,proposeGenieCards,genieOptions,evaluateProposal,simulateTicks,address,resident,residentDirectory,applyResourceDelta,applyNarrativeEvent,applyNarrativeAftermath};
 // One arithmetic implementation serves Node and the Supabase Edge adapter.
 // The global export keeps the file executable as a Deno side-effect import;
 // CommonJS remains the canonical Node/test interface.
