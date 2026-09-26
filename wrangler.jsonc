@@ -18,5 +18,13 @@
     "crons": [
       "*/5 * * * *"
     ]
-  }
+  },
+  "d1_databases": [
+    {
+      "binding": "TELEGRAM_DB",
+      "database_name": "world-server-telegram-state",
+      "database_id": "29b33c0d-7a0a-4a4c-a282-3fc9583e6cdb",
+      "migrations_dir": "migrations/telegram-d1"
+    }
+  ]
 }
