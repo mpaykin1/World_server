@@ -950,3 +950,5 @@ Task: implement original worker-safe face culling and compact typed-array mesh o
 2026-09-26 integration bridge: current apps/voxel-world/client.js already has Golden CanvasTexture atlas and per-chunk Uint8Array indexed (y*CHUNK+z)*CHUNK+x. Do not replace Golden materials or duplicate atlas in production. Add opt-in chunk snapshot conversion to the existing worker protocol, preserving world-coordinate edge neighbors. Tests and live renderer integration remain pending.
 
 2026-09-26 copy-only scope: independent standalone versioned voxel chunk save codec with strict bounds and round-trip tests; no game integration, no upstream copyrighted files.
+
+2026-09-26 copy-only scope extension: standalone seeded visual tour manifest and cross-engine asset provenance schema, independently written after studying Godot/Unity/Unreal DEVELOPMENT.md. No renderer/game integration and no upstream file copying.
