@@ -1008,3 +1008,5 @@ Task: implement original worker-safe face culling and compact typed-array mesh o
 2026-09-26 standalone: studied actual Unreal Render/MCTextureRecipes.cpp Mottle and StoneLike (fBm two-color mottle, dark vein threshold, height reduction). Independently compose original tileable noise into original stone albedo/height maps; deterministic standalone tests. No upstream assets/code copied or live integration.
 
 2026-09-26 standalone: studied actual Unreal MCTextureRecipes.cpp Rings/Bark: rounded-square growth rings with fBm wobble and anisotropic rim grain; independently implement wood-end material with original colors and tests. No upstream assets/code or live integration.
+
+2026-09-26 standalone: read Unreal MCTextureRecipes.cpp Bark anisotropic ridges and birch lenticels; independently implement original bark material and tests, no copied source/assets or game integration.
