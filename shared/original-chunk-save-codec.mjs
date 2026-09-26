@@ -1,5 +1,5 @@
 /** Original portable chunk save codec; no upstream code or game integration. */
-const MAGIC=[87,83,67,72],VERSION=1,HEADER=22,MAX=262144;
+const MAGIC=[87,83,67,72],VERSION=1,HEADER=24,MAX=262144;
 const checkSize=size=>{
  if(!Array.isArray(size)||size.length!==3||size.some(n=>!Number.isSafeInteger(n)||n<1||n>256))throw new RangeError('size');
  const count=size[0]*size[1]*size[2];
@@ -16,7 +16,7 @@ export function encodeOriginalChunk({size,origin=[0,0,0],blocks}){
  out.set(MAGIC);view.setUint8(4,VERSION);view.setUint8(5,0);
  size.forEach((n,i)=>view.setUint16(6+i*2,n,true));
  origin.forEach((n,i)=>view.setInt32(12+i*4,n,true));
- // Header occupies 24 bytes: magic 4 + version 1 + flags 1 + size 6 + origin 12.
+ for(let i=0;i<count;i++)view.setUint16(HEADER+i*2,blocks[i],true);
  return out;
 }
 export function decodeOriginalChunk(bytes){
