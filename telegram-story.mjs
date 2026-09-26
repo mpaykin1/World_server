@@ -89,7 +89,8 @@ function enactWorldEvent(world,input){
   next.story=storyState(next);next.revision++;
   change(next,IMPACT[kind]||{});
   let target='';
-  if(BURNING.has(kind)||['earthquake','meteor','attack'].includes(kind))
+  if(BURNING.has(kind)||['earthquake','meteor','attack'].includes(kind)||
+     (['flood','storm'].includes(kind)&&/смы|разруш|снес|разбил|уничтож/i.test(input.text)))
     target=destroyStructure(next,input.text);
   if(THREATS.has(kind))
     next.story.active={kind,severity:kind==='dragon_fire'?3:2,age:0,target};
@@ -191,8 +192,10 @@ export function applyStoryText(world,text){
 }
 export function advanceStoryDay(previous,world){
   const active=previous.story?.active;
-  if(!active)return world;
+  const rebuilding=previous.story?.ruins?.some(x=>x.rebuilding);
+  if(!active&&!rebuilding)return world;
   const next=structuredClone(world);next.story=structuredClone(previous.story);
+  if(active){
   const incident=next.story.active;incident.age++;
   if(incident.age>=3){
     next.story.active=null;
@@ -209,12 +212,20 @@ export function advanceStoryDay(previous,world){
       description:'Прошёл ещё один день. Проводите спасательные работы и восстанавливайте город.',
       text:'',target:incident.target};
   }
+  }
+  let restored='';
   for(const ruin of next.story.ruins||[]){
     if(ruin.rebuilding&&next.projects.some(x=>x.id===ruin.rebuilding&&x.active)){
-      ruin.complete=true;
+      ruin.complete=true;restored=ruin.name;
     }
   }
   next.story.ruins=next.story.ruins.filter(x=>!x.complete);
+  if(restored){
+    next.story.last={kind:'recovery',scene:'story_recovery',
+      title:'🏘 Объект снова построен: '+restored+'.',
+      description:'Новый объект готов после строительства. Его вклад в ресурсы начнётся со следующего игрового дня.',
+      text:'',target:restored};
+  }
   closeCrisis(next);
   return next;
 }
