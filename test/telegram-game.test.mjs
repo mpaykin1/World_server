@@ -241,6 +241,22 @@ test('dragon story sent through My Variant burns structures and shows rescue cho
   assert.match(a.calls.filter(x=>x.method==='sendAnimation').at(-1)
     .payload.animation,/story_extinguish-\d\.mp4$/);
 });
+test('D1 callback repairs malformed active incidents without spending resources',async()=>{
+  for(const active of [{},'fire']){
+    const e=env(),a=mockApi();
+    const session=await loadSession(e.TELEGRAM_DB,42);
+    session.world.story={active,ruins:[],last:null,evacuated:0};
+    e.TELEGRAM_DB.rows.get('42').world=JSON.stringify(session.world);
+    const before=structuredClone(session.world);
+    assert.equal((await post(e,a,callback(1,'tg2:0:defend'))).status,200);
+    const saved=await loadSession(e.TELEGRAM_DB,42);
+    assert.equal(saved.world.story.active,null);
+    assert.equal(saved.world.story.last.kind,'blocked');
+    assert.deepEqual(saved.world.resources,before.resources);
+    assert.equal(saved.world.population,before.population);
+    assert(Object.values(saved.world.resources).every(Number.isFinite));
+  }
+});
 test('unsolicited free-form story, unrelated to menu state, is still executed',async()=>{
   const e=env(),a=mockApi();
   await post(e,a,start(1));
