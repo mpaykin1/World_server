@@ -998,3 +998,5 @@ Task: implement original worker-safe face culling and compact typed-array mesh o
 2026-09-26 standalone: original enclosed-voxel visibility masks inspired by Godot mesher.gd. No runtime integration.
 
 2026-09-26 copy-only: studied Unity Lighting.cs vertical sky initialization, expose-depth and six-neighbor sky flood (15 downward exception); independently implement bounded skylight volume and standalone tests, no runtime integration.
+
+2026-09-26 standalone: studied Unity Lighting.cs UpdateChannel/PropagateWorld two-phase incremental sky updates. Implement correctness-first independent edit relight with changed-cell and affected-section metadata; no game integration.
