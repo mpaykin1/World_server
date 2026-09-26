@@ -8,7 +8,7 @@ import {fileURLToPath} from 'node:url';
 
 const require=createRequire(import.meta.url);
 const engine=require('../lib/world-consequence-engine.js');
-const {applyStoryText,advanceStoryDay}=await import('../telegram-story.mjs');
+const {applyStoryText,applyStoryAction,advanceStoryDay}=await import('../telegram-story.mjs');
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 
 test('actual Edge global and Node wrapper expose identical narrative arithmetic',()=>{
@@ -84,4 +84,46 @@ test('Telegram story transport has exact parity with canonical event and afterma
   assert.deepEqual(actualDay.resources,expectedDay.resources);
   assert.equal(actualDay.population,expectedDay.population);
   assert.equal(actualDay.revision,expectedDay.revision);
+});
+
+test('evacuation and bounded return use canonical population arithmetic',()=>{
+  const initial=engine.createWorld('canonical-evacuation');
+  initial.resources.workers=initial.population;
+  const threat=applyStoryText(initial,'Прилетел дракон и сжёг город').world;
+  const moved=Math.min(4,threat.population-1);
+  const evacuated=applyStoryAction(threat,'evacuate').world;
+  assert.equal(evacuated.population,threat.population-moved);
+  assert.equal(evacuated.story.evacuated,moved);
+  assert.equal(evacuated.revision,threat.revision+1);
+  assert(evacuated.resources.workers<=evacuated.population);
+
+  const safe=structuredClone(evacuated);safe.story.active=null;
+  let previous=safe,returned=0;
+  while(previous.story.evacuated>0){
+    const ticked=engine.tick(previous);
+    const next=advanceStoryDay(previous,ticked);
+    const count=next.history.at(-1).count;
+    assert.equal(next.history.at(-1).kind,'telegram_story_return');
+    assert(count>0&&count<=2);
+    assert.equal(next.population,ticked.population+count);
+    assert.equal(next.revision,ticked.revision);
+    returned+=count;previous=next;
+  }
+  assert.equal(returned,moved);
+  assert.equal(previous.story.evacuated,0);
+});
+
+test('population-only deltas cap workers and malformed evacuation state repairs safely',()=>{
+  const world=engine.createWorld('evacuation-legacy');
+  world.population=3;world.resources.workers=9;
+  const reduced=engine.applyResourceDelta(world,{population:-2});
+  assert.equal(reduced.population,1);
+  assert.equal(reduced.resources.workers,1);
+  assert.equal(world.resources.workers,9);
+
+  const legacy=structuredClone(world);
+  legacy.story={active:null,ruins:[],last:null,evacuated:Number.MAX_VALUE};
+  const advanced=advanceStoryDay(legacy,engine.tick(legacy));
+  assert.equal(advanced.story.evacuated,0);
+  assert(!advanced.history.some(event=>event.kind==='telegram_story_return'));
 });
