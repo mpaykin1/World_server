@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {engine,initialWorld,options,applyPlan,loadSession,saveSession,view} from '../telegram-state.mjs';
-import {handleTelegramWebhook,webhookSecret,registerTelegramWebhook,telegramStatus} from '../telegram-game.mjs';
+import {handleTelegramWebhook,webhookSecret,registerTelegramWebhook,telegramStatus,activateTelegramWebhook} from '../telegram-game.mjs';
 const TOKEN='123456:FAKE_EXAMPLE_ONLY_ABCDEFGHIJKLMNOP';
 const URL='https://world-server.mmmpaykin.workers.dev/api/telegram/webhook';
 
@@ -67,7 +67,7 @@ function callback(id,data){return{update_id:id,callback_query:{
   id:'query-'+id,data,message:{chat}
 }};}
 function text(id,message){return{update_id:id,message:{chat,text:message}};}
-function env(){return{TELEGRAM_BOT_TOKEN:TOKEN,TELEGRAM_DB:new MockD1()};}
+function env(){return{TELEGRAM_BOT_TOKEN:TOKEN,TELEGRAM_DB:new MockD1(),TELEGRAM_HEALTH_KEY:'test_only_health_admin_secret_1234567890'};}
 
 test('canonical world uses repeatable seed and feasible choices',()=>{
   assert.deepEqual(initialWorld(42),initialWorld(42));
@@ -169,11 +169,20 @@ test('health checks readiness and cron does not rewrite a matching webhook',asyn
   const e=env(),a=mockApi();
   assert.equal(await registerTelegramWebhook(e,a.fetcher),true);
   assert.deepEqual(a.calls.map(x=>x.method),['getWebhookInfo']);
-  const res=await telegramStatus(e,a.fetcher);
+  const request=new Request('https://world-server.mmmpaykin.workers.dev/api/telegram/status',{
+    headers:{'x-world-server-admin-token':e.TELEGRAM_HEALTH_KEY}
+  });
+  assert.equal((await telegramStatus(new Request(request.url),e,a.fetcher)).status,403);
+  assert.equal((await activateTelegramWebhook(new Request(request.url,{method:'POST'}),e,a.fetcher)).status,403);
+  const res=await telegramStatus(request,e,a.fetcher);
   assert.equal(res.status,200);
   assert.equal((await res.json()).botUsername,'World_serverbot');
   const miss=mockApi({webhookUrl:''});
   assert.equal(await registerTelegramWebhook(e,miss.fetcher),true);
   assert.deepEqual(miss.calls.map(x=>x.method),['getWebhookInfo','setWebhook']);
   assert.equal(miss.calls[1].payload.secret_token,await webhookSecret(TOKEN));
+  const activation=new Request('https://world-server.mmmpaykin.workers.dev/api/telegram/activate',{
+    method:'POST',headers:{'x-world-server-admin-token':e.TELEGRAM_HEALTH_KEY}
+  });
+  assert.equal((await activateTelegramWebhook(activation,e,miss.fetcher)).status,200);
 });
