@@ -110,7 +110,9 @@ export function turnDescription(before,after,scene){
   return lines.join('\n');
 }
 export function sceneMedia(scene,world,updateId=0){
-  const variant=hash([scene.id,world.seed,world.tick,world.revision,updateId].join(':'))%3;
+  const variant=scene.id.startsWith('progress_')&&scene.project
+    ? Math.max(0,Math.min(2,3-scene.project.remaining))
+    :hash([scene.id,world.seed,world.tick,world.revision,updateId].join(':'))%3;
   const name=scene.id+'-'+variant;
   return {
     kind:ANIMATED.has(scene.id)?'animation':'photo',
