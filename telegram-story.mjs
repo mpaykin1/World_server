@@ -22,8 +22,16 @@ const TITLE={
 };
 const evacuatedCount=story=>Number.isSafeInteger(story?.evacuated)&&story.evacuated>0
   ?story.evacuated:0;
+function activeIncident(value){
+  if(!value||typeof value!=='object'||Array.isArray(value))return null;
+  if(!THREATS.has(value.kind))return null;
+  if(!Number.isSafeInteger(value.severity)||value.severity<1||value.severity>3)return null;
+  if(!Number.isSafeInteger(value.age)||value.age<0||value.age>2)return null;
+  return value;
+}
 function storyState(world){
   const state=world.story||{active:null,ruins:[],last:null,evacuated:0};
+  state.active=activeIncident(state.active);
   state.evacuated=evacuatedCount(state);
   return state;
 }
@@ -103,13 +111,13 @@ function reject(world,description){
 }
 function rescueTarget(world){
   const s=world.story;
-  return s?.active||s?.ruins?.length;
+  return activeIncident(s?.active)||s?.ruins?.length;
 }
 export function applyStoryAction(world,action,text=''){
   if(!STORY_ACTIONS.has(action))return reject(world,'Неизвестное действие.');
   if(!rescueTarget(world)&&action!=='relief')
     return reject(world,'Сейчас нет активной угрозы или разрушений.');
-  if((action==='evacuate'||action==='defend')&&!world.story?.active)
+  if((action==='evacuate'||action==='defend')&&!activeIncident(world.story?.active))
     return reject(world,'Сейчас нет активной угрозы для этого действия.');
   let next=structuredClone(world);next.story=storyState(next);
   const initialIncident=next.story.active,initialResources=next.resources;
@@ -179,11 +187,12 @@ export function applyStoryText(world,text){
   return enactWorldEvent(world,intent);
 }
 export function advanceStoryDay(previous,world){
-  const active=previous.story?.active;
+  const active=activeIncident(previous.story?.active);
   const rebuilding=previous.story?.ruins?.some(x=>x.rebuilding);
   const evacuated=evacuatedCount(previous.story);
+  const activeNeedsRepair=previous.story?.active!=null&&!active;
   const evacuationNeedsRepair=previous.story&&previous.story.evacuated!==evacuated;
-  if(!active&&!rebuilding&&!evacuated&&!evacuationNeedsRepair)return world;
+  if(!active&&!rebuilding&&!evacuated&&!evacuationNeedsRepair&&!activeNeedsRepair)return world;
   let next=structuredClone(world);
   next.story=storyState({story:structuredClone(previous.story)});
   if(active){
