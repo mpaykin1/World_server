@@ -57,6 +57,16 @@ async function onCommand(message,updateId,env,fetcher){
   const db=env.TELEGRAM_DB,chatId=message.chat.id;
   const session=await loadSession(db,chatId);
   if(updateId<=session.lastUpdate)return;
+  if(/^\/link(?:@\w+)?(?:\s|$)/i.test(message.text||'')){
+    const {issueLinkCode}=await import('./chain-session.mjs');
+    const code=await issueLinkCode(db,chatId);
+    const updated=await saveSession(db,session,{updateId});
+    if(updated)await botApi(env.TELEGRAM_BOT_TOKEN,'sendMessage',{
+      chat_id:chatId,text:'🔗 Код для объединения с браузером: '+code+
+        '\nОткрой сайт игры → меню → «Связать с Telegram». Код действует 10 минут и только один раз.'
+    },fetcher);
+    return;
+  }
   const reset=/^\/new(?:@\w+)?(?:\s|$)/i.test(message.text||'');
   const world=reset?initialWorld(chatId,session.restart+1):session.world;
   const updated=await saveSession(db,session,{
@@ -173,7 +183,7 @@ export async function handleTelegramWebhook(request,env,fetcher=fetch){
   const id=update?.update_id;
   if(!Number.isSafeInteger(id)||id<0)return new Response('Invalid update',{status:400});
   if(update.message?.text){
-    if(/^\/(start|help|new)(?:@\w+)?(?:\s|$)/i.test(update.message.text))
+    if(/^\/(start|help|new|link)(?:@\w+)?(?:\s|$)/i.test(update.message.text))
       await onCommand(update.message,id,env,fetcher);
     else await onText(update.message,id,env,fetcher);
   }else if(update.callback_query)await onCallback(update.callback_query,id,env,fetcher);
