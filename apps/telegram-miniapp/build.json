@@ -2,5 +2,8 @@
   "scratchSha256": "8fe1553124471d126e1ff61928bfb4e9693c5c5a3473c88140eb82f8ff5e715e",
   "packager": "@turbowarp/packager@3.13.0",
   "bytes": 4856336,
-  "generatedAt": "2026-09-27"
+  "generatedAt": "2026-09-27",
+  "compiledSha256": "b9eb8fb77202c3a93228ea0c03dfd73ef7aa1f0aa5b37e9aca7a6974c03a8e01",
+  "hostedUrl": "https://mpaykin1.github.io/scratch-chain-reaction/miniapp/game.html",
+  "sourceRepoCommit": "29707f9512c48e91b9cd3a1a7f761ede21ed9858"
 }
