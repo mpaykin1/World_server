@@ -5,10 +5,25 @@ const ALIASES = Object.freeze({
   woods: "forest", electricity: "energy", power: "energy",
   concept: "idea", human: "villager",
 });
+// Declarative only: canonical world-consequence-engine owns all resource/economy mutations.
+export const GAMEPLAY_BLOCKS = Object.freeze({
+  barren: {footprint:[4,4], sockets:[], capabilities:["terrain"], events:[]},
+  city: {footprint:[4,4], sockets:["road","energy"], capabilities:["settlement","repair"], events:["city.build","city.damage"]},
+  forest: {footprint:[4,4], sockets:["terrain"], capabilities:["ecology","flammable","regrowth"], events:["forest.plant","forest.damage"]},
+  river: {footprint:[4,4], sockets:["water"], capabilities:["water"], events:["river.place"]},
+  volcano: {footprint:[4,4], sockets:["terrain"], capabilities:["hazard"], events:["volcano.activate"]},
+  energy: {footprint:[4,4], sockets:["energy"], capabilities:["power_generation"], events:["energy.build"]},
+  idea: {footprint:[2,2], sockets:[], capabilities:["idea"], events:["idea.discover"]},
+  villager: {footprint:[1,1], sockets:["road"], capabilities:["resident","actor"], events:["resident.move"]},
+});
 export function voxelType(raw) {
   const key = String(raw || "").trim().toLowerCase();
   const result = ALIASES[key] || key;
   return WORLD_VOXEL_TYPES.includes(result) ? result : null;
+}
+export function gameplayBlock(raw) {
+  const type = voxelType(raw);
+  return type ? GAMEPLAY_BLOCKS[type] : null;
 }
 export function validVoxelManifest(manifest) {
   if (manifest?.schemaVersion !== 1 || !Array.isArray(manifest.entities)) return false;
