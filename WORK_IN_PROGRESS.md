@@ -1023,3 +1023,9 @@ Local final evidence:
 ### Fleet BLOCK repair — malformed active incidents
 
 Superseding independent PRE comment `5850438921` returned exact head `9f66bd6e09e5e50e212a95b940949f64cdacc757`: any truthy malformed `story.active` could authorize incident actions, spend resources, create non-finite severity, or throw on primitive state. Repair in the existing PR only: validate the incident object, supported threat kind, severity 1..3 and age 0..2 before eligibility or mutation; normalize corrupt saved state to `null`; cover both direct Node action calls and the D1-backed Edge/Telegram callback path. Previous READY handoff is withdrawn until fresh exact-head checks and an independent PRE pass.
+
+### Fleet repair hardening — malformed story containers
+
+Follow-up review of the same persistence boundary found that a corrupt legacy `story` container or non-array `story.ruins` can still throw during normalization/day advance, or make a string `ruins` value appear to be a rescue target. Extend the existing PR only: normalize the story envelope and ruins collection before eligibility or mutation, make daily rebuild detection array-safe, and add direct Node plus D1-backed Telegram regressions. Preserve valid incidents, ruins and all canonical engine arithmetic. Re-run the focused suites and every exact-head cloud gate; the candidate remains draft until a fresh independent Fleet verdict.
+
+Final local evidence: focused canonical engine, Node story and actual D1-backed Telegram suites **56/56 PASS**; `node --check telegram-story.mjs`, agent rules and `git diff --check` PASS. The repair covers primitive/array story envelopes and string/object ruins collections without resource or population mutation. Next: push the same PR branch, require fresh exact-head cloud checks and a new Fleet PRE verdict; no merge, deployment or live claim by Builder.
