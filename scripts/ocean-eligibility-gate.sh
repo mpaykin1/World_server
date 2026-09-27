@@ -23,6 +23,12 @@ CURRENT_MASTER="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/master" \
   --jq '.object.sha')"
 test "$BASE_SHA" = "$CURRENT_MASTER"
 
+# The separate, source-trusted .github/workflows/independent-pr-review.yml
+# publishes "World Independent Adversarial Review" on the exact PR HEAD,
+# on pull_request_target or workflow_dispatch. It is deliberately NOT
+# manufactured by Fleet; Fleet must wait for an independent verdict.
+# After an actual rebase onto the latest master, BASE_SHA equals
+# CURRENT_MASTER. If master advances again, fail closed until revalidated.
 for ((attempt=1; attempt<=POLL_ATTEMPTS; attempt++)); do
   REVIEW="$(gh api -H 'Accept: application/vnd.github+json' \
     "repos/${GITHUB_REPOSITORY}/commits/${EXPECTED}/check-runs" \
