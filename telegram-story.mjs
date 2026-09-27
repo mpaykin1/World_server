@@ -115,15 +115,39 @@ function shootAtDragon(world,text=''){
   next=engine.applyResourceDelta(next,{budget:-5});
   next.revision++;
   next.story.dragon.hp=Math.max(0,dragon.hp-28);
-  const defeated=next.story.dragon.hp===0;
-  next.story.dragon.active=!defeated;
+  const hp=next.story.dragon.hp,defeated=hp===0;
+  const cityExists=next.projects.some(p=>
+    ['luxury_arcology','tourism','temple'].includes(p.type));
+  const strongDefense=next.resources.power>=65&&next.resources.health>=80;
+  const retreats=!defeated&&(hp<=44||strongDefense);
+  const counterattacks=!defeated&&!retreats&&cityExists;
+  next.story.dragon.active=!defeated&&!retreats;
+  next.story.dragon.retreating=retreats;
+  let target='';
+  if(counterattacks){
+    // All population/resource arithmetic remains with the ONE canonical engine.
+    next=engine.applyNarrativeEvent(next,'dragon_fire');
+    target=destroyStructure(next,'город','dragon_fire');
+    next.story.active={kind:'dragon_fire',severity:3,age:0,target};
+    next.history.push({tick:next.tick,kind:'telegram_story_dragon_counterattack',
+      target,remaining:hp});
+  }else if(retreats){
+    next.history.push({tick:next.tick,kind:'telegram_story_dragon_retreat',
+      remaining:hp});
+  }
   next.story.last={kind:'defense',scene:'story_defense',
-    title:defeated?'🏹 Дракон повержен!':'🏹 Люди стреляют в дракона!',
+    reaction:counterattacks?'dragon_counterattack':retreats?'dragon_retreat':
+      defeated?'dragon_defeat':'dragon_wounded',
+    title:defeated?'🏹 Дракон повержен!':retreats?'🐉 Раненый дракон отступил!':
+      '🏹 Люди стреляют в дракона!',
     description:defeated?'Город защищён. Угроза миновала.':
-      'Дракон ранен. Осталось здоровья: '+next.story.dragon.hp+'.',
+      counterattacks?'Дракон ранен, но ответил огнём. Повреждён объект: '+target+
+        '. Начался пожар: вода, здоровье, население и бюджет пострадали.':
+      retreats?'Дракон потерял решимость и покинул город. Пожар и руины остаются.':
+      'Дракон ранен. Осталось здоровья: '+hp+'.',
     text:String(text).slice(0,190),target:'dragon'};
   next.history.push({tick:next.tick,kind:'telegram_story_shoot',
-    damage:28,remaining:next.story.dragon.hp});
+    damage:28,remaining:hp});
   return{world:next,accepted:true,action:'story',kind:'defense'};
 }
 export function applyStoryAction(world,action,text=''){
