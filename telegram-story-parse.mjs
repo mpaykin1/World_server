@@ -71,12 +71,17 @@ function classifyArchery(text){
   if(!shot||!bow)return null;
   const before=text.slice(0,shot.index);
   const after=text.slice(shot.index+shot[0].length);
-  const humanActor=/(?:^|[.!?]\s*)(?:люди|жители|горожане|лучники|воины|солдаты|мы|people|citizens|archers|we)(?:\s|$)[^.!?]{0,60}$/i.test(before);
-  const explicitDragon=/(?:дракон(?:а|у|ом)?|dragon)/i.test(after);
+  const humanActor=/(?:^|[.!?]\s*)(?:люди|жители|горожане|лучники|воины|солдаты|мы|people|citizens|archers|we)(?:\s|$)[^.!?]{0,60}$/i.test(before)&&
+    !/(?:дракон|dragon)/i.test(before);
+  const negated=/(?:^|\s)(?:не|not)\s*$/i.test(before)||
+    /(?:^|\s)(?:не\s+(?:будут|стали|хотят)|not\s+going\s+to)\s*$/i.test(before);
+  const explicitDragon=/(?:(?:в|по)\s+дракон(?:а|у|ом)?(?:\s|$)|at\s+(?:the\s+)?dragon)/i.test(after);
   const pronoun=/(?:(?:в|по)\s+(?:него|нему)(?:\s|$)|(?:at\s+him|him))/i.test(after);
+  const negativeTarget=/(?:не\s+(?:в|по)\s+(?:дракон|него|нему)|not\s+at\s+(?:the\s+)?dragon)/i.test(after);
   const otherTarget=/(?:(?:в|по)\s+(?!дракон|него(?:\s|$)|нему(?:\s|$))[а-яёa-z-]{2,}|(?:волк\w*|медвед\w*|мишен\w*|монстр\w*|людей|жителей|wolf|bear|target|people))/i.test(after);
   const competingReferent=pronoun&&/(?:волк\w*|медвед\w*|мишен\w*|монстр\w*|wolf|bear|target)/i.test(before);
-  if(humanActor&&(explicitDragon||pronoun)&&!otherTarget&&!competingReferent)
+  if(humanActor&&!negated&&!negativeTarget&&(explicitDragon||pronoun)&&
+     !otherTarget&&!competingReferent)
     return{kind:'action',action:'shoot_dragon',text,recognized:true};
   return{kind:'clarification',text,recognized:true,description:
     'Уточни одним предложением, кто стреляет и в кого. Например: «Лучники стреляют в дракона из луков».'};
