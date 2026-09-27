@@ -79,8 +79,8 @@ function classifyArchery(text){
   const after=text.slice(shot.index+shot[0].length);
   const humanActor=/^\s*(?:люди|жители|горожане|лучники|воины|солдаты|мы|people|citizens|archers|we)(?:\s|$)[^.!?]{0,60}$/i.test(clauseBefore)&&
     !/(?:дракон|dragon)/i.test(clauseBefore);
-  const negated=/(?:^|\s)(?:не|ни|нет|без|(?:отказ|перест|прекрат|избег)[а-яё]*)(?=\s|$)/i.test(clauseBefore)||
-    /\b(?:not|never|cannot|cant|can't|wont|won't|dont|don't|doesnt|doesn't|didnt|didn't|refus\w*|stop\w*|avoid\w*|unable)\b/i.test(clauseBefore);
+  const negated=/(?:^|\s)(?:не|ни|нет|без|(?:отказ|перест|прекрат|избег|неспособ|закончил)[а-яё]*)(?=\s|$)/i.test(clauseBefore)||
+    /\b(?:not|never|cannot|cant|can't|wont|won't|dont|don't|doesnt|doesn't|didnt|didn't|refus\w*|stop\w*|avoid\w*|unable|incapable|declin\w*|quit\w*|ceas\w*)\b/i.test(clauseBefore);
   const explicitDragon=/(?:(?:в|по)\s+дракон(?:а|у|ом)?(?:\s|$)|at\s+(?:the\s+)?dragon|^\s*(?:the\s+)?dragon(?:\s|$))/i.test(after);
   const pronoun=/(?:(?:в|по)\s+(?:него|нему)(?:\s|$)|(?:at\s+him|him))/i.test(after);
   const negativeTarget=/(?:не\s+(?:в|по)\s+(?:дракон|него|нему)|not\s+at\s+(?:the\s+)?dragon)/i.test(after);
