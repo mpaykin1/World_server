@@ -6,6 +6,7 @@ const bytes=n=>crypto.getRandomValues(new Uint8Array(n));
 export const hashHex=async value=>[...new Uint8Array(await crypto.subtle.digest(
   'SHA-256',enc.encode(value)))].map(x=>x.toString(16).padStart(2,'0')).join('');
 export function newBrowserToken(){
+  const b=bytes(32);
   return btoa(String.fromCharCode(...b)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
   return btoa(String.fromCharCode(...b)).replace(/\\+/g,'-').replace(/\\//g,'_').replace(/=+$/,'');
 }
