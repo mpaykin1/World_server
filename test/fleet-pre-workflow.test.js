@@ -123,3 +123,17 @@ test('newest independent failed review supersedes prior success',t=>{
   assert.equal(jq.status,0,jq.stderr);
   assert.match(jq.stdout,/^completed\tfailure/);
 });
+
+test('independent reviewer is a separate trusted workflow publishing the exact-head check',()=>{
+  const independent=fs.readFileSync(path.join(root,
+    '.github/workflows/independent-pr-review.yml'),'utf8');
+  assert.match(independent,/pull_request_target:/);
+  assert.match(independent,/workflow_dispatch:/);
+  assert.match(independent,/World Independent Adversarial Review/);
+  assert.match(independent,/head_sha="\$HEAD_SHA"/);
+  assert.match(gate,/independent-pr-review\.yml/);
+});
+test('freshly rebased PR matching current master is eligible after a real review PASS',()=>{
+  const result=runGate('success',{base:'latest-master',master:'latest-master'});
+  assert.equal(result.status,0,result.stderr);
+});
