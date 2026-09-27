@@ -73,7 +73,7 @@ function classifyArchery(text){
   const clauseBreak=Math.max(before.lastIndexOf('.'),before.lastIndexOf('!'),
     before.lastIndexOf('?'));
   const clauseBefore=before.slice(clauseBreak+1);
-  const priorText=before.slice(0,clauseBreak).trim();
+  const priorText=clauseBreak>=0?before.slice(0,clauseBreak).trim():'';
   const priorClause=priorText.slice(Math.max(priorText.lastIndexOf('.'),
     priorText.lastIndexOf('!'),priorText.lastIndexOf('?'))+1);
   const after=text.slice(shot.index+shot[0].length);
@@ -81,18 +81,22 @@ function classifyArchery(text){
   const bridge=String(actor?.[1]||'').trim();
   // Fail closed: only known positive auxiliaries/adverbs may occur between the
   // actor and the shooting verb. Unknown modality is clarified, never charged.
-  const positiveBridge=/^(?:быстро|сразу|метко|дружно|решительно|снова|вновь|уверенно|неохотно|уже|начинают|начали|решили|продолжают|продолжили|и|are|were|have|quickly|immediately|accurately|together|decisively|reluctantly|again|now|still|begin|began|start|started|continue|continued|decide|decided|trying|to)$/i;
+  const positiveBridge=/^(?:быстро|сразу|метко|дружно|решительно|снова|вновь|уверенно|неохотно|уже|сейчас|активно|внезапно|начинают|начали|решили|продолжают|продолжили|и|are|is|were|have|keep|keeps|quickly|immediately|accurately|together|decisively|reluctantly|actively|suddenly|again|now|still|begin|began|start|started|continue|continued|decide|decided|trying|to)$/i;
   const groundedBridge=!bridge||bridge.split(/\s+/).every(word=>positiveBridge.test(word));
   const humanActor=Boolean(actor)&&groundedBridge&&!/(?:дракон|dragon)/i.test(clauseBefore);
   const negated=/(?:^|\s)(?:не|ни|нет|без|(?:отказ|перест|прекрат|избег|неспособ|закончил)[а-яё]*)(?=\s|$)/i.test(clauseBefore)||
     /\b(?:not|never|cannot|cant|can't|wont|won't|dont|don't|doesnt|doesn't|didnt|didn't|refus\w*|stop\w*|avoid\w*|unable|incapable|declin\w*|quit\w*|ceas\w*)\b/i.test(clauseBefore);
   const explicitDragon=/(?:(?:в|по)\s+дракон(?:а|у|ом)?(?:\s|$)|at\s+(?:the\s+)?dragon|^\s*(?:the\s+)?dragon(?:\s|$))/i.test(after);
   const pronoun=/(?:(?:в|по)\s+(?:него|нему)(?:\s|$)|(?:at\s+him|him))/i.test(after);
+  const positiveAfter=/^(?:\s*(?:в|по)\s+(?:него|нему|дракон(?:а|у|ом)?)\s+(?:из\s+)?(?:лука|луков|стрел(?:а|ы|ами)?)(?:\s+(?:сейчас|активно|внезапно|сразу|метко))*|\s*(?:at\s+)?(?:him|(?:the\s+)?dragon)\s+(?:with\s+)?(?:bows?|arrows?)(?:\s+(?:now|actively|suddenly|immediately|accurately))*)\s*[.!?]*$/i.test(after);
   const negativeTarget=/(?:не\s+(?:в|по)\s+(?:дракон|него|нему)|not\s+at\s+(?:the\s+)?dragon)/i.test(after);
   const otherTarget=/(?:(?:в|по)\s+(?!дракон|него(?:\s|$)|нему(?:\s|$))[а-яёa-z-]{2,}|(?:волк\w*|медвед\w*|мишен\w*|монстр\w*|людей|жителей|wolf|bear|target|people))/i.test(after);
-  const competingReferent=pronoun&&/(?:волк\w*|медвед\w*|мишен\w*|монстр\w*|wolf|bear|target)/i.test(clauseBefore+' '+priorClause);
+  const priorDragon=/^(?:дракон|dragon)(?:\s+(?:рядом|здесь|летит|прилетел|nearby|here|flies|arrived))*\s*$/i.test(priorClause);
+  const competingReferent=pronoun&&(
+    /(?:волк\w*|медвед\w*|мишен\w*|монстр\w*|wolf|bear|target)/i.test(clauseBefore)||
+    (Boolean(priorClause)&&!priorDragon));
   if(humanActor&&!negated&&!negativeTarget&&(explicitDragon||pronoun)&&
-     !otherTarget&&!competingReferent)
+     positiveAfter&&!otherTarget&&!competingReferent)
     return{kind:'action',action:'shoot_dragon',text,recognized:true};
   return{kind:'clarification',text,recognized:true,description:
     'Уточни одним предложением, кто стреляет и в кого. Например: «Лучники стреляют в дракона из луков».'};
