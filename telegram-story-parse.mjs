@@ -53,6 +53,17 @@ const actionPatterns=[
   ['rebuild',/восстанов|отстро|почин|ремонт|rebuild/i],
   ['relief',/гуманитар|помочь пострадав|раздать.*(?:еду|воду)|relief/i]
 ];
+export function dragonPresent(world){
+  const story=world?.story;
+  if(!story)return false;
+  if(story.dragon!==undefined)return Boolean(story.dragon?.present);
+  // D1 worlds saved before the dragon entity was introduced still contain
+  // their private narrative history, even after an unrecognized follow-up.
+  return ['dragon_arrival','dragon_fire','dragon_help'].includes(story.last?.kind)||
+    story.active?.kind==='dragon_fire'||
+    Boolean(world.history?.some(event=>
+      /^telegram_story_dragon_(?:arrival|fire|help)$/.test(event.kind)));
+}
 export function classifyStoryText(value,world=null){
   const text=String(value||'').trim().slice(0,600);
   const dragon=/дракон|dragon|огнедышащ|змей горыныч/i.test(text);
@@ -66,7 +77,7 @@ export function classifyStoryText(value,world=null){
   const archers=/люди|жители|горожане|лучники|воины|солдаты|мы\b/i.test(text);
   const shooting=/стреля|выстрел|выпустили? стрел|пустили? стрел|луков|из лука|shoot.*arrow/i.test(text);
   const target=dragon||/в него|по нему|дракону|его из лук/i.test(text);
-  if(archers&&shooting&&target&&(dragon||world?.story?.dragon?.present))
+  if(archers&&shooting&&target&&(dragon||dragonPresent(world)))
     return{kind:'action',action:'shoot_dragon',text,recognized:true};
   if(dragon){
     const kind=destructive?'dragon_fire':benevolent?'dragon_help':'dragon_arrival';
