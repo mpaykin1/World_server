@@ -115,7 +115,7 @@ function rescueTarget(world){
 }
 function shootDragon(world,text=''){
   if(!dragonPresent(world))
-    return reject(world,'В этом мире нет дракона. Если ты нажал «Новый мир», прежний дракон остался в предыдущем мире. Сначала напиши «Прилетел дракон».');
+    return reject(world,'Здесь нет дракона. Если ты выбрал «Новый мир», дракон остался в прежнем. Напиши «Прилетел дракон».');
   if(world.resources.budget<5)
     return reject(world,'Для подготовки лучников нужно 5 единиц бюджета.');
   let next=structuredClone(world);next.story=storyState(next);
@@ -134,10 +134,10 @@ function shootDragon(world,text=''){
     };
   }
   const detail=fled
-    ?'Стрелы достигли цели. Раненый дракон покинул город, угроза снята.'
+    ?'Раненый дракон улетел. Угроза снята.'
     :hit
-      ?'Лучники ранили дракона. Он разозлился: теперь городу угрожает ответный огонь.'
-      :'Стрелы пролетели мимо. Дракон заметил нападение, ответный огонь возможен.';
+      ?'Дракон ранен и зол. Городу угрожает ответный огонь.'
+      :'Стрелы прошли мимо. Дракон разозлён; возможен ответный огонь.';
   next.story.last={kind:'defense',scene:'story_defense',
     title:'🏹 Лучники обстреляли дракона.',description:detail,text,target:'Дракон'};
   next.history.push({tick:next.tick,kind:'telegram_story_dragon_arrows',hit,fled});
