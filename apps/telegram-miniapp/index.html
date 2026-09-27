@@ -23,8 +23,8 @@ footer span{font-size:10px;flex:1;color:#a9d9ca;font-weight:500}
 <button class="alt" id="fullscreen" type="button">⛶ Экран</button>
 <a href="https://t.me/World_serverbot" id="bot">🧞 Бот</a></header>
 <main><div id="loading" role="status">🌱 Загружаем твой анимированный Scratch-мир…</div>
-<iframe id="game" src="https://mpaykin1.github.io/scratch-chain-reaction/miniapp/game.html" title="Анимированная Цепная реакция" allow="autoplay; fullscreen" allowfullscreen></iframe></main>
-<footer><span>Scratch-режим · прогресс пока отдельно от текстовой игры бота</span>
+<iframe id="game" src="https://mpaykin1.github.io/scratch-chain-reaction/player/" title="Анимированная Цепная реакция" allow="autoplay; fullscreen" allowfullscreen></iframe></main>
+<footer><span>Scratch-режим · прогресс пока отдельно от текстовой игры бота</span><a href="https://mpaykin1.github.io/scratch-chain-reaction/miniapp/game.html" title="Запасной режим">Запасной режим</a>
 <button class="alt" id="restart" type="button">↺ Заново</button></footer>
 <script>
 (()=>{
@@ -39,6 +39,6 @@ footer span{font-size:10px;flex:1;color:#a9d9ca;font-weight:500}
  game.addEventListener('error',()=>{
    document.getElementById('loading').textContent='Не удалось загрузить игру. Проверь соединение.';
  });
- document.getElementById('restart').onclick=()=>{game.src='https://mpaykin1.github.io/scratch-chain-reaction/miniapp/game.html'};
+ document.getElementById('restart').onclick=()=>{game.src='https://mpaykin1.github.io/scratch-chain-reaction/player/'};
 })();
 </script></body></html>
