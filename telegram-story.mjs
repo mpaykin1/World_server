@@ -248,6 +248,8 @@ export function applyStoryAction(world,action,text=''){
   return{world:next,accepted:true,action:'story',kind:name};
 }
 export function applyStoryIntent(world,intent){
+  if(intent.kind==='clarification')return reject(world,intent.description||
+    'Уточни, кто действует и на какую цель.');
   if(intent.kind==='build'){
     const type=supportedBuildType(intent.text);
     if(!type)return enactWorldEvent(world,{kind:'unknown',text:intent.text,requestedBuild:true});
@@ -258,7 +260,15 @@ export function applyStoryIntent(world,intent){
     result.world.projects.at(-1).intent.comment=intent.text;
     return{world:result.world,accepted:true,action:'start',kind:type};
   }
-  if(intent.kind==='action')return applyStoryAction(world,intent.action,intent.text);
+  if(intent.kind==='action'){
+    if(intent.action==='shoot_dragon'){
+      const grounded=classifyStoryText(intent.text,world);
+      if(grounded.kind!=='action'||grounded.action!=='shoot_dragon')
+        return reject(world,grounded.description||
+          'Уточни, кто стреляет в дракона и каким оружием.');
+    }
+    return applyStoryAction(world,intent.action,intent.text);
+  }
   return enactWorldEvent(world,intent);
 }
 export function applyStoryText(world,text){

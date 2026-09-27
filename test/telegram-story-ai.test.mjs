@@ -46,6 +46,17 @@ test('AI cannot invent effects, unsupported construction or ungrounded events',a
     assert.equal(result.world.projects.length,0);
   }
 });
+test('AI action allowlist cannot bypass deterministic dragon actor and target validation',()=>{
+  const arrived=applyStoryText(initialWorld(77),'Прилетел дракон').world;
+  for(const text of ['Люди стреляют в волков из луков','Дракон стреляет в людей из лука']){
+    const result=applyStoryIntent(arrived,{kind:'action',action:'shoot_dragon',text,
+      recognized:true});
+    assert.equal(result.accepted,false,text);
+    assert.deepEqual(result.world.resources,arrived.resources,text);
+    assert.deepEqual(result.world.story.dragon,arrived.story.dragon,text);
+    assert(!result.world.history.some(x=>x.kind==='telegram_story_dragon_arrows'));
+  }
+});
 
 test('malformed legacy story never crashes the optional AI context',async()=>{
   const before=initialWorld(78);

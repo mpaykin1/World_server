@@ -65,6 +65,22 @@ export function dragonPresent(world){
       event&&typeof event==='object'&&
       /^telegram_story_dragon_(?:arrival|fire|help)$/.test(event.kind)));
 }
+function classifyArchery(text){
+  const shot=/(?:стреля(?:ют|ет|ем|ете|л[аи]?|ть)|выстрел(?:ил[аи]?|или|ить)|выпустил[аи]?\s+стрел|выпустили\s+стрел|пустил[аи]?\s+стрел|пустили\s+стрел|shoot(?:s|ing)?)/i.exec(text);
+  const bow=/(?:лук(?:а|ов|ами)?|стрел(?:а|ы|ами)?|bows?|arrows?)/i.test(text);
+  if(!shot||!bow)return null;
+  const before=text.slice(0,shot.index);
+  const after=text.slice(shot.index+shot[0].length);
+  const humanActor=/(?:^|[.!?]\s*)(?:люди|жители|горожане|лучники|воины|солдаты|мы|people|citizens|archers|we)(?:\s|$)[^.!?]{0,60}$/i.test(before);
+  const explicitDragon=/(?:дракон(?:а|у|ом)?|dragon)/i.test(after);
+  const pronoun=/(?:(?:в|по)\s+(?:него|нему)(?:\s|$)|(?:at\s+him|him))/i.test(after);
+  const otherTarget=/(?:(?:в|по)\s+(?!дракон|него(?:\s|$)|нему(?:\s|$))[а-яёa-z-]{2,}|(?:волк\w*|медвед\w*|мишен\w*|монстр\w*|людей|жителей|wolf|bear|target|people))/i.test(after);
+  const competingReferent=pronoun&&/(?:волк\w*|медвед\w*|мишен\w*|монстр\w*|wolf|bear|target)/i.test(before);
+  if(humanActor&&(explicitDragon||pronoun)&&!otherTarget&&!competingReferent)
+    return{kind:'action',action:'shoot_dragon',text,recognized:true};
+  return{kind:'clarification',text,recognized:true,description:
+    'Уточни одним предложением, кто стреляет и в кого. Например: «Лучники стреляют в дракона из луков».'};
+}
 export function classifyStoryText(value,world=null){
   const text=String(value||'').trim().slice(0,600);
   const dragon=/дракон|dragon|огнедышащ|змей горыныч/i.test(text);
@@ -73,15 +89,10 @@ export function classifyStoryText(value,world=null){
   const benevolent=/подар|помо[гщ]|спас|добр|золото|друж|gift|help/i.test(text);
   if(/^\s*(?:я |мы )?(?:постро|возв[её]л|возвест|созда[тл])/i.test(text))
     return{kind:'build',text,recognized:true};
-  // A follow-up such as "люди стреляют в него" refers to the dragon
-  // already stored in this private world's story; never conjure a new one.
-  const archers=/люди|жители|горожане|лучники|воины|солдаты|мы\b/i.test(text);
-  const shooting=/стреля|выстрел|выпустили? стрел|пустили? стрел|луков|из лука|shoot.*arrow/i.test(text);
-  const target=dragon||/в него|по нему|дракону|его из лук/i.test(text);
-  // Also recognize the attempt in a fresh world, but reject it safely if the
-  // previous world's dragon was reset. Never invent a target to satisfy it.
-  if(archers&&shooting&&target)
-    return{kind:'action',action:'shoot_dragon',text,recognized:true};
+  // Resolve typed actor -> target before generic dragon routing. Invalid or
+  // conflicting archery is a clarification, never a model fallback/event.
+  const archery=classifyArchery(text);
+  if(archery)return archery;
   if(dragon){
     const kind=destructive?'dragon_fire':benevolent?'dragon_help':'dragon_arrival';
     return{kind,text,recognized:true,medium:dragon};

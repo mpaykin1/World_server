@@ -342,9 +342,36 @@ test('webhook chains dragon arrival, arrow follow-up and free AI fallback',async
   assert.equal(shot.resources.budget,arrival.resources.budget-5);
   assert.match(a.calls.filter(x=>x.method==='sendAnimation').at(-1).payload.animation,
     /story_defense-\d\.mp4$/);
-  await post(e,a,text(4,'Гигантская волна накрыла побережье'));
+  const sent=a.calls.length;
+  await post(e,a,text(3,'Люди стреляют в него из луков'));
+  assert.deepEqual((await loadSession(e.TELEGRAM_DB,42)).world,shot,
+    'Telegram retry must not reroll or double-charge the volley');
+  assert.equal(a.calls.length,sent,'duplicate update must not render twice');
+  await post(e,a,start(4));
+  const resumed=(await loadSession(e.TELEGRAM_DB,42)).world;
+  assert.equal(resumed.story.dragon.health,2);
+  assert.equal(resumed.story.active.kind,'dragon_fire');
+  await post(e,a,text(5,'Гигантская волна накрыла побережье'));
   const aiTurn=(await loadSession(e.TELEGRAM_DB,42)).world;
   assert.equal(modelCalls,1);
   assert.equal(aiTurn.story.last.kind,'flood');
   assert(aiTurn.resources.power<shot.resources.power);
+});
+test('D1 rejects reversed or conflicting archery without AI, charge or dragon mutation',async()=>{
+  const e=env(),a=mockApi();
+  let modelCalls=0;e.AI={run:async()=>{modelCalls++;return{response:'{}'}}};
+  await post(e,a,start(1));
+  await post(e,a,text(2,'Прилетел дракон'));
+  const arrived=(await loadSession(e.TELEGRAM_DB,42)).world;
+  for(const [id,message] of [[3,'Люди стреляют в волков из луков'],
+    [4,'Дракон стреляет в людей из лука']]){
+    await post(e,a,text(id,message));
+    const stored=(await loadSession(e.TELEGRAM_DB,42)).world;
+    assert.deepEqual(stored.resources,arrived.resources,message);
+    assert.deepEqual(stored.story.dragon,arrived.story.dragon,message);
+    assert.equal(stored.story.active,null,message);
+    assert.match(stored.story.last.description,/кто стреляет и в кого/,message);
+    assert(!stored.history.some(x=>x.kind==='telegram_story_dragon_arrows'));
+  }
+  assert.equal(modelCalls,0,'deterministic clarification must not spend AI quota');
 });

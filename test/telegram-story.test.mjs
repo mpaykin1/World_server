@@ -163,6 +163,24 @@ test('archers react to an existing dragon referenced as him',()=>{
     'the outcome must be reproducible from the same revision');
   assert.equal(arrival.story.dragon.health,3,'input is immutable');
 });
+test('typed archery rejects other targets and a reversed dragon actor',()=>{
+  const arrived=applyStoryText(initialWorld(73),'Прилетел дракон').world;
+  for(const text of ['Люди стреляют в волков из луков',
+    'Люди стреляют по мишеням из луков','Дракон стреляет в людей из лука',
+    'Люди видят волков и стреляют в него из луков']){
+    const result=applyStoryText(arrived,text);
+    assert.equal(result.accepted,false,text);
+    assert.equal(result.kind,'blocked',text);
+    assert.match(result.world.story.last.description,/кто стреляет и в кого/,text);
+    assert.deepEqual(result.world.resources,arrived.resources,text);
+    assert.deepEqual(result.world.story.dragon,arrived.story.dragon,text);
+    assert.equal(result.world.story.active,arrived.story.active,text);
+    assert.equal(result.world.history.filter(x=>
+      x.kind==='telegram_story_dragon_arrows').length,0,text);
+  }
+  assert.equal(classifyStoryText('Лучники стреляют в дракона из луков',arrived).action,
+    'shoot_dragon');
+});
 test('dragon can flee after repeated arrow volleys',()=>{
   let w=applyStoryText(initialWorld(74),'Прилетел дракон').world;
   for(let i=0;i<6&&w.story.dragon.present;i++)
