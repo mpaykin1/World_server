@@ -3,6 +3,8 @@ name: Cloudflare Exact-Head Preview
 on:
   pull_request:
     branches: [master]
+  push:
+    branches: [ai/chatgpt/guest-world-continuity-20260927]
   workflow_dispatch:
 
 concurrency:
@@ -49,7 +51,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          PR_NUMBER="${{ github.event.pull_request.number || 'manual' }}"
+          PR_NUMBER="${{ github.event.pull_request.number || '332' }}"
           export WORKERS_CI_COMMIT_SHA="$SOURCE_SHA"
           # Isolated PR workers must not create cron triggers: the Free account's
           # five slots are reserved for actual production scheduling.
