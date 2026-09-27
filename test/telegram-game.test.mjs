@@ -272,7 +272,7 @@ test('webhook chains dragon arrival, arrow follow-up and free AI fallback',async
   assert.equal(shot.story.dragon.health,2);
   assert.equal(shot.resources.budget,arrival.resources.budget-5);
   assert.match(a.calls.filter(x=>x.method==='sendAnimation').at(-1).payload.animation,
-    /story_defense-\d\.mp4$/);
+    /story_dragon_arrows-\d\.mp4$/);
   await post(e,a,text(4,'Гигантская волна накрыла побережье'));
   const aiTurn=(await loadSession(e.TELEGRAM_DB,42)).world;
   assert.equal(modelCalls,1);
