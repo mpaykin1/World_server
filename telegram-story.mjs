@@ -1,7 +1,7 @@
 // Telegram owns story presentation/state; the canonical shared engine owns
 // every resource and population calculation for events and day aftermath.
 import {engine,applyPlan,LABELS} from './telegram-state.mjs';
-import {classifyStoryText,STORY_ACTIONS,supportedBuildType} from './telegram-story-parse.mjs';
+import {classifyStoryText,dragonPresent,STORY_ACTIONS,supportedBuildType} from './telegram-story-parse.mjs';
 
 const THREATS=new Set(['dragon_fire','fire','flood','storm','earthquake',
   'meteor','epidemic','attack','drought']);
@@ -55,10 +55,12 @@ function ruinRecords(value){
 function storyState(world){
   const stored=world.story;
   const state=stored&&typeof stored==='object'&&!Array.isArray(stored)
-    ?stored:{active:null,ruins:[],last:null,evacuated:0};
+    ?stored:{active:null,ruins:[],last:null,evacuated:0,dragon:null};
   state.active=activeIncident(state.active);
   state.ruins=ruinRecords(state.ruins);
   state.evacuated=evacuatedCount(state);
+  if(state.dragon===undefined&&dragonPresent(world))
+    state.dragon={present:true,health:3,temper:'calm'};
   return state;
 }
 function damagedTarget(world,text){
@@ -101,6 +103,10 @@ function closeCrisis(world){
 function enactWorldEvent(world,input){
   const kind=input.kind,next=engine.applyNarrativeEvent(world,kind);
   next.story=storyState(next);
+  if(['dragon_arrival','dragon_fire','dragon_help'].includes(kind)){
+    next.story.dragon={present:true,health:next.story.dragon?.present
+      ?next.story.dragon.health:3,temper:kind==='dragon_fire'?'hostile':'calm'};
+  }
   let target='';
   if(BURNING.has(kind)||['earthquake','meteor','attack'].includes(kind)||
      (['flood','storm'].includes(kind)&&/смы|разруш|снес|разбил|уничтож/i.test(input.text)))
@@ -139,7 +145,39 @@ function rescueTarget(world){
   const s=world.story;
   return activeIncident(s?.active)||ruinRecords(s?.ruins).length;
 }
+function shootDragon(world,text=''){
+  if(!dragonPresent(world))
+    return reject(world,'В этом мире нет дракона. Если ты нажал «Новый мир», прежний дракон остался в предыдущем мире. Сначала напиши «Прилетел дракон».');
+  if(world.resources.budget<5)
+    return reject(world,'Для подготовки лучников нужно 5 единиц бюджета.');
+  let next=structuredClone(world);next.story=storyState(next);
+  next=engine.applyResourceDelta(next,{budget:-5});next.revision++;
+  // Stable for a given world revision: retries never reroll the hit.
+  const hit=world.revision%3!==0;
+  if(hit)next.story.dragon.health=Math.max(0,next.story.dragon.health-1);
+  const fled=next.story.dragon.health===0;
+  if(fled){
+    next.story.dragon.present=false;
+    if(next.story.active?.kind==='dragon_fire')next.story.active=null;
+  }else{
+    next.story.dragon.temper='hostile';
+    if(!next.story.active)next.story.active={
+      kind:'dragon_fire',severity:1,age:0,target:''
+    };
+  }
+  const detail=fled
+    ?'Стрелы достигли цели. Раненый дракон покинул город, угроза снята.'
+    :hit
+      ?'Лучники ранили дракона. Он разозлился: теперь городу угрожает ответный огонь.'
+      :'Стрелы пролетели мимо. Дракон заметил нападение, ответный огонь возможен.';
+  next.story.last={kind:'defense',scene:'story_defense',
+    title:'🏹 Лучники обстреляли дракона.',description:detail,text,target:'Дракон'};
+  next.history.push({tick:next.tick,kind:'telegram_story_dragon_arrows',hit,fled});
+  closeCrisis(next);
+  return{world:next,accepted:true,action:'story',kind:'defense'};
+}
 export function applyStoryAction(world,action,text=''){
+  if(action==='shoot_dragon')return shootDragon(world,text);
   if(!STORY_ACTIONS.has(action))return reject(world,'Неизвестное действие.');
   if(!rescueTarget(world)&&action!=='relief')
     return reject(world,'Сейчас нет активной угрозы или разрушений.');
@@ -197,8 +235,7 @@ export function applyStoryAction(world,action,text=''){
   closeCrisis(next);
   return{world:next,accepted:true,action:'story',kind:name};
 }
-export function applyStoryText(world,text){
-  const intent=classifyStoryText(text);
+export function applyStoryIntent(world,intent){
   if(intent.kind==='build'){
     const type=supportedBuildType(intent.text);
     if(!type)return enactWorldEvent(world,{kind:'unknown',text:intent.text,requestedBuild:true});
@@ -211,6 +248,9 @@ export function applyStoryText(world,text){
   }
   if(intent.kind==='action')return applyStoryAction(world,intent.action,intent.text);
   return enactWorldEvent(world,intent);
+}
+export function applyStoryText(world,text){
+  return applyStoryIntent(world,classifyStoryText(text,world));
 }
 export function advanceStoryDay(previous,world){
   const active=activeIncident(previous.story?.active);

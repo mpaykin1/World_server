@@ -19,6 +19,9 @@
       "*/5 * * * *"
     ]
   },
+  "ai": {
+    "binding": "AI"
+  },
   "d1_databases": [
     {
       "binding": "TELEGRAM_DB",
