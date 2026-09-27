@@ -2,7 +2,7 @@
 // Canonical project math is imported, never duplicated or replaced by an LLM.
 import {
   engine, MAX_INTENT, initialWorld, options, applyPlan,
-  loadSession, saveSession, view
+  loadSession, saveSession, view, MINIAPP_URL
 } from './telegram-state.mjs';
 import {makeVisualTurn} from './telegram-scenes.mjs';
 import {applyStoryText,applyStoryAction,advanceStoryDay} from './telegram-story.mjs';
@@ -64,6 +64,14 @@ async function onCommand(message,updateId,env,fetcher){
     pending:null,updateId
   });
   if(!updated)return;
+  if(/^\/game(?:@\w+)?(?:\s|$)/i.test(message.text||'')){
+    await botApi(env.TELEGRAM_BOT_TOKEN,'sendMessage',{
+      chat_id:chatId,
+      text:'🎮 Открой графическую «Цепную реакцию» прямо внутри Telegram. Это та же анимированная Scratch-игра. Прогресс графической и текстовой версий пока раздельный.',
+      reply_markup:{inline_keyboard:[[{text:'🎮 Играть на полный экран',web_app:{url:MINIAPP_URL}}]]}
+    },fetcher);
+    return;
+  }
   await sendGame(env.TELEGRAM_BOT_TOKEN,chatId,
     makeVisualTurn(session.world,world,reset||session.lastUpdate<0?'new':'resume','',updateId,view(world)),fetcher);
 }
@@ -173,7 +181,7 @@ export async function handleTelegramWebhook(request,env,fetcher=fetch){
   const id=update?.update_id;
   if(!Number.isSafeInteger(id)||id<0)return new Response('Invalid update',{status:400});
   if(update.message?.text){
-    if(/^\/(start|help|new)(?:@\w+)?(?:\s|$)/i.test(update.message.text))
+    if(/^\/(start|help|new|game)(?:@\w+)?(?:\s|$)/i.test(update.message.text))
       await onCommand(update.message,id,env,fetcher);
     else await onText(update.message,id,env,fetcher);
   }else if(update.callback_query)await onCallback(update.callback_query,id,env,fetcher);
