@@ -113,7 +113,7 @@ function rescueTarget(world){
 }
 function shootDragon(world,text=''){
   if(!dragonPresent(world))
-    return reject(world,'Дракона рядом больше нет — стрелять не в кого.');
+    return reject(world,'В этом мире нет дракона. Если ты нажал «Новый мир», прежний дракон остался в предыдущем мире. Сначала напиши «Прилетел дракон».');
   if(world.resources.budget<5)
     return reject(world,'Для подготовки лучников нужно 5 единиц бюджета.');
   let next=structuredClone(world);next.story=storyState(next);
