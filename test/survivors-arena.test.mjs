@@ -119,6 +119,8 @@ test('new app is opt-in; only reads canonical world, keeps assets original and e
   assert.match(js, /__SURVIVORS_ARENA_READY__/);
   for (const id of ['pad','knob','role-modal','upgrade-modal','end-modal','xp-bar']) assert.ok(html.includes('id="' + id + '"'));
   assert.ok(render.includes('createPainter'));
-  assert.ok(!registry.apps['survivors-arena'] || registry.apps['survivors-arena'].status !== 'certified');
+  assert.equal(registry.apps['survivors-arena'].status, 'quarantine');
+  assert.equal(registry.apps['survivors-arena'].visible, false);
+  assert.equal(registry.apps['survivors-arena'].worldMenu.show, false);
   assert.equal(Object.keys(UPGRADES).length, 9);
 });
