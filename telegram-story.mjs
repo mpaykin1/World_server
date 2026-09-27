@@ -202,6 +202,8 @@ export function applyStoryAction(world,action,text=''){
   return{world:next,accepted:true,action:'story',kind:name};
 }
 export function applyStoryIntent(world,intent){
+  if(intent.kind==='clarification')return reject(world,intent.description||
+    'Уточни, кто действует и на какую цель.');
   if(intent.kind==='build'){
     const type=supportedBuildType(intent.text);
     if(!type)return enactWorldEvent(world,{kind:'unknown',text:intent.text,requestedBuild:true});
