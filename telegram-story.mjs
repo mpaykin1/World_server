@@ -1,7 +1,7 @@
 // Telegram owns story presentation/state; the canonical shared engine owns
 // every resource and population calculation for events and day aftermath.
 import {engine,applyPlan,LABELS} from './telegram-state.mjs';
-import {classifyStoryText,STORY_ACTIONS,supportedBuildType} from './telegram-story-parse.mjs';
+import {classifyStoryText,dragonPresent,STORY_ACTIONS,supportedBuildType} from './telegram-story-parse.mjs';
 
 const THREATS=new Set(['dragon_fire','fire','flood','storm','earthquake',
   'meteor','epidemic','attack','drought']);
@@ -25,6 +25,8 @@ const evacuatedCount=story=>Number.isSafeInteger(story?.evacuated)&&story.evacua
 function storyState(world){
   const state=world.story||{active:null,ruins:[],last:null,evacuated:0,dragon:null};
   state.evacuated=evacuatedCount(state);
+  if(state.dragon===undefined&&dragonPresent(world))
+    state.dragon={present:true,health:3,temper:'calm'};
   return state;
 }
 function damagedTarget(world,text){
@@ -110,7 +112,7 @@ function rescueTarget(world){
   return s?.active||s?.ruins?.length;
 }
 function shootDragon(world,text=''){
-  if(!world.story?.dragon?.present)
+  if(!dragonPresent(world))
     return reject(world,'Дракона рядом больше нет — стрелять не в кого.');
   if(world.resources.budget<5)
     return reject(world,'Для подготовки лучников нужно 5 единиц бюджета.');
