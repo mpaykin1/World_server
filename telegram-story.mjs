@@ -29,12 +29,26 @@ function activeIncident(value){
   if(!Number.isSafeInteger(value.age)||value.age<0||value.age>2)return null;
   return value;
 }
+function ruinRecord(value){
+  if(!value||typeof value!=='object'||Array.isArray(value))return null;
+  if(typeof value.id!=='string'||!value.id.trim()||value.id.length>128)return null;
+  if(typeof value.type!=='string'||!Object.hasOwn(engine.PROJECTS,value.type))return null;
+  if(value.rebuilding!==null&&value.rebuilding!==undefined&&
+     (typeof value.rebuilding!=='string'||!value.rebuilding.trim()||value.rebuilding.length>128))
+    return null;
+  return {id:value.id,type:value.type,
+    name:typeof value.name==='string'&&value.name.trim()
+      ?value.name.trim().slice(0,100):(LABELS[value.type]||value.type),
+    source:THREATS.has(value.source)?value.source:'unknown',
+    rebuilding:value.rebuilding||null};
+}
+const ruinRecords=value=>Array.isArray(value)?value.map(ruinRecord).filter(Boolean):[];
 function storyState(world){
   const stored=world.story;
   const state=stored&&typeof stored==='object'&&!Array.isArray(stored)
     ?stored:{active:null,ruins:[],last:null,evacuated:0};
   state.active=activeIncident(state.active);
-  state.ruins=Array.isArray(state.ruins)?state.ruins:[];
+  state.ruins=ruinRecords(state.ruins);
   state.evacuated=evacuatedCount(state);
   return state;
 }
@@ -114,7 +128,7 @@ function reject(world,description){
 }
 function rescueTarget(world){
   const s=world.story;
-  return activeIncident(s?.active)||(Array.isArray(s?.ruins)&&s.ruins.length);
+  return activeIncident(s?.active)||ruinRecords(s?.ruins).length;
 }
 export function applyStoryAction(world,action,text=''){
   if(!STORY_ACTIONS.has(action))return reject(world,'Неизвестное действие.');
@@ -191,13 +205,15 @@ export function applyStoryText(world,text){
 }
 export function advanceStoryDay(previous,world){
   const active=activeIncident(previous.story?.active);
-  const rebuilding=Array.isArray(previous.story?.ruins)&&
-    previous.story.ruins.some(x=>x&&typeof x==='object'&&x.rebuilding);
+  const storedRuins=previous.story?.ruins;
+  const ruins=ruinRecords(storedRuins);
+  const rebuilding=ruins.some(x=>x.rebuilding);
   const evacuated=evacuatedCount(previous.story);
   const storedStory=previous.story;
   const storyNeedsRepair=storedStory!=null&&(
     typeof storedStory!=='object'||Array.isArray(storedStory)||
-    (storedStory.ruins!=null&&!Array.isArray(storedStory.ruins)));
+    (storedStory.ruins!=null&&!Array.isArray(storedStory.ruins))||
+    (Array.isArray(storedStory.ruins)&&ruins.length!==storedStory.ruins.length));
   const activeNeedsRepair=previous.story?.active!=null&&!active;
   const evacuationNeedsRepair=previous.story&&previous.story.evacuated!==evacuated;
   if(!active&&!rebuilding&&!evacuated&&!evacuationNeedsRepair&&
