@@ -1,6 +1,7 @@
 import * as THREE from 'https://unpkg.com/three@0.165.0/build/three.module.js';
 import {installVoxelAutodemo} from './autodemo-bridge.mjs';
 import {createEmergenceAuthoritySync} from '../../shared/emergence-authority-sync.mjs';
+import {hash32 as sharedHash32,valueNoise as sharedValueNoise,biomeAt as sharedBiomeAt,heightAt as sharedHeightAt} from '../../shared/terrain-contract.mjs';
 
 const CHUNK = 16;
 const WORLD_Y = 96;
@@ -84,25 +85,13 @@ async function canonApi(eventType,summary,payload,idempotencyKey){
   throw lastError||new Error('Canon API error');
 }
 
-function hash32(x,z,seed){ let h=(Math.imul(x,374761393)^Math.imul(z,668265263)^seed)|0; h=Math.imul(h^(h>>>13),1274126177); return ((h^(h>>>16))>>>0)/4294967295; }
-function smooth(t){ return t*t*(3-2*t); }
-function valueNoise(x,z,scale,seed){
-  const fx=x/scale,fz=z/scale,x0=Math.floor(fx),z0=Math.floor(fz),tx=smooth(fx-x0),tz=smooth(fz-z0);
-  const a=hash32(x0,z0,seed),b=hash32(x0+1,z0,seed),c=hash32(x0,z0+1,seed),d=hash32(x0+1,z0+1,seed);
-  const ab=a+(b-a)*tx, cd=c+(d-c)*tx; return ab+(cd-ab)*tz;
-}
-function fbm(x,z,seed){ return valueNoise(x,z,72,seed)*.52+valueNoise(x,z,31,seed+97)*.28+valueNoise(x,z,13,seed+197)*.14+valueNoise(x,z,6,seed+313)*.06; }
+const hash32=sharedHash32,valueNoise=sharedValueNoise;
 let worldSeed=73194217;
 let worldTheme='mixed';
 let emergenceState=null;
 function emergenceSample(x,z){return window.WorldEmergenceRuntime?.sample?.(emergenceState,x,z)||null;}
-function biomeAt(x,z){ const macro=emergenceSample(x,z); if(macro?.biome)return macro.biome; const t=valueNoise(x,z,180,worldSeed+900), m=valueNoise(x,z,150,worldSeed+1400); if(worldTheme==='desert')return t>.14?'desert':'plains'; if(worldTheme==='snow')return t<.86?'snow':'plains'; if(worldTheme==='forest')return m>.18?'forest':'plains'; if(worldTheme==='mountains')return t<.72?'snow':'plains'; if(worldTheme==='islands')return m>.72?'forest':'plains'; if(t>.72)return 'desert'; if(t<.22)return 'snow'; if(m>.62)return 'forest'; return 'plains'; }
-function heightAt(x,z){
-  const b=biomeAt(x,z), n=fbm(x,z,worldSeed), ridge=Math.abs(valueNoise(x,z,105,worldSeed+77)-.5)*2;
-  let h=16+n*21; if(worldTheme==='mountains')h=20+n*25+ridge*20; else if(worldTheme==='islands')h=9+n*17-ridge*4; else if(b==='snow')h+=ridge*15; else if(b==='desert')h=17+n*11; else if(b==='forest')h+=4;
-  const macro=emergenceSample(x,z); if(macro?.heightDelta)h+=macro.heightDelta;
-  return clamp(Math.floor(h),5,WORLD_Y-12);
-}
+function biomeAt(x,z){return sharedBiomeAt(x,z,worldSeed,worldTheme,emergenceSample);}
+function heightAt(x,z){return sharedHeightAt(x,z,worldSeed,worldTheme,emergenceSample);}
 function caveAt(x,y,z){ if(y<4||y>55) return false; const a=valueNoise(x+y*7,z-y*5,22,worldSeed+2600); const b=valueNoise(x-y*3,z+y*9,11,worldSeed+2800); return a>.72&&b>.58; }
 function oreAt(x,y,z){ const r=hash32(x*7+y*17,z*11-y*5,worldSeed+3200); if(y<18&&r>.982) return BLOCK.IRON; if(y<36&&r>.972) return BLOCK.COAL; return BLOCK.STONE; }
 
