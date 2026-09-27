@@ -33,7 +33,7 @@ function placedOf(world){
   const projects=world.projects||[],kinds=projects.map(p=>p.type);
   const story=world.story||{},history=world.history||[];
   return {
-    city:world.houses?.length||kinds.filter(t=>['luxury_arcology','tourism','temple'].includes(t)).length,
+    city:kinds.filter(t=>['luxury_arcology','tourism','temple'].includes(t)).length,
     forest:history.some(h=>h.kind==='telegram_story_forest')?1:0,
     energy:kinds.filter(t=>['solar','coal','geothermal','biofuel_refinery'].includes(t)).length,
     volcano:kinds.some(t=>['geothermal','volcanic_farm'].includes(t))?1:0,
