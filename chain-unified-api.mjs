@@ -3,7 +3,7 @@
 import {engine,initialWorld,loadSession,options,applyPlan,view,describeChange,MAX_INTENT} from './telegram-state.mjs';
 import {applyStoryText,applyStoryAction,advanceStoryDay} from './telegram-story.mjs';
 import {STORY_ACTIONS} from './telegram-story-parse.mjs';
-import {authorizeBrowser,createBrowserSession,redeemLinkCode} from './chain-session.mjs';
+import {ensureChainSchema,authorizeBrowser,createBrowserSession,redeemLinkCode} from './chain-session.mjs';
 
 const ALLOWED=new Set(['https://mpaykin1.github.io']);
 const BUILDS=Object.freeze({
@@ -120,6 +120,7 @@ export async function handleUnifiedGame(request,env){
   if(!env.TELEGRAM_DB)return response({error:'Game storage unavailable'},503,origin);
   const path=new URL(request.url).pathname,db=env.TELEGRAM_DB;
   try{
+    await ensureChainSchema(db);
     if(path==='/api/chain/session'&&request.method==='POST'){
       const payload=await input(request);
       const created=await createBrowserSession(db,payload?.initData||'',
