@@ -11,16 +11,21 @@ const BASE='https://world-server.mmmpaykin.workers.dev/api/chain';
 const ORIGIN='https://mpaykin1.github.io';
 class MockD1{
   sessions=new Map();tokens=new Map();codes=new Map();
+  async batch(statements){const result=[];for(const statement of statements)result.push(await statement.run());return result;}
   prepare(sql){
     return{bind:(...a)=>({
       first:async()=>{
+        if(sql.startsWith('SELECT chat_id FROM chain_link_codes')){
+          const record=this.codes.get(a[0]);
+          return record&&record.expires>Date.now()?{chat_id:record.chatId}:null;
+        }
         if(sql.startsWith('SELECT * FROM telegram_sessions'))
           return this.sessions.get(a[0])||null;
         if(sql.startsWith('SELECT chat_id FROM chain_browser_tokens'))
           return this.tokens.has(a[0])?{chat_id:this.tokens.get(a[0])}:null;
         if(sql.startsWith('DELETE FROM chain_link_codes WHERE code=')){
           const record=this.codes.get(a[0]);
-          if(!record||record.expires<Date.now())return null;
+          if(!record||record.expires<Date.now()||(a.length>1&&record.chatId!==a[1]))return null;
           this.codes.delete(a[0]);return{chat_id:record.chatId};
         }
         throw Error('Unsupported FIRST: '+sql);
@@ -40,7 +45,13 @@ class MockD1{
           return{meta:{changes:1}};
         }
         if(sql.startsWith('UPDATE chain_browser_tokens')){
-          if(!this.tokens.has(a[1]))return{meta:{changes:0}};
+          if(!this.tokens.has(a[1])||(a.length>=3&&this.tokens.get(a[1])!==a[2]))
+            return{meta:{changes:0}};
+          if(sql.includes('EXISTS (SELECT 1 FROM telegram_sessions')){
+            const target=this.sessions.get(a[3]);
+            if(!target||target.revision!==a[4]||target.world!==a[5])
+              return{meta:{changes:0}};
+          }
           this.tokens.set(a[1],a[0]);return{meta:{changes:1}};
         }
         if(sql.startsWith('UPDATE telegram_sessions')){
@@ -112,17 +123,30 @@ test('Telegram and browser share D1 state, revisions and one-time pairing',async
   const guest=await call(env,'/state','GET',undefined,browserToken);
   assert.equal(guest.status,200);
   assert.equal(guest.data.linked,false);
-  const dragon=await call(env,'/action','POST',{kind:'idea',text:'Прилетел дракон',
+  assert.equal(guest.data.placed.city,0,'default simulator housing must not paint a player-built cinematic city');
+  const city=await call(env,'/action','POST',{kind:'build',type:'city',
     revision:guest.data.revision},browserToken);
+  assert.equal(city.status,200);
+  assert.ok(city.data.placed.city>0);
+  const dragon=await call(env,'/action','POST',{kind:'idea',text:'Прилетел дракон',
+    revision:city.data.revision},browserToken);
   assert.equal(dragon.status,200);
   assert.equal(dragon.data.story.dragon.hp,100);
   const shot=await call(env,'/action','POST',{kind:'idea',text:'Люди в него стреляют',
     revision:dragon.data.revision},browserToken);
   assert.equal(shot.status,200);
   assert.equal(shot.data.story.dragon.hp,72);
+  assert.equal(shot.data.story.active.kind,'dragon_fire');
+  assert.equal(shot.data.story.last.reaction,'dragon_counterattack');
+  assert.ok(shot.data.story.ruins.some(r=>r.type==='luxury_arcology'));
+  assert.equal(shot.data.placed.city,0,'counterattack destroys the newly built city');
+  assert.equal(shot.data.state.budget,dragon.data.state.budget-35,
+    'five defense budget plus canonical 30 fire budget');
   const stale=await call(env,'/action','POST',{kind:'next',revision:dragon.data.revision},
     browserToken);
   assert.equal(stale.status,409);
+  const guestChatId=[...env.TELEGRAM_DB.sessions.keys()].find(id=>id.startsWith('guest:'));
+  const guestSeed=JSON.parse(env.TELEGRAM_DB.sessions.get(guestChatId).world).seed;
   const tg=await loadSession(env.TELEGRAM_DB,42);
   const code=await issueLinkCode(env.TELEGRAM_DB,42);
   assert.equal((await call(env,'/link','POST',{code},browserToken)).status,200);
@@ -130,19 +154,50 @@ test('Telegram and browser share D1 state, revisions and one-time pairing',async
     'pairing code must be redeemed only once');
   const linked=await call(env,'/state','GET',undefined,browserToken);
   assert.equal(linked.data.linked,true);
-  assert.equal(linked.data.revision,tg.revision);
-  // Simulate a Telegram message modifying that exact row.
-  const changed=applyStoryText(tg.world,'Прилетел дракон').world;
+  assert.equal(linked.data.revision,shot.data.revision);
+  assert.equal(linked.data.story.dragon.hp,72);
+  assert.ok(linked.data.story.ruins.some(r=>r.type==='luxury_arcology'),
+    'city ruins and fire survive guest-to-Telegram pairing');
+  // Simulate a Telegram message modifying that exact adopted row.
+  const adopted=await loadSession(env.TELEGRAM_DB,42);
+  assert.equal(adopted.world.seed,guestSeed);
+  const changed=applyStoryText(adopted.world,'Люди в него стреляют из луков').world;
   const updated=await env.TELEGRAM_DB.prepare(
     'UPDATE telegram_sessions SET world=?,revision=?,restart=?,pending_revision=NULL,updated_at=CURRENT_TIMESTAMP WHERE chat_id=? AND revision=?'
-  ).bind(JSON.stringify(changed),changed.revision,tg.restart,tg.chatId,tg.revision).run();
+  ).bind(JSON.stringify(changed),changed.revision,adopted.restart,adopted.chatId,adopted.revision).run();
   assert.equal(updated.meta.changes,1);
   const browser=await call(env,'/state','GET',undefined,browserToken);
-  assert.equal(browser.data.story.dragon.hp,100);
-  const attack=await call(env,'/action','POST',{kind:'story_action',type:'shoot',
-    revision:browser.data.revision},browserToken);
-  assert.equal(attack.data.story.dragon.hp,72);
-  assert.equal((await loadSession(env.TELEGRAM_DB,42)).world.story.dragon.hp,72);
+  assert.equal(browser.data.story.dragon.hp,changed.story.dragon.hp);
+  assert.ok(browser.data.story.dragon.hp<72,'Telegram attack changed the same dragon');
+  assert.ok(browser.data.story.ruins.some(r=>r.type==='luxury_arcology'));
+  assert.equal(browser.data.story.dragon.active,false,'second hit makes dragon retreat');
+  assert.equal((await loadSession(env.TELEGRAM_DB,42)).world.story.dragon.hp,browser.data.story.dragon.hp);
+});
+
+test('a nonempty Telegram world never overwrites a progressed browser world on pairing',async()=>{
+  const env={TELEGRAM_DB:new MockD1(),TELEGRAM_BOT_TOKEN:TOKEN};
+  const created=await call(env,'/session','POST',{});
+  const token=created.data.token;
+  const initial=(await call(env,'/state','GET',undefined,token)).data;
+  const city=await call(env,'/action','POST',{
+    kind:'build',type:'city',revision:initial.revision},token);
+  assert.equal(city.status,200);
+  const telegram=await loadSession(env.TELEGRAM_DB,77);
+  const dragon=applyStoryText(telegram.world,'Прилетел дракон').world;
+  const persisted=await env.TELEGRAM_DB.prepare(
+    'UPDATE telegram_sessions SET world=?,revision=?,restart=?,pending_revision=NULL,updated_at=CURRENT_TIMESTAMP WHERE chat_id=? AND revision=?'
+  ).bind(JSON.stringify(dragon),dragon.revision,telegram.restart,telegram.chatId,telegram.revision).run();
+  assert.equal(persisted.meta.changes,1);
+  const code=await issueLinkCode(env.TELEGRAM_DB,77);
+  const attempt=await call(env,'/link','POST',{code},token);
+  assert.equal(attempt.status,409);
+  assert.equal(env.TELEGRAM_DB.codes.has(code),true,'rejected link code is not consumed');
+  const browser=(await call(env,'/state','GET',undefined,token)).data;
+  assert.equal(browser.linked,false);
+  assert.equal(browser.revision,city.data.revision);
+  assert.ok(browser.placed.city>0);
+  const telegramAfter=await loadSession(env.TELEGRAM_DB,77);
+  assert.equal(telegramAfter.world.story.dragon.hp,100);
 });
 test('API blocks foreign origins and missing bearer tokens',async()=>{
   const env={TELEGRAM_DB:new MockD1(),TELEGRAM_BOT_TOKEN:TOKEN};

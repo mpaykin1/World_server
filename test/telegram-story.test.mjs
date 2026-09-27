@@ -138,3 +138,47 @@ test('free-form rescue action does not require pressing a menu first',()=>{
   assert.equal(denial.accepted,false);
   assert.match(denial.world.story.last.description,/Нечего тушить/);
 });
+
+
+test('first archer volley triggers canonical city fire; second makes wounded dragon retreat',()=>{
+  const initial=initialWorld(55),built=applyPlan(initial,'luxury_arcology');
+  assert.equal(built.accepted,true);
+  const arrived=applyStoryText(built.world,'Прилетел дракон').world;
+  const shot=applyStoryText(arrived,'Люди в него стреляют из луков').world;
+  assert.equal(shot.story.dragon.hp,72);
+  assert.equal(shot.story.dragon.active,true);
+  assert.equal(shot.story.active.kind,'dragon_fire');
+  assert.equal(shot.story.last.reaction,'dragon_counterattack');
+  assert(shot.story.ruins.some(r=>r.type==='luxury_arcology'));
+  assert.equal(shot.projects.some(p=>p.type==='luxury_arcology'),false);
+  assert.equal(shot.resources.budget,arrived.resources.budget-35);
+  assert(shot.resources.water<arrived.resources.water);
+  assert(shot.resources.health<arrived.resources.health);
+  assert(shot.population<arrived.population);
+  assert.equal(arrived.projects.length,1,'original world stays intact');
+  const after=applyStoryText(shot,'Люди снова стреляют в него из луков').world;
+  assert.equal(after.story.dragon.hp,44);
+  assert.equal(after.story.dragon.active,false);
+  assert.equal(after.story.dragon.retreating,true);
+  assert.equal(after.story.last.reaction,'dragon_retreat');
+  assert.equal(after.story.active.kind,'dragon_fire',
+    'retreat does not magically extinguish a city fire');
+  const nextDay=advanceStoryDay(after,engine.tick(after));
+  assert(nextDay.resources.health<after.resources.health);
+  assert.equal(JSON.stringify(after.story.ruins),JSON.stringify(shot.story.ruins));
+});
+test('strong city defense makes the first wounded dragon retreat without burning structures',()=>{
+  const built=applyPlan(initialWorld(43),'luxury_arcology');
+  assert.equal(built.accepted,true);
+  const defended=structuredClone(built.world);
+  defended.resources.power=85;defended.resources.health=90;
+  const arrived=applyStoryText(defended,'Прилетел дракон').world;
+  const shot=applyStoryText(arrived,'Стрелять в дракона из луков').world;
+  assert.equal(shot.story.dragon.hp,72);
+  assert.equal(shot.story.dragon.active,false);
+  assert.equal(shot.story.last.reaction,'dragon_retreat');
+  assert.equal(shot.story.active,null);
+  assert.equal(shot.story.ruins.length,0);
+  assert.equal(shot.projects.length,1);
+  assert.equal(shot.resources.budget,arrived.resources.budget-5);
+});

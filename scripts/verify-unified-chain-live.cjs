@@ -28,8 +28,18 @@ async function send(path,{method='GET',payload,revision}={}){
   assert.equal(initial.status,200);
   assert.equal(initial.linked,false);
   assert.equal(initial.revision,0);
+  assert.equal(initial.placed.city,0,'No built cinematic city before player action');
+  const city=await send('/action',{method:'POST',payload:{
+    kind:'build',type:'city',revision:initial.revision}});
+  assert.equal(city.status,200);
+  assert.equal(city.placed.city,1);
+  assert.equal(city.building.some(p=>p.type==='luxury_arcology'),true);
+  assert.equal(city.state.budget,initial.state.budget-35);
+  const cityReloaded=await send('/state');
+  assert.equal(cityReloaded.revision,city.revision);
+  assert.equal(cityReloaded.placed.city,1);
   const first=await send('/action',{method:'POST',payload:{
-    kind:'idea',text:'Прилетел дракон',revision:initial.revision}});
+    kind:'idea',text:'Прилетел дракон',revision:city.revision}});
   assert.equal(first.status,200);
   assert.equal(first.story.last.kind,'dragon_arrival');
   assert.equal(first.placed.dragon,true);
@@ -39,17 +49,26 @@ async function send(path,{method='GET',payload,revision}={}){
   assert.equal(second.status,200);
   assert.equal(second.story.last.kind,'defense');
   assert.equal(second.story.dragon.hp,72);
-  assert.equal(second.state.budget,first.state.budget-5);
+  assert.equal(second.story.last.reaction,'dragon_counterattack');
+  assert.equal(second.story.active.kind,'dragon_fire');
+  assert.equal(second.placed.city,0,'city visibly damaged after the dragon response');
+  assert.equal(second.story.ruins.some(r=>r.type==='luxury_arcology'),true);
+  assert.equal(second.state.budget,first.state.budget-35);
+  assert(second.state.water<first.state.water);
+  assert(second.state.health<first.state.health);
+  assert(second.state.population<first.state.population);
   const replay=await send('/action',{method:'POST',payload:{
-    kind:'next',revision:first.revision}});
+    kind:'idea',text:'Люди в него стреляют',revision:first.revision}});
   assert.equal(replay.status,409,'A stale browser may not overwrite a Telegram turn');
   const resumed=await send('/state');
   assert.equal(resumed.revision,second.revision);
   assert.equal(resumed.story.dragon.hp,72);
+  assert.equal(resumed.story.active.kind,'dragon_fire');
+  assert.equal(resumed.story.ruins.length,1);
   const reset=await send('/action',{method:'POST',payload:{
     kind:'reset',revision:resumed.revision}});
   assert.equal(reset.status,200);
   assert.equal(reset.story.dragon,null);
-  console.log('PASS: anonymous guest, D1 persistence, dragon arrival, pronoun combat,');
+  console.log('PASS: guest city -> dragon -> archery -> counterattack/fire and persisted ruins,');
   console.log('      revision conflict, reset and GitHub Pages CORS on exact-preview Worker.');
 })().catch(error=>{console.error(error.message);process.exitCode=1;});

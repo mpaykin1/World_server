@@ -91,3 +91,24 @@ export async function redeemLinkCode(db,code,tokenHash){
     .bind(row.chat_id,tokenHash).run();
   return updated.meta?.changes===1?row.chat_id:null;
 }
+
+export async function peekLinkCode(db,code){
+  if(!/^[A-HJ-NP-Z2-9]{12}$/.test(code))return null;
+  const row=await db.prepare(
+    'SELECT chat_id FROM chain_link_codes WHERE code=? AND expires_at>CURRENT_TIMESTAMP'
+  ).bind(code).first();
+  return row?.chat_id||null;
+}
+export async function claimLinkCode(db,code,expectedChatId){
+  if(!/^[A-HJ-NP-Z2-9]{12}$/.test(code))return false;
+  const claimed=await db.prepare(
+    'DELETE FROM chain_link_codes WHERE code=? AND chat_id=? AND expires_at>CURRENT_TIMESTAMP RETURNING chat_id'
+  ).bind(code,expectedChatId).first();
+  return claimed?.chat_id===expectedChatId;
+}
+export async function connectBrowserToken(db,chatId,tokenHash,expectedChatId){
+  const result=await db.prepare(
+    'UPDATE chain_browser_tokens SET chat_id=?,last_used_at=CURRENT_TIMESTAMP WHERE token_hash=? AND chat_id=?'
+  ).bind(chatId,tokenHash,expectedChatId).run();
+  return result.meta?.changes===1;
+}
