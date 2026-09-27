@@ -6,7 +6,8 @@ const oldNoise=(x,z,scale,seed)=>{
   const fx=x/scale,fz=z/scale,x0=Math.floor(fx),z0=Math.floor(fz);
   const tx=smooth(fx-x0),tz=smooth(fz-z0);
   const a=oldHash(x0,z0,seed),b=oldHash(x0+1,z0,seed),c=oldHash(x0,z0+1,seed),d=oldHash(x0+1,z0+1,seed);
-  return (a+(b-a)*tx)*(1-tz)+(c+(d-c)*tx)*tz;
+  const ab=a+(b-a)*tx,cd=c+(d-c)*tx;
+  return ab+(cd-ab)*tz;
 };
 const oldBiome=(x,z,seed,theme,macro)=>{
   if(macro?.biome)return macro.biome;
