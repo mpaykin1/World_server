@@ -3,6 +3,20 @@
 const enc=new TextEncoder();
 const alphabet='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const bytes=n=>crypto.getRandomValues(new Uint8Array(n));
+let schemaReady=null;
+export async function ensureChainSchema(db){
+  // Worker D1 bindings can migrate their own additive schema; deployment tokens
+  // need only Workers deploy permission, not Cloudflare account D1 admin.
+  // IF NOT EXISTS makes parallel cold starts and repeated deployments harmless.
+  if(!schemaReady)schemaReady=(async()=>{
+    await db.prepare('CREATE TABLE IF NOT EXISTS chain_browser_tokens (token_hash TEXT PRIMARY KEY,chat_id TEXT NOT NULL,created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,last_used_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)').run();
+    await db.prepare('CREATE INDEX IF NOT EXISTS chain_browser_tokens_chat ON chain_browser_tokens(chat_id)').run();
+    await db.prepare('CREATE TABLE IF NOT EXISTS chain_link_codes (code TEXT PRIMARY KEY,chat_id TEXT NOT NULL,expires_at TEXT NOT NULL)').run();
+    await db.prepare('CREATE INDEX IF NOT EXISTS chain_link_codes_expiry ON chain_link_codes(expires_at)').run();
+  })().catch(error=>{schemaReady=null;throw error;});
+  return schemaReady;
+}
+
 export const hashHex=async value=>[...new Uint8Array(await crypto.subtle.digest(
   'SHA-256',enc.encode(value)))].map(x=>x.toString(16).padStart(2,'0')).join('');
 export function newBrowserToken(){
@@ -60,6 +74,7 @@ export async function authorizeBrowser(db,request){
   return row?{chatId:row.chat_id,tokenHash}:null;
 }
 export async function issueLinkCode(db,chatId){
+  await ensureChainSchema(db);
   const code=newLinkCode();
   await db.prepare("DELETE FROM chain_link_codes WHERE expires_at < CURRENT_TIMESTAMP").run();
   await db.prepare("INSERT INTO chain_link_codes(code,chat_id,expires_at) VALUES(?,?,datetime('now','+10 minutes'))")
