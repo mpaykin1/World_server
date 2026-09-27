@@ -108,13 +108,17 @@ export function view(world,notice=''){
   if((incident||ruin)&&world.resources.budget>=8)
     emergency.push({text:'🚑 Доставить помощь 💰8',
       callback_data:'tg2:'+world.revision+':relief'});
+  if(story?.dragon?.active&&world.resources.budget>=5)
+    emergency.push({text:'🏹 Стрелять в дракона 💰5',
+      callback_data:'tg2:'+world.revision+':shoot'});
   const choices=emergency.map(button=>[button]);
   for(const o of offered)choices.push([{
     text:o.label+'  💰'+o.plan.cost+'  ⏳'+o.plan.buildTicks,
     callback_data:'tg2:'+world.revision+':'+o.type
   }]);
   choices.push([{text:'⏩ Следующий день',callback_data:'tg2:'+world.revision+':next'}]);
-  choices.push([{text:'✍️ Свой вариант',callback_data:'tg2:'+world.revision+':free'}]);
+  choices.push([{text:'✍️ Свой вариант',callback_data:'tg2:'+world.revision+':free'},
+    {text:'🎮 Играть с графикой',web_app:{url:'https://mpaykin1.github.io/scratch-chain-reaction/cinematic/'}}]);
   choices.push([{text:'🔄 Новый мир',callback_data:'tg2:'+world.revision+':reset'}]);
   return {text:(notice?notice+'\n\n':'')+intro+
     (story?.last?'\n📜 '+story.last.title:'')+
