@@ -292,3 +292,12 @@ jobs:
           fi
           gh issue comment "${ISSUE}" --body "$(printf 'WORLD_AI_RESULT_V1\nPR: %s\nHEAD_SHA: %s\nACTUAL_MODEL: %s\nTESTS: %s\nNEXT: %s' \
             "${PR_URL}" "$(git rev-parse HEAD)" "${MODEL}" "${TESTS}" "${NEXT}")"
+      - name: Report failed collaboration run
+        if: github.event_name == 'issue_comment' && failure()
+        shell: bash
+        run: |
+          set -euo pipefail
+          ISSUE="$(jq -r '.issue.number' "${GITHUB_EVENT_PATH}")"
+          RUN_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          gh issue comment "${ISSUE}" --body "$(printf 'WORLD_AI_RESULT_V1\nSTATUS: FAILED\nRUN_URL: %s\nACTUAL_MODEL: UNVERIFIED\nNEXT: inspect the failing GitHub Actions step; check whether OPENROUTER_API_KEY is configured and whether a zero-cost model is live; never paste secrets here' "${RUN_URL}")"
+
