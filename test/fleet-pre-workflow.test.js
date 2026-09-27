@@ -36,7 +36,7 @@ test('gate polls exact independent check and only accepts completed success',()=
     gate.indexOf('READY_FOR_OCEAN=YES'));
 });
 
-function runGate(sequence,{base='base-sha',master='base-sha',attempts='3'}={}){
+function runGate(sequence,{base='base-sha',master='base-sha',attempts='3',masterAfterReview='',headAfterReview=''}={}){
   const dir=fs.mkdtempSync(path.join(os.tmpdir(),'ocean-gate-'));
   const counter=path.join(dir,'counter');
   const gh=path.join(dir,'gh');
@@ -44,9 +44,17 @@ function runGate(sequence,{base='base-sha',master='base-sha',attempts='3'}={}){
 set -euo pipefail
 args="$*"
 if [[ "$args" == *"/pulls/"* ]]; then
+  if [[ -n "$FAKE_HEAD_AFTER_REVIEW" && -f "$FAKE_COUNTER" ]]; then
+  printf 'false\\t%s\\t%s\\tmaster\\n' "$FAKE_HEAD_AFTER_REVIEW" "$FAKE_BASE"
+  else
   printf 'false\\t%s\\t%s\\tmaster\\n' "$EXPECTED" "$FAKE_BASE"
+  fi
 elif [[ "$args" == *"git/ref/heads/master"* ]]; then
+  if [[ -n "$FAKE_MASTER_AFTER_REVIEW" && -f "$FAKE_COUNTER" ]]; then
+  printf '%s\\n' "$FAKE_MASTER_AFTER_REVIEW"
+  else
   printf '%s\\n' "$FAKE_MASTER"
+  fi
 else
   n=0; test ! -f "$FAKE_COUNTER" || n="$(cat "$FAKE_COUNTER")"
   n=$((n+1)); printf '%s' "$n" > "$FAKE_COUNTER"
@@ -65,6 +73,7 @@ fi
       GITHUB_REPOSITORY:'owner/repo',PR_NUMBER:'320',EXPECTED:'head-sha',
       CERTIFIED:'head-sha',REVIEW_POLL_ATTEMPTS:attempts,REVIEW_POLL_SECONDS:'0',
       FAKE_BASE:base,FAKE_MASTER:master,FAKE_REVIEW_SEQUENCE:sequence,
+      FAKE_MASTER_AFTER_REVIEW:masterAfterReview,FAKE_HEAD_AFTER_REVIEW:headAfterReview,
       FAKE_COUNTER:counter}
   });
   fs.rmSync(dir,{recursive:true,force:true});
@@ -136,4 +145,15 @@ test('independent reviewer is a separate trusted workflow publishing the exact-h
 test('freshly rebased PR matching current master is eligible after a real review PASS',()=>{
   const result=runGate('success',{base:'latest-master',master:'latest-master'});
   assert.equal(result.status,0,result.stderr);
+});
+
+test('a master advance during review polling invalidates an earlier PASS',()=>{
+  const r=runGate('pending,success',{masterAfterReview:'concurrent-master'});
+  assert.notEqual(r.status,0,'the initially matching master became stale');
+  assert.doesNotMatch(r.stdout,/READY_FOR_OCEAN=YES/);
+});
+test('a PR head change during polling invalidates an earlier PASS',()=>{
+  const r=runGate('pending,success',{headAfterReview:'new-pr-head'});
+  assert.notEqual(r.status,0,'the reviewed head differs from the live PR');
+  assert.doesNotMatch(r.stdout,/READY_FOR_OCEAN=YES/);
 });
