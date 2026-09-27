@@ -4,8 +4,9 @@ const http=require('node:http'),fs=require('node:fs'),path=require('node:path');
 const assert=require('node:assert/strict');
 const {chromium,devices}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const root=path.resolve(__dirname,'..'),out=process.env.SCREENSHOT_DIR||require('node:os').tmpdir();
-const file=path.join(root,'apps/telegram-miniapp/game.html');
-assert(fs.statSync(file).size>100000,'Packaged Scratch game missing');
+const GAME_URL='https://mpaykin1.github.io/scratch-chain-reaction/miniapp/game.html';
+assert(fs.readFileSync(path.join(root,'apps/telegram-miniapp/index.html'),'utf8').includes(GAME_URL),
+  'Embedded game must be pinned to the approved first-party Scratch URL');
 const server=http.createServer((req,res)=>{
  const rel=new URL(req.url,'http://local/').pathname.replace(/^\/+/,'');
  const target=path.resolve(root,rel.endsWith('/')?rel+'index.html':rel);
@@ -23,7 +24,7 @@ async function verify(browser,kind,config){
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto('http://127.0.0.1:'+server.address().port+
    '/apps/telegram-miniapp/',{waitUntil:'domcontentloaded',timeout:30000});
- await page.waitForFunction(()=>document.querySelector('#loading')?.hidden,{timeout:45000});
+ await page.waitForFunction(()=>document.querySelector('#loading')?.hidden,{timeout:65000});
  const frame=page.frameLocator('#game');
  await frame.locator('canvas').first().waitFor({state:'visible',timeout:45000});
  await page.waitForTimeout(1500);
