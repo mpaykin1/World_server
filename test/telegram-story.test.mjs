@@ -173,3 +173,17 @@ test('dragon can flee after repeated arrow volleys',()=>{
   assert.equal(unavailable.kind,'blocked');
   assert.deepEqual(unavailable.world.resources,w.resources);
 });
+
+test('legacy D1 session remembers the dragon after an unsupported follow-up',()=>{
+  const arrival=applyStoryText(initialWorld(92),'Прилетел дракон').world;
+  const legacy=structuredClone(arrival);
+  delete legacy.story.dragon;
+  const missed=applyStoryText(legacy,'Мимо прошла странная тень').world;
+  assert.equal(missed.story.last.kind,'unknown');
+  assert(view(missed).reply_markup.inline_keyboard.flat().some(button=>
+    button.callback_data.endsWith(':shoot_dragon')));
+  const corrected=applyStoryText(missed,'Люди стреляют в него из луков');
+  assert.equal(corrected.kind,'defense');
+  assert.equal(corrected.world.story.dragon.health,2);
+  assert.equal(corrected.world.resources.budget,missed.resources.budget-5);
+});
