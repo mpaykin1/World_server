@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ru"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#102a37"><title>Цепная реакция · Telegram</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;height:100dvh;overflow:hidden}
+body{font:600 14px system-ui,-apple-system,sans-serif;color:#fdf0d5;background:#091c29;display:flex;flex-direction:column}
+header{display:flex;align-items:center;gap:8px;padding:calc(env(safe-area-inset-top) + 5px) 8px 5px;background:#124539;border-bottom:1px solid #629986}
+#title{min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:clamp(13px,3.5vw,17px)}
+a,button{border:1px solid #f4d487;border-radius:9px;background:#f4d487;color:#152d32;text-decoration:none;
+ padding:8px;font:700 12px system-ui;cursor:pointer;white-space:nowrap}
+button.alt{background:#27554c;color:#fff4d7;border-color:#7ea68b}
+main{position:relative;flex:1;min-height:0;display:flex}
+iframe{border:0;flex:1;width:100%;height:100%;background:#092430}
+#loading{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:12px;background:#113940;color:#ffe5a7}
+#loading[hidden]{display:none}
+footer{padding:5px 8px calc(env(safe-area-inset-bottom) + 5px);display:flex;align-items:center;gap:8px;background:#113d3b}
+footer span{font-size:10px;flex:1;color:#a9d9ca;font-weight:500}
+@media(orientation:landscape) and (max-height:470px){header{padding:3px 7px}footer{padding:2px 7px}}
+</style>
+<script src="https://telegram.org/js/telegram-web-app.js"></script></head>
+<body><header><span id="title">🌍 Цепная реакция · Злой Джинн</span>
+<button class="alt" id="fullscreen" type="button">⛶ Экран</button>
+<a href="https://t.me/World_serverbot" id="bot">🧞 Бот</a></header>
+<main><div id="loading" role="status">🌱 Загружаем твой анимированный Scratch-мир…</div>
+<iframe id="game" src="./game.html" title="Анимированная Цепная реакция" allow="autoplay; fullscreen" allowfullscreen></iframe></main>
+<footer><span>Scratch-режим · прогресс пока отдельно от текстовой игры бота</span>
+<button class="alt" id="restart" type="button">↺ Заново</button></footer>
+<script>
+(()=>{
+ const game=document.getElementById('game'),telegram=window.Telegram?.WebApp;
+ try{telegram?.ready();telegram?.expand();telegram?.disableVerticalSwipes?.();}catch{}
+ document.getElementById('fullscreen').onclick=()=>{
+   try{telegram?.expand();telegram?.requestFullscreen?.();}catch{}
+   if(!telegram&&document.documentElement.requestFullscreen)
+     document.documentElement.requestFullscreen().catch(()=>{});
+ };
+ game.addEventListener('load',()=>{document.getElementById('loading').hidden=true});
+ game.addEventListener('error',()=>{
+   document.getElementById('loading').textContent='Не удалось загрузить игру. Проверь соединение.';
+ });
+ document.getElementById('restart').onclick=()=>{game.src='./game.html'};
+})();
+</script></body></html>
