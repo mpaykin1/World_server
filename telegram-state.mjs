@@ -101,7 +101,11 @@ export function view(world,notice=''){
       emergency.push({text:'🛡 Укрепить оборону 💰15',
         callback_data:'tg2:'+world.revision+':defend'});
   }
-  const ruin=story?.ruins?.find(x=>!x.rebuilding);
+  const ruin=Array.isArray(story?.ruins)?story.ruins.find(x=>
+    x&&typeof x==='object'&&!Array.isArray(x)&&
+    typeof x.id==='string'&&x.id.trim()&&x.id.length<=128&&
+    typeof x.type==='string'&&Object.hasOwn(engine.PROJECTS,x.type)&&
+    !x.rebuilding):null;
   if(ruin&&engine.preview(world,engine.interpretIntent('',ruin.type)).feasible)
     emergency.push({text:'🏗 Восстановить '+ruin.name,
       callback_data:'tg2:'+world.revision+':rebuild'});
