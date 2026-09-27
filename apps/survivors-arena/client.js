@@ -246,6 +246,12 @@ pad.addEventListener('pointercancel', releasePointer);
 addEventListener('resize', painter.resize);
 window.__SURVIVORS_ARENA_READY__ = {
   ready:true, version:'poc-1',
+  // Purely local fixture for the UI integration test. Cannot mutate the shared world.
+  injectTestGem:() => {
+    if (!run || query.get('e2e') !== '1' || !['localhost','127.0.0.1'].includes(location.hostname)) return false;
+    run.gems.push({ x:run.player.x, y:run.player.y, amount:run.nextXp });
+    return true;
+  },
   snapshot:() => ({
     started:!!run, role:run?.role || null, worldConnected, worldId, worldRevision, time:run?.t || 0,
     sharedWorldReadOnly:true, tags:[...world.tags], canvas:painter.metrics,
