@@ -38,3 +38,17 @@ test('repeated dragon arrival cannot heal an injured or enraged dragon',()=>{
   assert.equal(repeated.story.dragon.temper,'hostile');
   assert.equal(repeated.story.active.kind,'dragon_fire');
 });
+
+test('negative or refused archery cannot charge budget or spawn an event',()=>{
+  const world=applyStoryText(initialWorld(459),'Прилетел дракон').world;
+  for(const phrase of ['Люди не стреляют в него из луков',
+    'Лучники отказались выпускать стрелы в дракона',
+    'Лучники перестали стрелять по дракону из луков']){
+    const out=applyStoryText(world,phrase);
+    assert.equal(out.accepted,false,phrase);
+    assert.equal(out.world.story.last.kind,'blocked',phrase);
+    assert.deepEqual(out.world.resources,world.resources,phrase);
+    assert.equal(out.world.history.length,world.history.length,phrase);
+    assert.equal(out.world.story.dragon.health,3,phrase);
+  }
+});
