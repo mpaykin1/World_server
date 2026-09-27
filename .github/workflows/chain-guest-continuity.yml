@@ -1,0 +1,35 @@
+name: Chain guest-to-Telegram continuity
+on:
+  push:
+    branches: [ai/chatgpt/guest-world-continuity-20260927]
+    paths:
+      - chain-session.mjs
+      - chain-unified-api.mjs
+      - telegram-*.mjs
+      - test/unified-chain-game.test.mjs
+      - .github/workflows/chain-guest-continuity.yml
+  pull_request:
+    branches: [master, feat/unified-chain-world-20260927]
+    paths:
+      - chain-session.mjs
+      - chain-unified-api.mjs
+      - telegram-*.mjs
+      - test/unified-chain-game.test.mjs
+      - .github/workflows/chain-guest-continuity.yml
+permissions:
+  contents: read
+jobs:
+  guest-world-continuity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Syntax checks
+        run: |
+          node --check chain-session.mjs
+          node --check chain-unified-api.mjs
+      - name: Real canonical simulation / D1 Mock unit regressions
+        run: node --test test/unified-chain-game.test.mjs test/telegram-story.test.mjs test/telegram-game.test.mjs
