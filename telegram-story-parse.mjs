@@ -77,7 +77,9 @@ export function classifyStoryText(value,world=null){
   const archers=/люди|жители|горожане|лучники|воины|солдаты|мы\b/i.test(text);
   const shooting=/стреля|выстрел|выпустили? стрел|пустили? стрел|луков|из лука|shoot.*arrow/i.test(text);
   const target=dragon||/в него|по нему|дракону|его из лук/i.test(text);
-  if(archers&&shooting&&target&&(dragon||dragonPresent(world)))
+  // Also recognize the attempt in a fresh world, but reject it safely if the
+  // previous world's dragon was reset. Never invent a target to satisfy it.
+  if(archers&&shooting&&target)
     return{kind:'action',action:'shoot_dragon',text,recognized:true};
   if(dragon){
     const kind=destructive?'dragon_fire':benevolent?'dragon_help':'dragon_arrival';
