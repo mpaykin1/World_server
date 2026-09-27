@@ -579,24 +579,6 @@
       "animation": "story_dragon_arrival-2.mp4"
     },
     {
-      "id": "story_dragon_arrows",
-      "variant": 0,
-      "photo": "story_dragon_arrows-0.png",
-      "animation": "story_dragon_arrows-0.mp4"
-    },
-    {
-      "id": "story_dragon_arrows",
-      "variant": 1,
-      "photo": "story_dragon_arrows-1.png",
-      "animation": "story_dragon_arrows-1.mp4"
-    },
-    {
-      "id": "story_dragon_arrows",
-      "variant": 2,
-      "photo": "story_dragon_arrows-2.png",
-      "animation": "story_dragon_arrows-2.mp4"
-    },
-    {
       "id": "story_dragon_help",
       "variant": 0,
       "photo": "story_dragon_help-0.png",

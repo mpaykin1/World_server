@@ -2,7 +2,7 @@
 // Matching is deliberately conservative: ambiguous plot twists are recorded,
 // illustrated as unclassified, and ask the player what changes physically.
 export const STORY_SCENES=[
-  'story_dragon_fire','story_dragon_arrival','story_dragon_arrows','story_dragon_help',
+  'story_dragon_fire','story_dragon_arrival','story_dragon_help',
   'story_dragon_aftermath','story_fire','story_flood','story_storm',
   'story_earthquake','story_meteor','story_epidemic','story_attack',
   'story_rain','story_drought','story_forest','story_festival',

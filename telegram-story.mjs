@@ -136,7 +136,7 @@ function shootDragon(world,text=''){
     :hit
       ?'Лучники ранили дракона. Он разозлился: теперь городу угрожает ответный огонь.'
       :'Стрелы пролетели мимо. Дракон заметил нападение, ответный огонь возможен.';
-  next.story.last={kind:'defense',scene:'story_dragon_arrows',
+  next.story.last={kind:'defense',scene:'story_defense',
     title:'🏹 Лучники обстреляли дракона.',description:detail,text,target:'Дракон'};
   next.history.push({tick:next.tick,kind:'telegram_story_dragon_arrows',hit,fled});
   closeCrisis(next);

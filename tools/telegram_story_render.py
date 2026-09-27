@@ -2,7 +2,7 @@
 import math
 
 STORY = (
-    "story_dragon_fire", "story_dragon_arrival", "story_dragon_arrows", "story_dragon_help",
+    "story_dragon_fire", "story_dragon_arrival", "story_dragon_help",
     "story_dragon_aftermath", "story_fire", "story_flood", "story_storm",
     "story_earthquake", "story_meteor", "story_epidemic", "story_attack",
     "story_rain", "story_drought", "story_forest", "story_festival",
@@ -12,7 +12,6 @@ STORY = (
 HEAD = {
     "story_dragon_fire": "ДРАКОН ПОДЖЁГ ГОРОД",
     "story_dragon_arrival": "НАД ГОРОДОМ ДРАКОН",
-    "story_dragon_arrows": "ЛУЧНИКИ ПРОТИВ ДРАКОНА",
     "story_dragon_help": "ДРАКОН ПОМОГ ГОРОДУ",
     "story_dragon_aftermath": "СЛЕДЫ ДРАКОНЬЕГО ОГНЯ",
     "story_fire": "ПОЖАР В ГОРОДЕ", "story_flood": "НАВОДНЕНИЕ",
@@ -83,24 +82,6 @@ def draw_story(d, scene, variant, frame, plant):
         burned_site(d,frame,smolder=kind!="dragon_aftermath")
     if kind.startswith("dragon") and kind!="dragon_aftermath":
         dragon(d,frame,kind)
-    if kind=="dragon_arrows":
-        # Independent, looping trajectories; bows and the dragon stay visible.
-        for j in range(3):
-            bx=116+j*57
-            by=259+(j%2)*9
-            d.ellipse((bx-5,by-43,bx+7,by-31),
-                      fill=(238,199,147),outline=(52,69,68),width=2)
-            d.line((bx,by-29,bx+2,by-5),fill=(117,157,153),width=5)
-            d.line((bx+1,by-24,bx+20,by-36),fill=(202,174,115),width=3)
-            d.arc((bx+6,by-53,bx+30,by-10),74,290,
-                  fill=(245,198,106),width=3)
-            d.line((bx+14,by-47,bx+24,by-13),fill=(244,224,169),width=1)
-            progress=(frame*1.3+j*.31)%1.0
-            ax=bx+22+(440-bx-22-int(87*frame))*progress
-            ay=by-39+(111-by+39)*progress
-            d.line((ax-11,ay+6,ax+11,ay-7),fill=(239,215,174),width=3)
-            d.polygon([(ax+12,ay-8),(ax+1,ay-6),(ax+7,ay+1)],
-                      fill=(242,242,226))
     if kind=="flood":
         d.polygon([(0,220),(122,213),(262,232),(389,218),(640,222),
                    (640,321),(0,321)],fill=(38,128,165))
