@@ -191,3 +191,32 @@ test('daily advance repairs malformed active incidents without aftermath',()=>{
   assert.deepEqual(advanced.resources,ticked.resources);
   assert.equal(advanced.population,ticked.population);
 });
+
+test('malformed story envelopes and ruins fail closed without throwing',()=>{
+  const malformed=[
+    'fire',[],42,
+    {active:null,ruins:'old-ruin',last:null,evacuated:0},
+    {active:null,ruins:{id:'old-ruin'},last:null,evacuated:0}
+  ];
+  for(const story of malformed){
+    const world=engine.createWorld('malformed-story-envelope');
+    world.story=story;
+    const original=structuredClone(world);
+    for(const action of ['evacuate','defend','rebuild']){
+      const result=applyStoryAction(world,action);
+      assert.equal(result.accepted,false,JSON.stringify(story)+':'+action);
+      assert.equal(result.world.story.active,null);
+      assert.deepEqual(result.world.story.ruins,[]);
+      assert.deepEqual(result.world.resources,original.resources);
+      assert.equal(result.world.population,original.population);
+      assert(Object.values(result.world.resources).every(Number.isFinite));
+    }
+    const ticked=engine.tick(world);
+    const advanced=advanceStoryDay(world,ticked);
+    assert.equal(advanced.story.active,null);
+    assert.deepEqual(advanced.story.ruins,[]);
+    assert.deepEqual(advanced.resources,ticked.resources);
+    assert.equal(advanced.population,ticked.population);
+    assert.deepEqual(world,original,'repair must not mutate persisted input');
+  }
+});
