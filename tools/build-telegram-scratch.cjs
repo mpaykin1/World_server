@@ -13,7 +13,8 @@ const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypt
  maker.options.appearance.background='#091928';
  maker.options.loadingScreen.text='Цепная реакция — загружаем живой мир…';
  maker.options.controls.fullscreen.enabled=true;
- maker.options.custom.css='html,body{margin:0;background:#091928;overflow:hidden}';
+ maker.options.custom.css=
+   "html,body{margin:0;background:#091928 url('./backdrop.webp') center/cover fixed!important;overflow:hidden}";
  const result=await maker.package();
  if(result.type!=='text/html')throw Error('Bad output: '+result.type);
  const out=path.resolve(__dirname,'../apps/telegram-miniapp/game.html');
