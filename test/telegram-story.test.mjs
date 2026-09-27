@@ -204,6 +204,16 @@ test('typed archery rejects other targets and a reversed dragon actor',()=>{
     'Орк рядом. Люди стреляют по нему из луков',
     'Knight nearby. People shoot him with bows',
     'Goblin nearby. People shoot him with bows',
+    'Лучники перестали выпускать стрелы в дракона',
+    'Лучники отказались выпускать стрелы в дракона',
+    'Лучники закончили выпускать стрелы в дракона',
+    'Лучники прекратили выпускать стрелы в дракона',
+    'Лучники не стали выпускать стрелы в дракона',
+    'Лучники перестали пускать стрелы по дракону',
+    'Лучники отказались пускать стрелы по дракону',
+    'Лучники закончили пускать стрелы по дракону',
+    'Лучники прекратили пускать стрелы по дракону',
+    'Лучники не стали пускать стрелы по дракону',
     'Волк рядом. Люди стреляют по нему из луков',
     'Люди видят, как дракон стреляет в людей из лука',
     'Люди стреляют не в дракона из луков',
@@ -250,6 +260,9 @@ test('typed archery rejects other targets and a reversed dragon actor',()=>{
     'Над городом появился дракон. Лучники стреляют по нему из луков',
     'People shoot at the dragon with the bows'])
     assert.equal(classifyStoryText(text,arrived).action,'shoot_dragon',text);
+  for(const text of ["Fire destroyed the archers' bows",
+    'The people fled the fire with bows'])
+    assert.equal(classifyStoryText(text,arrived).kind,'fire',text);
 });
 test('dragon can flee after repeated arrow volleys',()=>{
   let w=applyStoryText(initialWorld(74),'Прилетел дракон').world;

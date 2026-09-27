@@ -66,10 +66,12 @@ export function dragonPresent(world){
       /^telegram_story_dragon_(?:arrival|fire|help)$/.test(event.kind)));
 }
 function classifyArchery(text){
-  const shot=/(?:стреля(?:ют|ет|ем|ете|л[аи]?|ть)|выстрел(?:ил[аи]?|или|ить)|выпустил[аи]?|выпустили|пустил[аи]?|пустили|shoot(?:s|ing)?|fir(?:ing|ed|es|e))/i.exec(text);
+  const shot=/(?:стреля(?:ют|ет|ем|ете|л[аи]?|ть)|выстрел(?:ил[аи]?|или|ить)|выпустил[аи]?|выпустили|пустил[аи]?|пустили|(?:вы)?пуска(?:ют|ть)|(?:вы)?пустить|shoot(?:s|ing)?|fir(?:ing|ed|es|e))/i.exec(text);
   const bow=/(?:лук(?:а|ов|ами)?|стрел(?:а|ы|ами)?|bows?|arrows?)/i.test(text);
   if(!shot||!bow)return null;
   const before=text.slice(0,shot.index);
+  const englishFire=/^fir(?:ing|ed|es|e)$/i.test(shot[0]);
+  if(englishFire&&(!before.trim()||/\bthe\s*$/i.test(before)))return null;
   const clauseBreak=Math.max(before.lastIndexOf('.'),before.lastIndexOf('!'),
     before.lastIndexOf('?'));
   const clauseBefore=before.slice(clauseBreak+1);

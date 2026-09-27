@@ -385,7 +385,17 @@ test('D1 rejects reversed or conflicting archery without AI, charge or dragon mu
     [22,'People shoot him with bows, but not anymore'],
     [23,'Люди стреляют в него из луков, но передумали'],
     [24,'Рыцарь рядом. Люди стреляют по нему из луков'],
-    [25,'Knight nearby. People shoot him with bows']]){
+    [25,'Knight nearby. People shoot him with bows'],
+    [26,'Лучники перестали выпускать стрелы в дракона'],
+    [27,'Лучники отказались выпускать стрелы в дракона'],
+    [28,'Лучники закончили выпускать стрелы в дракона'],
+    [29,'Лучники прекратили выпускать стрелы в дракона'],
+    [30,'Лучники не стали выпускать стрелы в дракона'],
+    [31,'Лучники перестали пускать стрелы по дракону'],
+    [32,'Лучники отказались пускать стрелы по дракону'],
+    [33,'Лучники закончили пускать стрелы по дракону'],
+    [34,'Лучники прекратили пускать стрелы по дракону'],
+    [35,'Лучники не стали пускать стрелы по дракону']]){
     await post(e,a,text(id,message));
     const stored=(await loadSession(e.TELEGRAM_DB,42)).world;
     assert.deepEqual(stored.resources,arrived.resources,message);
@@ -395,6 +405,17 @@ test('D1 rejects reversed or conflicting archery without AI, charge or dragon mu
     assert(!stored.history.some(x=>x.kind==='telegram_story_dragon_arrows'));
   }
   assert.equal(modelCalls,0,'deterministic clarification must not spend AI quota');
+});
+test('D1 leaves real fire language on the combustion path',async()=>{
+  for(const message of ["Fire destroyed the archers' bows",
+    'The people fled the fire with bows']){
+    const e=env(),a=mockApi();
+    await post(e,a,start(1));
+    await post(e,a,text(2,message));
+    const stored=(await loadSession(e.TELEGRAM_DB,42)).world;
+    assert.equal(stored.story.last.kind,'fire',message);
+    assert(!stored.history.some(x=>x.kind==='telegram_story_dragon_arrows'),message);
+  }
 });
 test('D1 executes common positive dragon volleys in both word orders',async()=>{
   const messages=['Лучники стреляют из луков по дракону',
