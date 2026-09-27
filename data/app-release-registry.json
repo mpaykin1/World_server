@@ -185,6 +185,13 @@
         "spawn",
         "render"
       ]
+    },
+    "telegram-miniapp": {
+      "title": "Цепная реакция — Telegram Scratch",
+      "visible": false,
+      "status": "beta",
+      "kind": "telegram-miniapp",
+      "reason": "Точная упакованная анимированная Scratch-игра доступна по кнопке Telegram. Прогресс пока отдельно от D1 мира бота; пока не сертифицирована как Golden 3D world и не включена в общий каталог."
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",
