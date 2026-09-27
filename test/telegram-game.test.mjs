@@ -279,11 +279,19 @@ test('D1 callback repairs malformed story envelopes without spending resources',
 });
 test('Telegram view ignores malformed ruin elements',()=>{
   const world=initialWorld(42);
-  world.story={active:null,ruins:[null,'old-ruin',{id:'old-ruin',type:'invented'}],
+  world.story={active:null,ruins:[null,'old-ruin',{id:'old-ruin',type:'invented'},
+    {id:'empty-marker',type:'workshop',rebuilding:''},
+    {id:'object-marker',type:'workshop',rebuilding:{}}],
     last:null,evacuated:0};
   const rendered=view(world);
   assert(!rendered.reply_markup.inline_keyboard.flat()
     .some(button=>button.callback_data?.endsWith(':rebuild')));
+
+  world.story.ruins=[{id:'canonical-ruin',type:'workshop',name:'Мастерская',
+    source:'fire',rebuilding:null}];
+  assert(view(world).reply_markup.inline_keyboard.flat()
+    .some(button=>button.callback_data?.endsWith(':rebuild')),
+  'a canonical unrepaired ruin must retain its rebuild control');
 });
 test('unsolicited free-form story, unrelated to menu state, is still executed',async()=>{
   const e=env(),a=mockApi();
