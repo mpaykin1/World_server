@@ -396,3 +396,23 @@ test('D1 rejects reversed or conflicting archery without AI, charge or dragon mu
   }
   assert.equal(modelCalls,0,'deterministic clarification must not spend AI quota');
 });
+test('D1 executes common positive dragon volleys in both word orders',async()=>{
+  const messages=['Лучники стреляют из луков по дракону',
+    'The archers are shooting at the dragon with bows',
+    'People are shooting arrows at the dragon',
+    'Прилетел дракон. Жители стреляют по нему из луков',
+    'A dragon arrived. Archers shoot him with arrows'];
+  for(const message of messages){
+    const e=env(),a=mockApi();
+    await post(e,a,start(1));
+    await post(e,a,text(2,'Прилетел дракон'));
+    const arrived=(await loadSession(e.TELEGRAM_DB,42)).world;
+    await post(e,a,text(3,message));
+    const stored=(await loadSession(e.TELEGRAM_DB,42)).world;
+    assert.equal(stored.resources.budget,arrived.resources.budget-5,message);
+    assert.equal(stored.story.dragon.health,2,message);
+    assert.equal(stored.story.active.kind,'dragon_fire',message);
+    assert.equal(stored.history.filter(x=>
+      x.kind==='telegram_story_dragon_arrows').length,1,message);
+  }
+});

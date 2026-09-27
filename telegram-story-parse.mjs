@@ -77,7 +77,7 @@ function classifyArchery(text){
   const priorClause=priorText.slice(Math.max(priorText.lastIndexOf('.'),
     priorText.lastIndexOf('!'),priorText.lastIndexOf('?'))+1);
   const after=text.slice(shot.index+shot[0].length);
-  const actor=/^\s*(?:люди|жители|горожане|лучники|воины|солдаты|мы|people|citizens|archers|we)(?:\s+([^.!?]{0,60}?))?\s*$/i.exec(clauseBefore);
+  const actor=/^\s*(?:люди|жители|горожане|лучники|воины|солдаты|мы|(?:the\s+)?(?:people|citizens|archers)|we)(?:\s+([^.!?]{0,60}?))?\s*$/i.exec(clauseBefore);
   const bridge=String(actor?.[1]||'').trim();
   // Fail closed: only known positive auxiliaries/adverbs may occur between the
   // actor and the shooting verb. Unknown modality is clarified, never charged.
@@ -88,10 +88,10 @@ function classifyArchery(text){
     /\b(?:not|never|cannot|cant|can't|wont|won't|dont|don't|doesnt|doesn't|didnt|didn't|refus\w*|stop\w*|avoid\w*|unable|incapable|declin\w*|quit\w*|ceas\w*)\b/i.test(clauseBefore);
   const explicitDragon=/(?:(?:в|по)\s+дракон(?:а|у|ом)?(?:\s|$)|at\s+(?:the\s+)?dragon|^\s*(?:the\s+)?dragon(?:\s|$))/i.test(after);
   const pronoun=/(?:(?:в|по)\s+(?:него|нему)(?:\s|$)|(?:at\s+him|him))/i.test(after);
-  const positiveAfter=/^(?:\s*(?:в|по)\s+(?:него|нему|дракон(?:а|у|ом)?)\s+(?:из\s+)?(?:лука|луков|стрел(?:а|ы|ами)?)(?:\s+(?:сейчас|активно|внезапно|сразу|метко))*|\s*(?:at\s+)?(?:him|(?:the\s+)?dragon)\s+(?:with\s+)?(?:bows?|arrows?)(?:\s+(?:now|actively|suddenly|immediately|accurately))*)\s*[.!?]*$/i.test(after);
+  const positiveAfter=/^(?:\s*(?:в|по)\s+(?:него|нему|дракон(?:а|у|ом)?)\s+(?:из\s+)?(?:лука|луков|стрел(?:а|ы|ами)?)|\s*(?:из\s+)?(?:лука|луков|стрел(?:а|ы|ами)?)\s+(?:в|по)\s+(?:него|нему|дракон(?:а|у|ом)?)|\s*(?:at\s+)?(?:him|(?:the\s+)?dragon)\s+(?:with\s+)?(?:bows?|arrows?)|\s*(?:with\s+)?(?:bows?|arrows?)\s+(?:at\s+)?(?:him|(?:the\s+)?dragon))(?:\s+(?:сейчас|активно|внезапно|сразу|метко|now|actively|suddenly|immediately|accurately))*\s*[.!?]*$/i.test(after);
   const negativeTarget=/(?:не\s+(?:в|по)\s+(?:дракон|него|нему)|not\s+at\s+(?:the\s+)?dragon)/i.test(after);
-  const otherTarget=/(?:(?:в|по)\s+(?!дракон|него(?:\s|$)|нему(?:\s|$))[а-яёa-z-]{2,}|(?:волк\w*|медвед\w*|мишен\w*|монстр\w*|людей|жителей|wolf|bear|target|people))/i.test(after);
-  const priorDragon=/^(?:дракон|dragon)(?:\s+(?:рядом|здесь|летит|прилетел|nearby|here|flies|arrived))*\s*$/i.test(priorClause);
+  const otherTarget=/(?:(?:^|\s)(?:в|по)\s+(?!дракон|него(?:\s|$)|нему(?:\s|$))[а-яёa-z-]{2,}|(?:волк\w*|медвед\w*|мишен\w*|монстр\w*|людей|жителей|wolf|bear|target|people))/i.test(after);
+  const priorDragon=/^(?:(?:прилетел\s+)?дракон(?:\s+(?:рядом|здесь|летит|прилетел))*|в\s+небе\s+дракон|(?:the\s+|a\s+)?dragon(?:\s+(?:is\s+)?(?:nearby|here)|\s+(?:flies|arrived))*)\s*$/i.test(priorClause);
   const competingReferent=pronoun&&(
     /(?:волк\w*|медвед\w*|мишен\w*|монстр\w*|wolf|bear|target)/i.test(clauseBefore)||
     (Boolean(priorClause)&&!priorDragon));

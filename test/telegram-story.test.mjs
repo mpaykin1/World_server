@@ -230,7 +230,16 @@ test('typed archery rejects other targets and a reversed dragon actor',()=>{
     'People are shooting at the dragon with bows',
     'Archers started shooting at him with bows',
     'People are actively shooting at the dragon with bows',
-    'People suddenly shoot the dragon with bows'])
+    'People suddenly shoot the dragon with bows',
+    'Лучники стреляют из луков по дракону',
+    'Люди стреляют стрелами в дракона',
+    'Прилетел дракон. Жители стреляют по нему из луков',
+    'В небе дракон. Лучники стреляют по нему из луков',
+    'The archers are shooting at the dragon with bows',
+    'People are shooting arrows at the dragon',
+    'Archers shoot arrows at him',
+    'The dragon is nearby. People shoot him with bows',
+    'A dragon arrived. Archers shoot him with arrows'])
     assert.equal(classifyStoryText(text,arrived).action,'shoot_dragon',text);
 });
 test('dragon can flee after repeated arrow volleys',()=>{
