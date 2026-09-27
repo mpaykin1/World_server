@@ -4,6 +4,9 @@
   "bytes": 4856336,
   "generatedAt": "2026-09-27",
   "compiledSha256": "b9eb8fb77202c3a93228ea0c03dfd73ef7aa1f0aa5b37e9aca7a6974c03a8e01",
-  "hostedUrl": "https://mpaykin1.github.io/scratch-chain-reaction/miniapp/game.html",
-  "sourceRepoCommit": "29707f9512c48e91b9cd3a1a7f761ede21ed9858"
+  "hostedUrl": "https://mpaykin1.github.io/scratch-chain-reaction/player/",
+  "sourceRepoCommit": "29707f9512c48e91b9cd3a1a7f761ede21ed9858",
+  "fallbackUrl": "https://mpaykin1.github.io/scratch-chain-reaction/miniapp/game.html",
+  "runtime": "owner-hosted TurboWarp Scaffolding MPL-2.0 with true portrait and wide stage",
+  "playerSourceSha": "934b80c330eb509150fcfd186b1830cd2458b3a5"
 }
