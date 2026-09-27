@@ -984,3 +984,10 @@ Registered on protected base `75bb69eab3d94f260ee8140075f48a4d1e2ed32e`. Impleme
 - **Required tests:** `node --test test/survivors-arena.test.mjs`; `npm run check`; `npx playwright test e2e/survivors-arena.spec.js --project=desktop-chromium --project=mobile-webkit`; standard release gates for later certification.
 - **Status:** WORKING — implementation pending; never call this public-ready merely because source files exist.
 - **Completion criteria:** reproducible attacks/gems/choices, fixed enemy budgets, actual browser motion and controls on desktop/iOS emulation, user-visible intensity and upgrade feedback, documented licenses; public link only after fresh live verified production, >85% measured visibility and project Golden Standard.
+
+### 2026-09-27 implementation checkpoint
+- Added a **real opt-in playable front-end**: `apps/survivors-arena/{index.html,style.css,client.js,render.mjs}`.
+- Added seeded pure simulation core `shared/survivors-arena-core.mjs`, 3 original playable archetypes, 9 upgrades, escalating auto-fire horde, XP gems and magnetic pickup, boss milestones, evolution, bounded particles/enemies, responsive/mobile joystick, optional generated audio, motion reduction.
+- Read-only `macro_read` from current canonical shared World Server world; honest autonomous fallback if unavailable. Current POC does not persist arena consequences back to Supabase or Telegram.
+- Added `test/survivors-arena.test.mjs`, browser tests in `e2e/survivors-arena.spec.js` and independent PR CI in `.github/workflows/survivors-arena.yml`; local-only fixture is **UI-specific**. Deterministic Node suite separately tests legitimate enemy kills, gems and upgrades.
+- **Still pending:** live GitHub CI results, desktop/iPhone screenshots and independent visual/user visibility scoring; certified release and stable production link are intentionally blocked until those checks succeed.
