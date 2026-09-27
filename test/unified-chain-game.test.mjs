@@ -123,6 +123,7 @@ test('Telegram and browser share D1 state, revisions and one-time pairing',async
   const guest=await call(env,'/state','GET',undefined,browserToken);
   assert.equal(guest.status,200);
   assert.equal(guest.data.linked,false);
+  assert.equal(guest.data.placed.city,0,'default simulator housing must not paint a player-built cinematic city');
   const city=await call(env,'/action','POST',{kind:'build',type:'city',
     revision:guest.data.revision},browserToken);
   assert.equal(city.status,200);
