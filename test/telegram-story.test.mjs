@@ -153,8 +153,8 @@ test('archers react to an existing dragon referenced as him',()=>{
   assert.equal(shot.world.story.active.kind,'dragon_fire');
   assert.equal(shot.world.resources.budget,arrival.resources.budget-5);
   assert.equal(shot.world.population,arrival.population);
-  assert.equal(shot.world.story.last.scene,'story_defense');
-  assert.equal(classifyTurn(arrival,shot.world,'story').id,'story_defense');
+  assert.equal(shot.world.story.last.scene,'story_dragon_arrows');
+  assert.equal(classifyTurn(arrival,shot.world,'story').id,'story_dragon_arrows');
   assert(view(arrival).reply_markup.inline_keyboard.flat().some(button=>
     button.callback_data.endsWith(':shoot_dragon')));
   assert.deepEqual(applyStoryText(arrival,'Люди стреляют в него из луков'),shot,
