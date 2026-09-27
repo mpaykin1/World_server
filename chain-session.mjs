@@ -6,7 +6,7 @@ const bytes=n=>crypto.getRandomValues(new Uint8Array(n));
 export const hashHex=async value=>[...new Uint8Array(await crypto.subtle.digest(
   'SHA-256',enc.encode(value)))].map(x=>x.toString(16).padStart(2,'0')).join('');
 export function newBrowserToken(){
-  const b=bytes(32);
+  return btoa(String.fromCharCode(...b)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
   return btoa(String.fromCharCode(...b)).replace(/\\+/g,'-').replace(/\\//g,'_').replace(/=+$/,'');
 }
 export function newLinkCode(){
@@ -29,7 +29,7 @@ export async function telegramUserId(initData,botToken,now=Date.now()){
   try{parsed=JSON.parse(user);}catch{return null;}
   if(!Number.isSafeInteger(parsed.id)||parsed.id<=0)return null;
   const check=[...params.entries()].filter(([k])=>k!=='hash')
-    .sort(([a],[b])=>a.localeCompare(b,'en')).map(([k,v])=>k+'='+v).join('\\n');
+    .sort(([a],[b])=>a.localeCompare(b,'en')).map(([k,v])=>k+'='+v).join('\n');
   const secret=await digest(enc.encode('WebAppData'),botToken);
   const signed=[...await digest(secret,check)].map(x=>x.toString(16).padStart(2,'0')).join('');
   return hexEqual(signed,hash)?String(parsed.id):null;
