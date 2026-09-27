@@ -42,7 +42,16 @@ function ruinRecord(value){
     source:THREATS.has(value.source)?value.source:'unknown',
     rebuilding:value.rebuilding||null};
 }
-const ruinRecords=value=>Array.isArray(value)?value.map(ruinRecord).filter(Boolean):[];
+function ruinRecords(value){
+  if(!Array.isArray(value))return [];
+  const seen=new Set(),records=[];
+  for(const candidate of value){
+    const record=ruinRecord(candidate);
+    if(!record||seen.has(record.id))continue;
+    seen.add(record.id);records.push(record);
+  }
+  return records;
+}
 function storyState(world){
   const stored=world.story;
   const state=stored&&typeof stored==='object'&&!Array.isArray(stored)

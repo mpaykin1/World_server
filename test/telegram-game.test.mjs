@@ -277,6 +277,23 @@ test('D1 callback repairs malformed story envelopes without spending resources',
     assert(Object.values(saved.world.resources).every(Number.isFinite));
   }
 });
+test('D1 callback deduplicates canonical ruins before action eligibility',async()=>{
+  const e=env(),a=mockApi();
+  const session=await loadSession(e.TELEGRAM_DB,42);
+  session.world.story={active:null,ruins:[
+    {id:'same-ruin',type:'workshop',name:'Мастерская',source:'fire',rebuilding:null},
+    {id:'same-ruin',type:'workshop',name:'Копия',source:'fire',rebuilding:null}
+  ],last:null,evacuated:0};
+  e.TELEGRAM_DB.rows.get('42').world=JSON.stringify(session.world);
+  const before=structuredClone(session.world.resources);
+
+  assert.equal((await post(e,a,callback(1,'tg2:0:defend'))).status,200);
+  const saved=await loadSession(e.TELEGRAM_DB,42);
+  assert.equal(saved.world.story.last.kind,'blocked');
+  assert.equal(saved.world.story.ruins.length,1);
+  assert.equal(saved.world.story.ruins[0].id,'same-ruin');
+  assert.deepEqual(saved.world.resources,before);
+});
 test('Telegram view ignores malformed ruin elements',()=>{
   const world=initialWorld(42);
   world.story={active:null,ruins:[null,'old-ruin',{id:'old-ruin',type:'invented'},

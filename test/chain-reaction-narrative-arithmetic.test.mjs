@@ -225,3 +225,23 @@ test('malformed story envelopes and ruins fail closed without throwing',()=>{
     assert.deepEqual(world,original,'repair must not mutate persisted input');
   }
 });
+
+test('duplicate ruin ids cannot start or charge a second rebuild',()=>{
+  const world=engine.createWorld('duplicate-ruin-id');
+  world.story={active:null,ruins:[
+    {id:'same-ruin',type:'workshop',name:'Мастерская',source:'fire',rebuilding:null},
+    {id:'same-ruin',type:'workshop',name:'Поддельная копия',source:'fire',rebuilding:null}
+  ],last:null,evacuated:0};
+
+  const first=applyStoryAction(world,'rebuild');
+  assert.equal(first.accepted,true);
+  assert.equal(first.world.story.ruins.length,1);
+  assert.equal(first.world.projects.length,1);
+  const resources=structuredClone(first.world.resources);
+
+  const second=applyStoryAction(first.world,'rebuild');
+  assert.equal(second.accepted,false);
+  assert.equal(second.world.story.ruins.length,1);
+  assert.equal(second.world.projects.length,1);
+  assert.deepEqual(second.world.resources,resources);
+});
