@@ -2,13 +2,16 @@
 // Canonical project math is imported, never duplicated or replaced by an LLM.
 import {
   engine, MAX_INTENT, initialWorld, options, applyPlan,
-  loadSession, saveSession, view, MINIAPP_URL
+  loadSession, saveSession, view as baseView, MINIAPP_URL
 } from './telegram-state.mjs';
 import {makeVisualTurn} from './telegram-scenes.mjs';
 import {applyStoryText,applyStoryAction,advanceStoryDay} from './telegram-story.mjs';
 import {STORY_ACTIONS} from './telegram-story-parse.mjs';
 
 const WEBHOOK_URL='https://world-server.mmmpaykin.workers.dev/api/telegram/webhook';
+const betaEnabled=env=>env?.TELEGRAM_MINIAPP_BETA_ENABLED==='true';
+// A hidden beta is offered only in opted-in private Telegram conversations.
+const view=(world,notice='',env={})=>baseView(world,notice,{miniappEnabled:betaEnabled(env)});
 const TOKEN_PATTERN=/^\d+:[A-Za-z0-9_-]{20,}$/;
 const responseJson=(value,status=200)=>new Response(JSON.stringify(value),{
   status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store'}
@@ -65,6 +68,12 @@ async function onCommand(message,updateId,env,fetcher){
   });
   if(!updated)return;
   if(/^\/game(?:@\w+)?(?:\s|$)/i.test(message.text||'')){
+    if(!betaEnabled(env)){
+      await botApi(env.TELEGRAM_BOT_TOKEN,'sendMessage',{
+        chat_id:chatId,text:'Графическая игра пока проходит выпускную проверку. Попробуй позже.'
+      },fetcher);
+      return;
+    }
     await botApi(env.TELEGRAM_BOT_TOKEN,'sendMessage',{
       chat_id:chatId,
       text:'🎮 Открой графическую «Цепную реакцию» прямо внутри Telegram. Это та же анимированная Scratch-игра. Прогресс графической и текстовой версий пока раздельный.',
@@ -73,7 +82,7 @@ async function onCommand(message,updateId,env,fetcher){
     return;
   }
   await sendGame(env.TELEGRAM_BOT_TOKEN,chatId,
-    makeVisualTurn(session.world,world,reset||session.lastUpdate<0?'new':'resume','',updateId,view(world)),fetcher);
+    makeVisualTurn(session.world,world,reset||session.lastUpdate<0?'new':'resume','',updateId,view(world,'',env)),fetcher);
 }
 function parseCallback(data){
   const match=/^tg2:(\d{1,10}):([a-z_]{1,35})$/.exec(data||'');
@@ -93,7 +102,7 @@ async function onCallback(callback,updateId,env,fetcher){
     await botApi(token,'answerCallbackQuery',{callback_query_id:callback.id,
       text:'Эта кнопка устарела. Продолжим текущую игру.'},fetcher);
     if(updateId>session.lastUpdate)await sendGame(token,chat.id,
-      makeVisualTurn(session.world,session.world,'stale','',updateId,view(session.world)),fetcher);
+      makeVisualTurn(session.world,session.world,'stale','',updateId,view(session.world,'',env)),fetcher);
     return;
   }
   let world=session.world,restart=session.restart,pending=null,notice='',action='day',projectType='';
@@ -120,7 +129,7 @@ async function onCallback(callback,updateId,env,fetcher){
       await botApi(token,'answerCallbackQuery',{callback_query_id:callback.id,
         text:'Этот проект больше недоступен.'},fetcher);
       await sendGame(token,chat.id,
-        makeVisualTurn(world,world,'blocked','',updateId,view(world)),fetcher);
+        makeVisualTurn(world,world,'blocked','',updateId,view(world,'',env)),fetcher);
       return;
     }
     const outcome=applyPlan(world,candidate.type);
@@ -138,7 +147,7 @@ async function onCallback(callback,updateId,env,fetcher){
     text:saved?'Решение принято.':'Ход уже изменился.'},fetcher);
   if(!saved)return;
   await sendGame(token,chat.id,
-    makeVisualTurn(session.world,world,action,projectType,updateId,view(world,notice)),fetcher);
+    makeVisualTurn(session.world,world,action,projectType,updateId,view(world,notice,env)),fetcher);
 }
 async function onText(message,updateId,env,fetcher){
   if(message.chat?.type!=='private')return;
@@ -149,7 +158,7 @@ async function onText(message,updateId,env,fetcher){
   if(!text||text.length>MAX_INTENT){
     await sendGame(token,message.chat.id,
       makeVisualTurn(session.world,session.world,'plan','',updateId,
-        view(session.world,'Напиши идею длиной от 1 до 600 символов.')),fetcher);
+        view(session.world,'Напиши идею длиной от 1 до 600 символов.',env)),fetcher);
     return;
   }
   // Every free-form message is a possible story turn, even if the player did
@@ -162,7 +171,7 @@ async function onText(message,updateId,env,fetcher){
   if(!saved)return;
   await sendGame(token,message.chat.id,
     makeVisualTurn(session.world,result.world,
-      result.action,result.kind,updateId,view(result.world)),fetcher);
+      result.action,result.kind,updateId,view(result.world,'',env)),fetcher);
 }
 export async function handleTelegramWebhook(request,env,fetcher=fetch){
   if(request.method!=='POST')return new Response('Method Not Allowed',{status:405});
