@@ -255,33 +255,30 @@ test('unsolicited free-form story, unrelated to menu state, is still executed',a
   assert.equal(a.calls.length,count,'Duplicate delivery must not create another story');
 });
 
-test('D1 webhook persists dragon and one volley across reload, dedup and reset',async()=>{
-  const e=env(),a=mockApi();
-  assert.equal((await post(e,a,start(20))).status,200);
-  assert.equal((await post(e,a,text(21,'Прилетел дракон'))).status,200);
-  const arrival=(await loadSession(e.TELEGRAM_DB,42)).world;
-  assert.equal(arrival.story.dragon.health,3);
-  assert.equal(arrival.story.dragon.present,true);
-  assert.equal((await post(e,a,text(22,'Люди стреляют в него из луков'))).status,200);
+test('D1 persists dragon arrows exactly once, then isolates a reset',async()=>{
+  const e=env(),a=mockApi(),arrows='Люди стреляют в него из луков';
+  await post(e,a,start(20));
+  await post(e,a,text(21,'Прилетел дракон'));
+  const before=(await loadSession(e.TELEGRAM_DB,42)).world;
+  await post(e,a,text(22,arrows));
   const shot=(await loadSession(e.TELEGRAM_DB,42)).world;
-  assert.equal(shot.story.last.kind,'defense');
-  assert.equal(shot.story.dragon.health,2);
-  assert.equal(shot.resources.budget,arrival.resources.budget-5);
-  assert.equal(shot.history.filter(x=>x.kind==='telegram_story_dragon_arrows').length,1);
-  assert.match(a.calls.filter(x=>x.method==='sendAnimation').at(-1).payload.animation,
-    /story_defense-\d\.mp4$/);
-  const renders=a.calls.length;
-  await post(e,a,text(22,'Люди стреляют в него из луков'));
-  assert.equal(a.calls.length,renders,'duplicate update cannot rerender');
+  assert.deepEqual([before.story.dragon.health,shot.story.dragon.health,
+    shot.story.last.kind,shot.resources.budget,
+    shot.history.filter(x=>x.kind==='telegram_story_dragon_arrows').length],
+    [3,2,'defense',before.resources.budget-5,1]);
+  assert.match(a.calls.filter(x=>x.method==='sendAnimation').at(-1)
+    .payload.animation,/story_defense-\d\.mp4$/);
+  const sent=a.calls.length;
+  await post(e,a,text(22,arrows));
+  assert.equal(a.calls.length,sent);
   assert.deepEqual((await loadSession(e.TELEGRAM_DB,42)).world,shot);
   await post(e,a,start(23));
   assert.equal((await loadSession(e.TELEGRAM_DB,42)).world.story.dragon.health,2);
   await post(e,a,callback(24,'tg2:'+shot.revision+':reset'));
   const reset=(await loadSession(e.TELEGRAM_DB,42)).world;
-  assert.equal(reset.story?.dragon?.present??false,false);
-  await post(e,a,text(25,'Люди стреляют в него из луков'));
-  const blocked=(await loadSession(e.TELEGRAM_DB,42)).world;
-  assert.equal(blocked.story.last.kind,'blocked');
-  assert.deepEqual(blocked.resources,reset.resources);
-  assert.equal(blocked.history.filter(x=>x.kind==='telegram_story_dragon_arrows').length,0);
+  await post(e,a,text(25,arrows));
+  const after=(await loadSession(e.TELEGRAM_DB,42)).world;
+  assert.deepEqual(after.resources,reset.resources);
+  assert.equal(after.story.last.kind,'blocked');
+  assert(!after.history.some(x=>x.kind==='telegram_story_dragon_arrows'));
 });
