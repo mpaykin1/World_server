@@ -34,10 +34,11 @@ export async function classifyStoryWithAI(world,text,ai){
   const state=world.story||{};
   const context={
     dragon:dragonPresent(world)?'present':'absent',
-    dragonHealth:state.dragon?.present?state.dragon.health:null,
-    crisis:state.active?.kind||null,
-    lastStory:state.last?.kind||null,
-    lastText:state.last?.text?.slice(0,120)||null
+    dragonHealth:state.dragon?.present&&Number.isSafeInteger(state.dragon.health)
+      ?Math.min(3,Math.max(1,state.dragon.health)):null,
+    crisis:typeof state.active?.kind==='string'?state.active.kind.slice(0,35):null,
+    lastStory:typeof state.last?.kind==='string'?state.last.kind.slice(0,35):null,
+    lastText:typeof state.last?.text==='string'?state.last.text.slice(0,120):null
   };
   try{
     const result=await ai.run(STORY_AI_MODEL,{
@@ -51,7 +52,7 @@ export async function classifyStoryWithAI(world,text,ai){
     if(!decoded||typeof decoded.evidence!=='string')return simple;
     const evidence=decoded.evidence.trim();
     if(!evidence||evidence.length>120||
-      !simple.text.toLocaleLowerCase().includes(evidence.toLocaleLowerCase()))
+      !simple.text.toLowerCase().includes(evidence.toLowerCase()))
       return simple;
     if(EVENTS.has(decoded.kind))
       return {...simple,kind:decoded.kind,recognized:true};

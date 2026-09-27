@@ -61,6 +61,18 @@ function storyState(world){
   state.evacuated=evacuatedCount(state);
   if(state.dragon===undefined&&dragonPresent(world))
     state.dragon={present:true,health:3,temper:'calm'};
+  else if(state.dragon!==null&&state.dragon!==undefined){
+    const raw=state.dragon;
+    if(!raw||typeof raw!=='object'||Array.isArray(raw)||
+       typeof raw.present!=='boolean')state.dragon=null;
+    else state.dragon={
+      present:raw.present,
+      health:raw.present
+        ?(Number.isSafeInteger(raw.health)&&raw.health>=1&&raw.health<=3?raw.health:3)
+        :0,
+      temper:['calm','hostile'].includes(raw.temper)?raw.temper:'calm'
+    };
+  }
   return state;
 }
 function damagedTarget(world,text){

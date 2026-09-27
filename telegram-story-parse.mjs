@@ -61,7 +61,8 @@ export function dragonPresent(world){
   // their private narrative history, even after an unrecognized follow-up.
   return ['dragon_arrival','dragon_fire','dragon_help'].includes(story.last?.kind)||
     story.active?.kind==='dragon_fire'||
-    Boolean(world.history?.some(event=>
+    Boolean(Array.isArray(world.history)&&world.history.some(event=>
+      event&&typeof event==='object'&&
       /^telegram_story_dragon_(?:arrival|fire|help)$/.test(event.kind)));
 }
 export function classifyStoryText(value,world=null){

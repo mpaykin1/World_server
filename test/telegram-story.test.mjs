@@ -200,3 +200,13 @@ test('New World explicitly resets old dragon; follow-up explains missing target'
   assert.match(reply.world.story.last.description,/Новый мир/);
   assert.deepEqual(reply.world.resources,fresh.resources);
 });
+
+test('corrupt persisted dragon health repairs before an arrow hit',()=>{
+  const old=applyStoryText(initialWorld(79),'Прилетел дракон').world;
+  const corrupt=structuredClone(old);
+  corrupt.story.dragon.health={untrusted:true};
+  const result=applyStoryText(corrupt,'Люди стреляют в него из луков');
+  assert.equal(result.kind,'defense');
+  assert.equal(result.world.story.dragon.health,2);
+  assert.equal(corrupt.story.dragon.health.untrusted,true,'input stays untouched');
+});

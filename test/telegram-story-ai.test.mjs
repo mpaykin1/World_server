@@ -46,3 +46,23 @@ test('AI cannot invent effects, unsupported construction or ungrounded events',a
     assert.equal(result.world.projects.length,0);
   }
 });
+
+test('malformed legacy story never crashes the optional AI context',async()=>{
+  const before=initialWorld(78);
+  before.story={active:{kind:5},ruins:[],evacuated:0,
+    last:{kind:{untrusted:'tag'},text:{untrusted:'prompt'}},
+    dragon:{present:true,health:{untrusted:'value'}}};
+  const message='Гигантская волна захлестнула площадь';
+  const ai={run:async(model,args)=>{
+    assert.equal(model,STORY_AI_MODEL);
+    const payload=JSON.parse(args.messages[1].content);
+    assert.equal(payload.world.lastText,null);
+    assert.equal(payload.world.lastStory,null);
+    assert.equal(payload.world.dragonHealth,null);
+    return{response:JSON.stringify({kind:'flood',evidence:'Гигантская волна'})};
+  }};
+  const classified=await classifyStoryWithAI(before,message,ai);
+  assert.equal(classified.kind,'flood');
+  const result=applyStoryIntent(before,classified);
+  assert.equal(result.world.story.last.kind,'flood');
+});
