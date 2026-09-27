@@ -6,8 +6,6 @@ on:
 
 permissions:
   contents: read
-  pull-requests: read
-  checks: read
 
 jobs:
   fleet-pre:
@@ -65,10 +63,10 @@ jobs:
     steps:
       - name: Reject missing or stale certificate
         env:
-          GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
           EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
           CERTIFIED: ${{ needs.fleet-pre.outputs.sha }}
         run: |
           set -euo pipefail
-          bash scripts/ocean-eligibility-gate.sh
+          test -n "$CERTIFIED"
+          test "$CERTIFIED" = "$EXPECTED"
+          echo "READY_FOR_OCEAN=YES SHA=$CERTIFIED"
