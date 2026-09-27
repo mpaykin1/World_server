@@ -77,7 +77,7 @@ function callback(id,data){return{update_id:id,callback_query:{
   id:'query-'+id,data,message:{chat}
 }};}
 function text(id,message){return{update_id:id,message:{chat,text:message}};}
-function env(){return{TELEGRAM_BOT_TOKEN:TOKEN,TELEGRAM_DB:new MockD1()};}
+function env(){return{TELEGRAM_BOT_TOKEN:TOKEN,TELEGRAM_DB:new MockD1(),TELEGRAM_MINIAPP_BETA_ENABLED:'true'};}
 
 test('canonical world uses repeatable seed and feasible choices',()=>{
   assert.deepEqual(initialWorld(42),initialWorld(42));
@@ -117,6 +117,16 @@ test('start sends new-world animation and seven controls, without AI calls',asyn
   assert.equal((await loadSession(e.TELEGRAM_DB,42)).lastUpdate,10);
   await post(e,a,start(10));
   assert.equal(a.calls.length,1,'Telegram retry must not double-send');
+});
+test('hidden beta cannot be opened or advertised unless production enables it',async()=>{
+  const e=env(),a=mockApi();e.TELEGRAM_MINIAPP_BETA_ENABLED='false';
+  await post(e,a,start(1));
+  const ordinary=a.calls.at(-1).payload;
+  assert(!ordinary.reply_markup.inline_keyboard.flat().some(x=>x.web_app));
+  await post(e,a,start(2,'/game'));
+  assert.equal(a.calls.at(-1).method,'sendMessage');
+  assert.match(a.calls.at(-1).payload.text,/проверку/);
+  assert(!a.calls.at(-1).payload.reply_markup?.inline_keyboard?.flat().some(x=>x.web_app));
 });
 test('/game opens the same approved Scratch graphics inside Telegram',async()=>{
   const e=env(),a=mockApi();
