@@ -254,3 +254,28 @@ test('unsolicited free-form story, unrelated to menu state, is still executed',a
   await post(e,a,text(2,'Наводнение затопило город'));
   assert.equal(a.calls.length,count,'Duplicate delivery must not create another story');
 });
+
+test('webhook chains dragon arrival, arrow follow-up and free AI fallback',async()=>{
+  const e=env(),a=mockApi();
+  let modelCalls=0;
+  e.AI={run:async()=>{modelCalls++;
+    return{response:JSON.stringify({kind:'flood',evidence:'Гигантская волна'})};
+  }};
+  await post(e,a,start(1));
+  await post(e,a,text(2,'Прилетел дракон'));
+  const arrival=(await loadSession(e.TELEGRAM_DB,42)).world;
+  assert.equal(arrival.story.dragon.present,true);
+  await post(e,a,text(3,'Люди стреляют в него из луков'));
+  const shot=(await loadSession(e.TELEGRAM_DB,42)).world;
+  assert.equal(modelCalls,0,'well-understood context must not spend AI quota');
+  assert.equal(shot.story.last.kind,'defense');
+  assert.equal(shot.story.dragon.health,2);
+  assert.equal(shot.resources.budget,arrival.resources.budget-5);
+  assert.match(a.calls.filter(x=>x.method==='sendAnimation').at(-1).payload.animation,
+    /story_defense-\d\.mp4$/);
+  await post(e,a,text(4,'Гигантская волна накрыла побережье'));
+  const aiTurn=(await loadSession(e.TELEGRAM_DB,42)).world;
+  assert.equal(modelCalls,1);
+  assert.equal(aiTurn.story.last.kind,'flood');
+  assert(aiTurn.resources.power<shot.resources.power);
+});
