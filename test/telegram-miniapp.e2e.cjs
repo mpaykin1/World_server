@@ -4,7 +4,7 @@ const http=require('node:http'),fs=require('node:fs'),path=require('node:path');
 const assert=require('node:assert/strict');
 const {chromium,devices}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const root=path.resolve(__dirname,'..'),out=process.env.SCREENSHOT_DIR||require('node:os').tmpdir();
-const GAME_URL='https://mpaykin1.github.io/scratch-chain-reaction/miniapp/game.html';
+const GAME_URL='https://mpaykin1.github.io/scratch-chain-reaction/player/';
 assert(fs.readFileSync(path.join(root,'apps/telegram-miniapp/index.html'),'utf8').includes(GAME_URL),
   'Embedded game must be pinned to the approved first-party Scratch URL');
 const server=http.createServer((req,res)=>{
@@ -27,7 +27,10 @@ async function verify(browser,kind,config){
  await page.waitForFunction(()=>document.querySelector('#loading')?.hidden,{timeout:65000});
  const frame=page.frameLocator('#game');
  await frame.locator('canvas').first().waitFor({state:'visible',timeout:45000});
- await page.waitForTimeout(1500);
+ const actual=page.frames().find(f=>f.url().startsWith(GAME_URL));
+ assert(actual,kind+': self-hosted game frame unavailable');
+ await actual.waitForFunction(()=>window.__ownTurboWarp?.diagnostics?.started,null,{timeout:75000});
+ await page.waitForTimeout(400);
  const info=await page.evaluate(()=>{
   const iframe=document.querySelector('#game'),c=iframe.getBoundingClientRect();
   return{frameWidth:c.width,frameHeight:c.height,viewportWidth:innerWidth,
@@ -43,7 +46,13 @@ async function verify(browser,kind,config){
  assert(!info.horizontalOverflow,kind+': horizontal overflow');
  assert(info.frameWidth>=info.viewportWidth*.95,kind+': stage not fullscreen width');
  assert(info.frameHeight>=info.viewportHeight*.65,kind+': game too small');
+ const coverage=stage.width*stage.height/(info.frameWidth*info.frameHeight);
+ assert(coverage>=.85,kind+': actual Scratch canvas too small '+coverage);
+ const choices=await actual.evaluate(()=>window.__ownTurboWarp.player.vm.runtime.targets.filter(t=>t.getName?.().startsWith('Выбор ')).map(t=>({name:t.getName(),visible:t.visible,x:t.x,y:t.y})));
+ assert.equal(choices.length,5,kind+': missing choice sprites');
+ assert(choices.every(c=>c.visible),kind+': invisible options');
  assert.equal(errors.length,0,kind+': JavaScript runtime errors '+errors.join(';'));
+ console.log('CANVAS_COVERAGE_PERCENT',kind,Math.round(coverage*1000)/10);
  const screenshot=path.join(out,'world-server-telegram-'+kind+'.png');
  await page.screenshot({path:screenshot,fullPage:true});
  console.log('MINIAPP_BROWSER_PASS',kind,JSON.stringify(info),JSON.stringify(stage),
