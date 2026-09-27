@@ -258,7 +258,10 @@ test('D1 callback repairs malformed active incidents without spending resources'
   }
 });
 test('D1 callback repairs malformed story envelopes without spending resources',async()=>{
-  for(const story of ['fire',[],{active:null,ruins:'old-ruin',last:null,evacuated:0}]){
+  for(const story of ['fire',[],{active:null,ruins:'old-ruin',last:null,evacuated:0},
+    {active:null,ruins:[null],last:null,evacuated:0},
+    {active:null,ruins:['old-ruin'],last:null,evacuated:0},
+    {active:null,ruins:[{id:'old-ruin',type:'invented',rebuilding:null}],last:null,evacuated:0}]){
     const e=env(),a=mockApi();
     const session=await loadSession(e.TELEGRAM_DB,42);
     session.world.story=story;
@@ -273,6 +276,14 @@ test('D1 callback repairs malformed story envelopes without spending resources',
     assert.equal(saved.world.population,before.population);
     assert(Object.values(saved.world.resources).every(Number.isFinite));
   }
+});
+test('Telegram view ignores malformed ruin elements',()=>{
+  const world=initialWorld(42);
+  world.story={active:null,ruins:[null,'old-ruin',{id:'old-ruin',type:'invented'}],
+    last:null,evacuated:0};
+  const rendered=view(world);
+  assert(!rendered.reply_markup.inline_keyboard.flat()
+    .some(button=>button.callback_data?.endsWith(':rebuild')));
 });
 test('unsolicited free-form story, unrelated to menu state, is still executed',async()=>{
   const e=env(),a=mockApi();
