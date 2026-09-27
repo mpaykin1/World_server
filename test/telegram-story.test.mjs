@@ -169,6 +169,9 @@ test('typed archery rejects other targets and a reversed dragon actor',()=>{
     'Люди стреляют по мишеням из луков','Дракон стреляет в людей из лука',
     'Люди видят волков и стреляют в него из луков',
     'Люди не стреляют в него из луков',
+    'Люди перестали стрелять в него из луков',
+    'Люди отказались стрелять в него из луков',
+    'People refuse to shoot him with bows',
     'Люди видят, как дракон стреляет в людей из лука',
     'Люди стреляют не в дракона из луков',
     'Люди стреляют из луков, а дракон наблюдает']){
@@ -183,6 +186,8 @@ test('typed archery rejects other targets and a reversed dragon actor',()=>{
       x.kind==='telegram_story_dragon_arrows').length,0,text);
   }
   assert.equal(classifyStoryText('Лучники стреляют в дракона из луков',arrived).action,
+    'shoot_dragon');
+  assert.equal(classifyStoryText('Дракон рядом. Люди стреляют по нему из луков',arrived).action,
     'shoot_dragon');
 });
 test('dragon can flee after repeated arrow volleys',()=>{

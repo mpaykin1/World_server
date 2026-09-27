@@ -70,16 +70,18 @@ function classifyArchery(text){
   const bow=/(?:лук(?:а|ов|ами)?|стрел(?:а|ы|ами)?|bows?|arrows?)/i.test(text);
   if(!shot||!bow)return null;
   const before=text.slice(0,shot.index);
+  const clauseBefore=before.slice(Math.max(before.lastIndexOf('.'),before.lastIndexOf('!'),
+    before.lastIndexOf('?'))+1);
   const after=text.slice(shot.index+shot[0].length);
-  const humanActor=/(?:^|[.!?]\s*)(?:люди|жители|горожане|лучники|воины|солдаты|мы|people|citizens|archers|we)(?:\s|$)[^.!?]{0,60}$/i.test(before)&&
-    !/(?:дракон|dragon)/i.test(before);
-  const negated=/(?:^|\s)(?:не|not)\s*$/i.test(before)||
-    /(?:^|\s)(?:не\s+(?:будут|стали|хотят)|not\s+going\s+to)\s*$/i.test(before);
+  const humanActor=/^\s*(?:люди|жители|горожане|лучники|воины|солдаты|мы|people|citizens|archers|we)(?:\s|$)[^.!?]{0,60}$/i.test(clauseBefore)&&
+    !/(?:дракон|dragon)/i.test(clauseBefore);
+  const negated=/(?:^|\s)(?:не|not)\s*$/i.test(clauseBefore)||
+    /(?:^|\s)(?:не\s+(?:будут|стали|хотят)|not\s+going\s+to|перестал[аи]?|отказал(?:ся|ись)|refuse(?:s|d)?\s+to|stop(?:ped)?\s+)\s*$/i.test(clauseBefore);
   const explicitDragon=/(?:(?:в|по)\s+дракон(?:а|у|ом)?(?:\s|$)|at\s+(?:the\s+)?dragon)/i.test(after);
   const pronoun=/(?:(?:в|по)\s+(?:него|нему)(?:\s|$)|(?:at\s+him|him))/i.test(after);
   const negativeTarget=/(?:не\s+(?:в|по)\s+(?:дракон|него|нему)|not\s+at\s+(?:the\s+)?dragon)/i.test(after);
   const otherTarget=/(?:(?:в|по)\s+(?!дракон|него(?:\s|$)|нему(?:\s|$))[а-яёa-z-]{2,}|(?:волк\w*|медвед\w*|мишен\w*|монстр\w*|людей|жителей|wolf|bear|target|people))/i.test(after);
-  const competingReferent=pronoun&&/(?:волк\w*|медвед\w*|мишен\w*|монстр\w*|wolf|bear|target)/i.test(before);
+  const competingReferent=pronoun&&/(?:волк\w*|медвед\w*|мишен\w*|монстр\w*|wolf|bear|target)/i.test(clauseBefore);
   if(humanActor&&!negated&&!negativeTarget&&(explicitDragon||pronoun)&&
      !otherTarget&&!competingReferent)
     return{kind:'action',action:'shoot_dragon',text,recognized:true};

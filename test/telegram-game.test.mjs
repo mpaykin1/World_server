@@ -364,7 +364,8 @@ test('D1 rejects reversed or conflicting archery without AI, charge or dragon mu
   await post(e,a,text(2,'Прилетел дракон'));
   const arrived=(await loadSession(e.TELEGRAM_DB,42)).world;
   for(const [id,message] of [[3,'Люди стреляют в волков из луков'],
-    [4,'Дракон стреляет в людей из лука']]){
+    [4,'Дракон стреляет в людей из лука'],
+    [5,'Люди отказались стрелять в него из луков']]){
     await post(e,a,text(id,message));
     const stored=(await loadSession(e.TELEGRAM_DB,42)).world;
     assert.deepEqual(stored.resources,arrived.resources,message);
