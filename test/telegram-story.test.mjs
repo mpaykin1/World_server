@@ -138,3 +138,38 @@ test('free-form rescue action does not require pressing a menu first',()=>{
   assert.equal(denial.accepted,false);
   assert.match(denial.world.story.last.description,/Нечего тушить/);
 });
+
+test('archers react to an existing dragon referenced as him',()=>{
+  const start=initialWorld(73);
+  assert.equal(applyStoryText(start,'Люди стреляют в него из луков').kind,'unknown',
+    'no dragon must not be invented');
+  const arrival=applyStoryText(start,'Прилетел дракон').world;
+  assert.equal(arrival.story.dragon.present,true);
+  assert.equal(arrival.story.active,null,'arrival itself is peaceful');
+  const shot=applyStoryText(arrival,'Люди стреляют в него из луков');
+  assert.equal(shot.accepted,true);
+  assert.equal(shot.kind,'defense');
+  assert.equal(shot.world.story.dragon.health,2);
+  assert.equal(shot.world.story.active.kind,'dragon_fire');
+  assert.equal(shot.world.resources.budget,arrival.resources.budget-5);
+  assert.equal(shot.world.population,arrival.population);
+  assert.equal(shot.world.story.last.scene,'story_defense');
+  assert.equal(classifyTurn(arrival,shot.world,'story').id,'story_defense');
+  assert(view(arrival).reply_markup.inline_keyboard.flat().some(button=>
+    button.callback_data.endsWith(':shoot_dragon')));
+  assert.deepEqual(applyStoryText(arrival,'Люди стреляют в него из луков'),shot,
+    'the outcome must be reproducible from the same revision');
+  assert.equal(arrival.story.dragon.health,3,'input is immutable');
+});
+test('dragon can flee after repeated arrow volleys',()=>{
+  let w=applyStoryText(initialWorld(74),'Прилетел дракон').world;
+  for(let i=0;i<6&&w.story.dragon.present;i++)
+    w=applyStoryText(w,'Лучники стреляют по нему из луков').world;
+  assert.equal(w.story.dragon.present,false);
+  assert.equal(w.story.active,null);
+  assert.equal(view(w).reply_markup.inline_keyboard.flat().some(button=>
+    button.callback_data.endsWith(':shoot_dragon')),false);
+  const unavailable=applyStoryText(w,'Лучники стреляют в дракона из луков');
+  assert.equal(unavailable.kind,'blocked');
+  assert.deepEqual(unavailable.world.resources,w.resources);
+});
