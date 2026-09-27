@@ -254,3 +254,34 @@ test('unsolicited free-form story, unrelated to menu state, is still executed',a
   await post(e,a,text(2,'Наводнение затопило город'));
   assert.equal(a.calls.length,count,'Duplicate delivery must not create another story');
 });
+
+test('D1 webhook persists dragon and one volley across reload, dedup and reset',async()=>{
+  const e=env(),a=mockApi();
+  assert.equal((await post(e,a,start(20))).status,200);
+  assert.equal((await post(e,a,text(21,'Прилетел дракон'))).status,200);
+  const arrival=(await loadSession(e.TELEGRAM_DB,42)).world;
+  assert.equal(arrival.story.dragon.health,3);
+  assert.equal(arrival.story.dragon.present,true);
+  assert.equal((await post(e,a,text(22,'Люди стреляют в него из луков'))).status,200);
+  const shot=(await loadSession(e.TELEGRAM_DB,42)).world;
+  assert.equal(shot.story.last.kind,'defense');
+  assert.equal(shot.story.dragon.health,2);
+  assert.equal(shot.resources.budget,arrival.resources.budget-5);
+  assert.equal(shot.history.filter(x=>x.kind==='telegram_story_dragon_arrows').length,1);
+  assert.match(a.calls.filter(x=>x.method==='sendAnimation').at(-1).payload.animation,
+    /story_defense-\d\.mp4$/);
+  const renders=a.calls.length;
+  await post(e,a,text(22,'Люди стреляют в него из луков'));
+  assert.equal(a.calls.length,renders,'duplicate update cannot rerender');
+  assert.deepEqual((await loadSession(e.TELEGRAM_DB,42)).world,shot);
+  await post(e,a,start(23));
+  assert.equal((await loadSession(e.TELEGRAM_DB,42)).world.story.dragon.health,2);
+  await post(e,a,callback(24,'tg2:'+shot.revision+':reset'));
+  const reset=(await loadSession(e.TELEGRAM_DB,42)).world;
+  assert.equal(reset.story?.dragon?.present??false,false);
+  await post(e,a,text(25,'Люди стреляют в него из луков'));
+  const blocked=(await loadSession(e.TELEGRAM_DB,42)).world;
+  assert.equal(blocked.story.last.kind,'blocked');
+  assert.deepEqual(blocked.resources,reset.resources);
+  assert.equal(blocked.history.filter(x=>x.kind==='telegram_story_dragon_arrows').length,0);
+});
