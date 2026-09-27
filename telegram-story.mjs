@@ -70,10 +70,10 @@ function enactWorldEvent(world,input){
   const kind=input.kind,next=engine.applyNarrativeEvent(world,kind);
   next.story=storyState(next);
   if(['dragon_arrival','dragon_fire','dragon_help'].includes(kind)){
-    const previous=next.story.dragon;
-    next.story.dragon={present:true,health:previous?.present?previous.health:3,
-      temper:kind==='dragon_fire'?'hostile':
-        previous?.present?previous.temper:'calm'};
+    if(!next.story.dragon?.present)next.story.dragon={
+      present:true,health:3,temper:kind==='dragon_fire'?'hostile':'calm'
+    };
+    else if(kind==='dragon_fire')next.story.dragon.temper='hostile';
   }
   let target='';
   if(BURNING.has(kind)||['earthquake','meteor','attack'].includes(kind)||
