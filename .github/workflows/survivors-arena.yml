@@ -1,0 +1,45 @@
+name: Survivors Arena POC smoke
+
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - 'apps/survivors-arena/**'
+      - 'shared/survivors-arena-core.mjs'
+      - 'test/survivors-arena.test.mjs'
+      - 'e2e/survivors-arena.spec.js'
+      - '.github/workflows/survivors-arena.yml'
+  workflow_dispatch:
+
+jobs:
+  deterministic-and-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Deterministic simulation regression suite
+        run: node --test test/survivors-arena.test.mjs
+      - name: Verify browser module syntax
+        run: |
+          node --check shared/survivors-arena-core.mjs
+          node --check apps/survivors-arena/client.js
+          node --check apps/survivors-arena/render.mjs
+      - name: Install browser test dependencies
+        run: npm ci --ignore-scripts
+      - name: Install Chromium and iPhone WebKit engines
+        run: npx playwright install --with-deps chromium webkit
+      - name: Desktop Chromium and iPhone WebKit behavioral smoke
+        run: npx playwright test e2e/survivors-arena.spec.js --project=desktop-chromium --project=mobile-webkit --reporter=line
+      - name: Preserve screenshots and browser traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: survivors-arena-browser-evidence
+          path: |
+            test-results/
+            playwright-report/
+          if-no-files-found: ignore
