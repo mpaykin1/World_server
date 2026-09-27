@@ -127,6 +127,45 @@ test('negation-free dragon arrival is not falsely treated as a fire',()=>{
   assert.equal(out.kind,'dragon_arrival');
   assert.equal(out.world.story.active,null);
   assert.equal(out.world.story.ruins.length,0);
+  assert.deepEqual(out.world.story.entities,[{
+    id:'dragon:primary',kind:'dragon',status:'active',health:3,
+    location:'у реки',arrivedAtTick:0
+  }]);
+});
+test('archers resolve a pronoun to the persisted dragon and retaliation uses the engine',()=>{
+  const arrived=applyStoryText(initialWorld(14),'Прилетел дракон').world;
+  const before=structuredClone(arrived);
+  assert.equal(classifyStoryText('Люди стреляют в него из луков').action,'shoot');
+  const result=applyStoryText(arrived,'Люди стреляют в него из луков');
+  assert.equal(result.accepted,true);
+  assert.equal(result.kind,'dragon_archery');
+  assert.equal(result.world.revision,before.revision+1);
+  assert.equal(result.world.story.entities[0].health,2);
+  assert.equal(result.world.story.entities[0].status,'active');
+  assert.equal(result.world.story.active.kind,'dragon_fire');
+  assert.equal(result.world.resources.budget,before.resources.budget-36);
+  assert(result.world.resources.health<before.resources.health);
+  assert.equal(result.world.history.at(-1).kind,'telegram_story_dragon_archery');
+  assert.deepEqual(result.world.history.at(-1).requirements,
+    {archers:3,bows:3,budget:6});
+  assert.deepEqual(arrived,before,'input world remains immutable');
+});
+test('archery without an active dragon asks for a useful target clarification',()=>{
+  const before=initialWorld(14);
+  const result=applyStoryText(before,'Люди стреляют в него из луков');
+  assert.equal(result.accepted,false);
+  assert.match(result.world.story.last.description,/активного дракона|Уточни цель/);
+  assert.deepEqual(result.world.resources,before.resources);
+});
+test('legacy dragon fire hydrates one bounded target before pronoun resolution',()=>{
+  const world=initialWorld(14);
+  world.story={active:{kind:'dragon_fire',severity:3,age:0,target:''},
+    ruins:[],last:null,evacuated:0};
+  const result=applyStoryText(world,'Люди стреляют в него из луков');
+  assert.equal(result.accepted,true);
+  assert.equal(result.world.story.entities.length,1);
+  assert.equal(result.world.story.entities[0].id,'dragon:primary');
+  assert.equal(result.world.story.entities[0].health,2);
 });
 test('free-form rescue action does not require pressing a menu first',()=>{
   const w=applyStoryText(initialWorld(42),'Прилетел дракон и сжег комплекс').world;

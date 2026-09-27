@@ -22,6 +22,38 @@ const TITLE={
 };
 const evacuatedCount=story=>Number.isSafeInteger(story?.evacuated)&&story.evacuated>0
   ?story.evacuated:0;
+function entityRecord(value){
+  if(!value||typeof value!=='object'||Array.isArray(value))return null;
+  if(value.id!=='dragon:primary'||value.kind!=='dragon')return null;
+  if(!['active','fled'].includes(value.status))return null;
+  if(!Number.isSafeInteger(value.health)||value.health<1||value.health>3)return null;
+  if(!Number.isSafeInteger(value.arrivedAtTick)||value.arrivedAtTick<0)return null;
+  return {id:value.id,kind:value.kind,status:value.status,health:value.health,
+    location:typeof value.location==='string'&&value.location.trim()
+      ?value.location.trim().slice(0,80):'окрестности города',
+    arrivedAtTick:value.arrivedAtTick};
+}
+function entityRecords(value){
+  if(!Array.isArray(value))return [];
+  const records=[];
+  for(const candidate of value){
+    const record=entityRecord(candidate);
+    if(record&&!records.some(item=>item.id===record.id))records.push(record);
+  }
+  return records;
+}
+const activeDragon=story=>Array.isArray(story?.entities)
+  ?story.entities.find(entity=>entityRecord(entity)?.status==='active')||null:null;
+function ensureDragon(story,tick,text=''){
+  let dragon=activeDragon(story);
+  if(dragon)return dragon;
+  dragon=story.entities.find(entity=>entity?.id==='dragon:primary')||null;
+  const arrival={id:'dragon:primary',kind:'dragon',status:'active',health:3,
+    location:/рек[аиу]|river/i.test(text)?'у реки':'окрестности города',arrivedAtTick:tick};
+  if(dragon)Object.assign(dragon,arrival);
+  else{dragon=arrival;story.entities.push(dragon)}
+  return dragon;
+}
 function activeIncident(value){
   if(!value||typeof value!=='object'||Array.isArray(value))return null;
   if(!THREATS.has(value.kind))return null;
@@ -55,9 +87,12 @@ function ruinRecords(value){
 function storyState(world){
   const stored=world.story;
   const state=stored&&typeof stored==='object'&&!Array.isArray(stored)
-    ?stored:{active:null,ruins:[],last:null,evacuated:0};
+    ?stored:{active:null,ruins:[],entities:[],last:null,evacuated:0};
   state.active=activeIncident(state.active);
   state.ruins=ruinRecords(state.ruins);
+  state.entities=entityRecords(state.entities);
+  if(state.active?.kind==='dragon_fire'&&!activeDragon(state))
+    ensureDragon(state,Number.isSafeInteger(world.tick)&&world.tick>=0?world.tick:0);
   state.evacuated=evacuatedCount(state);
   return state;
 }
@@ -101,6 +136,8 @@ function closeCrisis(world){
 function enactWorldEvent(world,input){
   const kind=input.kind,next=engine.applyNarrativeEvent(world,kind);
   next.story=storyState(next);
+  if(['dragon_arrival','dragon_fire','dragon_help'].includes(kind))
+    ensureDragon(next.story,next.tick,input.text);
   let target='';
   if(BURNING.has(kind)||['earthquake','meteor','attack'].includes(kind)||
      (['flood','storm'].includes(kind)&&/смы|разруш|снес|разбил|уничтож/i.test(input.text)))
@@ -141,6 +178,44 @@ function rescueTarget(world){
 }
 export function applyStoryAction(world,action,text=''){
   if(!STORY_ACTIONS.has(action))return reject(world,'Неизвестное действие.');
+  if(action==='shoot'){
+    const stored=storyState({story:structuredClone(world.story)});
+    const target=activeDragon(stored);
+    if(!target)return reject(world,
+      'Не вижу активного дракона. Уточни цель или сначала опиши, где появился дракон.');
+    const archers=3,cost=6;
+    if((world.resources?.workers||0)<archers)return reject(world,
+      'Нужно минимум 3 свободных жителя для отряда лучников. Можно укрепить оборону или эвакуироваться.');
+    if((world.resources?.budget||0)<cost)return reject(world,
+      'Не хватает 6 единиц бюджета на луки и стрелы. Можно укрепить оборону или эвакуироваться.');
+    let next=structuredClone(world);next.story=stored;
+    next=engine.applyResourceDelta(next,{budget:-cost});
+    let dragon=activeDragon(next.story);dragon.health--;
+    const retaliated=dragon.health>1;
+    let damaged='';
+    if(retaliated){
+      next=engine.applyNarrativeEvent(next,'dragon_fire');
+      next.story=storyState(next);
+      dragon=activeDragon(next.story);
+      damaged=destroyStructure(next,text,'dragon_fire');
+      next.story.active={kind:'dragon_fire',severity:3,age:0,target:damaged};
+    }else{
+      next.revision++;
+      dragon.status='fled';
+      next.story.active=null;
+    }
+    const detail=retaliated
+      ?'Три лучника выпустили залп и ранили дракона. Он ответил огнём; повреждён объект: '+damaged+'.'
+      :'Залп попал в ослабленного дракона. Он отступил, непосредственная угроза закончилась.';
+    next.story.last={kind:'dragon_archery',scene:'story_defense',
+      title:retaliated?'🏹 Лучники ранили дракона — он атакует!':'🏹 Дракон отступил.',
+      description:detail,text,target:'dragon:primary'};
+    next.history.push({tick:next.tick,kind:'telegram_story_dragon_archery',
+      target:'dragon:primary',requirements:{archers,bows:archers,budget:cost},
+      hit:true,retaliated,remainingHealth:dragon.health});
+    closeCrisis(next);
+    return{world:next,accepted:true,action:'story',kind:'dragon_archery'};
+  }
   if(!rescueTarget(world)&&action!=='relief')
     return reject(world,'Сейчас нет активной угрозы или разрушений.');
   if((action==='evacuate'||action==='defend')&&!activeIncident(world.story?.active))

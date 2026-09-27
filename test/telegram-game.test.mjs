@@ -323,3 +323,34 @@ test('unsolicited free-form story, unrelated to menu state, is still executed',a
   await post(e,a,text(2,'Наводнение затопило город'));
   assert.equal(a.calls.length,count,'Duplicate delivery must not create another story');
 });
+test('D1 preserves dragon target, archery retaliation and retry idempotency across reload',async()=>{
+  const e=env(),a=mockApi();
+  await post(e,a,start(1));
+  await post(e,a,text(2,'Прилетел дракон'));
+  const arrived=await loadSession(e.TELEGRAM_DB,42);
+  assert.equal(arrived.world.story.entities[0].id,'dragon:primary');
+  assert.equal(arrived.world.story.entities[0].health,3);
+
+  await post(e,a,text(3,'Люди стреляют в него из луков'));
+  const attacked=await loadSession(e.TELEGRAM_DB,42);
+  assert.equal(attacked.world.story.entities[0].health,2);
+  assert.equal(attacked.world.story.active.kind,'dragon_fire');
+  assert.equal(attacked.world.history.filter(x=>
+    x.kind==='telegram_story_dragon_archery').length,1);
+  assert.match(a.calls.filter(x=>x.method==='sendAnimation').at(-1)
+    .payload.animation,/story_defense-[0-2]\.mp4$/);
+
+  const charged=attacked.world.resources.budget;
+  const calls=a.calls.length;
+  await post(e,a,text(3,'Люди стреляют в него из луков'));
+  const duplicate=await loadSession(e.TELEGRAM_DB,42);
+  assert.equal(duplicate.world.resources.budget,charged);
+  assert.equal(duplicate.world.history.filter(x=>
+    x.kind==='telegram_story_dragon_archery').length,1);
+  assert.equal(a.calls.length,calls,'retry must not render or charge twice');
+
+  await post(e,a,start(4));
+  const resumed=await loadSession(e.TELEGRAM_DB,42);
+  assert.equal(resumed.world.story.entities[0].health,2);
+  assert.equal(resumed.world.story.active.kind,'dragon_fire');
+});

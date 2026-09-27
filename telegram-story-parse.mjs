@@ -10,7 +10,7 @@ export const STORY_SCENES=[
   'story_rebuild','story_defense','story_recovery','story_unknown'
 ];
 export const STORY_ACTIONS=new Set([
-  'extinguish','evacuate','defend','rebuild','relief'
+  'extinguish','evacuate','defend','rebuild','relief','shoot'
 ]);
 const rules=[
   ['fire',/пожар|огонь|сгорел|сгорел[аи]|сгоревш|сожг|сж[её]г|горит|подж[её]г|wildfire|fire/i],
@@ -47,6 +47,7 @@ export function supportedBuildType(text){
 
 const isBuilding=/постро|возв[её]л|возвест|строить|созда[тл].*(?:станци|ферм|завод|комплекс|город)|build/i;
 const actionPatterns=[
+  ['shoot',/(?=.*(?:стрел(?:я|ять|яет|яют|ял|или)|выстрел))(?=.*(?:лук|луков|стрел[аы]|arrow|bow))/i],
   ['extinguish',/потуш|затуш|туш[ие]|огнетуш|extinguish/i],
   ['evacuate',/эваку|укры|увест.*жител|спасти.*люд|evacuat/i],
   ['defend',/защит|оборон|отогна|дракон.*уб[ие]|defend/i],
@@ -61,12 +62,12 @@ export function classifyStoryText(value){
   const benevolent=/подар|помо[гщ]|спас|добр|золото|друж|gift|help/i.test(text);
   if(/^\s*(?:я |мы )?(?:постро|возв[её]л|возвест|созда[тл])/i.test(text))
     return{kind:'build',text,recognized:true};
+  for(const [kind,pattern] of actionPatterns){
+    if(pattern.test(text))return{kind:'action',action:kind,text,recognized:true};
+  }
   if(dragon){
     const kind=destructive?'dragon_fire':benevolent?'dragon_help':'dragon_arrival';
     return{kind,text,recognized:true,medium:dragon};
-  }
-  for(const [kind,pattern] of actionPatterns){
-    if(pattern.test(text))return{kind:'action',action:kind,text,recognized:true};
   }
   // Keep construction requests on the canonical deterministic game engine.
   if(isBuilding.test(text))return{kind:'build',text,recognized:true};
