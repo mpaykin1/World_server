@@ -21,11 +21,14 @@ test('legacy D1 history recovers the dragon after unrelated text',()=>{
   assert(Number.isInteger(say(saved,'Люди стреляют по нему из луков')
     .world.story.dragon.health));
 });
-test('arrival cannot heal a wounded dragon',()=>{
-  const arrived=say(initialWorld(458),dragon).world,shot=say(arrived,arrows).world;
-  const repeat=say(shot,'Прилетел дракон и сел у реки').world;
-  assert.deepEqual([repeat.story.dragon.health,repeat.story.dragon.temper,
-    repeat.story.active.kind],[shot.story.dragon.health,'hostile','dragon_fire']);
+test('arrival and fire preserve wounds; fire forces hostility',()=>{
+  const shot=say(say(initialWorld(458),dragon).world,arrows).world;
+  for(const text of ['Прилетел дракон и сел у реки','Дракон сжёг часть города']){
+    const next=say(shot,text).world;
+    assert.deepEqual([next.story.dragon.health,next.story.dragon.temper],
+      [shot.story.dragon.health,'hostile'],text);
+  }
+  assert.equal(shot.story.active.kind,'dragon_fire');
 });
 test('negated or refused arrows do not create events or spend resources',()=>{
   const saved=say(initialWorld(459),dragon).world;
