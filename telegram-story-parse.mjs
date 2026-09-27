@@ -10,7 +10,7 @@ export const STORY_SCENES=[
   'story_rebuild','story_defense','story_recovery','story_unknown'
 ];
 export const STORY_ACTIONS=new Set([
-  'extinguish','evacuate','defend','rebuild','relief'
+  'extinguish','evacuate','defend','rebuild','relief','shoot_dragon'
 ]);
 const rules=[
   ['fire',/пожар|огонь|сгорел|сгорел[аи]|сгоревш|сожг|сж[её]г|горит|подж[её]г|wildfire|fire/i],
@@ -53,7 +53,7 @@ const actionPatterns=[
   ['rebuild',/восстанов|отстро|почин|ремонт|rebuild/i],
   ['relief',/гуманитар|помочь пострадав|раздать.*(?:еду|воду)|relief/i]
 ];
-export function classifyStoryText(value){
+export function classifyStoryText(value,world=null){
   const text=String(value||'').trim().slice(0,600);
   const dragon=/дракон|dragon|огнедышащ|змей горыныч/i.test(text);
   const destructive=rules[0][1].test(text)||
@@ -61,6 +61,13 @@ export function classifyStoryText(value){
   const benevolent=/подар|помо[гщ]|спас|добр|золото|друж|gift|help/i.test(text);
   if(/^\s*(?:я |мы )?(?:постро|возв[её]л|возвест|созда[тл])/i.test(text))
     return{kind:'build',text,recognized:true};
+  // A follow-up such as "люди стреляют в него" refers to the dragon
+  // already stored in this private world's story; never conjure a new one.
+  const archers=/люди|жители|горожане|лучники|воины|солдаты|мы\b/i.test(text);
+  const shooting=/стреля|выстрел|выпустили? стрел|пустили? стрел|луков|из лука|shoot.*arrow/i.test(text);
+  const target=dragon||/в него|по нему|дракону|его из лук/i.test(text);
+  if(archers&&shooting&&target&&(dragon||world?.story?.dragon?.present))
+    return{kind:'action',action:'shoot_dragon',text,recognized:true};
   if(dragon){
     const kind=destructive?'dragon_fire':benevolent?'dragon_help':'dragon_arrival';
     return{kind,text,recognized:true,medium:dragon};
