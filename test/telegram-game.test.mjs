@@ -401,7 +401,16 @@ test('D1 executes common positive dragon volleys in both word orders',async()=>{
     'The archers are shooting at the dragon with bows',
     'People are shooting arrows at the dragon',
     'Прилетел дракон. Жители стреляют по нему из луков',
-    'A dragon arrived. Archers shoot him with arrows'];
+    'A dragon arrived. Archers shoot him with arrows',
+    'Archers fired arrows at the dragon',
+    'The people fired at him with bows',
+    'Лучники выпустили стрелы в дракона',
+    'Жители пустили стрелы по дракону',
+    'A dragon appeared. People shoot him with bows',
+    'The dragon appeared nearby. The archers shoot him with arrows',
+    'Дракон появился над городом. Жители стреляют по нему из луков',
+    'Над городом появился дракон. Лучники стреляют по нему из луков',
+    'People shoot at the dragon with the bows'];
   for(const message of messages){
     const e=env(),a=mockApi();
     await post(e,a,start(1));
