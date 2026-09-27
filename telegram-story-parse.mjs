@@ -79,6 +79,14 @@ export function classifyStoryText(value,world=null){
   const target=dragon||/в него|по нему|дракону|его из лук/i.test(text);
   // Also recognize the attempt in a fresh world, but reject it safely if the
   // previous world's dragon was reset. Never invent a target to satisfy it.
+  // A negated/refused volley is a statement, not an attack. Do not turn
+  // "не выпускать стрелы в дракона" into a new dragon-arrival catastrophe.
+  const mentionedVolleys=/стреля|выстрел|выпус(?:к|т)|пус(?:к|т)|shoot|fir(?:e|ed|ing)/i.test(text)&&
+    /лук|стрел|bows?|arrows?/i.test(text);
+  const negated=/(?:^|\s)(?:не|ни|перестали|отказались|закончили|прекратили|not|never|stopped|refused|ceased)(?=\s|$)/i.test(text);
+  if(archers&&mentionedVolleys&&target&&negated)
+    return{kind:'clarification',text,recognized:true,
+      description:'Лучники пока не стреляют. Если ты хочешь начать атаку, скажи об этом явно.'};
   if(archers&&shooting&&target)
     return{kind:'action',action:'shoot_dragon',text,recognized:true};
   if(dragon){
