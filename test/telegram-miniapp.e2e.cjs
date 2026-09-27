@@ -8,7 +8,7 @@ const file=path.join(root,'apps/telegram-miniapp/game.html');
 assert(fs.statSync(file).size>100000,'Packaged Scratch game missing');
 const server=http.createServer((req,res)=>{
  const rel=new URL(req.url,'http://local/').pathname.replace(/^\/+/,'');
- const target=path.resolve(root,rel);
+ const target=path.resolve(root,rel.endsWith('/')?rel+'index.html':rel);
  if(!target.startsWith(root+path.sep)){res.writeHead(403).end();return;}
  try{
   const data=fs.readFileSync(target);
