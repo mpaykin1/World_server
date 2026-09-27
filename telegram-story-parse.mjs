@@ -57,8 +57,7 @@ export function dragonPresent(world){
   const story=world?.story;
   if(!story)return false;
   if(story.dragon!==undefined)return Boolean(story.dragon?.present);
-  // D1 worlds saved before the dragon entity was introduced still contain
-  // their private narrative history, even after an unrecognized follow-up.
+  // Restore legacy D1 dragons from private event history.
   return ['dragon_arrival','dragon_fire','dragon_help'].includes(story.last?.kind)||
     story.active?.kind==='dragon_fire'||
     Boolean(world.history?.some(event=>
@@ -72,15 +71,12 @@ export function classifyStoryText(value,world=null){
   const benevolent=/подар|помо[гщ]|спас|добр|золото|друж|gift|help/i.test(text);
   if(/^\s*(?:я |мы )?(?:постро|возв[её]л|возвест|созда[тл])/i.test(text))
     return{kind:'build',text,recognized:true};
-  // A follow-up such as "люди стреляют в него" refers to the dragon
-  // already stored in this private world's story; never conjure a new one.
+  // Follow-up pronouns resolve only against this saved world.
   const archers=/люди|жители|горожане|лучники|воины|солдаты|мы\b/i.test(text);
   const shooting=/стреля|выстрел|выпустили? стрел|пустили? стрел|луков|из лука|shoot.*arrow/i.test(text);
   const target=dragon||/в него|по нему|дракону|его из лук/i.test(text);
-  // Also recognize the attempt in a fresh world, but reject it safely if the
-  // previous world's dragon was reset. Never invent a target to satisfy it.
-  // A negated/refused volley is a statement, not an attack. Do not turn
-  // "не выпускать стрелы в дракона" into a new dragon-arrival catastrophe.
+  // Fresh worlds reject shots at absent dragons.
+  // Refusals are not attacks or new dragon arrivals.
   const mentionedVolleys=/стреля|выстрел|выпус(?:к|т)|пус(?:к|т)|shoot|fir(?:e|ed|ing)/i.test(text)&&
     /лук|стрел|bows?|arrows?/i.test(text);
   const negated=/(?:^|\s)(?:не|ни|перестали|отказались|закончили|прекратили|not|never|stopped|refused|ceased)(?=\s|$)/i.test(text);
