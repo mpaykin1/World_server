@@ -196,7 +196,12 @@ test('malformed story envelopes and ruins fail closed without throwing',()=>{
   const malformed=[
     'fire',[],42,
     {active:null,ruins:'old-ruin',last:null,evacuated:0},
-    {active:null,ruins:{id:'old-ruin'},last:null,evacuated:0}
+    {active:null,ruins:{id:'old-ruin'},last:null,evacuated:0},
+    {active:null,ruins:[null],last:null,evacuated:0},
+    {active:null,ruins:['old-ruin'],last:null,evacuated:0},
+    {active:null,ruins:[{id:'old-ruin'}],last:null,evacuated:0},
+    {active:null,ruins:[{id:'old-ruin',type:'invented',rebuilding:null}],last:null,evacuated:0},
+    {active:null,ruins:[{id:'old-ruin',type:'workshop',rebuilding:{}}],last:null,evacuated:0}
   ];
   for(const story of malformed){
     const world=engine.createWorld('malformed-story-envelope');
