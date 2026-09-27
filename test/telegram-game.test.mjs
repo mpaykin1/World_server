@@ -113,16 +113,38 @@ test('start sends new-world animation and seven controls, without AI calls',asyn
   assert.deepEqual(a.calls.map(x=>x.method),['sendAnimation']);
   assert.match(a.calls[0].payload.animation,/origin-\d\.mp4$/);
   assert.match(a.calls[0].payload.caption,/Новый мир создан/);
-  assert.equal(a.calls[0].payload.reply_markup.inline_keyboard.length,7);
+  assert.equal(a.calls[0].payload.reply_markup.inline_keyboard.length,8);
   assert.equal((await loadSession(e.TELEGRAM_DB,42)).lastUpdate,10);
   await post(e,a,start(10));
   assert.equal(a.calls.length,1,'Telegram retry must not double-send');
+});
+test('/game opens the same approved Scratch graphics inside Telegram',async()=>{
+  const e=env(),a=mockApi();
+  assert.equal((await post(e,a,start(14,'/game'))).status,200);
+  assert.deepEqual(a.calls.map(x=>x.method),['sendMessage']);
+  const payload=a.calls[0].payload;
+  assert.match(payload.text,/Scratch/);
+  assert.equal(payload.reply_markup.inline_keyboard[0][0].web_app.url,
+    'https://world-server.mmmpaykin.workers.dev/apps/telegram-miniapp/');
+  assert.equal((await loadSession(e.TELEGRAM_DB,42)).lastUpdate,14);
+  await post(e,a,start(14,'/game'));
+  assert.equal(a.calls.length,1,'Duplicate /game must not resend');
+});
+test('graphical Mini App button is available after every playable turn',async()=>{
+  const e=env(),a=mockApi();await post(e,a,start(1));
+  const first=a.calls.find(x=>x.method==='sendAnimation').payload;
+  const graphical=first.reply_markup.inline_keyboard.flat().find(x=>x.web_app);
+  assert.equal(graphical.web_app.url,
+    'https://world-server.mmmpaykin.workers.dev/apps/telegram-miniapp/');
+  await post(e,a,callback(2,'tg2:0:next'));
+  const second=a.calls.at(-1).payload;
+  assert(second.reply_markup.inline_keyboard.flat().some(x=>x.web_app));
 });
 test('failed animation and image fall back to a playable text message',async()=>{
   const e=env(),a=mockApi({photoOk:false,animationOk:false});
   assert.equal((await post(e,a,start(10))).status,200);
   assert.deepEqual(a.calls.map(x=>x.method),['sendAnimation','sendPhoto','sendMessage']);
-  assert.equal(a.calls[2].payload.reply_markup.inline_keyboard.length,7);
+  assert.equal(a.calls[2].payload.reply_markup.inline_keyboard.length,8);
 });
 test('choice updates D1 once and stale buttons cannot replay mutations',async()=>{
   const e=env(),a=mockApi({photoOk:false,animationOk:false});
