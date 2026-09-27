@@ -93,6 +93,16 @@
         "previewVideo": "/shared/world-previews/survival.webm"
       }
     },
+    "survivors-arena": {
+      "title": "Цепная реакция: Рой",
+      "visible": false,
+      "status": "quarantine",
+      "kind": "game",
+      "reason": "Opt-in POC: independent desktop and iPhone visual checks and >85% user visibility remain unverified.",
+      "worldMenu": {
+        "show": false
+      }
+    },
     "world-sharabass": {
       "title": "Мир Шарабас",
       "visible": false,
