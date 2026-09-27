@@ -3,7 +3,7 @@
 import {engine,initialWorld,loadSession,options,applyPlan,view,describeChange,MAX_INTENT} from './telegram-state.mjs';
 import {applyStoryText,applyStoryAction,advanceStoryDay} from './telegram-story.mjs';
 import {STORY_ACTIONS} from './telegram-story-parse.mjs';
-import {ensureChainSchema,authorizeBrowser,createBrowserSession,redeemLinkCode} from './chain-session.mjs';
+import {ensureChainSchema,authorizeBrowser,createBrowserSession,peekLinkCode,claimLinkCode,connectBrowserToken} from './chain-session.mjs';
 
 const ALLOWED=new Set(['https://mpaykin1.github.io']);
 const BUILDS=Object.freeze({
@@ -131,11 +131,47 @@ export async function handleUnifiedGame(request,env){
     const auth=await authorizeBrowser(db,request);
     if(!auth)return response({error:'Browser session expired; open a new world'},401,origin);
     if(path==='/api/chain/link'&&request.method==='POST'){
-      const body=await input(request),chatId=await redeemLinkCode(db,
-        String(body.code||'').trim().toUpperCase(),auth.tokenHash);
+      const body=await input(request);
+      const code=String(body.code||'').trim().toUpperCase();
+      // Inspect BOTH worlds before consuming the single-use Telegram code.
+      const chatId=await peekLinkCode(db,code);
       if(!chatId)return response({error:'Код недействителен или истёк.'},400,origin);
-      const s=await loadSession(db,chatId);
-      return response(browserSnapshot(s.world,true),200,origin);
+      const guest=auth.chatId.startsWith('guest:')
+        ?await loadSession(db,auth.chatId):null;
+      const telegram=await loadSession(db,chatId);
+      const guestProgress=!!guest&&
+        (guest.revision>0||guest.world.tick>0||
+          guest.world.history?.length>0);
+      const pristine=telegram.revision===0&&telegram.world.tick===0&&
+        !telegram.world.history?.length;
+      const sameWorld=guestProgress&&telegram.world.seed===guest.world.seed;
+      if(guestProgress&&!pristine&&!sameWorld){
+        return response({error:'В Telegram уже есть другой мир. Гостевой мир сохранён; код не использован.'},
+          409,origin);
+      }
+      if(!await claimLinkCode(db,code,chatId))
+        return response({error:'Код уже использован или истёк.'},400,origin);
+      if(guestProgress&&pristine&&!sameWorld){
+        // D1 batch is one transaction. The browser token switches only if the
+        // revision-fenced adoption committed the exact existing guest world.
+        const worldJSON=JSON.stringify(guest.world);
+        const result=await db.batch([
+          db.prepare(
+            'UPDATE telegram_sessions SET world=?,revision=?,restart=?,pending_revision=NULL,updated_at=CURRENT_TIMESTAMP WHERE chat_id=? AND revision=?'
+          ).bind(worldJSON,guest.revision,guest.restart,chatId,telegram.revision),
+          db.prepare(
+            'UPDATE chain_browser_tokens SET chat_id=?,last_used_at=CURRENT_TIMESTAMP WHERE token_hash=? AND chat_id=? AND EXISTS (SELECT 1 FROM telegram_sessions WHERE chat_id=? AND revision=? AND world=?)'
+          ).bind(chatId,auth.tokenHash,guest.chatId,chatId,guest.revision,worldJSON)
+        ]);
+        if(result[0]?.meta?.changes!==1||result[1]?.meta?.changes!==1){
+          return response({error:'Мир изменился одновременно в другом клиенте. Оба состояния сохранены. Получи новый /link.'},
+            409,origin);
+        }
+      }else if(!await connectBrowserToken(db,chatId,auth.tokenHash,auth.chatId)){
+        return response({error:'Сессия браузера изменилась. Получи новый /link.'},409,origin);
+      }
+      const linked=await loadSession(db,chatId);
+      return response(browserSnapshot(linked.world,true),200,origin);
     }
     const session=await loadSession(db,auth.chatId);
     if(path==='/api/chain/state'&&request.method==='GET')
