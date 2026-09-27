@@ -60,6 +60,7 @@ class MockD1{
     run:async()=>{
       if(sql.startsWith('DELETE FROM chain_link_codes WHERE expires_at'))
         return{meta:{changes:0}};
+      if(sql.startsWith('CREATE TABLE')||sql.startsWith('CREATE INDEX'))return{meta:{changes:0}};
       throw Error('Unsupported bare RUN: '+sql);
     }};
   }
