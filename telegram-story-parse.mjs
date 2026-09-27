@@ -77,8 +77,13 @@ function classifyArchery(text){
   const priorClause=priorText.slice(Math.max(priorText.lastIndexOf('.'),
     priorText.lastIndexOf('!'),priorText.lastIndexOf('?'))+1);
   const after=text.slice(shot.index+shot[0].length);
-  const humanActor=/^\s*(?:люди|жители|горожане|лучники|воины|солдаты|мы|people|citizens|archers|we)(?:\s|$)[^.!?]{0,60}$/i.test(clauseBefore)&&
-    !/(?:дракон|dragon)/i.test(clauseBefore);
+  const actor=/^\s*(?:люди|жители|горожане|лучники|воины|солдаты|мы|people|citizens|archers|we)(?:\s+([^.!?]{0,60}?))?\s*$/i.exec(clauseBefore);
+  const bridge=String(actor?.[1]||'').trim();
+  // Fail closed: only known positive auxiliaries/adverbs may occur between the
+  // actor and the shooting verb. Unknown modality is clarified, never charged.
+  const positiveBridge=/^(?:быстро|сразу|метко|дружно|решительно|снова|вновь|уверенно|неохотно|уже|начинают|начали|решили|продолжают|продолжили|и|are|were|have|quickly|immediately|accurately|together|decisively|reluctantly|again|now|still|begin|began|start|started|continue|continued|decide|decided|trying|to)$/i;
+  const groundedBridge=!bridge||bridge.split(/\s+/).every(word=>positiveBridge.test(word));
+  const humanActor=Boolean(actor)&&groundedBridge&&!/(?:дракон|dragon)/i.test(clauseBefore);
   const negated=/(?:^|\s)(?:не|ни|нет|без|(?:отказ|перест|прекрат|избег|неспособ|закончил)[а-яё]*)(?=\s|$)/i.test(clauseBefore)||
     /\b(?:not|never|cannot|cant|can't|wont|won't|dont|don't|doesnt|doesn't|didnt|didn't|refus\w*|stop\w*|avoid\w*|unable|incapable|declin\w*|quit\w*|ceas\w*)\b/i.test(clauseBefore);
   const explicitDragon=/(?:(?:в|по)\s+дракон(?:а|у|ом)?(?:\s|$)|at\s+(?:the\s+)?dragon|^\s*(?:the\s+)?dragon(?:\s|$))/i.test(after);

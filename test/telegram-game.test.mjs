@@ -369,7 +369,18 @@ test('D1 rejects reversed or conflicting archery without AI, charge or dragon mu
     [6,'Волк рядом. Люди стреляют по нему из луков'],
     [7,"People don't shoot him with bows"],
     [8,'Лучники неспособны стрелять в него из луков'],
-    [9,'Citizens decline to shoot him with bows']]){
+    [9,'Citizens decline to shoot him with bows'],
+    [10,'Люди отстрелялись по нему из луков'],
+    [11,'Жители уже отстрелялись в дракона из луков'],
+    [12,'Лучники завершили стрелять в него из луков'],
+    [13,'Солдаты лишены возможности стрелять в него из луков'],
+    [14,'Мы против того, чтобы стрелять в него из луков'],
+    [15,'People finished shooting at him with bows'],
+    [16,'Citizens have finished shooting at him with bows'],
+    [17,'Archers completed shooting at him with bows'],
+    [18,'We no longer shoot him with bows'],
+    [19,'People lack the ability to shoot him with bows'],
+    [20,'Citizens are against shooting at him with bows']]){
     await post(e,a,text(id,message));
     const stored=(await loadSession(e.TELEGRAM_DB,42)).world;
     assert.deepEqual(stored.resources,arrived.resources,message);
