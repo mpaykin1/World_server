@@ -141,8 +141,10 @@ test('free-form rescue action does not require pressing a menu first',()=>{
 
 test('archers react to an existing dragon referenced as him',()=>{
   const start=initialWorld(73);
-  assert.equal(applyStoryText(start,'Люди стреляют в него из луков').kind,'unknown',
-    'no dragon must not be invented');
+  const missing=applyStoryText(start,'Люди стреляют в него из луков');
+  assert.equal(missing.kind,'blocked','no dragon must not be invented');
+  assert.match(missing.world.story.last.description,/В этом мире нет дракона/);
+  assert.deepEqual(missing.world.resources,start.resources);
   const arrival=applyStoryText(start,'Прилетел дракон').world;
   assert.equal(arrival.story.dragon.present,true);
   assert.equal(arrival.story.active,null,'arrival itself is peaceful');
@@ -186,4 +188,15 @@ test('legacy D1 session remembers the dragon after an unsupported follow-up',()=
   assert.equal(corrected.kind,'defense');
   assert.equal(corrected.world.story.dragon.health,2);
   assert.equal(corrected.world.resources.budget,missed.resources.budget-5);
+});
+
+test('New World explicitly resets old dragon; follow-up explains missing target',()=>{
+  const old=applyStoryText(initialWorld(53),'Прилетел дракон').world;
+  const fresh=initialWorld(53,1);
+  assert(old.story.dragon.present);
+  assert.equal(fresh.story,undefined);
+  const reply=applyStoryText(fresh,'Люди стреляют в него из луков');
+  assert.equal(reply.kind,'blocked');
+  assert.match(reply.world.story.last.description,/Новый мир/);
+  assert.deepEqual(reply.world.resources,fresh.resources);
 });
