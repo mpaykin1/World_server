@@ -49,7 +49,7 @@ const isBuilding=/постро|возв[её]л|возвест|строить|с
 const actionPatterns=[
   ['extinguish',/потуш|затуш|туш[ие]|огнетуш|extinguish/i],
   ['evacuate',/эваку|укры|увест.*жител|спасти.*люд|evacuat/i],
-  ['defend',/защит|оборон|отогна|дракон.*уб[ие]|defend/i],
+  ['defend',/защит|оборон|отогна|дракон.*уб[ие]|(?:люди|жители|горожане|воины|солдаты|лучники).*?(?:стрел|атаку|напада)|(?:стреля|выстрел|атаку).*?(?:в|по) дракон|defend/i],
   ['rebuild',/восстанов|отстро|почин|ремонт|rebuild/i],
   ['relief',/гуманитар|помочь пострадав|раздать.*(?:еду|воду)|relief/i]
 ];
@@ -61,6 +61,10 @@ export function classifyStoryText(value){
   const benevolent=/подар|помо[гщ]|спас|добр|золото|друж|gift|help/i.test(text);
   if(/^\s*(?:я |мы )?(?:постро|возв[её]л|возвест|созда[тл])/i.test(text))
     return{kind:'build',text,recognized:true};
+  // Player-directed combat takes precedence over mere mentions of a dragon.
+  const directedDefense=actionPatterns.find(([action,pattern])=>
+    action==='defend'&&pattern.test(text));
+  if(directedDefense)return{kind:'action',action:'defend',text,recognized:true};
   if(dragon){
     const kind=destructive?'dragon_fire':benevolent?'dragon_help':'dragon_arrival';
     return{kind,text,recognized:true,medium:dragon};

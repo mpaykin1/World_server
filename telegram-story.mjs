@@ -107,7 +107,8 @@ function rescueTarget(world){
 }
 export function applyStoryAction(world,action,text=''){
   if(!STORY_ACTIONS.has(action))return reject(world,'Неизвестное действие.');
-  if(!rescueTarget(world)&&action!=='relief')
+  const dragonNearby=action==='defend'&&world.story?.last?.kind==='dragon_arrival';
+  if(!rescueTarget(world)&&!dragonNearby&&action!=='relief')
     return reject(world,'Сейчас нет активной угрозы или разрушений.');
   let next=structuredClone(world);next.story=storyState(next);
   const initialIncident=next.story.active,initialResources=next.resources;
@@ -146,7 +147,9 @@ export function applyStoryAction(world,action,text=''){
   }else if(action==='defend'){
     if(incident)incident.severity=Math.max(0,incident.severity-2);
     if(incident?.severity===0)next.story.active=null;
-    detail='Защитники ослабили угрозу. Последствия разрушений остались.';
+    detail=dragonNearby&&!incident
+      ?'Жители открыли огонь по прилетевшему дракону. Дракон отступил; город потратил средства на оборону.'
+      :'Защитники ослабили угрозу. Последствия разрушений остались.';
   }else{
     next=engine.applyResourceDelta(next,{water:8,food:7,health:3});
     detail='Спасатели доставили воду и еду, здоровью жителей стало лучше.';
