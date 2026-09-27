@@ -37,6 +37,18 @@ for ((attempt=1; attempt<=POLL_ATTEMPTS; attempt++)); do
   # GitHub check-run IDs increase on rerun. A new queued run must supersede an older PASS.
   if test "$STATUS" = completed; then
     test "$CONCLUSION" = success
+    # A concurrent protected-master merge or PR edit during polling invalidates
+    # the original snapshot. Revalidate identity immediately before success.
+    FINAL_META="$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}" \
+      --jq '[.draft, .head.sha, .base.sha, .base.ref] | @tsv')"
+    read -r FINAL_DRAFT FINAL_HEAD FINAL_BASE FINAL_REF <<< "$FINAL_META"
+    FINAL_MASTER="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/master" \
+      --jq '.object.sha')"
+    test "$FINAL_DRAFT" = false
+    test "$FINAL_HEAD" = "$EXPECTED"
+    test "$FINAL_REF" = master
+    test "$FINAL_BASE" = "$FINAL_MASTER"
+    test "$FINAL_MASTER" = "$CURRENT_MASTER"
     echo "READY_FOR_OCEAN=YES SHA=$CERTIFIED"
     exit 0
   fi
