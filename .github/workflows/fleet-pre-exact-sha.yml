@@ -6,6 +6,8 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
+  checks: read
 
 jobs:
   fleet-pre:
@@ -39,6 +41,7 @@ jobs:
         run: |
           set -euo pipefail
           npm run check:fast
+          node --test test/fleet-pre-workflow.test.js
           node --test test/world-emergence.test.js
           if test -f test/world-concept-graph.test.js; then
             node --test test/world-concept-graph.test.js
@@ -49,7 +52,7 @@ jobs:
           CERTIFIED_SHA: ${{ steps.identity.outputs.sha }}
         shell: bash
         run: |
-          printf '{"kind":"FLEET_PRE","sha":"%s","runId":"%s","verdict":"PASS","scope":"syntax-and-causal-tests"}\n' "$CERTIFIED_SHA" "$GITHUB_RUN_ID" > fleet-pre-evidence.json
+          printf '{"kind":"FLEET_PRE","sha":"%s","runId":"%s","verdict":"TESTS_PASS","scope":"syntax-causal-and-gate-tests (independent model review separate)"}\n' "$CERTIFIED_SHA" "$GITHUB_RUN_ID" > fleet-pre-evidence.json
       - uses: actions/upload-artifact@v4
         with:
           name: fleet-pre-${{ steps.identity.outputs.sha }}
@@ -63,10 +66,10 @@ jobs:
     steps:
       - name: Reject missing or stale certificate
         env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
           EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
           CERTIFIED: ${{ needs.fleet-pre.outputs.sha }}
         run: |
           set -euo pipefail
-          test -n "$CERTIFIED"
-          test "$CERTIFIED" = "$EXPECTED"
-          echo "READY_FOR_OCEAN=YES SHA=$CERTIFIED"
+          bash scripts/ocean-eligibility-gate.sh
