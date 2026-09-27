@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0e1a23">
+<title>Цепная реакция · Рой — World Server</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<canvas id="arena" aria-label="Игровое поле: двигайтесь, оружие стреляет автоматически"></canvas>
+<div id="xp-track" aria-label="Прогресс до следующего уровня"><div id="xp-bar"></div></div>
+<header id="hud" aria-live="off">
+  <div id="brand"><strong>ЦЕПНАЯ РЕАКЦИЯ</strong><span>РЕЖИМ РОЯ · ПРОТОТИП</span></div>
+  <div id="scores">
+    <div class="metric"><small>ЗДОРОВЬЕ</small> <b id="hp">100/100</b></div>
+    <div class="metric"><small>УРОВЕНЬ</small> <b id="level">1</b></div>
+    <div class="metric"><small>ВРЕМЯ</small> <b id="clock">00:00</b></div>
+    <div class="metric"><small>ПОБЕЖДЕНО</small> <b id="kills">0</b></div>
+    <div class="metric"><small>СЕРИЯ</small> <b id="streak">—</b></div>
+  </div>
+</header>
+<nav id="toolbar" aria-label="Игровые настройки">
+  <button id="sound" aria-label="Переключить звук" aria-pressed="false">🔈</button>
+  <button id="motion" aria-label="Уменьшить эффекты" aria-pressed="false">✨</button>
+  <button id="pause" aria-label="Пауза" aria-pressed="false">⏸</button>
+  <a href="/apps/voxel-world/" aria-label="Назад к Voxel World">↩ 3D мир</a>
+</nav>
+<div id="pad" role="group" aria-label="Виртуальный джойстик движения"><div id="knob"></div></div>
+<aside id="world">
+  <b id="world-name">WORLD SERVER · MAIN</b>
+  <p>Один герой против роя. Двигайся и собирай кристаллы. Оружие стреляет само.</p>
+  <div id="world-status" role="status">Читаем состояние общего мира…</div>
+</aside>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="pause-note" role="status">ПАУЗА · пробел — продолжить</div>
+<section id="role-modal" class="overlay" aria-label="Выбор героя">
+  <div class="dialog">
+    <span class="eyebrow">WORLD SERVER / SURVIVORS EXPERIMENT</span>
+    <h1>Один мир.<br>Сотни последствий.</h1>
+    <p>Вселись в жителя мира. Тебе нужно только двигаться — атаки автоматические. Опыт превращается в новые способности; противников становится всё больше. 3 минуты — первая проверка твоей сборки.</p>
+    <div class="choices" id="roles">
+      <button type="button" class="choice" data-role="warrior"><span class="symbol">⚔</span><strong>Воин</strong><small>Мощное автоматическое оружие.</small></button>
+      <button type="button" class="choice" data-role="worker"><span class="symbol">⚒</span><strong>Рабочий</strong><small>Магнит опыта и ударная волна.</small></button>
+      <button type="button" class="choice" data-role="mayor"><span class="symbol">♛</span><strong>Мэр</strong><small>Ополчение: несколько выстрелов за раз.</small></button>
+    </div>
+    <p id="role-tip">WASD / стрелки на компьютере · виртуальный джойстик на телефоне · пробел — пауза. Никаких аккаунтов.</p>
+  </div>
+</section>
+<section id="upgrade-modal" class="overlay" aria-labelledby="upgrade-title" hidden>
+  <div class="dialog">
+    <span class="eyebrow">ЦЕПНАЯ РЕАКЦИЯ НАЧАЛАСЬ</span>
+    <h2 id="upgrade-title">Новый уровень!</h2>
+    <p>Выбери одно улучшение. Мир остановлен, пока ты решаешь.</p>
+    <div class="choices" id="upgrades"></div>
+  </div>
+</section>
+<section id="end-modal" class="overlay" aria-label="Конец забега" hidden>
+  <div class="dialog">
+    <span class="eyebrow">ИСТОРИЯ МИРА ПРОДОЛЖАЕТСЯ</span>
+    <h2>Герой выбыл. Рой остался.</h2>
+    <p id="end-summary"></p>
+    <button id="again" class="primary">Попробовать другую цепочку ↗</button>
+  </div>
+</section>
+<div id="live-region" aria-live="polite" aria-atomic="true"></div>
+<script type="module" src="./client.js"></script>
+</body>
+</html>
