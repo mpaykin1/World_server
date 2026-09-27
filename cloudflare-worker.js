@@ -261,6 +261,10 @@ export default {
     const url = new URL(request.url);
     if (url.pathname === '/') return Response.redirect(new URL('/apps/catalog/', url), 302);
 
+    if (url.pathname.startsWith('/api/chain/')) {
+      const { handleUnifiedGame } = await import('./chain-unified-api.mjs');
+      return handleUnifiedGame(request, env);
+    }
     if (url.pathname === '/api/telegram/webhook') {
       const { handleTelegramWebhook } = await import('./telegram-game.mjs');
       return handleTelegramWebhook(request, env);
