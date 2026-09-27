@@ -5,7 +5,8 @@ import {
   loadSession, saveSession, view
 } from './telegram-state.mjs';
 import {makeVisualTurn} from './telegram-scenes.mjs';
-import {applyStoryText,applyStoryAction,advanceStoryDay} from './telegram-story.mjs';
+import {applyStoryIntent,applyStoryAction,advanceStoryDay} from './telegram-story.mjs';
+import {classifyStoryWithAI} from './telegram-story-ai.mjs';
 import {STORY_ACTIONS} from './telegram-story-parse.mjs';
 
 const WEBHOOK_URL='https://world-server.mmmpaykin.workers.dev/api/telegram/webhook';
@@ -147,7 +148,8 @@ async function onText(message,updateId,env,fetcher){
   // Every free-form message is a possible story turn, even if the player did
   // not press "My variant" first. Never silently reinterpret dragons as
   // a generic workshop construction order.
-  const result=applyStoryText(session.world,text);
+  const intent=await classifyStoryWithAI(session.world,text,env.AI);
+  const result=applyStoryIntent(session.world,intent);
   const saved=await saveSession(env.TELEGRAM_DB,session,{
     world:result.world,pending:null,updateId
   });
