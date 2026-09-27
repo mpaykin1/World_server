@@ -8,7 +8,6 @@ export const hashHex=async value=>[...new Uint8Array(await crypto.subtle.digest(
 export function newBrowserToken(){
   const b=bytes(32);
   return btoa(String.fromCharCode(...b)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
-  return btoa(String.fromCharCode(...b)).replace(/\\+/g,'-').replace(/\\//g,'_').replace(/=+$/,'');
 }
 export function newLinkCode(){
   return [...bytes(12)].map(n=>alphabet[n%alphabet.length]).join('');
