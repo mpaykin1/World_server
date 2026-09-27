@@ -136,6 +136,12 @@ test('Telegram and browser share D1 state, revisions and one-time pairing',async
     revision:dragon.data.revision},browserToken);
   assert.equal(shot.status,200);
   assert.equal(shot.data.story.dragon.hp,72);
+  assert.equal(shot.data.story.active.kind,'dragon_fire');
+  assert.equal(shot.data.story.last.reaction,'dragon_counterattack');
+  assert.ok(shot.data.story.ruins.some(r=>r.type==='luxury_arcology'));
+  assert.equal(shot.data.placed.city,0,'counterattack destroys the newly built city');
+  assert.equal(shot.data.state.budget,dragon.data.state.budget-35,
+    'five defense budget plus canonical 30 fire budget');
   const stale=await call(env,'/action','POST',{kind:'next',revision:dragon.data.revision},
     browserToken);
   assert.equal(stale.status,409);
@@ -150,7 +156,8 @@ test('Telegram and browser share D1 state, revisions and one-time pairing',async
   assert.equal(linked.data.linked,true);
   assert.equal(linked.data.revision,shot.data.revision);
   assert.equal(linked.data.story.dragon.hp,72);
-  assert.ok(linked.data.placed.city>0,'browser city survived pairing');
+  assert.ok(linked.data.story.ruins.some(r=>r.type==='luxury_arcology'),
+    'city ruins and fire survive guest-to-Telegram pairing');
   // Simulate a Telegram message modifying that exact adopted row.
   const adopted=await loadSession(env.TELEGRAM_DB,42);
   assert.equal(adopted.world.seed,guestSeed);
@@ -162,7 +169,8 @@ test('Telegram and browser share D1 state, revisions and one-time pairing',async
   const browser=await call(env,'/state','GET',undefined,browserToken);
   assert.equal(browser.data.story.dragon.hp,changed.story.dragon.hp);
   assert.ok(browser.data.story.dragon.hp<72,'Telegram attack changed the same dragon');
-  assert.ok(browser.data.placed.city>0);
+  assert.ok(browser.data.story.ruins.some(r=>r.type==='luxury_arcology'));
+  assert.equal(browser.data.story.dragon.active,false,'second hit makes dragon retreat');
   assert.equal((await loadSession(env.TELEGRAM_DB,42)).world.story.dragon.hp,browser.data.story.dragon.hp);
 });
 
