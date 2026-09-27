@@ -105,7 +105,7 @@ export function view(world,notice=''){
     x&&typeof x==='object'&&!Array.isArray(x)&&
     typeof x.id==='string'&&x.id.trim()&&x.id.length<=128&&
     typeof x.type==='string'&&Object.hasOwn(engine.PROJECTS,x.type)&&
-    !x.rebuilding):null;
+    (x.rebuilding===null||x.rebuilding===undefined)):null;
   if(ruin&&engine.preview(world,engine.interpretIntent('',ruin.type)).feasible)
     emergency.push({text:'🏗 Восстановить '+ruin.name,
       callback_data:'tg2:'+world.revision+':rebuild'});
