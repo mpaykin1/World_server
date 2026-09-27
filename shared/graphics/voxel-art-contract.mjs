@@ -26,6 +26,7 @@ export function validVoxelManifest(manifest) {
 export function planVoxelPlacements(world, max = 8) {
   if (!world || !Array.isArray(world.entities)) return [];
   const limit = Math.max(0, Math.min(24, Math.floor(Number(max) || 0)));
+  if (limit === 0) return [];
   const seen = new Set();
   const result = [];
   for (const e of world.entities) {

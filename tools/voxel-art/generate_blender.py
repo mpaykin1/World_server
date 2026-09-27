@@ -26,9 +26,9 @@ VFX = {"volcano": ["lava_glow", "eruption_embers", "ash"],
        "energy": ["rotor_spin", "electric_spark"],
        "idea": ["crystal_pulse"], "river": ["water_ripples"]}
 ANIMS = {"energy": ["rotor_spin"], "idea": ["crystal_pulse"],
-         "volcano": ["eruption_embers"], "villager": ["walk"]}
-PIVOT = {"energy": (0, -3.25, 4.2), "idea": (0, 0, 3.1),
-         "volcano": (0, 0, 5.4), "villager": (0, 0, 1.4)}
+         "volcano": ["eruption_embers"], "villager": ["walk_left", "walk_right"]}
+PIVOT = {"energy": (0, -.81, 1.75), "idea": (0, 0, 1.55),
+         "volcano": (0, 0, 2.86), "villager": (0, 0, .81)}
 DIRECTIONS = [(1, 0, 0), (-1, 0, 0), (0, 1, 0),
               (0, -1, 0), (0, 0, 1), (0, 0, -1)]
 QUADS = [
@@ -207,8 +207,6 @@ def build_villager():
     cuboid(v, -1, 1, -1, 1, 10, 10, "wood")
     block(v, -1, -2, 7, "wood")
     block(v, 1, -2, 7, "wood")
-    cuboid(v, -1, -1, -1, 1, 0, 2, "pants")
-    cuboid(v, 1, 1, -1, 1, 0, 2, "pants")
     return v
 
 
@@ -259,6 +257,20 @@ def animate(kind):
         ob.keyframe_insert(data_path="location", frame=49)
         if ob.animation_data.action:
             ob.animation_data.action.name = "eruption_embers"
+    elif kind == "villager":
+        for side, suffix in [(-1, "left"), (1, "right")]:
+            leg = {}
+            cuboid(leg, 0, 0, -1, 1, -3, -1, "pants")
+            obj, _ = mesh(leg, "ANIM_leg_" + suffix,
+                          pivot=(side * .27, 0, .81))
+            obj.rotation_euler[0] = side * .4
+            obj.keyframe_insert(data_path="rotation_euler", frame=1)
+            obj.rotation_euler[0] = -side * .4
+            obj.keyframe_insert(data_path="rotation_euler", frame=13)
+            obj.rotation_euler[0] = side * .4
+            obj.keyframe_insert(data_path="rotation_euler", frame=25)
+            if obj.animation_data.action:
+                obj.animation_data.action.name = "walk_" + suffix
 
 
 def camera_preview(path):

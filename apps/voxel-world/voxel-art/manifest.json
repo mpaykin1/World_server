@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 1,
+  "generator": "blender-5.1-world-voxel-art",
+  "source": "tools/voxel-art/generate_blender.py",
+  "design": "original isometric industrial voxel art",
+  "entities": [
+    {
+      "id": "barren",
+      "type": "barren",
+      "file": "barren.glb",
+      "url": "/apps/voxel-world/voxel-art/barren.glb",
+      "sha256": "1ef6fec73850378c5f00423f3ef2ffb36b32a21162a44baac531254e5455dadc",
+      "bytes": 57076,
+      "triangles": 992,
+      "clips": [],
+      "vfx": [],
+      "format": "glTF-binary",
+      "origin": "World Server original procedural voxel art",
+      "license": "CC0-1.0",
+      "unit": "metre",
+      "up": "Y-glTF",
+      "fps": 24
+    },
+    {
+      "id": "city",
+      "type": "city",
+      "file": "city.glb",
+      "url": "/apps/voxel-world/voxel-art/city.glb",
+      "sha256": "5644dfc4f9b4e4d9b58f000623d00496c2af06f2c570a3b9cfa0992c2d39ec71",
+      "bytes": 90332,
+      "triangles": 1564,
+      "clips": [],
+      "vfx": [],
+      "format": "glTF-binary",
+      "origin": "World Server original procedural voxel art",
+      "license": "CC0-1.0",
+      "unit": "metre",
+      "up": "Y-glTF",
+      "fps": 24
+    },
+    {
+      "id": "forest",
+      "type": "forest",
+      "file": "forest.glb",
+      "url": "/apps/voxel-world/voxel-art/forest.glb",
+      "sha256": "8fc09200556739f13363d3559c5f84fe7aa8dd47ffc417084591d6b33953edb4",
+      "bytes": 113080,
+      "triangles": 1996,
+      "clips": [],
+      "vfx": [],
+      "format": "glTF-binary",
+      "origin": "World Server original procedural voxel art",
+      "license": "CC0-1.0",
+      "unit": "metre",
+      "up": "Y-glTF",
+      "fps": 24
+    },
+    {
+      "id": "volcano",
+      "type": "volcano",
+      "file": "volcano.glb",
+      "url": "/apps/voxel-world/voxel-art/volcano.glb",
+      "sha256": "1c165c9230c7c6510bf417bab91def06e93309a3327fbc7b438d5cba7e624f0b",
+      "bytes": 85572,
+      "triangles": 1452,
+      "clips": [
+        "eruption_embers"
+      ],
+      "vfx": [
+        "lava_glow",
+        "eruption_embers",
+        "ash"
+      ],
+      "format": "glTF-binary",
+      "origin": "World Server original procedural voxel art",
+      "license": "CC0-1.0",
+      "unit": "metre",
+      "up": "Y-glTF",
+      "fps": 24
+    },
+    {
+      "id": "energy",
+      "type": "energy",
+      "file": "energy.glb",
+      "url": "/apps/voxel-world/voxel-art/energy.glb",
+      "sha256": "d6f6b577e031b6e4c928c77e93493376e781719b9b1f24f90ef587d20cd83b81",
+      "bytes": 84036,
+      "triangles": 1072,
+      "clips": [
+        "rotor_spin"
+      ],
+      "vfx": [
+        "rotor_spin",
+        "electric_spark"
+      ],
+      "format": "glTF-binary",
+      "origin": "World Server original procedural voxel art",
+      "license": "CC0-1.0",
+      "unit": "metre",
+      "up": "Y-glTF",
+      "fps": 24
+    },
+    {
+      "id": "idea",
+      "type": "idea",
+      "file": "idea.glb",
+      "url": "/apps/voxel-world/voxel-art/idea.glb",
+      "sha256": "0852b1c4e3d7646110f2101b1accfa4bb2d1283b73a86f15d9e074ad32f8998d",
+      "bytes": 71960,
+      "triangles": 992,
+      "clips": [
+        "crystal_pulse"
+      ],
+      "vfx": [
+        "crystal_pulse"
+      ],
+      "format": "glTF-binary",
+      "origin": "World Server original procedural voxel art",
+      "license": "CC0-1.0",
+      "unit": "metre",
+      "up": "Y-glTF",
+      "fps": 24
+    },
+    {
+      "id": "river",
+      "type": "river",
+      "file": "river.glb",
+      "url": "/apps/voxel-world/voxel-art/river.glb",
+      "sha256": "e4fea95ef82790baf02f365dbe737115339af4218a8e893593fc7bfdf47f2fa0",
+      "bytes": 54292,
+      "triangles": 940,
+      "clips": [],
+      "vfx": [
+        "water_ripples"
+      ],
+      "format": "glTF-binary",
+      "origin": "World Server original procedural voxel art",
+      "license": "CC0-1.0",
+      "unit": "metre",
+      "up": "Y-glTF",
+      "fps": 24
+    },
+    {
+      "id": "villager",
+      "type": "villager",
+      "file": "villager.glb",
+      "url": "/apps/voxel-world/voxel-art/villager.glb",
+      "sha256": "650859554f879ff14b031070d7d1051c58d551de660dfcc43a6a0b4059768f5e",
+      "bytes": 30392,
+      "triangles": 324,
+      "clips": [
+        "walk_left",
+        "walk_right"
+      ],
+      "vfx": [],
+      "format": "glTF-binary",
+      "origin": "World Server original procedural voxel art",
+      "license": "CC0-1.0",
+      "unit": "metre",
+      "up": "Y-glTF",
+      "fps": 24
+    }
+  ],
+  "defaultFallback": "existing procedural voxel renderer"
+}

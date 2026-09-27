@@ -54,6 +54,27 @@ async function view(browser, name, viewport, isMobile, dpr) {
   const canvas = await page.locator('canvas').evaluate(node =>
     ({width:node.width,height:node.height,display: getComputedStyle(node).display}));
   if (canvas.width <= 0 || canvas.height <= 0) throw new Error('Canvas is empty');
+  if (!isMobile) {
+    const integration = await page.evaluate(async () => {
+      const THREE = await import("three");
+      const {installWorldVoxelArt} = await import("/apps/voxel-world/voxel-art-runtime.mjs");
+      const worldGroup = new THREE.Group();
+      const camera = new THREE.PerspectiveCamera();
+      camera.position.set(0, 30, 40);
+      const art = installWorldVoxelArt({THREE, worldGroup, camera, heightAt: () => 0});
+      await art.ready;
+      const rendered = await art.update({entities: [
+        {id: "macro-city-00001", type: "city", x: 0, z: 0, radius: 34},
+        {id: "macro-volcano-02", type: "volcano", x: 18, z: 0, radius: 34},
+        {id: "macro-energy-03", type: "energy", x: -20, z: 0, radius: 34},
+      ]});
+      art.tick();
+      return {...art.stats(), rendered, children: worldGroup.children.length};
+    });
+    if (!integration.rendered || integration.instances !== 3 || integration.children !== 3)
+      throw new Error("Failed actual voxel-world runtime placements: " + JSON.stringify(integration));
+    console.log("[VOXEL_ART_E2E] live runtime placement", integration);
+  }
   if (faults.length) throw new Error('Page errors: '+faults.join('; '));
   console.log('[VOXEL_ART_E2E]',name,'7 macro choices pass',canvas);
   await context.close();
