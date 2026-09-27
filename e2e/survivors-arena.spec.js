@@ -66,22 +66,27 @@ test('iPhone WebKit: mobile layout, worker role and draggable joystick', async (
   expect(errors).toEqual([]);
 });
 
-test('upgrades: level-up presents 3 working choices and game resumes', async ({ page }) => {
+test('local integration fixture: a real gem triggers 3-choice level up and resumes simulation', async ({ page }) => {
   test.skip(test.info().project.name !== 'desktop-chromium', 'desktop integration only');
-  await page.goto('/apps/survivors-arena/');
+  await page.goto('/apps/survivors-arena/?e2e=1');
   await page.getByRole('button', { name:/Мэр/ }).click();
-  const reached = await page.evaluate(async () => {
-    // The runtime keeps the game state private. A legitimate run must actually earn experience.
-    const start = performance.now();
-    while (performance.now() - start < 22000) {
-      if (!document.getElementById('upgrade-modal').hidden) return true;
-      await new Promise(resolve => setTimeout(resolve, 100));
-    }
-    return false;
-  });
-  test.skip(!reached, 'Survival-driven experience did not reach level 2 within the smoke budget');
+  const seeded = await page.evaluate(() => window.__SURVIVORS_ARENA_READY__.injectTestGem());
+  expect(seeded).toBe(true);
+  await expect(page.locator('#upgrade-modal')).toBeVisible();
   await expect(page.locator('#upgrades button')).toHaveCount(3);
+  await expect.poll(() => page.evaluate(() => window.__SURVIVORS_ARENA_READY__.snapshot().level)).toBe(2);
   await page.locator('#upgrades button').first().click();
   await expect(page.locator('#upgrade-modal')).toBeHidden();
   await expect.poll(() => page.evaluate(() => window.__SURVIVORS_ARENA_READY__.snapshot().paused)).toBe(false);
+});
+
+test('server failure: solo arena remains playable and reports its offline status', async ({ page }) => {
+  test.skip(test.info().project.name !== 'desktop-chromium', 'desktop resilience only');
+  await page.route('**/api/voxel', route => route.fulfill({status:503,body:'{"error":"offline"}'}));
+  await page.goto('/apps/survivors-arena/');
+  await expect(page.locator('#world-status')).toContainText('Автономный прототип');
+  await page.getByRole('button', {name:/Воин/}).click();
+  const snapshot = await page.evaluate(() => window.__SURVIVORS_ARENA_READY__.snapshot());
+  expect(snapshot.started).toBe(true);
+  expect(snapshot.worldConnected).toBe(false);
 });
