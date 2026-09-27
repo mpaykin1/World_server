@@ -88,6 +88,7 @@ export function view(world,notice=''){
       (LABELS[p.type]||p.type)+' ('+p.remaining+' дн.)').join(', '):'');
   const story=world.story;
   const incident=story?.active;
+  const dragon=story?.dragon?.present;
   const emergency=[];
   if(incident){
     if(['dragon_fire','fire'].includes(incident.kind)&&
@@ -108,6 +109,9 @@ export function view(world,notice=''){
   if((incident||ruin)&&world.resources.budget>=8)
     emergency.push({text:'🚑 Доставить помощь 💰8',
       callback_data:'tg2:'+world.revision+':relief'});
+  if(dragon&&world.resources.budget>=5)
+    emergency.unshift({text:'🏹 Стрелять в дракона 💰5',
+      callback_data:'tg2:'+world.revision+':shoot_dragon'});
   const choices=emergency.map(button=>[button]);
   for(const o of offered)choices.push([{
     text:o.label+'  💰'+o.plan.cost+'  ⏳'+o.plan.buildTicks,
@@ -118,6 +122,7 @@ export function view(world,notice=''){
   choices.push([{text:'🔄 Новый мир',callback_data:'tg2:'+world.revision+':reset'}]);
   return {text:(notice?notice+'\n\n':'')+intro+
     (story?.last?'\n📜 '+story.last.title:'')+
+    (dragon?'\n🐉 Дракон рядом (силы: '+story.dragon.health+'/3).':'')+
     (incident?'\n🚨 Активная угроза!':'')+
     (story?.ruins?.length?'\n🏚 Разрушено объектов: '+story.ruins.length:'')+
     (world.crisis?'\n🚨 Дефицит жизненно важных ресурсов.':'')+
