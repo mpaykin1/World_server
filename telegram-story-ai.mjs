@@ -1,6 +1,6 @@
 // Optional Cloudflare Workers AI semantic fallback for otherwise unknown turns.
 // The model chooses a *whitelisted* intent, never numeric resource changes.
-import {classifyStoryText} from './telegram-story-parse.mjs';
+import {classifyStoryText,dragonPresent} from './telegram-story-parse.mjs';
 
 export const STORY_AI_MODEL='@cf/meta/llama-3.1-8b-instruct-fast';
 const EVENTS=new Set([
@@ -33,7 +33,7 @@ export async function classifyStoryWithAI(world,text,ai){
   if(simple.recognized||typeof ai?.run!=='function')return simple;
   const state=world.story||{};
   const context={
-    dragon:state.dragon?.present?'present':'absent',
+    dragon:dragonPresent(world)?'present':'absent',
     dragonHealth:state.dragon?.present?state.dragon.health:null,
     crisis:state.active?.kind||null,
     lastStory:state.last?.kind||null,
