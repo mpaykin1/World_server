@@ -30,8 +30,11 @@ function activeIncident(value){
   return value;
 }
 function storyState(world){
-  const state=world.story||{active:null,ruins:[],last:null,evacuated:0};
+  const stored=world.story;
+  const state=stored&&typeof stored==='object'&&!Array.isArray(stored)
+    ?stored:{active:null,ruins:[],last:null,evacuated:0};
   state.active=activeIncident(state.active);
+  state.ruins=Array.isArray(state.ruins)?state.ruins:[];
   state.evacuated=evacuatedCount(state);
   return state;
 }
@@ -111,7 +114,7 @@ function reject(world,description){
 }
 function rescueTarget(world){
   const s=world.story;
-  return activeIncident(s?.active)||s?.ruins?.length;
+  return activeIncident(s?.active)||(Array.isArray(s?.ruins)&&s.ruins.length);
 }
 export function applyStoryAction(world,action,text=''){
   if(!STORY_ACTIONS.has(action))return reject(world,'Неизвестное действие.');
@@ -188,11 +191,17 @@ export function applyStoryText(world,text){
 }
 export function advanceStoryDay(previous,world){
   const active=activeIncident(previous.story?.active);
-  const rebuilding=previous.story?.ruins?.some(x=>x.rebuilding);
+  const rebuilding=Array.isArray(previous.story?.ruins)&&
+    previous.story.ruins.some(x=>x&&typeof x==='object'&&x.rebuilding);
   const evacuated=evacuatedCount(previous.story);
+  const storedStory=previous.story;
+  const storyNeedsRepair=storedStory!=null&&(
+    typeof storedStory!=='object'||Array.isArray(storedStory)||
+    (storedStory.ruins!=null&&!Array.isArray(storedStory.ruins)));
   const activeNeedsRepair=previous.story?.active!=null&&!active;
   const evacuationNeedsRepair=previous.story&&previous.story.evacuated!==evacuated;
-  if(!active&&!rebuilding&&!evacuated&&!evacuationNeedsRepair&&!activeNeedsRepair)return world;
+  if(!active&&!rebuilding&&!evacuated&&!evacuationNeedsRepair&&
+    !activeNeedsRepair&&!storyNeedsRepair)return world;
   let next=structuredClone(world);
   next.story=storyState({story:structuredClone(previous.story)});
   if(active){
