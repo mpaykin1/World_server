@@ -6,6 +6,8 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
+  checks: read
 
 jobs:
   fleet-pre:
@@ -63,10 +65,23 @@ jobs:
     steps:
       - name: Reject missing or stale certificate
         env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
           EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
           CERTIFIED: ${{ needs.fleet-pre.outputs.sha }}
         run: |
           set -euo pipefail
+          test -n "$PR_NUMBER"
           test -n "$CERTIFIED"
           test "$CERTIFIED" = "$EXPECTED"
+          META="$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}" \
+            --jq '[.draft, .head.sha] | @tsv')"
+          read -r DRAFT PR_HEAD <<< "$META"
+          test "$DRAFT" = false
+          test "$PR_HEAD" = "$EXPECTED"
+          APPROVED="$(gh api \
+            -H 'Accept: application/vnd.github+json' \
+            "repos/${GITHUB_REPOSITORY}/commits/${EXPECTED}/check-runs" \
+            --jq '[.check_runs[] | select(.name == "World Independent Adversarial Review" and .status == "completed" and .conclusion == "success")] | length > 0')"
+          test "$APPROVED" = true
           echo "READY_FOR_OCEAN=YES SHA=$CERTIFIED"
