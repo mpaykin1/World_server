@@ -40,10 +40,9 @@ jobs:
           else
             echo "configured=false" >> "$GITHUB_OUTPUT"
           fi
-      - name: Apply additive shared-world D1 migration
-        if: steps.authority.outputs.configured == 'true'
-        shell: bash
-        run: npx --yes wrangler@4.45.0 d1 migrations apply world-server-telegram-state --remote --config wrangler.jsonc
+      # Runtime Worker D1 binding bootstraps the same additive IF NOT EXISTS schema.
+      # The deploy token lacks account D1 API scope (Cloudflare 7403).
+      # The exact-preview live smoke below proves that bootstrap actually works.
       - name: Deploy isolated exact-head worker
         id: deploy
         if: steps.authority.outputs.configured == 'true'
