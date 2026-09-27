@@ -247,7 +247,7 @@ addEventListener('resize', painter.resize);
 window.__SURVIVORS_ARENA_READY__ = {
   ready:true, version:'poc-1',
   snapshot:() => ({
-    started:!!run, role:run?.role || null, worldConnected, worldId, worldRevision,
+    started:!!run, role:run?.role || null, worldConnected, worldId, worldRevision, time:run?.t || 0,
     sharedWorldReadOnly:true, tags:[...world.tags], canvas:painter.metrics,
     player:run ? { x:run.player.x, y:run.player.y, hp:run.player.hp } : null,
     level:run?.level || 0, kills:run?.kills || 0, enemies:run?.enemies.length || 0,
