@@ -254,3 +254,19 @@ test('unsolicited free-form story, unrelated to menu state, is still executed',a
   await post(e,a,text(2,'Наводнение затопило город'));
   assert.equal(a.calls.length,count,'Duplicate delivery must not create another story');
 });
+test('webhook persists dragon then residents fire with canonical revision and replay guard',async()=>{
+  const e=env(),a=mockApi();
+  await post(e,a,start(1));
+  await post(e,a,text(2,'Прилетел дракон'));
+  const arrival=await loadSession(e.TELEGRAM_DB,42);
+  assert.equal(arrival.world.story.last.kind,'dragon_arrival');
+  await post(e,a,text(3,'Люди в него стреляют'));
+  const defended=await loadSession(e.TELEGRAM_DB,42);
+  assert.equal(defended.world.story.last.kind,'defense');
+  assert.equal(defended.revision,arrival.revision+1);
+  assert.equal(defended.world.resources.budget,arrival.world.resources.budget-15);
+  assert.match(a.calls.filter(x=>x.method==='sendAnimation').at(-1)
+    .payload.animation,/story_defense-[0-2]\.mp4$/);
+  await post(e,a,text(3,'Люди в него стреляют'));
+  assert.deepEqual((await loadSession(e.TELEGRAM_DB,42)).world,defended.world);
+});
