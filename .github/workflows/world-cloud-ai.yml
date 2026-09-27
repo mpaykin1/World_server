@@ -274,13 +274,21 @@ jobs:
           echo "Created ${PR_URL}"
 
       - name: Report result to issue
-        if: >-
-          steps.candidate.outputs.changed == 'true' &&
-          github.event_name == 'issue_comment' &&
-          steps.pr.outputs.url != ''
+        if: github.event_name == 'issue_comment' && success()
         shell: bash
+        env:
+          PR_URL: ${{ steps.pr.outputs.url }}
+          CHANGED: ${{ steps.candidate.outputs.changed }}
         run: |
           set -euo pipefail
           ISSUE="$(jq -r '.issue.number' "${GITHUB_EVENT_PATH}")"
-          gh issue comment "${ISSUE}" --body "$(printf 'WORLD_AI_RESULT_V1\nPR: %s\nHEAD_SHA: %s\nACTUAL_MODEL: %s\nTESTS: npm run check + desktop-ai:check + golden:check passed in this workflow\nNEXT: independent diff review + Fleet PRE (not production verified)' \
-            '${{ steps.pr.outputs.url }}' "$(git rev-parse HEAD)" "${MODEL}")"
+          if [[ "${CHANGED}" == "true" && -n "${PR_URL}" ]]; then
+            TESTS="npm run check + desktop-ai:check + golden:check passed in this workflow"
+            NEXT="Independent diff review + Fleet PRE; production not verified"
+          else
+            PR_URL="NONE — review-only / no patch"
+            TESTS="No patch produced; full verification step skipped"
+            NEXT="Review the agent log; create a bounded follow-up task if needed"
+          fi
+          gh issue comment "${ISSUE}" --body "$(printf 'WORLD_AI_RESULT_V1\nPR: %s\nHEAD_SHA: %s\nACTUAL_MODEL: %s\nTESTS: %s\nNEXT: %s' \
+            "${PR_URL}" "$(git rev-parse HEAD)" "${MODEL}" "${TESTS}" "${NEXT}")"
