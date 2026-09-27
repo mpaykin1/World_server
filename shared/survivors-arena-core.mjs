@@ -48,7 +48,7 @@ export function createRun({ seed = 1, role = 'warrior', maxEnemies = 140, world 
 }
 function spawnEnemy(state, boss = false) {
   if (state.enemies.length >= state.maxEnemies) return;
-  const angle = rand(state) * TAU, radius = 14 + rand(state) * 5, growth = 1 + state.t / 58;
+  const angle = rand(state) * TAU, radius = 7.8 + rand(state) * 3.6 + Math.min(4, state.t / 65), growth = 1 + state.t / 58;
   const hasVolcano = state.world.tags.includes('volcano');
   const hp = (boss ? 45 : 2.4 + state.t * .065) * growth;
   state.enemies.push({
