@@ -28,3 +28,13 @@ test('legacy narrative history restores dragon target',()=>{
   assert.equal(shot.kind,'defense');
   assert(Number.isInteger(shot.world.story.dragon.health));
 });
+
+test('repeated dragon arrival cannot heal an injured or enraged dragon',()=>{
+  const arrived=applyStoryText(initialWorld(458),'Прилетел дракон').world;
+  const shot=applyStoryText(arrived,'Люди стреляют в него из луков').world;
+  assert.equal(shot.story.dragon.temper,'hostile');
+  const repeated=applyStoryText(shot,'Прилетел дракон и сел у реки').world;
+  assert.equal(repeated.story.dragon.health,shot.story.dragon.health);
+  assert.equal(repeated.story.dragon.temper,'hostile');
+  assert.equal(repeated.story.active.kind,'dragon_fire');
+});
