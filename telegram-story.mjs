@@ -67,6 +67,8 @@ function closeCrisis(world){
 function enactWorldEvent(world,input){
   const kind=input.kind,next=engine.applyNarrativeEvent(world,kind);
   next.story=storyState(next);
+  if(['dragon_arrival','dragon_fire','dragon_help'].includes(kind))
+    next.story.dragon={active:true,hp:100};
   let target='';
   if(BURNING.has(kind)||['earthquake','meteor','attack'].includes(kind)||
      (['flood','storm'].includes(kind)&&/смы|разруш|снес|разбил|уничтож/i.test(input.text)))
@@ -105,7 +107,27 @@ function rescueTarget(world){
   const s=world.story;
   return s?.active||s?.ruins?.length;
 }
+function shootAtDragon(world,text=''){
+  const dragon=world.story?.dragon;
+  if(!dragon?.active)return reject(world,'Поблизости нет дракона.');
+  if(world.resources.budget<5)return reject(world,'Не хватает денег на оборону: нужно 5.');
+  let next=structuredClone(world);
+  next=engine.applyResourceDelta(next,{budget:-5});
+  next.revision++;
+  next.story.dragon.hp=Math.max(0,dragon.hp-28);
+  const defeated=next.story.dragon.hp===0;
+  next.story.dragon.active=!defeated;
+  next.story.last={kind:'defense',scene:'story_defense',
+    title:defeated?'🏹 Дракон повержен!':'🏹 Люди стреляют в дракона!',
+    description:defeated?'Город защищён. Угроза миновала.':
+      'Дракон ранен. Осталось здоровья: '+next.story.dragon.hp+'.',
+    text:String(text).slice(0,190),target:'dragon'};
+  next.history.push({tick:next.tick,kind:'telegram_story_shoot',
+    damage:28,remaining:next.story.dragon.hp});
+  return{world:next,accepted:true,action:'story',kind:'defense'};
+}
 export function applyStoryAction(world,action,text=''){
+  if(action==='shoot')return shootAtDragon(world,text);
   if(!STORY_ACTIONS.has(action))return reject(world,'Неизвестное действие.');
   if(!rescueTarget(world)&&action!=='relief')
     return reject(world,'Сейчас нет активной угрозы или разрушений.');
