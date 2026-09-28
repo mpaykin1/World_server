@@ -55,6 +55,19 @@ test('Explicit OpenRouter without key fails closed',async()=>{
  const result=await handleAiInterpret(req({text:'Построй город',provider:'openrouter'}),env);
  assert.equal(result.status,503);assert.equal((await result.json()).detail,'OPENROUTER_KEY_MISSING');
 });
+test('Explicit OpenRouter failure never calls another provider or leaks a secret', async () => {
+ const env=mkEnv(), oldFetch=globalThis.fetch;
+ let otherProviderUsed=false;
+ env.AI.run=async()=>{otherProviderUsed=true;throw Error('unexpected');};
+ globalThis.fetch=async()=>{otherProviderUsed=true;throw Error('unexpected');};
+ delete env.OPENROUTER_API_KEY;
+ try {
+   const response=await handleAiInterpret(req({text:'Построй город',provider:'openrouter'}),env);
+   const body=await response.json();
+   assert.equal(response.status,503);assert.equal(otherProviderUsed,false);
+   assert.ok(!JSON.stringify(body).includes('TEST_DUMMY'));
+ } finally {globalThis.fetch=oldFetch;}
+});
 test('Auto falls back to Gemini on Workers AI failure', async () => {
  const oldFetch=globalThis.fetch;
  globalThis.fetch=async()=>Response.json({candidates:[{content:{parts:[{text:parsed}]}}]});
