@@ -30,3 +30,27 @@ test('Apply request rate limit',async()=>{const env=mkEnv();env.GAME_AI_RATE_LIM
 test('Reject invalid prompt',async()=>{const result=await handleAiInterpret(req({text:'а'}),mkEnv());assert.equal(result.status,400);});
 test('Accept official game CORS preflight',async()=>{const result=await handleAiInterpret(req({},'OPTIONS'),mkEnv());assert.equal(result.status,204);assert.equal(result.headers.get('access-control-allow-origin'),origin);});
 test('Status does not leak API secrets',async()=>{const result=await handleAiInterpret(req({},'GET'),mkEnv());assert.equal(result.status,200);assert.deepEqual((await result.clone().json()).providers,{cloudflare:true,gemini:true});assert.ok(!(await result.text()).includes('TEST_DUMMY'));});
+
+test('Gemini retries only allowlisted free model if first returns 404', async () => {
+ const oldFetch=globalThis.fetch, seen=[];
+ globalThis.fetch=async (url)=>{
+   seen.push(url);
+   return url.includes('3.5-flash-lite')
+    ? new Response('{}',{status:404})
+    : Response.json({candidates:[{content:{parts:[{text:parsed}]}}]});
+ };
+ try {
+   const response=await handleAiInterpret(req({text:'Построй город',provider:'gemini'}),mkEnv());
+   assert.equal(response.status,200);
+   assert.equal(seen.length,2);
+   assert.match(seen[0],/gemini-3\.5-flash-lite/);
+   assert.match(seen[1],/gemini-3\.1-flash-lite/);
+ } finally {globalThis.fetch=oldFetch;}
+});
+test('Gemini refuses model outside known free-model list', async () => {
+ const env=mkEnv();env.GEMINI_MODEL='paid-model';
+ const response=await handleAiInterpret(req({text:'Построй город',provider:'gemini'}),env);
+ assert.equal(response.status,503);
+ const body=await response.json();
+ assert.equal(body.detail,'GEMINI_MODEL_NOT_FREE_ALLOWLISTED');
+});
