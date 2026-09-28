@@ -128,6 +128,24 @@ test('negation-free dragon arrival is not falsely treated as a fire',()=>{
   assert.equal(out.world.story.active,null);
   assert.equal(out.world.story.ruins.length,0);
 });
+test('dragon arrival followed by residents shooting changes the same world',()=>{
+  const before=initialWorld(42);
+  const arrived=applyStoryText(before,'Прилетел дракон').world;
+  assert.equal(arrived.story.last.kind,'dragon_arrival');
+  const utterance='Люди в него стреляют';
+  assert.deepEqual(classifyStoryText(utterance).action,'defend');
+  assert.equal(classifyStoryText('Жители стреляют в дракона').action,'defend');
+  const fired=applyStoryText(arrived,utterance);
+  assert.equal(fired.accepted,true);
+  assert.equal(fired.kind,'defense');
+  assert.equal(fired.world.revision,arrived.revision+1);
+  assert.equal(fired.world.resources.budget,arrived.resources.budget-15);
+  assert.match(fired.world.story.last.description,/дракон отступил/i);
+  assert.equal(classifyTurn(arrived,fired.world,'story').id,'story_defense');
+  assert.equal(applyStoryText(fired.world,utterance).accepted,false);
+  assert.equal(applyStoryText(before,utterance).accepted,false);
+  assert.equal(before.story,undefined);
+});
 test('free-form rescue action does not require pressing a menu first',()=>{
   const w=applyStoryText(initialWorld(42),'Прилетел дракон и сжег комплекс').world;
   assert.equal(classifyStoryText('Потушить пожар').action,'extinguish');
