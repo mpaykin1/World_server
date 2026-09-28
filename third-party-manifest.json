@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0.0",
+  "policy": "deny-by-default",
+  "allowlist": {
+    "code": [
+      "0BSD",
+      "Unlicense",
+      "MIT",
+      "Apache-2.0"
+    ],
+    "assets": [
+      "CC0-1.0",
+      "Public-Domain"
+    ]
+  },
+  "dependencies": [],
+  "notes": "The first Living Ink vertical slice imports no external code, models, textures, fonts, shaders, animations, or training data. Candidate libraries remain audit-only until separately pinned and hashed.",
+  "legacyPackageBaseline": [
+    "@sentry/browser",
+    "@supabase/supabase-js",
+    "@vercel/sandbox",
+    "esbuild",
+    "@lhci/cli",
+    "@playwright/test",
+    "pngjs"
+  ]
+}
