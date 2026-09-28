@@ -136,7 +136,7 @@ test('Prediction strips untrusted extra world fields', async () => {
 });
 
 
-test('Auto rejects invented exact future numbers and falls back to a grounded provider', async () => {
+test('Exact future numbers are converted to qualitative grounded language', async () => {
   const originalFetch=globalThis.fetch;
   const env=mkEnv();
   env.AI.run=async()=>({response:JSON.stringify({
@@ -158,8 +158,9 @@ test('Auto rejects invented exact future numbers and falls back to a grounded pr
     }),env);
     const body=await response.json();
     assert.equal(response.status,200);
-    assert.equal(body.provider,'gemini');
+    assert.equal(body.provider,'cloudflare');
     assert.doesNotMatch(JSON.stringify(body.prediction),/12 человек/);
+    assert.match(JSON.stringify(body.prediction),/населения/);
   }finally{globalThis.fetch=originalFetch;}
 });
 
