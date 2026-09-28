@@ -76,21 +76,29 @@ async function gemini(env, message) {
 async function groq(env, message) {
   const key = String(env.GROQ_API_KEY || '').trim();
   if (!key) throw Error('GROQ_KEY_MISSING');
-  // Both names are free-tier text models. Do not allow arbitrary paid-model overrides.
-  const FREE_MODELS = ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant'];
+  // The former Llama free-plan IDs were retired in August 2026.
+  const FREE_MODELS = ['openai/gpt-oss-20b', 'openai/gpt-oss-120b'];
   const model = env.GROQ_MODEL || FREE_MODELS[0];
   if (!FREE_MODELS.includes(model)) throw Error('GROQ_MODEL_NOT_FREE_ALLOWLISTED');
-  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST', signal: AbortSignal.timeout(7500),
-    headers: { authorization: 'Bearer ' + key, 'content-type': 'application/json' },
-    body: JSON.stringify({
-      model, temperature: 0, max_tokens: 650, response_format: { type: 'json_object' },
-      messages: [{ role: 'system', content: PROMPT }, { role: 'user', content: message }]
-    })
-  });
-  if (!response.ok) throw Error('GROQ_HTTP_' + response.status);
-  const data = await response.json();
-  return normalize(data?.choices?.[0]?.message?.content || '');
+  let lastStatus = 404;
+  for (const selected of [model, ...FREE_MODELS.filter(x => x !== model)]) {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST', signal: AbortSignal.timeout(7500),
+      headers: { authorization: 'Bearer ' + key, 'content-type': 'application/json' },
+      body: JSON.stringify({
+        model: selected, max_completion_tokens: 900, reasoning_effort: 'low',
+        include_reasoning: false, response_format: { type: 'json_object' },
+        messages: [{ role: 'system', content: PROMPT }, { role: 'user', content: message }]
+      })
+    });
+    if (response.status === 404 || response.status === 403) {
+      lastStatus = response.status; continue;
+    }
+    if (!response.ok) throw Error('GROQ_HTTP_' + response.status);
+    const data = await response.json();
+    return normalize(data?.choices?.[0]?.message?.content || '');
+  }
+  throw Error('GROQ_HTTP_' + lastStatus);
 }
 export async function handleAiInterpret(request, env) {
   const origin = request.headers.get('origin') || '';
