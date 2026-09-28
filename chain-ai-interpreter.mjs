@@ -34,7 +34,7 @@ function normalize(result) {
     unknowns: Array.isArray(decoded.unknowns) ? decoded.unknowns.slice(0, 4).map(x => String(x).slice(0, 120)) : [] };
 }
 function normalizePrediction(result) {
-  const text = String(result || '').trim().replace(/^\`\`\`(?:json)?\\s*/i, '').replace(/\\s*\`\`\`$/, '');
+  const text = String(result || '').trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
   let decoded;
   try { decoded = JSON.parse(text); }
   catch {
