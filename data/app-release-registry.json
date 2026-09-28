@@ -185,6 +185,13 @@
         "spawn",
         "render"
       ]
+    },
+    "living-ink-office": {
+      "title": "ASQURA Living Ink Office",
+      "visible": false,
+      "status": "quarantine",
+      "kind": "graphics-vertical-slice",
+      "reason": "First Living Ink vertical slice is deny-by-default until exact-head CI, desktop/mobile browser checks, offline proof, and the approved ASQURA reference visual gate exceed the user threshold of 85%."
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",
