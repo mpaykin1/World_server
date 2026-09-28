@@ -107,7 +107,8 @@ function rescueTarget(world){
 }
 export function applyStoryAction(world,action,text=''){
   if(!STORY_ACTIONS.has(action))return reject(world,'Неизвестное действие.');
-  if(!rescueTarget(world)&&action!=='relief')
+  const arrived=world.story?.last?.kind==='dragon_arrival';
+  if(!rescueTarget(world)&&action!=='relief'&&!(action==='defend'&&arrived))
     return reject(world,'Сейчас нет активной угрозы или разрушений.');
   let next=structuredClone(world);next.story=storyState(next);
   const initialIncident=next.story.active,initialResources=next.resources;
@@ -146,7 +147,9 @@ export function applyStoryAction(world,action,text=''){
   }else if(action==='defend'){
     if(incident)incident.severity=Math.max(0,incident.severity-2);
     if(incident?.severity===0)next.story.active=null;
-    detail='Защитники ослабили угрозу. Последствия разрушений остались.';
+    detail=arrived||incident?.kind==='dragon_arrival'
+      ?'Защитники открыли огонь. Дракон отступил от города.'
+      :'Защитники ослабили угрозу. Последствия разрушений остались.';
   }else{
     next=engine.applyResourceDelta(next,{water:8,food:7,health:3});
     detail='Спасатели доставили воду и еду, здоровью жителей стало лучше.';
@@ -160,6 +163,13 @@ export function applyStoryAction(world,action,text=''){
   next.history.push({tick:next.tick,kind:'telegram_story_'+name});
   closeCrisis(next);
   return{world:next,accepted:true,action:'story',kind:name};
+}
+export function applyInterpretedStory(world,text,intent){
+  if(intent?.kind==='action'&&STORY_ACTIONS.has(intent.action))
+    return applyStoryAction(world,intent.action,text);
+  if(THREATS.has(intent?.kind)||['dragon_help','rain','forest','festival','trade','rescue'].includes(intent?.kind))
+    return enactWorldEvent(world,{kind:intent.kind,text});
+  return applyStoryText(world,text);
 }
 export function applyStoryText(world,text){
   const intent=classifyStoryText(text);

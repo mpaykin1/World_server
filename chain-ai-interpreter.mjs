@@ -73,12 +73,31 @@ async function gemini(env, message) {
   }
   throw Error('GEMINI_HTTP_' + lastStatus);
 }
+async function groq(env, message) {
+  const key = String(env.GROQ_API_KEY || '').trim();
+  if (!key) throw Error('GROQ_KEY_MISSING');
+  // Both names are free-tier text models. Do not allow arbitrary paid-model overrides.
+  const FREE_MODELS = ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant'];
+  const model = env.GROQ_MODEL || FREE_MODELS[0];
+  if (!FREE_MODELS.includes(model)) throw Error('GROQ_MODEL_NOT_FREE_ALLOWLISTED');
+  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST', signal: AbortSignal.timeout(7500),
+    headers: { authorization: 'Bearer ' + key, 'content-type': 'application/json' },
+    body: JSON.stringify({
+      model, temperature: 0, max_tokens: 650, response_format: { type: 'json_object' },
+      messages: [{ role: 'system', content: PROMPT }, { role: 'user', content: message }]
+    })
+  });
+  if (!response.ok) throw Error('GROQ_HTTP_' + response.status);
+  const data = await response.json();
+  return normalize(data?.choices?.[0]?.message?.content || '');
+}
 export async function handleAiInterpret(request, env) {
   const origin = request.headers.get('origin') || '';
   if (origin && !ALLOWED_ORIGINS.has(origin)) return respond({ error: 'origin_not_allowed' }, 403, origin);
   if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors(origin) });
   if (request.method === 'GET') return respond({ ok: true, providers: {
-    cloudflare: Boolean(env.AI), gemini: Boolean(env.GEMINI_API_KEY) } }, 200, origin);
+    cloudflare: Boolean(env.AI), gemini: Boolean(env.GEMINI_API_KEY), groq: Boolean(env.GROQ_API_KEY) } }, 200, origin);
   if (request.method !== 'POST') return respond({ error: 'method_not_allowed' }, 405, origin);
   if (Number(request.headers.get('content-length') || 0) > 4096) return respond({ error: 'request_too_large' }, 413, origin);
   // Mandatory cost guard: fail closed if the binding has not been deployed yet.
@@ -90,15 +109,27 @@ export async function handleAiInterpret(request, env) {
   let body; try { body = JSON.parse(raw); } catch { return respond({ error: 'invalid_json' }, 400, origin); }
   if (typeof body?.text !== 'string' || body.text.trim().length < 3 || body.text.length > 800)
     return respond({ error: 'invalid_text' }, 400, origin);
-  const provider = ['cloudflare', 'gemini', 'auto'].includes(body.provider) ? body.provider : 'auto';
+  const provider = ['cloudflare', 'gemini', 'groq', 'auto'].includes(body.provider) ? body.provider : 'auto';
   const message = JSON.stringify({ text: body.text.trim(), world: safeContext(body.worldContext) });
   try {
     let proposal, used = provider;
     if (provider === 'gemini') proposal = await gemini(env, message);
+    else if (provider === 'groq') proposal = await groq(env, message);
     else if (provider === 'cloudflare') proposal = await cloudflare(env, message);
     else {
       try { proposal = await cloudflare(env, message); used = 'cloudflare'; }
-      catch (error) { if (!env.GEMINI_API_KEY) throw error; proposal = await gemini(env, message); used = 'gemini'; }
+      catch (error) {
+        if (env.GROQ_API_KEY) {
+          try { proposal = await groq(env, message); used = 'groq'; }
+          catch (groqError) {
+            if (!env.GEMINI_API_KEY) throw groqError;
+            proposal = await gemini(env, message); used = 'gemini';
+          }
+        } else {
+          if (!env.GEMINI_API_KEY) throw error;
+          proposal = await gemini(env, message); used = 'gemini';
+        }
+      }
     }
     return respond({ ok: true, provider: used, proposal, executed: false }, 200, origin);
   } catch (error) {

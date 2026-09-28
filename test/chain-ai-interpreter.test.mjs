@@ -29,7 +29,7 @@ test('Refuse to call AI without cost guard',async()=>{const env=mkEnv();delete e
 test('Apply request rate limit',async()=>{const env=mkEnv();env.GAME_AI_RATE_LIMIT.limit=async()=>({success:false});const result=await handleAiInterpret(req({text:'Город'}),env);assert.equal(result.status,429);});
 test('Reject invalid prompt',async()=>{const result=await handleAiInterpret(req({text:'а'}),mkEnv());assert.equal(result.status,400);});
 test('Accept official game CORS preflight',async()=>{const result=await handleAiInterpret(req({},'OPTIONS'),mkEnv());assert.equal(result.status,204);assert.equal(result.headers.get('access-control-allow-origin'),origin);});
-test('Status does not leak API secrets',async()=>{const result=await handleAiInterpret(req({},'GET'),mkEnv());assert.equal(result.status,200);assert.deepEqual((await result.clone().json()).providers,{cloudflare:true,gemini:true});assert.ok(!(await result.text()).includes('TEST_DUMMY'));});
+test('Status does not leak API secrets',async()=>{const result=await handleAiInterpret(req({},'GET'),mkEnv());assert.equal(result.status,200);assert.deepEqual((await result.clone().json()).providers,{cloudflare:true,gemini:true,groq:false});assert.ok(!(await result.text()).includes('TEST_DUMMY'));});
 
 test('Gemini retries only allowlisted free model if first returns 404', async () => {
  const oldFetch=globalThis.fetch, seen=[];
