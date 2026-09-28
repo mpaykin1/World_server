@@ -254,3 +254,31 @@ test('unsolicited free-form story, unrelated to menu state, is still executed',a
   await post(e,a,text(2,'Наводнение затопило город'));
   assert.equal(a.calls.length,count,'Duplicate delivery must not create another story');
 });
+
+test('D1 persists dragon arrows exactly once, then isolates a reset',async()=>{
+  const e=env(),a=mockApi(),arrows='Люди стреляют в него из луков';
+  await post(e,a,start(20));
+  await post(e,a,text(21,'Прилетел дракон'));
+  const before=(await loadSession(e.TELEGRAM_DB,42)).world;
+  await post(e,a,text(22,arrows));
+  const shot=(await loadSession(e.TELEGRAM_DB,42)).world;
+  assert.deepEqual([before.story.dragon.health,shot.story.dragon.health,
+    shot.story.last.kind,shot.resources.budget,
+    shot.history.filter(x=>x.kind==='telegram_story_dragon_arrows').length],
+    [3,2,'defense',before.resources.budget-5,1]);
+  assert.match(a.calls.filter(x=>x.method==='sendAnimation').at(-1)
+    .payload.animation,/story_defense-\d\.mp4$/);
+  const sent=a.calls.length;
+  await post(e,a,text(22,arrows));
+  assert.equal(a.calls.length,sent);
+  assert.deepEqual((await loadSession(e.TELEGRAM_DB,42)).world,shot);
+  await post(e,a,start(23));
+  assert.equal((await loadSession(e.TELEGRAM_DB,42)).world.story.dragon.health,2);
+  await post(e,a,callback(24,'tg2:'+shot.revision+':reset'));
+  const reset=(await loadSession(e.TELEGRAM_DB,42)).world;
+  await post(e,a,text(25,arrows));
+  const after=(await loadSession(e.TELEGRAM_DB,42)).world;
+  assert.deepEqual(after.resources,reset.resources);
+  assert.equal(after.story.last.kind,'blocked');
+  assert(!after.history.some(x=>x.kind==='telegram_story_dragon_arrows'));
+});
