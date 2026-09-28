@@ -6,6 +6,9 @@
   "version_metadata": {
     "binding": "CF_VERSION_METADATA"
   },
+  "ai": {
+    "binding": "AI"
+  },
   "assets": {
     "directory": ".",
     "binding": "ASSETS",
