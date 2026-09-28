@@ -67,6 +67,24 @@ test('actual Edge uses current membership, strict revision fence and honest 0 of
   for(const bad of [-1,1.5,'0',null])await assert.rejects(runEdge(f,body('game-state',{expectedRevision:bad})),e=>e.status===400);
   assert.equal(f.writes,0);
 });
+test('actual Edge and Node lock certified card identity while free design stays intention-driven',async()=>{
+  const edgeFixture=fixture(),nodeFixture=fixture();
+  const state=await runEdge(edgeFixture,body('game-state'));
+  const card=state.cards[0]; assert.ok(card);
+  const conflicting='Солнечная электростанция и геотермальная энергия, строим поэтапно и осторожно';
+  const selected=body('preview-plan',{structure:card.structure,choiceId:card.id,text:conflicting});
+  const edge=await runEdge(edgeFixture,selected),node=await runNode(nodeFixture,selected);
+  assert.equal(edge.plan.intent.goal,card.structure);
+  assert.deepEqual({...edge,runtime:undefined},{...node,runtime:undefined});
+  const other=Object.keys(engine.PROJECTS).find(value=>value!==card.structure);
+  await assert.rejects(runEdge(edgeFixture,body('preview-plan',{structure:other,choiceId:card.id,text:conflicting})),e=>e.status===409);
+  await assert.rejects(runEdge(edgeFixture,body('preview-plan',{structure:card.structure,choiceId:'forged'})),e=>e.status===409);
+  const free=await runEdge(edgeFixture,body('interpret-intent',{structure:'workshop',choiceId:'free-design',text:'солнечная электростанция'}));
+  assert.equal(free.intent.goal,'solar');
+  await runEdge(edgeFixture,body('commit-plan',{structure:card.structure,choiceId:card.id,text:conflicting,expectedRevision:0}));
+  await assert.rejects(runEdge(edgeFixture,selected),e=>e.status===409);
+  assert.equal(edgeFixture.writes,1);
+});
 test('actual Edge CAS two writers, stale 409 then latest refresh',async()=>{
   const f=fixture(),b=body('commit-plan',{expectedRevision:0});
   const results=await Promise.allSettled([runEdge(f,b),runEdge(f,b)]);

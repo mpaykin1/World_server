@@ -96,3 +96,12 @@ test('Node and Edge both allowlist residents in every public world projection', 
     assert.match(source, /world:\s*publicState\(next\)/);
   }
 });
+
+test('Edge and Node both authenticate a certified choice ID and preserve free design',()=>{
+ for(const p of ['lib/chain-reaction-api.js','supabase/functions/world-emergence/chain-reaction.ts']){
+  const s=fs.readFileSync(path.join(root,p),'utf8');
+  assert.match(s,/choiceId/);assert.match(s,/STALE_CHOICE/);
+  assert.match(s,/engine\.genieOptions\(world\)\.cards\.find/);
+   assert.match(s,/free-design/);
+  }
+});

@@ -1,0 +1,5 @@
+# Certified Genie choices and fifth free-design lane
+
+Server responses include 0–4 current-revision cards (each with id and structure) and fifth.id = free-design. A fixed card must send choiceId:card.id with structure:card.structure to both preview-plan and commit-plan. Node and Edge recompute the current offers and reject stale, forged, mismatched IDs with 409 STALE_CHOICE; text still affects cautious/reckless build timing and risk, but does not change the selected building. The fifth lane uses choiceId:free-design with a supported default structure and free text: the existing intent interpreter can change its goal. Missing choiceId remains backwards-compatible for existing clients. All economics remain server-authoritative.
+
+Graphics #284 owner: attach server-provided IDs to cards and forward choiceId on preview and commit; use fifth.id for custom design; on 409 clear stale selection and refresh game-state without read fence. Only wire after server merge and deployment; do not claim public visual readiness before exact live desktop/mobile smoke and FPS.

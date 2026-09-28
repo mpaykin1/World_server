@@ -17,10 +17,17 @@ function bearer(req:Request) {
 function bodySize(value:unknown) {
   return new TextEncoder().encode(JSON.stringify(value)).byteLength;
 }
-function intentFrom(body:any) {
+function intentFrom(body:any,world:any) {
   if(typeof body.structure!=="string"||!Object.hasOwn(engine.PROJECTS,body.structure))fail(400,"Invalid structure");
   if(body.text!==undefined&&(typeof body.text!=="string"||body.text.length>600))fail(400,"Invalid text");
-  return {...engine.interpretIntent(body.text||"",body.structure),schemaVersion:1};
+  if(body.choiceId!==undefined&&(typeof body.choiceId!=="string"||body.choiceId.length>128))fail(400,"Invalid choiceId");
+  const parsed=engine.interpretIntent(body.text||"",body.structure);
+  if(body.choiceId===undefined||body.choiceId==="free-design")return {...parsed,schemaVersion:1};
+  const certified=engine.genieOptions(world).cards.find((card:any)=>card.id===body.choiceId);
+  if(!certified||certified.structure!==body.structure)fail(409,"STALE_CHOICE");
+  const locked=engine.interpretIntent("",certified.structure);
+  return {...locked,assumptions:parsed.assumptions,timeline:locked.timeline+(parsed.assumptions.cautious?1:0),
+    uncertainty:parsed.uncertainty,comment:parsed.comment,schemaVersion:1};
 }
 function residentAddress(body:any) {
   if(typeof body.building!=="string"||!WORLD.test(body.building))fail(400,"Invalid building");
@@ -131,7 +138,7 @@ export async function handleChainReaction(admin:any,req:Request,body:any,runtime
     return runtime.json({...base,world:publicState(world),...engine.genieOptions(world)});
   }
   if(body.action==="genie-options")return runtime.json({...base,...engine.genieOptions(world)});
-  const intent=body.action==="tick"?null:intentFrom(body);
+  const intent=body.action==="tick"?null:intentFrom(body,world);
   if(body.action==="interpret-intent")return runtime.json({...base,intent});
   if(body.action==="preview-plan")return runtime.json({...base,plan:engine.preview(world,intent),world:publicState(world)});
   if(!Number.isSafeInteger(body.expectedRevision)||body.expectedRevision<0)fail(400,"expectedRevision required");
