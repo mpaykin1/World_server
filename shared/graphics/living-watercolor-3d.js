@@ -98,7 +98,7 @@ function patchWatercolorMaterial(THREE,material,style,seed,states){
     shader.vertexShader=shader.vertexShader.replace('#include <worldpos_vertex>','#include <worldpos_vertex>\nvWcWorld=(modelMatrix*vec4(transformed,1.0)).xyz;');
     shader.fragmentShader=shader.fragmentShader.replace('#include <common>',`#include <common>\nvarying vec3 vWcWorld;\nuniform float uWcTime,uWcSeed,uWcWash,uWcGran,uWcBleed,uWcQuality;\nuniform vec3 uWcPaper,uWcInk,uWcWashColor;\nfloat wcHash(vec3 p){p=fract(p*.1031+uWcSeed);p+=dot(p,p.yzx+33.33);return fract((p.x+p.y)*p.z);}`);
     const needle='#include <color_fragment>';
-    if(shader.fragmentShader.includes(needle))shader.fragmentShader=shader.fragmentShader.replace(needle,`${needle}\nfloat wcG=wcHash(floor(vWcWorld*(2.2+uWcQuality*1.8)));\nfloat wcB=wcHash(floor(vWcWorld*1.15)+vec3(9.0,3.0,5.0));\nfloat wcFlow=.5+.25*sin(dot(vWcWorld.xz,vec2(1.7,2.3))+uWcSeed*19.0)+.25*sin(dot(vWcWorld.xy,vec2(2.9,-1.35))+uWcSeed*11.0);\nfloat wcDensity=clamp(uWcWash+(wcG-.5)*uWcGran*.72+(wcB-.5)*uWcBleed+(wcFlow-.5)*uWcGran*.62,.22,.94);\nvec3 wcPigment=mix(uWcWashColor,diffuseColor.rgb,.46);\ndiffuseColor.rgb=mix(uWcPaper,wcPigment,wcDensity);`);
+    if(shader.fragmentShader.includes(needle))shader.fragmentShader=shader.fragmentShader.replace(needle,`${needle}\nfloat wcFlow1=sin(dot(vWcWorld,vec3(1.73,2.11,.87))+uWcSeed*19.0);\nfloat wcFlow2=sin(dot(vWcWorld,vec3(-2.37,.91,1.41))+uWcSeed*11.0);\nfloat wcFlow3=sin(dot(vWcWorld,vec3(.63,-1.57,2.83))+uWcSeed*7.0);\nfloat wcGrain=sin(dot(vWcWorld,vec3(7.7,6.3,8.9))+uWcSeed*29.0)*.5+.5;\nfloat wcFlow=(wcFlow1+wcFlow2*.72+wcFlow3*.48)/2.2;\nfloat wcDensity=clamp(uWcWash+wcFlow*uWcGran*.24+(wcGrain-.5)*uWcBleed*.18,.28,.92);\nvec3 wcPigment=mix(uWcWashColor,diffuseColor.rgb,.58);\ndiffuseColor.rgb=mix(uWcPaper,wcPigment,wcDensity);`);
   };
   m.customProgramCacheKey=()=>`${previousKey?.()||''}|living-watercolor-3d:${state.seed}:${style.washOpacity}`;
   m.roughness=Math.max(Number(m.roughness??.85),.86);m.metalness=Math.min(Number(m.metalness??0),.06);m.needsUpdate=true;
@@ -127,8 +127,9 @@ export function createLivingWatercolor3D({THREE,renderer,scene,camera,style:inpu
   const style=createWatercolorStyle(inputStyle),materialStates=new Set(),outlineStates=new Set(),emitters=new Set(),roots=new Set();
   let quality=1,disposed=false;
   renderer.setClearColor?.(style.paperColor,1);if(renderer.domElement?.style)renderer.domElement.style.background=style.paperColor;
-  if(scene&&!scene.background)scene.background=new THREE.Color(style.paperColor);
   const paperTexture=makePaperTexture(THREE,style,style.seed),brushTexture=makeBrushTexture(THREE,style,style.seed^0x51f15e);
+  if(paperTexture&&'colorSpace' in paperTexture)paperTexture.colorSpace=THREE.SRGBColorSpace;
+  if(scene&&!scene.background)scene.background=paperTexture||new THREE.Color(style.paperColor);
 
   function apply(root,{seed=style.seed,outline=true}={}){
     if(!root)return root;roots.add(root);let i=0;
