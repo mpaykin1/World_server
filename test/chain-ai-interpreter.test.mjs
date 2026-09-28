@@ -54,3 +54,20 @@ test('Gemini refuses model outside known free-model list', async () => {
  const body=await response.json();
  assert.equal(body.detail,'GEMINI_MODEL_NOT_FREE_ALLOWLISTED');
 });
+
+test('Dragon arrival is preserved as a supported event command', async () => {
+ const env=mkEnv();
+ env.AI.run=async()=>({response:JSON.stringify({summary:'Прилетел дракон',commands:[{action:'event',kind:'dragon',details:'Дракон прилетел'}],unknowns:[]})});
+ const response=await handleAiInterpret(req({text:'Прилетел дракон',provider:'cloudflare',worldContext:{turn:0,entities:[]}}),env);
+ const body=await response.json();
+ assert.equal(response.status,200);assert.equal(body.proposal.commands[0].action,'event');assert.equal(body.proposal.commands[0].kind,'dragon');
+});
+test('Living dragon context reaches the model without arbitrary entity data', async () => {
+ let seen='';
+ const env=mkEnv();
+ env.AI.run=async (_model,input)=>{seen=input.messages[1].content;return {response:JSON.stringify({summary:'Атака',commands:[{action:'event',kind:'attack'}],unknowns:[]})};};
+ const response=await handleAiInterpret(req({text:'Люди в него стреляют',provider:'cloudflare',worldContext:{
+   turn:2,entities:[{kind:'dragon',hp:73,secret:'do-not-pass'},{kind:'person',hp:10}]
+ }}),env);
+ assert.equal(response.status,200);assert.match(seen,/"entities":\[\{"kind":"dragon","hp":73\}\]/);assert.doesNotMatch(seen,/secret|person/);
+});
