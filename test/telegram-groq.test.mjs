@@ -44,3 +44,27 @@ test('Unrecognized model output does not apply simulation changes',()=>{
   assert.equal(response.world.population,world.population);
   assert.equal(response.kind,'unknown');
 });
+
+test('Telegram Groq retries current free GPT-OSS models after 404',async()=>{
+  const models=[];
+  const world=applyStoryText(initialWorld(6),'прилетел дракон').world;
+  const result=await interpretAmbiguousStory({GROQ_API_KEY:'test'},world,'они атакуют его',
+    async(_url,opts)=>{
+      models.push(JSON.parse(opts.body).model);
+      return models.length===1
+        ?new Response('{}',{status:404})
+        :Response.json({choices:[{message:{content:'{"type":"action","value":"defend"}'}}]});
+    });
+  assert.deepEqual(result,{kind:'action',action:'defend'});
+  assert.deepEqual(models,['openai/gpt-oss-20b','openai/gpt-oss-120b']);
+});
+test('Telegram avoids retired and unapproved Groq model overrides',async()=>{
+  let called=false;
+  const result=await interpretAmbiguousStory({
+    GROQ_API_KEY:'test',GROQ_MODEL:'llama-3.3-70b-versatile'
+  },initialWorld(7),'нечто произошло',async()=>{
+    called=true;throw Error('unexpected call');
+  });
+  assert.equal(result,null);
+  assert.equal(called,false);
+});

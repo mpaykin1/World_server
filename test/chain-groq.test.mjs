@@ -21,7 +21,7 @@ test('Groq explicit provider interprets intent without executing world mutations
   globalThis.fetch = async (url, opts) => {
     assert.equal(url, 'https://api.groq.com/openai/v1/chat/completions');
     assert.equal(opts.headers.authorization, 'Bearer fake-only-for-tests');
-    assert.equal(JSON.parse(opts.body).model, 'llama-3.3-70b-versatile');
+    assert.equal(JSON.parse(opts.body).model, 'openai/gpt-oss-20b');
     return Response.json({ choices: [{ message: { content: proposal } }] });
   };
   try {
@@ -100,4 +100,26 @@ test('Untrusted Groq commands cannot change unknown world objects', async () => 
     assert.deepEqual(body.proposal.commands, []);
     assert.equal(body.executed, false);
   } finally { globalThis.fetch = originalFetch; }
+});
+
+test('Retired Groq model is never called on the free plan',async()=>{
+  const runtime=env();runtime.GROQ_MODEL='llama-3.3-70b-versatile';
+  const response=await handleAiInterpret(request('groq'),runtime);
+  assert.equal(response.status,503);
+  assert.equal((await response.json()).detail,'GROQ_MODEL_NOT_FREE_ALLOWLISTED');
+});
+test('Groq retries production GPT-OSS 120B only for unavailable 20B model',async()=>{
+  const originalFetch=globalThis.fetch,models=[];
+  globalThis.fetch=async (_url,opts)=>{
+    models.push(JSON.parse(opts.body).model);
+    return models.length===1
+      ?new Response('{}',{status:404})
+      :Response.json({choices:[{message:{content:proposal}}]});
+  };
+  try{
+    const response=await handleAiInterpret(request('groq'),env());
+    assert.equal(response.status,200);
+    assert.equal((await response.json()).provider,'groq');
+    assert.deepEqual(models,['openai/gpt-oss-20b','openai/gpt-oss-120b']);
+  }finally{globalThis.fetch=originalFetch;}
 });
