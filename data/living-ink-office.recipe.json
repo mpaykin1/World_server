@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "living-ink-office",
+  "name": "ASQURA Living Ink Office Vertical Slice",
+  "seed": 12345,
+  "style": {
+    "paper": "#f5f0e8",
+    "paperWarm": "#eadfce",
+    "ink": "#21384f",
+    "inkSoft": "#5d7185",
+    "wash": "#8d9cab",
+    "plant": "#7e9284",
+    "glass": "#dfe8ec",
+    "warm": "#b8a58f",
+    "screen": "#eef2f3"
+  },
+  "layout": {"rooms": 1, "desks": 2, "glassPartitions": 1},
+  "characters": [
+    {"role": "analyst"},
+    {"role": "manager"},
+    {"role": "designer"}
+  ],
+  "props": ["desk", "computer", "chair", "plant", "coffee-machine", "mug", "glass-wall"],
+  "actions": ["idle", "walk", "sit", "type", "coffee", "talk", "listen", "meeting", "whiteboard", "printer", "carry-folder", "open-door", "look-around"],
+  "lod": {"artisticLevels": 3, "nearMeters": 11, "farMeters": 24},
+  "standalone": {"networkRuntime": false, "externalAssets": false, "externalJavaScript": false}
+}
