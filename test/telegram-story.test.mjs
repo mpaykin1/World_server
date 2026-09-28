@@ -138,3 +138,65 @@ test('free-form rescue action does not require pressing a menu first',()=>{
   assert.equal(denial.accepted,false);
   assert.match(denial.world.story.last.description,/Нечего тушить/);
 });
+
+test('archers react to an existing dragon referenced as him',()=>{
+  const start=initialWorld(73);
+  const missing=applyStoryText(start,'Люди стреляют в него из луков');
+  assert.equal(missing.kind,'blocked','no dragon must not be invented');
+  assert.match(missing.world.story.last.description,/В этом мире нет дракона/);
+  assert.deepEqual(missing.world.resources,start.resources);
+  const arrival=applyStoryText(start,'Прилетел дракон').world;
+  assert.equal(arrival.story.dragon.present,true);
+  assert.equal(arrival.story.active,null,'arrival itself is peaceful');
+  const shot=applyStoryText(arrival,'Люди стреляют в него из луков');
+  assert.equal(shot.accepted,true);
+  assert.equal(shot.kind,'defense');
+  assert.equal(shot.world.story.dragon.health,2);
+  assert.equal(shot.world.story.active.kind,'dragon_fire');
+  assert.equal(shot.world.resources.budget,arrival.resources.budget-5);
+  assert.equal(shot.world.population,arrival.population);
+  assert.equal(shot.world.story.last.scene,'story_defense');
+  assert.equal(classifyTurn(arrival,shot.world,'story').id,'story_defense');
+  assert(view(arrival).reply_markup.inline_keyboard.flat().some(button=>
+    button.callback_data.endsWith(':shoot_dragon')));
+  assert.deepEqual(applyStoryText(arrival,'Люди стреляют в него из луков'),shot,
+    'the outcome must be reproducible from the same revision');
+  assert.equal(arrival.story.dragon.health,3,'input is immutable');
+});
+test('dragon can flee after repeated arrow volleys',()=>{
+  let w=applyStoryText(initialWorld(74),'Прилетел дракон').world;
+  for(let i=0;i<6&&w.story.dragon.present;i++)
+    w=applyStoryText(w,'Лучники стреляют по нему из луков').world;
+  assert.equal(w.story.dragon.present,false);
+  assert.equal(w.story.active,null);
+  assert.equal(view(w).reply_markup.inline_keyboard.flat().some(button=>
+    button.callback_data.endsWith(':shoot_dragon')),false);
+  const unavailable=applyStoryText(w,'Лучники стреляют в дракона из луков');
+  assert.equal(unavailable.kind,'blocked');
+  assert.deepEqual(unavailable.world.resources,w.resources);
+});
+
+test('legacy D1 session remembers the dragon after an unsupported follow-up',()=>{
+  const arrival=applyStoryText(initialWorld(92),'Прилетел дракон').world;
+  const legacy=structuredClone(arrival);
+  delete legacy.story.dragon;
+  const missed=applyStoryText(legacy,'Мимо прошла странная тень').world;
+  assert.equal(missed.story.last.kind,'unknown');
+  assert(view(missed).reply_markup.inline_keyboard.flat().some(button=>
+    button.callback_data.endsWith(':shoot_dragon')));
+  const corrected=applyStoryText(missed,'Люди стреляют в него из луков');
+  assert.equal(corrected.kind,'defense');
+  assert.equal(corrected.world.story.dragon.health,2);
+  assert.equal(corrected.world.resources.budget,missed.resources.budget-5);
+});
+
+test('New World explicitly resets old dragon; follow-up explains missing target',()=>{
+  const old=applyStoryText(initialWorld(53),'Прилетел дракон').world;
+  const fresh=initialWorld(53,1);
+  assert(old.story.dragon.present);
+  assert.equal(fresh.story,undefined);
+  const reply=applyStoryText(fresh,'Люди стреляют в него из луков');
+  assert.equal(reply.kind,'blocked');
+  assert.match(reply.world.story.last.description,/Новый мир/);
+  assert.deepEqual(reply.world.resources,fresh.resources);
+});
