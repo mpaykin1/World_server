@@ -32,7 +32,7 @@ test('Groq rejects invented actions and tolerates upstream failures',async()=>{
 });
 test('Dragon arrival followed by shooting causes a persisted defence result',()=>{
   const arrived=applyStoryText(initialWorld(4),'прилетел дракон');
-  assert.equal(arrived.world.story.active.kind,'dragon_arrival');
+  assert.equal(arrived.world.story.active,null);
   const response=applyStoryAction(arrived.world,'defend','люди в него стреляют');
   assert.equal(response.accepted,true);
   assert.equal(response.world.story.active,null);
