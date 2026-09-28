@@ -71,3 +71,109 @@ test('Living dragon context reaches the model without arbitrary entity data', as
  }}),env);
  assert.equal(response.status,200);assert.match(seen,/"entities":\[\{"kind":"dragon","hp":73\}\]/);assert.doesNotMatch(seen,/secret|person/);
 });
+
+
+test('Build prediction uses current world context without advancing the world', async () => {
+  let systemPrompt='', userMessage='';
+  const env=mkEnv();
+  env.AI.run=async (_model,input)=>{
+    systemPrompt=input.messages[0].content;
+    userMessage=input.messages[1].content;
+    return {response:JSON.stringify({
+      summary:'Город, вероятно, усилит спрос на ресурсы.',
+      immediate:['Появится дополнительный спрос на воду и энергию.'],
+      later:['Может вырасти потребность в инфраструктуре.'],
+      risks:['При низких запасах воды возможен дефицит.'],
+      surprise:'Рост города может повысить ценность соседнего леса как зоны отдыха.',
+      confidence:0.72
+    })};
+  };
+  const input={text:'Построить город',mode:'predict_build',provider:'cloudflare',
+    build:{kind:'city',location:'текущее место в сцене'},
+    worldContext:{turn:4,population:43,power:12,water:6,food:9,eco:24,budget:38,placed:{city:1,forest:2,energy:0,volcano:0}}};
+  const response=await handleAiInterpret(req(input),env);
+  const body=await response.json();
+  assert.equal(response.status,200);
+  assert.equal(body.executed,false);
+  assert.equal(body.provider,'cloudflare');
+  assert.match(body.prediction.summary,/Город/);
+  assert.deepEqual(body.prediction.risks,['При низких запасах воды возможен дефицит.']);
+  assert.equal(body.prediction.confidence,0.72);
+  assert.match(systemPrompt,/Do NOT advance turns/);
+  assert.match(userMessage,/"turn":4/);
+  assert.match(userMessage,/"water":6/);
+  assert.match(userMessage,/"kind":"city"/);
+});
+
+test('Build prediction rejects unsupported build kinds before calling AI', async () => {
+  const env=mkEnv(); let called=false;
+  env.AI.run=async()=>{called=true;return {response:'{}'};};
+  const response=await handleAiInterpret(req({
+    text:'Построить космопорт',mode:'predict_build',provider:'cloudflare',
+    build:{kind:'spaceport'},worldContext:{turn:0}
+  }),env);
+  assert.equal(response.status,400);
+  assert.equal((await response.json()).error,'invalid_build_kind');
+  assert.equal(called,false);
+});
+
+test('Prediction strips untrusted extra world fields', async () => {
+  let seen='';
+  const env=mkEnv();
+  env.AI.run=async (_model,input)=>{
+    seen=input.messages[1].content;
+    return {response:JSON.stringify({
+      summary:'Лес может улучшить экологическую устойчивость.',
+      immediate:['Вероятно улучшится состояние экологии.'],later:[],risks:[],surprise:'',confidence:0.6
+    })};
+  };
+  const response=await handleAiInterpret(req({
+    text:'Посадить лес',mode:'predict_build',provider:'cloudflare',build:{kind:'forest'},
+    worldContext:{turn:1,eco:3,secret:'never-pass',placed:{forest:0,secret:99}}
+  }),env);
+  assert.equal(response.status,200);
+  assert.doesNotMatch(seen,/secret|never-pass/);
+});
+
+
+test('Exact future numbers are converted to qualitative grounded language', async () => {
+  const originalFetch=globalThis.fetch;
+  const env=mkEnv();
+  env.AI.run=async()=>({response:JSON.stringify({
+    summary:'Город может вырасти.',immediate:['Население вырастет на 12 человек.'],
+    later:[],risks:[],surprise:'',confidence:0.7
+  })});
+  globalThis.fetch=async()=>Response.json({candidates:[{content:{parts:[{text:JSON.stringify({
+    summary:'Город, вероятно, усилит спрос на ресурсы.',
+    immediate:['Может вырасти нагрузка на воду и энергию.'],
+    later:['Возможно, потребуется дополнительная инфраструктура.'],
+    risks:['Существующий дефицит воды может усилиться.'],
+    surprise:'Рост города может изменить ценность уже построенных объектов.',
+    confidence:0.68
+  })}]}}]});
+  try{
+    const response=await handleAiInterpret(req({
+      text:'Построить город',mode:'predict_build',provider:'auto',
+      build:{kind:'city'},worldContext:{turn:2,water:6,power:12,budget:38}
+    }),env);
+    const body=await response.json();
+    assert.equal(response.status,200);
+    assert.equal(body.provider,'cloudflare');
+    assert.doesNotMatch(JSON.stringify(body.prediction),/12 человек/);
+    assert.match(JSON.stringify(body.prediction),/населения/);
+  }finally{globalThis.fetch=originalFetch;}
+});
+
+test('Explicit prediction provider fails closed on ungrounded invented facts', async () => {
+  const env=mkEnv();
+  env.AI.run=async()=>({response:JSON.stringify({
+    summary:'Город может развиваться.',
+    immediate:['Может открыться скрытый ресурс.'],later:[],risks:[],surprise:'',confidence:0.7
+  })});
+  const response=await handleAiInterpret(req({
+    text:'Построить город',mode:'predict_build',provider:'cloudflare',
+    build:{kind:'city'},worldContext:{turn:0}
+  }),env);
+  assert.equal(response.status,503);
+  assert.match((await response.json()).detail,/AI_PREDICTION_EMPTY/);
+});
