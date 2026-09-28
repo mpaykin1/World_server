@@ -57,6 +57,12 @@ function normalizePrediction(result) {
   };
   if (!prediction.summary || !(prediction.immediate.length || prediction.later.length || prediction.risks.length || prediction.surprise))
     throw Error('AI_PREDICTION_EMPTY');
+  const natural = [prediction.summary, ...prediction.immediate, ...prediction.later, ...prediction.risks, prediction.surprise]
+    .filter(Boolean);
+  if (natural.some(text => /\d/u.test(text))) throw Error('AI_PREDICTION_UNGROUNDED_NUMBERS');
+  if (natural.some(text => !/[А-Яа-яЁё]/u.test(text))) throw Error('AI_PREDICTION_NOT_RUSSIAN');
+  const invented = /(друг(?:ой|ие|их)\s+игрок|скрыт\w*\s+ресурс|неизвестн\w*\s+ресурс|подземн\w*\s+(?:вод|ресурс)|соседн\w*\s+(?:регион|город))/iu;
+  if (natural.some(text => invented.test(text))) throw Error('AI_PREDICTION_UNGROUNDED_FACT');
   return prediction;
 }
 function safeContext(value) {
