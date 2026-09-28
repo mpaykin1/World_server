@@ -17,6 +17,13 @@
       "/api/*"
     ]
   },
+  "ratelimits": [
+    {
+      "name": "GAME_AI_RATE_LIMIT",
+      "namespace_id": "1002",
+      "simple": { "limit": 10, "period": 60 }
+    }
+  ],
   "triggers": {
     "crons": [
       "*/5 * * * *"
