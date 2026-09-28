@@ -142,10 +142,40 @@ function addInkShell(THREE,mesh,style,seed,outlineStates){
   return shells;
 }
 
+function createPaperCompositor(sourceCanvas,style,getQuality){
+  if(typeof document==='undefined'||!sourceCanvas?.parentNode)return null;
+  const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');
+  if(!ctx)return null;
+  canvas.dataset.livingWatercolorCompositor='true';
+  Object.assign(canvas.style,{position:'fixed',inset:'0',width:'100vw',height:'100vh',pointerEvents:'none',zIndex:'1',mixBlendMode:'multiply'});
+  sourceCanvas.parentNode.insertBefore(canvas,sourceCanvas.nextSibling);
+  let w=0,h=0,dpr=1;
+  function resize(){
+    const nw=innerWidth||1,nh=innerHeight||1,nd=Math.min(devicePixelRatio||1,1.5);
+    if(nw===w&&nh===h&&nd===dpr)return;w=nw;h=nh;dpr=nd;canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  function present(timeMs=performance.now()){
+    resize();ctx.clearRect(0,0,w,h);
+    const q=clamp(getQuality?.()??1,.35,1),passes=q>.78?4:q>.55?3:2;
+    ctx.save();ctx.globalCompositeOperation='source-over';
+    for(let i=0;i<passes;i++){
+      const phase=(stableSeed(style.seed+':composite:'+i)%1000)*.013;
+      const drift=Math.sin(timeMs*.00011+phase)*style.motion;
+      const dx=(hash01(i,13,7,style.seed)-.5)*(1.2+style.bleed*4)+drift;
+      const dy=(hash01(i,17,11,style.seed)-.5)*(1.1+style.bleed*3)-drift*.45;
+      ctx.globalAlpha=(.025+.018*i)*q;ctx.filter=`blur(${(.22+i*.12).toFixed(2)}px)`;
+      ctx.drawImage(sourceCanvas,dx,dy,w,h);
+    }
+    ctx.restore();
+  }
+  function dispose(){canvas.remove();}
+  resize();return{canvas,present,resize,dispose};
+}
+
 export function createLivingWatercolor3D({THREE,renderer,scene,camera,style:inputStyle={},autoQuality=true}={}){
   if(!THREE||!renderer)throw new Error('LivingWatercolor3D: THREE + renderer required');
   const style=createWatercolorStyle(inputStyle),materialStates=new Set(),outlineStates=new Set(),emitters=new Set(),roots=new Set();
-  let quality=1,disposed=false;
+  let quality=1,disposed=false,compositor=null;
   renderer.setClearColor?.(style.paperColor,1);if(renderer.domElement?.style)renderer.domElement.style.background=style.paperColor;
   const paperTexture=makePaperTexture(THREE,style,style.seed),brushTexture=makeBrushTexture(THREE,style,style.seed^0x51f15e),washTexture=makeWashTexture(THREE,style,style.seed^0x7f4a7c15);
   if(paperTexture&&'colorSpace' in paperTexture)paperTexture.colorSpace=THREE.SRGBColorSpace;
@@ -192,7 +222,7 @@ export function createLivingWatercolor3D({THREE,renderer,scene,camera,style:inpu
     for(const s of outlineStates){s.uniforms.uTime.value=seconds;const d=camera&&s.mesh.getWorldPosition?camera.position.distanceTo(s.mesh.getWorldPosition(new THREE.Vector3())):0;const lod=watercolorLodForDistance(d,style.lod);s.uniforms.uOpacity.value=s.baseOpacity*(lod==='near'?1:lod==='mid'?.8:lod==='far'?.52:.25);s.uniforms.uJitter.value=style.edgeJitter*(.72+.28*quality);}
     for(const e of emitters)updateEmitter(e,timeMs);
   }
-  function setQuality(value){quality=clamp(value,.35,1);return quality;}
+  function setQuality(value){quality=clamp(value,.35,1);return quality;}\n  function attachCompositor(){if(!compositor)compositor=createPaperCompositor(renderer.domElement,style,()=>quality);return compositor;}\n  function present(timeMs=performance.now()){compositor?.present?.(timeMs);}
   let qualityListener=null;
   if(autoQuality&&typeof window!=='undefined'){
     qualityListener=e=>setQuality(e?.detail?.quality??1);window.addEventListener('goldenqualitychange',qualityListener);
@@ -202,9 +232,9 @@ export function createLivingWatercolor3D({THREE,renderer,scene,camera,style:inpu
     disposed=true;if(qualityListener&&typeof window!=='undefined')window.removeEventListener('goldenqualitychange',qualityListener);
     for(const s of outlineStates){s.mesh.material?.dispose?.();s.mesh.removeFromParent?.();}
     for(const e of emitters){for(const p of e.particles)p.sprite.material?.dispose?.();e.group.removeFromParent?.();}
-    paperTexture?.dispose?.();brushTexture?.dispose?.();washTexture?.dispose?.();outlineStates.clear();emitters.clear();materialStates.clear();roots.clear();
+    compositor?.dispose?.();compositor=null;paperTexture?.dispose?.();brushTexture?.dispose?.();washTexture?.dispose?.();outlineStates.clear();emitters.clear();materialStates.clear();roots.clear();
   }
-  return{style,apply,tick,setQuality,addGroundWash,createBrushEmitter,diagnostics,dispose,paperTexture,brushTexture,washTexture};
+  return{style,apply,tick,setQuality,addGroundWash,createBrushEmitter,attachCompositor,present,diagnostics,dispose,paperTexture,brushTexture,washTexture};
 }
 
 export{DEFAULT_STYLE};
