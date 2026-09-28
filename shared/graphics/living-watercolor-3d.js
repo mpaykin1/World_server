@@ -187,7 +187,7 @@ export function createLivingWatercolor3D({THREE,renderer,scene,camera,style:inpu
       if(!obj?.isMesh||obj.userData?.livingWatercolorOutline)return;
       obj.userData=obj.userData||{};if(!obj.userData.__livingWatercolorOriginalMaterial)obj.userData.__livingWatercolorOriginalMaterial=obj.material;
       const mats=Array.isArray(obj.material)?obj.material:[obj.material];
-      const patched=mats.map((m,mi)=>patchWatercolorMaterial(THREE,m,style,stableSeed(`${seed}:${i}:${mi}`),materialStates));
+      const patched=mats.map((m,mi)=>patchWatercolorMaterial(THREE,m,style,stableSeed(`${seed}:${i}:${mi}`),materialStates,washTexture));
       obj.material=Array.isArray(obj.material)?patched:patched[0];if(outline)addInkShell(THREE,obj,style,stableSeed(`${seed}:ink:${i}`),outlineStates);i++;
     });
     return root;
@@ -222,7 +222,9 @@ export function createLivingWatercolor3D({THREE,renderer,scene,camera,style:inpu
     for(const s of outlineStates){s.uniforms.uTime.value=seconds;const d=camera&&s.mesh.getWorldPosition?camera.position.distanceTo(s.mesh.getWorldPosition(new THREE.Vector3())):0;const lod=watercolorLodForDistance(d,style.lod);s.uniforms.uOpacity.value=s.baseOpacity*(lod==='near'?1:lod==='mid'?.8:lod==='far'?.52:.25);s.uniforms.uJitter.value=style.edgeJitter*(.72+.28*quality);}
     for(const e of emitters)updateEmitter(e,timeMs);
   }
-  function setQuality(value){quality=clamp(value,.35,1);return quality;}\n  function attachCompositor(){if(!compositor)compositor=createPaperCompositor(renderer.domElement,style,()=>quality);return compositor;}\n  function present(timeMs=performance.now()){compositor?.present?.(timeMs);}
+  function setQuality(value){quality=clamp(value,.35,1);return quality;}
+  function attachCompositor(){if(!compositor)compositor=createPaperCompositor(renderer.domElement,style,()=>quality);return compositor;}
+  function present(timeMs=performance.now()){compositor?.present?.(timeMs);}
   let qualityListener=null;
   if(autoQuality&&typeof window!=='undefined'){
     qualityListener=e=>setQuality(e?.detail?.quality??1);window.addEventListener('goldenqualitychange',qualityListener);
