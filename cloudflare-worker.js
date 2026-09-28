@@ -269,6 +269,10 @@ export default {
       const { telegramStatus } = await import('./telegram-game.mjs');
       return telegramStatus(env);
     }
+    if (url.pathname === '/api/chain-ai') {
+      const { handleAiInterpret } = await import('./chain-ai-interpreter.mjs');
+      return handleAiInterpret(request, env);
+    }
     if (url.pathname === '/api/config') return configApi(request, env);
     if (url.pathname === '/api/apps') return appsApi(request, env, url);
     if (url.pathname === '/api/worlds') return worldsApi(request, env, url);
