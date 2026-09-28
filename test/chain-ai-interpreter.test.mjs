@@ -134,3 +134,45 @@ test('Prediction strips untrusted extra world fields', async () => {
   assert.equal(response.status,200);
   assert.doesNotMatch(seen,/secret|never-pass/);
 });
+
+
+test('Auto rejects invented exact future numbers and falls back to a grounded provider', async () => {
+  const originalFetch=globalThis.fetch;
+  const env=mkEnv();
+  env.AI.run=async()=>({response:JSON.stringify({
+    summary:'Город может вырасти.',immediate:['Население вырастет на 12 человек.'],
+    later:[],risks:[],surprise:'',confidence:0.7
+  })});
+  globalThis.fetch=async()=>Response.json({candidates:[{content:{parts:[{text:JSON.stringify({
+    summary:'Город, вероятно, усилит спрос на ресурсы.',
+    immediate:['Может вырасти нагрузка на воду и энергию.'],
+    later:['Возможно, потребуется дополнительная инфраструктура.'],
+    risks:['Существующий дефицит воды может усилиться.'],
+    surprise:'Рост города может изменить ценность уже построенных объектов.',
+    confidence:0.68
+  })}]}}]});
+  try{
+    const response=await handleAiInterpret(req({
+      text:'Построить город',mode:'predict_build',provider:'auto',
+      build:{kind:'city'},worldContext:{turn:2,water:6,power:12,budget:38}
+    }),env);
+    const body=await response.json();
+    assert.equal(response.status,200);
+    assert.equal(body.provider,'gemini');
+    assert.doesNotMatch(JSON.stringify(body.prediction),/12 человек/);
+  }finally{globalThis.fetch=originalFetch;}
+});
+
+test('Explicit prediction provider fails closed on ungrounded invented facts', async () => {
+  const env=mkEnv();
+  env.AI.run=async()=>({response:JSON.stringify({
+    summary:'Город может развиваться.',
+    immediate:['Может открыться скрытый ресурс.'],later:[],risks:[],surprise:'',confidence:0.7
+  })});
+  const response=await handleAiInterpret(req({
+    text:'Построить город',mode:'predict_build',provider:'cloudflare',
+    build:{kind:'city'},worldContext:{turn:0}
+  }),env);
+  assert.equal(response.status,503);
+  assert.match((await response.json()).detail,/UNGROUNDED_FACT/);
+});
