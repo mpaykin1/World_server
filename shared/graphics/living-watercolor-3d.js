@@ -68,6 +68,26 @@ function makeBrushTexture(THREE,style,seed=0,size=128){
   const texture=new THREE.CanvasTexture(canvas);texture.needsUpdate=true;
   texture.minFilter=THREE.LinearFilter;texture.magFilter=THREE.LinearFilter;return texture;
 }
+function makeWashTexture(THREE,style,seed=0,size=192){
+  const canvas=makeCanvas(size);if(!canvas)return null;
+  const ctx=canvas.getContext('2d');if(!ctx)return null;
+  ctx.fillStyle='#ffffff';ctx.fillRect(0,0,size,size);
+  for(let i=0;i<44;i++){
+    const x=hash01(i,41,7,seed)*size,y=hash01(i,43,11,seed)*size;
+    const rx=size*(.08+hash01(i,47,13,seed)*.22),ry=size*(.06+hash01(i,53,17,seed)*.18);
+    const a=.035+hash01(i,59,19,seed)*.095;
+    ctx.save();ctx.translate(x,y);ctx.rotate((hash01(i,61,23,seed)-.5)*1.2);
+    ctx.fillStyle=`rgba(70,88,112,${a})`;ctx.beginPath();ctx.ellipse(0,0,rx,ry,0,0,Math.PI*2);ctx.fill();ctx.restore();
+  }
+  for(let i=0;i<20;i++){
+    const x=hash01(i,67,29,seed)*size,y=hash01(i,71,31,seed)*size,r=size*(.035+hash01(i,73,37,seed)*.09);
+    const g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,'rgba(255,255,255,.20)');g.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
+  }
+  const texture=new THREE.CanvasTexture(canvas);texture.wrapS=texture.wrapT=THREE.RepeatWrapping;texture.repeat.set(1.8,1.8);
+  if('colorSpace' in texture)texture.colorSpace=THREE.SRGBColorSpace;texture.needsUpdate=true;return texture;
+}
+
 function makePaperTexture(THREE,style,seed=0,size=128){
   const canvas=makeCanvas(size);if(!canvas)return null;
   const ctx=canvas.getContext('2d');if(!ctx)return null;
@@ -80,7 +100,7 @@ function makePaperTexture(THREE,style,seed=0,size=128){
   const texture=new THREE.CanvasTexture(canvas);texture.wrapS=texture.wrapT=THREE.RepeatWrapping;
   texture.repeat?.set?.(7,7);texture.needsUpdate=true;return texture;
 }
-function patchWatercolorMaterial(THREE,material,style,seed,states){
+function patchWatercolorMaterial(THREE,material,style,seed,states,washTexture){
   if(!material||material.userData?.livingWatercolorPatched)return material;
   if(!material.isMeshStandardMaterial&&!material.isMeshPhysicalMaterial&&!material.isMeshLambertMaterial)return material;
   const m=material.clone();m.userData={...(material.userData||{}),livingWatercolorPatched:true};
@@ -101,7 +121,7 @@ function patchWatercolorMaterial(THREE,material,style,seed,states){
     if(shader.fragmentShader.includes(needle))shader.fragmentShader=shader.fragmentShader.replace(needle,`${needle}\nfloat wcFlow1=sin(dot(vWcWorld,vec3(1.73,2.11,.87))+uWcSeed*19.0);\nfloat wcFlow2=sin(dot(vWcWorld,vec3(-2.37,.91,1.41))+uWcSeed*11.0);\nfloat wcFlow3=sin(dot(vWcWorld,vec3(.63,-1.57,2.83))+uWcSeed*7.0);\nfloat wcGrain=sin(dot(vWcWorld,vec3(7.7,6.3,8.9))+uWcSeed*29.0)*.5+.5;\nfloat wcFlow=(wcFlow1+wcFlow2*.72+wcFlow3*.48)/2.2;\nfloat wcDensity=clamp(uWcWash+wcFlow*uWcGran*.62+(wcGrain-.5)*uWcBleed*.34,.16,.96);\nvec3 wcPigment=mix(uWcWashColor,diffuseColor.rgb,.46);\ndiffuseColor.rgb=mix(uWcPaper,wcPigment,wcDensity);`);
   };
   m.customProgramCacheKey=()=>`${previousKey?.()||''}|living-watercolor-3d:${state.seed}:${style.washOpacity}`;
-  m.roughness=Math.max(Number(m.roughness??.85),.86);m.metalness=Math.min(Number(m.metalness??0),.06);m.needsUpdate=true;
+  if(!m.map&&washTexture)m.map=washTexture;m.roughness=Math.max(Number(m.roughness??.85),.92);m.metalness=Math.min(Number(m.metalness??0),.03);m.needsUpdate=true;
   return m;
 }
 function addInkShell(THREE,mesh,style,seed,outlineStates){
@@ -127,7 +147,7 @@ export function createLivingWatercolor3D({THREE,renderer,scene,camera,style:inpu
   const style=createWatercolorStyle(inputStyle),materialStates=new Set(),outlineStates=new Set(),emitters=new Set(),roots=new Set();
   let quality=1,disposed=false;
   renderer.setClearColor?.(style.paperColor,1);if(renderer.domElement?.style)renderer.domElement.style.background=style.paperColor;
-  const paperTexture=makePaperTexture(THREE,style,style.seed),brushTexture=makeBrushTexture(THREE,style,style.seed^0x51f15e);
+  const paperTexture=makePaperTexture(THREE,style,style.seed),brushTexture=makeBrushTexture(THREE,style,style.seed^0x51f15e),washTexture=makeWashTexture(THREE,style,style.seed^0x7f4a7c15);
   if(paperTexture&&'colorSpace' in paperTexture)paperTexture.colorSpace=THREE.SRGBColorSpace;
   if(scene&&!scene.background)scene.background=paperTexture||new THREE.Color(style.paperColor);
 
@@ -177,14 +197,14 @@ export function createLivingWatercolor3D({THREE,renderer,scene,camera,style:inpu
   if(autoQuality&&typeof window!=='undefined'){
     qualityListener=e=>setQuality(e?.detail?.quality??1);window.addEventListener('goldenqualitychange',qualityListener);
   }
-  function diagnostics(){return{style,quality,roots:roots.size,materials:materialStates.size,outlines:outlineStates.size,emitters:emitters.size,paperTexture:Boolean(paperTexture),brushTexture:Boolean(brushTexture)};}
+  function diagnostics(){return{style,quality,roots:roots.size,materials:materialStates.size,outlines:outlineStates.size,emitters:emitters.size,paperTexture:Boolean(paperTexture),brushTexture:Boolean(brushTexture),washTexture:Boolean(washTexture)};}
   function dispose(){
     disposed=true;if(qualityListener&&typeof window!=='undefined')window.removeEventListener('goldenqualitychange',qualityListener);
     for(const s of outlineStates){s.mesh.material?.dispose?.();s.mesh.removeFromParent?.();}
     for(const e of emitters){for(const p of e.particles)p.sprite.material?.dispose?.();e.group.removeFromParent?.();}
-    paperTexture?.dispose?.();brushTexture?.dispose?.();outlineStates.clear();emitters.clear();materialStates.clear();roots.clear();
+    paperTexture?.dispose?.();brushTexture?.dispose?.();washTexture?.dispose?.();outlineStates.clear();emitters.clear();materialStates.clear();roots.clear();
   }
-  return{style,apply,tick,setQuality,addGroundWash,createBrushEmitter,diagnostics,dispose,paperTexture,brushTexture};
+  return{style,apply,tick,setQuality,addGroundWash,createBrushEmitter,diagnostics,dispose,paperTexture,brushTexture,washTexture};
 }
 
 export{DEFAULT_STYLE};
