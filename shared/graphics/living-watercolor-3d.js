@@ -90,15 +90,15 @@ function patchWatercolorMaterial(THREE,material,style,seed,states){
     previous?.(shader,...rest);
     Object.assign(shader.uniforms,{
       uWcTime:{value:0},uWcSeed:{value:(state.seed%10000)/10000},
-      uWcPaper:{value:colorVec3(THREE,style.paperColor)},uWcInk:{value:colorVec3(THREE,style.inkColor)},
+      uWcPaper:{value:colorVec3(THREE,style.paperColor)},uWcInk:{value:colorVec3(THREE,style.inkColor)},uWcWashColor:{value:colorVec3(THREE,style.washColor)},
       uWcWash:{value:style.washOpacity},uWcGran:{value:style.granulation},uWcBleed:{value:style.bleed},uWcQuality:{value:1}
     });
     state.uniforms=shader.uniforms;
     shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vWcWorld;');
     shader.vertexShader=shader.vertexShader.replace('#include <worldpos_vertex>','#include <worldpos_vertex>\nvWcWorld=(modelMatrix*vec4(transformed,1.0)).xyz;');
-    shader.fragmentShader=shader.fragmentShader.replace('#include <common>',`#include <common>\nvarying vec3 vWcWorld;\nuniform float uWcTime,uWcSeed,uWcWash,uWcGran,uWcBleed,uWcQuality;\nuniform vec3 uWcPaper,uWcInk;\nfloat wcHash(vec3 p){p=fract(p*.1031+uWcSeed);p+=dot(p,p.yzx+33.33);return fract((p.x+p.y)*p.z);}`);
+    shader.fragmentShader=shader.fragmentShader.replace('#include <common>',`#include <common>\nvarying vec3 vWcWorld;\nuniform float uWcTime,uWcSeed,uWcWash,uWcGran,uWcBleed,uWcQuality;\nuniform vec3 uWcPaper,uWcInk,uWcWashColor;\nfloat wcHash(vec3 p){p=fract(p*.1031+uWcSeed);p+=dot(p,p.yzx+33.33);return fract((p.x+p.y)*p.z);}`);
     const needle='#include <color_fragment>';
-    if(shader.fragmentShader.includes(needle))shader.fragmentShader=shader.fragmentShader.replace(needle,`${needle}\nfloat wcG=wcHash(floor(vWcWorld*(5.5+uWcQuality*7.0)));\nfloat wcB=wcHash(floor(vWcWorld*2.3)+vec3(9.0,3.0,5.0));\nfloat wcDensity=clamp(uWcWash+(wcG-.5)*uWcGran+(wcB-.5)*uWcBleed,.16,1.0);\ndiffuseColor.rgb=mix(uWcPaper,diffuseColor.rgb,wcDensity);`);
+    if(shader.fragmentShader.includes(needle))shader.fragmentShader=shader.fragmentShader.replace(needle,`${needle}\nfloat wcG=wcHash(floor(vWcWorld*(2.2+uWcQuality*1.8)));\nfloat wcB=wcHash(floor(vWcWorld*1.15)+vec3(9.0,3.0,5.0));\nfloat wcFlow=.5+.25*sin(dot(vWcWorld.xz,vec2(1.7,2.3))+uWcSeed*19.0)+.25*sin(dot(vWcWorld.xy,vec2(2.9,-1.35))+uWcSeed*11.0);\nfloat wcDensity=clamp(uWcWash+(wcG-.5)*uWcGran*.72+(wcB-.5)*uWcBleed+(wcFlow-.5)*uWcGran*.62,.22,.94);\nvec3 wcPigment=mix(uWcWashColor,diffuseColor.rgb,.46);\ndiffuseColor.rgb=mix(uWcPaper,wcPigment,wcDensity);`);
   };
   m.customProgramCacheKey=()=>`${previousKey?.()||''}|living-watercolor-3d:${state.seed}:${style.washOpacity}`;
   m.roughness=Math.max(Number(m.roughness??.85),.86);m.metalness=Math.min(Number(m.metalness??0),.06);m.needsUpdate=true;
@@ -106,15 +106,20 @@ function patchWatercolorMaterial(THREE,material,style,seed,states){
 }
 function addInkShell(THREE,mesh,style,seed,outlineStates){
   if(mesh.userData?.livingWatercolorOutline||!mesh.geometry?.attributes?.normal)return null;
-  const uniforms={uTime:{value:0},uSeed:{value:(stableSeed(seed)%10000)/10000},uWidth:{value:style.edgeWidth},uJitter:{value:style.edgeJitter},uOpacity:{value:.72},uInk:{value:colorVec3(THREE,style.inkColor)}};
-  const material=new THREE.ShaderMaterial({
-    uniforms,side:THREE.BackSide,transparent:true,depthWrite:false,depthTest:true,
-    vertexShader:`uniform float uTime,uSeed,uWidth,uJitter;\nfloat h(vec3 p){p=fract(p*.1031+uSeed);p+=dot(p,p.yzx+33.33);return fract((p.x+p.y)*p.z);}\nvoid main(){float n=h(position*5.0);float breathe=sin(uTime*.17+uSeed*17.0)*.35;float w=uWidth*(1.0+(n-.5)*uJitter+breathe*uJitter);vec3 p=position+normal*w;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.0);}`,
-    fragmentShader:`uniform vec3 uInk;uniform float uOpacity;void main(){gl_FragColor=vec4(uInk,uOpacity);}`
-  });
-  const shell=new THREE.Mesh(mesh.geometry,material);shell.name='__livingWatercolorOutline';
-  shell.frustumCulled=mesh.frustumCulled;shell.renderOrder=(mesh.renderOrder||0)-1;shell.userData.livingWatercolorOutline=true;
-  mesh.add(shell);outlineStates.add({mesh:shell,uniforms});return shell;
+  const shells=[],passes=[[.82,.22],[1.0,.34],[1.24,.18]];
+  for(let pass=0;pass<passes.length;pass++){
+    const [widthScale,opacity]=passes[pass],passSeed=stableSeed(`${seed}:${pass}`);
+    const uniforms={uTime:{value:0},uSeed:{value:(passSeed%10000)/10000},uWidth:{value:style.edgeWidth*widthScale},uJitter:{value:style.edgeJitter},uOpacity:{value:opacity},uInk:{value:colorVec3(THREE,style.inkColor)}};
+    const material=new THREE.ShaderMaterial({
+      uniforms,side:THREE.BackSide,transparent:true,depthWrite:false,depthTest:true,
+      vertexShader:`uniform float uTime,uSeed,uWidth,uJitter;\nfloat h(vec3 p){p=fract(p*.1031+uSeed);p+=dot(p,p.yzx+33.33);return fract((p.x+p.y)*p.z);}\nvoid main(){float n=h(position*4.2),n2=h(position*11.7+vec3(uSeed));float breathe=sin(uTime*.11+uSeed*31.0)*.22;float w=uWidth*(.88+(n-.5)*uJitter*1.25+(n2-.5)*uJitter*.45+breathe*uJitter);vec3 p=position+normal*w;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.0);}`,
+      fragmentShader:`uniform vec3 uInk;uniform float uOpacity;void main(){gl_FragColor=vec4(uInk,uOpacity);}`
+    });
+    const shell=new THREE.Mesh(mesh.geometry,material);shell.name='__livingWatercolorOutline';
+    shell.frustumCulled=mesh.frustumCulled;shell.renderOrder=(mesh.renderOrder||0)-1-pass;shell.userData.livingWatercolorOutline=true;
+    mesh.add(shell);outlineStates.add({mesh:shell,uniforms,baseOpacity:opacity});shells.push(shell);
+  }
+  return shells;
 }
 
 export function createLivingWatercolor3D({THREE,renderer,scene,camera,style:inputStyle={},autoQuality=true}={}){
@@ -163,7 +168,7 @@ export function createLivingWatercolor3D({THREE,renderer,scene,camera,style:inpu
     if(disposed)return;
     const seconds=timeMs/1000;
     for(const s of materialStates)if(s.uniforms){s.uniforms.uWcTime.value=seconds;s.uniforms.uWcQuality.value=quality;}
-    for(const s of outlineStates){s.uniforms.uTime.value=seconds;const d=camera&&s.mesh.getWorldPosition?camera.position.distanceTo(s.mesh.getWorldPosition(new THREE.Vector3())):0;const lod=watercolorLodForDistance(d,style.lod);s.uniforms.uOpacity.value=lod==='near'?.76:lod==='mid'?.58:lod==='far'?.34:.16;s.uniforms.uJitter.value=style.edgeJitter*(.72+.28*quality);}
+    for(const s of outlineStates){s.uniforms.uTime.value=seconds;const d=camera&&s.mesh.getWorldPosition?camera.position.distanceTo(s.mesh.getWorldPosition(new THREE.Vector3())):0;const lod=watercolorLodForDistance(d,style.lod);s.uniforms.uOpacity.value=s.baseOpacity*(lod==='near'?1:lod==='mid'?.8:lod==='far'?.52:.25);s.uniforms.uJitter.value=style.edgeJitter*(.72+.28*quality);}
     for(const e of emitters)updateEmitter(e,timeMs);
   }
   function setQuality(value){quality=clamp(value,.35,1);return quality;}
