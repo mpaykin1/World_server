@@ -175,5 +175,5 @@ test('Explicit prediction provider fails closed on ungrounded invented facts', a
     build:{kind:'city'},worldContext:{turn:0}
   }),env);
   assert.equal(response.status,503);
-  assert.match((await response.json()).detail,/UNGROUNDED_FACT/);
+  assert.match((await response.json()).detail,/AI_PREDICTION_EMPTY/);
 });
