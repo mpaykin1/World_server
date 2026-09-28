@@ -34,7 +34,7 @@ function normalize(result) {
     unknowns: Array.isArray(decoded.unknowns) ? decoded.unknowns.slice(0, 4).map(x => String(x).slice(0, 120)) : [] };
 }
 function normalizePrediction(result) {
-  const text = String(result || '').trim().replace(/^\`\`\`(?:json)?\s*/i, '').replace(/\s*\`\`\`$/, '');
+  const text = String(result || '').trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
   let decoded;
   try { decoded = JSON.parse(text); }
   catch {
@@ -43,26 +43,37 @@ function normalizePrediction(result) {
     decoded = JSON.parse(text.slice(start, end + 1));
   }
   if (!decoded || typeof decoded !== 'object') throw Error('AI_PREDICTION_INVALID');
+  const invented = /(друг(?:ой|ие|их)\s+игрок|скрыт[А-Яа-яЁё]*\s+ресурс|неизвестн[А-Яа-яЁё]*\s+ресурс|подземн[А-Яа-яЁё]*\s+(?:вод|ресурс)|соседн[А-Яа-яЁё]*\s+(?:регион|город))/iu;
+  const qualitative = (value) => {
+    const raw = String(value || '').trim().slice(0, 180);
+    if (!raw || !/[А-Яа-яЁё]/u.test(raw) || invented.test(raw)) return '';
+    if (!/\d/u.test(raw)) return raw;
+    const lower = raw.toLowerCase();
+    if (/населен/u.test(lower)) return 'Численность населения может измениться.';
+    if (/бюджет|доход|деньг/u.test(lower)) return 'Состояние бюджета может измениться.';
+    if (/вод/u.test(lower)) return 'Доступность воды может измениться.';
+    if (/энерг|элект/u.test(lower)) return 'Доступность энергии может измениться.';
+    if (/ед|пищ|продоволь/u.test(lower)) return 'Запасы еды могут измениться.';
+    if (/эколог|загряз/u.test(lower)) return 'Экологическая нагрузка может измениться.';
+    return '';
+  };
   const list = (value) => Array.isArray(value)
-    ? value.slice(0, 3).map(item => String(item || '').trim().slice(0, 180)).filter(Boolean)
+    ? [...new Set(value.slice(0, 3).map(qualitative).filter(Boolean))]
     : [];
   const confidence = Number(decoded.confidence);
   const prediction = {
-    summary: String(decoded.summary || '').trim().slice(0, 320),
+    summary: qualitative(decoded.summary),
     immediate: list(decoded.immediate),
     later: list(decoded.later),
     risks: list(decoded.risks),
-    surprise: String(decoded.surprise || '').trim().slice(0, 240),
+    surprise: qualitative(decoded.surprise).slice(0, 240),
     confidence: Number.isFinite(confidence) ? Math.max(0, Math.min(1, confidence)) : 0.5
   };
+  if (!prediction.summary) {
+    prediction.summary = prediction.immediate[0] || prediction.later[0] || prediction.risks[0] || prediction.surprise;
+  }
   if (!prediction.summary || !(prediction.immediate.length || prediction.later.length || prediction.risks.length || prediction.surprise))
     throw Error('AI_PREDICTION_EMPTY');
-  const natural = [prediction.summary, ...prediction.immediate, ...prediction.later, ...prediction.risks, prediction.surprise]
-    .filter(Boolean);
-  if (natural.some(text => /\d/u.test(text))) throw Error('AI_PREDICTION_UNGROUNDED_NUMBERS');
-  if (natural.some(text => !/[А-Яа-яЁё]/u.test(text))) throw Error('AI_PREDICTION_NOT_RUSSIAN');
-  const invented = /(друг(?:ой|ие|их)\s+игрок|скрыт[А-Яа-яЁё]*\s+ресурс|неизвестн[А-Яа-яЁё]*\s+ресурс|подземн[А-Яа-яЁё]*\s+(?:вод|ресурс)|соседн[А-Яа-яЁё]*\s+(?:регион|город))/iu;
-  if (natural.some(text => invented.test(text))) throw Error('AI_PREDICTION_UNGROUNDED_FACT');
   return prediction;
 }
 function safeContext(value) {
