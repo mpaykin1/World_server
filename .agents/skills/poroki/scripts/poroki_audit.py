@@ -11,7 +11,7 @@ CODE_SUFFIXES = {".js", ".jsx", ".mjs", ".cjs", ".ts", ".tsx", ".py"}
 SKIP_PARTS = {"node_modules", ".git", "dist", "build", ".next", "coverage", "venv", ".venv"}
 IMPORT_RE = re.compile(r"^\s*(?:import\s|from\s+\S+\s+import\s|(?:const|let|var)\s+.+?=\s*require\()")
 RISK_RULES = (
-    ("dynamic-execution", re.compile(r"\b(?:eval|new\s+Function)\s*\(")),
+    ("dynamic-execution", re.compile(r"(?<![\w.])eval\s*\(|\bnew\s+Function\s*\(")),
     ("nondeterministic-input", re.compile(r"\b(?:Math\.random|Date\.now)\s*\(")),
     ("empty-catch", re.compile(r"\bcatch\s*(?:\([^)]*\))?\s*\{\s*\}")),
 )

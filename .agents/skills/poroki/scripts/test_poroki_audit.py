@@ -21,6 +21,11 @@ class PorokiAuditTests(unittest.TestCase):
         actual = {x["kind"] for x in inspect_text("x.js", text)}
         self.assertTrue({"dynamic-execution", "nondeterministic-input", "empty-catch"} <= actual)
 
+    def test_torch_eval_method_is_not_dynamic_execution(self):
+        # model.eval() changes Torch mode and does not execute user code.
+        signals = inspect_text('ai3d/depth_anything.py', 'model.to(device).eval()')
+        self.assertFalse(any(x['kind'] == 'dynamic-execution' for x in signals))
+
     def test_skips_bundles_and_non_code(self):
         self.assertFalse(is_code(Path("node_modules/lib/index.js")))
         self.assertFalse(is_code(Path("assets/banner.png")))
