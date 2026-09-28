@@ -65,7 +65,7 @@ test('Dragon arrival is preserved as a supported event command', async () => {
 test('Living dragon context reaches the model without arbitrary entity data', async () => {
  let seen='';
  const env=mkEnv();
- env.AI.run=async input=>{seen=input.messages[1].content;return {response:JSON.stringify({summary:'Атака',commands:[{action:'event',kind:'attack'}],unknowns:[]})};};
+ env.AI.run=async (_model,input)=>{seen=input.messages[1].content;return {response:JSON.stringify({summary:'Атака',commands:[{action:'event',kind:'attack'}],unknowns:[]})};};
  const response=await handleAiInterpret(req({text:'Люди в него стреляют',provider:'cloudflare',worldContext:{
    turn:2,entities:[{kind:'dragon',hp:73,secret:'do-not-pass'},{kind:'person',hp:10}]
  }}),env);
