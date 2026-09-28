@@ -189,7 +189,16 @@ export async function handleAiInterpret(request, env) {
     if (provider === 'gemini') proposal = await gemini(env, message, prompt, normalizer);
     else if (provider === 'groq') proposal = await groq(env, message, prompt, normalizer);
     else if (provider === 'cloudflare') proposal = await cloudflare(env, message, prompt, normalizer);
-    else {
+    else if (predictionMode && env.GROQ_API_KEY) {
+      try { proposal = await groq(env, message, prompt, normalizer); used = 'groq'; }
+      catch (groqError) {
+        try { proposal = await cloudflare(env, message, prompt, normalizer); used = 'cloudflare'; }
+        catch (cloudflareError) {
+          if (!env.GEMINI_API_KEY) throw cloudflareError;
+          proposal = await gemini(env, message, prompt, normalizer); used = 'gemini';
+        }
+      }
+    } else {
       try { proposal = await cloudflare(env, message, prompt, normalizer); used = 'cloudflare'; }
       catch (error) {
         if (env.GROQ_API_KEY) {
