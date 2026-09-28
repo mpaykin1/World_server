@@ -6,7 +6,7 @@ camera.position.set(6.7,5.4,10.8);camera.lookAt(0,1.45,0);
 const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});
 renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.7));renderer.outputColorSpace=THREE.SRGBColorSpace;document.body.appendChild(renderer.domElement);
 const quality=window.GoldenQualityDirector?.create?.({renderer,targetFps:50});
-const style=createWatercolorStyle({seed:'living-watercolor-lab',inkColor:'#34465e',washColor:'#74859a',edgeWidth:.034,edgeJitter:.24,granulation:.36,bleed:.2,shadowWash:.13});
+const style=createWatercolorStyle({seed:'living-watercolor-lab',inkColor:'#2e425d',washColor:'#718399',edgeWidth:.046,edgeJitter:.28,granulation:.5,bleed:.24,shadowWash:.13});
 const watercolor=createLivingWatercolor3D({THREE,renderer,scene,camera,style});
 scene.add(new THREE.HemisphereLight(0xffffff,0x9aa4b0,2.6));const key=new THREE.DirectionalLight(0xffffff,1.45);key.position.set(4,8,5);scene.add(key);
 const stage=new THREE.Group();scene.add(stage);
