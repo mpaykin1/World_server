@@ -73,12 +73,27 @@ async function gemini(env, message) {
   }
   throw Error('GEMINI_HTTP_' + lastStatus);
 }
+async function openrouter(env, message) {
+  if (!env.OPENROUTER_API_KEY) throw Error('OPENROUTER_KEY_MISSING');
+  // Hard-code the zero-price router; never accept a paid model from client input or env.
+  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST', signal: AbortSignal.timeout(12000),
+    headers: { 'content-type': 'application/json', authorization: 'Bearer ' + env.OPENROUTER_API_KEY },
+    body: JSON.stringify({ model: 'openrouter/free', messages: [
+      { role: 'system', content: PROMPT }, { role: 'user', content: message }
+    ], temperature: 0.15, max_tokens: 650 })
+  });
+  if (!response.ok) throw Error('OPENROUTER_HTTP_' + response.status);
+  const payload = await response.json();
+  return normalize(payload.choices?.[0]?.message?.content || '');
+}
 export async function handleAiInterpret(request, env) {
   const origin = request.headers.get('origin') || '';
   if (origin && !ALLOWED_ORIGINS.has(origin)) return respond({ error: 'origin_not_allowed' }, 403, origin);
   if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors(origin) });
   if (request.method === 'GET') return respond({ ok: true, providers: {
-    cloudflare: Boolean(env.AI), gemini: Boolean(env.GEMINI_API_KEY) } }, 200, origin);
+    cloudflare: Boolean(env.AI), gemini: Boolean(env.GEMINI_API_KEY),
+    openrouter: Boolean(env.OPENROUTER_API_KEY) } }, 200, origin);
   if (request.method !== 'POST') return respond({ error: 'method_not_allowed' }, 405, origin);
   if (Number(request.headers.get('content-length') || 0) > 4096) return respond({ error: 'request_too_large' }, 413, origin);
   // Mandatory cost guard: fail closed if the binding has not been deployed yet.
@@ -90,16 +105,19 @@ export async function handleAiInterpret(request, env) {
   let body; try { body = JSON.parse(raw); } catch { return respond({ error: 'invalid_json' }, 400, origin); }
   if (typeof body?.text !== 'string' || body.text.trim().length < 3 || body.text.length > 800)
     return respond({ error: 'invalid_text' }, 400, origin);
-  const provider = ['cloudflare', 'gemini', 'auto'].includes(body.provider) ? body.provider : 'auto';
+  const provider = ['cloudflare', 'gemini', 'openrouter', 'auto'].includes(body.provider) ? body.provider : 'auto';
   const message = JSON.stringify({ text: body.text.trim(), world: safeContext(body.worldContext) });
   try {
-    let proposal, used = provider;
-    if (provider === 'gemini') proposal = await gemini(env, message);
-    else if (provider === 'cloudflare') proposal = await cloudflare(env, message);
-    else {
-      try { proposal = await cloudflare(env, message); used = 'cloudflare'; }
-      catch (error) { if (!env.GEMINI_API_KEY) throw error; proposal = await gemini(env, message); used = 'gemini'; }
+    let proposal, used = provider, lastError;
+    const candidates = provider === 'auto'
+      ? [['cloudflare', cloudflare], ...(env.OPENROUTER_API_KEY ? [['openrouter', openrouter]] : []),
+        ...(env.GEMINI_API_KEY ? [['gemini', gemini]] : [])]
+      : [[provider, { cloudflare, openrouter, gemini }[provider]]];
+    for (const [name, run] of candidates) {
+      try { proposal = await run(env, message); used = name; break; }
+      catch (error) { lastError = error; }
     }
+    if (!proposal) throw lastError || Error('AI_PROVIDER_UNAVAILABLE');
     return respond({ ok: true, provider: used, proposal, executed: false }, 200, origin);
   } catch (error) {
     return respond({ ok: false, error: 'ai_provider_unavailable', detail: String(error.message).slice(0, 80) }, 503, origin);
