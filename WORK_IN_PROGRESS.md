@@ -973,3 +973,13 @@ Regression tests must cover canonical population arithmetic, worker bound, exact
 Registered on protected base `75bb69eab3d94f260ee8140075f48a4d1e2ed32e`. Implementation and tests in progress.
 
 ---
+
+
+## 2026-09-28 — AI/chatgpt pixel-parallax skill (branch ai/chatgpt/pixel-parallax-skill-20260928)
+
+- **Goal:** Extract a reusable Godot-style multi-plane pixel-art depth technique from the supplied 41-second reference without copying third-party artwork.
+- **Current/target:** Standalone deterministic original web renderer and interactive lab, a reusable agent skill, four arithmetic/determinism regression tests. Existing main 3D scene and cinematic game must remain unchanged.
+- **Implementation:** New shared/graphics/pixel-parallax.mjs, apps/parallax-lab/*, .agents/skills/pixel-parallax/SKILL.md, test/pixel-parallax.test.mjs and docs. Reuse the actual camera offset on later game integration.
+- **Risk:** New rendering is browser-only until a separate Godot 2D adapter; release is blocked until browser, real-device, performance and user-visibility (>85%) gates pass.
+- **Checks:** Locally run node --test test/pixel-parallax.test.mjs (4 tests pass) and syntax checks. PR CI plus real browser smoke required before integration/public link.
+- **Completion criteria:** Approved PR with no regressions, externally verified original pixels and motion across desktop/mobile; no production URL until fresh live gate.
