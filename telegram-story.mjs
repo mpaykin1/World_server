@@ -146,7 +146,9 @@ export function applyStoryAction(world,action,text=''){
   }else if(action==='defend'){
     if(incident)incident.severity=Math.max(0,incident.severity-2);
     if(incident?.severity===0)next.story.active=null;
-    detail=incident?.kind==='dragon_arrival'\n      ?'Защитники открыли огонь. Дракон отступил от города.'\n      :'Защитники ослабили угрозу. Последствия разрушений остались.';
+    detail=incident?.kind==='dragon_arrival'
+      ?'Защитники открыли огонь. Дракон отступил от города.'
+      :'Защитники ослабили угрозу. Последствия разрушений остались.';
   }else{
     next=engine.applyResourceDelta(next,{water:8,food:7,health:3});
     detail='Спасатели доставили воду и еду, здоровью жителей стало лучше.';
@@ -161,7 +163,14 @@ export function applyStoryAction(world,action,text=''){
   closeCrisis(next);
   return{world:next,accepted:true,action:'story',kind:name};
 }
-export function applyInterpretedStory(world,text,intent){\n  if(intent?.kind==='action'&&STORY_ACTIONS.has(intent.action))\n    return applyStoryAction(world,intent.action,text);\n  if(THREATS.has(intent?.kind)||['dragon_help','rain','forest','festival','trade','rescue'].includes(intent?.kind))\n    return enactWorldEvent(world,{kind:intent.kind,text});\n  return applyStoryText(world,text);\n}\nexport function applyStoryText(world,text){
+export function applyInterpretedStory(world,text,intent){
+  if(intent?.kind==='action'&&STORY_ACTIONS.has(intent.action))
+    return applyStoryAction(world,intent.action,text);
+  if(THREATS.has(intent?.kind)||['dragon_help','rain','forest','festival','trade','rescue'].includes(intent?.kind))
+    return enactWorldEvent(world,{kind:intent.kind,text});
+  return applyStoryText(world,text);
+}
+export function applyStoryText(world,text){
   const intent=classifyStoryText(text);
   if(intent.kind==='build'){
     const type=supportedBuildType(intent.text);
@@ -193,7 +202,8 @@ export function advanceStoryDay(previous,world){
         'Непосредственная угроза закончилась, но разрушенные объекты всё ещё требуют восстановления.',
       text:'',target:''};
   }else{
-    if(incident.kind!=='dragon_arrival')\n      next=engine.applyNarrativeAftermath(next,incident.kind);
+    if(incident.kind!=='dragon_arrival')
+      next=engine.applyNarrativeAftermath(next,incident.kind);
     const kind=incident.kind==='dragon_fire'?'dragon_aftermath':incident.kind;
     next.story.last={kind,scene:'story_'+kind,title:'⏳ Последствия продолжаются.',
       description:'Прошёл ещё один день. Проводите спасательные работы и восстанавливайте город.',
