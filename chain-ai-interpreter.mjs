@@ -53,17 +53,25 @@ async function cloudflare(env, message) {
 }
 async function gemini(env, message) {
   if (!env.GEMINI_API_KEY) throw Error('GEMINI_KEY_MISSING');
-  const model = env.GEMINI_MODEL || 'gemini-2.5-flash';
-  if (!/^[a-zA-Z0-9._-]{1,60}$/.test(model)) throw Error('INVALID_GEMINI_MODEL');
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
-  const response = await fetch(url, { method: 'POST', signal: AbortSignal.timeout(12000),
-    headers: { 'content-type': 'application/json', 'x-goog-api-key': env.GEMINI_API_KEY },
-    body: JSON.stringify({ systemInstruction: { parts: [{ text: PROMPT }] },
-      contents: [{ role: 'user', parts: [{ text: message }] }],
-      generationConfig: { temperature: 0.15, maxOutputTokens: 650, responseMimeType: 'application/json' } }) });
-  if (!response.ok) throw Error('GEMINI_HTTP_' + response.status);
-  const payload = await response.json();
-  return normalize((payload.candidates?.[0]?.content?.parts || []).map(part => part.text || '').join(''));
+  // Only models with an advertised free text tier. The old 2.5 default returns 404 for new accounts.
+  const FREE_MODELS = ['gemini-3.5-flash-lite', 'gemini-3.1-flash-lite'];
+  const model = env.GEMINI_MODEL || FREE_MODELS[0];
+  if (!FREE_MODELS.includes(model)) throw Error('GEMINI_MODEL_NOT_FREE_ALLOWLISTED');
+  const payload = JSON.stringify({ systemInstruction: { parts: [{ text: PROMPT }] },
+    contents: [{ role: 'user', parts: [{ text: message }] }],
+    generationConfig: { temperature: 0.15, maxOutputTokens: 650, responseMimeType: 'application/json' } });
+  let lastStatus;
+  for (const selected of [model, ...FREE_MODELS.filter(x => x !== model)]) {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${selected}:generateContent`;
+    const response = await fetch(url, { method: 'POST', signal: AbortSignal.timeout(9000),
+      headers: { 'content-type': 'application/json', 'x-goog-api-key': env.GEMINI_API_KEY },
+      body: payload });
+    if (response.status === 404) { lastStatus = 404; continue; }
+    if (!response.ok) throw Error('GEMINI_HTTP_' + response.status);
+    const result = await response.json();
+    return normalize((result.candidates?.[0]?.content?.parts || []).map(part => part.text || '').join(''));
+  }
+  throw Error('GEMINI_HTTP_' + lastStatus);
 }
 export async function handleAiInterpret(request, env) {
   const origin = request.headers.get('origin') || '';
