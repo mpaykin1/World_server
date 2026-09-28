@@ -68,6 +68,29 @@ test('Explicit OpenRouter failure never calls another provider or leaks a secret
    assert.ok(!JSON.stringify(body).includes('TEST_DUMMY'));
  } finally {globalThis.fetch=oldFetch;}
 });
+test('Auto skips an absent Workers AI binding and absent OpenRouter key',async()=>{
+ const env=mkEnv(),oldFetch=globalThis.fetch;
+ delete env.AI;delete env.OPENROUTER_API_KEY;
+ let requests=0;
+ globalThis.fetch=async url=>{requests++;assert.match(String(url),/generativelanguage.googleapis.com/);
+   return Response.json({candidates:[{content:{parts:[{text:parsed}]}}]});};
+ try {
+   const response=await handleAiInterpret(req({text:'Построй город',provider:'auto'}),env);
+   assert.equal(response.status,200);
+   assert.equal((await response.json()).provider,'gemini');
+   assert.equal(requests,1);
+ }finally{globalThis.fetch=oldFetch;}
+});
+test('Auto without any configured provider fails closed, with no external calls',async()=>{
+ const env=mkEnv();delete env.AI;delete env.OPENROUTER_API_KEY;delete env.GEMINI_API_KEY;
+ const oldFetch=globalThis.fetch;let called=false;
+ globalThis.fetch=async()=>{called=true;throw Error('Unexpected network call');};
+ try{
+   const response=await handleAiInterpret(req({text:'Построй город',provider:'auto'}),env);
+   assert.equal(response.status,503);assert.equal(called,false);
+   assert.equal((await response.json()).detail,'AI_PROVIDER_UNAVAILABLE');
+ }finally{globalThis.fetch=oldFetch;}
+});
 test('Auto falls back to Gemini on Workers AI failure', async () => {
  const oldFetch=globalThis.fetch;
  globalThis.fetch=async()=>Response.json({candidates:[{content:{parts:[{text:parsed}]}}]});
