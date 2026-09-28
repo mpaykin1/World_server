@@ -87,6 +87,23 @@ async function openrouter(env, message) {
   const payload = await response.json();
   return normalize(payload.choices?.[0]?.message?.content || '');
 }
+async function chooseAutomaticProvider(env, message) {
+  let lastError;
+  if (env.AI) {
+    try { return { provider: 'cloudflare', proposal: await cloudflare(env, message) }; }
+    catch (error) { lastError = error; }
+  }
+  // A missing key is a skipped provider, not a failed request.
+  if (env.OPENROUTER_API_KEY) {
+    try { return { provider: 'openrouter', proposal: await openrouter(env, message) }; }
+    catch (error) { lastError = error; }
+  }
+  if (env.GEMINI_API_KEY) {
+    try { return { provider: 'gemini', proposal: await gemini(env, message) }; }
+    catch (error) { lastError = error; }
+  }
+  throw lastError || Error('AI_PROVIDER_UNAVAILABLE');
+}
 export async function handleAiInterpret(request, env) {
   const origin = request.headers.get('origin') || '';
   if (origin && !ALLOWED_ORIGINS.has(origin)) return respond({ error: 'origin_not_allowed' }, 403, origin);
@@ -108,26 +125,17 @@ export async function handleAiInterpret(request, env) {
   const provider = ['cloudflare', 'gemini', 'openrouter', 'auto'].includes(body.provider) ? body.provider : 'auto';
   const message = JSON.stringify({ text: body.text.trim(), world: safeContext(body.worldContext) });
   try {
-    let proposal, used = provider;
-    if (provider === 'openrouter') proposal = await openrouter(env, message);
-    else if (provider === 'cloudflare') proposal = await cloudflare(env, message);
-    else if (provider === 'gemini') proposal = await gemini(env, message);
-    else {
-      // Free-only failover: never try unconfigured providers or a paid model.
-      let lastError;
-      try { proposal = await cloudflare(env, message); used = 'cloudflare'; }
-      catch (error) { lastError = error; }
-      if (!proposal && env.OPENROUTER_API_KEY) {
-        try { proposal = await openrouter(env, message); used = 'openrouter'; }
-        catch (error) { lastError = error; }
-      }
-      if (!proposal && env.GEMINI_API_KEY) {
-        try { proposal = await gemini(env, message); used = 'gemini'; }
-        catch (error) { lastError = error; }
-      }
-      if (!proposal) throw lastError || Error('AI_PROVIDER_UNAVAILABLE');
+    let result;
+    if (provider === 'openrouter') {
+      result = { provider: 'openrouter', proposal: await openrouter(env, message) };
+    } else if (provider === 'cloudflare') {
+      result = { provider: 'cloudflare', proposal: await cloudflare(env, message) };
+    } else if (provider === 'gemini') {
+      result = { provider: 'gemini', proposal: await gemini(env, message) };
+    } else {
+      result = await chooseAutomaticProvider(env, message);
     }
-    return respond({ ok: true, provider: used, proposal, executed: false }, 200, origin);
+    return respond({ ok: true, provider: result.provider, proposal: result.proposal, executed: false }, 200, origin);
   } catch (error) {
     return respond({ ok: false, error: 'ai_provider_unavailable', detail: String(error.message).slice(0, 80) }, 503, origin);
   }
