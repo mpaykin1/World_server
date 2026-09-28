@@ -1,5 +1,6 @@
 // D1-backed session state for Telegram; canonical deterministic game logic is shared.
 import './supabase/functions/_shared/world-consequence-engine.js';
+import {dragonPresent} from './telegram-story-parse.mjs';
 export const engine = globalThis.WorldConsequenceEngine;
 export const MAX_INTENT = 600;
 export const LABELS = Object.freeze({
@@ -88,6 +89,7 @@ export function view(world,notice=''){
       (LABELS[p.type]||p.type)+' ('+p.remaining+' дн.)').join(', '):'');
   const story=world.story;
   const incident=story?.active;
+  const dragon=dragonPresent(world);
   const emergency=[];
   if(incident){
     if(['dragon_fire','fire'].includes(incident.kind)&&
@@ -101,13 +103,20 @@ export function view(world,notice=''){
       emergency.push({text:'🛡 Укрепить оборону 💰15',
         callback_data:'tg2:'+world.revision+':defend'});
   }
-  const ruin=story?.ruins?.find(x=>!x.rebuilding);
+  const ruin=Array.isArray(story?.ruins)?story.ruins.find(x=>
+    x&&typeof x==='object'&&!Array.isArray(x)&&
+    typeof x.id==='string'&&x.id.trim()&&x.id.length<=128&&
+    typeof x.type==='string'&&Object.hasOwn(engine.PROJECTS,x.type)&&
+    (x.rebuilding===null||x.rebuilding===undefined)):null;
   if(ruin&&engine.preview(world,engine.interpretIntent('',ruin.type)).feasible)
     emergency.push({text:'🏗 Восстановить '+ruin.name,
       callback_data:'tg2:'+world.revision+':rebuild'});
   if((incident||ruin)&&world.resources.budget>=8)
     emergency.push({text:'🚑 Доставить помощь 💰8',
       callback_data:'tg2:'+world.revision+':relief'});
+  if(dragon&&world.resources.budget>=5)
+    emergency.unshift({text:'🏹 Стрелять в дракона 💰5',
+      callback_data:'tg2:'+world.revision+':shoot_dragon'});
   const choices=emergency.map(button=>[button]);
   for(const o of offered)choices.push([{
     text:o.label+'  💰'+o.plan.cost+'  ⏳'+o.plan.buildTicks,
@@ -118,6 +127,7 @@ export function view(world,notice=''){
   choices.push([{text:'🔄 Новый мир',callback_data:'tg2:'+world.revision+':reset'}]);
   return {text:(notice?notice+'\n\n':'')+intro+
     (story?.last?'\n📜 '+story.last.title:'')+
+    (dragon?'\n🐉 Дракон рядом (силы: '+(story?.dragon?.health??3)+'/3).':'')+
     (incident?'\n🚨 Активная угроза!':'')+
     (story?.ruins?.length?'\n🏚 Разрушено объектов: '+story.ruins.length:'')+
     (world.crisis?'\n🚨 Дефицит жизненно важных ресурсов.':'')+

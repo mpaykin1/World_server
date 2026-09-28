@@ -241,6 +241,75 @@ test('dragon story sent through My Variant burns structures and shows rescue cho
   assert.match(a.calls.filter(x=>x.method==='sendAnimation').at(-1)
     .payload.animation,/story_extinguish-\d\.mp4$/);
 });
+test('D1 callback repairs malformed active incidents without spending resources',async()=>{
+  for(const active of [{},'fire']){
+    const e=env(),a=mockApi();
+    const session=await loadSession(e.TELEGRAM_DB,42);
+    session.world.story={active,ruins:[],last:null,evacuated:0};
+    e.TELEGRAM_DB.rows.get('42').world=JSON.stringify(session.world);
+    const before=structuredClone(session.world);
+    assert.equal((await post(e,a,callback(1,'tg2:0:defend'))).status,200);
+    const saved=await loadSession(e.TELEGRAM_DB,42);
+    assert.equal(saved.world.story.active,null);
+    assert.equal(saved.world.story.last.kind,'blocked');
+    assert.deepEqual(saved.world.resources,before.resources);
+    assert.equal(saved.world.population,before.population);
+    assert(Object.values(saved.world.resources).every(Number.isFinite));
+  }
+});
+test('D1 callback repairs malformed story envelopes without spending resources',async()=>{
+  for(const story of ['fire',[],{active:null,ruins:'old-ruin',last:null,evacuated:0},
+    {active:null,ruins:[null],last:null,evacuated:0},
+    {active:null,ruins:['old-ruin'],last:null,evacuated:0},
+    {active:null,ruins:[{id:'old-ruin',type:'invented',rebuilding:null}],last:null,evacuated:0}]){
+    const e=env(),a=mockApi();
+    const session=await loadSession(e.TELEGRAM_DB,42);
+    session.world.story=story;
+    e.TELEGRAM_DB.rows.get('42').world=JSON.stringify(session.world);
+    const before=structuredClone(session.world);
+    assert.equal((await post(e,a,callback(1,'tg2:0:defend'))).status,200);
+    const saved=await loadSession(e.TELEGRAM_DB,42);
+    assert.equal(saved.world.story.active,null);
+    assert.deepEqual(saved.world.story.ruins,[]);
+    assert.equal(saved.world.story.last.kind,'blocked');
+    assert.deepEqual(saved.world.resources,before.resources);
+    assert.equal(saved.world.population,before.population);
+    assert(Object.values(saved.world.resources).every(Number.isFinite));
+  }
+});
+test('D1 callback deduplicates canonical ruins before action eligibility',async()=>{
+  const e=env(),a=mockApi();
+  const session=await loadSession(e.TELEGRAM_DB,42);
+  session.world.story={active:null,ruins:[
+    {id:'same-ruin',type:'workshop',name:'Мастерская',source:'fire',rebuilding:null},
+    {id:'same-ruin',type:'workshop',name:'Копия',source:'fire',rebuilding:null}
+  ],last:null,evacuated:0};
+  e.TELEGRAM_DB.rows.get('42').world=JSON.stringify(session.world);
+  const before=structuredClone(session.world.resources);
+
+  assert.equal((await post(e,a,callback(1,'tg2:0:defend'))).status,200);
+  const saved=await loadSession(e.TELEGRAM_DB,42);
+  assert.equal(saved.world.story.last.kind,'blocked');
+  assert.equal(saved.world.story.ruins.length,1);
+  assert.equal(saved.world.story.ruins[0].id,'same-ruin');
+  assert.deepEqual(saved.world.resources,before);
+});
+test('Telegram view ignores malformed ruin elements',()=>{
+  const world=initialWorld(42);
+  world.story={active:null,ruins:[null,'old-ruin',{id:'old-ruin',type:'invented'},
+    {id:'empty-marker',type:'workshop',rebuilding:''},
+    {id:'object-marker',type:'workshop',rebuilding:{}}],
+    last:null,evacuated:0};
+  const rendered=view(world);
+  assert(!rendered.reply_markup.inline_keyboard.flat()
+    .some(button=>button.callback_data?.endsWith(':rebuild')));
+
+  world.story.ruins=[{id:'canonical-ruin',type:'workshop',name:'Мастерская',
+    source:'fire',rebuilding:null}];
+  assert(view(world).reply_markup.inline_keyboard.flat()
+    .some(button=>button.callback_data?.endsWith(':rebuild')),
+  'a canonical unrepaired ruin must retain its rebuild control');
+});
 test('unsolicited free-form story, unrelated to menu state, is still executed',async()=>{
   const e=env(),a=mockApi();
   await post(e,a,start(1));
@@ -253,4 +322,127 @@ test('unsolicited free-form story, unrelated to menu state, is still executed',a
   const count=a.calls.length;
   await post(e,a,text(2,'Наводнение затопило город'));
   assert.equal(a.calls.length,count,'Duplicate delivery must not create another story');
+});
+
+test('webhook chains dragon arrival, arrow follow-up and free AI fallback',async()=>{
+  const e=env(),a=mockApi();
+  let modelCalls=0;
+  e.AI={run:async()=>{modelCalls++;
+    return{response:JSON.stringify({kind:'flood',evidence:'Гигантская волна'})};
+  }};
+  await post(e,a,start(1));
+  await post(e,a,text(2,'Прилетел дракон'));
+  const arrival=(await loadSession(e.TELEGRAM_DB,42)).world;
+  assert.equal(arrival.story.dragon.present,true);
+  await post(e,a,text(3,'Люди стреляют в него из луков'));
+  const shot=(await loadSession(e.TELEGRAM_DB,42)).world;
+  assert.equal(modelCalls,0,'well-understood context must not spend AI quota');
+  assert.equal(shot.story.last.kind,'defense');
+  assert.equal(shot.story.dragon.health,2);
+  assert.equal(shot.resources.budget,arrival.resources.budget-5);
+  assert.match(a.calls.filter(x=>x.method==='sendAnimation').at(-1).payload.animation,
+    /story_defense-\d\.mp4$/);
+  const sent=a.calls.length;
+  await post(e,a,text(3,'Люди стреляют в него из луков'));
+  assert.deepEqual((await loadSession(e.TELEGRAM_DB,42)).world,shot,
+    'Telegram retry must not reroll or double-charge the volley');
+  assert.equal(a.calls.length,sent,'duplicate update must not render twice');
+  await post(e,a,start(4));
+  const resumed=(await loadSession(e.TELEGRAM_DB,42)).world;
+  assert.equal(resumed.story.dragon.health,2);
+  assert.equal(resumed.story.active.kind,'dragon_fire');
+  await post(e,a,text(5,'Гигантская волна накрыла побережье'));
+  const aiTurn=(await loadSession(e.TELEGRAM_DB,42)).world;
+  assert.equal(modelCalls,1);
+  assert.equal(aiTurn.story.last.kind,'flood');
+  assert(aiTurn.resources.power<shot.resources.power);
+});
+test('D1 rejects reversed or conflicting archery without AI, charge or dragon mutation',async()=>{
+  const e=env(),a=mockApi();
+  let modelCalls=0;e.AI={run:async()=>{modelCalls++;return{response:'{}'}}};
+  await post(e,a,start(1));
+  await post(e,a,text(2,'Прилетел дракон'));
+  const arrived=(await loadSession(e.TELEGRAM_DB,42)).world;
+  for(const [id,message] of [[3,'Люди стреляют в волков из луков'],
+    [4,'Дракон стреляет в людей из лука'],
+    [5,'Люди отказались стрелять в него из луков'],
+    [6,'Волк рядом. Люди стреляют по нему из луков'],
+    [7,"People don't shoot him with bows"],
+    [8,'Лучники неспособны стрелять в него из луков'],
+    [9,'Citizens decline to shoot him with bows'],
+    [10,'Люди отстрелялись по нему из луков'],
+    [11,'Жители уже отстрелялись в дракона из луков'],
+    [12,'Лучники завершили стрелять в него из луков'],
+    [13,'Солдаты лишены возможности стрелять в него из луков'],
+    [14,'Мы против того, чтобы стрелять в него из луков'],
+    [15,'People finished shooting at him with bows'],
+    [16,'Citizens have finished shooting at him with bows'],
+    [17,'Archers completed shooting at him with bows'],
+    [18,'We no longer shoot him with bows'],
+    [19,'People lack the ability to shoot him with bows'],
+    [20,'Citizens are against shooting at him with bows'],
+    [21,'People shoot him with bows no longer'],
+    [22,'People shoot him with bows, but not anymore'],
+    [23,'Люди стреляют в него из луков, но передумали'],
+    [24,'Рыцарь рядом. Люди стреляют по нему из луков'],
+    [25,'Knight nearby. People shoot him with bows'],
+    [26,'Лучники перестали выпускать стрелы в дракона'],
+    [27,'Лучники отказались выпускать стрелы в дракона'],
+    [28,'Лучники закончили выпускать стрелы в дракона'],
+    [29,'Лучники прекратили выпускать стрелы в дракона'],
+    [30,'Лучники не стали выпускать стрелы в дракона'],
+    [31,'Лучники перестали пускать стрелы по дракону'],
+    [32,'Лучники отказались пускать стрелы по дракону'],
+    [33,'Лучники закончили пускать стрелы по дракону'],
+    [34,'Лучники прекратили пускать стрелы по дракону'],
+    [35,'Лучники не стали пускать стрелы по дракону']]){
+    await post(e,a,text(id,message));
+    const stored=(await loadSession(e.TELEGRAM_DB,42)).world;
+    assert.deepEqual(stored.resources,arrived.resources,message);
+    assert.deepEqual(stored.story.dragon,arrived.story.dragon,message);
+    assert.equal(stored.story.active,null,message);
+    assert.match(stored.story.last.description,/кто стреляет и в кого/,message);
+    assert(!stored.history.some(x=>x.kind==='telegram_story_dragon_arrows'));
+  }
+  assert.equal(modelCalls,0,'deterministic clarification must not spend AI quota');
+});
+test('D1 leaves real fire language on the combustion path',async()=>{
+  for(const message of ["Fire destroyed the archers' bows",
+    'The people fled the fire with bows']){
+    const e=env(),a=mockApi();
+    await post(e,a,start(1));
+    await post(e,a,text(2,message));
+    const stored=(await loadSession(e.TELEGRAM_DB,42)).world;
+    assert.equal(stored.story.last.kind,'fire',message);
+    assert(!stored.history.some(x=>x.kind==='telegram_story_dragon_arrows'),message);
+  }
+});
+test('D1 executes common positive dragon volleys in both word orders',async()=>{
+  const messages=['Лучники стреляют из луков по дракону',
+    'The archers are shooting at the dragon with bows',
+    'People are shooting arrows at the dragon',
+    'Прилетел дракон. Жители стреляют по нему из луков',
+    'A dragon arrived. Archers shoot him with arrows',
+    'Archers fired arrows at the dragon',
+    'The people fired at him with bows',
+    'Лучники выпустили стрелы в дракона',
+    'Жители пустили стрелы по дракону',
+    'A dragon appeared. People shoot him with bows',
+    'The dragon appeared nearby. The archers shoot him with arrows',
+    'Дракон появился над городом. Жители стреляют по нему из луков',
+    'Над городом появился дракон. Лучники стреляют по нему из луков',
+    'People shoot at the dragon with the bows'];
+  for(const message of messages){
+    const e=env(),a=mockApi();
+    await post(e,a,start(1));
+    await post(e,a,text(2,'Прилетел дракон'));
+    const arrived=(await loadSession(e.TELEGRAM_DB,42)).world;
+    await post(e,a,text(3,message));
+    const stored=(await loadSession(e.TELEGRAM_DB,42)).world;
+    assert.equal(stored.resources.budget,arrived.resources.budget-5,message);
+    assert.equal(stored.story.dragon.health,2,message);
+    assert.equal(stored.story.active.kind,'dragon_fire',message);
+    assert.equal(stored.history.filter(x=>
+      x.kind==='telegram_story_dragon_arrows').length,1,message);
+  }
 });
