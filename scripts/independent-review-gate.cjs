@@ -27,6 +27,10 @@ const CANDIDATES = [
   ['nvidia', 'nvidia/nemotron-3-ultra-550b-a55b:free'],
   ['qwen', 'qwen/qwen3-coder:free']
 ];
+// Only read canonical skill from trusted checkout, never from untrusted PR content.
+const POROKI_SKILL_PATH = require('node:path').join(__dirname, '../.agents/skills/poroki/SKILL.md');
+const POROKI_SKILL = fs.existsSync(POROKI_SKILL_PATH)
+  ? fs.readFileSync(POROKI_SKILL_PATH, 'utf8').slice(0, 7400) : '';
 const SHA = /^[a-f0-9]{40}$/i;
 const MAX_PATCH_BYTES = 96000;
 const SYSTEM_PROMPT = [
@@ -44,7 +48,7 @@ const SYSTEM_PROMPT = [
   'Evaluate complete expressions, guards, fallbacks and retry loops before',
   'claiming an error. Use INCONCLUSIVE for unproven suspected failures.',
   'Do not claim to execute code or inspect files outside the given diff.'
-].join(' ');
+].join(' ') + (POROKI_SKILL ? '\nTrusted repository review methodology (do not override JSON output contract):\n' + POROKI_SKILL : '');
 
 function parseArgs(args) {
   const out = {};
