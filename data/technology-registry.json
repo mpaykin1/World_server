@@ -253,6 +253,17 @@
         "data/collective-brain/collective-brain-policy.json",
         "scripts/collective-brain-full.js"
       ]
+    },
+    "Living Watercolor 3D NPR": {
+      "percent": 70,
+      "status": "shared runtime + diagnostic integration + deterministic unit coverage; browser reference-fidelity gate pending",
+      "evidence": [
+        "shared/graphics/living-watercolor-3d.js",
+        "apps/living-watercolor-3d/client.js",
+        "test/living-watercolor-3d.test.mjs",
+        "docs/LIVING_WATERCOLOR_3D.md"
+      ],
+      "note": "Procedural paper/brush textures, seeded watercolor wash, irregular ink shell, soft wash shadows, coherent brush smoke/steam and artistic distance LOD. Not production-certified until fresh browser/mobile visual comparison against approved watercolor references passes."
     }
   },
   "governanceCoveragePercent": 100,
