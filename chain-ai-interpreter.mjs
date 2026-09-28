@@ -61,7 +61,7 @@ function normalizePrediction(result) {
     .filter(Boolean);
   if (natural.some(text => /\d/u.test(text))) throw Error('AI_PREDICTION_UNGROUNDED_NUMBERS');
   if (natural.some(text => !/[А-Яа-яЁё]/u.test(text))) throw Error('AI_PREDICTION_NOT_RUSSIAN');
-  const invented = /(друг(?:ой|ие|их)\s+игрок|скрыт\w*\s+ресурс|неизвестн\w*\s+ресурс|подземн\w*\s+(?:вод|ресурс)|соседн\w*\s+(?:регион|город))/iu;
+  const invented = /(друг(?:ой|ие|их)\s+игрок|скрыт[А-Яа-яЁё]*\s+ресурс|неизвестн[А-Яа-яЁё]*\s+ресурс|подземн[А-Яа-яЁё]*\s+(?:вод|ресурс)|соседн[А-Яа-яЁё]*\s+(?:регион|город))/iu;
   if (natural.some(text => invented.test(text))) throw Error('AI_PREDICTION_UNGROUNDED_FACT');
   return prediction;
 }
