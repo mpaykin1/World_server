@@ -41,3 +41,19 @@ test('lava reaches river; forest burns and residents evacuate; restore/replay id
  assert.equal(restoreFactoryWorld('{invalid'),null);
  assert.deepEqual(clone(a),a);
 });
+test('120 chunk-distance camera traversals keep persistent block coordinates and bounded visible buffer',()=>{
+ const w=createFactoryWorld(341,'chain-test'),b=placeBlock(w,'forest',-33,16);
+ const cache=new Map();
+ for(let i=0;i<120;i++){
+  const camera={x:-20+i*17,z:40-i*19};
+  const area=viewportBounds(camera,390,844),chunks=visibleChunks(area);
+  assert.ok(chunks.length>0&&chunks.length<64);
+  const keep=new Set(chunks.map(pair=>pair.join(',')));
+  for(const key of cache.keys())if(!keep.has(key))cache.delete(key);
+  for(const [cx,cz] of chunks)if(!cache.has(cx+','+cz))cache.set(cx+','+cz,generateChunk(w.seed,cx,cz));
+  assert.equal(cache.size,chunks.length);
+ }
+ assert.equal(w.blocks.find(item=>item.id===b.id).x,-33);
+ assert.equal(w.blocks.find(item=>item.id===b.id).z,16);
+ assert.deepEqual(clone(w),w);
+});
