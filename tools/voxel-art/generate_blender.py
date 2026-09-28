@@ -308,12 +308,16 @@ def make_asset(kind, output, preview):
             camera_preview(output / (kind + ".png"))
         except Exception as exc:
             print("PREVIEW_WARNING", kind, str(exc))
+    preview_path = output / (kind + ".png")
+    preview_meta = ({"file": kind + ".png", "sha256": hashlib.sha256(preview_path.read_bytes()).hexdigest(),
+        "bytes": preview_path.stat().st_size} if preview_path.exists() else None)
     return {
         "id": kind, "type": kind, "file": kind + ".glb", "url": "/apps/voxel-world/voxel-art/" + kind + ".glb",
         "sha256": hashlib.sha256(dest.read_bytes()).hexdigest(), "bytes": dest.stat().st_size,
         "triangles": triangles, "clips": ANIMS.get(kind, []), "vfx": VFX.get(kind, []),
         "format": "glTF-binary", "origin": "World Server original procedural voxel art",
         "license": "CC0-1.0", "unit": "metre", "up": "Y-glTF", "fps": 24,
+        "preview": preview_meta,
     }
 
 

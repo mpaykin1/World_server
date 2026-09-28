@@ -48,6 +48,9 @@ test('all eight exported original GLB models have consistent hashes and parseabl
     assert.ok(Array.isArray(json.meshes) && json.meshes.length, asset.id);
     assert.equal(asset.sha256, crypto.createHash('sha256').update(bytes).digest('hex'));
     assert.equal(asset.bytes, bytes.length);
+    const preview=fs.readFileSync(path.join(ART,asset.preview.file));
+    assert.equal(asset.preview.sha256,crypto.createHash('sha256').update(preview).digest('hex'));
+    assert.equal(asset.preview.bytes,preview.length);
     assert.ok(asset.bytes < 5_000_000, asset.id + ': mobile budget');
     assert.ok(asset.triangles > 0 && asset.triangles < 25000, asset.id + ': polygon budget');
     assert.ok(Array.isArray(json.scenes), asset.id);

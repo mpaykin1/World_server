@@ -19,7 +19,12 @@
       "license": "CC0-1.0",
       "unit": "metre",
       "up": "Y-glTF",
-      "fps": 24
+      "fps": 24,
+      "preview": {
+        "file": "barren.png",
+        "sha256": "bfdc45f03c93305e5d5f9a6b0d5c8489c486ed7f9daad525129f070470190db1",
+        "bytes": 123329
+      }
     },
     {
       "id": "city",
@@ -36,7 +41,12 @@
       "license": "CC0-1.0",
       "unit": "metre",
       "up": "Y-glTF",
-      "fps": 24
+      "fps": 24,
+      "preview": {
+        "file": "city.png",
+        "sha256": "d10a610081a50f95a2ac6ab093153780af04eb5c5eec4742df2e8ac1a252c948",
+        "bytes": 146830
+      }
     },
     {
       "id": "forest",
@@ -53,7 +63,12 @@
       "license": "CC0-1.0",
       "unit": "metre",
       "up": "Y-glTF",
-      "fps": 24
+      "fps": 24,
+      "preview": {
+        "file": "forest.png",
+        "sha256": "c20f68ad7c2b5870acd6c7797a8f18e38df9b1e9ad958281462402080ee8f09c",
+        "bytes": 163505
+      }
     },
     {
       "id": "volcano",
@@ -76,7 +91,12 @@
       "license": "CC0-1.0",
       "unit": "metre",
       "up": "Y-glTF",
-      "fps": 24
+      "fps": 24,
+      "preview": {
+        "file": "volcano.png",
+        "sha256": "1c6bbc3a2832cce20e2eafd01729bfcebf43a0eadfa31e17976d65ecbfcb1600",
+        "bytes": 156912
+      }
     },
     {
       "id": "energy",
@@ -98,7 +118,12 @@
       "license": "CC0-1.0",
       "unit": "metre",
       "up": "Y-glTF",
-      "fps": 24
+      "fps": 24,
+      "preview": {
+        "file": "energy.png",
+        "sha256": "9ec99943a00b9bb109ccf1e38abb67df75e33dcf1e5dc8a75f16396f2957c489",
+        "bytes": 140158
+      }
     },
     {
       "id": "idea",
@@ -119,7 +144,12 @@
       "license": "CC0-1.0",
       "unit": "metre",
       "up": "Y-glTF",
-      "fps": 24
+      "fps": 24,
+      "preview": {
+        "file": "idea.png",
+        "sha256": "938133b095821767f80c076bab8e0e1288c3f6edfae2bda39b2c88b2f470abf4",
+        "bytes": 133855
+      }
     },
     {
       "id": "river",
@@ -138,7 +168,12 @@
       "license": "CC0-1.0",
       "unit": "metre",
       "up": "Y-glTF",
-      "fps": 24
+      "fps": 24,
+      "preview": {
+        "file": "river.png",
+        "sha256": "7b1d49e31f2e3f3474e0c372926f9bd01126da8e7c9de8f0d609e2616e4eb6b2",
+        "bytes": 122707
+      }
     },
     {
       "id": "villager",
@@ -158,7 +193,12 @@
       "license": "CC0-1.0",
       "unit": "metre",
       "up": "Y-glTF",
-      "fps": 24
+      "fps": 24,
+      "preview": {
+        "file": "villager.png",
+        "sha256": "9d15b0de4db637eb02edf35803942700fbd70495bde52b43f39514bc874c07ec",
+        "bytes": 98195
+      }
     }
   ],
   "defaultFallback": "existing procedural voxel renderer"

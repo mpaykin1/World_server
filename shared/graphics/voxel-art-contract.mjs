@@ -34,6 +34,9 @@ export function validVoxelManifest(manifest) {
     if (!/^[a-f0-9]{64}$/.test(item.sha256 || "")) return false;
     if (!(Number.isSafeInteger(item.bytes) && item.bytes > 20)) return false;
     if (!Array.isArray(item.clips) || !Array.isArray(item.vfx)) return false;
+    if (item.preview && (item.preview.file !== item.id + ".png" ||
+      !/^[a-f0-9]{64}$/.test(item.preview.sha256 || "") ||
+      !Number.isSafeInteger(item.preview.bytes) || item.preview.bytes <= 20)) return false;
     seen.add(item.id);
     return true;
   });
