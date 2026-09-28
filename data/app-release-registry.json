@@ -185,6 +185,13 @@
         "spawn",
         "render"
       ]
+    },
+    "living-watercolor-3d": {
+      "title": "Living Watercolor 3D Lab",
+      "visible": false,
+      "status": "diagnostic",
+      "kind": "diagnostic",
+      "reason": "Shared watercolor NPR technology lab. Not public/certified until browser/mobile visual-reference verification passes."
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",
