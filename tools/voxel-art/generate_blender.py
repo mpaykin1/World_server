@@ -62,7 +62,23 @@ def material(name: str):
     return mat
 
 
-def _subset(recipe: Recipe, include=None, exclude=None):
+
+
+def coarsen_voxels(recipe: Recipe, factor: int):
+    if factor <= 1:
+        return dict(recipe.voxels)
+    bins = {}
+    hot = {"lava_hot":0,"lava":1,"water":2,"water_shallow":2,"crystal_hot":2,"light":2}
+    for (x,y,z), value in recipe.voxels.items():
+        key = (round(x/factor), round(y/factor), round(z/factor))
+        material, fid = value
+        feature = recipe.features.get(fid)
+        rank = (feature.detail if feature else 3, hot.get(material, 5), stable_hash(fid, material))
+        current = bins.get(key)
+        if current is None or rank < current[0]:
+            bins[key] = (rank, value)
+    return {key: packed[1] for key, packed in bins.items()}
+\ndef _subset(recipe: Recipe, include=None, exclude=None):
     include = set(include or ())
     exclude = set(exclude or ())
     out = {}
@@ -110,6 +126,7 @@ def mesh_voxels(voxels, name: str, unit=.22, origin=(0,0,0)):
         "vertices": len(vertices),
         "materialCount": len(palette),
         "drawCalls": len(palette),
+        "voxelCount": len(voxels),
     }
 
 
@@ -117,7 +134,14 @@ def _add_recipe_mesh(recipe: Recipe, name: str):
     animated_parts = set()
     if recipe.kind == "villager" and recipe.lod == 0:
         animated_parts = {"villager:leftLeg", "villager:rightLeg"}
-    body, metrics = mesh_voxels(_subset(recipe, exclude=animated_parts), name)
+    factor = (1, 2, 3)[recipe.lod]
+    body_voxels = _subset(recipe, exclude=animated_parts)
+    if factor > 1:
+        shadow = Recipe(recipe.kind, recipe.seed, recipe.lod, recipe.params)
+        shadow.features = recipe.features
+        shadow.voxels = body_voxels
+        body_voxels = coarsen_voxels(shadow, factor)
+    body, metrics = mesh_voxels(body_voxels, name, unit=.22*factor)
     body["world_server_type"] = recipe.kind
     body["world_server_lod"] = recipe.lod
     body["semantic_graph_version"] = 1
