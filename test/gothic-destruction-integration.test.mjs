@@ -17,7 +17,9 @@ test('gothic destruction is opt-in and does not alter default voxel-world startu
 });
 
 test('runtime lab reuses canonical grammar damage planner and bounded Rapier adapter',()=>{
-  assert.match(lab,/buildGothicTower/);
+  assert.match(lab,/createVoxelModRegistry/);
+  assert.match(lab,/createGothicCityMod/);
+  assert.match(lab,/gothic-city:tower/);
   assert.match(lab,/fireCannonAtStructure/);
   assert.match(lab,/createRapierCollapseRuntime/);
   assert.match(lab,/loadPinnedRapier/);
