@@ -52,7 +52,7 @@ jobs:
 
       - name: Install browser smoke dependency
         run: |
-          npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.63.0
+          npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.63.0 pngjs@7.0.0
           npx playwright install --with-deps chromium
 
       - name: Serve built HTML
