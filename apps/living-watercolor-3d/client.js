@@ -86,6 +86,7 @@ requestAnimationFrame(animate);
 window.__LIVING_WATERCOLOR_3D_READY__={
   ready:true,version:'2.0.0',
   features:[
+    'watercolor-wash-shader','irregular-ink-shell','artistic-lod',
     'orthographic-illustration-camera','organic-geometry','reference-shaped-generators',
     'semantic-ink-strokes','pigment-pooling','paper-gaps','procedural-paper','soft-wash-shadow',
     'coherent-brush-smoke','reference-fidelity-gate','golden-quality-hook','paper-space-compositor'
