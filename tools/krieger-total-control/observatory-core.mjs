@@ -13,6 +13,11 @@ export const FORENSICS_STAGES = Object.freeze([
   "weapon.request",
   "weapon.request_accepted",
   "weapon.commit",
+  "geometry.mesh",
+  "material.pass",
+  "renderer.frame",
+  "scene.portals",
+  "gpu.frame",
 ]);
 
 export function latestByStage(events = []) {
@@ -97,11 +102,62 @@ export function analyzeLifecycle(events = []) {
   return {observed,missingBeforeCallMain,readyForDeterministicStart:missingBeforeCallMain.length===0};
 }
 
+
+export function analyzeAssets(events = []) {
+  const meshes = events.filter(x => x?.stage === "geometry.mesh");
+  const materialPasses = events.filter(x => x?.stage === "material.pass");
+  const byKind = Object.create(null);
+  let triangles = 0;
+  let vertices = 0;
+  let animated = 0;
+  for (const m of meshes) {
+    byKind[m.kind] = (byKind[m.kind] || 0) + 1;
+    triangles += Number(m.triangles || 0);
+    vertices += Number(m.vertices || 0);
+    animated += m.animated ? 1 : 0;
+  }
+  const usage = Object.create(null);
+  for (const p of materialPasses) usage[p.usage] = (usage[p.usage] || 0) + 1;
+  return {
+    meshSamples:meshes.length,
+    byKind,
+    totalSampledVertices:vertices,
+    totalSampledTriangles:triangles,
+    animatedMeshSamples:animated,
+    materialPassSamples:materialPasses.length,
+    materialUsageHistogram:usage,
+  };
+}
+
+export function analyzeScene(events = []) {
+  const latest = events.filter(x => x?.stage === "scene.portals").at(-1) || null;
+  if (!latest) return {observed:false,latest:null,visibilityRatio:null};
+  const ratio = latest.sectors > 0 ? latest.visibleSectors / latest.sectors : null;
+  return {observed:true,latest,visibilityRatio:ratio};
+}
+
+export function analyzeRenderer(events = []) {
+  const renderer = events.filter(x => x?.stage === "renderer.frame").at(-1) || null;
+  const gpu = events.filter(x => x?.stage === "gpu.frame").at(-1) || null;
+  const cpuHasJobs = !!(renderer && Number(renderer.paintJobs || 0) > 0);
+  const gpuHasDraws = !!(gpu && Number(gpu.drawCalls || 0) > 0);
+  return {
+    renderer,
+    gpu,
+    cpuHasJobs,
+    gpuHasDraws,
+    cpuToGpuObserved:cpuHasJobs && gpuHasDraws,
+  };
+}
+
 export function analyzeForensics(events = []) {
   return {
     viewport: analyzeViewport(events),
     weapon: analyzeWeapon(events),
     lifecycle: analyzeLifecycle(events),
+    assets: analyzeAssets(events),
+    scene: analyzeScene(events),
+    renderer: analyzeRenderer(events),
     eventCount: events.length,
   };
 }
