@@ -1,4 +1,5 @@
-import { buildGothicTower } from '../../shared/gothic-architecture.mjs';
+import {createVoxelModRegistry} from '../../shared/voxel-mod-registry.mjs';
+import {createGothicCityMod} from '../../shared/mods/gothic-city.mjs';
 import { fireCannonAtStructure } from '../../shared/voxel-structural-destruction.mjs';
 import {
   RAPIER_PROVENANCE,
@@ -69,7 +70,13 @@ function mountFireButton(fire){
 
 export async function installGothicDestructionLab({THREE,scene,player,heightAt,toast}={}){
   if(!THREE||!scene||!player||typeof heightAt!=='function')throw new TypeError('Voxel runtime bindings required');
-  const origin=towerOrigin(player,heightAt),tower=buildGothicTower({origin,seed:20260929,width:7,height:14});
+  const origin=towerOrigin(player,heightAt),registry=createVoxelModRegistry();
+  registry.register(createGothicCityMod());
+  const blueprint=registry.compileBlueprint({
+    structureId:'gothic-city:tower',blueprintVersion:1,seed:20260929,
+    params:{origin,width:7,height:14},
+  });
+  const tower=blueprint.structure;
   let staticMesh=instancedVoxels(THREE,tower.voxels),fired=false,accumulator=0;
   scene.add(staticMesh);addCannonMarker(THREE,scene,origin);
 
@@ -116,6 +123,7 @@ export async function installGothicDestructionLab({THREE,scene,player,heightAt,t
     return{
       enabled:true,fired,towerVoxels:tower.voxels.length,dynamicMeshes:bodyMeshes.size,
       origin:{...origin},bodies:physics.snapshot(),
+      blueprint:{modId:blueprint.modId,structureId:blueprint.structureId,blueprintVersion:blueprint.blueprintVersion,seed:blueprint.seed},
       ...physics.stats(),rapier:RAPIER_PROVENANCE,
     };
   }
