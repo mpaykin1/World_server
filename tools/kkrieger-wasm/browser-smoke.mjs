@@ -100,7 +100,7 @@ try {
       runtimeReady = true;
     }
 
-    screenshotBuffer = await page.screenshot({ fullPage: true });
+    screenshotBuffer = await page.locator("canvas").screenshot();
     pixels = analyzePng(screenshotBuffer);
     if (runtimeReady && rendered(pixels)) break;
   }
