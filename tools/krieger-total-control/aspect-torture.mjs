@@ -47,14 +47,26 @@ try {
       throw new Error(c.id+" still forces a 2:1 master viewport");
     }
     const screenshot=process.env.KK_TORTURE_SHOTS;
+    let screenshotError=null;
     if(screenshot) {
       fs.mkdirSync(screenshot,{recursive:true});
-      await page.screenshot({path:`${screenshot}/${c.id.replace(/[^a-z0-9]+/gi,"_")}.png`,fullPage:true});
+      try {
+        // The live WebGL compositor can stall a full-page capture in headless
+        // Chromium. A canvas capture is smaller and remains evidence-only:
+        // telemetry, not PNG export, is the diagnostic gate.
+        await page.locator("canvas").screenshot({
+          path:`${screenshot}/${c.id.replace(/[^a-z0-9]+/gi,"_")}.png`,
+          timeout:15000,
+        });
+      } catch(e) {
+        screenshotError=String(e?.message||e);
+      }
     }
     results.push({
       case:c,
       analysis,
       stages,
+      screenshotError,
       errors:errors.filter(x=>!/pointer lock|AudioContext|favicon/i.test(x)),
     });
     await context.close();
