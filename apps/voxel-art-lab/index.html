@@ -14,7 +14,13 @@ button{cursor:pointer;padding:7px 9px;border:1px solid #567883;border-radius:7px
 button[aria-pressed="true"]{background:#388b74;border-color:#82dcc1;color:white}button:focus-visible{outline:3px solid #ffcb69}
 #status{margin-top:7px;font-size:12px;color:#c3d9dc;max-width:590px}
 footer{position:absolute;bottom:max(8px,env(safe-area-inset-bottom));left:max(8px,env(safe-area-inset-left));z-index:2;background:#0c1922c9;border-radius:7px;padding:7px 10px;color:#bfd0d7;font-size:12px}
-@media(max-width:620px){header{right:8px;padding:8px}h1{font-size:15px}p{display:none}button{padding:6px 7px;font-size:11px;min-height:33px}#status{font-size:11px}footer{font-size:10px}}
+@media(max-width:620px){
+header{right:8px;padding:6px;max-width:none}h1,p,footer{display:none}
+nav,.controls{flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;margin-top:3px}
+nav::-webkit-scrollbar,.controls::-webkit-scrollbar{display:none}.group{flex:0 0 auto;padding:2px}
+button{flex:0 0 auto;padding:5px 7px;font-size:10px;min-height:30px}
+#status{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}
+}
 </style>
 <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
 </head>
