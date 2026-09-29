@@ -43,7 +43,7 @@ replace_once("wasm/shell.html",
       var keep = window.__kkForensics.slice(-12).map(function(x){
         return x.stage + ' ' + JSON.stringify(x).slice(0,180);
       });
-      out.textContent = keep.join('\n');
+      out.textContent = keep.join('\\n');
     }
   };
   function kkBrowserSnapshot(reason){
@@ -157,23 +157,23 @@ replace_once("wasm/shell.html",
 
 # Platform-level screen/backbuffer and real GL viewport.
 replace_once("wasm/_start_wasm.cpp",
-"""  fprintf(stderr,"[kk] screen: %dx%d\n",ConfigX,ConfigY);
+"""  fprintf(stderr,"[kk] screen: %dx%d\\n",ConfigX,ConfigY);
 }
 """,
-"""  fprintf(stderr,"[kk] screen: %dx%d\n",ConfigX,ConfigY);
-  fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"engine.screen\\\",\\\"config\\\":[%d,%d],\\\"viewportXY\\\":[%d,%d]}\n",
+"""  fprintf(stderr,"[kk] screen: %dx%d\\n",ConfigX,ConfigY);
+  fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"engine.screen\\\",\\\"config\\\":[%d,%d],\\\"viewportXY\\\":[%d,%d]}\\n",
           ConfigX,ConfigY,ViewportX,ViewportY);
 }
 """)
 
 replace_once("wasm/_start_wasm.cpp",
-"""  KKTRACE("viewport rt=%d win=%d,%d-%d,%d\n",vp.RenderTarget,vp.Window.x0,vp.Window.y0,vp.Window.x1,vp.Window.y1);
+"""  KKTRACE("viewport rt=%d win=%d,%d-%d,%d\\n",vp.RenderTarget,vp.Window.x0,vp.Window.y0,vp.Window.x1,vp.Window.y1);
 """,
-"""  KKTRACE("viewport rt=%d win=%d,%d-%d,%d\n",vp.RenderTarget,vp.Window.x0,vp.Window.y0,vp.Window.x1,vp.Window.y1);
+"""  KKTRACE("viewport rt=%d win=%d,%d-%d,%d\\n",vp.RenderTarget,vp.Window.x0,vp.Window.y0,vp.Window.x1,vp.Window.y1);
   {
     GLint gv[4] = {0,0,0,0};
     glGetIntegerv(GL_VIEWPORT,gv);
-    fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"engine.set_viewport.before\\\",\\\"rt\\\":%d,\\\"window\\\":[%d,%d,%d,%d],\\\"glBefore\\\":[%d,%d,%d,%d]}\n",
+    fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"engine.set_viewport.before\\\",\\\"rt\\\":%d,\\\"window\\\":[%d,%d,%d,%d],\\\"glBefore\\\":[%d,%d,%d,%d]}\\n",
             vp.RenderTarget,vp.Window.x0,vp.Window.y0,vp.Window.x1,vp.Window.y1,gv[0],gv[1],gv[2],gv[3]);
   }
 """)
@@ -184,7 +184,7 @@ replace_once("mainplayer.cpp",
     RenderTargetManager->SetMasterViewport(vp);
 """,
 """#if defined(__EMSCRIPTEN__)
-    fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"mainplayer.master_viewport\\\",\\\"config\\\":[%d,%d],\\\"window\\\":[%d,%d,%d,%d],\\\"ratio\\\":%.6f}\n",
+    fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"mainplayer.master_viewport\\\",\\\"config\\\":[%d,%d],\\\"window\\\":[%d,%d,%d,%d],\\\"ratio\\\":%.6f}\\n",
             sSystem->ConfigX,sSystem->ConfigY,vp.Window.x0,vp.Window.y0,vp.Window.x1,vp.Window.y1,
             vp.Window.YSize() ? 1.0f*vp.Window.XSize()/vp.Window.YSize() : 0.0f);
 #endif
@@ -199,7 +199,7 @@ replace_once("mainplayer.cpp",
 """,
 """    Environment->Aspect = 2.0f;
 #if defined(__EMSCRIPTEN__)
-    fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"mainplayer.projection_aspect\\\",\\\"aspect\\\":%.6f,\\\"masterWindow\\\":[%d,%d,%d,%d]}\n",
+    fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"mainplayer.projection_aspect\\\",\\\"aspect\\\":%.6f,\\\"masterWindow\\\":[%d,%d,%d,%d]}\\n",
             Environment->Aspect,vp.Window.x0,vp.Window.y0,vp.Window.x1,vp.Window.y1);
 #endif
 
@@ -214,7 +214,7 @@ replace_once("genoverlay.cpp",
 """,
 """      GenOverlayManager->PrepareViewport(rt,view);
 #if defined(__EMSCRIPTEN__)
-      fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"ipp.viewport.pre_fraction\\\",\\\"op\\\":%d,\\\"rtSizeClass\\\":%d,\\\"window\\\":[%d,%d,%d,%d],\\\"fraction\\\":[%.6f,%.6f,%.6f,%.6f]}\n",
+      fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"ipp.viewport.pre_fraction\\\",\\\"op\\\":%d,\\\"rtSizeClass\\\":%d,\\\"window\\\":[%d,%d,%d,%d],\\\"fraction\\\":[%.6f,%.6f,%.6f,%.6f]}\\n",
               parent->OpId,rt->Size,view.Window.x0,view.Window.y0,view.Window.x1,view.Window.y1,fx0,fy0,fx1,fy1);
       {
 """)
@@ -227,7 +227,7 @@ replace_once("genoverlay.cpp",
 """      if(r.x0<r.x1 && r.y0<r.y1)
         view.Window = r;
 #if defined(__EMSCRIPTEN__)
-      fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"ipp.viewport.post_fraction\\\",\\\"op\\\":%d,\\\"rtSizeClass\\\":%d,\\\"window\\\":[%d,%d,%d,%d]}\n",
+      fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"ipp.viewport.post_fraction\\\",\\\"op\\\":%d,\\\"rtSizeClass\\\":%d,\\\"window\\\":[%d,%d,%d,%d]}\\n",
               parent->OpId,rt->Size,view.Window.x0,view.Window.y0,view.Window.x1,view.Window.y1);
 #endif
       sSystem->SetViewport(view);
@@ -241,14 +241,14 @@ replace_once("kkriegergame.cpp",
 """,
 """      i = weaponswap[key&7];
 #if defined(__EMSCRIPTEN__)
-      fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"weapon.request\\\",\\\"key\\\":%u,\\\"mapped\\\":%d,\\\"owned\\\":%d,\\\"current\\\":%d,\\\"next\\\":%d,\\\"timer\\\":%.6f}\n",
+      fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"weapon.request\\\",\\\"key\\\":%u,\\\"mapped\\\":%d,\\\"owned\\\":%d,\\\"current\\\":%d,\\\"next\\\":%d,\\\"timer\\\":%.6f}\\n",
               (unsigned)key,i,(i>=0 && i<8)?Player.Weapon[i]:0,Player.CurrentWeapon,Player.NextWeapon,WeaponTimer);
 #endif
       if(i>=0 && Player.Weapon[i])
       {
         Player.NextWeapon = i;
 #if defined(__EMSCRIPTEN__)
-        fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"weapon.request_accepted\\\",\\\"mapped\\\":%d,\\\"current\\\":%d,\\\"next\\\":%d,\\\"timer\\\":%.6f}\n",
+        fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"weapon.request_accepted\\\",\\\"mapped\\\":%d,\\\"current\\\":%d,\\\"next\\\":%d,\\\"timer\\\":%.6f}\\n",
                 i,Player.CurrentWeapon,Player.NextWeapon,WeaponTimer);
 #endif
       }
@@ -260,7 +260,7 @@ replace_once("kkriegergame.cpp",
 """,
 """    Player.CurrentWeapon = Player.NextWeapon;
 #if defined(__EMSCRIPTEN__)
-    fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"weapon.commit\\\",\\\"current\\\":%d,\\\"next\\\":%d,\\\"timerBeforeReset\\\":%.6f}\n",
+    fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"weapon.commit\\\",\\\"current\\\":%d,\\\"next\\\":%d,\\\"timerBeforeReset\\\":%.6f}\\n",
             Player.CurrentWeapon,Player.NextWeapon,WeaponTimer);
 #endif
     WeaponEvent.Exit();
