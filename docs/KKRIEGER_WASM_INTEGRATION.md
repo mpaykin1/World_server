@@ -42,3 +42,24 @@ The first integration boundary is intentionally build-and-verify rather than cop
 The CI workflow checks out the exact upstream SHA, sets up Emscripten 6.0.9, builds one HTML, verifies single-file packaging and then runs a real browser smoke. Heavy compilation stays in GitHub Actions rather than on the user's PC.
 
 No existing World Server app or public route is modified by this bridge.
+
+
+## Canonical playable build and handoff
+
+The canonical playable browser build is maintained in:
+
+- repository: https://github.com/mpaykin1/scratch-chain-reaction
+- public game: https://mpaykin1.github.io/scratch-chain-reaction/kkrieger/
+- handoff: `KRIEGER_HANDOFF.md`
+- known issues: `KRIEGER_KNOWN_ISSUES.md`
+- open physical-iPhone bug tracker: https://github.com/mpaykin1/scratch-chain-reaction/issues/34
+
+### IMPORTANT — physical iPhone bugs remain OPEN
+
+Do not infer success from Chromium smoke tests alone. As of 2026-09-29 the user still reproduces these on a physical iPhone:
+
+1. USE does not reliably change the real in-game weapon in portrait or landscape.
+2. START GAME works intermittently in portrait and landscape.
+3. Portrait mode still does not render the actual 3D scene truly full-screen; the scene can remain a horizontal strip with large black regions.
+
+These three issues are **not accepted as fixed** until the user confirms them on a physical device. Preserve the currently good landscape graphics, walking, swipe aiming and FIRE while fixing them.
