@@ -1,0 +1,5 @@
+ M package.json
+ M scripts/check-agent-rules.js
+?? lib/agent-budget-guard.js
+?? scripts/check-agent-budget.js
+?? test/agent-budget-guard.test.js

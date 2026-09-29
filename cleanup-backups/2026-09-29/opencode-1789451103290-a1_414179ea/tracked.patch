@@ -1,0 +1,37 @@
+diff --git a/package.json b/package.json
+index d5ad6986..144c714a 100644
+--- a/package.json
++++ b/package.json
+@@ -12,6 +12,7 @@
+     "indieworlds:export": "node scripts/export-indieworlds.js",
+     "indieworlds:check": "node scripts/export-indieworlds.js --check",
+     "check:fast": "node scripts/check-js.js",
++    "ai-budget:check": "node scripts/check-agent-budget.js",
+     "discover": "node scripts/discover-ai3d-engines.js",
+     "e2e": "node scripts/ai3d-e2e-smoke.js",
+     "e2e:python": "python services/ai3d-worker/scripts/e2e-smoke.py",
+diff --git a/scripts/check-agent-rules.js b/scripts/check-agent-rules.js
+index 74526da8..cda2bfab 100644
+--- a/scripts/check-agent-rules.js
++++ b/scripts/check-agent-rules.js
+@@ -95,6 +95,20 @@ try {
+   failed = true;
+ }
+ 
++// 6. The daily AI-agent work-budget guard (paid fallback <= 30% of daily
++// agent work; no paid APIs/GPU) is present and wired as a runnable gate.
++try {
++  const guardLib = path.join(root, 'lib', 'agent-budget-guard.js');
++  const guardCli = path.join(root, 'scripts', 'check-agent-budget.js');
++  check(fs.existsSync(guardLib), 'agent-budget-guard.js exists (paid-fallback <=30% daily share rule)');
++  check(fs.existsSync(guardCli), 'check-agent-budget.js CLI guard exists');
++  const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
++  check(typeof pkg.scripts['ai-budget:check'] === 'string' && pkg.scripts['ai-budget:check'].includes('check-agent-budget.js'), 'ai-budget:check is wired into package.json');
++} catch (e) {
++  console.error('WARN: agent budget guard check failed', e.message);
++  failed = true;
++}
++
+ if (failed) {
+   console.error('\nAgent rules check FAILED');
+   process.exit(1);

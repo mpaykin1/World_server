@@ -1,0 +1,38 @@
+name: Fleet PRE Merge Chain
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      head_sha:
+        description: Exact 40-hex HEAD_SHA to certify
+        required: true
+        type: string
+      pr:
+        description: PR number that owns this exact head
+        required: true
+        type: string
+
+concurrency:
+  group: fleet-pre-merge-chain-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  issues: read
+
+jobs:
+  fleet-pre-merge-chain:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enforce exact-SHA Fleet PRE certificate (fail-closed)
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/check-fleet-pre-certificate.cjs \
+            "${{ github.event.pull_request.head.sha || inputs.head_sha }}" \
+            --pr "${{ github.event.pull_request.number || inputs.pr }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

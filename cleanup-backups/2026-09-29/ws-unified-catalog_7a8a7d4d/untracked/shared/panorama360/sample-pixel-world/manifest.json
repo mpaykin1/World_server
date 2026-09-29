@@ -1,0 +1,77 @@
+{
+  "type": "pixel-panorama-360",
+  "schemaVersion": "4.0.0",
+  "slug": "sample-pixel-world",
+  "title": "Sample Pixel World",
+  "description": "Sample animated pixel-art panorama",
+  "fps": 8,
+  "loop": true,
+  "createdAt": "2026-09-06T06:30:29.692Z",
+  "source": {
+    "width": 512,
+    "height": 256,
+    "frameCount": 8
+  },
+  "hotspots": [
+    {
+      "label": "Reload sample",
+      "yaw": 1.2,
+      "pitch": 0,
+      "targetSlug": "sample-pixel-world",
+      "targetManifest": "/shared/panorama360/sample-pixel-world/manifest.json"
+    }
+  ],
+  "mobile": {
+    "width": 512,
+    "height": 256,
+    "frameCount": 8,
+    "frames": [
+      "/shared/panorama360/sample-pixel-world/mobile/000001.png",
+      "/shared/panorama360/sample-pixel-world/mobile/000002.png",
+      "/shared/panorama360/sample-pixel-world/mobile/000003.png",
+      "/shared/panorama360/sample-pixel-world/mobile/000004.png",
+      "/shared/panorama360/sample-pixel-world/mobile/000005.png",
+      "/shared/panorama360/sample-pixel-world/mobile/000006.png",
+      "/shared/panorama360/sample-pixel-world/mobile/000007.png",
+      "/shared/panorama360/sample-pixel-world/mobile/000008.png"
+    ],
+    "previewUrl": "/shared/panorama360/sample-pixel-world/mobile/preview.png",
+    "mp4Url": null,
+    "webmUrl": null,
+    "apngUrl": null
+  },
+  "desktop": {
+    "width": 512,
+    "height": 256,
+    "frameCount": 8,
+    "frames": [
+      "/shared/panorama360/sample-pixel-world/desktop/000001.png",
+      "/shared/panorama360/sample-pixel-world/desktop/000002.png",
+      "/shared/panorama360/sample-pixel-world/desktop/000003.png",
+      "/shared/panorama360/sample-pixel-world/desktop/000004.png",
+      "/shared/panorama360/sample-pixel-world/desktop/000005.png",
+      "/shared/panorama360/sample-pixel-world/desktop/000006.png",
+      "/shared/panorama360/sample-pixel-world/desktop/000007.png",
+      "/shared/panorama360/sample-pixel-world/desktop/000008.png"
+    ],
+    "previewUrl": "/shared/panorama360/sample-pixel-world/desktop/preview.png",
+    "mp4Url": null,
+    "webmUrl": null,
+    "apngUrl": null
+  },
+  "multires": {
+    "tileSize": 512,
+    "frameCount": 8,
+    "levels": [
+      {
+        "width": 512,
+        "height": 256,
+        "cols": 1,
+        "rows": 1,
+        "tileSize": 512,
+        "template": "/shared/panorama360/sample-pixel-world/tiles/512/f{frame}/{x}_{y}.png"
+      }
+    ]
+  },
+  "previewUrl": "/shared/panorama360/sample-pixel-world/desktop/preview.png"
+}

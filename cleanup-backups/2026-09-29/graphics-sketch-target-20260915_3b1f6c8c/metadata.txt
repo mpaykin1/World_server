@@ -1,0 +1,4 @@
+original_path=C:/Users/user/AppData/Local/World_server_worktrees/graphics-sketch-target-20260915
+head=
+3b1f6c8c4a4b62c146928581b17b9a261b03b5a1
+branch=ai/chatgpt/chunk-e2e-profile2-20260919

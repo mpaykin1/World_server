@@ -1,0 +1,4 @@
+original_path=C:/Users/user/AppData/Local/World_server_worktrees/graphics-rebuild-e2e-20260919-1553
+head=
+30d5cebdf4d25f00be9b7b34e12b673046e9c5fe
+branch=ai/chatgpt/rebuildchunk-profile-next-20260919

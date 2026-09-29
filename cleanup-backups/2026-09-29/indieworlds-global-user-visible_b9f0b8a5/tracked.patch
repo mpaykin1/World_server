@@ -1,0 +1,175 @@
+diff --git a/AI_START_HERE.md b/AI_START_HERE.md
+index 529e5943..b7eb9ebe 100644
+--- a/AI_START_HERE.md
++++ b/AI_START_HERE.md
+@@ -12,7 +12,12 @@
+ 
+ В таком режиме технический блокер — это следующая подзадача, а не повод закончить отчётом. CI fail, конфликт, deploy fail, 404/500, протухший preview, неправильный SHA, browser failure и отсутствие видимого изменения — всё это `NOT_DONE`, пока доступные авторизованные инструменты могут продолжать исправление.
+ 
+-Допустимый нормальный финал — только свежепроверенная рабочая ссылка с видимым запрошенным изменением. Исключение — настоящий `USER_ACTION_REQUIRED`, когда нужен owner-only шаг, который AI физически не может выполнить доступными инструментами.
++Допустимый нормальный финал — только свежепроверенная рабочая ссылка с видимым запрошенным изменением.
++
++### USER-VISIBILITY GATE (обязателен перед любой ссылкой)
++
++Если пользователь просит рабочую ссылку после визуального/пользовательского изменения, AI **не имеет права выдавать URL**, пока `USER_VISIBLE_IMPACT < 85%`. Сначала устранить блокеры заметности, затем выполнить `npm run visibility:gate`, после deploy проверить production реальным браузером и убедиться, что постоянно видимый сигнал изменения, название текущего мира и CTA к истории/связям действительно видны. Любой FAIL означает `LINK_OUTPUT_BLOCKED` и продолжение работы. Выдаётся только постоянный production URL, не preview.
++Исключение — настоящий `USER_ACTION_REQUIRED`, когда нужен owner-only шаг, который AI физически не может выполнить доступными инструментами.
+ 
+ Свежий чат также обязан искать текущий resumable checkpoint в каноническом issue #80/task ledger и не создавать конкурирующую реализацию уже активной ручной задачи.
+ 
+diff --git a/package.json b/package.json
+index b2c5131b..d944f5ff 100644
+--- a/package.json
++++ b/package.json
+@@ -22,7 +22,7 @@
+     "quality:regression": "node scripts/quality-regression-gate.js",
+     "quality:diff": "node scripts/quality-diff.js",
+     "quality:accept": "node scripts/quality-accept-baseline.js",
+-    "release:gate": "npm run desktop-ai:check && npm run check && npm run golden:check && npm run quality:check && npm run quality:regression && npm run quality:fuzz && npm run quality:impact && npm run quality:perceptual && npm run tech:audit && npm run tech:health && npm run quality:tech-orchestrator && npm run duplicates:check && npm run contracts:check && npm run project:review && npm run quality:stability && npm run evidence:score && npm run regressions:capture && npm run quality:issue-candidates && npm run quality:world && npm run collective-brain:check && npm run collective-brain:security && npm run collective-brain:cycle",
++    "release:gate": "npm run desktop-ai:check && npm run visibility:gate && npm run check && npm run golden:check && npm run quality:check && npm run quality:regression && npm run quality:fuzz && npm run quality:impact && npm run quality:perceptual && npm run tech:audit && npm run tech:health && npm run quality:tech-orchestrator && npm run duplicates:check && npm run contracts:check && npm run project:review && npm run quality:stability && npm run evidence:score && npm run regressions:capture && npm run quality:issue-candidates && npm run quality:world && npm run collective-brain:check && npm run collective-brain:security && npm run collective-brain:cycle",
+     "duplicates:check": "node scripts/duplicate-system-review.js",
+     "contracts:check": "node scripts/system-contract-review.js",
+     "regressions:capture": "node scripts/capture-regressions.js",
+@@ -115,7 +115,8 @@
+     "agent-session:preflight": "node lib/agent-session-guard.js preflight direct-desktop-ai",
+     "agent-session:postflight": "node lib/agent-session-guard.js postflight direct-desktop-ai",
+     "agent-session:check": "node lib/agent-session-guard.js preflight policy-check",
+-    "quality:world:microdetail": "node scripts/world-microdetail-audit.js"
++    "quality:world:microdetail": "node scripts/world-microdetail-audit.js",
++    "visibility:gate": "node scripts/check-user-visibility-gate.js"
+   },
+   "engines": {
+     "node": "24.x"
+diff --git a/policy/user-visibility-gate.json b/policy/user-visibility-gate.json
+new file mode 100644
+index 00000000..eafb1a83
+--- /dev/null
++++ b/policy/user-visibility-gate.json
+@@ -0,0 +1,14 @@
++{
++  "version": 1,
++  "name": "USER_VISIBILITY_GATE",
++  "thresholdPercent": 85,
++  "linkPolicy": "BLOCK_LINK_OUTPUT_BELOW_THRESHOLD",
++  "requires": [
++    "always-visible change signal",
++    "current-world identity",
++    "story/connections CTA",
++    "canonical wrapper for external worlds",
++    "production browser verification"
++  ],
++  "productionBase": "https://world-server.netlify.app"
++}
+diff --git a/scripts/check-user-visibility-gate.js b/scripts/check-user-visibility-gate.js
+new file mode 100644
+index 00000000..8893e8f7
+--- /dev/null
++++ b/scripts/check-user-visibility-gate.js
+@@ -0,0 +1,19 @@
++'use strict';
++const fs=require('node:fs'),path=require('node:path');
++const root=path.resolve(__dirname,'..');
++const policy=JSON.parse(fs.readFileSync(path.join(root,'policy/user-visibility-gate.json'),'utf8'));
++const shell=fs.readFileSync(path.join(root,'shared/golden-ui-shell.js'),'utf8');
++const css=fs.readFileSync(path.join(root,'shared/golden-ui-shell.css'),'utf8');
++const gateway=fs.readFileSync(path.join(root,'world/gateway.js'),'utf8');
++const checks=[
++  ['always-visible change signal',30,/goldenWorldPulse/.test(shell)&&/#goldenWorldPulse/.test(css)],
++  ['current-world identity',20,/goldenPulseTitle/.test(shell)&&/goldenPulseStory/.test(shell)],
++  ['story/connections CTA',20,/goldenPulseOpen/.test(shell)&&/select\('worlds'\)/.test(shell)],
++  ['canonical wrapper for external worlds',20,/\/world\/\?id=/.test(shell)&&/x\.external===true/.test(gateway)],
++  ['portable discovery visible',10,/Паспорт независимого мира/.test(shell)&&/application\/vnd\.world-server\.indieworld\+json/.test(shell)]
++];
++const score=checks.reduce((n,[,w,ok])=>n+(ok?w:0),0);
++for(const [name,w,ok] of checks) console.log(`${ok?'PASS':'FAIL'} ${w}% ${name}`);
++console.log(`USER_VISIBLE_IMPACT=${score}% threshold=${policy.thresholdPercent}%`);
++if(score<policy.thresholdPercent){console.error('LINK_OUTPUT_BLOCKED');process.exit(1)}
++console.log('LINK_OUTPUT_SOURCE_GATE=PASS');
+diff --git a/shared/golden-ui-shell.css b/shared/golden-ui-shell.css
+index dbdc7e1b..0f92e6d2 100644
+--- a/shared/golden-ui-shell.css
++++ b/shared/golden-ui-shell.css
+@@ -1,4 +1,4 @@
+-﻿#goldenUiShell{position:fixed;inset:0;z-index:2147482500;pointer-events:none;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#fff}
++#goldenUiShell{position:fixed;inset:0;z-index:2147482500;pointer-events:none;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#fff}
+ #goldenUiShell *{box-sizing:border-box}#goldenUiShell svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+ #goldenToolbar{position:absolute;left:max(10px,env(safe-area-inset-left));top:max(10px,env(safe-area-inset-top));display:flex;gap:7px;pointer-events:auto}
+ #goldenToolbar button,#goldenDrawerClose{width:44px;height:44px;border-radius:13px;border:1px solid rgba(255,255,255,.2);background:rgba(12,16,22,.78);color:#fff;display:grid;place-items:center;backdrop-filter:blur(12px);box-shadow:0 5px 20px rgba(0,0,0,.22);cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+@@ -13,3 +13,6 @@
+ #goldenLore h3{margin:2px 0 8px;font:900 20px/1.05 Georgia,serif}#goldenLore p{font:15px/1.48 system-ui;margin:7px 0}#goldenLore .goldenLoreHistory{padding:10px;border-left:3px solid #e6c772;background:rgba(255,255,255,.06);border-radius:0 9px 9px 0}#goldenIndieWorld{margin-top:14px;padding:12px;border:1px solid rgba(230,199,114,.36);border-radius:12px;background:linear-gradient(135deg,rgba(230,199,114,.12),rgba(255,255,255,.04))}#goldenIndieWorld h3{margin:0 0 5px;font:800 16px/1.2 system-ui}#goldenIndieWorld p{margin:4px 0 9px;color:#d7dee5;font:13px/1.4 system-ui}.goldenIndieStatus{display:inline-block;margin:3px 0 7px;padding:4px 7px;border-radius:999px;background:rgba(230,199,114,.16);color:#f3dc9b;font:800 10px/1 system-ui;letter-spacing:.06em}.goldenIndieActions{display:flex;flex-wrap:wrap;gap:7px}.goldenIndieActions a{display:inline-flex;align-items:center;min-height:44px;padding:8px 10px;border:1px solid rgba(255,255,255,.16);border-radius:9px;background:rgba(255,255,255,.08);color:#fff;text-decoration:none;font:700 12px system-ui}.goldenIndieActions a:hover{background:rgba(255,255,255,.14)}#goldenIndieWorld .goldenIndiePending{color:#f0c982}#goldenTechnicalInfo{margin-top:14px;color:#c9d2db;font:12px/1.4 system-ui}
+ .golden-minimal-ui #targetInfo{display:none!important}.golden-drawer-open #mobileControls,.golden-drawer-open #mobileControls *{pointer-events:none!important}
+ @media(max-width:800px),(pointer:coarse){#goldenToolbar{gap:5px}#goldenToolbar button{width:46px;height:46px}#goldenDrawer{top:calc(max(10px,env(safe-area-inset-top)) + 54px);width:calc(100vw - max(20px,env(safe-area-inset-left) + env(safe-area-inset-right)));max-height:70vh}#goldenDrawerClose{width:52px;height:52px;border-radius:15px}#goldenDrawer>header{min-height:62px}.goldenWorldMode{top:62px}.goldenBridgePicker{grid-template-columns:1fr}.goldenHeadline{font-size:21px}}
++
++#goldenWorldPulse{position:absolute;right:max(10px,env(safe-area-inset-right));top:max(10px,env(safe-area-inset-top));width:min(360px,calc(100vw - 220px));padding:11px 12px;border:1px solid rgba(230,199,114,.48);border-radius:15px;background:linear-gradient(135deg,rgba(13,18,24,.94),rgba(41,31,12,.88));backdrop-filter:blur(16px);box-shadow:0 10px 30px rgba(0,0,0,.34);pointer-events:auto}.goldenPulseEyebrow{font:900 10px/1 system-ui;letter-spacing:.12em;color:#f0d783}.goldenPulseTitle{display:block;margin-top:5px;font:900 17px/1.05 Georgia,serif}.goldenPulseStory{display:block;margin-top:4px;font:600 12px/1.25 system-ui;color:#eef2f5}.goldenPulseStory,.goldenPulseTitle{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#goldenPulseMeta{margin-top:5px;font:800 10px/1.2 system-ui;color:#bfe7c7}#goldenPulseOpen{margin-top:7px;min-height:36px;width:100%;border:1px solid rgba(255,255,255,.18);border-radius:9px;background:rgba(255,255,255,.1);color:#fff;font:800 12px system-ui;cursor:pointer;touch-action:manipulation}#goldenPulseOpen:hover{background:rgba(255,255,255,.16)}
++@media(max-width:800px),(pointer:coarse){#goldenWorldPulse{left:max(10px,env(safe-area-inset-left));right:max(10px,env(safe-area-inset-right));top:calc(max(10px,env(safe-area-inset-top)) + 54px);width:auto;padding:8px 10px}.goldenPulseStory{font-size:11px}#goldenPulseOpen{min-height:34px}.golden-drawer-open #goldenWorldPulse{opacity:.18;pointer-events:none}}
+diff --git a/shared/golden-ui-shell.js b/shared/golden-ui-shell.js
+index 557d9454..61021f32 100644
+--- a/shared/golden-ui-shell.js
++++ b/shared/golden-ui-shell.js
+@@ -1,15 +1,18 @@
+-﻿'use strict';
++'use strict';
+ (function(){
+   if(window.__GOLDEN_UI_SHELL_V2__) return;
+   window.__GOLDEN_UI_SHELL_V2__=true;
+   const path=location.pathname;
++  const query=new URLSearchParams(location.search);
++  const gatewayWorldId=path.startsWith('/world/')?(query.get('id')||''):'';
+   const configs=[
+     {match:'/apps/catalog/',title:'Миры',worldId:'world-server-catalog-live',selectors:['.app-title','.topHint','#miniMap']},
+     {match:'/apps/voxel-world/',title:'Voxel World',worldId:'voxel-world',selectors:['#vwHud','#vwHelp','#vwBack']},
+     {match:'/apps/ai3d-voxel-city/',title:'Voxel City',worldId:'ai3d-voxel-city',selectors:['header','.controls','.metrics']},
+     {match:'/apps/survival/',title:'Survival',worldId:'survival',selectors:['.app-title','.topHint']},
+     {match:'/apps/world-sharabass/',title:'Мир Шарабас',worldId:'world-sharabass',selectors:['.app-title','.topHint']},
+-    {match:'/apps/dark-void-scene/',title:'Dark Void Navigator',worldId:'dark-void-scene',selectors:[]}
++    {match:'/apps/dark-void-scene/',title:'Dark Void Navigator',worldId:'dark-void-scene',selectors:[]},
++    {match:'/world/',title:'Мир',worldId:gatewayWorldId,selectors:['#worldGatewayStatus']}
+   ];
+   const cfg=configs.find(c=>path.startsWith(c.match))||{title:'World',worldId:'',selectors:[]};
+   const svg=paths=>`<svg viewBox="0 0 24 24" aria-hidden="true">${paths}</svg>`;
+@@ -26,7 +29,7 @@
+     <button data-golden-tab="worlds" aria-label="Миры">${icons.worlds}</button>
+     <button data-golden-tab="settings" aria-label="Настройки">${icons.settings}</button>
+     <button data-golden-tab="info" aria-label="Информация">${icons.info}</button>
+-  </nav><section id="goldenDrawer" aria-hidden="true">
++  </nav><aside id="goldenWorldPulse" aria-live="polite"><div class="goldenPulseEyebrow">INDIEWORLDS · LIVE</div><strong id="goldenPulseTitle">${cfg.title}</strong><span id="goldenPulseStory">Связываем этот мир с общей историей…</span><div id="goldenPulseMeta">Проверяем связи…</div><button id="goldenPulseOpen" type="button">История и связи →</button></aside><section id="goldenDrawer" aria-hidden="true">
+     <header><strong id="goldenDrawerTitle">${cfg.title}</strong><button id="goldenDrawerClose" aria-label="Закрыть">${icons.close}</button></header>
+     <div class="goldenTab" data-tab="menu"><div id="goldenPackedPanels"></div></div>
+     <div class="goldenTab" data-tab="worlds"><div class="goldenWorldMode"><button class="active" data-world-view="newspaper">Газета миров</button><button data-world-view="connections">Связи миров</button></div><div id="goldenWorldList">Загрузка миров…</div><div id="goldenConnections"></div></div>
+@@ -61,7 +64,7 @@
+   function menuWorlds(){return inventory.filter(x=>x?.worldMenu?.show&&x.url&&['game','navigator','hub','experiment','experience'].includes(x.kind||'game'));}
+   function mediaFor(card,item){const box=document.createElement('div');box.className='goldenPaperMedia';const src=item.worldMenu?.previewVideo;if(!src){box.classList.add('no-video');return box;}const v=document.createElement('video');v.muted=true;v.loop=true;v.playsInline=true;v.preload='none';v.dataset.src=src;v.setAttribute('aria-label',`Видео-превью ${item.title}`);v.addEventListener('error',()=>{v.remove();box.classList.add('no-video');},{once:true});box.appendChild(v);return box;}
+   function activateLazyVideos(host){const videos=[...host.querySelectorAll('video[data-src]')];const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;if(!('IntersectionObserver'in window)){for(const v of videos){v.src=v.dataset.src;if(!reduced)v.play().catch(()=>{});}return;}const io=new IntersectionObserver(entries=>{for(const e of entries){const v=e.target;if(e.isIntersecting){if(!v.src)v.src=v.dataset.src;if(!reduced)v.play().catch(()=>{});}else v.pause();}},{root:drawer,threshold:.2});videos.forEach(v=>io.observe(v));}
+-  function renderNewspaper(){const host=root.querySelector('#goldenWorldList');host.replaceChildren();const worlds=menuWorlds();for(const item of worlds){const m=item.worldMenu||{};const card=document.createElement('article');card.className='goldenPaperCard';card.dataset.worldId=item.id;card.appendChild(mediaFor(card,item));const body=document.createElement('div');body.className='goldenPaperBody';const kicker=document.createElement('div');kicker.className='goldenKicker';kicker.textContent=item.external?'ЖИВОЙ ВНЕШНИЙ МИР':item.status==='certified'?'ПРОВЕРЕННЫЙ МИР':'МИР В КАТАЛОГЕ';const h=document.createElement('h3');h.className='goldenHeadline';h.textContent=m.headline||item.title;const story=document.createElement('p');story.className='goldenPaperStory';story.textContent=m.lore||item.description||'У этого мира скоро появится история.';const status=document.createElement('div');status.className='goldenWorldStatus';status.textContent=`${item.title} · ${item.status||'unknown'}`;const a=document.createElement('a');a.className='goldenWorldLink';a.href=item.url;a.textContent='Войти в мир →';body.append(kicker,h,story,status,a);card.append(body);host.append(card);}if(!worlds.length)host.textContent='Пока нет миров для газеты.';activateLazyVideos(host);}
++  function renderNewspaper(){const host=root.querySelector('#goldenWorldList');host.replaceChildren();const worlds=menuWorlds();for(const item of worlds){const m=item.worldMenu||{};const card=document.createElement('article');card.className='goldenPaperCard';card.dataset.worldId=item.id;card.appendChild(mediaFor(card,item));const body=document.createElement('div');body.className='goldenPaperBody';const kicker=document.createElement('div');kicker.className='goldenKicker';kicker.textContent=item.external?'ЖИВОЙ ВНЕШНИЙ МИР':item.status==='certified'?'ПРОВЕРЕННЫЙ МИР':'МИР В КАТАЛОГЕ';const h=document.createElement('h3');h.className='goldenHeadline';h.textContent=m.headline||item.title;const story=document.createElement('p');story.className='goldenPaperStory';story.textContent=m.lore||item.description||'У этого мира скоро появится история.';const status=document.createElement('div');status.className='goldenWorldStatus';status.textContent=`${item.title} · ${item.status||'unknown'}`;const a=document.createElement('a');a.className='goldenWorldLink';a.href=item.external?`/world/?id=${encodeURIComponent(item.id)}`:item.url;a.textContent='Войти в мир →';body.append(kicker,h,story,status,a);card.append(body);host.append(card);}if(!worlds.length)host.textContent='Пока нет миров для газеты.';activateLazyVideos(host);}
+   function findById(id){return inventory.find(x=>x.id===id||x.worldMenu?.familyId===id);}
+   function bridgeStory(a,b){if(!a||!b)return 'Выбери два мира.';if(a.id===b.id)return 'Выбери два разных мира — тогда между ними появится мост.';const direct=(a.worldMenu?.connections||[]).find(x=>x.targetId===b.id||x.targetId===b.worldMenu?.familyId);if(direct?.story)return direct.story;const reverse=(b.worldMenu?.connections||[]).find(x=>x.targetId===a.id||x.targetId===a.worldMenu?.familyId);if(reverse?.story)return reverse.story;return `Между «${a.title}» и «${b.title}» появилась дверь. Герои могут пройти через неё, но каждый мир сохраняет свои правила и свою историю.`;}
+   function renderConnections(){const host=root.querySelector('#goldenConnections');host.replaceChildren();const worlds=menuWorlds();const intro=document.createElement('p');intro.textContent='Связь — это мост между историями. Ничего не смешивается навсегда без подтверждения.';const picker=document.createElement('div');picker.className='goldenBridgePicker';const aSel=document.createElement('select'),bSel=document.createElement('select');for(const [i,w] of worlds.entries()){for(const sel of [aSel,bSel]){const o=document.createElement('option');o.value=w.id;o.textContent=w.title;sel.appendChild(o);}if(i===1)bSel.value=w.id;}picker.append(aSel,bSel);const story=document.createElement('div');story.className='goldenBridgeStory';const update=()=>{story.textContent=bridgeStory(findById(aSel.value),findById(bSel.value));};aSel.addEventListener('change',update);bSel.addEventListener('change',update);host.append(intro,picker,story);const list=document.createElement('div');list.className='goldenBridgeList';for(const w of worlds){for(const c of w.worldMenu?.connections||[]){const t=findById(c.targetId);if(!t)continue;const card=document.createElement('div');card.className='goldenBridgeCard';const strong=document.createElement('strong');strong.textContent=`${w.title} → ${t.title}`;const p=document.createElement('div');p.textContent=c.story;card.append(strong,p);list.append(card);}}host.append(list);update();}
+@@ -76,9 +79,11 @@
+     const jsonLd=document.createElement('script');jsonLd.dataset.indieworldJsonld='true';jsonLd.type='application/ld+json';let worldUrl='';try{worldUrl=new URL(current.url,location.origin).href;}catch{}jsonLd.textContent=JSON.stringify({'@context':'https://schema.org','@type':current.kind==='game'?'VideoGame':current.kind==='hub'?'WebSite':'CreativeWork',identifier:current.id,name:current.title,headline:current.worldMenu?.headline||current.title,description:current.worldMenu?.lore||current.description||'',url:worldUrl,isPartOf:{'@type':'WebSite',name:'IMPROVE WORLD — IndieWorlds',url:new URL('/apps/catalog/',location.origin).href}});document.head.appendChild(jsonLd);
+   }
+   function renderPassport(current){const host=root.querySelector('#goldenIndieWorld');host.replaceChildren();const h=document.createElement('h3');h.textContent='Паспорт независимого мира';const p=document.createElement('p');p.textContent='Открытый адрес, переносимое описание и связи без алгоритмической ленты.';const status=document.createElement('div');status.className='goldenIndieStatus';status.textContent=isPublicWorld(current)?'ОПУБЛИКОВАН В INDIEWORLDS':'ЧЕРНОВИК · ЖДЁТ СЕРТИФИКАЦИИ';const actions=document.createElement('div');actions.className='goldenIndieActions';const feed=document.createElement('a');feed.href='/api/worlds?format=rss';feed.textContent='RSS всех миров';actions.appendChild(feed);if(isPublicWorld(current)){const passport=document.createElement('a');passport.href=`/api/worlds?format=indieweb&id=${encodeURIComponent(current.id)}`;passport.textContent='Открыть JSON-паспорт';actions.prepend(passport);}else{const pending=document.createElement('p');pending.className='goldenIndiePending';pending.textContent='Паспорт станет публичным только после прохождения Quality Gate.';host.append(h,p,status,pending,actions);return;}host.append(h,p,status,actions);}
++  function renderPulse(){const current=findById(cfg.worldId);const worlds=menuWorlds();root.querySelector('#goldenPulseTitle').textContent=current?.title||cfg.title;root.querySelector('#goldenPulseStory').textContent=current?.worldMenu?.headline||current?.worldMenu?.lore||'Этот мир подключён к общей истории IMPROVE WORLD.';root.querySelector('#goldenPulseMeta').textContent=`${worlds.length} миров связаны · ${isPublicWorld(current)?'паспорт опубликован':'мир проходит Quality Gate'}`;}
+   function renderInfo(){const host=root.querySelector('#goldenLore');const current=findById(cfg.worldId);host.replaceChildren();const h=document.createElement('h3');h.textContent='История этого мира';const lore=document.createElement('p');lore.textContent=current?.worldMenu?.lore||'Этот мир уже живёт на сервере. Его простая история ещё дописывается.';const hist=document.createElement('div');hist.className='goldenLoreHistory';hist.textContent=current?.worldMenu?.history||'Мир появился, чтобы стать частью общей истории IMPROVE WORLD.';host.append(h,lore,hist);renderPassport(current);installDiscoveryMetadata(current);}
+-  async function bootWorlds(){try{inventory=await loadInventory();renderNewspaper();renderConnections();renderInfo();}catch(e){console.error('[GOLDEN WORLDS]',e);root.querySelector('#goldenWorldList').textContent='Каталог временно недоступен, но текущий мир продолжает работать.';renderInfo();}}
++  async function bootWorlds(){try{inventory=await loadInventory();renderNewspaper();renderConnections();renderInfo();renderPulse();}catch(e){console.error('[GOLDEN WORLDS]',e);root.querySelector('#goldenWorldList').textContent='Каталог временно недоступен, но текущий мир продолжает работать.';renderInfo();}}
+   for(const b of root.querySelectorAll('[data-world-view]'))b.addEventListener('click',()=>{const connections=b.dataset.worldView==='connections';root.querySelector('[data-tab="worlds"]').classList.toggle('goldenConnectionsOpen',connections);for(const x of root.querySelectorAll('[data-world-view]'))x.classList.toggle('active',x===b);});
++  root.querySelector('#goldenPulseOpen').addEventListener('click',e=>{e.preventDefault();e.stopPropagation();select('worlds');});
+   root.querySelector('#goldenFullscreen').addEventListener('click',async()=>{try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen?.();else await document.exitFullscreen?.();}catch{}});
+   root.querySelector('#goldenMinimalUi').addEventListener('click',e=>{const on=!document.documentElement.classList.contains('golden-minimal-ui');document.documentElement.classList.toggle('golden-minimal-ui',on);e.currentTarget.setAttribute('aria-pressed',String(on));});
+   bootWorlds();
+diff --git a/world/gateway.js b/world/gateway.js
+new file mode 100644
+index 00000000..498c7b41
+--- /dev/null
++++ b/world/gateway.js
+@@ -0,0 +1,2 @@
++'use strict';
++(async()=>{const q=new URLSearchParams(location.search);const id=q.get('id')||'';const frame=document.querySelector('#worldFrame');const status=document.querySelector('#worldGatewayStatus');try{const r=await fetch('/api/apps?all=1',{cache:'no-store'});if(!r.ok)throw new Error(`catalog HTTP ${r.status}`);const j=await r.json();const item=(j.inventory||[]).find(x=>x.id===id&&x.external===true&&x.worldMenu?.show&&x.url);if(!item)throw new Error('Мир не опубликован в каноническом каталоге');const u=new URL(item.url);if(u.protocol!=='https:')throw new Error('Разрешены только HTTPS-миры');document.title=`${item.title} · IMPROVE WORLD`;frame.title=item.title;frame.src=u.href;frame.addEventListener('load',()=>{status.hidden=true;},{once:true});}catch(e){status.textContent=`Не удалось открыть мир: ${e.message}`;status.dataset.error='true';}})();
+diff --git a/world/index.html b/world/index.html
+new file mode 100644
+index 00000000..78651c1d
+--- /dev/null
++++ b/world/index.html
+@@ -0,0 +1 @@
++<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><title>IMPROVE WORLD</title><link rel="stylesheet" href="/shared/golden-ui-shell.css"><style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080b10}#worldFrame{position:fixed;inset:0;width:100%;height:100%;border:0;background:#080b10}#worldGatewayStatus{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:20;padding:12px 16px;border-radius:12px;background:rgba(8,11,16,.82);color:#fff;font:700 14px system-ui}</style></head><body><div id="worldGatewayStatus">Открываем мир…</div><iframe id="worldFrame" title="Мир IMPROVE WORLD" allow="fullscreen; autoplay; gamepad" allowfullscreen></iframe><script src="/world/gateway.js"></script><script src="/shared/golden-ui-shell.js"></script></body></html>
+\ No newline at end of file

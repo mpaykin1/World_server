@@ -1,0 +1,4 @@
+original_path=C:/Users/user/AppData/Local/World_server_worktrees/graphics-incremental-mesh-20260916
+head=
+bff8ec17d1e70a025f5297f10856ca6ea9a1a5c3
+branch=ai/chatgpt/color-pack-20260917

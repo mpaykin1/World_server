@@ -1,0 +1,416 @@
+diff --git a/DESKTOP_AI_PROTOCOL_REPORT.json b/DESKTOP_AI_PROTOCOL_REPORT.json
+index a7435352..e8296a8a 100644
+--- a/DESKTOP_AI_PROTOCOL_REPORT.json
++++ b/DESKTOP_AI_PROTOCOL_REPORT.json
+@@ -1,5 +1,5 @@
+ {
+-  "generatedAt": "2026-09-10T03:27:21.573Z",
++  "generatedAt": "2026-09-22T00:54:53.484Z",
+   "pass": true,
+   "errors": [],
+   "warnings": []
+diff --git a/WORK_IN_PROGRESS.md b/WORK_IN_PROGRESS.md
+index 25825abf..2773dab6 100644
+--- a/WORK_IN_PROGRESS.md
++++ b/WORK_IN_PROGRESS.md
+@@ -2,6 +2,78 @@
+ 
+ ---
+ 
++# Master-goal slice — daily paid-work quota (Codex ≤30%) + CPU load in PC-health guard — 2026-09-22
++
++## Task
++Implementation/test slice for the master goal: enforce "Codex is fallback only and must stay at or below 30% of daily AI-agent work; prefer Claude/OpenCode", "never use paid APIs or paid GPU", and "PC HEALTH AND ZERO-CHAOS GUARD must measure CPU load, available RAM and free disk before and after every delegated local session". Fix only safe root causes, add focused regression tests, report evidence, no production deployment.
++
++## Why
++Current master already: never drives ChatGPT/claude-desktop programmatically, requires explicit `allowPaid` for Codex, prefers free cloud/local agents in the default plan, and wraps every dispatch in the shared zero-chaos session guard. Two explicit master-goal requirements are NOT enforced and are now added: (1) a persistent daily paid-work quota with a 30% paid cap so Codex can never dominate daily AI-agent work, and (2) real CPU-load measurement (with warning/critical thresholds) so heavy local work is deferred under CPU pressure exactly like RAM pressure already is.
++
++## Current state
++Branch `ai/master-coordinator/opencode-1790037903647-a1`, tree clean at `d06cb3ed` (coordinator default HEAD/LKG). `scripts/master-coordinator.cjs` dispatches OpenCode/OpenHuman/AnythingLLM/free-cloud/Codex but has no daily quota ledger; `lib/agent-session-guard.js` measures free RAM + free disk on every preflight/postflight but reports no CPU load. Before-session PC health captured: free RAM 26.7%, free disk ~187 GB, Desktop clean.
++
++## Target state
++- A small append-only JSONL work-quota ledger (`lib/agent-work-quota.js`, `state/agent-work-quota.jsonl`) counts every dispatched agent work unit (free vs paid) over a trailing window (default 24h) and blocks a new Codex dispatch when one more paid unit would push the paid share above the cap (default 30%). Free agents (OpenCode, OpenHuman, AnythingLLM, world-cloud-ai, Claude/desktop via reportSelfExecuted) are never throttled.
++- The PC-health guard measures CPU load via a cross-platform `os.cpus()` tick sample (`lib/resource-scheduler.js#cpuUtilizationPercent`) and surfaces `cpuPercent`/`cpuWarning`/`cpuCritical` in every preflight/postflight, deferring `localHeavy` work when CPU is critically saturated, mirroring the existing RAM deferral.
++- All new logic pure/unit-tested; no behavior change for free agents; no production deployment.
++
++## Files / systems involved
++- `lib/agent-work-quota.js` (new) — pure daily paid-work-quota ledger.
++- `lib/resource-scheduler.js` — added `sampleCpuTicks`/`cpuBusyRatio`/`cpuUtilizationPercent`.
++- `lib/agent-session-guard.js` — `snapshotResources` now includes CPU load + thresholds; preflight `throttle` also gates `localHeavy` on `cpuCritical`.
++- `data/desktop-ai-policy.json` — added `warnCpuPercent`/`maxCpuPercent`/`cpuSampleIntervalMs` under `sessionHygiene`.
++- `scripts/master-coordinator.cjs` — quota gate + recording for Codex/free agents and self-executed Claude work; `PAID_QUOTA_EXCEEDED` is a pending (never false-green) result.
++- `test/agent-work-quota.test.js` (new), `test/master-coordinator.test.js`, `test/resource-scheduler.test.js`, `test/agent-session-guard.test.js` — focused regression tests.
++
++## Known risks
++- Quota ledger lives in git-ignored `state/` (like `ai-agent-reports.jsonl`), so quota history is per-machine runtime state, not source truth.
++- A Codex attempt counts as a paid unit as soon as the quota gate + allow-paid gate pass, even if the CLI is missing or the run later fails — deliberately conservative so the paid budget is never exceeded.
++- CPU sampling adds a bounded ~150ms sample per preflight/postflight; only the session guard path uses it.
++- Process detection/killing for orphan duplicate agents remains config/policy-only (never broaden deletion or kill unknown/user processes).
++
++## Golden systems that must be preserved
++Existing routing, leases, resource scheduling, session guard, reports schema, `OFFLINE_ONLY_AGENTS` never-invoked contract, default free-only plan (OpenCode + OpenHuman; cloud/AnythingLLM/Codex opt-in), Codex explicit `allowPaid` gate, deny-by-default paid dispatch, `npm run check` gates.
++
++## Errors that must not return
++Paid Codex work exceeding 30% of the trailing daily window; Codex auto-selection as primary; false-green PASS for a quota-blocked subtask; `state/` runtime files committed to the repo; Desktop clutter/worktrees; CPU sampling failing closed on platforms where `os.cpus()` ticks do not advance.
++
++## Exact patch / change plan
++1. Add `lib/agent-work-quota.js`: `record`/`readRecords`/`snapshot`/`decidePaidDispatch`, paid-only = `codex` by class, 30%/24h defaults, tolerant of malformed lines and missing files.
++2. Add `cpuUtilizationPercent` (+ tick helpers) to `lib/resource-scheduler.js`.
++3. Surface CPU load + thresholds in `lib/agent-session-guard.js` and add policy keys to `data/desktop-ai-policy.json`.
++4. Wire quota into `scripts/master-coordinator.cjs`: record free units on dispatch, record/window-check paid units in `invokeCodex`, `PAID_QUOTA_EXCEEDED` as a pending result, env knobs `MASTER_COORDINATOR_CODEX_MAX_SHARE`/`MASTER_COORDINATOR_QUOTA_WINDOW_HOURS`/`AI_AGENT_WORK_QUOTA_PATH`.
++5. Add regression tests for quota math/boundaries, coordinator integration without CLI spawn, CPU math/measurement, and guard snapshot.
++6. Update this WIP entry, run focused + repository checks, commit, push, open PR. No merge or production deploy.
++
++## Tests to run
++- `node --test test/agent-work-quota.test.js test/master-coordinator.test.js test/resource-scheduler.test.js test/agent-session-guard.test.js`
++- `npm run check:fast`
++- `npm run check`
++- `npm run desktop-ai:check`
++- `npm run check-agent-rules`
++- `git diff --check`
++
++## Deployment / PR plan
++Branch `ai/master-coordinator/opencode-1790037903647-a1` -> PR to `master`. No direct master push, no auto-merge, no production deployment. Runtime ledger stays in git-ignored `state/`.
++
++## Current progress
++All code and tests written. Focused verification next; no claim of robustness against a live free-agent benchmark (out of scope for this slice and honestly not exercised).
++
++## Next action
++Run focused tests and repository gates, inspect failures, fix until PASS, then `git diff --check`, commit, push, open the review PR. Leave quota CLI/cloud integration as a separately reviewed follow-up.
++
++## Completion criteria
++- Paid >=30% cap enforced with an append-only ledger; free agents never throttled.
++- Preflight/postflight report real CPU load; `localHeavy` work defers under critical CPU.
++- No accepted quality metric regresses; focused + repository checks pass; PR open with evidence.
++- No production deployment performed and no `state/` runtime files committed.
++
++## Final evidence
++Pending current-run verification: focused test output, `npm run check` result, `golden:check`, `desktop-ai:check`, `check-agent-rules`, `git diff --check`, after-session PC health, PR URL, and the honest list of not-claimed items.
++
++---
++
+ # IndieWorlds foundation — 2026-09-10
+ 
+ ## Task
+diff --git a/data/desktop-ai-policy.json b/data/desktop-ai-policy.json
+index 28edc33b..b1a68622 100644
+--- a/data/desktop-ai-policy.json
++++ b/data/desktop-ai-policy.json
+@@ -40,6 +40,9 @@
+     "minFreeRamPercent": 15,
+     "warnFreeRamPercent": 25,
+     "minFreeDiskGB": 5,
++    "warnCpuPercent": 80,
++    "maxCpuPercent": 95,
++    "cpuSampleIntervalMs": 150,
+     "desktopAllowedProjectItems": [
+       "World_server"
+     ],
+diff --git a/lib/agent-session-guard.js b/lib/agent-session-guard.js
+index 8f6ed87c..53fe1d81 100644
+--- a/lib/agent-session-guard.js
++++ b/lib/agent-session-guard.js
+@@ -79,18 +79,22 @@ function cleanupOwnedScratch(policy = loadPolicy(), now = Date.now()) {
+   return { reclaimedBytes, removed };
+ }
+ 
+-function snapshotResources(policy = loadPolicy()) {
++function snapshotResources(policy = loadPolicy(), opts = {}) {
+   const pressure = resourceScheduler.systemPressure();
+   const freeRamPercent = Math.round(pressure.freeRatio * 1000) / 10;
+   const freeDiskBytes = diskFreeBytes(policy.aiRoot);
+   const minFreeDiskGB = Number(policy.minFreeDiskGB || 5);
++  const cpuPercent = resourceScheduler.cpuUtilizationPercent({ intervalMs: opts.cpuSampleIntervalMs || Number(policy.cpuSampleIntervalMs || 150) });
+   return {
+     freeRamPercent,
++    cpuPercent,
+     memoryPressure: pressure.level,
+     freeDiskBytes,
+     freeDiskGB: freeDiskBytes == null ? null : Math.round((freeDiskBytes / 1024 ** 3) * 10) / 10,
+     ramCritical: freeRamPercent < Number(policy.minFreeRamPercent || 15),
+     ramWarning: freeRamPercent < Number(policy.warnFreeRamPercent || 25),
++    cpuWarning: cpuPercent > Number(policy.warnCpuPercent || 80),
++    cpuCritical: cpuPercent >= Number(policy.maxCpuPercent || 95),
+     diskCritical: freeDiskBytes != null && freeDiskBytes < minFreeDiskGB * 1024 ** 3,
+   };
+ }
+@@ -99,16 +103,16 @@ function preflight(agentId, opts = {}) {
+   const policy = ensureRoots();
+   const cleanup = opts.cleanup === false ? { reclaimedBytes: 0, removed: [] } : cleanupOwnedScratch(policy);
+   const desktop = auditDesktop();
+-  const resources = snapshotResources(policy);
++  const resources = snapshotResources(policy, opts);
+   const ok = desktop.ok && !resources.diskCritical;
+-  return { phase: 'preflight', agentId, ok, throttle: Boolean(opts.localHeavy && resources.ramCritical), desktop, resources, cleanup, roots: { worktrees: policy.worktreesRoot, scratch: policy.scratchRoot, ai: policy.aiRoot } };
++  return { phase: 'preflight', agentId, ok, throttle: Boolean(opts.localHeavy && (resources.ramCritical || resources.cpuCritical)), desktop, resources, cleanup, roots: { worktrees: policy.worktreesRoot, scratch: policy.scratchRoot, ai: policy.aiRoot } };
+ }
+ 
+ function postflight(agentId, opts = {}) {
+   const policy = ensureRoots();
+   const cleanup = opts.cleanup === false ? { reclaimedBytes: 0, removed: [] } : cleanupOwnedScratch(policy);
+   const desktop = auditDesktop();
+-  const resources = snapshotResources(policy);
++  const resources = snapshotResources(policy, opts);
+   return { phase: 'postflight', agentId, ok: desktop.ok && !resources.diskCritical, desktop, resources, cleanup, roots: { worktrees: policy.worktreesRoot, scratch: policy.scratchRoot, ai: policy.aiRoot } };
+ }
+ 
+diff --git a/lib/resource-scheduler.js b/lib/resource-scheduler.js
+index 22754dea..8e0cf2ba 100644
+--- a/lib/resource-scheduler.js
++++ b/lib/resource-scheduler.js
+@@ -77,6 +77,37 @@ function systemPressure() {
+   return { freeRatio, level, totalBytes: total, freeBytes: free };
+ }
+ 
++// CPU utilization is the one metric os.* does NOT report directly - this
++// samples os.cpus() tick counters twice over a short bounded interval and
++// derives the busy ratio. Works cross-platform (including Windows where
++// os.loadavg() is always [0,0,0]); the sampler is injectable so callers and
++// tests never depend on wall-clock timing.
++function sampleCpuTicks() {
++  const cpus = os.cpus();
++  let idle = 0;
++  let total = 0;
++  for (const cpu of cpus) {
++    const t = cpu.times || {};
++    total += (t.user || 0) + (t.nice || 0) + (t.sys || 0) + (t.idle || 0) + (t.irq || 0);
++    idle += t.idle || 0;
++  }
++  return { idle, total };
++}
++
++function cpuBusyRatio(a, b) {
++  const dTotal = b.total - a.total;
++  if (!(dTotal > 0)) return 0;
++  const dIdle = Math.max(0, b.idle - a.idle);
++  return Math.max(0, Math.min(1, (dTotal - dIdle) / dTotal));
++}
++
++function cpuUtilizationPercent({ intervalMs = 150, sampler = sampleCpuTicks } = {}) {
++  const before = sampler();
++  if (intervalMs > 0) Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, intervalMs);
++  const after = sampler();
++  return Math.round(cpuBusyRatio(before, after) * 1000) / 10;
++}
++
+ function conflictingClassesHeld(root, classes) {
+   const held = [];
+   for (const cls of classes) {
+@@ -177,4 +208,4 @@ async function withResourceSlot(root, command, taskId, fn, { maxWaitMs = 60000,
+   return { ok: false, retriable: true, error: `resource scheduler: could not acquire a conflict-free slot within ${maxWaitMs}ms`, blockedBy: lastBlock };
+ }
+ 
+-module.exports = { RESOURCE_CLASSES, CONFLICTS, COMMAND_RESOURCE_CLASSES, classesForCommand, systemPressure, tryAcquire, withResourceSlot, unloadOllamaIfWarranted };
++module.exports = { RESOURCE_CLASSES, CONFLICTS, COMMAND_RESOURCE_CLASSES, classesForCommand, systemPressure, sampleCpuTicks, cpuBusyRatio, cpuUtilizationPercent, tryAcquire, withResourceSlot, unloadOllamaIfWarranted };
+diff --git a/scripts/master-coordinator.cjs b/scripts/master-coordinator.cjs
+index ec425b62..a09dd414 100644
+--- a/scripts/master-coordinator.cjs
++++ b/scripts/master-coordinator.cjs
+@@ -39,6 +39,7 @@ const { classifyIntent } = require('../lib/mcp-intent-router');
+ const { resolveMainTreeRoot } = require('../lib/world-server-paths');
+ const sessionGuard = require('../lib/agent-session-guard');
+ const manualCompletion = require('../lib/manual-task-completion-contract');
++const agentWorkQuota = require('../lib/agent-work-quota');
+ 
+ // Read-only capability classes get sandboxRoot pointed at the REAL repo (the
+ // local model's tool allowlist for these classes is read_file/read_text_file/
+@@ -106,6 +107,18 @@ const WORKTREES_ROOT = process.env.WORLD_SERVER_WORKTREES_ROOT || path.join(os.h
+ const RECOVERY_ROOT = process.env.WORLD_SERVER_RECOVERY_ROOT || path.join(sessionGuard.loadPolicy().aiRoot, 'Recovery');
+ const MAX_SUBTASK_ATTEMPTS = Number(process.env.MASTER_COORDINATOR_MAX_ATTEMPTS || 2);
+ 
++// Daily paid-work quota (master-goal rule: "Codex is fallback only and must
++// stay at or below 30% of daily AI-agent work; prefer Claude/OpenCode").
++// Runtime ledger lives next to the shared AI-agent report log so it is
++// always on the same (git-ignored) state volume, never inside the repo.
++const MAX_PAID_SHARE = Math.min(Math.max(Number(process.env.MASTER_COORDINATOR_CODEX_MAX_SHARE || agentWorkQuota.MAX_PAID_SHARE_DEFAULT), 0.01), 1);
++const QUOTA_WINDOW_HOURS = Math.max(1, Number(process.env.MASTER_COORDINATOR_QUOTA_WINDOW_HOURS || agentWorkQuota.WINDOW_HOURS_DEFAULT));
++const WORK_QUOTA_PATH = process.env.AI_AGENT_WORK_QUOTA_PATH || path.join(path.dirname(REPORT_LOG_PATH), 'agent-work-quota.jsonl');
++
++function recordQuotaWork(agentId, outcome = agentWorkQuota.OUTCOMES.DISPATCHED) {
++  return agentWorkQuota.record(WORK_QUOTA_PATH, { agentId, outcome });
++}
++
+ // Agents this coordinator can automatically dispatch to, and how.
+ const LOCAL_MODEL_AGENTS = new Set(['openhuman', 'anythingllm']);
+ const CLOUD_MODEL_AGENTS = new Set(['world-cloud-ai']);
+@@ -286,12 +299,19 @@ async function invokeCloudWorldAi(taskText, opts = {}) {
+ }
+ 
+ // ---------------------------------------------------------------------------
+-// Codex adapter: explicit paid fallback only. It is never selected by default;
++// Codex adapter: explicit paid fallback only, additionally throttled by the
++// daily paid-work quota (default cap 30%). It is never selected by default;
+ // callers must pass allowPaid=true (or MASTER_COORDINATOR_ALLOW_PAID=1).
+ // ---------------------------------------------------------------------------
+ async function invokeCodex(taskText, opts = {}) {
+   const allowed = opts.allowPaid === true || process.env.MASTER_COORDINATOR_ALLOW_PAID === '1';
+   if (!allowed) return { ok: false, result: 'PAID_FALLBACK_DISABLED', reason: 'Codex requires explicit allowPaid=true' };
++  const quota = agentWorkQuota.decidePaidDispatch(WORK_QUOTA_PATH, { now: Date.now(), windowHours: QUOTA_WINDOW_HOURS, maxPaidShare: MAX_PAID_SHARE, agentId: 'codex' });
++  if (quota.blocked) {
++    recordQuotaWork('codex', agentWorkQuota.OUTCOMES.BLOCKED);
++    return { ok: false, result: 'PAID_QUOTA_EXCEEDED', reason: `Codex blocked by paid-work quota: one more paid dispatch would push the ${QUOTA_WINDOW_HOURS}h paid share to ${quota.wouldBePaidSharePercent}% (cap ${Math.round(MAX_PAID_SHARE * 100)}%)`, quota: quota.current, wouldBePaidSharePercent: quota.wouldBePaidSharePercent };
++  }
++  recordQuotaWork('codex', agentWorkQuota.OUTCOMES.DISPATCHED);
+   const refused = scanExternalTask(taskText);
+   if (refused) return refused;
+   if (!CODEX_CLI_PATH) return { ok: false, result: 'NOT_AVAILABLE', reason: 'codex CLI not found on PATH' };
+@@ -331,7 +351,7 @@ async function invokeCodex(taskText, opts = {}) {
+ }
+ 
+ function reportAutomatedAgentResult(agentId, taskText, result, opts = {}) {
+-  const pending = new Set(['DISPATCHED', 'QUEUED', 'SKIPPED_ACTIVE', 'PAID_FALLBACK_DISABLED']);
++  const pending = new Set(['DISPATCHED', 'QUEUED', 'SKIPPED_ACTIVE', 'PAID_FALLBACK_DISABLED', 'PAID_QUOTA_EXCEEDED']);
+   const status = result.result === 'PASS' ? 'done' : (pending.has(result.result) ? 'queued' : 'failed');
+   const entry = {
+     at: nowIso(), agent: agentId, task_id: opts.taskId || `${agentId}-${Date.now()}`,
+@@ -383,6 +403,7 @@ function assignOffline(agentId, taskText, opts = {}) {
+ // ---------------------------------------------------------------------------
+ function reportSelfExecuted(taskText, result, opts = {}) {
+   const selfAgentId = opts.agentId || 'claude-code';
++  recordQuotaWork(selfAgentId, agentWorkQuota.OUTCOMES.DISPATCHED);
+   const hygienePost = sessionGuard.postflight(selfAgentId);
+   const effectiveOk = Boolean(result.ok) && hygienePost.ok;
+   const entry = {
+@@ -480,6 +501,10 @@ async function dispatchSubtask(root, subtask, opts = {}) {
+   return sessionGuard.withAgentSessionGuard(agentId, () => withSubtaskLease(root, taskId, async () => {
+     let lastResult = null;
+     for (let attempt = 1; attempt <= MAX_SUBTASK_ATTEMPTS; attempt++) {
++      // Free-agent dispatches (OpenCode, free cloud, local models) count
++      // toward the denominator of the daily paid-work quota; Codex is
++      // recorded inside invokeCodex after its own quota/allow-paid gates.
++      if (!PAID_FALLBACK_AGENTS.has(agentId)) recordQuotaWork(agentId, agentWorkQuota.OUTCOMES.DISPATCHED);
+       if (agentId === 'opencode') {
+         const gate = opts.respectResourceGate === false ? true : await resourceGateOk('opencode');
+         if (gate !== true) { lastResult = { ok: false, result: 'QUEUED', resourceGate: gate }; break; }
+@@ -493,7 +518,7 @@ async function dispatchSubtask(root, subtask, opts = {}) {
+         const gate = opts.respectResourceGate === false ? true : await resourceGateOk('network-agent');
+         if (gate !== true) { lastResult = { ok: false, result: 'QUEUED', resourceGate: gate }; break; }
+         lastResult = await invokeCodex(taskText, { taskId: `${taskId}-a${attempt}`, push: opts.push, allowPaid: opts.allowPaid });
+-        if (lastResult.result === 'PAID_FALLBACK_DISABLED') break;
++        if (lastResult.result === 'PAID_FALLBACK_DISABLED' || lastResult.result === 'PAID_QUOTA_EXCEEDED') break;
+       } else if (LOCAL_MODEL_AGENTS.has(agentId)) {
+         lastResult = await invokeLocalModelAgent(agentId, taskText, { taskId: `${taskId}-a${attempt}`, respectResourceGate: opts.respectResourceGate, respectConcurrencyLock: opts.respectConcurrencyLock });
+         if (lastResult.result === 'QUEUED') break;
+@@ -529,7 +554,7 @@ function buildDefaultSubtasks(goal, opts = {}) {
+ 
+ function summarizeMasterResults(results) {
+   const terminalFail = new Set(['FAIL', 'REFUSED', 'UNKNOWN_AGENT', 'NO_AGENT', 'NOT_AVAILABLE', 'ZERO_CHAOS_BLOCKED', 'ZERO_CHAOS_POSTFAIL']);
+-  const pending = new Set(['QUEUED', 'SKIPPED_ACTIVE', 'ASSIGNED', 'SELF_EXECUTE', 'DISPATCHED', 'PAID_FALLBACK_DISABLED']);
++  const pending = new Set(['QUEUED', 'SKIPPED_ACTIVE', 'ASSIGNED', 'SELF_EXECUTE', 'DISPATCHED', 'PAID_FALLBACK_DISABLED', 'PAID_QUOTA_EXCEEDED']);
+   if (results.some((r) => terminalFail.has(r.result))) return 'FAIL';
+   if (results.some((r) => pending.has(r.result))) return 'PENDING';
+   return results.length > 0 && results.every((r) => r.result === 'PASS') ? 'PASS' : 'FAIL';
+@@ -574,6 +599,11 @@ module.exports = {
+   resolveOpencodeExe,
+   OPENCODE_CLI_PATH,
+   REPORT_LOG_PATH,
++  WORK_QUOTA_PATH,
++  MAX_PAID_SHARE,
++  QUOTA_WINDOW_HOURS,
++  recordQuotaWork,
++  agentWorkQuota,
+   WORKTREES_ROOT,
+   RECOVERY_ROOT,
+   OFFLINE_ONLY_AGENTS,
+diff --git a/test/agent-session-guard.test.js b/test/agent-session-guard.test.js
+index c55db344..d51da1e9 100644
+--- a/test/agent-session-guard.test.js
++++ b/test/agent-session-guard.test.js
+@@ -51,4 +51,14 @@ test('coverage is inherited automatically by an arbitrary future agent id', () =
+   const matrix = guard.coverageFor(['codex', 'future-agent-v99']);
+   const future = matrix.find((x) => x.agentId === 'future-agent-v99');
+   assert.deepEqual(future, { agentId: 'future-agent-v99', preflight: true, postflight: true, inherited: true });
++});
++
++test('snapshotResources measures real CPU load and exposes warning/critical thresholds (PC-health before/after)', () => {
++  const policy = guard.loadPolicy();
++  const r = guard.snapshotResources(policy, { cpuSampleIntervalMs: 20 });
++  assert.ok(typeof r.cpuPercent === 'number', 'cpuPercent must be measured, not a placeholder');
++  assert.ok(r.cpuPercent >= 0 && r.cpuPercent <= 100, `cpuPercent out of range: ${r.cpuPercent}`);
++  assert.equal(typeof r.cpuWarning, 'boolean');
++  assert.equal(typeof r.cpuCritical, 'boolean');
++  assert.ok(Number(policy.warnCpuPercent) > 0 && Number(policy.maxCpuPercent) > Number(policy.warnCpuPercent));
+ });
+\ No newline at end of file
+diff --git a/test/master-coordinator.test.js b/test/master-coordinator.test.js
+index 143c1e4b..5b22b5fc 100644
+--- a/test/master-coordinator.test.js
++++ b/test/master-coordinator.test.js
+@@ -22,9 +22,11 @@ function mkTmpRoot() {
+ const REPORT_LOG = path.join(mkTmpRoot(), 'ai-agent-reports.jsonl');
+ process.env.AI_AGENT_REPORTS_PATH = REPORT_LOG;
+ process.env.WORLD_SERVER_RECOVERY_ROOT = path.join(mkTmpRoot(), 'recovery');
++process.env.AI_AGENT_WORK_QUOTA_PATH = path.join(mkTmpRoot(), 'agent-work-quota.jsonl');
+ 
+ const mc = require('../scripts/master-coordinator.cjs');
+ const collectiveBrain = require('../lib/collective-brain');
++const agentWorkQuota = require('../lib/agent-work-quota');
+ 
+ function readReports() {
+   try {
+@@ -285,3 +287,42 @@ test('Codex adapter fails closed without explicit paid permission', async () =>
+   assert.equal(r.ok, false);
+   assert.equal(r.result, 'PAID_FALLBACK_DISABLED');
+ });
++
++function seedPaidQuota(free = 0, paid = 5, now = Date.now()) {
++  const lines = [
++    ...Array.from({ length: paid }, () => ({ ts: now, agentId: 'codex', cls: 'paid', outcome: 'dispatched' })),
++    ...Array.from({ length: free }, () => ({ ts: now, agentId: 'opencode', cls: 'free', outcome: 'dispatched' })),
++  ];
++  fs.writeFileSync(mc.WORK_QUOTA_PATH, lines.map((l) => JSON.stringify(l)).join('\n') + '\n');
++}
++
++test('paid-work quota: Codex dispatch already over the 30% cap is blocked (PAID_QUOTA_EXCEEDED) before any CLI spawn', async () => {
++  seedPaidQuota();
++  const r = await mc.invokeCodex('review a tiny safe change', { allowPaid: true });
++  assert.equal(r.ok, false);
++  assert.equal(r.result, 'PAID_QUOTA_EXCEEDED');
++  assert.equal(r.quota.paidSharePercent, 100);
++  assert.equal(r.quota.paidDispatchCount, 5);
++});
++
++test('dispatchSubtask: a codex subtask blocked by the paid-work quota never spawns the CLI or retries', async () => {
++  const root = mkTmpRoot();
++  seedPaidQuota();
++  const r = await mc.dispatchSubtask(root, { text: 'small safe review', agent: 'codex', taskId: 'quota-dispatch-test' }, { allowPaid: true });
++  assert.equal(r.result, 'PAID_QUOTA_EXCEEDED');
++  assert.equal(r.ok, false);
++  assert.equal(r.attempts, undefined, 'the retry loop must short-circuit before consuming an attempt');
++});
++
++test('reportSelfExecuted records Claude/desktop work as a free quota unit', () => {
++  mc.reportSelfExecuted('architecture review', { ok: true }, { taskId: 'quota-free-unit' });
++  const recs = agentWorkQuota.readRecords(mc.WORK_QUOTA_PATH);
++  const entry = recs.find((x) => x.agentId === 'claude-code');
++  assert.ok(entry, 'a claude-code free unit must be present in the quota ledger');
++  assert.equal(entry.cls, 'free');
++  assert.equal(entry.outcome, 'dispatched');
++});
++
++test('paid-quota block results can never false-green PASS', () => {
++  assert.equal(mc.summarizeMasterResults([{ result: 'PASS' }, { result: 'PAID_QUOTA_EXCEEDED' }]), 'PENDING');
++});
+diff --git a/test/resource-scheduler.test.js b/test/resource-scheduler.test.js
+index 655a5531..f8959797 100644
+--- a/test/resource-scheduler.test.js
++++ b/test/resource-scheduler.test.js
+@@ -26,6 +26,18 @@ test('systemPressure: reports a real, sane free-memory ratio, not a placeholder'
+   assert.ok(p.totalBytes > 0);
+ });
+ 
++test('cpuBusyRatio: deterministic delta math, clamped to 0-1 and never negative on backward samples', () => {
++  assert.equal(scheduler.cpuBusyRatio({ idle: 50, total: 100 }, { idle: 100, total: 200 }), 0.5);
++  assert.equal(scheduler.cpuBusyRatio({ idle: 200, total: 300 }, { idle: 200, total: 400 }), 1);
++  assert.equal(scheduler.cpuBusyRatio({ idle: 100, total: 200 }, { idle: 200, total: 200 }), 0);
++  assert.equal(scheduler.cpuBusyRatio({ idle: 10, total: 10 }, { idle: 10, total: 10 }), 0);
++});
++
++test('cpuUtilizationPercent: returns a real 0-100 percentage over a short real sampling interval', () => {
++  const p = scheduler.cpuUtilizationPercent({ intervalMs: 30 });
++  assert.ok(p >= 0 && p <= 100, `unexpected CPU percent ${p}`);
++});
++
+ // --- unloadOllamaIfWarranted: point 5 this cycle - free a warm local
+ // model's RAM before a genuinely RAM-hungry BUILD/CPU_HEAVY task, not for
+ // every task (that would defeat the whole point of keeping it warm). ---

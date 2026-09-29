@@ -1,0 +1,6 @@
+ M WORK_IN_PROGRESS.md
+ M lib/agent-session-guard.js
+ M scripts/export-indieworlds.js
+ M test/agent-session-guard.test.js
+ M test/indieworlds.test.js
+?? .gitattributes

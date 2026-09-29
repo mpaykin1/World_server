@@ -1,0 +1,41 @@
+diff --git a/scripts/master-coordinator.cjs b/scripts/master-coordinator.cjs
+index ec425b62..357421ec 100644
+--- a/scripts/master-coordinator.cjs
++++ b/scripts/master-coordinator.cjs
+@@ -39,6 +39,7 @@ const { classifyIntent } = require('../lib/mcp-intent-router');
+ const { resolveMainTreeRoot } = require('../lib/world-server-paths');
+ const sessionGuard = require('../lib/agent-session-guard');
+ const manualCompletion = require('../lib/manual-task-completion-contract');
++const agentWorkQuota = require('../lib/agent-work-quota');
+ 
+ // Read-only capability classes get sandboxRoot pointed at the REAL repo (the
+ // local model's tool allowlist for these classes is read_file/read_text_file/
+@@ -492,6 +493,8 @@ async function dispatchSubtask(root, subtask, opts = {}) {
+       } else if (PAID_FALLBACK_AGENTS.has(agentId)) {
+         const gate = opts.respectResourceGate === false ? true : await resourceGateOk('network-agent');
+         if (gate !== true) { lastResult = { ok: false, result: 'QUEUED', resourceGate: gate }; break; }
++        const quota = agentWorkQuota.evaluateReportLog(REPORT_LOG_PATH);
++        if (!quota.ok) { lastResult = { ok: false, result: 'PAID_QUOTA_EXCEEDED', quota }; break; }
+         lastResult = await invokeCodex(taskText, { taskId: `${taskId}-a${attempt}`, push: opts.push, allowPaid: opts.allowPaid });
+         if (lastResult.result === 'PAID_FALLBACK_DISABLED') break;
+       } else if (LOCAL_MODEL_AGENTS.has(agentId)) {
+@@ -523,7 +526,18 @@ function buildDefaultSubtasks(goal, opts = {}) {
+   const includeAnythingLLM = opts.includeAnythingLLM === true || process.env.MASTER_COORDINATOR_INCLUDE_ANYTHINGLLM === '1';
+   if (includeAnythingLLM) subtasks.push({ taskId: `anythingllm-${Date.now()}`, agent: 'anythingllm', text: `Knowledge/documentation audit for master goal: ${base}. Compare current repo docs/contracts and report stale or conflicting instructions. Do not modify files.` });
+   const includeCodex = opts.includeCodex === true || process.env.MASTER_COORDINATOR_INCLUDE_CODEX === '1';
+-  if (includeCodex) subtasks.push({ taskId: `codex-${Date.now()}`, agent: 'codex', text: `High-capability fallback review/implementation slice for master goal: ${base}. Inspect existing agent results first, fix only unresolved root causes, add regression protection, and avoid duplicating work.` });
++  if (includeCodex) {
++    // Daily Codex fallback quota (data/agent-work-policy.json): Codex must stay
++    // at or below 30% of daily AI-agent work. When its recorded share is already
++    // at/above the cap, do not even schedule the fallback subtask — the hard
++    // gate in dispatchSubtask enforces the same rule again right before any run.
++    const quota = agentWorkQuota.evaluateReportLog(REPORT_LOG_PATH);
++    if (quota.ok) {
++      subtasks.push({ taskId: `codex-${Date.now()}`, agent: 'codex', text: `High-capability fallback review/implementation slice for master goal: ${base}. Inspect existing agent results first, fix only unresolved root causes, add regression protection, and avoid duplicating work.` });
++    } else {
++      collectiveBrain.appendEvent(opts.root || MAIN_TREE_ROOT, 'PAID_QUOTA_EXCEEDED', { goalHash: collectiveBrain.sha256(String(goal || '')), reason: quota.reason });
++    }
++  }
+   return subtasks;
+ }
+ 

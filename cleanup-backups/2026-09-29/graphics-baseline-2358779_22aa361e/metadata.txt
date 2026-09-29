@@ -1,0 +1,4 @@
+original_path=C:/Users/user/AppData/Local/World_server_worktrees/graphics-baseline-2358779
+head=
+22aa361ef40f5788252399bee4ecd6450ed6862a
+branch=ai/chatgpt/shore-pack-20260917

@@ -1,0 +1,27 @@
+name: Fleet PRE Merge-Chain Gate
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: fleet-pre-merge-chain-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  fleet-pre-merge-chain:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enforce exact-SHA Fleet PRE certificate before merge
+        id: certificate
+        env:
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/check-fleet-pre-certificate.cjs "$PR_HEAD_SHA"

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "AGENT_WORK_QUOTA_POLICY",
+  "rule": "Claude and OpenCode may be used freely. Codex is a fallback only and its share of daily AI-agent work must stay at or below 30 percent. Prefer free cloud agents for heavy work and local agents only for bounded low-load work. Paid APIs and paid GPU are never used.",
+  "preferredAgents": [
+    "opencode",
+    "claude-code",
+    "desktop-ai",
+    "world-cloud-ai",
+    "openhuman",
+    "anythingllm"
+  ],
+  "paidFallbackAgents": [
+    "codex"
+  ],
+  "codexMaxDailySharePercent": 30,
+  "windowMinutes": 1440,
+  "rollingWindow": true,
+  "countedStatuses": [
+    "done",
+    "queued",
+    "failed",
+    "assigned"
+  ],
+  "measurement": "Share of AI-agent dispatch work recorded in the shared state/ai-agent-reports.jsonl report log within the rolling daily window. A Codex dispatch is hard-blocked while Codex's recorded share is at or above the cap, so the day cannot finish above 30 percent paid-fallback work.",
+  "enforcement": {
+    "planner": "SKIP_CODEX when the recorded share is already at or above the cap",
+    "dispatcher": "PAID_QUOTA_EXCEEDED before any Codex invocation when the recorded share is at or above the cap"
+  },
+  "nonGoals": [
+    "This policy does not measure or spend money, APIs or GPU; it only gates Codex dispatch against the shared daily record. It never writes to the report log itself."
+  ]
+}

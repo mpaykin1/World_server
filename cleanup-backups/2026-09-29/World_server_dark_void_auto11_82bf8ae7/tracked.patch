@@ -1,0 +1,56 @@
+diff --git a/TEST_GAP_MANIFEST.json b/TEST_GAP_MANIFEST.json
+index 9eed0d4c..a35704ac 100644
+--- a/TEST_GAP_MANIFEST.json
++++ b/TEST_GAP_MANIFEST.json
+@@ -1,4 +1,4 @@
+ {
+-  "generatedAt": "2026-08-24T05:15:53.126Z",
++  "generatedAt": "2026-09-06T13:45:38.168Z",
+   "gaps": []
+ }
+diff --git a/WORK_IN_PROGRESS.md b/WORK_IN_PROGRESS.md
+index dd0feed9..fccecb4f 100644
+--- a/WORK_IN_PROGRESS.md
++++ b/WORK_IN_PROGRESS.md
+@@ -296,3 +296,9 @@ result reported exactly as observed, not adjusted to look more favorable.
+ - Fix: reuse the existing manifestation preview/execute path with deterministic pre-build causal families (scale-up, scale-down, seed-shift); select family from step only, record modelFamily, and execute the exact predicted intervention.
+ - Regression: deterministic bounded family selection plus existing prediction-before-build/delta tests.
+ - Negative outcomes remain recorded; no thresholds changed and no duplicate science/runtime system added.
++
++## Dark Void V5 long-session journal compaction repair
++- Root cause: persistence stores only the last 512 RecipeJournal rows, but verifier required the first persisted row to point to genesis. After >512 actions, reload rejected both localStorage and IndexedDB snapshots; restored append could also regress step numbering because it used rows.length.
++- Fix: verifier supports anchored contiguous journal segments while still validating every retained hash/link/step; append continues from the retained tail step.
++- Regression: >520 actions -> 512-row persisted segment -> exact valid reload -> next step remains 520.
++- No duplicate journal/storage/runtime introduced.
+diff --git a/shared/dark-void-infinite-runtime.mjs b/shared/dark-void-infinite-runtime.mjs
+index a19ee604..c6d13b58 100644
+--- a/shared/dark-void-infinite-runtime.mjs
++++ b/shared/dark-void-infinite-runtime.mjs
+@@ -2,7 +2,7 @@ const JKEY='darkVoidRecipeJournal:v3',UKEY='darkVoidUnderstanding:v1',JDB='darkV
+ const enc=typeof TextEncoder!=='undefined'?new TextEncoder():null;
+ const b=v=>enc?enc.encode(JSON.stringify(v)).length:JSON.stringify(v).length;
+ export function hash32(text=''){let h=2166136261>>>0;for(const ch of String(text)){h^=ch.codePointAt(0);h=Math.imul(h,16777619)>>>0}return h>>>0}
+-export function verifyJournalRows(rows=[]){if(!Array.isArray(rows))return false;let prev='genesis';for(const r of rows){if(!r||typeof r!=='object')return false;const x={...r};delete x.hash;const h=hash32(prev+'|'+JSON.stringify(x));if(h!==r.hash||r.prevHash!==prev)return false;prev=r.hash}return true}
++export function verifyJournalRows(rows=[]){if(!Array.isArray(rows))return false;if(!rows.length)return true;const firstStep=Number(rows[0]?.step);if(!Number.isInteger(firstStep)||firstStep<0)return false;let prev=firstStep===0?'genesis':rows[0]?.prevHash;if(typeof prev!=='string'&&typeof prev!=='number')return false;for(let i=0;i<rows.length;i++){const r=rows[i];if(!r||typeof r!=='object'||r.step!==firstStep+i)return false;const x={...r};delete x.hash;const h=hash32(prev+'|'+JSON.stringify(x));if(h!==r.hash||r.prevHash!==prev)return false;prev=r.hash}return true}
+ export class RecipeJournal{
+  constructor(){this.rows=this.#load();this.persistence='localStorage';this.ready=this.#hydrateIndexedDB();this._persistTail=this.ready.catch(()=>false)}
+  #load(){try{const rows=JSON.parse(localStorage.getItem(JKEY)||'[]');return verifyJournalRows(rows)?rows:[]}catch{return[]}}
+@@ -12,7 +12,7 @@ export class RecipeJournal{
+  #putDB(db,rows){return new Promise((resolve,reject)=>{const tx=db.transaction(JSTORE,'readwrite');tx.objectStore(JSTORE).put(rows,'rows');tx.oncomplete=()=>resolve(true);tx.onerror=()=>reject(tx.error)})}
+  async #saveIndexedDB(rows){try{const db=await this.#openDB();await this.#putDB(db,rows);this.persistence='indexedDB';db.close();return true}catch{return false}}
+  flushPersistence(){return this._persistTail}
+- append(plan,meta={}){const prev=this.rows.at(-1)?.hash||'genesis';const row={step:this.rows.length,id:plan.id,intent:plan.intent,origin:plan.origin,blocks:plan.blocks?.length||0,meta,prevHash:prev};row.hash=hash32(prev+'|'+JSON.stringify(row));this.rows.push(row);this.#save();return row}
++ append(plan,meta={}){const last=this.rows.at(-1),prev=last?.hash||'genesis',step=Number.isInteger(last?.step)?last.step+1:0;const row={step,id:plan.id,intent:plan.intent,origin:plan.origin,blocks:plan.blocks?.length||0,meta,prevHash:prev};row.hash=hash32(prev+'|'+JSON.stringify(row));this.rows.push(row);this.#save();return row}
+  verify(){return verifyJournalRows(this.rows)}
+  bytes(){return b(this.rows)} replay(){return this.rows.map(r=>({intent:r.intent,origin:r.origin,expectedBlocks:r.blocks,hash:r.hash}))}
+ }
+diff --git a/test/dark-void-v5-production-invariants.test.mjs b/test/dark-void-v5-production-invariants.test.mjs
+index 1ab90776..531c5ed0 100644
+--- a/test/dark-void-v5-production-invariants.test.mjs
++++ b/test/dark-void-v5-production-invariants.test.mjs
+@@ -14,3 +14,5 @@ test('SurpriseEngine exhausts its bank before repeats; AdaptiveTeacher changes d
+ test('WorkerPlanAdvisor preserves deterministic main-thread fallback when Worker is unavailable',async()=>{const old=globalThis.Worker;try{globalThis.Worker=undefined;const w=new WorkerPlanAdvisor();const r=await w.advise({type:'tower',seed:7,scale:1});assert.equal(r.ok,true);assert.equal(r.fallback,true);assert.ok(r.blocks.length>0);assert.equal(r.meta.count,r.blocks.length);w.dispose()}finally{globalThis.Worker=old}});
+ test('RecipeJournal upgrades localStorage to crash-safe IndexedDB without replacing the journal API',async()=>{const fs=await import('node:fs/promises'),src=await fs.readFile(new URL('../shared/dark-void-infinite-runtime.mjs',import.meta.url),'utf8');assert.match(src,/indexedDB\.open\(JDB,1\)/);assert.match(src,/objectStore\(JSTORE\)\.put\(rows,'rows'\)/);assert.match(src,/this\.ready=this\.#hydrateIndexedDB\(\)/);assert.match(src,/this\.persistence='indexedDB'/);assert.match(src,/this\._persistTail=this\._persistTail\.then/);assert.match(src,/flushPersistence\(\)/);assert.match(src,/localStorage\.setItem\(JKEY/)});
+ test('RecipeJournal never promotes a longer corrupted persistence snapshot',()=>{globalThis.localStorage=memory();const j=new RecipeJournal();for(let i=0;i<4;i++)j.append({id:`safe-${i}`,intent:{type:'tower',seed:i},origin:{x:i,y:1,z:0},blocks:[{}]});const valid=structuredClone(j.rows),corrupted=[...structuredClone(valid),{...structuredClone(valid.at(-1)),step:99,prevHash:123,hash:456}];assert.equal(verifyJournalRows(valid),true);assert.equal(verifyJournalRows(corrupted),false);assert.equal(verifyJournalRows(null),false);assert.equal(j.verify(),true)});
++
++test('RecipeJournal survives >512-action persistence compaction without chain or step regression',()=>{globalThis.localStorage=memory();const j=new RecipeJournal();for(let i=0;i<520;i++)j.append({id:`long-${i}`,intent:{type:'tower',seed:i},origin:{x:i,y:1,z:0},blocks:[{}]});const persisted=JSON.parse(localStorage.getItem('darkVoidRecipeJournal:v3'));assert.equal(persisted.length,512);assert.equal(persisted[0].step,8);assert.equal(persisted.at(-1).step,519);assert.equal(verifyJournalRows(persisted),true);const restored=new RecipeJournal();assert.equal(restored.rows.length,512);assert.equal(restored.verify(),true);const next=restored.append({id:'long-520',intent:{type:'tower',seed:520},origin:{x:520,y:1,z:0},blocks:[{}]});assert.equal(next.step,520);assert.equal(restored.verify(),true)});

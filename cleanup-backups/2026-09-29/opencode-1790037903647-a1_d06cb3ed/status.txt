@@ -1,0 +1,11 @@
+ M DESKTOP_AI_PROTOCOL_REPORT.json
+ M WORK_IN_PROGRESS.md
+ M data/desktop-ai-policy.json
+ M lib/agent-session-guard.js
+ M lib/resource-scheduler.js
+ M scripts/master-coordinator.cjs
+ M test/agent-session-guard.test.js
+ M test/master-coordinator.test.js
+ M test/resource-scheduler.test.js
+?? lib/agent-work-quota.js
+?? test/agent-work-quota.test.js

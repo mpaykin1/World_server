@@ -1,0 +1,6 @@
+ M TEST_GAP_MANIFEST.json
+ M WORK_IN_PROGRESS.md
+ M shared/dark-void-infinite-runtime.mjs
+ M test/dark-void-v5-production-invariants.test.mjs
+?? _auto11_smoke.mjs
+?? state/

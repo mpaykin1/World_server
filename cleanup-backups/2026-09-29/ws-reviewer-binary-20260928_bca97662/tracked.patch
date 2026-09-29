@@ -1,0 +1,51 @@
+diff --git a/scripts/independent-review-gate.cjs b/scripts/independent-review-gate.cjs
+index 9a88ff79..270cf5ec 100644
+--- a/scripts/independent-review-gate.cjs
++++ b/scripts/independent-review-gate.cjs
+@@ -5,6 +5,7 @@
+ const fs = require('node:fs');
+ const crypto = require('node:crypto');
+ const cp = require('node:child_process');
++const { auditBinaryAssets } = require('./independent-binary-audit.cjs');
+ const { performance } = require('node:perf_hooks');
+ const { MAX_PATCH_BYTES: MAX_CLOUDFLARE_PATCH_BYTES, API_TOKEN,
+   availableCloudflareModels, requestCloudflareReview } = require('./independent-review-cloudflare.cjs');
+@@ -257,8 +258,9 @@ async function requestReview(model, patch, metadata, key, {
+ }
+ function readPatch(base, head) {
+   if (!SHA.test(base) || !SHA.test(head)) throw new Error('Expected exact 40-character commit SHAs');
+-  return cp.execFileSync('git', ['diff', '--no-ext-diff', '--no-color', '--binary',
+-    '--unified=8', base + '...' + head, '--'], { encoding: 'utf8',
++  return cp.execFileSync('git', ['diff', '--no-ext-diff', '--no-color',
++    '--unified=8', base + '...' + head, '--', '.',
++    ':(exclude,glob)**/*.glb', ':(exclude,glob)**/*.png'], { encoding: 'utf8',
+       maxBuffer: MAX_PATCH_BYTES * 3 });
+ }
+ async function reviewPatch({ patch, base, head, key, builderModel = '',
+@@ -351,7 +353,17 @@ async function main() {
+   const base = args.base || '';
+   const head = args.head || '';
+   const output = args.output || 'INDEPENDENT_REVIEW_REPORT.json';
+-  const patch = args['diff-file'] ? fs.readFileSync(args['diff-file'], 'utf8') : readPatch(base, head);
++  const binaryAudit = args['diff-file']
++    ? {verdict:'INCONCLUSIVE',blockers:['External diff-file has no verified binary asset coverage']}
++    : auditBinaryAssets(base,head);
++  if (binaryAudit.verdict === 'INCONCLUSIVE') {
++    const blocked={schemaVersion:1,base,head,verdict:'INCONCLUSIVE',reviewers:[],
++      blockers:binaryAudit.blockers,binaryAudit,requiresMaintainerDecision:true};
++    fs.writeFileSync(output,JSON.stringify(blocked,null,2)+'\n');
++    console.error('[INDEPENDENT_REVIEW] binary audit blocked: '+blocked.blockers.join('; '));
++    process.exitCode=2;return;
++  }
++  const patch = readPatch(base, head);
+   const report = await reviewPatch({
+     patch, base, head, key: process.env.WORLD_REVIEW_KEY || '',
+     builderModel: process.env.WORLD_BUILDER_MODEL || 'qwen/qwen3-coder:free',
+@@ -361,6 +373,7 @@ async function main() {
+       freePlanConfirmed: process.env.WORLD_CF_WORKERS_FREE_CONFIRMED === 'true'
+     }
+   });
++  report.binaryAudit=binaryAudit;
+   fs.writeFileSync(output, JSON.stringify(report, null, 2) + '\n');
+   console.log('[INDEPENDENT_REVIEW] verdict=' + report.verdict +
+     ' reviewers=' + report.reviewers.map(x => x.family + ':' + x.verdict).join(',') +

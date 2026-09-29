@@ -1,0 +1,5 @@
+ M scripts/master-coordinator.cjs
+?? data/master-goal-policy.json
+?? lib/agent-work-ledger.js
+?? scripts/check-master-goal-policy.js
+?? test/agent-work-ledger.test.js

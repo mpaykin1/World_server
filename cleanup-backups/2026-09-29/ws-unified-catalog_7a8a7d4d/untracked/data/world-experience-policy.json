@@ -1,0 +1,29 @@
+{
+  "version": "WORLD_EXPERIENCE_V1",
+  "ui": {
+    "maxPersistentPrimaryButtons": 1,
+    "singleButtonId": "goldenWorldButton",
+    "compactMenuRequired": true,
+    "secondaryControlsMustBePacked": true
+  },
+  "catalog": {
+    "presentation": "newspaper",
+    "clickbaitHeadlines": true,
+    "rootStory": "Осколки Improve World",
+    "videoPreviewWhenGraphical": true,
+    "previewMaxWidth": 480,
+    "previewMaxHeight": 270,
+    "previewMaxSeconds": 8
+  },
+  "lore": {
+    "perWorldRequired": true,
+    "autoWeaveNewWorlds": true,
+    "minConnections": 2
+  },
+  "infiniteWorld": {
+    "requiredKinds": ["game", "experience", "navigator"],
+    "chunkedContinuation": true,
+    "deterministic": true,
+    "contract": "WORLD_INFINITE_CHUNKS_V1"
+  }
+}

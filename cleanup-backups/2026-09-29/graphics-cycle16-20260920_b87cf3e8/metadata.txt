@@ -1,0 +1,4 @@
+original_path=C:/Users/user/AppData/Local/World_server_worktrees/graphics-cycle16-20260920
+head=
+b87cf3e81c2d7d1a461d3244098fa074adb3e5dc
+branch=ai/chatgpt/fix-solid-uv-regression-20260920

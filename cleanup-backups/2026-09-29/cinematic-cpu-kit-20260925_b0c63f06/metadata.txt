@@ -1,0 +1,4 @@
+original_path=C:/Users/user/AppData/Local/World_server_worktrees/cinematic-cpu-kit-20260925
+head=
+b0c63f068bae31544754c412f6a70223b41cc65e
+branch=ai/chatgpt/cinematic-cpu-kit-20260925

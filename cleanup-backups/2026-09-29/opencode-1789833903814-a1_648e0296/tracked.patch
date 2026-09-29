@@ -1,0 +1,112 @@
+diff --git a/WORK_IN_PROGRESS.md b/WORK_IN_PROGRESS.md
+index bd7579b8..5c5ccc96 100644
+--- a/WORK_IN_PROGRESS.md
++++ b/WORK_IN_PROGRESS.md
+@@ -2,6 +2,79 @@
+ 
+ ---
+ 
++# Merge-chain Fleet-PRE gate — 2026-09-19
++
++## Task
++Implement the standing Architect Builder delta (issue #80, re-dispatched as GAP B on 2026-09-16/17, reaffirmed 2026-09-19) as an implementation/test slice: a permanent, fail-closed merge-chain gate that machine-requires an exact-SHA `READY_FOR_OCEAN` Fleet PRE certificate before any PR can integrate into `master`.
++
++## Why
++Weakest control-plane pillar: nothing in scripts/ lib/ .github/ test/ currently requires an exact-SHA Fleet PRE certificate before integration. PRs #116/#117/#121/#183/#185/#187 merged without certificates and the #91/#113 false-green class repeated; `git grep READY_FOR_OCEAN|PRE_INTEGRATION_QA|FLEET_PRE|fleet-pre|merge-chain` on master returns zero enforcement occurrences. Confirmed-error-twice therefore requires a permanent regression guard. The change is CI/scripts/tests-only and non-deployable, so it does not consume Vercel quota.
++
++## Current state
++- Fresh base: current protected `origin/master` = `648e02961786107ccd795fd8b193b349cbd5f5f5` (`test(autodemo): gate canonical capabilities in browsers (#188)`).
++- Session worktree `opencode-1789833903814-a1` reset onto that base; nothing else in the working tree.
++- No competing implementation exists: no branch/PR carries the gate files (`scripts/check-fleet-pre-certificate.cjs`, `.github/workflows/fleet-pre-merge-chain.yml`, `test/fleet-pre-certificate.test.js` all absent on master); prior `merge-chain-fleet-pre-gate` branches are stale empty forks.
++
++## Target state
++A pure-Node fail-closed certificate checker, a deterministic checked-in certificate source directory, a `fleet-pre-merge-chain` pull_request check (green only on exact-SHA cert pass), and permanent regression tests inside required `npm run check`. Before (<60 s): any PR targeting master merges without any PRE certificate enforcement. After: the new check is red (BLOCK) until an independent Fleet PRE certificate for the exact head SHA is committed to `data/fleet-pre-certificates/<sha>.json`.
++
++## Files / systems involved
++- `scripts/check-fleet-pre-certificate.cjs` (new) — pure fail-closed validator, `module.exports` for offline tests, CLI exits 1 on BLOCK.
++- `data/fleet-pre-certificates/README.md` (new) — deny-by-default schema and contract for the single authoritative, checked-in certificate source.
++- `.github/workflows/fleet-pre-merge-chain.yml` (new) — `pull_request:[master]` + `workflow_dispatch`, `contents: read`, check reports `fleet-pre-merge-chain`; no `|| true`, no skip, no fallback green.
++- `test/fleet-pre-certificate.test.js` (new) — 7 fail-closed rules + happy path + bypass-class scan + CLI wiring, all inside `node --test`.
++- `WORK_IN_PROGRESS.md` (this entry).
++
++## Known risks
++- No production deployment, merge or self-certification is performed by this slice; Fleet PRE and Ocean are separate stages.
++- The new workflow makes every master-targeting PR red until a real cert exists; this is intended fail-closed behavior. Making it a required status check is an owner action (TRUE_USER_ACTION_REQUIRED).
++- If a cert-source mechanism proves insufficient, rollback is a single-revert of the new commits; LKG `648e0296` untouched.
++
++## Golden systems that must be preserved
++No app/game/graphics/runtime/API/lore/registry change. Existing required checks (`check`, `quality-regression`, `agent-rules`, `world-quality`, `godot-web-preview`) are untouched until the owner adds the new check. Deny-by-default release registry, release gates and exact-SHA delivery rules stay intact.
++
++## Errors that must not return
++- Integration without an exact-SHA Fleet PRE certificate (the #91/#113 false-green class).
++- Any `|| true`, `continue-on-error: true`, `if: always()` mask or fallback-green inside the new gate.
++- Fabricated PASS: the evaluator returns PASS only for one exact, fresh, unambiguous `READY_FOR_OCEAN` certificate.
++- Weakening existing tests or thresholds; duplicating the certificate mechanism.
++
++## Exact patch / change plan
++1. Pure-Node `scripts/check-fleet-pre-certificate.cjs`: fail-closed rules (no cert → BLOCK; skipped/empty → BLOCK; exactHeadSha != headSha → BLOCK; verdict != READY_FOR_OCEAN → BLOCK; stale > maxAge (default 24 h) → BLOCK; missing/malformed `canonicalSha256` → BLOCK; ambiguous → BLOCK; exact fresh cert → PASS). Logic separated from file I/O.
++2. Authoritative deterministic source: checked-in `data/fleet-pre-certificates/<sha>.json`; file-name/content SHA consistency enforced; any other recorded source (e.g. issue comments only) fails closed.
++3. `.github/workflows/fleet-pre-merge-chain.yml` runs `node scripts/check-fleet-pre-certificate.cjs "$PR_HEAD_SHA"` under `set -euo pipefail`; job failure → red `fleet-pre-merge-chain` check.
++4. `test/fleet-pre-certificate.test.js` covering all fail-closed rules, happy path, CLI exit codes, and a bypass-class scan asserting the workflow cannot be green without the certificate check.
++5. Run focused + fast gates locally; full suite delegated to cloud CI; commit, push the session branch, open one PR into `master` routed to independent Fleet PRE.
++
++## Tests to run
++- `node scripts/check-js.js` (`npm run check:fast`) — local, stdlib only.
++- `node --test test/fleet-pre-certificate.test.js` — local.
++- `node scripts/check-agent-rules.js` — local.
++- `git diff --check` — local.
++- Cloud CI on the pushed head: `npm run check`, `npm run golden:check`, `npm run desktop-ai:check`, release gates, and the new `fleet-pre-merge-chain` workflow.
++
++## Deployment / PR plan
++Commit on the session branch (`ai/master-coordinator/opencode-1789833903814-a1`), push to origin, open one PR into `master`. No merge, no production deploy, no Vercel preview spend (CI/scripts/docs-only per `check-vercel-ignore`). Route the exact pushed head SHA to independent Fleet PRE before Ocean.
++
++## Current progress
++- Fresh base reset completed (`648e0296`).
++- Check script, certificate README, workflow and regression tests implemented.
++- Focused local verification next (fast gates + focused `node --test`); then commit/push/PR.
++
++## Next action
++Run the local gates, fix any failure, then commit + push + open the PR and record exact BASE/HEAD evidence.
++
++## Completion criteria
++- Local fast + focused gates pass; no existing test weakened.
++- New regression tests permanently inside `npm run check`.
++- PR pushed with exact `BASE_SHA`/`HEAD_SHA` and honest evidence.
++- No merge or deployment performed by Builder; independent Fleet PRE is the next stage.
++
++## Final evidence
++Pending local verification and push (fill below once complete): focused suite count, check:fast result, agent-rules result, `git diff --check`, BASE_SHA, HEAD_SHA, PR URL, workflow-run state.
++
++---
++
+ # PR #133 flush — perf(voxel) eliminate per-vertex color clones — 2026-09-17 (Builder slice)
+ 
+ ## Task
+diff --git a/scripts/check-vercel-ignore.js b/scripts/check-vercel-ignore.js
+index 8c95b3eb..6a2c9ea8 100644
+--- a/scripts/check-vercel-ignore.js
++++ b/scripts/check-vercel-ignore.js
+@@ -31,7 +31,8 @@ const NON_DEPLOYABLE_EXACT_FILES = new Set([
+   '.gitignore',
+   '.env.example',
+   'ai3d-final-delivery.json',
+-  '.collective-brain-install.json'
++  '.collective-brain-install.json',
++  'scripts/check-fleet-pre-certificate.cjs'
+ ]);
+ 
+ const NON_DEPLOYABLE_ROOT_PATTERNS = [
+diff --git a/test/vercel-ignore.test.js b/test/vercel-ignore.test.js
+index ad3e303f..1e9ddd95 100644
+--- a/test/vercel-ignore.test.js
++++ b/test/vercel-ignore.test.js
+@@ -28,7 +28,8 @@ test('isDeployableFile correctly identifies non-deployable paths', () => {
+     'ANYTHINGLLM_HEALTH_CHECK.json',
+     'WORLD_RUNTIME_QUALITY_REPORT.json',
+     'TECHNOLOGY_AUDIT.json',
+-    'EVIDENCE_QUALITY_REPORT.json'
++    'EVIDENCE_QUALITY_REPORT.json',
++    'scripts/check-fleet-pre-certificate.cjs'
+   ];
+ 
+   for (const filepath of nonDeployable) {

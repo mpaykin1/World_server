@@ -1,0 +1,4 @@
+original_path=C:/Users/user/AppData/Local/World_server_worktrees/graphics-cycle13-20260920
+head=
+8a14a5b67230703097ea2fc9f2b0868a457c986b
+branch=ai/chatgpt/vertex-pack-cycle14

@@ -1,0 +1,4 @@
+original_path=C:/Users/user/AppData/Local/World_server_worktrees/graphics-profile-20260918-1257
+head=
+0964311b78f82921eaccc9eabcafbf3719367dd3
+branch=ai/chatgpt/chunk-profile4-20260919

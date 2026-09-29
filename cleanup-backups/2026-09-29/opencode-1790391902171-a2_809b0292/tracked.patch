@@ -1,0 +1,91 @@
+diff --git a/.github/workflows/fleet-pre-exact-sha.yml b/.github/workflows/fleet-pre-exact-sha.yml
+index 25880806..c56117c9 100644
+--- a/.github/workflows/fleet-pre-exact-sha.yml
++++ b/.github/workflows/fleet-pre-exact-sha.yml
+@@ -3,9 +3,16 @@ on:
+   pull_request:
+     branches: [master]
+   workflow_dispatch:
++    inputs:
++      pr_number:
++        description: Existing PR to certify Ocean merge eligibility for
++        type: number
++        required: false
+ 
+ permissions:
+   contents: read
++  checks: read
++  pull-requests: read
+ 
+ jobs:
+   fleet-pre:
+@@ -69,4 +76,43 @@ jobs:
+           set -euo pipefail
+           test -n "$CERTIFIED"
+           test "$CERTIFIED" = "$EXPECTED"
+-          echo "READY_FOR_OCEAN=YES SHA=$CERTIFIED"
++
++      # Certificate-SHA == head-SHA is necessary but not sufficient. Collect the
++      # remaining exact-head facts the protected integration actually needs so
++      # the decision below can fail closed instead of assuming approval.
++      - name: Collect exact-head pull request and independent review facts
++        env:
++          GH_TOKEN: ${{ github.token }}
++          EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
++          CERTIFIED_SHA: ${{ needs.fleet-pre.outputs.sha }}
++          PR_NUMBER: ${{ github.event.pull_request.number || inputs.pr_number }}
++          CHECK_NAME: 'World Independent Adversarial Review'
++        run: |
++          set -euo pipefail
++          FACTS_DIR="$RUNNER_TEMP/ocean"
++          mkdir -p "$FACTS_DIR"
++          if test -z "${PR_NUMBER:-}"; then
++            echo "::warning::no pull request number resolved; the gate will fail closed"
++            exit 0
++          fi
++          gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}" > "$FACTS_DIR/pr.json"
++          gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/master" > "$FACTS_DIR/master.json"
++          # Server-side check_name filter: one JSON object, never a paginated
++          # stream, so a review run on a later page cannot be silently missed.
++          ENCODED_NAME="$(jq -rn --arg v "$CHECK_NAME" '$v | @uri')"
++          gh api "repos/${GITHUB_REPOSITORY}/commits/${EXPECTED}/check-runs?check_name=${ENCODED_NAME}&per_page=100" \
++            > "$FACTS_DIR/checks.json"
++
++      - uses: actions/checkout@v4
++        with:
++          ref: ${{ github.event.pull_request.head.sha || github.sha }}
++          persist-credentials: false
++      - uses: actions/setup-node@v4
++        with:
++          node-version: 24
++
++      - name: Fail closed unless the exact head is Ocean eligible
++        run: |
++          set -euo pipefail
++          node scripts/ocean-merge-eligibility-facts.js "$RUNNER_TEMP/ocean"
++          node scripts/ocean-merge-eligibility-gate.js "$RUNNER_TEMP/ocean/facts.json"
+diff --git a/WORK_IN_PROGRESS.md b/WORK_IN_PROGRESS.md
+index 4ef48060..2ee4300a 100644
+--- a/WORK_IN_PROGRESS.md
++++ b/WORK_IN_PROGRESS.md
+@@ -937,3 +937,20 @@ Implementation and local verification complete. Remaining proof is GitHub Action
+ - Completion criteria: scoped commit and honest test evidence; integration release remains subject to cloud gates and live Supabase verification.
+ - Final evidence: node --test --test-isolation=none test/chain-reaction-api.test.js test/world-consequence-engine.test.js: 19/19 passed. node --check api/voxel.js and lib/chain-reaction-api.js passed; git diff --check passed. Agent rules check passed with git subprocess EPERM warnings (branch/file checks not verified by that script). Ordinary node --test failed to spawn subprocesses (EPERM); same tests passed with isolation disabled. Full release suite remains unrun, cloud-first. No live database or browser claim. Simulation arithmetic and accepted quality metrics unchanged; no scientific readiness claim.
+ - Commit blocker: git add failed creating C:/Users/user/Desktop/World_server/.git/worktrees/worldserver-codex-chain-20260923/index.lock: Permission denied. The linked worktree Git directory is outside this session's writable root; approvals are unavailable. No commit/SHA, push, PR or deployment produced. No new worktree or Desktop copy created; existing user worktrees left untouched.
++
++# Ocean merge-eligibility fail-closed gate — 2026-09-26
++
++- Task / why: consume the Architect FACTORY_REGRESSION signal (issue #80, 2026-09-25T04:52Z). The Ocean merge eligibility job certified READY_FOR_OCEAN=YES from certificate-SHA == head-SHA alone, so it passed on the exact heads where independent review was FAILURE/ACTION_REQUIRED and the base was behind master (#278/#289/#295/#298/#291).
++- Current state (reproduced, not remembered): on PR #278 exact head ä7609653618a7ee910542be1fb70ec3e8db13b, World Independent Adversarial Review = ction_required / Independent review: INCONCLUSIVE, mergeable_state = ehind, base 1ebffff… != trusted master 809b0292…. The old gate would still have certified this head.
++- Target state: one pure, fail-closed decision that also requires the exact-head independent review PASS and a current protected master base.
++- Systems / files: .github/workflows/fleet-pre-exact-sha.yml (existing ocean-eligibility job modified in place, no parallel gate), lib/ocean-merge-eligibility.js, scripts/ocean-merge-eligibility-facts.js, scripts/ocean-merge-eligibility-gate.js, 	est/ocean-merge-eligibility.test.js, 	est/ocean-merge-eligibility-facts.test.js.
++- Risks: blocking every candidate while free reviewer capacity is 429-limited (intended fail-closed, not a regression); transient mergeable:null while GitHub computes state; read-only checks/pull-requests permissions on pull_request; any PR built from a fork.
++- Preserve: the Fleet PRE certificate contract, the World Independent Adversarial Review check name and publisher, all existing PR/check names, branch protection, and the merge-chain-fleet-pre-gate branches left deleted/404.
++- Exact plan: collect PR + master + exact-head review facts via gh api with a server-side check_name filter; shape them in a tested Node script; decide in one pure module; emit READY_FOR_OCEAN=YES only on a fully proven decision.
++- Bugs found and fixed while implementing: (1) --paginate + jq --slurpfile would inspect only page 1 of check runs; (2) the verdict title regex matched erdict:… but the review workflow actually publishes Independent review: <VERDICT>, so a real PASS produced erdict:null and every good candidate would have been rejected. Both are now guarded by named REGRESSION tests.
++- Tests: ode --test test/ocean-merge-eligibility.test.js test/ocean-merge-eligibility-facts.test.js = 20/20 PASS; ode scripts/check-js.js = Syntax OK 68 files; ode scripts/check-agent-rules.js = PASSED; ode scripts/duplicate-system-review.js = blockers=0; ode scripts/system-contract-review.js = blockers=0; existing related suite (independent-review gate/workflow/cloudflare, quality-canary workflow/config) = 44/44 PASS.
++- Live verification: the real PR #278 API payloads were run through the shipped CLI; it exits 1 with UNRESOLVED_CONFLICT, BASE_NOT_CURRENT_MASTER and INDEPENDENT_REVIEW_INCONCLUSIVE and prints no READY_FOR_OCEAN marker.
++- Current progress: BUILDER_IMPLEMENTED_AND_LOCALLY_TESTED. Not merged, not released, not deployed, and not independent-reviewed — this agent does not self-certify.
++- Next action: Fleet QA independent exact-head review of this PR; Ocean protected integration only on a genuine independent PASS at the exact current head; the canonical Cloudflare origin / WORLD_SERVER_CANONICAL_ORIGIN question stays with the owner and is untouched here.
++- Completion criteria: exact-head CI green, genuine independent review PASS, Ocean protected merge, then Fleet POST live verification of the deployed exact SHA.
++- Final evidence: see the PR body for BASE_SHA/HEAD_SHA and raw command output. Full pm run check and elease:gate were not run locally because this worktree has no ode_modules and the cloud-first policy forbids a local heavy dependency install; that limitation is reported, not reported as PASS.

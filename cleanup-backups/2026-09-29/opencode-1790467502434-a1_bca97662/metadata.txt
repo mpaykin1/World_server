@@ -1,0 +1,4 @@
+original_path=C:/Users/user/AppData/Local/World_server_worktrees/opencode-1790467502434-a1
+head=
+bca976629b0662e70b6d6e3d1092994fdef054a9
+branch=ai/opencode/ocean-eligibility-fail-closed-20260926

@@ -1,0 +1,4 @@
+original_path=C:/Users/user/AppData/Local/World_server_worktrees/graphics-e2e-cycle12-20260920
+head=
+1cc272a1cfa139f743a1973627cf5152a432e0ab
+branch=ai/chatgpt/geometry-pack-profile-20260920

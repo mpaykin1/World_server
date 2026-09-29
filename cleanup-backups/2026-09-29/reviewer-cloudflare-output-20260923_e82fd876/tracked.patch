@@ -1,0 +1,116 @@
+diff --git a/scripts/independent-review-cloudflare.cjs b/scripts/independent-review-cloudflare.cjs
+index ad36dc2f..a158d213 100644
+--- a/scripts/independent-review-cloudflare.cjs
++++ b/scripts/independent-review-cloudflare.cjs
+@@ -4,6 +4,7 @@ const { performance } = require('node:perf_hooks');
+ // These three different model families are listed for Workers Free in
+ // Cloudflare's 2026-07-28 announcement. Never select a paid-only model.
+ const MODELS = Object.freeze([
++  // Three independent Cloudflare-hosted model families, tried sequentially.
+   ['google', '@cf/google/gemma-4-26b-a4b-it'],
+   ['z-ai', '@cf/zai-org/glm-4.7-flash'],
+   ['nvidia', '@cf/nvidia/nemotron-3-120b-a12b']
+@@ -46,6 +47,7 @@ async function requestCloudflareReview(model, patch, metadata, {
+ } = {}) {
+   const started = performance.now();
+   const result = { provider: 'cloudflare', family: model.family, model: model.id };
++  let diagnostics = { finishReason: 'unknown', contentChars: 0, reasoningTokens: 0 };
+   try {
+     if (!ACCOUNT_ID.test(accountId || '') || !token) throw new Error('Cloudflare credential unavailable');
+     if (!API_TOKEN.test(token)) throw new Error('Invalid Workers AI token format');
+@@ -57,12 +59,17 @@ async function requestCloudflareReview(model, patch, metadata, {
+     const payload = { messages: [
+       { role: 'system', content: systemPrompt },
+       { role: 'user', content: JSON.stringify({ context: metadata, untrusted_patch: patch }) }
+-    ], max_tokens: 2500, temperature: 0, stream: false };
++    ], max_completion_tokens: 2200,
++      chat_template_kwargs: { enable_thinking: false },
++      temperature: 0, stream: false };
++    // Large Gemma timed out after 45 seconds in the first live probe.
++    // Bound its wait so the next independent family still gets a chance.
++    const timeoutMs = model.family === 'google' ? 24000 : 38000;
+     const answer = await getJson(url, {
+       method: 'POST',
+       headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+       body: JSON.stringify(payload)
+-    }, 45000);
++    }, timeoutMs);
+     if (answer?.success !== true || !answer?.result) {
+       const raw = String(answer?.errors?.[0]?.code ?? 'unknown');
+       const code = /^[0-9]{1,12}$/.test(raw) ? raw : 'unknown';
+@@ -70,18 +77,24 @@ async function requestCloudflareReview(model, patch, metadata, {
+     }
+     const reply = answer.result;
+     const choice = reply.choices?.[0];
+-    const output = reply.response ?? choice?.message?.content;
++    const output = reply.response ?? choice?.message?.content ?? reply.message?.content;
+     const content = Array.isArray(output) ? output.filter(x => x?.type === 'text')
+       .map(x => x.text).join('') : output;
+-    if (choice?.finish_reason === 'length' || reply.finish_reason === 'length') {
+-      throw new Error('Cloudflare response truncated');
+-    }
++    const finish = choice?.finish_reason ?? reply.finish_reason ?? 'unknown';
++    diagnostics = {
++      finishReason: /^(stop|length|tool_calls|unknown)$/.test(finish) ? finish : 'unknown',
++      contentChars: typeof content === 'string' ? content.length : 0,
++      reasoningTokens: Number.isSafeInteger(reply.usage?.completion_tokens_details?.reasoning_tokens)
++        ? reply.usage.completion_tokens_details.reasoning_tokens : 0
++    };
++    if (diagnostics.finishReason === 'length') throw new Error('Cloudflare response truncated');
+     const review = parseVerdict(content);
+-    return { ...result, ...review, durationMs: Math.round(performance.now() - started) };
++    return { ...result, ...review, diagnostics,
++      durationMs: Math.round(performance.now() - started) };
+   } catch (err) {
+     // Do not log token, request body, or full provider response.
+     return { ...result, verdict: 'INCONCLUSIVE', findings: [], falsification_attempts: [],
+-      reason: safeCloudflareError(err),
++      reason: safeCloudflareError(err), diagnostics,
+       durationMs: Math.round(performance.now() - started) };
+   }
+ }
+diff --git a/test/independent-review-cloudflare.test.js b/test/independent-review-cloudflare.test.js
+index b4ae3318..e392fd09 100644
+--- a/test/independent-review-cloudflare.test.js
++++ b/test/independent-review-cloudflare.test.js
+@@ -175,3 +175,40 @@ test('allowlisted diagnostic text is strictly exact and cannot contain a key', (
+   assert.equal(safeCloudflareError(new Error('Missing structured review fields '+ secret)),
+     'Cloudflare request failed (details redacted)');
+ });
++
++test('live-shaped Cloudflare answer obeys documented generation knobs', async () => {
++  const model = availableCloudflareModels(cfg)[1];
++  let sent, timeout;
++  const result = await requestCloudflareReview(model, patch, {}, {
++    ...cfg, systemPrompt: 'Review code', parseVerdict,
++    getJson: async (_url, options, timeoutMs) => {
++      sent = JSON.parse(options.body); timeout = timeoutMs;
++      return { success: true, result: {
++        choices: [{ finish_reason: 'stop', message: { content: JSON.stringify(pass) } }],
++        usage: { completion_tokens_details: { reasoning_tokens: 7 } }
++      } };
++    }
++  });
++  assert.equal(result.verdict, 'PASS');
++  assert.equal(result.diagnostics.finishReason, 'stop');
++  assert.equal(result.diagnostics.reasoningTokens, 7);
++  assert.equal(sent.max_completion_tokens, 2200);
++  assert.deepEqual(sent.chat_template_kwargs, { enable_thinking: false });
++  assert.equal(sent.reasoning_effort, undefined);
++  assert.equal(timeout, 38000);
++});
++
++test('Cloudflare truncation retains nonsecret diagnostics and fails closed', async () => {
++  const model = availableCloudflareModels(cfg)[2];
++  const result = await requestCloudflareReview(model, patch, {}, {
++    ...cfg, systemPrompt: 'Review code', parseVerdict,
++    getJson: async () => ({ success: true, result: {
++      choices: [{ finish_reason: 'length', message: { content: '{"verdict":"PASS"' } }]
++    } })
++  });
++  assert.equal(result.verdict, 'INCONCLUSIVE');
++  assert.equal(result.reason, 'Cloudflare response truncated');
++  assert.equal(result.diagnostics.finishReason, 'length');
++  assert.ok(result.diagnostics.contentChars > 0);
++  assert.ok(!JSON.stringify(result).includes(cfg.token));
++});

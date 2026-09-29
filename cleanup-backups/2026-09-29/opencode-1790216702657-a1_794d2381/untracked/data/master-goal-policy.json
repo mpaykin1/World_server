@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "1.0.0",
+  "policyId": "master-goal-work-governance",
+  "description": "Machine-readable contract for the master-goal factory governance policy: existing Collective Brain/master-coordinator and authorized agents only, Claude/OpenCode preferred, Codex paid fallback only and capped at <=30% of daily AI-agent work, no programmatic ChatGPT Work / Computer Use, free-cloud-first, Zero-Chaos PC-health guard before and after every delegated local session.",
+  "codexDailyShareCap": 0.30,
+  "dailyWindowUtc": true,
+  "reportLogRelativePath": "state/ai-agent-reports.jsonl",
+  "enforceCodexDispatchCap": true,
+  "agentCostClasses": {
+    "free": [
+      "opencode",
+      "openhuman",
+      "anythingllm",
+      "world-cloud-ai",
+      "claude-code",
+      "desktop-ai",
+      "local-ollama",
+      "ollama"
+    ],
+    "paidFallback": [
+      "codex"
+    ],
+    "offlineOnly": [
+      "chatgpt",
+      "claude-desktop"
+    ]
+  },
+  "refusedWorkStatuses": [
+    "PAID_FALLBACK_DISABLED",
+    "NOT_AVAILABLE",
+    "UNKNOWN_AGENT",
+    "NO_AGENT",
+    "REFUSED",
+    "ZERO_CHAOS_BLOCKED",
+    "ZERO_CHAOS_POSTFAIL",
+    "CODEX_DAILY_CAP_EXCEEDED"
+  ],
+  "automatedWorkStatuses": [
+    "done",
+    "failed",
+    "queued",
+    "assigned",
+    "claimed",
+    "completed",
+    "in_progress"
+  ],
+  "paidApis": false,
+  "paidGpu": false,
+  "freshBootstrapFiles": [
+    "AI_START_HERE.md",
+    ".ai/project-context-index.json",
+    "CHATGPT_GAME_CONTROL.md",
+    "DESKTOP_AI_INSTALL_AND_VERIFY.md",
+    "AGENTS.md",
+    "data/desktop-ai-policy.json"
+  ],
+  "zeroChaosContract": {
+    "minFreeRamPercent": 15,
+    "warnFreeRamPercent": 25,
+    "minFreeDiskGB": 5,
+    "worktreesRoot": "%LOCALAPPDATA%\\World_server_worktrees",
+    "aiRoot": "%LOCALAPPDATA%\\WorldServerAI"
+  }
+}

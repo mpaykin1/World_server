@@ -1,0 +1,4 @@
+original_path=C:/Users/user/AppData/Local/World_server_worktrees/opencode-1790567102545-a1
+head=
+16ef2c6ccdeec6f9888c94ac4d78bcadef1d24cb
+branch=ai/opencode/check-js-root-mjs-coverage-20260928

@@ -1,0 +1,4 @@
+original_path=C:/Users/user/AppData/Local/WorldServerAI/worktrees/lw3dv2
+head=
+52e336742fe05344dd8559cfaa3ae1291b2ee648
+branch=

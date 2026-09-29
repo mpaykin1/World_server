@@ -1,0 +1,2 @@
+ M scripts/verify-working-link.cjs
+?? test/verify-working-link.test.js

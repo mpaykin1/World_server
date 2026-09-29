@@ -1,0 +1,7 @@
+#!/usr/bin/env node
+'use strict';
+const fs=require('fs');const path=require('path');
+function parse(){const o={root:process.cwd(),backup:''};for(let i=2;i<process.argv.length;i++){if(process.argv[i]==='--root')o.root=path.resolve(process.argv[++i]);else if(process.argv[i]==='--backup')o.backup=path.resolve(process.argv[++i]);}return o;}
+function ensure(d){fs.mkdirSync(d,{recursive:true})}
+function main(){const a=parse();if(!a.backup)throw new Error('--backup <.system-integration-backups/pixel-panorama-360-v4-...> required');const reportFile=path.join(a.backup,'INSTALL_REPORT.json');if(!fs.existsSync(reportFile))throw new Error('INSTALL_REPORT.json missing');const r=JSON.parse(fs.readFileSync(reportFile,'utf8'));if(r.patch!=='WORLD_SERVER_PIXEL_PANORAMA_360_V4')throw new Error('backup is not V4');const backed=new Set(r.backedUp||[]);for(const rel of r.payloadRelativeFiles||[]){if(backed.has(rel))continue;const f=path.join(a.root,rel);if(fs.existsSync(f)&&fs.statSync(f).isFile())fs.rmSync(f,{force:true});}for(const rel of backed){const src=path.join(a.backup,rel),dst=path.join(a.root,rel);if(!fs.existsSync(src))continue;ensure(path.dirname(dst));fs.copyFileSync(src,dst);}console.log(JSON.stringify({ok:true,restored:[...backed].length,removedNew:(r.payloadRelativeFiles||[]).filter(x=>!backed.has(x)).length,backup:a.backup},null,2));}
+try{main()}catch(e){console.error(e.message);process.exit(1)}

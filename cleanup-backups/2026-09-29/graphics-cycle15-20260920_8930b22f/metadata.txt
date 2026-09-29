@@ -1,0 +1,4 @@
+original_path=C:/Users/user/AppData/Local/World_server_worktrees/graphics-cycle15-20260920
+head=
+8930b22f0182e1507434f9e673273dd612010ab4
+branch=ai/chatgpt/typed-buffer-conversion-20260920

@@ -1,0 +1,4 @@
+original_path=C:/Users/user/AppData/Local/World_server_worktrees/World_server_dark_void_v4
+head=
+bc79d1b5d966a8a870619659a35f68786221cdc2
+branch=ai/dark-void-v4-google-ai-ready

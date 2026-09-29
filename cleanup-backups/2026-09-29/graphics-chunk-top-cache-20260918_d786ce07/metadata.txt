@@ -1,0 +1,4 @@
+original_path=C:/Users/user/AppData/Local/World_server_worktrees/graphics-chunk-top-cache-20260918
+head=
+d786ce0743c77401992a597833aba443afdbc2c7
+branch=ai/chatgpt/chunk-top-cache-20260918

@@ -1,0 +1,20 @@
+ M apps/ai3d-voxel-city/cinematic-assets/basalt-normal.png
+ M apps/ai3d-voxel-city/cinematic-assets/cinematic-pack.json
+ M apps/ai3d-voxel-city/cinematic-assets/concrete-normal.png
+ M apps/ai3d-voxel-city/cinematic-assets/geothermal-plant-lod0.glb
+ M apps/ai3d-voxel-city/cinematic-assets/geothermal-plant-lod0.meshopt.glb
+ M apps/ai3d-voxel-city/cinematic-assets/geothermal-plant-lod1.glb
+ M apps/ai3d-voxel-city/cinematic-assets/geothermal-plant-lod1.meshopt.glb
+ M apps/ai3d-voxel-city/cinematic-assets/geothermal-plant-lod2.glb
+ M apps/ai3d-voxel-city/cinematic-assets/geothermal-plant-lod2.meshopt.glb
+ M apps/ai3d-voxel-city/cinematic-assets/steel-normal.png
+ M apps/ai3d-voxel-city/cinematic-assets/volcano-lod0.glb
+ M apps/ai3d-voxel-city/cinematic-assets/volcano-lod0.meshopt.glb
+ M apps/ai3d-voxel-city/cinematic-assets/volcano-lod1.glb
+ M apps/ai3d-voxel-city/cinematic-assets/volcano-lod1.meshopt.glb
+ M apps/ai3d-voxel-city/cinematic-assets/volcano-lod2.glb
+ M apps/ai3d-voxel-city/cinematic-assets/volcano-lod2.meshopt.glb
+ M scripts/cinematic_cpu/texture_cpu.py
+ M scripts/cinematic_cpu/verify_pack.cjs
+ M test/cinematic-cpu-pack.test.mjs
+?? scripts/cinematic_cpu/inspect_normal_png.cjs

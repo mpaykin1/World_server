@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "AGENT_WORK_QUOTA",
+  "description": "Daily AI-agent work-share quota. Codex is fallback-only and must stay at or below its configured share of each day's master-coordinator dispatched AI work; Claude/OpenCode/free cloud agents are preferred by default.",
+  "maxCodexDailySharePercent": 30,
+  "window": "UTC day",
+  "ledgerPath": "data/collective-brain/runtime/agent-work-ledger.jsonl",
+  "recording": "Every master-coordinator dispatched subtask records one work unit for its agent (deduplicated by agent+taskId+day).",
+  "enforcement": "master-coordinator refuses Codex dispatch once today's recorded Codex share reaches maxCodexDailySharePercent.",
+  "unconfiguredDefault": "fail closed: if the quota ledger is unreadable, Codex dispatch is refused until the ledger is inspectable."
+}

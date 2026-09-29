@@ -1,0 +1,63 @@
+name: Fleet PRE merge chain
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      head_sha:
+        description: Exact head SHA (workflow_dispatch only)
+        required: false
+        type: string
+      pr_number:
+        description: PR number this cert applies to (workflow_dispatch only)
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fleet-pre-merge-chain-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  fleet-pre-merge-chain:
+    name: fleet-pre-merge-chain
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Resolve exact PR head SHA and PR number
+        id: head
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            HEAD="${{ github.event.pull_request.head.sha }}"
+            PR="${{ github.event.pull_request.number }}"
+          else
+            HEAD="${{ inputs.head_sha }}"
+            PR="${{ inputs.pr_number }}"
+          fi
+          if [ -z "$HEAD" ]; then
+            echo "::error::No head SHA available. For workflow_dispatch pass inputs.head_sha."
+            exit 1
+          fi
+          echo "head=$HEAD" >> "$GITHUB_OUTPUT"
+          echo "pr=$PR" >> "$GITHUB_OUTPUT"
+
+      - name: Fleet PRE exact-SHA certificate gate
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          ARGS=(--head-sha "${{ steps.head.outputs.head }}")
+          if [ -n "${{ steps.head.outputs.pr }}" ]; then
+            ARGS+=(--pr "${{ steps.head.outputs.pr }}")
+          fi
+          node scripts/check-fleet-pre-certificate.cjs "${ARGS[@]}"

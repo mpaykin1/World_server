@@ -1,0 +1,93 @@
+diff --git a/WORK_IN_PROGRESS.md b/WORK_IN_PROGRESS.md
+index bd7579b8..d752f173 100644
+--- a/WORK_IN_PROGRESS.md
++++ b/WORK_IN_PROGRESS.md
+@@ -2,6 +2,69 @@
+ 
+ ---
+ 
++# PC Health & Zero-Chaos Guard slice — 2026-09-17
++
++## Task
++Implement and test a focused slice of the master PC-HEALTH / ZERO-CHAOS goal on top of the existing shared session guard: real CPU measurement, duplicate/orphan AI-process detection (read-only, never kills), a persisted before/after health ledger, decision/reroute semantics for heavy local work, and an explicit Codex ≤30% daily-share / never-paid gate.
++
++## Why
++The master directive requires a mandatory pre/post health check for every delegated local session: measure CPU load, available RAM and free disk; detect duplicate and orphan AI/node/python processes while never terminating unknown/user processes; record before/after health and ensure PC health after the session is no worse than before; keep Codex as fallback ≤30% of daily AI-agent work and never use paid APIs/GPU. The existing `lib/agent-session-guard.js` only audits Desktop clutter and free RAM/disk; `os.loadavg()` is a known no-op on Windows, so CPU was never actually measured, processes were never surveyed, and no before/after ledger existed.
++
++## Current state
++Branch `opencode/pc-health-zerochaos-guard` created from exact `origin/master` `ede47aa50dded13803f57c4d601779a7235470ef`. Baseline PC health before work: CPU 87%, free RAM 34.1%, free disk 192.77 GB.
++
++## Target state
++One reusable `lib/pc-health-guard.js` provides: Windows-safe CPU percent; cross-platform read-only process survey with duplicate/orphan/heavy-job classification that structurally cannot terminate processes; a health snapshot (CPU/RAM/disk/processes); a policy evaluation with `allow`/`deferHeavy`/`hardBlock` decisions; an append-only JSONL ledger under `%LOCALAPPDATA%\WorldServerAI\HealthLedger` (off-Desktop); before/after comparison that flags health regression; daily per-agent usage with Codex ≤30% and `paid:true` enforcement. The existing shared guard gains additive `compute`/`sessionId`/`healthRecord` fields without changing its `ok` semantics.
++
++## Files / systems involved
++- `lib/pc-health-guard.js` (new)
++- `lib/agent-session-guard.js` (additive wiring)
++- `data/desktop-ai-policy.json` (new thresholds)
++- `test/pc-health-guard.test.js` (new focused tests)
++- `test/agent-session-guard.test.js` (one integration test)
++- `package.json` (`pc-health:check` npm script)
++- `WORK_IN_PROGRESS.md` (this entry)
++
++## Known risks
++- Never change existing `ok` semantics of the shared guard so master-coordinator/SELF_EXECUTE dispatch is not broken by additive fields.
++- Process survey must be strictly read-only (report only); owned-process termination stays exclusively in the launcher's `runWithTreeKill`.
++- Avoid adding load: CPU sampling on Windows prefers the OS's own `LoadPercentage` (CIM) and only busy-samples briefly as fallback.
++- Health ledger must live off-Desktop under the existing `aiRoot`.
++
++## Golden systems that must be preserved
++Shared session guard lifecycle, Desktop hygiene audit, scratch cleanup policy, resource scheduler, master-coordinator dispatch, `check-agent-rules` wiring assertions.
++
++## Errors that must not return
++`process.kill`/`taskkill` inside the new guard, ledger writes to Desktop, CPU reported from `os.loadavg()` on Windows as if meaningful, hard-blocking normal light local work on transient CPU, paying for work while `allowPaidWork` is false, Codex exceeding the 30% daily cap silently.
++
++## Exact patch / change plan
++1. Add policy thresholds: `maxCpuPercent`, `hardMaxCpuPercent`, `maxDuplicateAgentProcesses`, `maxConcurrentComputeHeavyJobs`, `codexMaxDailySharePercent`, `allowPaidWork`, `healthLedgerSubdir`.
++2. Add `lib/pc-health-guard.js` (pure collectors + pure classifiers + ledger, no death APIs).
++3. Wire `preflight`/`postflight`/`withAgentSessionGuard` to include CPU, process survey, decision, ledger records and before/after comparison; extend `throttle` to CPU/high-pressure heavy local work.
++4. Add `pc-health:check` npm script + CLI (`--record`).
++5. Add focused regression tests (fixtures, not live CPU) + structural never-kill test.
++6. Run `check:fast`, focused tests, `desktop-ai:check`, `golden:check`, `check-agent-rules`; commit/push/PR to `master`; no deployment.
++
++## Tests to run
++`npm run pc-health:check`, `node --test test/pc-health-guard.test.js`, `node --test test/agent-session-guard.test.js`, `npm run check:fast`, `npm run desktop-ai:check`, `npm run golden:check`, `node scripts/check-agent-rules.js`, `npm run master-coordinator:test`.
++
++## Deployment / PR plan
++Push `opencode/pc-health-zerochaos-guard`, open one PR into `master`. No direct master push, no merge, no production deployment; this slice is infra/policy only.
++
++## Current progress
++Bootstrap complete; branch created at exact origin/master SHA. Implementation starting.
++
++## Next action
++Write policy fields + `lib/pc-health-guard.js`, wire the shared guard, add tests, verify, commit, push, PR.
++
++## Completion criteria
++Focused tests pass; shared guard `ok` semantics unchanged; pc-health-guard contains no process-termination call; ledger lives under `aiRoot`; Codex ≤30% and paid-work gates testable with fixtures; PC health after session no worse than before; PR open with evidence.
++
++## Final evidence
++Pending current-run verification and PC after-check measurement.
++
++---
++
+ # PR #133 flush — perf(voxel) eliminate per-vertex color clones — 2026-09-17 (Builder slice)
+ 
+ ## Task
+diff --git a/data/desktop-ai-policy.json b/data/desktop-ai-policy.json
+index 28edc33b..6fcb4dfc 100644
+--- a/data/desktop-ai-policy.json
++++ b/data/desktop-ai-policy.json
+@@ -40,6 +40,14 @@
+     "minFreeRamPercent": 15,
+     "warnFreeRamPercent": 25,
+     "minFreeDiskGB": 5,
++    "maxCpuPercent": 80,
++    "hardMaxCpuPercent": 95,
++    "maxDuplicateAgentProcesses": 2,
++    "maxConcurrentComputeHeavyJobs": 1,
++    "codexMaxDailySharePercent": 30,
++    "allowPaidWork": false,
++    "healthLedgerSubdir": "HealthLedger",
++    "healthLedgerRetentionDays": 7,
+     "desktopAllowedProjectItems": [
+       "World_server"
+     ],

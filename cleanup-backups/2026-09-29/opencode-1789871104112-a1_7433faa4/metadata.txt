@@ -1,0 +1,4 @@
+original_path=C:/Users/user/AppData/Local/World_server_worktrees/opencode-1789871104112-a1
+head=
+7433faa4a9ea40d353bc92c0b1f0a58e8daa19c1
+branch=ai/master-coordinator/opencode-1789871104112-a1

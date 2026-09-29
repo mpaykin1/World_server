@@ -1,0 +1,70 @@
+diff --git a/scripts/master-coordinator.cjs b/scripts/master-coordinator.cjs
+index ec425b62..08e2623a 100644
+--- a/scripts/master-coordinator.cjs
++++ b/scripts/master-coordinator.cjs
+@@ -39,6 +39,7 @@ const { classifyIntent } = require('../lib/mcp-intent-router');
+ const { resolveMainTreeRoot } = require('../lib/world-server-paths');
+ const sessionGuard = require('../lib/agent-session-guard');
+ const manualCompletion = require('../lib/manual-task-completion-contract');
++const agentWorkLedger = require('../lib/agent-work-ledger');
+ 
+ // Read-only capability classes get sandboxRoot pointed at the REAL repo (the
+ // local model's tool allowlist for these classes is read_file/read_text_file/
+@@ -287,13 +288,29 @@ async function invokeCloudWorldAi(taskText, opts = {}) {
+ 
+ // ---------------------------------------------------------------------------
+ // Codex adapter: explicit paid fallback only. It is never selected by default;
+-// callers must pass allowPaid=true (or MASTER_COORDINATOR_ALLOW_PAID=1).
++// callers must pass allowPaid=true (or MASTER_COORDINATOR_ALLOW_PAID=1). The
++// master-goal policy also caps Codex at a share of daily AI-agent work; a
++// dispatch that would push today's measured share over the cap is refused
++// before any worktree/CLI work begins (fail-closed, evidence-based, absent
++// log = no evidence = still allowed).
+ // ---------------------------------------------------------------------------
+ async function invokeCodex(taskText, opts = {}) {
+   const allowed = opts.allowPaid === true || process.env.MASTER_COORDINATOR_ALLOW_PAID === '1';
+   if (!allowed) return { ok: false, result: 'PAID_FALLBACK_DISABLED', reason: 'Codex requires explicit allowPaid=true' };
+   const refused = scanExternalTask(taskText);
+   if (refused) return refused;
++  let capGate;
++  try {
++    capGate = agentWorkLedger.codexDispatchGate(REPORT_LOG_PATH);
++  } catch (err) {
++    // A corrupt/missing policy file must never crash dispatch: the policy
++    // gate (scripts/check-master-goal-policy.js, part of `npm run check`)
++    // fails CI loudly on that same corruption. Here it degrades to allowed.
++    capGate = { result: 'ALLOWED', enforcementError: String((err && err.message) || err) };
++  }
++  if (capGate.result === 'CODEX_DAILY_CAP_EXCEEDED') {
++    return { ok: false, result: 'CODEX_DAILY_CAP_EXCEEDED', reason: capGate.reason, codex: capGate };
++  }
+   if (!CODEX_CLI_PATH) return { ok: false, result: 'NOT_AVAILABLE', reason: 'codex CLI not found on PATH' };
+   const taskId = opts.taskId || `codex-${Date.now()}`;
+   const { dir, branch } = createIsolatedWorktree(taskId);
+@@ -331,7 +348,7 @@ async function invokeCodex(taskText, opts = {}) {
+ }
+ 
+ function reportAutomatedAgentResult(agentId, taskText, result, opts = {}) {
+-  const pending = new Set(['DISPATCHED', 'QUEUED', 'SKIPPED_ACTIVE', 'PAID_FALLBACK_DISABLED']);
++  const pending = new Set(['DISPATCHED', 'QUEUED', 'SKIPPED_ACTIVE', 'PAID_FALLBACK_DISABLED', 'CODEX_DAILY_CAP_EXCEEDED']);
+   const status = result.result === 'PASS' ? 'done' : (pending.has(result.result) ? 'queued' : 'failed');
+   const entry = {
+     at: nowIso(), agent: agentId, task_id: opts.taskId || `${agentId}-${Date.now()}`,
+@@ -493,7 +510,7 @@ async function dispatchSubtask(root, subtask, opts = {}) {
+         const gate = opts.respectResourceGate === false ? true : await resourceGateOk('network-agent');
+         if (gate !== true) { lastResult = { ok: false, result: 'QUEUED', resourceGate: gate }; break; }
+         lastResult = await invokeCodex(taskText, { taskId: `${taskId}-a${attempt}`, push: opts.push, allowPaid: opts.allowPaid });
+-        if (lastResult.result === 'PAID_FALLBACK_DISABLED') break;
++        if (lastResult.result === 'PAID_FALLBACK_DISABLED' || lastResult.result === 'CODEX_DAILY_CAP_EXCEEDED') break;
+       } else if (LOCAL_MODEL_AGENTS.has(agentId)) {
+         lastResult = await invokeLocalModelAgent(agentId, taskText, { taskId: `${taskId}-a${attempt}`, respectResourceGate: opts.respectResourceGate, respectConcurrencyLock: opts.respectConcurrencyLock });
+         if (lastResult.result === 'QUEUED') break;
+@@ -529,7 +546,7 @@ function buildDefaultSubtasks(goal, opts = {}) {
+ 
+ function summarizeMasterResults(results) {
+   const terminalFail = new Set(['FAIL', 'REFUSED', 'UNKNOWN_AGENT', 'NO_AGENT', 'NOT_AVAILABLE', 'ZERO_CHAOS_BLOCKED', 'ZERO_CHAOS_POSTFAIL']);
+-  const pending = new Set(['QUEUED', 'SKIPPED_ACTIVE', 'ASSIGNED', 'SELF_EXECUTE', 'DISPATCHED', 'PAID_FALLBACK_DISABLED']);
++  const pending = new Set(['QUEUED', 'SKIPPED_ACTIVE', 'ASSIGNED', 'SELF_EXECUTE', 'DISPATCHED', 'PAID_FALLBACK_DISABLED', 'CODEX_DAILY_CAP_EXCEEDED']);
+   if (results.some((r) => terminalFail.has(r.result))) return 'FAIL';
+   if (results.some((r) => pending.has(r.result))) return 'PENDING';
+   return results.length > 0 && results.every((r) => r.result === 'PASS') ? 'PASS' : 'FAIL';

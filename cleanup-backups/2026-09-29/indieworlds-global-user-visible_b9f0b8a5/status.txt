@@ -1,0 +1,8 @@
+M  AI_START_HERE.md
+M  package.json
+A  policy/user-visibility-gate.json
+A  scripts/check-user-visibility-gate.js
+M  shared/golden-ui-shell.css
+M  shared/golden-ui-shell.js
+A  world/gateway.js
+A  world/index.html

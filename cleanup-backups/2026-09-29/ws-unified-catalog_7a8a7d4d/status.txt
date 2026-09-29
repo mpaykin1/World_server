@@ -1,0 +1,114 @@
+ M .env.example
+ M WORLD_UNIFICATION_PLAN.md
+ M api/ai3d.js
+ M api/apps.js
+ M api/config.js
+ M api/voxel.js
+ M apps/ai3d-reference-test/index.html
+ M apps/ai3d-voxel-city/client.js
+ M apps/ai3d-voxel-city/index.html
+ M apps/catalog/client.js
+ M apps/dark-void-scene/client.js
+ M apps/dark-void-scene/index.html
+ M apps/survival/client.js
+ M apps/survival/index.html
+ M apps/voxel-world/client.js
+ M apps/voxel-world/index.html
+ M apps/world-sharabass/index.html
+ M data/app-release-registry.json
+ M lib/env.js
+ M package.json
+ M playwright.config.js
+ M scripts/check-golden-standard.js
+ M scripts/world-fleet-audit.js
+ M server.js
+ M services/ai3d-worker/ai3d/runner.py
+ M services/ai3d-worker/server.py
+ M shared/common.js
+ M shared/golden-catalog-menu.js
+ M shared/golden-ui-shell.css
+ M shared/golden-ui-shell.js
+ M templates/ai3d-playable-scene/client.js
+?? .ink-glyph-backups/
+?? .system-integration-backups/
+?? INK_GLYPH_WORLD_REPORT.json
+?? WORLD_FLEET_AUDIT.targeted.json
+?? api/pixel-panorama.js
+?? apps/dreamfog-world/
+?? apps/ink-glyph-world/
+?? apps/pixel-panorama-360/
+?? artifacts/
+?? assets/
+?? data/dreamfog-quality-profile.json
+?? data/ink-glyph-font-registry.json
+?? data/pixel-panorama-registry.json
+?? data/world-experience-policy.json
+?? docs/INK_GLYPH_WORLD.md
+?? docs/PIXEL_PANORAMA_360_V4.md
+?? e2e/dreamfog-world.spec.js
+?? e2e/ink-glyph-world.spec.js
+?? e2e/pixel-panorama-360.spec.js
+?? e2e/pixel-panorama-360.visual.spec.js
+?? e2e/world-experience-standard.spec.js
+?? install-pixel-panorama-360-v4.cjs
+?? lib/pixel-panorama-registry.cjs
+?? lib/world-lore.js
+?? rollback-pixel-panorama-360-v4.cjs
+?? scripts/_chatgpt_e2e_patch.py
+?? scripts/_chatgpt_free_mode_patch.py
+?? scripts/_chatgpt_golden_v3_patch.py
+?? scripts/_chatgpt_playwright_port_patch.py
+?? scripts/_chatgpt_static_assets_patch.py
+?? scripts/_chatgpt_voxel_offline_patch.py
+?? scripts/apply-golden-experience-controls.py
+?? scripts/benchmark-ink-glyph-world.cjs
+?? scripts/check-ink-glyph-world.cjs
+?? scripts/debug-dream-page.js
+?? scripts/debug-pixel-page.js
+?? scripts/debug-voxel-controls.cjs
+?? scripts/debug-voxel-controls2.cjs
+?? scripts/download-ink-glyph-fonts.cjs
+?? scripts/download-ink-glyph-strokes.cjs
+?? scripts/download-ink-glyph-vendor.cjs
+?? scripts/dreamfog-static-gate.mjs
+?? scripts/generate-world-previews.js
+?? scripts/ink-glyph-network-diagnostics.cjs
+?? scripts/install-ink-glyph-tools.cjs
+?? scripts/optimize-ink-glyph-fonts.py
+?? scripts/optimize-ink-glyph-glb.cjs
+?? scripts/patch-audit-heavy-budget.py
+?? scripts/patch-audit-runtime-fastpath.py
+?? scripts/patch-dark-mobile-budget.py
+?? scripts/patch-golden-ui-configs.py
+?? scripts/patch-pixel-fallback.py
+?? scripts/patch-world-audit-summary.py
+?? scripts/pixel-panorama-360-animate-still.cjs
+?? scripts/pixel-panorama-360-build.cjs
+?? scripts/pixel-panorama-360-certify.cjs
+?? scripts/pixel-panorama-360-generator-router.cjs
+?? scripts/pixel-panorama-360-prod-verify.cjs
+?? scripts/pixel-panorama-360-publish-supabase.cjs
+?? scripts/pixel-panorama-360-release-gate.cjs
+?? scripts/pixel-panorama-360-temporal-check.cjs
+?? scripts/pixel-panorama-360-tools-verify.cjs
+?? scripts/pixel-panorama-360-validate.cjs
+?? scripts/repair-local-world-contracts.py
+?? scripts/validate-ink-glyph-glb.cjs
+?? scripts/world-fleet-audit.fixed.js
+?? services/ai3d-worker/ai3d/plugins/pixel_panorama_360.py
+?? services/ai3d-worker/scripts/bootstrap-pixel-panorama.sh
+?? services/ai3d-worker/tools/dreamfog_from_image.py
+?? shared/dreamfog-atmosphere.js
+?? shared/golden-experience-controls.js
+?? shared/infinite-world-runtime.js
+?? shared/ink-glyph-world-core.js
+?? shared/panorama360-source/
+?? shared/panorama360/
+?? shared/vendor/
+?? shared/world-previews/
+?? state/
+?? supabase/migrations/20260826011000_pixel_panorama_360_v4.sql
+?? test/dreamfog-config.test.js
+?? test/ink-glyph-world.test.js
+?? test/world-fleet-audit-summary.test.js
+?? tools/

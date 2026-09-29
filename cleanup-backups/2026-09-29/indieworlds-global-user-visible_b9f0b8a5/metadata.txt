@@ -1,0 +1,4 @@
+original_path=C:/Users/user/AppData/Local/World_server_worktrees/indieworlds-global-user-visible
+head=
+b9f0b8a507a7c01132ad5d8baca9aa1ba07db92f
+branch=ai/chatgpt/indieworlds-global-user-visible

@@ -1,0 +1,4 @@
+dirty_worktrees=67
+copied_untracked=262
+skipped_sensitive=
+1

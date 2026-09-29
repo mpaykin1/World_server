@@ -1,0 +1,443 @@
+diff --git a/WORK_IN_PROGRESS.md b/WORK_IN_PROGRESS.md
+index 25825abf..0755f353 100644
+--- a/WORK_IN_PROGRESS.md
++++ b/WORK_IN_PROGRESS.md
+@@ -2,6 +2,122 @@
+ 
+ ---
+ 
++# PC-health / Zero-Chaos guard enforcement + Windows gate unblock — 2026-09-26
++
++## Task
++Make the existing PC-HEALTH / ZERO-CHAOS guard actually enforce the invariants the
++master goal declares, and unblock the mandatory `npm run check` gate on Windows.
++
++## Why
++The master goal makes the PC-health guard mandatory before and after every delegated
++local session and names three concrete thresholds: high CPU, available RAM below
++25%, and critically low disk must defer heavy local AI work. Auditing the existing
++implementation showed two of those signals were computed and then read by nothing,
++and a policy list that is declared as inherited was duplicated as a hardcoded regex.
++
++## Current state
++Branch `ai/master-coordinator/opencode-1790391902171-a1` at `d06cb3ed`, clean
++baseline. Three defects reproduced individually before any edit. A fourth,
++independent pre-existing failure was then found while running the required gate.
++
++## Target state
++`data/desktop-ai-policy.json` is the single source of truth for RAM floors, owned
++scratch prefixes and Desktop rules, and every one of its declared signals changes
++real behaviour. `npm run check` runs green on a Windows checkout.
++
++## Files / systems involved
++- `lib/agent-session-guard.js` — RAM floor enforcement, policy-driven scratch matcher, Desktop audit
++- `scripts/export-indieworlds.js` — drift comparison
++- `.gitattributes` (new) — keeps generated artifacts byte-exact
++- `test/agent-session-guard.test.js`, `test/indieworlds.test.js` — regression guards
++
++## Known risks
++- Enforcing the 25% floor (instead of only 15%) defers heavy local-model agents
++  earlier than before. This is the declared intent and matches the host-thrashing
++  incident already documented in `lib/ai-resource-scheduler.js`, but it does change
++  when local agents are allowed to start.
++- The generalized Desktop rule is restricted to *directories* so a user file such as
++  `World_server.sublime-workspace` can never block a session.
++
++## Golden systems that must be preserved
++Deny-by-default release registry, Golden UI, IndieWeb passports/RSS, the shared
++session guard for every registered agent, and the pre-existing byte-exactness intent
++of the IndieWeb export gate. No app, game, API or renderer code was touched.
++
++## Errors that must not return
++- A policy threshold that is measured, reported and then ignored.
++- A policy list duplicated as a hardcoded regex, silently ignoring `inheritForFutureAgents`.
++- Numbered/space-separated AI copy folders escaping Desktop audit.
++- A generated-artifact gate that fails on Windows purely because git rewrote LF to CRLF.
++- Turning the drift check into a false green: real content drift must still be caught.
++
++## Exact patch / change plan
++1. `snapshotResources` gains `deferHeavyWork` + reason; `preflight` throttles on it
++   instead of on the never-consumed `ramCritical` alone.
++2. `cleanupOwnedScratch` builds its matcher from `policy.ownedScratchPrefixes`
++   (regex-escaped, with the previous list as fallback).
++3. `auditDesktop` flags any Desktop *directory* whose name starts with `World_server`.
++4. `drift()` normalizes line endings and takes an optional root; `.gitattributes`
++   marks `shared/indieworlds/**` as `-text` so git stops rewriting the bytes.
++5. Focused regression tests for each defect, each proven to fail before the fix.
++
++## Tests to run
++Focused guard and IndieWeb suites; `npm run check`; `npm run check:fast`;
++`npm run desktop-ai:check`; `npm run golden:check`; `node scripts/check-agent-rules.js`;
++`npm run quality:diff`; `git diff --check`.
++
++## Deployment / PR plan
++No commit, push, PR, merge or production deployment was performed. Nothing is
++self-certified. The patch is left in the working tree for the coordinator/Architect
++to review, commit and route.
++
++## Current progress
++Implementation and focused regression tests complete. All three guard defects and
++the Windows export-gate defect are fixed and covered. Full repository suite is green.
++
++## Next action
++Architect review, then commit/push and open a PR to `master` through the existing
++coordinator flow. Requires explicit authorization — not performed by this slice.
++
++## Completion criteria
++Every regression test fails on the pre-fix code and passes after it; `npm run check`
++is green on a Windows checkout; no accepted quality metric regresses; the patch stays
++inside the existing session-guard/export subsystems.
++
++## Final evidence
++- Pre-fix reproduction, guard: 5 of 7 new tests failed (numbered-folder audit,
++  policy-driven scratch prefixes, prefix regex-escaping, enforced RAM floor, heavy
++  throttling at 25%). The 2 that passed pre-fix are deliberate guards against
++  over-correction (user-file safety, default-prefix fallback).
++- Pre-fix reproduction, IndieWeb: `checked-in static exports match canonical data`
++  and `world API remains backward-compatible` already failed on Windows, plus both
++  new drift tests failed.
++- Root cause of the export failure, proven byte-level: on-disk 43955 bytes / 742
++  CRLF vs expected 43213 bytes / 742 bare LF; content identical after CRLF→LF
++  normalization; `core.autocrlf=true`; no `.gitattributes` existed.
++- `node --test test/agent-session-guard.test.js`: 11 tests, 11 pass, 0 fail.
++- `node --test test/indieworlds.test.js`: 13 tests, 13 pass, 0 fail.
++- `npm run check`: 665 tests, 663 pass, 0 fail, 2 skipped (opt-in by design).
++- `npm run check:fast`: Syntax OK, 60 JavaScript files.
++- `npm run desktop-ai:check`: `[DESKTOP_AI_PROTOCOL] PASS`.
++- `npm run golden:check`: `GOLDEN STANDARD: PASS`.
++- `node scripts/check-agent-rules.js`: PASSED, including off-Desktop roots and
++  session-guard coverage for every registered agent.
++- `npm run indieworlds:check`: PASS — "static exports match canonical world data".
++- `git check-attr text -- shared/indieworlds/index.json`: `text: unset` (rule active).
++- `npm run quality:diff`: no accepted metric regressed; every reported metric improved.
++- `git diff --check`: clean. No UTF-8 BOM introduced.
++- Live machine check via `npm run agent-session:check`: Desktop violations 0,
++  free RAM 49.4%, free disk 177.6 GB, `deferHeavyWork=false`, roots all off-Desktop.
++- Verification of the guard's own RAM measurement: `os.freemem()`/`os.totalmem()`
++  agree exactly with `Win32_OperatingSystem.FreePhysicalMemory` (7.9 / 15.86 GB =
++  49.8%), so the guard measures the same "available RAM" the master goal specifies.
++- Files: 4 modified, 1 added, +199/-13. No app, game, API, renderer or deploy change.
++- Environment note: this worktree has no `node_modules`; suites were run with
++  `NODE_PATH` pointed at the existing canonical `node_modules` (reuse, no install).
++
++---
++
+ # IndieWorlds foundation — 2026-09-10
+ 
+ ## Task
+diff --git a/lib/agent-session-guard.js b/lib/agent-session-guard.js
+index 8f6ed87c..09230e97 100644
+--- a/lib/agent-session-guard.js
++++ b/lib/agent-session-guard.js
+@@ -12,6 +12,28 @@ const AI_DESKTOP_PATTERNS = [
+   /^SESSION_SAFE_TO_DELETE$/i,
+   /^WORLD_SERVER_KEEP\.zip$/i,
+ ];
++// Any other Desktop *directory* starting with the canonical project name is an AI
++// copy/worktree/numbered-folder artifact. Deliberately restricted to directories:
++// a user file named `World_server.sublime-workspace` must never be reported or
++// used to block a session. The old explicit alternation only matched a fixed list
++// of underscore suffixes, so real violations such as `World_server 2`,
++// `World_server-3`, `World_server (1)` and `World_server_20260926` escaped audit.
++const AI_DESKTOP_DIR_PATTERN = /^World_server/i;
++const DEFAULT_OWNED_SCRATCH_PREFIXES = Object.freeze(['agent-', 'health-probe-', 'session-guard-']);
++
++function escapeForRegExp(value) {
++  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
++}
++
++// data/desktop-ai-policy.json#sessionHygiene.ownedScratchPrefixes is the declared
++// source of truth and the policy sets inheritForFutureAgents:true, so a prefix
++// added to policy must take effect without a second hardcoded copy of the list.
++function ownedScratchMatcher(policy = loadPolicy()) {
++  const declared = Array.isArray(policy.ownedScratchPrefixes) && policy.ownedScratchPrefixes.length
++    ? policy.ownedScratchPrefixes.map(String)
++    : DEFAULT_OWNED_SCRATCH_PREFIXES;
++  return new RegExp(`^(?:${declared.map(escapeForRegExp).join('|')})`, 'i');
++}
+ 
+ function expandEnvPath(value) {
+   return String(value || '')
+@@ -45,7 +67,8 @@ function auditDesktop(desktop = desktopPath()) {
+   try { entries = fs.readdirSync(desktop, { withFileTypes: true }); } catch { return { ok: true, desktop, violations, unreadable: true }; }
+   for (const entry of entries) {
+     if (entry.name.toLowerCase() === CANONICAL_DESKTOP_NAME.toLowerCase()) continue;
+-    if (AI_DESKTOP_PATTERNS.some((re) => re.test(entry.name))) violations.push(path.join(desktop, entry.name));
++    if (AI_DESKTOP_PATTERNS.some((re) => re.test(entry.name))) { violations.push(path.join(desktop, entry.name)); continue; }
++    if (entry.isDirectory() && AI_DESKTOP_DIR_PATTERN.test(entry.name)) violations.push(path.join(desktop, entry.name));
+   }
+   return { ok: violations.length === 0, desktop, violations };
+ }
+@@ -60,7 +83,7 @@ function diskFreeBytes(target) {
+ function cleanupOwnedScratch(policy = loadPolicy(), now = Date.now()) {
+   const root = policy.scratchRoot;
+   const ttlMs = Number(policy.scratchTtlHours || 24) * 60 * 60 * 1000;
+-  const allowed = /^(?:agent-|health-probe-|session-guard-)/i;
++  const allowed = ownedScratchMatcher(policy);
+   let reclaimedBytes = 0;
+   const removed = [];
+   let entries = [];
+@@ -84,13 +107,30 @@ function snapshotResources(policy = loadPolicy()) {
+   const freeRamPercent = Math.round(pressure.freeRatio * 1000) / 10;
+   const freeDiskBytes = diskFreeBytes(policy.aiRoot);
+   const minFreeDiskGB = Number(policy.minFreeDiskGB || 5);
++  const minFreeRamPercent = Number(policy.minFreeRamPercent || 15);
++  const warnFreeRamPercent = Number(policy.warnFreeRamPercent || 25);
++  const ramCritical = freeRamPercent < minFreeRamPercent;
++  const ramWarning = freeRamPercent < warnFreeRamPercent;
++  // warnFreeRamPercent was previously computed into `ramWarning` and then read by
++  // nothing, so the policy's 25% safety floor was a dead signal: heavy local work
++  // was only ever deferred below minFreeRamPercent (15%). Below the warn floor
++  // local inference thrashes the host instead of running (see the measured
++  // ollama model-load thrashing recorded in lib/ai-resource-scheduler.js), so
++  // heavy work is now deferred at the declared warn floor.
++  const deferHeavyWork = ramWarning || ramCritical;
+   return {
+     freeRamPercent,
+     memoryPressure: pressure.level,
+     freeDiskBytes,
+     freeDiskGB: freeDiskBytes == null ? null : Math.round((freeDiskBytes / 1024 ** 3) * 10) / 10,
+-    ramCritical: freeRamPercent < Number(policy.minFreeRamPercent || 15),
+-    ramWarning: freeRamPercent < Number(policy.warnFreeRamPercent || 25),
++    ramCritical,
++    ramWarning,
++    minFreeRamPercent,
++    warnFreeRamPercent,
++    deferHeavyWork,
++    deferHeavyWorkReason: deferHeavyWork
++      ? `free RAM ${freeRamPercent}% is below the ${warnFreeRamPercent}% heavy-work safety floor`
++      : null,
+     diskCritical: freeDiskBytes != null && freeDiskBytes < minFreeDiskGB * 1024 ** 3,
+   };
+ }
+@@ -101,7 +141,7 @@ function preflight(agentId, opts = {}) {
+   const desktop = auditDesktop();
+   const resources = snapshotResources(policy);
+   const ok = desktop.ok && !resources.diskCritical;
+-  return { phase: 'preflight', agentId, ok, throttle: Boolean(opts.localHeavy && resources.ramCritical), desktop, resources, cleanup, roots: { worktrees: policy.worktreesRoot, scratch: policy.scratchRoot, ai: policy.aiRoot } };
++  return { phase: 'preflight', agentId, ok, throttle: Boolean(opts.localHeavy && resources.deferHeavyWork), desktop, resources, cleanup, roots: { worktrees: policy.worktreesRoot, scratch: policy.scratchRoot, ai: policy.aiRoot } };
+ }
+ 
+ function postflight(agentId, opts = {}) {
+@@ -115,7 +155,7 @@ function postflight(agentId, opts = {}) {
+ async function withAgentSessionGuard(agentId, fn, opts = {}) {
+   const pre = preflight(agentId, opts);
+   if (!pre.ok) return { ok: false, result: 'ZERO_CHAOS_BLOCKED', reason: 'Desktop hygiene or disk safety gate failed', sessionGuard: { pre, post: null } };
+-  if (pre.throttle) return { ok: false, result: 'QUEUED', reason: 'local AI work deferred because free RAM is below the configured safety floor', sessionGuard: { pre, post: null } };
++  if (pre.throttle) return { ok: false, result: 'QUEUED', reason: `local AI work deferred: ${(pre.resources && pre.resources.deferHeavyWorkReason) || 'host memory is below the configured heavy-work safety floor'}`, sessionGuard: { pre, post: null } };
+   let value;
+   let thrown;
+   try { value = await fn(); } catch (err) { thrown = err; }
+@@ -133,7 +173,7 @@ function coverageFor(agentIds) {
+   return [...new Set(agentIds)].sort().map((agentId) => ({ agentId, preflight: true, postflight: true, inherited: true }));
+ }
+ 
+-module.exports = { loadPolicy, ensureRoots, auditDesktop, cleanupOwnedScratch, snapshotResources, preflight, postflight, withAgentSessionGuard, coverageFor, expandEnvPath };
++module.exports = { loadPolicy, ensureRoots, auditDesktop, cleanupOwnedScratch, ownedScratchMatcher, snapshotResources, preflight, postflight, withAgentSessionGuard, coverageFor, expandEnvPath, DEFAULT_OWNED_SCRATCH_PREFIXES };
+ 
+ if (require.main === module) {
+   const phase = process.argv[2] || 'preflight';
+diff --git a/scripts/export-indieworlds.js b/scripts/export-indieworlds.js
+index bcf2257b..91032784 100644
+--- a/scripts/export-indieworlds.js
++++ b/scripts/export-indieworlds.js
+@@ -36,14 +36,24 @@ function writeArtifacts(artifacts = expectedArtifacts()) {
+   return artifacts;
+ }
+ 
+-function drift(artifacts = expectedArtifacts()) {
++// These artifacts are generated with LF newlines. Without a `.gitattributes`
++// rule, a Windows checkout with `core.autocrlf=true` rewrites them to CRLF, and a
++// byte-exact comparison then reports every single artifact as drifted even though
++// the content is identical - which failed `npm run check` on every Windows
++// machine. Line-ending-only differences are not content drift, so they are
++// normalized before comparing. Real content changes are still detected.
++function normalizeNewlines(value) {
++  return typeof value === 'string' ? value.replace(/\r\n/g, '\n') : value;
++}
++
++function drift(artifacts = expectedArtifacts(), root = outputRoot) {
+   const mismatches = [];
+   for (const [relativePath, expected] of artifacts) {
+-    const destination = path.join(outputRoot, relativePath);
++    const destination = path.join(root, relativePath);
+     const actual = fs.existsSync(destination) ? fs.readFileSync(destination, 'utf8') : null;
+-    if (actual !== expected) mismatches.push(relativePath);
++    if (normalizeNewlines(actual) !== normalizeNewlines(expected)) mismatches.push(relativePath);
+   }
+-  const worldsDir = path.join(outputRoot, 'worlds');
++  const worldsDir = path.join(root, 'worlds');
+   if (fs.existsSync(worldsDir)) {
+     const expectedWorldFiles = new Set([...artifacts.keys()].filter((name) => name.startsWith('worlds/')).map((name) => path.basename(name)));
+     for (const name of fs.readdirSync(worldsDir)) {
+@@ -66,4 +76,4 @@ if (require.main === module) {
+   }
+ }
+ 
+-module.exports = { expectedArtifacts, writeArtifacts, drift, outputRoot };
++module.exports = { expectedArtifacts, writeArtifacts, drift, outputRoot, normalizeNewlines };
+diff --git a/test/agent-session-guard.test.js b/test/agent-session-guard.test.js
+index c55db344..404b2287 100644
+--- a/test/agent-session-guard.test.js
++++ b/test/agent-session-guard.test.js
+@@ -51,4 +51,111 @@ test('coverage is inherited automatically by an arbitrary future agent id', () =
+   const matrix = guard.coverageFor(['codex', 'future-agent-v99']);
+   const future = matrix.find((x) => x.agentId === 'future-agent-v99');
+   assert.deepEqual(future, { agentId: 'future-agent-v99', preflight: true, postflight: true, inherited: true });
+-});
+\ No newline at end of file
++});
++
++test('REGRESSION: desktop audit catches numbered/space-separated World_server AI copy folders', () => {
++  const desktop = tempDir('fake-desktop-numbered');
++  for (const name of ['World_server', 'World_server 2', 'World_server-3', 'World_server (1)', 'World_server_20260926', 'family-photo.jpg']) {
++    fs.mkdirSync(path.join(desktop, name));
++  }
++  const r = guard.auditDesktop(desktop);
++  assert.equal(r.ok, false);
++  const flagged = r.violations.map((v) => path.basename(v));
++  assert.deepEqual(flagged.sort(), ['World_server (1)', 'World_server 2', 'World_server-3', 'World_server_20260926']);
++  assert.ok(flagged.every((n) => n !== 'World_server'), 'canonical project folder must never be a violation');
++});
++
++test('REGRESSION: a user file merely starting with World_server is never a violation', () => {
++  const desktop = tempDir('fake-desktop-userfile');
++  fs.mkdirSync(path.join(desktop, 'World_server'));
++  fs.writeFileSync(path.join(desktop, 'World_server.sublime-workspace'), '{"settings":{}}');
++  fs.writeFileSync(path.join(desktop, 'World_server notes.txt'), 'user data');
++  const r = guard.auditDesktop(desktop);
++  assert.equal(r.ok, true, `unexpected violations: ${JSON.stringify(r.violations)}`);
++  assert.deepEqual(r.violations, []);
++});
++
++test('REGRESSION: scratch cleanup honors policy.ownedScratchPrefixes instead of a hardcoded list', () => {
++  const scratchRoot = tempDir('agent-scratch-inherited');
++  const policyOwned = path.join(scratchRoot, 'custom-owned-old.txt');
++  const defaultOwned = path.join(scratchRoot, 'agent-old.txt');
++  const userFile = path.join(scratchRoot, 'notes.txt');
++  fs.writeFileSync(policyOwned, 'x');
++  fs.writeFileSync(defaultOwned, 'x');
++  fs.writeFileSync(userFile, 'keep');
++  const old = new Date(Date.now() - 48 * 60 * 60 * 1000);
++  fs.utimesSync(policyOwned, old, old);
++  fs.utimesSync(defaultOwned, old, old);
++
++  const r = guard.cleanupOwnedScratch({ scratchRoot, scratchTtlHours: 24, ownedScratchPrefixes: ['custom-owned-'] });
++  assert.equal(fs.existsSync(policyOwned), false, 'a prefix declared in policy must be cleaned without a code change');
++  assert.equal(fs.existsSync(defaultOwned), true, 'prefixes removed from policy must stop being deleted');
++  assert.equal(fs.existsSync(userFile), true);
++  assert.deepEqual(r.removed, [policyOwned]);
++});
++
++test('REGRESSION: scratch cleanup falls back to the built-in prefixes when policy omits them', () => {
++  const scratchRoot = tempDir('agent-scratch-fallback');
++  const owned = path.join(scratchRoot, 'agent-old.txt');
++  fs.writeFileSync(owned, 'x');
++  const old = new Date(Date.now() - 48 * 60 * 60 * 1000);
++  fs.utimesSync(owned, old, old);
++  const r = guard.cleanupOwnedScratch({ scratchRoot, scratchTtlHours: 24 });
++  assert.equal(fs.existsSync(owned), false);
++  assert.deepEqual(r.removed, [owned]);
++});
++
++test('REGRESSION: policy ownedScratchPrefixes are regex-escaped, never injected raw', () => {
++  const matcher = guard.ownedScratchMatcher({ ownedScratchPrefixes: ['a+b(c)'] });
++  assert.equal(matcher.test('a+b(c)old.txt'), true);
++  assert.equal(matcher.test('aXbXcYold.txt'), false);
++});
++
++test('REGRESSION: warnFreeRamPercent is enforced, not a dead signal', () => {
++  const policy = guard.loadPolicy();
++  assert.equal(policy.warnFreeRamPercent, 25);
++
++  const low = guard.snapshotResources({ ...policy, aiRoot: os.tmpdir() });
++  assert.equal(low.warnFreeRamPercent, 25);
++  assert.equal(typeof low.deferHeavyWork, 'boolean', 'deferHeavyWork decision must exist');
++  if (low.ramWarning) {
++    assert.equal(low.deferHeavyWork, true, 'below the 25% warn floor heavy work must be deferred');
++  }
++
++  const healthy = guard.snapshotResources({
++    ...policy,
++    aiRoot: os.tmpdir(),
++    warnFreeRamPercent: 0,
++    minFreeRamPercent: 0,
++  });
++  assert.equal(healthy.ramWarning, false);
++  assert.equal(healthy.ramCritical, false);
++  assert.equal(healthy.deferHeavyWork, false);
++  assert.equal(healthy.deferHeavyWorkReason, null);
++});
++
++test('REGRESSION: a heavy session is throttled at the 25% floor, a light session is not', async () => {
++  const real = os.freemem;
++  const realTotal = os.totalmem;
++  const forced = { free: 2, total: 10 }; // 20% free -> below the 25% floor, above the 15% critical floor
++  os.freemem = () => forced.free * 1024 ** 3;
++  os.totalmem = () => forced.total * 1024 ** 3;
++  try {
++    const heavy = guard.preflight('unit-heavy', { localHeavy: true, cleanup: false });
++    const light = guard.preflight('unit-light', { localHeavy: false, cleanup: false });
++    assert.equal(heavy.resources.freeRamPercent, 20);
++    assert.equal(heavy.resources.ramWarning, true);
++    assert.equal(heavy.resources.ramCritical, false, '20% is above the 15% critical floor');
++    assert.equal(heavy.throttle, true, 'heavy local work must be deferred below the declared 25% floor');
++
++    assert.equal(light.throttle, false, 'bounded light local work must not be blocked by the heavy-work floor');
++
++    const queued = await guard.withAgentSessionGuard('unit-heavy', () => ({ ok: true, result: 'PASS' }), { localHeavy: true });
++    assert.equal(queued.ok, false);
++    assert.equal(queued.result, 'QUEUED');
++    assert.match(queued.reason, /deferred/);
++  } finally {
++    os.freemem = real;
++    os.totalmem = realTotal;
++  }
++});
+diff --git a/test/indieworlds.test.js b/test/indieworlds.test.js
+index b1012778..7db3c924 100644
+--- a/test/indieworlds.test.js
++++ b/test/indieworlds.test.js
+@@ -12,6 +12,8 @@ const {
+ } = require('../lib/indieworlds');
+ const { expectedArtifacts, drift } = require('../scripts/export-indieworlds');
+ 
++const os = require('node:os');
++
+ const root = path.resolve(__dirname, '..');
+ process.chdir(root);
+ 
+@@ -137,6 +139,33 @@ test('checked-in static exports match canonical data and contain only public pas
+   assert.equal(passports.includes('worlds/world-sharabass.json'), false);
+ });
+ 
++test('REGRESSION: an EOL-only rewrite is not drift, but real content drift still is', () => {
++  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'indieworlds-drift-'));
++  fs.mkdirSync(path.join(dir, 'worlds'), { recursive: true });
++  const target = path.join(dir, 'worlds', 'probe.json');
++  const artifacts = new Map([['worlds/probe.json', '{"name":"probe"}\n']]);
++
++  fs.writeFileSync(target, '{"name":"probe"}\r\n');
++  assert.deepEqual(drift(artifacts, dir), [], 'a CRLF rewrite by git must not be reported as drift');
++
++  fs.writeFileSync(target, '{"name":"tampered"}\n');
++  assert.deepEqual(drift(artifacts, dir), ['worlds/probe.json'], 'a real content change must still be reported');
++
++  fs.unlinkSync(target);
++  assert.deepEqual(drift(artifacts, dir), ['worlds/probe.json'], 'a missing artifact must still be reported');
++
++  fs.rmSync(dir, { recursive: true, force: true });
++});
++
++test('REGRESSION: generated indieworlds artifacts stay exempt from git EOL conversion', () => {
++  const lines = fs.readFileSync(path.join(root, '.gitattributes'), 'utf8').split(/\r?\n/);
++  const wildcard = lines.findIndex((line) => /^\*\s+text=auto\b/.test(line));
++  const generated = lines.findIndex((line) => /^shared\/indieworlds\/\*\*\s+-text\b/.test(line));
++  assert.ok(generated !== -1, 'the "-text" rule for shared/indieworlds/** must exist');
++  assert.ok(wildcard !== -1, 'the "* text=auto" default must exist');
++  assert.ok(generated > wildcard, 'the specific -text rule must come after "* text=auto" because later attribute lines win');
++});
++
+ test('world API remains backward-compatible while exposing opt-in IndieWorld formats', async () => {
+   const legacy = await callWorlds('/api/worlds');
+   assert.equal(legacy.statusCode, 200);

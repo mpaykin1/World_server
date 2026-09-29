@@ -1,0 +1,4 @@
+original_path=C:/Users/user/AppData/Local/World_server_worktrees/opencode-1789607102816-a1
+head=
+0a1d836ceb364402450d92b43699e339cd40e0fd
+branch=ai/opencode/merge-chain-fleet-pre-gate

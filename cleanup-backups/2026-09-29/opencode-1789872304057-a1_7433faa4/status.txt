@@ -1,0 +1,5 @@
+ M data/desktop-ai-policy.json
+ M lib/agent-session-guard.js
+?? data/agent-work-quota-policy.json
+?? lib/agent-process-audit.js
+?? lib/agent-work-quota.js

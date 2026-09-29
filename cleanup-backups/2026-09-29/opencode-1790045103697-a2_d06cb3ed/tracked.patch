@@ -1,0 +1,245 @@
+diff --git a/WORK_IN_PROGRESS.md b/WORK_IN_PROGRESS.md
+index 25825abf..3fbf21c2 100644
+--- a/WORK_IN_PROGRESS.md
++++ b/WORK_IN_PROGRESS.md
+@@ -1,4 +1,114 @@
+-# WORK IN PROGRESS — Scoped Task Compiler, resource scheduler, real native Godot pipeline
++# WORK IN PROGRESS — Codex daily work-quota gate (master-goal slice) | Scoped Task Compiler, resource scheduler, real native Godot pipeline
++
++---
++
++# Codex daily work-quota gate — 2026-09-22
++
++## Task
++Implement the master-goal rule "Codex is paid fallback only and must stay at or
++below 30 percent of daily AI-agent work, preferring Claude/OpenCode" as a real,
++repository-wide enforcement gate in the existing master-coordinator dispatch
++path, with focused regression tests. No production deployment.
++
++## Why
++The rule was documented but never enforced: Codex was only gated by explicit
++`allowPaid`/`--allow-paid` and per-call opt-in, with zero accounting of how much
++of a day's AI-agent work Codex actually performed. The authoritative daily work
++ledger (`state/ai-agent-reports.jsonl` - the shared log every agent already
++writes via reportAutomatedAgentResult/reportSelfExecuted/runSubtask) was not
++being read to guard paid fallback dispatches.
++
++## Current state
++Fresh worktree from `origin/master` @ `dd190cbf1b8a757a9bca0ae95faad5f2bdacf2d9`
++(17 commits ahead of local `master` at device). Inspected existing agent
++selection/guard code: `scripts/master-coordinator.cjs` (buildDefaultSubtasks,
++dispatchSubtask codex branch, summarizeMasterResults), `lib/agent-history.js`,
++`lib/agent-session-guard.js`, `data/desktop-ai-policy.json`. Verified no active
++PR or unmerged branch implements a Codex daily-work quota. `opencode/master-goal-agent-governance`
++covers CPU-load + process census (a separate slice) and is intentionally not
++duplicated here. `opencode/agent-work-quota-20260915` carries no unique commits.
++
++## Target state
++A Codex dispatch is refused with `CODEX_QUOTA_EXCEEDED` (never invoked, never
++written to the work ledger) whenever Codex is already above 30% of the trailing
++day's dispatched AI-agent work; exactly 30% remains allowed; Claude/OpenCode
++remain the preferred continuation (the planner's own OpenCode slice is not
++duplicated). The share is observable via `npm run codex:quota`.
++
++## Files / systems involved
++- `lib/codex-work-quota.js` (new): pure daily-share accounting over the shared
++  agent-report ledger; trailing-24h window; `done`/`failed` dispatched entries
++  count as work (assigned/queued do not); blocking is strict and falsifiable.
++- `scripts/master-coordinator.cjs`: quota gate in the PAID_FALLBACK branch of
++  `dispatchSubtask` (before any subprocess, configurable via
++  `opts.agentReportsPath`/`opts.quotaNow`/`opts.codexMaxDailyShare`, with an
++  `opts.invokeCodex` seam for deterministic tests); `CODEX_QUOTA_EXCEEDED`
++  added to the PENDING status set; blocked dispatches are excluded from
++  `reportAutomatedAgentResult` so they never corrupt the ledger's ratio.
++- `package.json`: new `codex:quota` script (read-only monitor).
++- `test/codex-work-quota.test.js` (new, 11 tests) +
++  `test/master-coordinator.test.js` (3 new gate tests).
++
++## Known risks
++- Strict boundary with no fudge floor: a day where the only work so far is
++  Codex (e.g. 1/1) blocks further Codex until other agents do work - this is
++  the literal rule, applied honestly.
++- The count is only as good as the shared ledger: agents that never report
++  into `state/ai-agent-reports.jsonl` are invisible, so the quota measures the
++  system's own recorded daily work.
++- Trailing 24h window (not UTC calendar day) avoids a midnight cliff splitting
++  one session across two accounting days; documented in the module.
++
++## Golden systems that must be preserved
++Master-coordinator routing/leases/resource gates; agent report schema
++(`state/ai-agent-reports.jsonl`); Codex explicit opt-in (`allowPaid`) and
++fail-closed behavior; session guard; one-task-one-PR; LKG/rollback; VNO.
++
++## Errors that must not return
++A quota-blocked Codex dispatch being invoked or written to the work ledger as
++`failed` (a real ratio corruption found and fixed during verification); a
++blocked Codex false-greening an overall PASS; over-blocking at a share below
++30%; the gate claiming a share from a ledger it never read.
++
++## Exact patch / change plan
++1. Add `lib/codex-work-quota.js` (read ledger, count dispatched work in window,
++   decide at `<=maxShare`).
++2. Gate `dispatchSubtask`'s Codex branch on the decision before spawning
++   Codex; return `CODEX_QUOTA_EXCEEDED` and skip `reportAutomatedAgentResult`.
++3. Register `CODEX_QUOTA_EXCEEDED` as PENDING in `summarizeMasterResults`.
++4. Add `codex:quota` npm script + inline CLI in the module.
++5. Add focused module tests and coordinator gate tests; run full `npm run check`.
++
++## Tests to run
++`node --test test/codex-work-quota.test.js test/master-coordinator.test.js`;
++`node scripts/check-js.js`; `npm run check`; `npm run desktop-ai:check`;
++`git diff --check`; `node lib/codex-work-quota.js` smoke.
++
++## Deployment / PR plan
++Branch `opencode/codex-work-quota-20260922` -> single review PR to `master`.
++No direct master push, auto-merge or production deployment. This patch touches
++no deployable app/api surface, so the existing Vercel quota guard should skip
++deployment of the slice itself.
++
++## Current progress
++Module, coordinator gate, npm script and all 14 focused tests are implemented
++and passing. Full repository `npm run check` remains to run before commit.
++
++## Next action
++Run full `npm run check` + `desktop-ai:check`; fix any regression; commit; push;
++open PR; report exact evidence incl. before/after PC health.
++
++## Completion criteria
++All new regression tests + full repo check pass; quota blocked/at-cap/under-cap
++behavior is pinned by tests; no accepted quality metric regresses; PR open with
++evidence; PC health after session no worse than before.
++
++## Final evidence
++Pending full `npm run check`. Focused suite: `node --test
++test/codex-work-quota.test.js test/master-coordinator.test.js` => 40 tests, 40
++PASS, 0 FAIL (incl. 11 new quota-module tests and 3 new coordinator gate
++tests). CLI smoke: no-ledger => allowed/exit 0; 2/3 Codex fixture => blocked
++"above the 30% daily cap", exit 1.
+ 
+ ---
+ 
+diff --git a/package.json b/package.json
+index 1b3e792b..c92baa26 100644
+--- a/package.json
++++ b/package.json
+@@ -112,6 +112,7 @@
+     "master-coordinator:test": "node --test test/master-coordinator.test.js",
+     "master-coordinator:full-free": "node scripts/master-coordinator.cjs --full-free",
+     "master-coordinator:paid-review": "node scripts/master-coordinator.cjs --full-free --allow-paid",
++    "codex:quota": "node lib/codex-work-quota.js",
+     "agent-session:preflight": "node lib/agent-session-guard.js preflight direct-desktop-ai",
+     "agent-session:postflight": "node lib/agent-session-guard.js postflight direct-desktop-ai",
+     "agent-session:check": "node lib/agent-session-guard.js preflight policy-check",
+diff --git a/scripts/master-coordinator.cjs b/scripts/master-coordinator.cjs
+index ec425b62..0d9872de 100644
+--- a/scripts/master-coordinator.cjs
++++ b/scripts/master-coordinator.cjs
+@@ -39,6 +39,7 @@ const { classifyIntent } = require('../lib/mcp-intent-router');
+ const { resolveMainTreeRoot } = require('../lib/world-server-paths');
+ const sessionGuard = require('../lib/agent-session-guard');
+ const manualCompletion = require('../lib/manual-task-completion-contract');
++const codexWorkQuota = require('../lib/codex-work-quota');
+ 
+ // Read-only capability classes get sandboxRoot pointed at the REAL repo (the
+ // local model's tool allowlist for these classes is read_file/read_text_file/
+@@ -492,7 +493,19 @@ async function dispatchSubtask(root, subtask, opts = {}) {
+       } else if (PAID_FALLBACK_AGENTS.has(agentId)) {
+         const gate = opts.respectResourceGate === false ? true : await resourceGateOk('network-agent');
+         if (gate !== true) { lastResult = { ok: false, result: 'QUEUED', resourceGate: gate }; break; }
+-        lastResult = await invokeCodex(taskText, { taskId: `${taskId}-a${attempt}`, push: opts.push, allowPaid: opts.allowPaid });
++        // Master-goal daily Codex quota: Codex is a paid fallback only and
++        // must stay at or below 30 percent of daily AI-agent work, preferring
++        // Claude/OpenCode. Read-only over the shared agent-report ledger
++        // (lib/codex-work-quota.js). A block is honored BEFORE any subprocess
++        // is spawned and records nothing (the dispatch never happened); the
++        // planner's own OpenCode slice is the preferred-Claude/OpenCode
++        // continuation, so no duplicate local dispatch is made here.
++        const quota = codexWorkQuota.codexDispatchDecision({ agentReportsPath: opts.agentReportsPath || REPORT_LOG_PATH, now: opts.quotaNow, maxShare: opts.codexMaxDailyShare });
++        if (!quota.allowed) {
++          lastResult = { ok: false, result: 'CODEX_QUOTA_EXCEEDED', reason: quota.reason, codexQuota: quota };
++          break;
++        }
++        lastResult = await (opts.invokeCodex || invokeCodex)(taskText, { taskId: `${taskId}-a${attempt}`, push: opts.push, allowPaid: opts.allowPaid });
+         if (lastResult.result === 'PAID_FALLBACK_DISABLED') break;
+       } else if (LOCAL_MODEL_AGENTS.has(agentId)) {
+         lastResult = await invokeLocalModelAgent(agentId, taskText, { taskId: `${taskId}-a${attempt}`, respectResourceGate: opts.respectResourceGate, respectConcurrencyLock: opts.respectConcurrencyLock });
+@@ -500,7 +513,7 @@ async function dispatchSubtask(root, subtask, opts = {}) {
+       }
+       if (lastResult && lastResult.ok) break;
+     }
+-    if (lastResult && (agentId === 'opencode' || CLOUD_MODEL_AGENTS.has(agentId) || PAID_FALLBACK_AGENTS.has(agentId))) {
++    if (lastResult && (agentId === 'opencode' || CLOUD_MODEL_AGENTS.has(agentId) || PAID_FALLBACK_AGENTS.has(agentId)) && lastResult.result !== 'CODEX_QUOTA_EXCEEDED') {
+       reportAutomatedAgentResult(agentId, taskText, lastResult, { taskId });
+     }
+     return { taskId, agentId, routePlan, ...lastResult };
+@@ -529,7 +542,7 @@ function buildDefaultSubtasks(goal, opts = {}) {
+ 
+ function summarizeMasterResults(results) {
+   const terminalFail = new Set(['FAIL', 'REFUSED', 'UNKNOWN_AGENT', 'NO_AGENT', 'NOT_AVAILABLE', 'ZERO_CHAOS_BLOCKED', 'ZERO_CHAOS_POSTFAIL']);
+-  const pending = new Set(['QUEUED', 'SKIPPED_ACTIVE', 'ASSIGNED', 'SELF_EXECUTE', 'DISPATCHED', 'PAID_FALLBACK_DISABLED']);
++  const pending = new Set(['QUEUED', 'SKIPPED_ACTIVE', 'ASSIGNED', 'SELF_EXECUTE', 'DISPATCHED', 'PAID_FALLBACK_DISABLED', 'CODEX_QUOTA_EXCEEDED']);
+   if (results.some((r) => terminalFail.has(r.result))) return 'FAIL';
+   if (results.some((r) => pending.has(r.result))) return 'PENDING';
+   return results.length > 0 && results.every((r) => r.result === 'PASS') ? 'PASS' : 'FAIL';
+diff --git a/test/master-coordinator.test.js b/test/master-coordinator.test.js
+index 143c1e4b..8c82719d 100644
+--- a/test/master-coordinator.test.js
++++ b/test/master-coordinator.test.js
+@@ -285,3 +285,57 @@ test('Codex adapter fails closed without explicit paid permission', async () =>
+   assert.equal(r.ok, false);
+   assert.equal(r.result, 'PAID_FALLBACK_DISABLED');
+ });
++
++test('codex dispatch is blocked before any subprocess when the daily 30% share is exceeded', async () => {
++  // A fixture ledger (the same shared report schema every agent writes) where
++  // Codex is already 4/6 of the trailing-day work. A new Codex dispatch must
++  // be blocked with CODEX_QUOTA_EXCEEDED BEFORE invokeCodex (which is why the
++  // gate accepts agentReportsPath/quotaNow for deterministic testing).
++  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'wsh-codex-quota-dispatch-'));
++  const fixture = path.join(dir, 'ai-agent-reports.jsonl');
++  const at = '2026-09-22T12:00:00.000Z';
++  const lines = [
++    { at, agent: 'codex', status: 'done' },
++    { at, agent: 'codex', status: 'failed' },
++    { at, agent: 'codex', status: 'done' },
++    { at, agent: 'codex', status: 'done' },
++    { at, agent: 'opencode', status: 'done' },
++    { at, agent: 'claude-code', status: 'done' },
++  ];
++  fs.writeFileSync(fixture, lines.map((l) => JSON.stringify(l)).join('\n') + '\n');
++  const beforeCodings = readReports().length;
++  const root = mkTmpRoot();
++  const r = await mc.dispatchSubtask(root, { text: 'unresolved integration bug', agent: 'codex', taskId: 'codex-quota-blocked-test' }, { allowPaid: true, agentReportsPath: fixture, quotaNow: Date.parse(at) });
++  assert.equal(r.ok, false);
++  assert.equal(r.result, 'CODEX_QUOTA_EXCEEDED');
++  assert.ok(r.codexQuota && r.codexQuota.codex === 4 && r.codexQuota.total === 6, 'blocked decision must carry the real daily counts');
++  assert.equal(readReports().length, beforeCodings, 'a quota-blocked dispatch must not write a work entry to the shared ledger');
++});
++
++test('codex dispatch proceeds past the quota gate when today share is below the 30% cap', async () => {
++  // A ledger where Codex is 1/5 - below the cap - proves the gate does not
++  // over-block. The real Codex CLI is replaced by a stubbed adapter via the
++  // same seam style runMasterGoal already uses for dispatchFn, so this stays
++  // deterministic and never spawns a paid subprocess.
++  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'wsh-codex-quota-allow-'));
++  const fixture = path.join(dir, 'ai-agent-reports.jsonl');
++  const at = '2026-09-22T12:00:00.000Z';
++  const lines = [
++    { at, agent: 'codex', status: 'done' },
++    { at, agent: 'opencode', status: 'done' },
++    { at, agent: 'opencode', status: 'done' },
++    { at, agent: 'claude-code', status: 'done' },
++    { at, agent: 'world-cloud-ai', status: 'done' },
++  ];
++  fs.writeFileSync(fixture, lines.map((l) => JSON.stringify(l)).join('\n') + '\n');
++  const root = mkTmpRoot();
++  let invokedWithAllowPaid = false;
++  const r = await mc.dispatchSubtask(root, { text: 'unresolved integration bug', agent: 'codex', taskId: 'codex-quota-allow-test' }, { allowPaid: true, agentReportsPath: fixture, quotaNow: Date.parse(at), invokeCodex: async (_text, o) => { invokedWithAllowPaid = o.allowPaid === true; return { ok: true, result: 'PASS', committed: 'deadbeef' }; } });
++  assert.notEqual(r.result, 'CODEX_QUOTA_EXCEEDED', 'a 1/5 daily share must pass the quota gate');
++  assert.equal(r.result, 'PASS');
++  assert.equal(invokedWithAllowPaid, true, 'the adapter must still receive allowPaid through the gate');
++});
++
++test('a blocked codex quota can never false-green an overall PASS', () => {
++  assert.equal(mc.summarizeMasterResults([{ result: 'PASS' }, { result: 'CODEX_QUOTA_EXCEEDED' }]), 'PENDING');
++});

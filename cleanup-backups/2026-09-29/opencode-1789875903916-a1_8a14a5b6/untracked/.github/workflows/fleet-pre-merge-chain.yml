@@ -1,0 +1,51 @@
+name: Fleet PRE Merge-Chain Gate
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: PR number to certify
+        required: true
+        type: string
+      head_sha:
+        description: Exact PR head SHA (40-hex) to certify
+        required: true
+        type: string
+
+concurrency:
+  group: fleet-pre-merge-chain-${{ github.event.pull_request.number || github.event.inputs.pr }}-${{ github.event.pull_request.head.sha || github.event.inputs.head_sha }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+
+jobs:
+  fleet-pre-merge-chain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Verify exact-SHA Fleet PRE certificate
+        shell: bash
+        env:
+          COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.event.inputs.head_sha }}
+          PR_NUMBER: ${{ github.event.pull_request.number || github.event.inputs.pr }}
+          GITHUB_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          if [ -z "$COMMIT_SHA" ] || [ -z "$PR_NUMBER" ]; then
+            echo "::error::Missing PR number or exact head SHA for the Fleet PRE certificate check."
+            exit 1
+          fi
+          OWNER="${GITHUB_REPO%/*}"
+          REPO="${GITHUB_REPO#*/}"
+          node scripts/check-fleet-pre-certificate.cjs "$COMMIT_SHA" --pr "$PR_NUMBER" --owner "$OWNER" --repo "$REPO" --issue 80 --max-age-hours 24

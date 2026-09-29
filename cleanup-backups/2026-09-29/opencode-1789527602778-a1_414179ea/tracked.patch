@@ -1,0 +1,73 @@
+diff --git a/WORK_IN_PROGRESS.md b/WORK_IN_PROGRESS.md
+index 7246d20f..d3f2f7c7 100644
+--- a/WORK_IN_PROGRESS.md
++++ b/WORK_IN_PROGRESS.md
+@@ -2,6 +2,68 @@
+ 
+ ---
+ 
++# Merge-chain Fleet PRE exact-SHA enforcement gate — 2026-09-16
++
++## Task
++Close GAP B: add a permanent, fail-closed merge-chain gate that machine-requires an exact-SHA Fleet PRE `READY_FOR_OCEAN` certificate before any PR head may be accepted for Ocean integration. Pure CI/scripts/tests/data/docs delta — no app/game/runtime change, no production deployment.
++
++## Why
++Weakest `CLAIM_TRUTH` control-plane pillar. Integration can proceed today with NO independent exact-SHA Fleet PRE certificate (proven: #116/#117/#121 merged without certs, plus the repeated #91/#113 false-green bypass class). Confirmed-error-twice => permanent regression-guard candidate; the Architect dispatch of 2026-09-16 (issue #80) defines acceptance A1-A6 for this exact delta.
++
++## Current state
++`master` = `414179ead82c97375f057e8e39a22c67dd981814` (`fix(autodemo): use live Creature Factory visuals (#121)`). GAP A (fail-closed Cloudflare) is already CLOSED on master via merged PR #117. GAP B remains OPEN: whole-tree grep for `FLEET_PRE`/`PRE_INTEGRATION_QA`/`READY_FOR_OCEAN` = zero enforcement occurrences. Worktree branch `opencode/merge-chain-fleet-pre-gate` created from `origin/master` `414179ea`; nothing else changed yet.
++
++## Target state
++A `fleet-pre-merge-chain` status check appears on PRs targeting master: no cert => red BLOCK; a fresh exact-SHA `READY_FOR_OCEAN` certificate (Fleet comment on issue #80) => green. The pure-Node checker and its 7 fail-closed rules + happy path are covered by `node --test` tests inside the required `check` gate.
++
++## Files / systems involved
++- `scripts/check-fleet-pre-certificate.cjs` (new, pure Node, no deps, `module.exports` for offline tests)
++- `.github/workflows/fleet-pre-merge-chain.yml` (new required PR check)
++- `test/fleet-pre-certificate.test.js` (new, 9 tests incl. bypass-class scan)
++- `data/fleet-pre-certificates/README.md` (new cert format/authority documentation)
++- `WORK_IN_PROGRESS.md` (this entry)
++
++## Known risks
++- The checked-in `data/fleet-pre-certificates/<sha>.json` file source must NOT be used as CI authority (a PR author can forge it in their own PR); CI uses the issue-#80 comment source only (Fleet comments require a repo collaborator). File source is deterministic validation only, documented fail-closed.
++- A single-header/decoding bug could make the gate trivially green — mitigated by 8 rule tests + a YAML bypass-class scan test (no `|| true`, no `continue-on-error`, no `if: always()` green).
++- The gate is designed to stay RED until a real Fleet PRE certifies the exact head; that is intended behavior, not a defect.
++
++## Golden systems that must be preserved
++The existing 5 protected required checks (check, quality-regression, agent-rules, world-quality, godot-web-preview), branch protection strictness on master, deny-by-default release, Vercel quota guard (`.github/` already non-deployable), exact-SHA freshness/provenance rules and Zero-Chaos.
++
++## Errors that must not return
++- #91/#113 false-green bypass class (credential-skip / fallback-green / `|| true`) on the merge-chain gate.
++- ANY merge without an exact-SHA Fleet PRE `READY_FOR_OCEAN` certificate.
++- Certificate freshness drift (stale >24h accepted), head SHA mismatch, or verdict relaxation.
++
++## Exact patch / change plan
++1. Add pure-Node `scripts/check-fleet-pre-certificate.cjs`: deterministic cert serialize/sha256, comment heading parser, newest-cert selection, `validateCert` (7 fail-closed rules + happy path), CLI with `--sha/--pr/--source issues|file/--token/--max-age-hours`, exit 0 PASS / 1 BLOCK with machine-readable reason.
++2. Add `data/fleet-pre-certificates/README.md` documenting cert JSON shape, canonical sha256, ISSUE-based vs FILE-based authority and why only ISSUE is CI-authoritative.
++3. Add `.github/workflows/fleet-pre-merge-chain.yml`: `pull_request` against master + `workflow_dispatch`; permissions `contents/issues/pull-requests: read`; single job runs the checker against `github.event.pull_request.head.sha` with `GITHUB_TOKEN`; no skip, no fallback green.
++4. Add `test/fleet-pre-certificate.test.js` (within required `check`): 7 fail-closed rule tests + happy path + bypass-class workflow scan.
++5. Run targeted tests, `npm run check`, `node scripts/check-agent-rules.js`, `npm run desktop-ai:check`, `npm run golden:check`, `git diff --check`.
++6. Commit on `opencode/merge-chain-fleet-pre-gate`, push, open ONE PR to master with evidence; no merge/deploy by this session.
++
++## Tests to run
++`node --test test/fleet-pre-certificate.test.js`; `npm run check`; `node scripts/check-agent-rules.js`; `npm run desktop-ai:check`; `npm run golden:check`; `git diff --check`.
++
++## Deployment / PR plan
++Branch `opencode/merge-chain-fleet-pre-gate` -> ONE PR to `master`. No direct master push, no production deploy, no Vercel build (`.github/`/`test/`/`scripts/`/`data/`/docs-only diff is non-deployable per existing quota guard). After push: Fleet PRE independently falsifies the exact final HEAD_SHA, then Ocean may integrate only that SHA; owner action later (non-blocking for this PR) = add `fleet-pre-merge-chain` to protected required checks.
++
++## Current progress
++Baseline gathered; branch created from `origin/master` 414179ea; implementation not yet edited.
++
++## Next action
++Write the checker script, cert doc, workflow and tests; run gates; commit/push/PR.
++
++## Completion criteria
++A1-A6 from the Architect dispatch: fail-closed rules 1-7 + happy path each have tests; CI uses ISSUE source with the other source failing closed; workflow cannot be green without the cert check (bypass scan); gates pass on exact head; diff limited to `.github/`, `scripts/`, `test/`, `data/`, docs, `WORK_IN_PROGRESS.md`.
++
++## Final evidence
++Pending verification (this run).
++
++---
++
+ # PR #91 Stack Completion refresh — 2026-09-12
+ 
+ ## Task

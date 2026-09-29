@@ -1,0 +1,10 @@
+ M TEST_GAP_MANIFEST.json
+ M WORK_IN_PROGRESS.md
+ M apps/dark-void-scene/golden-ai3d-playable-runtime.js
+ M data/error-prevention-registry.json
+ M shared/dark-void-science-evidence.mjs
+ M shared/dark-void-science-journey.mjs
+ M test/dark-void-navigator-accessibility-v5.test.mjs
+ M test/dark-void-science-journey.test.mjs
+ M test/dark-void-v5-production-invariants.test.mjs
+?? state/

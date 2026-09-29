@@ -1,0 +1,109 @@
+diff --git a/TEST_GAP_MANIFEST.json b/TEST_GAP_MANIFEST.json
+index 21b87f3d..28d54c5e 100644
+--- a/TEST_GAP_MANIFEST.json
++++ b/TEST_GAP_MANIFEST.json
+@@ -1,4 +1,4 @@
+ {
+-  "generatedAt": "2026-09-10T03:24:36.971Z",
++  "generatedAt": "2026-09-25T00:54:53.611Z",
+   "gaps": []
+ }
+diff --git a/package.json b/package.json
+index 3e4e73f6..677f4c2e 100644
+--- a/package.json
++++ b/package.json
+@@ -111,6 +111,7 @@
+     "collective-brain:knowledge-pack": "node scripts/collective-brain-knowledge-pack.js",
+     "collective-brain:ordinary-chat-check": "node scripts/openhuman-ordinary-chat-check.js",
+     "master-coordinator": "node scripts/master-coordinator.cjs",
++    "master-coordinator:quota-check": "node lib/agent-daily-quota.js",
+     "master-coordinator:test": "node --test test/master-coordinator.test.js",
+     "master-coordinator:full-free": "node scripts/master-coordinator.cjs --full-free",
+     "master-coordinator:paid-review": "node scripts/master-coordinator.cjs --full-free --allow-paid",
+diff --git a/scripts/master-coordinator.cjs b/scripts/master-coordinator.cjs
+index ec425b62..a382d7a7 100644
+--- a/scripts/master-coordinator.cjs
++++ b/scripts/master-coordinator.cjs
+@@ -39,6 +39,7 @@ const { classifyIntent } = require('../lib/mcp-intent-router');
+ const { resolveMainTreeRoot } = require('../lib/world-server-paths');
+ const sessionGuard = require('../lib/agent-session-guard');
+ const manualCompletion = require('../lib/manual-task-completion-contract');
++const dailyQuota = require('../lib/agent-daily-quota');
+ 
+ // Read-only capability classes get sandboxRoot pointed at the REAL repo (the
+ // local model's tool allowlist for these classes is read_file/read_text_file/
+@@ -331,7 +332,7 @@ async function invokeCodex(taskText, opts = {}) {
+ }
+ 
+ function reportAutomatedAgentResult(agentId, taskText, result, opts = {}) {
+-  const pending = new Set(['DISPATCHED', 'QUEUED', 'SKIPPED_ACTIVE', 'PAID_FALLBACK_DISABLED']);
++  const pending = new Set(['DISPATCHED', 'QUEUED', 'SKIPPED_ACTIVE', 'PAID_FALLBACK_DISABLED', 'CODEX_DAILY_QUOTA_EXCEEDED']);
+   const status = result.result === 'PASS' ? 'done' : (pending.has(result.result) ? 'queued' : 'failed');
+   const entry = {
+     at: nowIso(), agent: agentId, task_id: opts.taskId || `${agentId}-${Date.now()}`,
+@@ -490,6 +491,8 @@ async function dispatchSubtask(root, subtask, opts = {}) {
+         lastResult = await invokeCloudWorldAi(taskText, { taskId: `${taskId}-a${attempt}`, ref: opts.cloudRef, waitForCompletion: opts.waitForCloud, waitTimeoutMs: opts.cloudWaitTimeoutMs });
+         break;
+       } else if (PAID_FALLBACK_AGENTS.has(agentId)) {
++        const quota = dailyQuota.gateCodexDispatch({ logPath: REPORT_LOG_PATH });
++        if (!quota.ok) { lastResult = { ok: false, result: 'CODEX_DAILY_QUOTA_EXCEEDED', reason: quota.reason, quota: quota.data }; break; }
+         const gate = opts.respectResourceGate === false ? true : await resourceGateOk('network-agent');
+         if (gate !== true) { lastResult = { ok: false, result: 'QUEUED', resourceGate: gate }; break; }
+         lastResult = await invokeCodex(taskText, { taskId: `${taskId}-a${attempt}`, push: opts.push, allowPaid: opts.allowPaid });
+@@ -529,7 +532,7 @@ function buildDefaultSubtasks(goal, opts = {}) {
+ 
+ function summarizeMasterResults(results) {
+   const terminalFail = new Set(['FAIL', 'REFUSED', 'UNKNOWN_AGENT', 'NO_AGENT', 'NOT_AVAILABLE', 'ZERO_CHAOS_BLOCKED', 'ZERO_CHAOS_POSTFAIL']);
+-  const pending = new Set(['QUEUED', 'SKIPPED_ACTIVE', 'ASSIGNED', 'SELF_EXECUTE', 'DISPATCHED', 'PAID_FALLBACK_DISABLED']);
++  const pending = new Set(['QUEUED', 'SKIPPED_ACTIVE', 'ASSIGNED', 'SELF_EXECUTE', 'DISPATCHED', 'PAID_FALLBACK_DISABLED', 'CODEX_DAILY_QUOTA_EXCEEDED']);
+   if (results.some((r) => terminalFail.has(r.result))) return 'FAIL';
+   if (results.some((r) => pending.has(r.result))) return 'PENDING';
+   return results.length > 0 && results.every((r) => r.result === 'PASS') ? 'PASS' : 'FAIL';
+@@ -583,6 +586,7 @@ module.exports = {
+   SELF_EXECUTE_AGENTS,
+   GH_CLI_PATH,
+   CODEX_CLI_PATH,
++  dailyQuota,
+ };
+ 
+ if (require.main === module) {
+diff --git a/test/master-coordinator.test.js b/test/master-coordinator.test.js
+index 143c1e4b..3cc06947 100644
+--- a/test/master-coordinator.test.js
++++ b/test/master-coordinator.test.js
+@@ -285,3 +285,35 @@ test('Codex adapter fails closed without explicit paid permission', async () =>
+   assert.equal(r.ok, false);
+   assert.equal(r.result, 'PAID_FALLBACK_DISABLED');
+ });
++
++test('summarizeMasterResults treats CODEX_DAILY_QUOTA_EXCEEDED as PENDING, never FAIL/PASS', () => {
++  assert.equal(mc.summarizeMasterResults([{ result: 'PASS' }, { result: 'CODEX_DAILY_QUOTA_EXCEEDED' }]), 'PENDING');
++});
++
++test('coordinator exposes the daily-quota module so the Codex 30% cap rule is enforced from one place', () => {
++  assert.ok(mc.dailyQuota);
++  assert.equal(mc.dailyQuota.DEFAULT_MAX_SHARE, 0.3);
++  assert.equal(typeof mc.dailyQuota.gateCodexDispatch, 'function');
++});
++
++test('dispatchSubtask refuses a Codex fallback when the daily share cap is exceeded, before any paid invocation', async () => {
++  const snapshot = fs.existsSync(REPORT_LOG) ? fs.readFileSync(REPORT_LOG, 'utf8') : '';
++  const now = Date.now();
++  const entries = [];
++  for (let n = 1; n <= 4; n++) entries.push(JSON.stringify({ at: new Date(now - n * 60 * 1000).toISOString(), agent: 'codex', status: 'done' }));
++  for (let n = 5; n <= 10; n++) entries.push(JSON.stringify({ at: new Date(now - n * 60 * 1000).toISOString(), agent: 'opencode', status: 'done' }));
++  try {
++    fs.writeFileSync(REPORT_LOG, entries.join('\n') + '\n');
++    const root = mkTmpRoot();
++    const r = await mc.dispatchSubtask(root, { text: 'unresolved integration bug', agent: 'codex', taskId: 'codex-quota-block-test' }, { allowPaid: true, respectResourceGate: false });
++    assert.equal(r.ok, false);
++    assert.equal(r.result, 'CODEX_DAILY_QUOTA_EXCEEDED');
++    assert.ok(r.quota);
++    assert.equal(r.quota.codexCount, 4);
++    assert.equal(r.quota.totalCount, 10);
++    assert.equal(r.quota.share, 0.4);
++    assert.match(r.reason, /exceeds the 30% cap/);
++  } finally {
++    fs.writeFileSync(REPORT_LOG, snapshot);
++  }
++});

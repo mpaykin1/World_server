@@ -1,0 +1,40 @@
+{
+  "generatedAt": "2026-09-06T12:54:38.185Z",
+  "width": 320,
+  "height": 180,
+  "secondsApprox": 4,
+  "worlds": [
+    {
+      "id": "voxel-world",
+      "ok": true
+    },
+    {
+      "id": "ai3d-voxel-city",
+      "ok": true
+    },
+    {
+      "id": "survival",
+      "ok": true
+    },
+    {
+      "id": "world-sharabass",
+      "ok": true
+    },
+    {
+      "id": "dark-void-scene",
+      "ok": true
+    },
+    {
+      "id": "dreamfog-world",
+      "ok": true
+    },
+    {
+      "id": "ink-glyph-world",
+      "ok": true
+    },
+    {
+      "id": "pixel-panorama-360",
+      "ok": true
+    }
+  ]
+}

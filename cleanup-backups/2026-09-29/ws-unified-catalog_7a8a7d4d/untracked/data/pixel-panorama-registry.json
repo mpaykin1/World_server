@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "2.0.0",
+  "system": "PIXEL_PANORAMA_360",
+  "items": [
+    {
+      "slug": "sample-pixel-world",
+      "title": "Sample Pixel World",
+      "description": "Sample animated pixel-art panorama",
+      "manifestUrl": "/shared/panorama360/sample-pixel-world/manifest.json",
+      "previewUrl": "/shared/panorama360/sample-pixel-world/desktop/preview.png",
+      "frameCount": 8,
+      "fps": 8,
+      "qualityTiers": [
+        "mobile",
+        "desktop"
+      ],
+      "multires": true,
+      "createdAt": "2026-09-06T06:30:30.394Z",
+      "updatedAt": "2026-09-06T06:30:30.394Z"
+    }
+  ]
+}

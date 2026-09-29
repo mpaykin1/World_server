@@ -1,0 +1,4 @@
+original_path=C:/Users/user/AppData/Local/World_server_worktrees/opencode-1789627502820-a2
+head=
+ede47aa50dded13803f57c4d601779a7235470ef
+branch=opencode/pc-health-zerochaos-guard

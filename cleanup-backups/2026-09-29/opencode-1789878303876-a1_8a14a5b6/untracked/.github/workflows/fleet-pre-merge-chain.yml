@@ -1,0 +1,46 @@
+name: Fleet-PRE Merge Chain Gate
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: fleet-pre-merge-chain-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  issues: read
+
+jobs:
+  fleet-pre-merge-chain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Fetch authoritative Fleet PRE certificates from issue #80
+        shell: bash
+        run: |
+          set -euo pipefail
+          REPO="${{ github.repository }}"
+          gh api "repos/${REPO}/issues/80/comments" --paginate > fleet-pre-comments.json
+          node -e "const c=require('./fleet-pre-comments.json'); if(!Array.isArray(c)) throw new Error('comments fetch did not return an array'); console.log('Fleet PRE comments fetched:', c.length);"
+
+      - name: Enforce exact-SHA Fleet PRE certificate (fail-closed)
+        shell: bash
+        run: |
+          set -euo pipefail
+          PR_NUMBER="${{ github.event.pull_request.number || '0' }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha || github.sha }}"
+          node scripts/check-fleet-pre-certificate.cjs \
+            --pr="$PR_NUMBER" \
+            --head-sha="$HEAD_SHA" \
+            --issue-comments=fleet-pre-comments.json \
+            --max-age-hours=24

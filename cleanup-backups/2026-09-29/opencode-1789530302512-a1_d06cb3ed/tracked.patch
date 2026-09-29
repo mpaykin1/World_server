@@ -1,0 +1,63 @@
+diff --git a/WORK_IN_PROGRESS.md b/WORK_IN_PROGRESS.md
+index 25825abf..1043751e 100644
+--- a/WORK_IN_PROGRESS.md
++++ b/WORK_IN_PROGRESS.md
+@@ -2,6 +2,58 @@
+ 
+ ---
+ 
++# Merge-chain Fleet PRE exact-SHA enforcement gate — 2026-09-16
++
++## Task (Owner Delta, issue #80 FRESH_2026-09-16)
++Close GAP B on a NEW single PR: a permanent merge-chain gate that machine-requires an unambiguous, exact-SHA Fleet PRE `READY_FOR_OCEAN=YES` certificate before any PR targeting `master` may integrate. Baseline master = `414179ea` (fix(autodemo): use live Creature Factory visuals (#121)). Owned lane = branch `ai/chatgpt/merge-chain-fleet-pre-gate` (created empty from `origin/master`). GAP A is already closed on master (PR #117 merged, `cloudflare-preview.yml` fails closed).
++
++## Why
++Weakest CLAIM_TRUTH pillar: integration is currently possible with NO independent exact-SHA Fleet PRE certificate (#116/#117/#121 merged without certs). Whole-tree grep for `READY_FOR_OCEAN|PRE_INTEGRATION_QA|FLEET_PRE|fleet-cert|merge-chain` = ZERO enforcement occurrences. Confirmed-error-twice class (#91/#113) against a permanent gap is a permanent-regression-guard candidate.
++
++## Current state
++Baseline master `414179ea` fetched; feature branch points there with no commits. `origin/master` healthy; PR #117 merged (02e6831a); production Cloudflare still on UUID revision (out of scope, no production deploy by anyone). No existing PR carries this gate.
++
++## Target state
++- `scripts/check-fleet-pre-certificate.cjs` (pure Node, no deps, `module.exports` for offline tests): validates cert records against 7 fail-closed rules; I/O (issue #80 comment fetch via unauthenticated public API or GH_TOKEN) separated from pure validation logic.
++- Authoritative deterministic source: issue #80 `[FLEET][PRE_INTEGRATION_QA][PR_#][EXACT_HEAD_<sha>] ... READY_FOR_OCEAN=YES` comments. Checked-in `data/fleet-pre-certificates/<sha>.json` files are NOT authoritative and can never produce PASS (fail-closed "other source").
++- `.github/workflows/fleet-pre-merge-chain.yml`: `fleet-pre-merge-chain` check on PRs targeting master + workflow_dispatch; green only on exact-SHA cert pass; no `|| true`, no skip, no fallback green.
++- `test/fleet-pre-certificate.test.js`: 7 fail-closed rule tests + happy path + PR-mismatch + ambiguous + bypass-class workflow scan, integrated via `node --test` inside `npm run check`.
++
++## Files / systems involved
++`scripts/check-fleet-pre-certificate.cjs` (new), `.github/workflows/fleet-pre-merge-chain.yml` (new), `test/fleet-pre-certificate.test.js` (new), `docs/FLEET_PRE_MERGE_CHAIN.md` (new), `WORK_IN_PROGRESS.md`. No app/game/api/runtime change; Vercel deploy skipped (`.github/ docs/ test/ scripts/` non-deployable per `check-vercel-ignore.js`).
++
++## Known risks / fail-closed guarantees
++- Missing/skipped/corrupted cert, SHA mismatch, wrong PR, non-READY verdict, stale cert (>24h), unreachable/ambiguous source, checked-in file without comment => BLOCK (exit nonzero), never green.
++- Unauthenticated public API rate limits: mitigated by `issues: read` token in the workflow (script accepts GH_TOKEN/GITHUB_TOKEN); script stays usable unauthenticated for manual probes.
++- New workflow check will be red on this PR until Fleet PRE certifies the final head — expected fail-closed behavior, not a merge blocker (master required checks unchanged until owner adds `fleet-pre-merge-chain`).
++
++## Exact patch / change plan
++1. Implement pure cert parsing/validation + CLI in `scripts/check-fleet-pre-certificate.cjs`.
++2. Add `.github/workflows/fleet-pre-merge-chain.yml`.
++3. Add `test/fleet-pre-certificate.test.js` (rule tests + bypass scan).
++4. Add `docs/FLEET_PRE_MERGE_CHAIN.md` documenting source, rules, workflow, Ocean/Fleet usage.
++5. Run gates: `npm run check`, `node scripts/check-agent-rules.js`, `npm run golden:check`, `npm run quality:regression`, VNO/science gates; CI runs the heavier remaining gates.
++
++## Tests to run
++`npm run check` (node --test picks up the new suite), `git diff --check`, workflow bypass scan (in test), script CLI fail-closed probes (offline, unreachable source).
++
++## Deployment / PR plan
++Commit + push `ai/chatgpt/merge-chain-fleet-pre-gate`, open ONE PR to `master` (base 414179ea). No merge, no master push, no production deploy. Route final head to Fleet PRE (independent) after push.
++
++## Current progress
++Bootstrap complete; implementation pending.
++
++## Next action
++Implement script, workflow, tests, doc; run local gates; commit/push; open PR #122; post evidence; hand off to Fleet PRE.
++
++## Completion criteria
++A1-A6 of Owners Delta #3 FRESH_2026-09-16: pure script + 7 fail-closed rules; deterministic certified source (issue #80 comments, file fails closed); merge-chain workflow; 8+ tests + bypass scan inside `npm run check`; repo gates pass; diff scoped to `.github/ scripts/ test/ data/ docs`; no production deploy.
++
++## Final evidence
++To be filled after gates and PR creation.
++
++---
++
+ # IndieWorlds foundation — 2026-09-10
+ 
+ ## Task

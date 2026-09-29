@@ -1,0 +1,4 @@
+original_path=C:/Users/user/AppData/Local/World_server_worktrees/opencode-1789863903777-a2
+head=
+2ef15ccade0d757894f6fc4f7e9b3cc752725dbd
+branch=opencode/voxel-vertex-color-uint8

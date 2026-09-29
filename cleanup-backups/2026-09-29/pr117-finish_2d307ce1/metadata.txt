@@ -1,0 +1,4 @@
+original_path=C:/Users/user/AppData/Local/World_server_worktrees/pr117-finish
+head=
+2d307ce12ee59de96f38b7524ec279e1eacec338
+branch=ai-chatgpt-cloudflare-repair-20260914

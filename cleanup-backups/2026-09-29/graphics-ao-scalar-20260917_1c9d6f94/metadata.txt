@@ -1,0 +1,4 @@
+original_path=C:/Users/user/AppData/Local/World_server_worktrees/graphics-ao-scalar-20260917
+head=
+1c9d6f94eee6a0527a4aacffcb26eb38ad0d6bee
+branch=ai/chatgpt/water-shore-allocation-free-20260917

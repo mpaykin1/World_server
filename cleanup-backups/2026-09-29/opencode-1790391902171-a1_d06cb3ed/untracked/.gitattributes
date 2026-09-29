@@ -1,0 +1,13 @@
+# Source and documentation keep the platform default.
+* text=auto
+
+# Deterministic generated artifacts must never be rewritten by git's end-of-line
+# conversion. `shared/indieworlds/**` is generated with LF newlines by
+# `npm run indieworlds:export`, and `npm run indieworlds:check` proves the
+# checked-in bytes still match canonical registry/graph/lore data. Marking the
+# files `-text` keeps them byte-exact on every platform, so a Windows checkout
+# with `core.autocrlf=true` can no longer fail the gate on a pure CRLF rewrite.
+#
+# Attribute order matters: a later matching line overrides an earlier one, so this
+# specific `-text` rule must stay after `* text=auto` to take effect.
+shared/indieworlds/** -text

@@ -1,0 +1,38 @@
+name: Fleet PRE Merge Chain
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fleet-pre-merge-chain:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Resolve exact PR HEAD SHA
+        id: sha
+        shell: bash
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            SHA="${{ github.event.pull_request.head.sha }}"
+          else
+            SHA="${{ github.sha }}"
+          fi
+          echo "head_sha=${SHA}" >> "$GITHUB_OUTPUT"
+
+      - name: Fail closed without an exact-SHA Fleet PRE certificate
+        shell: bash
+        env:
+          FLEET_PRE_CERT_SOURCE: repo
+        run: node scripts/check-fleet-pre-certificate.cjs "${{ steps.sha.outputs.head_sha }}"

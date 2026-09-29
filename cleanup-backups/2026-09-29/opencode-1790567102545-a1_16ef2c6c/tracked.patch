@@ -1,0 +1,212 @@
+diff --git a/TEST_GAP_MANIFEST.json b/TEST_GAP_MANIFEST.json
+index 21b87f3d..204a1e68 100644
+--- a/TEST_GAP_MANIFEST.json
++++ b/TEST_GAP_MANIFEST.json
+@@ -1,4 +1,4 @@
+ {
+-  "generatedAt": "2026-09-10T03:24:36.971Z",
++  "generatedAt": "2026-09-28T03:54:21.564Z",
+   "gaps": []
+ }
+diff --git a/WORK_IN_PROGRESS.md b/WORK_IN_PROGRESS.md
+index 517dc3b8..bd19104e 100644
+--- a/WORK_IN_PROGRESS.md
++++ b/WORK_IN_PROGRESS.md
+@@ -973,3 +973,118 @@ Regression tests must cover canonical population arithmetic, worker bound, exact
+ Registered on protected base `75bb69eab3d94f260ee8140075f48a4d1e2ed32e`. Implementation and tests in progress.
+ 
+ ---
++
++---
++
++# Root-level ESM syntax coverage gap — 2026-09-28
++
++## Task
++Extend the single existing JavaScript syntax gate (`scripts/check-js.js`) so the
++7 root-level `*.mjs` runtime entry points are actually syntax-checked by every
++automated gate, and add a behavioural regression test that proves the gate now
++fails closed on a broken root ESM.
++
++## Why
++Fleet PRE independently falsified PR #320/#326 with finding F3: the gate
++(`npm run check:fast` -> `scripts/check-js.js`) only covers `server.js`,
++`shared/common.js`, `api/*.js`, `lib/*.js` and `apps/*/client.js`. It does not
++cover root-level `*.mjs` — precisely the extension of `telegram-story.mjs`,
++`telegram-state.mjs` and `telegram-game.mjs`, the files those PRs change. A
++candidate can therefore ship a syntactically broken Telegram/Chain Reaction
++runtime entry point while every green check stays green.
++
++This is a release-control defect in a file that open PR #324 does NOT touch, so
++it is owned separately from the Ocean eligibility gate and does not duplicate
++that PR.
++
++## Current state
++Branch `ai/opencode/check-js-root-mjs-coverage-20260928`, created from exact
++current default head `16ef2c6ccdeec6f9888c94ac4d78bcadef1d24cb`
++(`fix: restore free-tier Groq model calls for Chain Reaction and Telegram (#345)`).
++Previous default head / rollback reference: `16ef2c6c`. LKG unchanged: this is a
++CI-only delta with no schema, data, runtime, dependency or deploy change.
++
++## Target state
++One syntax gate covers CommonJS runtime entry points, browser clients and
++root-level ESM entry points. A broken root `*.mjs` fails `npm run check`,
++`npm run check:fast`, quality, godot and fleet-pre, exactly as a broken `lib/*.js`
++already does.
++
++## Files / systems involved
++- `scripts/check-js.js` — the single existing gate; extended, not duplicated.
++- `test/check-js-syntax-coverage.test.js` — new behavioural regression test.
++- `WORK_IN_PROGRESS.md` — this evidence entry.
++
++No new dependency. No new workflow, no parallel gate, no second checker.
++
++## Exact patch / change plan
++1. Extract target discovery and the check loop out of the inline script body
++   into exported functions `collectTargets(rootDir)` and
++   `checkTargets(rootDir, spawn)`, mirroring the existing
++   `scripts/independent-review-gate.cjs` convention of pure exported functions
++   with a thin CLI.
++2. Add root-level `*.mjs` files to the ESM target list, checked through the same
++   `node --check --input-type=module` stdin path already used for
++   `apps/*/client.js`.
++3. Preserve existing behaviour exactly: same child-process flags, same
++   diagnostics, same propagation of the child's exit status, same
++   `Syntax OK: N JavaScript files` summary line, and `main()` still runs on
++   direct execution.
++4. Add a behavioural test that builds a throwaway fixture root in the OS temp
++   directory and runs the real exported checker against it, asserting a broken
++   root `*.mjs` is rejected and a valid one is accepted. The test must not
++   create, mutate or depend on files inside the repository, so it cannot race
++   the parallel `node --test` runner.
++
++## Known risks
++- A currently-valid root `*.mjs` could be rejected by `--input-type=module`.
++  Pre-verified before editing: all 7 files pass the exact invocation, so the
++  change turns no currently-green gate red.
++- `--input-type=module` is a stdin-only flag; root `*.mjs` must use the same
++  stdin path as `apps/*/client.js`, not the `path` argument form.
++- `test/` files run in parallel; any test that writes into the repository root
++  could make an unrelated concurrent `check-js` run fail spuriously. The new
++  test therefore uses a temp fixture root and never the real root.
++
++## Errors that must not return
++- A tautological test that only regex-matches the source text of `check-js.js`.
++- A `check-js` that reports success for a file it never passed to `node --check`.
++- A second, parallel syntax checker, or a new dependency.
++- Weakening, skipping or relaxing any existing gate or test.
++
++## Tests to run
++- `node --test test/check-js-syntax-coverage.test.js`
++- `npm run check:fast`
++- `node scripts/check-js.js`
++- `npm run check`
++- `node scripts/check-agent-rules.js`
++- `npm run golden:check`
++- `git diff --check`
++- Negative reproduction: a deliberately broken root `*.mjs` must now make
++  `node scripts/check-js.js` exit non-zero, then be deleted.
++
++## Deployment / PR plan
++Single PR from `ai/opencode/check-js-root-mjs-coverage-20260928` into `master`.
++No direct master push, no merge, no production deployment. Heavy verification
++is delegated to existing cloud CI. Ocean integration and Fleet POST are
++separate, owner-gated steps and are NOT claimed here.
++
++## Current progress
++Root cause reproduced before editing: with a deliberately broken root
++`zz-repro-syntax-probe.mjs` present, `node scripts/check-js.js` exited 0 with
++"Syntax OK: 67 JavaScript files" while `node --check` on the same file exited 1.
++The probe file was deleted. All 7 real root `*.mjs` files verified to pass the
++exact `--check --input-type=module` stdin invocation. Implementation next.
++
++## Next action
++Implement the `scripts/check-js.js` change, add the behavioural regression
++test, run the gates above, commit, push and open the PR.
++
++## Completion criteria
++A broken root `*.mjs` fails the shared gate; all 7 real root `*.mjs` still pass;
++`npm run check` stays green with no test weakened or skipped; no new dependency,
++workflow or duplicate checker; behaviour covered by an executed test rather
++than a text match.
++
++## Final evidence
++Pending current-run verification.
+diff --git a/scripts/check-js.js b/scripts/check-js.js
+index bf193ad1..24adbf42 100644
+--- a/scripts/check-js.js
++++ b/scripts/check-js.js
+@@ -5,32 +5,53 @@ const path = require('path');
+ const { spawnSync } = require('child_process');
+ 
+ const root = path.resolve(__dirname, '..');
+-const files = ['server.js', 'shared/common.js'];
+-const modules = [];
+-for (const directory of ['api', 'lib']) {
+-  for (const entry of fs.readdirSync(path.join(root, directory))) {
+-    if (entry.endsWith('.js')) files.push(`${directory}/${entry}`);
++
++function collectTargets(rootDir) {
++  const files = ['server.js', 'shared/common.js'];
++  const modules = [];
++  for (const directory of ['api', 'lib']) {
++    for (const entry of fs.readdirSync(path.join(rootDir, directory))) {
++      if (entry.endsWith('.js')) files.push(`${directory}/${entry}`);
++    }
+   }
+-}
+-for (const entry of fs.readdirSync(path.join(root, 'apps'), { withFileTypes: true })) {
+-  if (!entry.isDirectory()) continue;
+-  const client = `apps/${entry.name}/client.js`;
+-  if (fs.existsSync(path.join(root, client))) modules.push(client);
++  for (const entry of fs.readdirSync(path.join(rootDir, 'apps'), { withFileTypes: true })) {
++    if (!entry.isDirectory()) continue;
++    const client = `apps/${entry.name}/client.js`;
++    if (fs.existsSync(path.join(rootDir, client))) modules.push(client);
++  }
++  // Root-level .mjs are ES module runtime entry points (Telegram and Chain
++  // Reaction handlers). They are edited by ordinary feature work, so leaving
++  // them out of this gate let a candidate ship a file that cannot parse while
++  // every syntax check still reported success.
++  for (const entry of fs.readdirSync(rootDir, { withFileTypes: true })) {
++    if (entry.isFile() && entry.name.endsWith('.mjs')) modules.push(entry.name);
++  }
++  return { files, modules };
+ }
+ 
+-for (const file of files) {
+-  const result = spawnSync(process.execPath, ['--check', path.join(root, file)], { encoding: 'utf8' });
+-  if (result.status !== 0) {
+-    process.stderr.write(result.stderr || result.stdout);
+-    process.exit(result.status || 1);
++function checkTargets(rootDir, spawn = spawnSync) {
++  const { files, modules } = collectTargets(rootDir);
++  const total = files.length + modules.length;
++  for (const file of files) {
++    const result = spawn(process.execPath, ['--check', path.join(rootDir, file)], { encoding: 'utf8' });
++    if (result.status !== 0) return { ok: false, file, status: result.status, output: result.stderr || result.stdout, total };
++  }
++  for (const file of modules) {
++    const source = fs.readFileSync(path.join(rootDir, file), 'utf8');
++    const result = spawn(process.execPath, ['--check', '--input-type=module'], { input: source, encoding: 'utf8' });
++    if (result.status !== 0) return { ok: false, file, status: result.status, output: result.stderr || result.stdout, total };
+   }
++  return { ok: true, status: 0, output: '', total };
+ }
+-for (const file of modules) {
+-  const source = fs.readFileSync(path.join(root, file), 'utf8');
+-  const result = spawnSync(process.execPath, ['--check', '--input-type=module'], { input: source, encoding: 'utf8' });
+-  if (result.status !== 0) {
+-    process.stderr.write(`${file}:\n${result.stderr || result.stdout}`);
++
++function main() {
++  const result = checkTargets(root);
++  if (!result.ok) {
++    process.stderr.write(`${result.file}:\n${result.output}`);
+     process.exit(result.status || 1);
+   }
++  console.log(`Syntax OK: ${result.total} JavaScript files`);
+ }
+-console.log(`Syntax OK: ${files.length + modules.length} JavaScript files`);
++
++if (require.main === module) main();
++module.exports = { collectTargets, checkTargets };

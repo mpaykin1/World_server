@@ -1,0 +1,13 @@
+diff --git a/scripts/verify-working-link.cjs b/scripts/verify-working-link.cjs
+index 86e456fc..acdd858d 100644
+--- a/scripts/verify-working-link.cjs
++++ b/scripts/verify-working-link.cjs
+@@ -6,7 +6,7 @@ const path = require('node:path');
+ 
+ const deploymentIdentity = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'cloudflare-deployment-identity.json'), 'utf8').replace(/^\uFEFF/, ''));
+ 
+-const ERROR_MARKERS = ['site not found','page not found','404: not_found','deployment_not_found','vercel login','not found - request id'];
++const ERROR_MARKERS = ['site not found','page not found','404: not_found','deployment_not_found','vercel login','not found - request id','internal server error'];
+ function parseArgs(argv){
+   const out={url:argv[2]||process.env[deploymentIdentity.previewOriginEnvironmentVariable]||process.env[deploymentIdentity.canonicalOriginEnvironmentVariable]||'',game:false,readyGlobal:'',inventoryId:'',expectedSha:''};
+   for(const a of argv.slice(3)){

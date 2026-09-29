@@ -1,0 +1,174 @@
+diff --git a/data/desktop-ai-policy.json b/data/desktop-ai-policy.json
+index 28edc33b..ea1fb91c 100644
+--- a/data/desktop-ai-policy.json
++++ b/data/desktop-ai-policy.json
+@@ -40,6 +40,7 @@
+     "minFreeRamPercent": 15,
+     "warnFreeRamPercent": 25,
+     "minFreeDiskGB": 5,
++    "maxCpuLoadPercent": 85,
+     "desktopAllowedProjectItems": [
+       "World_server"
+     ],
+@@ -49,6 +50,10 @@
+       "session-guard-"
+     ],
+     "processRule": "Never terminate user or unrelated processes. Only the process tree explicitly spawned and owned by the current AI launcher may be stopped on timeout/duplication.",
+-    "completionRule": "Every local-capable AI session must pass preflight before execution and postflight before completion."
++    "completionRule": "Every local-capable AI session must pass preflight before execution and postflight before completion.",
++    "cpuRule": "If CPU load reaches maxCpuLoadPercent while a heavy local AI job would start, defer the job (QUEUED_CPU) instead of starting it.",
++    "healthEvidenceRule": "Preflight and postflight snapshots (CPU, RAM, disk) are appended to the off-Desktop health-evidence ledger so after-session health can be compared against before-session health.",
++    "processAuditRule": "AI/node/python processes are sampled before and after each session to detect duplicates and orphan candidates, but ONLY PIDs explicitly recorded as owned by this session may ever be terminated.",
++    "safeToDeleteRule": "Anything this session cannot safely delete at its end is moved into the owned SESSION_SAFE_TO_DELETE folder with a README and manifest, never force-deleted and never left as scattered junk."
+   }
+ }
+diff --git a/lib/agent-session-guard.js b/lib/agent-session-guard.js
+index 8f6ed87c..61a3c3af 100644
+--- a/lib/agent-session-guard.js
++++ b/lib/agent-session-guard.js
+@@ -3,6 +3,7 @@ const fs = require('fs');
+ const path = require('path');
+ const os = require('os');
+ const resourceScheduler = require('./resource-scheduler');
++const processAudit = require('./agent-process-audit');
+ 
+ const POLICY_PATH = path.join(__dirname, '..', 'data', 'desktop-ai-policy.json');
+ const CANONICAL_DESKTOP_NAME = 'World_server';
+@@ -57,6 +58,69 @@ function diskFreeBytes(target) {
+   } catch { return null; }
+ }
+ 
++// Best-effort CPU load sampling. Reuses the existing cross-platform probe
++// (lib/ai-resource-scheduler.js#getResourceState: PowerShell Win32_Processor
++// on Windows, os.loadavg on POSIX) instead of duplicating another probe. On
++// failure it returns null so resource decisions still work from RAM/disk.
++function cpuLoadPercent() {
++  try {
++    const state = require('./ai-resource-scheduler').getResourceState();
++    const v = Number(state && state.cpuLoadPercent);
++    return Number.isFinite(v) ? v : null;
++  } catch {
++    return null;
++  }
++}
++
++function healthEvidencePath(policy) {
++  return path.join(policy.aiRoot, 'Runtime', 'health-evidence.jsonl');
++}
++
++// Appends one immutable before/after health record for a session so "PC
++// health after the session must be no worse than before" can be verified, not
++// just asserted in prose. Best-effort: a recording failure must not break the
++// caller's normal flow.
++function recordHealthEvidence(policy, { phase, agentId, snapshot }) {
++  const fp = healthEvidencePath(policy);
++  const entry = { at: new Date().toISOString(), phase, agentId, host: os.hostname(), snapshot };
++  try {
++    fs.mkdirSync(path.dirname(fp), { recursive: true });
++    fs.appendFileSync(fp, JSON.stringify(entry) + '\n');
++    return { ok: true, path: fp };
++  } catch {
++    return { ok: false };
++  }
++}
++
++// SAFE_TO_DELETE quarantine: anything this session cannot safely remove right
++// now (in use, sole copy, unpushed work, user-owned, uncertain ownership) is
++// moved - not deleted - into one owned folder with a README explaining why,
++// instead of being left as scattered junk or force-deleted. The destination
++// lives under the AI scratch root, never on the Desktop.
++const SAFE_TO_DELETE_README = '# SESSION SAFE TO DELETE\n\nAnything in this folder was moved here by an AI session because it could not be safely deleted at session end (see each README inside a subfolder). Review and delete manually, or keep as evidence.\n';
++
++function safeToDeleteRoot(policy) {
++  return path.join(policy.aiRoot, 'SESSION_SAFE_TO_DELETE');
++}
++
++function quarantineUnsafe(policy, sourcePath, reason) {
++  const src = String(sourcePath || '');
++  if (!src) return { ok: false, reason: 'no source path' };
++  if (!fs.existsSync(src)) return { ok: false, reason: `source missing: ${src}` };
++  const root = safeToDeleteRoot(policy);
++  const slot = path.join(root, `item-${Date.now()}`);
++  try {
++    fs.mkdirSync(slot, { recursive: true });
++    fs.writeFileSync(path.join(root, 'README.md'), SAFE_TO_DELETE_README, { flag: 'a' });
++    fs.writeFileSync(path.join(slot, 'MANIFEST.json'), JSON.stringify({ movedFrom: src, reason: reason || 'unsafe-to-delete at session end', at: new Date().toISOString(), host: os.hostname() }, null, 2) + '\n');
++    fs.copyFileSync(src, path.join(slot, path.basename(src)));
++    fs.unlinkSync(src);
++    return { ok: true, from: src, to: slot, reason: reason || 'unsafe-to-delete' };
++  } catch (error) {
++    return { ok: false, reason: `quarantine failed: ${error.message}` };
++  }
++}
++
+ function cleanupOwnedScratch(policy = loadPolicy(), now = Date.now()) {
+   const root = policy.scratchRoot;
+   const ttlMs = Number(policy.scratchTtlHours || 24) * 60 * 60 * 1000;
+@@ -84,7 +148,13 @@ function snapshotResources(policy = loadPolicy()) {
+   const freeRamPercent = Math.round(pressure.freeRatio * 1000) / 10;
+   const freeDiskBytes = diskFreeBytes(policy.aiRoot);
+   const minFreeDiskGB = Number(policy.minFreeDiskGB || 5);
++  const maxCpuPercent = Number(policy.maxCpuLoadPercent != null ? policy.maxCpuLoadPercent : 85);
++  const cpu = cpuLoadPercent();
++  const cpuCritical = cpu != null && cpu >= maxCpuPercent;
+   return {
++    cpuLoadPercent: cpu,
++    cpuCritical,
++    maxCpuLoadPercent: maxCpuPercent,
+     freeRamPercent,
+     memoryPressure: pressure.level,
+     freeDiskBytes,
+@@ -100,8 +170,14 @@ function preflight(agentId, opts = {}) {
+   const cleanup = opts.cleanup === false ? { reclaimedBytes: 0, removed: [] } : cleanupOwnedScratch(policy);
+   const desktop = auditDesktop();
+   const resources = snapshotResources(policy);
++  const processAuditReport = opts.processAudit === false ? null : auditSessionProcesses(opts);
++  const evidence = opts.recordEvidence === false ? null : recordHealthEvidence(policy, { phase: 'preflight', agentId, snapshot: resources });
+   const ok = desktop.ok && !resources.diskCritical;
+-  return { phase: 'preflight', agentId, ok, throttle: Boolean(opts.localHeavy && resources.ramCritical), desktop, resources, cleanup, roots: { worktrees: policy.worktreesRoot, scratch: policy.scratchRoot, ai: policy.aiRoot } };
++  const cpuBlocked = Boolean(opts.localHeavy && resources.cpuCritical);
++  let decision = ok ? 'RUN' : 'BLOCKED';
++  if (opts.localHeavy && resources.ramCritical) decision = 'QUEUED_RAM';
++  else if (opts.localHeavy && resources.cpuCritical) decision = 'QUEUED_CPU';
++  return { phase: 'preflight', agentId, ok, throttle: Boolean(opts.localHeavy && (resources.ramCritical || resources.cpuCritical)), cpuBlocked, resources, desktop, cleanup, processAudit: processAuditReport, healthEvidence: evidence, decision, roots: { worktrees: policy.worktreesRoot, scratch: policy.scratchRoot, ai: policy.aiRoot } };
+ }
+ 
+ function postflight(agentId, opts = {}) {
+@@ -109,7 +185,27 @@ function postflight(agentId, opts = {}) {
+   const cleanup = opts.cleanup === false ? { reclaimedBytes: 0, removed: [] } : cleanupOwnedScratch(policy);
+   const desktop = auditDesktop();
+   const resources = snapshotResources(policy);
+-  return { phase: 'postflight', agentId, ok: desktop.ok && !resources.diskCritical, desktop, resources, cleanup, roots: { worktrees: policy.worktreesRoot, scratch: policy.scratchRoot, ai: policy.aiRoot } };
++  const processAuditReport = opts.processAudit === false ? null : auditSessionProcesses(opts);
++  const evidence = opts.recordEvidence === false ? null : recordHealthEvidence(policy, { phase: 'postflight', agentId, snapshot: resources });
++  return { phase: 'postflight', agentId, ok: desktop.ok && !resources.diskCritical, desktop, resources, cleanup, processAudit: processAuditReport, healthEvidence: evidence, roots: { worktrees: policy.worktreesRoot, scratch: policy.scratchRoot, ai: policy.aiRoot } };
++}
++
++// Samples live AI processes and classifies them against the current session's
++// owned PIDs + start time. Pure classification never kills anything; the only
++// termination path is terminateSessionOwned once a completed session hands its
++// explicitly-recorded owned PIDs to the caller.
++function auditSessionProcesses(opts = {}) {
++  const processes = opts.processes || processAudit.sampleAiProcesses();
++  const ownedPids = opts.ownedPids || [];
++  const sessionStartAt = opts.sessionStartAt || null;
++  const classified = processAudit.classifyProcesses(processes, { ownedPids, sessionStartAt });
++  return { sampleSource: opts.processes ? 'injected' : 'live', ownedPidCount: ownedPids.length, ...classified };
++}
++
++// Terminates ONLY PIDs the completed session explicitly recorded as its own.
++// dry-run by default; never accepts or touches unknown/user processes.
++function terminateSessionOwned(ownedPids, opts = {}) {
++  return processAudit.terminateOwnedOnly(ownedPids, { ...opts, processes: opts.processes || processAudit.sampleAiProcesses() });
+ }
+ 
+ async function withAgentSessionGuard(agentId, fn, opts = {}) {
+@@ -133,7 +229,7 @@ function coverageFor(agentIds) {
+   return [...new Set(agentIds)].sort().map((agentId) => ({ agentId, preflight: true, postflight: true, inherited: true }));
+ }
+ 
+-module.exports = { loadPolicy, ensureRoots, auditDesktop, cleanupOwnedScratch, snapshotResources, preflight, postflight, withAgentSessionGuard, coverageFor, expandEnvPath };
++module.exports = { loadPolicy, ensureRoots, auditDesktop, cleanupOwnedScratch, snapshotResources, preflight, postflight, withAgentSessionGuard, coverageFor, expandEnvPath, cpuLoadPercent, recordHealthEvidence, quarantineUnsafe, safeToDeleteRoot, auditSessionProcesses, terminateSessionOwned };
+ 
+ if (require.main === module) {
+   const phase = process.argv[2] || 'preflight';

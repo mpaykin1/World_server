@@ -1,0 +1,6 @@
+'use strict';
+const {spawn}=require('child_process');const {chromium}=require('@playwright/test');const path=require('path');
+const root=path.resolve(__dirname,'..');const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+(async()=>{const server=spawn(process.execPath,['server.js'],{cwd:root,env:{...process.env,PORT:'3197'},stdio:'ignore'});await sleep(1500);const browser=await chromium.launch({headless:true});const page=await browser.newPage({viewport:{width:1280,height:720}});
+page.on('pageerror',e=>console.log('PAGEERROR',e.stack||e.message));page.on('console',m=>{if(m.type()==='error')console.log('CONSOLE',m.text())});
+try{await page.goto('http://127.0.0.1:3197/apps/pixel-panorama-360/',{waitUntil:'domcontentloaded'});await sleep(3500);console.log(await page.evaluate(()=>({status:document.getElementById('status')?.textContent,url:location.href,runtime:window.GamePlayableRuntime?.stats?.(),view:window.PixelPano360?.getView?.(),canvas:[document.getElementById('stage')?.width,document.getElementById('stage')?.height]})));await page.screenshot({path:path.join(root,'artifacts','pixel-debug.png')});}finally{await browser.close();server.kill();}})().catch(e=>{console.error(e);process.exitCode=1});

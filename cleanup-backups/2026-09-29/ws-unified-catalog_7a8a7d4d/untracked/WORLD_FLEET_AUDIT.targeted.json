@@ -1,0 +1,324 @@
+{
+  "summary": {
+    "generatedAt": "2026-09-07T15:15:23.857Z",
+    "total": 8,
+    "completed": 8,
+    "pass": 8,
+    "fail": 0,
+    "localPass": 8,
+    "localFail": 0,
+    "legacyPass": 0,
+    "legacyFail": 0,
+    "auditComplete": true,
+    "currentBatchReady": true
+  },
+  "worlds": [
+    {
+      "id": "voxel-world",
+      "title": "Voxel World",
+      "source": "local",
+      "url": "http://127.0.0.1:31568/apps/voxel-world/",
+      "status": "PASS",
+      "checks": {
+        "open": true,
+        "graphics": true,
+        "wasd": true,
+        "arrows": true,
+        "joystick": true,
+        "mobileLook": true
+      },
+      "desktop": {
+        "open": true,
+        "visual": {
+          "stddev": 48.445,
+          "uniqueColors": 1741,
+          "nonBlank": true
+        },
+        "wasd": true,
+        "arrows": true,
+        "errors": [
+          "TypeError: Cannot read properties of null (reading 'channel')\n    at connectRealtime (http://127.0.0.1:31568/apps/voxel-world/client.js:249:42)\n    at http://127.0.0.1:31568/apps/voxel-world/client.js:300:555",
+          "Failed to load resource: the server responded with a status of 404 (Not Found)"
+        ]
+      },
+      "mobile": {
+        "open": true,
+        "visual": {
+          "stddev": 50.067,
+          "uniqueColors": 1846,
+          "nonBlank": true
+        },
+        "joystick": true,
+        "look": true,
+        "errors": []
+      }
+    },
+    {
+      "id": "ai3d-voxel-city",
+      "title": "AI3D Voxel City",
+      "source": "local",
+      "url": "http://127.0.0.1:31568/apps/ai3d-voxel-city/",
+      "status": "PASS",
+      "checks": {
+        "open": true,
+        "graphics": true,
+        "wasd": true,
+        "arrows": true,
+        "joystick": true,
+        "mobileLook": true
+      },
+      "desktop": {
+        "open": true,
+        "visual": {
+          "stddev": 40.369,
+          "uniqueColors": 764,
+          "nonBlank": true
+        },
+        "wasd": true,
+        "arrows": true,
+        "errors": [
+          "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+        ]
+      },
+      "mobile": {
+        "open": true,
+        "visual": {
+          "stddev": 43.318,
+          "uniqueColors": 939,
+          "nonBlank": true
+        },
+        "joystick": true,
+        "look": true,
+        "errors": []
+      }
+    },
+    {
+      "id": "survival",
+      "title": "Survival",
+      "source": "local",
+      "url": "http://127.0.0.1:31568/apps/survival/",
+      "status": "PASS",
+      "checks": {
+        "open": true,
+        "graphics": true,
+        "wasd": true,
+        "arrows": true,
+        "joystick": true,
+        "mobileLook": true
+      },
+      "desktop": {
+        "open": true,
+        "visual": {
+          "stddev": 31.431,
+          "uniqueColors": 691,
+          "nonBlank": true
+        },
+        "wasd": true,
+        "arrows": true,
+        "errors": [
+          "Failed to load resource: the server responded with a status of 404 (Not Found)"
+        ]
+      },
+      "mobile": {
+        "open": true,
+        "visual": {
+          "stddev": 28.626,
+          "uniqueColors": 1328,
+          "nonBlank": true
+        },
+        "joystick": true,
+        "look": true,
+        "errors": []
+      }
+    },
+    {
+      "id": "world-sharabass",
+      "title": "Мир Шарабас",
+      "source": "local",
+      "url": "http://127.0.0.1:31568/apps/world-sharabass/",
+      "status": "PASS",
+      "checks": {
+        "open": true,
+        "graphics": true,
+        "wasd": true,
+        "arrows": true,
+        "joystick": true,
+        "mobileLook": true
+      },
+      "desktop": {
+        "open": true,
+        "visual": {
+          "stddev": 15.906,
+          "uniqueColors": 2260,
+          "nonBlank": true
+        },
+        "wasd": true,
+        "arrows": true,
+        "errors": []
+      },
+      "mobile": {
+        "open": true,
+        "visual": {
+          "stddev": 21.328,
+          "uniqueColors": 3387,
+          "nonBlank": true
+        },
+        "joystick": true,
+        "look": true,
+        "errors": []
+      }
+    },
+    {
+      "id": "dark-void-scene",
+      "title": "Dark Void Navigator",
+      "source": "local",
+      "url": "http://127.0.0.1:31568/apps/dark-void-scene/",
+      "status": "PASS",
+      "checks": {
+        "open": true,
+        "graphics": true,
+        "wasd": true,
+        "arrows": true,
+        "joystick": true,
+        "mobileLook": true
+      },
+      "desktop": {
+        "open": true,
+        "visual": {
+          "stddev": 15.804,
+          "uniqueColors": 761,
+          "nonBlank": true
+        },
+        "wasd": true,
+        "arrows": true,
+        "errors": []
+      },
+      "mobile": {
+        "open": true,
+        "visual": {
+          "stddev": 25.322,
+          "uniqueColors": 1096,
+          "nonBlank": true
+        },
+        "joystick": true,
+        "look": true,
+        "errors": []
+      }
+    },
+    {
+      "id": "dreamfog-world",
+      "title": "DreamFog World",
+      "source": "local",
+      "url": "http://127.0.0.1:31568/apps/dreamfog-world/",
+      "status": "PASS",
+      "checks": {
+        "open": true,
+        "graphics": true,
+        "wasd": true,
+        "arrows": true,
+        "joystick": true,
+        "mobileLook": true
+      },
+      "desktop": {
+        "open": true,
+        "visual": {
+          "stddev": 14.907,
+          "uniqueColors": 816,
+          "nonBlank": true
+        },
+        "wasd": true,
+        "arrows": true,
+        "errors": [
+          "Failed to load resource: the server responded with a status of 404 (Not Found)"
+        ]
+      },
+      "mobile": {
+        "open": true,
+        "visual": {
+          "stddev": 32.047,
+          "uniqueColors": 1064,
+          "nonBlank": true
+        },
+        "joystick": true,
+        "look": true,
+        "errors": []
+      }
+    },
+    {
+      "id": "ink-glyph-world",
+      "title": "Ink Glyph World",
+      "source": "local",
+      "url": "http://127.0.0.1:31568/apps/ink-glyph-world/",
+      "status": "PASS",
+      "checks": {
+        "open": true,
+        "graphics": true,
+        "wasd": true,
+        "arrows": true,
+        "joystick": true,
+        "mobileLook": true
+      },
+      "desktop": {
+        "open": true,
+        "visual": {
+          "stddev": 41.912,
+          "uniqueColors": 1478,
+          "nonBlank": true
+        },
+        "wasd": true,
+        "arrows": true,
+        "errors": [
+          "Failed to load resource: the server responded with a status of 404 (Not Found)"
+        ]
+      },
+      "mobile": {
+        "open": true,
+        "visual": {
+          "stddev": 53.194,
+          "uniqueColors": 2733,
+          "nonBlank": true
+        },
+        "joystick": true,
+        "look": true,
+        "errors": []
+      }
+    },
+    {
+      "id": "pixel-panorama-360",
+      "title": "Pixel Panorama 360",
+      "source": "local",
+      "url": "http://127.0.0.1:31568/apps/pixel-panorama-360/",
+      "status": "PASS",
+      "checks": {
+        "open": true,
+        "graphics": true,
+        "wasd": true,
+        "arrows": true,
+        "joystick": true,
+        "mobileLook": true
+      },
+      "desktop": {
+        "open": true,
+        "visual": {
+          "stddev": 52.541,
+          "uniqueColors": 1254,
+          "nonBlank": true
+        },
+        "wasd": true,
+        "arrows": true,
+        "errors": []
+      },
+      "mobile": {
+        "open": true,
+        "visual": {
+          "stddev": 11.492,
+          "uniqueColors": 311,
+          "nonBlank": true
+        },
+        "joystick": true,
+        "look": true,
+        "errors": []
+      }
+    }
+  ]
+}

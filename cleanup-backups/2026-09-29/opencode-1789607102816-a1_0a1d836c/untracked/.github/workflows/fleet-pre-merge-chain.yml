@@ -1,0 +1,93 @@
+name: Fleet PRE Merge Chain
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      head:
+        description: Exact 40-hex HEAD SHA to certify (defaults to github.sha)
+        required: false
+
+concurrency:
+  group: fleet-pre-merge-chain-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  issues: read
+
+jobs:
+  fleet-pre-merge-chain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Resolve exact PR head SHA
+        id: head
+        shell: bash
+        run: |
+          SHA="${{ github.event.pull_request.head.sha || inputs.head || github.sha }}"
+          case "$SHA" in
+            [0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]) : ;;
+            *) echo "BLOCKED: HEAD SHA is not exactly 40 hex characters" >&2; exit 1 ;;
+          esac
+          echo "sha=${SHA}" >> "$GITHUB_OUTPUT"
+      - name: Enforce master merge target
+        shell: bash
+        run: |
+          BASE="${{ github.event.pull_request.base.ref }}"
+          if [ -n "$BASE" ] && [ "$BASE" != "master" ]; then
+            echo "BLOCKED: fleet-pre-merge-chain governs integrations into master only" >&2
+            exit 1
+          fi
+      - name: Fetch master for the authoritative certificate registry
+        shell: bash
+        run: git fetch --depth=1 origin master
+      - name: Extract master-tree certificate candidate
+        id: master-cert
+        shell: bash
+        run: |
+          SHA="${{ steps.head.outputs.sha }}"
+          MASTER_PATH="$RUNNER_TEMP/fleet-pre-cert-master-${SHA}.json"
+          if git show "origin/master:data/fleet-pre-certificates/${SHA}.json" > "$MASTER_PATH" 2>/dev/null; then
+            echo "path=${MASTER_PATH}" >> "$GITHUB_OUTPUT"
+          else
+            echo "path=" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Fetch issue #80 comments for the issue-80 certificate mirror
+        id: issue80
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          TEXT_PATH="$RUNNER_TEMP/fleet-pre-issue80.txt"
+          if gh api "repos/${GITHUB_REPOSITORY}/issues/80/comments" --paginate --jq '.[] | [.body, .createdAt] | @tsv' > "$TEXT_PATH" 2>/dev/null && [ -s "$TEXT_PATH" ]; then
+            echo "path=${TEXT_PATH}" >> "$GITHUB_OUTPUT"
+          else
+            echo "path=" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Run fail-closed Fleet PRE certificate gate
+        id: gate
+        shell: bash
+        run: |
+          ARGS=(--head "${{ steps.head.outputs.sha }}" --max-age-hours 24 --source auto)
+          if [ -n "${{ steps.master-cert.outputs.path }}" ]; then
+            ARGS+=(--cert-file "${{ steps.master-cert.outputs.path }}")
+          fi
+          if [ -n "${{ steps.issue80.outputs.path }}" ]; then
+            ARGS+=(--issue80-text-file "${{ steps.issue80.outputs.path }}")
+          fi
+          node scripts/check-fleet-pre-certificate.cjs "${ARGS[@]}"
+      - name: Report gate context
+        if: always()
+        shell: bash
+        run: |
+          echo "check=fleet-pre-merge-chain"
+          echo "head_sha=${{ steps.head.outputs.sha }}"
+          echo "gate_result=${{ steps.gate.conclusion || 'noop' }}"

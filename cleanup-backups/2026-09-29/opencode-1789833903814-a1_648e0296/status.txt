@@ -1,0 +1,7 @@
+ M WORK_IN_PROGRESS.md
+ M scripts/check-vercel-ignore.js
+ M test/vercel-ignore.test.js
+?? .github/workflows/fleet-pre-merge-chain.yml
+?? data/fleet-pre-certificates/
+?? scripts/check-fleet-pre-certificate.cjs
+?? test/fleet-pre-certificate.test.js

@@ -1,0 +1,135 @@
+diff --git a/.github/workflows/fleet-pre-exact-sha.yml b/.github/workflows/fleet-pre-exact-sha.yml
+index 25880806..c613fb83 100644
+--- a/.github/workflows/fleet-pre-exact-sha.yml
++++ b/.github/workflows/fleet-pre-exact-sha.yml
+@@ -56,10 +56,22 @@ jobs:
+           path: fleet-pre-evidence.json
+           if-no-files-found: error
+ 
++  # Hardened 2026-09-27: the certificate-only gate emitted
++  # READY_FOR_OCEAN=YES for draft PRs with a red independent review, so Ocean
++  # had to hand-hold candidates manually. This job still refuses to authorise
++  # anything on a bad certificate; it additionally requires an independent PASS
++  # on the exact head, a base equal to current master, and a non-draft PR. It is
++  # the single existing eligibility gate, not a competing parallel gate.
+   ocean-eligibility:
+     name: Ocean merge eligibility
+     needs: fleet-pre
+     runs-on: ubuntu-24.04
++    timeout-minutes: 20
++    # Least privilege for this job only: read the exact-head check runs.
++    # Workflow-level `contents: read` is unchanged and deliberately not widened.
++    permissions:
++      contents: read
++      checks: read
+     steps:
+       - name: Reject missing or stale certificate
+         env:
+@@ -69,4 +81,106 @@ jobs:
+           set -euo pipefail
+           test -n "$CERTIFIED"
+           test "$CERTIFIED" = "$EXPECTED"
+-          echo "READY_FOR_OCEAN=YES SHA=$CERTIFIED"
++
++      # workflow_dispatch has no pull_request context. Preserve the historical
++      # certificate-only behaviour there and do not fail the dispatch.
++      - name: Resolve pull request context
++        id: context
++        shell: bash
++        env:
++          GH_TOKEN: ${{ github.token }}
++          PR_HEAD: ${{ github.event.pull_request.head.sha }}
++          PR_BASE: ${{ github.event.pull_request.base.sha }}
++          PR_DRAFT: ${{ github.event.pull_request.draft }}
++        run: |
++          set -euo pipefail
++          if test -z "$PR_HEAD"; then
++            echo "READY_FOR_OCEAN=SKIPPED_NO_PR_CONTEXT"
++            exit 0
++          fi
++          TRUSTED="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/master" --jq '.object.sha')"
++          printf 'base=%s\nmaster=%s\ndraft=%s\n' \
++            "$PR_BASE" "$TRUSTED" "${PR_DRAFT:-unknown}" >> "$GITHUB_OUTPUT"
++
++      # Execute trusted master code only. A pull_request trigger runs this
++      # job's workflow file from the candidate branch, so the decision logic is
++      # never taken from untrusted PR code.
++      - name: Checkout current trusted master (not PR code)
++        if: github.event.pull_request.head.sha != ''
++        uses: actions/checkout@v4
++        with:
++          ref: ${{ steps.context.outputs.master }}
++          persist-credentials: false
++      - uses: actions/setup-node@v4
++        if: github.event.pull_request.head.sha != ''
++        with:
++          node-version: 24
++
++      # The independent reviewer is a separate pull_request_target workflow, so
++      # immediately after a push its check-run is queued, in progress or absent
++      # for minutes. Poll for a bounded time. A blocking verdict is final and
++      # stops the wait; a superseded or non-approval state is never treated as
++      # approval; timeout without an independent PASS fails closed.
++      - name: Await exact-head independent review verdict
++        id: review
++        if: github.event.pull_request.head.sha != ''
++        shell: bash
++        env:
++          GH_TOKEN: ${{ github.token }}
++          PR_HEAD: ${{ github.event.pull_request.head.sha }}
++        run: |
++          set -euo pipefail
++          DEADLINE=$(( $(date +%s) + 480 ))
++          STATUS="absent"
++          CONCLUSION="absent"
++          while :; do
++            RUN="$(gh api "repos/${GITHUB_REPOSITORY}/commits/${PR_HEAD}/check-runs?per_page=100" \
++              --jq '[.check_runs[] | select(.name == "World Independent Adversarial Review")] | sort_by(.id) | last | if . == null then "absent" else (.status + " " + (.conclusion // "absent")) end' \
++              2>/dev/null || echo "absent absent")"
++            STATUS="${RUN%% *}"
++            CONCLUSION="${RUN##* }"
++            if test "$STATUS" = "completed"; then
++              case "$CONCLUSION" in
++                success|failure|action_required) break ;;
++                *) echo "::notice::Independent review completed $CONCLUSION; awaiting a superseding run or deadline" ;;
++              esac
++            fi
++            if test "$(date +%s)" -ge "$DEADLINE"; then break; fi
++            sleep 15
++          done
++          if test "$STATUS" = "absent" && test "$CONCLUSION" = "absent"; then
++            VERDICT="absent"
++          elif test "$STATUS" = "completed"; then
++            VERDICT="$CONCLUSION"
++          else
++            VERDICT="pending"
++          fi
++          echo "verdict=$VERDICT" >> "$GITHUB_OUTPUT"
++          echo "observed_status=$STATUS" >> "$GITHUB_OUTPUT"
++          echo "observed_conclusion=$CONCLUSION" >> "$GITHUB_OUTPUT"
++
++      - name: Fail-closed Ocean eligibility decision
++        if: github.event.pull_request.head.sha != ''
++        shell: bash
++        env:
++          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
++          CERT_SHA: ${{ needs.fleet-pre.outputs.sha }}
++          BASE_SHA: ${{ steps.context.outputs.base }}
++          MASTER_SHA: ${{ steps.context.outputs.master }}
++          DRAFT: ${{ steps.context.outputs.draft }}
++          REVIEW: ${{ steps.review.outputs.verdict }}
++        run: |
++          set -euo pipefail
++          if test ! -f scripts/ocean-merge-eligibility.cjs; then
++            echo "READY_FOR_OCEAN=SKIPPED_GUARD_NOT_INSTALLED"
++            echo "::warning::Fail-closed Ocean eligibility guard is not installed on trusted master; refusing to emit READY_FOR_OCEAN=YES."
++            exit 0
++          fi
++          node scripts/ocean-merge-eligibility.cjs \
++            --head-sha "$HEAD_SHA" \
++            --cert-sha "$CERT_SHA" \
++            --base-sha "$BASE_SHA" \
++            --master-sha "$MASTER_SHA" \
++            --is-draft "$DRAFT" \
++            --review-conclusion "$REVIEW" \
++            --pull-request-context true

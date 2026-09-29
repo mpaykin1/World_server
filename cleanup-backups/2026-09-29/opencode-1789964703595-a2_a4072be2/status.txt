@@ -1,0 +1,3 @@
+?? .github/workflows/fleet-pre-merge-chain.yml
+?? scripts/check-fleet-pre-certificate.cjs
+?? test/fleet-pre-certificate.test.js

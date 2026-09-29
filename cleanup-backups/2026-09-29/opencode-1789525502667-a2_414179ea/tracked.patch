@@ -1,0 +1,148 @@
+diff --git a/WORK_IN_PROGRESS.md b/WORK_IN_PROGRESS.md
+index 7246d20f..05b46f18 100644
+--- a/WORK_IN_PROGRESS.md
++++ b/WORK_IN_PROGRESS.md
+@@ -18,6 +18,106 @@ Resolve the historical branch conflicts in favor of current master, reapply only
+ 
+ ---
+ 
++# Merge-chain Fleet-PRE exact-SHA gate (GAP B) — 2026-09-16
++
++## Task
++Implement the permanent merge-chain Fleet-PRE exact-SHA enforcement gate
++(Architect OWNER_DELTA / GAP B, issued 2026-09-16 and repeatedly since
++2026-09-14): no PR head may be integrated without an exact-SHA
++`READY_FOR_OCEAN` Fleet PRE certificate.
++
++## Why
++Weakest CLAIM_TRUTH control-plane pillar. Integration historically proceeded
++with zero independent exact-SHA Fleet PRE certificates (`#116/#117/#121`
++merged without certs; repeated `#91/#113` false-green class). `git grep` over
++`scripts/ lib/ test/ .github/` returns zero enforcement occurrences today.
++Confirmed-error-twice => permanent regression-guard candidate. Pure
++CI/scripts/tests/data/docs delta; no app/game/runtime change, no production
++deploy, no Vercel build (non-deployable paths).
++
++## Current state
++Fresh branch from `origin/master` `414179ea` (canonical default HEAD; LKG =
++`414179ea`). No prior Builder commits pushed for this lane. GAP B confirmed
++open on the exact head (whole-tree grep = 0 enforcement occurrences).
++
++## Target state
++A pure-Node fail-closed certificate validator + a `fleet-pre-merge-chain`
++GitHub Actions check that is green ONLY when a fresh exact-SHA
++`READY_FOR_OCEAN` certificate exists, plus regression tests inside
++`npm run check` and a bypass-class scan that forbids any no-cert/skip/
++`|| true`/fallback-green path.
++
++## Files / systems involved
++- `scripts/check-fleet-pre-certificate.cjs` (new, no deps, `module.exports`)
++- `.github/workflows/fleet-pre-merge-chain.yml` (new)
++- `test/fleet-pre-certificate.test.js` (new, inside `npm run check`)
++- `test/vercel-ignore.test.js` + `scripts/check-vercel-ignore.js` (add
++  `data/fleet-pre-certificates/` to the non-deployable prefixes so committed
++  certificates never consume Vercel quota)
++- `data/fleet-pre-certificates/README.md` (new; documents the cert schema)
++- `WORK_IN_PROGRESS.md` (this evidence)
++
++## Known risks
++Cert-source ambiguity opening a bypass -> default deterministic repo source,
++issue-80 scan available only as an explicit opt-in source, no cross-fallback.
++Adding a new required status check is an owner action; until then this gate
++is informational on the PR and must not break other lanes.
++
++## Golden systems that must be preserved
++Master protection, existing required checks (`check`, `quality-regression`,
++`agent-rules`, `world-quality`, `godot-web-preview`), Vercel quota guard,
++existing non-deployable prefix semantics for everything else.
++
++## Errors that must not return
++The `#91/#113` false-green class: cert-skip, `|| true`, `continue-on-error`,
++`if: always()` green fallback, different-SHA/stale cert accepted, silent
++fallback to a second source, and Vercel builds triggered by committed certs.
++
++## Exact patch / change plan
++1. `scripts/check-fleet-pre-certificate.cjs`: pure `evaluateCertificate`
++   (fail-closed rules 1-7) separated from I/O; `readCertFromRepo`;
++   `scanIssueCommentsForCert`; `fetchIssueComments` (https, opt-in);
++   CLI `node scripts/check-fleet-pre-certificate.cjs <headSha>` with
++   `FLEET_PRE_CERT_SOURCE=repo|issue80` (default repo) and
++   `FLEET_PRE_MAX_AGE_HOURS` (default 24).
++2. Workflow `fleet-pre-merge-chain.yml`: `pull_request:[master]` +
++   `workflow_dispatch`, `contents: read`, job `fleet-pre-merge-chain` runs
++   the validator against the PR HEAD SHA; no skip/`|| true`/fallback green.
++3. Tests: 8 fail-closed/happy rules + issue-80 scan + bypass-class workflow
++   scan (asserts no-cert path cannot be green) + Vercel ignore regression.
++4. Docs: cert schema README under `data/fleet-pre-certificates/`.
++5. Run focused + repo gates; commit; push; open PR; no merge/deploy.
++
++## Tests to run
++`node --test test/fleet-pre-certificate.test.js test/vercel-ignore.test.js`;
++`npm run check`; `node scripts/check-agent-rules.js`; `npm run golden:check`;
++`npm run quality:regression`; `node scripts/check-fleet-pre-certificate.cjs <headSha>`
++(exit 1, missing cert); `node scripts/check-vercel-ignore.js` guard checks;
++`git diff --check`; `node scripts/master-coordinator.cjs --check` if applicable.
++
++## Deployment / PR plan
++Branch `ai/master-coordinator/opencode-1789525502667-a2` -> one PR to
++`master` (one-task-one-PR). No master push, no merge, no production deploy.
++After push, Fleet PRE independently falsifies the exact HEAD_SHA; owner later
++adds `fleet-pre-merge-chain` to required status checks (TRUE_USER_ACTION_REQUIRED).
++
++## Current progress
++Bootstrap done (fresh ISSUE-80 state, exact HEAD/LKG `414179ea`, GAP B
++re-confirmed empty). Implementation and verification in progress.
++
++## Next action
++Write validator + workflow + tests; run gates; commit/push; open PR.
++
++## Completion criteria
++Validator exits 0 only for exact fresh cert, 1 for every fail-closed case;
++workflow cannot be green without the cert path; `npm run check` and repo
++gates pass; PR opened with evidence; no merge/deploy performed.
++
++## Final evidence
++Pending current-run verification.
++
++---
++
+ # IndieWorlds foundation — 2026-09-10
+ 
+ ## Task
+diff --git a/scripts/check-vercel-ignore.js b/scripts/check-vercel-ignore.js
+index 8c95b3eb..e33e77ef 100644
+--- a/scripts/check-vercel-ignore.js
++++ b/scripts/check-vercel-ignore.js
+@@ -19,7 +19,8 @@ const NON_DEPLOYABLE_PREFIXES = [
+   'e2e/',
+   'godot/',
+   'policy/',
+-  'templates/'
++  'templates/',
++  'data/fleet-pre-certificates/'
+ ];
+ 
+ const NON_DEPLOYABLE_EXTENSIONS = [
+diff --git a/test/vercel-ignore.test.js b/test/vercel-ignore.test.js
+index ad3e303f..a2557154 100644
+--- a/test/vercel-ignore.test.js
++++ b/test/vercel-ignore.test.js
+@@ -16,6 +16,9 @@ test('isDeployableFile correctly identifies non-deployable paths', () => {
+     'godot/world-client/main.tscn',
+     'policy/collective-brain.rego',
+     'templates/godot-voxel-game-starter/README.md',
++    'data/fleet-pre-certificates/414179ead82c97375f057e8e39a22c67dd981814.json',
++    'data/fleet-pre-certificates/13b129ca5caf43121595c480e707bd57b444d4ec.json',
++    'data/fleet-pre-certificates/README.md',
+     'README.md',
+     'AGENTS.md',
+     'FIX_NPM_INSTALL.txt',
+@@ -55,6 +58,8 @@ test('isDeployableFile correctly identifies deployable runtime and application p
+     'vercel.json',
+     'package.json',
+     'package-lock.json',
++    'data/world-manifests/voxel-world.json',
++    'data/app-release-registry.json',
+     'scripts/check-vercel-ignore.js',
+     'scripts/inject-sentry-runtime.js'
+   ];

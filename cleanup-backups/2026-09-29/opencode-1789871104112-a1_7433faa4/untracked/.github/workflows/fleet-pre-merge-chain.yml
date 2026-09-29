@@ -1,0 +1,57 @@
+name: Fleet PRE Merge-Chain Gate
+
+# GAP B close: permanent merge-chain Fleet-PRE exact-SHA gate.
+# This check is GREEN only when an independent, fresh [FLEET][PRE_INTEGRATION_QA]
+# certificate for the EXACT PR head SHA exists in issue #80 (or the checked-in
+# data/fleet-pre-certificates secondary source) with verdict READY_FOR_OCEAN=YES.
+# Every other state is RED BLOCK. There is no `|| true`, no skip, no fallback-green.
+#
+# Add `fleet-pre-merge-chain` to master required status checks once green on the
+# gate PR itself (owner-only action).
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      head_sha:
+        description: 'Exact PR head SHA to certify'
+        required: true
+      pr_number:
+        description: 'PR number (optional, informational)'
+        required: false
+
+permissions:
+  contents: read
+  issues: read
+
+jobs:
+  fleet-pre-merge-chain:
+    name: fleet-pre-merge-chain
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Resolve exact PR head SHA
+        id: head
+        shell: bash
+        run: |
+          if [ -n "${{ github.event.pull_request.head.sha }}" ]; then
+            echo "sha=${{ github.event.pull_request.head.sha }}" >> "$GITHUB_OUTPUT"
+          elif [ -n "${{ github.event.inputs.head_sha }}" ]; then
+            echo "sha=${{ github.event.inputs.head_sha }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "sha=" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Enforce exact-SHA Fleet PRE certificate
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/check-fleet-pre-certificate.cjs --head "${{ steps.head.outputs.sha }}" --repo "${{ github.repository }}"
+
+# Fail-closed on purpose: a missing, skipped, mismatched, non-READY or stale
+# certificate exits non-zero here and turns the required check RED.

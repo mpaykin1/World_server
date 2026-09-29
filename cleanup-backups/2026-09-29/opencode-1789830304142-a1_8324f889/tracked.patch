@@ -1,0 +1,63 @@
+diff --git a/TEST_GAP_MANIFEST.json b/TEST_GAP_MANIFEST.json
+index 21b87f3d..5b05d447 100644
+--- a/TEST_GAP_MANIFEST.json
++++ b/TEST_GAP_MANIFEST.json
+@@ -1,4 +1,4 @@
+ {
+-  "generatedAt": "2026-09-10T03:24:36.971Z",
++  "generatedAt": "2026-09-19T15:14:02.268Z",
+   "gaps": []
+ }
+diff --git a/WORK_IN_PROGRESS.md b/WORK_IN_PROGRESS.md
+index bd7579b8..5340e2b8 100644
+--- a/WORK_IN_PROGRESS.md
++++ b/WORK_IN_PROGRESS.md
+@@ -793,3 +793,48 @@ Implementation and local verification complete. Remaining proof is GitHub Action
+ - Delivery requirement: exact commit + pushed branch + test Preview URL + real-browser verification before PASS.
+ - Current mode: FINISH MODE. No optional scope expansion before verified Preview.
+ - Remaining gate: focused/full checks -> commit -> push -> Preview deploy -> browser verify exact URL -> handoff URL.
++
++---
++
++# Builder slice — voxel vertex-color Uint8 regression guard (2026-09-19)
++
++## Task
++Latest Architect assignment (issue #80, 2026-09-17T06:10Z, "voxel-world vertex-color quantization (Uint8)") acceptance requires a dedicated regression test. The client implementation already landed on master: `FACE_COLOR_BY_MATERIAL` pre-quantizes colors to integer 0-255 bytes, `pushFace` pushes precomputed LUT components (no per-vertex `THREE.Color` clones), and `makeGeometry` stores color via normalized `Uint8Array.from(data.col)` (3 bytes/vertex). BUT `test/voxel-world-color-uint8.test.js` does not exist: no test currently guards the Uint8 color attribute type or per-vertex color byte size, so reverting to per-vertex Float32 color (12 B/vertex) or a `new THREE.Color(per face)` allocation would NOT fail CI.
++
++## Why
++Regression law: confirmed fixes must become permanent regression protection. The color storage was converted during the voxel perf family (#133/#177-#180/#185) with only the generic `pushface-color-neutral` (float byte-identity) coverage; the Architect's own dedicated guard was never added. Missing guard = silent revert risk to 12 B Float32 colors and per-face Color allocation.
++
++## Current state
++- BASE = master `8324f889c372fbcaad2bf4e717c9010a4e173cb4` (`test(golden): stabilize post-merge fleet evidence (#187)`).
++- Builder worktree: `%LOCALAPPDATA%\World_server_worktrees\opencode-1789830304142-a1`, branch `ai/master-coordinator/opencode-1789830304142-a1` (fast-forwarded onto master, zero local commits).
++- Unit under test: `apps/voxel-world/client.js` lines 431/441/444/445 (FACE_AO_SHADE, FACE_COLOR_BY_MATERIAL, pushFace, makeGeometry).
++
++## Target state
++One new file `test/voxel-world-color-uint8.test.js` (node --test, runs inside `npm run check`):
++1. Structure: `makeGeometry` color attribute must be normalized Uint8 (3 bytes/vertex); Float32/Float64 color attr fails the guard.
++2. Structure: `FACE_COLOR_BY_MATERIAL` formula pre-quantizes to integer bytes (`Math.round(...*255)`) and `pushFace` pushes precomputed LUT components.
++3. Numeric: quantize->dequantize error <= 1/255 per channel over the real 14-block palette x 6 face shades x 4 AO shades.
++4. Value: quantized color attribute is 3 bytes/vertex vs 12 for Float32 (>= 75% color memory reduction).
++5. Determinism: stable hash over the swept byte buffer, byte-exact round-trip.
++
++## Affected systems
++- `test/voxel-world-color-uint8.test.js` (new, pure Node, no DOM/deps).
++- `WORK_IN_PROGRESS.md` (evidence ledger only).
++- No runtime/app/game/API/asset change; non-deployable per check-vercel-ignore scope.
++
++## Risks / invariants
++- Do not touch runtime code (color behavior already proven byte-neutral by `pushface-color-neutral`).
++- Test must assert current master truth, not invented numbers (byte-size math derived from the actual attribute layout, not the old 48/39/35/31 snapshot).
++- No competing PR: this is the coordinator-provisioned builder lane; no merge, no deploy.
++
++## Tests to run
++- `node --test test/voxel-world-color-uint8.test.js`
++- `npm run check` (includes check-js.js + indieworlds:check + full node --test)
++- `git diff --check`
++
++## Deployment / PR plan
++Commit on `ai/master-coordinator/opencode-1789830304142-a1`, push, open ONE PR to master, then route to Fleet PRE. No production deploy.
++
++## Completion criteria / Final evidence
++- New test file passes; `npm run check` PASS; `git diff --check` PASS.
++- PR open with PR URL + HEAD_SHA; base = 8324f889; Fleet PRE requested.

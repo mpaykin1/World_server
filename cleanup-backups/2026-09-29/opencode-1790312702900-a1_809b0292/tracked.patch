@@ -1,0 +1,100 @@
+diff --git a/.github/workflows/fleet-pre-exact-sha.yml b/.github/workflows/fleet-pre-exact-sha.yml
+index 25880806..822a6c24 100644
+--- a/.github/workflows/fleet-pre-exact-sha.yml
++++ b/.github/workflows/fleet-pre-exact-sha.yml
+@@ -6,6 +6,8 @@ on:
+ 
+ permissions:
+   contents: read
++  pull-requests: read
++  checks: read
+ 
+ jobs:
+   fleet-pre:
+@@ -61,12 +63,42 @@ jobs:
+     needs: fleet-pre
+     runs-on: ubuntu-24.04
+     steps:
+-      - name: Reject missing or stale certificate
++      - name: Resolve exact candidate evidence
++        id: evidence
++        shell: bash
+         env:
++          GH_TOKEN: ${{ github.token }}
+           EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
++        run: |
++          set -euo pipefail
++          test -n "$EXPECTED"
++          TRUSTED="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/master" --jq '.object.sha')"
++          [[ "$TRUSTED" =~ ^[a-f0-9]{40}$ ]]
++          REL="$(gh api "repos/${GITHUB_REPOSITORY}/compare/${TRUSTED}...${EXPECTED}" --jq '[.ahead_by,.behind_by] | @tsv')"
++          read -r AHEAD BEHIND <<< "$REL"
++          [[ "$AHEAD" =~ ^[0-9]+$ && "$BEHIND" =~ ^[0-9]+$ ]]
++          REVIEW=""
++          if [ "${{ github.event_name }}" = "pull_request" ]; then
++            REVIEW="$(gh api "repos/${GITHUB_REPOSITORY}/commits/${EXPECTED}/check-runs?per_page=100" \
++              --jq '[.check_runs[] | select(.name == "World Independent Adversarial Review" and .status == "completed")] | sort_by(.completed_at // "") | last | .conclusion // "missing"')"
++          fi
++          echo "expected=${EXPECTED}" >> "$GITHUB_OUTPUT"
++          echo "behind=${BEHIND}" >> "$GITHUB_OUTPUT"
++          echo "review=${REVIEW}" >> "$GITHUB_OUTPUT"
++      - name: Reject failed review, stale base or stale certificate
++        env:
++          EXPECTED: ${{ steps.evidence.outputs.expected }}
+           CERTIFIED: ${{ needs.fleet-pre.outputs.sha }}
++          BASE_REF: ${{ github.event.pull_request.base.ref || '' }}
++          BEHIND: ${{ steps.evidence.outputs.behind }}
++          REVIEW: ${{ steps.evidence.outputs.review }}
++          EVENT: ${{ github.event_name }}
+         run: |
+           set -euo pipefail
+-          test -n "$CERTIFIED"
+-          test "$CERTIFIED" = "$EXPECTED"
+-          echo "READY_FOR_OCEAN=YES SHA=$CERTIFIED"
++          node scripts/ocean-eligibility-gate.cjs \
++            --expected-sha "$EXPECTED" \
++            --certified-sha "$CERTIFIED" \
++            --base-ref "$BASE_REF" \
++            --behind-by "$BEHIND" \
++            --review-conclusion "$REVIEW" \
++            --event "$EVENT"
+diff --git a/WORK_IN_PROGRESS.md b/WORK_IN_PROGRESS.md
+index 4ef48060..5b1eb74f 100644
+--- a/WORK_IN_PROGRESS.md
++++ b/WORK_IN_PROGRESS.md
+@@ -1,3 +1,35 @@
++# 2026-09-25: Fleet PRE ocean-eligibility fail-closed gate (FACTORY_REGRESSION)
++
++Task: fix the confirmed factory regression reported in the OCEAN protected integration checkpoint (issue #80, 2026-09-25): current master `fleet-pre-exact-sha.yml` "Ocean merge eligibility" certified cert-SHA==head but did NOT fail on independent PR review verdict or on base≠master. It was observed as SUCCESS coexisting with `independent-review`=FAILURE and stale bases on #278/#289/#295/#298/#291.
++
++Why: a stale-base or review-failed candidate must never be certified READY_FOR_OCEAN at the exact head; that empty gate allowed Ocean-eligible status to appear alongside blocked candidates and undermined the independent review enforcement boundary.
++
++Current state: protected LKG / current default HEAD = `809b0292b26edb1ea320e61144f1b1dfed772922`. The gate step only ran `test "$CERTIFIED" = "$EXPECTED"` and echoed READY_FOR_OCEAN. No PR base check, no master-freshness check, no check of the `World Independent Adversarial Review` verdict on the exact head.
++
++Target state: the same single "Ocean merge eligibility" job fails closed unless ALL hold at the exact head: (1) fleet-pre certification equals the exact head SHA, (2) PR base ref is master, (3) the head is not behind current master (behind_by==0), (4) the `World Independent Adversarial Review` check on the exact head concludes `success` (pull_request events).
++
++Files / systems involved: `.github/workflows/fleet-pre-exact-sha.yml`, new `scripts/ocean-eligibility-gate.cjs` (pure decision + CLI), new `test/ocean-eligibility-gate.test.js` (fixture matrix + workflow regression guard), WORK_IN_PROGRESS.md.
++
++Known risks: adding a real review requirement may surface as failed "Ocean merge eligibility" on in-flight PRs whose independent review passes are pending/inconclusive (infra #290 prerequisite) — that is the intended fail-closed signal, not a new defect. Dispatch runs (non-PR) enforce SHA certification + freshness only; review PASS is required for PR merge decisions.
++
++Golden systems preserved: single existing gate (no parallel gate created), denial-of-final without independent review PASS, exact-SHA propagation, CI/test suite untouched.
++
++Errors that must not return: cert-SHA==head as the only condition; READY_FOR_OCEAN on a stale base; READY_FOR_OCEAN without independent adversarial review PASS at the exact head; fabricated PASS.
++
++Exact patch / change plan: (1) add a pure `evaluateOceanEligibility` decision (missing input fails closed), (2) wire the workflow to resolve trusted master, ahead/behind via compare API, and the review check via check-runs on the exact head, then call the script, (3) add the fixture-matrix + workflow-text regression test.
++
++Tests to run: `node scripts/check-js.js`, `node --test test/ocean-eligibility-gate.test.js`, `node --test test/independent-review-workflow.test.js`, `git diff --check`; full `npm run check` + PR CI in cloud.
++
++Deployment / PR plan: branch `ai/opencode/fleet-pre-gate-fail-closed`, one owned PR into master, no merge/deploy by this slice.
++
++Progress: implemented.
++
++Next action: bounded local verify, commit, push, open PR; independent review PASS stays an external prerequisite to merge.
++
++Completion criteria: focused tests green locally and in PR CI; the gate demonstrably BLOCKs stale base / failed review / stale certificate; no accepted metric regresses.
++
++---
++
+ # 2026-09-24: Chain Reaction backend release evidence checklist
+ 
+ Task: publish a compact, auditable release checklist for the already implemented Chain Reaction backend without changing simulation, API, Supabase state, or Graphics-owned UI. Why: merged, deployed, and independently live-verified are different gates; PR #285/#286 must not be counted as release-ready from PRE evidence alone. Current state: master `142200812d3d57a1b79aaaba2af628168acc648e` contains both `resident-at-address` and atomic `game-state`; Ocean records the same master on canonical Cloudflare and Supabase `world-emergence` ACTIVE v14, bundle `345677bf2b2b8d6e3adc98956a6bd045a68768d26a49f0986abb8e3935e2fe3d`; no Fleet POST certificate for #285/#286 exists yet. Target: one source-controlled checklist that separates MERGED, DEPLOYED, and LIVE_VERIFIED and marks every missing proof `NOT_VERIFIED`. Files/systems: documentation only. Risks: treating preview/CI/PRE or unauthenticated 401 smoke as authenticated production proof, inheriting an older POST to a newer endpoint, or obscuring Graphics blockers. Preserve: one consequence engine, all server arithmetic/auth/CAS/privacy behavior, UI ownership, and existing automation count. Exact plan: record immutable candidate/integrated SHAs, cloud runs, Edge identity, prior live certificates, and explicit owner/TODO for the combined endpoint POST. Tests: Markdown evidence/link scan, `git diff --check`, agent rules, and documentation-only deployment-ignore check. PR plan: isolated branch and PR; no deploy, merge, Fleet POST, or UI edit by this task. Progress: evidence collected from PR #285/#286, ledger #80, and read-only Supabase function inventory; checklist is complete. Next action: publish the documentation-only PR and let CI validate the exact head. Completion: checklist committed and cloud handoff created. Final evidence: read-only Supabase inventory independently reports `world-emergence` ACTIVE v14 with the Ocean-recorded bundle; `git diff --check`, agent rules, exact evidence scan, scope check, and documentation-only Vercel quota guard PASS. No source/UI/deployment mutation and no duplicate Fleet POST.

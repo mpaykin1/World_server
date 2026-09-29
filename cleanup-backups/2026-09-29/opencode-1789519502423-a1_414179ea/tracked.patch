@@ -1,0 +1,88 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index df64d28f..9a1197eb 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -160,3 +160,17 @@ jobs:
+             echo "NOTICE: direct push to master detected — protect master with branch protection rule (Require pull request)"
+           fi
+           echo "Branch/PR check done"
++
++  fleet-pre-cert:
++    runs-on: ubuntu-latest
++    if: github.event_name == 'pull_request'
++    steps:
++      - uses: actions/checkout@v4
++      - name: Merge-chain Fleet PRE exact-SHA certificate (hard gate)
++        shell: bash
++        run: |
++          set -euo pipefail
++          node scripts/check-fleet-pre-certificate.js \
++            --head-sha "${{ github.event.pull_request.head.sha }}" \
++            --base-sha "${{ github.event.pull_request.base.sha }}" \
++            --certifier-must-not-equal "${{ github.event.pull_request.head.user.login }}"
+diff --git a/WORK_IN_PROGRESS.md b/WORK_IN_PROGRESS.md
+index 7246d20f..0f4ae257 100644
+--- a/WORK_IN_PROGRESS.md
++++ b/WORK_IN_PROGRESS.md
+@@ -2,6 +2,61 @@
+ 
+ ---
+ 
++# Fleet PRE merge-chain certificate gate + Cloudflare fail-closed regression — 2026-09-16
++
++## Task
++Close the two still-open Architect (issue #80 / Owner Delta #3) acceptance items on current master `414179ea`:
++- **GAP B (A4)**: add a machine-checkable merge-chain gate so integration into `master` is allowed only when an unambiguous Fleet PRE `READY_FOR_OCEAN=YES` certificate names the EXACT final PR HEAD_SHA. Missing, skipped, different-SHA, stale, duplicate and self-signed certificates must block. Nothing today enforces this (`git grep READY_FOR_OCEAN|PRE_INTEGRATION_QA|FLEET_PRE` = 0 hits on master).
++- **A3 regression test**: PR #117 merged the fail-closed `cloudflare-preview.yml` step, but no regression test reproduces the historical #91/#113 FALSE-GREEN bypass class (missing/skipped Cloudflare credentials must never be reported green).
++
++## Why
++`Builder -> Fleet PRE -> Ocean -> Fleet POST` is the canonical pipeline contract; without a machine-checkable exact-SHA certificate gate, the protected integration stage can still proceed without an independent Fleet PRE certificate (duplicate/parallel-system risk).
++
++## Current state
++Fresh branch `opencode/fleet-pre-cert-gate-20260916` created from `origin/master` `414179ea`. Repo truth verified: current master already has the fail-closed Cloudflare step in `.github/workflows/cloudflare-preview.yml` (GAP A structural fix merged via #117) but no bypass-class regression test; `scripts/lib/workflows/tests` contain zero Fleet-PRE/READY_FOR_OCEAN merge-chain enforcement.
++
++## Target state
++One reusable gate (`scripts/check-fleet-pre-certificate.js` + pure logic in `lib/fleet-pre-certificate.js`) + one required CI job (`fleet-pre-cert` in `ci.yml`) + a falsifiable bypass-class fixture test for the Cloudflare fail-closed path. Fleet PRE (independent verifier role) publishes certificates into `data/fleet-pre-certificates/fleet-pre-<40hex>.json`.
++
++## Files / systems involved
++- `lib/fleet-pre-certificate.js` (new) — pure certificate-store validation.
++- `scripts/check-fleet-pre-certificate.js` (new) — CLI hard gate (exit 1 blocks).
++- `lib/cloudflare-fail-closed.js` (new) — pure fail-closed workflow scan.
++- `test/fleet-pre-certificate.test.js` (new) — missing/skipped/mismatch/stale/future/duplicate/self-certified/valid.
++- `test/cloudflare-fail-closed.test.js` (new) — A3 bypass-class reproduction.
++- `.github/workflows/ci.yml` — new `fleet-pre-cert` required-check job.
++- `data/fleet-pre-certificates/README.md` (new) — certificate schema + issuer contract.
++- `scripts/check-vercel-ignore.js` / `test/vercel-ignore.test.js` — keep Vercel quarantine behavior intact (`.github/`, `test/`, `data/fleet-pre-certificates/README.md` are non-deployable).
++
++## Known risks / invariants
++- Never allow Builder self-certification: optional `--certifier-must-not-equal <head author>` in the CI wiring.
++- Certificate freshness (`certifiedAt`) is bounded (default 48h) and must not be future-dated.
++- One certificate per exact SHA; duplicate/conflicting verdicts block.
++- No app/game/graphics source change; no production deployment; no direct master push; no auto-merge.
++
++## Exact patch / change plan
++1. `lib/fleet-pre-certificate.js`: schema + `gateCertificateStore()` and `validateCertificate()`.
++2. `scripts/check-fleet-pre-certificate.js`: CLI wrapper (`--head-sha`, `--cert-dir`, `--max-age-seconds`, `--certifier-must-not-equal`, `--json`).
++3. `data/fleet-pre-certificates/README.md`: schema, issuer contract, gate semantics.
++4. `lib/cloudflare-fail-closed.js`: `assertCloudflarePreviewFailClosed(workflowSource)` fixture function.
++5. `test/fleet-pre-certificate.test.js` + `test/cloudflare-fail-closed.test.js`.
++6. `ci.yml`: required job `fleet-pre-cert` running the gate with exact PR head SHA.
++7. Rename/inform: branch protection must list `fleet-pre-cert` (owner action, documented in PR).
++
++## Tests to run
++`node --test test/fleet-pre-certificate.test.js test/cloudflare-fail-closed.test.js`; `npm run check:fast`; `npm run check`; `node scripts/check-agent-rules.js`; `node scripts/check-golden-standard.js`; `git diff --check`.
++
++## Deployment / PR plan
++Commit + push `opencode/fleet-pre-cert-gate-20260916`, open one PR to `master`. No merge, no production/preview promotion by this session. After a new head, route to Fleet PRE for independent exact-SHA certification, then Ocean integration.
++
++## Completion criteria
++The gate blocks missing / skipped / different-SHA / stale / future / duplicate / self-certified certificates and passes on a valid exact-SHA Fleet PRE certificate; the A3 fixture test fails on a Netlify-fallback green bypass and passes on current master's fail-closed workflow; repository gates pass on the new head.
++
++## Final evidence
++Pending implementation and test run in this session.
++
++---
++
+ # PR #91 Stack Completion refresh — 2026-09-12
+ 
+ ## Task

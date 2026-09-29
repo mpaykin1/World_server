@@ -1,0 +1,11 @@
+{
+  "contract": "WORLD_SERVER_GOLDEN_STANDARD_V2",
+  "kind": "dreamfog-atmospheric-world",
+  "render": "three-webgl-hybrid-fog",
+  "physics": "shared-golden-physics",
+  "controls": "shared-ai3d-playable-runtime",
+  "performance": "shared-golden-performance-autotuner + dreamfog-feature-tiering",
+  "depthSource": "existing Depth Anything V2 Small worker plugin",
+  "fallback": "procedural seeded atmosphere without generated depth layers",
+  "status": "patch-candidate"
+}

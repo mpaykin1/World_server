@@ -1,0 +1,4 @@
+original_path=C:/Users/user/AppData/Local/World_server_worktrees/World_server_dark_void_auto15
+head=
+82bf8ae75d68b0e5c653b369e193fd7fac4bf7a3
+branch=ai/dark-void-auto15

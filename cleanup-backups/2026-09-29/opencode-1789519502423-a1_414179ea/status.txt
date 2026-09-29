@@ -1,0 +1,8 @@
+ M .github/workflows/ci.yml
+ M WORK_IN_PROGRESS.md
+?? data/fleet-pre-certificates/
+?? lib/cloudflare-fail-closed.js
+?? lib/fleet-pre-certificate.js
+?? scripts/check-fleet-pre-certificate.js
+?? test/cloudflare-fail-closed.test.js
+?? test/fleet-pre-certificate.test.js

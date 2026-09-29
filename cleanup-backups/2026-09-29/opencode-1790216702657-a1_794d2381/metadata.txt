@@ -1,0 +1,4 @@
+original_path=C:/Users/user/AppData/Local/World_server_worktrees/opencode-1790216702657-a1
+head=
+794d23811045537c6a0472e02b91a30ac6073626
+branch=opencode/master-goal-codex-cap-20260924
