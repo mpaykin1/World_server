@@ -131,7 +131,7 @@ jobs:
           set -euo pipefail
           git config user.name "world-server-kkrieger-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add artifacts/kkrieger/kkrieger_autonomous_fixed.html artifacts/kkrieger/kkrieger_smoke.png artifacts/kkrieger/kkrieger_smoke.json
+          git add -f artifacts/kkrieger/kkrieger_autonomous_fixed.html artifacts/kkrieger/kkrieger_smoke.png artifacts/kkrieger/kkrieger_smoke.json
           if git diff --cached --quiet; then
             echo "artifact unchanged"
           else
