@@ -25,7 +25,7 @@ function validLod(lod,index,type){
   if(!lod||lod.lod!==index||!positiveInt(lod.bytes)||!hash(lod.sha256))return false;
   const file=index===0?type+".glb":type+".lod"+index+".glb";
   if(lod.file!==file||!positiveInt(lod.triangles)||!positiveInt(lod.vertices)||!positiveInt(lod.visibleFaces))return false;
-  if(!positiveInt(lod.voxelCount)||!positiveInt(lod.drawCalls)||!Number.isFinite(lod.generationMs))return false;
+  if(!positiveInt(lod.voxelCount)||!positiveInt(lod.drawCalls))return false;
   return true;
 }
 export function validVoxelManifest(manifest){
