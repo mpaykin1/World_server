@@ -326,7 +326,7 @@ def _export_lod(kind: str, seed: int, lod: int, output: Path, params=None):
     dest = output / file_name
     _export_glb(dest)
     elapsed = (time.perf_counter() - start) * 1000
-    return recipe, {
+    meta = {
         "lod": lod, "file": file_name,
         "url": "/apps/voxel-world/voxel-art/" + file_name,
         **_digest(dest), **recipe.stats(), **mesh_metrics,
@@ -335,12 +335,7 @@ def _export_lod(kind: str, seed: int, lod: int, output: Path, params=None):
         "kind": kind, "lod": lod, "generationMs": round(elapsed, 2),
         "triangles": mesh_metrics["triangles"], "bytes": dest.stat().st_size,
     }, separators=(",", ":")))
-    return recipe, {
-        "lod": lod, "file": file_name,
-        "url": "/apps/voxel-world/voxel-art/" + file_name,
-        **_digest(dest), **recipe.stats(), **mesh_metrics,
-    }
-
+    return recipe, meta
 
 def make_asset(kind: str, output: Path, preview: bool, seed: int):
     asset_seed = (seed ^ (stable_hash(kind) & 0x7fffffff)) & 0x7fffffff
