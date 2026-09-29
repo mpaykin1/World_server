@@ -48,24 +48,21 @@ import sys
 p = Path(sys.argv[1])
 s = p.read_text(encoding="utf-8")
 
-needle = '  -sENVIRONMENT=web\n'
-if s.count(needle) != 1:
-    raise SystemExit(
-        f"expected exactly one Emscripten web environment flag, found {s.count(needle)}"
-    )
-s = s.replace(needle, needle + '  -sSINGLE_FILE=1\n', 1)
-
-replacements = (
-    ('--preload-file "$ROOT/data/kkrieger3383.kx@/kkrieger.kx"',
-     '--embed-file "$ROOT/data/kkrieger3383.kx@/kkrieger.kx"'),
-    ('--preload-file "$ROOT/data/kkrieger_beta_conv.kx@/kkrieger_beta.kx"',
-     '--embed-file "$ROOT/data/kkrieger_beta_conv.kx@/kkrieger_beta.kx"'),
-)
-for old, new in replacements:
-    count = s.count(old)
-    if count != 1:
-        raise SystemExit(f"expected exactly one preload flag {old!r}, found {count}")
-    s = s.replace(old, new, 1)
+old_block = '''  -sENVIRONMENT=web
+  --preload-file "$ROOT/data/kkrieger3383.kx@/kkrieger.kx"
+  --preload-file "$ROOT/data/kkrieger_beta_conv.kx@/kkrieger_beta.kx"
+  --shell-file "$ROOT/wasm/shell.html"
+'''
+new_block = '''  -sENVIRONMENT=web
+  -sSINGLE_FILE=1
+  --embed-file "$ROOT/data/kkrieger3383.kx@/kkrieger.kx"
+  --embed-file "$ROOT/data/kkrieger_beta_conv.kx@/kkrieger_beta.kx"
+  --shell-file "$ROOT/wasm/shell.html"
+'''
+count = s.count(old_block)
+if count != 1:
+    raise SystemExit(f"expected exactly one release LDFLAGS block, found {count}")
+s = s.replace(old_block, new_block, 1)
 
 p.write_text(s, encoding="utf-8")
 PY
