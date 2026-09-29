@@ -59,12 +59,15 @@ if (Test-Path (Join-Path $Repo '.git')) {
   $dirty = (git -C $Repo status --porcelain | Measure-Object).Count
   Write-Log ("git branch={0} dirty={1}" -f $branch,$dirty)
   if (-not $DryRun) {
+    $oldPreference = $ErrorActionPreference
+    $ErrorActionPreference = 'SilentlyContinue'
     git -C $Repo fetch origin --prune 2>$null | Out-Null
     git -C $Repo gc --auto 2>$null | Out-Null
+    $ErrorActionPreference = $oldPreference
   }
 }
 
-$tooBusy = ($health.Cpu -ge 75 -or $health.FreeRamGB -lt 3.5 -or $health.FreeCGB -lt 20)
+$tooBusy = ($health.Cpu -ge 70 -or $health.FreeRamGB -lt 4.0 -or $health.FreeCGB -lt 20)
 if ($tooBusy) {
   Write-Log 'resource gate active: Agent Zero review skipped'
   Stop-WorldServerOllama
