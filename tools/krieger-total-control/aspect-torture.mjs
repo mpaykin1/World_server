@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import fs from "node:fs";
 import { chromium } from "playwright";
-import { analyzeForensics } from "./observatory-core.mjs";
+import { analyzeForensics, validateCoreRuntimeEvidence } from "./observatory-core.mjs";
 
 const base = process.env.KK_URL || "http://127.0.0.1:8765/kkrieger.html?res=fit";
 const requireResponsive = process.env.KK_REQUIRE_RESPONSIVE === "1";
@@ -42,6 +42,10 @@ try {
     await page.waitForTimeout(250);
     const events=await page.evaluate(()=>window.__kkForensics.slice());
     const analysis=analyzeForensics(events);
+    const runtimeValidation=validateCoreRuntimeEvidence(events);
+    if(!runtimeValidation.pass) {
+      throw new Error(c.id+" invalid live forensics: "+runtimeValidation.errors.join(" | "));
+    }
     const stages=[...new Set(events.map(x=>x.stage))];
     const mustHave=[
       "browser.viewport","engine.screen","mainplayer.master_viewport",
@@ -72,6 +76,7 @@ try {
     results.push({
       case:c,
       analysis,
+      runtimeValidation,
       stages,
       observatory:{
         assetSamples:analysis.assets.meshSamples,
