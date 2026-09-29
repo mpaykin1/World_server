@@ -240,3 +240,62 @@ export function simulateCannonCollapse(voxels, impact = {}, options = {}) {
   const collapse=planCollapseBodies(analysis,{...options,impactDirection:damage.direction});
   return {version:STRUCTURAL_DESTRUCTION_VERSION,damage,analysis,collapse};
 }
+
+function collisionVoxel(byKey,position){
+  const x=Math.round(position.x),y=Math.round(position.y),z=Math.round(position.z);
+  return byKey.get(key3(x,y,z))||null;
+}
+
+export function traceCannonProjectile(voxels, shot = {}, options = {}) {
+  const byKey=normalizeVoxels(voxels,options.maxVoxels);
+  const start={x:Number(shot.origin?.x)||0,y:Number(shot.origin?.y)||0,z:Number(shot.origin?.z)||0};
+  const velocity={
+    x:Number(shot.velocity?.x)||0,
+    y:Number(shot.velocity?.y)||0,
+    z:Number(shot.velocity?.z)||0,
+  };
+  if(Math.hypot(velocity.x,velocity.y,velocity.z)<.01)throw new RangeError('Projectile velocity required');
+  const gravity=clamp(Number(options.gravity ?? -9.81),-50,0);
+  const maxTime=clamp(Number(options.maxTime ?? 8),.05,30);
+  const maxStep=clamp(Number(options.maxStep ?? .125),.02,.25);
+  const maxSamples=clamp(Math.trunc(options.maxSamples ?? 4096),16,20000);
+  const position={...start},path=[{...start,t:0}];
+  let t=0,samples=0;
+  while(t<maxTime&&samples<maxSamples){
+    const speed=Math.hypot(velocity.x,velocity.y,velocity.z);
+    const dt=Math.min(maxTime-t,Math.max(.001,maxStep/Math.max(speed,1)));
+    velocity.y+=gravity*dt;
+    position.x+=velocity.x*dt;position.y+=velocity.y*dt;position.z+=velocity.z*dt;
+    t+=dt;samples++;
+    const hit=collisionVoxel(byKey,position);
+    if(hit){
+      return {hit:true,voxel:hit,point:{...position},velocity:{...velocity},time:t,samples,path};
+    }
+    if(samples===1||samples%8===0)path.push({...position,t});
+  }
+  return {hit:false,voxel:null,point:{...position},velocity:{...velocity},time:t,samples,path};
+}
+
+export function fireCannonAtStructure(voxels, shot = {}, options = {}) {
+  const flight=traceCannonProjectile(voxels,shot,options);
+  if(!flight.hit){
+    return {
+      version:STRUCTURAL_DESTRUCTION_VERSION,
+      flight,
+      damage:null,
+      analysis:analyzeStructuralSupport(voxels,options),
+      collapse:{bodies:[],deferred:[],unstableCount:0},
+    };
+  }
+  const speed=Math.hypot(flight.velocity.x,flight.velocity.y,flight.velocity.z);
+  const result=simulateCannonCollapse(voxels,{
+    point:flight.point,
+    direction:flight.velocity,
+    mass:shot.mass,
+    speed,
+    radius:shot.damageRadius,
+    energyScale:shot.energyScale,
+    maxDestroyed:shot.maxDestroyed,
+  },options);
+  return {...result,flight};
+}
