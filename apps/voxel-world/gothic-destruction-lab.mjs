@@ -113,7 +113,11 @@ export async function installGothicDestructionLab({THREE,scene,player,heightAt,t
   }
 
   function stats(){
-    return{enabled:true,fired,towerVoxels:tower.voxels.length,dynamicMeshes:bodyMeshes.size,...physics.stats(),rapier:RAPIER_PROVENANCE};
+    return{
+      enabled:true,fired,towerVoxels:tower.voxels.length,dynamicMeshes:bodyMeshes.size,
+      origin:{...origin},bodies:physics.snapshot(),
+      ...physics.stats(),rapier:RAPIER_PROVENANCE,
+    };
   }
 
   const button=mountFireButton(fire);
