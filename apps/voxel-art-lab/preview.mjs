@@ -134,6 +134,13 @@ document.getElementById("animation").addEventListener("click",event=>{
 document.getElementById("semantic").addEventListener("click",event=>{
   semantic=!semantic;event.currentTarget.setAttribute("aria-pressed",String(semantic));void drawDebug();
 });
+window.__voxelViewerStats=()=>({
+  kind:activeKind,version,lod,animation,semantic,zoom,
+  debugBoxes:debugGroup?.children.length||0,
+  cacheEntries:cache.size,semanticCacheEntries:semanticCache.size,
+  render:{calls:renderer.info.render.calls,triangles:renderer.info.render.triangles,points:renderer.info.render.points},
+});
+
 async function start(){
   try{await Promise.all([fetchManifest("new"),fetchManifest("old")]);await show();}
   catch(error){status.textContent="Viewer startup error: "+error.message;}
