@@ -68,7 +68,7 @@ async function view(browser,name,viewport,isMobile,dpr){
   if(await page.locator('#animation').getAttribute('aria-pressed')!=='false')throw new Error('Animation toggle failed');
   await page.locator('#animation').click();
   const before=await page.evaluate(()=>window.__voxelViewerStats().zoom);
-  if(isMobile)await pinch(page);else await page.mouse.wheel(0,-420);
+  if(isMobile)await pinch(page);else await page.locator('canvas').dispatchEvent('wheel',{deltaY:-420});
   await page.waitForTimeout(120);
   const after=await page.evaluate(()=>window.__voxelViewerStats().zoom);
   if(Math.abs(after-before)<.02)throw new Error((isMobile?'Pinch':'Wheel')+' zoom failed');
