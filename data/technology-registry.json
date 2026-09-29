@@ -255,15 +255,18 @@
       ]
     },
     "Living Watercolor 3D NPR": {
-      "percent": 70,
-      "status": "shared runtime + diagnostic integration + deterministic unit coverage; browser reference-fidelity gate pending",
+      "percent": 82,
+      "status": "v2 sketch-first shared runtime + organic generators + diagnostic browser integration; reference gate below release threshold",
       "evidence": [
         "shared/graphics/living-watercolor-3d.js",
+        "shared/graphics/living-watercolor-generators.js",
+        "shared/graphics/living-watercolor-reference-gate.js",
         "apps/living-watercolor-3d/client.js",
         "test/living-watercolor-3d.test.mjs",
+        "test/living-watercolor-v2.test.mjs",
         "docs/LIVING_WATERCOLOR_3D.md"
       ],
-      "note": "Procedural paper/brush textures, seeded watercolor wash, irregular ink shell, soft wash shadows, coherent brush smoke/steam and artistic distance LOD. Not production-certified until fresh browser/mobile visual comparison against approved watercolor references passes."
+      "note": "V2 adds orthographic illustration framing, clone-safe organic deformation, sketch-specific house/tree/volcano/power-plant generators, semantic ink, pigment pooling, paper gaps, adaptive screen-space watercolor compositing and measured reference profiles. Focused tests pass, but current fresh reference-fidelity scores remain below the >=85 release threshold, so this stays diagnostic/non-production."
     }
   },
   "governanceCoveragePercent": 100,
