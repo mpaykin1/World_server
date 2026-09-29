@@ -23,6 +23,21 @@
       "license":"source/provenance remains governed by docs/KKRIEGER_WASM_INTEGRATION.md"
     },
     {
+      "id":"emscripten-fixed-2to1-viewport-policy",
+      "subsystem":"viewport-render-target",
+      "status":"FOUND",
+      "verifiedSha":"3bf0ff017372e640e966c2785a4d95a998cec242",
+      "files":["werkkzeug3_kkrieger/mainplayer.cpp"],
+      "symbols":["sAppHandler","sAPPCODE_PAINT","sSystem->ConfigX","sSystem->ConfigY","vp.Window","Environment->Aspect","GenOverlayManager->SetMasterViewport","RenderTargetManager->SetMasterViewport"],
+      "flow":["ConfigX/ConfigY","sAPPCODE_PAINT","largest centred 2:1 rectangle","vp.Window","GenOverlayManager master viewport","RenderTargetManager master viewport","Environment->Aspect=2.0","renderer"],
+      "invariant":"On the verified Emscripten source, the engine intentionally centres the largest 2:1 gameplay rectangle and independently fixes Environment->Aspect to 2.0; CSS/fullscreen canvas coverage cannot by itself produce a portrait-filling 3D viewport.",
+      "evidence":["MasonDye/kkrieger-wasm@3bf0ff017372e640e966c2785a4d95a998cec242:werkkzeug3_kkrieger/mainplayer.cpp:sAPPCODE_PAINT"],
+      "knownUnknowns":["Runtime ConfigX/ConfigY and resulting vp.Window on physical iPhone are not yet measured.","Master render-target dimensions and effective projection at runtime are not yet measured."],
+      "nextExperiment":"Read-only Observatory must report ConfigX/ConfigY, vp.Window, master render-target dimensions and effective aspect before any portrait policy change; then test a bounded Portrait Lab and physical-iPhone gate.",
+      "worldServerCapability":"portrait-viewport-policy-and-observability",
+      "license":"mainplayer.cpp declares BSD; preserve upstream provenance and verify repository LICENSE.txt boundaries before code reuse."
+    },
+    {
       "id":"weapon-state-proof-boundary",
       "subsystem":"input-game-state",
       "status":"FOUND",
