@@ -294,4 +294,184 @@ replace_once("kkriegergame.cpp",
     WeaponEvent.Exit();
 """)
 
+
+# Geometry provenance: record generated mesh -> runtime EngMesh expansion.
+replace_once("engine.cpp",
+"""  for(sInt i=1;i<Mtrl.Count;i++)
+    Mtrl[i].Material->AddRef();
+
+  PrepareJobs(mesh);
+}
+""",
+"""  for(sInt i=1;i<Mtrl.Count;i++)
+    Mtrl[i].Material->AddRef();
+
+  PrepareJobs(mesh);
+#if defined(__EMSCRIPTEN__)
+  {
+    static sInt obsGenMesh;
+    if(obsGenMesh++ < 256)
+    {
+      sInt indices = 0;
+      for(sInt ji=0;ji<Jobs.Count;ji++) indices += Jobs[ji].IndexCount;
+      fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"geometry.mesh\\\",\\\"kind\\\":\\\"GenMesh\\\",\\\"sourceFaces\\\":%d,\\\"vertices\\\":%d,\\\"parts\\\":%d,\\\"materials\\\":%d,\\\"jobs\\\":%d,\\\"triangles\\\":%d,\\\"animated\\\":%d}\\n",
+              mesh->Face.Count,VertCount,PartCount,Mtrl.Count,Jobs.Count,indices/3,Animation?1:0);
+    }
+  }
+#endif
+}
+""")
+
+replace_once("engine.cpp",
+"""  sRelease(Animation);
+  Animation = mesh->Animation;
+  if(Animation)
+    Animation->AddRef();
+}
+""",
+"""  sRelease(Animation);
+  Animation = mesh->Animation;
+  if(Animation)
+    Animation->AddRef();
+#if defined(__EMSCRIPTEN__)
+  {
+    static sInt obsMinMesh;
+    if(obsMinMesh++ < 256)
+    {
+      sInt indices = 0;
+      for(sInt ji=0;ji<Jobs.Count;ji++) indices += Jobs[ji].IndexCount;
+      fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"geometry.mesh\\\",\\\"kind\\\":\\\"GenMinMesh\\\",\\\"sourceFaces\\\":%d,\\\"vertices\\\":%d,\\\"parts\\\":%d,\\\"materials\\\":%d,\\\"jobs\\\":%d,\\\"triangles\\\":%d,\\\"animated\\\":%d}\\n",
+              mesh->Faces.Count,VertCount,PartCount,Mtrl.Count,Jobs.Count,indices/3,Animation?1:0);
+    }
+  }
+#endif
+}
+""")
+
+# Material provenance: exact pass creation and usage/program classification.
+replace_once("genmaterial.cpp",
+"""  ps->Pass = pass;
+  ps->Size = size;
+  ps->Aspect = aspect;
+}
+""",
+"""  ps->Pass = pass;
+  ps->Size = size;
+  ps->Aspect = aspect;
+#if defined(__EMSCRIPTEN__)
+  {
+    static sInt obsPass;
+    if(obsPass++ < 512)
+      fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"material.pass\\\",\\\"usage\\\":%d,\\\"program\\\":%d,\\\"pass\\\":%d,\\\"size\\\":%.6f,\\\"aspect\\\":%.6f,\\\"materialPassCount\\\":%d}\\n",
+              use,program,pass,size,aspect,Passes.Count);
+  }
+#endif
+}
+""")
+
+# Scene/level provenance: count portal graph and the visible sectors before
+# execution resets SectorPaint.
+replace_once("engine.cpp",
+"""  // exec phase
+  sZONE(PortalJob);
+
+  for(GenScene *job=SectorJobs;job;job=job->Next)
+""",
+"""#if defined(__EMSCRIPTEN__)
+  {
+    static sInt obsPortalFrame;
+    if(obsPortalFrame++ < 3 || (obsPortalFrame % 60) == 0)
+    {
+      sInt sectors = 0, visible = 0, portals = 0;
+      for(GenScene *sj=SectorJobs;sj;sj=sj->Next)
+      {
+        sectors++;
+        if(sj->SectorPaint) visible++;
+      }
+      for(PortalJob *pj=PortalJobs;pj;pj=pj->Next) portals++;
+      fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"scene.portals\\\",\\\"sectors\\\":%d,\\\"visibleSectors\\\":%d,\\\"portals\\\":%d,\\\"observer\\\":%d}\\n",
+              sectors,visible,portals,observerCell?1:0);
+    }
+  }
+#endif
+
+  // exec phase
+  sZONE(PortalJob);
+
+  for(GenScene *job=SectorJobs;job;job=job->Next)
+""")
+
+# Generic renderer frame statistics after the actual paint-job graph is built.
+replace_once("engine.cpp",
+"""  BuildPaintJobs();
+#if defined(__EMSCRIPTEN__)
+  {
+    if(kkExecTrace)
+""",
+"""  BuildPaintJobs();
+#if defined(__EMSCRIPTEN__)
+  {
+    static sInt obsRenderFrame;
+    if(obsRenderFrame++ < 3 || (obsRenderFrame % 60) == 0)
+    {
+      sInt meshes=0,effects=0,usage[ENGU_MAX];
+      sSetMem(usage,0,sizeof(usage));
+      for(MeshJob *j=MeshJobs;j;j=j->Next) meshes++;
+      for(EffectJob *j=EffectJobs;j;j=j->Next) effects++;
+      for(sInt i=0;i<PaintJobs.Count;i++)
+      {
+        sInt u=(PaintJobs[i]->SortKey >> 16) & 0xf;
+        if(u>=0 && u<ENGU_MAX) usage[u]++;
+      }
+      fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"renderer.frame\\\",\\\"mode\\\":\\\"generic\\\",\\\"meshJobs\\\":%d,\\\"effectJobs\\\":%d,\\\"paintJobs\\\":%d,\\\"lights\\\":%d,\\\"usage\\\":[%d,%d,%d,%d,%d,%d,%d,%d]}\\n",
+              meshes,effects,PaintJobs.Count,LightJobCount,
+              usage[0],usage[1],usage[2],usage[3],usage[4],usage[5],usage[6],usage[7]);
+    }
+    if(kkExecTrace)
+""")
+
+# Breakpoint 2004 renderer has a different sort-key layout and shadow path.
+replace_once("engine.cpp",
+"""  BuildPaintJobs();
+  Build04 = sFALSE;
+
+  if(kkExecTrace)
+""",
+"""  BuildPaintJobs();
+  Build04 = sFALSE;
+
+  {
+    static sInt obsRender04Frame;
+    if(obsRender04Frame++ < 3 || (obsRender04Frame % 60) == 0)
+    {
+      sInt meshes=0,effects=0,usage04[5];
+      sSetMem(usage04,0,sizeof(usage04));
+      for(MeshJob *j=MeshJobs;j;j=j->Next) meshes++;
+      for(EffectJob *j=EffectJobs;j;j=j->Next) effects++;
+      for(sInt i=0;i<PaintJobs.Count;i++)
+      {
+        sInt u=(PaintJobs[i]->SortKey >> 28) & 0xf;
+        if(u>=0 && u<5) usage04[u]++;
+      }
+      fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"renderer.frame\\\",\\\"mode\\\":\\\"2004\\\",\\\"meshJobs\\\":%d,\\\"effectJobs\\\":%d,\\\"paintJobs\\\":%d,\\\"rawLights\\\":%d,\\\"selectedLights\\\":%d,\\\"shadowLights\\\":%d,\\\"shadowJobs\\\":%d,\\\"usage04\\\":[%d,%d,%d,%d,%d]}\\n",
+              meshes,effects,PaintJobs.Count,Lights04Count,count,shadows,Shadow04Count,
+              usage04[0],usage04[1],usage04[2],usage04[3],usage04[4]);
+    }
+  }
+
+  if(kkExecTrace)
+""")
+
+# Platform/GPU-side frame counters: this is the final CPU->WebGL proof that
+# render jobs actually produced draw/setup/viewport traffic.
+replace_once("wasm/_start_wasm.cpp",
+"""    fprintf(stderr,"[kk]   states applied=%d skipped=%d\\n",cStateSet,cStateSkip);
+    cViewport=cClear=cSetup=cInstT=cInstP=cDraw=cDrawEmpty=cGeoEnd=0;
+""",
+"""    fprintf(stderr,"[kk]   states applied=%d skipped=%d\\n",cStateSet,cStateSkip);
+    fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"gpu.frame\\\",\\\"frame\\\":%d,\\\"viewportChanges\\\":%d,\\\"clears\\\":%d,\\\"setups\\\":%d,\\\"instancesTranslated\\\":%d,\\\"instancesPlaceholder\\\":%d,\\\"drawCalls\\\":%d,\\\"emptyDraws\\\":%d,\\\"geoEnds\\\":%d,\\\"statesApplied\\\":%d,\\\"statesSkipped\\\":%d,\\\"glError\\\":%u}\\n",
+            gFrame,cViewport,cClear,cSetup,cInstT,cInstP,cDraw,cDrawEmpty,cGeoEnd,cStateSet,cStateSkip,(unsigned)e);
+    cViewport=cClear=cSetup=cInstT=cInstP=cDraw=cDrawEmpty=cGeoEnd=0;
+""")
+
 print("Krieger Total Control forensics patch: PASS")
