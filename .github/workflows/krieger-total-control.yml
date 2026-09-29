@@ -1,0 +1,132 @@
+name: Krieger Total Control
+
+on:
+  push:
+    branches: ["ai/**"]
+    paths:
+      - "data/krieger-*.json"
+      - "docs/krieger-total-control/**"
+      - "tools/krieger-total-control/**"
+      - "test/krieger-total-control.test.mjs"
+      - ".github/workflows/krieger-total-control.yml"
+  pull_request:
+    branches: [master]
+    paths:
+      - "data/krieger-*.json"
+      - "docs/krieger-total-control/**"
+      - "tools/krieger-total-control/**"
+      - "test/krieger-total-control.test.mjs"
+      - ".github/workflows/krieger-total-control.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: krieger-total-control-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  knowledge-and-forensics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Checkout World Server
+        uses: actions/checkout@v4
+
+      - name: Checkout pinned kkrieger source
+        uses: actions/checkout@v4
+        with:
+          repository: MasonDye/kkrieger-wasm
+          ref: 3bf0ff017372e640e966c2785a4d95a998cec242
+          path: .upstream/kkrieger-wasm
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Verify Knowledge Graph against exact upstream source
+        run: node tools/krieger-total-control/verify-upstream.mjs .upstream/kkrieger-wasm/werkkzeug3_kkrieger
+
+      - name: Observatory semantic tests
+        run: node --test test/krieger-total-control.test.mjs
+
+      - name: Validate and apply instrumentation-only patch
+        run: |
+          python -m py_compile tools/krieger-total-control/patch-forensics.py
+          python tools/krieger-total-control/patch-forensics.py .upstream/kkrieger-wasm/werkkzeug3_kkrieger
+          grep -q 'mainplayer.master_viewport' .upstream/kkrieger-wasm/werkkzeug3_kkrieger/mainplayer.cpp
+          grep -q 'weapon.commit' .upstream/kkrieger-wasm/werkkzeug3_kkrieger/kkriegergame.cpp
+          grep -q 'Krieger Observatory' .upstream/kkrieger-wasm/werkkzeug3_kkrieger/wasm/shell.html
+
+      - name: Set up Emscripten 6.0.9
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 6.0.9
+          actions-cache-folder: emsdk-cache
+
+      - name: Build instrumented real C++/WASM game
+        env:
+          KK_RELEASE: "1"
+          KK_OBJDIR: ${{ github.workspace }}/work/krieger-total-control/obj
+          KK_OUTDIR: ${{ github.workspace }}/work/krieger-total-control/dist
+        run: |
+          mkdir -p work/krieger-total-control
+          bash .upstream/kkrieger-wasm/werkkzeug3_kkrieger/wasm/build.sh clean
+          test -s work/krieger-total-control/dist/kkrieger.html
+
+      - name: Install browser test runtime
+        run: |
+          npm install --no-save --package-lock=false --ignore-scripts --no-audit --no-fund playwright@1.63.0
+          node node_modules/playwright/cli.js install chromium
+
+      - name: Serve instrumented build
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory work/krieger-total-control/dist >/tmp/krieger-total-control-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:8765/kkrieger.html >/dev/null && break
+            sleep 1
+          done
+
+      - name: Aspect-ratio torture test — diagnostic mode
+        env:
+          KK_URL: http://127.0.0.1:8765/kkrieger.html?res=fit
+          KK_TORTURE_REPORT: work/krieger-total-control/KRIEGER_ASPECT_TORTURE_REPORT.json
+          KK_TORTURE_SHOTS: work/krieger-total-control/torture-shots
+        run: node tools/krieger-total-control/aspect-torture.mjs
+
+      - name: Require portrait root cause to be measurable
+        run: |
+          node - <<'NODE'
+          const r=require('./work/krieger-total-control/KRIEGER_ASPECT_TORTURE_REPORT.json');
+          if(!r.localization.knownPortraitPolicyDetected) {
+            throw new Error('forensics did not localize the current forced 2:1 portrait policy');
+          }
+          const portraits=r.cases.filter(x=>x.case.height>x.case.width);
+          if(!portraits.length || portraits.some(x=>!x.analysis.viewport.screen)) {
+            throw new Error('portrait cases are missing engine telemetry');
+          }
+          console.log('KNOWN_PORTRAIT_2_TO_1_LOCALIZED', portraits.map(x=>({
+            id:x.case.id,
+            screen:x.analysis.viewport.screen,
+            master:x.analysis.viewport.master,
+            coverage:x.analysis.viewport.masterMetrics?.areaCoverage,
+            aspect:x.analysis.viewport.projectionAspect
+          })));
+          NODE
+
+      - name: Upload Observatory and Viewport Lab evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: krieger-total-control-${{ github.sha }}
+          path: |
+            work/krieger-total-control/KRIEGER_ASPECT_TORTURE_REPORT.json
+            work/krieger-total-control/torture-shots/
+            work/krieger-total-control/dist/kkrieger.html
+          if-no-files-found: warn
+          retention-days: 14
