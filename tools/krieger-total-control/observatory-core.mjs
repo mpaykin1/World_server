@@ -204,6 +204,60 @@ export function analyzeGame(events = []) {
   };
 }
 
+
+export function validateCoreRuntimeEvidence(events = []) {
+  const errors=[];
+  const latest=latestByStage(events);
+  const meshes=events.filter(x=>x?.stage==="geometry.mesh");
+  const passes=events.filter(x=>x?.stage==="material.pass");
+  const renderFrames=events.filter(x=>x?.stage==="renderer.frame");
+  const gpuFrames=events.filter(x=>x?.stage==="gpu.frame");
+  const gpuDraws=events.filter(x=>x?.stage==="gpu.draw");
+
+  const screen=latest["engine.screen"]?.config;
+  if(!Array.isArray(screen) || screen.length!==2 || screen.some(x=>!Number.isFinite(x)||x<=0))
+    errors.push("engine.screen.config must contain two positive finite dimensions");
+
+  const master=latest["mainplayer.master_viewport"]?.window;
+  if(!Array.isArray(master) || master.length!==4 || master.some(x=>!Number.isFinite(x)))
+    errors.push("mainplayer.master_viewport.window must contain four finite coordinates");
+  else if(master[2]<=master[0] || master[3]<=master[1])
+    errors.push("mainplayer.master_viewport.window must have positive area");
+
+  if(!meshes.some(x=>Number(x.vertices)>0 && Number(x.triangles)>0))
+    errors.push("no geometry.mesh sample has positive vertices and triangles");
+
+  if(!passes.some(x=>Number.isFinite(Number(x.usage)) && Number.isFinite(Number(x.program)) && Number.isFinite(Number(x.pass))))
+    errors.push("no material.pass sample has finite usage/program/pass");
+
+  if(!renderFrames.some(x=>Number(x.paintJobs)>0))
+    errors.push("no renderer.frame has positive paintJobs");
+
+  if(!gpuFrames.some(x=>Number(x.drawCalls)>0))
+    errors.push("no gpu.frame has positive drawCalls");
+
+  const doc=latest["data.document"];
+  if(!doc || Number(doc.ops)<=0 || Number(doc.classes)<=0 || Number(doc.bytesConsumed)<=0)
+    errors.push("data.document must report positive classes, ops and bytesConsumed");
+
+  for(const d of gpuDraws.slice(0,64)) {
+    if(!Number.isFinite(Number(d.setup)) || !Array.isArray(d.viewport) || d.viewport.length!==4)
+      errors.push("gpu.draw sample has invalid setup/viewport");
+  }
+
+  return {
+    pass:errors.length===0,
+    errors,
+    samples:{
+      meshes:meshes.length,
+      materialPasses:passes.length,
+      rendererFrames:renderFrames.length,
+      gpuFrames:gpuFrames.length,
+      gpuDraws:gpuDraws.length,
+    },
+  };
+}
+
 export function analyzeForensics(events = []) {
   return {
     viewport: analyzeViewport(events),
