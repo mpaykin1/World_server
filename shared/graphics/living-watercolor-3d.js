@@ -204,14 +204,16 @@ function createPaperCompositor(sourceCanvas,style,getQuality,{replaceSource=fals
       const u=lums[Math.max(0,y-1)*cw+x],d=lums[Math.min(ch-1,y+1)*cw+x];
       const grad=Math.hypot((rr-l)*.5,(d-u)*.5),edge=clamp((grad-5)/26,0,1)*mask;
       const darkness=clamp((paperL-lum-34)/118,0,1)*mask;
-      const blot=washField[p],washAlpha=clamp(.68+(blot-.5)*.78,.29,.98);
-      const lift=(lum<135?clamp((186-lum)/112,0,.62):clamp((174-lum)/145,0,.34))*(1-edge*.82);
+      const blot=washField[p],sourceDark=clamp((paperL-lum)/128,0,1),washAlpha=clamp(.30+sourceDark*.34+(blot-.5)*.42,.16,.82);
+      const lift=(lum<135?clamp((176-lum)/126,0,.28):clamp((188-lum)/132,0,.46))*(1-edge*.82);
       const sr=r*(1-lift)+paper[0]*lift,sg=g*(1-lift)+paper[1]*lift,sb=b*(1-lift)+paper[2]*lift;
-      const pigmentMix=clamp(.52+(blot-.5)*.28,.38,.68);
+      const pigmentMix=clamp(.40+sourceDark*.10+(blot-.5)*.24,.28,.60);
       const pr=pigment[0]*pigmentMix+sr*(1-pigmentMix),pg=pigment[1]*pigmentMix+sg*(1-pigmentMix),pb=pigment[2]*pigmentMix+sb*(1-pigmentMix);
       const a=mask*washAlpha;
       let ro=paper[0]*(1-a)+pr*a,go=paper[1]*(1-a)+pg*a,bo=paper[2]*(1-a)+pb*a;
-      const inkAmount=clamp(edge*.62+darkness*.18,0,.78);
+      const structureDark=clamp((138-lum)/78,0,1)*mask;
+      const preserve=structureDark*.30;ro=ro*(1-preserve)+r*preserve;go=go*(1-preserve)+g*preserve;bo=bo*(1-preserve)+b*preserve;
+      const inkAmount=clamp(edge*.68+darkness*.16,0,.80);
       ro=ro*(1-inkAmount)+ink[0]*inkAmount;go=go*(1-inkAmount)+ink[1]*inkAmount;bo=bo*(1-inkAmount)+ink[2]*inkAmount;
       const grain=(hash01(x,y,1,seed)-.5)*2.4*(1-mask*.55);
       dst[i]=clamp(ro+grain,0,255);dst[i+1]=clamp(go+grain,0,255);dst[i+2]=clamp(bo+grain,0,255);dst[i+3]=255;
@@ -223,10 +225,10 @@ function createPaperCompositor(sourceCanvas,style,getQuality,{replaceSource=fals
       const bx=hash01(k,71,3,seed)*cw,by=hash01(k,73,5,seed)*ch;
       const brx=(.035+hash01(k,79,7,seed)*.16)*cw,bry=(.028+hash01(k,83,11,seed)*.13)*ch;
       bctx.save();bctx.translate(bx,by);bctx.rotate((hash01(k,89,13,seed)-.5)*1.2);
-      bctx.fillStyle=style.inkColor;bctx.globalAlpha=.018+hash01(k,97,17,seed)*.055;
+      bctx.fillStyle=style.washColor;bctx.globalAlpha=.045+hash01(k,97,17,seed)*.105;
       bctx.beginPath();bctx.ellipse(0,0,brx,bry,0,0,Math.PI*2);bctx.fill();bctx.restore();
     }
-    bctx.globalCompositeOperation='destination-in';bctx.globalAlpha=.72;bctx.drawImage(maskCanvas,0,0);bctx.globalCompositeOperation='source-over';
+    bctx.globalCompositeOperation='destination-in';bctx.globalAlpha=.88;bctx.drawImage(maskCanvas,0,0);bctx.globalCompositeOperation='source-over';
     ctx.save();ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1;ctx.filter='none';ctx.fillStyle=style.paperColor;ctx.fillRect(0,0,w,h);
     ctx.drawImage(paint,0,0,w,h);
     ctx.globalCompositeOperation='multiply';ctx.globalAlpha=.88;ctx.drawImage(blobs,0,0,w,h);ctx.globalCompositeOperation='source-over';

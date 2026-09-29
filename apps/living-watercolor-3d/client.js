@@ -14,7 +14,7 @@ renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(deviceP
 const quality=window.GoldenQualityDirector?.create?.({renderer,targetFps:50});
 const style=createWatercolorStyle({
   seed:'living-watercolor-v2',inkColor:'#2e425d',paperColor:'#f6f1e7',washColor:'#78899d',
-  washOpacity:.68,washLayers:9,edgeWidth:.038,edgeJitter:.31,granulation:.55,bleed:.29,
+  washOpacity:.68,washLayers:9,edgeWidth:.048,edgeJitter:.37,granulation:.55,bleed:.29,
   shadowWash:.12,motion:.13,pigmentPooling:.34,paperGap:.18,paintedLight:.72
 });
 const watercolor=createLivingWatercolor3D({THREE,renderer,scene,camera,style});watercolor.attachCompositor({replaceSource:true});
