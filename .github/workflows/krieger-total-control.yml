@@ -96,7 +96,7 @@ jobs:
         env:
           KK_URL: http://127.0.0.1:8765/kkrieger.html?res=fit
           KK_TORTURE_REPORT: work/krieger-total-control/KRIEGER_ASPECT_TORTURE_REPORT.json
-          KK_TORTURE_SHOTS: work/krieger-total-control/torture-shots
+          KK_TORTURE_TRACES: work/krieger-total-control/torture-traces
         run: node tools/krieger-total-control/aspect-torture.mjs
 
       - name: Require portrait root cause to be measurable
@@ -126,7 +126,7 @@ jobs:
           name: krieger-total-control-${{ github.sha }}
           path: |
             work/krieger-total-control/KRIEGER_ASPECT_TORTURE_REPORT.json
-            work/krieger-total-control/torture-shots/
+            work/krieger-total-control/torture-traces/
             work/krieger-total-control/dist/kkrieger.html
           if-no-files-found: warn
           retention-days: 14
