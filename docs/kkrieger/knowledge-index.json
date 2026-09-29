@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "system": "krieger-learning-teaching",
+  "statusVocabulary": ["FOUND","TESTED","INTEGRATED","LIVE_VERIFIED","BLOCKED","PROTOTYPE","NEEDS_REVERIFY"],
+  "canonical": {
+    "upstream": {"repo":"MasonDye/kkrieger-wasm","verifiedSha":"3bf0ff017372e640e966c2785a4d95a998cec242"},
+    "worldServerIntegrationObservedSha":"b12faed1bf7439ba9d257327ae4ccfcf8c17079a",
+    "knowledgeBase":"docs/kkrieger/KNOWLEDGE_BASE.md",
+    "handoff":"docs/kkrieger/AI_HANDOFF.md"
+  },
+  "entries": [
+    {
+      "id":"viewport-proof-boundary",
+      "subsystem":"viewport-render-target",
+      "status":"FOUND",
+      "verifiedSha":"3bf0ff017372e640e966c2785a4d95a998cec242",
+      "files":["genoverlay.cpp","kkriegergame.cpp","engine.cpp"],
+      "flow":["browser viewport/DPR","engine ConfigX/ConfigY","InitScreens","genoverlay render target","projection","final view.Window"],
+      "invariant":"DOM canvas coverage is not proof that the engine-owned final 3D viewport fills portrait.",
+      "evidence":["docs/kkrieger/KNOWLEDGE_BASE.md#failure-lesson-viewport-visibility-is-not-3d-viewport-proof"],
+      "nextExperiment":"Expose engine-owned viewport/render-target dimensions and identity through read-only Emscripten Observatory.",
+      "worldServerCapability":"renderer-observability",
+      "license":"source/provenance remains governed by docs/KKRIEGER_WASM_INTEGRATION.md"
+    },
+    {
+      "id":"weapon-state-proof-boundary",
+      "subsystem":"input-game-state",
+      "status":"FOUND",
+      "verifiedSha":"3bf0ff017372e640e966c2785a4d95a998cec242",
+      "files":["kkriegergame.cpp"],
+      "flow":["mobile shell input","WASM key buffer","OnKey","Player.NextWeapon","AddEvents transition gate","Player.CurrentWeapon","WeaponEvent"],
+      "invariant":"DOM weapon label is not proof of engine-owned CurrentWeapon transition.",
+      "evidence":["docs/kkrieger/KNOWLEDGE_BASE.md#failure-lesson-dom-weapon-label-is-not-weapon-state-proof"],
+      "nextExperiment":"Expose CurrentWeapon, NextWeapon, WeaponTimer and WeaponEvent presence through read-only Observatory.",
+      "worldServerCapability":"input-state-observability",
+      "license":"source/provenance remains governed by docs/KKRIEGER_WASM_INTEGRATION.md"
+    }
+  ],
+  "stalenessRule":"If a referenced file or symbol changes relative to verifiedSha, mark the affected entry NEEDS_REVERIFY until source/runtime evidence is repeated.",
+  "retentionGate":["WHAT DID WE LEARN?","WHERE IS IT STORED?","HOW IS IT VERIFIED?","CAN ANOTHER AI REPRODUCE IT?"]
+}
