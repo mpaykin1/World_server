@@ -54,12 +54,15 @@ The canonical playable browser build is maintained in:
 - known issues: `KRIEGER_KNOWN_ISSUES.md`
 - open physical-iPhone bug tracker: https://github.com/mpaykin1/scratch-chain-reaction/issues/34
 
-### IMPORTANT — physical iPhone bugs remain OPEN
+### Physical-iPhone truth and Total Control
 
-Do not infer success from Chromium smoke tests alone. As of 2026-09-29 the user still reproduces these on a physical iPhone:
+Do not infer success from Chromium smoke tests alone. Physical-device evidence outranks synthetic browser evidence.
 
-1. USE does not reliably change the real in-game weapon in portrait or landscape.
-2. START GAME works intermittently in portrait and landscape.
-3. Portrait mode still does not render the actual 3D scene truly full-screen; the scene can remain a horizontal strip with large black regions.
+Current status on 2026-09-29:
 
-These three issues are **not accepted as fixed** until the user confirms them on a physical device. Preserve the currently good landscape graphics, walking, swipe aiming and FIRE while fixing them.
+1. portrait fullscreen for the canonical Krieger browser port is user-confirmed solved;
+2. USE / real weapon switching remains a separate physical-device concern until explicitly confirmed;
+3. START GAME reliability remains a separate physical-device concern until explicitly confirmed;
+4. custom Level Lab authoring is **not** accepted merely because the canvas is non-black. A physical iPhone exposed a mostly flat blue-gray frame with a horizontal void even after synthetic CI reported >92% non-black pixels.
+
+The custom-level lesson is now part of the highest-priority **Krieger Total Control** effort. See `docs/KKRIEGER_TOTAL_CONTROL.md`. The target is a native authoring path through `GenMesh -> GenMaterial -> GenScene -> Sector/Portal/Light -> Engine jobs -> Paint2004 -> postprocess -> viewport`, with collision from the same scene graph.
