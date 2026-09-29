@@ -161,7 +161,7 @@ test('gothic viaduct stays stable with all piers and loses the unsupported span 
 
   const plan=planCollapseBodies(after,{...options,impactDirection:{x:1,y:0,z:0}});
   assert.ok(plan.bodies.some(b=>b.status==='unsupported-span'));
-  assert.ok(plan.bodies.some(b=>b.voxelKeys.some(k=>k.startsWith(`${middle},`)));
+  assert.ok(plan.bodies.some(b=>b.voxelKeys.some(k=>k.startsWith(`${middle},`))));
 });
 
 test('span support is opt-in so ordinary voxel structures keep pure connectivity semantics',()=>{
