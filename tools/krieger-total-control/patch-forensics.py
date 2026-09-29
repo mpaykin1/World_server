@@ -167,6 +167,24 @@ replace_once("wasm/shell.html",
 
 # Platform-level screen/backbuffer and real GL viewport.
 replace_once("wasm/_start_wasm.cpp",
+# Initial platform setup does not necessarily call InitScreens before the
+# first frame, so capture the same screen state in InitX as well.
+replace_once("wasm/_start_wasm.cpp",
+"""  Screen[0].XSize = ConfigX;
+  Screen[0].YSize = ConfigY;
+  ViewportX = ConfigX;
+  ViewportY = ConfigY;
+  CpuMask = 0;
+""",
+"""  Screen[0].XSize = ConfigX;
+  Screen[0].YSize = ConfigY;
+  ViewportX = ConfigX;
+  ViewportY = ConfigY;
+  fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"engine.screen\\\",\\\"reason\\\":\\\"InitX\\\",\\\"config\\\":[%d,%d],\\\"viewportXY\\\":[%d,%d]}\\n",
+          ConfigX,ConfigY,ViewportX,ViewportY);
+  CpuMask = 0;
+""")
+
 """  fprintf(stderr,"[kk] screen: %dx%d\\n",ConfigX,ConfigY);
 }
 """,
