@@ -10,6 +10,8 @@ import {
   analyzeAssets,
   analyzeScene,
   analyzeRenderer,
+  analyzeData,
+  analyzeGame,
 } from "../tools/krieger-total-control/observatory-core.mjs";
 
 test("viewport forensics localizes the pinned portrait 2:1 master viewport", () => {
@@ -163,4 +165,39 @@ test("full Total Control analysis includes render/scene/assets channels independ
   assert.equal(a.assets.meshSamples,1);
   assert.equal(a.scene.visibilityRatio,0.5);
   assert.equal(a.renderer.cpuToGpuObserved,true);
+});
+
+
+test("data Observatory measures compact document expansion without guessing visual size", () => {
+  const d=analyzeData([
+    {stage:"data.document",classes:43,ops:600,splines:20,events:35,songBytes:9000,sampleBytes:3000,bytesConsumed:120000,beta2004:1},
+  ]);
+  assert.equal(d.observed,true);
+  assert.equal(d.document.ops,600);
+  assert.equal(d.expansion.semanticNodes,655);
+  assert.equal(d.expansion.audioBytes,12000);
+  assert.ok(d.expansion.semanticNodesPerKB>5);
+});
+
+test("game Observatory reads real simulated player and creature state", () => {
+  const g=analyzeGame([
+    {stage:"game.state",tick:100,player:{life:87,armor:12,weapon:2,nextWeapon:2,weaponTimer:.25},monsters:{count:8,alive:5,states:[0,1,2,1,4]},shots:1,dynamicCells:3},
+    {stage:"creature.sample",index:0,type:2,state:4,life:80,lifeMax:100,weaponKind:1,pos:[1,2,3]},
+  ]);
+  assert.equal(g.observed,true);
+  assert.equal(g.playerWeapon,2);
+  assert.equal(g.playerNextWeapon,2);
+  assert.equal(g.activeMonsters,4);
+  assert.equal(g.creatureSamples.length,1);
+});
+
+test("full Total Control analysis keeps compact-data and live-game channels separate", () => {
+  const a=analyzeForensics([
+    {stage:"data.document",classes:10,ops:100,splines:4,events:6,bytesConsumed:20000},
+    {stage:"game.state",player:{weapon:1,nextWeapon:2},monsters:{states:[0,0,0,1,3]}},
+  ]);
+  assert.equal(a.data.observed,true);
+  assert.equal(a.game.observed,true);
+  assert.equal(a.game.playerWeapon,1);
+  assert.equal(a.game.playerNextWeapon,2);
 });
