@@ -46,7 +46,7 @@ try {
     const mustHave=[
       "browser.viewport","engine.screen","mainplayer.master_viewport",
       "mainplayer.projection_aspect","engine.set_viewport.before",
-      "geometry.mesh","material.pass","renderer.frame","gpu.frame"
+      "geometry.mesh","material.pass","renderer.frame","gpu.frame","data.document"
     ];
     const missing=mustHave.filter(x=>!stages.includes(x));
     if(missing.length) throw new Error(c.id+" missing forensic stages: "+missing.join(", "));
@@ -78,6 +78,8 @@ try {
         materialPassSamples:analysis.assets.materialPassSamples,
         scene:analysis.scene,
         renderer:analysis.renderer,
+        data:analysis.data,
+        game:analysis.game,
       },
       screenshotError,
       errors:errors.filter(x=>!/pointer lock|AudioContext|favicon/i.test(x)),
