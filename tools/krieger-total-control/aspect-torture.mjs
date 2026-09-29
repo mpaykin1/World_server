@@ -36,11 +36,18 @@ try {
     await page.locator("#start").click();
     await page.waitForFunction(()=>window.__kkForensics.some(x=>x.stage==="mainplayer.master_viewport"),null,{timeout:90000});
     await page.waitForFunction(()=>window.__kkForensics.some(x=>x.stage==="engine.set_viewport.before"),null,{timeout:30000});
-    await page.waitForTimeout(1200);
+    await page.waitForFunction(()=>window.__kkForensics.some(x=>x.stage==="renderer.frame"),null,{timeout:30000});
+    await page.waitForFunction(()=>window.__kkForensics.some(x=>x.stage==="gpu.frame"),null,{timeout:30000});
+    await page.waitForFunction(()=>window.__kkForensics.some(x=>x.stage==="geometry.mesh") && window.__kkForensics.some(x=>x.stage==="material.pass"),null,{timeout:30000});
+    await page.waitForTimeout(250);
     const events=await page.evaluate(()=>window.__kkForensics.slice());
     const analysis=analyzeForensics(events);
     const stages=[...new Set(events.map(x=>x.stage))];
-    const mustHave=["browser.viewport","engine.screen","mainplayer.master_viewport","mainplayer.projection_aspect","engine.set_viewport.before"];
+    const mustHave=[
+      "browser.viewport","engine.screen","mainplayer.master_viewport",
+      "mainplayer.projection_aspect","engine.set_viewport.before",
+      "geometry.mesh","material.pass","renderer.frame","gpu.frame"
+    ];
     const missing=mustHave.filter(x=>!stages.includes(x));
     if(missing.length) throw new Error(c.id+" missing forensic stages: "+missing.join(", "));
     if(requireResponsive && c.height>c.width && analysis.viewport.forcedTwoToOne) {
@@ -66,6 +73,12 @@ try {
       case:c,
       analysis,
       stages,
+      observatory:{
+        assetSamples:analysis.assets.meshSamples,
+        materialPassSamples:analysis.assets.materialPassSamples,
+        scene:analysis.scene,
+        renderer:analysis.renderer,
+      },
       screenshotError,
       errors:errors.filter(x=>!/pointer lock|AudioContext|favicon/i.test(x)),
     });
