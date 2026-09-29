@@ -74,11 +74,26 @@ async function view(browser,name,viewport,isMobile,dpr){
   if(Math.abs(after-before)<.02)throw new Error((isMobile?'Pinch':'Wheel')+' zoom failed');
   const canvas=await page.locator('canvas').evaluate(node=>({width:node.width,height:node.height,display:getComputedStyle(node).display}));
   if(canvas.width<=0||canvas.height<=0)throw new Error('Canvas is empty');
-  const perf=await frameSample(page),memory=await page.evaluate(()=>performance.memory?.usedJSHeapSize||null);
-  const stats=await page.evaluate(()=>window.__voxelViewerStats());
+  const visibility=await page.evaluate(()=>{
+    const vw=innerWidth,vh=innerHeight,area=vw*vh;
+    const boxes=[...document.querySelectorAll('header,footer')].map(node=>{
+      const style=getComputedStyle(node),r=node.getBoundingClientRect();
+      return style.display==='none'?0:Math.max(0,Math.min(vw,r.right)-Math.max(0,r.left))*Math.max(0,Math.min(vh,r.bottom)-Math.max(0,r.top));
+    });
+    const occluded=Math.min(area,boxes.reduce((a,b)=>a+b,0));
+    return Number(((1-occluded/area)*100).toFixed(1));
+  });
+  if(visibility<=85)throw new Error('User-visible scene gate failed: '+visibility+'%');
+  await page.locator('button[data-version="old"]').click();await waitState(page,'volcano','old',0);
+  const oldPerf=await frameSample(page),oldStats=await page.evaluate(()=>window.__voxelViewerStats());
+  await page.locator('button[data-version="new"]').click();await waitState(page,'volcano','new',0);
+  const newPerf=await frameSample(page),newStats=await page.evaluate(()=>window.__voxelViewerStats());
+  const memory=await page.evaluate(()=>performance.memory?.usedJSHeapSize||null);
   if(external.length)throw new Error('Offline viewer made external requests: '+[...new Set(external)].join(', '));
   if(faults.length)throw new Error('Page errors: '+faults.join('; '));
-  const metrics={name,viewport,canvas,perf,memory,render:stats.render,cacheEntries:stats.cacheEntries};
+  const metrics={name,viewport,canvas,userVisibleScenePercent:visibility,memory,
+    old:{perf:oldPerf,render:oldStats.render},new:{perf:newPerf,render:newStats.render},
+    cacheEntries:newStats.cacheEntries};
   console.log('[VOXEL_ART_E2E]',JSON.stringify(metrics));await context.close();return metrics;
 }
 (async()=>{
