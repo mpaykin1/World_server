@@ -210,9 +210,9 @@ def animate(kind: str, recipe: Recipe):
                         vox[(x,y,z)] = ("crystal_hot", fid)
         obj = _simple_anim_mesh(vox, "ANIM_crystal_pulse", (0,0,1.42))
         obj.keyframe_insert(data_path="scale", frame=1)
-        obj.scale.set((1.08,1.08,1.08))
+        obj.scale=(1.08,1.08,1.08)
         obj.keyframe_insert(data_path="scale", frame=25)
-        obj.scale.set((1,1,1))
+        obj.scale=(1,1,1)
         obj.keyframe_insert(data_path="scale", frame=49)
         if obj.animation_data and obj.animation_data.action:
             obj.animation_data.action.name = "crystal_pulse"
