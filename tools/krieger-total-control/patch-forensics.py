@@ -859,7 +859,8 @@ replace_once("wasm/_start_wasm.cpp",
       fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"gpu.draw\\\",\\\"originOp\\\":%d,\\\"originClass\\\":%d,\\\"originResult\\\":%d,\\\"jobId\\\":%d,\\\"usage\\\":%d,\\\"renderPass\\\":%d,\\\"program\\\":%d,\\\"vertices\\\":%d,\\\"indices\\\":%d,\\\"geometryHandle\\\":%d,\\\"setup\\\":%d,\\\"renderTarget\\\":%d,\\\"viewport\\\":[%d,%d,%d,%d]}\\n",
               kkObsOriginOp,kkObsOriginClass,kkObsOriginResult,kkObsJobId,kkObsUsage,kkObsRenderPass,kkObsProgram,
               kkObsVertices,kkObsIndices,handle,CurrentSetupId,CurrentViewport.RenderTarget,
-              gVpRect[0],gVpRect[1],gVpRect[2],gVpRect[3]);
+              CurrentViewport.Window.x0,CurrentViewport.Window.y0,
+              CurrentViewport.Window.x0+ViewportX,CurrentViewport.Window.y0+ViewportY);
   }
   KKTRACE("draw h=%d mode=%x fvf=%d vc=%d ic=%d setup=%d | sten=%d func=%d ref=%d ops=%d/%d/%d two=%d ccw=%d/%d/%d cw=%x zw=%d zf=%d cull=%d blend=%d/%d/%d op=%d at=%d/%d/%d\\n",
 """)
