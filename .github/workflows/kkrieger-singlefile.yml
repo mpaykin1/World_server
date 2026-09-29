@@ -1,0 +1,80 @@
+name: kkrieger single-file bridge
+
+on:
+  push:
+    branches: ["ai/chatgpt/kkrieger-wasm-singlefile-20260929"]
+    paths:
+      - "tools/kkrieger-wasm/**"
+      - "docs/KKRIEGER_WASM_INTEGRATION.md"
+      - "WORK_IN_PROGRESS.md"
+      - ".github/workflows/kkrieger-singlefile.yml"
+  pull_request:
+    branches: [master]
+    paths:
+      - "tools/kkrieger-wasm/**"
+      - "docs/KKRIEGER_WASM_INTEGRATION.md"
+      - "WORK_IN_PROGRESS.md"
+      - ".github/workflows/kkrieger-singlefile.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Checkout pinned kkrieger-wasm source
+        uses: actions/checkout@v4
+        with:
+          repository: MasonDye/kkrieger-wasm
+          ref: 3bf0ff017372e640e966c2785a4d95a998cec242
+          path: .upstream/kkrieger-wasm
+
+      - name: Set up Emscripten 6.0.9
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 6.0.9
+          actions-cache-folder: emsdk-cache
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Build one autonomous HTML
+        run: bash tools/kkrieger-wasm/build-singlefile.sh .upstream/kkrieger-wasm
+
+      - name: Static single-file verification
+        run: node tools/kkrieger-wasm/verify-singlefile.mjs work/kkrieger-singlefile/kkrieger_standalone.html
+
+      - name: Install browser smoke dependency
+        run: |
+          npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.63.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve built HTML
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory work/kkrieger-singlefile >/tmp/kkrieger-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:8765/kkrieger_standalone.html >/dev/null && break
+            sleep 1
+          done
+
+      - name: Real WebGL2 browser smoke and >85% visibility gate
+        env:
+          KK_URL: http://127.0.0.1:8765/kkrieger_standalone.html
+          KK_SCREENSHOT: work/kkrieger-singlefile/kkrieger-smoke.png
+        run: node tools/kkrieger-wasm/browser-smoke.mjs
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kkrieger-world-server-bridge-${{ github.sha }}
+          path: |
+            work/kkrieger-singlefile/kkrieger_standalone.html
+            work/kkrieger-singlefile/kkrieger-smoke.png
+          if-no-files-found: ignore
+          retention-days: 7
