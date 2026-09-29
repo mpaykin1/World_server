@@ -91,13 +91,34 @@ replace_once("wasm/shell.html",
          color:#9ef;padding:6px;font:10px/1.25 monospace}
   #kkobs summary{cursor:pointer;color:#fff;font-size:11px}
   #kkobsout{white-space:pre-wrap;margin-top:5px}
+  #kkobstools{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0}
+  #kkobstools button{background:#111;color:#cff;border:1px solid #466;padding:4px 6px;
+                     font:10px/1.1 monospace;cursor:pointer}
+  #kkobstools button[data-state]:after{content:' · ' attr(data-state);color:#fff}
 """)
 
 replace_once("wasm/shell.html",
 """<button id="fs" title="fullscreen (Esc or the button leaves it)">&#x26F6; fullscreen</button>
 <div id="start">""",
 """<button id="fs" title="fullscreen (Esc or the button leaves it)">&#x26F6; fullscreen</button>
-<details id="kkobs"><summary>Krieger Observatory · Forensics</summary><div id="kkobsout">waiting for telemetry…</div></details>
+<details id="kkobs"><summary>Krieger Observatory · Forensics</summary>
+<div id="kkobstools">
+  <button data-kkcmd="1">TRACE OPS</button>
+  <button data-kkcmd="2">DUMP JOBS</button>
+  <button data-kkcmd="3">FRUSTUM</button>
+  <button data-kkcmd="4">MATERIAL</button>
+  <button data-kkcmd="5">PASSES</button>
+  <button data-kkcmd="6">SHADOW MODE</button>
+  <button data-kkcmd="7">PORTALS</button>
+  <button data-kkcmd="8">LIGHT TERM</button>
+  <button data-kkcmd="9">SHADOW VOLUMES</button>
+  <button data-kkcmd="10">ALPHA TEST</button>
+  <button data-kkcmd="11">CULL MODE</button>
+  <button data-kkcmd="12">LIGHT TEST</button>
+  <button data-kkcmd="13">STENCIL VOLUMES</button>
+  <button data-kkcmd="14">R/B SWIZZLE</button>
+</div>
+<div id="kkobsout">waiting for telemetry…</div></details>
 <div id="start">""")
 
 replace_once("wasm/shell.html",
@@ -106,6 +127,7 @@ replace_once("wasm/shell.html",
 """    onRuntimeInitialized: function(){
       window.__kkForensicsPush({stage:'lifecycle.runtime_initialized'});
       kkBrowserSnapshot('runtime_initialized');
+      document.querySelectorAll('[data-kkcmd]').forEach(function(b){ b.disabled=false; });
       if(statusEl) statusEl.textContent = 'ready';
     },
 """)
@@ -163,6 +185,59 @@ replace_once("wasm/shell.html",
   if(window.visualViewport) visualViewport.addEventListener('resize',function(){kkBrowserSnapshot('visualViewport.resize');},{passive:true});
   document.addEventListener('fullscreenchange',function(){kkBrowserSnapshot('fullscreenchange');});
   requestAnimationFrame(function(){kkBrowserSnapshot('first_animation_frame');});
+  document.querySelectorAll('[data-kkcmd]').forEach(function(b){
+    b.disabled=true;
+    b.addEventListener('click',function(e){
+      e.preventDefault(); e.stopPropagation();
+      if(!Module || !Module.ccall) return;
+      var code=Number(this.getAttribute('data-kkcmd'));
+      try {
+        var state=Module.ccall('kkObsCommand','number',['number'],[code]);
+        this.setAttribute('data-state',String(state));
+        window.__kkForensicsPush({stage:'observatory.command',code:code,state:state,label:this.textContent});
+      } catch(err) {
+        window.__kkForensicsPush({stage:'observatory.command_error',code:code,message:String(err)});
+      }
+    });
+  });
+""")
+
+# Observatory controls call existing renderer debug switches directly. They are
+# inert until a human presses a debug button and do not change release defaults.
+replace_once("wasm/_start_wasm.cpp",
+"""static sInt kkCullDebug = 0;                     // debug (J): 1 culling off, 2 inverted winding
+static void ApplyCull()
+""",
+"""static sInt kkCullDebug = 0;                     // debug (J): 1 culling off, 2 inverted winding
+
+extern "C" EMSCRIPTEN_KEEPALIVE int kkObsCommand(int code)
+{
+  switch(code)
+  {
+  case 1: kkExecTrace = 1; return 1;
+  case 2: kkDumpJobs = 1; return 1;
+  case 3: kkNoFrustumCull = !kkNoFrustumCull; return kkNoFrustumCull;
+  case 4: kkOnlyMtrl = (kkOnlyMtrl + 1) % 17; return kkOnlyMtrl;
+  case 5:
+    { extern sInt kkUsageFilter; kkUsageFilter = (kkUsageFilter + 1) % 3; return kkUsageFilter; }
+  case 6:
+    { extern sInt kkCycleShadows(); return kkCycleShadows(); }
+  case 7:
+    { extern sInt kkPaintAllSectors; kkPaintAllSectors = !kkPaintAllSectors; return kkPaintAllSectors; }
+  case 8:
+    { extern sInt kkLightDebugView; kkLightDebugView = (kkLightDebugView + 1) % 7; return kkLightDebugView; }
+  case 9: kkShowShadowVolumes = !kkShowShadowVolumes; return kkShowShadowVolumes;
+  case 10: kkAlphaTestOff = !kkAlphaTestOff; return kkAlphaTestOff;
+  case 11: kkCullDebug = (kkCullDebug + 1) % 3; return kkCullDebug;
+  case 12: kkLightTestOff = (kkLightTestOff + 1) % 4; return kkLightTestOff;
+  case 13: kkStencilMarkVolumes = !kkStencilMarkVolumes; return kkStencilMarkVolumes;
+  case 14:
+    { extern sInt kkSwizzleOutput; kkSwizzleOutput = !kkSwizzleOutput; return kkSwizzleOutput; }
+  default: return -1;
+  }
+}
+
+static void ApplyCull()
 """)
 
 # Platform-level screen/backbuffer and real GL viewport.
