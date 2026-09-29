@@ -109,6 +109,13 @@
         "previewVideo": "/shared/world-previews/world-sharabass.webm"
       }
     },
+    "voxel-art-lab": {
+      "title": "World Server — original voxel art workshop",
+      "visible": false,
+      "status": "diagnostic",
+      "kind": "tool",
+      "reason": "Original Blender GLB art QA; hidden until visual baseline approval and real device readiness"
+    },
     "ai3d-reference-test": {
       "title": "AI3D Reference Test",
       "visible": false,
