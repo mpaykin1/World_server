@@ -12,6 +12,7 @@ import {
   analyzeRenderer,
   analyzeData,
   analyzeGame,
+  validateCoreRuntimeEvidence,
 } from "../tools/krieger-total-control/observatory-core.mjs";
 
 test("viewport forensics localizes the pinned portrait 2:1 master viewport", () => {
@@ -250,4 +251,38 @@ test("renderer Observatory does not invent provenance for internal/effect draws"
   assert.equal(r.drawSamples,1);
   assert.equal(r.drawsWithOperator,0);
   assert.equal(r.drawProvenance.length,0);
+});
+
+
+test("live-evidence validator rejects stage-only fake telemetry", () => {
+  const v=validateCoreRuntimeEvidence([
+    {stage:"engine.screen",config:[390,844]},
+    {stage:"mainplayer.master_viewport",window:[0,0,390,844]},
+    {stage:"geometry.mesh",vertices:0,triangles:0},
+    {stage:"material.pass",usage:0,program:0,pass:0},
+    {stage:"renderer.frame",paintJobs:0},
+    {stage:"gpu.frame",drawCalls:0},
+    {stage:"data.document",classes:0,ops:0,bytesConsumed:0},
+  ]);
+  assert.equal(v.pass,false);
+  assert.ok(v.errors.some(x=>x.includes("positive vertices")));
+  assert.ok(v.errors.some(x=>x.includes("positive paintJobs")));
+  assert.ok(v.errors.some(x=>x.includes("positive drawCalls")));
+  assert.ok(v.errors.some(x=>x.includes("positive classes")));
+});
+
+test("live-evidence validator accepts coherent measured runtime values", () => {
+  const v=validateCoreRuntimeEvidence([
+    {stage:"engine.screen",config:[390,844]},
+    {stage:"mainplayer.master_viewport",window:[0,300,390,495]},
+    {stage:"geometry.mesh",vertices:120,triangles:80},
+    {stage:"material.pass",usage:0,program:1,pass:2},
+    {stage:"renderer.frame",paintJobs:42},
+    {stage:"gpu.frame",drawCalls:44},
+    {stage:"gpu.draw",setup:5,viewport:[0,0,390,195]},
+    {stage:"data.document",classes:40,ops:600,bytesConsumed:120000},
+  ]);
+  assert.equal(v.pass,true);
+  assert.deepEqual(v.errors,[]);
+  assert.equal(v.samples.gpuDraws,1);
 });
