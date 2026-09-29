@@ -97,6 +97,71 @@ function foundationKeys(keys, nodeByKey, options) {
   });
 }
 
+const ROLE_SUPPORT_DISTANCE=Object.freeze({
+  foundation:0,pier:0,wall:4,window:4,arch:6,deck:4,roof:8,spire:8,
+});
+
+function supportDistanceLimit(voxel,options){
+  const custom=options.roleSupportDistance?.[voxel.role];
+  if(Number.isFinite(custom))return Math.max(0,Number(custom));
+  const role=ROLE_SUPPORT_DISTANCE[voxel.role];
+  if(Number.isFinite(role))return role;
+  return Number.isFinite(options.maxHorizontalSupportDistance)
+    ? Math.max(0,Number(options.maxHorizontalSupportDistance)) : Infinity;
+}
+
+function computeSupportDistances(graph,options){
+  const anchors=foundationKeys(graph.keys,graph.nodeByKey,options);
+  const distance=new Map(),current=[...anchors];
+  for(const key of anchors)distance.set(key,0);
+  const budget=clamp(Math.trunc(options.supportDistanceBudget??64),1,256);
+  for(let d=0;current.length&&d<=budget;d++){
+    const next=[];
+    for(let i=0;i<current.length;i++){
+      const key=current[i];if(distance.get(key)!==d)continue;
+      const v=graph.nodeByKey.get(key);
+      for(const neighbor of graph.neighbors.get(key)||[]){
+        const n=graph.nodeByKey.get(neighbor);
+        const candidate=d+(n.y===v.y?1:0),known=distance.get(neighbor);
+        if(known!==undefined&&known<=candidate)continue;
+        distance.set(neighbor,candidate);
+        (candidate===d?current:next).push(neighbor);
+      }
+    }
+    current.splice(0,current.length,...next);
+  }
+  return distance;
+}
+
+function extractSubsetComponents(graph,subset){
+  const seen=new Set(),components=[];
+  for(const start of [...subset].sort()){
+    if(seen.has(start))continue;
+    const queue=[start],keys=[];seen.add(start);
+    for(let i=0;i<queue.length;i++){
+      const key=queue[i];keys.push(key);
+      for(const next of graph.neighbors.get(key)||[])if(subset.has(next)&&!seen.has(next)){
+        seen.add(next);queue.push(next);
+      }
+    }
+    components.push(keys.sort());
+  }
+  return components;
+}
+
+function spanFailureRegions(graph,options){
+  if(options.enableSpanSupport!==true)return {distance:new Map(),regions:[],unsupportedKeys:new Set()};
+  const distance=computeSupportDistances(graph,options),unsupportedKeys=new Set();
+  for(const key of graph.keys){
+    const voxel=graph.nodeByKey.get(key),limit=supportDistanceLimit(voxel,options),d=distance.get(key);
+    if(Number.isFinite(limit)&&(d===undefined||d>limit))unsupportedKeys.add(key);
+  }
+  const regions=extractSubsetComponents(graph,unsupportedKeys).map(keys=>({
+    keys,anchors:[],...massProperties(keys,graph.nodeByKey),status:'unsupported-span',support:null,
+  }));
+  return {distance,regions,unsupportedKeys};
+}
+
 function supportBounds(keys, nodeByKey) {
   let minX=Infinity,maxX=-Infinity,minZ=Infinity,maxZ=-Infinity,sx=0,sy=0,sz=0;
   for (const key of keys) {
@@ -125,7 +190,13 @@ export function analyzeStructuralSupport(voxels, options = {}) {
   const components = extractComponents(graph).map(keys => componentState(keys, graph, options));
   const counts = { supported:0, unsupported:0, 'topple-risk':0 };
   for (const component of components) counts[component.status]++;
-  return { graph, components, counts };
+  const span=spanFailureRegions(graph,options);
+  return {
+    graph,components,counts,
+    supportDistance:span.distance,
+    spanRegions:span.regions,
+    spanUnsupportedVoxels:span.unsupportedKeys.size,
+  };
 }
 
 function normalizedDirection(direction = {}) {
@@ -196,7 +267,10 @@ function materialMix(keys,nodeByKey) {
 export function planCollapseBodies(analysis, options = {}) {
   const maxBodies=clamp(Math.trunc(options.maxBodies ?? 32),1,128);
   const maxClusterVoxels=clamp(Math.trunc(options.maxClusterVoxels ?? 8192),1,50000);
-  const unstable=analysis.components.filter(c=>c.status!=='supported').sort((a,b)=>b.mass-a.mass||a.keys[0].localeCompare(b.keys[0]));
+  const whole=analysis.components.filter(c=>c.status!=='supported');
+  const reserved=new Set(whole.flatMap(c=>c.keys));
+  const spans=(analysis.spanRegions||[]).filter(c=>!c.keys.some(k=>reserved.has(k)));
+  const unstable=[...whole,...spans].sort((a,b)=>b.mass-a.mass||a.keys[0].localeCompare(b.keys[0]));
   const bodies=[],deferred=[];
   for (const component of unstable) {
     if (bodies.length>=maxBodies || component.keys.length>maxClusterVoxels) {
