@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-09-08T20:17:38.348Z",
+  "projectId": "prj_XsKyvMHpuNomoPBxuOD8vd26Fi3y",
+  "projectName": "world-server",
+  "inspectedRootDirectory": null,
+  "expectedRootForWorldServer": ".",
+  "pass": true,
+  "errors": [],
+  "warnings": []
+}

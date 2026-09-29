@@ -1,7 +1,7 @@
 {
   "test": "ANYTHINGLLM_HEALTH_CHECK",
-  "generatedAt": "2026-09-02T05:27:18.577Z",
-  "status": "PASS",
+  "generatedAt": "2026-09-15T05:09:46.466Z",
+  "status": "FAIL",
   "anythingllm": {
     "up": true,
     "authenticated": true
@@ -9,6 +9,10 @@
   "ollama": {
     "up": true,
     "models": [
+      "deepseek-coder:6.7b",
+      "qwen2.5-coder:3b",
+      "qwen2.5:3b-instruct",
+      "qwen3-fast:1.7b",
       "qwen3:1.7b",
       "qwen3:4b",
       "bge-m3:latest",
@@ -24,38 +28,24 @@
       },
       {
         "slug": "world",
-        "threads": 3
+        "threads": 2
       }
     ]
   },
   "mcpFilesystem": {
-    "configured": true,
-    "servers": [
-      {
-        "name": "world-server-sandbox",
-        "scopedPath": "C:/Users/user/Desktop/World_server AI/World_server_anythingllm_sandbox",
-        "targetsMainTree": false
-      }
-    ],
+    "configured": false,
+    "servers": [],
     "unsafeMainTreeGrant": false,
     "unsafe": []
   },
   "secretGuard": {
-    "status": "PASS",
-    "results": [
-      {
-        "server": "world-server-sandbox",
-        "scopedPath": "C:/Users/user/Desktop/World_server AI/World_server_anythingllm_sandbox",
-        "foundSecrets": [],
-        "status": "PASS_NO_SECRETS"
-      }
-    ]
+    "status": "N/A",
+    "reason": "no filesystem MCP server configured"
   },
   "selectiveTools": {
-    "status": "EVIDENCE_FOUND",
-    "logFile": "C:\\Users\\user\\AppData\\Roaming\\anythingllm-desktop\\storage\\logs\\backend-2026-09-02.log",
-    "lastLine": "[IntelligentSkillSelector]\\u001b[0m Selected tools:\\n  1. world-server-sandbox-directory_tree\\n  2. document-summarizer\\n  3. world-server-sandbox-read_text_file\\n  4. rag-memory\\n  5. world-server-sandbox-read_file\\n  6. web-scraping\\n  7. world-server-sandbox-read_media_file\\n  8. world-server-sandbox-read_multiple_files\\n  9. world-server-sandbox-get_file_info\\n  10. world-server-sandbox-list_directory\\n  11. world-server-sandbox-list_directory_with_sizes\\n  12. world-server-sandbox-search_files\\n  13. world-server-sandbox-edit_file\\n  14. world-server-sandbox-write_file\\n  15. world-server-sandbox-list_allowed_directories\\n\",\"service\":\"backend\"}\r",
-    "occurrences": 7
+    "status": "NOT_VERIFIED",
+    "reason": "no IntelligentSkillSelector log lines in latest backend log",
+    "logFile": "C:\\Users\\user\\AppData\\Roaming\\anythingllm-desktop\\storage\\logs\\backend-2026-09-15.log"
   },
   "openhuman": {
     "executableExists": true,

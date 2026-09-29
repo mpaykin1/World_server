@@ -1,6 +1,6 @@
 {
   "test": "OPENHUMAN_ORDINARY_CHAT_SHARED_MEMORY_TEST",
-  "generatedAt": "2026-09-01T14:30:20.279Z",
+  "generatedAt": "2026-09-15T05:09:15.988Z",
   "config": {
     "status": "OK",
     "path": "C:\\Users\\user\\.openhuman\\users\\6a95a408b339ec0ca292a12d\\config.toml",
@@ -8,30 +8,26 @@
     "agentmemoryUrl": "http://127.0.0.1:3111"
   },
   "backend": {
-    "ok": true,
-    "error": null
+    "ok": false,
+    "error": "agentmemory GET /agentmemory/livez -> 404: "
   },
   "knowledge": {
-    "status": "PRESENT",
+    "status": "PRESENT_BUT_UNVERIFIED_IN_SEARCH",
     "entryCount": 12,
     "staleness": "FRESH",
-    "currentHead": "1994b53b01f9f4f641f27805fbc9d1cfd0a847e7",
+    "currentHead": "d06cb3ed737718576f2cd933a6df31b7748bbf4c",
     "searchProof": [
       {
         "query": "What do you know about the World_server project?",
-        "resultCount": 10,
-        "aboveFloorCount": 10,
-        "topScore": 1.05
+        "error": "agentmemory POST /agentmemory/smart-search -> 404: "
       },
       {
         "query": "World_server architecture Navigator Supabase Collective Brain",
-        "resultCount": 10,
-        "aboveFloorCount": 10,
-        "topScore": 1.0303125000000002
+        "error": "agentmemory POST /agentmemory/smart-search -> 404: "
       }
     ]
   },
-  "restCrossMemory": "PASS",
+  "restCrossMemory": "FAIL",
   "manualE2e": {
     "status": "NOT_VERIFIED",
     "reason": "no manual E2E evidence file has ever been recorded — the real OpenHuman chat UI has not been walked through the required test sequence"

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "7.2.0",
+  "generatedAt": "2026-09-11T10:11:00.468Z",
+  "pass": true,
+  "mandatory": false,
+  "available": true,
+  "jar": ".world-server\\tools\\tla2tools.jar",
+  "checksum": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+  "expectedChecksum": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+  "checksumPass": true,
+  "runs": [
+    {
+      "module": "DurableJobQueue",
+      "config": "DurableJobQueue.cfg",
+      "pass": true,
+      "exitCode": 0,
+      "tail": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)\r\nWarning: Please run the Java VM which executes TLC with a throughput optimized garbage collector by passing the \"-XX:+UseParallelGC\" property.\n(Use the -nowarning option to disable this warning.)\r\nRunning breadth-first search Model-Checking with fp 46 and seed -2260567383889319894 with 1 worker on 8 cores with 742MB heap and 64MB offheap memory (Windows 10 10.0 amd64, Oracle Corporation 1.8.0_401 x86_64, MSBDiskFPSet, DiskStateQueue).\r\nParsing file C:\\Users\\user\\Desktop\\World_server\\specs\\DurableJobQueue.tla\r\nParsing file C:\\Users\\user\\AppData\\Local\\Temp\\Naturals.tla\r\nParsing file C:\\Users\\user\\AppData\\Local\\Temp\\TLC.tla\r\nParsing file C:\\Users\\user\\AppData\\Local\\Temp\\Sequences.tla\r\nParsing file C:\\Users\\user\\AppData\\Local\\Temp\\FiniteSets.tla\r\nSemantic processing of module Naturals\r\nSemantic processing of module Sequences\r\nSemantic processing of module FiniteSets\r\nSemantic processing of module TLC\r\nSemantic processing of module DurableJobQueue\r\nStarting... (2026-09-11 13:10:57)\r\nComputing initial states...\r\nFinished computing initial states: 1 distinct state generated at 2026-09-11 13:10:58.\r\nModel checking completed. No error has been found.\n  Estimates of the probability that TLC did not check all reachable states\n  because two distinct states had the same fingerprint:\n  calculated (optimistic):  val = 4.2E-18\r\n19 states generated, 13 distinct states found, 0 states left on queue.\r\nThe depth of the complete state graph search is 7.\r\nThe average outdegree of the complete state graph is 1 (minimum is 0, the maximum 2 and the 95th percentile is 2).\r\nFinished in 01s at (2026-09-11 13:10:58)\r\n"
+    },
+    {
+      "module": "ControlPlane",
+      "config": "ControlPlane.cfg",
+      "pass": true,
+      "exitCode": 0,
+      "tail": "TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)\r\nWarning: Please run the Java VM which executes TLC with a throughput optimized garbage collector by passing the \"-XX:+UseParallelGC\" property.\n(Use the -nowarning option to disable this warning.)\r\nRunning breadth-first search Model-Checking with fp 86 and seed 7991791532243140829 with 1 worker on 8 cores with 742MB heap and 64MB offheap memory (Windows 10 10.0 amd64, Oracle Corporation 1.8.0_401 x86_64, MSBDiskFPSet, DiskStateQueue).\r\nParsing file C:\\Users\\user\\Desktop\\World_server\\specs\\ControlPlane.tla\r\nParsing file C:\\Users\\user\\AppData\\Local\\Temp\\Naturals.tla\r\nParsing file C:\\Users\\user\\AppData\\Local\\Temp\\TLC.tla\r\nParsing file C:\\Users\\user\\AppData\\Local\\Temp\\Sequences.tla\r\nParsing file C:\\Users\\user\\AppData\\Local\\Temp\\FiniteSets.tla\r\nSemantic processing of module Naturals\r\nSemantic processing of module Sequences\r\nSemantic processing of module FiniteSets\r\nSemantic processing of module TLC\r\nSemantic processing of module ControlPlane\r\nStarting... (2026-09-11 13:10:59)\r\nComputing initial states...\r\nFinished computing initial states: 1 distinct state generated at 2026-09-11 13:10:59.\r\nModel checking completed. No error has been found.\n  Estimates of the probability that TLC did not check all reachable states\n  because two distinct states had the same fingerprint:\n  calculated (optimistic):  val = 3.3E-19\r\n7 states generated, 6 distinct states found, 0 states left on queue.\r\nThe depth of the complete state graph search is 4.\r\nThe average outdegree of the complete state graph is 1 (minimum is 0, the maximum 2 and the 95th percentile is 2).\r\nFinished in 01s at (2026-09-11 13:10:59)\r\n"
+    }
+  ],
+  "externalBlockers": []
+}

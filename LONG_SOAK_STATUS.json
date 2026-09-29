@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "7.5.1",
+  "generatedAt": "2026-09-09T03:37:43.027Z",
+  "pass": true,
+  "smokeHarnessVerified": true,
+  "durationHours": 8.000616,
+  "eventCount": 910,
+  "allRecovered": true,
+  "continuityOk": true,
+  "maxGapMs": 32786,
+  "longSoakCertified": true,
+  "minimumCertifiedHours": 8,
+  "stateFile": ".world-server-state/long-soak/state.json",
+  "runId": "916a9bc0-0e19-4ddb-a3be-7f651967587c",
+  "truthRule": "LONG_SOAK_CERTIFIED requires >=8 hours of fresh continuous wall-clock evidence, no unrecovered invariant violation, and no heartbeat gap above resumeMaxGapSeconds; stale state may not fast-forward certification."
+}

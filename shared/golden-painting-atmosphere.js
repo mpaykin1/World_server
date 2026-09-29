@@ -318,6 +318,8 @@ ${marker}`);
     const c=probe.sh.coefficients;
     c[0].set((up[0]+down[0])/(2*SH_C0),(up[1]+down[1])/(2*SH_C0),(up[2]+down[2])/(2*SH_C0));
     c[1].set((up[0]-down[0])/(2*SH_C1),(up[1]-down[1])/(2*SH_C1),(up[2]-down[2])/(2*SH_C1));
+    const key=a.lights.find(o=>o?.isDirectionalLight&&o!==a.moonLight),sunRgb=rgb(s.sun);
+    if(key?.position){const tx=key.target?.position?.x||0,tz=key.target?.position?.z||0,dx=key.position.x-tx,dz=key.position.z-tz,hm=Math.hypot(dx,dz)||1,hx=dx/hm,hz=dz/hm,hs=strength*.22;c[2].set(sunRgb[0]/255*hs*hz/SH_C1,sunRgb[1]/255*hs*hz/SH_C1,sunRgb[2]/255*hs*hz/SH_C1);c[3].set(sunRgb[0]/255*hs*hx/SH_C1,sunRgb[1]/255*hs*hx/SH_C1,sunRgb[2]/255*hs*hx/SH_C1);}else{c[2].set(0,0,0);c[3].set(0,0,0);}
     probe.intensity=1;
   }
   function updateImportanceShadows(a,camera){

@@ -1,0 +1,1932 @@
+{
+  "generatedAt": "2026-09-15T05:09:50.805Z",
+  "nodes": [
+    {
+      "id": "app:voxel-world",
+      "type": "app",
+      "status": "certified",
+      "visible": true
+    },
+    {
+      "id": "app:ai3d-voxel-city",
+      "type": "app",
+      "status": "certified",
+      "visible": true
+    },
+    {
+      "id": "app:survival",
+      "type": "app",
+      "status": "quarantine",
+      "visible": false
+    },
+    {
+      "id": "app:world-sharabass",
+      "type": "app",
+      "status": "quarantine",
+      "visible": false
+    },
+    {
+      "id": "app:ai3d-reference-test",
+      "type": "app",
+      "status": "diagnostic",
+      "visible": false
+    },
+    {
+      "id": "app:ai-3d",
+      "type": "app",
+      "status": "tool",
+      "visible": false
+    },
+    {
+      "id": "app:chat",
+      "type": "app",
+      "status": "tool",
+      "visible": false
+    },
+    {
+      "id": "app:catalog",
+      "type": "app",
+      "status": "system",
+      "visible": false
+    },
+    {
+      "id": "app:dark-void-scene",
+      "type": "app",
+      "status": "quarantine",
+      "visible": false
+    },
+    {
+      "id": "app:cinematic-encounter",
+      "type": "app",
+      "status": "certified",
+      "visible": true
+    },
+    {
+      "id": "cap:playable",
+      "type": "capability"
+    },
+    {
+      "id": "cap:windows",
+      "type": "capability"
+    },
+    {
+      "id": "error:controls-inverted-camera-relative",
+      "type": "error",
+      "status": "known",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:mobile-entry-not-clickable",
+      "type": "error",
+      "status": "known",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:mobile-controls-missing",
+      "type": "error",
+      "status": "known",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:stairs-collision-broken",
+      "type": "error",
+      "status": "known",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:wall-collision-broken",
+      "type": "error",
+      "status": "known",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:spawn-not-grounded",
+      "type": "error",
+      "status": "known",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:jump-moves-forward",
+      "type": "error",
+      "status": "known",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:camera-roll-on-look",
+      "type": "error",
+      "status": "known",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:catalog-auto-publishes-index-html",
+      "type": "error",
+      "status": "known",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:vercel-quota-exhausted-by-non-runtime-deploys",
+      "type": "error",
+      "status": "protected",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:false-green-assertion",
+      "type": "error",
+      "status": "known",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:menu-obstructs-game",
+      "type": "error",
+      "status": "known",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:world-selection-walk-only",
+      "type": "error",
+      "status": "known",
+      "severity": "major"
+    },
+    {
+      "id": "error:godot-nodepath-absolute-unresolvable",
+      "type": "error",
+      "status": "protected",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:godot-camera-orbit-wrong-pivot",
+      "type": "error",
+      "status": "protected",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:godot-gdscript-undefined-class-is-check",
+      "type": "error",
+      "status": "protected",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:powershell-utf8-mojibake-on-install",
+      "type": "error",
+      "status": "protected",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:godot-editor-play-hides-standalone-parse-errors",
+      "type": "error",
+      "status": "protected",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:voxel-hero-silhouette-invisible-against-void",
+      "type": "error",
+      "status": "protected",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:premature-done-claim-below-reference-gate",
+      "type": "error",
+      "status": "protected",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:godot-orbit-rig-position-duplicates-camera-offset",
+      "type": "error",
+      "status": "protected",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:godot-ai-node-create-parent-param-silently-ignored",
+      "type": "error",
+      "status": "protected",
+      "severity": "major"
+    },
+    {
+      "id": "error:godot-world-parented-under-hero",
+      "type": "error",
+      "status": "protected",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:godot-hero-built-at-world-voxel-scale",
+      "type": "error",
+      "status": "protected",
+      "severity": "major"
+    },
+    {
+      "id": "error:threejs-object3d-subclass-pivot-property-corrupts-matrix",
+      "type": "error",
+      "status": "protected",
+      "severity": "major"
+    },
+    {
+      "id": "error:collective-brain-secret-leak",
+      "type": "error",
+      "status": "protected",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:collective-brain-prompt-injection-memory",
+      "type": "error",
+      "status": "protected",
+      "severity": "major"
+    },
+    {
+      "id": "error:agentmemory-silent-fallback",
+      "type": "error",
+      "status": "protected",
+      "severity": "major"
+    },
+    {
+      "id": "error:agentmemory-port-conflict",
+      "type": "error",
+      "status": "known",
+      "severity": "major"
+    },
+    {
+      "id": "error:collective-brain-memory-duplication",
+      "type": "error",
+      "status": "protected",
+      "severity": "minor"
+    },
+    {
+      "id": "error:collective-brain-event-corruption",
+      "type": "error",
+      "status": "protected",
+      "severity": "major"
+    },
+    {
+      "id": "error:collective-brain-stale-lease-deadlock",
+      "type": "error",
+      "status": "protected",
+      "severity": "major"
+    },
+    {
+      "id": "error:duplicate-orchestrator-stack",
+      "type": "error",
+      "status": "protected",
+      "severity": "major"
+    },
+    {
+      "id": "error:openhuman-embedding-dimension-mismatch",
+      "type": "error",
+      "status": "protected",
+      "severity": "major"
+    },
+    {
+      "id": "error:openhuman-vision-capability-mismatch",
+      "type": "error",
+      "status": "protected",
+      "severity": "major"
+    },
+    {
+      "id": "error:openhuman-config-overwrite",
+      "type": "error",
+      "status": "protected",
+      "severity": "major"
+    },
+    {
+      "id": "error:collective-brain-dirty-main-bootstrap",
+      "type": "error",
+      "status": "protected",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:desktop-ai-system-installer-boundary",
+      "type": "error",
+      "status": "protected",
+      "severity": "major"
+    },
+    {
+      "id": "error:release-gate-skipped-as-heavy",
+      "type": "error",
+      "status": "protected",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:github-app-connector-403-repo-not-selected",
+      "type": "error",
+      "status": "known",
+      "severity": "major"
+    },
+    {
+      "id": "error:git-worktree-shared-local-branch-refs",
+      "type": "error",
+      "status": "protected",
+      "severity": "major"
+    },
+    {
+      "id": "error:windows-spawnsync-timeout-does-not-kill-process-tree",
+      "type": "error",
+      "status": "protected",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:ollama-thinking-models-exceed-typical-timeouts-on-cpu",
+      "type": "error",
+      "status": "protected",
+      "severity": "major"
+    },
+    {
+      "id": "error:opencode-free-tier-timeout-on-full-repo-context",
+      "type": "error",
+      "status": "protected",
+      "severity": "major"
+    },
+    {
+      "id": "error:gdscript-64bit-int-does-not-replicate-js-32bit-bitops",
+      "type": "error",
+      "status": "protected",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:unmanaged-concurrent-network-heavy-plus-llm-remote-misdiagnosed-as-model-timeout",
+      "type": "error",
+      "status": "protected",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:resource-scheduler-lightweight-class-was-accidentally-self-serializing",
+      "type": "error",
+      "status": "protected",
+      "severity": "major"
+    },
+    {
+      "id": "error:opencode-process-hangs-after-completing-edit-when-spawned-from-node",
+      "type": "error",
+      "status": "protected",
+      "severity": "release-blocker"
+    },
+    {
+      "id": "error:opencode-free-tier-reliability-degrades-with-sustained-session-usage",
+      "type": "error",
+      "status": "known",
+      "severity": "major"
+    },
+    {
+      "id": "error:opencode-cli-hangs-on-node-spawn-due-to-unclosed-stdin",
+      "type": "error",
+      "status": "known",
+      "severity": "major"
+    },
+    {
+      "id": "error:ollama-local-patch-reliability-lower-than-opencode-on-cpu-only-hardware",
+      "type": "error",
+      "status": "known",
+      "severity": "major"
+    },
+    {
+      "id": "error:ai3d-webgl-canvas-proof-dpr",
+      "type": "error",
+      "status": "protected",
+      "severity": "major"
+    },
+    {
+      "id": "error:remote-bridge-worker-token-auth",
+      "type": "error",
+      "status": "protected",
+      "severity": "major"
+    },
+    {
+      "id": "error:agent-invoke-throwaway-branch-leak",
+      "type": "error",
+      "status": "protected",
+      "severity": "major"
+    },
+    {
+      "id": "error:SCIENCE-RUN-072-EXPENSIVE-HARNESS-EVIDENCE",
+      "type": "error",
+      "status": "protected",
+      "severity": "major"
+    },
+    {
+      "id": "golden:controls",
+      "type": "golden",
+      "status": "golden",
+      "canonical": "shared/ai3d-playable-runtime.js"
+    },
+    {
+      "id": "golden:collision",
+      "type": "golden",
+      "status": "golden",
+      "canonical": "step-up-v1"
+    },
+    {
+      "id": "golden:stained-glass",
+      "type": "golden",
+      "status": "awaiting-source-promotion",
+      "canonical": null
+    },
+    {
+      "id": "golden:compact-menu",
+      "type": "golden",
+      "status": "planned",
+      "canonical": "shared/golden-ui-menu.js"
+    },
+    {
+      "id": "golden:indieworld-discovery",
+      "type": "golden",
+      "status": "golden",
+      "canonical": [
+        "lib/indieworlds.js",
+        "shared/golden-ui-shell.js"
+      ]
+    },
+    {
+      "id": "golden:painting-atmosphere",
+      "type": "golden",
+      "status": "golden",
+      "canonical": "shared/golden-painting-atmosphere.js"
+    },
+    {
+      "id": "tech:Vercel",
+      "type": "technology",
+      "percent": 90,
+      "status": "production"
+    },
+    {
+      "id": "tech:Supabase Postgres/Auth/Realtime",
+      "type": "technology",
+      "percent": 90,
+      "status": "production"
+    },
+    {
+      "id": "tech:Three.js/WebGL2",
+      "type": "technology",
+      "percent": 90,
+      "status": "production"
+    },
+    {
+      "id": "tech:Playwright",
+      "type": "technology",
+      "percent": 65,
+      "status": "integrated"
+    },
+    {
+      "id": "tech:Python/FastAPI AI3D worker",
+      "type": "technology",
+      "percent": 65,
+      "status": "integrated"
+    },
+    {
+      "id": "tech:AI3D auto-discovery",
+      "type": "technology",
+      "percent": 70,
+      "status": "integrated"
+    },
+    {
+      "id": "tech:IndieWeb-compatible world discovery",
+      "type": "technology",
+      "percent": 70,
+      "status": "integrated"
+    },
+    {
+      "id": "tech:Depth Anything",
+      "type": "technology",
+      "percent": 50,
+      "status": "adapter"
+    },
+    {
+      "id": "tech:Blender pipeline",
+      "type": "technology",
+      "percent": 70,
+      "status": "adapter + LOD/mesh optimizer prepared"
+    },
+    {
+      "id": "tech:TRELLIS.2",
+      "type": "technology",
+      "percent": 60,
+      "status": "real adapter + GPU router + mesh postprocess prepared; runtime not verified"
+    },
+    {
+      "id": "tech:Godot 4.7.1",
+      "type": "technology",
+      "percent": 78,
+      "status": "bridge + runtime smoke + quality orchestration prepared"
+    },
+    {
+      "id": "tech:Hunyuan3D",
+      "type": "technology",
+      "percent": 75,
+      "status": "remote routing + quality postprocess prepared"
+    },
+    {
+      "id": "tech:InstantMesh",
+      "type": "technology",
+      "percent": 80,
+      "status": "real adapter + GPU router + mesh postprocess prepared; runtime not verified"
+    },
+    {
+      "id": "tech:MPFB",
+      "type": "technology",
+      "percent": 30,
+      "status": "orchestrator-visible; runtime not verified"
+    },
+    {
+      "id": "tech:UniRig",
+      "type": "technology",
+      "percent": 30,
+      "status": "orchestrator-visible; runtime not verified"
+    },
+    {
+      "id": "tech:Rigify",
+      "type": "technology",
+      "percent": 30,
+      "status": "orchestrator-visible; runtime not verified"
+    },
+    {
+      "id": "tech:Goo Engine",
+      "type": "technology",
+      "percent": 30,
+      "status": "orchestrator-visible; runtime not verified"
+    },
+    {
+      "id": "tech:UPBGE",
+      "type": "technology",
+      "percent": 30,
+      "status": "orchestrator-visible; runtime not verified"
+    },
+    {
+      "id": "tech:Blender MCP",
+      "type": "technology",
+      "percent": 0,
+      "status": "not-server-runtime"
+    },
+    {
+      "id": "tech:Unity MCP",
+      "type": "technology",
+      "percent": 0,
+      "status": "not-server-runtime"
+    },
+    {
+      "id": "tech:OpenGameEval/OpenGame",
+      "type": "technology",
+      "percent": 10,
+      "status": "concept-partial"
+    },
+    {
+      "id": "tech:World Server Collective Brain V2",
+      "type": "technology",
+      "percent": 98,
+      "status": "repository integration + tests + audit journal + router + lease/security policy prepared; real desktop external-runtime verification remains"
+    },
+    {
+      "id": "tech:OpenHuman external orchestrator",
+      "type": "technology",
+      "percent": 88,
+      "status": "external optional orchestrator install/config/verification automation prepared; real desktop runtime evidence required"
+    },
+    {
+      "id": "tech:agentmemory shared agent memory",
+      "type": "technology",
+      "percent": 95,
+      "status": "REST/MCP shared-memory bridge + durable outbox + dedup + hash-chain + restart verification tooling prepared"
+    },
+    {
+      "id": "tech:iii engine for agentmemory",
+      "type": "technology",
+      "percent": 90,
+      "status": "pinned native-Windows install/start/verify automation prepared"
+    },
+    {
+      "id": "tech:tinyagents/tinyflows via OpenHuman",
+      "type": "technology",
+      "percent": 75,
+      "status": "integration path and verification policy prepared through OpenHuman; direct vendoring intentionally avoided"
+    },
+    {
+      "id": "tech:Ollama local inference adapter",
+      "type": "technology",
+      "percent": 82,
+      "status": "optional install/config/health/model-selection automation prepared; runtime model pull/benchmark remains"
+    },
+    {
+      "id": "tech:Collective Brain memory security firewall",
+      "type": "technology",
+      "percent": 100,
+      "status": "secret scan/redaction + untrusted recall boundary + release gate installed"
+    },
+    {
+      "id": "tech:Collective Brain coordination leases/audit replay",
+      "type": "technology",
+      "percent": 100,
+      "status": "atomic stale-reclaiming leases + hash-chained runtime event journal installed"
+    },
+    {
+      "id": "tech:OPA policy adapter",
+      "type": "technology",
+      "percent": 65,
+      "status": "Rego policy + optional parity smoke installed; native JSON policy remains fallback when OPA binary is absent"
+    },
+    {
+      "id": "tech:Gitleaks/Trivy security adapters",
+      "type": "technology",
+      "percent": 45,
+      "status": "optional installer/runbook prepared; native memory scanner already active"
+    },
+    {
+      "id": "tech:World Server Collective Brain V2.1",
+      "type": "technology",
+      "percent": 99,
+      "status": "repository integration + tests + audit journal + router + lease/security policy + safe system-bootstrap handoff prepared; real desktop external-runtime verification remains"
+    },
+    {
+      "id": "metric:controls",
+      "type": "metric"
+    },
+    {
+      "id": "control:canonical-basis",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:desktop-cardinal-directions",
+      "type": "control",
+      "weight": 20
+    },
+    {
+      "id": "control:desktop-diagonal-directions",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:mouse-look",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:jump-y-only",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:camera-roll-zero",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:touch-move",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:touch-look",
+      "type": "control",
+      "weight": 5
+    },
+    {
+      "id": "control:fuzz-controls",
+      "type": "control",
+      "weight": 5
+    },
+    {
+      "id": "metric:graphics",
+      "type": "metric"
+    },
+    {
+      "id": "control:render-surface-visible",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:no-primary-blur",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:nonzero-render-stats",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:adaptive-resolution",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:local-three-vendor-or-controlled-import",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:golden-visual-registry",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:visual-regression-harness",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:approved-screenshot-baselines",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:performance-budgets",
+      "type": "control",
+      "weight": 5
+    },
+    {
+      "id": "control:hud-visual-audit",
+      "type": "control",
+      "weight": 5
+    },
+    {
+      "id": "control:perceptual-regression",
+      "type": "control",
+      "weight": 8
+    },
+    {
+      "id": "metric:deviceAccessibility",
+      "type": "metric"
+    },
+    {
+      "id": "control:desktop-chrome",
+      "type": "control",
+      "weight": 20
+    },
+    {
+      "id": "control:android-phone",
+      "type": "control",
+      "weight": 25
+    },
+    {
+      "id": "control:iphone-emulation",
+      "type": "control",
+      "weight": 20
+    },
+    {
+      "id": "control:tablet-emulation",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:touch-target-44",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:safe-area",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:touch-movement-real",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:real-device-hook",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "metric:menu",
+      "type": "metric"
+    },
+    {
+      "id": "control:shared-ui-shell",
+      "type": "control",
+      "weight": 20
+    },
+    {
+      "id": "control:system-panels-packed",
+      "type": "control",
+      "weight": 20
+    },
+    {
+      "id": "control:direct-world-selection",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:touch-target",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:obstruction-budget",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:escape-close",
+      "type": "control",
+      "weight": 5
+    },
+    {
+      "id": "control:focus-visible",
+      "type": "control",
+      "weight": 5
+    },
+    {
+      "id": "metric:collisions",
+      "type": "metric"
+    },
+    {
+      "id": "control:canonical-physics",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:wall-block",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:step-up",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:too-high-block",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:spawn-grounded",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:fall-respawn",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:no-basic-tunneling",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:swept-substeps",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:fuzz-collision",
+      "type": "control",
+      "weight": 5
+    },
+    {
+      "id": "metric:codeQuality",
+      "type": "metric"
+    },
+    {
+      "id": "control:syntax-check",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:no-false-green",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:canonical-input",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:duplicate-detector",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:dependency-graph",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:tests-present",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "metric:codeReviewer",
+      "type": "metric"
+    },
+    {
+      "id": "control:project-reviewer",
+      "type": "control",
+      "weight": 25
+    },
+    {
+      "id": "control:duplicate-reviewer",
+      "type": "control",
+      "weight": 20
+    },
+    {
+      "id": "control:contract-reviewer",
+      "type": "control",
+      "weight": 20
+    },
+    {
+      "id": "control:technology-audit",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:regression-gate",
+      "type": "control",
+      "weight": 20
+    },
+    {
+      "id": "metric:reports",
+      "type": "metric"
+    },
+    {
+      "id": "control:master-report",
+      "type": "control",
+      "weight": 30
+    },
+    {
+      "id": "control:regression-report",
+      "type": "control",
+      "weight": 20
+    },
+    {
+      "id": "control:project-review-report",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:tech-report",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:duplicate-report",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:contract-report",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "metric:functionConnectivity",
+      "type": "metric"
+    },
+    {
+      "id": "control:golden-registry",
+      "type": "control",
+      "weight": 20
+    },
+    {
+      "id": "control:capability-map",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:propagation-gate",
+      "type": "control",
+      "weight": 20
+    },
+    {
+      "id": "control:system-contract-map",
+      "type": "control",
+      "weight": 20
+    },
+    {
+      "id": "control:duplicate-system-ban",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:cross-app-adoption-report",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "metric:uploadedTechnologyUse",
+      "type": "metric"
+    },
+    {
+      "id": "control:evidence-registry",
+      "type": "control",
+      "weight": 20
+    },
+    {
+      "id": "control:auto-discovery",
+      "type": "control",
+      "weight": 20
+    },
+    {
+      "id": "control:runtime-health",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:production-adapters",
+      "type": "control",
+      "weight": 45
+    },
+    {
+      "id": "control:technology-orchestrator",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:instantmesh-real-cli",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:gpu-worker-router",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "metric:errorRecurrenceProtection",
+      "type": "metric"
+    },
+    {
+      "id": "control:error-registry",
+      "type": "control",
+      "weight": 20
+    },
+    {
+      "id": "control:fix-confirmed-workflow",
+      "type": "control",
+      "weight": 20
+    },
+    {
+      "id": "control:protected-error-lock",
+      "type": "control",
+      "weight": 20
+    },
+    {
+      "id": "control:auto-capture-new-failures",
+      "type": "control",
+      "weight": 20
+    },
+    {
+      "id": "control:history",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:ci-enforcement",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "metric:goldenSolutionPropagation",
+      "type": "metric"
+    },
+    {
+      "id": "control:promotion-workflow",
+      "type": "control",
+      "weight": 20
+    },
+    {
+      "id": "control:adoption-lock",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:verified-migration",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "metric:qualityGrowthAutomation",
+      "type": "metric"
+    },
+    {
+      "id": "control:growth-engine",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:autofix",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:auto-pr",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:canary",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:rollback",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:telemetry",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:autobisect",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:mutation-safety",
+      "type": "control",
+      "weight": 5
+    },
+    {
+      "id": "control:stability-runs",
+      "type": "control",
+      "weight": 5
+    },
+    {
+      "id": "control:issue-sync",
+      "type": "control",
+      "weight": 5
+    },
+    {
+      "id": "control:fuzz-property-tests",
+      "type": "control",
+      "weight": 8
+    },
+    {
+      "id": "control:impact-graph",
+      "type": "control",
+      "weight": 8
+    },
+    {
+      "id": "control:change-impact-analysis",
+      "type": "control",
+      "weight": 6
+    },
+    {
+      "id": "control:learn-confirmed-fixes",
+      "type": "control",
+      "weight": 8
+    },
+    {
+      "id": "control:sandbox-patch-synthesis",
+      "type": "control",
+      "weight": 12
+    },
+    {
+      "id": "control:perceptual-gate",
+      "type": "control",
+      "weight": 8
+    },
+    {
+      "id": "control:gpu-routing",
+      "type": "control",
+      "weight": 8
+    },
+    {
+      "id": "control:progressive-rollout",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:deployment-bisect",
+      "type": "control",
+      "weight": 5
+    },
+    {
+      "id": "control:self-evolution-cycle",
+      "type": "control",
+      "weight": 12
+    },
+    {
+      "id": "control:patch-tournament",
+      "type": "control",
+      "weight": 10
+    },
+    {
+      "id": "control:root-cause",
+      "type": "control",
+      "weight": 8
+    },
+    {
+      "id": "control:auto-regression-tests",
+      "type": "control",
+      "weight": 12
+    },
+    {
+      "id": "control:golden-versioning",
+      "type": "control",
+      "weight": 8
+    },
+    {
+      "id": "control:perf-autotuner",
+      "type": "control",
+      "weight": 8
+    },
+    {
+      "id": "control:mesh-optimizer",
+      "type": "control",
+      "weight": 8
+    },
+    {
+      "id": "control:asset-dedup",
+      "type": "control",
+      "weight": 6
+    },
+    {
+      "id": "control:risk-predictor",
+      "type": "control",
+      "weight": 6
+    },
+    {
+      "id": "control:cost-optimizer",
+      "type": "control",
+      "weight": 6
+    },
+    {
+      "id": "control:knowledge-graph",
+      "type": "control",
+      "weight": 8
+    },
+    {
+      "id": "control:durable-cycle",
+      "type": "control",
+      "weight": 6
+    },
+    {
+      "id": "metric:desktopAIContinuity",
+      "type": "metric"
+    },
+    {
+      "id": "control:canonical-desktop-instruction",
+      "type": "control",
+      "weight": 25
+    },
+    {
+      "id": "control:mandatory-work-md",
+      "type": "control",
+      "weight": 25
+    },
+    {
+      "id": "control:machine-policy",
+      "type": "control",
+      "weight": 15
+    },
+    {
+      "id": "control:release-gate-enforcement",
+      "type": "control",
+      "weight": 20
+    },
+    {
+      "id": "control:task-initializer",
+      "type": "control",
+      "weight": 15
+    }
+  ],
+  "edges": [
+    {
+      "from": "app:voxel-world",
+      "to": "cap:playable",
+      "kind": "has"
+    },
+    {
+      "from": "app:ai3d-voxel-city",
+      "to": "cap:playable",
+      "kind": "has"
+    },
+    {
+      "from": "app:ai3d-voxel-city",
+      "to": "cap:windows",
+      "kind": "has"
+    },
+    {
+      "from": "app:survival",
+      "to": "cap:playable",
+      "kind": "has"
+    },
+    {
+      "from": "app:world-sharabass",
+      "to": "cap:playable",
+      "kind": "has"
+    },
+    {
+      "from": "metric:controls",
+      "to": "control:canonical-basis",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:controls",
+      "to": "control:desktop-cardinal-directions",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:controls",
+      "to": "control:desktop-diagonal-directions",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:controls",
+      "to": "control:mouse-look",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:controls",
+      "to": "control:jump-y-only",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:controls",
+      "to": "control:camera-roll-zero",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:controls",
+      "to": "control:touch-move",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:controls",
+      "to": "control:touch-look",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:controls",
+      "to": "control:fuzz-controls",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:graphics",
+      "to": "control:render-surface-visible",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:graphics",
+      "to": "control:no-primary-blur",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:graphics",
+      "to": "control:nonzero-render-stats",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:graphics",
+      "to": "control:adaptive-resolution",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:graphics",
+      "to": "control:local-three-vendor-or-controlled-import",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:graphics",
+      "to": "control:golden-visual-registry",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:graphics",
+      "to": "control:visual-regression-harness",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:graphics",
+      "to": "control:approved-screenshot-baselines",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:graphics",
+      "to": "control:performance-budgets",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:graphics",
+      "to": "control:hud-visual-audit",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:graphics",
+      "to": "control:perceptual-regression",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:deviceAccessibility",
+      "to": "control:desktop-chrome",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:deviceAccessibility",
+      "to": "control:android-phone",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:deviceAccessibility",
+      "to": "control:iphone-emulation",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:deviceAccessibility",
+      "to": "control:tablet-emulation",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:deviceAccessibility",
+      "to": "control:touch-target-44",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:deviceAccessibility",
+      "to": "control:safe-area",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:deviceAccessibility",
+      "to": "control:touch-movement-real",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:deviceAccessibility",
+      "to": "control:real-device-hook",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:menu",
+      "to": "control:shared-ui-shell",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:menu",
+      "to": "control:system-panels-packed",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:menu",
+      "to": "control:direct-world-selection",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:menu",
+      "to": "control:touch-target",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:menu",
+      "to": "control:safe-area",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:menu",
+      "to": "control:obstruction-budget",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:menu",
+      "to": "control:escape-close",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:menu",
+      "to": "control:focus-visible",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:collisions",
+      "to": "control:canonical-physics",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:collisions",
+      "to": "control:wall-block",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:collisions",
+      "to": "control:step-up",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:collisions",
+      "to": "control:too-high-block",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:collisions",
+      "to": "control:spawn-grounded",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:collisions",
+      "to": "control:fall-respawn",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:collisions",
+      "to": "control:no-basic-tunneling",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:collisions",
+      "to": "control:swept-substeps",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:collisions",
+      "to": "control:fuzz-collision",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:codeQuality",
+      "to": "control:syntax-check",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:codeQuality",
+      "to": "control:no-false-green",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:codeQuality",
+      "to": "control:canonical-input",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:codeQuality",
+      "to": "control:canonical-physics",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:codeQuality",
+      "to": "control:duplicate-detector",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:codeQuality",
+      "to": "control:dependency-graph",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:codeQuality",
+      "to": "control:tests-present",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:codeReviewer",
+      "to": "control:project-reviewer",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:codeReviewer",
+      "to": "control:duplicate-reviewer",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:codeReviewer",
+      "to": "control:contract-reviewer",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:codeReviewer",
+      "to": "control:technology-audit",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:codeReviewer",
+      "to": "control:regression-gate",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:reports",
+      "to": "control:master-report",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:reports",
+      "to": "control:regression-report",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:reports",
+      "to": "control:project-review-report",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:reports",
+      "to": "control:tech-report",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:reports",
+      "to": "control:duplicate-report",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:reports",
+      "to": "control:contract-report",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:functionConnectivity",
+      "to": "control:golden-registry",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:functionConnectivity",
+      "to": "control:capability-map",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:functionConnectivity",
+      "to": "control:propagation-gate",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:functionConnectivity",
+      "to": "control:system-contract-map",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:functionConnectivity",
+      "to": "control:duplicate-system-ban",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:functionConnectivity",
+      "to": "control:cross-app-adoption-report",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:uploadedTechnologyUse",
+      "to": "control:evidence-registry",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:uploadedTechnologyUse",
+      "to": "control:auto-discovery",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:uploadedTechnologyUse",
+      "to": "control:runtime-health",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:uploadedTechnologyUse",
+      "to": "control:production-adapters",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:uploadedTechnologyUse",
+      "to": "control:technology-orchestrator",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:uploadedTechnologyUse",
+      "to": "control:instantmesh-real-cli",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:uploadedTechnologyUse",
+      "to": "control:gpu-worker-router",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:errorRecurrenceProtection",
+      "to": "control:error-registry",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:errorRecurrenceProtection",
+      "to": "control:fix-confirmed-workflow",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:errorRecurrenceProtection",
+      "to": "control:protected-error-lock",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:errorRecurrenceProtection",
+      "to": "control:auto-capture-new-failures",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:errorRecurrenceProtection",
+      "to": "control:history",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:errorRecurrenceProtection",
+      "to": "control:ci-enforcement",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:goldenSolutionPropagation",
+      "to": "control:golden-registry",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:goldenSolutionPropagation",
+      "to": "control:promotion-workflow",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:goldenSolutionPropagation",
+      "to": "control:capability-map",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:goldenSolutionPropagation",
+      "to": "control:propagation-gate",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:goldenSolutionPropagation",
+      "to": "control:adoption-lock",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:goldenSolutionPropagation",
+      "to": "control:verified-migration",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:growth-engine",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:autofix",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:auto-pr",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:canary",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:rollback",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:telemetry",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:autobisect",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:mutation-safety",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:stability-runs",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:issue-sync",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:fuzz-property-tests",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:impact-graph",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:change-impact-analysis",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:learn-confirmed-fixes",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:sandbox-patch-synthesis",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:perceptual-gate",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:gpu-routing",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:progressive-rollout",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:deployment-bisect",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:self-evolution-cycle",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:patch-tournament",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:root-cause",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:auto-regression-tests",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:golden-versioning",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:perf-autotuner",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:mesh-optimizer",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:asset-dedup",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:risk-predictor",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:cost-optimizer",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:knowledge-graph",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:qualityGrowthAutomation",
+      "to": "control:durable-cycle",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:desktopAIContinuity",
+      "to": "control:canonical-desktop-instruction",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:desktopAIContinuity",
+      "to": "control:mandatory-work-md",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:desktopAIContinuity",
+      "to": "control:machine-policy",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:desktopAIContinuity",
+      "to": "control:release-gate-enforcement",
+      "kind": "measured-by"
+    },
+    {
+      "from": "metric:desktopAIContinuity",
+      "to": "control:task-initializer",
+      "kind": "measured-by"
+    }
+  ]
+}

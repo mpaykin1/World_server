@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-09-08T20:17:26.421Z",
+  "currentBytes": 1721902808,
+  "currentGB": 1.604,
+  "objectCount": 4764,
+  "snapshotCount": 31,
+  "limits": {
+    "keepSnapshots": 20,
+    "emergencyKeepSnapshots": 5,
+    "warnGB": 5,
+    "autoGcGB": 10,
+    "emergencyGB": 20,
+    "enabled": true
+  },
+  "lastGcAt": "2026-09-08T20:17:26.421Z",
+  "lastGcTrigger": "post-snapshot",
+  "lastGcRan": false,
+  "lastGcOk": null,
+  "lastGcReclaimedBytes": 0,
+  "lastGcReclaimedObjects": 0,
+  "lastGcRemovedSnapshots": 0
+}

@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "1.0.0",
+  "releaseProfile": "web-server",
+  "targets": ["web", "server"],
+  "requirePhysicalMobile": false,
+  "mobilePlatforms": ["android", "ios"],
+  "mobileStatus": "deferred-not-required",
+  "reason": "Current production release is web/server only; Android and iOS certification is intentionally deferred until mobile becomes a shipping target.",
+  "truthRule": "A platform may be excluded from readiness only by explicit release scope. Excluded platforms are NOT_APPLICABLE, never fake PASS, and must be re-enabled before shipping that platform."
+}

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "7.5.1",
+  "migrationId": "world-server-live-fenced-probe-v1",
+  "leaseKey": "world-server-migration-fencing",
+  "strategy": "expand-migrate-contract",
+  "phases": ["expand", "migrate", "contract"],
+  "backfillVerified": true,
+  "requestedPhase": "migrate",
+  "destructiveExpand": false,
+  "scope": "production-supabase-proof",
+  "truthRule": "The verifier must acquire a fresh remote lease and prove stale-token rejection plus current-token application before liveVerified may be true."
+}

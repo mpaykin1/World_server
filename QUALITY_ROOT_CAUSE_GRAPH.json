@@ -1,30 +1,8 @@
 {
-  "generatedAt": "2026-08-24T05:06:37.097Z",
+  "generatedAt": "2026-09-15T05:09:50.711Z",
   "nodes": [
     {
       "id": "issue:1",
-      "type": "issue",
-      "source": "PROJECT_QUALITY_REVIEW.json",
-      "item": {
-        "severity": "major",
-        "category": "mobile",
-        "file": "apps/ai3d-voxel-city/index.html",
-        "message": "viewport-fit=cover missing"
-      }
-    },
-    {
-      "id": "file:apps/ai3d-voxel-city/index.html",
-      "type": "file",
-      "file": "apps/ai3d-voxel-city/index.html"
-    },
-    {
-      "id": "commit:12f94250cd1731d7d1709b12a8d09f3c2e2d7989",
-      "type": "commit",
-      "sha": "12f94250cd1731d7d1709b12a8d09f3c2e2d7989",
-      "at": "2026-08-24T03:02:00+03:00"
-    },
-    {
-      "id": "issue:2",
       "type": "issue",
       "source": "DUPLICATE_SYSTEM_REPORT.json",
       "item": {
@@ -44,7 +22,7 @@
       }
     },
     {
-      "id": "issue:3",
+      "id": "issue:2",
       "type": "issue",
       "source": "DUPLICATE_SYSTEM_REPORT.json",
       "item": {
@@ -64,31 +42,6 @@
       }
     }
   ],
-  "edges": [
-    {
-      "from": "issue:1",
-      "to": "file:apps/ai3d-voxel-city/index.html",
-      "kind": "observed-in"
-    },
-    {
-      "from": "file:apps/ai3d-voxel-city/index.html",
-      "to": "commit:12f94250cd1731d7d1709b12a8d09f3c2e2d7989",
-      "kind": "last-changed-by"
-    },
-    {
-      "from": "file:apps/ai3d-voxel-city/index.html",
-      "to": "app:ai3d-voxel-city",
-      "kind": "impacts"
-    }
-  ],
-  "causes": [
-    {
-      "issue": "issue:1",
-      "file": "apps/ai3d-voxel-city/index.html",
-      "commit": {
-        "sha": "12f94250cd1731d7d1709b12a8d09f3c2e2d7989",
-        "at": "2026-08-24T03:02:00+03:00"
-      }
-    }
-  ]
+  "edges": [],
+  "causes": []
 }
