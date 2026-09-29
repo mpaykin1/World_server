@@ -118,6 +118,7 @@ export async function loadPinnedRapier(importer=url=>import(url)){
   const url='https://cdn.jsdelivr.net/npm/@dimforge/rapier3d-deterministic-compat@0.21.0/+esm';
   const mod=await importer(url);
   const RAPIER=mod?.default||mod;
+  if(typeof RAPIER?.init==='function')await RAPIER.init();
   assertRapier(RAPIER);
   return RAPIER;
 }
