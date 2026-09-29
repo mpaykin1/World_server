@@ -12,11 +12,21 @@ const BLOCK = Object.freeze({
 const clampInt = (value, min, max) => Math.max(min, Math.min(max, Math.round(Number(value) || min)));
 const key3 = (x, y, z) => `${x},${y},${z}`;
 
+const ROLE_PRIORITY = Object.freeze({
+  foundation: 50,
+  pier: 40,
+  arch: 30,
+  roof: 20,
+  spire: 20,
+  wall: 10,
+  window: 5,
+});
+
 function addVoxel(map, x, y, z, blockType, role, structureId) {
   const k = key3(x, y, z);
   const next = { x, y, z, blockType, role, structureId };
   const current = map.get(k);
-  if (!current || current.role !== 'foundation') map.set(k, next);
+  if (!current || (ROLE_PRIORITY[role] || 0) > (ROLE_PRIORITY[current.role] || 0)) map.set(k, next);
 }
 
 function addFoundation(map, o, half, structureId) {
