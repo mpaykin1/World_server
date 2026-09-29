@@ -35,7 +35,7 @@
       "type": "FIX_CONFIRMED",
       "id": "reference-3d-silently-downgraded-to-2d",
       "at": "2026-09-29T03:06:19Z",
-      "lessonHash": "reference-dimensionality-before-visual-score-v1",
+      "lessonHash": "44878b3bd164ecfa2da67c2e6e97e0e2407587912b8a46cfc3080fc841893f8c",
       "supersedes": null
     }
   ],
