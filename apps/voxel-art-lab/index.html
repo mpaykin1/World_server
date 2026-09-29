@@ -3,36 +3,40 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>World Server — мастерская собственной воксельной графики</title>
+<title>World Server — OLD 1× / NEW 10× voxel viewer</title>
 <style>
-:root{color-scheme:dark}*{box-sizing:border-box}html,body{margin:0;height:100%;background:#111c21;font:14px system-ui;color:#e8f3ed}
-canvas{display:block;touch-action:none}main{position:fixed;inset:0}header{position:absolute;top:14px;left:16px;z-index:2;max-width:420px;padding:13px;background:#0c1922e8;border:1px solid #3c6675;border-radius:12px}
-h1{font-size:19px;margin:0 0 7px}p{margin:0 0 8px;line-height:1.4;color:#b5ced2}
-nav{display:flex;flex-wrap:wrap;gap:7px}button{cursor:pointer;padding:9px 12px;border:1px solid #567883;border-radius:8px;background:#213c45;color:#e7faf4;font:inherit;min-height:40px}
-button[aria-pressed="true"]{background:#388b74;border-color:#82dcc1;color:white}
-button:focus-visible{outline:3px solid #ffcb69}#status{margin-top:8px;font-size:12px;color:#c3d9dc}
-footer{position:absolute;bottom:12px;left:16px;z-index:2;background:#0c1922c9;border-radius:7px;padding:8px 12px;color:#bfd0d7}
-@media(max-width:620px){header{left:8px;right:8px;top:8px;padding:9px}h1{font-size:16px}button{padding:7px 9px;font-size:12px;min-height:36px}footer{left:8px;bottom:8px;font-size:11px}}
+:root{color-scheme:dark}*{box-sizing:border-box}html,body{margin:0;height:100%;background:#10191e;font:14px system-ui;color:#e8f3ed;overflow:hidden}
+canvas{display:block;touch-action:none}main{position:fixed;inset:0}
+header{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(8px,env(safe-area-inset-left));z-index:2;max-width:min(620px,calc(100vw - 16px));padding:10px;background:#0c1922e8;border:1px solid #3c6675;border-radius:12px;backdrop-filter:blur(8px)}
+h1{font-size:17px;margin:0 0 5px}p{margin:0 0 7px;line-height:1.3;color:#b5ced2}
+nav,.controls{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}.group{display:flex;gap:4px;padding:3px;border:1px solid #39545f;border-radius:9px}
+button{cursor:pointer;padding:7px 9px;border:1px solid #567883;border-radius:7px;background:#213c45;color:#e7faf4;font:inherit;min-height:36px}
+button[aria-pressed="true"]{background:#388b74;border-color:#82dcc1;color:white}button:focus-visible{outline:3px solid #ffcb69}
+#status{margin-top:7px;font-size:12px;color:#c3d9dc;max-width:590px}
+footer{position:absolute;bottom:max(8px,env(safe-area-inset-bottom));left:max(8px,env(safe-area-inset-left));z-index:2;background:#0c1922c9;border-radius:7px;padding:7px 10px;color:#bfd0d7;font-size:12px}
+@media(max-width:620px){header{right:8px;padding:8px}h1{font-size:15px}p{display:none}button{padding:6px 7px;font-size:11px;min-height:33px}#status{font-size:11px}footer{font-size:10px}}
 </style>
-<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.165.0/build/three.module.js"}}</script>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
 </head>
 <body>
-<main id="stage" aria-label="Изометрическая мастерская оригинальной воксельной графики"></main>
+<main id="stage" aria-label="Сравнение восьми оригинальных 3D-моделей World Server"></main>
 <header>
-<h1>World Server · Воксельная мастерская</h1>
-<p>Наши собственные модели из Blender. Выбери, что создать в новом мире.</p>
-<nav id="choices" aria-label="Создать объект">
-<button type="button" data-kind="barren" aria-pressed="true">Земля</button>
-<button type="button" data-kind="city">Город</button>
-<button type="button" data-kind="forest">Лес</button>
-<button type="button" data-kind="volcano">Вулкан</button>
-<button type="button" data-kind="energy">Энергия</button>
-<button type="button" data-kind="idea">Идея</button>
-<button type="button" data-kind="river">Река</button>
+<h1>World Server · 8 моделей · OLD 1× ↔ NEW 10×</h1>
+<p>Поворот — пальцем/мышью, zoom — pinch/колесом. Debug semantic regions выключен по умолчанию.</p>
+<nav id="choices" aria-label="Выбор модели">
+<button data-kind="barren" aria-pressed="true">Земля</button><button data-kind="city">Город</button>
+<button data-kind="forest">Лес</button><button data-kind="volcano">Вулкан</button>
+<button data-kind="energy">Энергия</button><button data-kind="idea">Идея</button>
+<button data-kind="river">Река</button><button data-kind="villager">Житель</button>
 </nav>
-<div id="status" role="status" aria-live="polite">Загрузка моделей…</div>
+<div class="controls">
+<div class="group" id="versions" aria-label="Версия"><button data-version="old">OLD 1×</button><button data-version="new" aria-pressed="true">NEW 10×</button></div>
+<div class="group" id="lods" aria-label="LOD"><button data-lod="0" aria-pressed="true">LOD0</button><button data-lod="1">LOD1</button><button data-lod="2">LOD2</button></div>
+<div class="group"><button id="animation" aria-pressed="true">Анимация</button><button id="semantic" aria-pressed="false">Semantic debug</button></div>
+</div>
+<div id="status" role="status" aria-live="polite">Загрузка локальных GLB…</div>
 </header>
-<footer>Оригинальная процедурная 3D-графика · Blender 5.1 · GLB · перетаскивай сцену для поворота</footer>
+<footer>Оригинальная procedural voxel-art графика · Blender 5.1 · GLB · 3 LOD · без runtime API</footer>
 <script type="module" src="./preview.mjs"></script>
 </body>
 </html>
