@@ -16,18 +16,20 @@ const cases = [
   {id:"narrow_portrait",width:320,height:900},
 ];
 
-const browser = await chromium.launch({
-  headless:true,
-  args:["--use-angle=swiftshader","--enable-unsafe-swiftshader","--ignore-gpu-blocklist","--autoplay-policy=no-user-gesture-required"],
-});
-
 const results=[];
 let fatal=null;
-try {
-  for (const c of cases) {
-    const context=await browser.newContext({viewport:{width:c.width,height:c.height},deviceScaleFactor:1});
-    const page=await context.newPage();
-    const errors=[];
+for (const c of cases) {
+  let browser=null;
+  let context=null;
+  let page=null;
+  const errors=[];
+  try {
+    browser=await chromium.launch({
+      headless:true,
+      args:["--use-angle=swiftshader","--enable-unsafe-swiftshader","--ignore-gpu-blocklist","--autoplay-policy=no-user-gesture-required"],
+    });
+    context=await browser.newContext({viewport:{width:c.width,height:c.height},deviceScaleFactor:1});
+    page=await context.newPage();
     page.on("pageerror",e=>errors.push(String(e)));
     page.on("console",m=>{ if(m.type()==="error") errors.push(m.text()); });
     const join=base.includes("?") ? "&" : "?";
@@ -43,6 +45,14 @@ try {
     const events=await page.evaluate(()=>window.__kkForensics.slice());
     const analysis=analyzeForensics(events);
     const runtimeValidation=validateCoreRuntimeEvidence(events);
+    const traceDir=process.env.KK_TORTURE_TRACES;
+    if(traceDir){
+      fs.mkdirSync(traceDir,{recursive:true});
+      fs.writeFileSync(
+        `${traceDir}/${c.id.replace(/[^a-z0-9]+/gi,"_")}.json`,
+        JSON.stringify({case:c,events},null,2)+"\n"
+      );
+    }
     if(!runtimeValidation.pass) {
       throw new Error(c.id+" invalid live forensics: "+runtimeValidation.errors.join(" | "));
     }
@@ -89,19 +99,26 @@ try {
       screenshotError,
       errors:errors.filter(x=>!/pointer lock|AudioContext|favicon/i.test(x)),
     });
-    await context.close();
+  } catch(e) {
+    const message=String(e?.stack||e);
+    results.push({
+      case:c,
+      failed:true,
+      fatal:message,
+      errors:errors.filter(x=>!/pointer lock|AudioContext|favicon/i.test(x)),
+    });
+    if(!fatal) fatal=message;
+  } finally {
+    if(context) { try { await context.close(); } catch(e) {} }
+    if(browser) { try { await browser.close(); } catch(e) {} }
   }
-} catch(e) {
-  fatal=String(e?.stack||e);
-} finally {
-  await browser.close();
 }
 
 const report={
   generatedAt:new Date().toISOString(),
   url:base,
   mode:requireResponsive ? "responsive_acceptance" : "diagnostic",
-  pass:!fatal && results.every(x=>x.errors.length===0),
+  pass:!fatal && results.length===cases.length && results.every(x=>!x.failed && x.errors.length===0),
   fatal,
   cases:results,
   localization:{
