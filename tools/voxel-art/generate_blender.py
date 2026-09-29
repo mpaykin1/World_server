@@ -267,6 +267,29 @@ def camera_preview(path: Path, kind: str):
     bpy.context.scene.render.resolution_percentage = 100
     bpy.context.scene.render.filepath = str(path)
     bpy.ops.render.render(write_still=True)
+    _normalize_png(path)
+
+
+def _normalize_png(path: Path):
+    data = path.read_bytes()
+    signature = b"\x89PNG\r\n\x1a\n"
+    if not data.startswith(signature):
+        raise ValueError("Preview is not PNG: " + str(path))
+    volatile = {b"tEXt", b"iTXt", b"zTXt", b"eXIf", b"tIME"}
+    out = bytearray(signature)
+    pos = len(signature)
+    while pos + 12 <= len(data):
+        length = int.from_bytes(data[pos:pos + 4], "big")
+        end = pos + 12 + length
+        if end > len(data):
+            raise ValueError("Truncated PNG: " + str(path))
+        chunk_type = data[pos + 4:pos + 8]
+        if chunk_type not in volatile:
+            out.extend(data[pos:end])
+        pos = end
+        if chunk_type == b"IEND":
+            break
+    path.write_bytes(bytes(out))
 
 
 def _digest(path: Path):
@@ -307,7 +330,15 @@ def _export_lod(kind: str, seed: int, lod: int, output: Path, params=None):
         "lod": lod, "file": file_name,
         "url": "/apps/voxel-world/voxel-art/" + file_name,
         **_digest(dest), **recipe.stats(), **mesh_metrics,
-        "generationMs": round(elapsed, 2),
+    }
+    print("VOXEL_ART_LOD_METRIC", json.dumps({
+        "kind": kind, "lod": lod, "generationMs": round(elapsed, 2),
+        "triangles": mesh_metrics["triangles"], "bytes": dest.stat().st_size,
+    }, separators=(",", ":")))
+    return recipe, {
+        "lod": lod, "file": file_name,
+        "url": "/apps/voxel-world/voxel-art/" + file_name,
+        **_digest(dest), **recipe.stats(), **mesh_metrics,
     }
 
 
