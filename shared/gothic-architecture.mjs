@@ -148,9 +148,11 @@ function addViaductArch(map,o,left,right,deckY,halfWidth,structureId){
   for(let x=left+1;x<right;x++){
     const t=(x-left)/span*2-1;
     const rise=Math.max(1,Math.round((1-t*t)*Math.max(2,deckY-3)));
-    const y=o.y+2+rise;
-    addVoxel(map,x,y,o.z-halfWidth,BLOCK.STONE,'arch',structureId);
-    addVoxel(map,x,y,o.z+halfWidth,BLOCK.STONE,'arch',structureId);
+    const curveY=o.y+2+rise;
+    for(let y=curveY;y<o.y+deckY;y++){
+      addVoxel(map,x,y,o.z-halfWidth,BLOCK.STONE,'arch',structureId);
+      addVoxel(map,x,y,o.z+halfWidth,BLOCK.STONE,'arch',structureId);
+    }
   }
 }
 
