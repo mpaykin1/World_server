@@ -16,11 +16,20 @@ if not (root / "wasm" / "_start_wasm.cpp").is_file():
 
 def replace_once(rel, old, new):
     p = root / rel
-    text = p.read_text(encoding="utf-8")
+    raw = p.read_bytes()
+    try:
+        text = raw.decode("utf-8")
+        encoding = "utf-8"
+    except UnicodeDecodeError:
+        # The historical farbrausch tree contains source files with 8-bit
+        # text bytes. Latin-1 is a byte-preserving fallback: untouched bytes
+        # round-trip 1:1 while our instrumentation stays ASCII.
+        text = raw.decode("latin-1")
+        encoding = "latin-1"
     count = text.count(old)
     if count != 1:
         raise SystemExit(f"{rel}: expected exactly one instrumentation anchor, found {count}: {old[:100]!r}")
-    p.write_text(text.replace(old, new, 1), encoding="utf-8")
+    p.write_bytes(text.replace(old, new, 1).encode(encoding))
 
 # Browser collector + compact Observatory panel. C++ emits JSON lines prefixed
 # with [kk-forensics]; Module.print/printErr already receive stdout/stderr.
