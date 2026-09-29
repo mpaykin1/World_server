@@ -71,9 +71,10 @@ replace_once("wasm/shell.html",
   }
   function kkLog(t){
     if(typeof t === 'string') {
-      var at=t.indexOf('[kk-forensics] ');
+      var marker='[kk-forensics] ';
+      var at=t.indexOf(marker);
       if(at>=0) {
-        try { window.__kkForensicsPush(JSON.parse(t.slice(at+16))); } catch(e) {}
+        try { window.__kkForensicsPush(JSON.parse(t.slice(at+marker.length))); } catch(e) {}
       }
     }
     window.__kkLog.push(t);
