@@ -346,7 +346,7 @@ def make_asset(kind: str, output: Path, preview: bool, seed: int):
             "microFeatures": semantic_payload["stats"]["microFeatures"],
         },
         "format": "glTF-binary", "origin": "World Server original procedural voxel art",
-        "license": "CC0-1.0", "unit": "metre", "up": "Y-glTF", "fps": 24,
+        "license": "PROJECT-ORIGINAL-NO-SEPARATE-LICENSE", "unit": "metre", "up": "Y-glTF", "fps": 24,
         "seed": asset_seed, "preview": preview_meta,
     }
 
