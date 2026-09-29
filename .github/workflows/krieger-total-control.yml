@@ -99,6 +99,9 @@ jobs:
           KK_TORTURE_TRACES: work/krieger-total-control/torture-traces
         run: node tools/krieger-total-control/aspect-torture.mjs
 
+      - name: Replay detached real-runtime traces
+        run: node tools/krieger-total-control/replay-trace.mjs work/krieger-total-control/torture-traces
+
       - name: Require portrait root cause to be measurable
         run: |
           node - <<'NODE'
