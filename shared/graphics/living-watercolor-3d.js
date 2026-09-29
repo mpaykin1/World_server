@@ -3,7 +3,7 @@
 const DEFAULT_STYLE=Object.freeze({
   inkColor:'#24364f',paperColor:'#f6f1e7',washColor:'#8794a4',
   washOpacity:.72,washLayers:6,edgeWidth:.022,edgeJitter:.17,
-  granulation:.26,bleed:.16,shadowWash:.16,motion:.18,seed:73194217,
+  granulation:.26,bleed:.16,shadowWash:.16,motion:.18,pigmentPooling:.24,paperGap:.13,paintedLight:.48,seed:73194217,
   lod:{near:18,mid:42,far:82,billboard:140}
 });
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,Number(v)||0));
@@ -38,6 +38,9 @@ export function createWatercolorStyle(overrides={}){
     bleed:clamp(overrides.bleed??DEFAULT_STYLE.bleed,0,.7),
     shadowWash:clamp(overrides.shadowWash??DEFAULT_STYLE.shadowWash,0,.6),
     motion:clamp(overrides.motion??DEFAULT_STYLE.motion,0,.8),
+    pigmentPooling:clamp(overrides.pigmentPooling??DEFAULT_STYLE.pigmentPooling,0,.8),
+    paperGap:clamp(overrides.paperGap??DEFAULT_STYLE.paperGap,0,.6),
+    paintedLight:clamp(overrides.paintedLight??DEFAULT_STYLE.paintedLight,0,1),
     seed:stableSeed(overrides.seed??DEFAULT_STYLE.seed),lod:Object.freeze(lod)
   });
 }
@@ -111,14 +114,16 @@ function patchWatercolorMaterial(THREE,material,style,seed,states,washTexture){
     Object.assign(shader.uniforms,{
       uWcTime:{value:0},uWcSeed:{value:(state.seed%10000)/10000},
       uWcPaper:{value:colorVec3(THREE,style.paperColor)},uWcInk:{value:colorVec3(THREE,style.inkColor)},uWcWashColor:{value:colorVec3(THREE,style.washColor)},
-      uWcWash:{value:style.washOpacity},uWcGran:{value:style.granulation},uWcBleed:{value:style.bleed},uWcQuality:{value:1}
+      uWcWash:{value:style.washOpacity},uWcGran:{value:style.granulation},uWcBleed:{value:style.bleed},uWcQuality:{value:1},
+      uWcPool:{value:style.pigmentPooling},uWcPaperGap:{value:style.paperGap},uWcPaintedLight:{value:style.paintedLight}
     });
     state.uniforms=shader.uniforms;
-    shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vWcWorld;');
+    shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vWcWorld;\nvarying vec3 vWcNormal;');
     shader.vertexShader=shader.vertexShader.replace('#include <worldpos_vertex>','#include <worldpos_vertex>\nvWcWorld=(modelMatrix*vec4(transformed,1.0)).xyz;');
-    shader.fragmentShader=shader.fragmentShader.replace('#include <common>',`#include <common>\nvarying vec3 vWcWorld;\nuniform float uWcTime,uWcSeed,uWcWash,uWcGran,uWcBleed,uWcQuality;\nuniform vec3 uWcPaper,uWcInk,uWcWashColor;\nfloat wcHash(vec3 p){p=fract(p*.1031+uWcSeed);p+=dot(p,p.yzx+33.33);return fract((p.x+p.y)*p.z);}`);
+    shader.vertexShader=shader.vertexShader.replace('#include <defaultnormal_vertex>','#include <defaultnormal_vertex>\nvWcNormal=normalize(normalMatrix*objectNormal);');
+    shader.fragmentShader=shader.fragmentShader.replace('#include <common>',`#include <common>\nvarying vec3 vWcWorld;\nvarying vec3 vWcNormal;\nuniform float uWcTime,uWcSeed,uWcWash,uWcGran,uWcBleed,uWcQuality,uWcPool,uWcPaperGap,uWcPaintedLight;\nuniform vec3 uWcPaper,uWcInk,uWcWashColor;\nfloat wcHash(vec3 p){p=fract(p*.1031+uWcSeed);p+=dot(p,p.yzx+33.33);return fract((p.x+p.y)*p.z);}`);
     const needle='#include <color_fragment>';
-    if(shader.fragmentShader.includes(needle))shader.fragmentShader=shader.fragmentShader.replace(needle,`${needle}\nfloat wcFlow1=sin(dot(vWcWorld,vec3(1.73,2.11,.87))+uWcSeed*19.0);\nfloat wcFlow2=sin(dot(vWcWorld,vec3(-2.37,.91,1.41))+uWcSeed*11.0);\nfloat wcFlow3=sin(dot(vWcWorld,vec3(.63,-1.57,2.83))+uWcSeed*7.0);\nfloat wcGrain=sin(dot(vWcWorld,vec3(7.7,6.3,8.9))+uWcSeed*29.0)*.5+.5;\nfloat wcFlow=(wcFlow1+wcFlow2*.72+wcFlow3*.48)/2.2;\nfloat wcDensity=clamp(uWcWash+wcFlow*uWcGran*.62+(wcGrain-.5)*uWcBleed*.34,.16,.96);\nvec3 wcPigment=mix(uWcWashColor,diffuseColor.rgb,.46);\ndiffuseColor.rgb=mix(uWcPaper,wcPigment,wcDensity);`);
+    if(shader.fragmentShader.includes(needle))shader.fragmentShader=shader.fragmentShader.replace(needle,`${needle}\nfloat wcFlow1=sin(dot(vWcWorld,vec3(1.73,2.11,.87))+uWcSeed*19.0);\nfloat wcFlow2=sin(dot(vWcWorld,vec3(-2.37,.91,1.41))+uWcSeed*11.0);\nfloat wcFlow3=sin(dot(vWcWorld,vec3(.63,-1.57,2.83))+uWcSeed*7.0);\nfloat wcGrain=sin(dot(vWcWorld,vec3(7.7,6.3,8.9))+uWcSeed*29.0)*.5+.5;\nfloat wcFlow=(wcFlow1+wcFlow2*.72+wcFlow3*.48)/2.2;\nvec3 wcN=normalize(vWcNormal);\nfloat wcRim=pow(1.0-clamp(abs(wcN.z),0.0,1.0),1.65);\nfloat wcDown=smoothstep(.12,.92,1.0-max(wcN.y,0.0));\nfloat wcPool=wcRim*uWcPool+wcDown*uWcPool*.32;\nfloat wcGap=smoothstep(.46,.95,wcFlow*.5+.5+(wcGrain-.5)*.30)*uWcPaperGap;\nfloat wcDensity=clamp(uWcWash+wcFlow*uWcGran*.62+(wcGrain-.5)*uWcBleed*.34+wcPool-wcGap,.10,.98);\nvec3 wcPigment=mix(uWcWashColor,diffuseColor.rgb,.42);\nfloat wcLight=.70+.30*(wcN.y*.5+.5);\nvec3 wcPaint=mix(uWcPaper,wcPigment,wcDensity);\nwcPaint=mix(wcPaint,wcPaint*wcLight,uWcPaintedLight);\ndiffuseColor.rgb=wcPaint;`);
   };
   m.customProgramCacheKey=()=>`${previousKey?.()||''}|living-watercolor-3d:${state.seed}:${style.washOpacity}`;
   if(!m.map&&washTexture)m.map=washTexture;m.roughness=Math.max(Number(m.roughness??.85),.92);m.metalness=Math.min(Number(m.metalness??0),.03);m.needsUpdate=true;
@@ -187,8 +192,9 @@ export function createLivingWatercolor3D({THREE,renderer,scene,camera,style:inpu
       if(!obj?.isMesh||obj.userData?.livingWatercolorOutline)return;
       obj.userData=obj.userData||{};if(!obj.userData.__livingWatercolorOriginalMaterial)obj.userData.__livingWatercolorOriginalMaterial=obj.material;
       const mats=Array.isArray(obj.material)?obj.material:[obj.material];
-      const patched=mats.map((m,mi)=>patchWatercolorMaterial(THREE,m,style,stableSeed(`${seed}:${i}:${mi}`),materialStates,washTexture));
-      obj.material=Array.isArray(obj.material)?patched:patched[0];if(outline)addInkShell(THREE,obj,style,stableSeed(`${seed}:ink:${i}`),outlineStates);i++;
+      const patched=obj.userData.watercolorSkipWash?mats:mats.map((m,mi)=>patchWatercolorMaterial(THREE,m,style,stableSeed(`${seed}:${i}:${mi}`),materialStates,washTexture));
+      obj.material=Array.isArray(obj.material)?patched:patched[0];
+      if(outline&&obj.userData.watercolorOutline!==false)addInkShell(THREE,obj,style,stableSeed(`${seed}:ink:${i}`),outlineStates);i++;
     });
     return root;
   }
