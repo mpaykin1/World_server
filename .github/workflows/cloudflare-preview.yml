@@ -35,7 +35,7 @@ jobs:
           HEAD="$SOURCE_SHA"
           CHANGED="$(git diff --name-only "$BASE" "$HEAD")"
           printf '%s\n' "$CHANGED"
-          if printf '%s\n' "$CHANGED" | grep -Eq '^(apps/voxel-world/(client\.js|gothic-destruction-lab\.mjs)|shared/(gothic-architecture\.mjs|voxel-structural-destruction\.mjs|physics/rapier-collapse-runtime\.mjs)|e2e/gothic-destruction\.spec\.js|test/(gothic-structural-destruction|rapier-collapse-runtime|gothic-destruction-integration)\.test\.mjs)$'; then
+          if printf '%s\n' "$CHANGED" | grep -Eq '^(apps/voxel-world/(client\.js|gothic-destruction-lab\.mjs)|shared/(gothic-architecture\.mjs|voxel-structural-destruction\.mjs|voxel-mod-registry\.mjs|mods/gothic-city\.mjs|physics/rapier-collapse-runtime\.mjs)|e2e/gothic-destruction\.spec\.js|test/(gothic-structural-destruction|rapier-collapse-runtime|gothic-destruction-integration|voxel-mod-registry)\.test\.mjs)$'; then
             echo "run=true" >> "$GITHUB_OUTPUT"
           else
             echo "run=false" >> "$GITHUB_OUTPUT"
