@@ -727,4 +727,141 @@ replace_once("engine.cpp",
         sInt usage = pass->Usage;
 """)
 
+
+# Material-pass reverse provenance. Unlike a material object, PaintJob carries
+# only GenMaterialPass*, so resolve that pass back to the owning KDoc operator.
+replace_once("kdoc.cpp",
+"""sInt kkCacheOrigin(KObject *object,sInt &classId,sInt &result)
+{
+  classId = -1;
+  result = -1;
+  if(!kkDoc || !object) return -1;
+  for(sInt i=0;i<kkDoc->Ops.Count;i++)
+  {
+    KOp &op = kkDoc->Ops[i];
+    if(op.Cache == object)
+    {
+      classId = kkClassIds[op.Command & 255];
+      result = op.Result;
+      return op.OpId;
+    }
+  }
+  return -1;
+}
+""",
+"""sInt kkCacheOrigin(KObject *object,sInt &classId,sInt &result)
+{
+  classId = -1;
+  result = -1;
+  if(!kkDoc || !object) return -1;
+  for(sInt i=0;i<kkDoc->Ops.Count;i++)
+  {
+    KOp &op = kkDoc->Ops[i];
+    if(op.Cache == object)
+    {
+      classId = kkClassIds[op.Command & 255];
+      result = op.Result;
+      return op.OpId;
+    }
+  }
+  return -1;
+}
+
+sInt kkMaterialPassOrigin(GenMaterialPass *needle,sInt &classId,sInt &result)
+{
+  classId = -1;
+  result = -1;
+  if(!kkDoc || !needle) return -1;
+  for(sInt i=0;i<kkDoc->Ops.Count;i++)
+  {
+    KOp &op = kkDoc->Ops[i];
+    if(!op.Cache || op.Cache->ClassId != KC_MATERIAL) continue;
+    GenMaterial *gm = (GenMaterial *)op.Cache;
+    for(sInt p=0;p<gm->Passes.Count;p++)
+      if(&gm->Passes[p] == needle)
+      {
+        classId = kkClassIds[op.Command & 255];
+        result = op.Result;
+        return op.OpId;
+      }
+  }
+  return -1;
+}
+""")
+
+replace_once("engine.cpp",
+"""extern sInt kkCacheOrigin(KObject *object,sInt &classId,sInt &result);
+""",
+"""extern sInt kkCacheOrigin(KObject *object,sInt &classId,sInt &result);
+extern sInt kkMaterialPassOrigin(GenMaterialPass *pass,sInt &classId,sInt &result);
+extern "C" void kkObsDrawContext(sInt originOp,sInt originClass,sInt originResult,
+                                  sInt jobId,sInt usage,sInt renderPass,sInt program,
+                                  sInt vertices,sInt indices);
+""")
+
+replace_once("engine.cpp",
+"""  // skip empty jobs
+  if(!job->VertexCount)
+    return;
+
+  //sZONE(PaintJob);
+""",
+"""  // skip empty jobs
+  if(!job->VertexCount)
+    return;
+
+#if defined(__EMSCRIPTEN__)
+  {
+    static sInt obsPaintContext;
+    if(obsPaintContext++ < 512)
+    {
+      sInt originClass=-1,originResult=-1;
+      sInt originOp=kkMaterialPassOrigin(pass,originClass,originResult);
+      kkObsDrawContext(originOp,originClass,originResult,
+                       jobId,pass?pass->Usage:-1,pass?pass->Pass:-1,job->Program,
+                       job->VertexCount,job->IndexCount);
+    }
+  }
+#endif
+
+  //sZONE(PaintJob);
+""")
+
+# GPU bridge stores the engine-side provenance context and attaches it to the
+# next concrete WebGL geometry draws.
+replace_once("wasm/_start_wasm.cpp",
+"""static sInt cViewport, cClear, cSetup, cInstT, cInstP, cDraw, cDrawEmpty, cGeoEnd;
+#define KKTRACE(...) do { if(gTraceLeft>0) { gTraceLeft--; fprintf(stderr,"[kk] T " __VA_ARGS__); } } while(0)
+""",
+"""static sInt cViewport, cClear, cSetup, cInstT, cInstP, cDraw, cDrawEmpty, cGeoEnd;
+static sInt kkObsOriginOp=-1,kkObsOriginClass=-1,kkObsOriginResult=-1;
+static sInt kkObsJobId=-1,kkObsUsage=-1,kkObsRenderPass=-1,kkObsProgram=-1;
+static sInt kkObsVertices,kkObsIndices;
+extern "C" void kkObsDrawContext(sInt originOp,sInt originClass,sInt originResult,
+                                  sInt jobId,sInt usage,sInt renderPass,sInt program,
+                                  sInt vertices,sInt indices)
+{
+  kkObsOriginOp=originOp; kkObsOriginClass=originClass; kkObsOriginResult=originResult;
+  kkObsJobId=jobId; kkObsUsage=usage; kkObsRenderPass=renderPass; kkObsProgram=program;
+  kkObsVertices=vertices; kkObsIndices=indices;
+}
+#define KKTRACE(...) do { if(gTraceLeft>0) { gTraceLeft--; fprintf(stderr,"[kk] T " __VA_ARGS__); } } while(0)
+""")
+
+replace_once("wasm/_start_wasm.cpp",
+"""  cDraw++;
+  KKTRACE("draw h=%d mode=%x fvf=%d vc=%d ic=%d setup=%d | sten=%d func=%d ref=%d ops=%d/%d/%d two=%d ccw=%d/%d/%d cw=%x zw=%d zf=%d cull=%d blend=%d/%d/%d op=%d at=%d/%d/%d\\n",
+""",
+"""  cDraw++;
+  {
+    static sInt obsDraw;
+    if(obsDraw++ < 512)
+      fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"gpu.draw\\\",\\\"originOp\\\":%d,\\\"originClass\\\":%d,\\\"originResult\\\":%d,\\\"jobId\\\":%d,\\\"usage\\\":%d,\\\"renderPass\\\":%d,\\\"program\\\":%d,\\\"vertices\\\":%d,\\\"indices\\\":%d,\\\"geometryHandle\\\":%d,\\\"setup\\\":%d,\\\"renderTarget\\\":%d,\\\"viewport\\\":[%d,%d,%d,%d]}\\n",
+              kkObsOriginOp,kkObsOriginClass,kkObsOriginResult,kkObsJobId,kkObsUsage,kkObsRenderPass,kkObsProgram,
+              kkObsVertices,kkObsIndices,handle,CurrentSetupId,CurrentViewport.RenderTarget,
+              gVpRect[0],gVpRect[1],gVpRect[2],gVpRect[3]);
+  }
+  KKTRACE("draw h=%d mode=%x fvf=%d vc=%d ic=%d setup=%d | sten=%d func=%d ref=%d ops=%d/%d/%d two=%d ccw=%d/%d/%d cw=%x zw=%d zf=%d cull=%d blend=%d/%d/%d op=%d at=%d/%d/%d\\n",
+""")
+
 print("Krieger Total Control forensics patch: PASS")
