@@ -104,3 +104,34 @@ After a successful trace:
 ## World Server teaching bridge
 
 General principle: engine-owned observability must cross the WASM boundary through a stable read-only schema. The reusable World Server capability is a renderer/game-state Observatory adapter that separates semantic state, render-target state and presentation/UI state, preventing false PASS from overlays or shadow DOM state.
+
+## Implementation-ready owner boundary (source-verified)
+
+Verified against `MasonDye/kkrieger-wasm@3bf0ff017372e640e966c2785a4d95a998cec242`.
+
+The narrowest single read-only sampling boundary is `werkkzeug3_kkrieger/mainplayer.cpp:sAppHandler(sAPPCODE_PAINT)`. This frame already owns or can directly read all of the following without creating JS shadow state:
+
+- `Game->Player.CurrentWeapon`, `Game->Player.NextWeapon`, `Game->WeaponTimer` and `Game->WeaponEvent` after `Game->OnTick(...)`;
+- `Game->Switches[KGS_GAME]` and `Game->GetNewRoot()` / `Document->CurrentRoot` around root switching;
+- `sSystem->ConfigX/ConfigY` before the Emscripten 2:1 clamp;
+- the resulting `vp.Window` immediately after that clamp and before both `SetMasterViewport(vp)` calls;
+- `Environment->Aspect` immediately after the current hard-coded `2.0f` assignment.
+
+This is a stronger implementation boundary than sampling these values from unrelated browser callbacks: it captures semantic game state and presentation state in the same engine frame and preserves ordering evidence.
+
+### Required v1 snapshot ordering
+
+1. At entry to PAINT after timing is computed, increment a monotonic Observatory frame/sequence counter.
+2. After `Game->OnTick(Environment,max)`, sample weapon/game-owned state.
+3. After the Emscripten viewport clamp, sample `ConfigX/Y` and `vp.Window.{x0,y0,x1,y1}`.
+4. After `mode = Game->GetNewRoot()`, sample requested root plus `Document->CurrentRoot` before mutation; sample again after root-switch logic if it changes.
+5. After `Environment->Aspect = 2.0f`, sample effective aspect.
+6. Export only the latest stable value record through an Emscripten-only getter/copy function. Do not expose raw object pointers.
+
+### Source ownership facts
+
+`KKriegerGame` publicly owns `Player`, `Switches[KKRIEGER_SWITCHES]`, `WeaponEvent` and `WeaponTimer`; `KKriegerPlayer` publicly owns `CurrentWeapon` and `NextWeapon`. Therefore the v1 probe does not require invasive private-member changes or gameplay writes.
+
+### Remaining unknown before TESTED
+
+The exact render-target width/height/identity is **not** proven merely by `vp.Window` or the two `SetMasterViewport` calls. Keep those fields unknown until `RenderTargetManager_` ownership/storage is source-traced or runtime-exposed. Do not synthesize render-target dimensions from `vp.Window`.
