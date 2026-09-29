@@ -643,4 +643,88 @@ replace_once("kkriegergame.cpp",
 """)
 
 
+
+# Provenance bridge: reverse the KDoc runtime cache table so renderer-side
+# objects can name the exact compact-data operator that produced them.
+replace_once("kdoc.cpp",
+"""KObject *kkOpCache(sInt index)                            // debug: cached object of the index-th operator
+{
+  return (kkDoc && index >= 0 && index < kkDoc->Ops.Count) ? kkDoc->Ops[index].Cache : 0;
+}
+""",
+"""KObject *kkOpCache(sInt index)                            // debug: cached object of the index-th operator
+{
+  return (kkDoc && index >= 0 && index < kkDoc->Ops.Count) ? kkDoc->Ops[index].Cache : 0;
+}
+
+sInt kkCacheOrigin(KObject *object,sInt &classId,sInt &result)
+{
+  classId = -1;
+  result = -1;
+  if(!kkDoc || !object) return -1;
+  for(sInt i=0;i<kkDoc->Ops.Count;i++)
+  {
+    KOp &op = kkDoc->Ops[i];
+    if(op.Cache == object)
+    {
+      classId = kkClassIds[op.Command & 255];
+      result = op.Result;
+      return op.OpId;
+    }
+  }
+  return -1;
+}
+""")
+
+replace_once("engine.cpp",
+"""extern KObject *kkOpCache(sInt index);                    // kdoc.cpp: cached object of an operator
+""",
+"""extern KObject *kkOpCache(sInt index);                    // kdoc.cpp: cached object of an operator
+extern sInt kkCacheOrigin(KObject *object,sInt &classId,sInt &result);
+""")
+
+# Enrich mesh provenance with the exact KDoc operator when the generated mesh
+# itself is a cached operator result.
+replace_once("engine.cpp",
+"""      fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"geometry.mesh\\\",\\\"kind\\\":\\\"GenMesh\\\",\\\"sourceFaces\\\":%d,\\\"vertices\\\":%d,\\\"parts\\\":%d,\\\"materials\\\":%d,\\\"jobs\\\":%d,\\\"triangles\\\":%d,\\\"animated\\\":%d}\\n",
+              mesh->Face.Count,VertCount,PartCount,Mtrl.Count,Jobs.Count,indices/3,Animation?1:0);
+""",
+"""      sInt originClass=-1,originResult=-1;
+      sInt originOp=kkCacheOrigin(mesh,originClass,originResult);
+      fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"geometry.mesh\\\",\\\"kind\\\":\\\"GenMesh\\\",\\\"originOp\\\":%d,\\\"originClass\\\":%d,\\\"originResult\\\":%d,\\\"sourceFaces\\\":%d,\\\"vertices\\\":%d,\\\"parts\\\":%d,\\\"materials\\\":%d,\\\"jobs\\\":%d,\\\"triangles\\\":%d,\\\"animated\\\":%d}\\n",
+              originOp,originClass,originResult,mesh->Face.Count,VertCount,PartCount,Mtrl.Count,Jobs.Count,indices/3,Animation?1:0);
+""")
+
+replace_once("engine.cpp",
+"""      fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"geometry.mesh\\\",\\\"kind\\\":\\\"GenMinMesh\\\",\\\"sourceFaces\\\":%d,\\\"vertices\\\":%d,\\\"parts\\\":%d,\\\"materials\\\":%d,\\\"jobs\\\":%d,\\\"triangles\\\":%d,\\\"animated\\\":%d}\\n",
+              mesh->Faces.Count,VertCount,PartCount,Mtrl.Count,Jobs.Count,indices/3,Animation?1:0);
+""",
+"""      sInt originClass=-1,originResult=-1;
+      sInt originOp=kkCacheOrigin(mesh,originClass,originResult);
+      fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"geometry.mesh\\\",\\\"kind\\\":\\\"GenMinMesh\\\",\\\"originOp\\\":%d,\\\"originClass\\\":%d,\\\"originResult\\\":%d,\\\"sourceFaces\\\":%d,\\\"vertices\\\":%d,\\\"parts\\\":%d,\\\"materials\\\":%d,\\\"jobs\\\":%d,\\\"triangles\\\":%d,\\\"animated\\\":%d}\\n",
+              originOp,originClass,originResult,mesh->Faces.Count,VertCount,PartCount,Mtrl.Count,Jobs.Count,indices/3,Animation?1:0);
+""")
+
+# During the first observed renderer frame connect the selected material
+# pointer back to its compact-data operator too.
+replace_once("engine.cpp",
+"""      GenMaterialPass *pass = &meshMat->Material->Passes[j];
+        sInt usage = pass->Usage;
+""",
+"""      GenMaterialPass *pass = &meshMat->Material->Passes[j];
+#if defined(__EMSCRIPTEN__)
+      {
+        static sInt obsMaterialJob;
+        if(obsMaterialJob++ < 256)
+        {
+          sInt originClass=-1,originResult=-1;
+          sInt originOp=kkCacheOrigin(meshMat->Material,originClass,originResult);
+          fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"material.job\\\",\\\"originOp\\\":%d,\\\"originClass\\\":%d,\\\"originResult\\\":%d,\\\"meshMaterialIndex\\\":%d,\\\"passIndex\\\":%d,\\\"usage\\\":%d,\\\"program\\\":%d,\\\"renderPass\\\":%d}\\n",
+                  originOp,originClass,originResult,i,j,pass->Usage,pass->Program,pass->Pass);
+        }
+      }
+#endif
+        sInt usage = pass->Usage;
+""")
+
 print("Krieger Total Control forensics patch: PASS")
