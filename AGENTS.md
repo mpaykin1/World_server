@@ -168,6 +168,7 @@ For every task, patch, repair, upgrade, deployment or quality-improvement run:
 This rule applies to every current and future AI agent working on `World_server`.
 
 - **Browser/cloud first.** If a task can be done in GitHub, CI, Vercel, Google AI Studio, browser ChatGPT, cloud Codex, Claude/cloud agents, or another existing remote system, do it there instead of on the user's PC.
+- **Agent Zero is a low-impact secondary helper/reviewer.** Give it direct access to the canonical checkout rather than cloning another repository. Routine/scheduled reviews are read-only. Before invoking local Agent Zero/Ollama work, require free RAM >= 3.5 GB, CPU < 75%, and free C: space >= 20 GB; otherwise skip the local AI step and unload only World Server-owned Ollama models. Keep Ollama to one loaded model and one parallel request whenever possible. Any Agent Zero code edit still requires its own `ai/agent-zero/<task>` branch, tests, push and PR.
 - Local/Desktop execution is allowed only for steps that cannot reasonably be completed in browser/cloud, or for the smallest safe bridge needed to publish work to the cloud.
 - Desktop Codex/Claude/OpenCode should act primarily as **coordinator/orchestrator**: commit/push minimal bridge changes, assign work to available cloud/browser agents, collect results, review, and integrate.
 - Reuse `scripts/master-coordinator.cjs`, the existing collective-brain/lease/reporting systems, GitHub and existing cloud infrastructure. Do not create a second orchestration stack.
