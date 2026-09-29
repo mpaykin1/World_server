@@ -64,7 +64,9 @@ const fs = require('fs');
     startOverlayPresent: Boolean(document.querySelector('#start')),
     canvasWidth: Module?.canvas?.width || 0,
     canvasHeight: Module?.canvas?.height || 0,
-    recentLog: Array.isArray(window.__kkLog) ? window.__kkLog.slice(-40) : []
+    generationFinished: Array.isArray(window.__kkLog) && window.__kkLog.some((line) => /generation finished in/i.test(line)),
+    playableRootSeen: Array.isArray(window.__kkLog) && window.__kkLog.some((line) => /CurrentRoot=2|paint: CurrentRoot=2/i.test(line)),
+    recentLog: Array.isArray(window.__kkLog) ? window.__kkLog.slice(-60) : []
   }));
 
   await browser.close();
@@ -72,12 +74,13 @@ const fs = require('fs');
   const result = {
     schema: 'kkrieger-browser-smoke-v1',
     url,
-    generationFinished: state.recentLog.some((line) => /generation finished in/i.test(line)),
+    generationFinished: state.generationFinished,
+    playableRootSeen: state.playableRootSeen,
     nonBlack,
     metrics,
     state,
     severeErrors: severe,
-    pass: state.recentLog.some((line) => /generation finished in/i.test(line)) && nonBlack && severe.length === 0 && !state.startOverlayPresent && state.canvasWidth > 0 && state.canvasHeight > 0
+    pass: state.generationFinished && state.playableRootSeen && nonBlack && severe.length === 0 && !state.startOverlayPresent && state.canvasWidth > 0 && state.canvasHeight > 0
   };
   fs.writeFileSync(shot.replace(/\.png$/i, '.json'), JSON.stringify(result, null, 2) + '\n');
   console.log(JSON.stringify(result, null, 2));
