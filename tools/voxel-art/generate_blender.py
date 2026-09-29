@@ -78,7 +78,8 @@ def coarsen_voxels(recipe: Recipe, factor: int):
         if current is None or rank < current[0]:
             bins[key] = (rank, value)
     return {key: packed[1] for key, packed in bins.items()}
-\ndef _subset(recipe: Recipe, include=None, exclude=None):
+
+def _subset(recipe: Recipe, include=None, exclude=None):
     include = set(include or ())
     exclude = set(exclude or ())
     out = {}
