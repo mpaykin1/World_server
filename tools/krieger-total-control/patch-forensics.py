@@ -630,7 +630,7 @@ replace_once("kkriegergame.cpp",
       {
         KKriegerMonster *m = Monsters[mi];
         fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"creature.sample\\\",\\\"index\\\":%d,\\\"type\\\":%d,\\\"state\\\":%d,\\\"life\\\":%d,\\\"lifeMax\\\":%d,\\\"armor\\\":%d,\\\"weaponKind\\\":%d,\\\"flags\\\":%d,\\\"pos\\\":[%.5f,%.5f,%.5f]}\\n",
-                mi,m->GetType(),m->State,m->Life,m->LifeMax,m->Armor,m->WeaponKind,m->Flags,
+                mi,m->WeaponKind,m->State,m->Life,m->LifeMax,m->Armor,m->WeaponKind,m->Flags,
                 m->Collider.Pos.x,m->Collider.Pos.y,m->Collider.Pos.z);
       }
     }
