@@ -19,7 +19,7 @@ const ROLE_PRIORITY = Object.freeze({
   roof: 20,
   spire: 20,
   wall: 10,
-  window: 5,
+  window: 15,
 });
 
 function addVoxel(map, x, y, z, blockType, role, structureId) {
