@@ -201,3 +201,26 @@ test("full Total Control analysis keeps compact-data and live-game channels sepa
   assert.equal(a.game.playerWeapon,1);
   assert.equal(a.game.playerNextWeapon,2);
 });
+
+
+test("asset Observatory keeps exact KDoc operator provenance separate from geometry metrics", () => {
+  const a=analyzeAssets([
+    {stage:"geometry.mesh",kind:"GenMesh",originOp:317,originClass:0x91,originResult:3,vertices:120,triangles:80,animated:0},
+    {stage:"material.pass",usage:4,program:1},
+    {stage:"material.job",originOp:88,originClass:0x42,originResult:5,usage:4,program:1,renderPass:7},
+  ]);
+  assert.deepEqual(a.meshOrigins,[{kind:"GenMesh",op:317,classId:0x91,result:3,vertices:120,triangles:80}]);
+  assert.deepEqual(a.materialOrigins,[{op:88,classId:0x42,result:5,usage:4,program:1,renderPass:7}]);
+  assert.equal(a.materialJobSamples,1);
+});
+
+test("unowned/transient runtime objects do not invent KDoc provenance", () => {
+  const a=analyzeAssets([
+    {stage:"geometry.mesh",kind:"GenMinMesh",originOp:-1,originClass:-1,originResult:-1,vertices:60,triangles:20,animated:1},
+    {stage:"material.job",originOp:-1,originClass:-1,originResult:-1,usage:0,program:1,renderPass:0},
+  ]);
+  assert.equal(a.meshOrigins.length,0);
+  assert.equal(a.materialOrigins.length,0);
+  assert.equal(a.meshSamples,1);
+  assert.equal(a.materialJobSamples,1);
+});
