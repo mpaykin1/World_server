@@ -1,8 +1,13 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { selectedModels, parseVerdict, aggregate, preflightPatch, reviewPatch, requestReview } =
-  require('../scripts/independent-review-gate.cjs');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
+const cp = require('node:child_process');
+const { selectedModels, parseVerdict, aggregate, preflightPatch, reviewPatch, requestReview,
+  readPatch, unreadablePatchReport, PatchReadError, MAX_PATCH_BYTES, MAX_DIFF_READ_BYTES,
+  UNREADABLE_PATCH_BLOCKER } = require('../scripts/independent-review-gate.cjs');
 
 const candidates = { data: [
   { id: 'qwen/qwen3-coder:free', pricing: { prompt: '0', completion: '0' } },
@@ -269,4 +274,71 @@ test('long evidence is safely truncated but never erased or mistaken for missing
   assert.equal(result.findings[0].reproduction.length, 1200);
   assert.match(result.findings[0].evidence, /^E+$/);
   assert.match(result.findings[0].reproduction, /^R+$/);
+});
+
+// Regression: a candidate diff larger than the bounded read budget used to throw
+// `spawnSync git ENOBUFS` out of the gate. main() then exited 2 with no report
+// file, so the workflow published INCONCLUSIVE with no recorded reason and the
+// whole independent-review job FAILED on an infrastructure error instead of a
+// defensible fail-closed verdict.
+test('an over-budget diff fails closed with a recorded reason, never a crash', () => {
+  assert.throws(() => readPatch('not-a-sha', 'b'.repeat(40)), /40-character/);
+
+  // Real repository pair whose diff exceeds the read ceiling, built in a temp
+  // directory so the failure is reproduced deterministically and offline.
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'rev-gate-'));
+  const git = (...args) => cp.execFileSync('git', args, { cwd: dir, stdio: 'ignore' });
+  try {
+    git('init', '-q');
+    git('config', 'user.email', 'gate@test.invalid');
+    git('config', 'user.name', 'gate');
+    fs.writeFileSync(path.join(dir, 'seed.txt'), 'seed\n');
+    git('add', '-A');
+    git('commit', '-q', '-m', 'seed');
+    const base = cp.execFileSync('git', ['rev-parse', 'HEAD'], { cwd: dir, encoding: 'utf8' }).trim();
+    // Vendored binary-style asset: the exact shape that broke the real gate.
+    fs.writeFileSync(path.join(dir, 'blob.bin'), Buffer.alloc(MAX_DIFF_READ_BYTES * 2, 7));
+    git('add', '-A');
+    git('commit', '-q', '-m', 'large asset');
+    const head = cp.execFileSync('git', ['rev-parse', 'HEAD'], { cwd: dir, encoding: 'utf8' }).trim();
+
+    // The raw git read genuinely overflows; the gate must translate that into a
+    // recorded fail-closed blocker rather than an unhandled ENOBUFS throw.
+    assert.throws(() =>
+      cp.execFileSync('git', ['diff', '--no-ext-diff', '--no-color', '--binary',
+        '--unified=8', base + '...' + head, '--'],
+        { cwd: dir, encoding: 'utf8', maxBuffer: MAX_DIFF_READ_BYTES }), /ENOBUFS/);
+
+    assert.throws(() => readPatch(base, head), err => {
+      assert.ok(err instanceof PatchReadError, 'expected PatchReadError, got ' + err.constructor.name);
+      assert.equal(err.message, UNREADABLE_PATCH_BLOCKER);
+      return true;
+    });
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('an unreadable diff still writes auditable fail-closed evidence', () => {
+  const report = unreadablePatchReport('a'.repeat(40), 'b'.repeat(40), UNREADABLE_PATCH_BLOCKER);
+  assert.equal(report.verdict, 'INCONCLUSIVE');
+  assert.equal(report.reviewers.length, 0);
+  assert.equal(report.requiresMaintainerDecision, true);
+  assert.equal(report.diffSha256, null);
+  assert.deepEqual(report.blockers, [UNREADABLE_PATCH_BLOCKER]);
+  // The gate must never certify a patch it could not fully read, and must never
+  // publish a fabricated content hash for content it never obtained.
+  assert.notEqual(report.verdict, 'PASS');
+});
+
+test('the read ceiling stays above the review budget and is not attacker-shrunk', () => {
+  // preflightPatch must still reject a patch that read fine but is too large to
+  // send, and the read ceiling must remain a superset of that budget so an
+  // in-budget patch is never misreported as unreadable.
+  assert.ok(MAX_DIFF_READ_BYTES > MAX_PATCH_BYTES);
+  assert.equal(preflightPatch('x'.repeat(MAX_PATCH_BYTES + 1)),
+    'Patch exceeds review budget; full human review required');
+  assert.equal(preflightPatch('x'.repeat(MAX_DIFF_READ_BYTES - 1)),
+    'Patch exceeds review budget; full human review required');
+  assert.equal(preflightPatch('x'.repeat(MAX_PATCH_BYTES)), null);
 });

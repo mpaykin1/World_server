@@ -29,6 +29,13 @@ const CANDIDATES = [
 ];
 const SHA = /^[a-f0-9]{40}$/i;
 const MAX_PATCH_BYTES = 96000;
+// Hard ceiling for the bounded git read. A candidate diff larger than this
+// (vendored binaries, generated assets) must fail closed, never be truncated
+// into a partial patch and never reach an external reviewer model.
+const MAX_DIFF_READ_BYTES = MAX_PATCH_BYTES * 3;
+const UNREADABLE_PATCH_BLOCKER =
+  'Candidate diff could not be read within the independent review budget; full human review required';
+class PatchReadError extends Error { }
 const SYSTEM_PROMPT = [
   'You are an independent, adversarial code reviewer. Your task is to',
   'attempt to falsify the claimed fix and find real, reproducible defects.',
@@ -257,9 +264,13 @@ async function requestReview(model, patch, metadata, key, {
 }
 function readPatch(base, head) {
   if (!SHA.test(base) || !SHA.test(head)) throw new Error('Expected exact 40-character commit SHAs');
-  return cp.execFileSync('git', ['diff', '--no-ext-diff', '--no-color', '--binary',
+  // A truncated diff would hide changed lines and could certify an unseen patch,
+  // so an over-budget read must fail closed rather than return partial content.
+  const result = cp.spawnSync('git', ['diff', '--no-ext-diff', '--no-color', '--binary',
     '--unified=8', base + '...' + head, '--'], { encoding: 'utf8',
-      maxBuffer: MAX_PATCH_BYTES * 3 });
+      maxBuffer: MAX_DIFF_READ_BYTES });
+  if (result.error || result.status !== 0) throw new PatchReadError(UNREADABLE_PATCH_BLOCKER);
+  return result.stdout;
 }
 async function reviewPatch({ patch, base, head, key, builderModel = '',
   getCatalog = getJson, review = requestReview, cloudflare = null,
@@ -346,21 +357,37 @@ async function reviewPatch({ patch, base, head, key, builderModel = '',
   }
   return recordDisagreement(report);
 }
+// An unreadable or over-budget diff must still produce auditable evidence:
+// the workflow publishes its verdict from this file, so crashing without it
+// would leave the gate reporting INCONCLUSIVE with no reason recorded.
+function unreadablePatchReport(base, head, reason) {
+  return {
+    schemaVersion: 1, generatedAt: new Date().toISOString(), base, head,
+    diffSha256: null, diffBytes: null, verdict: 'INCONCLUSIVE',
+    reviewers: [], blockers: [reason], providerIssues: [], requiresMaintainerDecision: true
+  };
+}
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const base = args.base || '';
   const head = args.head || '';
   const output = args.output || 'INDEPENDENT_REVIEW_REPORT.json';
-  const patch = args['diff-file'] ? fs.readFileSync(args['diff-file'], 'utf8') : readPatch(base, head);
-  const report = await reviewPatch({
-    patch, base, head, key: process.env.WORLD_REVIEW_KEY || '',
-    builderModel: process.env.WORLD_BUILDER_MODEL || 'qwen/qwen3-coder:free',
-    cloudflare: {
-      accountId: process.env.CLOUDFLARE_ACCOUNT_ID || '',
-      token: process.env.CLOUDFLARE_API_TOKEN || '',
-      freePlanConfirmed: process.env.WORLD_CF_WORKERS_FREE_CONFIRMED === 'true'
-    }
-  });
+  let report;
+  try {
+    const patch = args['diff-file'] ? fs.readFileSync(args['diff-file'], 'utf8') : readPatch(base, head);
+    report = await reviewPatch({
+      patch, base, head, key: process.env.WORLD_REVIEW_KEY || '',
+      builderModel: process.env.WORLD_BUILDER_MODEL || 'qwen/qwen3-coder:free',
+      cloudflare: {
+        accountId: process.env.CLOUDFLARE_ACCOUNT_ID || '',
+        token: process.env.CLOUDFLARE_API_TOKEN || '',
+        freePlanConfirmed: process.env.WORLD_CF_WORKERS_FREE_CONFIRMED === 'true'
+      }
+    });
+  } catch (err) {
+    if (!(err instanceof PatchReadError)) throw err;
+    report = unreadablePatchReport(base, head, err.message);
+  }
   fs.writeFileSync(output, JSON.stringify(report, null, 2) + '\n');
   console.log('[INDEPENDENT_REVIEW] verdict=' + report.verdict +
     ' reviewers=' + report.reviewers.map(x => x.family + ':' + x.verdict).join(',') +
@@ -368,4 +395,4 @@ async function main() {
   process.exitCode = report.verdict === 'PASS' ? 0 : 2;
 }
 if (require.main === module) main().catch(err => { console.error('[INDEPENDENT_REVIEW] ' + err.message); process.exitCode = 2; });
-module.exports = { selectedModels, parseVerdict, aggregate, preflightPatch, reviewPatch, requestReview, readPatch };
+module.exports = { selectedModels, parseVerdict, aggregate, preflightPatch, reviewPatch, requestReview, readPatch, unreadablePatchReport, PatchReadError, MAX_PATCH_BYTES, MAX_DIFF_READ_BYTES, UNREADABLE_PATCH_BLOCKER };
