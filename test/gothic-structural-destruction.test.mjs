@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildGothicTower } from '../shared/gothic-architecture.mjs';
+import { buildGothicTower, buildGothicViaduct } from '../shared/gothic-architecture.mjs';
 import {
   analyzeStructuralSupport,
   applyCannonImpact,
@@ -140,4 +140,35 @@ test('missed cannon shot leaves the structure intact and creates no collapse bod
   assert.equal(result.damage,null);
   assert.equal(result.collapse.bodies.length,0);
   assert.equal(result.analysis.counts.unsupported,0);
+});
+
+
+test('gothic viaduct stays stable with all piers and loses the unsupported span after one pier is removed',()=>{
+  const viaduct=buildGothicViaduct({seed:55,spanCount:4,pierSpacing:8,deckY:9});
+  const options={enableSpanSupport:true,supportDistanceBudget:32,maxBodies:12,maxClusterVoxels:5000};
+
+  const baseline=analyzeStructuralSupport(viaduct.voxels,options);
+  assert.equal(baseline.counts.unsupported,0);
+  assert.equal(baseline.counts['topple-risk'],0);
+  assert.equal(baseline.spanUnsupportedVoxels,0);
+
+  const middle=viaduct.pierXs[Math.floor(viaduct.pierXs.length/2)];
+  const damaged=viaduct.voxels.filter(v=>!(v.x===middle&&(v.role==='foundation'||v.role==='pier')));
+  const after=analyzeStructuralSupport(damaged,options);
+  assert.equal(after.counts.unsupported,0,'bridge remains globally connected to outer foundations');
+  assert.ok(after.spanUnsupportedVoxels>0,'long unsupported span must be detected despite connectivity');
+  assert.ok(after.spanRegions.length>=1);
+
+  const plan=planCollapseBodies(after,{...options,impactDirection:{x:1,y:0,z:0}});
+  assert.ok(plan.bodies.some(b=>b.status==='unsupported-span'));
+  assert.ok(plan.bodies.some(b=>b.voxelKeys.some(k=>k.startsWith(`${middle},`)));
+});
+
+test('span support is opt-in so ordinary voxel structures keep pure connectivity semantics',()=>{
+  const viaduct=buildGothicViaduct({seed:56,spanCount:4,pierSpacing:8,deckY:9});
+  const middle=viaduct.pierXs[Math.floor(viaduct.pierXs.length/2)];
+  const damaged=viaduct.voxels.filter(v=>!(v.x===middle&&(v.role==='foundation'||v.role==='pier')));
+  const plain=analyzeStructuralSupport(damaged);
+  assert.equal(plain.spanUnsupportedVoxels,0);
+  assert.equal(plain.spanRegions.length,0);
 });
