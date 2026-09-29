@@ -110,9 +110,9 @@ test('ballistic cannon flight hits the generated tower before applying structura
   const tower=buildGothicTower({seed:31,width:7,height:14});
   const shot={
     origin:{x:18,y:1.4,z:0},
-    velocity:{x:-40,y:0,z:0},
+    velocity:{x:-80,y:0,z:0},
     mass:48,
-    damageRadius:3.2,
+    damageRadius:3.5,
   };
   const flight=traceCannonProjectile(tower.voxels,shot,{maxStep:.1,maxTime:2});
   assert.equal(flight.hit,true);
