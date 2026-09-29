@@ -19,6 +19,7 @@ export const FORENSICS_STAGES = Object.freeze([
   "renderer.frame",
   "scene.portals",
   "gpu.frame",
+  "gpu.draw",
   "data.document",
   "game.state",
   "creature.sample",
@@ -153,6 +154,7 @@ export function analyzeScene(events = []) {
 export function analyzeRenderer(events = []) {
   const renderer = events.filter(x => x?.stage === "renderer.frame").at(-1) || null;
   const gpu = events.filter(x => x?.stage === "gpu.frame").at(-1) || null;
+  const draws = events.filter(x => x?.stage === "gpu.draw");
   const cpuHasJobs = !!(renderer && Number(renderer.paintJobs || 0) > 0);
   const gpuHasDraws = !!(gpu && Number(gpu.drawCalls || 0) > 0);
   return {
@@ -161,6 +163,14 @@ export function analyzeRenderer(events = []) {
     cpuHasJobs,
     gpuHasDraws,
     cpuToGpuObserved:cpuHasJobs && gpuHasDraws,
+    drawSamples:draws.length,
+    drawsWithOperator:draws.filter(x=>Number.isInteger(x.originOp) && x.originOp>=0).length,
+    drawProvenance:draws.filter(x=>Number.isInteger(x.originOp) && x.originOp>=0).slice(-64).map(x=>({
+      op:x.originOp,classId:x.originClass,result:x.originResult,
+      jobId:x.jobId,usage:x.usage,renderPass:x.renderPass,program:x.program,
+      vertices:x.vertices,indices:x.indices,setup:x.setup,
+      renderTarget:x.renderTarget,viewport:x.viewport
+    })),
   };
 }
 
