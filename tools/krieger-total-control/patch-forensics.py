@@ -205,6 +205,18 @@ replace_once("wasm/shell.html",
 # Observatory controls call existing renderer debug switches directly. They are
 # inert until a human presses a debug button and do not change release defaults.
 replace_once("wasm/_start_wasm.cpp",
+"""extern sInt kkExecTrace;                                  // kdoc.cpp: one-frame op trace
+extern sInt kkPaintAllSectors;                            // engine.cpp: portal visibility off
+""",
+"""extern sInt kkExecTrace;                                  // kdoc.cpp: one-frame op trace
+extern sInt kkPaintAllSectors;                            // engine.cpp: portal visibility off
+extern sInt kkUsageFilter;                                // engine.cpp: render pass filter
+extern sInt kkLightDebugView;                             // wasm/render2004.cpp: lighting term view
+extern sInt kkSwizzleOutput;                              // wasm/render2004.cpp: shader output debug
+extern sInt kkCycleShadows();                             // genoverlay.cpp: shadow/light mode
+""")
+
+replace_once("wasm/_start_wasm.cpp",
 """static sInt kkCullDebug = 0;                     // debug (J): 1 culling off, 2 inverted winding
 static void ApplyCull()
 """,
@@ -218,21 +230,16 @@ extern "C" EMSCRIPTEN_KEEPALIVE int kkObsCommand(int code)
   case 2: kkDumpJobs = 1; return 1;
   case 3: kkNoFrustumCull = !kkNoFrustumCull; return kkNoFrustumCull;
   case 4: kkOnlyMtrl = (kkOnlyMtrl + 1) % 17; return kkOnlyMtrl;
-  case 5:
-    { extern sInt kkUsageFilter; kkUsageFilter = (kkUsageFilter + 1) % 3; return kkUsageFilter; }
-  case 6:
-    { extern sInt kkCycleShadows(); return kkCycleShadows(); }
-  case 7:
-    { extern sInt kkPaintAllSectors; kkPaintAllSectors = !kkPaintAllSectors; return kkPaintAllSectors; }
-  case 8:
-    { extern sInt kkLightDebugView; kkLightDebugView = (kkLightDebugView + 1) % 7; return kkLightDebugView; }
+  case 5: kkUsageFilter = (kkUsageFilter + 1) % 3; return kkUsageFilter;
+  case 6: return kkCycleShadows();
+  case 7: kkPaintAllSectors = !kkPaintAllSectors; return kkPaintAllSectors;
+  case 8: kkLightDebugView = (kkLightDebugView + 1) % 7; return kkLightDebugView;
   case 9: kkShowShadowVolumes = !kkShowShadowVolumes; return kkShowShadowVolumes;
   case 10: kkAlphaTestOff = !kkAlphaTestOff; return kkAlphaTestOff;
   case 11: kkCullDebug = (kkCullDebug + 1) % 3; return kkCullDebug;
   case 12: kkLightTestOff = (kkLightTestOff + 1) % 4; return kkLightTestOff;
   case 13: kkStencilMarkVolumes = !kkStencilMarkVolumes; return kkStencilMarkVolumes;
-  case 14:
-    { extern sInt kkSwizzleOutput; kkSwizzleOutput = !kkSwizzleOutput; return kkSwizzleOutput; }
+  case 14: kkSwizzleOutput = !kkSwizzleOutput; return kkSwizzleOutput;
   default: return -1;
   }
 }
