@@ -123,10 +123,11 @@ function patchWatercolorMaterial(THREE,material,style,seed,states,washTexture){
     shader.vertexShader=shader.vertexShader.replace('#include <defaultnormal_vertex>','#include <defaultnormal_vertex>\nvWcNormal=normalize(normalMatrix*objectNormal);');
     shader.fragmentShader=shader.fragmentShader.replace('#include <common>',`#include <common>\nvarying vec3 vWcWorld;\nvarying vec3 vWcNormal;\nuniform float uWcTime,uWcSeed,uWcWash,uWcGran,uWcBleed,uWcQuality,uWcPool,uWcPaperGap,uWcPaintedLight;\nuniform vec3 uWcPaper,uWcInk,uWcWashColor;\nfloat wcHash(vec3 p){p=fract(p*.1031+uWcSeed);p+=dot(p,p.yzx+33.33);return fract((p.x+p.y)*p.z);}`);
     const needle='#include <color_fragment>';
-    if(shader.fragmentShader.includes(needle))shader.fragmentShader=shader.fragmentShader.replace(needle,`${needle}\nfloat wcFlow1=sin(dot(vWcWorld,vec3(1.73,2.11,.87))+uWcSeed*19.0);\nfloat wcFlow2=sin(dot(vWcWorld,vec3(-2.37,.91,1.41))+uWcSeed*11.0);\nfloat wcFlow3=sin(dot(vWcWorld,vec3(.63,-1.57,2.83))+uWcSeed*7.0);\nfloat wcGrain=sin(dot(vWcWorld,vec3(7.7,6.3,8.9))+uWcSeed*29.0)*.5+.5;\nfloat wcFlow=(wcFlow1+wcFlow2*.72+wcFlow3*.48)/2.2;\nvec3 wcN=normalize(vWcNormal);\nfloat wcRim=pow(1.0-clamp(abs(wcN.z),0.0,1.0),1.65);\nfloat wcDown=smoothstep(.12,.92,1.0-max(wcN.y,0.0));\nfloat wcPool=wcRim*uWcPool+wcDown*uWcPool*.32;\nfloat wcGap=smoothstep(.46,.95,wcFlow*.5+.5+(wcGrain-.5)*.30)*uWcPaperGap;\nfloat wcDensity=clamp(uWcWash+wcFlow*uWcGran*.62+(wcGrain-.5)*uWcBleed*.34+wcPool-wcGap,.10,.98);\nvec3 wcPigment=mix(uWcWashColor,diffuseColor.rgb,.42);\nfloat wcLight=.70+.30*(wcN.y*.5+.5);\nvec3 wcPaint=mix(uWcPaper,wcPigment,wcDensity);\nwcPaint=mix(wcPaint,wcPaint*wcLight,uWcPaintedLight);\ndiffuseColor.rgb=wcPaint;`);
+    if(shader.fragmentShader.includes(needle))shader.fragmentShader=shader.fragmentShader.replace(needle,`${needle}\nfloat wcFlow1=sin(dot(vWcWorld,vec3(1.73,2.11,.87))+uWcSeed*19.0);\nfloat wcFlow2=sin(dot(vWcWorld,vec3(-2.37,.91,1.41))+uWcSeed*11.0);\nfloat wcFlow3=sin(dot(vWcWorld,vec3(.63,-1.57,2.83))+uWcSeed*7.0);\nfloat wcGrain=sin(dot(vWcWorld,vec3(7.7,6.3,8.9))+uWcSeed*29.0)*.5+.5;\nfloat wcFlow=(wcFlow1+wcFlow2*.72+wcFlow3*.48)/2.2;\nvec3 wcN=normalize(vWcNormal);\nfloat wcRim=pow(1.0-clamp(abs(wcN.z),0.0,1.0),1.65);\nfloat wcDown=smoothstep(.12,.92,1.0-max(wcN.y,0.0));\nfloat wcPool=wcRim*uWcPool+wcDown*uWcPool*.32;\nfloat wcGap=smoothstep(.46,.95,wcFlow*.5+.5+(wcGrain-.5)*.30)*uWcPaperGap;\nfloat wcDensity=clamp(uWcWash+wcFlow*uWcGran*.62+(wcGrain-.5)*uWcBleed*.34+wcPool-wcGap,.10,.98);\nvec3 wcPigment=mix(uWcWashColor,diffuseColor.rgb,.42);\nfloat wcLight=.70+.30*(wcN.y*.5+.5);\nvec3 wcPaint=mix(uWcPaper,wcPigment,wcDensity);\nwcPaint=mix(wcPaint,wcPaint*wcLight,(1.0-uWcPaintedLight)*.35);\ndiffuseColor.rgb=wcPaint;`);
+    if(shader.fragmentShader.includes('#include <opaque_fragment>'))shader.fragmentShader=shader.fragmentShader.replace('#include <opaque_fragment>','outgoingLight=mix(outgoingLight,diffuseColor.rgb,uWcPaintedLight);\n#include <opaque_fragment>');
   };
   m.customProgramCacheKey=()=>`${previousKey?.()||''}|living-watercolor-3d:${state.seed}:${style.washOpacity}`;
-  if(!m.map&&washTexture)m.map=washTexture;m.roughness=Math.max(Number(m.roughness??.85),.92);m.metalness=Math.min(Number(m.metalness??0),.03);m.needsUpdate=true;
+  m.roughness=Math.max(Number(m.roughness??.85),.92);m.metalness=Math.min(Number(m.metalness??0),.03);m.needsUpdate=true;
   return m;
 }
 function addInkShell(THREE,mesh,style,seed,outlineStates){
@@ -147,34 +148,99 @@ function addInkShell(THREE,mesh,style,seed,outlineStates){
   return shells;
 }
 
-function createPaperCompositor(sourceCanvas,style,getQuality){
+function hexRgb(hex){
+  const n=parseInt(String(hex||'#000000').slice(1),16);
+  return[(n>>16)&255,(n>>8)&255,n&255];
+}
+function createPaperCompositor(sourceCanvas,style,getQuality,{replaceSource=false}={}){
   if(typeof document==='undefined'||!sourceCanvas?.parentNode)return null;
-  const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');
-  if(!ctx)return null;
+  const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d',{alpha:false});
+  const work=document.createElement('canvas'),wctx=work.getContext('2d',{willReadFrequently:true});
+  const paint=document.createElement('canvas'),pctx=paint.getContext('2d');
+  const maskCanvas=document.createElement('canvas'),mctx=maskCanvas.getContext('2d');
+  const blobs=document.createElement('canvas'),bctx=blobs.getContext('2d');
+  if(!ctx||!wctx||!pctx||!mctx||!bctx)return null;
   canvas.dataset.livingWatercolorCompositor='true';
-  Object.assign(canvas.style,{position:'fixed',inset:'0',width:'100vw',height:'100vh',pointerEvents:'none',zIndex:'1',mixBlendMode:'multiply'});
+  Object.assign(canvas.style,{position:'fixed',inset:'0',width:'100vw',height:'100vh',pointerEvents:'none',zIndex:'1',mixBlendMode:'normal'});
   sourceCanvas.parentNode.insertBefore(canvas,sourceCanvas.nextSibling);
-  let w=0,h=0,dpr=1;
+  const oldOpacity=sourceCanvas.style.opacity;if(replaceSource)sourceCanvas.style.opacity='0';
+  let w=0,h=0,cw=0,ch=0,lastPresent=-1,out=null,lums=null,washField=null,maskImage=null;
+  const paper=hexRgb(style.paperColor),pigment=hexRgb(style.washColor),ink=hexRgb(style.inkColor);
+  const paperL=paper[0]*.2126+paper[1]*.7152+paper[2]*.0722,seed=style.seed|0;
+  function buildWashField(){
+    washField=new Float32Array(cw*ch);washField.fill(.48);
+    for(let k=0;k<22;k++){
+      const cx=hash01(k,3,7,seed)*cw,cy=hash01(k,5,11,seed)*ch;
+      const rx=(.07+hash01(k,13,17,seed)*.22)*cw,ry=(.05+hash01(k,19,23,seed)*.18)*ch;
+      const amp=(hash01(k,29,31,seed)-.42)*.62;
+      const x0=Math.max(0,Math.floor(cx-rx*1.15)),x1=Math.min(cw-1,Math.ceil(cx+rx*1.15));
+      const y0=Math.max(0,Math.floor(cy-ry*1.15)),y1=Math.min(ch-1,Math.ceil(cy+ry*1.15));
+      for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){
+        const dx=(x-cx)/rx,dy=(y-cy)/ry,d=dx*dx+dy*dy;if(d>=1.25)continue;
+        washField[y*cw+x]+=amp*Math.pow(Math.max(0,1-d/1.25),2);
+      }
+    }
+    let lo=Infinity,hi=-Infinity;for(const v of washField){if(v<lo)lo=v;if(v>hi)hi=v;}
+    const span=Math.max(.001,hi-lo);for(let i=0;i<washField.length;i++)washField[i]=clamp((washField[i]-lo)/span,0,1);
+  }
   function resize(){
-    const nw=innerWidth||1,nh=innerHeight||1,nd=Math.min(devicePixelRatio||1,1.5);
-    if(nw===w&&nh===h&&nd===dpr)return;w=nw;h=nh;dpr=nd;canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
+    const nw=innerWidth||1,nh=innerHeight||1,q=clamp(getQuality?.()??1,.35,1);
+    const scale=.40+.20*q,ncw=Math.max(128,Math.round(nw*scale)),nch=Math.max(128,Math.round(nh*scale));
+    if(nw===w&&nh===h&&ncw===cw&&nch===ch)return;
+    w=nw;h=nh;cw=ncw;ch=nch;canvas.width=w;canvas.height=h;work.width=paint.width=maskCanvas.width=blobs.width=cw;work.height=paint.height=maskCanvas.height=blobs.height=ch;
+    out=wctx.createImageData(cw,ch);maskImage=mctx.createImageData(cw,ch);lums=new Float32Array(cw*ch);ctx.imageSmoothingEnabled=true;buildWashField();
   }
   function present(timeMs=performance.now()){
-    resize();ctx.clearRect(0,0,w,h);
-    const q=clamp(getQuality?.()??1,.35,1),passes=q>.78?4:q>.55?3:2;
-    ctx.save();ctx.globalCompositeOperation='source-over';
+    resize();const q=clamp(getQuality?.()??1,.35,1),minDelta=1000/(18+10*q);
+    if(lastPresent>=0&&timeMs-lastPresent<minDelta)return;lastPresent=timeMs;
+    wctx.clearRect(0,0,cw,ch);wctx.drawImage(sourceCanvas,0,0,cw,ch);
+    const src=wctx.getImageData(0,0,cw,ch).data,dst=out.data;
+    for(let i=0,p=0;i<src.length;i+=4,p++)lums[p]=src[i]*.2126+src[i+1]*.7152+src[i+2]*.0722;
+    for(let y=0;y<ch;y++)for(let x=0;x<cw;x++){
+      const p=y*cw+x,i=p*4,r=src[i],g=src[i+1],b=src[i+2],lum=lums[p];
+      const dr=r-paper[0],dg=g-paper[1],db=b-paper[2],dist=Math.sqrt(dr*dr+dg*dg+db*db);
+      const mask=clamp((dist-5)/44,0,1);
+      const l=lums[y*cw+Math.max(0,x-1)],rr=lums[y*cw+Math.min(cw-1,x+1)];
+      const u=lums[Math.max(0,y-1)*cw+x],d=lums[Math.min(ch-1,y+1)*cw+x];
+      const grad=Math.hypot((rr-l)*.5,(d-u)*.5),edge=clamp((grad-5)/26,0,1)*mask;
+      const darkness=clamp((paperL-lum-34)/118,0,1)*mask;
+      const blot=washField[p],washAlpha=clamp(.68+(blot-.5)*.78,.29,.98);
+      const lift=(lum<135?clamp((186-lum)/112,0,.62):clamp((174-lum)/145,0,.34))*(1-edge*.82);
+      const sr=r*(1-lift)+paper[0]*lift,sg=g*(1-lift)+paper[1]*lift,sb=b*(1-lift)+paper[2]*lift;
+      const pigmentMix=clamp(.52+(blot-.5)*.28,.38,.68);
+      const pr=pigment[0]*pigmentMix+sr*(1-pigmentMix),pg=pigment[1]*pigmentMix+sg*(1-pigmentMix),pb=pigment[2]*pigmentMix+sb*(1-pigmentMix);
+      const a=mask*washAlpha;
+      let ro=paper[0]*(1-a)+pr*a,go=paper[1]*(1-a)+pg*a,bo=paper[2]*(1-a)+pb*a;
+      const inkAmount=clamp(edge*.62+darkness*.18,0,.78);
+      ro=ro*(1-inkAmount)+ink[0]*inkAmount;go=go*(1-inkAmount)+ink[1]*inkAmount;bo=bo*(1-inkAmount)+ink[2]*inkAmount;
+      const grain=(hash01(x,y,1,seed)-.5)*2.4*(1-mask*.55);
+      dst[i]=clamp(ro+grain,0,255);dst[i+1]=clamp(go+grain,0,255);dst[i+2]=clamp(bo+grain,0,255);dst[i+3]=255;
+      maskImage.data[i]=maskImage.data[i+1]=maskImage.data[i+2]=255;maskImage.data[i+3]=Math.round(mask*255);
+    }
+    pctx.putImageData(out,0,0);mctx.putImageData(maskImage,0,0);
+    bctx.clearRect(0,0,cw,ch);bctx.globalCompositeOperation='source-over';
+    for(let k=0;k<30;k++){
+      const bx=hash01(k,71,3,seed)*cw,by=hash01(k,73,5,seed)*ch;
+      const brx=(.035+hash01(k,79,7,seed)*.16)*cw,bry=(.028+hash01(k,83,11,seed)*.13)*ch;
+      bctx.save();bctx.translate(bx,by);bctx.rotate((hash01(k,89,13,seed)-.5)*1.2);
+      bctx.fillStyle=style.inkColor;bctx.globalAlpha=.018+hash01(k,97,17,seed)*.055;
+      bctx.beginPath();bctx.ellipse(0,0,brx,bry,0,0,Math.PI*2);bctx.fill();bctx.restore();
+    }
+    bctx.globalCompositeOperation='destination-in';bctx.globalAlpha=.72;bctx.drawImage(maskCanvas,0,0);bctx.globalCompositeOperation='source-over';
+    ctx.save();ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1;ctx.filter='none';ctx.fillStyle=style.paperColor;ctx.fillRect(0,0,w,h);
+    ctx.drawImage(paint,0,0,w,h);
+    ctx.globalCompositeOperation='multiply';ctx.globalAlpha=.88;ctx.drawImage(blobs,0,0,w,h);ctx.globalCompositeOperation='source-over';
+    const passes=q>.78?3:q>.55?2:1;
     for(let i=0;i<passes;i++){
-      const phase=(stableSeed(style.seed+':composite:'+i)%1000)*.013;
-      const drift=Math.sin(timeMs*.00011+phase)*style.motion;
-      const dx=(hash01(i,13,7,style.seed)-.5)*(1.2+style.bleed*4)+drift;
-      const dy=(hash01(i,17,11,style.seed)-.5)*(1.1+style.bleed*3)-drift*.45;
-      ctx.globalAlpha=(.025+.018*i)*q;ctx.filter=`blur(${(.22+i*.12).toFixed(2)}px)`;
-      ctx.drawImage(sourceCanvas,dx,dy,w,h);
+      const drift=Math.sin(timeMs*.00010+(seed%1000)*.01+i*1.7)*style.motion;
+      const dx=(hash01(i,13,7,seed)-.5)*(1+style.bleed*3)+drift,dy=(hash01(i,17,11,seed)-.5)*(1+style.bleed*2)-drift*.4;
+      ctx.globalAlpha=(.014+.011*i)*q;ctx.filter=`blur(${(.32+i*.24).toFixed(2)}px)`;ctx.drawImage(paint,dx,dy,w,h);
     }
     ctx.restore();
   }
-  function dispose(){canvas.remove();}
-  resize();return{canvas,present,resize,dispose};
+  function captureImageData(){return ctx.getImageData(0,0,w,h);}
+  function dispose(){if(replaceSource)sourceCanvas.style.opacity=oldOpacity;canvas.remove();}
+  resize();return{canvas,present,resize,captureImageData,dispose,replaceSource};
 }
 
 export function createLivingWatercolor3D({THREE,renderer,scene,camera,style:inputStyle={},autoQuality=true}={}){
@@ -229,8 +295,9 @@ export function createLivingWatercolor3D({THREE,renderer,scene,camera,style:inpu
     for(const e of emitters)updateEmitter(e,timeMs);
   }
   function setQuality(value){quality=clamp(value,.35,1);return quality;}
-  function attachCompositor(){if(!compositor)compositor=createPaperCompositor(renderer.domElement,style,()=>quality);return compositor;}
+  function attachCompositor(options={}){if(!compositor)compositor=createPaperCompositor(renderer.domElement,style,()=>quality,options);return compositor;}
   function present(timeMs=performance.now()){compositor?.present?.(timeMs);}
+  function captureImageData(){return compositor?.captureImageData?.()||null;}
   let qualityListener=null;
   if(autoQuality&&typeof window!=='undefined'){
     qualityListener=e=>setQuality(e?.detail?.quality??1);window.addEventListener('goldenqualitychange',qualityListener);
@@ -242,7 +309,7 @@ export function createLivingWatercolor3D({THREE,renderer,scene,camera,style:inpu
     for(const e of emitters){for(const p of e.particles)p.sprite.material?.dispose?.();e.group.removeFromParent?.();}
     compositor?.dispose?.();compositor=null;paperTexture?.dispose?.();brushTexture?.dispose?.();washTexture?.dispose?.();outlineStates.clear();emitters.clear();materialStates.clear();roots.clear();
   }
-  return{style,apply,tick,setQuality,addGroundWash,createBrushEmitter,attachCompositor,present,diagnostics,dispose,paperTexture,brushTexture,washTexture};
+  return{style,apply,tick,setQuality,addGroundWash,createBrushEmitter,attachCompositor,present,captureImageData,diagnostics,dispose,paperTexture,brushTexture,washTexture};
 }
 
 export{DEFAULT_STYLE};

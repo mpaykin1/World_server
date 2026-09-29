@@ -4,7 +4,7 @@ import {
   createIllustrationCamera,createWatercolorHouse,createWatercolorTree,
   createWatercolorVolcano,createWatercolorPlant
 } from '../../shared/graphics/living-watercolor-generators.js';
-import {scoreRendererAgainstReference} from '../../shared/graphics/living-watercolor-reference-gate.js';
+import {measureWatercolorImageData,scoreWatercolorMetrics} from '../../shared/graphics/living-watercolor-reference-gate.js';
 
 const scene=new THREE.Scene();
 const camera=createIllustrationCamera(THREE,{width:innerWidth,height:innerHeight,viewHeight:7.5,position:[6.4,4.8,9.6],lookAt:[0,1.4,0]});
@@ -17,7 +17,7 @@ const style=createWatercolorStyle({
   washOpacity:.68,washLayers:9,edgeWidth:.038,edgeJitter:.31,granulation:.55,bleed:.29,
   shadowWash:.12,motion:.13,pigmentPooling:.34,paperGap:.18,paintedLight:.72
 });
-const watercolor=createLivingWatercolor3D({THREE,renderer,scene,camera,style});watercolor.attachCompositor();
+const watercolor=createLivingWatercolor3D({THREE,renderer,scene,camera,style});watercolor.attachCompositor({replaceSource:true});
 
 scene.add(new THREE.HemisphereLight(0xffffff,0xa8b0ba,2.9));
 const key=new THREE.DirectionalLight(0xffffff,.72);key.position.set(4,8,5);scene.add(key);
@@ -51,9 +51,11 @@ function setLayout(mode){
     for(const n of names){const [x,z,s]=layout[n];const o=items[n];o.visible=true;o.position.set(x,0,z);o.scale.setScalar(s);o.rotation.set(0,0,0);}
   }else{
     for(const n of names){const o=items[n];o.visible=n===mode;o.position.set(0,0,0);o.scale.setScalar(1);o.rotation.set(0,0,0);}
-    const y={house:-.05,tree:-.35,volcano:-.10,plant:-.05}[mode]??0;
-    items[mode].position.y=y;
+    const pos={house:[.18,-.10,0],tree:[.36,-.62,0],volcano:[.18,-.10,0],plant:[-.18,-.28,0]}[mode]||[0,0,0];
+    items[mode].position.set(...pos);
   }
+  camera.zoom={all:.82,house:1.20,tree:1.11,volcano:1.06,plant:1.12}[mode]??1;
+  camera.updateProjectionMatrix();
 }
 function show(mode){
   active=mode;setLayout(mode);document.querySelectorAll('#chooser button').forEach((b,i)=>b.classList.toggle('active',(i===0?'all':names[i-1])===mode));
@@ -71,7 +73,7 @@ addEventListener('resize',()=>{renderer.setSize(innerWidth,innerHeight);fitCamer
 
 function scoreActive(){
   if(active==='all')return null;
-  try{return scoreRendererAgainstReference(renderer,active,{maxSize:420});}catch{return null;}
+  try{const imageData=watercolor.captureImageData();if(!imageData)return null;const metrics=measureWatercolorImageData(imageData);return{metrics,gate:scoreWatercolorMetrics(metrics,active)};}catch{return null;}
 }
 function animate(t){
   currentX+=(targetX-currentX)*.032;currentY+=(targetY-currentY)*.032;
