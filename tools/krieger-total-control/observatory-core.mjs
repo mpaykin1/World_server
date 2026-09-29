@@ -18,6 +18,9 @@ export const FORENSICS_STAGES = Object.freeze([
   "renderer.frame",
   "scene.portals",
   "gpu.frame",
+  "data.document",
+  "game.state",
+  "creature.sample",
 ]);
 
 export function latestByStage(events = []) {
@@ -150,6 +153,36 @@ export function analyzeRenderer(events = []) {
   };
 }
 
+
+export function analyzeData(events = []) {
+  const document = events.filter(x => x?.stage === "data.document").at(-1) || null;
+  if (!document) return {observed:false,document:null,expansion:null};
+  const bytes = Math.max(1,Number(document.bytesConsumed || 0));
+  const semanticNodes = Number(document.ops || 0) + Number(document.splines || 0) + Number(document.events || 0);
+  return {
+    observed:true,
+    document,
+    expansion:{
+      semanticNodes,
+      semanticNodesPerKB:semanticNodes / (bytes / 1024),
+      audioBytes:Number(document.songBytes || 0) + Number(document.sampleBytes || 0),
+    },
+  };
+}
+
+export function analyzeGame(events = []) {
+  const state = events.filter(x => x?.stage === "game.state").at(-1) || null;
+  const creatures = events.filter(x => x?.stage === "creature.sample");
+  return {
+    observed:!!state,
+    state,
+    creatureSamples:creatures.slice(-4),
+    activeMonsters:state?.monsters?.states?.[4] ?? null,
+    playerWeapon:state?.player?.weapon ?? null,
+    playerNextWeapon:state?.player?.nextWeapon ?? null,
+  };
+}
+
 export function analyzeForensics(events = []) {
   return {
     viewport: analyzeViewport(events),
@@ -158,6 +191,8 @@ export function analyzeForensics(events = []) {
     assets: analyzeAssets(events),
     scene: analyzeScene(events),
     renderer: analyzeRenderer(events),
+    data: analyzeData(events),
+    game: analyzeGame(events),
     eventCount: events.length,
   };
 }
