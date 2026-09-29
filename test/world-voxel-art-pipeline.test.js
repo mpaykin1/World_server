@@ -24,6 +24,7 @@ test('all eight NEW models are parseable optimized GLBs with monotonic LODs and 
   const manifest=JSON.parse(fs.readFileSync(path.join(ART,'manifest.json'),'utf8'));assert.equal(validVoxelManifest(manifest),true);
   assert.deepEqual(manifest.entities.map(x=>x.id).sort(),[...EXPECTED].sort());assert.equal(manifest.schemaVersion,2);
   for(const asset of manifest.entities){
+    assert.equal(asset.license,'PROJECT-ORIGINAL-NO-SEPARATE-LICENSE',asset.id+' rights marker');
     assert.ok(asset.semantic.featureCount>=MIN_FEATURES[asset.id],asset.id+' semantic detail floor');
     let previous=Infinity;
     for(const lod of asset.lods){
