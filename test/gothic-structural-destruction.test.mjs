@@ -5,6 +5,8 @@ import {
   analyzeStructuralSupport,
   applyCannonImpact,
   buildStructuralGraph,
+  fireCannonAtStructure,
+  traceCannonProjectile,
   materialForBlock,
   planCollapseBodies,
   simulateCannonCollapse,
@@ -101,4 +103,41 @@ test('collapse planning is replay deterministic and obeys rigid-body budgets',()
   assert.equal(bounded.bodies.length,0);
   assert.ok(bounded.deferred.length>=1);
   assert.ok(bounded.deferred.every(x=>x.reason==='budget'));
+});
+
+
+test('ballistic cannon flight hits the generated tower before applying structural damage',()=>{
+  const tower=buildGothicTower({seed:31,width:7,height:14});
+  const shot={
+    origin:{x:18,y:1.4,z:0},
+    velocity:{x:-40,y:0,z:0},
+    mass:48,
+    damageRadius:3.2,
+  };
+  const flight=traceCannonProjectile(tower.voxels,shot,{maxStep:.1,maxTime:2});
+  assert.equal(flight.hit,true);
+  assert.equal(flight.voxel.x,3);
+  assert.ok(flight.time>0&&flight.time<1);
+  assert.ok(flight.samples>10);
+  assert.ok(flight.velocity.y<0);
+
+  const result=fireCannonAtStructure(tower.voxels,shot,{
+    maxStep:.1,maxTime:2,supportMargin:.65,maxBodies:8,maxClusterVoxels:5000,
+  });
+  assert.equal(result.flight.hit,true);
+  assert.ok(result.damage.destroyed.length>0);
+  assert.ok(result.collapse.bodies.length>=1);
+  const main=[...result.collapse.bodies].sort((a,b)=>b.voxelCount-a.voxelCount)[0];
+  assert.ok(main.linearVelocity.x>0,'remaining support should tip the damaged tower toward +X breach');
+});
+
+test('missed cannon shot leaves the structure intact and creates no collapse bodies',()=>{
+  const tower=buildGothicTower({seed:32,width:7,height:14});
+  const result=fireCannonAtStructure(tower.voxels,{
+    origin:{x:18,y:40,z:0},velocity:{x:-40,y:0,z:0},mass:48,damageRadius:3.2,
+  },{maxStep:.1,maxTime:.5});
+  assert.equal(result.flight.hit,false);
+  assert.equal(result.damage,null);
+  assert.equal(result.collapse.bodies.length,0);
+  assert.equal(result.analysis.counts.unsupported,0);
 });
