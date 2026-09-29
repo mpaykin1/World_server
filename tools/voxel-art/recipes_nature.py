@@ -212,9 +212,10 @@ def build_volcano(seed: int, lod: int = 0, params=None) -> Recipe:
     vegetation = r.feature("vegetationZone", "vegetationZone", root, 2,
                            gameplay={"habitable": True, "excludesActiveLava": True})
     candidates = [(-10,8),(-8,9),(-6,9),(-9,6),(-7,2),(-6,1),(-8,0),(5,10),(7,10),(10,8),(10,6),(6,-10),(4,-9),(-4,10)]
+    canonical_lava_xy=[(px,py) for path in channels for px,py,_ in path]
     kept = 0
     for x,y in candidates:
-        if _near_cells(x,y,lava_cells,2.2):
+        if any((x-px)*(x-px)+(y-py)*(y-py) <= 2.2*2.2 for px,py in canonical_lava_xy):
             continue
         _plant(r,f"vegetation:{kept:02d}",x,y,2,vegetation,3)
         kept += 1
