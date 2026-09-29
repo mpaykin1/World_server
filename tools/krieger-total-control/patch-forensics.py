@@ -350,6 +350,15 @@ replace_once("engine.cpp",
 
 # Material provenance: exact pass creation and usage/program classification.
 replace_once("genmaterial.cpp",
+"""#include "rtmanager.hpp"
+""",
+"""#include "rtmanager.hpp"
+#if defined(__EMSCRIPTEN__)
+#include <stdio.h>
+#endif
+""")
+
+replace_once("genmaterial.cpp",
 """  ps->Pass = pass;
   ps->Size = size;
   ps->Aspect = aspect;
