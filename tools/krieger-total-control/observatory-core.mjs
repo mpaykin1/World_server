@@ -15,6 +15,7 @@ export const FORENSICS_STAGES = Object.freeze([
   "weapon.commit",
   "geometry.mesh",
   "material.pass",
+  "material.job",
   "renderer.frame",
   "scene.portals",
   "gpu.frame",
@@ -109,6 +110,7 @@ export function analyzeLifecycle(events = []) {
 export function analyzeAssets(events = []) {
   const meshes = events.filter(x => x?.stage === "geometry.mesh");
   const materialPasses = events.filter(x => x?.stage === "material.pass");
+  const materialJobs = events.filter(x => x?.stage === "material.job");
   const byKind = Object.create(null);
   let triangles = 0;
   let vertices = 0;
@@ -128,7 +130,16 @@ export function analyzeAssets(events = []) {
     totalSampledTriangles:triangles,
     animatedMeshSamples:animated,
     materialPassSamples:materialPasses.length,
+    materialJobSamples:materialJobs.length,
     materialUsageHistogram:usage,
+    meshOrigins:meshes.filter(x=>Number.isInteger(x.originOp) && x.originOp>=0).map(x=>({
+      kind:x.kind,op:x.originOp,classId:x.originClass,result:x.originResult,
+      vertices:x.vertices,triangles:x.triangles
+    })),
+    materialOrigins:materialJobs.filter(x=>Number.isInteger(x.originOp) && x.originOp>=0).map(x=>({
+      op:x.originOp,classId:x.originClass,result:x.originResult,
+      usage:x.usage,program:x.program,renderPass:x.renderPass
+    })),
   };
 }
 
