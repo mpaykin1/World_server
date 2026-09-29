@@ -403,12 +403,14 @@ replace_once("engine.cpp",
 
 # Generic renderer frame statistics after the actual paint-job graph is built.
 replace_once("engine.cpp",
-"""  BuildPaintJobs();
+"""  // FIRE! (damn, this routine is getting shorter and shorter)
+  BuildPaintJobs();
 #if defined(__EMSCRIPTEN__)
   {
     if(kkExecTrace)
 """,
-"""  BuildPaintJobs();
+"""  // FIRE! (damn, this routine is getting shorter and shorter)
+  BuildPaintJobs();
 #if defined(__EMSCRIPTEN__)
   {
     static sInt obsRenderFrame;
