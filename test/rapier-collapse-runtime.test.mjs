@@ -20,6 +20,8 @@ class Desc {
   setRestitution(v){this.values.restitution=v;return this;}
 }
 const FakeRapier={
+  initCalls:0,
+  async init(){this.initCalls++;},
   RigidBodyDesc:{dynamic:()=>new Desc('body')},
   ColliderDesc:{cuboid:(...args)=>new Desc('cuboid',args)},
 };
@@ -107,9 +109,10 @@ test('body and collider budgets fail closed instead of spawning runaway physics'
   assert.ok(outB.deferred.some(x=>x.reason==='body-budget'));
 });
 
-test('pinned loader resolves only the expected deterministic compat URL',async()=>{
-  let seen='';
+test('pinned loader resolves the expected deterministic compat URL and initializes WASM',async()=>{
+  let seen='';FakeRapier.initCalls=0;
   const loaded=await loadPinnedRapier(async url=>{seen=url;return{default:FakeRapier};});
   assert.equal(loaded,FakeRapier);
+  assert.equal(FakeRapier.initCalls,1);
   assert.equal(seen,'https://cdn.jsdelivr.net/npm/@dimforge/rapier3d-deterministic-compat@0.21.0/+esm');
 });
