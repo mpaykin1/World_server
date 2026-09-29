@@ -1,0 +1,915 @@
+{
+  "schemaVersion": 1,
+  "kind": "river",
+  "seed": 1505456670,
+  "root": "river:root",
+  "features": [
+    {
+      "id": "river:bank",
+      "type": "bank",
+      "parent": "river:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -9,
+          -12,
+          0
+        ],
+        [
+          8,
+          12,
+          0
+        ]
+      ],
+      "position": [
+        -0.5,
+        0.0,
+        0.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "shore": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "river:bankPlant:00:L",
+      "type": "vegetation",
+      "parent": "river:wetVegetation",
+      "detail": 3,
+      "bounds": [
+        [
+          -9,
+          -10,
+          1
+        ],
+        [
+          -8,
+          -10,
+          2
+        ]
+      ],
+      "position": [
+        -8.5,
+        -10.0,
+        1.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "river:bankPlant:00:R",
+      "type": "vegetation",
+      "parent": "river:wetVegetation",
+      "detail": 3,
+      "bounds": [
+        [
+          1,
+          -10,
+          1
+        ],
+        [
+          2,
+          -10,
+          2
+        ]
+      ],
+      "position": [
+        1.5,
+        -10.0,
+        1.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "river:bankPlant:01:L",
+      "type": "vegetation",
+      "parent": "river:wetVegetation",
+      "detail": 3,
+      "bounds": [
+        [
+          -9,
+          -6,
+          1
+        ],
+        [
+          -8,
+          -6,
+          2
+        ]
+      ],
+      "position": [
+        -8.5,
+        -6.0,
+        1.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "river:bankPlant:01:R",
+      "type": "vegetation",
+      "parent": "river:wetVegetation",
+      "detail": 3,
+      "bounds": [
+        [
+          3,
+          -6,
+          1
+        ],
+        [
+          4,
+          -6,
+          2
+        ]
+      ],
+      "position": [
+        3.5,
+        -6.0,
+        1.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "river:bankPlant:02:L",
+      "type": "vegetation",
+      "parent": "river:wetVegetation",
+      "detail": 3,
+      "bounds": [
+        [
+          -4,
+          -2,
+          1
+        ],
+        [
+          -3,
+          -2,
+          2
+        ]
+      ],
+      "position": [
+        -3.5,
+        -2.0,
+        1.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "river:bankPlant:02:R",
+      "type": "vegetation",
+      "parent": "river:wetVegetation",
+      "detail": 3,
+      "bounds": [
+        [
+          6,
+          -2,
+          1
+        ],
+        [
+          6,
+          -2,
+          2
+        ]
+      ],
+      "position": [
+        6.0,
+        -2.0,
+        1.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "river:bankPlant:03:L",
+      "type": "vegetation",
+      "parent": "river:wetVegetation",
+      "detail": 3,
+      "bounds": [
+        [
+          -3,
+          2,
+          1
+        ],
+        [
+          -3,
+          2,
+          2
+        ]
+      ],
+      "position": [
+        -3.0,
+        2.0,
+        1.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "river:bankPlant:03:R",
+      "type": "vegetation",
+      "parent": "river:wetVegetation",
+      "detail": 3,
+      "bounds": null,
+      "position": null,
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "river:bankPlant:04:L",
+      "type": "vegetation",
+      "parent": "river:wetVegetation",
+      "detail": 3,
+      "bounds": [
+        [
+          -3,
+          6,
+          1
+        ],
+        [
+          -2,
+          6,
+          2
+        ]
+      ],
+      "position": [
+        -2.5,
+        6.0,
+        1.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "river:bankPlant:04:R",
+      "type": "vegetation",
+      "parent": "river:wetVegetation",
+      "detail": 3,
+      "bounds": [
+        [
+          7,
+          6,
+          1
+        ],
+        [
+          7,
+          6,
+          2
+        ]
+      ],
+      "position": [
+        7.0,
+        6.0,
+        1.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "river:bankPlant:05:L",
+      "type": "vegetation",
+      "parent": "river:wetVegetation",
+      "detail": 3,
+      "bounds": [
+        [
+          -6,
+          10,
+          1
+        ],
+        [
+          -5,
+          10,
+          2
+        ]
+      ],
+      "position": [
+        -5.5,
+        10.0,
+        1.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "river:bankPlant:05:R",
+      "type": "vegetation",
+      "parent": "river:wetVegetation",
+      "detail": 3,
+      "bounds": [
+        [
+          6,
+          10,
+          2
+        ],
+        [
+          6,
+          10,
+          2
+        ]
+      ],
+      "position": [
+        6.0,
+        10.0,
+        2.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "river:bankRock:00",
+      "type": "rock",
+      "parent": "river:bank",
+      "detail": 3,
+      "bounds": [
+        [
+          -11,
+          -10,
+          0
+        ],
+        [
+          -9,
+          -8,
+          2
+        ]
+      ],
+      "position": [
+        -10.0,
+        -9.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "river:bankRock:01",
+      "type": "rock",
+      "parent": "river:bank",
+      "detail": 3,
+      "bounds": [
+        [
+          7,
+          -8,
+          0
+        ],
+        [
+          9,
+          -6,
+          2
+        ]
+      ],
+      "position": [
+        8.0,
+        -7.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "river:bankRock:02",
+      "type": "rock",
+      "parent": "river:bank",
+      "detail": 3,
+      "bounds": [
+        [
+          -8,
+          -2,
+          0
+        ],
+        [
+          -6,
+          0,
+          2
+        ]
+      ],
+      "position": [
+        -7.0,
+        -1.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "river:bankRock:03",
+      "type": "rock",
+      "parent": "river:bank",
+      "detail": 3,
+      "bounds": [
+        [
+          8,
+          1,
+          0
+        ],
+        [
+          10,
+          3,
+          2
+        ]
+      ],
+      "position": [
+        9.0,
+        2.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "river:bankRock:04",
+      "type": "rock",
+      "parent": "river:bank",
+      "detail": 3,
+      "bounds": [
+        [
+          -10,
+          8,
+          0
+        ],
+        [
+          -8,
+          10,
+          2
+        ]
+      ],
+      "position": [
+        -9.0,
+        9.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "river:bankRock:05",
+      "type": "rock",
+      "parent": "river:bank",
+      "detail": 3,
+      "bounds": [
+        [
+          6,
+          9,
+          0
+        ],
+        [
+          8,
+          11,
+          2
+        ]
+      ],
+      "position": [
+        7.0,
+        10.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "river:bedrock",
+      "type": "strata",
+      "parent": "river:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -12,
+          -12,
+          -3
+        ],
+        [
+          12,
+          12,
+          -3
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        -3.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "river:deepZone",
+      "type": "deepWater",
+      "parent": "river:mainChannel",
+      "detail": 2,
+      "bounds": [
+        [
+          -6,
+          -12,
+          0
+        ],
+        [
+          5,
+          12,
+          0
+        ]
+      ],
+      "position": [
+        -0.5,
+        0.0,
+        0.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "depth": "deep"
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "river:mainChannel",
+      "type": "mainChannel",
+      "parent": "river:root",
+      "detail": 1,
+      "bounds": null,
+      "position": null,
+      "relationships": [],
+      "gameplay": {
+        "water": true,
+        "flow": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "river:rapid:00",
+      "type": "rapid",
+      "parent": "river:mainChannel",
+      "detail": 2,
+      "bounds": [
+        [
+          -3,
+          -5,
+          0
+        ],
+        [
+          3,
+          -1,
+          1
+        ]
+      ],
+      "position": [
+        0.0,
+        -3.0,
+        0.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flowSpeed": "fast"
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "river:root",
+      "type": "river",
+      "parent": null,
+      "detail": 1,
+      "bounds": null,
+      "position": null,
+      "relationships": [],
+      "gameplay": {
+        "semanticRoot": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "river:shallowZone",
+      "type": "shallowWater",
+      "parent": "river:mainChannel",
+      "detail": 2,
+      "bounds": [
+        [
+          -8,
+          -12,
+          0
+        ],
+        [
+          7,
+          12,
+          0
+        ]
+      ],
+      "position": [
+        -0.5,
+        0.0,
+        0.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "depth": "shallow"
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "river:soil",
+      "type": "strata",
+      "parent": "river:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -12,
+          -12,
+          -1
+        ],
+        [
+          12,
+          12,
+          -1
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "river:subsoil",
+      "type": "strata",
+      "parent": "river:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -12,
+          -12,
+          -2
+        ],
+        [
+          12,
+          12,
+          -2
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        -2.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "river:surface",
+      "type": "terrainSurface",
+      "parent": "river:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -12,
+          -12,
+          0
+        ],
+        [
+          12,
+          12,
+          0
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "river:tributary:00",
+      "type": "tributary",
+      "parent": "river:mainChannel",
+      "detail": 2,
+      "bounds": [
+        [
+          -13,
+          3,
+          0
+        ],
+        [
+          4,
+          9,
+          0
+        ]
+      ],
+      "position": [
+        -4.5,
+        6.0,
+        0.0
+      ],
+      "relationships": [
+        {
+          "type": "joins",
+          "target": "river:mainChannel"
+        }
+      ],
+      "gameplay": {
+        "water": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "river:waterfall:00",
+      "type": "waterfall",
+      "parent": "river:mainChannel",
+      "detail": 2,
+      "bounds": [
+        [
+          1,
+          5,
+          0
+        ],
+        [
+          3,
+          9,
+          2
+        ]
+      ],
+      "position": [
+        2.0,
+        7.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "drop": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "river:wetVegetation",
+      "type": "wetVegetation",
+      "parent": "river:bank",
+      "detail": 2,
+      "bounds": null,
+      "position": null,
+      "relationships": [],
+      "gameplay": {
+        "riparian": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    }
+  ],
+  "recipeMeta": {
+    "design": "variable-width meandering river system with tributary, depth zones and riparian edge"
+  },
+  "stats": {
+    "voxelCount": 2586,
+    "materialCount": 12,
+    "featureCount": 27,
+    "macroFeatures": 5,
+    "mesoFeatures": 5,
+    "microFeatures": 17
+  },
+  "watercolorCompatibility": {
+    "hiddenGeometryScaffold": true,
+    "semanticEdges": true,
+    "showVoxelWireframe": false,
+    "pigmentRegionsFromFeatures": true
+  }
+}

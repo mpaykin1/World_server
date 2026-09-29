@@ -1,0 +1,609 @@
+{
+  "schemaVersion": 1,
+  "kind": "villager",
+  "seed": 1329974014,
+  "root": "villager:root",
+  "features": [
+    {
+      "id": "villager:accessory",
+      "type": "bag",
+      "parent": "villager:root",
+      "detail": 3,
+      "bounds": [
+        [
+          3,
+          -1,
+          5
+        ],
+        [
+          4,
+          1,
+          8
+        ]
+      ],
+      "position": [
+        3.5,
+        0.0,
+        6.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "role": "resident"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "villager:belt",
+      "type": "belt",
+      "parent": "villager:torso",
+      "detail": 3,
+      "bounds": [
+        [
+          -2,
+          -2,
+          4
+        ],
+        [
+          2,
+          1,
+          4
+        ]
+      ],
+      "position": [
+        0.0,
+        -0.5,
+        4.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "villager:eye:00",
+      "type": "eye",
+      "parent": "villager:face",
+      "detail": 3,
+      "bounds": [
+        [
+          -1,
+          -2,
+          10
+        ],
+        [
+          -1,
+          -2,
+          10
+        ]
+      ],
+      "position": [
+        -1.0,
+        -2.0,
+        10.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "villager:eye:01",
+      "type": "eye",
+      "parent": "villager:face",
+      "detail": 3,
+      "bounds": [
+        [
+          1,
+          -2,
+          10
+        ],
+        [
+          1,
+          -2,
+          10
+        ]
+      ],
+      "position": [
+        1.0,
+        -2.0,
+        10.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "villager:face",
+      "type": "face",
+      "parent": "villager:head",
+      "detail": 2,
+      "bounds": null,
+      "position": null,
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "villager:hair",
+      "type": "hair",
+      "parent": "villager:head",
+      "detail": 2,
+      "bounds": [
+        [
+          -2,
+          -1,
+          10
+        ],
+        [
+          2,
+          1,
+          12
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        11.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "villager:head",
+      "type": "head",
+      "parent": "villager:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -2,
+          -1,
+          8
+        ],
+        [
+          2,
+          1,
+          11
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        9.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "villager:leftArm",
+      "type": "arm",
+      "parent": "villager:shoulders",
+      "detail": 1,
+      "bounds": [
+        [
+          -4,
+          -1,
+          5
+        ],
+        [
+          -4,
+          0,
+          5
+        ]
+      ],
+      "position": [
+        -4.0,
+        -0.5,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "animationSocket": "leftArm"
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "villager:leftArm:hand",
+      "type": "hand",
+      "parent": "villager:leftArm",
+      "detail": 2,
+      "bounds": [
+        [
+          -4,
+          -1,
+          4
+        ],
+        [
+          -4,
+          0,
+          4
+        ]
+      ],
+      "position": [
+        -4.0,
+        -0.5,
+        4.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "villager:leftLeg",
+      "type": "leg",
+      "parent": "villager:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -1,
+          -1,
+          1
+        ],
+        [
+          -1,
+          0,
+          3
+        ]
+      ],
+      "position": [
+        -1.0,
+        -0.5,
+        2.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "animationSocket": "leftLeg"
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "villager:mouth",
+      "type": "mouth",
+      "parent": "villager:face",
+      "detail": 3,
+      "bounds": [
+        [
+          0,
+          -2,
+          8
+        ],
+        [
+          0,
+          -2,
+          8
+        ]
+      ],
+      "position": [
+        0.0,
+        -2.0,
+        8.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "villager:neck",
+      "type": "neck",
+      "parent": "villager:root",
+      "detail": 2,
+      "bounds": [
+        [
+          -1,
+          0,
+          7
+        ],
+        [
+          1,
+          0,
+          7
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        7.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "villager:nose",
+      "type": "nose",
+      "parent": "villager:face",
+      "detail": 3,
+      "bounds": [
+        [
+          0,
+          -2,
+          9
+        ],
+        [
+          0,
+          -2,
+          9
+        ]
+      ],
+      "position": [
+        0.0,
+        -2.0,
+        9.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "villager:pocket:00",
+      "type": "pocket",
+      "parent": "villager:torso",
+      "detail": 3,
+      "bounds": [
+        [
+          -2,
+          -2,
+          5
+        ],
+        [
+          -2,
+          -2,
+          5
+        ]
+      ],
+      "position": [
+        -2.0,
+        -2.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "villager:pocket:01",
+      "type": "pocket",
+      "parent": "villager:torso",
+      "detail": 3,
+      "bounds": [
+        [
+          2,
+          -2,
+          5
+        ],
+        [
+          2,
+          -2,
+          5
+        ]
+      ],
+      "position": [
+        2.0,
+        -2.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "villager:rightArm",
+      "type": "arm",
+      "parent": "villager:shoulders",
+      "detail": 1,
+      "bounds": null,
+      "position": null,
+      "relationships": [],
+      "gameplay": {
+        "animationSocket": "rightArm"
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "villager:rightArm:hand",
+      "type": "hand",
+      "parent": "villager:rightArm",
+      "detail": 2,
+      "bounds": [
+        [
+          4,
+          -1,
+          4
+        ],
+        [
+          4,
+          0,
+          4
+        ]
+      ],
+      "position": [
+        4.0,
+        -0.5,
+        4.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "villager:rightLeg",
+      "type": "leg",
+      "parent": "villager:root",
+      "detail": 1,
+      "bounds": [
+        [
+          1,
+          -1,
+          1
+        ],
+        [
+          1,
+          0,
+          3
+        ]
+      ],
+      "position": [
+        1.0,
+        -0.5,
+        2.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "animationSocket": "rightLeg"
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "villager:root",
+      "type": "human",
+      "parent": null,
+      "detail": 1,
+      "bounds": null,
+      "position": null,
+      "relationships": [],
+      "gameplay": {
+        "resident": true,
+        "role": "resident"
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "villager:shoulders",
+      "type": "shoulders",
+      "parent": "villager:root",
+      "detail": 2,
+      "bounds": [
+        [
+          -3,
+          -1,
+          5
+        ],
+        [
+          2,
+          1,
+          6
+        ]
+      ],
+      "position": [
+        -0.5,
+        0.0,
+        5.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "villager:torso",
+      "type": "torso",
+      "parent": "villager:root",
+      "detail": 1,
+      "bounds": null,
+      "position": null,
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    }
+  ],
+  "recipeMeta": {
+    "design": "parametric readable voxel human",
+    "roles": [
+      "resident",
+      "farmer",
+      "lumberjack",
+      "miner",
+      "builder",
+      "researcher",
+      "fisher"
+    ],
+    "animationSockets": [
+      "leftLeg",
+      "rightLeg",
+      "leftArm",
+      "rightArm",
+      "head"
+    ],
+    "preparedClips": [
+      "idle",
+      "walk",
+      "work",
+      "carry",
+      "sit"
+    ]
+  },
+  "stats": {
+    "voxelCount": 182,
+    "materialCount": 10,
+    "featureCount": 17,
+    "macroFeatures": 4,
+    "mesoFeatures": 5,
+    "microFeatures": 8
+  },
+  "watercolorCompatibility": {
+    "hiddenGeometryScaffold": true,
+    "semanticEdges": true,
+    "showVoxelWireframe": false,
+    "pigmentRegionsFromFeatures": true
+  }
+}

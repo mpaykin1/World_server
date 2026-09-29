@@ -1,0 +1,1043 @@
+{
+  "schemaVersion": 1,
+  "kind": "barren",
+  "seed": 2013128755,
+  "root": "barren:root",
+  "features": [
+    {
+      "id": "barren:erosion:crack:00",
+      "type": "crack",
+      "parent": "barren:root",
+      "detail": 2,
+      "bounds": [
+        [
+          -9,
+          -2,
+          1
+        ],
+        [
+          1,
+          1,
+          1
+        ]
+      ],
+      "position": [
+        -4.0,
+        -0.5,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "barren:erosion:crack:01",
+      "type": "crack",
+      "parent": "barren:root",
+      "detail": 2,
+      "bounds": [
+        [
+          3,
+          -1,
+          1
+        ],
+        [
+          8,
+          8,
+          1
+        ]
+      ],
+      "position": [
+        5.5,
+        3.5,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "barren:erosion:crack:02",
+      "type": "crack",
+      "parent": "barren:root",
+      "detail": 2,
+      "bounds": [
+        [
+          -2,
+          -9,
+          1
+        ],
+        [
+          2,
+          -4,
+          1
+        ]
+      ],
+      "position": [
+        0.0,
+        -6.5,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "barren:geology:band:00",
+      "type": "geologyBand",
+      "parent": "barren:root",
+      "detail": 2,
+      "bounds": [
+        [
+          -11,
+          -11,
+          -2
+        ],
+        [
+          11,
+          11,
+          -2
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        -2.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "barren:geology:band:01",
+      "type": "geologyBand",
+      "parent": "barren:root",
+      "detail": 2,
+      "bounds": [
+        [
+          -11,
+          -11,
+          -1
+        ],
+        [
+          11,
+          11,
+          -1
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "barren:geology:band:02",
+      "type": "geologyBand",
+      "parent": "barren:root",
+      "detail": 2,
+      "bounds": [
+        [
+          -11,
+          -11,
+          0
+        ],
+        [
+          11,
+          11,
+          0
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "barren:landform:depression:00",
+      "type": "depression",
+      "parent": "barren:root",
+      "detail": 2,
+      "bounds": [
+        [
+          -1,
+          0,
+          0
+        ],
+        [
+          3,
+          4,
+          0
+        ]
+      ],
+      "position": [
+        1.0,
+        2.0,
+        0.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "barren:landform:depression:01",
+      "type": "depression",
+      "parent": "barren:root",
+      "detail": 2,
+      "bounds": [
+        [
+          -5,
+          -1,
+          0
+        ],
+        [
+          -1,
+          3,
+          0
+        ]
+      ],
+      "position": [
+        -3.0,
+        1.0,
+        0.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "barren:landform:depression:02",
+      "type": "depression",
+      "parent": "barren:root",
+      "detail": 2,
+      "bounds": [
+        [
+          5,
+          -4,
+          0
+        ],
+        [
+          9,
+          0,
+          0
+        ]
+      ],
+      "position": [
+        7.0,
+        -2.0,
+        0.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "barren:landform:mound:00",
+      "type": "mound",
+      "parent": "barren:root",
+      "detail": 2,
+      "bounds": [
+        [
+          -9,
+          -6,
+          1
+        ],
+        [
+          -3,
+          -1,
+          2
+        ]
+      ],
+      "position": [
+        -6.0,
+        -3.5,
+        1.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "barren:landform:mound:01",
+      "type": "mound",
+      "parent": "barren:root",
+      "detail": 2,
+      "bounds": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          9,
+          9,
+          3
+        ]
+      ],
+      "position": [
+        5.0,
+        5.0,
+        2.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "barren:landform:mound:02",
+      "type": "mound",
+      "parent": "barren:root",
+      "detail": 2,
+      "bounds": [
+        [
+          1,
+          -10,
+          1
+        ],
+        [
+          7,
+          -4,
+          2
+        ]
+      ],
+      "position": [
+        4.0,
+        -7.0,
+        1.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "barren:landform:mound:03",
+      "type": "mound",
+      "parent": "barren:root",
+      "detail": 2,
+      "bounds": [
+        [
+          -10,
+          4,
+          1
+        ],
+        [
+          -4,
+          9,
+          2
+        ]
+      ],
+      "position": [
+        -7.0,
+        6.5,
+        1.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "barren:rock:00",
+      "type": "rock",
+      "parent": "barren:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          -10,
+          -7,
+          0
+        ],
+        [
+          -7,
+          -5,
+          2
+        ]
+      ],
+      "position": [
+        -8.5,
+        -6.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "barren:rock:01",
+      "type": "rock",
+      "parent": "barren:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          -7,
+          -8,
+          0
+        ],
+        [
+          -5,
+          -6,
+          2
+        ]
+      ],
+      "position": [
+        -6.0,
+        -7.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "barren:rock:02",
+      "type": "rock",
+      "parent": "barren:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          -6,
+          -5,
+          0
+        ],
+        [
+          -4,
+          -3,
+          2
+        ]
+      ],
+      "position": [
+        -5.0,
+        -4.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "barren:rock:03",
+      "type": "rock",
+      "parent": "barren:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          7,
+          5,
+          0
+        ],
+        [
+          10,
+          7,
+          2
+        ]
+      ],
+      "position": [
+        8.5,
+        6.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "barren:rock:04",
+      "type": "rock",
+      "parent": "barren:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          5,
+          7,
+          0
+        ],
+        [
+          7,
+          9,
+          2
+        ]
+      ],
+      "position": [
+        6.0,
+        8.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "barren:rock:05",
+      "type": "rock",
+      "parent": "barren:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          4,
+          5,
+          0
+        ],
+        [
+          6,
+          7,
+          2
+        ]
+      ],
+      "position": [
+        5.0,
+        6.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "barren:rock:06",
+      "type": "rock",
+      "parent": "barren:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          0,
+          -9,
+          0
+        ],
+        [
+          4,
+          -7,
+          2
+        ]
+      ],
+      "position": [
+        2.0,
+        -8.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "barren:rock:07",
+      "type": "rock",
+      "parent": "barren:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          3,
+          -7,
+          0
+        ],
+        [
+          5,
+          -5,
+          2
+        ]
+      ],
+      "position": [
+        4.0,
+        -6.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "barren:rock:08",
+      "type": "rock",
+      "parent": "barren:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          -9,
+          2,
+          0
+        ],
+        [
+          -7,
+          3,
+          2
+        ]
+      ],
+      "position": [
+        -8.0,
+        2.5,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "barren:rock:09",
+      "type": "rock",
+      "parent": "barren:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          -8,
+          3,
+          0
+        ],
+        [
+          -4,
+          5,
+          2
+        ]
+      ],
+      "position": [
+        -6.0,
+        4.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "barren:rock:10",
+      "type": "rock",
+      "parent": "barren:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          7,
+          -5,
+          0
+        ],
+        [
+          9,
+          -3,
+          2
+        ]
+      ],
+      "position": [
+        8.0,
+        -4.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "barren:rockField",
+      "type": "rockField",
+      "parent": "barren:root",
+      "detail": 2,
+      "bounds": null,
+      "position": null,
+      "relationships": [],
+      "gameplay": {
+        "erosionSource": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "barren:root",
+      "type": "barren",
+      "parent": null,
+      "detail": 1,
+      "bounds": null,
+      "position": null,
+      "relationships": [],
+      "gameplay": {
+        "semanticRoot": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "barren:strata:bedrock",
+      "type": "strata",
+      "parent": "barren:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -11,
+          -11,
+          -3
+        ],
+        [
+          11,
+          11,
+          -3
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        -3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": false
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "barren:strata:soil",
+      "type": "strata",
+      "parent": "barren:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -10,
+          -10,
+          -1
+        ],
+        [
+          11,
+          11,
+          -1
+        ]
+      ],
+      "position": [
+        0.5,
+        0.5,
+        -1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": false
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "barren:strata:subsoil",
+      "type": "strata",
+      "parent": "barren:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -10,
+          -10,
+          -2
+        ],
+        [
+          11,
+          11,
+          -2
+        ]
+      ],
+      "position": [
+        0.5,
+        0.5,
+        -2.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": false
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "barren:surface",
+      "type": "terrainSurface",
+      "parent": "barren:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -10,
+          -10,
+          0
+        ],
+        [
+          11,
+          11,
+          0
+        ]
+      ],
+      "position": [
+        0.5,
+        0.5,
+        0.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "barren:vegetation:00",
+      "type": "vegetation",
+      "parent": "barren:root",
+      "detail": 3,
+      "bounds": [
+        [
+          -4,
+          7,
+          1
+        ],
+        [
+          -4,
+          7,
+          2
+        ]
+      ],
+      "position": [
+        -4.0,
+        7.0,
+        1.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "barren:vegetation:01",
+      "type": "vegetation",
+      "parent": "barren:root",
+      "detail": 3,
+      "bounds": [
+        [
+          0,
+          7,
+          1
+        ],
+        [
+          1,
+          7,
+          2
+        ]
+      ],
+      "position": [
+        0.5,
+        7.0,
+        1.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "barren:vegetation:02",
+      "type": "vegetation",
+      "parent": "barren:root",
+      "detail": 3,
+      "bounds": [
+        [
+          7,
+          1,
+          1
+        ],
+        [
+          7,
+          1,
+          2
+        ]
+      ],
+      "position": [
+        7.0,
+        1.0,
+        1.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "barren:vegetation:03",
+      "type": "vegetation",
+      "parent": "barren:root",
+      "detail": 3,
+      "bounds": [
+        [
+          -7,
+          -1,
+          1
+        ],
+        [
+          -6,
+          -1,
+          2
+        ]
+      ],
+      "position": [
+        -6.5,
+        -1.0,
+        1.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "barren:vegetation:04",
+      "type": "vegetation",
+      "parent": "barren:root",
+      "detail": 3,
+      "bounds": [
+        [
+          2,
+          5,
+          1
+        ],
+        [
+          3,
+          5,
+          2
+        ]
+      ],
+      "position": [
+        2.5,
+        5.0,
+        1.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    }
+  ],
+  "recipeMeta": {
+    "design": "layered eroded terrain block with readable side geology"
+  },
+  "stats": {
+    "voxelCount": 2374,
+    "materialCount": 8,
+    "featureCount": 33,
+    "macroFeatures": 4,
+    "mesoFeatures": 13,
+    "microFeatures": 16
+  },
+  "watercolorCompatibility": {
+    "hiddenGeometryScaffold": true,
+    "semanticEdges": true,
+    "showVoxelWireframe": false,
+    "pigmentRegionsFromFeatures": true
+  }
+}

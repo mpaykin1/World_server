@@ -1,0 +1,2122 @@
+{
+  "schemaVersion": 1,
+  "kind": "forest",
+  "seed": 1310306848,
+  "root": "forest:root",
+  "features": [
+    {
+      "id": "forest:clearing",
+      "type": "clearing",
+      "parent": "forest:stand",
+      "detail": 2,
+      "bounds": [
+        [
+          -1,
+          -6,
+          1
+        ],
+        [
+          5,
+          0,
+          1
+        ]
+      ],
+      "position": [
+        2.0,
+        -3.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "forest:fallenLog:00",
+      "type": "fallenLog",
+      "parent": "forest:stand",
+      "detail": 3,
+      "bounds": [
+        [
+          -4,
+          1,
+          2
+        ],
+        [
+          2,
+          2,
+          2
+        ]
+      ],
+      "position": [
+        -1.0,
+        1.5,
+        2.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "habitat": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:path",
+      "type": "trail",
+      "parent": "forest:root",
+      "detail": 2,
+      "bounds": [
+        [
+          -12,
+          -3,
+          1
+        ],
+        [
+          12,
+          5,
+          1
+        ]
+      ],
+      "position": [
+        0.0,
+        1.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "forest:rock:00",
+      "type": "rock",
+      "parent": "forest:root",
+      "detail": 3,
+      "bounds": [
+        [
+          -11,
+          -9,
+          0
+        ],
+        [
+          -9,
+          -7,
+          2
+        ]
+      ],
+      "position": [
+        -10.0,
+        -8.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:rock:01",
+      "type": "rock",
+      "parent": "forest:root",
+      "detail": 3,
+      "bounds": [
+        [
+          9,
+          -8,
+          0
+        ],
+        [
+          11,
+          -6,
+          2
+        ]
+      ],
+      "position": [
+        10.0,
+        -7.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:rock:02",
+      "type": "rock",
+      "parent": "forest:root",
+      "detail": 3,
+      "bounds": [
+        [
+          -10,
+          6,
+          0
+        ],
+        [
+          -8,
+          8,
+          2
+        ]
+      ],
+      "position": [
+        -9.0,
+        7.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:rock:03",
+      "type": "rock",
+      "parent": "forest:root",
+      "detail": 3,
+      "bounds": [
+        [
+          7,
+          8,
+          0
+        ],
+        [
+          9,
+          10,
+          2
+        ]
+      ],
+      "position": [
+        8.0,
+        9.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:rock:04",
+      "type": "rock",
+      "parent": "forest:root",
+      "detail": 3,
+      "bounds": [
+        [
+          3,
+          3,
+          0
+        ],
+        [
+          5,
+          5,
+          2
+        ]
+      ],
+      "position": [
+        4.0,
+        4.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:rock:05",
+      "type": "rock",
+      "parent": "forest:root",
+      "detail": 3,
+      "bounds": [
+        [
+          -6,
+          3,
+          0
+        ],
+        [
+          -4,
+          5,
+          2
+        ]
+      ],
+      "position": [
+        -5.0,
+        4.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:root",
+      "type": "forest",
+      "parent": null,
+      "detail": 1,
+      "bounds": null,
+      "position": null,
+      "relationships": [],
+      "gameplay": {
+        "semanticRoot": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "forest:shrub:00",
+      "type": "shrub",
+      "parent": "forest:understory",
+      "detail": 3,
+      "bounds": [
+        [
+          -8,
+          -6,
+          1
+        ],
+        [
+          -6,
+          -4,
+          3
+        ]
+      ],
+      "position": [
+        -7.0,
+        -5.0,
+        2.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:shrub:01",
+      "type": "shrub",
+      "parent": "forest:understory",
+      "detail": 3,
+      "bounds": [
+        [
+          -3,
+          -8,
+          1
+        ],
+        [
+          -1,
+          -6,
+          3
+        ]
+      ],
+      "position": [
+        -2.0,
+        -7.0,
+        2.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:shrub:02",
+      "type": "shrub",
+      "parent": "forest:understory",
+      "detail": 3,
+      "bounds": [
+        [
+          3,
+          -8,
+          1
+        ],
+        [
+          5,
+          -6,
+          3
+        ]
+      ],
+      "position": [
+        4.0,
+        -7.0,
+        2.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:shrub:03",
+      "type": "shrub",
+      "parent": "forest:understory",
+      "detail": 3,
+      "bounds": [
+        [
+          7,
+          -2,
+          1
+        ],
+        [
+          9,
+          0,
+          3
+        ]
+      ],
+      "position": [
+        8.0,
+        -1.0,
+        2.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:shrub:04",
+      "type": "shrub",
+      "parent": "forest:understory",
+      "detail": 3,
+      "bounds": [
+        [
+          -8,
+          0,
+          1
+        ],
+        [
+          -6,
+          2,
+          3
+        ]
+      ],
+      "position": [
+        -7.0,
+        1.0,
+        2.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:shrub:05",
+      "type": "shrub",
+      "parent": "forest:understory",
+      "detail": 3,
+      "bounds": [
+        [
+          -5,
+          6,
+          1
+        ],
+        [
+          -3,
+          8,
+          3
+        ]
+      ],
+      "position": [
+        -4.0,
+        7.0,
+        2.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:shrub:06",
+      "type": "shrub",
+      "parent": "forest:understory",
+      "detail": 3,
+      "bounds": [
+        [
+          1,
+          5,
+          1
+        ],
+        [
+          3,
+          7,
+          3
+        ]
+      ],
+      "position": [
+        2.0,
+        6.0,
+        2.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:shrub:07",
+      "type": "shrub",
+      "parent": "forest:understory",
+      "detail": 3,
+      "bounds": [
+        [
+          5,
+          4,
+          1
+        ],
+        [
+          7,
+          6,
+          3
+        ]
+      ],
+      "position": [
+        6.0,
+        5.0,
+        2.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:shrub:08",
+      "type": "shrub",
+      "parent": "forest:understory",
+      "detail": 3,
+      "bounds": [
+        [
+          8,
+          1,
+          1
+        ],
+        [
+          10,
+          3,
+          3
+        ]
+      ],
+      "position": [
+        9.0,
+        2.0,
+        2.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:shrub:09",
+      "type": "shrub",
+      "parent": "forest:understory",
+      "detail": 3,
+      "bounds": [
+        [
+          -1,
+          -7,
+          1
+        ],
+        [
+          1,
+          -5,
+          3
+        ]
+      ],
+      "position": [
+        0.0,
+        -6.0,
+        2.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:shrub:10",
+      "type": "shrub",
+      "parent": "forest:understory",
+      "detail": 3,
+      "bounds": [
+        [
+          4,
+          2,
+          1
+        ],
+        [
+          6,
+          4,
+          3
+        ]
+      ],
+      "position": [
+        5.0,
+        3.0,
+        2.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:shrub:11",
+      "type": "shrub",
+      "parent": "forest:understory",
+      "detail": 3,
+      "bounds": [
+        [
+          -11,
+          6,
+          2
+        ],
+        [
+          -10,
+          8,
+          3
+        ]
+      ],
+      "position": [
+        -10.5,
+        7.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:stand",
+      "type": "forestStand",
+      "parent": "forest:root",
+      "detail": 1,
+      "bounds": null,
+      "position": null,
+      "relationships": [],
+      "gameplay": {
+        "ecology": true,
+        "flammable": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "forest:strata:bedrock",
+      "type": "strata",
+      "parent": "forest:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -11,
+          -11,
+          -3
+        ],
+        [
+          11,
+          11,
+          -3
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        -3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": false
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "forest:strata:soil",
+      "type": "strata",
+      "parent": "forest:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -11,
+          -11,
+          -1
+        ],
+        [
+          11,
+          11,
+          -1
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": false
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "forest:strata:subsoil",
+      "type": "strata",
+      "parent": "forest:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -11,
+          -11,
+          -2
+        ],
+        [
+          11,
+          11,
+          -2
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        -2.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": false
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "forest:stump:00",
+      "type": "stump",
+      "parent": "forest:stand",
+      "detail": 3,
+      "bounds": [
+        [
+          -3,
+          2,
+          1
+        ],
+        [
+          -1,
+          4,
+          2
+        ]
+      ],
+      "position": [
+        -2.0,
+        3.0,
+        1.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:surface",
+      "type": "terrainSurface",
+      "parent": "forest:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -11,
+          -11,
+          0
+        ],
+        [
+          11,
+          11,
+          0
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "forest:tree:00",
+      "type": "tree",
+      "parent": "forest:stand",
+      "detail": 2,
+      "bounds": [
+        [
+          -11,
+          -10,
+          1
+        ],
+        [
+          -5,
+          -4,
+          12
+        ]
+      ],
+      "position": [
+        -8.0,
+        -7.0,
+        6.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true,
+        "ageClass": "mature"
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "forest:tree:00:branch",
+      "type": "branch",
+      "parent": "forest:tree:00",
+      "detail": 3,
+      "bounds": [
+        [
+          -9,
+          -7,
+          7
+        ],
+        [
+          -8,
+          -5,
+          9
+        ]
+      ],
+      "position": [
+        -8.5,
+        -6.0,
+        8.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:tree:01",
+      "type": "tree",
+      "parent": "forest:stand",
+      "detail": 2,
+      "bounds": [
+        [
+          -6,
+          -10,
+          1
+        ],
+        [
+          -2,
+          -6,
+          8
+        ]
+      ],
+      "position": [
+        -4.0,
+        -8.0,
+        4.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true,
+        "ageClass": "mature"
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "forest:tree:01:branch",
+      "type": "branch",
+      "parent": "forest:tree:01",
+      "detail": 3,
+      "bounds": [
+        [
+          -4,
+          -8,
+          3
+        ],
+        [
+          -3,
+          -6,
+          5
+        ]
+      ],
+      "position": [
+        -3.5,
+        -7.0,
+        4.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:tree:02",
+      "type": "tree",
+      "parent": "forest:stand",
+      "detail": 2,
+      "bounds": [
+        [
+          -1,
+          -10,
+          1
+        ],
+        [
+          3,
+          -6,
+          8
+        ]
+      ],
+      "position": [
+        1.0,
+        -8.0,
+        4.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true,
+        "ageClass": "mature"
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "forest:tree:02:branch",
+      "type": "branch",
+      "parent": "forest:tree:02",
+      "detail": 3,
+      "bounds": [
+        [
+          0,
+          -8,
+          3
+        ],
+        [
+          1,
+          -6,
+          5
+        ]
+      ],
+      "position": [
+        0.5,
+        -7.0,
+        4.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:tree:03",
+      "type": "tree",
+      "parent": "forest:stand",
+      "detail": 2,
+      "bounds": [
+        [
+          3,
+          -10,
+          1
+        ],
+        [
+          9,
+          -4,
+          11
+        ]
+      ],
+      "position": [
+        6.0,
+        -7.0,
+        6.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true,
+        "ageClass": "mature"
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "forest:tree:03:branch",
+      "type": "branch",
+      "parent": "forest:tree:03",
+      "detail": 3,
+      "bounds": [
+        [
+          6,
+          -7,
+          6
+        ],
+        [
+          7,
+          -5,
+          8
+        ]
+      ],
+      "position": [
+        6.5,
+        -6.0,
+        7.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:tree:04",
+      "type": "tree",
+      "parent": "forest:stand",
+      "detail": 2,
+      "bounds": [
+        [
+          6,
+          -6,
+          1
+        ],
+        [
+          12,
+          0,
+          8
+        ]
+      ],
+      "position": [
+        9.0,
+        -3.0,
+        4.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true,
+        "ageClass": "mature"
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "forest:tree:04:branch",
+      "type": "branch",
+      "parent": "forest:tree:04",
+      "detail": 3,
+      "bounds": [
+        [
+          8,
+          -3,
+          3
+        ],
+        [
+          9,
+          -1,
+          5
+        ]
+      ],
+      "position": [
+        8.5,
+        -2.0,
+        4.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:tree:05",
+      "type": "tree",
+      "parent": "forest:stand",
+      "detail": 2,
+      "bounds": [
+        [
+          -12,
+          -4,
+          1
+        ],
+        [
+          -5,
+          0,
+          8
+        ]
+      ],
+      "position": [
+        -8.5,
+        -2.0,
+        4.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true,
+        "ageClass": "mature"
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "forest:tree:05:branch",
+      "type": "branch",
+      "parent": "forest:tree:05",
+      "detail": 3,
+      "bounds": [
+        [
+          -9,
+          -2,
+          3
+        ],
+        [
+          -8,
+          0,
+          5
+        ]
+      ],
+      "position": [
+        -8.5,
+        -1.0,
+        4.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:tree:06",
+      "type": "tree",
+      "parent": "forest:stand",
+      "detail": 2,
+      "bounds": [
+        [
+          -8,
+          0,
+          1
+        ],
+        [
+          -4,
+          4,
+          10
+        ]
+      ],
+      "position": [
+        -6.0,
+        2.0,
+        5.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true,
+        "ageClass": "mature"
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "forest:tree:06:branch",
+      "type": "branch",
+      "parent": "forest:tree:06",
+      "detail": 3,
+      "bounds": [
+        [
+          -7,
+          2,
+          5
+        ],
+        [
+          -6,
+          4,
+          7
+        ]
+      ],
+      "position": [
+        -6.5,
+        3.0,
+        6.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:tree:07",
+      "type": "tree",
+      "parent": "forest:stand",
+      "detail": 2,
+      "bounds": [
+        [
+          -6,
+          2,
+          1
+        ],
+        [
+          -1,
+          8,
+          12
+        ]
+      ],
+      "position": [
+        -3.5,
+        5.0,
+        6.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true,
+        "ageClass": "mature"
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "forest:tree:07:branch",
+      "type": "branch",
+      "parent": "forest:tree:07",
+      "detail": 3,
+      "bounds": [
+        [
+          -3,
+          5,
+          7
+        ],
+        [
+          -3,
+          5,
+          7
+        ]
+      ],
+      "position": [
+        -3.0,
+        5.0,
+        7.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:tree:08",
+      "type": "tree",
+      "parent": "forest:stand",
+      "detail": 2,
+      "bounds": [
+        [
+          -3,
+          4,
+          1
+        ],
+        [
+          3,
+          10,
+          11
+        ]
+      ],
+      "position": [
+        0.0,
+        7.0,
+        6.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true,
+        "ageClass": "mature"
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "forest:tree:08:branch",
+      "type": "branch",
+      "parent": "forest:tree:08",
+      "detail": 3,
+      "bounds": [
+        [
+          -1,
+          7,
+          6
+        ],
+        [
+          0,
+          9,
+          8
+        ]
+      ],
+      "position": [
+        -0.5,
+        8.0,
+        7.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:tree:09",
+      "type": "tree",
+      "parent": "forest:stand",
+      "detail": 2,
+      "bounds": [
+        [
+          4,
+          3,
+          1
+        ],
+        [
+          7,
+          9,
+          8
+        ]
+      ],
+      "position": [
+        5.5,
+        6.0,
+        4.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true,
+        "ageClass": "mature"
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "forest:tree:09:branch",
+      "type": "branch",
+      "parent": "forest:tree:09",
+      "detail": 3,
+      "bounds": [
+        [
+          5,
+          6,
+          3
+        ],
+        [
+          6,
+          8,
+          5
+        ]
+      ],
+      "position": [
+        5.5,
+        7.0,
+        4.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:tree:10",
+      "type": "tree",
+      "parent": "forest:stand",
+      "detail": 2,
+      "bounds": [
+        [
+          6,
+          5,
+          1
+        ],
+        [
+          10,
+          9,
+          8
+        ]
+      ],
+      "position": [
+        8.0,
+        7.0,
+        4.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true,
+        "ageClass": "mature"
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "forest:tree:10:branch",
+      "type": "branch",
+      "parent": "forest:tree:10",
+      "detail": 3,
+      "bounds": [
+        [
+          7,
+          8,
+          4
+        ],
+        [
+          8,
+          9,
+          5
+        ]
+      ],
+      "position": [
+        7.5,
+        8.5,
+        4.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:tree:11",
+      "type": "tree",
+      "parent": "forest:stand",
+      "detail": 2,
+      "bounds": [
+        [
+          -10,
+          6,
+          1
+        ],
+        [
+          -6,
+          10,
+          9
+        ]
+      ],
+      "position": [
+        -8.0,
+        8.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true,
+        "ageClass": "mature"
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "forest:tree:11:branch",
+      "type": "branch",
+      "parent": "forest:tree:11",
+      "detail": 3,
+      "bounds": [
+        [
+          -8,
+          8,
+          4
+        ],
+        [
+          -7,
+          10,
+          6
+        ]
+      ],
+      "position": [
+        -7.5,
+        9.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:tree:12",
+      "type": "tree",
+      "parent": "forest:stand",
+      "detail": 2,
+      "bounds": [
+        [
+          5,
+          -1,
+          1
+        ],
+        [
+          9,
+          3,
+          11
+        ]
+      ],
+      "position": [
+        7.0,
+        1.0,
+        6.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true,
+        "ageClass": "mature"
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "forest:tree:12:branch",
+      "type": "branch",
+      "parent": "forest:tree:12",
+      "detail": 3,
+      "bounds": [
+        [
+          6,
+          1,
+          6
+        ],
+        [
+          7,
+          3,
+          8
+        ]
+      ],
+      "position": [
+        6.5,
+        2.0,
+        7.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:tree:13",
+      "type": "tree",
+      "parent": "forest:stand",
+      "detail": 2,
+      "bounds": [
+        [
+          -4,
+          -7,
+          1
+        ],
+        [
+          2,
+          -1,
+          12
+        ]
+      ],
+      "position": [
+        -1.0,
+        -4.0,
+        6.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true,
+        "ageClass": "mature"
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "forest:tree:13:branch",
+      "type": "branch",
+      "parent": "forest:tree:13",
+      "detail": 3,
+      "bounds": [
+        [
+          -1,
+          -4,
+          7
+        ],
+        [
+          0,
+          -2,
+          9
+        ]
+      ],
+      "position": [
+        -0.5,
+        -3.0,
+        8.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:tree:14",
+      "type": "tree",
+      "parent": "forest:stand",
+      "detail": 2,
+      "bounds": [
+        [
+          1,
+          -4,
+          1
+        ],
+        [
+          7,
+          2,
+          9
+        ]
+      ],
+      "position": [
+        4.0,
+        -1.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true,
+        "ageClass": "mature"
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "forest:tree:14:branch",
+      "type": "branch",
+      "parent": "forest:tree:14",
+      "detail": 3,
+      "bounds": [
+        [
+          3,
+          -1,
+          4
+        ],
+        [
+          4,
+          1,
+          6
+        ]
+      ],
+      "position": [
+        3.5,
+        0.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:tree:20",
+      "type": "youngTree",
+      "parent": "forest:stand",
+      "detail": 2,
+      "bounds": [
+        [
+          -7,
+          -7,
+          1
+        ],
+        [
+          -3,
+          -3,
+          6
+        ]
+      ],
+      "position": [
+        -5.0,
+        -5.0,
+        3.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true,
+        "ageClass": "young"
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "forest:tree:20:branch",
+      "type": "branch",
+      "parent": "forest:tree:20",
+      "detail": 3,
+      "bounds": [
+        [
+          -6,
+          -5,
+          2
+        ],
+        [
+          -5,
+          -3,
+          3
+        ]
+      ],
+      "position": [
+        -5.5,
+        -4.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:tree:21",
+      "type": "youngTree",
+      "parent": "forest:stand",
+      "detail": 2,
+      "bounds": [
+        [
+          0,
+          3,
+          1
+        ],
+        [
+          6,
+          9,
+          7
+        ]
+      ],
+      "position": [
+        3.0,
+        6.0,
+        4.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true,
+        "ageClass": "young"
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "forest:tree:21:branch",
+      "type": "branch",
+      "parent": "forest:tree:21",
+      "detail": 3,
+      "bounds": [
+        [
+          4,
+          7,
+          3
+        ],
+        [
+          4,
+          8,
+          4
+        ]
+      ],
+      "position": [
+        4.0,
+        7.5,
+        3.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:tree:22",
+      "type": "youngTree",
+      "parent": "forest:stand",
+      "detail": 2,
+      "bounds": [
+        [
+          6,
+          3,
+          1
+        ],
+        [
+          13,
+          7,
+          6
+        ]
+      ],
+      "position": [
+        9.5,
+        5.0,
+        3.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true,
+        "ageClass": "young"
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "forest:tree:22:branch",
+      "type": "branch",
+      "parent": "forest:tree:22",
+      "detail": 3,
+      "bounds": [
+        [
+          8,
+          5,
+          2
+        ],
+        [
+          9,
+          7,
+          3
+        ]
+      ],
+      "position": [
+        8.5,
+        6.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:tree:23",
+      "type": "youngTree",
+      "parent": "forest:stand",
+      "detail": 2,
+      "bounds": [
+        [
+          -11,
+          3,
+          1
+        ],
+        [
+          -7,
+          7,
+          7
+        ]
+      ],
+      "position": [
+        -9.0,
+        5.0,
+        4.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true,
+        "ageClass": "young"
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "forest:tree:23:branch",
+      "type": "branch",
+      "parent": "forest:tree:23",
+      "detail": 3,
+      "bounds": [
+        [
+          -9,
+          5,
+          2
+        ],
+        [
+          -8,
+          7,
+          4
+        ]
+      ],
+      "position": [
+        -8.5,
+        6.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:tree:24",
+      "type": "youngTree",
+      "parent": "forest:stand",
+      "detail": 2,
+      "bounds": [
+        [
+          2,
+          -8,
+          1
+        ],
+        [
+          8,
+          -2,
+          6
+        ]
+      ],
+      "position": [
+        5.0,
+        -5.0,
+        3.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true,
+        "ageClass": "young"
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "forest:tree:24:branch",
+      "type": "branch",
+      "parent": "forest:tree:24",
+      "detail": 3,
+      "bounds": [
+        [
+          4,
+          -5,
+          2
+        ],
+        [
+          5,
+          -3,
+          3
+        ]
+      ],
+      "position": [
+        4.5,
+        -4.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:tree:25",
+      "type": "youngTree",
+      "parent": "forest:stand",
+      "detail": 2,
+      "bounds": [
+        [
+          -3,
+          1,
+          1
+        ],
+        [
+          4,
+          5,
+          7
+        ]
+      ],
+      "position": [
+        0.5,
+        3.0,
+        4.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true,
+        "ageClass": "young"
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "forest:tree:25:branch",
+      "type": "branch",
+      "parent": "forest:tree:25",
+      "detail": 3,
+      "bounds": [
+        [
+          0,
+          3,
+          2
+        ],
+        [
+          1,
+          5,
+          4
+        ]
+      ],
+      "position": [
+        0.5,
+        4.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "forest:understory",
+      "type": "understory",
+      "parent": "forest:stand",
+      "detail": 2,
+      "bounds": null,
+      "position": null,
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    }
+  ],
+  "recipeMeta": {
+    "design": "mixed-age deterministic woodland with path, clearing and understory"
+  },
+  "stats": {
+    "voxelCount": 3738,
+    "materialCount": 13,
+    "featureCount": 68,
+    "macroFeatures": 4,
+    "mesoFeatures": 23,
+    "microFeatures": 41
+  },
+  "watercolorCompatibility": {
+    "hiddenGeometryScaffold": true,
+    "semanticEdges": true,
+    "showVoxelWireframe": false,
+    "pigmentRegionsFromFeatures": true
+  }
+}

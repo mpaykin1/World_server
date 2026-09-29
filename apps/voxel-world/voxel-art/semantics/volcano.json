@@ -1,0 +1,1629 @@
+{
+  "schemaVersion": 1,
+  "kind": "volcano",
+  "seed": 689523015,
+  "root": "volcano:root",
+  "features": [
+    {
+      "id": "volcano:ashPlume",
+      "type": "vfxEmitter",
+      "parent": "volcano:crater",
+      "detail": 3,
+      "bounds": null,
+      "position": null,
+      "relationships": [],
+      "gameplay": {
+        "vfx": "ash",
+        "runtimeOnly": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:ashZone",
+      "type": "ashZone",
+      "parent": "volcano:root",
+      "detail": 2,
+      "bounds": [
+        [
+          -10,
+          -1,
+          1
+        ],
+        [
+          9,
+          9,
+          1
+        ]
+      ],
+      "position": [
+        -0.5,
+        4.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "fertilityAfterWeathering": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "volcano:cliff:00",
+      "type": "cliff",
+      "parent": "volcano:massif",
+      "detail": 2,
+      "bounds": [
+        [
+          6,
+          1,
+          1
+        ],
+        [
+          8,
+          3,
+          4
+        ]
+      ],
+      "position": [
+        7.0,
+        2.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "volcano:cliff:01",
+      "type": "cliff",
+      "parent": "volcano:massif",
+      "detail": 2,
+      "bounds": [
+        [
+          -7,
+          5,
+          1
+        ],
+        [
+          -5,
+          7,
+          4
+        ]
+      ],
+      "position": [
+        -6.0,
+        6.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "volcano:cliff:02",
+      "type": "cliff",
+      "parent": "volcano:massif",
+      "detail": 2,
+      "bounds": [
+        [
+          3,
+          6,
+          1
+        ],
+        [
+          5,
+          8,
+          3
+        ]
+      ],
+      "position": [
+        4.0,
+        7.0,
+        2.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "volcano:crater",
+      "type": "crater",
+      "parent": "volcano:massif",
+      "detail": 1,
+      "bounds": [
+        [
+          -5,
+          -4,
+          10
+        ],
+        [
+          3,
+          4,
+          11
+        ]
+      ],
+      "position": [
+        -1.0,
+        0.0,
+        10.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "lavaSource": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "volcano:lavaCascade:00",
+      "type": "lavaCascade",
+      "parent": "volcano:lavaChannel:00",
+      "detail": 2,
+      "bounds": [
+        [
+          4,
+          -2,
+          4
+        ],
+        [
+          5,
+          -2,
+          8
+        ]
+      ],
+      "position": [
+        4.5,
+        -2.0,
+        6.0
+      ],
+      "relationships": [
+        {
+          "type": "continues",
+          "target": "volcano:lavaChannel:00"
+        }
+      ],
+      "gameplay": {
+        "activeLava": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "volcano:lavaCascade:01",
+      "type": "lavaCascade",
+      "parent": "volcano:lavaChannel:01",
+      "detail": 2,
+      "bounds": [
+        [
+          -5,
+          3,
+          3
+        ],
+        [
+          -4,
+          3,
+          7
+        ]
+      ],
+      "position": [
+        -4.5,
+        3.0,
+        5.0
+      ],
+      "relationships": [
+        {
+          "type": "continues",
+          "target": "volcano:lavaChannel:01"
+        }
+      ],
+      "gameplay": {
+        "activeLava": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "volcano:lavaChannel:00",
+      "type": "lavaChannel",
+      "parent": "volcano:crater",
+      "detail": 1,
+      "bounds": [
+        [
+          0,
+          -6,
+          1
+        ],
+        [
+          12,
+          1,
+          10
+        ]
+      ],
+      "position": [
+        6.0,
+        -2.5,
+        5.5
+      ],
+      "relationships": [
+        {
+          "type": "origin",
+          "target": "volcano:lavaSource"
+        }
+      ],
+      "gameplay": {
+        "activeLava": true,
+        "primary": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "volcano:lavaChannel:01",
+      "type": "lavaChannel",
+      "parent": "volcano:crater",
+      "detail": 2,
+      "bounds": [
+        [
+          -9,
+          2,
+          2
+        ],
+        [
+          -4,
+          5,
+          7
+        ]
+      ],
+      "position": [
+        -6.5,
+        3.5,
+        4.5
+      ],
+      "relationships": [
+        {
+          "type": "origin",
+          "target": "volcano:lavaSource"
+        }
+      ],
+      "gameplay": {
+        "activeLava": true,
+        "primary": false
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "volcano:lavaChannel:02",
+      "type": "lavaChannel",
+      "parent": "volcano:crater",
+      "detail": 2,
+      "bounds": [
+        [
+          -2,
+          -7,
+          4
+        ],
+        [
+          0,
+          -1,
+          10
+        ]
+      ],
+      "position": [
+        -1.0,
+        -4.0,
+        7.0
+      ],
+      "relationships": [
+        {
+          "type": "origin",
+          "target": "volcano:lavaSource"
+        }
+      ],
+      "gameplay": {
+        "activeLava": true,
+        "primary": false
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "volcano:lavaSource",
+      "type": "lavaSource",
+      "parent": "volcano:crater",
+      "detail": 1,
+      "bounds": [
+        [
+          -3,
+          -2,
+          9
+        ],
+        [
+          1,
+          2,
+          9
+        ]
+      ],
+      "position": [
+        -1.0,
+        0.0,
+        9.0
+      ],
+      "relationships": [
+        {
+          "type": "feeds",
+          "target": "volcano:lavaChannel:00"
+        }
+      ],
+      "gameplay": {
+        "activeLava": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "volcano:massif",
+      "type": "volcanicMassif",
+      "parent": "volcano:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -11,
+          -11,
+          1
+        ],
+        [
+          11,
+          11,
+          9
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "hazard": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "volcano:ridge:00",
+      "type": "ridge",
+      "parent": "volcano:massif",
+      "detail": 2,
+      "bounds": [
+        [
+          -8,
+          -2,
+          3
+        ],
+        [
+          0,
+          2,
+          10
+        ]
+      ],
+      "position": [
+        -4.0,
+        0.0,
+        6.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "erosionBarrier": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "volcano:ridge:01",
+      "type": "ridge",
+      "parent": "volcano:massif",
+      "detail": 2,
+      "bounds": [
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          8,
+          9,
+          9
+        ]
+      ],
+      "position": [
+        4.0,
+        5.0,
+        5.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "erosionBarrier": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "volcano:ridge:02",
+      "type": "ridge",
+      "parent": "volcano:massif",
+      "detail": 2,
+      "bounds": [
+        [
+          -9,
+          -8,
+          2
+        ],
+        [
+          -1,
+          0,
+          9
+        ]
+      ],
+      "position": [
+        -5.0,
+        -4.0,
+        5.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "erosionBarrier": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "volcano:rock:00",
+      "type": "rock",
+      "parent": "volcano:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          -13,
+          1,
+          0
+        ],
+        [
+          -9,
+          3,
+          2
+        ]
+      ],
+      "position": [
+        -11.0,
+        2.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:rock:01",
+      "type": "rock",
+      "parent": "volcano:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          -11,
+          3,
+          0
+        ],
+        [
+          -9,
+          5,
+          2
+        ]
+      ],
+      "position": [
+        -10.0,
+        4.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:rock:02",
+      "type": "rock",
+      "parent": "volcano:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          -9,
+          5,
+          0
+        ],
+        [
+          -7,
+          7,
+          2
+        ]
+      ],
+      "position": [
+        -8.0,
+        6.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:rock:03",
+      "type": "rock",
+      "parent": "volcano:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          -7,
+          7,
+          0
+        ],
+        [
+          -5,
+          9,
+          2
+        ]
+      ],
+      "position": [
+        -6.0,
+        8.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:rock:04",
+      "type": "rock",
+      "parent": "volcano:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          1,
+          10,
+          0
+        ],
+        [
+          3,
+          11,
+          2
+        ]
+      ],
+      "position": [
+        2.0,
+        10.5,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:rock:05",
+      "type": "rock",
+      "parent": "volcano:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          2,
+          8,
+          0
+        ],
+        [
+          6,
+          10,
+          2
+        ]
+      ],
+      "position": [
+        4.0,
+        9.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:rock:06",
+      "type": "rock",
+      "parent": "volcano:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          6,
+          6,
+          0
+        ],
+        [
+          8,
+          8,
+          2
+        ]
+      ],
+      "position": [
+        7.0,
+        7.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:rock:07",
+      "type": "rock",
+      "parent": "volcano:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          8,
+          4,
+          0
+        ],
+        [
+          10,
+          6,
+          2
+        ]
+      ],
+      "position": [
+        9.0,
+        5.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:rock:08",
+      "type": "rock",
+      "parent": "volcano:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          9,
+          1,
+          0
+        ],
+        [
+          11,
+          3,
+          2
+        ]
+      ],
+      "position": [
+        10.0,
+        2.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:rock:09",
+      "type": "rock",
+      "parent": "volcano:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          8,
+          -8,
+          0
+        ],
+        [
+          10,
+          -6,
+          2
+        ]
+      ],
+      "position": [
+        9.0,
+        -7.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:rock:10",
+      "type": "rock",
+      "parent": "volcano:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          5,
+          -10,
+          0
+        ],
+        [
+          9,
+          -8,
+          2
+        ]
+      ],
+      "position": [
+        7.0,
+        -9.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:rock:11",
+      "type": "rock",
+      "parent": "volcano:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          2,
+          -11,
+          0
+        ],
+        [
+          4,
+          -9,
+          2
+        ]
+      ],
+      "position": [
+        3.0,
+        -10.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:rock:12",
+      "type": "rock",
+      "parent": "volcano:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          -5,
+          -11,
+          0
+        ],
+        [
+          -3,
+          -9,
+          2
+        ]
+      ],
+      "position": [
+        -4.0,
+        -10.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:rock:13",
+      "type": "rock",
+      "parent": "volcano:rockField",
+      "detail": 3,
+      "bounds": [
+        [
+          -8,
+          -9,
+          0
+        ],
+        [
+          -6,
+          -7,
+          2
+        ]
+      ],
+      "position": [
+        -7.0,
+        -8.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "scatter": "rock"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:rockField",
+      "type": "rockField",
+      "parent": "volcano:massif",
+      "detail": 2,
+      "bounds": null,
+      "position": null,
+      "relationships": [],
+      "gameplay": {
+        "talus": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "volcano:root",
+      "type": "volcano",
+      "parent": null,
+      "detail": 1,
+      "bounds": null,
+      "position": null,
+      "relationships": [],
+      "gameplay": {
+        "semanticRoot": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "volcano:safeTerrace:00",
+      "type": "safeTerrace",
+      "parent": "volcano:massif",
+      "detail": 2,
+      "bounds": [
+        [
+          -10,
+          -2,
+          3
+        ],
+        [
+          -4,
+          4,
+          4
+        ]
+      ],
+      "position": [
+        -7.0,
+        1.0,
+        3.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "habitable": true,
+        "safeFromActiveLava": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "volcano:safeTerrace:01",
+      "type": "safeTerrace",
+      "parent": "volcano:massif",
+      "detail": 2,
+      "bounds": [
+        [
+          2,
+          -10,
+          2
+        ],
+        [
+          8,
+          -4,
+          2
+        ]
+      ],
+      "position": [
+        5.0,
+        -7.0,
+        2.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "habitable": true,
+        "safeFromActiveLava": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "volcano:safeTerrace:02",
+      "type": "safeTerrace",
+      "parent": "volcano:massif",
+      "detail": 2,
+      "bounds": [
+        [
+          -5,
+          6,
+          2
+        ],
+        [
+          -1,
+          10,
+          2
+        ]
+      ],
+      "position": [
+        -3.0,
+        8.0,
+        2.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "habitable": true,
+        "safeFromActiveLava": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "volcano:strata:bedrock",
+      "type": "strata",
+      "parent": "volcano:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -12,
+          -12,
+          -3
+        ],
+        [
+          12,
+          12,
+          -3
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        -3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": false
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "volcano:strata:soil",
+      "type": "strata",
+      "parent": "volcano:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -12,
+          -12,
+          -1
+        ],
+        [
+          12,
+          12,
+          -1
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": false
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "volcano:strata:subsoil",
+      "type": "strata",
+      "parent": "volcano:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -12,
+          -12,
+          -2
+        ],
+        [
+          12,
+          12,
+          -2
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        -2.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": false
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "volcano:surface",
+      "type": "terrainSurface",
+      "parent": "volcano:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -12,
+          -12,
+          0
+        ],
+        [
+          12,
+          12,
+          0
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "volcano:valley",
+      "type": "valley",
+      "parent": "volcano:massif",
+      "detail": 2,
+      "bounds": [
+        [
+          -11,
+          -5,
+          1
+        ],
+        [
+          -2,
+          0,
+          4
+        ]
+      ],
+      "position": [
+        -6.5,
+        -2.5,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "drainage": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "volcano:vegetation:00",
+      "type": "vegetation",
+      "parent": "volcano:vegetationZone",
+      "detail": 3,
+      "bounds": [
+        [
+          -10,
+          8,
+          2
+        ],
+        [
+          -9,
+          8,
+          3
+        ]
+      ],
+      "position": [
+        -9.5,
+        8.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:vegetation:01",
+      "type": "vegetation",
+      "parent": "volcano:vegetationZone",
+      "detail": 3,
+      "bounds": [
+        [
+          -8,
+          9,
+          2
+        ],
+        [
+          -8,
+          9,
+          3
+        ]
+      ],
+      "position": [
+        -8.0,
+        9.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:vegetation:02",
+      "type": "vegetation",
+      "parent": "volcano:vegetationZone",
+      "detail": 3,
+      "bounds": [
+        [
+          -6,
+          9,
+          2
+        ],
+        [
+          -5,
+          9,
+          3
+        ]
+      ],
+      "position": [
+        -5.5,
+        9.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:vegetation:03",
+      "type": "vegetation",
+      "parent": "volcano:vegetationZone",
+      "detail": 3,
+      "bounds": [
+        [
+          -6,
+          1,
+          2
+        ],
+        [
+          -6,
+          1,
+          3
+        ]
+      ],
+      "position": [
+        -6.0,
+        1.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:vegetation:04",
+      "type": "vegetation",
+      "parent": "volcano:vegetationZone",
+      "detail": 3,
+      "bounds": [
+        [
+          -8,
+          0,
+          2
+        ],
+        [
+          -7,
+          0,
+          3
+        ]
+      ],
+      "position": [
+        -7.5,
+        0.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:vegetation:05",
+      "type": "vegetation",
+      "parent": "volcano:vegetationZone",
+      "detail": 3,
+      "bounds": [
+        [
+          5,
+          10,
+          2
+        ],
+        [
+          6,
+          10,
+          3
+        ]
+      ],
+      "position": [
+        5.5,
+        10.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:vegetation:06",
+      "type": "vegetation",
+      "parent": "volcano:vegetationZone",
+      "detail": 3,
+      "bounds": [
+        [
+          7,
+          10,
+          2
+        ],
+        [
+          8,
+          10,
+          3
+        ]
+      ],
+      "position": [
+        7.5,
+        10.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:vegetation:07",
+      "type": "vegetation",
+      "parent": "volcano:vegetationZone",
+      "detail": 3,
+      "bounds": [
+        [
+          10,
+          8,
+          2
+        ],
+        [
+          10,
+          8,
+          3
+        ]
+      ],
+      "position": [
+        10.0,
+        8.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:vegetation:08",
+      "type": "vegetation",
+      "parent": "volcano:vegetationZone",
+      "detail": 3,
+      "bounds": [
+        [
+          10,
+          6,
+          2
+        ],
+        [
+          11,
+          6,
+          3
+        ]
+      ],
+      "position": [
+        10.5,
+        6.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:vegetation:09",
+      "type": "vegetation",
+      "parent": "volcano:vegetationZone",
+      "detail": 3,
+      "bounds": [
+        [
+          6,
+          -10,
+          2
+        ],
+        [
+          6,
+          -10,
+          3
+        ]
+      ],
+      "position": [
+        6.0,
+        -10.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:vegetation:10",
+      "type": "vegetation",
+      "parent": "volcano:vegetationZone",
+      "detail": 3,
+      "bounds": [
+        [
+          4,
+          -9,
+          2
+        ],
+        [
+          5,
+          -9,
+          3
+        ]
+      ],
+      "position": [
+        4.5,
+        -9.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:vegetation:11",
+      "type": "vegetation",
+      "parent": "volcano:vegetationZone",
+      "detail": 3,
+      "bounds": [
+        [
+          -4,
+          10,
+          2
+        ],
+        [
+          -3,
+          10,
+          3
+        ]
+      ],
+      "position": [
+        -3.5,
+        10.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "flammable": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "volcano:vegetationZone",
+      "type": "vegetationZone",
+      "parent": "volcano:root",
+      "detail": 2,
+      "bounds": null,
+      "position": null,
+      "relationships": [],
+      "gameplay": {
+        "habitable": true,
+        "excludesActiveLava": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    }
+  ],
+  "recipeMeta": {
+    "design": "asymmetric inhabited volcanic micro-location",
+    "vfxFeature": "volcano:ashPlume",
+    "activeLavaFeatureIds": [
+      "volcano:lavaSource",
+      "volcano:lavaChannel:00",
+      "volcano:lavaChannel:01",
+      "volcano:lavaChannel:02"
+    ]
+  },
+  "stats": {
+    "voxelCount": 4958,
+    "materialCount": 14,
+    "featureCount": 49,
+    "macroFeatures": 8,
+    "mesoFeatures": 15,
+    "microFeatures": 26
+  },
+  "watercolorCompatibility": {
+    "hiddenGeometryScaffold": true,
+    "semanticEdges": true,
+    "showVoxelWireframe": false,
+    "pigmentRegionsFromFeatures": true
+  }
+}

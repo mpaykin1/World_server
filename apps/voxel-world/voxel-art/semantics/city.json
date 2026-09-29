@@ -1,0 +1,4045 @@
+{
+  "schemaVersion": 1,
+  "kind": "city",
+  "seed": 572100176,
+  "root": "city:root",
+  "features": [
+    {
+      "id": "city:alley:00",
+      "type": "alley",
+      "parent": "city:district:central",
+      "detail": 2,
+      "bounds": [
+        [
+          -6,
+          -6,
+          1
+        ],
+        [
+          -3,
+          4,
+          1
+        ]
+      ],
+      "position": [
+        -4.5,
+        -1.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "city:building:00",
+      "type": "building",
+      "parent": "city:district:central",
+      "detail": 2,
+      "bounds": [
+        [
+          -13,
+          -13,
+          1
+        ],
+        [
+          -9,
+          -9,
+          7
+        ]
+      ],
+      "position": [
+        -11.0,
+        -11.0,
+        4.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "occupiable": true,
+        "floors": 2
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "city:building:00:entrance",
+      "type": "entrance",
+      "parent": "city:building:00",
+      "detail": 3,
+      "bounds": [
+        [
+          -11,
+          -14,
+          2
+        ],
+        [
+          -11,
+          -14,
+          3
+        ]
+      ],
+      "position": [
+        -11.0,
+        -14.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkablePortal": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:00:roof",
+      "type": "roof",
+      "parent": "city:building:00",
+      "detail": 2,
+      "bounds": [
+        [
+          -14,
+          -14,
+          8
+        ],
+        [
+          -8,
+          -8,
+          8
+        ]
+      ],
+      "position": [
+        -11.0,
+        -11.0,
+        8.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "city:building:00:roofTech",
+      "type": "roofEquipment",
+      "parent": "city:building:00:roof",
+      "detail": 3,
+      "bounds": [
+        [
+          -11,
+          -11,
+          9
+        ],
+        [
+          -10,
+          -10,
+          10
+        ]
+      ],
+      "position": [
+        -10.5,
+        -10.5,
+        9.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:00:window:00",
+      "type": "window",
+      "parent": "city:building:00",
+      "detail": 3,
+      "bounds": [
+        [
+          -12,
+          -14,
+          3
+        ],
+        [
+          -12,
+          -14,
+          3
+        ]
+      ],
+      "position": [
+        -12.0,
+        -14.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:00:window:01",
+      "type": "window",
+      "parent": "city:building:00",
+      "detail": 3,
+      "bounds": [
+        [
+          -10,
+          -14,
+          3
+        ],
+        [
+          -10,
+          -14,
+          3
+        ]
+      ],
+      "position": [
+        -10.0,
+        -14.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:00:window:02",
+      "type": "window",
+      "parent": "city:building:00",
+      "detail": 3,
+      "bounds": [
+        [
+          -8,
+          -12,
+          3
+        ],
+        [
+          -8,
+          -12,
+          3
+        ]
+      ],
+      "position": [
+        -8.0,
+        -12.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:00:window:03",
+      "type": "window",
+      "parent": "city:building:00",
+      "detail": 3,
+      "bounds": [
+        [
+          -8,
+          -10,
+          3
+        ],
+        [
+          -8,
+          -10,
+          3
+        ]
+      ],
+      "position": [
+        -8.0,
+        -10.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:00:window:04",
+      "type": "window",
+      "parent": "city:building:00",
+      "detail": 3,
+      "bounds": [
+        [
+          -12,
+          -14,
+          5
+        ],
+        [
+          -12,
+          -14,
+          5
+        ]
+      ],
+      "position": [
+        -12.0,
+        -14.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:00:window:05",
+      "type": "window",
+      "parent": "city:building:00",
+      "detail": 3,
+      "bounds": [
+        [
+          -10,
+          -14,
+          5
+        ],
+        [
+          -10,
+          -14,
+          5
+        ]
+      ],
+      "position": [
+        -10.0,
+        -14.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:00:window:06",
+      "type": "window",
+      "parent": "city:building:00",
+      "detail": 3,
+      "bounds": [
+        [
+          -8,
+          -12,
+          5
+        ],
+        [
+          -8,
+          -12,
+          5
+        ]
+      ],
+      "position": [
+        -8.0,
+        -12.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:00:window:07",
+      "type": "window",
+      "parent": "city:building:00",
+      "detail": 3,
+      "bounds": [
+        [
+          -8,
+          -10,
+          5
+        ],
+        [
+          -8,
+          -10,
+          5
+        ]
+      ],
+      "position": [
+        -8.0,
+        -10.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:01",
+      "type": "building",
+      "parent": "city:district:central",
+      "detail": 2,
+      "bounds": [
+        [
+          -6,
+          -13,
+          1
+        ],
+        [
+          -3,
+          -9,
+          10
+        ]
+      ],
+      "position": [
+        -4.5,
+        -11.0,
+        5.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "occupiable": true,
+        "floors": 3
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "city:building:01:entrance",
+      "type": "entrance",
+      "parent": "city:building:01",
+      "detail": 3,
+      "bounds": [
+        [
+          -4,
+          -14,
+          2
+        ],
+        [
+          -4,
+          -14,
+          3
+        ]
+      ],
+      "position": [
+        -4.0,
+        -14.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkablePortal": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:01:roof",
+      "type": "roof",
+      "parent": "city:building:01",
+      "detail": 2,
+      "bounds": [
+        [
+          -7,
+          -14,
+          11
+        ],
+        [
+          -2,
+          -8,
+          12
+        ]
+      ],
+      "position": [
+        -4.5,
+        -11.0,
+        11.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "city:building:01:roofTech",
+      "type": "roofEquipment",
+      "parent": "city:building:01:roof",
+      "detail": 3,
+      "bounds": [
+        [
+          -4,
+          -11,
+          12
+        ],
+        [
+          -3,
+          -10,
+          13
+        ]
+      ],
+      "position": [
+        -3.5,
+        -10.5,
+        12.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:01:window:00",
+      "type": "window",
+      "parent": "city:building:01",
+      "detail": 3,
+      "bounds": [
+        [
+          -5,
+          -14,
+          3
+        ],
+        [
+          -5,
+          -14,
+          3
+        ]
+      ],
+      "position": [
+        -5.0,
+        -14.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:01:window:01",
+      "type": "window",
+      "parent": "city:building:01",
+      "detail": 3,
+      "bounds": [
+        [
+          -2,
+          -12,
+          3
+        ],
+        [
+          -2,
+          -12,
+          3
+        ]
+      ],
+      "position": [
+        -2.0,
+        -12.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:01:window:02",
+      "type": "window",
+      "parent": "city:building:01",
+      "detail": 3,
+      "bounds": [
+        [
+          -2,
+          -10,
+          3
+        ],
+        [
+          -2,
+          -10,
+          3
+        ]
+      ],
+      "position": [
+        -2.0,
+        -10.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:01:window:03",
+      "type": "window",
+      "parent": "city:building:01",
+      "detail": 3,
+      "bounds": [
+        [
+          -5,
+          -14,
+          5
+        ],
+        [
+          -5,
+          -14,
+          5
+        ]
+      ],
+      "position": [
+        -5.0,
+        -14.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:01:window:04",
+      "type": "window",
+      "parent": "city:building:01",
+      "detail": 3,
+      "bounds": [
+        [
+          -2,
+          -12,
+          5
+        ],
+        [
+          -2,
+          -12,
+          5
+        ]
+      ],
+      "position": [
+        -2.0,
+        -12.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:01:window:05",
+      "type": "window",
+      "parent": "city:building:01",
+      "detail": 3,
+      "bounds": [
+        [
+          -2,
+          -10,
+          5
+        ],
+        [
+          -2,
+          -10,
+          5
+        ]
+      ],
+      "position": [
+        -2.0,
+        -10.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:01:window:06",
+      "type": "window",
+      "parent": "city:building:01",
+      "detail": 3,
+      "bounds": [
+        [
+          -5,
+          -14,
+          7
+        ],
+        [
+          -5,
+          -14,
+          7
+        ]
+      ],
+      "position": [
+        -5.0,
+        -14.0,
+        7.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:01:window:07",
+      "type": "window",
+      "parent": "city:building:01",
+      "detail": 3,
+      "bounds": [
+        [
+          -2,
+          -12,
+          7
+        ],
+        [
+          -2,
+          -12,
+          7
+        ]
+      ],
+      "position": [
+        -2.0,
+        -12.0,
+        7.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:01:window:08",
+      "type": "window",
+      "parent": "city:building:01",
+      "detail": 3,
+      "bounds": [
+        [
+          -2,
+          -10,
+          7
+        ],
+        [
+          -2,
+          -10,
+          7
+        ]
+      ],
+      "position": [
+        -2.0,
+        -10.0,
+        7.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:01:window:09",
+      "type": "window",
+      "parent": "city:building:01",
+      "detail": 3,
+      "bounds": [
+        [
+          -5,
+          -14,
+          9
+        ],
+        [
+          -5,
+          -14,
+          9
+        ]
+      ],
+      "position": [
+        -5.0,
+        -14.0,
+        9.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:01:window:10",
+      "type": "window",
+      "parent": "city:building:01",
+      "detail": 3,
+      "bounds": [
+        [
+          -2,
+          -12,
+          9
+        ],
+        [
+          -2,
+          -12,
+          9
+        ]
+      ],
+      "position": [
+        -2.0,
+        -12.0,
+        9.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:01:window:11",
+      "type": "window",
+      "parent": "city:building:01",
+      "detail": 3,
+      "bounds": [
+        [
+          -2,
+          -10,
+          9
+        ],
+        [
+          -2,
+          -10,
+          9
+        ]
+      ],
+      "position": [
+        -2.0,
+        -10.0,
+        9.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:02",
+      "type": "building",
+      "parent": "city:district:central",
+      "detail": 2,
+      "bounds": [
+        [
+          5,
+          -13,
+          1
+        ],
+        [
+          7,
+          -9,
+          6
+        ]
+      ],
+      "position": [
+        6.0,
+        -11.0,
+        3.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "occupiable": true,
+        "floors": 2
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "city:building:02:entrance",
+      "type": "entrance",
+      "parent": "city:building:02",
+      "detail": 3,
+      "bounds": [
+        [
+          6,
+          -14,
+          2
+        ],
+        [
+          6,
+          -14,
+          2
+        ]
+      ],
+      "position": [
+        6.0,
+        -14.0,
+        2.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkablePortal": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:02:roof",
+      "type": "roof",
+      "parent": "city:building:02",
+      "detail": 2,
+      "bounds": [
+        [
+          4,
+          -14,
+          7
+        ],
+        [
+          8,
+          -8,
+          7
+        ]
+      ],
+      "position": [
+        6.0,
+        -11.0,
+        7.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "city:building:02:window:00",
+      "type": "window",
+      "parent": "city:building:02",
+      "detail": 3,
+      "bounds": [
+        [
+          6,
+          -14,
+          3
+        ],
+        [
+          6,
+          -14,
+          3
+        ]
+      ],
+      "position": [
+        6.0,
+        -14.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:02:window:01",
+      "type": "window",
+      "parent": "city:building:02",
+      "detail": 3,
+      "bounds": [
+        [
+          8,
+          -12,
+          3
+        ],
+        [
+          8,
+          -12,
+          3
+        ]
+      ],
+      "position": [
+        8.0,
+        -12.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:02:window:02",
+      "type": "window",
+      "parent": "city:building:02",
+      "detail": 3,
+      "bounds": [
+        [
+          8,
+          -10,
+          3
+        ],
+        [
+          8,
+          -10,
+          3
+        ]
+      ],
+      "position": [
+        8.0,
+        -10.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:02:window:03",
+      "type": "window",
+      "parent": "city:building:02",
+      "detail": 3,
+      "bounds": [
+        [
+          6,
+          -14,
+          5
+        ],
+        [
+          6,
+          -14,
+          5
+        ]
+      ],
+      "position": [
+        6.0,
+        -14.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:02:window:04",
+      "type": "window",
+      "parent": "city:building:02",
+      "detail": 3,
+      "bounds": [
+        [
+          8,
+          -12,
+          5
+        ],
+        [
+          8,
+          -12,
+          5
+        ]
+      ],
+      "position": [
+        8.0,
+        -12.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:02:window:05",
+      "type": "window",
+      "parent": "city:building:02",
+      "detail": 3,
+      "bounds": [
+        [
+          8,
+          -10,
+          5
+        ],
+        [
+          8,
+          -10,
+          5
+        ]
+      ],
+      "position": [
+        8.0,
+        -10.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:03",
+      "type": "building",
+      "parent": "city:district:central",
+      "detail": 2,
+      "bounds": [
+        [
+          10,
+          -13,
+          1
+        ],
+        [
+          13,
+          -9,
+          8
+        ]
+      ],
+      "position": [
+        11.5,
+        -11.0,
+        4.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "occupiable": true,
+        "floors": 2
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "city:building:03:entrance",
+      "type": "entrance",
+      "parent": "city:building:03",
+      "detail": 3,
+      "bounds": [
+        [
+          12,
+          -14,
+          2
+        ],
+        [
+          12,
+          -14,
+          3
+        ]
+      ],
+      "position": [
+        12.0,
+        -14.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkablePortal": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:03:roof",
+      "type": "roof",
+      "parent": "city:building:03",
+      "detail": 2,
+      "bounds": [
+        [
+          9,
+          -14,
+          9
+        ],
+        [
+          14,
+          -8,
+          9
+        ]
+      ],
+      "position": [
+        11.5,
+        -11.0,
+        9.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "city:building:03:roofTech",
+      "type": "roofEquipment",
+      "parent": "city:building:03:roof",
+      "detail": 3,
+      "bounds": [
+        [
+          12,
+          -11,
+          10
+        ],
+        [
+          13,
+          -10,
+          11
+        ]
+      ],
+      "position": [
+        12.5,
+        -10.5,
+        10.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:03:window:00",
+      "type": "window",
+      "parent": "city:building:03",
+      "detail": 3,
+      "bounds": [
+        [
+          11,
+          -14,
+          3
+        ],
+        [
+          11,
+          -14,
+          3
+        ]
+      ],
+      "position": [
+        11.0,
+        -14.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:03:window:01",
+      "type": "window",
+      "parent": "city:building:03",
+      "detail": 3,
+      "bounds": [
+        [
+          14,
+          -12,
+          3
+        ],
+        [
+          14,
+          -12,
+          3
+        ]
+      ],
+      "position": [
+        14.0,
+        -12.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:03:window:02",
+      "type": "window",
+      "parent": "city:building:03",
+      "detail": 3,
+      "bounds": [
+        [
+          14,
+          -10,
+          3
+        ],
+        [
+          14,
+          -10,
+          3
+        ]
+      ],
+      "position": [
+        14.0,
+        -10.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:03:window:03",
+      "type": "window",
+      "parent": "city:building:03",
+      "detail": 3,
+      "bounds": [
+        [
+          11,
+          -14,
+          5
+        ],
+        [
+          11,
+          -14,
+          5
+        ]
+      ],
+      "position": [
+        11.0,
+        -14.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:03:window:04",
+      "type": "window",
+      "parent": "city:building:03",
+      "detail": 3,
+      "bounds": [
+        [
+          14,
+          -12,
+          5
+        ],
+        [
+          14,
+          -12,
+          5
+        ]
+      ],
+      "position": [
+        14.0,
+        -12.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:03:window:05",
+      "type": "window",
+      "parent": "city:building:03",
+      "detail": 3,
+      "bounds": [
+        [
+          14,
+          -10,
+          5
+        ],
+        [
+          14,
+          -10,
+          5
+        ]
+      ],
+      "position": [
+        14.0,
+        -10.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:03:window:06",
+      "type": "window",
+      "parent": "city:building:03",
+      "detail": 3,
+      "bounds": [
+        [
+          11,
+          -14,
+          7
+        ],
+        [
+          11,
+          -14,
+          7
+        ]
+      ],
+      "position": [
+        11.0,
+        -14.0,
+        7.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:03:window:07",
+      "type": "window",
+      "parent": "city:building:03",
+      "detail": 3,
+      "bounds": [
+        [
+          14,
+          -12,
+          7
+        ],
+        [
+          14,
+          -12,
+          7
+        ]
+      ],
+      "position": [
+        14.0,
+        -12.0,
+        7.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:03:window:08",
+      "type": "window",
+      "parent": "city:building:03",
+      "detail": 3,
+      "bounds": [
+        [
+          14,
+          -10,
+          7
+        ],
+        [
+          14,
+          -10,
+          7
+        ]
+      ],
+      "position": [
+        14.0,
+        -10.0,
+        7.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:04",
+      "type": "building",
+      "parent": "city:district:central",
+      "detail": 2,
+      "bounds": [
+        [
+          -13,
+          -5,
+          1
+        ],
+        [
+          -9,
+          -2,
+          5
+        ]
+      ],
+      "position": [
+        -11.0,
+        -3.5,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "occupiable": true,
+        "floors": 1
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "city:building:04:entrance",
+      "type": "entrance",
+      "parent": "city:building:04",
+      "detail": 3,
+      "bounds": [
+        [
+          -11,
+          -6,
+          2
+        ],
+        [
+          -11,
+          -6,
+          3
+        ]
+      ],
+      "position": [
+        -11.0,
+        -6.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkablePortal": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:04:roof",
+      "type": "roof",
+      "parent": "city:building:04",
+      "detail": 2,
+      "bounds": [
+        [
+          -14,
+          -6,
+          6
+        ],
+        [
+          -8,
+          -1,
+          6
+        ]
+      ],
+      "position": [
+        -11.0,
+        -3.5,
+        6.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "city:building:04:window:00",
+      "type": "window",
+      "parent": "city:building:04",
+      "detail": 3,
+      "bounds": [
+        [
+          -12,
+          -6,
+          3
+        ],
+        [
+          -12,
+          -6,
+          3
+        ]
+      ],
+      "position": [
+        -12.0,
+        -6.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:04:window:01",
+      "type": "window",
+      "parent": "city:building:04",
+      "detail": 3,
+      "bounds": [
+        [
+          -10,
+          -6,
+          3
+        ],
+        [
+          -10,
+          -6,
+          3
+        ]
+      ],
+      "position": [
+        -10.0,
+        -6.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:04:window:02",
+      "type": "window",
+      "parent": "city:building:04",
+      "detail": 3,
+      "bounds": [
+        [
+          -8,
+          -4,
+          3
+        ],
+        [
+          -8,
+          -4,
+          3
+        ]
+      ],
+      "position": [
+        -8.0,
+        -4.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:05",
+      "type": "building",
+      "parent": "city:district:central",
+      "detail": 2,
+      "bounds": [
+        [
+          7,
+          -5,
+          1
+        ],
+        [
+          11,
+          -2,
+          11
+        ]
+      ],
+      "position": [
+        9.0,
+        -3.5,
+        6.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "occupiable": true,
+        "floors": 3
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "city:building:05:entrance",
+      "type": "entrance",
+      "parent": "city:building:05",
+      "detail": 3,
+      "bounds": [
+        [
+          9,
+          -6,
+          2
+        ],
+        [
+          9,
+          -6,
+          3
+        ]
+      ],
+      "position": [
+        9.0,
+        -6.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkablePortal": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:05:roof",
+      "type": "roof",
+      "parent": "city:building:05",
+      "detail": 2,
+      "bounds": [
+        [
+          6,
+          -6,
+          12
+        ],
+        [
+          12,
+          -1,
+          13
+        ]
+      ],
+      "position": [
+        9.0,
+        -3.5,
+        12.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "city:building:05:roofTech",
+      "type": "roofEquipment",
+      "parent": "city:building:05:roof",
+      "detail": 3,
+      "bounds": [
+        [
+          9,
+          -3,
+          13
+        ],
+        [
+          10,
+          -2,
+          14
+        ]
+      ],
+      "position": [
+        9.5,
+        -2.5,
+        13.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:05:window:00",
+      "type": "window",
+      "parent": "city:building:05",
+      "detail": 3,
+      "bounds": [
+        [
+          8,
+          -6,
+          3
+        ],
+        [
+          8,
+          -6,
+          3
+        ]
+      ],
+      "position": [
+        8.0,
+        -6.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:05:window:01",
+      "type": "window",
+      "parent": "city:building:05",
+      "detail": 3,
+      "bounds": [
+        [
+          10,
+          -6,
+          3
+        ],
+        [
+          10,
+          -6,
+          3
+        ]
+      ],
+      "position": [
+        10.0,
+        -6.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:05:window:02",
+      "type": "window",
+      "parent": "city:building:05",
+      "detail": 3,
+      "bounds": [
+        [
+          12,
+          -4,
+          3
+        ],
+        [
+          12,
+          -4,
+          3
+        ]
+      ],
+      "position": [
+        12.0,
+        -4.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:05:window:03",
+      "type": "window",
+      "parent": "city:building:05",
+      "detail": 3,
+      "bounds": [
+        [
+          8,
+          -6,
+          5
+        ],
+        [
+          8,
+          -6,
+          5
+        ]
+      ],
+      "position": [
+        8.0,
+        -6.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:05:window:04",
+      "type": "window",
+      "parent": "city:building:05",
+      "detail": 3,
+      "bounds": [
+        [
+          10,
+          -6,
+          5
+        ],
+        [
+          10,
+          -6,
+          5
+        ]
+      ],
+      "position": [
+        10.0,
+        -6.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:05:window:05",
+      "type": "window",
+      "parent": "city:building:05",
+      "detail": 3,
+      "bounds": [
+        [
+          12,
+          -4,
+          5
+        ],
+        [
+          12,
+          -4,
+          5
+        ]
+      ],
+      "position": [
+        12.0,
+        -4.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:05:window:06",
+      "type": "window",
+      "parent": "city:building:05",
+      "detail": 3,
+      "bounds": [
+        [
+          8,
+          -6,
+          7
+        ],
+        [
+          8,
+          -6,
+          7
+        ]
+      ],
+      "position": [
+        8.0,
+        -6.0,
+        7.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:05:window:07",
+      "type": "window",
+      "parent": "city:building:05",
+      "detail": 3,
+      "bounds": [
+        [
+          10,
+          -6,
+          7
+        ],
+        [
+          10,
+          -6,
+          7
+        ]
+      ],
+      "position": [
+        10.0,
+        -6.0,
+        7.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:05:window:08",
+      "type": "window",
+      "parent": "city:building:05",
+      "detail": 3,
+      "bounds": [
+        [
+          12,
+          -4,
+          7
+        ],
+        [
+          12,
+          -4,
+          7
+        ]
+      ],
+      "position": [
+        12.0,
+        -4.0,
+        7.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:05:window:09",
+      "type": "window",
+      "parent": "city:building:05",
+      "detail": 3,
+      "bounds": [
+        [
+          8,
+          -6,
+          9
+        ],
+        [
+          8,
+          -6,
+          9
+        ]
+      ],
+      "position": [
+        8.0,
+        -6.0,
+        9.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:05:window:10",
+      "type": "window",
+      "parent": "city:building:05",
+      "detail": 3,
+      "bounds": [
+        [
+          10,
+          -6,
+          9
+        ],
+        [
+          10,
+          -6,
+          9
+        ]
+      ],
+      "position": [
+        10.0,
+        -6.0,
+        9.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:05:window:11",
+      "type": "window",
+      "parent": "city:building:05",
+      "detail": 3,
+      "bounds": [
+        [
+          12,
+          -4,
+          9
+        ],
+        [
+          12,
+          -4,
+          9
+        ]
+      ],
+      "position": [
+        12.0,
+        -4.0,
+        9.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:06",
+      "type": "building",
+      "parent": "city:district:central",
+      "detail": 2,
+      "bounds": [
+        [
+          -13,
+          7,
+          1
+        ],
+        [
+          -9,
+          11,
+          9
+        ]
+      ],
+      "position": [
+        -11.0,
+        9.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "occupiable": true,
+        "floors": 3
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "city:building:06:entrance",
+      "type": "entrance",
+      "parent": "city:building:06",
+      "detail": 3,
+      "bounds": [
+        [
+          -11,
+          6,
+          2
+        ],
+        [
+          -11,
+          6,
+          3
+        ]
+      ],
+      "position": [
+        -11.0,
+        6.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkablePortal": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:06:roof",
+      "type": "roof",
+      "parent": "city:building:06",
+      "detail": 2,
+      "bounds": [
+        [
+          -14,
+          6,
+          10
+        ],
+        [
+          -8,
+          12,
+          11
+        ]
+      ],
+      "position": [
+        -11.0,
+        9.0,
+        10.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "city:building:06:roofTech",
+      "type": "roofEquipment",
+      "parent": "city:building:06:roof",
+      "detail": 3,
+      "bounds": [
+        [
+          -11,
+          9,
+          11
+        ],
+        [
+          -10,
+          10,
+          12
+        ]
+      ],
+      "position": [
+        -10.5,
+        9.5,
+        11.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:06:window:00",
+      "type": "window",
+      "parent": "city:building:06",
+      "detail": 3,
+      "bounds": [
+        [
+          -12,
+          6,
+          3
+        ],
+        [
+          -12,
+          6,
+          3
+        ]
+      ],
+      "position": [
+        -12.0,
+        6.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:06:window:01",
+      "type": "window",
+      "parent": "city:building:06",
+      "detail": 3,
+      "bounds": [
+        [
+          -10,
+          6,
+          3
+        ],
+        [
+          -10,
+          6,
+          3
+        ]
+      ],
+      "position": [
+        -10.0,
+        6.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:06:window:02",
+      "type": "window",
+      "parent": "city:building:06",
+      "detail": 3,
+      "bounds": [
+        [
+          -8,
+          8,
+          3
+        ],
+        [
+          -8,
+          8,
+          3
+        ]
+      ],
+      "position": [
+        -8.0,
+        8.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:06:window:03",
+      "type": "window",
+      "parent": "city:building:06",
+      "detail": 3,
+      "bounds": [
+        [
+          -8,
+          10,
+          3
+        ],
+        [
+          -8,
+          10,
+          3
+        ]
+      ],
+      "position": [
+        -8.0,
+        10.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:06:window:04",
+      "type": "window",
+      "parent": "city:building:06",
+      "detail": 3,
+      "bounds": [
+        [
+          -12,
+          6,
+          5
+        ],
+        [
+          -12,
+          6,
+          5
+        ]
+      ],
+      "position": [
+        -12.0,
+        6.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:06:window:05",
+      "type": "window",
+      "parent": "city:building:06",
+      "detail": 3,
+      "bounds": [
+        [
+          -10,
+          6,
+          5
+        ],
+        [
+          -10,
+          6,
+          5
+        ]
+      ],
+      "position": [
+        -10.0,
+        6.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:06:window:06",
+      "type": "window",
+      "parent": "city:building:06",
+      "detail": 3,
+      "bounds": [
+        [
+          -8,
+          8,
+          5
+        ],
+        [
+          -8,
+          8,
+          5
+        ]
+      ],
+      "position": [
+        -8.0,
+        8.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:06:window:07",
+      "type": "window",
+      "parent": "city:building:06",
+      "detail": 3,
+      "bounds": [
+        [
+          -8,
+          10,
+          5
+        ],
+        [
+          -8,
+          10,
+          5
+        ]
+      ],
+      "position": [
+        -8.0,
+        10.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:06:window:08",
+      "type": "window",
+      "parent": "city:building:06",
+      "detail": 3,
+      "bounds": [
+        [
+          -12,
+          6,
+          7
+        ],
+        [
+          -12,
+          6,
+          7
+        ]
+      ],
+      "position": [
+        -12.0,
+        6.0,
+        7.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:06:window:09",
+      "type": "window",
+      "parent": "city:building:06",
+      "detail": 3,
+      "bounds": [
+        [
+          -10,
+          6,
+          7
+        ],
+        [
+          -10,
+          6,
+          7
+        ]
+      ],
+      "position": [
+        -10.0,
+        6.0,
+        7.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:06:window:10",
+      "type": "window",
+      "parent": "city:building:06",
+      "detail": 3,
+      "bounds": [
+        [
+          -8,
+          8,
+          7
+        ],
+        [
+          -8,
+          8,
+          7
+        ]
+      ],
+      "position": [
+        -8.0,
+        8.0,
+        7.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:06:window:11",
+      "type": "window",
+      "parent": "city:building:06",
+      "detail": 3,
+      "bounds": [
+        [
+          -8,
+          10,
+          7
+        ],
+        [
+          -8,
+          10,
+          7
+        ]
+      ],
+      "position": [
+        -8.0,
+        10.0,
+        7.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:07",
+      "type": "building",
+      "parent": "city:district:central",
+      "detail": 2,
+      "bounds": [
+        [
+          7,
+          7,
+          1
+        ],
+        [
+          12,
+          11,
+          7
+        ]
+      ],
+      "position": [
+        9.5,
+        9.0,
+        4.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "occupiable": true,
+        "floors": 2
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "city:building:07:entrance",
+      "type": "entrance",
+      "parent": "city:building:07",
+      "detail": 3,
+      "bounds": [
+        [
+          10,
+          6,
+          2
+        ],
+        [
+          10,
+          6,
+          2
+        ]
+      ],
+      "position": [
+        10.0,
+        6.0,
+        2.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkablePortal": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:07:roof",
+      "type": "roof",
+      "parent": "city:building:07",
+      "detail": 2,
+      "bounds": [
+        [
+          6,
+          6,
+          8
+        ],
+        [
+          13,
+          12,
+          8
+        ]
+      ],
+      "position": [
+        9.5,
+        9.0,
+        8.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "city:building:07:roofTech",
+      "type": "roofEquipment",
+      "parent": "city:building:07:roof",
+      "detail": 3,
+      "bounds": [
+        [
+          10,
+          9,
+          9
+        ],
+        [
+          11,
+          10,
+          10
+        ]
+      ],
+      "position": [
+        10.5,
+        9.5,
+        9.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:07:window:00",
+      "type": "window",
+      "parent": "city:building:07",
+      "detail": 3,
+      "bounds": [
+        [
+          8,
+          6,
+          3
+        ],
+        [
+          8,
+          6,
+          3
+        ]
+      ],
+      "position": [
+        8.0,
+        6.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:07:window:01",
+      "type": "window",
+      "parent": "city:building:07",
+      "detail": 3,
+      "bounds": [
+        [
+          10,
+          6,
+          3
+        ],
+        [
+          10,
+          6,
+          3
+        ]
+      ],
+      "position": [
+        10.0,
+        6.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:07:window:02",
+      "type": "window",
+      "parent": "city:building:07",
+      "detail": 3,
+      "bounds": [
+        [
+          13,
+          8,
+          3
+        ],
+        [
+          13,
+          8,
+          3
+        ]
+      ],
+      "position": [
+        13.0,
+        8.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:07:window:03",
+      "type": "window",
+      "parent": "city:building:07",
+      "detail": 3,
+      "bounds": [
+        [
+          13,
+          10,
+          3
+        ],
+        [
+          13,
+          10,
+          3
+        ]
+      ],
+      "position": [
+        13.0,
+        10.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:07:window:04",
+      "type": "window",
+      "parent": "city:building:07",
+      "detail": 3,
+      "bounds": [
+        [
+          8,
+          6,
+          5
+        ],
+        [
+          8,
+          6,
+          5
+        ]
+      ],
+      "position": [
+        8.0,
+        6.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:07:window:05",
+      "type": "window",
+      "parent": "city:building:07",
+      "detail": 3,
+      "bounds": [
+        [
+          10,
+          6,
+          5
+        ],
+        [
+          10,
+          6,
+          5
+        ]
+      ],
+      "position": [
+        10.0,
+        6.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:07:window:06",
+      "type": "window",
+      "parent": "city:building:07",
+      "detail": 3,
+      "bounds": [
+        [
+          13,
+          8,
+          5
+        ],
+        [
+          13,
+          8,
+          5
+        ]
+      ],
+      "position": [
+        13.0,
+        8.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:07:window:07",
+      "type": "window",
+      "parent": "city:building:07",
+      "detail": 3,
+      "bounds": [
+        [
+          13,
+          10,
+          5
+        ],
+        [
+          13,
+          10,
+          5
+        ]
+      ],
+      "position": [
+        13.0,
+        10.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:08",
+      "type": "building",
+      "parent": "city:district:central",
+      "detail": 2,
+      "bounds": [
+        [
+          10,
+          1,
+          1
+        ],
+        [
+          13,
+          4,
+          5
+        ]
+      ],
+      "position": [
+        11.5,
+        2.5,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "occupiable": true,
+        "floors": 1
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "city:building:08:entrance",
+      "type": "entrance",
+      "parent": "city:building:08",
+      "detail": 3,
+      "bounds": [
+        [
+          12,
+          0,
+          2
+        ],
+        [
+          12,
+          0,
+          3
+        ]
+      ],
+      "position": [
+        12.0,
+        0.0,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkablePortal": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:08:roof",
+      "type": "roof",
+      "parent": "city:building:08",
+      "detail": 2,
+      "bounds": [
+        [
+          9,
+          0,
+          6
+        ],
+        [
+          14,
+          5,
+          6
+        ]
+      ],
+      "position": [
+        11.5,
+        2.5,
+        6.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "city:building:08:window:00",
+      "type": "window",
+      "parent": "city:building:08",
+      "detail": 3,
+      "bounds": [
+        [
+          11,
+          0,
+          3
+        ],
+        [
+          11,
+          0,
+          3
+        ]
+      ],
+      "position": [
+        11.0,
+        0.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "front"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:building:08:window:01",
+      "type": "window",
+      "parent": "city:building:08",
+      "detail": 3,
+      "bounds": [
+        [
+          14,
+          2,
+          3
+        ],
+        [
+          14,
+          2,
+          3
+        ]
+      ],
+      "position": [
+        14.0,
+        2.0,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "facade": "side"
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:district:central",
+      "type": "district",
+      "parent": "city:root",
+      "detail": 1,
+      "bounds": null,
+      "position": null,
+      "relationships": [],
+      "gameplay": {
+        "settlement": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "city:infrastructure",
+      "type": "infrastructure",
+      "parent": "city:district:central",
+      "detail": 2,
+      "bounds": null,
+      "position": null,
+      "relationships": [],
+      "gameplay": {
+        "utility": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "city:lamp:00",
+      "type": "streetLamp",
+      "parent": "city:infrastructure",
+      "detail": 3,
+      "bounds": [
+        [
+          -5,
+          -5,
+          2
+        ],
+        [
+          -5,
+          -5,
+          6
+        ]
+      ],
+      "position": [
+        -5.0,
+        -5.0,
+        4.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:lamp:01",
+      "type": "streetLamp",
+      "parent": "city:infrastructure",
+      "detail": 3,
+      "bounds": [
+        [
+          5,
+          -5,
+          2
+        ],
+        [
+          5,
+          -5,
+          6
+        ]
+      ],
+      "position": [
+        5.0,
+        -5.0,
+        4.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:lamp:02",
+      "type": "streetLamp",
+      "parent": "city:infrastructure",
+      "detail": 3,
+      "bounds": [
+        [
+          -5,
+          4,
+          2
+        ],
+        [
+          -5,
+          4,
+          6
+        ]
+      ],
+      "position": [
+        -5.0,
+        4.0,
+        4.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:lamp:03",
+      "type": "streetLamp",
+      "parent": "city:infrastructure",
+      "detail": 3,
+      "bounds": [
+        [
+          5,
+          4,
+          5
+        ],
+        [
+          5,
+          4,
+          6
+        ]
+      ],
+      "position": [
+        5.0,
+        4.0,
+        5.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:lamp:04",
+      "type": "streetLamp",
+      "parent": "city:infrastructure",
+      "detail": 3,
+      "bounds": [
+        [
+          -11,
+          5,
+          2
+        ],
+        [
+          -11,
+          5,
+          6
+        ]
+      ],
+      "position": [
+        -11.0,
+        5.0,
+        4.0
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:lamp:05",
+      "type": "streetLamp",
+      "parent": "city:infrastructure",
+      "detail": 3,
+      "bounds": [
+        [
+          11,
+          5,
+          2
+        ],
+        [
+          11,
+          5,
+          5
+        ]
+      ],
+      "position": [
+        11.0,
+        5.0,
+        3.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:publicSpace:plaza",
+      "type": "publicSpace",
+      "parent": "city:district:central",
+      "detail": 1,
+      "bounds": [
+        [
+          -5,
+          5,
+          1
+        ],
+        [
+          5,
+          12,
+          1
+        ]
+      ],
+      "position": [
+        0.0,
+        8.5,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "gathering": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "city:root",
+      "type": "city",
+      "parent": null,
+      "detail": 1,
+      "bounds": null,
+      "position": null,
+      "relationships": [],
+      "gameplay": {
+        "semanticRoot": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "city:sidewalk:east",
+      "type": "sidewalk",
+      "parent": "city:district:central",
+      "detail": 2,
+      "bounds": [
+        [
+          5,
+          -8,
+          1
+        ],
+        [
+          6,
+          13,
+          1
+        ]
+      ],
+      "position": [
+        5.5,
+        2.5,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "city:sidewalk:north",
+      "type": "sidewalk",
+      "parent": "city:district:central",
+      "detail": 2,
+      "bounds": [
+        [
+          -13,
+          5,
+          1
+        ],
+        [
+          13,
+          6,
+          1
+        ]
+      ],
+      "position": [
+        0.0,
+        5.5,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "city:sidewalk:south",
+      "type": "sidewalk",
+      "parent": "city:district:central",
+      "detail": 2,
+      "bounds": [
+        [
+          -13,
+          -7,
+          1
+        ],
+        [
+          13,
+          -6,
+          1
+        ]
+      ],
+      "position": [
+        0.0,
+        -6.5,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "city:sidewalk:west",
+      "type": "sidewalk",
+      "parent": "city:district:central",
+      "detail": 2,
+      "bounds": [
+        [
+          -7,
+          -13,
+          1
+        ],
+        [
+          -6,
+          13,
+          1
+        ]
+      ],
+      "position": [
+        -6.5,
+        0.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "city:strata:bedrock",
+      "type": "strata",
+      "parent": "city:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -13,
+          -13,
+          -3
+        ],
+        [
+          13,
+          13,
+          -3
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        -3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": false
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "city:strata:soil",
+      "type": "strata",
+      "parent": "city:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -13,
+          -13,
+          -1
+        ],
+        [
+          13,
+          13,
+          -1
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": false
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "city:strata:subsoil",
+      "type": "strata",
+      "parent": "city:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -13,
+          -13,
+          -2
+        ],
+        [
+          13,
+          13,
+          -2
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        -2.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": false
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "city:street:eastLane",
+      "type": "street",
+      "parent": "city:district:central",
+      "detail": 1,
+      "bounds": [
+        [
+          8,
+          -13,
+          1
+        ],
+        [
+          10,
+          13,
+          1
+        ]
+      ],
+      "position": [
+        9.0,
+        0.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "transport": true,
+        "walkable": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "city:street:eastWest",
+      "type": "street",
+      "parent": "city:district:central",
+      "detail": 1,
+      "bounds": [
+        [
+          -13,
+          -2,
+          1
+        ],
+        [
+          13,
+          2,
+          1
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "transport": true,
+        "walkable": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "city:street:northSouth",
+      "type": "street",
+      "parent": "city:district:central",
+      "detail": 1,
+      "bounds": [
+        [
+          -2,
+          -13,
+          1
+        ],
+        [
+          2,
+          13,
+          1
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "transport": true,
+        "walkable": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "city:street:westLane",
+      "type": "street",
+      "parent": "city:district:central",
+      "detail": 1,
+      "bounds": [
+        [
+          -10,
+          -13,
+          1
+        ],
+        [
+          -8,
+          13,
+          1
+        ]
+      ],
+      "position": [
+        -9.0,
+        0.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "transport": true,
+        "walkable": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "city:streetTree:00",
+      "type": "streetTree",
+      "parent": "city:publicSpace:plaza",
+      "detail": 3,
+      "bounds": [
+        [
+          -7,
+          7,
+          2
+        ],
+        [
+          -3,
+          11,
+          8
+        ]
+      ],
+      "position": [
+        -5.0,
+        9.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "ecology": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:streetTree:01",
+      "type": "streetTree",
+      "parent": "city:publicSpace:plaza",
+      "detail": 3,
+      "bounds": [
+        [
+          -2,
+          8,
+          2
+        ],
+        [
+          2,
+          12,
+          8
+        ]
+      ],
+      "position": [
+        0.0,
+        10.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "ecology": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:streetTree:02",
+      "type": "streetTree",
+      "parent": "city:publicSpace:plaza",
+      "detail": 3,
+      "bounds": [
+        [
+          3,
+          7,
+          2
+        ],
+        [
+          7,
+          11,
+          8
+        ]
+      ],
+      "position": [
+        5.0,
+        9.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "ecology": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:streetTree:03",
+      "type": "streetTree",
+      "parent": "city:publicSpace:plaza",
+      "detail": 3,
+      "bounds": [
+        [
+          -12,
+          1,
+          2
+        ],
+        [
+          -8,
+          5,
+          8
+        ]
+      ],
+      "position": [
+        -10.0,
+        3.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "ecology": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:streetTree:04",
+      "type": "streetTree",
+      "parent": "city:publicSpace:plaza",
+      "detail": 3,
+      "bounds": [
+        [
+          9,
+          1,
+          2
+        ],
+        [
+          13,
+          5,
+          8
+        ]
+      ],
+      "position": [
+        11.0,
+        3.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "ecology": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:surface",
+      "type": "terrainSurface",
+      "parent": "city:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -13,
+          -13,
+          0
+        ],
+        [
+          13,
+          13,
+          0
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "city:utility:transformer",
+      "type": "technicalObject",
+      "parent": "city:infrastructure",
+      "detail": 3,
+      "bounds": [
+        [
+          4,
+          3,
+          2
+        ],
+        [
+          5,
+          4,
+          4
+        ]
+      ],
+      "position": [
+        4.5,
+        3.5,
+        3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "energy": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "city:utility:vents",
+      "type": "technicalObject",
+      "parent": "city:infrastructure",
+      "detail": 3,
+      "bounds": [
+        [
+          -2,
+          9,
+          2
+        ],
+        [
+          -1,
+          10,
+          3
+        ]
+      ],
+      "position": [
+        -1.5,
+        9.5,
+        2.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    }
+  ],
+  "recipeMeta": {
+    "design": "structured miniature city: streets -> blocks -> buildings -> entrances -> public space -> details"
+  },
+  "stats": {
+    "voxelCount": 5585,
+    "materialCount": 20,
+    "featureCount": 132,
+    "macroFeatures": 9,
+    "mesoFeatures": 23,
+    "microFeatures": 100
+  },
+  "watercolorCompatibility": {
+    "hiddenGeometryScaffold": true,
+    "semanticEdges": true,
+    "showVoxelWireframe": false,
+    "pigmentRegionsFromFeatures": true
+  }
+}

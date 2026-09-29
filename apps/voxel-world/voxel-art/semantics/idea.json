@@ -1,0 +1,1026 @@
+{
+  "schemaVersion": 1,
+  "kind": "idea",
+  "seed": 1387209455,
+  "root": "idea:root",
+  "features": [
+    {
+      "id": "idea:campus",
+      "type": "knowledgeCampus",
+      "parent": "idea:root",
+      "detail": 1,
+      "bounds": null,
+      "position": null,
+      "relationships": [],
+      "gameplay": {
+        "research": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "idea:discussionRing",
+      "type": "publicResearchSpace",
+      "parent": "idea:campus",
+      "detail": 2,
+      "bounds": [
+        [
+          -8,
+          -8,
+          1
+        ],
+        [
+          8,
+          8,
+          1
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "gathering": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "idea:informationLinks",
+      "type": "informationLinks",
+      "parent": "idea:campus",
+      "detail": 1,
+      "bounds": null,
+      "position": null,
+      "relationships": [],
+      "gameplay": {
+        "informationFlow": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "idea:knowledgeCore",
+      "type": "knowledgeCore",
+      "parent": "idea:campus",
+      "detail": 1,
+      "bounds": [
+        [
+          -3,
+          -3,
+          1
+        ],
+        [
+          3,
+          3,
+          9
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        5.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "ideaSource": true,
+        "information": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "idea:link:00",
+      "type": "informationLink",
+      "parent": "idea:informationLinks",
+      "detail": 2,
+      "bounds": [
+        [
+          -6,
+          -3,
+          3
+        ],
+        [
+          -2,
+          -1,
+          3
+        ]
+      ],
+      "position": [
+        -4.0,
+        -2.0,
+        3.0
+      ],
+      "relationships": [
+        {
+          "type": "connects",
+          "target": "idea:knowledgeCore"
+        }
+      ],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "idea:link:01",
+      "type": "informationLink",
+      "parent": "idea:informationLinks",
+      "detail": 2,
+      "bounds": [
+        [
+          -6,
+          0,
+          3
+        ],
+        [
+          -1,
+          7,
+          3
+        ]
+      ],
+      "position": [
+        -3.5,
+        3.5,
+        3.0
+      ],
+      "relationships": [
+        {
+          "type": "connects",
+          "target": "idea:knowledgeCore"
+        }
+      ],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "idea:link:02",
+      "type": "informationLink",
+      "parent": "idea:informationLinks",
+      "detail": 2,
+      "bounds": [
+        [
+          1,
+          -4,
+          3
+        ],
+        [
+          9,
+          -1,
+          3
+        ]
+      ],
+      "position": [
+        5.0,
+        -2.5,
+        3.0
+      ],
+      "relationships": [
+        {
+          "type": "connects",
+          "target": "idea:knowledgeCore"
+        }
+      ],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "idea:link:03",
+      "type": "informationLink",
+      "parent": "idea:informationLinks",
+      "detail": 2,
+      "bounds": [
+        [
+          0,
+          0,
+          3
+        ],
+        [
+          9,
+          8,
+          3
+        ]
+      ],
+      "position": [
+        4.5,
+        4.0,
+        3.0
+      ],
+      "relationships": [
+        {
+          "type": "connects",
+          "target": "idea:knowledgeCore"
+        }
+      ],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "idea:module:00",
+      "type": "researchModule",
+      "parent": "idea:campus",
+      "detail": 2,
+      "bounds": [
+        [
+          -8,
+          -5,
+          1
+        ],
+        [
+          -4,
+          -1,
+          4
+        ]
+      ],
+      "position": [
+        -6.0,
+        -3.0,
+        2.5
+      ],
+      "relationships": [
+        {
+          "type": "linkedTo",
+          "target": "idea:knowledgeCore"
+        }
+      ],
+      "gameplay": {
+        "research": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "idea:module:00:instrument",
+      "type": "researchInstrument",
+      "parent": "idea:module:00",
+      "detail": 3,
+      "bounds": [
+        [
+          -6,
+          -3,
+          5
+        ],
+        [
+          -6,
+          -3,
+          8
+        ]
+      ],
+      "position": [
+        -6.0,
+        -3.0,
+        6.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "idea:module:01",
+      "type": "researchModule",
+      "parent": "idea:campus",
+      "detail": 2,
+      "bounds": [
+        [
+          -8,
+          5,
+          1
+        ],
+        [
+          -4,
+          9,
+          5
+        ]
+      ],
+      "position": [
+        -6.0,
+        7.0,
+        3.0
+      ],
+      "relationships": [
+        {
+          "type": "linkedTo",
+          "target": "idea:knowledgeCore"
+        }
+      ],
+      "gameplay": {
+        "research": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "idea:module:01:instrument",
+      "type": "researchInstrument",
+      "parent": "idea:module:01",
+      "detail": 3,
+      "bounds": [
+        [
+          -6,
+          7,
+          5
+        ],
+        [
+          -6,
+          7,
+          8
+        ]
+      ],
+      "position": [
+        -6.0,
+        7.0,
+        6.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "idea:module:02",
+      "type": "researchModule",
+      "parent": "idea:campus",
+      "detail": 2,
+      "bounds": [
+        [
+          7,
+          -6,
+          1
+        ],
+        [
+          11,
+          -2,
+          4
+        ]
+      ],
+      "position": [
+        9.0,
+        -4.0,
+        2.5
+      ],
+      "relationships": [
+        {
+          "type": "linkedTo",
+          "target": "idea:knowledgeCore"
+        }
+      ],
+      "gameplay": {
+        "research": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "idea:module:02:instrument",
+      "type": "researchInstrument",
+      "parent": "idea:module:02",
+      "detail": 3,
+      "bounds": [
+        [
+          9,
+          -4,
+          5
+        ],
+        [
+          9,
+          -4,
+          8
+        ]
+      ],
+      "position": [
+        9.0,
+        -4.0,
+        6.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "idea:module:03",
+      "type": "researchModule",
+      "parent": "idea:campus",
+      "detail": 2,
+      "bounds": [
+        [
+          7,
+          6,
+          1
+        ],
+        [
+          11,
+          10,
+          5
+        ]
+      ],
+      "position": [
+        9.0,
+        8.0,
+        3.0
+      ],
+      "relationships": [
+        {
+          "type": "linkedTo",
+          "target": "idea:knowledgeCore"
+        }
+      ],
+      "gameplay": {
+        "research": true
+      },
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "idea:module:03:instrument",
+      "type": "researchInstrument",
+      "parent": "idea:module:03",
+      "detail": 3,
+      "bounds": [
+        [
+          9,
+          8,
+          5
+        ],
+        [
+          9,
+          8,
+          8
+        ]
+      ],
+      "position": [
+        9.0,
+        8.0,
+        6.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "idea:panel:00",
+      "type": "researchPanel",
+      "parent": "idea:researchPanels",
+      "detail": 3,
+      "bounds": [
+        [
+          -4,
+          0,
+          2
+        ],
+        [
+          -3,
+          0,
+          5
+        ]
+      ],
+      "position": [
+        -3.5,
+        0.0,
+        3.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "idea:panel:01",
+      "type": "researchPanel",
+      "parent": "idea:researchPanels",
+      "detail": 3,
+      "bounds": [
+        [
+          4,
+          0,
+          2
+        ],
+        [
+          5,
+          0,
+          5
+        ]
+      ],
+      "position": [
+        4.5,
+        0.0,
+        3.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "idea:panel:02",
+      "type": "researchPanel",
+      "parent": "idea:researchPanels",
+      "detail": 3,
+      "bounds": [
+        [
+          0,
+          -5,
+          2
+        ],
+        [
+          1,
+          -5,
+          5
+        ]
+      ],
+      "position": [
+        0.5,
+        -5.0,
+        3.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "idea:panel:03",
+      "type": "researchPanel",
+      "parent": "idea:researchPanels",
+      "detail": 3,
+      "bounds": [
+        [
+          0,
+          5,
+          2
+        ],
+        [
+          1,
+          5,
+          5
+        ]
+      ],
+      "position": [
+        0.5,
+        5.0,
+        3.5
+      ],
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "idea:researchPanels",
+      "type": "researchPanels",
+      "parent": "idea:campus",
+      "detail": 2,
+      "bounds": null,
+      "position": null,
+      "relationships": [],
+      "gameplay": {},
+      "lodPresence": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "idea:root",
+      "type": "idea",
+      "parent": null,
+      "detail": 1,
+      "bounds": null,
+      "position": null,
+      "relationships": [],
+      "gameplay": {
+        "semanticRoot": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "idea:strata:bedrock",
+      "type": "strata",
+      "parent": "idea:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -10,
+          -10,
+          -3
+        ],
+        [
+          10,
+          10,
+          -3
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        -3.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": false
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "idea:strata:soil",
+      "type": "strata",
+      "parent": "idea:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -10,
+          -10,
+          -1
+        ],
+        [
+          10,
+          10,
+          -1
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": false
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "idea:strata:subsoil",
+      "type": "strata",
+      "parent": "idea:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -10,
+          -10,
+          -2
+        ],
+        [
+          10,
+          10,
+          -2
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        -2.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": false
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "idea:surface",
+      "type": "terrainSurface",
+      "parent": "idea:root",
+      "detail": 1,
+      "bounds": [
+        [
+          -10,
+          -10,
+          0
+        ],
+        [
+          10,
+          10,
+          0
+        ]
+      ],
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "relationships": [],
+      "gameplay": {
+        "walkable": true
+      },
+      "lodPresence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "idea:symbolNode:00",
+      "type": "symbolicNode",
+      "parent": "idea:discussionRing",
+      "detail": 3,
+      "bounds": [
+        [
+          8,
+          0,
+          2
+        ],
+        [
+          8,
+          0,
+          5
+        ]
+      ],
+      "position": [
+        8.0,
+        0.0,
+        3.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "information": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "idea:symbolNode:01",
+      "type": "symbolicNode",
+      "parent": "idea:discussionRing",
+      "detail": 3,
+      "bounds": [
+        [
+          6,
+          6,
+          2
+        ],
+        [
+          6,
+          6,
+          5
+        ]
+      ],
+      "position": [
+        6.0,
+        6.0,
+        3.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "information": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "idea:symbolNode:02",
+      "type": "symbolicNode",
+      "parent": "idea:discussionRing",
+      "detail": 3,
+      "bounds": [
+        [
+          0,
+          8,
+          2
+        ],
+        [
+          0,
+          8,
+          5
+        ]
+      ],
+      "position": [
+        0.0,
+        8.0,
+        3.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "information": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "idea:symbolNode:03",
+      "type": "symbolicNode",
+      "parent": "idea:discussionRing",
+      "detail": 3,
+      "bounds": [
+        [
+          -6,
+          6,
+          2
+        ],
+        [
+          -6,
+          6,
+          5
+        ]
+      ],
+      "position": [
+        -6.0,
+        6.0,
+        3.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "information": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "idea:symbolNode:04",
+      "type": "symbolicNode",
+      "parent": "idea:discussionRing",
+      "detail": 3,
+      "bounds": [
+        [
+          -8,
+          0,
+          2
+        ],
+        [
+          -8,
+          0,
+          5
+        ]
+      ],
+      "position": [
+        -8.0,
+        0.0,
+        3.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "information": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "idea:symbolNode:05",
+      "type": "symbolicNode",
+      "parent": "idea:discussionRing",
+      "detail": 3,
+      "bounds": [
+        [
+          -6,
+          -6,
+          2
+        ],
+        [
+          -6,
+          -6,
+          5
+        ]
+      ],
+      "position": [
+        -6.0,
+        -6.0,
+        3.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "information": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "idea:symbolNode:06",
+      "type": "symbolicNode",
+      "parent": "idea:discussionRing",
+      "detail": 3,
+      "bounds": [
+        [
+          0,
+          -8,
+          2
+        ],
+        [
+          0,
+          -8,
+          5
+        ]
+      ],
+      "position": [
+        0.0,
+        -8.0,
+        3.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "information": true
+      },
+      "lodPresence": [
+        0
+      ]
+    },
+    {
+      "id": "idea:symbolNode:07",
+      "type": "symbolicNode",
+      "parent": "idea:discussionRing",
+      "detail": 3,
+      "bounds": [
+        [
+          6,
+          -6,
+          2
+        ],
+        [
+          6,
+          -6,
+          5
+        ]
+      ],
+      "position": [
+        6.0,
+        -6.0,
+        3.5
+      ],
+      "relationships": [],
+      "gameplay": {
+        "information": true
+      },
+      "lodPresence": [
+        0
+      ]
+    }
+  ],
+  "recipeMeta": {
+    "design": "recognizable knowledge campus with central core, modules and explicit information links"
+  },
+  "stats": {
+    "voxelCount": 2566,
+    "materialCount": 13,
+    "featureCount": 30,
+    "macroFeatures": 5,
+    "mesoFeatures": 9,
+    "microFeatures": 16
+  },
+  "watercolorCompatibility": {
+    "hiddenGeometryScaffold": true,
+    "semanticEdges": true,
+    "showVoxelWireframe": false,
+    "pigmentRegionsFromFeatures": true
+  }
+}
