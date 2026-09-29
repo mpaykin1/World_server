@@ -575,4 +575,65 @@ replace_once("wasm/_start_wasm.cpp",
     cViewport=cClear=cSetup=cInstT=cInstP=cDraw=cDrawEmpty=cGeoEnd=0;
 """)
 
+
+# Data/compression provenance: one compact export becomes an operator graph,
+# events, splines, blobs, audio data and eventually generated runtime objects.
+replace_once("kdoc.cpp",
+"""  CurrentRoot = 0;
+
+  dataPtr = data;
+}
+""",
+"""  CurrentRoot = 0;
+
+#if defined(__EMSCRIPTEN__)
+  fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"data.document\\\",\\\"classes\\\":%d,\\\"ops\\\":%d,\\\"splines\\\":%d,\\\"events\\\":%d,\\\"songBytes\\\":%d,\\\"sampleBytes\\\":%d,\\\"bytesConsumed\\\":%d,\\\"beta2004\\\":%d}\\n",
+          nClasses,nOps,nSplines,Events.Count,SongSize,SampleSize,(int)(data-dataPtr),kkBetaData?1:0);
+#endif
+  dataPtr = data;
+}
+""")
+
+# Creature/game-state Observatory. This is emitted after simulation/collision
+# for the tick, not from a UI proxy.
+replace_once("kkriegergame.cpp",
+"""// diagnostics
+
+#if !sPLAYER
+""",
+"""#if defined(__EMSCRIPTEN__)
+  {
+    static sInt obsGameTick;
+    if(obsGameTick++ < 3 || (obsGameTick % 60) == 0)
+    {
+      sInt states[5] = {0,0,0,0,0};
+      sInt alive = 0;
+      for(sInt mi=0;mi<Monsters.Count;mi++)
+      {
+        KKriegerMonster *m = Monsters[mi];
+        if(m->Life > 0) alive++;
+        if(m->State >= 0 && m->State < 5) states[m->State]++;
+      }
+      fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"game.state\\\",\\\"tick\\\":%d,\\\"player\\\":{\\\"life\\\":%d,\\\"armor\\\":%d,\\\"weapon\\\":%d,\\\"nextWeapon\\\":%d,\\\"weaponTimer\\\":%.6f,\\\"pos\\\":[%.5f,%.5f,%.5f],\\\"dir\\\":%.6f,\\\"look\\\":%.6f,\\\"onGround\\\":%d},\\\"monsters\\\":{\\\"count\\\":%d,\\\"alive\\\":%d,\\\"states\\\":[%d,%d,%d,%d,%d]},\\\"shots\\\":%d,\\\"dynamicCells\\\":%d}\\n",
+              TickCount,Player.Life,Player.Armor,Player.CurrentWeapon,Player.NextWeapon,WeaponTimer,
+              PlayerPos.x,PlayerPos.y,PlayerPos.z,PlayerDir,PlayerLook,OnGround?1:0,
+              Monsters.Count,alive,states[0],states[1],states[2],states[3],states[4],Shots.Count,DCellUsed);
+      sInt samples = sMin(Monsters.Count,4);
+      for(sInt mi=0;mi<samples;mi++)
+      {
+        KKriegerMonster *m = Monsters[mi];
+        fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"creature.sample\\\",\\\"index\\\":%d,\\\"type\\\":%d,\\\"state\\\":%d,\\\"life\\\":%d,\\\"lifeMax\\\":%d,\\\"armor\\\":%d,\\\"weaponKind\\\":%d,\\\"flags\\\":%d,\\\"pos\\\":[%.5f,%.5f,%.5f]}\\n",
+                mi,m->GetType(),m->State,m->Life,m->LifeMax,m->Armor,m->WeaponKind,m->Flags,
+                m->Collider.Pos.x,m->Collider.Pos.y,m->Collider.Pos.z);
+      }
+    }
+  }
+#endif
+
+// diagnostics
+
+#if !sPLAYER
+""")
+
+
 print("Krieger Total Control forensics patch: PASS")
