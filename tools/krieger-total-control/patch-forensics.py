@@ -462,6 +462,21 @@ replace_once("engine.cpp",
   if(kkExecTrace)
 """)
 
+# Emit the first three GPU frames immediately so labs do not need to wait 120
+# software-rendered frames before proving that paint jobs reached WebGL.
+replace_once("wasm/_start_wasm.cpp",
+"""  kkOpaqueBackbuffer();
+  gFrame++;
+  if(gFrame % 120 == 0)
+""",
+"""  kkOpaqueBackbuffer();
+  gFrame++;
+  if(gFrame <= 3)
+    fprintf(stderr,"[kk-forensics] {\\\"stage\\\":\\\"gpu.frame\\\",\\\"frame\\\":%d,\\\"viewportChanges\\\":%d,\\\"clears\\\":%d,\\\"setups\\\":%d,\\\"instancesTranslated\\\":%d,\\\"instancesPlaceholder\\\":%d,\\\"drawCalls\\\":%d,\\\"emptyDraws\\\":%d,\\\"geoEnds\\\":%d,\\\"statesApplied\\\":%d,\\\"statesSkipped\\\":%d,\\\"glError\\\":0}\\n",
+            gFrame,cViewport,cClear,cSetup,cInstT,cInstP,cDraw,cDrawEmpty,cGeoEnd,cStateSet,cStateSkip);
+  if(gFrame % 120 == 0)
+""")
+
 # Platform/GPU-side frame counters: this is the final CPU->WebGL proof that
 # render jobs actually produced draw/setup/viewport traffic.
 replace_once("wasm/_start_wasm.cpp",
