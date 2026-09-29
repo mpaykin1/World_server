@@ -214,7 +214,7 @@ def build_villager(seed: int, lod: int = 0, params=None) -> Recipe:
     for i,x in enumerate((-1,1)):
         eye=r.feature(f"eye:{i:02d}","eye",face,3)
         r.put(x,-2,head_z+head_h-1,"glass_dark",eye)
-    nose=r.feature("nose","nose",face,3); r.put(0,-2,head_z+head_h-2,skin_light,nose)
+    nose=r.feature("nose","nose",face,3); r.put(0,-2,head_z+head_h-2,"skin_light",nose)
     mouth=r.feature("mouth","mouth",face,3); r.put(0,-2,head_z+head_h-3,"brick",mouth)
     for i,x in enumerate((-build,build)):
         pocket=r.feature(f"pocket:{i:02d}","pocket",torso,3); r.put(x,-2,leg_h+2,"wood",pocket)
