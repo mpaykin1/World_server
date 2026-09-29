@@ -42,7 +42,18 @@ const fs = require('fs');
   }
   await page.waitForTimeout(8000);
 
-  const buffer = await page.screenshot({ path: shot });
+  // Capture the WebGL canvas on a render frame. Whole-page screenshots can
+  // block for tens of seconds while the software WebGL game continuously
+  // presents frames in CI; reading the canvas on rAF is deterministic.
+  const dataUrl = await page.evaluate(() => new Promise((resolve, reject) => {
+    requestAnimationFrame(() => {
+      try { resolve(Module.canvas.toDataURL('image/png')); }
+      catch (error) { reject(String(error && error.stack ? error.stack : error)); }
+    });
+  }));
+  const buffer = Buffer.from(String(dataUrl).split(',')[1] || '', 'base64');
+  if (!buffer.length) throw new Error('canvas capture returned no PNG bytes');
+  fs.writeFileSync(shot, buffer);
   const png = PNG.sync.read(buffer);
   let bright = 0;
   let sum = 0;
