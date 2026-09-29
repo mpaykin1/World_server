@@ -224,3 +224,30 @@ test("unowned/transient runtime objects do not invent KDoc provenance", () => {
   assert.equal(a.meshSamples,1);
   assert.equal(a.materialJobSamples,1);
 });
+
+
+test("renderer Observatory carries exact KDoc provenance into WebGL draw samples", () => {
+  const r=analyzeRenderer([
+    {stage:"renderer.frame",mode:"2004",paintJobs:12},
+    {stage:"gpu.frame",frame:2,drawCalls:14},
+    {stage:"gpu.draw",originOp:317,originClass:0x91,originResult:3,jobId:4,usage:4,renderPass:7,program:0,vertices:120,indices:240,setup:11,renderTarget:-1,viewport:[0,0,390,844]},
+  ]);
+  assert.equal(r.cpuToGpuObserved,true);
+  assert.equal(r.drawSamples,1);
+  assert.equal(r.drawsWithOperator,1);
+  assert.deepEqual(r.drawProvenance[0],{
+    op:317,classId:0x91,result:3,jobId:4,usage:4,renderPass:7,program:0,
+    vertices:120,indices:240,setup:11,renderTarget:-1,viewport:[0,0,390,844]
+  });
+});
+
+test("renderer Observatory does not invent provenance for internal/effect draws", () => {
+  const r=analyzeRenderer([
+    {stage:"renderer.frame",mode:"generic",paintJobs:2},
+    {stage:"gpu.frame",frame:1,drawCalls:2},
+    {stage:"gpu.draw",originOp:-1,originClass:-1,originResult:-1,jobId:-1,usage:-1,renderPass:-1,program:-1,vertices:4,indices:6,setup:3,renderTarget:8,viewport:[0,0,512,512]},
+  ]);
+  assert.equal(r.drawSamples,1);
+  assert.equal(r.drawsWithOperator,0);
+  assert.equal(r.drawProvenance.length,0);
+});
