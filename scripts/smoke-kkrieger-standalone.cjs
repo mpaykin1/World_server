@@ -11,7 +11,7 @@ const fs = require('fs');
 
   const browser = await chromium.launch({
     headless: true,
-    args: ['--use-gl=swiftshader', '--enable-webgl', '--ignore-gpu-blocklist']
+    args: ['--use-gl=swiftshader', '--enable-webgl', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist']
   });
   const page = await browser.newPage({ viewport: { width: 1280, height: 960 } });
   const severe = [];
@@ -26,32 +26,39 @@ const fs = require('fs');
   await page.waitForFunction(() => document.querySelector('#status')?.textContent === 'ready', { timeout: 240000 });
   await page.click('#start');
 
-  const deadline = Date.now() + 240000;
-  let nonBlack = false;
-  let metrics = null;
-  while (Date.now() < deadline) {
-    await page.waitForTimeout(5000);
-    const buffer = await page.screenshot({ path: shot });
-    const png = PNG.sync.read(buffer);
-    let bright = 0;
-    let sum = 0;
-    const step = 16;
-    let samples = 0;
-    for (let y = 0; y < png.height; y += step) {
-      for (let x = 0; x < png.width; x += step) {
-        const i = (png.width * y + x) << 2;
-        const lum = (png.data[i] + png.data[i + 1] + png.data[i + 2]) / 3;
-        sum += lum;
-        if (lum > 18) bright++;
-        samples++;
-      }
-    }
-    metrics = { meanLuma: sum / samples, brightFraction: bright / samples, width: png.width, height: png.height };
-    if (metrics.meanLuma > 6 && metrics.brightFraction > 0.03) {
-      nonBlack = true;
-      break;
+  // Do not mistake the procedural-generation progress bar for a playable frame.
+  await page.waitForFunction(
+    () => Array.isArray(window.__kkLog) && window.__kkLog.some((line) => /generation finished in/i.test(line)),
+    { timeout: 360000 }
+  );
+
+  // The 2004 game starts with intro/menu roots. Drive the same Enter path used
+  // by upstream's headless smoke until the playable level has had time to render.
+  await page.locator('#canvas').click({ position: { x: 640, y: 480 } }).catch(() => {});
+  await page.waitForTimeout(12000);
+  for (let i = 0; i < 5; i++) {
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(3000);
+  }
+  await page.waitForTimeout(8000);
+
+  const buffer = await page.screenshot({ path: shot });
+  const png = PNG.sync.read(buffer);
+  let bright = 0;
+  let sum = 0;
+  const step = 16;
+  let samples = 0;
+  for (let y = 0; y < png.height; y += step) {
+    for (let x = 0; x < png.width; x += step) {
+      const i = (png.width * y + x) << 2;
+      const lum = (png.data[i] + png.data[i + 1] + png.data[i + 2]) / 3;
+      sum += lum;
+      if (lum > 18) bright++;
+      samples++;
     }
   }
+  const metrics = { meanLuma: sum / samples, brightFraction: bright / samples, width: png.width, height: png.height };
+  const nonBlack = metrics.meanLuma > 6 && metrics.brightFraction > 0.03;
 
   const state = await page.evaluate(() => ({
     startOverlayPresent: Boolean(document.querySelector('#start')),
@@ -65,11 +72,12 @@ const fs = require('fs');
   const result = {
     schema: 'kkrieger-browser-smoke-v1',
     url,
+    generationFinished: state.recentLog.some((line) => /generation finished in/i.test(line)),
     nonBlack,
     metrics,
     state,
     severeErrors: severe,
-    pass: nonBlack && severe.length === 0 && !state.startOverlayPresent && state.canvasWidth > 0 && state.canvasHeight > 0
+    pass: state.recentLog.some((line) => /generation finished in/i.test(line)) && nonBlack && severe.length === 0 && !state.startOverlayPresent && state.canvasWidth > 0 && state.canvasHeight > 0
   };
   fs.writeFileSync(shot.replace(/\.png$/i, '.json'), JSON.stringify(result, null, 2) + '\n');
   console.log(JSON.stringify(result, null, 2));
