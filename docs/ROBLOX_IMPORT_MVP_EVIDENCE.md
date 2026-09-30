@@ -53,3 +53,22 @@ Prevention: generated release metadata with non-ASCII text must use a UTF-8-pres
 
 
 Exact-head gate rerun marker: registry encoding repaired; playable MVP tree unchanged.
+
+## Playable MVP browser failure: desktop render pressure starved projectile progress
+
+An earlier exact-head Cloudflare run for PR #367 produced useful falsification evidence:
+- mobile WebKit passed;
+- desktop Chromium failed after three retries;
+- the first/third failures reached the physical throw but `impacts` stayed at zero until the 35 s test timeout;
+- one retry stalled inside `page.evaluate(fireTest)`, showing main-thread responsiveness itself was degraded.
+
+The failure signature pointed to render/main-thread pressure rather than a missing throw API: the scene kept five active chunks (`KEEP=2`), thousands of separate Gothic meshes and many decorative shadow casters.
+Repair in the clean release branch:
+- adaptive active-chunk ring: mobile keeps the current chunk, desktop keeps one neighbor each side;
+- four buildings per chunk instead of six while preserving the source-derived 128-stud chunk and 54–176-stud Gothic building rules;
+- decorative buttresses, torch posts and distant towers no longer cast expensive shadows;
+- held-rock transform is initialized before runtime `ready`;
+- runtime frame progress is exposed for evidence/debugging.
+
+Lesson: a graphics-first gate must measure not only viewport coverage but also interaction progress under the actual renderer. A scene can occupy 100% of the screen and still be unusable if draw/shadow pressure starves gameplay simulation.
+
