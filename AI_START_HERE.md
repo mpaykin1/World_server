@@ -106,3 +106,12 @@
 ### Самая короткая версия для любого нового AI
 
 **Сначала прочитай `AI_START_HERE.md` + `.ai/project-context-index.json`. Для ручных изменений прочитай `CHATGPT_GAME_CONTROL.md`. Если пользователь просит изменить проект и прислать ссылку — не заканчивай отчётом при исправимом блокере; продолжай до свежепроверенной рабочей ссылки или настоящего owner-only `USER_ACTION_REQUIRED`. ВНО = Воспроизводимость + Независимость + Опровержение.**
+
+
+## Krieger Location Rebuild — physical-iPhone milestone
+
+The published Krieger Location Rebuild is now **human-visible on a physical iPhone**: the user confirms the location changes, although only modestly. Treat this as a partial authoring-control success, not full Krieger graphics control.
+
+Canonical record: `docs/KRIEGER_LOCATION_REBUILD_PHYSICAL_IPHONE_SUCCESS_2026-09-30.md`.
+
+Next Krieger milestone: an unmistakably different authored room/corridor composition while preserving native Krieger materials, lighting, weapon/effect pipeline and gameplay semantics.
