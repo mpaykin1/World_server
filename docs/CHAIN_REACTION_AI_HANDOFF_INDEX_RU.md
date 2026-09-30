@@ -17,7 +17,7 @@
 9. `docs/META6_AI_LESSONS_RU.md`
 10. `docs/META6_REGRESSION_PROTOCOL_RU.md`
 
-Не начинать с нуля, пока эти документы не прочитаны.
+Не начинать с нуля, пока эти документы не прочитаны.\n\nЕсли нужен готовый короткий контекст для нового чата: `docs/CHAIN_REACTION_NEW_CHAT_BOOTSTRAP_RU.md`.
 
 ---
 
