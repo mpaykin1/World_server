@@ -1049,3 +1049,15 @@ Final evidence:
 - full npm run check: PASS;
 - Golden Standard: PASS;
 - current reference-fidelity status: IN_PROGRESS, not a Krieger-fidelity claim.
+
+
+## 2026-09-30 Graphics Quality Governor — live publication success
+
+Stable public route is LIVE_VERIFIED:
+https://mpaykin1.github.io/scratch-chain-reaction/graphics-quality-governor/
+
+Fresh browser verification at 2026-09-30T03:42:47.418Z: HTTP 200; portrait 390x844 and desktop 1280x800; zero page/console errors; real A/B framebuffer hashes differ; same A/B render resolution; noticeability proxy 100/100. Scratch publication merged at f7328000c7517432986a745e8c4be61c27e56187.
+
+Reusable success lesson is committed in docs/graphics/GRAPHICS_QUALITY_GOVERNOR_MVP_SUCCESS_2026-09-30.md and exact live evidence in docs/graphics/evidence/graphics-quality-governor-live-smoke-2026-09-30.json.
+
+Honesty boundary remains unchanged: structural Governor MVP succeeded, but canonical Krieger reference fidelity is still IN_PROGRESS and physical iPhone 11 verification is still USER_VERIFICATION_REQUIRED.
