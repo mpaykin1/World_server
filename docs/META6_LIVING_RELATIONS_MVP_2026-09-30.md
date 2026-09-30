@@ -330,3 +330,15 @@ The player can now see:
 **object A → animated relation → object B → resource/behavior consequence.**
 
 That visible causal bridge is the foundation for the next generation of Chain Reaction gameplay.
+
+
+## Связанные документы для продолжения
+
+Для следующего агента этот файл не является единственной точкой входа. Читать вместе с:
+
+- `docs/CHAIN_REACTION_AI_HANDOFF_INDEX_RU.md` — центральный индекс и порядок чтения;
+- `docs/META6_TECHNICAL_ARCHITECTURE_RU.md` — state/input/AI/object/relation/deck architecture;
+- `docs/META6_AI_LESSONS_RU.md` — короткие правила, что переиспользовать и каких ошибок не повторять;
+- `docs/META6_REGRESSION_PROTOCOL_RU.md` — обязательные проверки и следующий multi-step chain slice.
+
+Если дальнейшая реализация расходится с этими документами, она должна явно объяснить, какой proven invariant изменяется и почему.
