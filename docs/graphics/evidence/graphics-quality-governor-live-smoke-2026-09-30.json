@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "LIVE_VERIFIED",
+  "verifiedAt": "2026-09-30T03:42:47.418Z",
+  "url": "https://mpaykin1.github.io/scratch-chain-reaction/graphics-quality-governor/",
+  "scratchMergeSha": "f7328000c7517432986a745e8c4be61c27e56187",
+  "worldServerImplementationSha": "cba839abb92857e2145d592a1aab5975dd5a6f3e",
+  "noticeability": 100,
+  "portrait": {
+    "http": 200,
+    "errors": [],
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "canvas": {
+      "width": 390,
+      "height": 844
+    },
+    "primitiveFramebuffer": {
+      "hash": "7d4e067b",
+      "width": 320,
+      "height": 636,
+      "litRatio": 0.5921867555979038,
+      "edgeLikeRatio": 0.0004764173415912339
+    },
+    "enhancedFramebuffer": {
+      "hash": "fd1f9c5e",
+      "width": 320,
+      "height": 636,
+      "litRatio": 0.9475940924249643,
+      "edgeLikeRatio": 0.15674130538351597
+    }
+  },
+  "desktop": {
+    "http": 200,
+    "errors": [],
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "canvas": {
+      "width": 1280,
+      "height": 800
+    },
+    "primitiveFramebuffer": {
+      "hash": "80a35fe4",
+      "width": 973,
+      "height": 608,
+      "litRatio": 0.5259878668634203,
+      "edgeLikeRatio": 0.05263157894736842
+    },
+    "enhancedFramebuffer": {
+      "hash": "321b73fa",
+      "width": 973,
+      "height": 608,
+      "litRatio": 0.6950319724545008,
+      "edgeLikeRatio": 0.26660108214461387
+    }
+  },
+  "physicalIPhone": "USER_VERIFICATION_REQUIRED",
+  "canonicalKriegerReferenceFidelity": "IN_PROGRESS"
+}
