@@ -151,3 +151,16 @@ docs/CHAIN_REACTION_MOBILE_VIEWPORT_CONTRACT_RU.md
 `docs/PROCEDURAL_KRIEGER_MVP_SUCCESS_2026-09-30.md`
 
 Пользователь отдельно подтвердил два качества: по игровому пространству **удобно двигаться**, а действия дают **заметные графические элементы**. Этот этап закрепляет CameraController с pan/pinch/tap separation, world/screen transforms, procedural visible-chunk rendering и объектные Canvas renderers как обязательные reusable patterns. Не путать название прототипа с доказательством использования оригинального .kkrieger renderer: зафиксированный успех относится к UX перемещения и лёгкой процедурной графике.
+
+
+## Meta5: glyph + procedural graphics + live AI — 30 сентября 2026
+
+Следующий пользовательски проверенный вертикальный срез находится в:
+
+`docs/META5_LIVE_AI_MERGE_SUCCESS_2026-09-30.md`
+
+Живая версия: https://mpaykin1.github.io/meta5/
+
+Meta5 объединяет сохранённую систему иероглифов Meta4, удачный pan/pinch/tap procedural MVP, графические объекты с маленьким glyph-label и настоящий production AI через отдельный `mode=predict_action`. Meta4 и предыдущий procedural MVP при этом не изменялись.
+
+Этот этап закрепляет новый acceptance invariant: до живого AI-ответа и YES мир не мутирует; NO оставляет 0 изменений; YES создаёт ровно один объект в выбранной world-space позиции.
