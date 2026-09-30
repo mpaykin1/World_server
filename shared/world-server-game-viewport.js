@@ -146,6 +146,15 @@
     if(document.body) document.body.scrollTop=0;
   }
 
+  function allowNativePan(target){
+    return !!target?.closest?.('[data-world-server-scroll]');
+  }
+
+  function blockBrowserGesture(event){
+    if(allowNativePan(event.target)) return;
+    if(event.cancelable) event.preventDefault();
+  }
+
   function sync(){
     state.resizeQueued=false;
     lockDocument();
@@ -247,6 +256,10 @@
     window.addEventListener('resize',schedule,{passive:true});
     window.addEventListener('orientationchange',schedule,{passive:true});
     window.addEventListener('scroll',zeroScroll,{passive:true,capture:true});
+    document.addEventListener('touchmove',blockBrowserGesture,{passive:false,capture:true});
+    for(const type of ['gesturestart','gesturechange','gestureend']){
+      document.addEventListener(type,blockBrowserGesture,{passive:false,capture:true});
+    }
     document.addEventListener('visibilitychange',()=>{ if(!document.hidden) schedule(); });
     new MutationObserver(schedule).observe(document.documentElement,{childList:true,subtree:true});
   }
