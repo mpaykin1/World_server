@@ -16,10 +16,16 @@ scene.background=new THREE.Color(0x0b121c);
 scene.fog=new THREE.FogExp2(0x101925,0.018);
 
 const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,260);
-const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
-renderer.setPixelRatio(Math.min(devicePixelRatio||1,coarse?1.35:1.75));
+const renderer=new THREE.WebGLRenderer({antialias:!coarse,powerPreference:'high-performance'});
+const gl=renderer.getContext(),debugRenderer=gl.getExtension('WEBGL_debug_renderer_info');
+const rendererName=String(debugRenderer?gl.getParameter(debugRenderer.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER));
+const softwareRenderer=/swiftshader|llvmpipe|software/i.test(rendererName);
+const shadowsEnabled=!softwareRenderer;
+const maxDpr=softwareRenderer?.75:(coarse?1.05:1.35);
+const physicsHz=softwareRenderer?24:(coarse?30:45);
+renderer.setPixelRatio(Math.min(devicePixelRatio||1,maxDpr));
 renderer.setSize(innerWidth,innerHeight);
-renderer.shadowMap.enabled=true;
+renderer.shadowMap.enabled=shadowsEnabled;
 renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 renderer.outputColorSpace=THREE.SRGBColorSpace;
 renderer.toneMapping=THREE.ACESFilmicToneMapping;
@@ -32,7 +38,7 @@ controls.maxPolarAngle=Math.PI*.48;controls.minPolarAngle=.18;controls.enablePan
 
 const hemi=new THREE.HemisphereLight(0x7198c7,0x21160f,1.25);scene.add(hemi);
 const sun=new THREE.DirectionalLight(0xffdfb0,3.4);
-sun.position.set(22,38,24);sun.castShadow=true;sun.shadow.mapSize.set(coarse?1024:2048,coarse?1024:2048);
+sun.position.set(22,38,24);sun.castShadow=shadowsEnabled;sun.shadow.mapSize.set(coarse?512:1024,coarse?512:1024);
 sun.shadow.camera.left=-46;sun.shadow.camera.right=46;sun.shadow.camera.top=40;sun.shadow.camera.bottom=-34;sun.shadow.camera.near=1;sun.shadow.camera.far=100;scene.add(sun);
 const rim=new THREE.DirectionalLight(0x6aa6ff,1.45);rim.position.set(-25,18,-28);scene.add(rim);
 
@@ -74,7 +80,7 @@ function meshVoxels(voxels,center=null,falling=false){
       matrix.compose(new THREE.Vector3(v.x-cx,v.y-cy,v.z-cz),new THREE.Quaternion(),new THREE.Vector3(s,s,s));
       mesh.setMatrixAt(i,matrix);
     }
-    mesh.instanceMatrix.needsUpdate=true;mesh.castShadow=true;mesh.receiveShadow=true;group.add(mesh);
+    mesh.instanceMatrix.needsUpdate=true;mesh.castShadow=shadowsEnabled&&!falling;mesh.receiveShadow=shadowsEnabled;group.add(mesh);
   }
   return group;
 }
@@ -89,7 +95,7 @@ function addRubble(seedX,seedZ,count=80){
     m.compose(new THREE.Vector3(x,-.3,z),new THREE.Quaternion().setFromEuler(new THREE.Euler(i*.17,i*.31,i*.11)),new THREE.Vector3(s,s,s));
     mesh.setMatrixAt(i,m);
   }
-  mesh.instanceMatrix.needsUpdate=true;mesh.castShadow=true;mesh.receiveShadow=true;scene.add(mesh);
+  mesh.instanceMatrix.needsUpdate=true;mesh.castShadow=shadowsEnabled&&!coarse;mesh.receiveShadow=shadowsEnabled;scene.add(mesh);
 }
 addRubble(8,0,60);addRubble(-12,-8,90);
 
@@ -107,7 +113,7 @@ const RAPIER=await loadPinnedRapier();
 const world=new RAPIER.World({x:0,y:-9.81,z:0});
 let groundCollider=RAPIER.ColliderDesc.cuboid(75,.5,75);
 groundCollider=groundCollider.setTranslation(0,-1,0).setFriction(.9);world.createCollider(groundCollider);
-const physics=createRapierCollapseRuntime({RAPIER,world,maxBodies:12,maxColliders:1800});
+const physics=createRapierCollapseRuntime({RAPIER,world,maxBodies:12,maxColliders:32,colliderMode:'cluster-aabb'});
 
 class StructureActor{
   constructor(name,blueprint,shot,options={}){
@@ -152,12 +158,12 @@ function cannonAt(position,axis='x'){
   const group=new THREE.Group(),iron=new THREE.MeshStandardMaterial({color:0x30343a,roughness:.42,metalness:.72}),wood=new THREE.MeshStandardMaterial({color:0x6a462c,roughness:.93});
   const barrel=new THREE.Mesh(new THREE.CylinderGeometry(.25,.4,3.6,14),iron);
   if(axis==='x')barrel.rotation.z=Math.PI/2;else barrel.rotation.x=Math.PI/2;
-  barrel.position.set(position.x,position.y+1.15,position.z);barrel.castShadow=true;group.add(barrel);
+  barrel.position.set(position.x,position.y+1.15,position.z);barrel.castShadow=shadowsEnabled;group.add(barrel);
   for(const side of [-.75,.75]){
     const wheel=new THREE.Mesh(new THREE.CylinderGeometry(.72,.72,.22,14),wood);
     if(axis==='x'){wheel.rotation.x=Math.PI/2;wheel.position.set(position.x+.35,position.y+.58,position.z+side);}
     else{wheel.rotation.z=Math.PI/2;wheel.position.set(position.x+side,position.y+.58,position.z+.35);}
-    wheel.castShadow=true;group.add(wheel);
+    wheel.castShadow=shadowsEnabled;group.add(wheel);
   }
   scene.add(group);
 }
@@ -167,7 +173,7 @@ let dust=[];
 function impactFx(point,color=0xd4b184){
   const flash=new THREE.PointLight(0xffb25d,18,18,2);flash.position.set(point.x,point.y,point.z);scene.add(flash);
   setTimeout(()=>scene.remove(flash),150);
-  const count=coarse?90:150,positions=new Float32Array(count*3),vel=new Float32Array(count*3);
+  const count=softwareRenderer?35:(coarse?55:100),positions=new Float32Array(count*3),vel=new Float32Array(count*3);
   for(let i=0;i<count;i++){
     positions[i*3]=point.x;positions[i*3+1]=point.y;positions[i*3+2]=point.z;
     const a=Math.random()*Math.PI*2,s=.8+Math.random()*4.6;
@@ -186,7 +192,7 @@ function updateDust(dt){
 }
 
 const projectile=new THREE.Mesh(new THREE.SphereGeometry(.28,14,10),new THREE.MeshStandardMaterial({color:0x151515,roughness:.28,metalness:.8,emissive:0x5b1d08,emissiveIntensity:.4}));
-projectile.castShadow=true;projectile.visible=false;scene.add(projectile);
+projectile.castShadow=shadowsEnabled;projectile.visible=false;scene.add(projectile);
 const trailGeom=new THREE.BufferGeometry(),trailMat=new THREE.LineBasicMaterial({color:0xffa35a,transparent:true,opacity:.5});
 let trail=null;
 
@@ -252,16 +258,17 @@ async function fireSelected(){
 fireBtn.addEventListener('click',fireSelected);
 
 let accumulator=0,prev=performance.now(),fps=60,frameCounter=0,fpsStamp=performance.now();
+const physicsStep=1/physicsHz;
 function loop(now){
   requestAnimationFrame(loop);const dt=Math.min(.04,(now-prev)/1000);prev=now;controls.update();updateDust(dt);
-  accumulator+=dt;let steps=0;while(accumulator>=1/60&&steps<3){physics.step(1);accumulator-=1/60;steps++;}
+  accumulator+=dt;let steps=0;while(accumulator>=physicsStep&&steps<2){physics.step(1);accumulator-=physicsStep;steps++;}
   const states=physics.snapshot();actors.tower.sync(states);actors.viaduct.sync(states);
   frameCounter++;if(now-fpsStamp>750){fps=Math.round(frameCounter*1000/(now-fpsStamp));frameCounter=0;fpsStamp=now;}
   renderer.render(scene,camera);
 }
 requestAnimationFrame(loop);
 
-addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio||1,coarse?1.35:1.75));renderer.setSize(innerWidth,innerHeight);});
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio||1,maxDpr));renderer.setSize(innerWidth,innerHeight);});
 
 window.GothicDestructionMVP={
   fire(target=selected){setSelected(target);return fireSelected();},
@@ -272,7 +279,9 @@ window.GothicDestructionMVP={
       viewport:{w:innerWidth,h:innerHeight,canvas:{w:renderer.domElement.clientWidth,h:renderer.domElement.clientHeight}},
       tower:{fired:actors.tower.fired,voxels:actors.tower.structure.voxels.length,dynamic:actors.tower.dynamic.size},
       viaduct:{fired:actors.viaduct.fired,voxels:actors.viaduct.structure.voxels.length,dynamic:actors.viaduct.dynamic.size},
-      physics:{...p,bodies},rapier:RAPIER_PROVENANCE,
+      physics:{...p,bodies},
+      quality:{softwareRenderer,rendererName,maxDpr,shadows:shadowsEnabled,physicsHz},
+      rapier:RAPIER_PROVENANCE,
     };
   }
 };
