@@ -256,7 +256,7 @@
     },
     "Living Watercolor 3D NPR": {
       "percent": 90,
-      "status": "v2 MVP reference-gate PASS on canonical and mobile viewports; production merge/deploy verification pending",
+      "status": "house/tree/power-plant accepted; volcano smoke golden success; volcano body human-rejected and requires rebuild",
       "evidence": [
         "shared/graphics/living-watercolor-3d.js",
         "shared/graphics/living-watercolor-generators.js",
@@ -266,9 +266,11 @@
         "test/living-watercolor-3d-integration.test.mjs",
         "test/living-watercolor-v2.test.mjs",
         "docs/LIVING_WATERCOLOR_3D.md",
-        "docs/LIVING_WATERCOLOR_3D_MVP_SUCCESS.md"
+        "docs/LIVING_WATERCOLOR_3D_MVP_SUCCESS.md",
+        "docs/LIVING_WATERCOLOR_VOLCANO_SMOKE_SUCCESS_2026-09-30.md",
+        "docs/LIVING_WATERCOLOR_VOLCANO_BODY_FAILURE_2026-09-30.md"
       ],
-      "note": "Fresh browser evidence crossed >=85 for all four approved references. Canonical 844x1055: house 90.5, tree 92.0, volcano 86.7, plant 85.8. Mobile 390x844: house 87.1, tree 93.0, volcano 90.1, plant 86.4. 12/12 focused tests pass. Keep diagnostic/non-production status until exact-head repository CI and deployment verification complete."
+      "note": "Human review supersedes the earlier all-four-success interpretation. Preserve volcano smoke v3 as golden. Treat the current volcano body as a negative example even though automated reference metrics previously passed >=85; human side-by-side approval is required for this style."
     }
   },
   "governanceCoveragePercent": 100,
