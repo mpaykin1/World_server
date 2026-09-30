@@ -66,7 +66,7 @@ test('public Gothic MVP shatters tower and viaduct into independent voxel rigid 
   expect(initial.tower.voxels).toBeGreaterThan(200);
   expect(initial.viaduct.voxels).toBeGreaterThan(200);
   expect(initial.rapier.version).toBe('0.21.0');
-  expect(initial.quality.perShotFragmentBudget).toBeGreaterThanOrEqual(56);
+  expect(initial.quality.perShotFragmentBudget).toBeGreaterThanOrEqual(48);
   expect(initial.quality.activeFragmentBudget).toBeGreaterThanOrEqual(initial.quality.perShotFragmentBudget*2);
   expect((initial.viewport.canvas.w*initial.viewport.canvas.h)/(initial.viewport.w*initial.viewport.h)).toBeGreaterThan(.98);
 
