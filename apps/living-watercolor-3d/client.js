@@ -46,7 +46,7 @@ for(const name of names){
   watercolor.addGroundWash(o,{x:0,z:0,width:name==='plant'?3.5:name==='volcano'?3.2:2.8,depth:name==='tree'?1.6:1.9,opacity:name==='volcano'?.065:name==='plant'?.075:style.shadowWash,seed:name+':shadow'});
   items[name]=o;
 }
-const smokeVol=watercolor.createBrushEmitter({parent:items.volcano,origin:new THREE.Vector3(0,2.46,0),count:12,scale:.46,rise:.42,spread:.42,wind:.055,seed:'volcano-smoke-v2',opacity:.10});
+const smokeVol=watercolor.createBrushEmitter({parent:items.volcano,origin:new THREE.Vector3(0,2.28,0),count:18,scale:.58,rise:.62,spread:.56,wind:.045,seed:'volcano-smoke-v3',opacity:.14});
 const smokePlant=watercolor.createBrushEmitter({parent:items.plant,origin:new THREE.Vector3(-.64,3.58,0),count:9,scale:.34,rise:.40,spread:.30,wind:.08,seed:'plant-smoke-v2',opacity:.09});
 
 let active=(new URLSearchParams(location.search).get('object')||'house');
@@ -65,13 +65,13 @@ function setLayout(mode){
   }else{
     for(const n of names){const o=items[n];o.visible=n===mode;o.position.set(0,0,0);o.scale.setScalar(1);o.rotation.set(0,0,0);}
     const mobile=innerWidth/Math.max(1,innerHeight)<.62;
-    const posDesktop={house:[.00,-.30,0],tree:[.36,-1.05,0],volcano:[.18,-.02,0],plant:[-.55,-1.00,0]};
-    const posMobile={house:[.00,-.30,0],tree:[.36,-1.05,0],volcano:[.18,.04,0],plant:[-.46,-1.20,0]};
+    const posDesktop={house:[.00,-.30,0],tree:[.36,-1.05,0],volcano:[.04,-.22,0],plant:[-.55,-1.00,0]};
+    const posMobile={house:[.00,-.30,0],tree:[.36,-1.05,0],volcano:[.02,-.30,0],plant:[-.46,-1.20,0]};
     items[mode].position.set(...((mobile?posMobile:posDesktop)[mode]||[0,0,0]));
   }
   const mobile=innerWidth/Math.max(1,innerHeight)<.62;
-  const zoomDesktop={all:.82,house:1.38,tree:1.11,volcano:1.10,plant:1.55};
-  const zoomMobile={all:.78,house:1.44,tree:1.11,volcano:1.10,plant:2.13};
+  const zoomDesktop={all:.82,house:1.38,tree:1.11,volcano:1.18,plant:1.55};
+  const zoomMobile={all:.78,house:1.44,tree:1.11,volcano:1.17,plant:2.13};
   camera.zoom=(mobile?zoomMobile:zoomDesktop)[mode]??1;
   camera.updateProjectionMatrix();
 }
