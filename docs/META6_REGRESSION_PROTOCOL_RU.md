@@ -192,3 +192,16 @@ Canonical failure analysis: `docs/DELIVERY_FAILURE_GITHUB_PAGES_404_2026-09-30.m
 
 Source data: `data/chain-reaction-prepared-fallback-en.json`.
 Failure analysis: `docs/META6_EN_AI_UNAVAILABLE_FAILURE_2026-09-30.md`.
+
+
+## N. Multilingual live-AI parity
+
+Для каждого поддерживаемого языка:
+
+- [ ] client отправляет locale;
+- [ ] backend prompt/normalizer поддерживает locale;
+- [ ] response возвращает effective `language`;
+- [ ] production Worker содержит изменение;
+- [ ] production smoke возвращает live provider + `executed:false`;
+- [ ] default/старый locale не регрессирует;
+- [ ] fallback остаётся доступным, но не засчитывается как live AI success.

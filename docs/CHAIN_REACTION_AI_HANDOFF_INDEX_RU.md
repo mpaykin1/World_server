@@ -385,3 +385,12 @@ Manifest содержит live URLs, exact commits, proven invariants, relation 
 - `data/chain-reaction-prepared-fallback-en.json`
 
 Новый канон: **gameplay works without AI; live AI upgrades the forecast when available**. Provider failure не должен превращать forecast modal в тупик.
+
+
+# 15. Multilingual live-AI parity failure
+
+Meta6 English client once moved ahead of the production backend. Read:
+
+`docs/META6_EN_LIVE_AI_PARITY_FAILURE_2026-09-30.md`
+
+Rule: a locale is not live until client locale + backend locale + production deployment + real production smoke all pass together.
