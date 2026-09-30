@@ -1,0 +1,149 @@
+{
+  "schema": "world-server.world-evolution-recipe/v1",
+  "id": "cube-living-diorama-v1",
+  "seed": 20260930,
+  "styleProfile": "CINEMATIC_VOXEL_ART",
+  "qualityTier": "KRIEGER_CLASS",
+  "durationSeconds": 12,
+  "initial": {
+    "type": "cube",
+    "size": 1,
+    "material": "prototype-gray"
+  },
+  "stages": [
+    {
+      "id": "matter",
+      "range": [
+        0,
+        0.22
+      ],
+      "dependsOn": [],
+      "ops": [
+        "split8",
+        "split64",
+        "settle"
+      ]
+    },
+    {
+      "id": "terrain",
+      "range": [
+        0.18,
+        0.42
+      ],
+      "dependsOn": [
+        "matter"
+      ],
+      "ops": [
+        "extrude",
+        "settle",
+        "fracture"
+      ],
+      "semantic": [
+        "ground",
+        "rock",
+        "cliff"
+      ]
+    },
+    {
+      "id": "biome",
+      "range": [
+        0.32,
+        0.58
+      ],
+      "dependsOn": [
+        "terrain"
+      ],
+      "succession": [
+        "soil",
+        "grass",
+        "shrubs",
+        "tree",
+        "moss"
+      ]
+    },
+    {
+      "id": "architecture",
+      "range": [
+        0.44,
+        0.72
+      ],
+      "dependsOn": [
+        "terrain"
+      ],
+      "recipe": [
+        "foundation",
+        "arch",
+        "tower",
+        "openings",
+        "trim",
+        "wear"
+      ]
+    },
+    {
+      "id": "surface",
+      "range": [
+        0.52,
+        0.82
+      ],
+      "dependsOn": [
+        "terrain",
+        "architecture"
+      ],
+      "layers": [
+        "base",
+        "variation",
+        "cavity",
+        "edgeWear",
+        "moisture",
+        "moss"
+      ]
+    },
+    {
+      "id": "lighting",
+      "range": [
+        0.62,
+        0.9
+      ],
+      "dependsOn": [
+        "surface"
+      ],
+      "features": [
+        "sun",
+        "shadow",
+        "fog",
+        "emissiveLinkedLocalLight"
+      ]
+    },
+    {
+      "id": "life",
+      "range": [
+        0.72,
+        1
+      ],
+      "dependsOn": [
+        "biome",
+        "architecture"
+      ],
+      "features": [
+        "movingCharacter",
+        "vegetationWind",
+        "smoke"
+      ]
+    },
+    {
+      "id": "director",
+      "range": [
+        0,
+        1
+      ],
+      "dependsOn": [],
+      "camera": "catmull-rom-one-take"
+    }
+  ],
+  "invariants": [
+    "same seed+recipe => same state at t",
+    "state(t) derives from construction graph",
+    "no hidden finished scene",
+    "primitive cube valid only during initial evolution"
+  ]
+}
