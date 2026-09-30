@@ -322,3 +322,47 @@ Before another "new level" release, build focused native labs in this order:
 4. **Fidelity gate** — compare provenance and physical screenshots against the known-good original Krieger path.
 
 Only after these pass should the infinite `WorldRecipe -> Krieger compiler` work become the primary implementation path.
+
+
+## Failure KFL-003 — Reactor Recipe Proof rendered only the weapon; CI also looked "hung"
+
+### Evidence
+
+The first Dark Reactor Recipe Proof build compiled successfully and preserved the native Krieger weapon pipeline. CI telemetry proved:
+
+- custom reactor geometry: 10,262 vertices / 7,900 faces;
+- procedural materials initialized;
+- player collision cell valid;
+- `WeaponOptics[current]` and `WeaponShot[current]` became non-null;
+- the original first-person weapon was visibly rendered.
+
+But the captured framebuffer was still effectively black except for HUD + weapon:
+
+- non-black central framebuffer: ~1.85%;
+- dominant black bin: ~98.2%.
+
+The screenshot therefore proved a useful distinction: **the native weapon path worked while our new world render was not visible**.
+
+### Root causes
+
+1. The player was inside a closed shell built from ordinary outward-facing geometry, while the custom reactor material passes were one-sided. Interior wall faces could be back-face culled.
+2. The inherited start yaw (`2.582993`) came from an older Level Lab layout and looked past the new reactor centre in the very narrow portrait horizontal FOV.
+3. The visual smoke test captured after movement/look mutations, so it judged an arbitrary later camera instead of the deterministic first public frame.
+4. CI used iPhone DPR=3 under SwiftShader (1170×2532 backing buffer) and ran duplicate push + pull-request workflows. With multipass lighting, procedural textures and double-sided geometry this made the proof unnecessarily slow and looked like a hang.
+
+### Fixes
+
+- make the custom reactor base/light/shadow/postlight passes double-sided;
+- author a new start yaw near `1.95` aimed at the reactor centre;
+- add a deterministic `kkLabHeroView()` reset and judge the public hero view;
+- keep gameplay movement/look/FIRE proofs separate from the visual hero-view proof;
+- run visual CI at the same 390×844 CSS portrait but DPR=1; physical iPhone remains the final high-DPR authority;
+- remove the duplicate pull-request Reactor workflow trigger and use one concurrency group.
+
+### MUST NOT REPEAT
+
+- do not reuse a camera pose from a different procedural layout;
+- do not build an interior shell with one-sided passes unless the geometry explicitly has inward faces;
+- do not measure graphics fidelity from a camera that smoke tests have already moved unpredictably;
+- do not spend 9× more software-render pixels in CI when the test is about recipe visibility rather than Retina resolution;
+- do not run duplicate heavyweight push + PR jobs for the same Krieger proof.
