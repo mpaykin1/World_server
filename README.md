@@ -122,3 +122,13 @@ npm run check
 ```js
 await window.AppCore.init('new_app');
 ```
+
+
+## Krieger failure memory
+
+Krieger research has a permanent physical-device failure record so future agents do not repeat the same shortcuts:
+
+- [Level Lab v1 physical-iPhone postmortem](docs/KKRIEGER_LEVEL_LAB_POSTMORTEM_2026-09-30.md)
+- [Native weapon and firing pipeline](docs/KKRIEGER_WEAPON_PIPELINE.md)
+
+Rule: a non-black Krieger framebuffer is not proof of Krieger-quality graphics. Preserve the native operator/material/scene and weapon/effect chains.
