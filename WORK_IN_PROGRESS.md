@@ -1,6 +1,77 @@
-# 2026-09-28: Living Ink / ASQURA vertical slice
+# 2026-09-30: Living Ink / ASQURA real-mesh NPR v3
 
-Task: extend World Server with a reusable Living Ink graphics stack and compile a first autonomous ASQURA office HTML from it. Why: the requested target is a reusable scene pipeline, not a one-off demo; the first proof must show three distinct suited office workers, recognizable office props, animation, artistic LOD, deterministic seeded stylization, and zero runtime network dependencies. Current state: reusable deterministic renderer, procedural office scene, WorldRecipe compiler, generated standalone artifact, license manifest/gate, unit tests and browser tests are now implemented on this isolated branch. Target state: pass exact-head repository CI and obtain a fresh browser capture/reference score above the user's 85% visual threshold before any public testing URL is released. Files / systems involved: shared/living-ink-core.js, shared/living-ink-office.js, lib/living-ink-compiler.js, data/living-ink-office.recipe.json, scripts/build-living-ink-office.js, scripts/check-third-party-licenses.js, third-party-manifest.json, THIRD_PARTY_NOTICES.txt, apps/living-ink-office/index.html, focused unit/e2e tests, package scripts and documentation. Known risks: visual drift from the approved reference, accidental runtime network dependencies, nondeterministic ink noise, over-detailed far LOD, hidden dependency licensing, and browser/device performance. Golden systems that must be preserved: existing controls/collision/release registries and all current apps; this slice is isolated and does not rewrite existing generators. Errors that must not return: false-ready visual claims, unverified public links, nondeterministic reference rendering, and assuming asset licenses inherit an engine license. Exact patch / change plan: deterministic seeded ink primitives and three information LODs; procedural suited humans with walk/sit/type/coffee and broader reusable action library; office prop/room grammar; self-contained compiler/export; deny-by-default third-party manifest/license gate; regression tests; exact-head CI; browser/reference visual gate. Tests to run: npm run check; npm run living-ink:build; npm run living-ink:e2e for desktop/mobile when browser infrastructure is available; reference screenshot comparison before any public link. Deployment / PR plan: isolated branch -> PR -> CI -> browser visual gate -> only then a verified public test target. Current progress: implementation and generated autonomous HTML are committed. Focused local validation completed before push: syntax PASS, third-party gate PASS, Living Ink unit suite 6/6 PASS, generated artifact 22,405 bytes with no HTTP(S), script src, external stylesheet, fetch, XHR or WebSocket reference. Container Chromium capture was attempted but unavailable because the runtime failed at the browser/GPU/DBus layer; therefore no visual >85 claim is being made from local execution. Next action: run exact-head GitHub CI, fix any regression, then obtain browser visual evidence and compare against the approved ASQURA reference. Completion criteria: exact-head gates PASS; autonomous HTML is self-contained/offline; three distinct suited office workers and office props animate; artistic LOD contract is exercised; public link is withheld until fresh reference visual score is above 85. Final evidence: implementation commits present; exact-head CI and fresh browser/reference evidence pending.
+Task: replace the transparent technical-sketch bottleneck with a real 3D depth-tested NPR path while preserving the successful mobile walkthrough and standalone/offline artifact.
+
+Why: user comparison against the approved ASQURA reference showed that the previous Canvas renderer still behaved like transparent 2D primitives: hidden lines crossed foreground objects, humans/props were schematic, glass was noisy, and composition lacked true depth hierarchy.
+
+Current implementation:
+- audited/pinned three.js r160 (MIT) vendored under vendor/three-r160 with exact SHA-256/provenance and notices
+- real WebGL meshes with depthTest/depthWrite and polygon offset
+- EdgesGeometry semantic crease/boundary line path
+- procedural hierarchical office-human rig with reusable animation states
+- detailed 3D desk/chair/monitor/keyboard/mug/paper/plant/coffee/printer/meeting/lounge/light factory
+- selective translucent glass
+- soft GPU-friendly grounding/watercolor planes
+- walkthrough camera + mobile two-zone controls + architectural FRAME mode
+- artistic near/mid/far detail visibility
+- autonomous single HTML compiler using same-document Blob modules, no CDN/runtime API
+- desktop Chromium and iPhone WebKit browser evidence workflow
+
+Open-source audit:
+- imported: three.js r160 / package 0.160.0 / MIT
+- reviewed, not imported yet: meshoptimizer (MIT), glTF-Transform (MIT)
+- rejected for automatic import in this task: pmndrs/postprocessing because observed Zlib is outside the task's automatic code allowlist
+- no third-party models, textures, fonts, animations or training assets imported
+
+Known failures learned from:
+1. newest inspected three.js split module/core form increased standalone surface; pinned self-contained r160 instead
+2. first esbuild builder contained an invalid regex escape; replaced by simpler pure-Node Blob-module compiler
+3. first r160 CI run still contained stale r186 test expectations; corrected and rerun
+4. independent external-review infrastructure hit ENOBUFS on the large audited/generated diff; this is recorded as review-infrastructure debt, not treated as feature PASS
+5. user-visible quality is improved but this work does not claim 85% reference similarity; remaining biggest gap is fine human anatomy/clothing nuance and denser watercolor/architectural art direction
+
+Evidence already PASS on exact head e11f851eebcd7c92f7846b0622b57a7f7b6b1604:
+- standalone build reproducible
+- WebGL NPR focused tests 4/4
+- third-party license gate PASS
+- desktop Chromium e2e 3/3
+- iPhone WebKit e2e 3/3
+- screenshot artifact captured by CI
+- no external runtime requests in browser test
+- depthTest + hidden-line markers + real meshes + 10 required quality systems exposed
+- mobile walkthrough and FRAME mode both verified
+- offline-after-load verified
+
+Current refinement after that evidence:
+- tapered procedural suit torso instead of box torso
+- adjusted initial pitch to show more office on portrait
+- FRAME camera moved to three-quarter architectural composition closer to the approved reference
+- regenerated autonomous artifact; fresh exact-head browser rerun pending
+
+Files/systems:
+- shared/living-ink-webgl-npr.mjs
+- shared/living-ink-webgl-human.mjs
+- shared/living-ink-webgl-scene.mjs
+- apps/living-ink-office/webgl-entry.mjs
+- apps/living-ink-office-v3/index.html
+- scripts/build-living-ink-webgl.js
+- test/living-ink-webgl.test.js
+- e2e/living-ink-webgl.spec.js
+- .github/workflows/living-ink-webgl-v3.yml
+- third-party-manifest.json
+- THIRD_PARTY_NOTICES.txt
+- docs/LIVING_INK_NPR_OSS_AUDIT_2026-09-30.md
+
+Do not regress:
+- do not return to all-Canvas transparent X-ray lines as primary quality path
+- do not remove real depth-tested meshes/hidden-line behavior
+- do not replace one shared scene with separate flat mobile/desktop demos
+- keep standalone/offline export and touch walkthrough
+- third-party code/assets remain deny-by-default and independently licensed/provenanced
+
+Next action: obtain fresh exact-head Chromium + iPhone WebKit evidence for the camera/human refinement, inspect the screenshot, then publish the verified artifact to the stable scratch-chain-reaction Living Ink path and record the success analysis.
+
+Completion criteria: fresh exact-head browser PASS, public static artifact verified, visible real-mesh/occlusion improvement retained, and success/failure learning committed for future chats.
 
 
 ---
