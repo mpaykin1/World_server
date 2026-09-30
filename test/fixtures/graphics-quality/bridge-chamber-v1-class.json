@@ -1,0 +1,12 @@
+{
+  "id": "bridge-chamber-v1-class",
+  "qualityTier": "KRIEGER_CLASS",
+  "styleProfile": {"name":"polygonal-fps","intentionalPrimitiveMinimalism":false,"requiresDynamicLighting":true},
+  "lighting": {"geometryResponse":false},
+  "objects": [
+    {"id":"floor","important":true,"nearCamera":true,"geometry":"plane","semantic":{"macro":true,"meso":false,"micro":false,"surface":false,"state":false},"material":{"variation":false,"microrelief":false,"zones":1}},
+    {"id":"wall-a","important":true,"geometry":"box","semantic":{"macro":true,"meso":false,"micro":false,"surface":false,"state":false},"material":{"variation":false,"microrelief":false,"zones":1}},
+    {"id":"wall-b","important":true,"geometry":"box","semantic":{"macro":true,"meso":false,"micro":false,"surface":false,"state":false},"material":{"variation":false,"microrelief":false,"zones":1}},
+    {"id":"bridge","important":true,"nearCamera":true,"geometry":"box","semantic":{"macro":true,"meso":false,"micro":false,"surface":false,"state":false},"material":{"variation":false,"microrelief":false,"zones":1}}
+  ]
+}
