@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Roblox Gothic Rocks → World Server MVP</title>
+<style>
+:root{color-scheme:dark}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080a10;touch-action:none}body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}canvas{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}#crosshair{position:fixed;left:50%;top:50%;width:26px;height:26px;transform:translate(-50%,-50%);z-index:30;pointer-events:none;filter:drop-shadow(0 1px 3px #000)}#crosshair:before,#crosshair:after{content:"";position:absolute;background:rgba(255,255,255,.92);border-radius:2px}#crosshair:before{left:12px;top:3px;width:2px;height:20px}#crosshair:after{left:3px;top:12px;width:20px;height:2px}#throw{position:fixed;right:max(20px,env(safe-area-inset-right));bottom:max(24px,env(safe-area-inset-bottom));z-index:80;width:88px;height:88px;border-radius:50%;border:1px solid rgba(255,230,175,.7);background:radial-gradient(circle at 40% 35%,rgba(120,151,66,.92),rgba(31,37,22,.92));color:#fff;font:800 13px system-ui;letter-spacing:.03em;box-shadow:0 8px 30px rgba(0,0,0,.42),inset 0 0 0 4px rgba(255,255,255,.05);backdrop-filter:blur(6px);touch-action:none}#throw.charging{transform:scale(1.08);box-shadow:0 0 0 8px rgba(155,225,92,.12),0 8px 30px rgba(0,0,0,.5)}#status{position:fixed;left:max(12px,env(safe-area-inset-left));top:max(12px,env(safe-area-inset-top));z-index:70;padding:7px 10px;border-radius:9px;background:rgba(5,7,10,.42);border:1px solid rgba(255,255,255,.12);color:#f3ead9;font:600 11px/1.2 system-ui;backdrop-filter:blur(6px);pointer-events:none;transition:opacity .6s;max-width:54vw}#charge{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:70;width:min(260px,52vw);height:4px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden;pointer-events:none}#charge>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#78a63d,#d5f278,#fff3c0);box-shadow:0 0 12px rgba(190,255,92,.8)}#loading{position:fixed;inset:0;z-index:200;display:grid;place-items:center;background:radial-gradient(circle at 50% 40%,#2d2625,#08090e 70%);color:#f1dfbd;font:800 16px system-ui;letter-spacing:.04em;transition:opacity .7s}#loading.hide{opacity:0;pointer-events:none}.hint{opacity:.72;font-weight:600;font-size:12px;margin-top:8px;text-align:center}.fallback{position:fixed;left:0;right:0;bottom:0;z-index:2;height:26vh;background:linear-gradient(transparent,rgba(0,0,0,.35));pointer-events:none}@media(pointer:coarse),(max-width:800px){#status{font-size:10px;max-width:48vw}#throw{width:82px;height:82px;right:max(16px,env(safe-area-inset-right));bottom:max(20px,env(safe-area-inset-bottom))}#charge{bottom:max(15px,env(safe-area-inset-bottom))}#goldenMobileControls #goldenLookPad{right:116px!important;bottom:16px!important;width:96px!important;height:96px!important}#goldenMobileControls #goldenMovePad{bottom:16px!important;width:110px!important;height:110px!important}#goldenMobileControls #goldenJump{right:118px!important;bottom:122px!important;width:58px!important;height:58px!important}}
+</style>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.165.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.165.0/examples/jsm/"}}</script>
+<script src="/shared/ai3d-playable-runtime.js"></script>
+<script src="/shared/golden-physics.js"></script>
+<script src="/shared/golden-painting-atmosphere.js"></script>
+<script src="/shared/golden-performance-autotuner.js"></script>
+<script src="/shared/world-quality-autopilot.js"></script>
+</head>
+<body>
+<div id="loading"><div>WORLD SERVER · ROBLOX PORT<div class="hint">городкамни.rbxlx → процедурный готический город</div></div></div>
+<div id="status">Загрузка города…</div><div id="crosshair"></div><div id="charge"><i></i></div><button id="throw" type="button">БРОСИТЬ</button><div class="fallback"></div>
+<script type="module" src="./client.js"></script>
+</body>
+</html>
