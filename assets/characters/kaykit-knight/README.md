@@ -22,3 +22,18 @@ This license covers the KayKit assets only. It does not grant rights to unrelate
 Use `manifest.json` as the stable entry point. Do not hard-code upstream URLs in games. Porting tools should resolve the model and animation groups from this manifest so a future KayKit update can be reviewed once and reused everywhere.
 
 The files are pinned to upstream collection commit `af08a62d3669370ec4636ae6314b38cdcd5dd759`; do not silently replace them with mutable upstream HEAD.
+
+
+## Universal Player Character
+
+This bundle is the default **Universal Player Character** for compatible World Server humanoid games and for Roblox ports that used the standard Roblox Humanoid/avatar.
+
+Canonical integration points:
+
+- model + animation groups: `manifest.json`;
+- semantic gameplay actions: `semantic-actions.json`;
+- browser loader/controller: `/shared/universal-player-character.mjs`.
+
+Games should call semantic actions such as `idle`, `walk`, `run`, `jump_start`, `airborne`, `land`, `primary_attack`, `ranged_shoot`, `hit`, `death`, `interact`, `throw` and related actions. The runtime resolves those semantics to a real clip present in the pinned Rig_Medium animation bundle.
+
+A Roblox standard Humanoid may be replaced by this character by default. An explicitly supplied custom avatar that the project has rights to use is preserved unless the port opts into replacement.
