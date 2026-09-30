@@ -222,3 +222,8 @@ For any manual ChatGPT/AI task where the user asks for a testable artifact or li
 - Treat `implemented/tested but no usable stable production URL` as a pipeline regression. Never hand off `deploy-preview-*` or immutable deploy aliases as the final user link unless the user explicitly requests a temporary Preview.
 
 Canonical machine-readable policy: `data/manual-task-completion-contract.json`; runtime gate: `lib/manual-task-completion-contract.js`.
+
+
+## Mandatory browser-game viewport lock
+
+All browser games must use the shared World Server Game Viewport Lock. Do not fix page scrolling independently inside one game. The canonical contract is `docs/GAME_VIEWPORT_LOCK.md`; production injection is `scripts/inject-game-viewport-lock.js`; `GAME_VIEWPORT_LOCK_GATE` is a release blocker. Any gameplay drag that moves the document is RELEASE FAIL. New `apps/<game>/index.html` entrypoints are protected by default; exemptions are only for non-game tools. Physical iPhone evidence remains required for a verified mobile release because WebKit overscroll has device-specific edge cases.
