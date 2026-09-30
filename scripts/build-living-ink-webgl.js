@@ -2,32 +2,52 @@
 'use strict';
 const fs=require('fs');
 const path=require('path');
-const esbuild=require('esbuild');
 
 const root=path.resolve(__dirname,'..');
-const entry=path.join(root,'apps','living-ink-office','webgl-entry.mjs');
 const outDir=path.join(root,'apps','living-ink-office-v3');
 const out=path.join(outDir,'index.html');
 
-const result=esbuild.buildSync({
-  entryPoints:[entry],
-  bundle:true,
-  format:'iife',
-  platform:'browser',
-  target:['es2020','safari15'],
-  minify:true,
-  treeShaking:true,
-  write:false,
-  legalComments:'none',
-  banner:{js:'/*! three.js r160 / 0.160.0 - MIT - Copyright © 2010-2026 three.js authors. Full notice in THIRD_PARTY_NOTICES.txt and HTML source. */'}
+function read(rel){return fs.readFileSync(path.join(root,rel),'utf8');}
+function dataUrl(source){return 'data:text/javascript;base64,'+Buffer.from(source,'utf8').toString('base64');}
+function rewrite(source,map){
+  let out=source;
+  for(const [from,to] of Object.entries(map)) out=out.split(from).join(to);
+  return out;
+}
+
+const three=read('vendor/three-r160/three.module.min.js');
+const npr=rewrite(read('shared/living-ink-webgl-npr.mjs'),{
+  "'../vendor/three-r160/three.module.min.js'":"'three'"
 });
-const js=result.outputFiles[0].text.split('</script').join('<\\/script');
+const human=rewrite(read('shared/living-ink-webgl-human.mjs'),{
+  "'../vendor/three-r160/three.module.min.js'":"'three'",
+  "'./living-ink-webgl-npr.mjs'":"'@living/npr'"
+});
+const scene=rewrite(read('shared/living-ink-webgl-scene.mjs'),{
+  "'../vendor/three-r160/three.module.min.js'":"'three'",
+  "'./living-ink-webgl-npr.mjs'":"'@living/npr'",
+  "'./living-ink-webgl-human.mjs'":"'@living/human'"
+});
+const entry=rewrite(read('apps/living-ink-office/webgl-entry.mjs'),{
+  "'../../vendor/three-r160/three.module.min.js'":"'three'",
+  "'../../shared/living-ink-webgl-npr.mjs'":"'@living/npr'",
+  "'../../shared/living-ink-webgl-scene.mjs'":"'@living/scene'"
+});
+
+const importMap={
+  imports:{
+    three:dataUrl(three),
+    '@living/npr':dataUrl(npr),
+    '@living/human':dataUrl(human),
+    '@living/scene':dataUrl(scene),
+    '@living/entry':dataUrl(entry)
+  }
+};
 const notice=[
   'three.js r160 / 0.160.0',
-  'MIT License — Copyright © 2010-2026 three.js authors.',
-  'Permission is granted under the MIT License; full text is preserved in',
-  'World Server THIRD_PARTY_NOTICES.txt and vendor/three-r160/LICENSE.'
-].join('\\n');
+  'MIT License — Copyright © 2010-2023 three.js authors.',
+  'Full license text: World Server THIRD_PARTY_NOTICES.txt and vendor/three-r160/LICENSE.'
+].join(' ');
 
 const html=[
 '<!doctype html>',
@@ -44,15 +64,16 @@ const html=[
 '.brand{position:fixed;right:16px;top:max(14px,env(safe-area-inset-top));z-index:9;color:rgba(67,86,106,.26);font:800 11px system-ui;letter-spacing:.14em;pointer-events:none}',
 '.mode{position:fixed;right:16px;bottom:max(12px,env(safe-area-inset-bottom));z-index:9;color:rgba(67,86,106,.18);font:700 9px system-ui;letter-spacing:.10em;pointer-events:none}',
 '</style>',
+'<script type="importmap">'+JSON.stringify(importMap).replace(/<\/script/gi,'<\\/script')+'</script>',
 '</head><body>',
-'<!-- '+notice.replace(/--/g,'—')+' -->',
+'<!-- '+notice+' -->',
 '<canvas id="living-ink"></canvas>',
 '<div class="brand">ASQURA / REAL 3D NPR v3</div>',
 '<div class="mode">DEPTH · HIDDEN-LINE · LOD · WATERCOLOUR</div>',
-'<script>'+js+'</script>',
+'<script type="module">import "@living/entry";</script>',
 '</body></html>',
 ''
-].join('\\n');
+].join('\n');
 
 fs.mkdirSync(outDir,{recursive:true});
 fs.writeFileSync(out,html,'utf8');
