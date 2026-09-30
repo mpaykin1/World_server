@@ -4,6 +4,7 @@ import {createEvolutionPlan,sampleTimeline,clamp01,easeOutBack,planSignature} fr
 const root=document.getElementById('game-root'),loading=document.getElementById('loading');
 const stageEl=document.getElementById('stage'),fill=document.getElementById('fill'),replay=document.getElementById('replay');
 const recipe=await fetch('./recipe.json',{cache:'no-store'}).then(r=>r.json());
+const params=new URLSearchParams(location.search),autoplay=params.get('autoplay')!=='0';
 const plan=createEvolutionPlan(recipe),duration=recipe.durationSeconds||12,mobile=matchMedia('(pointer:coarse)').matches;
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x05070b);scene.fog=new THREE.Fog(0x05070b,7,24);
 const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.05,80);
@@ -18,7 +19,7 @@ const terrainMeshes=new Array(plan.terrain.length),rockMeshes=new Array(plan.bio
 let walker=null,birds=[],start=performance.now();
 const cameraPath=new THREE.CatmullRomCurve3([new THREE.Vector3(0,2.8,11.5),new THREE.Vector3(8.2,4.8,8.4),new THREE.Vector3(9.5,6.4,1.8),new THREE.Vector3(5.7,5.2,-7),new THREE.Vector3(1.2,4.2,-10.2)]);
 const look=new THREE.Vector3(0,1.1,0),tmpColor=new THREE.Color();
-window.__WORLD_EVOLUTION_EVIDENCE__={seed:plan.seed,signature:planSignature(plan),counts:{terrain:plan.terrain.length,rocks:plan.biome.rocks.length,grass:plan.biome.grass.length,trees:plan.biome.trees.length,architecture:plan.architecture.length}};
+window.__WORLD_EVOLUTION_EVIDENCE__={ready:false,seed:plan.seed,signature:planSignature(plan),initialPrimitiveCount:1,progress:0,stage:'cube',visibilityPercent:0,visibleGeneratedObjects:0,seedCubeVisible:true,lifeActive:false,counts:{terrain:plan.terrain.length,rocks:plan.biome.rocks.length,grass:plan.biome.grass.length,trees:plan.biome.trees.length,architecture:plan.architecture.length}};
 
 function ensureTerrain(i){
   if(terrainMeshes[i])return terrainMeshes[i];const m=new THREE.Mesh(box,earth);m.castShadow=false;m.receiveShadow=true;m.scale.setScalar(.06);m.position.copy(seedCube.position);world.add(m);terrainMeshes[i]=m;return m;
@@ -46,19 +47,19 @@ function ensureLife(){
 function mixMaterial(mat,target,t){tmpColor.copy(gray).lerp(target,clamp01(t));mat.color.copy(tmpColor);}
 function updateMaterials(p){mixMaterial(earth,earthColor,p);mixMaterial(stone,stoneColor,p);mixMaterial(wood,woodColor,p);mixMaterial(leaf,leafColor,p);mixMaterial(roof,roofColor,p);glass.emissive.setRGB(.12*p,.22*p,.28*p);}
 function updateTerrain(s,time){
-  const matter=s.matter,settle=s.terrain;for(let i=0;i<plan.terrain.length;i++){const d=plan.terrain[i],local=clamp01((matter-d.delay*.45)/.72);if(local<=0)continue;const m=ensureTerrain(i),e=easeOutBack(local),spiral=(1-local)*2.4;m.position.set(d.x*e+Math.sin(i*.71+time*2)*spiral*.15,1.25+(d.y-1.25)*e+Math.sin(local*Math.PI)*1.7,d.z*e+Math.cos(i*.53+time*2)*spiral*.15);m.rotation.set(d.spin*(1-local),d.spin*.6*(1-local),0);m.scale.set(.94,.94*(.72+d.scaleY*.42),.94);if(settle<.15)m.scale.multiplyScalar(.88+.12*local);}
-  seedCube.scale.setScalar(Math.max(.001,1-matter*1.12));seedCube.rotation.y+=.006;
+  const matter=s.matter,settle=s.terrain;for(let i=0;i<plan.terrain.length;i++){const d=plan.terrain[i],local=clamp01((matter-d.delay*.45)/.72);if(local<=0){if(terrainMeshes[i])terrainMeshes[i].visible=false;continue;}const m=ensureTerrain(i),e=easeOutBack(local),spiral=(1-local)*2.4;m.visible=true;m.position.set(d.x*e+Math.sin(i*.71+time*2)*spiral*.15,1.25+(d.y-1.25)*e+Math.sin(local*Math.PI)*1.7,d.z*e+Math.cos(i*.53+time*2)*spiral*.15);m.rotation.set(d.spin*(1-local),d.spin*.6*(1-local),0);m.scale.set(.94,.94*(.72+d.scaleY*.42),.94);if(settle<.15)m.scale.multiplyScalar(.88+.12*local);}
+  seedCube.visible=matter<.89;seedCube.scale.setScalar(Math.max(.001,1-matter*1.12));seedCube.rotation.y+=.006;
 }
 function updateBiome(s,time){
-  const p=s.biome;for(let i=0;i<plan.biome.rocks.length;i++){const d=plan.biome.rocks[i],q=clamp01((p-d.delay*.45)/.55);if(q>0)ensureRock(i).scale.setScalar(easeOutBack(q));}
-  for(let i=0;i<plan.biome.grass.length;i++){const d=plan.biome.grass[i],q=clamp01((p-d.delay*.55)/.45);if(q>0){const m=ensureGrass(i);m.scale.y=easeOutBack(q);m.rotation.z=Math.sin(time*1.8+d.phase)*.12*p;}}
-  for(let i=0;i<plan.biome.trees.length;i++){const d=plan.biome.trees[i],q=clamp01((p-d.delay*.45)/.55);if(q>0){const g=ensureTree(i);const grow=easeOutBack(q)*d.scale;g.scale.set(grow,grow*(.86+.14*q),grow);g.rotation.z=Math.sin(time*.8+i)*.015*p;}}
+  const p=s.biome;for(let i=0;i<plan.biome.rocks.length;i++){const d=plan.biome.rocks[i],q=clamp01((p-d.delay*.45)/.55);if(q>0){const m=ensureRock(i);m.visible=true;m.scale.setScalar(easeOutBack(q));}else if(rockMeshes[i])rockMeshes[i].visible=false;}
+  for(let i=0;i<plan.biome.grass.length;i++){const d=plan.biome.grass[i],q=clamp01((p-d.delay*.55)/.45);if(q>0){const m=ensureGrass(i);m.visible=true;m.scale.y=easeOutBack(q);m.rotation.z=Math.sin(time*1.8+d.phase)*.12*p;}else if(grassMeshes[i])grassMeshes[i].visible=false;}
+  for(let i=0;i<plan.biome.trees.length;i++){const d=plan.biome.trees[i],q=clamp01((p-d.delay*.45)/.55);if(q>0){const g=ensureTree(i);g.visible=true;const grow=easeOutBack(q)*d.scale;g.scale.set(grow,grow*(.86+.14*q),grow);g.rotation.z=Math.sin(time*.8+i)*.015*p;}else if(treeGroups[i])treeGroups[i].visible=false;}
 }
 function updateArchitecture(s){
-  const p=s.architecture;for(let i=0;i<plan.architecture.length;i++){const d=plan.architecture[i],q=clamp01((p-d.delay*.36)/.64);if(q<=0)continue;const m=ensureArch(i);const e=easeOutBack(q);m.position.y=.05+(d.y-.05)*e;m.scale.setScalar(e);}
+  const p=s.architecture;for(let i=0;i<plan.architecture.length;i++){const d=plan.architecture[i],q=clamp01((p-d.delay*.36)/.64);if(q<=0){if(archMeshes[i])archMeshes[i].visible=false;continue;}const m=ensureArch(i);m.visible=true;const e=easeOutBack(q);m.position.y=.05+(d.y-.05)*e;m.scale.setScalar(e);}
 }
 function updateLife(s,time){
-  if(s.life<=.02)return;ensureLife();const q=s.life,r=plan.life.walker.radius,a=time*plan.life.walker.speed+plan.life.walker.phase;walker.position.set(Math.cos(a)*r,.92,Math.sin(a)*r);walker.rotation.y=-a;walker.children.filter(x=>x.userData.leg).forEach((leg,i)=>leg.rotation.x=Math.sin(time*6+(i?Math.PI:0))*.6*q);
+  if(s.life<=.02){if(walker)walker.visible=false;for(const b of birds)b.visible=false;return;}ensureLife();walker.visible=true;for(const b of birds)b.visible=true;const q=s.life,r=plan.life.walker.radius,a=time*plan.life.walker.speed+plan.life.walker.phase;walker.position.set(Math.cos(a)*r,.92,Math.sin(a)*r);walker.rotation.y=-a;walker.children.filter(x=>x.userData.leg).forEach((leg,i)=>leg.rotation.x=Math.sin(time*6+(i?Math.PI:0))*.6*q);
   birds.forEach((g,i)=>{const d=plan.life.birds[i],a=time*d.speed+d.phase;g.position.set(Math.cos(a)*d.radius,d.height+Math.sin(a*2)*.25,Math.sin(a)*d.radius);g.rotation.y=-a;g.children[1].rotation.z=Math.sin(time*8+i)*.5;g.children[2].rotation.z=-Math.sin(time*8+i)*.5;g.scale.setScalar(q);});
 }
 function updateLighting(s){
@@ -68,11 +69,19 @@ function updateCamera(progress,time){
   const cp=cameraPath.getPoint(clamp01(progress*.94));camera.position.copy(cp);look.set(.4+Math.sin(progress*Math.PI)*.8,1.15+progress*.45,-.2);camera.lookAt(look);camera.rotation.z=Math.sin(time*.45)*.004;
 }
 function stageName(stages){const order=['final','life','lighting','materials','architecture','biome','terrain','matter','cube'];return order.find(k=>stages[k]>.08)||'cube';}
+function visibleGeneratedCount(){return[...terrainMeshes,...rockMeshes,...grassMeshes,...treeGroups,...archMeshes].filter(x=>x?.visible).length+(walker?.visible?1:0)+birds.filter(x=>x?.visible).length;}
+function updateEvidence(progress,stage){
+  const rect=renderer.domElement.getBoundingClientRect(),viewportArea=Math.max(1,innerWidth*innerHeight);
+  Object.assign(window.__WORLD_EVOLUTION_EVIDENCE__,{ready:true,progress:Number(progress.toFixed(4)),stage,visibilityPercent:Number(Math.min(100,100*rect.width*rect.height/viewportArea).toFixed(2)),visibleGeneratedObjects:visibleGeneratedCount(),seedCubeVisible:seedCube.visible,lifeActive:Boolean(walker?.visible&&birds.some(x=>x.visible))});
+}
+function renderAt(progress,time){
+  const sample=sampleTimeline(recipe,progress),s=sample.stages,stage=stageName(s);updateTerrain(s,time);updateBiome(s,time);updateArchitecture(s);updateMaterials(s.materials);updateLighting(s);updateLife(s,time);updateCamera(progress,time);stageEl.textContent=stage.toUpperCase();fill.style.width=`${(progress*100).toFixed(1)}%`;renderer.render(scene,camera);updateEvidence(progress,stage);
+}
 function frame(now){
-  const elapsed=(now-start)/1000,progress=clamp01(elapsed/duration),sample=sampleTimeline(recipe,progress),s=sample.stages;updateTerrain(s,elapsed);updateBiome(s,elapsed);updateArchitecture(s);updateMaterials(s.materials);updateLighting(s);updateLife(s,elapsed);updateCamera(progress,elapsed);stageEl.textContent=stageName(s).toUpperCase();fill.style.width=`${(progress*100).toFixed(1)}%`;renderer.render(scene,camera);if(progress<1)requestAnimationFrame(frame);
+  const elapsed=(now-start)/1000,progress=clamp01(elapsed/duration);renderAt(progress,elapsed);if(progress<1)requestAnimationFrame(frame);
 }
 function restart(){
-  for(const obj of [...terrainMeshes,...rockMeshes,...grassMeshes,...treeGroups,...archMeshes])if(obj)world.remove(obj);if(walker)world.remove(walker);for(const b of birds)world.remove(b);terrainMeshes.fill(null);rockMeshes.fill(null);grassMeshes.fill(null);treeGroups.fill(null);archMeshes.fill(null);walker=null;birds=[];seedCube.scale.setScalar(1);start=performance.now();requestAnimationFrame(frame);
+  for(const obj of [...terrainMeshes,...rockMeshes,...grassMeshes,...treeGroups,...archMeshes])if(obj)world.remove(obj);if(walker)world.remove(walker);for(const b of birds)world.remove(b);terrainMeshes.fill(null);rockMeshes.fill(null);grassMeshes.fill(null);treeGroups.fill(null);archMeshes.fill(null);walker=null;birds=[];seedCube.visible=true;seedCube.scale.setScalar(1);start=performance.now();if(autoplay)requestAnimationFrame(frame);else renderAt(0,0);
 }
 function resize(){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);}
-addEventListener('resize',resize,{passive:true});replay.addEventListener('click',restart);renderer.domElement.addEventListener('dblclick',restart);loading.classList.add('hidden');requestAnimationFrame(frame);
+addEventListener('resize',resize,{passive:true});replay.addEventListener('click',restart);renderer.domElement.addEventListener('dblclick',restart);window.__WORLD_EVOLUTION_CONTROL__={seek(progress){const p=clamp01(progress);renderAt(p,p*duration);return {...window.__WORLD_EVOLUTION_EVIDENCE__};},restart};loading.classList.add('hidden');if(autoplay)requestAnimationFrame(frame);else renderAt(0,0);
