@@ -10,3 +10,10 @@ test('Roblox Gothic Rocks MVP preserves source-derived gameplay constants and Wo
 test('MVP exposes an executable graphics visibility and physical throw evidence contract',()=>{
   const client=read('apps/roblox-gothic-rocks/client.js');assert.match(client,/visibilityPercent/);assert.match(client,/state\.fireTest/);assert.match(client,/state\.shots\+\+/);assert.match(client,/state\.impacts\+\+/);assert.match(client,/GameGoldenPhysics\?\.moveSwept/);
 });
+
+test('projectile simulation remains real-time when render FPS drops',()=>{
+  const client=read('apps/roblox-gothic-rocks/client.js');
+  assert.match(client,/Math\.ceil\(dt\/\.02\)/);
+  assert.match(client,/Math\.min\(\.25,\(now-last\)\/1000/);
+  assert.doesNotMatch(client,/const dt=Math\.min\(\.033,\(now-last\)\/1000/);
+});
