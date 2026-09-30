@@ -1,11 +1,11 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-const S=0.25, CHUNK=128*S, KEEP=2, BRIDGE_W=20*S, CITY_GROUND=-52*S;
+const coarse=matchMedia('(pointer:coarse)').matches;
+const S=0.25, CHUNK=128*S, KEEP=coarse?0:1, BRIDGE_W=20*S, CITY_GROUND=-52*S;
 const WALK=16*S, RUN=28*S, GRAVITY=30*S, JUMP=34*S;
 const THROW_MIN=54*S, THROW_MAX=108*S, CHARGE_SECONDS=1.62;
 const PLAYER_R=.33, PLAYER_H=1.75;
-const coarse=matchMedia('(pointer:coarse)').matches;
 const statusEl=document.querySelector('#status'), loading=document.querySelector('#loading'), throwBtn=document.querySelector('#throw'), chargeBar=document.querySelector('#charge i');
 
 const state={ready:false,shots:0,impacts:0,visibilityPercent:0,qualityFloor:85,source:'городкамни.rbxlx',avatar:'kaykit-knight-rig-medium',externalRobloxAssetsUsed:0};
@@ -54,24 +54,24 @@ function boxAndCollider(parent,pos,size,mat,kind='solid'){const m=meshBox(parent
 function addWindow(parent,x,y,z,front=true){const size=front?new THREE.Vector3(.62,1.5,.08):new THREE.Vector3(.08,1.5,.62);meshBox(parent,new THREE.Vector3(x,y,z),size,mats.window,false);}
 function gothicBuilding(parent,x,z,w,d,h,seed){
  const baseY=CITY_GROUND, g=new THREE.Group();g.position.set(x,0,z);parent.add(g);
- const bodyPos=new THREE.Vector3(0,baseY+h/2,0),bodySize=new THREE.Vector3(w,h,d);meshBox(g,bodyPos,bodySize,mats.stone);addCollider(new THREE.Vector3(x,bodyPos.y,z),bodySize,'building');
+ const bodyPos=new THREE.Vector3(0,baseY+h/2,0),bodySize=new THREE.Vector3(w,h,d);meshBox(g,bodyPos,bodySize,mats.stone,Math.abs(x)<CHUNK*.8);addCollider(new THREE.Vector3(x,bodyPos.y,z),bodySize,'building');
  meshBox(g,new THREE.Vector3(0,baseY+.75,0),new THREE.Vector3(w+1.05,1.5,d+1.05),mats.dark);
  const levels=clamp(Math.floor(h/4.5),3,8);
  for(let lv=0;lv<levels;lv++){const y=baseY+2.2+lv*(h-4.2)/Math.max(1,levels-1);meshBox(g,new THREE.Vector3(0,y,d/2+.05),new THREE.Vector3(w+.25,.15,.1),mats.dark,false);meshBox(g,new THREE.Vector3(0,y,-d/2-.05),new THREE.Vector3(w+.25,.15,.1),mats.dark,false);}
  for(const side of [-1,1]){for(let ix=0;ix<3;ix++){const wx=lerp(-w*.31,w*.31,ix/2);for(let lv=0;lv<Math.min(5,levels-1);lv++){const wy=baseY+3.2+lv*3.75;if(wy<baseY+h-1.8)addWindow(g,wx,wy,side*(d/2+.055),true);}}}
- for(const side of [-1,1]){for(let i=0;i<3;i++){const bx=lerp(-w*.4,w*.4,i/2);meshBox(g,new THREE.Vector3(bx,baseY+h*.38,side*(d/2+.4)),new THREE.Vector3(.55,h*.72,.65),mats.dark);}}
+ for(const side of [-1,1]){for(let i=0;i<3;i++){const bx=lerp(-w*.4,w*.4,i/2);meshBox(g,new THREE.Vector3(bx,baseY+h*.38,side*(d/2+.4)),new THREE.Vector3(.55,h*.72,.65),mats.dark,false);}}
  meshBox(g,new THREE.Vector3(0,baseY+h+.3,0),new THREE.Vector3(w+1.25,.6,d+1.25),mats.dark);
  meshCone(g,new THREE.Vector3(0,baseY+h+.15,0),Math.max(w,d)*.54,5.5+hash(seed+9)*7,mats.dark);
- for(const sx of [-1,1])for(const sz of [-1,1]){const tx=sx*(w/2+.7),tz=sz*(d/2+.7),th=h*(.68+hash(seed+tx+tz)*.32);const tower=new THREE.Mesh(geo.cyl,mats.stone2);tower.position.set(tx,baseY+th/2,tz);tower.scale.set(.8,th,.8);tower.castShadow=true;tower.receiveShadow=true;g.add(tower);meshCone(g,new THREE.Vector3(tx,baseY+th,tz),1.1,4.2+hash(seed+tz)*4.5,mats.dark);}
+ for(const sx of [-1,1])for(const sz of [-1,1]){const tx=sx*(w/2+.7),tz=sz*(d/2+.7),th=h*(.68+hash(seed+tx+tz)*.32);const tower=new THREE.Mesh(geo.cyl,mats.stone2);tower.position.set(tx,baseY+th/2,tz);tower.scale.set(.8,th,.8);tower.castShadow=Math.abs(x)<CHUNK*.8&&!coarse;tower.receiveShadow=true;g.add(tower);meshCone(g,new THREE.Vector3(tx,baseY+th,tz),1.1,4.2+hash(seed+tz)*4.5,mats.dark);}
  return g;
 }
 
 function buildBridge(parent,k){const cx=k*CHUNK,z=routeZ(cx),y=routeY(cx),length=CHUNK+1.2;const deck=boxAndCollider(parent,new THREE.Vector3(cx,y-.95,z),new THREE.Vector3(length,1.5,BRIDGE_W+1.5),mats.stone,'bridge');meshBox(parent,new THREE.Vector3(cx,y+.08,z),new THREE.Vector3(length,.18,BRIDGE_W+.65),mats.road,false);
  for(const side of [-1,1]){const pz=z+side*(BRIDGE_W/2+.28);boxAndCollider(parent,new THREE.Vector3(cx,y+.65,pz),new THREE.Vector3(length,1.3,.28),mats.stone2,'parapet');for(let i=0;i<16;i++){const x=cx-CHUNK/2+1+i*(CHUNK-2)/15;meshBox(parent,new THREE.Vector3(x,y+1.25,pz),new THREE.Vector3(.27,.42,.25),mats.stone,false);}}
- for(let i=0;i<4;i++){const x=cx-CHUNK*.36+i*CHUNK*.24;for(const side of [-1,1]){const zt=z+side*(BRIDGE_W/2+.48);meshBox(parent,new THREE.Vector3(x,y+1.42,zt),new THREE.Vector3(.12,.72,.12),mats.metal);const f=meshCone(parent,new THREE.Vector3(x,y+1.76,zt),.18,.42,mats.flame);f.castShadow=false;if(i%2===0&&Math.abs(k)<=1){const l=new THREE.PointLight(0xff6d1f,1.6,8.5,2);l.position.set(x,y+2.15,zt);parent.add(l);}}}
+ for(let i=0;i<4;i++){const x=cx-CHUNK*.36+i*CHUNK*.24;for(const side of [-1,1]){const zt=z+side*(BRIDGE_W/2+.48);meshBox(parent,new THREE.Vector3(x,y+1.42,zt),new THREE.Vector3(.12,.72,.12),mats.metal,false);const f=meshCone(parent,new THREE.Vector3(x,y+1.76,zt),.18,.42,mats.flame);f.castShadow=false;if(i%2===0&&Math.abs(k)<=1){const l=new THREE.PointLight(0xff6d1f,1.6,8.5,2);l.position.set(x,y+2.15,zt);parent.add(l);}}}
 }
 
-function buildChunk(k){const g=new THREE.Group();g.userData.k=k;city.add(g);activeBuildChunk=k;buildBridge(g,k);const seed=k*131+900,cx=k*CHUNK;for(const side of [-1,1]){for(let i=0;i<3;i++){const x=cx-CHUNK*.38+i*CHUNK*.38+(hash(seed+i+side)-.5)*3;const bz=routeZ(x);const dist=(42+hash(seed+i*6+side)*76)*S;const z=bz+side*dist;const w=(18+hash(seed+i+3)*20)*S,d=(16+hash(seed+i+9)*26)*S,h=(54+hash(seed+i+15)*100)*S;gothicBuilding(g,x,z,w,d,h,seed+i*31+side*17);}}
+function buildChunk(k){const g=new THREE.Group();g.userData.k=k;city.add(g);activeBuildChunk=k;buildBridge(g,k);const seed=k*131+900,cx=k*CHUNK;for(const side of [-1,1]){for(let i=0;i<2;i++){const x=cx+lerp(-CHUNK*.32,CHUNK*.32,i)+(hash(seed+i+side)-.5)*3;const bz=routeZ(x);const dist=(42+hash(seed+i*6+side)*76)*S;const z=bz+side*dist;const w=(18+hash(seed+i+3)*20)*S,d=(16+hash(seed+i+9)*26)*S,h=(54+hash(seed+i+15)*100)*S;gothicBuilding(g,x,z,w,d,h,seed+i*31+side*17);}}
  for(let i=0;i<18;i++){const x=cx-CHUNK/2+hash(seed+i*21)*CHUNK,z=routeZ(x)+(hash(seed+i*31)>.5?1:-1)*(BRIDGE_W*.75+hash(seed+i*44)*7);meshBox(g,new THREE.Vector3(x,CITY_GROUND+.05,z),new THREE.Vector3(.6+hash(seed+i)*1.5,.09,.8+hash(seed+i*3)*1.8),mats.moss,false);}
  chunkGroups.set(k,g);activeBuildChunk=null;
 }
@@ -121,8 +121,8 @@ function updateLighting(t){const phase=(t/90000)%1,night=Math.max(0,Math.sin((ph
 function updateVisibility(){const r=renderer.domElement.getBoundingClientRect(),area=Math.max(0,Math.min(innerWidth,r.right)-Math.max(0,r.left))*Math.max(0,Math.min(innerHeight,r.bottom)-Math.max(0,r.top));state.visibilityPercent=Number((100*area/(innerWidth*innerHeight)).toFixed(1));}
 
 let last=performance.now();
-function frame(now){requestAnimationFrame(frame);const dt=Math.min(.033,(now-last)/1000||.016);last=now;window.GameGoldenStandard?.frame?.();updatePlayer(dt);updateCamera();updateHeldRock(now);updateProjectiles(dt);updateTrajectory();updateLighting(now);mixer?.update(dt);renderer.render(scene,camera);}
+function frame(now){requestAnimationFrame(frame);state.frames=(state.frames||0)+1;const dt=Math.min(.033,(now-last)/1000||.016);last=now;window.GameGoldenStandard?.frame?.();updatePlayer(dt);updateCamera();updateHeldRock(now);updateProjectiles(dt);updateTrajectory();updateLighting(now);mixer?.update(dt);renderer.render(scene,camera);}
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);updateVisibility();});
 
-async function boot(){ensureChunks(0);await loadAvatar();updateVisibility();window.GameGoldenStandard?.reportReady?.({walkable:true,collisions:true,grounding:true,playerSpawn:true,mouseLook:true,touchControls:coarse?true:window.GameGoldenStandard.state.touchControls,mobileReady:true});state.ready=true;statusEl.textContent=`ROBLOX→WORLD SERVER · ${state.visibilityPercent}% графики · F/кнопка — бросок`;setTimeout(()=>statusEl.style.opacity='.18',3400);loading.classList.add('hide');requestAnimationFrame(frame);}
+async function boot(){ensureChunks(0);await loadAvatar();updateHeldRock(performance.now());updateVisibility();window.GameGoldenStandard?.reportReady?.({walkable:true,collisions:true,grounding:true,playerSpawn:true,mouseLook:true,touchControls:coarse?true:window.GameGoldenStandard.state.touchControls,mobileReady:true});state.ready=true;statusEl.textContent=`ROBLOX→WORLD SERVER · ${state.visibilityPercent}% графики · F/кнопка — бросок`;setTimeout(()=>statusEl.style.opacity='.18',3400);loading.classList.add('hide');requestAnimationFrame(frame);}
 boot();
