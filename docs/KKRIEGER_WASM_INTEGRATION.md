@@ -54,6 +54,10 @@ The canonical playable browser build is maintained in:
 - known issues: `KRIEGER_KNOWN_ISSUES.md`
 - open physical-iPhone bug tracker: https://github.com/mpaykin1/scratch-chain-reaction/issues/34
 
+### Failure ledger
+
+Physical-device failures and their exact source-level causes are tracked in `docs/KKRIEGER_FAILURE_LEDGER.md`. Every later Krieger task must read this before modifying the integration so already disproven shortcuts are not repeated.
+
 ### Physical-iPhone truth and Total Control
 
 Do not infer success from Chromium smoke tests alone. Physical-device evidence outranks synthetic browser evidence.
