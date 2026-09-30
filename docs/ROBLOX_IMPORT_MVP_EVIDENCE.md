@@ -72,3 +72,16 @@ Repair in the clean release branch:
 
 Lesson: a graphics-first gate must measure not only viewport coverage but also interaction progress under the actual renderer. A scene can occupy 100% of the screen and still be unusable if draw/shadow pressure starves gameplay simulation.
 
+### Root-cause refinement after the second exact-head failure
+
+The reduced-mesh candidate still failed desktop impact timing while mobile WebKit passed. That falsified the hypothesis that draw-count reduction alone was sufficient.
+The deeper defect was simulation time dilation: the render loop clamped every frame to at most `0.033 s`. Under slow software-rendered desktop frames, hundreds of milliseconds of real time could advance only 33 ms of projectile physics.
+
+Repair:
+- render delta may now represent up to 250 ms of real elapsed time;
+- projectile/debris physics subdivides that elapsed time into <=20 ms steps for stable collision/ballistics;
+- collision uses the rock radius rather than only its center;
+- character swept movement retains its tighter movement delta cap.
+
+Reusable lesson: never tie authoritative gameplay time to a render-FPS clamp. Rendering may degrade under load, but deterministic gameplay/ballistics must advance against elapsed time using bounded physics substeps.
+
