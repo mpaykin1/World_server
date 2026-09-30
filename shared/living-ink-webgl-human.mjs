@@ -13,10 +13,17 @@ export function createOfficeHuman(ctx,opt={}){
   const suit=STYLE.suit[Math.floor(seeded(seed,4)*STYLE.suit.length)];
   const shirt=[0xf1f2ef,0xeee9e2,0xe7ecee,0xf2eee8][Math.floor(seeded(seed,5)*4)];
 
-  const torso=ctx.box(spine,[.42*build,.52*height,.23],[0,.06,0],{
-    color:suit,opacity:.27,semantic:'human',importance:1,edgeOpacity:.52,edgeThreshold:28
+  const torso=ctx.addInkMesh(
+    spine,
+    new THREE.CylinderGeometry(.18*build,.145*build,.52*height,8,1,false),
+    {color:suit,opacity:.27,semantic:'human',importance:1,edgeOpacity:.48,edgeThreshold:28,
+      position:new THREE.Vector3(0,.06,0)}
+  );
+  torso.scale.z=.68+(seeded(seed,7)-.5)*.08;
+  const shoulderLine=ctx.box(spine,[.39*build,.035,.14],[0,.285*height,-.01],{
+    color:suit,opacity:.18,semantic:'human',importance:.85,edgeOpacity:.24
   });
-  torso.scale.x=1+(seeded(seed,7)-.5)*.12;
+  shoulderLine.userData.nearOnly=true;
 
   const shirtMesh=ctx.box(spine,[.18*build,.29*height,.018],[0,.105,-.126],{
     color:shirt,opacity:.26,semantic:'human',importance:1,edgeOpacity:.20,edgeThreshold:40
