@@ -1,0 +1,227 @@
+{
+  "version": 1,
+  "updated": "2026-09-30",
+  "site": {
+    "name": {
+      "ru": "Театр жизненных сценариев Михаила Пайкина",
+      "en": "Mikhail Paykin — Theatre of Life Scenarios"
+    },
+    "url": "https://theater.mmmpaykin.workers.dev/",
+    "location": {
+      "city": "Tbilisi",
+      "country": "Georgia"
+    },
+    "languages": [
+      "ru",
+      "en"
+    ],
+    "verifiedFacts": [
+      {
+        "id": "location",
+        "factRu": "Проект работает в Тбилиси.",
+        "factEn": "The project operates in Tbilisi.",
+        "source": "https://theater.mmmpaykin.workers.dev/"
+      },
+      {
+        "id": "daily-show",
+        "factRu": "В текущей опубликованной программе интерактивный спектакль указан ежедневно в 19:00.",
+        "factEn": "The current published program lists an interactive show daily at 19:00.",
+        "source": "https://theater.mmmpaykin.workers.dev/raspisanie-tbilisi/"
+      },
+      {
+        "id": "show-price",
+        "factRu": "В текущей опубликованной программе указана стоимость спектакля 30 ₾.",
+        "factEn": "The current published program lists the show price as 30 GEL.",
+        "source": "https://theater.mmmpaykin.workers.dev/raspisanie-tbilisi/"
+      },
+      {
+        "id": "address",
+        "factRu": "На сайте опубликован адрес Абано 13/15, Тбилиси.",
+        "factEn": "The site publishes the address Abano 13/15, Tbilisi.",
+        "source": "https://theater.mmmpaykin.workers.dev/raspisanie-tbilisi/"
+      },
+      {
+        "id": "method",
+        "factRu": "Сайт описывает театротерапию как авторскую творческую и обучающую практику, а не медицинскую услугу.",
+        "factEn": "The site describes theatre therapy as an original creative and educational practice, not a medical service.",
+        "source": "https://theater.mmmpaykin.workers.dev/"
+      }
+    ]
+  },
+  "campaigns": [
+    {
+      "id": "private_workshops",
+      "label": {
+        "ru": "Командные воркшопы",
+        "en": "Private team workshops"
+      },
+      "status": "proposal",
+      "targetSectors": [
+        "Information Technology & Services",
+        "Financial Services",
+        "Professional Services",
+        "Technology",
+        "Fintech"
+      ],
+      "needSignals": [
+        "communication",
+        "team alignment",
+        "change",
+        "leadership",
+        "conflict",
+        "presentation",
+        "collaboration"
+      ],
+      "pain": {
+        "ru": "Команде нужен безопасный способ посмотреть на реальные рабочие ситуации со стороны и попробовать другой способ действия.",
+        "en": "The team needs a safe way to examine real work situations and rehearse different responses."
+      },
+      "offer": {
+        "ru": "командный театр-воркшоп: реальные рабочие сценарии → сценическая репетиция → наблюдение → альтернативные действия",
+        "en": "a team theatre workshop: real work scenarios → staged rehearsal → observation → alternative actions"
+      },
+      "subject": {
+        "ru": "Командный воркшоп без лекции: репетиция реальных ситуаций",
+        "en": "A team workshop without a lecture: rehearse real scenarios"
+      }
+    },
+    {
+      "id": "schools_colleges",
+      "label": {
+        "ru": "Школы и университеты",
+        "en": "Schools and colleges"
+      },
+      "status": "proposal",
+      "targetSectors": [
+        "Education",
+        "University",
+        "School",
+        "Higher Education"
+      ],
+      "needSignals": [
+        "student engagement",
+        "dialogue",
+        "social themes",
+        "confidence",
+        "communication",
+        "creativity"
+      ],
+      "pain": {
+        "ru": "Участникам нужен вовлекающий способ исследовать эмоции, диалог и социальные ситуации через действие.",
+        "en": "Participants need an engaging way to explore emotions, dialogue and social situations through action."
+      },
+      "offer": {
+        "ru": "театральная образовательная лаборатория для студентов или преподавателей с импровизацией и разбором сценариев",
+        "en": "a drama-based learning lab for students or educators using improvisation and scenario rehearsal"
+      },
+      "subject": {
+        "ru": "Театральная лаборатория для студентов: диалог через действие",
+        "en": "Drama-based learning lab: dialogue through action"
+      }
+    },
+    {
+      "id": "ngo_programs",
+      "label": {
+        "ru": "НКО и общественные программы",
+        "en": "NGO and community programs"
+      },
+      "status": "proposal",
+      "targetSectors": [
+        "Nonprofit",
+        "NGO",
+        "Community",
+        "Civic & Social Organization"
+      ],
+      "needSignals": [
+        "community dialogue",
+        "sensitive topics",
+        "facilitation",
+        "reflection",
+        "inclusion"
+      ],
+      "pain": {
+        "ru": "Нужен формат, в котором сложные общественные темы можно обсуждать не только словами, но и через наблюдение за действием.",
+        "en": "The program needs a format for exploring sensitive community topics through action, not discussion alone."
+      },
+      "offer": {
+        "ru": "фасилитируемый интерактивный театральный формат для диалога и рефлексии вокруг общественной темы",
+        "en": "a facilitated interactive-theatre format for dialogue and reflection around a community issue"
+      },
+      "subject": {
+        "ru": "Интерактивный театр как формат диалога для программы",
+        "en": "Interactive theatre as a dialogue format for your program"
+      }
+    },
+    {
+      "id": "creative_agencies",
+      "label": {
+        "ru": "Креативные агентства",
+        "en": "Creative agencies"
+      },
+      "status": "proposal",
+      "targetSectors": [
+        "Marketing & Advertising",
+        "Design",
+        "Creative Agency",
+        "Media",
+        "Production"
+      ],
+      "needSignals": [
+        "pitch confidence",
+        "ideation",
+        "presence",
+        "creative block",
+        "team energy"
+      ],
+      "pain": {
+        "ru": "Команде нужны свежие способы проявляться, презентовать идеи и выходить из привычных творческих паттернов.",
+        "en": "The team needs fresh ways to show up, pitch ideas and break habitual creative patterns."
+      },
+      "offer": {
+        "ru": "короткая импровизационная лаборатория для питчей, смелости и групповой генерации идей",
+        "en": "a short improvisation lab for pitching, presence and group ideation"
+      },
+      "subject": {
+        "ru": "Импровизационная лаборатория для креативной команды",
+        "en": "Improvisation lab for a creative team"
+      }
+    },
+    {
+      "id": "individuals_change",
+      "label": {
+        "ru": "Люди в период перемен",
+        "en": "Individuals in change"
+      },
+      "status": "active-site",
+      "targetSectors": [
+        "Individuals"
+      ],
+      "needSignals": [
+        "stuck",
+        "choice",
+        "boundaries",
+        "change",
+        "self-expression"
+      ],
+      "pain": {
+        "ru": "Человек повторяет один и тот же жизненный сценарий и хочет попробовать другой ход в безопасной творческой форме.",
+        "en": "A person feels stuck in a repeating life pattern and wants to rehearse another move in a creative setting."
+      },
+      "offer": {
+        "ru": "спектакль, занятие или индивидуальная репетиция жизненной сцены — в зависимости от текущего запроса",
+        "en": "a show, group session or individual rehearsal of a life scene depending on the current need"
+      },
+      "subject": {
+        "ru": "Какой формат сейчас подойдёт именно вам?",
+        "en": "Which format fits what you need right now?"
+      }
+    }
+  ],
+  "rules": {
+    "humanReviewRequired": true,
+    "autoSend": false,
+    "noPrivateDataScraping": true,
+    "citedFactsOnlyForPersonalization": true,
+    "optOutStopsContact": true
+  }
+}
