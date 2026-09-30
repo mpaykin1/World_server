@@ -31,3 +31,11 @@ test('Cloudflare worker routes promotion API before dynamic proxy', () => {
   const dynamic = worker.indexOf("url.pathname.startsWith('/api/')");
   assert.ok(route > 0 && dynamic > route);
 });
+
+test('seed prospects are research candidates with dated public sources', () => {
+  const data = JSON.parse(read('data/promotion-theater.json'));
+  assert.ok(data.seedProspects.length >= 5);
+  assert.ok(data.seedProspects.every((x) => x.status === 'research-candidate'));
+  assert.ok(data.seedProspects.every((x) => /^https:\/\//.test(x.sourceUrl)));
+  assert.ok(data.seedProspects.every((x) => /^2026-09-30$/.test(x.observedDate)));
+});
