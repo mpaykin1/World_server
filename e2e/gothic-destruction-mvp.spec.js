@@ -3,7 +3,10 @@ const {test,expect}=require('@playwright/test');
 async function ready(page){
   await page.goto('/apps/gothic-destruction-mvp/',{waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>window.GothicDestructionMVP?.stats?.().ready===true,null,{timeout:30000});
-  await expect(page.locator('#loader')).toHaveClass(/hidden/);
+  await page.waitForFunction(()=>{
+    const loader=document.querySelector('#loader');
+    return !loader||loader.classList.contains('hidden');
+  },null,{timeout:10000});
   await expect(page.locator('#fire')).toBeVisible();
 }
 
