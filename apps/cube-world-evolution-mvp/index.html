@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Cube → Living Voxel Diorama</title>
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#05070b}
+body{position:fixed;inset:0;font-family:system-ui,-apple-system,sans-serif;color:#fff}
+#game-root,canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;user-select:none;-webkit-user-select:none}
+#hud{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:4;pointer-events:none;text-align:center;text-shadow:0 2px 12px #000}
+#stage{font-size:11px;letter-spacing:.18em;text-transform:uppercase;opacity:.82}#title{font-size:clamp(15px,3.8vw,22px);font-weight:800;margin-top:4px;white-space:nowrap}
+#bar{width:min(64vw,320px);height:2px;margin:9px auto 0;background:#ffffff25;border-radius:9px;overflow:hidden}#fill{height:100%;width:0;background:#fff}
+#replay{position:fixed;right:max(12px,env(safe-area-inset-right));top:max(12px,env(safe-area-inset-top));z-index:5;width:42px;height:42px;border:1px solid #ffffff35;border-radius:50%;background:#00000038;color:#fff;font-size:20px;backdrop-filter:blur(8px)}
+#loading{position:fixed;inset:0;z-index:9;display:grid;place-items:center;background:#05070b;font-weight:700;letter-spacing:.08em}.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div id="game-root"></div><div id="loading">WORLD EVOLUTION</div>
+<div id="hud"><div id="stage">CUBE</div><div id="title">Один куб. Тысячи систем. Один живой мир.</div><div id="bar"><div id="fill"></div></div></div>
+<button id="replay" aria-label="Повторить">↻</button>
+<script type="module" src="./app.mjs"></script>
+</body>
+</html>
