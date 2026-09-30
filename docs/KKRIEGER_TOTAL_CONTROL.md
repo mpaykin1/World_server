@@ -180,3 +180,39 @@ Verified examples include:
 Canonical World Server learning record: [KKRIEGER_GRAPHICS_FIDELITY_MAP.md](KKRIEGER_GRAPHICS_FIDELITY_MAP.md).
 
 This changes the extraction target: World Server should learn to compile/parameterize **operator recipes**, not merely invoke isolated geometry functions.
+
+
+## Success KSC-001 — Dark Reactor Recipe Proof is publicly playable
+
+Date: 2026-09-30  
+Public build SHA: `7bc4d3dbea15fd1c0574079dfaf4f5bbbb60f5da`
+
+The first Krieger Recipe Proof MVP now passes both local CI and a re-run against the permanent GitHub Pages bytes.
+
+What made it work:
+
+- preserved the native Krieger weapon and shot/event runtime instead of flushing it;
+- appended custom procedural geometry to native Engine jobs instead of clearing `MeshJobs/EffectJobs/SectorJobs/PortalJobs`;
+- used real Krieger mesh generators (Cube/Cylinder/Torus/Sphere/Multiply) and a same-recipe A/B parameter mutation;
+- generated procedural Bitmap textures and normal maps, then fed them through a stable BASE+LIGHT material path;
+- separated gameplay proofs (movement/look/FIRE) from the deterministic hero-view visual proof;
+- reduced CI device scale while keeping the same portrait CSS viewport, with physical iPhone remaining final authority;
+- tuned the material/compositor interaction after two opposite failures: ~2% visible black frame, then ~97% dominant white frame.
+
+Verified public-run evidence:
+
+- 10,262 vertices / 7,900 faces / 10 collision volumes;
+- 52 visual parts, 31 curved operations, 2 Multiply recipe uses;
+- 4 procedural textures, 3 material categories, bump mapping enabled;
+- native WeaponOptics and WeaponShot live;
+- native FIRE state transition PASS;
+- portrait 390x844 master viewport;
+- non-black central framebuffer: **99.95%**;
+- dominant coarse colour bin: **50.27%** (no flat-field failure);
+- 156 quantized colour bins;
+- edge density: 4.29%;
+- camera-turn framebuffer delta: 23.05%;
+- exact public bytes PASS;
+- public-URL smoke PASS.
+
+Permanent lesson: the release gate must simultaneously prove **technology provenance**, **gameplay state transition**, **structured framebuffer**, and **the exact deployed public bytes**. Any one of those alone can give a false PASS.
