@@ -185,6 +185,21 @@
         "spawn",
         "render"
       ]
+    },
+    "gothic-destruction-mvp": {
+      "title": "Gothic Destruction MVP",
+      "visible": false,
+      "status": "diagnostic",
+      "kind": "demo",
+      "reason": "Exact-head experimental structural-destruction showcase. Direct testing is allowed, but it is not yet certified for the public catalog.",
+      "worldMenu": {
+        "show": false,
+        "headline": "ГОТИЧЕСКАЯ БАШНЯ ПАДАЕТ НЕ ПО СЦЕНАРИЮ — ОНА ТЕРЯЕТ ОПОРУ!",
+        "lore": "Экспериментальный полигон World Server показывает, как процедурная готическая архитектура получает несущие связи, повреждения от пушечного ядра и физически падающие voxel-кластеры.",
+        "history": "Сначала World Server научился строить готические формы. Затем появились structural graph, баллистика, material damage и Rapier runtime. Этот MVP соединяет их в одну видимую сцену.",
+        "familyId": "gothic-destruction-mvp",
+        "connections": []
+      }
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",
