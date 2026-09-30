@@ -13,8 +13,26 @@
       "Public-Domain"
     ]
   },
-  "dependencies": [],
-  "notes": "The first Living Ink vertical slice imports no external code, models, textures, fonts, shaders, animations, or training data. Candidate libraries remain audit-only until separately pinned and hashed.",
+  "dependencies": [
+    {
+      "name": "three",
+      "upstream": "https://github.com/mrdoob/three.js",
+      "version": "0.186.1",
+      "commitOrTag": "r186",
+      "license": "MIT",
+      "class": "code",
+      "filesImported": [
+        "vendor/three-r186/three.module.js",
+        "vendor/three-r186/LICENSE"
+      ],
+      "modifications": "None in vendored upstream files. World Server bundles selected exports into autonomous Living Ink artifacts at build time.",
+      "requiredNotices": true,
+      "commercialUseStatus": "allowed",
+      "redistributionRequirements": "Preserve the MIT copyright and license notice in redistributed/bundled copies.",
+      "sha256": "9052042d676cb0fdc1ddfefe193053f34b7ac0513a616fdac4535d49987812ea"
+    }
+  ],
+  "notes": "Living Ink NPR v3 imports only the audited three.js r186 code above. No external models, textures, fonts, animations, example assets, or training data are imported. meshoptimizer and glTF-Transform were reviewed as future MIT candidates but are not imported because the current vertical slice does not need them; this keeps third-party surface minimal.",
   "legacyPackageBaseline": [
     "@sentry/browser",
     "@supabase/supabase-js",
