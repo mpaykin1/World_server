@@ -18,7 +18,8 @@
     "docs/SCIENCE_GAMEPLAY_STANDARD.md",
     ".ai/aka-serial-growth-engine.json",
     "data/serial-growth-state.json",
-    "docs/SERIAL_GROWTH_ENGINE.md"
+    "docs/SERIAL_GROWTH_ENGINE.md",
+    "docs/GAME_VIEWPORT_LOCK.md"
   ],
   "concepts": {
     "vno": {
@@ -116,6 +117,32 @@
       "canonicalProductionOriginSource": "WORLD_SERVER_CANONICAL_ORIGIN",
       "canonicalWorldHubPath": "/apps/voxel-world/",
       "topology": "Builder -> Fleet PRE -> Ocean -> Fleet POST"
+    },
+    "gameViewportLock": {
+      "displayName": "World Server Game Viewport Lock",
+      "canonicalFile": "docs/GAME_VIEWPORT_LOCK.md",
+      "aliases": [
+        "Game Viewport Lock",
+        "GAME_VIEWPORT_LOCK_GATE",
+        "WorldServerGameViewport",
+        "WorldServerGameShell",
+        "fixed game viewport",
+        "no scroll game",
+        "touch ownership",
+        "page bounce",
+        "rubber-band",
+        "viewport lock"
+      ],
+      "machineFiles": [
+        "shared/world-server-game-viewport.js",
+        "shared/world-server-game-viewport.css",
+        "scripts/inject-game-viewport-lock.js",
+        "scripts/game-viewport-lock-gate.js",
+        "e2e/game-viewport-lock.spec.js"
+      ],
+      "invariant": "Gameplay gestures may move the game, but page movement must remain exactly zero.",
+      "releaseBlocker": true,
+      "physicalIphoneAuthority": true
     }
   },
   "freshChatMandatoryReads": {

@@ -766,6 +766,44 @@
         "SCIENCE_RUN_072_H2.json"
       ],
       "confirmedAt": "2026-09-06T00:00:00.000Z"
+    },
+    {
+      "id": "browser-game-page-scroll-touch-conflict",
+      "category": "game-runtime",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "Vertical or diagonal finger movement over a browser game also scrolls, bounces or stretches the page, making camera/joystick control unreliable on iPhone Safari.",
+      "rootCause": "Game pages independently implemented viewport CSS/input. Without one owner for VisualViewport, document scroll, Pointer Events, canvas DPR, WebGL viewport and camera aspect, browser pan/overscroll could compete with gameplay.",
+      "solution": "WorldServerGameViewport is injected into game entrypoints by default and owns the complete viewport/input/resize chain. GAME_VIEWPORT_LOCK_GATE blocks release on contract regression.",
+      "protection": [
+        "shared/world-server-game-viewport.js",
+        "shared/world-server-game-viewport.css",
+        "scripts/inject-game-viewport-lock.js",
+        "scripts/game-viewport-lock-gate.js",
+        "test/game-viewport-lock.test.js",
+        "e2e/game-viewport-lock.spec.js",
+        "scripts/real-device-gate.js"
+      ],
+      "evidence": [
+        "mobile-webkit CI regression requires page movement = 0 while game input > 0",
+        "Vercel build injection defaults new game app entrypoints into the shell",
+        "physical iOS requested through quality:real-devices"
+      ],
+      "confirmedAt": "2026-09-30T10:05:00+04:00",
+      "integrationLessons": [
+        "First exact-head Quality Regression run failed because the new viewport filenames became keyword context for an unrelated explicit-file agent task.",
+        "Root cause: scoped-task-compiler Level 1 allowed keyword/known-issue candidates even when the goal explicitly named a real target file.",
+        "Permanent fix: Level 1 now filters to explicit targets whenever explicit paths exist; broader context remains available at Level 2/3.",
+        "Do not weaken or delete the scoped-task-compiler regression test to make new platform systems pass."
+      ],
+      "integrationFailureEvidence": {
+        "workflow": "Quality Regression Lock",
+        "failedRunId": 36678143515,
+        "failedJobId": 109767534087,
+        "exactHead": "508863cf7fc130d567e1c78a38e8fffef4bca763",
+        "failingTest": "test/scoped-task-compiler.test.js: explicit target only at level 1",
+        "fix": "lib/scoped-task-compiler.js explicit-only Level 1 filter"
+      }
     }
   ],
   "confirmationProtocol": {

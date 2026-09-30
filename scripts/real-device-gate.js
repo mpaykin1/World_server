@@ -8,7 +8,7 @@ if(!url||!token){
   console.log('[REAL_DEVICE_GATE] NOT_CONFIGURED');
   process.exit(process.env.REAL_DEVICE_STRICT==='1'?21:0);
 }
-const payload={baseUrl:process.env.QUALITY_BASE_URL||'http://localhost:3000',suite:'world-server-golden',devices:['physical-ios-phone','physical-android-phone']};
+const payload={baseUrl:process.env.QUALITY_BASE_URL||'http://localhost:3000',suite:'world-server-golden',devices:['physical-ios-phone','physical-android-phone'],requiredChecks:['game-viewport-lock']};
 const r=await fetch(url,{method:'POST',headers:{authorization:`Bearer ${token}`,'content-type':'application/json'},body:JSON.stringify(payload),signal:AbortSignal.timeout(120000)});
 const j=await r.json().catch(()=>({}));
 const pass=r.ok&&j.pass===true;

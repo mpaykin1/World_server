@@ -21,7 +21,10 @@
     {
       "name": "GAME_AI_RATE_LIMIT",
       "namespace_id": "1002",
-      "simple": { "limit": 10, "period": 60 }
+      "simple": {
+        "limit": 10,
+        "period": 60
+      }
     }
   ],
   "triggers": {
@@ -36,5 +39,8 @@
       "database_id": "29b33c0d-7a0a-4a4c-a282-3fc9583e6cdb",
       "migrations_dir": "migrations/telegram-d1"
     }
-  ]
+  ],
+  "build": {
+    "command": "node scripts/inject-game-viewport-lock.js"
+  }
 }

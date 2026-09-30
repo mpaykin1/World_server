@@ -81,6 +81,10 @@ jobs:
         run: npm run release:gate
       - name: Install Playwright browsers (chromium + webkit for iPhone emulation)
         run: npx playwright install --with-deps chromium webkit
+      - name: Inject universal Game Viewport Lock (production shape)
+        run: npm run viewport:inject
+      - name: Game Viewport Lock (WebKit iPhone emulation, hard)
+        run: npx playwright test e2e/game-viewport-lock.spec.js --project=mobile-webkit --retries=2
       - name: Sentry runtime smoke (Playwright) - window.WorldServerSentry + ingest (hard)
         run: npx playwright test e2e/sentry-smoke.spec.js --project=desktop-chromium --retries=2
       - name: AI3D Voxel City autoplay (hard only when impacted)

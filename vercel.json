@@ -75,6 +75,6 @@
     }
   ],
   "outputDirectory": ".",
-  "buildCommand": "node scripts/inject-sentry-runtime.js",
+  "buildCommand": "node scripts/inject-sentry-runtime.js && node scripts/inject-game-viewport-lock.js",
   "ignoreCommand": "node scripts/check-vercel-ignore.js"
 }
