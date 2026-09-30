@@ -220,8 +220,8 @@
       overflowHidden:csHtml.overflow==='hidden'&&csBody.overflow==='hidden',
       touchActionNone:!csSurface||csSurface.touchAction==='none',
       canvasCss:surface?.tagName!=='CANVAS'||(
-        Math.abs(surface.getBoundingClientRect().width-p.cssWidth)<=2&&
-        Math.abs(surface.getBoundingClientRect().height-p.cssHeight)<=2
+        Math.abs(surface.getBoundingClientRect().width-p.visualViewport.width)<=2&&
+        Math.abs(surface.getBoundingClientRect().height-p.visualViewport.height)<=2
       ),
       drawingBuffer:!gl||(
         Math.abs(gl.drawingBufferWidth-p.bufferWidth)<=1&&
