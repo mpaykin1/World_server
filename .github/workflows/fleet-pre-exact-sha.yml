@@ -63,7 +63,18 @@ jobs:
     name: Ocean merge eligibility
     needs: fleet-pre
     runs-on: ubuntu-24.04
+    timeout-minutes: 25
     steps:
+      # The gate is version-controlled, so this job must own the exact
+      # candidate head it certifies. Without this checkout the gate cannot
+      # resolve and the job dies with exit 127.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
       - name: Reject missing or stale certificate
         env:
           GH_TOKEN: ${{ github.token }}
