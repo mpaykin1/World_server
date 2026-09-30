@@ -97,23 +97,33 @@ function taperedBentTrunk(THREE,{seed='tree-trunk',height=2.45,r0=.48,r1=.24,seg
   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));g.setIndex(idx);g.computeVertexNormals();return g;
 }
 
-function volcanoGeometry(THREE,{seed='volcano',height=2.4,radius=2.35,segments=36,rings=8}={}){
+function volcanoGeometry(THREE,{seed='volcano',height=2.18,radius=2.65,segments=48,rings=11}={}){
   const verts=[],idx=[],s=stableSeed(seed);
   for(let j=0;j<=rings;j++){
     const t=j/rings,y=t*height;
-    const base=(radius*(1-t*.72))*(1-.05*Math.sin(t*Math.PI));
+    // Broad rounded cone like the approved sketch: wide foot, softened shoulders,
+    // narrow but not needle-like summit.
+    const profile=Math.pow(1-t,.72);
+    const shoulder=1+.11*Math.sin(t*Math.PI)-.035*Math.sin(t*Math.PI*2);
+    const base=radius*(.18+.82*profile)*shoulder;
     for(let i=0;i<segments;i++){
       const a=i/segments*Math.PI*2;
-      const asymmetric=1+.08*Math.sin(a*2.3+s*.0003)+.05*Math.sin(a*5.1+s*.0007)+organicDisplacementAt(Math.cos(a),t,Math.sin(a),{seed:s,amount:.045,scale:1.4});
-      const r=base*asymmetric;
-      verts.push(Math.cos(a)*r,y,Math.sin(a)*r*.90);
+      const lowFreq=.055*Math.sin(a*2.0+s*.00031)+.035*Math.sin(a*3.0+s*.00067);
+      const hand=.028*Math.sin(a*5.0+t*3.1+s*.00019);
+      const organic=organicDisplacementAt(Math.cos(a),t,Math.sin(a),{seed:s,amount:.028,scale:1.15});
+      const r=base*(1+lowFreq+hand+organic);
+      // Slight front/back flattening keeps the illustration-like silhouette.
+      verts.push(Math.cos(a)*r,y,Math.sin(a)*r*.88);
     }
   }
   for(let j=0;j<rings;j++)for(let i=0;i<segments;i++){
     const a=j*segments+i,b=j*segments+(i+1)%segments,c=(j+1)*segments+(i+1)%segments,d=(j+1)*segments+i;
     idx.push(a,b,d,b,c,d);
   }
-  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));g.setIndex(idx);g.computeVertexNormals();return g;
+  const g=new THREE.BufferGeometry();
+  g.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));
+  g.setIndex(idx);g.computeVertexNormals();g.computeBoundingSphere();
+  return g;
 }
 
 export function createWatercolorHouse(THREE,{seed='house',ink='#2e425d',wash='#aeb7c0'}={}){
@@ -145,16 +155,75 @@ export function createWatercolorTree(THREE,{seed='tree',ink='#2e425d',wash='#98a
 
 export function createWatercolorVolcano(THREE,{seed='volcano',ink='#2e425d',wash='#aab3bd'}={}){
   const g=new THREE.Group();g.name='watercolor-volcano';
-  const cone=mesh(THREE,volcanoGeometry(THREE,{seed}),stdMat(THREE,wash),{name:'volcano-body'});g.add(cone);
-  const rim=mesh(THREE,deformGeometryOrganic(THREE,new THREE.TorusGeometry(.72,.105,10,42),{seed:seed+':rim',amount:.018,scale:1.3}),inkMat(THREE,ink,.45),{outline:false,skipWash:true,name:'volcano-rim'});
-  rim.position.y=2.38;rim.rotation.x=Math.PI/2;g.add(rim);
-  const channels=[-.95,-.26,.44,1.12];
-  channels.forEach((x,i)=>{
-    const a=x*.52,top=new THREE.Vector3(Math.sin(a)*.56,2.30,Math.cos(a)*.48);
-    const mid=new THREE.Vector3(Math.sin(a)*1.10+(i-1.5)*.04,1.30,Math.cos(a)*.88);
-    const bot=new THREE.Vector3(Math.sin(a)*2.02+(i-1.5)*.08,.12,Math.cos(a)*1.55);
-    g.add(createSemanticStroke(THREE,[top,mid,bot],{color:ink,radius:.045+.01*(i%2),opacity:.67,seed:seed+':channel:'+i}));
+
+  const cone=mesh(
+    THREE,
+    volcanoGeometry(THREE,{seed,height:2.18,radius:2.65,segments:48,rings:11}),
+    stdMat(THREE,wash),
+    {name:'volcano-body'}
+  );
+  g.add(cone);
+
+  // Dark oval crater opening: large, soft, readable from the fixed illustration camera.
+  const crater=mesh(
+    THREE,
+    deformGeometryOrganic(
+      THREE,
+      new THREE.CircleGeometry(.76,42),
+      {seed:seed+':crater',amount:.028,scale:1.5,vertical:.25}
+    ),
+    inkMat(THREE,ink,.42),
+    {outline:false,skipWash:true,name:'volcano-crater'}
+  );
+  crater.position.set(0,2.205,.01);
+  crater.rotation.x=-Math.PI/2;
+  crater.scale.set(1.20,.82,1);
+  g.add(crater);
+
+  // Irregular painted rim, deliberately not a clean technical ring.
+  const rim=mesh(
+    THREE,
+    deformGeometryOrganic(
+      THREE,
+      new THREE.TorusGeometry(.80,.085,9,48),
+      {seed:seed+':rim',amount:.032,scale:1.35,vertical:.20}
+    ),
+    inkMat(THREE,ink,.48),
+    {outline:false,skipWash:true,name:'volcano-rim'}
+  );
+  rim.position.y=2.205;
+  rim.rotation.x=Math.PI/2;
+  rim.scale.set(1.18,.88,1);
+  g.add(rim);
+
+  // The sketch is defined by a few broad, uneven dark channels — not many edges.
+  const channelDefs=[
+    [[-.48,2.08,.47],[-.88,1.42,.78],[-1.48,.72,1.08],[-2.20,.10,1.42]],
+    [[ .02,2.06,.58],[ .12,1.44,.98],[ .52,.78,1.30],[ .94,.10,1.56]],
+    [[ .54,2.04,.42],[ .98,1.45,.70],[1.52,.76,.98],[2.18,.10,1.24]]
+  ];
+  channelDefs.forEach((pts,i)=>{
+    g.add(createSemanticStroke(
+      THREE,
+      pts.map(p=>new THREE.Vector3(...p)),
+      {color:ink,radius:i===1?.060:.054,opacity:.64,seed:seed+':channel:'+i}
+    ));
   });
+
+  // Two very soft secondary slope strokes help the broad painted mass without
+  // exposing mesh topology.
+  const secondary=[
+    [[-1.38,1.18,-.58],[-1.72,.55,-.88],[-2.12,.12,-1.08]],
+    [[ 1.26,1.14,-.54],[ 1.62,.52,-.82],[ 2.08,.12,-1.02]]
+  ];
+  secondary.forEach((pts,i)=>{
+    g.add(createSemanticStroke(
+      THREE,
+      pts.map(p=>new THREE.Vector3(...p)),
+      {color:ink,radius:.038,opacity:.24,seed:seed+':secondary:'+i}
+    ));
+  });
+
   return g;
 }
 
