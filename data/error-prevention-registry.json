@@ -787,6 +787,15 @@
         "npm run fidelity:check",
         "test/reference-fidelity-policy.test.js",
         "fresh side-by-side evidence before >=85%/final claim"
+      ],
+      "solution": "Preserve the reference rendering class first: classify the reference, require capability/dimensional equivalence, use the real 3D/WebGL/WASM pipeline, then package autonomously. Run behavioral smoke and fresh side-by-side evidence before any final or >=85% claim.",
+      "evidence": [
+        "docs/KRIEGER_FAILURE_POSTMORTEM_2026-09-29.md",
+        "docs/REFERENCE_DIMENSIONAL_FIDELITY.md",
+        "data/reference-fidelity-policy.json",
+        "test/reference-fidelity-policy.test.js",
+        "artifacts/kkrieger/kkrieger_smoke.json",
+        "artifacts/kkrieger/kkrieger_smoke.png"
       ]
     }
   ],
