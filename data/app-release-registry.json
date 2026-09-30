@@ -199,6 +199,21 @@
       "status": "diagnostic",
       "kind": "diagnostic",
       "reason": "Portable self-contained KayKit Knight viewer; not a certified game or public catalog entry."
+    },
+    "roblox-gothic-rocks": {
+      "title": "Roblox Gothic Rocks → World Server MVP",
+      "visible": false,
+      "status": "experimental",
+      "kind": "prototype",
+      "reason": "Playable Roblox-port evidence lane; direct-link MVP, not yet certified for the public catalog.",
+      "worldMenu": {
+        "show": false,
+        "headline": "ГОТИЧЕСКИЙ ГОРОД: КАМЕНЬ ЛЕТИТ ПО НАСТОЯЩЕЙ БАЛЛИСТИКЕ",
+        "lore": "Первый игровой доказательный перенос Roblox-проекта через универсальный World Server bridge.",
+        "history": "Сцена восстановлена из правил городкамни.rbxlx без использования внешних Roblox asset bytes.",
+        "familyId": "roblox-gothic-rocks",
+        "connections": []
+      }
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",
