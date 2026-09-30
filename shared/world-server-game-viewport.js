@@ -23,8 +23,8 @@
       if(!el) continue;
       el.style.setProperty('overflow','hidden','important');
       el.style.setProperty('overscroll-behavior','none','important');
-      el.style.setProperty('width','100%','important');
-      el.style.setProperty('height','100%','important');
+      el.style.setProperty('width','var(--wsgv-width)','important');
+      el.style.setProperty('height','var(--wsgv-height)','important');
       el.style.setProperty('margin','0','important');
     }
     if(document.body){
