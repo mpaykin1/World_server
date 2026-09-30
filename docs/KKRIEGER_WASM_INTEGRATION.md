@@ -70,3 +70,14 @@ Current status on 2026-09-29:
 4. custom Level Lab authoring is **not** accepted merely because the canvas is non-black. A physical iPhone exposed a mostly flat blue-gray frame with a horizontal void even after synthetic CI reported >92% non-black pixels.
 
 The custom-level lesson is now part of the highest-priority **Krieger Total Control** effort. See `docs/KKRIEGER_TOTAL_CONTROL.md`. The target is a native authoring path through `GenMesh -> GenMaterial -> GenScene -> Sector/Portal/Light -> Engine jobs -> Paint2004 -> postprocess -> viewport`, with collision from the same scene graph.
+
+
+### 2026-09-30 Level Lab failure lesson
+
+The custom Level Lab proved that a real Krieger WebAssembly renderer can still produce a non-Krieger-looking custom world if content authoring bypasses the real operator/material/scene graph.
+
+Physical iPhone evidence also exposed a gameplay integration error: Level Lab v1 calls `KKriegerGame::Flush()`, clearing `WeaponOptics/WeaponShot/WeaponExplode`, and its isolated renderer clears native mesh/effect jobs. This explains the missing first-person weapon and non-working visible FIRE path.
+
+For World Server, the integration boundary must therefore preserve gameplay resource graphs and extract/adapt the native KX authoring pipeline, rather than replace the rendered world with one global cube-composed mesh.
+
+See [KKRIEGER_LEVEL_LAB_POSTMORTEM_2026-09-30.md](KKRIEGER_LEVEL_LAB_POSTMORTEM_2026-09-30.md).
