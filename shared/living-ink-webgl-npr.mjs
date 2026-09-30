@@ -1,4 +1,4 @@
-import * as THREE from '../vendor/three-r186/three.module.js';
+import * as THREE from '../vendor/three-r160/three.module.min.js';
 
 export const STYLE={
   paper:0xf8f4ed,
