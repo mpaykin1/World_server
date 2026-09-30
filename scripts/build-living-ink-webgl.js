@@ -19,14 +19,14 @@ const result=esbuild.buildSync({
   treeShaking:true,
   write:false,
   legalComments:'none',
-  banner:{js:'/*! three.js r186 / 0.186.1 - MIT - Copyright © 2010-2026 three.js authors. Full notice in THIRD_PARTY_NOTICES.txt and HTML source. */'}
+  banner:{js:'/*! three.js r160 / 0.160.0 - MIT - Copyright © 2010-2026 three.js authors. Full notice in THIRD_PARTY_NOTICES.txt and HTML source. */'}
 });
 const js=result.outputFiles[0].text.split('</script').join('<\\/script');
 const notice=[
-  'three.js r186 / 0.186.1',
+  'three.js r160 / 0.160.0',
   'MIT License — Copyright © 2010-2026 three.js authors.',
   'Permission is granted under the MIT License; full text is preserved in',
-  'World Server THIRD_PARTY_NOTICES.txt and vendor/three-r186/LICENSE.'
+  'World Server THIRD_PARTY_NOTICES.txt and vendor/three-r160/LICENSE.'
 ].join('\\n');
 
 const html=[
