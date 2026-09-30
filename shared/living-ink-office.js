@@ -1,10 +1,14 @@
 (function(root,factory){
-  const api=factory(root.LivingInkCore || (typeof require==='function'?require('./living-ink-core.js'):null));
+  const api=factory(
+    root.LivingInkCore || (typeof require==='function'?require('./living-ink-core.js'):null),
+    root.LivingInkQuality || (typeof require==='function'?require('./living-ink-quality.js'):null)
+  );
   if(typeof module==='object'&&module.exports) module.exports=api;
   root.LivingInkOffice=api;
-})(typeof globalThis!=='undefined'?globalThis:this,function(Core){
+})(typeof globalThis!=='undefined'?globalThis:this,function(Core,Quality){
   'use strict';
   if(!Core) throw new Error('LivingInkCore is required');
+  if(!Quality) throw new Error('LivingInkQuality is required');
   const {v,hash,clamp}=Core;
   const ACTIONS=['idle','walk','sit','type','coffee','talk','listen','meeting','whiteboard','printer','carry-folder','open-door','look-around'];
   const PALETTE=['#506579','#667684','#756c66','#58695f','#445a70','#68717d'];
@@ -51,17 +55,14 @@
   }
 
   function roomShell(r,z,seed,side){
-    const cx=side*4.15,w=5.15,d=8.8,h=3.15;
-    // floor volume
+    const cx=side*4.15,w=5.15,d=8.8;
     box(r,cx,-.035,z,w,.07,d,{color:r.style.warm,alpha:.055,priority:2,seed:seed+1,edgeAlpha:.08});
-    // outer wall and rear wall, leaving an open entry toward the corridor
-    box(r,side*6.65,1.55,z,.06,3.10,d,{color:r.style.glass,alpha:.07,priority:1,seed:seed+2,edgeAlpha:.18});
-    box(r,cx,1.55,z+d/2,.06,3.10,w,{color:r.style.glass,alpha:.06,priority:1,seed:seed+3,edgeAlpha:.16});
-    // glass corridor facade with a wide central door opening
-    const gx=side*1.58;
-    box(r,gx,1.55,z-d*.31,.05,3.10,2.3,{color:r.style.glass,alpha:.08,priority:1,seed:seed+4,edgeAlpha:.18});
-    box(r,gx,1.55,z+d*.31,.05,3.10,2.3,{color:r.style.glass,alpha:.08,priority:1,seed:seed+5,edgeAlpha:.18});
-    r.text(v(cx,2.30,z+d*.36),'ASQURA',{size:.11,alpha:.34,priority:1});
+    box(r,side*6.65,1.55,z,.06,3.10,d,{color:r.style.glass,alpha:.055,priority:1,seed:seed+2,edgeAlpha:.15});
+    box(r,cx,1.55,z+d/2,.06,3.10,w,{color:r.style.glass,alpha:.05,priority:1,seed:seed+3,edgeAlpha:.14});
+    Quality.glassPartition(r,{x:side*1.58,z:z-d*.31,w:2.6,h:2.82,axis:'z',seed:seed+4});
+    Quality.glassPartition(r,{x:side*1.58,z:z+d*.31,w:2.6,h:2.82,axis:'z',seed:seed+44});
+    Quality.glassPartition(r,{x:cx,z:z+d*.16,w:4.45,h:2.76,axis:'x',seed:seed+84,label:'ASQURA',doorGap:.72});
+    Quality.watercolorMass(r,v(cx,.9,z),2.25,.76,r.style.glass,.065,seed+95,1.08);
   }
 
   function desk(r,x,z,rot,seed){
@@ -71,6 +72,7 @@
     box(r,x+face*.28,.82,z,.06,.25,.06,{color:r.style.inkSoft,alpha:.10,priority:1,seed:seed+21});
     box(r,x-face*.18,.775,z,.48,.025,.22,{color:r.style.wash,alpha:.09,priority:0,seed:seed+22});
     r.blob(v(x-face*.52,.79,z+.21),{radius:.034,stretch:1.05,color:r.style.warm,alpha:.20,priority:0,seed:seed+23});
+    Quality.propScatter(r,x,z,seed+70,face);
   }
 
   function chair(r,x,z,seed){
@@ -119,38 +121,14 @@
   }
 
   function human(r,p,x,z,state,t,side=1,scale=1){
-    const s=p.height*scale,build=p.build,anim=t*.001*(.90+hash(p.seed,30)*.45);
-    let px=x,pz=z,hip=.62*s,chest=1.03*s,head=1.42*s,arm=0,leg=0;
-    if(state==='walk'){px+=Math.sin(anim*.72+p.seed)*.45;pz+=Math.sin(anim*.36+p.seed)*.07;arm=Math.sin(anim*3.0)*.16;leg=Math.sin(anim*3.0)*.17;}
-    if(state==='sit'||state==='type'){hip*=.86;chest*=.94;head*=.95;}
-    r.shadow(v(px,0,pz),{rx:.25*build,ry:.07,alpha:.055,seed:p.seed+90});
-    box(r,px,.86*s,pz,.33*build,.52*s,.20,{color:p.suit,alpha:.18,priority:1,seed:p.seed,edgeAlpha:.22});
-    box(r,px,1.04*s,pz-.115,.20*build,.26*s,.025,{color:p.shirt,alpha:.18,priority:0,seed:p.seed+2,edgeAlpha:.16});
-    r.blob(v(px,head,pz),{radius:.10*s,stretch:1.02,color:r.style.inkSoft,alpha:.38,priority:1,seed:p.seed+4});
-    r.blob(v(px,head+.075*s,pz-.01),{radius:.073*s,stretch:.72+(p.hair%3)*.16,color:r.style.ink,alpha:.40,priority:0,seed:p.seed+5});
-
-    const shL=v(px-.17*build,chest,pz),shR=v(px+.17*build,chest,pz);
-    let handL=v(px-.28+arm,.72*s,pz-.05),handR=v(px+.28-arm,.72*s,pz+.05);
-    if(state==='type'){handL=v(px+side*.25,.76*s,pz-.16);handR=v(px+side*.29,.77*s,pz+.12);}
-    if(state==='coffee'){handR=v(px+.17,.98*s,pz-.03);r.blob(v(handR.x+.035,handR.y+.02,handR.z),{radius:.035,stretch:1,color:r.style.warm,alpha:.26,priority:0,seed:p.seed+18});}
-    r.line(shL,handL,{width:.029,alpha:.43,priority:1,seed:p.seed+20});r.line(shR,handR,{width:.029,alpha:.43,priority:1,seed:p.seed+21});
-
-    const kL=v(px-.09,.37*s,pz-leg),kR=v(px+.10,.37*s,pz+leg),fL=v(px-.13,.04,pz-.07-leg),fR=v(px+.14,.04,pz+.08+leg);
-    r.line(v(px-.08,hip,pz),kL,{width:.035,alpha:.43,priority:1,seed:p.seed+22});r.line(kL,fL,{width:.030,alpha:.43,priority:1,seed:p.seed+23});
-    r.line(v(px+.08,hip,pz),kR,{width:.035,alpha:.43,priority:1,seed:p.seed+24});r.line(kR,fR,{width:.030,alpha:.43,priority:1,seed:p.seed+25});
-    if(p.accessory==='badge') box(r,px+.09,.96*s,pz-.13,.08,.07,.015,{color:r.style.screen,alpha:.23,priority:0,seed:p.seed+30,edges:false});
-    if(p.accessory==='glasses'){
-      r.line(v(px-.075,head+.01*s,pz-.11),v(px-.015,head+.01*s,pz-.11),{width:.006,alpha:.38,priority:0,seed:p.seed+31});
-      r.line(v(px+.015,head+.01*s,pz-.11),v(px+.075,head+.01*s,pz-.11),{width:.006,alpha:.38,priority:0,seed:p.seed+32});
-    }
-    if((p.accessory==='briefcase'||p.accessory==='folder')&&state==='walk')
-      box(r,handR.x,.36*s,pz-.03,.28,.24,.08,{color:p.suit,alpha:.15,priority:0,seed:p.seed+33});
+    Quality.humanSilhouette(r,p,x,z,state,t,side,scale);
   }
 
-  function moduleAt(r,z,seed,t,people,startIndex){
+  function moduleAt(r,z,seed,t,people,startIndex,moduleIndex=0){
+    const plan=Quality.compositionPlan(z,moduleIndex);
     roomShell(r,z,seed,-1);roomShell(r,z,seed+200,1);
-    // corridor floor and ceiling rhythm
     box(r,0,-.04,z,3.0,.06,9.4,{color:r.style.warm,alpha:.045,priority:2,seed:seed+300,edgeAlpha:.06});
+    plan.washCenters.forEach((w,i)=>Quality.watercolorMass(r,v(w.x,.55,w.z),w.rx,w.ry,i? '#9ba8b1':'#a6afb4',.075,seed+302+i,1.15));
     for(const dz of [-3.4,0,3.4]){
       const zz=z+dz;
       r.line(v(-1.55,3.12,zz),v(1.55,3.12,zz),{alpha:.13,priority:1,seed:seed+310+Math.round(dz*10)});
@@ -166,16 +144,15 @@
     printer(r,5.8,z+3.4,seed+480);
     plant(r,-6.0,z-3.0,seed+490,.95);plant(r,-2.1,z+3.4,seed+491,.70);plant(r,2.2,z+.3,seed+492,.72);plant(r,6.0,z-3.1,seed+493,.90);
 
-    const slots=[
-      [-4.75,z-1.82,'type',1,1.00],[-3.55,z+1.15,'sit',-1,.97],
-      [4.0,z-1.25,'meeting',1,.94],[4.85,z-1.5,'talk',-1,.92],
-      [-5.15,z+2.9,'coffee',1,.95],[.05,z-.8,'walk',1,1.03],
-      [5.7,z+3.35,'printer',-1,.90],[3.8,z+2.55,'sit',1,.92]
-    ];
-    slots.forEach((q,i)=>{
-      const p=people[(startIndex+i)%people.length];
-      human(r,p,q[0],q[1],q[2],t,p.seed%2?1:-1,q[4]);
+    const hero=people[startIndex%people.length];
+    human(r,hero,plan.hero.x,plan.hero.z,'walk',t,hero.seed%2?1:-1,plan.hero.scale);
+    plan.secondary.forEach((q,i)=>{
+      const p=people[(startIndex+i+1)%people.length];
+      const directed=Quality.stagedBehavior(i+moduleIndex,t,seed);
+      human(r,p,q.x,q.z,i<2?q.state:directed,t,p.seed%2?1:-1,q.scale);
     });
+    human(r,people[(startIndex+6)%people.length],5.7,z+3.35,'printer',t,-1,.90);
+    human(r,people[(startIndex+7)%people.length],-3.55,z+1.15,'type',t,1,.92);
   }
 
   function renderOffice(r,recipe,t){
@@ -187,7 +164,7 @@
     let rendered=0;
     for(let m=center-1;m<=center+2;m++){
       if(m<0) continue;
-      moduleAt(r,5+m*moduleSize,seed+m*701,t,people,m*8);
+      moduleAt(r,5+m*moduleSize,seed+m*701,t,people,m*8,m);
       rendered++;
     }
     // long corridor rails make forward motion legible
@@ -202,7 +179,10 @@
       lodLevels:['near-detail','medium-simplified','far-ink'],
       props:['3d-desks','3d-computers','3d-chairs','plants','coffee-machine','printer','meeting-room','lounge','glass-offices','pendant-lights'],
       renderer:'world-space-3d-living-ink',
+      qualitySystems:Quality.SYSTEMS.slice(),
+      visualQualityProfile:'asqura-quality-floor-v2',
       renderedModules:rendered,
+      cameraMode:r.illustrationMode?'illustration':'walkthrough',
       camera:{...r.camera}
     };
   }
@@ -212,21 +192,34 @@
     let hud=document.getElementById('living-ink-touch-hud');
     if(hud) return hud;
     hud=document.createElement('div');hud.id='living-ink-touch-hud';
-    hud.innerHTML='<div class="li-stick li-left"><div class="li-knob"></div></div><div class="li-look">LOOK</div>';
+    hud.innerHTML='<div class="li-stick li-left"><div class="li-knob"></div></div><div class="li-look">LOOK</div><button class="li-frame" type="button">FRAME</button>';
     const style=document.createElement('style');
     style.textContent=`
       #living-ink-touch-hud{position:fixed;inset:0;pointer-events:none;z-index:8}
       .li-stick{position:absolute;left:max(20px,env(safe-area-inset-left));bottom:max(28px,env(safe-area-inset-bottom));width:118px;height:118px;border:1px solid rgba(49,72,95,.20);border-radius:50%;background:rgba(248,245,239,.18);box-shadow:inset 0 0 28px rgba(49,72,95,.04)}
       .li-knob{position:absolute;left:39px;top:39px;width:40px;height:40px;border-radius:50%;border:1px solid rgba(49,72,95,.27);background:rgba(248,245,239,.42);transform:translate(0,0)}
       .li-look{position:absolute;right:max(18px,env(safe-area-inset-right));bottom:max(39px,env(safe-area-inset-bottom));font:700 9px system-ui;letter-spacing:.12em;color:rgba(49,72,95,.22)}
-      @media (pointer:fine){#living-ink-touch-hud{display:none}}
+      .li-frame{position:absolute;left:max(16px,env(safe-area-inset-left));top:max(16px,env(safe-area-inset-top));pointer-events:auto;border:1px solid rgba(49,72,95,.16);border-radius:999px;padding:7px 10px;background:rgba(248,245,239,.62);color:rgba(49,72,95,.45);font:800 9px system-ui;letter-spacing:.10em}
+      .li-frame.active{background:rgba(115,136,151,.14);color:rgba(49,72,95,.72)}
+      @media (pointer:fine){.li-stick,.li-look{display:none}}
     `;
     document.head.appendChild(style);document.body.appendChild(hud);return hud;
   }
 
   function installInteraction(r,canvas){
     const keys=Object.create(null),active=new Map(),move={x:0,y:0},hud=ensureTouchHud();
-    const knob=()=>hud?.querySelector('.li-knob');
+    const knob=()=>hud?.querySelector('.li-knob'),frameButton=hud?.querySelector('.li-frame');
+    if(frameButton){
+      frameButton.addEventListener('pointerdown',e=>e.stopPropagation());
+      frameButton.addEventListener('click',e=>{
+        e.stopPropagation();
+        r.illustrationMode=!r.illustrationMode;
+        if(r.illustrationMode){Quality.applyIllustrationCamera(r,true);r.camera.yaw=-.06;}
+        else{r.camera.y=1.58;r.camera.pitch=.035;r.resize();}
+        frameButton.classList.toggle('active',r.illustrationMode);
+        window.__livingInkCameraMode=r.illustrationMode?'illustration':'walkthrough';
+      });
+    }
     const resetKnob=()=>{const k=knob();if(k)k.style.transform='translate(0px,0px)';};
     addEventListener('keydown',e=>keys[e.key]=true);addEventListener('keyup',e=>keys[e.key]=false);
 
@@ -269,7 +262,8 @@
 
   function start(canvas,recipe){
     const r=new Core.LivingInkRenderer(canvas,{seed:recipe.seed||12345,style:recipe.style||{}});
-    r.camera={x:0,y:1.58,z:-2.15,yaw:0,pitch:.035};
+    r.camera={x:0,y:1.54,z:-2.15,yaw:-.035,pitch:.018};
+    r.illustrationMode=false;
     const input=installInteraction(r,canvas);
     let last=0,frames=0,startAt=performance.now(),frameTimes=[];
     function tick(t){
@@ -279,7 +273,7 @@
       window.__livingInkMetrics={fps:frames/elapsed,p95FrameMs:p95,drawCalls:result.stats.drawCalls,primitives:result.stats.primitives,standalone:true,seed:recipe.seed};
       window.__livingInkScene=result;requestAnimationFrame(tick);
     }
-    addEventListener('resize',()=>r.resize());requestAnimationFrame(tick);return r;
+    addEventListener('resize',()=>{r.resize();if(r.illustrationMode)Quality.applyIllustrationCamera(r,true);});requestAnimationFrame(tick);return r;
   }
   return {ACTIONS,personProfile,behaviorAt,renderOffice,installInteraction,start};
 });
