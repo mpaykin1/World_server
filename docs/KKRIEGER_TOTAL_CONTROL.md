@@ -163,3 +163,20 @@ The actual converted beta is now inventoried: **4,817 operators, 77 classes, 38 
 This confirms that full control must operate on reusable KOp recipes/subgraphs, not only low-level C++ mesh calls.
 
 See [KKRIEGER_KX_ARCHAEOLOGY_BASELINE.md](KKRIEGER_KX_ARCHAEOLOGY_BASELINE.md).
+
+
+## Deep graphics fidelity map
+
+The packed KX graphs have now been traversed deeply enough to quantify representative world, material, weapon and postprocess recipes.
+
+Verified examples include:
+
+- a **722-node** representative beta world mesh recipe with **317 mesh operators** and **11 materials**;
+- a **796-node** large beta sector;
+- a **159-node** rich material, **158 nodes** of which are procedural bitmap processing;
+- first-person weapon optics graphs of **224–362 operators**;
+- explicit IPP `Viewport -> Color -> Blur -> Merge -> Mask` postprocess branches.
+
+Canonical World Server learning record: [KKRIEGER_GRAPHICS_FIDELITY_MAP.md](KKRIEGER_GRAPHICS_FIDELITY_MAP.md).
+
+This changes the extraction target: World Server should learn to compile/parameterize **operator recipes**, not merely invoke isolated geometry functions.
