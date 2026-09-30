@@ -8,6 +8,8 @@ test('Roblox Gothic Rocks MVP is graphics-first and throws a physical rock', asy
   expect(initial.visibilityPercent).toBeGreaterThanOrEqual(85);
   expect(initial.qualityFloor).toBeGreaterThanOrEqual(85);
   expect(initial.externalRobloxAssetsUsed).toBe(0);
+  expect(initial.avatar).toBe('kaykit-knight-rig-medium');
+  expect(initial.characterRuntime).toBe('universal-player-character');
   const canvasBox=await page.locator('canvas').boundingBox();
   const viewport=page.viewportSize();
   expect(canvasBox.width*canvasBox.height/(viewport.width*viewport.height)).toBeGreaterThanOrEqual(.85);
