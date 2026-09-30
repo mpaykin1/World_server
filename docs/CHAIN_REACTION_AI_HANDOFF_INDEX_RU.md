@@ -374,3 +374,14 @@ Manifest содержит live URLs, exact commits, proven invariants, relation 
 `docs/DELIVERY_FAILURE_GITHUB_PAGES_404_2026-09-30.md`
 
 Главное правило: repository file existence не доказывает live deployment. Публичная ссылка считается готовой только после deployment success + HTTP 200 + expected marker.
+
+
+# 14. AI availability failure and fallback contract
+
+Обязательные документы после Meta6 EN failure:
+
+- `docs/META6_EN_AI_UNAVAILABLE_FAILURE_2026-09-30.md`
+- `docs/CHAIN_REACTION_AI_FALLBACK_CONTRACT_RU.md`
+- `data/chain-reaction-prepared-fallback-en.json`
+
+Новый канон: **gameplay works without AI; live AI upgrades the forecast when available**. Provider failure не должен превращать forecast modal в тупик.
