@@ -60,8 +60,13 @@ jobs:
       - name: Verify Cloudflare stack and security
         if: steps.authority.outputs.configured == 'true'
         run: node scripts/verify-cloudflare-stack.cjs "${{ steps.deploy.outputs.url }}" "$SOURCE_SHA"
-      - name: Install Chromium
-        run: npx playwright install --with-deps chromium
+      - name: Install Chromium + WebKit
+        run: npx playwright install --with-deps chromium webkit
+      - name: Verify Roblox Gothic Rocks MVP on desktop + iPhone
+        if: steps.authority.outputs.configured == 'true'
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ steps.deploy.outputs.url }}
+        run: npx playwright test e2e/roblox-gothic-rocks.spec.js --project=desktop-chromium --project=mobile-webkit --retries=2
       - name: Verify exact-head Cloudflare playable delivery
         if: steps.authority.outputs.configured == 'true'
         run: npm run delivery:verify -- "${{ steps.deploy.outputs.url }}/apps/voxel-world/" --expected-sha="$SOURCE_SHA" --game --inventory-id=voxel-world
