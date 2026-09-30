@@ -167,20 +167,24 @@
   function box(r,x,y,z,sx,sy,sz,opt={}){
     const c=opt.color||r.style.wash,a=opt.alpha??.14,p=opt.priority??1,seed=opt.seed||0;
     const x0=x-sx/2,x1=x+sx/2,y0=y-sy/2,y1=y+sy/2,z0=z-sz/2,z1=z+sz/2;
-    const faces=[
-      [v(x0,y0,z0),v(x1,y0,z0),v(x1,y1,z0),v(x0,y1,z0)],
-      [v(x1,y0,z0),v(x1,y0,z1),v(x1,y1,z1),v(x1,y1,z0)],
-      [v(x1,y0,z1),v(x0,y0,z1),v(x0,y1,z1),v(x1,y1,z1)],
-      [v(x0,y0,z1),v(x0,y0,z0),v(x0,y1,z0),v(x0,y1,z1)],
-      [v(x0,y1,z0),v(x1,y1,z0),v(x1,y1,z1),v(x0,y1,z1)]
-    ];
-    faces.forEach((f,i)=>r.poly(f,{color:c,alpha:a*(i===4?1.15:1),priority:p,seed:seed+i}));
+    const zFace=r.camera.z<=z
+      ? [v(x0,y0,z0),v(x1,y0,z0),v(x1,y1,z0),v(x0,y1,z0)]
+      : [v(x1,y0,z1),v(x0,y0,z1),v(x0,y1,z1),v(x1,y1,z1)];
+    const xFace=r.camera.x<=x
+      ? [v(x0,y0,z1),v(x0,y0,z0),v(x0,y1,z0),v(x0,y1,z1)]
+      : [v(x1,y0,z0),v(x1,y0,z1),v(x1,y1,z1),v(x1,y1,z0)];
+    const top=[v(x0,y1,z0),v(x1,y1,z0),v(x1,y1,z1),v(x0,y1,z1)];
+    r.poly(zFace,{color:c,alpha:a,priority:p,seed});
+    r.poly(xFace,{color:c,alpha:a*.92,priority:p,seed:seed+1});
+    r.poly(top,{color:c,alpha:a*1.12,priority:p,seed:seed+2});
+    if(opt.edges===false) return;
+    const ea=opt.edgeAlpha??.22;
     const e=[
-      [x0,y0,z0,x1,y0,z0],[x1,y0,z0,x1,y0,z1],[x1,y0,z1,x0,y0,z1],[x0,y0,z1,x0,y0,z0],
-      [x0,y1,z0,x1,y1,z0],[x1,y1,z0,x1,y1,z1],[x1,y1,z1,x0,y1,z1],[x0,y1,z1,x0,y1,z0],
-      [x0,y0,z0,x0,y1,z0],[x1,y0,z0,x1,y1,z0],[x1,y0,z1,x1,y1,z1],[x0,y0,z1,x0,y1,z1]
+      [x0,y0,z0,x1,y0,z0],[x1,y0,z0,x1,y1,z0],[x1,y1,z0,x0,y1,z0],[x0,y1,z0,x0,y0,z0],
+      [x0,y1,z1,x1,y1,z1],[x0,y1,z0,x0,y1,z1],[x1,y1,z0,x1,y1,z1],
+      [x0,y0,z0,x0,y0,z1],[x1,y0,z0,x1,y0,z1]
     ];
-    if(opt.edges!==false) e.forEach((q,i)=>r.line(v(q[0],q[1],q[2]),v(q[3],q[4],q[5]),{width:.008,color:r.style.inkSoft,alpha:opt.edgeAlpha??.22,priority:p,seed:seed+20+i}));
+    e.forEach((q,i)=>r.line(v(q[0],q[1],q[2]),v(q[3],q[4],q[5]),{width:.008,color:r.style.inkSoft,alpha:ea,priority:p,seed:seed+20+i}));
   }
 
   function roomShell(r,z,seed,side){
@@ -318,7 +322,7 @@
     const moduleSize=10;
     const center=Math.floor((r.camera.z+2)/moduleSize);
     let rendered=0;
-    for(let m=center-1;m<=center+4;m++){
+    for(let m=center-1;m<=center+2;m++){
       if(m<0) continue;
       moduleAt(r,5+m*moduleSize,seed+m*701,t,people,m*8);
       rendered++;
