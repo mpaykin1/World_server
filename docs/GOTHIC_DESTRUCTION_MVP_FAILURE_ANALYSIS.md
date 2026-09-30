@@ -75,3 +75,11 @@ The browser gate must assert:
 A technically correct simulator can still fail the user if its **representation changes the semantics**. “The object moved” is not enough evidence for fragmentation. Tests must measure the property the user actually cares about.
 
 Likewise, a graphics-first game should not inherit an engineering dashboard. Technical proof belongs in telemetry/tests; the player viewport belongs to the world.
+
+## Confirmed success — 2026-09-30
+
+The user retested the corrected MVP on a real iPhone and explicitly confirmed: **"камни разлетаются хорошо"**.
+
+This changes the fragmentation fix from an inferred/browser-only success to a user-confirmed physical-device success. The reusable implementation is promoted as Golden Success `gothic-voxel-fragmentation/v1`; see `docs/GOTHIC_VOXEL_FRAGMENTATION_GOLDEN_SUCCESS.md` and `shared/golden-components/gothic-voxel-fragmentation/v1/rapier-collapse-runtime.mjs`.
+
+Future agents should prefer this pattern when the requested visual semantics are individual block debris: deterministic structural authority → independent bounded voxel rigid bodies → distinct deterministic impulses → instanced rendering → hard fragment budgets → adaptive rendering/performance → pairwise-spread regression proof.
