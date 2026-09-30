@@ -30,6 +30,13 @@
       "at": "2026-09-06T20:25:00.000Z",
       "lessonHash": "f8a9e710b34d28e75122b1029c381c62938f9218274536291902837261a8109d",
       "supersedes": null
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "voxel-destruction-glued-cluster-proxy",
+      "at": "2026-09-30T05:53:57Z",
+      "lessonHash": "a147559210a4fce973540dca43aa9ccb26c26e3b09545cd7059d3e33c358c0eb",
+      "supersedes": null
     }
   ],
   "knownErrors": [
@@ -771,7 +778,7 @@
       "id": "voxel-destruction-glued-cluster-proxy",
       "category": "physics",
       "severity": "release-blocker",
-      "status": "known",
+      "status": "protected",
       "symptom": "A visibly voxel-built destroyed section moves as one welded rigid chunk instead of cubes separating after impact.",
       "rootCause": "A performance optimization represented an entire unsupported voxel component as one cluster-AABB Rapier rigid body; the test only proved gross body motion and never measured independent fragment separation.",
       "protection": [
@@ -779,7 +786,15 @@
         "Recover performance with instanced rendering, fragment budgets, adaptive DPR/shadows/physics frequency and sleeping bodies; never by re-gluing visible debris.",
         "e2e/gothic-destruction-mvp.spec.js must prove multiple unique voxel bodies and increasing pairwise spread after impact.",
         "docs/GOTHIC_DESTRUCTION_MVP_FAILURE_ANALYSIS.md"
-      ]
+      ],
+      "solution": "Use bounded per-voxel Rapier rigid bodies with deterministic distinct impact impulses, instanced rendering, strict fragment budgets and adaptive rendering/physics. Prove real separation by tracking unique voxel bodies and requiring pairwise spread to increase.",
+      "evidence": [
+        "docs/GOTHIC_VOXEL_FRAGMENTATION_GOLDEN_SUCCESS.md",
+        "shared/golden-components/gothic-voxel-fragmentation/v1/rapier-collapse-runtime.mjs",
+        "e2e/gothic-destruction-mvp.spec.js",
+        "user physical iPhone confirmation 2026-09-30: камни разлетаются хорошо"
+      ],
+      "confirmedAt": "2026-09-30T05:53:57Z"
     },
     {
       "id": "graphics-first-mvp-diagnostic-hud-obstruction",
