@@ -17,22 +17,22 @@
     {
       "name": "three",
       "upstream": "https://github.com/mrdoob/three.js",
-      "version": "0.186.1",
-      "commitOrTag": "r186",
+      "version": "0.160.0",
+      "commitOrTag": "r160",
       "license": "MIT",
       "class": "code",
       "filesImported": [
-        "vendor/three-r186/three.module.js",
-        "vendor/three-r186/LICENSE"
+        "vendor/three-r160/three.module.min.js",
+        "vendor/three-r160/LICENSE"
       ],
-      "modifications": "None in vendored upstream files. World Server bundles selected exports into autonomous Living Ink artifacts at build time.",
+      "modifications": "None in vendored upstream files. World Server bundles selected exports into the autonomous Living Ink WebGL NPR artifact at build time.",
       "requiredNotices": true,
       "commercialUseStatus": "allowed",
       "redistributionRequirements": "Preserve the MIT copyright and license notice in redistributed/bundled copies.",
-      "sha256": "9052042d676cb0fdc1ddfefe193053f34b7ac0513a616fdac4535d49987812ea"
+      "sha256": "3e690ac7d180b0aadf0891bea39eec643e29e2d3e75c99b18689518665f69ba6"
     }
   ],
-  "notes": "Living Ink NPR v3 imports only the audited three.js r186 code above. No external models, textures, fonts, animations, example assets, or training data are imported. meshoptimizer and glTF-Transform were reviewed as future MIT candidates but are not imported because the current vertical slice does not need them; this keeps third-party surface minimal.",
+  "notes": "Living Ink NPR v3 uses audited three.js r160 because it provides a single self-contained ES module suitable for the standalone HTML compiler. Newer r186 splits the build into module/core files, increasing standalone integration surface. No third-party models, textures, fonts, animations, examples, or training data are imported. meshoptimizer and glTF-Transform were reviewed as future MIT candidates but intentionally not imported because this vertical slice does not require them.",
   "legacyPackageBaseline": [
     "@sentry/browser",
     "@supabase/supabase-js",
