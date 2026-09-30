@@ -30,6 +30,13 @@
       "at": "2026-09-06T20:25:00.000Z",
       "lessonHash": "f8a9e710b34d28e75122b1029c381c62938f9218274536291902837261a8109d",
       "supersedes": null
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "reference-3d-silently-downgraded-to-2d",
+      "at": "2026-09-29T03:06:19Z",
+      "lessonHash": "44878b3bd164ecfa2da67c2e6e97e0e2407587912b8a46cfc3080fc841893f8c",
+      "supersedes": null
     }
   ],
   "knownErrors": [
@@ -766,6 +773,30 @@
         "SCIENCE_RUN_072_H2.json"
       ],
       "confirmedAt": "2026-09-06T00:00:00.000Z"
+    },
+    {
+      "id": "reference-3d-silently-downgraded-to-2d",
+      "category": "visual-fidelity",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "A requested high-fidelity volumetric 3D reference is delivered as a raycaster/billboard/2D-HUD approximation and reported as close or final.",
+      "rootCause": "Implementation optimized for speed/file simplicity instead of preserving the reference rendering class; visual scoring happened before a dimensionality gate.",
+      "protection": [
+        "data/reference-fidelity-policy.json",
+        "docs/REFERENCE_DIMENSIONAL_FIDELITY.md",
+        "npm run fidelity:check",
+        "test/reference-fidelity-policy.test.js",
+        "fresh side-by-side evidence before >=85%/final claim"
+      ],
+      "solution": "Preserve the reference rendering class first: classify the reference, require capability/dimensional equivalence, use the real 3D/WebGL/WASM pipeline, then package autonomously. Run behavioral smoke and fresh side-by-side evidence before any final or >=85% claim.",
+      "evidence": [
+        "docs/KRIEGER_FAILURE_POSTMORTEM_2026-09-29.md",
+        "docs/REFERENCE_DIMENSIONAL_FIDELITY.md",
+        "data/reference-fidelity-policy.json",
+        "test/reference-fidelity-policy.test.js",
+        "artifacts/kkrieger/kkrieger_smoke.json",
+        "artifacts/kkrieger/kkrieger_smoke.png"
+      ]
     }
   ],
   "confirmationProtocol": {

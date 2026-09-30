@@ -222,3 +222,17 @@ For any manual ChatGPT/AI task where the user asks for a testable artifact or li
 - Treat `implemented/tested but no usable stable production URL` as a pipeline regression. Never hand off `deploy-preview-*` or immutable deploy aliases as the final user link unless the user explicitly requests a temporary Preview.
 
 Canonical machine-readable policy: `data/manual-task-completion-contract.json`; runtime gate: `lib/manual-task-completion-contract.js`.
+
+## 21. REFERENCE DIMENSIONAL FIDELITY — HARD RULE
+
+This is a permanent cross-project release rule for any task that asks to match an approved visual reference, especially a true 3D game/reference.
+
+- **Reference dimensionality is a hard constraint.** A volumetric 3D reference may not be silently replaced by a lower-dimensional final implementation.
+- For a volumetric FPS reference, these are **prototype/diagnostic only** and are forbidden as final: 2.5D **raycaster**, **billboard** enemies, a **HUD/canvas weapon** or flat sprite weapon, heightfield/relief substitutes, and screen-space-only fake lighting.
+- A final volumetric FPS must use a perspective 3D camera, depth-tested 3D environment, depth-tested 3D weapon, volumetric 3D enemies, and **scene-reactive lighting** that changes real geometry/material response.
+- Do not deliberately render at a much lower internal resolution and upscale it as a fidelity shortcut. Render scale below 0.75 requires explicit evidence/approval.
+- **Dimensional gate runs before visual-score gate.** A candidate that fails dimensionality is blocked even if a self-reported similarity score is high.
+- Any claim of final/ready or >=85% similarity requires a **fresh side-by-side** comparison against the approved reference plus fresh behavioral browser smoke; no rounding up.
+- For a requested autonomous HTML, wasm/game data/runtime dependencies must be embedded; no external runtime .wasm/.data/script/image dependency is allowed unless the user explicitly relaxes autonomy.
+- For .kkrieger-class work, use `data/reference-fidelity-policy.json` and `docs/REFERENCE_DIMENSIONAL_FIDELITY.md`. The pinned open-source browser reference is `MasonDye/kkrieger-wasm@3bf0ff017372e640e966c2785a4d95a998cec242`.
+- Hard check: `npm run fidelity:check`. Never bypass it with `|| true`, `continue-on-error`, or by relabeling a prototype as final.

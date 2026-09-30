@@ -1,0 +1,148 @@
+name: Build autonomous kkrieger
+
+on:
+  push:
+    branches:
+      - ai/chatgpt/krieger-fidelity-guard
+    paths:
+      - .github/workflows/build-kkrieger-standalone.yml
+      - scripts/verify-kkrieger-standalone.js
+      - scripts/smoke-kkrieger-standalone.cjs
+      - data/reference-fidelity-policy.json
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: kkrieger-single-file-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout World_server task branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Set up Emscripten 6.0.9
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 6.0.9
+          actions-cache-folder: emsdk-cache
+
+      - name: Fetch pinned open-source kkrieger-wasm
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf work/kkrieger-wasm
+          mkdir -p work
+          git clone --filter=blob:none https://github.com/MasonDye/kkrieger-wasm.git work/kkrieger-wasm
+          cd work/kkrieger-wasm
+          git checkout --detach 3bf0ff017372e640e966c2785a4d95a998cec242
+          test "$(git rev-parse HEAD)" = "3bf0ff017372e640e966c2785a4d95a998cec242"
+
+      - name: Convert upstream build to a true single autonomous HTML
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("work/kkrieger-wasm/werkkzeug3_kkrieger/wasm/build.sh")
+          s = p.read_text()
+          s = s.replace('--preload-file "$ROOT/data/kkrieger3383.kx@/kkrieger.kx"', '--embed-file "$ROOT/data/kkrieger3383.kx@/kkrieger.kx"')
+          s = s.replace('--preload-file "$ROOT/data/kkrieger_beta_conv.kx@/kkrieger_beta.kx"', '--embed-file "$ROOT/data/kkrieger_beta_conv.kx@/kkrieger_beta.kx"')
+          marker = '  -sENVIRONMENT=web\n'
+          if '-sSINGLE_FILE=1' not in s:
+              if marker not in s:
+                  raise SystemExit("cannot locate Emscripten environment flag")
+              s = s.replace(marker, marker + '  -sSINGLE_FILE=1\n', 1)
+          p.write_text(s)
+          PY
+          grep -n -- '-sSINGLE_FILE=1\|--embed-file' work/kkrieger-wasm/werkkzeug3_kkrieger/wasm/build.sh
+
+      - name: Build original procedural engine/data as WebAssembly + WebGL2
+        working-directory: work/kkrieger-wasm/werkkzeug3_kkrieger
+        shell: bash
+        run: |
+          set -euo pipefail
+          KK_RELEASE=1 bash wasm/build.sh clean
+          find wasm/dist_release -maxdepth 1 -type f -printf '%f %s bytes\n'
+          test -f wasm/dist_release/kkrieger.html
+          test "$(find wasm/dist_release -maxdepth 1 -type f | wc -l)" -eq 1
+
+      - name: Package notices inside the HTML and stage artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/kkrieger
+          python3 - <<'PY'
+          from pathlib import Path
+          src = Path("work/kkrieger-wasm/werkkzeug3_kkrieger/wasm/dist_release/kkrieger.html")
+          html = src.read_text()
+          upstream = Path("work/kkrieger-wasm/README.MD").read_text()
+          mojo = Path("work/kkrieger-wasm/werkkzeug3_kkrieger/wasm/mojoshader/LICENSE.txt").read_text()
+          notice = """<!--
+          AUTONOMOUS KKRIEGER BUILD
+          Upstream: https://github.com/MasonDye/kkrieger-wasm
+          Pinned commit: 3bf0ff017372e640e966c2785a4d95a998cec242
+
+          THIRD PARTY / SOURCE NOTICES
+          """ + upstream + "\n\nMojoShader license:\n" + mojo + "\n-->"
+          out = Path("artifacts/kkrieger/kkrieger_autonomous_fixed.html")
+          out.write_text(notice + "\n" + html)
+          PY
+          wc -c artifacts/kkrieger/kkrieger_autonomous_fixed.html
+          node scripts/verify-kkrieger-standalone.js artifacts/kkrieger/kkrieger_autonomous_fixed.html
+
+      - name: Install browser smoke dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci --ignore-scripts
+          npx playwright install --with-deps chromium
+
+      - name: Browser smoke the autonomous file
+        shell: bash
+        run: |
+          set -euo pipefail
+          (
+            cd artifacts/kkrieger
+            python3 -m http.server 8765 --bind 127.0.0.1 > ../../work/kkrieger-http.log 2>&1
+          ) &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID || true' EXIT
+          sleep 2
+          node scripts/smoke-kkrieger-standalone.cjs             "http://127.0.0.1:8765/kkrieger_autonomous_fixed.html?res=1024x768"             "artifacts/kkrieger/kkrieger_smoke.png"
+
+      - name: Commit verified artifact back to task branch
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "world-server-kkrieger-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -f artifacts/kkrieger/kkrieger_autonomous_fixed.html artifacts/kkrieger/kkrieger_smoke.png artifacts/kkrieger/kkrieger_smoke.json
+          if git diff --cached --quiet; then
+            echo "artifact unchanged"
+          else
+            git commit -m "build: add verified autonomous kkrieger artifact"
+            git push origin HEAD:ai/chatgpt/krieger-fidelity-guard
+          fi
+
+      - name: Upload build evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: kkrieger-autonomous-fixed
+          path: artifacts/kkrieger/
+          if-no-files-found: error
+          retention-days: 30

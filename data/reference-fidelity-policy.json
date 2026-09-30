@@ -1,0 +1,58 @@
+{
+  "schema": "reference-fidelity-policy-v1",
+  "minimumFinalSimilarityPercent": 85,
+  "policy": "preserve-reference-dimensionality-and-rendering-class",
+  "principles": {
+    "noSilentTechnologyDowngrade": true,
+    "referenceDimensionalityIsHardConstraint": true,
+    "freshSideBySideEvidenceRequiredForFinalClaim": true,
+    "behavioralSmokeRequiredForPlayableClaim": true,
+    "http200AloneIsNotProof": true
+  },
+  "classes": {
+    "volumetric-fps": {
+      "required": {
+        "environment": "true-3d-depth-tested",
+        "weapon": "true-3d-depth-tested",
+        "enemies": "true-3d-volumetric",
+        "lighting": "scene-reactive",
+        "particles": "scene-integrated",
+        "camera": "perspective-3d"
+      },
+      "forbiddenAsFinal": [
+        "raycaster-2.5d",
+        "billboard-enemy",
+        "hud-canvas-weapon",
+        "flat-sprite-weapon",
+        "screen-space-only-lighting",
+        "heightfield-substitute",
+        "low-resolution-upscale-as-quality-substitute"
+      ]
+    }
+  },
+  "krieger": {
+    "referenceClass": "volumetric-fps",
+    "upstreamRepository": "MasonDye/kkrieger-wasm",
+    "upstreamCommit": "3bf0ff017372e640e966c2785a4d95a998cec242",
+    "buildRequirements": {
+      "renderer": "WebGL2",
+      "runtime": "WebAssembly",
+      "proceduralMeshes": true,
+      "proceduralMaterials": true,
+      "v2Audio": true,
+      "weaponTrue3D": true,
+      "enemiesTrue3D": true,
+      "environmentTrue3D": true,
+      "sceneReactiveLighting": true,
+      "autonomousSingleFile": true,
+      "externalRuntimeSubresources": 0
+    },
+    "finalEvidence": [
+      "fresh browser smoke",
+      "fresh side-by-side screenshot against approved reference",
+      "all dimensional gates pass",
+      "visual similarity score >= 85 without rounding up",
+      "single-file audit shows no external wasm/data/script dependency"
+    ]
+  }
+}
