@@ -128,6 +128,9 @@ export function createWatercolorHouse(THREE,{seed='house',ink='#2e425d',wash='#a
   const win=mesh(THREE,new THREE.BoxGeometry(.72,.58,.04),inkMat(THREE,ink,.25),{outline:false,skipWash:true,name:'house-window'});win.position.set(.55,.93,1.05);g.add(win);
   g.add(createSemanticStroke(THREE,[new THREE.Vector3(-1.45,1.68,1.17),new THREE.Vector3(0,2.68,1.17),new THREE.Vector3(1.45,1.68,1.17)],{color:ink,radius:.035,seed:seed+':gable'}));
   g.add(createSemanticStroke(THREE,[new THREE.Vector3(-1.32,1.68,1.18),new THREE.Vector3(1.32,1.68,1.18)],{color:ink,radius:.028,opacity:.62,seed:seed+':eave'}));
+  g.add(createSemanticStroke(THREE,[new THREE.Vector3(.55,.48,1.08),new THREE.Vector3(.55,1.38,1.08)],{color:ink,radius:.018,opacity:.52,seed:seed+':window-v'}));
+  g.add(createSemanticStroke(THREE,[new THREE.Vector3(.18,.93,1.08),new THREE.Vector3(.92,.93,1.08)],{color:ink,radius:.018,opacity:.52,seed:seed+':window-h'}));
+  g.add(createSemanticStroke(THREE,[new THREE.Vector3(-.86,.05,1.08),new THREE.Vector3(-.86,.98,1.08),new THREE.Vector3(-.30,.98,1.08)],{color:ink,radius:.020,opacity:.48,seed:seed+':door-frame'}));
   return g;
 }
 
@@ -165,6 +168,8 @@ export function createWatercolorPlant(THREE,{seed='plant',ink='#2e425d',wash='#a
   const door=mesh(THREE,new THREE.BoxGeometry(.45,.62,.04),inkMat(THREE,ink,.40),{outline:false,skipWash:true});door.position.set(-.55,.35,.88);g.add(door);
   for(let i=0;i<4;i++){const w=mesh(THREE,new THREE.BoxGeometry(.22,.18,.035),inkMat(THREE,ink,.26),{outline:false,skipWash:true});w.position.set(-.96+i*.43,.78,.88);g.add(w);}
   for(let i=0;i<3;i++)g.add(createSemanticStroke(THREE,[new THREE.Vector3(-.82+i*.48,1.23,.66),new THREE.Vector3(-.58+i*.48,1.23,.66)],{color:ink,radius:.027,opacity:.48,seed:seed+':roof:'+i}));
+  for(let i=0;i<2;i++){const band=mesh(THREE,new THREE.TorusGeometry(.255,.024,6,24),inkMat(THREE,ink,.46),{outline:false,skipWash:true,name:'plant-stack-band'});band.position.set(-.64,2.35+i*.42,0);band.rotation.x=Math.PI/2;g.add(band);}
+  const towerRim=mesh(THREE,new THREE.TorusGeometry(.98,.032,8,40),inkMat(THREE,ink,.52),{outline:false,skipWash:true,name:'plant-tower-rim'});towerRim.position.set(1.55,2.82,-.30);towerRim.rotation.x=Math.PI/2;g.add(towerRim);
   return g;
 }
 

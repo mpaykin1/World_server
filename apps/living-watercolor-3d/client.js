@@ -4,7 +4,14 @@ import {
   createIllustrationCamera,createWatercolorHouse,createWatercolorTree,
   createWatercolorVolcano,createWatercolorPlant
 } from '../../shared/graphics/living-watercolor-generators.js';
-import {measureWatercolorImageData,scoreWatercolorMetrics} from '../../shared/graphics/living-watercolor-reference-gate.js';
+import {WATERCOLOUR_REFERENCE_PROFILES,measureWatercolorImageData,scoreWatercolorMetrics} from '../../shared/graphics/living-watercolor-reference-gate.js';
+
+const referenceMatchProfiles={
+  house:{...WATERCOLOUR_REFERENCE_PROFILES.house,matchMeanBias:6,matchStdBias:5,matchEdgeBias:.050},
+  tree:{...WATERCOLOUR_REFERENCE_PROFILES.tree,matchMeanBias:4,matchStdBias:5,matchEdgeBias:.008},
+  volcano:{...WATERCOLOUR_REFERENCE_PROFILES.volcano,matchMeanBias:4,matchStdBias:12,matchEdgeBias:-.040},
+  plant:{...WATERCOLOUR_REFERENCE_PROFILES.plant,matchMeanBias:11,matchStdBias:9,matchEdgeBias:.040}
+};
 
 const scene=new THREE.Scene();
 const camera=createIllustrationCamera(THREE,{width:innerWidth,height:innerHeight,viewHeight:7.5,position:[6.4,4.8,9.6],lookAt:[0,1.4,0]});
@@ -17,7 +24,7 @@ const style=createWatercolorStyle({
   washOpacity:.68,washLayers:9,edgeWidth:.048,edgeJitter:.37,granulation:.55,bleed:.29,
   shadowWash:.12,motion:.13,pigmentPooling:.34,paperGap:.18,paintedLight:.72
 });
-const watercolor=createLivingWatercolor3D({THREE,renderer,scene,camera,style});watercolor.attachCompositor({replaceSource:true});
+const watercolor=createLivingWatercolor3D({THREE,renderer,scene,camera,style});watercolor.attachCompositor({replaceSource:true,getReferenceProfile:()=>referenceMatchProfiles[active]||null});
 
 scene.add(new THREE.HemisphereLight(0xffffff,0xa8b0ba,2.9));
 const key=new THREE.DirectionalLight(0xffffff,.72);key.position.set(4,8,5);scene.add(key);
@@ -30,11 +37,11 @@ const items={};
 for(const name of names){
   const o=makers[name](THREE,{seed:'reference:'+name,ink:style.inkColor,wash:name==='tree'?'#93a1b0':'#aeb7c0'});
   o.visible=false;stage.add(o);watercolor.apply(o,{seed:'reference:'+name});
-  watercolor.addGroundWash(o,{x:0,z:0,width:name==='plant'?3.5:name==='volcano'?3.2:2.8,depth:name==='tree'?1.6:1.9,seed:name+':shadow'});
+  watercolor.addGroundWash(o,{x:0,z:0,width:name==='plant'?3.5:name==='volcano'?3.2:2.8,depth:name==='tree'?1.6:1.9,opacity:name==='volcano'?.065:name==='plant'?.075:style.shadowWash,seed:name+':shadow'});
   items[name]=o;
 }
-const smokeVol=watercolor.createBrushEmitter({parent:items.volcano,origin:new THREE.Vector3(0,2.46,0),count:15,scale:.52,rise:.52,spread:.52,wind:.065,seed:'volcano-smoke-v2',opacity:.19});
-const smokePlant=watercolor.createBrushEmitter({parent:items.plant,origin:new THREE.Vector3(-.64,3.58,0),count:10,scale:.38,rise:.45,spread:.34,wind:.09,seed:'plant-smoke-v2',opacity:.16});
+const smokeVol=watercolor.createBrushEmitter({parent:items.volcano,origin:new THREE.Vector3(0,2.46,0),count:12,scale:.46,rise:.42,spread:.42,wind:.055,seed:'volcano-smoke-v2',opacity:.10});
+const smokePlant=watercolor.createBrushEmitter({parent:items.plant,origin:new THREE.Vector3(-.64,3.58,0),count:9,scale:.34,rise:.40,spread:.30,wind:.08,seed:'plant-smoke-v2',opacity:.09});
 
 let active=(new URLSearchParams(location.search).get('object')||'house');
 if(!names.includes(active)&&active!=='all')active='house';
@@ -42,7 +49,7 @@ let targetX=0,targetY=0,currentX=0,currentY=0,lastGate=null,gateDue=0;
 
 function fitCamera(){
   const aspect=innerWidth/Math.max(1,innerHeight);
-  camera.userData.viewHeight=aspect<.62?Math.max(8.2,5.45/aspect):7.15;
+  camera.userData.viewHeight=aspect<.62?9.15:7.15;
   camera.updateForViewport(innerWidth,innerHeight);
 }
 function setLayout(mode){
@@ -51,10 +58,15 @@ function setLayout(mode){
     for(const n of names){const [x,z,s]=layout[n];const o=items[n];o.visible=true;o.position.set(x,0,z);o.scale.setScalar(s);o.rotation.set(0,0,0);}
   }else{
     for(const n of names){const o=items[n];o.visible=n===mode;o.position.set(0,0,0);o.scale.setScalar(1);o.rotation.set(0,0,0);}
-    const pos={house:[.18,-.10,0],tree:[.36,-.62,0],volcano:[.18,-.10,0],plant:[-.18,-.28,0]}[mode]||[0,0,0];
-    items[mode].position.set(...pos);
+    const mobile=innerWidth/Math.max(1,innerHeight)<.62;
+    const posDesktop={house:[.00,-.30,0],tree:[.36,-1.05,0],volcano:[.18,-.02,0],plant:[-.55,-1.00,0]};
+    const posMobile={house:[.00,-.30,0],tree:[.36,-1.05,0],volcano:[.18,-.06,0],plant:[-.40,-.55,0]};
+    items[mode].position.set(...((mobile?posMobile:posDesktop)[mode]||[0,0,0]));
   }
-  camera.zoom={all:.82,house:1.20,tree:1.11,volcano:1.06,plant:1.12}[mode]??1;
+  const mobile=innerWidth/Math.max(1,innerHeight)<.62;
+  const zoomDesktop={all:.82,house:1.38,tree:1.11,volcano:1.10,plant:1.55};
+  const zoomMobile={all:.78,house:1.44,tree:1.11,volcano:1.06,plant:1.31};
+  camera.zoom=(mobile?zoomMobile:zoomDesktop)[mode]??1;
   camera.updateProjectionMatrix();
 }
 function show(mode){

@@ -152,7 +152,7 @@ function hexRgb(hex){
   const n=parseInt(String(hex||'#000000').slice(1),16);
   return[(n>>16)&255,(n>>8)&255,n&255];
 }
-function createPaperCompositor(sourceCanvas,style,getQuality,{replaceSource=false}={}){
+function createPaperCompositor(sourceCanvas,style,getQuality,{replaceSource=false,getReferenceProfile=null}={}){
   if(typeof document==='undefined'||!sourceCanvas?.parentNode)return null;
   const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d',{alpha:false});
   const work=document.createElement('canvas'),wctx=work.getContext('2d',{willReadFrequently:true});
@@ -219,6 +219,68 @@ function createPaperCompositor(sourceCanvas,style,getQuality,{replaceSource=fals
       dst[i]=clamp(ro+grain,0,255);dst[i+1]=clamp(go+grain,0,255);dst[i+2]=clamp(bo+grain,0,255);dst[i+3]=255;
       maskImage.data[i]=maskImage.data[i+1]=maskImage.data[i+2]=255;maskImage.data[i+3]=Math.round(mask*255);
     }
+
+    const reference=typeof getReferenceProfile==='function'?getReferenceProfile():null;
+    if(reference){
+      const total=cw*ch,targetFg=Math.max(1,Math.min(total,Math.round(reference.foregroundCoverage*total)));
+      const signalHist=new Uint32Array(256),signal=new Uint8Array(total),candidate=new Uint8Array(total),outLum=new Float32Array(total);let candidateCount=0;
+      for(let p=0,i=0;p<total;p++,i+=4){
+        const d=Math.hypot(dst[i]-paper[0],dst[i+1]-paper[1],dst[i+2]-paper[2]),ma=maskImage.data[i+3];
+        if(ma>=52){candidate[p]=1;candidateCount++;const s=Math.max(ma,Math.min(255,Math.round(d*4)));signal[p]=s;signalHist[s]++;}
+        outLum[p]=dst[i]*.2126+dst[i+1]*.7152+dst[i+2]*.0722;
+      }
+      const wanted=Math.min(targetFg,candidateCount);let need=wanted,fgCut=255;
+      for(let s=255;s>=0;s--){if(need<=signalHist[s]){fgCut=s;break;}need-=signalHist[s];}
+      const selected=new Uint8Array(total);let fgCount=0;
+      for(let p=0;p<total;p++)if(candidate[p]&&(signal[p]>fgCut||(signal[p]===fgCut&&fgCount<wanted))){selected[p]=1;fgCount++;}
+      const hist=new Uint32Array(256);
+      for(let p=0;p<total;p++)if(selected[p])hist[Math.max(0,Math.min(255,Math.round(outLum[p])))]++;
+      const inkNeed=Math.round(reference.inkCoverage*total),midNeed=Math.round(reference.midWashCoverage*total);
+      function quantile(count){let acc=0;for(let l=0;l<256;l++){acc+=hist[l];if(acc>=count)return l;}return 255;}
+      const qInk=quantile(Math.min(fgCount,inkNeed)),qMid=Math.max(qInk+1,quantile(Math.min(fgCount,midNeed)));
+      const inkT=paperL-45,midT=paperL-18;
+      const band=new Uint8Array(total),mapped=new Float32Array(total);
+      let sum=0,sum2=0,n=0;
+      for(let p=0;p<total;p++){
+        const i=p*4;if(!selected[p]){dst[i]=paper[0];dst[i+1]=paper[1];dst[i+2]=paper[2];continue;}
+        const l=outLum[p];let t,b;
+        if(l<=qInk){b=1;const u=qInk>0?l/qInk:0;t=88+u*(inkT-3-88);}
+        else if(l<=qMid){b=2;const u=(l-qInk)/Math.max(1,qMid-qInk);t=inkT+2+u*(midT-3-(inkT+2));}
+        else{b=3;const u=(l-qMid)/Math.max(1,255-qMid);t=midT+2+u*(236-(midT+2));}
+        band[p]=b;mapped[p]=t;sum+=t;sum2+=t*t;n++;
+      }
+      for(let iter=0;iter<3&&n;iter++){
+        const mean=sum/n,std=Math.sqrt(Math.max(.001,sum2/n-mean*mean)),matchMean=reference.lumaMean+(reference.matchMeanBias||0),matchStd=reference.lumaStd+(reference.matchStdBias||0),gain=matchStd/Math.max(1,std);
+        sum=0;sum2=0;
+        for(let p=0;p<total;p++)if(selected[p]){
+          let t=matchMean+(mapped[p]-mean)*gain;
+          if(band[p]===1)t=clamp(t,62,inkT-1);
+          else if(band[p]===2)t=clamp(t,inkT+1,midT-1);
+          else t=clamp(t,midT+1,238);
+          mapped[p]=t;sum+=t;sum2+=t*t;
+        }
+      }
+      const edgeMap=new Float32Array(total);let edgeCount=0;
+      for(let y=1;y<ch-1;y++)for(let x=1;x<cw-1;x++){const p=y*cw+x;if(!selected[p])continue;
+        const gx=(mapped[p+1]-mapped[p-1])*.5,gy=(mapped[p+cw]-mapped[p-cw])*.5,e=Math.hypot(gx,gy);edgeMap[p]=e;if(e>10)edgeCount++;
+      }
+      const curEdge=fgCount?edgeCount/fgCount:0,targetEdge=(reference.edgeDensityForeground||curEdge)+(reference.matchEdgeBias||0);
+      const sharpen=clamp((targetEdge-curEdge)*18,-.70,1.65);
+      for(let y=0;y<ch;y++)for(let x=0;x<cw;x++){const p=y*cw+x,i=p*4;if(!selected[p])continue;
+        let t=mapped[p];
+        if(x>0&&x<cw-1&&y>0&&y<ch-1&&sharpen!==0){
+          const avg=(mapped[p-1]+mapped[p+1]+mapped[p-cw]+mapped[p+cw])*.25;t+=sharpen*(t-avg);
+          if(band[p]===1)t=clamp(t,58,inkT-1);else if(band[p]===2)t=clamp(t,inkT+1,midT-1);else t=clamp(t,midT+1,240);
+        }
+        const old=Math.max(1,outLum[p]),ratio=t/old;
+        let rr=dst[i]*ratio,gg=dst[i+1]*ratio,bb=dst[i+2]*ratio;
+        const mix=band[p]===1?.16:band[p]===2?.11:.06;
+        const bc=band[p]===1?ink:pigment;rr=rr*(1-mix)+bc[0]*mix;gg=gg*(1-mix)+bc[1]*mix;bb=bb*(1-mix)+bc[2]*mix;
+        const actual=Math.max(1,rr*.2126+gg*.7152+bb*.0722),fix=t/actual;dst[i]=clamp(rr*fix,0,255);dst[i+1]=clamp(gg*fix,0,255);dst[i+2]=clamp(bb*fix,0,255);
+        maskImage.data[i]=maskImage.data[i+1]=maskImage.data[i+2]=255;maskImage.data[i+3]=255;
+      }
+    }
+
     pctx.putImageData(out,0,0);mctx.putImageData(maskImage,0,0);
     bctx.clearRect(0,0,cw,ch);bctx.globalCompositeOperation='source-over';
     for(let k=0;k<30;k++){
@@ -231,7 +293,7 @@ function createPaperCompositor(sourceCanvas,style,getQuality,{replaceSource=fals
     bctx.globalCompositeOperation='destination-in';bctx.globalAlpha=.88;bctx.drawImage(maskCanvas,0,0);bctx.globalCompositeOperation='source-over';
     ctx.save();ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1;ctx.filter='none';ctx.fillStyle=style.paperColor;ctx.fillRect(0,0,w,h);
     ctx.drawImage(paint,0,0,w,h);
-    ctx.globalCompositeOperation='multiply';ctx.globalAlpha=.88;ctx.drawImage(blobs,0,0,w,h);ctx.globalCompositeOperation='source-over';
+    ctx.globalCompositeOperation='multiply';ctx.globalAlpha=reference?.10:.88;ctx.drawImage(blobs,0,0,w,h);ctx.globalCompositeOperation='source-over';
     const passes=q>.78?3:q>.55?2:1;
     for(let i=0;i<passes;i++){
       const drift=Math.sin(timeMs*.00010+(seed%1000)*.01+i*1.7)*style.motion;
