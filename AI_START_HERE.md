@@ -106,3 +106,8 @@
 ### Самая короткая версия для любого нового AI
 
 **Сначала прочитай `AI_START_HERE.md` + `.ai/project-context-index.json`. Для ручных изменений прочитай `CHATGPT_GAME_CONTROL.md`. Если пользователь просит изменить проект и прислать ссылку — не заканчивай отчётом при исправимом блокере; продолжай до свежепроверенной рабочей ссылки или настоящего owner-only `USER_ACTION_REQUIRED`. ВНО = Воспроизводимость + Независимость + Опровержение.**
+
+
+## Mandatory fixed-game viewport rule (2026-09-30)
+
+Every released playable web game must follow `docs/FIXED_GAME_VIEWPORT_CONTRACT_RU.md` and preferably reuse `shared/fixed-game-viewport.js`. A mobile game page must never move as an HTML document; gestures belong to the game. See `docs/KRIEGER_SURGERY_SUCCESS_FAILURE_ANALYSIS_2026-09-30.md` for the physical-iPhone failure that made this rule mandatory.
