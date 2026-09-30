@@ -1033,3 +1033,23 @@ Goal: merge the user-confirmed Meta4 glyph interaction with the preserved proced
 The new mode accepts only the fixed Meta4 glyph action allowlist, strips arbitrary world fields, accepts bounded visible-area counts, returns the existing qualitative prediction schema with `executed:false`, and reuses the existing Groq-first free provider/fallback path. AI remains prediction-only; only the client YES action may mutate its local game state.
 
 Required evidence: focused chain AI tests; protected CI; exact-head Cloudflare preview; production POST proving a glyph action such as river is answered by a real provider; separate Meta5 browser proof for pan, pinch, exact tap placement, graphical object + glyph label, NO no-mutation, YES one-mutation, rotating decks and local report.
+
+
+---
+# 2026-09-30: Universal Player Character / KayKit Knight
+
+- **Task:** promote the merged KayKit Knight bundle into the canonical reusable World Server player-character runtime and wire Roblox Humanoid ports to it.
+- **Why:** the CC0 Knight and 139 compatible Rig_Medium animation clips are already in master, but games still hand-pick animation files/names and can diverge.
+- **Current state:** canonical asset bundle exists in `assets/characters/kaykit-knight/`; Roblox import/runtime bridge exists; `roblox-gothic-rocks` loads only one movement animation GLB with local regex mapping.
+- **Target state:** one shared loader/controller, one semantic animation contract, importer-generated character plan, and at least one real Roblox port consuming the shared runtime.
+- **Files / systems involved:** KayKit character manifest, new semantic action map, shared browser runtime, Roblox importer, Gothic Rocks port, docs and regression tests.
+- **Known risks:** animation clip/node mismatch across GLBs, accidental duplicate character authority, breaking the already verified Roblox MVP, or overstating unsupported Roblox/custom-avatar semantics.
+- **Golden systems preserved:** existing controls, golden physics, networking authority, graphics quality floor, current KayKit pinned assets and CC0 provenance.
+- **Errors that must not return:** local per-game hard-coded animation regexes; silently inventing unsupported source assets; replacing custom user-provided avatars without an explicit integration choice.
+- **Exact patch plan:** add semantic-actions.json; add shared universal-player-character.mjs; make importer emit canonical character mapping; refactor Gothic Rocks to the shared loader; add focused asset/import/adoption regressions; update Roblox import docs.
+- **Tests to run:** new universal-player-character unit test, Roblox importer tests, Gothic Rocks source/unit tests, exact-head CI/Fleet/quality gates.
+- **Deployment / PR plan:** isolated branch -> PR -> exact-head CI/Fleet -> merge only after green; no manual production bypass.
+- **Current progress:** semantic map, shared runtime, importer mapping, Golden registration and Gothic Rocks adoption implemented. First focused run correctly failed 2 tests: (1) KayKit Character Animations 1.1 renamed combat/idle clips (for example `Idle_A`, `Melee_1H_*`, `Ranged_1H_*`), while the first map used older names; (2) the old Gothic Rocks regression expected a direct `Knight.glb` string after ownership moved into the shared runtime. Root causes were fixed without weakening asset verification: current 1.1 names are primary with older aliases retained as compatibility fallbacks, and the regression now follows the canonical shared runtime + manifest to the exact Knight asset.
+- **Next action:** exact-head cloud CI/Fleet/quality/browser gates on the final branch head; merge only if all required gates are green.
+- **Completion criteria:** required core semantics resolve against the vendored 139-clip Rig_Medium bundle; importer points Roblox character controllers to the canonical runtime; Gothic Rocks consumes it; exact-head gates pass.
+- **Final evidence:** focused tests `node --test test/universal-player-character.test.js test/roblox-import.test.js test/roblox-gothic-rocks.test.js` = 14/14 PASS; `node scripts/check-js.js` = Syntax OK 74 JS files; `git diff --check` PASS. Browser E2E now hard-requires `characterRuntime === 'universal-player-character'` so fallback cannot self-certify. PR cloud/Fleet evidence must be green on this exact head before merge.

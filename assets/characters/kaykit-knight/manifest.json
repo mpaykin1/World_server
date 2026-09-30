@@ -31,5 +31,11 @@
   ],
   "officialPackageAnimationCount": 161,
   "compatibleAnimationClipCount": 139,
-  "selectionReason": "Rig_Medium is the richer single-character runtime and matches the Knight rig; package-wide 161 is not the per-rig clip count."
+  "selectionReason": "Rig_Medium is the richer single-character runtime and matches the Knight rig; package-wide 161 is not the per-rig clip count.",
+  "semanticActions": "semantic-actions.json",
+  "runtimeModule": "/shared/universal-player-character.mjs",
+  "defaultFor": {
+    "worldServer": true,
+    "robloxStandardHumanoid": true
+  }
 }
