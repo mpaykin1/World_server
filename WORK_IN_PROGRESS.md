@@ -1,3 +1,22 @@
+# 2026-09-30: Autonomous KayKit Knight HTML viewer
+
+Task: publish a single autonomous HTML file containing the KayKit Knight character and its viewer/runtime so it can be opened without adjacent asset files.
+Why: provide a portable visual test artifact for the reusable World Server humanoid.
+Current state: canonical KayKit Knight runtime is merged in master; an existing proven single-file Knight animation gallery has been copied as one standalone HTML artifact.
+Target state: one self-contained HTML under apps/kaykit-knight-standalone/index.html, mobile-friendly, with embedded rendering/runtime/model data and animation controls.
+Files / systems involved: apps/kaykit-knight-standalone/index.html and this WIP record only.
+Known risks: confusing the standalone gallery's embedded clip library with the separate canonical 139-clip runtime bundle; oversized single HTML; broken mobile controls.
+Golden systems preserved: no shared runtime, controls, collision, catalog or release registry changes.
+Exact patch: reuse the previously generated self-contained Knight gallery blob; do not duplicate external files.
+Tests to run: exact-head CI, Quality Regression Lock, Independent Fleet PRE; inspect file presence/size and final master SHA after merge.
+Deployment / PR plan: isolated branch -> PR -> CI -> merge. No public game-catalog certification or production deployment claim.
+Current progress: standalone HTML committed at a33f05e3c71ec3c682775cfca804b5c943c74e7b.
+Next action: open PR and require clean exact-head checks before merge.
+Completion criteria: PR merged; file exists on master; direct GitHub file/download links resolve.
+Final evidence: pending exact-head CI and master verification.
+
+---
+
 # 2026-09-30: KayKit reusable Roblox-port avatar runtime
 
 Task: vendor one reusable KayKit Knight avatar plus the richest compatible Character Animations runtime into World Server for games ported from Roblox.
