@@ -985,3 +985,12 @@ Regression tests must cover canonical population arithmetic, worker bound, exact
 Registered on protected base `75bb69eab3d94f260ee8140075f48a4d1e2ed32e`. Implementation and tests in progress.
 
 ---
+
+
+## Meta5 glyph-world live prediction lane — 2026-09-30
+
+Goal: merge the user-confirmed Meta4 glyph interaction with the preserved procedural camera/graphics MVP in a separate public version, without changing either successful client. Backend change is deliberately isolated: add `mode=predict_action` to the existing `/api/chain-ai` endpoint while preserving `predict_build` semantics.
+
+The new mode accepts only the fixed Meta4 glyph action allowlist, strips arbitrary world fields, accepts bounded visible-area counts, returns the existing qualitative prediction schema with `executed:false`, and reuses the existing Groq-first free provider/fallback path. AI remains prediction-only; only the client YES action may mutate its local game state.
+
+Required evidence: focused chain AI tests; protected CI; exact-head Cloudflare preview; production POST proving a glyph action such as river is answered by a real provider; separate Meta5 browser proof for pan, pinch, exact tap placement, graphical object + glyph label, NO no-mutation, YES one-mutation, rotating decks and local report.

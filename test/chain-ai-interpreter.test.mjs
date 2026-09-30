@@ -177,3 +177,56 @@ test('Explicit prediction provider fails closed on ungrounded invented facts', a
   assert.equal(response.status,503);
   assert.match((await response.json()).detail,/AI_PREDICTION_EMPTY/);
 });
+
+
+test('Glyph action prediction supports the Meta5 action catalog without mutating the world', async () => {
+  let systemPrompt='', userMessage='';
+  const env=mkEnv();
+  env.AI.run=async (_model,input)=>{
+    systemPrompt=input.messages[0].content;
+    userMessage=input.messages[1].content;
+    return {response:JSON.stringify({
+      summary:'Река, вероятно, изменит маршруты людей и доступность воды.',
+      immediate:['Может улучшиться доступ к воде в видимой области.'],
+      later:['Поселения могут начать тянуться к берегу.'],
+      risks:['Соседние участки могут стать менее удобными для строительства.'],
+      surprise:'Река может связать ранее раздельные части мира.',
+      confidence:0.71
+    })};
+  };
+  const response=await handleAiInterpret(req({
+    text:'Предсказать действие Река',
+    mode:'predict_action',
+    provider:'cloudflare',
+    action:{kind:'river',name:'Река',glyph:'川',location:'видимая область x 120 y -40'},
+    worldContext:{
+      turn:5,population:31,power:18,water:20,food:36,eco:47,budget:42,
+      visible:{city:1,forest:2,river:0,secret:99}
+    }
+  }),env);
+  const body=await response.json();
+  assert.equal(response.status,200);
+  assert.equal(body.executed,false);
+  assert.equal(body.provider,'cloudflare');
+  assert.match(body.prediction.summary,/Река/);
+  assert.match(systemPrompt,/glyph-world game/);
+  assert.match(userMessage,/"kind":"river"/);
+  assert.match(userMessage,/"glyph":"川"/);
+  assert.match(userMessage,/"visible":\{"city":1,"forest":2,"river":0\}/);
+  assert.doesNotMatch(userMessage,/secret/);
+});
+
+test('Glyph action prediction rejects actions outside the server allowlist before calling AI', async () => {
+  const env=mkEnv(); let called=false;
+  env.AI.run=async()=>{called=true;return {response:'{}'};};
+  const response=await handleAiInterpret(req({
+    text:'Предсказать действие',
+    mode:'predict_action',
+    provider:'cloudflare',
+    action:{kind:'spaceport',name:'Космопорт',glyph:'星'},
+    worldContext:{turn:0}
+  }),env);
+  assert.equal(response.status,400);
+  assert.equal((await response.json()).error,'invalid_action_kind');
+  assert.equal(called,false);
+});

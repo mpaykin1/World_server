@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#0a0d10">
+<title>Цепочка — Procedural Krieger World</title>
+<style>
+:root{
+  --bg:#090c0f;--panel:rgba(13,17,21,.86);--line:rgba(255,255,255,.12);
+  --text:#f4f2ea;--muted:#aab2bb;--accent:#e99151;--good:#8ed89f;--bad:#ff7e72;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);
+font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;background:#0b0f12}
+.panel{background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(16px);
+box-shadow:0 16px 60px rgba(0,0,0,.28);border-radius:18px}
+#top{position:fixed;left:12px;right:12px;top:max(12px,env(safe-area-inset-top));display:flex;gap:9px;z-index:5;pointer-events:none}
+#story{padding:10px 13px;min-width:0;flex:1;pointer-events:auto}
+#story b{font-size:14px}#chapter{font-size:11px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#stats{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:9px 11px;min-width:390px;pointer-events:auto}
+.stat{font-size:9px;color:var(--muted);white-space:nowrap}.stat b{display:block;font-size:14px;color:white;margin-top:1px}
+#compass{position:fixed;right:12px;top:104px;z-index:4;padding:7px 10px;font-size:10px;color:var(--muted);pointer-events:none}
+#bottom{position:fixed;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);
+width:min(820px,calc(100vw - 20px));padding:8px;z-index:6}
+#tools{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.tool{border:1px solid var(--line);background:rgba(255,255,255,.055);color:white;border-radius:12px;padding:7px 3px;cursor:pointer;min-height:56px}
+.tool.active{outline:2px solid #ef995d;background:rgba(239,153,93,.15)}
+.tool .ico{font-size:21px;display:block;line-height:1.05}.tool .name{font-size:9px;color:#d9dfe4}
+#message{height:24px;padding:6px 3px 0;font-size:10px;color:#bdc5cd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#modal{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(6px)}
+#modal.show{display:flex}
+#card{width:min(500px,100%);background:#11161b;border:1px solid rgba(255,255,255,.16);border-radius:20px;padding:17px;box-shadow:0 32px 90px rgba(0,0,0,.55)}
+#card h2{margin:0 0 8px;font-size:20px}
+#forecast{font-size:13px;line-height:1.5;color:#e6e9eb;white-space:pre-line}
+#modalBtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+button{font:inherit}
+#modalBtns button,#reset{border:1px solid var(--line);border-radius:12px;padding:11px;background:rgba(255,255,255,.06);color:white}
+#yes{background:#e99151!important;color:#160d08!important;font-weight:800}
+#ending{display:none;margin-top:8px;padding:8px;border-radius:10px;border:1px solid var(--line);font-size:11px;color:#ffe0c8}
+#reset{display:none;margin-top:8px;width:100%}
+#help{position:fixed;left:12px;bottom:92px;z-index:3;padding:7px 9px;font-size:10px;color:var(--muted);pointer-events:none}
+@media(max-width:780px){
+ #top{display:block}
+ #stats{margin-top:7px;min-width:0;padding:8px 10px}
+ #story{width:100%}
+ #compass{top:150px}
+ #bottom{width:calc(100vw - 14px);bottom:max(7px,env(safe-area-inset-bottom))}
+ #tools{gap:4px}.tool{padding:6px 1px;min-height:53px}.tool .ico{font-size:19px}.tool .name{font-size:8px}
+ #help{bottom:88px}
+}
+</style>
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<div id="top">
+  <div id="story" class="panel">
+    <b>Цепочка: процедурный мир</b>
+    <div id="chapter">Глава 1. Здесь пока почти ничего нет. Проведи пальцем — мир бесконечен.</div>
+    <div id="ending"></div><button id="reset">Новый мир</button>
+  </div>
+  <div id="stats" class="panel">
+    <div class="stat">Люди<b id="pop">18</b></div>
+    <div class="stat">Еда<b id="food">28</b></div>
+    <div class="stat">Энергия<b id="energy">8</b></div>
+    <div class="stat">Природа<b id="eco">44</b></div>
+    <div class="stat">Надежда<b id="hope">36</b></div>
+  </div>
+</div>
+
+<div id="compass" class="panel">↔ тащи мир · ⤢ щипок = масштаб</div>
+<div id="help" class="panel">Выбери объект → тап по земле. Тащить можно бесконечно в любую сторону.</div>
+
+<div id="bottom" class="panel">
+  <div id="tools">
+    <button class="tool" data-tool="city"><span class="ico">🏙</span><span class="name">Город</span></button>
+    <button class="tool" data-tool="forest"><span class="ico">🌲</span><span class="name">Лес</span></button>
+    <button class="tool" data-tool="volcano"><span class="ico">🌋</span><span class="name">Вулкан</span></button>
+    <button class="tool" data-tool="power"><span class="ico">⚡</span><span class="name">Станция</span></button>
+    <button class="tool" data-tool="farm"><span class="ico">🌾</span><span class="name">Ферма</span></button>
+    <button class="tool" data-tool="river"><span class="ico">💧</span><span class="name">Река</span></button>
+  </div>
+  <div id="message">Можно просто исследовать мир пальцем — строительство не мешает перетаскиванию.</div>
+</div>
+
+<div id="modal">
+  <div id="card">
+    <h2 id="modalTitle"></h2>
+    <div id="forecast"></div>
+    <div id="modalBtns"><button id="no">Нет</button><button id="yes">Да, построить</button></div>
+  </div>
+</div>
+
+<script>
+(()=>{'use strict';
+const c=document.getElementById('game'),ctx=c.getContext('2d',{alpha:false});
+const DPR=Math.min(2,devicePixelRatio||1);
+let W=0,H=0,time=0;
+function resize(){W=innerWidth;H=innerHeight;c.width=W*DPR;c.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0)}
+addEventListener('resize',resize);resize();
+
+const S={seed:(Math.random()*1e9)|0,turn:0,pop:18,food:28,energy:8,eco:44,hope:36,ended:false,objects:[]};
+const cam={x:0,y:0,zoom:1};
+let selected=null,pending=null;
+const defs={
+ city:{name:'Город',col:'#c8c1b4'},
+ forest:{name:'Лес',col:'#4e8f60'},
+ volcano:{name:'Вулкан',col:'#d75b35'},
+ power:{name:'Электростанция',col:'#a9adb0'},
+ farm:{name:'Ферма',col:'#d6ad4e'},
+ river:{name:'Река',col:'#4fb6db'}
+};
+const chapters=[
+'Глава 1. Здесь пока почти ничего нет. Проведи пальцем — мир бесконечен.',
+'Глава 2. Первые объекты начинают влиять друг на друга.',
+'Глава 3. Мир запоминает решения и отвечает цепными реакциями.',
+'Глава 4. Люди уже используют построенное не так, как ты ожидал.',
+'Глава 5. Теперь ты не строишь мир — ты договариваешься с ним.'
+];
+function hash(a,b=0){let v=Math.sin((a*12.9898+b*78.233+S.seed*.00001))*43758.5453;return v-Math.floor(v)}
+function clamp(v){return Math.max(0,Math.min(100,Math.round(v)))}
+function w2s(x,y){return {x:(x-cam.x)*cam.zoom+W/2,y:(y-cam.y)*cam.zoom+H/2}}
+function s2w(x,y){return {x:(x-W/2)/cam.zoom+cam.x,y:(y-H/2)/cam.zoom+cam.y}}
+function iso(wx,wy,wz=0){const p=w2s(wx,wy);return{x:p.x,y:p.y-wz*cam.zoom}}
+
+function poly(points,fill,stroke='rgba(0,0,0,.22)',lw=1){
+ ctx.beginPath();ctx.moveTo(points[0][0],points[0][1]);
+ for(let i=1;i<points.length;i++)ctx.lineTo(points[i][0],points[i][1]);
+ ctx.closePath();ctx.fillStyle=fill;ctx.fill();
+ if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw;ctx.stroke()}
+}
+function line(points,stroke,lw=1){
+ ctx.beginPath();ctx.moveTo(points[0][0],points[0][1]);
+ for(let i=1;i<points.length;i++)ctx.lineTo(points[i][0],points[i][1]);
+ ctx.strokeStyle=stroke;ctx.lineWidth=lw;ctx.stroke()
+}
+function box(wx,wy,z,sx,sy,sz,top='#bbb',left='#777',right='#999'){
+ let q=cam.zoom, p=iso(wx,wy,z), ax=sx*q*.52, ay=sy*q*.28, h=sz*q;
+ let A=[p.x,p.y-ay],B=[p.x+ax,p.y],C=[p.x,p.y+ay],D=[p.x-ax,p.y],At=[A[0],A[1]-h],Bt=[B[0],B[1]-h],Ct=[C[0],C[1]-h],Dt=[D[0],D[1]-h];
+ poly([D,C,Ct,Dt],left);poly([C,B,Bt,Ct],right);poly([Dt,Ct,Bt,At],top);
+}
+function cyl(wx,wy,z,r,h,col='#aaa'){
+ let p=iso(wx,wy,z),q=cam.zoom,rx=r*q*.55,ry=r*q*.24,hh=h*q;
+ ctx.fillStyle=shade(col,-.22);ctx.fillRect(p.x-rx,p.y-hh,rx*2,hh);
+ ctx.beginPath();ctx.ellipse(p.x,p.y-hh,rx,ry,0,0,7);ctx.fillStyle=shade(col,.13);ctx.fill();
+ ctx.beginPath();ctx.ellipse(p.x,p.y,rx,ry,0,0,7);ctx.fillStyle=shade(col,-.1);ctx.globalAlpha=.55;ctx.fill();ctx.globalAlpha=1;
+}
+function shade(hex,a){
+ let n=parseInt(hex.slice(1),16),r=(n>>16)&255,g=(n>>8)&255,b=n&255;
+ r=Math.max(0,Math.min(255,Math.round(r*(1+a))));g=Math.max(0,Math.min(255,Math.round(g*(1+a))));b=Math.max(0,Math.min(255,Math.round(b*(1+a))));
+ return `rgb(${r},${g},${b})`
+}
+function glow(x,y,r,col){
+ let g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,col);g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.fillRect(x-r,y-r,r*2,r*2)
+}
+function ellipseGround(wx,wy,rx,ry,fill,alpha=1){
+ let p=w2s(wx,wy);ctx.globalAlpha=alpha;ctx.beginPath();ctx.ellipse(p.x,p.y,rx*cam.zoom,ry*cam.zoom,0,0,7);ctx.fillStyle=fill;ctx.fill();ctx.globalAlpha=1;
+}
+function tri(a,b,c,fill){poly([[a.x,a.y],[b.x,b.y],[c.x,c.y]],fill)}
+function smoke(wx,wy,z,phase){
+ for(let i=0;i<5;i++){let p=iso(wx+Math.sin(time*.0005+i+phase)*3,wy,z+i*9+Math.sin(time*.001+i)*2),rr=(5+i*1.7)*cam.zoom;ctx.globalAlpha=.12-i*.01;ctx.beginPath();ctx.arc(p.x,p.y,rr,0,7);ctx.fillStyle='#c8c8c4';ctx.fill()}ctx.globalAlpha=1
+}
+
+function drawGround(){
+ ctx.fillStyle='#0c1013';ctx.fillRect(0,0,W,H);
+ const spacing=80*cam.zoom;
+ if(spacing>18){
+  const ox=((W/2-cam.x*cam.zoom)%spacing+spacing)%spacing, oy=((H/2-cam.y*cam.zoom)%spacing+spacing)%spacing;
+  ctx.strokeStyle='rgba(255,255,255,.028)';ctx.lineWidth=1;
+  for(let x=ox-100;x<W+100;x+=spacing){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
+  for(let y=oy-100;y<H+100;y+=spacing){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
+ }
+ // deterministic scattered terrain marks in visible chunks
+ const min=s2w(0,0), max=s2w(W,H), cell=180;
+ let x0=Math.floor(min.x/cell)-1,x1=Math.floor(max.x/cell)+1,y0=Math.floor(min.y/cell)-1,y1=Math.floor(max.y/cell)+1;
+ ctx.strokeStyle='rgba(201,185,157,.055)';ctx.lineWidth=1;
+ for(let cy=y0;cy<=y1;cy++)for(let cx=x0;cx<=x1;cx++){
+   let bx=cx*cell+hash(cx,cy)*cell, by=cy*cell+hash(cy,cx)*cell,p=w2s(bx,by);
+   for(let k=0;k<3;k++){let a=hash(cx*7+k,cy*9)*6.28,len=(10+hash(cx+k,cy-k)*35)*cam.zoom;
+     ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x+Math.cos(a)*len,p.y+Math.sin(a)*len*.55);ctx.stroke()}
+ }
+}
+function drawCity(o){
+ const s=o.s;
+ ellipseGround(o.x,o.y,52*s,23*s,'rgba(0,0,0,.28)');
+ // road cross
+ let p=w2s(o.x,o.y);
+ line([[p.x-48*s*cam.zoom,p.y],[p.x+48*s*cam.zoom,p.y]],'rgba(196,183,159,.16)',5*cam.zoom);
+ line([[p.x,p.y-22*s*cam.zoom],[p.x,p.y+22*s*cam.zoom]],'rgba(196,183,159,.12)',4*cam.zoom);
+ const blocks=[[-24,-4,10,12,18],[-8,-10,14,14,32],[10,-3,13,13,22],[25,5,10,10,15],[-17,11,11,10,14]];
+ blocks.forEach((b,i)=>box(o.x+b[0]*s,o.y+b[1]*s,0,b[2]*s,b[3]*s,b[4]*s, i===1?'#ddd4c5':'#bfb7aa','#776f66','#999084'));
+ // warm windows
+ for(let i=0;i<7;i++){let px=o.x+(-22+i*7)*s,py=o.y+(-2+(i%2)*8)*s,q=iso(px,py,8*s);glow(q.x,q.y,8*cam.zoom,'rgba(255,144,52,.12)');ctx.fillStyle='#eaa05c';ctx.fillRect(q.x-1.4,q.y-1.4,2.8,2.8)}
+}
+function drawForest(o){
+ ellipseGround(o.x,o.y,50*o.s,24*o.s,'rgba(32,85,53,.18)');
+ for(let i=0;i<11;i++){
+  let a=hash(o.id,i)*6.28,r=(8+hash(i,o.id)*37)*o.s,wx=o.x+Math.cos(a)*r,wy=o.y+Math.sin(a)*r*.55;
+  let h=(15+hash(i+8,o.id)*22)*o.s;
+  box(wx,wy,0,4*o.s,4*o.s,h*.65,'#644b38','#3f3025','#513d2d');
+  let z=h*.55;
+  for(let j=0;j<3;j++){
+    let p=iso(wx,wy,z+j*6*o.s),rr=(11-j*1.5)*o.s*cam.zoom;
+    poly([[p.x,p.y-rr],[p.x+rr*.8,p.y+rr*.4],[p.x,p.y+rr*.75],[p.x-rr*.8,p.y+rr*.4]],j===1?'#5fa66a':'#4c8b5b');
+  }
+ }
+}
+function drawVolcano(o){
+ const q=cam.zoom,s=o.s,p=w2s(o.x,o.y);
+ ellipseGround(o.x,o.y,52*s,25*s,'rgba(0,0,0,.32)');
+ const layers=7;
+ for(let i=0;i<layers;i++){
+  let rr=(48-i*6)*s*q,yy=p.y-i*5*s*q;
+  let pts=[];
+  for(let k=0;k<12;k++){let a=k/12*6.28,jit=.82+hash(o.id+i,k)*.28;pts.push([p.x+Math.cos(a)*rr*jit,p.y+Math.sin(a)*rr*.42*jit-i*5*s*q])}
+  poly(pts,i<4?'#393837':'#4a4039',null);
+ }
+ let crater=iso(o.x,o.y,35*s);
+ glow(crater.x,crater.y,38*s*q,'rgba(255,83,20,.22)');
+ ctx.beginPath();ctx.ellipse(crater.x,crater.y,13*s*q,5*s*q,0,0,7);ctx.fillStyle='#ff7a2b';ctx.fill();
+ // lava paths
+ for(let j=0;j<3;j++){let a=(j*2.1+hash(o.id,j))*1,pts=[];for(let k=0;k<6;k++){let rr=k*8*s,pp=w2s(o.x+Math.cos(a)*rr,o.y+Math.sin(a)*rr*.55);pts.push([pp.x,pp.y-(35-k*6)*s*q])}line(pts,'#ff7a2b',3*s*q)}
+ smoke(o.x,o.y,45*s,o.id*.1);
+}
+function drawPower(o){
+ const s=o.s;ellipseGround(o.x,o.y,55*s,24*s,'rgba(0,0,0,.3)');
+ box(o.x,o.y+6*s,0,38*s,24*s,12*s,'#a8a8a5','#5d6062','#797d7f');
+ box(o.x-18*s,o.y-5*s,0,15*s,14*s,18*s,'#b3b2ad','#67696a','#818486');
+ cyl(o.x+18*s,o.y-7*s,0,9*s,28*s,'#8c9091');
+ // cooling tower flared illusion
+ let p=iso(o.x+18*s,o.y-7*s,28*s),q=cam.zoom;
+ ctx.beginPath();ctx.moveTo(p.x-7*s*q,p.y);ctx.lineTo(p.x-12*s*q,p.y+28*s*q);ctx.lineTo(p.x+12*s*q,p.y+28*s*q);ctx.lineTo(p.x+7*s*q,p.y);ctx.closePath();ctx.fillStyle='#878b8c';ctx.fill();
+ ctx.beginPath();ctx.ellipse(p.x,p.y,7*s*q,3*s*q,0,0,7);ctx.fillStyle='#c0bdb6';ctx.fill();
+ cyl(o.x-6*s,o.y-12*s,10*s,2.7*s,34*s,'#9a8376');cyl(o.x+2*s,o.y-13*s,10*s,2.3*s,39*s,'#a58b7b');
+ let g=iso(o.x,o.y+7*s,8*s);glow(g.x,g.y,28*s*q,'rgba(255,146,58,.14)');
+ for(let i=0;i<6;i++){let w=iso(o.x+(-13+i*5)*s,o.y+12*s,8*s);ctx.fillStyle='#e7a45e';ctx.fillRect(w.x-1.5,w.y-1.5,3,3)}
+ smoke(o.x+18*s,o.y-7*s,32*s,o.id);smoke(o.x-6*s,o.y-12*s,49*s,o.id+1);
+}
+function drawFarm(o){
+ const s=o.s,q=cam.zoom;
+ ellipseGround(o.x,o.y,56*s,24*s,'rgba(93,68,28,.2)');
+ const plots=[[-23,-7],[2,-7],[-23,8],[2,8]];
+ plots.forEach((v,j)=>{
+  let p=w2s(o.x+v[0]*s,o.y+v[1]*s),w=20*s*q,h=10*s*q;
+  poly([[p.x-w,p.y],[p.x,p.y-h*.55],[p.x+w,p.y],[p.x,p.y+h*.55]],j%2?'#c49c42':'#d8b458');
+  for(let k=-2;k<=2;k++)line([[p.x-w*.75,p.y+k*h*.12],[p.x+w*.75,p.y+k*h*.12]],'rgba(255,231,161,.36)',1);
+ });
+ box(o.x+27*s,o.y-7*s,0,16*s,12*s,13*s,'#d1c4b1','#856c54','#a68868');
+ // roof
+ let p=iso(o.x+27*s,o.y-7*s,13*s),rr=9*s*q;tri({x:p.x-rr,y:p.y},{x:p.x,y:p.y-7*s*q},{x:p.x+rr,y:p.y},'#8f5a40');
+ // windmill
+ box(o.x+30*s,o.y+11*s,0,4*s,4*s,24*s,'#9c8d79','#655b4e','#7e7161');
+ let hub=iso(o.x+30*s,o.y+11*s,20*s);
+ for(let a=0;a<4;a++){let ang=time*.00025+a*Math.PI/2,linep=[[hub.x,hub.y],[hub.x+Math.cos(ang)*14*s*q,hub.y+Math.sin(ang)*14*s*q]];line(linep,'#d9c39c',3*s*q)}
+}
+function drawRiver(o){
+ const s=o.s,q=cam.zoom;
+ let pts=[];
+ for(let i=-4;i<=4;i++){let xx=o.x+i*14*s, yy=o.y+Math.sin(i*.85+o.id)*12*s;let p=w2s(xx,yy);pts.push([p.x,p.y])}
+ ctx.lineCap='round';line(pts,'rgba(38,92,112,.42)',18*s*q);line(pts,'#4eb9df',10*s*q);line(pts,'rgba(196,241,255,.42)',2*s*q);ctx.lineCap='butt';
+ // banks/rocks
+ for(let i=0;i<10;i++){let a=hash(o.id,i)*6.28,r=12+hash(i,o.id)*45,wx=o.x+Math.cos(a)*r*s,wy=o.y+Math.sin(a)*r*.45*s;box(wx,wy,0,5*s,5*s,(3+hash(i+7,o.id)*6)*s,'#596267','#333b3f','#454e52')}
+}
+function drawObject(o){
+ if(o.k==='city')drawCity(o);else if(o.k==='forest')drawForest(o);else if(o.k==='volcano')drawVolcano(o);
+ else if(o.k==='power')drawPower(o);else if(o.k==='farm')drawFarm(o);else drawRiver(o);
+}
+function drawPeople(){
+ const count=Math.min(60,S.pop);
+ for(let i=0;i<count;i++){
+  let target=S.objects.length?S.objects[i%S.objects.length]:{x:0,y:0};
+  let a=time*.00007*(.4+hash(i,1))+i*2.17,r=22+hash(i,2)*70;
+  let wx=target.x+Math.cos(a)*r,wy=target.y+Math.sin(a)*r*.5,p=w2s(wx,wy),q=cam.zoom;
+  if(p.x<-10||p.x>W+10||p.y<-10||p.y>H+10)continue;
+  ctx.strokeStyle='rgba(235,220,192,.72)';ctx.fillStyle='rgba(235,220,192,.88)';ctx.lineWidth=Math.max(.8,1.1*q);
+  ctx.beginPath();ctx.arc(p.x,p.y-5*q,2*q,0,7);ctx.fill();
+  line([[p.x,p.y-3*q],[p.x,p.y+4*q]],ctx.strokeStyle,ctx.lineWidth);
+  line([[p.x,p.y],[p.x-3*q,p.y+2*q]],ctx.strokeStyle,ctx.lineWidth);
+  line([[p.x,p.y],[p.x+3*q,p.y+2*q]],ctx.strokeStyle,ctx.lineWidth);
+  line([[p.x,p.y+4*q],[p.x-2*q,p.y+8*q]],ctx.strokeStyle,ctx.lineWidth);
+  line([[p.x,p.y+4*q],[p.x+2*q,p.y+8*q]],ctx.strokeStyle,ctx.lineWidth);
+ }
+}
+function sortDraw(){
+ const visible=S.objects.filter(o=>{let p=w2s(o.x,o.y);return p.x>-200&&p.x<W+200&&p.y>-200&&p.y<H+200});
+ visible.sort((a,b)=>a.y-b.y);visible.forEach(drawObject);
+}
+
+function forecast(k){
+ let lines={city:['Жильё и работа увеличат население.','Городу потребуется больше еды и энергии.','Если природы мало, рост быстро станет дорогим.'],
+ forest:['Лес восстанавливает природу и пищу.','Люди начинают селиться по кромке леса.','Без энергии лес не решит проблемы большого города.'],
+ volcano:['Вулкан опасен сразу, но даёт тепло и плодородную почву.','Через несколько ходов рядом появятся минералы и горячие источники.','Первый удар снизит надежду и экологию.'],
+ power:['Энергия ускорит работу города и ферм.','Свет и мастерские увеличат надежду.','Если природа уже истощена, промышленный рост усилит кризис.'],
+ farm:['Ферма быстро увеличит запас еды.','При наличии воды её эффект станет значительно сильнее.','Слишком много ферм без леса истощают землю.'],
+ river:['Река даёт воду, усиливает лес и ферму.','Поселения начнут тянуться к берегам.','Вулкан рядом может изменить русло и вызвать разрушения.']}[k];
+ let surprise=['Появится стихийный рынок.','Жители построят тропу сами.','Возникнет маленькое новое поселение.','Один объект начнёт усиливать соседний.'][Math.floor(hash(S.turn,k.length)*4)];
+ return `Сейчас:\n${lines[0]}\n\nДальше:\n${lines[1]}\n\nРиск:\n${lines[2]}\n\nНеожиданный эффект:\n${surprise}`;
+}
+function apply(k,x,y){
+ S.turn++;let o={id:S.turn,k,x,y,s:.82+hash(S.turn,7)*.45};S.objects.push(o);
+ if(k==='city'){S.pop+=8;S.food-=6;S.energy-=6;S.eco-=7;S.hope+=9}
+ if(k==='forest'){S.food+=7;S.eco+=15;S.hope+=5}
+ if(k==='volcano'){S.food-=4;S.energy+=8;S.eco-=8;S.hope-=5}
+ if(k==='power'){S.energy+=18;S.eco-=5;S.hope+=5;S.food+=1}
+ if(k==='farm'){S.food+=18;S.eco-=4;S.energy-=2;S.hope+=3}
+ if(k==='river'){S.food+=8;S.eco+=9;S.hope+=4}
+ // spatial synergies
+ for(const a of S.objects){
+   if(a===o)continue;let d=Math.hypot(a.x-o.x,a.y-o.y);
+   if(d<170){
+    let pair=[a.k,k].sort().join('+');
+    if(pair==='farm+river'){S.food+=9;S.hope+=2}
+    if(pair==='forest+river'){S.eco+=7;S.food+=3}
+    if(pair==='city+power'){S.energy+=4;S.hope+=4}
+    if(pair==='city+farm'){S.food+=3;S.pop+=2}
+    if(pair==='power+volcano'){S.energy+=7}
+    if(pair==='city+volcano'){S.hope-=6;S.pop-=2}
+   }
+ }
+ if(S.food<12){S.pop-=3;S.hope-=7}
+ if(S.energy<5&&S.pop>30)S.hope-=4;
+ ['food','energy','eco','hope'].forEach(v=>S[v]=clamp(S[v]));S.pop=Math.max(3,Math.round(S.pop));
+ updateUI(k);checkEnd();
+}
+function updateUI(k){
+ ['pop','food','energy','eco','hope'].forEach(id=>document.getElementById(id).textContent=S[id]);
+ document.getElementById('chapter').textContent=chapters[Math.min(4,Math.floor(S.turn/2))];
+ document.getElementById('message').textContent=`${defs[k].name} построен. Ход ${S.turn}. ${S.food<20?'Еды мало. ':''}${S.energy<15?'Энергии мало. ':''}${S.eco<25?'Природа истощена. ':''}`;
+}
+function checkEnd(){
+ if(S.turn<10)return;
+ let t='';
+ if(S.hope>68&&S.food>48&&S.energy>35&&S.eco>35)t='Мир научился держать равновесие. Теперь люди продолжают цепочку сами.';
+ else if(S.eco<12)t='Мир стал производительным, но почти потерял живую природу.';
+ else if(S.food<12)t='Рост обогнал ресурсы. Начинается эпоха дефицита.';
+ else if(S.hope<12)t='Ресурсы ещё есть, но жители перестали верить в общий проект.';
+ if(t){S.ended=true;let e=document.getElementById('ending');e.style.display='block';e.textContent='ФИНАЛ ПЕРВОЙ ГЛАВЫ: '+t;document.getElementById('reset').style.display='block'}
+}
+document.getElementById('reset').onclick=()=>location.reload();
+
+document.querySelectorAll('.tool').forEach(b=>b.onclick=()=>{
+ if(S.ended)return;selected=b.dataset.tool;
+ document.querySelectorAll('.tool').forEach(z=>z.classList.toggle('active',z===b));
+ document.getElementById('message').textContent=`${defs[selected].name}: тапни по месту строительства. Палец можно тянуть — это не построит объект.`;
+});
+
+// Pointer pan + tap + pinch
+const pts=new Map();let dragStart=null,lastCenter=null,startDist=0,startZoom=1,moved=false;
+function centerOfPointers(){let a=[...pts.values()];return{x:a.reduce((s,p)=>s+p.x,0)/a.length,y:a.reduce((s,p)=>s+p.y,0)/a.length}}
+function dist2(){let a=[...pts.values()];return a.length<2?0:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y)}
+c.addEventListener('pointerdown',e=>{
+ c.setPointerCapture(e.pointerId);pts.set(e.pointerId,{x:e.clientX,y:e.clientY});moved=false;
+ if(pts.size===1){dragStart={x:e.clientX,y:e.clientY,cx:cam.x,cy:cam.y};lastCenter={x:e.clientX,y:e.clientY}}
+ if(pts.size===2){startDist=dist2();startZoom=cam.zoom;lastCenter=centerOfPointers()}
+});
+c.addEventListener('pointermove',e=>{
+ if(!pts.has(e.pointerId))return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+ if(pts.size===1&&dragStart){
+  let dx=e.clientX-dragStart.x,dy=e.clientY-dragStart.y;if(Math.hypot(dx,dy)>5)moved=true;
+  cam.x=dragStart.cx-dx/cam.zoom;cam.y=dragStart.cy-dy/cam.zoom;
+ }else if(pts.size>=2){
+  moved=true;let cen=centerOfPointers(),d=dist2();
+  let before=s2w(cen.x,cen.y);cam.zoom=Math.max(.45,Math.min(2.2,startZoom*(d/startDist)));
+  let after=s2w(cen.x,cen.y);cam.x+=before.x-after.x;cam.y+=before.y-after.y;lastCenter=cen;
+ }
+});
+c.addEventListener('pointerup',e=>{
+ const p=pts.get(e.pointerId);pts.delete(e.pointerId);
+ if(!moved&&p&&selected&&!S.ended){
+   let w=s2w(p.x,p.y);pending={k:selected,x:w.x,y:w.y};
+   document.getElementById('modalTitle').textContent=defs[selected].name+' — прогноз';
+   document.getElementById('forecast').textContent=forecast(selected);
+   document.getElementById('modal').classList.add('show');
+ }
+ if(pts.size===1){let rem=[...pts.values()][0];dragStart={x:rem.x,y:rem.y,cx:cam.x,cy:cam.y}}
+ else if(pts.size===0)dragStart=null;
+});
+c.addEventListener('pointercancel',e=>{pts.delete(e.pointerId);if(!pts.size)dragStart=null});
+c.addEventListener('wheel',e=>{
+ let before=s2w(e.clientX,e.clientY);cam.zoom=Math.max(.45,Math.min(2.2,cam.zoom*Math.exp(-e.deltaY*.001)));
+ let after=s2w(e.clientX,e.clientY);cam.x+=before.x-after.x;cam.y+=before.y-after.y;e.preventDefault()
+},{passive:false});
+
+document.getElementById('no').onclick=()=>{pending=null;document.getElementById('modal').classList.remove('show')};
+document.getElementById('yes').onclick=()=>{if(pending)apply(pending.k,pending.x,pending.y);pending=null;document.getElementById('modal').classList.remove('show')};
+
+function loop(t){
+ time=t;drawGround();sortDraw();drawPeople();
+ // center marker only when a tool is selected
+ if(selected&&!document.getElementById('modal').classList.contains('show')){
+  let p={x:W/2,y:H/2};ctx.strokeStyle='rgba(255,255,255,.08)';ctx.beginPath();ctx.arc(p.x,p.y,22,0,7);ctx.stroke();
+ }
+ requestAnimationFrame(loop)
+}
+requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

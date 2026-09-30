@@ -185,6 +185,13 @@
         "spawn",
         "render"
       ]
+    },
+    "chain-reaction-procedural-krieger": {
+      "title": "Chain Reaction Procedural Krieger MVP",
+      "visible": false,
+      "status": "experimental",
+      "kind": "prototype",
+      "reason": "User-confirmed reusable mobile camera/input and procedural Canvas graphics reference. Preserved for internal reuse; not certified for the public catalog."
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",
