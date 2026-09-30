@@ -164,3 +164,14 @@ docs/CHAIN_REACTION_MOBILE_VIEWPORT_CONTRACT_RU.md
 Meta5 объединяет сохранённую систему иероглифов Meta4, удачный pan/pinch/tap procedural MVP, графические объекты с маленьким glyph-label и настоящий production AI через отдельный `mode=predict_action`. Meta4 и предыдущий procedural MVP при этом не изменялись.
 
 Этот этап закрепляет новый acceptance invariant: до живого AI-ответа и YES мир не мутирует; NO оставляет 0 изменений; YES создаёт ровно один объект в выбранной world-space позиции.
+
+
+## Meta5 post-test learning: preserve success, fix the action loop
+
+Direct user testing confirmed the combined Meta5 direction is successful overall, but exposed two mandatory follow-ups. See:
+
+`docs/META5_USER_FEEDBACK_SUCCESS_FAILURES_2026-09-30.md`
+
+The canonical action-deck contract is now: **five usable choices -> consume one -> immediately fill exactly that slot with one logical successor -> again five usable choices**. Do not wait for all five original cards to be consumed.
+
+The `Идея` action also has an unresolved physical-device interaction defect. Backend acceptance of `idea` is not sufficient proof of a fix; close only after physical iPhone touch evidence through selection, modal, live AI response/retry, YES and rendered Idea-object.
