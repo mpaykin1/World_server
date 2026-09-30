@@ -1,6 +1,6 @@
 # Krieger Total Control — World Server extraction map
 
-Status: 2026-09-29  
+Status: 2026-09-30  
 Priority: HIGHEST  
 Canonical research/build repo: `mpaykin1/scratch-chain-reaction`  
 Pinned upstream: `MasonDye/kkrieger-wasm@3bf0ff017372e640e966c2785a4d95a998cec242`
@@ -65,6 +65,22 @@ Verified source anchors:
 - `werkkzeug3_kkrieger/engine.cpp`
 - `werkkzeug3_kkrieger/kkriegergame.cpp`
 - `werkkzeug3_kkrieger/wasm/render2004.cpp`
+
+## Current fidelity status — do not confuse visibility with Krieger fidelity
+
+The 2026-09-30 physical-iPhone test is a second, stronger failure lesson.
+
+The Level Lab is now visibly 3D, but the user correctly rejected it as a Krieger graphics proof: it is still primarily scaled `Mesh_Cube` primitives with a custom debug-like material; the first-person weapon is absent and FIRE does not create a working visible shot.
+
+The exact root-cause record is canonical in:
+
+- `docs/KKRIEGER_FAILURE_LEDGER.md`
+
+From now on, a Krieger capability claim needs both **visual evidence** and **technology provenance evidence**. A changing non-black framebuffer is not enough. We must prove that the expected native operator/data chain actually executed.
+
+The Level Lab v1 status is therefore:
+
+`RENDERER/COLLISION ISOLATION HARNESS — NOT KRIEGER FIDELITY PROOF`.
 
 ## First extraction classification
 
