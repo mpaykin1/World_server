@@ -260,7 +260,7 @@ const actors={
   viaduct:new StructureActor(
     'viaduct','Виадук',viaductBlueprint,
     {enableSpanSupport:true,supportDistanceBudget:32,maxBodies:8,maxClusterVoxels:1400},
-    new THREE.Vector3(-12,1,-1),
+    new THREE.Vector3(-12,2,-9),
   ),
 };
 
