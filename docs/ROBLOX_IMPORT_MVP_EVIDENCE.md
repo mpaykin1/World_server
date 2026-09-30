@@ -51,3 +51,5 @@ Root cause: human-readable UTF-8 metadata was passed through a shell/code-page b
 Repair: rewrite the affected registry fields through the GitHub UTF-8 contents API and keep the existing Golden corruption gate enabled.
 Prevention: generated release metadata with non-ASCII text must use a UTF-8-preserving file/API path; never weaken the `???` fail-closed check to make a release pass.
 
+
+Exact-head gate rerun marker: registry encoding repaired; playable MVP tree unchanged.
