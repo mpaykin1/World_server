@@ -192,6 +192,13 @@
       "status": "quarantine",
       "kind": "graphics-vertical-slice",
       "reason": "First Living Ink vertical slice is deny-by-default until exact-head CI, desktop/mobile browser checks, offline proof, and the approved ASQURA reference visual gate exceed the user threshold of 85%."
+    },
+    "living-ink-office-v3": {
+      "title": "ASQURA Living Ink NPR v3",
+      "visible": false,
+      "status": "quarantine",
+      "kind": "graphics-vertical-slice",
+      "reason": "Real-mesh WebGL NPR vertical slice. Keep quarantined until build, depth/hidden-line browser tests, mobile walkthrough, offline proof and fresh visual review pass."
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",
