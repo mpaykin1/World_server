@@ -54,3 +54,11 @@ The failed prototype reproduced theme but not rendering class: 640x360 internal 
 
 Machine-readable source: `data/reference-fidelity-policy.json`.
 Hard checker: `npm run fidelity:check`.
+
+
+## Failure postmortem
+
+The concrete failure that created this rule is documented in:
+`docs/KRIEGER_FAILURE_POSTMORTEM_2026-09-29.md`.
+
+Future agents should read the postmortem before changing Krieger/reference-fidelity code; it records not only the symptoms but the architectural decision errors that caused them.
