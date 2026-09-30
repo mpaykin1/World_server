@@ -1,7 +1,7 @@
 const {test,expect}=require('@playwright/test');
 
 test.describe('Living Ink real-mesh WebGL NPR v3',()=>{
-  test('renders real meshes with depth-tested hidden lines and no external requests',async({page})=>{
+  test('renders real meshes with depth-tested hidden lines and no external requests',async({page},testInfo)=>{
     const external=[];
     page.on('request',request=>{
       const u=new URL(request.url());
@@ -20,6 +20,7 @@ test.describe('Living Ink real-mesh WebGL NPR v3',()=>{
     expect(data.metrics.triangles).toBeGreaterThan(0);
     expect(data.metrics.drawCalls).toBeGreaterThan(0);
     expect(external).toEqual([]);
+    await page.screenshot({path:testInfo.outputPath('living-ink-webgl-v3.png'),fullPage:true});
   });
 
   test('walkthrough movement and architectural FRAME camera both work',async({page})=>{
@@ -33,6 +34,10 @@ test.describe('Living Ink real-mesh WebGL NPR v3',()=>{
     await page.waitForFunction(()=>window.__livingInkScene?.cameraMode==='illustration');
     const illustrated=await page.evaluate(()=>window.__livingInkScene);
     expect(illustrated.cameraMode).toBe('illustration');
+    await page.context().setOffline(true);
+    await page.waitForTimeout(250);
+    const aliveOffline=await page.evaluate(()=>window.__livingInkMetrics?.fps>0&&window.__livingInkScene?.renderer==='three-webgl-npr-v3');
+    expect(aliveOffline).toBe(true);
   });
 
   test('canvas covers the viewport and exposes measured runtime telemetry',async({page})=>{
