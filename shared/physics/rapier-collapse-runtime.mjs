@@ -51,11 +51,31 @@ function makeVoxelColliderDesc(RAPIER,voxel,center,halfExtent){
   return desc;
 }
 
-export function createRapierCollapseRuntime({RAPIER,world,maxBodies=16,maxColliders=2048,halfExtent=.49}={}){
+function makeClusterColliderDesc(RAPIER,plan,members,halfExtent){
+  const box=plan.aabb;
+  const hx=Math.max(halfExtent,(box.maxX-box.minX)/2+halfExtent);
+  const hy=Math.max(halfExtent,(box.maxY-box.minY)/2+halfExtent);
+  const hz=Math.max(halfExtent,(box.maxZ-box.minZ)/2+halfExtent);
+  const cx=(box.minX+box.maxX)/2,cy=(box.minY+box.maxY)/2,cz=(box.minZ+box.maxZ)/2;
+  const volume=Math.max(.001,8*hx*hy*hz);
+  const density=Math.max(.01,Number(plan.mass)||1)/volume;
+  const friction=members.length
+    ? members.reduce((sum,v)=>sum+materialForBlock(v.blockType).friction,0)/members.length
+    : .75;
+  let desc=RAPIER.ColliderDesc.cuboid(hx,hy,hz);
+  desc=callMaybe(desc,'setTranslation',cx-plan.centerOfMass.x,cy-plan.centerOfMass.y,cz-plan.centerOfMass.z);
+  desc=callMaybe(desc,'setDensity',density);
+  desc=callMaybe(desc,'setFriction',friction);
+  desc=callMaybe(desc,'setRestitution',.025);
+  return desc;
+}
+
+export function createRapierCollapseRuntime({RAPIER,world,maxBodies=16,maxColliders=2048,halfExtent=.49,colliderMode='voxel'}={}){
   assertRapier(RAPIER);assertWorld(world);
   const bodyBudget=clampInt(maxBodies,1,64);
   const colliderBudget=clampInt(maxColliders,1,8192);
   const extent=Math.max(.35,Math.min(.5,Number(halfExtent)||.49));
+  const mode=colliderMode==='cluster-aabb'?'cluster-aabb':'voxel';
   const active=new Map();
   let colliderCount=0;
 
@@ -66,14 +86,20 @@ export function createRapierCollapseRuntime({RAPIER,world,maxBodies=16,maxCollid
     for(const plan of plans){
       if(active.has(plan.id)){spawned.push(snapshotOne(active.get(plan.id)));continue;}
       if(active.size>=bodyBudget){deferred.push({id:plan.id,reason:'body-budget'});continue;}
-      if(colliderCount+plan.voxelKeys.length>colliderBudget){deferred.push({id:plan.id,reason:'collider-budget'});continue;}
+      const neededColliders=mode==='cluster-aabb'?1:plan.voxelKeys.length;
+      if(colliderCount+neededColliders>colliderBudget){deferred.push({id:plan.id,reason:'collider-budget'});continue;}
       const members=plan.voxelKeys.map(k=>voxels.get(k)).filter(Boolean);
       if(members.length!==plan.voxelKeys.length){deferred.push({id:plan.id,reason:'missing-voxels'});continue;}
       const rigidBody=world.createRigidBody(makeBodyDesc(RAPIER,plan));
       const colliders=[];
-      for(const voxel of members){
-        const collider=world.createCollider(makeVoxelColliderDesc(RAPIER,voxel,plan.centerOfMass,extent),rigidBody);
+      if(mode==='cluster-aabb'){
+        const collider=world.createCollider(makeClusterColliderDesc(RAPIER,plan,members,extent),rigidBody);
         colliders.push(collider);colliderCount++;
+      }else{
+        for(const voxel of members){
+          const collider=world.createCollider(makeVoxelColliderDesc(RAPIER,voxel,plan.centerOfMass,extent),rigidBody);
+          colliders.push(collider);colliderCount++;
+        }
       }
       const entry={id:plan.id,plan,rigidBody,colliders,settled:false};
       active.set(plan.id,entry);
@@ -108,7 +134,7 @@ export function createRapierCollapseRuntime({RAPIER,world,maxBodies=16,maxCollid
   function stats(){
     let sleeping=0;
     for(const entry of active.values())if(entry.rigidBody.isSleeping?.())sleeping++;
-    return {activeBodies:active.size,activeColliders:colliderCount,sleepingBodies:sleeping,bodyBudget,colliderBudget};
+    return {activeBodies:active.size,activeColliders:colliderCount,sleepingBodies:sleeping,bodyBudget,colliderBudget,colliderMode:mode};
   }
 
   return {spawn,step,snapshot,stats,clear};
