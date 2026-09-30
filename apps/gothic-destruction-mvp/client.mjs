@@ -218,13 +218,18 @@ function animateProjectile(actor,result){
   return new Promise(resolve=>{
     const start=actor.shot.origin,v0=actor.shot.velocity,flight=Math.max(.05,result.flight?.time||.3),visualDuration=1.1;
     projectile.visible=true;
-    if(trail){scene.remove(trail);trail.geometry.dispose();}
+    if(trail){scene.remove(trail);trail.geometry.dispose();trail=null;}
+    trail=new THREE.Line(new THREE.BufferGeometry(),trailMat);scene.add(trail);
     const points=[],started=performance.now();
     function frame(now){
       const u=Math.min(1,(now-started)/(visualDuration*1000)),t=flight*u,e=.5*9.81*t*t;
       projectile.position.set(start.x+v0.x*t,start.y+v0.y*t-e,start.z+v0.z*t);points.push(projectile.position.clone());
-      if(points.length>2){trailGeom.setFromPoints(points.slice(-48));trail=new THREE.Line(trailGeom.clone(),trailMat);scene.add(trail);}
-      if(u<1)requestAnimationFrame(frame);else{projectile.visible=false;resolve();}
+      if(points.length>2)trail.geometry.setFromPoints(points.slice(-48));
+      if(u<1)requestAnimationFrame(frame);else{
+        projectile.visible=false;
+        setTimeout(()=>{if(trail){scene.remove(trail);trail.geometry.dispose();trail=null;}},280);
+        resolve();
+      }
     }
     requestAnimationFrame(frame);
   });
