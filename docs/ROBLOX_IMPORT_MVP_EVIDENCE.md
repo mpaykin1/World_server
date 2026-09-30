@@ -41,3 +41,13 @@ A robust Roblox migration should translate **game systems and intent**, not mere
 `RBXLX -> typed IR -> asset manifest -> semantic behavior plan -> Golden runtime adapters -> game-specific implementation -> normal World Server quality gates`.
 
 This evidence intentionally preserves both the failed parser assumption and the successful fix so future agents can avoid repeating it.
+
+## Playable MVP release failure found and repaired
+
+During the exact-head release gate, `Golden Standard` rejected the branch with `world registry contains encoding corruption`.
+The playable app itself was not the failing component: a Windows PowerShell inline script had converted four newly added Cyrillic registry strings into literal `?` characters before commit.
+
+Root cause: human-readable UTF-8 metadata was passed through a shell/code-page boundary instead of a UTF-8-preserving write path.
+Repair: rewrite the affected registry fields through the GitHub UTF-8 contents API and keep the existing Golden corruption gate enabled.
+Prevention: generated release metadata with non-ASCII text must use a UTF-8-preserving file/API path; never weaken the `???` fail-closed check to make a release pass.
+
