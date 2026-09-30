@@ -2,7 +2,7 @@ World Server - Third Party Notices
 
 three
 Upstream: https://github.com/mrdoob/three.js
-Pinned release: r186 / package version 0.186.1
+Pinned release: r160 / package version 0.160.0
 License: MIT
 Copyright © 2010-2026 three.js authors
 
