@@ -223,5 +223,62 @@
     "noPrivateDataScraping": true,
     "citedFactsOnlyForPersonalization": true,
     "optOutStopsContact": true
-  }
+  },
+  "seedProspects": [
+    {
+      "id": "impact-hub-tbilisi",
+      "company": "Impact Hub Tbilisi",
+      "location": "Tbilisi, Georgia",
+      "sector": "Coworking / Social Impact",
+      "campaignId": "ngo_programs",
+      "publicFact": "Official site describes a Tbilisi coworking community, social-impact programs, collaboration opportunities, events and meetups.",
+      "sourceUrl": "https://tbilisi.impacthub.net/",
+      "observedDate": "2026-09-30",
+      "status": "research-candidate"
+    },
+    {
+      "id": "scalable-solutions",
+      "company": "Scalable Solutions",
+      "location": "Tbilisi, Georgia",
+      "sector": "Information Technology & Services",
+      "campaignId": "private_workshops",
+      "publicFact": "A public careers page lists an HR Director role for Remote / Tbilisi and describes the company as building blockchain and digital-asset infrastructure.",
+      "sourceUrl": "https://scalablesolutions.io/careers/vacancy/p5x42o535y0msvc9xc6l8o52",
+      "observedDate": "2026-09-30",
+      "status": "research-candidate"
+    },
+    {
+      "id": "creative-education-studio",
+      "company": "Creative Education Studio",
+      "location": "Tbilisi, Georgia",
+      "sector": "Education",
+      "campaignId": "schools_colleges",
+      "publicFact": "Official site describes a Tbilisi creative media school focused on Music and Design with practical courses.",
+      "sourceUrl": "https://www.ces.ge/?lang=eng",
+      "observedDate": "2026-09-30",
+      "status": "research-candidate"
+    },
+    {
+      "id": "sinc-georgia",
+      "company": "SiNC — Social Innovation & Entrepreneurship Center",
+      "location": "Tbilisi, Georgia",
+      "sector": "NGO / Social Innovation",
+      "campaignId": "ngo_programs",
+      "publicFact": "Official site says SiNC runs training courses, workshops, bootcamps, mentoring and youth/social-innovation programs in Tbilisi and Georgia.",
+      "sourceUrl": "https://www.sinc.org.ge/en",
+      "observedDate": "2026-09-30",
+      "status": "research-candidate"
+    },
+    {
+      "id": "droni",
+      "company": "Youth Association DRONI",
+      "location": "Tbilisi, Georgia",
+      "sector": "NGO / Youth Development",
+      "campaignId": "ngo_programs",
+      "publicFact": "Official site describes educational and youth-development work including civil society, conflict resolution, human rights and intercultural relations.",
+      "sourceUrl": "https://droni.org/",
+      "observedDate": "2026-09-30",
+      "status": "research-candidate"
+    }
+  ]
 }
