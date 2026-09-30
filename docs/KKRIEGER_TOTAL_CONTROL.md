@@ -141,3 +141,16 @@ Krieger Archaeology
 ```
 
 The goal is not to preserve Krieger forever as a monolith. The goal is to understand it well enough that World Server can deliberately reuse, adapt or independently reimplement each valuable idea.
+
+
+## 2026-09-30: physical-iPhone failure changes the Level Lab roadmap
+
+Black-screen recovery was not the end of the problem. The physical iPhone showed that Level Lab v1 is visually primitive, has no visible first-person weapon, and produces no visible FIRE effect.
+
+Confirmed reasons: the lab is mainly `Mesh_Cube + GenMesh::Add`; its material is a minimal renderer-survival material; its reset path calls `KKriegerGame::Flush()` and destroys `WeaponOptics/WeaponShot/WeaponExplode`; its isolated paint path clears native `MeshJobs/EffectJobs`.
+
+Therefore v1 is retained only as a renderer/collision/viewport harness. It is not the product architecture and must not be “improved” merely by adding more cubes.
+
+World Server invariant: preserve the native weapon/effect resource chain and move level replacement to the scene/operator boundary. Next path is KX archaeology -> Observatory -> Native Geometry/Material/Scene Labs -> Weapon Lab -> Native Level Lab v2.
+
+Detailed postmortem: [KKRIEGER_LEVEL_LAB_POSTMORTEM_2026-09-30.md](KKRIEGER_LEVEL_LAB_POSTMORTEM_2026-09-30.md)
