@@ -175,3 +175,30 @@ Direct user testing confirmed the combined Meta5 direction is successful overall
 The canonical action-deck contract is now: **five usable choices -> consume one -> immediately fill exactly that slot with one logical successor -> again five usable choices**. Do not wait for all five original cards to be consumed.
 
 The `Идея` action also has an unresolved physical-device interaction defect. Backend acceptance of `idea` is not sufficient proof of a fix; close only after physical iPhone touch evidence through selection, modal, live AI response/retry, YES and rendered Idea-object.
+
+
+## Meta6 — видимые живые связи между объектами
+
+Новый отдельный MVP опубликован здесь:
+
+https://mpaykin1.github.io/meta6/
+
+Полный handoff:
+
+`docs/META6_LIVING_RELATIONS_MVP_2026-09-30.md`
+
+Meta6 не изменяет Meta5. Она добавляет relation-engine: совместимые world-space объекты, размещённые рядом, создают persistent relation с отдельной анимацией, one-time causal effect и отображением в локальном отчёте.
+
+Канонический новый визуальный принцип:
+
+**объект A → видимая анимированная связь → объект B → наблюдаемое последствие.**
+
+Первый обязательный набор связей:
+- лес ↔ город;
+- вулкан → город;
+- энергия → город;
+- река → поля;
+- дорога ↔ город;
+- огонь → лес.
+
+Meta6 также исправляет action-loop: после использования одной карточки немедленно заменяется ровно этот slot логическим successor, а не ожидается расходование всей пятёрки.
