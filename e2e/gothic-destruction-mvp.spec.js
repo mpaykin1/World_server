@@ -28,7 +28,8 @@ async function fireAndProveMotion(page,target){
   expect(moved).toBeTruthy();
   expect(Math.hypot(moved.position.x-body.position.x,moved.position.y-body.position.y,moved.position.z-body.position.z)).toBeGreaterThan(.01);
   expect(later.physics.activeBodies).toBeLessThanOrEqual(12);
-  expect(later.physics.activeColliders).toBeLessThanOrEqual(1800);
+  expect(later.physics.activeColliders).toBeLessThanOrEqual(32);
+  expect(later.physics.colliderMode).toBe('cluster-aabb');
   expect(later.shots).toBe(before.shots+1);
 }
 
@@ -41,6 +42,8 @@ test('public Gothic Destruction MVP shows and physically destroys tower plus via
   expect(initial.tower.voxels).toBeGreaterThan(200);
   expect(initial.viaduct.voxels).toBeGreaterThan(200);
   expect(initial.rapier.version).toBe('0.21.0');
+  expect(initial.physics.colliderMode).toBe('cluster-aabb');
+  expect(initial.quality.physicsHz).toBeGreaterThanOrEqual(24);
   expect((initial.viewport.canvas.w*initial.viewport.canvas.h)/(initial.viewport.w*initial.viewport.h)).toBeGreaterThan(.92);
 
   await fireAndProveMotion(page,'tower');
