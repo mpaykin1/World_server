@@ -175,3 +175,17 @@ Meta5 browser E2E на viewport 390×844 также получил:
 Главный reusable success:
 
 **glyph UI + precise spatial input + animated graphics + live server AI работают как одна цепочка, при этом старые успешные версии не затронуты.**
+
+
+## User feedback after live use — superseding caveat
+
+After the user tested Meta5 directly, the overall result remained strongly positive, but two defects were found and must be treated as open P0 issues:
+
+1. `人 Идея` does not complete the expected interaction path on the user's device.
+2. A consumed action card stays disabled until all five cards are used; the required UX is immediate slot-by-slot replenishment with the next logical build/development.
+
+The detailed diagnosis, confirmed code cause for the deck issue, production `idea` backend smoke, uncertainty boundary for the touch defect, and regression checklist are recorded in:
+
+`docs/META5_USER_FEEDBACK_SUCCESS_FAILURES_2026-09-30.md`
+
+Do not call these two points fixed merely because synthetic browser tests or the AI endpoint pass. The Idea defect requires end-to-end physical-touch proof; deck replacement requires a different continuously replenished action-loop.
