@@ -62,6 +62,11 @@ jobs:
         run: node scripts/verify-cloudflare-stack.cjs "${{ steps.deploy.outputs.url }}" "$SOURCE_SHA"
       - name: Install Chromium + WebKit
         run: npx playwright install --with-deps chromium webkit
+      - name: Verify Cube World Evolution on desktop + iPhone
+        if: steps.authority.outputs.configured == 'true'
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ steps.deploy.outputs.url }}
+        run: npx playwright test e2e/cube-world-evolution.spec.js --project=desktop-chromium --project=mobile-webkit --retries=2
       - name: Verify Roblox Gothic Rocks MVP on desktop + iPhone
         if: steps.authority.outputs.configured == 'true'
         env:
