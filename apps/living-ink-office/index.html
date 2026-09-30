@@ -39,7 +39,7 @@
       const w=this.canvas.clientWidth||innerWidth||1280, h=this.canvas.clientHeight||innerHeight||720;
       this.DPR=Math.min((typeof devicePixelRatio!=='undefined'?devicePixelRatio:1)||1,2);
       this.W=w; this.H=h; this.canvas.width=Math.round(w*this.DPR); this.canvas.height=Math.round(h*this.DPR);
-      this.ctx.setTransform(this.DPR,0,0,this.DPR,0,0); this.F=Math.min(w,h)*1.13;
+      this.ctx.setTransform(this.DPR,0,0,this.DPR,0,0); this.F=w<h?Math.min(h*.86,w*1.65):Math.min(w,h)*1.13;
       this.buildPaper();
     }
     buildPaper(){
@@ -108,7 +108,7 @@
       return {...this.stats};
     }
     _inkLine(d,fade){
-      const c=this.ctx;c.save();c.lineCap='round'; const passes=d.lod===0?3:2;
+      const c=this.ctx;c.save();c.lineCap='round'; const passes=d.lod===0?2:1;
       for(let i=0;i<passes;i++){
         const jx=(hash(this.seed,d.seed,i,1)-.5)*(d.lod===0?.9:.55),jy=(hash(this.seed,d.seed,i,2)-.5)*(d.lod===0?.9:.55);
         c.globalAlpha=d.alpha*fade*(.40+hash(this.seed,d.seed,i,3)*.16); c.strokeStyle=d.color;
@@ -116,7 +116,7 @@
       } c.restore();
     }
     _inkPoly(d,fade){
-      const c=this.ctx;c.save(); const passes=d.lod===0?4:2;
+      const c=this.ctx;c.save(); const passes=d.lod===0?2:1;
       for(let i=0;i<passes;i++){
         c.globalAlpha=d.alpha*fade*(.30+hash(this.seed,d.seed,i,9)*.12);c.fillStyle=d.color;c.beginPath();
         d.pts.forEach((p,k)=>{const j=(hash(this.seed,d.seed+i,k,10)-.5)*(d.lod===0?.7:.35);if(k===0)c.moveTo(p.x+j,p.y-j);else c.lineTo(p.x+j,p.y-j);});
@@ -124,7 +124,7 @@
       } c.restore();
     }
     _inkBlob(d,fade){
-      const c=this.ctx;c.save();const passes=d.type==='shadow'?4:(d.lod===0?7:4);
+      const c=this.ctx;c.save();const passes=d.type==='shadow'?2:(d.lod===0?3:2);
       for(let i=0;i<passes;i++){
         c.globalAlpha=d.alpha*fade*(d.type==='shadow'?.11:.12+hash(this.seed,d.seed,i,12)*.07);c.fillStyle=d.color;c.beginPath();
         const ox=(hash(this.seed,d.seed,i,13)-.5)*d.rx*.11,oy=(hash(this.seed,d.seed,i,14)-.5)*d.ry*.11;
