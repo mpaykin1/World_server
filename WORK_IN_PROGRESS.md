@@ -979,3 +979,13 @@ Regression tests must cover canonical population arithmetic, worker bound, exact
 Registered on protected base `75bb69eab3d94f260ee8140075f48a4d1e2ed32e`. Implementation and tests in progress.
 
 ---
+
+---
+
+# 2026-09-27: ChatGPT and Qwen GitHub handoff
+
+Task: connect the existing OpenCode/Qwen cloud agent with ChatGPT's GitHub issue/PR review flow without a new scheduler, duplicate service or production runtime change.
+Baseline: master bca976629b0662e70b6d6e3d1092994fdef054a9. Owner: isolated feat/qwen-chatgpt-github-handoff-20260927. Files: QWEN.md, docs/AI_QWEN_COLLABORATION.md, scripts/qwen-handoff.cjs, test/qwen-handoff.test.js, the existing world-cloud-ai workflow, and this checkpoint.
+Progress: generated WORLD_AI_HANDOFF_V1 carries task, exact SHA and canonical context; owner-only /worldai remains access-gated; result carries WORLD_AI_RESULT_V1, actual model and exact SHA. Four focused handoff tests passed locally. No real Qwen call or credential presence is verified.
+Risks: owner secret may be missing and zero-cost model availability may change; actual fallback model must be attributed. Preserve Builder → Fleet PRE → Ocean → Fleet POST.
+Next: exact-branch CI and independent workflow review. Owner confirms/sets the existing secret and comments /worldai on a bounded issue to prove live roundtrip. No production deployment or player-visible readiness claimed.

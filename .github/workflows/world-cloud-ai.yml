@@ -146,6 +146,8 @@ jobs:
           Rules:
           - Work only inside this repository.
           - Inspect and reuse existing systems before adding anything new.
+          - Read AI_START_HERE.md, .ai/project-context-index.json, QWEN.md and docs/AI_QWEN_COLLABORATION.md; honor existing file/PR ownership and the canonical issue #80.
+          - Treat the generated WORLD_AI_HANDOFF_V1 as the task contract. Report the ACTUAL model used if Qwen was unavailable.
           - Fix root causes, not symptoms, and add regression protection when practical.
           - Preserve existing graphics, physics, animation, lighting, audio, textures and performance; do not simplify working visuals.
           - Prefer scalable production solutions with minimal manual steps.
@@ -157,8 +159,13 @@ jobs:
           - Run relevant tests while working when useful.
           WORLD_AI_PROMPT
           )"
+          TASK_FILE="${RUNNER_TEMP}/world-ai-task.txt"
+          printf '%s' "${TASK}" > "${TASK_FILE}"
+          HANDOFF_FILE="${RUNNER_TEMP}/world-ai-handoff.txt"
+          node scripts/qwen-handoff.cjs --task-file "${TASK_FILE}" > "${HANDOFF_FILE}"
           PROMPT_FILE="${RUNNER_TEMP}/world-ai-prompt.txt"
-          printf '%s\n\nRequested task:\n%s\n' "${PROMPT}" "${TASK}" > "${PROMPT_FILE}"
+          printf '%s\n\n' "${PROMPT}" > "${PROMPT_FILE}"
+          cat "${HANDOFF_FILE}" >> "${PROMPT_FILE}"
           node scripts/world-cloud-opencode-failover.cjs \
             --prompt-file "${PROMPT_FILE}" \
             --models-file "${WORLD_FREE_MODELS_FILE}"
@@ -246,9 +253,10 @@ jobs:
           TITLE="World Cloud AI: ${TASK}"
           TITLE="${TITLE:0:120}"
           BODY="$(cat <<EOF
-          Automated by World Cloud AI.
+          WORLD_AI_RESULT_V1 — automated candidate by World Cloud AI.
 
-          Model: ${MODEL} via zero-cost OpenRouter failover
+          ACTUAL_MODEL: ${MODEL} via zero-cost OpenRouter failover
+          HEAD_SHA: $(git rev-parse HEAD)
           Agent: OpenCode ${OPENCODE_VERSION}
           Verification: npm run check + desktop-ai:check + golden:check
           Source run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}
@@ -266,12 +274,30 @@ jobs:
           echo "Created ${PR_URL}"
 
       - name: Report result to issue
-        if: >-
-          steps.candidate.outputs.changed == 'true' &&
-          github.event_name == 'issue_comment' &&
-          steps.pr.outputs.url != ''
+        if: github.event_name == 'issue_comment' && success()
+        shell: bash
+        env:
+          PR_URL: ${{ steps.pr.outputs.url }}
+          CHANGED: ${{ steps.candidate.outputs.changed }}
+        run: |
+          set -euo pipefail
+          ISSUE="$(jq -r '.issue.number' "${GITHUB_EVENT_PATH}")"
+          if [[ "${CHANGED}" == "true" && -n "${PR_URL}" ]]; then
+            TESTS="npm run check + desktop-ai:check + golden:check passed in this workflow"
+            NEXT="Independent diff review + Fleet PRE; production not verified"
+          else
+            PR_URL="NONE — review-only / no patch"
+            TESTS="No patch produced; full verification step skipped"
+            NEXT="Review the agent log; create a bounded follow-up task if needed"
+          fi
+          gh issue comment "${ISSUE}" --body "$(printf 'WORLD_AI_RESULT_V1\nPR: %s\nHEAD_SHA: %s\nACTUAL_MODEL: %s\nTESTS: %s\nNEXT: %s' \
+            "${PR_URL}" "$(git rev-parse HEAD)" "${MODEL}" "${TESTS}" "${NEXT}")"
+      - name: Report failed collaboration run
+        if: github.event_name == 'issue_comment' && failure()
         shell: bash
         run: |
           set -euo pipefail
           ISSUE="$(jq -r '.issue.number' "${GITHUB_EVENT_PATH}")"
-          gh issue comment "${ISSUE}" --body "World Cloud AI finished and opened: ${{ steps.pr.outputs.url }}"
+          RUN_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          gh issue comment "${ISSUE}" --body "$(printf 'WORLD_AI_RESULT_V1\nSTATUS: FAILED\nRUN_URL: %s\nACTUAL_MODEL: UNVERIFIED\nNEXT: inspect the failing GitHub Actions step; check whether OPENROUTER_API_KEY is configured and whether a zero-cost model is live; never paste secrets here' "${RUN_URL}")"
+
