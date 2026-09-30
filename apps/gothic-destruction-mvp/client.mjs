@@ -24,7 +24,8 @@ const softwareRenderer=/swiftshader|llvmpipe|software/i.test(rendererName);
 const shadowsEnabled=!softwareRenderer;
 const maxDpr=softwareRenderer?.78:(coarse?1.12:1.45);
 const physicsHz=softwareRenderer?24:(coarse?32:48);
-const fragmentBudget=softwareRenderer?96:(coarse?160:220);
+const perShotFragmentBudget=softwareRenderer?56:(coarse?90:120);
+const activeFragmentBudget=softwareRenderer?112:(coarse?180:240);
 renderer.setPixelRatio(Math.min(devicePixelRatio||1,maxDpr));
 renderer.setSize(innerWidth,innerHeight);
 renderer.shadowMap.enabled=shadowsEnabled;
@@ -162,8 +163,8 @@ world.createCollider(groundCollider);
 
 const physics=createRapierCollapseRuntime({
   RAPIER,world,
-  maxBodies:fragmentBudget,
-  maxColliders:fragmentBudget,
+  maxBodies:activeFragmentBudget,
+  maxColliders:activeFragmentBudget,
   halfExtent:.445,
   colliderMode:'voxel',
 });
@@ -238,7 +239,7 @@ class StructureActor{
     const spawned=physics.spawnFragments(result.collapse,remaining,{
       impact:{point:result.flight.point,direction:result.flight.velocity},
       destroyed:result.damage?.destroyed||[],
-      maxFragments:fragmentBudget,
+      maxFragments:perShotFragmentBudget,
     });
     const dynamicKeys=new Set(spawned.spawned.map(s=>s.voxelKey).filter(Boolean));
     addFragmentVisuals(spawned.spawned);
@@ -467,7 +468,7 @@ window.GothicDestructionMVP={
       viaduct:{fired:actors.viaduct.fired,voxels:actors.viaduct.structure.voxels.length,fragments:actors.viaduct.fragmentIds.length},
       fragments:{count:bodies.filter(b=>b.kind==='voxel-fragment').length,bodies},
       physics:{...p},
-      quality:{softwareRenderer,rendererName,maxDpr,shadows:shadowsEnabled,physicsHz,fragmentBudget},
+      quality:{softwareRenderer,rendererName,maxDpr,shadows:shadowsEnabled,physicsHz,perShotFragmentBudget,activeFragmentBudget},
       rapier:RAPIER_PROVENANCE,
     };
   },
