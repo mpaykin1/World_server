@@ -133,6 +133,13 @@
       "status": "system",
       "kind": "hub"
     },
+    "voxel-art-render-mvp": {
+      "title": "Voxel Keep",
+      "visible": false,
+      "status": "quarantine",
+      "kind": "game",
+      "reason": "Purpose-built renderer MVP proving the existing World Server voxel baseline, Golden Painting/Quality and Universal Voxel Microdetail V2 in a playable collect-defend-portal loop. Kept out of the public catalog until production-link verification and full Golden gameplay-contract certification are complete."
+    },
     "dark-void-scene": {
       "title": "Dark Void Navigator",
       "visible": false,
