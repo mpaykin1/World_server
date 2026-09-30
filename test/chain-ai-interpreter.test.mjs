@@ -230,3 +230,62 @@ test('Glyph action prediction rejects actions outside the server allowlist befor
   assert.equal((await response.json()).error,'invalid_action_kind');
   assert.equal(called,false);
 });
+
+
+test('Glyph action prediction can return English without changing the Russian default', async () => {
+  let systemPrompt='', userMessage='';
+  const env=mkEnv();
+  env.AI.run=async (_model,input)=>{
+    systemPrompt=input.messages[0].content;
+    userMessage=input.messages[1].content;
+    return {response:JSON.stringify({
+      summary:'A forest may improve local ecology while creating new resource flows toward the city.',
+      immediate:['Residents may begin using the forest as a nearby resource and recreation area.'],
+      later:['Paths and exchange between the forest and nearby settlement could become more active.'],
+      risks:['Heavy use could put pressure on the forest edge.'],
+      surprise:'The forest could become a focal point for a new route or neighborhood.',
+      confidence:0.78
+    })};
+  };
+  const response=await handleAiInterpret(req({
+    text:'Predict the Forest action',
+    mode:'predict_action',
+    language:'en',
+    provider:'cloudflare',
+    action:{kind:'forest',name:'Forest',glyph:'木',location:'visible area x 40 y 20'},
+    worldContext:{turn:3,population:22,power:11,water:30,food:27,eco:44,budget:38,visible:{city:1,forest:0}}
+  }),env);
+  const body=await response.json();
+  assert.equal(response.status,200);
+  assert.equal(body.executed,false);
+  assert.equal(body.language,'en');
+  assert.match(body.prediction.summary,/forest/i);
+  assert.match(systemPrompt,/All natural-language strings must be in English/);
+  assert.match(userMessage,/"name":"Forest"/);
+});
+
+test('Glyph action prediction keeps Russian as the default language', async () => {
+  const env=mkEnv();
+  env.AI.run=async (_model,input)=>{
+    assert.match(input.messages[0].content,/All natural-language strings must be in Russian/);
+    return {response:JSON.stringify({
+      summary:'Лес, вероятно, улучшит экологию видимой области.',
+      immediate:['Жители могут чаще использовать лес.'],
+      later:['Может появиться новая связь с поселением.'],
+      risks:['Чрезмерное использование может ослабить край леса.'],
+      surprise:'Лес может стать причиной нового маршрута.',
+      confidence:0.66
+    })};
+  };
+  const response=await handleAiInterpret(req({
+    text:'Предсказать Лес',
+    mode:'predict_action',
+    provider:'cloudflare',
+    action:{kind:'forest',name:'Лес',glyph:'木',location:'видимая область'},
+    worldContext:{turn:1}
+  }),env);
+  const body=await response.json();
+  assert.equal(response.status,200);
+  assert.equal(body.language,'ru');
+  assert.match(body.prediction.summary,/Лес/);
+});
