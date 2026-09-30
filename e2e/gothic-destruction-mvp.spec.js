@@ -51,7 +51,7 @@ async function fireAndProveSeparation(page,target){
     if(after&&Math.hypot(after.position.x-body.position.x,after.position.y-body.position.y,after.position.z-body.position.z)>.06)independentlyMoved++;
   }
   expect(independentlyMoved).toBeGreaterThanOrEqual(Math.min(8,created.length));
-  expect(later.physics.activeBodies).toBeLessThanOrEqual(later.quality.fragmentBudget);
+  expect(later.physics.activeBodies).toBeLessThanOrEqual(later.quality.activeFragmentBudget);
   expect(later.physics.activeColliders).toBe(later.physics.activeBodies);
   expect(later.shots).toBe(before.shots+1);
 }
@@ -66,7 +66,8 @@ test('public Gothic MVP shatters tower and viaduct into independent voxel rigid 
   expect(initial.tower.voxels).toBeGreaterThan(200);
   expect(initial.viaduct.voxels).toBeGreaterThan(200);
   expect(initial.rapier.version).toBe('0.21.0');
-  expect(initial.quality.fragmentBudget).toBeGreaterThanOrEqual(96);
+  expect(initial.quality.perShotFragmentBudget).toBeGreaterThanOrEqual(56);
+  expect(initial.quality.activeFragmentBudget).toBeGreaterThanOrEqual(initial.quality.perShotFragmentBudget*2);
   expect((initial.viewport.canvas.w*initial.viewport.canvas.h)/(initial.viewport.w*initial.viewport.h)).toBeGreaterThan(.98);
 
   await fireAndProveSeparation(page,'tower');
