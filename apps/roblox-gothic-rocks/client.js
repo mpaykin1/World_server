@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { loadUniversalPlayer } from '../../shared/universal-player-character.mjs';
 
 const coarse=matchMedia('(pointer:coarse)').matches;
 const S=0.25, CHUNK=128*S, KEEP=coarse?0:1, BRIDGE_W=20*S, CITY_GROUND=-52*S;
@@ -77,10 +77,10 @@ function buildChunk(k){const g=new THREE.Group();g.userData.k=k;city.add(g);acti
 }
 function ensureChunks(x){const center=Math.floor((x+CHUNK/2)/CHUNK);for(let k=center-KEEP;k<=center+KEEP;k++)if(!chunkGroups.has(k))buildChunk(k);for(const [k,g] of [...chunkGroups])if(Math.abs(k-center)>KEEP){city.remove(g);chunkGroups.delete(k);for(let i=colliders.length-1;i>=0;i--)if(colliders[i].chunk===k)colliders.splice(i,1);}}
 
-const avatarRoot=new THREE.Group();scene.add(avatarRoot);let avatar=null,mixer=null,activeAction=null,actions={};
+const avatarRoot=new THREE.Group();scene.add(avatarRoot);let avatar=null,character=null;
 function fallbackAvatar(){const g=new THREE.Group();const body=new THREE.Mesh(new THREE.CylinderGeometry(.32,.36,1.15,8),new THREE.MeshStandardMaterial({color:0x6e7682,roughness:.7,metalness:.25}));body.position.y=.9;body.castShadow=true;g.add(body);const head=new THREE.Mesh(new THREE.SphereGeometry(.25,12,10),new THREE.MeshStandardMaterial({color:0xb9a88d,roughness:.8}));head.position.y=1.75;head.castShadow=true;g.add(head);avatarRoot.add(g);avatar=g;}
-function playAnim(kind){if(!mixer)return;const next=actions[kind]||actions.idle||Object.values(actions)[0];if(!next||next===activeAction)return;next.reset().fadeIn(.16).play();activeAction?.fadeOut(.16);activeAction=next;}
-async function loadAvatar(){try{const loader=new GLTFLoader();const [model,anim]=await Promise.all([loader.loadAsync('/assets/characters/kaykit-knight/model/Knight.glb'),loader.loadAsync('/assets/characters/kaykit-knight/animations/Rig_Medium_MovementBasic.glb')]);avatar=model.scene;avatar.scale.setScalar(.78);avatar.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});avatarRoot.add(avatar);mixer=new THREE.AnimationMixer(avatar);for(const clip of anim.animations){const n=clip.name.toLowerCase();const a=mixer.clipAction(clip);if(/idle/.test(n)&&!actions.idle)actions.idle=a;if(/walk/.test(n)&&!actions.walk)actions.walk=a;if(/run|sprint/.test(n)&&!actions.run)actions.run=a;}playAnim('idle');}catch(e){console.warn('[ROBLOX PORT] KayKit fallback',e);fallbackAvatar();}}
+function playAnim(kind){character?.play(kind);}
+async function loadAvatar(){try{character=await loadUniversalPlayer({parent:avatarRoot,scale:.78});avatar=character.object;state.avatar=character.id;character.play('idle',{fade:0});}catch(e){console.warn('[ROBLOX PORT] KayKit fallback',e);fallbackAvatar();}}
 
 const player={pos:new THREE.Vector3(0,routeY(0)+.05,0),vel:new THREE.Vector3(),yaw:Math.PI/2,pitch:-.08,onGround:true};
 let lookX=0,lookY=0;
@@ -125,7 +125,7 @@ function updateLighting(t){const phase=(t/90000)%1,night=Math.max(0,Math.sin((ph
 function updateVisibility(){const r=renderer.domElement.getBoundingClientRect(),area=Math.max(0,Math.min(innerWidth,r.right)-Math.max(0,r.left))*Math.max(0,Math.min(innerHeight,r.bottom)-Math.max(0,r.top));state.visibilityPercent=Number((100*area/(innerWidth*innerHeight)).toFixed(1));}
 
 let last=performance.now();
-function frame(now){requestAnimationFrame(frame);state.frames=(state.frames||0)+1;const dt=Math.min(.25,(now-last)/1000||.016);last=now;state.lastFrameDt=dt;window.GameGoldenStandard?.frame?.();updatePlayer(Math.min(.05,dt));updateCamera();updateHeldRock(now);updateProjectiles(dt);updateTrajectory();updateLighting(now);mixer?.update(dt);renderer.render(scene,camera);}
+function frame(now){requestAnimationFrame(frame);state.frames=(state.frames||0)+1;const dt=Math.min(.25,(now-last)/1000||.016);last=now;state.lastFrameDt=dt;window.GameGoldenStandard?.frame?.();updatePlayer(Math.min(.05,dt));updateCamera();updateHeldRock(now);updateProjectiles(dt);updateTrajectory();updateLighting(now);character?.update(dt);renderer.render(scene,camera);}
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);updateVisibility();});
 
 async function boot(){ensureChunks(0);await loadAvatar();updateHeldRock(performance.now());updateVisibility();window.GameGoldenStandard?.reportReady?.({walkable:true,collisions:true,grounding:true,playerSpawn:true,mouseLook:true,touchControls:coarse?true:window.GameGoldenStandard.state.touchControls,mobileReady:true});state.ready=true;statusEl.textContent=`ROBLOX→WORLD SERVER · ${state.visibilityPercent}% графики · F/кнопка — бросок`;setTimeout(()=>statusEl.style.opacity='.18',3400);loading.classList.add('hide');requestAnimationFrame(frame);}
