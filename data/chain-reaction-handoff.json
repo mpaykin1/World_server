@@ -104,5 +104,6 @@
     "do not replace live AI failures with fake forecasts",
     "do not reduce visible causal interactions to hidden stat changes",
     "add regression evidence and exact SHA for every claimed success"
-  ]
-}
+  ],
+  "new_chat_bootstrap": "docs/CHAIN_REACTION_NEW_CHAT_BOOTSTRAP_RU.md"
+}\n
