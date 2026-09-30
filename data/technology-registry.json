@@ -253,6 +253,22 @@
         "data/collective-brain/collective-brain-policy.json",
         "scripts/collective-brain-full.js"
       ]
+    },
+    "Living Watercolor 3D NPR": {
+      "percent": 90,
+      "status": "v2 MVP reference-gate PASS on canonical and mobile viewports; production merge/deploy verification pending",
+      "evidence": [
+        "shared/graphics/living-watercolor-3d.js",
+        "shared/graphics/living-watercolor-generators.js",
+        "shared/graphics/living-watercolor-reference-gate.js",
+        "apps/living-watercolor-3d/client.js",
+        "test/living-watercolor-3d.test.mjs",
+        "test/living-watercolor-3d-integration.test.mjs",
+        "test/living-watercolor-v2.test.mjs",
+        "docs/LIVING_WATERCOLOR_3D.md",
+        "docs/LIVING_WATERCOLOR_3D_MVP_SUCCESS.md"
+      ],
+      "note": "Fresh browser evidence crossed >=85 for all four approved references. Canonical 844x1055: house 90.5, tree 92.0, volcano 86.7, plant 85.8. Mobile 390x844: house 87.1, tree 93.0, volcano 90.1, plant 86.4. 12/12 focused tests pass. Keep diagnostic/non-production status until exact-head repository CI and deployment verification complete."
     }
   },
   "governanceCoveragePercent": 100,

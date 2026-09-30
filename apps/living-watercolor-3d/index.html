@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Living Watercolor 3D Lab</title><link rel="icon" href="data:,">
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f6f1e7;touch-action:none;font-family:system-ui,sans-serif}canvas{display:block;width:100%;height:100%}
+#label{position:fixed;left:50%;top:max(12px,env(safe-area-inset-top));transform:translateX(-50%);z-index:3;padding:8px 12px;border-radius:999px;background:rgba(246,241,231,.72);color:#24364f;font:700 12px system-ui;letter-spacing:.04em;pointer-events:none;backdrop-filter:blur(5px)}
+#hint{position:fixed;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:3;color:rgba(36,54,79,.55);font:11px system-ui;white-space:nowrap;pointer-events:none}#chooser{position:fixed;left:50%;bottom:max(42px,calc(env(safe-area-inset-bottom) + 42px));transform:translateX(-50%);z-index:4;display:flex;gap:6px}#chooser button{border:1px solid rgba(52,70,94,.22);background:rgba(246,241,231,.74);color:#34465e;border-radius:999px;padding:6px 9px;font:600 10px system-ui;backdrop-filter:blur(5px)}#chooser button.active{background:rgba(52,70,94,.16);border-color:rgba(52,70,94,.48)}
+</style>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.165.0/build/three.module.js"}}</script>
+<script src="/shared/graphics/golden-quality-director.js"></script>
+</head><body><div id="label">ДОМИК · WATERCOLOR V2</div><div id="chooser"><button>Все</button><button class="active">Дом</button><button>Дерево</button><button>Вулкан</button><button>Станция</button></div><div id="hint">двигай пальцем / мышью — акварель остаётся связной во времени</div><script type="module" src="./client.js"></script></body></html>

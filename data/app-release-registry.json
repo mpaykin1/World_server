@@ -192,6 +192,13 @@
       "status": "experimental",
       "kind": "prototype",
       "reason": "User-confirmed reusable mobile camera/input and procedural Canvas graphics reference. Preserved for internal reuse; not certified for the public catalog."
+    },
+    "living-watercolor-3d": {
+      "title": "Living Watercolor 3D Lab",
+      "visible": false,
+      "status": "diagnostic",
+      "kind": "diagnostic",
+      "reason": "Shared watercolor NPR technology lab. Reference gate PASS; kept diagnostic-only pending production release certification."
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",
