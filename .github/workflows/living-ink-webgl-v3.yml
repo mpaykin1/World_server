@@ -1,0 +1,58 @@
+name: Living Ink WebGL NPR v3
+
+on:
+  push:
+    branches:
+      - ai/chatgpt/living-ink-asqura-vertical-slice
+  pull_request:
+    branches: [master]
+    paths:
+      - 'apps/living-ink-office-v3/**'
+      - 'apps/living-ink-office/webgl-entry.mjs'
+      - 'shared/living-ink-webgl-*.mjs'
+      - 'scripts/build-living-ink-webgl.js'
+      - 'test/living-ink-webgl.test.js'
+      - 'e2e/living-ink-webgl.spec.js'
+      - 'third-party-manifest.json'
+      - 'THIRD_PARTY_NOTICES.txt'
+      - 'vendor/three-r160/**'
+      - '.github/workflows/living-ink-webgl-v3.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts || npm install
+      - name: Build autonomous real-mesh NPR artifact
+        run: npm run living-ink:webgl:build
+      - name: Focused architecture and license tests
+        run: |
+          node --test test/living-ink-webgl.test.js
+          node scripts/check-third-party-licenses.js
+      - name: Verify generated artifact is reproducible
+        run: git diff --exit-code -- apps/living-ink-office-v3/index.html
+      - name: Install browser engines
+        run: npx playwright install --with-deps chromium webkit
+      - name: Desktop Chromium proof
+        run: npx playwright test e2e/living-ink-webgl.spec.js --project=desktop-chromium --retries=1
+      - name: iPhone WebKit proof
+        run: npx playwright test e2e/living-ink-webgl.spec.js --project=mobile-webkit --retries=1
+      - name: Upload screenshots, traces and reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: living-ink-webgl-v3-evidence-${{ github.sha }}
+          path: |
+            test-results/
+            playwright-report/
+          if-no-files-found: warn
+          retention-days: 30
