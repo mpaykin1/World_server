@@ -2,6 +2,14 @@
 
 > Этот файл — постоянные правила для **всех AI-агентов** (Codex, OpenCode, и любых других). Нарушение правил считается ошибкой выполнения.
 
+## Специальный вход для Chain Reaction / Meta4–Meta6
+
+Если задача касается Meta4, Meta5, Meta6, «Цепной реакции», glyph-world, live AI forecast, action deck, procedural graphics или object relations, **перед изменениями обязательно** прочитать:
+
+`docs/CHAIN_REACTION_AI_HANDOFF_INDEX_RU.md`
+
+Этот index указывает канонический порядок чтения, живые ссылки, exact SHAs, подтверждённые успехи, открытые ограничения, regression rules и next vertical slice. Не начинать новый MVP с нуля и не переписывать работающие Meta4/5/6 без явной причины.
+
 ## 1. Ветки и защита `master`
 
 - `master` — защищённая стабильная ветка. Прямой `push` в `master` **запрещён**.
