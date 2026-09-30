@@ -256,7 +256,7 @@
     },
     "Living Watercolor 3D NPR": {
       "percent": 90,
-      "status": "house/tree/power-plant accepted; volcano smoke golden success; volcano body human-rejected and requires rebuild",
+      "status": "house/tree/power-plant accepted benchmarks; illustration-first volcano + volcano smoke accepted golden references",
       "evidence": [
         "shared/graphics/living-watercolor-3d.js",
         "shared/graphics/living-watercolor-generators.js",
@@ -268,9 +268,11 @@
         "docs/LIVING_WATERCOLOR_3D.md",
         "docs/LIVING_WATERCOLOR_3D_MVP_SUCCESS.md",
         "docs/LIVING_WATERCOLOR_VOLCANO_SMOKE_SUCCESS_2026-09-30.md",
-        "docs/LIVING_WATERCOLOR_VOLCANO_BODY_FAILURE_2026-09-30.md"
+        "docs/LIVING_WATERCOLOR_VOLCANO_BODY_FAILURE_2026-09-30.md",
+        "docs/LIVING_WATERCOLOR_VOLCANO_ILLUSTRATION_FIRST_SUCCESS_2026-09-30.md",
+        "shared/graphics/illustration-mass-modeler.js"
       ],
-      "note": "Human review supersedes the earlier all-four-success interpretation. Preserve volcano smoke v3 as golden. Treat the current volcano body as a negative example even though automated reference metrics previously passed >=85; human side-by-side approval is required for this style."
+      "note": "Human review now accepts the rebuilt Illustration-First volcano as SUCCESS / ETALON. Reuse the architecture: visual grammar -> painted masses -> painted void -> sparse semantic strokes -> hidden 3D scaffold -> watercolor compositor. The earlier radial-cone/technical-crater volcano remains a superseded negative reference."
     }
   },
   "governanceCoveragePercent": 100,
