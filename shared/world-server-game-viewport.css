@@ -55,5 +55,7 @@ canvas,[data-world-server-game-surface]{
   overflow:auto!important;
   overscroll-behavior:contain!important;
   touch-action:pan-y!important;
+  user-select:text!important;
+  -webkit-user-select:text!important;
   -webkit-overflow-scrolling:touch!important;
 }
