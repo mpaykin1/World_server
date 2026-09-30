@@ -10,9 +10,24 @@ test.describe('Living Ink ASQURA standalone vertical slice',()=>{
     expect(new Set(scene.people.map(p=>`${p.height.toFixed(3)}:${p.build.toFixed(3)}:${p.suit}:${p.accessory}`)).size).toBeGreaterThanOrEqual(3);
     expect(scene.actions).toEqual(expect.arrayContaining(['walk','sit','type','coffee']));
     expect(scene.lodLevels.length).toBeGreaterThanOrEqual(2);
+    expect(scene.qualitySystems).toHaveLength(10);
+    expect(scene.visualQualityProfile).toBe('asqura-quality-floor-v2');
+    expect(scene.renderer).toBe('world-space-3d-living-ink');
     expect(external).toEqual([]);
     const canvas=page.locator('#living-ink');await expect(canvas).toBeVisible();
     const box=await canvas.boundingBox();expect(box.width).toBeGreaterThan(300);expect(box.height).toBeGreaterThan(300);
+  });
+  test('supports illustration camera mode without replacing walkthrough navigation',async({page})=>{
+    await page.goto('/apps/living-ink-office/',{waitUntil:'domcontentloaded'});
+    await page.waitForFunction(()=>window.__livingInkScene?.qualitySystems?.length===10);
+    const button=page.locator('.li-frame');
+    await expect(button).toBeVisible();
+    await button.click();
+    await page.waitForFunction(()=>window.__livingInkScene?.cameraMode==='illustration');
+    const scene=await page.evaluate(()=>window.__livingInkScene);
+    expect(scene.cameraMode).toBe('illustration');
+    await button.click();
+    await page.waitForFunction(()=>window.__livingInkScene?.cameraMode==='walkthrough');
   });
   test('exposes measured runtime telemetry without inventing an FPS claim',async({page})=>{
     await page.goto('/apps/living-ink-office/',{waitUntil:'domcontentloaded'});
