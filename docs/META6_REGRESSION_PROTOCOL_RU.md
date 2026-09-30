@@ -171,3 +171,24 @@ Every future handoff should include:
 - [ ] если deployment queued/running/cancelled — не писать «готово» и не называть ссылку рабочей.
 
 Canonical failure analysis: `docs/DELIVERY_FAILURE_GITHUB_PAGES_404_2026-09-30.md`.
+
+
+## M. AI fallback / offline resilience
+
+Обязательно проверить:
+
+- [ ] prepared forecast отображается сразу до live AI response;
+- [ ] prepared development ideas отображаются;
+- [ ] live AI success заменяет prepared forecast;
+- [ ] network failure оставляет prepared fallback;
+- [ ] timeout оставляет prepared fallback;
+- [ ] wrong-language/unsupported-locale response оставляет prepared fallback;
+- [ ] fallback явно помечен PREPARED FALLBACK;
+- [ ] Retry Live AI доступен;
+- [ ] YES остаётся enabled при fallback;
+- [ ] NO = 0 mutations при fallback;
+- [ ] YES = exactly 1 primary action при fallback;
+- [ ] поздний stale AI response не перезаписывает закрытый/новый forecast modal.
+
+Source data: `data/chain-reaction-prepared-fallback-en.json`.
+Failure analysis: `docs/META6_EN_AI_UNAVAILABLE_FAILURE_2026-09-30.md`.

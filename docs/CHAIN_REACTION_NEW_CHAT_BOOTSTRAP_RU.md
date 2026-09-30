@@ -93,3 +93,12 @@ Meta6 proven primary relations:
 Не объявляй успехом то, что не проверено.
 
 ---
+
+Дополнительный обязательный resilience rule:
+
+- live AI недоступен -> не блокировать игру;
+- сразу показывать prepared forecast + prepared development ideas;
+- честно маркировать PREPARED FALLBACK;
+- YES остаётся доступным;
+- Retry Live AI не обязателен для продолжения;
+- prepared content никогда не выдавать за AI.

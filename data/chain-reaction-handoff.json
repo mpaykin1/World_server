@@ -37,7 +37,9 @@
     "docs/META6_TECHNICAL_ARCHITECTURE_RU.md",
     "docs/META6_AI_LESSONS_RU.md",
     "docs/META6_REGRESSION_PROTOCOL_RU.md",
-    "docs/DELIVERY_FAILURE_GITHUB_PAGES_404_2026-09-30.md"
+    "docs/DELIVERY_FAILURE_GITHUB_PAGES_404_2026-09-30.md",
+    "docs/META6_EN_AI_UNAVAILABLE_FAILURE_2026-09-30.md",
+    "docs/CHAIN_REACTION_AI_FALLBACK_CONTRACT_RU.md"
   ],
   "proven_invariants": [
     "fixed gameplay viewport",
@@ -121,5 +123,18 @@
       "expected marker"
     ],
     "rule": "Never report a public demo link as ready before live verification against the latest commit/version."
+  },
+  "prepared_ai_fallback": {
+    "enabled": true,
+    "language": "en",
+    "data": "data/chain-reaction-prepared-fallback-en.json",
+    "action_count": 25,
+    "policy": "Prepared forecast and prepared ideas are always available; live AI upgrades them when usable.",
+    "provenance_labels": [
+      "LIVE AI",
+      "PREPARED FORECAST",
+      "PREPARED FALLBACK"
+    ],
+    "continue_play_on_ai_failure": true
   }
 }
