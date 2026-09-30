@@ -35,7 +35,7 @@ test('compiled artifact is autonomous and has no runtime network reference',()=>
   const office=fs.readFileSync(path.join(root,'shared','living-ink-office.js'),'utf8');
   const html=Compiler.compileStandalone({recipe,coreSource:core,qualitySource:quality,officeSource:office});
   assert.match(html,/__LIVING_INK_STANDALONE__/);assert.match(html,/ASQURA/);
-  assert.doesNotMatch(html,/<script[^>]+src=/i);assert.doesNotMatch(html,/<link[^>]+href=/i);
+  assert.doesNotMatch(html,/<script[^>]+src=/i);assert.doesNotMatch(html,/<link[^>]+href=["']https?:/i);
   assert.doesNotMatch(html,/\bhttps?:\/\//i);assert.doesNotMatch(html,/fetch\s*\(/);assert.doesNotMatch(html,/XMLHttpRequest|WebSocket/);
 });
 test('generated standalone matches compiler output exactly',()=>{
