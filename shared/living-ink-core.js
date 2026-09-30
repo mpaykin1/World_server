@@ -67,7 +67,7 @@
       const cy=Math.cos(this.camera.yaw),sy=Math.sin(this.camera.yaw),cp=Math.cos(this.camera.pitch),sp=Math.sin(this.camera.pitch);
       const x1=dx*cy-dz*sy,z1=dx*sy+dz*cy,y2=dy*cp-z1*sp,z2=dy*sp+z1*cp;
       if(z2<.08) return null;
-      return {x:this.W*.5+(x1/z2)*this.F,y:this.H*.55-(y2/z2)*this.F,z:z2};
+      return {x:this.W*.5+(x1/z2)*this.F,y:this.H*.49-(y2/z2)*this.F,z:z2};
     }
     line(a,b,{width=.018,color=this.style.ink,alpha=.55,priority=1,seed=0}={}){
       const A=this.project(a),B=this.project(b); if(!A||!B) return;
@@ -87,6 +87,11 @@
       const P=this.project(p); if(!P)return; const scale=this.F/P.z;
       this.queue.push({type:'shadow',x:P.x,y:P.y,rx:rx*scale,ry:ry*scale,z:P.z+.01,lod:selectArtisticLod(P.z),color:this.style.ink,alpha,seed});
     }
+    wash(p,{rx=.7,ry=.28,color=this.style.wash,alpha=.12,priority=1,seed=0,blur=10}={}){
+      const P=this.project(p); if(!P)return; const lod=selectArtisticLod(P.z); if(priority<lod)return;
+      const scale=this.F/P.z;
+      this.queue.push({type:'wash',x:P.x,y:P.y,rx:rx*scale,ry:ry*scale,z:P.z+.015,lod,color,alpha,seed,blur});
+    }
     text(p,text,{size=.11,color=this.style.ink,alpha=.6,weight=700,priority=0}={}){
       const P=this.project(p);if(!P)return;const lod=selectArtisticLod(P.z);if(priority<lod)return;
       this.queue.push({type:'text',x:P.x,y:P.y,z:P.z,lod,text,size:clamp(size*this.F/P.z,5,72),color,alpha,weight});
@@ -100,7 +105,7 @@
       for(const d of this.queue){
         const fade=clamp(1-(d.z-8)/58,.08,1); this.stats[d.lod===0?'near':d.lod===1?'medium':'far']++;
         if(d.type==='line') this._inkLine(d,fade); else if(d.type==='poly') this._inkPoly(d,fade);
-        else if(d.type==='blob'||d.type==='shadow') this._inkBlob(d,fade); else this._text(d,fade);
+        else if(d.type==='wash') this._wash(d,fade); else if(d.type==='blob'||d.type==='shadow') this._inkBlob(d,fade); else this._text(d,fade);
       }
       const vg=this.ctx.createRadialGradient(this.W*.5,this.H*.46,Math.min(this.W,this.H)*.16,this.W*.5,this.H*.46,Math.max(this.W,this.H)*.8);
       vg.addColorStop(0,'rgba(255,255,255,0)'); vg.addColorStop(1,'rgba(64,54,43,.055)'); this.ctx.fillStyle=vg; this.ctx.fillRect(0,0,this.W,this.H);
@@ -124,11 +129,25 @@
     }
     _inkBlob(d,fade){
       const c=this.ctx;c.save();const passes=d.type==='shadow'?2:(d.lod===0?3:2);
+      if(d.type==='shadow') c.filter='blur(2.2px)';
       for(let i=0;i<passes;i++){
-        c.globalAlpha=d.alpha*fade*(d.type==='shadow'?.11:.12+hash(this.seed,d.seed,i,12)*.07);c.fillStyle=d.color;c.beginPath();
+        const gain=d.type==='shadow'?(.34+hash(this.seed,d.seed,i,12)*.10):(.12+hash(this.seed,d.seed,i,12)*.07);
+        c.globalAlpha=d.alpha*fade*gain;c.fillStyle=d.color;c.beginPath();
         const ox=(hash(this.seed,d.seed,i,13)-.5)*d.rx*.11,oy=(hash(this.seed,d.seed,i,14)-.5)*d.ry*.11;
         c.ellipse(d.x+ox,d.y+oy,d.rx*(.86+hash(this.seed,d.seed,i,15)*.15),d.ry*(.86+hash(this.seed,d.seed,i,16)*.15),0,0,TAU);c.fill();this.stats.drawCalls++;
       } c.restore();
+    }
+    _wash(d,fade){
+      const c=this.ctx;c.save();c.translate(d.x,d.y);c.scale(Math.max(.001,d.rx),Math.max(.001,d.ry));
+      c.filter=`blur(${Math.max(1,d.blur/Math.max(.5,d.rx))}px)`;
+      const passes=d.lod===0?3:2;
+      for(let i=0;i<passes;i++){
+        const ox=(hash(this.seed,d.seed,i,41)-.5)*.16,oy=(hash(this.seed,d.seed,i,42)-.5)*.16;
+        const g=c.createRadialGradient(ox,oy,0,ox,oy,1);
+        g.addColorStop(0,d.color);g.addColorStop(.55,d.color);g.addColorStop(1,'rgba(255,255,255,0)');
+        c.globalAlpha=d.alpha*fade*(.24+hash(this.seed,d.seed,i,43)*.12);c.fillStyle=g;c.beginPath();c.ellipse(ox,oy,1,1,0,0,TAU);c.fill();this.stats.drawCalls++;
+      }
+      c.restore();
     }
     _text(d,fade){const c=this.ctx;c.save();c.globalAlpha=d.alpha*fade;c.fillStyle=d.color;c.font=`${d.weight} ${d.size}px system-ui,-apple-system,Segoe UI,Arial,sans-serif`;c.textAlign='center';c.textBaseline='middle';c.fillText(d.text,d.x,d.y);c.restore();this.stats.drawCalls++;}
   }
