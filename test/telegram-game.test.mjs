@@ -77,7 +77,7 @@ function callback(id,data){return{update_id:id,callback_query:{
   id:'query-'+id,data,message:{chat}
 }};}
 function text(id,message){return{update_id:id,message:{chat,text:message}};}
-function env(){return{TELEGRAM_BOT_TOKEN:TOKEN,TELEGRAM_DB:new MockD1()};}
+function env(){return{TELEGRAM_BOT_TOKEN:TOKEN,TELEGRAM_DB:new MockD1(),TELEGRAM_MINIAPP_BETA_ENABLED:'true'};}
 
 test('canonical world uses repeatable seed and feasible choices',()=>{
   assert.deepEqual(initialWorld(42),initialWorld(42));
@@ -113,16 +113,48 @@ test('start sends new-world animation and seven controls, without AI calls',asyn
   assert.deepEqual(a.calls.map(x=>x.method),['sendAnimation']);
   assert.match(a.calls[0].payload.animation,/origin-\d\.mp4$/);
   assert.match(a.calls[0].payload.caption,/Новый мир создан/);
-  assert.equal(a.calls[0].payload.reply_markup.inline_keyboard.length,7);
+  assert.equal(a.calls[0].payload.reply_markup.inline_keyboard.length,8);
   assert.equal((await loadSession(e.TELEGRAM_DB,42)).lastUpdate,10);
   await post(e,a,start(10));
   assert.equal(a.calls.length,1,'Telegram retry must not double-send');
+});
+test('hidden beta cannot be opened or advertised unless production enables it',async()=>{
+  const e=env(),a=mockApi();e.TELEGRAM_MINIAPP_BETA_ENABLED='false';
+  await post(e,a,start(1));
+  const ordinary=a.calls.at(-1).payload;
+  assert(!ordinary.reply_markup.inline_keyboard.flat().some(x=>x.web_app));
+  await post(e,a,start(2,'/game'));
+  assert.equal(a.calls.at(-1).method,'sendMessage');
+  assert.match(a.calls.at(-1).payload.text,/проверку/);
+  assert(!a.calls.at(-1).payload.reply_markup?.inline_keyboard?.flat().some(x=>x.web_app));
+});
+test('/game opens the same approved Scratch graphics inside Telegram',async()=>{
+  const e=env(),a=mockApi();
+  assert.equal((await post(e,a,start(14,'/game'))).status,200);
+  assert.deepEqual(a.calls.map(x=>x.method),['sendMessage']);
+  const payload=a.calls[0].payload;
+  assert.match(payload.text,/Scratch/);
+  assert.equal(payload.reply_markup.inline_keyboard[0][0].web_app.url,
+    'https://world-server.mmmpaykin.workers.dev/apps/telegram-miniapp/');
+  assert.equal((await loadSession(e.TELEGRAM_DB,42)).lastUpdate,14);
+  await post(e,a,start(14,'/game'));
+  assert.equal(a.calls.length,1,'Duplicate /game must not resend');
+});
+test('graphical Mini App button is available after every playable turn',async()=>{
+  const e=env(),a=mockApi();await post(e,a,start(1));
+  const first=a.calls.find(x=>x.method==='sendAnimation').payload;
+  const graphical=first.reply_markup.inline_keyboard.flat().find(x=>x.web_app);
+  assert.equal(graphical.web_app.url,
+    'https://world-server.mmmpaykin.workers.dev/apps/telegram-miniapp/');
+  await post(e,a,callback(2,'tg2:0:next'));
+  const second=a.calls.at(-1).payload;
+  assert(second.reply_markup.inline_keyboard.flat().some(x=>x.web_app));
 });
 test('failed animation and image fall back to a playable text message',async()=>{
   const e=env(),a=mockApi({photoOk:false,animationOk:false});
   assert.equal((await post(e,a,start(10))).status,200);
   assert.deepEqual(a.calls.map(x=>x.method),['sendAnimation','sendPhoto','sendMessage']);
-  assert.equal(a.calls[2].payload.reply_markup.inline_keyboard.length,7);
+  assert.equal(a.calls[2].payload.reply_markup.inline_keyboard.length,8);
 });
 test('choice updates D1 once and stale buttons cannot replay mutations',async()=>{
   const e=env(),a=mockApi({photoOk:false,animationOk:false});

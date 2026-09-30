@@ -2,6 +2,7 @@
 import './supabase/functions/_shared/world-consequence-engine.js';
 export const engine = globalThis.WorldConsequenceEngine;
 export const MAX_INTENT = 600;
+export const MINIAPP_URL='https://world-server.mmmpaykin.workers.dev/apps/telegram-miniapp/';
 export const LABELS = Object.freeze({
   geothermal:'Геотермальная станция',tourism:'Туристический комплекс',
   volcanic_farm:'Вулканические фермы',solar:'Солнечная станция',
@@ -79,7 +80,7 @@ export function summary(world){
   return '⚡'+r.power+'  💧'+r.water+'  🌾'+r.food+
     '\n💰'+r.budget+'  🌳'+r.ecology+'  ❤️'+r.health;
 }
-export function view(world,notice=''){
+export function view(world,notice='',config={}){
   const offered=options(world);
   const building=world.projects.filter(p=>!p.active);
   const intro='🌍 ЦЕПНАЯ РЕАКЦИЯ — ЗЛОЙ ДЖИНН\nДень '+world.tick+
@@ -115,6 +116,9 @@ export function view(world,notice=''){
   }]);
   choices.push([{text:'⏩ Следующий день',callback_data:'tg2:'+world.revision+':next'}]);
   choices.push([{text:'✍️ Свой вариант',callback_data:'tg2:'+world.revision+':free'}]);
+  // Hidden beta must be explicitly enabled; a hidden registry entry alone is not an access check.
+  if(config.miniappEnabled===true)
+    choices.push([{text:'🎮 Графическая игра',web_app:{url:MINIAPP_URL}}]);
   choices.push([{text:'🔄 Новый мир',callback_data:'tg2:'+world.revision+':reset'}]);
   return {text:(notice?notice+'\n\n':'')+intro+
     (story?.last?'\n📜 '+story.last.title:'')+
