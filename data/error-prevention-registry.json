@@ -789,7 +789,21 @@
         "Vercel build injection defaults new game app entrypoints into the shell",
         "physical iOS requested through quality:real-devices"
       ],
-      "confirmedAt": "2026-09-30T10:05:00+04:00"
+      "confirmedAt": "2026-09-30T10:05:00+04:00",
+      "integrationLessons": [
+        "First exact-head Quality Regression run failed because the new viewport filenames became keyword context for an unrelated explicit-file agent task.",
+        "Root cause: scoped-task-compiler Level 1 allowed keyword/known-issue candidates even when the goal explicitly named a real target file.",
+        "Permanent fix: Level 1 now filters to explicit targets whenever explicit paths exist; broader context remains available at Level 2/3.",
+        "Do not weaken or delete the scoped-task-compiler regression test to make new platform systems pass."
+      ],
+      "integrationFailureEvidence": {
+        "workflow": "Quality Regression Lock",
+        "failedRunId": 36678143515,
+        "failedJobId": 109767534087,
+        "exactHead": "508863cf7fc130d567e1c78a38e8fffef4bca763",
+        "failingTest": "test/scoped-task-compiler.test.js: explicit target only at level 1",
+        "fix": "lib/scoped-task-compiler.js explicit-only Level 1 filter"
+      }
     }
   ],
   "confirmationProtocol": {
