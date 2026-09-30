@@ -365,3 +365,12 @@ https://mpaykin1.github.io/meta6/
 `data/chain-reaction-handoff.json`
 
 Manifest содержит live URLs, exact commits, proven invariants, relation types, known limits, required reading, agent rules и next vertical slice. Markdown-документы остаются source-of-truth для деталей; JSON — быстрый индекс для автоматизированных агентов.
+
+
+# 13. Delivery failure to learn from
+
+Обязательный release-process разбор:
+
+`docs/DELIVERY_FAILURE_GITHUB_PAGES_404_2026-09-30.md`
+
+Главное правило: repository file existence не доказывает live deployment. Публичная ссылка считается готовой только после deployment success + HTTP 200 + expected marker.
