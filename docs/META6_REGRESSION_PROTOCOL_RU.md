@@ -156,3 +156,18 @@ Every future handoff should include:
     relation proof:
     known blockers:
     next step:
+
+
+## L. Public delivery gate
+
+Перед отправкой пользователю любой новой публичной ссылки:
+
+- [ ] source commit существует;
+- [ ] hosting deployment завершён с success;
+- [ ] public URL отвечает HTTP 200;
+- [ ] response содержит version-specific marker;
+- [ ] baseline URL старой рабочей версии по-прежнему работает;
+- [ ] после последнего cosmetic/fix commit live proof повторён;
+- [ ] если deployment queued/running/cancelled — не писать «готово» и не называть ссылку рабочей.
+
+Canonical failure analysis: `docs/DELIVERY_FAILURE_GITHUB_PAGES_404_2026-09-30.md`.
