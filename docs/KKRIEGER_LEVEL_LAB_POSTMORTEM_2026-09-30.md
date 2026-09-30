@@ -44,7 +44,9 @@ WeaponExplode[][]
 WeaponTimer
 ```
 
-Therefore no first-person weapon can be displayed and FIRE has no authored shot operator to execute.
+`Flush()` is destructive, but deeper inspection found that `Exec_KKrieger_Events` can repopulate these arrays from authored KOp links when the root graph executes again. Therefore a permanent-null claim requires telemetry and the current Level Lab never proved the rebind.
+
+The guaranteed visual blocker is the later renderer isolation: it clears native `MeshJobs` and `EffectJobs` before paint, so a valid weapon or shot event can still be removed from the framebuffer. See `KKRIEGER_WEAPON_PIPELINE.md`.
 
 ### 4. Native weapon/effect jobs were also removed from rendering
 
@@ -53,7 +55,7 @@ The isolation paint path clears `MeshJobs`, `EffectJobs`, `PortalJobs` and `Sect
 ## Permanent World Server rules
 
 - Do not equate “uses Krieger renderer/classes” with “Krieger-quality graphics”.
-- Do not call destructive `KKriegerGame::Flush()` after weapon resources are populated unless they are explicitly restored.
+- Treat `KKriegerGame::Flush()` as destructive to weapon links; after it runs, explicitly prove `Exec_KKrieger_Events` rebound every required link.
 - Do not globally clear mesh/effect job queues in a product-level custom scene.
 - FIRE must be proven end-to-end: input -> game state -> non-null WeaponShot -> shot event -> render -> visible effect/hit.
 - Weapon visibility must be separately proven through non-null `WeaponOptics[current]` and framebuffer evidence.
