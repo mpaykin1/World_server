@@ -21,7 +21,7 @@ const result=esbuild.buildSync({
   legalComments:'none',
   banner:{js:'/*! three.js r186 / 0.186.1 - MIT - Copyright © 2010-2026 three.js authors. Full notice in THIRD_PARTY_NOTICES.txt and HTML source. */'}
 });
-const js=result.outputFiles[0].text.replace(/<\\/script/gi,'<\\\\/script');
+const js=result.outputFiles[0].text.split('</script').join('<\\/script');
 const notice=[
   'three.js r186 / 0.186.1',
   'MIT License — Copyright © 2010-2026 three.js authors.',
