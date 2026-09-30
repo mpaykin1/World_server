@@ -1,6 +1,7 @@
 // Sketch-first procedural geometry for Living Watercolor 3D v2.
 // The helpers clone/deform geometry and never mutate gameplay source meshes.
 import {stableSeed,hash01} from './living-watercolor-3d.js';
+import {createIllustrationMassModeler} from './illustration-mass-modeler.js';
 
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 
@@ -155,78 +156,63 @@ export function createWatercolorTree(THREE,{seed='tree',ink='#2e425d',wash='#98a
 
 export function createWatercolorVolcano(THREE,{seed='volcano',ink='#2e425d',wash='#aab3bd'}={}){
   const g=new THREE.Group();g.name='watercolor-volcano';
+  const modeler=createIllustrationMassModeler(THREE,{ink,wash});
 
-  const cone=mesh(
-    THREE,
-    volcanoGeometry(THREE,{seed,height:2.18,radius:2.65,segments:48,rings:11}),
-    stdMat(THREE,wash),
-    {name:'volcano-body'}
-  );
-  g.add(cone);
+  // Illustration-first: the visible volcano is composed from overlapping painted masses.
+  // There is no radial cone, torus crater, or technical topology in the active model.
+  const main=modeler.mass({
+    seed:seed+':main',width:5.25,height:2.34,topWidth:.72,depth:1.22,
+    color:wash,position:[0,0,0],outline:true,name:'volcano-main-mass'
+  });
+  g.add(main);
 
-  // Dark oval crater opening: large, soft, readable from the fixed illustration camera.
-  const crater=mesh(
-    THREE,
-    deformGeometryOrganic(
-      THREE,
-      new THREE.CircleGeometry(.76,42),
-      {seed:seed+':crater',amount:.028,scale:1.5,vertical:.25}
-    ),
-    inkMat(THREE,ink,.42),
-    {outline:false,skipWash:true,name:'volcano-crater'}
-  );
-  crater.position.set(0,2.205,.01);
-  crater.rotation.x=-Math.PI/2;
-  crater.scale.set(1.20,.82,1);
+  const left=modeler.mass({
+    seed:seed+':left',width:2.55,height:1.72,topWidth:.44,depth:.74,
+    color:'#97a3b0',opacity:.72,position:[-.92,.10,.18],outline:false,name:'volcano-left-pigment-mass'
+  });
+  g.add(left);
+
+  const right=modeler.mass({
+    seed:seed+':right',width:2.30,height:1.62,topWidth:.42,depth:.70,
+    color:'#9da8b4',opacity:.68,position:[.88,.14,.12],outline:false,name:'volcano-right-pigment-mass'
+  });
+  g.add(right);
+
+  const center=modeler.mass({
+    seed:seed+':center',width:1.72,height:1.40,topWidth:.30,depth:.46,
+    color:'#8f9aa8',opacity:.30,position:[.08,.18,.38],outline:false,name:'volcano-center-wash-mass'
+  });
+  g.add(center);
+
+  // The crater is an irregular painted void, not a Circle/Torus construction.
+  const crater=modeler.void({
+    seed:seed+':crater',rx:.67,rz:.34,opacity:.50,position:[0,2.18,.50],name:'volcano-painted-crater'
+  });
   g.add(crater);
 
-  // Irregular painted rim, deliberately not a clean technical ring.
-  const rim=mesh(
-    THREE,
-    deformGeometryOrganic(
-      THREE,
-      new THREE.TorusGeometry(.80,.085,9,48),
-      {seed:seed+':rim',amount:.032,scale:1.35,vertical:.20}
-    ),
-    inkMat(THREE,ink,.48),
-    {outline:false,skipWash:true,name:'volcano-rim'}
-  );
-  rim.position.y=2.205;
-  rim.rotation.x=Math.PI/2;
-  rim.scale.set(1.18,.88,1);
-  g.add(rim);
-
-  // The sketch is defined by a few broad, uneven dark channels — not many edges.
-  const channelDefs=[
-    [[-.48,2.08,.47],[-.88,1.42,.78],[-1.48,.72,1.08],[-2.20,.10,1.42]],
-    [[ .02,2.06,.58],[ .12,1.44,.98],[ .52,.78,1.30],[ .94,.10,1.56]],
-    [[ .54,2.04,.42],[ .98,1.45,.70],[1.52,.76,.98],[2.18,.10,1.24]]
+  // Only a few form-defining brush strokes explain the slopes.
+  const flows=[
+    [[-.42,2.04,.54],[-.70,1.56,.62],[-1.22,.92,.72],[-1.88,.16,.82]],
+    [[ .02,2.02,.58],[ .14,1.48,.70],[ .44,.82,.82],[ .78,.16,.92]],
+    [[ .46,2.00,.48],[ .80,1.50,.58],[1.28,.86,.66],[1.92,.16,.74]]
   ];
-  channelDefs.forEach((pts,i)=>{
-    g.add(createSemanticStroke(
-      THREE,
-      pts.map(p=>new THREE.Vector3(...p)),
-      {color:ink,radius:i===1?.060:.054,opacity:.64,seed:seed+':channel:'+i}
-    ));
-  });
+  flows.forEach((pts,i)=>g.add(modeler.stroke(pts,{
+    seed:seed+':flow:'+i,radius:i===1?.064:.058,opacity:.60,name:'volcano-flow-'+i
+  })));
 
-  // Two very soft secondary slope strokes help the broad painted mass without
-  // exposing mesh topology.
+  // Broken, pale secondary marks behave like brush remnants rather than mesh edges.
   const secondary=[
-    [[-1.38,1.18,-.58],[-1.72,.55,-.88],[-2.12,.12,-1.08]],
-    [[ 1.26,1.14,-.54],[ 1.62,.52,-.82],[ 2.08,.12,-1.02]]
+    [[-1.16,1.22,.28],[-1.52,.62,.34],[-2.10,.14,.40]],
+    [[ 1.08,1.16,.24],[ 1.48,.60,.30],[ 2.08,.14,.38]]
   ];
-  secondary.forEach((pts,i)=>{
-    g.add(createSemanticStroke(
-      THREE,
-      pts.map(p=>new THREE.Vector3(...p)),
-      {color:ink,radius:.038,opacity:.24,seed:seed+':secondary:'+i}
-    ));
-  });
+  secondary.forEach((pts,i)=>g.add(modeler.stroke(pts,{
+    seed:seed+':secondary:'+i,radius:.036,opacity:.20,name:'volcano-secondary-'+i
+  })));
 
+  g.userData.illustrationFirst=true;
+  g.userData.visualGrammar='mass+void+semantic-strokes';
   return g;
 }
-
 export function createWatercolorPlant(THREE,{seed='plant',ink='#2e425d',wash='#aab3bd'}={}){
   const g=new THREE.Group();g.name='watercolor-plant';
   const body=mesh(THREE,deformGeometryOrganic(THREE,new THREE.BoxGeometry(2.35,1.20,1.72,3,3,3),{seed:seed+':body',amount:.015}),stdMat(THREE,wash),{name:'plant-body'});body.position.y=.60;g.add(body);
