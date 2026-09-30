@@ -10,13 +10,14 @@ async function ready(page){
 async function fireAndProveMotion(page,target){
   await page.locator(`.target[data-target="${target}"]`).click();
   const before=await page.evaluate(()=>window.GothicDestructionMVP.stats());
+  const beforeIds=new Set(before.physics.bodies.map(b=>b.id));
   await page.locator('#fire').click();
   await page.waitForFunction(t=>{
     const s=window.GothicDestructionMVP?.stats?.();
     return s?.[t]?.fired===true&&s?.[t]?.dynamic>0&&s?.physics?.bodies?.length>0;
   },target,{timeout:15000});
   const first=await page.evaluate(()=>window.GothicDestructionMVP.stats());
-  const body=first.physics.bodies.at(-1);
+  const body=first.physics.bodies.find(b=>!beforeIds.has(b.id));
   expect(body).toBeTruthy();
   await page.waitForTimeout(700);
   const later=await page.evaluate(()=>window.GothicDestructionMVP.stats());
