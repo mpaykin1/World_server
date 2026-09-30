@@ -1,0 +1,6 @@
+World Server - Third Party Notices
+
+Living Ink / ASQURA vertical slice (2026-09-28):
+No third-party code or assets are embedded by this slice.
+
+This file is maintained separately from World Server's own license. Future imported dependencies must be listed in third-party-manifest.json and, when required, their notices reproduced here before release.
