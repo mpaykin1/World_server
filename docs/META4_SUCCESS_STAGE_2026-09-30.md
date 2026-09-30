@@ -264,3 +264,12 @@ Meta4 стала успешной не потому, что «добавили p
 Исходник сохранён в `apps/chain-reaction-procedural-krieger/index.html`, а полный learning record — в `docs/PROCEDURAL_KRIEGER_MVP_SUCCESS_2026-09-30.md`.
 
 Дальнейший вертикальный срез должен объединять spatial/causal свойства Meta4 с этим более удачным camera/input и procedural graphics feedback, а не заменять один успех другим.
+
+
+## 15. Meta5 продолжает этот успех, не заменяя Meta4
+
+Meta4 остаётся зафиксированной и неизменяемой успешной контрольной версией.
+
+Новая отдельная версия https://mpaykin1.github.io/meta5/ объединяет этот spatial/causal pattern с procedural graphics MVP и живым World Server AI. Полный handoff: `docs/META5_LIVE_AI_MERGE_SUCCESS_2026-09-30.md`.
+
+Сравнения и новые эксперименты должны использовать Meta4 как regression reference, а Meta5 — как следующую интеграционную ветку.
