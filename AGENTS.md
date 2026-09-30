@@ -240,3 +240,7 @@ Canonical machine-readable policy: `data/manual-task-completion-contract.json`; 
 `commit -> deployment success -> live HTTP 200 -> expected marker -> only then share as ready`.
 
 Если deployment queued/running/cancelled, статус только **COMMITTED/DEPLOYING**, но не **LIVE VERIFIED**. После любого нового commit предыдущая live-проверка считается устаревшей. Разбор ошибки: `docs/DELIVERY_FAILURE_GITHUB_PAGES_404_2026-09-30.md`.
+
+## AI fallback availability rule
+
+Для Chain Reaction live AI не может быть единственной причиной, по которой игра продолжает работать. Если provider/locale/network/timeout/parse не дают usable prediction, клиент обязан перейти на **prepared forecast + prepared development ideas**, честно пометить источник как PREPARED FALLBACK и оставить игровой YES-path доступным. Retry Live AI — дополнительная возможность, а не блокировка gameplay. Разбор: `docs/META6_EN_AI_UNAVAILABLE_FAILURE_2026-09-30.md`. Контракт: `docs/CHAIN_REACTION_AI_FALLBACK_CONTRACT_RU.md`.
