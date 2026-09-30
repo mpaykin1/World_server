@@ -244,3 +244,8 @@ Canonical machine-readable policy: `data/manual-task-completion-contract.json`; 
 ## AI fallback availability rule
 
 Для Chain Reaction live AI не может быть единственной причиной, по которой игра продолжает работать. Если provider/locale/network/timeout/parse не дают usable prediction, клиент обязан перейти на **prepared forecast + prepared development ideas**, честно пометить источник как PREPARED FALLBACK и оставить игровой YES-path доступным. Retry Live AI — дополнительная возможность, а не блокировка gameplay. Разбор: `docs/META6_EN_AI_UNAVAILABLE_FAILURE_2026-09-30.md`. Контракт: `docs/CHAIN_REACTION_AI_FALLBACK_CONTRACT_RU.md`.
+
+
+## Fixed game viewport is a release invariant
+
+Every playable web game must follow `docs/FIXED_GAME_VIEWPORT_CONTRACT_RU.md`. The HTML page itself must never scroll or rubber-band on mobile; drag belongs to the game camera/controls. Prefer `shared/fixed-game-viewport.js` or prove equivalent invariants. Physical iPhone confirmation is the final authority.
