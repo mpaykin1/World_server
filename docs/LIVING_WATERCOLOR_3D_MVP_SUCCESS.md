@@ -4,7 +4,7 @@ Date: 2026-09-30
 
 ## Result
 
-The sketch-first Living Watercolor 3D v2 MVP crossed the project reference-fidelity threshold for all four approved object classes on the canonical 844×1055 reference viewport and on the 390×844 mobile/iPhone-class viewport.
+The sketch-first Living Watercolor 3D v2 automated reference gate crossed the project threshold for all four object classes on the canonical and mobile viewports. **Subsequent human review supersedes that interpretation for the volcano body:** house, tree and power plant remain accepted successes; volcano smoke is accepted as a golden success; the current volcano body is visually rejected and requires rebuild.
 
 Measured fresh browser scores from the final tuning cycle:
 
@@ -56,4 +56,14 @@ Code commits that produced the passing cycle include `9e8fb289c2f5d338d67103c319
 
 ## Release posture
 
-The visual MVP has passed the internal >=85 reference-fidelity gate on both canonical and mobile viewports. Repository CI / deployment evidence must still be checked on the exact final branch head before merging to protected master or calling the production deployment verified.
+The automated gate passed on both canonical and mobile viewports, but that is no longer sufficient evidence of complete visual success. The current volcano body failed human review and must not be labeled successful until a rebuilt version passes both the metric gate and side-by-side human acceptance. Volcano smoke is explicitly preserved as a successful effect.
+
+
+## Human-review correction — 2026-09-30
+
+The prior table remains useful as **metric evidence**, but its volcano score must not be interpreted as artistic approval. Human review accepted the smoke and rejected the volcano body.
+
+- Success record: `docs/LIVING_WATERCOLOR_VOLCANO_SMOKE_SUCCESS_2026-09-30.md`
+- Failure record: `docs/LIVING_WATERCOLOR_VOLCANO_BODY_FAILURE_2026-09-30.md`
+
+This correction is intentionally preserved so future agents do not optimize to the metric while missing the visual gestalt.
