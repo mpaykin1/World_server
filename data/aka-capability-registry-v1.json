@@ -1,0 +1,32 @@
+{
+  "schema": "world-server-capability-registry/v1",
+  "capabilities": [
+    {
+      "id": "semantic-scene-contract",
+      "version": 1,
+      "status": "prototype",
+      "consumers": [
+        "KRIEGER_CLASS",
+        "INK",
+        "CUBE"
+      ],
+      "contract": {
+        "scene": {
+          "seed": "integer",
+          "objects": "array"
+        },
+        "object": {
+          "id": "string",
+          "kind": "string",
+          "position": "[x,y,z]",
+          "scale": "[x,y,z]",
+          "tags": "string[]"
+        }
+      },
+      "evidence": {
+        "tests": [],
+        "sha": null
+      }
+    }
+  ]
+}
