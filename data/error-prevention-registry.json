@@ -766,6 +766,34 @@
         "SCIENCE_RUN_072_H2.json"
       ],
       "confirmedAt": "2026-09-06T00:00:00.000Z"
+    },
+    {
+      "id": "voxel-destruction-glued-cluster-proxy",
+      "category": "physics",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "A visibly voxel-built destroyed section moves as one welded rigid chunk instead of cubes separating after impact.",
+      "rootCause": "A performance optimization represented an entire unsupported voxel component as one cluster-AABB Rapier rigid body; the test only proved gross body motion and never measured independent fragment separation.",
+      "protection": [
+        "Use bounded per-voxel rigid bodies when visible destruction semantics require fragmentation.",
+        "Recover performance with instanced rendering, fragment budgets, adaptive DPR/shadows/physics frequency and sleeping bodies; never by re-gluing visible debris.",
+        "e2e/gothic-destruction-mvp.spec.js must prove multiple unique voxel bodies and increasing pairwise spread after impact.",
+        "docs/GOTHIC_DESTRUCTION_MVP_FAILURE_ANALYSIS.md"
+      ]
+    },
+    {
+      "id": "graphics-first-mvp-diagnostic-hud-obstruction",
+      "category": "ui",
+      "severity": "release-blocker",
+      "status": "known",
+      "symptom": "Title, technology badge, selectors, status panels and secondary controls cover a large fraction of a graphics-first mobile viewport.",
+      "rootCause": "A diagnostic presentation leaked into the player-facing MVP, and the browser test checked only that controls were visible rather than bounding persistent HUD inventory and occupied screen area.",
+      "protection": [
+        "For the Gothic Destruction graphics MVP persistent HUD is exactly a center reticle plus one FIRE button.",
+        "Canvas must fill at least 98% of viewport width/height; fire button under 8% area; reticle under 1% area.",
+        "e2e/gothic-destruction-mvp.spec.js rejects legacy panel/selector/status elements.",
+        "docs/GOTHIC_DESTRUCTION_MVP_FAILURE_ANALYSIS.md"
+      ]
     }
   ],
   "confirmationProtocol": {
