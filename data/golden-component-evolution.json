@@ -1,6 +1,20 @@
 {
   "schemaVersion": "1.0.0",
-  "components": {},
+  "components": {
+    "gothic-voxel-fragmentation": {
+      "versions": [
+        {
+          "version": "v1",
+          "sha256": "cb510e127a7a17826af253d2b93feccd83fd4a63d1c63034b8dacb49dfcc6426",
+          "source": "shared/physics/rapier-collapse-runtime.mjs",
+          "canonical": "shared/golden-components/gothic-voxel-fragmentation/v1/rapier-collapse-runtime.mjs",
+          "status": "verified-candidate",
+          "createdAt": "2026-09-30T05:54:52.462Z"
+        }
+      ],
+      "activeVersion": "v1"
+    }
+  },
   "policy": {
     "immutableVersions": true,
     "wholeFileExactCopyOnly": true,
