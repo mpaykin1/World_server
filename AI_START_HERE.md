@@ -106,3 +106,10 @@
 ### Самая короткая версия для любого нового AI
 
 **Сначала прочитай `AI_START_HERE.md` + `.ai/project-context-index.json`. Для ручных изменений прочитай `CHATGPT_GAME_CONTROL.md`. Если пользователь просит изменить проект и прислать ссылку — не заканчивай отчётом при исправимом блокере; продолжай до свежепроверенной рабочей ссылки или настоящего owner-only `USER_ACTION_REQUIRED`. ВНО = Воспроизводимость + Независимость + Опровержение.**
+
+
+## Mandatory Game Viewport Lock (2026-09-30)
+
+Every released playable browser game uses the single canonical viewport runtime: `shared/world-server-game-viewport.js` + `shared/world-server-game-viewport.css`. Read `docs/GAME_VIEWPORT_LOCK.md` before changing mobile input, canvas sizing, renderer resize or orientation behavior.
+
+The invariant is: gameplay touch may move the game, but document movement must remain 0 px. New `apps/<game>/index.html` pages are protected by default through `scripts/inject-game-viewport-lock.js`; `GAME_VIEWPORT_LOCK_GATE` is release-blocking. Do not create another per-game viewport runtime. Physical-iPhone evidence outranks synthetic WebKit when they disagree.
