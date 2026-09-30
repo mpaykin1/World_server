@@ -275,12 +275,21 @@ controls.update();
 const raycaster=new THREE.Raycaster();
 const centerNdc=new THREE.Vector2(0,0);
 
-function crosshairActor(){
+function crosshairTarget(preferredKey=null){
   raycaster.setFromCamera(centerNdc,camera);
   const meshes=[];
   for(const actor of Object.values(actors))if(!actor.fired)meshes.push(...actor.staticGroup.children);
-  const hit=raycaster.intersectObjects(meshes,false)[0];
-  if(hit?.object?.userData?.actorKey)return actors[hit.object.userData.actorKey]||null;
+  const hits=raycaster.intersectObjects(meshes,false);
+  const preferred=preferredKey?actors[preferredKey]:null;
+  if(preferred&&!preferred.fired){
+    const preferredHit=hits.find(hit=>hit?.object?.userData?.actorKey===preferredKey);
+    if(preferredHit)return{actor:preferred,point:preferredHit.point.clone()};
+  }
+  const hit=hits[0];
+  if(hit?.object?.userData?.actorKey){
+    const actor=actors[hit.object.userData.actorKey];
+    if(actor&&!actor.fired)return{actor,point:hit.point.clone()};
+  }
   let best=null,bestDist=Infinity;
   for(const actor of Object.values(actors)){
     if(actor.fired)continue;
@@ -288,15 +297,14 @@ function crosshairActor(){
     const d=Math.hypot(p.x,p.y);
     if(p.z>=-1&&p.z<=1&&d<bestDist){best=actor;bestDist=d;}
   }
-  return best;
+  return best?{actor:best,point:best.impactPoint.clone()}:null;
 }
 
-function shotForActor(actor){
+function shotForTarget(actor,target){
   const start=camera.position.clone();
-  const target=actor.impactPoint.clone();
   const dx=target.x-start.x,dy=target.y-start.y,dz=target.z-start.z;
   const distance=Math.hypot(dx,dy,dz);
-  const t=Math.max(.16,distance/90);
+  const t=Math.max(.16,distance/92);
   return{
     origin:{x:start.x,y:start.y,z:start.z},
     velocity:{x:dx/t,y:dy/t+4.905*t,z:dz/t},
@@ -382,20 +390,23 @@ function updateDust(dt){
   });
 }
 
-let busy=false,shotCount=0,lastTarget='tower';
+let busy=false,shotCount=0,lastTarget='tower',lastError='';
 
 async function fireTarget(targetKey=null){
   if(busy)return false;
-  const actor=targetKey?actors[targetKey]:crosshairActor();
+  const target=crosshairTarget(targetKey);
+  const actor=target?.actor||null;
   if(!actor||actor.fired){
+    lastError='no-target';
     a11yStatus.textContent='Нет цели в прицеле';
     return false;
   }
   busy=true;
   fireBtn.disabled=true;
   lastTarget=actor.key;
+  lastError='';
   try{
-    const shot=shotForActor(actor);
+    const shot=shotForTarget(actor,target.point);
     const result=fireCannonAtStructure(actor.structure.voxels,shot,actor.options);
     if(!result.flight?.hit)throw new Error('Снаряд не попал в конструкцию');
     await animateProjectile(shot,result);
@@ -405,6 +416,7 @@ async function fireTarget(targetKey=null){
     a11yStatus.textContent=`${actor.name}: разлетелось ${spawned.fragmentCount} блоков`;
     return true;
   }catch(error){
+    lastError=String(error?.message||error);
     console.error('[GOTHIC MVP]',error);
     a11yStatus.textContent='Выстрел не выполнен';
     return false;
@@ -461,7 +473,7 @@ window.GothicDestructionMVP={
   stats(){
     const bodies=physics.snapshot(),p=physics.stats();
     return{
-      ready:true,busy,shots:shotCount,fps,lastTarget,
+      ready:true,busy,shots:shotCount,fps,lastTarget,lastError,
       viewport:{w:innerWidth,h:innerHeight,canvas:{w:renderer.domElement.clientWidth,h:renderer.domElement.clientHeight}},
       hud:{visible:[...document.querySelectorAll('[data-gameplay-hud]')].filter(el=>getComputedStyle(el).display!=='none').map(el=>el.dataset.gameplayHud)},
       tower:{fired:actors.tower.fired,voxels:actors.tower.structure.voxels.length,fragments:actors.tower.fragmentIds.length},
