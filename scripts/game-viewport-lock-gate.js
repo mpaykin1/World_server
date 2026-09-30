@@ -43,6 +43,8 @@ if(!bad){
 
   const vercel=JSON.parse(read('vercel.json'));
   if(!String(vercel.buildCommand||'').includes('inject-game-viewport-lock.js')) fail('Vercel build does not inject viewport lock');
+  const wrangler=JSON.parse(read('wrangler.jsonc'));
+  if(!String(wrangler.build?.command||'').includes('inject-game-viewport-lock.js')) fail('Cloudflare build does not inject viewport lock');
   const pkg=JSON.parse(read('package.json'));
   if(!String(pkg.scripts?.['release:gate']||'').includes('viewport:check')) fail('release:gate does not enforce viewport:check');
   if(!String(pkg.scripts?.build||'').includes('viewport:inject')) fail('build does not inject viewport lock');
