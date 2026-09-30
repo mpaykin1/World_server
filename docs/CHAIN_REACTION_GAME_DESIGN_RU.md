@@ -138,3 +138,16 @@ docs/CHAIN_REACTION_MOBILE_VIEWPORT_CONTRACT_RU.md
 Этот прототип доказал совместную работу fixed mobile viewport, world-space/screen-space преобразований, viewport-local placement, причинной миграции, viewport-local отчёта и последовательной выдачи новых действий. Дальнейшие реализации должны переносить эти свойства, а не переписывать прототип с нуля.
 
 Ограничение этапа: прогнозы внутри Meta4 пока локальные; production World Server AI существует отдельно. Следующий вертикальный шаг — подключить Meta4 UX к `/api/chain-ai` в prediction-only режиме, сохранив правило «NO не мутирует мир, YES создаёт ровно один объект».
+
+
+## Пользовательски подтверждённый MVP управления + процедурной графики — 30 сентября 2026
+
+Дополнительный успешный автономный прототип сохранён в:
+
+`apps/chain-reaction-procedural-krieger/index.html`
+
+Разбор причин успеха и правила повторного использования:
+
+`docs/PROCEDURAL_KRIEGER_MVP_SUCCESS_2026-09-30.md`
+
+Пользователь отдельно подтвердил два качества: по игровому пространству **удобно двигаться**, а действия дают **заметные графические элементы**. Этот этап закрепляет CameraController с pan/pinch/tap separation, world/screen transforms, procedural visible-chunk rendering и объектные Canvas renderers как обязательные reusable patterns. Не путать название прототипа с доказательством использования оригинального .kkrieger renderer: зафиксированный успех относится к UX перемещения и лёгкой процедурной графике.
