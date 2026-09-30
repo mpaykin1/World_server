@@ -29,6 +29,25 @@ test.describe('GAME_VIEWPORT_LOCK_GATE',()=>{
     expect(result.qa.checks.touchActionNone).toBe(true);
     expect(result.qa.checks.canvasCss).toBe(true);
     expect(result.qa.checks.drawingBuffer).toBe(true);
+    expect(result.qa.checks.webglViewport).toBe(true);
+  });
+
+  test('document touchmove is blocked but isolated scroll UI stays native',async({page})=>{
+    await page.setContent('<!doctype html><html><body><canvas id="game" style="width:100vw;height:100vh"></canvas><div id="modal" data-world-server-scroll style="position:fixed;inset:20px;overflow:auto"><div style="height:2000px"></div></div></body></html>');
+    await page.addStyleTag({path:path.resolve('shared/world-server-game-viewport.css')});
+    await page.addScriptTag({path:path.resolve('shared/world-server-game-viewport.js')});
+    await page.waitForFunction(()=>window.WorldServerGameViewport?.state.ready===true);
+    const result=await page.evaluate(()=>{
+      const game=document.querySelector('#game');
+      const modal=document.querySelector('#modal');
+      const blocked=new Event('touchmove',{bubbles:true,cancelable:true});
+      game.dispatchEvent(blocked);
+      const allowed=new Event('touchmove',{bubbles:true,cancelable:true});
+      modal.dispatchEvent(allowed);
+      return {gameBlocked:blocked.defaultPrevented,modalAllowed:!allowed.defaultPrevented};
+    });
+    expect(result.gameBlocked).toBe(true);
+    expect(result.modalAllowed).toBe(true);
   });
 
   test('production-shaped app receives the universal shell',async({page})=>{
