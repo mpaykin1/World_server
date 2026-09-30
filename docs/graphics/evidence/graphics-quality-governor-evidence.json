@@ -1,0 +1,73 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-09-30",
+  "target": "KRIEGER_CLASS",
+  "status": "MVP_STRUCTURAL_PROOF_REFERENCE_IN_PROGRESS",
+  "source": {
+    "worldServerBase": "9cc528d3f42d5bc3ce15dd46c5132004b8870fcc",
+    "kriegerStudied": "df9cae000f9f9ae8986661f3ed4b86a562baff89",
+    "upstreamKrieger": "3bf0ff017372e640e966c2785a4d95a998cec242"
+  },
+  "deterministicAB": {
+    "recipe": "bridge-vault-alpha",
+    "seed": 424242,
+    "noticeabilityScore": 100,
+    "minimumNoticeability": 85,
+    "primitiveFingerprint": "7861558b",
+    "enhancedFingerprint": "3e16cc98"
+  },
+  "structuralGovernor": {
+    "primitive": {
+      "passed": false,
+      "hardGates": {
+        "NEAR_OBJECT_GATE": false,
+        "MATERIAL_GATE": false,
+        "LIGHTING_GATE": false,
+        "ENVIRONMENT_GATE": false
+      }
+    },
+    "enhancedCandidate": {
+      "passed": true,
+      "hardGates": {
+        "NEAR_OBJECT_GATE": true,
+        "MATERIAL_GATE": true,
+        "LIGHTING_GATE": true,
+        "ENVIRONMENT_GATE": true
+      }
+    }
+  },
+  "referenceVisualGate": {
+    "status": "IN_PROGRESS",
+    "scores": {
+      "compositionDepth": 78,
+      "geometryDensity": 62,
+      "materialRichness": 58,
+      "lightingShadow": 72,
+      "nearCameraHero": 60,
+      "microdetail": 55,
+      "atmosphereReadability": 70
+    },
+    "note": "Manual quality-class comparison to the user-supplied Krieger portrait reference. No full Krieger-fidelity claim."
+  },
+  "deviceEvidence": {
+    "syntheticPortrait": {
+      "viewport": "390x844 CSS",
+      "http": 200,
+      "consoleErrors": 0,
+      "canvasCoverage": "100% CSS viewport"
+    },
+    "physicalIPhone": "USER_VERIFICATION_REQUIRED"
+  },
+  "performance": {
+    "mode": "on-demand",
+    "timing": "diagnostic-only; no physical-iPhone FPS claim",
+    "nominalTriangles": {
+      "primitive": 72,
+      "enhanced": 68480
+    },
+    "nominalDrawCalls": {
+      "primitive": 6,
+      "enhanced": 46
+    }
+  }
+}

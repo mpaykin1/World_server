@@ -979,3 +979,73 @@ Regression tests must cover canonical population arithmetic, worker bound, exact
 Registered on protected base `75bb69eab3d94f260ee8140075f48a4d1e2ed32e`. Implementation and tests in progress.
 
 ---
+
+
+---
+
+# 2026-09-30: Graphics Quality Governor / Krieger-class quality floor MVP
+
+Task: implement a real World Server Graphics Quality Governor that rejects primitive graphics and proves the same semantic scene improves under a Krieger-class candidate quality profile.
+Why: the prior Krieger Level Lab reached non-black 3D but remained dominated by simple boxes, flat materials, weak local-light interaction, and low semantic detail; the system lacked a hard visual-quality floor.
+Current state: World Server already has visual-quality policies, semantic-detail/material/PBR helpers, golden gates, and a successful procedural graphics MVP, but no scene-level non-compensating hard gates for near object, material, lighting, environment, semantic detail, style-aware primitive detection, or deterministic quality report.
+Target: reusable library + deterministic tests + small portrait-capable A/B WebGL MVP using one SceneRecipe/seed/camera/FOV and quality=primitive vs quality=krieger_class, plus evidence and teaching docs.
+Affected systems: lib graphics-quality governor, shared graphics runtime, one isolated app, tests/e2e, capability/knowledge docs, release registry only after gates.
+Risks: greenwashing by triangle count, style discrimination, random noise instead of semantic detail, local-light claims without nearby geometry response, mobile viewport regressions, GPU overload, duplicate quality stack.
+Exact patch plan: implement style-aware metrics and four hard gates; add same-recipe compiler with semantic macro/meso/micro tags; build WebGL2 A/B scene with richer silhouettes/material variation/point lights/near-camera prop and debug overlay; add deterministic/unit/browser tests; record Krieger provenance and Level Lab failure lesson; run focused/full/golden checks and fresh live verification before any link.
+Required tests: primitive expected hard-gate failures; enhanced measurable improvements; triangle-count-only anti-cheat; giant flat fallback detector; deterministic report; StyleProfile rule changes; renderer/browser smoke; portrait viewport sanity; A/B generation difference.
+What to do with patch: isolated branch -> commit -> push -> PR to protected master; deploy public MVP separately without replacing /kkrieger/.
+Progress: repository and current Krieger handoff/known issues read; clean off-Desktop worktree created from master 9cc528d3; implementation next.
+Next action: inspect existing graphics runtime/policies, implement governor and MVP, run evidence.
+Completion: Quality Governor catches the primitive class honestly; enhanced candidate reaches >=85% user-visible quality target without faking gates; fresh public portrait link passes release verification.
+Final evidence: pending implementation/tests/browser/deploy/user device verification.
+
+
+## 2026-09-30 Graphics Quality Governor — implementation evidence update
+
+Current progress:
+- reusable style-aware Graphics Quality Governor and Primitive Graphics Detector implemented;
+- same-recipe/same-seed/same-camera A/B compiler implemented;
+- portrait WebGL2 diagnostic MVP implemented with primitive and enhanced candidate profiles;
+- four non-compensating hard gates implemented: NEAR_OBJECT, MATERIAL, LIGHTING, ENVIRONMENT;
+- 8/8 focused unit regressions PASS;
+- browser smoke PASS on synthetic portrait 390x844 and desktop 1280x800 with zero console/page errors;
+- A/B framebuffer evidence is real: the buttons change actual WebGL pixels, not just labels;
+- same A/B framebuffer resolution is now enforced;
+- local A/B noticeability proxy = 100/100, above the required 85 threshold;
+- full npm run check PASS;
+- Golden Standard PASS;
+- quality:impact completed;
+- quality:diff completed.
+
+Important honesty boundary:
+- the enhanced candidate passes the configured structural governor gates, but the current screenshot is still below the canonical Krieger visual-reference thresholds in geometry density, material richness, lighting/shadow depth, near-camera hero detail and microdetail;
+- therefore the UI says KRIEGER-CLASS CANDIDATE and REFERENCE FIDELITY: USER VERIFICATION REQUIRED;
+- physical iPhone performance/fidelity is NOT TESTED yet and must not be claimed;
+- no Krieger room/weapon/creature/texture/assets were copied; this MVP is an independent WebGL2 proof informed by verified Krieger architecture lessons.
+
+Baseline/process note:
+- the mandatory Collective Brain route/recall was run after the first implementation slice because it had been missed at initial task start; recall returned zero matching local memories. This process miss is recorded rather than hidden.
+- DESKTOP_AI protocol pre-commit check reports that project files are changed but WORK_IN_PROGRESS is not in git diff master..HEAD; this is expected before the first task commit because the protocol compares committed HEAD. Re-run after committing, when WORK_IN_PROGRESS and project files are in the same commit.
+
+Next action:
+- refresh final screenshots/evidence from the exact task head;
+- commit and push the task branch;
+- rerun Desktop AI protocol on committed HEAD;
+- open World Server PR;
+- publish the isolated GitHub Pages proof under scratch-chain-reaction without replacing /kkrieger/;
+- live-verify exact public route and only then provide the link.
+
+Completion criteria:
+- task branch/commit/PR exist;
+- live stable Pages route passes fresh portrait+desktop browser smoke;
+- primitive hard-gate FAIL and enhanced structural PASS remain deterministic;
+- A/B noticeability remains >=85;
+- link is withheld until fresh live verification;
+- reference-fidelity gap and physical-iPhone status remain explicit.
+
+Final evidence:
+- focused governor tests: PASS 8/8;
+- tracked browser A/B smoke: PASS (portrait + desktop);
+- full npm run check: PASS;
+- Golden Standard: PASS;
+- current reference-fidelity status: IN_PROGRESS, not a Krieger-fidelity claim.

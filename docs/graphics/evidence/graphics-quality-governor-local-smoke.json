@@ -1,0 +1,235 @@
+{
+  "http": 200,
+  "errors": [],
+  "evidence": {
+    "recipe": {
+      "id": "bridge-vault-alpha",
+      "seed": 424242,
+      "styleProfile": "krieger_industrial",
+      "semantics": {
+        "setting": "abandoned geothermal relay hall",
+        "route": "central maintenance causeway",
+        "landmark": "sealed reactor iris",
+        "foreground": "survey instrument",
+        "hazards": [
+          "steam leaks",
+          "live conduits"
+        ],
+        "architecture": [
+          "vaulted supports",
+          "service galleries",
+          "recessed panels"
+        ],
+        "props": [
+          "pipes",
+          "cable trays",
+          "warning lamps",
+          "debris"
+        ]
+      },
+      "camera": {
+        "position": [
+          0,
+          0.18,
+          5.3
+        ],
+        "target": [
+          0,
+          -0.05,
+          -7.5
+        ],
+        "fov": 64
+      },
+      "composition": {
+        "foreground": "survey instrument",
+        "middle": "supports and causeway",
+        "focal": "reactor iris",
+        "background": "sealed maintenance vault"
+      }
+    },
+    "reports": {
+      "primitive": {
+        "qualityTier": "KRIEGER_CLASS",
+        "styleProfile": "krieger_industrial",
+        "passed": false,
+        "status": "PROTOTYPE",
+        "gates": {
+          "TRUE_3D_GATE": true,
+          "DEPTH_GATE": false,
+          "SILHOUETTE_GATE": false,
+          "SEMANTIC_DETAIL_GATE": false,
+          "SECONDARY_GEOMETRY_GATE": false,
+          "NEAR_OBJECT_GATE": false,
+          "MATERIAL_GATE": false,
+          "LIGHTING_GATE": false,
+          "ENVIRONMENT_GATE": false,
+          "PERFORMANCE_GATE": true,
+          "DPR_GATE": true
+        },
+        "metrics": {
+          "true3D": 1,
+          "spatialDepth": 0.344,
+          "silhouetteComplexity": 0.16,
+          "semanticDetail": 0.127,
+          "secondaryGeometry": 0,
+          "materialVariation": 0.02,
+          "lightingResponse": 0.2,
+          "nearObjectComplexity": 0.088,
+          "environmentDetail": 0.109,
+          "flatSurfaceRatio": 0.94,
+          "primitiveFallbackRatio": 1,
+          "depthPlanes": 2,
+          "triangles": 72,
+          "drawCalls": 6,
+          "dpr": 3,
+          "generationMs": 0.8
+        },
+        "failures": [
+          {
+            "gate": "DEPTH_GATE",
+            "hard": false,
+            "reason": "depth 0.344, planes 2"
+          },
+          {
+            "gate": "SILHOUETTE_GATE",
+            "hard": false,
+            "reason": "silhouette 0.16 < 0.42"
+          },
+          {
+            "gate": "SEMANTIC_DETAIL_GATE",
+            "hard": false,
+            "reason": "semantic detail 0.127 < 0.55"
+          },
+          {
+            "gate": "SECONDARY_GEOMETRY_GATE",
+            "hard": false,
+            "reason": "secondary geometry 0 < 0.45"
+          },
+          {
+            "gate": "NEAR_OBJECT_GATE",
+            "hard": true,
+            "reason": "near object complexity 0.088 < 0.58"
+          },
+          {
+            "gate": "MATERIAL_GATE",
+            "hard": true,
+            "reason": "material 0.02, flat ratio 0.94"
+          },
+          {
+            "gate": "LIGHTING_GATE",
+            "hard": true,
+            "reason": "local light response 0.2 < 0.5"
+          },
+          {
+            "gate": "ENVIRONMENT_GATE",
+            "hard": true,
+            "reason": "environment 0.109, primitive ratio 1"
+          }
+        ],
+        "primitiveWarnings": [
+          {
+            "code": "GIANT_FLAT_PRIMITIVE",
+            "severity": "hard",
+            "count": 5
+          },
+          {
+            "code": "PRIMITIVE_FALLBACK_DOMINANT",
+            "severity": "hard"
+          },
+          {
+            "code": "LOW_SEMANTIC_DETAIL",
+            "severity": "hard"
+          },
+          {
+            "code": "LOW_MATERIAL_VARIATION",
+            "severity": "hard"
+          },
+          {
+            "code": "NEAR_CAMERA_LOW_DETAIL",
+            "severity": "hard"
+          },
+          {
+            "code": "SHALLOW_COMPOSITION",
+            "severity": "medium"
+          }
+        ],
+        "recommendations": [
+          "Strengthen foreground/midground/focal/background separation.",
+          "Add macro→meso→micro semantic structure rather than random geometric noise.",
+          "Compile the foreground object from functional parts, secondary silhouette and material regions.",
+          "Split dominant surfaces into material zones and add procedural roughness/cavity/wear variation.",
+          "Bind local or emissive lights to nearby geometry response; glow alone is insufficient.",
+          "Replace giant fallback surfaces with semantic supports, recesses, frames, trims and props.",
+          "Reduce primitive-fallback dominance; triangle inflation does not count as quality."
+        ]
+      },
+      "krieger_class": {
+        "qualityTier": "KRIEGER_CLASS",
+        "styleProfile": "krieger_industrial",
+        "passed": true,
+        "status": "PASS",
+        "gates": {
+          "TRUE_3D_GATE": true,
+          "DEPTH_GATE": true,
+          "SILHOUETTE_GATE": true,
+          "SEMANTIC_DETAIL_GATE": true,
+          "SECONDARY_GEOMETRY_GATE": true,
+          "NEAR_OBJECT_GATE": true,
+          "MATERIAL_GATE": true,
+          "LIGHTING_GATE": true,
+          "ENVIRONMENT_GATE": true,
+          "PERFORMANCE_GATE": true,
+          "DPR_GATE": true
+        },
+        "metrics": {
+          "true3D": 1,
+          "spatialDepth": 0.933,
+          "silhouetteComplexity": 0.821,
+          "semanticDetail": 0.766,
+          "secondaryGeometry": 0.889,
+          "materialVariation": 0.694,
+          "lightingResponse": 1,
+          "nearObjectComplexity": 0.965,
+          "environmentDetail": 0.82,
+          "flatSurfaceRatio": 0.357,
+          "primitiveFallbackRatio": 0,
+          "depthPlanes": 5,
+          "triangles": 68480,
+          "drawCalls": 46,
+          "dpr": 3,
+          "generationMs": 3.8
+        },
+        "failures": [],
+        "primitiveWarnings": [],
+        "recommendations": []
+      }
+    },
+    "noticeScore": 100,
+    "fingerprints": {
+      "primitive": "7861558b",
+      "krieger_class": "3e16cc98"
+    },
+    "runtime": {
+      "frameMs": 0,
+      "width": 320,
+      "height": 636,
+      "mode": "on-demand",
+      "timingReliability": "diagnostic-only"
+    }
+  },
+  "canvas": {
+    "w": 320,
+    "h": 636,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "width": 390,
+      "height": 844,
+      "top": 0,
+      "right": 390,
+      "bottom": 844,
+      "left": 0
+    }
+  },
+  "enhancedActive": true
+}

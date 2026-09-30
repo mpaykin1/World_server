@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "1.0.0",
+  "policy": "user-approved-reference-visuals-are-non-compensating-release-gates",
+  "categoryTemplate": {
+    "defaultThresholds": {
+      "compositionDepth": 80,
+      "geometryDensity": 85,
+      "materialRichness": 85,
+      "lightingShadow": 80,
+      "nearCameraHero": 85,
+      "microdetail": 85,
+      "atmosphereReadability": 80
+    }
+  },
+  "projects": {
+    "graphics-quality-governor-krieger-reference": {
+      "reference": {
+        "kind": "technological-quality-reference",
+        "description": "Physical-iPhone Krieger portrait frame supplied by the user; compare quality class, not literal room/weapon/creature identity.",
+        "canonicalPublicRuntime": "https://mpaykin1.github.io/scratch-chain-reaction/kkrieger-portrait-proof/"
+      },
+      "thresholds": {
+        "compositionDepth": 80,
+        "geometryDensity": 85,
+        "materialRichness": 85,
+        "lightingShadow": 80,
+        "nearCameraHero": 85,
+        "microdetail": 85,
+        "atmosphereReadability": 80
+      },
+      "lastRecordedScore": {
+        "at": "2026-09-30",
+        "status": "IN_PROGRESS",
+        "compositionDepth": 78,
+        "geometryDensity": 62,
+        "materialRichness": 58,
+        "lightingShadow": 72,
+        "nearCameraHero": 60,
+        "microdetail": 55,
+        "atmosphereReadability": 70,
+        "note": "Manual side-by-side quality-class audit. Structural Governor improvement is clear, but canonical Krieger fidelity is not yet proven. Do not round up or call this final."
+      }
+    }
+  }
+}

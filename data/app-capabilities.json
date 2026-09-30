@@ -57,6 +57,17 @@
         "playable": false,
         "windows": false
       }
+    },
+    "graphics-quality-governor-mvp": {
+      "type": "diagnostic",
+      "capabilities": {
+        "playable": false,
+        "webgl2": true,
+        "portrait": true,
+        "graphicsQualityGovernor": true,
+        "primitiveGraphicsDetector": true,
+        "deterministicAB": true
+      }
     }
   },
   "rule": "Unknown capability must be audited before claiming full Golden propagation coverage."

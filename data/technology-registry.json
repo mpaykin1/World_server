@@ -253,6 +253,18 @@
         "data/collective-brain/collective-brain-policy.json",
         "scripts/collective-brain-full.js"
       ]
+    },
+    "World Server Graphics Quality Governor": {
+      "percent": 72,
+      "status": "integrated MVP; structural gates + A/B browser proof; canonical Krieger reference fidelity and physical-iPhone performance remain unverified",
+      "evidence": [
+        "shared/graphics/graphics-quality-governor.mjs",
+        "shared/graphics/quality-scene-compiler.mjs",
+        "test/graphics-quality-governor.test.mjs",
+        "scripts/graphics-quality-governor-smoke.cjs",
+        "docs/graphics/GRAPHICS_QUALITY_GOVERNOR.md"
+      ],
+      "note": "Style-aware non-compensating quality floor. Primitive hard-gate failure is proven; enhanced is a Krieger-class candidate, not a claim of canonical .kkrieger fidelity."
     }
   },
   "governanceCoveragePercent": 100,

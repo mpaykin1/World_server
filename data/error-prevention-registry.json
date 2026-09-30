@@ -766,6 +766,21 @@
         "SCIENCE_RUN_072_H2.json"
       ],
       "confirmedAt": "2026-09-06T00:00:00.000Z"
+    },
+    {
+      "id": "krieger-primitive-quality-false-positive",
+      "category": "graphics",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "A technically running/non-black 3D scene is presented as high-quality even though it is dominated by simple primitives, flat materials, weak local-light response and low semantic detail.",
+      "rootCause": "Runtime/occupancy evidence was allowed to substitute for a non-compensating graphics-class quality floor; Level Lab v1 proved renderer correctness but not authored Krieger-class fidelity.",
+      "protection": [
+        "shared/graphics/graphics-quality-governor.mjs hard gates",
+        "Primitive Graphics Detector",
+        "test/graphics-quality-governor.test.mjs anti-triangle-inflation and giant-flat-fallback regressions",
+        "scripts/graphics-quality-governor-smoke.cjs real framebuffer A/B check",
+        "reference visual gate remains IN_PROGRESS until category thresholds are met"
+      ]
     }
   ],
   "confirmationProtocol": {

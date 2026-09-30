@@ -1,0 +1,77 @@
+{
+  "generatedAt": "2026-09-30T03:33:16.147Z",
+  "url": "http://127.0.0.1:8788/apps/graphics-quality-governor-mvp/",
+  "pass": true,
+  "results": [
+    {
+      "name": "portrait-mobile",
+      "http": 200,
+      "errors": [],
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "canvas": {
+        "width": 390,
+        "height": 844
+      },
+      "noticeability": 100,
+      "primitiveFingerprint": {
+        "hash": "7d4e067b",
+        "litRatio": 0.5921867555979038,
+        "edgeLikeRatio": 0.0004764173415912339,
+        "width": 320,
+        "height": 636
+      },
+      "enhancedFingerprint": {
+        "hash": "fd1f9c5e",
+        "litRatio": 0.9475940924249643,
+        "edgeLikeRatio": 0.15674130538351597,
+        "width": 320,
+        "height": 636
+      },
+      "runtime": {
+        "frameMs": 0,
+        "width": 320,
+        "height": 636,
+        "mode": "on-demand",
+        "timingReliability": "diagnostic-only"
+      }
+    },
+    {
+      "name": "desktop",
+      "http": 200,
+      "errors": [],
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "canvas": {
+        "width": 1280,
+        "height": 800
+      },
+      "noticeability": 100,
+      "primitiveFingerprint": {
+        "hash": "80a35fe4",
+        "litRatio": 0.5259878668634203,
+        "edgeLikeRatio": 0.05263157894736842,
+        "width": 973,
+        "height": 608
+      },
+      "enhancedFingerprint": {
+        "hash": "321b73fa",
+        "litRatio": 0.6950319724545008,
+        "edgeLikeRatio": 0.26660108214461387,
+        "width": 973,
+        "height": 608
+      },
+      "runtime": {
+        "frameMs": 0,
+        "width": 973,
+        "height": 608,
+        "mode": "on-demand",
+        "timingReliability": "diagnostic-only"
+      }
+    }
+  ]
+}

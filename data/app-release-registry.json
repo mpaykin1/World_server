@@ -192,6 +192,13 @@
       "status": "experimental",
       "kind": "prototype",
       "reason": "User-confirmed reusable mobile camera/input and procedural Canvas graphics reference. Preserved for internal reuse; not certified for the public catalog."
+    },
+    "graphics-quality-governor-mvp": {
+      "title": "Graphics Quality Governor MVP",
+      "visible": false,
+      "status": "diagnostic",
+      "kind": "diagnostic",
+      "reason": "A/B graphics-quality proof. Not a certified public gameplay world and not canonical Krieger fidelity."
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",
