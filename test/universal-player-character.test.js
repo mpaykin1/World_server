@@ -19,13 +19,17 @@ test('canonical universal player semantics resolve against vendored Rig_Medium c
   const manifest = JSON.parse(fs.readFileSync(path.join(CHAR_ROOT, 'manifest.json'), 'utf8'));
   const semantics = JSON.parse(fs.readFileSync(path.join(CHAR_ROOT, 'semantic-actions.json'), 'utf8'));
   const clips = new Set();
+  let clipCount = 0;
   for (const relative of manifest.animationGroups) {
     const json = readGlbJson(path.join(CHAR_ROOT, relative));
-    for (const clip of json.animations || []) clips.add(clip.name);
+    for (const clip of json.animations || []) {
+      clipCount++;
+      clips.add(clip.name);
+    }
   }
 
   assert.equal(manifest.id, semantics.characterId);
-  assert.equal(clips.size, manifest.compatibleAnimationClipCount);
+  assert.equal(clipCount, manifest.compatibleAnimationClipCount);
   for (const required of semantics.requiredCore) {
     const candidates = semantics.actions[required];
     assert.ok(Array.isArray(candidates) && candidates.length, `missing candidates for ${required}`);
@@ -48,4 +52,15 @@ test('verified Roblox MVP consumes the shared universal player runtime rather th
   assert.match(source, /loadUniversalPlayer/);
   assert.doesNotMatch(source, /Rig_Medium_MovementBasic\.glb/);
   assert.doesNotMatch(source, /if\(\/idle\//);
+});
+
+
+test('Roblox importer selects the canonical universal player character for Humanoid ports', () => {
+  const { importRbxlx } = require('../lib/roblox-importer');
+  const xml = `<?xml version="1.0" encoding="utf-8"?><roblox version="4"><Item class="Workspace" referent="W"><Properties><string name="Name">Workspace</string></Properties><Item class="Model" referent="C"><Properties><string name="Name">Character</string></Properties><Item class="Humanoid" referent="H"><Properties><string name="Name">Humanoid</string></Properties></Item><Item class="LocalScript" referent="S"><Properties><string name="Name">Animate</string><ProtectedString name="Source"><![CDATA[local h=script.Parent:FindFirstChildOfClass("Humanoid")]]></ProtectedString></Properties></Item></Item></Item></roblox>`;
+  const result = importRbxlx(xml);
+  assert.equal(result.adapters.character.mode, 'replace-standard-humanoid');
+  assert.equal(result.adapters.character.characterId, 'kaykit-knight-rig-medium');
+  assert.equal(result.adapters.character.canonical, 'shared/universal-player-character.mjs');
+  assert.equal(result.recipe.player.characterId, 'kaykit-knight-rig-medium');
 });
