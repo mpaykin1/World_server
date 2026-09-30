@@ -1,0 +1,75 @@
+{
+  "schema": "world-server.cube-readiness/v1",
+  "updatedAt": "2026-09-30",
+  "previousPercent": 4,
+  "currentPercent": 5,
+  "threshold80Notified": false,
+  "rule": "Score only repository evidence. Block score = weight * evidencedCompletion.",
+  "blocks": [
+    {
+      "id": "growthMorph",
+      "weight": 15,
+      "completion": 0,
+      "evidence": []
+    },
+    {
+      "id": "voxelMatter",
+      "weight": 10,
+      "completion": 0,
+      "evidence": []
+    },
+    {
+      "id": "terrainBiome",
+      "weight": 10,
+      "completion": 0,
+      "evidence": []
+    },
+    {
+      "id": "architectureSemantic",
+      "weight": 10,
+      "completion": 0,
+      "evidence": []
+    },
+    {
+      "id": "materials",
+      "weight": 10,
+      "completion": 0,
+      "evidence": []
+    },
+    {
+      "id": "lightingAtmosphere",
+      "weight": 10,
+      "completion": 0,
+      "evidence": []
+    },
+    {
+      "id": "livingWorldFx",
+      "weight": 10,
+      "completion": 0,
+      "evidence": []
+    },
+    {
+      "id": "directorRecipe",
+      "weight": 10,
+      "completion": 0.1,
+      "evidence": [
+        "docs/cube/world-evolution-recipe.v1.json@560b1164536dcd0385e76d2310e06a54eff8c53e"
+      ]
+    },
+    {
+      "id": "qualityGovernorTests",
+      "weight": 10,
+      "completion": 0.4,
+      "evidence": [
+        "docs/graphics-quality/governor.schema.json"
+      ]
+    },
+    {
+      "id": "deployMobilePerformanceEvidence",
+      "weight": 5,
+      "completion": 0,
+      "evidence": []
+    }
+  ],
+  "nearestBlocker": "Executable deterministic evaluator: recipe + seed + t -> generated world state with replay/intermediate-state tests."
+}
