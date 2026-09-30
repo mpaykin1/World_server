@@ -253,6 +253,18 @@
         "data/collective-brain/collective-brain-policy.json",
         "scripts/collective-brain-full.js"
       ]
+    },
+    "ABot-Recon": {
+      "percent": 60,
+      "status": "video ingest + real upstream adapter + isolated Linux/CUDA bootstrap prepared; real external GPU runtime verification pending",
+      "evidence": [
+        "services/ai3d-worker/ai3d/plugins/abot_recon.py",
+        "services/ai3d-worker/tools/export_abot_ply.py",
+        "services/ai3d-worker/server.py",
+        "test/abot-recon-integration.test.js",
+        "docs/ABOT_RECON_INTEGRATION.md"
+      ],
+      "note": "Upstream source Apache-2.0; official model weights CC BY-NC 4.0. Adapter fails closed without a configured Linux NVIDIA runtime."
     }
   },
   "governanceCoveragePercent": 100,

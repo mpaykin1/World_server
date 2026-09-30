@@ -8,6 +8,7 @@ from typing import Any
 from PIL import Image
 
 ALLOWED_IMAGE_TYPES = {"image/png", "image/jpeg", "image/webp"}
+ALLOWED_VIDEO_TYPES = {"video/mp4", "video/webm", "video/quicktime", "video/x-msvideo"}
 
 
 def verify_image(path: Path, max_pixels: int = 40_000_000) -> tuple[int, int]:
@@ -19,6 +20,25 @@ def verify_image(path: Path, max_pixels: int = 40_000_000) -> tuple[int, int]:
     if width < 16 or height < 16 or width * height > max_pixels:
         raise ValueError(f"Unsupported image dimensions: {width}x{height}")
     return width, height
+
+
+def verify_video(path: Path) -> str:
+    """Lightweight container validation before ffmpeg performs full decode.
+
+    This deliberately checks signatures only; codec/container decoding remains
+    the responsibility of ffmpeg inside the ABot-Recon adapter.
+    """
+    if not path.is_file() or path.stat().st_size < 64:
+        raise ValueError("Video file is empty or too small")
+    with path.open("rb") as handle:
+        head = handle.read(32)
+    if len(head) >= 12 and head[4:8] == b"ftyp":
+        return "iso-bmff"
+    if head.startswith(b"\x1aE\xdf\xa3"):
+        return "webm"
+    if head.startswith(b"RIFF") and head[8:12] == b"AVI ":
+        return "avi"
+    raise ValueError("Unsupported or malformed video container")
 
 
 def _sha256(path: Path) -> str:
@@ -280,5 +300,5 @@ def file_meta(path: Path, role: str) -> dict[str, Any]:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     suffix = path.suffix.lower()
-    mime = {".glb": "model/gltf-binary", ".png": "image/png", ".json": "application/json", ".txt": "text/plain"}.get(suffix, "application/octet-stream")
+    mime = {".glb": "model/gltf-binary", ".png": "image/png", ".json": "application/json", ".txt": "text/plain", ".ply": "application/octet-stream", ".npy": "application/octet-stream", ".log": "text/plain"}.get(suffix, "application/octet-stream")
     return {"name": path.name, "role": role, "bytes": path.stat().st_size, "sha256": digest.hexdigest(), "mime": mime}

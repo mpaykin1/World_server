@@ -55,7 +55,8 @@ module.exports = withErrors(async (req, res) => {
     token,
     expiresAt: payload.exp * 1000,
     maxUploadMb: Math.max(1, Math.min(Number(process.env.AI3D_MAX_UPLOAD_MB) || 25, 100)),
-    modes: ['auto', 'image_to_3d', 'depth', 'building', 'map', 'voxel_city'],
+    maxVideoUploadMb: Math.max(1, Math.min(Number(process.env.AI3D_MAX_VIDEO_UPLOAD_MB) || 100, 500)),
+    modes: ['auto', 'image_to_3d', 'depth', 'building', 'map', 'voxel_city', 'video_to_3d'],
     deliveryPolicy: deliveryPolicyForClient(),
     deliveryStatus: deliveryStatusForClient()
   });
