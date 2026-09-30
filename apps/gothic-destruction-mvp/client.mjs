@@ -22,8 +22,8 @@ const gl=renderer.getContext(),debugRenderer=gl.getExtension('WEBGL_debug_render
 const rendererName=String(debugRenderer?gl.getParameter(debugRenderer.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER));
 const softwareRenderer=/swiftshader|llvmpipe|software/i.test(rendererName);
 const shadowsEnabled=!softwareRenderer;
-const maxDpr=softwareRenderer?.78:(coarse?1.12:1.45);
-const physicsHz=softwareRenderer?24:(coarse?32:48);
+const maxDpr=softwareRenderer?.5:(coarse?1.12:1.45);
+const physicsHz=softwareRenderer?12:(coarse?32:48);
 const perShotFragmentBudget=softwareRenderer?48:(coarse?90:120);
 const activeFragmentBudget=softwareRenderer?96:(coarse?180:240);
 renderer.setPixelRatio(Math.min(devicePixelRatio||1,maxDpr));
