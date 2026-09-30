@@ -4,7 +4,7 @@
 **Статус:** USER-VISIBLE SUCCESS / отдельная новая версия  
 **Живая версия:** https://mpaykin1.github.io/meta5/  
 **Репозиторий:** https://github.com/mpaykin1/meta5  
-**Meta5 exact commit:** `4ba71ba39609c9a0e26693d6ee8cdfdb6ab162ee`  
+**Meta5 exact commit:** `eecb8d6b368760e5a01b61bac114be4aceedf1ae`  
 **World Server AI merge:** `284dc4eba8d127b218ae7998a05a4bafc156a151`
 
 ## Что было объединено
