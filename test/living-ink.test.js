@@ -36,5 +36,5 @@ test('generated standalone matches compiler output exactly',()=>{
   const core=fs.readFileSync(path.join(root,'shared','living-ink-core.js'),'utf8');
   const office=fs.readFileSync(path.join(root,'shared','living-ink-office.js'),'utf8');
   const expected=Compiler.compileStandalone({recipe,coreSource:core,officeSource:office});
-  const actual=fs.readFileSync(path.join(root,'apps','living-ink-office','index.html'),'utf8').replace(/\s*<script src="\/shared\/sentry-runtime\.js"><\/script>\s*/g,'');assert.equal(actual,expected);
+  const actual=fs.readFileSync(path.join(root,'apps','living-ink-office','index.html'),'utf8').replace(/\s*<script src="\/shared\/sentry-runtime\.js"><\/script>\s*/g,'');assert.equal(actual.replace(/\r\n/g,'\n'),expected.replace(/\r\n/g,'\n'));
 });
