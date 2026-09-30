@@ -27,6 +27,7 @@ Imported games should reuse the Golden components instead of rebuilding them:
 - rendering/quality: existing World Server WebGL and quality-governor pipeline;
 - Roblox UI: semantic rebuild onto `shared/golden-ui-shell.js`, preserving actions/layout intent rather than Roblox widget runtime;
 - Terrain/TerrainRegion: explicit terrain lane; opaque region bytes require a supported decoder or an owner-provided export and are never silently approximated;
+- player character: standard Roblox Humanoid/avatar -> Golden Universal Player Character via `shared/universal-player-character.mjs`, `assets/characters/kaykit-knight/manifest.json` and `semantic-actions.json`; explicit owned custom avatars are preserved unless replacement is requested;
 - audio/animation/external assets: manifest-first mapping, with unresolved bytes kept as blockers.
 
 The semantic translator recognizes `Workspace:Raycast`, `ApplyImpulse`, assembly velocity, contact events, `RemoteEvent`, input services, `RunService`, TweenService, CollectionService, Humanoid/CFrame/attributes and common procedural/chunk patterns. Recognition means “adapter/reimplementation required”; it does **not** mean arbitrary Luau has been automatically translated.
@@ -38,3 +39,10 @@ The semantic translator recognizes `Workspace:Raycast`, `ApplyImpulse`, assembly
 ## Reference game: `городкамни.rbxlx`
 
 The inspected reference contains procedural Gothic city generation, chunk systems, movement/climbing/air-control scripts, lighting/visual systems, a substantial moss-rock projectile system and three `RemoteEvent`s (`ThrowRock`, `DropRock`, `RockCinematic`). This makes it a useful integration fixture conceptually, but the original uploaded project is not committed to World Server; CI uses a small synthetic fixture that exercises the same importer contracts without copying the game.
+
+
+## Universal player / animation semantics
+
+The importer emits a `character` adapter plan for every port. When Humanoid/Animator or character-controller behavior is detected, the plan uses `replace-standard-humanoid`; otherwise the same runtime remains available as the default generic player.
+
+Roblox state/default-animation names are mapped to semantic actions rather than copied animation IDs. This keeps gameplay code stable while the character asset or animation pack can be reviewed centrally. Unsupported/custom motions are not invented; a game can extend or override the semantic map explicitly.
