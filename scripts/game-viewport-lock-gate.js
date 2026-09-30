@@ -25,6 +25,7 @@ if(!bad){
     [runtime,/visualViewport/,'VisualViewport ownership'],
     [runtime,/setPointerCapture/,'pointer capture'],
     [runtime,/drawingBufferWidth/,'drawing-buffer QA'],
+    [runtime,/webglViewport/,'WebGL viewport QA'],
     [runtime,/cameraAspect/,'camera aspect QA'],
     [runtime,/scrollTo\(0,0\)/,'scroll reset'],
     [css,/overscroll-behavior:none/,'overscroll lock'],
