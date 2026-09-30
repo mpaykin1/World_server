@@ -1,0 +1,55 @@
+/* WORLD SERVER GAME VIEWPORT LOCK v1
+   Mandatory full-screen browser-game contract. */
+:root{
+  --wsgv-width:100vw;
+  --wsgv-height:100dvh;
+  --wsgv-offset-left:0px;
+  --wsgv-offset-top:0px;
+  --wsgv-safe-top:env(safe-area-inset-top,0px);
+  --wsgv-safe-right:env(safe-area-inset-right,0px);
+  --wsgv-safe-bottom:env(safe-area-inset-bottom,0px);
+  --wsgv-safe-left:env(safe-area-inset-left,0px);
+}
+html,body{
+  margin:0!important;
+  width:100%!important;
+  height:100%!important;
+  overflow:hidden!important;
+  overscroll-behavior:none!important;
+  -webkit-overflow-scrolling:auto!important;
+}
+body{
+  position:fixed!important;
+  inset:0!important;
+  width:var(--wsgv-width)!important;
+  height:var(--wsgv-height)!important;
+  max-width:var(--wsgv-width)!important;
+  max-height:var(--wsgv-height)!important;
+}
+#game-root,[data-world-server-game-root]{
+  position:fixed!important;
+  left:var(--wsgv-offset-left)!important;
+  top:var(--wsgv-offset-top)!important;
+  width:var(--wsgv-width)!important;
+  height:var(--wsgv-height)!important;
+  overflow:hidden!important;
+  overscroll-behavior:none!important;
+}
+canvas,[data-world-server-game-surface]{
+  touch-action:none!important;
+  user-select:none!important;
+  -webkit-user-select:none!important;
+  -webkit-touch-callout:none!important;
+}
+[data-world-server-primary-canvas]{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+}
+[data-world-server-scroll]{
+  overflow:auto!important;
+  overscroll-behavior:contain!important;
+  touch-action:pan-y!important;
+  -webkit-overflow-scrolling:touch!important;
+}
