@@ -6,15 +6,15 @@ const path=require('path');
 const cp=require('child_process');
 const root=path.resolve(__dirname,'..');
 
-test('three.js r186 is audited and vendored',()=>{
+test('three.js r160 is audited and vendored',()=>{
   const manifest=JSON.parse(fs.readFileSync(path.join(root,'third-party-manifest.json'),'utf8'));
   const three=manifest.dependencies.find(x=>x.name==='three');
   assert.ok(three);
   assert.equal(three.license,'MIT');
   assert.equal(three.commitOrTag,'r186');
   assert.match(three.sha256,/^[0-9a-f]{64}$/);
-  assert.ok(fs.existsSync(path.join(root,'vendor','three-r186','three.module.js')));
-  assert.ok(fs.existsSync(path.join(root,'vendor','three-r186','LICENSE')));
+  assert.ok(fs.existsSync(path.join(root,'vendor','three-r160','three.module.js')));
+  assert.ok(fs.existsSync(path.join(root,'vendor','three-r160','LICENSE')));
 });
 
 test('WebGL NPR source exposes the required real-3D systems',()=>{
