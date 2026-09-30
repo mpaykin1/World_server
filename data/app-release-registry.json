@@ -214,6 +214,13 @@
         "familyId": "roblox-gothic-rocks",
         "connections": []
       }
+    },
+    "blocky-avatar-139": {
+      "title": "World Server Blocky Avatar 139",
+      "visible": false,
+      "status": "diagnostic",
+      "kind": "diagnostic",
+      "reason": "Self-contained graphics/animation proof for a Minecraft-like original block avatar using the reusable KayKit Rig_Medium CC0 animation runtime; not a public catalog game."
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",
