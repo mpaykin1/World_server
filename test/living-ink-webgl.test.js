@@ -11,9 +11,9 @@ test('three.js r160 is audited and vendored',()=>{
   const three=manifest.dependencies.find(x=>x.name==='three');
   assert.ok(three);
   assert.equal(three.license,'MIT');
-  assert.equal(three.commitOrTag,'r186');
+  assert.equal(three.commitOrTag,'r160');
   assert.match(three.sha256,/^[0-9a-f]{64}$/);
-  assert.ok(fs.existsSync(path.join(root,'vendor','three-r160','three.module.js')));
+  assert.ok(fs.existsSync(path.join(root,'vendor','three-r160','three.module.min.js')));
   assert.ok(fs.existsSync(path.join(root,'vendor','three-r160','LICENSE')));
 });
 
@@ -38,7 +38,7 @@ test('standalone WebGL NPR artifact builds without external runtime dependencies
   const html=fs.readFileSync(path.join(root,'apps','living-ink-office-v3','index.html'),'utf8');
   assert.match(html,/ASQURA \/ REAL 3D NPR v3/);
   assert.match(html,/three-webgl-npr-v3/);
-  assert.match(html,/Copyright © 2010-2026 three\.js authors/);
+  assert.match(html,/Copyright © 2010-2023 three\.js authors/);
   assert.doesNotMatch(html,/<script[^>]+src=/i);
   assert.doesNotMatch(html,/<link[^>]+href=["']https?:/i);
   assert.doesNotMatch(html,/<img[^>]+src=["']https?:/i);
