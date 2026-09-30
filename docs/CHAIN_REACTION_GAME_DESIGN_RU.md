@@ -224,3 +224,8 @@ Live AI остаётся предпочтительным источником, 
 Подробный контракт: `docs/CHAIN_REACTION_AI_FALLBACK_CONTRACT_RU.md`.
 Разбор неудачи: `docs/META6_EN_AI_UNAVAILABLE_FAILURE_2026-09-30.md`.
 Reusable English fallback data: `data/chain-reaction-prepared-fallback-en.json`.
+
+
+## Multilingual live-AI parity
+
+Для любой новой языковой версии live AI считается готовым только после реального production smoke на этом языке. Наличие client translation или green preview недостаточно. Canonical analysis: `docs/META6_EN_LIVE_AI_PARITY_FAILURE_2026-09-30.md`.
