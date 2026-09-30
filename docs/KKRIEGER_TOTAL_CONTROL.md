@@ -154,3 +154,12 @@ Therefore v1 is retained only as a renderer/collision/viewport harness. It is no
 World Server invariant: preserve the native weapon/effect resource chain and move level replacement to the scene/operator boundary. Next path is KX archaeology -> Observatory -> Native Geometry/Material/Scene Labs -> Weapon Lab -> Native Level Lab v2.
 
 Detailed postmortem: [KKRIEGER_LEVEL_LAB_POSTMORTEM_2026-09-30.md](KKRIEGER_LEVEL_LAB_POSTMORTEM_2026-09-30.md)
+
+
+## Quantified KX baseline
+
+The actual converted beta is now inventoried: **4,817 operators, 77 classes, 38 splines**. Weapon optics subgraphs alone reach **224–362 operators**, while shot subgraphs reach **19–63**.
+
+This confirms that full control must operate on reusable KOp recipes/subgraphs, not only low-level C++ mesh calls.
+
+See [KKRIEGER_KX_ARCHAEOLOGY_BASELINE.md](KKRIEGER_KX_ARCHAEOLOGY_BASELINE.md).
