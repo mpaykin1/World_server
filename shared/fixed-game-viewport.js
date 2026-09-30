@@ -81,8 +81,11 @@
     win.addEventListener("scroll", onScroll, { passive: true });
     win.addEventListener("resize", sync, { passive: true });
     if (win.visualViewport) {
+      // Browser chrome movement may emit visualViewport scroll while layout
+      // is settling. Writing height/scroll state from that event can create
+      // a feedback loop on iOS. Resize is the authoritative height signal;
+      // document scroll is guarded independently below.
       win.visualViewport.addEventListener("resize", sync, { passive: true });
-      win.visualViewport.addEventListener("scroll", sync, { passive: true });
     }
 
     sync();
@@ -99,7 +102,6 @@
         win.removeEventListener("resize", sync);
         if (win.visualViewport) {
           win.visualViewport.removeEventListener("resize", sync);
-          win.visualViewport.removeEventListener("scroll", sync);
         }
       }
     };
