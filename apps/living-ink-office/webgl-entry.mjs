@@ -1,4 +1,4 @@
-import * as THREE from '../../vendor/three-r186/three.module.js';
+import * as THREE from '../../vendor/three-r160/three.module.min.js';
 import {createNprContext} from '../../shared/living-ink-webgl-npr.mjs';
 import {createOfficeScene} from '../../shared/living-ink-webgl-scene.mjs';
 
