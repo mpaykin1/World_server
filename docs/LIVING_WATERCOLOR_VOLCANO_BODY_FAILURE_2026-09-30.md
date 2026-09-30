@@ -1,10 +1,14 @@
-# Living Watercolor volcano body — FAILURE memory
+# Living Watercolor volcano body — SUPERSEDED FAILURE memory
 
 Date: 2026-09-30
 
-## Human acceptance overrides the metric
+## Status correction
 
-The current **volcano body is explicitly rejected as a visual failure**.
+This document preserves the **old rejected volcano-body approach** as a negative example. It is no longer the current volcano status.
+
+The newer Illustration-First volcano has been explicitly accepted as a **success and etalon**. See `docs/LIVING_WATERCOLOR_VOLCANO_ILLUSTRATION_FIRST_SUCCESS_2026-09-30.md`.
+
+The implementation described below remains useful because it explains what not to repeat.
 
 This is important because the automated reference-fidelity gate previously reported a passing numeric score for the volcano. That numeric pass must **not** be treated as proof of artistic success. Human side-by-side review is authoritative for this style.
 
@@ -56,4 +60,4 @@ For this object, **human visual acceptance is the final gate**.
 
 ## Status
 
-**FAILURE / REBUILD REQUIRED.** Preserve the current code only as a negative example showing that a high metric score can coexist with poor artistic similarity.
+**SUPERSEDED FAILURE / NEGATIVE REFERENCE.** Preserve this document as a warning against primitive-first volcano construction. The canonical current implementation is the accepted Illustration-First volcano.
