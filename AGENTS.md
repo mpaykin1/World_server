@@ -230,3 +230,13 @@ For any manual ChatGPT/AI task where the user asks for a testable artifact or li
 - Treat `implemented/tested but no usable stable production URL` as a pipeline regression. Never hand off `deploy-preview-*` or immutable deploy aliases as the final user link unless the user explicitly requests a temporary Preview.
 
 Canonical machine-readable policy: `data/manual-task-completion-contract.json`; runtime gate: `lib/manual-task-completion-contract.js`.
+
+## Public-link delivery gate
+
+Для любой публичной демо-ссылки запрещено считать задачу завершённой только потому, что файл закоммичен.
+
+Обязательная последовательность:
+
+`commit -> deployment success -> live HTTP 200 -> expected marker -> only then share as ready`.
+
+Если deployment queued/running/cancelled, статус только **COMMITTED/DEPLOYING**, но не **LIVE VERIFIED**. После любого нового commit предыдущая live-проверка считается устаревшей. Разбор ошибки: `docs/DELIVERY_FAILURE_GITHUB_PAGES_404_2026-09-30.md`.
