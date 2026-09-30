@@ -280,3 +280,5 @@ window.GothicDestructionMVP={
 statusEl.textContent=`Готово: башня ${actors.tower.structure.voxels.length} voxels · виадук ${actors.viaduct.structure.voxels.length} voxels · выбери цель.`;
 loader.classList.add('hidden');
 setTimeout(()=>loader.remove(),650);
+const autoTarget=new URLSearchParams(location.search).get('autofire');
+if(actors[autoTarget]){setSelected(autoTarget);setTimeout(()=>void fireSelected(),900);}
