@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>World Server Promotion Engine — Михаил Пайкин</title>
+<meta name="description" content="Evidence-first система продвижения: аудит сайта, кампании, компании, роли ЛПР, персонализированные RU/EN письма и обратная связь.">
+<meta name="robots" content="noindex,nofollow">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<header class="topbar">
+  <div><strong>World Server Promotion Engine</strong><span id="subtitle">Продвижение сайта Михаила Пайкина</span></div>
+  <div class="lang"><button data-lang="ru" class="active">RU</button><button data-lang="en">EN</button></div>
+</header>
+<main>
+<section class="hero">
+  <p class="eyebrow" data-i18n="eyebrow">Evidence-first · без спама · RU/EN</p>
+  <h1 data-i18n="title">Продвижение не как рассылка, а как проверяемая система.</h1>
+  <p data-i18n="lead">Исследование → конкуренты → кампании → организации → роли ЛПР → персонализированное письмо → ручная проверка → обратная связь.</p>
+  <div class="statusbar"><span>✓ public facts only</span><span>✓ human review</span><span>✓ opt-out stops contact</span><span>✕ no auto-send</span></div>
+</section>
+
+<nav class="steps" aria-label="Promotion pipeline">
+  <button class="step active" data-step="1"><b>1</b><span data-i18n="s1">Исследовать сайт</span></button>
+  <button class="step" data-step="2"><b>2</b><span data-i18n="s2">Конкуренты</span></button>
+  <button class="step" data-step="3"><b>3</b><span data-i18n="s3">Кампании</span></button>
+  <button class="step" data-step="4"><b>4</b><span data-i18n="s4">Компании</span></button>
+  <button class="step" data-step="5"><b>5</b><span data-i18n="s5">Роли ЛПР</span></button>
+  <button class="step" data-step="6"><b>6</b><span data-i18n="s6">Письма</span></button>
+  <button class="step" data-step="7"><b>7</b><span data-i18n="s7">Лендинг + UTM</span></button>
+  <button class="step" data-step="8"><b>8</b><span data-i18n="s8">Обратная связь</span></button>
+</nav>
+
+<section class="panel active" data-panel="1">
+  <div class="section-head"><div><p class="eyebrow">1</p><h2 data-i18n="researchTitle">Что мы реально можем утверждать о проекте</h2></div><button id="refresh-profile" class="ghost" data-i18n="refresh">Обновить профиль</button></div>
+  <div id="facts" class="cards"></div>
+  <div class="notice" data-i18n="factNotice">Каждый факт хранится вместе с URL-источником. Неподтверждённые идеи кампаний не превращаются в «факты» автоматически.</div>
+  <div class="agent-box">
+    <h3>Agent Zero research brief</h3>
+    <p data-i18n="agentZeroText">Система умеет подготовить отдельное задание для Agent Zero: искать только публичные факты и возвращать их с источниками. Результат можно импортировать обратно как evidence JSON.</p>
+    <label><span data-i18n="competitorsInput">Конкуренты / сайты, по одному в строке</span><textarea id="agent-competitors" rows="4" placeholder="https://example.com"></textarea></label>
+    <label><span data-i18n="prospectsInput">Организации для проверки, по одной в строке</span><textarea id="agent-prospects" rows="4" placeholder="Company name or domain"></textarea></label>
+    <div class="actions"><button id="make-agent-brief" class="primary" data-i18n="makeBrief">Собрать задание Agent Zero</button><button id="copy-agent-brief" class="ghost" data-i18n="copy">Копировать</button></div>
+    <textarea id="agent-brief" rows="7" readonly></textarea>
+    <label><span data-i18n="importEvidence">Импорт evidence JSON от Agent Zero</span><textarea id="agent-evidence" rows="5" placeholder='{"site_findings":[...],"competitor_findings":[...]}'></textarea></label>
+    <button id="import-evidence" class="ghost" data-i18n="validateEvidence">Проверить и импортировать</button>
+    <div id="evidence-result" class="mini-output"></div>
+  </div>
+</section>
+
+<section class="panel" data-panel="2">
+  <p class="eyebrow">2</p><h2 data-i18n="competitorTitle">Конкуренты: не список ради списка, а карта различий</h2>
+  <p data-i18n="competitorLead">Добавьте сайты, которые человек реально может выбрать вместо вас. Для каждого запишите только наблюдаемый факт и источник; выводы держим отдельно.</p>
+  <div class="formgrid">
+    <label><span data-i18n="siteUrl">URL конкурента</span><input id="competitor-url" type="url" placeholder="https://..."></label>
+    <label><span data-i18n="observed">Наблюдаемый факт</span><input id="competitor-fact" placeholder="Например: продаёт 2-hour improv workshop"></label>
+    <label><span data-i18n="inference">Наш вывод</span><input id="competitor-inference" placeholder="Например: делает упор на entertainment"></label>
+  </div>
+  <button id="add-competitor" class="primary" data-i18n="addCompetitor">Добавить в карту</button>
+  <div id="competitor-list" class="table"></div>
+</section>
+
+<section class="panel" data-panel="3">
+  <p class="eyebrow">3</p><h2 data-i18n="campaignTitle">Кампании под разные задачи, а не одно письмо всем</h2>
+  <div id="campaigns" class="campaigns"></div>
+</section>
+
+<section class="panel" data-panel="4">
+  <p class="eyebrow">4</p><h2 data-i18n="prospectTitle">Оценить потенциальную организацию</h2>
+  <p data-i18n="prospectLead">Система не угадывает «боль» компании. Вы вносите только то, что знаете из публичного источника; остальное считается гипотезой.</p>
+  <div class="formgrid">
+    <label><span data-i18n="company">Компания</span><input id="company" placeholder="Nexus"></label>
+    <label><span data-i18n="location">География</span><input id="location" value="Tbilisi, Georgia"></label>
+    <label><span data-i18n="sector">Сектор</span><input id="sector" placeholder="Information Technology & Services"></label>
+    <label><span data-i18n="publicFact">Публичный факт</span><textarea id="public-fact" rows="3" placeholder="Что конкретно увидели на сайте/LinkedIn компании"></textarea></label>
+    <label><span data-i18n="sourceUrl">URL источника</span><input id="source-url" type="url" placeholder="https://..."></label>
+    <label><span data-i18n="needSignals">Сигналы потребности через запятую</span><input id="need-signals" placeholder="communication, change, leadership"></label>
+  </div>
+  <button id="score-company" class="primary" data-i18n="score">Оценить fit</button>
+  <div id="score-output" class="score-output"></div>
+</section>
+
+<section class="panel" data-panel="5">
+  <p class="eyebrow">5</p><h2 data-i18n="rolesTitle">Ищем не личные данные, а правильную функцию в организации</h2>
+  <p data-i18n="rolesLead">Сначала выбираем роль, которая логически отвечает за задачу: HR, L&D, Program Director, Creative Director и т.д. Имя и рабочий контакт добавляются только из публичного профессионального источника.</p>
+  <div id="roles" class="role-list"></div>
+  <label><span data-i18n="roleName">Выбранная роль / имя из публичного источника</span><input id="role-input" placeholder="HR Manager"></label>
+</section>
+
+<section class="panel" data-panel="6">
+  <p class="eyebrow">6</p><h2 data-i18n="emailTitle">Письмо строится из доказанного факта + релевантного предложения</h2>
+  <div class="toggle-row"><label><input id="ai-draft" type="checkbox" checked> <span data-i18n="useAi">Улучшить формулировку через Workers AI, не добавляя новых фактов</span></label></div>
+  <div class="actions"><button id="generate-email" class="primary" data-i18n="generate">Сгенерировать RU/EN письмо</button></div>
+  <div class="email-grid">
+    <article class="email"><h3>RU</h3><input id="subject-ru" readonly><textarea id="body-ru" rows="14" readonly></textarea><button class="ghost copy-email" data-copy="ru" data-i18n="copyEmail">Копировать письмо</button></article>
+    <article class="email"><h3>EN</h3><input id="subject-en" readonly><textarea id="body-en" rows="14" readonly></textarea><button class="ghost copy-email" data-copy="en" data-i18n="copyEmail">Копировать письмо</button></article>
+  </div>
+  <div class="warning" data-i18n="sendWarning">Автоматической отправки нет. Перед отправкой человек обязан проверить факт, тон, адресата и право на контакт.</div>
+</section>
+
+<section class="panel" data-panel="7">
+  <p class="eyebrow">7</p><h2 data-i18n="landingTitle">Каждой кампании — подходящий лендинг и измеримая ссылка</h2>
+  <div class="formgrid">
+    <label><span data-i18n="landing">Landing URL</span><select id="landing-select"></select></label>
+    <label><span>utm_source</span><input id="utm-source" value="outreach"></label>
+    <label><span>utm_medium</span><input id="utm-medium" value="email"></label>
+    <label><span>utm_campaign</span><input id="utm-campaign" value="team_workshop_tbilisi"></label>
+  </div>
+  <button id="build-utm" class="primary" data-i18n="buildLink">Собрать ссылку</button>
+  <div id="utm-output" class="mini-output"></div>
+</section>
+
+<section class="panel" data-panel="8">
+  <p class="eyebrow">8</p><h2 data-i18n="feedbackTitle">Система должна учиться не на количестве писем, а на результате</h2>
+  <p data-i18n="feedbackLead">Отмечайте только реальные статусы: draft → reviewed → sent → replied → meeting → won/lost. «Открытие» письма не считаем лидом.</p>
+  <div class="feedback-grid">
+    <button data-status="draft">Draft</button><button data-status="reviewed">Reviewed</button><button data-status="sent">Sent</button><button data-status="replied">Replied</button><button data-status="meeting">Meeting</button><button data-status="won">Won</button><button data-status="lost">Lost</button><button data-status="optout">Opt-out</button>
+  </div>
+  <div id="feedback-output" class="mini-output"></div>
+  <button id="export-session" class="ghost" data-i18n="export">Экспортировать сессию JSON</button>
+</section>
+</main>
+<footer><span>World Server · Promotion Engine MVP</span><span id="guard">Human review required · Auto-send disabled</span></footer>
+<script type="module" src="./app.js"></script>
+</body></html>
