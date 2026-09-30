@@ -74,6 +74,26 @@ test('collapse plan becomes bounded dynamic bodies with voxel colliders and cano
   assert.ok(tower.voxels.length>result.damage.remaining.length);
 });
 
+
+
+test('cluster AABB mode keeps visual voxels canonical while using one collider per collapse body',()=>{
+  const {result}=collapseFixture(),world=new FakeWorld();
+  const runtime=createRapierCollapseRuntime({
+    RAPIER:FakeRapier,world,maxBodies:4,maxColliders:8,colliderMode:'cluster-aabb',
+  });
+  const out=runtime.spawn(result.collapse,result.damage.remaining);
+  assert.equal(out.deferred.length,0);
+  assert.equal(out.spawned.length,result.collapse.bodies.length);
+  assert.equal(world.colliders.length,result.collapse.bodies.length);
+  assert.equal(runtime.stats().colliderMode,'cluster-aabb');
+  assert.equal(runtime.stats().activeColliders,result.collapse.bodies.length);
+  for(const collider of world.colliders){
+    assert.equal(collider.desc.kind,'cuboid');
+    assert.ok(collider.desc.values.density>0);
+    assert.ok(collider.desc.args.every(v=>v>=.35));
+  }
+});
+
 test('runtime steps bodies to sleep and does not duplicate a stable collapse id',()=>{
   const {result}=collapseFixture(),world=new FakeWorld();
   const runtime=createRapierCollapseRuntime({RAPIER:FakeRapier,world,maxBodies:4,maxColliders:4096});
