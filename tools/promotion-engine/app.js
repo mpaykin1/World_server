@@ -29,7 +29,7 @@ async function loadProfile() {
   const data = await res.json();
   if (!res.ok || !data.ok) throw new Error(data.error || 'profile_error');
   state.profile = data.profile;
-  renderFacts(); renderCampaigns(); renderRoles(); renderLandings();
+  renderFacts(); renderCampaigns(); renderRoles(); renderLandings(); renderSeedProspects();
 }
 function renderFacts() {
   const facts = state.profile?.site?.verifiedFacts || [];
@@ -70,6 +70,29 @@ function renderRoles() {
     state.role = b.dataset.role; q('#role-input').value = state.role; renderRoles();
   });
 }
+function renderSeedProspects() {
+  const box = q('#seed-prospects');
+  if (!box) return;
+  const rows = state.profile?.seedProspects || [];
+  box.innerHTML = rows.map((p) =>
+    '<article class="card"><small>' + esc(p.status) + ' · ' + esc(p.observedDate) + '</small><h3>' + esc(p.company) + '</h3>' +
+    '<p>' + esc(p.publicFact) + '</p><a href="' + esc(p.sourceUrl) + '" target="_blank" rel="noopener noreferrer">Source →</a>' +
+    '<div class="actions"><button class="ghost" data-seed="' + esc(p.id) + '">Load candidate →</button></div></article>'
+  ).join('');
+  qa('[data-seed]', box).forEach((b) => b.onclick = () => {
+    const p = rows.find((x) => x.id === b.dataset.seed);
+    if (!p) return;
+    state.campaignId = p.campaignId || state.campaignId;
+    q('#company').value = p.company || '';
+    q('#location').value = p.location || '';
+    q('#sector').value = p.sector || '';
+    q('#public-fact').value = p.publicFact || '';
+    q('#source-url').value = p.sourceUrl || '';
+    q('#need-signals').value = '';
+    state.lastScore = null; state.roles = null; renderCampaigns(); renderRoles(); renderScore();
+  });
+}
+
 function readProspect() {
   state.prospect = {
     company:q('#company').value.trim(),
