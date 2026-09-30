@@ -27,8 +27,14 @@ const FakeRapier={
 };
 class FakeBody {
   constructor(desc,id){this.desc=desc;this.handle=id;this.steps=0;}
-  translation(){const p=this.desc.values.translation;return{x:p[0],y:p[1]-this.steps*.2,z:p[2]};}
-  rotation(){return{x:0,y:0,z:0,w:1};}
+  translation(){
+    const p=this.desc.values.translation,v=this.desc.values.linvel||[0,0,0],t=this.steps*.05;
+    return{x:p[0]+v[0]*t,y:p[1]+v[1]*t-.5*9.81*t*t,z:p[2]+v[2]*t};
+  }
+  rotation(){
+    const a=this.desc.values.angvel||{x:0,y:0,z:0};
+    return{x:(a.x||0)*this.steps*.01,y:(a.y||0)*this.steps*.01,z:(a.z||0)*this.steps*.01,w:1};
+  }
   isSleeping(){return this.steps>=4;}
 }
 class FakeWorld {
@@ -92,6 +98,41 @@ test('cluster AABB mode keeps visual voxels canonical while using one collider p
     assert.ok(collider.desc.values.density>0);
     assert.ok(collider.desc.args.every(v=>v>=.35));
   }
+});
+
+test('fragment mode creates independent voxel bodies with divergent deterministic impulses',()=>{
+  const {result}=collapseFixture(),world=new FakeWorld();
+  const runtime=createRapierCollapseRuntime({RAPIER:FakeRapier,world,maxBodies:128,maxColliders:128,halfExtent:.445});
+  const out=runtime.spawnFragments(result.collapse,result.damage.remaining,{
+    impact:{point:result.damage.point,direction:result.damage.direction},
+    destroyed:result.damage.destroyed,
+    maxFragments:96,
+  });
+  assert.ok(out.fragmentCount>=8);
+  assert.equal(out.spawned.length,world.bodies.length);
+  assert.equal(world.colliders.length,world.bodies.length);
+  assert.equal(new Set(out.spawned.map(x=>x.voxelKey)).size,out.spawned.length);
+  const velocityKeys=new Set(world.bodies.map(b=>JSON.stringify(b.desc.values.linvel)));
+  assert.ok(velocityKeys.size>=Math.min(8,world.bodies.length));
+  const before=runtime.snapshot();
+  runtime.step(2);
+  const after=runtime.snapshot();
+  let changedPairs=0;
+  for(let i=0;i<Math.min(before.length,10);i++)for(let j=i+1;j<Math.min(before.length,10);j++){
+    const d0=Math.hypot(
+      before[i].position.x-before[j].position.x,
+      before[i].position.y-before[j].position.y,
+      before[i].position.z-before[j].position.z,
+    );
+    const d1=Math.hypot(
+      after[i].position.x-after[j].position.x,
+      after[i].position.y-after[j].position.y,
+      after[i].position.z-after[j].position.z,
+    );
+    if(Math.abs(d1-d0)>.001)changedPairs++;
+  }
+  assert.ok(changedPairs>0);
+  assert.ok(after.every(x=>x.kind==='voxel-fragment'&&x.voxelKey));
 });
 
 test('runtime steps bodies to sleep and does not duplicate a stable collapse id',()=>{
