@@ -270,7 +270,9 @@
     if(state.ready) return;
     sync();
     window.visualViewport?.addEventListener('resize',schedule,{passive:true});
-    window.visualViewport?.addEventListener('scroll',schedule,{passive:true});
+    // iOS may emit VisualViewport scroll while Safari chrome is settling.
+    // Rewriting viewport geometry from that event can feed back into rubber-band;
+    // resize is the authoritative geometry signal, document scroll is guarded separately.
     window.addEventListener('resize',schedule,{passive:true});
     window.addEventListener('orientationchange',schedule,{passive:true});
     window.addEventListener('scroll',zeroScroll,{passive:true,capture:true});
