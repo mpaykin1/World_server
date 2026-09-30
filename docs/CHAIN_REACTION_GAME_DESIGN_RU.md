@@ -202,3 +202,12 @@ Meta6 не изменяет Meta5. Она добавляет relation-engine: с
 - огонь → лес.
 
 Meta6 также исправляет action-loop: после использования одной карточки немедленно заменяется ровно этот slot логическим successor, а не ожидается расходование всей пятёрки.
+
+
+## Центральный AI handoff index
+
+Для любого нового чата/агента, который продолжает эту систему, каноническая точка входа:
+
+`docs/CHAIN_REACTION_AI_HANDOFF_INDEX_RU.md`
+
+Не дублировать исследования Meta4/Meta5/Meta6. Index содержит порядок чтения, exact live versions, proven invariants, relation architecture, AI rules, regression checklist и следующий рекомендуемый vertical slice.
