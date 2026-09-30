@@ -24,8 +24,10 @@ test.describe('GAME_VIEWPORT_LOCK_GATE',()=>{
     expect(result.input).toBeGreaterThan(0);
     expect(result.x).toBe(0);
     expect(result.y).toBe(0);
+    expect(result.qa.checks.documentHeight).toBe(true);
     expect(result.qa.checks.overflowHidden).toBe(true);
     expect(result.qa.checks.touchActionNone).toBe(true);
+    expect(result.qa.checks.canvasCss).toBe(true);
     expect(result.qa.checks.drawingBuffer).toBe(true);
   });
 
@@ -33,8 +35,10 @@ test.describe('GAME_VIEWPORT_LOCK_GATE',()=>{
     await page.goto('/apps/chain-reaction-meta6-living-relations/');
     await page.waitForFunction(()=>window.WorldServerGameViewport?.state.ready===true);
     const result=await page.evaluate(()=>window.WorldServerGameViewport.snapshot());
+    expect(result.checks.documentHeight).toBe(true);
     expect(result.checks.scrollZero).toBe(true);
     expect(result.checks.overflowHidden).toBe(true);
     expect(result.checks.touchActionNone).toBe(true);
+    expect(result.checks.canvasCss).toBe(true);
   });
 });
