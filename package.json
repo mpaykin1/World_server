@@ -124,7 +124,9 @@
     "quality:world:detail-efficiency:test": "node --test test/world-detail-efficiency-gate.test.js",
     "living-ink:build": "node scripts/build-living-ink-office.js",
     "licenses:check": "node scripts/check-third-party-licenses.js",
-    "living-ink:e2e": "playwright test e2e/living-ink-office.spec.js --project=desktop-chromium --project=mobile-chromium"
+    "living-ink:e2e": "playwright test e2e/living-ink-office.spec.js --project=desktop-chromium --project=mobile-chromium",
+    "living-ink:webgl:build": "node scripts/build-living-ink-webgl.js",
+    "living-ink:webgl:e2e": "npm run living-ink:webgl:build && playwright test e2e/living-ink-webgl.spec.js --project=desktop-chromium --project=mobile-chromium"
   },
   "engines": {
     "node": "24.x"
