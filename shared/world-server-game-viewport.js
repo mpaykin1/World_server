@@ -89,6 +89,16 @@
     return window.camera||window.gameCamera||window.WorldServer?.camera||null;
   }
 
+  function findTrackedCamera(){
+    const globalCamera=findCamera();
+    if(globalCamera) return globalCamera;
+    for(const adapter of adapters){
+      const camera=adapter.camera||adapter.getCamera?.();
+      if(camera) return camera;
+    }
+    return null;
+  }
+
   function resizeRenderer(cssW,cssH,dpr){
     const r=findRenderer();
     try{
@@ -220,7 +230,7 @@
     if(surface?.tagName==='CANVAS'){
       try{ gl=surface.getContext('webgl2')||surface.getContext('webgl'); }catch{}
     }
-    const camera=findCamera();
+    const camera=findTrackedCamera();
     const expectedAspect=p.cssWidth/p.cssHeight;
     const cameraAspect=Number(camera?.aspect);
     const checks={
@@ -236,6 +246,14 @@
         Math.abs(gl.drawingBufferWidth-p.bufferWidth)<=1&&
         Math.abs(gl.drawingBufferHeight-p.bufferHeight)<=1
       ),
+      webglViewport:!gl||(()=>{
+        try{
+          const v=gl.getParameter(gl.VIEWPORT);
+          return v[0]===0&&v[1]===0&&
+            Math.abs(v[2]-gl.drawingBufferWidth)<=1&&
+            Math.abs(v[3]-gl.drawingBufferHeight)<=1;
+        }catch{return false;}
+      })(),
       cameraAspect:!Number.isFinite(cameraAspect)||Math.abs(cameraAspect-expectedAspect)<0.002
     };
     return {version:VERSION,pass:Object.values(checks).every(Boolean),checks,inputEvents:state.inputEvents,metrics:p};
