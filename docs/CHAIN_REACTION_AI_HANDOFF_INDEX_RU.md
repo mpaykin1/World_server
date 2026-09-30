@@ -356,3 +356,12 @@ Meta6 relation animation — хороший visual-causal MVP, но не фин�
 
 Для live experimental build:
 https://mpaykin1.github.io/meta6/
+
+
+# 12. Machine-readable manifest
+
+Для агентов, которым нужен быстрый структурированный context без парсинга всех markdown-файлов:
+
+`data/chain-reaction-handoff.json`
+
+Manifest содержит live URLs, exact commits, proven invariants, relation types, known limits, required reading, agent rules и next vertical slice. Markdown-документы остаются source-of-truth для деталей; JSON — быстрый индекс для автоматизированных агентов.
