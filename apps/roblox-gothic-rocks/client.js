@@ -8,7 +8,7 @@ const THROW_MIN=54*S, THROW_MAX=108*S, CHARGE_SECONDS=1.62;
 const PLAYER_R=.33, PLAYER_H=1.75;
 const statusEl=document.querySelector('#status'), loading=document.querySelector('#loading'), throwBtn=document.querySelector('#throw'), chargeBar=document.querySelector('#charge i');
 
-const state={ready:false,shots:0,impacts:0,visibilityPercent:0,qualityFloor:85,source:'городкамни.rbxlx',avatar:'kaykit-knight-rig-medium',externalRobloxAssetsUsed:0};
+const state={ready:false,shots:0,impacts:0,visibilityPercent:0,qualityFloor:85,source:'городкамни.rbxlx',avatar:'kaykit-knight-rig-medium',characterRuntime:'pending',externalRobloxAssetsUsed:0};
 window.__ROBLOX_PORT_MVP__=state;
 
 function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
@@ -80,7 +80,7 @@ function ensureChunks(x){const center=Math.floor((x+CHUNK/2)/CHUNK);for(let k=ce
 const avatarRoot=new THREE.Group();scene.add(avatarRoot);let avatar=null,character=null;
 function fallbackAvatar(){const g=new THREE.Group();const body=new THREE.Mesh(new THREE.CylinderGeometry(.32,.36,1.15,8),new THREE.MeshStandardMaterial({color:0x6e7682,roughness:.7,metalness:.25}));body.position.y=.9;body.castShadow=true;g.add(body);const head=new THREE.Mesh(new THREE.SphereGeometry(.25,12,10),new THREE.MeshStandardMaterial({color:0xb9a88d,roughness:.8}));head.position.y=1.75;head.castShadow=true;g.add(head);avatarRoot.add(g);avatar=g;}
 function playAnim(kind){character?.play(kind);}
-async function loadAvatar(){try{character=await loadUniversalPlayer({parent:avatarRoot,scale:.78});avatar=character.object;state.avatar=character.id;character.play('idle',{fade:0});}catch(e){console.warn('[ROBLOX PORT] KayKit fallback',e);fallbackAvatar();}}
+async function loadAvatar(){try{character=await loadUniversalPlayer({parent:avatarRoot,scale:.78});avatar=character.object;state.avatar=character.id;state.characterRuntime='universal-player-character';character.play('idle',{fade:0});}catch(e){state.characterRuntime='fallback';console.warn('[ROBLOX PORT] KayKit fallback',e);fallbackAvatar();}}
 
 const player={pos:new THREE.Vector3(0,routeY(0)+.05,0),vel:new THREE.Vector3(),yaw:Math.PI/2,pitch:-.08,onGround:true};
 let lookX=0,lookY=0;
