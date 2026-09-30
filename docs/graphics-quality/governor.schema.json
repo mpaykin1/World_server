@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "system": "world-server-graphics-quality-governor",
+  "status": "PROTOTYPE",
+  "qualityTiers": ["PROTOTYPE","KRIEGER_CLASS"],
+  "pipeline": ["WorldRecipe","SemanticSceneCompiler","Geometry","Materials","Lighting","CharactersAnimation","FX","Composition","Render","GraphicsQualityGovernor"],
+  "hardStopGates": {
+    "NEAR_OBJECT_GATE": {"requiredFor":["KRIEGER_CLASS"],"failIf":["important near-camera object is accidental primitive-only geometry","important near-camera object is billboard-only unless StyleProfile explicitly requires it"]},
+    "MATERIAL_GATE": {"requiredFor":["KRIEGER_CLASS"],"failIf":["key surface is uniform flat material without explicit StyleProfile justification"]},
+    "LIGHTING_GATE": {"requiredFor":["KRIEGER_CLASS"],"failIf":["style requires dynamic/emissive lighting but source has no measurable effect on nearby 3D geometry"]},
+    "ENVIRONMENT_GATE": {"requiredFor":["KRIEGER_CLASS"],"failIf":["scene is predominantly a few large undetailed primitive surfaces without explicit StyleProfile justification"]}
+  },
+  "semanticDetailLayers": ["MACRO","MESO","MICRO","SURFACE","STATE"],
+  "primitiveDetectorSignals": ["large-flat-primitive-ratio","uniform-region-ratio","edge-frequency","secondary-geometry-coverage","semantic-feature-density","material-variation","local-lighting-evidence","near-object-detail"],
+  "decision": {"anyRequiredHardStopFail":"PROTOTYPE_OR_BLOCKED","allRequiredPass":"PUBLISH_CANDIDATE_NOT_LIVE_VERIFIED"},
+  "regressionTargets": [{"id":"bridge-chamber-v1-class","expectation":"must fail KRIEGER_CLASS when represented by boxy primitive-dominant geometry without semantic secondary detail/material/light evidence"}],
+  "evidenceContract": ["fixed-seed","fixed-camera","fixed-FOV","fixed-exposure","fixed-resolution","exact-SHA","CURRENT-TARGET-RESULT","desktop-performance","iPhone-performance-when-relevant"],
+  "performanceSignals": ["fps-p95","memory","draw-calls","triangles-instances","generation-time","streaming-time"],
+  "styleRule":"StyleProfile controls appearance; quality tier controls execution depth. Intentional minimalism/voxel/watercolor must be judged by style-equivalent semantic and artistic complexity rather than forced PBR.",
+  "kriegerRule":"Krieger is a technological quality floor and source of general reusable principles, not an art-style mandate and not permission to copy protected assets/designs.",
+  "nextExecutableStep":"Implement a deterministic scene-metrics collector for primitive dominance and semantic-detail coverage, then make bridge-chamber-v1-class a negative KRIEGER_CLASS regression fixture.",
+  "retentionRule":"Every confirmed reusable capability or quality lesson must link to exact SHA/evidence and enter Knowledge Base/Capability Registry; repeatable operations become playbooks; affected knowledge becomes NEEDS_REVERIFY."
+}
