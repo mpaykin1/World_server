@@ -38,7 +38,7 @@ document.head.appendChild(style);
 
 const active=new Map(),move={x:0,y:0},knob=hud.querySelector('.li-knob'),frameButton=hud.querySelector('.li-frame');
 const keys=Object.create(null);
-let yaw=0,pitch=-.01,mode='walkthrough',savedPose=null;
+let yaw=0,pitch=-.075,mode='walkthrough',savedPose=null;
 
 function updateCameraRotation(){
   const dir=new THREE.Vector3(Math.sin(yaw)*Math.cos(pitch),Math.sin(pitch),Math.cos(yaw)*Math.cos(pitch));
@@ -78,13 +78,13 @@ frameButton.addEventListener('click',e=>{
   if(mode==='walkthrough'){
     savedPose={position:camera.position.clone(),yaw,pitch};
     mode='illustration';frameButton.classList.add('active');
-    camera.position.set(.15,1.70,-.35);
-    const target=new THREE.Vector3(0,1.03,9.7);camera.lookAt(target);
-    camera.fov=innerWidth<innerHeight?47:42;camera.updateProjectionMatrix();
+    camera.position.set(-5.25,1.72,1.20);
+    const target=new THREE.Vector3(.45,1.02,9.6);camera.lookAt(target);
+    camera.fov=innerWidth<innerHeight?51:43;camera.updateProjectionMatrix();
   }else{
     mode='walkthrough';frameButton.classList.remove('active');
     camera.position.copy(savedPose?.position||new THREE.Vector3(0,1.62,-2.2));
-    yaw=savedPose?.yaw||0;pitch=savedPose?.pitch||-.01;
+    yaw=savedPose?.yaw||0;pitch=savedPose?.pitch??-.075;
     camera.fov=innerWidth<innerHeight?58:48;camera.updateProjectionMatrix();updateCameraRotation();
   }
 });
