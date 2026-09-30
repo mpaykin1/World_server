@@ -19,6 +19,15 @@ set -euo pipefail
 : "${EXPECTED:?EXPECTED is required}"
 : "${CERTIFIED:?CERTIFIED is required}"
 
+GATE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# The independent-review selection runs on Node, which this gate already
+# requires through $DUPLICATE_COMMAND, instead of on an optional jq binary.
+# An absent jq used to make the covering regression tests skip silently, which
+# is a false green; Node is guaranteed by the job's own setup-node step.
+NODE_BIN="${OCEAN_NODE_BIN:-node}"
+REVIEW_SELECTOR="${OCEAN_REVIEW_SELECTOR:-$GATE_DIR/ocean-review-select.js}"
+test -f "$REVIEW_SELECTOR" || { echo "Review selector is missing: $REVIEW_SELECTOR" >&2; exit 1; }
+
 POLL_ATTEMPTS="${REVIEW_POLL_ATTEMPTS:-12}"
 POLL_SECONDS="${REVIEW_POLL_SECONDS:-10}"
 # The canonical duplicate/parallel-system review. Overridable only so the
@@ -70,7 +79,7 @@ $DUPLICATE_COMMAND >/dev/null
 for ((attempt=1; attempt<=POLL_ATTEMPTS; attempt++)); do
   REVIEW="$(gh api -H 'Accept: application/vnd.github+json' \
     "repos/${GITHUB_REPOSITORY}/commits/${EXPECTED}/check-runs" \
-    --jq '[.check_runs[] | select(.name == "World Independent Adversarial Review")] | sort_by(.id) | last // {} | [.status // "absent", .conclusion // ""] | @tsv')"
+    | "$NODE_BIN" "$REVIEW_SELECTOR")"
   read -r STATUS CONCLUSION <<< "$REVIEW"
   # GitHub check-run IDs increase on rerun. A new queued run must supersede an older PASS.
   if test "$STATUS" = completed; then

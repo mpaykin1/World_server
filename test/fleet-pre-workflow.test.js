@@ -71,7 +71,7 @@ test('gate reuses the canonical duplicate review instead of a second detector',(
 
 function runGate(sequence,{base=MASTER,master=MASTER,attempts='3',masterAfterReview='',
   headAfterReview='',mergeable='true',mergeableAfterReview='',certified=HEAD,
-  expected=HEAD,draft='false',duplicateCommand='true'}={}){
+  expected=HEAD,draft='false',duplicateCommand='true',priorSuccess=false}={}){
   const dir=fs.mkdtempSync(path.join(os.tmpdir(),'ocean-gate-'));
   const counter=path.join(dir,'counter');
   const gh=path.join(dir,'gh');
@@ -96,12 +96,26 @@ else
   n=$((n+1)); printf '%s' "$n" > "$FAKE_COUNTER"
   IFS=',' read -ra states <<< "$FAKE_REVIEW_SEQUENCE"
   i=$((n-1)); test "$i" -lt "\${#states[@]}" || i=$((\${#states[@]}-1))
-  case "\${states[$i]}" in
-    success) printf 'completed\\tsuccess\\n' ;;
-    failure) printf 'completed\\tfailure\\n' ;;
-    inconclusive) printf 'completed\\taction_required\\n' ;;
-    *) printf 'in_progress\\t\\n' ;;
-  esac
+  # Real GitHub shape: raw check-runs JSON, not a pre-selected row, so the
+  # production selector actually runs on every test in this suite.
+  printf '{"check_runs":['
+  sep=''
+  if test "$FAKE_PRIOR_SUCCESS" = 1; then
+    printf '{"id":100,"name":"World Independent Adversarial Review","status":"completed","conclusion":"success"}'
+    sep=','
+  fi
+  for ((k=0;k<=i;k++)); do
+    case "\${states[$k]}" in
+      success) row='"status":"completed","conclusion":"success"' ;;
+      failure) row='"status":"completed","conclusion":"failure"' ;;
+      inconclusive) row='"status":"completed","conclusion":"action_required"' ;;
+      queued) row='"status":"queued","conclusion":null' ;;
+      *) row='"status":"in_progress","conclusion":null' ;;
+    esac
+    printf '%s{"id":%d,"name":"World Independent Adversarial Review",%s}' "$sep" "$((200+k))" "$row"
+    sep=','
+  done
+  printf ']}\\n'
 fi
 `);
   fs.chmodSync(gh,0o755);
@@ -111,11 +125,20 @@ fi
       CERTIFIED:certified,REVIEW_POLL_ATTEMPTS:attempts,REVIEW_POLL_SECONDS:'0',
       OCEAN_DUPLICATE_COMMAND:duplicateCommand,
       FAKE_BASE:base,FAKE_MASTER:master,FAKE_REVIEW_SEQUENCE:sequence,
+      FAKE_PRIOR_SUCCESS:priorSuccess?'1':'0',
       FAKE_MERGEABLE:mergeable,FAKE_MERGEABLE_AFTER_REVIEW:mergeableAfterReview||mergeable,
       FAKE_DRAFT:draft,FAKE_MASTER_AFTER_REVIEW:masterAfterReview,
       FAKE_HEAD_AFTER_REVIEW:headAfterReview,FAKE_COUNTER:counter}
   });
   fs.rmSync(dir,{recursive:true,force:true});
+  // If bash could not execute the gate at all it exits non-zero for the wrong
+  // reason, which would silently satisfy every fail-closed assertion below and
+  // turn this whole file into a false green. Refuse to report on that.
+  assert.equal(result.error,undefined,
+    `bash could not execute the gate (${result.error&&result.error.code}); `+
+    'the fail-closed assertions below would be meaningless');
+  assert.doesNotMatch(result.stderr,/No such file or directory/,
+    'bash could not resolve the gate script, so its non-zero exit proves nothing');
   return result;
 }
 
@@ -201,37 +224,128 @@ test('review timeout and completed non-success both fail closed',()=>{
   }
 });
 
-test('newest independent check ID supersedes an older success even while queued',t=>{
-  const selector=gate.match(/--jq '(\[\.check_runs\[\][^\n]+)'/);
-  assert(selector,'Read the production GitHub jq selector');
-  assert.match(selector[1],/sort_by\(\.id\)/);
-  const jq=spawnSync('jq',['-r',selector[1]],{
+// Executes the production selector the gate itself calls. Hermetic by
+// construction: it needs Node, which the gate already requires through its
+// canonical duplicate review, and never the optional jq binary, so it cannot
+// degrade into a silent skip on a jq-less host.
+const SELECTOR=path.join(root,'scripts','ocean-review-select.js');
+function selectRuns(runs){
+  return spawnSync(process.execPath,[SELECTOR],{
     encoding:'utf8',input:JSON.stringify({check_runs:[
-      {id:900, name:'World Independent Adversarial Review',status:'completed',
-        conclusion:'success',started_at:'2026-09-27T02:00:00Z'},
-      {id:901, name:'World Independent Adversarial Review',status:'queued',
-        conclusion:null,started_at:null}
+      ...runs.map(r=>({name:'World Independent Adversarial Review',...r}))
     ]})
   });
-  if(jq.error?.code==='ENOENT'){t.skip('jq unavailable in this host');return;}
-  assert.equal(jq.status,0,jq.stderr);
-  assert.match(jq.stdout,/^queued(?:\t|\r?\n)/);
-  assert.doesNotMatch(jq.stdout,/success/);
+}
+
+test('the exact-head review selection is hermetic and never depends on a jq binary',()=>{
+  assert.ok(fs.existsSync(SELECTOR),
+    'the version-controlled selector the gate calls must exist');
+  assert.match(gate,/ocean-review-select\.js/);
+  assert.doesNotMatch(gate,/check-runs[\s\S]{0,240}--jq/,
+    'selecting the review must not require the optional jq binary, or its guard silently skips');
+  assert.doesNotMatch(fs.readFileSync(__filename,'utf8'),/t\.skip\(/,
+    'a skipped guard is a false green under AGENTS.md section 10');
 });
-test('newest independent failed review supersedes prior success',t=>{
-  const selector=gate.match(/--jq '(\[\.check_runs\[\][^\n]+)'/);
-  assert(selector);
-  const jq=spawnSync('jq',['-r',selector[1]],{
+
+test('newest independent check ID supersedes an older success even while queued',()=>{
+  const selected=selectRuns([
+    {id:900,status:'completed',conclusion:'success',started_at:'2026-09-27T02:00:00Z'},
+    {id:901,status:'queued',conclusion:null,started_at:null}
+  ]);
+  assert.equal(selected.status,0,selected.stderr);
+  assert.match(selected.stdout,/^queued/);
+  assert.doesNotMatch(selected.stdout,/success/);
+  const r=runGate('queued',{priorSuccess:true,attempts:'2'});
+  assert.notEqual(r.status,0,'a queued rerun superseded the reviewed PASS');
+  assert.doesNotMatch(r.stdout,/READY_FOR_OCEAN=YES/);
+});
+
+test('newest independent failed review supersedes prior success',()=>{
+  const selected=selectRuns([
+    {id:15,status:'completed',conclusion:'success',started_at:'2026-09-27T02:00:00Z'},
+    {id:16,status:'completed',conclusion:'failure',started_at:'2026-09-27T02:01:00Z'}
+  ]);
+  assert.equal(selected.status,0,selected.stderr);
+  assert.match(selected.stdout,/^completed\tfailure/);
+  const r=runGate('failure',{priorSuccess:true});
+  assert.notEqual(r.status,0);
+  assert.doesNotMatch(r.stdout,/READY_FOR_OCEAN=YES/);
+});
+
+test('the selector takes the newest id, not the first match',()=>{
+  const newerPass=selectRuns([
+    {id:15,status:'completed',conclusion:'failure'},
+    {id:16,status:'completed',conclusion:'success'}
+  ]);
+  assert.equal(newerPass.status,0,newerPass.stderr);
+  assert.match(newerPass.stdout,/^completed\tsuccess/);
+  const olderPass=selectRuns([
+    {id:15,status:'completed',conclusion:'success'},
+    {id:16,status:'completed',conclusion:'failure'}
+  ]);
+  assert.match(olderPass.stdout,/^completed\tfailure/);
+});
+
+test('an absent or unrelated check-run set is absent, never a pass',()=>{
+  const empty=selectRuns([]);
+  assert.equal(empty.status,0,empty.stderr);
+  assert.equal(empty.stdout,'absent\t\n');
+  const unrelated=spawnSync(process.execPath,[SELECTOR],{
     encoding:'utf8',input:JSON.stringify({check_runs:[
-      {id:15,name:'World Independent Adversarial Review',
-        status:'completed',conclusion:'success',started_at:'2026-09-27T02:00:00Z'},
-      {id:16,name:'World Independent Adversarial Review',
-        status:'completed',conclusion:'failure',started_at:'2026-09-27T02:01:00Z'}
+      {id:7,name:'Ocean merge eligibility',status:'completed',conclusion:'success'}
     ]})
   });
-  if(jq.error?.code==='ENOENT'){t.skip('jq unavailable in this host');return;}
-  assert.equal(jq.status,0,jq.stderr);
-  assert.match(jq.stdout,/^completed\tfailure/);
+  assert.equal(unrelated.status,0,unrelated.stderr);
+  assert.equal(unrelated.stdout,'absent\t\n');
+});
+
+test('the selector fails closed on an unusable payload instead of inventing a verdict',()=>{
+  for(const payload of ['not json at all',JSON.stringify([]),JSON.stringify({total_count:1})]){
+    const result=spawnSync(process.execPath,[SELECTOR],{encoding:'utf8',input:payload});
+    assert.notEqual(result.status,0,payload);
+    assert.doesNotMatch(result.stdout,/completed/);
+  }
+});
+
+// Recorded live state, not synthetic. Fleet PRE and Ocean both read PR #352 at
+// head 95b16ec2 on 2026-09-30: the exact-head "World Independent Adversarial
+// Review" had concluded failure, and the gate that shipped on master still
+// certified that same head READY_FOR_OCEAN=YES. That is the exact BEFORE state
+// this guard exists to reject.
+const RECORDED_352_FAILURE={id:36652535133,
+  name:'World Independent Adversarial Review',status:'completed',conclusion:'failure',
+  completed_at:'2026-09-30T00:56:12Z'};
+
+test('recorded live case: a failed exact-head review is not Ocean eligible',()=>{
+  const selected=spawnSync(process.execPath,[SELECTOR],{
+    encoding:'utf8',input:JSON.stringify({check_runs:[RECORDED_352_FAILURE]})
+  });
+  assert.equal(selected.status,0,selected.stderr);
+  assert.match(selected.stdout,/^completed\tfailure/);
+  const r=runGate('failure');
+  assert.notEqual(r.status,0,'the recorded live BLOCK must stay blocked');
+  assert.doesNotMatch(r.stdout,/READY_FOR_OCEAN=YES/);
+});
+
+test('negative control: the pre-fix tautology certifies the recorded BLOCK, so the guard discriminates',()=>{
+  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'ocean-tautology-'));
+  const script=path.join(dir,'tautology.sh');
+  fs.writeFileSync(script,`set -euo pipefail
+test -n "$CERTIFIED"
+test "$CERTIFIED" = "$EXPECTED"
+echo "READY_FOR_OCEAN=YES SHA=$CERTIFIED"
+`);
+  const before=spawnSync('bash',[script],{
+    encoding:'utf8',env:{...process.env,CERTIFIED:HEAD,EXPECTED:HEAD}
+  });
+  fs.rmSync(dir,{recursive:true,force:true});
+  assert.equal(before.status,0,before.stderr);
+  assert.match(before.stdout,/READY_FOR_OCEAN=YES/,
+    'the pre-fix predicate reads no review and certifies the recorded BLOCK; if this stops holding the fixture no longer discriminates');
+  const after=runGate('failure');
+  assert.notEqual(after.status,0,
+    'the new predicate must reject what the pre-fix predicate accepted');
+  assert.doesNotMatch(after.stdout,/READY_FOR_OCEAN=YES/);
 });
 
 test('independent reviewer is a separate trusted workflow publishing the exact-head check',()=>{
