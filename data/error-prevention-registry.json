@@ -766,6 +766,30 @@
         "SCIENCE_RUN_072_H2.json"
       ],
       "confirmedAt": "2026-09-06T00:00:00.000Z"
+    },
+    {
+      "id": "browser-game-page-scroll-touch-conflict",
+      "category": "game-runtime",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "Vertical or diagonal finger movement over a browser game also scrolls, bounces or stretches the page, making camera/joystick control unreliable on iPhone Safari.",
+      "rootCause": "Game pages independently implemented viewport CSS/input. Without one owner for VisualViewport, document scroll, Pointer Events, canvas DPR, WebGL viewport and camera aspect, browser pan/overscroll could compete with gameplay.",
+      "solution": "WorldServerGameViewport is injected into game entrypoints by default and owns the complete viewport/input/resize chain. GAME_VIEWPORT_LOCK_GATE blocks release on contract regression.",
+      "protection": [
+        "shared/world-server-game-viewport.js",
+        "shared/world-server-game-viewport.css",
+        "scripts/inject-game-viewport-lock.js",
+        "scripts/game-viewport-lock-gate.js",
+        "test/game-viewport-lock.test.js",
+        "e2e/game-viewport-lock.spec.js",
+        "scripts/real-device-gate.js"
+      ],
+      "evidence": [
+        "mobile-webkit CI regression requires page movement = 0 while game input > 0",
+        "Vercel build injection defaults new game app entrypoints into the shell",
+        "physical iOS requested through quality:real-devices"
+      ],
+      "confirmedAt": "2026-09-30T10:05:00+04:00"
     }
   ],
   "confirmationProtocol": {
