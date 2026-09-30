@@ -1,0 +1,25 @@
+name: Export KayKit standalone HTML
+
+on:
+  push:
+    branches:
+      - ai/chatgpt/export-kaykit-html-20260930
+    paths:
+      - .github/workflows/export-kaykit-html.yml
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify standalone HTML exists
+        run: |
+          test -s apps/kaykit-knight-standalone/index.html
+          grep -qi '<!doctype html' apps/kaykit-knight-standalone/index.html
+      - name: Upload autonomous HTML
+        uses: actions/upload-artifact@v4
+        with:
+          name: KayKit_Knight_Standalone_HTML
+          path: apps/kaykit-knight-standalone/index.html
+          if-no-files-found: error
+          retention-days: 1
