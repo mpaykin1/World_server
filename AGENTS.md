@@ -222,3 +222,10 @@ For any manual ChatGPT/AI task where the user asks for a testable artifact or li
 - Treat `implemented/tested but no usable stable production URL` as a pipeline regression. Never hand off `deploy-preview-*` or immutable deploy aliases as the final user link unless the user explicitly requests a temporary Preview.
 
 Canonical machine-readable policy: `data/manual-task-completion-contract.json`; runtime gate: `lib/manual-task-completion-contract.js`.
+
+
+## Fixed game viewport is a release invariant
+
+For every playable web game, HTML page movement is a regression. Follow `docs/FIXED_GAME_VIEWPORT_CONTRACT_RU.md` and use `shared/fixed-game-viewport.js` or an equivalent implementation that proves the same invariants.
+
+Required mobile behavior: page scroll X/Y remains zero, root/body are fixed + overflow hidden + touch-action none, browser rubber-band does not move the game surface, and pointer/touch gestures are consumed by game controls/camera. Physical iPhone is the final authority.
