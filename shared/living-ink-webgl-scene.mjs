@@ -1,4 +1,4 @@
-import * as THREE from '../vendor/three-r186/three.module.js';
+import * as THREE from '../vendor/three-r160/three.module.min.js';
 import {STYLE,seeded} from './living-ink-webgl-npr.mjs';
 import {createOfficeHuman,animateOfficeHuman,updateHumanLod} from './living-ink-webgl-human.mjs';
 
