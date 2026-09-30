@@ -979,3 +979,21 @@ Regression tests must cover canonical population arithmetic, worker bound, exact
 Registered on protected base `75bb69eab3d94f260ee8140075f48a4d1e2ed32e`. Implementation and tests in progress.
 
 ---
+
+## 2026-09-27 — Survivors arena POC (ai/chat/survivors-arena-poc-20260927)
+- **Why:** test Vampire Survivors' readable move-only, auto-fire, dense enemy, gem magnet, escalating upgrade loop inside World Server without cloning its protected characters/art/music.
+- **Current state:** World Server has a quarantined 3D survival app but no verified survivors-style horde loop. This task adds an isolated `apps/survivors-arena` prototype plus deterministic shared combat core and regression tests. Existing Voxel World remains unchanged.
+- **Target:** mobile/desktop playable prototype, 3 fictional resident roles (warrior / worker / mayor), periodic enemy escalation, pickups, 3-choice pauses, bounded particle effects, optional read-only macro_read from canonical World Server world, deterministic seed and capped spawn cost.
+- **Affected systems:** new app and shared core; release registry remains deny-by-default; docs and test. No new Supabase tables or writes to shared world yet.
+- **Risks:** third-party asset licenses, iOS WebKit performance, live backend not accessible, separate arena session not yet persisted into canonical world, session visibility not yet measured.
+- **Patch plan:** implement pure deterministic state machine; Canvas2D view/input; read-only emergence synchronization and offline fallback; Node tests plus desktop/mobile browser smoke; seek independent review; only then consider certification/integration with Voxel World and production.
+- **Required tests:** `node --test test/survivors-arena.test.mjs`; `npm run check`; `npx playwright test e2e/survivors-arena.spec.js --project=desktop-chromium --project=mobile-webkit`; standard release gates for later certification.
+- **Status:** WORKING — implementation pending; never call this public-ready merely because source files exist.
+- **Completion criteria:** reproducible attacks/gems/choices, fixed enemy budgets, actual browser motion and controls on desktop/iOS emulation, user-visible intensity and upgrade feedback, documented licenses; public link only after fresh live verified production, >85% measured visibility and project Golden Standard.
+
+### 2026-09-27 implementation checkpoint
+- Added a **real opt-in playable front-end**: `apps/survivors-arena/{index.html,style.css,client.js,render.mjs}`.
+- Added seeded pure simulation core `shared/survivors-arena-core.mjs`, 3 original playable archetypes, 9 upgrades, escalating auto-fire horde, XP gems and magnetic pickup, boss milestones, evolution, bounded particles/enemies, responsive/mobile joystick, optional generated audio, motion reduction.
+- Read-only `macro_read` from current canonical shared World Server world; honest autonomous fallback if unavailable. Current POC does not persist arena consequences back to Supabase or Telegram.
+- Added `test/survivors-arena.test.mjs`, browser tests in `e2e/survivors-arena.spec.js` and independent PR CI in `.github/workflows/survivors-arena.yml`; local-only fixture is **UI-specific**. Deterministic Node suite separately tests legitimate enemy kills, gems and upgrades.
+- **Still pending:** live GitHub CI results, desktop/iPhone screenshots and independent visual/user visibility scoring; certified release and stable production link are intentionally blocked until those checks succeed.
