@@ -33,6 +33,35 @@ test('sand falls and settles on solid stone', () => {
   assert.equal(world.getCell(0, 0, 0)?.material, 'stone');
 });
 
+test('powder uses explicit horizontal offsets to settle diagonally downward', () => {
+  const world = new MatterWorld({ seed: 17 });
+  world.setCell(0, 0, 0, 'stone');
+  world.setCell(0, 1, 0, 'sand');
+  world.step();
+  const sand = world.snapshot().find(cell => cell.material === 'sand');
+  const [x, y, z] = sand.position.split(',').map(Number);
+  assert.equal(y, 0);
+  assert.equal(Math.abs(x) + Math.abs(z), 1);
+});
+
+test('liquid flows horizontally when gravity is blocked', () => {
+  const world = new MatterWorld({ seed: 19 });
+  world.setCell(0, 0, 0, 'stone');
+  world.setCell(0, 1, 0, 'water');
+  world.step();
+  const water = world.snapshot().find(cell => cell.material === 'water');
+  const [x, y, z] = water.position.split(',').map(Number);
+  assert.equal(y, 1);
+  assert.equal(Math.abs(x) + Math.abs(z), 1);
+});
+
+test('gas rises vertically before trying horizontal drift', () => {
+  const world = new MatterWorld({ seed: 23 });
+  world.setCell(0, 1, 0, 'steam', { temperature: 120, life: 12 });
+  world.step();
+  assert.equal(world.getCell(0, 2, 0)?.material, 'steam');
+});
+
 test('denser water falls through oil by swapping materials', () => {
   const world = new MatterWorld({ seed: 9 });
   floor(world, 1);
@@ -60,12 +89,17 @@ test('lava touching water makes stone and steam without scripted event', () => {
   assert.ok(!materials.includes('lava'));
 });
 
-test('fire ignites wood, consumes fuel and leaves ash', () => {
+test('fire ignites wood; wood duration is fuel, not fire life', () => {
   const world = new MatterWorld({ seed: 4 });
   floor(world);
   world.setCell(0, 1, 0, 'wood');
   world.setCell(1, 1, 0, 'fire');
-  run(world, 14);
+  world.step();
+  const ignited = world.getCell(0, 1, 0);
+  assert.equal(ignited?.material, 'wood');
+  assert.equal(ignited?.burning, true);
+  assert.ok(ignited.fuel >= 7 && ignited.fuel <= 8);
+  run(world, 13);
   assert.ok(world.snapshot().some(cell => cell.material === 'ash'));
 });
 
