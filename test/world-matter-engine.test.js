@@ -2,7 +2,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { MatterWorld, MATERIALS, CHUNK_SIZE } = require('../lib/world-matter-engine');
+const { MatterWorld, MATERIALS, CHUNK_SIZE, GRAVITY } = require('../lib/world-matter-engine');
 
 function run(world, ticks) {
   const stats = [];
@@ -18,6 +18,7 @@ function floor(world, radius = 2) {
 
 test('matter catalog exposes physical phases and chunk scale', () => {
   assert.equal(CHUNK_SIZE, 16);
+  assert.deepEqual(GRAVITY, { x: 0, y: -1, z: 0 });
   assert.equal(MATERIALS.sand.phase, 'powder');
   assert.equal(MATERIALS.water.phase, 'liquid');
   assert.equal(MATERIALS.steam.phase, 'gas');
@@ -31,6 +32,18 @@ test('sand falls and settles on solid stone', () => {
   run(world, 5);
   assert.equal(world.getCell(0, 1, 0)?.material, 'sand');
   assert.equal(world.getCell(0, 0, 0)?.material, 'stone');
+});
+
+test('fixed Y-up gravity crosses chunk boundaries deterministically', () => {
+  const falling = new MatterWorld({ seed: 29 });
+  falling.setCell(0, 16, 0, 'sand');
+  falling.step();
+  assert.equal(falling.getCell(0, 15, 0)?.material, 'sand');
+
+  const rising = new MatterWorld({ seed: 31 });
+  rising.setCell(0, -1, 0, 'steam', { temperature: 120, life: 12 });
+  rising.step();
+  assert.equal(rising.getCell(0, 0, 0)?.material, 'steam');
 });
 
 test('powder uses explicit horizontal offsets to settle diagonally downward', () => {
@@ -89,7 +102,16 @@ test('lava touching water makes stone and steam without scripted event', () => {
   assert.ok(!materials.includes('lava'));
 });
 
-test('fire ignites wood; wood duration is fuel, not fire life', () => {
+test('nonflammable material cannot be forged into a burning state', () => {
+  const world = new MatterWorld({ seed: 37 });
+  world.setCell(0, 0, 0, 'stone', { burning: true, fuel: 10 });
+  assert.equal(world.getCell(0, 0, 0)?.burning, false);
+  world.step();
+  assert.equal(world.getCell(0, 0, 0)?.material, 'stone');
+  assert.ok(!world.snapshot().some(cell => cell.material === 'fire'));
+});
+
+test('fire ignites wood; wood survives ignition and consumes its fuel budget', () => {
   const world = new MatterWorld({ seed: 4 });
   floor(world);
   world.setCell(0, 1, 0, 'wood');
