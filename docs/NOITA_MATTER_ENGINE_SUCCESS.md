@@ -40,6 +40,8 @@ The first adversarial review returned BLOCK on two claims that did not reproduce
 
 This is useful process evidence: even a false-positive review can expose code that is technically correct but too easy to misread. The fix was clarity plus executable counterexamples, not disabling the reviewer.
 
+A second adversarial run produced one useful hardening finding among mostly unsupported claims: callers could forge `burning:true` on inert materials because cell normalization accepted the flag for every material. The engine now accepts burning state only for materials with an ignition threshold, and `_combust` also fails closed for inert matter. The same review invented per-chunk/inverted Y axes; the engine now exports an explicit fixed world gravity contract `{x:0,y:-1,z:0}` and tests falling/rising across a 16-cell chunk boundary, making the World Server Y-up convention executable rather than implicit.
+
 ## Verified behavior
 
 The dedicated matter suite passes 11/11, covering phases, gravity, diagonal settling, horizontal liquid flow, vertical gas rise, density, lava-water reaction, combustion, phase changes, sleeping and determinism.
