@@ -11,6 +11,7 @@
 html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#06101b;touch-action:none}
 body{position:fixed;inset:0}
 canvas{position:fixed!important;inset:0;width:100%!important;height:100%!important;display:block;z-index:0;touch-action:none}
+#hybrid2d{z-index:3!important;pointer-events:none;display:none}
 #stormTint{position:fixed;inset:0;z-index:4;pointer-events:none;background:linear-gradient(180deg,rgba(5,13,31,.06),rgba(1,8,16,.32));mix-blend-mode:multiply}
 #flash{position:fixed;inset:0;z-index:50;pointer-events:none;background:#dbe9ff;opacity:0}
 #hud{position:fixed;inset:0;z-index:20;pointer-events:none;padding:max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}
@@ -51,7 +52,7 @@ canvas{position:fixed!important;inset:0;width:100%!important;height:100%!importa
   #goldenMobileControls #goldenMoveKnob{left:38px!important;top:38px!important;width:42px!important;height:42px!important}
   #goldenMobileControls #goldenLookPad{display:none!important}
   #goldenMobileControls #goldenJump{right:97px!important;bottom:98px!important;width:56px!important;height:56px!important}
-  #hotbar{bottom:max(3px,env(safe-area-inset-bottom));gap:2px}.slot{width:31px;height:31px;font-size:16px}.apng{width:58px;height:58px}#combatHint{display:none}#tech{bottom:150px;opacity:.35}
+  #hybrid2d{display:block}#hotbar{bottom:max(3px,env(safe-area-inset-bottom));gap:2px}.slot{width:31px;height:31px;font-size:16px}.apng{width:58px;height:58px}#combatHint{display:none}#tech{bottom:150px;opacity:.35}
 }
 </style>
 <script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.165.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.165.0/examples/jsm/"}}</script>
@@ -62,6 +63,7 @@ canvas{position:fixed!important;inset:0;width:100%!important;height:100%!importa
 <script src="/shared/world-quality-autopilot.js"></script>
 </head>
 <body>
+<canvas id="hybrid2d" aria-hidden="true"></canvas>
 <div id="stormTint"></div><div id="flash"></div>
 <div id="hud">
   <div class="topbar">

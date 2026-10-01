@@ -94,6 +94,37 @@ const rainCount=coarse?900:1600,rainGeo=new THREE.BufferGeometry(),rainData=new 
 for(let i=0;i<rainCount;i++){rainData[i*3]=(hash(i*3)-.5)*52;rainData[i*3+1]=hash(i*5)*30;rainData[i*3+2]=(hash(i*7)-.5)*65;}
 rainGeo.setAttribute('position',new THREE.BufferAttribute(rainData,3));
 const rain=new THREE.Points(rainGeo,new THREE.PointsMaterial({color:0xb9d7ee,size:.055,transparent:true,opacity:.65,depthWrite:false}));scene.add(rain);state.rainDrops=rainCount;
+const hybrid=$('#hybrid2d'),hctx=hybrid.getContext('2d');
+function sizeHybrid(){
+ if(!coarse)return;const dpr=Math.min(devicePixelRatio||1,2);hybrid.width=Math.round(innerWidth*dpr);hybrid.height=Math.round(innerHeight*dpr);hctx.setTransform(dpr,0,0,dpr,0,0);
+}
+function poly2(ctx,pts,fill){ctx.fillStyle=fill;ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);ctx.closePath();ctx.fill();}
+function drawHybrid(now){
+ if(!coarse)return;const c=hctx,w=innerWidth,h=innerHeight,hor=h*.31,progress=clamp((7-player.pos.z)/112,0,1);
+ c.clearRect(0,0,w,h);
+ let g=c.createLinearGradient(0,0,0,hor+80);g.addColorStop(0,'#274c6d');g.addColorStop(.55,'#17324c');g.addColorStop(1,'#0c2034');c.fillStyle=g;c.fillRect(0,0,w,hor+90);
+ for(let i=0;i<9;i++){const x=-35+i*(w+70)/8,peak=hor-28-hash(i*13)*90;poly2(c,[[x-65,hor+35],[x,peak],[x+78,hor+35]],i%2?'#233b50':'#2c485d');}
+ let wg=c.createLinearGradient(0,hor,0,h);wg.addColorStop(0,'#2d7896');wg.addColorStop(.48,'#135377');wg.addColorStop(1,'#082c51');c.fillStyle=wg;c.fillRect(0,hor,w,h-hor);
+ const drift=(-player.pos.z*1.7)%28;
+ for(let y=hor+8+drift;y<h;y+=28){const p=(y-hor)/(h-hor);c.strokeStyle='rgba(130,216,244,'+(0.11+p*.18)+')';c.lineWidth=1+p*1.7;c.beginPath();for(let x=-10;x<w+15;x+=24){const yy=y+Math.sin(x*.05+now*.002+y*.025)*3;c.lineTo(x,yy);}c.stroke();}
+ for(let i=0;i<9;i++){const d=(i+1)/9,y=hor+25+d*d*h*.62,scale=.42+d*1.15,sideGap=w*.20*(1-d)+w*.02;
+  for(const side of [-1,1]){const bw=42*scale,bh=(62+hash(i*5)*42)*scale,x=side<0?sideGap-bw:w-sideGap;const base=y+35;
+   c.fillStyle=i%2?'#283746':'#344858';c.fillRect(x,base-bh,bw,bh);
+   c.fillStyle='#152131';poly2(c,[[x-5,base-bh],[x+bw*.5,base-bh-25*scale],[x+bw+5,base-bh]],'#152131');
+   c.fillStyle='#ffc466';for(let wy=base-bh+18*scale;wy<base-8;wy+=18*scale)for(let wx=x+10*scale;wx<x+bw-5;wx+=17*scale)c.fillRect(wx,wy,4*scale,6*scale);
+  }
+ }
+ const cs=.68+progress*.32,cx=w*.5,cy=hor+28; c.save();c.translate(cx,cy);c.scale(cs,cs);
+ c.fillStyle='#6f7f8f';c.fillRect(-52,-76,104,82);c.fillStyle='#354459';c.fillRect(-60,2,120,18);
+ for(const tx of [-42,0,42]){c.fillStyle='#7e8c99';c.fillRect(tx-13,-110,26,112);poly2(c,[[tx-18,-110],[tx,-153],[tx+18,-110]],'#17243a');c.fillStyle='#ffd26d';c.fillRect(tx-4,-88,8,24);}
+ c.fillStyle='#204d87';c.fillRect(-45,-58,12,42);c.fillRect(33,-58,12,42);c.restore();
+ const by=hor+42+h*.19; c.strokeStyle='#7c8790';c.lineWidth=12;c.beginPath();c.moveTo(-10,by);c.quadraticCurveTo(w*.5,by-45,w+10,by);c.stroke();c.strokeStyle='#303d4b';c.lineWidth=5;c.stroke();
+ for(let i=0;i<9;i++){const d=(i+1)/10,y=hor+45+d*d*h*.52,xOff=(1-d)*w*.39+22,r=2+d*5;for(const side of [-1,1]){const x=w*.5+side*xOff;c.strokeStyle='#182331';c.lineWidth=2+d*3;c.beginPath();c.moveTo(x,y);c.lineTo(x,y-25*d-8);c.stroke();c.fillStyle='#ffd06a';c.beginPath();c.arc(x,y-28*d-9,r,0,Math.PI*2);c.fill();}}
+ for(let i=0;i<45;i++){const yy=hor+hash(i*7)*(h-hor),xx=hash(i*11)*w;c.strokeStyle='rgba(210,235,255,.32)';c.lineWidth=1;c.beginPath();c.moveTo(xx,yy);c.lineTo(xx-5,yy+17);c.stroke();}
+ const py=h*.69;c.save();c.translate(w*.5,py);c.fillStyle='#1d4f91';poly2(c,[[-22,15],[0,-18],[25,16],[18,72],[-25,72]],'#1d4f91');c.fillStyle='#b48a55';c.fillRect(-15,-46,30,35);c.fillStyle='#24374d';c.fillRect(-22,-14,44,54);c.strokeStyle='#c6d0d8';c.lineWidth=5;c.beginPath();c.moveTo(18,4);c.lineTo(38,60);c.stroke();c.restore();
+}
+sizeHybrid();
+
 const playerRoot=new THREE.Group();scene.add(playerRoot);let playerCharacter=null;
 const playerFallback=meshBox(playerRoot,0,1,0,.7,1.8,.55,mats.banner);
 const playerCape=meshBox(playerRoot,0,1.12,.31,.92,1.32,.08,mats.banner);playerCape.rotation.x=-.08;
@@ -148,7 +179,7 @@ function updateCamera(){
  const desired=target.clone().addScaledVector(dir,-5.2).addScaledVector(right,.75);desired.y+=1.15;camera.position.lerp(desired,.13);camera.lookAt(target.clone().addScaledVector(dir,6));
  const wp=cathedral.localToWorld(new THREE.Vector3(0,19,4)),p=wp.clone().project(camera),x=(p.x*.5+.5)*innerWidth,y=(-p.y*.5+.5)*innerHeight,marker=$('#waypoint');
  marker.style.left=clamp(x,44,innerWidth-44)+'px';marker.style.top=clamp(y,92,innerHeight*.56)+'px';
- for(const [el,world] of fireHud){const q=world.clone().project(camera),visible=q.z<1&&q.z>-1&&Math.abs(q.x)<1.15&&Math.abs(q.y)<1.15;el.style.opacity=visible?'.88':'0';el.style.left=((q.x*.5+.5)*innerWidth)+'px';el.style.top=((-q.y*.5+.5)*innerHeight)+'px';}
+ for(const [el,world] of fireHud){if(coarse){const dist=player.pos.z-world.z,depth=clamp(1-dist/115,.08,.92);el.style.opacity=dist>0&&dist<125?'.88':'0';el.style.left=(innerWidth*.5+world.x*(2.2+depth*5.6))+'px';el.style.top=(innerHeight*.28+depth*innerHeight*.42)+'px';const sz=42+depth*24;el.style.width=sz+'px';el.style.height=sz+'px';}else{const q=world.clone().project(camera),visible=q.z<1&&q.z>-1&&Math.abs(q.x)<1.15&&Math.abs(q.y)<1.15;el.style.opacity=visible?'.88':'0';el.style.left=((q.x*.5+.5)*innerWidth)+'px';el.style.top=((-q.y*.5+.5)*innerHeight)+'px';}}
 }
 function updateWater(t){const arr=waterPos.array;for(let i=0;i<waterPos.count;i++){const x=waterBase[i*3],z=waterBase[i*3+2];arr[i*3+1]=waterBase[i*3+1]+Math.sin(x*.28+z*.13+t*.0024)*.045+Math.sin(z*.31-t*.0018)*.025;}waterPos.needsUpdate=true;}
 function updateRain(dt){const a=rainGeo.attributes.position.array;for(let i=0;i<rainCount;i++){a[i*3+1]-=dt*(19+hash(i)*10);a[i*3]-=dt*4.2;if(a[i*3+1]<-2){a[i*3+1]=28+hash(i*9)*5;a[i*3]=(hash(i*3)-.5)*52;}}rainGeo.attributes.position.needsUpdate=true;rain.position.set(camera.position.x,0,camera.position.z);}
@@ -165,10 +196,10 @@ function updateVisibility(){
 let last=performance.now();
 function frame(now){
  requestAnimationFrame(frame);const dt=Math.min(.05,(now-last)/1000||.016);last=now;
- window.GameGoldenStandard?.frame?.();updatePlayer(dt);updateCamera();updateWater(now);updateRain(dt);updateLightning(now);updateEnemy(now);updateVitals(dt);
+ window.GameGoldenStandard?.frame?.();updatePlayer(dt);updateCamera();updateWater(now);updateRain(dt);updateLightning(now);updateEnemy(now);updateVitals(dt);drawHybrid(now);
  playerCharacter?.update(dt);npcCharacter?.update(dt);renderer.render(scene,camera);
 }
-addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);updateVisibility();});
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);sizeHybrid();updateVisibility();});
 async function boot(){
  requestAnimationFrame(frame);await loadNpc();updateVisibility();
  window.GameGoldenStandard?.reportReady?.({walkable:true,collisions:true,grounding:true,playerSpawn:true,mouseLook:true,touchControls:coarse?true:window.GameGoldenStandard.state.touchControls,mobileReady:true});
