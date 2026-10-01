@@ -35,7 +35,9 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     const bottomUi = innerWidth < 760 ? 132 : 128;
     const availableH = Math.max(300, innerHeight - bottomUi - 8);
-    const cell = Math.max(3.7, Math.min(innerWidth / (X_MAX - X_MIN + 5), availableH / (Y_MAX + 4), 12));
+    const desktopCell = Math.min(innerWidth / (X_MAX - X_MIN + 5), availableH / (Y_MAX + 4), 12);
+    const mobileCell = Math.min(10.5, availableH / (Y_MAX + 3));
+    const cell = Math.max(3.7, innerWidth < 520 ? mobileCell : desktopCell);
     view.cell = cell;
     view.left = (innerWidth - (X_MAX - X_MIN + 1) * cell) / 2;
     view.bottom = innerHeight - bottomUi - 6;
@@ -213,6 +215,7 @@
     for (const item of snapshot) {
       const [x, y, z] = item.position.split(',').map(Number);
       if (z !== Z || y < Y_MIN || y > Y_MAX || x < X_MIN || x > X_MAX) continue;
+      if (item.material === 'stone' && y === Y_MAX) continue;
       drawCell(x, y, item);
     }
     ctx.fillStyle = 'rgba(255,255,255,.6)';
@@ -264,6 +267,6 @@
   addEventListener('resize', resize);
 
   resize();
-  reset('mix');
+  reset(innerWidth < 520 ? 'lava' : 'mix');
   requestAnimationFrame(frame);
 })();
