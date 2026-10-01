@@ -135,3 +135,63 @@ OpenTTD Online публикует WebAssembly-сборку OpenTTD. Официа
 - regression test после большого pan.
 
 Если новая графическая или серверная реализация меняет систему координат, эти инварианты переносятся первыми.
+
+
+## 10. GLOBAL GAME VIEWPORT LOCK — ОБЯЗАТЕЛЬНО ДЛЯ ВСЕХ ИГР И MVP
+
+После физического теста Krieger Reactor 2026-10-01 этот контракт повышен из локального правила «Цепочки» до **глобального инварианта World Server**.
+
+Любая браузерная игра, лаборатория, proof/MVP и порт обязаны подключать один и тот же проверенный viewport-lock слой. Запрещено заново вручную копировать сокращённую версию CSS.
+
+Минимальный контракт оболочки:
+
+```css
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  position: fixed;
+  inset: 0;
+}
+body, #game-root, #wrap, canvas {
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+#game-root, #wrap, canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+```
+
+Для игровых touch-движений нужен отдельный non-passive guard там, где браузер всё ещё пытается интерпретировать жест:
+
+```js
+surface.addEventListener("touchmove", e => e.preventDefault(), { passive: false });
+```
+
+Игровые `pointermove/touchmove` обработчики не должны одновременно позволять браузеру двигать страницу.
+
+### Fullscreen / landscape
+
+Если игра обещает «только игра на экране», fullscreen-request выполняется непосредственно внутри пользовательского START/ENTER gesture. Нельзя переносить его в `setTimeout`/`requestAnimationFrame` и надеяться сохранить user activation.
+
+Автотест обязан проверять:
+- document scroll offsets до/после look-drag равны;
+- `document.scrollingElement.scrollTop===0`;
+- game root совпадает с visual viewport;
+- canvas совпадает с game root;
+- при rotation игра пересчитывает viewport/projection, а не создаёт дополнительную прокручиваемую область;
+- fullscreen/standalone state фиксируется отдельной телеметрией;
+- в landscape DOM игры не содержит собственной «верхней полосы/папок/меню» вне game surface.
+
+Важно: системный Safari/Telegram browser chrome не является частью DOM и CSS не может гарантированно скрыть его во всех webview. Поэтому release-claim «game-only fullscreen» допустим только после реального fullscreen или standalone/PWA подтверждения на физическом устройстве.
+
+### Regression rule
+
+Нарушение Game Viewport Lock — **release blocker**, даже если 3D, управление и CI в остальном проходят. Любой новый MVP сначала наследует этот контракт, затем добавляет собственный UI.
