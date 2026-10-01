@@ -1000,3 +1000,8 @@ Goal: merge the user-confirmed Meta4 glyph interaction with the preserved proced
 The new mode accepts only the fixed Meta4 glyph action allowlist, strips arbitrary world fields, accepts bounded visible-area counts, returns the existing qualitative prediction schema with `executed:false`, and reuses the existing Groq-first free provider/fallback path. AI remains prediction-only; only the client YES action may mutate its local game state.
 
 Required evidence: focused chain AI tests; protected CI; exact-head Cloudflare preview; production POST proving a glyph action such as river is answered by a real provider; separate Meta5 browser proof for pan, pinch, exact tap placement, graphical object + glyph label, NO no-mutation, YES one-mutation, rotating decks and local report.
+
+
+## 2026-10-01 — Illustration Office Worker review
+
+The worker is accepted as a SUCCESS baseline. Keep the childlike watercolor character, idle, walk and carry actions unchanged. The `wave` action is a separate FAILURE: its hand motion direction is wrong for the intended stop-like wave. Success: `docs/ILLUSTRATION_OFFICE_WORKER_SUCCESS_2026-10-01.md`. Failure: `docs/ILLUSTRATION_OFFICE_WORKER_WAVE_FAILURE_2026-10-01.md`. Next fix should add explicit wrist/palm orientation rules before wave is considered reusable.
