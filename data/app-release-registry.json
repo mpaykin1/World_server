@@ -221,6 +221,26 @@
       "status": "experimental",
       "kind": "prototype",
       "reason": "User-requested successor to Meta5 demonstrating visible object-to-object interactions, continuous action-slot replenishment, robust glyph touch selection and live AI forecasts. Preserved for internal reuse; not public-catalog certified."
+    },
+    "cube-world-evolution-mvp": {
+      "title": "Cube → Living Voxel Diorama",
+      "visible": false,
+      "status": "experimental",
+      "kind": "prototype",
+      "reason": "WorldEvolutionRecipe one-take procedural growth proof. Direct-link candidate only; remains deny-by-default until exact-head browser/mobile visual acceptance and >85% visible-demo coverage are verified.",
+      "worldMenu": {
+        "show": false,
+        "headline": "ОДИН КУБ ВЫРАСТАЕТ В ЖИВОЙ ВОКСЕЛЬНЫЙ МИР",
+        "lore": "Технический доказательный мир World Server: рельеф, биом, архитектура, материалы, свет и жизнь рождаются из одного Recipe и seed.",
+        "history": "Создан как первый вертикальный срез World Evolution Engine; до сертификации остаётся внутренним экспериментальным MVP.",
+        "familyId": "cube-world-evolution-mvp",
+        "connections": [
+          {
+            "targetId": "voxel-world",
+            "story": "Эволюционный прототип использует тот же процедурный язык кубической материи, который масштабируется в Voxel World."
+          }
+        ]
+      }
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",

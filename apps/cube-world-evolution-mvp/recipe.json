@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "1.0.0",
+  "type": "WorldEvolutionRecipe",
+  "seed": 73194217,
+  "style": "CINEMATIC_VOXEL_ART",
+  "quality": "KRIEGER_CLASS_PLUS",
+  "durationSeconds": 12,
+  "initialSeed": "CUBE",
+  "terrain": { "radius": 9, "relief": 3.4 },
+  "biome": { "rocks": 22, "grass": 140, "trees": 5 },
+  "architecture": { "kind": "ARCH_TOWER", "blocks": 112 },
+  "materials": { "evolution": true, "wetness": 0.18, "moss": 0.32 },
+  "lighting": { "evolution": true, "fog": true, "sunrise": true },
+  "life": { "walkers": 1, "birds": 3, "wind": true },
+  "timeline": [
+    ["cube", 0.00, 0.16], ["matter", 0.10, 0.36], ["terrain", 0.24, 0.52],
+    ["biome", 0.38, 0.66], ["architecture", 0.50, 0.78], ["materials", 0.60, 0.86],
+    ["lighting", 0.68, 0.93], ["life", 0.78, 1.00], ["final", 0.92, 1.00]
+  ]
+}

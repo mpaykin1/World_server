@@ -61,6 +61,24 @@
         "application/vnd.world-server.indieworld+json",
         "application/rss+xml"
       ]
+    },
+    "worldEvolution": {
+      "canonical": [
+        "lib/world-evolution.js",
+        "shared/world-evolution-runtime.mjs",
+        "scripts/world-evolution-audit.js"
+      ],
+      "requiredBy": [
+        "cube-world-evolution-mvp"
+      ],
+      "invariants": [
+        "recipe+seed generate geometry; no embedded prebuilt scene payload",
+        "timeline is sampleable at any t=0..1",
+        "same seed produces the same generated plan",
+        "quality thresholds are stage-aware",
+        "mobile game viewport is non-scrollable"
+      ],
+      "qualityIntegration": "scripts/world-quality-autopilot.js"
     }
   }
 }
