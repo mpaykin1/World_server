@@ -366,3 +366,167 @@ The screenshot therefore proved a useful distinction: **the native weapon path w
 - do not measure graphics fidelity from a camera that smoke tests have already moved unpredictably;
 - do not spend 9× more software-render pixels in CI when the test is about recipe visibility rather than Retina resolution;
 - do not run duplicate heavyweight push + PR jobs for the same Krieger proof.
+
+
+## Failure KFL-004 — Dark Reactor is original, but physical iPhone exposes fidelity, FIRE-visual and viewport regressions
+
+**Physical-device evidence:** 2026-10-01, iPhone.  
+**Reference:** known-good original Krieger frame has dense surface detail, multiple material families, local light pools, deep shadows/specular response, readable floor/wall/ceiling texture structure, visible weapon and active combat effects.  
+**Custom Reactor:** architecture is original and traversable, but the scene is strongly overexposed/flattened; many surfaces collapse toward one cream/yellow family; procedural detail is not perceptually comparable to the original. FIRE produces sound/state change but no visible firing animation/effect. Looking around can drag the browser page. In landscape Safari/tab chrome remains visible instead of game-only presentation.
+
+### What is NOT a failure
+
+Keep these capabilities as successful and do not regress them while fixing fidelity:
+
+- a genuinely new Krieger level/architecture exists rather than a replay of the original level;
+- custom collision works;
+- jump works;
+- portrait uses the full game surface;
+- mobile joystick movement works;
+- the original detailed first-person weapon is visibly preserved.
+
+The failure is therefore **not “custom level impossible.”** It is the next layer: surface/material fidelity, dynamic light/shadow, visible shot FX, and universal mobile viewport/fullscreen discipline.
+
+### Confirmed root cause A — the rescue material deliberately abandoned the full Krieger material contract
+
+The Reactor was made visible by replacing the attempted full Material 1.1 reproduction with a “stable BASE+LIGHT” fallback. The code explicitly marks this telemetry as `stableBaseLight=1`.
+
+That fallback keeps:
+- procedural diffuse texture;
+- procedural normal/bump texture;
+- BASE;
+- LIGHT.
+
+But it omits or bypasses the important parts of the richer Krieger look:
+- the normal native `ENGU_SHADOW` material path for the custom materials;
+- `ENGU_POSTLIGHT` texture multiplication in the intended 2004 sequence;
+- `ENGU_POSTLIGHT2` / environment-reflection style stages;
+- the full native `Material11Insert` compositor interaction;
+- material-specific alpha/specularity/environment behavior.
+
+This was a valid emergency renderer-forensics step, but it must not be mistaken for a Krieger-fidelity material solution.
+
+### Confirmed root cause B — four simple generated maps cannot substitute for Krieger material recipes
+
+The custom Reactor currently synthesizes only a tiny material vocabulary: stone/metal/glow and four simple procedural bitmap inputs based mainly on Bricks/Perlin/Normals.
+
+The mapped original data shows that rich Krieger materials can be 100–160+ operator bitmap programs using chains such as:
+
+`Perlin -> Merge -> HSCB -> Blur -> Range -> Mask -> Distort -> Normals/Bump -> material slots`.
+
+Therefore “procedural texture exists” was too weak a gate. The custom scene is procedurally textured in a technical sense while still looking flat and uniform on a physical phone.
+
+### Confirmed root cause C — the custom light rig is much simpler than the original look
+
+The Reactor appends a few manual `AddLightJob` lights plus ambient. That proves lights reach the renderer, but it is not equivalent to the original authored lighting program.
+
+The reference frame depends on the 2004 lighting/compositor stack: selected local lights, range fade, normal response, specular contribution, shadow volumes/masks and later image processing. The custom fallback material also removed the custom shadow pass, so geometry can be lit without reproducing the deep light/shadow separation visible in the original.
+
+The physical result — broad pale surfaces and lost micro-contrast — is consistent with this simplified material/light contract.
+
+### Confirmed root cause D — the FIRE gate proved simulation, not visible firing
+
+The Reactor smoke test accepts FIRE when any of these native state transitions occurs:
+
+- shot count rises; or
+- ammo falls; or
+- cooldown rises.
+
+That proves:
+`touch -> kkLabFire -> FireKey -> OnTick -> WeaponShot/FireShot`.
+
+It does **not** prove:
+`shot event -> visible muzzle/recoil/projectile/effect jobs -> framebuffer`.
+
+The user's iPhone result is decisive: sound is audible, but there is no visible firing animation/effect. Therefore the old gate was a false positive for the user-visible feature.
+
+### FIRE visual hypotheses to test next
+
+These are hypotheses, not yet confirmed causes:
+
+1. The shot/audio event is alive, but the visual subgraph queues Effect/Scene jobs whose bounds/sector assumptions belong to the original level while the player now lives near the isolated Reactor origin (~X=1000).
+2. A muzzle/projectile effect reaches jobs but is culled, sorted, or composited away by the altered custom material/render setup.
+3. Recoil/weapon animation state changes but is too short or not sampled by the current mobile bridge/test; the test never compares weapon-region pixels before/after FIRE.
+4. Audio can succeed independently of visual effect, so “sound heard” cannot be used as evidence for the render half of the shot pipeline.
+
+### Confirmed root cause E — the universal Game Viewport Lock contract regressed in the Reactor shell
+
+The World Server contract already requires:
+
+- fixed `html, body`;
+- `overflow:hidden`;
+- `overscroll-behavior:none`;
+- fixed full-screen game root;
+- `touch-action:none`;
+- browser gesture suppression on the game surface.
+
+The Reactor shell only added:
+
+`body{overscroll-behavior:none; ...}`
+
+plus fixed `#wrap` and `touch-action:none` on canvas/controls.
+
+It did **not** restore the complete invariant on `html,body`:
+- no `position:fixed; inset:0`;
+- no explicit `overflow:hidden` on both;
+- no complete root width/height lock;
+- no non-passive `touchmove` guard with `preventDefault()`.
+
+The custom `pointermove` look handlers also do not call `preventDefault()`.
+
+That is a direct process failure: a known World Server invariant was copied incompletely into a new MVP instead of being reused as a mandatory shared module/test.
+
+### Confirmed root cause F — fullscreen-on-start was accidentally removed
+
+The previous shell start path contained:
+
+`if(fsStart.checked) enterFullscreen();`
+
+The Reactor replacement start handler removed that call.
+
+As a result, landscape can remain ordinary Safari/embedded-browser presentation with tabs/address UI visible. The physical screenshot shows exactly that.
+
+Fullscreen must be requested **synchronously inside the user's start gesture** where the platform allows it. A delayed request after `requestAnimationFrame/setTimeout` can lose transient user activation. Where browser fullscreen is unavailable, installed standalone/PWA mode is the fallback; ordinary Safari chrome cannot be guaranteed away by CSS alone.
+
+### Why CI passed anyway
+
+The release gate proved:
+- geometry provenance counters;
+- collision;
+- weapon resource presence;
+- FIRE gameplay-state transition;
+- portrait engine dimensions;
+- structured/non-flat framebuffer;
+- camera-induced framebuffer change.
+
+Those are useful, but they do not measure:
+- similarity of material complexity to the Krieger reference;
+- preservation of local dynamic-light/shadow contrast;
+- visible muzzle/recoil/projectile pixels after FIRE;
+- document scroll/bounce under real touch;
+- browser chrome absence in landscape;
+- fullscreen/standalone state.
+
+The physical iPhone therefore correctly vetoes the CI PASS.
+
+### Mandatory fixes before the next public Krieger-fidelity claim
+
+1. **Material Recipe Lab first.** Replay one real 40–100+ node bitmap/material subtree from the original graph on new geometry. Do not hand-author another four-map approximation and call it done.
+2. Restore intentional `BASE -> SHADOW -> LIGHT -> POSTLIGHT -> POSTLIGHT2/IPP` behavior incrementally with per-stage captures. Never jump directly from black/white rescue states to a release.
+3. Add a dynamic-light proof: move/pulse a local light and require localized surface response plus shadow/specular change, not just global luminance change.
+4. Add a **reference-detail gate** on physical and synthetic frames: local contrast, texture-frequency/edge distribution, clipped-white area, shadow area, and material-family separation. Do not use one global “non-black >85%” metric as a fidelity score.
+5. FIRE acceptance must compare a weapon/muzzle region before/during/after firing and prove a visible delta attributable to recoil/muzzle/projectile/effect, while separately proving native ammo/cooldown/shot state.
+6. Instrument EffectJobs/Scene jobs for the selected weapon shot root and report whether each was created, culled, rendered and composited.
+7. Promote Game Viewport Lock to a shared invariant for **every** World Server game/MVP. New shells may not hand-copy a partial CSS version.
+8. Test real touch drag with assertions that `scrollX/scrollY/scrollTop` and visual-viewport offsets do not change while camera yaw/pitch does.
+9. Restore fullscreen request in the immediate ENTER/START click and test portrait + landscape. If Fullscreen API is unavailable, provide the standalone/PWA route; never call browser chrome “game UI.”
+10. Add landscape evidence that the visible content is only the game surface, with no page scroll area and no accidental tab/header area included in the game layout.
+
+### MUST NOT REPEAT
+
+- Do not optimize for a CI framebuffer metric by simplifying away the material passes that create the target look.
+- Do not call four simple maps “Krieger-level materials” merely because they are procedural.
+- Do not equate FIRE state change or sound with visible shooting.
+- Do not hand-copy the viewport contract into each prototype; centralize it and regression-test it.
+- Do not remove fullscreen entry while replacing a start handler.
+- Do not publish a Krieger-fidelity success claim without a physical-iPhone visual comparison against the known-good reference.
