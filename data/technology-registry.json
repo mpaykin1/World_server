@@ -276,18 +276,16 @@
     },
     "Illustration Character Rig + KayKit Motion Transfer": {
       "percent": 90,
-      "status": "real Rig_Medium motion transfer integrated; 139 source clips / 132 unique motions load in browser; per-motion human semantic review remains",
+      "status": "animation transfer accepted success; current worker rendering rejected; visual diagnosis pending",
       "evidence": [
         "shared/graphics/illustration-character-kaykit.js",
-        "shared/graphics/illustration-character-rig.js",
-        "shared/graphics/illustration-mass-modeler.js",
         "assets/characters/kaykit-knight/manifest.json",
-        "assets/characters/kaykit-knight/semantic-actions.json",
         "apps/living-watercolor-3d/client.js",
         "test/illustration-character-kaykit.test.mjs",
-        "docs/ILLUSTRATION_CHARACTER_KAYKIT_MOTION_TRANSFER_2026-10-01.md"
+        "docs/ILLUSTRATION_OFFICE_WORKER_KAYKIT_ANIMATION_SUCCESS_2026-10-01.md",
+        "docs/ILLUSTRATION_OFFICE_WORKER_RENDERING_FAILURE_2026-10-01.md"
       ],
-      "note": "KayKit mesh stays hidden; its Rig_Medium skeleton drives childlike watercolor masses. 139 source clips collapse to 132 unique motion names because T-Pose repeats in all eight groups. Old benchmark objects are untouched. Human behavior review still gates gesture acceptance."
+      "note": "Human review explicitly separates motion from appearance: KayKit animation transfer is approved and reusable; the current worker drawing/rendering is rejected. Do not infer the visual cause before the later review."
     }
   },
   "governanceCoveragePercent": 100,
