@@ -1,5 +1,12 @@
 # World Server
 
+
+## Chain Reaction / Meta4–Meta6 — вход для новых AI-агентов
+
+Центральный handoff: [`docs/CHAIN_REACTION_AI_HANDOFF_INDEX_RU.md`](docs/CHAIN_REACTION_AI_HANDOFF_INDEX_RU.md).
+
+Он связывает рабочие Meta4/Meta5/Meta6, mobile viewport contract, live AI, procedural graphics, action-deck evolution, living-relations architecture, regression protocol и следующий vertical slice. Если задача касается «Цепной реакции», начинать с этого документа, а не с повторного исследования проекта.
+
 > **AI / новый чат: начни здесь → [`AI_START_HERE.md`](AI_START_HERE.md).** Там находится общий индекс проекта, Принцип **ВНО = Воспроизводимость, Независимость, Опровержение**, Science→Gameplay и ссылки на канонические правила. Не проси пользователя заново объяснять проектный термин, пока не проверил этот индекс в `master`.
 
 ## Главный научно-игровой цикл: ВНО / VNO
