@@ -273,6 +273,21 @@
         "shared/graphics/illustration-mass-modeler.js"
       ],
       "note": "Human review now accepts the rebuilt Illustration-First volcano as SUCCESS / ETALON. Reuse the architecture: visual grammar -> painted masses -> painted void -> sparse semantic strokes -> hidden 3D scaffold -> watercolor compositor. The earlier radial-cone/technical-crater volcano remains a superseded negative reference."
+    },
+    "Illustration Character Rig + KayKit Motion Transfer": {
+      "percent": 90,
+      "status": "real Rig_Medium motion transfer integrated; 139 source clips / 132 unique motions load in browser; per-motion human semantic review remains",
+      "evidence": [
+        "shared/graphics/illustration-character-kaykit.js",
+        "shared/graphics/illustration-character-rig.js",
+        "shared/graphics/illustration-mass-modeler.js",
+        "assets/characters/kaykit-knight/manifest.json",
+        "assets/characters/kaykit-knight/semantic-actions.json",
+        "apps/living-watercolor-3d/client.js",
+        "test/illustration-character-kaykit.test.mjs",
+        "docs/ILLUSTRATION_CHARACTER_KAYKIT_MOTION_TRANSFER_2026-10-01.md"
+      ],
+      "note": "KayKit mesh stays hidden; its Rig_Medium skeleton drives childlike watercolor masses. 139 source clips collapse to 132 unique motion names because T-Pose repeats in all eight groups. Old benchmark objects are untouched. Human behavior review still gates gesture acceptance."
     }
   },
   "governanceCoveragePercent": 100,

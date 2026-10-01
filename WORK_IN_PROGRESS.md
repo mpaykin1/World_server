@@ -1005,3 +1005,8 @@ Required evidence: focused chain AI tests; protected CI; exact-head Cloudflare p
 ## 2026-10-01 — Illustration Office Worker review
 
 The worker is accepted as a SUCCESS baseline. Keep the childlike watercolor character, idle, walk and carry actions unchanged. The `wave` action is a separate FAILURE: its hand motion direction is wrong for the intended stop-like wave. Success: `docs/ILLUSTRATION_OFFICE_WORKER_SUCCESS_2026-10-01.md`. Failure: `docs/ILLUSTRATION_OFFICE_WORKER_WAVE_FAILURE_2026-10-01.md`. Next fix should add explicit wrist/palm orientation rules before wave is considered reusable.
+
+
+## 2026-10-01 — KayKit motion transfer for Illustration Office Worker
+
+Implemented a hidden KayKit Rig_Medium motion-driver for the accepted childlike watercolor worker. The visible worker is built from painted illustration masses attached to the real KayKit skeleton; KayKit source meshes remain hidden. The library contains 139 source clips across eight GLBs and 132 unique motion names because T-Pose is duplicated in all eight groups. The current semantic contract resolves 40 gameplay actions. A mobile browser smoke verified loading and playback of representative walk/run/jump/sit/wave/unarmed/ranged/death clips. The benchmark house/tree/volcano/power-plant generators were not modified. Technical playback is not human approval: the old hand-authored wave failure remains a negative example, and KayKit Waving still requires fresh human review before being promoted. Canonical evidence: docs/ILLUSTRATION_CHARACTER_KAYKIT_MOTION_TRANSFER_2026-10-01.md.
