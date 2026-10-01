@@ -5,13 +5,13 @@ const coarse=matchMedia('(pointer:coarse)').matches;
 const $=s=>document.querySelector(s);
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const hash=n=>{const x=Math.sin(n*12.9898+78.233)*43758.5453;return x-Math.floor(x);};
-const GOAL_Z=-132,WATER_Y=.48,STREET_W=16;
+const GOAL_Z=-105,WATER_Y=.48,STREET_W=16;
 const state={ready:false,visibilityPercent:0,userNoticeabilityPercent:0,playerModel:'pending',npcModel:'pending',apngSprites:2,proceduralBuildings:0,rainDrops:0,attackCount:0,enemyHits:0,playerZ:7,distanceMeters:128,missionComplete:false,kriegerTech:'instancing+procedural-geometry+fixed-budget'};
 window.__FLOODED_CATHEDRAL_MVP__=state;
 
 const scene=new THREE.Scene();
-scene.background=new THREE.Color(0x071426);
-scene.fog=new THREE.FogExp2(0x0b1b2b,coarse?.018:.015);
+scene.background=new THREE.Color(coarse?0x173753:0x102c48);
+scene.fog=new THREE.FogExp2(0x183a55,coarse?.006:.009);
 const camera=new THREE.PerspectiveCamera(66,innerWidth/innerHeight,.05,300);
 const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
 renderer.setPixelRatio(Math.min(devicePixelRatio,coarse?1.35:1.8));
@@ -24,12 +24,12 @@ renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 document.body.prepend(renderer.domElement);
 window.GoldenPaintingAtmosphere?.registerThree?.({THREE,scene,renderer,getCamera:()=>camera,worldId:'flooded-cathedral-mvp'});
 window.WorldQualityAutopilot?.registerRenderer?.('flooded-cathedral-mvp',renderer,{initialTier:coarse?'BALANCED':'HIGH',targetFps:coarse?38:55,getStats(){return{calls:renderer.info.render.calls,triangles:renderer.info.render.triangles}}});
-const hemi=new THREE.HemisphereLight(0x7899c8,0x10131a,1.35);scene.add(hemi);
-const moon=new THREE.DirectionalLight(0x98b8ff,1.15);moon.position.set(-20,34,12);moon.castShadow=true;moon.shadow.mapSize.set(coarse?512:1024,coarse?512:1024);scene.add(moon);
+const hemi=new THREE.HemisphereLight(0x9bc9f3,0x171c25,2.05);scene.add(hemi);
+const moon=new THREE.DirectionalLight(0xb3d0ff,1.75);moon.position.set(-20,34,12);moon.castShadow=true;moon.shadow.mapSize.set(coarse?512:1024,coarse?512:1024);scene.add(moon);
 const warm=new THREE.DirectionalLight(0xffb25a,.38);warm.position.set(22,12,-40);scene.add(warm);
 const mats={
- stone:new THREE.MeshStandardMaterial({color:0x38404c,roughness:.88,metalness:.05}),
- stone2:new THREE.MeshStandardMaterial({color:0x202733,roughness:.92,metalness:.08}),
+ stone:new THREE.MeshStandardMaterial({color:0x566372,roughness:.88,metalness:.05}),
+ stone2:new THREE.MeshStandardMaterial({color:0x303b4a,roughness:.92,metalness:.08}),
  roof:new THREE.MeshStandardMaterial({color:0x0c1422,roughness:.78,metalness:.18}),
  road:new THREE.MeshStandardMaterial({color:0x252d36,roughness:.96}),
  window:new THREE.MeshStandardMaterial({color:0xffc36b,emissive:0xff8c2a,emissiveIntensity:2.5,roughness:.5}),
@@ -43,19 +43,25 @@ const ground=new THREE.Mesh(new THREE.BoxGeometry(STREET_W,.6,160),mats.road);gr
 for(const side of [-1,1]){const curb=new THREE.Mesh(new THREE.BoxGeometry(2,.85,160),mats.stone);curb.position.set(side*(STREET_W/2+1),.05,-60);curb.receiveShadow=true;scene.add(curb);}
 const waterGeo=new THREE.PlaneGeometry(80,190,30,46);waterGeo.rotateX(-Math.PI/2);
 const waterPos=waterGeo.attributes.position,waterBase=new Float32Array(waterPos.array);
-const waterMat=new THREE.MeshStandardMaterial({color:0x174f73,transparent:true,opacity:.78,roughness:.24,metalness:.16,emissive:0x071b2d,emissiveIntensity:.25,side:THREE.DoubleSide});
+const waterMat=new THREE.MeshStandardMaterial({color:0x23759b,transparent:true,opacity:.74,roughness:.2,metalness:.18,emissive:0x0b2c48,emissiveIntensity:.52,side:THREE.DoubleSide});
 const water=new THREE.Mesh(waterGeo,waterMat);water.position.set(0,WATER_Y,-60);water.receiveShadow=true;scene.add(water);
 function addInstancedCity(){
  const count=coarse?54:78,body=new THREE.InstancedMesh(boxGeo,mats.stone,count),roof=new THREE.InstancedMesh(coneGeo,mats.roof,count);
  const dummy=new THREE.Object3D();let n=0;
  for(let i=0;i<count;i++){
-  const side=i%2?-1:1,z=10-(i>>1)*4.15+(hash(i*4)-.5)*2.1,x=side*(12+hash(i*9)*13),w=3.2+hash(i*5)*4.8,d=3+hash(i*8)*5.4,h=8+hash(i*13)*20;
+  const side=i%2?-1:1,z=10-(i>>1)*4.15+(hash(i*4)-.5)*2.1,x=side*(8.7+hash(i*9)*8.6),w=3.2+hash(i*5)*4.8,d=3+hash(i*8)*5.4,h=9+hash(i*13)*22;
   dummy.position.set(x,h/2,z);dummy.scale.set(w,h,d);dummy.rotation.set(0,(hash(i*6)-.5)*.12,0);dummy.updateMatrix();body.setMatrixAt(n,dummy.matrix);
   dummy.position.set(x,h+.9,z);dummy.scale.set(Math.max(w,d)*.57,4+hash(i*19)*5,Math.max(w,d)*.57);dummy.rotation.set(0,0,0);dummy.updateMatrix();roof.setMatrixAt(n,dummy.matrix);n++;
  }
  body.castShadow=!coarse;body.receiveShadow=true;roof.castShadow=!coarse;roof.receiveShadow=true;scene.add(body,roof);state.proceduralBuildings=count;
 }
 addInstancedCity();
+function addStreetWindows(){
+ const count=48,windows=new THREE.InstancedMesh(boxGeo,mats.window,count),d=new THREE.Object3D();let n=0;
+ for(let lane=0;lane<2;lane++)for(let i=0;i<24;i++){const side=lane?1:-1,z=3-i*4.35,x=side*(8.15+hash(i+lane*19)*.45),y=2.6+(i%3)*2.05;d.position.set(x,y,z);d.scale.set(.38,.7,.12);d.updateMatrix();windows.setMatrixAt(n++,d.matrix);}
+ windows.castShadow=false;scene.add(windows);
+}
+addStreetWindows();
 
 function meshBox(parent,x,y,z,w,h,d,mat=mats.stone){const m=new THREE.Mesh(boxGeo,mat);m.position.set(x,y,z);m.scale.set(w,h,d);m.castShadow=!coarse;m.receiveShadow=true;parent.add(m);return m;}
 function meshCone(parent,x,y,z,r,h,mat=mats.roof){const m=new THREE.Mesh(coneGeo,mat);m.position.set(x,y+h/2,z);m.scale.set(r,h,r);m.castShadow=!coarse;parent.add(m);return m;}
@@ -75,7 +81,7 @@ function addBridge(z){
  for(const x of [-7.6,7.6]){meshBox(g,x,3.3,z,1.4,5.4,1.5,mats.stone2);meshCone(g,x,6,z,1.1,3,mats.roof);}
  for(const x of [-5,-2.5,0,2.5,5])meshBox(g,x,2.35,z+2.1,.18,2.3,.18,mats.wood);
 }
-addBridge(-43);addBridge(-93);
+addBridge(-22);addBridge(-58);addBridge(-88);
 function addLantern(x,z){
  const pole=new THREE.Mesh(cylGeo,mats.stone2);pole.position.set(x,2.1,z);pole.scale.set(.12,4,.12);scene.add(pole);
  const glow=new THREE.Mesh(new THREE.SphereGeometry(.18,8,6),mats.window);glow.position.set(x,4.25,z);scene.add(glow);
@@ -90,6 +96,7 @@ rainGeo.setAttribute('position',new THREE.BufferAttribute(rainData,3));
 const rain=new THREE.Points(rainGeo,new THREE.PointsMaterial({color:0xb9d7ee,size:.055,transparent:true,opacity:.65,depthWrite:false}));scene.add(rain);state.rainDrops=rainCount;
 const playerRoot=new THREE.Group();scene.add(playerRoot);let playerCharacter=null;
 const playerFallback=meshBox(playerRoot,0,1,0,.7,1.8,.55,mats.banner);
+const playerCape=meshBox(playerRoot,0,1.12,.31,.92,1.32,.08,mats.banner);playerCape.rotation.x=-.08;
 const player={pos:new THREE.Vector3(0,.02,7),yaw:0,pitch:-.12,sprintHeld:false,attackUntil:0,velY:0,onGround:true};
 async function loadPlayer(){try{playerCharacter=await loadActionForgePlayer({parent:playerRoot,scale:.92});playerCharacter.play('idle',{fade:0});playerFallback.visible=false;state.playerModel=playerCharacter.id;}catch(e){console.warn('player GLB fallback',e);state.playerModel='procedural-fallback';}}
 const npcRoot=new THREE.Group();npcRoot.position.set(-4.8,0,-30);npcRoot.rotation.y=-.4;scene.add(npcRoot);let npcCharacter=null;
