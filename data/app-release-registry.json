@@ -221,6 +221,13 @@
       "status": "experimental",
       "kind": "prototype",
       "reason": "User-requested successor to Meta5 demonstrating visible object-to-object interactions, continuous action-slot replenishment, robust glyph touch selection and live AI forecasts. Preserved for internal reuse; not public-catalog certified."
+    },
+    "flooded-cathedral-mvp": {
+      "title": "Flooded Cathedral MVP",
+      "visible": false,
+      "status": "experimental",
+      "kind": "game",
+      "reason": "Playable vertical-slice experiment; isolated from the public certified catalog until user acceptance and production evidence."
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",
