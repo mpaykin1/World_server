@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#080b12">
+<title>Noita Matter Lab — World Server</title>
+<style>
+:root{color-scheme:dark;--glass:rgba(9,13,22,.78);--line:rgba(255,255,255,.14)}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080b12;touch-action:none}
+body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#fff}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block;background:radial-gradient(circle at 50% 25%,#17233a 0,#090d16 48%,#05070b 100%)}
+#top{position:fixed;z-index:20;left:max(10px,env(safe-area-inset-left));right:max(10px,env(safe-area-inset-right));top:max(10px,env(safe-area-inset-top));display:flex;gap:8px;align-items:flex-start;pointer-events:none}
+.card{background:var(--glass);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(14px);box-shadow:0 10px 30px rgba(0,0,0,.28)}
+#title{padding:9px 11px;min-width:0;flex:1}.name{font-size:14px;font-weight:900;letter-spacing:.02em}.sub{font-size:10px;opacity:.67;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#stats{padding:8px 10px;font:700 10px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:nowrap}
+#reaction{position:fixed;z-index:21;left:50%;top:max(76px,calc(env(safe-area-inset-top) + 68px));transform:translateX(-50%);padding:7px 12px;border-radius:999px;background:rgba(7,12,20,.78);border:1px solid rgba(120,210,255,.26);font-size:11px;font-weight:800;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none}
+#reaction.show{opacity:1;transform:translateX(-50%) translateY(3px)}
+#bottom{position:fixed;z-index:30;left:0;right:0;bottom:0;padding:8px max(10px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));background:linear-gradient(transparent,rgba(4,7,12,.82) 25%,rgba(4,7,12,.96));}
+.row{display:flex;gap:7px;overflow-x:auto;padding:4px 0;scrollbar-width:none}.row::-webkit-scrollbar{display:none}
+button{flex:0 0 auto;border:1px solid var(--line);border-radius:12px;background:rgba(19,27,42,.88);color:#fff;padding:9px 12px;font:800 11px system-ui;letter-spacing:.01em;box-shadow:0 5px 14px rgba(0,0,0,.2)}
+button.active{border-color:rgba(255,255,255,.68);background:rgba(48,67,98,.96);transform:translateY(-1px)}
+.material{display:flex;gap:7px;align-items:center}.dot{width:10px;height:10px;border-radius:3px;box-shadow:0 0 10px currentColor}
+#hint{font-size:10px;opacity:.65;text-align:center;padding-top:3px}
+@media(min-width:760px){#bottom{left:50%;right:auto;width:min(760px,92vw);transform:translateX(-50%);border-radius:18px 18px 0 0}.name{font-size:16px}.sub,#stats,#hint{font-size:11px}}
+</style>
+</head>
+<body>
+<canvas id="world"></canvas>
+<div id="top">
+  <div id="title" class="card"><div class="name">NOITA MATTER LAB</div><div class="sub">World Server · живые материалы · одно и то же физическое ядро</div></div>
+  <div id="stats" class="card">tick 0<br>active 0<br>chunks 0</div>
+</div>
+<div id="reaction">Реакция</div>
+<div id="bottom">
+  <div class="row" id="scenarios">
+    <button data-scene="mix" class="active">🔥 КОМБО</button>
+    <button data-scene="lava">🌋 ЛАВА + ВОДА</button>
+    <button data-scene="fire">🏠 ПОЖАР</button>
+    <button data-scene="sand">🏖 ПЕСОК + МАСЛО</button>
+    <button id="pause">⏸ ПАУЗА</button>
+    <button id="reset">↻ СБРОС</button>
+  </div>
+  <div class="row" id="tools">
+    <button data-tool="sand" class="active material"><span class="dot" style="color:#e9ca77;background:#e9ca77"></span>ПЕСОК</button>
+    <button data-tool="water" class="material"><span class="dot" style="color:#42a5ff;background:#42a5ff"></span>ВОДА</button>
+    <button data-tool="oil" class="material"><span class="dot" style="color:#93723a;background:#93723a"></span>МАСЛО</button>
+    <button data-tool="wood" class="material"><span class="dot" style="color:#a85d30;background:#a85d30"></span>ДЕРЕВО</button>
+    <button data-tool="fire" class="material"><span class="dot" style="color:#ff773d;background:#ff773d"></span>ОГОНЬ</button>
+    <button data-tool="lava" class="material"><span class="dot" style="color:#ff3b22;background:#ff3b22"></span>ЛАВА</button>
+    <button data-tool="air">⌫ СТЕРЕТЬ</button>
+  </div>
+  <div id="hint">Проведи пальцем по миру — материал добавляется прямо в симуляцию.</div>
+</div>
+<script src="./world-matter.bundle.js"></script>
+<script src="./client.js"></script>
+</body>
+</html>
