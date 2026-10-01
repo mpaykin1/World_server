@@ -273,6 +273,10 @@ export default {
       const { handleAiInterpret } = await import('./chain-ai-interpreter.mjs');
       return handleAiInterpret(request, env);
     }
+    if (url.pathname === '/api/promotion') {
+      const { handlePromotionApi } = await import('./promotion-api.mjs');
+      return handlePromotionApi(request, env);
+    }
     if (url.pathname === '/api/config') return configApi(request, env);
     if (url.pathname === '/api/apps') return appsApi(request, env, url);
     if (url.pathname === '/api/worlds') return worldsApi(request, env, url);
