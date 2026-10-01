@@ -34,9 +34,15 @@ The first test run passed 5/8. Two failures were bad fixtures: a single support 
 
 Fix: fire now explicitly ignites adjacent flammable cells before it moves. Tests now use physical floors/walls instead of assuming particles remain pinned to one coordinate.
 
+## Independent-review hardening
+
+The first adversarial review returned BLOCK on two claims that did not reproduce: it interpreted horizontal direction tuples as broken vertical movement, and it confused fire `life` (TTL) with combustible-material `fuel`. Instead of bypassing the review, the implementation was made unambiguous: horizontal directions are now explicit 2D offsets, fire TTL is named separately in `_processFire`, and falsification tests cover diagonal powder settling, horizontal liquid flow, vertical gas rise, and one-tick wood ignition/fuel survival.
+
+This is useful process evidence: even a false-positive review can expose code that is technically correct but too easy to misread. The fix was clarity plus executable counterexamples, not disabling the reviewer.
+
 ## Verified behavior
 
-The dedicated matter suite passes 8/8, covering phases, gravity, density, lava-water reaction, combustion, phase changes, sleeping and determinism.
+The dedicated matter suite passes 11/11, covering phases, gravity, diagonal settling, horizontal liquid flow, vertical gas rise, density, lava-water reaction, combustion, phase changes, sleeping and determinism.
 
 ## Next integration
 
