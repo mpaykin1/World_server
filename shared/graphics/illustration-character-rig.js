@@ -11,8 +11,17 @@ function makePivot(THREE,name,position=[0,0,0]){
   const g=new THREE.Group();g.name=name;g.position.set(...position);return g;
 }
 
-function partMass(modeler,{seed,width,height,depth=.34,color,opacity=1,position=[0,0,0],outline=true,name}){
-  return modeler.mass({seed,width,height,topWidth:width*.72,depth,color,opacity,position,outline,name});
+function naiveProfile(width,height,{top=.76,waist=.68,bottom=.92}={}){
+  const hw=width*.5;
+  return [
+    [-hw*bottom,0],[-hw*.96,height*.10],[-hw*.82,height*.42],
+    [-hw*waist,height*.68],[-hw*top,height],
+    [ hw*top,height],[ hw*waist,height*.68],[ hw*.82,height*.42],
+    [ hw*.96,height*.10],[ hw*bottom,0]
+  ];
+}
+function partMass(modeler,{seed,width,height,depth=.34,color,opacity=1,position=[0,0,0],outline=true,name,profileOptions={}}){
+  return modeler.mass({seed,profile:naiveProfile(width,height,profileOptions),width,height,topWidth:width*.72,depth,color,opacity,position,outline,name});
 }
 
 function ellipseMesh(THREE,{rx=.35,ry=.42,depth=.28,color='#aab3bd',opacity=1,name='ellipse-part'}={}){
@@ -44,9 +53,9 @@ export function createIllustrationOfficeWorker(THREE,{
   const hipL=makePivot(THREE,'worker-left-hip',[-.26,-.02,0]);hips.add(hipL);
   const hipR=makePivot(THREE,'worker-right-hip',[.26,-.02,0]);hips.add(hipR);
 
-  const body=partMass(modeler,{seed:seed+':body',width:1.18,height:1.38,depth:.48,color:'#98a5b3',position:[-.59,-.10,0],name:'worker-body'});
+  const body=partMass(modeler,{seed:seed+':body',width:1.18,height:1.38,depth:.48,color:'#98a5b3',position:[0,-.10,0],name:'worker-body',profileOptions:{top:.72,waist:.60,bottom:.80}});
   torso.add(body);
-  const shirt=partMass(modeler,{seed:seed+':shirt',width:.48,height:.82,depth:.08,color:'#c0c7ce',opacity:.48,position:[-.24,.22,.28],outline:false,name:'worker-shirt-wash'});
+  const shirt=partMass(modeler,{seed:seed+':shirt',width:.48,height:.82,depth:.08,color:'#c0c7ce',opacity:.48,position:[0,.22,.28],outline:false,name:'worker-shirt-wash',profileOptions:{top:.66,waist:.58,bottom:.66}});
   torso.add(shirt);
 
   const head=ellipseMesh(THREE,{rx:.38,ry:.40,depth:.31,color:'#a7b1bb',name:'worker-head'});
@@ -59,9 +68,9 @@ export function createIllustrationOfficeWorker(THREE,{
 
   function makeArm(side,pivot){
     const s=side==='left'?-1:1;
-    const upper=partMass(modeler,{seed:seed+':'+side+'-upper-arm',width:.34,height:.82,depth:.30,color:'#8f9cab',position:[-.17,-.80,0],name:'worker-'+side+'-upper-arm'});
+    const upper=partMass(modeler,{seed:seed+':'+side+'-upper-arm',width:.34,height:.82,depth:.30,color:'#8f9cab',position:[0,-.80,0],name:'worker-'+side+'-upper-arm',profileOptions:{top:.72,waist:.68,bottom:.62}});
     const elbow=makePivot(THREE,'worker-'+side+'-elbow',[0,-.76,0]);pivot.add(upper,elbow);
-    const fore=partMass(modeler,{seed:seed+':'+side+'-forearm',width:.30,height:.76,depth:.27,color:'#9ba7b4',position:[-.15,-.72,0],name:'worker-'+side+'-forearm'});
+    const fore=partMass(modeler,{seed:seed+':'+side+'-forearm',width:.30,height:.76,depth:.27,color:'#9ba7b4',position:[0,-.72,0],name:'worker-'+side+'-forearm',profileOptions:{top:.66,waist:.62,bottom:.54}});
     elbow.add(fore);
     const hand=ellipseMesh(THREE,{rx:.13,ry:.15,depth:.12,color:'#a8b2bb',name:'worker-'+side+'-hand'});hand.position.set(0,-.78,0);elbow.add(hand);
     pivot.position.x=Math.abs(pivot.position.x)*s;
@@ -71,9 +80,9 @@ export function createIllustrationOfficeWorker(THREE,{
 
   function makeLeg(side,pivot){
     const s=side==='left'?-1:1;
-    const upper=partMass(modeler,{seed:seed+':'+side+'-upper-leg',width:.38,height:1.00,depth:.34,color:'#8795a5',position:[-.19,-.96,0],name:'worker-'+side+'-upper-leg'});
+    const upper=partMass(modeler,{seed:seed+':'+side+'-upper-leg',width:.38,height:1.00,depth:.34,color:'#8795a5',position:[0,-.96,0],name:'worker-'+side+'-upper-leg',profileOptions:{top:.72,waist:.62,bottom:.58}});
     const knee=makePivot(THREE,'worker-'+side+'-knee',[0,-.94,0]);pivot.add(upper,knee);
-    const lower=partMass(modeler,{seed:seed+':'+side+'-lower-leg',width:.32,height:.94,depth:.30,color:'#8997a7',position:[-.16,-.90,0],name:'worker-'+side+'-lower-leg'});
+    const lower=partMass(modeler,{seed:seed+':'+side+'-lower-leg',width:.32,height:.94,depth:.30,color:'#8997a7',position:[0,-.90,0],name:'worker-'+side+'-lower-leg',profileOptions:{top:.62,waist:.58,bottom:.52}});
     knee.add(lower);
     const shoe=ellipseMesh(THREE,{rx:.23,ry:.12,depth:.22,color:'#5b6d83',name:'worker-'+side+'-shoe'});shoe.position.set(.06*s,-.98,.09);shoe.scale.x=1.28;knee.add(shoe);
     pivot.position.x=Math.abs(pivot.position.x)*s;
