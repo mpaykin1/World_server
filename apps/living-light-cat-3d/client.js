@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { LightPipeline, livingGoldProfile } from '/shared/light/index.mjs';
-import { createLivingLightCat } from './cat-rig.js';
+import { createLivingLightCat, addCatWhiskers } from './cat-rig.js';
 import { applyCatPose } from './cat-animation.js';
 
 const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
@@ -17,7 +17,7 @@ maskScene.background=new THREE.Color(0x000000);
 const camera=new THREE.PerspectiveCamera(29,innerWidth/innerHeight,0.1,100);
 function frameCamera(){
   const portrait=innerWidth/innerHeight<0.72;
-  camera.position.set(0.30,portrait?0.05:0.20,portrait?10.7:8.0);
+  camera.position.set(0.30,portrait?0.02:0.18,portrait?11.7:8.6);
   camera.lookAt(0.18,-0.05,0);
 }
 frameCamera();
@@ -29,6 +29,7 @@ maskScene.add(maskRoot);
 
 const colorCat=createLivingLightCat(colorRoot,{mask:false});
 const maskCat=createLivingLightCat(maskRoot,{mask:true});
+addCatWhiskers(colorCat.head);
 colorRoot.scale.setScalar(1.08);
 maskRoot.scale.copy(colorRoot.scale);
 
@@ -38,16 +39,16 @@ const catGoldProfile={
   core:[1.0,0.99,0.90],
   gold:[1.0,0.61,0.14],
   amber:[1.0,0.22,0.025],
-  coreGain:3.8,
-  goldGain:2.35,
-  haloGain:1.55,
-  bloomGain:1.92,
-  bloomRadius:2.9,
+  coreGain:3.25,
+  goldGain:1.52,
+  haloGain:0.72,
+  bloomGain:0.92,
+  bloomRadius:1.75,
   rimPower:2.05,
   depthGain:0.42,
-  filamentGain:0.34,
-  filamentThreshold:0.865,
-  temporalBlend:0.64,
+  filamentGain:0.20,
+  filamentThreshold:0.89,
+  temporalBlend:0.58,
   edgeSoftness:0.58,
   topGain:1.20,
   middleGain:1.04,
@@ -78,7 +79,13 @@ function frame(now){
   elapsed+=dt;
   applyCatPose(colorCat,elapsed,{mode:qa,manualYaw});
   applyCatPose(maskCat,elapsed,{mode:qa,manualYaw});
+  camera.layers.set(0);
   light.render(elapsed);
+  renderer.autoClear=false;
+  camera.layers.set(1);
+  renderer.render(colorScene,camera);
+  camera.layers.set(0);
+  renderer.autoClear=true;
   window.LivingLightCat3D={
     ready:true,
     mode:qa,
