@@ -249,3 +249,17 @@ Canonical machine-readable policy: `data/manual-task-completion-contract.json`; 
 ## Multilingual AI production parity
 
 Если клиент добавляет новый AI locale, backend и production Worker должны получить этот locale в том же release unit. Нельзя считать locale готовым по client commit или preview. Обязательны production deploy + live smoke с `executed:false` и ожидаемым `language`. См. `docs/META6_EN_LIVE_AI_PARITY_FAILURE_2026-09-30.md`.
+
+
+## 13. WORLD GROWTH ARCHITECTURE — permanent AKA rule
+
+The 50 worldwide-growth architecture hypotheses are a canonical development surface, not a brainstorming list. Source of truth: `.ai/aka-world-growth-engine.json` + `data/world-growth-hypotheses.json`.
+
+- Before inventing a new subsystem, run/search the existing capability/contract inventory and reuse compatible systems.
+- Existing AKA tasks must periodically run `npm run growth:architecture` and advance the highest-leverage unresolved gap through one bounded implementation slice.
+- Do not create a sixth automation. Route work through the existing Architect / Builder / Fleet / Ocean topology.
+- Shared contracts and cross-system consumers outrank one-off demo HTML when both can prove the same idea.
+- `VERIFIED` requires exact evidence; a plan, issue, PR body or self-report is insufficient.
+- Novelty/cost/speed/network-effect claims require their own measurements and may not be inferred from code volume.
+- Technical evidence status is not the owner's MVP verdict. Success/failure learning labels are written only after the owner's explicit decision.
+- After a capability is verified, expose it to compatible worlds/agents through shared contracts/registry and re-score all 50 so AKA automatically moves to the next gap.

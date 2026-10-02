@@ -122,7 +122,9 @@
     "delivery:two-player": "node scripts/live-two-player-qa.cjs",
     "quality:world:detail-efficiency": "node scripts/world-detail-efficiency-loop.js",
     "quality:world:detail-efficiency:test": "node --test test/world-detail-efficiency-gate.test.js",
-    "roblox:import": "node scripts/import-roblox-world.js"
+    "roblox:import": "node scripts/import-roblox-world.js",
+    "growth:architecture": "node scripts/world-growth-architect.mjs",
+    "growth:architecture:check": "node scripts/world-growth-architect.mjs --check && node --test test/world-growth-architecture.test.mjs"
   },
   "engines": {
     "node": "24.x"
