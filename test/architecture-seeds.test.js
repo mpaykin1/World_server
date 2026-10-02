@@ -4,7 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const {
   normalizeSeedKey, seed32FromKey, createArchitectureDNA,
-  sampleBuildingRecipe, huntArchitectureSeeds
+  sampleCityPlan, sampleBuildingRecipe, huntArchitectureSeeds
 } = require('../lib/architecture-seeds');
 const { createWorldDNA, settingsFromDNA, publicWorld } = require('../lib/world-factory');
 const factoryApi = require('../lib/api-handlers/world-factory')._private;
@@ -106,4 +106,17 @@ test('facade constraint collapse is deterministic and keeps accent modules separ
     if (x + 1 < pattern.width) assert.notEqual(pattern.rows[y][x + 1], accent);
     if (y + 1 < pattern.height) assert.notEqual(pattern.rows[y + 1][x], accent);
   }
+});
+
+
+test('city plans are deterministic and architecture-specific', () => {
+  const ny = createArchitectureDNA({ seed: '9001', idea: 'New York' });
+  const china = createArchitectureDNA({ seed: '9001', idea: 'древняя китайская архитектура' });
+  const a = sampleCityPlan(ny, { x: 0, z: 0, size: 240 });
+  const b = sampleCityPlan(ny, { x: 0, z: 0, size: 240 });
+  const c = sampleCityPlan(china, { x: 0, z: 0, size: 240 });
+  assert.deepEqual(a, b);
+  assert.ok(a.roads.length > 4 && c.roads.length > 2);
+  assert.notEqual(a.pattern, c.pattern);
+  assert.equal(a.districtAnchors.length, 4);
 });
