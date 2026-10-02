@@ -44,12 +44,12 @@ export function createKriegerSurfaceLibrary(renderer,seed=1){
   const normal=makeTexture(normalFromHeight(height,size,3.3),size);
   const maxAniso=renderer.capabilities.getMaxAnisotropy?.()||4;for(const t of [albedo,roughness,normal])t.anisotropy=Math.min(8,maxAniso);
   return {
-    floorStone:new THREE.MeshStandardMaterial({color:0xcbd1d5,map:albedo,normalMap:normal,normalScale:new THREE.Vector2(.68,.68),roughness:.58,roughnessMap:roughness,metalness:.045}),
-    stone:new THREE.MeshStandardMaterial({color:0xc5ccd2,map:albedo,normalMap:normal,normalScale:new THREE.Vector2(.72,.72),roughness:.70,roughnessMap:roughness,metalness:.04}),
-    darkStone:new THREE.MeshStandardMaterial({color:0x4b555d,map:albedo,normalMap:normal,normalScale:new THREE.Vector2(.58,.58),roughness:.80,roughnessMap:roughness,metalness:.03}),
-    metal:new THREE.MeshStandardMaterial({color:0x4d5964,roughness:.34,metalness:.72,normalMap:normal,normalScale:new THREE.Vector2(.12,.12)}),
-    warmMetal:new THREE.MeshStandardMaterial({color:0x765c48,roughness:.40,metalness:.52,normalMap:normal,normalScale:new THREE.Vector2(.18,.18)}),
-    emissive:new THREE.MeshStandardMaterial({color:0xffc48b,emissive:0xff7623,emissiveIntensity:3.2,roughness:.28,metalness:.04}),
+    floorStone:new THREE.MeshStandardMaterial({color:0xd7dcdf,map:albedo,normalMap:normal,normalScale:new THREE.Vector2(.74,.74),roughness:.88,roughnessMap:roughness,metalness:.018}),
+    stone:new THREE.MeshStandardMaterial({color:0xd7d8d4,map:albedo,normalMap:normal,normalScale:new THREE.Vector2(.76,.76),roughness:.64,roughnessMap:roughness,metalness:.045}),
+    darkStone:new THREE.MeshStandardMaterial({color:0x68737c,map:albedo,normalMap:normal,normalScale:new THREE.Vector2(.62,.62),roughness:.76,roughnessMap:roughness,metalness:.035}),
+    metal:new THREE.MeshStandardMaterial({color:0x242a30,roughness:.34,metalness:.82,normalMap:normal,normalScale:new THREE.Vector2(.14,.14)}),
+    warmMetal:new THREE.MeshStandardMaterial({color:0x8f694d,roughness:.36,metalness:.58,normalMap:normal,normalScale:new THREE.Vector2(.20,.20)}),
+    emissive:new THREE.MeshStandardMaterial({color:0xffd09a,emissive:0xff7a25,emissiveIntensity:5.0,roughness:.22,metalness:.04}),
     textures:[albedo,roughness,normal]
   };
 }
@@ -90,32 +90,33 @@ function installRhythm(runtime,profile,surfaces){
   runtime.cinematicArchitecture={group:g,owned,profile};return g;
 }
 function installLocalLights(runtime,profile){
-  const lights=[],z0=profile.startZ+profile.spacing;
-  for(let i=0;i<3;i++){
-    const z=z0+i*profile.spacing*3.2,side=i%2===0?-1:1,light=new THREE.PointLight(0xff9a45,28,10,2);
-    light.position.set(side*profile.halfWidth*.72,profile.height*.68,z);light.castShadow=false;
+  const lights=[],z0=profile.startZ+profile.spacing*.8;
+  for(let i=0;i<5;i++){
+    const z=z0+i*profile.spacing*2.15,side=i%2===0?-1:1,light=new THREE.PointLight(0xffa04e,62,14,1.75);
+    light.position.set(side*profile.halfWidth*.62,profile.height*.62,z);light.castShadow=false;
     runtime.scene.add(light);lights.push(light);
   }
-  const cool=new THREE.DirectionalLight(0x729bc4,.55);cool.position.set(-4,8,-6);cool.castShadow=false;runtime.scene.add(cool);
+  const cool=new THREE.DirectionalLight(0x86a9cf,.88);cool.position.set(-4,8,-6);cool.castShadow=false;runtime.scene.add(cool);
   runtime.cinematicLights=[...lights,cool];return lights;
 }
 function heroPart(group,geometry,material,p,r=[0,0,0]){
   const m=new THREE.Mesh(geometry,material);m.position.fromArray(p);m.rotation.set(...r);m.castShadow=true;m.receiveShadow=true;group.add(m);return m;
 }
 function installHero(runtime,surfaces){
-  const hero=new THREE.Group();hero.name='hero.world-tool';hero.position.set(.18,-.25,-1.80);hero.rotation.set(-.08,.32,-.03);hero.scale.setScalar(.66);
-  heroPart(hero,new THREE.BoxGeometry(.34,.20,.80),surfaces.metal,[0,0,-.08]);
-  heroPart(hero,new THREE.BoxGeometry(.26,.12,.52),surfaces.warmMetal,[0,.13,-.34]);
-  heroPart(hero,new THREE.CylinderGeometry(.062,.076,.96,12),surfaces.metal,[0,.035,-.80],[Math.PI/2,0,0]);
-  for(const x of [-.13,.13])heroPart(hero,new THREE.CylinderGeometry(.029,.029,.72,8),surfaces.warmMetal,[x,.065,-.50],[Math.PI/2,0,0]);
-  const grip=heroPart(hero,new THREE.BoxGeometry(.14,.46,.18),surfaces.darkStone,[0,-.31,.12],[-.20,0,0]);grip.scale.z=.78;
-  for(let i=0;i<5;i++)heroPart(hero,new THREE.BoxGeometry(.29,.028,.048),surfaces.darkStone,[0,.22,-.36+i*.12]);
-  for(let i=0;i<3;i++)heroPart(hero,new THREE.BoxGeometry(.035,.075,.13),surfaces.warmMetal,[.19,.015,-.30+i*.20]);
-  heroPart(hero,new THREE.BoxGeometry(.045,.045,.25),surfaces.emissive,[.17,.16,-.36]);
-  const ring=heroPart(hero,new THREE.TorusGeometry(.102,.025,8,18),surfaces.warmMetal,[0,.035,-1.27],[Math.PI/2,0,0]);ring.scale.y=.82;
-  heroPart(hero,new THREE.BoxGeometry(.20,.065,.20),surfaces.warmMetal,[0,-.10,.31]);
+  const hero=new THREE.Group();hero.name='hero.world-tool';hero.position.set(.24,-.43,-1.06);hero.rotation.set(-.055,-.16,.018);hero.scale.setScalar(.44);
+  heroPart(hero,new THREE.BoxGeometry(.52,.25,.88),surfaces.metal,[0,.01,-.08]);
+  heroPart(hero,new THREE.BoxGeometry(.58,.29,.34),surfaces.metal,[0,-.02,.50]);
+  heroPart(hero,new THREE.BoxGeometry(.39,.105,.72),surfaces.warmMetal,[0,.19,-.20]);
+  heroPart(hero,new THREE.CylinderGeometry(.078,.095,1.42,14),surfaces.metal,[0,.055,-1.07],[Math.PI/2,0,0]);
+  heroPart(hero,new THREE.CylinderGeometry(.12,.14,.34,14),surfaces.warmMetal,[0,.055,-1.82],[Math.PI/2,0,0]);
+  for(const x of [-.15,.15])heroPart(hero,new THREE.CylinderGeometry(.032,.042,1.08,10),surfaces.warmMetal,[x,.105,-.82],[Math.PI/2,0,0]);
+  const grip=heroPart(hero,new THREE.BoxGeometry(.17,.60,.22),surfaces.darkStone,[0,-.40,.28],[-.31,0,0]);grip.scale.z=.76;
+  for(let i=0;i<7;i++)heroPart(hero,new THREE.BoxGeometry(.40,.030,.055),surfaces.darkStone,[0,.245,-.43+i*.115]);
+  for(let i=0;i<4;i++)heroPart(hero,new THREE.BoxGeometry(.040,.085,.13),surfaces.warmMetal,[.29,.025,-.40+i*.20]);
+  heroPart(hero,new THREE.BoxGeometry(.050,.050,.34),surfaces.emissive,[.245,.19,-.40]);
+  const ring=heroPart(hero,new THREE.TorusGeometry(.145,.030,8,20),surfaces.warmMetal,[0,.055,-2.01],[Math.PI/2,0,0]);ring.scale.y=.82;
   runtime.camera.add(hero);if(!runtime.camera.parent)runtime.scene.add(runtime.camera);
-  const key=new THREE.PointLight(0xb7c9df,6.2,3.6,2);key.position.set(.08,.18,-.42);runtime.camera.add(key);
+  const key=new THREE.PointLight(0xb9d4ef,11.5,4.5,1.7);key.position.set(.02,.30,-.50);runtime.camera.add(key);
   runtime.heroForeground=hero;runtime.heroKey=key;
   runtime.qualityObjects.push({id:'render.hero-world-tool',group:hero,kind:'hero-foreground',semanticLayers:['macro','meso','micro','surface','state','props'],semanticTags:['foreground','tool','receiver','barrel','rails','muzzle','indicator','grip'],materialVariation:.94,surfaceMicrodetail:.86,flatSurfaceRatio:.10,concavity:.62,functionalComponents:14,forceNearCamera:true});
   return hero;
@@ -133,10 +134,10 @@ export function cinematicProfileFromRecipe(recipe){
 export function installKriegerCinematicStack(runtime,recipe){
   const surfaces=createKriegerSurfaceLibrary(runtime.renderer,recipe.seed),profile=cinematicProfileFromRecipe(recipe);
   runtime.qualityObjects=runtime.qualityObjects||[];runtime.cinematicSurfaces=surfaces;
-  runtime.scene.children.forEach(node=>{if(node.isHemisphereLight)node.intensity=.16;else if(node.isDirectionalLight)node.intensity=.22;});
+  runtime.scene.children.forEach(node=>{if(node.isHemisphereLight)node.intensity=.38;else if(node.isDirectionalLight)node.intensity=.28;});
   installRhythm(runtime,profile,surfaces);const localLights=installLocalLights(runtime,profile);installHero(runtime,surfaces);
   runtime.scene.background=new THREE.Color(0x020407);runtime.scene.fog=new THREE.FogExp2(0x05080c,.045);
-  runtime.renderer.toneMapping=THREE.ACESFilmicToneMapping;runtime.renderer.toneMappingExposure=1.08;
+  runtime.renderer.toneMapping=THREE.ACESFilmicToneMapping;runtime.renderer.toneMappingExposure=1.38;
   return {profile,localLights,surfaces};
 }
 export function cinematicStackEvidence(runtime){
