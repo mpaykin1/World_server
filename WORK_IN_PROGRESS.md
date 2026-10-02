@@ -1,3 +1,23 @@
+# 2026-10-02: Architecture Seed DNA / procedural city-biome seeds
+
+Task: build a reusable deterministic architecture-seed system for World Server so one world seed can reproducibly drive city style, street grammar, building grammar, biome modifiers, ruins/flooding and future mixed architectural families.
+Why: the user wants Minecraft-like shareable seeds focused primarily on architecture (Gothic, New York, ancient Chinese, Tokyo, future cities) and unusual biomes (jungle, flooded ruins), while reusing permissively licensed open-source algorithms where useful and independently reimplementing algorithmic ideas when direct reuse is unsuitable.
+Current state: voxel-world already uses worldSeed for terrain/biomes/caves/vegetation and world-emergence uses seed for deterministic relations, but there is no canonical Architecture DNA, named style grammar, deterministic sub-seed derivation, architecture mixing contract, or seed-hunter scoring API.
+Target state: canonical pure-JS Architecture Seed core derives stable sub-seeds and Architecture DNA; World Factory persists it in worldDNA; browser runtime can sample deterministic districts/building recipes without copying third-party assets; tests prove same seed/version => same DNA and different seed => changed architecture; seed hunter can rank rare combinations.
+Files / systems involved: new lib/architecture-seeds.js, lib/world-factory.js, focused tests, docs/source notices as needed; voxel-world integration only through backward-compatible worldDNA fields in this slice.
+Known risks: claiming fidelity to real cities from coarse grammar presets; importing assets whose licenses differ from code licenses; breaking old worlds when generator algorithms evolve; non-determinism from JS object iteration/time/random; overloading mobile rendering by materializing too many buildings.
+Golden systems that must be preserved: existing worldSeed terrain generation, World Emergence determinism, certified voxel-world controls/collision/mobile contracts, >85% visual-delivery gate, deny-by-default release policy.
+Errors that must not return: unversioned procedural generation that changes old seeds; Math.random in deterministic worldgen; third-party sample assets copied without license proof; seed changing gameplay state outside its documented generator version.
+Exact patch / change plan: implement versioned sub-seed hashing; architecture families and aliases; deterministic style blending; city-layout/road/building/biome/history DNA; grammar-safe building recipe sampling; deterministic seed-hunter scoring; integrate Architecture DNA into createWorldDNA/settings/public projections; add regression tests and source-attribution notes for algorithmic inspirations without vendoring incompatible samples.
+Tests to run: focused architecture-seed tests; world-factory tests; syntax checks; full npm run check and exact-head CI; no playable-link claim in this task unless a separate visual MVP is explicitly requested.
+Deployment / PR plan: isolated branch -> PR -> CI/review -> protected master; no direct master push, no automatic merge.
+Current progress: branch created; mandatory instructions and quality/golden/error registries reviewed; implementation pending.
+Next action: implement deterministic core and focused tests, then run exact-head checks.
+Completion criteria: deterministic versioned Architecture DNA is persisted by World Factory, supports requested style families/biome-history modifiers and seed ranking, passes focused/full checks, and PR is reviewable without regressing existing world generation.
+Final evidence: pending.
+
+---
+
 # 2026-10-02: СЖ — правила из пользовательской редактуры
 
 Task: извлечь устойчивые авторские преобразования из явной пользовательской правки текста про хейтершу и добавить их в каноническую СЖ.
