@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#05080d">
+<title>Noita Full Stack — World Server</title>
+<style>
+:root{color-scheme:dark;--glass:rgba(7,10,16,.80);--line:rgba(255,255,255,.15)}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#05080d;touch-action:none}
+body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#fff}
+#world{position:fixed;inset:0;width:100%;height:100%;display:block;background:#05080d}
+#top{position:fixed;z-index:30;left:max(8px,env(safe-area-inset-left));right:max(8px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));display:flex;gap:8px;pointer-events:none}
+.panel{background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(12px);border-radius:13px;box-shadow:0 10px 28px rgba(0,0,0,.28)}
+#title{padding:8px 10px;flex:1;min-width:0}.name{font-weight:900;font-size:13px}.sub{font-size:9px;opacity:.65;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+#stats{padding:7px 9px;font:700 9px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:nowrap}
+#toast{position:fixed;z-index:32;top:max(70px,calc(env(safe-area-inset-top) + 62px));left:50%;transform:translateX(-50%) translateY(-4px);padding:7px 11px;border-radius:999px;background:rgba(9,12,18,.88);border:1px solid rgba(255,174,72,.32);font-size:10px;font-weight:900;opacity:0;transition:.18s;pointer-events:none}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#controls{position:fixed;z-index:40;left:0;right:0;bottom:0;padding:6px max(8px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));background:linear-gradient(transparent,rgba(3,5,9,.72) 18%,rgba(3,5,9,.97) 48%)}
+.row{display:flex;gap:6px;overflow-x:auto;padding:3px 0;scrollbar-width:none}.row::-webkit-scrollbar{display:none}
+button{flex:0 0 auto;border:1px solid var(--line);border-radius:11px;background:rgba(18,25,38,.92);color:#fff;padding:8px 10px;font:800 10px system-ui;box-shadow:0 4px 12px rgba(0,0,0,.22)}
+button:active{transform:translateY(1px);background:rgba(47,63,92,.95)}
+button.hot{border-color:rgba(255,111,52,.52)}button.cool{border-color:rgba(74,165,255,.45)}button.break{border-color:rgba(255,215,90,.42)}
+#move{position:fixed;z-index:41;left:max(10px,env(safe-area-inset-left));bottom:calc(max(88px,env(safe-area-inset-bottom) + 82px));display:flex;gap:7px}
+#move button,#action{width:46px;height:46px;border-radius:50%;font-size:18px;padding:0;background:rgba(10,16,27,.76);backdrop-filter:blur(8px)}
+#action{position:fixed;z-index:41;right:max(12px,env(safe-area-inset-right));bottom:calc(max(90px,env(safe-area-inset-bottom) + 84px));border-color:rgba(255,128,48,.48)}
+#legend{text-align:center;font-size:9px;opacity:.58;padding-top:2px}
+@media(min-width:760px){#controls{left:50%;right:auto;width:min(850px,94vw);transform:translateX(-50%);border-radius:18px 18px 0 0}.name{font-size:15px}.sub,#stats,#legend{font-size:10px}}
+</style>
+</head>
+<body>
+<canvas id="world"></canvas>
+<div id="top">
+  <div id="title" class="panel"><div class="name">NOITA FULL STACK</div><div class="sub">Matter + structure + rigid clusters + particles + glow + pixel camera + sprite runtime</div></div>
+  <div id="stats" class="panel">boot…</div>
+</div>
+<div id="toast">готово</div>
+<div id="move"><button id="left">◀</button><button id="jump">▲</button><button id="right">▶</button></div>
+<button id="action">✦</button>
+<div id="controls">
+  <div class="row">
+    <button id="sand" class="break">ПЕСОК ×4000</button>
+    <button id="lava" class="hot">ЛАВА + ВОДА</button>
+    <button id="ignite" class="hot">ПОДЖЕЧЬ</button>
+    <button id="break" class="break">СЛОМАТЬ ОПОРУ</button>
+    <button id="zoom">ZOOM / CUT</button>
+    <button id="reset" class="cool">СБРОС</button>
+  </div>
+  <div id="legend">◀ ▶ движение · ▲ прыжок · ✦ магические частицы · физика и обвалы не заскриптованы</div>
+</div>
+<script src="./world-noita-stack.bundle.js"></script>
+<script src="./client.js"></script>
+</body>
+</html>
