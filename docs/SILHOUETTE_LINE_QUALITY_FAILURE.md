@@ -49,3 +49,11 @@ A technically correct silhouette edge is not the same thing as a beautiful lumin
 **3D motion system: SUCCESS by user decision.**
 **Observed baseline line quality: FAILURE by user decision.**
 **New line candidate: UNACCEPTED / pending user decision.**
+
+## Canonical replacement system
+
+The reusable remediation path is now named **LIGHT**.
+
+Future work should start from `shared/light/index.mjs` and `docs/LIGHT_SYSTEM.md`, rather than extending the original baseline outline shader ad hoc.
+
+This pointer does not change the recorded FAILURE verdict for the observed baseline line.

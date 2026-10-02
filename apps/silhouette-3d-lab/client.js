@@ -2,9 +2,9 @@ import * as THREE from 'three';
 import {
   createSilhouetteCreature,
   animateSilhouetteCreature,
-  clonePose,
-  Silhouette3DOutlinePipeline
+  clonePose
 } from '/shared/silhouette-3d/index.mjs';
+import { LightPipeline, livingGoldProfile } from '/shared/light/index.mjs';
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
 renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
@@ -28,14 +28,14 @@ maskScene.add(maskRoot);
 const colorRig = createSilhouetteCreature(colorRoot, { asMask: false, scale: 1.25 });
 const maskRig = createSilhouetteCreature(maskRoot, { asMask: true, scale: 1.25 });
 
-const pipeline = new Silhouette3DOutlinePipeline({
+const pipeline = new LightPipeline({
   renderer,
   colorScene,
   maskScene,
   camera,
   width: innerWidth,
   height: innerHeight,
-  outline: 1
+  profile: livingGoldProfile
 });
 
 let yaw = 0.15;
@@ -94,6 +94,7 @@ addEventListener('resize', () => {
   pipeline.resize(innerWidth, innerHeight);
 });
 
+window.LIGHT = { name: 'LIGHT', version: 1, pipeline, profile: livingGoldProfile };
 window.Silhouette3DLive = {
   renderer,
   camera,

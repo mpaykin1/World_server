@@ -266,6 +266,20 @@
         "test/roblox-import.test.js"
       ],
       "note": "Never executes embedded Luau during import. Reuses Golden controls/physics and authoritative World Server networking; external Roblox assets and opaque TerrainRegion bytes remain explicit blockers until provided/exported/decoded."
+    },
+    "LIGHT": {
+      "percent": 88,
+      "status": "integrated reusable 3D luminous-line runtime; visual acceptance pending",
+      "evidence": [
+        "shared/light/index.mjs",
+        "shared/light/pipeline.mjs",
+        "shared/light/capture.mjs",
+        "shared/light/shaders.mjs",
+        "apps/silhouette-3d-lab/client.js",
+        "test/light-system.test.js",
+        "docs/LIGHT_SYSTEM.md"
+      ],
+      "note": "Canonical World Server system for normal/depth-aware rim light, screen-space distance-field edge shaping, HDR half-float glow, Kawase bloom, stable micro-filaments, motion-aware temporal stabilization, art-directed zones and 3D luminous curves. Do not convert pending visual quality into SUCCESS/FAILURE without explicit user decision."
     }
   },
   "governanceCoveragePercent": 100,
