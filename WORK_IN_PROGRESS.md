@@ -2,9 +2,9 @@
 
 Task/why: add a reusable image/video-observation -> visual grammar -> graphics-lane compiler so agents reuse AI3D/voxel/PBR/LIGHT/sprite systems instead of one-off clones.
 State/target: specialized renderers existed but no common semantic router; target is deterministic style/dimension/material/light/camera/detail/motion grammar plus executable plans and correction/verification contract.
-Affected: lib/reference-{video-analyzer,visual-grammar,visual-router,visual-compiler}.js; data/reference-visual-lanes.json; script/test/docs/package. Risks: false semantic certainty, missing watercolor runtime, overfitting. Preserve: golden AI3D/LIGHT/voxel systems and user-only SUCCESS/FAILURE verdict.
+Affected: lib/reference-{video-analyzer,visual-grammar,visual-router,visual-compiler}.js; data/reference-visual-lanes.json; script/test/package. Risks: false semantic certainty, missing watercolor runtime, overfitting. Preserve: golden AI3D/LIGHT/voxel systems and user-only SUCCESS/FAILURE verdict.
 Plan/tests: aggregate normalized frame evidence; route voxel/3D/sprite/LIGHT; expose CLI; report unavailable lanes honestly; run focused node test, JS check and full PR CI.
-Progress/next: compiler, lane registry, CLI, docs and tests implemented on isolated branch; exact-head gates running. Merge only after independent review + CI.
+Progress/next: compiler, lane registry, CLI and tests implemented on isolated branch; exact-head gates running. Merge only after independent review + CI.
 Completion/final evidence: machine-readable routing works for gothic voxel, pixel sprite and luminous 3D; blockers remain explicit. Head before gate retry: 86d23f45b4ff230a436136b3800fedd0ce267739.
 
 ---
