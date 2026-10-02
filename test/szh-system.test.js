@@ -50,5 +50,5 @@ test('SZH human-readable canon is discoverable from AI_START_HERE', () => {
   assert.match(start, /docs\/SZH_SYSTEM_RU\.md/);
   assert.match(start, /\.ai\/szh-writing-system\.json/);
   assert.match(canon, /функциональная шероховатость/i);
-  assert.match(canon, /не изменяй каноническую СЖ автоматически/i);
+  assert.match(canon, /не менять каноническую СЖ без явной команды/i);
 });
