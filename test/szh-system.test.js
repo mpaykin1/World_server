@@ -4,6 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const { execFileSync } = require('node:child_process');
 
 const ROOT = path.join(__dirname, '..');
 
@@ -78,4 +79,26 @@ test('SZH executable resolver activates and preserves user precedence', () => {
   });
   assert.ok(prompt.indexOf('LATEST USER EDIT') < prompt.indexOf('CURRENT STYLE INSTRUCTION'));
   assert.ok(prompt.indexOf('CURRENT STYLE INSTRUCTION') < prompt.indexOf('SZH CORE FORMULA'));
+});
+
+
+test('SZH CLI honors --request even when personal default is disabled', () => {
+  const output = execFileSync(
+    process.execPath,
+    [path.join(ROOT, 'scripts', 'szh-context.js'), '--not-personal', '--request', 'напиши по СЖ'],
+    { encoding: 'utf8' }
+  );
+  const context = JSON.parse(output);
+  assert.equal(context.active, true);
+  assert.equal(context.id, 'szh');
+});
+
+test('SZH inactive context keeps a stable safe shape', () => {
+  const { buildSzhContext } = require('../lib/szh-writing-system');
+  const context = buildSzhContext({ request: 'technical note', personalAuthoredText: false });
+  assert.equal(context.active, false);
+  assert.deepEqual(context.rules, []);
+  assert.deepEqual(context.selfCheck, []);
+  assert.equal(context.latestUserEdit, null);
+  assert.equal(context.currentStyleInstruction, null);
 });
