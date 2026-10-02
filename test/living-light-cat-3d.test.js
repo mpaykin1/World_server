@@ -12,9 +12,10 @@ test('Living Light Cat is genuine 3D geometry',()=>{
   assert.match(rig,/SphereGeometry/);
   assert.match(rig,/CylinderGeometry/);
   assert.match(rig,/ConeGeometry/);
-  assert.match(rig,/TubeGeometry/);
+  assert.match(rig,/LineBasicMaterial/);
   assert.match(rig,/headPivot/);
   assert.match(rig,/tailSegment/);
+  assert.match(rig,/whiskerOverlay/);
 });
 
 test('Living Light Cat head and tail move in 3D',()=>{
