@@ -1,11 +1,12 @@
 {
-  "generatedAt": "2026-09-10T03:27:14.911Z",
+  "generatedAt": "2026-09-22T08:45:04.855Z",
   "nodes": [
     "app:ai-3d",
     "app:ai3d-reference-test",
     "app:ai3d-voxel-city",
     "app:catalog",
     "app:chat",
+    "app:cinematic-encounter",
     "app:dark-void-scene",
     "app:survival",
     "app:voxel-world",
@@ -24,6 +25,8 @@
     "apps/catalog/client.js",
     "apps/catalog/index.html",
     "apps/chat/index.html",
+    "apps/cinematic-encounter/client.js",
+    "apps/cinematic-encounter/index.html",
     "apps/dark-void-scene/client.js",
     "apps/dark-void-scene/golden-ai3d-playable-runtime.js",
     "apps/dark-void-scene/index.html",
@@ -32,6 +35,7 @@
     "apps/dark-void-scene/mobile-shell-config.js",
     "apps/survival/client.js",
     "apps/survival/index.html",
+    "apps/voxel-world/autodemo-bridge.mjs",
     "apps/voxel-world/client.js",
     "apps/voxel-world/index.html",
     "apps/world-sharabass/index.html",
@@ -45,10 +49,14 @@
     "shared/ai3d-playable-runtime.js",
     "shared/common.js",
     "shared/golden-catalog-menu.js",
+    "shared/golden-painting-atmosphere.js",
     "shared/golden-performance-autotuner.js",
     "shared/golden-physics.js",
     "shared/golden-ui-shell.css",
     "shared/golden-ui-shell.js",
+    "shared/graphics/golden-asset-codec.js",
+    "shared/graphics/golden-quality-director.js",
+    "shared/graphics/phaser4-fx-layer.js",
     "shared/graphics/universal-voxel-microdetail-bootstrap.js",
     "shared/indieworlds/feed.xml",
     "shared/indieworlds/index.json",
@@ -57,6 +65,7 @@
     "shared/quality-telemetry.js",
     "shared/sentry-runtime.js",
     "shared/style.css",
+    "shared/world-emergence-runtime.js",
     "shared/world-quality-autopilot.js"
   ],
   "edges": [
@@ -132,6 +141,21 @@
     },
     {
       "from": "shared/sentry-runtime.js",
+      "to": "apps/ai3d-voxel-city/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/graphics/golden-quality-director.js",
+      "to": "apps/ai3d-voxel-city/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-painting-atmosphere.js",
+      "to": "apps/ai3d-voxel-city/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/graphics/golden-asset-codec.js",
       "to": "apps/ai3d-voxel-city/index.html",
       "kind": "html-dependency"
     },
@@ -266,6 +290,56 @@
       "kind": "html-dependency"
     },
     {
+      "from": "apps/cinematic-encounter/client.js",
+      "to": "app:cinematic-encounter",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "apps/cinematic-encounter/index.html",
+      "to": "app:cinematic-encounter",
+      "kind": "belongs-to"
+    },
+    {
+      "from": "shared/golden-ui-shell.css",
+      "to": "apps/cinematic-encounter/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/sentry-runtime.js",
+      "to": "apps/cinematic-encounter/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/graphics/golden-quality-director.js",
+      "to": "apps/cinematic-encounter/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-painting-atmosphere.js",
+      "to": "apps/cinematic-encounter/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/graphics/golden-asset-codec.js",
+      "to": "apps/cinematic-encounter/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-physics.js",
+      "to": "apps/cinematic-encounter/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-ui-shell.js",
+      "to": "apps/cinematic-encounter/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/quality-telemetry.js",
+      "to": "apps/cinematic-encounter/index.html",
+      "kind": "html-dependency"
+    },
+    {
       "from": "apps/dark-void-scene/client.js",
       "to": "app:dark-void-scene",
       "kind": "belongs-to"
@@ -279,6 +353,21 @@
       "from": "apps/dark-void-scene/index.html",
       "to": "app:dark-void-scene",
       "kind": "belongs-to"
+    },
+    {
+      "from": "shared/graphics/golden-quality-director.js",
+      "to": "apps/dark-void-scene/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-painting-atmosphere.js",
+      "to": "apps/dark-void-scene/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/graphics/golden-asset-codec.js",
+      "to": "apps/dark-void-scene/index.html",
+      "kind": "html-dependency"
     },
     {
       "from": "apps/dark-void-scene/mobile-game-shell.css",
@@ -312,6 +401,21 @@
     },
     {
       "from": "shared/sentry-runtime.js",
+      "to": "apps/survival/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/graphics/golden-quality-director.js",
+      "to": "apps/survival/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-painting-atmosphere.js",
+      "to": "apps/survival/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/graphics/golden-asset-codec.js",
       "to": "apps/survival/index.html",
       "kind": "html-dependency"
     },
@@ -351,6 +455,11 @@
       "kind": "belongs-to"
     },
     {
+      "from": "apps/voxel-world/autodemo-bridge.mjs",
+      "to": "apps/voxel-world/client.js",
+      "kind": "module-dependency"
+    },
+    {
       "from": "apps/voxel-world/index.html",
       "to": "app:voxel-world",
       "kind": "belongs-to"
@@ -376,7 +485,32 @@
       "kind": "html-dependency"
     },
     {
+      "from": "shared/graphics/golden-quality-director.js",
+      "to": "apps/voxel-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/graphics/phaser4-fx-layer.js",
+      "to": "apps/voxel-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-painting-atmosphere.js",
+      "to": "apps/voxel-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/graphics/golden-asset-codec.js",
+      "to": "apps/voxel-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
       "from": "shared/common.js",
+      "to": "apps/voxel-world/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/world-emergence-runtime.js",
       "to": "apps/voxel-world/index.html",
       "kind": "html-dependency"
     },
@@ -427,6 +561,21 @@
     },
     {
       "from": "shared/sentry-runtime.js",
+      "to": "apps/world-sharabass/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/graphics/golden-quality-director.js",
+      "to": "apps/world-sharabass/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/golden-painting-atmosphere.js",
+      "to": "apps/world-sharabass/index.html",
+      "kind": "html-dependency"
+    },
+    {
+      "from": "shared/graphics/golden-asset-codec.js",
       "to": "apps/world-sharabass/index.html",
       "kind": "html-dependency"
     },
@@ -594,6 +743,11 @@
       "from": "release:quarantine",
       "to": "app:dark-void-scene",
       "kind": "release-status"
+    },
+    {
+      "from": "release:certified",
+      "to": "app:cinematic-encounter",
+      "kind": "release-status"
     }
   ],
   "reverse": {
@@ -609,6 +763,7 @@
       "apps/ai3d-voxel-city/index.html",
       "apps/catalog/index.html",
       "apps/chat/index.html",
+      "apps/cinematic-encounter/index.html",
       "apps/survival/index.html",
       "apps/voxel-world/index.html",
       "apps/world-sharabass/index.html"
@@ -650,6 +805,30 @@
       "app:ai3d-voxel-city",
       "app:catalog"
     ],
+    "shared/graphics/golden-quality-director.js": [
+      "apps/ai3d-voxel-city/index.html",
+      "apps/cinematic-encounter/index.html",
+      "apps/dark-void-scene/index.html",
+      "apps/survival/index.html",
+      "apps/voxel-world/index.html",
+      "apps/world-sharabass/index.html"
+    ],
+    "shared/golden-painting-atmosphere.js": [
+      "apps/ai3d-voxel-city/index.html",
+      "apps/cinematic-encounter/index.html",
+      "apps/dark-void-scene/index.html",
+      "apps/survival/index.html",
+      "apps/voxel-world/index.html",
+      "apps/world-sharabass/index.html"
+    ],
+    "shared/graphics/golden-asset-codec.js": [
+      "apps/ai3d-voxel-city/index.html",
+      "apps/cinematic-encounter/index.html",
+      "apps/dark-void-scene/index.html",
+      "apps/survival/index.html",
+      "apps/voxel-world/index.html",
+      "apps/world-sharabass/index.html"
+    ],
     "shared/graphics/universal-voxel-microdetail-bootstrap.js": [
       "apps/ai3d-voxel-city/index.html",
       "apps/voxel-world/index.html"
@@ -657,6 +836,7 @@
     "shared/golden-ui-shell.css": [
       "apps/ai3d-voxel-city/index.html",
       "apps/catalog/index.html",
+      "apps/cinematic-encounter/index.html",
       "apps/survival/index.html",
       "apps/voxel-world/index.html",
       "apps/world-sharabass/index.html",
@@ -667,6 +847,7 @@
     "shared/golden-physics.js": [
       "apps/ai3d-voxel-city/index.html",
       "apps/catalog/index.html",
+      "apps/cinematic-encounter/index.html",
       "apps/survival/index.html",
       "apps/voxel-world/index.html",
       "apps/world-sharabass/index.html",
@@ -679,6 +860,7 @@
     "shared/golden-ui-shell.js": [
       "apps/ai3d-voxel-city/index.html",
       "apps/catalog/index.html",
+      "apps/cinematic-encounter/index.html",
       "apps/survival/index.html",
       "apps/voxel-world/index.html",
       "apps/world-sharabass/index.html",
@@ -689,6 +871,7 @@
     "shared/quality-telemetry.js": [
       "apps/ai3d-voxel-city/index.html",
       "apps/catalog/index.html",
+      "apps/cinematic-encounter/index.html",
       "apps/survival/index.html",
       "apps/voxel-world/index.html",
       "apps/world-sharabass/index.html"
@@ -736,6 +919,12 @@
     "apps/chat/index.html": [
       "app:chat"
     ],
+    "apps/cinematic-encounter/client.js": [
+      "app:cinematic-encounter"
+    ],
+    "apps/cinematic-encounter/index.html": [
+      "app:cinematic-encounter"
+    ],
     "apps/dark-void-scene/client.js": [
       "app:dark-void-scene"
     ],
@@ -763,10 +952,19 @@
     "apps/voxel-world/client.js": [
       "app:voxel-world"
     ],
+    "apps/voxel-world/autodemo-bridge.mjs": [
+      "apps/voxel-world/client.js"
+    ],
     "apps/voxel-world/index.html": [
       "app:voxel-world"
     ],
     "shared/indieworlds/worlds/voxel-world.json": [
+      "apps/voxel-world/index.html"
+    ],
+    "shared/graphics/phaser4-fx-layer.js": [
+      "apps/voxel-world/index.html"
+    ],
+    "shared/world-emergence-runtime.js": [
       "apps/voxel-world/index.html"
     ],
     "apps/world-sharabass/index.html": [
@@ -783,7 +981,8 @@
     ],
     "release:certified": [
       "app:voxel-world",
-      "app:ai3d-voxel-city"
+      "app:ai3d-voxel-city",
+      "app:cinematic-encounter"
     ],
     "release:quarantine": [
       "app:survival",
