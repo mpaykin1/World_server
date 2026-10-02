@@ -25,7 +25,8 @@ test('SZH living writing system is registered as canonical AI context', () => {
     'AI_START_HERE.md',
     '.ai/project-context-index.json',
     'docs/SZH_SYSTEM_RU.md',
-    '.ai/szh-writing-system.json'
+    '.ai/szh-writing-system.json',
+    'lib/szh-writing-system.js'
   ]);
 });
 
@@ -51,4 +52,30 @@ test('SZH human-readable canon is discoverable from AI_START_HERE', () => {
   assert.match(start, /\.ai\/szh-writing-system\.json/);
   assert.match(canon, /функциональная шероховатость/i);
   assert.match(canon, /не менять каноническую СЖ без явной команды/i);
+});
+
+
+test('SZH executable resolver activates and preserves user precedence', () => {
+  const { buildSzhContext, buildSzhPrompt, shouldActivateSzh } = require('../lib/szh-writing-system');
+
+  assert.equal(shouldActivateSzh({ request: 'напиши по СЖ', personalAuthoredText: false }), true);
+  assert.equal(shouldActivateSzh({ request: 'technical note', personalAuthoredText: false }), false);
+
+  const context = buildSzhContext({
+    request: 'перепиши текст',
+    latestUserEdit: 'мой живой вариант',
+    currentStyleInstruction: 'короче и жёстче',
+    personalAuthoredText: true
+  });
+  assert.equal(context.active, true);
+  assert.equal(context.latestUserEdit, 'мой живой вариант');
+  assert.equal(context.currentStyleInstruction, 'короче и жёстче');
+
+  const prompt = buildSzhPrompt({
+    latestUserEdit: 'мой живой вариант',
+    currentStyleInstruction: 'короче и жёстче',
+    personalAuthoredText: true
+  });
+  assert.ok(prompt.indexOf('LATEST USER EDIT') < prompt.indexOf('CURRENT STYLE INSTRUCTION'));
+  assert.ok(prompt.indexOf('CURRENT STYLE INSTRUCTION') < prompt.indexOf('SZH CORE FORMULA'));
 });
