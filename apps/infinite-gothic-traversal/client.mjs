@@ -122,11 +122,13 @@ function proxyHeight(cx,cz){
   return 12+(n%10);
 }
 function rebuildProxies(centerCx,centerCz){
-  const positions=[];
+  const positions=[],bridgeX=[],bridgeZ=[];
+  const detailed=(dx,dz)=>Math.abs(dx)<=DETAIL_RADIUS&&Math.abs(dz)<=DETAIL_RADIUS;
   for(let dz=-PROXY_RADIUS;dz<=PROXY_RADIUS;dz++)for(let dx=-PROXY_RADIUS;dx<=PROXY_RADIUS;dx++){
-    if(Math.abs(dx)<=DETAIL_RADIUS&&Math.abs(dz)<=DETAIL_RADIUS)continue;
     const cx=centerCx+dx,cz=centerCz+dz;
-    positions.push({cx,cz,height:proxyHeight(cx,cz)});
+    if(!detailed(dx,dz))positions.push({cx,cz,height:proxyHeight(cx,cz)});
+    if(dx<PROXY_RADIUS&&!(detailed(dx,dz)&&detailed(dx+1,dz)))bridgeX.push({cx,cz});
+    if(dz<PROXY_RADIUS&&!(detailed(dx,dz)&&detailed(dx,dz+1)))bridgeZ.push({cx,cz});
   }
   const material=new THREE.MeshStandardMaterial({color:0x25303c,roughness:1,metalness:0});
   const geometry=new THREE.BoxGeometry(BUILDING_HALF*2+1,1,BUILDING_HALF*2+1);
@@ -144,6 +146,27 @@ function rebuildProxies(centerCx,centerCz){
   }
   mesh.instanceMatrix.needsUpdate=true;
   proxyGroup.add(mesh);
+
+  const span=CELL_SIZE-BUILDING_HALF*2;
+  const bridgeMaterial=new THREE.MeshStandardMaterial({color:0x202b36,roughness:1,metalness:0});
+  const xGeometry=new THREE.BoxGeometry(span,.72,CORRIDOR_HALF*2+1);
+  const zGeometry=new THREE.BoxGeometry(CORRIDOR_HALF*2+1,.72,span);
+  const xMesh=new THREE.InstancedMesh(xGeometry,bridgeMaterial,bridgeX.length);
+  const zMesh=new THREE.InstancedMesh(zGeometry,bridgeMaterial,bridgeZ.length);
+  xMesh.userData.ownedGeometry=true;xMesh.userData.ownedMaterial=true;
+  zMesh.userData.ownedGeometry=true;
+  for(let i=0;i<bridgeX.length;i++){
+    const p=bridgeX[i];
+    matrix.makeTranslation((p.cx+.5)*CELL_SIZE,-.64,p.cz*CELL_SIZE);
+    xMesh.setMatrixAt(i,matrix);
+  }
+  for(let i=0;i<bridgeZ.length;i++){
+    const p=bridgeZ[i];
+    matrix.makeTranslation(p.cx*CELL_SIZE,-.64,(p.cz+.5)*CELL_SIZE);
+    zMesh.setMatrixAt(i,matrix);
+  }
+  xMesh.instanceMatrix.needsUpdate=true;zMesh.instanceMatrix.needsUpdate=true;
+  proxyGroup.add(xMesh,zMesh);
 }
 
 const player={x:-CELL_SIZE/2,z:0,yaw:-Math.PI/2,pitch:0};
