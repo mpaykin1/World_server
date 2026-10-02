@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "purpose": "Universal discovery index for new chats and AI agents working on World_server",
   "startHere": "AI_START_HERE.md",
   "canonicalContextFiles": [
@@ -20,7 +20,9 @@
     "data/serial-growth-state.json",
     "docs/SERIAL_GROWTH_ENGINE.md",
     "docs/SZH_SYSTEM_RU.md",
-    ".ai/szh-writing-system.json"
+    ".ai/szh-writing-system.json",
+    ".ai/aka-world-growth-engine.json",
+    "data/world-growth-hypotheses.json"
   ],
   "concepts": {
     "vno": {
@@ -142,6 +144,26 @@
       "scope": "Personal authored writing for Mikhail: drafting, rewriting, shortening, developing and polishing while preserving a live uneven human voice.",
       "precedence": "Latest explicit user edit > current explicit style instruction > SZH canonical doc > machine rules > generic writing conventions",
       "learningRule": "Compare user edits to AI drafts and infer candidate transformations, but update the canonical SZH only after explicit user instruction."
+    },
+    "worldGrowthArchitecture": {
+      "displayName": "World Growth Architecture — 50 hypotheses",
+      "canonicalFile": ".ai/aka-world-growth-engine.json",
+      "aliases": [
+        "World Growth Architecture",
+        "50 growth hypotheses",
+        "50 архитектурных гипотез",
+        "всемирный рост",
+        "worldwide growth",
+        "self-expanding platform",
+        "недостающие системы через AKA"
+      ],
+      "machineFiles": [
+        ".ai/aka-world-growth-engine.json",
+        "data/world-growth-hypotheses.json",
+        "scripts/world-growth-architect.mjs"
+      ],
+      "pipeline": "AKA Architect -> Builder -> Fleet PRE -> Ocean -> Fleet POST",
+      "rule": "Select one highest-leverage unresolved architecture gap per cycle; do not create a sixth automation; success/failure learning labels require explicit owner decision."
     }
   },
   "freshChatMandatoryReads": {
@@ -178,8 +200,15 @@
       "docs/SZH_SYSTEM_RU.md",
       ".ai/szh-writing-system.json",
       "lib/szh-writing-system.js"
+    ],
+    "worldGrowthArchitectureWork": [
+      "AI_START_HERE.md",
+      ".ai/project-context-index.json",
+      ".ai/aka-world-growth-engine.json",
+      "data/world-growth-hypotheses.json",
+      "issue #80 latest nonterminal checkpoint"
     ]
   },
-  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md, data/manual-delivery-policy.json, and data/cloudflare-deployment-identity.json. For serial or player-acquisition content work read the Serial Growth Engine contract and continuity state. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains; final URLs must pass delivery:verify against the repo-derived Cloudflare identity and exact deployed SHA. For personal authored writing for Mikhail, or when an SZH alias is used, read docs/SZH_SYSTEM_RU.md and .ai/szh-writing-system.json before drafting; agents may run node scripts/szh-context.js --prompt to obtain the executable context. Later user edits are stronger calibration evidence, but the canonical rules must not change without explicit user instruction.",
+  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md, data/manual-delivery-policy.json, and data/cloudflare-deployment-identity.json. For serial or player-acquisition content work read the Serial Growth Engine contract and continuity state. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains; final URLs must pass delivery:verify against the repo-derived Cloudflare identity and exact deployed SHA. For personal authored writing for Mikhail, or when an SZH alias is used, read docs/SZH_SYSTEM_RU.md and .ai/szh-writing-system.json before drafting; agents may run node scripts/szh-context.js --prompt to obtain the executable context. Later user edits are stronger calibration evidence, but the canonical rules must not change without explicit user instruction. For worldwide-growth architecture work, read .ai/aka-world-growth-engine.json and data/world-growth-hypotheses.json, run the deterministic selector, and route one bounded highest-leverage gap through the existing AKA/Fleet/Ocean pipeline without creating another automation.",
   "sourceOfTruthBranch": "master"
 }
