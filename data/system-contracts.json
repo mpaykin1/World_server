@@ -73,16 +73,18 @@
         "lib/reference-sprite-generator.js",
         "shared/reference-graphics/video-sampler.mjs"
       ],
-      "requiredBy": [
-        "reference-driven-graphics-tasks"
-      ],
+      "requiredBy": [],
       "rules": [
         "extract measurable style before choosing a renderer",
         "keep semantic hints separate from pixel measurements",
         "reuse existing voxel/AI3D/PBR/LIGHT/sprite systems",
         "render back and correct largest perceptual mismatch first",
         "user decides visual success or failure"
-      ]
+      ],
+      "scope": {
+        "trigger": "reference-driven image/video graphics tasks",
+        "adoption": "explicit per compatible app"
+      }
     }
   }
 }
