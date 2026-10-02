@@ -93,15 +93,17 @@ button{font:inherit}
   </div>
 </div>
 
-<script>
+<script type="module">
+import { installSemanticSceneConsumer } from '../../shared/semantic-scene-runtime-v1.mjs';
 (()=>{'use strict';
+const semanticScene=installSemanticSceneConsumer('KRIEGER_CLASS');
 const c=document.getElementById('game'),ctx=c.getContext('2d',{alpha:false});
 const DPR=Math.min(2,devicePixelRatio||1);
 let W=0,H=0,time=0;
 function resize(){W=innerWidth;H=innerHeight;c.width=W*DPR;c.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0)}
 addEventListener('resize',resize);resize();
 
-const S={seed:(Math.random()*1e9)|0,turn:0,pop:18,food:28,energy:8,eco:44,hope:36,ended:false,objects:[]};
+const S={seed:semanticScene.seed,turn:0,pop:18,food:28,energy:8,eco:44,hope:36,ended:false,objects:[]};
 const cam={x:0,y:0,zoom:1};
 let selected=null,pending=null;
 const defs={
