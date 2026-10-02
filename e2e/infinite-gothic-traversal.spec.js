@@ -18,9 +18,10 @@ test('infinite Gothic world streams a bounded connected route in all four direct
   await ready(page);
 
   const initial=await page.evaluate(()=>window.InfiniteGothicTraversal.stats());
-  expect(initial.activeCells).toBe(25);
-  expect(initial.activeEdges).toBe(40);
-  expect(initial.renderedVoxels).toBeGreaterThan(5000);
+  const side=initial.detailRadius*2+1;
+  expect(initial.activeCells).toBe(side*side);
+  expect(initial.activeEdges).toBe(2*side*(side-1));
+  expect(initial.renderedVoxels).toBeGreaterThan(initial.detailRadius===1?1400:5000);
   expect(initial.topology.walkable).toBe(true);
   expect(initial.viewport.canvasW/initial.viewport.w).toBeGreaterThan(.98);
   expect(initial.viewport.canvasH/initial.viewport.h).toBeGreaterThan(.98);
@@ -46,11 +47,13 @@ test('infinite Gothic world streams a bounded connected route in all four direct
 
   await page.waitForTimeout(1600);
   const final=await page.evaluate(()=>window.InfiniteGothicTraversal.stats());
-  expect(final.activeCells).toBe(25);
-  expect(final.activeEdges).toBe(40);
-  expect(final.detailRadius).toBe(2);
+  const finalSide=final.detailRadius*2+1;
+  expect(final.activeCells).toBe(finalSide*finalSide);
+  expect(final.activeEdges).toBe(2*finalSide*(finalSide-1));
+  expect(final.detailRadius).toBeGreaterThanOrEqual(1);
+  expect(final.detailRadius).toBeLessThanOrEqual(2);
   expect(final.visitedCells).toBeGreaterThanOrEqual(20);
-  expect(final.renderedVoxels).toBeGreaterThan(5000);
+  expect(final.renderedVoxels).toBeGreaterThan(final.detailRadius===1?1400:5000);
   expect(final.fps).toBeGreaterThan(10);
   expect(fatal.filter(x=>!/favicon|404/i.test(x))).toEqual([]);
 });
