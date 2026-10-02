@@ -1,3 +1,22 @@
+# 2026-10-02: СЖ — правила из пользовательской редактуры
+
+Task: извлечь устойчивые авторские преобразования из явной пользовательской правки текста про хейтершу и добавить их в каноническую СЖ.
+Why: пользователь подтвердил, что его редактура должна стать новым обучающим материалом СЖ и прямо приказал добавить новые правила.
+Current state: СЖ уже хранит базовые принципы живого неровного текста, но часть характерных преобразований из свежей редактуры описана слишком общо: удаление мета-фраз, однословные удары, перевод наблюдения в непосредственное действие, отказ от декоративной шутки, если она тормозит конфликт.
+Target state: человекочитаемый канон и машинный контракт содержат отдельный набор правил user-edit calibration; regression test защищает их от случайного удаления.
+Files / systems involved: docs/SZH_SYSTEM_RU.md, .ai/szh-writing-system.json, test/szh-system.test.js, WORK_IN_PROGRESS.md.
+Known risks: принять артефакты ручного редактирования (слепленные пробелы/случайные опечатки) за авторский приём; переобучить систему на одном тексте; сделать стиль механически рубленым.
+Golden systems preserved: latest user edit > current instruction > SZH canon; случайные опечатки не имитируются; канон меняется только после явной команды пользователя.
+Exact patch plan: добавить отдельный раздел правил, выведенных из этой редактуры; синхронизировать machine-readable rules; добавить тест на ключевые новые принципы; не менять resolver API.
+Tests to run: node --test test/szh-system.test.js; затем cloud CI/npm run check через PR.
+Deployment / PR plan: isolated branch -> PR -> protected master; documentation/AI-context only, no game deployment.
+Current progress: task registered; patch pending.
+Next action: patch canon + machine contract + regression test.
+Completion criteria: новые правила присутствуют в human/machine canon, focused test защищает их, PR открыт на protected master.
+Final evidence: pending exact-head CI and review.
+
+---
+
 # 2026-10-02: СЖ cross-chat discovery hardening
 
 Task: make СЖ / «Система живого» reliably discoverable from a completely fresh AI chat even while GitHub code search is stale.
