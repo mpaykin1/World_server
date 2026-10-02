@@ -1,0 +1,423 @@
+{
+  "version": 1,
+  "updatedAt": "2026-10-02",
+  "source": "50 worldwide-growth architecture hypotheses",
+  "policy": {
+    "conservativeBootstrap": true,
+    "statusesAreTechnicalEvidenceStatesNotOwnerSuccessFailureJudgments": true,
+    "successFailureLearningLabelsRequireExplicitOwnerDecision": true,
+    "noPercentageWithoutDefinedMeasurement": true
+  },
+  "countsAtBootstrap": {
+    "total": 50,
+    "missing": 7,
+    "experimental": 24,
+    "implemented": 19,
+    "tested": 0,
+    "verified": 0,
+    "blocked": 0,
+    "unknown": 0
+  },
+  "hypotheses": [
+    {
+      "id": 1,
+      "title": "First-in-world capability has evidence",
+      "status": "MISSING",
+      "leverage": 3,
+      "evidence": [],
+      "notes": "No canonical cross-project capability is currently accepted as implemented; AKA should advance this through bounded evidence-backed slices."
+    },
+    {
+      "id": 2,
+      "title": "Existing capability is materially cheaper",
+      "status": "MISSING",
+      "leverage": 3,
+      "evidence": [],
+      "notes": "No canonical cross-project capability is currently accepted as implemented; AKA should advance this through bounded evidence-backed slices."
+    },
+    {
+      "id": 3,
+      "title": "Existing capability is materially faster",
+      "status": "MISSING",
+      "leverage": 3,
+      "evidence": [],
+      "notes": "No canonical cross-project capability is currently accepted as implemented; AKA should advance this through bounded evidence-backed slices."
+    },
+    {
+      "id": 4,
+      "title": "One creator can achieve studio-scale output",
+      "status": "EXPERIMENTAL",
+      "leverage": 3,
+      "evidence": [],
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
+    },
+    {
+      "id": 5,
+      "title": "Complex technology is hidden behind a simple user interface",
+      "status": "EXPERIMENTAL",
+      "leverage": 3,
+      "evidence": [],
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
+    },
+    {
+      "id": 6,
+      "title": "User actions become durable content",
+      "status": "IMPLEMENTED",
+      "leverage": 5,
+      "evidence": [],
+      "notes": "Bootstrap classification only. Requires exact current evidence before promotion to TESTED/VERIFIED."
+    },
+    {
+      "id": 7,
+      "title": "Content/world progression is effectively unbounded",
+      "status": "IMPLEMENTED",
+      "leverage": 3,
+      "evidence": [],
+      "notes": "Bootstrap classification only. Requires exact current evidence before promotion to TESTED/VERIFIED."
+    },
+    {
+      "id": 8,
+      "title": "World persists and evolves independently of one active player",
+      "status": "EXPERIMENTAL",
+      "leverage": 3,
+      "evidence": [],
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
+    },
+    {
+      "id": 9,
+      "title": "One authoritative world is reachable from multiple interfaces",
+      "status": "IMPLEMENTED",
+      "leverage": 5,
+      "evidence": [],
+      "notes": "Bootstrap classification only. Requires exact current evidence before promotion to TESTED/VERIFIED."
+    },
+    {
+      "id": 10,
+      "title": "Humans and AI act on the same causal world state",
+      "status": "EXPERIMENTAL",
+      "leverage": 3,
+      "evidence": [],
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
+    },
+    {
+      "id": 11,
+      "title": "AI reacts to world state rather than only scripted story",
+      "status": "IMPLEMENTED",
+      "leverage": 3,
+      "evidence": [],
+      "notes": "Bootstrap classification only. Requires exact current evidence before promotion to TESTED/VERIFIED."
+    },
+    {
+      "id": 12,
+      "title": "Natural-language intent becomes an in-world action",
+      "status": "IMPLEMENTED",
+      "leverage": 3,
+      "evidence": [],
+      "notes": "Bootstrap classification only. Requires exact current evidence before promotion to TESTED/VERIFIED."
+    },
+    {
+      "id": 13,
+      "title": "Users can express actions not hard-coded as individual buttons",
+      "status": "EXPERIMENTAL",
+      "leverage": 3,
+      "evidence": [],
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
+    },
+    {
+      "id": 14,
+      "title": "AI can predict consequences before a mutation",
+      "status": "IMPLEMENTED",
+      "leverage": 3,
+      "evidence": [],
+      "notes": "Bootstrap classification only. Requires exact current evidence before promotion to TESTED/VERIFIED."
+    },
+    {
+      "id": 15,
+      "title": "Every meaningful action leaves causal provenance",
+      "status": "EXPERIMENTAL",
+      "leverage": 5,
+      "evidence": [],
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
+    },
+    {
+      "id": 16,
+      "title": "Causal graph drives history beyond scripted sequences",
+      "status": "EXPERIMENTAL",
+      "leverage": 3,
+      "evidence": [],
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
+    },
+    {
+      "id": 17,
+      "title": "World can continue after catastrophe",
+      "status": "EXPERIMENTAL",
+      "leverage": 3,
+      "evidence": [],
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
+    },
+    {
+      "id": 18,
+      "title": "Player mistakes create new gameplay instead of only game over",
+      "status": "EXPERIMENTAL",
+      "leverage": 3,
+      "evidence": [],
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
+    },
+    {
+      "id": 19,
+      "title": "One platform/runtime supports multiple genres",
+      "status": "EXPERIMENTAL",
+      "leverage": 3,
+      "evidence": [],
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
+    },
+    {
+      "id": 20,
+      "title": "Genre can change during the same running world",
+      "status": "MISSING",
+      "leverage": 5,
+      "evidence": [],
+      "notes": "No canonical cross-project capability is currently accepted as implemented; AKA should advance this through bounded evidence-backed slices."
+    },
+    {
+      "id": 21,
+      "title": "Visual style is decoupled from world logic",
+      "status": "IMPLEMENTED",
+      "leverage": 3,
+      "evidence": [],
+      "notes": "Bootstrap classification only. Requires exact current evidence before promotion to TESTED/VERIFIED."
+    },
+    {
+      "id": 22,
+      "title": "Character identity/behavior is decoupled from a renderer",
+      "status": "EXPERIMENTAL",
+      "leverage": 3,
+      "evidence": [],
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
+    },
+    {
+      "id": 23,
+      "title": "Reusable animation runtime serves many creatures/characters",
+      "status": "EXPERIMENTAL",
+      "leverage": 3,
+      "evidence": [],
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
+    },
+    {
+      "id": 24,
+      "title": "Objects are recipes rather than only fixed meshes",
+      "status": "IMPLEMENTED",
+      "leverage": 3,
+      "evidence": [],
+      "notes": "Bootstrap classification only. Requires exact current evidence before promotion to TESTED/VERIFIED."
+    },
+    {
+      "id": 25,
+      "title": "Worlds are compactly represented by seeds/rules/recipes",
+      "status": "IMPLEMENTED",
+      "leverage": 3,
+      "evidence": [],
+      "notes": "Bootstrap classification only. Requires exact current evidence before promotion to TESTED/VERIFIED."
+    },
+    {
+      "id": 26,
+      "title": "Procedural generation is constrained and controllable",
+      "status": "IMPLEMENTED",
+      "leverage": 3,
+      "evidence": [],
+      "notes": "Bootstrap classification only. Requires exact current evidence before promotion to TESTED/VERIFIED."
+    },
+    {
+      "id": 27,
+      "title": "User-created objects enter the shared building language",
+      "status": "MISSING",
+      "leverage": 5,
+      "evidence": [],
+      "notes": "No canonical cross-project capability is currently accepted as implemented; AKA should advance this through bounded evidence-backed slices."
+    },
+    {
+      "id": 28,
+      "title": "A new verified system can strengthen multiple existing systems",
+      "status": "EXPERIMENTAL",
+      "leverage": 5,
+      "evidence": [],
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
+    },
+    {
+      "id": 29,
+      "title": "Capabilities compose into higher-order behavior",
+      "status": "IMPLEMENTED",
+      "leverage": 4,
+      "evidence": [],
+      "notes": "Bootstrap classification only. Requires exact current evidence before promotion to TESTED/VERIFIED."
+    },
+    {
+      "id": 30,
+      "title": "Architecture behaves like interoperable Lego blocks",
+      "status": "EXPERIMENTAL",
+      "leverage": 4,
+      "evidence": [],
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
+    },
+    {
+      "id": 31,
+      "title": "Universal semantic world/scene representation",
+      "status": "EXPERIMENTAL",
+      "leverage": 5,
+      "evidence": [],
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
+    },
+    {
+      "id": 32,
+      "title": "Universal portable object representation",
+      "status": "EXPERIMENTAL",
+      "leverage": 5,
+      "evidence": [],
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
+    },
+    {
+      "id": 33,
+      "title": "Universal behavior/action contract",
+      "status": "EXPERIMENTAL",
+      "leverage": 5,
+      "evidence": [],
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
+    },
+    {
+      "id": 34,
+      "title": "AI can compose existing capabilities for a new task",
+      "status": "EXPERIMENTAL",
+      "leverage": 5,
+      "evidence": [],
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
+    },
+    {
+      "id": 35,
+      "title": "The system knows its own verified capabilities",
+      "status": "IMPLEMENTED",
+      "leverage": 5,
+      "evidence": [],
+      "notes": "Bootstrap classification only. Requires exact current evidence before promotion to TESTED/VERIFIED."
+    },
+    {
+      "id": 36,
+      "title": "AI can discover/select capabilities from the registry",
+      "status": "EXPERIMENTAL",
+      "leverage": 5,
+      "evidence": [],
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
+    },
+    {
+      "id": 37,
+      "title": "A verified experiment becomes a reusable platform capability",
+      "status": "IMPLEMENTED",
+      "leverage": 5,
+      "evidence": [],
+      "notes": "Bootstrap classification only. Requires exact current evidence before promotion to TESTED/VERIFIED."
+    },
+    {
+      "id": 38,
+      "title": "Failures and regressions become reusable engineering knowledge",
+      "status": "IMPLEMENTED",
+      "leverage": 5,
+      "evidence": [],
+      "notes": "Bootstrap classification only. Requires exact current evidence before promotion to TESTED/VERIFIED."
+    },
+    {
+      "id": 39,
+      "title": "The project improves from its own development evidence",
+      "status": "IMPLEMENTED",
+      "leverage": 5,
+      "evidence": [],
+      "notes": "Bootstrap classification only. Requires exact current evidence before promotion to TESTED/VERIFIED."
+    },
+    {
+      "id": 40,
+      "title": "A new AI agent can continue previous work from durable context",
+      "status": "IMPLEMENTED",
+      "leverage": 5,
+      "evidence": [],
+      "notes": "Bootstrap classification only. Requires exact current evidence before promotion to TESTED/VERIFIED."
+    },
+    {
+      "id": 41,
+      "title": "System is modular with explicit contracts rather than one monolith",
+      "status": "IMPLEMENTED",
+      "leverage": 4,
+      "evidence": [],
+      "notes": "Bootstrap classification only. Requires exact current evidence before promotion to TESTED/VERIFIED."
+    },
+    {
+      "id": 42,
+      "title": "Renderer/AI/physics providers can be replaced behind adapters",
+      "status": "EXPERIMENTAL",
+      "leverage": 4,
+      "evidence": [],
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
+    },
+    {
+      "id": 43,
+      "title": "Core architecture is not locked to one AI provider",
+      "status": "IMPLEMENTED",
+      "leverage": 4,
+      "evidence": [],
+      "notes": "Bootstrap classification only. Requires exact current evidence before promotion to TESTED/VERIFIED."
+    },
+    {
+      "id": 44,
+      "title": "Important paths run on affordable/mobile/CPU-friendly hardware",
+      "status": "IMPLEMENTED",
+      "leverage": 4,
+      "evidence": [],
+      "notes": "Bootstrap classification only. Requires exact current evidence before promotion to TESTED/VERIFIED."
+    },
+    {
+      "id": 45,
+      "title": "Client/runtime can stay compact through procedural generation and caching",
+      "status": "EXPERIMENTAL",
+      "leverage": 4,
+      "evidence": [],
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
+    },
+    {
+      "id": 46,
+      "title": "Users can create their own worlds on the same platform",
+      "status": "EXPERIMENTAL",
+      "leverage": 5,
+      "evidence": [],
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
+    },
+    {
+      "id": 47,
+      "title": "External developers can add capabilities through a safe plugin/SDK boundary",
+      "status": "MISSING",
+      "leverage": 5,
+      "evidence": [],
+      "notes": "No canonical cross-project capability is currently accepted as implemented; AKA should advance this through bounded evidence-backed slices."
+    },
+    {
+      "id": 48,
+      "title": "User-created content has stable identity and cross-world portability",
+      "status": "EXPERIMENTAL",
+      "leverage": 5,
+      "evidence": [],
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
+    },
+    {
+      "id": 49,
+      "title": "A new user can measurably create value for other users",
+      "status": "MISSING",
+      "leverage": 5,
+      "evidence": [],
+      "notes": "No canonical cross-project capability is currently accepted as implemented; AKA should advance this through bounded evidence-backed slices."
+    },
+    {
+      "id": 50,
+      "title": "The product is a machine for creating new worlds, mechanics and stories",
+      "status": "EXPERIMENTAL",
+      "leverage": 5,
+      "evidence": [],
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
+    }
+  ]
+}
