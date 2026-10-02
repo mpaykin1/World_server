@@ -44,6 +44,7 @@ test('infinite Gothic world streams a bounded connected route in all four direct
   expect(results.south.cell.cz).toBeGreaterThanOrEqual(6);
   expect(results.north.cell.cz).toBeLessThanOrEqual(-6);
 
+  await page.waitForTimeout(1600);
   const final=await page.evaluate(()=>window.InfiniteGothicTraversal.stats());
   expect(final.activeCells).toBe(25);
   expect(final.activeEdges).toBe(40);
