@@ -1,4 +1,4 @@
-function clampCount(value){return Math.max(1,Math.min(24,Math.trunc(Number(value)||8));}
+function clampCount(value){return Math.max(1,Math.min(24,Math.trunc(Number(value)||8)));}
 
 export function sampleTimes(duration,count=8){
   const n=clampCount(count),d=Math.max(0,Number(duration)||0);
