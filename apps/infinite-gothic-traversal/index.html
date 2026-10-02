@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#070b12">
+<title>Infinite Gothic Traversal — World Server</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#070b12;color:#fff;overscroll-behavior:none}
+#scene{position:fixed;inset:0}
+canvas{display:block;width:100%;height:100%;touch-action:none}
+#reticle{position:fixed;left:50%;top:50%;width:22px;height:22px;transform:translate(-50%,-50%);z-index:4;pointer-events:none;opacity:.78;filter:drop-shadow(0 1px 2px #000)}
+#reticle::before,#reticle::after{content:"";position:absolute;left:50%;top:50%;background:#fff;border-radius:2px}
+#reticle::before{width:18px;height:1.5px;transform:translate(-50%,-50%)}
+#reticle::after{width:1.5px;height:18px;transform:translate(-50%,-50%)}
+#loader{position:fixed;inset:0;z-index:20;display:grid;place-items:center;background:#070b12;transition:opacity .45s}
+#loader::after{content:"";width:30px;height:30px;border:3px solid #ffffff1f;border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
+#loader.hidden{opacity:0;pointer-events:none}
+#a11y{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.165.0/build/three.module.js"}}</script>
+</head>
+<body>
+<div id="scene"></div>
+<div id="reticle" aria-hidden="true"></div>
+<div id="a11y" aria-live="polite"></div>
+<div id="loader" aria-label="Загрузка бесконечного мира"></div>
+<script type="module" src="./client.mjs"></script>
+</body>
+</html>
