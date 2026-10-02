@@ -1,6 +1,6 @@
 {
   "schemaVersion": "4.0.0",
-  "generatedAt": "2026-08-24T05:16:12.155Z",
+  "generatedAt": "2026-09-26T08:46:27.948Z",
   "readinessPercent": 100,
   "domainPercent": {
     "detail": 100,
@@ -12,13 +12,21 @@
   "hardGateReady": true,
   "runtimeQualityPercent": 97,
   "deviceEvidencePercent": 87,
-  "evidenceLedgerSha256": "83a63dc74282b76425e1191aa366cd642555f5f333d6de6cc3628847b4729987",
+  "evidenceLedgerSha256": "826f34933825ee2982db8951e4b79a320f21c3848d0e7ff66cd022ba4a668cf1",
   "materialProfiles": 64,
   "visibilityPercent": 100,
+  "microdetailPercent": 92,
+  "microdetailSchemaVersion": "2.0.0",
   "retargetContractReady": true,
   "schedulerRoutes": 5,
   "candidateCount": 12,
+  "nextExperimentStatus": "PROPOSED_UNVERIFIED",
+  "nextExperimentCandidate": "high-0p08",
   "feedbackSamples": 0,
+  "detailEfficiencyOutcome": null,
+  "detailEfficiencyGain": null,
+  "emergencePercent": 100,
+  "emergenceHardGateReady": true,
   "nextSystems": [
     {
       "domain": "optimization",
