@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-25T09:00:49.465Z",
+  "inputSha256": "88481eb63d9875de726caf6e12c6ecb8f78808fea36061b80ac1577e67687c73",
+  "status": "PROPOSED_UNVERIFIED",
+  "mutationAllowed": false,
+  "notYetProven": true,
+  "candidate": {
+    "id": "high-0p08",
+    "tier": "HIGH",
+    "baseline": "high-0",
+    "predictedQualityGain": 5.36,
+    "predictedCostDelta": 8.4,
+    "hypothesisPriority": -0.52,
+    "proposedSettings": {
+      "detailRadius": 1.08,
+      "maxDpr": 1.4
+    },
+    "baselineSettings": {
+      "detailRadius": 1,
+      "maxDpr": 1.32
+    }
+  },
+  "excludedReason": null,
+  "experiment": {
+    "predeclaredHypothesis": "For tier HIGH, settings high-0p08 improve perceived world detail versus unchanged high-0 without reducing minimum acceptable frame rate or controls.",
+    "counterfactual": "Run unchanged high-0 under the same seed, viewport, hardware, camera path and scene.",
+    "requiredEvidence": [
+      "Side-by-side visual baseline and independent reviewer on exact candidate SHA",
+      "Median and p95 frame time on desktop and mobile; baseline versus candidate",
+      "No regression in movement, collisions, jumping, animation or input latency",
+      "A/B replay with a fixed world seed, stable scene and three repeated measurements",
+      "Real-user visibility metric >= 85% BEFORE any test URL is advertised"
+    ],
+    "rejectionRules": [
+      "Reject if measured p95 frame time worsens more than 5%",
+      "Reject if a Golden Standard behavior regresses or no paired device data exists",
+      "Reject if independent review or CI is BLOCK or INCONCLUSIVE"
+    ]
+  }
+}
