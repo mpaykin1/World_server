@@ -17,7 +17,7 @@ maskScene.background=new THREE.Color(0x000000);
 const camera=new THREE.PerspectiveCamera(29,innerWidth/innerHeight,0.1,100);
 function frameCamera(){
   const portrait=innerWidth/innerHeight<0.72;
-  camera.position.set(0.30,portrait?0.02:0.18,portrait?11.7:8.6);
+  camera.position.set(0.30,portrait?0.02:0.18,portrait?12.7:9.0);
   camera.lookAt(0.18,-0.05,0);
 }
 frameCamera();
@@ -81,11 +81,15 @@ function frame(now){
   applyCatPose(maskCat,elapsed,{mode:qa,manualYaw});
   camera.layers.set(0);
   light.render(elapsed);
+  const savedBackground=colorScene.background;
+  colorScene.background=null;
   renderer.autoClear=false;
+  renderer.clearDepth();
   camera.layers.set(1);
   renderer.render(colorScene,camera);
   camera.layers.set(0);
   renderer.autoClear=true;
+  colorScene.background=savedBackground;
   window.LivingLightCat3D={
     ready:true,
     mode:qa,
