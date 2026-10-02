@@ -141,7 +141,9 @@
     "noveltyClaimsRequirePriorArtSearch": true,
     "speedAndCostClaimsRequireBenchmarks": true,
     "networkEffectClaimsRequireRealMultiUserMetrics": true,
-    "syntheticLoadDoesNotProveDemand": true
+    "syntheticLoadDoesNotProveDemand": true,
+    "finalHeadRequired": true,
+    "previousHeadPassCannotCertifyNewHead": true
   },
   "reportFields": [
     "selected_hypothesis",
