@@ -78,10 +78,14 @@ float approximateDistance(vec2 uv, vec2 px, float center) {
 }
 
 float zoneGain(float y) {
-  float top = smoothstep(0.48, 0.88, y) * uZoneGain.x;
-  float bottom = smoothstep(0.52, 0.10, y) * uZoneGain.z;
-  float middle = (1.0 - clamp(top + bottom, 0.0, 1.0)) * uZoneGain.y;
-  return max(0.2, top + middle + bottom);
+  float topW = smoothstep(0.48, 0.88, y);
+  float bottomW = 1.0 - smoothstep(0.10, 0.52, y);
+  float middleW = max(0.0, 1.0 - max(topW, bottomW));
+  return max(0.2,
+    topW * uZoneGain.x +
+    middleW * uZoneGain.y +
+    bottomW * uZoneGain.z
+  );
 }
 
 void main() {
@@ -135,7 +139,10 @@ uniform float uHistoryWeight;
 void main() {
   vec3 current = texture2D(tCurrent, vUv).rgb;
   vec3 history = texture2D(tHistory, vUv).rgb;
-  vec3 stable = mix(current, history, clamp(uHistoryWeight, 0.0, 0.94));
+  float delta = length(current - history);
+  float motionReject = exp(-delta * 4.0);
+  float historyWeight = clamp(uHistoryWeight * motionReject, 0.0, 0.94);
+  vec3 stable = mix(current, history, historyWeight);
   gl_FragColor = vec4(stable, 1.0);
 }`;
 
