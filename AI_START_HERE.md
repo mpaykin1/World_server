@@ -123,3 +123,15 @@
 Для персональных авторских текстов Михаила можно также выполнить `node scripts/szh-context.js --prompt` и использовать выданный контекст перед черновиком. Это правило относится к текстовому авторству; проектные/репозиторные инструкции `AGENTS.md`, `CHATGPT_GAME_CONTROL.md` и другие safety/delivery contracts сохраняют более высокий приоритет в задачах разработки.
 
 Даже без слова «СЖ» используй её как baseline для персональных авторских текстов Михаила, если текущая команда не задаёт другой стиль.
+
+
+## World Growth Architecture — 50 worldwide-growth hypotheses
+
+When the task concerns worldwide growth, missing architectural systems, self-expanding capabilities, creator/plugin portability, network effects, or asks AKA to keep developing these directions, read:
+
+- `.ai/aka-world-growth-engine.json`
+- `data/world-growth-hypotheses.json`
+- `scripts/world-growth-architect.mjs`
+- latest issue #80 checkpoint
+
+Run `npm run growth:architecture` to select the highest-leverage unresolved hypothesis/program. Reuse the EXISTING AKA tasks and the canonical `Builder -> Fleet PRE -> Ocean -> Fleet POST` pipeline; do not create a sixth automation or a competing orchestrator. One cycle advances one bounded architecture gap unless a higher-priority release blocker preempts it. A technical status may advance only with exact evidence. Never record an MVP as owner-approved success or failure until the owner explicitly decides.
