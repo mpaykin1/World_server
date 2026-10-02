@@ -36,6 +36,7 @@ const mime = {
   '.json': 'application/json; charset=utf-8',
   '.xml': 'application/rss+xml; charset=utf-8',
   '.png': 'image/png',
+  '.glb': 'model/gltf-binary',
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
   '.svg': 'image/svg+xml',
