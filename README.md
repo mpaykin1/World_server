@@ -1,5 +1,11 @@
 # World Server
 
+## СЖ / SZH — Система живого
+
+Если пользователь или AI упоминает **СЖ**, **система живого**, **SZH**, **СП**, **сбитый живой поток** или «как я пишу» — **не начинай с GitHub code search**. Открой напрямую корневой bootstrap [`SZH.md`](SZH.md), затем канон [`docs/SZH_SYSTEM_RU.md`](docs/SZH_SYSTEM_RU.md).
+
+> GitHub code search может временно вернуть 0 результатов после свежего merge. Корневой `SZH.md` и прямые пути в `master` являются надёжным discovery-маршрутом.
+
 
 ## Chain Reaction / Meta4–Meta6 — вход для новых AI-агентов
 
