@@ -36,13 +36,13 @@ maskRoot.scale.copy(colorRoot.scale);
 const catGoldProfile={
   ...livingGoldProfile,
   id:'living-cat-gold',
-  core:[1.0,0.965,0.78],
-  gold:[1.0,0.50,0.085],
-  amber:[1.0,0.20,0.018],
-  coreGain:2.25,
-  goldGain:1.18,
-  haloGain:0.38,
-  bloomGain:0.58,
+  core:[1.0,0.91,0.62],
+  gold:[1.0,0.48,0.065],
+  amber:[1.0,0.18,0.012],
+  coreGain:1.82,
+  goldGain:1.30,
+  haloGain:0.44,
+  bloomGain:0.64,
   bloomRadius:1.35,
   rimPower:2.05,
   depthGain:0.42,
@@ -50,9 +50,9 @@ const catGoldProfile={
   filamentThreshold:0.915,
   temporalBlend:0.58,
   edgeSoftness:0.58,
-  topGain:1.20,
-  middleGain:1.04,
-  bottomGain:0.94
+  topGain:1.26,
+  middleGain:1.02,
+  bottomGain:0.72
 };
 
 const light=new LightPipeline({
