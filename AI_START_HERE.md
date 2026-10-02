@@ -141,3 +141,22 @@
 `Готовность TED — N%`
 
 Это не вероятность принятия заявки TED/TEDx/конференцией/СМИ. Это готовность проекта иметь проверяемый повод международного масштаба. Не повышать процент за планы, документацию, промпты или самозаявленные достижения. Использовать существующий AKA; новую автоматизацию для этого не создавать.
+
+
+---
+
+## Reference-driven graphics / video reference
+
+If the user asks to recreate the **visual essence** of an image or video reference in game graphics (voxel city, 3D scene, sprite, luminous contour, materials, lighting, camera or animation), do not start a one-off renderer from scratch.
+
+First read:
+
+- `REFERENCE_GRAPHICS.md`
+- `docs/REFERENCE_GRAPHICS_COMPILER.md`
+- `data/reference-graphics-policy.json`
+
+Canonical flow:
+
+`sampled reference frames -> Visual Grammar -> graphics router -> existing World Server lanes -> render-back -> prioritized correction`.
+
+Keep measured pixel evidence separate from semantic hints. Reuse AI3D, voxel, PBR, LIGHT and the reference sprite generator where compatible. Visual SUCCESS/FAILURE is recorded only after the user's explicit decision.
