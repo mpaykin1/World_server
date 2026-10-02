@@ -235,6 +235,13 @@
       "status": "experimental",
       "kind": "prototype",
       "reason": "Internal proof lane for real 3D articulated silhouette rendering; line quality intentionally remains unaccepted pending luminous-line upgrade and user confirmation."
+    },
+    "living-light-cat-3d": {
+      "title": "Living Light Cat 3D",
+      "visible": false,
+      "status": "experimental",
+      "kind": "prototype",
+      "reason": "Direct-link visual proof of a real articulated 3D cat rendered through the canonical LIGHT luminous-line pipeline; public-catalog promotion waits for user visual acceptance."
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",
