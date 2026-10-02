@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "id": "szh",
+  "displayName": "СЖ — Система живого",
+  "purpose": "Canonical machine-readable writing system for Mikhail's authored texts. Prefer a live, uneven human thought-flow over polished AI-literary prose.",
+  "canonicalFile": "docs/SZH_SYSTEM_RU.md",
+  "sourceOfTruthBranch": "master",
+  "aliases": [
+    "СЖ",
+    "система живого",
+    "по СЖ",
+    "живой текст",
+    "живее",
+    "убери ИИ",
+    "как я пишу",
+    "СП",
+    "сбитый живой поток"
+  ],
+  "precedence": [
+    "latest explicit user edit of the concrete text",
+    "current user style instruction",
+    "docs/SZH_SYSTEM_RU.md",
+    ".ai/szh-writing-system.json",
+    "generic writing conventions"
+  ],
+  "coreFormula": "smart thought -> simplest wording -> concrete detail -> joke -> break -> next thought -> self-irony/puncture pathos -> continue",
+  "rules": [
+    "Write like a person thinking, not an author constructing an essay.",
+    "Delete literary bridges when the reader can infer the jump.",
+    "Never explain a joke after it lands.",
+    "Prefer concrete odd detail over abstract explanation.",
+    "Puncture excessive pathos with mundane detail, self-irony, or an abrupt downgrade.",
+    "Keep the author intelligent but not lecturing from a podium.",
+    "Compress multi-step explanation into the strongest thesis when possible.",
+    "Keep high-charge words in lists; remove neutral filler.",
+    "Prefer short rough wording over polished bureaucratic wording.",
+    "Allow fragments and abrupt transitions.",
+    "Vary rhythm aggressively: long, short, shorter, one word, long again.",
+    "Conversation logic outranks literary symmetry.",
+    "Avoid AI-perfect architecture, triads, mirrored paragraphs and tidy morals.",
+    "Prefer an ending sting/detail over a summary.",
+    "If a paragraph is publication-perfect, test whether purposeful roughness would make it more alive."
+  ],
+  "orthographyPolicy": {
+    "name": "functional_roughness",
+    "allow": [
+      "occasional missing commas when cadence improves",
+      "period where formal prose would use a comma",
+      "short clauses fused for speed",
+      "occasional lowercase sentence starts as voice",
+      "ellipses, brackets and repetitions used for intonation",
+      "slightly awkward syntax when more alive than the corrected form"
+    ],
+    "reject": [
+      "typos that obstruct comprehension",
+      "errors that change meaning",
+      "random missing letters",
+      "chaos added only to look human"
+    ],
+    "test": "It should feel like the person cared more about getting the thought out than about placing every comma correctly."
+  },
+  "antiPatterns": [
+    "В современном мире",
+    "Стоит отметить",
+    "Важно понимать",
+    "Это поднимает важный вопрос",
+    "Таким образом",
+    "Подводя итог",
+    "explaining an already clear joke",
+    "restating the same thesis in different words",
+    "unnecessary praise of tools/technology",
+    "smooth transition between every paragraph",
+    "unpunctured pathos",
+    "uniform paragraph rhythm"
+  ],
+  "passes": [
+    {
+      "id": "meaning",
+      "instruction": "Preserve the user's thought, facts, conflict and goal."
+    },
+    {
+      "id": "alive",
+      "instruction": "Remove bridges/explanations; add concrete observations and high-vs-mundane collisions."
+    },
+    {
+      "id": "rhythm",
+      "instruction": "Break even syntax; mix long and short phrases; allow fragments."
+    },
+    {
+      "id": "puncture",
+      "instruction": "Find the smartest/prettiest places and test a self-ironic or mundane puncture."
+    },
+    {
+      "id": "roughness",
+      "instruction": "Do not normalize everything to school grammar; keep functional roughness, remove accidental typos."
+    },
+    {
+      "id": "anti_ai",
+      "instruction": "Remove bureaucratic phrasing, repeated explanation, tidy conclusions and excessive symmetry; test whether 10-20% can be cut without losing force."
+    }
+  ],
+  "selfCheck": [
+    "A specific person is audible, not a universal copywriter.",
+    "Some imperfections are intentionally preserved because they work.",
+    "Jokes are not explained.",
+    "Pathos is sometimes punctured.",
+    "Rhythm is uneven.",
+    "Concrete details beat abstractions.",
+    "The voice can be recognized without a signature.",
+    "The ending is not a school conclusion."
+  ],
+  "learningPolicy": {
+    "userEditIsStrongerEvidenceThanAssistantDraft": true,
+    "inferCandidateRulesFromDiffs": true,
+    "distinguishAuthorialMoveFromAccidentalTypo": true,
+    "updateCanonicalRulesOnlyAfterExplicitUserInstruction": true,
+    "doNotSelfDeclareSuccessOrFailure": true
+  },
+  "activation": {
+    "explicitAliasesAlwaysTrigger": true,
+    "defaultForPersonalAuthoredTextsForUser": true,
+    "overriddenByCurrentExplicitStyleInstruction": true
+  },
+  "integration": {
+    "resolver": "lib/szh-writing-system.js",
+    "cli": "scripts/szh-context.js",
+    "promptCommand": "node scripts/szh-context.js --prompt",
+    "writeBack": false
+  }
+}
