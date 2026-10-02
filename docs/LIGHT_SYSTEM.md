@@ -123,7 +123,9 @@ The user explicitly marked the underlying **3D silhouette system as SUCCESS**.
 
 The user explicitly marked the previously observed plain line quality as **FAILURE**.
 
-LIGHT is the reusable technical system created to address that failed line-quality layer. Its integration does **not** automatically change the user's visual verdict. A later LIGHT visual result must be shown to the user before any new SUCCESS/FAILURE decision is recorded.
+The user later explicitly marked the deployed **Living Light Cat 3D** proof as **SUCCESS**. Canonical accepted proof: `https://world-server.mmmpaykin.workers.dev/apps/living-light-cat-3d/`, accepted production merge SHA `f044aa498b94618bab4d2590b140d7aa4695fdc4`. Full handoff: `LIVING_LIGHT_CAT_3D_SUCCESS.md`.
+
+This SUCCESS belongs to that reviewed proof. Future LIGHT variants still require their own user decision.
 
 ## Rule for future chats
 
