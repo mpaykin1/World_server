@@ -1,0 +1,54 @@
+'use strict';
+
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+
+const ROOT = path.join(__dirname, '..');
+
+function read(relativePath) {
+  return fs.readFileSync(path.join(ROOT, relativePath), 'utf8');
+}
+
+test('SZH living writing system is registered as canonical AI context', () => {
+  const index = JSON.parse(read('.ai/project-context-index.json'));
+  const szh = index.concepts && index.concepts.szh;
+
+  assert.ok(szh, 'project context index must register SZH');
+  assert.equal(szh.canonicalFile, 'docs/SZH_SYSTEM_RU.md');
+  assert.ok(szh.aliases.includes('СЖ'));
+  assert.ok(szh.aliases.includes('СП'));
+  assert.ok(index.canonicalContextFiles.includes('docs/SZH_SYSTEM_RU.md'));
+  assert.ok(index.canonicalContextFiles.includes('.ai/szh-writing-system.json'));
+  assert.deepEqual(index.freshChatMandatoryReads.userWriting, [
+    'AI_START_HERE.md',
+    '.ai/project-context-index.json',
+    'docs/SZH_SYSTEM_RU.md',
+    '.ai/szh-writing-system.json'
+  ]);
+});
+
+test('SZH machine contract preserves user-edit precedence and explicit canon updates', () => {
+  const rules = JSON.parse(read('.ai/szh-writing-system.json'));
+
+  assert.equal(rules.id, 'szh');
+  assert.equal(rules.canonicalFile, 'docs/SZH_SYSTEM_RU.md');
+  assert.ok(rules.rules.length >= 15);
+  assert.equal(rules.orthographyPolicy.name, 'functional_roughness');
+  assert.equal(rules.learningPolicy.userEditIsStrongerEvidenceThanAssistantDraft, true);
+  assert.equal(rules.learningPolicy.updateCanonicalRulesOnlyAfterExplicitUserInstruction, true);
+  assert.equal(rules.learningPolicy.doNotSelfDeclareSuccessOrFailure, true);
+  assert.equal(rules.activation.defaultForPersonalAuthoredTextsForUser, true);
+});
+
+test('SZH human-readable canon is discoverable from AI_START_HERE', () => {
+  const start = read('AI_START_HERE.md');
+  const canon = read('docs/SZH_SYSTEM_RU.md');
+
+  assert.match(start, /СЖ — источник истины/);
+  assert.match(start, /docs\/SZH_SYSTEM_RU\.md/);
+  assert.match(start, /\.ai\/szh-writing-system\.json/);
+  assert.match(canon, /функциональная шероховатость/i);
+  assert.match(canon, /не изменяй каноническую СЖ автоматически/i);
+});
