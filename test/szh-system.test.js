@@ -18,11 +18,13 @@ test('SZH living writing system is registered as canonical AI context', () => {
 
   assert.ok(szh, 'project context index must register SZH');
   assert.equal(szh.canonicalFile, 'docs/SZH_SYSTEM_RU.md');
+  assert.equal(szh.bootstrapFile, 'SZH.md');
   assert.ok(szh.aliases.includes('СЖ'));
   assert.ok(szh.aliases.includes('СП'));
   assert.ok(index.canonicalContextFiles.includes('docs/SZH_SYSTEM_RU.md'));
   assert.ok(index.canonicalContextFiles.includes('.ai/szh-writing-system.json'));
   assert.deepEqual(index.freshChatMandatoryReads.userWriting, [
+    'SZH.md',
     'AI_START_HERE.md',
     '.ai/project-context-index.json',
     'docs/SZH_SYSTEM_RU.md',
@@ -101,4 +103,20 @@ test('SZH inactive context keeps a stable safe shape', () => {
   assert.deepEqual(context.selfCheck, []);
   assert.equal(context.latestUserEdit, null);
   assert.equal(context.currentStyleInstruction, null);
+});
+
+
+test('SZH root discovery survives stale code search', () => {
+  const rootAlias = read('SZH.md');
+  const readme = read('README.md');
+  const agents = read('AGENTS.md');
+
+  assert.match(rootAlias, /СЖ = Система живого/);
+  assert.match(rootAlias, /GitHub code search/i);
+  assert.match(rootAlias, /docs\/SZH_SYSTEM_RU\.md/);
+  assert.match(readme, /SZH\.md/);
+  assert.match(readme, /не начинай с GitHub code search/i);
+  assert.match(agents, /СЖ \/ SZH — обязательное обнаружение/);
+  assert.match(agents, /не считать отсутствие результата в GitHub code search доказательством отсутствия СЖ/i);
+  assert.match(agents, /не просить пользователя заново расшифровывать «СЖ»/i);
 });
