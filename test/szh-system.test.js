@@ -18,11 +18,13 @@ test('SZH living writing system is registered as canonical AI context', () => {
 
   assert.ok(szh, 'project context index must register SZH');
   assert.equal(szh.canonicalFile, 'docs/SZH_SYSTEM_RU.md');
+  assert.equal(szh.bootstrapFile, 'SZH.md');
   assert.ok(szh.aliases.includes('СЖ'));
   assert.ok(szh.aliases.includes('СП'));
   assert.ok(index.canonicalContextFiles.includes('docs/SZH_SYSTEM_RU.md'));
   assert.ok(index.canonicalContextFiles.includes('.ai/szh-writing-system.json'));
   assert.deepEqual(index.freshChatMandatoryReads.userWriting, [
+    'SZH.md',
     'AI_START_HERE.md',
     '.ai/project-context-index.json',
     'docs/SZH_SYSTEM_RU.md',
