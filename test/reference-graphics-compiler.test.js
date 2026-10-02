@@ -86,3 +86,12 @@ test('correction planner fixes camera/structure/light before microdetail',()=>{
   assert(result.fixes.some(x=>x.system==='LIGHT'));
   assert(result.fixes[0].priority>=90);
 });
+
+
+test('transparent sprite background does not become false darkness',()=>{
+  const pixels=frame(4,4,(x,y)=>x<2?[220,180,120,255]:[0,0,0,0]);
+  const stats=analyzeReferenceFrames([pixels]);
+  assert.equal(stats.frames[0].visiblePixels,8);
+  assert(stats.meanLuma>0.6);
+  assert(stats.darkRatio<0.05);
+});
