@@ -61,9 +61,9 @@ export function createLivingLightCat(parent,{mask=false}={}){
   body.name='bodyRig';
   root.add(body);
 
-  ellipsoid(body,1,[0.73,1.16,0.52],[-0.46,0.10,0],mask,'body');
-  ellipsoid(body,1,[0.86,0.78,0.55],[-0.42,-0.72,0.02],mask,'rump');
-  ellipsoid(body,1,[0.43,0.79,0.41],[0.08,0.51,0.01],mask,'chest');
+  ellipsoid(body,1,[0.69,1.17,0.50],[-0.48,0.08,0],mask,'body');
+  ellipsoid(body,1,[0.84,0.77,0.54],[-0.43,-0.72,0.02],mask,'rump');
+  ellipsoid(body,1,[0.40,0.83,0.39],[0.03,0.48,0.01],mask,'chest');
 
   cylinder(body,0.072,1.18,[0.17,-0.63,0.15],[0,0,-0.015],mask,'frontLegNear');
   cylinder(body,0.060,1.12,[0.05,-0.66,-0.14],[0,0,0.012],mask,'frontLegFar');
@@ -79,12 +79,13 @@ export function createLivingLightCat(parent,{mask=false}={}){
   head.position.set(0.36,0.43,0);
   neck.add(head);
 
-  ellipsoid(head,0.50,[0.96,0.88,0.86],[0.0,0.0,0],mask,'head');
-  ellipsoid(head,0.25,[1.06,0.56,0.70],[0.42,-0.10,0.01],mask,'muzzle');
-  ellipsoid(head,0.085,[0.72,0.52,0.60],[0.64,-0.085,0.02],mask,'nose');
+  ellipsoid(head,0.48,[0.96,0.89,0.84],[0.0,0.0,0],mask,'head');
+  ellipsoid(head,0.235,[1.08,0.53,0.68],[0.43,-0.11,0.01],mask,'muzzle');
+  ellipsoid(head,0.075,[0.72,0.50,0.58],[0.64,-0.09,0.02],mask,'nose');
 
-  ear(head,[-0.11,0.46,-0.12],[0.02,0.05,-0.17],mask,'earFar');
-  ear(head,[0.15,0.49,0.11],[-0.04,-0.04,0.09],mask,'earNear');
+  const farEar=ear(head,[-0.13,0.39,-0.22],[0.02,0.05,-0.20],mask,'earFar');
+  farEar.scale.set(0.70,0.72,0.70);
+  ear(head,[0.08,0.49,0.10],[-0.04,-0.04,0.08],mask,'earNear');
 
   const tail=makeTail(root,mask);
   return {root,body,neck,head,tail};
@@ -141,10 +142,10 @@ export function updateTailGeometry(rig,points){
   for(let i=0;i<segments.length;i++){
     const a=points[i],b=points[i+1];
     const u=i/(segments.length-1);
-    placeSegment(segments[i],a,b,0.105*(1-u)+0.030*u);
+    placeSegment(segments[i],a,b,0.095*(1-u)+0.010*u);
     if(i<joints.length){
       joints[i].position.copy(b);
-      const r=0.10*(1-u)+0.028*u;
+      const r=0.092*(1-u)+0.009*u;
       joints[i].scale.setScalar(r);
     }
   }
