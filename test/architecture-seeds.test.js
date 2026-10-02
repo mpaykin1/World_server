@@ -90,3 +90,20 @@ test('World Factory seed hunter API is bounded and deterministic', () => {
   assert.deepEqual(a, b);
   assert.equal(a.seeds.length, 5);
 });
+
+
+test('facade constraint collapse is deterministic and keeps accent modules separated', () => {
+  const dna = createArchitectureDNA({ seed: '777', idea: 'готический город' });
+  const recipe = sampleBuildingRecipe(dna, { x: 16, z: 32, lotWidth: 16, lotDepth: 18 });
+  const pattern = recipe.facadePattern;
+  assert.ok(pattern.width >= 3 && pattern.height >= 2);
+  assert.deepEqual(pattern, sampleBuildingRecipe(dna, { x: 16, z: 32, lotWidth: 16, lotDepth: 18 }).facadePattern);
+  const accent = dna.grammar.facade.at(-1);
+  const center = Math.floor(pattern.width / 2);
+  assert.equal(pattern.rows[pattern.height - 1][center], accent);
+  for (let y = 0; y < pattern.height; y++) for (let x = 0; x < pattern.width; x++) {
+    if (pattern.rows[y][x] !== accent) continue;
+    if (x + 1 < pattern.width) assert.notEqual(pattern.rows[y][x + 1], accent);
+    if (y + 1 < pattern.height) assert.notEqual(pattern.rows[y + 1][x], accent);
+  }
+});
