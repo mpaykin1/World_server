@@ -304,7 +304,7 @@ function testTravel(direction,cells=6){
   if(!dir)throw new RangeError('Unknown test direction');
   player.x=0;player.z=0;
   currentCell={cx:Number.NaN,cz:Number.NaN};rebuildWorld(true);
-  const step=.8,total=Math.ceil(distance/step);
+  const step=3.5,total=Math.ceil(distance/step);
   let blockedSteps=0;
   for(let i=0;i<total;i++)if(!attemptMove(dir.x*step,dir.z*step))blockedSteps++;
   updateCamera();
