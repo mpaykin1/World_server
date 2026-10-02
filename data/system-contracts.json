@@ -69,7 +69,9 @@
         "lib/reference-visual-grammar.js",
         "lib/reference-graphics-router.js",
         "lib/reference-recipe-compiler.js",
-        "lib/reference-correction-planner.js"
+        "lib/reference-correction-planner.js",
+        "lib/reference-sprite-generator.js",
+        "shared/reference-graphics/video-sampler.mjs"
       ],
       "requiredBy": [
         "reference-driven-graphics-tasks"
