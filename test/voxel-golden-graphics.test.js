@@ -70,7 +70,8 @@ test('runtime LOD policy cuts distant shadow work and adapts vegetation/water',(
 test('startup streaming ramps detail without blocking first playable seconds',()=>{
   assert.match(src,/goldenStreamingStartedAt=performance\.now\(\)/);
   assert.match(src,/age<12000\?1:\(age<30000\?2:VIEW\)/);
-  assert.match(src,/need\.length>=2/);
+  assert.match(src,/planMissingChunks\(/);
+  assert.match(src,/radius:viewRadius,budget:2/);
   assert.ok(/while\(top>0&&c\.get\(lx,top,lz\)===BLOCK\.AIR\)top--/.test(src) || /const top=c\.columnTop\[lz\*CHUNK\+lx\]/.test(src), 'meshing must bound each column by its highest non-air voxel');
   if(/columnTop/.test(src)){
     assert.match(src,/columnTop=new Uint8Array\(CHUNK\*CHUNK\)/);

@@ -90,6 +90,10 @@ jobs:
         if: steps.quota-guard.outputs.proceed == 'true'
         run: node scripts/godot-web-build.js
 
+      - name: Check web/Godot chunk planner parity
+        if: steps.quota-guard.outputs.proceed == 'true'
+        run: node --test test/voxel-chunk-planner.test.mjs
+
       - name: Run Web-Native Equivalence Check
         if: steps.quota-guard.outputs.proceed == 'true'
         run: node scripts/compare-worldgen.js
