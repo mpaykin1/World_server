@@ -200,6 +200,21 @@
         "familyId": "gothic-destruction-mvp",
         "connections": []
       }
+    },
+    "infinite-gothic-traversal": {
+      "title": "Infinite Gothic Traversal",
+      "visible": false,
+      "status": "diagnostic",
+      "kind": "game",
+      "reason": "Experimental endless traversal grammar; direct preview testing allowed, not public-catalog certified yet.",
+      "worldMenu": {
+        "show": false,
+        "headline": "ГОТИЧЕСКИЙ ГОРОД БЕЗ КРАЯ: КАЖДОЕ ЗДАНИЕ ВЕДЁТ НА НОВЫЙ МОСТ!",
+        "lore": "Башни соединены мостами, а сквозь сами здания прорезаны арочные проходы. На каждом перекрёстке можно выбрать новое направление, и город достраивается впереди.",
+        "history": "Эта версия появилась как проверка бесконечной проходимости: не просто бесконечный фон, а бесконечная связная сеть маршрутов.",
+        "familyId": "infinite-gothic-traversal",
+        "connections": []
+      }
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",
