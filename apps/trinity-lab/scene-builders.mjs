@@ -1,6 +1,7 @@
 ﻿import * as THREE from '../../shared/vendor/three-r160/three.module.min.js';
 import {createNprContext, STYLE as INK_STYLE} from '../../shared/living-ink-webgl-npr.mjs';
 import {semanticObjects} from '../../shared/trinity-scene-recipe.mjs';
+import {installKriegerCinematicStack,disposeKriegerCinematicStack} from '../../shared/graphics/krieger-cinematic-stack.mjs';
 
 function shadowize(mesh){
   mesh.castShadow=true; mesh.receiveShadow=true; return mesh;
@@ -72,7 +73,7 @@ function addCharacter(root,object,m){
 function addLamp(root,object,m,scene){
   const g=semanticGroup(root,object),pole=mesh(new THREE.CylinderGeometry(.07,.09,2.8,10),m.trim);pole.position.y=1.4;g.add(pole);
   g.add(box([.52,.10,.34],m.trim,[0,2.78,0]));const bulb=mesh(new THREE.SphereGeometry(.13,10,8),m.warm);bulb.position.set(0,2.58,0);g.add(bulb);
-  const light=new THREE.PointLight(object.color||0xffc77b,object.intensity||1.5,9,2);light.position.copy(g.position).add(new THREE.Vector3(0,2.58,0));light.castShadow=true;scene.add(light);g.userData.localLight=light;return g;
+  const light=new THREE.PointLight(object.color||0xffc77b,object.intensity||1.5,9,2);light.position.copy(g.position).add(new THREE.Vector3(0,2.58,0));light.castShadow=false;scene.add(light);g.userData.localLight=light;return g;
 }
 function addWater(root,object,m){
   const g=semanticGroup(root,object),surface=box(object.size,m.water,[0,.02,0]);surface.receiveShadow=true;surface.userData.water=true;g.add(surface);return g;
@@ -114,9 +115,13 @@ export function createStandardBase(canvas,recipe,kind='KRIEGER'){
 }
 export function createKriegerRuntime(canvas,recipe){
   const runtime=createStandardBase(canvas,recipe,'KRIEGER');
-  const {renderer,scene,camera,root,mats,objects}=runtime;
+  const {renderer,scene,camera,root,mats,objects}=runtime,cinematic=installKriegerCinematicStack(runtime,recipe);
+  Object.assign(mats,{ground:cinematic.surfaces.floorStone,stone:cinematic.surfaces.stone,stone2:cinematic.surfaces.stone,trim:cinematic.surfaces.warmMetal,dark:cinematic.surfaces.metal,warm:cinematic.surfaces.emissive,rock:cinematic.surfaces.darkStone});
   for(const object of semanticObjects(recipe))objects.set(object.id,addStdObject(root,object,mats,scene,recipe.seed));
-  runtime.update=time=>updateStandard(runtime,time);runtime.dispose=()=>disposeRuntime(runtime);return runtime;
+  let shadowWarm=false;
+  runtime.render=()=>{renderer.render(scene,camera);if(!shadowWarm){renderer.shadowMap.autoUpdate=false;shadowWarm=true}};
+  runtime.update=time=>updateStandard(runtime,time);
+  runtime.dispose=()=>{disposeRuntime(runtime);disposeKriegerCinematicStack(runtime)};return runtime;
 }
 function updateStandard(runtime,time){
   const ch=runtime.objects.get('character.walker'),t=time*.0042;if(ch?.userData.limbs){

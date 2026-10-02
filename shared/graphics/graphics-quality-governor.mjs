@@ -11,6 +11,9 @@ const DEFAULT_THRESHOLDS = Object.freeze({
   maxFlatSurfaceRatio: 0.64,
   maxPrimitiveFallbackRatio: 0.5,
   minDepthPlanes: 3,
+  architecturalRhythm: 0.6,
+  microdetail: 0.55,
+  controlledDarkness: 0.65,
   minDpr: 1,
   maxDrawCalls: 180,
   maxTriangles: 700000
@@ -24,6 +27,10 @@ const STYLE_OVERRIDES = Object.freeze({
     materialVariation: 0.45,
     nearObject: 0.58,
     environmentDetail: 0.55,
+    minDepthPlanes: 5,
+    architecturalRhythm: 0.75,
+    microdetail: 0.72,
+    controlledDarkness: 0.75,
     maxFlatSurfaceRatio: 0.5,
     maxPrimitiveFallbackRatio: 0.34
   },
@@ -170,6 +177,7 @@ export function analyzeGraphicsQuality(scene, options = {}) {
     (1 - ratio(giantCount, Math.max(1, environmentObjects.length))) * 0.2
   );
   const lightingResponse = localLights.length ? ratio(responsiveLights.length, localLights.length) : clamp01(scene.lighting?.globalResponse || 0.6);
+  const cinematic = scene.cinematic?.enabled ? scene.cinematic : null;
   const metrics = {
     true3D: round(ratio(true3DObjects.length, objects.length)),
     spatialDepth: round(depthSpan * 0.56 + Math.min(1, depthPlanes / 5) * 0.24 + foreground * 0.1 + focal * 0.1),
@@ -180,6 +188,10 @@ export function analyzeGraphicsQuality(scene, options = {}) {
     lightingResponse: round(lightingResponse),
     nearObjectComplexity: round(Math.max(0, ...nearObjects.map(objectNearScore))),
     environmentDetail: round(environmentDetail),
+    architecturalRhythm: round(cinematic?.architectureRhythm || 0),
+    microdetail: round(cinematic?.microdetail || 0),
+    controlledDarkness: round(cinematic?.controlledDarkness || 0),
+    materialLightCoupling: round(cinematic?.materialLightCoupling || 0),
     flatSurfaceRatio: round(weightedFlatRatio(objects)),
     primitiveFallbackRatio: round(ratio(primitiveCount, objects.length)),
     depthPlanes,
@@ -200,10 +212,17 @@ export function analyzeGraphicsQuality(scene, options = {}) {
     LIGHTING_GATE: metrics.lightingResponse >= thresholds.lightingResponse,
     ENVIRONMENT_GATE: metrics.environmentDetail >= thresholds.environmentDetail && metrics.primitiveFallbackRatio <= thresholds.maxPrimitiveFallbackRatio,
     PERFORMANCE_GATE: metrics.drawCalls <= thresholds.maxDrawCalls && metrics.triangles <= thresholds.maxTriangles,
-    DPR_GATE: metrics.dpr >= thresholds.minDpr
+    DPR_GATE: metrics.dpr >= thresholds.minDpr,
+    ...(cinematic ? {
+      ARCHITECTURAL_RHYTHM_GATE: metrics.architecturalRhythm >= thresholds.architecturalRhythm,
+      MICRODETAIL_GATE: metrics.microdetail >= thresholds.microdetail,
+      HERO_FOREGROUND_GATE: metrics.nearObjectComplexity >= thresholds.nearObject,
+      CONTROLLED_DARKNESS_GATE: metrics.controlledDarkness >= thresholds.controlledDarkness,
+      MATERIAL_LIGHT_COUPLING_GATE: metrics.materialLightCoupling >= 0.65 && metrics.lightingResponse >= thresholds.lightingResponse
+    } : {})
   };
 
-  const hardGateNames = ['NEAR_OBJECT_GATE', 'MATERIAL_GATE', 'LIGHTING_GATE', 'ENVIRONMENT_GATE'];
+  const hardGateNames = ['NEAR_OBJECT_GATE', 'MATERIAL_GATE', 'LIGHTING_GATE', 'ENVIRONMENT_GATE','HERO_FOREGROUND_GATE','CONTROLLED_DARKNESS_GATE','MATERIAL_LIGHT_COUPLING_GATE'];
   const primitiveWarnings = detectPrimitiveGraphics(scene, {styleProfile});
   const failures = Object.entries(gates).filter(([, passed]) => !passed).map(([gate]) => ({
     gate,
@@ -236,7 +255,12 @@ function failureReason(gate, metrics, thresholds) {
     LIGHTING_GATE: `local light response ${metrics.lightingResponse} < ${thresholds.lightingResponse}`,
     ENVIRONMENT_GATE: `environment ${metrics.environmentDetail}, primitive ratio ${metrics.primitiveFallbackRatio}`,
     PERFORMANCE_GATE: `triangles ${metrics.triangles}, draw calls ${metrics.drawCalls}`,
-    DPR_GATE: `DPR ${metrics.dpr} < ${thresholds.minDpr}`
+    DPR_GATE: `DPR ${metrics.dpr} < ${thresholds.minDpr}`,
+    ARCHITECTURAL_RHYTHM_GATE: `architectural rhythm ${metrics.architecturalRhythm} < ${thresholds.architecturalRhythm}`,
+    MICRODETAIL_GATE: `microdetail ${metrics.microdetail} < ${thresholds.microdetail}`,
+    HERO_FOREGROUND_GATE: `hero foreground complexity ${metrics.nearObjectComplexity} < ${thresholds.nearObject}`,
+    CONTROLLED_DARKNESS_GATE: `controlled darkness ${metrics.controlledDarkness} < ${thresholds.controlledDarkness}`,
+    MATERIAL_LIGHT_COUPLING_GATE: `material/light coupling ${metrics.materialLightCoupling}, response ${metrics.lightingResponse}`
   };
   return reasons[gate] || gate;
 }
@@ -248,7 +272,12 @@ function recommendationsFor(failures, warnings) {
     LIGHTING_GATE: 'Bind local or emissive lights to nearby geometry response; glow alone is insufficient.',
     ENVIRONMENT_GATE: 'Replace giant fallback surfaces with semantic supports, recesses, frames, trims and props.',
     SEMANTIC_DETAIL_GATE: 'Add macro→meso→micro semantic structure rather than random geometric noise.',
-    DEPTH_GATE: 'Strengthen foreground/midground/focal/background separation.'
+    DEPTH_GATE: 'Strengthen foreground/midground/focal/background separation.',
+    ARCHITECTURAL_RHYTHM_GATE: 'Repeat a small set of strong architectural modules through depth using instancing.',
+    MICRODETAIL_GATE: 'Add real normal/roughness/surface variation rather than flat color.',
+    HERO_FOREGROUND_GATE: 'Keep a high-detail first-person foreground anchor visible.',
+    CONTROLLED_DARKNESS_GATE: 'Use actual dark environment, fog and local light contrast to hide distance without flattening silhouettes.',
+    MATERIAL_LIGHT_COUPLING_GATE: 'Ensure warm local lights visibly drive textured material response on nearby geometry.'
   };
   const result = failures.map(f => map[f.gate]).filter(Boolean);
   if (warnings.some(w => w.code === 'PRIMITIVE_FALLBACK_DOMINANT')) result.push('Reduce primitive-fallback dominance; triangle inflation does not count as quality.');

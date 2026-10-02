@@ -15,25 +15,29 @@ export const TrinitySceneRecipe = freeze({
   seed: TRINITY_SEED,
   terrain: { size: [18, 0.5, 15], position: [0, -0.3, 1], material: 'stone-earth' },
   architecture: [
-    { id: 'tower.main', kind: 'tower', position: [-3.7, 0, 3.2], size: [3.4, 5.8, 3.4], material: 'aged-stone' },
-    { id: 'bridge.arch', kind: 'bridge', position: [2.3, 0.05, 0.3], size: [4.8, 1.15, 2.0], material: 'warm-stone' }
+    { id: 'tower.main', kind: 'tower', position: [-3.0, 0, 15.2], size: [3.4, 5.8, 3.4], material: 'aged-stone' },
+    { id: 'bridge.arch', kind: 'bridge', position: [0, 0.05, 4.2], size: [4.8, 1.15, 2.0], material: 'warm-stone' }
   ],
   vegetation: [
-    { id: 'tree.courtyard', kind: 'tree', position: [4.6, 0, 3.9], scale: 1.08, material: 'living-green' }
+    { id: 'tree.courtyard', kind: 'tree', position: [2.55, 0, 13.4], scale: 1.08, material: 'living-green' }
   ],
   characters: [
-    { id: 'character.walker', kind: 'character', position: [0.1, 0, -1.8], heading: 0.45, material: 'desaturated-human' }
+    { id: 'character.walker', kind: 'character', position: [-0.7, 0, 6.3], heading: 0.45, material: 'desaturated-human' }
   ],
   lights: [
-    { id: 'light.lamp', kind: 'lamp', position: [-1.4, 0, -3.0], intensity: 1.5, color: '#ffc77b' }
+    { id: 'light.lamp', kind: 'lamp', position: [-0.9, 0, 6.9], intensity: 2.1, color: '#ffc77b' }
   ],
   water: [
-    { id: 'water.rill', kind: 'water', position: [2.3, -0.03, 0.3], size: [0.9, 0.04, 6.0], material: 'water' }
+    { id: 'water.rill', kind: 'water', position: [1.1, -0.03, 7.2], size: [0.65, 0.04, 6.0], material: 'water' }
   ],
   props: [
-    { id: 'rock.west', kind: 'rock', position: [-5.3, 0.05, -1.5], scale: 0.72, material: 'rock' },
-    { id: 'rock.east', kind: 'rock', position: [5.3, 0.05, -1.3], scale: 0.92, material: 'rock' }
+    { id: 'rock.west', kind: 'rock', position: [-1.15, 0.05, 4.1], scale: 0.72, material: 'rock' },
+    { id: 'rock.east', kind: 'rock', position: [2.25, 0.05, 12.0], scale: 0.92, material: 'rock' }
   ],
+  artDirection: {
+    KRIEGER: { corridorSegments: 15, spacing: 2.8, halfWidth: 3.45, height: 5.0, startZ: -5.8 },
+    INK: { architecturalRhythm: true, depthPlanes: 6 }
+  },
   events: [{ id: 'event.walk-loop', kind: 'walk-loop', target: 'character.walker' }],
   evolution: {
     durationMs: 12000,

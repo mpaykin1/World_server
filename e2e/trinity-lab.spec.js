@@ -10,6 +10,8 @@ test('one recipe drives KRIEGER INK and CUBE with locked viewport',async({page})
   let snap=await lab(page);
   expect(snap.mode).toBe('KRIEGER');expect(snap.visibility).toBeGreaterThanOrEqual(85);
   expect(snap.viewport.scrollX).toBe(0);expect(snap.viewport.scrollY).toBe(0);expect(snap.viewport.consistent).toBeTruthy();
+  for(const gate of ['DEPTH_GATE','NEAR_OBJECT_GATE','MATERIAL_GATE','LIGHTING_GATE','ENVIRONMENT_GATE','ARCHITECTURAL_RHYTHM_GATE','MICRODETAIL_GATE','HERO_FOREGROUND_GATE','CONTROLLED_DARKNESS_GATE','MATERIAL_LIGHT_COUPLING_GATE'])expect(snap.gates[gate],gate).toBeTruthy();
+  expect(snap.metrics.drawCalls).toBeLessThanOrEqual(180);expect(snap.metrics.triangles).toBeLessThan(700000);
   const seed=snap.seed,signature=snap.signature;
   await page.getByRole('button',{name:'INK',exact:true}).click();await page.waitForTimeout(600);
   await page.evaluate(()=>window.__trinityLab.moveCamera(.3,.2));await page.waitForTimeout(600);

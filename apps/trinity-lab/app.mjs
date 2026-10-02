@@ -1,6 +1,6 @@
 import {THREE,createKriegerRuntime,createInkRuntime,disposeRuntime,runtimeMetrics} from './scene-builders.mjs';
 import {createCubeRuntime,cubeSnapshot,cubeDeterministicSignature} from './cube-evolution.mjs';
-import {governorInput,userVisibility,viewportEvidence} from './quality-adapter.mjs';
+import {governorInput,userVisibility,userVisibilityDetails,viewportEvidence} from './quality-adapter.mjs';
 import {analyzeGraphicsQuality} from '../../shared/graphics/graphics-quality-governor.mjs';
 import {TrinitySceneRecipe,semanticIds,semanticSignature,adaptTrinityScene} from '../../shared/trinity-scene-recipe.mjs';
 
@@ -9,7 +9,7 @@ const root=document.getElementById('gameRoot'),debug=document.getElementById('de
 const debugBtn=document.getElementById('debugBtn'),modeBadge=document.getElementById('modeBadge'),buttons=[...document.querySelectorAll('[data-mode]')];
 const recipe=TrinitySceneRecipe,targetIds=semanticIds(recipe),signature=semanticSignature(recipe);
 const viewportLock=window.WorldServerFixedViewport.install();
-const pose={position:new THREE.Vector3(0,4.4,-13.8),yaw:Math.PI,pitch:-.16};
+const pose={position:new THREE.Vector3(0,1.82,-8.4),yaw:Math.PI,pitch:.015};
 const input={keys:new Set(),touchX:0,touchY:0,pointer:null,lastX:0,lastY:0,startX:0,startY:0,zone:null};
 const evidence={ink:false,growth:false,cameraMoved:false,frames:0};
 const state={mode:'KRIEGER',runtime:null,lastTime:performance.now(),frameTimes:[],lastDebug:0};
@@ -96,8 +96,8 @@ function capabilityState(runtime,metrics,viewport){
   };
 }
 function debugSnapshot(){
-  const runtime=state.runtime,metrics=runtimeMetrics(runtime),viewport=viewportEvidence(runtime),perf=frameStats(),visibility=userVisibility(runtime,recipe);
-  const capabilities=capabilityState(runtime,metrics,viewport),base={mode:state.mode,seed:recipe.seed,signature,sharedRecipe:sameRecipeProof(),capabilities,metrics,viewport,visibility,performance:perf};
+  const runtime=state.runtime,metrics=runtimeMetrics(runtime),viewport=viewportEvidence(runtime),perf=frameStats(),visibilityDetails=userVisibilityDetails(runtime,recipe),visibility=visibilityDetails.percent;
+  const capabilities=capabilityState(runtime,metrics,viewport),base={mode:state.mode,seed:recipe.seed,signature,sharedRecipe:sameRecipeProof(),capabilities,metrics,viewport,visibility,visibilityDetails,performance:perf};
   if(state.mode==='KRIEGER'){const report=analyzeGraphicsQuality(governorInput(runtime,recipe),{styleProfile:'krieger_industrial'});base.gates=report.gates;base.governor=report;base.nativeKriegerAuthoring='MISSING';base.kriegerAdapter='PARTIAL'}
   if(state.mode==='INK')base.gates=inkGates(runtime);
   if(state.mode==='CUBE'){base.cube=cubeSnapshot(runtime);base.gates=cubeGates(runtime)}
