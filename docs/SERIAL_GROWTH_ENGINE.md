@@ -91,3 +91,31 @@ The best episodes let real players influence later episodes safely. This turns v
 - `data/serial-growth-state.json` — persistent series continuity and metrics.
 - `scripts/validate-serial-growth.mjs` — hard validation gates.
 - `docs/SERIAL_GROWTH_ENGINE.md` — this specification.
+
+
+## World significance / Готовность TED
+
+AKA also carries a permanent **world-significance** lane. It does not create a sixth automation and does not replace player acquisition. It asks a second question during the same cycle:
+
+> Does this real capability make World Server more defensible as a globally interesting, reproducible phenomenon?
+
+The canonical contract is `.ai/ted-media-readiness.json`; evidence-backed state is `data/ted-media-readiness.json`; full rules are in `docs/TED_MEDIA_READINESS_RU.md`.
+
+Every meaningful AKA report must contain the line:
+
+```
+Готовность TED — N%
+```
+
+This metric is **not** the probability that TED/TEDx, a conference, or a media outlet will accept an application. It measures whether the product has enough verified novelty, causal depth, persistence, shared-world behavior, reproducibility, independent evidence and a concise public proof to support a credible international story.
+
+Each run must:
+1. re-audit all 12 readiness systems from fresh evidence;
+2. recompute the score rather than copy the previous number;
+3. identify one primary high-leverage bottleneck;
+4. prefer a bounded shared implementation that strengthens that bottleneck and one or more adjacent systems;
+5. add test/replay/falsification evidence;
+6. update readiness only for real evidence-backed deltas;
+7. allow regressions or invalidated evidence to reduce the score.
+
+Mutual reinforcement changes **priority**, not the arithmetic score. Plans, prose, prompts, elapsed time and self-asserted claims never earn readiness points.
