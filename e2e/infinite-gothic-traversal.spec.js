@@ -110,5 +110,6 @@ test('mobile invisible touch zones move and turn without adding HUD controls',as
 
   const turned=await page.evaluate(()=>window.InfiniteGothicTraversal.stats());
   expect(Math.abs(turned.player.yaw-moved.player.yaw)).toBeGreaterThan(.05);
-  expect(document.querySelectorAll?.('.joystick,.mobile-controls,.touch-pad')?.length||0).toBe(0);
+  const visibleTouchHud=await page.evaluate(()=>document.querySelectorAll('.joystick,.mobile-controls,.touch-pad').length);
+  expect(visibleTouchHud).toBe(0);
 });
