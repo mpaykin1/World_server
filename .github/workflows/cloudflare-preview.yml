@@ -29,6 +29,8 @@ jobs:
           node-version: "24"
           cache: npm
       - run: npm ci
+      - name: Verify canonical cross-client state before D1 changes
+        run: node --test test/unified-chain-game.test.mjs
       - id: authority
         name: Detect Cloudflare deployment authority
         shell: bash
@@ -38,6 +40,9 @@ jobs:
           else
             echo "configured=false" >> "$GITHUB_OUTPUT"
           fi
+      # Runtime Worker D1 binding bootstraps the same additive IF NOT EXISTS schema.
+      # The deploy token lacks account D1 API scope (Cloudflare 7403).
+      # The exact-preview live smoke below proves that bootstrap actually works.
       - name: Deploy isolated exact-head worker
         id: deploy
         if: steps.authority.outputs.configured == 'true'
@@ -57,6 +62,9 @@ jobs:
       - name: Wait for exact-head Cloudflare activation
         if: steps.authority.outputs.configured == 'true'
         run: node scripts/wait-for-cloudflare-deploy.cjs "${{ steps.deploy.outputs.url }}" "$SOURCE_SHA"
+      - name: Test one real shared world on exact-preview Worker
+        if: steps.authority.outputs.configured == 'true'
+        run: node scripts/verify-unified-chain-live.cjs "${{ steps.deploy.outputs.url }}"
       - name: Verify Cloudflare stack and security
         if: steps.authority.outputs.configured == 'true'
         run: node scripts/verify-cloudflare-stack.cjs "${{ steps.deploy.outputs.url }}" "$SOURCE_SHA"

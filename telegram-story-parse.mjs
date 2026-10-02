@@ -10,7 +10,7 @@ export const STORY_SCENES=[
   'story_rebuild','story_defense','story_recovery','story_unknown'
 ];
 export const STORY_ACTIONS=new Set([
-  'extinguish','evacuate','defend','rebuild','relief'
+  'extinguish','evacuate','defend','rebuild','relief','shoot'
 ]);
 const rules=[
   ['fire',/пожар|огонь|сгорел|сгорел[аи]|сгоревш|сожг|сж[её]г|горит|подж[её]г|wildfire|fire/i],
@@ -56,6 +56,10 @@ const actionPatterns=[
 export function classifyStoryText(value){
   const text=String(value||'').trim().slice(0,600);
   const dragon=/дракон|dragon|огнедышащ|змей горыныч/i.test(text);
+  // Shooting uses the persisted dragon, even when the player says 'him'.
+  if(/стреля|выстрел|стрельб|обстрел|shoot/i.test(text)&&
+    !/дракон.*(?:стреля|выстрел)/i.test(text))
+    return{kind:'action',action:'shoot',text,recognized:true};
   const destructive=rules[0][1].test(text)||
     /разруш|уничтож|снес|разн[её]с|пепел|атаковал|сж[её]г|burn|destroy/i.test(text);
   const benevolent=/подар|помо[гщ]|спас|добр|золото|друж|gift|help/i.test(text);

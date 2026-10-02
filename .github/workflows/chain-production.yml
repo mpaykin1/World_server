@@ -1,0 +1,46 @@
+name: Deploy Unified Chain World
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'chain-session.mjs'
+      - 'chain-unified-api.mjs'
+      - 'cloudflare-worker.js'
+      - 'telegram-*.mjs'
+      - 'migrations/telegram-d1/**'
+      - 'scripts/verify-unified-chain-live.cjs'
+      - '.github/workflows/chain-production.yml'
+  workflow_dispatch:
+concurrency:
+  group: unified-chain-production
+  cancel-in-progress: false
+permissions:
+  contents: read
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      WORKERS_CI_COMMIT_SHA: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
+      - name: Verify shared engine and all regression gates
+        run: npm run check
+      - name: Require deployment authorization
+        shell: bash
+        run: |
+          test -n "$CLOUDFLARE_API_TOKEN"
+          test -n "$CLOUDFLARE_ACCOUNT_ID"
+      - name: Deploy exact-SHA production Worker with existing D1 binding
+        run: npm run deploy:cloudflare:production
+      - name: Confirm exact deployed SHA and public application assets
+        run: node scripts/wait-for-cloudflare-deploy.cjs "https://world-server.mmmpaykin.workers.dev" "$GITHUB_SHA"
+      - name: Verify live guest, dragon combat, durable D1 and CORS
+        run: node scripts/verify-unified-chain-live.cjs "https://world-server.mmmpaykin.workers.dev"
