@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-10T03:26:14.078Z",
+  "generatedAt": "2026-10-02T09:59:01.653Z",
   "issues": [],
   "technologies": {
     "Vercel": {
@@ -252,6 +252,19 @@
         "data/collective-brain/collective-brain-policy.json",
         "scripts/collective-brain-full.js"
       ]
+    },
+    "Roblox RBXLX import bridge": {
+      "percent": 70,
+      "status": "integrated importer + semantic/runtime adapters; playable parity remains asset and per-game migration gated",
+      "evidence": [
+        "lib/roblox-rbxlx-parser.js",
+        "lib/roblox-importer.js",
+        "lib/roblox-behavior-translator.js",
+        "lib/roblox-asset-resolver.js",
+        "shared/roblox-runtime-adapter.js",
+        "test/roblox-import.test.js"
+      ],
+      "note": "Never executes embedded Luau during import. Reuses Golden controls/physics and authoritative World Server networking; external Roblox assets and opaque TerrainRegion bytes remain explicit blockers until provided/exported/decoded."
     }
   }
 }
