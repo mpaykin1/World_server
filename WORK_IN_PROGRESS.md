@@ -1090,3 +1090,34 @@ Required evidence: focused chain AI tests; protected CI; exact-head Cloudflare p
 - **Next action:** exact-head cloud CI/Fleet/quality/browser gates on the final branch head; merge only if all required gates are green.
 - **Completion criteria:** required core semantics resolve against the vendored 139-clip Rig_Medium bundle; importer points Roblox character controllers to the canonical runtime; Gothic Rocks consumes it; exact-head gates pass.
 - **Final evidence:** focused tests `node --test test/universal-player-character.test.js test/roblox-import.test.js test/roblox-gothic-rocks.test.js` = 14/14 PASS; `node scripts/check-js.js` = Syntax OK 74 JS files; `git diff --check` PASS. Browser E2E now hard-requires `characterRuntime === 'universal-player-character'` so fallback cannot self-certify. PR cloud/Fleet evidence must be green on this exact head before merge.
+# 2026-10-02: Privacy-safe authored canon continuation
+
+## Task / why
+Add the smallest backend primitive required by the Global Community critical path: an authenticated participant can continue an existing durable event in the same authoritative world, and the new event preserves a privacy-safe author reference plus a causal parent. The current `/api/canon` ledger already persists and replays events, but source events have no durable authorship and always discard a requested parent.
+
+## Current state / target state
+- Base: `bb6afed85cc5dbcebe968c0c24ebd93506ea0d03`.
+- Current: `event_key`, world, summary, payload and cross-world `cause_event_key` persist; Node and Edge write authorization differ; any authenticated Edge user can author canon for a world they have never joined.
+- Target: Node/Edge require an authenticated `voxel_player_states` participant in the same world, derive a stable non-reversible public actor reference, validate an optional parent event belongs to that same world, persist the lineage, and return replayable revision/attribution fields. No raw account/Telegram identifier enters public canon.
+
+## Files / systems / risks
+- `lib/world-canon.js`, `lib/api-handlers/canon.js`, `supabase/functions/world-stack/index.ts`, one forward-only Supabase migration, focused tests, this coordination ledger.
+- Risks: BOLA, cross-world parent forgery, raw UUID disclosure, retry creating a second event/revision, Node/Edge drift, breaking existing anonymous reads or legacy events.
+- Preserve: existing service-role-only writes/RLS, public read projection, cross-world lore consequences, deterministic `event_key`, current voxel renderer, Chain Reaction engine, UI/Graphics/LIGHT, auth/CAS and all existing worlds.
+
+## Exact patch / test / delivery plan
+1. Extend the existing table (not a new event store) with an immutable database identity revision, privacy-safe actor, source-platform and visibility fields; backfill legacy rows without rewriting event keys.
+2. Add shared validation/planning helpers and Node/Edge parity for participant authorization and same-world parent validation.
+3. Add two-actor continuation, replay/idempotency, cross-world-forgery and migration contract regressions.
+4. Run focused tests, syntax, agent rules and diff checks; publish one branch/PR. Fleet PRE must independently certify the exact candidate before Ocean. No merge/deploy/Fleet POST claim by Builder.
+
+## Progress / next / completion
+- Baseline focused tests: `world-canon` 6/6 and `chain-reaction-api` 19/19 PASS.
+- Supabase CLI is unavailable in this runner, so the migration will use the repository's existing timestamp convention and be validated structurally; no direct schema mutation is authorized.
+- Implemented: the existing ledger now has database-assigned immutable revisions, explicit parent links, stable pseudonymous actor references, trusted browser provenance and public visibility scope; Node and Edge both require actual same-world participation and reject cross-world parent forgery. Caller-supplied platform provenance is ignored.
+- Supabase security advisors were read on the current production project. Existing warnings concern unrelated private/no-policy tables and legacy SECURITY DEFINER functions; this slice adds no function, exposed write grant, or new table.
+- Focused behavioral/security/Cloudflare suite: 23/23 PASS. Syntax, agent rules and `git diff --check`: PASS.
+- Full `npm run check`: 1023 tests; 1017 PASS, 2 FAIL, 4 SKIP. Both failures are unchanged environment-only `cpu-real3d` imports (`ModuleNotFoundError: requests`); every changed canon/Edge/Cloudflare test passed.
+- Next: commit/publish exact candidate, then require exact-head cloud checks and independent Fleet PRE.
+- Completion: exact SHA/PR, focused PASS, cloud exact-head checks requested; live two-client and cross-platform status stays `NOT_VERIFIED` until independent post-deploy evidence.
+- Final evidence: candidate SHA/PR and cloud run IDs pending publication. No schema deployment, live two-client, Telegram/browser parity, deep-link, network-effect metric or LIGHT claim.

@@ -2,6 +2,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.112.3";
 const loreBible = {"worlds":{"voxel-world":{"headline":"КТО ПОЛОЖИЛ ПЕРВЫЙ КУБ — И ПОЧЕМУ ОН ДО СИХ ПОР ПОЁТ?","connections":[{"targetId":"world-sharabass","story":"Семь древних блоков отвечают той же последовательностью нот, которой когда-то говорил Шарабас."}]},"ai3d-voxel-city":{"headline":"КАЖДУЮ НОЧЬ ЭТОТ ГОРОД ПЕРЕСТРАИВАЕТ СЕБЯ — НО ДЛЯ КОГО?","connections":[{"targetId":"voxel-world","story":"План улиц продолжает координатный узор, начатый возле Первого Куба."}]},"survival":{"headline":"КАЖДОЕ УТРО ЗДЕСЬ ПОЯВЛЯЮТСЯ СЛЕДЫ ТОГО, КТО ЕЩЁ НЕ ПРИШЁЛ","connections":[{"targetId":"dark-void-navigator-live","story":"В почти погасших углях появляется тот же одинокий свет, с которого начинается Dark Void."}]},"world-sharabass":{"headline":"ТАМ, ГДЕ МУЗЫКА УМЕЛА ОТВЕЧАТЬ","connections":[{"targetId":"voxel-world","story":"Семь нот Шарабаса заставляют древние блоки Voxel World светиться и менять положение."},{"targetId":"dark-void-navigator-live","story":"В полной темноте ноты превращаются в семь огней Навигатора."}]},"dark-void-navigator-live":{"headline":"В ТЕМНОТЕ ЕСТЬ ДВЕРЬ БЕЗ СТЕН — И ОНА ОТВЕЧАЕТ НА ВОПРОСЫ","connections":[{"targetId":"world-sharabass","story":"Семь огней складываются в Начальную Фразу музыкального языка Шарабаса."},{"targetId":"improve-world-home-live","story":"Дверь без стен иногда открывается прямо в коридор Дома историй."}]},"improve-world-home-live":{"headline":"ЭТОТ ДОМ ДОСТРАИВАЕТ КОМНАТУ КАЖДЫЙ РАЗ, КОГДА ЕМУ РАССКАЗЫВАЮТ ИСТОРИЮ","connections":[{"targetId":"world-server-catalog-live","story":"Карта Дверей стала первым планом Каталога, но на ней есть проход, которого нет ни в одном списке."},{"targetId":"improve-world-experiment-100","story":"Одна дверь ведёт в Лабораторию 100, где истории временно превращают в законы физики."}]},"improve-world-experiment-100":{"headline":"ЛАБОРАТОРИЯ №100 СКРЫВАЕТ ЭКСПЕРИМЕНТ №101 — И В НЁМ УЖЕ ЕСТЬ УЧАСТНИК","connections":[{"targetId":"improve-world-home-live","story":"Истории из Дома приходят сюда как гипотезы и иногда возвращаются способными менять реальность."}]},"voxel-gothic-steampunk-world":{"headline":"ТРИДЦАТЬ ЛЕТ ЧАСЫ БИЛИ ДВЕНАДЦАТЬ РАЗ. ПРОШЛОЙ НОЧЬЮ РАЗДАЛСЯ ТРИНАДЦАТЫЙ УДАР","connections":[{"targetId":"world-sharabass","story":"В Сердечном Двигателе хранится металлический цилиндр с утраченной частью Песни Шарабаса."},{"targetId":"gothic-voxel-city-atlas-v3-mobile-final","story":"Атлас показывает район за несколько минут до тринадцатого удара."}]},"gothic-voxel-city-atlas-v3-mobile-final":{"headline":"ЭТА КАРТА РИСУЕТ УЛИЦЫ ЗА ДЕНЬ ДО ТОГО, КАК ИХ ПОСТРОЯТ","connections":[{"targetId":"voxel-gothic-steampunk-world","story":"Все красные линии сходятся к Сердечному Двигателю перед тринадцатым ударом."}]},"voxel-gothic-steampunk-mobile-repaired":{"headline":"КОГДА ГОРОД НАЧАЛ СКЛАДЫВАТЬСЯ, ИНЖЕНЕРЫ СПРЯТАЛИ ЕГО В МИРЕ РАЗМЕРОМ С ЛАДОНЬ","connections":[{"targetId":"voxel-gothic-steampunk-world","story":"Исчезнувшие кварталы большого города появляются здесь в уменьшенном виде после тринадцатого удара."}]},"world-server-codex-voxel-v3":{"headline":"СТАРЫЙ МИР НЕ УДАЛИЛСЯ — ОН ПРОДОЛЖАЕТ ЖИТЬ ПОД НОВЫМ","connections":[{"targetId":"voxel-world","story":"Фантомные Кубы указывают координаты Первого Куба, но точка отсутствует на нынешней карте."}]},"cinematic-encounter":{"headline":"ЧТО МЕЛЬКНУЛО В ПЫЛИ В МОМЕНТ ВСПЫШКИ — И ПОЧЕМУ ОНО ИДЁТ ПО СЛЕДУ ИГРОКА?","connections":[{"targetId":"voxel-world","story":"Последняя цепочка следов уходит за промышленную дорогу в бесконечный Voxel World, где те же четыре отметины появляются на древних блоках."}]},"world-server-catalog-live":{"headline":"МЕЖДУ МИРАМИ ЕСТЬ ВОКЗАЛ С ТРИНАДЦАТОЙ ДВЕРЬЮ, КОТОРОЙ НЕТ НИ НА ОДНОЙ КАРТЕ","connections":[{"targetId":"improve-world-home-live","story":"Карта Дверей из Дома не показывает тринадцатый проход, хотя остальные двери на ней есть."},{"targetId":"world-sharabass","story":"Один из замков открывается только правильной нотой Песни Шарабаса."}]}}} as const;
 
 const WORLD_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const CANON_EVENT_KEY = /^[0-9a-f]{64}$/;
 const REQUEST_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const THEMES = ["forest", "mountains", "islands", "desert", "snow", "gothic", "steampunk", "ruins"];
 const encoder = new TextEncoder();
@@ -236,19 +237,38 @@ async function canonEffect(eventKey: string, sourceWorldId: string, targetWorldI
   return { schemaVersion: 1, kind: "canon_beacon", effectId: `canon-${key.slice(0, 16)}`, hue: Math.round(unit(0) * 359), radius: Number((4 + unit(8) * 5).toFixed(2)), intensity: Number((0.7 + unit(16) * .55).toFixed(2)), lifetimeMs: 86400000 };
 }
 async function canonRecord(admin: any, req: Request, body: any) {
-  await requireUser(admin, req);
+  const actor = await requireUser(admin, req);
   const worldId = cleanWorldId(body.worldId);
   const eventType = cleanEventType(body.eventType);
   const summary = cleanSummary(body.summary);
   const payload = safePayload(body.payload);
   const idempotencyKey = String(body.idempotencyKey || "").trim().slice(0, 180);
   if (!idempotencyKey) fail(400, "Canon idempotency key is required.");
+  // The public canon route is browser-origin. Telegram/world_server adapters
+  // must set provenance inside their trusted server path, never via user input.
+  const sourcePlatform = "browser";
+  const parentEventKey = body.parentEventKey === undefined || body.parentEventKey === null || body.parentEventKey === ""
+    ? null : String(body.parentEventKey).trim().toLowerCase();
+  if (parentEventKey && !CANON_EVENT_KEY.test(parentEventKey)) fail(400, "Invalid canon parent event.");
   const eventKey = await sha256Hex(`${worldId}\n${eventType}\n${idempotencyKey}`);
+  const actorRef = `actor-${(await sha256Hex(`world-canon-actor-v1\n${actor.id}`)).slice(0, 24)}`;
+  const { data: participant, error: participantError } = await admin.from("voxel_player_states")
+    .select("id").eq("world_id", worldId).eq("user_id", actor.id).maybeSingle();
+  if (participantError) throw participantError;
+  if (!participant) fail(403, "Сначала войдите в этот мир.");
+  if (parentEventKey) {
+    const { data: parent, error: parentError } = await admin.from("world_canon_events")
+      .select("event_key,world_id").eq("event_key", parentEventKey).maybeSingle();
+    if (parentError) throw parentError;
+    if (!parent || parent.world_id !== worldId) fail(409, "PARENT_EVENT_NOT_IN_WORLD");
+  }
   const { data: world, error: worldError } = await admin.from("voxel_worlds").select("settings").eq("id", worldId).maybeSingle();
   if (worldError) throw worldError;
   const alias = worldId === "main" ? "voxel-world" : worldId;
   const lore = world?.settings?.lore || world?.settings?.worldDNA?.lore || (loreBible as any)?.worlds?.[alias] || null;
-  const source = { event_key: eventKey, world_id: worldId, event_type: eventType, summary, payload, cause_event_key: null, source_world_id: worldId, target_world_id: worldId };
+  const source = { event_key: eventKey, world_id: worldId, event_type: eventType, summary, payload,
+    cause_event_key: parentEventKey, parent_event_key: parentEventKey, actor_ref: actorRef,
+    source_platform: sourcePlatform, visibility_scope: "public", source_world_id: worldId, target_world_id: worldId };
   const seen = new Set<string>();
   const consequences: any[] = [];
   for (const connection of Array.isArray(lore?.connections) ? lore.connections : []) {
@@ -261,12 +281,13 @@ async function canonRecord(admin: any, req: Request, body: any) {
       event_key: consequenceKey, world_id: targetId, event_type: "cross_world_consequence",
       summary: `Последствие из «${worldId}»: ${story}`.slice(0, 500),
       payload: { causeWorldId: worldId, causeEventType: eventType, story, effect: await canonEffect(eventKey, worldId, targetId) },
-      cause_event_key: eventKey, source_world_id: worldId, target_world_id: targetId
+      cause_event_key: eventKey, parent_event_key: eventKey, actor_ref: actorRef,
+      source_platform: sourcePlatform, visibility_scope: "public", source_world_id: worldId, target_world_id: targetId
     });
     if (consequences.length >= 4) break;
   }
   const rows = [source, ...consequences];
-  const { data, error } = await admin.from("world_canon_events").upsert(rows, { onConflict: "event_key" }).select("event_key,world_id,event_type,summary,payload,cause_event_key,source_world_id,target_world_id,created_at");
+  const { data, error } = await admin.from("world_canon_events").upsert(rows, { onConflict: "event_key" }).select("event_key,world_id,revision,event_type,summary,payload,cause_event_key,parent_event_key,actor_ref,source_platform,visibility_scope,source_world_id,target_world_id,created_at");
   if (error) throw error;
   return json({ event: source, consequences, persisted: data || [], runtime: "supabase-edge" });
 }
@@ -274,7 +295,7 @@ async function canon(admin: any, req: Request, url: URL) {
   if (req.method === "GET") {
     const worldId = cleanWorldId(url.searchParams.get("worldId"));
     const limit = Math.max(1, Math.min(50, Number(url.searchParams.get("limit")) || 20));
-    const { data, error } = await admin.from("world_canon_events").select("event_key,world_id,event_type,summary,payload,cause_event_key,source_world_id,target_world_id,created_at").eq("world_id", worldId).order("created_at", { ascending: false }).limit(limit);
+    const { data, error } = await admin.from("world_canon_events").select("event_key,world_id,revision,event_type,summary,payload,cause_event_key,parent_event_key,actor_ref,source_platform,visibility_scope,source_world_id,target_world_id,created_at").eq("world_id", worldId).order("created_at", { ascending: false }).limit(limit);
     if (error) throw error;
     return json({ events: data || [], runtime: "supabase-edge" });
   }
