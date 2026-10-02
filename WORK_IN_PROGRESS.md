@@ -1,3 +1,22 @@
+# 2026-10-02: Universal Reference Visual Compiler
+
+Task: implement a reusable World Server pipeline that turns image/video-reference observations into a machine-readable visual grammar and routes that grammar into existing graphics lanes instead of building one-off reference clones.
+Why: World Server already has AI3D, voxel generation, PBR/material profiling, LIGHT, silhouette 3D, procedural sprite tooling and visual gates, but lacks a common reference-understanding layer that can choose and parameterize those systems consistently.
+Current state: reference fidelity and several specialized generators exist; video/style semantics, unified visual grammar, lane routing, lighting/material/camera plans and cross-lane validation are fragmented.
+Target state: one canonical compiler accepts normalized reference observations (including sampled video frames), infers style/dimension/geometry/material/light/camera/detail/motion grammar, selects compatible rendering lanes, emits an executable generation plan, and exposes deterministic comparison features for tests and future agents.
+Files / systems involved: new lib/reference-visual-grammar.js, lib/reference-visual-router.js, lib/reference-visual-compiler.js, data/reference-visual-lanes.json, scripts/reference-visual-compile.js, docs/REFERENCE_VISUAL_COMPILER.md, focused tests, package.json command, WORK_IN_PROGRESS.md.
+Known risks: pretending semantic inference is stronger than evidence; routing watercolor to a runtime missing from current master; overfitting to gothic voxel examples; introducing non-deterministic AI dependence into the baseline compiler.
+Golden systems preserved: AI3D final-delivery gate, voxel architecture path, LIGHT API, user-confirmed silhouette success, user-controlled SUCCESS/FAILURE decisions, current golden graphics, protected master workflow.
+Exact patch plan: create deterministic evidence-to-grammar extractor; define canonical lane registry with availability/degradation flags; add router scoring; compile material/light/camera/detail/motion plans; add video-frame temporal aggregation without requiring model inference; expose CLI JSON in/out; add regression tests covering gothic voxel 3D, 2D sprite, luminous silhouette, mixed references and missing-watercolor fallback; document extension point for future vision/AI analyzer.
+Tests to run: node --test test/reference-visual-compiler.test.js; node scripts/check-js.js; full npm run check through PR CI.
+Deployment / PR plan: isolated branch -> PR -> protected master; no public playable-link claim because this task creates shared graphics infrastructure, not a new certified game.
+Current progress: branch created from master f044aa498b94618bab4d2590b140d7aa4695fdc4; canonical handoff and graphics stack audited.
+Next action: implement compiler modules, lane registry, CLI and focused tests.
+Completion criteria: deterministic compiler routes at least voxel-3D, sprite-2D and LIGHT references into existing World Server systems; output is machine-readable; missing lanes are reported honestly; focused tests pass and PR is opened.
+Final evidence: pending implementation/tests/PR.
+
+---
+
 # 2026-10-02: СЖ — правила из пользовательской редактуры
 
 Task: извлечь устойчивые авторские преобразования из явной пользовательской правки текста про хейтершу и добавить их в каноническую СЖ.
