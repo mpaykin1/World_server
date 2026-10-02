@@ -61,6 +61,26 @@
         "application/vnd.world-server.indieworld+json",
         "application/rss+xml"
       ]
+    },
+    "referenceGraphics": {
+      "canonical": [
+        "REFERENCE_GRAPHICS.md",
+        "lib/reference-frame-analyzer.js",
+        "lib/reference-visual-grammar.js",
+        "lib/reference-graphics-router.js",
+        "lib/reference-recipe-compiler.js",
+        "lib/reference-correction-planner.js"
+      ],
+      "requiredBy": [
+        "reference-driven-graphics-tasks"
+      ],
+      "rules": [
+        "extract measurable style before choosing a renderer",
+        "keep semantic hints separate from pixel measurements",
+        "reuse existing voxel/AI3D/PBR/LIGHT/sprite systems",
+        "render back and correct largest perceptual mismatch first",
+        "user decides visual success or failure"
+      ]
     }
   }
 }
