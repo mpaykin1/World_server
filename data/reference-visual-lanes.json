@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "1.0.0",
+  "lanes": [
+    {
+      "id": "voxel-3d",
+      "available": true,
+      "maturity": "production-foundation",
+      "dimensions": [
+        "3d"
+      ],
+      "styles": [
+        "voxel",
+        "gothic-voxel",
+        "steampunk-voxel"
+      ],
+      "capabilities": [
+        "walkable-world",
+        "semantic-microdetail",
+        "pbr-profiles",
+        "depth-prior",
+        "material-profiles"
+      ],
+      "systems": [
+        "services/ai3d-worker/ai3d/plugins/voxel_city.py",
+        "lib/world-quality-voxel-enhancer.js",
+        "lib/world-quality-material-profiler.js",
+        "lib/world-quality-pbr-synthesizer.js"
+      ]
+    },
+    {
+      "id": "mesh-3d",
+      "available": true,
+      "maturity": "production-foundation",
+      "dimensions": [
+        "3d"
+      ],
+      "styles": [
+        "mesh-3d",
+        "realistic-3d",
+        "stylized-3d",
+        "illustrative-3d"
+      ],
+      "capabilities": [
+        "playable-runtime",
+        "depth-prior",
+        "procedural-building",
+        "mesh-generation"
+      ],
+      "systems": [
+        "api/ai3d.js",
+        "shared/ai3d-playable-runtime.js",
+        "services/ai3d-worker/ai3d/plugins/blender_building.py"
+      ]
+    },
+    {
+      "id": "sprite-2d",
+      "available": true,
+      "maturity": "basic",
+      "dimensions": [
+        "2d"
+      ],
+      "styles": [
+        "pixel-art",
+        "sprite",
+        "illustrative-2d"
+      ],
+      "capabilities": [
+        "cpu-atlas",
+        "deterministic-palette",
+        "frame-animation",
+        "alpha"
+      ],
+      "systems": [
+        "scripts/world-sprite-cpu.js",
+        "lib/world-sprite-needs.js"
+      ],
+      "limitations": [
+        "general reference-shaped sprite synthesis still needs pixel/region evidence"
+      ]
+    },
+    {
+      "id": "light-contour-3d",
+      "available": true,
+      "maturity": "production-foundation",
+      "dimensions": [
+        "3d"
+      ],
+      "auxiliary": true,
+      "styles": [
+        "luminous-outline",
+        "living-light",
+        "neon-rim"
+      ],
+      "capabilities": [
+        "normal-aware-rim",
+        "depth-aware-contour",
+        "hdr-bloom",
+        "temporal-stability",
+        "micro-filaments"
+      ],
+      "systems": [
+        "shared/light/index.mjs",
+        "shared/light/pipeline.mjs"
+      ]
+    },
+    {
+      "id": "silhouette-3d",
+      "available": true,
+      "maturity": "production-foundation",
+      "dimensions": [
+        "3d"
+      ],
+      "auxiliary": true,
+      "styles": [
+        "silhouette",
+        "outline-3d"
+      ],
+      "capabilities": [
+        "real-3d-rig",
+        "perspective",
+        "occlusion",
+        "outline-extraction"
+      ],
+      "systems": [
+        "shared/silhouette-3d/index.mjs",
+        "shared/silhouette-3d/outline-pipeline.mjs"
+      ]
+    },
+    {
+      "id": "watercolor-3d",
+      "available": false,
+      "maturity": "documented-success-runtime-missing",
+      "dimensions": [
+        "3d"
+      ],
+      "styles": [
+        "watercolor",
+        "living-watercolor"
+      ],
+      "capabilities": [
+        "semantic-ink",
+        "paper-space-composite",
+        "reference-shaped-generator"
+      ],
+      "systems": [
+        "docs/LIVING_WATERCOLOR_HOUSE_TREE_PLANT_SUCCESS_2026-09-30.md"
+      ],
+      "limitations": [
+        "canonical shared/graphics/living-watercolor runtime files are absent from current master"
+      ]
+    }
+  ]
+}
