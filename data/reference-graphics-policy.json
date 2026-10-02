@@ -3,8 +3,15 @@
   "system": "REFERENCE_GRAPHICS_COMPILER",
   "goal": "extract visual grammar from sampled image/video evidence and configure existing World Server graphics systems without copying a reference pixel-for-pixel",
   "inputs": {
-    "required": ["rgbaFrames"],
-    "optional": ["semanticHints", "styleTags", "cameraHint", "materialHints"]
+    "required": [
+      "rgbaFrames"
+    ],
+    "optional": [
+      "semanticHints",
+      "styleTags",
+      "cameraHint",
+      "materialHints"
+    ]
   },
   "stages": [
     "frame-analysis",
@@ -20,8 +27,9 @@
     "ai3d": "services/ai3d-worker/",
     "materials": "lib/world-quality-pbr-synthesizer.js",
     "light": "shared/light/index.mjs",
-    "sprite": "scripts/world-sprite-cpu.js",
-    "fidelity": "lib/reference-fidelity.js"
+    "sprite": "lib/reference-sprite-generator.js",
+    "fidelity": "lib/reference-fidelity.js",
+    "videoSampler": "shared/reference-graphics/video-sampler.mjs"
   },
   "rules": [
     "pixel statistics may describe style but may not invent semantic object identity",
