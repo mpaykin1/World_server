@@ -45,7 +45,7 @@ test('integration lab proves perspective 3D and exposes evidence hook', () => {
   const client = read('apps/silhouette-3d-lab/client.js');
   assert.match(index, /three@0\.185\.1/);
   assert.match(client, /PerspectiveCamera/);
-  assert.match(client, /Silhouette3DOutlinePipeline/);
+  assert.match(client, /LightPipeline/);
   assert.match(client, /animateSilhouetteCreature/);
   assert.match(client, /window\.Silhouette3DLive/);
 });
