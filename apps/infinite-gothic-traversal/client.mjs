@@ -242,7 +242,7 @@ const touch={
 };
 renderer.domElement.addEventListener('pointerdown',event=>{
   if(event.pointerType!=='touch')return;
-  renderer.domElement.setPointerCapture?.(event.pointerId);
+  try{renderer.domElement.setPointerCapture?.(event.pointerId);}catch{}
   if(event.clientX<innerWidth*.5&&touch.moveId===null){
     touch.moveId=event.pointerId;
     touch.moveStartX=event.clientX;touch.moveStartY=event.clientY;
