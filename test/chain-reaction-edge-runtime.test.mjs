@@ -76,3 +76,32 @@ test('actual Edge CAS two writers, stale 409 then latest refresh',async()=>{
   assert.equal((await runEdge(f,body('game-state'))).revision,1);
   assert.equal(f.writes,1);
 });
+
+
+test('actual Edge optional OpenAI actions stay authenticated and keep private state off provider input', async () => {
+  const f = fixture(), previousDeno = globalThis.Deno, previousFetch = globalThis.fetch;
+  let calls = 0;
+  try {
+    globalThis.Deno = { env: { get: name => name === 'OPENAI_API_KEY' ? 'test-placeholder' : undefined } };
+    globalThis.fetch = async (_url, init) => {
+      calls++;
+      assert.equal(init.signal.aborted, false);
+      const payload = JSON.parse(init.body);
+      assert.equal(payload.store, false);
+      assert.doesNotMatch(JSON.stringify(payload), /LEGACY RESIDENT SECRET|NESTED RESIDENT SECRET|LEGACY HISTORY SECRET|actorId|hidden-class/);
+      const scenario = JSON.parse(payload.input[1].content);
+      assert.equal(scenario.exactSimulation.cost, 40);
+      return { ok: true, json: async () => ({ output: [{ content: [{ type: 'output_text', text: 'Станция строится.' }] }] }) };
+    };
+    assert.equal((await runEdge(f, body('genie-ai-status'))).configured, true);
+    const reply = await runEdge(f, body('genie-narrate', { text: 'Солнечная станция' }));
+    assert.equal(reply.source, 'openai'); assert.equal(reply.revision, 0);
+    assert.equal(f.writes, 0); assert.equal(calls, 1);
+    f.members.delete(player);
+    await assert.rejects(runEdge(f, body('genie-narrate'), 'player'), e => e.status === 403);
+    assert.equal(calls, 1);
+  } finally {
+    globalThis.Deno = previousDeno;
+    globalThis.fetch = previousFetch;
+  }
+});

@@ -283,3 +283,34 @@ test('atomic and legacy world projections allowlist resident fields', async () =
   assert.equal(first.revision, first.world.revision);
   assert.equal(f.writes, 2);
 });
+
+
+test('authenticated AI endpoints never write game state or disclose private world data', async () => {
+  const f = fixture(), oldKey = process.env.OPENAI_API_KEY, oldFetch = globalThis.fetch;
+  let calls = 0;
+  try {
+    process.env.OPENAI_API_KEY = '';
+    assert.equal((await handle(f.admin, req, body('genie-ai-status'))).configured, false);
+    await rejects(handle(f.admin, req, body('genie-narrate')), 503);
+    process.env.OPENAI_API_KEY = 'test-placeholder';
+    globalThis.fetch = async (_url, init) => {
+      calls++;
+      const request = JSON.parse(init.body), scenario = JSON.parse(request.input[1].content);
+      assert.equal(request.store, false);
+      assert.equal('residents' in scenario, false);
+      assert.equal('history' in scenario, false);
+      return { ok: true, json: async () => ({ output: [{ content: [{ type: 'output_text', text: 'Строительство займёт два хода.' }] }] }) };
+    };
+    assert.equal((await handle(f.admin, req, body('genie-ai-status'))).configured, true);
+    const result = await handle(f.admin, req, body('genie-narrate', { text: 'Солнечные панели' }));
+    assert.equal(result.simulation.cost, 40);
+    assert.equal(result.revision, 0);
+    assert.equal(f.writes, 0);
+    await rejects(handle(fixture({ denied: true }).admin, req, body('genie-narrate')), 403);
+    assert.equal(calls, 1);
+  } finally {
+    if (oldKey === undefined) delete process.env.OPENAI_API_KEY;
+    else process.env.OPENAI_API_KEY = oldKey;
+    globalThis.fetch = oldFetch;
+  }
+});

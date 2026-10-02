@@ -1,0 +1,7 @@
+# Optional Genie OpenAI narration
+
+The existing World Server Supabase Edge Functions project has an `OPENAI_API_KEY` secret saved through its dashboard. Keep its value exclusively in the hosting secrets store; never place it in code, URLs, browser JavaScript, source control or chat.
+
+This branch adds an optional authenticated `genie-ai-status` action and an explicit `genie-narrate` action to the existing Chain Reaction Node and Supabase Edge APIs. The status action reports only whether a key exists; it cannot verify billing or key validity. The narration action uses the Responses API with a small response limit and a request timeout. Only sanitized, allowlisted game-state fields and the explicitly submitted player idea are sent. The deterministic simulator remains authoritative for game rules, costs, resources and simulation.
+
+Integration gates: focused tests and GitHub CI; independent review of the exact branch SHA; deploy updated `world-emergence` together with the new shared `genie-ai.js` module from the approved commit; verify status with an authenticated world member; after API billing is confirmed, explicitly request one narration and record the outcome. No normal gameplay path automatically spends API credits. Per-isolate cooldowns are defense in depth, not a replacement for OpenAI project billing limits. Frontend controls belong to the Graphics team and require a separate reviewed integration; no public test link before live checks and visibility >85%.
