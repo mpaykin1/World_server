@@ -17,7 +17,7 @@ maskScene.background=new THREE.Color(0x000000);
 const camera=new THREE.PerspectiveCamera(29,innerWidth/innerHeight,0.1,100);
 function frameCamera(){
   const portrait=innerWidth/innerHeight<0.72;
-  camera.position.set(0.30,portrait?0.02:0.18,portrait?12.7:9.0);
+  camera.position.set(0.30,portrait?0.02:0.18,portrait?13.6:9.3);
   camera.lookAt(0.18,-0.05,0);
 }
 frameCamera();
@@ -36,18 +36,18 @@ maskRoot.scale.copy(colorRoot.scale);
 const catGoldProfile={
   ...livingGoldProfile,
   id:'living-cat-gold',
-  core:[1.0,0.99,0.90],
-  gold:[1.0,0.61,0.14],
-  amber:[1.0,0.22,0.025],
-  coreGain:3.25,
-  goldGain:1.52,
-  haloGain:0.72,
-  bloomGain:0.92,
-  bloomRadius:1.75,
+  core:[1.0,0.965,0.78],
+  gold:[1.0,0.50,0.085],
+  amber:[1.0,0.20,0.018],
+  coreGain:2.25,
+  goldGain:1.18,
+  haloGain:0.38,
+  bloomGain:0.58,
+  bloomRadius:1.35,
   rimPower:2.05,
   depthGain:0.42,
-  filamentGain:0.20,
-  filamentThreshold:0.89,
+  filamentGain:0.12,
+  filamentThreshold:0.915,
   temporalBlend:0.58,
   edgeSoftness:0.58,
   topGain:1.20,
