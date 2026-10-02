@@ -120,5 +120,11 @@
     "explicitAliasesAlwaysTrigger": true,
     "defaultForPersonalAuthoredTextsForUser": true,
     "overriddenByCurrentExplicitStyleInstruction": true
+  },
+  "integration": {
+    "resolver": "lib/szh-writing-system.js",
+    "cli": "scripts/szh-context.js",
+    "promptCommand": "node scripts/szh-context.js --prompt",
+    "writeBack": false
   }
 }
