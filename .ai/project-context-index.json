@@ -20,7 +20,8 @@
     "data/serial-growth-state.json",
     "docs/SERIAL_GROWTH_ENGINE.md",
     "docs/SZH_SYSTEM_RU.md",
-    ".ai/szh-writing-system.json"
+    ".ai/szh-writing-system.json",
+    "SZH.md"
   ],
   "concepts": {
     "vno": {
@@ -141,7 +142,9 @@
       ],
       "scope": "Personal authored writing for Mikhail: drafting, rewriting, shortening, developing and polishing while preserving a live uneven human voice.",
       "precedence": "Latest explicit user edit > current explicit style instruction > SZH canonical doc > machine rules > generic writing conventions",
-      "learningRule": "Compare user edits to AI drafts and infer candidate transformations, but update the canonical SZH only after explicit user instruction."
+      "learningRule": "Compare user edits to AI drafts and infer candidate transformations, but update the canonical SZH only after explicit user instruction.",
+      "bootstrapFile": "SZH.md",
+      "discoveryRule": "Open SZH.md directly before relying on GitHub code search; a zero-result search is not evidence that SZH is absent."
     }
   },
   "freshChatMandatoryReads": {
@@ -173,6 +176,7 @@
       "docs/SERIAL_GROWTH_ENGINE.md"
     ],
     "userWriting": [
+      "SZH.md",
       "AI_START_HERE.md",
       ".ai/project-context-index.json",
       "docs/SZH_SYSTEM_RU.md",
