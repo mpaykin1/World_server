@@ -1,7 +1,6 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict');
-const {compileReferenceVisual,planVisualCorrections}=require('../lib/reference-visual-compiler');
-const {analyzeVideoFrames}=require('../lib/reference-video-analyzer');
+const {compileReferenceVisual,planVisualCorrections,analyzeVideoFrames}=require('../lib/reference-visual-compiler');
 
 test('gothic voxel video routes to voxel 3D',()=>{
   const r=compileReferenceVisual({sourceType:'video',frames:[
