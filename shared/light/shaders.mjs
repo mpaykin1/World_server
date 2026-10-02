@@ -101,12 +101,18 @@ float zoneGain(float y) {
 void main() {
   vec2 px = 1.0 / max(uResolution, vec2(1.0));
   float center = maskAt(vUv);
-  float nearOutside = ringMax(vUv, px, 2.0);
-  float insideMin = ringMin(vUv, px, 2.0);
+  float in2 = center * (1.0 - ringMin(vUv, px, 2.0));
+  float in5 = center * (1.0 - ringMin(vUv, px, 5.0));
+  float in10 = center * (1.0 - ringMin(vUv, px, 10.0));
+  float out2 = (1.0 - center) * ringMax(vUv, px, 2.0);
+  float out5 = (1.0 - center) * ringMax(vUv, px, 5.0);
+  float out10 = (1.0 - center) * ringMax(vUv, px, 10.0);
+  float out18 = (1.0 - center) * ringMax(vUv, px, 18.0);
 
-  float innerEdge = center * (1.0 - insideMin);
-  float outsideEdge = (1.0 - center) * nearOutside;
-  float contour = max(innerEdge, outsideEdge);
+  float edge2 = max(in2, out2);
+  float edge5 = max(in5, out5);
+  float edge10 = max(in10, out10);
+  float contour = edge2;
 
   vec3 n = normalAt(vUv);
   float fresnel = pow(clamp(1.0 - abs(n.z), 0.0, 1.0), uRimPower);
@@ -115,13 +121,12 @@ void main() {
   float depthDy = abs(depth - depthAt(vUv + vec2(0.0, px.y * 2.0)));
   float depthEdge = clamp((depthDx + depthDy) * 9.0, 0.0, 1.0);
 
-  float distancePx = approximateDistance(vUv, px, center);
-  float core = (1.0 - smoothstep(1.5, 3.0, distancePx)) * (0.72 + contour * 0.28);
-  float gold = (1.0 - smoothstep(2.0, 9.5, distancePx)) * (1.0 - core * 0.58);
-  float halo = (1.0 - center) * (1.0 - smoothstep(4.5, 24.0, distancePx)) * (1.0 - gold * 0.55);
+  float core = edge2;
+  float gold = clamp(edge5 - edge2 * 0.62, 0.0, 1.0);
+  float halo = clamp(out18 * 0.72 + out10 * 0.28 - out5 * 0.62, 0.0, 1.0);
 
   float spatial = hash21(floor(gl_FragCoord.xy * 0.45));
-  float filament = step(uFilamentThreshold, spatial) * smoothstep(13.0, 1.0, distancePx);
+  float filament = step(uFilamentThreshold, spatial) * clamp(edge10 - edge2, 0.0, 1.0);
   filament *= 0.76 + 0.24 * sin(vUv.y * 920.0 + vUv.x * 437.0);
 
   float rim = mix(0.70, 1.28, fresnel);
