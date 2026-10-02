@@ -228,6 +228,13 @@
       "status": "experimental",
       "kind": "game",
       "reason": "Playable vertical-slice experiment; isolated from the public certified catalog until user acceptance and production evidence."
+    },
+    "silhouette-3d-lab": {
+      "title": "Silhouette 3D Lab",
+      "visible": false,
+      "status": "experimental",
+      "kind": "prototype",
+      "reason": "Internal proof lane for real 3D articulated silhouette rendering; line quality intentionally remains unaccepted pending luminous-line upgrade and user confirmation."
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",
