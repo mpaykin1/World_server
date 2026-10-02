@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "contract": "shared/semantic-scene-contract-v1.mjs",
+  "runtimeBridge": "shared/semantic-scene-runtime-v1.mjs",
+  "canonicalSeed": 42,
+  "consumers": {
+    "KRIEGER_CLASS": "apps/chain-reaction-procedural-krieger/index.html",
+    "INK": "apps/chain-reaction-meta6-living-relations/index.html",
+    "CUBE": "apps/voxel-world/client.js"
+  }
+}
