@@ -12,6 +12,8 @@ Code:
 - `lib/reference-graphics-router.js`
 - `lib/reference-recipe-compiler.js`
 - `lib/reference-correction-planner.js`
+- `lib/reference-sprite-generator.js`
+- `shared/reference-graphics/video-sampler.mjs`
 
 Search terms for future chats: **REFERENCE GRAPHICS**, **video reference**, **visual grammar**, **reference compiler**.
 
