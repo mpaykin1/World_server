@@ -15,8 +15,12 @@ colorScene.background=new THREE.Color(0x000000);
 maskScene.background=new THREE.Color(0x000000);
 
 const camera=new THREE.PerspectiveCamera(29,innerWidth/innerHeight,0.1,100);
-camera.position.set(0.30,0.20,7.4);
-camera.lookAt(0.15,0.05,0);
+function frameCamera(){
+  const portrait=innerWidth/innerHeight<0.72;
+  camera.position.set(0.30,portrait?0.05:0.20,portrait?10.7:8.0);
+  camera.lookAt(0.18,-0.05,0);
+}
+frameCamera();
 
 const colorRoot=new THREE.Group();
 const maskRoot=new THREE.Group();
@@ -105,6 +109,7 @@ renderer.domElement.addEventListener('pointercancel',()=>{dragging=false;});
 
 addEventListener('resize',()=>{
   camera.aspect=innerWidth/innerHeight;
+  frameCamera();
   camera.updateProjectionMatrix();
   renderer.setSize(innerWidth,innerHeight);
   light.resize(innerWidth,innerHeight);
