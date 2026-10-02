@@ -4,7 +4,7 @@
   window.__GOLDEN_UI_SHELL_V2__=true;
   const path=location.pathname;
   const configs=[
-    {match:'/apps/catalog/',title:'Миры',worldId:'world-server-catalog-live',selectors:['.app-title','.topHint','#miniMap']},
+    {match:'/apps/catalog/',title:'Миры',worldId:'world-server-catalog-live',selectors:['.app-title','.topHint','#miniMap','#authBox','.mc-chat']},
     {match:'/apps/voxel-world/',title:'Voxel World',worldId:'voxel-world',selectors:['#vwHud','#vwHelp','#vwBack']},
     {match:'/apps/ai3d-voxel-city/',title:'Voxel City',worldId:'ai3d-voxel-city',selectors:['header','.controls','.metrics','.compare > .pane:not(.viewerPane)','.viewerHead','#stats'],graphicsFirst:{host:'.viewerPane',surface:'#viewer'}},
     {match:'/apps/survival/',title:'Survival',worldId:'survival',selectors:['#survivalHelp','#stats','#backLink','#buildPanel','#inventory']},
@@ -27,7 +27,7 @@
     <button data-golden-tab="worlds" aria-label="Миры">${icons.worlds}</button>
     <button data-golden-tab="settings" aria-label="Настройки">${icons.settings}</button>
     <button data-golden-tab="info" aria-label="Информация">${icons.info}</button>
-  </nav><section id="goldenDrawer" aria-hidden="true">
+  </nav><section id="goldenDrawer" aria-hidden="true" inert>
     <header><strong id="goldenDrawerTitle">${cfg.title}</strong><button id="goldenDrawerClose" aria-label="Закрыть">${icons.close}</button></header>
     <div class="goldenTab" data-tab="menu"><div id="goldenPackedPanels"></div></div>
     <div class="goldenTab" data-tab="worlds"><button id="goldenCreateWorld" class="goldenAction">Создать мир</button><div class="goldenWorldMode"><button class="active" data-world-view="newspaper">Газета миров</button><button data-world-view="connections">Связи миров</button></div><div id="goldenWorldList">Загрузка миров…</div><div id="goldenConnections"></div></div>
@@ -41,8 +41,8 @@
   function displayName(item){const explicit=item?.worldMenu?.displayName;if(explicit)return explicit;const raw=String(item?.title||item?.id||'Новый Мир').replace(/Improve\s+World/gi,' ').replace(systemTitleTokens,' ').replace(/[-_]+/g,' ').replace(/\s+/g,' ').trim();return raw.split(/\s+/).filter(Boolean).slice(0,3).join(' ')||'Новый Мир';}
   function fusionUrl(a,b){if(!a||!b||a.id===b.id)return '#';return `/shared/world-fusion.html?a=${encodeURIComponent(a.id)}&b=${encodeURIComponent(b.id)}`;}
   function emitDrawer(open){document.documentElement.classList.toggle('golden-drawer-open',open);dispatchEvent(new CustomEvent('goldendrawerchange',{detail:{open,tab:active}}));}
-  function select(tab){if(drawer.classList.contains('open')&&active===tab){close();return;} active=tab; title.textContent=tab==='worlds'?'Миры':tab==='settings'?'Настройки':tab==='info'?'Информация':cfg.title; for(const el of root.querySelectorAll('.goldenTab'))el.hidden=el.dataset.tab!==tab; drawer.classList.add('open');drawer.setAttribute('aria-hidden','false');emitDrawer(true);}
-  function close(){drawer.classList.remove('open');drawer.setAttribute('aria-hidden','true');emitDrawer(false);}
+  function select(tab){if(drawer.classList.contains('open')&&active===tab){close();return;} active=tab; title.textContent=tab==='worlds'?'Миры':tab==='settings'?'Настройки':tab==='info'?'Информация':cfg.title; for(const el of root.querySelectorAll('.goldenTab'))el.hidden=el.dataset.tab!==tab; drawer.inert=false;drawer.classList.add('open');drawer.setAttribute('aria-hidden','false');emitDrawer(true);}
+  function close(){const wasOpen=drawer.classList.contains('open');drawer.inert=true;drawer.classList.remove('open');drawer.setAttribute('aria-hidden','true');if(wasOpen)[...root.querySelectorAll('[data-golden-tab]')].find(b=>b.dataset.goldenTab===active)?.focus();emitDrawer(false);}
   for(const b of root.querySelectorAll('[data-golden-tab]')){b.addEventListener('pointerdown',e=>e.stopPropagation());b.addEventListener('click',e=>{e.stopPropagation();select(b.dataset.goldenTab);});}
   const closeButton=root.querySelector('#goldenDrawerClose');
   closeButton.addEventListener('pointerdown',e=>e.stopPropagation());
@@ -50,7 +50,13 @@
   closeButton.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();close();});
   drawer.addEventListener('pointerdown',e=>e.stopPropagation());
   addEventListener('keydown',e=>{if(e.code==='Escape')close()});
-  for(const selector of cfg.selectors){for(const node of [...document.querySelectorAll(selector)]){if(root.contains(node))continue;node.dataset.goldenPacked='true';packed.appendChild(node);}}
+  function packPanels(container=document){for(const selector of cfg.selectors){const nodes=[...container.querySelectorAll(selector)];if(container.matches?.(selector))nodes.unshift(container);for(const node of nodes){if(root.contains(node))continue;node.dataset.goldenPacked='true';packed.appendChild(node);}}}
+  packPanels();
+  // AppCore creates catalog login/chat after async initialization. Move, never clone.
+  if(cfg.worldId==='world-server-catalog-live'){
+    const panelObserver=new MutationObserver(records=>{for(const record of records)for(const node of record.addedNodes)if(node.nodeType===1&&!root.contains(node))packPanels(node);});
+    panelObserver.observe(document.body,{childList:true});
+  }
   if(!packed.children.length){const p=document.createElement('p');p.textContent='Дополнительных системных панелей нет.';packed.appendChild(p);}
   if(cfg.graphicsFirst){const host=document.querySelector(cfg.graphicsFirst.host),surface=document.querySelector(cfg.graphicsFirst.surface);if(host&&surface){document.documentElement.classList.add('golden-graphics-first');host.dataset.goldenViewport='primary';surface.dataset.goldenPrimaryRenderer='true';}else console.error('[GOLDEN GRAPHICS] primary renderer missing',cfg.graphicsFirst);}
 
