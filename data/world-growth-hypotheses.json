@@ -11,8 +11,8 @@
   "countsAtBootstrap": {
     "total": 50,
     "missing": 7,
-    "experimental": 24,
-    "implemented": 19,
+    "experimental": 26,
+    "implemented": 17,
     "tested": 0,
     "verified": 0,
     "blocked": 0,
@@ -86,10 +86,10 @@
     {
       "id": 9,
       "title": "One authoritative world is reachable from multiple interfaces",
-      "status": "IMPLEMENTED",
+      "status": "EXPERIMENTAL",
       "leverage": 5,
       "evidence": [],
-      "notes": "Bootstrap classification only. Requires exact current evidence before promotion to TESTED/VERIFIED."
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
     },
     {
       "id": 10,
@@ -126,10 +126,10 @@
     {
       "id": 14,
       "title": "AI can predict consequences before a mutation",
-      "status": "IMPLEMENTED",
+      "status": "EXPERIMENTAL",
       "leverage": 3,
       "evidence": [],
-      "notes": "Bootstrap classification only. Requires exact current evidence before promotion to TESTED/VERIFIED."
+      "notes": "Substantial partial work or isolated MVPs exist, but the architecture is not yet accepted as a canonical verified platform capability."
     },
     {
       "id": 15,
