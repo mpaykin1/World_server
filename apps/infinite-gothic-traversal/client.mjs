@@ -16,7 +16,7 @@ const loader=document.querySelector('#loader');
 const a11y=document.querySelector('#a11y');
 const coarse=matchMedia('(pointer:coarse)').matches;
 const WORLD_SEED='world-server-infinite-gothic-v1';
-const DETAIL_RADIUS=2;
+const MAX_DETAIL_RADIUS=2;
 const PROXY_RADIUS=5;
 const PLAYER_Y=1.18;
 
@@ -30,7 +30,8 @@ const gl=renderer.getContext();
 const debugInfo=gl.getExtension('WEBGL_debug_renderer_info');
 const rendererName=String(debugInfo?gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER));
 const software=/swiftshader|llvmpipe|software/i.test(rendererName);
-const maxDpr=software?.7:(coarse?1.15:1.55);
+const DETAIL_RADIUS=software?1:MAX_DETAIL_RADIUS;
+const maxDpr=software?.5:(coarse?1.15:1.55);
 renderer.setPixelRatio(Math.min(devicePixelRatio||1,maxDpr));
 renderer.setSize(innerWidth,innerHeight);
 renderer.outputColorSpace=THREE.SRGBColorSpace;
