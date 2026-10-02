@@ -8,8 +8,8 @@ function tailControlPoints(t,mode='live'){
   const swing=fixed ?? Math.sin(t*0.82);
   const depth=fixed ?? Math.sin(t*0.64+0.8);
   const controls=[
-    [-0.82,-0.84, 0.00],
-    [-0.86,-1.12, 0.03],
+    [-0.63,-0.82, 0.00],
+    [-0.78,-1.10, 0.03],
     [-0.38,-1.29, 0.05],
     [ 0.38,-1.31, 0.07],
     [ 1.16,-1.24, 0.08],
