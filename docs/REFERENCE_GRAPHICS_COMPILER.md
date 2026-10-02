@@ -25,6 +25,8 @@ This makes one reference useful across different rendering lanes. A gothic voxel
 - `lib/reference-graphics-router.js` — routes the grammar into existing World Server graphics lanes.
 - `lib/reference-recipe-compiler.js` — produces interoperable geometry/material/light/camera/motion recipes.
 - `lib/reference-correction-planner.js` — closes the loop after render-back and prioritizes the largest mismatch.
+- `lib/reference-sprite-generator.js` — generic CPU semantic-part sprite rasterizer with palette, outline and shading bands.
+- `shared/reference-graphics/video-sampler.mjs` — browser video sampler that produces bounded RGBA evidence frames.
 - `data/reference-graphics-policy.json` — machine-readable contract.
 
 ## Important boundary: pixels vs semantics
@@ -45,14 +47,14 @@ Routes to the existing AI3D worker. Recipes require semantic decomposition, silh
 References with strong emissive/local-light grammar can add the canonical `shared/light/index.mjs` layer without flattening the underlying 3D.
 
 ### 2D sprites
-The compiler now emits a general sprite style recipe: palette budget, outline strength, shading bands, animation cadence and semantic-parts requirement. The existing CPU sprite runtime remains narrow (smoke/ripple/ash), so a general semantic sprite renderer is still a runtime blocker rather than a hidden fake capability.
+The compiler emits a general sprite style recipe and `reference-sprite-generator` can rasterize semantic parts into deterministic shaded/outlined frames or atlases. Automatic semantic part extraction still requires explicit hints or a multimodal semantic adapter; the renderer itself is no longer limited to smoke/ripple/ash.
 
 ### Watercolor
 A user-validated Watercolor success record exists, but the canonical runtime files are not currently present in `master`. The router therefore exposes this as a blocker instead of pretending that lane is executable.
 
 ## Video references
 
-Video decoding is an adapter concern. The compiler accepts multiple sampled RGBA frames and measures temporal motion/flicker across them. Browser/FFmpeg adapters can feed those frames without changing the grammar contract.
+`shared/reference-graphics/video-sampler.mjs` samples a browser `HTMLVideoElement` at deterministic bounded times and outputs RGBA frames. The compiler measures temporal motion/flicker across them. A future server-side decoder may feed the same frame contract without changing the grammar layer.
 
 A single frame may produce a static recipe; it must not be treated as proof of temporal similarity.
 
