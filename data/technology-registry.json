@@ -280,6 +280,33 @@
         "docs/LIGHT_SYSTEM.md"
       ],
       "note": "Canonical World Server system for normal/depth-aware rim light, screen-space distance-field edge shaping, HDR half-float glow, Kawase bloom, stable micro-filaments, motion-aware temporal stabilization, art-directed zones and 3D luminous curves. Do not convert pending visual quality into SUCCESS/FAILURE without explicit user decision."
+    },
+    "KRIEGER TOTAL CONTROL": {
+      "percent": 48,
+      "status": "partial: real native runtime, custom semantic-scene authoring not yet native",
+      "evidence": [
+        "docs/TRINITY_LAB_EVIDENCE_2026-10-02.md",
+        "apps/trinity-lab/",
+        "e2e/trinity-lab.spec.js"
+      ]
+    },
+    "INK / LIVING INK": {
+      "percent": 74,
+      "status": "integrated partial: semantic real-mesh NPR and persistence proven; watercolor fidelity incomplete",
+      "evidence": [
+        "shared/living-ink-webgl-npr.mjs",
+        "apps/trinity-lab/",
+        "docs/TRINITY_LAB_EVIDENCE_2026-10-02.md"
+      ]
+    },
+    "CUBE / CUBE-TO-WORLD": {
+      "percent": 78,
+      "status": "integrated partial: deterministic real staged growth; extrude/merge missing",
+      "evidence": [
+        "shared/world-evolution-runtime.mjs",
+        "apps/trinity-lab/cube-evolution.mjs",
+        "e2e/trinity-lab.spec.js"
+      ]
     }
   },
   "governanceCoveragePercent": 100,

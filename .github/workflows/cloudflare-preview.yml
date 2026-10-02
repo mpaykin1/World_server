@@ -62,6 +62,16 @@ jobs:
         run: node scripts/verify-cloudflare-stack.cjs "${{ steps.deploy.outputs.url }}" "$SOURCE_SHA"
       - name: Install Chromium + WebKit
         run: npx playwright install --with-deps chromium webkit
+      - name: Verify Trinity Lab cinematic stack on desktop + portrait
+        if: steps.authority.outputs.configured == 'true'
+        run: node scripts/trinity-evidence.cjs "${{ steps.deploy.outputs.url }}/apps/trinity-lab/" "test-results/trinity-evidence-live.json"
+      - name: Upload Trinity Lab evidence
+        if: always() && steps.authority.outputs.configured == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: trinity-lab-evidence-${{ github.event.pull_request.number || github.run_id }}
+          path: test-results/trinity-evidence-live*
+          if-no-files-found: warn
       - name: Verify Roblox Gothic Rocks MVP on desktop + iPhone
         if: steps.authority.outputs.configured == 'true'
         env:

@@ -57,6 +57,13 @@
         "playable": false,
         "windows": false
       }
+    },
+    "trinity-lab": {
+      "type": "diagnostic",
+      "capabilities": {
+        "playable": true,
+        "windows": "unknown"
+      }
     }
   },
   "rule": "Unknown capability must be audited before claiming full Golden propagation coverage."
