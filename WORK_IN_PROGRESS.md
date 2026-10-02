@@ -1,3 +1,22 @@
+# 2026-10-02: СЖ — вертикальный ритм пустых строк
+
+Task: добавить правило форматирования СЖ по явной команде пользователя: убирать большинство пустых строк между короткими фразами, оставляя примерно 30% как смысловые паузы.
+Why: пользователь хочет более плотный визуальный поток без потери ударных пауз.
+Current state: СЖ регулирует синтаксический и смысловой ритм, но не задаёт норму плотности пустых строк.
+Target state: около 70% пустых строк удаляются; около 30% сохраняются только для панча, смены сцены, сильной паузы или резкого поворота мысли.
+Files / systems involved: docs/SZH_SYSTEM_RU.md, test/szh-system.test.js, WORK_IN_PROGRESS.md.
+Known risks: превратить текст в нечитаемую стену; механически считать строки вместо смыслового ритма.
+Golden systems preserved: смысловая пауза важнее процента; случайные артефакты форматирования не становятся стилем.
+Exact patch plan: добавить правило в канон; regression-test на формулировку; PR в protected master.
+Tests to run: focused test + cloud CI.
+Deployment / PR plan: isolated branch -> PR -> master; no runtime/game deployment.
+Current progress: task registered.
+Next action: patch canon and regression test.
+Completion criteria: правило merged in master and применяется к revised text.
+Final evidence: pending.
+
+---
+
 # 2026-10-02: СЖ — правила из пользовательской редактуры
 
 Task: извлечь устойчивые авторские преобразования из явной пользовательской правки текста про хейтершу и добавить их в каноническую СЖ.
