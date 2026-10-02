@@ -6,6 +6,7 @@ const {
   normalizeSeedKey, seed32FromKey, createArchitectureDNA,
   sampleBuildingRecipe, huntArchitectureSeeds
 } = require('../lib/architecture-seeds');
+const { createWorldDNA, settingsFromDNA, publicWorld } = require('../lib/world-factory');
 
 test('architecture DNA is deterministic for the same exact seed', () => {
   const a = createArchitectureDNA({ seed: '-3361685360695458093', idea: 'затопленный готический город в джунглях' });
@@ -50,4 +51,23 @@ test('seed hunter is deterministic and ranks requested rare combinations', () =>
   assert.equal(a.length, 6);
   assert.ok(a.every((row, index) => index === 0 || a[index - 1].score >= row.score));
   assert.ok(a.every(row => row.primaryFamily === 'gothic' && row.modifiers.includes('flooded') && row.modifiers.includes('ruins')));
+});
+
+
+test('World Factory preserves exact explicit seedKey and exposes architecture DNA', () => {
+  const raw = '-3361685360695458093';
+  const dna = createWorldDNA({
+    idea: 'готический затопленный город в джунглях',
+    requestId: '123e4567-e89b-42d3-a456-426614174999',
+    loreBible: { worlds: {} },
+    seed: raw
+  });
+  assert.equal(dna.seedKey, raw);
+  assert.equal(dna.architecture.primaryFamily, 'gothic');
+  assert.ok(Number.isSafeInteger(dna.seed) && dna.seed > 0);
+  const settings = settingsFromDNA(dna);
+  assert.equal(settings.seedKey, raw);
+  const world = publicWorld({ id: dna.id, seed: dna.seed, settings });
+  assert.equal(world.seedKey, raw);
+  assert.deepEqual(world.architecture, dna.architecture);
 });
