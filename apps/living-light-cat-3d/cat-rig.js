@@ -64,6 +64,7 @@ export function createLivingLightCat(parent,{mask=false}={}){
   ellipsoid(body,1,[0.69,1.17,0.50],[-0.48,0.08,0],mask,'body');
   ellipsoid(body,1,[0.84,0.77,0.54],[-0.43,-0.72,0.02],mask,'rump');
   ellipsoid(body,1,[0.40,0.83,0.39],[0.03,0.48,0.01],mask,'chest');
+  ellipsoid(body,0.58,[0.72,0.86,0.74],[-0.15,0.94,0],mask,'shoulderBridge');
 
   cylinder(body,0.072,1.18,[0.17,-0.63,0.15],[0,0,-0.015],mask,'frontLegNear');
   cylinder(body,0.060,1.12,[0.05,-0.66,-0.14],[0,0,0.012],mask,'frontLegFar');
@@ -81,10 +82,11 @@ export function createLivingLightCat(parent,{mask=false}={}){
 
   ellipsoid(head,0.48,[0.96,0.89,0.84],[0.0,0.0,0],mask,'head');
   ellipsoid(head,0.235,[1.08,0.53,0.68],[0.43,-0.11,0.01],mask,'muzzle');
+  ellipsoid(head,0.17,[0.84,0.48,0.66],[0.29,-0.27,0.00],mask,'chin');
   ellipsoid(head,0.075,[0.72,0.50,0.58],[0.64,-0.09,0.02],mask,'nose');
 
   const farEar=ear(head,[-0.13,0.39,-0.22],[0.02,0.05,-0.20],mask,'earFar');
-  farEar.scale.set(0.70,0.72,0.70);
+  farEar.scale.set(0.52,0.58,0.52);
   ear(head,[0.08,0.49,0.10],[-0.04,-0.04,0.08],mask,'earNear');
 
   const tail=makeTail(root,mask);
