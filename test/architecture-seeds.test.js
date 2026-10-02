@@ -7,6 +7,7 @@ const {
   sampleBuildingRecipe, huntArchitectureSeeds
 } = require('../lib/architecture-seeds');
 const { createWorldDNA, settingsFromDNA, publicWorld } = require('../lib/world-factory');
+const factoryApi = require('../lib/api-handlers/world-factory')._private;
 
 test('architecture DNA is deterministic for the same exact seed', () => {
   const a = createArchitectureDNA({ seed: '-3361685360695458093', idea: 'затопленный готический город в джунглях' });
@@ -70,4 +71,22 @@ test('World Factory preserves exact explicit seedKey and exposes architecture DN
   const world = publicWorld({ id: dna.id, seed: dna.seed, settings });
   assert.equal(world.seedKey, raw);
   assert.deepEqual(world.architecture, dna.architecture);
+});
+
+
+test('World Factory seed preview returns deterministic building samples without persistence', () => {
+  const body = { seed: '350362654', idea: 'Tokyo flooded ruins', samples: [{ x: 10, z: 20 }] };
+  const a = factoryApi.previewArchitectureSeed(body);
+  const b = factoryApi.previewArchitectureSeed(body);
+  assert.deepEqual(a, b);
+  assert.equal(a.architecture.primaryFamily, 'tokyo');
+  assert.equal(a.samples.length, 1);
+});
+
+test('World Factory seed hunter API is bounded and deterministic', () => {
+  const body = { startSeed: '500', count: 32, limit: 5, idea: 'future jungle city', criteria: { family: 'future', modifiers: ['jungle'] } };
+  const a = factoryApi.huntArchitectureSeedOptions(body);
+  const b = factoryApi.huntArchitectureSeedOptions(body);
+  assert.deepEqual(a, b);
+  assert.equal(a.seeds.length, 5);
 });
