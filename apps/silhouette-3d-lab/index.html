@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#000000">
+<title>World Server · Silhouette 3D Lab</title>
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;touch-action:none}
+canvas{display:block;width:100%;height:100%}
+#hud{position:fixed;left:max(12px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));z-index:3;color:#ffffff78;font:11px/1.4 system-ui;letter-spacing:.12em;text-transform:uppercase;pointer-events:none}
+</style>
+</head>
+<body>
+<div id="hud">Silhouette 3D · real geometry / real depth · baseline line</div>
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js"}}
+</script>
+<script type="module" src="./client.js"></script>
+</body>
+</html>
