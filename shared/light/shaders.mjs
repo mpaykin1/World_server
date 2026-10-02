@@ -116,9 +116,9 @@ void main() {
   float depthEdge = clamp((depthDx + depthDy) * 9.0, 0.0, 1.0);
 
   float distancePx = approximateDistance(vUv, px, center);
-  float core = smoothstep(3.0, 1.5, distancePx) * (0.72 + contour * 0.28);
-  float gold = smoothstep(9.5, 2.0, distancePx) * (1.0 - core * 0.58);
-  float halo = (1.0 - center) * smoothstep(24.0, 4.5, distancePx) * (1.0 - gold * 0.55);
+  float core = (1.0 - smoothstep(1.5, 3.0, distancePx)) * (0.72 + contour * 0.28);
+  float gold = (1.0 - smoothstep(2.0, 9.5, distancePx)) * (1.0 - core * 0.58);
+  float halo = (1.0 - center) * (1.0 - smoothstep(4.5, 24.0, distancePx)) * (1.0 - gold * 0.55);
 
   float spatial = hash21(floor(gl_FragCoord.xy * 0.45));
   float filament = step(uFilamentThreshold, spatial) * smoothstep(13.0, 1.0, distancePx);
