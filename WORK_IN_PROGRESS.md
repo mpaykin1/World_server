@@ -10,10 +10,10 @@ Golden systems preserved: latest user edit > current instruction > SZH canon; с
 Exact patch plan: добавить отдельный раздел правил, выведенных из этой редактуры; синхронизировать machine-readable rules; добавить тест на ключевые новые принципы; не менять resolver API.
 Tests to run: node --test test/szh-system.test.js; затем cloud CI/npm run check через PR.
 Deployment / PR plan: isolated branch -> PR -> protected master; documentation/AI-context only, no game deployment.
-Current progress: task registered; patch pending.
-Next action: patch canon + machine contract + regression test.
-Completion criteria: новые правила присутствуют в human/machine canon, focused test защищает их, PR открыт на protected master.
-Final evidence: pending exact-head CI and review.
+Current progress: human-readable canon updated with 22 user-edit calibration rules; regression test added. Two attempts to write .ai/szh-writing-system.json were blocked by connector safety, so the canonical human source is updated but the machine mirror is not yet synchronized.
+Next action: publish PR and run exact-head CI; do not bypass connector safety to mutate the blocked machine file.
+Completion criteria: canonical docs rules and regression test are merged after review; machine mirror synchronization remains an explicit follow-up if the connector permits it.
+Final evidence: docs commit d8f9c44e13e58c60395f1aef99b7114c23dc221d; test commit f7b52a353236fe8dc23f0b7d720218b4a790acf9; exact-head CI/review pending.
 
 ---
 
