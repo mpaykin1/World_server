@@ -55,13 +55,19 @@ const catGoldProfile={
   bottomGain:0.72
 };
 
+const bufferSize=new THREE.Vector2();
+function getRenderSize(){
+  renderer.getDrawingBufferSize(bufferSize);
+  return {width:Math.max(1,Math.round(bufferSize.x)),height:Math.max(1,Math.round(bufferSize.y))};
+}
+const initialRenderSize=getRenderSize();
 const light=new LightPipeline({
   renderer,
   colorScene,
   maskScene,
   camera,
-  width:innerWidth,
-  height:innerHeight,
+  width:initialRenderSize.width,
+  height:initialRenderSize.height,
   profile:catGoldProfile
 });
 
@@ -123,7 +129,8 @@ addEventListener('resize',()=>{
   frameCamera();
   camera.updateProjectionMatrix();
   renderer.setSize(innerWidth,innerHeight);
-  light.resize(innerWidth,innerHeight);
+  const renderSize=getRenderSize();
+  light.resize(renderSize.width,renderSize.height);
 });
 
 window.LIGHT={name:'LIGHT',version:1,pipeline:light,profile:catGoldProfile};
