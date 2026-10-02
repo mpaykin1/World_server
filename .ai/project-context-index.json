@@ -1,5 +1,5 @@
 {
-  "version": 5,
+  "version": 4,
   "purpose": "Universal discovery index for new chats and AI agents working on World_server",
   "startHere": "AI_START_HERE.md",
   "canonicalContextFiles": [
@@ -135,7 +135,9 @@
         "сбитый живой поток"
       ],
       "machineFiles": [
-        ".ai/szh-writing-system.json"
+        ".ai/szh-writing-system.json",
+        "lib/szh-writing-system.js",
+        "scripts/szh-context.js"
       ],
       "scope": "Personal authored writing for Mikhail: drafting, rewriting, shortening, developing and polishing while preserving a live uneven human voice.",
       "precedence": "Latest explicit user edit > current explicit style instruction > SZH canonical doc > machine rules > generic writing conventions",
@@ -174,9 +176,10 @@
       "AI_START_HERE.md",
       ".ai/project-context-index.json",
       "docs/SZH_SYSTEM_RU.md",
-      ".ai/szh-writing-system.json"
+      ".ai/szh-writing-system.json",
+      "lib/szh-writing-system.js"
     ]
   },
-  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md, data/manual-delivery-policy.json, and data/cloudflare-deployment-identity.json. For serial or player-acquisition content work read the Serial Growth Engine contract and continuity state. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains; final URLs must pass delivery:verify against the repo-derived Cloudflare identity and exact deployed SHA. For personal authored writing for Mikhail, or when an SZH alias is used, read docs/SZH_SYSTEM_RU.md and .ai/szh-writing-system.json before drafting; treat later user edits as stronger calibration evidence, but do not mutate the canon without explicit user instruction.",
+  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md, data/manual-delivery-policy.json, and data/cloudflare-deployment-identity.json. For serial or player-acquisition content work read the Serial Growth Engine contract and continuity state. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains; final URLs must pass delivery:verify against the repo-derived Cloudflare identity and exact deployed SHA. For personal authored writing for Mikhail, or when an SZH alias is used, read docs/SZH_SYSTEM_RU.md and .ai/szh-writing-system.json before drafting; agents may run node scripts/szh-context.js --prompt to obtain the executable context. Later user edits are stronger calibration evidence, but the canonical rules must not change without explicit user instruction.",
   "sourceOfTruthBranch": "master"
 }
