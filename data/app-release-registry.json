@@ -241,7 +241,14 @@
       "visible": false,
       "status": "experimental",
       "kind": "prototype",
-      "reason": "Direct-link visual proof of a real articulated 3D cat rendered through the canonical LIGHT luminous-line pipeline; public-catalog promotion waits for user visual acceptance."
+      "reason": "User explicitly approved the deployed Living Light Cat 3D MVP as SUCCESS. It remains hidden from the main certified public catalog because user acceptance and Golden catalog certification are separate gates.",
+      "userAcceptance": {
+        "verdict": "SUCCESS",
+        "acceptedAt": "2026-10-02",
+        "acceptedProductionSha": "f044aa498b94618bab4d2590b140d7aa4695fdc4",
+        "canonicalUrl": "https://world-server.mmmpaykin.workers.dev/apps/living-light-cat-3d/",
+        "handoff": "LIVING_LIGHT_CAT_3D_SUCCESS.md"
+      }
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",
