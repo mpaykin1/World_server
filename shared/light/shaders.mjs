@@ -101,18 +101,18 @@ float zoneGain(float y) {
 void main() {
   vec2 px = 1.0 / max(uResolution, vec2(1.0));
   float center = maskAt(vUv);
-  float in2 = center * (1.0 - ringMin(vUv, px, 2.0));
-  float in5 = center * (1.0 - ringMin(vUv, px, 5.0));
-  float in10 = center * (1.0 - ringMin(vUv, px, 10.0));
-  float out2 = (1.0 - center) * ringMax(vUv, px, 2.0);
-  float out5 = (1.0 - center) * ringMax(vUv, px, 5.0);
-  float out10 = (1.0 - center) * ringMax(vUv, px, 10.0);
-  float out18 = (1.0 - center) * ringMax(vUv, px, 18.0);
+  float in1 = center * (1.0 - ringMin(vUv, px, 1.0));
+  float in3 = center * (1.0 - ringMin(vUv, px, 3.0));
+  float in7 = center * (1.0 - ringMin(vUv, px, 7.0));
+  float out1 = (1.0 - center) * ringMax(vUv, px, 1.0);
+  float out3 = (1.0 - center) * ringMax(vUv, px, 3.0);
+  float out7 = (1.0 - center) * ringMax(vUv, px, 7.0);
+  float out15 = (1.0 - center) * ringMax(vUv, px, 15.0);
 
-  float edge2 = max(in2, out2);
-  float edge5 = max(in5, out5);
-  float edge10 = max(in10, out10);
-  float contour = edge2;
+  float edge1 = max(in1, out1);
+  float edge3 = max(in3, out3);
+  float edge7 = max(in7, out7);
+  float contour = edge1;
 
   vec3 n = normalAt(vUv);
   float fresnel = pow(clamp(1.0 - abs(n.z), 0.0, 1.0), uRimPower);
@@ -121,12 +121,12 @@ void main() {
   float depthDy = abs(depth - depthAt(vUv + vec2(0.0, px.y * 2.0)));
   float depthEdge = clamp((depthDx + depthDy) * 9.0, 0.0, 1.0);
 
-  float core = edge2;
-  float gold = clamp(edge5 - edge2 * 0.62, 0.0, 1.0);
-  float halo = clamp(out18 * 0.72 + out10 * 0.28 - out5 * 0.62, 0.0, 1.0);
+  float core = edge1;
+  float gold = clamp(edge3 - edge1 * 0.68, 0.0, 1.0);
+  float halo = clamp(out15 * 0.62 + out7 * 0.38 - out3 * 0.70, 0.0, 1.0);
 
   float spatial = hash21(floor(gl_FragCoord.xy * 0.45));
-  float filament = step(uFilamentThreshold, spatial) * clamp(edge10 - edge2, 0.0, 1.0);
+  float filament = step(uFilamentThreshold, spatial) * clamp(edge7 - edge1, 0.0, 1.0);
   filament *= 0.76 + 0.24 * sin(vUv.y * 920.0 + vUv.x * 437.0);
 
   float rim = mix(0.70, 1.28, fresnel);
