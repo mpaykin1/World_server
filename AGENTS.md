@@ -261,3 +261,19 @@ Canonical machine-readable policy: `data/manual-task-completion-contract.json`; 
 ## Multilingual AI production parity
 
 Если клиент добавляет новый AI locale, backend и production Worker должны получить этот locale в том же release unit. Нельзя считать locale готовым по client commit или preview. Обязательны production deploy + live smoke с `executed:false` и ожидаемым `language`. См. `docs/META6_EN_LIVE_AI_PARITY_FAILURE_2026-09-30.md`.
+
+
+## 21. SESSION FINALIZATION / DESKTOP ZERO-CLUTTER — HARD RULE
+
+This rule is mandatory for every AI and every World Server session, including ChatGPT, Codex, Claude, OpenCode, OpenHuman, AKA workers, recovery workers and coordinators.
+
+- The Windows Desktop is not a workspace. Never create temporary clones, worktrees, logs, screenshots, reports, scripts, archives, build folders or helper files there.
+- Canonical temporary root: `%LOCALAPPDATA%\WorldServerAI\`. Reuse it instead of inventing another scratch location.
+- Before an AI session ends, all useful source changes must be committed to Git and pushed to a remote branch. A dirty worktree is not an acceptable final state.
+- Session cleanup is transactional: **SAVE FIRST -> VERIFY SAVE -> REMOVE**. Never delete a dirty or unverified worktree.
+- If commit/push cannot be completed safely, archive the entire unresolved artifact as ZIP under `%LOCALAPPDATA%\WorldServerAI\archives\`, verify that the ZIP exists, then remove the Desktop copy.
+- Disposable session-owned files must be deleted. Unknown/user-owned files must never be touched.
+- Run `powershell -ExecutionPolicy Bypass -File scripts/session-finalize.ps1` before reporting session completion.
+- A session is not complete until the finalizer shows no extra `World_server_*`, `ws-*`, `ws_*` or `scratch-chain-reaction-*` session directories on Desktop.
+- If cleanup cannot complete, report the exact blocker and leave the preserved ZIP path. Do not silently leave clutter.
+- Any agent that creates a Desktop worktree or ends with uncommitted/unarchived World Server artifacts has failed the session hygiene contract.
