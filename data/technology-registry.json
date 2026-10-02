@@ -266,6 +266,33 @@
         "test/roblox-import.test.js"
       ],
       "note": "Never executes embedded Luau during import. Reuses Golden controls/physics and authoritative World Server networking; external Roblox assets and opaque TerrainRegion bytes remain explicit blockers until provided/exported/decoded."
+    },
+    "KRIEGER TOTAL CONTROL": {
+      "percent": 48,
+      "status": "partial: real native runtime, custom semantic-scene authoring not yet native",
+      "evidence": [
+        "docs/TRINITY_LAB_EVIDENCE_2026-10-02.md",
+        "apps/trinity-lab/",
+        "e2e/trinity-lab.spec.js"
+      ]
+    },
+    "INK / LIVING INK": {
+      "percent": 74,
+      "status": "integrated partial: semantic real-mesh NPR and persistence proven; watercolor fidelity incomplete",
+      "evidence": [
+        "shared/living-ink-webgl-npr.mjs",
+        "apps/trinity-lab/",
+        "docs/TRINITY_LAB_EVIDENCE_2026-10-02.md"
+      ]
+    },
+    "CUBE / CUBE-TO-WORLD": {
+      "percent": 78,
+      "status": "integrated partial: deterministic real staged growth; extrude/merge missing",
+      "evidence": [
+        "shared/world-evolution-runtime.mjs",
+        "apps/trinity-lab/cube-evolution.mjs",
+        "e2e/trinity-lab.spec.js"
+      ]
     }
   },
   "governanceCoveragePercent": 100,

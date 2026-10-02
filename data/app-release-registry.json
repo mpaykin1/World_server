@@ -228,6 +228,13 @@
       "status": "experimental",
       "kind": "game",
       "reason": "Playable vertical-slice experiment; isolated from the public certified catalog until user acceptance and production evidence."
+    },
+    "trinity-lab": {
+      "title": "World Server Trinity Lab",
+      "visible": false,
+      "status": "diagnostic",
+      "kind": "diagnostic",
+      "reason": "Direct-link diagnostic proving one semantic recipe across KRIEGER, INK and CUBE; not a certified catalog game."
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",

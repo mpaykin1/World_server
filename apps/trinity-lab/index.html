@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#11151a">
+<title>World Server - Trinity Lab</title>
+<style>
+:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#f6f3eb;background:#11151a}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#11151a}
+#gameRoot{position:fixed;inset:0;overflow:hidden;touch-action:none;background:#11151a}
+.gameCanvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+#inkCanvas{display:none}
+#hud{position:fixed;left:50%;top:max(10px,env(safe-area-inset-top));transform:translateX(-50%);
+display:flex;gap:7px;z-index:10;padding:6px;border:1px solid rgba(255,255,255,.14);border-radius:15px;
+background:rgba(13,17,22,.66);backdrop-filter:blur(14px);box-shadow:0 10px 36px rgba(0,0,0,.24)}
+button{border:1px solid rgba(255,255,255,.14);border-radius:10px;background:rgba(255,255,255,.07);color:#f6f3eb;
+padding:9px 12px;font-weight:750;letter-spacing:.04em;font-size:11px;min-width:76px}
+button.active{background:#f0a15d;color:#1a100a;border-color:#ffc08a}
+#debugBtn{min-width:62px}
+#modeBadge{position:fixed;left:12px;bottom:max(12px,env(safe-area-inset-bottom));z-index:8;
+padding:7px 10px;border-radius:11px;background:rgba(8,11,14,.58);border:1px solid rgba(255,255,255,.10);
+font-size:10px;letter-spacing:.08em;color:#d4d9df;pointer-events:none}
+#touchHint{position:fixed;inset:auto 0 max(38px,env(safe-area-inset-bottom)) 0;z-index:4;
+display:none;justify-content:space-between;padding:0 20px;pointer-events:none;font-size:9px;color:rgba(255,255,255,.36)}
+#debug{position:fixed;z-index:20;top:70px;right:10px;bottom:10px;width:min(390px,calc(100vw - 20px));
+overflow:auto;display:none;background:rgba(9,12,16,.92);border:1px solid rgba(255,255,255,.15);border-radius:16px;
+padding:13px;backdrop-filter:blur(18px);font-size:11px;line-height:1.42}
+#debug.open{display:block}
+#debug h2{font-size:14px;margin:0 0 8px}
+#debug pre{white-space:pre-wrap;margin:0;color:#cfd7df;font:10px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace}
+@media(max-width:700px){
+  #hud{top:max(7px,env(safe-area-inset-top));gap:4px;padding:5px}
+  button{min-width:0;padding:8px 9px;font-size:10px}
+  #touchHint{display:flex}
+  #modeBadge{font-size:9px}
+}
+</style>
+</head>
+<body>
+<div id="gameRoot" data-world-game-root>
+  <canvas id="worldCanvas" class="gameCanvas" data-world-game-canvas></canvas>
+  <canvas id="inkCanvas" class="gameCanvas" data-world-game-canvas></canvas>
+</div>
+<div id="hud">
+  <button data-mode="KRIEGER" class="active">KRIEGER</button>
+  <button data-mode="INK">INK</button>
+  <button data-mode="CUBE">CUBE</button>
+  <button id="debugBtn">DEBUG</button>
+</div>
+<div id="modeBadge">TRINITY / KRIEGER</div>
+<div id="touchHint"><span>LEFT: MOVE</span><span>RIGHT: LOOK</span></div>
+<aside id="debug"><h2>TRINITY DIAGNOSTICS</h2><pre id="debugText">initializing...</pre></aside>
+<script src="../../shared/fixed-game-viewport.js"></script>
+<script type="module" src="./app.mjs"></script>
+</body>
+</html>

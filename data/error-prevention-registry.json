@@ -30,6 +30,27 @@
       "at": "2026-09-06T20:25:00.000Z",
       "lessonHash": "f8a9e710b34d28e75122b1029c381c62938f9218274536291902837261a8109d",
       "supersedes": null
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "trinity-vendor-static-path-404",
+      "at": "2026-10-02T04:56:54.608Z",
+      "lessonHash": "071e5aa5e05a73ba3acf6ed8aef6706e81de667675b561a3786d39b038b6c826",
+      "supersedes": null
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "trinity-cube-evolution-state-races",
+      "at": "2026-10-02T04:56:57.147Z",
+      "lessonHash": "5bcde933ea9420b4bf2591b6413e5c466b21f28f336ce6a84d0ba2a04fb6fc17",
+      "supersedes": null
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "scoped-task-level1-explicit-path-contamination",
+      "at": "2026-10-02T04:56:59.319Z",
+      "lessonHash": "39c4f98398f3ed5e7f1890dfba1e2dd5270d697fb86446fbe4f1babb973b7317",
+      "supersedes": null
     }
   ],
   "knownErrors": [
@@ -766,6 +787,65 @@
         "SCIENCE_RUN_072_H2.json"
       ],
       "confirmedAt": "2026-09-06T00:00:00.000Z"
+    },
+    {
+      "id": "trinity-vendor-static-path-404",
+      "category": "collective-brain-learned",
+      "severity": "major",
+      "status": "protected",
+      "history": [],
+      "rootCause": "World Server local static server does not expose repository-root vendor paths, so a valid vendored Three.js module returned 404 and prevented Trinity modules from starting.",
+      "solution": "Place the already-licensed Three.js vendor under the served shared/vendor path and make Living Ink and Trinity import that single shared copy.",
+      "protection": [
+        "scripts/trinity-evidence.cjs",
+        "e2e/trinity-lab.spec.js"
+      ],
+      "evidence": [
+        "docs/TRINITY_LAB_EVIDENCE_2026-10-02.md",
+        "shared/vendor/three-r160/LICENSE"
+      ],
+      "confirmedAt": "2026-10-02T04:56:54.606Z",
+      "lessonHash": "071e5aa5e05a73ba3acf6ed8aef6706e81de667675b561a3786d39b038b6c826",
+      "supersedes": null
+    },
+    {
+      "id": "trinity-cube-evolution-state-races",
+      "category": "collective-brain-learned",
+      "severity": "major",
+      "status": "protected",
+      "history": [],
+      "rootCause": "Compact comma expressions after completed statements left CUBE stage variables undeclared, and manual evidence progress was immediately overwritten by autoplay on the next frame.",
+      "solution": "Use explicit lexical declarations for stage-local variables and freeze autoplay when manual progress evidence is selected until restart.",
+      "protection": [
+        "e2e/trinity-lab.spec.js",
+        "test/trinity-scene.test.mjs"
+      ],
+      "evidence": [
+        "apps/trinity-lab/cube-evolution.mjs",
+        "docs/TRINITY_LAB_EVIDENCE_2026-10-02.md"
+      ],
+      "confirmedAt": "2026-10-02T04:56:57.144Z",
+      "lessonHash": "5bcde933ea9420b4bf2591b6413e5c466b21f28f336ce6a84d0ba2a04fb6fc17",
+      "supersedes": null
+    },
+    {
+      "id": "scoped-task-level1-explicit-path-contamination",
+      "category": "collective-brain-learned",
+      "severity": "major",
+      "status": "protected",
+      "history": [],
+      "rootCause": "Level-1 scoped task compilation continued keyword discovery even after an explicit existing target path was found, so adding shared/fixed-game-viewport.js made an unrelated single-file viewport task pull in that shared file.",
+      "solution": "When level 1 has explicit existing paths, return only those explicit paths; level 2 remains the bounded dependency expansion lane.",
+      "protection": [
+        "test/scoped-task-compiler.test.js"
+      ],
+      "evidence": [
+        "lib/scoped-task-compiler.js",
+        "docs/TRINITY_LAB_EVIDENCE_2026-10-02.md"
+      ],
+      "confirmedAt": "2026-10-02T04:56:59.317Z",
+      "lessonHash": "39c4f98398f3ed5e7f1890dfba1e2dd5270d697fb86446fbe4f1babb973b7317",
+      "supersedes": null
     }
   ],
   "confirmationProtocol": {
