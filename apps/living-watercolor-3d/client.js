@@ -142,13 +142,13 @@ function setLayout(mode){
     for(const n of selectableNames){const o=items[n];o.visible=n===mode;o.position.set(0,0,0);o.scale.setScalar(1);o.rotation.set(0,0,0);}
     if(mode==='worker'&&workerDriver)items.worker.scale.setScalar(workerDriver.root.userData.baseScale||3);
     const mobile=innerWidth/Math.max(1,innerHeight)<.62;
-    const posDesktop={house:[.00,-.30,0],tree:[.36,-1.05,0],volcano:[.04,-.22,0],plant:[-.55,-1.00,0],worker:[0,-.10,0]};
-    const posMobile={house:[.00,-.30,0],tree:[.36,-1.05,0],volcano:[.02,-.30,0],plant:[-.46,-1.20,0],worker:[0,-.22,0]};
+    const posDesktop={house:[.00,-.30,0],tree:[.36,-1.05,0],volcano:[.04,-.22,0],plant:[-.55,-1.00,0],worker:[.30,-.10,0]};
+    const posMobile={house:[.00,-.30,0],tree:[.36,-1.05,0],volcano:[.02,-.30,0],plant:[-.46,-1.20,0],worker:[.48,-.22,0]};
     items[mode].position.set(...((mobile?posMobile:posDesktop)[mode]||[0,0,0]));
   }
   const mobile=innerWidth/Math.max(1,innerHeight)<.62;
-  const zoomDesktop={all:.82,house:1.38,tree:1.11,volcano:1.18,plant:1.55,worker:1.18};
-  const zoomMobile={all:.78,house:1.44,tree:1.11,volcano:1.17,plant:2.13,worker:1.24};
+  const zoomDesktop={all:.82,house:1.38,tree:1.11,volcano:1.18,plant:1.55,worker:1.08};
+  const zoomMobile={all:.78,house:1.44,tree:1.11,volcano:1.17,plant:2.13,worker:1.12};
   camera.zoom=(mobile?zoomMobile:zoomDesktop)[mode]??1;
   camera.updateProjectionMatrix();
 }
