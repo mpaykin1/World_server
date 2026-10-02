@@ -1,0 +1,158 @@
+{
+  "version": 1,
+  "name": "AKA World Growth Architecture",
+  "enabled": true,
+  "orchestrationMode": "augment_existing_aka",
+  "mission": "Continuously turn World Server's 50 worldwide-growth architecture hypotheses into verified reusable capabilities without creating a parallel orchestration stack.",
+  "canonicalLedger": "data/world-growth-hypotheses.json",
+  "selector": "scripts/world-growth-architect.mjs",
+  "issueLedger": "https://github.com/mpaykin1/World_server/issues/80",
+  "noNewAutomation": true,
+  "pipeline": [
+    "AKA Architect",
+    "Builder",
+    "Fleet PRE",
+    "Ocean",
+    "Fleet POST"
+  ],
+  "statusModel": [
+    "UNKNOWN",
+    "MISSING",
+    "EXPERIMENTAL",
+    "IMPLEMENTED",
+    "TESTED",
+    "VERIFIED",
+    "BLOCKED"
+  ],
+  "ownerDecisionPolicy": {
+    "technicalEvidenceMayAdvanceStatus": true,
+    "successFailureLearningLabelsRequireExplicitOwnerDecision": true,
+    "neverInferOwnerAcceptance": true
+  },
+  "selectionPolicy": {
+    "onePrimaryArchitectureGapPerCycle": true,
+    "urgentReleaseBlockerMayPreempt": true,
+    "preferSharedCapabilityOverOneOffDemo": true,
+    "preferCrossSystemLeverage": true,
+    "preferReuseBeforeNewSubsystem": true,
+    "noReadinessIncreaseWithoutNewEvidence": true,
+    "unknownIsBetterThanInventedPrecision": true
+  },
+  "cycle": [
+    "Read fresh master, issue #80, active ownership/PRs, this contract and the 50-item ledger.",
+    "Run the deterministic selector and inspect the highest-leverage unresolved hypothesis/program.",
+    "Search the repository for an existing equivalent before designing anything new.",
+    "Implement one bounded vertical slice that advances the selected hypothesis and at least one dependent system when feasible.",
+    "Add focused regression/evidence tests; preserve replay, CAS/idempotency, mobile, security, provenance and quality gates where applicable.",
+    "Send the exact candidate SHA through Fleet PRE -> Ocean -> Fleet POST. A Builder result cannot self-certify VERIFIED.",
+    "Update ledger evidence/status only from exact artifacts. Never write owner success/failure learning labels without explicit owner decision.",
+    "At the next cycle, re-score all 50 so solved gaps stop consuming priority and the next weakest high-leverage gap rises automatically."
+  ],
+  "missingSystemPrograms": [
+    {
+      "id": "novelty-and-economics-evidence",
+      "hypotheses": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "goal": "Measure novelty, cost and speed advantages instead of asserting them."
+    },
+    {
+      "id": "dynamic-genre-runtime",
+      "hypotheses": [
+        19,
+        20
+      ],
+      "goal": "Make genre a composable runtime mode rather than a collection of unrelated demos."
+    },
+    {
+      "id": "universal-object-behavior-language",
+      "hypotheses": [
+        27,
+        31,
+        32,
+        33
+      ],
+      "goal": "Promote user-created objects and behaviors into portable shared semantic contracts."
+    },
+    {
+      "id": "capability-composition-runtime",
+      "hypotheses": [
+        28,
+        29,
+        30,
+        34,
+        35,
+        36,
+        37
+      ],
+      "goal": "Let verified capabilities advertise contracts and be safely discovered/composed by AI and worlds."
+    },
+    {
+      "id": "creator-platform-and-portability",
+      "hypotheses": [
+        46,
+        48
+      ],
+      "goal": "Give user-created worlds/content stable identity, export/import and cross-world reuse."
+    },
+    {
+      "id": "external-plugin-sdk-boundary",
+      "hypotheses": [
+        41,
+        42,
+        43,
+        47
+      ],
+      "goal": "Define a safe versioned third-party capability adapter/SDK boundary before any plugin economy claim."
+    },
+    {
+      "id": "network-effect-loop",
+      "hypotheses": [
+        6,
+        8,
+        9,
+        15,
+        46,
+        49
+      ],
+      "goal": "Prove A -> durable world change -> B sees/continues -> measurable value to others."
+    },
+    {
+      "id": "self-expanding-world-platform",
+      "hypotheses": [
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        50
+      ],
+      "goal": "Turn verified development learnings into discoverable reusable capabilities that expand the platform."
+    }
+  ],
+  "evidenceRules": {
+    "verifiedRequiresExactEvidence": true,
+    "prOrPlanAloneIsNotVerified": true,
+    "liveClaimsRequireFleetPostOrEquivalentIndependentExactRevisionEvidence": true,
+    "noveltyClaimsRequirePriorArtSearch": true,
+    "speedAndCostClaimsRequireBenchmarks": true,
+    "networkEffectClaimsRequireRealMultiUserMetrics": true,
+    "syntheticLoadDoesNotProveDemand": true
+  },
+  "reportFields": [
+    "selected_hypothesis",
+    "selected_program",
+    "before_status",
+    "implemented_slice",
+    "exact_sha_or_pr",
+    "evidence",
+    "cross_system_consumers",
+    "after_status",
+    "blocker",
+    "next_highest_leverage_gap"
+  ]
+}
