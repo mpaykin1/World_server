@@ -44,6 +44,25 @@ jobs:
         if: github.event_name != 'pull_request'
         shell: bash
         run: echo "run=true" >> "$GITHUB_OUTPUT"
+      - id: infinite-impact
+        name: Detect Infinite Gothic traversal impact
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE="${{ github.event.pull_request.base.sha }}"
+          HEAD="$SOURCE_SHA"
+          CHANGED="$(git diff --name-only "$BASE" "$HEAD")"
+          if printf '%s\n' "$CHANGED" | grep -Eq '^(apps/infinite-gothic-traversal/|shared/infinite-gothic-traversal\.mjs$|e2e/infinite-gothic-traversal\.spec\.js$|test/infinite-gothic-traversal\.test\.mjs$|data/app-release-registry\.json$)'; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+      - id: infinite-impact-manual
+        name: Mark Infinite Gothic impact for manual dispatch
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: echo "run=true" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
@@ -99,6 +118,14 @@ jobs:
       - name: Gothic destruction browser gate not impacted
         if: steps.authority.outputs.configured == 'true' && steps.gothic-impact.outputs.run != 'true' && steps.gothic-impact-manual.outputs.run != 'true'
         run: echo "Gothic destruction files are unchanged; dedicated collapse browser gate skipped."
+      - name: Verify Infinite Gothic Traversal
+        if: steps.authority.outputs.configured == 'true' && (steps.infinite-impact.outputs.run == 'true' || steps.infinite-impact-manual.outputs.run == 'true')
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ steps.deploy.outputs.url }}
+        run: npx playwright test e2e/infinite-gothic-traversal.spec.js --project=desktop-chromium --project=mobile-chromium --retries=2
+      - name: Infinite Gothic traversal browser gate not impacted
+        if: steps.authority.outputs.configured == 'true' && steps.infinite-impact.outputs.run != 'true' && steps.infinite-impact-manual.outputs.run != 'true'
+        run: echo "Infinite Gothic traversal files are unchanged; dedicated browser gate skipped."
       - name: Fail closed when Cloudflare credentials are unavailable
         if: steps.authority.outputs.configured != 'true'
         shell: bash
