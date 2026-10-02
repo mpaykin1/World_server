@@ -125,7 +125,7 @@ The user explicitly marked the previously observed plain line quality as **FAILU
 
 The user later explicitly marked the deployed **Living Light Cat 3D** proof as **SUCCESS**. Canonical accepted proof: `https://world-server.mmmpaykin.workers.dev/apps/living-light-cat-3d/`, accepted production merge SHA `f044aa498b94618bab4d2590b140d7aa4695fdc4`. Full handoff: `LIVING_LIGHT_CAT_3D_SUCCESS.md`.
 
-This SUCCESS belongs to that reviewed proof. Future LIGHT variants still require their own user decision.
+This SUCCESS belongs to that reviewed proof. Future LIGHT variants still require their own user decision. Every new visual LIGHT result must be shown to the user before any new SUCCESS/FAILURE verdict is recorded.
 
 ## Rule for future chats
 
