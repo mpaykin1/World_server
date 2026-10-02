@@ -2,53 +2,50 @@
 
 Date: 2026-10-02
 
-User decision: **FAILURE** for the visual quality of the current silhouette line.
+User decision: **FAILURE** for the visual quality of the observed baseline silhouette line.
 
-## What failed
+## What failed in the observed version
 
-The 3D silhouette system works, but the visible contour is not yet artistically strong enough.
+The 3D silhouette system works, but the visible contour that was reviewed by the user was not artistically strong enough.
 
-Compared with the desired Living Light sketch, the current line is too plain:
+Compared with the desired Living Light sketch, that line was:
 
 - mostly uniform white;
-- nearly uniform width;
-- weak luminous falloff;
-- no hot inner core + warm outer halo separation;
-- no rich gold / amber color gradient;
-- no soft bloom that feels emitted by light;
-- no subtle irregularity, filament detail or fur-like edge energy;
-- the contour reads as a technical postprocess outline rather than a living light source.
+- nearly uniform in width;
+- weak in luminous falloff;
+- missing a near-white hot core + warm gold + amber halo separation;
+- missing convincing emitted-light bloom;
+- missing subtle filament / fur-edge energy;
+- reading as a technical postprocess outline rather than a living light source.
 
-## Root cause
+## Root cause of the failed baseline
 
-The baseline fragment shader derives the edge with a small set of radial max samples around the binary mask, then adds:
+The baseline fragment shader derived the edge with radial max samples around the binary mask and then added only:
 
 - one white near-edge term;
 - one white far-glow term.
 
-This is enough to prove silhouette extraction, but it is not enough to reproduce the sketch quality.
+That proved silhouette extraction, but it did not reproduce the reference-quality luminous line.
 
-The current architecture uses hard max-distance dilation rather than a layered luminous profile. It does not model a bright core, several falloff radii, warm spectral shift, or local intensity variation.
+## Candidate improvement after the failure record
 
-## What must change before line quality can be called success
+After the user marked the baseline line as FAILURE, a new rendering candidate was added with:
 
-1. Separate the contour into at least three energy bands:
-   - near-white hot core;
-   - golden primary line;
-   - soft amber/orange halo.
-2. Replace the single max-style glow with smoother weighted falloff / blur.
-3. Add small controlled intensity variation along the rim.
-4. Add optional micro-filaments / fur-edge wisps without destroying silhouette readability.
-5. Preserve temporal stability: no noisy crawling or flicker.
-6. Keep the 3D silhouette architecture unchanged; improve only the rendering of the extracted rim.
+- near-white hot core;
+- gold primary band;
+- amber outer halo;
+- multiple distance bands;
+- stable spatial filament variation;
+- slow low-amplitude light breathing.
 
-## Acceptance rule
+This candidate is an implementation attempt only. **It does not change the product verdict.**
 
-Do not mark line quality as SUCCESS until the user explicitly confirms that the emitted-light appearance is close enough to the target sketch.
+The line remains classified as **FAILURE until the user explicitly accepts a later visual result**.
 
 ## Reusable lesson
 
 A technically correct silhouette edge is not the same thing as a beautiful luminous line.
 
-**3D motion system: SUCCESS.**
-**Current line rendering quality: FAILURE.**
+**3D motion system: SUCCESS by user decision.**
+**Observed baseline line quality: FAILURE by user decision.**
+**New line candidate: UNACCEPTED / pending user decision.**
