@@ -32,7 +32,7 @@ jobs:
       - name: Install Playwright browsers (chromium + webkit for iPhone emulation)
         run: npx playwright install --with-deps chromium webkit
       - name: Desktop + mobile behavioral gate
-        run: npx playwright test e2e/golden-release.spec.js --retries=2
+        run: npx playwright test e2e/golden-release.spec.js e2e/chain-reaction-ui.spec.js --retries=2
       - name: Quality delta
         if: always()
         run: npm run quality:diff
@@ -42,6 +42,8 @@ jobs:
         with:
           name: quality-regression-reports
           path: |
+            test-results/
+            playwright-report/
             QUALITY_REPORT.json
             QUALITY_REGRESSION_REPORT.json
             QUALITY_DIFF.md
