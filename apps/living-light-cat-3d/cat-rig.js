@@ -32,19 +32,6 @@ function ear(parent, position, rotation, mask, name){
   return mesh;
 }
 
-function whisker(parent, y, z, length, bend, mask, name){
-  const curve = new THREE.QuadraticBezierCurve3(
-    new THREE.Vector3(0.62, y, z),
-    new THREE.Vector3(0.62 + length * 0.55, y + bend, z),
-    new THREE.Vector3(0.62 + length, y + bend * 0.45, z)
-  );
-  const geometry = new THREE.TubeGeometry(curve, 18, 0.008, 5, false);
-  const mesh = new THREE.Mesh(geometry, mat(mask));
-  mesh.name = name;
-  parent.add(mesh);
-  return mesh;
-}
-
 function makeTail(root, mask){
   const segments=[];
   const joints=[];
@@ -74,37 +61,66 @@ export function createLivingLightCat(parent,{mask=false}={}){
   body.name='bodyRig';
   root.add(body);
 
-  ellipsoid(body,1,[0.88,1.26,0.58],[-0.42,0.08,0],mask,'body');
-  ellipsoid(body,1,[0.88,0.83,0.62],[-0.36,-0.72,0.02],mask,'rump');
-  ellipsoid(body,1,[0.54,0.86,0.48],[0.18,0.50,0.01],mask,'chest');
+  ellipsoid(body,1,[0.73,1.16,0.52],[-0.46,0.10,0],mask,'body');
+  ellipsoid(body,1,[0.86,0.78,0.55],[-0.42,-0.72,0.02],mask,'rump');
+  ellipsoid(body,1,[0.43,0.79,0.41],[0.08,0.51,0.01],mask,'chest');
 
-  cylinder(body,0.10,1.25,[0.19,-0.61,0.17],[0,0,-0.02],mask,'frontLegNear');
-  cylinder(body,0.085,1.18,[0.06,-0.64,-0.16],[0,0,0.015],mask,'frontLegFar');
+  cylinder(body,0.072,1.18,[0.17,-0.63,0.15],[0,0,-0.015],mask,'frontLegNear');
+  cylinder(body,0.060,1.12,[0.05,-0.66,-0.14],[0,0,0.012],mask,'frontLegFar');
 
   const neck=new THREE.Group();
   neck.name='neckPivot';
-  neck.position.set(0.05,1.10,0);
+  neck.position.set(0.02,1.08,0);
   body.add(neck);
-  ellipsoid(neck,0.48,[0.75,0.82,0.72],[0.08,0.08,0],mask,'neck');
+  ellipsoid(neck,0.42,[0.70,0.78,0.66],[0.10,0.09,0],mask,'neck');
 
   const head=new THREE.Group();
   head.name='headPivot';
-  head.position.set(0.38,0.46,0);
+  head.position.set(0.36,0.43,0);
   neck.add(head);
 
-  ellipsoid(head,0.56,[1.0,0.90,0.88],[0.0,0.0,0],mask,'head');
-  ellipsoid(head,0.30,[1.05,0.62,0.78],[0.48,-0.10,0.01],mask,'muzzle');
-  ellipsoid(head,0.11,[0.78,0.55,0.65],[0.75,-0.08,0.02],mask,'nose');
+  ellipsoid(head,0.50,[0.96,0.88,0.86],[0.0,0.0,0],mask,'head');
+  ellipsoid(head,0.25,[1.06,0.56,0.70],[0.42,-0.10,0.01],mask,'muzzle');
+  ellipsoid(head,0.085,[0.72,0.52,0.60],[0.64,-0.085,0.02],mask,'nose');
 
-  ear(head,[-0.12,0.52,-0.14],[0.02,0.05,-0.18],mask,'earFar');
-  ear(head,[0.18,0.57,0.13],[-0.04,-0.04,0.10],mask,'earNear');
-
-  whisker(head,-0.10,0.28,0.96,0.10,mask,'whiskerA');
-  whisker(head,-0.16,0.30,1.06,-0.01,mask,'whiskerB');
-  whisker(head,-0.22,0.27,0.92,-0.12,mask,'whiskerC');
+  ear(head,[-0.11,0.46,-0.12],[0.02,0.05,-0.17],mask,'earFar');
+  ear(head,[0.15,0.49,0.11],[-0.04,-0.04,0.09],mask,'earNear');
 
   const tail=makeTail(root,mask);
   return {root,body,neck,head,tail};
+}
+
+export function addCatWhiskers(head){
+  const material=new THREE.LineBasicMaterial({
+    color:0xffc56a,
+    transparent:true,
+    opacity:0.58,
+    blending:THREE.AdditiveBlending,
+    depthWrite:false,
+    depthTest:true
+  });
+  const defs=[
+    [-0.08,0.23,0.92,0.12],
+    [-0.14,0.24,1.02,0.02],
+    [-0.20,0.22,0.94,-0.10],
+    [-0.25,0.18,0.80,-0.16]
+  ];
+  const lines=[];
+  for(let i=0;i<defs.length;i++){
+    const [y,z,length,bend]=defs[i];
+    const curve=new THREE.QuadraticBezierCurve3(
+      new THREE.Vector3(0.52,y,z),
+      new THREE.Vector3(0.52+length*0.55,y+bend,z+0.01),
+      new THREE.Vector3(0.52+length,y+bend*0.35,z)
+    );
+    const geometry=new THREE.BufferGeometry().setFromPoints(curve.getPoints(24));
+    const line=new THREE.Line(geometry,material);
+    line.name='whiskerOverlay'+i;
+    line.layers.set(1);
+    head.add(line);
+    lines.push(line);
+  }
+  return lines;
 }
 
 const UP=new THREE.Vector3(0,1,0);
