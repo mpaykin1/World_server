@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "purpose": "Universal discovery index for new chats and AI agents working on World_server",
   "startHere": "AI_START_HERE.md",
   "canonicalContextFiles": [
@@ -21,7 +21,10 @@
     "docs/SERIAL_GROWTH_ENGINE.md",
     "docs/SZH_SYSTEM_RU.md",
     ".ai/szh-writing-system.json",
-    "SZH.md"
+    "SZH.md",
+    ".ai/ted-media-readiness.json",
+    "data/ted-media-readiness.json",
+    "docs/TED_MEDIA_READINESS_RU.md"
   ],
   "concepts": {
     "vno": {
@@ -145,6 +148,29 @@
       "learningRule": "Compare user edits to AI drafts and infer candidate transformations, but update the canonical SZH only after explicit user instruction.",
       "bootstrapFile": "SZH.md",
       "discoveryRule": "Open SZH.md directly before relying on GitHub code search; a zero-result search is not evidence that SZH is absent."
+    },
+    "tedMediaReadiness": {
+      "displayName": "Готовность TED / Global Media Readiness",
+      "canonicalFile": "docs/TED_MEDIA_READINESS_RU.md",
+      "aliases": [
+        "Готовность TED",
+        "TED readiness",
+        "мировые СМИ",
+        "global media readiness",
+        "conference readiness",
+        "world significance",
+        "повод писать в мировые СМИ"
+      ],
+      "machineFiles": [
+        ".ai/ted-media-readiness.json",
+        "data/ted-media-readiness.json",
+        "scripts/validate-ted-media-readiness.mjs"
+      ],
+      "scope": "Evidence-backed readiness of World_server to support a credible globally interesting, reproducible product/research story and a concise public proof.",
+      "scoreSemantics": "Not a probability of TED/TEDx/conference/media acceptance. Score can rise only with new evidence and may fall after regression or invalidated evidence.",
+      "requiredReportLine": "Готовность TED — N%",
+      "hourlyViaExistingAKA": true,
+      "noNewAutomation": true
     }
   },
   "freshChatMandatoryReads": {
@@ -173,7 +199,10 @@
       ".ai/project-context-index.json",
       ".ai/aka-serial-growth-engine.json",
       "data/serial-growth-state.json",
-      "docs/SERIAL_GROWTH_ENGINE.md"
+      "docs/SERIAL_GROWTH_ENGINE.md",
+      ".ai/ted-media-readiness.json",
+      "data/ted-media-readiness.json",
+      "docs/TED_MEDIA_READINESS_RU.md"
     ],
     "userWriting": [
       "SZH.md",
@@ -184,6 +213,6 @@
       "lib/szh-writing-system.js"
     ]
   },
-  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md, data/manual-delivery-policy.json, and data/cloudflare-deployment-identity.json. For serial or player-acquisition content work read the Serial Growth Engine contract and continuity state. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains; final URLs must pass delivery:verify against the repo-derived Cloudflare identity and exact deployed SHA. For personal authored writing for Mikhail, or when an SZH alias is used, read docs/SZH_SYSTEM_RU.md and .ai/szh-writing-system.json before drafting; agents may run node scripts/szh-context.js --prompt to obtain the executable context. Later user edits are stronger calibration evidence, but the canonical rules must not change without explicit user instruction.",
+  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md, data/manual-delivery-policy.json, and data/cloudflare-deployment-identity.json. For serial or player-acquisition content work read the Serial Growth Engine contract and continuity state. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains; final URLs must pass delivery:verify against the repo-derived Cloudflare identity and exact deployed SHA. For personal authored writing for Mikhail, or when an SZH alias is used, read docs/SZH_SYSTEM_RU.md and .ai/szh-writing-system.json before drafting; agents may run node scripts/szh-context.js --prompt to obtain the executable context. Later user edits are stronger calibration evidence, but the canonical rules must not change without explicit user instruction. For TED/global-media/world-significance work, read docs/TED_MEDIA_READINESS_RU.md, .ai/ted-media-readiness.json and data/ted-media-readiness.json; use the existing AKA loop and never invent a second automation stack or readiness delta without evidence.",
   "sourceOfTruthBranch": "master"
 }
