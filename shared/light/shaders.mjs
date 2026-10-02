@@ -65,11 +65,21 @@ float ringMin(vec2 uv, vec2 px, float radius) {
 }
 
 float approximateDistance(vec2 uv, vec2 px, float center) {
+  if (center > 0.5) {
+    float r2i = ringMin(uv, px, 2.0);
+    float r5i = ringMin(uv, px, 5.0);
+    float r10i = ringMin(uv, px, 10.0);
+    float r18i = ringMin(uv, px, 18.0);
+    if (r2i < 0.5) return 2.0;
+    if (r5i < 0.5) return 5.0;
+    if (r10i < 0.5) return 10.0;
+    if (r18i < 0.5) return 18.0;
+    return 32.0;
+  }
   float r2 = ringMax(uv, px, 2.0);
   float r5 = ringMax(uv, px, 5.0);
   float r10 = ringMax(uv, px, 10.0);
   float r18 = ringMax(uv, px, 18.0);
-  if (center > 0.5) return 0.0;
   if (r2 > 0.5) return 2.0;
   if (r5 > 0.5) return 5.0;
   if (r10 > 0.5) return 10.0;
@@ -106,9 +116,9 @@ void main() {
   float depthEdge = clamp((depthDx + depthDy) * 9.0, 0.0, 1.0);
 
   float distancePx = approximateDistance(vUv, px, center);
-  float core = contour * smoothstep(1.0, 0.0, distancePx * 0.45);
-  float gold = smoothstep(9.0, 1.0, distancePx) * (1.0 - core * 0.45);
-  float halo = smoothstep(24.0, 3.0, distancePx) * (1.0 - gold * 0.62);
+  float core = smoothstep(3.0, 1.5, distancePx) * (0.72 + contour * 0.28);
+  float gold = smoothstep(9.5, 2.0, distancePx) * (1.0 - core * 0.58);
+  float halo = (1.0 - center) * smoothstep(24.0, 4.5, distancePx) * (1.0 - gold * 0.55);
 
   float spatial = hash21(floor(gl_FragCoord.xy * 0.45));
   float filament = step(uFilamentThreshold, spatial) * smoothstep(13.0, 1.0, distancePx);
