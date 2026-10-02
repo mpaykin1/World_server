@@ -36,3 +36,9 @@ test('deterministic selector validates the ledger', () => {
   const output = execFileSync(process.execPath, ['scripts/world-growth-architect.mjs', '--check'], { encoding: 'utf8' });
   assert.match(output, /WORLD_GROWTH_OK total=50/);
 });
+
+
+test('final candidate head must be verified independently', () => {
+  assert.equal(contract.evidenceRules.finalHeadRequired, true);
+  assert.equal(contract.evidenceRules.previousHeadPassCannotCertifyNewHead, true);
+});
