@@ -21,6 +21,7 @@ function frameMetrics(buffer) {
 async function probe(browser, name, contextOptions) {
   const context = await browser.newContext(contextOptions);
   const page = await context.newPage();
+  page.setDefaultTimeout(90000);
   const errors = [];
   page.on('pageerror', error => errors.push(String(error.stack || error.message)));
   page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });
