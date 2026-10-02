@@ -120,3 +120,16 @@ test('SZH root discovery survives stale code search', () => {
   assert.match(agents, /не считать отсутствие результата в GitHub code search доказательством отсутствия СЖ/i);
   assert.match(agents, /не просить пользователя заново расшифровывать «СЖ»/i);
 });
+
+
+test('SZH preserves user-edit calibration 2026-10-02', () => {
+  const canon = read('docs/SZH_SYSTEM_RU.md');
+
+  assert.match(canon, /Калибровка по пользовательской редактуре 2026-10-02/);
+  assert.match(canon, /Удалять мета-анонсы мысли/);
+  assert.match(canon, /Одно разговорное слово может заменить объясняющий абзац/);
+  assert.match(canon, /После удара — уходить/);
+  assert.match(canon, /Хорошую литературную шутку тоже можно вырезать/);
+  assert.match(canon, /мысль → удар → обрыв → следующая мысль/);
+  assert.match(canon, /Шероховатость не равна техническому мусору/);
+});
