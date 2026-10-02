@@ -1111,3 +1111,15 @@ Required evidence: focused chain AI tests; protected CI; exact-head Cloudflare p
 - **Next action:** add pure deterministic compiler modules and focused tests, then publish a draft PR for cloud CI.
 - **Completion criteria:** one public compiler API accepts sampled reference frames + optional semantic hints and returns stable visual grammar, selected lanes, engine recipes, temporal grammar and correction priorities without mutating existing Golden systems.
 - **Final evidence:** pending focused tests and PR CI.
+
+
+## Reference Graphics Compiler progress update — 2026-10-02
+
+- Implemented CPU RGBA frame analysis, multi-frame temporal evidence, Visual Grammar, lane routing, geometry/material/light/camera/motion recipes, render-back correction planning, generic semantic-part sprite rasterization, deterministic sprite atlas generation and browser video sampling.
+- Registered the system in `REFERENCE_GRAPHICS.md`, `AI_START_HERE.md`, `data/system-contracts.json` and `data/reference-graphics-policy.json`.
+- First exact-head CI correctly found a router defect: blockiness heuristic overrode explicit sprite/watercolor lanes. Root cause fixed by precedence `explicit art lane -> dimensionality -> heuristic blockiness`.
+- Second exact-head CI correctly found a syntax defect in `video-sampler.mjs`; fixed without weakening tests.
+- Transparent sprite backgrounds are excluded from visual statistics so alpha does not become false darkness.
+- Existing Golden systems remain unchanged; Watercolor runtime is not copied from its 70-commit diverged branch without isolated integration review.
+- Independent adversarial review is currently INCONCLUSIVE because both configured free reviewer families returned provider/rate-limit failure; no code findings were produced. This is not treated as PASS.
+- Final evidence remains pending on exact head after the syntax fix. Do not merge or record user visual SUCCESS/FAILURE automatically.
