@@ -1,0 +1,67 @@
+name: Cloudflare Production AI Deploy
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "chain-ai-interpreter.mjs"
+      - "cloudflare-worker.js"
+      - ".github/workflows/cloudflare-production-ai.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: cloudflare-production-ai
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-and-smoke:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      WORKERS_CI_COMMIT_SHA: ${{ github.sha }}
+      PROD_URL: "https://world-server.mmmpaykin.workers.dev"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
+      - name: Require Cloudflare production credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${CLOUDFLARE_API_TOKEN:-}"
+          test -n "${CLOUDFLARE_ACCOUNT_ID:-}"
+      - name: Deploy exact master SHA to production Worker
+        run: npm run deploy:cloudflare:production
+      - name: Wait for exact-head production activation
+        run: node scripts/wait-for-cloudflare-deploy.cjs "$PROD_URL" "$GITHUB_SHA"
+      - name: Verify Cloudflare production stack
+        run: node scripts/verify-cloudflare-stack.cjs "$PROD_URL" "$GITHUB_SHA"
+      - name: Smoke Russian predict_action
+        shell: bash
+        run: |
+          set -euo pipefail
+          BODY='{"text":"Предсказать Лес","mode":"predict_action","provider":"auto","action":{"kind":"forest","name":"Лес","glyph":"木","location":"видимая область"},"worldContext":{"turn":1,"population":18,"power":8,"water":34,"food":28,"eco":44,"budget":36}}'
+          OUT="$(curl -fsS --max-time 30 -H "content-type: application/json" -d "$BODY" "$PROD_URL/api/chain-ai")"
+          printf "%s\n" "$OUT"
+          printf "%s" "$OUT" | jq -e '.ok == true and .executed == false and .language == "ru" and (.prediction.summary | type == "string" and length > 0)' >/dev/null
+      - name: Smoke English predict_action
+        shell: bash
+        run: |
+          set -euo pipefail
+          BODY='{"text":"Predict City","mode":"predict_action","language":"en","provider":"auto","action":{"kind":"city","name":"City","glyph":"門","location":"visible area"},"worldContext":{"turn":1,"population":18,"power":8,"water":34,"food":28,"eco":44,"budget":36}}'
+          OUT="$(curl -fsS --max-time 30 -H "content-type: application/json" -d "$BODY" "$PROD_URL/api/chain-ai")"
+          printf "%s\n" "$OUT"
+          printf "%s" "$OUT" | jq -e '.ok == true and .executed == false and .language == "en" and (.prediction.summary | test("[A-Za-z]"))' >/dev/null
+      - name: Production evidence
+        run: |
+          echo "PROD_URL=$PROD_URL"
+          echo "DEPLOYED_SHA=$GITHUB_SHA"
+          echo "RUSSIAN_AI=PASS"
+          echo "ENGLISH_AI=PASS"

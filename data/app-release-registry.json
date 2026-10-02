@@ -192,6 +192,63 @@
       "status": "experimental",
       "kind": "prototype",
       "reason": "User-confirmed reusable mobile camera/input and procedural Canvas graphics reference. Preserved for internal reuse; not certified for the public catalog."
+    },
+    "kaykit-knight-standalone": {
+      "title": "KayKit Knight Standalone",
+      "visible": false,
+      "status": "diagnostic",
+      "kind": "diagnostic",
+      "reason": "Portable self-contained KayKit Knight viewer; not a certified game or public catalog entry."
+    },
+    "roblox-gothic-rocks": {
+      "title": "Roblox Gothic Rocks → World Server MVP",
+      "visible": false,
+      "status": "experimental",
+      "kind": "prototype",
+      "reason": "Playable Roblox-port evidence lane; direct-link MVP, not yet certified for the public catalog.",
+      "worldMenu": {
+        "show": false,
+        "headline": "ГОТИЧЕСКИЙ ГОРОД: КАМЕНЬ ЛЕТИТ ПО НАСТОЯЩЕЙ БАЛЛИСТИКЕ",
+        "lore": "Первый игровой доказательный перенос Roblox-проекта через универсальный World Server bridge.",
+        "history": "Сцена восстановлена из правил городкамни.rbxlx без использования внешних Roblox asset bytes.",
+        "familyId": "roblox-gothic-rocks",
+        "connections": []
+      }
+    },
+    "chain-reaction-meta6-living-relations": {
+      "title": "Chain Reaction Meta6 Living Relations",
+      "visible": false,
+      "status": "experimental",
+      "kind": "prototype",
+      "reason": "User-requested successor to Meta5 demonstrating visible object-to-object interactions, continuous action-slot replenishment, robust glyph touch selection and live AI forecasts. Preserved for internal reuse; not public-catalog certified."
+    },
+    "flooded-cathedral-mvp": {
+      "title": "Flooded Cathedral MVP",
+      "visible": false,
+      "status": "experimental",
+      "kind": "game",
+      "reason": "Playable vertical-slice experiment; isolated from the public certified catalog until user acceptance and production evidence."
+    },
+    "silhouette-3d-lab": {
+      "title": "Silhouette 3D Lab",
+      "visible": false,
+      "status": "experimental",
+      "kind": "prototype",
+      "reason": "Internal proof lane for real 3D articulated silhouette rendering; line quality intentionally remains unaccepted pending luminous-line upgrade and user confirmation."
+    },
+    "living-light-cat-3d": {
+      "title": "Living Light Cat 3D",
+      "visible": false,
+      "status": "experimental",
+      "kind": "prototype",
+      "reason": "User explicitly approved the deployed Living Light Cat 3D MVP as SUCCESS. It remains hidden from the main certified public catalog because user acceptance and Golden catalog certification are separate gates.",
+      "userAcceptance": {
+        "verdict": "SUCCESS",
+        "acceptedAt": "2026-10-02",
+        "acceptedProductionSha": "f044aa498b94618bab4d2590b140d7aa4695fdc4",
+        "canonicalUrl": "https://world-server.mmmpaykin.workers.dev/apps/living-light-cat-3d/",
+        "handoff": "LIVING_LIGHT_CAT_3D_SUCCESS.md"
+      }
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",

@@ -2,6 +2,26 @@
 
 > Этот файл — постоянные правила для **всех AI-агентов** (Codex, OpenCode, и любых других). Нарушение правил считается ошибкой выполнения.
 
+## СЖ / SZH — обязательное обнаружение
+
+Если пользователь говорит **«СЖ»**, **«система живого»**, **«SZH»**, **«СП»**, **«сбитый живой поток»** или просит писать «как я пишу», агент обязан:
+
+1. открыть напрямую `SZH.md` из `master`;
+2. затем открыть `docs/SZH_SYSTEM_RU.md` и `.ai/szh-writing-system.json`;
+3. при необходимости использовать `node scripts/szh-context.js --prompt --request "..."`;
+4. **не считать отсутствие результата в GitHub code search доказательством отсутствия СЖ**;
+5. не просить пользователя заново расшифровывать «СЖ», пока прямые канонические пути не проверены.
+
+Корневой `SZH.md` — discovery alias; канон остаётся `docs/SZH_SYSTEM_RU.md`.
+
+## Специальный вход для Chain Reaction / Meta4–Meta6
+
+Если задача касается Meta4, Meta5, Meta6, «Цепной реакции», glyph-world, live AI forecast, action deck, procedural graphics или object relations, **перед изменениями обязательно** прочитать:
+
+`docs/CHAIN_REACTION_AI_HANDOFF_INDEX_RU.md`
+
+Этот index указывает канонический порядок чтения, живые ссылки, exact SHAs, подтверждённые успехи, открытые ограничения, regression rules и next vertical slice. Не начинать новый MVP с нуля и не переписывать работающие Meta4/5/6 без явной причины.
+
 ## 1. Ветки и защита `master`
 
 - `master` — защищённая стабильная ветка. Прямой `push` в `master` **запрещён**.
@@ -222,3 +242,22 @@ For any manual ChatGPT/AI task where the user asks for a testable artifact or li
 - Treat `implemented/tested but no usable stable production URL` as a pipeline regression. Never hand off `deploy-preview-*` or immutable deploy aliases as the final user link unless the user explicitly requests a temporary Preview.
 
 Canonical machine-readable policy: `data/manual-task-completion-contract.json`; runtime gate: `lib/manual-task-completion-contract.js`.
+
+## Public-link delivery gate
+
+Для любой публичной демо-ссылки запрещено считать задачу завершённой только потому, что файл закоммичен.
+
+Обязательная последовательность:
+
+`commit -> deployment success -> live HTTP 200 -> expected marker -> only then share as ready`.
+
+Если deployment queued/running/cancelled, статус только **COMMITTED/DEPLOYING**, но не **LIVE VERIFIED**. После любого нового commit предыдущая live-проверка считается устаревшей. Разбор ошибки: `docs/DELIVERY_FAILURE_GITHUB_PAGES_404_2026-09-30.md`.
+
+## AI fallback availability rule
+
+Для Chain Reaction live AI не может быть единственной причиной, по которой игра продолжает работать. Если provider/locale/network/timeout/parse не дают usable prediction, клиент обязан перейти на **prepared forecast + prepared development ideas**, честно пометить источник как PREPARED FALLBACK и оставить игровой YES-path доступным. Retry Live AI — дополнительная возможность, а не блокировка gameplay. Разбор: `docs/META6_EN_AI_UNAVAILABLE_FAILURE_2026-09-30.md`. Контракт: `docs/CHAIN_REACTION_AI_FALLBACK_CONTRACT_RU.md`.
+
+
+## Multilingual AI production parity
+
+Если клиент добавляет новый AI locale, backend и production Worker должны получить этот locale в том же release unit. Нельзя считать locale готовым по client commit или preview. Обязательны production deploy + live smoke с `executed:false` и ожидаемым `language`. См. `docs/META6_EN_LIVE_AI_PARITY_FAILURE_2026-09-30.md`.

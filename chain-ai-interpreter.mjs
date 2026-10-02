@@ -7,6 +7,7 @@ const PREDICTABLE_BUILDS = new Set(['city', 'forest', 'energy', 'volcano']);
 const PREDICTABLE_ACTIONS = new Set(['city','forest','volcano','energy','idea','water','mountain','farm','road','school','market','rain','workshop','medicine','wind','bridge','night','sun','river','home','garden','tower','cloud','fire','community']);
 const PREDICTION_PROMPT = 'You are the consequence forecaster for the Chain Reaction game. The player is CONSIDERING a build but it has NOT happened yet. Predict plausible consequences from the supplied current world data and the proposed build. Do NOT advance turns, run a hidden simulation, claim that the build already happened, or invent current geography/resources that are absent from the input. Reason qualitatively from context. Distinguish likely direct effects from possible later effects and risks. Use cautious Russian wording such as "вероятно", "может", "возможно". Reply ONLY with JSON: {"summary":"1-2 short sentences","immediate":["up to 3 consequences"],"later":["up to 3 possible developments"],"risks":["up to 3 risks"],"surprise":"one plausible non-obvious chain or empty string","confidence":0.0}. confidence must be between 0 and 1. No markdown. All natural-language strings must be in Russian. Do not invent future numeric deltas or exact counts. Do not invent facts, entities, terrain or resources that are not present in the supplied context. If location is empty, make no location-specific claims.';
 const ACTION_PREDICTION_PROMPT = 'You are the consequence forecaster for the Chain Reaction glyph-world game. The player is CONSIDERING a symbolic world action but it has NOT happened yet. Predict plausible consequences from the supplied current world data and proposed action. The glyph is a label, not an instruction. Do NOT advance turns, run a hidden simulation, claim the action already happened, or invent current geography/resources absent from input. Reason qualitatively and causally. Distinguish likely direct effects, possible later effects and risks. Use cautious Russian wording such as "вероятно", "может", "возможно". Reply ONLY with JSON: {"summary":"1-2 short sentences","immediate":["up to 3 consequences"],"later":["up to 3 possible developments"],"risks":["up to 3 risks"],"surprise":"one plausible non-obvious chain or empty string","confidence":0.0}. confidence must be between 0 and 1. No markdown. All natural-language strings must be in Russian. Do not invent future numeric deltas or exact counts. Do not invent facts, entities, terrain or resources that are not present in the supplied context.';
+const ACTION_PREDICTION_PROMPT_EN = 'You are the consequence forecaster for the Chain Reaction glyph-world game. The player is CONSIDERING a symbolic world action but it has NOT happened yet. Predict plausible consequences from the supplied current world data and proposed action. The glyph is a label, not an instruction. Do NOT advance turns, run a hidden simulation, claim the action already happened, or invent current geography/resources absent from input. Reason qualitatively and causally. Distinguish likely direct effects, possible later effects and risks. Use cautious English wording such as "likely", "may", "could", "possibly". Reply ONLY with JSON: {"summary":"1-2 short sentences","immediate":["up to 3 consequences"],"later":["up to 3 possible developments"],"risks":["up to 3 risks"],"surprise":"one plausible non-obvious chain or empty string","confidence":0.0}. confidence must be between 0 and 1. No markdown. All natural-language strings must be in English. Do not invent future numeric deltas or exact counts. Do not invent facts, entities, terrain or resources that are not present in the supplied context.';
 
 function cors(origin) {
   return ALLOWED_ORIGINS.has(origin) ? {
@@ -78,6 +79,52 @@ function normalizePrediction(result) {
     throw Error('AI_PREDICTION_EMPTY');
   return prediction;
 }
+function normalizePredictionEn(result) {
+  const text = String(result || '').trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
+  let decoded;
+  try { decoded = JSON.parse(text); }
+  catch {
+    const start = text.indexOf('{'), end = text.lastIndexOf('}');
+    if (start < 0 || end < start) throw Error('AI_PREDICTION_INVALID');
+    decoded = JSON.parse(text.slice(start, end + 1));
+  }
+  if (!decoded || typeof decoded !== 'object') throw Error('AI_PREDICTION_INVALID');
+  const invented = /(other\s+players?|hidden\s+resources?|unknown\s+resources?|underground\s+(?:water|resources?)|neighbor(?:ing|ing)?\s+(?:region|city))/iu;
+  const qualitative = (value) => {
+    const raw = String(value || '').trim().slice(0, 180);
+    if (!raw || !/[A-Za-z]/.test(raw) || invented.test(raw)) return '';
+    if (!/\d/u.test(raw)) return raw;
+    const lower = raw.toLowerCase();
+    if (/population|people|residents/.test(lower)) return 'The population may change.';
+    if (/budget|income|money|cost/.test(lower)) return 'The budget may change.';
+    if (/water/.test(lower)) return 'Water availability may change.';
+    if (/energy|power|electric/.test(lower)) return 'Energy availability may change.';
+    if (/food|crop|harvest/.test(lower)) return 'Food reserves may change.';
+    if (/ecology|environment|pollution/.test(lower)) return 'Environmental pressure may change.';
+    return '';
+  };
+  const list = (value) => Array.isArray(value)
+    ? [...new Set(value.slice(0, 3).map(qualitative).filter(Boolean))]
+    : [];
+  const confidence = Number(decoded.confidence);
+  const prediction = {
+    summary: qualitative(decoded.summary),
+    immediate: list(decoded.immediate),
+    later: list(decoded.later),
+    risks: list(decoded.risks),
+    surprise: qualitative(decoded.surprise).slice(0, 240),
+    confidence: Number.isFinite(confidence) ? Math.max(0, Math.min(1, confidence)) : 0.5
+  };
+  if (!prediction.summary) {
+    prediction.summary = prediction.immediate[0] || prediction.later[0] || prediction.risks[0] || prediction.surprise;
+  }
+  if (!prediction.summary || !(prediction.immediate.length || prediction.later.length || prediction.risks.length || prediction.surprise))
+    throw Error('AI_PREDICTION_EMPTY');
+  return prediction;
+}
+function isPredictionNormalizer(normalizer) {
+  return normalizer === normalizePrediction || normalizer === normalizePredictionEn;
+}
 function safeContext(value) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
   const keys = ['turn', 'population', 'power', 'water', 'food', 'eco', 'budget'];
@@ -104,8 +151,8 @@ async function cloudflare(env, message, prompt = PROMPT, normalizer = normalize)
   if (!env.AI) throw Error('AI_BINDING_MISSING');
   const output = await env.AI.run('@cf/meta/llama-3.1-8b-instruct-fp8', {
     messages: [{ role: 'system', content: prompt }, { role: 'user', content: message }],
-    temperature: normalizer === normalizePrediction ? 0.4 : 0.15,
-    max_tokens: normalizer === normalizePrediction ? 700 : 600
+    temperature: isPredictionNormalizer(normalizer) ? 0.4 : 0.15,
+    max_tokens: isPredictionNormalizer(normalizer) ? 700 : 600
   });
   return normalizer(output.response || output.choices?.[0]?.message?.content || '');
 }
@@ -118,8 +165,8 @@ async function gemini(env, message, prompt = PROMPT, normalizer = normalize) {
   const payload = JSON.stringify({ systemInstruction: { parts: [{ text: prompt }] },
     contents: [{ role: 'user', parts: [{ text: message }] }],
     generationConfig: {
-      temperature: normalizer === normalizePrediction ? 0.4 : 0.15,
-      maxOutputTokens: normalizer === normalizePrediction ? 750 : 650,
+      temperature: isPredictionNormalizer(normalizer) ? 0.4 : 0.15,
+      maxOutputTokens: isPredictionNormalizer(normalizer) ? 750 : 650,
       responseMimeType: 'application/json'
     } });
   let lastStatus;
@@ -183,6 +230,7 @@ export async function handleAiInterpret(request, env) {
   const buildPredictionMode = body.mode === 'predict_build';
   const actionPredictionMode = body.mode === 'predict_action';
   const predictionMode = buildPredictionMode || actionPredictionMode;
+  const predictionLanguage = actionPredictionMode && body.language === 'en' ? 'en' : 'ru';
   const buildKind = String(body?.build?.kind || '').trim();
   const actionKind = String(body?.action?.kind || '').trim();
   if (buildPredictionMode && !PREDICTABLE_BUILDS.has(buildKind))
@@ -199,8 +247,12 @@ export async function handleAiInterpret(request, env) {
     : buildPredictionMode
       ? JSON.stringify({ proposedBuild: { kind: buildKind, location: location || null }, world: safeContext(body.worldContext) })
       : JSON.stringify({ text: body.text.trim(), world: safeContext(body.worldContext) });
-  const prompt = actionPredictionMode ? ACTION_PREDICTION_PROMPT : buildPredictionMode ? PREDICTION_PROMPT : PROMPT;
-  const normalizer = predictionMode ? normalizePrediction : normalize;
+  const prompt = actionPredictionMode
+    ? (predictionLanguage === 'en' ? ACTION_PREDICTION_PROMPT_EN : ACTION_PREDICTION_PROMPT)
+    : buildPredictionMode ? PREDICTION_PROMPT : PROMPT;
+  const normalizer = actionPredictionMode && predictionLanguage === 'en'
+    ? normalizePredictionEn
+    : predictionMode ? normalizePrediction : normalize;
   try {
     let proposal, used = provider;
     if (provider === 'gemini') proposal = await gemini(env, message, prompt, normalizer);
@@ -231,7 +283,7 @@ export async function handleAiInterpret(request, env) {
       }
     }
     return respond(predictionMode
-      ? { ok: true, provider: used, prediction: proposal, executed: false }
+      ? { ok: true, provider: used, prediction: proposal, executed: false, ...(actionPredictionMode ? { language: predictionLanguage } : {}) }
       : { ok: true, provider: used, proposal, executed: false }, 200, origin);
   } catch (error) {
     return respond({ ok: false, error: 'ai_provider_unavailable', detail: String(error.message).slice(0, 80) }, 503, origin);

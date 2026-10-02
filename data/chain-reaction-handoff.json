@@ -1,0 +1,140 @@
+{
+  "version": "2026-09-30",
+  "status": "active-handoff",
+  "canonical_entrypoint": "docs/CHAIN_REACTION_AI_HANDOFF_INDEX_RU.md",
+  "live": {
+    "meta4": {
+      "url": "https://mpaykin1.github.io/meta4/",
+      "role": "spatial-causal regression baseline"
+    },
+    "meta5": {
+      "url": "https://mpaykin1.github.io/meta5/",
+      "role": "live AI + graphical object baseline"
+    },
+    "meta6": {
+      "url": "https://mpaykin1.github.io/meta6/",
+      "repo": "https://github.com/mpaykin1/meta6",
+      "commit": "32ab5e3295b98779a9cb72bd9abdcb185718bf03",
+      "role": "living relations experimental baseline"
+    }
+  },
+  "world_server": {
+    "repo": "https://github.com/mpaykin1/World_server",
+    "meta6_merge": "8d09d350310100cf14f6cc8c88cda22627f08b84",
+    "meta6_pr": 377,
+    "preserved_app": "apps/chain-reaction-meta6-living-relations/index.html",
+    "ai_endpoint": "https://world-server.mmmpaykin.workers.dev/api/chain-ai",
+    "ai_mode": "predict_action"
+  },
+  "required_reading": [
+    "docs/CHAIN_REACTION_GAME_DESIGN_RU.md",
+    "docs/CHAIN_REACTION_MOBILE_VIEWPORT_CONTRACT_RU.md",
+    "docs/META4_SUCCESS_STAGE_2026-09-30.md",
+    "docs/PROCEDURAL_KRIEGER_MVP_SUCCESS_2026-09-30.md",
+    "docs/META5_LIVE_AI_MERGE_SUCCESS_2026-09-30.md",
+    "docs/META5_USER_FEEDBACK_SUCCESS_FAILURES_2026-09-30.md",
+    "docs/META6_LIVING_RELATIONS_MVP_2026-09-30.md",
+    "docs/META6_TECHNICAL_ARCHITECTURE_RU.md",
+    "docs/META6_AI_LESSONS_RU.md",
+    "docs/META6_REGRESSION_PROTOCOL_RU.md",
+    "docs/DELIVERY_FAILURE_GITHUB_PAGES_404_2026-09-30.md",
+    "docs/META6_EN_AI_UNAVAILABLE_FAILURE_2026-09-30.md",
+    "docs/CHAIN_REACTION_AI_FALLBACK_CONTRACT_RU.md"
+  ],
+  "proven_invariants": [
+    "fixed gameplay viewport",
+    "world-space entities and screen-space HUD",
+    "one-finger pan",
+    "anchored pinch zoom",
+    "tap-to-place in world-space",
+    "glyph action UI",
+    "procedural graphical result",
+    "small glyph label above object",
+    "live server AI forecast",
+    "executed:false prediction contract",
+    "NO causes zero mutation",
+    "YES creates exactly one primary object",
+    "viewport-local report",
+    "continuous five-slot action deck",
+    "logical successor selection",
+    "persistent relation objects",
+    "visible animated relation renderers"
+  ],
+  "meta6_primary_relations": [
+    "forest-city",
+    "volcano-city",
+    "energy-city",
+    "river-farm",
+    "road-city",
+    "fire-forest"
+  ],
+  "meta6_secondary_relations": [
+    "river-forest",
+    "farm-market",
+    "bridge-river",
+    "rain-fire"
+  ],
+  "known_limits": [
+    "physical iPhone is still final acceptance authority",
+    "relation reach is distance-based MVP logic",
+    "most relation effects are one-time discovery effects",
+    "moving flow dots are visual proxies rather than persistent logistics entities",
+    "no road/pathfinding graph",
+    "no tree-by-tree fire propagation",
+    "no terrain field simulation",
+    "no authoritative persistent shared Meta6 world yet",
+    "AI does not generate relation recipes yet",
+    "Meta6 is Canvas procedural graphics, not proof of original .kkrieger renderer reuse"
+  ],
+  "next_vertical_slice": {
+    "name": "persistent irrigation-to-market chain",
+    "sequence": [
+      "river + farm create irrigation relation",
+      "timed water flow updates farm",
+      "farm production increases over time",
+      "persistent cargo entity spawns",
+      "cargo follows a path to market",
+      "market receives cargo and visually upgrades",
+      "new logical successor action appears"
+    ]
+  },
+  "agent_rules": [
+    "do not start a replacement MVP from scratch before reading required docs",
+    "do not modify proven older public baselines without explicit need",
+    "use a separate branch for work",
+    "preserve AI prediction-only contract",
+    "never mutate world before YES",
+    "do not replace live AI failures with fake forecasts",
+    "do not reduce visible causal interactions to hidden stat changes",
+    "add regression evidence and exact SHA for every claimed success"
+  ],
+  "new_chat_bootstrap": "docs/CHAIN_REACTION_NEW_CHAT_BOOTSTRAP_RU.md",
+  "public_delivery_gate": {
+    "statuses": [
+      "COMMITTED",
+      "DEPLOYING",
+      "LIVE VERIFIED",
+      "FAILED DELIVERY"
+    ],
+    "ready_formula": [
+      "source committed",
+      "deployment success",
+      "HTTP 200",
+      "expected marker"
+    ],
+    "rule": "Never report a public demo link as ready before live verification against the latest commit/version."
+  },
+  "prepared_ai_fallback": {
+    "enabled": true,
+    "language": "en",
+    "data": "data/chain-reaction-prepared-fallback-en.json",
+    "action_count": 25,
+    "policy": "Prepared forecast and prepared ideas are always available; live AI upgrades them when usable.",
+    "provenance_labels": [
+      "LIVE AI",
+      "PREPARED FORECAST",
+      "PREPARED FALLBACK"
+    ],
+    "continue_play_on_ai_failure": true
+  }
+}

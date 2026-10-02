@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "kaykit-knight-rig-medium",
+  "displayName": "KayKit Knight — Rig Medium",
+  "purpose": "Reusable CC0 humanoid runtime for World Server games, including Roblox-port replacements",
+  "license": "CC0-1.0",
+  "commercialUse": true,
+  "attributionRequired": false,
+  "creator": "Kay Lousberg",
+  "officialCharacterPage": "https://kaylousberg.itch.io/kaykit-adventurers",
+  "officialAnimationPage": "https://kaylousberg.itch.io/kaykit-character-animations",
+  "vendorSource": {
+    "repository": "GeorgeQLe/assets-kaykit-3d-characters",
+    "commit": "af08a62d3669370ec4636ae6314b38cdcd5dd759",
+    "collection": "The Complete KayKit Collection v6",
+    "characterPack": "KayKit Adventurers 2.0",
+    "animationPack": "KayKit Character Animations 1.1"
+  },
+  "rig": "Rig_Medium",
+  "model": "model/Knight.glb",
+  "texture": "model/knight_texture.png",
+  "animationGroups": [
+    "animations/Rig_Medium_General.glb",
+    "animations/Rig_Medium_MovementBasic.glb",
+    "animations/Rig_Medium_MovementAdvanced.glb",
+    "animations/Rig_Medium_CombatMelee.glb",
+    "animations/Rig_Medium_CombatRanged.glb",
+    "animations/Rig_Medium_Simulation.glb",
+    "animations/Rig_Medium_Special.glb",
+    "animations/Rig_Medium_Tools.glb"
+  ],
+  "officialPackageAnimationCount": 161,
+  "compatibleAnimationClipCount": 139,
+  "selectionReason": "Rig_Medium is the richer single-character runtime and matches the Knight rig; package-wide 161 is not the per-rig clip count.",
+  "semanticActions": "semantic-actions.json",
+  "runtimeModule": "/shared/universal-player-character.mjs",
+  "defaultFor": {
+    "worldServer": true,
+    "robloxStandardHumanoid": true
+  }
+}
