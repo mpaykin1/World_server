@@ -1,3 +1,22 @@
+# 2026-10-02: СЖ — правила из пользовательской редактуры
+
+Task: извлечь устойчивые авторские преобразования из явной пользовательской правки текста про хейтершу и добавить их в каноническую СЖ.
+Why: пользователь подтвердил, что его редактура должна стать новым обучающим материалом СЖ и прямо приказал добавить новые правила.
+Current state: СЖ уже хранит базовые принципы живого неровного текста, но часть характерных преобразований из свежей редактуры описана слишком общо: удаление мета-фраз, однословные удары, перевод наблюдения в непосредственное действие, отказ от декоративной шутки, если она тормозит конфликт.
+Target state: человекочитаемый канон и машинный контракт содержат отдельный набор правил user-edit calibration; regression test защищает их от случайного удаления.
+Files / systems involved: docs/SZH_SYSTEM_RU.md, .ai/szh-writing-system.json, test/szh-system.test.js, WORK_IN_PROGRESS.md.
+Known risks: принять артефакты ручного редактирования (слепленные пробелы/случайные опечатки) за авторский приём; переобучить систему на одном тексте; сделать стиль механически рубленым.
+Golden systems preserved: latest user edit > current instruction > SZH canon; случайные опечатки не имитируются; канон меняется только после явной команды пользователя.
+Exact patch plan: добавить отдельный раздел правил, выведенных из этой редактуры; синхронизировать machine-readable rules; добавить тест на ключевые новые принципы; не менять resolver API.
+Tests to run: node --test test/szh-system.test.js; затем cloud CI/npm run check через PR.
+Deployment / PR plan: isolated branch -> PR -> protected master; documentation/AI-context only, no game deployment.
+Current progress: human-readable canon updated with 22 user-edit calibration rules; regression test added. Two attempts to write .ai/szh-writing-system.json were blocked by connector safety, so the canonical human source is updated but the machine mirror is not yet synchronized.
+Next action: publish PR and run exact-head CI; do not bypass connector safety to mutate the blocked machine file.
+Completion criteria: canonical docs rules and regression test are merged after review; machine mirror synchronization remains an explicit follow-up if the connector permits it.
+Final evidence: docs commit d8f9c44e13e58c60395f1aef99b7114c23dc221d; test commit f7b52a353236fe8dc23f0b7d720218b4a790acf9; exact-head CI/review pending.
+
+---
+
 # 2026-10-02: СЖ cross-chat discovery hardening
 
 Task: make СЖ / «Система живого» reliably discoverable from a completely fresh AI chat even while GitHub code search is stale.
