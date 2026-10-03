@@ -269,7 +269,7 @@
     },
     "LIGHT": {
       "percent": 88,
-      "status": "integrated reusable 3D luminous-line runtime; visual acceptance pending",
+      "status": "integrated reusable 3D luminous-line runtime; Living Light Cat 3D visual proof user-approved",
       "evidence": [
         "shared/light/index.mjs",
         "shared/light/pipeline.mjs",
@@ -277,9 +277,12 @@
         "shared/light/shaders.mjs",
         "apps/silhouette-3d-lab/client.js",
         "test/light-system.test.js",
-        "docs/LIGHT_SYSTEM.md"
+        "docs/LIGHT_SYSTEM.md",
+        "LIVING_LIGHT_CAT_3D_SUCCESS.md",
+        "apps/living-light-cat-3d/client.js",
+        "test/living-light-cat-3d.test.js"
       ],
-      "note": "Canonical World Server system for normal/depth-aware rim light, screen-space distance-field edge shaping, HDR half-float glow, Kawase bloom, stable micro-filaments, motion-aware temporal stabilization, art-directed zones and 3D luminous curves. Do not convert pending visual quality into SUCCESS/FAILURE without explicit user decision."
+      "note": "Canonical World Server LIGHT system for normal/depth-aware luminous 3D silhouettes. The deployed Living Light Cat 3D proof at production merge SHA f044aa498b94618bab4d2590b140d7aa4695fdc4 was explicitly marked SUCCESS by the user on 2026-10-02. Future variants need their own user verdict."
     },
     "KRIEGER TOTAL CONTROL": {
       "percent": 48,

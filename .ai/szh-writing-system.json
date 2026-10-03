@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "id": "szh",
   "displayName": "СЖ — Система живого",
   "purpose": "Canonical machine-readable writing system for Mikhail's authored texts. Prefer a live, uneven human thought-flow over polished AI-literary prose.",
@@ -39,7 +39,19 @@
     "Conversation logic outranks literary symmetry.",
     "Avoid AI-perfect architecture, triads, mirrored paragraphs and tidy morals.",
     "Prefer an ending sting/detail over a summary.",
-    "If a paragraph is publication-perfect, test whether purposeful roughness would make it more alive."
+    "If a paragraph is publication-perfect, test whether purposeful roughness would make it more alive.",
+    "Delete explanatory lead-ins when the scene already proves the thought; prefer a live fragment over a literary setup.",
+    "Cut hedges such as 'мне кажется', 'наверное', and similar safety wording when the statement can stand directly.",
+    "Do not announce emotional transitions such as 'then it stopped being funny'; let the next line create the transition.",
+    "Allow sentence fusion, lowercase starts, and fragmentary tags when they encode speed or pressure rather than accidental noise.",
+    "Use profanity as a pressure-release event at an emotional hinge, not as decorative seasoning.",
+    "Use callbacks to already charged concrete details instead of adding a fresh explanation.",
+    "In a repetition ladder, one anomalous smaller/larger item may deliberately break scale and create the punch.",
+    "Prefer direct uncomfortable questions to the reader over abstract discussion of what a reader might do.",
+    "Do not force a therapeutic self-help resolution after genuine pain; a minimal exit, unresolved question, or sting may be stronger.",
+    "When writing about tragedy, aim jokes at the speaker, money, systems, guilt, bureaucracy, or absurdity—not at the injured person or their suffering.",
+    "Preserve corrected factual details even when a previous inaccurate version was more elegant or funnier.",
+    "Search the final draft for overly correct reassurance, moral closure, or emotional instructions and cut them when the text survives without them."
   ],
   "orthographyPolicy": {
     "name": "functional_roughness",
@@ -71,7 +83,11 @@
     "unnecessary praise of tools/technology",
     "smooth transition between every paragraph",
     "unpunctured pathos",
-    "uniform paragraph rhythm"
+    "uniform paragraph rhythm",
+    "announcing that the text is switching from funny to serious",
+    "hedging a clear authorial claim with unnecessary 'мне кажется' / 'наверное'",
+    "therapeutic checklist ending after an emotionally unresolved conflict",
+    "profanity added without changing pressure or rhythm"
   ],
   "passes": [
     {
@@ -107,7 +123,11 @@
     "Rhythm is uneven.",
     "Concrete details beat abstractions.",
     "The voice can be recognized without a signature.",
-    "The ending is not a school conclusion."
+    "The ending is not a school conclusion.",
+    "Serious human suffering is not the punchline; the joke target is the speaker, system, money, guilt or absurdity.",
+    "The ending does not over-reassure or hand the reader a tidy therapeutic solution.",
+    "Hedges and explanatory transitions survive only when they carry meaning.",
+    "Profanity, if present, changes pressure or rhythm rather than merely making the text louder."
   ],
   "learningPolicy": {
     "userEditIsStrongerEvidenceThanAssistantDraft": true,
@@ -126,5 +146,11 @@
     "cli": "scripts/szh-context.js",
     "promptCommand": "node scripts/szh-context.js --prompt",
     "writeBack": false
+  },
+  "latestCalibration": {
+    "id": "2026-10-02-lift-essay",
+    "canonicalSection": "docs/SZH_SYSTEM_RU.md#32-калибровка-по-эссе-шестьдесят-тысяч-2026-10-02",
+    "evidence": "explicit user edit of assistant draft",
+    "status": "canonical_by_explicit_user_instruction"
   }
 }
